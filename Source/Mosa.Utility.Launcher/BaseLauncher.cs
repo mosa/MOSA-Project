@@ -50,12 +50,12 @@ namespace Mosa.Utility.Launcher
 		protected void NormalizeSettings()
 		{
 			// Normalize inputs
-			LauncherSettings.ImageBootLoader = LauncherSettings.ImageBootLoader == null ? string.Empty : LauncherSettings.ImageBootLoader.ToLowerInvariant();
-			LauncherSettings.ImageFormat = LauncherSettings.ImageFormat == null ? string.Empty : LauncherSettings.ImageFormat.ToLowerInvariant();
-			LauncherSettings.FileSystem = LauncherSettings.FileSystem == null ? string.Empty : LauncherSettings.FileSystem.ToLowerInvariant();
-			LauncherSettings.EmulatorSerial = LauncherSettings.EmulatorSerial == null ? string.Empty : LauncherSettings.EmulatorSerial.ToLowerInvariant();
-			LauncherSettings.Emulator = LauncherSettings.Emulator == null ? string.Empty : LauncherSettings.Emulator.ToLowerInvariant();
-			LauncherSettings.Platform = LauncherSettings.Platform.ToLowerInvariant();
+			LauncherSettings.ImageBootLoader = LauncherSettings.ImageBootLoader == null ? string.Empty : LauncherSettings.ImageBootLoader.ToLowerInvariant().Trim();
+			LauncherSettings.ImageFormat = LauncherSettings.ImageFormat == null ? string.Empty : LauncherSettings.ImageFormat.ToLowerInvariant().Trim();
+			LauncherSettings.FileSystem = LauncherSettings.FileSystem == null ? string.Empty : LauncherSettings.FileSystem.ToLowerInvariant().Trim();
+			LauncherSettings.EmulatorSerial = LauncherSettings.EmulatorSerial == null ? string.Empty : LauncherSettings.EmulatorSerial.ToLowerInvariant().Trim();
+			LauncherSettings.Emulator = LauncherSettings.Emulator == null ? string.Empty : LauncherSettings.Emulator.ToLowerInvariant().Trim();
+			LauncherSettings.Platform = LauncherSettings.Platform.ToLowerInvariant().Trim();
 		}
 
 		private void SetDefaults()
@@ -244,6 +244,14 @@ namespace Mosa.Utility.Launcher
 			}
 
 			return process;
+		}
+
+		protected string NullToEmpty(string value)
+		{
+			if (string.IsNullOrWhiteSpace(value))
+				return string.Empty;
+
+			return value;
 		}
 	}
 }

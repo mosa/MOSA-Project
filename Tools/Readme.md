@@ -3,8 +3,7 @@ These tools are used by the MOSA project under their respective licenses.
 qemu
 - GPL License
 - http://www.qemu.org
-- binary form: http://qemu.weilnetz.de/
-- Version: 2.11.0
+- Version: 7.1.0
 
 bochs
 - LGPL License

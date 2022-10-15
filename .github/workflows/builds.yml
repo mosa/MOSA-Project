@@ -9,17 +9,14 @@ jobs:
     name: Windows Build
     runs-on: windows-latest
     env:
-      BUILD_VERSION: 2.0.0
+      BUILD_VERSION: 2.2.1
     steps:
       - name: Set net6.0
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '6.0.x'
-      - name: Set Build Version
-        uses: travisj/build-number-action@v1
-        id: mosa-project-build-number
       - name: View Build Version
-        run: echo ${{ env.BUILD_VERSION }}.${{ steps.mosa-project-build-number.outputs.build-number }}
+        run: echo ${{ env.BUILD_VERSION }}.${{ github.run_number }}
       - name: View Github Info
         run: echo repository=${{ github.repository }} event_name=${{ github.event_name }} ref=${{ github.ref }} head_ref=${{ github.head_ref }} base_ref=${{ github.base_ref }}
       - name: Checkout
@@ -36,28 +33,28 @@ jobs:
       - name: Build
         run: dotnet build Source/Mosa.sln /p:Version=${{ env.BUILD_VERSION }}
       - name: Create Installer
-        run: ISCC.exe /DMyAppVersion=${{ env.BUILD_VERSION }}.${{ steps.mosa-project-build-number.outputs.build-number }} Source/Inno-Setup-Script/Mosa-Installer.iss
+        run: ISCC.exe /DMyAppVersion=${{ env.BUILD_VERSION }}.${{ github.run_number }} Source/Inno-Setup-Script/Mosa-Installer.iss
       - name: Create Package - Mosa.Tools.Package
-        run: nuget pack Source\Mosa.Packages\Mosa.Tools.Package.nuspec -Tool -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ steps.mosa-project-build-number.outputs.build-number }}
+        run: nuget pack Source\Mosa.Packages\Mosa.Tools.Package.nuspec -Tool -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ github.run_number }}
       - name: Create Package - Mosa.Korlib
-        run: nuget pack Source\Mosa.Packages\Mosa.Korlib.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ steps.mosa-project-build-number.outputs.build-number }}
+        run: nuget pack Source\Mosa.Packages\Mosa.Korlib.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ github.run_number }}
       - name: Create Package - Mosa.DeviceSystem
-        run: nuget pack Source\Mosa.Packages\Mosa.DeviceSystem.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ steps.mosa-project-build-number.outputs.build-number }}
+        run: nuget pack Source\Mosa.Packages\Mosa.DeviceSystem.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ github.run_number }}
       - name: Create Package - Mosa.Runtime
-        run: nuget pack Source\Mosa.Packages\Mosa.Runtime.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ steps.mosa-project-build-number.outputs.build-number }}
+        run: nuget pack Source\Mosa.Packages\Mosa.Runtime.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ github.run_number }}
       - name: Create Package - Mosa.Platform.x86
-        run: nuget pack Source\Mosa.Packages\Mosa.Platform.x86.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ steps.mosa-project-build-number.outputs.build-number }}
+        run: nuget pack Source\Mosa.Packages\Mosa.Platform.x86.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ github.run_number }}
       - name: Create Package - Mosa.Kernel.x86
-        run: nuget pack Source\Mosa.Packages\Mosa.Kernel.x86.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ steps.mosa-project-build-number.outputs.build-number }}
+        run: nuget pack Source\Mosa.Packages\Mosa.Kernel.x86.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ github.run_number }}
       - name: Create Package - Mosa.Platform.x64
-        run: nuget pack Source\Mosa.Packages\Mosa.Platform.x64.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ steps.mosa-project-build-number.outputs.build-number }}
+        run: nuget pack Source\Mosa.Packages\Mosa.Platform.x64.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ github.run_number }}
       - name: Create Package - Mosa.Kernel.x64
-        run: nuget pack Source\Mosa.Packages\Mosa.Kernel.x64.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ steps.mosa-project-build-number.outputs.build-number }}
+        run: nuget pack Source\Mosa.Packages\Mosa.Kernel.x64.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ github.run_number }}
       - name: Create Installer Artifact
         uses: actions/upload-artifact@master
         with:
-          name: MOSA-Installer-${{ env.BUILD_VERSION }}.${{ steps.mosa-project-build-number.outputs.build-number }}.exe
-          path: bin\MOSA-Installer-${{ env.BUILD_VERSION }}.${{ steps.mosa-project-build-number.outputs.build-number }}.exe
+          name: MOSA-Installer-${{ env.BUILD_VERSION }}.${{ github.run_number }}.exe
+          path: bin\MOSA-Installer-${{ env.BUILD_VERSION }}.${{ github.run_number }}.exe
       - name: Create Nuget Packages Artifact
         uses: actions/upload-artifact@master
         with:
@@ -72,28 +69,28 @@ jobs:
       - name: Test Demo - Mosa.Demo.CoolWorld.x86 
         run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.Demo.CoolWorld.x86.dll -s Launcher.Test=true
       - name: Publish Package - Mosa.Tools.Package
-        run: dotnet nuget push bin\nupkg\Mosa.Tools.Package.${{ env.BUILD_VERSION }}.${{ steps.mosa-project-build-number.outputs.build-number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
+        run: dotnet nuget push bin\nupkg\Mosa.Tools.Package.${{ env.BUILD_VERSION }}.${{ github.run_number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
         if: github.event_name == 'push' && github.repository == 'mosa/MOSA-Project' && github.ref == 'refs/heads/master'
       - name: Publish Package - Mosa.Korlib
-        run: dotnet nuget push bin\nupkg\Mosa.Korlib.${{ env.BUILD_VERSION }}.${{ steps.mosa-project-build-number.outputs.build-number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
+        run: dotnet nuget push bin\nupkg\Mosa.Korlib.${{ env.BUILD_VERSION }}.${{ github.run_number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
         if: github.event_name == 'push' && github.repository == 'mosa/MOSA-Project' && github.ref == 'refs/heads/master'
       - name: Publish Package - Mosa.DeviceSystem
-        run: dotnet nuget push bin\nupkg\Mosa.DeviceSystem.${{ env.BUILD_VERSION }}.${{ steps.mosa-project-build-number.outputs.build-number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
+        run: dotnet nuget push bin\nupkg\Mosa.DeviceSystem.${{ env.BUILD_VERSION }}.${{ github.run_number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
         if: github.event_name == 'push' && github.repository == 'mosa/MOSA-Project' && github.ref == 'refs/heads/master'
       - name: Publish Package - Mosa.Runtime
-        run: dotnet nuget push bin\nupkg\Mosa.Runtime.${{ env.BUILD_VERSION }}.${{ steps.mosa-project-build-number.outputs.build-number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
+        run: dotnet nuget push bin\nupkg\Mosa.Runtime.${{ env.BUILD_VERSION }}.${{ github.run_number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
         if: github.event_name == 'push' && github.repository == 'mosa/MOSA-Project' && github.ref == 'refs/heads/master'
       - name: Publish Package - Mosa.Platform.x86
-        run: dotnet nuget push bin\nupkg\Mosa.Platform.x86.${{ env.BUILD_VERSION }}.${{ steps.mosa-project-build-number.outputs.build-number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
+        run: dotnet nuget push bin\nupkg\Mosa.Platform.x86.${{ env.BUILD_VERSION }}.${{ github.run_number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
         if: github.event_name == 'push' && github.repository == 'mosa/MOSA-Project' && github.ref == 'refs/heads/master'
       - name: Publish Package - Mosa.Kernel.x86
-        run: dotnet nuget push bin\nupkg\Mosa.Kernel.x86.${{ env.BUILD_VERSION }}.${{ steps.mosa-project-build-number.outputs.build-number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
+        run: dotnet nuget push bin\nupkg\Mosa.Kernel.x86.${{ env.BUILD_VERSION }}.${{ github.run_number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
         if: github.event_name == 'push' && github.repository == 'mosa/MOSA-Project' && github.ref == 'refs/heads/master'
       - name: Publish Package - Mosa.Platform.x64
-        run: dotnet nuget push bin\nupkg\Mosa.Platform.x64.${{ env.BUILD_VERSION }}.${{ steps.mosa-project-build-number.outputs.build-number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
+        run: dotnet nuget push bin\nupkg\Mosa.Platform.x64.${{ env.BUILD_VERSION }}.${{ github.run_number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
         if: github.event_name == 'push' && github.repository == 'mosa/MOSA-Project' && github.ref == 'refs/heads/master'
       - name: Publish Package - Mosa.Kernel.x64
-        run: dotnet nuget push bin\nupkg\Mosa.Kernel.x64.${{ env.BUILD_VERSION }}.${{ steps.mosa-project-build-number.outputs.build-number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
+        run: dotnet nuget push bin\nupkg\Mosa.Kernel.x64.${{ env.BUILD_VERSION }}.${{ github.run_number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
         if: github.event_name == 'push' && github.repository == 'mosa/MOSA-Project' && github.ref == 'refs/heads/master'
 
   build-unix:
