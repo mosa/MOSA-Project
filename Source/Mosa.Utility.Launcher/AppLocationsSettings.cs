@@ -45,10 +45,9 @@ namespace Mosa.Utility.Launcher
 					@"%CURRENT%\Tools\QEMU",
 					@"%APPDIR%\Tools\QEMU",
 					@"%APPDIR%\..\Tools\QEMU",
-					@"%MOSATOOLS%\QEMU",
-
 					@"%ProgramFiles%\qemu",
 					@"%ProgramFiles(x86)%\qemu",
+					@"%MOSATOOLS%\QEMU",
 					"/bin",
 					"/usr/bin"
 				}
