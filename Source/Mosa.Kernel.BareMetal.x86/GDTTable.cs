@@ -35,17 +35,12 @@ namespace Mosa.Kernel.BareMetal.x86
 
 		public void Setup()
 		{
-			Console.WriteLine("Mosa.Kernel.BareMetal.x86.GDTTable.GDTTable:Enter");
-
 			Entry.Store16(0, (GDTEntryOffset.TotalSize * 3) - 1);
-			Console.WriteLine("Mosa.Kernel.BareMetal.x86.GDTTable.GDTTable:1");
 			Entry.StorePointer(2, Entry + 6);
-			Console.WriteLine("Mosa.Kernel.BareMetal.x86.GDTTable.GDTTable:2");
 
 			Set(0, 0, 0, 0, 0);                // Null segment
 			Set(1, 0, 0xFFFFFFFF, 0x9A, 0xCF); // Code segment
 			Set(2, 0, 0xFFFFFFFF, 0x92, 0xCF); // Data segment
-			Console.WriteLine("Mosa.Kernel.BareMetal.x86.GDTTable.GDTTable:Exit");
 		}
 
 		public void Enable()

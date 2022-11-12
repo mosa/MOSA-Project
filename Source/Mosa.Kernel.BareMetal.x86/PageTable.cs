@@ -41,15 +41,19 @@ namespace Mosa.Kernel.BareMetal.x86
 			}
 
 			Console.WriteLine("Mosa.Kernel.BareMetal.x86.PageTable.Initialize:2");
-			while (true) { }
 
 			// Clear the Page Tables
 			for (uint index = 0; index < 1024; index++)
 			{
+				Console.WriteValue(index);
+
 				Page.ClearPage(PageTables + (index * Page.Size));
+
+				Console.Write(' ');
 			}
 
 			Console.WriteLine("Mosa.Kernel.BareMetal.x86.PageTable.Initialize:Exit");
+			while (true) { }
 		}
 
 		public static void Enable()
