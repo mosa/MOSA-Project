@@ -18,7 +18,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Text;
-using System.Linq;
 
 namespace Mosa.Utility.Launcher
 {
@@ -578,7 +577,7 @@ namespace Mosa.Utility.Launcher
 				string status = $"Compiling: {$"{(DateTime.Now - CompileStartTime).TotalSeconds:0.00}"} secs: {compilerEvent.ToText()}";
 
 				if (!string.IsNullOrEmpty(message))
-					status += $"- { message}";
+					status += $"- {message}";
 
 				Output(status);
 			}

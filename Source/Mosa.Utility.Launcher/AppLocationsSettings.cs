@@ -156,13 +156,6 @@ namespace Mosa.Utility.Launcher
 			return TryFind(
 				new string[] { "bochs.exe", "bochs" },
 				new string[] {
-					@"%MOSA%\Tools\Bochs",
-					@"%CURRENT%\..\Tools\Bochs",
-					@"%CURRENT%\Tools\Bochs",
-					@"%APPDIR%\Tools\Bochs",
-					@"%APPDIR%\..\Tools\Bochs",
-					@"%MOSATOOLS%\Bochs",
-
 					@"%ProgramFiles%\Bochs-2.6.9",
 					@"%ProgramFiles(x86)%\Bochs-2.6.9",
 					@"%ProgramFiles%\Bochs-2.6.8",
@@ -171,6 +164,16 @@ namespace Mosa.Utility.Launcher
 					@"%ProgramFiles(x86)%\Bochs-2.6.5",
 					@"%ProgramFiles%\Bochs-2.6.2",
 					@"%ProgramFiles(x86)%\Bochs-2.6.2",
+					@"%ProgramFiles%\Bochs-2.7",
+					@"%ProgramFiles(x86)%\Bochs-2.7",
+
+					@"%MOSA%\Tools\Bochs",
+					@"%CURRENT%\..\Tools\Bochs",
+					@"%CURRENT%\Tools\Bochs",
+					@"%APPDIR%\Tools\Bochs",
+					@"%APPDIR%\..\Tools\Bochs",
+					@"%MOSATOOLS%\Bochs",
+
 					"/bin",
 					"/usr/bin"
 				}

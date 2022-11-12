@@ -124,12 +124,30 @@ namespace Mosa.Kernel.BareMetal.x86
 		{
 			while (Offset >= Columns * Rows)
 			{
-				Runtime.Internal.MemoryCopy(new Pointer(Address), new Pointer(Address + (Columns * 2)), Columns * 2);
-				Runtime.Internal.MemorySet(new Pointer(Address + (Columns * (Rows - 1))), (byte)((BackgroundColor & 0x0F) << 4), (int)(Columns * 2));
+				ScrollLines();
+				ClearLastLine();
 
 				Offset = (short)(Offset - Columns);
 			}
+
 			UpdateCursor();
+		}
+
+		private static void ScrollLines()
+		{
+			Runtime.Internal.MemoryCopy(new Pointer(Address), new Pointer(Address + (Columns * 2)), Columns * (Rows - 1) * 2);
+		}
+
+		private static void ClearLastLine()
+		{
+			var address = new Pointer(Address + (Columns * (Rows - 1) * 2));
+
+			var value = (ushort)((Color | ((BackgroundColor & 0x0F) << 4)) << 8);
+
+			for (int i = 0; i < Columns * 2; i += 2)
+			{
+				address.Store16(i, value);
+			}
 		}
 
 		private static void UpdateCursor()
