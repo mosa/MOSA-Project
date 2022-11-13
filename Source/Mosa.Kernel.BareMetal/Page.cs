@@ -14,19 +14,12 @@ namespace Mosa.Kernel.BareMetal
 
 		public static Pointer ClearPage(Pointer page)
 		{
-			//Console.WriteLine("Mosa.Kernel.BareMetal.Page.ClearPage:Enter");
+			var writes = Size / 4;
 
-			var writes = Size / 8;
-
-			for (uint i = 0; i < writes; i += 8)
+			for (uint i = 0; i < writes; i += 4)
 			{
-				//Console.WriteValue(i);
-				//Console.WriteLine();
-
-				page.Store64(i, 0);
+				page.Store32(i, 0);
 			}
-
-			//Console.WriteLine("Mosa.Kernel.BareMetal.Page.ClearPage:Exit");
 
 			return page;
 		}

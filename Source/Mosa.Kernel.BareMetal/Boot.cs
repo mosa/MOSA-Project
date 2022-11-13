@@ -33,7 +33,8 @@ namespace Mosa.Kernel.BareMetal
 
 			Console.Write("2...");
 			BootMemoryMap.ImportMultibootV1MemoryMap();
-			BootMemoryMap.Dump();
+
+			//BootMemoryMap.Dump();
 
 			Console.Write("4...");
 			PhysicalPageAllocator.Setup();

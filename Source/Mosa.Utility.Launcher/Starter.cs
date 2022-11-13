@@ -152,9 +152,11 @@ namespace Mosa.Utility.Launcher
 		{
 			var arg = new StringBuilder();
 
+			arg.Append(" -no-reboot");
 			arg.Append(" -L " + Quote(LauncherSettings.QEMUBios));
 			arg.Append($" -m {LauncherSettings.EmulatorMemory.ToString()}M");
 			arg.Append($" -smp cores={LauncherSettings.EmulatorCores.ToString()}");
+			arg.Append(" -usb");
 
 			if (LauncherSettings.Platform == "x86")
 			{
@@ -164,6 +166,8 @@ namespace Mosa.Utility.Launcher
 			switch (LauncherSettings.EmulatorSVGA)
 			{
 				case "vmware": arg.Append(" -vga vmware"); break;
+				case "cirrus": arg.Append(" -vga cirrus"); break;
+				case "std": arg.Append(" -vga std"); break;
 				default: break;
 			}
 

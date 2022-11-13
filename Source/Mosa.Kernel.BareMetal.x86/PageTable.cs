@@ -16,14 +16,13 @@ namespace Mosa.Kernel.BareMetal.x86
 
 		public static void Setup()
 		{
-			Console.WriteLine("Mosa.Kernel.BareMetal.x86.PageTable.Setup:Enter");
+			//Console.WriteLine("Mosa.Kernel.BareMetal.x86.PageTable.Setup:Enter");
 			GDTTable = new GDTTable(PhysicalPageAllocator.ReservePage());
 
 			PageDirectory = PhysicalPageAllocator.ReservePage();
-
 			PageTables = PhysicalPageAllocator.ReservePages(1024);
 
-			Console.WriteLine("Mosa.Kernel.BareMetal.x86.PageTable.Setup:Exit");
+			//Console.WriteLine("Mosa.Kernel.BareMetal.x86.PageTable.Setup:Exit");
 		}
 
 		public static void Initialize()
