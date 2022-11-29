@@ -80,7 +80,6 @@ Source: "..\..\bin\Mosa.Utility.Disassembler.dll"; DestDir: "{app}\bin"; Flags: 
 ;Source: "..\..\bin\System.Threading.Channels.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 ;Source: "..\..\bin\System.Threading.Tasks.Extensions.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\dnlib.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
-Source: "..\..\bin\CommandLine.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\PriorityQueue.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\WinFormsUI.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\WeifenLuo.WinFormsUI.Docking.ThemeVS2015.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
