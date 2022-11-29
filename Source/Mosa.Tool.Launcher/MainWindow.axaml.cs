@@ -29,8 +29,7 @@ namespace Mosa.Tool.Launcher
 		{
 			InitializeComponent();
 
-			var timer = new DispatcherTimer();
-			timer.Interval = TimeSpan.FromMilliseconds(1);
+			var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(1) };
 			timer.Tick += (_, _) =>
 			{
 				OutputProgress.Maximum = _totalMethods;

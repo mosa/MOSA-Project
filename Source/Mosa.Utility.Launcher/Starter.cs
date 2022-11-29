@@ -10,6 +10,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
+using System.Runtime.InteropServices;
 
 namespace Mosa.Utility.Launcher
 {
@@ -153,7 +154,6 @@ namespace Mosa.Utility.Launcher
 			var arg = new StringBuilder();
 
 			arg.Append(" -L " + Quote(LauncherSettings.QEMUBios));
-			arg.Append(" -soundhw sb16");
 
 			// TODO: Issue with unit tests on Linux
 			/*if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
@@ -169,12 +169,10 @@ namespace Mosa.Utility.Launcher
 				arg.Append(" -cpu qemu32,+sse4.1");
 			}
 
-			if (!string.IsNullOrWhiteSpace(LauncherSettings.EmulatorSVGA))
+			switch (LauncherSettings.EmulatorSVGA)
 			{
-				switch (LauncherSettings.EmulatorSVGA.ToLowerInvariant())
-				{
-					case "vmware": arg.Append(" -vga vmware"); break;
-				}
+				case "vmware": arg.Append(" -vga vmware"); break;
+				default: break;
 			}
 
 			if (!LauncherSettings.EmulatorDisplay || LauncherSettings.LauncherTest)
@@ -193,14 +191,12 @@ namespace Mosa.Utility.Launcher
 			}
 
 			// COM2 = Mosa Internal Debugger
-			if (!string.IsNullOrWhiteSpace(LauncherSettings.EmulatorSerial))
+			switch (LauncherSettings.EmulatorSerial)
 			{
-				switch (LauncherSettings.EmulatorSerial)
-				{
-					case "pipe": arg.Append($" -serial pipe:{LauncherSettings.EmulatorSerialPipe}"); break;
-					case "tcpserver": arg.Append($" -serial tcp:{LauncherSettings.EmulatorSerialHost}:{LauncherSettings.EmulatorSerialPort},server,nowait"); break;
-					case "tcpclient": arg.Append($" -serial tcp:{LauncherSettings.EmulatorSerialHost}:{LauncherSettings.EmulatorSerialPort},client,nowait"); break;
-				}
+				case "pipe": arg.Append($" -serial pipe:{LauncherSettings.EmulatorSerialPipe}"); break;
+				case "tcpserver": arg.Append($" -serial tcp:{LauncherSettings.EmulatorSerialHost}:{LauncherSettings.EmulatorSerialPort},server,nowait"); break;
+				case "tcpclient": arg.Append($" -serial tcp:{LauncherSettings.EmulatorSerialHost}:{LauncherSettings.EmulatorSerialPort},client,nowait"); break;
+				default: break;
 			}
 
 			if (LauncherSettings.EmulatorGDB)
@@ -208,20 +204,11 @@ namespace Mosa.Utility.Launcher
 				arg.Append($" -S -gdb tcp::{LauncherSettings.GDBPort}");
 			}
 
-			if (LauncherSettings.ImageFormat == "iso")
+			switch (LauncherSettings.ImageFormat)
 			{
-				arg.Append($" -cdrom {Quote(LauncherSettings.ImageFile)}");
-			}
-			else
-			{
-				if (LauncherSettings.ImageFormat == "bin")
-				{
-					arg.Append($" -kernel {Quote(LauncherSettings.ImageFile)}");
-				}
-				else
-				{
-					arg.Append($" -hda {Quote(LauncherSettings.ImageFile)}");
-				}
+				case "iso": arg.Append($" -cdrom {Quote(LauncherSettings.ImageFile)}"); break;
+				case "bin": arg.Append($" -kernel {Quote(LauncherSettings.ImageFile)}"); break;
+				default: arg.Append($" -hda {Quote(LauncherSettings.ImageFile)}"); break;
 			}
 
 			return LaunchApplication(LauncherSettings.QEMU, arg.ToString(), getOutput);
@@ -234,40 +221,60 @@ namespace Mosa.Utility.Launcher
 			var logfile = Path.Combine(LauncherSettings.TemporaryFolder, Path.GetFileNameWithoutExtension(LauncherSettings.ImageFile) + "-bochs.log");
 			var configfile = Path.Combine(LauncherSettings.TemporaryFolder, Path.GetFileNameWithoutExtension(LauncherSettings.ImageFile) + ".bxrc");
 
-			var fileVersionInfo = FileVersionInfo.GetVersionInfo(LauncherSettings.Bochs);
-
-			// simd or sse
-			var simd = "simd";
-
-			if (!(fileVersionInfo.FileMajorPart >= 2 && fileVersionInfo.FileMinorPart >= 6 && fileVersionInfo.FileBuildPart >= 5))
-				simd = "sse";
-
 			var sb = new StringBuilder();
 
 			sb.AppendLine($"megs: {LauncherSettings.EmulatorMemory}");
-			sb.AppendLine("ata0: enabled=1,ioaddr1=0x1f0,ioaddr2=0x3f0,irq=14");
-			sb.AppendLine($"cpu: count={LauncherSettings.EmulatorCores}");
-			sb.AppendLine($"cpuid: mmx=1,sep=1,{simd}=sse4_2,apic=xapic,aes=1,movbe=1,xsave=1");
-			sb.AppendLine("boot: cdrom,disk");
+			sb.AppendLine($"ata0: enabled=1,ioaddr1=0x1f0,ioaddr2=0x3f0,irq=14");
+			sb.AppendLine($"cpuid: mmx=1,sep=1,simd=sse4_2,apic=xapic,aes=1,movbe=1,xsave=1");
+			sb.AppendLine($"boot: cdrom,disk");
 			sb.AppendLine($"log: {Quote(logfile)}");
 			sb.AppendLine($"romimage: file={Quote(Path.Combine(bochsdirectory, "BIOS-bochs-latest"))}");
 			sb.AppendLine($"vgaromimage: file={Quote(Path.Combine(bochsdirectory, "VGABIOS-lgpl-latest"))}");
-			sb.AppendLine($"display_library: x, options={Quote("gui_debug")}");
 
-			if (LauncherSettings.ImageFormat == "iso")
+			//sb.AppendLine($"vgaromimage: file={Quote(Path.Combine(bochsdirectory, "VGABIOS-lgpl-latest-cirrus"))}");
+
+			if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
 			{
-				sb.AppendLine($"ata0-master: type=cdrom,path={Quote(LauncherSettings.ImageFile)},status=inserted");
+				sb.AppendLine($"display_library: x, options={Quote("gui_debug")}");
+			}
+
+			switch (LauncherSettings.ImageFormat)
+			{
+				case "iso": sb.AppendLine($"ata0-master: type=cdrom,path={Quote(LauncherSettings.ImageFile)},status=inserted"); break;
+				default: sb.AppendLine($"ata0-master: type=disk,path={Quote(LauncherSettings.ImageFile)},biosdetect=none,cylinders=0,heads=0,spt=0"); break;
+			}
+
+			switch (LauncherSettings.EmulatorSVGA)
+			{
+				case "vbe": sb.Append("vga: extension=vbe"); break;
+				case "cirrus": sb.Append("vga: extension=cirrus"); break;
+				default: break;
+			}
+
+			// COM1 = Kernel Log
+			if (LauncherSettings.LauncherTest)
+			{
+				// Not supported
+				sb.AppendLine("com1: enabled=1, mode=null");
 			}
 			else
 			{
-				sb.AppendLine($"ata0-master: type=disk,path={Quote(LauncherSettings.ImageFile)},biosdetect=none,cylinders=0,heads=0,spt=0");
+				sb.AppendLine("com1: enabled=1, mode=null");
 			}
 
-			sb.AppendLine(@"com1: enabled=1, mode=pipe-server, dev=\\.\pipe\MOSA1");
-
-			if (LauncherSettings.EmulatorSerial == "pipe")
+			// COM2 = Mosa Internal Debugger
+			switch (LauncherSettings.EmulatorSerial)
 			{
-				sb.AppendLine(@"com2: enabled=1, mode=pipe-server, dev=\\.\pipe\MOSA2");
+				case "pipe": sb.Append($"com2: enabled=1, mode=pipe-server, dev=\\\\.\\pipe\\{LauncherSettings.EmulatorSerialPipe}"); break;
+				case "tcpserver": sb.Append($"com2: enabled=1, mode=socket-server, dev={LauncherSettings.EmulatorSerialHost}:{LauncherSettings.EmulatorSerialPort}"); break;
+				case "tcpclient": sb.Append($"com2: enabled=1, mode=socket-client, dev={LauncherSettings.EmulatorSerialHost}:{LauncherSettings.EmulatorSerialPort}"); break;
+				default: break;
+			}
+
+			if (LauncherSettings.EmulatorGDB)
+			{
+				// Untested
+				sb.Append($"gdbstub: enabled=1, port={LauncherSettings.GDBPort}, text_base=0, data_base=0, bss_base=0");
 			}
 
 			File.WriteAllText(configfile, sb.ToString());
@@ -325,6 +332,7 @@ namespace Mosa.Utility.Launcher
 
 			sb.AppendLine("floppy0.present = \"FALSE\"");
 
+			// COM1 = Kernel Log
 			sb.AppendLine("serial0.present = \"TRUE\"");
 			sb.AppendLine("serial0.yieldOnMsrRead = \"FALSE\"");
 			sb.AppendLine("serial0.fileType = \"pipe\"");
@@ -332,28 +340,32 @@ namespace Mosa.Utility.Launcher
 			sb.AppendLine("serial0.pipe.endPoint = \"server\"");
 			sb.AppendLine("serial0.tryNoRxLoss = \"FALSE\"");
 
-			if (LauncherSettings.EmulatorSerial == "pipe")
+			// COM2 = Mosa Internal Debugger
+			if (NullToEmpty(LauncherSettings.EmulatorSerial) == "pipe")
 			{
 				sb.AppendLine("serial1.present = \"TRUE\"");
 				sb.AppendLine("serial1.yieldOnMsrRead = \"FALSE\"");
 				sb.AppendLine("serial1.fileType = \"pipe\"");
-				sb.AppendLine("serial1.fileName = \"\\\\.\\pipe\\MOSA2\"");
+				sb.AppendLine($"serial1.fileName = \"\\\\.\\pipe\\{LauncherSettings.EmulatorSerialPipe}\"");
 				sb.AppendLine("serial1.pipe.endPoint = \"server\"");
 				sb.AppendLine("serial1.tryNoRxLoss = \"FALSE\"");
+
+				// FUTURE - when adding TCP instead of PIPE support (TCP is preferred)
+				//serial0.present = "TRUE"
+				//serial0.yieldOnMsrRead = "TRUE"
+				//serial0.fileType = "network"
+				//serial0.fileName = "telnet://192.168.1.2:2001"
 			}
 
 			File.WriteAllText(configfile, sb.ToString());
 
-			string arg = Quote(configfile);
+			var arg = Quote(configfile);
 
-			// If "VMwareWorkstation" is found, first launch it.
 			if (!String.IsNullOrWhiteSpace(LauncherSettings.VmwareWorkstation))
 			{
 				return LaunchApplication(LauncherSettings.VmwareWorkstation, arg, getOutput);
 			}
-
-			// If "VMwarePlayer" is found, but not "VMwareWorkstation", then launch "VMwarePlayer"
-			if (!String.IsNullOrWhiteSpace(LauncherSettings.VmwarePlayer))
+			else if (!String.IsNullOrWhiteSpace(LauncherSettings.VmwarePlayer))
 			{
 				return LaunchApplication(LauncherSettings.VmwarePlayer, arg, getOutput);
 			}
