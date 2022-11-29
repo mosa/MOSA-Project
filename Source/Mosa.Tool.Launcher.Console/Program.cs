@@ -19,7 +19,7 @@ namespace Mosa.Tool.Launcher.Console
 		{
 			Settings = AppLocationsSettings.GetAppLocations();
 
-			NotifyStatus($"Current Directory: {Environment.CurrentDirectory}");
+			NotifyStatus("Current Directory: " + Environment.CurrentDirectory);
 
 			RegisterPlatforms();
 
@@ -35,26 +35,24 @@ namespace Mosa.Tool.Launcher.Console
 
 				if (!Builder.IsSucccessful)
 				{
-					NotifyStatus($"Aborting! A build error has occurred.");
+					NotifyStatus("Aborting! A build error has occurred.");
 					return 1;
 				}
-				else
-				{
-					if (Settings.GetValue("Launcher.Launch", false))
-					{
-						var starter = new Starter(Builder.Settings, compilerHooks, Builder.Linker);
 
-						if (!starter.Launch())
-						{
-							NotifyStatus($"Aborting! A launch error has occurred.");
-							return 1;
-						}
+				if (Settings.GetValue("Launcher.Launch", false))
+				{
+					var starter = new Starter(Builder.Settings, compilerHooks, Builder.Linker);
+
+					if (!starter.Launch())
+					{
+						NotifyStatus("Aborting! A launch error has occurred.");
+						return 1;
 					}
 				}
 			}
 			catch (Exception e)
 			{
-				NotifyStatus($"Exception: {e.ToString()}");
+				NotifyStatus($"Exception: {e}");
 				return 1;
 			}
 
@@ -113,10 +111,9 @@ namespace Mosa.Tool.Launcher.Console
 			Settings.SetValue("Launcher.PlugKorlib", true);
 			Settings.SetValue("Launcher.HuntForCorLib", true);
 			Settings.SetValue("Linker.Drawf", false);
-			Settings.SetValue("OS.Name", "MOSA");
 		}
 
-		public static void LoadArguments(string[] args)
+		private static void LoadArguments(string[] args)
 		{
 			SetDefaultSettings();
 
@@ -124,15 +121,15 @@ namespace Mosa.Tool.Launcher.Console
 
 			Settings.Merge(arguments);
 
-			var sourcefiles = Settings.GetValueList("Compiler.SourceFiles");
-
-			if (sourcefiles != null)
+			var files = Settings.GetValueList("Compiler.SourceFiles");
+			if (files != null)
 			{
-				foreach (var sourcefile in sourcefiles)
-				{
-					var full = Path.GetFullPath(sourcefile);
-					var path = Path.GetDirectoryName(full);
+				var src = files[0];
+				Settings.SetValue("OS.Name", src != null ? Path.GetFileNameWithoutExtension(src) : "MOSA");
 
+				foreach (var file in files)
+				{
+					var path = Path.GetDirectoryName(Path.GetFullPath(file));
 					if (!string.IsNullOrWhiteSpace(path))
 					{
 						Settings.AddPropertyListValue("SearchPaths", path);
