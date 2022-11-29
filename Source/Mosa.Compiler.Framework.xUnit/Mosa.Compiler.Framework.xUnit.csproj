@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net7.0</TargetFramework>
 		<AssemblyTitle>Mosa.Compiler.Framework.xUnit</AssemblyTitle>
 		<Company>MOSA Project</Company>
 		<Product>Mosa.Compiler.Framework.xUnit</Product>
@@ -11,7 +11,7 @@
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<DebugType>full</DebugType>
 		<RemoveIntegerChecks>False</RemoveIntegerChecks>
-		<LangVersion>10.0</LangVersion>
+		<LangVersion>11.0</LangVersion>
 		<FileAlignment>4096</FileAlignment>
 		<OutputPath>..\..\bin\</OutputPath>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>

@@ -85,7 +85,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		{
 			stream.Position = 0;
 
-			var sha = new SHA256Managed();
+			using var sha = SHA256.Create();
 			var hash = sha.ComputeHash(stream);
 			return BitConverter.ToString(hash);
 		}

@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <AssemblyTitle>Mosa.Platform.x64</AssemblyTitle>
     <Company>MOSA Project</Company>
     <Product>Mosa.Platform.x64</Product>
@@ -10,7 +10,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <DebugType>full</DebugType>
     <RegisterForComInterop>False</RegisterForComInterop>
-    <LangVersion>10.0</LangVersion>
+    <LangVersion>11.0</LangVersion>
     <RemoveIntegerChecks>False</RemoveIntegerChecks>
     <OutputPath>..\..\bin\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>

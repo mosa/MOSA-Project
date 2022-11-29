@@ -242,7 +242,7 @@ namespace Mosa.Utility.Launcher
 				{
 					var name = Path.GetFileName(file).ToUpper();
 
-					Console.WriteLine("Adding file: " + name);
+					Output("Adding file: " + name);
 					bootImageOptions.IncludeFiles.Add(new IncludeFile(name, File.ReadAllBytes(file)));
 				}
 			}
@@ -409,7 +409,7 @@ namespace Mosa.Utility.Launcher
 				{
 					var name = Path.GetFileName(file).ToUpper();
 
-					Console.WriteLine("Adding file: " + name);
+					Output("Adding file: " + name);
 					File.Copy(file, Path.Combine(isoDirectory, name));
 				}
 			}
@@ -472,7 +472,7 @@ namespace Mosa.Utility.Launcher
 				{
 					var name = Path.GetFileName(file).ToUpper();
 
-					Console.WriteLine("Adding file: " + name);
+					Output("Adding file: " + name);
 					File.Copy(file, Path.Combine(isoDirectory, name));
 				}
 			}

@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <AssemblyTitle>Mosa.Utility.Compiler</AssemblyTitle>
     <Company>MOSA Project</Company>
     <Product>Mosa.Utility.Compiler</Product>
     <copyright>Copyright © MOSA Project 2022</copyright>
-    <LangVersion>10.0</LangVersion>
+    <LangVersion>11.0</LangVersion>
     <BaseAddress>285212672</BaseAddress>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <RemoveIntegerChecks>False</RemoveIntegerChecks>
