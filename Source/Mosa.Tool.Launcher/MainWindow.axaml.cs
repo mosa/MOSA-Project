@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,7 +8,6 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Platform;
 using Avalonia.Threading;
-using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Configuration;
 using Mosa.Compiler.Framework;
 using Mosa.Utility.Configuration;
@@ -159,7 +159,7 @@ namespace Mosa.Tool.Launcher
 			_settings.SetValue("Linker.Symbols", EmtSymbs.IsChecked.Value);
 			_settings.SetValue("Linker.StaticRelocations", EmtRelocs.IsChecked.Value);
 			_settings.SetValue("Linker.Drawf", EmtDwarf.IsChecked.Value);
-			_settings.SetValue("Compiler.BaseAddress", (uint)BaseAddrTxt.Text.ParseHexOrInteger());
+			_settings.SetValue("Compiler.BaseAddress", uint.Parse(BaseAddrTxt.Text, NumberStyles.Integer | NumberStyles.HexNumber));
 
 			_settings.SetValue("CompilerDebug.NasmFile", NasmFile.IsChecked.Value ? "%DEFAULT%" : string.Empty);
 			_settings.SetValue("CompilerDebug.AsmFile", AsmFile.IsChecked.Value ? "%DEFAULT%" : string.Empty);

@@ -100,7 +100,7 @@ namespace Mosa.Demo.SVGAWorld.x86
 
 			GeneralUtils.Mouse = DeviceService.GetFirstDevice<StandardMouse>().DeviceDriver as StandardMouse;
 			if (GeneralUtils.Mouse == null)
-				HAL.Abort("Mmouse not found.");
+				HAL.Abort("Mouse not found.");
 
 			Log("<SELFTEST:PASSED>");
 			DoGraphics();
@@ -126,8 +126,6 @@ namespace Mosa.Demo.SVGAWorld.x86
 			Taskbar.Buttons.Add(new TaskbarButton(Taskbar, "Settings", Color.Coral, Color.White, Color.Red,
 				() => { WindowManager.Open(new Settings(70, 90, 400, 200, Color.MediumPurple, Color.Purple, Color.White)); return null; }));
 
-			List<Label> labels;
-
 			for (; ; )
 			{
 				// Clear screen
@@ -137,7 +135,7 @@ namespace Mosa.Demo.SVGAWorld.x86
 				Display.DrawMosaLogo(10);
 
 				// Initialize background labels
-				labels = new List<Label>
+				var labels = new List<Label>
 				{
 					new Label("Current resolution is " + Display.Width + "x" + Display.Height, Display.DefaultFont, 10, 10, Color.OrangeRed),
 					new Label("FPS is " + FPSMeter.FPS, Display.DefaultFont, 10, 26, Color.Lime),
@@ -174,7 +172,7 @@ namespace Mosa.Demo.SVGAWorld.x86
 
 		public static void ProcessInterrupt(uint interrupt, uint errorCode)
 		{
-			if (interrupt >= 0x20 && interrupt < 0x30)
+			if (interrupt is >= 0x20 and < 0x30)
 				DeviceSystem.HAL.ProcessInterrupt((byte)(interrupt - 0x20));
 		}
 	}
