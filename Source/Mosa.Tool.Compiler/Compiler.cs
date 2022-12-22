@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using Mosa.Compiler.MosaTypeSystem.CLR;
 
 namespace Mosa.Tool.Compiler
 {
@@ -74,7 +75,7 @@ Example: Mosa.Tool.Compiler.exe -o Mosa.HelloWorld.x86.bin -platform x86 Mosa.He
 					throw new Exception("No input file(s) specified.");
 				}
 
-				compiler = new MosaCompiler(Settings, CreateCompilerHooks());
+				compiler = new MosaCompiler(Settings, CreateCompilerHooks(), new ClrModuleLoader(), new ClrTypeResolver());
 
 				if (string.IsNullOrEmpty(compiler.CompilerSettings.OutputFile))
 				{

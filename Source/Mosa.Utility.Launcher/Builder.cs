@@ -19,6 +19,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Text;
 using System.Linq;
+using Mosa.Compiler.MosaTypeSystem.CLR;
 
 namespace Mosa.Utility.Launcher
 {
@@ -142,7 +143,7 @@ namespace Mosa.Utility.Launcher
 				}
 			}
 
-			var compiler = new MosaCompiler(Settings, CompilerHooks);
+			var compiler = new MosaCompiler(Settings, CompilerHooks, new ClrModuleLoader(), new ClrTypeResolver());
 
 			compiler.Load();
 			compiler.Initialize();

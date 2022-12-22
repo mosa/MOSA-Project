@@ -2,7 +2,7 @@
 
 namespace Mosa.Compiler.MosaTypeSystem
 {
-	internal interface ITypeSystemController
+	public interface ITypeSystemController
 	{
 		MosaModule CreateModule();
 

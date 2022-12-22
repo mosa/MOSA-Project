@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common.Exceptions;
-using Mosa.Compiler.MosaTypeSystem.Metadata;
 using System;
 using System.Collections.Generic;
 
@@ -25,7 +24,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			set
 			{
 				corLib = value;
-				BuiltIn = new BuiltInTypes(this, corLib);
+				BuiltIn = new BuiltInTypes(typeResolver, this, corLib);
 			}
 		}
 
@@ -51,19 +50,21 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public MosaMethod EntryPoint { get; private set; }
 
-		internal ITypeSystemController Controller { get; private set; }
+		public ITypeSystemController Controller { get; private set; }
 
-		internal readonly CLRMetadata metadata;
+		private readonly IMetadata metadata;
+		private readonly ITypeResolver typeResolver;
 
-		private TypeSystem(CLRMetadata metadata)
+		private TypeSystem(IMetadata metadata, ITypeResolver typeResolver)
 		{
 			this.metadata = metadata;
+			this.typeResolver = typeResolver;
 			Modules = new List<MosaModule>();
 		}
 
-		public static TypeSystem Load(IMetadata metadata)
+		public static TypeSystem Load(IMetadata metadata, ITypeResolver typeResolver)
 		{
-			var result = new TypeSystem(metadata as CLRMetadata);
+			var result = new TypeSystem(metadata, typeResolver);
 			result.Load();
 			return result;
 		}
