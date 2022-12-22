@@ -17,7 +17,7 @@ namespace Mosa.Platform.x86.CompilerStages
 
 		private void CreateMultibootMethod()
 		{
-			var startUpType = TypeSystem.GetTypeByName("Mosa.Runtime", "StartUp");
+			var startUpType = TypeSystem.GetTypeByName("Mosa.Runtime.StartUp");
 			var initializeMethod = startUpType.FindMethodByName("Initialize");
 
 			Compiler.GetMethodData(initializeMethod).DoNotInline = true;

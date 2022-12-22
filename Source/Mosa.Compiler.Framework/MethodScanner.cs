@@ -377,19 +377,19 @@ namespace Mosa.Compiler.Framework
 				ScheduleMethod(entryPoint);
 			}
 
-			var objectType = TypeSystem.GetTypeByName("System", "Object");
+			var objectType = TypeSystem.GetTypeByName("System.Object");
 			allocatedTypes.Add(objectType);
 
-			var stringType = TypeSystem.GetTypeByName("System", "String");
+			var stringType = TypeSystem.GetTypeByName("System.String");
 			allocatedTypes.Add(stringType);
 
-			var typeType = TypeSystem.GetTypeByName("System", "Type");
+			var typeType = TypeSystem.GetTypeByName("System.Type");
 			allocatedTypes.Add(typeType);
 
-			var exceptionType = TypeSystem.GetTypeByName("System", "Exception");
+			var exceptionType = TypeSystem.GetTypeByName("System.Exception");
 			allocatedTypes.Add(exceptionType);
 
-			var delegateType = TypeSystem.GetTypeByName("System", "Delegate");
+			var delegateType = TypeSystem.GetTypeByName("System.Delegate");
 			allocatedTypes.Add(delegateType);
 
 			//var arrayType = TypeSystem.GetTypeByName("System", "Array");

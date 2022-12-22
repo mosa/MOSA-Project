@@ -31,62 +31,62 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 		private void DivSigned32(Context context)
 		{
-			ReplaceWithCall(context, "Mosa.Runtime.Math", "Division", "sdiv32");
+			ReplaceWithCall(context, "Mosa.Runtime.Math.Division", "sdiv32");
 		}
 
 		private void DivSigned64(Context context)
 		{
-			ReplaceWithCall(context, "Mosa.Runtime.Math", "Division", "sdiv64");
+			ReplaceWithCall(context, "Mosa.Runtime.Math.Division", "sdiv64");
 		}
 
 		private void DivUnsigned32(Context context)
 		{
-			ReplaceWithCall(context, "Mosa.Runtime.Math", "Division", "udiv32");
+			ReplaceWithCall(context, "Mosa.Runtime.Math.Division", "udiv32");
 		}
 
 		private void DivUnsigned64(Context context)
 		{
-			ReplaceWithCall(context, "Mosa.Runtime.Math", "Division", "udiv64");
+			ReplaceWithCall(context, "Mosa.Runtime.Math.Division", "udiv64");
 		}
 
 		private void RemSigned32(Context context)
 		{
-			ReplaceWithCall(context, "Mosa.Runtime.Math", "Division", "smod32");
+			ReplaceWithCall(context, "Mosa.Runtime.Math.Division", "smod32");
 		}
 
 		private void RemSigned64(Context context)
 		{
-			ReplaceWithCall(context, "Mosa.Runtime.Math", "Division", "smod64");
+			ReplaceWithCall(context, "Mosa.Runtime.Math.Division", "smod64");
 		}
 
 		private void RemUnsigned32(Context context)
 		{
-			ReplaceWithCall(context, "Mosa.Runtime.Math", "Division", "umod32");
+			ReplaceWithCall(context, "Mosa.Runtime.Math.Division", "umod32");
 		}
 
 		private void RemUnsigned64(Context context)
 		{
-			ReplaceWithCall(context, "Mosa.Runtime.Math", "Division", "umod64");
+			ReplaceWithCall(context, "Mosa.Runtime.Math.Division", "umod64");
 		}
 
 		private void ConvertFloatR4ToFloatR8(Context context)
 		{
-			ReplaceWithCall(context, "Mosa.Runtime.ARMv8A32.Math", "FloatingPoint", "FloatToDouble");
+			ReplaceWithCall(context, "Mosa.Runtime.ARMv8A32.Math.FloatingPoint", "FloatToDouble");
 		}
 
 		private void ConvertFloatR8ToFloatR4(Context context)
 		{
-			ReplaceWithCall(context, "Mosa.Runtime.ARMv8A32.Math", "FloatingPoint", "DoubleToFloat");
+			ReplaceWithCall(context, "Mosa.Runtime.ARMv8A32.Math.FloatingPoint", "DoubleToFloat");
 		}
 
 		private void BitCopyFloatR4ToInt32(Context context)
 		{
-			ReplaceWithCall(context, "Mosa.Runtime.ARMv8A32.Math", "FloatingPoint", "BitCopyFloatR4ToInt32");
+			ReplaceWithCall(context, "Mosa.Runtime.ARMv8A32.Math.FloatingPoint", "BitCopyFloatR4ToInt32");
 		}
 
 		private void BitCopyInt32ToFloatR4(Context context)
 		{
-			ReplaceWithCall(context, "Mosa.Runtime.ARMv8A32.Math", "FloatingPoint", "BitCopyInt32ToFloatR4");
+			ReplaceWithCall(context, "Mosa.Runtime.ARMv8A32.Math.FloatingPoint", "BitCopyInt32ToFloatR4");
 		}
 
 		#endregion Visitation Methods

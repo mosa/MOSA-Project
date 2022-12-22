@@ -40,17 +40,17 @@ namespace Mosa.Compiler.Framework.CIL
 			if (decoder.Instruction.Operand is MosaType)
 			{
 				node.MosaType = (MosaType)decoder.Instruction.Operand;
-				node.Result = decoder.MethodCompiler.CreateVirtualRegister(decoder.TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"));
+				node.Result = decoder.MethodCompiler.CreateVirtualRegister(decoder.TypeSystem.GetTypeByName("System.RuntimeTypeHandle"));
 			}
 			else if (decoder.Instruction.Operand is MosaMethod)
 			{
 				node.InvokeMethod = (MosaMethod)decoder.Instruction.Operand;
-				node.Result = decoder.MethodCompiler.CreateVirtualRegister(decoder.TypeSystem.GetTypeByName("System", "RuntimeMethodHandle"));
+				node.Result = decoder.MethodCompiler.CreateVirtualRegister(decoder.TypeSystem.GetTypeByName("System.RuntimeMethodHandle"));
 			}
 			else if (decoder.Instruction.Operand is MosaField)
 			{
 				node.MosaField = (MosaField)decoder.Instruction.Operand;
-				node.Result = decoder.MethodCompiler.CreateVirtualRegister(decoder.TypeSystem.GetTypeByName("System", "RuntimeFieldHandle"));
+				node.Result = decoder.MethodCompiler.CreateVirtualRegister(decoder.TypeSystem.GetTypeByName("System.RuntimeFieldHandle"));
 			}
 			node.OperandCount = 0;
 		}

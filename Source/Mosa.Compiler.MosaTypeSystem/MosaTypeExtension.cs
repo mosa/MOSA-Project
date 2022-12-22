@@ -48,7 +48,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public static MosaType ToSZArray(this MosaType type)
 		{
-			var array = type.TypeSystem.GetTypeByName(type.TypeSystem.CorLib, "System", "Array");
+			var array = type.TypeSystem.TypeResolver.ResolveType(type.TypeSystem.CorLib, MosaTypeCode.Array);
 			var result = type.TypeSystem.Controller.CreateType();
 
 			using (var arrayType = type.TypeSystem.Controller.MutateType(result))
@@ -73,7 +73,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public static MosaType ToArray(this MosaType type, MosaArrayInfo info)
 		{
-			var array = type.TypeSystem.GetTypeByName(type.TypeSystem.CorLib, "System", "Array");
+			var array = type.TypeSystem.TypeResolver.ResolveType(type.TypeSystem.CorLib, MosaTypeCode.Array);
 			var result = type.TypeSystem.Controller.CreateType(array);
 
 			using (var arrayType = type.TypeSystem.Controller.MutateType(result))

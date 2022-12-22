@@ -46,28 +46,28 @@ public class BuiltInTypes
 
 	//public MosaType ValueType { get; }
 
-	public BuiltInTypes(ITypeResolver typeResolver, TypeSystem typeSystem, MosaModule corlib)
+	public BuiltInTypes(ITypeResolver typeResolver, MosaModule corlib)
 	{
-		Void = typeResolver.ResolveType(typeSystem, corlib, BuiltInType.Void);
-		Boolean = typeResolver.ResolveType(typeSystem, corlib, BuiltInType.Boolean);
-		Char = typeResolver.ResolveType(typeSystem, corlib, BuiltInType.Char);
-		I1 = typeResolver.ResolveType(typeSystem, corlib, BuiltInType.SByte);
-		U1 = typeResolver.ResolveType(typeSystem, corlib, BuiltInType.Byte);
-		I2 = typeResolver.ResolveType(typeSystem, corlib, BuiltInType.Int16);
-		U2 = typeResolver.ResolveType(typeSystem, corlib, BuiltInType.UInt16);
-		I4 = typeResolver.ResolveType(typeSystem, corlib, BuiltInType.Int32);
-		U4 = typeResolver.ResolveType(typeSystem, corlib, BuiltInType.UInt32);
-		I8 = typeResolver.ResolveType(typeSystem, corlib, BuiltInType.Int64);
-		U8 = typeResolver.ResolveType(typeSystem, corlib, BuiltInType.UInt64);
-		R4 = typeResolver.ResolveType(typeSystem, corlib, BuiltInType.Single);
-		R8 = typeResolver.ResolveType(typeSystem, corlib, BuiltInType.Double);
-		String = typeResolver.ResolveType(typeSystem, corlib, BuiltInType.String);
-		Object = typeResolver.ResolveType(typeSystem, corlib, BuiltInType.Object);
-		I = typeResolver.ResolveType(typeSystem, corlib, BuiltInType.IntPtr);
-		U = typeResolver.ResolveType(typeSystem, corlib, BuiltInType.UIntPtr);
-		TypedRef = typeResolver.ResolveType(typeSystem, corlib, BuiltInType.TypedReference);
-		Pointer = typeResolver.ResolveType(typeSystem, corlib, BuiltInType.TypedReference);
-		TypedRef = typeResolver.ResolveType(typeSystem, corlib, BuiltInType.TypedReference);
+		Void = typeResolver.ResolveType(corlib, BuiltInType.Void);
+		Boolean = typeResolver.ResolveType(corlib, BuiltInType.Boolean);
+		Char = typeResolver.ResolveType(corlib, BuiltInType.Char);
+		I1 = typeResolver.ResolveType(corlib, BuiltInType.SByte);
+		U1 = typeResolver.ResolveType(corlib, BuiltInType.Byte);
+		I2 = typeResolver.ResolveType(corlib, BuiltInType.Int16);
+		U2 = typeResolver.ResolveType(corlib, BuiltInType.UInt16);
+		I4 = typeResolver.ResolveType(corlib, BuiltInType.Int32);
+		U4 = typeResolver.ResolveType(corlib, BuiltInType.UInt32);
+		I8 = typeResolver.ResolveType(corlib, BuiltInType.Int64);
+		U8 = typeResolver.ResolveType(corlib, BuiltInType.UInt64);
+		R4 = typeResolver.ResolveType(corlib, BuiltInType.Single);
+		R8 = typeResolver.ResolveType(corlib, BuiltInType.Double);
+		String = typeResolver.ResolveType(corlib, BuiltInType.String);
+		Object = typeResolver.ResolveType(corlib, BuiltInType.Object);
+		I = typeResolver.ResolveType(corlib, BuiltInType.IntPtr);
+		U = typeResolver.ResolveType(corlib, BuiltInType.UIntPtr);
+		TypedRef = typeResolver.ResolveType(corlib, BuiltInType.TypedReference);
+		Pointer = typeResolver.ResolveType(corlib, BuiltInType.TypedReference);
+		TypedRef = typeResolver.ResolveType(corlib, BuiltInType.TypedReference);
 		Pointer = Void.ToUnmanagedPointer();
 
 		//ValueType = typeResolver.ResolveType(typeSystem, corlib, BuiltInType.ValueType);

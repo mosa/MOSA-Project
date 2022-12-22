@@ -946,7 +946,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Operand GetRuntimeTypeHandle(MosaType runtimeType)
 		{
-			return Operand.CreateLabel(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"), Metadata.TypeDefinition + runtimeType.FullName);
+			return Operand.CreateLabel(TypeSystem.GetTypeByName("System.RuntimeTypeHandle"), Metadata.TypeDefinition + runtimeType.FullName);
 		}
 
 		private uint GetSize(ElementType elementType)
@@ -2854,7 +2854,7 @@ namespace Mosa.Compiler.Framework.Stages
 				MethodScanner.AccessedField(context.MosaField);
 			}
 
-			var runtimeFieldHandle = TypeSystem.GetTypeByName("System", "RuntimeFieldHandle"); // FUTURE: cache this
+			var runtimeFieldHandle = TypeSystem.GetTypeByName("System.RuntimeFieldHandle"); // FUTURE: cache this
 
 			var result = AllocateVirtualRegister(runtimeFieldHandle);
 			context.AppendInstruction(move, result, source);

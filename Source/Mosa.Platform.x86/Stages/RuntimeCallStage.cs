@@ -31,18 +31,18 @@ namespace Mosa.Platform.x86.Stages
 
 		private void DivSigned64(Context context)
 		{
-			ReplaceWithCall(context, "Mosa.Runtime.Math", "Division", "sdiv64");
+			ReplaceWithCall(context, "Mosa.Runtime.Math.Division", "sdiv64");
 		}
 
 		private void DivUnsigned64(Context context)
 		{
-			ReplaceWithCall(context, "Mosa.Runtime.Math", "Division", "udiv64");
+			ReplaceWithCall(context, "Mosa.Runtime.Math.Division", "udiv64");
 		}
 
 		private void MulCarryOut64(Context context)
 		{
 			var methodName = "mul64carry";
-			var method = GetMethod("Mosa.Runtime.Math", "Multiplication", methodName);
+			var method = GetMethod("Mosa.Runtime.Math.Multiplication", methodName);
 
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
@@ -65,7 +65,7 @@ namespace Mosa.Platform.x86.Stages
 		private void MulOverflowOut64(Context context)
 		{
 			var methodName = "mul64overflow";
-			var method = GetMethod("Mosa.Runtime.Math", "Multiplication", methodName);
+			var method = GetMethod("Mosa.Runtime.Math.Multiplication", methodName);
 
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
@@ -90,7 +90,7 @@ namespace Mosa.Platform.x86.Stages
 			Debug.Assert(context.Result.IsR4);
 			Debug.Assert(context.Operand1.IsR4);
 
-			ReplaceWithCall(context, "Mosa.Runtime.Math.x86", "Division", "RemR4");
+			ReplaceWithCall(context, "Mosa.Runtime.Math.x86.Division", "RemR4");
 		}
 
 		private void RemFloatR8(Context context)
@@ -98,37 +98,37 @@ namespace Mosa.Platform.x86.Stages
 			Debug.Assert(context.Result.IsR8);
 			Debug.Assert(context.Operand1.IsR8);
 
-			ReplaceWithCall(context, "Mosa.Runtime.Math.x86", "Division", "RemR8");
+			ReplaceWithCall(context, "Mosa.Runtime.Math.x86.Division", "RemR8");
 		}
 
 		private void RemSigned64(Context context)
 		{
-			ReplaceWithCall(context, "Mosa.Runtime.Math", "Division", "smod64");
+			ReplaceWithCall(context, "Mosa.Runtime.Math.Division", "smod64");
 		}
 
 		private void RemUnsigned64(Context context)
 		{
-			ReplaceWithCall(context, "Mosa.Runtime.Math", "Division", "umod64");
+			ReplaceWithCall(context, "Mosa.Runtime.Math.Division", "umod64");
 		}
 
 		private void R4ToI8(Context context)
 		{
-			ReplaceWithCall(context, "Mosa.Runtime.Math", "Conversion", "R4ToI8");
+			ReplaceWithCall(context, "Mosa.Runtime.Math.Conversion", "R4ToI8");
 		}
 
 		private void R8ToI8(Context context)
 		{
-			ReplaceWithCall(context, "Mosa.Runtime.Math", "Conversion", "R8ToI8");
+			ReplaceWithCall(context, "Mosa.Runtime.Math.Conversion", "R8ToI8");
 		}
 
 		private void R4ToU8(Context context)
 		{
-			ReplaceWithCall(context, "Mosa.Runtime.Math", "Conversion", "R4ToU8");
+			ReplaceWithCall(context, "Mosa.Runtime.Math.Conversion", "R4ToU8");
 		}
 
 		private void R8ToU8(Context context)
 		{
-			ReplaceWithCall(context, "Mosa.Runtime.Math", "Conversion", "R8ToU8");
+			ReplaceWithCall(context, "Mosa.Runtime.Math.Conversion", "R8ToU8");
 		}
 
 		#endregion Visitation Methods
