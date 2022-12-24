@@ -510,8 +510,9 @@ namespace Mosa.Utility.SourceCodeGenerator
 			var sb = new StringBuilder();
 
 			sb.Append(filter.MethodName);
-
 			sb.Append('(');
+
+			bool register = false;
 
 			foreach (var parameter in filter.Parameters)
 			{
@@ -521,17 +522,30 @@ namespace Mosa.Utility.SourceCodeGenerator
 				}
 				else if (parameter.IsLabel)
 				{
-					var first = transform.LabelSet.GetFirstPosition(parameter.Value);
+					if (!register)
+					{
+						var first = transform.LabelSet.GetFirstPosition(parameter.Value);
 
-					var parent = NodeNbrToNode[first.NodeNbr];
+						var parent = NodeNbrToNode[first.NodeNbr];
 
-					var operandName = GetOperandName(first.OperandIndex);
+						var operandName = GetOperandName(first.OperandIndex);
 
-					sb.Append($"context.{parent}{operandName}");
+						sb.Append($"context.{parent}{operandName}");
+					}
+					else
+					{
+						sb.Append($"{parameter.LabelName}");
+						register = false;
+					}
 				}
 				else if (parameter.IsAt)
 				{
 					sb.Append("context");
+				}
+				else if (parameter.IsPercent)
+				{
+					sb.Append("CPURegister.");
+					register = true;
 				}
 				else if (parameter.IsInteger)
 				{
@@ -553,7 +567,10 @@ namespace Mosa.Utility.SourceCodeGenerator
 					//sb.Append('f');
 				}
 
-				sb.Append(", ");
+				if (!register)
+				{
+					sb.Append(", ");
+				}
 			}
 
 			if (filter.Parameters.Count != 0)

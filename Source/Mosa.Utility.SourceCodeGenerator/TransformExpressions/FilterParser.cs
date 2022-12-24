@@ -83,6 +83,10 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 				{
 					method.Parameters.Add(new Operand(token, method.Parameters.Count));
 				}
+				else if (token.TokenType == TokenType.Percent && method.MethodName != null)
+				{
+					method.Parameters.Add(new Operand(token, method.Parameters.Count));
+				}
 				else if (token.TokenType == TokenType.Comma)
 				{
 					// skip

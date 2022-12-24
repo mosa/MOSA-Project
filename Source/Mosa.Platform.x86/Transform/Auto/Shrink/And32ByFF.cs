@@ -28,6 +28,12 @@ namespace Mosa.Platform.x86.Transform.Auto.Shrink
 			if (AreStatusFlagUsed(context))
 				return false;
 
+			if (IsCPURegister(context.Operand1, CPURegister.ESI))
+				return false;
+
+			if (IsCPURegister(context.Operand1, CPURegister.EDI))
+				return false;
+
 			return true;
 		}
 

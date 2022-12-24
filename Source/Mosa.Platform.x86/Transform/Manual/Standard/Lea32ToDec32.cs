@@ -25,7 +25,7 @@ namespace Mosa.Platform.x86.Transform.Manual.Standard
 			if (context.Operand1 != context.Result)
 				return false;
 
-			if (context.Operand1.Register == GeneralPurposeRegister.ESP)
+			if (context.Operand1.Register == CPURegister.ESP)
 				return false;
 
 			if (!(AreStatusFlagsUsed(context.Node.Next, false, true, false, false, false) == TriState.No))

@@ -20,7 +20,8 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// Gets the type of the elf machine.
 		/// </summary>
-		public override MachineType ElfMachineType { get { return MachineType.Intel386; } }
+		public override MachineType ElfMachineType
+		{ get { return MachineType.Intel386; } }
 
 		/// <summary>
 		/// Defines the register set of the target architecture.
@@ -30,90 +31,103 @@ namespace Mosa.Platform.x86
 			////////////////////////////////////////////////////////
 			// 32-bit general purpose registers
 			////////////////////////////////////////////////////////
-			GeneralPurposeRegister.EAX,
-			GeneralPurposeRegister.ECX,
-			GeneralPurposeRegister.EDX,
-			GeneralPurposeRegister.EBX,
-			GeneralPurposeRegister.ESP,
-			GeneralPurposeRegister.EBP,
-			GeneralPurposeRegister.ESI,
-			GeneralPurposeRegister.EDI,
+			CPURegister.EAX,
+			CPURegister.ECX,
+			CPURegister.EDX,
+			CPURegister.EBX,
+			CPURegister.ESP,
+			CPURegister.EBP,
+			CPURegister.ESI,
+			CPURegister.EDI,
 
 			////////////////////////////////////////////////////////
 			// SSE 128-bit floating point registers
 			////////////////////////////////////////////////////////
-			SSE2Register.XMM0,
-			SSE2Register.XMM1,
-			SSE2Register.XMM2,
-			SSE2Register.XMM3,
-			SSE2Register.XMM4,
-			SSE2Register.XMM5,
-			SSE2Register.XMM6,
-			SSE2Register.XMM7
+			CPURegister.XMM0,
+			CPURegister.XMM1,
+			CPURegister.XMM2,
+			CPURegister.XMM3,
+			CPURegister.XMM4,
+			CPURegister.XMM5,
+			CPURegister.XMM6,
+			CPURegister.XMM7
 		};
 
 		/// <summary>
 		/// Gets the native size of architecture in bytes.
 		/// </summary>
 		/// <value>This property always returns 4.</value>
-		public override uint NativePointerSize { get { return 4; } }
+		public override uint NativePointerSize
+		{ get { return 4; } }
 
 		/// <summary>
 		/// Retrieves the register set of the x86 platform.
 		/// </summary>
-		public override PhysicalRegister[] RegisterSet { get { return registers; } }
+		public override PhysicalRegister[] RegisterSet
+		{ get { return registers; } }
 
 		/// <summary>
 		/// Retrieves the stack frame register of the x86.
 		/// </summary>
-		public override PhysicalRegister StackFrameRegister { get { return GeneralPurposeRegister.EBP; } }
+		public override PhysicalRegister StackFrameRegister
+		{ get { return CPURegister.EBP; } }
 
 		/// <summary>
 		/// Retrieves the stack pointer register of the x86.
 		/// </summary>
-		public override PhysicalRegister StackPointerRegister { get { return GeneralPurposeRegister.ESP; } }
+		public override PhysicalRegister StackPointerRegister
+		{ get { return CPURegister.ESP; } }
 
-		public override PhysicalRegister LinkRegister { get { return null; } }
+		public override PhysicalRegister LinkRegister
+		{ get { return null; } }
 
 		/// <summary>
 		/// Gets the return32 bit register.
 		/// </summary>
-		public override PhysicalRegister ReturnRegister { get { return GeneralPurposeRegister.EAX; } }
+		public override PhysicalRegister ReturnRegister
+		{ get { return CPURegister.EAX; } }
 
 		/// <summary>
 		/// Gets the return64 bit register.
 		/// </summary>
-		public override PhysicalRegister ReturnHighRegister { get { return GeneralPurposeRegister.EDX; } }
+		public override PhysicalRegister ReturnHighRegister
+		{ get { return CPURegister.EDX; } }
 
 		/// <summary>
 		/// Gets the return floating point register.
 		/// </summary>
-		public override PhysicalRegister ReturnFloatingPointRegister { get { return SSE2Register.XMM0; } }
+		public override PhysicalRegister ReturnFloatingPointRegister
+		{ get { return CPURegister.XMM0; } }
 
 		/// <summary>
 		/// Retrieves the exception register of the architecture.
 		/// </summary>
-		public override PhysicalRegister ExceptionRegister { get { return GeneralPurposeRegister.EDI; } }
+		public override PhysicalRegister ExceptionRegister
+		{ get { return CPURegister.EDI; } }
 
 		/// <summary>
 		/// Gets the finally return block register.
 		/// </summary>
-		public override PhysicalRegister LeaveTargetRegister { get { return GeneralPurposeRegister.ESI; } }
+		public override PhysicalRegister LeaveTargetRegister
+		{ get { return CPURegister.ESI; } }
 
 		/// <summary>
 		/// Retrieves the program counter register of the x86.
 		/// </summary>
-		public override PhysicalRegister ProgramCounter { get { return null; } }
+		public override PhysicalRegister ProgramCounter
+		{ get { return null; } }
 
 		/// <summary>
 		/// Gets the name of the platform.
 		/// </summary>
-		public override string PlatformName { get { return "x86"; } }
+		public override string PlatformName
+		{ get { return "x86"; } }
 
 		/// <summary>
 		/// Gets the instructions.
 		/// </summary>
-		public override List<BaseInstruction> Instructions { get { return X86Instructions.List; } }
+		public override List<BaseInstruction> Instructions
+		{ get { return X86Instructions.List; } }
 
 		public override OpcodeEncoder GetOpcodeEncoder()
 		{

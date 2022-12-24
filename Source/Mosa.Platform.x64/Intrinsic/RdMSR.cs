@@ -18,9 +18,9 @@ namespace Mosa.Platform.x64.Intrinsic
 
 			methodCompiler.SplitLongOperand(result, out Operand resultLow, out Operand resultHigh);
 
-			var EAX = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, GeneralPurposeRegister.EAX);
-			var EDX = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, GeneralPurposeRegister.EDX);
-			var ECX = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, GeneralPurposeRegister.ECX);
+			var EAX = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, CPURegister.EAX);
+			var EDX = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, CPURegister.EDX);
+			var ECX = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, CPURegister.ECX);
 
 			context.SetInstruction(X64.Mov64, ECX, operand1);
 			context.AppendInstruction2(X64.RdMSR, EAX, EDX, ECX);

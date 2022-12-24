@@ -99,6 +99,11 @@ namespace Mosa.Compiler.Framework.Transform
 			return operand.IsCPURegister;
 		}
 
+		protected static bool IsCPURegister(Operand operand, PhysicalRegister register)
+		{
+			return operand.IsCPURegister && operand.Register == register;
+		}
+
 		protected static bool IsVirtualRegister(Operand operand)
 		{
 			return operand.IsVirtualRegister;

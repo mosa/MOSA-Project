@@ -15,7 +15,7 @@ namespace Mosa.Platform.x64.Intrinsic
 		{
 			Operand v0 = context.Operand1;
 
-			Operand esp = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, GeneralPurposeRegister.ESP);
+			Operand esp = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, CPURegister.ESP);
 
 			context.SetInstruction(X64.Mov64, esp, v0);
 			context.AppendInstruction(X64.Popad);

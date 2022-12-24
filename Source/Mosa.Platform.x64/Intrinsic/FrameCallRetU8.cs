@@ -16,8 +16,8 @@ namespace Mosa.Platform.x64.Intrinsic
 			var result = context.Result;
 			var methodAddress = context.Operand1;
 
-			var eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, GeneralPurposeRegister.EAX);
-			var edx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, GeneralPurposeRegister.EDX);
+			var eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, CPURegister.EAX);
+			var edx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, CPURegister.EDX);
 
 			methodCompiler.SplitLongOperand(result, out Operand op0L, out Operand op0H);
 

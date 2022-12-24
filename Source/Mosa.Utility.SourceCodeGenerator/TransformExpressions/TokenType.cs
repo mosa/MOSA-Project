@@ -49,6 +49,7 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 		OpenCurly,
 		CloseCurly,
 
-		At
+		At,
+		Percent,
 	}
 }

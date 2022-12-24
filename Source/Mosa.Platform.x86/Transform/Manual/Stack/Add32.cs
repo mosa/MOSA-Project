@@ -23,7 +23,7 @@ namespace Mosa.Platform.x86.Transform.Manual.Stack
 			if (!context.Operand1.IsCPURegister)
 				return false;
 
-			if (context.Operand1.Register != GeneralPurposeRegister.ESP)
+			if (context.Operand1.Register != CPURegister.ESP)
 				return false;
 
 			if (!context.Operand2.IsConstant)
@@ -37,7 +37,7 @@ namespace Mosa.Platform.x86.Transform.Manual.Stack
 			if (next.Instruction != X86.Sub32)
 				return false;
 
-			if (context.Operand1.Register != GeneralPurposeRegister.ESP)
+			if (context.Operand1.Register != CPURegister.ESP)
 				return false;
 
 			if (!next.Operand2.IsConstant)

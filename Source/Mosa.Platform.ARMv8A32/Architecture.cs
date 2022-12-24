@@ -18,12 +18,14 @@ namespace Mosa.Platform.ARMv8A32
 		/// <summary>
 		/// Gets the type of the elf machine.
 		/// </summary>
-		public override MachineType ElfMachineType { get { return MachineType.ARM; } }
+		public override MachineType ElfMachineType
+		{ get { return MachineType.ARM; } }
 
 		/// <summary>
 		/// Gets the name of the platform.
 		/// </summary>
-		public override string PlatformName { get { return "ARMv8A32"; } }
+		public override string PlatformName
+		{ get { return "ARMv8A32"; } }
 
 		/// <summary>
 		/// Gets the register set of the architecture.
@@ -33,88 +35,99 @@ namespace Mosa.Platform.ARMv8A32
 			////////////////////////////////////////////////////////
 			// 32-bit general purpose registers
 			////////////////////////////////////////////////////////
-			GeneralPurposeRegister.R0,
-			GeneralPurposeRegister.R1,
-			GeneralPurposeRegister.R2,
-			GeneralPurposeRegister.R3,
-			GeneralPurposeRegister.R4,
-			GeneralPurposeRegister.R5,
-			GeneralPurposeRegister.R6,
-			GeneralPurposeRegister.R7,
-			GeneralPurposeRegister.R8,
-			GeneralPurposeRegister.R9,
-			GeneralPurposeRegister.R10,
-			GeneralPurposeRegister.FP,
-			GeneralPurposeRegister.R12,
-			GeneralPurposeRegister.SP,
-			GeneralPurposeRegister.LR,
-			GeneralPurposeRegister.PC,
+			CPURegister.R0,
+			CPURegister.R1,
+			CPURegister.R2,
+			CPURegister.R3,
+			CPURegister.R4,
+			CPURegister.R5,
+			CPURegister.R6,
+			CPURegister.R7,
+			CPURegister.R8,
+			CPURegister.R9,
+			CPURegister.R10,
+			CPURegister.FP,
+			CPURegister.R12,
+			CPURegister.SP,
+			CPURegister.LR,
+			CPURegister.PC,
 
 			////////////////////////////////////////////////////////
 			// Floating Point 128-bit floating point registers
 			////////////////////////////////////////////////////////
-			FloatingPointRegister.d0,
-			FloatingPointRegister.d1,
-			FloatingPointRegister.d2,
-			FloatingPointRegister.d3,
-			FloatingPointRegister.d4,
-			FloatingPointRegister.d5,
-			FloatingPointRegister.d6,
-			FloatingPointRegister.d7
+			CPURegister.d0,
+			CPURegister.d1,
+			CPURegister.d2,
+			CPURegister.d3,
+			CPURegister.d4,
+			CPURegister.d5,
+			CPURegister.d6,
+			CPURegister.d7
 		};
 
 		/// <summary>
 		/// Gets the native size of architecture in bytes.
 		/// </summary>
 		/// <value>This property always returns 4.</value>
-		public override uint NativePointerSize { get { return 4; } }
+		public override uint NativePointerSize
+		{ get { return 4; } }
 
 		/// <summary>
 		/// Retrieves the register set of the ARMv8A32 platform.
 		/// </summary>
-		public override PhysicalRegister[] RegisterSet { get { return registers; } }
+		public override PhysicalRegister[] RegisterSet
+		{ get { return registers; } }
 
 		/// <summary>
 		/// Retrieves the stack frame register of the ARMv8A32.
 		/// </summary>
-		public override PhysicalRegister StackFrameRegister { get { return GeneralPurposeRegister.FP; } }
+		public override PhysicalRegister StackFrameRegister
+		{ get { return CPURegister.FP; } }
 
 		/// <summary>
 		/// Retrieves the stack pointer register of the ARMv8A32.
 		/// </summary>
-		public override PhysicalRegister StackPointerRegister { get { return GeneralPurposeRegister.SP; } }
+		public override PhysicalRegister StackPointerRegister
+		{ get { return CPURegister.SP; } }
 
 		/// <summary>
 		/// Gets the return register.
 		/// </summary>
-		public override PhysicalRegister ReturnRegister { get { return GeneralPurposeRegister.R0; } }
+		public override PhysicalRegister ReturnRegister
+		{ get { return CPURegister.R0; } }
 
-		public override PhysicalRegister LinkRegister { get { return GeneralPurposeRegister.LR; } }
+		public override PhysicalRegister LinkRegister
+		{ get { return CPURegister.LR; } }
 
 		/// <summary>
 		/// Gets the return register for the high portion of the 64bit result.
 		/// </summary>
-		public override PhysicalRegister ReturnHighRegister { get { return GeneralPurposeRegister.R1; } }
+		public override PhysicalRegister ReturnHighRegister
+		{ get { return CPURegister.R1; } }
 
 		/// <summary>
 		/// Gets the return floating point register.
 		/// </summary>
-		public override PhysicalRegister ReturnFloatingPointRegister { get { return FloatingPointRegister.d0; } }
+		public override PhysicalRegister ReturnFloatingPointRegister
+		{ get { return CPURegister.d0; } }
 
 		/// <summary>
 		/// Retrieves the exception register of the architecture.
 		/// </summary>
-		public override PhysicalRegister ExceptionRegister { get { return GeneralPurposeRegister.R8; } }
+		public override PhysicalRegister ExceptionRegister
+		{ get { return CPURegister.R8; } }
 
 		/// <summary>
 		/// Gets the finally return block register.
 		/// </summary>
-		public override PhysicalRegister LeaveTargetRegister { get { return GeneralPurposeRegister.R9; } }
+		public override PhysicalRegister LeaveTargetRegister
+		{ get { return CPURegister.R9; } }
 
 		/// <summary>
 		/// Retrieves the program counter register of the ARMv8A32.
 		/// </summary>
-		public override PhysicalRegister ProgramCounter { get { return GeneralPurposeRegister.PC; } }
+		public override PhysicalRegister ProgramCounter
+		{ get { return CPURegister.PC; } }
 
 		/// <summary>
 		/// Gets the instructions.
@@ -122,7 +135,8 @@ namespace Mosa.Platform.ARMv8A32
 		/// <value>
 		/// The instructions.
 		/// </value>
-		public override List<BaseInstruction> Instructions { get { return ARMv8A32Instructions.List; } }
+		public override List<BaseInstruction> Instructions
+		{ get { return ARMv8A32Instructions.List; } }
 
 		public override OpcodeEncoder GetOpcodeEncoder()
 		{

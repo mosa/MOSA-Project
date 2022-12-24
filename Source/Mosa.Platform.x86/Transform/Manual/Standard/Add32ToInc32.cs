@@ -22,7 +22,7 @@ namespace Mosa.Platform.x86.Transform.Manual.Standard
 			if (context.Operand2.ConstantUnsigned64 != 1)
 				return false;
 
-			if (context.Operand1.Register == GeneralPurposeRegister.ESP)
+			if (context.Operand1.Register == CPURegister.ESP)
 				return false;
 
 			if (context.Operand1 != context.Result)

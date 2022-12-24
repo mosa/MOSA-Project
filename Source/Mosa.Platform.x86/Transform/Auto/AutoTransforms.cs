@@ -17,6 +17,7 @@ namespace Mosa.Platform.x86.Transform.Auto
 			 new StrengthReduction.Add32ByZero(),
 			 new StrengthReduction.Add32ByZero_v1(),
 			 new StrengthReduction.Sub32ByZero(),
+			 new Shrink.And32ByFF(),
 		};
 	}
 }

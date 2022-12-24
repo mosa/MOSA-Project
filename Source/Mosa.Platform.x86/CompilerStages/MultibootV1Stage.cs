@@ -24,10 +24,10 @@ namespace Mosa.Platform.x86.CompilerStages
 
 			var entryPoint = Operand.CreateSymbolFromMethod(initializeMethod, TypeSystem);
 
-			var eax = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
-			var ebx = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBX);
-			var ebp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBP);
-			var esp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP);
+			var eax = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.EAX);
+			var ebx = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.EBX);
+			var ebp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.EBP);
+			var esp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.ESP);
 
 			var multibootEAX = Operand.CreateUnmanagedSymbolPointer(MultibootEAX, TypeSystem);
 			var multibootEBX = Operand.CreateUnmanagedSymbolPointer(MultibootEBX, TypeSystem);

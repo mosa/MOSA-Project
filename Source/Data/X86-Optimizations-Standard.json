@@ -35,6 +35,17 @@
 			"Result": "(X86.Mov32 a)",
 			"Variations": "Yes",
 			"Log": "Yes"
+		},
+		{
+			"FamilyName": "x86",
+			"Type": "Shrink",
+			"Name": "And32",
+			"SubName": "ByFF",
+			"Expression": "X86.And32 a 0xFF",
+			"Filter": "!AreStatusFlagUsed(@) && !IsCPURegister(a,%ESI) && !IsCPURegister(a,%EDI)",
+			"Result": "(X86.Movzx8To32 a)",
+			"Variations": "Yes",
+			"Log": "Yes"
 		}
 	]
 }

@@ -13,7 +13,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::GetCR4")]
 		private static void GetCR4(Context context, MethodCompiler methodCompiler)
 		{
-			context.SetInstruction(X86.MovCRLoad32, context.Result, Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, ControlRegister.CR4));
+			context.SetInstruction(X86.MovCRLoad32, context.Result, Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, CPURegister.CR4));
 		}
 	}
 }

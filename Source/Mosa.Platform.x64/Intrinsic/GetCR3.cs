@@ -13,7 +13,7 @@ namespace Mosa.Platform.x64.Intrinsic
 		[IntrinsicMethod("Mosa.Platform.x64.Intrinsic::GetCR3")]
 		private static void GetCR3(Context context, MethodCompiler methodCompiler)
 		{
-			context.SetInstruction(X64.MovCRLoad64, context.Result, Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U8, ControlRegister.CR3));
+			context.SetInstruction(X64.MovCRLoad64, context.Result, Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U8, CPURegister.CR3));
 		}
 	}
 }
