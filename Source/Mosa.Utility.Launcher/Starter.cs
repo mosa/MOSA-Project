@@ -152,11 +152,10 @@ namespace Mosa.Utility.Launcher
 		{
 			var arg = new StringBuilder();
 
-			arg.Append(" -no-reboot");
-			arg.Append(" -L " + Quote(LauncherSettings.QEMUBios));
 			arg.Append($" -m {LauncherSettings.EmulatorMemory.ToString()}M");
 			arg.Append($" -smp cores={LauncherSettings.EmulatorCores.ToString()}");
-			arg.Append(" -usb");
+
+			//arg.Append(" -usb");
 
 			if (LauncherSettings.Platform == "x86")
 			{
@@ -206,6 +205,9 @@ namespace Mosa.Utility.Launcher
 				case "bin": arg.Append($" -kernel {Quote(LauncherSettings.ImageFile)}"); break;
 				default: arg.Append($" -hda {Quote(LauncherSettings.ImageFile)}"); break;
 			}
+
+			//arg.Append(" -no-reboot");
+			arg.Append(" -L " + Quote(LauncherSettings.QEMUBios));
 
 			return LaunchApplication(LauncherSettings.QEMU, arg.ToString(), getOutput);
 		}

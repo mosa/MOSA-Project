@@ -22,7 +22,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.LowerTo32
 			var resultHigh = transformContext.AllocateVirtualRegister32();
 			var v1 = transformContext.AllocateVirtualRegister32();
 
-			context.SetInstruction(IRInstruction.Move32, v1, operand1);
+			context.SetInstruction(IRInstruction.GetLow32, v1, operand1);
 			context.AppendInstruction(IRInstruction.SignExtend8x32, resultLow, v1);
 			context.AppendInstruction(IRInstruction.ArithShiftRight32, resultHigh, resultLow, transformContext.CreateConstant(31));
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);

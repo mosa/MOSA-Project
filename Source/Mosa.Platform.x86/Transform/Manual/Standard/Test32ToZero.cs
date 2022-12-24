@@ -3,11 +3,11 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transform;
 
-namespace Mosa.Platform.x86.Transform.Manual
+namespace Mosa.Platform.x86.Transform.Manual.Standard
 {
-	public sealed class Cmp32ToZero : BaseTransformation
+	public sealed class Test32ToZero : BaseTransformation
 	{
-		public Cmp32ToZero() : base(X86.Cmp32)
+		public Test32ToZero() : base(X86.Test32)
 		{
 		}
 

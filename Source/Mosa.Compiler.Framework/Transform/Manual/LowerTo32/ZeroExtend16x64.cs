@@ -18,9 +18,11 @@ namespace Mosa.Compiler.Framework.Transform.Manual.LowerTo32
 			var result = context.Result;
 			var operand1 = context.Operand1;
 
+			var resultLow = transformContext.AllocateVirtualRegister32();
 			var v1 = transformContext.AllocateVirtualRegister32();
 
-			context.SetInstruction(IRInstruction.ZeroExtend16x32, v1, operand1);
+			context.SetInstruction(IRInstruction.GetLow32, resultLow, operand1);
+			context.AppendInstruction(IRInstruction.ZeroExtend16x32, v1, resultLow);
 			context.AppendInstruction(IRInstruction.To64, result, operand1, transformContext.ConstantZero32);
 		}
 	}

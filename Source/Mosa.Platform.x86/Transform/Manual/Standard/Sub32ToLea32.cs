@@ -4,17 +4,17 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transform;
 using Mosa.Platform.Intel;
 
-namespace Mosa.Platform.x86.Transform.Manual
+namespace Mosa.Platform.x86.Transform.Manual.Standard
 {
 	// This transformation can reduce restrictions placed on the register allocator.
-	// The LEA does not change any of the status flags, however, the add instruction does modify some flags (carry, zero, etc.)
+	// The LEA does not change any of the status flags, however, the sub instruction does modify some flags (carry, zero, etc.)
 	// Therefore, this transformation can only occur if the status flags are unused later.
 	// A search is required to determine if a status flag is used.
 	// However, if the search is not conclusive, the transformation is not made.
 
-	public sealed class Add32ToLea32 : BaseTransformation
+	public sealed class Sub32ToLea32 : BaseTransformation
 	{
-		public Add32ToLea32() : base(X86.Add32)
+		public Sub32ToLea32() : base(X86.Sub32)
 		{
 		}
 
@@ -23,7 +23,7 @@ namespace Mosa.Platform.x86.Transform.Manual
 			if (!context.Operand1.IsVirtualRegister)
 				return false;
 
-			if (context.Operand2.IsCPURegister)
+			if (!context.Operand2.IsResolvedConstant)
 				return false;
 
 			if (context.Operand1.Register == GeneralPurposeRegister.ESP)
@@ -40,7 +40,9 @@ namespace Mosa.Platform.x86.Transform.Manual
 
 		public override void Transform(Context context, TransformContext transformContext)
 		{
-			context.SetInstruction(X86.Lea32, context.Result, context.Operand1, context.Operand2);
+			var constant = transformContext.CreateConstant(-context.Operand2.ConstantSigned32);
+
+			context.SetInstruction(X86.Lea32, context.Result, context.Operand1, constant);
 		}
 	}
 }

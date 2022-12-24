@@ -6,11 +6,11 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transform;
 using Mosa.Platform.Intel;
 
-namespace Mosa.Platform.x86.Transform.Manual
+namespace Mosa.Platform.x86.Transform.Manual.Standard
 {
-	public sealed class Sub32ToDec32 : BaseTransformation
+	public sealed class Lea32ToDec32 : BaseTransformation
 	{
-		public Sub32ToDec32() : base(X86.Sub32)
+		public Lea32ToDec32() : base(X86.Lea32)
 		{
 		}
 
@@ -19,7 +19,7 @@ namespace Mosa.Platform.x86.Transform.Manual
 			if (!context.Operand2.IsResolvedConstant)
 				return false;
 
-			if (context.Operand2.ConstantUnsigned64 != 1)
+			if (context.Operand2.ConstantSigned64 != -1)
 				return false;
 
 			if (context.Operand1 != context.Result)

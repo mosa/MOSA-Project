@@ -3,7 +3,7 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transform;
 
-namespace Mosa.Platform.x86.Transform.Manual
+namespace Mosa.Platform.x86.Transform.Manual.Standard
 {
 	public sealed class Cmp32ToTest32 : BaseTransformation
 	{
