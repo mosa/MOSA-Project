@@ -21,8 +21,7 @@ namespace Mosa.Platform.x64
 		/// <summary>
 		/// Gets the type of the elf machine.
 		/// </summary>
-		public override MachineType ElfMachineType
-		{ get { return MachineType.Intel386; } }
+		public override MachineType ElfMachineType => MachineType.Intel386;
 
 		/// <summary>
 		/// Defines the register set of the target architecture.
@@ -76,77 +75,64 @@ namespace Mosa.Platform.x64
 		/// Gets the native size of architecture in bytes.
 		/// </summary>
 		/// <value>This property always returns 8.</value>
-		public override uint NativePointerSize
-		{ get { return 8; } }
+		public override uint NativePointerSize => 8;
 
 		/// <summary>
 		/// Retrieves the register set of the x64 platform.
 		/// </summary>
-		public override PhysicalRegister[] RegisterSet
-		{ get { return Registers; } }
+		public override PhysicalRegister[] RegisterSet => Registers;
 
 		/// <summary>
 		/// Retrieves the stack frame register of the x86.
 		/// </summary>
-		public override PhysicalRegister StackFrameRegister
-		{ get { return CPURegister.EBP; } }
+		public override PhysicalRegister StackFrameRegister => CPURegister.EBP;
 
 		/// <summary>
 		/// Retrieves the stack pointer register of the x86.
 		/// </summary>
-		public override PhysicalRegister StackPointerRegister
-		{ get { return CPURegister.ESP; } }
+		public override PhysicalRegister StackPointerRegister => CPURegister.ESP;
 
 		/// <summary>
 		/// Gets the return register.
 		/// </summary>
-		public override PhysicalRegister ReturnRegister
-		{ get { return CPURegister.EAX; } }
+		public override PhysicalRegister ReturnRegister => CPURegister.EAX;
 
-		public override PhysicalRegister LinkRegister
-		{ get { return null; } }
+		public override PhysicalRegister LinkRegister => null;
 
 		/// <summary>
 		/// Gets the return register for the high portion of the 64bit result.
 		/// </summary>
-		public override PhysicalRegister ReturnHighRegister
-		{ get { return null; } }
+		public override PhysicalRegister ReturnHighRegister => null;
 
 		/// <summary>
 		/// Gets the return floating point register.
 		/// </summary>
-		public override PhysicalRegister ReturnFloatingPointRegister
-		{ get { return CPURegister.XMM0; } }
+		public override PhysicalRegister ReturnFloatingPointRegister => CPURegister.XMM0;
 
 		/// <summary>
 		/// Retrieves the exception register of the architecture.
 		/// </summary>
-		public override PhysicalRegister ExceptionRegister
-		{ get { return CPURegister.EDI; } }
+		public override PhysicalRegister ExceptionRegister => CPURegister.EDI;
 
 		/// <summary>
 		/// Gets the finally return block register.
 		/// </summary>
-		public override PhysicalRegister LeaveTargetRegister
-		{ get { return CPURegister.ESI; } }
+		public override PhysicalRegister LeaveTargetRegister => CPURegister.ESI;
 
 		/// <summary>
 		/// Retrieves the program counter register of the x86.
 		/// </summary>
-		public override PhysicalRegister ProgramCounter
-		{ get { return null; } }
+		public override PhysicalRegister ProgramCounter => null;
 
 		/// <summary>
 		/// Gets the name of the platform.
 		/// </summary>
-		public override string PlatformName
-		{ get { return "x64"; } }
+		public override string PlatformName => "x64";
 
 		/// <summary>
 		/// Gets the instructions.
 		/// </summary>
-		public override List<BaseInstruction> Instructions
-		{ get { return X64Instructions.List; } }
+		public override List<BaseInstruction> Instructions => X64Instructions.List;
 
 		public override OpcodeEncoder GetOpcodeEncoder()
 		{
