@@ -48,7 +48,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.Simplification
 			var v1 = transformContext.AllocateVirtualRegister(transformContext.I8);
 
 			context.SetInstruction(IRInstruction.Or64, v1, t1, t2);
-			context.AppendInstruction(IRInstruction.Truncate64x32, result, v1);
+			context.AppendInstruction(IRInstruction.GetLow32, result, v1);
 		}
 	}
 }
