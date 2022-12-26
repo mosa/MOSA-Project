@@ -150,7 +150,7 @@ Emulator Settings
     Emulator,"Type of Emulator Qemu, VMware, Bochs"
     Emulator.Memory,Amount of memory for the virtual machine in MB
     Emulator.Display,"If true, show the video display"
-	Emulator.SVGA,"SVGA mode: std or vmware"
+	Emulator.SVGA,"SVGA mode: std, cirrus, vbe or vmware"
     Emulator.GDB,"If true, enables GDB within emulator"
     Emulator.Serial,"Serial Emulation type None, Pipe, TCPServer, TCPClient"
     Emulator.Serial.Host,Serial Host Name or IP address

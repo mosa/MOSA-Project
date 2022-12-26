@@ -39,5 +39,35 @@ namespace Mosa.UnitTests.Optimization
 		{
 			return (x ^ y) | x;
 		}
+
+		[MosaUnitTest(Series = "I4I4")]
+		public static int Or32And32And32ByI1(int x, int y)
+		{
+			return (byte)x | (byte)y;
+		}
+
+		[MosaUnitTest(Series = "I4I4")]
+		public static int Or32And32And32ByI2(int x, int y)
+		{
+			return (short)x | (short)y;
+		}
+
+		[MosaUnitTest(Series = "I8I8")]
+		public static long Or64And64And64ByI4(long x, long y)
+		{
+			return (int)x | (int)y;
+		}
+
+		[MosaUnitTest(Series = "I4")]
+		public static int NegTest32(int i) => ~i + 1;
+
+		[MosaUnitTest(Series = "I8")]
+		public static long NegTest64(long i) => ~i + 1;
+
+		[MosaUnitTest(Series = "I4")]
+		public static bool BitSet(int x) => (x & 1) == 1;
+
+		[MosaUnitTest(Series = "I4")]
+		public static int ResetLowestSetBit(int x) => x & (x - 1);
 	}
 }

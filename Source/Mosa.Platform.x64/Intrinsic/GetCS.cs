@@ -13,7 +13,7 @@ namespace Mosa.Platform.x64.Intrinsic
 		[IntrinsicMethod("Mosa.Platform.x64.Intrinsic::GetCS")]
 		private static void GetCS(Context context, MethodCompiler methodCompiler)
 		{
-			context.SetInstruction(X64.MovLoadSeg64, context.Result, Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U8, SegmentRegister.CS));
+			context.SetInstruction(X64.MovLoadSeg64, context.Result, Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U8, CPURegister.CS));
 		}
 	}
 }

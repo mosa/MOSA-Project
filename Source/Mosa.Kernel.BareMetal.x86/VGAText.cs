@@ -14,7 +14,7 @@ namespace Mosa.Kernel.BareMetal.x86
 		private const uint Columns = 80;
 		private const uint Rows = 25;
 
-		private static short Offset = 0;
+		private static ushort Offset = 0;
 
 		private static byte Color { get; set; }
 
@@ -23,13 +23,13 @@ namespace Mosa.Kernel.BareMetal.x86
 		public static byte Column
 		{
 			get { return (byte)(Offset % Columns); }
-			private set { Offset = (short)((Columns * Row) + value); }
+			private set { Offset = (ushort)((Columns * Row) + value); }
 		}
 
 		public static byte Row
 		{
 			get { return (byte)(Offset / Columns); }
-			private set { Offset = (short)((Columns * value) + Column); }
+			private set { Offset = (ushort)((Columns * value) + Column); }
 		}
 
 		public static void SetColor(byte color)
@@ -124,12 +124,30 @@ namespace Mosa.Kernel.BareMetal.x86
 		{
 			while (Offset >= Columns * Rows)
 			{
-				Runtime.Internal.MemoryCopy(new Pointer(Address), new Pointer(Address + (Columns * 2)), Columns * 2);
-				Runtime.Internal.MemorySet(new Pointer(Address + (Columns * (Rows - 1))), (byte)((BackgroundColor & 0x0F) << 4), (int)(Columns * 2));
+				ScrollLines();
+				ClearLastLine();
 
-				Offset = (short)(Offset - Columns);
+				Offset = (ushort)(Offset - Columns);
 			}
+
 			UpdateCursor();
+		}
+
+		private static void ScrollLines()
+		{
+			Runtime.Internal.MemoryCopy(new Pointer(Address), new Pointer(Address + (Columns * 2)), Columns * (Rows - 1) * 2);
+		}
+
+		private static void ClearLastLine()
+		{
+			var address = new Pointer(Address + (Columns * (Rows - 1) * 2));
+
+			var value = (ushort)((Color | ((BackgroundColor & 0x0F) << 4)) << 8);
+
+			for (int i = 0; i < Columns * 2; i += 2)
+			{
+				address.Store16(i, value);
+			}
 		}
 
 		private static void UpdateCursor()

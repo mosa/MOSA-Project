@@ -23,7 +23,7 @@ namespace Mosa.Platform.x86.Transform.Manual.Special
 			if (!context.Result.IsCPURegister)
 				return false;
 
-			if (context.Result.Register != GeneralPurposeRegister.ESP)
+			if (context.Result.Register != CPURegister.ESP)
 				return false;
 
 			var previous = GetPreviousNode(context);
@@ -31,7 +31,7 @@ namespace Mosa.Platform.x86.Transform.Manual.Special
 			if (previous == null || previous.Instruction != X86.Mov32)
 				return false;
 
-			if (previous.Result.Register != GeneralPurposeRegister.ESP)
+			if (previous.Result.Register != CPURegister.ESP)
 				return false;
 
 			if (!previous.Operand1.IsResolvedConstant)

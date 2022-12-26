@@ -1,0 +1,83 @@
+﻿{
+	"Commutative": [
+		"X64.Add32",
+		"X64.And32",
+		"X64.Add64",
+		"X64.And64",
+		"X64.Or32",
+		"X64.Or64"
+	],
+	"Optimizations": [
+		{
+			"FamilyName": "X64",
+			"Type": "Standard",
+			"Name": "Mov##",
+			"SubName": "Consolidate",
+			"Expression": "X64.Mov## (X64.Mov## a)",
+			"Filter": "IsVirtualRegister(a)",
+			"Result": "(X64.Mov## a)",
+			"Variations": "No"
+		},
+		{
+			"FamilyName": "X64",
+			"Type": "StrengthReduction",
+			"Name": "Add##",
+			"SubName": "ByZero",
+			"Expression": "X64.Add## a 0",
+			"Filter": "!AreStatusFlagUsed(@)",
+			"Result": "(X64.Mov## a)",
+			"Variations": "No"
+		},
+		{
+			"FamilyName": "X64",
+			"Type": "StrengthReduction",
+			"Name": "Sub##",
+			"SubName": "ByZero",
+			"Expression": "X64.Sub## a 0",
+			"Filter": "!AreStatusFlagUsed(@)",
+			"Result": "(X64.Mov## a)",
+			"Variations": "Yes"
+		},
+		{
+			"FamilyName": "X64",
+			"Type": "Shrink",
+			"Name": "And##",
+			"SubName": "ByFF",
+			"Expression": "X64.And## a 0xFF",
+			"Filter": "!IsCPURegister(a,%ESI) && !IsCPURegister(a,%EDI) && !AreStatusFlagUsed(@)",
+			"Result": "(X64.Movzx8To## a)",
+			"Variations": "Yes",
+			"Log": "No"
+		},
+		{
+			"FamilyName": "X64",
+			"Type": "StrengthReduction",
+			"Name": "Add##By1Not##",
+			"SubName": "",
+			"Expression": "X64.Add## (X64.Not## x) 1",
+			"Filter": "IsVirtualRegister(x) && !IsCarryFlagUsed(@)",
+			"Result": "(X64.Neg## x)",
+			"Variations": "Yes"
+		},
+		{
+			"FamilyName": "X64",
+			"Type": "StrengthReduction",
+			"Name": "Inc##Not##",
+			"SubName": "",
+			"Expression": "X64.Inc## (X64.Not## x)",
+			"Filter": "IsVirtualRegister(x) && !IsCarryFlagUsed(@)",
+			"Result": "(X64.Neg## x)",
+			"Variations": "No"
+		},
+		{
+			"FamilyName": "X64",
+			"Type": "Specific",
+			"Name": "And##Add##",
+			"SubName": "ToBlsr##",
+			"Expression": "X64.And## x (X64.Add## x -1)",
+			"Filter": "IsVirtualRegister(x) && !IsCarryFlagUsed(@)",
+			"Result": "(X64.Blsr## x)",
+			"Variations": "Yes"
+		}
+	]
+}

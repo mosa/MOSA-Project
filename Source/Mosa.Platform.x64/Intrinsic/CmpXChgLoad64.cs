@@ -18,7 +18,7 @@ namespace Mosa.Platform.x64.Intrinsic
 			var comparand = context.Operand3;
 			var result = context.Result;
 
-			var eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U8, GeneralPurposeRegister.EAX);
+			var eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U8, CPURegister.EAX);
 			var v1 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.U8);
 
 			context.SetInstruction(X64.Mov64, eax, comparand);

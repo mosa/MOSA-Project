@@ -142,6 +142,10 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 				{
 					tokens.Add(new Token(TokenType.At, index++, "@"));
 				}
+				else if (c == '%')
+				{
+					tokens.Add(new Token(TokenType.Percent, index++, "%"));
+				}
 				else
 				{
 					throw new CompilerException($"tokensizer: syntax error at {index}");

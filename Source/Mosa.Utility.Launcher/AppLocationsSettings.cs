@@ -38,17 +38,16 @@ namespace Mosa.Utility.Launcher
 		private static string FindQemu()
 		{
 			return TryFind(
-				new string[] { "qemu-system-i386.exe", "qemu-system-i386", "qemu-system-x86_64", "qemu-system-x86_64.exe", },
+				new string[] { "qemu-system-x86_64", "qemu-system-x86_64.exe", "qemu-system-i386.exe", "qemu-system-i386" },
 				new string[] {
 					@"%MOSA%\Tools\QEMU",
 					@"%CURRENT%\..\Tools\QEMU",
 					@"%CURRENT%\Tools\QEMU",
 					@"%APPDIR%\Tools\QEMU",
 					@"%APPDIR%\..\Tools\QEMU",
-					@"%MOSATOOLS%\QEMU",
-
 					@"%ProgramFiles%\qemu",
 					@"%ProgramFiles(x86)%\qemu",
+					@"%MOSATOOLS%\QEMU",
 					"/bin",
 					"/usr/bin"
 				}
@@ -156,13 +155,6 @@ namespace Mosa.Utility.Launcher
 			return TryFind(
 				new string[] { "bochs.exe", "bochs" },
 				new string[] {
-					@"%MOSA%\Tools\Bochs",
-					@"%CURRENT%\..\Tools\Bochs",
-					@"%CURRENT%\Tools\Bochs",
-					@"%APPDIR%\Tools\Bochs",
-					@"%APPDIR%\..\Tools\Bochs",
-					@"%MOSATOOLS%\Bochs",
-
 					@"%ProgramFiles%\Bochs-2.6.9",
 					@"%ProgramFiles(x86)%\Bochs-2.6.9",
 					@"%ProgramFiles%\Bochs-2.6.8",
@@ -171,6 +163,16 @@ namespace Mosa.Utility.Launcher
 					@"%ProgramFiles(x86)%\Bochs-2.6.5",
 					@"%ProgramFiles%\Bochs-2.6.2",
 					@"%ProgramFiles(x86)%\Bochs-2.6.2",
+					@"%ProgramFiles%\Bochs-2.7",
+					@"%ProgramFiles(x86)%\Bochs-2.7",
+
+					@"%MOSA%\Tools\Bochs",
+					@"%CURRENT%\..\Tools\Bochs",
+					@"%CURRENT%\Tools\Bochs",
+					@"%APPDIR%\Tools\Bochs",
+					@"%APPDIR%\..\Tools\Bochs",
+					@"%MOSATOOLS%\Bochs",
+
 					"/bin",
 					"/usr/bin"
 				}

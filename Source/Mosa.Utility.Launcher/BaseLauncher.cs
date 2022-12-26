@@ -14,7 +14,8 @@ namespace Mosa.Utility.Launcher
 
 		public LauncherSettings LauncherSettings { get; }
 
-		public Settings Settings { get { return LauncherSettings.Settings; } }
+		public Settings Settings
+		{ get { return LauncherSettings.Settings; } }
 
 		public BaseLauncher(Settings settings, CompilerHooks compilerHook)
 		{
@@ -167,13 +168,13 @@ namespace Mosa.Utility.Launcher
 			CompilerHooks.NotifyStatus?.Invoke(status);
 		}
 
-		static protected byte[] GetResource(string path, string name)
+		protected static byte[] GetResource(string path, string name)
 		{
 			var newname = path.Replace(".", "._").Replace(@"\", "._").Replace("/", "._").Replace("-", "_") + "." + name;
 			return GetResource(newname);
 		}
 
-		static protected byte[] GetResource(string name)
+		protected static byte[] GetResource(string name)
 		{
 			var assembly = Assembly.GetExecutingAssembly();
 			var stream = assembly.GetManifestResourceStream("Mosa.Utility.Launcher.Resources." + name);
@@ -181,7 +182,7 @@ namespace Mosa.Utility.Launcher
 			return binary.ReadBytes((int)stream.Length);
 		}
 
-		static protected string Quote(string location)
+		protected static string Quote(string location)
 		{
 			return '"' + location + '"';
 		}
@@ -206,7 +207,7 @@ namespace Mosa.Utility.Launcher
 
 		protected Process LaunchConsoleApplication(string app, string args)
 		{
-			Output($"Launching Application: {app}");
+			Output($"Launching Console Application: {app}");
 			Output($"Arguments: {args}");
 
 			var start = new ProcessStartInfo

@@ -10,7 +10,7 @@ namespace Mosa.Runtime.x86
 	/// </summary>
 	public static unsafe class Native
 	{
-		#region Intrinsic
+		#region Intrinsic Instructions
 
 		[DllImport("Mosa.Platform.x86.Intrinsic::Lidt")]
 		public static extern void Lidt(uint address);
@@ -20,12 +20,6 @@ namespace Mosa.Runtime.x86
 
 		[DllImport("Mosa.Platform.x86.Intrinsic::Lgdt")]
 		public static extern void Lgdt(uint address);
-
-		[DllImport("Mosa.Platform.x86.Intrinsic::SetSegments")]
-		public static extern void SetSegments(ushort ds, ushort es, ushort fs, ushort gs, ushort ss);
-
-		[DllImport("Mosa.Platform.x86.Intrinsic::FarJump")]
-		public static extern void FarJump();
 
 		[DllImport("Mosa.Platform.x86.Intrinsic::Sti")]
 		public static extern void Sti();
@@ -74,6 +68,43 @@ namespace Mosa.Runtime.x86
 
 		[DllImport("Mosa.Platform.x86.Intrinsic::RdMSR")]
 		public static extern ulong RdMSR(uint mrs);
+
+		[DllImport("Mosa.Platform.x86.Intrinsic::Pause")]
+		public static extern void Pause();
+
+		[DllImport("Mosa.Platform.x86.Intrinsic::Int")]
+		public static extern void Int(byte interrupt);
+
+		[DllImport("Mosa.Platform.x86.Intrinsic::Sqrtsd")]
+		public static extern double Sqrtsd(double destination);
+
+		[DllImport("Mosa.Platform.x86.Intrinsic::Sqrtss")]
+		public static extern float Sqrtss(float destination);
+
+		[DllImport("Mosa.Platform.x86.Intrinsic::Roundsd2Negative")]
+		public static extern double Roundsd2Negative(double destination);
+
+		[DllImport("Mosa.Platform.x86.Intrinsic::Roundsd2Positive")]
+		public static extern double Roundsd2Positive(double destination);
+
+		[DllImport("Mosa.Platform.x86.Intrinsic::Roundss2Negative")]
+		public static extern float Roundss2Negative(float destination);
+
+		[DllImport("Mosa.Platform.x86.Intrinsic::Roundss2Positive")]
+		public static extern float Roundss2Positive(float destination);
+
+		[DllImport("Mosa.Platform.x86.Intrinsic::Blsr32")]
+		public static extern uint Blsr32(uint esp);
+
+		#endregion Intrinsic Instructions
+
+		#region Intrinsic Methods
+
+		[DllImport("Mosa.Platform.x86.Intrinsic::SetSegments")]
+		public static extern void SetSegments(ushort ds, ushort es, ushort fs, ushort gs, ushort ss);
+
+		[DllImport("Mosa.Platform.x86.Intrinsic::FarJump")]
+		public static extern void FarJump();
 
 		[DllImport("Mosa.Platform.x86.Intrinsic::BochsDebug")]
 		public static extern void BochsDebug();
@@ -150,9 +181,6 @@ namespace Mosa.Runtime.x86
 		[DllImport("Mosa.Platform.x86.Intrinsic::XChgLoad32")]
 		public static extern int XChgLoad32(int location, int value);
 
-		[DllImport("Mosa.Platform.x86.Intrinsic::Pause")]
-		public static extern void Pause();
-
 		[DllImport("Mosa.Platform.x86.Intrinsic::GetIDTJumpLocation")]
 		public static extern uint GetIDTJumpLocation(uint irq);
 
@@ -183,9 +211,6 @@ namespace Mosa.Runtime.x86
 		[DllImport("Mosa.Platform.x86.Intrinsic::AllocateStackSpace")]
 		public static extern uint AllocateStackSpace(uint size);
 
-		[DllImport("Mosa.Platform.x86.Intrinsic::Int")]
-		public static extern void Int(byte interrupt);
-
 		[DllImport("Mosa.Platform.x86.Intrinsic::Remainder")]
 		public static extern float Remainder(float dividend, float divisor);
 
@@ -198,25 +223,7 @@ namespace Mosa.Runtime.x86
 		[DllImport("Mosa.Platform.x86.Intrinsic::Memclr256")]
 		public static extern void Memclr256(void* destination);
 
-		[DllImport("Mosa.Platform.x86.Intrinsic::Sqrtsd")]
-		public static extern double Sqrtsd(double destination);
-
-		[DllImport("Mosa.Platform.x86.Intrinsic::Sqrtss")]
-		public static extern float Sqrtss(float destination);
-
-		[DllImport("Mosa.Platform.x86.Intrinsic::Roundsd2Negative")]
-		public static extern double Roundsd2Negative(double destination);
-
-		[DllImport("Mosa.Platform.x86.Intrinsic::Roundsd2Positive")]
-		public static extern double Roundsd2Positive(double destination);
-
-		[DllImport("Mosa.Platform.x86.Intrinsic::Roundss2Negative")]
-		public static extern float Roundss2Negative(float destination);
-
-		[DllImport("Mosa.Platform.x86.Intrinsic::Roundss2Positive")]
-		public static extern float Roundss2Positive(float destination);
-
-		#endregion Intrinsic
+		#endregion Intrinsic Methods
 
 		#region IRQs Intrinsic
 

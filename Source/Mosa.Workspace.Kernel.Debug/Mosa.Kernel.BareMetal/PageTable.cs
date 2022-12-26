@@ -11,9 +11,14 @@ namespace Mosa.Kernel.BareMetal
 	{
 		public static void Setup()
 		{
-			Console.Write("a");
+			Console.WriteLine("Mosa.Kernel.BareMetal.PageTable.Setup:Enter");
+
+			while (true)
+			{
+			}
 
 			Platform.PageTableSetup();
+
 			Console.Write("b");
 
 			Platform.PageTableInitialize();

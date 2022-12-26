@@ -8,7 +8,7 @@ namespace Mosa.Platform.x64.Intrinsic
 	/// <summary>
 	/// IntrinsicMethods
 	/// </summary>
-	static partial class IntrinsicMethods
+	internal static partial class IntrinsicMethods
 	{
 		[IntrinsicMethod("Mosa.Platform.x64.Intrinsic::SetSegments")]
 		private static void SetSegments(Context context, MethodCompiler methodCompiler)
@@ -19,11 +19,11 @@ namespace Mosa.Platform.x64.Intrinsic
 			var operand4 = context.GetOperand(3);
 			var operand5 = context.GetOperand(4);
 
-			var ds = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I2, SegmentRegister.DS);
-			var es = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I2, SegmentRegister.ES);
-			var fs = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I2, SegmentRegister.FS);
-			var gs = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I2, SegmentRegister.GS);
-			var ss = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I2, SegmentRegister.SS);
+			var ds = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I2, CPURegister.DS);
+			var es = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I2, CPURegister.ES);
+			var fs = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I2, CPURegister.FS);
+			var gs = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I2, CPURegister.GS);
+			var ss = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I2, CPURegister.SS);
 
 			context.SetInstruction(X64.MovStoreSeg64, ds, operand1);
 			context.AppendInstruction(X64.MovStoreSeg64, es, operand2);

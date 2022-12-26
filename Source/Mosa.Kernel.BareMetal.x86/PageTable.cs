@@ -16,18 +16,22 @@ namespace Mosa.Kernel.BareMetal.x86
 
 		public static void Setup()
 		{
+			//Console.WriteLine("Mosa.Kernel.BareMetal.x86.PageTable.Setup:Enter");
 			GDTTable = new GDTTable(PhysicalPageAllocator.ReservePage());
 
 			PageDirectory = PhysicalPageAllocator.ReservePage();
+			PageTables = PhysicalPageAllocator.ReservePages(1024);
 
-			Console.Write("D");
-			PageTables = PhysicalPageAllocator.ReservePages(Page.Size * 1024);
-			Console.Write("E");
+			//Console.WriteLine("Mosa.Kernel.BareMetal.x86.PageTable.Setup:Exit");
 		}
 
 		public static void Initialize()
 		{
+			Console.WriteLine("Mosa.Kernel.BareMetal.x86.PageTable.Initialize:Enter");
+
 			GDTTable.Setup();
+
+			Console.WriteLine("Mosa.Kernel.BareMetal.x86.PageTable.Initialize:1");
 
 			// Setup Page Directory
 			for (uint index = 0; index < 1024; index++)
@@ -35,11 +39,20 @@ namespace Mosa.Kernel.BareMetal.x86
 				PageDirectory.Store32(index << 2, (uint)(PageTables.ToInt32() + (index * 4096) | 0x04 | 0x02 | 0x01));
 			}
 
+			Console.WriteLine("Mosa.Kernel.BareMetal.x86.PageTable.Initialize:2");
+
 			// Clear the Page Tables
 			for (uint index = 0; index < 1024; index++)
 			{
+				Console.WriteValue(index);
+
 				Page.ClearPage(PageTables + (index * Page.Size));
+
+				Console.Write(' ');
 			}
+
+			Console.WriteLine("Mosa.Kernel.BareMetal.x86.PageTable.Initialize:Exit");
+			while (true) { }
 		}
 
 		public static void Enable()

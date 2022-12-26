@@ -43,17 +43,17 @@ namespace Mosa.Platform.x86.Stages
 			if (context.Result.IsCPURegister
 				&& context.Result2.IsCPURegister
 				&& context.Operand1.IsCPURegister
-				&& context.Result.Register == GeneralPurposeRegister.EDX
-				&& context.Result2.Register == GeneralPurposeRegister.EAX
-				&& context.Operand1.Register == GeneralPurposeRegister.EAX)
+				&& context.Result.Register == CPURegister.EDX
+				&& context.Result2.Register == CPURegister.EAX
+				&& context.Operand1.Register == CPURegister.EAX)
 				return;
 
 			var operand1 = context.Operand1;
 			var result = context.Result;
 			var result2 = context.Result2;
 
-			var EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
-			var EDX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
+			var EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.EAX);
+			var EDX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.EDX);
 
 			context.SetInstruction(X86.Mov32, EAX, operand1);
 			context.AppendInstruction2(X86.Cdq32, EDX, EAX, EAX);
@@ -66,10 +66,10 @@ namespace Mosa.Platform.x86.Stages
 			if (context.Result.IsCPURegister
 				&& context.Result2.IsCPURegister
 				&& context.Operand1.IsCPURegister
-				&& context.Result.Register == GeneralPurposeRegister.EDX
-				&& context.Result2.Register == GeneralPurposeRegister.EAX
-				&& context.Operand1.Register == GeneralPurposeRegister.EDX
-				&& context.Operand2.Register == GeneralPurposeRegister.EAX)
+				&& context.Result.Register == CPURegister.EDX
+				&& context.Result2.Register == CPURegister.EAX
+				&& context.Operand1.Register == CPURegister.EDX
+				&& context.Operand2.Register == CPURegister.EAX)
 				return;
 
 			var operand1 = context.Operand1;
@@ -78,8 +78,8 @@ namespace Mosa.Platform.x86.Stages
 			var result = context.Result;
 			var result2 = context.Result2;
 
-			var EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
-			var EDX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
+			var EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.EAX);
+			var EDX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.EDX);
 
 			context.SetInstruction(X86.Mov32, EDX, operand1);
 			context.AppendInstruction(X86.Mov32, EAX, operand2);
@@ -105,10 +105,10 @@ namespace Mosa.Platform.x86.Stages
 				&& context.Result2.IsCPURegister
 				&& context.Operand1.IsCPURegister
 				&& context.Operand2.IsCPURegister
-				&& context.Result.Register == GeneralPurposeRegister.EDX
-				&& context.Result2.Register == GeneralPurposeRegister.EAX
-				&& context.Operand1.Register == GeneralPurposeRegister.EDX
-				&& context.Operand2.Register == GeneralPurposeRegister.EAX)
+				&& context.Result.Register == CPURegister.EDX
+				&& context.Result2.Register == CPURegister.EAX
+				&& context.Operand1.Register == CPURegister.EDX
+				&& context.Operand2.Register == CPURegister.EAX)
 				return;
 
 			var operand1 = context.Operand1;
@@ -117,8 +117,8 @@ namespace Mosa.Platform.x86.Stages
 			var result = context.Result;
 			var result2 = context.Result2;
 
-			var EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
-			var EDX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
+			var EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.EAX);
+			var EDX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.EDX);
 
 			context.SetInstruction(X86.Mov32, EDX, operand1);
 			context.AppendInstruction(X86.Mov32, EAX, operand2);
@@ -154,15 +154,15 @@ namespace Mosa.Platform.x86.Stages
 		{
 			if (context.Result.IsCPURegister
 				&& context.Operand1.IsCPURegister
-				&& context.Result.Register == GeneralPurposeRegister.EAX
-				&& (context.Operand1.Register == GeneralPurposeRegister.EDX || context.Operand1.IsConstant))
+				&& context.Result.Register == CPURegister.EAX
+				&& (context.Operand1.Register == CPURegister.EDX || context.Operand1.IsConstant))
 				return;
 
 			var result = context.Result;
 			var operand1 = context.Operand1;
 
-			var EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, GeneralPurposeRegister.EAX);
-			var EDX = Operand.CreateCPURegister(operand1.Type, GeneralPurposeRegister.EDX);
+			var EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, CPURegister.EAX);
+			var EDX = Operand.CreateCPURegister(operand1.Type, CPURegister.EDX);
 
 			context.SetInstruction(X86.Mov32, EDX, operand1);
 			context.AppendInstruction(X86.In16, EAX, EDX);
@@ -173,15 +173,15 @@ namespace Mosa.Platform.x86.Stages
 		{
 			if (context.Result.IsCPURegister
 				&& context.Operand1.IsCPURegister
-				&& context.Result.Register == GeneralPurposeRegister.EAX
-				&& (context.Operand1.Register == GeneralPurposeRegister.EDX || context.Operand1.IsConstant))
+				&& context.Result.Register == CPURegister.EAX
+				&& (context.Operand1.Register == CPURegister.EDX || context.Operand1.IsConstant))
 				return;
 
 			var result = context.Result;
 			var operand1 = context.Operand1;
 
-			var EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, GeneralPurposeRegister.EAX);
-			var EDX = Operand.CreateCPURegister(operand1.Type, GeneralPurposeRegister.EDX);
+			var EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, CPURegister.EAX);
+			var EDX = Operand.CreateCPURegister(operand1.Type, CPURegister.EDX);
 
 			context.SetInstruction(X86.Mov32, EDX, operand1);
 			context.AppendInstruction(X86.In32, EAX, EDX);
@@ -192,15 +192,15 @@ namespace Mosa.Platform.x86.Stages
 		{
 			if (context.Result.IsCPURegister
 				&& context.Operand1.IsCPURegister
-				&& context.Result.Register == GeneralPurposeRegister.EAX
-				&& (context.Operand1.Register == GeneralPurposeRegister.EDX || context.Operand1.IsConstant))
+				&& context.Result.Register == CPURegister.EAX
+				&& (context.Operand1.Register == CPURegister.EDX || context.Operand1.IsConstant))
 				return;
 
 			var result = context.Result;
 			var operand1 = context.Operand1;
 
-			var EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, GeneralPurposeRegister.EAX);
-			var EDX = Operand.CreateCPURegister(operand1.Type, GeneralPurposeRegister.EDX);
+			var EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, CPURegister.EAX);
+			var EDX = Operand.CreateCPURegister(operand1.Type, CPURegister.EDX);
 
 			context.SetInstruction(X86.Mov32, EDX, operand1);
 			context.AppendInstruction(X86.In8, EAX, EDX);
@@ -227,9 +227,9 @@ namespace Mosa.Platform.x86.Stages
 				&& context.Result2.IsCPURegister
 				&& context.Operand1.IsCPURegister
 				&& !context.Operand2.IsConstant
-				&& context.Result.Register == GeneralPurposeRegister.EDX
-				&& context.Result2.Register == GeneralPurposeRegister.EAX
-				&& context.Operand1.Register == GeneralPurposeRegister.EAX)
+				&& context.Result.Register == CPURegister.EDX
+				&& context.Result2.Register == CPURegister.EAX
+				&& context.Operand1.Register == CPURegister.EAX)
 				return;
 
 			var operand1 = context.Operand1;
@@ -237,8 +237,8 @@ namespace Mosa.Platform.x86.Stages
 			var result = context.Result;
 			var result2 = context.Result2;
 
-			var EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
-			var EDX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
+			var EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.EAX);
+			var EDX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.EDX);
 
 			context.SetInstruction(X86.Mov32, EAX, operand1);
 
@@ -261,16 +261,16 @@ namespace Mosa.Platform.x86.Stages
 			// TRANSFORM: OUT <= EDX, EAX && OUT <= imm8, EAX
 			if (context.Operand1.IsCPURegister
 				&& context.Operand2.IsCPURegister
-				&& (context.Operand1.Register == GeneralPurposeRegister.EDX || context.Operand1.IsConstant)
-				&& context.Operand2.Register == GeneralPurposeRegister.EAX)
+				&& (context.Operand1.Register == CPURegister.EDX || context.Operand1.IsConstant)
+				&& context.Operand2.Register == CPURegister.EAX)
 				return;
 
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
 			var instruction = context.Instruction;
 
-			var EAX = Operand.CreateCPURegister(operand2.Type, GeneralPurposeRegister.EAX);
-			var EDX = Operand.CreateCPURegister(operand1.Type, GeneralPurposeRegister.EDX);
+			var EAX = Operand.CreateCPURegister(operand2.Type, CPURegister.EAX);
+			var EDX = Operand.CreateCPURegister(operand1.Type, CPURegister.EDX);
 
 			context.SetInstruction(X86.Mov32, EDX, operand1);
 			context.AppendInstruction(X86.Mov32, EAX, operand2);
@@ -297,7 +297,7 @@ namespace Mosa.Platform.x86.Stages
 			if (context.Operand3.IsConstant)
 				return;
 
-			if (context.Operand3.Register == GeneralPurposeRegister.ECX)
+			if (context.Operand3.Register == CPURegister.ECX)
 				return;
 
 			var operand1 = context.Operand1;
@@ -305,7 +305,7 @@ namespace Mosa.Platform.x86.Stages
 			var operand3 = context.Operand3;
 			var result = context.Result;
 
-			var ECX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
+			var ECX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.ECX);
 
 			context.SetInstruction(X86.Mov32, ECX, operand3);
 			context.AppendInstruction(X86.Shld32, result, operand1, operand2, ECX);
@@ -321,7 +321,7 @@ namespace Mosa.Platform.x86.Stages
 			if (context.Operand3.IsConstant)
 				return;
 
-			if (context.Operand3.Register == GeneralPurposeRegister.ECX)
+			if (context.Operand3.Register == CPURegister.ECX)
 				return;
 
 			var operand1 = context.Operand1;
@@ -329,7 +329,7 @@ namespace Mosa.Platform.x86.Stages
 			var operand3 = context.Operand3;
 			var result = context.Result;
 
-			var ECX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
+			var ECX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.ECX);
 
 			context.SetInstruction(X86.Mov32, ECX, operand3);
 			context.AppendInstruction(X86.Shrd32, result, operand1, operand2, ECX);
@@ -340,18 +340,18 @@ namespace Mosa.Platform.x86.Stages
 			if (context.Result.IsCPURegister
 				&& context.Result2.IsCPURegister
 				&& context.Operand1.IsCPURegister
-				&& context.Result.Register == GeneralPurposeRegister.EAX
-				&& context.Result2.Register == GeneralPurposeRegister.EDX
-				&& context.Operand1.Register == GeneralPurposeRegister.ECX)
+				&& context.Result.Register == CPURegister.EAX
+				&& context.Result2.Register == CPURegister.EDX
+				&& context.Operand1.Register == CPURegister.ECX)
 				return;
 
 			var operand1 = context.Operand1;
 			var result = context.Result;
 			var result2 = context.Result2;
 
-			var EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
-			var EDX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
-			var ECX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
+			var EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.EAX);
+			var EDX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.EDX);
+			var ECX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.ECX);
 
 			context.SetInstruction(X86.Mov32, ECX, operand1);
 			context.AppendInstruction2(X86.RdMSR, EAX, EDX, ECX);
@@ -364,18 +364,18 @@ namespace Mosa.Platform.x86.Stages
 			if (context.Operand1.IsCPURegister
 				&& context.Operand2.IsCPURegister
 				&& context.Operand3.IsCPURegister
-				&& context.Operand1.Register == GeneralPurposeRegister.ECX
-				&& context.Operand2.Register == GeneralPurposeRegister.EAX
-				&& context.Operand3.Register == GeneralPurposeRegister.EDX)
+				&& context.Operand1.Register == CPURegister.ECX
+				&& context.Operand2.Register == CPURegister.EAX
+				&& context.Operand3.Register == CPURegister.EDX)
 				return;
 
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
 			var operand3 = context.Operand3;
 
-			var EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
-			var EDX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
-			var ECX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
+			var EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.EAX);
+			var EDX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.EDX);
+			var ECX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.ECX);
 
 			context.SetInstruction(X86.Mov32, ECX, operand1);
 			context.AppendInstruction(X86.Mov32, EAX, operand2);
@@ -390,14 +390,14 @@ namespace Mosa.Platform.x86.Stages
 			if (context.Operand2.IsConstant)
 				return;
 
-			if (context.Operand2.Register == GeneralPurposeRegister.ECX)
+			if (context.Operand2.Register == CPURegister.ECX)
 				return;
 
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
 			var result = context.Result;
 
-			var ECX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
+			var ECX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.ECX);
 
 			context.SetInstruction(X86.Mov32, ECX, operand2);
 			context.AppendInstruction(instruction, result, operand1, ECX);

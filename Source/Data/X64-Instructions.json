@@ -5045,6 +5045,46 @@
 					"Encoding": "[x64],operand-prefix=0x0F,opcode=0x30"
 				}
 			]
+		},
+		{
+			"Name": "Blsr32",
+			"Commutative": "true",
+			"FamilyName": "X64",
+			"FlagsCleared": "O",
+			"FlagsModified": "ZCS",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "AP",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register]",
+					"Encoding": "[x64-rex32],opcode=0xC4,opcode2=0xE2,opcode3=0x78,opcode4=0xF3,mod=11,reg=b001,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
+				}
+			]
+		},
+		{
+			"Name": "Blsr64",
+			"Commutative": "true",
+			"FamilyName": "X64",
+			"FlagsCleared": "O",
+			"FlagsModified": "ZCS",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "AP",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register]",
+					"Encoding": "[x64-rex64],opcode=0xC4,opcode2=0xE2,opcode3=0x78,opcode4=0xF3,mod=11,reg=b001,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
+				}
+			]
 		}
 	]
 }

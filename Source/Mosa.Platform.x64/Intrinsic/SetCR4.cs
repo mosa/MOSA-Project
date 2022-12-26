@@ -15,8 +15,8 @@ namespace Mosa.Platform.x64.Intrinsic
 		{
 			Operand operand1 = context.Operand1;
 
-			Operand eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, GeneralPurposeRegister.EAX);
-			Operand cr = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, ControlRegister.CR4);
+			Operand eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, CPURegister.EAX);
+			Operand cr = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, CPURegister.CR4);
 
 			context.SetInstruction(X64.Mov64, eax, operand1);
 			context.AppendInstruction(X64.MovCRStore64, null, cr, eax);

@@ -135,5 +135,6 @@ namespace Mosa.Platform.x86
 		public static readonly BochsDebug BochsDebug = new BochsDebug();
 		public static readonly RdMSR RdMSR = new RdMSR();
 		public static readonly WrMSR WrMSR = new WrMSR();
+		public static readonly Blsr32 Blsr32 = new Blsr32();
 	}
 }
