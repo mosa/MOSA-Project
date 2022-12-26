@@ -13,7 +13,7 @@ namespace Mosa.Plug.Korlib.System.Threading.x86
 		[Plug("System.Threading.Monitor::Enter")]
 		internal static void Enter(Object obj)
 		{
-			var sync = Runtime.Internal.GetObjectLockAndStatus(obj);
+			var sync = Mosa.Runtime.Internal.GetObjectLockAndStatus(obj);
 
 			while (Native.CmpXChgLoad32(sync.ToInt32(), 1, 0) != 0)
 			{ }
@@ -23,7 +23,7 @@ namespace Mosa.Plug.Korlib.System.Threading.x86
 		[Plug("System.Threading.Monitor::ReliableEnter")]
 		internal static void ReliableEnter(Object obj, ref bool lockTaken)
 		{
-			var sync = Runtime.Internal.GetObjectLockAndStatus(obj);
+			var sync = Mosa.Runtime.Internal.GetObjectLockAndStatus(obj);
 
 			while (Native.CmpXChgLoad32(sync.ToInt32(), 1, 0) != 0)
 			{ }
@@ -35,7 +35,7 @@ namespace Mosa.Plug.Korlib.System.Threading.x86
 		[Plug("System.Threading.Monitor::Exit")]
 		internal static void Exit(Object obj)
 		{
-			var sync = Runtime.Internal.GetObjectLockAndStatus(obj);
+			var sync = Mosa.Runtime.Internal.GetObjectLockAndStatus(obj);
 
 			Native.XAddLoad32(sync.ToInt32(), -1);
 		}
