@@ -4,15 +4,15 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x86.Instructions
+namespace Mosa.Platform.x64.Instructions
 {
 	/// <summary>
-	/// Blsr32
+	/// Blsr64
 	/// </summary>
-	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed class Blsr32 : X86Instruction
+	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
+	public sealed class Blsr64 : X64Instruction
 	{
-		internal Blsr32()
+		internal Blsr64()
 			: base(1, 1)
 		{
 		}
@@ -43,6 +43,12 @@ namespace Mosa.Platform.x86.Instructions
 			System.Diagnostics.Debug.Assert(node.Operand1.IsCPURegister);
 			System.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);
 
+			opcodeEncoder.SuppressByte(0x40);
+			opcodeEncoder.Append4Bits(0b0100);
+			opcodeEncoder.Append1Bit(0b1);
+			opcodeEncoder.Append1Bit(0b0);
+			opcodeEncoder.Append1Bit(0b0);
+			opcodeEncoder.Append1Bit((node.Result.Register.RegisterCode >> 3) & 0x1);
 			opcodeEncoder.Append8Bits(0xC4);
 			opcodeEncoder.Append8Bits(0xE2);
 			opcodeEncoder.Append8Bits(0x78);
