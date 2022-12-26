@@ -1,7 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Platform.Intel;
 
 namespace Mosa.Platform.x64.CompilerStages
 {
@@ -23,10 +22,10 @@ namespace Mosa.Platform.x64.CompilerStages
 
 			var entryPoint = Operand.CreateSymbolFromMethod(initializeMethod, TypeSystem);
 
-			var eax = Operand.CreateCPURegister(TypeSystem.BuiltIn.I8, CPURegister.EAX);
-			var ebx = Operand.CreateCPURegister(TypeSystem.BuiltIn.I8, CPURegister.EBX);
-			var ebp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I8, CPURegister.EBP);
-			var esp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I8, CPURegister.ESP);
+			var eax = Operand.CreateCPURegister(TypeSystem.BuiltIn.I8, CPURegister.R1);
+			var ebx = Operand.CreateCPURegister(TypeSystem.BuiltIn.I8, CPURegister.R3);
+			var ebp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I8, CPURegister.RBP);
+			var esp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I8, CPURegister.RSP);
 
 			var multibootEAX = Operand.CreateUnmanagedSymbolPointer(MultibootEAX, TypeSystem);
 			var multibootEBX = Operand.CreateUnmanagedSymbolPointer(MultibootEBX, TypeSystem);

@@ -31,14 +31,14 @@ namespace Mosa.Platform.x64
 			////////////////////////////////////////////////////////
 			// 32-bit general purpose registers
 			////////////////////////////////////////////////////////
-			CPURegister.EAX,
-			CPURegister.ECX,
-			CPURegister.EDX,
-			CPURegister.EBX,
-			CPURegister.ESP,
-			CPURegister.EBP,
-			CPURegister.ESI,
-			CPURegister.EDI,
+			CPURegister.R0,
+			CPURegister.R1,
+			CPURegister.R2,
+			CPURegister.R3,
+			CPURegister.RSP,
+			CPURegister.RBP,
+			CPURegister.R6,
+			CPURegister.R7,
 
 			CPURegister.R8,
 			CPURegister.R9,
@@ -85,17 +85,17 @@ namespace Mosa.Platform.x64
 		/// <summary>
 		/// Retrieves the stack frame register of the x86.
 		/// </summary>
-		public override PhysicalRegister StackFrameRegister => CPURegister.EBP;
+		public override PhysicalRegister StackFrameRegister => CPURegister.RBP;
 
 		/// <summary>
 		/// Retrieves the stack pointer register of the x86.
 		/// </summary>
-		public override PhysicalRegister StackPointerRegister => CPURegister.ESP;
+		public override PhysicalRegister StackPointerRegister => CPURegister.RSP;
 
 		/// <summary>
 		/// Gets the return register.
 		/// </summary>
-		public override PhysicalRegister ReturnRegister => CPURegister.EAX;
+		public override PhysicalRegister ReturnRegister => CPURegister.R1;
 
 		public override PhysicalRegister LinkRegister => null;
 
@@ -112,12 +112,12 @@ namespace Mosa.Platform.x64
 		/// <summary>
 		/// Retrieves the exception register of the architecture.
 		/// </summary>
-		public override PhysicalRegister ExceptionRegister => CPURegister.EDI;
+		public override PhysicalRegister ExceptionRegister => CPURegister.R7;
 
 		/// <summary>
 		/// Gets the finally return block register.
 		/// </summary>
-		public override PhysicalRegister LeaveTargetRegister => CPURegister.ESI;
+		public override PhysicalRegister LeaveTargetRegister => CPURegister.R6;
 
 		/// <summary>
 		/// Retrieves the program counter register of the x86.

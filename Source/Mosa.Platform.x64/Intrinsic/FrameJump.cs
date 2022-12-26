@@ -8,7 +8,7 @@ namespace Mosa.Platform.x64.Intrinsic
 	/// <summary>
 	/// IntrinsicMethods
 	/// </summary>
-	static partial class IntrinsicMethods
+	internal static partial class IntrinsicMethods
 	{
 		[IntrinsicMethod("Mosa.Platform.x64.Intrinsic::FrameJump")]
 		private static void FrameJump(Context context, MethodCompiler methodCompiler)
@@ -18,12 +18,12 @@ namespace Mosa.Platform.x64.Intrinsic
 			var v2 = context.Operand3;
 			var v3 = context.GetOperand(3);
 
-			var esp = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, CPURegister.ESP);
-			var ebp = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, CPURegister.EBP);
+			var esp = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, CPURegister.RSP);
+			var ebp = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, CPURegister.RBP);
 
-			var eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, CPURegister.EAX);
-			var ebx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, CPURegister.EBX);
-			var ecx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, CPURegister.ECX);
+			var eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, CPURegister.R1);
+			var ebx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, CPURegister.R3);
+			var ecx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, CPURegister.R1);
 
 			// Move all virtual registers into physical registers - necessary since stack frame pointer will change
 			context.SetInstruction(X64.Mov64, eax, v0);
