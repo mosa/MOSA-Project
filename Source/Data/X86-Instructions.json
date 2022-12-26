@@ -3590,6 +3590,67 @@
 					"Encoding": "[x86],opcode=0xC4,opcode2=0xE2,opcode3=0x78,opcode4=0xF3,mod=11,reg=b001,rm=reg3:r"
 				}
 			]
+		},
+		{
+			"Name": "Popcnt32",
+			"Commutative": "true",
+			"FamilyName": "X86",
+			"FlagsCleared": "OSACP",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "Z",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register]",
+					"Encoding": "[x86],opcode=0xF3,opcode2=0x0F,opcode3=0xB8,mod=11,reg=b001,rm=reg3:r"
+				}
+			]
+		},
+		{
+			"Name": "Lzcnt32",
+			"Commutative": "true",
+			"FamilyName": "X86",
+			"FlagsCleared": "",
+			"FlagsModified": "ZC",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "OSAP",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register]",
+					"Encoding": "[x86],opcode=0xF3,opcode2=0x0F,opcode3=0xBD,mod=11,reg=b001,rm=reg3:r"
+				}
+			]
+		},
+		{
+			"Name": "Tzcnt32",
+			"Commutative": "true",
+			"FamilyName": "X86",
+			"FlagsCleared": "",
+			"FlagsModified": "ZC",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "OSAP",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register]",
+					"Encoding": "[x86],opcode=0xF3,opcode2=0x0F,opcode3=0xBC,mod=11,reg=b001,rm=reg3:r"
+				}
+			]
 		}
+
 	]
 }

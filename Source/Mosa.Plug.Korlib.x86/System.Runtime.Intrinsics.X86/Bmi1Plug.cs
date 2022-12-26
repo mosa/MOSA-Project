@@ -12,5 +12,11 @@ namespace Mosa.Plug.Korlib.System.Runtime.Intrinsics.X86
 		{
 			return Native.Blsr32(value);
 		}
+
+		[Plug("System.Runtime.Intrinsics.X86.Bmi1::TrailingZeroCount")]
+		internal static uint TrailingZeroCount(uint value)
+		{
+			return Native.Tzcnt32(value);
+		}
 	}
 }
