@@ -35,6 +35,8 @@ namespace Mosa.Compiler.Framework
 
 		public bool HasLoops { get; set; }
 
+		public bool SelfReference { get; set; }
+
 		public bool HasAddressOfInstruction { get; set; }
 
 		public int IRInstructionCount { get; set; }
@@ -102,6 +104,7 @@ namespace Mosa.Compiler.Framework
 			IsInvoked = false;
 			AggressiveInlineRequested = false;
 			StackFrameRequired = true;
+			SelfReference = false;
 		}
 
 		#region Methods

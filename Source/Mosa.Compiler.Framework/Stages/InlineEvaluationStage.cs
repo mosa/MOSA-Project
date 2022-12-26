@@ -42,6 +42,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			MethodData.HasAddressOfInstruction = false;
 			MethodData.HasLoops = false;
+			MethodData.SelfReference = false;
 
 			//MethodData.IsDevirtualized = Method.IsVirtual && !TypeLayout.IsMethodOverridden(Method);
 
@@ -92,6 +93,11 @@ namespace Mosa.Compiler.Framework.Stages
 						if (node.Instruction == IRInstruction.AddressOf)
 						{
 							MethodData.HasAddressOfInstruction = true;
+						}
+
+						if (node.Instruction == IRInstruction.CallStatic && node.Operand1.Method == Method)
+						{
+							MethodData.SelfReference = true;
 						}
 
 						if (node.Instruction == IRInstruction.SetReturn32
@@ -157,9 +163,10 @@ namespace Mosa.Compiler.Framework.Stages
 			trace?.Log($"NonIRInstructionCount: {MethodData.NonIRInstructionCount}");
 			trace?.Log($"HasAddressOfInstruction: {MethodData.HasAddressOfInstruction}");
 			trace?.Log($"HasLoops: {MethodData.HasLoops}");
+			trace?.Log($"SelfReference: {MethodData.SelfReference}");
 			trace?.Log($"** Dynamically Evaluated");
 			trace?.Log($"Inlined: {MethodData.Inlined}");
-
+			
 			InlineCount.Set(inline);
 			ReversedInlineCount.Set(MethodData.Version >= MaximumCompileCount);
 
@@ -209,6 +216,9 @@ namespace Mosa.Compiler.Framework.Stages
 				return true;
 
 			if (methodData.HasMethodPointerReferenced)
+				return true;
+
+			if (methodData.SelfReference)
 				return true;
 
 			var method = methodData.Method;
