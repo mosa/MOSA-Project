@@ -159,7 +159,7 @@ namespace Mosa.Utility.Launcher
 
 			if (LauncherSettings.Platform == "x86")
 			{
-				arg.Append(" -cpu qemu32,+sse4.1");
+				arg.Append(" -cpu qemu32,+sse4.1,abm,bmi1,bmi2");
 			}
 
 			switch (LauncherSettings.EmulatorSVGA)

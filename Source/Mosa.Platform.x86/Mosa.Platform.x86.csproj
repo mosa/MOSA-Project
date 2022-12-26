@@ -31,7 +31,4 @@
   <ItemGroup>
     <Compile Remove="Intrinsic\SuppressStackFrame.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Transform\Auto\Shrink\" />
-  </ItemGroup>
 </Project>

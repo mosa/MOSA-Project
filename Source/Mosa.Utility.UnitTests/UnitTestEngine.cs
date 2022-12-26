@@ -57,7 +57,7 @@ namespace Mosa.Utility.UnitTests
 
 		private DateTime CompileStartTime;
 
-		public bool IsAborted { get { return Aborted; } }
+		public bool IsAborted => Aborted;
 
 		public UnitTestEngine(Settings settings)
 		{
@@ -596,6 +596,7 @@ namespace Mosa.Utility.UnitTests
 				else
 				{
 					unitTest.Status = UnitTestStatus.Failed;
+					var value = Equals(unitTest.Expected, unitTest.Result);
 					Errors++;
 
 					Console.WriteLine("ERROR: " + UnitTestSystem.OutputUnitTestResult(unitTest));

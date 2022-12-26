@@ -57,5 +57,17 @@ namespace Mosa.UnitTests.Optimization
 		{
 			return (int)x | (int)y;
 		}
+
+		[MosaUnitTest(Series = "I4")]
+		public static int NegTest32(int i) => ~i + 1;
+
+		[MosaUnitTest(Series = "I8")]
+		public static long NegTest64(long i) => ~i + 1;
+
+		[MosaUnitTest(Series = "I4")]
+		public static bool BitSet(int x) => (x & 1) == 1;
+
+		[MosaUnitTest(Series = "I4")]
+		public static int ResetLowestSetBit(int x) => x & (x - 1);
 	}
 }

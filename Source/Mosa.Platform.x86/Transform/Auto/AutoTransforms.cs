@@ -15,9 +15,16 @@ namespace Mosa.Platform.x86.Transform.Auto
 		public static readonly List<BaseTransformation> List = new List<BaseTransformation> {
 			 new Standard.Mov32Consolidate(),
 			 new StrengthReduction.Add32ByZero(),
-			 new StrengthReduction.Add32ByZero_v1(),
 			 new StrengthReduction.Sub32ByZero(),
 			 new Shrink.And32ByFF(),
+			 new Shrink.And32ByFF_v1(),
+			 new StrengthReduction.Add32By1Not32(),
+			 new StrengthReduction.Add32By1Not32_v1(),
+			 new StrengthReduction.Inc32Not32(),
+			 new Specific.And32Add32ToBlsr32(),
+			 new Specific.And32Add32ToBlsr32_v1(),
+			 new Specific.And32Add32ToBlsr32_v2(),
+			 new Specific.And32Add32ToBlsr32_v3(),
 		};
 	}
 }

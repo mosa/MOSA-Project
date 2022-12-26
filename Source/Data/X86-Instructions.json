@@ -3570,6 +3570,26 @@
 					"Encoding": "[x86],operand-prefix=0x0F,opcode=0x30"
 				}
 			]
+		},
+		{
+			"Name": "Blsr32",
+			"Commutative": "true",
+			"FamilyName": "X86",
+			"FlagsCleared": "O",
+			"FlagsModified": "ZCS",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "AP",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register]",
+					"Encoding": "[x86],opcode=0xC4,opcode2=0xE2,opcode3=0x78,opcode4=0xF3,mod=11,reg=b001,rm=reg3:o1"
+				}
+			]
 		}
 	]
 }

@@ -9,23 +9,29 @@ using Mosa.Compiler.Framework.Transform;
 namespace Mosa.Platform.x86.Transform.Auto.StrengthReduction
 {
 	/// <summary>
-	/// Sub32ByZero
+	/// Inc32Not32
 	/// </summary>
-	public sealed class Sub32ByZero : BaseTransformation
+	public sealed class Inc32Not32 : BaseTransformation
 	{
-		public Sub32ByZero() : base(X86.Sub32)
+		public Inc32Not32() : base(X86.Inc32)
 		{
 		}
 
 		public override bool Match(Context context, TransformContext transformContext)
 		{
-			if (!context.Operand2.IsResolvedConstant)
+			if (!context.Operand1.IsVirtualRegister)
 				return false;
 
-			if (context.Operand2.ConstantUnsigned64 != 0)
+			if (context.Operand1.Definitions.Count != 1)
 				return false;
 
-			if (AreStatusFlagUsed(context))
+			if (context.Operand1.Definitions[0].Instruction != X86.Not32)
+				return false;
+
+			if (!IsVirtualRegister(context.Operand1.Definitions[0].Operand1))
+				return false;
+
+			if (IsCarryFlagUsed(context))
 				return false;
 
 			return true;
@@ -35,9 +41,9 @@ namespace Mosa.Platform.x86.Transform.Auto.StrengthReduction
 		{
 			var result = context.Result;
 
-			var t1 = context.Operand1;
+			var t1 = context.Operand1.Definitions[0].Operand1;
 
-			context.SetInstruction(X86.Mov32, result, t1);
+			context.SetInstruction(X86.Neg32, result, t1);
 		}
 	}
 }

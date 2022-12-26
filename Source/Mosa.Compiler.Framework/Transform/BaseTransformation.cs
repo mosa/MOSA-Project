@@ -234,6 +234,11 @@ namespace Mosa.Compiler.Framework.Transform
 			return AreAnyStatusFlagsUsed(context.Node) != TriState.No;
 		}
 
+		public static bool IsCarryFlagUsed(Context context)
+		{
+			return IsCarryFlagUsed(context.Node) != TriState.No;
+		}
+
 		#endregion Filter Methods
 
 		#region Expression Methods
@@ -740,6 +745,11 @@ namespace Mosa.Compiler.Framework.Transform
 			return AreStatusFlagsUsed(node.Next, true, true, true, true, true);
 		}
 
+		public static TriState IsCarryFlagUsed(InstructionNode node)
+		{
+			return AreStatusFlagsUsed(node.Next, false, true, false, false, false);
+		}
+
 		public static TriState AreStatusFlagsUsed(InstructionNode node, bool checkZero, bool checkCarry, bool checkSign, bool checkOverlow, bool checkParity)
 		{
 			// if none are being checked, then for sure it's a no
@@ -765,8 +775,8 @@ namespace Mosa.Compiler.Framework.Transform
 				if (at.Instruction.FlowControl == FlowControl.Return)
 					return TriState.No;
 
-				//if (at.Instruction.FlowControl == FlowControl.Throw)
-				//	return TriState.No;
+				if (at.Instruction == IRInstruction.Epilogue)
+					return TriState.No;
 
 				if (at.Instruction.FlowControl == FlowControl.UnconditionalBranch && at.Block.NextBlocks.Count == 1)
 				{

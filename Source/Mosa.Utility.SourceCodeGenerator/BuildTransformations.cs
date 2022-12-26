@@ -124,20 +124,20 @@ namespace Mosa.Utility.SourceCodeGenerator
 			Save();
 		}
 
-		private void GenerateTransformations(string name, string familyName, string type, string subName, Transformation transform, bool Variations, bool log)
+		private void GenerateTransformations(string name, string familyName, string type, string subName, Transformation transform, bool variations, bool log)
 		{
 			GenerateTransformation2(name, familyName, type, subName, transform, log);
 
-			if (!Variations)
+			if (!variations)
 				return;
 
 			if (CommutativeInstructions == null || CommutativeInstructions.Count == 0)
 				return;
 
-			var variations = transform.DeriveVariations(CommutativeInstructions);
+			var derivedVariations = transform.DeriveVariations(CommutativeInstructions);
 
 			int index = 1;
-			foreach (var variation in variations)
+			foreach (var variation in derivedVariations)
 			{
 				GenerateTransformation2(name, familyName, type, $"{subName}_v{index}", variation, log);
 				index++;
