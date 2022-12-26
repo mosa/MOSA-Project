@@ -13,7 +13,7 @@ namespace Mosa.Platform.x64.Transform.Auto.Shrink
 	/// </summary>
 	public sealed class And32ByFF : BaseTransformation
 	{
-		public And32ByFF() : base(x64.And32)
+		public And32ByFF() : base(X64.And32)
 		{
 		}
 
@@ -43,7 +43,7 @@ namespace Mosa.Platform.x64.Transform.Auto.Shrink
 
 			var t1 = context.Operand1;
 
-			context.SetInstruction(x64.Movzx8To32, result, t1);
+			context.SetInstruction(X64.Movzx8To32, result, t1);
 		}
 	}
 
@@ -52,7 +52,7 @@ namespace Mosa.Platform.x64.Transform.Auto.Shrink
 	/// </summary>
 	public sealed class And32ByFF_v1 : BaseTransformation
 	{
-		public And32ByFF_v1() : base(x64.And32)
+		public And32ByFF_v1() : base(X64.And32)
 		{
 		}
 
@@ -82,7 +82,7 @@ namespace Mosa.Platform.x64.Transform.Auto.Shrink
 
 			var t1 = context.Operand2;
 
-			context.SetInstruction(x64.Movzx8To32, result, t1);
+			context.SetInstruction(X64.Movzx8To32, result, t1);
 		}
 	}
 }

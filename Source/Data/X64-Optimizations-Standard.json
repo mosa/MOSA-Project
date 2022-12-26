@@ -1,82 +1,82 @@
 ﻿{
 	"Commutative": [
-		"x64.Add32",
-		"x64.And32",
-		"x64.Add64",
-		"x64.And64",
-		"x64.Or32",
-		"x64.Or64"
+		"X64.Add32",
+		"X64.And32",
+		"X64.Add64",
+		"X64.And64",
+		"X64.Or32",
+		"X64.Or64"
 	],
 	"Optimizations": [
 		{
-			"FamilyName": "x64",
+			"FamilyName": "X64",
 			"Type": "Standard",
 			"Name": "Mov##",
 			"SubName": "Consolidate",
-			"Expression": "x64.Mov## (x64.Mov## a)",
+			"Expression": "X64.Mov## (X64.Mov## a)",
 			"Filter": "IsVirtualRegister(a)",
-			"Result": "(x64.Mov## a)",
+			"Result": "(X64.Mov## a)",
 			"Variations": "No"
 		},
 		{
-			"FamilyName": "x64",
+			"FamilyName": "X64",
 			"Type": "StrengthReduction",
 			"Name": "Add##",
 			"SubName": "ByZero",
-			"Expression": "x64.Add## a 0",
+			"Expression": "X64.Add## a 0",
 			"Filter": "!AreStatusFlagUsed(@)",
-			"Result": "(x64.Mov## a)",
+			"Result": "(X64.Mov## a)",
 			"Variations": "No"
 		},
 		{
-			"FamilyName": "x64",
+			"FamilyName": "X64",
 			"Type": "StrengthReduction",
 			"Name": "Sub##",
 			"SubName": "ByZero",
-			"Expression": "x64.Sub## a 0",
+			"Expression": "X64.Sub## a 0",
 			"Filter": "!AreStatusFlagUsed(@)",
-			"Result": "(x64.Mov## a)",
+			"Result": "(X64.Mov## a)",
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "x64",
+			"FamilyName": "X64",
 			"Type": "Shrink",
 			"Name": "And##",
 			"SubName": "ByFF",
-			"Expression": "x64.And## a 0xFF",
+			"Expression": "X64.And## a 0xFF",
 			"Filter": "!IsCPURegister(a,%ESI) && !IsCPURegister(a,%EDI) && !AreStatusFlagUsed(@)",
-			"Result": "(x64.Movzx8To## a)",
+			"Result": "(X64.Movzx8To## a)",
 			"Variations": "Yes",
 			"Log": "No"
 		},
 		{
-			"FamilyName": "x64",
+			"FamilyName": "X64",
 			"Type": "StrengthReduction",
 			"Name": "Add##By1Not##",
 			"SubName": "",
-			"Expression": "x64.Add## (x64.Not## x) 1",
+			"Expression": "X64.Add## (X64.Not## x) 1",
 			"Filter": "IsVirtualRegister(x) && !IsCarryFlagUsed(@)",
-			"Result": "(x64.Neg## x)",
+			"Result": "(X64.Neg## x)",
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "x64",
+			"FamilyName": "X64",
 			"Type": "StrengthReduction",
 			"Name": "Inc##Not##",
 			"SubName": "",
-			"Expression": "x64.Inc## (x64.Not## x)",
+			"Expression": "X64.Inc## (X64.Not## x)",
 			"Filter": "IsVirtualRegister(x) && !IsCarryFlagUsed(@)",
-			"Result": "(x64.Neg## x)",
+			"Result": "(X64.Neg## x)",
 			"Variations": "No"
 		},
 		{
-			"FamilyName": "x64",
+			"FamilyName": "X64",
 			"Type": "Specific",
 			"Name": "And##Add##",
 			"SubName": "ToBlsr##",
-			"Expression": "x64.And## x (x64.Add## x -1)",
+			"Expression": "X64.And## x (X64.Add## x -1)",
 			"Filter": "IsVirtualRegister(x) && !IsCarryFlagUsed(@)",
-			"Result": "(x64.Blsr## x)",
+			"Result": "(X64.Blsr## x)",
 			"Variations": "Yes"
 		}
 	]

@@ -13,7 +13,7 @@ namespace Mosa.Platform.x64.Transform.Auto.StrengthReduction
 	/// </summary>
 	public sealed class Sub32ByZero : BaseTransformation
 	{
-		public Sub32ByZero() : base(x64.Sub32)
+		public Sub32ByZero() : base(X64.Sub32)
 		{
 		}
 
@@ -37,7 +37,7 @@ namespace Mosa.Platform.x64.Transform.Auto.StrengthReduction
 
 			var t1 = context.Operand1;
 
-			context.SetInstruction(x64.Mov32, result, t1);
+			context.SetInstruction(X64.Mov32, result, t1);
 		}
 	}
 }

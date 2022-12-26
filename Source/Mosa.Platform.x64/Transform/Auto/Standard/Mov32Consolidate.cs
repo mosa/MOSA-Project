@@ -13,7 +13,7 @@ namespace Mosa.Platform.x64.Transform.Auto.Standard
 	/// </summary>
 	public sealed class Mov32Consolidate : BaseTransformation
 	{
-		public Mov32Consolidate() : base(x64.Mov32)
+		public Mov32Consolidate() : base(X64.Mov32)
 		{
 		}
 
@@ -25,7 +25,7 @@ namespace Mosa.Platform.x64.Transform.Auto.Standard
 			if (context.Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Instruction != x64.Mov32)
+			if (context.Operand1.Definitions[0].Instruction != X64.Mov32)
 				return false;
 
 			if (!IsVirtualRegister(context.Operand1.Definitions[0].Operand1))
@@ -40,7 +40,7 @@ namespace Mosa.Platform.x64.Transform.Auto.Standard
 
 			var t1 = context.Operand1.Definitions[0].Operand1;
 
-			context.SetInstruction(x64.Mov32, result, t1);
+			context.SetInstruction(X64.Mov32, result, t1);
 		}
 	}
 }

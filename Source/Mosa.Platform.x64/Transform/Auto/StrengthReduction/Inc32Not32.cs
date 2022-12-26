@@ -13,7 +13,7 @@ namespace Mosa.Platform.x64.Transform.Auto.StrengthReduction
 	/// </summary>
 	public sealed class Inc32Not32 : BaseTransformation
 	{
-		public Inc32Not32() : base(x64.Inc32)
+		public Inc32Not32() : base(X64.Inc32)
 		{
 		}
 
@@ -25,7 +25,7 @@ namespace Mosa.Platform.x64.Transform.Auto.StrengthReduction
 			if (context.Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Instruction != x64.Not32)
+			if (context.Operand1.Definitions[0].Instruction != X64.Not32)
 				return false;
 
 			if (!IsVirtualRegister(context.Operand1.Definitions[0].Operand1))
@@ -43,7 +43,7 @@ namespace Mosa.Platform.x64.Transform.Auto.StrengthReduction
 
 			var t1 = context.Operand1.Definitions[0].Operand1;
 
-			context.SetInstruction(x64.Neg32, result, t1);
+			context.SetInstruction(X64.Neg32, result, t1);
 		}
 	}
 }

@@ -13,7 +13,7 @@ namespace Mosa.Platform.x64.Transform.Auto.StrengthReduction
 	/// </summary>
 	public sealed class Add32By1Not32 : BaseTransformation
 	{
-		public Add32By1Not32() : base(x64.Add32)
+		public Add32By1Not32() : base(X64.Add32)
 		{
 		}
 
@@ -31,7 +31,7 @@ namespace Mosa.Platform.x64.Transform.Auto.StrengthReduction
 			if (context.Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Instruction != x64.Not32)
+			if (context.Operand1.Definitions[0].Instruction != X64.Not32)
 				return false;
 
 			if (!IsVirtualRegister(context.Operand1.Definitions[0].Operand1))
@@ -49,7 +49,7 @@ namespace Mosa.Platform.x64.Transform.Auto.StrengthReduction
 
 			var t1 = context.Operand1.Definitions[0].Operand1;
 
-			context.SetInstruction(x64.Neg32, result, t1);
+			context.SetInstruction(X64.Neg32, result, t1);
 		}
 	}
 
@@ -58,7 +58,7 @@ namespace Mosa.Platform.x64.Transform.Auto.StrengthReduction
 	/// </summary>
 	public sealed class Add32By1Not32_v1 : BaseTransformation
 	{
-		public Add32By1Not32_v1() : base(x64.Add32)
+		public Add32By1Not32_v1() : base(X64.Add32)
 		{
 		}
 
@@ -76,7 +76,7 @@ namespace Mosa.Platform.x64.Transform.Auto.StrengthReduction
 			if (context.Operand2.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand2.Definitions[0].Instruction != x64.Not32)
+			if (context.Operand2.Definitions[0].Instruction != X64.Not32)
 				return false;
 
 			if (!IsVirtualRegister(context.Operand2.Definitions[0].Operand1))
@@ -94,7 +94,7 @@ namespace Mosa.Platform.x64.Transform.Auto.StrengthReduction
 
 			var t1 = context.Operand2.Definitions[0].Operand1;
 
-			context.SetInstruction(x64.Neg32, result, t1);
+			context.SetInstruction(X64.Neg32, result, t1);
 		}
 	}
 }

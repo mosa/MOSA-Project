@@ -13,7 +13,7 @@ namespace Mosa.Platform.x64.Transform.Auto.Specific
 	/// </summary>
 	public sealed class And64Add64ToBlsr64 : BaseTransformation
 	{
-		public And64Add64ToBlsr64() : base(x64.And64)
+		public And64Add64ToBlsr64() : base(X64.And64)
 		{
 		}
 
@@ -25,7 +25,7 @@ namespace Mosa.Platform.x64.Transform.Auto.Specific
 			if (context.Operand2.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand2.Definitions[0].Instruction != x64.Add64)
+			if (context.Operand2.Definitions[0].Instruction != X64.Add64)
 				return false;
 
 			if (!context.Operand2.Definitions[0].Operand2.IsResolvedConstant)
@@ -52,7 +52,7 @@ namespace Mosa.Platform.x64.Transform.Auto.Specific
 
 			var t1 = context.Operand1;
 
-			context.SetInstruction(x64.Blsr64, result, t1);
+			context.SetInstruction(X64.Blsr64, result, t1);
 		}
 	}
 
@@ -61,7 +61,7 @@ namespace Mosa.Platform.x64.Transform.Auto.Specific
 	/// </summary>
 	public sealed class And64Add64ToBlsr64_v1 : BaseTransformation
 	{
-		public And64Add64ToBlsr64_v1() : base(x64.And64)
+		public And64Add64ToBlsr64_v1() : base(X64.And64)
 		{
 		}
 
@@ -73,7 +73,7 @@ namespace Mosa.Platform.x64.Transform.Auto.Specific
 			if (context.Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Instruction != x64.Add64)
+			if (context.Operand1.Definitions[0].Instruction != X64.Add64)
 				return false;
 
 			if (!context.Operand1.Definitions[0].Operand2.IsResolvedConstant)
@@ -100,7 +100,7 @@ namespace Mosa.Platform.x64.Transform.Auto.Specific
 
 			var t1 = context.Operand1.Definitions[0].Operand1;
 
-			context.SetInstruction(x64.Blsr64, result, t1);
+			context.SetInstruction(X64.Blsr64, result, t1);
 		}
 	}
 
@@ -109,7 +109,7 @@ namespace Mosa.Platform.x64.Transform.Auto.Specific
 	/// </summary>
 	public sealed class And64Add64ToBlsr64_v2 : BaseTransformation
 	{
-		public And64Add64ToBlsr64_v2() : base(x64.And64)
+		public And64Add64ToBlsr64_v2() : base(X64.And64)
 		{
 		}
 
@@ -121,7 +121,7 @@ namespace Mosa.Platform.x64.Transform.Auto.Specific
 			if (context.Operand2.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand2.Definitions[0].Instruction != x64.Add64)
+			if (context.Operand2.Definitions[0].Instruction != X64.Add64)
 				return false;
 
 			if (!context.Operand2.Definitions[0].Operand1.IsResolvedConstant)
@@ -148,7 +148,7 @@ namespace Mosa.Platform.x64.Transform.Auto.Specific
 
 			var t1 = context.Operand1;
 
-			context.SetInstruction(x64.Blsr64, result, t1);
+			context.SetInstruction(X64.Blsr64, result, t1);
 		}
 	}
 
@@ -157,7 +157,7 @@ namespace Mosa.Platform.x64.Transform.Auto.Specific
 	/// </summary>
 	public sealed class And64Add64ToBlsr64_v3 : BaseTransformation
 	{
-		public And64Add64ToBlsr64_v3() : base(x64.And64)
+		public And64Add64ToBlsr64_v3() : base(X64.And64)
 		{
 		}
 
@@ -169,7 +169,7 @@ namespace Mosa.Platform.x64.Transform.Auto.Specific
 			if (context.Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Instruction != x64.Add64)
+			if (context.Operand1.Definitions[0].Instruction != X64.Add64)
 				return false;
 
 			if (!context.Operand1.Definitions[0].Operand1.IsResolvedConstant)
@@ -196,7 +196,7 @@ namespace Mosa.Platform.x64.Transform.Auto.Specific
 
 			var t1 = context.Operand1.Definitions[0].Operand2;
 
-			context.SetInstruction(x64.Blsr64, result, t1);
+			context.SetInstruction(X64.Blsr64, result, t1);
 		}
 	}
 }

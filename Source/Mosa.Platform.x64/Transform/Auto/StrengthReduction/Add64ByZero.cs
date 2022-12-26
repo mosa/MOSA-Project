@@ -13,7 +13,7 @@ namespace Mosa.Platform.x64.Transform.Auto.StrengthReduction
 	/// </summary>
 	public sealed class Add64ByZero : BaseTransformation
 	{
-		public Add64ByZero() : base(x64.Add64)
+		public Add64ByZero() : base(X64.Add64)
 		{
 		}
 
@@ -37,7 +37,7 @@ namespace Mosa.Platform.x64.Transform.Auto.StrengthReduction
 
 			var t1 = context.Operand1;
 
-			context.SetInstruction(x64.Mov64, result, t1);
+			context.SetInstruction(X64.Mov64, result, t1);
 		}
 	}
 }
