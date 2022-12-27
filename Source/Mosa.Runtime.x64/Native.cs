@@ -48,19 +48,19 @@ namespace Mosa.Runtime.x64
 		public static extern void Hlt();
 
 		[DllImport("Mosa.Platform.x64.Intrinsic::Invlpg")]
-		public static extern void Invlpg(uint address);
+		public static extern void Invlpg(ulong address);
 
-		[DllImport("Mosa.Platform.x64.Intrinsic::CpuIdEax")]
-		public static extern uint CpuIdEax(uint function);
+		[DllImport("Mosa.Platform.x64.Intrinsic::CpuIdRAX")]
+		public static extern ulong CpuIdRAX(ulong eax, ulong rcx);
 
-		[DllImport("Mosa.Platform.x64.Intrinsic::CpuIdEbx")]
-		public static extern uint CpuIdEbx(uint function);
+		[DllImport("Mosa.Platform.x64.Intrinsic::CpuIdRBX")]
+		public static extern ulong CpuIdRBX(ulong eax, ulong rcx);
 
-		[DllImport("Mosa.Platform.x64.Intrinsic::CpuIdEcx")]
-		public static extern uint CpuIdEcx(uint function);
+		[DllImport("Mosa.Platform.x64.Intrinsic::CpuIdRCX")]
+		public static extern ulong CpuIdRCX(ulong eax, ulong rcx);
 
-		[DllImport("Mosa.Platform.x64.Intrinsic::CpuIdEdx")]
-		public static extern uint CpuIdEdx(uint function);
+		[DllImport("Mosa.Platform.x64.Intrinsic::CpuIdRDX")]
+		public static extern ulong CpuIdRDX(ulong eax, ulong rcx);
 
 		[DllImport("Mosa.Platform.x64.Intrinsic::Pause")]
 		public static extern void Pause();
@@ -174,11 +174,11 @@ namespace Mosa.Runtime.x64
 		[DllImport("Mosa.Platform.x64.Intrinsic::GetIDTJumpLocation")]
 		public static extern long GetIDTJumpLocation(uint irq);
 
-		[DllImport("Mosa.Platform.x64.Intrinsic::GetMultibootEAX")]
-		public static extern ulong GetMultibootEAX();
+		[DllImport("Mosa.Platform.x64.Intrinsic::GetMultibootRAX")]
+		public static extern ulong GetMultibootRAX();
 
-		[DllImport("Mosa.Platform.x64.Intrinsic::GetMultibootEBX")]
-		public static extern ulong GetMultibootEBX();
+		[DllImport("Mosa.Platform.x64.Intrinsic::GetMultibootRBX")]
+		public static extern ulong GetMultibootRBX();
 
 		[DllImport("Mosa.Platform.x64.Intrinsic::FrameJump")]
 		public static extern void FrameJump(Pointer eip, Pointer esp, Pointer ebp, int exceptionRegister);
