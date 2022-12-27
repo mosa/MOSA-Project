@@ -93,17 +93,22 @@ namespace Mosa.Compiler.Framework
 
 		public void AppendBit(uint value)
 		{
-			AppendBit(value != 0);
+			AppendBit((value & 0x1) != 0);
 		}
 
 		public void Append1Bit(int value)
 		{
-			AppendBit(value != 0);
+			AppendBit((value & 0x1) != 0);
 		}
 
 		public void Append1Bit(uint value)
 		{
-			AppendBit(value != 0);
+			AppendBit((value & 0x1) != 0);
+		}
+
+		public void Append1BitNot(uint value)
+		{
+			AppendBit(~value & 0x1);
 		}
 
 		public void Append2Bits(uint value)
