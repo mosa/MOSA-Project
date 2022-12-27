@@ -2935,7 +2935,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var methodData = MethodCompiler.Compiler.GetMethodData(method);
 
-			methodData.HasMethodPointerReferenced = true;
+			methodData.IsReferenced = true;
 
 			return true;
 		}

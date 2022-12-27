@@ -19,6 +19,10 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(X86.Shr32, Shr32);
 			AddVisitation(X86.Shrd32, Shrd32);
 			AddVisitation(X86.CMov32, CMov32);
+
+			AddVisitation(X86.Popcnt32, Popcnt32);
+			AddVisitation(X86.Tzcnt32, Tzcnt32);
+			AddVisitation(X86.Lzcnt32, Lzcnt32);
 		}
 
 		#region Visitation Methods
@@ -71,6 +75,21 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		public void CMov32(Context context)
+		{
+			RegisterForOperand1(context);
+		}
+
+		public void Popcnt32(Context context)
+		{
+			RegisterForOperand1(context);
+		}
+
+		public void Tzcnt32(Context context)
+		{
+			RegisterForOperand1(context);
+		}
+
+		public void Lzcnt32(Context context)
 		{
 			RegisterForOperand1(context);
 		}

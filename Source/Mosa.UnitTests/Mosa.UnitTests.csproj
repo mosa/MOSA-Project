@@ -16,15 +16,6 @@
 		<DebugSymbols>True</DebugSymbols>
 	</PropertyGroup>
 	<ItemGroup>
-	  <Compile Remove="Mosa.Collections.Generic\BinarySearchTreeTests.cs" />
-	  <Compile Remove="Mosa.Collections.Generic\BitFlagsTests.cs" />
-	  <Compile Remove="Mosa.Collections.Generic\DictionaryTests.cs" />
-	  <Compile Remove="Mosa.Collections.Generic\ListTests.cs" />
-	  <Compile Remove="Mosa.Collections.Generic\QueueTests.cs" />
-	  <Compile Remove="Mosa.Collections.Generic\StackTests.cs" />
-	  <Compile Remove="Mosa.Collections.Generic\TClass.cs" />
-	</ItemGroup>
-	<ItemGroup>
 		<ProjectReference Include="..\Mosa.Collections.Generic\Mosa.Collections.Generic.csproj" />
 		<ProjectReference Include="..\Mosa.Korlib\Mosa.Korlib.csproj" />
 	</ItemGroup>
@@ -151,8 +142,5 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="Mosa.Collections.Generic\" />
 	</ItemGroup>
 </Project>

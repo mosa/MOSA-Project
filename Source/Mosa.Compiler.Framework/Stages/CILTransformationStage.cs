@@ -1010,11 +1010,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var methodData = MethodCompiler.Compiler.GetMethodData(invokedMethod);
 
-			if (!methodData.HasMethodPointerReferenced)
+			if (!methodData.IsReferenced)
 			{
-				methodData.HasMethodPointerReferenced = true;
+				methodData.IsReferenced = true;
 
-				MethodScheduler.AddToRecompileQueue(methodData); // FUTURE: Optimize this not to re-schedule when not necessary
+				MethodScheduler.AddToRecompileQueue(methodData);
 
 				//Debug.WriteLine($" Method Reference: [{MethodData.Version}] {invokedMethod}"); //DEBUGREMOVE
 			}
