@@ -1,7 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Platform.Intel;
+
 using System.Diagnostics;
 
 namespace Mosa.Platform.x64.Stages

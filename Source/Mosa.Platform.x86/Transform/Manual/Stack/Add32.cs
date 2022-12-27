@@ -4,7 +4,7 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transform;
-using Mosa.Platform.Intel;
+
 using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Transform.Manual.Stack

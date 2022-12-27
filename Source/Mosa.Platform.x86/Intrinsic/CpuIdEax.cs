@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Platform.Intel;
-using System.Runtime.Intrinsics.Arm;
 
 namespace Mosa.Platform.x86.Intrinsic
 {

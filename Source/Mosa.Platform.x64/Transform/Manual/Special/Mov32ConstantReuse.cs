@@ -2,7 +2,7 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transform;
-using Mosa.Platform.Intel;
+
 
 namespace Mosa.Platform.x64.Transform.Manual.Special
 {

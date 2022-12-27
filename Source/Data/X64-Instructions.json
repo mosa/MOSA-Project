@@ -710,7 +710,7 @@
 			"FlagsUnchanged": "ZCSOP",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 1,
+			"OperandCount": 2,
 			"ResultCount": 1,
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
