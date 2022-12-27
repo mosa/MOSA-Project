@@ -15,13 +15,14 @@ namespace Mosa.Platform.x64.Intrinsic
 		{
 			var result = context.Result;
 			var operand = context.Operand1;
-			var eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, CPURegister.R1);
-			var ecx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, CPURegister.R1);
+
+			var rax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, CPURegister.RAX);
+			var rcx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, CPURegister.RCX);
 			var reg = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, CPURegister.R1);
 
-			context.SetInstruction(X64.Mov64, eax, operand);
-			context.AppendInstruction(X64.Mov64, ecx, methodCompiler.ConstantZero32);
-			context.AppendInstruction(X64.CpuId, eax, eax);
+			context.SetInstruction(X64.Mov64, rax, operand);
+			context.AppendInstruction(X64.Mov64, rcx, methodCompiler.ConstantZero32);
+			context.AppendInstruction(X64.CpuId, rax, rax);
 			context.AppendInstruction(X64.Mov64, result, reg);
 		}
 	}

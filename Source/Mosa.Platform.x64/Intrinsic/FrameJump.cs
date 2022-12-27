@@ -21,9 +21,9 @@ namespace Mosa.Platform.x64.Intrinsic
 			var esp = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, CPURegister.RSP);
 			var ebp = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, CPURegister.RBP);
 
-			var eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, CPURegister.R1);
-			var ebx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, CPURegister.R3);
-			var ecx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, CPURegister.R1);
+			var eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, CPURegister.RAX);
+			var ebx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, CPURegister.RBX);
+			var ecx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, CPURegister.RCX);
 
 			// Move all virtual registers into physical registers - necessary since stack frame pointer will change
 			context.SetInstruction(X64.Mov64, eax, v0);

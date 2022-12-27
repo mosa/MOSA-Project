@@ -95,7 +95,7 @@ namespace Mosa.Platform.x64
 		/// <summary>
 		/// Gets the return register.
 		/// </summary>
-		public override PhysicalRegister ReturnRegister => CPURegister.R1;
+		public override PhysicalRegister ReturnRegister => CPURegister.RAX;
 
 		public override PhysicalRegister LinkRegister => null;
 

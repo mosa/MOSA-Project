@@ -18,14 +18,14 @@ namespace Mosa.Platform.x64.Intrinsic
 			var comparand = context.Operand3;
 			var result = context.Result;
 
-			var eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U8, CPURegister.R1);
+			var rax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U8, CPURegister.RAX);
 			var v1 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.U8);
 
-			context.SetInstruction(X64.Mov64, eax, comparand);
+			context.SetInstruction(X64.Mov64, rax, comparand);
 			context.AppendInstruction(X64.Mov64, v1, value);
 			context.AppendInstruction(X64.Lock);
-			context.AppendInstruction(X64.CmpXChgLoad64, eax, eax, location, methodCompiler.ConstantZero32, v1);
-			context.AppendInstruction(X64.Mov64, result, eax);
+			context.AppendInstruction(X64.CmpXChgLoad64, rax, rax, location, methodCompiler.ConstantZero32, v1);
+			context.AppendInstruction(X64.Mov64, result, rax);
 		}
 	}
 }

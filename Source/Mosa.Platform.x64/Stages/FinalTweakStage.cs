@@ -94,7 +94,7 @@ namespace Mosa.Platform.x64.Stages
 
 			Debug.Assert(result.IsCPURegister);
 
-			if (result.Register == CPURegister.R6 || result.Register == CPURegister.R7)
+			if (result.Register == CPURegister.RSI || result.Register == CPURegister.R7)
 			{
 				var source = context.Operand1;
 				var offset = context.Operand2;
@@ -110,7 +110,7 @@ namespace Mosa.Platform.x64.Stages
 
 			Debug.Assert(result.IsCPURegister);
 
-			if (result.Register == CPURegister.R6 || result.Register == CPURegister.R7)
+			if (result.Register == CPURegister.RSI || result.Register == CPURegister.RDI)
 			{
 				var source = context.Operand1;
 				var offset = context.Operand2;
@@ -146,7 +146,7 @@ namespace Mosa.Platform.x64.Stages
 		{
 			var value = context.Operand3;
 
-			if (value.IsCPURegister && (value.Register == CPURegister.R6 || value.Register == CPURegister.R7))
+			if (value.IsCPURegister && (value.Register == CPURegister.R6 || value.Register == CPURegister.RDI))
 			{
 				var dest = context.Operand1;
 				var offset = context.Operand2;
@@ -157,9 +157,9 @@ namespace Mosa.Platform.x64.Stages
 				{
 					temporaryRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.R1);
 				}
-				else if (dest.Register != CPURegister.R3 && offset.Register != CPURegister.R3)
+				else if (dest.Register != CPURegister.RBX && offset.Register != CPURegister.RBX)
 				{
-					temporaryRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.R3);
+					temporaryRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.RBX);
 				}
 				else if (dest.Register != CPURegister.R1 && offset.Register != CPURegister.R1)
 				{
@@ -180,7 +180,7 @@ namespace Mosa.Platform.x64.Stages
 		{
 			var value = context.Operand3;
 
-			if (value.IsCPURegister && (value.Register == CPURegister.R6 || value.Register == CPURegister.R7))
+			if (value.IsCPURegister && (value.Register == CPURegister.RSI || value.Register == CPURegister.RDI))
 			{
 				var dest = context.Operand1;
 				var offset = context.Operand2;
@@ -191,9 +191,9 @@ namespace Mosa.Platform.x64.Stages
 				{
 					temporaryRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.R1);
 				}
-				else if (dest.Register != CPURegister.R3 && offset.Register != CPURegister.R3)
+				else if (dest.Register != CPURegister.RBX && offset.Register != CPURegister.RBX)
 				{
-					temporaryRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.R3);
+					temporaryRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.RBX);
 				}
 				else if (dest.Register != CPURegister.R1 && offset.Register != CPURegister.R1)
 				{
@@ -214,8 +214,8 @@ namespace Mosa.Platform.x64.Stages
 		{
 			Debug.Assert(context.Result.IsCPURegister);
 
-			// Movzx8To32 can not use with ESI or EDI registers
-			if (context.Operand1.Register != CPURegister.R6 && context.Operand1.Register != CPURegister.R7)
+			// Movzx8To32 can not use with RSI or RDI registers
+			if (context.Operand1.Register != CPURegister.RSI && context.Operand1.Register != CPURegister.RDI)
 				return;
 
 			var result = context.Result;
@@ -236,8 +236,8 @@ namespace Mosa.Platform.x64.Stages
 		{
 			Debug.Assert(context.Result.IsCPURegister);
 
-			// Movzx8To32 can not use with ESI or EDI registers
-			if (context.Operand1.Register != CPURegister.R6 && context.Operand1.Register != CPURegister.R7)
+			// Movzx8To32 can not use with RSI or RDI registers
+			if (context.Operand1.Register != CPURegister.RSI && context.Operand1.Register != CPURegister.RDI)
 				return;
 
 			var result = context.Result;
@@ -268,8 +268,8 @@ namespace Mosa.Platform.x64.Stages
 
 			Debug.Assert(result.IsCPURegister);
 
-			// SETcc can not use with ESI or EDI registers
-			if (result.Register == CPURegister.R6 || result.Register == CPURegister.R7)
+			// SETcc can not use with RSI or RDI registers
+			if (result.Register == CPURegister.RSI || result.Register == CPURegister.RDI)
 			{
 				var condition = context.ConditionCode;
 
