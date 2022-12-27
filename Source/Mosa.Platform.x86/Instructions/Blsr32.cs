@@ -39,12 +39,19 @@ namespace Mosa.Platform.x86.Instructions
 			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
 			opcodeEncoder.Append8Bits(0xC4);
-			opcodeEncoder.Append8Bits(0xE2);
-			opcodeEncoder.Append8Bits(0x78);
+			opcodeEncoder.Append1Bit(0b1);
+			opcodeEncoder.Append1Bit(0b1);
+			opcodeEncoder.Append1Bit(0b1);
+			opcodeEncoder.Append4Bits(0b0001);
+			opcodeEncoder.Append1Bit(0b0);
+			opcodeEncoder.Append1Bit(0b0);
+			opcodeEncoder.Append4BitsNot(node.Operand1.Register.RegisterCode);
+			opcodeEncoder.Append1Bit(0b0);
+			opcodeEncoder.Append2Bits(0b00);
 			opcodeEncoder.Append8Bits(0xF3);
 			opcodeEncoder.Append2Bits(0b11);
-			opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
-			opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+			opcodeEncoder.Append3Bits(0b001);
+			opcodeEncoder.Append4Bits(node.Result.Register.RegisterCode);
 		}
 	}
 }

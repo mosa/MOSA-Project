@@ -56,6 +56,7 @@ namespace Mosa.Demo.TestWorld.x86.Tests
 			testMethods.Add(PlugTest4);
 			testMethods.Add(PlugTest5);
 			testMethods.Add(PlugTest6);
+			testMethods.Add(PlugTest7);
 		}
 
 		public static bool PlugTest1()
@@ -86,6 +87,12 @@ namespace Mosa.Demo.TestWorld.x86.Tests
 		public static bool PlugTest6()
 		{
 			return System.Runtime.Intrinsics.X86.Bmi1.TrailingZeroCount(0x2) == 1;
+		}
+
+
+		public static bool PlugTest7()
+		{
+			return System.Runtime.Intrinsics.X86.Bmi1.ResetLowestSetBit(0x3) == 1;
 		}
 	}
 }

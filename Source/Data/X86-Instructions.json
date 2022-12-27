@@ -3,6 +3,8 @@
 		"[x86]=[instruction-prefix]|[address-prefix]|[operand-prefix]|[opcode]|[opcode2]|[opcode3]|[opcode4]|[mod]|[reg]|[rm]|[scale]|[index]|[base]|[displacement]|[immediate]",
 		"[x64]=[instruction-prefix]|[address-prefix]|[operand-prefix]|[rex.opcode]|[rex.w]|[rex.r]|[rex.x]|[rex.b]|[opcode]|[opcode2]|[opcode3]|[opcode4]|[mod]|[reg]|[rm]|[scale]|[index]|[base]|[displacement]|[immediate]",
 
+		"[x86-vex-3]=[vex.opcode]|[vex.R]|[vex.X]|[vex.B]|[vex.MapSelect]|[vex.WE]|[vex.vvvv]|[vex.L]|[vex.PP]|[vex.opcode2]|[mod]|[reg]|[rm],vex.opcode=0xC4,vex.R=1,vex.X=1,vex.B=1,vex.WE=0,vex.L=0,vex.PP=00",
+
 		"[x86-base-load-ebp+zero]=[x86],mod=01,reg=reg3:[dest],rm=101,immediate=0x00",
 		"[x86-base-load-ebp+register]=[x86],mod=01,reg=reg3:[dest],rm=100,scale=00,index=reg3:[membase],base=101,immediate=0x00",
 		"[x86-base-load-esp+zero]=[x86],mod=00,reg=reg3:[dest],rm=100,scale=00,index=100,base=100",
@@ -3587,7 +3589,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[#register]",
-					"Encoding": "[x86],opcode=0xC4,opcode2=0xE2,opcode3=0x78,opcode4=0xF3,mod=11,reg=reg3:o1,rm=reg3:r"
+					"Encoding": "[x86-vex-3],vex.MapSelect=00010,vex.opcode2=0xF3,vex.vvvv=reg4not:o1,mod=11,reg=001,rm=reg4:r"
 				}
 			]
 		},

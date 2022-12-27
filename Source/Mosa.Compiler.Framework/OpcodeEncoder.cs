@@ -116,9 +116,19 @@ namespace Mosa.Compiler.Framework
 			AppendBits(value, 3);
 		}
 
+		public void Append3BitsNot(uint value)
+		{
+			AppendBits((byte)~value, 3);
+		}
+
 		public void Append4Bits(byte value)
 		{
 			AppendBits(value, 4);
+		}
+
+		public void Append4BitsNot(uint value)
+		{
+			AppendBits((uint)~value, 4);
 		}
 
 		public void Append4Bits(uint value)

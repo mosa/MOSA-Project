@@ -10,7 +10,8 @@ namespace Mosa.Utility.SourceCodeGenerator
 	{
 		protected virtual string Platform { get; }
 
-		protected string NormalizedPlatform { get { return Platform.Substring(0, 1).ToUpperInvariant() + Platform.Substring(1); } }
+		protected string NormalizedPlatform
+		{ get { return Platform.Substring(0, 1).ToUpperInvariant() + Platform.Substring(1); } }
 
 		private readonly Dictionary<string, string> EncodingTemplates = new Dictionary<string, string>();
 
@@ -811,11 +812,13 @@ namespace Mosa.Utility.SourceCodeGenerator
 			switch (part)
 			{
 				case "reg3": code = "Append3Bits"; postcode = ".Register.RegisterCode"; return;
-				case "reg3s1": code = "Append3Bits("; postcode = ".Register.RegisterCode >> 1) & 0b111"; return;
-				case "reg4x": code = "Append1Bit("; postcode = ".Register.RegisterCode >> 3) & 0x1"; return;
 				case "reg4": code = "Append4Bits"; postcode = ".Register.RegisterCode"; return;
 				case "reg5": code = "Append5Bits"; postcode = ".Register.RegisterCode"; return;
 				case "reg6": code = "Append6Bits"; postcode = ".Register.RegisterCode"; return;
+				case "reg3s1": code = "Append3Bits("; postcode = ".Register.RegisterCode >> 1) & 0b111"; return;
+				case "reg4x": code = "Append1Bit("; postcode = ".Register.RegisterCode >> 3) & 0x1"; return;
+				case "reg3not": code = "Append3BitsNot"; postcode = ".Register.RegisterCode"; return;
+				case "reg4not": code = "Append4BitsNot"; postcode = ".Register.RegisterCode"; return;
 				case "imm1": code = "Append1BitImmediate"; return;
 				case "imm2": code = "Append2BitImmediate"; return;
 				case "imm4": code = "Append4BitImmediate"; return;
