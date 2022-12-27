@@ -3589,7 +3589,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[#register]",
-					"Encoding": "[x86-vex-3],vex.MapSelect=00010,vex.opcode2=0xF3,vex.vvvv=reg4not:o1,mod=11,reg=001,rm=reg4:r"
+					"Encoding": "[x86-vex-3],vex.MapSelect=00010,vex.opcode2=0xF3,vex.vvvv=reg4not:o1,mod=11,reg=001,rm=reg3:r"
 				}
 			]
 		},

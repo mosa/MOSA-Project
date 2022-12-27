@@ -76,23 +76,22 @@ namespace Mosa.Demo.TestWorld.x86.Tests
 
 		public static bool PlugTest4()
 		{
-			return System.Runtime.Intrinsics.X86.Popcnt.PopCount(3) == 2;
+			return System.Runtime.Intrinsics.X86.Popcnt.PopCount(0b11) == 2;
 		}
 
 		public static bool PlugTest5()
 		{
-			return System.Runtime.Intrinsics.X86.Lzcnt.LeadingZeroCount(0x0) == 32;
+			return System.Runtime.Intrinsics.X86.Lzcnt.LeadingZeroCount(0b1) == 31;
 		}
 
 		public static bool PlugTest6()
 		{
-			return System.Runtime.Intrinsics.X86.Bmi1.TrailingZeroCount(0x2) == 1;
+			return System.Runtime.Intrinsics.X86.Bmi1.TrailingZeroCount(0b10) == 1;
 		}
-
 
 		public static bool PlugTest7()
 		{
-			return System.Runtime.Intrinsics.X86.Bmi1.ResetLowestSetBit(0x3) == 1;
+			return System.Runtime.Intrinsics.X86.Bmi1.ResetLowestSetBit(0b11) == 0b10;
 		}
 	}
 }
