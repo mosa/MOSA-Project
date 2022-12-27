@@ -114,6 +114,17 @@ namespace Mosa.Utility.SourceCodeGenerator
 				"Mosa.Platform.x86"
 			).Execute();
 
+			new BuildTransformationListFile(
+				Path.Combine(targetPath, @"Mosa.Platform.x86\Transform\Auto"),
+				"AutoTransforms.cs",
+				"Mosa.Platform.x86.Transform.Auto",
+				"AutoTransforms",
+				new List<string>()
+				{
+					"x86."
+				}
+			).Execute();
+
 			new BuildTransformations(
 				Path.Combine(dataPath, @"X64-Optimizations-Standard.json"),
 				Path.Combine(targetPath, @"Mosa.Platform.x64\Transform\Auto"),
@@ -128,18 +139,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 				"AutoTransforms",
 				new List<string>()
 				{
-					"x64."
-				}
-			).Execute();
-
-			new BuildTransformationListFile(
-				Path.Combine(targetPath, @"Mosa.Platform.x86\Transform\Auto"),
-				"AutoTransforms.cs",
-				"Mosa.Platform.x86.Transform.Auto",
-				"AutoTransforms",
-				new List<string>()
-				{
-					"x86."
+					"X64."
 				}
 			).Execute();
 
