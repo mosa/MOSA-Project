@@ -29,7 +29,7 @@ namespace Mosa.Platform.x64
 		private static readonly PhysicalRegister[] Registers = new PhysicalRegister[]
 		{
 			////////////////////////////////////////////////////////
-			// 32-bit general purpose registers
+			// 64-bit general purpose registers
 			////////////////////////////////////////////////////////
 			CPURegister.R0,
 			CPURegister.R1,

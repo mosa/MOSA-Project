@@ -8,7 +8,7 @@ namespace Mosa.Platform.x64.Intrinsic
 	/// <summary>
 	/// IntrinsicMethods
 	/// </summary>
-	static partial class IntrinsicMethods
+	internal static partial class IntrinsicMethods
 	{
 		[IntrinsicMethod("Mosa.Platform.x64.Intrinsic::RdMSR")]
 		private static void RdMSR(Context context, MethodCompiler methodCompiler)
@@ -18,9 +18,9 @@ namespace Mosa.Platform.x64.Intrinsic
 
 			methodCompiler.SplitLongOperand(result, out Operand resultLow, out Operand resultHigh);
 
-			var EAX = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, CPURegister.R1);
-			var EDX = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, CPURegister.R2);
-			var ECX = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, CPURegister.R1);
+			var EAX = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, CPURegister.RAX);
+			var EDX = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, CPURegister.RDX);
+			var ECX = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, CPURegister.RAX);
 
 			context.SetInstruction(X64.Mov64, ECX, operand1);
 			context.AppendInstruction2(X64.RdMSR, EAX, EDX, ECX);

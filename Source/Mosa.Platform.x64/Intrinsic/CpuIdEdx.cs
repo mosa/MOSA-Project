@@ -18,7 +18,7 @@ namespace Mosa.Platform.x64.Intrinsic
 
 			var rax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, CPURegister.RAX);
 			var rcx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, CPURegister.RCX);
-			var reg = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, CPURegister.R2);
+			var reg = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, CPURegister.RDX);
 
 			context.SetInstruction(X64.Mov64, rax, operand);
 			context.AppendInstruction(X64.Mov64, rcx, methodCompiler.ConstantZero32);
