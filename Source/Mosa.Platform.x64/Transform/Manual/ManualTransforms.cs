@@ -16,6 +16,7 @@ namespace Mosa.Platform.x64.Transform.Manual
 		{
 			new Special.Deadcode(),
 			new Standard.Mov32ToXor32(),
+			new Standard.Mov64ToXor64(),
 			new Standard.Add32ToInc32(),
 			new Standard.Sub32ToDec32(),
 			new Standard.Lea32ToInc32(),
@@ -24,7 +25,10 @@ namespace Mosa.Platform.x64.Transform.Manual
 			new Standard.Test32ToZero(),
 			new Standard.Cmp32ToTest32(),
 
-			//Mov64ToXor64
+			//Add64ToLea64
+			//Add32ToLea32
+			//Sub64ToLea64
+			//Sub64ToLea64
 		};
 
 		public static readonly List<BaseTransformation> PostList = new List<BaseTransformation>
@@ -35,6 +39,7 @@ namespace Mosa.Platform.x64.Transform.Manual
 		public static readonly List<BaseTransformation> EarlyList = new List<BaseTransformation>
 		{
 			new Stack.Add32(),
+			new Stack.Add64(),
 
 			//new Special.Mov32ReuseConstant(), /// this can wait
 			//new Special.Mov32Propagate(),

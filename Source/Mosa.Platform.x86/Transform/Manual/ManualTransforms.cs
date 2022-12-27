@@ -23,6 +23,9 @@ namespace Mosa.Platform.x86.Transform.Manual
 			new Standard.Cmp32ToZero(),
 			new Standard.Test32ToZero(),
 			new Standard.Cmp32ToTest32(),
+
+			//Add32ToLea32
+			//Sub32ToLea32
 		};
 
 		public static readonly List<BaseTransformation> PostList = new List<BaseTransformation>

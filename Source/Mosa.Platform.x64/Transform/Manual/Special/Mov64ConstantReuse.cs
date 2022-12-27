@@ -6,9 +6,9 @@ using Mosa.Platform.Intel;
 
 namespace Mosa.Platform.x64.Transform.Manual.Special
 {
-	public sealed class Mov32ConstantReuse : BaseTransformation
+	public sealed class Mov64ConstantReuse : BaseTransformation
 	{
-		public Mov32ConstantReuse() : base(X64.Mov32)
+		public Mov64ConstantReuse() : base(X64.Mov64)
 		{
 		}
 
@@ -28,7 +28,7 @@ namespace Mosa.Platform.x64.Transform.Manual.Special
 
 			var previous = GetPreviousNode(context);
 
-			if (previous == null || previous.Instruction != X64.Mov32)
+			if (previous == null || previous.Instruction != X64.Mov64)
 				return false;
 
 			if (previous.Result.Register != CPURegister.RSP)

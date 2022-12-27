@@ -40,7 +40,7 @@ namespace Mosa.Platform.x86.Transform.Manual.Special
 			if (!previous.Result.IsCPURegister)
 				return false;
 
-			if (context.Operand1.ConstantUnsigned32 != previous.Operand1.ConstantUnsigned32)
+			if (context.Operand1.ConstantUnsigned64 != previous.Operand1.ConstantUnsigned64)
 				return false;
 
 			return true;
