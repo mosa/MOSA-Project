@@ -122,6 +122,17 @@ namespace Mosa.Utility.SourceCodeGenerator
 			).Execute();
 
 			new BuildTransformationListFile(
+				Path.Combine(targetPath, @"Mosa.Platform.x64\Transform\Auto"),
+				"AutoTransforms.cs",
+				"Mosa.Platform.x64.Transform.Auto",
+				"AutoTransforms",
+				new List<string>()
+				{
+					"x64."
+				}
+			).Execute();
+
+			new BuildTransformationListFile(
 				Path.Combine(targetPath, @"Mosa.Platform.x86\Transform\Auto"),
 				"AutoTransforms.cs",
 				"Mosa.Platform.x86.Transform.Auto",

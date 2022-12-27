@@ -18,23 +18,23 @@ namespace Mosa.Platform.x64.Intrinsic
 			var v2 = context.Operand3;
 			var v3 = context.GetOperand(3);
 
-			var esp = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, CPURegister.RSP);
-			var ebp = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, CPURegister.RBP);
+			var rsp = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, CPURegister.RSP);
+			var rbp = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, CPURegister.RBP);
 
-			var eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, CPURegister.RAX);
-			var ebx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, CPURegister.RBX);
-			var ecx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, CPURegister.RCX);
+			var rax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, CPURegister.RAX);
+			var rbx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, CPURegister.RBX);
+			var rcx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, CPURegister.RCX);
 
 			// Move all virtual registers into physical registers - necessary since stack frame pointer will change
-			context.SetInstruction(X64.Mov64, eax, v0);
-			context.AppendInstruction(X64.Mov64, ebx, v1);
-			context.AppendInstruction(X64.Mov64, ecx, v2);
+			context.SetInstruction(X64.Mov64, rax, v0);
+			context.AppendInstruction(X64.Mov64, rbx, v1);
+			context.AppendInstruction(X64.Mov64, rcx, v2);
 			context.AppendInstruction(X64.Mov64, methodCompiler.Compiler.ExceptionRegister, v3);
 
 			// Update the frame and stack registers
-			context.AppendInstruction(X64.Mov64, ebp, ecx);
-			context.AppendInstruction(X64.Mov64, esp, ebx);
-			context.AppendInstruction(X64.JmpExternal, null, eax);
+			context.AppendInstruction(X64.Mov64, rbp, rcx);
+			context.AppendInstruction(X64.Mov64, rsp, rbx);
+			context.AppendInstruction(X64.JmpExternal, null, rax);
 
 			// future - common code (refactor opportunity)
 			context.GotoNext();

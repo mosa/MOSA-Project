@@ -1,6 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
+using Mosa.Platform.x64.Instructions;
 
 namespace Mosa.Platform.x64.Stages
 {
@@ -15,6 +16,18 @@ namespace Mosa.Platform.x64.Stages
 			AddVisitation(X64.Call, CallReg);
 			AddVisitation(X64.Cmp32, Cmp32);
 			AddVisitation(X64.Cmp64, Cmp64);
+
+			AddVisitation(X64.Blsr32, Blsr32);
+
+			//AddVisitation(X64.Popcnt32, Popcnt32);
+			//AddVisitation(X64.Tzcnt32, Tzcnt32);
+			//AddVisitation(X64.Lzcnt32, Lzcnt32);
+
+			AddVisitation(X64.Blsr64, Blsr64);
+
+			//AddVisitation(X64.Popcnt32, Popcnt32);
+			//AddVisitation(X64.Tzcnt32, Tzcnt32);
+			//AddVisitation(X64.Lzcnt32, Lzcnt32);
 		}
 
 		#region Visitation Methods
@@ -59,6 +72,117 @@ namespace Mosa.Platform.x64.Stages
 			}
 		}
 
+		public void Blsr32(Context context)
+		{
+			RegisterForOperand1(context);
+		}
+
+		public void Blsr64(Context context)
+		{
+			RegisterForOperand1(context);
+		}
+
+		public void Popcnt32(Context context)
+		{
+			RegisterForOperand1(context);
+		}
+
+		public void Popcnt64(Context context)
+		{
+			RegisterForOperand1(context);
+		}
+
+		public void Tzcnt32(Context context)
+		{
+			RegisterForOperand1(context);
+		}
+
+		public void Tzcnt64(Context context)
+		{
+			RegisterForOperand1(context);
+		}
+
+		public void Lzcnt32(Context context)
+		{
+			RegisterForOperand1(context);
+		}
+
+		public void Lzcnt64(Context context)
+		{
+			RegisterForOperand1(context);
+		}
+
 		#endregion Visitation Methods
+
+		#region Helpers
+
+		public void RegisterForOperand1And2(Context context)
+		{
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+
+			if (operand1.IsConstant && operand2.IsConstant && operand1.ConstantUnsigned64 == operand2.ConstantUnsigned64)
+			{
+				var v1 = AllocateVirtualRegister(operand1);
+
+				context.InsertBefore().AppendInstruction(X64.Mov64, v1, operand1);
+				context.Operand1 = v1;
+				context.Operand2 = v1;
+				return;
+			}
+			else if (operand1.IsConstant && operand2.IsConstant)
+			{
+				var v1 = AllocateVirtualRegister(operand1);
+				var v2 = AllocateVirtualRegister(operand2);
+
+				context.InsertBefore().AppendInstruction(X64.Mov64, v1, operand1);
+				context.InsertBefore().AppendInstruction(X64.Mov64, v2, operand2);
+				context.Operand1 = v1;
+				context.Operand2 = v2;
+				return;
+			}
+			else if (operand1.IsConstant)
+			{
+				var v1 = AllocateVirtualRegister(operand1);
+
+				context.InsertBefore().AppendInstruction(X64.Mov64, v1, operand1);
+				context.Operand1 = v1;
+			}
+			else if (operand2.IsConstant)
+			{
+				var v1 = AllocateVirtualRegister(operand2);
+
+				context.InsertBefore().AppendInstruction(X64.Mov64, v1, operand2);
+				context.Operand2 = v1;
+			}
+		}
+
+		public void RegisterForOperand1(Context context)
+		{
+			var operand1 = context.Operand1;
+
+			if (operand1.IsConstant)
+			{
+				var v1 = AllocateVirtualRegister(operand1);
+
+				context.InsertBefore().AppendInstruction(X64.Mov64, v1, operand1);
+				context.Operand1 = v1;
+			}
+		}
+
+		public void RegisterForOperand2(Context context)
+		{
+			var operand2 = context.Operand2;
+
+			if (operand2.IsConstant)
+			{
+				var v1 = AllocateVirtualRegister(operand2);
+
+				context.InsertBefore().AppendInstruction(X64.Mov64, v1, operand2);
+				context.Operand2 = v1;
+			}
+		}
+
+		#endregion Helpers
 	}
 }

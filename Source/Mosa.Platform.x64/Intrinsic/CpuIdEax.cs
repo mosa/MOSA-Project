@@ -21,7 +21,7 @@ namespace Mosa.Platform.x64.Intrinsic
 
 			context.SetInstruction(X64.Mov64, rax, operand);
 			context.AppendInstruction(X64.Mov64, rcx, methodCompiler.ConstantZero32);
-			context.AppendInstruction(X64.CpuId, rax, rax);
+			context.AppendInstruction(X64.CpuId, rax, rax, rcx);
 			context.AppendInstruction(X64.Mov64, result, rax);
 		}
 	}

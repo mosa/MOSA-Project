@@ -21,7 +21,7 @@ namespace Mosa.Platform.x86.Intrinsic
 
 			context.SetInstruction(X86.Mov32, eax, operand);
 			context.AppendInstruction(X86.Mov32, ecx, methodCompiler.ConstantZero32);
-			context.AppendInstruction(X86.CpuId, eax, eax);
+			context.AppendInstruction(X86.CpuId, eax, eax, ecx);
 			context.AppendInstruction(X86.Mov32, result, eax);
 		}
 	}

@@ -7,7 +7,7 @@ namespace Mosa.Platform.x64
 	{
 		#region Translations
 
-		public static readonly PhysicalRegister R4 = RBX;
+		public static readonly PhysicalRegister R4 = RBP;
 		public static readonly PhysicalRegister R5 = RSP;
 
 		public static readonly PhysicalRegister RAX = R0;
@@ -16,15 +16,6 @@ namespace Mosa.Platform.x64
 		public static readonly PhysicalRegister RBX = R3;
 		public static readonly PhysicalRegister RSI = R6;
 		public static readonly PhysicalRegister RDI = R7;
-
-		//public static readonly PhysicalRegister EAX = R0;
-		//public static readonly PhysicalRegister ECX = R1;
-		//public static readonly PhysicalRegister EDX = R2;
-		//public static readonly PhysicalRegister EBX = R3;
-		//public static readonly PhysicalRegister ESP = R4;
-		//public static readonly PhysicalRegister EBP = R5;
-		//public static readonly PhysicalRegister ESI = R6;
-		//public static readonly PhysicalRegister EDI = R7;
 
 		#endregion Translations
 
