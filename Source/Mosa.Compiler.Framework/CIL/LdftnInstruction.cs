@@ -38,6 +38,14 @@ namespace Mosa.Compiler.Framework.CIL
 
 			node.Result = decoder.MethodCompiler.CreateVirtualRegister(decoder.TypeSystem.ToFnPtr(method.Signature));
 			node.InvokeMethod = method;
+
+			//var methodData = decoder.MethodCompiler.Compiler.GetMethodData(method);
+
+			//if (!methodData.ReferenceAcquired)
+			//{
+			//	methodData.ReferenceAcquired = true;
+			//	decoder.MethodCompiler.Compiler.MethodScheduler.AddToRecompileQueue(methodData);
+			//}
 		}
 
 		#endregion Methods

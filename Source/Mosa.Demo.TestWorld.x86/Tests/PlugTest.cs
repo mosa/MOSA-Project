@@ -45,30 +45,53 @@ namespace Mosa.Demo.TestWorld.x86.Tests
 		}
 	}
 
-	public class PlugTestTest : KernelTest
+	public class PlugTest : KernelTest
 	{
-		public PlugTestTest()
+		public PlugTest()
 			: base("Plug")
 		{
-			testMethods.Add(PlugTestTest1);
-			testMethods.Add(PlugTestTest2);
-			testMethods.Add(PlugTestTest3);
+			testMethods.Add(PlugTest1);
+			testMethods.Add(PlugTest2);
+			testMethods.Add(PlugTest3);
+			testMethods.Add(PlugTest4);
+			testMethods.Add(PlugTest5);
+			testMethods.Add(PlugTest6);
+			testMethods.Add(PlugTest7);
 		}
 
-		public static bool PlugTestTest1()
+		public static bool PlugTest1()
 		{
 			return PlugTestCase.AddOne(10) == 11;
 		}
 
-		public static bool PlugTestTest2()
+		public static bool PlugTest2()
 		{
 			return PlugTestCase.Double(10) == 20;
 		}
 
-		public static bool PlugTestTest3()
+		public static bool PlugTest3()
 		{
-			PlugTestCase test = new PlugTestCase();
-			return test.AddZ2Z(11) == 22;
+			return new PlugTestCase().AddZ2Z(11) == 22;
+		}
+
+		public static bool PlugTest4()
+		{
+			return System.Runtime.Intrinsics.X86.Popcnt.PopCount(0b11) == 2;
+		}
+
+		public static bool PlugTest5()
+		{
+			return System.Runtime.Intrinsics.X86.Lzcnt.LeadingZeroCount(0b1) == 31;
+		}
+
+		public static bool PlugTest6()
+		{
+			return System.Runtime.Intrinsics.X86.Bmi1.TrailingZeroCount(0b10) == 1;
+		}
+
+		public static bool PlugTest7()
+		{
+			return System.Runtime.Intrinsics.X86.Bmi1.ResetLowestSetBit(0b11) == 0b10;
 		}
 	}
 }

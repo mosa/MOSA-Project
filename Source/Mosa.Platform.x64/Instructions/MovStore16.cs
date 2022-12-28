@@ -30,7 +30,7 @@ namespace Mosa.Platform.x64.Instructions
 				opcodeEncoder.SuppressByte(0x40);
 				opcodeEncoder.Append4Bits(0b0100);
 				opcodeEncoder.Append1Bit(0b0);
-				opcodeEncoder.Append1Bit((node.Operand3.Register.RegisterCode >> 3) & 0x1);
+				opcodeEncoder.Append1Bit((node.Operand3.Register.RegisterCode >> 3));
 				opcodeEncoder.Append1Bit(0b0);
 				opcodeEncoder.Append1Bit(0b0);
 				opcodeEncoder.Append8Bits(0x89);
@@ -47,8 +47,8 @@ namespace Mosa.Platform.x64.Instructions
 				opcodeEncoder.SuppressByte(0x40);
 				opcodeEncoder.Append4Bits(0b0100);
 				opcodeEncoder.Append1Bit(0b0);
-				opcodeEncoder.Append1Bit((node.Operand3.Register.RegisterCode >> 3) & 0x1);
-				opcodeEncoder.Append1Bit((node.Operand2.Register.RegisterCode >> 3) & 0x1);
+				opcodeEncoder.Append1Bit((node.Operand3.Register.RegisterCode >> 3));
+				opcodeEncoder.Append1Bit((node.Operand2.Register.RegisterCode >> 3));
 				opcodeEncoder.Append1Bit(0b0);
 				opcodeEncoder.Append8Bits(0x89);
 				opcodeEncoder.Append2Bits(0b01);
@@ -67,7 +67,7 @@ namespace Mosa.Platform.x64.Instructions
 				opcodeEncoder.SuppressByte(0x40);
 				opcodeEncoder.Append4Bits(0b0100);
 				opcodeEncoder.Append1Bit(0b0);
-				opcodeEncoder.Append1Bit((node.Operand3.Register.RegisterCode >> 3) & 0x1);
+				opcodeEncoder.Append1Bit((node.Operand3.Register.RegisterCode >> 3));
 				opcodeEncoder.Append1Bit(0b0);
 				opcodeEncoder.Append1Bit(0b0);
 				opcodeEncoder.Append8Bits(0x89);
@@ -86,7 +86,7 @@ namespace Mosa.Platform.x64.Instructions
 				opcodeEncoder.SuppressByte(0x40);
 				opcodeEncoder.Append4Bits(0b0100);
 				opcodeEncoder.Append1Bit(0b0);
-				opcodeEncoder.Append1Bit((node.Operand3.Register.RegisterCode >> 3) & 0x1);
+				opcodeEncoder.Append1Bit((node.Operand3.Register.RegisterCode >> 3));
 				opcodeEncoder.Append1Bit(0b0);
 				opcodeEncoder.Append1Bit(0b0);
 				opcodeEncoder.Append8Bits(0x89);
@@ -106,7 +106,7 @@ namespace Mosa.Platform.x64.Instructions
 				opcodeEncoder.SuppressByte(0x40);
 				opcodeEncoder.Append4Bits(0b0100);
 				opcodeEncoder.Append1Bit(0b0);
-				opcodeEncoder.Append1Bit((node.Operand3.Register.RegisterCode >> 3) & 0x1);
+				opcodeEncoder.Append1Bit((node.Operand3.Register.RegisterCode >> 3));
 				opcodeEncoder.Append1Bit(0b0);
 				opcodeEncoder.Append1Bit(0b0);
 				opcodeEncoder.Append8Bits(0x89);
@@ -123,8 +123,8 @@ namespace Mosa.Platform.x64.Instructions
 				opcodeEncoder.SuppressByte(0x40);
 				opcodeEncoder.Append4Bits(0b0100);
 				opcodeEncoder.Append1Bit(0b0);
-				opcodeEncoder.Append1Bit((node.Operand3.Register.RegisterCode >> 3) & 0x1);
-				opcodeEncoder.Append1Bit((node.Operand2.Register.RegisterCode >> 3) & 0x1);
+				opcodeEncoder.Append1Bit((node.Operand3.Register.RegisterCode >> 3));
+				opcodeEncoder.Append1Bit((node.Operand2.Register.RegisterCode >> 3));
 				opcodeEncoder.Append1Bit(0b0);
 				opcodeEncoder.Append8Bits(0x89);
 				opcodeEncoder.Append2Bits(0b00);
@@ -142,9 +142,9 @@ namespace Mosa.Platform.x64.Instructions
 				opcodeEncoder.SuppressByte(0x40);
 				opcodeEncoder.Append4Bits(0b0100);
 				opcodeEncoder.Append1Bit(0b0);
-				opcodeEncoder.Append1Bit((node.Operand3.Register.RegisterCode >> 3) & 0x1);
+				opcodeEncoder.Append1Bit((node.Operand3.Register.RegisterCode >> 3));
 				opcodeEncoder.Append1Bit(0b0);
-				opcodeEncoder.Append1Bit((node.Operand1.Register.RegisterCode >> 3) & 0x1);
+				opcodeEncoder.Append1Bit((node.Operand1.Register.RegisterCode >> 3));
 				opcodeEncoder.Append8Bits(0x89);
 				opcodeEncoder.Append2Bits(0b00);
 				opcodeEncoder.Append3Bits(node.Operand3.Register.RegisterCode);
@@ -158,9 +158,9 @@ namespace Mosa.Platform.x64.Instructions
 				opcodeEncoder.SuppressByte(0x40);
 				opcodeEncoder.Append4Bits(0b0100);
 				opcodeEncoder.Append1Bit(0b0);
-				opcodeEncoder.Append1Bit((node.Operand3.Register.RegisterCode >> 3) & 0x1);
+				opcodeEncoder.Append1Bit((node.Operand3.Register.RegisterCode >> 3));
 				opcodeEncoder.Append1Bit(0b0);
-				opcodeEncoder.Append1Bit((node.Operand1.Register.RegisterCode >> 3) & 0x1);
+				opcodeEncoder.Append1Bit((node.Operand1.Register.RegisterCode >> 3));
 				opcodeEncoder.Append8Bits(0x89);
 				opcodeEncoder.Append2Bits(0b01);
 				opcodeEncoder.Append3Bits(node.Operand3.Register.RegisterCode);
@@ -175,9 +175,9 @@ namespace Mosa.Platform.x64.Instructions
 				opcodeEncoder.SuppressByte(0x40);
 				opcodeEncoder.Append4Bits(0b0100);
 				opcodeEncoder.Append1Bit(0b0);
-				opcodeEncoder.Append1Bit((node.Operand3.Register.RegisterCode >> 3) & 0x1);
+				opcodeEncoder.Append1Bit((node.Operand3.Register.RegisterCode >> 3));
 				opcodeEncoder.Append1Bit(0b0);
-				opcodeEncoder.Append1Bit((node.Operand1.Register.RegisterCode >> 3) & 0x1);
+				opcodeEncoder.Append1Bit((node.Operand1.Register.RegisterCode >> 3));
 				opcodeEncoder.Append8Bits(0x89);
 				opcodeEncoder.Append2Bits(0b10);
 				opcodeEncoder.Append3Bits(node.Operand3.Register.RegisterCode);
@@ -192,7 +192,7 @@ namespace Mosa.Platform.x64.Instructions
 				opcodeEncoder.SuppressByte(0x40);
 				opcodeEncoder.Append4Bits(0b0100);
 				opcodeEncoder.Append1Bit(0b0);
-				opcodeEncoder.Append1Bit((node.Operand3.Register.RegisterCode >> 3) & 0x1);
+				opcodeEncoder.Append1Bit((node.Operand3.Register.RegisterCode >> 3));
 				opcodeEncoder.Append1Bit(0b0);
 				opcodeEncoder.Append1Bit(0b0);
 				opcodeEncoder.Append8Bits(0x89);
@@ -228,7 +228,7 @@ namespace Mosa.Platform.x64.Instructions
 				opcodeEncoder.Append4Bits(0b0100);
 				opcodeEncoder.Append1Bit(0b0);
 				opcodeEncoder.Append1Bit(0b0);
-				opcodeEncoder.Append1Bit((node.Operand2.Register.RegisterCode >> 3) & 0x1);
+				opcodeEncoder.Append1Bit((node.Operand2.Register.RegisterCode >> 3));
 				opcodeEncoder.Append1Bit(0b0);
 				opcodeEncoder.Append8Bits(0xC7);
 				opcodeEncoder.Append2Bits(0b01);
@@ -307,7 +307,7 @@ namespace Mosa.Platform.x64.Instructions
 				opcodeEncoder.Append4Bits(0b0100);
 				opcodeEncoder.Append1Bit(0b0);
 				opcodeEncoder.Append1Bit(0b0);
-				opcodeEncoder.Append1Bit((node.Operand2.Register.RegisterCode >> 3) & 0x1);
+				opcodeEncoder.Append1Bit((node.Operand2.Register.RegisterCode >> 3));
 				opcodeEncoder.Append1Bit(0b0);
 				opcodeEncoder.Append8Bits(0xC7);
 				opcodeEncoder.Append2Bits(0b00);
@@ -328,7 +328,7 @@ namespace Mosa.Platform.x64.Instructions
 				opcodeEncoder.Append1Bit(0b0);
 				opcodeEncoder.Append1Bit(0b0);
 				opcodeEncoder.Append1Bit(0b0);
-				opcodeEncoder.Append1Bit((node.Operand1.Register.RegisterCode >> 3) & 0x1);
+				opcodeEncoder.Append1Bit((node.Operand1.Register.RegisterCode >> 3));
 				opcodeEncoder.Append8Bits(0xC7);
 				opcodeEncoder.Append2Bits(0b00);
 				opcodeEncoder.Append3Bits(0b000);
@@ -345,7 +345,7 @@ namespace Mosa.Platform.x64.Instructions
 				opcodeEncoder.Append1Bit(0b0);
 				opcodeEncoder.Append1Bit(0b0);
 				opcodeEncoder.Append1Bit(0b0);
-				opcodeEncoder.Append1Bit((node.Operand1.Register.RegisterCode >> 3) & 0x1);
+				opcodeEncoder.Append1Bit((node.Operand1.Register.RegisterCode >> 3));
 				opcodeEncoder.Append8Bits(0xC7);
 				opcodeEncoder.Append2Bits(0b01);
 				opcodeEncoder.Append3Bits(0b000);
@@ -363,7 +363,7 @@ namespace Mosa.Platform.x64.Instructions
 				opcodeEncoder.Append1Bit(0b0);
 				opcodeEncoder.Append1Bit(0b0);
 				opcodeEncoder.Append1Bit(0b0);
-				opcodeEncoder.Append1Bit((node.Operand1.Register.RegisterCode >> 3) & 0x1);
+				opcodeEncoder.Append1Bit((node.Operand1.Register.RegisterCode >> 3));
 				opcodeEncoder.Append8Bits(0xC7);
 				opcodeEncoder.Append2Bits(0b10);
 				opcodeEncoder.Append3Bits(0b000);

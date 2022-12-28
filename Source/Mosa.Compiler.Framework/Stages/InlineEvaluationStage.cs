@@ -42,7 +42,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			MethodData.HasAddressOfInstruction = false;
 			MethodData.HasLoops = false;
-			MethodData.SelfReference = false;
+			MethodData.IsSelfReferenced = false;
 
 			//MethodData.IsDevirtualized = Method.IsVirtual && !TypeLayout.IsMethodOverridden(Method);
 
@@ -54,6 +54,7 @@ namespace Mosa.Compiler.Framework.Stages
 			trace?.Log($"HasAggressiveInliningAttribute: {MethodData.HasAggressiveInliningAttribute}");
 			trace?.Log($"AggressiveInlineRequested: {MethodData.AggressiveInlineRequested}");
 			trace?.Log($"IsMethodImplementationReplaced (Plugged): {MethodData.IsMethodImplementationReplaced}");
+			trace?.Log($"IsReferenced: {MethodData.IsReferenced}");
 			trace?.Log($"CompileCount: {MethodData.Version}");
 
 			if (StaticCanNotInline(MethodData))
@@ -97,7 +98,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 						if (node.Instruction == IRInstruction.CallStatic && node.Operand1.Method == Method)
 						{
-							MethodData.SelfReference = true;
+							MethodData.IsSelfReferenced = true;
 						}
 
 						if (node.Instruction == IRInstruction.SetReturn32
@@ -163,10 +164,10 @@ namespace Mosa.Compiler.Framework.Stages
 			trace?.Log($"NonIRInstructionCount: {MethodData.NonIRInstructionCount}");
 			trace?.Log($"HasAddressOfInstruction: {MethodData.HasAddressOfInstruction}");
 			trace?.Log($"HasLoops: {MethodData.HasLoops}");
-			trace?.Log($"SelfReference: {MethodData.SelfReference}");
+			trace?.Log($"IsSelfReferenced: {MethodData.IsSelfReferenced}");
 			trace?.Log($"** Dynamically Evaluated");
 			trace?.Log($"Inlined: {MethodData.Inlined}");
-			
+
 			InlineCount.Set(inline);
 			ReversedInlineCount.Set(MethodData.Version >= MaximumCompileCount);
 
@@ -215,10 +216,10 @@ namespace Mosa.Compiler.Framework.Stages
 			if (methodData.HasProtectedRegions)
 				return true;
 
-			if (methodData.HasMethodPointerReferenced)
+			if (methodData.IsReferenced)
 				return true;
 
-			if (methodData.SelfReference)
+			if (methodData.IsSelfReferenced)
 				return true;
 
 			var method = methodData.Method;

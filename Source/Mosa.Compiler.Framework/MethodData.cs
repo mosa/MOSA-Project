@@ -35,7 +35,7 @@ namespace Mosa.Compiler.Framework
 
 		public bool HasLoops { get; set; }
 
-		public bool SelfReference { get; set; }
+		public bool IsSelfReferenced { get; set; }
 
 		public bool HasAddressOfInstruction { get; set; }
 
@@ -67,11 +67,12 @@ namespace Mosa.Compiler.Framework
 
 		public bool DoNotInline { get; set; }
 
-		public bool HasMethodPointerReferenced { get; set; }
+		public bool IsReferenced { get; set; }
 
 		public bool HasCode { get; set; }
 
-		public bool Inlined { get { lock (_lock) { return InlineMethodData.IsInlined; } } }
+		public bool Inlined
+		{ get { lock (_lock) { return InlineMethodData.IsInlined; } } }
 
 		public MosaMethod ReplacedBy { get; set; }
 
@@ -99,12 +100,12 @@ namespace Mosa.Compiler.Framework
 			DoNotInline = false;
 			InlineMethodData = new InlineMethodData(null, 0);
 			IsDevirtualized = false;
-			HasMethodPointerReferenced = false;
+			IsReferenced = false;
 			HasCode = false;
 			IsInvoked = false;
 			AggressiveInlineRequested = false;
 			StackFrameRequired = true;
-			SelfReference = false;
+			IsSelfReferenced = false;
 		}
 
 		#region Methods

@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Platform.Intel;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
@@ -10,19 +9,23 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	internal static partial class IntrinsicMethods
 	{
-		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::CpuIdEcx")]
-		private static void CpuIdEcx(Context context, MethodCompiler methodCompiler)
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::CpuIdECX")]
+		private static void CpuIdECX(Context context, MethodCompiler methodCompiler)
 		{
 			var result = context.Result;
-			var operand = context.Operand1;
-			var eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, CPURegister.EAX);
-			var ecx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, CPURegister.ECX);
-			var reg = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, CPURegister.ECX);
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
 
-			context.SetInstruction(X86.Mov32, eax, operand);
-			context.AppendInstruction(X86.Mov32, ecx, methodCompiler.ConstantZero32);
-			context.AppendInstruction(X86.CpuId, eax, eax);
-			context.AppendInstruction(X86.Mov32, result, reg);
+			var eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, CPURegister.EAX);
+			var ebx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, CPURegister.EBX);
+			var ecx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, CPURegister.ECX);
+			var edx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, CPURegister.EDX);
+
+			context.SetInstruction(X86.Mov32, eax, operand1);
+			context.AppendInstruction(X86.Mov32, ecx, operand2); context.AppendInstruction(X86.Mov32, ecx, methodCompiler.ConstantZero32);
+			context.AppendInstruction(X86.CpuId, eax, eax, ecx);
+			context.AppendInstruction(IRInstruction.Gen, eax, ebx, ecx, edx);
+			context.AppendInstruction(X86.Mov32, result, ecx);
 		}
 	}
 }

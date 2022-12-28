@@ -13,14 +13,14 @@ namespace Mosa.Platform.x86.Instructions
 	public sealed class CpuId : X86Instruction
 	{
 		internal CpuId()
-			: base(1, 1)
+			: base(1, 2)
 		{
 		}
 
 		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
-			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
+			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
 			opcodeEncoder.Append8Bits(0x0F);
 			opcodeEncoder.Append8Bits(0xA2);

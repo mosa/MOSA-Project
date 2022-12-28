@@ -53,13 +53,14 @@ namespace Mosa.Kernel.x86
 			/*if (PAE)
 				return (eax & 0xfffff000) | ((edx & 0x0f) << 32);
 			else
-				*/return (Pointer)(eax & 0xfffff000);
+				*/
+			return (Pointer)(eax & 0xfffff000);
 		}
 
 		public static bool CheckAPIC()
 		{
-			uint eax = Native.CpuIdEax(1);
-			uint edx = Native.CpuIdEdx(1);
+			uint eax = Native.CpuIdEAX(1, 0);
+			uint edx = Native.CpuIdEDX(1, 0);
 
 			return (edx & CPUID_FEAT_EDX_APIC) != 0;
 		}

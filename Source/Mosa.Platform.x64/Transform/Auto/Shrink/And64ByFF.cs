@@ -25,10 +25,10 @@ namespace Mosa.Platform.x64.Transform.Auto.Shrink
 			if (context.Operand2.ConstantUnsigned64 != 0xFF)
 				return false;
 
-			if (IsCPURegister(context.Operand1, CPURegister.ESI))
+			if (IsCPURegister(context.Operand1, CPURegister.RSI))
 				return false;
 
-			if (IsCPURegister(context.Operand1, CPURegister.EDI))
+			if (IsCPURegister(context.Operand1, CPURegister.RDI))
 				return false;
 
 			if (AreStatusFlagUsed(context))
@@ -64,10 +64,10 @@ namespace Mosa.Platform.x64.Transform.Auto.Shrink
 			if (context.Operand1.ConstantUnsigned64 != 0xFF)
 				return false;
 
-			if (IsCPURegister(context.Operand2, CPURegister.ESI))
+			if (IsCPURegister(context.Operand2, CPURegister.RSI))
 				return false;
 
-			if (IsCPURegister(context.Operand2, CPURegister.EDI))
+			if (IsCPURegister(context.Operand2, CPURegister.RDI))
 				return false;
 
 			if (AreStatusFlagUsed(context))

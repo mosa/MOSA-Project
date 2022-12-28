@@ -5,6 +5,8 @@
 		"[x64-rex32]=[x64-rex],rex.w=0",
 		"[x64-rex64]=[x64-rex],rex.w=1",
 
+		"[x64-vex-3]=[vex.opcode]|[vex.R]|[vex.X]|[vex.B]|[vex.MapSelect]|[vex.WE]|[vex.vvvv]|[vex.L]|[vex.PP]|[vex.opcode2]|[mod]|[reg]|[rm],vex.opcode=0xC4,vex.PP=00",
+
 		"[x64-branch]=[x64],operand-prefix=0x0F,opcode=[opcode-branch],immediate=rel32:label",
 		"[x64-setbyteif]=[x64-rex64],operand-prefix=0x0F,opcode=[opcode-setbyteif],mod=11,reg=000,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r",
 		"[x64-cmov32]=[x64-rex32],operand-prefix=0x0F,opcode=[opcode-cmov],mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2",
@@ -708,7 +710,7 @@
 			"FlagsUnchanged": "ZCSOP",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 1,
+			"OperandCount": 2,
 			"ResultCount": 1,
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
@@ -5049,7 +5051,7 @@
 		{
 			"Name": "Blsr32",
 			"Commutative": "true",
-			"FamilyName": "X64",
+			"FamilyName": "X86",
 			"FlagsCleared": "O",
 			"FlagsModified": "ZCS",
 			"FlagsSet": "",
@@ -5058,18 +5060,18 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"ThreeTwoAddressConversion": "true",
+			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[#register]",
-					"Encoding": "[x64-rex32],opcode=0xC4,opcode2=0xE2,opcode3=0x78,opcode4=0xF3,mod=11,reg=b001,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
+					"Encoding": "[x86-vex-3],vex.MapSelect=00010,vex.opcode2=0xF3,vex.vvvv=reg4not:o1,mod=11,reg=001,rm=reg3:r,rm=reg3:r,vex.R=reg4xnot:r,vex.X=reg4xnot:r,vex.WE=0,vex.L=0"
 				}
 			]
 		},
 		{
 			"Name": "Blsr64",
 			"Commutative": "true",
-			"FamilyName": "X64",
+			"FamilyName": "X86",
 			"FlagsCleared": "O",
 			"FlagsModified": "ZCS",
 			"FlagsSet": "",
@@ -5078,11 +5080,11 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"ThreeTwoAddressConversion": "true",
+			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[#register]",
-					"Encoding": "[x64-rex64],opcode=0xC4,opcode2=0xE2,opcode3=0x78,opcode4=0xF3,mod=11,reg=b001,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
+					"Encoding": "[x86-vex-3],vex.MapSelect=00010,vex.opcode2=0xF3,vex.vvvv=reg4not:o1,mod=11,reg=001,rm=reg3:r,vex.R=reg4xnot:r,vex.X=reg4xnot:r,vex.B=reg4xnot:r,vex.WE=1,vex.L=0"
 				}
 			]
 		}

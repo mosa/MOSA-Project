@@ -40,15 +40,21 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 				foreach (string filter in Filters)
 				{
-					var regex = new Regex(filter);
-
-					var match = regex.Match(name);
-
-					if (match.Success)
+					if (name.StartsWith(filter))
 					{
 						include = true;
 						break;
 					}
+
+					//var regex = new Regex(filter);
+
+					//var match = regex.Match(name);
+
+					//if (match.Success)
+					//{
+					//	include = true;
+					//	break;
+					//}
 				}
 
 				if (include)

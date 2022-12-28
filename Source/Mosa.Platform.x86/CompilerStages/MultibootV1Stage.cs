@@ -2,7 +2,7 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.MosaTypeSystem;
-using Mosa.Platform.Intel;
+
 
 namespace Mosa.Platform.x86.CompilerStages
 {

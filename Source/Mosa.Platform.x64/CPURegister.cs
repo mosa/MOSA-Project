@@ -1,52 +1,65 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 using Mosa.Compiler.Framework;
-using Mosa.Platform.Intel;
 
 namespace Mosa.Platform.x64
 {
 	public static class CPURegister
 	{
+		#region Translations
+
+		public static readonly PhysicalRegister R4 = RBP;
+		public static readonly PhysicalRegister R5 = RSP;
+
+		public static readonly PhysicalRegister RAX = R0;
+		public static readonly PhysicalRegister RCX = R1;
+		public static readonly PhysicalRegister RDX = R2;
+		public static readonly PhysicalRegister RBX = R3;
+		public static readonly PhysicalRegister RSI = R6;
+		public static readonly PhysicalRegister RDI = R7;
+
+		#endregion Translations
+
 		#region Physical Registers
 
 		/// <summary>
-		/// Represents the EAX register.
+		/// Represents the R0 register.
 		/// </summary>
-		public static readonly PhysicalRegister EAX = new PhysicalRegister(0, 0, "EAX", true, false);
+		public static readonly PhysicalRegister R0 = new PhysicalRegister(0, 0, "R1", true, false);
 
 		/// <summary>
-		/// Represents the ECX register.
+		/// Represents the R1 register.
 		/// </summary>
-		public static readonly PhysicalRegister ECX = new PhysicalRegister(1, 1, "ECX", true, false);
+		public static readonly PhysicalRegister R1 = new PhysicalRegister(1, 1, "R2", true, false);
 
 		/// <summary>
-		/// Represents the EDX register.
+		/// Represents the R2 register.
 		/// </summary>
-		public static readonly PhysicalRegister EDX = new PhysicalRegister(2, 2, "EDX", true, false);
+		public static readonly PhysicalRegister R2 = new PhysicalRegister(2, 2, "R2", true, false);
 
 		/// <summary>
-		/// Represents the EBX register.
+		/// Represents the R3 register.
 		/// </summary>
-		public static readonly PhysicalRegister EBX = new PhysicalRegister(3, 3, "EBX", true, false);
+		public static readonly PhysicalRegister R3 = new PhysicalRegister(3, 3, "R3", true, false);
 
 		/// <summary>
-		/// Represents the ESP register.
+		/// Represents the RSP register.
 		/// </summary>
-		public static readonly PhysicalRegister ESP = new PhysicalRegister(4, 4, "ESP", true, false);
+		public static readonly PhysicalRegister RSP = new PhysicalRegister(4, 4, "RSP", true, false);
 
 		/// <summary>
-		/// Represents the EBP register.
+		/// Represents the RBP register.
 		/// </summary>
-		public static readonly PhysicalRegister EBP = new PhysicalRegister(5, 5, "EBP", true, false);
+		public static readonly PhysicalRegister RBP = new PhysicalRegister(5, 5, "RBP", true, false);
 
 		/// <summary>
-		/// Represents the ESI register.
+		/// Represents the R6 register.
 		/// </summary>
-		public static readonly PhysicalRegister ESI = new PhysicalRegister(6, 6, "ESI", true, false);
+		public static readonly PhysicalRegister R6 = new PhysicalRegister(6, 6, "R6", true, false);
 
 		/// <summary>
-		/// Represents the EDI register.
+		/// Represents the R7 register.
 		/// </summary>
-		public static readonly PhysicalRegister EDI = new PhysicalRegister(7, 7, "EDI", true, false);
+		public static readonly PhysicalRegister R7 = new PhysicalRegister(7, 7, "R7", true, false);
 
 		/// <summary>
 		/// Represents the R8 register.

@@ -1,7 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Platform.Intel;
+
 using System.Diagnostics;
 
 namespace Mosa.Platform.x64.Stages
@@ -94,7 +94,7 @@ namespace Mosa.Platform.x64.Stages
 
 			Debug.Assert(result.IsCPURegister);
 
-			if (result.Register == CPURegister.ESI || result.Register == CPURegister.EDI)
+			if (result.Register == CPURegister.RSI || result.Register == CPURegister.RDI)
 			{
 				var source = context.Operand1;
 				var offset = context.Operand2;
@@ -110,7 +110,7 @@ namespace Mosa.Platform.x64.Stages
 
 			Debug.Assert(result.IsCPURegister);
 
-			if (result.Register == CPURegister.ESI || result.Register == CPURegister.EDI)
+			if (result.Register == CPURegister.RSI || result.Register == CPURegister.RDI)
 			{
 				var source = context.Operand1;
 				var offset = context.Operand2;
@@ -146,28 +146,28 @@ namespace Mosa.Platform.x64.Stages
 		{
 			var value = context.Operand3;
 
-			if (value.IsCPURegister && (value.Register == CPURegister.ESI || value.Register == CPURegister.EDI))
+			if (value.IsCPURegister && (value.Register == CPURegister.RSI || value.Register == CPURegister.RDI))
 			{
 				var dest = context.Operand1;
 				var offset = context.Operand2;
 
 				Operand temporaryRegister = null;
 
-				if (dest.Register != CPURegister.EAX && offset.Register != CPURegister.EAX)
+				if (dest.Register != CPURegister.RAX && offset.Register != CPURegister.RAX)
 				{
-					temporaryRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.EAX);
+					temporaryRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.RAX);
 				}
-				else if (dest.Register != CPURegister.EBX && offset.Register != CPURegister.EBX)
+				else if (dest.Register != CPURegister.RBX && offset.Register != CPURegister.RBX)
 				{
-					temporaryRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.EBX);
+					temporaryRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.RBX);
 				}
-				else if (dest.Register != CPURegister.ECX && offset.Register != CPURegister.ECX)
+				else if (dest.Register != CPURegister.RAX && offset.Register != CPURegister.RAX)
 				{
-					temporaryRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.ECX);
+					temporaryRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.RAX);
 				}
 				else
 				{
-					temporaryRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.EDX);
+					temporaryRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.RAX);
 				}
 
 				context.SetInstruction2(X64.XChg64, temporaryRegister, value, value, temporaryRegister);
@@ -180,28 +180,28 @@ namespace Mosa.Platform.x64.Stages
 		{
 			var value = context.Operand3;
 
-			if (value.IsCPURegister && (value.Register == CPURegister.ESI || value.Register == CPURegister.EDI))
+			if (value.IsCPURegister && (value.Register == CPURegister.RSI || value.Register == CPURegister.RDI))
 			{
 				var dest = context.Operand1;
 				var offset = context.Operand2;
 
 				Operand temporaryRegister = null;
 
-				if (dest.Register != CPURegister.EAX && offset.Register != CPURegister.EAX)
+				if (dest.Register != CPURegister.RAX && offset.Register != CPURegister.RAX)
 				{
-					temporaryRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.EAX);
+					temporaryRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.RAX);
 				}
-				else if (dest.Register != CPURegister.EBX && offset.Register != CPURegister.EBX)
+				else if (dest.Register != CPURegister.RBX && offset.Register != CPURegister.RBX)
 				{
-					temporaryRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.EBX);
+					temporaryRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.RBX);
 				}
-				else if (dest.Register != CPURegister.ECX && offset.Register != CPURegister.ECX)
+				else if (dest.Register != CPURegister.RAX && offset.Register != CPURegister.RAX)
 				{
-					temporaryRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.ECX);
+					temporaryRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.RAX);
 				}
 				else
 				{
-					temporaryRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.EDX);
+					temporaryRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.RDX);
 				}
 
 				context.SetInstruction2(X64.XChg64, temporaryRegister, value, value, temporaryRegister);
@@ -214,8 +214,8 @@ namespace Mosa.Platform.x64.Stages
 		{
 			Debug.Assert(context.Result.IsCPURegister);
 
-			// Movzx8To32 can not use with ESI or EDI registers
-			if (context.Operand1.Register != CPURegister.ESI && context.Operand1.Register != CPURegister.EDI)
+			// Movzx8To32 can not use with RSI or RDI registers
+			if (context.Operand1.Register != CPURegister.RSI && context.Operand1.Register != CPURegister.RDI)
 				return;
 
 			var result = context.Result;
@@ -236,8 +236,8 @@ namespace Mosa.Platform.x64.Stages
 		{
 			Debug.Assert(context.Result.IsCPURegister);
 
-			// Movzx8To32 can not use with ESI or EDI registers
-			if (context.Operand1.Register != CPURegister.ESI && context.Operand1.Register != CPURegister.EDI)
+			// Movzx8To32 can not use with RSI or RDI registers
+			if (context.Operand1.Register != CPURegister.RSI && context.Operand1.Register != CPURegister.RDI)
 				return;
 
 			var result = context.Result;
@@ -268,16 +268,16 @@ namespace Mosa.Platform.x64.Stages
 
 			Debug.Assert(result.IsCPURegister);
 
-			// SETcc can not use with ESI or EDI registers
-			if (result.Register == CPURegister.ESI || result.Register == CPURegister.EDI)
+			// SETcc can not use with RSI or RDI registers
+			if (result.Register == CPURegister.RSI || result.Register == CPURegister.RDI)
 			{
 				var condition = context.ConditionCode;
 
-				var eax = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.EAX);
+				var rax = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.RAX);
 
-				context.SetInstruction2(X64.XChg64, eax, result, result, eax);
-				context.AppendInstruction(instruction, condition, eax);
-				context.AppendInstruction2(X64.XChg64, result, eax, eax, result);
+				context.SetInstruction2(X64.XChg64, rax, result, result, rax);
+				context.AppendInstruction(instruction, condition, rax);
+				context.AppendInstruction2(X64.XChg64, result, rax, rax, result);
 			}
 		}
 

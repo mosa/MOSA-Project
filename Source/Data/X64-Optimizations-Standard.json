@@ -44,7 +44,7 @@
 			"Name": "And##",
 			"SubName": "ByFF",
 			"Expression": "X64.And## a 0xFF",
-			"Filter": "!IsCPURegister(a,%ESI) && !IsCPURegister(a,%EDI) && !AreStatusFlagUsed(@)",
+			"Filter": "!IsCPURegister(a,%RSI) && !IsCPURegister(a,%RDI) && !AreStatusFlagUsed(@)",
 			"Result": "(X64.Movzx8To## a)",
 			"Variations": "Yes",
 			"Log": "No"

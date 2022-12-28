@@ -6,31 +6,38 @@ namespace Mosa.Kernel.x86
 {
 	public class CpuInfo
 	{
-		public uint NumberOfCores { get { return (Native.CpuIdEax(4) >> 26) + 1; } }
+		public uint NumberOfCores
+		{ get { return (Native.CpuIdEAX(4, 0) >> 26) + 1; } }
 
-		public uint Type { get { return (Native.CpuIdEax(1) & 0x3000) >> 12; } }
+		public uint Type
+		{ get { return (Native.CpuIdEAX(1, 0) & 0x3000) >> 12; } }
 
-		public uint Stepping { get { return Native.CpuIdEax(1) & 0xF; } }
+		public uint Stepping
+		{ get { return Native.CpuIdEAX(1, 0) & 0xF; } }
 
-		public uint Model { get { return (Native.CpuIdEax(1) & 0xF0) >> 4; } }
+		public uint Model
+		{ get { return (Native.CpuIdEAX(1, 0) & 0xF0) >> 4; } }
 
-		public uint Family { get { return (Native.CpuIdEax(1) & 0xF00) >> 8; } }
+		public uint Family
+		{ get { return (Native.CpuIdEAX(1, 0) & 0xF00) >> 8; } }
 
-		public bool SupportsExtendedCpuid { get { uint identifier = Native.CpuIdEax(0x80000000); return (identifier & 0x80000000) != 0; } }
+		public bool SupportsExtendedCpuid
+		{ get { uint identifier = Native.CpuIdEAX(0x80000000, 0); return (identifier & 0x80000000) != 0; } }
 
-		public bool SupportsBrandString { get { uint identifier = Native.CpuIdEax(0x80000000); return identifier >= 0x80000004U; } }
+		public bool SupportsBrandString
+		{ get { uint identifier = Native.CpuIdEAX(0x80000000, 0); return identifier >= 0x80000004U; } }
 
 		public void PrintVendorString(ConsoleSession console)
 		{
-			uint identifier = Native.CpuIdEbx(0);
+			uint identifier = Native.CpuIdEBX(0, 0);
 			for (int i = 0; i < 4; ++i)
 				console.Write((char)((identifier >> (i * 8)) & 0xFF));
 
-			identifier = Native.CpuIdEdx(0);
+			identifier = Native.CpuIdEDX(0, 0);
 			for (int i = 0; i < 4; ++i)
 				console.Write((char)((identifier >> (i * 8)) & 0xFF));
 
-			identifier = Native.CpuIdEcx(0);
+			identifier = Native.CpuIdECX(0, 0);
 			for (int i = 0; i < 4; ++i)
 				console.Write((char)((identifier >> (i * 8)) & 0xFF));
 		}
@@ -50,23 +57,23 @@ namespace Mosa.Kernel.x86
 
 		private void PrintBrand(ConsoleSession console, uint param)
 		{
-			uint identifier = Native.CpuIdEax(param);
+			uint identifier = Native.CpuIdEAX(param, 0);
 			bool whitespace = true;
 			if (identifier != 0x20202020)
 				for (int i = 0; i < 4; ++i)
 					PrintBrandPart(console, identifier, i, ref whitespace);
 
-			identifier = Native.CpuIdEbx(param);
+			identifier = Native.CpuIdEBX(param, 0);
 			if (identifier != 0x20202020)
 				for (int i = 0; i < 4; ++i)
 					PrintBrandPart(console, identifier, i, ref whitespace);
 
-			identifier = Native.CpuIdEcx(param);
+			identifier = Native.CpuIdECX(param, 0);
 			if (identifier != 0x20202020)
 				for (int i = 0; i < 4; ++i)
 					PrintBrandPart(console, identifier, i, ref whitespace);
 
-			identifier = Native.CpuIdEdx(param);
+			identifier = Native.CpuIdEDX(param, 0);
 			if (identifier != 0x20202020)
 				for (int i = 0; i < 4; ++i)
 					PrintBrandPart(console, identifier, i, ref whitespace);

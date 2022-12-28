@@ -51,17 +51,17 @@ namespace Mosa.Runtime.x86
 		[DllImport("Mosa.Platform.x86.Intrinsic::Invlpg")]
 		public static extern void Invlpg(uint address);
 
-		[DllImport("Mosa.Platform.x86.Intrinsic::CpuIdEax")]
-		public static extern uint CpuIdEax(uint function);
+		[DllImport("Mosa.Platform.x86.Intrinsic::CpuIdEAX")]
+		public static extern uint CpuIdEAX(uint eax, uint ecx);
 
-		[DllImport("Mosa.Platform.x86.Intrinsic::CpuIdEbx")]
-		public static extern uint CpuIdEbx(uint function);
+		[DllImport("Mosa.Platform.x86.Intrinsic::CpuIdEBX")]
+		public static extern uint CpuIdEBX(uint eax, uint ecx);
 
-		[DllImport("Mosa.Platform.x86.Intrinsic::CpuIdEcx")]
-		public static extern uint CpuIdEcx(uint function);
+		[DllImport("Mosa.Platform.x86.Intrinsic::CpuIdECX")]
+		public static extern uint CpuIdECX(uint eax, uint ecx);
 
-		[DllImport("Mosa.Platform.x86.Intrinsic::CpuIdEdx")]
-		public static extern uint CpuIdEdx(uint function);
+		[DllImport("Mosa.Platform.x86.Intrinsic::CpuIdEDX")]
+		public static extern uint CpuIdEDX(uint eax, uint ecx);
 
 		[DllImport("Mosa.Platform.x86.Intrinsic::WrMSR")]
 		public static extern void WrMSR(uint mrs, ulong value);
@@ -95,6 +95,15 @@ namespace Mosa.Runtime.x86
 
 		[DllImport("Mosa.Platform.x86.Intrinsic::Blsr32")]
 		public static extern uint Blsr32(uint esp);
+
+		[DllImport("Mosa.Platform.x86.Intrinsic::Popcnt32")]
+		public static extern uint Popcnt32(uint esp);
+
+		[DllImport("Mosa.Platform.x86.Intrinsic::Lzcnt32")]
+		public static extern uint Lzcnt32(uint esp);
+
+		[DllImport("Mosa.Platform.x86.Intrinsic::Tzcnt32")]
+		public static extern uint Tzcnt32(uint esp);
 
 		#endregion Intrinsic Instructions
 
