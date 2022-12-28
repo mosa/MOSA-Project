@@ -160,7 +160,7 @@ namespace Mosa.Tool.Launcher
 			settings.SetValue("Linker.Symbols", EmtSymbs.IsChecked.Value);
 			settings.SetValue("Linker.StaticRelocations", EmtRelocs.IsChecked.Value);
 			settings.SetValue("Linker.Drawf", EmtDwarf.IsChecked.Value);
-			settings.SetValue("Compiler.BaseAddress", uint.Parse(BaseAddrTxt.Text, NumberStyles.Integer | NumberStyles.HexNumber));
+			settings.SetValue("Compiler.BaseAddress", BaseAddrTxt.Text.StartsWith("0x") ? uint.Parse(BaseAddrTxt.Text[2..], NumberStyles.HexNumber) : uint.Parse(BaseAddrTxt.Text));
 
 			settings.SetValue("CompilerDebug.NasmFile", NasmFile.IsChecked.Value ? "%DEFAULT%" : string.Empty);
 			settings.SetValue("CompilerDebug.AsmFile", AsmFile.IsChecked.Value ? "%DEFAULT%" : string.Empty);
