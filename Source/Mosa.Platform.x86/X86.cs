@@ -135,5 +135,9 @@ namespace Mosa.Platform.x86
 		public static readonly BochsDebug BochsDebug = new BochsDebug();
 		public static readonly RdMSR RdMSR = new RdMSR();
 		public static readonly WrMSR WrMSR = new WrMSR();
+		public static readonly Blsr32 Blsr32 = new Blsr32();
+		public static readonly Popcnt32 Popcnt32 = new Popcnt32();
+		public static readonly Lzcnt32 Lzcnt32 = new Lzcnt32();
+		public static readonly Tzcnt32 Tzcnt32 = new Tzcnt32();
 	}
 }

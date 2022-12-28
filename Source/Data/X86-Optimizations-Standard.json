@@ -1,6 +1,8 @@
 ﻿{
 	"Commutative": [
-		"X86.Add32"
+		"X86.Add32",
+		"X86.And32",
+		"x64.Or32"
 	],
 	"Optimizations": [
 		{
@@ -11,8 +13,7 @@
 			"Expression": "X86.Mov32 (X86.Mov32 a)",
 			"Filter": "IsVirtualRegister(a)",
 			"Result": "(X86.Mov32 a)",
-			"Variations": "No",
-			"Log": "Yes"
+			"Variations": "No"
 		},
 		{
 			"FamilyName": "x86",
@@ -22,8 +23,7 @@
 			"Expression": "X86.Add32 a 0",
 			"Filter": "!AreStatusFlagUsed(@)",
 			"Result": "(X86.Mov32 a)",
-			"Variations": "Yes",
-			"Log": "Yes"
+			"Variations": "No"
 		},
 		{
 			"FamilyName": "x86",
@@ -33,8 +33,48 @@
 			"Expression": "X86.Sub32 a 0",
 			"Filter": "!AreStatusFlagUsed(@)",
 			"Result": "(X86.Mov32 a)",
+			"Variations": "Yes"
+		},
+		{
+			"FamilyName": "x86",
+			"Type": "Shrink",
+			"Name": "And32",
+			"SubName": "ByFF",
+			"Expression": "X86.And32 a 0xFF",
+			"Filter": "!IsCPURegister(a,%ESI) && !IsCPURegister(a,%EDI) && !AreStatusFlagUsed(@)",
+			"Result": "(X86.Movzx8To32 a)",
 			"Variations": "Yes",
-			"Log": "Yes"
+			"Log": "No"
+		},
+		{
+			"FamilyName": "x86",
+			"Type": "StrengthReduction",
+			"Name": "Add32By1Not32",
+			"SubName": "",
+			"Expression": "X86.Add32 (X86.Not32 x) 1",
+			"Filter": "IsVirtualRegister(x) && !IsCarryFlagUsed(@)",
+			"Result": "(X86.Neg32 x)",
+			"Variations": "Yes"
+		},
+		{
+			"FamilyName": "x86",
+			"Type": "StrengthReduction",
+			"Name": "Inc32Not32",
+			"SubName": "",
+			"Expression": "X86.Inc32 (X86.Not32 x)",
+			"Filter": "IsVirtualRegister(x) && !IsCarryFlagUsed(@)",
+			"Result": "(X86.Neg32 x)",
+			"Variations": "No"
+		},
+		{
+			"FamilyName": "x86",
+			"Type": "Specific",
+			"Name": "And32Add32",
+			"SubName": "ToBlsr32",
+			"Expression": "X86.And32 x (X86.Add32 x -1)",
+			"Filter": "IsVirtualRegister(x) && !IsCarryFlagUsed(@)",
+			"Result": "(X86.Blsr32 x)",
+			"Variations": "Yes"
 		}
 	]
 }

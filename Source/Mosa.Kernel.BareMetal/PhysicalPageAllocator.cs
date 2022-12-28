@@ -112,6 +112,83 @@ namespace Mosa.Kernel.BareMetal
 			SearchNextStartPage = MinimumAvailablePage;
 		}
 
+		public static void ReleasePages(Pointer page, uint count)
+		{
+			SetPageBitMapEntry((uint)page.ToInt64() / Page.Size, count, true);
+		}
+
+		public static Pointer ReservePage()
+		{
+			return ReservePages(1, 1);
+		}
+
+		public static Pointer ReservePages(uint count, uint alignment = 1)
+		{
+			if (count == 0)
+				return Pointer.Zero;
+
+			if (alignment == 0)
+				alignment = 1;
+
+			//Console.Write("Count: ");
+			//Console.WriteValue(count);
+			//Console.Write(' ');
+
+			// TODO: Acquire lock
+
+			uint start = SearchNextStartPage;
+			uint at = start;
+
+			while (true)
+			{
+				uint restartAt;
+
+				if (at % alignment != 0)
+				{
+					// not aligned
+					// todo - skip to next aligned address rather then just increment
+					restartAt = at + 1;
+
+					//Console.Write('.');
+				}
+				else if (CheckFreePage32(at, count, out restartAt))
+				{
+					// found space!
+					//Console.Write('X');
+					SetPageBitMapEntry(at, count, true);
+
+					//Console.Write('o');
+					SearchNextStartPage = restartAt;
+
+					//Console.WriteLine();
+
+					return new Pointer(at * Page.Size);
+				}
+				else
+				{
+					//Console.Write('-');
+					at = restartAt;
+				}
+
+				if (restartAt > MaximumAvailablePage || restartAt > TotalPages)
+				{
+					// warp around to the start of the bitmap
+					restartAt = MinimumAvailablePage;
+				}
+
+				if (at < start && restartAt > start)
+				{
+					//Console.WriteLine("NONE");
+
+					// looped around in the search
+					// quit, as there are no free pages
+					return Pointer.Zero;
+				}
+
+				at = restartAt;
+			}
+		}
+
 		private static void SetPageBitMapEntry(uint start, uint count, bool set)
 		{
 			var indexShift = (Pointer.Size == 4) ? 10 : 9;
@@ -174,69 +251,42 @@ namespace Mosa.Kernel.BareMetal
 			}
 		}
 
-		public static void ReleasePages(Pointer page, uint count)
+		private static bool CheckFreePage32(uint at, uint count, out uint nextAt)
 		{
-			SetPageBitMapEntry((uint)page.ToInt64() / Page.Size, count, true);
-		}
+			nextAt = at;
 
-		public static Pointer ReservePage()
-		{
-			return ReservePages(1, 1);
-		}
-
-		public static Pointer ReservePages(uint count, uint alignment = 1)
-		{
-			if (count == 0)
-				return Pointer.Zero;
-
-			if (alignment == 0)
-				alignment = 1;
-
-			// TODO: Acquire lock
-
-			uint start = SearchNextStartPage;
-			uint at = start;
-
-			while (true)
+			while (count > 0)
 			{
-				uint restartAt;
+				uint index = at >> 17;
+				uint slot = index * 4;
 
-				if (at % alignment != 0)
+				var bitmap = BitMapIndexTable.GetBitMapEntry(slot);
+
+				byte start = (byte)(at & 0b11111);
+				uint diff = start + count - 1;
+				byte end = (byte)(diff <= 31 ? diff : 31);
+				byte size = (byte)(end - start + 1);
+
+				uint mask = BitSet32(start, size);
+
+				uint offset32 = (at >> 10) & 0b11111;
+
+				var value = bitmap.Load32(offset32);
+
+				if ((value & mask) == 0)
 				{
-					// not aligned
-					// todo - skip to next aligned address
-					restartAt = at + 1;
-				}
-				else if (CheckFreePage(at, count, out restartAt))
-				{
-					// found space!
-
-					SetPageBitMapEntry(at, count, true);
-
-					SearchNextStartPage = restartAt;
-
-					return new Pointer(at * Page.Size);
+					nextAt = at + size;
+					count -= size;
+					at += size;
 				}
 				else
 				{
-					at = restartAt;
+					nextAt = at + 1; // + GetLowestSetBit(value)
+					return false;
 				}
-
-				if (restartAt > MaximumAvailablePage || restartAt > TotalPages)
-				{
-					// warp around to the start of the bitmap
-					restartAt = MinimumAvailablePage;
-				}
-
-				if (at < start && restartAt > start)
-				{
-					// looped around in the search
-					// quit, as there are no free pages
-					return Pointer.Zero;
-				}
-
-				at = restartAt;
 			}
+
+			return true;
 		}
 
 		private static bool CheckFreePage(uint start, uint count, out uint restartAt)
@@ -336,6 +386,14 @@ namespace Mosa.Kernel.BareMetal
 			restartAt = start + count + 1;
 
 			return true;
+		}
+
+		private static uint BitSet32(byte start, byte size)
+		{
+			if (size == 32)
+				return uint.MaxValue;
+
+			return ~(uint.MaxValue << size) << start;
 		}
 	}
 }

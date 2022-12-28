@@ -152,18 +152,21 @@ namespace Mosa.Utility.Launcher
 		{
 			var arg = new StringBuilder();
 
-			arg.Append(" -L " + Quote(LauncherSettings.QEMUBios));
 			arg.Append($" -m {LauncherSettings.EmulatorMemory.ToString()}M");
 			arg.Append($" -smp cores={LauncherSettings.EmulatorCores.ToString()}");
 
+			//arg.Append(" -usb");
+
 			if (LauncherSettings.Platform == "x86")
 			{
-				arg.Append(" -cpu qemu32,+sse4.1");
+				arg.Append(" -cpu qemu32,+sse4.1,abm,bmi1,bmi2,popcnt");
 			}
 
 			switch (LauncherSettings.EmulatorSVGA)
 			{
 				case "vmware": arg.Append(" -vga vmware"); break;
+				case "cirrus": arg.Append(" -vga cirrus"); break;
+				case "std": arg.Append(" -vga std"); break;
 				default: break;
 			}
 
@@ -202,6 +205,9 @@ namespace Mosa.Utility.Launcher
 				case "bin": arg.Append($" -kernel {Quote(LauncherSettings.ImageFile)}"); break;
 				default: arg.Append($" -hda {Quote(LauncherSettings.ImageFile)}"); break;
 			}
+
+			//arg.Append(" -no-reboot");
+			arg.Append(" -L " + Quote(LauncherSettings.QEMUBios));
 
 			return LaunchApplication(LauncherSettings.QEMU, arg.ToString(), getOutput);
 		}

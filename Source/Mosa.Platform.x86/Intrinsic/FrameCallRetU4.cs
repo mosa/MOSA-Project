@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Platform.Intel;
+
 
 namespace Mosa.Platform.x86.Intrinsic
 {
@@ -16,7 +16,7 @@ namespace Mosa.Platform.x86.Intrinsic
 			var result = context.Result;
 			var methodAddress = context.Operand1;
 
-			var eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
+			var eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, CPURegister.EAX);
 
 			context.SetInstruction(X86.Call, null, methodAddress);
 			context.AppendInstruction(IRInstruction.Gen, eax);

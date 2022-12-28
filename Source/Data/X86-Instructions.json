@@ -3,6 +3,8 @@
 		"[x86]=[instruction-prefix]|[address-prefix]|[operand-prefix]|[opcode]|[opcode2]|[opcode3]|[opcode4]|[mod]|[reg]|[rm]|[scale]|[index]|[base]|[displacement]|[immediate]",
 		"[x64]=[instruction-prefix]|[address-prefix]|[operand-prefix]|[rex.opcode]|[rex.w]|[rex.r]|[rex.x]|[rex.b]|[opcode]|[opcode2]|[opcode3]|[opcode4]|[mod]|[reg]|[rm]|[scale]|[index]|[base]|[displacement]|[immediate]",
 
+		"[x86-vex-3]=[vex.opcode]|[vex.R]|[vex.X]|[vex.B]|[vex.MapSelect]|[vex.WE]|[vex.vvvv]|[vex.L]|[vex.PP]|[vex.opcode2]|[mod]|[reg]|[rm],vex.opcode=0xC4,vex.R=1,vex.X=1,vex.B=1,vex.WE=0,vex.L=0,vex.PP=00",
+
 		"[x86-base-load-ebp+zero]=[x86],mod=01,reg=reg3:[dest],rm=101,immediate=0x00",
 		"[x86-base-load-ebp+register]=[x86],mod=01,reg=reg3:[dest],rm=100,scale=00,index=reg3:[membase],base=101,immediate=0x00",
 		"[x86-base-load-esp+zero]=[x86],mod=00,reg=reg3:[dest],rm=100,scale=00,index=100,base=100",
@@ -430,7 +432,7 @@
 			"FlagsUnchanged": "ZCSOP",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 1,
+			"OperandCount": 2,
 			"ResultCount": 1,
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
@@ -3570,6 +3572,87 @@
 					"Encoding": "[x86],operand-prefix=0x0F,opcode=0x30"
 				}
 			]
+		},
+		{
+			"Name": "Blsr32",
+			"Commutative": "true",
+			"FamilyName": "X86",
+			"FlagsCleared": "O",
+			"FlagsModified": "ZCS",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "AP",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register]",
+					"Encoding": "[x86-vex-3],vex.MapSelect=00010,vex.opcode2=0xF3,vex.vvvv=reg4not:o1,mod=11,reg=001,rm=reg3:r"
+				}
+			]
+		},
+		{
+			"Name": "Popcnt32",
+			"Commutative": "true",
+			"FamilyName": "X86",
+			"FlagsCleared": "OSACP",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "Z",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register]",
+					"Encoding": "[x86],opcode=0xF3,opcode2=0x0F,opcode3=0xB8,mod=11,reg=reg3:o1,rm=reg3:r"
+				}
+			]
+		},
+		{
+			"Name": "Lzcnt32",
+			"Commutative": "true",
+			"FamilyName": "X86",
+			"FlagsCleared": "",
+			"FlagsModified": "ZC",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "OSAP",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register]",
+					"Encoding": "[x86],opcode=0xF3,opcode2=0x0F,opcode3=0xBD,mod=11,reg=reg3:o1,rm=reg3:r"
+				}
+			]
+		},
+		{
+			"Name": "Tzcnt32",
+			"Commutative": "true",
+			"FamilyName": "X86",
+			"FlagsCleared": "",
+			"FlagsModified": "ZC",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "OSAP",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register]",
+					"Encoding": "[x86],opcode=0xF3,opcode2=0x0F,opcode3=0xBC,mod=11,reg=reg3:o1,rm=reg3:r"
+				}
+			]
 		}
+
 	]
 }

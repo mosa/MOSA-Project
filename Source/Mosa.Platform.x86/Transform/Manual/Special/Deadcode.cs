@@ -44,13 +44,17 @@ namespace Mosa.Platform.x86.Transform.Manual.Special
 			if (!instruction.IsPlatformInstruction)
 				return false;
 
-			// a more complex analysis would tracks the flag usage down the basic block to determine if the flags are used
+			//if (!AreStatusFlagUsed(context))
+			//	return false;
+
 			if (instruction.IsCarryFlagModified
 				|| instruction.IsOverflowFlagModified
 				|| instruction.IsZeroFlagModified
 				|| instruction.IsSignFlagModified
 				|| instruction.IsParityFlagModified)
-				return false;
+			{
+				return !AreStatusFlagUsed(context);
+			}
 
 			return true;
 		}

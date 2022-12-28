@@ -2,7 +2,7 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transform;
-using Mosa.Platform.Intel;
+
 
 namespace Mosa.Platform.x86.Transform.Manual.Special
 {
@@ -23,7 +23,7 @@ namespace Mosa.Platform.x86.Transform.Manual.Special
 			if (!context.Result.IsCPURegister)
 				return false;
 
-			if (context.Result.Register != GeneralPurposeRegister.ESP)
+			if (context.Result.Register != CPURegister.ESP)
 				return false;
 
 			var previous = GetPreviousNode(context);
@@ -31,7 +31,7 @@ namespace Mosa.Platform.x86.Transform.Manual.Special
 			if (previous == null || previous.Instruction != X86.Mov32)
 				return false;
 
-			if (previous.Result.Register != GeneralPurposeRegister.ESP)
+			if (previous.Result.Register != CPURegister.ESP)
 				return false;
 
 			if (!previous.Operand1.IsResolvedConstant)
@@ -40,7 +40,7 @@ namespace Mosa.Platform.x86.Transform.Manual.Special
 			if (!previous.Result.IsCPURegister)
 				return false;
 
-			if (context.Operand1.ConstantUnsigned32 != previous.Operand1.ConstantUnsigned32)
+			if (context.Operand1.ConstantUnsigned64 != previous.Operand1.ConstantUnsigned64)
 				return false;
 
 			return true;

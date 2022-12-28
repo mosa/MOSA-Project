@@ -440,6 +440,46 @@
 			"Filter": "",
 			"Result": "(IR.And## a 1)",
 			"Variations": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Or##And##And##",
+			"SubName": "ByConstant",
+			"Expression": "IR.Or## (IR.And## x C) (IR.And## y C)",
+			"Filter": "",
+			"Result": "(IR.And## (IR.Or## x y) C)",
+			"Variations": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Or##SignExtend16x##SignExtend16x##",
+			"SubName": "",
+			"Expression": "IR.Or## (IR.SignExtend16x## x) (IR.SignExtend16x## y)",
+			"Filter": "",
+			"Result": "(IR.SignExtend16x## (IR.Or## x y))",
+			"Variations": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Or32Truncate64x32Truncate64x32",
+			"SubName": "",
+			"Expression": "IR.Or32 (IR.Truncate64x32 x) (IR.Truncate64x32 y)",
+			"Filter": "",
+			"Result": "(IR.GetLow32 (IR.Or64 x y))",
+			"Variations": "No"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "SignExtend32x64Truncate64x32",
+			"SubName": "",
+			"Expression": "IR.SignExtend32x64 (IR.Truncate64x32 x)",
+			"Filter": "",
+			"Result": "(IR.SignExtend32x64 x)",
+			"Variations": "No"
 		}
 	]
 }

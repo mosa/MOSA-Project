@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Platform.Intel;
+
 
 namespace Mosa.Platform.x86.Intrinsic
 {
@@ -19,11 +19,11 @@ namespace Mosa.Platform.x86.Intrinsic
 			var operand4 = context.GetOperand(3);
 			var operand5 = context.GetOperand(4);
 
-			var ds = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I2, SegmentRegister.DS);
-			var es = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I2, SegmentRegister.ES);
-			var fs = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I2, SegmentRegister.FS);
-			var gs = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I2, SegmentRegister.GS);
-			var ss = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I2, SegmentRegister.SS);
+			var ds = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I2, CPURegister.DS);
+			var es = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I2, CPURegister.ES);
+			var fs = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I2, CPURegister.FS);
+			var gs = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I2, CPURegister.GS);
+			var ss = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I2, CPURegister.SS);
 
 			context.SetInstruction(X86.MovStoreSeg32, ds, operand1);
 			context.AppendInstruction(X86.MovStoreSeg32, es, operand2);

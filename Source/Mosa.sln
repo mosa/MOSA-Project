@@ -88,10 +88,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Tool.Bootstrap", "Mosa
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Packages", "Packages", "{52646152-3847-437E-9CCC-55DE500A5D6F}"
 	ProjectSection(SolutionItems) = preProject
+		Mosa.Packages\Mosa.DeviceSystem.nuspec = Mosa.Packages\Mosa.DeviceSystem.nuspec
 		Mosa.Packages\Mosa.Kernel.x64.nuspec = Mosa.Packages\Mosa.Kernel.x64.nuspec
 		Mosa.Packages\Mosa.Kernel.x86.nuspec = Mosa.Packages\Mosa.Kernel.x86.nuspec
 		Mosa.Packages\Mosa.Korlib.nuspec = Mosa.Packages\Mosa.Korlib.nuspec
-		Mosa.Packages\Mosa.DeviceSystem.nuspec = Mosa.Packages\Mosa.DeviceSystem.nuspec
 		Mosa.Packages\Mosa.Platform.x64.nuspec = Mosa.Packages\Mosa.Platform.x64.nuspec
 		Mosa.Packages\Mosa.Platform.x86.nuspec = Mosa.Packages\Mosa.Platform.x86.nuspec
 		Mosa.Packages\Mosa.Runtime.nuspec = Mosa.Packages\Mosa.Runtime.nuspec
@@ -177,6 +177,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Transforms", "Transforms", 
 		Data\IR-Optimizations-Simplification.json = Data\IR-Optimizations-Simplification.json
 		Data\IR-Optimizations-StrengthReduction-Complex.json = Data\IR-Optimizations-StrengthReduction-Complex.json
 		Data\IR-Optimizations-StrengthReduction.json = Data\IR-Optimizations-StrengthReduction.json
+		Data\X64-Optimizations-Standard.json = Data\X64-Optimizations-Standard.json
 		Data\X86-Optimizations-Standard.json = Data\X86-Optimizations-Standard.json
 	EndProjectSection
 EndProject

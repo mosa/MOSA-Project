@@ -36,6 +36,7 @@ namespace Mosa.Kernel.BareMetal
 			BootMemoryMap.Dump();
 
 			Console.Write("4...");
+
 			PhysicalPageAllocator.Setup();
 
 			Console.Write("5...");
@@ -44,9 +45,7 @@ namespace Mosa.Kernel.BareMetal
 
 			Console.Write("6...");
 
-			//while (true)
-			//{
-			//}
+			while (true) { }
 		}
 
 		[Plug("Mosa.Runtime.StartUp::GarbageCollectionInitialization")]
@@ -56,7 +55,7 @@ namespace Mosa.Kernel.BareMetal
 		}
 
 		[Plug("Mosa.Runtime.GC::AllocateMemory")]
-		static private Pointer AllocateMemory(uint size)
+		private static Pointer AllocateMemory(uint size)
 		{
 			return GCMemory.AllocateMemory(size);
 		}

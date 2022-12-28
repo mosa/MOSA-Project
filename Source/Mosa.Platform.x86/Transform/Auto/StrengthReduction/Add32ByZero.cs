@@ -13,7 +13,7 @@ namespace Mosa.Platform.x86.Transform.Auto.StrengthReduction
 	/// </summary>
 	public sealed class Add32ByZero : BaseTransformation
 	{
-		public Add32ByZero() : base(X86.Add32, true)
+		public Add32ByZero() : base(X86.Add32)
 		{
 		}
 
@@ -36,39 +36,6 @@ namespace Mosa.Platform.x86.Transform.Auto.StrengthReduction
 			var result = context.Result;
 
 			var t1 = context.Operand1;
-
-			context.SetInstruction(X86.Mov32, result, t1);
-		}
-	}
-
-	/// <summary>
-	/// Add32ByZero_v1
-	/// </summary>
-	public sealed class Add32ByZero_v1 : BaseTransformation
-	{
-		public Add32ByZero_v1() : base(X86.Add32, true)
-		{
-		}
-
-		public override bool Match(Context context, TransformContext transformContext)
-		{
-			if (!context.Operand1.IsResolvedConstant)
-				return false;
-
-			if (context.Operand1.ConstantUnsigned64 != 0)
-				return false;
-
-			if (AreStatusFlagUsed(context))
-				return false;
-
-			return true;
-		}
-
-		public override void Transform(Context context, TransformContext transformContext)
-		{
-			var result = context.Result;
-
-			var t1 = context.Operand2;
 
 			context.SetInstruction(X86.Mov32, result, t1);
 		}

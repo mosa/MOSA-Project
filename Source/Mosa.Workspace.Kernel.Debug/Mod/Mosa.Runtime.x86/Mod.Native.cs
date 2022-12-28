@@ -82,22 +82,22 @@ namespace Mosa.Runtime.x86
 		{
 		}
 
-		public static uint CpuIdEax(uint function)
+		public static uint CpuIdEAX(uint function)
 		{
 			return 0;
 		}
 
-		public static uint CpuIdEbx(uint function)
+		public static uint CpuIdEBX(uint function)
 		{
 			return 0;
 		}
 
-		public static uint CpuIdEcx(uint function)
+		public static uint CpuIdECX(uint function)
 		{
 			return 0;
 		}
 
-		public static uint CpuIdEdx(uint function)
+		public static uint CpuIdEDX(uint function)
 		{
 			return 0;
 		}

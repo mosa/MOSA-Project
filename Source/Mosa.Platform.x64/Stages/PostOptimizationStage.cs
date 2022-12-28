@@ -1,44 +1,25 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework;
-using static Mosa.Platform.x64.Stages.OptimizationStage;
+using Mosa.Compiler.Framework.Stages;
+using Mosa.Platform.x64.Transform.Auto;
+using Mosa.Platform.x64.Transform.Manual;
 
 namespace Mosa.Platform.x64.Stages
 {
 	/// <summary>
-	/// X86 Optimization Stage
+	/// X64 Post Optimization Stage
 	/// </summary>
-	/// <seealso cref="Mosa.Platform.x64.BaseTransformationStage" />
-	public sealed class PostOptimizationStage : BaseTransformationStage
+	/// <seealso cref="Mosa.Compiler.Framework.Stages.BaseTransformationStage" />
+	public sealed class PostOptimizationStage : BaseOptimizationStage
 	{
-		private Counter ZeroToXorSubstitutionCount = new Counter("X86.PostOptimizationStage.ZeroToXorSubstitution");
+		public override string Name => "x64." + GetType().Name;
 
-		protected override void PopulateVisitationDictionary()
+		public PostOptimizationStage()
+			: base(true, false)
 		{
-			AddVisitation(X64.Mov64, Mov64);
+			AddTranformations(AutoTransforms.List);
+			AddTranformations(ManualTransforms.List);
+			AddTranformations(ManualTransforms.PostList);
 		}
-
-		protected override void Initialize()
-		{
-			base.Initialize();
-
-			Register(ZeroToXorSubstitutionCount);
-		}
-
-		#region Visitation Methods
-
-		public void Mov64(Context context)
-		{
-			if (!context.Operand1.IsConstantZero)
-				return;
-
-			if (OptimizationStage.AreStatusFlagsUsed(context.Node.Next, true, true, true, true, true) == TriState.No)
-			{
-				context.SetInstruction(X64.Xor64, context.Result, context.Result, context.Result);
-				ZeroToXorSubstitutionCount.Increment();
-			}
-		}
-
-		#endregion Visitation Methods
 	}
 }

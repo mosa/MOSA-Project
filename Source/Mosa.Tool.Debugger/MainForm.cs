@@ -49,7 +49,8 @@ namespace Mosa.Tool.Debugger
 
 		//private ScriptView scriptView;
 
-		public string Status { set { toolStripStatusLabel1.Text = value; toolStrip1.Refresh(); } }
+		public string Status
+		{ set { toolStripStatusLabel1.Text = value; toolStrip1.Refresh(); } }
 
 		public Connector GDBConnector { get; private set; }
 
@@ -63,12 +64,20 @@ namespace Mosa.Tool.Debugger
 
 		public List<Watch> Watchs { get; } = new List<Watch>();
 
-		public BasePlatform Platform { get { return GDBConnector?.Platform; } }
+		public BasePlatform Platform
+		{ get { return GDBConnector?.Platform; } }
 
-		public ulong InstructionPointer { get { return Platform == null ? 0 : Platform.InstructionPointer.Value; } }
-		public ulong StackFrame { get { return Platform == null ? 0 : Platform.StackFrame.Value; } }
-		public ulong StackPointer { get { return Platform == null ? 0 : Platform.StackPointer.Value; } }
-		public ulong StatusFlag { get { return Platform == null ? 0 : Platform.StatusFlag.Value; } }
+		public ulong InstructionPointer
+		{ get { return Platform == null ? 0 : Platform.InstructionPointer.Value; } }
+
+		public ulong StackFrame
+		{ get { return Platform == null ? 0 : Platform.StackFrame.Value; } }
+
+		public ulong StackPointer
+		{ get { return Platform == null ? 0 : Platform.StackPointer.Value; } }
+
+		public ulong StatusFlag
+		{ get { return Platform == null ? 0 : Platform.StatusFlag.Value; } }
 
 		private Process VMProcess;
 
@@ -415,7 +424,11 @@ namespace Mosa.Tool.Debugger
 
 		private void LogGDBEvent(string info)
 		{
+			//if (info.Length > 100)
+			//	info = $"{info[..100]} ...";
+
 			//LogEvent($"GDB >> {info}");
+			//Debug.WriteLine($"GDB >> {info}");
 		}
 
 		private void Disconnect()

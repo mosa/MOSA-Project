@@ -1,14 +1,14 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Platform.Intel;
+
 
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
 	/// IntrinsicMethods
 	/// </summary>
-	static partial class IntrinsicMethods
+	internal static partial class IntrinsicMethods
 	{
 		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::FrameCallRetR8")]
 		private static void FrameCallRetR8(Context context, MethodCompiler methodCompiler)
@@ -16,9 +16,9 @@ namespace Mosa.Platform.x86.Intrinsic
 			var result = context.Result;
 			var methodAddress = context.Operand1;
 
-			var eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
-			var edx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
-			var xmm0 = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, SSE2Register.XMM0);
+			var eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, CPURegister.EAX);
+			var edx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, CPURegister.EDX);
+			var xmm0 = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, CPURegister.XMM0);
 
 			methodCompiler.SplitLongOperand(result, out Operand op0L, out Operand op0H);
 

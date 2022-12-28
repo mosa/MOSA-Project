@@ -72,7 +72,7 @@ namespace Mosa.Demo.TestWorld.x86.Tests
 			new Int64Test().Test();
 			new DelegateTest().Test();
 			new IsInstanceTest().Test();
-			new PlugTestTest().Test();
+			new PlugTest().Test();
 			new GenericTest().Test();
 			new Generic2Test().Test();
 			new InterfaceTest().Test();

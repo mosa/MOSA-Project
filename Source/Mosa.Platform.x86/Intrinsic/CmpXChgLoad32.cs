@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Platform.Intel;
+
 
 namespace Mosa.Platform.x86.Intrinsic
 {
@@ -18,7 +18,7 @@ namespace Mosa.Platform.x86.Intrinsic
 			var comparand = context.Operand3;
 			var result = context.Result;
 
-			var eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, GeneralPurposeRegister.EAX);
+			var eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, CPURegister.EAX);
 			var v1 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.U4);
 
 			context.SetInstruction(X86.Mov32, eax, comparand);

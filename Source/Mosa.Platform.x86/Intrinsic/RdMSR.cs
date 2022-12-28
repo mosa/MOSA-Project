@@ -1,7 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Platform.Intel;
+
 
 namespace Mosa.Platform.x86.Intrinsic
 {
@@ -18,9 +18,9 @@ namespace Mosa.Platform.x86.Intrinsic
 
 			methodCompiler.SplitLongOperand(result, out Operand resultLow, out Operand resultHigh);
 
-			var EAX = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
-			var EDX = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
-			var ECX = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
+			var EAX = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, CPURegister.EAX);
+			var EDX = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, CPURegister.EDX);
+			var ECX = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, CPURegister.ECX);
 
 			context.SetInstruction(X86.Mov32, ECX, operand1);
 			context.AppendInstruction2(X86.RdMSR, EAX, EDX, ECX);

@@ -5,7 +5,7 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.CompilerStages;
 using Mosa.Compiler.Framework.Linker.Elf;
 using Mosa.Compiler.Framework.Stages;
-using Mosa.Platform.Intel;
+
 using Mosa.Platform.x64.CompilerStages;
 using Mosa.Platform.x64.Stages;
 using System.Collections.Generic;
@@ -21,7 +21,7 @@ namespace Mosa.Platform.x64
 		/// <summary>
 		/// Gets the type of the elf machine.
 		/// </summary>
-		public override MachineType ElfMachineType { get { return MachineType.Intel386; } }
+		public override MachineType ElfMachineType => MachineType.Intel386;
 
 		/// <summary>
 		/// Defines the register set of the target architecture.
@@ -29,110 +29,110 @@ namespace Mosa.Platform.x64
 		private static readonly PhysicalRegister[] Registers = new PhysicalRegister[]
 		{
 			////////////////////////////////////////////////////////
-			// 32-bit general purpose registers
+			// 64-bit general purpose registers
 			////////////////////////////////////////////////////////
-			GeneralPurposeRegister.EAX,
-			GeneralPurposeRegister.ECX,
-			GeneralPurposeRegister.EDX,
-			GeneralPurposeRegister.EBX,
-			GeneralPurposeRegister.ESP,
-			GeneralPurposeRegister.EBP,
-			GeneralPurposeRegister.ESI,
-			GeneralPurposeRegister.EDI,
+			CPURegister.R0,
+			CPURegister.R1,
+			CPURegister.R2,
+			CPURegister.R3,
+			CPURegister.RSP,
+			CPURegister.RBP,
+			CPURegister.R6,
+			CPURegister.R7,
 
-			GeneralPurposeRegister.R8,
-			GeneralPurposeRegister.R9,
-			GeneralPurposeRegister.R10,
-			GeneralPurposeRegister.R11,
-			GeneralPurposeRegister.R12,
-			GeneralPurposeRegister.R13,
-			GeneralPurposeRegister.R14,
-			GeneralPurposeRegister.R15,
+			CPURegister.R8,
+			CPURegister.R9,
+			CPURegister.R10,
+			CPURegister.R11,
+			CPURegister.R12,
+			CPURegister.R13,
+			CPURegister.R14,
+			CPURegister.R15,
 
 			////////////////////////////////////////////////////////
 			// SSE 128-bit floating point registers
 			////////////////////////////////////////////////////////
-			SSE2Register.XMM0,
-			SSE2Register.XMM1,
-			SSE2Register.XMM2,
-			SSE2Register.XMM3,
-			SSE2Register.XMM4,
-			SSE2Register.XMM5,
-			SSE2Register.XMM6,
-			SSE2Register.XMM7,
+			CPURegister.XMM0,
+			CPURegister.XMM1,
+			CPURegister.XMM2,
+			CPURegister.XMM3,
+			CPURegister.XMM4,
+			CPURegister.XMM5,
+			CPURegister.XMM6,
+			CPURegister.XMM7,
 
-			SSE2Register.XMM8,
-			SSE2Register.XMM9,
-			SSE2Register.XMM10,
-			SSE2Register.XMM11,
-			SSE2Register.XMM12,
-			SSE2Register.XMM13,
-			SSE2Register.XMM14,
-			SSE2Register.XMM15
+			CPURegister.XMM8,
+			CPURegister.XMM9,
+			CPURegister.XMM10,
+			CPURegister.XMM11,
+			CPURegister.XMM12,
+			CPURegister.XMM13,
+			CPURegister.XMM14,
+			CPURegister.XMM15
 		};
 
 		/// <summary>
 		/// Gets the native size of architecture in bytes.
 		/// </summary>
 		/// <value>This property always returns 8.</value>
-		public override uint NativePointerSize { get { return 8; } }
+		public override uint NativePointerSize => 8;
 
 		/// <summary>
 		/// Retrieves the register set of the x64 platform.
 		/// </summary>
-		public override PhysicalRegister[] RegisterSet { get { return Registers; } }
+		public override PhysicalRegister[] RegisterSet => Registers;
 
 		/// <summary>
 		/// Retrieves the stack frame register of the x86.
 		/// </summary>
-		public override PhysicalRegister StackFrameRegister { get { return GeneralPurposeRegister.EBP; } }
+		public override PhysicalRegister StackFrameRegister => CPURegister.RBP;
 
 		/// <summary>
 		/// Retrieves the stack pointer register of the x86.
 		/// </summary>
-		public override PhysicalRegister StackPointerRegister { get { return GeneralPurposeRegister.ESP; } }
+		public override PhysicalRegister StackPointerRegister => CPURegister.RSP;
 
 		/// <summary>
 		/// Gets the return register.
 		/// </summary>
-		public override PhysicalRegister ReturnRegister { get { return GeneralPurposeRegister.EAX; } }
+		public override PhysicalRegister ReturnRegister => CPURegister.RAX;
 
-		public override PhysicalRegister LinkRegister { get { return null; } }
+		public override PhysicalRegister LinkRegister => null;
 
 		/// <summary>
 		/// Gets the return register for the high portion of the 64bit result.
 		/// </summary>
-		public override PhysicalRegister ReturnHighRegister { get { return null; } }
+		public override PhysicalRegister ReturnHighRegister => null;
 
 		/// <summary>
 		/// Gets the return floating point register.
 		/// </summary>
-		public override PhysicalRegister ReturnFloatingPointRegister { get { return SSE2Register.XMM0; } }
+		public override PhysicalRegister ReturnFloatingPointRegister => CPURegister.XMM0;
 
 		/// <summary>
 		/// Retrieves the exception register of the architecture.
 		/// </summary>
-		public override PhysicalRegister ExceptionRegister { get { return GeneralPurposeRegister.EDI; } }
+		public override PhysicalRegister ExceptionRegister => CPURegister.R7;
 
 		/// <summary>
 		/// Gets the finally return block register.
 		/// </summary>
-		public override PhysicalRegister LeaveTargetRegister { get { return GeneralPurposeRegister.ESI; } }
+		public override PhysicalRegister LeaveTargetRegister => CPURegister.R6;
 
 		/// <summary>
 		/// Retrieves the program counter register of the x86.
 		/// </summary>
-		public override PhysicalRegister ProgramCounter { get { return null; } }
+		public override PhysicalRegister ProgramCounter => null;
 
 		/// <summary>
 		/// Gets the name of the platform.
 		/// </summary>
-		public override string PlatformName { get { return "x64"; } }
+		public override string PlatformName => "x64";
 
 		/// <summary>
 		/// Gets the instructions.
 		/// </summary>
-		public override List<BaseInstruction> Instructions { get { return X64Instructions.List; } }
+		public override List<BaseInstruction> Instructions => X64Instructions.List;
 
 		public override OpcodeEncoder GetOpcodeEncoder()
 		{
@@ -171,10 +171,9 @@ namespace Mosa.Platform.x64
 				new BaseMethodCompilerStage[]
 				{
 					new IRTransformationStage(),
-					compilerSettings.PlatformOptimizations ? new Stages.OptimizationStage() : null,
+					compilerSettings.PlatformOptimizations ? new EarlyOptimizationStage() : null,
 					new TweakStage(),
 					new FixedRegisterAssignmentStage(),
-					compilerSettings.PlatformOptimizations ? new SimpleDeadCodeRemovalStage() : null,
 					new AddressModeConversionStage(),
 				});
 

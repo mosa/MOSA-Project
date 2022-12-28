@@ -2,7 +2,7 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.MosaTypeSystem;
-using Mosa.Platform.Intel;
+
 using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Stages
@@ -1461,7 +1461,7 @@ namespace Mosa.Platform.x86.Stages
 			var newBlocks = CreateNewBlockContexts(1, context.Label);
 			var nextBlock = Split(context);
 
-			var ECX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
+			var ECX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.ECX);
 
 			context.SetInstruction(X86.Mov32, ECX, count);
 			context.AppendInstruction(X86.Shrd32, resultLow, op1L, op1H, ECX);

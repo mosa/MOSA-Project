@@ -225,13 +225,15 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (!transformationsCounts.TryGetValue(name, out Counter counter))
 			{
-				counter = new Counter($"Transform-{name}");
+				counter = new Counter($"Transform-{name}", 1);
 
 				transformationsCounts.Add(name, counter);
 				Register(counter);
 			}
-
-			counter.Increment();
+			else
+			{
+				counter.Increment();
+			}
 		}
 
 		private bool BranchOptimizationPass()

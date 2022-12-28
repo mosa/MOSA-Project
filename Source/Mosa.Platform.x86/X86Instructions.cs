@@ -137,6 +137,10 @@ namespace Mosa.Platform.x86
 			X86.BochsDebug,
 			X86.RdMSR,
 			X86.WrMSR,
+			X86.Blsr32,
+			X86.Popcnt32,
+			X86.Lzcnt32,
+			X86.Tzcnt32,
 		};
 	}
 }

@@ -1,7 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Platform.Intel;
 
 namespace Mosa.Platform.x64.CompilerStages
 {
@@ -23,10 +22,10 @@ namespace Mosa.Platform.x64.CompilerStages
 
 			var entryPoint = Operand.CreateSymbolFromMethod(initializeMethod, TypeSystem);
 
-			var eax = Operand.CreateCPURegister(TypeSystem.BuiltIn.I8, GeneralPurposeRegister.EAX);
-			var ebx = Operand.CreateCPURegister(TypeSystem.BuiltIn.I8, GeneralPurposeRegister.EBX);
-			var ebp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I8, GeneralPurposeRegister.EBP);
-			var esp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I8, GeneralPurposeRegister.ESP);
+			var rax = Operand.CreateCPURegister(TypeSystem.BuiltIn.I8, CPURegister.RAX);
+			var rbx = Operand.CreateCPURegister(TypeSystem.BuiltIn.I8, CPURegister.RBX);
+			var rbp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I8, CPURegister.RBP);
+			var rsp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I8, CPURegister.RSP);
 
 			var multibootEAX = Operand.CreateUnmanagedSymbolPointer(MultibootEAX, TypeSystem);
 			var multibootEBX = Operand.CreateUnmanagedSymbolPointer(MultibootEBX, TypeSystem);
@@ -41,14 +40,14 @@ namespace Mosa.Platform.x64.CompilerStages
 			var ctx = new Context(block);
 
 			// Setup the stack and place the sentinel on the stack to indicate the start of the stack
-			ctx.AppendInstruction(X64.Mov64, esp, stackTop);
-			ctx.AppendInstruction(X64.Mov64, ebp, stackTop);
-			ctx.AppendInstruction(X64.MovStore64, null, esp, zero, zero);
-			ctx.AppendInstruction(X64.MovStore64, null, esp, offset, zero);
+			ctx.AppendInstruction(X64.Mov64, rsp, stackTop);
+			ctx.AppendInstruction(X64.Mov64, rbp, stackTop);
+			ctx.AppendInstruction(X64.MovStore64, null, rsp, zero, zero);
+			ctx.AppendInstruction(X64.MovStore64, null, rsp, offset, zero);
 
 			// Place the multiboot address into a static field
-			ctx.AppendInstruction(X64.MovStore64, null, multibootEAX, zero, eax);
-			ctx.AppendInstruction(X64.MovStore64, null, multibootEBX, zero, ebx);
+			ctx.AppendInstruction(X64.MovStore64, null, multibootEAX, zero, rax);
+			ctx.AppendInstruction(X64.MovStore64, null, multibootEBX, zero, rbx);
 
 			ctx.AppendInstruction(X64.Call, null, entryPoint);
 			ctx.AppendInstruction(X64.Ret);

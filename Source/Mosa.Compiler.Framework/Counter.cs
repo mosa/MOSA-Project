@@ -12,6 +12,12 @@ namespace Mosa.Compiler.Framework
 			Name = name;
 		}
 
+		public Counter(string name, int count)
+		{
+			Name = name;
+			Count = count;
+		}
+
 		public void Increment(int value = 1)
 		{
 			Count += value;
@@ -31,5 +37,7 @@ namespace Mosa.Compiler.Framework
 		{
 			Count = condition ? truevalue : falsevalue;
 		}
+
+		public override string ToString() => $"{Name} = {Count.ToString()}";
 	}
 }

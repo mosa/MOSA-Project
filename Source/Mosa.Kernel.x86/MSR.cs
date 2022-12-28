@@ -10,8 +10,8 @@ namespace Mosa.Kernel.x86
 
 		public static bool HasMSR()
 		{
-			uint eax = Native.CpuIdEax(1);
-			uint edx = Native.CpuIdEdx(1);
+			uint eax = Native.CpuIdEAX(1, 0);
+			uint edx = Native.CpuIdEDX(1, 0);
 
 			return (edx & CPUID_FLAG_MSR) != 0;
 		}
