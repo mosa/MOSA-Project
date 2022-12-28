@@ -46,7 +46,6 @@
 		<file src="..\..\bin\Reko.Arch.X86.dll" target="tools" />
 		<file src="..\..\bin\Reko.Core.dll" target="tools" />
 		<file src="..\..\bin\Reko.dll" target="tools" />
-		<file src="..\..\bin\CommandLine.dll" target="tools" />
 		<file src="..\..\bin\PriorityQueue.dll" target="tools" />
 		<file src="..\..\bin\WinFormsUI.dll" target="tools" />
 		<file src="..\..\bin\WeifenLuo.WinFormsUI.Docking.ThemeVS2015.dll" target="tools" />

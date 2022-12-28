@@ -207,7 +207,7 @@ namespace Mosa.Runtime
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static void MemorySet(Pointer dest, byte value, uint count)
 		{
-			var value32 = (uint)(value << 24 | value << 16 | value << 8 | value << 0);
+			var value32 = (uint)(value << 24 | value << 16 | value << 8 | value);
 
 			var count32 = count >> 2;
 			for (var i = 0; i < count32; i++)
@@ -225,7 +225,7 @@ namespace Mosa.Runtime
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static void MemorySet(Pointer dest, ushort value, uint count)
 		{
-			var value32 = (uint)(value << 16 | value << 0);
+			var value32 = (uint)(value << 16 | value);
 
 			var count32 = count >> 1;
 			for (var i = 0; i < count32; i++)
@@ -234,7 +234,7 @@ namespace Mosa.Runtime
 			}
 
 			var count16 = count & 0x01;
-			for (uint i = 0; i < count16; i++)
+			for (uint i = 0; i < count16; i += 2)
 			{
 				dest.Store16(count32 + i, value);
 			}
@@ -243,18 +243,25 @@ namespace Mosa.Runtime
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static void MemorySet(Pointer dest, uint value, uint count)
 		{
-			for (var i = 0; i < count; i += 4)
+			var count32 = count >> 2;
+			for (var i = 0; i < count32; i++)
 			{
-				dest.Store32(i, value);
+				dest.Store32(i << 2, value);
+			}
+
+			var count8 = count & 0x03;
+			for (uint i = 0; i < count8; i += 4)
+			{
+				dest.Store32(count32 + i, value);
 			}
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static void MemoryClear(Pointer dest, uint count, uint value = 0)
 		{
-			for (var i = 0; i < count; i++)
+			for (var i = 0; i < count; i += 4)
 			{
-				dest.Store8(i, (byte)value);
+				dest.Store32(i, value);
 			}
 		}
 
