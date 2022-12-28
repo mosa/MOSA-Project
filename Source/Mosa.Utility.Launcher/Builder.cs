@@ -579,7 +579,7 @@ namespace Mosa.Utility.Launcher
 				string status = $"Compiling: {$"{(DateTime.Now - CompileStartTime).TotalSeconds:0.00}"} secs: {compilerEvent.ToText()}";
 
 				if (!string.IsNullOrEmpty(message))
-					status += $"- { message}";
+					status += $"- {message}";
 
 				Output(status);
 			}

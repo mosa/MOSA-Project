@@ -1,3 +1,4 @@
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 using System;
 using System.Globalization;
 using System.IO;
@@ -18,23 +19,23 @@ namespace Mosa.Tool.Launcher
 	// TODO: Implement settings for FmtCmb and FrmCmb
 	public partial class MainWindow : Window
 	{
-		private bool _done;
-		private Settings _settings;
-		private Builder _builder;
-		private OpenFileDialog _source;
-		private OpenFolderDialog _destination;
+		private bool done;
+		private Settings settings;
+		private Builder builder;
+		private OpenFileDialog source;
+		private OpenFolderDialog destination;
 
 		public MainWindow()
 		{
 			InitializeComponent();
 
-			_source = new OpenFileDialog
+			source = new OpenFileDialog
 			{
 				AllowMultiple = false,
 				Title = "Select the file to compile"
 			};
 
-			_destination = new OpenFolderDialog
+			destination = new OpenFolderDialog
 			{
 				Title = "Select the output directory"
 			};
@@ -53,15 +54,15 @@ namespace Mosa.Tool.Launcher
 		public void Initialize(string[] args)
 		{
 			// Get the app locations
-			_settings = AppLocationsSettings.GetAppLocations();
+			settings = AppLocationsSettings.GetAppLocations();
 
 			// Set the default settings
 			SetDefaultSettings();
 
 			// Load the CLI arguments
-			_settings.Merge(SettingsLoader.RecursiveReader(args));
+			settings.Merge(SettingsLoader.RecursiveReader(args));
 
-			var files = _settings.GetValueList("Compiler.SourceFiles");
+			var files = settings.GetValueList("Compiler.SourceFiles");
 			if (files != null)
 			{
 				var src = files[0];
@@ -76,11 +77,11 @@ namespace Mosa.Tool.Launcher
 					var path = Path.GetDirectoryName(Path.GetFullPath(file));
 
 					if (!string.IsNullOrWhiteSpace(path))
-						_settings.AddPropertyListValue("SearchPaths", path);
+						settings.AddPropertyListValue("SearchPaths", path);
 				}
-			} else _settings.SetValue("Launcher.Start", false);
+			} else settings.SetValue("Launcher.Start", false);
 
-			// Output the current directory
+				// Output the current directory
 			AddOutput("Current Directory: " + Environment.CurrentDirectory);
 
 			// Set title label with the current compiler version
@@ -95,7 +96,7 @@ namespace Mosa.Tool.Launcher
 			UpdateSettings();
 			UpdateInterfaceAppLocations();
 
-			if (_settings.GetValue("Launcher.Start", false))
+			if (settings.GetValue("Launcher.Start", false))
 			{
 				Tabs.SelectedIndex = 4;
 				CompileBuildAndStart();
@@ -104,10 +105,10 @@ namespace Mosa.Tool.Launcher
 			// Hacky method to center the screen
 			this.GetObservable(IsVisibleProperty).Subscribe(value =>
 			{
-				if (!value || _done)
+				if (!value || done)
 					return;
 
-				_done = true;
+				done = true;
 				CenterWindow();
 			});
 		}
@@ -129,150 +130,150 @@ namespace Mosa.Tool.Launcher
 
 		private void UpdateInterfaceAppLocations()
 		{
-			bochsPathLbl.Content = _settings.GetValue("AppLocation.Bochs", "N/A");
-			ndiasmPathLbl.Content = _settings.GetValue("AppLocation.Ndisasm", "N/A");
-			qemuPathLbl.Content = _settings.GetValue("AppLocation.Qemu", "N/A");
-			qemuBiosPathLbl.Content = _settings.GetValue("AppLocation.QemuBIOS", "N/A");
-			qemuImgPathLbl.Content = _settings.GetValue("AppLocation.QemuImg", "N/A");
-			vboxPathLbl.Content = _settings.GetValue("AppLocation.VirtualBox", "N/A");
-			mkisofsPathLbl.Content = _settings.GetValue("AppLocation.Mkisofs", "N/A");
+			bochsPathLbl.Content = settings.GetValue("AppLocation.Bochs", "N/A");
+			ndiasmPathLbl.Content = settings.GetValue("AppLocation.Ndisasm", "N/A");
+			qemuPathLbl.Content = settings.GetValue("AppLocation.Qemu", "N/A");
+			qemuBiosPathLbl.Content = settings.GetValue("AppLocation.QemuBIOS", "N/A");
+			qemuImgPathLbl.Content = settings.GetValue("AppLocation.QemuImg", "N/A");
+			vboxPathLbl.Content = settings.GetValue("AppLocation.VirtualBox", "N/A");
+			mkisofsPathLbl.Content = settings.GetValue("AppLocation.Mkisofs", "N/A");
 
-			var workstation = _settings.GetValue("AppLocation.VmwareWorkstation", string.Empty);
-			vmwarePathLbl.Content = string.IsNullOrEmpty(workstation) ? _settings.GetValue("AppLocation.VmwarePlayer", "N/A") : workstation;
+			var workstation = settings.GetValue("AppLocation.VmwareWorkstation", string.Empty);
+			vmwarePathLbl.Content = string.IsNullOrEmpty(workstation) ? settings.GetValue("AppLocation.VmwarePlayer", "N/A") : workstation;
 		}
 
 		private void UpdateSettings()
 		{
-			_settings.SetValue("Optimizations.SSA", SsaOpts.IsChecked.Value);
-			_settings.SetValue("Optimizations.Basic", BasicOpts.IsChecked.Value);
-			_settings.SetValue("Optimizations.SCCP", SccpOpts.IsChecked.Value);
-			_settings.SetValue("Optimizations.Devirtualization", DevirtOpts.IsChecked.Value);
-			_settings.SetValue("Optimizations.Inline", InlineOpts.IsChecked.Value);
-			_settings.SetValue("Optimizations.Inline.Explicit", InlineExplOpts.IsChecked.Value);
-			_settings.SetValue("Optimizations.LongExpansion", LongExpOpts.IsChecked.Value);
-			_settings.SetValue("Optimizations.TwoPass", TwoOptPass.IsChecked.Value);
-			_settings.SetValue("Optimizations.ValueNumbering", ValueNumOpts.IsChecked.Value);
-			_settings.SetValue("Optimizations.BitTracker", BtOpts.IsChecked.Value);
-			_settings.SetValue("Optimizations.Platform", PlatOpts.IsChecked.Value);
-			_settings.SetValue("Optimizations.LoopInvariantCodeMotion", LicmOpts.IsChecked.Value);
+			settings.SetValue("Optimizations.SSA", SsaOpts.IsChecked.Value);
+			settings.SetValue("Optimizations.Basic", BasicOpts.IsChecked.Value);
+			settings.SetValue("Optimizations.SCCP", SccpOpts.IsChecked.Value);
+			settings.SetValue("Optimizations.Devirtualization", DevirtOpts.IsChecked.Value);
+			settings.SetValue("Optimizations.Inline", InlineOpts.IsChecked.Value);
+			settings.SetValue("Optimizations.Inline.Explicit", InlineExplOpts.IsChecked.Value);
+			settings.SetValue("Optimizations.LongExpansion", LongExpOpts.IsChecked.Value);
+			settings.SetValue("Optimizations.TwoPass", TwoOptPass.IsChecked.Value);
+			settings.SetValue("Optimizations.ValueNumbering", ValueNumOpts.IsChecked.Value);
+			settings.SetValue("Optimizations.BitTracker", BtOpts.IsChecked.Value);
+			settings.SetValue("Optimizations.Platform", PlatOpts.IsChecked.Value);
+			settings.SetValue("Optimizations.LoopInvariantCodeMotion", LicmOpts.IsChecked.Value);
 
-			_settings.SetValue("Linker.Symbols", EmtSymbs.IsChecked.Value);
-			_settings.SetValue("Linker.StaticRelocations", EmtRelocs.IsChecked.Value);
-			_settings.SetValue("Linker.Drawf", EmtDwarf.IsChecked.Value);
-			_settings.SetValue("Compiler.BaseAddress", uint.Parse(BaseAddrTxt.Text, NumberStyles.Integer | NumberStyles.HexNumber));
+			settings.SetValue("Linker.Symbols", EmtSymbs.IsChecked.Value);
+			settings.SetValue("Linker.StaticRelocations", EmtRelocs.IsChecked.Value);
+			settings.SetValue("Linker.Drawf", EmtDwarf.IsChecked.Value);
+			settings.SetValue("Compiler.BaseAddress", uint.Parse(BaseAddrTxt.Text, NumberStyles.Integer | NumberStyles.HexNumber));
 
-			_settings.SetValue("CompilerDebug.NasmFile", NasmFile.IsChecked.Value ? "%DEFAULT%" : string.Empty);
-			_settings.SetValue("CompilerDebug.AsmFile", AsmFile.IsChecked.Value ? "%DEFAULT%" : string.Empty);
-			_settings.SetValue("CompilerDebug.MapFile", MapFile.IsChecked.Value ? "%DEFAULT%" : string.Empty);
-			_settings.SetValue("CompilerDebug.DebugFile", DbgFile.IsChecked.Value ? "%DEFAULT%" : string.Empty);
-			_settings.SetValue("CompilerDebug.InlinedFile", InlLstFile.IsChecked.Value ? "%DEFAULT%" : string.Empty);
-			_settings.SetValue("CompilerDebug.PreLinkHashFile", HashFiles.IsChecked.Value ? "%DEFAULT%" : string.Empty);
-			_settings.SetValue("CompilerDebug.PostLinkHashFile", HashFiles.IsChecked.Value ? "%DEFAULT%" : string.Empty);
-			_settings.SetValue("CompilerDebug.CompileTimeFile", CompTimeFile.IsChecked.Value ? "%DEFAULT%" : string.Empty);
+			settings.SetValue("CompilerDebug.NasmFile", NasmFile.IsChecked.Value ? "%DEFAULT%" : string.Empty);
+			settings.SetValue("CompilerDebug.AsmFile", AsmFile.IsChecked.Value ? "%DEFAULT%" : string.Empty);
+			settings.SetValue("CompilerDebug.MapFile", MapFile.IsChecked.Value ? "%DEFAULT%" : string.Empty);
+			settings.SetValue("CompilerDebug.DebugFile", DbgFile.IsChecked.Value ? "%DEFAULT%" : string.Empty);
+			settings.SetValue("CompilerDebug.InlinedFile", InlLstFile.IsChecked.Value ? "%DEFAULT%" : string.Empty);
+			settings.SetValue("CompilerDebug.PreLinkHashFile", HashFiles.IsChecked.Value ? "%DEFAULT%" : string.Empty);
+			settings.SetValue("CompilerDebug.PostLinkHashFile", HashFiles.IsChecked.Value ? "%DEFAULT%" : string.Empty);
+			settings.SetValue("CompilerDebug.CompileTimeFile", CompTimeFile.IsChecked.Value ? "%DEFAULT%" : string.Empty);
 
-			_settings.SetValue("Launcher.Exit", ExitOnLaunch.IsChecked.Value);
+			settings.SetValue("Launcher.Exit", ExitOnLaunch.IsChecked.Value);
 
-			_settings.SetValue("Emulator.GDB", QemuGdb.IsChecked.Value);
-			_settings.SetValue("Launcher.LaunchGDB", LaunchGdb.IsChecked.Value);
-			_settings.SetValue("Launcher.LaunchDebugger", MosaDbger.IsChecked.Value);
+			settings.SetValue("Emulator.GDB", QemuGdb.IsChecked.Value);
+			settings.SetValue("Launcher.LaunchGDB", LaunchGdb.IsChecked.Value);
+			settings.SetValue("Launcher.LaunchDebugger", MosaDbger.IsChecked.Value);
 
-			_settings.SetValue("Compiler.Multithreading", MultiThreading.IsChecked.Value);
-			_settings.SetValue("Compiler.Multithreading.MaxThreads", 0);
-			_settings.SetValue("Compiler.MethodScanner", MethodScanner.IsChecked.Value);
+			settings.SetValue("Compiler.Multithreading", MultiThreading.IsChecked.Value);
+			settings.SetValue("Compiler.Multithreading.MaxThreads", 0);
+			settings.SetValue("Compiler.MethodScanner", MethodScanner.IsChecked.Value);
 
-			_settings.SetValue("Emulator.Memory", (int)MemVal.Value);
-			_settings.SetValue("Emulator.Cores", (int)CpuVal.Value);
+			settings.SetValue("Emulator.Memory", (int)MemVal.Value);
+			settings.SetValue("Emulator.Cores", (int)CpuVal.Value);
 
-			_settings.SetValue("Multiboot.Video", EnableVbe.IsChecked.Value);
-			_settings.SetValue("Multiboot.Width", (int)VbeWidth.Value);
-			_settings.SetValue("Multiboot.Height", (int)VbeHeight.Value);
-			_settings.SetValue("Multiboot.Depth", (int)VbeDepth.Value);
+			settings.SetValue("Multiboot.Video", EnableVbe.IsChecked.Value);
+			settings.SetValue("Multiboot.Width", (int)VbeWidth.Value);
+			settings.SetValue("Multiboot.Height", (int)VbeHeight.Value);
+			settings.SetValue("Multiboot.Depth", (int)VbeDepth.Value);
 
-			_settings.SetValue("Launcher.PlugKorlib", PlugKorlib.IsChecked.Value);
-			_settings.SetValue("OS.Name", OsNameTxt.Text);
+			settings.SetValue("Launcher.PlugKorlib", PlugKorlib.IsChecked.Value);
+			settings.SetValue("OS.Name", OsNameTxt.Text);
 
 			var src = SrcLbl.Content.ToString();
 
-			_settings.ClearProperty("Compiler.SourceFiles");
-			_settings.AddPropertyListValue("Compiler.SourceFiles", src);
+			settings.ClearProperty("Compiler.SourceFiles");
+			settings.AddPropertyListValue("Compiler.SourceFiles", src);
 
-			_settings.ClearProperty("SearchPaths");
-			_settings.AddPropertyListValue("SearchPaths", Path.GetDirectoryName(src));
+			settings.ClearProperty("SearchPaths");
+			settings.AddPropertyListValue("SearchPaths", Path.GetDirectoryName(src));
 
-			_settings.SetValue("Image.Folder", DstLbl.Content.ToString());
+			settings.SetValue("Image.Folder", DstLbl.Content.ToString());
 
 			switch (ImgCmb.SelectedIndex)
 			{
-				case 0: _settings.SetValue("Image.Format", "ISO"); break;
-				case 1: _settings.SetValue("Image.Format", "IMG"); break;
-				case 2: _settings.SetValue("Image.Format", "VHD"); break;
-				case 3: _settings.SetValue("Image.Format", "VDI"); break;
-				case 4: _settings.SetValue("Image.Format", "VMDK"); break;
-				default: _settings.ClearProperty("Image.Format"); break;
+				case 0: settings.SetValue("Image.Format", "ISO"); break;
+				case 1: settings.SetValue("Image.Format", "IMG"); break;
+				case 2: settings.SetValue("Image.Format", "VHD"); break;
+				case 3: settings.SetValue("Image.Format", "VDI"); break;
+				case 4: settings.SetValue("Image.Format", "VMDK"); break;
+				default: settings.ClearProperty("Image.Format"); break;
 			}
 
 			switch (EmuCmb.SelectedIndex)
 			{
-				case 0: _settings.SetValue("Emulator", "Qemu"); break;
-				case 1: _settings.SetValue("Emulator", "Bochs"); break;
-				case 2: _settings.SetValue("Emulator", "VMware"); break;
-				case 3: _settings.SetValue("Emulator", "VirtualBox"); break;
-				default: _settings.ClearProperty("Emulator"); break;
+				case 0: settings.SetValue("Emulator", "Qemu"); break;
+				case 1: settings.SetValue("Emulator", "Bochs"); break;
+				case 2: settings.SetValue("Emulator", "VMware"); break;
+				case 3: settings.SetValue("Emulator", "VirtualBox"); break;
+				default: settings.ClearProperty("Emulator"); break;
 			}
 
 			switch (CntCmb.SelectedIndex)
 			{
-				case 0: _settings.SetValue("Emulator.Serial", "None"); break;
-				case 1: _settings.SetValue("Emulator.Serial", "Pipe"); break;
-				case 2: _settings.SetValue("Emulator.Serial", "TCPServer"); break;
-				case 3: _settings.SetValue("Emulator.Serial", "TCPClient"); break;
-				default: _settings.ClearProperty("Emulator.Serial"); break;
+				case 0: settings.SetValue("Emulator.Serial", "None"); break;
+				case 1: settings.SetValue("Emulator.Serial", "Pipe"); break;
+				case 2: settings.SetValue("Emulator.Serial", "TCPServer"); break;
+				case 3: settings.SetValue("Emulator.Serial", "TCPClient"); break;
+				default: settings.ClearProperty("Emulator.Serial"); break;
 			}
 
 			switch (FsCmb.SelectedIndex)
 			{
-				case 0: _settings.SetValue("Image.FileSystem", "FAT12"); break;
-				case 1: _settings.SetValue("Image.FileSystem", "FAT16"); break;
-				case 2: _settings.SetValue("Image.FileSystem", "FAT32"); break;
-				default: _settings.ClearProperty("Image.FileSystem"); break;
+				case 0: settings.SetValue("Image.FileSystem", "FAT12"); break;
+				case 1: settings.SetValue("Image.FileSystem", "FAT16"); break;
+				case 2: settings.SetValue("Image.FileSystem", "FAT32"); break;
+				default: settings.ClearProperty("Image.FileSystem"); break;
 			}
 
 			switch (PltCmb.SelectedIndex)
 			{
-				case 0: _settings.SetValue("Compiler.Platform", "x86"); break;
-				case 1: _settings.SetValue("Compiler.Platform", "x64"); break;
-				case 2: _settings.SetValue("Compiler.Platform", "ARMv8A32"); break;
-				default: _settings.SetValue("Compiler.Platform", "x86"); break;
+				case 0: settings.SetValue("Compiler.Platform", "x86"); break;
+				case 1: settings.SetValue("Compiler.Platform", "x64"); break;
+				case 2: settings.SetValue("Compiler.Platform", "ARMv8A32"); break;
+				default: settings.SetValue("Compiler.Platform", "x86"); break;
 			}
 
 			switch (BldCmb.SelectedIndex)
 			{
-				case 0: _settings.SetValue("Image.BootLoader", "grub2.00"); break;
-				case 1: _settings.SetValue("Image.BootLoader", "grub0.97"); break;
-				case 2: _settings.SetValue("Image.BootLoader", "syslinux6.03"); break;
-				case 3: _settings.SetValue("Image.BootLoader", "syslinux3.72"); break;
-				case 4: _settings.SetValue("Image.BootLoader", "limine"); break;
-				default: _settings.ClearProperty("Image.BootLoader"); break;
+				case 0: settings.SetValue("Image.BootLoader", "grub2.00"); break;
+				case 1: settings.SetValue("Image.BootLoader", "grub0.97"); break;
+				case 2: settings.SetValue("Image.BootLoader", "syslinux6.03"); break;
+				case 3: settings.SetValue("Image.BootLoader", "syslinux3.72"); break;
+				case 4: settings.SetValue("Image.BootLoader", "limine"); break;
+				default: settings.ClearProperty("Image.BootLoader"); break;
 			}
 		}
 
 		private void SetDefaultSettings()
 		{
-			_settings.SetValue("Compiler.Binary", true);
-			_settings.SetValue("Compiler.Multithreading.MaxThreads", Environment.ProcessorCount);
-			_settings.SetValue("Compiler.TraceLevel", 0);
-			_settings.SetValue("Optimizations.Inline.AggressiveMaximum", 24);
-			_settings.SetValue("Optimizations.Inline.Maximum", 12);
-			_settings.SetValue("Optimizations.Basic.Window", 5);
-			_settings.SetValue("Image.ImageFile", "%DEFAULT%");
-			_settings.SetValue("Multiboot.Version", "v1");
-			_settings.SetValue("Emulator.Serial.Host", "127.0.0.1");
-			_settings.SetValue("Emulator.Serial.Port", new Random().Next(11111, 22222));
-			_settings.SetValue("Emulator.Serial.Pipe", "MOSA");
-			_settings.SetValue("Emulator.Display", true);
-			_settings.SetValue("Launcher.Start", false);
-			_settings.SetValue("Launcher.Launch", true);
-			_settings.SetValue("Launcher.HuntForCorLib", true);
+			settings.SetValue("Compiler.Binary", true);
+			settings.SetValue("Compiler.Multithreading.MaxThreads", Environment.ProcessorCount);
+			settings.SetValue("Compiler.TraceLevel", 0);
+			settings.SetValue("Optimizations.Inline.AggressiveMaximum", 24);
+			settings.SetValue("Optimizations.Inline.Maximum", 12);
+			settings.SetValue("Optimizations.Basic.Window", 5);
+			settings.SetValue("Image.ImageFile", "%DEFAULT%");
+			settings.SetValue("Multiboot.Version", "v1");
+			settings.SetValue("Emulator.Serial.Host", "127.0.0.1");
+			settings.SetValue("Emulator.Serial.Port", new Random().Next(11111, 22222));
+			settings.SetValue("Emulator.Serial.Pipe", "MOSA");
+			settings.SetValue("Emulator.Display", true);
+			settings.SetValue("Launcher.Start", false);
+			settings.SetValue("Launcher.Launch", true);
+			settings.SetValue("Launcher.HuntForCorLib", true);
 		}
 
 		private void CompileBuildAndStart()
@@ -284,8 +285,8 @@ namespace Mosa.Tool.Launcher
 			{
 				try
 				{
-					_builder = new Builder(_settings, CreateCompilerHook());
-					_builder.Build();
+					builder = new Builder(settings, CreateCompilerHook());
+					builder.Build();
 				}
 				catch (Exception e)
 				{
@@ -293,7 +294,7 @@ namespace Mosa.Tool.Launcher
 				}
 				finally
 				{
-					if (_builder.IsSucccessful)
+					if (builder.IsSucccessful)
 						Dispatcher.UIThread.Post(CompileCompleted);
 				}
 			});
@@ -301,17 +302,17 @@ namespace Mosa.Tool.Launcher
 
 		private void CompileCompleted()
 		{
-			if (!_settings.GetValue("Launcher.Launch", false))
+			if (!settings.GetValue("Launcher.Launch", false))
 				return;
 
-			foreach (var line in _builder.Counters)
+			foreach (var line in builder.Counters)
 				AddCounters(line);
 
-			var starter = new Starter(_builder.Settings, CreateCompilerHook(), _builder.Linker);
+			var starter = new Starter(builder.Settings, CreateCompilerHook(), builder.Linker);
 			if (!starter.Launch(true))
 				return;
 
-			if (_settings.GetValue("Launcher.Exit", false))
+			if (settings.GetValue("Launcher.Exit", false))
 				Close();
 		}
 
@@ -335,7 +336,7 @@ namespace Mosa.Tool.Launcher
 			Tabs.SelectedIndex = 4;
 			UpdateSettings();
 
-			var result = CheckOptions.Verify(_settings);
+			var result = CheckOptions.Verify(settings);
 			if (result == null)
 				CompileBuildAndStart();
 			else
@@ -344,7 +345,7 @@ namespace Mosa.Tool.Launcher
 
 		private async void SrcBtn_OnClick(object? _, RoutedEventArgs __)
 		{
-			var result = await _source.ShowAsync(this);
+			var result = await source.ShowAsync(this);
 			if (result == null)
 				return;
 
@@ -353,7 +354,7 @@ namespace Mosa.Tool.Launcher
 
 		private async void DstBtn_OnClick(object? _, RoutedEventArgs __)
 		{
-			var result = await _destination.ShowAsync(this);
+			var result = await destination.ShowAsync(this);
 			if (result == null)
 				return;
 
