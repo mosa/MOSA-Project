@@ -74,6 +74,5 @@ namespace Mosa.Plug.Korlib.System.x86
 		{
 			Screen.BackgroundColor = (byte)color;
 		}
-
 	}
 }
