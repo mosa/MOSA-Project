@@ -66,6 +66,15 @@ namespace Mosa.Kernel.x86
 		}
 
 		/// <summary>
+		/// Disables the PIC.
+		/// </summary>
+		public static void Disable()
+		{
+			Native.Out8(PIC1_Data, 0xFF);
+			Native.Out8(PIC2_Data, 0xFF);
+		}
+
+		/// <summary>
 		/// Sends the end of interrupt.
 		/// </summary>
 		/// <param name="irq">The irq.</param>

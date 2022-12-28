@@ -89,11 +89,18 @@ namespace Mosa.Demo.CoolWorld.x86
 
 			var acpi = DeviceService.GetFirstDevice<IACPI>().DeviceDriver as IACPI;
 
+			// TODO:
+			// Initialize APIC when ACPI is initialized
+			// Re-register all IRQs to use with the APIC
+
 			// Setup APIC
-			var localApic = DeviceSystem.HAL.GetPhysicalMemory((Pointer)acpi.LocalApicAddress, 0xFFFF).Address;
+			/*var localApic = DeviceSystem.HAL.GetPhysicalMemory((Pointer)acpi.LocalApicAddress, 0xFFFF).Address;
 			var ioApic = DeviceSystem.HAL.GetPhysicalMemory((Pointer)acpi.IOApicAddress, 0xFFFF).Address;
 
-			APIC.Setup(localApic, ioApic);
+			PIC.Disable();
+
+			LocalAPIC.Setup(localApic);
+			IOAPIC.Setup(ioApic);*/
 
 			Console.Write("> Probing for ISA devices...");
 			var isaDevices = DeviceService.GetChildrenOf(DeviceService.GetFirstDevice<ISABus>());

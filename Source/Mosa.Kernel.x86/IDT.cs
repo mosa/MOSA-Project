@@ -76,6 +76,7 @@ namespace Mosa.Kernel.x86
 		{
 			var p = Marshal.GetFunctionPointerForDelegate(method);
 
+			// TODO: Set I/O APIC entry here
 			Set(index, (uint)p.ToInt32(), 0x08, 0x8E);
 		}
 
@@ -2253,7 +2254,7 @@ namespace Mosa.Kernel.x86
 					}
 			}
 
-			PIC.SendEndOfInterrupt(stack->Interrupt);
+			LocalAPIC.SendEndOfInterrupt(stack->Interrupt);
 		}
 
 		private unsafe static void Error(IDTStack* stack, string message)
