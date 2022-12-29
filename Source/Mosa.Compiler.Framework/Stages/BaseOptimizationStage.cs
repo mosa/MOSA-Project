@@ -17,6 +17,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private const int MaximumPasses = 20;
 
 		private readonly Counter OptimizationCount;
+		private readonly Counter TransformCount;
 		private readonly Counter SkippedEmptyBlocksCount;
 		private readonly Counter RemoveUnreachableBlocksCount;
 		private readonly Counter BlocksMergedCount;
@@ -32,6 +33,7 @@ namespace Mosa.Compiler.Framework.Stages
 		protected bool EnableTransformationOptimizations;
 		protected bool EnableBlockOptimizations;
 		protected bool IsInSSAForm;
+		protected int MaxPasses;
 
 		protected BitArray EmptyBlocks;
 
@@ -39,11 +41,13 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected bool CountTransformations = false;
 
-		public BaseOptimizationStage(bool enableTransformationOptimizations = false, bool enableBlockOptimizations = false)
+		public BaseOptimizationStage(bool enableTransformationOptimizations = false, bool enableBlockOptimizations = false, int maxPasses = MaximumPasses)
 		{
 			EnableTransformationOptimizations = enableTransformationOptimizations;
 			EnableBlockOptimizations = enableBlockOptimizations;
+			MaxPasses = maxPasses;
 
+			TransformCount = new Counter($"{Name}.Transforms");
 			OptimizationCount = new Counter($"{Name}.Optimizations");
 			SkippedEmptyBlocksCount = new Counter($"{Name}.SkippedEmptyBlocks");
 			RemoveUnreachableBlocksCount = new Counter($"{Name}.RemoveUnreachableBlocks");
@@ -52,6 +56,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Initialize()
 		{
+			Register(TransformCount);
 			Register(OptimizationCount);
 			Register(SkippedEmptyBlocksCount);
 			Register(RemoveUnreachableBlocksCount);
@@ -96,7 +101,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			IsInSSAForm = MethodCompiler.IsInSSAForm;
 
-			Optimize();
+			ExecutePasses();
 
 			if (CompilerSettings.FullCheckMode)
 				CheckAllPhiInstructions();
@@ -105,9 +110,9 @@ namespace Mosa.Compiler.Framework.Stages
 		protected virtual void CustomizeTransformation()
 		{ }
 
-		private void Optimize()
+		private void ExecutePasses()
 		{
-			int maximumPasses = MaximumPasses;
+			int maxPasses = MaxPasses;
 			int pass = 1;
 
 			var changed = true;
@@ -123,7 +128,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				pass++;
 
-				if (pass >= maximumPasses)
+				if (pass >= maxPasses)
 					break;
 			}
 		}
@@ -204,7 +209,10 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (updated)
 				{
-					OptimizationCount.Increment();
+					if (transformation.IsOptimization)
+						OptimizationCount.Increment();
+					else if (transformation.IsTranformation)
+						TransformCount.Increment();
 
 					if (CountTransformations)
 						CountTransformation(transformation);
