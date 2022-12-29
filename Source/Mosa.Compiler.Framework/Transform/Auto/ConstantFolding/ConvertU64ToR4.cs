@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.ConstantFolding
 	/// </summary>
 	public sealed class ConvertU64ToR4 : BaseTransformation
 	{
-		public ConvertU64ToR4() : base(IRInstruction.ConvertU64ToR4, TransformationType.Auto| TransformationType.Optimization)
+		public ConvertU64ToR4() : base(IRInstruction.ConvertU64ToR4, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 

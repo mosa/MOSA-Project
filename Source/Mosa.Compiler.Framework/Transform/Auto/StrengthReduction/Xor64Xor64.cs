@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.StrengthReduction
 	/// </summary>
 	public sealed class Xor64Xor64 : BaseTransformation
 	{
-		public Xor64Xor64() : base(IRInstruction.Xor64, TransformationType.Auto| TransformationType.Optimization)
+		public Xor64Xor64() : base(IRInstruction.Xor64, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 
@@ -47,7 +47,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.StrengthReduction
 	/// </summary>
 	public sealed class Xor64Xor64_v1 : BaseTransformation
 	{
-		public Xor64Xor64_v1() : base(IRInstruction.Xor64, TransformationType.Auto| TransformationType.Optimization)
+		public Xor64Xor64_v1() : base(IRInstruction.Xor64, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 
@@ -83,7 +83,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.StrengthReduction
 	/// </summary>
 	public sealed class Xor64Xor64_v2 : BaseTransformation
 	{
-		public Xor64Xor64_v2() : base(IRInstruction.Xor64, TransformationType.Auto| TransformationType.Optimization)
+		public Xor64Xor64_v2() : base(IRInstruction.Xor64, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 
@@ -119,7 +119,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.StrengthReduction
 	/// </summary>
 	public sealed class Xor64Xor64_v3 : BaseTransformation
 	{
-		public Xor64Xor64_v3() : base(IRInstruction.Xor64, TransformationType.Auto| TransformationType.Optimization)
+		public Xor64Xor64_v3() : base(IRInstruction.Xor64, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 

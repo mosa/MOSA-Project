@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.ConstantFolding
 	/// </summary>
 	public sealed class DivUnsigned32 : BaseTransformation
 	{
-		public DivUnsigned32() : base(IRInstruction.DivUnsigned32, TransformationType.Auto| TransformationType.Optimization)
+		public DivUnsigned32() : base(IRInstruction.DivUnsigned32, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 

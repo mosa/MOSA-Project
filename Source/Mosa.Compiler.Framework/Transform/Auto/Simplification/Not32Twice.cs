@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.Simplification
 	/// </summary>
 	public sealed class Not32Twice : BaseTransformation
 	{
-		public Not32Twice() : base(IRInstruction.Not32, TransformationType.Auto| TransformationType.Optimization)
+		public Not32Twice() : base(IRInstruction.Not32, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 

@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.Simplification
 	/// </summary>
 	public sealed class Or64And64And64ByConstant : BaseTransformation
 	{
-		public Or64And64And64ByConstant() : base(IRInstruction.Or64, TransformationType.Auto| TransformationType.Optimization)
+		public Or64And64And64ByConstant() : base(IRInstruction.Or64, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 
@@ -61,7 +61,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.Simplification
 	/// </summary>
 	public sealed class Or64And64And64ByConstant_v1 : BaseTransformation
 	{
-		public Or64And64And64ByConstant_v1() : base(IRInstruction.Or64, TransformationType.Auto| TransformationType.Optimization)
+		public Or64And64And64ByConstant_v1() : base(IRInstruction.Or64, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 
@@ -111,7 +111,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.Simplification
 	/// </summary>
 	public sealed class Or64And64And64ByConstant_v2 : BaseTransformation
 	{
-		public Or64And64And64ByConstant_v2() : base(IRInstruction.Or64, TransformationType.Auto| TransformationType.Optimization)
+		public Or64And64And64ByConstant_v2() : base(IRInstruction.Or64, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 
@@ -161,7 +161,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.Simplification
 	/// </summary>
 	public sealed class Or64And64And64ByConstant_v3 : BaseTransformation
 	{
-		public Or64And64And64ByConstant_v3() : base(IRInstruction.Or64, TransformationType.Auto| TransformationType.Optimization)
+		public Or64And64And64ByConstant_v3() : base(IRInstruction.Or64, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 
@@ -211,7 +211,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.Simplification
 	/// </summary>
 	public sealed class Or64And64And64ByConstant_v4 : BaseTransformation
 	{
-		public Or64And64And64ByConstant_v4() : base(IRInstruction.Or64, TransformationType.Auto| TransformationType.Optimization)
+		public Or64And64And64ByConstant_v4() : base(IRInstruction.Or64, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 
@@ -261,7 +261,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.Simplification
 	/// </summary>
 	public sealed class Or64And64And64ByConstant_v5 : BaseTransformation
 	{
-		public Or64And64And64ByConstant_v5() : base(IRInstruction.Or64, TransformationType.Auto| TransformationType.Optimization)
+		public Or64And64And64ByConstant_v5() : base(IRInstruction.Or64, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 
@@ -311,7 +311,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.Simplification
 	/// </summary>
 	public sealed class Or64And64And64ByConstant_v6 : BaseTransformation
 	{
-		public Or64And64And64ByConstant_v6() : base(IRInstruction.Or64, TransformationType.Auto| TransformationType.Optimization)
+		public Or64And64And64ByConstant_v6() : base(IRInstruction.Or64, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 
@@ -361,7 +361,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.Simplification
 	/// </summary>
 	public sealed class Or64And64And64ByConstant_v7 : BaseTransformation
 	{
-		public Or64And64And64ByConstant_v7() : base(IRInstruction.Or64, TransformationType.Auto| TransformationType.Optimization)
+		public Or64And64And64ByConstant_v7() : base(IRInstruction.Or64, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 

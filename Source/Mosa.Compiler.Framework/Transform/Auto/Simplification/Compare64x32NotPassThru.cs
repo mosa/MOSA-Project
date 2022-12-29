@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.Simplification
 	/// </summary>
 	public sealed class Compare64x32NotPassThru : BaseTransformation
 	{
-		public Compare64x32NotPassThru() : base(IRInstruction.Compare64x32, TransformationType.Auto| TransformationType.Optimization)
+		public Compare64x32NotPassThru() : base(IRInstruction.Compare64x32, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 
@@ -64,7 +64,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.Simplification
 	/// </summary>
 	public sealed class Compare64x32NotPassThru_v1 : BaseTransformation
 	{
-		public Compare64x32NotPassThru_v1() : base(IRInstruction.Compare64x32, TransformationType.Auto| TransformationType.Optimization)
+		public Compare64x32NotPassThru_v1() : base(IRInstruction.Compare64x32, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 

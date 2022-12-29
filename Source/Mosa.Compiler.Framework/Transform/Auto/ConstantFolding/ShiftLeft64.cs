@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.ConstantFolding
 	/// </summary>
 	public sealed class ShiftLeft64 : BaseTransformation
 	{
-		public ShiftLeft64() : base(IRInstruction.ShiftLeft64, TransformationType.Auto| TransformationType.Optimization)
+		public ShiftLeft64() : base(IRInstruction.ShiftLeft64, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 

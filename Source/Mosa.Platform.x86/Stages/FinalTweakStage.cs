@@ -14,24 +14,30 @@ namespace Mosa.Platform.x86.Stages
 	{
 		protected override void PopulateVisitationDictionary()
 		{
-			AddVisitation(X86.Call, CallReg);
+			AddVisitation(X86.Call, Call);
 			AddVisitation(X86.Mov32, Mov32);
-			AddVisitation(X86.MovLoad16, MovLoad16);
+
+			//AddVisitation(X86.MovLoad16, MovLoad16);
 			AddVisitation(X86.MovLoad8, MovLoad8);
-			AddVisitation(X86.Movsd, Movsd);
+
+			//AddVisitation(X86.Movsd, Movsd);
 			AddVisitation(X86.Movss, Movss);
-			AddVisitation(X86.MovStore16, MovStore16);
+
+			//AddVisitation(X86.MovStore16, MovStore16);
 			AddVisitation(X86.MovStore8, MovStore8);
-			AddVisitation(X86.Movzx16To32, Movzx16To32);
+
+			//AddVisitation(X86.Movzx16To32, Movzx16To32);
 			AddVisitation(X86.Movsx16To32, Movsx16To32);
-			AddVisitation(X86.Movzx8To32, Movzx8To32);
+
+			//AddVisitation(X86.Movzx8To32, Movzx8To32);
 			AddVisitation(X86.Movsx8To32, Movsx8To32);
-			AddVisitation(X86.Setcc, Setcc);
+
+			//AddVisitation(X86.Setcc, Setcc);
 		}
 
 		#region Visitation Methods
 
-		public void CallReg(Context context)
+		public void Call(Context context)
 		{
 			Debug.Assert(context.Operand1 != null);
 			Debug.Assert(context.Operand1.IsCPURegister);

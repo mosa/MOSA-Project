@@ -12,23 +12,24 @@ namespace Mosa.Platform.x86.Stages
 	{
 		protected override void PopulateVisitationDictionary()
 		{
-			AddVisitation(X86.Call, CallReg);
-			AddVisitation(X86.Cmp32, Cmp32);
-			AddVisitation(X86.Shl32, Shl32);
-			AddVisitation(X86.Shld32, Shld32);
-			AddVisitation(X86.Shr32, Shr32);
-			AddVisitation(X86.Shrd32, Shrd32);
-			AddVisitation(X86.CMov32, CMov32);
+			AddVisitation(X86.Call, Call);
 
-			AddVisitation(X86.Blsr32, Blsr32);
-			AddVisitation(X86.Popcnt32, Popcnt32);
-			AddVisitation(X86.Tzcnt32, Tzcnt32);
-			AddVisitation(X86.Lzcnt32, Lzcnt32);
+			//AddVisitation(X86.Cmp32, Cmp32);
+			//AddVisitation(X86.Shl32, Shl32);
+			//AddVisitation(X86.Shld32, Shld32);
+			//AddVisitation(X86.Shr32, Shr32);
+			//AddVisitation(X86.Shrd32, Shrd32);
+			//AddVisitation(X86.CMov32, CMov32);
+
+			//AddVisitation(X86.Blsr32, Blsr32);
+			//AddVisitation(X86.Popcnt32, Popcnt32);
+			//AddVisitation(X86.Tzcnt32, Tzcnt32);
+			//AddVisitation(X86.Lzcnt32, Lzcnt32);
 		}
 
 		#region Visitation Methods
 
-		public void CallReg(Context context)
+		public void Call(Context context)
 		{
 			// FIXME: Result operand should be used instead of Operand1 for the result
 			// FIXME: Move to FixedRegisterAssignmentStage
@@ -44,15 +45,7 @@ namespace Mosa.Platform.x86.Stages
 
 		public void Cmp32(Context context)
 		{
-			var left = context.Operand1;
-
-			if (left.IsConstant)
-			{
-				var v1 = AllocateVirtualRegister(left);
-
-				context.InsertBefore().AppendInstruction(X86.Mov32, v1, left);
-				context.Operand1 = v1;
-			}
+			RegisterForOperand1(context);
 		}
 
 		public void Shrd32(Context context)

@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.Algebraic
 	/// </summary>
 	public sealed class Unsigned32AAPlusBBMinus2AB : BaseTransformation
 	{
-		public Unsigned32AAPlusBBMinus2AB() : base(IRInstruction.Sub32, TransformationType.Auto| TransformationType.Optimization)
+		public Unsigned32AAPlusBBMinus2AB() : base(IRInstruction.Sub32, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 
@@ -104,7 +104,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.Algebraic
 	/// </summary>
 	public sealed class Unsigned32AAPlusBBMinus2AB_v1 : BaseTransformation
 	{
-		public Unsigned32AAPlusBBMinus2AB_v1() : base(IRInstruction.Sub32, TransformationType.Auto| TransformationType.Optimization)
+		public Unsigned32AAPlusBBMinus2AB_v1() : base(IRInstruction.Sub32, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 
@@ -197,7 +197,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.Algebraic
 	/// </summary>
 	public sealed class Unsigned32AAPlusBBMinus2AB_v2 : BaseTransformation
 	{
-		public Unsigned32AAPlusBBMinus2AB_v2() : base(IRInstruction.Sub32, TransformationType.Auto| TransformationType.Optimization)
+		public Unsigned32AAPlusBBMinus2AB_v2() : base(IRInstruction.Sub32, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 
@@ -290,7 +290,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.Algebraic
 	/// </summary>
 	public sealed class Unsigned32AAPlusBBMinus2AB_v3 : BaseTransformation
 	{
-		public Unsigned32AAPlusBBMinus2AB_v3() : base(IRInstruction.Sub32, TransformationType.Auto| TransformationType.Optimization)
+		public Unsigned32AAPlusBBMinus2AB_v3() : base(IRInstruction.Sub32, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 

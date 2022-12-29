@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.Simplification
 	/// </summary>
 	public sealed class Compare64x64PassThru : BaseTransformation
 	{
-		public Compare64x64PassThru() : base(IRInstruction.Compare64x64, TransformationType.Auto| TransformationType.Optimization)
+		public Compare64x64PassThru() : base(IRInstruction.Compare64x64, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 
@@ -61,7 +61,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.Simplification
 	/// </summary>
 	public sealed class Compare64x64PassThru_v1 : BaseTransformation
 	{
-		public Compare64x64PassThru_v1() : base(IRInstruction.Compare64x64, TransformationType.Auto| TransformationType.Optimization)
+		public Compare64x64PassThru_v1() : base(IRInstruction.Compare64x64, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 

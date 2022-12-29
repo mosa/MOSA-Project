@@ -1,12 +1,11 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Net;
 
 namespace Mosa.Compiler.Framework.Transform
 {
@@ -161,7 +160,17 @@ namespace Mosa.Compiler.Framework.Transform
 			return value == 0 ? ConstantZero32 : Operand.CreateConstant(I4, value);
 		}
 
+		public Operand CreateConstant32(int value)
+		{
+			return value == 0 ? ConstantZero32 : Operand.CreateConstant(I4, value);
+		}
+
 		public Operand CreateConstant(uint value)
+		{
+			return value == 0 ? ConstantZero32 : Operand.CreateConstant(I4, value);
+		}
+
+		public Operand CreateConstant32(uint value)
 		{
 			return value == 0 ? ConstantZero32 : Operand.CreateConstant(I4, value);
 		}
@@ -171,7 +180,17 @@ namespace Mosa.Compiler.Framework.Transform
 			return value == 0 ? ConstantZero64 : Operand.CreateConstant(I8, value);
 		}
 
+		public Operand CreateConstant64(long value)
+		{
+			return value == 0 ? ConstantZero64 : Operand.CreateConstant(I8, value);
+		}
+
 		public Operand CreateConstant(ulong value)
+		{
+			return value == 0 ? ConstantZero64 : Operand.CreateConstant(I8, value);
+		}
+
+		public Operand CreateConstant64(ulong value)
 		{
 			return value == 0 ? ConstantZero64 : Operand.CreateConstant(I8, value);
 		}
@@ -289,6 +308,71 @@ namespace Mosa.Compiler.Framework.Transform
 		}
 
 		#endregion Phi Helpers
+
+		#region Move Helpers
+
+		public void MoveOperand1ToVirtualRegister(Context context, BaseInstruction moveInstruction)
+		{
+			var operand1 = context.Operand1;
+
+			var v1 = AllocateVirtualRegister(operand1.Type);
+
+			context.InsertBefore().AppendInstruction(moveInstruction, v1, operand1);
+			context.Operand1 = v1;
+		}
+
+		public void MoveOperand2ToVirtualRegister(Context context, BaseInstruction moveInstruction)
+		{
+			var operand2 = context.Operand1;
+
+			var v1 = AllocateVirtualRegister(operand2.Type);
+
+			context.InsertBefore().AppendInstruction(moveInstruction, v1, operand2);
+			context.Operand2 = v1;
+		}
+
+		public void MoveOperand1And2ToVirtualRegisters(Context context, BaseInstruction moveInstruction)
+		{
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+
+			if (operand1.IsConstant && operand2.IsConstant && operand1.ConstantUnsigned64 == operand2.ConstantUnsigned64)
+			{
+				var v1 = AllocateVirtualRegister(operand1.Type);
+
+				context.InsertBefore().AppendInstruction(moveInstruction, v1, operand1);
+				context.Operand1 = v1;
+				context.Operand2 = v1;
+				return;
+			}
+			else if (operand1.IsConstant && operand2.IsConstant)
+			{
+				var v1 = AllocateVirtualRegister(operand1.Type);
+				var v2 = AllocateVirtualRegister(operand2.Type);
+
+				context.InsertBefore().AppendInstruction(moveInstruction, v1, operand1);
+				context.InsertBefore().AppendInstruction(moveInstruction, v2, operand2);
+				context.Operand1 = v1;
+				context.Operand2 = v2;
+				return;
+			}
+			else if (operand1.IsConstant)
+			{
+				var v1 = AllocateVirtualRegister(operand1.Type);
+
+				context.InsertBefore().AppendInstruction(moveInstruction, v1, operand1);
+				context.Operand1 = v1;
+			}
+			else if (operand2.IsConstant)
+			{
+				var v1 = AllocateVirtualRegister(operand2.Type);
+
+				context.InsertBefore().AppendInstruction(moveInstruction, v1, operand2);
+				context.Operand2 = v1;
+			}
+		}
+
+		#endregion Move Helpers
 
 		public void SplitLongOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
 		{

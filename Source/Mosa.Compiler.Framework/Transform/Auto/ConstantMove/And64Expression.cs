@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.ConstantMove
 	/// </summary>
 	public sealed class And64Expression : BaseTransformation
 	{
-		public And64Expression() : base(IRInstruction.And64, TransformationType.Auto| TransformationType.Optimization)
+		public And64Expression() : base(IRInstruction.And64, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 
@@ -58,7 +58,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.ConstantMove
 	/// </summary>
 	public sealed class And64Expression_v1 : BaseTransformation
 	{
-		public And64Expression_v1() : base(IRInstruction.And64, TransformationType.Auto| TransformationType.Optimization)
+		public And64Expression_v1() : base(IRInstruction.And64, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 
@@ -105,7 +105,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.ConstantMove
 	/// </summary>
 	public sealed class And64Expression_v2 : BaseTransformation
 	{
-		public And64Expression_v2() : base(IRInstruction.And64, TransformationType.Auto| TransformationType.Optimization)
+		public And64Expression_v2() : base(IRInstruction.And64, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 
@@ -152,7 +152,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.ConstantMove
 	/// </summary>
 	public sealed class And64Expression_v3 : BaseTransformation
 	{
-		public And64Expression_v3() : base(IRInstruction.And64, TransformationType.Auto| TransformationType.Optimization)
+		public And64Expression_v3() : base(IRInstruction.And64, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 

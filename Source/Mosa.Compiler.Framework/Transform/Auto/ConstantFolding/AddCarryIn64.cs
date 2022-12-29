@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.ConstantFolding
 	/// </summary>
 	public sealed class AddCarryIn64 : BaseTransformation
 	{
-		public AddCarryIn64() : base(IRInstruction.AddCarryIn64, TransformationType.Auto| TransformationType.Optimization)
+		public AddCarryIn64() : base(IRInstruction.AddCarryIn64, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 

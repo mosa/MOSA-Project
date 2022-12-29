@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.ConstantFolding
 	/// </summary>
 	public sealed class Add64 : BaseTransformation
 	{
-		public Add64() : base(IRInstruction.Add64, TransformationType.Auto| TransformationType.Optimization)
+		public Add64() : base(IRInstruction.Add64, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 

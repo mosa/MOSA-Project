@@ -13,7 +13,7 @@ namespace Mosa.Platform.x86.Transform.Auto.StrengthReduction
 	/// </summary>
 	public sealed class Add32ByZero : BaseTransformation
 	{
-		public Add32ByZero() : base(X86.Add32, TransformationType.Auto| TransformationType.Optimization)
+		public Add32ByZero() : base(X86.Add32, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 

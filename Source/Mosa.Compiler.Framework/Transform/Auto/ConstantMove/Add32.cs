@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.ConstantMove
 	/// </summary>
 	public sealed class Add32 : BaseTransformation
 	{
-		public Add32() : base(IRInstruction.Add32, TransformationType.Auto| TransformationType.Optimization)
+		public Add32() : base(IRInstruction.Add32, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 

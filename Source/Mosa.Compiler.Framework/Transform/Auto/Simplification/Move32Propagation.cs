@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.Simplification
 	/// </summary>
 	public sealed class Move32Propagation : BaseTransformation
 	{
-		public Move32Propagation() : base(IRInstruction.Move32, TransformationType.Auto| TransformationType.Optimization)
+		public Move32Propagation() : base(IRInstruction.Move32, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 

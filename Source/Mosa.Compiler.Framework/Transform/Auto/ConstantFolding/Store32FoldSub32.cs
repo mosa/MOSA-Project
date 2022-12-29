@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.ConstantFolding
 	/// </summary>
 	public sealed class Store32FoldSub32 : BaseTransformation
 	{
-		public Store32FoldSub32() : base(IRInstruction.Store32, TransformationType.Auto| TransformationType.Optimization)
+		public Store32FoldSub32() : base(IRInstruction.Store32, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 

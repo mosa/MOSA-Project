@@ -13,7 +13,7 @@ namespace Mosa.Platform.x86.Transform.Auto.StrengthReduction
 	/// </summary>
 	public sealed class Inc32Not32 : BaseTransformation
 	{
-		public Inc32Not32() : base(X86.Inc32, TransformationType.Auto| TransformationType.Optimization)
+		public Inc32Not32() : base(X86.Inc32, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 

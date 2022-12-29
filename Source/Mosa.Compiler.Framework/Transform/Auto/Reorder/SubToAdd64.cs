@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.Reorder
 	/// </summary>
 	public sealed class SubToAdd64 : BaseTransformation
 	{
-		public SubToAdd64() : base(IRInstruction.Sub64, TransformationType.Auto| TransformationType.Optimization)
+		public SubToAdd64() : base(IRInstruction.Sub64, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 

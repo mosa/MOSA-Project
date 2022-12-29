@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.ConstantFolding
 	/// </summary>
 	public sealed class MulSignedShiftLeft64 : BaseTransformation
 	{
-		public MulSignedShiftLeft64() : base(IRInstruction.MulSigned64, TransformationType.Auto| TransformationType.Optimization)
+		public MulSignedShiftLeft64() : base(IRInstruction.MulSigned64, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 
@@ -58,7 +58,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.ConstantFolding
 	/// </summary>
 	public sealed class MulSignedShiftLeft64_v1 : BaseTransformation
 	{
-		public MulSignedShiftLeft64_v1() : base(IRInstruction.MulSigned64, TransformationType.Auto| TransformationType.Optimization)
+		public MulSignedShiftLeft64_v1() : base(IRInstruction.MulSigned64, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 

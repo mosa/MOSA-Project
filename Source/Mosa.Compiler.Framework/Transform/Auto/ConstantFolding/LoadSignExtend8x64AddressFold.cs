@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.ConstantFolding
 	/// </summary>
 	public sealed class LoadSignExtend8x64AddressFold : BaseTransformation
 	{
-		public LoadSignExtend8x64AddressFold() : base(IRInstruction.LoadSignExtend8x64, TransformationType.Auto| TransformationType.Optimization)
+		public LoadSignExtend8x64AddressFold() : base(IRInstruction.LoadSignExtend8x64, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 

@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.Rewrite
 	/// </summary>
 	public sealed class Compare32x32GreaterThanZero : BaseTransformation
 	{
-		public Compare32x32GreaterThanZero() : base(IRInstruction.Compare32x32, TransformationType.Auto| TransformationType.Optimization)
+		public Compare32x32GreaterThanZero() : base(IRInstruction.Compare32x32, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 
@@ -42,7 +42,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.Rewrite
 	/// </summary>
 	public sealed class Compare32x32GreaterThanZero_v1 : BaseTransformation
 	{
-		public Compare32x32GreaterThanZero_v1() : base(IRInstruction.Compare32x32, TransformationType.Auto| TransformationType.Optimization)
+		public Compare32x32GreaterThanZero_v1() : base(IRInstruction.Compare32x32, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 

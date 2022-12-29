@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.Simplification
 	/// </summary>
 	public sealed class Or32And32And32ByConstant : BaseTransformation
 	{
-		public Or32And32And32ByConstant() : base(IRInstruction.Or32, TransformationType.Auto| TransformationType.Optimization)
+		public Or32And32And32ByConstant() : base(IRInstruction.Or32, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 
@@ -61,7 +61,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.Simplification
 	/// </summary>
 	public sealed class Or32And32And32ByConstant_v1 : BaseTransformation
 	{
-		public Or32And32And32ByConstant_v1() : base(IRInstruction.Or32, TransformationType.Auto| TransformationType.Optimization)
+		public Or32And32And32ByConstant_v1() : base(IRInstruction.Or32, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 
@@ -111,7 +111,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.Simplification
 	/// </summary>
 	public sealed class Or32And32And32ByConstant_v2 : BaseTransformation
 	{
-		public Or32And32And32ByConstant_v2() : base(IRInstruction.Or32, TransformationType.Auto| TransformationType.Optimization)
+		public Or32And32And32ByConstant_v2() : base(IRInstruction.Or32, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 
@@ -161,7 +161,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.Simplification
 	/// </summary>
 	public sealed class Or32And32And32ByConstant_v3 : BaseTransformation
 	{
-		public Or32And32And32ByConstant_v3() : base(IRInstruction.Or32, TransformationType.Auto| TransformationType.Optimization)
+		public Or32And32And32ByConstant_v3() : base(IRInstruction.Or32, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 
@@ -211,7 +211,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.Simplification
 	/// </summary>
 	public sealed class Or32And32And32ByConstant_v4 : BaseTransformation
 	{
-		public Or32And32And32ByConstant_v4() : base(IRInstruction.Or32, TransformationType.Auto| TransformationType.Optimization)
+		public Or32And32And32ByConstant_v4() : base(IRInstruction.Or32, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 
@@ -261,7 +261,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.Simplification
 	/// </summary>
 	public sealed class Or32And32And32ByConstant_v5 : BaseTransformation
 	{
-		public Or32And32And32ByConstant_v5() : base(IRInstruction.Or32, TransformationType.Auto| TransformationType.Optimization)
+		public Or32And32And32ByConstant_v5() : base(IRInstruction.Or32, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 
@@ -311,7 +311,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.Simplification
 	/// </summary>
 	public sealed class Or32And32And32ByConstant_v6 : BaseTransformation
 	{
-		public Or32And32And32ByConstant_v6() : base(IRInstruction.Or32, TransformationType.Auto| TransformationType.Optimization)
+		public Or32And32And32ByConstant_v6() : base(IRInstruction.Or32, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 
@@ -361,7 +361,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.Simplification
 	/// </summary>
 	public sealed class Or32And32And32ByConstant_v7 : BaseTransformation
 	{
-		public Or32And32And32ByConstant_v7() : base(IRInstruction.Or32, TransformationType.Auto| TransformationType.Optimization)
+		public Or32And32And32ByConstant_v7() : base(IRInstruction.Or32, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 

@@ -13,7 +13,7 @@ namespace Mosa.Platform.x64.Transform.Auto.Standard
 	/// </summary>
 	public sealed class Mov32Consolidate : BaseTransformation
 	{
-		public Mov32Consolidate() : base(X64.Mov32, TransformationType.Auto| TransformationType.Optimization)
+		public Mov32Consolidate() : base(X64.Mov32, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 

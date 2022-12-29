@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.Simplification
 	/// </summary>
 	public sealed class And32Not32Not32 : BaseTransformation
 	{
-		public And32Not32Not32() : base(IRInstruction.And32, TransformationType.Auto| TransformationType.Optimization)
+		public And32Not32Not32() : base(IRInstruction.And32, TransformationType.Auto | TransformationType.Optimization)
 		{
 		}
 

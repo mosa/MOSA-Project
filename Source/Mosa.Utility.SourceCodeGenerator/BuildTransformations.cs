@@ -173,9 +173,8 @@ namespace Mosa.Utility.SourceCodeGenerator
 			Lines.AppendLine($"\tpublic sealed class {name}{subName} : BaseTransformation");
 			Lines.AppendLine("\t{");
 
-			//, bool optimization
 			string typestring = "TransformationType.Auto" +
-				(optimization ? "| TransformationType.Optimization" : string.Empty);
+				(optimization ? " | TransformationType.Optimization" : string.Empty);
 
 			if (log)
 				Lines.AppendLine($"\t\tpublic {name}{subName}() : base({instructionName}, " + typestring + ", true)");
