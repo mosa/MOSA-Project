@@ -1,8 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework.Transform;
-using Mosa.Compiler.Framework.Transform.Auto;
-using Mosa.Compiler.Framework.Transform.Manual;
+using Mosa.Compiler.Framework.Transforms;
+using Mosa.Compiler.Framework.Transforms.Optimizations.Auto;
+using Mosa.Compiler.Framework.Transforms.Optimizations.Manual;
 
 namespace Mosa.Compiler.Framework.Stages
 {

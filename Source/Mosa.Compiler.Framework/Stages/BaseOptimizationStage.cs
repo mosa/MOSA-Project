@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework.Trace;
-using Mosa.Compiler.Framework.Transform;
+using Mosa.Compiler.Framework.Transforms;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;

@@ -3,7 +3,7 @@
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.Trace;
-using Mosa.Compiler.Framework.Transform;
+using Mosa.Compiler.Framework.Transforms;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

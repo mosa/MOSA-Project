@@ -117,11 +117,11 @@ namespace Mosa.Utility.SourceCodeGenerator
 			if (!Namespace.Contains("Framework"))
 			{
 				Lines.AppendLine($"using Mosa.Compiler.Framework;");
-				Lines.AppendLine($"using Mosa.Compiler.Framework.Transform;");
+				Lines.AppendLine($"using Mosa.Compiler.Framework.Transforms;");
 			}
 
 			Lines.AppendLine();
-			Lines.AppendLine($"namespace {Path}.Transform.Auto.{type}");
+			Lines.AppendLine($"namespace {Path}.Transforms.Optimizations.Auto.{type}");
 			Lines.AppendLine("{");
 
 			GenerateTransformations(name, familyName, type, subName, transform, Variations, log, optimization);
