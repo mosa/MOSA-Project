@@ -7,7 +7,7 @@ namespace Mosa.Platform.x64.Transform.Manual.Standard
 {
 	public sealed class Cmp32ToZero : BaseTransformation
 	{
-		public Cmp32ToZero() : base(X64.Cmp32)
+		public Cmp32ToZero() : base(X64.Cmp32, TransformationType.Manual | TransformationType.Optimization)
 		{
 		}
 

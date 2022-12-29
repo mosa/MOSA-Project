@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Rewrite
 {
 	public sealed class Branch32Object : BaseTransformation
 	{
-		public Branch32Object() : base(IRInstruction.Branch32)
+		public Branch32Object() : base(IRInstruction.Branch32, TransformationType.Manual | TransformationType.Optimization)
 		{
 		}
 

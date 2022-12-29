@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Simplification
 {
 	public sealed class IfThenElse64Same : BaseTransformation
 	{
-		public IfThenElse64Same() : base(IRInstruction.IfThenElse64)
+		public IfThenElse64Same() : base(IRInstruction.IfThenElse64, TransformationType.Manual | TransformationType.Optimization)
 		{
 		}
 

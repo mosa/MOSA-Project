@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.ConstantFolding
 {
 	public sealed class BranchObject : BaseTransformation
 	{
-		public BranchObject() : base(IRInstruction.BranchObject)
+		public BranchObject() : base(IRInstruction.BranchObject, TransformationType.Manual | TransformationType.Optimization)
 		{
 		}
 

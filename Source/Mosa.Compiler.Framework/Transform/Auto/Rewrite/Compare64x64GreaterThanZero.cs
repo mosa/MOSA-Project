@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.Rewrite
 	/// </summary>
 	public sealed class Compare64x64GreaterThanZero : BaseTransformation
 	{
-		public Compare64x64GreaterThanZero() : base(IRInstruction.Compare64x64)
+		public Compare64x64GreaterThanZero() : base(IRInstruction.Compare64x64, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 
@@ -42,7 +42,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.Rewrite
 	/// </summary>
 	public sealed class Compare64x64GreaterThanZero_v1 : BaseTransformation
 	{
-		public Compare64x64GreaterThanZero_v1() : base(IRInstruction.Compare64x64)
+		public Compare64x64GreaterThanZero_v1() : base(IRInstruction.Compare64x64, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 

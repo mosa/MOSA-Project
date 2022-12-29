@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.ConstantFolding
 	/// </summary>
 	public sealed class And32x2 : BaseTransformation
 	{
-		public And32x2() : base(IRInstruction.And32)
+		public And32x2() : base(IRInstruction.And32, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 
@@ -54,7 +54,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.ConstantFolding
 	/// </summary>
 	public sealed class And32x2_v1 : BaseTransformation
 	{
-		public And32x2_v1() : base(IRInstruction.And32)
+		public And32x2_v1() : base(IRInstruction.And32, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 
@@ -97,7 +97,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.ConstantFolding
 	/// </summary>
 	public sealed class And32x2_v2 : BaseTransformation
 	{
-		public And32x2_v2() : base(IRInstruction.And32)
+		public And32x2_v2() : base(IRInstruction.And32, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 
@@ -140,7 +140,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.ConstantFolding
 	/// </summary>
 	public sealed class And32x2_v3 : BaseTransformation
 	{
-		public And32x2_v3() : base(IRInstruction.And32)
+		public And32x2_v3() : base(IRInstruction.And32, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 

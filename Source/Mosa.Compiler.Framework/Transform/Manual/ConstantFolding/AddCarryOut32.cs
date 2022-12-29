@@ -12,7 +12,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.ConstantFolding
 	/// </summary>
 	public sealed class AddCarryOut32 : BaseTransformation
 	{
-		public AddCarryOut32() : base(IRInstruction.AddCarryOut32)
+		public AddCarryOut32() : base(IRInstruction.AddCarryOut32, TransformationType.Manual | TransformationType.Optimization)
 		{
 		}
 

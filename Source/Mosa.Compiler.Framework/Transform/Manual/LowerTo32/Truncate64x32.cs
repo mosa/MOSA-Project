@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.LowerTo32
 {
 	public sealed class Truncate64x32 : BaseTransformation
 	{
-		public Truncate64x32() : base(IRInstruction.Truncate64x32)
+		public Truncate64x32() : base(IRInstruction.Truncate64x32, TransformationType.Manual | TransformationType.Optimization)
 		{
 		}
 

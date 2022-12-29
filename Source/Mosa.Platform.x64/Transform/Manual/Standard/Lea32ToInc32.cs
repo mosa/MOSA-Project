@@ -5,12 +5,11 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transform;
 
-
 namespace Mosa.Platform.x64.Transform.Manual.Standard
 {
 	public sealed class Lea32ToInc32 : BaseTransformation
 	{
-		public Lea32ToInc32() : base(X64.Lea32)
+		public Lea32ToInc32() : base(X64.Lea32, TransformationType.Manual | TransformationType.Optimization)
 		{
 		}
 

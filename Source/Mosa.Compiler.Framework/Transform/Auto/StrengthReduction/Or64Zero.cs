@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.StrengthReduction
 	/// </summary>
 	public sealed class Or64Zero : BaseTransformation
 	{
-		public Or64Zero() : base(IRInstruction.Or64)
+		public Or64Zero() : base(IRInstruction.Or64, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 
@@ -41,7 +41,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.StrengthReduction
 	/// </summary>
 	public sealed class Or64Zero_v1 : BaseTransformation
 	{
-		public Or64Zero_v1() : base(IRInstruction.Or64)
+		public Or64Zero_v1() : base(IRInstruction.Or64, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 

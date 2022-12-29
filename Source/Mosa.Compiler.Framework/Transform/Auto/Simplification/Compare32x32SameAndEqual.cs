@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.Simplification
 	/// </summary>
 	public sealed class Compare32x32SameAndEqual : BaseTransformation
 	{
-		public Compare32x32SameAndEqual() : base(IRInstruction.Compare32x32)
+		public Compare32x32SameAndEqual() : base(IRInstruction.Compare32x32, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 

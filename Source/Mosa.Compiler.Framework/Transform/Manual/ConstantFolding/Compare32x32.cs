@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.ConstantFolding
 {
 	public sealed class Compare32x32 : BaseTransformation
 	{
-		public Compare32x32() : base(IRInstruction.Compare32x32)
+		public Compare32x32() : base(IRInstruction.Compare32x32, TransformationType.Manual | TransformationType.Optimization)
 		{
 		}
 

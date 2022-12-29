@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.LowerTo32
 {
 	public sealed class Move64 : BaseTransformation
 	{
-		public Move64() : base(IRInstruction.Move64)
+		public Move64() : base(IRInstruction.Move64, TransformationType.Manual | TransformationType.Optimization)
 		{
 		}
 

@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Memory
 {
 	public sealed class LoadZeroExtend8x64Store8 : BaseTransformation
 	{
-		public LoadZeroExtend8x64Store8() : base(IRInstruction.LoadZeroExtend8x64)
+		public LoadZeroExtend8x64Store8() : base(IRInstruction.LoadZeroExtend8x64, TransformationType.Manual | TransformationType.Optimization)
 		{
 		}
 

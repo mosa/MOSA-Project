@@ -6,7 +6,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.LowerTo32
 {
 	public sealed class Compare64x64Rest : BaseTransformation
 	{
-		public Compare64x64Rest() : base(IRInstruction.Compare64x64, true)
+		public Compare64x64Rest() : base(IRInstruction.Compare64x64, TransformationType.Manual | TransformationType.Optimization, true)
 		{
 		}
 

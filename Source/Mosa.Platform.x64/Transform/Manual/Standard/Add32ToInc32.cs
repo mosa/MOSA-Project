@@ -5,12 +5,11 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transform;
 
-
 namespace Mosa.Platform.x64.Transform.Manual.Standard
 {
 	public sealed class Add32ToInc32 : BaseTransformation
 	{
-		public Add32ToInc32() : base(X64.Add32)
+		public Add32ToInc32() : base(X64.Add32, TransformationType.Manual | TransformationType.Optimization)
 		{
 		}
 

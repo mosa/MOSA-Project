@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.Simplification
 	/// </summary>
 	public sealed class Or32SignExtend16x32SignExtend16x32 : BaseTransformation
 	{
-		public Or32SignExtend16x32SignExtend16x32() : base(IRInstruction.Or32)
+		public Or32SignExtend16x32SignExtend16x32() : base(IRInstruction.Or32, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 
@@ -57,7 +57,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.Simplification
 	/// </summary>
 	public sealed class Or32SignExtend16x32SignExtend16x32_v1 : BaseTransformation
 	{
-		public Or32SignExtend16x32SignExtend16x32_v1() : base(IRInstruction.Or32)
+		public Or32SignExtend16x32SignExtend16x32_v1() : base(IRInstruction.Or32, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 

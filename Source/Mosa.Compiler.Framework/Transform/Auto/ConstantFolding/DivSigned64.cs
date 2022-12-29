@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.ConstantFolding
 	/// </summary>
 	public sealed class DivSigned64 : BaseTransformation
 	{
-		public DivSigned64() : base(IRInstruction.DivSigned64)
+		public DivSigned64() : base(IRInstruction.DivSigned64, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 

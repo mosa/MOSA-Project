@@ -7,7 +7,7 @@ namespace Mosa.Platform.x64.Transform.Manual.Standard
 {
 	public sealed class Test32ToZero : BaseTransformation
 	{
-		public Test32ToZero() : base(X64.Test32)
+		public Test32ToZero() : base(X64.Test32, TransformationType.Manual | TransformationType.Optimization)
 		{
 		}
 

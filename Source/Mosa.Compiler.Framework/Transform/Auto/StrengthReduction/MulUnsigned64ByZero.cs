@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.StrengthReduction
 	/// </summary>
 	public sealed class MulUnsigned64ByZero : BaseTransformation
 	{
-		public MulUnsigned64ByZero() : base(IRInstruction.MulUnsigned64)
+		public MulUnsigned64ByZero() : base(IRInstruction.MulUnsigned64, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 
@@ -41,7 +41,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.StrengthReduction
 	/// </summary>
 	public sealed class MulUnsigned64ByZero_v1 : BaseTransformation
 	{
-		public MulUnsigned64ByZero_v1() : base(IRInstruction.MulUnsigned64)
+		public MulUnsigned64ByZero_v1() : base(IRInstruction.MulUnsigned64, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 

@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.StrengthReduction
 	/// </summary>
 	public sealed class Xor32Xor32 : BaseTransformation
 	{
-		public Xor32Xor32() : base(IRInstruction.Xor32)
+		public Xor32Xor32() : base(IRInstruction.Xor32, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 
@@ -47,7 +47,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.StrengthReduction
 	/// </summary>
 	public sealed class Xor32Xor32_v1 : BaseTransformation
 	{
-		public Xor32Xor32_v1() : base(IRInstruction.Xor32)
+		public Xor32Xor32_v1() : base(IRInstruction.Xor32, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 
@@ -83,7 +83,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.StrengthReduction
 	/// </summary>
 	public sealed class Xor32Xor32_v2 : BaseTransformation
 	{
-		public Xor32Xor32_v2() : base(IRInstruction.Xor32)
+		public Xor32Xor32_v2() : base(IRInstruction.Xor32, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 
@@ -119,7 +119,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.StrengthReduction
 	/// </summary>
 	public sealed class Xor32Xor32_v3 : BaseTransformation
 	{
-		public Xor32Xor32_v3() : base(IRInstruction.Xor32)
+		public Xor32Xor32_v3() : base(IRInstruction.Xor32, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 

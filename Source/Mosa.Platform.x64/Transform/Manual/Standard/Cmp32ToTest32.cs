@@ -7,7 +7,7 @@ namespace Mosa.Platform.x64.Transform.Manual.Standard
 {
 	public sealed class Cmp32ToTest32 : BaseTransformation
 	{
-		public Cmp32ToTest32() : base(X64.Cmp32)
+		public Cmp32ToTest32() : base(X64.Cmp32, TransformationType.Manual | TransformationType.Optimization)
 		{
 		}
 

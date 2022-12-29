@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.ConstantFolding
 	/// </summary>
 	public sealed class Or32 : BaseTransformation
 	{
-		public Or32() : base(IRInstruction.Or32)
+		public Or32() : base(IRInstruction.Or32, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 

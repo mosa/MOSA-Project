@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Special
 {
 	public sealed class Move32PropagateConstant : BaseTransformation
 	{
-		public Move32PropagateConstant() : base(IRInstruction.Move32)
+		public Move32PropagateConstant() : base(IRInstruction.Move32, TransformationType.Manual | TransformationType.Optimization)
 		{
 		}
 

@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.ConstantMove
 	/// </summary>
 	public sealed class Add64Expression : BaseTransformation
 	{
-		public Add64Expression() : base(IRInstruction.Add64)
+		public Add64Expression() : base(IRInstruction.Add64, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 
@@ -58,7 +58,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.ConstantMove
 	/// </summary>
 	public sealed class Add64Expression_v1 : BaseTransformation
 	{
-		public Add64Expression_v1() : base(IRInstruction.Add64)
+		public Add64Expression_v1() : base(IRInstruction.Add64, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 
@@ -105,7 +105,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.ConstantMove
 	/// </summary>
 	public sealed class Add64Expression_v2 : BaseTransformation
 	{
-		public Add64Expression_v2() : base(IRInstruction.Add64)
+		public Add64Expression_v2() : base(IRInstruction.Add64, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 
@@ -152,7 +152,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.ConstantMove
 	/// </summary>
 	public sealed class Add64Expression_v3 : BaseTransformation
 	{
-		public Add64Expression_v3() : base(IRInstruction.Add64)
+		public Add64Expression_v3() : base(IRInstruction.Add64, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 

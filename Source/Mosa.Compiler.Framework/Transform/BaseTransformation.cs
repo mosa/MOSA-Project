@@ -5,6 +5,10 @@ using System;
 
 namespace Mosa.Compiler.Framework.Transform
 {
+	[Flags]
+	public enum TransformationType
+	{ Default, Auto, Manual, Optimization, Tranformation }
+
 	public abstract class BaseTransformation
 	{
 		#region Properties
@@ -14,27 +18,35 @@ namespace Mosa.Compiler.Framework.Transform
 		public bool Log { get; private set; } = false;
 		public string Name { get; }
 
+		public virtual bool IsAuto { get; protected set; }
+		public bool IsManual => !IsAuto;
+		public virtual bool IsOptimization { get; protected set; }
+		public bool IsTranformation => !IsOptimization;
+
 		#endregion Properties
 
 		#region Constructors
 
-		public BaseTransformation(BaseInstruction instruction)
-			: this()
-		{
-			Instruction = instruction;
-		}
-
-		public BaseTransformation(BaseInstruction instruction, bool log = false)
-			: this()
+		public BaseTransformation(BaseInstruction instruction, TransformationType type, bool log = false)
 		{
 			Instruction = instruction;
 			Log = log;
-		}
 
-		protected BaseTransformation()
-		{
+			IsAuto = type.HasFlag(TransformationType.Auto);
+			IsOptimization = type.HasFlag(TransformationType.Optimization);
+
 			Name = ExtractName();
 			TransformationDirectory.Add(this);
+		}
+
+		public BaseTransformation(TransformationType type, bool log = false)
+			: this(null, type, log)
+		{
+		}
+
+		public BaseTransformation(BaseInstruction instruction, bool log)
+			: this(instruction, TransformationType.Default, log)
+		{
 		}
 
 		#endregion Constructors
@@ -1020,6 +1032,11 @@ namespace Mosa.Compiler.Framework.Transform
 		protected static BasicBlock GetOtherBranchTarget(BasicBlock block, BasicBlock target)
 		{
 			return block.NextBlocks[0] == target ? block.NextBlocks[1] : block.NextBlocks[0];
+		}
+
+		public static bool IsPhiInstruction(BaseInstruction instruction)
+		{
+			return BaseCodeTransformationStage.IsPhiInstruction(instruction);
 		}
 	}
 }

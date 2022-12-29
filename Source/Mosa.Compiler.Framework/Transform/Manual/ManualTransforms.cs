@@ -227,6 +227,8 @@ namespace Mosa.Compiler.Framework.Transform.Manual
 			new Rewrite.Branch64LessThanZero(),
 			new Rewrite.Branch64GreaterThanZero(),
 			new Rewrite.Branch64LessOrEqualThanZero(),
+
+			new PHI.Phi32Add32(),
 		};
 	}
 }

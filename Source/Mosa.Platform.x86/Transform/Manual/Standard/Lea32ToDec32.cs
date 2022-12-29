@@ -9,7 +9,7 @@ namespace Mosa.Platform.x86.Transform.Manual.Standard
 {
 	public sealed class Lea32ToDec32 : BaseTransformation
 	{
-		public Lea32ToDec32() : base(X86.Lea32)
+		public Lea32ToDec32() : base(X86.Lea32, TransformationType.Manual | TransformationType.Optimization)
 		{
 		}
 

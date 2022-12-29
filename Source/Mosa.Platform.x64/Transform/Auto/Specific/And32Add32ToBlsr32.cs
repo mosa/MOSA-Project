@@ -13,7 +13,7 @@ namespace Mosa.Platform.x64.Transform.Auto.Specific
 	/// </summary>
 	public sealed class And32Add32ToBlsr32 : BaseTransformation
 	{
-		public And32Add32ToBlsr32() : base(X64.And32)
+		public And32Add32ToBlsr32() : base(X64.And32, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 
@@ -61,7 +61,7 @@ namespace Mosa.Platform.x64.Transform.Auto.Specific
 	/// </summary>
 	public sealed class And32Add32ToBlsr32_v1 : BaseTransformation
 	{
-		public And32Add32ToBlsr32_v1() : base(X64.And32)
+		public And32Add32ToBlsr32_v1() : base(X64.And32, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 
@@ -109,7 +109,7 @@ namespace Mosa.Platform.x64.Transform.Auto.Specific
 	/// </summary>
 	public sealed class And32Add32ToBlsr32_v2 : BaseTransformation
 	{
-		public And32Add32ToBlsr32_v2() : base(X64.And32)
+		public And32Add32ToBlsr32_v2() : base(X64.And32, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 
@@ -157,7 +157,7 @@ namespace Mosa.Platform.x64.Transform.Auto.Specific
 	/// </summary>
 	public sealed class And32Add32ToBlsr32_v3 : BaseTransformation
 	{
-		public And32Add32ToBlsr32_v3() : base(X64.And32)
+		public And32Add32ToBlsr32_v3() : base(X64.And32, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 

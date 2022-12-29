@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Simplification
 {
 	public sealed class Branch32OnlyOneExit : BaseTransformation
 	{
-		public Branch32OnlyOneExit() : base(IRInstruction.Branch32)
+		public Branch32OnlyOneExit() : base(IRInstruction.Branch32, TransformationType.Manual | TransformationType.Optimization)
 		{
 		}
 

@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.ConstantMove
 	/// </summary>
 	public sealed class MulUnsigned64 : BaseTransformation
 	{
-		public MulUnsigned64() : base(IRInstruction.MulUnsigned64)
+		public MulUnsigned64() : base(IRInstruction.MulUnsigned64, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 

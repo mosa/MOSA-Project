@@ -13,7 +13,7 @@ namespace Mosa.Platform.x64.Transform.Manual.Standard
 
 	public sealed class Add64ToLea64 : BaseTransformation
 	{
-		public Add64ToLea64() : base(X64.Add64)
+		public Add64ToLea64() : base(X64.Add64, TransformationType.Manual | TransformationType.Optimization)
 		{
 		}
 

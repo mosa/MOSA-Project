@@ -5,12 +5,11 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transform;
 
-
 namespace Mosa.Platform.x86.Transform.Manual.Standard
 {
 	public sealed class Sub32ToDec32 : BaseTransformation
 	{
-		public Sub32ToDec32() : base(X86.Sub32)
+		public Sub32ToDec32() : base(X86.Sub32, TransformationType.Manual | TransformationType.Optimization)
 		{
 		}
 

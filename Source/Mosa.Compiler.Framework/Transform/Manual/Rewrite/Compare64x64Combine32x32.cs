@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Rewrite
 {
 	public sealed class Compare64x64Combine32x32 : BaseTransformation
 	{
-		public Compare64x64Combine32x32() : base(IRInstruction.Compare64x64)
+		public Compare64x64Combine32x32() : base(IRInstruction.Compare64x64, TransformationType.Manual | TransformationType.Optimization)
 		{
 		}
 

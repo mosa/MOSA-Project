@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.LowerTo32
 {
 	public sealed class Branch64Extends : BaseTransformation
 	{
-		public Branch64Extends() : base(IRInstruction.Branch64, true)
+		public Branch64Extends() : base(IRInstruction.Branch64, TransformationType.Manual | TransformationType.Optimization, true)
 		{
 		}
 

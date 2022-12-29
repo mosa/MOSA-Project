@@ -5,7 +5,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.LowerTo32
 	// NOT WORKING!!!
 	public sealed class Compare64x32UnsignedGreater : BaseTransformation
 	{
-		public Compare64x32UnsignedGreater() : base(IRInstruction.Compare64x32)
+		public Compare64x32UnsignedGreater() : base(IRInstruction.Compare64x32, TransformationType.Manual | TransformationType.Optimization)
 		{
 		}
 

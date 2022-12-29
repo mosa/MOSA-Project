@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.ConstantMove
 	/// </summary>
 	public sealed class And64 : BaseTransformation
 	{
-		public And64() : base(IRInstruction.And64)
+		public And64() : base(IRInstruction.And64, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 

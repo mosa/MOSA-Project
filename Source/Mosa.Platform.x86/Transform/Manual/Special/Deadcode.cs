@@ -7,7 +7,7 @@ namespace Mosa.Platform.x86.Transform.Manual.Special
 {
 	public sealed class Deadcode : BaseTransformation
 	{
-		public Deadcode() : base()
+		public Deadcode() : base(TransformationType.Manual | TransformationType.Optimization)
 		{
 		}
 

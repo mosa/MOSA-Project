@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.LowerTo32
 {
 	public sealed class Xor64 : BaseTransformation
 	{
-		public Xor64() : base(IRInstruction.Xor64)
+		public Xor64() : base(IRInstruction.Xor64, TransformationType.Manual | TransformationType.Optimization)
 		{
 		}
 

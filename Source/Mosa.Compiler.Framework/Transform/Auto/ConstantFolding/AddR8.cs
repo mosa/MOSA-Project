@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.ConstantFolding
 	/// </summary>
 	public sealed class AddR8 : BaseTransformation
 	{
-		public AddR8() : base(IRInstruction.AddR8)
+		public AddR8() : base(IRInstruction.AddR8, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 

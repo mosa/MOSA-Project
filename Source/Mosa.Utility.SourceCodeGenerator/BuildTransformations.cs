@@ -2,6 +2,7 @@
 
 using Mosa.Utility.SourceCodeGenerator.TransformExpressions;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace Mosa.Utility.SourceCodeGenerator
@@ -54,26 +55,32 @@ namespace Mosa.Utility.SourceCodeGenerator
 			string filter = node.Filter;
 			string result = node.Result;
 			bool log = (node.Log != null && node.Log == "Yes");
-			bool Variations = (node.Variations != null && node.Variations == "Yes");
+			bool variations = (node.Variations != null && node.Variations == "Yes");
 
-			GenerateTranformations(name, familyName, type, subName, expression, filter, result, Variations, log);
+			bool optimization = node.Optimization != null && node.Optimization == "Yes";
+			bool transformation = node.Transformation != null && node.Transformation == "Yes";
+
+			if (!optimization && !transformation)
+				optimization = true;
+
+			GenerateTranformations(name, familyName, type, subName, expression, filter, result, variations, log, optimization);
 		}
 
-		private void GenerateTranformations(string name, string familyName, string type, string subName, string expression, string filter, string result, bool Variations, bool log)
+		private void GenerateTranformations(string name, string familyName, string type, string subName, string expression, string filter, string result, bool variations, bool log, bool optimization)
 		{
 			if (expression.Contains("R#"))
 			{
-				GenerateTransformation(R4(name), R4(familyName), R4(type), R4(subName), new Transformation(R4(expression), R4(filter), R4(result)), Variations, log);
-				GenerateTransformation(R8(name), R8(familyName), R8(type), R8(subName), new Transformation(R8(expression), R8(filter), R8(result)), Variations, log);
+				GenerateTransformation(R4(name), R4(familyName), R4(type), R4(subName), new Transformation(R4(expression), R4(filter), R4(result)), variations, log, optimization);
+				GenerateTransformation(R8(name), R8(familyName), R8(type), R8(subName), new Transformation(R8(expression), R8(filter), R8(result)), variations, log, optimization);
 			}
 			else if (expression.Contains("##"))
 			{
-				GenerateTransformation(To32(name), To32(familyName), To32(type), To32(subName), new Transformation(To32(expression), To32(filter), To32(result)), Variations, log);
-				GenerateTransformation(To64(name), To64(familyName), To64(type), To64(subName), new Transformation(To64(expression), To64(filter), To64(result)), Variations, log);
+				GenerateTransformation(To32(name), To32(familyName), To32(type), To32(subName), new Transformation(To32(expression), To32(filter), To32(result)), variations, log, optimization);
+				GenerateTransformation(To64(name), To64(familyName), To64(type), To64(subName), new Transformation(To64(expression), To64(filter), To64(result)), variations, log, optimization);
 			}
 			else
 			{
-				GenerateTransformation(name, familyName, type, subName, new Transformation(expression, filter, result), Variations, log);
+				GenerateTransformation(name, familyName, type, subName, new Transformation(expression, filter, result), variations, log, optimization);
 			}
 		}
 
@@ -97,7 +104,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 			return s?.Replace("R#", "R8");
 		}
 
-		private void GenerateTransformation(string name, string familyName, string type, string subName, Transformation transform, bool Variations, bool log)
+		private void GenerateTransformation(string name, string familyName, string type, string subName, Transformation transform, bool Variations, bool log, bool optimization)
 		{
 			Lines.Clear();
 			First = true;
@@ -117,16 +124,16 @@ namespace Mosa.Utility.SourceCodeGenerator
 			Lines.AppendLine($"namespace {Path}.Transform.Auto.{type}");
 			Lines.AppendLine("{");
 
-			GenerateTransformations(name, familyName, type, subName, transform, Variations, log);
+			GenerateTransformations(name, familyName, type, subName, transform, Variations, log, optimization);
 
 			Lines.AppendLine("}");
 
 			Save();
 		}
 
-		private void GenerateTransformations(string name, string familyName, string type, string subName, Transformation transform, bool variations, bool log)
+		private void GenerateTransformations(string name, string familyName, string type, string subName, Transformation transform, bool variations, bool log, bool optimization)
 		{
-			GenerateTransformation2(name, familyName, type, subName, transform, log);
+			GenerateTransformation2(name, familyName, type, subName, transform, log, optimization);
 
 			if (!variations)
 				return;
@@ -139,12 +146,12 @@ namespace Mosa.Utility.SourceCodeGenerator
 			int index = 1;
 			foreach (var variation in derivedVariations)
 			{
-				GenerateTransformation2(name, familyName, type, $"{subName}_v{index}", variation, log);
+				GenerateTransformation2(name, familyName, type, $"{subName}_v{index}", variation, log, optimization);
 				index++;
 			}
 		}
 
-		private void GenerateTransformation2(string name, string familyName, string type, string subName, Transformation transform, bool log)
+		private void GenerateTransformation2(string name, string familyName, string type, string subName, Transformation transform, bool log, bool optimization)
 		{
 			var instructionName = transform.InstructionTree.InstructionName.Replace("IR.", "IRInstruction.");
 
@@ -166,10 +173,14 @@ namespace Mosa.Utility.SourceCodeGenerator
 			Lines.AppendLine($"\tpublic sealed class {name}{subName} : BaseTransformation");
 			Lines.AppendLine("\t{");
 
+			//, bool optimization
+			string typestring = "TransformationType.Auto" +
+				(optimization ? "| TransformationType.Optimization" : string.Empty);
+
 			if (log)
-				Lines.AppendLine($"\t\tpublic {name}{subName}() : base({instructionName}, true)");
+				Lines.AppendLine($"\t\tpublic {name}{subName}() : base({instructionName}, " + typestring + ", true)");
 			else
-				Lines.AppendLine($"\t\tpublic {name}{subName}() : base({instructionName})");
+				Lines.AppendLine($"\t\tpublic {name}{subName}() : base({instructionName}, " + typestring + ")");
 
 			Lines.AppendLine("\t\t{");
 			Lines.AppendLine("\t\t}");

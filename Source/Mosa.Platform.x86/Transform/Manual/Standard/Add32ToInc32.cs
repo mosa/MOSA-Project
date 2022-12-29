@@ -9,7 +9,7 @@ namespace Mosa.Platform.x86.Transform.Manual.Standard
 {
 	public sealed class Add32ToInc32 : BaseTransformation
 	{
-		public Add32ToInc32() : base(X86.Add32)
+		public Add32ToInc32() : base(X86.Add32, TransformationType.Manual | TransformationType.Optimization)
 		{
 		}
 

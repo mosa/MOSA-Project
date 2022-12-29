@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Special
 {
 	public sealed class MoveR8Propagate : BaseTransformation
 	{
-		public MoveR8Propagate() : base(IRInstruction.MoveR8)
+		public MoveR8Propagate() : base(IRInstruction.MoveR8, TransformationType.Manual | TransformationType.Optimization)
 		{
 		}
 

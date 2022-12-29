@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.StrengthReduction
 	/// </summary>
 	public sealed class ShiftLeft64ByZero : BaseTransformation
 	{
-		public ShiftLeft64ByZero() : base(IRInstruction.ShiftLeft64)
+		public ShiftLeft64ByZero() : base(IRInstruction.ShiftLeft64, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 

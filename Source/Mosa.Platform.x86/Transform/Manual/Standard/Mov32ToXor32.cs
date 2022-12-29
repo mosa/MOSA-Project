@@ -7,7 +7,7 @@ namespace Mosa.Platform.x86.Transform.Manual.Standard
 {
 	public sealed class Mov32ToXor32 : BaseTransformation
 	{
-		public Mov32ToXor32() : base(X86.Mov32)
+		public Mov32ToXor32() : base(X86.Mov32, TransformationType.Manual | TransformationType.Optimization)
 		{
 		}
 

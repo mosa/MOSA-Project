@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Memory
 {
 	public sealed class DoubleLoadR8 : BaseTransformation
 	{
-		public DoubleLoadR8() : base(IRInstruction.LoadR8)
+		public DoubleLoadR8() : base(IRInstruction.LoadR8, TransformationType.Manual | TransformationType.Optimization)
 		{
 		}
 

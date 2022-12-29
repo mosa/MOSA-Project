@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.ConstantFolding
 	/// </summary>
 	public sealed class RemUnsigned32 : BaseTransformation
 	{
-		public RemUnsigned32() : base(IRInstruction.RemUnsigned32)
+		public RemUnsigned32() : base(IRInstruction.RemUnsigned32, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 

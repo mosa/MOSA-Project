@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Memory
 {
 	public sealed class DoubleStoreParam32 : BaseTransformation
 	{
-		public DoubleStoreParam32() : base(IRInstruction.StoreParam32)
+		public DoubleStoreParam32() : base(IRInstruction.StoreParam32, TransformationType.Manual | TransformationType.Optimization)
 		{
 		}
 

@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.ConstantMove
 	/// </summary>
 	public sealed class MulSigned32 : BaseTransformation
 	{
-		public MulSigned32() : base(IRInstruction.MulSigned32)
+		public MulSigned32() : base(IRInstruction.MulSigned32, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 

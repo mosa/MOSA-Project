@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.ConstantFolding
 	/// </summary>
 	public sealed class AddCarryIn32Inside : BaseTransformation
 	{
-		public AddCarryIn32Inside() : base(IRInstruction.AddCarryIn32)
+		public AddCarryIn32Inside() : base(IRInstruction.AddCarryIn32, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 

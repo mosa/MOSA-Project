@@ -3,12 +3,11 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transform;
 
-
 namespace Mosa.Platform.x64.Transform.Manual.Special
 {
 	public sealed class Mov32ConstantReuse : BaseTransformation
 	{
-		public Mov32ConstantReuse() : base(X64.Mov32)
+		public Mov32ConstantReuse() : base(X64.Mov32, TransformationType.Manual | TransformationType.Optimization)
 		{
 		}
 

@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Memory
 {
 	public sealed class StoreLoadParam64 : BaseTransformation
 	{
-		public StoreLoadParam64() : base(IRInstruction.StoreParam64)
+		public StoreLoadParam64() : base(IRInstruction.StoreParam64, TransformationType.Manual | TransformationType.Optimization)
 		{
 		}
 

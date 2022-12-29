@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.StrengthReduction
 	/// </summary>
 	public sealed class DivSigned32ByZero : BaseTransformation
 	{
-		public DivSigned32ByZero() : base(IRInstruction.DivSigned32)
+		public DivSigned32ByZero() : base(IRInstruction.DivSigned32, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 

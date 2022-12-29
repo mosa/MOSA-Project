@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Special
 {
 	public sealed class Phi64Propagate : BaseTransformation
 	{
-		public Phi64Propagate() : base(IRInstruction.Phi64)
+		public Phi64Propagate() : base(IRInstruction.Phi64, TransformationType.Manual | TransformationType.Optimization)
 		{
 		}
 

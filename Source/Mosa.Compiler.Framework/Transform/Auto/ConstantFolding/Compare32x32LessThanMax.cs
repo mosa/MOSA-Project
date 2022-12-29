@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.ConstantFolding
 	/// </summary>
 	public sealed class Compare32x32LessThanMax : BaseTransformation
 	{
-		public Compare32x32LessThanMax() : base(IRInstruction.Compare32x32)
+		public Compare32x32LessThanMax() : base(IRInstruction.Compare32x32, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 

@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.ConstantFolding
 	/// </summary>
 	public sealed class Sub64x2 : BaseTransformation
 	{
-		public Sub64x2() : base(IRInstruction.Sub64)
+		public Sub64x2() : base(IRInstruction.Sub64, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 

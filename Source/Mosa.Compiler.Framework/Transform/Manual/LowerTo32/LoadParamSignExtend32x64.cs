@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.LowerTo32
 {
 	public sealed class LoadParamSignExtend32x64 : BaseTransformation
 	{
-		public LoadParamSignExtend32x64() : base(IRInstruction.LoadParamSignExtend32x64)
+		public LoadParamSignExtend32x64() : base(IRInstruction.LoadParamSignExtend32x64, TransformationType.Manual | TransformationType.Optimization)
 		{
 		}
 

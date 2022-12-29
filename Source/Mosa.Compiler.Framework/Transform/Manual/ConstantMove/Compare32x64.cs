@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.ConstantMove
 {
 	public sealed class Compare32x64 : BaseTransformation
 	{
-		public Compare32x64() : base(IRInstruction.Compare32x64)
+		public Compare32x64() : base(IRInstruction.Compare32x64, TransformationType.Manual | TransformationType.Optimization)
 		{
 		}
 

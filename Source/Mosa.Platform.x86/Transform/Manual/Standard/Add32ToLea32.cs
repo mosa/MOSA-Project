@@ -13,7 +13,7 @@ namespace Mosa.Platform.x86.Transform.Manual.Standard
 
 	public sealed class Add32ToLea32 : BaseTransformation
 	{
-		public Add32ToLea32() : base(X86.Add32)
+		public Add32ToLea32() : base(X86.Add32, TransformationType.Manual | TransformationType.Optimization)
 		{
 		}
 

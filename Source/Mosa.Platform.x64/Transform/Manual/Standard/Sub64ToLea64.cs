@@ -3,7 +3,6 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transform;
 
-
 namespace Mosa.Platform.x64.Transform.Manual.Standard
 {
 	// This transformation can reduce restrictions placed on the register allocator.
@@ -14,7 +13,7 @@ namespace Mosa.Platform.x64.Transform.Manual.Standard
 
 	public sealed class Sub64ToLea64 : BaseTransformation
 	{
-		public Sub64ToLea64() : base(X64.Sub64)
+		public Sub64ToLea64() : base(X64.Sub64, TransformationType.Manual | TransformationType.Optimization)
 		{
 		}
 

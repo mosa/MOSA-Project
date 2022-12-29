@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.StrengthReduction
 	/// </summary>
 	public sealed class IsolateAndFlipLeastSignificantBit32 : BaseTransformation
 	{
-		public IsolateAndFlipLeastSignificantBit32() : base(IRInstruction.Add32)
+		public IsolateAndFlipLeastSignificantBit32() : base(IRInstruction.Add32, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 
@@ -76,7 +76,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.StrengthReduction
 	/// </summary>
 	public sealed class IsolateAndFlipLeastSignificantBit32_v1 : BaseTransformation
 	{
-		public IsolateAndFlipLeastSignificantBit32_v1() : base(IRInstruction.Add32)
+		public IsolateAndFlipLeastSignificantBit32_v1() : base(IRInstruction.Add32, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 

@@ -7,7 +7,7 @@ namespace Mosa.Platform.x86.Transform.Manual.Special
 {
 	public sealed class Mov32Propagate : BaseTransformation
 	{
-		public Mov32Propagate() : base(X86.Mov32)
+		public Mov32Propagate() : base(X86.Mov32, TransformationType.Manual | TransformationType.Optimization)
 		{
 		}
 

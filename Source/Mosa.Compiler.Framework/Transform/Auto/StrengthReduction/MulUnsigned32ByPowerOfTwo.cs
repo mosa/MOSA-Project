@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.StrengthReduction
 	/// </summary>
 	public sealed class MulUnsigned32ByPowerOfTwo : BaseTransformation
 	{
-		public MulUnsigned32ByPowerOfTwo() : base(IRInstruction.MulUnsigned32)
+		public MulUnsigned32ByPowerOfTwo() : base(IRInstruction.MulUnsigned32, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 
@@ -50,7 +50,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.StrengthReduction
 	/// </summary>
 	public sealed class MulUnsigned32ByPowerOfTwo_v1 : BaseTransformation
 	{
-		public MulUnsigned32ByPowerOfTwo_v1() : base(IRInstruction.MulUnsigned32)
+		public MulUnsigned32ByPowerOfTwo_v1() : base(IRInstruction.MulUnsigned32, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 

@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.Simplification
 	/// </summary>
 	public sealed class GetHigh32FromShiftedMore32 : BaseTransformation
 	{
-		public GetHigh32FromShiftedMore32() : base(IRInstruction.GetHigh32)
+		public GetHigh32FromShiftedMore32() : base(IRInstruction.GetHigh32, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 

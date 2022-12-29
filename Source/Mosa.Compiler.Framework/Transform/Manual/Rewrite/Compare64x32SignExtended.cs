@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Rewrite
 	/// </summary>
 	public sealed class Compare64x32SignExtended : BaseTransformation
 	{
-		public Compare64x32SignExtended() : base(IRInstruction.Compare64x32)
+		public Compare64x32SignExtended() : base(IRInstruction.Compare64x32, TransformationType.Manual | TransformationType.Optimization)
 		{
 		}
 

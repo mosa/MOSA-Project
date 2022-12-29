@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Rewrite
 {
 	public sealed class Branch64GreaterOrEqualThanZero : BaseTransformation
 	{
-		public Branch64GreaterOrEqualThanZero() : base(IRInstruction.Branch64)
+		public Branch64GreaterOrEqualThanZero() : base(IRInstruction.Branch64, TransformationType.Manual | TransformationType.Optimization)
 		{
 		}
 

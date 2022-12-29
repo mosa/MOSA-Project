@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.ConstantFolding
 	/// </summary>
 	public sealed class SubR4 : BaseTransformation
 	{
-		public SubR4() : base(IRInstruction.SubR4)
+		public SubR4() : base(IRInstruction.SubR4, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 

@@ -16,7 +16,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private const int MaximumInstructionID = 1000;
 		private const int MaximumPasses = 20;
 
-		private readonly Counter OptimizationsCount;
+		private readonly Counter OptimizationCount;
 		private readonly Counter SkippedEmptyBlocksCount;
 		private readonly Counter RemoveUnreachableBlocksCount;
 		private readonly Counter BlocksMergedCount;
@@ -44,7 +44,7 @@ namespace Mosa.Compiler.Framework.Stages
 			EnableTransformationOptimizations = enableTransformationOptimizations;
 			EnableBlockOptimizations = enableBlockOptimizations;
 
-			OptimizationsCount = new Counter($"{Name}.Optimizations");
+			OptimizationCount = new Counter($"{Name}.Optimizations");
 			SkippedEmptyBlocksCount = new Counter($"{Name}.SkippedEmptyBlocks");
 			RemoveUnreachableBlocksCount = new Counter($"{Name}.RemoveUnreachableBlocks");
 			BlocksMergedCount = new Counter($"{Name}.BlockMergeStage.BlocksMerged");
@@ -52,7 +52,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Initialize()
 		{
-			Register(OptimizationsCount);
+			Register(OptimizationCount);
 			Register(SkippedEmptyBlocksCount);
 			Register(RemoveUnreachableBlocksCount);
 			Register(BlocksMergedCount);
@@ -204,7 +204,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (updated)
 				{
-					OptimizationsCount.Increment();
+					OptimizationCount.Increment();
 
 					if (CountTransformations)
 						CountTransformation(transformation);

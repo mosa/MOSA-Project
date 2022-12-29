@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.ConstantFolding
 	/// </summary>
 	public sealed class LoadR8FoldAdd64 : BaseTransformation
 	{
-		public LoadR8FoldAdd64() : base(IRInstruction.LoadR8)
+		public LoadR8FoldAdd64() : base(IRInstruction.LoadR8, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 

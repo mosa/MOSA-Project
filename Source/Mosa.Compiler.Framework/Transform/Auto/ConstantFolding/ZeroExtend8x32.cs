@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.ConstantFolding
 	/// </summary>
 	public sealed class ZeroExtend8x32 : BaseTransformation
 	{
-		public ZeroExtend8x32() : base(IRInstruction.ZeroExtend8x32)
+		public ZeroExtend8x32() : base(IRInstruction.ZeroExtend8x32, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 

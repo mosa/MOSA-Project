@@ -7,7 +7,7 @@ namespace Mosa.Platform.x64.Transform.Manual.Standard
 {
 	public sealed class Mov64ToXor64 : BaseTransformation
 	{
-		public Mov64ToXor64() : base(X64.Mov64)
+		public Mov64ToXor64() : base(X64.Mov64, TransformationType.Manual | TransformationType.Optimization)
 		{
 		}
 

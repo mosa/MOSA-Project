@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Simplification
 {
 	public sealed class IfThenElse32Same : BaseTransformation
 	{
-		public IfThenElse32Same() : base(IRInstruction.IfThenElse32)
+		public IfThenElse32Same() : base(IRInstruction.IfThenElse32, TransformationType.Manual | TransformationType.Optimization)
 		{
 		}
 

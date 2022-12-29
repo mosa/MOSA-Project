@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Special
 {
 	public sealed class MoveCompoundPropagate : BaseTransformation
 	{
-		public MoveCompoundPropagate() : base(IRInstruction.MoveCompound)
+		public MoveCompoundPropagate() : base(IRInstruction.MoveCompound, TransformationType.Manual | TransformationType.Optimization)
 		{
 		}
 

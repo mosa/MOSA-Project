@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Simplification
 {
 	public sealed class SubCarryOut32CarryNotUsed : BaseTransformation
 	{
-		public SubCarryOut32CarryNotUsed() : base(IRInstruction.SubCarryOut32)
+		public SubCarryOut32CarryNotUsed() : base(IRInstruction.SubCarryOut32, TransformationType.Manual | TransformationType.Optimization)
 		{
 		}
 

@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.ConstantMove
 	/// </summary>
 	public sealed class MulUnsigned32Expression : BaseTransformation
 	{
-		public MulUnsigned32Expression() : base(IRInstruction.MulUnsigned32)
+		public MulUnsigned32Expression() : base(IRInstruction.MulUnsigned32, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 
@@ -58,7 +58,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.ConstantMove
 	/// </summary>
 	public sealed class MulUnsigned32Expression_v1 : BaseTransformation
 	{
-		public MulUnsigned32Expression_v1() : base(IRInstruction.MulUnsigned32)
+		public MulUnsigned32Expression_v1() : base(IRInstruction.MulUnsigned32, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 
@@ -105,7 +105,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.ConstantMove
 	/// </summary>
 	public sealed class MulUnsigned32Expression_v2 : BaseTransformation
 	{
-		public MulUnsigned32Expression_v2() : base(IRInstruction.MulUnsigned32)
+		public MulUnsigned32Expression_v2() : base(IRInstruction.MulUnsigned32, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 
@@ -152,7 +152,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.ConstantMove
 	/// </summary>
 	public sealed class MulUnsigned32Expression_v3 : BaseTransformation
 	{
-		public MulUnsigned32Expression_v3() : base(IRInstruction.MulUnsigned32)
+		public MulUnsigned32Expression_v3() : base(IRInstruction.MulUnsigned32, TransformationType.Auto| TransformationType.Optimization)
 		{
 		}
 

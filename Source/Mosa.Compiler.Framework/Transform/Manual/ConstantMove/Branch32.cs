@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.ConstantMove
 {
 	public sealed class Branch32 : BaseTransformation
 	{
-		public Branch32() : base(IRInstruction.Branch32)
+		public Branch32() : base(IRInstruction.Branch32, TransformationType.Manual | TransformationType.Optimization)
 		{
 		}
 

@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.LowerTo32
 {
 	public sealed class ZeroExtend32x64 : BaseTransformation
 	{
-		public ZeroExtend32x64() : base(IRInstruction.ZeroExtend32x64)
+		public ZeroExtend32x64() : base(IRInstruction.ZeroExtend32x64, TransformationType.Manual | TransformationType.Optimization)
 		{
 		}
 

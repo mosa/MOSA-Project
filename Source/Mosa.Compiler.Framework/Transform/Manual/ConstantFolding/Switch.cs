@@ -6,7 +6,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.ConstantFolding
 {
 	public sealed class Switch : BaseTransformation
 	{
-		public Switch() : base(IRInstruction.Switch)
+		public Switch() : base(IRInstruction.Switch, TransformationType.Manual | TransformationType.Optimization)
 		{
 		}
 
