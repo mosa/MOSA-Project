@@ -16,7 +16,7 @@
 
 # -- Project information -----------------------------------------------------
 project = 'MOSA Project'
-copyright = '2008-{}, Mosa Project & contributors'.format(2021)
+copyright = '2008-{}, Mosa Project & contributors'.format(2022)
 author = 'Phil Garcia'
 
 # -- General configuration ---------------------------------------------------

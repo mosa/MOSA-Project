@@ -6,7 +6,7 @@ The MOSA compiler utilitizes a datebase of transformations to represent specific
 
 A special parser program, called ``Mosa.Utility.SourceCodeGenerator``, reads the text files and translates them into C# source code files, which are then included and compiled into the MOSA compiler.
 
-These files are located at ``Source\Data\IR-Optimization-*.json``.
+These files are located at ``Source/Data/IR-Optimization-*.json``.
 
 Transformation
 ==============
@@ -108,5 +108,5 @@ Here's an example of a strength reduction optimization where a multiplication op
 Functions
 =========
 
-To find the available filter and expression functions, see the methods in the ``Filter Methods`` and ``Expression Methods`` regions of ``Source\Mosa.Compiler.Framework\Transform\BaseTransformation.cs``.
+To find the available filter and expression functions, see the methods in the ``Filter Methods`` and ``Expression Methods`` regions of ``Source/Mosa.Compiler.Framework/Transform/BaseTransformation.cs``.
 
