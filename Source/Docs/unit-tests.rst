@@ -12,7 +12,7 @@ On Linux, execute the following to run the unit tests:
 
 	dotnet bin/Mosa.Utility.UnitTests.dll -oMax -s Emulator.Display=false
 
-The unit tests take a few minutes to execute on modern PC. The results will be automatically displayed on the screen. The last line shows the total number of tests and failed tests, and the total time. Similar to the following:
+The unit tests take a few minutes to execute on a modern PC. The results will be automatically displayed on the screen. The last line shows the total number of tests and failed tests, and the total time. Similar to the following:
 
 .. code-block:: text
   

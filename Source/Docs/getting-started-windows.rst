@@ -5,41 +5,43 @@ Getting Started On Windows
 Prerequisites
 =============
 
-Install any edition of `Visual Studio <http://www.visualstudio.com>`__ version 2019 or newer.
+Install any edition of `Visual Studio <https://visualstudio.microsoft.com/>`__ which supports the current .NET version MOSA is targeting. Currently, MOSA is targeting .NET 6, which requires Visual Studio 2022 or newer.
 
-Note: The MOSA source code repository includes the `Qemu <http://wiki.qemu.org/Main_Page>`__ virtual emulator for Windows.
+Alternatively, you can install `Rider <https://www.jetbrains.com/rider/>`__, which is paid, though it does offer a 30-day free trial.
+
+.. tip:: This page will assume you're either using Visual Studio or are using the command line.
+
+Note: The MOSA source code repository bundles many tools, such as the `QEMU <http://wiki.qemu.org/Main_Page>`__ virtual emulator for Windows.
 
 Download
 ========
 
-The MOSA project is available as a `zip download <https://github.com/mosa/MOSA-Project/archive/master.zip>`__ or via git:
+The MOSA project is available on GitHub and can be cloned via Git:
 
 .. code-block:: bash
 
-   git clone https://github.com/mosa/MOSA-Project.git
-
-If downloaded via zip, unzip the file.
+   git clone https://github.com/mosa/MOSA-Project
 
 Build
 =====
 
-Execute the ``Compiler.bat`` script in the base directory in the root directory to build and compile all the MOSA tools, kernels and demos.
+Execute the ``Compiler.bat`` script in the base directory in the root directory to build and compile all the MOSA tools, kernels and demos:
 
 .. code-block:: bash
 
 	Compiler.bat
 
-or compiled from the command line:
+You can also compile from your IDE, or the command line:
 
 .. code-block:: bash
 
 	dotnet build Source\Mosa.sln
 
-A successful build will display a ``Build succedded`` message (like below). Any warnings may be ignored.
+If built via the command line, a successful build will display a ``Build succeeded`` message (like below). Any warnings may be ignored.
 
 .. code-block:: bash
 
-	[... lines removed...]
+	[...compiler messages...]
 
 	Build succeeded.
 	0 Warning(s)
@@ -50,13 +52,11 @@ A successful build will display a ``Build succedded`` message (like below). Any 
 Launch
 ======
 
-To launch one of the demo application, execute the ``Launcher.bat`` script to start the :doc:`MOSA Launcher Tool<tool-launcher>`. This tool:
+To launch one of the demo applications, simply execute the ``Launcher.bat`` script to start the :doc:`MOSA Launcher Tool<tool-launcher>`. This tool:
 
 - Compiles the operating system 
 - Creates a virtual disk image, with the compiled binary and boot loader
 - Launches a virtual machine instance (using QEMU by default)
-
-By default, the CoolWorld demo operating system is pre-selected. Click the ``Compile and Run`` button to compile and launch the demo.
 
 Starter Project
 ===============
@@ -76,4 +76,13 @@ To compile and launch the application within a virtual machine, select from the 
 Open the ``Source\Mosa.Demo.MyWorld.x86\Mosa.Demo.MyWorld.x86.csproj`` project with Visual Studio.
 
 To compile and launch the application within a virtual machine, select from the ``Debug`` menu the ``Start Without Debugging`` option, or press ``CTRL+F5``.
+
+**Option #3** (Via the command line):
+
+If you want to use the command line, you can do so with the commands below:
+
+.. code-block:: bash
+
+	cd MOSA-Project\Source\Mosa.Demo.MyWorld.x86
+	dotnet run
 
