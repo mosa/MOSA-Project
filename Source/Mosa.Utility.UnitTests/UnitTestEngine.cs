@@ -113,6 +113,7 @@ namespace Mosa.Utility.UnitTests
 			Settings.SetValue("Launcher.Exit", true);
 			Settings.SetValue("Launcher.HuntForCorLib", true);
 			Settings.SetValue("Image.BootLoader", "limine");
+			Settings.SetValue("Image.Firmware", "bios");
 			Settings.SetValue("Image.Folder", Path.Combine(Path.GetTempPath(), "MOSA-UnitTest"));
 			Settings.SetValue("Image.Format", "IMG");
 			Settings.SetValue("Image.FileSystem", "FAT16");

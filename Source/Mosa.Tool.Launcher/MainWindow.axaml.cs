@@ -255,6 +255,12 @@ namespace Mosa.Tool.Launcher
 				case 4: settings.SetValue("Image.BootLoader", "limine"); break;
 				default: settings.ClearProperty("Image.BootLoader"); break;
 			}
+
+			switch (FrmCmb.SelectedIndex)
+			{
+				case 0: settings.SetValue("Image.Firmware", "bios"); break;
+				default: settings.ClearProperty("Image.Firmware"); break;
+			}
 		}
 
 		private void SetDefaultSettings()

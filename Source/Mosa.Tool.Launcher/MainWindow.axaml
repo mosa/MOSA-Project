@@ -91,7 +91,7 @@
 
             <TabItem Header="Advanced Options" FontSize="18">
                 <Grid>
-	                <Border Name="DbgerBox" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" Padding="4" HorizontalAlignment="Left" VerticalAlignment="Top" Height="150">
+	                <Border Name="DbgerBox" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" Padding="4" HorizontalAlignment="Left" VerticalAlignment="Top" Height="172">
 		                <StackPanel>
 			                <CheckBox Name="QemuGdb">Enable QEMU GDB</CheckBox>
 			                <CheckBox Name="LaunchGdb">Launch GDB</CheckBox>
@@ -106,7 +106,7 @@
 		                </StackPanel>
 	                </Border>
 
-	                <Border Name="LnkBox" Margin="265,0" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" Padding="4" VerticalAlignment="Top" HorizontalAlignment="Left" Height="150">
+	                <Border Name="LnkBox" Margin="265,0" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" Padding="4" VerticalAlignment="Top" HorizontalAlignment="Left" Height="172">
 						<StackPanel>
 							<CheckBox Name="EmtSymbs">Emit All Symbols</CheckBox>
 							<CheckBox Name="EmtRelocs">Emit Static Relocations</CheckBox>

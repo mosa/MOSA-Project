@@ -92,6 +92,7 @@ namespace Mosa.Tool.Launcher.Console
 			Settings.SetValue("Image.Format", "IMG");
 			Settings.SetValue("Image.FileSystem", "FAT16");
 			Settings.SetValue("Image.ImageFile", "%DEFAULT%");
+			Settings.SetValue("Image.Firmware", "bios");
 			Settings.SetValue("Multiboot.Version", "v1");
 			Settings.SetValue("Multiboot.Video", false);
 			Settings.SetValue("Multiboot.Video.Width", 640);
