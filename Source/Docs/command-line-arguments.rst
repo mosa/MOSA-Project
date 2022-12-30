@@ -144,6 +144,7 @@ Below are the command line arguments available:
 
     Launcher - Boot Loader:
     -bootloader,Image.BootLoader,{value}
+    -limine,Image.BootLoader,limine
     -grub,Image.BootLoader,grub0.97
     -grub0.97,Image.BootLoader,grub0.97
     -grub2.00,Image.BootLoader,grub2.00

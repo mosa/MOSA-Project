@@ -101,6 +101,10 @@
 <li class="toctree-l1"><a class="reference internal" href="getting-started-linux.html">Getting Started On Linux</a></li>
 <li class="toctree-l1"><a class="reference internal" href="demos.html">Demos</a></li>
 </ul>
+<p class="caption"><span class="caption-text">Structure</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="mosa-project-structure.html">MOSA Project Structure</a></li>
+</ul>
 <p class="caption"><span class="caption-text">Compiler</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="compiler-design.html">Compiler Design</a></li>
@@ -109,6 +113,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Settings</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="optimization-options.html">Optimization Options</a></li>
 <li class="toctree-l1"><a class="reference internal" href="settings-options.html">Settings Options</a></li>
 <li class="toctree-l1"><a class="reference internal" href="command-line-arguments.html">Command Line Arguments</a></li>
 </ul>
@@ -120,7 +125,6 @@
 <li class="toctree-l1"><a class="reference internal" href="tool-launcher-console.html">MOSA Launcher Console</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tool-explorer.html">MOSA Explorer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tool-debugger.html">MOSA Debugger</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tool-boot-image.html">MOSA Boot Image Tool</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Advanced</span></p>
 <ul class="current">
@@ -206,13 +210,13 @@
             
   <div class="section" id="baremetal-experiment">
 <h1>BareMetal Experiment<a class="headerlink" href="#baremetal-experiment" title="Permalink to this headline">¶</a></h1>
-<p><strong>BareMetal</strong> is an experimental Operating System with the design goal of utlitizing a single source code tree that supports multiple platforms (x86, x64, Arm) for all the high-level functions of the kernel.</p>
+<p><strong>BareMetal</strong> is an experimental Operating System with the design goal of utlitizing a single source code tree that supports multiple platforms (x86, x64, ARM) for all the high-level functions of the kernel.</p>
 <p>Platform specific low-level functions are incorporated using <code class="docutils literal notranslate"><span class="pre">method</span> <span class="pre">plugs</span></code>, which act similar to a method override.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>BareMetal is experimental and incomplete.</p>
 </div>
-<p>The demo can be started by executing the following script: <code class="docutils literal notranslate"><span class="pre">Demos\DEVELOPMENT-Run-Mosa.BareMetal.HelloWorld.x86.bat</span></code>.</p>
+<p>A BareMetal demo can be launched by executing a BareMetal scripts inside the Demos folder.</p>
 </div>
 
 
@@ -229,7 +233,7 @@
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2008-2021, Mosa Project &amp; contributors.
+        &#169; Copyright 2008-2022, Mosa Project &amp; contributors.
 
     </p>
   </div>

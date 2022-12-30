@@ -6,7 +6,7 @@ While most of the development and testing of MOSA is done using virtualization s
 
 Below are the steps for deploying a MOSA disk image to a USB flash drive:
 
-.. warning:: These instructions may vary slightly depending on your installation.
+.. tip:: This page assumes you're using Windows, even though it's using the **dd** utility.
 
 1. Create a MOSA disk image using the MOSA Launcher Tool.
 

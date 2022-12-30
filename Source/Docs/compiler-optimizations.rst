@@ -33,7 +33,7 @@ Block Reordering
 	Basic Block Reordering organizaze block of instructions to maximize the number of fall-through branches.
 
 Greedy Register Allocation
-	Greedy Register Allocation assigns cpu registers based on live ranges and spill weights.
+	Greedy Register Allocation assigns CPU registers based on live ranges and spill weights.
 
 Long Expansion
 	Long Expansion is the transformation of 64-bit instructions into 32-bit instructions for platforms without native 64-bit instructions. This may result in further optimization opportunities.

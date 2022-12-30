@@ -46,6 +46,7 @@ MigrationBackup/
 /Source/Docs/build
 /docs/build
 /docs/_sources
+/docs/.doctrees
 **/packages/*
 /Source/*/Properties/launchSettings.json
 stderr.txt

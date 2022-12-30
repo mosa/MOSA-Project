@@ -108,6 +108,10 @@
 <li class="toctree-l1"><a class="reference internal" href="getting-started-linux.html">Getting Started On Linux</a></li>
 <li class="toctree-l1"><a class="reference internal" href="demos.html">Demos</a></li>
 </ul>
+<p class="caption"><span class="caption-text">Structure</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="mosa-project-structure.html">MOSA Project Structure</a></li>
+</ul>
 <p class="caption"><span class="caption-text">Compiler</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="compiler-design.html">Compiler Design</a></li>
@@ -116,6 +120,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Settings</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="optimization-options.html">Optimization Options</a></li>
 <li class="toctree-l1"><a class="reference internal" href="settings-options.html">Settings Options</a></li>
 <li class="toctree-l1"><a class="reference internal" href="command-line-arguments.html">Command Line Arguments</a></li>
 </ul>
@@ -127,7 +132,6 @@
 <li class="toctree-l1"><a class="reference internal" href="tool-launcher-console.html">MOSA Launcher Console</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tool-explorer.html">MOSA Explorer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tool-debugger.html">MOSA Debugger</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tool-boot-image.html">MOSA Boot Image Tool</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Advanced</span></p>
 <ul>
@@ -213,10 +217,10 @@
             
   <div class="section" id="frequently-asked-questions-faqs">
 <h1>Frequently Asked Questions (FAQs)<a class="headerlink" href="#frequently-asked-questions-faqs" title="Permalink to this headline">¶</a></h1>
-<p>These are questions we’re frequently answering in our IRC channel, the mailing list or which come up during conversations.</p>
+<p>These are questions we’re frequently answering in our Discord server or which come up during conversations.</p>
 <div class="section" id="what-does-mosa-stand-for">
 <h2>What does MOSA stand for?<a class="headerlink" href="#what-does-mosa-stand-for" title="Permalink to this headline">¶</a></h2>
-<p>Managed Operation System Alliance. It was an alliance with the SharpOS project to create a .NET based operating system and toolsets. As operating systems share a lot of common groundwork MOSA aims to standardize interfaces in order to foster portability and to provide both projects with basic implementations of these interfaces.</p>
+<p>It stands for Managed Operating System Alliance. It was originally an alliance with the SharpOS project to create a .NET based operating system and toolsets. As operating systems share a lot of common groundwork, MOSA aims to standardize interfaces in order to foster portability and to provide both projects with basic implementations of these interfaces.</p>
 </div>
 <div class="section" id="who-can-join">
 <h2>Who can join?<a class="headerlink" href="#who-can-join" title="Permalink to this headline">¶</a></h2>
@@ -229,8 +233,8 @@
 <div class="section" id="how-is-the-cosmos-project-different-than-mosa">
 <h2>How is the Cosmos project different than MOSA?<a class="headerlink" href="#how-is-the-cosmos-project-different-than-mosa" title="Permalink to this headline">¶</a></h2>
 <p>Cosmos is designed to be an operating system toolkit plugin for Visual Studio. The Cosmos toolkit, once installed, integrates with Visual Studio in two significant ways. First, the toolkit introduces a new Cosmos project type that can launch and control the build process. Second, the toolkit integrates with Visual Studio’s debugger and provides break points and watches. The toolkit requires Microsoft’s implementation of the .NET framework to compile a Cosmos operating system.</p>
-<p>In comparison, MOSA has no dependencies on any Microsoft’s applications including Visual Studio, the .NET framework or Windows operation system. MOSA can run on Windows, Linux or the Apple’s OSX operating systems.</p>
-<p>Another important difference is Cosmos compiles to Assembly ASM and uses Netwide Assembler, NASM, to finally compile to binary. MOSA compiles directly to binary and has its own linker implementation.</p>
+<p>In comparison, MOSA has no dependencies on any Microsoft’s applications including Visual Studio, the .NET framework or Windows operating system. MOSA can run on Windows, Linux and even macOS!</p>
+<p>Another important difference is Cosmos compiles to Assembly and uses YASM, to finally compile to binary. MOSA compiles directly to binary and has its own linker implementation.</p>
 </div>
 <div class="section" id="are-cosmos-and-mosa-working-together">
 <h2>Are Cosmos and MOSA working together?<a class="headerlink" href="#are-cosmos-and-mosa-working-together" title="Permalink to this headline">¶</a></h2>
@@ -252,7 +256,7 @@
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2008-2021, Mosa Project &amp; contributors.
+        &#169; Copyright 2008-2022, Mosa Project &amp; contributors.
 
     </p>
   </div>

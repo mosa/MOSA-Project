@@ -6,18 +6,18 @@ The **MOSA Launcher** is GUI application used to select various compiler and bui
 
 .. image:: images/mosa-launcher.png
 
-.. tip:: Check out the :doc:`MOSA Launch <tool-launcher-console>` for a console version of this application.
+.. tip:: Check out the :doc:`MOSA Launcher Console <tool-launcher-console>` for a console version of this application.
 
 Usage
 -----
 
-The **MOSA Launcher** can be launched by executing ``Mosa.Tool.Launcher.exe``.
+The **MOSA Launcher** can be launched by executing ``Mosa.Tool.Launcher``.
 
 In addition, the tool can be launched from the command line with arguments:
 
 .. code-block:: text
 
-	Mosa.Tool.Launcher.exe Mosa.Demo.HelloWorld.x86.dll
+	Mosa.Tool.Launcher Mosa.Demo.HelloWorld.x86.dll
 
 
 Command Line Options

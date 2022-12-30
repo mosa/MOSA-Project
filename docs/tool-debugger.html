@@ -44,7 +44,7 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="MOSA Boot Image Tool" href="tool-boot-image.html" />
+    <link rel="next" title="Unit Tests" href="unit-tests.html" />
     <link rel="prev" title="MOSA Explorer" href="tool-explorer.html" /> 
 </head>
 
@@ -101,6 +101,10 @@
 <li class="toctree-l1"><a class="reference internal" href="getting-started-linux.html">Getting Started On Linux</a></li>
 <li class="toctree-l1"><a class="reference internal" href="demos.html">Demos</a></li>
 </ul>
+<p class="caption"><span class="caption-text">Structure</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="mosa-project-structure.html">MOSA Project Structure</a></li>
+</ul>
 <p class="caption"><span class="caption-text">Compiler</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="compiler-design.html">Compiler Design</a></li>
@@ -109,6 +113,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Settings</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="optimization-options.html">Optimization Options</a></li>
 <li class="toctree-l1"><a class="reference internal" href="settings-options.html">Settings Options</a></li>
 <li class="toctree-l1"><a class="reference internal" href="command-line-arguments.html">Command Line Arguments</a></li>
 </ul>
@@ -125,7 +130,6 @@
 <li class="toctree-l2"><a class="reference internal" href="#command-line-options">Command Line Options</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="tool-boot-image.html">MOSA Boot Image Tool</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Advanced</span></p>
 <ul>
@@ -230,9 +234,9 @@
 </div>
 <div class="section" id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
-<p>The <strong>MOSA Debugger</strong> can be launched by executing <code class="docutils literal notranslate"><span class="pre">Mosa.Tool.Debugger.exe</span></code>.</p>
+<p>The <strong>MOSA Debugger</strong> can be launched by executing <code class="docutils literal notranslate"><span class="pre">Mosa.Tool.Debugger</span></code>.</p>
 <p>In addition, the tool can be launched from the command line with arguments:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Mosa.Tool.Launcher.exe Mosa.Debugger.x86.exe
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Mosa.Tool.Debugger Mosa.Demo.HelloWorld.x86.dll
 </pre></div>
 </div>
 </div>
@@ -248,7 +252,7 @@
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="tool-boot-image.html" class="btn btn-neutral float-right" title="MOSA Boot Image Tool" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="unit-tests.html" class="btn btn-neutral float-right" title="Unit Tests" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
         <a href="tool-explorer.html" class="btn btn-neutral float-left" title="MOSA Explorer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
@@ -256,7 +260,7 @@
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2008-2021, Mosa Project &amp; contributors.
+        &#169; Copyright 2008-2022, Mosa Project &amp; contributors.
 
     </p>
   </div>
