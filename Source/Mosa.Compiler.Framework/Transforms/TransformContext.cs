@@ -40,7 +40,7 @@ namespace Mosa.Compiler.Framework.Transforms
 
 		public bool LowerTo32 { get; private set; }
 		public bool IsInSSAForm { get; private set; }
-
+		public bool AreCPURegistersAllocated { get; private set; }
 		public bool Is32BitPlatform { get; private set; }
 
 		public int Window { get; private set; }
@@ -70,6 +70,9 @@ namespace Mosa.Compiler.Framework.Transforms
 			Is32BitPlatform = Compiler.Architecture.Is32BitPlatform;
 			LowerTo32 = Compiler.CompilerSettings.LongExpansion;
 
+			IsInSSAForm = MethodCompiler.IsInSSAForm;
+			AreCPURegistersAllocated = MethodCompiler.AreCPURegistersAllocated;
+
 			Window = Math.Max(Compiler.CompilerSettings.OptimizationWindow, 1);
 		}
 
@@ -84,10 +87,9 @@ namespace Mosa.Compiler.Framework.Transforms
 			SpecialTraceLog = specialTraceLog;
 		}
 
-		public void SetStageOptions(bool inSSAForm, bool lowerTo32)
+		public void SetStageOptions(bool lowerTo32)
 		{
 			LowerTo32 = Compiler.CompilerSettings.LongExpansion && lowerTo32;
-			IsInSSAForm = inSSAForm;
 		}
 
 		public Operand AllocateVirtualRegister(MosaType type)

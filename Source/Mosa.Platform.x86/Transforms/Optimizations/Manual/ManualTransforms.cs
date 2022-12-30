@@ -23,21 +23,13 @@ namespace Mosa.Platform.x86.Transforms.Optimizations.Manual
 			new Standard.Test32ToZero(),
 			new Standard.Cmp32ToTest32(),
 
-			//Add32ToLea32
-			//Sub32ToLea32
-		};
-
-		public static readonly List<BaseTransformation> PostList = new List<BaseTransformation>
-		{
 			new Special.Mov32ConstantReuse(),
-		};
-
-		public static readonly List<BaseTransformation> EarlyList = new List<BaseTransformation>
-		{
 			new Stack.Add32(),
 
-			//new Special.Mov32ReuseConstant(), /// this can wait
 			//new Special.Mov32Propagate(),
+
+			//Add32ToLea32
+			//Sub32ToLea32
 		};
 	}
 }

@@ -20,6 +20,9 @@ namespace Mosa.Platform.x86.Transforms.Optimizations.Manual.Stack
 
 		public override bool Match(Context context, TransformContext transform)
 		{
+			if (transform.AreCPURegistersAllocated)
+				return false;
+
 			if (!context.Operand1.IsCPURegister)
 				return false;
 

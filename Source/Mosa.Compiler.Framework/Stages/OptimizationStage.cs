@@ -23,7 +23,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void CustomizeTransformation()
 		{
-			TransformContext.SetStageOptions(IsInSSAForm, LowerTo32 && CompilerSettings.LongExpansion && Is32BitPlatform);
+			TransformContext.SetStageOptions(LowerTo32 && CompilerSettings.LongExpansion && Is32BitPlatform);
 		}
 	}
 }

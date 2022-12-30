@@ -19,7 +19,6 @@ namespace Mosa.Platform.x86.Stages
 		{
 			AddTranformations(AutoTransforms.List);
 			AddTranformations(ManualTransforms.List);
-			AddTranformations(ManualTransforms.PostList);
 		}
 	}
 }

@@ -33,6 +33,8 @@ namespace Mosa.Compiler.Framework.Stages
 		protected bool EnableTransformationOptimizations;
 		protected bool EnableBlockOptimizations;
 		protected bool IsInSSAForm;
+		protected bool AreCPURegistersAllocated;
+
 		protected int MaxPasses;
 
 		protected BitArray EmptyBlocks;
@@ -100,6 +102,7 @@ namespace Mosa.Compiler.Framework.Stages
 			trace = CreateTraceLog(5);
 
 			IsInSSAForm = MethodCompiler.IsInSSAForm;
+			AreCPURegistersAllocated = MethodCompiler.AreCPURegistersAllocated;
 
 			ExecutePasses();
 
