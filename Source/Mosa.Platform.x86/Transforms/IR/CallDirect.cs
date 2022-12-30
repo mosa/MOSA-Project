@@ -10,9 +10,9 @@ namespace Mosa.Platform.x86.Transforms.IR
 	/// <summary>
 	/// CallDirect
 	/// </summary>
-	public sealed class CallDirect : BaseTransformation
+	public sealed class CallDirect : BaseTransform
 	{
-		public CallDirect() : base(IRInstruction.CallDirect, TransformationType.Manual | TransformationType.Transform)
+		public CallDirect() : base(IRInstruction.CallDirect, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

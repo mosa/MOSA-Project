@@ -9,9 +9,9 @@ namespace Mosa.Platform.x86.Transforms.Tweak
 	/// <summary>
 	/// Movzx16To32
 	/// </summary>
-	public sealed class Movzx16To32 : BaseTransformation
+	public sealed class Movzx16To32 : BaseTransform
 	{
-		public Movzx16To32() : base(X86.Movzx16To32, TransformationType.Manual | TransformationType.Transform)
+		public Movzx16To32() : base(X86.Movzx16To32, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

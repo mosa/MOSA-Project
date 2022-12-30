@@ -10,9 +10,9 @@ namespace Mosa.Platform.x86.Transforms.IR
 	/// <summary>
 	/// Load32
 	/// </summary>
-	public sealed class Load32 : BaseTransformation
+	public sealed class Load32 : BaseTransform
 	{
-		public Load32() : base(IRInstruction.Load32, TransformationType.Manual | TransformationType.Transform)
+		public Load32() : base(IRInstruction.Load32, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

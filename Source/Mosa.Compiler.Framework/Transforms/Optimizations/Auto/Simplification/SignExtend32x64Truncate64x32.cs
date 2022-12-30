@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
 	/// <summary>
 	/// SignExtend32x64Truncate64x32
 	/// </summary>
-	public sealed class SignExtend32x64Truncate64x32 : BaseTransformation
+	public sealed class SignExtend32x64Truncate64x32 : BaseTransform
 	{
-		public SignExtend32x64Truncate64x32() : base(IRInstruction.SignExtend32x64, TransformationType.Auto | TransformationType.Optimization)
+		public SignExtend32x64Truncate64x32() : base(IRInstruction.SignExtend32x64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

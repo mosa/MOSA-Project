@@ -10,9 +10,9 @@ namespace Mosa.Platform.x86.Transforms.IR
 	/// <summary>
 	/// IfThenElse32
 	/// </summary>
-	public sealed class IfThenElse32 : BaseTransformation
+	public sealed class IfThenElse32 : BaseTransform
 	{
-		public IfThenElse32() : base(IRInstruction.IfThenElse32, TransformationType.Manual | TransformationType.Transform)
+		public IfThenElse32() : base(IRInstruction.IfThenElse32, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

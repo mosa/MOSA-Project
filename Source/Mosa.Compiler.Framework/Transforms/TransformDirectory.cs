@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Transforms
 {
-	public static class TransformationDirectory
+	public static class TransformDirectory
 	{
-		public static List<BaseTransformation> Transformations = new List<BaseTransformation>();
+		public static List<BaseTransform> Transformations = new List<BaseTransform>();
 
-		public static void Add(BaseTransformation transformation)
+		public static void Add(BaseTransform transformation)
 		{
 			lock (Transformations)
 			{
@@ -18,9 +18,9 @@ namespace Mosa.Compiler.Framework.Transforms
 
 		public enum MatchType { Contains, StartsWith, EndsWith };
 
-		public static List<BaseTransformation> GetTransformations(string match, MatchType type)
+		public static List<BaseTransform> GetTransformations(string match, MatchType type)
 		{
-			var matches = new List<BaseTransformation>();
+			var matches = new List<BaseTransform>();
 
 			lock (Transformations)
 			{

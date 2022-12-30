@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
 	/// <summary>
 	/// Move64Propagation
 	/// </summary>
-	public sealed class Move64Propagation : BaseTransformation
+	public sealed class Move64Propagation : BaseTransform
 	{
-		public Move64Propagation() : base(IRInstruction.Move64, TransformationType.Auto | TransformationType.Optimization)
+		public Move64Propagation() : base(IRInstruction.Move64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.LowerTo32
 {
-	public sealed class Compare64x32RestInSSA : BaseTransformation
+	public sealed class Compare64x32RestInSSA : BaseTransform
 	{
-		public Compare64x32RestInSSA() : base(IRInstruction.Compare64x32, TransformationType.Manual | TransformationType.Optimization)
+		public Compare64x32RestInSSA() : base(IRInstruction.Compare64x32, TransformType.Manual | TransformType.Optimization)
 		{
 		}
 

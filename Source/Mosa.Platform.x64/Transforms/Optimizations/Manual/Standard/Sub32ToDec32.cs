@@ -7,9 +7,9 @@ using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x64.Transforms.Optimizations.Manual.Standard
 {
-	public sealed class Sub32ToDec32 : BaseTransformation
+	public sealed class Sub32ToDec32 : BaseTransform
 	{
-		public Sub32ToDec32() : base(X64.Sub32, TransformationType.Manual | TransformationType.Optimization)
+		public Sub32ToDec32() : base(X64.Sub32, TransformType.Manual | TransformType.Optimization)
 		{
 		}
 

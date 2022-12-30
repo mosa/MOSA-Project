@@ -2,9 +2,9 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Rewrite
 {
-	public sealed class Branch64Combine64x32 : BaseTransformation
+	public sealed class Branch64Combine64x32 : BaseTransform
 	{
-		public Branch64Combine64x32() : base(IRInstruction.Branch64, TransformationType.Manual | TransformationType.Optimization)
+		public Branch64Combine64x32() : base(IRInstruction.Branch64, TransformType.Manual | TransformType.Optimization)
 		{
 		}
 

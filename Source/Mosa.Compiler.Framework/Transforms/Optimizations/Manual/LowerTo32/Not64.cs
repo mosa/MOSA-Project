@@ -2,9 +2,9 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.LowerTo32
 {
-	public sealed class Not64 : BaseTransformation
+	public sealed class Not64 : BaseTransform
 	{
-		public Not64() : base(IRInstruction.Not64, TransformationType.Manual | TransformationType.Optimization)
+		public Not64() : base(IRInstruction.Not64, TransformType.Manual | TransformType.Optimization)
 		{
 		}
 

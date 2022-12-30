@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Rewrite
 	/// <summary>
 	/// IfThenElse32Compare32v2
 	/// </summary>
-	public sealed class IfThenElse32Compare32v2 : BaseTransformation
+	public sealed class IfThenElse32Compare32v2 : BaseTransform
 	{
-		public IfThenElse32Compare32v2() : base(IRInstruction.IfThenElse32, TransformationType.Auto | TransformationType.Optimization)
+		public IfThenElse32Compare32v2() : base(IRInstruction.IfThenElse32, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -53,9 +53,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Rewrite
 	/// <summary>
 	/// IfThenElse32Compare32v2_v1
 	/// </summary>
-	public sealed class IfThenElse32Compare32v2_v1 : BaseTransformation
+	public sealed class IfThenElse32Compare32v2_v1 : BaseTransform
 	{
-		public IfThenElse32Compare32v2_v1() : base(IRInstruction.IfThenElse32, TransformationType.Auto | TransformationType.Optimization)
+		public IfThenElse32Compare32v2_v1() : base(IRInstruction.IfThenElse32, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

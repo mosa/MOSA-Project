@@ -10,9 +10,9 @@ namespace Mosa.Platform.x86.Transforms.IR
 	/// <summary>
 	/// MulR8
 	/// </summary>
-	public sealed class MulR8 : BaseTransformation
+	public sealed class MulR8 : BaseTransform
 	{
-		public MulR8() : base(IRInstruction.MulR8, TransformationType.Manual | TransformationType.Transform)
+		public MulR8() : base(IRInstruction.MulR8, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

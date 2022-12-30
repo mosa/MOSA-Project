@@ -10,9 +10,9 @@ namespace Mosa.Platform.x86.Transforms.IR
 	/// <summary>
 	/// GetLow32
 	/// </summary>
-	public sealed class GetLow32 : BaseTransformation
+	public sealed class GetLow32 : BaseTransform
 	{
-		public GetLow32() : base(IRInstruction.GetLow32, TransformationType.Manual | TransformationType.Transform)
+		public GetLow32() : base(IRInstruction.GetLow32, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

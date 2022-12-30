@@ -2,9 +2,9 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Special
 {
-	public sealed class MoveObjectPropagateConstant : BaseTransformation
+	public sealed class MoveObjectPropagateConstant : BaseTransform
 	{
-		public MoveObjectPropagateConstant() : base(IRInstruction.MoveObject, TransformationType.Manual | TransformationType.Optimization)
+		public MoveObjectPropagateConstant() : base(IRInstruction.MoveObject, TransformType.Manual | TransformType.Optimization)
 		{
 		}
 

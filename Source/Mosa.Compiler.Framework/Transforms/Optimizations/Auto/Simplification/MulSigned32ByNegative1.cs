@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
 	/// <summary>
 	/// MulSigned32ByNegative1
 	/// </summary>
-	public sealed class MulSigned32ByNegative1 : BaseTransformation
+	public sealed class MulSigned32ByNegative1 : BaseTransform
 	{
-		public MulSigned32ByNegative1() : base(IRInstruction.MulSigned32, TransformationType.Auto | TransformationType.Optimization)
+		public MulSigned32ByNegative1() : base(IRInstruction.MulSigned32, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -41,9 +41,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
 	/// <summary>
 	/// MulSigned32ByNegative1_v1
 	/// </summary>
-	public sealed class MulSigned32ByNegative1_v1 : BaseTransformation
+	public sealed class MulSigned32ByNegative1_v1 : BaseTransform
 	{
-		public MulSigned32ByNegative1_v1() : base(IRInstruction.MulSigned32, TransformationType.Auto | TransformationType.Optimization)
+		public MulSigned32ByNegative1_v1() : base(IRInstruction.MulSigned32, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

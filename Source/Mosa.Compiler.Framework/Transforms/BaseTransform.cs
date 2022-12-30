@@ -6,10 +6,10 @@ using Mosa.Compiler.Common;
 namespace Mosa.Compiler.Framework.Transforms
 {
 	[Flags]
-	public enum TransformationType
+	public enum TransformType
 	{ Default, Auto, Manual, Optimization, Transform }
 
-	public abstract class BaseTransformation
+	public abstract class BaseTransform
 	{
 		#region Properties
 
@@ -27,25 +27,25 @@ namespace Mosa.Compiler.Framework.Transforms
 
 		#region Constructors
 
-		public BaseTransformation(BaseInstruction instruction, TransformationType type, bool log = false)
+		public BaseTransform(BaseInstruction instruction, TransformType type, bool log = false)
 		{
 			Instruction = instruction;
 			Log = log;
 
-			IsAuto = type.HasFlag(TransformationType.Auto);
-			IsOptimization = type.HasFlag(TransformationType.Optimization);
+			IsAuto = type.HasFlag(TransformType.Auto);
+			IsOptimization = type.HasFlag(TransformType.Optimization);
 
 			Name = ExtractName();
-			TransformationDirectory.Add(this);
+			TransformDirectory.Add(this);
 		}
 
-		public BaseTransformation(TransformationType type, bool log = false)
+		public BaseTransform(TransformType type, bool log = false)
 			: this(null, type, log)
 		{
 		}
 
-		public BaseTransformation(BaseInstruction instruction, bool log)
-			: this(instruction, TransformationType.Default, log)
+		public BaseTransform(BaseInstruction instruction, bool log)
+			: this(instruction, TransformType.Default, log)
 		{
 		}
 

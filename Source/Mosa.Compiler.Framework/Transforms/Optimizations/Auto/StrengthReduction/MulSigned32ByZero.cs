@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 	/// <summary>
 	/// MulSigned32ByZero
 	/// </summary>
-	public sealed class MulSigned32ByZero : BaseTransformation
+	public sealed class MulSigned32ByZero : BaseTransform
 	{
-		public MulSigned32ByZero() : base(IRInstruction.MulSigned32, TransformationType.Auto | TransformationType.Optimization)
+		public MulSigned32ByZero() : base(IRInstruction.MulSigned32, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -39,9 +39,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 	/// <summary>
 	/// MulSigned32ByZero_v1
 	/// </summary>
-	public sealed class MulSigned32ByZero_v1 : BaseTransformation
+	public sealed class MulSigned32ByZero_v1 : BaseTransform
 	{
-		public MulSigned32ByZero_v1() : base(IRInstruction.MulSigned32, TransformationType.Auto | TransformationType.Optimization)
+		public MulSigned32ByZero_v1() : base(IRInstruction.MulSigned32, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

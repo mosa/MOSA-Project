@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove
 	/// <summary>
 	/// Or64Expression
 	/// </summary>
-	public sealed class Or64Expression : BaseTransformation
+	public sealed class Or64Expression : BaseTransform
 	{
-		public Or64Expression() : base(IRInstruction.Or64, TransformationType.Auto | TransformationType.Optimization)
+		public Or64Expression() : base(IRInstruction.Or64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -56,9 +56,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove
 	/// <summary>
 	/// Or64Expression_v1
 	/// </summary>
-	public sealed class Or64Expression_v1 : BaseTransformation
+	public sealed class Or64Expression_v1 : BaseTransform
 	{
-		public Or64Expression_v1() : base(IRInstruction.Or64, TransformationType.Auto | TransformationType.Optimization)
+		public Or64Expression_v1() : base(IRInstruction.Or64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -103,9 +103,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove
 	/// <summary>
 	/// Or64Expression_v2
 	/// </summary>
-	public sealed class Or64Expression_v2 : BaseTransformation
+	public sealed class Or64Expression_v2 : BaseTransform
 	{
-		public Or64Expression_v2() : base(IRInstruction.Or64, TransformationType.Auto | TransformationType.Optimization)
+		public Or64Expression_v2() : base(IRInstruction.Or64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -150,9 +150,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove
 	/// <summary>
 	/// Or64Expression_v3
 	/// </summary>
-	public sealed class Or64Expression_v3 : BaseTransformation
+	public sealed class Or64Expression_v3 : BaseTransform
 	{
-		public Or64Expression_v3() : base(IRInstruction.Or64, TransformationType.Auto | TransformationType.Optimization)
+		public Or64Expression_v3() : base(IRInstruction.Or64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

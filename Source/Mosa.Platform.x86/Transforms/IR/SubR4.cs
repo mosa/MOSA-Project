@@ -10,9 +10,9 @@ namespace Mosa.Platform.x86.Transforms.IR
 	/// <summary>
 	/// SubR4
 	/// </summary>
-	public sealed class SubR4 : BaseTransformation
+	public sealed class SubR4 : BaseTransform
 	{
-		public SubR4() : base(IRInstruction.SubR4, TransformationType.Manual | TransformationType.Transform)
+		public SubR4() : base(IRInstruction.SubR4, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

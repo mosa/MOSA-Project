@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove
 	/// <summary>
 	/// AddR8Expression
 	/// </summary>
-	public sealed class AddR8Expression : BaseTransformation
+	public sealed class AddR8Expression : BaseTransform
 	{
-		public AddR8Expression() : base(IRInstruction.AddR8, TransformationType.Auto | TransformationType.Optimization)
+		public AddR8Expression() : base(IRInstruction.AddR8, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -56,9 +56,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove
 	/// <summary>
 	/// AddR8Expression_v1
 	/// </summary>
-	public sealed class AddR8Expression_v1 : BaseTransformation
+	public sealed class AddR8Expression_v1 : BaseTransform
 	{
-		public AddR8Expression_v1() : base(IRInstruction.AddR8, TransformationType.Auto | TransformationType.Optimization)
+		public AddR8Expression_v1() : base(IRInstruction.AddR8, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -103,9 +103,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove
 	/// <summary>
 	/// AddR8Expression_v2
 	/// </summary>
-	public sealed class AddR8Expression_v2 : BaseTransformation
+	public sealed class AddR8Expression_v2 : BaseTransform
 	{
-		public AddR8Expression_v2() : base(IRInstruction.AddR8, TransformationType.Auto | TransformationType.Optimization)
+		public AddR8Expression_v2() : base(IRInstruction.AddR8, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -150,9 +150,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove
 	/// <summary>
 	/// AddR8Expression_v3
 	/// </summary>
-	public sealed class AddR8Expression_v3 : BaseTransformation
+	public sealed class AddR8Expression_v3 : BaseTransform
 	{
-		public AddR8Expression_v3() : base(IRInstruction.AddR8, TransformationType.Auto | TransformationType.Optimization)
+		public AddR8Expression_v3() : base(IRInstruction.AddR8, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

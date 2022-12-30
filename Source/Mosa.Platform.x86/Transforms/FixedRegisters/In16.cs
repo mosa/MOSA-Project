@@ -8,9 +8,9 @@ namespace Mosa.Platform.x86.Transform.FixedRegisters
 	/// <summary>
 	/// In16
 	/// </summary>
-	public sealed class In16 : BaseTransformation
+	public sealed class In16 : BaseTransform
 	{
-		public In16() : base(X86.In16, TransformationType.Manual | TransformationType.Transform)
+		public In16() : base(X86.In16, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

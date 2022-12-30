@@ -10,9 +10,9 @@ namespace Mosa.Platform.x86.Transforms.IR
 	/// <summary>
 	/// SubCarryOut64
 	/// </summary>
-	public sealed class SubCarryOut64 : BaseTransformation
+	public sealed class SubCarryOut64 : BaseTransform
 	{
-		public SubCarryOut64() : base(IRInstruction.SubCarryOut64, TransformationType.Manual | TransformationType.Transform)
+		public SubCarryOut64() : base(IRInstruction.SubCarryOut64, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

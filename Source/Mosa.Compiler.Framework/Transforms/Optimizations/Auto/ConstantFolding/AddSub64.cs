@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
 	/// <summary>
 	/// AddSub64
 	/// </summary>
-	public sealed class AddSub64 : BaseTransformation
+	public sealed class AddSub64 : BaseTransform
 	{
-		public AddSub64() : base(IRInstruction.Add64, TransformationType.Auto | TransformationType.Optimization)
+		public AddSub64() : base(IRInstruction.Add64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -52,9 +52,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
 	/// <summary>
 	/// AddSub64_v1
 	/// </summary>
-	public sealed class AddSub64_v1 : BaseTransformation
+	public sealed class AddSub64_v1 : BaseTransform
 	{
-		public AddSub64_v1() : base(IRInstruction.Add64, TransformationType.Auto | TransformationType.Optimization)
+		public AddSub64_v1() : base(IRInstruction.Add64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

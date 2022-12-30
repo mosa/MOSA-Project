@@ -8,9 +8,9 @@ namespace Mosa.Platform.x86.Transforms.Tweak
 	/// <summary>
 	/// Popcnt32
 	/// </summary>
-	public sealed class Popcnt32 : BaseTransformation
+	public sealed class Popcnt32 : BaseTransform
 	{
-		public Popcnt32() : base(X86.Popcnt32, TransformationType.Manual | TransformationType.Transform)
+		public Popcnt32() : base(X86.Popcnt32, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

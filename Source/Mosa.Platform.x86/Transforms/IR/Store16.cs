@@ -10,9 +10,9 @@ namespace Mosa.Platform.x86.Transforms.IR
 	/// <summary>
 	/// Store16
 	/// </summary>
-	public sealed class Store16 : BaseTransformation
+	public sealed class Store16 : BaseTransform
 	{
-		public Store16() : base(IRInstruction.Store16, TransformationType.Manual | TransformationType.Transform)
+		public Store16() : base(IRInstruction.Store16, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

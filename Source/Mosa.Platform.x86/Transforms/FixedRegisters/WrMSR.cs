@@ -8,9 +8,9 @@ namespace Mosa.Platform.x86.Transform.FixedRegisters
 	/// <summary>
 	/// WrMSR
 	/// </summary>
-	public sealed class WrMSR : BaseTransformation
+	public sealed class WrMSR : BaseTransform
 	{
-		public WrMSR() : base(X86.WrMSR, TransformationType.Manual | TransformationType.Transform)
+		public WrMSR() : base(X86.WrMSR, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

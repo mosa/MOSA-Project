@@ -8,9 +8,9 @@ namespace Mosa.Platform.x86.Transforms.RuntimeCall
 	/// <summary>
 	/// DivUnsigned64
 	/// </summary>
-	public sealed class DivUnsigned64 : BaseTransformation
+	public sealed class DivUnsigned64 : BaseTransform
 	{
-		public DivUnsigned64() : base(IRInstruction.DivUnsigned64, TransformationType.Manual | TransformationType.Transform)
+		public DivUnsigned64() : base(IRInstruction.DivUnsigned64, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

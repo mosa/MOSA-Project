@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.ConstantFoldin
 	/// <summary>
 	/// Add32
 	/// </summary>
-	public sealed class AddCarryOut32 : BaseTransformation
+	public sealed class AddCarryOut32 : BaseTransform
 	{
-		public AddCarryOut32() : base(IRInstruction.AddCarryOut32, TransformationType.Manual | TransformationType.Optimization)
+		public AddCarryOut32() : base(IRInstruction.AddCarryOut32, TransformType.Manual | TransformType.Optimization)
 		{
 		}
 

@@ -2,9 +2,9 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Memory
 {
-	public sealed class LoadParamSignExtend8x64Store8 : BaseTransformation
+	public sealed class LoadParamSignExtend8x64Store8 : BaseTransform
 	{
-		public LoadParamSignExtend8x64Store8() : base(IRInstruction.LoadParamSignExtend8x64, TransformationType.Manual | TransformationType.Optimization)
+		public LoadParamSignExtend8x64Store8() : base(IRInstruction.LoadParamSignExtend8x64, TransformType.Manual | TransformType.Optimization)
 		{
 		}
 

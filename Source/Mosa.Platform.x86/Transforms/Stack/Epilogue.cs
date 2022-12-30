@@ -8,9 +8,9 @@ namespace Mosa.Platform.x86.Transforms.Stack
 	/// <summary>
 	/// Epilogue
 	/// </summary>
-	public sealed class Epilogue : BaseTransformation
+	public sealed class Epilogue : BaseTransform
 	{
-		public Epilogue() : base(IRInstruction.Epilogue, TransformationType.Manual | TransformationType.Transform)
+		public Epilogue() : base(IRInstruction.Epilogue, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

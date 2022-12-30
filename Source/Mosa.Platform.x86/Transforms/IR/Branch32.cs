@@ -10,9 +10,9 @@ namespace Mosa.Platform.x86.Transforms.IR
 	/// <summary>
 	/// Branch32
 	/// </summary>
-	public sealed class Branch32 : BaseTransformation
+	public sealed class Branch32 : BaseTransform
 	{
-		public Branch32() : base(IRInstruction.Branch32, TransformationType.Manual | TransformationType.Transform)
+		public Branch32() : base(IRInstruction.Branch32, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

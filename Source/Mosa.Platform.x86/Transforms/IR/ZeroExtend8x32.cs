@@ -10,9 +10,9 @@ namespace Mosa.Platform.x86.Transforms.IR
 	/// <summary>
 	/// ZeroExtend8x32
 	/// </summary>
-	public sealed class ZeroExtend8x32 : BaseTransformation
+	public sealed class ZeroExtend8x32 : BaseTransform
 	{
-		public ZeroExtend8x32() : base(IRInstruction.ZeroExtend8x32, TransformationType.Manual | TransformationType.Transform)
+		public ZeroExtend8x32() : base(IRInstruction.ZeroExtend8x32, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

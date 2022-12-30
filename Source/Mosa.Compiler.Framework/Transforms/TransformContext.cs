@@ -146,7 +146,7 @@ namespace Mosa.Compiler.Framework.Transforms
 			return VirtualRegisters.Allocate(O);
 		}
 
-		public bool ApplyTransform(Context context, BaseTransformation transformation)
+		public bool ApplyTransform(Context context, BaseTransform transformation)
 		{
 			if (!transformation.Match(context, this))
 				return false;
@@ -162,7 +162,7 @@ namespace Mosa.Compiler.Framework.Transforms
 
 		#region Trace
 
-		public void TraceBefore(Context context, BaseTransformation transformation)
+		public void TraceBefore(Context context, BaseTransform transformation)
 		{
 			if (transformation.Name != null)
 				TraceLog?.Log($"*** {transformation.Name}");

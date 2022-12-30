@@ -10,9 +10,9 @@ namespace Mosa.Platform.x86.Transforms.IR
 	/// <summary>
 	/// Sub64
 	/// </summary>
-	public sealed class Sub64 : BaseTransformation
+	public sealed class Sub64 : BaseTransform
 	{
-		public Sub64() : base(IRInstruction.Sub64, TransformationType.Manual | TransformationType.Transform)
+		public Sub64() : base(IRInstruction.Sub64, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

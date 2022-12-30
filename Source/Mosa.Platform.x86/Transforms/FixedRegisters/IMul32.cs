@@ -8,9 +8,9 @@ namespace Mosa.Platform.x86.Transform.FixedRegisters
 	/// <summary>
 	/// IMul32
 	/// </summary>
-	public sealed class IMul32 : BaseTransformation
+	public sealed class IMul32 : BaseTransform
 	{
-		public IMul32() : base(X86.IMul32, TransformationType.Manual | TransformationType.Transform)
+		public IMul32() : base(X86.IMul32, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

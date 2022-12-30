@@ -10,9 +10,9 @@ namespace Mosa.Platform.x86.Transforms.IR
 	/// <summary>
 	/// Call
 	/// </summary>
-	public sealed class Call : BaseTransformation
+	public sealed class Call : BaseTransform
 	{
-		public Call() : base(IRInstruction.Call, TransformationType.Manual | TransformationType.Transform)
+		public Call() : base(IRInstruction.Call, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

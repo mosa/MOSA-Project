@@ -2,9 +2,9 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Rewrite
 {
-	public sealed class BranchObject : BaseTransformation
+	public sealed class BranchObject : BaseTransform
 	{
-		public BranchObject() : base(IRInstruction.BranchObject, TransformationType.Manual | TransformationType.Optimization)
+		public BranchObject() : base(IRInstruction.BranchObject, TransformType.Manual | TransformType.Optimization)
 		{
 		}
 

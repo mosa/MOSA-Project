@@ -10,9 +10,9 @@ namespace Mosa.Platform.x86.Transforms.IR
 	/// <summary>
 	/// Nop
 	/// </summary>
-	public sealed class Nop : BaseTransformation
+	public sealed class Nop : BaseTransform
 	{
-		public Nop() : base(IRInstruction.Nop, TransformationType.Manual | TransformationType.Transform)
+		public Nop() : base(IRInstruction.Nop, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

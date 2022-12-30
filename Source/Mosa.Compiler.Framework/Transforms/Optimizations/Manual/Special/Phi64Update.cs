@@ -2,9 +2,9 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Special
 {
-	public sealed class Phi64Update : BaseTransformation
+	public sealed class Phi64Update : BaseTransform
 	{
-		public Phi64Update() : base(IRInstruction.Phi32, TransformationType.Manual | TransformationType.Optimization)
+		public Phi64Update() : base(IRInstruction.Phi32, TransformType.Manual | TransformType.Optimization)
 		{
 		}
 

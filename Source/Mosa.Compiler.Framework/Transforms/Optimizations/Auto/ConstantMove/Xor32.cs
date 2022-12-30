@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove
 	/// <summary>
 	/// Xor32
 	/// </summary>
-	public sealed class Xor32 : BaseTransformation
+	public sealed class Xor32 : BaseTransform
 	{
-		public Xor32() : base(IRInstruction.Xor32, TransformationType.Auto | TransformationType.Optimization)
+		public Xor32() : base(IRInstruction.Xor32, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

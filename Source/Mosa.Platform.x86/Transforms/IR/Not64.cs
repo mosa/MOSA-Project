@@ -10,9 +10,9 @@ namespace Mosa.Platform.x86.Transforms.IR
 	/// <summary>
 	/// Not64
 	/// </summary>
-	public sealed class Not64 : BaseTransformation
+	public sealed class Not64 : BaseTransform
 	{
-		public Not64() : base(IRInstruction.Not64, TransformationType.Manual | TransformationType.Transform)
+		public Not64() : base(IRInstruction.Not64, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

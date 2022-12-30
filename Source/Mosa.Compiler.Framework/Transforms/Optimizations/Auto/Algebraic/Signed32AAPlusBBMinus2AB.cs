@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Algebraic
 	/// <summary>
 	/// Signed32AAPlusBBMinus2AB
 	/// </summary>
-	public sealed class Signed32AAPlusBBMinus2AB : BaseTransformation
+	public sealed class Signed32AAPlusBBMinus2AB : BaseTransform
 	{
-		public Signed32AAPlusBBMinus2AB() : base(IRInstruction.Sub32, TransformationType.Auto | TransformationType.Optimization)
+		public Signed32AAPlusBBMinus2AB() : base(IRInstruction.Sub32, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -102,9 +102,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Algebraic
 	/// <summary>
 	/// Signed32AAPlusBBMinus2AB_v1
 	/// </summary>
-	public sealed class Signed32AAPlusBBMinus2AB_v1 : BaseTransformation
+	public sealed class Signed32AAPlusBBMinus2AB_v1 : BaseTransform
 	{
-		public Signed32AAPlusBBMinus2AB_v1() : base(IRInstruction.Sub32, TransformationType.Auto | TransformationType.Optimization)
+		public Signed32AAPlusBBMinus2AB_v1() : base(IRInstruction.Sub32, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -195,9 +195,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Algebraic
 	/// <summary>
 	/// Signed32AAPlusBBMinus2AB_v2
 	/// </summary>
-	public sealed class Signed32AAPlusBBMinus2AB_v2 : BaseTransformation
+	public sealed class Signed32AAPlusBBMinus2AB_v2 : BaseTransform
 	{
-		public Signed32AAPlusBBMinus2AB_v2() : base(IRInstruction.Sub32, TransformationType.Auto | TransformationType.Optimization)
+		public Signed32AAPlusBBMinus2AB_v2() : base(IRInstruction.Sub32, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -288,9 +288,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Algebraic
 	/// <summary>
 	/// Signed32AAPlusBBMinus2AB_v3
 	/// </summary>
-	public sealed class Signed32AAPlusBBMinus2AB_v3 : BaseTransformation
+	public sealed class Signed32AAPlusBBMinus2AB_v3 : BaseTransform
 	{
-		public Signed32AAPlusBBMinus2AB_v3() : base(IRInstruction.Sub32, TransformationType.Auto | TransformationType.Optimization)
+		public Signed32AAPlusBBMinus2AB_v3() : base(IRInstruction.Sub32, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

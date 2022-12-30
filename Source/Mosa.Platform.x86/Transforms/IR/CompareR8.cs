@@ -10,9 +10,9 @@ namespace Mosa.Platform.x86.Transforms.IR
 	/// <summary>
 	/// CompareR8
 	/// </summary>
-	public sealed class CompareR8 : BaseTransformation
+	public sealed class CompareR8 : BaseTransform
 	{
-		public CompareR8() : base(IRInstruction.CompareR8, TransformationType.Manual | TransformationType.Transform)
+		public CompareR8() : base(IRInstruction.CompareR8, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

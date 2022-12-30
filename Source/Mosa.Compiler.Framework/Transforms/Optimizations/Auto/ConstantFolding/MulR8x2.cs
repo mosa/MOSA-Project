@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
 	/// <summary>
 	/// MulR8x2
 	/// </summary>
-	public sealed class MulR8x2 : BaseTransformation
+	public sealed class MulR8x2 : BaseTransform
 	{
-		public MulR8x2() : base(IRInstruction.MulR8, TransformationType.Auto | TransformationType.Optimization)
+		public MulR8x2() : base(IRInstruction.MulR8, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -52,9 +52,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
 	/// <summary>
 	/// MulR8x2_v1
 	/// </summary>
-	public sealed class MulR8x2_v1 : BaseTransformation
+	public sealed class MulR8x2_v1 : BaseTransform
 	{
-		public MulR8x2_v1() : base(IRInstruction.MulR8, TransformationType.Auto | TransformationType.Optimization)
+		public MulR8x2_v1() : base(IRInstruction.MulR8, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -95,9 +95,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
 	/// <summary>
 	/// MulR8x2_v2
 	/// </summary>
-	public sealed class MulR8x2_v2 : BaseTransformation
+	public sealed class MulR8x2_v2 : BaseTransform
 	{
-		public MulR8x2_v2() : base(IRInstruction.MulR8, TransformationType.Auto | TransformationType.Optimization)
+		public MulR8x2_v2() : base(IRInstruction.MulR8, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -138,9 +138,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
 	/// <summary>
 	/// MulR8x2_v3
 	/// </summary>
-	public sealed class MulR8x2_v3 : BaseTransformation
+	public sealed class MulR8x2_v3 : BaseTransform
 	{
-		public MulR8x2_v3() : base(IRInstruction.MulR8, TransformationType.Auto | TransformationType.Optimization)
+		public MulR8x2_v3() : base(IRInstruction.MulR8, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

@@ -10,9 +10,9 @@ namespace Mosa.Platform.x86.Transforms.IR
 	/// <summary>
 	/// CompareObject
 	/// </summary>
-	public sealed class CompareObject : BaseTransformation
+	public sealed class CompareObject : BaseTransform
 	{
-		public CompareObject() : base(IRInstruction.CompareObject, TransformationType.Manual | TransformationType.Transform)
+		public CompareObject() : base(IRInstruction.CompareObject, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

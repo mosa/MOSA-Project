@@ -11,9 +11,9 @@ namespace Mosa.Platform.x64.Transforms.Optimizations.Auto.Shrink
 	/// <summary>
 	/// And64ByFF
 	/// </summary>
-	public sealed class And64ByFF : BaseTransformation
+	public sealed class And64ByFF : BaseTransform
 	{
-		public And64ByFF() : base(X64.And64, TransformationType.Auto | TransformationType.Optimization)
+		public And64ByFF() : base(X64.And64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -50,9 +50,9 @@ namespace Mosa.Platform.x64.Transforms.Optimizations.Auto.Shrink
 	/// <summary>
 	/// And64ByFF_v1
 	/// </summary>
-	public sealed class And64ByFF_v1 : BaseTransformation
+	public sealed class And64ByFF_v1 : BaseTransform
 	{
-		public And64ByFF_v1() : base(X64.And64, TransformationType.Auto | TransformationType.Optimization)
+		public And64ByFF_v1() : base(X64.And64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

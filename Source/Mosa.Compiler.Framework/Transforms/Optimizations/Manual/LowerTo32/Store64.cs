@@ -2,9 +2,9 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.LowerTo32
 {
-	public sealed class Store64 : BaseTransformation
+	public sealed class Store64 : BaseTransform
 	{
-		public Store64() : base(IRInstruction.Store64, TransformationType.Manual | TransformationType.Optimization)
+		public Store64() : base(IRInstruction.Store64, TransformType.Manual | TransformType.Optimization)
 		{
 		}
 

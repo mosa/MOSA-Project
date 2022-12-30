@@ -10,9 +10,9 @@ namespace Mosa.Platform.x86.Transforms.IR
 	/// <summary>
 	/// SubCarryIn32
 	/// </summary>
-	public sealed class SubCarryIn32 : BaseTransformation
+	public sealed class SubCarryIn32 : BaseTransform
 	{
-		public SubCarryIn32() : base(IRInstruction.SubCarryIn32, TransformationType.Manual | TransformationType.Transform)
+		public SubCarryIn32() : base(IRInstruction.SubCarryIn32, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

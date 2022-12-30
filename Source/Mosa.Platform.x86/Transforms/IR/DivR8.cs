@@ -10,9 +10,9 @@ namespace Mosa.Platform.x86.Transforms.IR
 	/// <summary>
 	/// DivR8
 	/// </summary>
-	public sealed class DivR8 : BaseTransformation
+	public sealed class DivR8 : BaseTransform
 	{
-		public DivR8() : base(IRInstruction.DivR8, TransformationType.Manual | TransformationType.Transform)
+		public DivR8() : base(IRInstruction.DivR8, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

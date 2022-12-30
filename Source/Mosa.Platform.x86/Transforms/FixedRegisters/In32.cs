@@ -8,9 +8,9 @@ namespace Mosa.Platform.x86.Transform.FixedRegisters
 	/// <summary>
 	/// In32
 	/// </summary>
-	public sealed class In32 : BaseTransformation
+	public sealed class In32 : BaseTransform
 	{
-		public In32() : base(X86.In32, TransformationType.Manual | TransformationType.Transform)
+		public In32() : base(X86.In32, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

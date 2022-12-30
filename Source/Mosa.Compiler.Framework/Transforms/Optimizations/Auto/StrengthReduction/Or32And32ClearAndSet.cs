@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 	/// <summary>
 	/// Or32And32ClearAndSet
 	/// </summary>
-	public sealed class Or32And32ClearAndSet : BaseTransformation
+	public sealed class Or32And32ClearAndSet : BaseTransform
 	{
-		public Or32And32ClearAndSet() : base(IRInstruction.Or32, TransformationType.Auto | TransformationType.Optimization)
+		public Or32And32ClearAndSet() : base(IRInstruction.Or32, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -52,9 +52,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 	/// <summary>
 	/// Or32And32ClearAndSet_v1
 	/// </summary>
-	public sealed class Or32And32ClearAndSet_v1 : BaseTransformation
+	public sealed class Or32And32ClearAndSet_v1 : BaseTransform
 	{
-		public Or32And32ClearAndSet_v1() : base(IRInstruction.Or32, TransformationType.Auto | TransformationType.Optimization)
+		public Or32And32ClearAndSet_v1() : base(IRInstruction.Or32, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -95,9 +95,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 	/// <summary>
 	/// Or32And32ClearAndSet_v2
 	/// </summary>
-	public sealed class Or32And32ClearAndSet_v2 : BaseTransformation
+	public sealed class Or32And32ClearAndSet_v2 : BaseTransform
 	{
-		public Or32And32ClearAndSet_v2() : base(IRInstruction.Or32, TransformationType.Auto | TransformationType.Optimization)
+		public Or32And32ClearAndSet_v2() : base(IRInstruction.Or32, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -138,9 +138,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 	/// <summary>
 	/// Or32And32ClearAndSet_v3
 	/// </summary>
-	public sealed class Or32And32ClearAndSet_v3 : BaseTransformation
+	public sealed class Or32And32ClearAndSet_v3 : BaseTransform
 	{
-		public Or32And32ClearAndSet_v3() : base(IRInstruction.Or32, TransformationType.Auto | TransformationType.Optimization)
+		public Or32And32ClearAndSet_v3() : base(IRInstruction.Or32, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

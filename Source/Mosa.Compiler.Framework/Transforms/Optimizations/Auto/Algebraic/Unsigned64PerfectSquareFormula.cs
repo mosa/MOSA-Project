@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Algebraic
 	/// <summary>
 	/// Unsigned64PerfectSquareFormula
 	/// </summary>
-	public sealed class Unsigned64PerfectSquareFormula : BaseTransformation
+	public sealed class Unsigned64PerfectSquareFormula : BaseTransform
 	{
-		public Unsigned64PerfectSquareFormula() : base(IRInstruction.Add64, TransformationType.Auto | TransformationType.Optimization)
+		public Unsigned64PerfectSquareFormula() : base(IRInstruction.Add64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -86,9 +86,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Algebraic
 	/// <summary>
 	/// Unsigned64PerfectSquareFormula_v1
 	/// </summary>
-	public sealed class Unsigned64PerfectSquareFormula_v1 : BaseTransformation
+	public sealed class Unsigned64PerfectSquareFormula_v1 : BaseTransform
 	{
-		public Unsigned64PerfectSquareFormula_v1() : base(IRInstruction.Add64, TransformationType.Auto | TransformationType.Optimization)
+		public Unsigned64PerfectSquareFormula_v1() : base(IRInstruction.Add64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -163,9 +163,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Algebraic
 	/// <summary>
 	/// Unsigned64PerfectSquareFormula_v2
 	/// </summary>
-	public sealed class Unsigned64PerfectSquareFormula_v2 : BaseTransformation
+	public sealed class Unsigned64PerfectSquareFormula_v2 : BaseTransform
 	{
-		public Unsigned64PerfectSquareFormula_v2() : base(IRInstruction.Add64, TransformationType.Auto | TransformationType.Optimization)
+		public Unsigned64PerfectSquareFormula_v2() : base(IRInstruction.Add64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -240,9 +240,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Algebraic
 	/// <summary>
 	/// Unsigned64PerfectSquareFormula_v3
 	/// </summary>
-	public sealed class Unsigned64PerfectSquareFormula_v3 : BaseTransformation
+	public sealed class Unsigned64PerfectSquareFormula_v3 : BaseTransform
 	{
-		public Unsigned64PerfectSquareFormula_v3() : base(IRInstruction.Add64, TransformationType.Auto | TransformationType.Optimization)
+		public Unsigned64PerfectSquareFormula_v3() : base(IRInstruction.Add64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -317,9 +317,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Algebraic
 	/// <summary>
 	/// Unsigned64PerfectSquareFormula_v4
 	/// </summary>
-	public sealed class Unsigned64PerfectSquareFormula_v4 : BaseTransformation
+	public sealed class Unsigned64PerfectSquareFormula_v4 : BaseTransform
 	{
-		public Unsigned64PerfectSquareFormula_v4() : base(IRInstruction.Add64, TransformationType.Auto | TransformationType.Optimization)
+		public Unsigned64PerfectSquareFormula_v4() : base(IRInstruction.Add64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -394,9 +394,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Algebraic
 	/// <summary>
 	/// Unsigned64PerfectSquareFormula_v5
 	/// </summary>
-	public sealed class Unsigned64PerfectSquareFormula_v5 : BaseTransformation
+	public sealed class Unsigned64PerfectSquareFormula_v5 : BaseTransform
 	{
-		public Unsigned64PerfectSquareFormula_v5() : base(IRInstruction.Add64, TransformationType.Auto | TransformationType.Optimization)
+		public Unsigned64PerfectSquareFormula_v5() : base(IRInstruction.Add64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -471,9 +471,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Algebraic
 	/// <summary>
 	/// Unsigned64PerfectSquareFormula_v6
 	/// </summary>
-	public sealed class Unsigned64PerfectSquareFormula_v6 : BaseTransformation
+	public sealed class Unsigned64PerfectSquareFormula_v6 : BaseTransform
 	{
-		public Unsigned64PerfectSquareFormula_v6() : base(IRInstruction.Add64, TransformationType.Auto | TransformationType.Optimization)
+		public Unsigned64PerfectSquareFormula_v6() : base(IRInstruction.Add64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -548,9 +548,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Algebraic
 	/// <summary>
 	/// Unsigned64PerfectSquareFormula_v7
 	/// </summary>
-	public sealed class Unsigned64PerfectSquareFormula_v7 : BaseTransformation
+	public sealed class Unsigned64PerfectSquareFormula_v7 : BaseTransform
 	{
-		public Unsigned64PerfectSquareFormula_v7() : base(IRInstruction.Add64, TransformationType.Auto | TransformationType.Optimization)
+		public Unsigned64PerfectSquareFormula_v7() : base(IRInstruction.Add64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

@@ -8,9 +8,9 @@ namespace Mosa.Platform.x86.Transforms.Tweak
 	/// <summary>
 	/// Cmp32
 	/// </summary>
-	public sealed class Cmp32 : BaseTransformation
+	public sealed class Cmp32 : BaseTransform
 	{
-		public Cmp32() : base(X86.Cmp32, TransformationType.Manual | TransformationType.Transform)
+		public Cmp32() : base(X86.Cmp32, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

@@ -10,9 +10,9 @@ namespace Mosa.Platform.x86.Transforms.IR
 	/// <summary>
 	/// SignExtend16x64
 	/// </summary>
-	public sealed class SignExtend16x64 : BaseTransformation
+	public sealed class SignExtend16x64 : BaseTransform
 	{
-		public SignExtend16x64() : base(IRInstruction.SignExtend16x64, TransformationType.Manual | TransformationType.Transform)
+		public SignExtend16x64() : base(IRInstruction.SignExtend16x64, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

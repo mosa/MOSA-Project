@@ -10,9 +10,9 @@ namespace Mosa.Platform.x86.Transforms.IR
 	/// <summary>
 	/// StoreR8
 	/// </summary>
-	public sealed class StoreR8 : BaseTransformation
+	public sealed class StoreR8 : BaseTransform
 	{
-		public StoreR8() : base(IRInstruction.StoreR8, TransformationType.Manual | TransformationType.Transform)
+		public StoreR8() : base(IRInstruction.StoreR8, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

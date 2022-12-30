@@ -9,9 +9,9 @@ namespace Mosa.Platform.x86.Transforms.Tweak
 	/// <summary>
 	/// Movss
 	/// </summary>
-	public sealed class Movss : BaseTransformation
+	public sealed class Movss : BaseTransform
 	{
-		public Movss() : base(X86.Movss, TransformationType.Manual | TransformationType.Transform)
+		public Movss() : base(X86.Movss, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

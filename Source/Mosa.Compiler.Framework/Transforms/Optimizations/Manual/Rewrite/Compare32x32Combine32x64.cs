@@ -2,9 +2,9 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Rewrite
 {
-	public sealed class Compare32x32Combine32x64 : BaseTransformation
+	public sealed class Compare32x32Combine32x64 : BaseTransform
 	{
-		public Compare32x32Combine32x64() : base(IRInstruction.Compare32x32, TransformationType.Manual | TransformationType.Optimization)
+		public Compare32x32Combine32x64() : base(IRInstruction.Compare32x32, TransformType.Manual | TransformType.Optimization)
 		{
 		}
 

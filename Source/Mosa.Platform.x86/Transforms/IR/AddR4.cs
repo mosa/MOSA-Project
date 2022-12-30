@@ -10,9 +10,9 @@ namespace Mosa.Platform.x86.Transforms.IR
 	/// <summary>
 	/// AddR4
 	/// </summary>
-	public sealed class AddR4 : BaseTransformation
+	public sealed class AddR4 : BaseTransform
 	{
-		public AddR4() : base(IRInstruction.AddR4, TransformationType.Manual | TransformationType.Transform)
+		public AddR4() : base(IRInstruction.AddR4, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

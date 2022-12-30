@@ -10,9 +10,9 @@ namespace Mosa.Platform.x86.Transforms.IR
 	/// <summary>
 	/// ShiftRight64
 	/// </summary>
-	public sealed class ShiftRight64 : BaseTransformation
+	public sealed class ShiftRight64 : BaseTransform
 	{
-		public ShiftRight64() : base(IRInstruction.ShiftRight64, TransformationType.Manual | TransformationType.Transform)
+		public ShiftRight64() : base(IRInstruction.ShiftRight64, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
 	/// <summary>
 	/// LoadZeroExtend16x32FoldAdd32
 	/// </summary>
-	public sealed class LoadZeroExtend16x32FoldAdd32 : BaseTransformation
+	public sealed class LoadZeroExtend16x32FoldAdd32 : BaseTransform
 	{
-		public LoadZeroExtend16x32FoldAdd32() : base(IRInstruction.LoadZeroExtend16x32, TransformationType.Auto | TransformationType.Optimization)
+		public LoadZeroExtend16x32FoldAdd32() : base(IRInstruction.LoadZeroExtend16x32, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

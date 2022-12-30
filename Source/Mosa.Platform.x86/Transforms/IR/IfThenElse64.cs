@@ -10,9 +10,9 @@ namespace Mosa.Platform.x86.Transforms.IR
 	/// <summary>
 	/// IfThenElse64
 	/// </summary>
-	public sealed class IfThenElse64 : BaseTransformation
+	public sealed class IfThenElse64 : BaseTransform
 	{
-		public IfThenElse64() : base(IRInstruction.IfThenElse64, TransformationType.Manual | TransformationType.Transform)
+		public IfThenElse64() : base(IRInstruction.IfThenElse64, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

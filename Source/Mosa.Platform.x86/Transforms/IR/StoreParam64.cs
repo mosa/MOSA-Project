@@ -10,9 +10,9 @@ namespace Mosa.Platform.x86.Transforms.IR
 	/// <summary>
 	/// StoreParam64
 	/// </summary>
-	public sealed class StoreParam64 : BaseTransformation
+	public sealed class StoreParam64 : BaseTransform
 	{
-		public StoreParam64() : base(IRInstruction.StoreParam64, TransformationType.Manual | TransformationType.Transform)
+		public StoreParam64() : base(IRInstruction.StoreParam64, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

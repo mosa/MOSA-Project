@@ -10,9 +10,9 @@ namespace Mosa.Platform.x86.Transforms.IR
 	/// <summary>
 	/// BranchObject
 	/// </summary>
-	public sealed class BranchObject : BaseTransformation
+	public sealed class BranchObject : BaseTransform
 	{
-		public BranchObject() : base(IRInstruction.BranchObject, TransformationType.Manual | TransformationType.Transform)
+		public BranchObject() : base(IRInstruction.BranchObject, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

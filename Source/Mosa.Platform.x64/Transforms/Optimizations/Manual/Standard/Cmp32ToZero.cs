@@ -5,9 +5,9 @@ using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x64.Transforms.Optimizations.Manual.Standard
 {
-	public sealed class Cmp32ToZero : BaseTransformation
+	public sealed class Cmp32ToZero : BaseTransform
 	{
-		public Cmp32ToZero() : base(X64.Cmp32, TransformationType.Manual | TransformationType.Optimization)
+		public Cmp32ToZero() : base(X64.Cmp32, TransformType.Manual | TransformType.Optimization)
 		{
 		}
 

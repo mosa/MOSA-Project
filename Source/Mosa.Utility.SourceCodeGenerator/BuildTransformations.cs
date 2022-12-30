@@ -169,11 +169,11 @@ namespace Mosa.Utility.SourceCodeGenerator
 			Lines.AppendLine($"\t/// {name}{subName}");
 			Lines.AppendLine("\t/// </summary>");
 
-			Lines.AppendLine($"\tpublic sealed class {name}{subName} : BaseTransformation");
+			Lines.AppendLine($"\tpublic sealed class {name}{subName} : BaseTransform");
 			Lines.AppendLine("\t{");
 
-			string typestring = "TransformationType.Auto" +
-				(optimization ? " | TransformationType.Optimization" : string.Empty);
+			string typestring = "TransformType.Auto" +
+				(optimization ? " | TransformType.Optimization" : string.Empty);
 
 			if (log)
 				Lines.AppendLine($"\t\tpublic {name}{subName}() : base({instructionName}, " + typestring + ", true)");

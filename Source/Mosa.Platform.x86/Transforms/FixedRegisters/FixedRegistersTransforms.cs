@@ -11,7 +11,7 @@ namespace Mosa.Platform.x86.Transforms.FixedRegisters
 	/// </summary>
 	public static class FixedRegistersTransforms
 	{
-		public static readonly List<BaseTransformation> List = new List<BaseTransformation>
+		public static readonly List<BaseTransform> List = new List<BaseTransform>
 		{
 			new Cdq32(),
 			new Div32(),

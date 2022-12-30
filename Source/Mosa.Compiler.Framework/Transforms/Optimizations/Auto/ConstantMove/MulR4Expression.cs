@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove
 	/// <summary>
 	/// MulR4Expression
 	/// </summary>
-	public sealed class MulR4Expression : BaseTransformation
+	public sealed class MulR4Expression : BaseTransform
 	{
-		public MulR4Expression() : base(IRInstruction.MulR4, TransformationType.Auto | TransformationType.Optimization)
+		public MulR4Expression() : base(IRInstruction.MulR4, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -56,9 +56,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove
 	/// <summary>
 	/// MulR4Expression_v1
 	/// </summary>
-	public sealed class MulR4Expression_v1 : BaseTransformation
+	public sealed class MulR4Expression_v1 : BaseTransform
 	{
-		public MulR4Expression_v1() : base(IRInstruction.MulR4, TransformationType.Auto | TransformationType.Optimization)
+		public MulR4Expression_v1() : base(IRInstruction.MulR4, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -103,9 +103,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove
 	/// <summary>
 	/// MulR4Expression_v2
 	/// </summary>
-	public sealed class MulR4Expression_v2 : BaseTransformation
+	public sealed class MulR4Expression_v2 : BaseTransform
 	{
-		public MulR4Expression_v2() : base(IRInstruction.MulR4, TransformationType.Auto | TransformationType.Optimization)
+		public MulR4Expression_v2() : base(IRInstruction.MulR4, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -150,9 +150,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove
 	/// <summary>
 	/// MulR4Expression_v3
 	/// </summary>
-	public sealed class MulR4Expression_v3 : BaseTransformation
+	public sealed class MulR4Expression_v3 : BaseTransform
 	{
-		public MulR4Expression_v3() : base(IRInstruction.MulR4, TransformationType.Auto | TransformationType.Optimization)
+		public MulR4Expression_v3() : base(IRInstruction.MulR4, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

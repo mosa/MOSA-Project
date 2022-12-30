@@ -12,9 +12,9 @@ namespace Mosa.Platform.x86.Transforms.Special
 	/// <summary>
 	/// AddressModeConversion
 	/// </summary>
-	public sealed class AddressModeConversion : BaseTransformation
+	public sealed class AddressModeConversion : BaseTransform
 	{
-		public AddressModeConversion() : base(null, TransformationType.Manual | TransformationType.Transform)
+		public AddressModeConversion() : base(null, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

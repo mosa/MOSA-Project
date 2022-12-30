@@ -8,9 +8,9 @@ namespace Mosa.Platform.x86.Transform.FixedRegisters
 	/// <summary>
 	/// IDiv32
 	/// </summary>
-	public sealed class IDiv32 : BaseTransformation
+	public sealed class IDiv32 : BaseTransform
 	{
-		public IDiv32() : base(X86.IDiv32, TransformationType.Manual | TransformationType.Transform)
+		public IDiv32() : base(X86.IDiv32, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

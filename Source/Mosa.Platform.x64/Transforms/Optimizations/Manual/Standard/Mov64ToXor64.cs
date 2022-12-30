@@ -5,9 +5,9 @@ using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x64.Transforms.Optimizations.Manual.Standard
 {
-	public sealed class Mov64ToXor64 : BaseTransformation
+	public sealed class Mov64ToXor64 : BaseTransform
 	{
-		public Mov64ToXor64() : base(X64.Mov64, TransformationType.Manual | TransformationType.Optimization)
+		public Mov64ToXor64() : base(X64.Mov64, TransformType.Manual | TransformType.Optimization)
 		{
 		}
 

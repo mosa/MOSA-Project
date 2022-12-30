@@ -4,9 +4,9 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Simplification
 {
-	public sealed class Compare64x32SameLow : BaseTransformation
+	public sealed class Compare64x32SameLow : BaseTransform
 	{
-		public Compare64x32SameLow() : base(IRInstruction.Compare64x32, TransformationType.Manual | TransformationType.Optimization)
+		public Compare64x32SameLow() : base(IRInstruction.Compare64x32, TransformType.Manual | TransformType.Optimization)
 		{
 		}
 

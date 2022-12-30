@@ -10,9 +10,9 @@ namespace Mosa.Platform.x86.Transforms.IR
 	/// <summary>
 	/// Jmp
 	/// </summary>
-	public sealed class Jmp : BaseTransformation
+	public sealed class Jmp : BaseTransform
 	{
-		public Jmp() : base(IRInstruction.Jmp, TransformationType.Manual | TransformationType.Transform)
+		public Jmp() : base(IRInstruction.Jmp, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

@@ -10,9 +10,9 @@ namespace Mosa.Platform.x86.Transforms.IR
 	/// <summary>
 	/// Truncate64x32
 	/// </summary>
-	public sealed class Truncate64x32 : BaseTransformation
+	public sealed class Truncate64x32 : BaseTransform
 	{
-		public Truncate64x32() : base(IRInstruction.Truncate64x32, TransformationType.Manual | TransformationType.Transform)
+		public Truncate64x32() : base(IRInstruction.Truncate64x32, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

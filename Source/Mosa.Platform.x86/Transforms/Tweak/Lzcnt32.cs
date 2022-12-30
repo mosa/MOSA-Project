@@ -8,9 +8,9 @@ namespace Mosa.Platform.x86.Transforms.Tweak
 	/// <summary>
 	/// Lzcnt32
 	/// </summary>
-	public sealed class Lzcnt32 : BaseTransformation
+	public sealed class Lzcnt32 : BaseTransform
 	{
-		public Lzcnt32() : base(X86.Lzcnt32, TransformationType.Manual | TransformationType.Transform)
+		public Lzcnt32() : base(X86.Lzcnt32, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

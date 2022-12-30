@@ -8,9 +8,9 @@ namespace Mosa.Platform.x86.Transform.FixedRegisters
 	/// <summary>
 	/// Cdq32
 	/// </summary>
-	public sealed class Cdq32 : BaseTransformation
+	public sealed class Cdq32 : BaseTransform
 	{
-		public Cdq32() : base(X86.Cdq32, TransformationType.Manual | TransformationType.Transform)
+		public Cdq32() : base(X86.Cdq32, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

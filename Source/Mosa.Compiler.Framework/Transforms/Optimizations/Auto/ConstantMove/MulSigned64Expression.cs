@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove
 	/// <summary>
 	/// MulSigned64Expression
 	/// </summary>
-	public sealed class MulSigned64Expression : BaseTransformation
+	public sealed class MulSigned64Expression : BaseTransform
 	{
-		public MulSigned64Expression() : base(IRInstruction.MulSigned64, TransformationType.Auto | TransformationType.Optimization)
+		public MulSigned64Expression() : base(IRInstruction.MulSigned64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -56,9 +56,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove
 	/// <summary>
 	/// MulSigned64Expression_v1
 	/// </summary>
-	public sealed class MulSigned64Expression_v1 : BaseTransformation
+	public sealed class MulSigned64Expression_v1 : BaseTransform
 	{
-		public MulSigned64Expression_v1() : base(IRInstruction.MulSigned64, TransformationType.Auto | TransformationType.Optimization)
+		public MulSigned64Expression_v1() : base(IRInstruction.MulSigned64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -103,9 +103,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove
 	/// <summary>
 	/// MulSigned64Expression_v2
 	/// </summary>
-	public sealed class MulSigned64Expression_v2 : BaseTransformation
+	public sealed class MulSigned64Expression_v2 : BaseTransform
 	{
-		public MulSigned64Expression_v2() : base(IRInstruction.MulSigned64, TransformationType.Auto | TransformationType.Optimization)
+		public MulSigned64Expression_v2() : base(IRInstruction.MulSigned64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -150,9 +150,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove
 	/// <summary>
 	/// MulSigned64Expression_v3
 	/// </summary>
-	public sealed class MulSigned64Expression_v3 : BaseTransformation
+	public sealed class MulSigned64Expression_v3 : BaseTransform
 	{
-		public MulSigned64Expression_v3() : base(IRInstruction.MulSigned64, TransformationType.Auto | TransformationType.Optimization)
+		public MulSigned64Expression_v3() : base(IRInstruction.MulSigned64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
 	/// <summary>
 	/// RemR4
 	/// </summary>
-	public sealed class RemR4 : BaseTransformation
+	public sealed class RemR4 : BaseTransform
 	{
-		public RemR4() : base(IRInstruction.RemR4, TransformationType.Auto | TransformationType.Optimization)
+		public RemR4() : base(IRInstruction.RemR4, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

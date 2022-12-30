@@ -10,9 +10,9 @@ namespace Mosa.Platform.x86.Transforms.IR
 	/// <summary>
 	/// And32
 	/// </summary>
-	public sealed class And32 : BaseTransformation
+	public sealed class And32 : BaseTransform
 	{
-		public And32() : base(IRInstruction.And32, TransformationType.Manual | TransformationType.Transform)
+		public And32() : base(IRInstruction.And32, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

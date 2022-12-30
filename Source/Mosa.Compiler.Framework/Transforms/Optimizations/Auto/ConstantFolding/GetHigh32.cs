@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
 	/// <summary>
 	/// GetHigh32
 	/// </summary>
-	public sealed class GetHigh32 : BaseTransformation
+	public sealed class GetHigh32 : BaseTransform
 	{
-		public GetHigh32() : base(IRInstruction.GetHigh32, TransformationType.Auto | TransformationType.Optimization)
+		public GetHigh32() : base(IRInstruction.GetHigh32, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

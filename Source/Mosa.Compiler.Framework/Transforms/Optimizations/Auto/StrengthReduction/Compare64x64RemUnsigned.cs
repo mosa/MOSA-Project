@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 	/// <summary>
 	/// Compare64x64RemUnsigned
 	/// </summary>
-	public sealed class Compare64x64RemUnsigned : BaseTransformation
+	public sealed class Compare64x64RemUnsigned : BaseTransform
 	{
-		public Compare64x64RemUnsigned() : base(IRInstruction.Compare64x64, TransformationType.Auto | TransformationType.Optimization)
+		public Compare64x64RemUnsigned() : base(IRInstruction.Compare64x64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -59,9 +59,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 	/// <summary>
 	/// Compare64x64RemUnsigned_v1
 	/// </summary>
-	public sealed class Compare64x64RemUnsigned_v1 : BaseTransformation
+	public sealed class Compare64x64RemUnsigned_v1 : BaseTransform
 	{
-		public Compare64x64RemUnsigned_v1() : base(IRInstruction.Compare64x64, TransformationType.Auto | TransformationType.Optimization)
+		public Compare64x64RemUnsigned_v1() : base(IRInstruction.Compare64x64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

@@ -10,9 +10,9 @@ namespace Mosa.Platform.x86.Transforms.IR
 	/// <summary>
 	/// MoveR8
 	/// </summary>
-	public sealed class MoveR8 : BaseTransformation
+	public sealed class MoveR8 : BaseTransform
 	{
-		public MoveR8() : base(IRInstruction.MoveR8, TransformationType.Manual | TransformationType.Transform)
+		public MoveR8() : base(IRInstruction.MoveR8, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

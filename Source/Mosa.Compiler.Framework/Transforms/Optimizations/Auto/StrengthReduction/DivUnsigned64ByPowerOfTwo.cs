@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 	/// <summary>
 	/// DivUnsigned64ByPowerOfTwo
 	/// </summary>
-	public sealed class DivUnsigned64ByPowerOfTwo : BaseTransformation
+	public sealed class DivUnsigned64ByPowerOfTwo : BaseTransform
 	{
-		public DivUnsigned64ByPowerOfTwo() : base(IRInstruction.DivUnsigned64, TransformationType.Auto | TransformationType.Optimization)
+		public DivUnsigned64ByPowerOfTwo() : base(IRInstruction.DivUnsigned64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

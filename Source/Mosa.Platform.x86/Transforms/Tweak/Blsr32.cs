@@ -8,9 +8,9 @@ namespace Mosa.Platform.x86.Transforms.Tweak
 	/// <summary>
 	/// Blsr32
 	/// </summary>
-	public sealed class Blsr32 : BaseTransformation
+	public sealed class Blsr32 : BaseTransform
 	{
-		public Blsr32() : base(X86.Blsr32, TransformationType.Manual | TransformationType.Transform)
+		public Blsr32() : base(X86.Blsr32, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

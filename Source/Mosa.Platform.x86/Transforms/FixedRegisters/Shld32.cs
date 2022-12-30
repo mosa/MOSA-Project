@@ -8,9 +8,9 @@ namespace Mosa.Platform.x86.Transform.FixedRegisters
 	/// <summary>
 	/// Shld32
 	/// </summary>
-	public sealed class Shld32 : BaseTransformation
+	public sealed class Shld32 : BaseTransform
 	{
-		public Shld32() : base(X86.Shld32, TransformationType.Manual | TransformationType.Transform)
+		public Shld32() : base(X86.Shld32, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

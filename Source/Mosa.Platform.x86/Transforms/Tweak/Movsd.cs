@@ -9,9 +9,9 @@ namespace Mosa.Platform.x86.Transforms.Tweak
 	/// <summary>
 	/// Movsd
 	/// </summary>
-	public sealed class Movsd : BaseTransformation
+	public sealed class Movsd : BaseTransform
 	{
-		public Movsd() : base(X86.Movsd, TransformationType.Manual | TransformationType.Optimization)
+		public Movsd() : base(X86.Movsd, TransformType.Manual | TransformType.Optimization)
 		{
 		}
 

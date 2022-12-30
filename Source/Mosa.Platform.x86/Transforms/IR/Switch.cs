@@ -10,9 +10,9 @@ namespace Mosa.Platform.x86.Transforms.IR
 	/// <summary>
 	/// Switch
 	/// </summary>
-	public sealed class Switch : BaseTransformation
+	public sealed class Switch : BaseTransform
 	{
-		public Switch() : base(IRInstruction.Switch, TransformationType.Manual | TransformationType.Transform)
+		public Switch() : base(IRInstruction.Switch, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

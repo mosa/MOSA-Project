@@ -2,9 +2,9 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.LowerTo32
 {
-	public sealed class Xor64 : BaseTransformation
+	public sealed class Xor64 : BaseTransform
 	{
-		public Xor64() : base(IRInstruction.Xor64, TransformationType.Manual | TransformationType.Optimization)
+		public Xor64() : base(IRInstruction.Xor64, TransformType.Manual | TransformType.Optimization)
 		{
 		}
 

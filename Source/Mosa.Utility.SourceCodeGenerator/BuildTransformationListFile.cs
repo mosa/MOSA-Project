@@ -31,7 +31,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 			Lines.AppendLine("\t/// </summary>");
 			Lines.AppendLine($"\tpublic static class {Classname}");
 			Lines.AppendLine("\t{");
-			Lines.AppendLine("\t\tpublic static readonly List<BaseTransformation> List = new List<BaseTransformation> {");
+			Lines.AppendLine("\t\tpublic static readonly List<BaseTransform> List = new List<BaseTransform> {");
 
 			foreach (var name in BuildTransformations.Transformations)
 			{

@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 	/// <summary>
 	/// Sub32ByZero
 	/// </summary>
-	public sealed class Sub32ByZero : BaseTransformation
+	public sealed class Sub32ByZero : BaseTransform
 	{
-		public Sub32ByZero() : base(IRInstruction.Sub32, TransformationType.Auto | TransformationType.Optimization)
+		public Sub32ByZero() : base(IRInstruction.Sub32, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

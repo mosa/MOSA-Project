@@ -10,9 +10,9 @@ namespace Mosa.Platform.x86.Transforms.IR
 	/// <summary>
 	/// StoreParamObject
 	/// </summary>
-	public sealed class StoreParamObject : BaseTransformation
+	public sealed class StoreParamObject : BaseTransform
 	{
-		public StoreParamObject() : base(IRInstruction.StoreParamObject, TransformationType.Manual | TransformationType.Transform)
+		public StoreParamObject() : base(IRInstruction.StoreParamObject, TransformType.Manual | TransformType.Transform)
 		{
 		}
 
