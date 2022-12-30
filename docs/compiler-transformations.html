@@ -244,7 +244,7 @@
         <span class="p">{</span>
         <span class="p">}</span>
 
-        <span class="k">public</span> <span class="k">override</span> <span class="kt">bool</span> <span class="nf">Match</span><span class="p">(</span><span class="n">Context</span> <span class="n">context</span><span class="p">,</span> <span class="n">TransformContext</span> <span class="n">transformContext</span><span class="p">)</span>
+        <span class="k">public</span> <span class="k">override</span> <span class="kt">bool</span> <span class="nf">Match</span><span class="p">(</span><span class="n">Context</span> <span class="n">context</span><span class="p">,</span> <span class="n">TransformContext</span> <span class="n">transform</span><span class="p">)</span>
         <span class="p">{</span>
                 <span class="k">if</span> <span class="p">(!</span><span class="n">IsResolvedConstant</span><span class="p">(</span><span class="n">context</span><span class="p">.</span><span class="n">Operand1</span><span class="p">))</span>
                         <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
@@ -255,14 +255,14 @@
                 <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
         <span class="p">}</span>
 
-        <span class="k">public</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">Transform</span><span class="p">(</span><span class="n">Context</span> <span class="n">context</span><span class="p">,</span> <span class="n">TransformContext</span> <span class="n">transformContext</span><span class="p">)</span>
+        <span class="k">public</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">Transform</span><span class="p">(</span><span class="n">Context</span> <span class="n">context</span><span class="p">,</span> <span class="n">TransformContext</span> <span class="n">transform</span><span class="p">)</span>
         <span class="p">{</span>
                 <span class="kt">var</span> <span class="n">result</span> <span class="p">=</span> <span class="n">context</span><span class="p">.</span><span class="n">Result</span><span class="p">;</span>
 
                 <span class="kt">var</span> <span class="n">t1</span> <span class="p">=</span> <span class="n">context</span><span class="p">.</span><span class="n">Operand1</span><span class="p">;</span>
                 <span class="kt">var</span> <span class="n">t2</span> <span class="p">=</span> <span class="n">context</span><span class="p">.</span><span class="n">Operand2</span><span class="p">;</span>
 
-                <span class="kt">var</span> <span class="n">e1</span> <span class="p">=</span> <span class="n">transformContext</span><span class="p">.</span><span class="n">CreateConstant</span><span class="p">(</span><span class="n">Add32</span><span class="p">(</span><span class="n">To32</span><span class="p">(</span><span class="n">t1</span><span class="p">),</span> <span class="n">To32</span><span class="p">(</span><span class="n">t2</span><span class="p">)));</span>
+                <span class="kt">var</span> <span class="n">e1</span> <span class="p">=</span> <span class="n">transform</span><span class="p">.</span><span class="n">CreateConstant</span><span class="p">(</span><span class="n">Add32</span><span class="p">(</span><span class="n">To32</span><span class="p">(</span><span class="n">t1</span><span class="p">),</span> <span class="n">To32</span><span class="p">(</span><span class="n">t2</span><span class="p">)));</span>
 
                 <span class="n">context</span><span class="p">.</span><span class="n">SetInstruction</span><span class="p">(</span><span class="n">IRInstruction</span><span class="p">.</span><span class="n">Move32</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">e1</span><span class="p">);</span>
         <span class="p">}</span>

@@ -1,6 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework.Stages;
 using Mosa.Platform.x86.Transforms.RuntimeCall;
 
 namespace Mosa.Platform.x86.Stages

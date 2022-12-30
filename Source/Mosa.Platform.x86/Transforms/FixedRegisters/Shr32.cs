@@ -1,12 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Diagnostics;
-
-using Mosa.Platform.x86;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
-using dnlib.DotNet.Emit;
-using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Platform.x86.Transform.FixedRegisters
 {

@@ -1,7 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework.Stages;
-using Mosa.Platform.x86.Transforms;
 using Mosa.Platform.x86.Transforms.FinalTweak;
 
 namespace Mosa.Platform.x86.Stages

@@ -3,8 +3,6 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-using System.Diagnostics;
-
 namespace Mosa.Platform.x86.Transforms.Tweak
 {
 	/// <summary>

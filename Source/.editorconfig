@@ -1,6 +1,3 @@
-# EditorConfig is awesome:
-http://EditorConfig.org
-
 # top-most EditorConfig file
 root = true
 
@@ -16,9 +13,13 @@ trim_trailing_whitespace = true
 
 [*.cs]
 indent_size = 4
-
-# CS0168: Variable is declared but never used
+dotnet_sort_system_directives_first = true
+dotnet_style_prefer_auto_properties = true
+dotnet_style_prefer_compound_assignment = true
+dotnet_style_coalesce_expression = true
+dotnet_style_prefer_simplified_interpolation = true
 dotnet_diagnostic.CS0168.severity = none
+file_header_template = Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 [*.csproj]
 indent_size = 4
