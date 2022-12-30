@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.DeviceSystem;
 using System.Collections.Generic;
 using System.Drawing;
 
@@ -67,7 +66,7 @@ namespace Mosa.Demo.SVGAWorld.x86
 						if (color != 0)
 							Display.DrawPoint(X + x, Y + y, Color);
 					}
-				//Display.Driver.SetCursor(true, (uint)X, (uint)Y);
+			//Display.Driver.SetCursor(true, (uint)X, (uint)Y);
 			else
 				Display.DrawPoint(X, Y, Color);
 		}

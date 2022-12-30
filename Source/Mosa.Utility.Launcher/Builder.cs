@@ -4,6 +4,11 @@
 //using DiscUtils.Partitions;
 //using DiscUtils.Raw;
 //using DiscUtils.Streams;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
+using System.Text;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Configuration;
 using Mosa.Compiler.Common.Exceptions;
@@ -12,12 +17,6 @@ using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Utility.BootImage;
-
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.IO.Compression;
-using System.Text;
 
 namespace Mosa.Utility.Launcher
 {

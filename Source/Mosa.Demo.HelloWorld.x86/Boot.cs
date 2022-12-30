@@ -1,10 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
 using Mosa.Kernel.x86;
 using Mosa.Kernel.x86.Smbios;
 using Mosa.Runtime.Plug;
 using Mosa.Runtime.x86;
-using System;
 
 namespace Mosa.Demo.HelloWorld.x86
 {

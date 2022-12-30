@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Demo.SVGAWorld.x86.Components;
 using System.Drawing;
+using Mosa.Demo.SVGAWorld.x86.Components;
 
 namespace Mosa.Demo.SVGAWorld.x86.Apps
 {

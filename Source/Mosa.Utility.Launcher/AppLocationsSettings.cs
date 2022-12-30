@@ -1,9 +1,9 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common.Configuration;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Mosa.Compiler.Common.Configuration;
 
 namespace Mosa.Utility.Launcher
 {

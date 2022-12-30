@@ -1,14 +1,13 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Collections.Generic;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.CompilerStages;
 using Mosa.Compiler.Framework.Linker.Elf;
 using Mosa.Compiler.Framework.Stages;
-
 using Mosa.Platform.x64.CompilerStages;
 using Mosa.Platform.x64.Stages;
-using System.Collections.Generic;
 
 namespace Mosa.Platform.x64
 {

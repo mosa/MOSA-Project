@@ -12,7 +12,6 @@ namespace Mosa.FileSystem.VFS
 		/// <summary>
 		/// The target of the symbolic link.
 		/// </summary>
-		private readonly string target;
 
 		#endregion Data Members
 
@@ -26,7 +25,7 @@ namespace Mosa.FileSystem.VFS
 		public SymbolicLinkNode(IFileSystem fs, string target)
 			: base(fs, VfsNodeType.SymbolicLink)
 		{
-			this.target = target;
+			this.Target = target;
 		}
 
 		#endregion Construction
@@ -38,10 +37,17 @@ namespace Mosa.FileSystem.VFS
 		/// </summary>
 		public string Target
 		{
-			get
-			{
-				return target;
-			}
+			/* Unmerged change from project 'Mosa.Utility.FileSystem'
+			Before:
+						get
+						{
+							return target;
+						}
+					}
+			After:
+						get; }
+			*/
+			get; private set;
 		}
 
 		#endregion Properties

@@ -1,0 +1,30 @@
+
+using System.Diagnostics;
+
+using Mosa.Platform.x86;
+using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.Transforms;
+
+namespace Mosa.Platform.x86.Transforms.IR
+{
+	/// <summary>
+	/// MulSigned32
+	/// </summary>
+	public sealed class MulSigned32 : BaseTransformation
+	{
+		public MulSigned32() : base(IRInstruction.MulSigned32, TransformationType.Manual | TransformationType.Transform)
+		{
+		}
+
+		public override bool Match(Context context, TransformContext transform)
+		{
+			return true;
+		}
+
+		public override void Transform(Context context, TransformContext transform)
+		{
+			var v1 = transform.AllocateVirtualRegister32();
+			context.SetInstruction2(X86.Mul32, v1, context.Result, context.Operand1, context.Operand2);
+		}
+	}
+}

@@ -1,10 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using dnlib.DotNet;
-using Mosa.Compiler.MosaTypeSystem.Metadata;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using dnlib.DotNet;
+using Mosa.Compiler.MosaTypeSystem.Metadata;
 
 namespace Mosa.Compiler.MosaTypeSystem
 {

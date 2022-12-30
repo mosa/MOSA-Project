@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework;
 using System;
+using Mosa.Compiler.Framework;
 
 namespace Mosa.Utility.UnitTests
 {

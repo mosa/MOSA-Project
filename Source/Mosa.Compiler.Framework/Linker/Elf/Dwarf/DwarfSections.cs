@@ -1,12 +1,12 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common;
-using Mosa.Compiler.Framework.Source;
-using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Mosa.Compiler.Common;
+using Mosa.Compiler.Framework.Source;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.Linker.Elf.Dwarf
 {

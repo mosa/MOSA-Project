@@ -25,7 +25,7 @@ namespace Mosa.Compiler.Framework.CIL
 					case OpCode.Constrained: return Prefix.Constrained;
 					case OpCode.No: return Prefix.No;
 					case OpCode.ReadOnly: return Prefix.ReadOnly;
-					case OpCode.Tailcall : return Prefix.Tail;
+					case OpCode.Tailcall: return Prefix.Tail;
 					case OpCode.Unaligned: return Prefix.Unaligned;
 					case OpCode.Volatile: return Prefix.Volatile;
 					default:

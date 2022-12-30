@@ -1,9 +1,9 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using dnlib.DotNet;
-using Mosa.Compiler.Common.Exceptions;
 using System;
 using System.Collections.Generic;
+using dnlib.DotNet;
+using Mosa.Compiler.Common.Exceptions;
 
 namespace Mosa.Compiler.MosaTypeSystem.Metadata
 {

@@ -1,7 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.DeviceSystem;
 using System.Drawing;
+using Mosa.DeviceSystem;
 
 namespace Mosa.Demo.SVGAWorld.x86.Components
 {
@@ -11,7 +11,7 @@ namespace Mosa.Demo.SVGAWorld.x86.Components
 
 		public Color Color;
 
-		public VirtualBitmap Bitmap;
+		public readonly VirtualBitmap Bitmap;
 
 		public PaintArea(int x, int y, int width, int height, Color color)
 		{
@@ -44,10 +44,11 @@ namespace Mosa.Demo.SVGAWorld.x86.Components
 				Mouse.IsOnPaintingArea = true;
 
 				if (Mouse.X - X < LastX || Mouse.Y - Y < LastY)
-					Bitmap.DrawLine(Mouse.X - X, Mouse.Y - Y, LastX, LastY, Mouse.Color);
+					Bitmap.DrawLine((uint)(Mouse.X - X), (uint)(Mouse.Y - Y), (uint)LastX, (uint)LastY, Mouse.Color);
 				else
-					Bitmap.DrawLine(LastX, LastY, Mouse.X - X, Mouse.Y - Y, Mouse.Color);
-			} else Mouse.IsOnPaintingArea = false;
+					Bitmap.DrawLine((uint)LastX, (uint)LastY, (uint)(Mouse.X - X), (uint)(Mouse.Y - Y), Mouse.Color);
+			}
+			else Mouse.IsOnPaintingArea = false;
 
 			LastX = Mouse.X - X;
 			LastY = Mouse.Y - Y;

@@ -1,15 +1,15 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common;
-using Mosa.Compiler.Common.Exceptions;
-using Mosa.Compiler.Framework.CIL;
-using Mosa.Compiler.Framework.Linker;
-using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using Mosa.Compiler.Common;
+using Mosa.Compiler.Common.Exceptions;
+using Mosa.Compiler.Framework.CIL;
+using Mosa.Compiler.Framework.Linker;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -404,7 +404,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 			}
 
-			var typeSize = Alignment.AlignUp((uint)TypeLayout.GetTypeSize(type), TypeLayout.NativePointerAlignment);
+			var typeSize = Alignment.AlignUp(TypeLayout.GetTypeSize(type), TypeLayout.NativePointerAlignment);
 			var runtimeType = GetRuntimeTypeHandle(type);
 
 			if (typeSize <= 8 || type.IsR)

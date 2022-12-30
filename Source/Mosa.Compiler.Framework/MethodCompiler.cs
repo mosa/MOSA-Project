@@ -1,12 +1,12 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Collections.Generic;
+using System.Diagnostics;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
-using System.Collections.Generic;
-using System.Diagnostics;
 using static Mosa.Compiler.Framework.CompilerHooks;
 
 namespace Mosa.Compiler.Framework
@@ -204,6 +204,9 @@ namespace Mosa.Compiler.Framework
 		public CompilerHooks CompilerHooks { get; }
 
 		public bool IsInSSAForm { get; set; }
+		public bool AreCPURegistersAllocated { get; set; }
+
+		public bool IsLocalStackFinalized { get; set; }
 
 		public bool Is32BitPlatform { get; }
 		public bool Is64BitPlatform { get; }
@@ -242,6 +245,8 @@ namespace Mosa.Compiler.Framework
 
 			Statistics = compiler.Statistics;
 			IsInSSAForm = false;
+			AreCPURegistersAllocated = false;
+			IsLocalStackFinalized = false;
 
 			BasicBlocks = basicBlocks ?? new BasicBlocks();
 			LocalStack = new List<Operand>();

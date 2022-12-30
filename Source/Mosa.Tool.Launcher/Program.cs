@@ -1,5 +1,7 @@
-﻿using Avalonia;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
 using System;
+using Avalonia;
 
 namespace Mosa.Tool.Launcher
 {

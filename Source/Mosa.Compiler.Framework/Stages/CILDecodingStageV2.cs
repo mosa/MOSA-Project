@@ -1,14 +1,14 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.MosaTypeSystem;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -3800,7 +3800,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var type = (MosaType)instruction.Operand;
 			var result = AllocateVirtualRegisterI32();
 
-			var size = type.IsPointer ? NativePointerSize : (uint)MethodCompiler.TypeLayout.GetTypeSize(type);
+			var size = type.IsPointer ? NativePointerSize : MethodCompiler.TypeLayout.GetTypeSize(type);
 
 			context.AppendInstruction(IRInstruction.Move32, result, CreateConstant32(size));
 

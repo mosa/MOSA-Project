@@ -1,11 +1,11 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common;
-using Mosa.Compiler.Framework.Trace;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using Mosa.Compiler.Common;
+using Mosa.Compiler.Framework.Trace;
 using static Mosa.Compiler.Framework.BaseMethodCompilerStage;
 
 namespace Mosa.Compiler.Framework.Analysis
@@ -29,19 +29,16 @@ namespace Mosa.Compiler.Framework.Analysis
 
 			private ReferenceStatusType ReferenceStatus;
 
-			private List<ulong> constants;
-
 			public int ConstantCount
-			{ get { return constants?.Count ?? 0; } }
+			{ get { return Constants?.Count ?? 0; } }
 
-			public List<ulong> Constants
-			{ get { return constants; } }
+			public List<ulong> Constants { get; private set; }
 
 			public ulong ConstantUnsignedLongInteger
-			{ get { return constants[0]; } }
+			{ get { return Constants[0]; } }
 
 			public long ConstantSignedLongInteger
-			{ get { return (long)constants[0]; } }
+			{ get { return (long)Constants[0]; } }
 
 			public bool ConstantsContainZero { get; set; }
 
@@ -50,7 +47,7 @@ namespace Mosa.Compiler.Framework.Analysis
 			public bool IsOverDefined
 			{
 				get { return Status == VariableStatusType.OverDefined; }
-				set { Status = VariableStatusType.OverDefined; constants = null; Debug.Assert(value); }
+				set { Status = VariableStatusType.OverDefined; Constants = null; Debug.Assert(value); }
 			}
 
 			public bool IsUnknown
@@ -143,7 +140,7 @@ namespace Mosa.Compiler.Framework.Analysis
 
 			private void AppendConstant(ulong value)
 			{
-				constants.Add(value);
+				Constants.Add(value);
 
 				if (value == 0)
 				{
@@ -156,23 +153,23 @@ namespace Mosa.Compiler.Framework.Analysis
 				if (Status == VariableStatusType.OverDefined)
 					return false;
 
-				if (constants != null)
+				if (Constants != null)
 				{
-					if (constants.Contains(value))
+					if (Constants.Contains(value))
 						return false;
 				}
 				else
 				{
-					constants = new List<ulong>(2);
+					Constants = new List<ulong>(2);
 					AppendConstant(value);
 					Status = VariableStatusType.SingleConstant;
 					return true;
 				}
 
-				if (constants.Count > MAXCONSTANTS)
+				if (Constants.Count > MAXCONSTANTS)
 				{
 					Status = VariableStatusType.OverDefined;
-					constants = null;
+					Constants = null;
 					return true;
 				}
 
@@ -206,8 +203,8 @@ namespace Mosa.Compiler.Framework.Analysis
 				}
 				else if (HasMultipleConstants)
 				{
-					sb.Append($" ({constants.Count}) =");
-					foreach (var i in constants)
+					sb.Append($" ({Constants.Count}) =");
+					foreach (var i in Constants)
 					{
 						sb.Append($" {i},");
 					}

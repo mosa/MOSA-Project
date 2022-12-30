@@ -1,12 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common.Exceptions;
-using Mosa.Compiler.Framework.CompilerStages;
-using Mosa.Compiler.Framework.Linker;
-using Mosa.Compiler.Framework.Stages;
-using Mosa.Compiler.Framework.Trace;
-using Mosa.Compiler.MosaTypeSystem;
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,6 +7,12 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
+using Mosa.Compiler.Common.Exceptions;
+using Mosa.Compiler.Framework.CompilerStages;
+using Mosa.Compiler.Framework.Linker;
+using Mosa.Compiler.Framework.Stages;
+using Mosa.Compiler.Framework.Trace;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework
 {
@@ -109,12 +108,12 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// The stack frame
 		/// </summary>
-		internal Operand StackFrame { get; }
+		public Operand StackFrame { get; }
 
 		/// <summary>
 		/// The stack frame
 		/// </summary>
-		internal Operand StackPointer { get; }
+		public Operand StackPointer { get; }
 
 		/// <summary>
 		/// The program counter

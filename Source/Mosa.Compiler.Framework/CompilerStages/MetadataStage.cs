@@ -1,13 +1,13 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common;
-using Mosa.Compiler.Framework.Linker;
-using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using Mosa.Compiler.Common;
+using Mosa.Compiler.Framework.Linker;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.CompilerStages
 {
@@ -173,7 +173,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			writer.Write(((uint)type.TypeCode << 24) + (uint)type.TypeAttributes, NativePointerSize);
 
 			// 4. Size
-			writer.Write((uint)TypeLayout.GetTypeSize(type), NativePointerSize);
+			writer.Write(TypeLayout.GetTypeSize(type), NativePointerSize);
 
 			// 5. Pointer to Assembly Definition
 			Linker.Link(LinkType.AbsoluteAddress, NativePatchType, typeDefinitionSymbol, writer.GetPosition(), assemblyTableSymbol, 0);

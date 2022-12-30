@@ -100,7 +100,6 @@
 		<!--<Compile Include="..\Mosa.UnitTests\Mosa.Collections.Generic\BitFlagsTests.cs" Link="Tests\Mosa.Collections.Generic\BitFlagsTests.cs" />-->
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\Mosa.Collections.Generic\Mosa.Collections.Generic.csproj" />
 		<ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
 		<ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj" />
 		<ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj" />

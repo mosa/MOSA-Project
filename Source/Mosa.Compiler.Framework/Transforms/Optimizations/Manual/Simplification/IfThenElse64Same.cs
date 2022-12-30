@@ -1,0 +1,21 @@
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Simplification
+{
+	public sealed class IfThenElse64Same : BaseTransformation
+	{
+		public IfThenElse64Same() : base(IRInstruction.IfThenElse64, TransformationType.Manual | TransformationType.Optimization)
+		{
+		}
+
+		public override bool Match(Context context, TransformContext transform)
+		{
+			return AreSame(context.Operand2, context.Operand3);
+		}
+
+		public override void Transform(Context context, TransformContext transform)
+		{
+			context.SetInstruction(IRInstruction.Move64, context.Result, context.Operand1);
+		}
+	}
+}

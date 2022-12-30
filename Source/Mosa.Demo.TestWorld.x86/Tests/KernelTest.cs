@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Kernel.x86;
 using System.Collections.Generic;
+using Mosa.Kernel.x86;
 
 namespace Mosa.Demo.TestWorld.x86.Tests
 {

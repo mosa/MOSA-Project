@@ -1,9 +1,9 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.MosaTypeSystem;
-using Priority_Queue;
 using System.Collections.Generic;
 using System.Threading;
+using Mosa.Compiler.MosaTypeSystem;
+using Priority_Queue;
 
 namespace Mosa.Compiler.Framework
 {

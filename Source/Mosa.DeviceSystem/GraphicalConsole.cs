@@ -91,7 +91,8 @@ namespace Mosa.DeviceSystem
 			{
 				Y -= Font.Height;
 				X = Width - LastCharWidth;
-			} else X -= LastCharWidth;
+			}
+			else X -= LastCharWidth;
 		}
 
 		public void NewLine()
@@ -116,6 +117,10 @@ namespace Mosa.DeviceSystem
 
 				case '\r':
 					X = 0;
+					break;
+
+				case '\t':
+					X += 4;
 					break;
 
 				default:

@@ -6,9 +6,9 @@ namespace System
 	///
 	/// </summary>
 	[Serializable]
-	public struct SByte: IComparable, IComparable<sbyte>, IEquatable<sbyte>
+	public readonly struct SByte: IComparable, IComparable<sbyte>, IEquatable<sbyte>
 	{
-		internal sbyte m_value;
+		internal readonly sbyte m_value;
 
 		public const sbyte MinValue = -128;
 		public const sbyte MaxValue = 127;

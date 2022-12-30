@@ -1,15 +1,13 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using Mosa.Demo.TestWorld.x86.Tests;
 using Mosa.Kernel.x86;
 using Mosa.Runtime;
 using Mosa.Runtime.Plug;
 using Mosa.Runtime.x86;
-using Mosa.UnitTests;
-using Mosa.UnitTests.FlowControl;
 using Mosa.UnitTests.Other;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 
 namespace Mosa.Demo.TestWorld.x86
 {

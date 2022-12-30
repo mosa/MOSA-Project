@@ -14,7 +14,7 @@ namespace Mosa.Demo.Application
 		{
 			Console.WriteLine("Rebooting...");
 
-			var pc = AppManager.ServiceManager.GetFirstService<PCService>() as PCService;
+			var pc = AppManager.ServiceManager.GetFirstService<PCService>();
 			pc.Reset();
 
 			return 0;

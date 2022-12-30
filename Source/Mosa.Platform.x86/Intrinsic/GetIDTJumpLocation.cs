@@ -1,8 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Diagnostics;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
-using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Intrinsic
 {

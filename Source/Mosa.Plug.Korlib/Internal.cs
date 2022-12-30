@@ -1,9 +1,9 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Collections.Generic;
 using Mosa.Plug.Korlib.Runtime;
 using Mosa.Runtime;
 using Mosa.Runtime.Plug;
-using System.Collections.Generic;
 
 namespace Mosa.Plug.Korlib
 {

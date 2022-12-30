@@ -1,0 +1,38 @@
+
+using System.Diagnostics;
+
+using Mosa.Platform.x86;
+using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.Transforms;
+
+namespace Mosa.Platform.x86.Transforms.IR
+{
+	/// <summary>
+	/// Switch
+	/// </summary>
+	public sealed class Switch : BaseTransformation
+	{
+		public Switch() : base(IRInstruction.Switch, TransformationType.Manual | TransformationType.Transform)
+		{
+		}
+
+		public override bool Match(Context context, TransformContext transform)
+		{
+			return true;
+		}
+
+		public override void Transform(Context context, TransformContext transform)
+		{
+			var targets = context.BranchTargets;
+			var operand = context.Operand1;
+
+			context.Empty();
+
+			for (int i = 0; i < targets.Count - 1; ++i)
+			{
+				context.AppendInstruction(X86.Cmp32, null, operand, transform.CreateConstant32(i));
+				context.AppendInstruction(X86.Branch, ConditionCode.Equal, targets[i]);
+			}
+		}
+	}
+}
