@@ -6,7 +6,7 @@ using Mosa.Compiler.Framework.Transforms;
 namespace Mosa.Platform.x86.Transforms.Stack
 {
 	/// <summary>
-	/// ConvertR4ToI64
+	/// Epilogue
 	/// </summary>
 	public sealed class Epilogue : BaseTransformation
 	{
@@ -16,7 +16,7 @@ namespace Mosa.Platform.x86.Transforms.Stack
 
 		public override bool Match(Context context, TransformContext transform)
 		{
-			return true;
+			return transform.MethodCompiler.IsLocalStackFinalized;
 		}
 
 		public override void Transform(Context context, TransformContext transform)

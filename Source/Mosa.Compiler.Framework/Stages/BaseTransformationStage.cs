@@ -115,7 +115,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void ExecutePasses()
 		{
-			int maxPasses = MaxPasses;
 			int pass = 1;
 
 			var changed = true;
@@ -131,7 +130,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				pass++;
 
-				if (pass >= maxPasses)
+				if (pass >= MaxPasses && MaxPasses != 0)
 					break;
 			}
 		}

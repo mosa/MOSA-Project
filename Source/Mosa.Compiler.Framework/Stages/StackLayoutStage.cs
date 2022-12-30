@@ -11,28 +11,17 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		protected override void Run()
 		{
-			if (!MethodCompiler.IsStackFrameRequired)
-				return;
-
 			// Layout stack variables
-			LayoutStackVariables();
-		}
-
-		#region Internals
-
-		/// <summary>
-		/// Layouts the stack variables.
-		/// </summary>
-		private void LayoutStackVariables()
-		{
-			// assign increasing stack offsets to each variable
-			int size = LayoutVariables(MethodCompiler.LocalStack, Architecture.OffsetOfFirstLocal);
+			int size = MethodCompiler.IsStackFrameRequired ? LayoutVariables(MethodCompiler.LocalStack, Architecture.OffsetOfFirstLocal) : 0;
 
 			MethodCompiler.StackSize = size;
 			MethodData.LocalMethodStackSize = -size;
+			MethodCompiler.IsLocalStackFinalized = true;
 
 			TraceStackLocals();
 		}
+
+		#region Internals
 
 		private void TraceStackLocals()
 		{

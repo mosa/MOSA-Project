@@ -151,20 +151,13 @@ namespace Mosa.Platform.x86
 				{
 					new IRTransformationStage(),
 					compilerSettings.PlatformOptimizations ? new Stages.OptimizationStage() : null,
-					new TweakStage(),
-					new FixedRegisterAssignmentStage(),
-					new AddressModeConversionStage(),
+					new PlatformStage(),
 				});
-
-			pipeline.InsertAfterLast<StackLayoutStage>(
-				new BuildStackStage()
-			);
 
 			pipeline.InsertBefore<CodeGenerationStage>(
 				new BaseMethodCompilerStage[]
 				{
-					//new StopStage(),
-					new TweakStage(),
+					new PlatformStage(),
 					compilerSettings.PlatformOptimizations ? new Stages.OptimizationStage() : null,
 				});
 

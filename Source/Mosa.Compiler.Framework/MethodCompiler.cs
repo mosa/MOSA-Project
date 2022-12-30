@@ -206,6 +206,8 @@ namespace Mosa.Compiler.Framework
 		public bool IsInSSAForm { get; set; }
 		public bool AreCPURegistersAllocated { get; set; }
 
+		public bool IsLocalStackFinalized { get; set; }
+
 		public bool Is32BitPlatform { get; }
 		public bool Is64BitPlatform { get; }
 
@@ -244,6 +246,7 @@ namespace Mosa.Compiler.Framework
 			Statistics = compiler.Statistics;
 			IsInSSAForm = false;
 			AreCPURegistersAllocated = false;
+			IsLocalStackFinalized = false;
 
 			BasicBlocks = basicBlocks ?? new BasicBlocks();
 			LocalStack = new List<Operand>();
