@@ -2,7 +2,12 @@
 Compiler Design
 ###############
 
-The MOSA Compiler framework is designed around two pipelines each with multiple stages.  
+The MOSA Compiler framework is designed around two pipelines each with multiple stages.
+
+Type System
+-----------
+
+The **Type System** is a fundamental part of the MOSA compiler. Essentially, all CIL types and methods are compiled into MOSA types and methods.
 
 Compiler Pipeline
 -----------------

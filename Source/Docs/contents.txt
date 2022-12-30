@@ -17,6 +17,13 @@
    demos
 
 .. toctree::
+   :hidden:
+   :caption: Structure
+   :maxdepth: 1
+
+   mosa-project-structure
+
+.. toctree::
    :caption: Compiler
    :hidden:
    :maxdepth: 2
@@ -44,7 +51,6 @@
    tool-launcher-console
    tool-explorer
    tool-debugger
-   tool-boot-image
 
 .. toctree::
    :caption: Advanced

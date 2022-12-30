@@ -9,11 +9,11 @@ The **MOSA Launcher Console** is a console application that automates the entire
 Usage
 -----
 
-A quick example that compiles `Mosa.Demo.TestWorld.x86.dll` demo with `-oMax` (all optimization enabled) and launches it using `Qemu`:
+A quick example that compiles `Mosa.Demo.TestWorld.x86.dll` demo with `-oMax` (all optimization enabled) and launches it using `QEMU`:
 
 .. code-block:: text
 
-  Mosa.Tool.Launcher.Console.exe -oMax Mosa.Demo.TestWorld.x86.dll
+  Mosa.Tool.Launcher.Console -oMax Mosa.Demo.TestWorld.x86.dll
 
 .. code-block:: text
 
