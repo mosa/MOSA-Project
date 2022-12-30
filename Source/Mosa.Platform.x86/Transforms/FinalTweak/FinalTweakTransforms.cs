@@ -8,7 +8,7 @@ namespace Mosa.Platform.x86.Transforms.FinalTweak
 	/// <summary>
 	/// FinalTweak Transformation List
 	/// </summary>
-	public static class FinalTweakTransforms
+	public static class FixedRegistersTransforms
 	{
 		public static readonly List<BaseTransformation> List = new List<BaseTransformation>
 		{

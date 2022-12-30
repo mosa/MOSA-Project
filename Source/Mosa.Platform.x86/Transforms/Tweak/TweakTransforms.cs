@@ -8,7 +8,7 @@ namespace Mosa.Platform.x86.Transforms.Tweak
 	/// <summary>
 	/// Tweak Transformation List
 	/// </summary>
-	public static class TweakTransforms
+	public static class StackBuildTransforms
 	{
 		public static readonly List<BaseTransformation> List = new List<BaseTransformation>
 		{

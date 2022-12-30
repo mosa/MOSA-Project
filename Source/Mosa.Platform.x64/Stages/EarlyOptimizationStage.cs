@@ -10,7 +10,7 @@ namespace Mosa.Platform.x64.Stages
 	/// X86 Optimization Stage
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.Stages.BaseTransformationStage" />
-	public sealed class EarlyOptimizationStage : BaseOptimizationStage
+	public sealed class EarlyOptimizationStage : Compiler.Framework.Stages.BaseTransformationStage
 	{
 		public override string Name => "x64." + GetType().Name;
 

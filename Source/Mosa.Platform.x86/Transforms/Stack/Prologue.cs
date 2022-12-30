@@ -1,19 +1,16 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Diagnostics;
-
-using Mosa.Platform.x86;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.x86.Transforms.RuntimeCall
+namespace Mosa.Platform.x86.Transforms.Stack
 {
 	/// <summary>
 	/// ConvertR4ToI64
 	/// </summary>
-	public sealed class Epilogue : BaseTransformation
+	public sealed class Prologue : BaseTransformation
 	{
-		public Epilogue() : base(IRInstruction.Epilogue, TransformationType.Manual | TransformationType.Transform)
+		public Prologue() : base(IRInstruction.Prologue, TransformationType.Manual | TransformationType.Transform)
 		{
 		}
 

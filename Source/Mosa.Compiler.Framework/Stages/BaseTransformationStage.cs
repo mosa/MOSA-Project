@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	///	Optimization Stage
 	/// </summary>
-	public abstract class BaseOptimizationStage : BaseMethodCompilerStage
+	public abstract class BaseTransformationStage : BaseMethodCompilerStage
 	{
 		private const int MaximumInstructionID = 1000;
 		private const int MaximumPasses = 20;
@@ -41,7 +41,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected bool CountTransformations = false;
 
-		public BaseOptimizationStage(bool enableTransformationOptimizations = false, bool enableBlockOptimizations = false, int maxPasses = MaximumPasses)
+		public BaseTransformationStage(bool enableTransformationOptimizations = false, bool enableBlockOptimizations = false, int maxPasses = MaximumPasses)
 		{
 			EnableTransformationOptimizations = enableTransformationOptimizations;
 			EnableBlockOptimizations = enableBlockOptimizations;

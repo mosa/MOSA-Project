@@ -9,7 +9,7 @@ namespace Mosa.Platform.x86.Stages
 	/// Runtime Call Transformation Stage
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.Stages.BaseTransformationStage" />
-	public sealed class RuntimeCallStage : BaseOptimizationStage
+	public sealed class RuntimeCallStage : Compiler.Framework.Stages.BaseTransformationStage
 	{
 		public override string Name => "x86." + GetType().Name;
 

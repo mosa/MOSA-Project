@@ -1,13 +1,9 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Diagnostics;
-
-using Mosa.Platform.x86;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
-using System.Reflection.Metadata.Ecma335;
 
-namespace Mosa.Platform.x86.Transforms.Block
+namespace Mosa.Platform.x86.Transforms.Stack
 {
 	/// <summary>
 	/// ConvertR4ToI64
