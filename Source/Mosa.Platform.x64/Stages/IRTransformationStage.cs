@@ -1,6 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Diagnostics;
+using dnlib.DotNet.Emit;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.MosaTypeSystem;
 
@@ -307,12 +308,130 @@ namespace Mosa.Platform.x64.Stages
 
 		private void CompareR4(Context context)
 		{
-			FloatCompare(context, X64.Ucomiss);
+			//FloatCompare(context, X64.Ucomiss);
+
+			var instruction = X64.Ucomiss;
+
+			var result = context.Result;
+			var condition = context.ConditionCode;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+
+			operand1 = MoveConstantToFloatRegister(context, operand1);
+			operand2 = MoveConstantToFloatRegister(context, operand2);
+
+			var v1 = AllocateVirtualRegisterI32();
+
+			if (condition == ConditionCode.Equal)
+			{
+				context.SetInstruction(instruction, null, operand1, operand2);
+				context.AppendInstruction(X64.Setcc, ConditionCode.NoParity, result);
+				context.AppendInstruction(X64.Mov32, v1, ConstantZero32);
+				context.AppendInstruction(X64.CMov32, ConditionCode.NotEqual, result, result, v1);
+				context.AppendInstruction(X64.Movzx8To32, result, result);
+				return;
+			}
+			else if (condition == ConditionCode.NotEqual)
+			{
+				context.SetInstruction(instruction, null, operand1, operand2);
+				context.AppendInstruction(X64.Setcc, ConditionCode.Parity, result);
+				context.AppendInstruction(X64.Mov32, v1, CreateConstant32(1));
+				context.AppendInstruction(X64.CMov32, ConditionCode.NotEqual, result, result, v1);
+				context.AppendInstruction(X64.Movzx8To32, result, result);
+				return;
+			}
+			else if (condition == ConditionCode.Greater || condition == ConditionCode.UnsignedGreater)
+			{
+				context.SetInstruction(instruction, null, operand1, operand2);
+				context.AppendInstruction(X64.Setcc, ConditionCode.UnsignedGreater, v1);
+				context.AppendInstruction(X64.Movzx8To32, result, v1);
+				return;
+			}
+			else if (condition == ConditionCode.Less || condition == ConditionCode.UnsignedLess)
+			{
+				context.SetInstruction(instruction, null, operand2, operand1);
+				context.AppendInstruction(X64.Setcc, ConditionCode.UnsignedGreater, v1);
+				context.AppendInstruction(X64.Movzx8To32, result, v1);
+				return;
+			}
+			else if (condition == ConditionCode.GreaterOrEqual || condition == ConditionCode.UnsignedGreaterOrEqual)
+			{
+				context.SetInstruction(instruction, null, operand2, operand1);
+				context.AppendInstruction(X64.Setcc, ConditionCode.NoCarry, v1);
+				context.AppendInstruction(X64.Movzx8To32, result, v1);
+				return;
+			}
+			else if (condition == ConditionCode.LessOrEqual || condition == ConditionCode.UnsignedLessOrEqual)
+			{
+				context.SetInstruction(instruction, null, operand2, operand1);
+				context.AppendInstruction(X64.Setcc, ConditionCode.NoCarry, v1);
+				context.AppendInstruction(X64.Movzx8To32, result, v1);
+				return;
+			}
 		}
 
 		private void CompareR8(Context context)
 		{
-			FloatCompare(context, X64.Ucomisd);
+			//FloatCompare(context, X64.Ucomisd);
+
+			var instruction = X64.Ucomisd;
+
+			var result = context.Result;
+			var condition = context.ConditionCode;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+
+			operand1 = MoveConstantToFloatRegister(context, operand1);
+			operand2 = MoveConstantToFloatRegister(context, operand2);
+
+			var v1 = AllocateVirtualRegisterI32();
+
+			if (condition == ConditionCode.Equal)
+			{
+				context.SetInstruction(instruction, null, operand1, operand2);
+				context.AppendInstruction(X64.Setcc, ConditionCode.NoParity, result);
+				context.AppendInstruction(X64.Mov32, v1, ConstantZero32);
+				context.AppendInstruction(X64.CMov32, ConditionCode.NotEqual, result, result, v1);
+				context.AppendInstruction(X64.Movzx8To32, result, result);
+				return;
+			}
+			else if (condition == ConditionCode.NotEqual)
+			{
+				context.SetInstruction(instruction, null, operand1, operand2);
+				context.AppendInstruction(X64.Setcc, ConditionCode.Parity, result);
+				context.AppendInstruction(X64.Mov32, v1, CreateConstant32(1));
+				context.AppendInstruction(X64.CMov32, ConditionCode.NotEqual, result, result, v1);
+				context.AppendInstruction(X64.Movzx8To32, result, result);
+				return;
+			}
+			else if (condition == ConditionCode.Greater || condition == ConditionCode.UnsignedGreater)
+			{
+				context.SetInstruction(instruction, null, operand1, operand2);
+				context.AppendInstruction(X64.Setcc, ConditionCode.UnsignedGreater, v1);
+				context.AppendInstruction(X64.Movzx8To32, result, v1);
+				return;
+			}
+			else if (condition == ConditionCode.Less || condition == ConditionCode.UnsignedLess)
+			{
+				context.SetInstruction(instruction, null, operand2, operand1);
+				context.AppendInstruction(X64.Setcc, ConditionCode.UnsignedGreater, v1);
+				context.AppendInstruction(X64.Movzx8To32, result, v1);
+				return;
+			}
+			else if (condition == ConditionCode.GreaterOrEqual || condition == ConditionCode.UnsignedGreaterOrEqual)
+			{
+				context.SetInstruction(instruction, null, operand2, operand1);
+				context.AppendInstruction(X64.Setcc, ConditionCode.NoCarry, v1);
+				context.AppendInstruction(X64.Movzx8To32, result, v1);
+				return;
+			}
+			else if (condition == ConditionCode.LessOrEqual || condition == ConditionCode.UnsignedLessOrEqual)
+			{
+				context.SetInstruction(instruction, null, operand2, operand1);
+				context.AppendInstruction(X64.Setcc, ConditionCode.NoCarry, v1);
+				context.AppendInstruction(X64.Movzx8To32, result, v1);
+				return;
+			}
 		}
 
 		private void ConvertI32ToR4(Context context)
@@ -863,12 +982,28 @@ namespace Mosa.Platform.x64.Stages
 
 		private void Compare32x64(Context context)
 		{
-			Compare64x64(context);
+			var condition = context.ConditionCode;
+			var resultOperand = context.Result;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+
+			var v1 = AllocateVirtualRegisterI32();
+			context.SetInstruction(X64.Cmp64, null, operand1, operand2);
+			context.AppendInstruction(X64.Setcc, condition, v1);
+			context.AppendInstruction(X64.Movzx8To64, resultOperand, v1);
 		}
 
 		private void Compare64x32(Context context)
 		{
-			Compare64x64(context);
+			var condition = context.ConditionCode;
+			var resultOperand = context.Result;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+
+			var v1 = AllocateVirtualRegisterI32();
+			context.SetInstruction(X64.Cmp64, null, operand1, operand2);
+			context.AppendInstruction(X64.Setcc, condition, v1);
+			context.AppendInstruction(X64.Movzx8To64, resultOperand, v1);
 		}
 
 		private void Compare64x64(Context context)

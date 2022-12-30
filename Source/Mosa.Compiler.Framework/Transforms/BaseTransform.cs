@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Transforms
 {
 	[Flags]
 	public enum TransformType
-	{ Default, Auto, Manual, Optimization, Transform }
+	{ Transform, Auto, Manual, Optimization  }
 
 	public abstract class BaseTransform
 	{
@@ -41,11 +41,6 @@ namespace Mosa.Compiler.Framework.Transforms
 
 		public BaseTransform(TransformType type, bool log = false)
 			: this(null, type, log)
-		{
-		}
-
-		public BaseTransform(BaseInstruction instruction, bool log)
-			: this(instruction, TransformType.Default, log)
 		{
 		}
 

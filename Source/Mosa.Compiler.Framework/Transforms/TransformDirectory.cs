@@ -8,17 +8,17 @@ namespace Mosa.Compiler.Framework.Transforms
 	{
 		public static List<BaseTransform> Transformations = new List<BaseTransform>();
 
-		public static void Add(BaseTransform transformation)
+		public static void Add(BaseTransform transform)
 		{
 			lock (Transformations)
 			{
-				Transformations.Add(transformation);
+				Transformations.Add(transform);
 			}
 		}
 
 		public enum MatchType { Contains, StartsWith, EndsWith };
 
-		public static List<BaseTransform> GetTransformations(string match, MatchType type)
+		public static List<BaseTransform> GetTransforms(string match, MatchType type)
 		{
 			var matches = new List<BaseTransform>();
 
