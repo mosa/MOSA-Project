@@ -1,12 +1,11 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common.Configuration;
-using Mosa.Compiler.Framework;
-
-using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Diagnostics;
 using System.IO;
+using Mosa.Compiler.Common.Configuration;
+using Mosa.Compiler.Framework;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Workspace.Experiment.Debug
 {

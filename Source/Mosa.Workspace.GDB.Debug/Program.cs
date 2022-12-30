@@ -1,10 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Utility.RSP;
-using Mosa.Utility.RSP.Command;
 using System;
 using System.Net.Sockets;
 using System.Threading;
+using Mosa.Utility.RSP;
+using Mosa.Utility.RSP.Command;
 
 namespace Mosa.Workspace.UnitTest.Debug
 {

@@ -14,92 +14,106 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 			new BuildTransformations(
 				Path.Combine(dataPath, @"IR-Optimizations-ConstantFolding.json"),
-				Path.Combine(targetPath, @"Mosa.Compiler.Framework\Transform\Auto"),
+				Path.Combine(targetPath, @"Mosa.Compiler.Framework\Transforms\Optimizations\Auto"),
 				"Mosa.Compiler.Framework",
 				"Mosa.Compiler.Framework"
 			).Execute();
 
 			new BuildTransformations(
 				Path.Combine(dataPath, @"IR-Optimizations-ConstantMove.json"),
-				Path.Combine(targetPath, @"Mosa.Compiler.Framework\Transform\Auto"),
+				Path.Combine(targetPath, @"Mosa.Compiler.Framework\Transforms\Optimizations\Auto"),
 				"Mosa.Compiler.Framework",
 				"Mosa.Compiler.Framework"
 			).Execute();
 
 			new BuildTransformations(
 				Path.Combine(dataPath, @"IR-Optimizations-Simplification.json"),
-				Path.Combine(targetPath, @"Mosa.Compiler.Framework\Transform\Auto"),
+				Path.Combine(targetPath, @"Mosa.Compiler.Framework\Transforms\Optimizations\Auto"),
 				"Mosa.Compiler.Framework",
 				"Mosa.Compiler.Framework"
 			).Execute();
 
 			new BuildTransformations(
 				Path.Combine(dataPath, @"IR-Optimizations-StrengthReduction.json"),
-				Path.Combine(targetPath, @"Mosa.Compiler.Framework\Transform\Auto"),
+				Path.Combine(targetPath, @"Mosa.Compiler.Framework\Transforms\Optimizations\Auto"),
 				"Mosa.Compiler.Framework",
 				"Mosa.Compiler.Framework"
 			).Execute();
 
 			new BuildTransformations(
 				Path.Combine(dataPath, @"IR-Optimizations-StrengthReduction-Complex.json"),
-				Path.Combine(targetPath, @"Mosa.Compiler.Framework\Transform\Auto"),
+				Path.Combine(targetPath, @"Mosa.Compiler.Framework\Transforms\Optimizations\Auto"),
 				"Mosa.Compiler.Framework",
 				"Mosa.Compiler.Framework"
 			).Execute();
 
 			new BuildTransformations(
 				Path.Combine(dataPath, @"IR-Optimizations-Reorder.json"),
-				Path.Combine(targetPath, @"Mosa.Compiler.Framework\Transform\Auto"),
+				Path.Combine(targetPath, @"Mosa.Compiler.Framework\Transforms\Optimizations\Auto"),
 				"Mosa.Compiler.Framework",
 				"Mosa.Compiler.Framework"
 			).Execute();
 
 			new BuildTransformations(
 				Path.Combine(dataPath, @"IR-Optimizations-ConstantMove-Expression.json"),
-				Path.Combine(targetPath, @"Mosa.Compiler.Framework\Transform\Auto"),
+				Path.Combine(targetPath, @"Mosa.Compiler.Framework\Transforms\Optimizations\Auto"),
 				"Mosa.Compiler.Framework",
 				"Mosa.Compiler.Framework"
 			).Execute();
 
 			new BuildTransformations(
 				Path.Combine(dataPath, @"IR-Optimizations-ConstantFolding-Expression.json"),
-				Path.Combine(targetPath, @"Mosa.Compiler.Framework\Transform\Auto"),
+				Path.Combine(targetPath, @"Mosa.Compiler.Framework\Transforms\Optimizations\Auto"),
 				"Mosa.Compiler.Framework",
 				"Mosa.Compiler.Framework"
 			).Execute();
 
 			new BuildTransformations(
 				Path.Combine(dataPath, @"IR-Optimizations-ConstantFolding-MemoryAccess.json"),
-				Path.Combine(targetPath, @"Mosa.Compiler.Framework\Transform\Auto"),
+				Path.Combine(targetPath, @"Mosa.Compiler.Framework\Transforms\Optimizations\Auto"),
 				"Mosa.Compiler.Framework",
 				"Mosa.Compiler.Framework"
 			).Execute();
 
 			new BuildTransformations(
 				Path.Combine(dataPath, @"IR-Optimizations-Rewrite.json"),
-				Path.Combine(targetPath, @"Mosa.Compiler.Framework\Transform\Auto"),
+				Path.Combine(targetPath, @"Mosa.Compiler.Framework\Transforms\Optimizations\Auto"),
 				"Mosa.Compiler.Framework",
 				"Mosa.Compiler.Framework"
 			).Execute();
 
 			new BuildTransformations(
 				Path.Combine(dataPath, @"IR-Optimizations-Phi.json"),
-				Path.Combine(targetPath, @"Mosa.Compiler.Framework\Transform\Auto"),
+				Path.Combine(targetPath, @"Mosa.Compiler.Framework\Transforms\Optimizations\Auto"),
 				"Mosa.Compiler.Framework",
 				"Mosa.Compiler.Framework"
 			).Execute();
 
 			new BuildTransformations(
 				Path.Combine(dataPath, @"IR-Optimizations-Algebraic.json"),
-				Path.Combine(targetPath, @"Mosa.Compiler.Framework\Transform\Auto"),
+				Path.Combine(targetPath, @"Mosa.Compiler.Framework\Transforms\Optimizations\Auto"),
 				"Mosa.Compiler.Framework",
 				"Mosa.Compiler.Framework"
 			).Execute();
 
+			new BuildTransformations(
+				Path.Combine(dataPath, @"X64-Optimizations-Standard.json"),
+				Path.Combine(targetPath, @"Mosa.Platform.x64\Transforms\Optimizations\Auto"),
+				"Mosa.Platform.x64",
+				"Mosa.Platform.x64"
+			).Execute();
+
+			new BuildTransformations(
+				Path.Combine(dataPath, @"X86-Optimizations-Standard.json"),
+				Path.Combine(targetPath, @"Mosa.Platform.x86\Transforms\Optimizations\Auto"),
+				"Mosa.Platform.x86",
+				"Mosa.Platform.x86"
+			).Execute();
+
 			new BuildTransformationListFile(
-				Path.Combine(targetPath, @"Mosa.Compiler.Framework\Transform\Auto"),
+				Path.Combine(targetPath, @"Mosa.Compiler.Framework\Transforms\Optimizations\Auto"),
 				"AutoTransforms.cs",
-				"Mosa.Compiler.Framework.Transform.Auto",
+				"Mosa.Compiler.Framework.Transforms.Optimizations.Auto",
 				"AutoTransforms",
 				new List<string>()
 				{
@@ -107,17 +121,10 @@ namespace Mosa.Utility.SourceCodeGenerator
 				}
 			).Execute();
 
-			new BuildTransformations(
-				Path.Combine(dataPath, @"X86-Optimizations-Standard.json"),
-				Path.Combine(targetPath, @"Mosa.Platform.x86\Transform\Auto"),
-				"Mosa.Platform.x86",
-				"Mosa.Platform.x86"
-			).Execute();
-
 			new BuildTransformationListFile(
-				Path.Combine(targetPath, @"Mosa.Platform.x86\Transform\Auto"),
+				Path.Combine(targetPath, @"Mosa.Platform.x86\Transforms\Optimizations\Auto"),
 				"AutoTransforms.cs",
-				"Mosa.Platform.x86.Transform.Auto",
+				"Mosa.Platform.x86.Transforms.Optimizations.Auto",
 				"AutoTransforms",
 				new List<string>()
 				{
@@ -125,17 +132,10 @@ namespace Mosa.Utility.SourceCodeGenerator
 				}
 			).Execute();
 
-			new BuildTransformations(
-				Path.Combine(dataPath, @"X64-Optimizations-Standard.json"),
-				Path.Combine(targetPath, @"Mosa.Platform.x64\Transform\Auto"),
-				"Mosa.Platform.x64",
-				"Mosa.Platform.x64"
-			).Execute();
-
 			new BuildTransformationListFile(
-				Path.Combine(targetPath, @"Mosa.Platform.x64\Transform\Auto"),
+				Path.Combine(targetPath, @"Mosa.Platform.x64\Transforms\Optimizations\Auto"),
 				"AutoTransforms.cs",
-				"Mosa.Platform.x64.Transform.Auto",
+				"Mosa.Platform.x64.Transforms.Optimizations.Auto",
 				"AutoTransforms",
 				new List<string>()
 				{

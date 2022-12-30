@@ -1,13 +1,13 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common;
-using Mosa.DeviceSystem;
-using Mosa.FileSystem.FAT;
-using Mosa.Workspace.FileSystem.Debug.Synthetic;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using Mosa.Compiler.Common;
+using Mosa.DeviceSystem;
+using Mosa.FileSystem.FAT;
+using Mosa.Workspace.FileSystem.Debug.Synthetic;
 
 namespace Mosa.Workspace.FileSystem.Debug
 {

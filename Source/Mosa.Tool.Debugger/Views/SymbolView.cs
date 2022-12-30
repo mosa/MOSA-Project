@@ -1,9 +1,9 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Tool.Debugger.DebugData;
 using System;
 using System.ComponentModel;
 using System.Windows.Forms;
+using Mosa.Tool.Debugger.DebugData;
 
 namespace Mosa.Tool.Debugger.Views
 {

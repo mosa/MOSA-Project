@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.FileSystem.FAT;
 using System.Collections.Generic;
+using Mosa.FileSystem.FAT;
 
 namespace Mosa.Demo.SVGAWorld.x86
 {

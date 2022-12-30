@@ -1,10 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Runtime;
-using Mosa.Runtime.x86;
 using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using Mosa.Runtime;
+using Mosa.Runtime.x86;
 
 namespace Mosa.Kernel.x86
 {

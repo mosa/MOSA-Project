@@ -1,8 +1,8 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework.Linker;
 using System;
 using System.IO;
+using Mosa.Compiler.Framework.Linker;
 
 namespace Mosa.Compiler.Framework.CompilerStages
 {

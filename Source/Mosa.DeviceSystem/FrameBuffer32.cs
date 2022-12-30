@@ -1,8 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Runtime;
 using System;
 using System.Drawing;
+using Mosa.Runtime;
 
 namespace Mosa.DeviceSystem
 {
@@ -252,7 +252,7 @@ namespace Mosa.DeviceSystem
 				radiusError += yChange;
 				yChange += 2;
 
-				if (((radiusError << 1) + xChange) > 0)
+				if ((radiusError << 1) + xChange > 0)
 				{
 					x1--;
 					radiusError += xChange;
@@ -261,6 +261,79 @@ namespace Mosa.DeviceSystem
 			}
 		}
 
+		public void DrawLine(uint color, uint x1, uint y1, uint x2, uint y2)
+		{
+			var dx = x2 - x1; /* The horizontal distance of the line */
+			var dy = y2 - y1; /* The vertical distance of the line */
+
+			if (dy == 0) /* The line is horizontal */
+			{
+				DrawHorizontalLine(color, dx, x1, y1);
+				return;
+			}
+
+			if (dx == 0) /* The line is vertical */
+			{
+				DrawVerticalLine(color, dy, x1, y1);
+				return;
+			}
+
+			/* The line is neither horizontal nor vertical, so it's diagonal! */
+			DrawDiagonalLine(color, dx, dy, x1, y1);
+		}
+
+		private void DrawHorizontalLine(uint color, uint dx, uint x, uint y)
+		{
+			for (uint i = 0; i < dx; i++)
+				SetPixel(x + i, y, color);
+		}
+
+		private void DrawVerticalLine(uint color, uint dy, uint x, uint y)
+		{
+			for (uint i = 0; i < dy; i++)
+				SetPixel(color, x, y + i);
+		}
+
+		private void DrawDiagonalLine(uint color, uint dx, uint dy, uint x1, uint y1)
+		{
+			var sdx = (uint)Math.Sign(dx);
+			var sdy = (uint)Math.Sign(dy);
+			var x = dy >> 1;
+			var y = dx >> 1;
+			var px = x1;
+			var py = y1;
+
+			if (dx >= dy) /* The line is more horizontal than vertical */
+			{
+				for (var i = 0; i < dx; i++)
+				{
+					y += dy;
+					if (y >= dx)
+					{
+						y -= dx;
+						py += sdy;
+					}
+					px += sdx;
+					SetPixel(color, px, py);
+				}
+			}
+			else /* The line is more vertical than horizontal */
+			{
+				for (var i = 0; i < dy; i++)
+				{
+					x += dx;
+					if (x >= dy)
+					{
+						x -= dy;
+						px += sdx;
+					}
+					py += sdy;
+					SetPixel(color, px, py);
+				}
+			}
+		}
+
+		/// <summary>Copies a source framebuffer to the current one.</summary>
 		public void CopyFrame(FrameBuffer32 source)
 		{
 			Internal.MemoryCopy(Buffer.Address, source.Buffer.Address, Buffer.Size);

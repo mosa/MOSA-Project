@@ -310,5 +310,18 @@ namespace Mosa.UnitTests.Optimization
 
 			return value;
 		}
+
+		[MosaUnitTest(Series = "U4")]
+		public static uint PhiTest1(uint x)
+		{
+			uint a = 10;
+			uint b = 20;
+
+			uint c = (x > 10) ? a : b;
+
+			uint d = c + 10;
+
+			return d;
+		}
 	}
 }

@@ -1,11 +1,11 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Tool.Debugger.DebugData;
-using Mosa.Utility.Disassembler;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
+using Mosa.Tool.Debugger.DebugData;
+using Mosa.Utility.Disassembler;
 
 namespace Mosa.Tool.Debugger.Views
 {

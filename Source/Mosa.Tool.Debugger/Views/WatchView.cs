@@ -1,11 +1,11 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Tool.Debugger.GDB;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Windows.Forms;
+using Mosa.Tool.Debugger.GDB;
 
 namespace Mosa.Tool.Debugger.Views
 {

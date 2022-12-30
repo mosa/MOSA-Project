@@ -1,4 +1,6 @@
-﻿using Mosa.DeviceSystem;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using Mosa.DeviceSystem;
 
 namespace Mosa.DeviceDriver.PCI
 {

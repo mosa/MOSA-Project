@@ -1,9 +1,9 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.DeviceDriver.ISA;
-using Mosa.DeviceSystem;
 using System.Collections.Generic;
 using System.Drawing;
+using Mosa.DeviceDriver.ISA;
+using Mosa.DeviceSystem;
 
 namespace Mosa.Demo.SVGAWorld.x86
 {
@@ -28,7 +28,7 @@ namespace Mosa.Demo.SVGAWorld.x86
 			var charset = string.Empty;
 
 			// Name
-			for (;;)
+			for (; ; )
 			{
 				var ch = stream.ReadByte();
 				if (ch == byte.MaxValue)
@@ -38,7 +38,7 @@ namespace Mosa.Demo.SVGAWorld.x86
 			}
 
 			// Charset
-			for (;;)
+			for (; ; )
 			{
 				var ch = stream.ReadByte();
 				if (ch == byte.MaxValue)

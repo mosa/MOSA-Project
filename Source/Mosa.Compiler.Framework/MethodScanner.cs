@@ -1,10 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Collections.Generic;
+using System.Diagnostics;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
-using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework
 {
@@ -281,7 +281,7 @@ namespace Mosa.Compiler.Framework
 
 					var slot = TypeLayout.GetMethodSlot(method);
 
-					ScheduleDerivedMethods(method.DeclaringType, (uint)slot);
+					ScheduleDerivedMethods(method.DeclaringType, slot);
 				}
 			}
 		}

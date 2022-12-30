@@ -117,7 +117,7 @@ namespace Mosa.DeviceDriver.ISA
 		{
 			Ticks = 0;
 			IsWaiting = true;
-			while (Ticks < ms);
+			while (Ticks < ms) ;
 			IsWaiting = false;
 		}
 	}

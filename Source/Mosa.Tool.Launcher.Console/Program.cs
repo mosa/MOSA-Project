@@ -1,11 +1,11 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
+using System.IO;
 using Mosa.Compiler.Common.Configuration;
 using Mosa.Compiler.Framework;
 using Mosa.Utility.Configuration;
 using Mosa.Utility.Launcher;
-using System;
-using System.IO;
 
 namespace Mosa.Tool.Launcher.Console
 {

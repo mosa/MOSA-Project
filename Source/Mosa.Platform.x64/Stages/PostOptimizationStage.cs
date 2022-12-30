@@ -1,8 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework.Stages;
-using Mosa.Platform.x64.Transform.Auto;
-using Mosa.Platform.x64.Transform.Manual;
+using Mosa.Platform.x64.Transforms.Optimizations.Auto;
+using Mosa.Platform.x64.Transforms.Optimizations.Manual;
 
 namespace Mosa.Platform.x64.Stages
 {
@@ -10,7 +9,7 @@ namespace Mosa.Platform.x64.Stages
 	/// X64 Post Optimization Stage
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.Stages.BaseTransformationStage" />
-	public sealed class PostOptimizationStage : BaseOptimizationStage
+	public sealed class PostOptimizationStage : Compiler.Framework.Stages.BaseTransformationStage
 	{
 		public override string Name => "x64." + GetType().Name;
 

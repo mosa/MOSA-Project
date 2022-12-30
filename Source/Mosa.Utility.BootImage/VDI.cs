@@ -51,7 +51,7 @@ namespace Mosa.Utility.BootImage
 		/// <param name="lastSnapGuid">The last snap GUID.</param>
 		/// <param name="diskGeometry">The disk geometry.</param>
 		/// <returns></returns>
-		static public byte[] CreateHeader(uint blocks, byte[] guid, byte[] lastSnapGuid, DiskGeometry diskGeometry)
+		public static byte[] CreateHeader(uint blocks, byte[] guid, byte[] lastSnapGuid, DiskGeometry diskGeometry)
 		{
 			var binaryHeader = new DataBlock(512);
 			var textLength = (uint)HeaderText.Length;
@@ -75,8 +75,8 @@ namespace Mosa.Utility.BootImage
 			binaryHeader.SetULong(VHIHeaderOffset.DiskSize, blocks * 512);
 			binaryHeader.SetUInt(VHIHeaderOffset.BlockSize, 0x100000);
 			binaryHeader.SetUInt(VHIHeaderOffset.BlockExtraData, 0);
-			binaryHeader.SetUInt(VHIHeaderOffset.BlocksInHDD, (blocks * 512) / 0x100000);
-			binaryHeader.SetUInt(VHIHeaderOffset.BlocksAllocated, (blocks * 512) / 0x100000);
+			binaryHeader.SetUInt(VHIHeaderOffset.BlocksInHDD, blocks * 512 / 0x100000);
+			binaryHeader.SetUInt(VHIHeaderOffset.BlocksAllocated, blocks * 512 / 0x100000);
 			binaryHeader.SetBytes(VHIHeaderOffset.UUID, guid, 0, 16);
 			binaryHeader.SetBytes(VHIHeaderOffset.UUIDLastSnap, lastSnapGuid, 0, 16);
 
@@ -88,15 +88,13 @@ namespace Mosa.Utility.BootImage
 		/// </summary>
 		/// <param name="blocks">The blocks.</param>
 		/// <returns></returns>
-		static public byte[] CreateImageMap(uint blocks)
+		public static byte[] CreateImageMap(uint blocks)
 		{
-			uint size = ((blocks * 512) / 0x100000) * 4;
-
-			uint imageBlocks = (uint)(GetAlignedSize(size) / 512);
-
+			var size = blocks * 512 / 0x100000 * 4;
+			var imageBlocks = (uint)(GetAlignedSize(size) / 512);
 			var binaryMap = new DataBlock(imageBlocks * 512);
 
-			for (uint i = 0; i < ((blocks * 512) / 0x100000); i++)
+			for (uint i = 0; i < size / 4; i++)
 				binaryMap.SetUInt(i * 4, i);
 
 			return binaryMap.Data;
@@ -107,7 +105,7 @@ namespace Mosa.Utility.BootImage
 		/// </summary>
 		/// <param name="size">The size.</param>
 		/// <returns></returns>
-		static private ulong GetAlignedSize(ulong size)
+		private static ulong GetAlignedSize(ulong size)
 		{
 			return (size + 511) & ~((ulong)511);
 		}

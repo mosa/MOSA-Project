@@ -1,8 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Text;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Analysis;
-using System.Text;
 
 namespace Mosa.Tool.Explorer.Stages
 {

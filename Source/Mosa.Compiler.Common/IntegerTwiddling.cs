@@ -1,7 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-
 namespace Mosa.Compiler.Common
 {
 	public static class IntegerTwiddling
@@ -55,7 +53,7 @@ namespace Mosa.Compiler.Common
 
 		public static bool IsMultiplyOverflow(uint a, uint b)
 		{
-			var r = (ulong)a * (ulong)b;
+			var r = a * (ulong)b;
 
 			return r > uint.MaxValue;
 		}

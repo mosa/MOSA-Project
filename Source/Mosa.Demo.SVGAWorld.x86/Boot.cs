@@ -1,19 +1,19 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
+using System.Collections.Generic;
+using System.Drawing;
 using Mosa.Demo.SVGAWorld.x86.Apps;
 using Mosa.Demo.SVGAWorld.x86.Components;
 using Mosa.Demo.SVGAWorld.x86.HAL;
 using Mosa.DeviceDriver;
 using Mosa.DeviceDriver.ISA;
+using Mosa.DeviceDriver.ScanCodeMap;
 using Mosa.DeviceSystem;
 using Mosa.DeviceSystem.Service;
+using Mosa.FileSystem.FAT;
 using Mosa.Kernel.x86;
 using Mosa.Runtime.Plug;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using Mosa.DeviceDriver.ScanCodeMap;
-using Mosa.FileSystem.FAT;
 using RTC = Mosa.Kernel.x86.RTC;
 
 namespace Mosa.Demo.SVGAWorld.x86
@@ -56,7 +56,7 @@ namespace Mosa.Demo.SVGAWorld.x86
 
 			// Create service manager and basic services
 			var serviceManager = new ServiceManager();
-            var partitionService = new PartitionService();
+			var partitionService = new PartitionService();
 
 			serviceManager.AddService(DeviceService);
 			serviceManager.AddService(new DiskDeviceService());
@@ -88,7 +88,7 @@ namespace Mosa.Demo.SVGAWorld.x86
 			if (!Display.Initialize())
 			{
 				Log("An error occured when initializing the graphics driver.");
-				for (; ; ) ;
+				for (; ; );
 			}
 
 			var keyboard = DeviceService.GetFirstDevice<StandardKeyboard>().DeviceDriver as StandardKeyboard;

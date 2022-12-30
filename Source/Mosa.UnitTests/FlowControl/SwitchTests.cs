@@ -1,13 +1,11 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-
 namespace Mosa.UnitTests.FlowControl
 {
 
 	public static class SwitchTests
 	{
-	
+
 		[MosaUnitTest(Series = "I1")]
 		public static sbyte SwitchI1(sbyte a)
 		{
@@ -33,7 +31,7 @@ namespace Mosa.UnitTests.FlowControl
 					return 42;
 			}
 		}
-	
+
 		[MosaUnitTest(Series = "I2")]
 		public static short SwitchI2(short a)
 		{
@@ -59,7 +57,7 @@ namespace Mosa.UnitTests.FlowControl
 					return 42;
 			}
 		}
-	
+
 		[MosaUnitTest(Series = "I4")]
 		public static int SwitchI4(int a)
 		{
@@ -85,7 +83,7 @@ namespace Mosa.UnitTests.FlowControl
 					return 42;
 			}
 		}
-	
+
 		[MosaUnitTest(Series = "I8")]
 		public static long SwitchI8(long a)
 		{
@@ -111,7 +109,7 @@ namespace Mosa.UnitTests.FlowControl
 					return 42;
 			}
 		}
-		
+
 		[MosaUnitTest(Series = "U1")]
 		public static byte SwitchU1(byte a)
 		{
@@ -131,7 +129,7 @@ namespace Mosa.UnitTests.FlowControl
 					return 42;
 			}
 		}
-	
+
 		[MosaUnitTest(Series = "U2")]
 		public static ushort SwitchU2(ushort a)
 		{
@@ -151,7 +149,7 @@ namespace Mosa.UnitTests.FlowControl
 					return 42;
 			}
 		}
-	
+
 		[MosaUnitTest(Series = "U4")]
 		public static uint SwitchU4(uint a)
 		{
@@ -171,7 +169,7 @@ namespace Mosa.UnitTests.FlowControl
 					return 42;
 			}
 		}
-	
+
 		[MosaUnitTest(Series = "U8")]
 		public static ulong SwitchU8(ulong a)
 		{
@@ -191,5 +189,5 @@ namespace Mosa.UnitTests.FlowControl
 					return 42;
 			}
 		}
-		}
+	}
 }

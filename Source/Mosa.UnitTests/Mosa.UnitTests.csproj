@@ -16,7 +16,6 @@
 		<DebugSymbols>True</DebugSymbols>
 	</PropertyGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\Mosa.Collections.Generic\Mosa.Collections.Generic.csproj" />
 		<ProjectReference Include="..\Mosa.Korlib\Mosa.Korlib.csproj" />
 	</ItemGroup>
 	<ItemGroup>

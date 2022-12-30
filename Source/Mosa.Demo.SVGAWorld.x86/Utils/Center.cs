@@ -1,4 +1,6 @@
-﻿namespace Mosa.Demo.SVGAWorld.x86
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+namespace Mosa.Demo.SVGAWorld.x86
 {
 	public static class Center
 	{

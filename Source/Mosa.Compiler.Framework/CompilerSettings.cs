@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common.Configuration;
 using System.Collections.Generic;
+using Mosa.Compiler.Common.Configuration;
 
 namespace Mosa.Compiler.Framework
 {

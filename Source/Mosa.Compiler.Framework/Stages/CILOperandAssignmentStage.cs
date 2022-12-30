@@ -1,9 +1,9 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework.CIL;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Mosa.Compiler.Framework.CIL;
 
 namespace Mosa.Compiler.Framework.Stages
 {

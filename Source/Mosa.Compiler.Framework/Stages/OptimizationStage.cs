@@ -1,15 +1,15 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework.Transform;
-using Mosa.Compiler.Framework.Transform.Auto;
-using Mosa.Compiler.Framework.Transform.Manual;
+using Mosa.Compiler.Framework.Transforms;
+using Mosa.Compiler.Framework.Transforms.Optimizations.Auto;
+using Mosa.Compiler.Framework.Transforms.Optimizations.Manual;
 
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
 	///	Optimization Stage
 	/// </summary>
-	public class OptimizationStage : BaseOptimizationStage
+	public class OptimizationStage : BaseTransformationStage
 	{
 		private readonly bool LowerTo32;
 
@@ -23,7 +23,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void CustomizeTransformation()
 		{
-			TransformContext.SetStageOptions(IsInSSAForm, LowerTo32 && CompilerSettings.LongExpansion && Is32BitPlatform);
+			TransformContext.SetStageOptions(LowerTo32 && CompilerSettings.LongExpansion && Is32BitPlatform);
 		}
 	}
 }

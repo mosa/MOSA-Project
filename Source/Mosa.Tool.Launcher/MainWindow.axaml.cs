@@ -20,6 +20,7 @@ namespace Mosa.Tool.Launcher
 	public partial class MainWindow : Window
 	{
 		private bool done;
+		private int totalMethods, completedMethods;
 		private Settings settings;
 		private Builder builder;
 		private OpenFileDialog source;
@@ -28,6 +29,14 @@ namespace Mosa.Tool.Launcher
 		public MainWindow()
 		{
 			InitializeComponent();
+
+			var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(1) };
+			timer.Tick += (_, _) =>
+			{
+				OutputProgress.Maximum = totalMethods;
+				OutputProgress.Value = completedMethods;
+			};
+			timer.Start();
 
 			source = new OpenFileDialog
 			{
@@ -46,6 +55,12 @@ namespace Mosa.Tool.Launcher
 			};
 
 			DstLbl.Content = Path.Combine(Path.GetTempPath(), "MOSA");
+		}
+
+		private void NotifyProgress(int total, int at)
+		{
+			totalMethods = total;
+			completedMethods = at;
 		}
 
 		private void AddOutput(string data)
@@ -107,7 +122,7 @@ namespace Mosa.Tool.Launcher
 				CompileBuildAndStart();
 			}
 
-			// Hacky method to center the screen
+			// Hacky method to center the window on the screen
 			this.GetObservable(IsVisibleProperty).Subscribe(value =>
 			{
 				if (!value || done)
@@ -127,6 +142,7 @@ namespace Mosa.Tool.Launcher
 		{
 			return new CompilerHooks
 			{
+				NotifyProgress = NotifyProgress,
 				NotifyStatus = NotifyStatus
 			};
 		}

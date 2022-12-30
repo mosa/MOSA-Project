@@ -1,13 +1,13 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Reko.Arch.Arm;
-using Reko.Arch.X86;
-using Reko.Core;
-using Reko.Core.Memory;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Text;
+using Reko.Arch.Arm;
+using Reko.Arch.X86;
+using Reko.Core;
+using Reko.Core.Memory;
 
 namespace Mosa.Utility.Disassembler
 {

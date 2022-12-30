@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.DeviceSystem.Service;
 using System.Collections.Generic;
+using Mosa.DeviceSystem.Service;
 
 namespace Mosa.DeviceSystem
 {

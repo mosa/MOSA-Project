@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Runtime.Plug;
 using System.Diagnostics;
+using Mosa.Runtime.Plug;
 
 namespace Mosa.Kernel.x86.Helpers
 {

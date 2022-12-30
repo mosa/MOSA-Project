@@ -1,14 +1,14 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework.Linker;
-using Mosa.Compiler.MosaTypeSystem;
-using Mosa.Utility.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Mosa.Compiler.Framework.Linker;
+using Mosa.Compiler.MosaTypeSystem;
+using Mosa.Utility.Configuration;
 
 namespace Mosa.Utility.UnitTests
 {

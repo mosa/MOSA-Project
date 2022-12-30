@@ -1,7 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Collections.Generic;
-
 namespace Mosa.UnitTests.Other
 {
 	public static class LockTests

@@ -1,10 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework.Linker;
-using Mosa.Compiler.Framework.Trace;
 using System;
 using System.Diagnostics;
 using System.IO;
+using Mosa.Compiler.Framework.Linker;
+using Mosa.Compiler.Framework.Trace;
 
 namespace Mosa.Compiler.Framework.Stages
 {

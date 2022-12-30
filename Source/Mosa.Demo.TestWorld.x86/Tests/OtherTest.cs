@@ -1,9 +1,9 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Runtime;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using Mosa.Runtime;
 
 namespace Mosa.Demo.TestWorld.x86.Tests
 {
