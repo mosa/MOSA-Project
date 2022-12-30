@@ -315,6 +315,8 @@ namespace Mosa.Compiler.Framework.Transforms
 
 		public void MoveOperand1ToVirtualRegister(Context context, BaseInstruction moveInstruction)
 		{
+			Debug.Assert(!context.Operand1.IsVirtualRegister);
+
 			var operand1 = context.Operand1;
 
 			var v1 = AllocateVirtualRegister(operand1.Type);
@@ -325,7 +327,9 @@ namespace Mosa.Compiler.Framework.Transforms
 
 		public void MoveOperand2ToVirtualRegister(Context context, BaseInstruction moveInstruction)
 		{
-			var operand2 = context.Operand1;
+			Debug.Assert(!context.Operand2.IsVirtualRegister);
+
+			var operand2 = context.Operand2;
 
 			var v1 = AllocateVirtualRegister(operand2.Type);
 
@@ -335,6 +339,8 @@ namespace Mosa.Compiler.Framework.Transforms
 
 		public void MoveOperand1And2ToVirtualRegisters(Context context, BaseInstruction moveInstruction)
 		{
+			Debug.Assert(!context.Operand1.IsVirtualRegister || !context.Operand2.IsVirtualRegister);
+
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
 

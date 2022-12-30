@@ -4,14 +4,14 @@ using System.Diagnostics;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.x86.Transforms.FinalTweak
+namespace Mosa.Platform.x86.Transforms.Tweak
 {
 	/// <summary>
-	/// Movsd
+	/// Movss
 	/// </summary>
-	public sealed class Movsd : BaseTransformation
+	public sealed class Movss : BaseTransformation
 	{
-		public Movsd() : base(X86.Movsd, TransformationType.Manual | TransformationType.Optimization)
+		public Movss() : base(X86.Movss, TransformationType.Manual | TransformationType.Transform)
 		{
 		}
 

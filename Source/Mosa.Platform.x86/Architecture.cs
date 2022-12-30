@@ -164,7 +164,7 @@ namespace Mosa.Platform.x86
 				new BaseMethodCompilerStage[]
 				{
 					//new StopStage(),
-					new FinalTweakStage(),
+					new TweakStage(),
 					compilerSettings.PlatformOptimizations ? new Stages.OptimizationStage() : null,
 				});
 

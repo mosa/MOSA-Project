@@ -4,14 +4,14 @@ using System.Diagnostics;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.x86.Transforms.FinalTweak
+namespace Mosa.Platform.x86.Transforms.Tweak
 {
 	/// <summary>
-	/// Movzx16To32
+	/// Movzx8To32
 	/// </summary>
-	public sealed class Movzx16To32 : BaseTransformation
+	public sealed class Movzx8To32 : BaseTransformation
 	{
-		public Movzx16To32() : base(X86.Movzx16To32, TransformationType.Manual | TransformationType.Transform)
+		public Movzx8To32() : base(X86.Movzx8To32, TransformationType.Manual | TransformationType.Transform)
 		{
 		}
 
@@ -33,12 +33,12 @@ namespace Mosa.Platform.x86.Transforms.FinalTweak
 			// Movzx8To32 can not use with ESI or EDI registers as source registers
 			if (source.Register == result.Register)
 			{
-				context.SetInstruction(X86.And32, result, result, transform.CreateConstant32(0xFFFF));
+				context.SetInstruction(X86.And32, result, result, transform.CreateConstant32(0xFF));
 			}
 			else
 			{
 				context.SetInstruction(X86.Mov32, result, source);
-				context.AppendInstruction(X86.And32, result, result, transform.CreateConstant32(0xFFFF));
+				context.AppendInstruction(X86.And32, result, result, transform.CreateConstant32(0xFF));
 			}
 		}
 	}

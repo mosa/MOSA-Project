@@ -4,7 +4,7 @@ using System.Diagnostics;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.x86.Transforms.FinalTweak
+namespace Mosa.Platform.x86.Transforms.Tweak
 {
 	/// <summary>
 	/// MovLoad16

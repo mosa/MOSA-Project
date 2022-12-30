@@ -22,6 +22,19 @@ namespace Mosa.Platform.x86.Transforms.Tweak
 			new Popcnt32(),
 			new Tzcnt32(),
 			new Lzcnt32(),
+
+			new Mov32(),
+			new MovLoad16(),
+			new MovLoad8(),
+			new Movsd(),
+			new Movss(),
+			new MovStore16(),
+			new MovStore8(),
+			new Movsx16To32(),
+			new Movsx8To32(),
+			new Movzx16To32(),
+			new Movzx8To32(),
+			new Setcc(),
 		};
 	}
 }

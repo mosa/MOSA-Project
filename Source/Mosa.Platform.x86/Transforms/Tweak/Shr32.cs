@@ -19,6 +19,9 @@ namespace Mosa.Platform.x86.Transforms.Tweak
 			if (!context.Operand1.IsConstant)
 				return false;
 
+			if (context.Operand1.IsCPURegister)
+				return false;
+
 			return true;
 		}
 
