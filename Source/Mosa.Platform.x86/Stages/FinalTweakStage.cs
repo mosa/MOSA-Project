@@ -15,7 +15,7 @@ namespace Mosa.Platform.x86.Stages
 		public FinalTweakStage()
 			: base(true, false, 1)
 		{
-			AddTranformations(FixedRegistersTransforms.List);
+			AddTranformations(FinalTweakTransforms.List);
 		}
 	}
 }

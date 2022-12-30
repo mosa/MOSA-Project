@@ -15,7 +15,7 @@ namespace Mosa.Platform.x86.Stages
 		public TweakStage()
 			: base(true, false, 1)
 		{
-			AddTranformations(StackBuildTransforms.List);
+			AddTranformations(TweakTransforms.List);
 		}
 	}
 }
