@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			if (!context.Operand1.IsVirtualRegister)
 				return false;
@@ -41,7 +41,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			var result = context.Result;
 
@@ -49,7 +49,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
 			var t2 = context.Operand1.Definitions[0].Operand2;
 			var t3 = context.Operand2;
 
-			var e1 = transformContext.CreateConstant(Add32(To32(t2), To32(t3)));
+			var e1 = transform.CreateConstant(Add32(To32(t2), To32(t3)));
 
 			context.SetInstruction(IRInstruction.ShiftLeft32, result, t1, e1);
 		}

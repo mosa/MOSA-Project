@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			if (!context.Operand1.IsVirtualRegister)
 				return false;
@@ -38,7 +38,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			var result = context.Result;
 

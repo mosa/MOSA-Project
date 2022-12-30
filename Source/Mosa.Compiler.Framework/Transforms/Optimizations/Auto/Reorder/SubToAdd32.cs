@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Reorder
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			if (!IsResolvedConstant(context.Operand2))
 				return false;
@@ -23,14 +23,14 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Reorder
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			var result = context.Result;
 
 			var t1 = context.Operand1;
 			var t2 = context.Operand2;
 
-			var e1 = transformContext.CreateConstant(Neg32(ToSigned32(t2)));
+			var e1 = transform.CreateConstant(Neg32(ToSigned32(t2)));
 
 			context.SetInstruction(IRInstruction.Add32, result, t1, e1);
 		}

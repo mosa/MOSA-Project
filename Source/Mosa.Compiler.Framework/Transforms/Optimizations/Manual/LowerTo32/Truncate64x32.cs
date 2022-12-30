@@ -8,12 +8,12 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.LowerTo32
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
-			return transformContext.LowerTo32;
+			return transform.LowerTo32;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			context.SetInstruction(IRInstruction.GetLow32, context.Result, context.Operand1);
 		}

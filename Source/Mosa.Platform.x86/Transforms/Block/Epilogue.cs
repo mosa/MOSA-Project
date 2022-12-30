@@ -5,6 +5,7 @@ using System.Diagnostics;
 using Mosa.Platform.x86;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Mosa.Platform.x86.Transforms.Block
 {
@@ -25,6 +26,9 @@ namespace Mosa.Platform.x86.Transforms.Block
 		public override void Transform(Context context, TransformContext transform)
 		{
 			context.Empty();
+
+			if (!transform.MethodCompiler.IsStackFrameRequired)
+				return;
 
 			if (transform.MethodCompiler.StackSize != 0)
 			{

@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Rewrite
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			if (context.ConditionCode != ConditionCode.UnsignedGreater)
 				return false;
@@ -26,7 +26,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Rewrite
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			var result = context.Result;
 
@@ -46,7 +46,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Rewrite
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			if (context.ConditionCode != ConditionCode.UnsignedLess)
 				return false;
@@ -57,7 +57,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Rewrite
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			var result = context.Result;
 

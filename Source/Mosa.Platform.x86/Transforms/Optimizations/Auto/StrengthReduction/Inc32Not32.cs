@@ -17,7 +17,7 @@ namespace Mosa.Platform.x86.Transforms.Optimizations.Auto.StrengthReduction
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			if (!context.Operand1.IsVirtualRegister)
 				return false;
@@ -37,7 +37,7 @@ namespace Mosa.Platform.x86.Transforms.Optimizations.Auto.StrengthReduction
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			var result = context.Result;
 

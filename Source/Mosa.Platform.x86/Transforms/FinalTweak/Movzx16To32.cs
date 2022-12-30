@@ -13,16 +13,16 @@ namespace Mosa.Platform.x86.Transforms.FinalTweak
 	/// </summary>
 	public sealed class Movzx16To32 : BaseTransformation
 	{
-		public Movzx16To32() : base(X86.Movzx16To32, TransformationType.Manual | TransformationType.Tranformation)
+		public Movzx16To32() : base(X86.Movzx16To32, TransformationType.Manual | TransformationType.Transform)
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			return !(context.Operand1.Register != CPURegister.ESI && context.Operand1.Register != CPURegister.EDI);
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			Debug.Assert(context.Result.IsCPURegister);
 
@@ -32,12 +32,12 @@ namespace Mosa.Platform.x86.Transforms.FinalTweak
 			// Movzx8To32 can not use with ESI or EDI registers as source registers
 			if (source.Register == result.Register)
 			{
-				context.SetInstruction(X86.And32, result, result, transformContext.CreateConstant32(0xFFFF));
+				context.SetInstruction(X86.And32, result, result, transform.CreateConstant32(0xFFFF));
 			}
 			else
 			{
 				context.SetInstruction(X86.Mov32, result, source);
-				context.AppendInstruction(X86.And32, result, result, transformContext.CreateConstant32(0xFFFF));
+				context.AppendInstruction(X86.And32, result, result, transform.CreateConstant32(0xFFFF));
 			}
 		}
 	}

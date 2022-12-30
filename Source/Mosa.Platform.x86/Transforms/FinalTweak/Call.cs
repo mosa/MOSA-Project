@@ -13,16 +13,16 @@ namespace Mosa.Platform.x86.Transforms.FinalTweak
 	/// </summary>
 	public sealed class Call : BaseTransformation
 	{
-		public Call() : base(X86.Call, TransformationType.Manual)
+		public Call() : base(X86.Call, TransformationType.Manual | TransformationType.Transform)
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			Debug.Assert(context.Operand1 != null);
 			Debug.Assert(context.Operand1.IsCPURegister);

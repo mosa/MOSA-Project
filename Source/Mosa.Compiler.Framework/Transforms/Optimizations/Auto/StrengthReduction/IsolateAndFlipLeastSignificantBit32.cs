@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			if (!context.Operand1.IsVirtualRegister)
 				return false;
@@ -56,15 +56,15 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			var result = context.Result;
 
 			var t1 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1;
 
-			var v1 = transformContext.AllocateVirtualRegister(transformContext.I4);
+			var v1 = transform.AllocateVirtualRegister(transform.I4);
 
-			var e1 = transformContext.CreateConstant(To32(1));
+			var e1 = transform.CreateConstant(To32(1));
 
 			context.SetInstruction(IRInstruction.Not32, v1, t1);
 			context.AppendInstruction(IRInstruction.And32, result, v1, e1);
@@ -80,7 +80,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			if (!context.Operand1.IsResolvedConstant)
 				return false;
@@ -121,15 +121,15 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			var result = context.Result;
 
 			var t1 = context.Operand2.Definitions[0].Operand1.Definitions[0].Operand1;
 
-			var v1 = transformContext.AllocateVirtualRegister(transformContext.I4);
+			var v1 = transform.AllocateVirtualRegister(transform.I4);
 
-			var e1 = transformContext.CreateConstant(To32(1));
+			var e1 = transform.CreateConstant(To32(1));
 
 			context.SetInstruction(IRInstruction.Not32, v1, t1);
 			context.AppendInstruction(IRInstruction.And32, result, v1, e1);

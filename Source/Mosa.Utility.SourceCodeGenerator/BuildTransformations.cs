@@ -185,7 +185,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 			Lines.AppendLine("\t\t}");
 			Lines.AppendLine("");
 
-			Lines.AppendLine("\t\tpublic override bool Match(Context context, TransformContext transformContext)");
+			Lines.AppendLine("\t\tpublic override bool Match(Context context, TransformContext transform)");
 			Lines.AppendLine("\t\t{");
 
 			ProcessExpressionNode(transform.InstructionTree);
@@ -198,7 +198,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 			Lines.AppendLine("\t\t}");
 
 			Lines.AppendLine("");
-			Lines.AppendLine("\t\tpublic override void Transform(Context context, TransformContext transformContext)");
+			Lines.AppendLine("\t\tpublic override void Transform(Context context, TransformContext transform)");
 			Lines.AppendLine("\t\t{");
 
 			ProcessResultInstructionTree(transform);
@@ -255,7 +255,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 				nodeNbrToVirtualRegisterNbr.Add(node.NodeNbr, virtualRegisterNbr);
 
-				Lines.AppendLine($"\t\t\tvar v{virtualRegisterNbr} = transformContext.AllocateVirtualRegister(transformContext.{resultType});");
+				Lines.AppendLine($"\t\t\tvar v{virtualRegisterNbr} = transform.AllocateVirtualRegister(transform.{resultType});");
 			}
 			if (virtualRegisterNbr != 0)
 				Lines.AppendLine();
@@ -275,7 +275,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 				if (constantTextToConstantNbr.TryGetValue(name, out int found))
 				{
 					constantToConstantNbr.Add(operand, found);
-					Lines.AppendLine($"\t\t\tvar c{operand} = transformContext.CreateConstant({name});");
+					Lines.AppendLine($"\t\t\tvar c{operand} = transform.CreateConstant({name});");
 					continue;
 				}
 
@@ -283,7 +283,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 				constantTextToConstantNbr.Add(name, constantNbr);
 				constantToConstantNbr.Add(operand, constantNbr);
 
-				Lines.AppendLine($"\t\t\tvar c{constantNbr} = transformContext.CreateConstant({name});");
+				Lines.AppendLine($"\t\t\tvar c{constantNbr} = transform.CreateConstant({name});");
 			}
 			if (constantNbr != 0)
 				Lines.AppendLine("");
@@ -306,7 +306,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 						methodToMethodNbr.Add(operand.Method, found);
 						continue;
 
-						//Lines.AppendLine($"\t\t\tvar e{found} = transformContext.CreateConstant({name});");
+						//Lines.AppendLine($"\t\t\tvar e{found} = transform.CreateConstant({name});");
 						//continue;
 					}
 
@@ -315,7 +315,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 					methodToMethodNbr.Add(operand.Method, methodNbr);
 					methodToExpressionText.Add(name, methodNbr);
 
-					Lines.AppendLine($"\t\t\tvar e{methodNbr} = transformContext.CreateConstant({name});");
+					Lines.AppendLine($"\t\t\tvar e{methodNbr} = transform.CreateConstant({name});");
 				}
 			}
 			if (methodNbr != 0)

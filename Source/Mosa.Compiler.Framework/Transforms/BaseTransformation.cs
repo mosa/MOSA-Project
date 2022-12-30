@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Transforms
 {
 	[Flags]
 	public enum TransformationType
-	{ Default, Auto, Manual, Optimization, Tranformation }
+	{ Default, Auto, Manual, Optimization, Transform }
 
 	public abstract class BaseTransformation
 	{
@@ -64,9 +64,9 @@ namespace Mosa.Compiler.Framework.Transforms
 
 		#endregion Internals
 
-		public abstract bool Match(Context context, TransformContext transformContext);
+		public abstract bool Match(Context context, TransformContext transform);
 
-		public abstract void Transform(Context context, TransformContext transformContext);
+		public abstract void Transform(Context context, TransformContext transform);
 
 		#region Filter Methods
 

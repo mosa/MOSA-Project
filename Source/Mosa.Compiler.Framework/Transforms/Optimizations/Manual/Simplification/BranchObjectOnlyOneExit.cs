@@ -8,7 +8,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Simplification
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			if (context.Block.NextBlocks.Count != 1)
 				return false;
@@ -16,7 +16,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Simplification
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			context.SetNop();
 

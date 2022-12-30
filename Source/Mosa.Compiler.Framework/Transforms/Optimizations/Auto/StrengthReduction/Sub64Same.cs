@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			if (!AreSame(context.Operand1, context.Operand2))
 				return false;
@@ -23,11 +23,11 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			var result = context.Result;
 
-			var e1 = transformContext.CreateConstant(To64(0));
+			var e1 = transform.CreateConstant(To64(0));
 
 			context.SetInstruction(IRInstruction.Move64, result, e1);
 		}

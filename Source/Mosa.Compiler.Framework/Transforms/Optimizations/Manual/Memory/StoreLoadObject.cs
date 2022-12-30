@@ -8,7 +8,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Memory
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			if (!context.Operand1.IsVirtualRegister)
 				return false;
@@ -16,7 +16,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Memory
 			if (!context.Operand2.IsResolvedConstant)
 				return false;
 
-			var previous = GetPreviousNodeUntil(context, IRInstruction.LoadObject, transformContext.Window, context.Operand3, context.Operand1);
+			var previous = GetPreviousNodeUntil(context, IRInstruction.LoadObject, transform.Window, context.Operand3, context.Operand1);
 
 			if (previous == null)
 				return false;
@@ -33,7 +33,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Memory
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			context.SetNop();
 		}

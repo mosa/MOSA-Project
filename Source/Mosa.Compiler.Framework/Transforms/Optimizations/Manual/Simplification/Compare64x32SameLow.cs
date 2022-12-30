@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Simplification
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			if (!context.Operand1.IsVirtualRegister)
 				return false;
@@ -45,7 +45,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Simplification
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			var operand1 = context.Operand1.Definitions[0].Operand2;
 			var operand2 = context.Operand2.Definitions[0].Operand2;

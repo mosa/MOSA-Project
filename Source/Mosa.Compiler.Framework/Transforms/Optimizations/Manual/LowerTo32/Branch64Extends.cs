@@ -8,9 +8,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.LowerTo32
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
-			if (!transformContext.LowerTo32)
+			if (!transform.LowerTo32)
 				return false;
 
 			if (!context.Operand1.IsVirtualRegister)
@@ -34,7 +34,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.LowerTo32
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			var t1 = context.Operand1.Definitions[0].Operand1;
 			var t2 = context.Operand2.Definitions[0].Operand1;

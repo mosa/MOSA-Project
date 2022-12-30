@@ -8,7 +8,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Special
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			if (context.ResultCount == 0 || context.ResultCount > 2)
 				return false;
@@ -46,7 +46,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Special
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			context.SetNop();
 		}

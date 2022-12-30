@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			var condition = context.ConditionCode;
 
@@ -28,11 +28,11 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			var result = context.Result;
 
-			var e1 = transformContext.CreateConstant(To32(0));
+			var e1 = transform.CreateConstant(To32(0));
 
 			context.SetInstruction(IRInstruction.Move32, result, e1);
 		}

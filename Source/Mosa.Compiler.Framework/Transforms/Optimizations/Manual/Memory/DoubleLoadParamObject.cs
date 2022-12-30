@@ -8,9 +8,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Memory
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
-			var previous = GetPreviousNodeUntil(context, IRInstruction.LoadParamObject, transformContext.Window, context.Result);
+			var previous = GetPreviousNodeUntil(context, IRInstruction.LoadParamObject, transform.Window, context.Result);
 
 			if (previous == null)
 				return false;
@@ -21,9 +21,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Memory
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
-			var previous = GetPreviousNodeUntil(context, IRInstruction.LoadParamObject, transformContext.Window);
+			var previous = GetPreviousNodeUntil(context, IRInstruction.LoadParamObject, transform.Window);
 
 			context.SetInstruction(IRInstruction.MoveObject, context.Result, previous.Result);
 		}

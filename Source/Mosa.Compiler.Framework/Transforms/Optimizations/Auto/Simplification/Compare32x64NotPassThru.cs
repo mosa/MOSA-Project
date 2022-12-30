@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			if (context.ConditionCode != ConditionCode.Equal)
 				return false;
@@ -44,15 +44,15 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			var result = context.Result;
 
 			var t1 = context.Operand1.Definitions[0].Operand1;
 
-			var v1 = transformContext.AllocateVirtualRegister(transformContext.I8);
+			var v1 = transform.AllocateVirtualRegister(transform.I8);
 
-			var c1 = transformContext.CreateConstant(1);
+			var c1 = transform.CreateConstant(1);
 
 			context.SetInstruction(IRInstruction.Not64, v1, t1);
 			context.AppendInstruction(IRInstruction.And64, result, v1, c1);
@@ -68,7 +68,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			if (context.ConditionCode != ConditionCode.Equal)
 				return false;
@@ -97,15 +97,15 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			var result = context.Result;
 
 			var t1 = context.Operand1.Definitions[0].Operand2;
 
-			var v1 = transformContext.AllocateVirtualRegister(transformContext.I8);
+			var v1 = transform.AllocateVirtualRegister(transform.I8);
 
-			var c1 = transformContext.CreateConstant(1);
+			var c1 = transform.CreateConstant(1);
 
 			context.SetInstruction(IRInstruction.Not64, v1, t1);
 			context.AppendInstruction(IRInstruction.And64, result, v1, c1);

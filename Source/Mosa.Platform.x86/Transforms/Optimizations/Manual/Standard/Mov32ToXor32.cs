@@ -11,7 +11,7 @@ namespace Mosa.Platform.x86.Transforms.Manual.Standard
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			if (!context.Operand1.IsConstantZero)
 				return false;
@@ -22,7 +22,7 @@ namespace Mosa.Platform.x86.Transforms.Manual.Standard
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			context.SetInstruction(X86.Xor32, context.Result, context.Result, context.Result);
 		}

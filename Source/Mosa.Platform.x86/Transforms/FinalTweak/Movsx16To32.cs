@@ -13,16 +13,16 @@ namespace Mosa.Platform.x86.Transforms.FinalTweak
 	/// </summary>
 	public sealed class Movsx16To32 : BaseTransformation
 	{
-		public Movsx16To32() : base(X86.Movsx16To32, TransformationType.Manual | TransformationType.Tranformation)
+		public Movsx16To32() : base(X86.Movsx16To32, TransformationType.Manual | TransformationType.Transform)
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			return !(context.Operand1.Register != CPURegister.ESI && context.Operand1.Register != CPURegister.EDI);
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			Debug.Assert(context.Result.IsCPURegister);
 
@@ -30,7 +30,7 @@ namespace Mosa.Platform.x86.Transforms.FinalTweak
 			var source = context.Operand1;
 
 			// Movsx16To32 can not use with ESI or EDI registers as source registers
-			var eax = Operand.CreateCPURegister(transformContext.I4, CPURegister.EAX);
+			var eax = Operand.CreateCPURegister(transform.I4, CPURegister.EAX);
 
 			if (source.Register == result.Register)
 			{

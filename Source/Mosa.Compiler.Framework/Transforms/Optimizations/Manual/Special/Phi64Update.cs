@@ -8,12 +8,12 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Special
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			return context.OperandCount != context.Block.PreviousBlocks.Count;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			TransformContext.UpdatePhi(context);
 		}

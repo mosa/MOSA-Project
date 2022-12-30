@@ -1,8 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Diagnostics;
-
-using Mosa.Platform.x86;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
@@ -13,18 +10,18 @@ namespace Mosa.Platform.x86.Transforms.RuntimeCall
 	/// </summary>
 	public sealed class DivUnsigned64 : BaseTransformation
 	{
-		public DivUnsigned64() : base(IRInstruction.DivUnsigned64, TransformationType.Manual)
+		public DivUnsigned64() : base(IRInstruction.DivUnsigned64, TransformationType.Manual | TransformationType.Transform)
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
-			transformContext.ReplaceWithCall(context, "Mosa.Runtime.Math", "Division", "udiv64");
+			transform.ReplaceWithCall(context, "Mosa.Runtime.Math", "Division", "udiv64");
 		}
 	}
 }

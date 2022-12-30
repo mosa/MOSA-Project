@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			if (!IsResolvedConstant(context.Operand2))
 				return false;
@@ -29,14 +29,14 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			var result = context.Result;
 
 			var t1 = context.Operand1;
 			var t2 = context.Operand2;
 
-			var e1 = transformContext.CreateConstant(Sub32(ShiftLeft32(1, And32(GetPowerOfTwo(To32(t2)), Sub32(32, 1))), 1));
+			var e1 = transform.CreateConstant(Sub32(ShiftLeft32(1, And32(GetPowerOfTwo(To32(t2)), Sub32(32, 1))), 1));
 
 			context.SetInstruction(IRInstruction.And32, result, t1, e1);
 		}

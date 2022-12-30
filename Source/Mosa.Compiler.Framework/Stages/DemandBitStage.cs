@@ -24,7 +24,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private NodeVisitationDelegate[] affected = new NodeVisitationDelegate[MaxInstructions];
 		private NodeVisitationDelegate[] demanded = new NodeVisitationDelegate[MaxInstructions];
 
-		private delegate ulong NodeVisitationDelegate(InstructionNode node, TransformContext transformContext);
+		private delegate ulong NodeVisitationDelegate(InstructionNode node, TransformContext transform);
 
 		private TransformContext TransformContext;
 
@@ -89,47 +89,47 @@ namespace Mosa.Compiler.Framework.Stages
 
 		#region IR Instructions
 
-		private static ulong AffectedBits_Or32(InstructionNode node, TransformContext transformContext)
+		private static ulong AffectedBits_Or32(InstructionNode node, TransformContext transform)
 		{
-			var value1 = transformContext.GetBitValue(node.Operand1);
-			var value2 = transformContext.GetBitValue(node.Operand2);
+			var value1 = transform.GetBitValue(node.Operand1);
+			var value2 = transform.GetBitValue(node.Operand2);
 
 			var affected = value1.BitsSet32 | value1.BitsUnknown32 | value2.BitsSet32 | value2.BitsUnknown32;
 
 			return affected;
 		}
 
-		private static ulong AffectedBits_Or64(InstructionNode node, TransformContext transformContext)
+		private static ulong AffectedBits_Or64(InstructionNode node, TransformContext transform)
 		{
-			var value1 = transformContext.GetBitValue(node.Operand1);
-			var value2 = transformContext.GetBitValue(node.Operand2);
+			var value1 = transform.GetBitValue(node.Operand1);
+			var value2 = transform.GetBitValue(node.Operand2);
 
 			var affected = value1.BitsSet | value1.BitsUnknown32 | value2.BitsSet | value2.BitsUnknown32;
 
 			return affected;
 		}
 
-		private static ulong AffectedBits_And32(InstructionNode node, TransformContext transformContext)
+		private static ulong AffectedBits_And32(InstructionNode node, TransformContext transform)
 		{
-			var value1 = transformContext.GetBitValue(node.Operand1);
-			var value2 = transformContext.GetBitValue(node.Operand2);
+			var value1 = transform.GetBitValue(node.Operand1);
+			var value2 = transform.GetBitValue(node.Operand2);
 
 			var affected = value1.BitsClear32 | value1.BitsUnknown32 | value2.BitsClear32 | value2.BitsUnknown32;
 
 			return affected;
 		}
 
-		private static ulong AffectedBits_And64(InstructionNode node, TransformContext transformContext)
+		private static ulong AffectedBits_And64(InstructionNode node, TransformContext transform)
 		{
-			var value1 = transformContext.GetBitValue(node.Operand1);
-			var value2 = transformContext.GetBitValue(node.Operand2);
+			var value1 = transform.GetBitValue(node.Operand1);
+			var value2 = transform.GetBitValue(node.Operand2);
 
 			var affected = value1.BitsClear | value1.BitsUnknown | value2.BitsClear | value2.BitsUnknown;
 
 			return affected;
 		}
 
-		private static ulong DemandedBits_And32(InstructionNode node, TransformContext transformContext)
+		private static ulong DemandedBits_And32(InstructionNode node, TransformContext transform)
 		{
 			if (node.Operand1.IsVirtualRegister && node.Operand2.IsResolvedConstant)
 				return node.Operand2.ConstantUnsigned32;
@@ -140,7 +140,7 @@ namespace Mosa.Compiler.Framework.Stages
 			return uint.MaxValue;
 		}
 
-		private static ulong DemandedBits_And64(InstructionNode node, TransformContext transformContext)
+		private static ulong DemandedBits_And64(InstructionNode node, TransformContext transform)
 		{
 			if (node.Operand1.IsVirtualRegister && node.Operand2.IsResolvedConstant)
 				return node.Operand2.ConstantUnsigned64;
@@ -151,7 +151,7 @@ namespace Mosa.Compiler.Framework.Stages
 			return ulong.MaxValue;
 		}
 
-		private static ulong DemandedBits_Or32(InstructionNode node, TransformContext transformContext)
+		private static ulong DemandedBits_Or32(InstructionNode node, TransformContext transform)
 		{
 			if (node.Operand1.IsVirtualRegister && node.Operand2.IsResolvedConstant)
 				return ~node.Operand2.ConstantUnsigned32;
@@ -162,7 +162,7 @@ namespace Mosa.Compiler.Framework.Stages
 			return uint.MaxValue;
 		}
 
-		private static ulong DemandedBits_Or64(InstructionNode node, TransformContext transformContext)
+		private static ulong DemandedBits_Or64(InstructionNode node, TransformContext transform)
 		{
 			if (node.Operand1.IsVirtualRegister && node.Operand2.IsResolvedConstant)
 				return ~node.Operand2.ConstantUnsigned64;
@@ -173,7 +173,7 @@ namespace Mosa.Compiler.Framework.Stages
 			return ulong.MaxValue;
 		}
 
-		private static ulong DemandedBits_ShiftRight32(InstructionNode node, TransformContext transformContext)
+		private static ulong DemandedBits_ShiftRight32(InstructionNode node, TransformContext transform)
 		{
 			if (node.Operand1.IsVirtualRegister && node.Operand2.IsResolvedConstant)
 				return (uint.MaxValue << (node.Operand2.ConstantSigned32 & 0x3F)) & uint.MaxValue;
@@ -184,7 +184,7 @@ namespace Mosa.Compiler.Framework.Stages
 			return uint.MaxValue;
 		}
 
-		private static ulong DemandedBits_ShiftRight64(InstructionNode node, TransformContext transformContext)
+		private static ulong DemandedBits_ShiftRight64(InstructionNode node, TransformContext transform)
 		{
 			if (node.Operand1.IsVirtualRegister && node.Operand2.IsResolvedConstant)
 				return ulong.MaxValue << (node.Operand2.ConstantSigned32 & 0x3F);

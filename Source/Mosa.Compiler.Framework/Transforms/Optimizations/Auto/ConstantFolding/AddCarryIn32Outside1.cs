@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			if (!IsResolvedConstant(context.Operand1))
 				return false;
@@ -26,7 +26,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			var result = context.Result;
 
@@ -34,7 +34,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
 			var t2 = context.Operand2;
 			var t3 = context.Operand3;
 
-			var e1 = transformContext.CreateConstant(Add32(To32(t1), BoolTo32(To32(t3))));
+			var e1 = transform.CreateConstant(Add32(To32(t1), BoolTo32(To32(t3))));
 
 			context.SetInstruction(IRInstruction.Add32, result, t2, e1);
 		}

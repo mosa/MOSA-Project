@@ -1,8 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Diagnostics;
-
-using Mosa.Platform.x86;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
@@ -13,18 +10,18 @@ namespace Mosa.Platform.x86.Transforms.RuntimeCall
 	/// </summary>
 	public sealed class RemSigned64 : BaseTransformation
 	{
-		public RemSigned64() : base(IRInstruction.RemSigned64, TransformationType.Manual)
+		public RemSigned64() : base(IRInstruction.RemSigned64, TransformationType.Manual | TransformationType.Transform)
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
-			transformContext.ReplaceWithCall(context, "Mosa.Runtime.Math", "Division", "smod64");
+			transform.ReplaceWithCall(context, "Mosa.Runtime.Math", "Division", "smod64");
 		}
 	}
 }

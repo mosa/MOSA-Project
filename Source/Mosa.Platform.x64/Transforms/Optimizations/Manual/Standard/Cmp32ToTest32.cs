@@ -11,7 +11,7 @@ namespace Mosa.Platform.x64.Transforms.Optimizations.Manual.Standard
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			if (!context.Operand2.IsResolvedConstant)
 				return false;
@@ -22,7 +22,7 @@ namespace Mosa.Platform.x64.Transforms.Optimizations.Manual.Standard
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			context.SetInstruction(X64.Test32, null, context.Operand1, context.Operand1);
 		}

@@ -8,7 +8,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Special
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			if (context.OperandCount != 2)
 				return false;
@@ -31,7 +31,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Special
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			var parent = context.PhiBlocks[0].PreviousBlocks[0];
 			var op1 = context.Operand1;
@@ -53,7 +53,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Special
 			var instruction = ctx.Instruction;
 			var branch = ctx.BranchTargets[0];
 
-			var resultCondition = transformContext.AllocateVirtualRegister(result.Type);
+			var resultCondition = transform.AllocateVirtualRegister(result.Type);
 			var conditionInstruction = instruction == IRInstruction.Branch32 ? (BaseInstruction)IRInstruction.Compare32x32 : IRInstruction.Compare64x64;
 			var swap = block1 == branch;
 

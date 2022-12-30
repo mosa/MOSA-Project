@@ -13,16 +13,16 @@ namespace Mosa.Platform.x86.Transforms.FinalTweak
 	/// </summary>
 	public sealed class Setcc : BaseTransformation
 	{
-		public Setcc() : base(X86.Setcc, TransformationType.Manual | TransformationType.Tranformation)
+		public Setcc() : base(X86.Setcc, TransformationType.Manual | TransformationType.Transform)
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			return context.Result.Register == CPURegister.ESI || context.Result.Register == CPURegister.EDI;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			Debug.Assert(context.Result.IsCPURegister);
 			Debug.Assert(context.Result.IsCPURegister);
@@ -33,7 +33,7 @@ namespace Mosa.Platform.x86.Transforms.FinalTweak
 			// SETcc can not use with ESI or EDI registers as source registers
 			var condition = context.ConditionCode;
 
-			var eax = Operand.CreateCPURegister(transformContext.I4, CPURegister.EAX);
+			var eax = Operand.CreateCPURegister(transform.I4, CPURegister.EAX);
 
 			context.SetInstruction2(X86.XChg32, eax, result, result, eax);
 			context.AppendInstruction(instruction, condition, eax);

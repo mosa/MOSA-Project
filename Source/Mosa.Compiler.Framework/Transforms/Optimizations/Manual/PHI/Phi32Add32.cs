@@ -8,7 +8,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.PHI
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			if (context.OperandCount != 2)
 				return false;
@@ -42,7 +42,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.PHI
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			var ctx = context.Result.Uses[0];
 			var result = ctx.Result;
@@ -50,8 +50,8 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.PHI
 
 			ctx.SetNop();
 
-			context.Operand1 = transformContext.CreateConstant(context.Operand1.ConstantUnsigned32 + value);
-			context.Operand2 = transformContext.CreateConstant(context.Operand2.ConstantUnsigned32 + value);
+			context.Operand1 = transform.CreateConstant(context.Operand1.ConstantUnsigned32 + value);
+			context.Operand2 = transform.CreateConstant(context.Operand2.ConstantUnsigned32 + value);
 			context.Result = result;
 		}
 	}

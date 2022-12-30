@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Reorder
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			if (!context.Operand2.IsVirtualRegister)
 				return false;
@@ -29,7 +29,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Reorder
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			var result = context.Result;
 
@@ -37,7 +37,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Reorder
 			var t2 = context.Operand2.Definitions[0].Operand1;
 			var t3 = context.Operand2.Definitions[0].Operand2;
 
-			var v1 = transformContext.AllocateVirtualRegister(transformContext.I8);
+			var v1 = transform.AllocateVirtualRegister(transform.I8);
 
 			context.SetInstruction(IRInstruction.MulUnsigned64, v1, t1, t2);
 			context.AppendInstruction(IRInstruction.ShiftLeft64, result, v1, t3);
@@ -53,7 +53,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Reorder
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			if (!context.Operand1.IsVirtualRegister)
 				return false;
@@ -67,7 +67,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Reorder
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			var result = context.Result;
 
@@ -75,7 +75,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Reorder
 			var t2 = context.Operand1.Definitions[0].Operand2;
 			var t3 = context.Operand2;
 
-			var v1 = transformContext.AllocateVirtualRegister(transformContext.I8);
+			var v1 = transform.AllocateVirtualRegister(transform.I8);
 
 			context.SetInstruction(IRInstruction.MulUnsigned64, v1, t3, t1);
 			context.AppendInstruction(IRInstruction.ShiftLeft64, result, v1, t2);

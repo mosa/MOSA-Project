@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			if (!context.Operand2.IsResolvedConstant)
 				return false;
@@ -26,13 +26,13 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			var result = context.Result;
 
 			var t1 = context.Operand1;
 
-			var e1 = transformContext.CreateConstant(To32(0));
+			var e1 = transform.CreateConstant(To32(0));
 
 			context.SetInstruction(IRInstruction.Sub32, result, e1, t1);
 		}
@@ -47,7 +47,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			if (!context.Operand1.IsResolvedConstant)
 				return false;
@@ -58,13 +58,13 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			var result = context.Result;
 
 			var t1 = context.Operand2;
 
-			var e1 = transformContext.CreateConstant(To32(0));
+			var e1 = transform.CreateConstant(To32(0));
 
 			context.SetInstruction(IRInstruction.Sub32, result, e1, t1);
 		}

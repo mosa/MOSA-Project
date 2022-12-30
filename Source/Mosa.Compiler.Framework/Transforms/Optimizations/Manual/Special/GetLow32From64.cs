@@ -13,12 +13,12 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Special
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
-			if (!transformContext.Is32BitPlatform)
+			if (!transform.Is32BitPlatform)
 				return false;
 
-			if (!transformContext.LowerTo32)
+			if (!transform.LowerTo32)
 				return false;
 
 			if (!context.Operand1.IsVirtualRegister)
@@ -39,7 +39,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Special
 			return false;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			context.SetInstruction(IRInstruction.Move32, context.Result, context.Operand1);
 		}

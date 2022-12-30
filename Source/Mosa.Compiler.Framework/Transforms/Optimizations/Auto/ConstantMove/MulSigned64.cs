@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			if (!IsResolvedConstant(context.Operand1))
 				return false;
@@ -26,7 +26,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			var result = context.Result;
 

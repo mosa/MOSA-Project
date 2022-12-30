@@ -1,0 +1,48 @@
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using System.Diagnostics;
+
+using Mosa.Platform.x86;
+using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.Transforms;
+
+namespace Mosa.Platform.x86.Transform.FixedRegisters
+{
+	/// <summary>
+	/// Cdq32
+	/// </summary>
+	public sealed class Cdq32 : BaseTransformation
+	{
+		public Cdq32() : base(X86.Cdq32, TransformationType.Manual | TransformationType.Transform)
+		{
+		}
+
+		public override bool Match(Context context, TransformContext transform)
+		{
+			if (context.Result.IsCPURegister
+				&& context.Result2.IsCPURegister
+				&& context.Operand1.IsCPURegister
+				&& context.Result.Register == CPURegister.EDX
+				&& context.Result2.Register == CPURegister.EAX
+				&& context.Operand1.Register == CPURegister.EAX)
+				return false;
+
+			return true;
+		}
+
+		public override void Transform(Context context, TransformContext transform)
+		{
+			var operand1 = context.Operand1;
+			var result = context.Result;
+			var result2 = context.Result2;
+
+			var eax = Operand.CreateCPURegister(transform.I4, CPURegister.EAX);
+			var edx = Operand.CreateCPURegister(transform.I4, CPURegister.EDX);
+
+			context.SetInstruction(X86.Mov32, eax, operand1);
+			context.AppendInstruction2(X86.Cdq32, edx, eax, eax);
+			context.AppendInstruction(X86.Mov32, result, edx);
+			context.AppendInstruction(X86.Mov32, result2, eax);
+		}
+	}
+}

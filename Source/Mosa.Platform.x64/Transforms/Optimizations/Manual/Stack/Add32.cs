@@ -18,7 +18,7 @@ namespace Mosa.Platform.x64.Transforms.Optimizations.Manual.Stack
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			if (!context.Operand1.IsCPURegister)
 				return false;
@@ -46,7 +46,7 @@ namespace Mosa.Platform.x64.Transforms.Optimizations.Manual.Stack
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			var next = GetNextNode(context);
 
@@ -59,11 +59,11 @@ namespace Mosa.Platform.x64.Transforms.Optimizations.Manual.Stack
 
 			if (value > 0)
 			{
-				context.SetInstruction(X64.Add32, context.Result, context.Operand1, transformContext.CreateConstant(value));
+				context.SetInstruction(X64.Add32, context.Result, context.Operand1, transform.CreateConstant(value));
 			}
 			else if (value < 0)
 			{
-				context.SetInstruction(X64.Sub32, context.Result, context.Operand1, transformContext.CreateConstant(-value));
+				context.SetInstruction(X64.Sub32, context.Result, context.Operand1, transform.CreateConstant(-value));
 			}
 			else // if (value == 0)
 			{

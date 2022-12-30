@@ -109,12 +109,12 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// The stack frame
 		/// </summary>
-		internal Operand StackFrame { get; }
+		public Operand StackFrame { get; }
 
 		/// <summary>
 		/// The stack frame
 		/// </summary>
-		internal Operand StackPointer { get; }
+		public Operand StackPointer { get; }
 
 		/// <summary>
 		/// The program counter

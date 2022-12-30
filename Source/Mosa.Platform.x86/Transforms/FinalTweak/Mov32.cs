@@ -13,16 +13,16 @@ namespace Mosa.Platform.x86.Transforms.FinalTweak
 	/// </summary>
 	public sealed class Mov32 : BaseTransformation
 	{
-		public Mov32() : base(X86.Mov32, TransformationType.Manual | TransformationType.Tranformation)
+		public Mov32() : base(X86.Mov32, TransformationType.Manual | TransformationType.Transform)
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			return context.Operand1.IsCPURegister && context.Result.Register == context.Operand1.Register;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			Debug.Assert(context.Result.IsCPURegister);
 

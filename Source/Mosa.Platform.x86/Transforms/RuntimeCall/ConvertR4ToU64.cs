@@ -13,18 +13,18 @@ namespace Mosa.Platform.x86.Transforms.RuntimeCall
 	/// </summary>
 	public sealed class ConvertR4ToU64 : BaseTransformation
 	{
-		public ConvertR4ToU64() : base(IRInstruction.ConvertR4ToU64, TransformationType.Manual)
+		public ConvertR4ToU64() : base(IRInstruction.ConvertR4ToU64, TransformationType.Manual | TransformationType.Transform)
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
-			transformContext.ReplaceWithCall(context, "Mosa.Runtime.Math", "Conversion", "R4ToU8");
+			transform.ReplaceWithCall(context, "Mosa.Runtime.Math", "Conversion", "R4ToU8");
 		}
 	}
 }

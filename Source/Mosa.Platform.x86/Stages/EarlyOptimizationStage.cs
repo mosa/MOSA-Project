@@ -1,7 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework.Stages;
-using Mosa.Platform.x86.Transforms.Auto;
+using Mosa.Platform.x86.Transforms.Optimizations.Auto;
 using Mosa.Platform.x86.Transforms.Optimizations.Manual;
 
 namespace Mosa.Platform.x86.Stages

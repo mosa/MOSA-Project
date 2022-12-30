@@ -8,7 +8,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Rewrite
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			if (context.ConditionCode != ConditionCode.UnsignedGreater)
 				return false;
@@ -19,7 +19,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Rewrite
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			var target = context.BranchTargets[0];
 

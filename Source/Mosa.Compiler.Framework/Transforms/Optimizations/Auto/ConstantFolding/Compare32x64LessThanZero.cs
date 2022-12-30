@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			if (context.ConditionCode != ConditionCode.UnsignedGreater)
 				return false;
@@ -29,11 +29,11 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			var result = context.Result;
 
-			var c1 = transformContext.CreateConstant(0);
+			var c1 = transform.CreateConstant(0);
 
 			context.SetInstruction(IRInstruction.Move64, result, c1);
 		}

@@ -17,7 +17,7 @@ namespace Mosa.Platform.x64.Transforms.Optimizations.Manual.Standard
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			if (!context.Operand1.IsVirtualRegister)
 				return false;
@@ -37,7 +37,7 @@ namespace Mosa.Platform.x64.Transforms.Optimizations.Manual.Standard
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			context.SetInstruction(X64.Lea64, context.Result, context.Operand1, context.Operand2);
 		}

@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Algebraic
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			if (!context.Operand1.IsVirtualRegister)
 				return false;
@@ -44,15 +44,15 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Algebraic
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			var result = context.Result;
 
 			var t1 = context.Operand1.Definitions[0].Operand1;
 			var t2 = context.Operand2.Definitions[0].Operand1;
 
-			var v1 = transformContext.AllocateVirtualRegister(transformContext.I8);
-			var v2 = transformContext.AllocateVirtualRegister(transformContext.I8);
+			var v1 = transform.AllocateVirtualRegister(transform.I8);
+			var v2 = transform.AllocateVirtualRegister(transform.I8);
 
 			context.SetInstruction(IRInstruction.Add64, v1, t1, t2);
 			context.AppendInstruction(IRInstruction.Sub64, v2, t1, t2);

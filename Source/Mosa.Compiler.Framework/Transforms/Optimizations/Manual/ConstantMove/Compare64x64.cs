@@ -8,7 +8,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.ConstantMove
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			if (IsConstant(context.Operand2))
 				return false;
@@ -19,7 +19,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.ConstantMove
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			context.SetInstruction(IRInstruction.Compare64x64, context.ConditionCode.GetReverse(), context.Result, context.Operand2, context.Operand1);
 		}

@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			if (context.ConditionCode != ConditionCode.Equal)
 				return false;
@@ -41,7 +41,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			var result = context.Result;
 
@@ -49,9 +49,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 			var t2 = context.Operand1.Definitions[0].Operand2;
 			var t3 = context.Operand2;
 
-			var v1 = transformContext.AllocateVirtualRegister(transformContext.I4);
+			var v1 = transform.AllocateVirtualRegister(transform.I4);
 
-			var e1 = transformContext.CreateConstant(MulUnsigned32(To32(t2), To32(t3)));
+			var e1 = transform.CreateConstant(MulUnsigned32(To32(t2), To32(t3)));
 
 			context.SetInstruction(IRInstruction.Sub32, v1, t1, e1);
 			context.AppendInstruction(IRInstruction.Compare32x32, ConditionCode.UnsignedLess, result, v1, t2);
@@ -67,7 +67,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			if (context.ConditionCode != ConditionCode.Equal)
 				return false;
@@ -93,7 +93,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			var result = context.Result;
 
@@ -101,9 +101,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 			var t2 = context.Operand2.Definitions[0].Operand1;
 			var t3 = context.Operand2.Definitions[0].Operand2;
 
-			var v1 = transformContext.AllocateVirtualRegister(transformContext.I4);
+			var v1 = transform.AllocateVirtualRegister(transform.I4);
 
-			var e1 = transformContext.CreateConstant(MulUnsigned32(To32(t3), To32(t1)));
+			var e1 = transform.CreateConstant(MulUnsigned32(To32(t3), To32(t1)));
 
 			context.SetInstruction(IRInstruction.Sub32, v1, t2, e1);
 			context.AppendInstruction(IRInstruction.Compare32x32, ConditionCode.UnsignedLess, result, v1, t3);

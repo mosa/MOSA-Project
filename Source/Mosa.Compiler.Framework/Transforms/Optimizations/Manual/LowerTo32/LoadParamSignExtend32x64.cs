@@ -8,23 +8,23 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.LowerTo32
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
-			return transformContext.LowerTo32;
+			return transform.LowerTo32;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			var result = context.Result;
 			var operand1 = context.Operand1;
 
-			transformContext.SplitLongOperand(operand1, out Operand op0Low, out Operand _);
+			transform.SplitLongOperand(operand1, out Operand op0Low, out Operand _);
 
-			var resultLow = transformContext.AllocateVirtualRegister32();
-			var resultHigh = transformContext.AllocateVirtualRegister32();
+			var resultLow = transform.AllocateVirtualRegister32();
+			var resultHigh = transform.AllocateVirtualRegister32();
 
 			context.SetInstruction(IRInstruction.LoadParam32, resultLow, op0Low);
-			context.AppendInstruction(IRInstruction.ArithShiftRight32, resultHigh, resultLow, transformContext.CreateConstant(31));
+			context.AppendInstruction(IRInstruction.ArithShiftRight32, resultHigh, resultLow, transform.CreateConstant(31));
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 	}

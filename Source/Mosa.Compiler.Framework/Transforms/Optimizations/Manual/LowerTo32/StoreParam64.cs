@@ -8,20 +8,20 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.LowerTo32
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
-			return transformContext.LowerTo32;
+			return transform.LowerTo32;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			var offset = context.Operand1;
 			var value = context.Operand2;
 
-			var valueLow = transformContext.AllocateVirtualRegister32();
-			var valueHigh = transformContext.AllocateVirtualRegister32();
+			var valueLow = transform.AllocateVirtualRegister32();
+			var valueHigh = transform.AllocateVirtualRegister32();
 
-			transformContext.SplitLongOperand(offset, out Operand op1Low, out Operand op1High);
+			transform.SplitLongOperand(offset, out Operand op1Low, out Operand op1High);
 
 			context.SetInstruction(IRInstruction.GetLow32, valueLow, value);
 			context.AppendInstruction(IRInstruction.GetHigh32, valueHigh, value);

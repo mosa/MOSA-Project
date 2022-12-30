@@ -10,11 +10,11 @@ namespace Mosa.Platform.x86.Transforms.Tweak
 	/// </summary>
 	public sealed class Blsr32 : BaseTransformation
 	{
-		public Blsr32() : base(X86.Blsr32, TransformationType.Manual | TransformationType.Tranformation)
+		public Blsr32() : base(X86.Blsr32, TransformationType.Manual | TransformationType.Transform)
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			if (!context.Operand1.IsConstant)
 				return false;
@@ -22,9 +22,9 @@ namespace Mosa.Platform.x86.Transforms.Tweak
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
-			transformContext.MoveOperand1ToVirtualRegister(context, X86.Mov32);
+			transform.MoveOperand1ToVirtualRegister(context, X86.Mov32);
 		}
 	}
 }

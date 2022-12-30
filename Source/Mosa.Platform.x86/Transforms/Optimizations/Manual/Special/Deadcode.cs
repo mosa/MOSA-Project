@@ -11,7 +11,7 @@ namespace Mosa.Platform.x86.Transforms.Optimizations.Manual.Special
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			if (context.ResultCount != 1)
 				return false;
@@ -59,7 +59,7 @@ namespace Mosa.Platform.x86.Transforms.Optimizations.Manual.Special
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			context.Empty();
 		}

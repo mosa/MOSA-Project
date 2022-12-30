@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			if (context.ConditionCode != ConditionCode.Equal)
 				return false;
@@ -44,13 +44,13 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			var result = context.Result;
 
 			var t1 = context.Operand1.Definitions[0].Operand1;
 
-			var c1 = transformContext.CreateConstant(1);
+			var c1 = transform.CreateConstant(1);
 
 			context.SetInstruction(IRInstruction.And64, result, t1, c1);
 		}
@@ -65,7 +65,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			if (context.ConditionCode != ConditionCode.Equal)
 				return false;
@@ -94,13 +94,13 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			var result = context.Result;
 
 			var t1 = context.Operand2.Definitions[0].Operand1;
 
-			var c1 = transformContext.CreateConstant(1);
+			var c1 = transform.CreateConstant(1);
 
 			context.SetInstruction(IRInstruction.And64, result, t1, c1);
 		}

@@ -1,10 +1,8 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Diagnostics;
-
-using Mosa.Platform.x86;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
+using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Transforms.RuntimeCall
 {
@@ -13,21 +11,21 @@ namespace Mosa.Platform.x86.Transforms.RuntimeCall
 	/// </summary>
 	public sealed class RemR8 : BaseTransformation
 	{
-		public RemR8() : base(IRInstruction.RemR8, TransformationType.Manual)
+		public RemR8() : base(IRInstruction.RemR8, TransformationType.Manual | TransformationType.Transform)
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			Debug.Assert(context.Result.IsR8);
 			Debug.Assert(context.Operand1.IsR8);
 
-			transformContext.ReplaceWithCall(context, "Mosa.Runtime.Math.x86", "Division", "RemR8");
+			transform.ReplaceWithCall(context, "Mosa.Runtime.Math.x86", "Division", "RemR8");
 		}
 	}
 }

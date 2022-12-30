@@ -17,7 +17,7 @@ namespace Mosa.Platform.x86.Transforms.Optimizations.Auto.Specific
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			if (!context.Operand2.IsVirtualRegister)
 				return false;
@@ -46,7 +46,7 @@ namespace Mosa.Platform.x86.Transforms.Optimizations.Auto.Specific
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			var result = context.Result;
 
@@ -65,7 +65,7 @@ namespace Mosa.Platform.x86.Transforms.Optimizations.Auto.Specific
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			if (!context.Operand1.IsVirtualRegister)
 				return false;
@@ -94,7 +94,7 @@ namespace Mosa.Platform.x86.Transforms.Optimizations.Auto.Specific
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			var result = context.Result;
 
@@ -113,7 +113,7 @@ namespace Mosa.Platform.x86.Transforms.Optimizations.Auto.Specific
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			if (!context.Operand2.IsVirtualRegister)
 				return false;
@@ -142,7 +142,7 @@ namespace Mosa.Platform.x86.Transforms.Optimizations.Auto.Specific
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			var result = context.Result;
 
@@ -161,7 +161,7 @@ namespace Mosa.Platform.x86.Transforms.Optimizations.Auto.Specific
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transformContext)
+		public override bool Match(Context context, TransformContext transform)
 		{
 			if (!context.Operand1.IsVirtualRegister)
 				return false;
@@ -190,7 +190,7 @@ namespace Mosa.Platform.x86.Transforms.Optimizations.Auto.Specific
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transformContext)
+		public override void Transform(Context context, TransformContext transform)
 		{
 			var result = context.Result;
 
