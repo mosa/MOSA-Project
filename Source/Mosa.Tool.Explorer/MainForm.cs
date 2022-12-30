@@ -12,9 +12,11 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.CompilerStages;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
+using Mosa.Compiler.MosaTypeSystem.CLR;
 using Mosa.Tool.Explorer.Stages;
 using Mosa.Utility.Configuration;
 using Mosa.Utility.Launcher;
+using Reko.Core.Dfa;
 using static Mosa.Compiler.Framework.CompilerHooks;
 
 namespace Mosa.Tool.Explorer
@@ -738,7 +740,7 @@ namespace Mosa.Tool.Explorer
 
 			var compilerHooks = CreateCompilerHook();
 
-			Compiler = new MosaCompiler(Settings, compilerHooks);
+			Compiler = new MosaCompiler(Settings, compilerHooks, new ClrModuleLoader(), new ClrTypeResolver());
 
 			Compiler.Load();
 

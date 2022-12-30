@@ -29,7 +29,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
 		<ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj" />
-		<ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj" />
+		<ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem.CLR\Mosa.Compiler.MosaTypeSystem.CLR.csproj" />
 		<ProjectReference Include="..\Mosa.Platform.ARMv8A32\Mosa.Platform.ARMv8A32.csproj" />
 		<ProjectReference Include="..\Mosa.Platform.x64\Mosa.Platform.x64.csproj" />
 		<ProjectReference Include="..\Mosa.Platform.x86\Mosa.Platform.x86.csproj" />
