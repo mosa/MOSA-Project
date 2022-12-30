@@ -1,7 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.DeviceSystem;
 using System.Drawing;
+using Mosa.DeviceSystem;
 
 namespace Mosa.Demo.SVGAWorld.x86.Components
 {
@@ -47,7 +47,8 @@ namespace Mosa.Demo.SVGAWorld.x86.Components
 					Bitmap.DrawLine((uint)(Mouse.X - X), (uint)(Mouse.Y - Y), (uint)LastX, (uint)LastY, Mouse.Color);
 				else
 					Bitmap.DrawLine((uint)LastX, (uint)LastY, (uint)(Mouse.X - X), (uint)(Mouse.Y - Y), Mouse.Color);
-			} else Mouse.IsOnPaintingArea = false;
+			}
+			else Mouse.IsOnPaintingArea = false;
 
 			LastX = Mouse.X - X;
 			LastY = Mouse.Y - Y;

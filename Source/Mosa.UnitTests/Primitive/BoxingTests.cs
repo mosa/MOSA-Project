@@ -1,10 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-
 namespace Mosa.UnitTests
 {
-	public static class BoxingTests 
+	public static class BoxingTests
 	{
 
 		[MosaUnitTest(Series = "U1")]
@@ -20,7 +18,7 @@ namespace Mosa.UnitTests
 			object o = value;
 			return o.Equals(value);
 		}
-	
+
 		[MosaUnitTest(Series = "U2")]
 		public static ushort BoxU2(ushort value)
 		{
@@ -34,7 +32,7 @@ namespace Mosa.UnitTests
 			object o = value;
 			return o.Equals(value);
 		}
-	
+
 		[MosaUnitTest(Series = "U4")]
 		public static uint BoxU4(uint value)
 		{
@@ -48,7 +46,7 @@ namespace Mosa.UnitTests
 			object o = value;
 			return o.Equals(value);
 		}
-	
+
 		[MosaUnitTest(Series = "U8")]
 		public static ulong BoxU8(ulong value)
 		{
@@ -62,7 +60,7 @@ namespace Mosa.UnitTests
 			object o = value;
 			return o.Equals(value);
 		}
-	
+
 		[MosaUnitTest(Series = "I1")]
 		public static sbyte BoxI1(sbyte value)
 		{
@@ -76,7 +74,7 @@ namespace Mosa.UnitTests
 			object o = value;
 			return o.Equals(value);
 		}
-	
+
 		[MosaUnitTest(Series = "I2")]
 		public static short BoxI2(short value)
 		{
@@ -90,7 +88,7 @@ namespace Mosa.UnitTests
 			object o = value;
 			return o.Equals(value);
 		}
-	
+
 		[MosaUnitTest(Series = "I4")]
 		public static int BoxI4(int value)
 		{
@@ -104,7 +102,7 @@ namespace Mosa.UnitTests
 			object o = value;
 			return o.Equals(value);
 		}
-	
+
 		[MosaUnitTest(Series = "I8")]
 		public static long BoxI8(long value)
 		{
@@ -118,7 +116,7 @@ namespace Mosa.UnitTests
 			object o = value;
 			return o.Equals(value);
 		}
-	
+
 		[MosaUnitTest(Series = "R4")]
 		public static float BoxR4(float value)
 		{
@@ -132,7 +130,7 @@ namespace Mosa.UnitTests
 			object o = value;
 			return o.Equals(value);
 		}
-	
+
 		[MosaUnitTest(Series = "R8")]
 		public static double BoxR8(double value)
 		{
@@ -146,7 +144,7 @@ namespace Mosa.UnitTests
 			object o = value;
 			return o.Equals(value);
 		}
-	
+
 		[MosaUnitTest(Series = "C")]
 		public static char BoxC(char value)
 		{
@@ -160,5 +158,5 @@ namespace Mosa.UnitTests
 			object o = value;
 			return o.Equals(value);
 		}
-		}
+	}
 }

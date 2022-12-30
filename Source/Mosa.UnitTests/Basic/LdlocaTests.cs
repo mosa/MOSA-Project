@@ -1,13 +1,11 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-
 namespace Mosa.UnitTests.Basic
 {
 
-	public static class LdlocaTests 
+	public static class LdlocaTests
 	{
-	
+
 		[MosaUnitTest(Series = "U1")]
 		public static bool LdlocaCheckValueU1(byte expect)
 		{
@@ -19,7 +17,7 @@ namespace Mosa.UnitTests.Basic
 		{
 			return (expect.Equals(a));
 		}
-	
+
 		[MosaUnitTest(Series = "U2")]
 		public static bool LdlocaCheckValueU2(ushort expect)
 		{
@@ -31,7 +29,7 @@ namespace Mosa.UnitTests.Basic
 		{
 			return (expect.Equals(a));
 		}
-	
+
 		[MosaUnitTest(Series = "U4")]
 		public static bool LdlocaCheckValueU4(uint expect)
 		{
@@ -43,7 +41,7 @@ namespace Mosa.UnitTests.Basic
 		{
 			return (expect.Equals(a));
 		}
-	
+
 		[MosaUnitTest(Series = "U8")]
 		public static bool LdlocaCheckValueU8(ulong expect)
 		{
@@ -55,7 +53,7 @@ namespace Mosa.UnitTests.Basic
 		{
 			return (expect.Equals(a));
 		}
-	
+
 		[MosaUnitTest(Series = "I1")]
 		public static bool LdlocaCheckValueI1(sbyte expect)
 		{
@@ -67,7 +65,7 @@ namespace Mosa.UnitTests.Basic
 		{
 			return (expect.Equals(a));
 		}
-	
+
 		[MosaUnitTest(Series = "I2")]
 		public static bool LdlocaCheckValueI2(short expect)
 		{
@@ -79,7 +77,7 @@ namespace Mosa.UnitTests.Basic
 		{
 			return (expect.Equals(a));
 		}
-	
+
 		[MosaUnitTest(Series = "I4")]
 		public static bool LdlocaCheckValueI4(int expect)
 		{
@@ -91,7 +89,7 @@ namespace Mosa.UnitTests.Basic
 		{
 			return (expect.Equals(a));
 		}
-	
+
 		[MosaUnitTest(Series = "I8")]
 		public static bool LdlocaCheckValueI8(long expect)
 		{
@@ -103,7 +101,7 @@ namespace Mosa.UnitTests.Basic
 		{
 			return (expect.Equals(a));
 		}
-	
+
 		[MosaUnitTest(Series = "R4")]
 		public static bool LdlocaCheckValueR4(float expect)
 		{
@@ -115,7 +113,7 @@ namespace Mosa.UnitTests.Basic
 		{
 			return (expect.Equals(a));
 		}
-	
+
 		[MosaUnitTest(Series = "R8")]
 		public static bool LdlocaCheckValueR8(double expect)
 		{
@@ -127,7 +125,7 @@ namespace Mosa.UnitTests.Basic
 		{
 			return (expect.Equals(a));
 		}
-	
+
 		[MosaUnitTest(Series = "C")]
 		public static bool LdlocaCheckValueC(char expect)
 		{
@@ -139,5 +137,5 @@ namespace Mosa.UnitTests.Basic
 		{
 			return (expect.Equals(a));
 		}
-		}
+	}
 }

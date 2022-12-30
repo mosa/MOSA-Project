@@ -1,9 +1,9 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
 using Mosa.DeviceSystem;
 using Mosa.FileSystem.FAT.Vfs;
 using Mosa.FileSystem.VFS;
-using System;
 
 namespace Mosa.FileSystem.FAT
 {
@@ -112,12 +112,6 @@ namespace Mosa.FileSystem.FAT
 	/// </summary>
 	public class FatFileSystem : GenericFileSystem
 	{
-		// Limitation: Long file names are not supported
-
-		/// <summary>
-		/// The fat type
-		/// </summary>
-		private FatType fatType;
 
 		/// <summary>
 		/// The end of cluster mark
@@ -215,11 +209,6 @@ namespace Mosa.FileSystem.FAT
 		private uint fatEntries;
 
 		/// <summary>
-		/// The cluster size in bytes
-		/// </summary>
-		private uint clusterSizeInBytes;
-
-		/// <summary>
 		/// ICompare
 		/// </summary>
 		public interface ICompare
@@ -238,7 +227,7 @@ namespace Mosa.FileSystem.FAT
 		/// Gets the type of the FAT.
 		/// </summary>
 		/// <value>The type of the FAT.</value>
-		public FatType FATType { get { return fatType; } }
+		public FatType FATType { get; private set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FatFileSystem"/> class.
@@ -279,7 +268,7 @@ namespace Mosa.FileSystem.FAT
 		/// <value>
 		/// The cluster size in bytes.
 		/// </value>
-		public uint ClusterSizeInBytes { get { return clusterSizeInBytes; } }
+		public uint ClusterSizeInBytes { get; private set; }
 
 		/// <summary>
 		/// Gets the sectors per cluster.
@@ -359,7 +348,7 @@ namespace Mosa.FileSystem.FAT
 			try
 			{
 				fatSectors = nbrFats * sectorsPerFat;
-				clusterSizeInBytes = sectorsPerCluster * BlockSize;
+				ClusterSizeInBytes = sectorsPerCluster * BlockSize;
 				rootDirSectors = (((rootEntries * 32) + (bytesPerSector - 1)) / bytesPerSector);
 				firstDataSector = reservedSectors + (nbrFats * sectorsPerFat) + rootDirSectors;
 				totalSectors = (totalSectors16 != 0) ? totalSectors16 : totalSectors32;
@@ -379,13 +368,13 @@ namespace Mosa.FileSystem.FAT
 				return false;
 
 			if (totalClusters < 4085)
-				fatType = FatType.FAT12;
+				FATType = FatType.FAT12;
 			else if (totalClusters < 65525)
-				fatType = FatType.FAT16;
+				FATType = FatType.FAT16;
 			else
-				fatType = FatType.FAT32;
+				FATType = FatType.FAT32;
 
-			if (fatType == FatType.FAT12)
+			if (FATType == FatType.FAT12)
 			{
 				reservedClusterMark = 0xFF0;
 				endOfClusterMark = 0x0FF8;
@@ -393,7 +382,7 @@ namespace Mosa.FileSystem.FAT
 				fatMask = 0xFFFFFFFF;
 				fatEntries = sectorsPerFat * 3 * BlockSize / 2;
 			}
-			else if (fatType == FatType.FAT16)
+			else if (FATType == FatType.FAT16)
 			{
 				reservedClusterMark = 0xFFF0;
 				endOfClusterMark = 0xFFF8;
@@ -411,10 +400,10 @@ namespace Mosa.FileSystem.FAT
 			}
 
 			// More basic checks
-			if ((fatType == FatType.FAT32) && (rootCluster32 == 0))
+			if ((FATType == FatType.FAT32) && (rootCluster32 == 0))
 				return false;
 
-			SerialNumber = bootSector.GetBytes(fatType != FatType.FAT32 ? BootSector.IDSerialNumber : BootSector.FAT32_IDSerialNumber, 4);
+			SerialNumber = bootSector.GetBytes(FATType != FatType.FAT32 ? BootSector.IDSerialNumber : BootSector.FAT32_IDSerialNumber, 4);
 
 			IsValid = true;
 
@@ -431,17 +420,17 @@ namespace Mosa.FileSystem.FAT
 			if (!partition.CanWrite)
 				return false;
 
-			fatType = fatSettings.FATType;
+			FATType = fatSettings.FATType;
 			bytesPerSector = 512;
 			nbrFats = 2;
 
 			totalSectors = partition.BlockCount;
-			sectorsPerCluster = GetSectorsPerClusterByTotalSectors(fatType, totalSectors);
+			sectorsPerCluster = GetSectorsPerClusterByTotalSectors(FATType, totalSectors);
 
 			if (sectorsPerCluster == 0)
 				return false;
 
-			if (fatType == FatType.FAT32)
+			if (FATType == FatType.FAT32)
 			{
 				reservedSectors = 32;
 				rootEntries = 0;
@@ -457,7 +446,7 @@ namespace Mosa.FileSystem.FAT
 			uint val1 = totalSectors - (reservedSectors + rootDirSectors);
 			uint val2 = (uint)((sectorsPerCluster * 256) + nbrFats);
 
-			if (fatType == FatType.FAT32)
+			if (FATType == FatType.FAT32)
 				val2 /= 2;
 
 			uint sectorsPerFat = (val1 + (val2 - 1)) / val2;
@@ -500,7 +489,7 @@ namespace Mosa.FileSystem.FAT
 			bootSector.SetUShort(BootSector.NumberOfHeads, fatSettings.NumberOfHeads);
 			bootSector.SetUInt(BootSector.HiddenSectors, fatSettings.HiddenSectors);
 
-			if (fatType != FatType.FAT32)
+			if (FATType != FatType.FAT32)
 			{
 				bootSector.SetUShort(BootSector.SectorsPerFAT, (ushort)sectorsPerFat);
 				if (fatSettings.FloppyMedia)
@@ -528,13 +517,13 @@ namespace Mosa.FileSystem.FAT
 					bootSector.SetBytes(BootSector.OSBootCode, fatSettings.OSBootCode, BootSector.OSBootCode, (uint)Math.Min(448, fatSettings.OSBootCode.Length));
 				}
 
-				if (fatType == FatType.FAT12)
+				if (FATType == FatType.FAT12)
 					bootSector.SetString(BootSector.FATType, "FAT12   ");
 				else
 					bootSector.SetString(BootSector.FATType, "FAT16   ");
 			}
 
-			if (fatType == FatType.FAT32)
+			if (FATType == FatType.FAT32)
 			{
 				bootSector.SetUShort(BootSector.SectorsPerFAT, 0);
 				bootSector.SetUInt(BootSector.FAT32_SectorPerFAT, sectorsPerFat);
@@ -568,10 +557,10 @@ namespace Mosa.FileSystem.FAT
 			// Write Boot Sector
 			partition.WriteBlock(0, 1, bootSector.Data);
 
-			if (fatType == FatType.FAT32)
+			if (FATType == FatType.FAT32)
 			{
 				// Write backup Boot Sector
-				if (fatType == FatType.FAT32)
+				if (FATType == FatType.FAT32)
 					partition.WriteBlock(6, 1, bootSector.Data);
 
 				// Create FSInfo Structure
@@ -619,12 +608,12 @@ namespace Mosa.FileSystem.FAT
 			// First FAT block is special
 			var firstFat = new DataBlock(512);
 
-			if (fatType == FatType.FAT12)
+			if (FATType == FatType.FAT12)
 			{
 				firstFat.SetByte(1, 0xFF);
 				firstFat.SetByte(2, 0xFF); // 0xF8
 			}
-			else if (fatType == FatType.FAT16)
+			else if (FATType == FatType.FAT16)
 			{
 				firstFat.SetUShort(0, 0xFFFF);
 				firstFat.SetUShort(2, 0xFFFF); // 0xFFF8
@@ -647,7 +636,7 @@ namespace Mosa.FileSystem.FAT
 				partition.WriteBlock(reservedSectors + sectorsPerFat, 1, firstFat.Data);
 
 			// Create Empty Root Directory
-			if (fatType != FatType.FAT32)
+			if (FATType != FatType.FAT32)
 			{
 				for (uint i = 0; i < rootDirSectors; i++)
 				{
@@ -738,9 +727,9 @@ namespace Mosa.FileSystem.FAT
 		{
 			uint fatoffset = 0;
 
-			if (fatType == FatType.FAT12)
+			if (FATType == FatType.FAT12)
 				fatoffset = (cluster + (cluster / 2));
-			else if (fatType == FatType.FAT16)
+			else if (FATType == FatType.FAT16)
 				fatoffset = cluster * 2;
 			else //if (type == FatType.FAT32)
 				fatoffset = cluster * 4;
@@ -749,14 +738,14 @@ namespace Mosa.FileSystem.FAT
 			uint sectorOffset = fatoffset % bytesPerSector;
 			uint nbrSectors = 1;
 
-			if ((fatType == FatType.FAT12) && (sectorOffset == bytesPerSector - 1))
+			if ((FATType == FatType.FAT12) && (sectorOffset == bytesPerSector - 1))
 				nbrSectors = 2;
 
 			var fat = new DataBlock(partition.ReadBlock(sector, nbrSectors));
 
 			uint clusterValue;
 
-			if (fatType == FatType.FAT12)
+			if (FATType == FatType.FAT12)
 			{
 				clusterValue = fat.GetUShort(sectorOffset);
 				if (cluster % 2 == 1)
@@ -764,7 +753,7 @@ namespace Mosa.FileSystem.FAT
 				else
 					clusterValue &= 0x0FFF;
 			}
-			else if (fatType == FatType.FAT16)
+			else if (FATType == FatType.FAT16)
 			{
 				clusterValue = fat.GetUShort(sectorOffset);
 			}
@@ -786,9 +775,9 @@ namespace Mosa.FileSystem.FAT
 		{
 			uint fatOffset = 0;
 
-			if (fatType == FatType.FAT12)
+			if (FATType == FatType.FAT12)
 				fatOffset = (cluster + (cluster / 2));
-			else if (fatType == FatType.FAT16)
+			else if (FATType == FatType.FAT16)
 				fatOffset = cluster * 2;
 			else //if (type == FatType.FAT32)
 				fatOffset = cluster * 4;
@@ -797,12 +786,12 @@ namespace Mosa.FileSystem.FAT
 			uint sectorOffset = fatOffset % bytesPerSector;
 			uint nbrSectors = 1;
 
-			if ((fatType == FatType.FAT12) && (sectorOffset == bytesPerSector - 1))
+			if ((FATType == FatType.FAT12) && (sectorOffset == bytesPerSector - 1))
 				nbrSectors = 2;
 
 			var fat = new DataBlock(partition.ReadBlock(sector, nbrSectors));
 
-			switch (fatType)
+			switch (FATType)
 			{
 				case FatType.FAT12:
 					{
@@ -1012,7 +1001,7 @@ namespace Mosa.FileSystem.FAT
 			uint activeSector = startCluster * sectorsPerCluster;
 
 			if (startCluster == 0)
-				activeSector = (fatType == FatType.FAT32) ? GetSectorByCluster(rootCluster32) : firstRootDirectorySector;
+				activeSector = (FATType == FatType.FAT32) ? GetSectorByCluster(rootCluster32) : firstRootDirectorySector;
 
 			uint increment = 0;
 
@@ -1022,10 +1011,10 @@ namespace Mosa.FileSystem.FAT
 
 				for (uint index = 0; index < entriesPerSector; index++)
 				{
-					if (compare.Compare(directory.Data, index * 32, fatType))
+					if (compare.Compare(directory.Data, index * 32, FATType))
 					{
 						var attribute = (FatFileAttributes)directory.GetByte((index * Entry.EntrySize) + Entry.FileAttributes);
-						return new FatFileLocation(GetClusterEntry(directory.Data, index, fatType), activeSector, index, (attribute & FatFileAttributes.SubDirectory) != 0);
+						return new FatFileLocation(GetClusterEntry(directory.Data, index, FATType), activeSector, index, (attribute & FatFileAttributes.SubDirectory) != 0);
 					}
 
 					if (directory.GetByte(Entry.DOSName + (index * Entry.EntrySize)) == FileNameAttribute.LastEntry)
@@ -1034,7 +1023,7 @@ namespace Mosa.FileSystem.FAT
 
 				++increment;
 
-				if ((startCluster == 0) && (fatType != FatType.FAT32))
+				if ((startCluster == 0) && (FATType != FatType.FAT32))
 				{
 					// FAT12/16 Root directory
 					if (increment >= rootDirSectors)

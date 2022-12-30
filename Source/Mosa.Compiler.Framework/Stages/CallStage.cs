@@ -1,9 +1,9 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common;
-using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Mosa.Compiler.Common;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -70,7 +70,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private uint CalculateMethodTableOffset(MosaMethod invokeTarget)
 		{
-			var slot = (uint)TypeLayout.GetMethodSlot(invokeTarget);
+			var slot = TypeLayout.GetMethodSlot(invokeTarget);
 
 			return NativePointerSize * (slot + 14); // 14 is the offset into the TypeDef to the start of the MethodTable
 		}
@@ -157,7 +157,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private uint CalculateInterfaceMethodTableOffset(MosaMethod invokeTarget)
 		{
-			var slot = (uint)TypeLayout.GetMethodSlot(invokeTarget);
+			var slot = TypeLayout.GetMethodSlot(invokeTarget);
 
 			// Skip the first two entries (TypeDef and Count)
 			slot += 2;

@@ -1,9 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Utility.SourceCodeGenerator.TransformExpressions;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Text;
+using Mosa.Utility.SourceCodeGenerator.TransformExpressions;
 
 namespace Mosa.Utility.SourceCodeGenerator
 {

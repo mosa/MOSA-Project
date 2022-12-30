@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common;
 using System;
+using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.Framework.Transforms
 {
@@ -517,7 +517,7 @@ namespace Mosa.Compiler.Framework.Transforms
 
 		protected static uint ArithmeticShiftRight32(uint a, int b)
 		{
-			return (uint)(((int)a) >> (int)b);
+			return (uint)(((int)a) >> b);
 		}
 
 		protected static ulong ArithmeticShiftRight64(ulong a, long b)

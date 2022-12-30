@@ -1,10 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Utility.RSP;
-using Mosa.Utility.RSP.Command;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Threading;
+using Mosa.Utility.RSP;
+using Mosa.Utility.RSP.Command;
 
 namespace Mosa.Tool.Debugger.GDB
 {

@@ -1,12 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common.Configuration;
-using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Linker;
-using Mosa.Compiler.Framework.Trace;
-using Mosa.Compiler.MosaTypeSystem;
-using Mosa.Utility.DebugEngine;
-using Mosa.Utility.Launcher;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,6 +7,13 @@ using System.IO;
 using System.IO.Pipes;
 using System.Net.Sockets;
 using System.Threading;
+using Mosa.Compiler.Common.Configuration;
+using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.Linker;
+using Mosa.Compiler.Framework.Trace;
+using Mosa.Compiler.MosaTypeSystem;
+using Mosa.Utility.DebugEngine;
+using Mosa.Utility.Launcher;
 
 namespace Mosa.Utility.UnitTests
 {

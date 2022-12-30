@@ -1,8 +1,8 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Runtime;
 using System;
 using System.Runtime.CompilerServices;
+using Mosa.Runtime;
 
 namespace Mosa.DeviceSystem
 {
@@ -11,31 +11,29 @@ namespace Mosa.DeviceSystem
 	/// </summary>
 	public readonly struct ConstrainedPointer
 	{
-		private readonly Pointer address;
-		private readonly uint size;
 
 		/// <summary>
 		/// Gets the address.
 		/// </summary>
 		/// <value>The address.</value>
-		public Pointer Address { get { return address; } }
+		public Pointer Address { get; }
 
 		/// <summary>
 		/// Gets the size.
 		/// </summary>
 		/// <value>The size.</value>
-		public uint Size { get { return size; } }
+		public uint Size { get; }
 
 		public ConstrainedPointer(Pointer address, uint size)
 		{
-			this.address = address;
-			this.size = size;
+			this.Address = address;
+			this.Size = size;
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private void CheckOffset(uint offset)
 		{
-			if (offset >= size)
+			if (offset >= Size)
 			{
 				throw new ArgumentOutOfRangeException(nameof(offset));
 			}
@@ -43,8 +41,8 @@ namespace Mosa.DeviceSystem
 
 		public byte this[uint offset]
 		{
-			get { CheckOffset(offset); return address.Load8(offset); }
-			set { CheckOffset(offset); address.Store8(offset, value); }
+			get { CheckOffset(offset); return Address.Load8(offset); }
+			set { CheckOffset(offset); Address.Store8(offset, value); }
 		}
 
 		/// <summary>
@@ -56,7 +54,7 @@ namespace Mosa.DeviceSystem
 		public byte Read8(uint offset)
 		{
 			CheckOffset(offset);
-			return address.Load8(offset);
+			return Address.Load8(offset);
 		}
 
 		/// <summary>
@@ -68,7 +66,7 @@ namespace Mosa.DeviceSystem
 		public void Write8(uint offset, byte value)
 		{
 			CheckOffset(offset);
-			address.Store8(offset, value);
+			Address.Store8(offset, value);
 		}
 
 		/// <summary>
@@ -80,7 +78,7 @@ namespace Mosa.DeviceSystem
 		public ushort Read16(uint offset)
 		{
 			CheckOffset(offset);
-			return address.Load16(offset);
+			return Address.Load16(offset);
 		}
 
 		/// <summary>
@@ -92,7 +90,7 @@ namespace Mosa.DeviceSystem
 		public void Write16(uint offset, ushort value)
 		{
 			CheckOffset(offset);
-			address.Store16(offset, value);
+			Address.Store16(offset, value);
 		}
 
 		/// <summary>
@@ -104,7 +102,7 @@ namespace Mosa.DeviceSystem
 		public uint Read24(uint offset)
 		{
 			CheckOffset(offset);
-			return address.Load16(offset) | (uint)(address.Load8(offset + 2) << 16);
+			return Address.Load16(offset) | (uint)(Address.Load8(offset + 2) << 16);
 		}
 
 		/// <summary>
@@ -116,8 +114,8 @@ namespace Mosa.DeviceSystem
 		public void Write24(uint offset, uint value)
 		{
 			CheckOffset(offset);
-			address.Store16(offset, (ushort)(value & 0xFFFF));
-			address.Store8(offset + 2, (byte)((value >> 16) & 0xFF));
+			Address.Store16(offset, (ushort)(value & 0xFFFF));
+			Address.Store8(offset + 2, (byte)((value >> 16) & 0xFF));
 		}
 
 		/// <summary>
@@ -129,7 +127,7 @@ namespace Mosa.DeviceSystem
 		public uint Read32(uint offset)
 		{
 			CheckOffset(offset);
-			return address.Load32(offset);
+			return Address.Load32(offset);
 		}
 
 		/// <summary>
@@ -141,7 +139,7 @@ namespace Mosa.DeviceSystem
 		public void Write32(uint offset, uint value)
 		{
 			CheckOffset(offset);
-			address.Store32(offset, value);
+			Address.Store32(offset, value);
 		}
 
 		/// <summary>
@@ -153,7 +151,7 @@ namespace Mosa.DeviceSystem
 		public ulong Read64(uint offset)
 		{
 			CheckOffset(offset);
-			return address.Load64(offset);
+			return Address.Load64(offset);
 		}
 
 		/// <summary>
@@ -165,7 +163,7 @@ namespace Mosa.DeviceSystem
 		public void Write64(uint offset, ulong value)
 		{
 			CheckOffset(offset);
-			address.Store64(offset, value);
+			Address.Store64(offset, value);
 		}
 	}
 }

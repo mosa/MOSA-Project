@@ -1,9 +1,9 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
 using Mosa.Kernel.BareMetal.MultibootSpecification;
 using Mosa.Kernel.BareMetal.x86;
 using Mosa.Runtime;
-using System;
 
 namespace Mosa.Kernel.BareMetal
 {

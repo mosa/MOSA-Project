@@ -1,7 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Runtime.x86;
 using Mosa.Runtime;
+using Mosa.Runtime.x86;
 
 namespace Mosa.Kernel.x86
 {
@@ -40,7 +40,7 @@ namespace Mosa.Kernel.x86
 			/*if (PAE)
 				edx = (apic >> 32) & 0x0f;*/
 
-			MSR.SetMSR(IA32_APIC_BASE_MSR, (ulong)(edx << 32) | (ulong)eax);
+			MSR.SetMSR(IA32_APIC_BASE_MSR, edx << 32 | (ulong)eax);
 		}
 
 		public static Pointer GetAPICBase()

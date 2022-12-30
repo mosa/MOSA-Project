@@ -1,13 +1,11 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-
 namespace Mosa.UnitTests.Basic
 {
 
-	public static class LdargaTests 
+	public static class LdargaTests
 	{
-	
+
 		[MosaUnitTest(Series = "U1")]
 		public static byte LdargaCheckValueU1(byte a)
 		{
@@ -22,7 +20,7 @@ namespace Mosa.UnitTests.Basic
 		[MosaUnitTest(Series = "U1U1")]
 		public static byte LdargaChangeValueU1(byte a, byte b)
 		{
-			LdargaChangeValueRefU1(ref a,b);
+			LdargaChangeValueRefU1(ref a, b);
 			return a;
 		}
 
@@ -30,7 +28,7 @@ namespace Mosa.UnitTests.Basic
 		{
 			a = b;
 		}
-	
+
 		[MosaUnitTest(Series = "U2")]
 		public static ushort LdargaCheckValueU2(ushort a)
 		{
@@ -45,7 +43,7 @@ namespace Mosa.UnitTests.Basic
 		[MosaUnitTest(Series = "U2U2")]
 		public static ushort LdargaChangeValueU2(ushort a, ushort b)
 		{
-			LdargaChangeValueRefU2(ref a,b);
+			LdargaChangeValueRefU2(ref a, b);
 			return a;
 		}
 
@@ -53,7 +51,7 @@ namespace Mosa.UnitTests.Basic
 		{
 			a = b;
 		}
-	
+
 		[MosaUnitTest(Series = "U4")]
 		public static uint LdargaCheckValueU4(uint a)
 		{
@@ -68,7 +66,7 @@ namespace Mosa.UnitTests.Basic
 		[MosaUnitTest(Series = "U4U4")]
 		public static uint LdargaChangeValueU4(uint a, uint b)
 		{
-			LdargaChangeValueRefU4(ref a,b);
+			LdargaChangeValueRefU4(ref a, b);
 			return a;
 		}
 
@@ -76,7 +74,7 @@ namespace Mosa.UnitTests.Basic
 		{
 			a = b;
 		}
-	
+
 		[MosaUnitTest(Series = "U8")]
 		public static ulong LdargaCheckValueU8(ulong a)
 		{
@@ -91,7 +89,7 @@ namespace Mosa.UnitTests.Basic
 		[MosaUnitTest(Series = "U8U8")]
 		public static ulong LdargaChangeValueU8(ulong a, ulong b)
 		{
-			LdargaChangeValueRefU8(ref a,b);
+			LdargaChangeValueRefU8(ref a, b);
 			return a;
 		}
 
@@ -99,7 +97,7 @@ namespace Mosa.UnitTests.Basic
 		{
 			a = b;
 		}
-	
+
 		[MosaUnitTest(Series = "I1")]
 		public static sbyte LdargaCheckValueI1(sbyte a)
 		{
@@ -114,7 +112,7 @@ namespace Mosa.UnitTests.Basic
 		[MosaUnitTest(Series = "I1I1")]
 		public static sbyte LdargaChangeValueI1(sbyte a, sbyte b)
 		{
-			LdargaChangeValueRefI1(ref a,b);
+			LdargaChangeValueRefI1(ref a, b);
 			return a;
 		}
 
@@ -122,7 +120,7 @@ namespace Mosa.UnitTests.Basic
 		{
 			a = b;
 		}
-	
+
 		[MosaUnitTest(Series = "I2")]
 		public static short LdargaCheckValueI2(short a)
 		{
@@ -137,7 +135,7 @@ namespace Mosa.UnitTests.Basic
 		[MosaUnitTest(Series = "I2I2")]
 		public static short LdargaChangeValueI2(short a, short b)
 		{
-			LdargaChangeValueRefI2(ref a,b);
+			LdargaChangeValueRefI2(ref a, b);
 			return a;
 		}
 
@@ -145,7 +143,7 @@ namespace Mosa.UnitTests.Basic
 		{
 			a = b;
 		}
-	
+
 		[MosaUnitTest(Series = "I4")]
 		public static int LdargaCheckValueI4(int a)
 		{
@@ -160,7 +158,7 @@ namespace Mosa.UnitTests.Basic
 		[MosaUnitTest(Series = "I4I4")]
 		public static int LdargaChangeValueI4(int a, int b)
 		{
-			LdargaChangeValueRefI4(ref a,b);
+			LdargaChangeValueRefI4(ref a, b);
 			return a;
 		}
 
@@ -168,7 +166,7 @@ namespace Mosa.UnitTests.Basic
 		{
 			a = b;
 		}
-	
+
 		[MosaUnitTest(Series = "I8")]
 		public static long LdargaCheckValueI8(long a)
 		{
@@ -183,7 +181,7 @@ namespace Mosa.UnitTests.Basic
 		[MosaUnitTest(Series = "I8I8")]
 		public static long LdargaChangeValueI8(long a, long b)
 		{
-			LdargaChangeValueRefI8(ref a,b);
+			LdargaChangeValueRefI8(ref a, b);
 			return a;
 		}
 
@@ -191,7 +189,7 @@ namespace Mosa.UnitTests.Basic
 		{
 			a = b;
 		}
-	
+
 		[MosaUnitTest(Series = "R4")]
 		public static float LdargaCheckValueR4(float a)
 		{
@@ -206,7 +204,7 @@ namespace Mosa.UnitTests.Basic
 		[MosaUnitTest(Series = "R4R4")]
 		public static float LdargaChangeValueR4(float a, float b)
 		{
-			LdargaChangeValueRefR4(ref a,b);
+			LdargaChangeValueRefR4(ref a, b);
 			return a;
 		}
 
@@ -214,7 +212,7 @@ namespace Mosa.UnitTests.Basic
 		{
 			a = b;
 		}
-	
+
 		[MosaUnitTest(Series = "R8")]
 		public static double LdargaCheckValueR8(double a)
 		{
@@ -229,7 +227,7 @@ namespace Mosa.UnitTests.Basic
 		[MosaUnitTest(Series = "R8R8")]
 		public static double LdargaChangeValueR8(double a, double b)
 		{
-			LdargaChangeValueRefR8(ref a,b);
+			LdargaChangeValueRefR8(ref a, b);
 			return a;
 		}
 
@@ -237,7 +235,7 @@ namespace Mosa.UnitTests.Basic
 		{
 			a = b;
 		}
-	
+
 		[MosaUnitTest(Series = "C")]
 		public static char LdargaCheckValueC(char a)
 		{
@@ -252,7 +250,7 @@ namespace Mosa.UnitTests.Basic
 		[MosaUnitTest(Series = "CC")]
 		public static char LdargaChangeValueC(char a, char b)
 		{
-			LdargaChangeValueRefC(ref a,b);
+			LdargaChangeValueRefC(ref a, b);
 			return a;
 		}
 
@@ -260,7 +258,7 @@ namespace Mosa.UnitTests.Basic
 		{
 			a = b;
 		}
-	
+
 		[MosaUnitTest(Series = "B")]
 		public static bool LdargaCheckValueB(bool a)
 		{
@@ -275,7 +273,7 @@ namespace Mosa.UnitTests.Basic
 		[MosaUnitTest(Series = "BB")]
 		public static bool LdargaChangeValueB(bool a, bool b)
 		{
-			LdargaChangeValueRefB(ref a,b);
+			LdargaChangeValueRefB(ref a, b);
 			return a;
 		}
 
@@ -283,5 +281,5 @@ namespace Mosa.UnitTests.Basic
 		{
 			a = b;
 		}
-		}
+	}
 }

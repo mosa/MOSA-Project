@@ -1,12 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common.Configuration;
-using Mosa.Compiler.Framework;
-using Mosa.Tool.Debugger.DebugData;
-using Mosa.Tool.Debugger.GDB;
-using Mosa.Tool.Debugger.Views;
-using Mosa.Utility.Configuration;
-using Mosa.Utility.Launcher;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,6 +7,13 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Windows.Forms;
+using Mosa.Compiler.Common.Configuration;
+using Mosa.Compiler.Framework;
+using Mosa.Tool.Debugger.DebugData;
+using Mosa.Tool.Debugger.GDB;
+using Mosa.Tool.Debugger.Views;
+using Mosa.Utility.Configuration;
+using Mosa.Utility.Launcher;
 using WeifenLuo.WinFormsUI.Docking;
 
 namespace Mosa.Tool.Debugger

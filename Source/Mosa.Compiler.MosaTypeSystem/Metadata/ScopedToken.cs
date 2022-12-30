@@ -1,8 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using dnlib.DotNet;
 using System;
 using System.Diagnostics;
+using dnlib.DotNet;
 
 namespace Mosa.Compiler.MosaTypeSystem
 {
@@ -11,17 +11,13 @@ namespace Mosa.Compiler.MosaTypeSystem
 	{
 		public ScopedToken(ModuleDef module, MDToken token)
 		{
-			this.module = module;
-			this.token = token;
+			this.Module = module;
+			this.Token = token;
 		}
 
-		private readonly ModuleDef module;
+		public ModuleDef Module { get; }
 
-		public ModuleDef Module { get { return module; } }
-
-		private readonly MDToken token;
-
-		public MDToken Token { get { return token; } }
+		public MDToken Token { get; }
 
 		public bool Equals(ScopedToken other)
 		{

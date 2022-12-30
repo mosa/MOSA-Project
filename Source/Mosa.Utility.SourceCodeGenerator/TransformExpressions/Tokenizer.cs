@@ -1,8 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common.Exceptions;
 using System;
 using System.Collections.Generic;
+using Mosa.Compiler.Common.Exceptions;
 
 namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 {

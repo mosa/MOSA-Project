@@ -1,8 +1,8 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Collections.Generic;
 using Mosa.Compiler.Framework.Transforms;
 using Mosa.Platform.x86.Transform.FixedRegisters;
-using System.Collections.Generic;
 
 namespace Mosa.Platform.x86.Transforms.FixedRegisters
 {

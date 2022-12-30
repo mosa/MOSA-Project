@@ -25,7 +25,7 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 		public bool IsAt { get { return Token != null && Token.TokenType == TokenType.At; } }
 
 		public bool IsPercent { get { return Token != null && Token.TokenType == TokenType.Percent; } }
-		
+
 		public bool IsInteger { get { return Token != null && Token.TokenType == TokenType.IntegerConstant; } }
 
 		public bool IsDouble { get { return Token != null && Token.TokenType == TokenType.DoubleConstant; } }

@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
-using Mosa.Demo.SVGAWorld.x86.Components;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using System.Collections.Generic;
 using System.Drawing;
+using Mosa.Demo.SVGAWorld.x86.Components;
 
 namespace Mosa.Demo.SVGAWorld.x86.Apps
 {

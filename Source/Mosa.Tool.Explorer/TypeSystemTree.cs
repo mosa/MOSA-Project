@@ -1,10 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework;
-using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Mosa.Compiler.Framework;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Tool.Explorer
 {

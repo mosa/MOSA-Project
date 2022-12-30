@@ -1,13 +1,12 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Collections.Generic;
+using System.Diagnostics;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
 using static Mosa.Compiler.Framework.CompilerHooks;
 
 namespace Mosa.Compiler.Framework

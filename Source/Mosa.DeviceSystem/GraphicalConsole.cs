@@ -91,7 +91,8 @@ namespace Mosa.DeviceSystem
 			{
 				Y -= Font.Height;
 				X = Width - LastCharWidth;
-			} else X -= LastCharWidth;
+			}
+			else X -= LastCharWidth;
 		}
 
 		public void NewLine()

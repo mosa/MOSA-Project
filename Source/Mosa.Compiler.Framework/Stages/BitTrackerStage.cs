@@ -1,13 +1,11 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
+using System.Diagnostics;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.Framework.Transforms;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -1909,7 +1907,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (lowest >= 1)
 				{
-					var low = (ulong)(1 << (int)lowest);
+					var low = (ulong)(1 << lowest);
 
 					return BitValue.CreateValue(
 						bitsSet: 0,

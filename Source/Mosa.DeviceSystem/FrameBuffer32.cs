@@ -1,8 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Runtime;
 using System;
 using System.Drawing;
+using Mosa.Runtime;
 
 namespace Mosa.DeviceSystem
 {

@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Runtime.x64;
 using System.Runtime.CompilerServices;
+using Mosa.Runtime.x64;
 
 namespace Mosa.Runtime.Math.x64
 {

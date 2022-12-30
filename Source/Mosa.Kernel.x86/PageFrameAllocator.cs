@@ -15,9 +15,6 @@ namespace Mosa.Kernel.x86
 		// Current position in map data structure
 		private static Pointer at;
 
-		private static uint totalPages;
-		private static uint totalUsedPages;
-
 		/// <summary>
 		/// Setup the physical page manager
 		/// </summary>
@@ -25,8 +22,8 @@ namespace Mosa.Kernel.x86
 		{
 			map = new Pointer(Address.PageFrameAllocator);
 			at = new Pointer(Address.PageFrameAllocator);
-			totalPages = 0;
-			totalUsedPages = 0;
+			TotalPages = 0;
+			TotalPagesInUse = 0;
 			SetupFreeMemory();
 		}
 
@@ -84,7 +81,7 @@ namespace Mosa.Kernel.x86
 			}
 
 			at -= 4;
-			totalPages += (normsize / PageSize);
+			TotalPages += (normsize / PageSize);
 		}
 
 		/// <summary>
@@ -96,7 +93,7 @@ namespace Mosa.Kernel.x86
 			if (at == map)
 				return Pointer.Zero; // out of memory
 
-			totalUsedPages++;
+			TotalPagesInUse++;
 			var avail = at.LoadPointer();
 			at -= 4;
 
@@ -112,7 +109,7 @@ namespace Mosa.Kernel.x86
 		/// <param name="address">The address.</param>
 		public static void Free(Pointer address)
 		{
-			totalUsedPages--;
+			TotalPagesInUse--;
 			at += 4;
 			at.Store32(address.ToUInt32());
 		}
@@ -125,11 +122,11 @@ namespace Mosa.Kernel.x86
 		/// <summary>
 		/// Retrieves the amount of total physical memory pages available in the system.
 		/// </summary>
-		public static uint TotalPages { get { return totalPages; } }
+		public static uint TotalPages { get; private set; }
 
 		/// <summary>
 		/// Retrieves the amount of number of physical pages in use.
 		/// </summary>
-		public static uint TotalPagesInUse { get { return totalUsedPages; } }
+		public static uint TotalPagesInUse { get; private set; }
 	}
 }

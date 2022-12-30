@@ -1,12 +1,11 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework.Analysis;
-using Mosa.Compiler.Framework.Trace;
-using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Net;
+using Mosa.Compiler.Framework.Analysis;
+using Mosa.Compiler.Framework.Trace;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.Transforms
 {

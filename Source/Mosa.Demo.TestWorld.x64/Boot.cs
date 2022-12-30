@@ -3,7 +3,6 @@
 using Mosa.Kernel.x64;
 using Mosa.Runtime.Plug;
 using Mosa.Runtime.x64;
-using Mosa.UnitTests;
 using Mosa.UnitTests.Optimization;
 
 namespace Mosa.Demo.TestWorld.x64

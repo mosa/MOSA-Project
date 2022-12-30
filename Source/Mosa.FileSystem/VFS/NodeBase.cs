@@ -16,12 +16,6 @@ namespace Mosa.FileSystem.VFS
 		/// <summary>
 		/// Holds the file system of the node.
 		/// </summary>
-		private readonly IFileSystem fs;
-
-		/// <summary>
-		/// Holds the type of the IVfsNode represented by this instance.
-		/// </summary>
-		private readonly VfsNodeType type;
 
 		#endregion Data Members
 
@@ -34,8 +28,8 @@ namespace Mosa.FileSystem.VFS
 		/// <param name="type">The type.</param>
 		protected NodeBase(IFileSystem fs, VfsNodeType type)
 		{
-			this.fs = fs;
-			this.type = type;
+			this.FileSystem = fs;
+			this.NodeType = type;
 		}
 
 		#endregion Construction
@@ -46,13 +40,27 @@ namespace Mosa.FileSystem.VFS
 		/// Gets the file system.
 		/// </summary>
 		/// <value>The file system.</value>
-		public IFileSystem FileSystem { get { return fs; } }
+
+		/* Unmerged change from project 'Mosa.Utility.FileSystem'
+		Before:
+				public IFileSystem FileSystem { get { return fs; } }
+		After:
+				public IFileSystem FileSystem { get; } }
+		*/
+		public IFileSystem FileSystem { get; private set; }
 
 		/// <summary>
 		/// Returns the type of the node.
 		/// </summary>
 		/// <value></value>
-		public VfsNodeType NodeType { get { return type; } }
+
+		/* Unmerged change from project 'Mosa.Utility.FileSystem'
+		Before:
+				public VfsNodeType NodeType { get { return type; } }
+		After:
+				public VfsNodeType NodeType { get; } }
+		*/
+		public VfsNodeType NodeType { get; private set; }
 
 		/// <summary>
 		/// Creates a new file system entry of the given name and type.

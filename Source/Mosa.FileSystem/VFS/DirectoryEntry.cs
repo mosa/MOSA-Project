@@ -21,20 +21,6 @@ namespace Mosa.FileSystem.VFS
 		/// <summary>
 		/// References the inode that belongs to this name.
 		/// </summary>
-		private IVfsNode inode;
-
-		/// <summary>
-		/// The name of this directory entry.
-		/// </summary>
-		private string name;
-
-		/// <summary>
-		/// Ptr to the parent directory entry.
-		/// </summary>
-		/// <remarks>
-		/// If _parent == this, we're at the root directory entry.
-		/// </remarks>
-		private DirectoryEntry parent;
 
 		/// <summary>
 		/// Sorted list of child directory entries of this name.
@@ -59,35 +45,17 @@ namespace Mosa.FileSystem.VFS
 		/// <summary>
 		///
 		/// </summary>
-		public string Name
-		{
-			get
-			{
-				return name;
-			}
-		}
+		public string Name { get; private set; }
 
 		/// <summary>
 		///
 		/// </summary>
-		public IVfsNode Node
-		{
-			get
-			{
-				return inode;
-			}
-		}
+		public IVfsNode Node { get; private set; }
 
 		/// <summary>
 		///
 		/// </summary>
-		public DirectoryEntry Parent
-		{
-			get
-			{
-				return parent;
-			}
-		}
+		public DirectoryEntry Parent { get; private set; }
 
 		#endregion Properties
 
@@ -134,7 +102,7 @@ namespace Mosa.FileSystem.VFS
 			 */
 
 			DirectoryEntry e = child;
-			while ((e != null) && (e.name != name))
+			while ((e != null) && (e.Name != name))
 				e = e.next;
 
 			return e;
@@ -151,9 +119,9 @@ namespace Mosa.FileSystem.VFS
 			if (!System.Object.ReferenceEquals(this, parent))
 				parent.InsertChild(this);
 
-			this.parent = parent;
-			this.name = name;
-			inode = node;
+			this.Parent = parent;
+			this.Name = name;
+			Node = node;
 		}
 
 		/// <summary>
@@ -168,11 +136,11 @@ namespace Mosa.FileSystem.VFS
 			// FIXME: Remove the entry from the parent and release it to the
 			// entry cache in the vfs service.
 			if (!System.Object.ReferenceEquals(this, Parent))
-				parent.RemoveChild(this);
+				Parent.RemoveChild(this);
 
-			inode = null;
-			name = null;
-			parent = null;
+			Node = null;
+			Name = null;
+			Parent = null;
 		}
 
 		#endregion Methods

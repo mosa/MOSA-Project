@@ -1,11 +1,11 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common.Exceptions;
-using Mosa.Compiler.Framework.Analysis;
-using Mosa.Compiler.Framework.Trace;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Mosa.Compiler.Common.Exceptions;
+using Mosa.Compiler.Framework.Analysis;
+using Mosa.Compiler.Framework.Trace;
 
 namespace Mosa.Compiler.Framework.Stages
 {
