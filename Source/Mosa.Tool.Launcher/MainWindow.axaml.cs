@@ -23,7 +23,7 @@ namespace Mosa.Tool.Launcher
 		private Settings settings;
 		private Builder builder;
 		private OpenFileDialog source;
-		private OpenFolderDialog destination;
+		private OpenFolderDialog destination, include;
 
 		public MainWindow()
 		{
@@ -38,6 +38,11 @@ namespace Mosa.Tool.Launcher
 			destination = new OpenFolderDialog
 			{
 				Title = "Select the output directory"
+			};
+
+			include = new OpenFolderDialog
+			{
+				Title = "Select the include directory"
 			};
 
 			DstLbl.Content = Path.Combine(Path.GetTempPath(), "MOSA");
@@ -201,6 +206,7 @@ namespace Mosa.Tool.Launcher
 			settings.AddPropertyListValue("SearchPaths", Path.GetDirectoryName(src));
 
 			settings.SetValue("Image.Folder", DstLbl.Content.ToString());
+			settings.SetValue("Image.FileSystem.RootInclude", IncDirTxt.Text);
 
 			switch (ImgCmb.SelectedIndex)
 			{
@@ -365,6 +371,15 @@ namespace Mosa.Tool.Launcher
 				return;
 
 			DstLbl.Content = result;
+		}
+
+		private async void IncBtn_OnClick(object? _, RoutedEventArgs __)
+		{
+			var result = await include.ShowAsync(this);
+			if (result == null)
+				return;
+
+			IncDirTxt.Text = result;
 		}
 	}
 }

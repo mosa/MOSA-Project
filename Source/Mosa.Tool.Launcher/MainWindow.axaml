@@ -96,7 +96,7 @@
 			                <CheckBox Name="QemuGdb">Enable QEMU GDB</CheckBox>
 			                <CheckBox Name="LaunchGdb">Launch GDB</CheckBox>
 			                <CheckBox Name="MosaDbger">Launch MOSA Debugger</CheckBox>
-			                <Label>Connection:</Label>
+			                <Label Margin="0,5,0,0">Connection:</Label>
 			                <ComboBox HorizontalContentAlignment="Center" Name="CntCmb" VerticalAlignment="Bottom" Margin="90,-20,0,90" Width="155" BorderBrush="LightGray" SelectedIndex="0">
 				                <Label>None</Label>
 				                <Label>Pipe</Label>
@@ -111,7 +111,7 @@
 							<CheckBox Name="EmtSymbs">Emit All Symbols</CheckBox>
 							<CheckBox Name="EmtRelocs">Emit Static Relocations</CheckBox>
 							<CheckBox Name="EmtDwarf">Emit Dwarf Information</CheckBox>
-							<Label>Base Address:</Label>
+							<Label Margin="0,5,0,0">Base Address:</Label>
 							<TextBox Name="BaseAddrTxt" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" Margin="110,-20,0,110" Width="175" BorderBrush="LightGray">0x00400000</TextBox>
 						</StackPanel>
 	                </Border>
@@ -143,23 +143,25 @@
                         </Grid>
 	                </Border>
 
-	                <Border Margin="0,182,0,0" Name="VbeBox" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" Padding="4" HorizontalAlignment="Left" VerticalAlignment="Top" Height="155">
+	                <Border Margin="0,182,0,0" Name="VbeBox" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" Padding="4" HorizontalAlignment="Left" VerticalAlignment="Top" Height="170">
 		                <StackPanel>
 			                <CheckBox Name="EnableVbe">Enable VBE Graphics</CheckBox>
-			                <Label>Width:</Label>
+			                <Label Margin="0,5,0,0">Width:</Label>
 			                <NumericUpDown Name="VbeWidth" Margin="65, -20, 0, 0" Width="180" BorderBrush="LightGray" HorizontalContentAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Left" Minimum="640" Maximum="1920" Value="640"></NumericUpDown>
-			                <Label>Height:</Label>
+			                <Label Margin="0,5,0,0">Height:</Label>
 			                <NumericUpDown Name="VbeHeight" Margin="65, -20, 0, 0" Width="180" BorderBrush="LightGray" HorizontalContentAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Left" Minimum="480" Maximum="1080" Value="480"></NumericUpDown>
-			                <Label>Depth:</Label>
+			                <Label Margin="0,5,0,0">Depth:</Label>
 			                <NumericUpDown Name="VbeDepth" Margin="65, -20, 0, 0" Width="180" BorderBrush="LightGray" HorizontalContentAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Left" Minimum="8" Maximum="32" Value="32" Increment="8"></NumericUpDown>
 		                </StackPanel>
 	                </Border>
 
-	                <Border Name="OtherBox" Margin="265,182,0,0" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" Padding="4" Height="155" VerticalAlignment="Top" HorizontalAlignment="Left">
+	                <Border Name="OtherBox" Margin="265,182,0,0" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" Padding="4" Height="170" VerticalAlignment="Top" HorizontalAlignment="Left">
 		                <StackPanel>
 			                <CheckBox Name="PlugKorlib" IsChecked="True">Plug Core Library</CheckBox>
-			                <Label>OS Name:</Label>
-			                <TextBox Name="OsNameTxt" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" Margin="90,-20,0,90" Width="195" BorderBrush="LightGray">MOSA</TextBox>
+			                <Label Margin="0,5,0,0">OS Name:</Label>
+			                <TextBox Name="OsNameTxt" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" Margin="135,-20,0,90" Width="435" BorderBrush="LightGray">MOSA</TextBox>
+			                <Button Name="IncBtn" Click="IncBtn_OnClick" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" Margin="0,-82,0,90" Width="130">Include Directory</Button>
+			                <TextBox Name="IncDirTxt" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" Margin="135,-120,0,90" Width="435" BorderBrush="LightGray"></TextBox>
 		                </StackPanel>
 	                </Border>
                 </Grid>
