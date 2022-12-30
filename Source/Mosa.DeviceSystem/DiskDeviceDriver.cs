@@ -18,11 +18,6 @@ namespace Mosa.DeviceSystem
 		private uint DriveNbr;
 
 		/// <summary>
-		/// The total sectors
-		/// </summary>
-		private uint totalSectors;
-
-		/// <summary>
 		/// The read only
 		/// </summary>
 		private bool readOnly;
@@ -37,7 +32,7 @@ namespace Mosa.DeviceSystem
 		/// Gets the total blocks.
 		/// </summary>
 		/// <value>The total blocks.</value>
-		public uint TotalBlocks { get { return totalSectors; } }
+		public uint TotalBlocks { get; private set; }
 
 		/// <summary>
 		/// Gets the size of the block.
@@ -67,7 +62,7 @@ namespace Mosa.DeviceSystem
 
 		public override void Start()
 		{
-			totalSectors = diskController.GetTotalSectors(DriveNbr);
+			TotalBlocks = diskController.GetTotalSectors(DriveNbr);
 
 			if (!readOnly)
 				readOnly = !diskController.CanWrite(DriveNbr);

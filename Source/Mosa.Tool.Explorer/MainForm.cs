@@ -1,5 +1,11 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
+using System.Threading;
+using System.Windows.Forms;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Configuration;
 using Mosa.Compiler.Framework;
@@ -9,14 +15,6 @@ using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Tool.Explorer.Stages;
 using Mosa.Utility.Configuration;
 using Mosa.Utility.Launcher;
-
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using System.Threading;
-using System.Windows.Forms;
-
 using static Mosa.Compiler.Framework.CompilerHooks;
 
 namespace Mosa.Tool.Explorer

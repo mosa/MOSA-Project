@@ -1,11 +1,11 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using dnlib.DotNet;
-using dnlib.DotNet.Emit;
-using Mosa.Compiler.Common.Exceptions;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using dnlib.DotNet;
+using dnlib.DotNet.Emit;
+using Mosa.Compiler.Common.Exceptions;
 
 namespace Mosa.Compiler.MosaTypeSystem.Metadata
 {

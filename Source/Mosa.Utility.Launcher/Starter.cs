@@ -1,15 +1,15 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
+using System.Diagnostics;
+using System.IO;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading;
 using Mosa.Compiler.Common.Configuration;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Utility.Configuration;
-using System;
-using System.Diagnostics;
-using System.IO;
-using System.Text;
-using System.Threading;
-using System.Runtime.InteropServices;
 
 namespace Mosa.Utility.Launcher
 {

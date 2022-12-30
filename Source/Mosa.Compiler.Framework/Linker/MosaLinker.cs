@@ -1,12 +1,12 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common;
-using Mosa.Compiler.Common.Exceptions;
-using Mosa.Compiler.Framework.Linker.Elf;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using Mosa.Compiler.Common;
+using Mosa.Compiler.Common.Exceptions;
+using Mosa.Compiler.Framework.Linker.Elf;
 
 namespace Mosa.Compiler.Framework.Linker
 {

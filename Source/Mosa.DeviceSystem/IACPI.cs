@@ -7,9 +7,9 @@ namespace Mosa.DeviceSystem
 	/// </summary>
 	public interface IACPI
 	{
-		BaseIOPortWrite ResetAddress { get; set; }		// FIXME - Should not expose I/O ports
-		BaseIOPortWrite PM1aControlBlock { get; set; }	// FIXME - Should not expose I/O ports
-		BaseIOPortWrite PM1bControlBlock { get; set; }	// FIXME - Should not expose I/O ports
+		BaseIOPortWrite ResetAddress { get; set; }      // FIXME - Should not expose I/O ports
+		BaseIOPortWrite PM1aControlBlock { get; set; }  // FIXME - Should not expose I/O ports
+		BaseIOPortWrite PM1bControlBlock { get; set; }  // FIXME - Should not expose I/O ports
 
 		short SLP_TYPa { get; set; }
 		short SLP_TYPb { get; set; }

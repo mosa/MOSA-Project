@@ -18,11 +18,6 @@ namespace Mosa.FileSystem.VFS
 		/// </summary>
 		private static DirectoryNode rootDirectory;
 
-		/// <summary>
-		/// Root entry of the virtual file system.
-		/// </summary>
-		private static DirectoryEntry rootNode;
-
 		#endregion Data Members
 
 		#region Construction
@@ -37,7 +32,7 @@ namespace Mosa.FileSystem.VFS
 		public static void Setup()
 		{
 			rootDirectory = new DirectoryNode(null);
-			rootNode = DirectoryEntry.AllocateRoot(rootDirectory);
+			RootDirectoryEntry = DirectoryEntry.AllocateRoot(rootDirectory);
 
 			// FIXME: Add an entry of the virtual file system to /system/filesystems
 		}
@@ -52,13 +47,7 @@ namespace Mosa.FileSystem.VFS
 		/// <summary>
 		///
 		/// </summary>
-		public static DirectoryEntry RootDirectoryEntry
-		{
-			get
-			{
-				return rootNode;
-			}
-		}
+		public static DirectoryEntry RootDirectoryEntry { get; private set; }
 
 		#endregion Static Properties
 
@@ -72,7 +61,7 @@ namespace Mosa.FileSystem.VFS
 		/// <returns>True if the requested access mode combination is available to the immediate caller. If any one requested access mode is not available, the result is false.</returns>
 		public static bool Access(string path, AccessMode mode)
 		{
-			DirectoryEntry entry = PathResolver.Resolve(rootNode, ref path, PathResolutionFlags.DoNotThrowNotFoundException);
+			DirectoryEntry entry = PathResolver.Resolve(RootDirectoryEntry, ref path, PathResolutionFlags.DoNotThrowNotFoundException);
 			if (null != entry)
 			{
 				return AccessCheck.Perform(entry, mode, AccessCheckFlags.NoThrow);
@@ -99,7 +88,7 @@ namespace Mosa.FileSystem.VFS
 		public static object Create(string path, VfsNodeType type, object settings, System.IO.FileAccess access, System.IO.FileShare share)
 		{
 			// Retrieve the parent directory
-			DirectoryEntry parent = PathResolver.Resolve(rootNode, ref path, PathResolutionFlags.RetrieveParent);
+			DirectoryEntry parent = PathResolver.Resolve(RootDirectoryEntry, ref path, PathResolutionFlags.RetrieveParent);
 
 			// Check if the caller has write access in the directory
 			AccessCheck.Perform(parent, AccessMode.Write, AccessCheckFlags.None);
@@ -120,7 +109,7 @@ namespace Mosa.FileSystem.VFS
 		/// <param name="path">The path to change to. This path may be relative or absolute.</param>
 		public static void ChangeDirectory(string path)
 		{
-			DirectoryEntry entry = PathResolver.Resolve(rootNode, ref path);
+			DirectoryEntry entry = PathResolver.Resolve(RootDirectoryEntry, ref path);
 
 			// FIXME: Set the current directory in the thread execution block
 		}
@@ -131,7 +120,7 @@ namespace Mosa.FileSystem.VFS
 		/// <param name="path">The path, which identifies a node.</param>
 		public static void Delete(string path)
 		{
-			DirectoryEntry entry = PathResolver.Resolve(rootNode, ref path, PathResolutionFlags.DoNotThrowNotFoundException);
+			DirectoryEntry entry = PathResolver.Resolve(RootDirectoryEntry, ref path, PathResolutionFlags.DoNotThrowNotFoundException);
 			if (null != entry)
 			{
 				AccessCheck.Perform(entry, AccessMode.Delete, AccessCheckFlags.None);
@@ -150,7 +139,7 @@ namespace Mosa.FileSystem.VFS
 		public static void Mount(string source, string target)
 		{
 			// Retrieve the parent directory of the mount
-			DirectoryEntry parent = PathResolver.Resolve(rootNode, ref target, PathResolutionFlags.RetrieveParent);
+			DirectoryEntry parent = PathResolver.Resolve(RootDirectoryEntry, ref target, PathResolutionFlags.RetrieveParent);
 
 			if (parent == null)
 				throw new System.ArgumentException();
@@ -173,7 +162,7 @@ namespace Mosa.FileSystem.VFS
 		/// <returns></returns>
 		public static object Open(string path, System.IO.FileAccess access, System.IO.FileShare share)
 		{
-			var entry = PathResolver.Resolve(rootNode, ref path);
+			var entry = PathResolver.Resolve(RootDirectoryEntry, ref path);
 
 			/* HINT:
 			 *

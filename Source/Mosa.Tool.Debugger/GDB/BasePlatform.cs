@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Utility.RSP;
 using System.Collections.Generic;
+using Mosa.Utility.RSP;
 
 namespace Mosa.Tool.Debugger.GDB
 {

@@ -1,9 +1,9 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Diagnostics;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Platform;
-using System.Diagnostics;
 
 namespace Mosa.Platform.ARMv8A32
 {

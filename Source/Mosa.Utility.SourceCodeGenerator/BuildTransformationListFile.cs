@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 
 namespace Mosa.Utility.SourceCodeGenerator
 {
@@ -21,8 +20,8 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 		protected override void Body()
 		{
-			Lines.AppendLine("using Mosa.Compiler.Framework.Transform;");
 			Lines.AppendLine("using System.Collections.Generic;");
+			Lines.AppendLine("using Mosa.Compiler.Framework.Transforms;");
 			Lines.AppendLine();
 
 			Lines.AppendLine($"namespace {Namespace}");

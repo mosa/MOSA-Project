@@ -1,8 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common.Configuration;
 using System;
 using System.Windows.Forms;
+using Mosa.Compiler.Common.Configuration;
 
 namespace Mosa.Tool.Debugger
 {

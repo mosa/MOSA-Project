@@ -1,8 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Runtime.InteropServices;
 using Mosa.DeviceSystem;
 using Mosa.Runtime;
-using System.Runtime.InteropServices;
 
 namespace Mosa.DeviceDriver.ISA
 {
@@ -238,7 +238,8 @@ namespace Mosa.DeviceDriver.ISA
 			{
 				Descriptor20 = (RSDPDescriptor20*)rsdpPtr;
 				XSDT = (XSDT*)HAL.GetPhysicalMemory((Pointer)Descriptor20->XsdtAddress, 0xFFFF).Address;
-			} else */RSDT = (RSDT*)HAL.GetPhysicalMemory((Pointer)Descriptor->RsdtAddress, 0xFFFF).Address;
+			} else */
+			RSDT = (RSDT*)HAL.GetPhysicalMemory((Pointer)Descriptor->RsdtAddress, 0xFFFF).Address;
 
 			FADT = (FADT*)HAL.GetPhysicalMemory(FindBySignature("FACP"), 0xFFFF).Address;
 			MADT = (MADT*)HAL.GetPhysicalMemory(FindBySignature("APIC"), 0xFFFF).Address;

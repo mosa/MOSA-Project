@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.UnitTests;
 using Mosa.UnitTests.Optimization;
 
 namespace Mosa.BareMetal.HelloWorld.ARMv8A32

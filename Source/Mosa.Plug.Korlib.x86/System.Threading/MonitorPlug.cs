@@ -1,9 +1,9 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Runtime.Plug;
-using Mosa.Runtime.x86;
 using System;
 using System.Runtime.CompilerServices;
+using Mosa.Runtime.Plug;
+using Mosa.Runtime.x86;
 
 namespace Mosa.Plug.Korlib.System.Threading.x86
 {

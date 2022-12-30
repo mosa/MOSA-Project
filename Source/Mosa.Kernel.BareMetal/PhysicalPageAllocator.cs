@@ -1,8 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
 using Mosa.Kernel.BareMetal.BootMemory;
 using Mosa.Runtime;
-using System;
 
 namespace Mosa.Kernel.BareMetal
 {

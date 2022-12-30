@@ -1,14 +1,11 @@
-﻿
-// Copyright (c) MOSA Project. Licensed under the New BSD License.
-
-using System;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.UnitTests.Basic
 {
 
-	public static class ForeachTests 
+	public static class ForeachTests
 	{
-	
+
 		[MosaUnitTest]
 		public static byte ForeachU1()
 		{
@@ -23,7 +20,7 @@ namespace Mosa.UnitTests.Basic
 
 			return total;
 		}
-	
+
 		[MosaUnitTest]
 		public static ushort ForeachU2()
 		{
@@ -38,7 +35,7 @@ namespace Mosa.UnitTests.Basic
 
 			return total;
 		}
-	
+
 		[MosaUnitTest]
 		public static uint ForeachU4()
 		{
@@ -53,7 +50,7 @@ namespace Mosa.UnitTests.Basic
 
 			return total;
 		}
-	
+
 		[MosaUnitTest]
 		public static ulong ForeachU8()
 		{
@@ -68,7 +65,7 @@ namespace Mosa.UnitTests.Basic
 
 			return total;
 		}
-	
+
 		[MosaUnitTest]
 		public static sbyte ForeachI1()
 		{
@@ -83,7 +80,7 @@ namespace Mosa.UnitTests.Basic
 
 			return total;
 		}
-	
+
 		[MosaUnitTest]
 		public static short ForeachI2()
 		{
@@ -98,13 +95,13 @@ namespace Mosa.UnitTests.Basic
 
 			return total;
 		}
-	
+
 		[MosaUnitTest]
 		public static int ForeachI4()
 		{
 			int[] a = new int[5];
 			for (int i = 0; i < 5; i++)
-				a[i] = (int)i;
+				a[i] = i;
 
 			int total = 0;
 
@@ -113,13 +110,13 @@ namespace Mosa.UnitTests.Basic
 
 			return total;
 		}
-	
+
 		[MosaUnitTest]
 		public static long ForeachI8()
 		{
 			long[] a = new long[5];
 			for (int i = 0; i < 5; i++)
-				a[i] = (long)i;
+				a[i] = i;
 
 			long total = 0;
 
@@ -128,6 +125,6 @@ namespace Mosa.UnitTests.Basic
 
 			return total;
 		}
-		}
+	}
 }
 

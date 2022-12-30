@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
-using Mosa.Compiler.Framework.Linker;
 using System.Diagnostics;
+using Mosa.Compiler.Framework.Linker;
 
 namespace Mosa.Compiler.Framework
 {
@@ -133,7 +133,7 @@ namespace Mosa.Compiler.Framework
 
 		public void Append4BitsNot(uint value)
 		{
-			AppendBits((uint)~value, 4);
+			AppendBits(~value, 4);
 		}
 
 		public void Append4Bits(uint value)

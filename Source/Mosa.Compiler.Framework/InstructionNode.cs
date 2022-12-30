@@ -1,10 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework
 {
@@ -44,11 +44,6 @@ namespace Mosa.Compiler.Framework
 		/// Holds the basic block that this instruction belongs to
 		/// </summary>
 		private BasicBlock basicBlock;
-
-		/// <summary>
-		/// Holds the branch targets
-		/// </summary>
-		private List<BasicBlock> branchTargets;
 
 		/// <summary>
 		/// The additional properties of an instruction node
@@ -297,7 +292,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds branch targets
 		/// </summary>
-		public List<BasicBlock> BranchTargets { get { return branchTargets; } }
+		public List<BasicBlock> BranchTargets { get; private set; }
 
 		/// <summary>
 		/// Gets the branch targets count.
@@ -305,7 +300,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// The branch targets count.
 		/// </value>
-		public int BranchTargetsCount { get { return branchTargets?.Count ?? 0; } }
+		public int BranchTargetsCount { get { return BranchTargets?.Count ?? 0; } }
 
 		/// <summary>
 		/// Sets the branch target.
@@ -315,7 +310,7 @@ namespace Mosa.Compiler.Framework
 		{
 			Debug.Assert(block != null);
 
-			(branchTargets ?? (branchTargets = new List<BasicBlock>(1))).Add(block);
+			(BranchTargets ?? (BranchTargets = new List<BasicBlock>(1))).Add(block);
 
 			Block?.AddBranchInstruction(this);
 		}
@@ -323,12 +318,12 @@ namespace Mosa.Compiler.Framework
 		public void UpdateBranchTarget(int index, BasicBlock block)
 		{
 			// no change, skip update
-			if (branchTargets[index] == block)
+			if (BranchTargets[index] == block)
 				return;
 
 			Block.RemoveBranchInstruction(this);
 
-			branchTargets[index] = block;
+			BranchTargets[index] = block;
 
 			Block.AddBranchInstruction(this);
 		}
@@ -471,7 +466,7 @@ namespace Mosa.Compiler.Framework
 			StatusRegister = StatusRegister.NotSet;
 			addition = null;
 			Block = null;
-			branchTargets = null;
+			BranchTargets = null;
 		}
 
 		/// <summary>
@@ -486,7 +481,7 @@ namespace Mosa.Compiler.Framework
 			Instruction = null;
 			addition = null;
 			Block.RemoveBranchInstruction(this);
-			branchTargets = null;
+			BranchTargets = null;
 
 			//Block.DebugCheck();
 		}

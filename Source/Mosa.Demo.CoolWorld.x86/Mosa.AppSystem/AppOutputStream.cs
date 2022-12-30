@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Kernel.x86;
 using System.IO;
+using Mosa.Kernel.x86;
 
 namespace Mosa.Demo.AppSystem
 {

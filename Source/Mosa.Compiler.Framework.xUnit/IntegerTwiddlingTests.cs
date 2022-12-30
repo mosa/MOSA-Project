@@ -1,8 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Diagnostics;
-using Xunit;
 using Mosa.Compiler.Common;
+using Xunit;
 
 namespace Mosa.Compiler.Framework.xUnit
 {

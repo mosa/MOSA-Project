@@ -7,16 +7,6 @@ namespace Mosa.DeviceSystem
 	/// </summary>
 	public class GenericPartition
 	{
-		private bool bootable;
-		private uint startLBA;
-		private uint totalBlocks;
-		private byte type;
-		private readonly uint index;
-
-		/// <summary>
-		/// for Guid Partition Table (GPT)
-		/// </summary>
-		private uint[] guid;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="GenericPartition"/> class.
@@ -24,49 +14,56 @@ namespace Mosa.DeviceSystem
 		/// <param name="index">The index.</param>
 		public GenericPartition(uint index)
 		{
-			this.index = index;
+			this.Index = index;
 		}
 
 		/// <summary>
 		/// Gets or sets a value indicating whether this <see cref="GenericPartition"/> is bootable.
 		/// </summary>
 		/// <value><c>true</c> if bootable; otherwise, <c>false</c>.</value>
-		public bool Bootable { get { return bootable; } set { bootable = value; } }
+		public bool Bootable { get; set; }
 
 		/// <summary>
 		/// Gets the partition index.
 		/// </summary>
 		/// <value>The partition index.</value>
+
+/* Unmerged change from project 'Mosa.Utility.FileSystem'
+Before:
 		public uint Index { get { return index; } }
+After:
+		public uint Index { get; } }
+*/
+		public uint Index { get; private set; }
 
 		/// <summary>
 		/// Gets or sets the start LBA.
 		/// </summary>
 		/// <value>The start LBA.</value>
-		public uint StartLBA { get { return startLBA; } set { startLBA = value; } }
+		public uint StartLBA { get; set; }
 
 		/// <summary>
 		/// Gets the end LBA.
 		/// </summary>
 		/// <value>The end LBA.</value>
-		public uint EndLBA { get { return startLBA + totalBlocks; } }
+		public uint EndLBA { get { return StartLBA + TotalBlocks; } }
 
 		/// <summary>
 		/// Gets or sets the total blocks.
 		/// </summary>
 		/// <value>The total blocks.</value>
-		public uint TotalBlocks { get { return totalBlocks; } set { totalBlocks = value; } }
+		public uint TotalBlocks { get; set; }
 
 		/// <summary>
 		/// Gets or sets the type of the partition.
 		/// </summary>
 		/// <value>The type of the partition.</value>
-		public byte PartitionType { get { return type; } set { type = value; } }
+		public byte PartitionType { get; set; }
 
 		/// <summary>
 		/// Gets or sets the GUID.
 		/// </summary>
 		/// <value>The GUID.</value>
-		public uint[] GUID { get { return guid; } set { guid = value; } }
+		public uint[] GUID { get; set; }
 	}
 }

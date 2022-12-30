@@ -1,8 +1,9 @@
-﻿using System;
-using System.Linq;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
 using System.IO;
-using Mosa.Utility.BootImage.Properties;
+using System.Linq;
 using Mosa.DeviceSystem;
+using Mosa.Utility.BootImage.Properties;
 
 namespace Mosa.Utility.BootImage
 {

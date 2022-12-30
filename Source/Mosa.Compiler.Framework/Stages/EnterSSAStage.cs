@@ -1,10 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Collections.Generic;
+using System.Text;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.Trace;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mosa.Compiler.Framework.Stages
 {

@@ -1,10 +1,10 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework.Linker;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
+using Mosa.Compiler.Framework.Linker;
 
 namespace Mosa.Compiler.Framework.CompilerStages
 {
