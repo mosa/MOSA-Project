@@ -11,7 +11,7 @@ namespace Mosa.Platform.x86.Transforms.FinalTweak
 	/// </summary>
 	public sealed class Mov32 : BaseTransformation
 	{
-		public Mov32() : base(X86.Mov32, TransformationType.Manual | TransformationType.Transform)
+		public Mov32() : base(X86.Mov32, TransformationType.Manual | TransformationType.Optimization)
 		{
 		}
 

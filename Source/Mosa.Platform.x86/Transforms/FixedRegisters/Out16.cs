@@ -6,11 +6,11 @@ using Mosa.Compiler.Framework.Transforms;
 namespace Mosa.Platform.x86.Transform.FixedRegisters
 {
 	/// <summary>
-	/// Out8
+	/// Out16
 	/// </summary>
-	public sealed class Out8 : BaseTransformation
+	public sealed class Out16 : BaseTransformation
 	{
-		public Out8() : base(X86.Out8, TransformationType.Manual | TransformationType.Transform)
+		public Out16() : base(X86.Out16, TransformationType.Manual | TransformationType.Transform)
 		{
 		}
 
@@ -35,7 +35,7 @@ namespace Mosa.Platform.x86.Transform.FixedRegisters
 
 			context.SetInstruction(X86.Mov32, edx, operand1);
 			context.AppendInstruction(X86.Mov32, eax, operand2);
-			context.AppendInstruction(X86.Out8, null, edx, eax);
+			context.AppendInstruction(X86.Out16, null, edx, eax);
 		}
 	}
 }

@@ -12,7 +12,6 @@ namespace Mosa.Platform.x86.Transforms.FinalTweak
 	{
 		public static readonly List<BaseTransformation> List = new List<BaseTransformation>
 		{
-			//new Call(),
 			new Mov32(),
 			new MovLoad16(),
 			new MovLoad8(),

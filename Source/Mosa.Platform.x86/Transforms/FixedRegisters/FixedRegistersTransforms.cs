@@ -23,6 +23,8 @@ namespace Mosa.Platform.x86.Transforms.FixedRegisters
 			new MovStoreSeg32(),
 			new Mul32(),
 			new Out8(),
+			new Out16(),
+			new Out32(),
 			new Rcr32(),
 			new RdMSR(),
 

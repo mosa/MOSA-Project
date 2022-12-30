@@ -17,6 +17,9 @@ namespace Mosa.Platform.x86.Transforms.FinalTweak
 
 		public override bool Match(Context context, TransformContext transform)
 		{
+			if (!context.Result.IsCPURegister)
+				return false;
+
 			return context.Result.Register == CPURegister.ESI || context.Result.Register == CPURegister.EDI;
 		}
 

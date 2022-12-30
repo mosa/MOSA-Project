@@ -150,9 +150,8 @@ namespace Mosa.Platform.x86
 				new BaseMethodCompilerStage[]
 				{
 					new IRTransformationStage(),
-					compilerSettings.PlatformOptimizations ? new EarlyOptimizationStage() : null,
+					compilerSettings.PlatformOptimizations ? new Stages.OptimizationStage() : null,
 					new TweakStage(),
-					new TweakStageLegacy(),
 					new FixedRegisterAssignmentStage(),
 					new AddressModeConversionStage(),
 				});
@@ -166,8 +165,7 @@ namespace Mosa.Platform.x86
 				{
 					//new StopStage(),
 					new FinalTweakStage(),
-					new FinalTweakStageLegacy(),
-					compilerSettings.PlatformOptimizations ? new PostOptimizationStage() : null,
+					compilerSettings.PlatformOptimizations ? new Stages.OptimizationStage() : null,
 				});
 
 			pipeline.InsertBefore<CodeGenerationStage>(
