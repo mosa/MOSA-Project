@@ -250,14 +250,14 @@ namespace Mosa.Tool.Explorer
 			if (selected == null)
 				return;
 
-			foreach (TreeNode node in treeView.Nodes)
+			foreach (System.Windows.Forms.TreeNode node in treeView.Nodes)
 			{
 				if (Select(node, selected))
 					return;
 			}
 		}
 
-		protected bool Select(TreeNode node, MosaUnit selected)
+		protected bool Select(System.Windows.Forms.TreeNode node, MosaUnit selected)
 		{
 			if (node == null)
 				return false;
@@ -272,7 +272,7 @@ namespace Mosa.Tool.Explorer
 				}
 			}
 
-			foreach (TreeNode children in node.Nodes)
+			foreach (System.Windows.Forms.TreeNode children in node.Nodes)
 			{
 				if (Select(children, selected))
 					return true;
