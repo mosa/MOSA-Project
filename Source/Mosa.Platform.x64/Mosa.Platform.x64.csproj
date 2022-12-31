@@ -26,7 +26,6 @@
     <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
     <ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj" />
     <ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj" />
-    <ProjectReference Include="..\Mosa.Platform.Intel\Mosa.Platform.Intel.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Transforms\FixedRegisters\" />

@@ -3,7 +3,7 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.MosaTypeSystem;
 
-namespace Mosa.Platform.Intel.CompilerStages
+namespace Mosa.Compiler.Framework.CompilerStages
 {
 	/// <summary>
 	/// Start Up Stage

@@ -6,7 +6,7 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 
-namespace Mosa.Platform.Intel.CompilerStages
+namespace Mosa.Compiler.Framework.Platform
 {
 	/// <summary>
 	/// Writes a multiboot v0.6.96 header into the generated binary.
@@ -19,7 +19,7 @@ namespace Mosa.Platform.Intel.CompilerStages
 	/// the specification at
 	/// http://www.gnu.org/software/grub/manual/multiboot/multiboot.html.
 	/// </remarks>
-	public abstract class MultibootV1Stage : BaseCompilerStage
+	public abstract class BaseMultibootV1Stage : BaseCompilerStage
 	{
 		private const string MultibootHeaderSymbolName = "<$>mosa-multiboot-header";
 
@@ -79,9 +79,13 @@ namespace Mosa.Platform.Intel.CompilerStages
 		protected LinkerSymbol multibootHeader;
 
 		public bool HasVideo { get; set; }
+
 		public int Width { get; set; }
+
 		public int Height { get; set; }
+
 		public int Depth { get; set; }
+
 		public long InitialStackAddress { get; set; }
 
 		#endregion Data Members

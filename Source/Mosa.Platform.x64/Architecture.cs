@@ -152,7 +152,7 @@ namespace Mosa.Platform.x64
 			}
 
 			pipeline.Add(
-				new Intel.CompilerStages.StartUpStage()
+				new StartUpStage()
 			);
 		}
 
