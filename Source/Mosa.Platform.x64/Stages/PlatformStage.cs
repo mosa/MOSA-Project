@@ -1,7 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Platform.x64.Transforms.FixedRegisters;
-using Mosa.Platform.x64.Transforms.Special;
 using Mosa.Platform.x64.Transforms.Stack;
 using Mosa.Platform.x64.Transforms.Tweak;
 

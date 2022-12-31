@@ -152,9 +152,9 @@ namespace Mosa.Platform.ARMv8A32
 			//	new StopStage()
 			//);
 
-			pipeline.InsertBefore<CallStage>(
-				new Stages.RuntimeCallStage()
-			);
+			//pipeline.InsertBefore<CallStage>(
+			//	new Stages.RuntimeCallStage()
+			//);
 
 			pipeline.InsertAfterLast<PlatformIntrinsicStage>(
 				new BaseMethodCompilerStage[]
@@ -166,9 +166,9 @@ namespace Mosa.Platform.ARMv8A32
 					compilerSettings.PlatformOptimizations ? new SimpleDeadCodeRemovalStage() : null,
 				});
 
-			pipeline.InsertAfterLast<StackLayoutStage>(
-				new BuildStackStage()
-			);
+			//pipeline.InsertAfterLast<StackLayoutStage>(
+			//	new BuildStackStage()
+			//);
 
 			pipeline.InsertBefore<CodeGenerationStage>(
 				new BaseMethodCompilerStage[]

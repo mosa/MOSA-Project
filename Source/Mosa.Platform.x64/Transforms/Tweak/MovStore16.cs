@@ -1,7 +1,5 @@
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Diagnostics;
-
-using Mosa.Platform.x64;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
@@ -49,6 +47,6 @@ namespace Mosa.Platform.x64.Transforms.Tweak
 			context.SetInstruction2(X64.XChg64, temporaryRegister, value, value, temporaryRegister);
 			context.AppendInstruction(X64.MovStore16, null, dest, offset, temporaryRegister);
 			context.AppendInstruction2(X64.XChg64, value, temporaryRegister, temporaryRegister, value);
-	}
+		}
 	}
 }

@@ -1,6 +1,6 @@
-using System.Diagnostics;
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Platform.x64;
+using System.Diagnostics;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 

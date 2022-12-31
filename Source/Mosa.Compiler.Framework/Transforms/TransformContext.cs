@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using dnlib.DotNet.Emit;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.Trace;
@@ -25,42 +26,61 @@ namespace Mosa.Compiler.Framework.Transforms
 		public TraceLog SpecialTraceLog { get; private set; }
 
 		public Operand ConstantZero32 { get; private set; }
+
 		public Operand ConstantZero64 { get; private set; }
+
 		public Operand ConstantZeroR4 { get; private set; }
+
 		public Operand ConstantZeroR8 { get; private set; }
 
-		public Operand Constant32_0 { get { return ConstantZero32; } }
+		public Operand Constant32_0
+		{ get { return ConstantZero32; } }
 
 		public Operand Constant32_1 { get; private set; }
+
 		public Operand Constant32_4 { get; private set; }
+
 		public Operand Constant32_32 { get; private set; }
+
 		public Operand Constant32_64 { get; private set; }
 
 		public Operand Constant64_32 { get; private set; }
 
-
 		public MosaType I4 { get; private set; }
+
 		public MosaType I8 { get; private set; }
+
 		public MosaType R4 { get; private set; }
+
 		public MosaType R8 { get; private set; }
+
 		public MosaType O { get; private set; }
 
 		public VirtualRegisters VirtualRegisters { get; private set; }
+
 		public BasicBlocks BasicBlocks { get; set; }
 
 		public bool LowerTo32 { get; private set; }
+
 		public bool IsInSSAForm { get; private set; }
+
 		public bool AreCPURegistersAllocated { get; private set; }
+
 		public bool Is32BitPlatform { get; private set; }
 
 		public int Window { get; private set; }
 
-		public Operand StackFrame { get { return MethodCompiler.Compiler.StackFrame; } }
+		public Operand StackFrame
+		{ get { return MethodCompiler.Compiler.StackFrame; } }
 
-		public Operand StackPointer { get { return MethodCompiler.Compiler.StackPointer; } }
+		public Operand StackPointer
+		{ get { return MethodCompiler.Compiler.StackPointer; } }
 
-		public uint NativePointerSize { get { return Compiler.Architecture.NativePointerSize; } }	
+		public uint NativePointerSize
+		{ get { return Compiler.Architecture.NativePointerSize; } }
 
+		public BaseArchitecture Architecture
+		{ get { return Compiler.Architecture; } }
 
 		public TransformContext(MethodCompiler methodCompiler, BitValueManager bitValueManager = null)
 		{
@@ -193,7 +213,7 @@ namespace Mosa.Compiler.Framework.Transforms
 		}
 
 		public Operand CreateConstant32(long value)
-		{			
+		{
 			return (int)value == 0 ? ConstantZero32 : Operand.CreateConstant(I4, (int)value);
 		}
 
@@ -416,7 +436,7 @@ namespace Mosa.Compiler.Framework.Transforms
 
 		public Operand CreateR4Label(float value)
 		{
-			var symbol =  Compiler.Linker.GetConstantSymbol(value);
+			var symbol = Compiler.Linker.GetConstantSymbol(value);
 
 			var label = Operand.CreateLabel(R4, symbol.Name);
 
@@ -441,8 +461,7 @@ namespace Mosa.Compiler.Framework.Transforms
 			return label;
 		}
 
-		#endregion
-
+		#endregion Linker Helpers
 
 		public void SplitLongOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
 		{
@@ -461,7 +480,7 @@ namespace Mosa.Compiler.Framework.Transforms
 			return BitValueManager.GetBitValueWithDefault(operand);
 		}
 
-		#endregion
+		#endregion BitValue (experimental)
 
 		public MosaMethod GetMethod(string namespaceName, string typeName, string methodName)
 		{
@@ -515,7 +534,7 @@ namespace Mosa.Compiler.Framework.Transforms
 			context.ConditionCode = context.ConditionCode.GetReverse();
 		}
 
-		public void OrderOperands(Context context)	// FUTURE: Rename
+		public void OrderOperands(Context context)  // FUTURE: Rename
 		{
 			if (context.Operand1.IsResolvedConstant && context.Operand2.IsResolvedConstant)
 			{
@@ -533,9 +552,7 @@ namespace Mosa.Compiler.Framework.Transforms
 			}
 		}
 
-
 		#region Floating Point Helpers
-
 
 		public Operand LoadValueR4(Context context, float value, BaseInstruction loadInstruction)
 		{
@@ -548,7 +565,7 @@ namespace Mosa.Compiler.Framework.Transforms
 			return v1;
 		}
 
-		public Operand LoadValueR8(Context context, double value,  BaseInstruction loadInstruction)
+		public Operand LoadValueR8(Context context, double value, BaseInstruction loadInstruction)
 		{
 			var label = CreateR8Label(value);
 
@@ -575,7 +592,6 @@ namespace Mosa.Compiler.Framework.Transforms
 			return v1;
 		}
 
-		#endregion
-
+		#endregion Floating Point Helpers
 	}
 }
