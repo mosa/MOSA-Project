@@ -10,7 +10,7 @@ namespace Mosa.Platform.x86.Transforms.RuntimeCall
 	/// </summary>
 	public static class RuntimeCallTransforms
 	{
-		public static readonly List<BaseTransformation> List = new List<BaseTransformation>
+		public static readonly List<BaseTransform> List = new List<BaseTransform>
 		{
 			new DivSigned64(),
 			new DivUnsigned64(),

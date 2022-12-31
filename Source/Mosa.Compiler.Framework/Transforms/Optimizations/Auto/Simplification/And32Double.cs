@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
 	/// <summary>
 	/// And32Double
 	/// </summary>
-	public sealed class And32Double : BaseTransformation
+	public sealed class And32Double : BaseTransform
 	{
-		public And32Double() : base(IRInstruction.And32, TransformationType.Auto | TransformationType.Optimization)
+		public And32Double() : base(IRInstruction.And32, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -46,9 +46,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
 	/// <summary>
 	/// And32Double_v1
 	/// </summary>
-	public sealed class And32Double_v1 : BaseTransformation
+	public sealed class And32Double_v1 : BaseTransform
 	{
-		public And32Double_v1() : base(IRInstruction.And32, TransformationType.Auto | TransformationType.Optimization)
+		public And32Double_v1() : base(IRInstruction.And32, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -83,9 +83,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
 	/// <summary>
 	/// And32Double_v2
 	/// </summary>
-	public sealed class And32Double_v2 : BaseTransformation
+	public sealed class And32Double_v2 : BaseTransform
 	{
-		public And32Double_v2() : base(IRInstruction.And32, TransformationType.Auto | TransformationType.Optimization)
+		public And32Double_v2() : base(IRInstruction.And32, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -120,9 +120,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
 	/// <summary>
 	/// And32Double_v3
 	/// </summary>
-	public sealed class And32Double_v3 : BaseTransformation
+	public sealed class And32Double_v3 : BaseTransform
 	{
-		public And32Double_v3() : base(IRInstruction.And32, TransformationType.Auto | TransformationType.Optimization)
+		public And32Double_v3() : base(IRInstruction.And32, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

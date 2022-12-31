@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
 	/// <summary>
 	/// ConvertU32ToR4
 	/// </summary>
-	public sealed class ConvertU32ToR4 : BaseTransformation
+	public sealed class ConvertU32ToR4 : BaseTransform
 	{
-		public ConvertU32ToR4() : base(IRInstruction.ConvertI32ToR4, TransformationType.Auto | TransformationType.Optimization)
+		public ConvertU32ToR4() : base(IRInstruction.ConvertI32ToR4, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

@@ -12,7 +12,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto
 	/// </summary>
 	public static class AutoTransforms
 	{
-		public static readonly List<BaseTransformation> List = new List<BaseTransformation> {
+		public static readonly List<BaseTransform> List = new List<BaseTransform> {
 			 new ConstantFolding.Add32(),
 			 new ConstantFolding.Add64(),
 			 new ConstantFolding.AddR4(),

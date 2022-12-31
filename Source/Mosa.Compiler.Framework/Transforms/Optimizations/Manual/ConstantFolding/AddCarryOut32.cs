@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.ConstantFoldin
 	/// <summary>
 	/// Add32
 	/// </summary>
-	public sealed class AddCarryOut32 : BaseTransformation
+	public sealed class AddCarryOut32 : BaseTransform
 	{
-		public AddCarryOut32() : base(IRInstruction.AddCarryOut32, TransformationType.Manual | TransformationType.Optimization)
+		public AddCarryOut32() : base(IRInstruction.AddCarryOut32, TransformType.Manual | TransformType.Optimization)
 		{
 		}
 
@@ -38,7 +38,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.ConstantFoldin
 			var carry = IntegerTwiddling.IsAddOverflow(t1, t2);
 
 			context.SetInstruction(IRInstruction.Move32, result, e1);
-			context.AppendInstruction(IRInstruction.Move32, result2, carry ? transform.CreateConstant(1) : transform.ConstantZero32);
+			context.AppendInstruction(IRInstruction.Move32, result2, carry ? transform.CreateConstant(1) : transform.Constant32_0);
 		}
 	}
 }

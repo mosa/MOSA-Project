@@ -8,9 +8,9 @@ namespace Mosa.Platform.x86.Transforms.Stack
 	/// <summary>
 	/// ConvertR4ToI64
 	/// </summary>
-	public sealed class Prologue : BaseTransformation
+	public sealed class Prologue : BaseTransform
 	{
-		public Prologue() : base(IRInstruction.Prologue, TransformationType.Manual | TransformationType.Transform)
+		public Prologue() : base(IRInstruction.Prologue, TransformType.Manual | TransformType.Transform)
 		{
 		}
 
@@ -24,12 +24,12 @@ namespace Mosa.Platform.x86.Transforms.Stack
 			if (!transform.MethodCompiler.IsStackFrameRequired)
 				return;
 
-			context.SetInstruction(X86.Push32, null, transform.Compiler.StackFrame);
-			context.AppendInstruction(X86.Mov32, transform.Compiler.StackFrame, transform.Compiler.StackPointer);
+			context.SetInstruction(X86.Push32, null, transform.StackFrame);
+			context.AppendInstruction(X86.Mov32, transform.StackFrame, transform.StackPointer);
 
 			if (transform.MethodCompiler.StackSize != 0)
 			{
-				context.AppendInstruction(X86.Sub32, transform.Compiler.StackPointer, transform.Compiler.StackPointer, transform.CreateConstant32(-transform.MethodCompiler.StackSize));
+				context.AppendInstruction(X86.Sub32, transform.StackPointer, transform.StackPointer, transform.CreateConstant32(-transform.MethodCompiler.StackSize));
 			}
 		}
 	}

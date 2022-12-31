@@ -2,9 +2,9 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Special
 {
-	public sealed class PhiR8Update : BaseTransformation
+	public sealed class PhiR8Update : BaseTransform
 	{
-		public PhiR8Update() : base(IRInstruction.Phi32, TransformationType.Manual | TransformationType.Optimization)
+		public PhiR8Update() : base(IRInstruction.Phi32, TransformType.Manual | TransformType.Optimization)
 		{
 		}
 

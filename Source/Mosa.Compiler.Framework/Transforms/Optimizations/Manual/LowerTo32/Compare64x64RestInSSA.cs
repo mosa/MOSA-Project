@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.LowerTo32
 {
-	public sealed class Compare64x64RestInSSA : BaseTransformation
+	public sealed class Compare64x64RestInSSA : BaseTransform
 	{
-		public Compare64x64RestInSSA() : base(IRInstruction.Compare64x64, TransformationType.Manual | TransformationType.Optimization, true)
+		public Compare64x64RestInSSA() : base(IRInstruction.Compare64x64, TransformType.Manual | TransformType.Optimization, true)
 		{
 		}
 
@@ -73,7 +73,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.LowerTo32
 			newBlocks[3].AppendInstruction(IRInstruction.Jmp, newBlocks[4].Block);
 
 			// Exit
-			newBlocks[4].AppendInstruction(IRInstruction.Phi64, resultLow, transform.CreateConstant((uint)1), transform.ConstantZero64);
+			newBlocks[4].AppendInstruction(IRInstruction.Phi64, resultLow, transform.CreateConstant((uint)1), transform.Constant64_0);
 			newBlocks[4].PhiBlocks = new List<BasicBlock>(2) { newBlocks[2].Block, newBlocks[3].Block };
 			newBlocks[4].AppendInstruction(IRInstruction.Jmp, nextBlock.Block);
 		}

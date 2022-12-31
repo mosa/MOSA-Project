@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 	/// <summary>
 	/// UselessOr64ShiftRight64
 	/// </summary>
-	public sealed class UselessOr64ShiftRight64 : BaseTransformation
+	public sealed class UselessOr64ShiftRight64 : BaseTransform
 	{
-		public UselessOr64ShiftRight64() : base(IRInstruction.ShiftRight64, TransformationType.Auto | TransformationType.Optimization)
+		public UselessOr64ShiftRight64() : base(IRInstruction.ShiftRight64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -55,9 +55,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 	/// <summary>
 	/// UselessOr64ShiftRight64_v1
 	/// </summary>
-	public sealed class UselessOr64ShiftRight64_v1 : BaseTransformation
+	public sealed class UselessOr64ShiftRight64_v1 : BaseTransform
 	{
-		public UselessOr64ShiftRight64_v1() : base(IRInstruction.ShiftRight64, TransformationType.Auto | TransformationType.Optimization)
+		public UselessOr64ShiftRight64_v1() : base(IRInstruction.ShiftRight64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

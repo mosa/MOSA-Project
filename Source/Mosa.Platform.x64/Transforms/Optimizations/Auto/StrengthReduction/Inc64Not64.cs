@@ -11,9 +11,9 @@ namespace Mosa.Platform.x64.Transforms.Optimizations.Auto.StrengthReduction
 	/// <summary>
 	/// Inc64Not64
 	/// </summary>
-	public sealed class Inc64Not64 : BaseTransformation
+	public sealed class Inc64Not64 : BaseTransform
 	{
-		public Inc64Not64() : base(X64.Inc64, TransformationType.Auto | TransformationType.Optimization)
+		public Inc64Not64() : base(X64.Inc64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

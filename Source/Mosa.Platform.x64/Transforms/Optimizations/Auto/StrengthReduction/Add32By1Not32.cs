@@ -11,9 +11,9 @@ namespace Mosa.Platform.x64.Transforms.Optimizations.Auto.StrengthReduction
 	/// <summary>
 	/// Add32By1Not32
 	/// </summary>
-	public sealed class Add32By1Not32 : BaseTransformation
+	public sealed class Add32By1Not32 : BaseTransform
 	{
-		public Add32By1Not32() : base(X64.Add32, TransformationType.Auto | TransformationType.Optimization)
+		public Add32By1Not32() : base(X64.Add32, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -56,9 +56,9 @@ namespace Mosa.Platform.x64.Transforms.Optimizations.Auto.StrengthReduction
 	/// <summary>
 	/// Add32By1Not32_v1
 	/// </summary>
-	public sealed class Add32By1Not32_v1 : BaseTransformation
+	public sealed class Add32By1Not32_v1 : BaseTransform
 	{
-		public Add32By1Not32_v1() : base(X64.Add32, TransformationType.Auto | TransformationType.Optimization)
+		public Add32By1Not32_v1() : base(X64.Add32, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

@@ -11,9 +11,9 @@ namespace Mosa.Platform.x64.Transforms.Optimizations.Auto.StrengthReduction
 	/// <summary>
 	/// Add64ByZero
 	/// </summary>
-	public sealed class Add64ByZero : BaseTransformation
+	public sealed class Add64ByZero : BaseTransform
 	{
-		public Add64ByZero() : base(X64.Add64, TransformationType.Auto | TransformationType.Optimization)
+		public Add64ByZero() : base(X64.Add64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

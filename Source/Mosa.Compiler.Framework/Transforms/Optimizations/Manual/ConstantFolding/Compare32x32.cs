@@ -2,9 +2,9 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.ConstantFolding
 {
-	public sealed class Compare32x32 : BaseTransformation
+	public sealed class Compare32x32 : BaseTransform
 	{
-		public Compare32x32() : base(IRInstruction.Compare32x32, TransformationType.Manual | TransformationType.Optimization)
+		public Compare32x32() : base(IRInstruction.Compare32x32, TransformType.Manual | TransformType.Optimization)
 		{
 		}
 

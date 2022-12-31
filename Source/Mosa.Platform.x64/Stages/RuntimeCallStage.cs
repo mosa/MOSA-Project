@@ -1,40 +1,21 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Diagnostics;
-using Mosa.Compiler.Framework;
+using Mosa.Platform.x64.Transforms.RuntimeCall;
 
 namespace Mosa.Platform.x64.Stages
 {
 	/// <summary>
-	/// Runtime Call Stage
+	/// Runtime Call Transformation Stage
 	/// </summary>
-	/// <seealso cref="Mosa.Platform.x64.BaseTransformationStage" />
-	public sealed class RuntimeCallStage : BaseTransformationStage
+	/// <seealso cref="Mosa.Compiler.Framework.Stages.BaseTransformationStage" />
+	public sealed class RuntimeCallStage : Compiler.Framework.Stages.BaseTransformationStage
 	{
-		protected override void PopulateVisitationDictionary()
+		public override string Name => "x64." + GetType().Name;
+
+		public RuntimeCallStage()
+			: base(true, false, 1)
 		{
-			AddVisitation(IRInstruction.RemR4, RemFloatR4);
-			AddVisitation(IRInstruction.RemR8, RemFloatR8);
+			AddTranformations(RuntimeCallTransforms.List);
 		}
-
-		#region Visitation Methods
-
-		private void RemFloatR4(Context context)
-		{
-			Debug.Assert(context.Result.IsR4);
-			Debug.Assert(context.Operand1.IsR4);
-
-			ReplaceWithCall(context, "Mosa.Runtime.Math.x64", "Division", "RemR4");
-		}
-
-		private void RemFloatR8(Context context)
-		{
-			Debug.Assert(context.Result.IsR8);
-			Debug.Assert(context.Operand1.IsR8);
-
-			ReplaceWithCall(context, "Mosa.Runtime.Math.x64", "Division", "RemR8");
-		}
-
-		#endregion Visitation Methods
 	}
 }

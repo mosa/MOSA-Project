@@ -10,7 +10,7 @@ namespace Mosa.Platform.x86.Transforms.Tweak
 	/// </summary>
 	public static class TweakTransforms
 	{
-		public static readonly List<BaseTransformation> List = new List<BaseTransformation>
+		public static readonly List<BaseTransform> List = new List<BaseTransform>
 		{
 			new Cmp32(),
 			new Shl32(),

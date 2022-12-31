@@ -8,9 +8,9 @@ namespace Mosa.Platform.x86.Transforms.RuntimeCall
 	/// <summary>
 	/// RemSigned64
 	/// </summary>
-	public sealed class RemSigned64 : BaseTransformation
+	public sealed class RemSigned64 : BaseTransform
 	{
-		public RemSigned64() : base(IRInstruction.RemSigned64, TransformationType.Manual | TransformationType.Transform)
+		public RemSigned64() : base(IRInstruction.RemSigned64, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 	/// <summary>
 	/// ShiftRight64ZeroValue
 	/// </summary>
-	public sealed class ShiftRight64ZeroValue : BaseTransformation
+	public sealed class ShiftRight64ZeroValue : BaseTransform
 	{
-		public ShiftRight64ZeroValue() : base(IRInstruction.ShiftRight64, TransformationType.Auto | TransformationType.Optimization)
+		public ShiftRight64ZeroValue() : base(IRInstruction.ShiftRight64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

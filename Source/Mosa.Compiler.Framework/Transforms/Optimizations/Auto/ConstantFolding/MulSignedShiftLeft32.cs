@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
 	/// <summary>
 	/// MulSignedShiftLeft32
 	/// </summary>
-	public sealed class MulSignedShiftLeft32 : BaseTransformation
+	public sealed class MulSignedShiftLeft32 : BaseTransform
 	{
-		public MulSignedShiftLeft32() : base(IRInstruction.MulSigned32, TransformationType.Auto | TransformationType.Optimization)
+		public MulSignedShiftLeft32() : base(IRInstruction.MulSigned32, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -56,9 +56,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
 	/// <summary>
 	/// MulSignedShiftLeft32_v1
 	/// </summary>
-	public sealed class MulSignedShiftLeft32_v1 : BaseTransformation
+	public sealed class MulSignedShiftLeft32_v1 : BaseTransform
 	{
-		public MulSignedShiftLeft32_v1() : base(IRInstruction.MulSigned32, TransformationType.Auto | TransformationType.Optimization)
+		public MulSignedShiftLeft32_v1() : base(IRInstruction.MulSigned32, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

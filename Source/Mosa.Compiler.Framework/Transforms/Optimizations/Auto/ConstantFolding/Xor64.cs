@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
 	/// <summary>
 	/// Xor64
 	/// </summary>
-	public sealed class Xor64 : BaseTransformation
+	public sealed class Xor64 : BaseTransform
 	{
-		public Xor64() : base(IRInstruction.Xor64, TransformationType.Auto | TransformationType.Optimization)
+		public Xor64() : base(IRInstruction.Xor64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

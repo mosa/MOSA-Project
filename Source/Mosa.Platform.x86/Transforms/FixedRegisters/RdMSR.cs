@@ -3,14 +3,14 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.x86.Transform.FixedRegisters
+namespace Mosa.Platform.x86.Transforms.FixedRegisters
 {
 	/// <summary>
 	/// RdMSR
 	/// </summary>
-	public sealed class RdMSR : BaseTransformation
+	public sealed class RdMSR : BaseTransform
 	{
-		public RdMSR() : base(X86.RdMSR, TransformationType.Manual | TransformationType.Transform)
+		public RdMSR() : base(X86.RdMSR, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

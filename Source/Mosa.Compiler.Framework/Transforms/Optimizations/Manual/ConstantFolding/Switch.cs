@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.ConstantFolding
 {
-	public sealed class Switch : BaseTransformation
+	public sealed class Switch : BaseTransform
 	{
-		public Switch() : base(IRInstruction.Switch, TransformationType.Manual | TransformationType.Optimization)
+		public Switch() : base(IRInstruction.Switch, TransformType.Manual | TransformType.Optimization)
 		{
 		}
 

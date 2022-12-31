@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 	/// <summary>
 	/// DivSigned32ByZero
 	/// </summary>
-	public sealed class DivSigned32ByZero : BaseTransformation
+	public sealed class DivSigned32ByZero : BaseTransform
 	{
-		public DivSigned32ByZero() : base(IRInstruction.DivSigned32, TransformationType.Auto | TransformationType.Optimization)
+		public DivSigned32ByZero() : base(IRInstruction.DivSigned32, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

@@ -3,14 +3,14 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.x86.Transform.FixedRegisters
+namespace Mosa.Platform.x86.Transforms.FixedRegisters
 {
 	/// <summary>
 	/// Rcr32
 	/// </summary>
-	public sealed class Rcr32 : BaseTransformation
+	public sealed class Rcr32 : BaseTransform
 	{
-		public Rcr32() : base(X86.Rcr32, TransformationType.Manual | TransformationType.Transform)
+		public Rcr32() : base(X86.Rcr32, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

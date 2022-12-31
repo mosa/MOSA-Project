@@ -8,9 +8,9 @@ namespace Mosa.Platform.x86.Transforms.RuntimeCall
 	/// <summary>
 	/// ConvertR8ToI64
 	/// </summary>
-	public sealed class ConvertR8ToI64 : BaseTransformation
+	public sealed class ConvertR8ToI64 : BaseTransform
 	{
-		public ConvertR8ToI64() : base(IRInstruction.ConvertR8ToI64, TransformationType.Manual | TransformationType.Transform)
+		public ConvertR8ToI64() : base(IRInstruction.ConvertR8ToI64, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

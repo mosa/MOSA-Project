@@ -5,9 +5,9 @@ using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x64.Transforms.Optimizations.Manual.Special
 {
-	public sealed class Deadcode : BaseTransformation
+	public sealed class Deadcode : BaseTransform
 	{
-		public Deadcode() : base(TransformationType.Manual | TransformationType.Optimization)
+		public Deadcode() : base(TransformType.Manual | TransformType.Optimization)
 		{
 		}
 

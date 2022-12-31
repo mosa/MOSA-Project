@@ -2,9 +2,9 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Special
 {
-	public sealed class MoveR4Propagate : BaseTransformation
+	public sealed class MoveR4Propagate : BaseTransform
 	{
-		public MoveR4Propagate() : base(IRInstruction.MoveR4, TransformationType.Manual | TransformationType.Optimization)
+		public MoveR4Propagate() : base(IRInstruction.MoveR4, TransformType.Manual | TransformType.Optimization)
 		{
 		}
 

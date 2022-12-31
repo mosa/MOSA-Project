@@ -1,10 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Xml.Linq;
-using dnlib.DotNet.Emit;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
-using Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Rewrite;
 using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Platform.x86.Transforms.Special
@@ -12,9 +9,9 @@ namespace Mosa.Platform.x86.Transforms.Special
 	/// <summary>
 	/// AddressModeConversion
 	/// </summary>
-	public sealed class AddressModeConversion : BaseTransformation
+	public sealed class AddressModeConversion : BaseTransform
 	{
-		public AddressModeConversion() : base(null, TransformationType.Manual | TransformationType.Transform)
+		public AddressModeConversion() : base(null, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

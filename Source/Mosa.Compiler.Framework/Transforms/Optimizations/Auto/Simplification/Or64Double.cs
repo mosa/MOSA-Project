@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
 	/// <summary>
 	/// Or64Double
 	/// </summary>
-	public sealed class Or64Double : BaseTransformation
+	public sealed class Or64Double : BaseTransform
 	{
-		public Or64Double() : base(IRInstruction.Or64, TransformationType.Auto | TransformationType.Optimization)
+		public Or64Double() : base(IRInstruction.Or64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -46,9 +46,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
 	/// <summary>
 	/// Or64Double_v1
 	/// </summary>
-	public sealed class Or64Double_v1 : BaseTransformation
+	public sealed class Or64Double_v1 : BaseTransform
 	{
-		public Or64Double_v1() : base(IRInstruction.Or64, TransformationType.Auto | TransformationType.Optimization)
+		public Or64Double_v1() : base(IRInstruction.Or64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -83,9 +83,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
 	/// <summary>
 	/// Or64Double_v2
 	/// </summary>
-	public sealed class Or64Double_v2 : BaseTransformation
+	public sealed class Or64Double_v2 : BaseTransform
 	{
-		public Or64Double_v2() : base(IRInstruction.Or64, TransformationType.Auto | TransformationType.Optimization)
+		public Or64Double_v2() : base(IRInstruction.Or64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -120,9 +120,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
 	/// <summary>
 	/// Or64Double_v3
 	/// </summary>
-	public sealed class Or64Double_v3 : BaseTransformation
+	public sealed class Or64Double_v3 : BaseTransform
 	{
-		public Or64Double_v3() : base(IRInstruction.Or64, TransformationType.Auto | TransformationType.Optimization)
+		public Or64Double_v3() : base(IRInstruction.Or64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
 	/// <summary>
 	/// Sub64MultipleWithCommon
 	/// </summary>
-	public sealed class Sub64MultipleWithCommon : BaseTransformation
+	public sealed class Sub64MultipleWithCommon : BaseTransform
 	{
-		public Sub64MultipleWithCommon() : base(IRInstruction.Sub64, TransformationType.Auto | TransformationType.Optimization)
+		public Sub64MultipleWithCommon() : base(IRInstruction.Sub64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -59,9 +59,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
 	/// <summary>
 	/// Sub64MultipleWithCommon_v1
 	/// </summary>
-	public sealed class Sub64MultipleWithCommon_v1 : BaseTransformation
+	public sealed class Sub64MultipleWithCommon_v1 : BaseTransform
 	{
-		public Sub64MultipleWithCommon_v1() : base(IRInstruction.Sub64, TransformationType.Auto | TransformationType.Optimization)
+		public Sub64MultipleWithCommon_v1() : base(IRInstruction.Sub64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -109,9 +109,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
 	/// <summary>
 	/// Sub64MultipleWithCommon_v2
 	/// </summary>
-	public sealed class Sub64MultipleWithCommon_v2 : BaseTransformation
+	public sealed class Sub64MultipleWithCommon_v2 : BaseTransform
 	{
-		public Sub64MultipleWithCommon_v2() : base(IRInstruction.Sub64, TransformationType.Auto | TransformationType.Optimization)
+		public Sub64MultipleWithCommon_v2() : base(IRInstruction.Sub64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -159,9 +159,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
 	/// <summary>
 	/// Sub64MultipleWithCommon_v3
 	/// </summary>
-	public sealed class Sub64MultipleWithCommon_v3 : BaseTransformation
+	public sealed class Sub64MultipleWithCommon_v3 : BaseTransform
 	{
-		public Sub64MultipleWithCommon_v3() : base(IRInstruction.Sub64, TransformationType.Auto | TransformationType.Optimization)
+		public Sub64MultipleWithCommon_v3() : base(IRInstruction.Sub64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

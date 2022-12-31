@@ -2,9 +2,9 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Special
 {
-	public sealed class Move32Propagate : BaseTransformation
+	public sealed class Move32Propagate : BaseTransform
 	{
-		public Move32Propagate() : base(IRInstruction.Move32, TransformationType.Manual | TransformationType.Optimization)
+		public Move32Propagate() : base(IRInstruction.Move32, TransformType.Manual | TransformType.Optimization)
 		{
 		}
 

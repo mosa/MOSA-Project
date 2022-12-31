@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Transforms.Optimizations.Manual
 	/// </summary>
 	public static class ManualTransforms
 	{
-		public static readonly List<BaseTransformation> List = new List<BaseTransformation>
+		public static readonly List<BaseTransform> List = new List<BaseTransform>
 		{
 			new Special.Deadcode(),
 			new Standard.Add32ToInc32(),

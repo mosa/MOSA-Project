@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
 	/// <summary>
 	/// GetHigh32FromRightLeftAndTo64
 	/// </summary>
-	public sealed class GetHigh32FromRightLeftAndTo64 : BaseTransformation
+	public sealed class GetHigh32FromRightLeftAndTo64 : BaseTransform
 	{
-		public GetHigh32FromRightLeftAndTo64() : base(IRInstruction.GetHigh32, TransformationType.Auto | TransformationType.Optimization)
+		public GetHigh32FromRightLeftAndTo64() : base(IRInstruction.GetHigh32, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

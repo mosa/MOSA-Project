@@ -11,9 +11,9 @@ namespace Mosa.Platform.x64.Transforms.Optimizations.Auto.Standard
 	/// <summary>
 	/// Mov64Consolidate
 	/// </summary>
-	public sealed class Mov64Consolidate : BaseTransformation
+	public sealed class Mov64Consolidate : BaseTransform
 	{
-		public Mov64Consolidate() : base(X64.Mov64, TransformationType.Auto | TransformationType.Optimization)
+		public Mov64Consolidate() : base(X64.Mov64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

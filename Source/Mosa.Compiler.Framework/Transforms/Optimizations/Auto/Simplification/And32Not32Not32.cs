@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
 	/// <summary>
 	/// And32Not32Not32
 	/// </summary>
-	public sealed class And32Not32Not32 : BaseTransformation
+	public sealed class And32Not32Not32 : BaseTransform
 	{
-		public And32Not32Not32() : base(IRInstruction.And32, TransformationType.Auto | TransformationType.Optimization)
+		public And32Not32Not32() : base(IRInstruction.And32, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

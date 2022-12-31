@@ -5,9 +5,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Rewrite
 	/// <summary>
 	/// Compare64x32SignZeroExtend
 	/// </summary>
-	public sealed class Compare64x32SignZeroExtend : BaseTransformation
+	public sealed class Compare64x32SignZeroExtend : BaseTransform
 	{
-		public Compare64x32SignZeroExtend() : base(IRInstruction.Compare64x32, TransformationType.Manual | TransformationType.Optimization)
+		public Compare64x32SignZeroExtend() : base(IRInstruction.Compare64x32, TransformType.Manual | TransformType.Optimization)
 		{
 		}
 

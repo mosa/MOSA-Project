@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Transforms.Optimizations.Auto
 	/// </summary>
 	public static class AutoTransforms
 	{
-		public static readonly List<BaseTransformation> List = new List<BaseTransformation> {
+		public static readonly List<BaseTransform> List = new List<BaseTransform> {
 			 new Standard.Mov32Consolidate(),
 			 new Standard.Mov64Consolidate(),
 			 new StrengthReduction.Add32ByZero(),

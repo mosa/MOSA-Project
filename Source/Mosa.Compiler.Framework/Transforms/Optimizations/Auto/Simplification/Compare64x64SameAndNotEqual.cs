@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
 	/// <summary>
 	/// Compare64x64SameAndNotEqual
 	/// </summary>
-	public sealed class Compare64x64SameAndNotEqual : BaseTransformation
+	public sealed class Compare64x64SameAndNotEqual : BaseTransform
 	{
-		public Compare64x64SameAndNotEqual() : base(IRInstruction.Compare64x64, TransformationType.Auto | TransformationType.Optimization)
+		public Compare64x64SameAndNotEqual() : base(IRInstruction.Compare64x64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

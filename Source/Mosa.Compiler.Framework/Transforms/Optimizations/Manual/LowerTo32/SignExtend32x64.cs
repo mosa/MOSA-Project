@@ -2,9 +2,9 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.LowerTo32
 {
-	public sealed class SignExtend32x64 : BaseTransformation
+	public sealed class SignExtend32x64 : BaseTransform
 	{
-		public SignExtend32x64() : base(IRInstruction.SignExtend32x64, TransformationType.Manual | TransformationType.Optimization)
+		public SignExtend32x64() : base(IRInstruction.SignExtend32x64, TransformType.Manual | TransformType.Optimization)
 		{
 		}
 

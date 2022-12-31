@@ -8,9 +8,9 @@ namespace Mosa.Platform.x86.Transforms.Tweak
 	/// <summary>
 	/// Shl32
 	/// </summary>
-	public sealed class Shl32 : BaseTransformation
+	public sealed class Shl32 : BaseTransform
 	{
-		public Shl32() : base(X86.Shl32, TransformationType.Manual | TransformationType.Transform)
+		public Shl32() : base(X86.Shl32, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

@@ -11,9 +11,9 @@ namespace Mosa.Platform.x64.Transforms.Optimizations.Manual.Standard
 	// A search is required to determine if a status flag is used.
 	// However, if the search is not conclusive, the transformation is not made.
 
-	public sealed class Sub32ToLea32 : BaseTransformation
+	public sealed class Sub32ToLea32 : BaseTransform
 	{
-		public Sub32ToLea32() : base(X64.Sub32, TransformationType.Manual | TransformationType.Optimization)
+		public Sub32ToLea32() : base(X64.Sub32, TransformType.Manual | TransformType.Optimization)
 		{
 		}
 

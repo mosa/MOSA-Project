@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
 	/// <summary>
 	/// IfThenElse32AlwaysTrue
 	/// </summary>
-	public sealed class IfThenElse32AlwaysTrue : BaseTransformation
+	public sealed class IfThenElse32AlwaysTrue : BaseTransform
 	{
-		public IfThenElse32AlwaysTrue() : base(IRInstruction.IfThenElse32, TransformationType.Auto | TransformationType.Optimization)
+		public IfThenElse32AlwaysTrue() : base(IRInstruction.IfThenElse32, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

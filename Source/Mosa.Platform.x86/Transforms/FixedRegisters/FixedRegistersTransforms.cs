@@ -2,7 +2,6 @@
 
 using System.Collections.Generic;
 using Mosa.Compiler.Framework.Transforms;
-using Mosa.Platform.x86.Transform.FixedRegisters;
 
 namespace Mosa.Platform.x86.Transforms.FixedRegisters
 {
@@ -11,7 +10,7 @@ namespace Mosa.Platform.x86.Transforms.FixedRegisters
 	/// </summary>
 	public static class FixedRegistersTransforms
 	{
-		public static readonly List<BaseTransformation> List = new List<BaseTransformation>
+		public static readonly List<BaseTransform> List = new List<BaseTransform>
 		{
 			new Cdq32(),
 			new Div32(),

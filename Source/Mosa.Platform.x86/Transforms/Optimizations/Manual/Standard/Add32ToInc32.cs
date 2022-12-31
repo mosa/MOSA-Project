@@ -7,9 +7,9 @@ using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x86.Transforms.Optimizations.Manual.Standard
 {
-	public sealed class Add32ToInc32 : BaseTransformation
+	public sealed class Add32ToInc32 : BaseTransform
 	{
-		public Add32ToInc32() : base(X86.Add32, TransformationType.Manual | TransformationType.Optimization)
+		public Add32ToInc32() : base(X86.Add32, TransformType.Manual | TransformType.Optimization)
 		{
 		}
 

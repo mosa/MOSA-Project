@@ -2,9 +2,9 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Rewrite
 {
-	public sealed class Compare64x64Combine64x64 : BaseTransformation
+	public sealed class Compare64x64Combine64x64 : BaseTransform
 	{
-		public Compare64x64Combine64x64() : base(IRInstruction.Compare64x64, TransformationType.Manual | TransformationType.Optimization)
+		public Compare64x64Combine64x64() : base(IRInstruction.Compare64x64, TransformType.Manual | TransformType.Optimization)
 		{
 		}
 

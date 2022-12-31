@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
 	/// <summary>
 	/// And32
 	/// </summary>
-	public sealed class And32 : BaseTransformation
+	public sealed class And32 : BaseTransform
 	{
-		public And32() : base(IRInstruction.And32, TransformationType.Auto | TransformationType.Optimization)
+		public And32() : base(IRInstruction.And32, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

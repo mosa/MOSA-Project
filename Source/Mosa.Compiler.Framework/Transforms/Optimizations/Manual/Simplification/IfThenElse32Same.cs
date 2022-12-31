@@ -2,9 +2,9 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Simplification
 {
-	public sealed class IfThenElse32Same : BaseTransformation
+	public sealed class IfThenElse32Same : BaseTransform
 	{
-		public IfThenElse32Same() : base(IRInstruction.IfThenElse32, TransformationType.Manual | TransformationType.Optimization)
+		public IfThenElse32Same() : base(IRInstruction.IfThenElse32, TransformType.Manual | TransformType.Optimization)
 		{
 		}
 

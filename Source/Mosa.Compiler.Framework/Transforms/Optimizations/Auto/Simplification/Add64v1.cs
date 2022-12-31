@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
 	/// <summary>
 	/// Add64v1
 	/// </summary>
-	public sealed class Add64v1 : BaseTransformation
+	public sealed class Add64v1 : BaseTransform
 	{
-		public Add64v1() : base(IRInstruction.Add64, TransformationType.Auto | TransformationType.Optimization)
+		public Add64v1() : base(IRInstruction.Add64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -45,9 +45,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
 	/// <summary>
 	/// Add64v1_v1
 	/// </summary>
-	public sealed class Add64v1_v1 : BaseTransformation
+	public sealed class Add64v1_v1 : BaseTransform
 	{
-		public Add64v1_v1() : base(IRInstruction.Add64, TransformationType.Auto | TransformationType.Optimization)
+		public Add64v1_v1() : base(IRInstruction.Add64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
