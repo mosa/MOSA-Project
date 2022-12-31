@@ -2,7 +2,6 @@
 
 using System.IO;
 using System.Text;
-using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 
