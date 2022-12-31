@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove
 	/// <summary>
 	/// Add64
 	/// </summary>
-	public sealed class Add64 : BaseTransformation
+	public sealed class Add64 : BaseTransform
 	{
-		public Add64() : base(IRInstruction.Add64, TransformationType.Auto | TransformationType.Optimization)
+		public Add64() : base(IRInstruction.Add64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

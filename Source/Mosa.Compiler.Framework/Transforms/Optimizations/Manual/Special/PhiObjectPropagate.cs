@@ -2,9 +2,9 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Special
 {
-	public sealed class PhiObjectPropagate : BaseTransformation
+	public sealed class PhiObjectPropagate : BaseTransform
 	{
-		public PhiObjectPropagate() : base(IRInstruction.PhiObject, TransformationType.Manual | TransformationType.Optimization)
+		public PhiObjectPropagate() : base(IRInstruction.PhiObject, TransformType.Manual | TransformType.Optimization)
 		{
 		}
 

@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
 	/// <summary>
 	/// Load32AddressFold
 	/// </summary>
-	public sealed class Load32AddressFold : BaseTransformation
+	public sealed class Load32AddressFold : BaseTransform
 	{
-		public Load32AddressFold() : base(IRInstruction.Load32, TransformationType.Auto | TransformationType.Optimization)
+		public Load32AddressFold() : base(IRInstruction.Load32, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

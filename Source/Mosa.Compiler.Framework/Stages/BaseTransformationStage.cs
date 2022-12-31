@@ -22,7 +22,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private readonly Counter RemoveUnreachableBlocksCount;
 		private readonly Counter BlocksMergedCount;
 
-		private readonly List<BaseTransformation>[] transformations = new List<BaseTransformation>[MaximumInstructionID];
+		private readonly List<BaseTransform>[] transformations = new List<BaseTransform>[MaximumInstructionID];
 
 		protected TransformContext TransformContext;
 
@@ -67,7 +67,7 @@ namespace Mosa.Compiler.Framework.Stages
 			CountTransformations = CompilerSettings.TraceLevel >= 9;
 		}
 
-		protected void AddTranformations(List<BaseTransformation> list)
+		protected void AddTranformations(List<BaseTransform> list)
 		{
 			foreach (var transformation in list)
 			{
@@ -75,13 +75,13 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		protected void AddTranformation(BaseTransformation transformation)
+		protected void AddTranformation(BaseTransform transformation)
 		{
 			int id = transformation.Instruction == null ? 0 : transformation.Instruction.ID;
 
 			if (transformations[id] == null)
 			{
-				transformations[id] = new List<BaseTransformation>();
+				transformations[id] = new List<BaseTransform>();
 			}
 
 			transformations[id].Add(transformation);
@@ -229,7 +229,7 @@ namespace Mosa.Compiler.Framework.Stages
 			return false;
 		}
 
-		private void CountTransformation(BaseTransformation transformation)
+		private void CountTransformation(BaseTransform transformation)
 		{
 			var name = transformation.Name;
 

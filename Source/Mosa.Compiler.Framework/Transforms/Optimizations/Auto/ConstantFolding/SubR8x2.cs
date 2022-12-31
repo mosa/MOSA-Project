@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
 	/// <summary>
 	/// SubR8x2
 	/// </summary>
-	public sealed class SubR8x2 : BaseTransformation
+	public sealed class SubR8x2 : BaseTransform
 	{
-		public SubR8x2() : base(IRInstruction.SubR8, TransformationType.Auto | TransformationType.Optimization)
+		public SubR8x2() : base(IRInstruction.SubR8, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

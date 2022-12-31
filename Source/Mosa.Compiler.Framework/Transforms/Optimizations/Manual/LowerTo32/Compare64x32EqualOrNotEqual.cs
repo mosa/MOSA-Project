@@ -2,9 +2,9 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.LowerTo32
 {
-	public sealed class Compare64x32EqualOrNotEqual : BaseTransformation
+	public sealed class Compare64x32EqualOrNotEqual : BaseTransform
 	{
-		public Compare64x32EqualOrNotEqual() : base(IRInstruction.Compare64x32, TransformationType.Manual | TransformationType.Optimization)
+		public Compare64x32EqualOrNotEqual() : base(IRInstruction.Compare64x32, TransformType.Manual | TransformType.Optimization)
 		{
 		}
 
@@ -40,7 +40,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.LowerTo32
 			context.AppendInstruction(IRInstruction.Xor32, v1, op0Low, op1Low);
 			context.AppendInstruction(IRInstruction.Xor32, v2, op0High, op1High);
 			context.AppendInstruction(IRInstruction.Or32, v3, v1, v2);
-			context.AppendInstruction(IRInstruction.Compare32x32, condition, result, v3, transform.ConstantZero32);
+			context.AppendInstruction(IRInstruction.Compare32x32, condition, result, v3, transform.Constant32_0);
 		}
 	}
 }

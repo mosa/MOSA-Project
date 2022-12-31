@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Mosa.Compiler.Framework.Analysis;
+using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 
@@ -23,26 +24,96 @@ namespace Mosa.Compiler.Framework.Transforms
 
 		public TraceLog SpecialTraceLog { get; private set; }
 
-		public Operand ConstantZero32 { get; private set; }
-		public Operand ConstantZero64 { get; private set; }
-		public Operand ConstantZeroR4 { get; private set; }
-		public Operand ConstantZeroR8 { get; private set; }
+		public Operand Constant32_0 { get; private set; }
+
+		public Operand Constant64_0 { get; private set; }
+
+		public Operand ConstantR4_0 { get; private set; }
+
+		public Operand ConstantR8_0 { get; private set; }
+
+		public Operand Constant32_1 { get; private set; }
+
+		public Operand Constant32_2 { get; private set; }
+
+		public Operand Constant32_3 { get; private set; }
+
+		public Operand Constant32_4 { get; private set; }
+
+		public Operand Constant32_16 { get; private set; }
+
+		public Operand Constant32_24 { get; private set; }
+
+		public Operand Constant32_31 { get; private set; }
+
+		public Operand Constant32_32 { get; private set; }
+
+		public Operand Constant32_64 { get; private set; }
+
+		public Operand Constant64_32 { get; private set; }
 
 		public MosaType I4 { get; private set; }
+
 		public MosaType I8 { get; private set; }
+
 		public MosaType R4 { get; private set; }
+
 		public MosaType R8 { get; private set; }
+
 		public MosaType O { get; private set; }
 
 		public VirtualRegisters VirtualRegisters { get; private set; }
+
 		public BasicBlocks BasicBlocks { get; set; }
 
 		public bool LowerTo32 { get; private set; }
+
 		public bool IsInSSAForm { get; private set; }
+
 		public bool AreCPURegistersAllocated { get; private set; }
+
 		public bool Is32BitPlatform { get; private set; }
 
 		public int Window { get; private set; }
+
+		public Operand StackFrame
+		{ get { return MethodCompiler.Compiler.StackFrame; } }
+
+		public Operand StackPointer
+		{ get { return MethodCompiler.Compiler.StackPointer; } }
+
+		/// <summary>
+		/// Gets the link register.
+		/// </summary>
+		public Operand LinkRegister
+		{ get { return MethodCompiler.Compiler.LinkRegister; } }
+
+		/// <summary>
+		/// Gets the program counter
+		/// </summary>
+		public Operand ProgramCounter
+		{ get { return MethodCompiler.Compiler.ProgramCounter; } }
+
+		/// <summary>
+		/// Gets the exception register.
+		/// </summary>
+		public Operand ExceptionRegister
+		{ get { return MethodCompiler.Compiler.ExceptionRegister; } }
+
+		/// <summary>
+		/// Gets the leave target register.
+		/// </summary>
+		public Operand LeaveTargetRegister
+		{ get { return MethodCompiler.Compiler.LeaveTargetRegister; } }
+
+		public uint NativePointerSize
+		{ get { return Compiler.Architecture.NativePointerSize; } }
+
+		public BaseArchitecture Architecture
+		{ get { return Compiler.Architecture; } }
+
+		public MosaLinker Linker
+		{ get { return Compiler.Linker; } }
 
 		public TransformContext(MethodCompiler methodCompiler, BitValueManager bitValueManager = null)
 		{
@@ -61,10 +132,22 @@ namespace Mosa.Compiler.Framework.Transforms
 			R8 = TypeSystem.BuiltIn.R8;
 			O = TypeSystem.BuiltIn.Object;
 
-			ConstantZero32 = MethodCompiler.ConstantZero32;
-			ConstantZero64 = MethodCompiler.ConstantZero64;
-			ConstantZeroR4 = MethodCompiler.ConstantZeroR4;
-			ConstantZeroR8 = MethodCompiler.ConstantZeroR8;
+			ConstantR4_0 = MethodCompiler.ConstantZeroR4;
+			ConstantR8_0 = MethodCompiler.ConstantZeroR8;
+			Constant32_0 = MethodCompiler.ConstantZero32;
+			Constant64_0 = MethodCompiler.ConstantZero64;
+
+			Constant32_1 = CreateConstant32(1);
+			Constant32_2 = CreateConstant32(2);
+			Constant32_3 = CreateConstant32(3);
+			Constant32_4 = CreateConstant32(4);
+			Constant32_16 = CreateConstant32(16);
+			Constant32_31 = CreateConstant32(31);
+			Constant32_32 = CreateConstant32(32);
+			Constant32_64 = CreateConstant32(64);
+			Constant32_24 = CreateConstant32(24);
+
+			Constant64_32 = CreateConstant64(32);
 
 			Is32BitPlatform = Compiler.Architecture.Is32BitPlatform;
 			LowerTo32 = Compiler.CompilerSettings.LongExpansion;
@@ -121,7 +204,7 @@ namespace Mosa.Compiler.Framework.Transforms
 			return VirtualRegisters.Allocate(O);
 		}
 
-		public bool ApplyTransform(Context context, BaseTransformation transformation)
+		public bool ApplyTransform(Context context, BaseTransform transformation)
 		{
 			if (!transformation.Match(context, this))
 				return false;
@@ -137,7 +220,7 @@ namespace Mosa.Compiler.Framework.Transforms
 
 		#region Trace
 
-		public void TraceBefore(Context context, BaseTransformation transformation)
+		public void TraceBefore(Context context, BaseTransform transformation)
 		{
 			if (transformation.Name != null)
 				TraceLog?.Log($"*** {transformation.Name}");
@@ -159,52 +242,57 @@ namespace Mosa.Compiler.Framework.Transforms
 
 		public Operand CreateConstant(int value)
 		{
-			return value == 0 ? ConstantZero32 : Operand.CreateConstant(I4, value);
+			return value == 0 ? Constant32_0 : Operand.CreateConstant(I4, value);
 		}
 
 		public Operand CreateConstant32(int value)
 		{
-			return value == 0 ? ConstantZero32 : Operand.CreateConstant(I4, value);
+			return value == 0 ? Constant32_0 : Operand.CreateConstant(I4, value);
+		}
+
+		public Operand CreateConstant32(long value)
+		{
+			return (int)value == 0 ? Constant32_0 : Operand.CreateConstant(I4, (int)value);
 		}
 
 		public Operand CreateConstant(uint value)
 		{
-			return value == 0 ? ConstantZero32 : Operand.CreateConstant(I4, value);
+			return value == 0 ? Constant32_0 : Operand.CreateConstant(I4, value);
 		}
 
 		public Operand CreateConstant32(uint value)
 		{
-			return value == 0 ? ConstantZero32 : Operand.CreateConstant(I4, value);
+			return value == 0 ? Constant32_0 : Operand.CreateConstant(I4, value);
 		}
 
 		public Operand CreateConstant(long value)
 		{
-			return value == 0 ? ConstantZero64 : Operand.CreateConstant(I8, value);
+			return value == 0 ? Constant64_0 : Operand.CreateConstant(I8, value);
 		}
 
 		public Operand CreateConstant64(long value)
 		{
-			return value == 0 ? ConstantZero64 : Operand.CreateConstant(I8, value);
+			return value == 0 ? Constant64_0 : Operand.CreateConstant(I8, value);
 		}
 
 		public Operand CreateConstant(ulong value)
 		{
-			return value == 0 ? ConstantZero64 : Operand.CreateConstant(I8, value);
+			return value == 0 ? Constant64_0 : Operand.CreateConstant(I8, value);
 		}
 
 		public Operand CreateConstant64(ulong value)
 		{
-			return value == 0 ? ConstantZero64 : Operand.CreateConstant(I8, value);
+			return value == 0 ? Constant64_0 : Operand.CreateConstant(I8, value);
 		}
 
 		public Operand CreateConstant(float value)
 		{
-			return value == 0 ? ConstantZeroR4 : Operand.CreateConstant(R4, value);
+			return value == 0 ? ConstantR4_0 : Operand.CreateConstant(R4, value);
 		}
 
 		public Operand CreateConstant(double value)
 		{
-			return value == 0 ? ConstantZeroR4 : Operand.CreateConstant(R8, value);
+			return value == 0 ? ConstantR4_0 : Operand.CreateConstant(R8, value);
 		}
 
 		#endregion Constant Helper Methods
@@ -382,10 +470,43 @@ namespace Mosa.Compiler.Framework.Transforms
 
 		#endregion Move Helpers
 
+		#region Linker Helpers
+
+		public Operand CreateR4Label(float value)
+		{
+			var symbol = Linker.GetConstantSymbol(value);
+
+			var label = Operand.CreateLabel(R4, symbol.Name);
+
+			return label;
+		}
+
+		public Operand CreateR8Label(double value)
+		{
+			var symbol = Linker.GetConstantSymbol(value);
+
+			var label = Operand.CreateLabel(R4, symbol.Name);
+
+			return label;
+		}
+
+		public Operand CreateFloatingPointLabel(Operand operand)
+		{
+			var symbol = operand.IsR4 ? Linker.GetConstantSymbol(operand.ConstantFloat) : Compiler.Linker.GetConstantSymbol(operand.ConstantDouble);
+
+			var label = Operand.CreateLabel(operand.IsR4 ? R4 : R8, symbol.Name);
+
+			return label;
+		}
+
+		#endregion Linker Helpers
+
 		public void SplitLongOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
 		{
 			MethodCompiler.SplitLongOperand(operand, out operandLow, out operandHigh);
 		}
+
+		#region BitValue (experimental)
 
 		public BitValue GetBitValue(Operand operand)
 		{
@@ -397,9 +518,11 @@ namespace Mosa.Compiler.Framework.Transforms
 			return BitValueManager.GetBitValueWithDefault(operand);
 		}
 
-		public MosaMethod GetMethod(string fullName, string methodName)
+		#endregion BitValue (experimental)
+
+		public MosaMethod GetMethod(string namespaceName, string typeName, string methodName)
 		{
-			var type = TypeSystem.GetTypeByName(fullName);
+			var type = TypeSystem.GetTypeByName(namespaceName, typeName);
 
 			if (type == null)
 				return null;
@@ -409,9 +532,9 @@ namespace Mosa.Compiler.Framework.Transforms
 			return method;
 		}
 
-		public void ReplaceWithCall(Context context, string fullName, string methodName)
+		public void ReplaceWithCall(Context context, string namespaceName, string typeName, string methodName)
 		{
-			var method = GetMethod(fullName, methodName);
+			var method = GetMethod(namespaceName, typeName, methodName);
 
 			Debug.Assert(method != null, $"Cannot find method: {methodName}");
 
@@ -434,5 +557,79 @@ namespace Mosa.Compiler.Framework.Transforms
 
 			MethodCompiler.MethodScanner.MethodInvoked(method, MethodCompiler.Method);
 		}
+
+		public void MoveConstantRight(Context context) // static
+		{
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+
+			if (operand2.IsConstant || operand1.IsVirtualRegister)
+				return;
+
+			// Move constant to the right
+			context.Operand1 = operand2;
+			context.Operand2 = operand1;
+			context.ConditionCode = context.ConditionCode.GetReverse();
+		}
+
+		public void OrderLoadStoreOperands(Context context)  // FUTURE: Rename
+		{
+			if (context.Operand1.IsResolvedConstant && context.Operand2.IsResolvedConstant)
+			{
+				context.Operand1 = CreateConstant(context.Operand1.ConstantUnsigned64 + context.Operand2.ConstantUnsigned64);
+				context.Operand2 = Constant32_0;
+			}
+
+			if (context.Operand1.IsConstant && !context.Operand2.IsConstant)
+			{
+				var operand1 = context.Operand1;
+				var operand2 = context.Operand2;
+
+				context.Operand2 = operand1;
+				context.Operand1 = operand2;
+			}
+		}
+
+		#region Floating Point Helpers
+
+		public Operand LoadValueR4(Context context, float value, BaseInstruction loadInstruction)
+		{
+			var label = CreateR4Label(value);
+
+			var v1 = AllocateVirtualRegisterR4();
+
+			context.InsertBefore().SetInstruction(loadInstruction, v1, label, Constant32_0);
+
+			return v1;
+		}
+
+		public Operand LoadValueR8(Context context, double value, BaseInstruction loadInstruction)
+		{
+			var label = CreateR8Label(value);
+
+			var v1 = AllocateVirtualRegisterR8();
+
+			context.InsertBefore().SetInstruction(loadInstruction, v1, label, Constant32_0);
+
+			return v1;
+		}
+
+		public Operand MoveConstantToFloatRegister(Context context, Operand operand, BaseInstruction instructionR4, BaseInstruction instructionR8)
+		{
+			if (!operand.IsConstant)
+				return operand;
+
+			var label = CreateFloatingPointLabel(operand);
+
+			var v1 = operand.IsR4 ? AllocateVirtualRegisterR4() : AllocateVirtualRegisterR8();
+
+			var instruction = operand.IsR4 ? instructionR4 : instructionR8;
+
+			context.InsertBefore().SetInstruction(instruction, v1, label, Constant32_0);
+
+			return v1;
+		}
+
+		#endregion Floating Point Helpers
 	}
 }

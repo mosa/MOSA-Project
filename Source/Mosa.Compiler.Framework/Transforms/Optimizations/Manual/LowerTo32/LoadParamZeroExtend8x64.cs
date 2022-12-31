@@ -2,9 +2,9 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.LowerTo32
 {
-	public sealed class LoadParamZeroExtend8x64 : BaseTransformation
+	public sealed class LoadParamZeroExtend8x64 : BaseTransform
 	{
-		public LoadParamZeroExtend8x64() : base(IRInstruction.LoadParamZeroExtend8x64, TransformationType.Manual | TransformationType.Optimization)
+		public LoadParamZeroExtend8x64() : base(IRInstruction.LoadParamZeroExtend8x64, TransformType.Manual | TransformType.Optimization)
 		{
 		}
 
@@ -23,7 +23,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.LowerTo32
 			transform.SplitLongOperand(operand1, out Operand op0Low, out Operand _);
 
 			context.SetInstruction(IRInstruction.LoadParamZeroExtend8x32, resultLow, op0Low);
-			context.AppendInstruction(IRInstruction.To64, result, resultLow, transform.ConstantZero32);
+			context.AppendInstruction(IRInstruction.To64, result, resultLow, transform.Constant32_0);
 		}
 	}
 }

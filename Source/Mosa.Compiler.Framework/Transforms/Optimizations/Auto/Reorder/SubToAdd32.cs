@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Reorder
 	/// <summary>
 	/// SubToAdd32
 	/// </summary>
-	public sealed class SubToAdd32 : BaseTransformation
+	public sealed class SubToAdd32 : BaseTransform
 	{
-		public SubToAdd32() : base(IRInstruction.Sub32, TransformationType.Auto | TransformationType.Optimization)
+		public SubToAdd32() : base(IRInstruction.Sub32, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

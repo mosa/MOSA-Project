@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Transforms.Optimizations.Manual
 	/// </summary>
 	public static class ManualTransforms
 	{
-		public static readonly List<BaseTransformation> List = new List<BaseTransformation>
+		public static readonly List<BaseTransform> List = new List<BaseTransform>
 		{
 			new Special.Deadcode(),
 			new Standard.Mov32ToXor32(),
@@ -31,12 +31,12 @@ namespace Mosa.Platform.x64.Transforms.Optimizations.Manual
 			//Sub64ToLea64
 		};
 
-		public static readonly List<BaseTransformation> PostList = new List<BaseTransformation>
+		public static readonly List<BaseTransform> PostList = new List<BaseTransform>
 		{
 			new Special.Mov32ConstantReuse(),
 		};
 
-		public static readonly List<BaseTransformation> EarlyList = new List<BaseTransformation>
+		public static readonly List<BaseTransform> EarlyList = new List<BaseTransform>
 		{
 			new Stack.Add32(),
 			new Stack.Add64(),

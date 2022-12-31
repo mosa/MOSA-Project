@@ -2,9 +2,9 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.LowerTo32
 {
-	public sealed class LoadParamSignExtend16x64 : BaseTransformation
+	public sealed class LoadParamSignExtend16x64 : BaseTransform
 	{
-		public LoadParamSignExtend16x64() : base(IRInstruction.LoadParamSignExtend16x64, TransformationType.Manual | TransformationType.Optimization)
+		public LoadParamSignExtend16x64() : base(IRInstruction.LoadParamSignExtend16x64, TransformType.Manual | TransformType.Optimization)
 		{
 		}
 

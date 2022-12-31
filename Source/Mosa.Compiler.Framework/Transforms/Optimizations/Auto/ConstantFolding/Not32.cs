@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
 	/// <summary>
 	/// Not32
 	/// </summary>
-	public sealed class Not32 : BaseTransformation
+	public sealed class Not32 : BaseTransform
 	{
-		public Not32() : base(IRInstruction.Not32, TransformationType.Auto | TransformationType.Optimization)
+		public Not32() : base(IRInstruction.Not32, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

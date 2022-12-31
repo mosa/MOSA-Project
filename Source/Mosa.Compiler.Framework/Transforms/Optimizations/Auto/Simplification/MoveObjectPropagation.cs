@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
 	/// <summary>
 	/// MoveObjectPropagation
 	/// </summary>
-	public sealed class MoveObjectPropagation : BaseTransformation
+	public sealed class MoveObjectPropagation : BaseTransform
 	{
-		public MoveObjectPropagation() : base(IRInstruction.MoveObject, TransformationType.Auto | TransformationType.Optimization)
+		public MoveObjectPropagation() : base(IRInstruction.MoveObject, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

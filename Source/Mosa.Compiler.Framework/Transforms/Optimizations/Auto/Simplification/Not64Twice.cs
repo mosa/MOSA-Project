@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
 	/// <summary>
 	/// Not64Twice
 	/// </summary>
-	public sealed class Not64Twice : BaseTransformation
+	public sealed class Not64Twice : BaseTransform
 	{
-		public Not64Twice() : base(IRInstruction.Not64, TransformationType.Auto | TransformationType.Optimization)
+		public Not64Twice() : base(IRInstruction.Not64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

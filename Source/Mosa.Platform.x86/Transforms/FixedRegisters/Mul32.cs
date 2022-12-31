@@ -4,14 +4,14 @@ using System.Diagnostics;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.x86.Transform.FixedRegisters
+namespace Mosa.Platform.x86.Transforms.FixedRegisters
 {
 	/// <summary>
 	/// Mul32
 	/// </summary>
-	public sealed class Mul32 : BaseTransformation
+	public sealed class Mul32 : BaseTransform
 	{
-		public Mul32() : base(X86.Mul32, TransformationType.Manual | TransformationType.Transform)
+		public Mul32() : base(X86.Mul32, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

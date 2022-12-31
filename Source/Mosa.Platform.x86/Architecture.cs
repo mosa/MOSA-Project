@@ -132,7 +132,7 @@ namespace Mosa.Platform.x86
 				);
 			}
 
-			pipeline.Add(new Intel.CompilerStages.StartUpStage());
+			pipeline.Add(new StartUpStage());
 		}
 
 		/// <summary>

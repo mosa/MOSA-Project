@@ -5,9 +5,9 @@ using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x86.Transforms.Optimizations.Manual.Standard
 {
-	public sealed class Test32ToZero : BaseTransformation
+	public sealed class Test32ToZero : BaseTransform
 	{
-		public Test32ToZero() : base(X86.Test32, TransformationType.Manual | TransformationType.Optimization)
+		public Test32ToZero() : base(X86.Test32, TransformType.Manual | TransformType.Optimization)
 		{
 		}
 

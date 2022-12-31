@@ -5,9 +5,9 @@ using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x86.Transforms.Optimizations.Manual.Special
 {
-	public sealed class Mov32ConstantReuse : BaseTransformation
+	public sealed class Mov32ConstantReuse : BaseTransform
 	{
-		public Mov32ConstantReuse() : base(X86.Mov32, TransformationType.Manual | TransformationType.Optimization)
+		public Mov32ConstantReuse() : base(X86.Mov32, TransformType.Manual | TransformType.Optimization)
 		{
 		}
 

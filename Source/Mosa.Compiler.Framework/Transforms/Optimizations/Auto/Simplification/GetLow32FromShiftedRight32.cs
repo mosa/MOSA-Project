@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
 	/// <summary>
 	/// GetLow32FromShiftedRight32
 	/// </summary>
-	public sealed class GetLow32FromShiftedRight32 : BaseTransformation
+	public sealed class GetLow32FromShiftedRight32 : BaseTransform
 	{
-		public GetLow32FromShiftedRight32() : base(IRInstruction.GetLow32, TransformationType.Auto | TransformationType.Optimization)
+		public GetLow32FromShiftedRight32() : base(IRInstruction.GetLow32, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

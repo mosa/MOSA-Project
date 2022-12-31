@@ -3,14 +3,14 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.x86.Transform.FixedRegisters
+namespace Mosa.Platform.x86.Transforms.FixedRegisters
 {
 	/// <summary>
 	/// Shrd32
 	/// </summary>
-	public sealed class Shrd32 : BaseTransformation
+	public sealed class Shrd32 : BaseTransform
 	{
-		public Shrd32() : base(X86.Shrd32, TransformationType.Manual | TransformationType.Transform)
+		public Shrd32() : base(X86.Shrd32, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

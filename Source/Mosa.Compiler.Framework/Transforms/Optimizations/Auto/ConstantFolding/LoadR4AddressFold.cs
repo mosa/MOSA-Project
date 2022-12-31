@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
 	/// <summary>
 	/// LoadR4AddressFold
 	/// </summary>
-	public sealed class LoadR4AddressFold : BaseTransformation
+	public sealed class LoadR4AddressFold : BaseTransform
 	{
-		public LoadR4AddressFold() : base(IRInstruction.LoadR4, TransformationType.Auto | TransformationType.Optimization)
+		public LoadR4AddressFold() : base(IRInstruction.LoadR4, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

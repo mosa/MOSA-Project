@@ -3,14 +3,14 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.x86.Transform.FixedRegisters
+namespace Mosa.Platform.x86.Transforms.FixedRegisters
 {
 	/// <summary>
 	/// Out16
 	/// </summary>
-	public sealed class Out16 : BaseTransformation
+	public sealed class Out16 : BaseTransform
 	{
-		public Out16() : base(X86.Out16, TransformationType.Manual | TransformationType.Transform)
+		public Out16() : base(X86.Out16, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

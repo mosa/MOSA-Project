@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
 	/// <summary>
 	/// StoreR4FoldSub32
 	/// </summary>
-	public sealed class StoreR4FoldSub32 : BaseTransformation
+	public sealed class StoreR4FoldSub32 : BaseTransform
 	{
-		public StoreR4FoldSub32() : base(IRInstruction.StoreR4, TransformationType.Auto | TransformationType.Optimization)
+		public StoreR4FoldSub32() : base(IRInstruction.StoreR4, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

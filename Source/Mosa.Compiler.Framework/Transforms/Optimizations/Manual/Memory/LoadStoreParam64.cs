@@ -2,9 +2,9 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Memory
 {
-	public sealed class LoadStoreParam64 : BaseTransformation
+	public sealed class LoadStoreParam64 : BaseTransform
 	{
-		public LoadStoreParam64() : base(IRInstruction.LoadParam64, TransformationType.Manual | TransformationType.Optimization)
+		public LoadStoreParam64() : base(IRInstruction.LoadParam64, TransformType.Manual | TransformType.Optimization)
 		{
 		}
 

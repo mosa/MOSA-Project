@@ -2,9 +2,9 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Simplification
 {
-	public sealed class Branch64OnlyOneExit : BaseTransformation
+	public sealed class Branch64OnlyOneExit : BaseTransform
 	{
-		public Branch64OnlyOneExit() : base(IRInstruction.Branch64, TransformationType.Manual | TransformationType.Optimization)
+		public Branch64OnlyOneExit() : base(IRInstruction.Branch64, TransformType.Manual | TransformType.Optimization)
 		{
 		}
 

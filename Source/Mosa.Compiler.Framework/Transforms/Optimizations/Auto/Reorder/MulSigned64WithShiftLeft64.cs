@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Reorder
 	/// <summary>
 	/// MulSigned64WithShiftLeft64
 	/// </summary>
-	public sealed class MulSigned64WithShiftLeft64 : BaseTransformation
+	public sealed class MulSigned64WithShiftLeft64 : BaseTransform
 	{
-		public MulSigned64WithShiftLeft64() : base(IRInstruction.MulSigned64, TransformationType.Auto | TransformationType.Optimization)
+		public MulSigned64WithShiftLeft64() : base(IRInstruction.MulSigned64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -47,9 +47,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Reorder
 	/// <summary>
 	/// MulSigned64WithShiftLeft64_v1
 	/// </summary>
-	public sealed class MulSigned64WithShiftLeft64_v1 : BaseTransformation
+	public sealed class MulSigned64WithShiftLeft64_v1 : BaseTransform
 	{
-		public MulSigned64WithShiftLeft64_v1() : base(IRInstruction.MulSigned64, TransformationType.Auto | TransformationType.Optimization)
+		public MulSigned64WithShiftLeft64_v1() : base(IRInstruction.MulSigned64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

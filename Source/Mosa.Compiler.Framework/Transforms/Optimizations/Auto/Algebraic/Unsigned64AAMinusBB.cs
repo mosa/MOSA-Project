@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Algebraic
 	/// <summary>
 	/// Unsigned64AAMinusBB
 	/// </summary>
-	public sealed class Unsigned64AAMinusBB : BaseTransformation
+	public sealed class Unsigned64AAMinusBB : BaseTransform
 	{
-		public Unsigned64AAMinusBB() : base(IRInstruction.Sub64, TransformationType.Auto | TransformationType.Optimization)
+		public Unsigned64AAMinusBB() : base(IRInstruction.Sub64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

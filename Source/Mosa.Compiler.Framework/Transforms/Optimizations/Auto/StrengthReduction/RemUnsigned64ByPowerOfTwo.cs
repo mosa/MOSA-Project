@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 	/// <summary>
 	/// RemUnsigned64ByPowerOfTwo
 	/// </summary>
-	public sealed class RemUnsigned64ByPowerOfTwo : BaseTransformation
+	public sealed class RemUnsigned64ByPowerOfTwo : BaseTransform
 	{
-		public RemUnsigned64ByPowerOfTwo() : base(IRInstruction.RemUnsigned64, TransformationType.Auto | TransformationType.Optimization)
+		public RemUnsigned64ByPowerOfTwo() : base(IRInstruction.RemUnsigned64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove
 	/// <summary>
 	/// MulR8
 	/// </summary>
-	public sealed class MulR8 : BaseTransformation
+	public sealed class MulR8 : BaseTransform
 	{
-		public MulR8() : base(IRInstruction.MulR8, TransformationType.Auto | TransformationType.Optimization)
+		public MulR8() : base(IRInstruction.MulR8, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

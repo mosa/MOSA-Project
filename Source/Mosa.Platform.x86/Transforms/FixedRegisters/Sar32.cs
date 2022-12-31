@@ -3,14 +3,14 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.x86.Transform.FixedRegisters
+namespace Mosa.Platform.x86.Transforms.FixedRegisters
 {
 	/// <summary>
 	/// Sar32
 	/// </summary>
-	public sealed class Sar32 : BaseTransformation
+	public sealed class Sar32 : BaseTransform
 	{
-		public Sar32() : base(X86.Sar32, TransformationType.Manual | TransformationType.Transform)
+		public Sar32() : base(X86.Sar32, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

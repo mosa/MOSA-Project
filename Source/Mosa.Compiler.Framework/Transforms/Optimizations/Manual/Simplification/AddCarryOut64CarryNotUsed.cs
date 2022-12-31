@@ -2,9 +2,9 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Simplification
 {
-	public sealed class AddCarryOut64CarryNotUsed : BaseTransformation
+	public sealed class AddCarryOut64CarryNotUsed : BaseTransform
 	{
-		public AddCarryOut64CarryNotUsed() : base(IRInstruction.AddCarryOut64, TransformationType.Manual | TransformationType.Optimization)
+		public AddCarryOut64CarryNotUsed() : base(IRInstruction.AddCarryOut64, TransformType.Manual | TransformType.Optimization)
 		{
 		}
 

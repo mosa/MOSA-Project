@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
 	/// <summary>
 	/// StoreR4FoldAdd64
 	/// </summary>
-	public sealed class StoreR4FoldAdd64 : BaseTransformation
+	public sealed class StoreR4FoldAdd64 : BaseTransform
 	{
-		public StoreR4FoldAdd64() : base(IRInstruction.StoreR4, TransformationType.Auto | TransformationType.Optimization)
+		public StoreR4FoldAdd64() : base(IRInstruction.StoreR4, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

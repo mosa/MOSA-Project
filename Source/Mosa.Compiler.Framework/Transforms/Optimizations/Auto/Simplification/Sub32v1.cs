@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
 	/// <summary>
 	/// Sub32v1
 	/// </summary>
-	public sealed class Sub32v1 : BaseTransformation
+	public sealed class Sub32v1 : BaseTransform
 	{
-		public Sub32v1() : base(IRInstruction.Sub32, TransformationType.Auto | TransformationType.Optimization)
+		public Sub32v1() : base(IRInstruction.Sub32, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
@@ -45,9 +45,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
 	/// <summary>
 	/// Sub32v1_v1
 	/// </summary>
-	public sealed class Sub32v1_v1 : BaseTransformation
+	public sealed class Sub32v1_v1 : BaseTransform
 	{
-		public Sub32v1_v1() : base(IRInstruction.Sub32, TransformationType.Auto | TransformationType.Optimization)
+		public Sub32v1_v1() : base(IRInstruction.Sub32, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

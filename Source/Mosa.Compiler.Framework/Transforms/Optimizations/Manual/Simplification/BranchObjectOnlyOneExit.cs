@@ -2,9 +2,9 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Simplification
 {
-	public sealed class BranchObjectOnlyOneExit : BaseTransformation
+	public sealed class BranchObjectOnlyOneExit : BaseTransform
 	{
-		public BranchObjectOnlyOneExit() : base(IRInstruction.BranchObject, TransformationType.Manual | TransformationType.Optimization)
+		public BranchObjectOnlyOneExit() : base(IRInstruction.BranchObject, TransformType.Manual | TransformType.Optimization)
 		{
 		}
 

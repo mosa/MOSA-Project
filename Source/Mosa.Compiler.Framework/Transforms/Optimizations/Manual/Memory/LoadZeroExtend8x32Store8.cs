@@ -2,9 +2,9 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Memory
 {
-	public sealed class LoadZeroExtend8x32Store8 : BaseTransformation
+	public sealed class LoadZeroExtend8x32Store8 : BaseTransform
 	{
-		public LoadZeroExtend8x32Store8() : base(IRInstruction.LoadZeroExtend8x32, TransformationType.Manual | TransformationType.Optimization)
+		public LoadZeroExtend8x32Store8() : base(IRInstruction.LoadZeroExtend8x32, TransformType.Manual | TransformType.Optimization)
 		{
 		}
 

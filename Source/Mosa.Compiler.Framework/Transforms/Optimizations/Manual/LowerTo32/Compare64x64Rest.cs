@@ -4,9 +4,9 @@ using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.LowerTo32
 {
-	public sealed class Compare64x64Rest : BaseTransformation
+	public sealed class Compare64x64Rest : BaseTransform
 	{
-		public Compare64x64Rest() : base(IRInstruction.Compare64x64, TransformationType.Manual | TransformationType.Optimization, true)
+		public Compare64x64Rest() : base(IRInstruction.Compare64x64, TransformType.Manual | TransformType.Optimization, true)
 		{
 		}
 
@@ -66,12 +66,12 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.LowerTo32
 			newBlocks[2].AppendInstruction(IRInstruction.Jmp, newBlocks[4].Block);
 
 			// Failed
-			newBlocks[3].AppendInstruction(IRInstruction.Move32, tempLow, transform.ConstantZero32);
+			newBlocks[3].AppendInstruction(IRInstruction.Move32, tempLow, transform.Constant32_0);
 			newBlocks[3].AppendInstruction(IRInstruction.Jmp, newBlocks[4].Block);
 
 			// Exit
 			newBlocks[4].AppendInstruction(IRInstruction.Move32, resultLow, tempLow);
-			newBlocks[4].AppendInstruction(IRInstruction.Move32, resultHigh, transform.ConstantZero32);
+			newBlocks[4].AppendInstruction(IRInstruction.Move32, resultHigh, transform.Constant32_0);
 			newBlocks[4].AppendInstruction(IRInstruction.Jmp, nextBlock.Block);
 		}
 	}

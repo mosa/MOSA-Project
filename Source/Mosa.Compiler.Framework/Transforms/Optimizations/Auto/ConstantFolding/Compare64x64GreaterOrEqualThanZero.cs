@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
 	/// <summary>
 	/// Compare64x64GreaterOrEqualThanZero
 	/// </summary>
-	public sealed class Compare64x64GreaterOrEqualThanZero : BaseTransformation
+	public sealed class Compare64x64GreaterOrEqualThanZero : BaseTransform
 	{
-		public Compare64x64GreaterOrEqualThanZero() : base(IRInstruction.Compare64x64, TransformationType.Auto | TransformationType.Optimization)
+		public Compare64x64GreaterOrEqualThanZero() : base(IRInstruction.Compare64x64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
