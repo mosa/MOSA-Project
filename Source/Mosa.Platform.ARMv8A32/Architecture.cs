@@ -163,7 +163,7 @@ namespace Mosa.Platform.ARMv8A32
 
 					//compilerSettings.EnablePlatformOptimizations ? new OptimizationStage() : null,
 					//new TweakStage(),
-					compilerSettings.PlatformOptimizations ? new SimpleDeadCodeRemovalStage() : null,
+					//compilerSettings.PlatformOptimizations ? new SimpleDeadCodeRemovalStage() : null,
 				});
 
 			//pipeline.InsertAfterLast<StackLayoutStage>(
@@ -173,7 +173,7 @@ namespace Mosa.Platform.ARMv8A32
 			pipeline.InsertBefore<CodeGenerationStage>(
 				new BaseMethodCompilerStage[]
 				{
-					new FinalTweakStage(),
+					//new FinalTweakStage(),
 
 					//compilerSettings.EnablePlatformOptimizations ? new PostOptimizationStage() : null,
 				});

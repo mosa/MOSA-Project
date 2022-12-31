@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using dnlib.DotNet.Emit;
 using Mosa.Compiler.Framework.Analysis;
+using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 
@@ -81,6 +82,9 @@ namespace Mosa.Compiler.Framework.Transforms
 
 		public BaseArchitecture Architecture
 		{ get { return Compiler.Architecture; } }
+
+		public MosaLinker Linker
+		{ get { return Compiler.Linker; } }
 
 		public TransformContext(MethodCompiler methodCompiler, BitValueManager bitValueManager = null)
 		{
@@ -436,7 +440,7 @@ namespace Mosa.Compiler.Framework.Transforms
 
 		public Operand CreateR4Label(float value)
 		{
-			var symbol = Compiler.Linker.GetConstantSymbol(value);
+			var symbol = Linker.GetConstantSymbol(value);
 
 			var label = Operand.CreateLabel(R4, symbol.Name);
 
@@ -445,7 +449,7 @@ namespace Mosa.Compiler.Framework.Transforms
 
 		public Operand CreateR8Label(double value)
 		{
-			var symbol = Compiler.Linker.GetConstantSymbol(value);
+			var symbol = Linker.GetConstantSymbol(value);
 
 			var label = Operand.CreateLabel(R4, symbol.Name);
 
@@ -454,7 +458,7 @@ namespace Mosa.Compiler.Framework.Transforms
 
 		public Operand CreateFloatingPointLabel(Operand operand)
 		{
-			var symbol = operand.IsR4 ? Compiler.Linker.GetConstantSymbol(operand.ConstantFloat) : Compiler.Linker.GetConstantSymbol(operand.ConstantDouble);
+			var symbol = operand.IsR4 ? Linker.GetConstantSymbol(operand.ConstantFloat) : Compiler.Linker.GetConstantSymbol(operand.ConstantDouble);
 
 			var label = Operand.CreateLabel(operand.IsR4 ? R4 : R8, symbol.Name);
 
