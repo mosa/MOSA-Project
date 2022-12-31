@@ -8,11 +8,11 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Utils
 	{
 		public ScopedToken Token { get; private set; }
 
-		public TDef Definition { get; private set; }
+		public TDef? Definition { get; private set; }
 
-		public TSig Signature { get; private set; }
+		public TSig? Signature { get; private set; }
 
-		public UnitDesc(ModuleDef module, TDef definition, TSig signature)
+		public UnitDesc(ModuleDef module, TDef? definition, TSig? signature)
 		{
 			if (definition != null)
 				Token = new ScopedToken(module, definition.MDToken);

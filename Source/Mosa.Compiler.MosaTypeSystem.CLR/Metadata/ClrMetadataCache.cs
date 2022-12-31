@@ -8,7 +8,7 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 {
 	public class ClrMetadataCache
 	{
-		public Dictionary<string, MosaModule> Modules { get; }
+		public Dictionary<string, MosaModule?> Modules { get; }
 
 		public MosaModule LinkerModule { get; }
 
@@ -25,12 +25,12 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 
 		public ClrMetadataCache()
 		{
-			Modules = new Dictionary<string, MosaModule>();
+			Modules = new Dictionary<string, MosaModule?>();
 		}
 
-		public void AddModule(MosaModule module)
+		public void AddModule(MosaModule? module)
 		{
-			Modules.Add(module.Name, module);
+			Modules.Add(module?.Name, module);
 
 			//var desc = module.GetUnderlyingObject<UnitDesc<ModuleDef, object>>();
 		}
@@ -43,7 +43,7 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 			throw new CompilerException();
 		}
 
-		public void AddType(MosaType type)
+		public void AddType(MosaType? type)
 		{
 			typeLookup.Add(type.GetUnderlyingObject<UnitDesc<TypeDef, TypeSig>>().Token, type);
 		}
@@ -53,7 +53,7 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 			return typeLookup[token];
 		}
 
-		public void AddMethod(MosaMethod method)
+		public void AddMethod(MosaMethod? method)
 		{
 			methodLookup.Add(method.GetUnderlyingObject<UnitDesc<MethodDef, MethodSig>>().Token, method);
 		}
@@ -63,7 +63,7 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 			return methodLookup[token];
 		}
 
-		public void AddField(MosaField field)
+		public void AddField(MosaField? field)
 		{
 			fieldLookup.Add(field.GetUnderlyingObject<UnitDesc<FieldDef, FieldSig>>().Token, field);
 		}
@@ -73,7 +73,7 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 			return fieldLookup[token];
 		}
 
-		public void AddProperty(MosaProperty property)
+		public void AddProperty(MosaProperty? property)
 		{
 			propertyLookup.Add(property.GetUnderlyingObject<UnitDesc<PropertyDef, PropertySig>>().Token, property);
 		}

@@ -11,15 +11,15 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 			moduleLoader = loader;
 		}
 
-		public TypeSystem TypeSystem { get; private set; }
+		public TypeSystem? TypeSystem { get; private set; }
 
-		public ITypeSystemController Controller { get; private set; }
+		public ITypeSystemController? Controller { get; private set; }
 
-		public ClrMetadataCache Cache { get; private set; }
+		public ClrMetadataCache? Cache { get; private set; }
 
-		public ClrMetadataLoader Loader { get; private set; }
+		public ClrMetadataLoader? Loader { get; private set; }
 
-		public ClrMetadataResolver Resolver { get; private set; }
+		public ClrMetadataResolver? Resolver { get; private set; }
 
 		public void Initialize(TypeSystem system, ITypeSystemController controller)
 		{

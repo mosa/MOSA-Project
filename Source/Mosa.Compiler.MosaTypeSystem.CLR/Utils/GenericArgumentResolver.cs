@@ -88,7 +88,7 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Utils
 			return false;
 		}
 
-		private MethodSig ResolveGenericArgs(MethodSig sig)
+		private MethodSig? ResolveGenericArgs(MethodSig sig)
 		{
 			if (sig == null)
 				return null;

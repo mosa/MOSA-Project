@@ -44,9 +44,9 @@ namespace dnlib.DotNet
 		/// </summary>
 		/// <param name="number">Generic variable number</param>
 		/// <returns>A <see cref="TypeSig"/> or <c>null</c> if none was found</returns>
-		public TypeSig Resolve(uint number)
+		public TypeSig? Resolve(uint number)
 		{
-			TypeSig result = null;
+			TypeSig? result = null;
 			for (var i = argsStack.Count - 1; i >= 0; i--)
 			{
 				var args = argsStack[i];

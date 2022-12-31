@@ -21,7 +21,7 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 		private readonly Queue<MosaUnit> resolveQueue = new();
 		private readonly Queue<MosaType> arrayResolveQueue = new();
 
-		public void EnqueueForResolve(MosaUnit unit)
+		public void EnqueueForResolve(MosaUnit? unit)
 		{
 			resolveQueue.Enqueue(unit);
 		}
