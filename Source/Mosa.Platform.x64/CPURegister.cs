@@ -7,15 +7,29 @@ namespace Mosa.Platform.x64
 	{
 		#region Translations
 
-		public static readonly PhysicalRegister R4 = RBP;
-		public static readonly PhysicalRegister R5 = RSP;
+		public static PhysicalRegister R4
+		{ get { return RBP; } }
 
-		public static readonly PhysicalRegister RAX = R0;
-		public static readonly PhysicalRegister RCX = R1;
-		public static readonly PhysicalRegister RDX = R2;
-		public static readonly PhysicalRegister RBX = R3;
-		public static readonly PhysicalRegister RSI = R6;
-		public static readonly PhysicalRegister RDI = R7;
+		public static PhysicalRegister R5
+		{ get { return RSP; } }
+
+		public static PhysicalRegister RAX
+		{ get { return R0; } }
+
+		public static PhysicalRegister RCX
+		{ get { return R1; } }
+
+		public static PhysicalRegister RDX
+		{ get { return R2; } }
+
+		public static PhysicalRegister RBX
+		{ get { return R3; } }
+
+		public static PhysicalRegister RSI
+		{ get { return R6; } }
+
+		public static PhysicalRegister RDI
+		{ get { return R7; } }
 
 		#endregion Translations
 
@@ -24,12 +38,12 @@ namespace Mosa.Platform.x64
 		/// <summary>
 		/// Represents the R0 register.
 		/// </summary>
-		public static readonly PhysicalRegister R0 = new PhysicalRegister(0, 0, "R1", true, false);
+		public static readonly PhysicalRegister R0 = new PhysicalRegister(0, 0, "R0", true, false);
 
 		/// <summary>
 		/// Represents the R1 register.
 		/// </summary>
-		public static readonly PhysicalRegister R1 = new PhysicalRegister(1, 1, "R2", true, false);
+		public static readonly PhysicalRegister R1 = new PhysicalRegister(1, 1, "R1", true, false);
 
 		/// <summary>
 		/// Represents the R2 register.
@@ -64,42 +78,42 @@ namespace Mosa.Platform.x64
 		/// <summary>
 		/// Represents the R8 register.
 		/// </summary>
-		public static readonly PhysicalRegister R8 = new PhysicalRegister(16, 8, "R8", true, false);
+		public static readonly PhysicalRegister R8 = new PhysicalRegister(8, 8, "R8", true, false);
 
 		/// <summary>
 		/// Represents the R9 register.
 		/// </summary>
-		public static readonly PhysicalRegister R9 = new PhysicalRegister(17, 9, "R9", true, false);
+		public static readonly PhysicalRegister R9 = new PhysicalRegister(9, 9, "R9", true, false);
 
 		/// <summary>
 		/// Represents the R10 register.
 		/// </summary>
-		public static readonly PhysicalRegister R10 = new PhysicalRegister(18, 10, "R10", true, false);
+		public static readonly PhysicalRegister R10 = new PhysicalRegister(10, 10, "R10", true, false);
 
 		/// <summary>
 		/// Represents the R11 register.
 		/// </summary>
-		public static readonly PhysicalRegister R11 = new PhysicalRegister(19, 11, "R11", true, false);
+		public static readonly PhysicalRegister R11 = new PhysicalRegister(11, 11, "R11", true, false);
 
 		/// <summary>
 		/// Represents the R12 register.
 		/// </summary>
-		public static readonly PhysicalRegister R12 = new PhysicalRegister(20, 12, "R12", true, false);
+		public static readonly PhysicalRegister R12 = new PhysicalRegister(12, 12, "R12", true, false);
 
 		/// <summary>
 		/// Represents the R13 register.
 		/// </summary>
-		public static readonly PhysicalRegister R13 = new PhysicalRegister(21, 13, "R13", true, false);
+		public static readonly PhysicalRegister R13 = new PhysicalRegister(13, 13, "R13", true, false);
 
 		/// <summary>
 		/// Represents the R14 register.
 		/// </summary>
-		public static readonly PhysicalRegister R14 = new PhysicalRegister(22, 14, "R14", true, false);
+		public static readonly PhysicalRegister R14 = new PhysicalRegister(14, 14, "R14", true, false);
 
 		/// <summary>
 		/// Represents the R15 register.
 		/// </summary>
-		public static readonly PhysicalRegister R15 = new PhysicalRegister(23, 15, "R15", true, false);
+		public static readonly PhysicalRegister R15 = new PhysicalRegister(15, 15, "R15", true, false);
 
 		#endregion Physical Registers
 
@@ -108,42 +122,42 @@ namespace Mosa.Platform.x64
 		/// <summary>
 		/// Represents SSE2 register XMM0.
 		/// </summary>
-		public static readonly PhysicalRegister XMM0 = new PhysicalRegister(8, 0, "XMM#0", false, true);
+		public static readonly PhysicalRegister XMM0 = new PhysicalRegister(16, 0, "XMM#0", false, true);
 
 		/// <summary>
 		/// Represents SSE2 register XMM1.
 		/// </summary>
-		public static readonly PhysicalRegister XMM1 = new PhysicalRegister(9, 1, "XMM#1", false, true);
+		public static readonly PhysicalRegister XMM1 = new PhysicalRegister(17, 1, "XMM#1", false, true);
 
 		/// <summary>
 		/// Represents SSE2 register XMM2.
 		/// </summary>
-		public static readonly PhysicalRegister XMM2 = new PhysicalRegister(10, 2, "XMM#2", false, true);
+		public static readonly PhysicalRegister XMM2 = new PhysicalRegister(18, 2, "XMM#2", false, true);
 
 		/// <summary>
 		/// Represents SSE2 register XMM3.
 		/// </summary>
-		public static readonly PhysicalRegister XMM3 = new PhysicalRegister(11, 3, "XMM#3", false, true);
+		public static readonly PhysicalRegister XMM3 = new PhysicalRegister(19, 3, "XMM#3", false, true);
 
 		/// <summary>
 		/// Represents SSE2 register XMM4.
 		/// </summary>
-		public static readonly PhysicalRegister XMM4 = new PhysicalRegister(12, 4, "XMM#4", false, true);
+		public static readonly PhysicalRegister XMM4 = new PhysicalRegister(20, 4, "XMM#4", false, true);
 
 		/// <summary>
 		/// Represents SSE2 register XMM5.
 		/// </summary>
-		public static readonly PhysicalRegister XMM5 = new PhysicalRegister(13, 5, "XMM#5", false, true);
+		public static readonly PhysicalRegister XMM5 = new PhysicalRegister(21, 5, "XMM#5", false, true);
 
 		/// <summary>
 		/// Represents SSE2 register XMM6.
 		/// </summary>
-		public static readonly PhysicalRegister XMM6 = new PhysicalRegister(14, 6, "XMM#6", false, true);
+		public static readonly PhysicalRegister XMM6 = new PhysicalRegister(22, 6, "XMM#6", false, true);
 
 		/// <summary>
 		/// Represents SSE2 register XMM7.
 		/// </summary>
-		public static readonly PhysicalRegister XMM7 = new PhysicalRegister(15, 7, "XMM#7", false, true);
+		public static readonly PhysicalRegister XMM7 = new PhysicalRegister(23, 7, "XMM#7", false, true);
 
 		/// <summary>
 		/// Represents SSE2 register XMM7.

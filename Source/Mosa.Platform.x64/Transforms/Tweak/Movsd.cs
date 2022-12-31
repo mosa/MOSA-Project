@@ -1,4 +1,3 @@
-
 using System.Diagnostics;
 
 using Mosa.Platform.x64;
@@ -18,7 +17,7 @@ namespace Mosa.Platform.x64.Transforms.Tweak
 
 		public override bool Match(Context context, TransformContext transform)
 		{
-			return context.Result.Register == context.Operand1.Register;
+			return context.Operand1.IsCPURegister && context.Result.Register == context.Operand1.Register;
 		}
 
 		public override void Transform(Context context, TransformContext transform)
@@ -26,7 +25,7 @@ namespace Mosa.Platform.x64.Transforms.Tweak
 			Debug.Assert(context.Result.IsCPURegister);
 			Debug.Assert(context.Operand1.IsCPURegister);
 
-				context.Empty();
+			context.Empty();
 		}
 	}
 }

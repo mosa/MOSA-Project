@@ -1,4 +1,3 @@
-
 using System.Diagnostics;
 
 using Mosa.Platform.x64;

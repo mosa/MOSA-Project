@@ -12,13 +12,12 @@ namespace Mosa.Platform.x64.Transforms.Tweak
 	{
 		public static readonly List<BaseTransform> List = new List<BaseTransform>
 		{
+			new Blsr32(),
+			new Blsr64(),
 			new Cmp32(),
 			new Cmp64(),
-			new Blsr32(),
-			//new Popcnt32(),
-			//new Tzcnt32(),
-			//new Lzcnt32(),
-			new Blsr64(),
+			new CMov32(),
+			new CMov64(),
 			new Mov32(),
 			new Mov64(),
 			new MovLoad16(),
@@ -28,9 +27,17 @@ namespace Mosa.Platform.x64.Transforms.Tweak
 			new MovStore16(),
 			new MovStore8(),
 			new Movzx16To32(),
+			new Movzx16To64(),
 			new Movzx8To32(),
+			new Movzx8To64(),
 			new Nop(),
 			new Setcc(),
-		};
+			//new Popcnt32(),
+			//new Tzcnt32(),
+			//new Lzcnt32(),
+			//new Popcnt64(),
+			//new Tzcnt64(),
+			//new Lzcnt64(),
+			};
 	}
 }
