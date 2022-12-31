@@ -21,7 +21,7 @@ namespace Mosa.Platform.x64.Transforms.IR
 
 		public override void Transform(Context context, TransformContext transform)
 		{
-			transform.OrderOperands(context);
+			transform.OrderLoadStoreOperands(context);
 
 			context.SetInstruction(X64.MovsxLoad8, context.Result, context.Operand1, context.Operand2);
 		}

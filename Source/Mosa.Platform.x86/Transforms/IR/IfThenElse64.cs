@@ -29,7 +29,7 @@ namespace Mosa.Platform.x86.Transforms.IR
 			var v1 = transform.AllocateVirtualRegister32();
 
 			context.SetInstruction(X86.Or32, v1, op1L, op1H);
-			context.AppendInstruction(X86.Cmp32, null, v1, transform.ConstantZero32);
+			context.AppendInstruction(X86.Cmp32, null, v1, transform.Constant32_0);
 			context.AppendInstruction(X86.CMov32, ConditionCode.NotEqual, resultLow, resultLow, op2L);     // true
 			context.AppendInstruction(X86.CMov32, ConditionCode.NotEqual, resultHigh, resultHigh, op2H);   // true
 			context.AppendInstruction(X86.CMov32, ConditionCode.Equal, resultLow, resultLow, op3L);        // false

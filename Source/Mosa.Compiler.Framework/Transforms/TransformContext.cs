@@ -3,8 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
-using dnlib.DotNet.Emit;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
@@ -26,16 +24,13 @@ namespace Mosa.Compiler.Framework.Transforms
 
 		public TraceLog SpecialTraceLog { get; private set; }
 
-		public Operand ConstantZero32 { get; private set; }
+		public Operand Constant32_0 { get; private set; }
 
-		public Operand ConstantZero64 { get; private set; }
+		public Operand Constant64_0 { get; private set; }
 
-		public Operand ConstantZeroR4 { get; private set; }
+		public Operand ConstantR4_0 { get; private set; }
 
-		public Operand ConstantZeroR8 { get; private set; }
-
-		public Operand Constant32_0
-		{ get { return ConstantZero32; } }
+		public Operand ConstantR8_0 { get; private set; }
 
 		public Operand Constant32_1 { get; private set; }
 
@@ -137,10 +132,10 @@ namespace Mosa.Compiler.Framework.Transforms
 			R8 = TypeSystem.BuiltIn.R8;
 			O = TypeSystem.BuiltIn.Object;
 
-			ConstantZero32 = MethodCompiler.ConstantZero32;
-			ConstantZero64 = MethodCompiler.ConstantZero64;
-			ConstantZeroR4 = MethodCompiler.ConstantZeroR4;
-			ConstantZeroR8 = MethodCompiler.ConstantZeroR8;
+			ConstantR4_0 = MethodCompiler.ConstantZeroR4;
+			ConstantR8_0 = MethodCompiler.ConstantZeroR8;
+			Constant32_0 = MethodCompiler.ConstantZero32;
+			Constant64_0 = MethodCompiler.ConstantZero64;
 
 			Constant32_1 = CreateConstant32(1);
 			Constant32_2 = CreateConstant32(2);
@@ -247,57 +242,57 @@ namespace Mosa.Compiler.Framework.Transforms
 
 		public Operand CreateConstant(int value)
 		{
-			return value == 0 ? ConstantZero32 : Operand.CreateConstant(I4, value);
+			return value == 0 ? Constant32_0 : Operand.CreateConstant(I4, value);
 		}
 
 		public Operand CreateConstant32(int value)
 		{
-			return value == 0 ? ConstantZero32 : Operand.CreateConstant(I4, value);
+			return value == 0 ? Constant32_0 : Operand.CreateConstant(I4, value);
 		}
 
 		public Operand CreateConstant32(long value)
 		{
-			return (int)value == 0 ? ConstantZero32 : Operand.CreateConstant(I4, (int)value);
+			return (int)value == 0 ? Constant32_0 : Operand.CreateConstant(I4, (int)value);
 		}
 
 		public Operand CreateConstant(uint value)
 		{
-			return value == 0 ? ConstantZero32 : Operand.CreateConstant(I4, value);
+			return value == 0 ? Constant32_0 : Operand.CreateConstant(I4, value);
 		}
 
 		public Operand CreateConstant32(uint value)
 		{
-			return value == 0 ? ConstantZero32 : Operand.CreateConstant(I4, value);
+			return value == 0 ? Constant32_0 : Operand.CreateConstant(I4, value);
 		}
 
 		public Operand CreateConstant(long value)
 		{
-			return value == 0 ? ConstantZero64 : Operand.CreateConstant(I8, value);
+			return value == 0 ? Constant64_0 : Operand.CreateConstant(I8, value);
 		}
 
 		public Operand CreateConstant64(long value)
 		{
-			return value == 0 ? ConstantZero64 : Operand.CreateConstant(I8, value);
+			return value == 0 ? Constant64_0 : Operand.CreateConstant(I8, value);
 		}
 
 		public Operand CreateConstant(ulong value)
 		{
-			return value == 0 ? ConstantZero64 : Operand.CreateConstant(I8, value);
+			return value == 0 ? Constant64_0 : Operand.CreateConstant(I8, value);
 		}
 
 		public Operand CreateConstant64(ulong value)
 		{
-			return value == 0 ? ConstantZero64 : Operand.CreateConstant(I8, value);
+			return value == 0 ? Constant64_0 : Operand.CreateConstant(I8, value);
 		}
 
 		public Operand CreateConstant(float value)
 		{
-			return value == 0 ? ConstantZeroR4 : Operand.CreateConstant(R4, value);
+			return value == 0 ? ConstantR4_0 : Operand.CreateConstant(R4, value);
 		}
 
 		public Operand CreateConstant(double value)
 		{
-			return value == 0 ? ConstantZeroR4 : Operand.CreateConstant(R8, value);
+			return value == 0 ? ConstantR4_0 : Operand.CreateConstant(R8, value);
 		}
 
 		#endregion Constant Helper Methods
@@ -577,12 +572,12 @@ namespace Mosa.Compiler.Framework.Transforms
 			context.ConditionCode = context.ConditionCode.GetReverse();
 		}
 
-		public void OrderOperands(Context context)  // FUTURE: Rename
+		public void OrderLoadStoreOperands(Context context)  // FUTURE: Rename
 		{
 			if (context.Operand1.IsResolvedConstant && context.Operand2.IsResolvedConstant)
 			{
 				context.Operand1 = CreateConstant(context.Operand1.ConstantUnsigned64 + context.Operand2.ConstantUnsigned64);
-				context.Operand2 = ConstantZero32;
+				context.Operand2 = Constant32_0;
 			}
 
 			if (context.Operand1.IsConstant && !context.Operand2.IsConstant)
@@ -603,7 +598,7 @@ namespace Mosa.Compiler.Framework.Transforms
 
 			var v1 = AllocateVirtualRegisterR4();
 
-			context.InsertBefore().SetInstruction(loadInstruction, v1, label, ConstantZero32);
+			context.InsertBefore().SetInstruction(loadInstruction, v1, label, Constant32_0);
 
 			return v1;
 		}
@@ -614,23 +609,23 @@ namespace Mosa.Compiler.Framework.Transforms
 
 			var v1 = AllocateVirtualRegisterR8();
 
-			context.InsertBefore().SetInstruction(loadInstruction, v1, label, ConstantZero32);
+			context.InsertBefore().SetInstruction(loadInstruction, v1, label, Constant32_0);
 
 			return v1;
 		}
 
-		public Operand MoveConstantToFloatRegister(Context context, Operand operand, TransformContext transform, BaseInstruction instructionR4, BaseInstruction instructionR8)
+		public Operand MoveConstantToFloatRegister(Context context, Operand operand, BaseInstruction instructionR4, BaseInstruction instructionR8)
 		{
 			if (!operand.IsConstant)
 				return operand;
 
 			var label = CreateFloatingPointLabel(operand);
 
-			var v1 = operand.IsR4 ? transform.AllocateVirtualRegisterR4() : transform.AllocateVirtualRegisterR8();
+			var v1 = operand.IsR4 ? AllocateVirtualRegisterR4() : AllocateVirtualRegisterR8();
 
 			var instruction = operand.IsR4 ? instructionR4 : instructionR8;
 
-			context.InsertBefore().SetInstruction(instruction, v1, label, transform.ConstantZero32);
+			context.InsertBefore().SetInstruction(instruction, v1, label, Constant32_0);
 
 			return v1;
 		}

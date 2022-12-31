@@ -28,7 +28,7 @@ namespace Mosa.Platform.x64.Transforms.IR
 
 			var v1 = transform.AllocateVirtualRegister32();
 
-			context.SetInstruction(X64.Bt32, v1, operand3, transform.ConstantZero64);
+			context.SetInstruction(X64.Bt32, v1, operand3, transform.Constant64_0);
 			context.AppendInstruction(X64.Sbb32, result, operand1, operand2);
 		}
 	}

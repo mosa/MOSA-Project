@@ -18,7 +18,7 @@ namespace Mosa.Platform.x64
 
 			var instruction = operand.IsR4 ? (BaseInstruction)X64.MovssLoad : X64.MovsdLoad;
 
-			context.InsertBefore().SetInstruction(instruction, v1, label, transform.ConstantZero32);
+			context.InsertBefore().SetInstruction(instruction, v1, label, transform.Constant32_0);
 
 			return v1;
 		}

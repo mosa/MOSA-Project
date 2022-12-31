@@ -25,7 +25,7 @@ namespace Mosa.Platform.ARMv8A32.Transforms.IR
 			Debug.Assert(!context.Result.IsR4);
 			Debug.Assert(!context.Result.IsR8);
 
-			transform.OrderOperands(context);
+			transform.OrderLoadStoreOperands(context);
 
 			ARMv8A32TransformHelper.TransformLoad(transform, context, ARMv8A32.LdrS16, context.Result, transform.StackFrame, context.Operand1);
 		}

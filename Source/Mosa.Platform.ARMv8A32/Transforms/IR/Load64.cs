@@ -33,9 +33,9 @@ namespace Mosa.Platform.ARMv8A32.Transforms.IR
 			var v2 = transform.AllocateVirtualRegister32();
 
 			context.SetInstruction(ARMv8A32.Add, v1, address, offset);
-			context.AppendInstruction(ARMv8A32.Ldr32, resultLow, v1, transform.ConstantZero32);
+			context.AppendInstruction(ARMv8A32.Ldr32, resultLow, v1, transform.Constant32_0);
 			context.AppendInstruction(ARMv8A32.Add, v2, v1, transform.Constant32_4);
-			context.AppendInstruction(ARMv8A32.Ldr32, resultHigh, v2, transform.ConstantZero32);
+			context.AppendInstruction(ARMv8A32.Ldr32, resultHigh, v2, transform.Constant32_0);
 		}
 	}
 }

@@ -47,7 +47,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.LowerTo32
 			context.AppendInstruction(IRInstruction.Or32, v5, v1, v4);
 
 			//context.AppendInstruction(IRInstruction.And32, result, v5, transform.CreateConstant((uint)1));
-			context.AppendInstruction(IRInstruction.IfThenElse32, result, v5, transform.CreateConstant((uint)1), transform.ConstantZero32);
+			context.AppendInstruction(IRInstruction.IfThenElse32, result, v5, transform.CreateConstant((uint)1), transform.Constant32_0);
 		}
 	}
 }

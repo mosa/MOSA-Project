@@ -23,7 +23,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.LowerTo32
 
 			context.SetInstruction(IRInstruction.GetLow32, resultLow, operand1);
 			context.AppendInstruction(IRInstruction.ZeroExtend16x32, v1, resultLow);
-			context.AppendInstruction(IRInstruction.To64, result, operand1, transform.ConstantZero32);
+			context.AppendInstruction(IRInstruction.To64, result, operand1, transform.Constant32_0);
 		}
 	}
 }

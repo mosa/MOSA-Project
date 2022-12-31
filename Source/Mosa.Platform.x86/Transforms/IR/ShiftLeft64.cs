@@ -39,14 +39,14 @@ namespace Mosa.Platform.x86.Transforms.IR
 				context.AppendInstruction(X86.Mov32, v2, count);
 				context.AppendInstruction(X86.Test32, null, v2, transform.Constant32_32);
 				context.AppendInstruction(X86.CMov32, ConditionCode.NotEqual, resultHigh, resultHigh, v1);
-				context.AppendInstruction(X86.Mov32, resultLow, transform.ConstantZero32);
+				context.AppendInstruction(X86.Mov32, resultLow, transform.Constant32_0);
 				context.AppendInstruction(X86.CMov32, ConditionCode.Equal, resultLow, resultLow, v1);
 			}
 			else
 			{
 				context.AppendInstruction(X86.Test32, null, count, transform.Constant32_32);
 				context.AppendInstruction(X86.CMov32, ConditionCode.NotEqual, resultHigh, resultHigh, v1);
-				context.AppendInstruction(X86.Mov32, resultLow, transform.ConstantZero32);
+				context.AppendInstruction(X86.Mov32, resultLow, transform.Constant32_0);
 				context.AppendInstruction(X86.CMov32, ConditionCode.Equal, resultLow, resultLow, v1);
 			}
 		}

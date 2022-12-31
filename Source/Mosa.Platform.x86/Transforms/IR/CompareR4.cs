@@ -39,7 +39,7 @@ namespace Mosa.Platform.x86.Transforms.IR
 			{
 				context.SetInstruction(instruction, null, operand1, operand2);
 				context.AppendInstruction(X86.Setcc, ConditionCode.NoParity, result);
-				context.AppendInstruction(X86.Mov32, v1, transform.ConstantZero32);
+				context.AppendInstruction(X86.Mov32, v1, transform.Constant32_0);
 				context.AppendInstruction(X86.CMov32, ConditionCode.NotEqual, result, result, v1);
 				context.AppendInstruction(X86.Movzx8To32, result, result);
 				return;

@@ -42,8 +42,8 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.LowerTo32
 			context.AppendInstruction(IRInstruction.Xor32, v1, op0Low, op1Low);
 			context.AppendInstruction(IRInstruction.Xor32, v2, op0High, op1High);
 			context.AppendInstruction(IRInstruction.Or32, v3, v1, v2);
-			context.AppendInstruction(IRInstruction.Compare32x32, condition, resultLow, v3, transform.ConstantZero32);
-			context.AppendInstruction(IRInstruction.Move32, condition, resultHigh, transform.ConstantZero64);
+			context.AppendInstruction(IRInstruction.Compare32x32, condition, resultLow, v3, transform.Constant32_0);
+			context.AppendInstruction(IRInstruction.Move32, condition, resultHigh, transform.Constant64_0);
 		}
 	}
 }

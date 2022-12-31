@@ -66,12 +66,12 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.LowerTo32
 			newBlocks[2].AppendInstruction(IRInstruction.Jmp, newBlocks[4].Block);
 
 			// Failed
-			newBlocks[3].AppendInstruction(IRInstruction.Move32, tempLow, transform.ConstantZero32);
+			newBlocks[3].AppendInstruction(IRInstruction.Move32, tempLow, transform.Constant32_0);
 			newBlocks[3].AppendInstruction(IRInstruction.Jmp, newBlocks[4].Block);
 
 			// Exit
 			newBlocks[4].AppendInstruction(IRInstruction.Move32, resultLow, tempLow);
-			newBlocks[4].AppendInstruction(IRInstruction.Move32, resultHigh, transform.ConstantZero32);
+			newBlocks[4].AppendInstruction(IRInstruction.Move32, resultHigh, transform.Constant32_0);
 			newBlocks[4].AppendInstruction(IRInstruction.Jmp, nextBlock.Block);
 		}
 	}

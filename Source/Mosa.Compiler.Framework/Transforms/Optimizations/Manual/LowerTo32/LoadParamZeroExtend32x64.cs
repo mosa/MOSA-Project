@@ -23,7 +23,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.LowerTo32
 			transform.SplitLongOperand(operand1, out Operand op0Low, out Operand _);
 
 			context.SetInstruction(IRInstruction.LoadParam32, resultLow, op0Low);
-			context.AppendInstruction(IRInstruction.To64, result, resultLow, transform.ConstantZero32);
+			context.AppendInstruction(IRInstruction.To64, result, resultLow, transform.Constant32_0);
 		}
 	}
 }

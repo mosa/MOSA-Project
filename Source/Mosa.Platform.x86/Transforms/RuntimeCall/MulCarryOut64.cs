@@ -39,7 +39,7 @@ namespace Mosa.Platform.x86.Transforms.RuntimeCall
 
 			context.SetInstruction(IRInstruction.AddressOf, v2, v1);
 			context.AppendInstruction(IRInstruction.CallStatic, result, symbol, operand1, operand2, v2);
-			context.AppendInstruction(IRInstruction.Load32, result2, v2, transform.ConstantZero32);
+			context.AppendInstruction(IRInstruction.Load32, result2, v2, transform.Constant32_0);
 
 			transform.MethodCompiler.MethodScanner.MethodInvoked(method, transform.MethodCompiler.Method);
 		}

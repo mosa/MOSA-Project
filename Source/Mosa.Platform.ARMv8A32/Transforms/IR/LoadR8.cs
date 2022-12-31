@@ -21,7 +21,7 @@ namespace Mosa.Platform.ARMv8A32.Transforms.IR
 
 		public override void Transform(Context context, TransformContext transform)
 		{
-			transform.OrderOperands(context);
+			transform.OrderLoadStoreOperands(context);
 
 			ARMv8A32TransformHelper.TransformLoad(transform, context, ARMv8A32.Ldf, context.Result, context.Operand1, context.Operand2);
 		}

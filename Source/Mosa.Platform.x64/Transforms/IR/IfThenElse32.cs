@@ -26,7 +26,7 @@ namespace Mosa.Platform.x64.Transforms.IR
 			var operand2 = context.Operand2;
 			var operand3 = context.Operand3;
 
-			context.SetInstruction(X64.Cmp32, null, operand1, transform.ConstantZero32);
+			context.SetInstruction(X64.Cmp32, null, operand1, transform.Constant32_0);
 			context.AppendInstruction(X64.CMov32, ConditionCode.NotEqual, result, result, operand2);    // true
 			context.AppendInstruction(X64.CMov32, ConditionCode.Equal, result, result, operand3);       // false
 		}

@@ -71,7 +71,7 @@ namespace Mosa.Platform.x86.Transforms.IR
 			newBlocks[2].AppendInstruction(X86.Jmp, nextBlock.Block);
 
 			// Failed
-			newBlocks[3].AppendInstruction(X86.Mov32, result, transform.ConstantZero32);
+			newBlocks[3].AppendInstruction(X86.Mov32, result, transform.Constant32_0);
 			newBlocks[3].AppendInstruction(X86.Jmp, nextBlock.Block);
 		}
 	}

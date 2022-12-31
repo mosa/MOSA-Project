@@ -30,26 +30,26 @@ namespace Mosa.Platform.x86.Transforms.IR
 			{
 				var v1 = transform.AllocateVirtualRegister(result.Type);
 
-				context.SetInstruction(X86.Cmp32, null, operand1, transform.ConstantZero32);
+				context.SetInstruction(X86.Cmp32, null, operand1, transform.Constant32_0);
 				context.AppendInstruction(X86.Mov32, result, operand2);                                     // true
 				context.AppendInstruction(X86.Mov32, v1, operand3);                                         // true
 				context.AppendInstruction(X86.CMov32, ConditionCode.Equal, result, result, v1);             // false
 			}
 			else if (operand2.IsConstant && !operand3.IsConstant)
 			{
-				context.SetInstruction(X86.Cmp32, null, operand1, transform.ConstantZero32);
+				context.SetInstruction(X86.Cmp32, null, operand1, transform.Constant32_0);
 				context.AppendInstruction(X86.Mov32, result, operand2);                                 // true
 				context.AppendInstruction(X86.CMov32, ConditionCode.Equal, result, result, operand3);       // false
 			}
 			else if (!operand2.IsConstant && operand3.IsConstant)
 			{
-				context.SetInstruction(X86.Cmp32, null, operand1, transform.ConstantZero32);
+				context.SetInstruction(X86.Cmp32, null, operand1, transform.Constant32_0);
 				context.AppendInstruction(X86.Mov32, result, operand3);                                     // true
 				context.AppendInstruction(X86.CMov32, ConditionCode.NotEqual, result, result, operand2);    // false
 			}
 			else if (!operand2.IsConstant && !operand3.IsConstant)
 			{
-				context.SetInstruction(X86.Cmp32, null, operand1, transform.ConstantZero32);
+				context.SetInstruction(X86.Cmp32, null, operand1, transform.Constant32_0);
 				context.AppendInstruction(X86.Mov32, result, operand2);                                     // true
 				context.AppendInstruction(X86.CMov32, ConditionCode.Equal, result, result, operand3);       // false
 			}

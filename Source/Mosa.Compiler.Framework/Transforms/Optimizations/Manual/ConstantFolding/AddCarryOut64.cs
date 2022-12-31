@@ -38,7 +38,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.ConstantFoldin
 			var carry = IntegerTwiddling.IsAddOverflow(t1, t2);
 
 			context.SetInstruction(IRInstruction.Move64, result, e1);
-			context.AppendInstruction(IRInstruction.Move64, result2, carry ? transform.CreateConstant(1) : transform.ConstantZero64);
+			context.AppendInstruction(IRInstruction.Move64, result2, carry ? transform.CreateConstant(1) : transform.Constant64_0);
 		}
 	}
 }

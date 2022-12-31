@@ -42,7 +42,7 @@ namespace Mosa.Platform.x86.Transforms.IR
 				{
 					// shift is exactly 32 bits
 					context.SetInstruction(X86.Mov32, resultLow, op1H);
-					context.AppendInstruction(X86.Mov32, resultHigh, transform.ConstantZero32);
+					context.AppendInstruction(X86.Mov32, resultHigh, transform.Constant32_0);
 					return;
 				}
 				else if (shift > 32)
@@ -50,7 +50,7 @@ namespace Mosa.Platform.x86.Transforms.IR
 					// shift is greater than 32 bits
 					var newshift = transform.CreateConstant32(shift - 32);
 					context.SetInstruction(X86.Shr32, resultLow, op1H, newshift);
-					context.AppendInstruction(X86.Mov32, resultHigh, transform.ConstantZero32);
+					context.AppendInstruction(X86.Mov32, resultHigh, transform.Constant32_0);
 					return;
 				}
 			}
@@ -69,7 +69,7 @@ namespace Mosa.Platform.x86.Transforms.IR
 			context.AppendInstruction(X86.Jmp, newBlocks[0].Block);
 
 			newBlocks[0].AppendInstruction(X86.Mov32, resultLow, resultHigh);
-			newBlocks[0].AppendInstruction(X86.Mov32, resultHigh, transform.ConstantZero32);
+			newBlocks[0].AppendInstruction(X86.Mov32, resultHigh, transform.Constant32_0);
 			newBlocks[0].AppendInstruction(X86.Jmp, nextBlock.Block);
 		}
 	}

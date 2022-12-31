@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Transforms
 {
 	[Flags]
 	public enum TransformType
-	{ Transform, Auto, Manual, Optimization  }
+	{ Transform, Auto, Manual, Optimization }
 
 	public abstract class BaseTransform
 	{
@@ -1033,6 +1033,6 @@ namespace Mosa.Compiler.Framework.Transforms
 		{
 			return BaseCodeTransformationStage.IsPhiInstruction(instruction);
 		}
-		
+
 	}
 }

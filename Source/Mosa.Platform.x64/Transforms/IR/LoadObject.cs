@@ -25,7 +25,7 @@ namespace Mosa.Platform.x64.Transforms.IR
 			Debug.Assert(!context.Result.IsR4);
 			Debug.Assert(!context.Result.IsR8);
 
-			transform.OrderOperands(context);
+			transform.OrderLoadStoreOperands(context);
 
 			context.SetInstruction(X64.MovLoad64, context.Result, context.Operand1, context.Operand2);
 		}

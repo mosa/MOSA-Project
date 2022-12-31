@@ -71,7 +71,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.LowerTo32
 			newBlocks[3].AppendInstruction(IRInstruction.Jmp, newBlocks[4].Block);
 
 			// Exit
-			newBlocks[4].AppendInstruction(IRInstruction.Phi32, result, transform.CreateConstant((uint)1), transform.ConstantZero32);
+			newBlocks[4].AppendInstruction(IRInstruction.Phi32, result, transform.CreateConstant((uint)1), transform.Constant32_0);
 			newBlocks[4].PhiBlocks = new List<BasicBlock>(2) { newBlocks[2].Block, newBlocks[3].Block };
 			newBlocks[4].AppendInstruction(IRInstruction.Jmp, nextBlock.Block);
 		}

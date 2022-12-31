@@ -33,7 +33,7 @@ namespace Mosa.Platform.ARMv8A32.Transforms.IR
 
 			context.SetInstruction(ARMv8A32.Cmp, condition, null, operand1, operand2);
 			context.AppendInstruction(ARMv8A32.Mov, condition, result, transform.Constant32_1);
-			context.AppendInstruction(ARMv8A32.Mov, condition.GetOpposite(), result, transform.ConstantZero32);
+			context.AppendInstruction(ARMv8A32.Mov, condition.GetOpposite(), result, transform.Constant32_0);
 		}
 	}
 }
