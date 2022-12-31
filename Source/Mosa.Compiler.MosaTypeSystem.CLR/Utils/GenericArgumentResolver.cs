@@ -9,7 +9,7 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Utils
 	/// </summary>
 	internal class GenericArgumentResolver
 	{
-		private readonly GenericArguments genericArguments;
+		private readonly GenericArguments? genericArguments;
 		private RecursionCounter recursionCounter;
 
 		/// <summary>
@@ -25,18 +25,18 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Utils
 		/// Pushes the type generic arguments into resolver stack.
 		/// </summary>
 		/// <param name="genericArgs">The generic arguments.</param>
-		public void PushTypeGenericArguments(IList<TypeSig> genericArgs)
+		public void PushTypeGenericArguments(IList<TypeSig?> genericArgs)
 		{
-			genericArguments.PushTypeArgs(genericArgs);
+			genericArguments?.PushTypeArgs(genericArgs);
 		}
 
 		/// <summary>
 		/// Pushes the method generic arguments into resolver stack.
 		/// </summary>
 		/// <param name="genericArgs">The generic arguments.</param>
-		public void PushMethodGenericArguments(IList<TypeSig> genericArgs)
+		public void PushMethodGenericArguments(IList<TypeSig?> genericArgs)
 		{
-			genericArguments.PushMethodArgs(genericArgs);
+			genericArguments?.PushMethodArgs(genericArgs);
 		}
 
 		/// <summary>
@@ -44,7 +44,7 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Utils
 		/// </summary>
 		public void PopTypeGenericArguments()
 		{
-			genericArguments.PopTypeArgs();
+			genericArguments?.PopTypeArgs();
 		}
 
 		/// <summary>
@@ -52,7 +52,7 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Utils
 		/// </summary>
 		public void PopMethodGenericArguments()
 		{
-			genericArguments.PopMethodArgs();
+			genericArguments?.PopMethodArgs();
 		}
 
 		/// <summary>
@@ -60,7 +60,7 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Utils
 		/// </summary>
 		/// <param name="typeSig">The type signature.</param>
 		/// <returns>Resolved type signature.</returns>
-		public TypeSig Resolve(TypeSig typeSig)
+		public TypeSig? Resolve(TypeSig? typeSig)
 		{
 			return ResolveGenericArgs(typeSig);
 		}
@@ -70,12 +70,12 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Utils
 		/// </summary>
 		/// <param name="methodSig">The method signature.</param>
 		/// <returns>Resolved method signature.</returns>
-		public MethodSig Resolve(MethodSig methodSig)
+		public MethodSig? Resolve(MethodSig methodSig)
 		{
 			return ResolveGenericArgs(methodSig);
 		}
 
-		private bool ReplaceGenericArg(ref TypeSig typeSig)
+		private bool ReplaceGenericArg(ref TypeSig? typeSig)
 		{
 			if (genericArguments == null)
 				return false;
@@ -88,7 +88,7 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Utils
 			return false;
 		}
 
-		private MethodSig? ResolveGenericArgs(MethodSig sig)
+		private MethodSig? ResolveGenericArgs(MethodSig? sig)
 		{
 			if (sig == null)
 				return null;
@@ -120,7 +120,7 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Utils
 			return sig;
 		}
 
-		private TypeSig ResolveGenericArgs(TypeSig typeSig)
+		private TypeSig? ResolveGenericArgs(TypeSig? typeSig)
 		{
 			if (!recursionCounter.Increment())
 				return null;
@@ -131,8 +131,8 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Utils
 				return typeSig;
 			}
 
-			TypeSig result;
-			switch (typeSig.ElementType)
+			TypeSig? result;
+			switch (typeSig?.ElementType)
 			{
 				case ElementType.Ptr: result = new PtrSig(ResolveGenericArgs(typeSig.Next)); break;
 				case ElementType.ByRef: result = new ByRefSig(ResolveGenericArgs(typeSig.Next)); break;
@@ -147,7 +147,7 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Utils
 				case ElementType.FnPtr:
 					var fnPtrSig = typeSig as FnPtrSig;
 
-					if (fnPtrSig.Signature is null)
+					if (fnPtrSig?.Signature is null)
 						return null;
 
 					result = new FnPtrSig(fnPtrSig.Signature);
@@ -161,7 +161,7 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Utils
 
 				case ElementType.GenericInst:
 					var gis = (GenericInstSig)typeSig;
-					var genArgs = new List<TypeSig>(gis.GenericArguments.Count);
+					var genArgs = new List<TypeSig?>(gis.GenericArguments.Count);
 					foreach (var ga in gis.GenericArguments)
 					{
 						genArgs.Add(ResolveGenericArgs(ga));

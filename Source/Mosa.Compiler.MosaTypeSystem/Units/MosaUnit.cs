@@ -7,7 +7,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 {
 	public abstract class MosaUnit
 	{
-		public object UnderlyingObject { get; private set; }
+		public object? UnderlyingObject { get; private set; }
 
 		public uint ID { get; internal set; }
 
@@ -40,9 +40,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return result;
 		}
 
-		public T GetUnderlyingObject<T>()
+		public T? GetUnderlyingObject<T>()
 		{
-			return (T)UnderlyingObject;
+			return (T?)UnderlyingObject;
 		}
 
 		public override string ToString()
@@ -50,7 +50,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return FullName;
 		}
 
-		public MosaCustomAttribute FindCustomAttribute(string fullName)
+		public MosaCustomAttribute? FindCustomAttribute(string fullName)
 		{
 			foreach (var attribute in customAttributes)
 			{
@@ -65,20 +65,20 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public abstract class MutatorBase : IDisposable
 		{
-			private readonly MosaUnit unit;
+			private readonly MosaUnit? unit;
 
-			internal MutatorBase(MosaUnit unit)
+			internal MutatorBase(MosaUnit? unit)
 			{
 				this.unit = unit;
 			}
 
-			public object UnderlyingObject { set { unit.UnderlyingObject = value; } }
+			public object? UnderlyingObject { set { unit.UnderlyingObject = value; } }
 
 			public string Name { set { unit.Name = value; } }
 
 			public bool IsCompilerGenerated { set { unit.IsCompilerGenerated = value; } }
 
-			public IList<MosaCustomAttribute> CustomAttributes { get { return unit.customAttributes; } }
+			public IList<MosaCustomAttribute>? CustomAttributes { get { return unit?.customAttributes; } }
 
 			public abstract void Dispose();
 		}

@@ -8,13 +8,13 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Utils
 	[DebuggerDisplay("[{Module.Name}] {Token.Table} {Token.Rid}")]
 	public readonly struct ScopedToken : IEquatable<ScopedToken>
 	{
-		public ScopedToken(ModuleDef module, MDToken token)
+		public ScopedToken(ModuleDef? module, MDToken token)
 		{
 			Module = module;
 			Token = token;
 		}
 
-		public ModuleDef Module { get; }
+		public ModuleDef? Module { get; }
 
 		public MDToken Token { get; }
 
@@ -35,7 +35,7 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Utils
 
 		public override string ToString()
 		{
-			return $"[{Module.Name}] 0x{Token:x8}";
+			return $"[{Module?.Name}] 0x{Token:x8}";
 		}
 	}
 }

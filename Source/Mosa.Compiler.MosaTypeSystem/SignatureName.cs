@@ -17,12 +17,12 @@ namespace Mosa.Compiler.MosaTypeSystem
 				{
 					if (i != 0)
 						result.Append(", ");
-					result.Append(sig.Parameters[i].ParameterType.ShortName);
+					result.Append(sig.Parameters[i]?.ParameterType?.ShortName);
 				}
 				result.Append(")");
 
 				result.Append(":");
-				result.Append(sig.ReturnType.ShortName);
+				result.Append(sig.ReturnType?.ShortName);
 
 				return result.ToString();
 			}
@@ -34,48 +34,48 @@ namespace Mosa.Compiler.MosaTypeSystem
 				{
 					if (i != 0)
 						result.Append(", ");
-					result.Append(sig.Parameters[i].ParameterType.FullName);
+					result.Append(sig.Parameters[i]?.ParameterType?.FullName);
 				}
 				result.Append(")");
 
 				result.Append(":");
-				result.Append(sig.ReturnType.FullName);
+				result.Append(sig.ReturnType?.FullName);
 
 				return result.ToString();
 			}
 		}
 
-		public static void UpdateType(MosaType type)
+		public static void UpdateType(MosaType? type)
 		{
 			var result = new StringBuilder();
 
-			if (type.GenericArguments?.Count > 0)
+			if (type?.GenericArguments?.Count > 0)
 			{
 				result.Append("<");
-				for (int i = 0; i < type.GenericArguments.Count; i++)
+				for (var i = 0; i < type.GenericArguments.Count; i++)
 				{
 					if (i != 0)
 						result.Append(", ");
-					result.Append(type.GenericArguments[i].FullName);
+					result.Append(type.GenericArguments[i]?.FullName);
 				}
 				result.Append(">");
 			}
 
-			switch (type.TypeCode)
+			switch (type?.TypeCode)
 			{
 				case MosaTypeCode.UnmanagedPointer:
-					result.Append(type.ElementType.Signature);
+					result.Append(type.ElementType?.Signature);
 					result.Append("*");
 					break;
 
 				case MosaTypeCode.ManagedPointer:
-					result.Append(type.ElementType.Signature);
+					result.Append(type.ElementType?.Signature);
 					result.Append("&");
 					break;
 
 				case MosaTypeCode.SZArray:
 				case MosaTypeCode.Array:
-					result.Append(type.ElementType.Signature);
+					result.Append(type.ElementType?.Signature);
 					result.Append(type.ArrayInfo.ToString());
 					break;
 
@@ -87,7 +87,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 					break;
 			}
 
-			if (type.Modifier != null)
+			if (type?.Modifier != null)
 			{
 				result.Append(" mod(");
 				result.Append(type.Modifier.Name);

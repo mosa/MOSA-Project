@@ -437,7 +437,7 @@ namespace Mosa.Compiler.Framework
 			if (!MethodScheduler.IsCompilable(method))
 				return;
 
-			Debug.Assert(!method.HasOpenGenericParams);
+			Debug.Assert(method.HasOpenGenericParams == false);
 
 			CompileMethod(method, 0);
 		}
@@ -447,7 +447,7 @@ namespace Mosa.Compiler.Framework
 			if (method.IsCompilerGenerated)
 				return method;
 
-			Debug.Assert(!method.HasOpenGenericParams);
+			Debug.Assert(method.HasOpenGenericParams == false);
 
 			lock (method)
 			{

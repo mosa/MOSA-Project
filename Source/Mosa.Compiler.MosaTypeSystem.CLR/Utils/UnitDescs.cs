@@ -12,7 +12,7 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Utils
 
 		public TSig? Signature { get; private set; }
 
-		public UnitDesc(ModuleDef module, TDef? definition, TSig? signature)
+		public UnitDesc(ModuleDef? module, TDef? definition, TSig? signature)
 		{
 			if (definition != null)
 				Token = new ScopedToken(module, definition.MDToken);
@@ -20,7 +20,7 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Utils
 			Signature = signature;
 		}
 
-		public UnitDesc<TDef, TSig> Clone(TSig newSig)
+		public UnitDesc<TDef, TSig> Clone(TSig? newSig)
 		{
 			var result = (UnitDesc<TDef, TSig>)MemberwiseClone();
 			result.Signature = newSig;

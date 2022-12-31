@@ -8,6 +8,6 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		void LoadMetadata();
 
-		string LookupUserString(MosaModule module, uint id);
+		string? LookupUserString(MosaModule module, uint id);
 	}
 }

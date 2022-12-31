@@ -4,6 +4,7 @@
     <LangVersion>11.0</LangVersion>
     <OutputPath>..\..\bin\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Properties\AssemblyInfo.cs" />

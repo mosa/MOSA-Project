@@ -1,113 +1,113 @@
 <Window xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        MaxWidth="801" MaxHeight="582" MinWidth="801" MinHeight="582"
-        x:Class="Mosa.Tool.Launcher.MainWindow"
-        Title="Managed Operating System Alliance - Launcher"
-        WindowStartupLocation="CenterScreen"
-        CanResize="False" FontSize="12">
-    <Canvas>
-        <Panel Background="#0270bf" Width="801" Height="45">
-            <Label Name="TitleLbl" Foreground="white" FontSize="22" Margin="8, 0, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Center">MOSA Launcher v</Label>
-        </Panel>
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		MaxWidth="801" MaxHeight="582" MinWidth="801" MinHeight="582"
+		x:Class="Mosa.Tool.Launcher.MainWindow"
+		Title="Managed Operating System Alliance - Launcher"
+		WindowStartupLocation="CenterScreen"
+		CanResize="False" FontSize="12">
+	<Canvas>
+		<Panel Background="#0270bf" Width="801" Height="45">
+			<Label Name="TitleLbl" Foreground="white" FontSize="22" Margin="8, 0, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Center">MOSA Launcher v</Label>
+		</Panel>
 
-        <TabControl Name="Tabs" Margin="0,45" FontSize="12">
-            <TabItem Header="Compiler Options" FontSize="14">
-                <Grid>
-                    <Button Name="SrcBtn" Click="SrcBtn_OnClick" VerticalAlignment="Top" HorizontalContentAlignment="Center" Margin="0,5" Width="93">Source</Button>
-                    <Label Name="SrcLbl" Margin="100,8,0,0">No path specified</Label>
-                    <Button Name="DstBtn" Click="DstBtn_OnClick" VerticalAlignment="Top" Margin="0,40">Destination</Button>
-                    <Label Name="DstLbl" Margin="100,43,0,0">No path specified</Label>
+		<TabControl Name="Tabs" Margin="0,45" FontSize="12">
+			<TabItem Header="Compiler Options" FontSize="14">
+				<Grid>
+					<Button Name="SrcBtn" Click="SrcBtn_OnClick" VerticalAlignment="Top" HorizontalContentAlignment="Center" Margin="0,5" Width="93">Source</Button>
+					<Label Name="SrcLbl" Margin="100,8,0,0">No path specified</Label>
+					<Button Name="DstBtn" Click="DstBtn_OnClick" VerticalAlignment="Top" Margin="0,40">Destination</Button>
+					<Label Name="DstLbl" Margin="100,43,0,0">No path specified</Label>
 
-                    <Border Name="OptsBox" Margin="0,80" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" Padding="4" HorizontalAlignment="Left" VerticalAlignment="Top">
-                        <StackPanel>
-	                        <CheckBox FontSize="12" IsChecked="True" Name="BasicOpts">Basic Optimiaztions</CheckBox>
-	                        <CheckBox FontSize="12" IsChecked="True" Name="DevirtOpts">Devirtualization</CheckBox>
-	                        <CheckBox FontSize="12" IsChecked="True" Name="SsaOpts">Static Single Assignment (SSA)</CheckBox>
-	                        <CheckBox FontSize="12" IsChecked="True" Name="ValueNumOpts">Value Numbering</CheckBox>
-	                        <CheckBox FontSize="12" IsChecked="True" Name="SccpOpts">Sparse Conditional Constant Propagation</CheckBox>
-	                        <CheckBox FontSize="12" IsChecked="True" Name="LicmOpts">Loop Invariant Code Motion</CheckBox>
-	                        <CheckBox FontSize="12" IsChecked="True" Name="BtOpts">Bit Tracker</CheckBox>
-	                        <CheckBox FontSize="12" IsChecked="True" Name="LongExpOpts">Long Expansion</CheckBox>
-	                        <CheckBox FontSize="12" Name="InlineExplOpts">Explicit Inlining</CheckBox>
-	                        <CheckBox FontSize="12" IsChecked="True" Name="InlineOpts">Inlining</CheckBox>
-	                        <CheckBox FontSize="12" IsChecked="True" Name="TwoOptPass">Two Optimization Passes</CheckBox>
-	                        <CheckBox FontSize="12" IsChecked="True" Name="PlatOpts">Platform Optimizations</CheckBox>
-                        </StackPanel>
-                    </Border>
+					<Border Name="OptsBox" Margin="0,80" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" Padding="4" HorizontalAlignment="Left" VerticalAlignment="Top">
+						<StackPanel>
+							<CheckBox FontSize="12" IsChecked="True" Name="BasicOpts">Basic Optimiaztions</CheckBox>
+							<CheckBox FontSize="12" IsChecked="True" Name="DevirtOpts">Devirtualization</CheckBox>
+							<CheckBox FontSize="12" IsChecked="True" Name="SsaOpts">Static Single Assignment (SSA)</CheckBox>
+							<CheckBox FontSize="12" IsChecked="True" Name="ValueNumOpts">Value Numbering</CheckBox>
+							<CheckBox FontSize="12" IsChecked="True" Name="SccpOpts">Sparse Conditional Constant Propagation</CheckBox>
+							<CheckBox FontSize="12" IsChecked="True" Name="LicmOpts">Loop Invariant Code Motion</CheckBox>
+							<CheckBox FontSize="12" IsChecked="True" Name="BtOpts">Bit Tracker</CheckBox>
+							<CheckBox FontSize="12" IsChecked="True" Name="LongExpOpts">Long Expansion</CheckBox>
+							<CheckBox FontSize="12" Name="InlineExplOpts">Explicit Inlining</CheckBox>
+							<CheckBox FontSize="12" IsChecked="True" Name="InlineOpts">Inlining</CheckBox>
+							<CheckBox FontSize="12" IsChecked="True" Name="TwoOptPass">Two Optimization Passes</CheckBox>
+							<CheckBox FontSize="12" IsChecked="True" Name="PlatOpts">Platform Optimizations</CheckBox>
+						</StackPanel>
+					</Border>
 
-                    <Border Name="DbgBox" Margin="280,80" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" Padding="4" VerticalAlignment="Top" HorizontalAlignment="Left" Width="173">
-                        <StackPanel>
-                            <CheckBox FontSize="12" Name="MapFile">MAP File</CheckBox>
-                            <CheckBox FontSize="12" Name="AsmFile">ASM File</CheckBox>
-                            <CheckBox FontSize="12" Name="NasmFile">NASM File</CheckBox>
-                            <CheckBox FontSize="12" Name="DbgFile">Debug File</CheckBox>
-                            <CheckBox FontSize="12" Name="InlLstFile">Inlined List File</CheckBox>
-                            <CheckBox FontSize="12" Name="CompTimeFile">Compile Time File</CheckBox>
-                            <CheckBox FontSize="12" Name="HashFiles">Hash Files</CheckBox>
-                        </StackPanel>
-                    </Border>
+					<Border Name="DbgBox" Margin="280,80" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" Padding="4" VerticalAlignment="Top" HorizontalAlignment="Left" Width="173">
+						<StackPanel>
+							<CheckBox FontSize="12" Name="MapFile">MAP File</CheckBox>
+							<CheckBox FontSize="12" Name="AsmFile">ASM File</CheckBox>
+							<CheckBox FontSize="12" Name="NasmFile">NASM File</CheckBox>
+							<CheckBox FontSize="12" Name="DbgFile">Debug File</CheckBox>
+							<CheckBox FontSize="12" Name="InlLstFile">Inlined List File</CheckBox>
+							<CheckBox FontSize="12" Name="CompTimeFile">Compile Time File</CheckBox>
+							<CheckBox FontSize="12" Name="HashFiles">Hash Files</CheckBox>
+						</StackPanel>
+					</Border>
 
-                    <Border Name="MiscBox" Margin="280,322" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" Padding="4" Height="152" VerticalAlignment="Top" HorizontalAlignment="Left">
-                        <StackPanel>
-	                        <CheckBox FontSize="12" IsChecked="True" Name="MultiThreading">Use Multiple Threads</CheckBox>
-	                        <CheckBox FontSize="12" Name="MethodScanner">Enable Method Scanner</CheckBox>
-	                        <Label Padding="27, 0, 0, 0">(experimental)</Label>
-                        </StackPanel>
-                    </Border>
+					<Border Name="MiscBox" Margin="280,322" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" Padding="4" Height="152" VerticalAlignment="Top" HorizontalAlignment="Left">
+						<StackPanel>
+							<CheckBox FontSize="12" IsChecked="True" Name="MultiThreading">Use Multiple Threads</CheckBox>
+							<CheckBox FontSize="12" Name="MethodScanner">Enable Method Scanner</CheckBox>
+							<Label Padding="27, 0, 0, 0">(experimental)</Label>
+						</StackPanel>
+					</Border>
 
-                    <Border Name="TargetBox" Margin="461,80" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" Padding="4" VerticalAlignment="Top" HorizontalAlignment="Left" Width="315" Height="234">
-                        <Grid Margin="0,4,0,4">
-                            <Label>Platform:</Label>
-	                        <ComboBox FontSize="12" SelectedIndex="0" HorizontalContentAlignment="Center" Name="PltCmb" Margin="105,0, 0, 0" Width="195" BorderBrush="LightGray">
-                                <Label>x86</Label>
-                                <Label>x64</Label>
-                                <Label>ARMv8A32</Label>
-                            </ComboBox>
-                            <Label Margin="0,40, 0, 0">Image Format:</Label>
-	                        <ComboBox FontSize="12" SelectedIndex="1" HorizontalContentAlignment="Center" Name="ImgCmb" Margin="105,40, 0, 0" Width="195" BorderBrush="LightGray">
-                                <Label>ISO (.iso)</Label>
-                                <Label>IMG (.img)</Label>
-                                <Label>Microsoft (.vhd)</Label>
-                                <Label>VirtualBox (.vdi)</Label>
-                                <Label>VMWare (.vmdk)</Label>
-                            </ComboBox>
-                            <Label Margin="0,80, 0, 0">Emulator:</Label>
-	                        <ComboBox FontSize="12" SelectedIndex="0" HorizontalContentAlignment="Center" Name="EmuCmb" Margin="105,80, 0, 0" Width="195" BorderBrush="LightGray">
-                                <Label>QEMU</Label>
-                                <Label>Bochs</Label>
-                                <Label>VMWare</Label>
-                                <Label>VirtualBox</Label>
-                            </ComboBox>
-                            <Label Margin="0,120, 0, 0">Memory:</Label>
-                            <NumericUpDown FontSize="12" Name="MemVal" Margin="105, 120, 0, 0" Width="195" BorderBrush="LightGray" HorizontalContentAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Left" Minimum="128" Value="128"></NumericUpDown>
-                            <Label Margin="0,160, 0, 0">Cores:</Label>
-                            <NumericUpDown FontSize="12" Name="CpuVal" Margin="105, 160, 0, 0" Width="195" BorderBrush="LightGray" HorizontalContentAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Left" Minimum="1" Value="1" Maximum="4"></NumericUpDown>
-                        </Grid>
-                    </Border>
+					<Border Name="TargetBox" Margin="461,80" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" Padding="4" VerticalAlignment="Top" HorizontalAlignment="Left" Width="315" Height="234">
+						<Grid Margin="0,4,0,4">
+							<Label>Platform:</Label>
+							<ComboBox FontSize="12" SelectedIndex="0" HorizontalContentAlignment="Center" Name="PltCmb" Margin="105,0, 0, 0" Width="195" BorderBrush="LightGray">
+								<Label>x86</Label>
+								<Label>x64</Label>
+								<Label>ARMv8A32</Label>
+							</ComboBox>
+							<Label Margin="0,40, 0, 0">Image Format:</Label>
+							<ComboBox FontSize="12" SelectedIndex="1" HorizontalContentAlignment="Center" Name="ImgCmb" Margin="105,40, 0, 0" Width="195" BorderBrush="LightGray">
+								<Label>ISO (.iso)</Label>
+								<Label>IMG (.img)</Label>
+								<Label>Microsoft (.vhd)</Label>
+								<Label>VirtualBox (.vdi)</Label>
+								<Label>VMWare (.vmdk)</Label>
+							</ComboBox>
+							<Label Margin="0,80, 0, 0">Emulator:</Label>
+							<ComboBox FontSize="12" SelectedIndex="0" HorizontalContentAlignment="Center" Name="EmuCmb" Margin="105,80, 0, 0" Width="195" BorderBrush="LightGray">
+								<Label>QEMU</Label>
+								<Label>Bochs</Label>
+								<Label>VMWare</Label>
+								<Label>VirtualBox</Label>
+							</ComboBox>
+							<Label Margin="0,120, 0, 0">Memory:</Label>
+							<NumericUpDown FontSize="12" Name="MemVal" Margin="105, 120, 0, 0" Width="195" BorderBrush="LightGray" HorizontalContentAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Left" Minimum="128" Value="128"></NumericUpDown>
+							<Label Margin="0,160, 0, 0">Cores:</Label>
+							<NumericUpDown FontSize="12" Name="CpuVal" Margin="105, 160, 0, 0" Width="195" BorderBrush="LightGray" HorizontalContentAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Left" Minimum="1" Value="1" Maximum="4"></NumericUpDown>
+						</Grid>
+					</Border>
 
-	                <CheckBox Name="ExitOnLaunch" Margin="556, 15, 0, 0" IsChecked="True">Exit on launch</CheckBox>
-	                <Button Name="LnchBtn" Click="LnchBtn_OnClick" Margin="461, 105, 0, 0" Width="315" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="50">Compile and Run</Button>
-                </Grid>
-            </TabItem>
+					<CheckBox Name="ExitOnLaunch" Margin="556, 15, 0, 0" IsChecked="True">Exit on launch</CheckBox>
+					<Button Name="LnchBtn" Click="LnchBtn_OnClick" Margin="461, 105, 0, 0" Width="315" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="50">Compile and Run</Button>
+				</Grid>
+			</TabItem>
 
-            <TabItem Header="Advanced Options" FontSize="14">
-                <Grid>
-	                <Border Name="DbgerBox" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" Padding="4" HorizontalAlignment="Left" VerticalAlignment="Top" Height="152">
-		                <StackPanel>
-			                <CheckBox FontSize="12" Name="QemuGdb">Enable QEMU GDB</CheckBox>
-			                <CheckBox FontSize="12" Name="LaunchGdb">Launch GDB</CheckBox>
-			                <CheckBox FontSize="12" Name="MosaDbger">Launch MOSA Debugger</CheckBox>
-			                <Label Margin="0,5,0,0">Connection:</Label>
-			                <ComboBox FontSize="12" SelectedIndex="0" HorizontalContentAlignment="Center" Name="CntCmb" VerticalAlignment="Bottom" Margin="85,-20,0,90" Width="160" BorderBrush="LightGray">
-				                <Label>None</Label>
-				                <Label>Pipe</Label>
-				                <Label>TCP Server</Label>
-				                <Label>TCP Client</Label>
-			                </ComboBox>
-		                </StackPanel>
-	                </Border>
+			<TabItem Header="Advanced Options" FontSize="14">
+				<Grid>
+					<Border Name="DbgerBox" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" Padding="4" HorizontalAlignment="Left" VerticalAlignment="Top" Height="152">
+						<StackPanel>
+							<CheckBox FontSize="12" Name="QemuGdb">Enable QEMU GDB</CheckBox>
+							<CheckBox FontSize="12" Name="LaunchGdb">Launch GDB</CheckBox>
+							<CheckBox FontSize="12" Name="MosaDbger">Launch MOSA Debugger</CheckBox>
+							<Label Margin="0,5,0,0">Connection:</Label>
+							<ComboBox FontSize="12" SelectedIndex="0" HorizontalContentAlignment="Center" Name="CntCmb" VerticalAlignment="Bottom" Margin="85,-20,0,90" Width="160" BorderBrush="LightGray">
+								<Label>None</Label>
+								<Label>Pipe</Label>
+								<Label>TCP Server</Label>
+								<Label>TCP Client</Label>
+							</ComboBox>
+						</StackPanel>
+					</Border>
 
-	                <Border Name="LnkBox" Margin="265,0" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" Padding="4" VerticalAlignment="Top" HorizontalAlignment="Left" Height="152">
+					<Border Name="LnkBox" Margin="265,0" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" Padding="4" VerticalAlignment="Top" HorizontalAlignment="Left" Height="152">
 						<StackPanel>
 							<CheckBox FontSize="12" Name="EmtSymbs">Emit All Symbols</CheckBox>
 							<CheckBox FontSize="12" Name="EmtRelocs">Emit Static Relocations</CheckBox>
@@ -115,90 +115,90 @@
 							<Label Margin="0,5,0,0">Base Address:</Label>
 							<TextBox FontSize="12" Name="BaseAddrTxt" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" Margin="135,-20,0,110" Width="367" BorderBrush="LightGray">0x00400000</TextBox>
 						</StackPanel>
-	                </Border>
+					</Border>
 
-	                <Border Margin="0,160,0,0" Name="VbeBox" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" Padding="4" HorizontalAlignment="Left" VerticalAlignment="Top" Height="160">
-		                <StackPanel>
-			                <CheckBox FontSize="12" Name="EnableVbe">Enable VBE Graphics</CheckBox>
-			                <Label Margin="0,5,0,0">Width:</Label>
-			                <NumericUpDown FontSize="12" Name="VbeWidth" Margin="85, -20, 0, 0" Width="160" BorderBrush="LightGray" HorizontalContentAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Left" Minimum="640" Maximum="1920" Value="640"></NumericUpDown>
-			                <Label Margin="0,5,0,0">Height:</Label>
-			                <NumericUpDown FontSize="12" Name="VbeHeight" Margin="85, -20, 0, 0" Width="160" BorderBrush="LightGray" HorizontalContentAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Left" Minimum="480" Maximum="1080" Value="480"></NumericUpDown>
-			                <Label Margin="0,5,0,0">Depth:</Label>
-			                <NumericUpDown FontSize="12" Name="VbeDepth" Margin="85, -20, 0, 0" Width="160" BorderBrush="LightGray" HorizontalContentAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Left" Minimum="8" Maximum="32" Value="32" Increment="8"></NumericUpDown>
-		                </StackPanel>
-	                </Border>
+					<Border Margin="0,160,0,0" Name="VbeBox" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" Padding="4" HorizontalAlignment="Left" VerticalAlignment="Top" Height="160">
+						<StackPanel>
+							<CheckBox FontSize="12" Name="EnableVbe">Enable VBE Graphics</CheckBox>
+							<Label Margin="0,5,0,0">Width:</Label>
+							<NumericUpDown FontSize="12" Name="VbeWidth" Margin="85, -20, 0, 0" Width="160" BorderBrush="LightGray" HorizontalContentAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Left" Minimum="640" Maximum="1920" Value="640"></NumericUpDown>
+							<Label Margin="0,5,0,0">Height:</Label>
+							<NumericUpDown FontSize="12" Name="VbeHeight" Margin="85, -20, 0, 0" Width="160" BorderBrush="LightGray" HorizontalContentAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Left" Minimum="480" Maximum="1080" Value="480"></NumericUpDown>
+							<Label Margin="0,5,0,0">Depth:</Label>
+							<NumericUpDown FontSize="12" Name="VbeDepth" Margin="85, -20, 0, 0" Width="160" BorderBrush="LightGray" HorizontalContentAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Left" Minimum="8" Maximum="32" Value="32" Increment="8"></NumericUpDown>
+						</StackPanel>
+					</Border>
 
-	                <Border Name="OtherBox" Margin="265,160,0,0" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" Padding="4" Height="160" VerticalAlignment="Top" HorizontalAlignment="Left">
-		                <StackPanel>
-			                <CheckBox FontSize="12" Name="PlugKorlib" IsChecked="True">Plug Core Library</CheckBox>
-			                <Label Margin="0,5,0,0">OS Name:</Label>
-			                <TextBox FontSize="12" Name="OsNameTxt" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" Margin="135,-20,0,90" Width="367" BorderBrush="LightGray">MOSA</TextBox>
-			                <Button FontSize="12" Name="IncBtn" Click="IncBtn_OnClick" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" Margin="0,-82,0,90" Width="130">Include Directory</Button>
-			                <TextBox FontSize="12" Name="IncDirTxt" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" Margin="135,-120,0,90" Width="367" BorderBrush="LightGray"></TextBox>
-		                </StackPanel>
-	                </Border>
+					<Border Name="OtherBox" Margin="265,160,0,0" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" Padding="4" Height="160" VerticalAlignment="Top" HorizontalAlignment="Left">
+						<StackPanel>
+							<CheckBox FontSize="12" Name="PlugKorlib" IsChecked="True">Plug Core Library</CheckBox>
+							<Label Margin="0,5,0,0">OS Name:</Label>
+							<TextBox FontSize="12" Name="OsNameTxt" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" Margin="135,-20,0,90" Width="367" BorderBrush="LightGray">MOSA</TextBox>
+							<Button FontSize="12" Name="IncBtn" Click="IncBtn_OnClick" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" Margin="0,-82,0,90" Width="130">Include Directory</Button>
+							<TextBox FontSize="12" Name="IncDirTxt" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" Margin="135,-120,0,90" Width="367" BorderBrush="LightGray"></TextBox>
+						</StackPanel>
+					</Border>
 
-	                <Border Name="ImgBox" Margin="0,328, 0, 0" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" Padding="4" VerticalAlignment="Top" HorizontalAlignment="Left" Height="150" Width="777">
-		                <Grid Margin="0,4,0,4">
-			                <Label>File System:</Label>
-			                <ComboBox FontSize="12" SelectedIndex="1" HorizontalContentAlignment="Center" Name="FsCmb" Margin="85,0, 0, 0" Width="146" BorderBrush="LightGray">
-				                <Label>FAT12</Label>
-				                <Label>FAT16</Label>
-				                <Label>FAT32</Label>
-			                </ComboBox>
-			                <Label Margin="0,40, 0, 0">Boot Format:</Label>
-			                <ComboBox FontSize="12" SelectedIndex="0" HorizontalContentAlignment="Center" Name="FmtCmb" Margin="85,40, 0, 0" Width="146" BorderBrush="LightGray">
-				                <Label>Multiboot v1</Label>
-			                </ComboBox>
-			                <Label Margin="0,80, 0, 0">Boot Loader:</Label>
-			                <ComboBox FontSize="12" SelectedIndex="4" HorizontalContentAlignment="Center" Name="BldCmb" Margin="85,80, 0, 0" Width="146" BorderBrush="LightGray">
-				                <Label>Grub 2.00</Label>
-				                <Label>Grub 0.97</Label>
-				                <Label>Syslinux 6.03</Label>
-				                <Label>Syslinux 3.72</Label>
-				                <Label>Limine</Label>
-			                </ComboBox>
-			                <Label Margin="241,0, 0, 0">Firmware:</Label>
-			                <ComboBox FontSize="12" SelectedIndex="0" HorizontalContentAlignment="Center" Name="FrmCmb" Margin="311,0, 0, 0" Width="146" BorderBrush="LightGray">
-				                <Label>BIOS</Label>
-			                </ComboBox>
-		                </Grid>
-	                </Border>
-                </Grid>
-            </TabItem>
+					<Border Name="ImgBox" Margin="0,328, 0, 0" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" Padding="4" VerticalAlignment="Top" HorizontalAlignment="Left" Height="150" Width="777">
+						<Grid Margin="0,4,0,4">
+							<Label>File System:</Label>
+							<ComboBox FontSize="12" SelectedIndex="1" HorizontalContentAlignment="Center" Name="FsCmb" Margin="85,0, 0, 0" Width="146" BorderBrush="LightGray">
+								<Label>FAT12</Label>
+								<Label>FAT16</Label>
+								<Label>FAT32</Label>
+							</ComboBox>
+							<Label Margin="0,40, 0, 0">Boot Format:</Label>
+							<ComboBox FontSize="12" SelectedIndex="0" HorizontalContentAlignment="Center" Name="FmtCmb" Margin="85,40, 0, 0" Width="146" BorderBrush="LightGray">
+								<Label>Multiboot v1</Label>
+							</ComboBox>
+							<Label Margin="0,80, 0, 0">Boot Loader:</Label>
+							<ComboBox FontSize="12" SelectedIndex="4" HorizontalContentAlignment="Center" Name="BldCmb" Margin="85,80, 0, 0" Width="146" BorderBrush="LightGray">
+								<Label>Grub 2.00</Label>
+								<Label>Grub 0.97</Label>
+								<Label>Syslinux 6.03</Label>
+								<Label>Syslinux 3.72</Label>
+								<Label>Limine</Label>
+							</ComboBox>
+							<Label Margin="241,0, 0, 0">Firmware:</Label>
+							<ComboBox FontSize="12" SelectedIndex="0" HorizontalContentAlignment="Center" Name="FrmCmb" Margin="311,0, 0, 0" Width="146" BorderBrush="LightGray">
+								<Label>BIOS</Label>
+							</ComboBox>
+						</Grid>
+					</Border>
+				</Grid>
+			</TabItem>
 
-            <TabItem Header="App Locations" FontSize="14">
-                <StackPanel>
-	                <Label FontSize="14">QEMU:</Label>
-	                <Label FontSize="14" Name="qemuPathLbl" Margin="165, -23, 0, 0">No path specified</Label>
-	                <Label FontSize="14">QEMU BIOS Directory:</Label>
-	                <Label FontSize="14" Name="qemuBiosPathLbl" Margin="165, -23, 0, 0">No path specified</Label>
-	                <Label FontSize="14">QEMU Image:</Label>
-	                <Label FontSize="14" Name="qemuImgPathLbl" Margin="165, -23, 0, 0">No path specified</Label>
-	                <Label FontSize="14">Bochs:</Label>
-	                <Label FontSize="14" Name="bochsPathLbl" Margin="165, -23, 0, 0">No path specified</Label>
-	                <Label FontSize="14">VMWare:</Label>
-	                <Label FontSize="14" Name="vmwarePathLbl" Margin="165, -23, 0, 0">No path specified</Label>
-	                <Label FontSize="14">VirtualBox:</Label>
-	                <Label FontSize="14" Name="vboxPathLbl" Margin="165, -23, 0, 0">No path specified</Label>
-	                <Label FontSize="14">mkisofs:</Label>
-	                <Label FontSize="14" Name="mkisofsPathLbl" Margin="165, -23, 0, 0">No path specified</Label>
-	                <Label FontSize="14">ndiasm:</Label>
-	                <Label FontSize="14" Name="ndiasmPathLbl" Margin="165, -23, 0, 0">No path specified</Label>
-                </StackPanel>
-            </TabItem>
+			<TabItem Header="App Locations" FontSize="14">
+				<StackPanel>
+					<Label FontSize="14">QEMU:</Label>
+					<Label FontSize="14" Name="qemuPathLbl" Margin="165, -23, 0, 0">No path specified</Label>
+					<Label FontSize="14">QEMU BIOS Directory:</Label>
+					<Label FontSize="14" Name="qemuBiosPathLbl" Margin="165, -23, 0, 0">No path specified</Label>
+					<Label FontSize="14">QEMU Image:</Label>
+					<Label FontSize="14" Name="qemuImgPathLbl" Margin="165, -23, 0, 0">No path specified</Label>
+					<Label FontSize="14">Bochs:</Label>
+					<Label FontSize="14" Name="bochsPathLbl" Margin="165, -23, 0, 0">No path specified</Label>
+					<Label FontSize="14">VMWare:</Label>
+					<Label FontSize="14" Name="vmwarePathLbl" Margin="165, -23, 0, 0">No path specified</Label>
+					<Label FontSize="14">VirtualBox:</Label>
+					<Label FontSize="14" Name="vboxPathLbl" Margin="165, -23, 0, 0">No path specified</Label>
+					<Label FontSize="14">mkisofs:</Label>
+					<Label FontSize="14" Name="mkisofsPathLbl" Margin="165, -23, 0, 0">No path specified</Label>
+					<Label FontSize="14">ndiasm:</Label>
+					<Label FontSize="14" Name="ndiasmPathLbl" Margin="165, -23, 0, 0">No path specified</Label>
+				</StackPanel>
+			</TabItem>
 
-            <TabItem Header="Counters" FontSize="14">
-	            <TextBox Name="CountersTxt" IsReadOnly="True" AcceptsReturn="True" TextWrapping="Wrap" Width="777" Height="475"></TextBox>
-            </TabItem>
+			<TabItem Header="Counters" FontSize="14">
+				<TextBox Name="CountersTxt" IsReadOnly="True" AcceptsReturn="True" TextWrapping="Wrap" Width="777" Height="475"></TextBox>
+			</TabItem>
 
-            <TabItem Header="Output" FontSize="14">
-	            <StackPanel>
-		            <ProgressBar Name="OutputProgress" Width="777" Height="20"></ProgressBar>
-		            <TextBox Name="OutputTxt" IsReadOnly="True" AcceptsReturn="True" TextWrapping="Wrap" Margin="0, 10, 0, 0" Width="777" Height="445"></TextBox>
-	            </StackPanel>
-            </TabItem>
-        </TabControl>
-    </Canvas>
+			<TabItem Header="Output" FontSize="14">
+				<StackPanel>
+					<ProgressBar Name="OutputProgress" Width="777" Height="20"></ProgressBar>
+					<TextBox Name="OutputTxt" IsReadOnly="True" AcceptsReturn="True" TextWrapping="Wrap" Margin="0, 10, 0, 0" Width="777" Height="445"></TextBox>
+				</StackPanel>
+			</TabItem>
+		</TabControl>
+	</Canvas>
 </Window>

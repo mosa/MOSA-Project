@@ -553,7 +553,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="method">The method.</param>
 		private MethodInfo __ResolveMethodParameters(MosaMethod method)
 		{
-			if (method.HasOpenGenericParams)
+			if (method.HasOpenGenericParams == true)
 				return null;
 
 			if (methodData.ContainsKey(method))
@@ -769,7 +769,7 @@ namespace Mosa.Compiler.Framework
 
 			foreach (var method in type.Methods)
 			{
-				if (method.HasOpenGenericParams)
+				if (method.HasOpenGenericParams == true)
 					continue;
 
 				if (IsExplicitInterfaceMethod(method) && methodFound != null)
@@ -805,7 +805,7 @@ namespace Mosa.Compiler.Framework
 
 			foreach (var method in type.Methods)
 			{
-				if (method.HasOpenGenericParams)
+				if (method.HasOpenGenericParams == true)
 					continue;
 
 				if (IsExplicitInterfaceMethod(method))

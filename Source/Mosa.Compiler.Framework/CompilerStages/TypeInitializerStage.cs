@@ -89,7 +89,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			{
 				foreach (var method in type.Methods)
 				{
-					if (method.IsTypeConstructor && !method.HasOpenGenericParams)
+					if (method.IsTypeConstructor && method.HasOpenGenericParams == false)
 					{
 						Schedule(method);
 

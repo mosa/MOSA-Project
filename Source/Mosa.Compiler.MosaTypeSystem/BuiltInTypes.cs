@@ -46,7 +46,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		//public MosaType ValueType { get; }
 
-		public BuiltInTypes(ITypeResolver typeResolver, MosaModule corlib)
+		public BuiltInTypes(ITypeResolver typeResolver, MosaModule? corlib)
 		{
 			Void = typeResolver.ResolveType(corlib, BuiltInType.Void);
 			Boolean = typeResolver.ResolveType(corlib, BuiltInType.Boolean);

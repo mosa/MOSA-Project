@@ -8,7 +8,7 @@ namespace dnlib.DotNet
 {
 	internal readonly struct GenericArgumentsStack
 	{
-		private readonly List<IList<TypeSig>> argsStack;
+		private readonly List<IList<TypeSig?>> argsStack;
 		private readonly bool isTypeVar;
 
 		/// <summary>
@@ -25,7 +25,7 @@ namespace dnlib.DotNet
 		/// Pushes generic arguments
 		/// </summary>
 		/// <param name="args">The generic arguments</param>
-		public void Push(IList<TypeSig> args) => argsStack.Add(args);
+		public void Push(IList<TypeSig?> args) => argsStack.Add(args);
 
 		/// <summary>
 		/// Pops generic arguments
@@ -74,7 +74,7 @@ namespace dnlib.DotNet
 		/// Pushes generic arguments
 		/// </summary>
 		/// <param name="typeArgs">The generic arguments</param>
-		public void PushTypeArgs(IList<TypeSig> typeArgs) => typeArgsStack.Push(typeArgs);
+		public void PushTypeArgs(IList<TypeSig?> typeArgs) => typeArgsStack.Push(typeArgs);
 
 		/// <summary>
 		/// Pops generic arguments
@@ -86,7 +86,7 @@ namespace dnlib.DotNet
 		/// Pushes generic arguments
 		/// </summary>
 		/// <param name="methodArgs">The generic arguments</param>
-		public void PushMethodArgs(IList<TypeSig> methodArgs) => methodArgsStack.Push(methodArgs);
+		public void PushMethodArgs(IList<TypeSig?> methodArgs) => methodArgsStack.Push(methodArgs);
 
 		/// <summary>
 		/// Pops generic arguments
@@ -102,7 +102,7 @@ namespace dnlib.DotNet
 		/// <param name="typeSig">Type signature</param>
 		/// <returns>New <see cref="TypeSig"/> which is never <c>null</c> unless
 		/// <paramref name="typeSig"/> is <c>null</c></returns>
-		public TypeSig Resolve(TypeSig typeSig)
+		public TypeSig? Resolve(TypeSig? typeSig)
 		{
 			switch (typeSig)
 			{

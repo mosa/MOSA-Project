@@ -8,11 +8,11 @@ namespace Mosa.Compiler.MosaTypeSystem
 	{
 		public string Name { get; private set; }
 
-		public MosaType Type { get; private set; }
+		public MosaType? Type { get; private set; }
 
 		public bool IsPinned { get; private set; }
 
-		public MosaLocal(string name, MosaType type, bool isPinned)
+		public MosaLocal(string name, MosaType? type, bool isPinned)
 		{
 			Name = name;
 			Type = type;
@@ -24,14 +24,14 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return Name + (IsPinned ? " [Pinned]" : "") + " " + Type;
 		}
 
-		public bool Equals(MosaLocal local)
+		public bool Equals(MosaLocal? local)
 		{
-			return Type.Equals(local.Type);
+			return Type?.Equals(local.Type) == true;
 		}
 
-		public bool Equals(MosaType type)
+		public bool Equals(MosaType? type)
 		{
-			return Type.Equals(type);
+			return Type?.Equals(type) == true;
 		}
 	}
 }

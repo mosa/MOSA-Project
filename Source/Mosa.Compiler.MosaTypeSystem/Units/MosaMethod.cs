@@ -7,9 +7,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 {
 	public sealed class MosaMethod : MosaUnit//, IEquatable<MosaMethod>
 	{
-		public MosaModule Module { get; private set; }
+		public MosaModule? Module { get; private set; }
 
-		public MosaType DeclaringType { get; private set; }
+		public MosaType? DeclaringType { get; private set; }
 
 		public MosaMethodSignature Signature { get; private set; }
 
@@ -37,13 +37,13 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public bool IsFinal { get; private set; }
 
-		public bool HasOpenGenericParams { get; private set; }
+		public bool? HasOpenGenericParams { get; private set; }
 
 		public bool HasImplementation { get { return Code.Count != 0; } }
 
 		private GenericArgumentsCollection genericArguments;
 
-		public IReadOnlyList<MosaType> GenericArguments { get; private set; }
+		public IReadOnlyList<MosaType?> GenericArguments { get; private set; }
 
 		private List<MosaLocal> localVars;
 		private List<MosaInstruction> instructions;
@@ -59,9 +59,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public IList<MosaExceptionHandler> ExceptionHandlers { get; private set; }
 
-		private List<MosaMethod> overrides;
+		private List<MosaMethod?> overrides;
 
-		public IList<MosaMethod> Overrides { get; private set; }
+		public IList<MosaMethod?> Overrides { get; private set; }
 
 		public bool IsExternal { get; private set; }
 
@@ -111,17 +111,17 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public class Mutator : MosaUnit.MutatorBase
 		{
-			private readonly MosaMethod method;
+			private readonly MosaMethod? method;
 
-			internal Mutator(MosaMethod method)
+			internal Mutator(MosaMethod? method)
 				: base(method)
 			{
 				this.method = method;
 			}
 
-			public MosaModule Module { set { method.Module = value; } }
+			public MosaModule? Module { set { method.Module = value; } }
 
-			public MosaType DeclaringType { set { method.DeclaringType = value; } }
+			public MosaType? DeclaringType { set { method.DeclaringType = value; } }
 
 			public MosaMethodSignature Signature { set { method.Signature = value; } }
 
@@ -149,21 +149,21 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			public bool IsFinal { set { method.IsFinal = value; } }
 
-			public bool HasOpenGenericParams { set { method.HasOpenGenericParams = value; } }
+			public bool? HasOpenGenericParams { set { method.HasOpenGenericParams = value; } }
 
-			public GenericArgumentsCollection GenericArguments { get { return method.genericArguments; } }
+			public GenericArgumentsCollection? GenericArguments { get { return method?.genericArguments; } }
 
 			public MosaMethodAttributes MethodAttributes { set { method.MethodAttributes = value; } }
 
-			public IList<MosaLocal> LocalVariables { get { return method.localVars; } }
+			public IList<MosaLocal>? LocalVariables { get { return method?.localVars; } }
 
 			public uint MaxStack { set { method.MaxStack = value; } }
 
-			public List<MosaInstruction> Code { get { return method.instructions; } }
+			public List<MosaInstruction>? Code { get { return method?.instructions; } }
 
-			public IList<MosaExceptionHandler> ExceptionBlocks { get { return method.exceptionHandlers; } }
+			public IList<MosaExceptionHandler>? ExceptionBlocks { get { return method?.exceptionHandlers; } }
 
-			public IList<MosaMethod> Overrides { get { return method.overrides; } }
+			public IList<MosaMethod?>? Overrides { get { return method?.overrides; } }
 
 			public bool IsExternal { set { method.IsExternal = value; } }
 
@@ -173,18 +173,18 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			public override void Dispose()
 			{
-				if (method.Signature != null && method.DeclaringType != null)
+				if (method?.Signature != null && method?.DeclaringType != null)
 				{
 					var methodName = new StringBuilder();
 					methodName.Append(method.Name);
-					if (GenericArguments.Count > 0)
+					if (GenericArguments?.Count > 0)
 					{
 						methodName.Append('<');
-						for (int i = 0; i < GenericArguments.Count; i++)
+						for (var i = 0; i < GenericArguments.Count; i++)
 						{
 							if (i != 0)
 								methodName.Append(", ");
-							methodName.Append(GenericArguments[i].FullName);
+							methodName.Append(GenericArguments[i]?.FullName);
 						}
 						methodName.Append('>');
 					}
@@ -198,9 +198,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 	public class MosaMethodFullNameComparer : IEqualityComparer<MosaMethod>
 	{
-		public bool Equals(MosaMethod x, MosaMethod y)
+		public bool Equals(MosaMethod? x, MosaMethod? y)
 		{
-			return x.FullName.Equals(y.FullName);
+			return x?.FullName.Equals(y?.FullName) == true;
 		}
 
 		public int GetHashCode(MosaMethod obj)

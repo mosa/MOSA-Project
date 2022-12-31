@@ -10,10 +10,6 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 	{
 		public Dictionary<string, MosaModule?> Modules { get; }
 
-		public MosaModule LinkerModule { get; }
-
-		public MosaType DefaultLinkerType { get; }
-
 		private readonly Dictionary<ScopedToken, MosaType> typeLookup = new();
 		private readonly Dictionary<ScopedToken, MosaMethod> methodLookup = new();
 		private readonly Dictionary<ScopedToken, MosaField> fieldLookup = new();
@@ -35,7 +31,7 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 			//var desc = module.GetUnderlyingObject<UnitDesc<ModuleDef, object>>();
 		}
 
-		public MosaModule GetModuleByName(string name)
+		public MosaModule? GetModuleByName(string name)
 		{
 			if (Modules.TryGetValue(name, out var result))
 				return result;

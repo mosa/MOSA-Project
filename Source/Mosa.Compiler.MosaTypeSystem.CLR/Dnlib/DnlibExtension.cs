@@ -93,45 +93,45 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Dnlib
 			return signature is ModifierSig or PinnedSig;
 		}
 
-		public static TypeSig GetTypeSig(this MosaType type)
+		public static TypeSig? GetTypeSig(this MosaType? type)
 		{
-			return type.GetUnderlyingObject<UnitDesc<TypeDef, TypeSig>>().Signature;
+			return type?.GetUnderlyingObject<UnitDesc<TypeDef, TypeSig>>()?.Signature;
 		}
 
-		public static MethodSig GetMethodSig(this MosaMethod method)
+		public static MethodSig? GetMethodSig(this MosaMethod? method)
 		{
-			return method.GetUnderlyingObject<UnitDesc<MethodDef, MethodSig>>().Signature;
+			return method?.GetUnderlyingObject<UnitDesc<MethodDef, MethodSig>>()?.Signature;
 		}
 
-		public static FieldSig GetFieldSig(this MosaField field)
+		public static FieldSig? GetFieldSig(this MosaField? field)
 		{
-			return field.GetUnderlyingObject<UnitDesc<FieldDef, FieldSig>>().Signature;
+			return field?.GetUnderlyingObject<UnitDesc<FieldDef, FieldSig>>()?.Signature;
 		}
 
-		public static PropertySig GetPropertySig(this MosaProperty property)
+		public static PropertySig? GetPropertySig(this MosaProperty? property)
 		{
-			return property.GetUnderlyingObject<UnitDesc<PropertyDef, PropertySig>>().Signature;
+			return property?.GetUnderlyingObject<UnitDesc<PropertyDef, PropertySig>>()?.Signature;
 		}
 
-		public static IList<TypeSig> GetGenericArguments(this IReadOnlyList<MosaType> types)
+		public static IList<TypeSig?> GetGenericArguments(this IReadOnlyList<MosaType?> types)
 		{
-			var result = new List<TypeSig>();
+			var result = new List<TypeSig?>();
 
 			foreach (var type in types)
 			{
-				result.Add(type.GetTypeSig());
+				result.Add(type?.GetTypeSig());
 			}
 
 			return result;
 		}
 
-		public static IList<TypeSig> GetGenericArguments(this IList<MosaType> types)
+		public static IList<TypeSig?> GetGenericArguments(this IList<MosaType?> types)
 		{
-			var result = new List<TypeSig>();
+			var result = new List<TypeSig?>();
 
 			foreach (var type in types)
 			{
-				result.Add(type.GetTypeSig());
+				result.Add(type?.GetTypeSig());
 			}
 
 			return result;

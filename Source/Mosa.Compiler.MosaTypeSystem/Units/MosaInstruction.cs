@@ -8,7 +8,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public ushort OpCode { get; set; }
 
-		public object Operand { get; set; }
+		public object? Operand { get; set; }
 
 		public int? Previous { get; set; }
 
@@ -17,7 +17,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 		/// <summary>
 		/// Document Name
 		/// </summary>
-		public string Document { get; set; }
+		public string? Document { get; set; }
 
 		/// <summary>
 		/// Start line

@@ -4,19 +4,19 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR
 {
 	public class ClrTypeResolver : ITypeResolver
 	{
-		private readonly Dictionary<Tuple<MosaModule, string>, MosaType> typeLookup;
+		private readonly Dictionary<Tuple<MosaModule?, string?>, MosaType?> typeLookup;
 
 		public ClrTypeResolver()
 		{
 			typeLookup = new();
 		}
 
-		public void AddType(Tuple<MosaModule, string> key, MosaType value)
+		public void AddType(Tuple<MosaModule?, string?> key, MosaType? value)
 		{
 			typeLookup[key] = value;
 		}
 
-		public MosaType? ResolveType(MosaModule module, BuiltInType type)
+		public MosaType? ResolveType(MosaModule? module, BuiltInType type)
 		{
 			return type switch
 			{
@@ -43,7 +43,7 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR
 			};
 		}
 
-		public MosaType? ResolveType(MosaModule module, MosaTypeCode type)
+		public MosaType? ResolveType(MosaModule? module, MosaTypeCode type)
 		{
 			return type switch
 			{
@@ -72,7 +72,7 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR
 			};
 		}
 
-		public MosaType? GetTypeByName(IList<MosaModule> modules, string fullName)
+		public MosaType? GetTypeByName(IList<MosaModule?> modules, string fullName)
 		{
 			foreach (var module in modules)
 			{
@@ -84,7 +84,7 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR
 			return null;
 		}
 
-		public MosaType? GetTypeByName(MosaModule module, string fullName)
+		public MosaType? GetTypeByName(MosaModule? module, string fullName)
 		{
 			return typeLookup.TryGetValue(Tuple.Create(module, fullName), out var result) ? result : null;
 		}

@@ -9,15 +9,15 @@ namespace Mosa.Compiler.MosaTypeSystem
 {
 	public class MosaType : MosaUnit, IEquatable<MosaType>
 	{
-		public MosaModule Module { get; private set; }
+		public MosaModule? Module { get; private set; }
 
 		public string Namespace { get; private set; }
 
 		public string Signature { get; internal set; }
 
-		public MosaType BaseType { get; private set; }
+		public MosaType? BaseType { get; private set; }
 
-		public MosaType DeclaringType { get; private set; }
+		public MosaType? DeclaringType { get; private set; }
 
 		public bool IsInterface { get; private set; }
 
@@ -33,18 +33,18 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public int? PackingSize { get; private set; }
 
-		private List<MosaMethod> methods;
-		private List<MosaField> fields;
-		private List<MosaProperty> properties;
-		private List<MosaType> interfaces;
+		private List<MosaMethod?> methods;
+		private List<MosaField?> fields;
+		private List<MosaProperty?> properties;
+		private List<MosaType?> interfaces;
 
-		public IList<MosaMethod> Methods { get; private set; }
+		public IList<MosaMethod?> Methods { get; private set; }
 
-		public IList<MosaProperty> Properties { get; private set; }
+		public IList<MosaProperty?> Properties { get; private set; }
 
-		public IList<MosaField> Fields { get; private set; }
+		public IList<MosaField?> Fields { get; private set; }
 
-		public IList<MosaType> Interfaces { get; private set; }
+		public IList<MosaType?> Interfaces { get; private set; }
 
 		public MosaTypeAttributes TypeAttributes { get; private set; }
 
@@ -98,7 +98,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		private GenericArgumentsCollection genericArguments;
 
-		public IReadOnlyList<MosaType> GenericArguments { get; private set; }
+		public IReadOnlyList<MosaType?> GenericArguments { get; private set; }
 
 		public bool IsUI1 { get { return IsU1 || IsI1; } }
 
@@ -153,11 +153,11 @@ namespace Mosa.Compiler.MosaTypeSystem
 			}
 		}
 
-		public MosaType ElementType { get; private set; }
+		public MosaType? ElementType { get; private set; }
 
 		public int? GenericParamIndex { get; private set; }
 
-		public MosaType Modifier { get; private set; }
+		public MosaType? Modifier { get; private set; }
 
 		public MosaArrayInfo ArrayInfo { get; private set; }
 
@@ -167,10 +167,10 @@ namespace Mosa.Compiler.MosaTypeSystem
 		{
 			Namespace = "";
 
-			Methods = (methods = new List<MosaMethod>()).AsReadOnly();
-			Fields = (fields = new List<MosaField>()).AsReadOnly();
-			Properties = (properties = new List<MosaProperty>()).AsReadOnly();
-			Interfaces = (interfaces = new List<MosaType>()).AsReadOnly();
+			Methods = (methods = new List<MosaMethod?>()).AsReadOnly();
+			Fields = (fields = new List<MosaField?>()).AsReadOnly();
+			Properties = (properties = new List<MosaProperty?>()).AsReadOnly();
+			Interfaces = (interfaces = new List<MosaType?>()).AsReadOnly();
 
 			GenericArguments = (genericArguments = new GenericArgumentsCollection());
 		}
@@ -179,46 +179,46 @@ namespace Mosa.Compiler.MosaTypeSystem
 		{
 			var result = (MosaType)base.Clone();
 
-			result.Methods = (result.methods = new List<MosaMethod>(methods)).AsReadOnly();
-			result.Fields = (result.fields = new List<MosaField>(fields)).AsReadOnly();
-			result.Properties = (result.properties = new List<MosaProperty>(properties)).AsReadOnly();
-			result.Interfaces = (result.interfaces = new List<MosaType>(interfaces)).AsReadOnly();
+			result.Methods = (result.methods = new List<MosaMethod?>(methods)).AsReadOnly();
+			result.Fields = (result.fields = new List<MosaField?>(fields)).AsReadOnly();
+			result.Properties = (result.properties = new List<MosaProperty?>(properties)).AsReadOnly();
+			result.Interfaces = (result.interfaces = new List<MosaType?>(interfaces)).AsReadOnly();
 
 			result.GenericArguments = (result.genericArguments = new GenericArgumentsCollection(genericArguments));
 
 			return result;
 		}
 
-		public bool Equals(MosaType other)
+		public bool Equals(MosaType? other)
 		{
 			return SignatureComparer.Equals(this, other);
 		}
 
-		public MosaMethod FindMethodByName(string name)
+		public MosaMethod? FindMethodByName(string name)
 		{
 			foreach (var method in Methods)
 			{
-				if (method.Name == name)
+				if (method?.Name == name)
 					return method;
 			}
 			return null;
 		}
 
-		public MosaMethod FindMethodByNameAndParameters(string name, IList<MosaParameter> parameters)
+		public MosaMethod? FindMethodByNameAndParameters(string name, IList<MosaParameter?> parameters)
 		{
 			foreach (var method in Methods)
 			{
-				if (method.Name == name && method.Signature.Parameters.SequenceEquals(parameters))
+				if (method?.Name == name && method.Signature.Parameters.SequenceEquals(parameters))
 					return method;
 			}
 			return null;
 		}
 
-		public MosaMethod FindMethodBySignature(string name, MosaMethodSignature sig)
+		public MosaMethod? FindMethodBySignature(string name, MosaMethodSignature sig)
 		{
 			foreach (var method in Methods)
 			{
-				if (method.Name == name && method.Signature.Equals(sig))
+				if (method?.Name == name && method.Signature.Equals(sig))
 					return method;
 			}
 			return null;
@@ -226,21 +226,21 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public class Mutator : MutatorBase
 		{
-			private readonly MosaType type;
+			private readonly MosaType? type;
 
-			internal Mutator(MosaType type)
+			internal Mutator(MosaType? type)
 				: base(type)
 			{
 				this.type = type;
 			}
 
-			public MosaModule Module { set { type.Module = value; } }
+			public MosaModule? Module { set { type.Module = value; } }
 
 			public string Namespace { set { type.Namespace = value; } }
 
-			public MosaType BaseType { set { type.BaseType = value; } }
+			public MosaType? BaseType { set { type.BaseType = value; } }
 
-			public MosaType DeclaringType { set { type.DeclaringType = value; } }
+			public MosaType? DeclaringType { set { type.DeclaringType = value; } }
 
 			public bool IsInterface { set { type.IsInterface = value; } }
 
@@ -256,13 +256,13 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			public int? PackingSize { set { type.PackingSize = value; } }
 
-			public IList<MosaMethod> Methods { get { return type.methods; } }
+			public IList<MosaMethod?>? Methods { get { return type?.methods; } }
 
-			public IList<MosaField> Fields { get { return type.fields; } }
+			public IList<MosaField?>? Fields { get { return type?.fields; } }
 
-			public IList<MosaProperty> Properties { get { return type.properties; } }
+			public IList<MosaProperty?>? Properties { get { return type?.properties; } }
 
-			public IList<MosaType> Interfaces { get { return type.interfaces; } }
+			public IList<MosaType?>? Interfaces { get { return type?.interfaces; } }
 
 			public MosaTypeAttributes TypeAttributes { set { type.TypeAttributes = value; } }
 
@@ -270,13 +270,13 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			public bool HasOpenGenericParams { set { type.HasOpenGenericParams = value; } }
 
-			public GenericArgumentsCollection GenericArguments { get { return type.genericArguments; } }
+			public GenericArgumentsCollection? GenericArguments { get { return type?.genericArguments; } }
 
-			public MosaType ElementType { set { type.ElementType = value; } }
+			public MosaType? ElementType { set { type.ElementType = value; } }
 
 			public int? GenericParamIndex { set { type.GenericParamIndex = value; } }
 
-			public MosaType Modifier { set { type.Modifier = value; } }
+			public MosaType? Modifier { set { type.Modifier = value; } }
 
 			public MosaArrayInfo ArrayInfo { set { type.ArrayInfo = value; } }
 
@@ -288,7 +288,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				var fName = new StringBuilder();
 				var sName = new StringBuilder();
 
-				if (type.DeclaringType != null && type.DeclaringType != type.ElementType)
+				if (type?.DeclaringType != null && type.DeclaringType != type.ElementType)
 				{
 					if (!string.IsNullOrEmpty(type.Namespace))
 					{
@@ -309,11 +309,11 @@ namespace Mosa.Compiler.MosaTypeSystem
 					type.FullName = fName.ToString();
 					type.ShortName = sName.ToString();
 				}
-				else if (type.DeclaringType != null)
+				else if (type?.DeclaringType != null)
 				{
-					fName.Append(type.ElementType.FullName);
+					fName.Append(type.ElementType?.FullName);
 					fName.Append(type.Signature);
-					sName.Append(type.ElementType.ShortName);
+					sName.Append(type.ElementType?.ShortName);
 					sName.Append(type.Signature);
 
 					type.FullName = fName.ToString();
@@ -321,16 +321,16 @@ namespace Mosa.Compiler.MosaTypeSystem
 				}
 				else
 				{
-					if (!string.IsNullOrEmpty(type.Namespace))
+					if (!string.IsNullOrEmpty(type?.Namespace))
 					{
 						fName.Append(type.Namespace);
 						fName.Append(".");
 					}
 
-					fName.Append(type.Name);
-					fName.Append(type.Signature);
-					sName.Append(type.Name);
-					sName.Append(type.Signature);
+					fName.Append(type?.Name);
+					fName.Append(type?.Signature);
+					sName.Append(type?.Name);
+					sName.Append(type?.Signature);
 
 					type.FullName = fName.ToString();
 					type.ShortName = sName.ToString();

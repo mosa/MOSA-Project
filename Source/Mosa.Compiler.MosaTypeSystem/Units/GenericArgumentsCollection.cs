@@ -7,7 +7,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 	/// <summary>
 	/// Removes duplicates and preserves order
 	/// </summary>
-	public class GenericArgumentsCollection : List<MosaType>
+	public class GenericArgumentsCollection : List<MosaType?>
 	{
 		public GenericArgumentsCollection()
 		{

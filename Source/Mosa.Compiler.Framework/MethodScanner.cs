@@ -72,7 +72,7 @@ namespace Mosa.Compiler.Framework
 
 				foreach (var method in type.Methods)
 				{
-					if ((!(!method.HasImplementation && method.IsAbstract)) && !method.HasOpenGenericParams && !method.DeclaringType.HasOpenGenericParams)
+					if ((!(!method.HasImplementation && method.IsAbstract)) && method.HasOpenGenericParams == false && !method.DeclaringType.HasOpenGenericParams)
 					{
 						totalMethods++;
 					}

@@ -21,9 +21,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public class Mutator : MosaUnit.MutatorBase
 		{
-			private readonly MosaModule module;
+			private readonly MosaModule? module;
 
-			internal Mutator(MosaModule module)
+			internal Mutator(MosaModule? module)
 				: base(module)
 			{
 				this.module = module;
@@ -37,8 +37,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			public override void Dispose()
 			{
-				module.FullName = module.Name;
-				module.ShortName = module.Name;
+				module.FullName = module?.Name;
+				module.ShortName = module?.Name;
 			}
 		}
 	}
