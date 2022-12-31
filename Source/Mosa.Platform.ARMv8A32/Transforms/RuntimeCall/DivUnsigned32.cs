@@ -21,7 +21,7 @@ namespace Mosa.Platform.ARMv8A32.Transforms.RuntimeCall
 
 		public override void Transform(Context context, TransformContext transform)
 		{
-			transform.ReplaceWithCall(context, "Mosa.Runtime.Math", "Division", "udiv32");
+			transform.ReplaceWithCall(context, "Mosa.Runtime.Math.Division", "udiv32");
 		}
 	}
 }

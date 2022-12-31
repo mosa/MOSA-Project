@@ -21,7 +21,7 @@ namespace Mosa.Platform.ARMv8A32.Transforms.RuntimeCall
 
 		public override void Transform(Context context, TransformContext transform)
 		{
-			transform.ReplaceWithCall(context, "Mosa.Runtime.ARMv8A32.Math", "FloatingPoint", "DoubleToFloat");
+			transform.ReplaceWithCall(context, "Mosa.Runtime.ARMv8A32.Math.FloatingPoint", "DoubleToFloat");
 		}
 	}
 }

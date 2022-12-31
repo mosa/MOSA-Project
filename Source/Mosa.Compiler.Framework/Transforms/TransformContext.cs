@@ -520,9 +520,9 @@ namespace Mosa.Compiler.Framework.Transforms
 
 		#endregion BitValue (experimental)
 
-		public MosaMethod GetMethod(string namespaceName, string typeName, string methodName)
+		public MosaMethod GetMethod(string fullName, string methodName)
 		{
-			var type = TypeSystem.GetTypeByName(namespaceName, typeName);
+			var type = TypeSystem.GetTypeByName(fullName);
 
 			if (type == null)
 				return null;
@@ -532,9 +532,9 @@ namespace Mosa.Compiler.Framework.Transforms
 			return method;
 		}
 
-		public void ReplaceWithCall(Context context, string namespaceName, string typeName, string methodName)
+		public void ReplaceWithCall(Context context, string fullName, string methodName)
 		{
-			var method = GetMethod(namespaceName, typeName, methodName);
+			var method = GetMethod(fullName, methodName);
 
 			Debug.Assert(method != null, $"Cannot find method: {methodName}");
 
