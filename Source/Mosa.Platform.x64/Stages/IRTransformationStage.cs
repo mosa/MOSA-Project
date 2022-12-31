@@ -1,6 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-
 using Mosa.Platform.x64.Transforms.IR;
 
 namespace Mosa.Platform.x64.Stages

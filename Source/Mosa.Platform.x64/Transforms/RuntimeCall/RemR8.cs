@@ -4,7 +4,7 @@ using System.Diagnostics;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.x86.Transforms.RuntimeCall
+namespace Mosa.Platform.x64.Transforms.RuntimeCall
 {
 	/// <summary>
 	/// RemR8

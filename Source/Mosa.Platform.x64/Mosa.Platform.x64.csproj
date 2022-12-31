@@ -28,4 +28,7 @@
     <ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj" />
     <ProjectReference Include="..\Mosa.Platform.Intel\Mosa.Platform.Intel.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Transforms\FixedRegisters\" />
+  </ItemGroup>
 </Project>

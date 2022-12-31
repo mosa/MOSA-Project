@@ -6,19 +6,18 @@ using Mosa.Platform.x64.Transforms.Optimizations.Manual;
 namespace Mosa.Platform.x64.Stages
 {
 	/// <summary>
-	/// X86 Optimization Stage
+	/// x64 Optimization Stage
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.Stages.BaseTransformationStage" />
-	public sealed class EarlyOptimizationStage : Compiler.Framework.Stages.BaseTransformationStage
+	public sealed class OptimizationStage : Compiler.Framework.Stages.BaseTransformationStage
 	{
 		public override string Name => "x64." + GetType().Name;
 
-		public EarlyOptimizationStage()
+		public OptimizationStage()
 			: base(true, false)
 		{
 			AddTranformations(AutoTransforms.List);
 			AddTranformations(ManualTransforms.List);
-			AddTranformations(ManualTransforms.EarlyList);
 		}
 	}
 }

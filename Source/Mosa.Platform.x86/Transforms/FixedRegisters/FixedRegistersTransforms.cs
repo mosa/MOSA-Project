@@ -2,7 +2,6 @@
 
 using System.Collections.Generic;
 using Mosa.Compiler.Framework.Transforms;
-using Mosa.Platform.x86.Transform.FixedRegisters;
 
 namespace Mosa.Platform.x86.Transforms.FixedRegisters
 {

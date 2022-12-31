@@ -170,23 +170,20 @@ namespace Mosa.Platform.x64
 				new BaseMethodCompilerStage[]
 				{
 					new IRTransformationStage(),
-					compilerSettings.PlatformOptimizations ? new EarlyOptimizationStage() : null,
-					new TweakStage(),
-					new FixedRegisterAssignmentStage(),
-					new AddressModeConversionStage(),
+					compilerSettings.PlatformOptimizations ? new Stages.OptimizationStage() : null,
+					new PlatformStage(),
 				});
-
-			pipeline.InsertAfterLast<StackLayoutStage>(
-				new BuildStackStage()
-			);
 
 			pipeline.InsertBefore<CodeGenerationStage>(
 				new BaseMethodCompilerStage[]
 				{
-					new FinalTweakStage(),
-					compilerSettings.PlatformOptimizations ? new PostOptimizationStage() : null,
-					new JumpOptimizationStage()
+					new PlatformStage(),
+					compilerSettings.PlatformOptimizations ? new Stages.OptimizationStage() : null,
 				});
+
+			pipeline.InsertBefore<CodeGenerationStage>(
+				new JumpOptimizationStage()
+			);
 		}
 
 		/// <summary>
