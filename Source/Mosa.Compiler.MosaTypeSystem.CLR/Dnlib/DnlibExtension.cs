@@ -3,137 +3,138 @@
 using dnlib.DotNet;
 using Mosa.Compiler.MosaTypeSystem.CLR.Utils;
 
-namespace Mosa.Compiler.MosaTypeSystem.CLR.Dnlib;
-
-internal static class DnlibExtension
+namespace Mosa.Compiler.MosaTypeSystem.CLR.Dnlib
 {
-	public static ITypeDefOrRef GetElementType(this TypeSig signature)
+	internal static class DnlibExtension
 	{
-		return signature.GetNonNestedTypeRefScope();
-	}
-
-	public static TypeSig GetElementSig(this TypeSig signature)
-	{
-		while (signature.Next != null)
+		public static ITypeDefOrRef GetElementType(this TypeSig signature)
 		{
-			signature = signature.Next;
-			var spec = signature.TryGetTypeSpec();
-			if (spec != null)
-				signature = spec.TypeSig;
+			return signature.GetNonNestedTypeRefScope();
 		}
 
-		return signature;
-	}
-
-	public static MethodDef ResolveMethod(this IMethodDefOrRef method)
-	{
-		if (method is MethodDef result)
-
-			return result;
-
-		return ((MemberRef)method).ResolveMethodThrow();
-	}
-
-	public static bool HasOpenGenericParameter(this TypeSig signature)
-	{
-		if (signature.IsGenericParameter)
-			return true;
-
-		if (signature is ModifierSig { Modifier: TypeSpec modifier } && HasOpenGenericParameter(modifier.TypeSig))
-			return true;
-
-		switch (signature)
+		public static TypeSig GetElementSig(this TypeSig signature)
 		{
-			case NonLeafSig:
+			while (signature.Next != null)
 			{
-				return HasOpenGenericParameter(signature.Next);
+				signature = signature.Next;
+				var spec = signature.TryGetTypeSpec();
+				if (spec != null)
+					signature = spec.TypeSig;
 			}
 
-			case TypeDefOrRefSig sig:
-			{
-				if (sig.TypeDefOrRef is TypeSpec type && HasOpenGenericParameter(type.TypeSig))
-					return true;
+			return signature;
+		}
 
-				return sig.TypeDefOrRef.ResolveTypeDef().HasGenericParameters;
-			}
+		public static MethodDef ResolveMethod(this IMethodDefOrRef method)
+		{
+			if (method is MethodDef result)
 
-			case GenericInstSig sig:
+				return result;
+
+			return ((MemberRef)method).ResolveMethodThrow();
+		}
+
+		public static bool HasOpenGenericParameter(this TypeSig signature)
+		{
+			if (signature.IsGenericParameter)
+				return true;
+
+			if (signature is ModifierSig { Modifier: TypeSpec modifier } && HasOpenGenericParameter(modifier.TypeSig))
+				return true;
+
+			switch (signature)
 			{
-				foreach (var genericArg in sig.GenericArguments)
+				case NonLeafSig:
 				{
-					if (HasOpenGenericParameter(genericArg))
-						return true;
+					return HasOpenGenericParameter(signature.Next);
 				}
 
-				if (sig.GenericType.TypeDefOrRef is TypeSpec genericType && HasOpenGenericParameter(genericType.TypeSig))
-					return true;
+				case TypeDefOrRefSig sig:
+				{
+					if (sig.TypeDefOrRef is TypeSpec type && HasOpenGenericParameter(type.TypeSig))
+						return true;
 
-				break;
+					return sig.TypeDefOrRef.ResolveTypeDef().HasGenericParameters;
+				}
+
+				case GenericInstSig sig:
+				{
+					foreach (var genericArg in sig.GenericArguments)
+					{
+						if (HasOpenGenericParameter(genericArg))
+							return true;
+					}
+
+					if (sig.GenericType.TypeDefOrRef is TypeSpec genericType && HasOpenGenericParameter(genericType.TypeSig))
+						return true;
+
+					break;
+				}
 			}
+
+			return false;
 		}
 
-		return false;
-	}
-
-	public static bool HasOpenGenericParameter(this MethodSig signature)
-	{
-		if (signature.GenParamCount > 0)
-			return true;
-
-		foreach (var param in signature.Params)
+		public static bool HasOpenGenericParameter(this MethodSig signature)
 		{
-			if (HasOpenGenericParameter(param))
+			if (signature.GenParamCount > 0)
 				return true;
+
+			foreach (var param in signature.Params)
+			{
+				if (HasOpenGenericParameter(param))
+					return true;
+			}
+			return HasOpenGenericParameter(signature.RetType);
 		}
-		return HasOpenGenericParameter(signature.RetType);
-	}
 
-	public static bool HasModifierOrPinned(this TypeSig signature)
-	{
-		return signature is ModifierSig or PinnedSig;
-	}
-
-	public static TypeSig GetTypeSig(this MosaType type)
-	{
-		return type.GetUnderlyingObject<UnitDesc<TypeDef, TypeSig>>().Signature;
-	}
-
-	public static MethodSig GetMethodSig(this MosaMethod method)
-	{
-		return method.GetUnderlyingObject<UnitDesc<MethodDef, MethodSig>>().Signature;
-	}
-
-	public static FieldSig GetFieldSig(this MosaField field)
-	{
-		return field.GetUnderlyingObject<UnitDesc<FieldDef, FieldSig>>().Signature;
-	}
-
-	public static PropertySig GetPropertySig(this MosaProperty property)
-	{
-		return property.GetUnderlyingObject<UnitDesc<PropertyDef, PropertySig>>().Signature;
-	}
-
-	public static IList<TypeSig> GetGenericArguments(this IReadOnlyList<MosaType> types)
-	{
-		var result = new List<TypeSig>();
-
-		foreach (var type in types)
+		public static bool HasModifierOrPinned(this TypeSig signature)
 		{
-			result.Add(type.GetTypeSig());
+			return signature is ModifierSig or PinnedSig;
 		}
 
-		return result;
-	}
-
-	public static IList<TypeSig> GetGenericArguments(this IList<MosaType> types)
-	{
-		var result = new List<TypeSig>();
-
-		foreach (var type in types)
+		public static TypeSig GetTypeSig(this MosaType type)
 		{
-			result.Add(type.GetTypeSig());
+			return type.GetUnderlyingObject<UnitDesc<TypeDef, TypeSig>>().Signature;
 		}
 
-		return result;
+		public static MethodSig GetMethodSig(this MosaMethod method)
+		{
+			return method.GetUnderlyingObject<UnitDesc<MethodDef, MethodSig>>().Signature;
+		}
+
+		public static FieldSig GetFieldSig(this MosaField field)
+		{
+			return field.GetUnderlyingObject<UnitDesc<FieldDef, FieldSig>>().Signature;
+		}
+
+		public static PropertySig GetPropertySig(this MosaProperty property)
+		{
+			return property.GetUnderlyingObject<UnitDesc<PropertyDef, PropertySig>>().Signature;
+		}
+
+		public static IList<TypeSig> GetGenericArguments(this IReadOnlyList<MosaType> types)
+		{
+			var result = new List<TypeSig>();
+
+			foreach (var type in types)
+			{
+				result.Add(type.GetTypeSig());
+			}
+
+			return result;
+		}
+
+		public static IList<TypeSig> GetGenericArguments(this IList<MosaType> types)
+		{
+			var result = new List<TypeSig>();
+
+			foreach (var type in types)
+			{
+				result.Add(type.GetTypeSig());
+			}
+
+			return result;
+		}
 	}
 }

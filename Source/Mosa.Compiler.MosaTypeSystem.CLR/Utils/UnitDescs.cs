@@ -2,28 +2,29 @@
 
 using dnlib.DotNet;
 
-namespace Mosa.Compiler.MosaTypeSystem.CLR.Utils;
-
-internal class UnitDesc<TDef, TSig> where TDef : IMDTokenProvider
+namespace Mosa.Compiler.MosaTypeSystem.CLR.Utils
 {
-	public ScopedToken Token { get; private set; }
-
-	public TDef Definition { get; private set; }
-
-	public TSig Signature { get; private set; }
-
-	public UnitDesc(ModuleDef module, TDef definition, TSig signature)
+	internal class UnitDesc<TDef, TSig> where TDef : IMDTokenProvider
 	{
-		if (definition != null)
-			Token = new ScopedToken(module, definition.MDToken);
-		Definition = definition;
-		Signature = signature;
-	}
+		public ScopedToken Token { get; private set; }
 
-	public UnitDesc<TDef, TSig> Clone(TSig newSig)
-	{
-		var result = (UnitDesc<TDef, TSig>)MemberwiseClone();
-		result.Signature = newSig;
-		return result;
+		public TDef Definition { get; private set; }
+
+		public TSig Signature { get; private set; }
+
+		public UnitDesc(ModuleDef module, TDef definition, TSig signature)
+		{
+			if (definition != null)
+				Token = new ScopedToken(module, definition.MDToken);
+			Definition = definition;
+			Signature = signature;
+		}
+
+		public UnitDesc<TDef, TSig> Clone(TSig newSig)
+		{
+			var result = (UnitDesc<TDef, TSig>)MemberwiseClone();
+			result.Signature = newSig;
+			return result;
+		}
 	}
 }

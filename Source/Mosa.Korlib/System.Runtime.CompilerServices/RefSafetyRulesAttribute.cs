@@ -1,15 +1,16 @@
 ﻿using System.Microsoft.CodeAnalysis;
 
-namespace System.Runtime.CompilerServices;
-
-[Embedded]
-[AttributeUsage(AttributeTargets.Module, AllowMultiple = false, Inherited = false)]
-public sealed class RefSafetyRulesAttribute : Attribute
+namespace System.Runtime.CompilerServices
 {
-	public readonly int Version;
-
-	public RefSafetyRulesAttribute(int version)
+	[Embedded]
+	[AttributeUsage(AttributeTargets.Module, AllowMultiple = false, Inherited = false)]
+	public sealed class RefSafetyRulesAttribute : Attribute
 	{
-		Version = version;
+		public readonly int Version;
+
+		public RefSafetyRulesAttribute(int version)
+		{
+			Version = version;
+		}
 	}
 }
