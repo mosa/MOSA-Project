@@ -30,7 +30,7 @@ namespace Mosa.Platform.x86.Transforms.IR
 
 			context.SetInstruction(X86.Sar32, v1, op1H, count);
 			context.AppendInstruction(X86.Shrd32, resultLow, op1L, op1H, count);
-			context.AppendInstruction(X86.Sar32, resultHigh, resultHigh, transform.Constant32_32);
+			context.AppendInstruction(X86.Sar32, resultHigh, resultHigh, transform.Constant32_31);
 
 			/// Optimized when shift value is a constant
 			if (count.IsResolvedConstant)

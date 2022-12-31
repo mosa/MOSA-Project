@@ -25,8 +25,8 @@ namespace Mosa.Platform.x86.Transforms.IR
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
 
-			operand1 = X86TransformHelper.MoveConstantToFloatRegister(context, operand1, transform);
-			operand2 = X86TransformHelper.MoveConstantToFloatRegister(context, operand2, transform);
+			operand1 = X86TransformHelper.MoveConstantToFloatRegister(transform, context, operand1);
+			operand2 = X86TransformHelper.MoveConstantToFloatRegister(transform, context, operand2);
 
 			context.SetInstruction(X86.Addsd, result, operand1, operand2);
 		}

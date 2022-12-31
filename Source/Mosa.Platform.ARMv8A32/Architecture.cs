@@ -144,38 +144,23 @@ namespace Mosa.Platform.ARMv8A32
 		/// <param name="compilerSettings">The compiler options.</param>
 		public override void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> pipeline, CompilerSettings compilerSettings)
 		{
-			//pipeline.InsertBefore<GreedyRegisterAllocatorStage>(
-			//	new StopStage()
-			//);
-
-			//pipeline.InsertAfterFirst<CodeGenerationStage>(
-			//	new StopStage()
-			//);
-
-			//pipeline.InsertBefore<CallStage>(
-			//	new Stages.RuntimeCallStage()
-			//);
+			pipeline.InsertBefore<CallStage>(
+				new Stages.RuntimeCallStage()
+			);
 
 			pipeline.InsertAfterLast<PlatformIntrinsicStage>(
 				new BaseMethodCompilerStage[]
 				{
 					new IRTransformationStage(),
-
-					//compilerSettings.EnablePlatformOptimizations ? new OptimizationStage() : null,
-					//new TweakStage(),
-					//compilerSettings.PlatformOptimizations ? new SimpleDeadCodeRemovalStage() : null,
+					compilerSettings.PlatformOptimizations ? new Stages.OptimizationStage() : null,
+					new PlatformStage(),
 				});
-
-			//pipeline.InsertAfterLast<StackLayoutStage>(
-			//	new BuildStackStage()
-			//);
 
 			pipeline.InsertBefore<CodeGenerationStage>(
 				new BaseMethodCompilerStage[]
 				{
-					//new FinalTweakStage(),
-
-					//compilerSettings.EnablePlatformOptimizations ? new PostOptimizationStage() : null,
+					new PlatformStage(),
+					compilerSettings.PlatformOptimizations ? new Stages.OptimizationStage() : null,
 				});
 
 			pipeline.InsertBefore<CodeGenerationStage>(

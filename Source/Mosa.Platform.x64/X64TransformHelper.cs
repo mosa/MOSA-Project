@@ -7,7 +7,7 @@ namespace Mosa.Platform.x64
 {
 	public static class X64TransformHelper
 	{
-		public static Operand MoveConstantToFloatRegister(Context context, Operand operand, TransformContext transform)
+		public static Operand MoveConstantToFloatRegister(TransformContext transform, Context context, Operand operand)
 		{
 			if (!operand.IsConstant)
 				return operand;
@@ -22,6 +22,5 @@ namespace Mosa.Platform.x64
 
 			return v1;
 		}
-
 	}
 }

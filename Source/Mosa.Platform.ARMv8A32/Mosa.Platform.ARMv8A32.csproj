@@ -25,6 +25,5 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Instructions\" />
-    <Folder Include="Transforms\IR\" />
   </ItemGroup>
 </Project>

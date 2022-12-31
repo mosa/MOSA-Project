@@ -24,7 +24,7 @@ namespace Mosa.Platform.x64.Transforms.IR
 			var result = context.Result;
 			var operand1 = context.Operand1;
 
-			operand1 = X64TransformHelper.MoveConstantToFloatRegister(context, operand1, transform);
+			operand1 = X64TransformHelper.MoveConstantToFloatRegister(transform, context, operand1);
 
 			context.SetInstruction(X64.Cvttss2si32, result, operand1);
 		}

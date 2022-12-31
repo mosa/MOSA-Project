@@ -7,7 +7,7 @@ namespace Mosa.Platform.x86
 {
 	public static class X86TransformHelper
 	{
-		public static Operand MoveConstantToFloatRegister(Context context, Operand operand, TransformContext transform)
+		public static Operand MoveConstantToFloatRegister(TransformContext transform, Context context, Operand operand)
 		{
 			if (!operand.IsConstant)
 				return operand;

@@ -39,7 +39,17 @@ namespace Mosa.Compiler.Framework.Transforms
 
 		public Operand Constant32_1 { get; private set; }
 
+		public Operand Constant32_2 { get; private set; }
+
+		public Operand Constant32_3 { get; private set; }
+
 		public Operand Constant32_4 { get; private set; }
+
+		public Operand Constant32_16 { get; private set; }
+
+		public Operand Constant32_24 { get; private set; }
+
+		public Operand Constant32_31 { get; private set; }
 
 		public Operand Constant32_32 { get; private set; }
 
@@ -77,6 +87,30 @@ namespace Mosa.Compiler.Framework.Transforms
 		public Operand StackPointer
 		{ get { return MethodCompiler.Compiler.StackPointer; } }
 
+		/// <summary>
+		/// Gets the link register.
+		/// </summary>
+		public Operand LinkRegister
+		{ get { return MethodCompiler.Compiler.LinkRegister; } }
+
+		/// <summary>
+		/// Gets the program counter
+		/// </summary>
+		public Operand ProgramCounter
+		{ get { return MethodCompiler.Compiler.ProgramCounter; } }
+
+		/// <summary>
+		/// Gets the exception register.
+		/// </summary>
+		public Operand ExceptionRegister
+		{ get { return MethodCompiler.Compiler.ExceptionRegister; } }
+
+		/// <summary>
+		/// Gets the leave target register.
+		/// </summary>
+		public Operand LeaveTargetRegister
+		{ get { return MethodCompiler.Compiler.LeaveTargetRegister; } }
+
 		public uint NativePointerSize
 		{ get { return Compiler.Architecture.NativePointerSize; } }
 
@@ -109,9 +143,14 @@ namespace Mosa.Compiler.Framework.Transforms
 			ConstantZeroR8 = MethodCompiler.ConstantZeroR8;
 
 			Constant32_1 = CreateConstant32(1);
+			Constant32_2 = CreateConstant32(2);
+			Constant32_3 = CreateConstant32(3);
 			Constant32_4 = CreateConstant32(4);
+			Constant32_16 = CreateConstant32(16);
+			Constant32_31 = CreateConstant32(31);
 			Constant32_32 = CreateConstant32(32);
 			Constant32_64 = CreateConstant32(64);
+			Constant32_24 = CreateConstant32(24);
 
 			Constant64_32 = CreateConstant64(32);
 
