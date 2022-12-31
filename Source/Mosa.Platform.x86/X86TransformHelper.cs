@@ -22,18 +22,5 @@ namespace Mosa.Platform.x86
 
 			return v1;
 		}
-
-		//private void Transform(Context context, TransformContext transform) // scratch code
-		//{
-		//	var result = context.Result;
-		//	var operand1 = context.Operand1;
-
-		//	if (operand1.IsConstant)
-		//	{
-		//		result = transform.LoadValueR4(context, operand1.ConstantFloat, X86.MovssLoad);
-		//	}
-
-		//	context.SetInstruction(X86.Movdssi32, result, operand1);
-		//}
 	}
 }
