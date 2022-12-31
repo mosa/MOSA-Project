@@ -66,8 +66,6 @@ namespace Mosa.Compiler.MosaTypeSystem
 			I = typeResolver.ResolveType(corlib, BuiltInType.IntPtr);
 			U = typeResolver.ResolveType(corlib, BuiltInType.UIntPtr);
 			TypedRef = typeResolver.ResolveType(corlib, BuiltInType.TypedReference);
-			Pointer = typeResolver.ResolveType(corlib, BuiltInType.TypedReference);
-			TypedRef = typeResolver.ResolveType(corlib, BuiltInType.TypedReference);
 			Pointer = Void.ToUnmanagedPointer();
 
 			//ValueType = typeResolver.ResolveType(typeSystem, corlib, BuiltInType.ValueType);
