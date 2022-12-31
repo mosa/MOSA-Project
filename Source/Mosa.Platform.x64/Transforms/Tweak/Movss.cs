@@ -17,7 +17,7 @@ namespace Mosa.Platform.x64.Transforms.Tweak
 
 		public override bool Match(Context context, TransformContext transform)
 		{
-			return context.Result.IsCPURegister && context.Operand1.IsCPURegister && context.Result.Register == context.Operand1.Register;
+			return context.Operand1.IsCPURegister && context.Result.Register == context.Operand1.Register;
 		}
 
 		public override void Transform(Context context, TransformContext transform)
