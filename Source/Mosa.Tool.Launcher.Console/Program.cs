@@ -19,7 +19,7 @@ namespace Mosa.Tool.Launcher.Console
 		{
 			Settings = AppLocationsSettings.GetAppLocations();
 
-			NotifyStatus("Current Directory: " + Environment.CurrentDirectory);
+			NotifyStatus($"Current Directory: {Environment.CurrentDirectory}");
 
 			RegisterPlatforms();
 

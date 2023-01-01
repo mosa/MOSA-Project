@@ -101,8 +101,8 @@ namespace Mosa.Tool.Launcher
 				}
 			} else settings.SetValue("Launcher.Start", false);
 
-				// Output the current directory
-			AddOutput("Current Directory: " + Environment.CurrentDirectory);
+			// Output the current directory
+			AddOutput($"Current Directory: {Environment.CurrentDirectory}");
 
 			// Set title label with the current compiler version
 			TitleLbl.Content += CompilerVersion.VersionString;
@@ -368,7 +368,7 @@ namespace Mosa.Tool.Launcher
 			if (result == null)
 				CompileBuildAndStart();
 			else
-				AddOutput("ERROR: " + result);
+				AddOutput($"ERROR: {result}");
 		}
 
 		private async void SrcBtn_OnClick(object? _, RoutedEventArgs __)
