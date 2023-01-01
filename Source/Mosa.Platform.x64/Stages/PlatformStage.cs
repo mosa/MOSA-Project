@@ -9,8 +9,8 @@ namespace Mosa.Platform.x64.Stages
 	/// <summary>
 	/// Platform Transformation Stage
 	/// </summary>
-	/// <seealso cref="Mosa.Compiler.Framework.Stages.BaseTransformationStage" />
-	public sealed class PlatformStage : Compiler.Framework.Stages.BaseTransformationStage
+	/// <seealso cref="Mosa.Compiler.Framework.Stages.BaseTransformStage" />
+	public sealed class PlatformStage : Compiler.Framework.Stages.BaseTransformStage
 	{
 		public override string Name => "x64." + GetType().Name;
 

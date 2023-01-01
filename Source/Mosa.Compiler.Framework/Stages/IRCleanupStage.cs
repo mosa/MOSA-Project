@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	/// IR Cleanup Stage
 	/// </summary>
-	public class IRCleanupStage : BaseTransformationStage
+	public class IRCleanupStage : BaseTransformStage
 	{
 		public IRCleanupStage() : base(false, true)
 		{

@@ -1128,6 +1128,7 @@ namespace Mosa.Tool.Explorer
 			cbEnableBitTracker.Checked = Settings.GetValue("Optimizations.BitTracker", cbEnableBitTracker.Checked);
 			cbEnableBinaryCodeGeneration.Checked = Settings.GetValue("Compiler.Binary", cbEnableBinaryCodeGeneration.Checked);
 			cbEnableMethodScanner.Checked = Settings.GetValue("Compiler.MethodScanner", cbEnableMethodScanner.Checked);
+			CBEnableMultithreading.Checked = Settings.GetValue("Compiler.Multithreading", CBEnableMultithreading.Checked);
 
 			tbFilter.Text = Settings.GetValue("Explorer.Filter", tbFilter.Text);
 

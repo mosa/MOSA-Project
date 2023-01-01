@@ -538,6 +538,15 @@
 			"Filter": "",
 			"Result": "(IR.Move## 1)",
 			"Variations": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "Truncate64x32",
+			"SubName": "",
+			"Expression": "IR.Truncate64x32 a",
+			"Filter": "IsResolvedConstant(a)",
+			"Result": "(IR.Move32 [To32(a)])"
 		}
 	]
 }
