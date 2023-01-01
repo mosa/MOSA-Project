@@ -43,9 +43,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected bool CountTransformations = false;
 
-		public BaseTransformStage(bool enableTransformatOptimizations = false, bool enableBlockOptimizations = false, int maxPasses = MaximumPasses)
+		public BaseTransformStage(bool enableTransformOptimizations = false, bool enableBlockOptimizations = false, int maxPasses = MaximumPasses)
 		{
-			EnableTransformOptimizations = enableTransformatOptimizations;
+			EnableTransformOptimizations = enableTransformOptimizations;
 			EnableBlockOptimizations = enableBlockOptimizations;
 			MaxPasses = maxPasses;
 
