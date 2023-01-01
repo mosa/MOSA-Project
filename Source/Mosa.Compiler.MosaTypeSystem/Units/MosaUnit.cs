@@ -11,13 +11,13 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public uint ID { get; internal set; }
 
-		public TypeSystem TypeSystem { get; internal set; }
+		public TypeSystem? TypeSystem { get; internal set; }
 
 		public string Name { get; private set; }
 
-		public string FullName { get; internal set; }
+		public string? FullName { get; internal set; }
 
-		public string ShortName { get; internal set; }
+		public string? ShortName { get; internal set; }
 
 		public bool IsCompilerGenerated { get; private set; }
 
@@ -45,7 +45,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return (T?)UnderlyingObject;
 		}
 
-		public override string ToString()
+		public override string? ToString()
 		{
 			return FullName;
 		}
@@ -54,7 +54,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 		{
 			foreach (var attribute in customAttributes)
 			{
-				if (attribute.Constructor.DeclaringType.FullName == fullName)
+				if (attribute.Constructor.DeclaringType?.FullName == fullName)
 				{
 					return attribute;
 				}
