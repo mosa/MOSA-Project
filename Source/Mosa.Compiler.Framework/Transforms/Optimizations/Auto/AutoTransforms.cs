@@ -115,6 +115,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto
 			 new ConstantFolding.Compare32x64LessThanMax(),
 			 new ConstantFolding.Compare64x32LessThanMax(),
 			 new ConstantFolding.Compare64x64LessThanMax(),
+			 new ConstantFolding.Truncate64x32(),
 			 new ConstantMove.Add32(),
 			 new ConstantMove.Add64(),
 			 new ConstantMove.AddR4(),

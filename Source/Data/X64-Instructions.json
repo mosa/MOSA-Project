@@ -735,7 +735,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex32],opcode=0xF2,opcode2=0x0F,opcode3=0x5A,mod=11,reg=reg3:o1,rm=reg3:o2,rex.r=reg4x:o1,rex.x=0,rex.b=reg4x:o2"
+					"Encoding": "[x64-rex32],opcode=0xF2,opcode2=0x0F,opcode3=0x5A,mod=11,reg=reg3:o1,rm=reg3:o2,rex.r=reg4x:o1,rex.x=0,rex.b=reg4x:o1"
 				}
 			]
 		},
@@ -4520,7 +4520,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[#register][register]",
-					"Encoding": "[x64-rex32],opcode=0x85,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
+					"Encoding": "[x64-rex32],opcode=0x85,mod=11,reg=reg3:o1,rm=reg3:o2,rex.r=reg4x:o1,rex.x=0,rex.b=reg4x:o2"
 				},
 				{
 					"Condition": "[#register][constant]",
@@ -4543,11 +4543,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[#register][register]",
-					"Encoding": "[x64-rex64],opcode=0x85,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
+					"Encoding": "[x64-rex64],opcode=0x85,mod=11,reg=reg3:o1,rm=reg3:o2,rex.r=reg4x:o1,rex.x=0,rex.b=reg4x:o2"
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex64],opcode=0xF7,mod=11,reg=000,rm=reg3:o1,immediate=imm32:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex64],opcode=0xF7,mod=11,reg=000,rm=reg3:o1,immediate=imm32:o2,rex.r=reg4x:o1,rex.x=0,rex.b=0"
 				}
 			]
 		},

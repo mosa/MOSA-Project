@@ -27,7 +27,7 @@ namespace Mosa.Platform.x64.Instructions
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append1Bit((node.Operand1.Register.RegisterCode >> 3));
 			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append1Bit((node.Operand2.Register.RegisterCode >> 3));
+			opcodeEncoder.Append1Bit((node.Operand1.Register.RegisterCode >> 3));
 			opcodeEncoder.Append8Bits(0xF2);
 			opcodeEncoder.Append8Bits(0x0F);
 			opcodeEncoder.Append8Bits(0x5A);

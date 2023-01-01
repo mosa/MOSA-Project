@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	///	Optimization Stage
 	/// </summary>
-	public abstract class BaseTransformationStage : BaseMethodCompilerStage
+	public abstract class BaseTransformStage : BaseMethodCompilerStage
 	{
 		private const int MaximumInstructionID = 1000;
 		private const int MaximumPasses = 20;
@@ -22,7 +22,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private readonly Counter RemoveUnreachableBlocksCount;
 		private readonly Counter BlocksMergedCount;
 
-		private readonly List<BaseTransform>[] transformations = new List<BaseTransform>[MaximumInstructionID];
+		private readonly List<BaseTransform>[] transforms = new List<BaseTransform>[MaximumInstructionID];
 
 		protected TransformContext TransformContext;
 
@@ -30,7 +30,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected TraceLog specialTrace;
 
-		protected bool EnableTransformationOptimizations;
+		protected bool EnableTransformOptimizations;
 		protected bool EnableBlockOptimizations;
 		protected bool IsInSSAForm;
 		protected bool AreCPURegistersAllocated;
@@ -39,13 +39,13 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected BitArray EmptyBlocks;
 
-		protected Dictionary<string, Counter> transformationsCounts = new Dictionary<string, Counter>();
+		protected Dictionary<string, Counter> transformCounts = new Dictionary<string, Counter>();
 
 		protected bool CountTransformations = false;
 
-		public BaseTransformationStage(bool enableTransformationOptimizations = false, bool enableBlockOptimizations = false, int maxPasses = MaximumPasses)
+		public BaseTransformStage(bool enableTransformatOptimizations = false, bool enableBlockOptimizations = false, int maxPasses = MaximumPasses)
 		{
-			EnableTransformationOptimizations = enableTransformationOptimizations;
+			EnableTransformOptimizations = enableTransformatOptimizations;
 			EnableBlockOptimizations = enableBlockOptimizations;
 			MaxPasses = maxPasses;
 
@@ -69,22 +69,22 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected void AddTranformations(List<BaseTransform> list)
 		{
-			foreach (var transformation in list)
+			foreach (var transform in list)
 			{
-				AddTranformation(transformation);
+				AddTranformation(transform);
 			}
 		}
 
-		protected void AddTranformation(BaseTransform transformation)
+		protected void AddTranformation(BaseTransform transform)
 		{
-			int id = transformation.Instruction == null ? 0 : transformation.Instruction.ID;
+			int id = transform.Instruction == null ? 0 : transform.Instruction.ID;
 
-			if (transformations[id] == null)
+			if (transforms[id] == null)
 			{
-				transformations[id] = new List<BaseTransform>();
+				transforms[id] = new List<BaseTransform>();
 			}
 
-			transformations[id].Add(transformation);
+			transforms[id].Add(transform);
 		}
 
 		protected override void Finish()
@@ -137,7 +137,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private bool InstructionTransformationPass()
 		{
-			if (!EnableTransformationOptimizations)
+			if (!EnableTransformOptimizations)
 				return false;
 
 			if (TransformContext == null)
@@ -196,28 +196,28 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private bool ApplyTransformations(Context context, int id)
 		{
-			var instructionTransformations = transformations[id];
+			var instructionTransforms = transforms[id];
 
-			if (instructionTransformations == null)
+			if (instructionTransforms == null)
 				return false;
 
-			int count = instructionTransformations.Count;
+			int count = instructionTransforms.Count;
 
 			for (int i = 0; i < count; i++)
 			{
-				var transformation = instructionTransformations[i];
+				var transform = instructionTransforms[i];
 
-				var updated = TransformContext.ApplyTransform(context, transformation);
+				var updated = TransformContext.ApplyTransform(context, transform);
 
 				if (updated)
 				{
-					if (transformation.IsOptimization)
+					if (transform.IsOptimization)
 						OptimizationCount.Increment();
-					else if (transformation.IsTranformation)
+					else if (transform.IsTranformation)
 						TransformCount.Increment();
 
 					if (CountTransformations)
-						CountTransformation(transformation);
+						CountTransformation(transform);
 
 					if (CompilerSettings.FullCheckMode)
 						CheckAllPhiInstructions();
@@ -229,15 +229,15 @@ namespace Mosa.Compiler.Framework.Stages
 			return false;
 		}
 
-		private void CountTransformation(BaseTransform transformation)
+		private void CountTransformation(BaseTransform transform)
 		{
-			var name = transformation.Name;
+			var name = transform.Name;
 
-			if (!transformationsCounts.TryGetValue(name, out Counter counter))
+			if (!transformCounts.TryGetValue(name, out Counter counter))
 			{
 				counter = new Counter($"Transform-{name}", 1);
 
-				transformationsCounts.Add(name, counter);
+				transformCounts.Add(name, counter);
 				Register(counter);
 			}
 			else

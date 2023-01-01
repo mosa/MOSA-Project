@@ -8,8 +8,8 @@ namespace Mosa.Platform.x86.Stages
 	/// <summary>
 	/// X86 IR Transformation Stage
 	/// </summary>
-	/// <seealso cref="Mosa.Compiler.Framework.Stages.BaseTransformationStage" />
-	public sealed class IRTransformationStage : Compiler.Framework.Stages.BaseTransformationStage
+	/// <seealso cref="Mosa.Compiler.Framework.Stages.BaseTransformStage" />
+	public sealed class IRTransformationStage : Compiler.Framework.Stages.BaseTransformStage
 	{
 		public override string Name => "x86." + GetType().Name;
 

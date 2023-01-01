@@ -16,20 +16,17 @@ namespace Mosa.Platform.x64.Transforms.Tweak
 
 		public override bool Match(Context context, TransformContext transform)
 		{
-			return true;
+			return context.Operand1.IsConstant;
 		}
 
 		public override void Transform(Context context, TransformContext transform)
 		{
 			var left = context.Operand1;
 
-			if (left.IsConstant)
-			{
-				var v1 = transform.AllocateVirtualRegister(left.Type);
+			var v1 = transform.AllocateVirtualRegister(left.Type);
 
-				context.InsertBefore().AppendInstruction(X64.Mov64, v1, left);
-				context.Operand1 = v1;
-			}
+			context.InsertBefore().AppendInstruction(X64.Mov64, v1, left);
+			context.Operand1 = v1;
 		}
 	}
 }
