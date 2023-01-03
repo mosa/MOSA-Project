@@ -1,0 +1,116 @@
+﻿{
+	"Commutative": [
+	],
+	"Optimizations": [
+		{
+			"FamilyName": "x64",
+			"Type": "Ordering",
+			"Name": "Adc##",
+			"SubName": "",
+			"Expression": "X64.Adc## x y",
+			"Filter": "IsVirtualRegister(x) && IsVirtualRegister(y) && IsGreater(UseCount(x),UseCount(y)) && !IsResultAndOperand1Same(@)",
+			"Result": "(X64.Adc## y x)",
+			"Priority": "10",
+			"Variations": "No"
+		},
+		{
+			"FamilyName": "x64",
+			"Type": "Ordering",
+			"Name": "Add##",
+			"SubName": "",
+			"Expression": "X64.Add## x y",
+			"Filter": "IsVirtualRegister(x) && IsVirtualRegister(y) && IsGreater(UseCount(x),UseCount(y)) && !IsResultAndOperand1Same(@)",
+			"Result": "(X64.Add## y x)",
+			"Priority": "10",
+			"Variations": "No"
+		},
+		{
+			"FamilyName": "x64",
+			"Type": "Ordering",
+			"Name": "Addss",
+			"SubName": "",
+			"Expression": "X64.Addss x y",
+			"Filter": "IsVirtualRegister(x) && IsVirtualRegister(y) && IsGreater(UseCount(x),UseCount(y)) && !IsResultAndOperand1Same(@)",
+			"Result": "(X64.Addss y x)",
+			"Priority": "10",
+			"Variations": "No"
+		},
+		{
+			"FamilyName": "x64",
+			"Type": "Ordering",
+			"Name": "Addsd",
+			"SubName": "",
+			"Expression": "X64.Addsd x y",
+			"Filter": "IsVirtualRegister(x) && IsVirtualRegister(y) && IsGreater(UseCount(x),UseCount(y)) && !IsResultAndOperand1Same(@)",
+			"Result": "(X64.Addsd y x)",
+			"Priority": "10",
+			"Variations": "No"
+		},
+		{
+			"FamilyName": "x64",
+			"Type": "Ordering",
+			"Name": "And##",
+			"SubName": "",
+			"Expression": "X64.And## x y",
+			"Filter": "IsVirtualRegister(x) && IsVirtualRegister(y) && IsGreater(UseCount(x),UseCount(y)) && !IsResultAndOperand1Same(@)",
+			"Result": "(X64.And## y x)",
+			"Priority": "10",
+			"Variations": "No"
+		},
+		{
+			"FamilyName": "x64",
+			"Type": "Ordering",
+			"Name": "IMul##",
+			"SubName": "",
+			"Expression": "X64.IMul## x y",
+			"Filter": "IsVirtualRegister(x) && IsVirtualRegister(y) && IsGreater(UseCount(x),UseCount(y)) && !IsResultAndOperand1Same(@)",
+			"Result": "(X64.IMul## y x)",
+			"Priority": "10",
+			"Variations": "No"
+		},
+		{
+			"FamilyName": "x64",
+			"Type": "Ordering",
+			"Name": "Mulss",
+			"SubName": "",
+			"Expression": "X64.Mulss x y",
+			"Filter": "IsVirtualRegister(x) && IsVirtualRegister(y) && IsGreater(UseCount(x),UseCount(y)) && !IsResultAndOperand1Same(@)",
+			"Result": "(X64.Mulss y x)",
+			"Priority": "10",
+			"Variations": "No"
+		},
+		{
+			"FamilyName": "x64",
+			"Type": "Ordering",
+			"Name": "Mulsd",
+			"SubName": "",
+			"Expression": "X64.Mulsd x y",
+			"Filter": "IsVirtualRegister(x) && IsVirtualRegister(y) && IsGreater(UseCount(x),UseCount(y)) && !IsResultAndOperand1Same(@)",
+			"Result": "(X64.Mulsd y x)",
+			"Priority": "10",
+			"Variations": "No"
+		},
+		{
+			"FamilyName": "x64",
+			"Type": "Ordering",
+			"Name": "Or##",
+			"SubName": "",
+			"Expression": "X64.Or## x y",
+			"Filter": "IsVirtualRegister(x) && IsVirtualRegister(y) && IsGreater(UseCount(x),UseCount(y)) && !IsResultAndOperand1Same(@)",
+			"Result": "(X64.Or## y x)",
+			"Priority": "10",
+			"Variations": "No"
+		},
+		{
+			"FamilyName": "x64",
+			"Type": "Ordering",
+			"Name": "Xor##",
+			"SubName": "",
+			"Expression": "X64.Xor## x y",
+			"Filter": "IsVirtualRegister(x) && IsVirtualRegister(y) && IsGreater(UseCount(x),UseCount(y)) && !IsResultAndOperand1Same(@)",
+			"Result": "(X64.Xor## y x)",
+			"Priority": "10",
+			"Variations": "No"
+		}
+	]
+}

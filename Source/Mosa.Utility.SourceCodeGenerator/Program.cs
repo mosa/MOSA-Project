@@ -97,6 +97,20 @@ namespace Mosa.Utility.SourceCodeGenerator
 			).Execute();
 
 			new BuildTransformations(
+				Path.Combine(dataPath, @"X86-Optimizations-Standard.json"),
+				Path.Combine(targetPath, @"Mosa.Platform.x86\Transforms\Optimizations\Auto"),
+				"Mosa.Platform.x86",
+				"Mosa.Platform.x86"
+			).Execute();
+
+			new BuildTransformations(
+				Path.Combine(dataPath, @"X86-Optimizations-Ordering.json"),
+				Path.Combine(targetPath, @"Mosa.Platform.x86\Transforms\Optimizations\Auto"),
+				"Mosa.Platform.x86",
+				"Mosa.Platform.x86"
+			).Execute();
+
+			new BuildTransformations(
 				Path.Combine(dataPath, @"X64-Optimizations-Standard.json"),
 				Path.Combine(targetPath, @"Mosa.Platform.x64\Transforms\Optimizations\Auto"),
 				"Mosa.Platform.x64",
@@ -104,10 +118,10 @@ namespace Mosa.Utility.SourceCodeGenerator
 			).Execute();
 
 			new BuildTransformations(
-				Path.Combine(dataPath, @"X86-Optimizations-Standard.json"),
-				Path.Combine(targetPath, @"Mosa.Platform.x86\Transforms\Optimizations\Auto"),
-				"Mosa.Platform.x86",
-				"Mosa.Platform.x86"
+				Path.Combine(dataPath, @"X64-Optimizations-Ordering.json"),
+				Path.Combine(targetPath, @"Mosa.Platform.x64\Transforms\Optimizations\Auto"),
+				"Mosa.Platform.x64",
+				"Mosa.Platform.x64"
 			).Execute();
 
 			new BuildTransformationListFile(

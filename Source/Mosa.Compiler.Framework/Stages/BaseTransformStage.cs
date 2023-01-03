@@ -3,6 +3,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.Framework.Transforms;
 
@@ -43,6 +44,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected bool CountTransformations = false;
 
+		private bool SortedByPriority = false;
+
 		public BaseTransformStage(bool enableTransformOptimizations = false, bool enableBlockOptimizations = false, int maxPasses = MaximumPasses)
 		{
 			EnableTransformOptimizations = enableTransformOptimizations;
@@ -75,7 +78,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		protected void AddTranformation(BaseTransform transform)
+		private void AddTranformation(BaseTransform transform)
 		{
 			int id = transform.Instruction == null ? 0 : transform.Instruction.ID;
 
@@ -99,6 +102,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Run()
 		{
+			SortByPriority();
+
 			trace = CreateTraceLog(5);
 
 			IsInSSAForm = MethodCompiler.IsInSSAForm;
@@ -108,6 +113,23 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (CompilerSettings.FullCheckMode)
 				CheckAllPhiInstructions();
+		}
+
+		private void SortByPriority()
+		{
+			if (SortedByPriority)
+				return;
+
+			foreach (var list in transforms)
+			{
+				if (list == null)
+					continue;
+
+				list.Sort();
+				list.Reverse();
+			}
+
+			SortedByPriority = true;
 		}
 
 		protected virtual void CustomizeTransformation()
