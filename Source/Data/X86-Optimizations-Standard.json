@@ -9,7 +9,7 @@
 			"FamilyName": "x86",
 			"Type": "Standard",
 			"Name": "Mov32",
-			"SubName": "Consolidate",
+			"SubName": "Coalescing",
 			"Expression": "X86.Mov32 (X86.Mov32 a)",
 			"Filter": "IsVirtualRegister(a)",
 			"Result": "(X86.Mov32 a)",

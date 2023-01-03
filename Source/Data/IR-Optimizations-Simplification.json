@@ -26,7 +26,7 @@
 			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "Move##",
-			"SubName": "Propagation",
+			"SubName": "Coalescing",
 			"Expression": "IR.Move## (IR.Move## a)",
 			"Filter": "!IsCPURegister(a)",
 			"Result": "(IR.Move## a)"
@@ -35,7 +35,7 @@
 			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "MoveObject",
-			"SubName": "Propagation",
+			"SubName": "Coalescing",
 			"Expression": "IR.MoveObject (IR.MoveObject a)",
 			"Filter": "",
 			"Result": "(IR.MoveObject a)"
