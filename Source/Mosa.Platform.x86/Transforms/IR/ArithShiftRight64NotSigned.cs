@@ -8,9 +8,9 @@ namespace Mosa.Platform.x86.Transforms.IR
 	/// <summary>
 	/// ArithShiftRight64Shift32Plus
 	/// </summary>
-	public sealed class ArithShiftRight64Shift32Plus : BaseTransform
+	public sealed class ArithShiftRight64NotSigned : BaseTransform
 	{
-		public ArithShiftRight64Shift32Plus() : base(IRInstruction.ArithShiftRight64, TransformType.Manual | TransformType.Transform)
+		public ArithShiftRight64NotSigned() : base(IRInstruction.ArithShiftRight64, TransformType.Manual | TransformType.Transform)
 		{
 		}
 

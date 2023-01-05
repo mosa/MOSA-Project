@@ -4,15 +4,13 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.LowerTo32
 {
 	public sealed class ArithShiftRight64By32 : BaseTransform
 	{
-		public ArithShiftRight64By32() : base(IRInstruction.ArithShiftRight64, TransformType.Manual | TransformType.Optimization, true)
+		public ArithShiftRight64By32() : base(IRInstruction.ArithShiftRight64, TransformType.Manual | TransformType.Optimization)
 		{
 		}
 
 		public override bool Match(Context context, TransformContext transform)
 		{
-			return false;
-
-			//return transform.LowerTo32 && context.Operand2.IsResolvedConstant && context.Operand2.ConstantUnsigned32 == 32;
+			return transform.LowerTo32 && context.Operand2.IsResolvedConstant && context.Operand2.ConstantUnsigned32 == 32;
 		}
 
 		public override void Transform(Context context, TransformContext transform)
