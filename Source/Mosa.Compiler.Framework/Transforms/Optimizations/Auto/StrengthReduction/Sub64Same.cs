@@ -15,6 +15,8 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 		{
 		}
 
+		public override int Priority => 80;
+
 		public override bool Match(Context context, TransformContext transform)
 		{
 			if (!AreSame(context.Operand1, context.Operand2))
