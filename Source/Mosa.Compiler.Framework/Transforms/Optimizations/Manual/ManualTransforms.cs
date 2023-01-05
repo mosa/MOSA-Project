@@ -116,9 +116,8 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual
 
 			//LowerTo32.Compare64x32UnsignedGreater(),
 			new LowerTo32.ArithShiftRight64By32(),
-
-			//new LowerTo32.ShiftRight64ByConstant32(),
-			//new LowerTo32.ShiftRight64ByConstant32Plus(),
+			new LowerTo32.ShiftRight64ByConstant32(),
+			new LowerTo32.ShiftRight64ByConstant32Plus(),
 
 			new LowerTo32.ShiftLeft64ByConstant32Plus(),
 			new LowerTo32.ShiftLeft64ByConstant32(),
