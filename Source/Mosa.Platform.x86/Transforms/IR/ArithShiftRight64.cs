@@ -26,33 +26,35 @@ namespace Mosa.Platform.x86.Transforms.IR
 
 			var count = context.Operand2;
 
-			var v1 = transform.AllocateVirtualRegister32();
-
-			context.SetInstruction(X86.Sar32, v1, op1H, count);
-			context.AppendInstruction(X86.Shrd32, resultLow, op1L, op1H, count);
-			context.AppendInstruction(X86.Sar32, resultHigh, resultHigh, transform.Constant32_31);
-
-			/// Optimized when shift value is a constant
-			if (count.IsResolvedConstant)
-			{
-				if (count.ConstantUnsigned32 == 32)
-				{
-					context.AppendInstruction(X86.Mov32, resultHigh, v1);
-				}
-				else
-				{
-					context.AppendInstruction(X86.Mov32, resultLow, v1);
-				}
-
-				return;
-			}
-
+			var v1_count = transform.AllocateVirtualRegister32();
 			var v2 = transform.AllocateVirtualRegister32();
+			var v3 = transform.AllocateVirtualRegister32();
 
-			context.AppendInstruction(X86.Mov32, v2, count);
-			context.AppendInstruction(X86.Test32, null, v2, transform.Constant32_32);
-			context.AppendInstruction(X86.CMov32, ConditionCode.NotEqual, resultLow, resultLow, v1);
-			context.AppendInstruction(X86.CMov32, ConditionCode.Equal, resultHigh, resultHigh, v1);
+			var newBlocks = transform.CreateNewBlockContexts(4, context.Label);
+			var nextBlock = transform.Split(context);
+
+			context.SetInstruction(X86.Mov32, v1_count, count);
+			context.AppendInstruction(X86.Cmp32, null, v1_count, transform.Constant32_64);
+			context.AppendInstruction(X86.Branch, ConditionCode.GreaterOrEqual, newBlocks[3].Block);
+			context.AppendInstruction(X86.Jmp, newBlocks[0].Block);
+
+			newBlocks[0].AppendInstruction(X86.Cmp32, null, v1_count, transform.Constant32_32);
+			newBlocks[0].AppendInstruction(X86.Branch, ConditionCode.GreaterOrEqual, newBlocks[2].Block);
+			newBlocks[0].AppendInstruction(X86.Jmp, newBlocks[1].Block);
+
+			newBlocks[1].AppendInstruction(X86.Shrd32, resultLow, op1L, op1H, v1_count);
+			newBlocks[1].AppendInstruction(X86.Sar32, resultHigh, op1H, v1_count);
+			newBlocks[1].AppendInstruction(X86.Jmp, nextBlock.Block);
+
+			newBlocks[2].AppendInstruction(X86.Mov32, v2, op1H);
+			newBlocks[2].AppendInstruction(X86.Sar32, resultHigh, op1H, transform.Constant32_31);
+			newBlocks[2].AppendInstruction(X86.And32, v3, v1_count, transform.Constant32_31);
+			newBlocks[2].AppendInstruction(X86.Sar32, resultLow, v2, v3);
+			newBlocks[2].AppendInstruction(X86.Jmp, nextBlock.Block);
+
+			newBlocks[3].AppendInstruction(X86.Sar32, resultHigh, op1H, transform.Constant32_31);
+			newBlocks[3].AppendInstruction(X86.Mov32, resultLow, resultHigh);
+			newBlocks[3].AppendInstruction(X86.Jmp, nextBlock.Block);
 		}
 	}
 }

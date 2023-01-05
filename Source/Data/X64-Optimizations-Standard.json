@@ -12,7 +12,7 @@
 			"FamilyName": "X64",
 			"Type": "Standard",
 			"Name": "Mov##",
-			"SubName": "Consolidate",
+			"SubName": "Coalescing",
 			"Expression": "X64.Mov## (X64.Mov## a)",
 			"Filter": "IsVirtualRegister(a)",
 			"Result": "(X64.Mov## a)",

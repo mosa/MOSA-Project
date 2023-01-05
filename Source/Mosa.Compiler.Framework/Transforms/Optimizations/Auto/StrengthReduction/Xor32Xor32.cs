@@ -15,6 +15,8 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 		{
 		}
 
+		public override int Priority => 80;
+
 		public override bool Match(Context context, TransformContext transform)
 		{
 			if (!context.Operand2.IsVirtualRegister)
@@ -50,6 +52,8 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 		public Xor32Xor32_v1() : base(IRInstruction.Xor32, TransformType.Auto | TransformType.Optimization)
 		{
 		}
+
+		public override int Priority => 80;
 
 		public override bool Match(Context context, TransformContext transform)
 		{
@@ -87,6 +91,8 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 		{
 		}
 
+		public override int Priority => 80;
+
 		public override bool Match(Context context, TransformContext transform)
 		{
 			if (!context.Operand2.IsVirtualRegister)
@@ -122,6 +128,8 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 		public Xor32Xor32_v3() : base(IRInstruction.Xor32, TransformType.Auto | TransformType.Optimization)
 		{
 		}
+
+		public override int Priority => 80;
 
 		public override bool Match(Context context, TransformContext transform)
 		{

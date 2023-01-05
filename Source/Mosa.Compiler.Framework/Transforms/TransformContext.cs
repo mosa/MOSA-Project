@@ -204,14 +204,14 @@ namespace Mosa.Compiler.Framework.Transforms
 			return VirtualRegisters.Allocate(O);
 		}
 
-		public bool ApplyTransform(Context context, BaseTransform transformation)
+		public bool ApplyTransform(Context context, BaseTransform transform)
 		{
-			if (!transformation.Match(context, this))
+			if (!transform.Match(context, this))
 				return false;
 
-			TraceBefore(context, transformation);
+			TraceBefore(context, transform);
 
-			transformation.Transform(context, this);
+			transform.Transform(context, this);
 
 			TraceAfter(context);
 

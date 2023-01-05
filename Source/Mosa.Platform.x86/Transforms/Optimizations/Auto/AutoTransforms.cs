@@ -13,7 +13,7 @@ namespace Mosa.Platform.x86.Transforms.Optimizations.Auto
 	public static class AutoTransforms
 	{
 		public static readonly List<BaseTransform> List = new List<BaseTransform> {
-			 new Standard.Mov32Consolidate(),
+			 new Standard.Mov32Coalescing(),
 			 new StrengthReduction.Add32ByZero(),
 			 new StrengthReduction.Sub32ByZero(),
 			 new Shrink.And32ByFF(),
@@ -25,6 +25,16 @@ namespace Mosa.Platform.x86.Transforms.Optimizations.Auto
 			 new Specific.And32Add32ToBlsr32_v1(),
 			 new Specific.And32Add32ToBlsr32_v2(),
 			 new Specific.And32Add32ToBlsr32_v3(),
+			 new Ordering.Adc32(),
+			 new Ordering.Add32(),
+			 new Ordering.Addss(),
+			 new Ordering.Addsd(),
+			 new Ordering.And32(),
+			 new Ordering.IMul32(),
+			 new Ordering.Mulss(),
+			 new Ordering.Mulsd(),
+			 new Ordering.Or32(),
+			 new Ordering.Xor32(),
 		};
 	}
 }

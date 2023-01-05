@@ -59,27 +59,29 @@ namespace Mosa.Utility.SourceCodeGenerator
 			bool optimization = node.Optimization != null && node.Optimization == "Yes";
 			bool transformation = node.Transformation != null && node.Transformation == "Yes";
 
+			int priority = node.Priority == null ? 0 : int.Parse(node.Priority);
+
 			if (!optimization && !transformation)
 				optimization = true;
 
-			GenerateTranformations(name, familyName, type, subName, expression, filter, result, variations, log, optimization);
+			GenerateTranformations(name, familyName, type, subName, expression, filter, result, variations, log, optimization, priority);
 		}
 
-		private void GenerateTranformations(string name, string familyName, string type, string subName, string expression, string filter, string result, bool variations, bool log, bool optimization)
+		private void GenerateTranformations(string name, string familyName, string type, string subName, string expression, string filter, string result, bool variations, bool log, bool optimization, int priority)
 		{
 			if (expression.Contains("R#"))
 			{
-				GenerateTransformation(R4(name), R4(familyName), R4(type), R4(subName), new Transformation(R4(expression), R4(filter), R4(result)), variations, log, optimization);
-				GenerateTransformation(R8(name), R8(familyName), R8(type), R8(subName), new Transformation(R8(expression), R8(filter), R8(result)), variations, log, optimization);
+				GenerateTransformation(R4(name), R4(familyName), R4(type), R4(subName), new Transformation(R4(expression), R4(filter), R4(result)), variations, log, optimization, priority);
+				GenerateTransformation(R8(name), R8(familyName), R8(type), R8(subName), new Transformation(R8(expression), R8(filter), R8(result)), variations, log, optimization, priority);
 			}
 			else if (expression.Contains("##"))
 			{
-				GenerateTransformation(To32(name), To32(familyName), To32(type), To32(subName), new Transformation(To32(expression), To32(filter), To32(result)), variations, log, optimization);
-				GenerateTransformation(To64(name), To64(familyName), To64(type), To64(subName), new Transformation(To64(expression), To64(filter), To64(result)), variations, log, optimization);
+				GenerateTransformation(To32(name), To32(familyName), To32(type), To32(subName), new Transformation(To32(expression), To32(filter), To32(result)), variations, log, optimization, priority);
+				GenerateTransformation(To64(name), To64(familyName), To64(type), To64(subName), new Transformation(To64(expression), To64(filter), To64(result)), variations, log, optimization, priority);
 			}
 			else
 			{
-				GenerateTransformation(name, familyName, type, subName, new Transformation(expression, filter, result), variations, log, optimization);
+				GenerateTransformation(name, familyName, type, subName, new Transformation(expression, filter, result), variations, log, optimization, priority);
 			}
 		}
 
@@ -103,7 +105,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 			return s?.Replace("R#", "R8");
 		}
 
-		private void GenerateTransformation(string name, string familyName, string type, string subName, Transformation transform, bool Variations, bool log, bool optimization)
+		private void GenerateTransformation(string name, string familyName, string type, string subName, Transformation transform, bool Variations, bool log, bool optimization, int priority)
 		{
 			Lines.Clear();
 			First = true;
@@ -123,16 +125,16 @@ namespace Mosa.Utility.SourceCodeGenerator
 			Lines.AppendLine($"namespace {Path}.Transforms.Optimizations.Auto.{type}");
 			Lines.AppendLine("{");
 
-			GenerateTransformations(name, familyName, type, subName, transform, Variations, log, optimization);
+			GenerateTransformations(name, familyName, type, subName, transform, Variations, log, optimization, priority);
 
 			Lines.AppendLine("}");
 
 			Save();
 		}
 
-		private void GenerateTransformations(string name, string familyName, string type, string subName, Transformation transform, bool variations, bool log, bool optimization)
+		private void GenerateTransformations(string name, string familyName, string type, string subName, Transformation transform, bool variations, bool log, bool optimization, int priority)
 		{
-			GenerateTransformation2(name, familyName, type, subName, transform, log, optimization);
+			GenerateTransformation2(name, familyName, type, subName, transform, log, optimization, priority);
 
 			if (!variations)
 				return;
@@ -145,12 +147,12 @@ namespace Mosa.Utility.SourceCodeGenerator
 			int index = 1;
 			foreach (var variation in derivedVariations)
 			{
-				GenerateTransformation2(name, familyName, type, $"{subName}_v{index}", variation, log, optimization);
+				GenerateTransformation2(name, familyName, type, $"{subName}_v{index}", variation, log, optimization, priority);
 				index++;
 			}
 		}
 
-		private void GenerateTransformation2(string name, string familyName, string type, string subName, Transformation transform, bool log, bool optimization)
+		private void GenerateTransformation2(string name, string familyName, string type, string subName, Transformation transform, bool log, bool optimization, int priority)
 		{
 			var instructionName = transform.InstructionTree.InstructionName.Replace("IR.", "IRInstruction.");
 
@@ -183,6 +185,12 @@ namespace Mosa.Utility.SourceCodeGenerator
 			Lines.AppendLine("\t\t{");
 			Lines.AppendLine("\t\t}");
 			Lines.AppendLine("");
+
+			if (priority != 0)
+			{
+				Lines.AppendLine($"\t\tpublic override int Priority => {priority};");
+				Lines.AppendLine("");
+			}
 
 			Lines.AppendLine("\t\tpublic override bool Match(Context context, TransformContext transform)");
 			Lines.AppendLine("\t\t{");

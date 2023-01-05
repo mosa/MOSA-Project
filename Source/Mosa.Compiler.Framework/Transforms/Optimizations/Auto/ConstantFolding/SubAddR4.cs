@@ -15,6 +15,8 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
 		{
 		}
 
+		public override int Priority => 90;
+
 		public override bool Match(Context context, TransformContext transform)
 		{
 			if (!context.Operand1.IsVirtualRegister)
@@ -57,6 +59,8 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
 		public SubAddR4_v1() : base(IRInstruction.SubR4, TransformType.Auto | TransformType.Optimization)
 		{
 		}
+
+		public override int Priority => 90;
 
 		public override bool Match(Context context, TransformContext transform)
 		{

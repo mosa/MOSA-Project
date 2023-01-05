@@ -1,0 +1,116 @@
+﻿{
+	"Commutative": [
+	],
+	"Optimizations": [
+		{
+			"FamilyName": "x86",
+			"Type": "Ordering",
+			"Name": "Adc32",
+			"SubName": "",
+			"Expression": "X86.Adc32 x y",
+			"Filter": "IsVirtualRegister(x) && IsVirtualRegister(y) && IsGreater(UseCount(x),UseCount(y)) && !IsResultAndOperand1Same(@)",
+			"Result": "(X86.Adc32 y x)",
+			"Priority": "10",
+			"Variations": "No"
+		},
+		{
+			"FamilyName": "x86",
+			"Type": "Ordering",
+			"Name": "Add32",
+			"SubName": "",
+			"Expression": "X86.Add32 x y",
+			"Filter": "IsVirtualRegister(x) && IsVirtualRegister(y) && IsGreater(UseCount(x),UseCount(y)) && !IsResultAndOperand1Same(@)",
+			"Result": "(X86.Add32 y x)",
+			"Priority": "10",
+			"Variations": "No"
+		},
+		{
+			"FamilyName": "x86",
+			"Type": "Ordering",
+			"Name": "Addss",
+			"SubName": "",
+			"Expression": "X86.Addss x y",
+			"Filter": "IsVirtualRegister(x) && IsVirtualRegister(y) && IsGreater(UseCount(x),UseCount(y)) && !IsResultAndOperand1Same(@)",
+			"Result": "(X86.Addss y x)",
+			"Priority": "10",
+			"Variations": "No"
+		},
+		{
+			"FamilyName": "x86",
+			"Type": "Ordering",
+			"Name": "Addsd",
+			"SubName": "",
+			"Expression": "X86.Addsd x y",
+			"Filter": "IsVirtualRegister(x) && IsVirtualRegister(y) && IsGreater(UseCount(x),UseCount(y)) && !IsResultAndOperand1Same(@)",
+			"Result": "(X86.Addsd y x)",
+			"Priority": "10",
+			"Variations": "No"
+		},
+		{
+			"FamilyName": "x86",
+			"Type": "Ordering",
+			"Name": "And32",
+			"SubName": "",
+			"Expression": "X86.And32 x y",
+			"Filter": "IsVirtualRegister(x) && IsVirtualRegister(y) && IsGreater(UseCount(x),UseCount(y)) && !IsResultAndOperand1Same(@)",
+			"Result": "(X86.And32 y x)",
+			"Priority": "10",
+			"Variations": "No"
+		},
+		{
+			"FamilyName": "x86",
+			"Type": "Ordering",
+			"Name": "IMul32",
+			"SubName": "",
+			"Expression": "X86.IMul32 x y",
+			"Filter": "IsVirtualRegister(x) && IsVirtualRegister(y) && IsGreater(UseCount(x),UseCount(y)) && !IsResultAndOperand1Same(@)",
+			"Result": "(X86.IMul32 y x)",
+			"Priority": "10",
+			"Variations": "No"
+		},
+		{
+			"FamilyName": "x86",
+			"Type": "Ordering",
+			"Name": "Mulss",
+			"SubName": "",
+			"Expression": "X86.Mulss x y",
+			"Filter": "IsVirtualRegister(x) && IsVirtualRegister(y) && IsGreater(UseCount(x),UseCount(y)) && !IsResultAndOperand1Same(@)",
+			"Result": "(X86.Mulss y x)",
+			"Priority": "10",
+			"Variations": "No"
+		},
+		{
+			"FamilyName": "x86",
+			"Type": "Ordering",
+			"Name": "Mulsd",
+			"SubName": "",
+			"Expression": "X86.Mulsd x y",
+			"Filter": "IsVirtualRegister(x) && IsVirtualRegister(y) && IsGreater(UseCount(x),UseCount(y)) && !IsResultAndOperand1Same(@)",
+			"Result": "(X86.Mulsd y x)",
+			"Priority": "10",
+			"Variations": "No"
+		},
+		{
+			"FamilyName": "x86",
+			"Type": "Ordering",
+			"Name": "Or32",
+			"SubName": "",
+			"Expression": "X86.Or32 x y",
+			"Filter": "IsVirtualRegister(x) && IsVirtualRegister(y) && IsGreater(UseCount(x),UseCount(y)) && !IsResultAndOperand1Same(@)",
+			"Result": "(X86.Or32 y x)",
+			"Priority": "10",
+			"Variations": "No"
+		},
+		{
+			"FamilyName": "x86",
+			"Type": "Ordering",
+			"Name": "Xor32",
+			"SubName": "",
+			"Expression": "X86.Xor32 x y",
+			"Filter": "IsVirtualRegister(x) && IsVirtualRegister(y) && IsGreater(UseCount(x),UseCount(y)) && !IsResultAndOperand1Same(@)",
+			"Result": "(X86.Xor32 y x)",
+			"Priority": "10",
+			"Variations": "No"
+		}
+	]
+}

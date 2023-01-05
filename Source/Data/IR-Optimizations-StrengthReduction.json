@@ -34,6 +34,7 @@
 			"Expression": "IR.Add## a 0",
 			"Filter": "",
 			"Result": "(IR.Move## a)",
+			"Priority": "80",
 			"Variations": "Yes"
 		},
 		{
@@ -44,6 +45,7 @@
 			"Expression": "IR.And## a 0",
 			"Filter": "",
 			"Result": "(IR.Move## [To##(0)])",
+			"Priority": "80",
 			"Variations": "Yes"
 		},
 		{
@@ -54,6 +56,7 @@
 			"Expression": "IR.And32 a 0xFFFFFFFF",
 			"Filter": "",
 			"Result": "(IR.Move32 a)",
+			"Priority": "80",
 			"Variations": "Yes"
 		},
 		{
@@ -64,6 +67,7 @@
 			"Expression": "IR.And64 a 0xFFFFFFFFFFFFFFFF",
 			"Filter": "",
 			"Result": "(IR.Move64 a)",
+			"Priority": "80",
 			"Variations": "Yes"
 		},
 		{
@@ -74,6 +78,7 @@
 			"Expression": "IR.Or32 a 0xFFFFFFFF",
 			"Filter": "",
 			"Result": "(IR.Move32 [To32(0xFFFFFFFF)])",
+			"Priority": "80",
 			"Variations": "Yes"
 		},
 		{
@@ -84,6 +89,7 @@
 			"Expression": "IR.Or64 a 0xFFFFFFFFFFFFFFFF",
 			"Filter": "",
 			"Result": "(IR.Move64 0xFFFFFFFFFFFFFFFF)",
+			"Priority": "80",
 			"Variations": "Yes"
 		},
 		{
@@ -94,6 +100,7 @@
 			"Expression": "IR.Or## a 0",
 			"Filter": "",
 			"Result": "(IR.Move## a)",
+			"Priority": "80",
 			"Variations": "Yes"
 		},
 		{
@@ -104,6 +111,7 @@
 			"Expression": "IR.Xor## a 0",
 			"Filter": "",
 			"Result": "(IR.Move## a)",
+			"Priority": "80",
 			"Variations": "Yes"
 		},
 		{
@@ -114,6 +122,7 @@
 			"Expression": "IR.Xor32 a 0xFFFFFFFF",
 			"Filter": "",
 			"Result": "(IR.Not32 a)",
+			"Priority": "80",
 			"Variations": "Yes"
 		},
 		{
@@ -124,6 +133,7 @@
 			"Expression": "IR.Xor64 a 0xFFFFFFFFFFFFFFFF",
 			"Filter": "",
 			"Result": "(IR.Not64 a)",
+			"Priority": "80",
 			"Variations": "Yes"
 		},
 		{
@@ -133,7 +143,8 @@
 			"SubName": "ZeroValue",
 			"Expression": "IR.ShiftRight## 0 a",
 			"Filter": "",
-			"Result": "(IR.Move## [To##(0)])"
+			"Result": "(IR.Move## [To##(0)])",
+			"Priority": "80"
 		},
 		{
 			"FamilyName": "IR",
@@ -142,7 +153,8 @@
 			"SubName": "ByZero",
 			"Expression": "IR.ShiftRight## a 0",
 			"Filter": "",
-			"Result": "(IR.Move## a)"
+			"Result": "(IR.Move## a)",
+			"Priority": "80"
 		},
 		{
 			"FamilyName": "IR",
@@ -151,7 +163,8 @@
 			"SubName": "ByZero",
 			"Expression": "IR.ShiftLeft## a 0",
 			"Filter": "",
-			"Result": "(IR.Move## a)"
+			"Result": "(IR.Move## a)",
+			"Priority": "80"
 		},
 		{
 			"FamilyName": "IR",
@@ -160,7 +173,8 @@
 			"SubName": "ByZero",
 			"Expression": "IR.Sub## a 0",
 			"Filter": "",
-			"Result": "(IR.Move## a)"
+			"Result": "(IR.Move## a)",
+			"Priority": "80"
 		},
 		{
 			"FamilyName": "IR",
@@ -169,7 +183,8 @@
 			"SubName": "Same",
 			"Expression": "IR.Sub## a a",
 			"Filter": "",
-			"Result": "(IR.Move## [To##(0)])"
+			"Result": "(IR.Move## [To##(0)])",
+			"Priority": "80"
 		},
 		{
 			"FamilyName": "IR",
@@ -178,7 +193,8 @@
 			"SubName": "Same",
 			"Expression": "IR.Xor## a a",
 			"Filter": "",
-			"Result": "(IR.Move## [To##(0)])"
+			"Result": "(IR.Move## [To##(0)])",
+			"Priority": "80"
 		},
 		{
 			"FamilyName": "IR",
@@ -188,6 +204,7 @@
 			"Expression": "IR.MulSigned## a 0",
 			"Filter": "",
 			"Result": "(IR.Move## [To##(0)])",
+			"Priority": "80",
 			"Variations": "Yes"
 		},
 		{
@@ -198,6 +215,7 @@
 			"Expression": "IR.MulUnsigned## a 0",
 			"Filter": "",
 			"Result": "(IR.Move## [To##(0)])",
+			"Priority": "80",
 			"Variations": "Yes"
 		},
 		{
@@ -208,6 +226,7 @@
 			"Expression": "IR.MulSigned## a 1",
 			"Filter": "",
 			"Result": "(IR.Move## a)",
+			"Priority": "80",
 			"Variations": "Yes"
 		},
 		{
@@ -218,6 +237,7 @@
 			"Expression": "IR.MulUnsigned## a 1",
 			"Filter": "",
 			"Result": "(IR.Move## a)",
+			"Priority": "80",
 			"Variations": "Yes"
 		},
 		{
@@ -247,7 +267,8 @@
 			"SubName": "ByZero",
 			"Expression": "IR.DivSigned## 0 c",
 			"Filter": "IsResolvedConstant(c) & !IsZero(c)",
-			"Result": "(IR.Move## [To##(0)])"
+			"Result": "(IR.Move## [To##(0)])",
+			"Priority": "80"
 		},
 		{
 			"FamilyName": "IR",
@@ -256,7 +277,8 @@
 			"SubName": "ByOne",
 			"Expression": "IR.DivSigned## a 1",
 			"Filter": "",
-			"Result": "(IR.Move## a)"
+			"Result": "(IR.Move## a)",
+			"Priority": "80"
 		},
 		{
 			"FamilyName": "IR",
@@ -265,7 +287,8 @@
 			"SubName": "ByOne",
 			"Expression": "IR.DivUnsigned## a 1",
 			"Filter": "",
-			"Result": "(IR.Move## a)"
+			"Result": "(IR.Move## a)",
+			"Priority": "80"
 		},
 		{
 			"FamilyName": "IR",
@@ -302,6 +325,7 @@
 			"Expression": "IR.Or## (IR.And## x c1) c2",
 			"Filter": "IsResolvedConstant(c2) & IsResolvedConstant(c1) & IsZero(Not##(Or##(To##(c1),To##(c2))))",
 			"Result": "(IR.Or## x c2)",
+			"Priority": "80",
 			"Variations": "Yes"
 		},
 		{
@@ -312,7 +336,69 @@
 			"Expression": "IR.Xor## x (IR.Xor## x y)",
 			"Filter": "",
 			"Result": "(IR.Move## y)",
+			"Priority": "80",
 			"Variations": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "ShiftLeft32",
+			"SubName": "By32",
+			"Expression": "IR.ShiftLeft32 x 32",
+			"Filter": "",
+			"Result": "(IR.Move32 0)",
+			"Priority": "80"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "ShiftLeft64",
+			"SubName": "By64",
+			"Expression": "IR.ShiftLeft64 x 64",
+			"Filter": "",
+			"Result": "(IR.Move64 0)",
+			"Priority": "80"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "ShiftRight32",
+			"SubName": "By32",
+			"Expression": "IR.ShiftRight32 a 32",
+			"Filter": "",
+			"Result": "(IR.Move32 0)",
+			"Priority": "80"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "ShiftLeft32",
+			"SubName": "By32",
+			"Expression": "IR.ShiftLeft32 a 32",
+			"Filter": "",
+			"Result": "(IR.Move32 0)",
+			"Priority": "80"
+		},
+
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "ShiftRight64",
+			"SubName": "By64",
+			"Expression": "IR.ShiftRight64 a 64",
+			"Filter": "",
+			"Result": "(IR.Move64 0)",
+			"Priority": "80"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "ShiftLeft64",
+			"SubName": "By64",
+			"Expression": "IR.ShiftLeft64 a 64",
+			"Filter": "",
+			"Result": "(IR.Move64 0)",
+			"Priority": "80"
 		}
 	]
 }

@@ -69,5 +69,101 @@ namespace Mosa.UnitTests.Optimization
 
 		[MosaUnitTest(Series = "I4")]
 		public static int ResetLowestSetBit(int x) => x & (x - 1);
+
+		[MosaUnitTest(Series = "U8")]
+		public static ulong ShiftLeftU8By1(ulong x) => x << 1;
+
+		[MosaUnitTest(Series = "U8")]
+		public static ulong ShiftLeftU8By2(ulong x) => x << 2;
+
+		[MosaUnitTest(Series = "U8")]
+		public static ulong ShiftLeftU8By31(ulong x) => x << 31;
+
+		[MosaUnitTest(Series = "U8")]
+		public static ulong ShiftLeftU8By32(ulong x) => x << 32;
+
+		[MosaUnitTest(Series = "U8")]
+		public static ulong ShiftLeftU8By33(ulong x) => x << 33;
+
+		[MosaUnitTest(Series = "U8")]
+		public static ulong ShiftLeftU8By45(ulong x) => x << 45;
+
+		[MosaUnitTest(Series = "U8")]
+		public static ulong ShiftLeftU8By63(ulong x) => x << 63;
+
+		[MosaUnitTest(Series = "U8")]
+		public static ulong ShiftLeftU8By64(ulong x) => x << 64;
+
+		[MosaUnitTest(Series = "U8")]
+		public static ulong ShiftRightU8By1(ulong x) => x >> 1;
+
+		[MosaUnitTest(Series = "U8")]
+		public static ulong ShiftRightU8By2(ulong x) => x >> 2;
+
+		[MosaUnitTest(Series = "U8")]
+		public static ulong ShiftRightU8By31(ulong x) => x >> 31;
+
+		[MosaUnitTest(Series = "U8")]
+		public static ulong ShiftRightU8By32(ulong x) => x >> 32;
+
+		[MosaUnitTest(Series = "U8")]
+		public static ulong ShiftRightU8By33(ulong x) => x >> 33;
+
+		[MosaUnitTest(Series = "U8")]
+		public static ulong ShiftRightU8By45(ulong x) => x >> 45;
+
+		[MosaUnitTest(Series = "U8")]
+		public static ulong ShiftRightU8By63(ulong x) => x >> 63;
+
+		[MosaUnitTest(Series = "U8")]
+		public static ulong ShiftRightU8By64(ulong x) => x >> 64;
+
+		[MosaUnitTest(Series = "I8")]
+		public static long ShiftLeftI8By1(long x) => x << 1;
+
+		[MosaUnitTest(Series = "I8")]
+		public static long ShiftLeftI8By2(long x) => x << 2;
+
+		[MosaUnitTest(Series = "I8")]
+		public static long ShiftLeftI8By31(long x) => x << 31;
+
+		[MosaUnitTest(Series = "I8")]
+		public static long ShiftLeftI8By32(long x) => x << 32;
+
+		[MosaUnitTest(Series = "I8")]
+		public static long ShiftLeftI8By33(long x) => x << 33;
+
+		[MosaUnitTest(Series = "I8")]
+		public static long ShiftLeftI8By45(long x) => x << 45;
+
+		[MosaUnitTest(Series = "I8")]
+		public static long ShiftLeftI8By63(long x) => x << 63;
+
+		[MosaUnitTest(Series = "I8")]
+		public static long ShiftLeftI8By64(long x) => x << 64;
+
+		[MosaUnitTest(Series = "I8")]
+		public static long ShiftRightI8By1(long x) => x << 1;
+
+		[MosaUnitTest(Series = "I8")]
+		public static long ShiftRightI8By2(long x) => x >> 2;
+
+		[MosaUnitTest(Series = "I8")]
+		public static long ShiftRightI8By31(long x) => x >> 31;
+
+		[MosaUnitTest(Series = "I8")]
+		public static long ShiftRightI8By32(long x) => x >> 32;
+
+		[MosaUnitTest(Series = "I8")]
+		public static long ShiftRightI8By33(long x) => x >> 33;
+
+		[MosaUnitTest(Series = "I8")]
+		public static long ShiftRightI8By45(long x) => x >> 45;
+
+		[MosaUnitTest(Series = "I8")]
+		public static long ShiftRightI8By63(long x) => x >> 63;
+
+		[MosaUnitTest(Series = "I8")]
+		public static long ShiftRightI8By64(long x) => x >> 64;
 	}
 }

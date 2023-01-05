@@ -26,7 +26,7 @@
 			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "Move##",
-			"SubName": "Propagation",
+			"SubName": "Coalescing",
 			"Expression": "IR.Move## (IR.Move## a)",
 			"Filter": "!IsCPURegister(a)",
 			"Result": "(IR.Move## a)"
@@ -35,7 +35,7 @@
 			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "MoveObject",
-			"SubName": "Propagation",
+			"SubName": "Coalescing",
 			"Expression": "IR.MoveObject (IR.MoveObject a)",
 			"Filter": "",
 			"Result": "(IR.MoveObject a)"
@@ -118,7 +118,7 @@
 			"Name": "GetHigh32",
 			"SubName": "FromShiftedMore32",
 			"Expression": "IR.GetHigh32 (IR.ShiftRight64 a b)",
-			"Filter": "IsGreaterOrEqual(And32(To32(b),63),32)",
+			"Filter": "IsResolvedConstant(b) && IsGreaterOrEqual(And32(To32(b),63),32)",
 			"Result": "(IR.Move32 0)"
 		},
 		{
@@ -127,7 +127,7 @@
 			"Name": "GetLow32",
 			"SubName": "FromShiftedMore32",
 			"Expression": "IR.GetLow32 (IR.ShiftLeft64 a b)",
-			"Filter": "IsGreaterOrEqual(And32(To32(b),63),32)",
+			"Filter": "IsResolvedConstant(b) && IsGreaterOrEqual(And32(To32(b),63),32)",
 			"Result": "(IR.Move32 0)"
 		},
 		{
