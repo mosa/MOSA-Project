@@ -376,6 +376,8 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto
 			 new StrengthReduction.Xor64Xor64_v1(),
 			 new StrengthReduction.Xor64Xor64_v2(),
 			 new StrengthReduction.Xor64Xor64_v3(),
+			 new StrengthReduction.ShiftLeft32By32(),
+			 new StrengthReduction.ShiftLeft64By64(),
 			 new StrengthReduction.Compare32x32RemUnsigned(),
 			 new StrengthReduction.Compare32x32RemUnsigned_v1(),
 			 new StrengthReduction.Compare32x64RemUnsigned(),

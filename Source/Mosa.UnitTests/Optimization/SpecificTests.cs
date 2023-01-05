@@ -69,5 +69,29 @@ namespace Mosa.UnitTests.Optimization
 
 		[MosaUnitTest(Series = "I4")]
 		public static int ResetLowestSetBit(int x) => x & (x - 1);
+
+		[MosaUnitTest(Series = "I8")]
+		public static long LeftShiftBy1(long x) => x << 1;
+
+		[MosaUnitTest(Series = "I8")]
+		public static long LeftShiftBy2(long x) => x << 2;
+
+		[MosaUnitTest(Series = "I8")]
+		public static long LeftShiftBy31(long x) => x << 31;
+
+		[MosaUnitTest(Series = "I8")]
+		public static long LeftShiftBy32(long x) => x << 32;
+
+		[MosaUnitTest(Series = "I8")]
+		public static long LeftShiftBy33(long x) => x << 33;
+
+		[MosaUnitTest(Series = "I8")]
+		public static long LeftShiftBy45(long x) => x << 45;
+
+		[MosaUnitTest(Series = "I8")]
+		public static long LeftShiftBy63(long x) => x << 63;
+
+		[MosaUnitTest(Series = "I8")]
+		public static long LeftShiftBy64(long x) => x << 64;
 	}
 }

@@ -26,6 +26,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
 			if (context.Operand1.Definitions[0].Instruction != IRInstruction.ShiftRight64)
 				return false;
 
+			if (!IsResolvedConstant(context.Operand1.Definitions[0].Operand2))
+				return false;
+
 			if (!IsGreaterOrEqual(And32(To32(context.Operand1.Definitions[0].Operand2), 63), 32))
 				return false;
 

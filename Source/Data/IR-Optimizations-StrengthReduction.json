@@ -338,6 +338,26 @@
 			"Result": "(IR.Move## y)",
 			"Priority": "80",
 			"Variations": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "ShiftLeft32",
+			"SubName": "By32",
+			"Expression": "IR.ShiftLeft32 x 32",
+			"Filter": "",
+			"Result": "(IR.Move32 0)",
+			"Priority": "80"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "ShiftLeft64",
+			"SubName": "By64",
+			"Expression": "IR.ShiftLeft64 x 64",
+			"Filter": "",
+			"Result": "(IR.Move64 0)",
+			"Priority": "80"
 		}
 	]
 }

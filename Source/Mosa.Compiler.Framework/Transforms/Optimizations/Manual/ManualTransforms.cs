@@ -120,8 +120,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual
 			new LowerTo32.ShiftRight64By32(),
 			new LowerTo32.ShiftRight64By32Plus(),
 
-			new LowerTo32.ShiftLeft64By32(),
-			new LowerTo32.ShiftLeft64By32Plus(),
+			//new LowerTo32.ShiftLeft64By32(),
+			//new LowerTo32.ShiftLeft64By32Plus(),
+			new LowerTo32.ShiftLeft64ByConstant(),
 
 			new LowerTo32.Load64(),
 			new LowerTo32.LoadParam64(),

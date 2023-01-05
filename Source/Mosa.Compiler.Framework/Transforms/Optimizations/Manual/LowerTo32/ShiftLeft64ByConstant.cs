@@ -1,0 +1,40 @@
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.LowerTo32
+{
+	public sealed class ShiftLeft64ByConstant : BaseTransform
+	{
+		public ShiftLeft64ByConstant() : base(IRInstruction.ShiftLeft64, TransformType.Manual | TransformType.Optimization, true)
+		{
+		}
+
+		public override bool Match(Context context, TransformContext transform)
+		{
+			return transform.LowerTo32 && context.Operand2.IsResolvedConstant && context.Operand2.ConstantUnsigned32 <= 32;
+		}
+
+		public override void Transform(Context context, TransformContext transform)
+		{
+			var result = context.Result;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+
+			var v1 = transform.AllocateVirtualRegister32();
+			var v2 = transform.AllocateVirtualRegister32();
+			var v3 = transform.AllocateVirtualRegister32();
+			var v4 = transform.AllocateVirtualRegister32();
+			var v5 = transform.AllocateVirtualRegister32();
+			var v6 = transform.AllocateVirtualRegister32();
+
+			context.SetInstruction(IRInstruction.GetLow32, v1, operand1);
+			context.AppendInstruction(IRInstruction.GetHigh32, v2, operand1);
+			context.AppendInstruction(IRInstruction.ShiftLeft32, v3, v1, operand2);
+
+			context.AppendInstruction(IRInstruction.ShiftLeft32, v4, v2, operand2);
+			context.AppendInstruction(IRInstruction.ShiftRight32, v5, v1, transform.CreateConstant32(32 - operand2.ConstantUnsigned32));
+			context.AppendInstruction(IRInstruction.Or32, v6, v4, v5);
+
+			context.AppendInstruction(IRInstruction.To64, result, v3, v6);
+		}
+	}
+}
