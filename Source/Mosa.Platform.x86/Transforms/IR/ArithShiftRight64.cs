@@ -16,7 +16,7 @@ namespace Mosa.Platform.x86.Transforms.IR
 
 		public override bool Match(Context context, TransformContext transform)
 		{
-			return true;
+			return !(context.Operand2.IsResolvedConstant && (context.Operand2.IsInteger32 & 32 == 0));
 		}
 
 		public override void Transform(Context context, TransformContext transform)
@@ -26,33 +26,27 @@ namespace Mosa.Platform.x86.Transforms.IR
 
 			var count = context.Operand2;
 
-			var v1 = transform.AllocateVirtualRegister32();
+			var v1_eax = transform.AllocateVirtualRegister32();
+			var v2_edx = transform.AllocateVirtualRegister32();
+			var v3_ecx = transform.AllocateVirtualRegister32();
 
-			context.SetInstruction(X86.Sar32, v1, op1H, count);
-			context.AppendInstruction(X86.Shrd32, resultLow, op1L, op1H, count);
-			context.AppendInstruction(X86.Sar32, resultHigh, resultHigh, transform.Constant32_31);
+			var newBlocks = transform.CreateNewBlockContexts(2, context.Label);
+			var nextBlock = transform.Split(context);
 
-			/// Optimized when shift value is a constant
-			if (count.IsResolvedConstant)
-			{
-				if (count.ConstantUnsigned32 == 32)
-				{
-					context.AppendInstruction(X86.Mov32, resultHigh, v1);
-				}
-				else
-				{
-					context.AppendInstruction(X86.Mov32, resultLow, v1);
-				}
+			context.SetInstruction(X86.Shrd32, v1_eax, op1L, op1H, count);
+			context.AppendInstruction(X86.Sar32, v2_edx, op1H, count);
+			context.AppendInstruction(X86.Mov32, v3_ecx, count);
+			context.AppendInstruction(X86.Test32, null, v3_ecx, transform.Constant32_32);
+			context.AppendInstruction(X86.Branch, ConditionCode.Equal, newBlocks[1].Block);
+			context.AppendInstruction(X86.Jmp, newBlocks[0].Block);
 
-				return;
-			}
+			newBlocks[0].AppendInstruction(X86.Mov32, resultLow, v2_edx);
+			newBlocks[0].AppendInstruction(X86.Sar32, resultHigh, v2_edx, transform.Constant32_31);
+			newBlocks[0].AppendInstruction(X86.Jmp, nextBlock.Block);
 
-			var v2 = transform.AllocateVirtualRegister32();
-
-			context.AppendInstruction(X86.Mov32, v2, count);
-			context.AppendInstruction(X86.Test32, null, v2, transform.Constant32_32);
-			context.AppendInstruction(X86.CMov32, ConditionCode.NotEqual, resultLow, resultLow, v1);
-			context.AppendInstruction(X86.CMov32, ConditionCode.Equal, resultHigh, resultHigh, v1);
+			newBlocks[1].AppendInstruction(X86.Mov32, resultLow, v1_eax);
+			newBlocks[1].AppendInstruction(X86.Mov32, resultHigh, v2_edx);
+			newBlocks[1].AppendInstruction(X86.Jmp, nextBlock.Block);
 		}
 	}
 }
