@@ -2,15 +2,16 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
+using Mosa.Platform.x86;
 
 namespace Mosa.Platform.x86.Transforms.IR
 {
 	/// <summary>
-	/// ArithShiftRight64Shift32Plus
+	/// ArithShiftRight64Less32
 	/// </summary>
-	public sealed class ArithShiftRight64NotSigned : BaseTransform
+	public sealed class ArithShiftRight64Less32 : BaseTransform
 	{
-		public ArithShiftRight64NotSigned() : base(IRInstruction.ArithShiftRight64, TransformType.Manual | TransformType.Transform)
+		public ArithShiftRight64Less32() : base(IRInstruction.ArithShiftRight64, TransformType.Manual | TransformType.Transform, true)
 		{
 		}
 
@@ -18,7 +19,7 @@ namespace Mosa.Platform.x86.Transforms.IR
 
 		public override bool Match(Context context, TransformContext transform)
 		{
-			return context.Operand2.IsResolvedConstant && (context.Operand2.IsInteger32 & 32 == 0);
+			return context.Operand2.IsResolvedConstant && context.Operand2.ConstantUnsigned32 <= 31;
 		}
 
 		public override void Transform(Context context, TransformContext transform)
@@ -27,8 +28,10 @@ namespace Mosa.Platform.x86.Transforms.IR
 			transform.SplitLongOperand(context.Operand1, out var op1L, out var op1H);
 
 			var count = context.Operand2;
+
 			context.SetInstruction(X86.Shrd32, resultLow, op1L, op1H, count);
 			context.AppendInstruction(X86.Sar32, resultHigh, op1H, count);
 		}
 	}
 }
+

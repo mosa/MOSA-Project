@@ -2,9 +2,9 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.LowerTo32
 {
-	public sealed class ShiftLeft64By32Plus : BaseTransform
+	public sealed class ShiftLeft64ByConstant32Plus : BaseTransform
 	{
-		public ShiftLeft64By32Plus() : base(IRInstruction.ShiftLeft64, TransformType.Manual | TransformType.Optimization)
+		public ShiftLeft64ByConstant32Plus() : base(IRInstruction.ShiftLeft64, TransformType.Manual | TransformType.Optimization)
 		{
 		}
 

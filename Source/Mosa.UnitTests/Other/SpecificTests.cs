@@ -170,25 +170,64 @@ namespace Mosa.UnitTests.Other
 			return x >> 52;
 		}
 
-		[MosaUnitTest((ulong)9)]
-		[MosaUnitTest(ulong.MaxValue)]
+		[MosaUnitTest(Series = "U8")]
 		public static ulong U8ShrBy52(ulong x)
 		{
 			return x >> 52;
 		}
 
-		[MosaUnitTest((ulong)9)]
-		[MosaUnitTest(ulong.MaxValue)]
+		[MosaUnitTest(Series = "U8")]
 		public static ulong U8ShrBy30(ulong x)
 		{
 			return x >> 30;
 		}
 
-		[MosaUnitTest((ulong)9)]
-		[MosaUnitTest(ulong.MaxValue)]
+		[MosaUnitTest(Series = "U8")]
 		public static ulong U8ShrBy31(ulong x)
 		{
 			return x >> 31;
+		}
+
+		[MosaUnitTest(Series = "U8")]
+		public static ulong U8ShrBy1(ulong x)
+		{
+			return x >> 1;
+		}
+
+		[MosaUnitTest(Series = "U8")]
+		public static ulong U8ShrBy63(ulong x)
+		{
+			return x >> 63;
+		}
+
+		[MosaUnitTest(Series = "I8")]
+		public static ulong I8ShrBy52(ulong x)
+		{
+			return x >> 52;
+		}
+
+		[MosaUnitTest(Series = "I8")]
+		public static ulong I8ShrBy30(ulong x)
+		{
+			return x >> 30;
+		}
+
+		[MosaUnitTest(Series = "I8")]
+		public static ulong I8ShrBy31(ulong x)
+		{
+			return x >> 31;
+		}
+
+		[MosaUnitTest(Series = "I8")]
+		public static ulong I8ShrBy1(ulong x)
+		{
+			return x >> 1;
+		}
+
+		[MosaUnitTest(Series = "I8")]
+		public static ulong I8ShrBy63(ulong x)
+		{
+			return x >> 63;
 		}
 
 		[MosaUnitTest(9, 9)]
