@@ -22,5 +22,14 @@ namespace Mosa.Platform.x86
 
 			return v1;
 		}
+
+		public static void AddressModeConversion(TransformContext transform, Context context, BaseInstruction instruction)
+		{
+			var result = context.Result;
+			var operand1 = context.Operand1;
+
+			context.InsertBefore().SetInstruction(instruction, result, operand1);
+			context.Operand1 = result;
+		}
 	}
 }
