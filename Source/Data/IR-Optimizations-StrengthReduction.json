@@ -302,15 +302,6 @@
 		{
 			"FamilyName": "IR",
 			"Type": "StrengthReduction",
-			"Name": "DivSigned##",
-			"SubName": "ByPowerOfTwo",
-			"Expression": "IR.DivSigned## x c",
-			"Filter": "IsResolvedConstant(c) & IsPowerOfTwo##(c) & !IsZero(c) & !IsOne(c)",
-			"Result": "(IR.ShiftRight## x [GetPowerOfTwo(To32(c))])"
-		},
-		{
-			"FamilyName": "IR",
-			"Type": "StrengthReduction",
 			"Name": "RemUnsigned##",
 			"SubName": "ByPowerOfTwo",
 			"Expression": "IR.RemUnsigned## x c",

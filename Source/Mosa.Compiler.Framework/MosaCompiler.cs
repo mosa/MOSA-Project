@@ -17,11 +17,12 @@ namespace Mosa.Compiler.Framework
 
 		public BaseArchitecture Platform { get; private set; }
 
-		public MosaLinker Linker { get { return Compiler.Linker; } }
+		public MosaLinker Linker => Compiler.Linker;
 
 		public CompilerHooks CompilerHooks { get; }
 
-		private enum CompileStage { Initial, Loaded, Initialized, Ready, Executing, Completed }
+		private enum CompileStage
+		{ Initial, Loaded, Initialized, Ready, Executing, Completed }
 
 		private CompileStage Stage = CompileStage.Initial;
 
@@ -141,7 +142,7 @@ namespace Mosa.Compiler.Framework
 				Stage = CompileStage.Executing;
 			}
 
-			var maxThreads = CompilerSettings.MaxThreads != 0 ? CompilerSettings.MaxThreads : (int)(Environment.ProcessorCount * 1.2);
+			var maxThreads = CompilerSettings.Multithreading ? CompilerSettings.MaxThreads != 0 ? CompilerSettings.MaxThreads : (int)(Environment.ProcessorCount * 1.2) : 1;
 
 			Compiler.ExecuteCompile(maxThreads);
 
