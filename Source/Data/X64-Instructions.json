@@ -529,7 +529,7 @@
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
 			"OperandCount": 1,
-			"ResultCount": 2,
+			"ResultCount": 1,
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
@@ -548,7 +548,7 @@
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
 			"OperandCount": 1,
-			"ResultCount": 2,
+			"ResultCount": 1,
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{

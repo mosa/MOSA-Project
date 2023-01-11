@@ -6,29 +6,27 @@ using Mosa.Compiler.Framework.Transforms;
 namespace Mosa.Platform.x86.Transforms.FixedRegisters
 {
 	/// <summary>
-	/// IMul32
+	/// IMul32Constant
 	/// </summary>
-	public sealed class IMul32 : BaseTransform
+	public sealed class IMul32Constant : BaseTransform
 	{
-		public IMul32() : base(X86.IMul32, TransformType.Manual | TransformType.Transform)
+		public IMul32Constant() : base(X86.IMul32, TransformType.Manual | TransformType.Transform)
 		{
 		}
 
 		public override bool Match(Context context, TransformContext transform)
 		{
-			if (!context.Operand2.IsConstant)
-				return false;
-
-			return true;
+			return context.Operand2.IsConstant;
 		}
 
 		public override void Transform(Context context, TransformContext transform)
 		{
-			var v1 = transform.AllocateVirtualRegister(context.Operand2.Type);
 			var operand2 = context.Operand2;
 
+			var v1 = transform.AllocateVirtualRegister32();
+
+			context.InsertBefore().AppendInstruction(X86.Mov32, v1, operand2);
 			context.Operand2 = v1;
-			context.InsertBefore().SetInstruction(X86.Mov32, v1, operand2);
 		}
 	}
 }

@@ -1316,6 +1316,8 @@ namespace Mosa.Compiler.Framework
 			Result2 = result2;
 			Operand1 = operand1;
 			Operand2 = operand2;
+
+			//Debug.Assert(instruction.DefaultResultCount == 2);
 		}
 
 		/// <summary>

@@ -32,8 +32,8 @@ namespace Mosa.Platform.x86.Transforms.IR
 			var v3 = transform.AllocateVirtualRegister32();
 			var v4 = transform.AllocateVirtualRegister32();
 
-			context.SetInstruction(X86.Mov32, v1, op2L);
-			context.AppendInstruction2(X86.Mul32, v1, resultLow, op2L, op1L);
+			//context.SetInstruction(X86.Mov32, v1, op2L);
+			context.SetInstruction2(X86.Mul32, v1, resultLow, op2L, op1L);
 
 			if (!resultHigh.IsConstantZero)
 			{

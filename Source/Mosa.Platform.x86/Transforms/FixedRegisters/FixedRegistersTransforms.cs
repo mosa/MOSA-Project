@@ -15,7 +15,6 @@ namespace Mosa.Platform.x86.Transforms.FixedRegisters
 			new Cdq32(),
 			new Div32(),
 			new IDiv32(),
-			new IMul32(),
 			new In16(),
 			new In32(),
 			new In8(),
@@ -33,6 +32,8 @@ namespace Mosa.Platform.x86.Transforms.FixedRegisters
 			new Shr32(),
 			new Shrd32(),
 			new WrMSR(),
+
+			new IMul32Constant(), // temp until specific emitter is written
 		};
 	}
 }

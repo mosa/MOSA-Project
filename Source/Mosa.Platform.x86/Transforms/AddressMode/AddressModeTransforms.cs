@@ -22,6 +22,7 @@ namespace Mosa.Platform.x86.Transforms.AddressMode
 			new Dec32(),
 			new Divsd(),
 			new Divss(),
+			new IMul32(),
 			new Mulsd(),
 			new Mulss(),
 			new Neg32(),

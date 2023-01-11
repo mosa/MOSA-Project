@@ -13,13 +13,13 @@ namespace Mosa.Platform.x64.Instructions
 	public sealed class Cdq64 : X64Instruction
 	{
 		internal Cdq64()
-			: base(2, 1)
+			: base(1, 1)
 		{
 		}
 
 		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 		{
-			System.Diagnostics.Debug.Assert(node.ResultCount == 2);
+			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
 			opcodeEncoder.SuppressByte(0x40);

@@ -43,9 +43,9 @@ namespace Mosa.Platform.x86.Transforms.FixedRegisters
 
 			if (operand2.IsConstant)
 			{
-				var v3 = transform.AllocateVirtualRegister32();
-				context.AppendInstruction(X86.Mov32, v3, operand2);
-				operand2 = v3;
+				var v1 = transform.AllocateVirtualRegister32();
+				context.AppendInstruction(X86.Mov32, v1, operand2);
+				operand2 = v1;
 			}
 
 			Debug.Assert(operand2.IsCPURegister || operand2.IsVirtualRegister);

@@ -6,11 +6,11 @@ using Mosa.Compiler.Framework.Transforms;
 namespace Mosa.Platform.x86.Transforms.AddressMode
 {
 	/// <summary>
-	/// Sar32
+	/// IMul32
 	/// </summary>
-	public sealed class Sar32 : BaseTransform
+	public sealed class IMul32 : BaseTransform
 	{
-		public Sar32() : base(X86.Sar32, TransformType.Manual | TransformType.Transform)
+		public IMul32() : base(X86.IMul32, TransformType.Manual | TransformType.Transform)
 		{
 		}
 
@@ -21,7 +21,7 @@ namespace Mosa.Platform.x86.Transforms.AddressMode
 
 		public override void Transform(Context context, TransformContext transform)
 		{
-			X86TransformHelper.AddressModeConversion(context, X86.Mov32);
+			X86TransformHelper.AddressModeConversionCummulative(context, X86.Mov32);
 		}
 	}
 }

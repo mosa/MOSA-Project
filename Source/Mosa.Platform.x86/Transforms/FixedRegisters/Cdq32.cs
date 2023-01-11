@@ -10,17 +10,15 @@ namespace Mosa.Platform.x86.Transforms.FixedRegisters
 	/// </summary>
 	public sealed class Cdq32 : BaseTransform
 	{
-		public Cdq32() : base(X86.Cdq32, TransformType.Manual | TransformType.Transform)
+		public Cdq32() : base(X86.Cdq32, TransformType.Manual | TransformType.Transform, true)
 		{
 		}
 
 		public override bool Match(Context context, TransformContext transform)
 		{
 			if (context.Result.IsCPURegister
-				&& context.Result2.IsCPURegister
 				&& context.Operand1.IsCPURegister
 				&& context.Result.Register == CPURegister.EDX
-				&& context.Result2.Register == CPURegister.EAX
 				&& context.Operand1.Register == CPURegister.EAX)
 				return false;
 
@@ -31,15 +29,13 @@ namespace Mosa.Platform.x86.Transforms.FixedRegisters
 		{
 			var operand1 = context.Operand1;
 			var result = context.Result;
-			var result2 = context.Result2;
 
 			var eax = Operand.CreateCPURegister(transform.I4, CPURegister.EAX);
 			var edx = Operand.CreateCPURegister(transform.I4, CPURegister.EDX);
 
 			context.SetInstruction(X86.Mov32, eax, operand1);
-			context.AppendInstruction2(X86.Cdq32, edx, eax, eax);
+			context.AppendInstruction(X86.Cdq32, edx, eax);
 			context.AppendInstruction(X86.Mov32, result, edx);
-			context.AppendInstruction(X86.Mov32, result2, eax);
 		}
 	}
 }

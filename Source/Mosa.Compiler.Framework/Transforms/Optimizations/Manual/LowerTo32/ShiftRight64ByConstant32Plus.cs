@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.LowerTo32
 {
 	public sealed class ShiftRight64ByConstant32Plus : BaseTransform
 	{
-		public ShiftRight64ByConstant32Plus() : base(IRInstruction.ShiftRight64, TransformType.Manual | TransformType.Optimization, true)
+		public ShiftRight64ByConstant32Plus() : base(IRInstruction.ShiftRight64, TransformType.Manual | TransformType.Optimization)
 		{
 		}
 

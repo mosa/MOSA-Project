@@ -1,5 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Platform.x86.Transforms.AddressMode;
 using Mosa.Platform.x86.Transforms.FixedRegisters;
 using Mosa.Platform.x86.Transforms.Stack;
 using Mosa.Platform.x86.Transforms.Tweak;
@@ -20,7 +21,8 @@ namespace Mosa.Platform.x86.Stages
 			AddTranformations(TweakTransforms.List);
 			AddTranformations(FixedRegistersTransforms.List);
 			AddTranformations(StackTransforms.List);
-			AddTranformations(SpecialTransforms.List);
+			AddTranformations(AddressModeTransforms.List);
+			//AddTranformations(SpecialTransforms.List);
 		}
 	}
 }
