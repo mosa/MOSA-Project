@@ -3,7 +3,7 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.x64.Transforms.FixedRegisters
+namespace Mosa.Platform.x64.Transforms.AddressMode
 {
 	/// <summary>
 	/// IMul32
@@ -16,16 +16,12 @@ namespace Mosa.Platform.x64.Transforms.FixedRegisters
 
 		public override bool Match(Context context, TransformContext transform)
 		{
-			return context.Operand2.IsConstant;
+			return !X64TransformHelper.IsAddressMode(context);
 		}
 
 		public override void Transform(Context context, TransformContext transform)
 		{
-			var v1 = transform.AllocateVirtualRegister(context.Operand2.Type);
-			var operand2 = context.Operand2;
-
-			context.Operand2 = v1;
-			context.InsertBefore().SetInstruction(X64.Mov64, v1, operand2);
+			X64TransformHelper.AddressModeConversionCummulative(context, X64.Mov32);
 		}
 	}
 }

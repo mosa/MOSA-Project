@@ -5,9 +5,9 @@ using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x86.Transforms.Optimizations.Manual.Special
 {
-	public sealed class Mov32Propagate : BaseTransform
+	public sealed class Mov32Coalescing : BaseTransform
 	{
-		public Mov32Propagate() : base(X86.Mov32, TransformType.Manual | TransformType.Optimization)
+		public Mov32Coalescing() : base(X86.Mov32, TransformType.Manual | TransformType.Optimization)
 		{
 		}
 

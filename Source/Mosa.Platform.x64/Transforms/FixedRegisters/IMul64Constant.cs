@@ -6,11 +6,11 @@ using Mosa.Compiler.Framework.Transforms;
 namespace Mosa.Platform.x64.Transforms.FixedRegisters
 {
 	/// <summary>
-	/// IMul64
+	/// IMul32Constant
 	/// </summary>
-	public sealed class IMul64 : BaseTransform
+	public sealed class IMul64Constant : BaseTransform
 	{
-		public IMul64() : base(X64.IMul64, TransformType.Manual | TransformType.Transform)
+		public IMul64Constant() : base(X64.IMul64, TransformType.Manual | TransformType.Transform)
 		{
 		}
 
@@ -21,11 +21,12 @@ namespace Mosa.Platform.x64.Transforms.FixedRegisters
 
 		public override void Transform(Context context, TransformContext transform)
 		{
-			var v1 = transform.AllocateVirtualRegister(context.Operand2.Type);
 			var operand2 = context.Operand2;
 
+			var v1 = transform.AllocateVirtualRegister64();
+
+			context.InsertBefore().AppendInstruction(X64.Mov64, v1, operand2);
 			context.Operand2 = v1;
-			context.InsertBefore().SetInstruction(X64.Mov64, v1, operand2);
 		}
 	}
 }
