@@ -78,7 +78,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		private void AddTranformation(BaseTransform transform)
+		public void AddTranformation(BaseTransform transform)
 		{
 			int id = transform.Instruction == null ? 0 : transform.Instruction.ID;
 
@@ -257,7 +257,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (!transformCounts.TryGetValue(name, out Counter counter))
 			{
-				counter = new Counter($"Transform-{name}", 1);
+				counter = new Counter($"{name}", 1);
 
 				transformCounts.Add(name, counter);
 				Register(counter);

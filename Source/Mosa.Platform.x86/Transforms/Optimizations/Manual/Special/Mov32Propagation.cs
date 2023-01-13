@@ -5,17 +5,14 @@ using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x86.Transforms.Optimizations.Manual.Special
 {
-	public sealed class Mov32Coalescing : BaseTransform
+	public sealed class Mov32Propagation : BaseTransform
 	{
-		public Mov32Coalescing() : base(X86.Mov32, TransformType.Manual | TransformType.Optimization)
+		public Mov32Propagation() : base(X86.Mov32, TransformType.Manual | TransformType.Optimization)
 		{
 		}
 
 		public override bool Match(Context context, TransformContext transform)
 		{
-			if (!transform.AreCPURegistersAllocated)    // ???
-				return false;
-
 			if (!context.Operand1.IsVirtualRegister)
 				return false;
 

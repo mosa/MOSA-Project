@@ -30,6 +30,8 @@ namespace Mosa.Compiler.Framework
 
 		private readonly NotifyTraceLogHandler NotifyInstructionTraceHandler;
 
+		private readonly NotifyTraceLogHandler NotifyMethodTranformInstructionTrace;
+
 		private readonly bool Statistics;
 
 		#endregion Data Members
@@ -204,11 +206,13 @@ namespace Mosa.Compiler.Framework
 		public CompilerHooks CompilerHooks { get; }
 
 		public bool IsInSSAForm { get; set; }
+
 		public bool AreCPURegistersAllocated { get; set; }
 
 		public bool IsLocalStackFinalized { get; set; }
 
 		public bool Is32BitPlatform { get; }
+
 		public bool Is64BitPlatform { get; }
 
 		public int? MethodTraceLevel { get; }
@@ -241,6 +245,8 @@ namespace Mosa.Compiler.Framework
 			Is64BitPlatform = Architecture.Is64BitPlatform;
 
 			NotifyInstructionTraceHandler = CompilerHooks.NotifyMethodInstructionTrace != null ? CompilerHooks.NotifyMethodInstructionTrace.Invoke(Method) : null;
+			NotifyMethodTranformInstructionTrace = CompilerHooks.NotifyMethodTranformInstructionTrace != null ? CompilerHooks.NotifyMethodTranformInstructionTrace.Invoke(Method) : null;
+
 			MethodTraceLevel = compiler.CompilerHooks.GetMethodTraceLevel != null ? compiler.CompilerHooks.GetMethodTraceLevel(method) : null;
 
 			Statistics = compiler.Statistics;
@@ -492,6 +498,14 @@ namespace Mosa.Compiler.Framework
 				return;
 
 			InstructionTrace.Run(this, stage, NotifyInstructionTraceHandler);
+		}
+
+		private void CreateTranformInstructionTrace(BaseMethodCompilerStage stage)
+		{
+			if (NotifyMethodTranformInstructionTrace == null)
+				return;
+
+			InstructionTrace.Run(this, stage, NotifyMethodTranformInstructionTrace);
 		}
 
 		private void PlugMethod()

@@ -27,7 +27,6 @@ namespace Mosa.Platform.x86.Transforms.Optimizations.Manual
 			new Stack.Add32(),
 
 			//new Special.Mov32Propagate(),
-
 			//Add32ToLea32
 			//Sub32ToLea32
 		};

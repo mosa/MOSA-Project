@@ -21,8 +21,6 @@ namespace Mosa.Platform.x86.Transforms.IR
 
 		public override void Transform(Context context, TransformContext transform)
 		{
-			//ExpandMul(context);
-
 			transform.SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
 			transform.SplitLongOperand(context.Operand1, out var op1L, out var op1H);
 			transform.SplitLongOperand(context.Operand2, out var op2L, out var op2H);
@@ -32,7 +30,6 @@ namespace Mosa.Platform.x86.Transforms.IR
 			var v3 = transform.AllocateVirtualRegister32();
 			var v4 = transform.AllocateVirtualRegister32();
 
-			//context.SetInstruction(X86.Mov32, v1, op2L);
 			context.SetInstruction2(X86.Mul32, v1, resultLow, op2L, op1L);
 
 			if (!resultHigh.IsConstantZero)

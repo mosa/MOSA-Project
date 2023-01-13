@@ -10,7 +10,7 @@ namespace Mosa.Platform.x86.Transforms.IR
 	/// </summary>
 	public sealed class RemSigned32 : BaseTransform
 	{
-		public RemSigned32() : base(IRInstruction.RemSigned32, TransformType.Manual | TransformType.Transform, true)
+		public RemSigned32() : base(IRInstruction.RemSigned32, TransformType.Manual | TransformType.Transform)
 		{
 		}
 
@@ -27,9 +27,6 @@ namespace Mosa.Platform.x86.Transforms.IR
 
 			var v1 = transform.AllocateVirtualRegister32();
 			var v2 = transform.AllocateVirtualRegister32();
-
-			//context.SetInstruction2(X86.Cdq32, v1, v2, operand1);
-			//context.AppendInstruction2(X86.IDiv32, result, v3, v1, v2, operand2);
 
 			context.SetInstruction(X86.Cdq32, v1, operand1);
 			context.AppendInstruction2(X86.IDiv32, result, v2, v1, operand1, operand2);

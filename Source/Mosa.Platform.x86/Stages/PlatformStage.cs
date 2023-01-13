@@ -2,6 +2,7 @@
 
 using Mosa.Platform.x86.Transforms.AddressMode;
 using Mosa.Platform.x86.Transforms.FixedRegisters;
+using Mosa.Platform.x86.Transforms.Optimizations.Manual.Special;
 using Mosa.Platform.x86.Transforms.Stack;
 using Mosa.Platform.x86.Transforms.Tweak;
 
@@ -22,7 +23,10 @@ namespace Mosa.Platform.x86.Stages
 			AddTranformations(FixedRegistersTransforms.List);
 			AddTranformations(StackTransforms.List);
 			AddTranformations(AddressModeTransforms.List);
-			//AddTranformations(SpecialTransforms.List);
+
+			AddTranformation(new Mov32Unless());
+			AddTranformation(new Mov32Propagation());
+			AddTranformation(new Deadcode());
 		}
 	}
 }
