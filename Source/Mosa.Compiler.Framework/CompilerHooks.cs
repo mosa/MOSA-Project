@@ -51,5 +51,7 @@ namespace Mosa.Compiler.Framework
 		public ExtendMethodCompilerPipelineHandler ExtendMethodCompilerPipeline;
 
 		public GetMethodTraceLevelHandler GetMethodTraceLevel;
+
+		public NotifyMethodInstructionTraceHandler NotifyMethodTranformInstructionTrace;
 	}
 }

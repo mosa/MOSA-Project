@@ -356,8 +356,6 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto
 			 new StrengthReduction.DivUnsigned64ByOne(),
 			 new StrengthReduction.DivUnsigned32ByPowerOfTwo(),
 			 new StrengthReduction.DivUnsigned64ByPowerOfTwo(),
-			 new StrengthReduction.DivSigned32ByPowerOfTwo(),
-			 new StrengthReduction.DivSigned64ByPowerOfTwo(),
 			 new StrengthReduction.RemUnsigned32ByPowerOfTwo(),
 			 new StrengthReduction.RemUnsigned64ByPowerOfTwo(),
 			 new StrengthReduction.Or32And32ClearAndSet(),

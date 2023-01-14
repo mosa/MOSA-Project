@@ -31,7 +31,6 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual
 
 			new ConstantFolding.Branch32(),
 			new ConstantFolding.Branch64(),
-
 			new ConstantFolding.Switch(),
 
 			new Special.Deadcode(),
@@ -74,11 +73,10 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual
 
 			new Rewrite.Branch32Object(),
 			new Rewrite.Branch64Object(),
-
-			new Special.MoveCompoundPropagate(),
-
 			new Rewrite.Branch32From64(),
 			new Rewrite.Branch64From32(),
+
+			new Special.MoveCompoundPropagate(),
 
 			new Special.MoveObjectPropagate(),
 			new Special.MoveObjectPropagateConstant(),
@@ -118,10 +116,8 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual
 			new LowerTo32.ArithShiftRight64By32(),
 			new LowerTo32.ShiftRight64ByConstant32(),
 			new LowerTo32.ShiftRight64ByConstant32Plus(),
-
 			new LowerTo32.ShiftLeft64ByConstant32Plus(),
 			new LowerTo32.ShiftLeft64ByConstant32(),
-
 			new LowerTo32.Load64(),
 			new LowerTo32.LoadParam64(),
 			new LowerTo32.LoadParamSignExtend16x64(),
@@ -142,7 +138,6 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual
 			new LowerTo32.Xor64(),
 			new LowerTo32.ZeroExtend16x64(),
 			new LowerTo32.ZeroExtend32x64(),
-
 			new LowerTo32.Move64(),
 
 			// LowerTo32 -- but try other transformations first!

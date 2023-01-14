@@ -3,7 +3,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
+using System.Runtime.CompilerServices;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.Framework.Transforms;
 
@@ -40,9 +40,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected BitArray EmptyBlocks;
 
-		protected Dictionary<string, Counter> transformCounts = new Dictionary<string, Counter>();
-
-		protected bool CountTransformations = false;
+		protected Dictionary<string, Counter> TransformCounters = new Dictionary<string, Counter>();
 
 		private bool SortedByPriority = false;
 
@@ -66,8 +64,6 @@ namespace Mosa.Compiler.Framework.Stages
 			Register(SkippedEmptyBlocksCount);
 			Register(RemoveUnreachableBlocksCount);
 			Register(BlocksMergedCount);
-
-			CountTransformations = CompilerSettings.TraceLevel >= 9;
 		}
 
 		protected void AddTranformations(List<BaseTransform> list)
@@ -78,7 +74,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		private void AddTranformation(BaseTransform transform)
+		public void AddTranformation(BaseTransform transform)
 		{
 			int id = transform.Instruction == null ? 0 : transform.Instruction.ID;
 
@@ -238,8 +234,8 @@ namespace Mosa.Compiler.Framework.Stages
 					else if (transform.IsTranformation)
 						TransformCount.Increment();
 
-					if (CountTransformations)
-						CountTransformation(transform);
+					if (MethodCompiler.Statistics)
+						UpdateCounter(transform.Name, 1);
 
 					if (CompilerSettings.FullCheckMode)
 						CheckAllPhiInstructions();
@@ -249,23 +245,6 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			return false;
-		}
-
-		private void CountTransformation(BaseTransform transform)
-		{
-			var name = transform.Name;
-
-			if (!transformCounts.TryGetValue(name, out Counter counter))
-			{
-				counter = new Counter($"Transform-{name}", 1);
-
-				transformCounts.Add(name, counter);
-				Register(counter);
-			}
-			else
-			{
-				counter.Increment();
-			}
 		}
 
 		private bool BranchOptimizationPass()

@@ -166,11 +166,11 @@ namespace Mosa.Utility.SourceCodeGenerator
 				Lines.AppendLine("\t\tpublic override bool HasUnspecifiedSideEffect { get { return true; } }");
 			}
 
-			if (node.ThreeTwoAddressConversion != null && node.ThreeTwoAddressConversion == "true")
-			{
-				Lines.AppendLine();
-				Lines.AppendLine("\t\tpublic override bool ThreeTwoAddressConversion { get { return true; } }");
-			}
+			//if (node.ThreeTwoAddressConversion != null && node.ThreeTwoAddressConversion == "true")
+			//{
+			//	Lines.AppendLine();
+			//	Lines.AppendLine("\t\tpublic override bool ThreeTwoAddressConversion { get { return true; } }");
+			//}
 
 			if (FlagsUsed.Contains("Z") || FlagsUsed == "CONDITIONAL")
 			{

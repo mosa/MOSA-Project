@@ -28,14 +28,13 @@ namespace Mosa.Platform.x64.Transforms.FixedRegisters
 
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
-			var instruction = context.Instruction;
 
 			var rax = Operand.CreateCPURegister(operand2.Type, CPURegister.RAX);
 			var rdx = Operand.CreateCPURegister(operand1.Type, CPURegister.RDX);
 
 			context.SetInstruction(X64.Mov64, rdx, operand1);
 			context.AppendInstruction(X64.Mov64, rax, operand2);
-			context.AppendInstruction(instruction, null, rdx, rax);
+			context.AppendInstruction(X64.Out8, null, rdx, rax);
 		}
 	}
 }

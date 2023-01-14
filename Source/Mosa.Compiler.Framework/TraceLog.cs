@@ -6,7 +6,8 @@ using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.Trace
 {
-	public enum TraceType { MethodInstructions, MethodDebug, MethodCounters, GlobalDebug }
+	public enum TraceType
+	{ MethodInstructions, MethodDebug, MethodCounters, GlobalDebug }
 
 	public sealed class TraceLog
 	{
@@ -20,6 +21,8 @@ namespace Mosa.Compiler.Framework.Trace
 
 		public int Version { get; }
 
+		public int Step { get; set; }
+
 		public List<string> Lines { get; }
 
 		private TraceLog(TraceType type)
@@ -28,19 +31,21 @@ namespace Mosa.Compiler.Framework.Trace
 			Lines = new List<string>();
 		}
 
-		public TraceLog(TraceType type, MosaMethod method, string stage, int version = 0)
+		public TraceLog(TraceType type, MosaMethod method, string stage, int version = 0, int step = 0)
 			: this(type)
 		{
 			Stage = stage;
 			Method = method;
 			Version = version;
+			Step = step;
 		}
 
-		public TraceLog(TraceType type, MosaMethod method, string stage, string section, int version = 0)
+		public TraceLog(TraceType type, MosaMethod method, string stage, string section, int version = 0, int step = 0)
 			: this(type, method, stage)
 		{
 			Section = section;
 			Version = version;
+			Step = step;
 		}
 
 		public void Log()

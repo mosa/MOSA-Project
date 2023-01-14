@@ -17,8 +17,6 @@ namespace Mosa.Platform.x64.Instructions
 		{
 		}
 
-		public override bool ThreeTwoAddressConversion { get { return true; } }
-
 		public override bool IsCarryFlagModified { get { return true; } }
 
 		public override bool IsSignFlagUnchanged { get { return true; } }

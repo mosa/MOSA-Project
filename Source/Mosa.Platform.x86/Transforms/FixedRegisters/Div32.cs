@@ -42,15 +42,15 @@ namespace Mosa.Platform.x86.Transforms.FixedRegisters
 			context.SetInstruction(X86.Mov32, edx, operand1);
 			context.AppendInstruction(X86.Mov32, eax, operand2);
 
-			if (operand3.IsCPURegister)
+			if (operand3.IsConstant)
 			{
-				context.AppendInstruction2(X86.Div32, edx, eax, edx, eax, operand3);
+				var v1 = transform.AllocateVirtualRegister32();
+				context.AppendInstruction(X86.Mov32, v1, operand3);
+				context.AppendInstruction2(X86.Div32, edx, eax, edx, eax, v1);
 			}
 			else
 			{
-				var v3 = transform.AllocateVirtualRegister32();
-				context.AppendInstruction(X86.Mov32, v3, operand3);
-				context.AppendInstruction2(X86.Div32, edx, eax, edx, eax, v3);
+				context.AppendInstruction2(X86.Div32, edx, eax, edx, eax, operand3);
 			}
 
 			context.AppendInstruction(X86.Mov32, result2, eax);

@@ -37,6 +37,61 @@
 		},
 		{
 			"FamilyName": "x86",
+			"Type": "StrengthReduction",
+			"Name": "IMul32",
+			"SubName": "ByZero",
+			"Expression": "X86.IMul32 a 0",
+			"Filter": "!AreStatusFlagUsed(@)",
+			"Result": "(X86.Mov32 0)",
+			"Variations": "No",
+			"Log": "No"
+		},
+		{
+			"FamilyName": "x86",
+			"Type": "StrengthReduction",
+			"Name": "IMul32",
+			"SubName": "ByOne",
+			"Expression": "X86.IMul32 a 1",
+			"Filter": "!AreStatusFlagUsed(@)",
+			"Result": "(X86.Mov32 1)",
+			"Variations": "No",
+			"Log": "No"
+		},
+		{
+			"FamilyName": "x86",
+			"Type": "Consolidating",
+			"Name": "Add32Mov32",
+			"SubName": "ByZero",
+			"Expression": "X86.Add32 a (X86.Mov32 0)",
+			"Filter": "!AreStatusFlagUsed(@)",
+			"Result": "(X86.Mov32 a)",
+			"Variations": "No",
+			"Log": "No"
+		},
+		{
+			"FamilyName": "x86",
+			"Type": "Consolidating",
+			"Name": "IMul32Mov32",
+			"SubName": "ByZero",
+			"Expression": "X86.IMul32 a (X86.Mov32 0)",
+			"Filter": "!AreStatusFlagUsed(@)",
+			"Result": "(X86.Mov32 0)",
+			"Variations": "No",
+			"Log": "No"
+		},
+		{
+			"FamilyName": "x86",
+			"Type": "Consolidating",
+			"Name": "IMul32Mov32",
+			"SubName": "ByOne",
+			"Expression": "X86.IMul32 a (X86.Mov32 1)",
+			"Filter": "!AreStatusFlagUsed(@)",
+			"Result": "(X86.Mov32 a)",
+			"Variations": "No",
+			"Log": "No"
+		},
+		{
+			"FamilyName": "x86",
 			"Type": "Shrink",
 			"Name": "And32",
 			"SubName": "ByFF",

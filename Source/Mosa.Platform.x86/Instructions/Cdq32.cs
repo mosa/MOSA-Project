@@ -13,13 +13,13 @@ namespace Mosa.Platform.x86.Instructions
 	public sealed class Cdq32 : X86Instruction
 	{
 		internal Cdq32()
-			: base(2, 1)
+			: base(1, 1)
 		{
 		}
 
 		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 		{
-			System.Diagnostics.Debug.Assert(node.ResultCount == 2);
+			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
 			opcodeEncoder.Append8Bits(0x99);

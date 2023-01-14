@@ -12,20 +12,23 @@ namespace Mosa.Compiler.Framework.Trace
 	/// </summary>
 	public static class InstructionTrace
 	{
-		public static void Run(MethodCompiler methodCompiler, BaseMethodCompilerStage stage, NotifyTraceLogHandler handler)
+		public static void Run(MethodCompiler methodCompiler, BaseMethodCompilerStage stage, NotifyTraceLogHandler handler, string section = null, int step = 0)
 		{
-			Run(
+			var trace = Run(
 				stage.FormattedStageName,
 				methodCompiler.Method,
 				methodCompiler.BasicBlocks,
 				methodCompiler.MethodData.Version,
-				handler
+				section,
+				step
 			);
+
+			handler.Invoke(trace);
 		}
 
-		public static void Run(string stage, MosaMethod method, BasicBlocks basicBlocks, int version, NotifyTraceLogHandler handler)
+		public static TraceLog Run(string stage, MosaMethod method, BasicBlocks basicBlocks, int version, string section, int step)
 		{
-			var traceLog = new TraceLog(TraceType.MethodInstructions, method, stage, version);
+			var traceLog = new TraceLog(TraceType.MethodInstructions, method, stage, section, version, step);
 
 			traceLog?.Log($"{method.FullName} [v{version}] after stage {stage}:");
 			traceLog?.Log();
@@ -48,7 +51,7 @@ namespace Mosa.Compiler.Framework.Trace
 				traceLog?.Log("No instructions.");
 			}
 
-			handler.Invoke(traceLog);
+			return traceLog;
 		}
 
 		private static string ListBlocks(IList<BasicBlock> blocks)

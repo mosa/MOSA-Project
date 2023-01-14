@@ -25,7 +25,7 @@ namespace Mosa.Platform.x86.Transforms.IR
 			transform.SplitLongOperand(context.Operand1, out var lowOffset, out _);
 
 			context.SetInstruction(X86.MovsxLoad16, resultLow, transform.StackFrame, lowOffset);
-			context.AppendInstruction2(X86.Cdq32, resultHigh, resultLow, resultLow);
+			context.AppendInstruction(X86.Cdq32, resultHigh, resultLow);
 		}
 	}
 }

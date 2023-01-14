@@ -17,13 +17,16 @@ namespace Mosa.Platform.x64.Transforms.FixedRegisters
 
 		public override bool Match(Context context, TransformContext transform)
 		{
-			return !(context.Result.IsCPURegister
+			if (context.Result.IsCPURegister
 				&& context.Result2.IsCPURegister
 				&& context.Operand1.IsCPURegister
 				&& !context.Operand2.IsConstant
 				&& context.Result.Register == CPURegister.RDX
 				&& context.Result2.Register == CPURegister.RAX
-				&& context.Operand1.Register == CPURegister.RAX);
+				&& context.Operand1.Register == CPURegister.RAX)
+				return false;
+
+			return true;
 		}
 
 		public override void Transform(Context context, TransformContext transform)
@@ -40,9 +43,9 @@ namespace Mosa.Platform.x64.Transforms.FixedRegisters
 
 			if (operand2.IsConstant)
 			{
-				Operand v3 = transform.AllocateVirtualRegister32();
-				context.AppendInstruction(X64.Mov64, v3, operand2);
-				operand2 = v3;
+				var v1 = transform.AllocateVirtualRegister32();
+				context.AppendInstruction(X64.Mov64, v1, operand2);
+				operand2 = v1;
 			}
 
 			Debug.Assert(operand2.IsCPURegister || operand2.IsVirtualRegister);

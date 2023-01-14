@@ -19,8 +19,6 @@ namespace Mosa.Platform.x64.Instructions
 
 		public override bool IsCommutative { get { return true; } }
 
-		public override bool ThreeTwoAddressConversion { get { return true; } }
-
 		public override bool IsZeroFlagCleared { get { return true; } }
 
 		public override bool IsZeroFlagModified { get { return true; } }

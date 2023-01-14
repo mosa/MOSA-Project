@@ -81,19 +81,19 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			sb.Append(Slot.ToString());
 
 			sb.Append(" FROM: ");
+
 			if (From.IsPhysicalRegister)
 			{
 				sb.Append(From.PhysicalRegister.ToString());
 			}
 			else
 			{
-				sb.AppendFormat("V_{0}", From.VirtualRegisterOperand.Index);
+				sb.AppendFormat("v{0}", From.VirtualRegisterOperand.Index);
 
 				if (FromRegister != null)
 				{
-					sb.Append(" [");
-					sb.Append(FromRegister.ToString());
-					sb.Append("]");
+					sb.Append($" [{FromRegister.ToString()}]");
+
 				}
 			}
 
@@ -104,13 +104,11 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			}
 			else
 			{
-				sb.AppendFormat("V_{0}", To.VirtualRegisterOperand.Index);
+				sb.AppendFormat("v{0}", To.VirtualRegisterOperand.Index);
 
 				if (ToRegister != null)
 				{
-					sb.Append(" [");
-					sb.Append(ToRegister.ToString());
-					sb.Append("]");
+					sb.Append($" [{ToRegister.ToString()}]");
 				}
 			}
 
