@@ -157,7 +157,7 @@ namespace Mosa.Tool.Explorer
 			DirtyLog = true;
 
 			RefreshLogDropDown();
-			RefreshLog();
+			RefreshLogViews();
 		}
 
 		private void RefreshLogDropDown()
@@ -171,14 +171,14 @@ namespace Mosa.Tool.Explorer
 			{
 				for (int i = cbSectionLogs.Items.Count; i < LogSections.Count; i++)
 				{
-					var formatted = "[" + i.ToString() + "] " + LogSections[i];
+					var formatted = $"[{i}] {LogSections[i]}";
 
 					cbSectionLogs.Items.Add(formatted);
 				}
 			}
 		}
 
-		private void RefreshLog()
+		private void RefreshLogViews()
 		{
 			if (!DirtyLog)
 				return;
@@ -409,6 +409,15 @@ namespace Mosa.Tool.Explorer
 
 		private void SubmitTraceEvent(CompilerEvent compilerEvent, string message, int threadID)
 		{
+			if (compilerEvent == CompilerEvent.Counter)
+			{
+				lock (compilerStageLock)
+				{
+					UpdateLog("Counters", message);
+					return;
+				}
+			}
+
 			var part = string.IsNullOrWhiteSpace(message) ? string.Empty : ": " + message;
 			var msg = $"{compilerEvent.ToText()}{part}";
 
@@ -425,17 +434,6 @@ namespace Mosa.Tool.Explorer
 				{
 					UpdateLog("Exception", msg);
 					UpdateLog("Compiler", timelog);
-				}
-				else if (compilerEvent == CompilerEvent.Counter)
-				{
-					if (message.StartsWith("Transform-"))
-					{
-						UpdateLog("Transforms", message.Substring(10));
-					}
-					else
-					{
-						UpdateLog("Counters", message);
-					}
 				}
 				else
 				{
@@ -476,7 +474,7 @@ namespace Mosa.Tool.Explorer
 
 			SetStatus("Compiled!");
 
-			SortLog("Transforms");
+			//SortLog("Transforms");
 			SortLog("Counters");
 
 			UpdateTree();
@@ -1034,7 +1032,7 @@ namespace Mosa.Tool.Explorer
 			CurrentLogSection = formatted.Substring(formatted.IndexOf(' ') + 1);
 
 			DirtyLog = true;
-			RefreshLog();
+			RefreshLogViews();
 		}
 
 		private readonly object _statusLock = new object();
@@ -1055,14 +1053,14 @@ namespace Mosa.Tool.Explorer
 		{
 			UpdateProgressBar();
 			RefreshLogDropDown();
-			RefreshLog();
+			RefreshLogViews();
 			RefreshStatus();
 		}
 
 		private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			DirtyLog = true;
-			RefreshLog();
+			RefreshLogViews();
 		}
 
 		private void treeView_BeforeSelect(object sender, TreeViewCancelEventArgs e)

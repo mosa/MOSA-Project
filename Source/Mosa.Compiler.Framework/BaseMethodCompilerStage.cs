@@ -218,7 +218,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// The counters
 		/// </summary>
-		private readonly List<Counter> Counters = new List<Counter>();
+		private readonly List<Counter> RegisteredCounters = new List<Counter>();
 
 		protected uint ObjectHeaderSize;
 
@@ -286,17 +286,9 @@ namespace Mosa.Compiler.Framework
 			Setup();
 		}
 
-		protected void Register(Counter counter)
-		{
-			Counters.Add(counter);
-		}
-
 		public void Execute()
 		{
-			foreach (var counter in Counters)
-			{
-				counter.Reset();
-			}
+			ResetRegisteredCounters();
 
 			try
 			{
@@ -313,10 +305,7 @@ namespace Mosa.Compiler.Framework
 
 			Finish();
 
-			foreach (var counter in Counters)
-			{
-				UpdateCounter(counter);
-			}
+			UpdateRegisterCounters();
 
 			MethodCompiler = null;
 			traceLogs = null;
@@ -384,19 +373,43 @@ namespace Mosa.Compiler.Framework
 
 		#endregion Methods
 
+		#region Counters
+
+		public void Register(Counter counter)
+		{
+			RegisteredCounters.Add(counter);
+		}
+
+		private void ResetRegisteredCounters()
+		{
+			foreach (var counter in RegisteredCounters)
+			{
+				counter.Reset();
+			}
+		}
+
+		private void UpdateRegisterCounters()
+		{
+			foreach (var counter in RegisteredCounters)
+			{
+				UpdateCounter(counter.Name, counter.Count);
+			}
+		}
+
+		protected void UpdateCounter(string name, int count = 1)
+		{
+			MethodData.Counters.UpdateSkipLock(name, count);
+		}
+
+		#endregion Counters
+
 		#region Overrides
 
 		protected virtual void Initialize()
 		{ }
 
-		protected virtual bool CheckToRun()
-		{
-			return true;
-		}
-
 		protected virtual void Setup()
-		{
-		}
+		{ }
 
 		protected virtual void Run()
 		{ }
@@ -913,15 +926,6 @@ namespace Mosa.Compiler.Framework
 		public static bool IsSSAForm(Operand operand)
 		{
 			return operand.Definitions.Count == 1;
-		}
-
-		/// <summary>
-		/// Updates the counter.
-		/// </summary>
-		/// <param name="counter">The counter.</param>
-		public void UpdateCounter(Counter counter)
-		{
-			MethodData.Counters.UpdateSkipLock(counter.Name, counter.Count);
 		}
 
 		/// <summary>

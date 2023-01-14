@@ -145,6 +145,8 @@ namespace Mosa.Compiler.Framework
 
 		public virtual string FullName { get; private set; }
 
+		public virtual string OpcodeName { get; private set; }
+
 		#endregion Properties
 
 		#region Platform Properties
@@ -248,6 +250,8 @@ namespace Mosa.Compiler.Framework
 			Name = name;
 
 			FullName = FamilyName + "." + Name;
+
+			OpcodeName = "Opcode." + FullName;
 		}
 
 		#endregion Construction

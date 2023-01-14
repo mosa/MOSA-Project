@@ -421,6 +421,7 @@ namespace Mosa.Compiler.Framework
 			if (Statistics)
 			{
 				var log = new TraceLog(TraceType.MethodCounters, Method, string.Empty, MethodData.Version);
+
 				log.Log(MethodData.Counters.Export());
 
 				Compiler.PostTraceLog(log);

@@ -9,58 +9,49 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public sealed class Counters
 	{
-		private readonly Dictionary<string, int> counters = new Dictionary<string, int>();
+		private readonly Dictionary<string, int> Entry = new Dictionary<string, int>();
 		private readonly object _lock = new object();
 
 		public void Reset()
 		{
-			counters.Clear();
+			Entry.Clear();
 		}
 
 		public void Update(string name, int count)
 		{
 			lock (_lock)
 			{
-				if (counters.TryGetValue(name, out int current))
-				{
-					counters.Remove(name);
-					counters.Add(name, count + current);
-				}
-				else
-				{
-					counters.Add(name, count);
-				}
+				UpdateSkipLock(name, count);
 			}
 		}
 
 		public void UpdateSkipLock(string name, int count)
 		{
-			if (counters.TryGetValue(name, out int current))
+			if (Entry.TryGetValue(name, out int current))
 			{
-				counters.Remove(name);
-				counters.Add(name, count + current);
+				Entry[name] = current + count;
 			}
 			else
 			{
-				counters.Add(name, count);
+				Entry.Add(name, count);
 			}
 		}
 
 		public void NewCountSkipLock(string name, int count)
 		{
-			counters.Add(name, count);
+			Entry.Add(name, count);
 		}
 
-		public List<string> Export()
+		public List<string> Export(string prefex = null)
 		{
 			var counts = new List<string>();
 
-			if (counters != null)
+			foreach (var item in Entry)
 			{
-				foreach (var item in counters)
-				{
-					counts.Add(item.Key + ": " + item.Value.ToString());
-				}
+				if (prefex == null)
+					counts.Add($"{item.Key}: {item.Value}");
+				else
+					counts.Add($"{prefex}{item.Key}: {item.Value}");
 			}
 
 			return counts;
@@ -68,10 +59,18 @@ namespace Mosa.Compiler.Framework
 
 		public void Merge(Counters counters)
 		{
-			foreach (var item in counters.counters)
+			lock (_lock)
 			{
-				Update(item.Key, item.Value);
+				foreach (var entry in counters.Entry)
+				{
+					UpdateSkipLock(entry.Key, entry.Value);
+				}
 			}
+		}
+
+		public override string ToString()
+		{
+			return $"Counts = {Entry.Count}";
 		}
 	}
 }

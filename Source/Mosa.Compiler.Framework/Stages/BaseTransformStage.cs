@@ -3,7 +3,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.Framework.Transforms;
 
@@ -40,7 +39,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected BitArray EmptyBlocks;
 
-		protected Dictionary<string, Counter> TransformCounts = new Dictionary<string, Counter>();
+		protected Dictionary<string, Counter> TransformCounters = new Dictionary<string, Counter>();
 
 		protected bool CountTransformations = false;
 
@@ -239,7 +238,7 @@ namespace Mosa.Compiler.Framework.Stages
 						TransformCount.Increment();
 
 					if (CountTransformations)
-						CountTransformation(transform);
+						UpdateCounter(transform.Name, 1);
 
 					if (CompilerSettings.FullCheckMode)
 						CheckAllPhiInstructions();
@@ -249,23 +248,6 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			return false;
-		}
-
-		private void CountTransformation(BaseTransform transform)
-		{
-			var name = transform.Name;
-
-			if (!TransformCounts.TryGetValue(name, out Counter counter))
-			{
-				counter = new Counter(name, 1);
-
-				TransformCounts.Add(name, counter);
-				Register(counter);
-			}
-			else
-			{
-				counter.Increment();
-			}
 		}
 
 		private bool BranchOptimizationPass()

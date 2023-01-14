@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using dnlib.DotNet.Emit;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.Framework.Transforms;
@@ -15,10 +16,8 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public sealed class CodeGenerationStage : BaseMethodCompilerStage
 	{
-		private Counter GeneratedInstructionCount = new Counter("CodeGenerationStage.GeneratedInstructions");
-		private Counter GeneratedBlockCount = new Counter("CodeGenerationStage.GeneratedBlocks");
-
-		protected Dictionary<string, Counter> OpcodeCounts = new Dictionary<string, Counter>();
+		private readonly Counter GeneratedInstructionCount = new Counter("CodeGenerationStage.GeneratedInstructions");
+		private readonly Counter GeneratedBlockCount = new Counter("CodeGenerationStage.GeneratedBlocks");
 
 		protected bool CountOpcodes = false;
 
@@ -102,8 +101,6 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			CodeEmitter = null;
 			codeStream = null;
-
-			OpcodeCounts.Clear();
 		}
 
 		#region Methods
@@ -158,7 +155,7 @@ namespace Mosa.Compiler.Framework.Stages
 						GeneratedInstructionCount.Increment();
 
 						if (CountOpcodes)
-							CountOpcode(node.Instruction);
+							UpdateCounter(node.Instruction.OpcodeName, 1);
 
 						trace?.Log($"0x{node.Offset:X8} {node.Offset} = {node}");
 					}
@@ -214,23 +211,6 @@ namespace Mosa.Compiler.Framework.Stages
 			var trace = CreateTraceLog("Patches", 9);
 
 			CodeEmitter.ResolvePatches(trace);
-		}
-
-		private void CountOpcode(BaseInstruction instruction)
-		{
-			var name = "Opcode." + instruction.FullName;
-
-			if (!OpcodeCounts.TryGetValue(name, out Counter counter))
-			{
-				counter = new Counter(name, 1);
-
-				OpcodeCounts.Add(name, counter);
-				Register(counter);
-			}
-			else
-			{
-				counter.Increment();
-			}
 		}
 
 		#endregion Methods

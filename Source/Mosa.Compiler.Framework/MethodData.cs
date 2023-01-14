@@ -108,6 +108,11 @@ namespace Mosa.Compiler.Framework
 			IsSelfReferenced = false;
 		}
 
+		public override string ToString()
+		{
+			return Method.FullName;
+		}
+
 		#region Methods
 
 		public void AddLabelRegion(int label, int start, int length)
