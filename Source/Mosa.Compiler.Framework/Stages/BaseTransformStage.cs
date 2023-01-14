@@ -66,8 +66,6 @@ namespace Mosa.Compiler.Framework.Stages
 			Register(SkippedEmptyBlocksCount);
 			Register(RemoveUnreachableBlocksCount);
 			Register(BlocksMergedCount);
-
-			CountTransformations = CompilerSettings.TraceLevel >= 9;
 		}
 
 		protected void AddTranformations(List<BaseTransform> list)
@@ -102,6 +100,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Run()
 		{
+			CountTransformations = MethodCompiler.MethodTraceLevel >= 9;
+
 			SortByPriority();
 
 			trace = CreateTraceLog(5);

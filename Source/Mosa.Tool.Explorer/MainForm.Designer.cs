@@ -761,11 +761,11 @@
 			// tabPage2
 			// 
 			this.tabPage2.Controls.Add(this.tbMethodCounters);
-			this.tabPage2.Location = new System.Drawing.Point(4, 28);
+			this.tabPage2.Location = new System.Drawing.Point(4, 27);
 			this.tabPage2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
 			this.tabPage2.Name = "tabPage2";
 			this.tabPage2.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-			this.tabPage2.Size = new System.Drawing.Size(679, 336);
+			this.tabPage2.Size = new System.Drawing.Size(679, 337);
 			this.tabPage2.TabIndex = 1;
 			this.tabPage2.Text = "Text";
 			this.tabPage2.UseVisualStyleBackColor = true;
@@ -779,7 +779,7 @@
 			this.tbMethodCounters.Location = new System.Drawing.Point(0, 3);
 			this.tbMethodCounters.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.tbMethodCounters.Name = "tbMethodCounters";
-			this.tbMethodCounters.Size = new System.Drawing.Size(676, 333);
+			this.tbMethodCounters.Size = new System.Drawing.Size(676, 334);
 			this.tbMethodCounters.TabIndex = 10;
 			this.tbMethodCounters.Text = "";
 			this.tbMethodCounters.WordWrap = false;
@@ -920,11 +920,11 @@
 			// tabPage5
 			// 
 			this.tabPage5.Controls.Add(this.tbCompilerCounters);
-			this.tabPage5.Location = new System.Drawing.Point(4, 27);
+			this.tabPage5.Location = new System.Drawing.Point(4, 28);
 			this.tabPage5.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
 			this.tabPage5.Name = "tabPage5";
 			this.tabPage5.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-			this.tabPage5.Size = new System.Drawing.Size(689, 334);
+			this.tabPage5.Size = new System.Drawing.Size(689, 333);
 			this.tabPage5.TabIndex = 1;
 			this.tabPage5.Text = "Text";
 			this.tabPage5.UseVisualStyleBackColor = true;
@@ -938,7 +938,7 @@
 			this.tbCompilerCounters.Location = new System.Drawing.Point(0, 0);
 			this.tbCompilerCounters.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.tbCompilerCounters.Name = "tbCompilerCounters";
-			this.tbCompilerCounters.Size = new System.Drawing.Size(686, 330);
+			this.tbCompilerCounters.Size = new System.Drawing.Size(686, 329);
 			this.tbCompilerCounters.TabIndex = 10;
 			this.tbCompilerCounters.Text = "";
 			this.tbCompilerCounters.WordWrap = false;

@@ -66,14 +66,14 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			Register(GeneratedInstructionCount);
 			Register(GeneratedBlockCount);
-
-			CountOpcodes = CompilerSettings.TraceLevel >= 9;
 		}
 
 		protected override void Run()
 		{
 			if (!EmitBinary)
 				return;
+
+			CountOpcodes = MethodCompiler.MethodTraceLevel >= 9;
 
 			var symbol = Linker.DefineSymbol(Method.FullName, SectionKind.Text, 0, 0);
 

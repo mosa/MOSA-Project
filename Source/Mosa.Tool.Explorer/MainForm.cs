@@ -660,6 +660,8 @@ namespace Mosa.Tool.Explorer
 
 				CompilerCounters.Add(entry);
 			}
+
+			tbCompilerCounters.Text = CreateText(lines);
 		}
 
 		private static CounterEntry ExtractCounterData(string line)
