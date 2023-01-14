@@ -13,7 +13,7 @@ namespace Mosa.Platform.x86.Transforms.Optimizations.Auto.Consolidating
 	/// </summary>
 	public sealed class Add32Mov32ByZero : BaseTransform
 	{
-		public Add32Mov32ByZero() : base(X86.Add32, TransformType.Auto | TransformType.Optimization, true)
+		public Add32Mov32ByZero() : base(X86.Add32, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

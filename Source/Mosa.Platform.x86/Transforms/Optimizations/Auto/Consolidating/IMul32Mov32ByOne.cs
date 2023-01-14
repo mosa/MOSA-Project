@@ -13,7 +13,7 @@ namespace Mosa.Platform.x86.Transforms.Optimizations.Auto.Consolidating
 	/// </summary>
 	public sealed class IMul32Mov32ByOne : BaseTransform
 	{
-		public IMul32Mov32ByOne() : base(X86.IMul32, TransformType.Auto | TransformType.Optimization, true)
+		public IMul32Mov32ByOne() : base(X86.IMul32, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 

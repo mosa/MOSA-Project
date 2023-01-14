@@ -13,7 +13,7 @@ namespace Mosa.Platform.x86.Transforms.Optimizations.Auto.StrengthReduction
 	/// </summary>
 	public sealed class IMul32ByZero : BaseTransform
 	{
-		public IMul32ByZero() : base(X86.IMul32, TransformType.Auto | TransformType.Optimization, true)
+		public IMul32ByZero() : base(X86.IMul32, TransformType.Auto | TransformType.Optimization)
 		{
 		}
 
