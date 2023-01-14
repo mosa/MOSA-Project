@@ -45,7 +45,7 @@ namespace Mosa.Compiler.Framework.Transforms
 			IsAuto = type.HasFlag(TransformType.Auto);
 			IsOptimization = type.HasFlag(TransformType.Optimization);
 
-			Name = ExtractName();
+			Name = GetType().FullName.Replace("Mosa.Platform.", string.Empty).Replace("Mosa.Compiler.Framework.Transforms", "IR").Replace("Transforms.", string.Empty);
 			TransformDirectory.Add(this);
 		}
 
@@ -57,15 +57,6 @@ namespace Mosa.Compiler.Framework.Transforms
 		#endregion Constructors
 
 		#region Internals
-
-		private string ExtractName()
-		{
-			string name = GetType().FullName;
-
-			var transform = name.Replace("Mosa.Platform.", string.Empty).Replace("Mosa.Compiler.Framework.", string.Empty).Replace("Transform.", string.Empty);
-
-			return transform;
-		}
 
 		int IComparable<BaseTransform>.CompareTo(BaseTransform other)
 		{

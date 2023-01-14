@@ -49,7 +49,7 @@ namespace Mosa.Compiler.Framework
 		/// building. Any instruction that alters the control flow must override
 		/// this property and correctly identify its control flow modifications.
 		/// </remarks>
-		public virtual FlowControl FlowControl { get { return FlowControl.Next; } }
+		public virtual FlowControl FlowControl => FlowControl.Next;
 
 		/// <summary>
 		/// Gets a value indicating whether to [ignore during code generation].
@@ -57,7 +57,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// <c>true</c> if [ignore during code generation]; otherwise, <c>false</c>.
 		/// </value>
-		public virtual bool IgnoreDuringCodeGeneration { get { return false; } }
+		public virtual bool IgnoreDuringCodeGeneration => false;
 
 		/// <summary>
 		/// Gets a value indicating whether to [ignore instruction's basic block].
@@ -65,7 +65,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// <c>true</c> if [ignore instruction basic block]; otherwise, <c>false</c>.
 		/// </value>
-		public virtual bool IgnoreInstructionBasicBlockTargets { get { return false; } }
+		public virtual bool IgnoreInstructionBasicBlockTargets => false;
 
 		/// <summary>
 		/// Gets a value indicating whether this instance has an unspecified side effect.
@@ -73,7 +73,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		///   <c>true</c> if this instance has side effect; otherwise, <c>false</c>.
 		/// </value>
-		public virtual bool HasUnspecifiedSideEffect { get { return false; } }
+		public virtual bool HasUnspecifiedSideEffect => false;
 
 		/// <summary>
 		/// Gets a value indicating whether this instance has memory write side effect.
@@ -81,7 +81,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		///   <c>true</c> if this instance has side effect; otherwise, <c>false</c>.
 		/// </value>
-		public virtual bool IsMemoryWrite { get { return false; } }
+		public virtual bool IsMemoryWrite => false;
 
 		/// <summary>
 		/// Gets a value indicating whether this instance has memory write side effect.
@@ -89,7 +89,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		///   <c>true</c> if this instance has side effect; otherwise, <c>false</c>.
 		/// </value>
-		public virtual bool IsMemoryRead { get { return false; } }
+		public virtual bool IsMemoryRead => false;
 
 		/// <summary>
 		/// Gets a value indicating whether this instance has IO operation side effect.
@@ -97,7 +97,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		///   <c>true</c> if this instance has side effect; otherwise, <c>false</c>.
 		/// </value>
-		public virtual bool IsIOOperation { get { return false; } }
+		public virtual bool IsIOOperation => false;
 
 		/// <summary>
 		/// Gets a value indicating whether [variable operand count].
@@ -105,7 +105,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		///   <c>true</c> if [variable operand count]; otherwise, <c>false</c>.
 		/// </value>
-		public virtual bool VariableOperands { get { return false; } }
+		public virtual bool VariableOperands => false;
 
 		/// <summary>
 		/// Gets a value indicating whether this <see cref="BaseInstruction"/> is commutative.
@@ -113,7 +113,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		///   <c>true</c> if commutative; otherwise, <c>false</c>.
 		/// </value>
-		public virtual bool IsCommutative { get { return false; } }
+		public virtual bool IsCommutative => false;
 
 		/// <summary>
 		/// Gets a value indicating whether this instance is parameter load.
@@ -121,7 +121,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		///   <c>true</c> if this instance is parameter load; otherwise, <c>false</c>.
 		/// </value>
-		public virtual bool IsParameterLoad { get { return false; } }
+		public virtual bool IsParameterLoad => false;
 
 		/// <summary>
 		/// Gets a value indicating whether this instance is parameter store.
@@ -129,110 +129,118 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		///   <c>true</c> if this instance is parameter store; otherwise, <c>false</c>.
 		/// </value>
-		public virtual bool IsParameterStore { get { return false; } }
+		public virtual bool IsParameterStore => false;
 
-		public virtual bool IsPlatformInstruction { get { return false; } }
+		public virtual bool IsPlatformInstruction => false;
 
-		public virtual bool IsIRInstruction { get { return false; } }
+		public virtual bool IsIRInstruction => false;
 
-		/// <summary>
-		/// Gets the name of the base instruction.
-		/// </summary>
-		/// <value>
-		/// The name of the base instruction.
-		/// </value>
-		public virtual string Name
-		{
-			get
-			{
-				string name = GetType().ToString();
+		public virtual string Name { get; private set; }
 
-				int index = name.LastIndexOf('.');
+		public virtual string AlternativeName => null;
 
-				if (index > 0)
-					name = name.Substring(index + 1);
+		public virtual string FamilyName => null;
 
-				return name;
-			}
-		}
+		public virtual string Modifier => null;
 
-		public virtual string AlternativeName { get { return null; } }
-		public virtual string FamilyName { get { return null; } }
-		public virtual string Modifier { get { return null; } }
-
-		private string CachedFullName { get; set; }
-
-		public virtual string FullName
-		{
-			get
-			{
-				if (CachedFullName == null)
-				{
-					CachedFullName = FamilyName + "." + Name;
-				}
-
-				return CachedFullName;
-			}
-		}
-
-		private string CachedFullAlternativeName { get; set; }
-
-		public virtual string FullAlternativeName
-		{
-			get
-			{
-				if (AlternativeName == null)
-					return null;
-
-				if (CachedFullAlternativeName == null)
-				{
-					CachedFullAlternativeName = FamilyName + "." + AlternativeName;
-				}
-
-				return CachedFullAlternativeName;
-			}
-		}
-
+		public virtual string FullName { get; private set; }
+		
 		#endregion Properties
 
 		#region Platform Properties
 
-		public virtual bool IsZeroFlagUsed { get { return false; } }
-		public virtual bool IsZeroFlagSet { get { return false; } }
-		public virtual bool IsZeroFlagCleared { get { return false; } }
-		public virtual bool IsZeroFlagModified { get { return false; } }
-		public virtual bool IsZeroFlagUnchanged { get { return false; } }
-		public virtual bool IsZeroFlagUndefined { get { return false; } }
+		public virtual bool IsZeroFlagUsed
+		{ get { return false; } }
 
-		public virtual bool IsCarryFlagUsed { get { return false; } }
-		public virtual bool IsCarryFlagSet { get { return false; } }
-		public virtual bool IsCarryFlagCleared { get { return false; } }
-		public virtual bool IsCarryFlagModified { get { return false; } }
-		public virtual bool IsCarryFlagUnchanged { get { return false; } }
-		public virtual bool IsCarryFlagUndefined { get { return false; } }
+		public virtual bool IsZeroFlagSet
+		{ get { return false; } }
 
-		public virtual bool IsSignFlagUsed { get { return false; } }
-		public virtual bool IsSignFlagSet { get { return false; } }
-		public virtual bool IsSignFlagCleared { get { return false; } }
-		public virtual bool IsSignFlagModified { get { return false; } }
-		public virtual bool IsSignFlagUnchanged { get { return false; } }
-		public virtual bool IsSignFlagUndefined { get { return false; } }
+		public virtual bool IsZeroFlagCleared
+		{ get { return false; } }
 
-		public virtual bool IsOverflowFlagUsed { get { return false; } }
-		public virtual bool IsOverflowFlagSet { get { return false; } }
-		public virtual bool IsOverflowFlagCleared { get { return false; } }
-		public virtual bool IsOverflowFlagModified { get { return false; } }
-		public virtual bool IsOverflowFlagUnchanged { get { return false; } }
-		public virtual bool IsOverflowFlagUndefined { get { return false; } }
+		public virtual bool IsZeroFlagModified
+		{ get { return false; } }
 
-		public virtual bool IsParityFlagUsed { get { return false; } }
-		public virtual bool IsParityFlagSet { get { return false; } }
-		public virtual bool IsParityFlagCleared { get { return false; } }
-		public virtual bool IsParityFlagModified { get { return false; } }
-		public virtual bool IsParityFlagUnchanged { get { return false; } }
-		public virtual bool IsParityFlagUndefined { get { return false; } }
+		public virtual bool IsZeroFlagUnchanged
+		{ get { return false; } }
 
-		public virtual bool AreFlagUseConditional { get { return false; } }
+		public virtual bool IsZeroFlagUndefined
+		{ get { return false; } }
+
+		public virtual bool IsCarryFlagUsed
+		{ get { return false; } }
+
+		public virtual bool IsCarryFlagSet
+		{ get { return false; } }
+
+		public virtual bool IsCarryFlagCleared
+		{ get { return false; } }
+
+		public virtual bool IsCarryFlagModified
+		{ get { return false; } }
+
+		public virtual bool IsCarryFlagUnchanged
+		{ get { return false; } }
+
+		public virtual bool IsCarryFlagUndefined
+		{ get { return false; } }
+
+		public virtual bool IsSignFlagUsed
+		{ get { return false; } }
+
+		public virtual bool IsSignFlagSet
+		{ get { return false; } }
+
+		public virtual bool IsSignFlagCleared
+		{ get { return false; } }
+
+		public virtual bool IsSignFlagModified
+		{ get { return false; } }
+
+		public virtual bool IsSignFlagUnchanged
+		{ get { return false; } }
+
+		public virtual bool IsSignFlagUndefined
+		{ get { return false; } }
+
+		public virtual bool IsOverflowFlagUsed
+		{ get { return false; } }
+
+		public virtual bool IsOverflowFlagSet
+		{ get { return false; } }
+
+		public virtual bool IsOverflowFlagCleared
+		{ get { return false; } }
+
+		public virtual bool IsOverflowFlagModified
+		{ get { return false; } }
+
+		public virtual bool IsOverflowFlagUnchanged
+		{ get { return false; } }
+
+		public virtual bool IsOverflowFlagUndefined
+		{ get { return false; } }
+
+		public virtual bool IsParityFlagUsed
+		{ get { return false; } }
+
+		public virtual bool IsParityFlagSet
+		{ get { return false; } }
+
+		public virtual bool IsParityFlagCleared
+		{ get { return false; } }
+
+		public virtual bool IsParityFlagModified
+		{ get { return false; } }
+
+		public virtual bool IsParityFlagUnchanged
+		{ get { return false; } }
+
+		public virtual bool IsParityFlagUndefined
+		{ get { return false; } }
+
+		public virtual bool AreFlagUseConditional
+		{ get { return false; } }
 
 		/// <summary>
 		/// Gets a value indicating whether [three two address conversion].
@@ -240,7 +248,8 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// <c>true</c> if [three two address conversion]; otherwise, <c>false</c>.
 		/// </value>
-		public virtual bool ThreeTwoAddressConversion { get { return false; } }
+		public virtual bool ThreeTwoAddressConversion
+		{ get { return false; } }
 
 		#endregion Platform Properties
 
@@ -268,6 +277,17 @@ namespace Mosa.Compiler.Framework
 			{
 				ID = ++NextInstructionID;
 			}
+
+			string name = GetType().ToString();
+
+			int index = name.LastIndexOf('.');
+
+			if (index > 0)
+				name = name.Substring(index + 1);
+
+			Name = name;
+
+			FullName = FamilyName + "." + Name;
 		}
 
 		#endregion Construction

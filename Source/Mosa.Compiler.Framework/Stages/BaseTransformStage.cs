@@ -40,7 +40,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected BitArray EmptyBlocks;
 
-		protected Dictionary<string, Counter> transformCounts = new Dictionary<string, Counter>();
+		protected Dictionary<string, Counter> TransformCounts = new Dictionary<string, Counter>();
 
 		protected bool CountTransformations = false;
 
@@ -255,11 +255,11 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var name = transform.Name;
 
-			if (!transformCounts.TryGetValue(name, out Counter counter))
+			if (!TransformCounts.TryGetValue(name, out Counter counter))
 			{
-				counter = new Counter($"{name}", 1);
+				counter = new Counter(name, 1);
 
-				transformCounts.Add(name, counter);
+				TransformCounts.Add(name, counter);
 				Register(counter);
 			}
 			else
