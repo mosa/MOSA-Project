@@ -144,112 +144,72 @@ namespace Mosa.Compiler.Framework
 		public virtual string Modifier => null;
 
 		public virtual string FullName { get; private set; }
-		
+
 		#endregion Properties
 
 		#region Platform Properties
 
-		public virtual bool IsZeroFlagUsed
-		{ get { return false; } }
+		public virtual bool IsZeroFlagUsed => false;
 
-		public virtual bool IsZeroFlagSet
-		{ get { return false; } }
+		public virtual bool IsZeroFlagSet => false;
 
-		public virtual bool IsZeroFlagCleared
-		{ get { return false; } }
+		public virtual bool IsZeroFlagCleared => false;
 
-		public virtual bool IsZeroFlagModified
-		{ get { return false; } }
+		public virtual bool IsZeroFlagModified => false;
 
-		public virtual bool IsZeroFlagUnchanged
-		{ get { return false; } }
+		public virtual bool IsZeroFlagUnchanged => false;
 
-		public virtual bool IsZeroFlagUndefined
-		{ get { return false; } }
+		public virtual bool IsZeroFlagUndefined => false;
 
-		public virtual bool IsCarryFlagUsed
-		{ get { return false; } }
+		public virtual bool IsCarryFlagUsed => false;
 
-		public virtual bool IsCarryFlagSet
-		{ get { return false; } }
+		public virtual bool IsCarryFlagSet => false;
 
-		public virtual bool IsCarryFlagCleared
-		{ get { return false; } }
+		public virtual bool IsCarryFlagCleared => false;
 
-		public virtual bool IsCarryFlagModified
-		{ get { return false; } }
+		public virtual bool IsCarryFlagModified => false;
 
-		public virtual bool IsCarryFlagUnchanged
-		{ get { return false; } }
+		public virtual bool IsCarryFlagUnchanged => false;
 
-		public virtual bool IsCarryFlagUndefined
-		{ get { return false; } }
+		public virtual bool IsCarryFlagUndefined => false;
 
-		public virtual bool IsSignFlagUsed
-		{ get { return false; } }
+		public virtual bool IsSignFlagUsed => false;
 
-		public virtual bool IsSignFlagSet
-		{ get { return false; } }
+		public virtual bool IsSignFlagSet => false;
 
-		public virtual bool IsSignFlagCleared
-		{ get { return false; } }
+		public virtual bool IsSignFlagCleared => false;
 
-		public virtual bool IsSignFlagModified
-		{ get { return false; } }
+		public virtual bool IsSignFlagModified => false;
 
-		public virtual bool IsSignFlagUnchanged
-		{ get { return false; } }
+		public virtual bool IsSignFlagUnchanged => false;
 
-		public virtual bool IsSignFlagUndefined
-		{ get { return false; } }
+		public virtual bool IsSignFlagUndefined => false;
 
-		public virtual bool IsOverflowFlagUsed
-		{ get { return false; } }
+		public virtual bool IsOverflowFlagUsed => false;
 
-		public virtual bool IsOverflowFlagSet
-		{ get { return false; } }
+		public virtual bool IsOverflowFlagSet => false;
 
-		public virtual bool IsOverflowFlagCleared
-		{ get { return false; } }
+		public virtual bool IsOverflowFlagCleared => false;
 
-		public virtual bool IsOverflowFlagModified
-		{ get { return false; } }
+		public virtual bool IsOverflowFlagModified => false;
 
-		public virtual bool IsOverflowFlagUnchanged
-		{ get { return false; } }
+		public virtual bool IsOverflowFlagUnchanged => false;
 
-		public virtual bool IsOverflowFlagUndefined
-		{ get { return false; } }
+		public virtual bool IsOverflowFlagUndefined => false;
 
-		public virtual bool IsParityFlagUsed
-		{ get { return false; } }
+		public virtual bool IsParityFlagUsed => false;
 
-		public virtual bool IsParityFlagSet
-		{ get { return false; } }
+		public virtual bool IsParityFlagSet => false;
 
-		public virtual bool IsParityFlagCleared
-		{ get { return false; } }
+		public virtual bool IsParityFlagCleared => false;
 
-		public virtual bool IsParityFlagModified
-		{ get { return false; } }
+		public virtual bool IsParityFlagModified => false;
 
-		public virtual bool IsParityFlagUnchanged
-		{ get { return false; } }
+		public virtual bool IsParityFlagUnchanged => false;
 
-		public virtual bool IsParityFlagUndefined
-		{ get { return false; } }
+		public virtual bool IsParityFlagUndefined => false;
 
-		public virtual bool AreFlagUseConditional
-		{ get { return false; } }
-
-		/// <summary>
-		/// Gets a value indicating whether [three two address conversion].
-		/// </summary>
-		/// <value>
-		/// <c>true</c> if [three two address conversion]; otherwise, <c>false</c>.
-		/// </value>
-		public virtual bool ThreeTwoAddressConversion
-		{ get { return false; } }
+		public virtual bool AreFlagUseConditional => false;
 
 		#endregion Platform Properties
 

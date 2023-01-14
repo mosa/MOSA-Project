@@ -17,8 +17,6 @@ namespace Mosa.Platform.x86.Instructions
 		{
 		}
 
-		public override bool ThreeTwoAddressConversion { get { return true; } }
-
 		public override bool IsZeroFlagUnchanged { get { return true; } }
 
 		public override bool IsZeroFlagUndefined { get { return true; } }

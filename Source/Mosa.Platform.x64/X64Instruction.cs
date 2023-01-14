@@ -33,7 +33,7 @@ namespace Mosa.Platform.x64
 		/// <value>
 		/// The name of the instruction family.
 		/// </value>
-		public override string FamilyName { get { return "X64"; } }
+		public override string FamilyName => "X64";
 
 		#endregion Properties
 
