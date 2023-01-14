@@ -53,7 +53,7 @@ namespace Mosa.Tool.Explorer
 				methodData.InstructionLogs.Clear();
 				methodData.OrderedDebugStageNames.Clear();
 				methodData.OrderedStageNames.Clear();
-				methodData.CounterData.Clear();
+				methodData.MethodCounters.Clear();
 				methodData.DebugLogs.Clear();
 				methodData.Version = version;
 			}
@@ -81,7 +81,7 @@ namespace Mosa.Tool.Explorer
 			{
 				ClearMethodDataOnNewVersion(version, methodData);
 
-				methodData.CounterData = lines;
+				methodData.MethodCounters = lines;
 			}
 		}
 

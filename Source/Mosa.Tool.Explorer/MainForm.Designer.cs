@@ -30,10 +30,6 @@
 		{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-			this.label4 = new System.Windows.Forms.Label();
-			this.label3 = new System.Windows.Forms.Label();
-			this.stageLabel = new System.Windows.Forms.Label();
-			this.label1 = new System.Windows.Forms.Label();
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
@@ -78,17 +74,35 @@
 			this.tbFilter = new System.Windows.Forms.TextBox();
 			this.tabControl = new System.Windows.Forms.TabControl();
 			this.tabStages = new System.Windows.Forms.TabPage();
+			this.label1 = new System.Windows.Forms.Label();
 			this.cbLabels = new System.Windows.Forms.ComboBox();
 			this.cbStages = new System.Windows.Forms.ComboBox();
+			this.stageLabel = new System.Windows.Forms.Label();
 			this.tbInstructions = new System.Windows.Forms.RichTextBox();
 			this.tabStageDebug = new System.Windows.Forms.TabPage();
 			this.cbDebugStages = new System.Windows.Forms.ComboBox();
+			this.label3 = new System.Windows.Forms.Label();
 			this.tbDebugResult = new System.Windows.Forms.RichTextBox();
 			this.tabMethodCounters = new System.Windows.Forms.TabPage();
+			this.tabControl1 = new System.Windows.Forms.TabControl();
+			this.tabPage1 = new System.Windows.Forms.TabPage();
+			this.label5 = new System.Windows.Forms.Label();
+			this.tbCounterFilter = new System.Windows.Forms.TextBox();
+			this.gridMethodCounters = new System.Windows.Forms.DataGridView();
+			this.tabPage2 = new System.Windows.Forms.TabPage();
 			this.tbMethodCounters = new System.Windows.Forms.RichTextBox();
 			this.tabLogs = new System.Windows.Forms.TabPage();
 			this.cbSectionLogs = new System.Windows.Forms.ComboBox();
+			this.label4 = new System.Windows.Forms.Label();
 			this.tbLogs = new System.Windows.Forms.RichTextBox();
+			this.tabCompilerCounters = new System.Windows.Forms.TabPage();
+			this.tabControl2 = new System.Windows.Forms.TabControl();
+			this.tabPage4 = new System.Windows.Forms.TabPage();
+			this.label6 = new System.Windows.Forms.Label();
+			this.tbCompilerCounterFilter = new System.Windows.Forms.TextBox();
+			this.gridCompilerCounters = new System.Windows.Forms.DataGridView();
+			this.tabPage5 = new System.Windows.Forms.TabPage();
+			this.tbCompilerCounters = new System.Windows.Forms.RichTextBox();
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
 			this.cbPlatform = new System.Windows.Forms.ToolStripComboBox();
 			this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
@@ -108,80 +122,51 @@
 			this.tabStages.SuspendLayout();
 			this.tabStageDebug.SuspendLayout();
 			this.tabMethodCounters.SuspendLayout();
+			this.tabControl1.SuspendLayout();
+			this.tabPage1.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.gridMethodCounters)).BeginInit();
+			this.tabPage2.SuspendLayout();
 			this.tabLogs.SuspendLayout();
+			this.tabCompilerCounters.SuspendLayout();
+			this.tabControl2.SuspendLayout();
+			this.tabPage4.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.gridCompilerCounters)).BeginInit();
+			this.tabPage5.SuspendLayout();
 			this.toolStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// label4
-			// 
-			this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.label4.Location = new System.Drawing.Point(5, 9);
-			this.label4.Margin = new System.Windows.Forms.Padding(5);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(70, 23);
-			this.label4.TabIndex = 45;
-			this.label4.Text = "Section:";
-			// 
-			// label3
-			// 
-			this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.label3.Location = new System.Drawing.Point(5, 9);
-			this.label3.Margin = new System.Windows.Forms.Padding(5);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(58, 23);
-			this.label3.TabIndex = 41;
-			this.label3.Text = "Stage:";
-			// 
-			// stageLabel
-			// 
-			this.stageLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.stageLabel.Location = new System.Drawing.Point(5, 9);
-			this.stageLabel.Margin = new System.Windows.Forms.Padding(5);
-			this.stageLabel.Name = "stageLabel";
-			this.stageLabel.Size = new System.Drawing.Size(58, 23);
-			this.stageLabel.TabIndex = 39;
-			this.stageLabel.Text = "Stage:";
-			// 
-			// label1
-			// 
-			this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.label1.Location = new System.Drawing.Point(352, 9);
-			this.label1.Margin = new System.Windows.Forms.Padding(5);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(56, 23);
-			this.label1.TabIndex = 41;
-			this.label1.Text = "Label:";
-			// 
 			// statusStrip1
 			// 
+			this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
 			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1,
             this.toolStripProgressBar1,
             this.toolStripStatusLabel});
-			this.statusStrip1.Location = new System.Drawing.Point(0, 545);
+			this.statusStrip1.Location = new System.Drawing.Point(0, 450);
 			this.statusStrip1.Name = "statusStrip1";
 			this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 16, 0);
-			this.statusStrip1.Size = new System.Drawing.Size(954, 24);
+			this.statusStrip1.Size = new System.Drawing.Size(940, 23);
 			this.statusStrip1.TabIndex = 0;
 			this.statusStrip1.Text = "statusStrip1";
 			// 
 			// toolStripStatusLabel1
 			// 
 			this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-			this.toolStripStatusLabel1.Size = new System.Drawing.Size(0, 19);
+			this.toolStripStatusLabel1.Size = new System.Drawing.Size(0, 18);
 			// 
 			// toolStripProgressBar1
 			// 
 			this.toolStripProgressBar1.Name = "toolStripProgressBar1";
-			this.toolStripProgressBar1.Size = new System.Drawing.Size(233, 18);
+			this.toolStripProgressBar1.Size = new System.Drawing.Size(233, 17);
 			// 
 			// toolStripStatusLabel
 			// 
 			this.toolStripStatusLabel.Name = "toolStripStatusLabel";
-			this.toolStripStatusLabel.Size = new System.Drawing.Size(0, 19);
+			this.toolStripStatusLabel.Size = new System.Drawing.Size(0, 18);
 			// 
 			// menuStrip1
 			// 
+			this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
 			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.compileToolStripMenuItem,
@@ -191,7 +176,7 @@
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
 			this.menuStrip1.Padding = new System.Windows.Forms.Padding(7, 2, 0, 2);
-			this.menuStrip1.Size = new System.Drawing.Size(954, 24);
+			this.menuStrip1.Size = new System.Drawing.Size(940, 24);
 			this.menuStrip1.TabIndex = 3;
 			this.menuStrip1.Text = "menuStrip1";
 			// 
@@ -492,7 +477,7 @@
 			this.treeView.Location = new System.Drawing.Point(4, 31);
 			this.treeView.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.treeView.Name = "treeView";
-			this.treeView.Size = new System.Drawing.Size(244, 456);
+			this.treeView.Size = new System.Drawing.Size(239, 365);
 			this.treeView.TabIndex = 3;
 			this.treeView.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeView_BeforeSelect);
 			this.treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TreeView_AfterSelect);
@@ -519,9 +504,8 @@
 			this.splitContainer1.Panel2.Controls.Add(this.tabControl);
 			this.splitContainer1.Panel2.RightToLeft = System.Windows.Forms.RightToLeft.No;
 			this.splitContainer1.RightToLeft = System.Windows.Forms.RightToLeft.No;
-			this.splitContainer1.Size = new System.Drawing.Size(950, 490);
-			this.splitContainer1.SplitterDistance = 249;
-			this.splitContainer1.SplitterWidth = 2;
+			this.splitContainer1.Size = new System.Drawing.Size(940, 396);
+			this.splitContainer1.SplitterDistance = 244;
 			this.splitContainer1.TabIndex = 26;
 			// 
 			// label2
@@ -538,10 +522,10 @@
 			// 
 			this.tbFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.tbFilter.Location = new System.Drawing.Point(48, 5);
+			this.tbFilter.Location = new System.Drawing.Point(45, 3);
 			this.tbFilter.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.tbFilter.Name = "tbFilter";
-			this.tbFilter.Size = new System.Drawing.Size(200, 23);
+			this.tbFilter.Size = new System.Drawing.Size(192, 23);
 			this.tbFilter.TabIndex = 4;
 			this.tbFilter.TextChanged += new System.EventHandler(this.tbFilter_TextChanged);
 			// 
@@ -550,17 +534,19 @@
 			this.tabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.tabControl.Appearance = System.Windows.Forms.TabAppearance.Buttons;
 			this.tabControl.Controls.Add(this.tabStages);
 			this.tabControl.Controls.Add(this.tabStageDebug);
 			this.tabControl.Controls.Add(this.tabMethodCounters);
 			this.tabControl.Controls.Add(this.tabLogs);
+			this.tabControl.Controls.Add(this.tabCompilerCounters);
 			this.tabControl.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.tabControl.Location = new System.Drawing.Point(0, 0);
+			this.tabControl.Location = new System.Drawing.Point(1, 3);
 			this.tabControl.Margin = new System.Windows.Forms.Padding(0);
 			this.tabControl.Name = "tabControl";
 			this.tabControl.Padding = new System.Drawing.Point(0, 0);
 			this.tabControl.SelectedIndex = 0;
-			this.tabControl.Size = new System.Drawing.Size(724, 490);
+			this.tabControl.Size = new System.Drawing.Size(691, 393);
 			this.tabControl.TabIndex = 38;
 			this.tabControl.SelectedIndexChanged += new System.EventHandler(this.tabControl_SelectedIndexChanged);
 			// 
@@ -572,12 +558,22 @@
 			this.tabStages.Controls.Add(this.cbStages);
 			this.tabStages.Controls.Add(this.stageLabel);
 			this.tabStages.Controls.Add(this.tbInstructions);
-			this.tabStages.Location = new System.Drawing.Point(4, 25);
+			this.tabStages.Location = new System.Drawing.Point(4, 28);
 			this.tabStages.Margin = new System.Windows.Forms.Padding(0);
 			this.tabStages.Name = "tabStages";
-			this.tabStages.Size = new System.Drawing.Size(716, 461);
+			this.tabStages.Size = new System.Drawing.Size(683, 361);
 			this.tabStages.TabIndex = 0;
 			this.tabStages.Text = "Instructions";
+			// 
+			// label1
+			// 
+			this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.label1.Location = new System.Drawing.Point(352, 9);
+			this.label1.Margin = new System.Windows.Forms.Padding(5);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(56, 23);
+			this.label1.TabIndex = 41;
+			this.label1.Text = "Label:";
 			// 
 			// cbLabels
 			// 
@@ -606,6 +602,16 @@
 			this.cbStages.TabIndex = 38;
 			this.cbStages.SelectedIndexChanged += new System.EventHandler(this.CbStages_SelectedIndexChanged);
 			// 
+			// stageLabel
+			// 
+			this.stageLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.stageLabel.Location = new System.Drawing.Point(5, 9);
+			this.stageLabel.Margin = new System.Windows.Forms.Padding(5);
+			this.stageLabel.Name = "stageLabel";
+			this.stageLabel.Size = new System.Drawing.Size(58, 23);
+			this.stageLabel.TabIndex = 39;
+			this.stageLabel.Text = "Stage:";
+			// 
 			// tbInstructions
 			// 
 			this.tbInstructions.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -615,7 +621,7 @@
 			this.tbInstructions.Location = new System.Drawing.Point(0, 37);
 			this.tbInstructions.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.tbInstructions.Name = "tbInstructions";
-			this.tbInstructions.Size = new System.Drawing.Size(691, 421);
+			this.tbInstructions.Size = new System.Drawing.Size(677, 324);
 			this.tbInstructions.TabIndex = 31;
 			this.tbInstructions.Text = "";
 			this.tbInstructions.WordWrap = false;
@@ -626,10 +632,10 @@
 			this.tabStageDebug.Controls.Add(this.cbDebugStages);
 			this.tabStageDebug.Controls.Add(this.label3);
 			this.tabStageDebug.Controls.Add(this.tbDebugResult);
-			this.tabStageDebug.Location = new System.Drawing.Point(4, 25);
+			this.tabStageDebug.Location = new System.Drawing.Point(4, 28);
 			this.tabStageDebug.Margin = new System.Windows.Forms.Padding(0);
 			this.tabStageDebug.Name = "tabStageDebug";
-			this.tabStageDebug.Size = new System.Drawing.Size(716, 461);
+			this.tabStageDebug.Size = new System.Drawing.Size(683, 361);
 			this.tabStageDebug.TabIndex = 1;
 			this.tabStageDebug.Text = "Debug";
 			// 
@@ -646,6 +652,16 @@
 			this.cbDebugStages.TabIndex = 40;
 			this.cbDebugStages.SelectedIndexChanged += new System.EventHandler(this.CbDebugStages_SelectedIndexChanged);
 			// 
+			// label3
+			// 
+			this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.label3.Location = new System.Drawing.Point(5, 9);
+			this.label3.Margin = new System.Windows.Forms.Padding(5);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(58, 23);
+			this.label3.TabIndex = 41;
+			this.label3.Text = "Stage:";
+			// 
 			// tbDebugResult
 			// 
 			this.tbDebugResult.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -655,7 +671,7 @@
 			this.tbDebugResult.Location = new System.Drawing.Point(0, 37);
 			this.tbDebugResult.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.tbDebugResult.Name = "tbDebugResult";
-			this.tbDebugResult.Size = new System.Drawing.Size(691, 412);
+			this.tbDebugResult.Size = new System.Drawing.Size(679, 331);
 			this.tbDebugResult.TabIndex = 32;
 			this.tbDebugResult.Text = "";
 			this.tbDebugResult.WordWrap = false;
@@ -663,13 +679,96 @@
 			// tabMethodCounters
 			// 
 			this.tabMethodCounters.BackColor = System.Drawing.Color.Gainsboro;
-			this.tabMethodCounters.Controls.Add(this.tbMethodCounters);
-			this.tabMethodCounters.Location = new System.Drawing.Point(4, 25);
+			this.tabMethodCounters.Controls.Add(this.tabControl1);
+			this.tabMethodCounters.Location = new System.Drawing.Point(4, 28);
 			this.tabMethodCounters.Margin = new System.Windows.Forms.Padding(0);
 			this.tabMethodCounters.Name = "tabMethodCounters";
-			this.tabMethodCounters.Size = new System.Drawing.Size(716, 461);
+			this.tabMethodCounters.Size = new System.Drawing.Size(683, 361);
 			this.tabMethodCounters.TabIndex = 6;
 			this.tabMethodCounters.Text = "Counters";
+			// 
+			// tabControl1
+			// 
+			this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.tabControl1.Appearance = System.Windows.Forms.TabAppearance.Buttons;
+			this.tabControl1.Controls.Add(this.tabPage1);
+			this.tabControl1.Controls.Add(this.tabPage2);
+			this.tabControl1.Location = new System.Drawing.Point(0, 0);
+			this.tabControl1.Margin = new System.Windows.Forms.Padding(0);
+			this.tabControl1.Multiline = true;
+			this.tabControl1.Name = "tabControl1";
+			this.tabControl1.SelectedIndex = 0;
+			this.tabControl1.Size = new System.Drawing.Size(687, 368);
+			this.tabControl1.TabIndex = 7;
+			// 
+			// tabPage1
+			// 
+			this.tabPage1.Controls.Add(this.label5);
+			this.tabPage1.Controls.Add(this.tbCounterFilter);
+			this.tabPage1.Controls.Add(this.gridMethodCounters);
+			this.tabPage1.Location = new System.Drawing.Point(4, 28);
+			this.tabPage1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+			this.tabPage1.Name = "tabPage1";
+			this.tabPage1.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
+			this.tabPage1.Size = new System.Drawing.Size(679, 336);
+			this.tabPage1.TabIndex = 0;
+			this.tabPage1.Text = "Grid";
+			this.tabPage1.UseVisualStyleBackColor = true;
+			// 
+			// label5
+			// 
+			this.label5.AutoSize = true;
+			this.label5.Location = new System.Drawing.Point(495, 13);
+			this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(43, 17);
+			this.label5.TabIndex = 9;
+			this.label5.Text = "Filter:";
+			// 
+			// tbCounterFilter
+			// 
+			this.tbCounterFilter.Location = new System.Drawing.Point(495, 31);
+			this.tbCounterFilter.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+			this.tbCounterFilter.Name = "tbCounterFilter";
+			this.tbCounterFilter.Size = new System.Drawing.Size(178, 23);
+			this.tbCounterFilter.TabIndex = 8;
+			this.tbCounterFilter.TextChanged += new System.EventHandler(this.tbMethodCounterFilter_TextChanged);
+			// 
+			// gridMethodCounters
+			// 
+			this.gridMethodCounters.AllowUserToAddRows = false;
+			this.gridMethodCounters.AllowUserToDeleteRows = false;
+			this.gridMethodCounters.AllowUserToOrderColumns = true;
+			this.gridMethodCounters.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+			this.gridMethodCounters.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			this.gridMethodCounters.Location = new System.Drawing.Point(3, 0);
+			this.gridMethodCounters.Name = "gridMethodCounters";
+			this.gridMethodCounters.ReadOnly = true;
+			this.gridMethodCounters.RowHeadersVisible = false;
+			this.gridMethodCounters.RowHeadersWidth = 51;
+			this.gridMethodCounters.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.gridMethodCounters.RowTemplate.Height = 20;
+			this.gridMethodCounters.ShowCellErrors = false;
+			this.gridMethodCounters.ShowCellToolTips = false;
+			this.gridMethodCounters.ShowEditingIcon = false;
+			this.gridMethodCounters.ShowRowErrors = false;
+			this.gridMethodCounters.Size = new System.Drawing.Size(481, 335);
+			this.gridMethodCounters.TabIndex = 7;
+			// 
+			// tabPage2
+			// 
+			this.tabPage2.Controls.Add(this.tbMethodCounters);
+			this.tabPage2.Location = new System.Drawing.Point(4, 28);
+			this.tabPage2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+			this.tabPage2.Name = "tabPage2";
+			this.tabPage2.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
+			this.tabPage2.Size = new System.Drawing.Size(679, 336);
+			this.tabPage2.TabIndex = 1;
+			this.tabPage2.Text = "Text";
+			this.tabPage2.UseVisualStyleBackColor = true;
 			// 
 			// tbMethodCounters
 			// 
@@ -677,11 +776,11 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.tbMethodCounters.Font = new System.Drawing.Font("Lucida Console", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.tbMethodCounters.Location = new System.Drawing.Point(0, 0);
+			this.tbMethodCounters.Location = new System.Drawing.Point(0, 3);
 			this.tbMethodCounters.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.tbMethodCounters.Name = "tbMethodCounters";
-			this.tbMethodCounters.Size = new System.Drawing.Size(691, 449);
-			this.tbMethodCounters.TabIndex = 3;
+			this.tbMethodCounters.Size = new System.Drawing.Size(676, 333);
+			this.tbMethodCounters.TabIndex = 10;
 			this.tbMethodCounters.Text = "";
 			this.tbMethodCounters.WordWrap = false;
 			// 
@@ -691,12 +790,12 @@
 			this.tabLogs.Controls.Add(this.cbSectionLogs);
 			this.tabLogs.Controls.Add(this.label4);
 			this.tabLogs.Controls.Add(this.tbLogs);
-			this.tabLogs.Location = new System.Drawing.Point(4, 25);
+			this.tabLogs.Location = new System.Drawing.Point(4, 28);
 			this.tabLogs.Margin = new System.Windows.Forms.Padding(0);
 			this.tabLogs.Name = "tabLogs";
-			this.tabLogs.Size = new System.Drawing.Size(716, 461);
+			this.tabLogs.Size = new System.Drawing.Size(683, 361);
 			this.tabLogs.TabIndex = 7;
-			this.tabLogs.Text = "Logs";
+			this.tabLogs.Text = "Compiler Logs";
 			// 
 			// cbSectionLogs
 			// 
@@ -711,6 +810,16 @@
 			this.cbSectionLogs.TabIndex = 44;
 			this.cbSectionLogs.SelectedIndexChanged += new System.EventHandler(this.cbSections_SelectedIndexChanged);
 			// 
+			// label4
+			// 
+			this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.label4.Location = new System.Drawing.Point(5, 9);
+			this.label4.Margin = new System.Windows.Forms.Padding(5);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(70, 23);
+			this.label4.TabIndex = 45;
+			this.label4.Text = "Section:";
+			// 
 			// tbLogs
 			// 
 			this.tbLogs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -720,13 +829,123 @@
 			this.tbLogs.Location = new System.Drawing.Point(0, 37);
 			this.tbLogs.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.tbLogs.Name = "tbLogs";
-			this.tbLogs.Size = new System.Drawing.Size(691, 412);
+			this.tbLogs.Size = new System.Drawing.Size(683, 324);
 			this.tbLogs.TabIndex = 3;
 			this.tbLogs.Text = "";
 			this.tbLogs.WordWrap = false;
 			// 
+			// tabCompilerCounters
+			// 
+			this.tabCompilerCounters.Controls.Add(this.tabControl2);
+			this.tabCompilerCounters.Location = new System.Drawing.Point(4, 28);
+			this.tabCompilerCounters.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+			this.tabCompilerCounters.Name = "tabCompilerCounters";
+			this.tabCompilerCounters.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
+			this.tabCompilerCounters.Size = new System.Drawing.Size(683, 361);
+			this.tabCompilerCounters.TabIndex = 8;
+			this.tabCompilerCounters.Text = "Compiler Counters";
+			this.tabCompilerCounters.UseVisualStyleBackColor = true;
+			// 
+			// tabControl2
+			// 
+			this.tabControl2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.tabControl2.Appearance = System.Windows.Forms.TabAppearance.Buttons;
+			this.tabControl2.Controls.Add(this.tabPage4);
+			this.tabControl2.Controls.Add(this.tabPage5);
+			this.tabControl2.Location = new System.Drawing.Point(0, 0);
+			this.tabControl2.Margin = new System.Windows.Forms.Padding(0);
+			this.tabControl2.Multiline = true;
+			this.tabControl2.Name = "tabControl2";
+			this.tabControl2.SelectedIndex = 0;
+			this.tabControl2.Size = new System.Drawing.Size(697, 365);
+			this.tabControl2.TabIndex = 8;
+			// 
+			// tabPage4
+			// 
+			this.tabPage4.Controls.Add(this.label6);
+			this.tabPage4.Controls.Add(this.tbCompilerCounterFilter);
+			this.tabPage4.Controls.Add(this.gridCompilerCounters);
+			this.tabPage4.Location = new System.Drawing.Point(4, 28);
+			this.tabPage4.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+			this.tabPage4.Name = "tabPage4";
+			this.tabPage4.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
+			this.tabPage4.Size = new System.Drawing.Size(689, 333);
+			this.tabPage4.TabIndex = 0;
+			this.tabPage4.Text = "Grid";
+			this.tabPage4.UseVisualStyleBackColor = true;
+			// 
+			// label6
+			// 
+			this.label6.AutoSize = true;
+			this.label6.Location = new System.Drawing.Point(498, 15);
+			this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(43, 17);
+			this.label6.TabIndex = 9;
+			this.label6.Text = "Filter:";
+			// 
+			// tbCompilerCounterFilter
+			// 
+			this.tbCompilerCounterFilter.Location = new System.Drawing.Point(495, 31);
+			this.tbCompilerCounterFilter.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+			this.tbCompilerCounterFilter.Name = "tbCompilerCounterFilter";
+			this.tbCompilerCounterFilter.Size = new System.Drawing.Size(178, 23);
+			this.tbCompilerCounterFilter.TabIndex = 8;
+			this.tbCompilerCounterFilter.TextChanged += new System.EventHandler(this.tbCompilerCounterFilter_TextChanged);
+			// 
+			// gridCompilerCounters
+			// 
+			this.gridCompilerCounters.AllowUserToAddRows = false;
+			this.gridCompilerCounters.AllowUserToDeleteRows = false;
+			this.gridCompilerCounters.AllowUserToOrderColumns = true;
+			this.gridCompilerCounters.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+			this.gridCompilerCounters.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			this.gridCompilerCounters.Location = new System.Drawing.Point(3, 0);
+			this.gridCompilerCounters.Name = "gridCompilerCounters";
+			this.gridCompilerCounters.ReadOnly = true;
+			this.gridCompilerCounters.RowHeadersVisible = false;
+			this.gridCompilerCounters.RowHeadersWidth = 51;
+			this.gridCompilerCounters.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.gridCompilerCounters.RowTemplate.Height = 20;
+			this.gridCompilerCounters.ShowCellErrors = false;
+			this.gridCompilerCounters.ShowCellToolTips = false;
+			this.gridCompilerCounters.ShowEditingIcon = false;
+			this.gridCompilerCounters.ShowRowErrors = false;
+			this.gridCompilerCounters.Size = new System.Drawing.Size(481, 333);
+			this.gridCompilerCounters.TabIndex = 7;
+			// 
+			// tabPage5
+			// 
+			this.tabPage5.Controls.Add(this.tbCompilerCounters);
+			this.tabPage5.Location = new System.Drawing.Point(4, 27);
+			this.tabPage5.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+			this.tabPage5.Name = "tabPage5";
+			this.tabPage5.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
+			this.tabPage5.Size = new System.Drawing.Size(689, 334);
+			this.tabPage5.TabIndex = 1;
+			this.tabPage5.Text = "Text";
+			this.tabPage5.UseVisualStyleBackColor = true;
+			// 
+			// tbCompilerCounters
+			// 
+			this.tbCompilerCounters.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.tbCompilerCounters.Font = new System.Drawing.Font("Lucida Console", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.tbCompilerCounters.Location = new System.Drawing.Point(0, 0);
+			this.tbCompilerCounters.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+			this.tbCompilerCounters.Name = "tbCompilerCounters";
+			this.tbCompilerCounters.Size = new System.Drawing.Size(686, 330);
+			this.tbCompilerCounters.TabIndex = 10;
+			this.tbCompilerCounters.Text = "";
+			this.tbCompilerCounters.WordWrap = false;
+			// 
 			// toolStrip1
 			// 
+			this.toolStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
 			this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.cbPlatform,
             this.toolStripSeparator3,
@@ -736,7 +955,7 @@
             this.toolStripSeparator1});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 24);
 			this.toolStrip1.Name = "toolStrip1";
-			this.toolStrip1.Size = new System.Drawing.Size(954, 25);
+			this.toolStrip1.Size = new System.Drawing.Size(940, 27);
 			this.toolStrip1.TabIndex = 27;
 			this.toolStrip1.Text = "toolStrip1";
 			// 
@@ -750,41 +969,41 @@
             "x64",
             "ARMv8A32"});
 			this.cbPlatform.Name = "cbPlatform";
-			this.cbPlatform.Size = new System.Drawing.Size(104, 25);
+			this.cbPlatform.Size = new System.Drawing.Size(104, 27);
 			this.cbPlatform.SelectedIndexChanged += new System.EventHandler(this.cbPlatform_SelectedIndexChanged);
 			// 
 			// toolStripSeparator3
 			// 
 			this.toolStripSeparator3.Name = "toolStripSeparator3";
-			this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+			this.toolStripSeparator3.Size = new System.Drawing.Size(6, 27);
 			// 
 			// toolStripButton1
 			// 
 			this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
 			this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButton1.Name = "toolStripButton1";
-			this.toolStripButton1.Size = new System.Drawing.Size(56, 22);
+			this.toolStripButton1.Size = new System.Drawing.Size(60, 24);
 			this.toolStripButton1.Text = "Open";
 			this.toolStripButton1.Click += new System.EventHandler(this.ToolStripButton1_Click);
 			// 
 			// toolStripSeparator2
 			// 
 			this.toolStripSeparator2.Name = "toolStripSeparator2";
-			this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+			this.toolStripSeparator2.Size = new System.Drawing.Size(6, 27);
 			// 
 			// toolStripButton4
 			// 
 			this.toolStripButton4.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton4.Image")));
 			this.toolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButton4.Name = "toolStripButton4";
-			this.toolStripButton4.Size = new System.Drawing.Size(72, 22);
+			this.toolStripButton4.Size = new System.Drawing.Size(76, 24);
 			this.toolStripButton4.Text = "Compile";
 			this.toolStripButton4.Click += new System.EventHandler(this.ToolStripButton4_Click);
 			// 
 			// toolStripSeparator1
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+			this.toolStripSeparator1.Size = new System.Drawing.Size(6, 27);
 			// 
 			// folderBrowserDialog1
 			// 
@@ -799,7 +1018,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(954, 569);
+			this.ClientSize = new System.Drawing.Size(940, 473);
 			this.Controls.Add(this.toolStrip1);
 			this.Controls.Add(this.statusStrip1);
 			this.Controls.Add(this.menuStrip1);
@@ -823,7 +1042,18 @@
 			this.tabStages.ResumeLayout(false);
 			this.tabStageDebug.ResumeLayout(false);
 			this.tabMethodCounters.ResumeLayout(false);
+			this.tabControl1.ResumeLayout(false);
+			this.tabPage1.ResumeLayout(false);
+			this.tabPage1.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.gridMethodCounters)).EndInit();
+			this.tabPage2.ResumeLayout(false);
 			this.tabLogs.ResumeLayout(false);
+			this.tabCompilerCounters.ResumeLayout(false);
+			this.tabControl2.ResumeLayout(false);
+			this.tabPage4.ResumeLayout(false);
+			this.tabPage4.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.gridCompilerCounters)).EndInit();
+			this.tabPage5.ResumeLayout(false);
 			this.toolStrip1.ResumeLayout(false);
 			this.toolStrip1.PerformLayout();
 			this.ResumeLayout(false);
@@ -871,19 +1101,6 @@
 		private System.Windows.Forms.ToolStripMenuItem cbEnableMethodScanner;
 		private System.Windows.Forms.TextBox tbFilter;
 		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.TabControl tabControl;
-		private System.Windows.Forms.TabPage tabStages;
-		private System.Windows.Forms.ComboBox cbLabels;
-		private System.Windows.Forms.ComboBox cbStages;
-		private System.Windows.Forms.RichTextBox tbInstructions;
-		private System.Windows.Forms.TabPage tabStageDebug;
-		private System.Windows.Forms.ComboBox cbDebugStages;
-		private System.Windows.Forms.RichTextBox tbDebugResult;
-		private System.Windows.Forms.TabPage tabMethodCounters;
-		private System.Windows.Forms.RichTextBox tbMethodCounters;
-		private System.Windows.Forms.TabPage tabLogs;
-		private System.Windows.Forms.ComboBox cbSectionLogs;
-		private System.Windows.Forms.RichTextBox tbLogs;
 		private System.Windows.Forms.Timer timer1;
 		private System.Windows.Forms.ToolStripComboBox cbPlatform;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
@@ -896,10 +1113,37 @@
 		private System.Windows.Forms.ToolStripMenuItem cbDisableAllOptimizations;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
 		private System.Windows.Forms.ToolStripMenuItem cbEnableDevirtualization;
-		private System.Windows.Forms.Label label4;
-		private System.Windows.Forms.Label label3;
-		private System.Windows.Forms.Label stageLabel;
-		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.ToolStripMenuItem cbCILDecoderStageV2Testing;
+		private System.Windows.Forms.TabControl tabControl;
+		private System.Windows.Forms.TabPage tabStages;
+		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.ComboBox cbLabels;
+		private System.Windows.Forms.ComboBox cbStages;
+		private System.Windows.Forms.Label stageLabel;
+		private System.Windows.Forms.RichTextBox tbInstructions;
+		private System.Windows.Forms.TabPage tabStageDebug;
+		private System.Windows.Forms.ComboBox cbDebugStages;
+		private System.Windows.Forms.Label label3;
+		private System.Windows.Forms.RichTextBox tbDebugResult;
+		private System.Windows.Forms.TabPage tabMethodCounters;
+		private System.Windows.Forms.TabControl tabControl1;
+		private System.Windows.Forms.TabPage tabPage1;
+		private System.Windows.Forms.DataGridView gridMethodCounters;
+		private System.Windows.Forms.TabPage tabPage2;
+		private System.Windows.Forms.TabPage tabLogs;
+		private System.Windows.Forms.ComboBox cbSectionLogs;
+		private System.Windows.Forms.Label label4;
+		private System.Windows.Forms.RichTextBox tbLogs;
+		private System.Windows.Forms.RichTextBox tbMethodCounters;
+		private System.Windows.Forms.Label label5;
+		private System.Windows.Forms.TextBox tbCounterFilter;
+		private System.Windows.Forms.TabPage tabCompilerCounters;
+		private System.Windows.Forms.TabControl tabControl2;
+		private System.Windows.Forms.TabPage tabPage4;
+		private System.Windows.Forms.Label label6;
+		private System.Windows.Forms.TextBox tbCompilerCounterFilter;
+		private System.Windows.Forms.DataGridView gridCompilerCounters;
+		private System.Windows.Forms.TabPage tabPage5;
+		private System.Windows.Forms.RichTextBox tbCompilerCounters;
 	}
 }

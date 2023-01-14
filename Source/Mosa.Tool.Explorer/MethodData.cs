@@ -11,6 +11,6 @@ namespace Mosa.Tool.Explorer
 		public List<string> OrderedDebugStageNames = new List<string>();
 		public Dictionary<string, List<string>> InstructionLogs = new Dictionary<string, List<string>>();
 		public Dictionary<string, List<string>> DebugLogs = new Dictionary<string, List<string>>();
-		public List<string> CounterData = new List<string>();
+		public List<string> MethodCounters = new List<string>();
 	}
 }

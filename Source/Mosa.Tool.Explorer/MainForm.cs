@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Text;
 using System.Threading;
@@ -21,6 +22,24 @@ namespace Mosa.Tool.Explorer
 {
 	public partial class MainForm : Form
 	{
+		#region Classes
+
+		protected class CounterEntry
+		{
+			//[Browsable(false)]
+			public string Name { get; set; }
+
+			public int Value { get; set; }
+
+			public CounterEntry(string name, int counter)
+			{
+				Name = name;
+				Value = counter;
+			}
+		}
+
+		#endregion Classes
+
 		private readonly Settings Settings = new Settings();
 
 		private DateTime compileStartTime;
@@ -44,11 +63,24 @@ namespace Mosa.Tool.Explorer
 		private bool DirtyLogDropDown = true;
 		private bool DirtyLog = true;
 
+		private readonly BindingList<CounterEntry> MethodCounters = new BindingList<CounterEntry>();
+		private readonly BindingList<CounterEntry> CompilerCounters = new BindingList<CounterEntry>();
+
 		public MainForm()
 		{
 			InitializeComponent();
 
 			cbPlatform.SelectedIndex = 0;
+
+			gridMethodCounters.DataSource = MethodCounters;
+			gridMethodCounters.Columns[0].Width = 370;
+			gridMethodCounters.Columns[1].Width = 80;
+			gridMethodCounters.Columns[1].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+
+			gridCompilerCounters.DataSource = CompilerCounters;
+			gridCompilerCounters.Columns[0].Width = 370;
+			gridCompilerCounters.Columns[1].Width = 80;
+			gridCompilerCounters.Columns[1].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
 			ClearAll();
 
@@ -148,31 +180,40 @@ namespace Mosa.Tool.Explorer
 
 		private void RefreshLog()
 		{
-			if (tabControl.SelectedTab != tabLogs)
-				return;
-
 			if (!DirtyLog)
 				return;
 
-			DirtyLog = false;
+			if (tabControl.SelectedTab == tabLogs)
+			{
+				tbLogs.Text = CreateText(GetLog(CurrentLogSection));
+			}
 
+			if (tabControl.SelectedTab == tabCompilerCounters)
+			{
+				UpdateCompilerCounters();
+			}
+
+			DirtyLog = false;
+		}
+
+		private List<string> GetLog(string section)
+		{
 			lock (Logs)
 			{
-				if (!Logs.ContainsKey(CurrentLogSection))
+				if (!Logs.ContainsKey(section))
 				{
-					tbLogs.Text = string.Empty;
-					return;
+					return null;
 				}
 
-				var lines = Logs[CurrentLogSection];
+				var lines = Logs[section];
 
 				if (lines == null)
 				{
-					tbLogs.Text = string.Empty;
+					return null;
 				}
 				else
 				{
-					tbLogs.Text = CreateText(lines);
+					return lines;
 				}
 			}
 		}
@@ -565,7 +606,7 @@ namespace Mosa.Tool.Explorer
 			}
 		}
 
-		private void UpdateCounters()
+		private void UpdateMethodCounters()
 		{
 			var method = CurrentMethodSelected;
 
@@ -579,7 +620,55 @@ namespace Mosa.Tool.Explorer
 			if (methodData == null)
 				return;
 
-			tbMethodCounters.Text = CreateText(methodData.CounterData);
+			tbMethodCounters.Text = CreateText(methodData.MethodCounters);
+
+			MethodCounters.Clear();
+
+			var filter = tbCounterFilter.Text;
+
+			foreach (var line in methodData.MethodCounters)
+			{
+				if (!line.Contains(filter))
+					continue;
+
+				var entry = ExtractCounterData(line);
+
+				MethodCounters.Add(entry);
+			}
+		}
+
+		private void UpdateCompilerCounters()
+		{
+			//if (tabControl.SelectedTab != tabCompilerCounters)
+			//	return;
+
+			CompilerCounters.Clear();
+
+			var lines = GetLog("Counters");
+
+			if (lines == null)
+				return;
+
+			var filter = tbCompilerCounterFilter.Text;
+
+			foreach (var line in lines)
+			{
+				if (!line.Contains(filter))
+					continue;
+
+				var entry = ExtractCounterData(line);
+
+				CompilerCounters.Add(entry);
+			}
+		}
+
+		private static CounterEntry ExtractCounterData(string line)
+		{
+			var index = line.IndexOf(':');
+			var name = line.Substring(0, index).Trim();
+			var value = line.Substring(index + 1).Trim().ToInt32();
+			var entry = new CounterEntry(name, value);
+			return entry;
 		}
 
 		private void UpdateLabels()
@@ -847,7 +936,7 @@ namespace Mosa.Tool.Explorer
 		{
 			UpdateStages();
 			UpdateDebugStages();
-			UpdateCounters();
+			UpdateMethodCounters();
 		}
 
 		private void DumpAllMethodStagesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -911,6 +1000,8 @@ namespace Mosa.Tool.Explorer
 			tbInstructions.Text = string.Empty;
 			tbDebugResult.Text = string.Empty;
 			methodStore.Clear();
+			MethodCounters.Clear();
+			CompilerCounters.Clear();
 
 			ClearAllLogs();
 		}
@@ -968,6 +1059,7 @@ namespace Mosa.Tool.Explorer
 
 		private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
 		{
+			DirtyLog = true;
 			RefreshLog();
 		}
 
@@ -1150,6 +1242,16 @@ namespace Mosa.Tool.Explorer
 		private void cbPlatform_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			ClearAll();
+		}
+
+		private void tbMethodCounterFilter_TextChanged(object sender, EventArgs e)
+		{
+			UpdateMethodCounters();
+		}
+
+		private void tbCompilerCounterFilter_TextChanged(object sender, EventArgs e)
+		{
+			UpdateCompilerCounters();
 		}
 	}
 }
