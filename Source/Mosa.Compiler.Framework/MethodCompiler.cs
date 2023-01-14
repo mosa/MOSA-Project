@@ -32,8 +32,6 @@ namespace Mosa.Compiler.Framework
 
 		private readonly NotifyTraceLogHandler NotifyMethodTranformInstructionTrace;
 
-		private readonly bool Statistics;
-
 		#endregion Data Members
 
 		#region Properties
@@ -191,6 +189,8 @@ namespace Mosa.Compiler.Framework
 		/// Holds flag that will stop method compiler
 		/// </summary>
 		public bool IsStopped { get; private set; }
+
+		public bool Statistics { get; private set; }
 
 		/// <summary>
 		/// Gets the linker symbol.

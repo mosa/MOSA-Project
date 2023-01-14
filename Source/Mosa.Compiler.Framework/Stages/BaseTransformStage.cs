@@ -3,6 +3,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.Framework.Transforms;
 
@@ -40,8 +41,6 @@ namespace Mosa.Compiler.Framework.Stages
 		protected BitArray EmptyBlocks;
 
 		protected Dictionary<string, Counter> TransformCounters = new Dictionary<string, Counter>();
-
-		protected bool CountTransformations = false;
 
 		private bool SortedByPriority = false;
 
@@ -99,8 +98,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Run()
 		{
-			CountTransformations = MethodCompiler.MethodTraceLevel >= 9;
-
 			SortByPriority();
 
 			trace = CreateTraceLog(5);
@@ -237,7 +234,7 @@ namespace Mosa.Compiler.Framework.Stages
 					else if (transform.IsTranformation)
 						TransformCount.Increment();
 
-					if (CountTransformations)
+					if (MethodCompiler.Statistics)
 						UpdateCounter(transform.Name, 1);
 
 					if (CompilerSettings.FullCheckMode)

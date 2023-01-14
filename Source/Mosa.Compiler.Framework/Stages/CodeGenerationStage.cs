@@ -19,8 +19,6 @@ namespace Mosa.Compiler.Framework.Stages
 		private readonly Counter GeneratedInstructionCount = new Counter("CodeGenerationStage.GeneratedInstructions");
 		private readonly Counter GeneratedBlockCount = new Counter("CodeGenerationStage.GeneratedBlocks");
 
-		protected bool CountOpcodes = false;
-
 		#region Data Members
 
 		/// <summary>
@@ -71,8 +69,6 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			if (!EmitBinary)
 				return;
-
-			CountOpcodes = MethodCompiler.MethodTraceLevel >= 9;
 
 			var symbol = Linker.DefineSymbol(Method.FullName, SectionKind.Text, 0, 0);
 
@@ -154,7 +150,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 						GeneratedInstructionCount.Increment();
 
-						if (CountOpcodes)
+						if (MethodCompiler.Statistics)
 							UpdateCounter(node.Instruction.OpcodeName, 1);
 
 						trace?.Log($"0x{node.Offset:X8} {node.Offset} = {node}");
