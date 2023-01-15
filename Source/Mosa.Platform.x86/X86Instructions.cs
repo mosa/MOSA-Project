@@ -44,6 +44,8 @@ namespace Mosa.Platform.x86
 			X86.Hlt,
 			X86.IDiv32,
 			X86.IMul32,
+			X86.IMul1o32,
+			X86.IMul3o32,
 			X86.In8,
 			X86.In16,
 			X86.In32,

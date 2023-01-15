@@ -737,12 +737,50 @@
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[eax][register]",
-					"Encoding": "[x86],opcode=0xF7,mod=11,reg=101,rm=reg3:o1"
-				},
-				{
 					"Condition": "[register][register]",
 					"Encoding": "[x86],opcode=0x0F,opcode2=0xAF,mod=11,reg=reg3:r,rm=reg3:o2"
+				}
+			]
+		},
+		{
+			"Name": "IMul1o32",
+			"FamilyName": "X86",
+			"FlagsCleared": "",
+			"FlagsModified": "CO",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "ZSP",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 2,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[eax][register]",
+					"Encoding": "[x86],opcode=0xF7,mod=11,reg=101,rm=reg3:o2"
+				}
+			]
+		},
+		{
+			"Name": "IMul3o32",
+			"FamilyName": "X86",
+			"FlagsCleared": "",
+			"FlagsModified": "CO",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "ZSP",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant_imm8]",
+					"Encoding": "[x86],opcode=0x6B,mod=11,reg=reg3:r,rm=reg3:o2,immediate=imm8:o3"
+				},
+				{
+					"Condition": "[register][register][constant]",
+					"Encoding": "[x86],opcode=0x69,opcode2=0xAF,mod=11,reg=reg3:r,rm=reg3:o2,immediate=imm32:o3"
 				}
 			]
 		},
