@@ -8,11 +8,11 @@
 		"[x86-base-load-ebp+zero]=[x86],mod=01,reg=reg3:[dest],rm=101,immediate=0x00",
 		"[x86-base-load-ebp+register]=[x86],mod=01,reg=reg3:[dest],rm=100,scale=00,index=reg3:[membase],base=101,immediate=0x00",
 		"[x86-base-load-esp+zero]=[x86],mod=00,reg=reg3:[dest],rm=100,scale=00,index=100,base=100",
-		"[x86-base-load-esp+sbyte]=[x86],mod=01,reg=reg3:[dest],rm=100,scale=00,index=100,base=100,immediate=imm8:[offset]",
+		"[x86-base-load-esp+[constant_imm8]]=[x86],mod=01,reg=reg3:[dest],rm=100,scale=00,index=100,base=100,immediate=imm8:[offset]",
 		"[x86-base-load-esp+constant]=[x86],mod=10,reg=reg3:[dest],rm=100,immediate=imm8:[offset]",
 		"[x86-base-load-register+register]=[x86],mod=00,reg=reg3:[dest],rm=100,scale=00,index=reg3:[offset],base=reg3:[membase]",
 		"[x86-base-load-register+zero]=[x86],mod=00,reg=reg3:[dest],rm=reg3:[membase]",
-		"[x86-base-load-register+sbyte]=[x86],mod=01,reg=reg3:[dest],rm=reg3:[membase],immediate=imm8:[offset]",
+		"[x86-base-load-register+[constant_imm8]]=[x86],mod=01,reg=reg3:[dest],rm=reg3:[membase],immediate=imm8:[offset]",
 		"[x86-base-load-register+constant]=[x86],mod=10,reg=reg3:[dest],rm=reg3:[membase],immediate=imm32:[offset]",
 		"[x86-base-load-constant+zero]=[x86],mod=00,reg=reg3:[dest],rm=101,immediate=imm32:[membase]",
 		"[x86-base-load-constant+constant]=[x86],mod=00,reg=reg3:[dest],rm=101,immediate=imm32+:[membase]:[offset]",
@@ -20,11 +20,11 @@
 		"[x86-common-load-ebp+zero]=[x86-base-load-ebp+zero],dest=r",
 		"[x86-common-load-ebp+register]=[x86-base-load-ebp+register],dest=r,membase=o2",
 		"[x86-common-load-esp+zero]=[x86-base-load-esp+zero],dest=r",
-		"[x86-common-load-esp+sbyte]=[x86-base-load-esp+sbyte],dest=r,offset=o2",
+		"[x86-common-load-esp+[constant_imm8]]=[x86-base-load-esp+[constant_imm8]],dest=r,offset=o2",
 		"[x86-common-load-esp+constant]=[x86-base-load-esp+constant],dest=r,offset=o2",
 		"[x86-common-load-register+register]=[x86-base-load-register+register],dest=r,membase=o1,offset=o2",
 		"[x86-common-load-register+zero]=[x86-base-load-register+zero],dest=r,membase=o1",
-		"[x86-common-load-register+sbyte]=[x86-base-load-register+sbyte],dest=r,membase=o1,offset=o2",
+		"[x86-common-load-register+[constant_imm8]]=[x86-base-load-register+[constant_imm8]],dest=r,membase=o1,offset=o2",
 		"[x86-common-load-register+constant]=[x86-base-load-register+constant],dest=r,membase=o1,offset=o2",
 		"[x86-common-load-constant+zero]=[x86-base-load-constant+zero],dest=r,membase=o1",
 		"[x86-common-load-constant+constant]=[x86-base-load-constant+constant],dest=r,membase=o1,offset=o2",
@@ -32,33 +32,33 @@
 		"[x86-base-store-register-ebp+zero]=[x86],mod=01,reg=reg3:[value],rm=101,displacement=0x00",
 		"[x86-base-store-register-ebp+register]=[x86],mod=01,reg=reg3:[value],rm=100,scale=00,index=reg3:[membase],base=101,displacement=0x00",
 		"[x86-base-store-register-esp+zero]=[x86],mod=00,reg=reg3:[value],rm=100,scale=00,index=100,base=100",
-		"[x86-base-store-register-esp+sbyte]=[x86],mod=01,reg=reg3:[value],rm=100,scale=00,index=100,base=100,displacement=imm8:[offset]",
+		"[x86-base-store-register-esp+[constant_imm8]]=[x86],mod=01,reg=reg3:[value],rm=100,scale=00,index=100,base=100,displacement=imm8:[offset]",
 		"[x86-base-store-register-esp+constant]=[x86],mod=10,reg=reg3:[value],rm=100,scale=00,index=100,base=100,immediate=imm32:[offset]",
 		"[x86-base-store-register-register+register]=[x86],mod=00,reg=reg3:[value],rm=100,scale=00,index=reg3:[offset],base=reg3:[membase]",
 		"[x86-base-store-register-register+zero]=[x86],mod=00,reg=reg3:[value],rm=reg3:[membase]",
-		"[x86-base-store-register-register+sbyte]=[x86],mod=01,reg=reg3:[value],rm=reg3:[membase],displacement=imm8:[offset]",
+		"[x86-base-store-register-register+[constant_imm8]]=[x86],mod=01,reg=reg3:[value],rm=reg3:[membase],displacement=imm8:[offset]",
 		"[x86-base-store-register-register+constant]=[x86],mod=10,reg=reg3:[value],rm=reg3:[membase],displacement=imm32:[offset]",
 		"[x86-base-store-register-constant+zero]=[x86],mod=00,reg=reg3:[value],rm=101,displacement=imm32:[membase]",
 
 		"[x86-common-store-register-ebp+zero]=[x86-base-store-register-ebp+zero],opcode=[opcode-register],value=o3",
 		"[x86-common-store-register-ebp+register]=[x86-base-store-register-ebp+register],opcode=[opcode-register],value=o3,membase=o2",
 		"[x86-common-store-register-esp+zero]=[x86-base-store-register-esp+zero],opcode=[opcode-register],value=o3",
-		"[x86-common-store-register-esp+sbyte]=[x86-base-store-register-esp+sbyte],opcode=[opcode-register],value=o3,offset=o2",
+		"[x86-common-store-register-esp+[constant_imm8]]=[x86-base-store-register-esp+[constant_imm8]],opcode=[opcode-register],value=o3,offset=o2",
 		"[x86-common-store-register-esp+constant]=[x86-base-store-register-esp+constant],opcode=[opcode-register],value=o3,offset=o2",
 		"[x86-common-store-register-register+register]=[x86-base-store-register-register+register],opcode=[opcode-register],value=o3,membase=o1,offset=o2",
 		"[x86-common-store-register-register+zero]=[x86-base-store-register-register+zero],opcode=[opcode-register],value=o3,membase=o1",
-		"[x86-common-store-register-register+sbyte]=[x86-base-store-register-register+sbyte],opcode=[opcode-register],value=o3,membase=o1,offset=o2",
+		"[x86-common-store-register-register+[constant_imm8]]=[x86-base-store-register-register+[constant_imm8]],opcode=[opcode-register],value=o3,membase=o1,offset=o2",
 		"[x86-common-store-register-register+constant]=[x86-base-store-register-register+constant],opcode=[opcode-register],value=o3,membase=o1,offset=o2",
 		"[x86-common-store-register-constant+zero]=[x86-base-store-register-constant+zero],opcode=[opcode-register],value=o3,membase=o1",
 
 		"[x86-base-store-constant-ebp+zero]=[x86],mod=01,reg=000,rm=101,displacement=0x00,immediate=imm[size]:[value]",
 		"[x86-base-store-constant-ebp+register]=[x86],mod=01,reg=000,rm=100,scale=00,index=reg3:[membase],base=101,immediate=0x00,immediate=imm[size]:[value]",
 		"[x86-base-store-constant-esp+zero]=[x86],mod=00,reg=000,rm=100,scale=00,index=100,base=100,immediate=imm[size]:[value]",
-		"[x86-base-store-constant-esp+sbyte]=[x86],mod=01,reg=000,rm=100,scale=00,index=100,base=100,displacement=imm8:[offset],immediate=imm[size]:[value]",
+		"[x86-base-store-constant-esp+[constant_imm8]]=[x86],mod=01,reg=000,rm=100,scale=00,index=100,base=100,displacement=imm8:[offset],immediate=imm[size]:[value]",
 		"[x86-base-store-constant-esp+constant]=[x86],mod=10,reg=000,rm=100,displacement=imm8:[offset],immediate=imm32:[value]",
 		"[x86-base-store-constant-register+register]=[x86],mod=00,reg=000,rm=100,scale=00,index=reg3:[offset],base=reg3:[membase],immediate=imm[size]:[value]",
 		"[x86-base-store-constant-register+zero]=[x86],mod=00,reg=000,rm=reg3:[membase],immediate=imm[size]:[value]",
-		"[x86-base-store-constant-register+sbyte]=[x86],mod=01,reg=000,rm=reg3:[membase],displacement=imm8:[offset],immediate=imm[size]:[value]",
+		"[x86-base-store-constant-register+[constant_imm8]]=[x86],mod=01,reg=000,rm=reg3:[membase],displacement=imm8:[offset],immediate=imm[size]:[value]",
 		"[x86-base-store-constant-register+constant]=[x86],mod=10,reg=000,rm=reg3:[membase],displacement=imm32:[offset],immediate=imm[size]:[value]",
 		"[x86-base-store-constant-constant+zero]=[x86],mod=00,reg=000,rm=101,displacement=imm32:[membase],immediate=imm[size]:[value]",
 		"[x86-base-store-constant-constant+constant]=[x86],mod=00,reg=000,rm=101,displacement=imm32+:[membase]:[offset],immediate=imm[size]:[value]",
@@ -67,11 +67,11 @@
 		"[x86-common-store-constant-ebp+zero]=[x86-base-store-constant-ebp+zero],opcode=[opcode-constant],value=o3",
 		"[x86-common-store-constant-ebp+register]=[x86-base-store-constant-ebp+register],opcode=[opcode-constant],value=o3,membase=o2",
 		"[x86-common-store-constant-esp+zero]=[x86-base-store-constant-esp+zero],opcode=[opcode-constant],value=o3",
-		"[x86-common-store-constant-esp+sbyte]=[x86-base-store-constant-esp+sbyte],opcode=[opcode-constant],value=o3,offset=o2",
+		"[x86-common-store-constant-esp+[constant_imm8]]=[x86-base-store-constant-esp+[constant_imm8]],opcode=[opcode-constant],value=o3,offset=o2",
 		"[x86-common-store-constant-esp+constant]=[x86-base-store-constant-esp+constant],opcode=[opcode-constant],value=o3,offset=o2",
 		"[x86-common-store-constant-register+register]=[x86-base-store-constant-register+register],opcode=[opcode-constant],value=o3,membase=o1,offset=o2",
 		"[x86-common-store-constant-register+zero]=[x86-base-store-constant-register+zero],opcode=[opcode-constant],value=o3,membase=o1",
-		"[x86-common-store-constant-register+sbyte]=[x86-base-store-constant-register+sbyte],opcode=[opcode-constant],value=o3,membase=o1,offset=o2",
+		"[x86-common-store-constant-register+[constant_imm8]]=[x86-base-store-constant-register+[constant_imm8]],opcode=[opcode-constant],value=o3,membase=o1,offset=o2",
 		"[x86-common-store-constant-register+constant]=[x86-base-store-constant-register+constant],opcode=[opcode-constant],value=o3,membase=o1,offset=o2",
 		"[x86-common-store-constant-constant+zero]=[x86-base-store-constant-constant+zero],opcode=[opcode-constant],value=o3,membase=o1",
 		"[x86-common-store-constant-constant+constant]=[x86-base-store-constant-constant+constant],opcode=[opcode-constant],value=o3,membase=o1,offset=o2",
@@ -92,6 +92,14 @@
 			"ResultCount": 1,
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
+				{
+					"Condition": "[eax][constant_imm8]",
+					"Encoding": "[x86],opcode=0x83,mod=11,reg=010,rm=000,immediate=imm8:o2"
+				},
+				{
+					"Condition": "[eax][constant]",
+					"Encoding": "[x86],opcode=0x15,immediate=imm32:o2"
+				},
 				{
 					"Condition": "[#register][register]",
 					"Encoding": "[x86],opcode=0x13,mod=11,reg=reg3:r,rm=reg3:o2"
@@ -116,6 +124,14 @@
 			"ResultCount": 1,
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
+				{
+					"Condition": "[eax][constant_imm8]",
+					"Encoding": "[x86],opcode=0x83,mod=11,reg=000,rm=000,immediate=imm8:o2"
+				},
+				{
+					"Condition": "[eax][constant]",
+					"Encoding": "[x86],opcode=0x05,immediate=imm32:o2"
+				},
 				{
 					"Condition": "[#register][register]",
 					"Encoding": "[x86],opcode=0x03,mod=11,reg=reg3:r,rm=reg3:o2"
@@ -180,6 +196,14 @@
 			"ResultCount": 1,
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
+				{
+					"Condition": "[eax][constant_imm8]",
+					"Encoding": "[x86],opcode=0x83,mod=11,reg=100,rm=000,immediate=imm8:o2"
+				},
+				{
+					"Condition": "[eax][constant]",
+					"Encoding": "[x86],opcode=0x25,immediate=imm32:o2"
+				},
 				{
 					"Condition": "[#register][register]",
 					"Encoding": "[x86],opcode=0x23,mod=11,reg=reg3:r,rm=reg3:o2"
@@ -355,6 +379,14 @@
 			"ResultCount": 0,
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
+				{
+					"Condition": "[eax][constant_imm8]",
+					"Encoding": "[x86],opcode=0x83,mod=11,reg=111,rm=000,immediate=imm8:o2"
+				},
+				{
+					"Condition": "[eax][constant]",
+					"Encoding": "[x86],opcode=0x3D,immediate=imm32:o2"
+				},
 				{
 					"Condition": "[#register][register]",
 					"Encoding": "[x86],opcode=0x3B,mod=11,reg=reg3:o1,rm=reg3:o2"
@@ -705,8 +737,50 @@
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"Condition": "[register][register]",
 					"Encoding": "[x86],opcode=0x0F,opcode2=0xAF,mod=11,reg=reg3:r,rm=reg3:o2"
+				}
+			]
+		},
+		{
+			"Name": "IMul1o32",
+			"FamilyName": "X86",
+			"FlagsCleared": "",
+			"FlagsModified": "CO",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "ZSP",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 2,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[eax][register]",
+					"Encoding": "[x86],opcode=0xF7,mod=11,reg=101,rm=reg3:o2"
+				}
+			]
+		},
+		{
+			"Name": "IMul3o32",
+			"FamilyName": "X86",
+			"FlagsCleared": "",
+			"FlagsModified": "CO",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "ZSP",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant_imm8]",
+					"Encoding": "[x86],opcode=0x6B,mod=11,reg=reg3:r,rm=reg3:o2,immediate=imm8:o3"
+				},
+				{
+					"Condition": "[register][register][constant]",
+					"Encoding": "[x86],opcode=0x69,opcode2=0xAF,mod=11,reg=reg3:r,rm=reg3:o2,immediate=imm32:o3"
 				}
 			]
 		},
@@ -936,8 +1010,8 @@
 					"Encoding": "[x86-common-load-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte]",
-					"Encoding": "[x86-common-load-esp+sbyte]"
+					"Condition": "[ESP][[constant_imm8]]",
+					"Encoding": "[x86-common-load-esp+[constant_imm8]]"
 				},
 				{
 					"Condition": "[ESP][constant]",
@@ -952,8 +1026,8 @@
 					"Encoding": "[x86-common-load-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte]",
-					"Encoding": "[x86-common-load-register+sbyte]"
+					"Condition": "[register][[constant_imm8]]",
+					"Encoding": "[x86-common-load-register+[constant_imm8]]"
 				},
 				{
 					"Condition": "[register][constant]",
@@ -1156,8 +1230,8 @@
 					"Encoding": "[x86-common-load-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte]",
-					"Encoding": "[x86-common-load-esp+sbyte]"
+					"Condition": "[ESP][[constant_imm8]]",
+					"Encoding": "[x86-common-load-esp+[constant_imm8]]"
 				},
 				{
 					"Condition": "[ESP][constant]",
@@ -1172,8 +1246,8 @@
 					"Encoding": "[x86-common-load-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte]",
-					"Encoding": "[x86-common-load-register+sbyte]"
+					"Condition": "[register][[constant_imm8]]",
+					"Encoding": "[x86-common-load-register+[constant_imm8]]"
 				},
 				{
 					"Condition": "[register][constant]",
@@ -1296,8 +1370,8 @@
 					"Encoding": "[x86-common-load-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte]",
-					"Encoding": "[x86-common-load-esp+sbyte]"
+					"Condition": "[ESP][[constant_imm8]]",
+					"Encoding": "[x86-common-load-esp+[constant_imm8]]"
 				},
 				{
 					"Condition": "[ESP][constant]",
@@ -1312,8 +1386,8 @@
 					"Encoding": "[x86-common-load-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte]",
-					"Encoding": "[x86-common-load-register+sbyte]"
+					"Condition": "[register][[constant_imm8]]",
+					"Encoding": "[x86-common-load-register+[constant_imm8]]"
 				},
 				{
 					"Condition": "[register][constant]",
@@ -1358,8 +1432,8 @@
 					"Encoding": "[x86-common-load-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte]",
-					"Encoding": "[x86-common-load-esp+sbyte]"
+					"Condition": "[ESP][[constant_imm8]]",
+					"Encoding": "[x86-common-load-esp+[constant_imm8]]"
 				},
 				{
 					"Condition": "[ESP][constant]",
@@ -1374,8 +1448,8 @@
 					"Encoding": "[x86-common-load-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte]",
-					"Encoding": "[x86-common-load-register+sbyte]"
+					"Condition": "[register][[constant_imm8]]",
+					"Encoding": "[x86-common-load-register+[constant_imm8]]"
 				},
 				{
 					"Condition": "[register][constant]",
@@ -1420,8 +1494,8 @@
 					"Encoding": "[x86-common-load-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte]",
-					"Encoding": "[x86-common-load-esp+sbyte]"
+					"Condition": "[ESP][[constant_imm8]]",
+					"Encoding": "[x86-common-load-esp+[constant_imm8]]"
 				},
 				{
 					"Condition": "[ESP][constant]",
@@ -1436,8 +1510,8 @@
 					"Encoding": "[x86-common-load-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte]",
-					"Encoding": "[x86-common-load-register+sbyte]"
+					"Condition": "[register][[constant_imm8]]",
+					"Encoding": "[x86-common-load-register+[constant_imm8]]"
 				},
 				{
 					"Condition": "[register][constant]",
@@ -1496,8 +1570,8 @@
 					"Encoding": "[x86-common-load-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte]",
-					"Encoding": "[x86-common-load-esp+sbyte]"
+					"Condition": "[ESP][[constant_imm8]]",
+					"Encoding": "[x86-common-load-esp+[constant_imm8]]"
 				},
 				{
 					"Condition": "[ESP][constant]",
@@ -1512,8 +1586,8 @@
 					"Encoding": "[x86-common-load-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte]",
-					"Encoding": "[x86-common-load-register+sbyte]"
+					"Condition": "[register][[constant_imm8]]",
+					"Encoding": "[x86-common-load-register+[constant_imm8]]"
 				},
 				{
 					"Condition": "[register][constant]",
@@ -1558,8 +1632,8 @@
 					"Encoding": "[x86-common-store-register-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte][register]",
-					"Encoding": "[x86-common-store-register-esp+sbyte]"
+					"Condition": "[ESP][[constant_imm8][register]",
+					"Encoding": "[x86-common-store-register-esp+[constant_imm8]]"
 				},
 				{
 					"Condition": "[ESP][constant][register]",
@@ -1574,8 +1648,8 @@
 					"Encoding": "[x86-common-store-register-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte][register]",
-					"Encoding": "[x86-common-store-register-register+sbyte]"
+					"Condition": "[register][[constant_imm8][register]",
+					"Encoding": "[x86-common-store-register-register+[constant_imm8]]"
 				},
 				{
 					"Condition": "[register][constant][register]",
@@ -1630,8 +1704,8 @@
 					"Encoding": "[x86-common-load-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte]",
-					"Encoding": "[x86-common-load-esp+sbyte]"
+					"Condition": "[ESP][[constant_imm8]]",
+					"Encoding": "[x86-common-load-esp+[constant_imm8]]"
 				},
 				{
 					"Condition": "[ESP][constant]",
@@ -1646,8 +1720,8 @@
 					"Encoding": "[x86-common-load-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte]",
-					"Encoding": "[x86-common-load-register+sbyte]"
+					"Condition": "[register][[constant_imm8]]",
+					"Encoding": "[x86-common-load-register+[constant_imm8]]"
 				},
 				{
 					"Condition": "[register][constant]",
@@ -1692,8 +1766,8 @@
 					"Encoding": "[x86-common-store-register-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte][register]",
-					"Encoding": "[x86-common-store-register-esp+sbyte]"
+					"Condition": "[ESP][[constant_imm8][register]",
+					"Encoding": "[x86-common-store-register-esp+[constant_imm8]]"
 				},
 				{
 					"Condition": "[ESP][constant][register]",
@@ -1708,8 +1782,8 @@
 					"Encoding": "[x86-common-store-register-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte][register]",
-					"Encoding": "[x86-common-store-register-register+sbyte]"
+					"Condition": "[register][[constant_imm8][register]",
+					"Encoding": "[x86-common-store-register-register+[constant_imm8]]"
 				},
 				{
 					"Condition": "[register][constant][register]",
@@ -1750,8 +1824,8 @@
 					"Encoding": "[x86-common-store-register-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte][register]",
-					"Encoding": "[x86-common-store-register-esp+sbyte]"
+					"Condition": "[ESP][[constant_imm8][register]",
+					"Encoding": "[x86-common-store-register-esp+[constant_imm8]]"
 				},
 				{
 					"Condition": "[ESP][constant][register]",
@@ -1766,8 +1840,8 @@
 					"Encoding": "[x86-common-store-register-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte][register]",
-					"Encoding": "[x86-common-store-register-register+sbyte]"
+					"Condition": "[register][[constant_imm8][register]",
+					"Encoding": "[x86-common-store-register-register+[constant_imm8]]"
 				},
 				{
 					"Condition": "[register][constant][register]",
@@ -1791,8 +1865,8 @@
 					"Encoding": "[x86-common-store-constant-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte][constant]",
-					"Encoding": "[x86-common-store-constant-esp+sbyte]"
+					"Condition": "[ESP][[constant_imm8][constant]",
+					"Encoding": "[x86-common-store-constant-esp+[constant_imm8]]"
 				},
 				{
 					"Condition": "[ESP][constant][constant]",
@@ -1807,8 +1881,8 @@
 					"Encoding": "[x86-common-store-constant-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte][constant]",
-					"Encoding": "[x86-common-store-constant-register+sbyte]"
+					"Condition": "[register][[constant_imm8][constant]",
+					"Encoding": "[x86-common-store-constant-register+[constant_imm8]]"
 				},
 				{
 					"Condition": "[register][constant][constant]",
@@ -1857,8 +1931,8 @@
 					"Encoding": "[x86-common-store-register-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte][register]",
-					"Encoding": "[x86-common-store-register-esp+sbyte]"
+					"Condition": "[ESP][[constant_imm8][register]",
+					"Encoding": "[x86-common-store-register-esp+[constant_imm8]]"
 				},
 				{
 					"Condition": "[ESP][constant][register]",
@@ -1873,8 +1947,8 @@
 					"Encoding": "[x86-common-store-register-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte][register]",
-					"Encoding": "[x86-common-store-register-register+sbyte]"
+					"Condition": "[register][[constant_imm8][register]",
+					"Encoding": "[x86-common-store-register-register+[constant_imm8]]"
 				},
 				{
 					"Condition": "[register][constant][register]",
@@ -1898,8 +1972,8 @@
 					"Encoding": "[x86-common-store-constant-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte][constant]",
-					"Encoding": "[x86-common-store-constant-esp+sbyte]"
+					"Condition": "[ESP][[constant_imm8][constant]",
+					"Encoding": "[x86-common-store-constant-esp+[constant_imm8]]"
 				},
 				{
 					"Condition": "[ESP][constant][constant]",
@@ -1914,8 +1988,8 @@
 					"Encoding": "[x86-common-store-constant-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte][constant]",
-					"Encoding": "[x86-common-store-constant-register+sbyte]"
+					"Condition": "[register][[constant_imm8][constant]",
+					"Encoding": "[x86-common-store-constant-register+[constant_imm8]]"
 				},
 				{
 					"Condition": "[register][constant][constant]",
@@ -1964,8 +2038,8 @@
 					"Encoding": "[x86-common-store-register-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte][register]",
-					"Encoding": "[x86-common-store-register-esp+sbyte]"
+					"Condition": "[ESP][[constant_imm8][register]",
+					"Encoding": "[x86-common-store-register-esp+[constant_imm8]]"
 				},
 				{
 					"Condition": "[ESP][constant][register]",
@@ -1980,8 +2054,8 @@
 					"Encoding": "[x86-common-store-register-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte][register]",
-					"Encoding": "[x86-common-store-register-register+sbyte]"
+					"Condition": "[register][[constant_imm8][register]",
+					"Encoding": "[x86-common-store-register-register+[constant_imm8]]"
 				},
 				{
 					"Condition": "[register][constant][register]",
@@ -2005,8 +2079,8 @@
 					"Encoding": "[x86-common-store-constant-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte][constant]",
-					"Encoding": "[x86-common-store-constant-esp+sbyte]"
+					"Condition": "[ESP][[constant_imm8][constant]",
+					"Encoding": "[x86-common-store-constant-esp+[constant_imm8]]"
 				},
 				{
 					"Condition": "[ESP][constant][constant]",
@@ -2021,8 +2095,8 @@
 					"Encoding": "[x86-common-store-constant-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte][constant]",
-					"Encoding": "[x86-common-store-constant-register+sbyte]"
+					"Condition": "[register][[constant_imm8][constant]",
+					"Encoding": "[x86-common-store-constant-register+[constant_imm8]]"
 				},
 				{
 					"Condition": "[register][constant][constant]",
@@ -2109,8 +2183,8 @@
 					"Encoding": "[x86-common-load-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte]",
-					"Encoding": "[x86-common-load-esp+sbyte]"
+					"Condition": "[ESP][[constant_imm8]]",
+					"Encoding": "[x86-common-load-esp+[constant_imm8]]"
 				},
 				{
 					"Condition": "[ESP][constant]",
@@ -2125,8 +2199,8 @@
 					"Encoding": "[x86-common-load-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte]",
-					"Encoding": "[x86-common-load-register+sbyte]"
+					"Condition": "[register][[constant_imm8]]",
+					"Encoding": "[x86-common-load-register+[constant_imm8]]"
 				},
 				{
 					"Condition": "[register][constant]",
@@ -2171,8 +2245,8 @@
 					"Encoding": "[x86-common-load-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte]",
-					"Encoding": "[x86-common-load-esp+sbyte]"
+					"Condition": "[ESP][[constant_imm8]]",
+					"Encoding": "[x86-common-load-esp+[constant_imm8]]"
 				},
 				{
 					"Condition": "[ESP][constant]",
@@ -2187,8 +2261,8 @@
 					"Encoding": "[x86-common-load-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte]",
-					"Encoding": "[x86-common-load-register+sbyte]"
+					"Condition": "[register][[constant_imm8]]",
+					"Encoding": "[x86-common-load-register+[constant_imm8]]"
 				},
 				{
 					"Condition": "[register][constant]",
@@ -2247,8 +2321,8 @@
 					"Encoding": "[x86-common-load-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte]",
-					"Encoding": "[x86-common-load-esp+sbyte]"
+					"Condition": "[ESP][[constant_imm8]]",
+					"Encoding": "[x86-common-load-esp+[constant_imm8]]"
 				},
 				{
 					"Condition": "[ESP][constant]",
@@ -2263,8 +2337,8 @@
 					"Encoding": "[x86-common-load-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte]",
-					"Encoding": "[x86-common-load-register+sbyte]"
+					"Condition": "[register][[constant_imm8]]",
+					"Encoding": "[x86-common-load-register+[constant_imm8]]"
 				},
 				{
 					"Condition": "[register][constant]",
@@ -2309,8 +2383,8 @@
 					"Encoding": "[x86-common-store-register-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte][register]",
-					"Encoding": "[x86-common-store-register-esp+sbyte]"
+					"Condition": "[ESP][[constant_imm8][register]",
+					"Encoding": "[x86-common-store-register-esp+[constant_imm8]]"
 				},
 				{
 					"Condition": "[ESP][constant][register]",
@@ -2325,8 +2399,8 @@
 					"Encoding": "[x86-common-store-register-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte][register]",
-					"Encoding": "[x86-common-store-register-register+sbyte]"
+					"Condition": "[register][[constant_imm8][register]",
+					"Encoding": "[x86-common-store-register-register+[constant_imm8]]"
 				},
 				{
 					"Condition": "[register][constant][register]",
@@ -2405,8 +2479,8 @@
 					"Encoding": "[x86-common-load-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte]",
-					"Encoding": "[x86-common-load-esp+sbyte]"
+					"Condition": "[ESP][[constant_imm8]]",
+					"Encoding": "[x86-common-load-esp+[constant_imm8]]"
 				},
 				{
 					"Condition": "[ESP][constant]",
@@ -2421,8 +2495,8 @@
 					"Encoding": "[x86-common-load-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte]",
-					"Encoding": "[x86-common-load-register+sbyte]"
+					"Condition": "[register][[constant_imm8]]",
+					"Encoding": "[x86-common-load-register+[constant_imm8]]"
 				},
 				{
 					"Condition": "[register][constant]",
@@ -2467,8 +2541,8 @@
 					"Encoding": "[x86-common-load-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte]",
-					"Encoding": "[x86-common-load-esp+sbyte]"
+					"Condition": "[ESP][[constant_imm8]]",
+					"Encoding": "[x86-common-load-esp+[constant_imm8]]"
 				},
 				{
 					"Condition": "[ESP][constant]",
@@ -2483,8 +2557,8 @@
 					"Encoding": "[x86-common-load-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte]",
-					"Encoding": "[x86-common-load-register+sbyte]"
+					"Condition": "[register][[constant_imm8]]",
+					"Encoding": "[x86-common-load-register+[constant_imm8]]"
 				},
 				{
 					"Condition": "[register][constant]",
@@ -2631,6 +2705,14 @@
 			"ResultCount": 1,
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
+				{
+					"Condition": "[eax][constant_imm8]",
+					"Encoding": "[x86],opcode=0x83,mod=11,reg=001,rm=000,immediate=imm8:o2"
+				},
+				{
+					"Condition": "[eax][constant]",
+					"Encoding": "[x86],opcode=0x0D,immediate=imm32:o2"
+				},
 				{
 					"Condition": "[#register][register]",
 					"Encoding": "[x86],opcode=0x0B,mod=11,reg=reg3:r,rm=reg3:o2"
@@ -2981,6 +3063,14 @@
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
+					"Condition": "[eax][constant_imm8]",
+					"Encoding": "[x86],opcode=0x83,mod=11,reg=011,rm=000,immediate=imm8:o2"
+				},
+				{
+					"Condition": "[eax][constant]",
+					"Encoding": "[x86],opcode=0x1D,immediate=imm32:o2"
+				},
+				{
 					"Condition": "[#register][register]",
 					"Encoding": "[x86],opcode=0x1B,mod=11,reg=reg3:r,rm=reg3:o2"
 				},
@@ -3149,7 +3239,6 @@
 				}
 			]
 		},
-
 		{
 			"Name": "Sqrtsd",
 			"Commutative": "true",
@@ -3183,6 +3272,14 @@
 			"ResultCount": 1,
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
+				{
+					"Condition": "[eax][constant_imm8]",
+					"Encoding": "[x86],opcode=0x83,mod=11,reg=101,rm=000,immediate=imm8:o2"
+				},
+				{
+					"Condition": "[eax][constant]",
+					"Encoding": "[x86],opcode=0x2D,immediate=imm32:o2"
+				},
 				{
 					"Condition": "[#register][register]",
 					"Encoding": "[x86],opcode=0x2B,mod=11,reg=reg3:r,rm=reg3:o2"
@@ -3246,6 +3343,10 @@
 			"ResultCount": 0,
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
+				{
+					"Condition": "[eax][constant]",
+					"Encoding": "[x86],opcode=0xA9,immediate=imm32:o2"
+				},
 				{
 					"Condition": "[#register][register]",
 					"Encoding": "[x86],opcode=0x85,mod=11,reg=reg3:o1,rm=reg3:o2"
@@ -3319,8 +3420,8 @@
 					"Encoding": "[x86-common-load-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte][register]",
-					"Encoding": "[x86-common-load-esp+sbyte]"
+					"Condition": "[ESP][[constant_imm8][register]",
+					"Encoding": "[x86-common-load-esp+[constant_imm8]]"
 				},
 				{
 					"Condition": "[ESP][constant][register]",
@@ -3335,8 +3436,8 @@
 					"Encoding": "[x86-common-load-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte][register]",
-					"Encoding": "[x86-common-load-register+sbyte]"
+					"Condition": "[register][[constant_imm8][register]",
+					"Encoding": "[x86-common-load-register+[constant_imm8]]"
 				},
 				{
 					"Condition": "[register][constant][register]",
@@ -3397,8 +3498,8 @@
 					"Encoding": "[x86-common-load-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte][register]",
-					"Encoding": "[x86-common-load-esp+sbyte]"
+					"Condition": "[ESP][[constant_imm8][register]",
+					"Encoding": "[x86-common-load-esp+[constant_imm8]]"
 				},
 				{
 					"Condition": "[ESP][constant][register]",
@@ -3413,8 +3514,8 @@
 					"Encoding": "[x86-common-load-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte][register]",
-					"Encoding": "[x86-common-load-register+sbyte]"
+					"Condition": "[register][[constant_imm8][register]",
+					"Encoding": "[x86-common-load-register+[constant_imm8]]"
 				},
 				{
 					"Condition": "[register][constant][register]",
@@ -3444,6 +3545,14 @@
 			"ResultCount": 1,
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
+				{
+					"Condition": "[eax][constant_imm8]",
+					"Encoding": "[x86],opcode=0x83,mod=11,reg=110,rm=000,immediate=imm8:o2"
+				},
+				{
+					"Condition": "[eax][constant]",
+					"Encoding": "[x86],opcode=0x35,immediate=imm32:o2"
+				},
 				{
 					"Condition": "[#register][register]",
 					"Encoding": "[x86],opcode=0x33,mod=11,reg=reg3:r,rm=reg3:o2"
@@ -3653,6 +3762,5 @@
 				}
 			]
 		}
-
 	]
 }
