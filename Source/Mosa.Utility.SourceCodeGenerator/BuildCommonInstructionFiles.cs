@@ -576,7 +576,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 						case 0: operand = "Operand1"; break;
 						case 1: operand = "Operand2"; break;
 						case 2: operand = "Operand3"; break;
-						default: operand = "GetOperand(" + i.ToString() + ")"; break;
+						default: operand = $"GetOperand({i})"; break;
 					}
 
 					string cond1 = string.Empty;
@@ -602,25 +602,25 @@ namespace Mosa.Utility.SourceCodeGenerator
 						case "one":
 						case "1": cond1 = ".IsConstantOne"; break;
 						case "sbyte":
-						case "signedbyte": cond1 = ".IsConstant"; cond2 = ".ConstantSigned32 >= " + sbyte.MinValue.ToString(); cond3 = ".ConstantSigned32 <= " + sbyte.MaxValue.ToString(); break;
-						case "signedshort": cond1 = ".IsConstant"; cond2 = ".ConstantSigned32 >= " + short.MinValue.ToString(); cond3 = ".ConstantSigned32 <= " + short.MaxValue.ToString(); break;
-						case "signint": cond1 = ".IsConstant"; cond2 = ".ConstantSigned32 >= " + int.MinValue.ToString(); cond3 = ".ConstantSigned32 <= " + int.MaxValue.ToString(); break;
+						case "signedbyte": cond1 = ".IsConstant"; cond2 = $".ConstantSigned32 >= {sbyte.MinValue}"; cond3 = $".ConstantSigned32 <= {sbyte.MaxValue}"; break;
+						case "signedshort": cond1 = ".IsConstant"; cond2 = $".ConstantSigned32 >= {short.MinValue}"; cond3 = $".ConstantSigned32 <= {short.MaxValue}"; break;
+						case "signint": cond1 = ".IsConstant"; cond2 = $".ConstantSigned32 >= {int.MinValue}"; cond3 = $".ConstantSigned32 <= {int.MaxValue}"; break;
 					}
 
-					string subexpression = "node." + operand + cond1;
+					string subexpression = $"node.{operand}{cond1}";
 
 					if (!string.IsNullOrWhiteSpace(cond3))
 					{
-						subexpression = "(" + subexpression + " && node." + operand + cond2 + " && node." + operand + cond3 + ")";
+						subexpression = $"({subexpression} && node.{operand}{cond2} && node.{operand}{cond3})";
 					}
 					else if (!string.IsNullOrWhiteSpace(cond2))
 					{
-						subexpression = "(" + subexpression + " && node." + operand + cond2 + ")";
+						subexpression = $"({subexpression} && node.{operand}{cond2})";
 					}
 
 					if (opp)
 					{
-						subexpression = "!" + subexpression;
+						subexpression = $"!{subexpression}";
 					}
 
 					if (string.IsNullOrWhiteSpace(orexpression))
@@ -629,7 +629,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 					}
 					else
 					{
-						orexpression = orexpression + " || " + subexpression;
+						orexpression = $"{orexpression} || {subexpression}";
 					}
 				}
 
@@ -639,7 +639,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 				}
 				else
 				{
-					expression = expression + " && " + orexpression;
+					expression = $"{expression} && {orexpression}";
 				}
 			}
 
@@ -651,7 +651,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 			var tabs = "\t\t\t\t\t\t\t\t\t\t".Substring(0, index + 3);
 			Lines.Append(tabs);
 
-			Lines.AppendLine("if (" + condition + ")");
+			Lines.AppendLine($"if ({condition})");
 
 			Lines.Append(tabs);
 			Lines.AppendLine("{");

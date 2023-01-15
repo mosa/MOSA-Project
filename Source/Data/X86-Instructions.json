@@ -191,6 +191,26 @@
 			]
 		},
 		{
+			"Name": "AndN32",
+			"Commutative": "true",
+			"FamilyName": "X86",
+			"FlagsCleared": "OF",
+			"FlagsModified": "SF",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "AP",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register]",
+					"Encoding": "[x86-vex-3],vex.MapSelect=00010,vex.opcode2=0xF2,vex.vvvv=reg4not:o1,mod=11,reg=reg3:o2,rm=reg3:r"
+				}
+			]
+		},
+		{
 			"Name": "Break",
 			"FamilyName": "X86",
 			"FlagsCleared": "",

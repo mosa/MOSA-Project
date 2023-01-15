@@ -925,7 +925,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "0100|1|reg3:r"
+					"Encoding": "[x64-rex32],opcode=0xFF,mod=11,reg=001,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
 				}
 			]
 		},
@@ -944,7 +944,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "0100|1|reg3:r"
+					"Encoding": "[x64-rex32],opcode=0xFF,mod=11,reg=001,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
 				}
 			]
 		},
@@ -1210,7 +1210,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "0100|0|reg3:r"
+					"Encoding": "[x64-rex32],opcode=0xFF,mod=11,reg=000,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
 				}
 			]
 		},
@@ -1229,7 +1229,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "0100|0|reg3:r"
+					"Encoding": "[x64-rex32],opcode=0xFF,mod=11,reg=000,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
 				}
 			]
 		},
