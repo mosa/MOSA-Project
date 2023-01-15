@@ -736,7 +736,10 @@
 			"ResultCount": 1,
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
-
+				{
+					"Condition": "[eax][register]",
+					"Encoding": "[x86],opcode=0xF7,mod=11,reg=101,rm=reg3:o1"
+				},
 				{
 					"Condition": "[register][register]",
 					"Encoding": "[x86],opcode=0x0F,opcode2=0xAF,mod=11,reg=reg3:r,rm=reg3:o2"
@@ -3302,10 +3305,6 @@
 			"ResultCount": 0,
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
-				{
-					"Condition": "[eax][constant_imm8]",
-					"Encoding": "[x86],opcode=0xF7,mod=11,reg=000,rm=000,immediate=imm8:o2"
-				},
 				{
 					"Condition": "[eax][constant]",
 					"Encoding": "[x86],opcode=0xA9,immediate=imm32:o2"

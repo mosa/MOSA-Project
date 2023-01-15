@@ -17,21 +17,29 @@ namespace Mosa.Platform.x86.Instructions
 		{
 		}
 
-		public override bool IsZeroFlagUnchanged { get { return true; } }
+		public override bool IsZeroFlagUnchanged
+		{ get { return true; } }
 
-		public override bool IsZeroFlagUndefined { get { return true; } }
+		public override bool IsZeroFlagUndefined
+		{ get { return true; } }
 
-		public override bool IsCarryFlagModified { get { return true; } }
+		public override bool IsCarryFlagModified
+		{ get { return true; } }
 
-		public override bool IsSignFlagUnchanged { get { return true; } }
+		public override bool IsSignFlagUnchanged
+		{ get { return true; } }
 
-		public override bool IsSignFlagUndefined { get { return true; } }
+		public override bool IsSignFlagUndefined
+		{ get { return true; } }
 
-		public override bool IsOverflowFlagModified { get { return true; } }
+		public override bool IsOverflowFlagModified
+		{ get { return true; } }
 
-		public override bool IsParityFlagUnchanged { get { return true; } }
+		public override bool IsParityFlagUnchanged
+		{ get { return true; } }
 
-		public override bool IsParityFlagUndefined { get { return true; } }
+		public override bool IsParityFlagUndefined
+		{ get { return true; } }
 
 		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 		{
@@ -40,6 +48,15 @@ namespace Mosa.Platform.x86.Instructions
 			System.Diagnostics.Debug.Assert(node.Result.IsCPURegister);
 			System.Diagnostics.Debug.Assert(node.Operand1.IsCPURegister);
 			System.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);
+
+			//if ((node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 0) && node.Operand2.IsCPURegister)
+			//{
+			//	opcodeEncoder.Append8Bits(0xF7);
+			//	opcodeEncoder.Append2Bits(0b11);
+			//	opcodeEncoder.Append3Bits(0b101);
+			//	opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
+			//	return;
+			//}
 
 			if (node.Operand1.IsCPURegister && node.Operand2.IsCPURegister)
 			{
