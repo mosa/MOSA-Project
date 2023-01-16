@@ -237,6 +237,8 @@ namespace Mosa.Compiler.Framework.Stages
 					if (MethodCompiler.Statistics)
 						UpdateCounter(transform.Name, 1);
 
+					MethodCompiler.CreateTranformInstructionTrace(this);
+
 					if (CompilerSettings.FullCheckMode)
 						CheckAllPhiInstructions();
 

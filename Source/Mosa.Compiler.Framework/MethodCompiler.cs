@@ -30,7 +30,9 @@ namespace Mosa.Compiler.Framework
 
 		private readonly NotifyTraceLogHandler NotifyInstructionTraceHandler;
 
-		private readonly NotifyTraceLogHandler NotifyMethodTranformInstructionTrace;
+		private readonly NotifyTraceLogHandler NotifyTranformTraceHandler;
+
+		private int InstructionTraceStep;
 
 		#endregion Data Members
 
@@ -244,8 +246,8 @@ namespace Mosa.Compiler.Framework
 			Is32BitPlatform = Architecture.Is32BitPlatform;
 			Is64BitPlatform = Architecture.Is64BitPlatform;
 
-			NotifyInstructionTraceHandler = CompilerHooks.NotifyMethodInstructionTrace != null ? CompilerHooks.NotifyMethodInstructionTrace.Invoke(Method) : null;
-			NotifyMethodTranformInstructionTrace = CompilerHooks.NotifyMethodTranformInstructionTrace != null ? CompilerHooks.NotifyMethodTranformInstructionTrace.Invoke(Method) : null;
+			NotifyInstructionTraceHandler = CompilerHooks.NotifyMethodInstructionTrace != null ? CompilerHooks.NotifyMethodInstructionTrace(Method) : null;
+			NotifyTranformTraceHandler = CompilerHooks.NotifyMethodInstructionTrace != null ? CompilerHooks.NotifyMethodInstructionTrace(Method) : null;
 
 			MethodTraceLevel = compiler.CompilerHooks.GetMethodTraceLevel != null ? compiler.CompilerHooks.GetMethodTraceLevel(method) : null;
 
@@ -269,6 +271,7 @@ namespace Mosa.Compiler.Framework
 
 			LocalVariables = emptyOperandList;
 			ThreadID = threadID;
+			InstructionTraceStep = 0;
 
 			IsStopped = false;
 			IsExecutePipeline = true;
@@ -296,7 +299,7 @@ namespace Mosa.Compiler.Framework
 				Symbol.RemovePatches();
 			}
 
-			var methodInfo = TypeLayout.__GetMethodInfo(Method);
+			var methodInfo = TypeLayout.GetMethodInfo(Method);
 
 			MethodData.ParameterSizes = methodInfo.ParameterSizes;
 			MethodData.ParameterOffsets = methodInfo.ParameterOffsets;
@@ -498,15 +501,19 @@ namespace Mosa.Compiler.Framework
 			if (NotifyInstructionTraceHandler == null)
 				return;
 
-			InstructionTrace.Run(this, stage, NotifyInstructionTraceHandler);
+			var trace = InstructionTrace.Run(stage.FormattedStageName, Method, BasicBlocks, MethodData.Version, null, 0);
+
+			NotifyInstructionTraceHandler(trace);
 		}
 
-		private void CreateTranformInstructionTrace(BaseMethodCompilerStage stage)
+		public void CreateTranformInstructionTrace(BaseMethodCompilerStage stage)
 		{
-			if (NotifyMethodTranformInstructionTrace == null)
+			if (NotifyTranformTraceHandler == null)
 				return;
 
-			InstructionTrace.Run(this, stage, NotifyMethodTranformInstructionTrace);
+			var trace = InstructionTrace.Run(stage.FormattedStageName, Method, BasicBlocks, MethodData.Version, null, ++InstructionTraceStep);
+
+			NotifyTranformTraceHandler(trace);
 		}
 
 		private void PlugMethod()
@@ -530,7 +537,7 @@ namespace Mosa.Compiler.Framework
 				var traceLog = new TraceLog(TraceType.MethodInstructions, Method, "XX-Plugged Method", MethodData.Version);
 				traceLog?.Log($"Plugged by {plugMethod.FullName}");
 
-				NotifyInstructionTraceHandler.Invoke(traceLog);
+				NotifyInstructionTraceHandler(traceLog);
 			}
 		}
 
@@ -603,7 +610,7 @@ namespace Mosa.Compiler.Framework
 			{
 				var traceLog = new TraceLog(TraceType.MethodInstructions, Method, "XX-External Method", MethodData.Version);
 				traceLog?.Log($"This method is external linked: {Method.ExternMethodName}");
-				NotifyInstructionTraceHandler.Invoke(traceLog);
+				NotifyInstructionTraceHandler(traceLog);
 			}
 		}
 
@@ -620,7 +627,7 @@ namespace Mosa.Compiler.Framework
 			{
 				var traceLog = new TraceLog(TraceType.MethodInstructions, Method, "XX-Internal Method", MethodData.Version);
 				traceLog?.Log($"This method is an internal method");
-				NotifyInstructionTraceHandler.Invoke(traceLog);
+				NotifyInstructionTraceHandler(traceLog);
 			}
 		}
 
@@ -658,7 +665,7 @@ namespace Mosa.Compiler.Framework
 			{
 				var traceLog = new TraceLog(TraceType.MethodInstructions, Method, "XX-Stubbed Method", MethodData.Version);
 				traceLog?.Log($"This method is a stubbed method");
-				NotifyInstructionTraceHandler.Invoke(traceLog);
+				NotifyInstructionTraceHandler(traceLog);
 			}
 		}
 

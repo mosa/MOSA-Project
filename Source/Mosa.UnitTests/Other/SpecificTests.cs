@@ -1,5 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.UnitTests.Basic;
+
 namespace Mosa.UnitTests.Other
 {
 	public static class SpecificTests
@@ -299,6 +301,26 @@ namespace Mosa.UnitTests.Other
 			ulong mask = 0xFFFFFFFFFFFFFFFFU >> (64 - count);
 			ulong bits = (value & mask) << index;
 			return (self & ~(mask << index)) | bits;
+		}
+
+		public static int PRETest(bool cond, int b, int c)
+		{
+			int a = 2;
+
+			int b1 = b;
+			int c1 = c;
+
+			if (cond)
+			{
+				a = b1 + c1;
+			}
+			else
+			{
+			}
+
+			int d = b1 + c1;
+
+			return d * a;
 		}
 	}
 }
