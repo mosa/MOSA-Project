@@ -247,7 +247,7 @@ namespace Mosa.Compiler.Framework
 			Is64BitPlatform = Architecture.Is64BitPlatform;
 
 			NotifyInstructionTraceHandler = CompilerHooks.NotifyMethodInstructionTrace != null ? CompilerHooks.NotifyMethodInstructionTrace(Method) : null;
-			NotifyTranformTraceHandler = CompilerHooks.NotifyMethodInstructionTrace != null ? CompilerHooks.NotifyMethodInstructionTrace(Method) : null;
+			NotifyTranformTraceHandler = CompilerHooks.NotifyMethodTranformTrace != null ? CompilerHooks.NotifyMethodTranformTrace(Method) : null;
 
 			MethodTraceLevel = compiler.CompilerHooks.GetMethodTraceLevel != null ? compiler.CompilerHooks.GetMethodTraceLevel(method) : null;
 
@@ -506,12 +506,12 @@ namespace Mosa.Compiler.Framework
 			NotifyInstructionTraceHandler(trace);
 		}
 
-		public void CreateTranformInstructionTrace(BaseMethodCompilerStage stage)
+		public void CreateTranformInstructionTrace(BaseMethodCompilerStage stage, int step)
 		{
 			if (NotifyTranformTraceHandler == null)
 				return;
 
-			var trace = InstructionTrace.Run(stage.FormattedStageName, Method, BasicBlocks, MethodData.Version, null, ++InstructionTraceStep);
+			var trace = InstructionTrace.Run(stage.FormattedStageName, Method, BasicBlocks, MethodData.Version, null, step);
 
 			NotifyTranformTraceHandler(trace);
 		}

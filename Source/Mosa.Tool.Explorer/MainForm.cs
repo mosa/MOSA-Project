@@ -60,7 +60,6 @@ namespace Mosa.Tool.Explorer
 		private readonly BindingList<CounterEntry> CompilerCounters = new BindingList<CounterEntry>();
 
 		private int TransformStep = 0;
-		private int TransformTotalSteps = 0;
 
 		public MainForm()
 		{
@@ -96,12 +95,12 @@ namespace Mosa.Tool.Explorer
 
 			ClearSectionDropDown();
 
-			cbSectionLogs.SelectedIndex = 0;
+			cbCompilerSections.SelectedIndex = 0;
 		}
 
 		private void ClearSectionDropDown()
 		{
-			cbSectionLogs.Items.Clear();
+			cbCompilerSections.Items.Clear();
 
 			CompilerData.DirtyLogSections = true;
 			CompilerData.DirtyLog = true;
@@ -119,11 +118,11 @@ namespace Mosa.Tool.Explorer
 
 			lock (CompilerData.Logs)
 			{
-				for (int i = cbSectionLogs.Items.Count; i < CompilerData.LogSections.Count; i++)
+				for (int i = cbCompilerSections.Items.Count; i < CompilerData.LogSections.Count; i++)
 				{
 					var formatted = $"[{i}] {CompilerData.LogSections[i]}";
 
-					cbSectionLogs.Items.Add(formatted);
+					cbCompilerSections.Items.Add(formatted);
 				}
 			}
 		}
@@ -387,9 +386,9 @@ namespace Mosa.Tool.Explorer
 			return node == null ? null : node.Tag as MosaMethod;
 		}
 
-		private string GetCurrentStage()
+		private string GetCurrentInstructionStage()
 		{
-			return cbStages.SelectedItem.ToString();
+			return cbInstructionStages.SelectedItem.ToString();
 		}
 
 		private string GetCurrentDebugStage()
@@ -397,12 +396,17 @@ namespace Mosa.Tool.Explorer
 			return cbDebugStages.SelectedItem.ToString();
 		}
 
-		private string GetCurrentLabel()
+		private string GetCurrentTransformStage()
 		{
-			return cbLabels.SelectedItem as string;
+			return cbTransformStages.SelectedItem.ToString();
 		}
 
-		private List<string> GetCurrentLines()
+		private string GetCurrentInstructionLabel()
+		{
+			return cbInstructionLabels.SelectedItem as string;
+		}
+
+		private MethodData GetCurrentMethodData()
 		{
 			var method = CurrentMethodSelected;
 
@@ -410,23 +414,41 @@ namespace Mosa.Tool.Explorer
 				return null;
 
 			var methodData = MethodStore.GetMethodData(method, false);
+
+			return methodData;
+		}
+
+		private List<string> GetCurrentInstructionLines()
+		{
+			var methodData = GetCurrentMethodData();
 
 			if (methodData == null)
 				return null;
 
-			string stage = GetCurrentStage();
+			var stage = GetCurrentInstructionStage();
 
 			return methodData.InstructionLogs[stage];
 		}
 
-		private List<string> GetCurrentDebugLines()
+		private List<string> GetCurrentTransformLines()
 		{
-			var method = CurrentMethodSelected;
+			var methodData = GetCurrentMethodData();
 
-			if (method == null)
+			if (methodData == null)
 				return null;
 
-			var methodData = MethodStore.GetMethodData(method, false);
+			var stage = GetCurrentTransformStage();
+
+			var logs = methodData.TransformLogs[stage];
+
+			var log = logs[TransformStep];
+
+			return log;
+		}
+
+		private List<string> GetCurrentDebugLines()
+		{
+			var methodData = GetCurrentMethodData();
 
 			if (methodData == null)
 				return null;
@@ -436,38 +458,28 @@ namespace Mosa.Tool.Explorer
 			return methodData.DebugLogs[stage];
 		}
 
-		private void UpdateStages()
+		private void UpdateInstructionStages()
 		{
-			var method = CurrentMethodSelected;
+			cbInstructionStages.Items.Clear();
 
-			if (method == null)
-				return;
-
-			cbStages.Items.Clear();
-
-			var methodData = MethodStore.GetMethodData(method, false);
+			var methodData = GetCurrentMethodData();
 
 			if (methodData == null)
 				return;
 
 			foreach (var stage in methodData.OrderedStageNames)
 			{
-				cbStages.Items.Add(stage);
+				cbInstructionStages.Items.Add(stage);
 			}
 
-			cbStages.SelectedIndex = cbStages.Items.Count == 0 ? -1 : 0;
+			cbInstructionStages.SelectedIndex = cbInstructionStages.Items.Count == 0 ? -1 : 0;
 		}
 
 		private void UpdateDebugStages()
 		{
-			var method = CurrentMethodSelected;
-
-			if (method == null)
-				return;
-
 			cbDebugStages.Items.Clear();
 
-			var methodData = MethodStore.GetMethodData(method, false);
+			var methodData = GetCurrentMethodData();
 
 			if (methodData == null)
 				return;
@@ -483,16 +495,31 @@ namespace Mosa.Tool.Explorer
 			}
 		}
 
-		private void UpdateMethodCounters()
+		private void UpdateTransformStages()
 		{
-			var method = CurrentMethodSelected;
+			cbTransformStages.Items.Clear();
 
-			if (method == null)
+			var methodData = GetCurrentMethodData();
+
+			if (methodData == null)
 				return;
 
+			foreach (string stage in methodData.OrderedTransformStageNames)
+			{
+				cbTransformStages.Items.Add(stage);
+			}
+
+			if (cbTransformStages.Items.Count > 0)
+			{
+				cbTransformStages.SelectedIndex = 0;
+			}
+		}
+
+		private void UpdateMethodCounters()
+		{
 			tbMethodCounters.Text = string.Empty;
 
-			var methodData = MethodStore.GetMethodData(method, false);
+			var methodData = GetCurrentMethodData();
 
 			if (methodData == null)
 				return;
@@ -550,22 +577,51 @@ namespace Mosa.Tool.Explorer
 			return entry;
 		}
 
-		private void UpdateLabels()
+		private static List<string> ExtractLabels(List<string> lines)
 		{
-			var lines = GetCurrentLines();
+			if (lines == null)
+				return null;
 
-			cbLabels.Items.Clear();
-			cbLabels.Items.Add("All");
+			var labels = new List<string>();
 
-			if (lines != null)
+			foreach (var line in lines)
 			{
-				foreach (var line in lines)
-				{
-					if (line.StartsWith("Block #"))
-					{
-						cbLabels.Items.Add(line.Substring(line.IndexOf("L_")));
-					}
-				}
+				if (!line.StartsWith("Block #"))
+					continue;
+
+				labels.Add(line.Substring(line.IndexOf("L_")));
+			}
+
+			return labels;
+		}
+
+		private void UpdateInstructionLabels()
+		{
+			var lines = GetCurrentInstructionLines();
+
+			cbInstructionLabels.Items.Clear();
+			cbInstructionLabels.Items.Add("All");
+
+			var labels = ExtractLabels(lines);
+
+			if (labels != null)
+			{
+				cbInstructionLabels.Items.AddRange(labels.ToArray());
+			}
+		}
+
+		private void UpdateTransformLabels()
+		{
+			var lines = GetCurrentTransformLines();
+
+			cbTransformLabels.Items.Clear();
+			cbTransformLabels.Items.Add("All");
+
+			var labels = ExtractLabels(lines);
+
+			if (labels != null)
+			{
+				cbTransformLabels.Items.AddRange(labels.ToArray());
 			}
 		}
 
@@ -574,8 +630,8 @@ namespace Mosa.Tool.Explorer
 			tbInstructions.Text = string.Empty;
 
 			var method = CurrentMethodSelected;
-			var lines = GetCurrentLines();
-			var label = GetCurrentLabel();
+			var lines = GetCurrentInstructionLines();
+			var label = GetCurrentInstructionLabel();
 
 			if (method == null)
 				return;
@@ -626,16 +682,16 @@ namespace Mosa.Tool.Explorer
 			Compiler.CompileSingleMethod(method);
 		}
 
-		private void CbStages_SelectedIndexChanged(object sender, EventArgs e)
+		private void CbInstructionStages_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			var previousItemLabel = cbLabels.SelectedItem;
+			var previousItemLabel = cbInstructionLabels.SelectedItem;
 
-			UpdateLabels();
+			UpdateInstructionLabels();
 
-			if (previousItemLabel != null && cbLabels.Items.Contains(previousItemLabel))
-				cbLabels.SelectedItem = previousItemLabel;
+			if (previousItemLabel != null && cbInstructionLabels.Items.Contains(previousItemLabel))
+				cbInstructionLabels.SelectedItem = previousItemLabel;
 			else
-				cbLabels.SelectedIndex = 0;
+				cbInstructionLabels.SelectedIndex = 0;
 
 			CbLabels_SelectedIndexChanged(null, null);
 		}
@@ -690,20 +746,20 @@ namespace Mosa.Tool.Explorer
 			return method == CurrentMethodSelected ? 10 : -1;
 		}
 
-		private NotifyTraceLogHandler NotifyMethodTranformTrace(MosaMethod method)
-		{
-			if (method != CurrentMethodSelected)
-				return null;
-
-			return NotifyMethodTransformTraceResponse;
-		}
-
 		public NotifyTraceLogHandler NotifyMethodInstructionTrace(MosaMethod method)
 		{
 			if (method != CurrentMethodSelected)
 				return null;
 
 			return NotifyMethodInstructionTraceResponse;
+		}
+
+		private NotifyTraceLogHandler NotifyMethodTranformTrace(MosaMethod method)
+		{
+			if (method != CurrentMethodSelected)
+				return null;
+
+			return NotifyMethodTransformTraceResponse;
 		}
 
 		private void NotifyMethodInstructionTraceResponse(TraceLog traceLog)
@@ -823,9 +879,10 @@ namespace Mosa.Tool.Explorer
 
 		private void UpdateMethodInformation(MosaMethod method)
 		{
-			UpdateStages();
+			UpdateInstructionStages();
 			UpdateDebugStages();
 			UpdateMethodCounters();
+			UpdateTransformStages();
 		}
 
 		private void DumpAllMethodStagesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -839,21 +896,21 @@ namespace Mosa.Tool.Explorer
 			{
 				var path = folderBrowserDialog1.SelectedPath;
 
-				cbStages.SelectedIndex = 0;
+				cbInstructionStages.SelectedIndex = 0;
 
 				while (true)
 				{
-					CbStages_SelectedIndexChanged(null, null);
+					CbInstructionStages_SelectedIndexChanged(null, null);
 
-					string stage = GetCurrentStage().Replace("\\", " - ").Replace("/", " - ");
+					var stage = GetCurrentInstructionStage().Replace("\\", " - ").Replace("/", " - ");
 					var result = tbInstructions.Text.Replace("\n", "\r\n");
 
 					File.WriteAllText(Path.Combine(path, stage + "-stage.txt"), result);
 
-					if (cbStages.Items.Count == cbStages.SelectedIndex + 1)
+					if (cbInstructionStages.Items.Count == cbInstructionStages.SelectedIndex + 1)
 						break;
 
-					cbStages.SelectedIndex++;
+					cbInstructionStages.SelectedIndex++;
 				}
 
 				cbDebugStages.SelectedIndex = 0;
@@ -915,9 +972,9 @@ namespace Mosa.Tool.Explorer
 			NodeSelected();
 		}
 
-		private void cbSections_SelectedIndexChanged(object sender, EventArgs e)
+		private void cbCompilerSections_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			var formatted = cbSectionLogs.SelectedItem as string;
+			var formatted = cbCompilerSections.SelectedItem as string;
 
 			CurrentLogSection = formatted.Substring(formatted.IndexOf(' ') + 1);
 
@@ -1145,7 +1202,7 @@ namespace Mosa.Tool.Explorer
 
 		private void UpdateTransform()
 		{
-			lbSteps.Text = $"{TransformStep} / {TransformTotalSteps}";
+			//lbSteps.Text = $"{TransformStep} / {TransformTotalSteps}";
 		}
 
 		private void btnFirst_Click(object sender, EventArgs e)

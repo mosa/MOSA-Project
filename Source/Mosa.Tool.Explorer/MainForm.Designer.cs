@@ -75,8 +75,8 @@
 			this.tabControl = new System.Windows.Forms.TabControl();
 			this.tabStages = new System.Windows.Forms.TabPage();
 			this.label1 = new System.Windows.Forms.Label();
-			this.cbLabels = new System.Windows.Forms.ComboBox();
-			this.cbStages = new System.Windows.Forms.ComboBox();
+			this.cbInstructionLabels = new System.Windows.Forms.ComboBox();
+			this.cbInstructionStages = new System.Windows.Forms.ComboBox();
 			this.stageLabel = new System.Windows.Forms.Label();
 			this.tbInstructions = new System.Windows.Forms.RichTextBox();
 			this.tabStageDebug = new System.Windows.Forms.TabPage();
@@ -84,6 +84,10 @@
 			this.label3 = new System.Windows.Forms.Label();
 			this.tbDebugResult = new System.Windows.Forms.RichTextBox();
 			this.tabTransforms = new System.Windows.Forms.TabPage();
+			this.label7 = new System.Windows.Forms.Label();
+			this.cbTransformLabels = new System.Windows.Forms.ComboBox();
+			this.cbTransformStages = new System.Windows.Forms.ComboBox();
+			this.label8 = new System.Windows.Forms.Label();
 			this.lbSteps = new System.Windows.Forms.Label();
 			this.btnLast = new System.Windows.Forms.Button();
 			this.btnNext = new System.Windows.Forms.Button();
@@ -99,7 +103,7 @@
 			this.tabPage2 = new System.Windows.Forms.TabPage();
 			this.tbMethodCounters = new System.Windows.Forms.RichTextBox();
 			this.tabLogs = new System.Windows.Forms.TabPage();
-			this.cbSectionLogs = new System.Windows.Forms.ComboBox();
+			this.cbCompilerSections = new System.Windows.Forms.ComboBox();
 			this.label4 = new System.Windows.Forms.Label();
 			this.tbLogs = new System.Windows.Forms.RichTextBox();
 			this.tabCompilerCounters = new System.Windows.Forms.TabPage();
@@ -119,10 +123,6 @@
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
 			this.timer1 = new System.Windows.Forms.Timer(this.components);
-			this.label7 = new System.Windows.Forms.Label();
-			this.cbTransformLabels = new System.Windows.Forms.ComboBox();
-			this.cbTransformStages = new System.Windows.Forms.ComboBox();
-			this.label8 = new System.Windows.Forms.Label();
 			this.statusStrip1.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -567,8 +567,8 @@
 			// 
 			this.tabStages.BackColor = System.Drawing.Color.Gainsboro;
 			this.tabStages.Controls.Add(this.label1);
-			this.tabStages.Controls.Add(this.cbLabels);
-			this.tabStages.Controls.Add(this.cbStages);
+			this.tabStages.Controls.Add(this.cbInstructionLabels);
+			this.tabStages.Controls.Add(this.cbInstructionStages);
 			this.tabStages.Controls.Add(this.stageLabel);
 			this.tabStages.Controls.Add(this.tbInstructions);
 			this.tabStages.Location = new System.Drawing.Point(4, 28);
@@ -588,32 +588,32 @@
 			this.label1.TabIndex = 41;
 			this.label1.Text = "Label:";
 			// 
-			// cbLabels
+			// cbInstructionLabels
 			// 
-			this.cbLabels.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.cbLabels.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.cbLabels.FormattingEnabled = true;
-			this.cbLabels.Location = new System.Drawing.Point(413, 8);
-			this.cbLabels.Margin = new System.Windows.Forms.Padding(5);
-			this.cbLabels.MaxDropDownItems = 20;
-			this.cbLabels.Name = "cbLabels";
-			this.cbLabels.Size = new System.Drawing.Size(122, 21);
-			this.cbLabels.TabIndex = 40;
-			this.cbLabels.SelectedIndexChanged += new System.EventHandler(this.CbLabels_SelectedIndexChanged);
+			this.cbInstructionLabels.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cbInstructionLabels.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.cbInstructionLabels.FormattingEnabled = true;
+			this.cbInstructionLabels.Location = new System.Drawing.Point(413, 8);
+			this.cbInstructionLabels.Margin = new System.Windows.Forms.Padding(5);
+			this.cbInstructionLabels.MaxDropDownItems = 20;
+			this.cbInstructionLabels.Name = "cbInstructionLabels";
+			this.cbInstructionLabels.Size = new System.Drawing.Size(122, 21);
+			this.cbInstructionLabels.TabIndex = 40;
+			this.cbInstructionLabels.SelectedIndexChanged += new System.EventHandler(this.CbLabels_SelectedIndexChanged);
 			// 
-			// cbStages
+			// cbInstructionStages
 			// 
-			this.cbStages.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.cbStages.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.cbStages.FormattingEnabled = true;
-			this.cbStages.ItemHeight = 13;
-			this.cbStages.Location = new System.Drawing.Point(64, 8);
-			this.cbStages.Margin = new System.Windows.Forms.Padding(5);
-			this.cbStages.MaxDropDownItems = 40;
-			this.cbStages.Name = "cbStages";
-			this.cbStages.Size = new System.Drawing.Size(282, 21);
-			this.cbStages.TabIndex = 38;
-			this.cbStages.SelectedIndexChanged += new System.EventHandler(this.CbStages_SelectedIndexChanged);
+			this.cbInstructionStages.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cbInstructionStages.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.cbInstructionStages.FormattingEnabled = true;
+			this.cbInstructionStages.ItemHeight = 13;
+			this.cbInstructionStages.Location = new System.Drawing.Point(64, 8);
+			this.cbInstructionStages.Margin = new System.Windows.Forms.Padding(5);
+			this.cbInstructionStages.MaxDropDownItems = 40;
+			this.cbInstructionStages.Name = "cbInstructionStages";
+			this.cbInstructionStages.Size = new System.Drawing.Size(282, 21);
+			this.cbInstructionStages.TabIndex = 38;
+			this.cbInstructionStages.SelectedIndexChanged += new System.EventHandler(this.CbInstructionStages_SelectedIndexChanged);
 			// 
 			// stageLabel
 			// 
@@ -708,6 +708,51 @@
 			this.tabTransforms.Size = new System.Drawing.Size(683, 361);
 			this.tabTransforms.TabIndex = 9;
 			this.tabTransforms.Text = "Transforms";
+			// 
+			// label7
+			// 
+			this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.label7.Location = new System.Drawing.Point(352, 9);
+			this.label7.Margin = new System.Windows.Forms.Padding(5);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(56, 23);
+			this.label7.TabIndex = 45;
+			this.label7.Text = "Label:";
+			// 
+			// cbTransformLabels
+			// 
+			this.cbTransformLabels.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cbTransformLabels.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.cbTransformLabels.FormattingEnabled = true;
+			this.cbTransformLabels.Location = new System.Drawing.Point(413, 8);
+			this.cbTransformLabels.Margin = new System.Windows.Forms.Padding(5);
+			this.cbTransformLabels.MaxDropDownItems = 20;
+			this.cbTransformLabels.Name = "cbTransformLabels";
+			this.cbTransformLabels.Size = new System.Drawing.Size(122, 21);
+			this.cbTransformLabels.TabIndex = 44;
+			// 
+			// cbTransformStages
+			// 
+			this.cbTransformStages.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cbTransformStages.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.cbTransformStages.FormattingEnabled = true;
+			this.cbTransformStages.ItemHeight = 13;
+			this.cbTransformStages.Location = new System.Drawing.Point(64, 8);
+			this.cbTransformStages.Margin = new System.Windows.Forms.Padding(5);
+			this.cbTransformStages.MaxDropDownItems = 40;
+			this.cbTransformStages.Name = "cbTransformStages";
+			this.cbTransformStages.Size = new System.Drawing.Size(282, 21);
+			this.cbTransformStages.TabIndex = 42;
+			// 
+			// label8
+			// 
+			this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.label8.Location = new System.Drawing.Point(5, 9);
+			this.label8.Margin = new System.Windows.Forms.Padding(5);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(58, 23);
+			this.label8.TabIndex = 43;
+			this.label8.Text = "Stage:";
 			// 
 			// lbSteps
 			// 
@@ -880,7 +925,7 @@
 			// tabLogs
 			// 
 			this.tabLogs.BackColor = System.Drawing.Color.Gainsboro;
-			this.tabLogs.Controls.Add(this.cbSectionLogs);
+			this.tabLogs.Controls.Add(this.cbCompilerSections);
 			this.tabLogs.Controls.Add(this.label4);
 			this.tabLogs.Controls.Add(this.tbLogs);
 			this.tabLogs.Location = new System.Drawing.Point(4, 28);
@@ -890,18 +935,18 @@
 			this.tabLogs.TabIndex = 7;
 			this.tabLogs.Text = "Compiler Logs";
 			// 
-			// cbSectionLogs
+			// cbCompilerSections
 			// 
-			this.cbSectionLogs.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.cbSectionLogs.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.cbSectionLogs.FormattingEnabled = true;
-			this.cbSectionLogs.Location = new System.Drawing.Point(77, 8);
-			this.cbSectionLogs.Margin = new System.Windows.Forms.Padding(5);
-			this.cbSectionLogs.MaxDropDownItems = 20;
-			this.cbSectionLogs.Name = "cbSectionLogs";
-			this.cbSectionLogs.Size = new System.Drawing.Size(285, 21);
-			this.cbSectionLogs.TabIndex = 44;
-			this.cbSectionLogs.SelectedIndexChanged += new System.EventHandler(this.cbSections_SelectedIndexChanged);
+			this.cbCompilerSections.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cbCompilerSections.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.cbCompilerSections.FormattingEnabled = true;
+			this.cbCompilerSections.Location = new System.Drawing.Point(77, 8);
+			this.cbCompilerSections.Margin = new System.Windows.Forms.Padding(5);
+			this.cbCompilerSections.MaxDropDownItems = 20;
+			this.cbCompilerSections.Name = "cbCompilerSections";
+			this.cbCompilerSections.Size = new System.Drawing.Size(285, 21);
+			this.cbCompilerSections.TabIndex = 44;
+			this.cbCompilerSections.SelectedIndexChanged += new System.EventHandler(this.cbCompilerSections_SelectedIndexChanged);
 			// 
 			// label4
 			// 
@@ -1107,51 +1152,6 @@
 			this.timer1.Enabled = true;
 			this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
 			// 
-			// label7
-			// 
-			this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.label7.Location = new System.Drawing.Point(352, 9);
-			this.label7.Margin = new System.Windows.Forms.Padding(5);
-			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(56, 23);
-			this.label7.TabIndex = 45;
-			this.label7.Text = "Label:";
-			// 
-			// cbTransformLabels
-			// 
-			this.cbTransformLabels.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.cbTransformLabels.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.cbTransformLabels.FormattingEnabled = true;
-			this.cbTransformLabels.Location = new System.Drawing.Point(413, 8);
-			this.cbTransformLabels.Margin = new System.Windows.Forms.Padding(5);
-			this.cbTransformLabels.MaxDropDownItems = 20;
-			this.cbTransformLabels.Name = "cbTransformLabels";
-			this.cbTransformLabels.Size = new System.Drawing.Size(122, 21);
-			this.cbTransformLabels.TabIndex = 44;
-			// 
-			// cbTransformStages
-			// 
-			this.cbTransformStages.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.cbTransformStages.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.cbTransformStages.FormattingEnabled = true;
-			this.cbTransformStages.ItemHeight = 13;
-			this.cbTransformStages.Location = new System.Drawing.Point(64, 8);
-			this.cbTransformStages.Margin = new System.Windows.Forms.Padding(5);
-			this.cbTransformStages.MaxDropDownItems = 40;
-			this.cbTransformStages.Name = "cbTransformStages";
-			this.cbTransformStages.Size = new System.Drawing.Size(282, 21);
-			this.cbTransformStages.TabIndex = 42;
-			// 
-			// label8
-			// 
-			this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.label8.Location = new System.Drawing.Point(5, 9);
-			this.label8.Margin = new System.Windows.Forms.Padding(5);
-			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(58, 23);
-			this.label8.TabIndex = 43;
-			this.label8.Text = "Stage:";
-			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -1257,8 +1257,8 @@
 		private System.Windows.Forms.TabControl tabControl;
 		private System.Windows.Forms.TabPage tabStages;
 		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.ComboBox cbLabels;
-		private System.Windows.Forms.ComboBox cbStages;
+		private System.Windows.Forms.ComboBox cbInstructionLabels;
+		private System.Windows.Forms.ComboBox cbInstructionStages;
 		private System.Windows.Forms.Label stageLabel;
 		private System.Windows.Forms.RichTextBox tbInstructions;
 		private System.Windows.Forms.TabPage tabStageDebug;
@@ -1271,7 +1271,7 @@
 		private System.Windows.Forms.DataGridView gridMethodCounters;
 		private System.Windows.Forms.TabPage tabPage2;
 		private System.Windows.Forms.TabPage tabLogs;
-		private System.Windows.Forms.ComboBox cbSectionLogs;
+		private System.Windows.Forms.ComboBox cbCompilerSections;
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.RichTextBox tbLogs;
 		private System.Windows.Forms.RichTextBox tbMethodCounters;
