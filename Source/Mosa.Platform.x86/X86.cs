@@ -43,6 +43,8 @@ namespace Mosa.Platform.x86
 		public static readonly Hlt Hlt = new Hlt();
 		public static readonly IDiv32 IDiv32 = new IDiv32();
 		public static readonly IMul32 IMul32 = new IMul32();
+		public static readonly IMul1o32 IMul1o32 = new IMul1o32();
+		public static readonly IMul3o32 IMul3o32 = new IMul3o32();
 		public static readonly In8 In8 = new In8();
 		public static readonly In16 In16 = new In16();
 		public static readonly In32 In32 = new In32();

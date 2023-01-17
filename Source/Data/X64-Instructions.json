@@ -1365,7 +1365,7 @@
 					"Encoding": "[x64-rex32-common-load-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte]",
+					"Condition": "[ESP][constant_imm8]",
 					"Encoding": "[x64-rex32-common-load-esp+sbyte]"
 				},
 				{
@@ -1381,7 +1381,7 @@
 					"Encoding": "[x64-rex32-common-load-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte]",
+					"Condition": "[register][constant_imm8]",
 					"Encoding": "[x64-rex32-common-load-register+sbyte]"
 				},
 				{
@@ -1417,7 +1417,7 @@
 					"Encoding": "[x64-rex64-common-load-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte]",
+					"Condition": "[ESP][constant_imm8]",
 					"Encoding": "[x64-rex64-common-load-esp+sbyte]"
 				},
 				{
@@ -1433,7 +1433,7 @@
 					"Encoding": "[x64-rex64-common-load-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte]",
+					"Condition": "[register][constant_imm8]",
 					"Encoding": "[x64-rex64-common-load-register+sbyte]"
 				},
 				{
@@ -1698,7 +1698,7 @@
 					"Encoding": "[x64-rex32-common-load-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte]",
+					"Condition": "[ESP][constant_imm8]",
 					"Encoding": "[x64-rex32-common-load-esp+sbyte]"
 				},
 				{
@@ -1714,7 +1714,7 @@
 					"Encoding": "[x64-rex32-common-load-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte]",
+					"Condition": "[register][constant_imm8]",
 					"Encoding": "[x64-rex32-common-load-register+sbyte]"
 				},
 				{
@@ -1878,7 +1878,7 @@
 					"Encoding": "[x64-rex32-common-load-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte]",
+					"Condition": "[ESP][constant_imm8]",
 					"Encoding": "[x64-rex32-common-load-esp+sbyte]"
 				},
 				{
@@ -1894,7 +1894,7 @@
 					"Encoding": "[x64-rex32-common-load-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte]",
+					"Condition": "[register][constant_imm8]",
 					"Encoding": "[x64-rex32-common-load-register+sbyte]"
 				},
 				{
@@ -1940,7 +1940,7 @@
 					"Encoding": "[x64-common-load-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte]",
+					"Condition": "[ESP][constant_imm8]",
 					"Encoding": "[x64-rex32-common-load-esp+sbyte]"
 				},
 				{
@@ -1956,7 +1956,7 @@
 					"Encoding": "[x64-rex32-common-load-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte]",
+					"Condition": "[register][constant_imm8]",
 					"Encoding": "[x64-rex32-common-load-register+sbyte]"
 				},
 				{
@@ -2002,7 +2002,7 @@
 					"Encoding": "[x64-rex32-common-load-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte]",
+					"Condition": "[ESP][constant_imm8]",
 					"Encoding": "[x64-rex32-common-load-esp+sbyte]"
 				},
 				{
@@ -2018,7 +2018,7 @@
 					"Encoding": "[x64-rex32-common-load-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte]",
+					"Condition": "[register][constant_imm8]",
 					"Encoding": "[x64-rex32-common-load-register+sbyte]"
 				},
 				{
@@ -2064,7 +2064,7 @@
 					"Encoding": "[x64-rex64-common-load-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte]",
+					"Condition": "[ESP][constant_imm8]",
 					"Encoding": "[x64-rex64-common-load-esp+sbyte]"
 				},
 				{
@@ -2080,7 +2080,7 @@
 					"Encoding": "[x64-rex64-common-load-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte]",
+					"Condition": "[register][constant_imm8]",
 					"Encoding": "[x64-rex64-common-load-register+sbyte]"
 				},
 				{
@@ -2140,7 +2140,7 @@
 					"Encoding": "[x64-rex32-common-load-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte]",
+					"Condition": "[ESP][constant_imm8]",
 					"Encoding": "[x64-rex32-common-load-esp+sbyte]"
 				},
 				{
@@ -2156,7 +2156,7 @@
 					"Encoding": "[x64-rex32-common-load-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte]",
+					"Condition": "[register][constant_imm8]",
 					"Encoding": "[x64-rex32-common-load-register+sbyte]"
 				},
 				{
@@ -2202,7 +2202,7 @@
 					"Encoding": "[x64-rex32-common-store-register-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte][register]",
+					"Condition": "[ESP][constant_imm8][register]",
 					"Encoding": "[x64-rex32-common-store-register-esp+sbyte]"
 				},
 				{
@@ -2218,7 +2218,7 @@
 					"Encoding": "[x64-rex32-common-store-register-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte][register]",
+					"Condition": "[register][constant_imm8][register]",
 					"Encoding": "[x64-rex32-common-store-register-register+sbyte]"
 				},
 				{
@@ -2274,7 +2274,7 @@
 					"Encoding": "[x64-rex32-common-load-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte]",
+					"Condition": "[ESP][constant_imm8]",
 					"Encoding": "[x64-rex32-common-load-esp+sbyte]"
 				},
 				{
@@ -2290,7 +2290,7 @@
 					"Encoding": "[x64-rex32-common-load-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte]",
+					"Condition": "[register][constant_imm8]",
 					"Encoding": "[x64-rex32-common-load-register+sbyte]"
 				},
 				{
@@ -2336,7 +2336,7 @@
 					"Encoding": "[x64-rex32-common-store-register-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte][register]",
+					"Condition": "[ESP][constant_imm8][register]",
 					"Encoding": "[x64-rex32-common-store-register-esp+sbyte]"
 				},
 				{
@@ -2352,7 +2352,7 @@
 					"Encoding": "[x64-rex32-common-store-register-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte][register]",
+					"Condition": "[register][constant_imm8][register]",
 					"Encoding": "[x64-rex32-common-store-register-register+sbyte]"
 				},
 				{
@@ -2394,7 +2394,7 @@
 					"Encoding": "[x64-rex32-common-store-register-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte][register]",
+					"Condition": "[ESP][constant_imm8][register]",
 					"Encoding": "[x64-rex32-common-store-register-esp+sbyte]"
 				},
 				{
@@ -2410,7 +2410,7 @@
 					"Encoding": "[x64-rex32-common-store-register-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte][register]",
+					"Condition": "[register][constant_imm8][register]",
 					"Encoding": "[x64-rex32-common-store-register-register+sbyte]"
 				},
 				{
@@ -2435,7 +2435,7 @@
 					"Encoding": "[x64-rex32-common-store-constant-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte][constant]",
+					"Condition": "[ESP][constant_imm8][constant]",
 					"Encoding": "[x64-rex32-common-store-constant-esp+sbyte]"
 				},
 				{
@@ -2451,7 +2451,7 @@
 					"Encoding": "[x64-rex32-common-store-constant-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte][constant]",
+					"Condition": "[register][constant_imm8][constant]",
 					"Encoding": "[x64-rex32-common-store-constant-register+sbyte]"
 				},
 				{
@@ -2501,7 +2501,7 @@
 					"Encoding": "[x64-rex32-common-store-register-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte][register]",
+					"Condition": "[ESP][constant_imm8][register]",
 					"Encoding": "[x64-rex32-common-store-register-esp+sbyte]"
 				},
 				{
@@ -2517,7 +2517,7 @@
 					"Encoding": "[x64-rex32-common-store-register-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte][register]",
+					"Condition": "[register][constant_imm8][register]",
 					"Encoding": "[x64-rex32-common-store-register-register+sbyte]"
 				},
 				{
@@ -2542,7 +2542,7 @@
 					"Encoding": "[x64-rex32-common-store-constant-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte][constant]",
+					"Condition": "[ESP][constant_imm8][constant]",
 					"Encoding": "[x64-rex32-common-store-constant-esp+sbyte]"
 				},
 				{
@@ -2558,7 +2558,7 @@
 					"Encoding": "[x64-rex32-common-store-constant-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte][constant]",
+					"Condition": "[register][constant_imm8][constant]",
 					"Encoding": "[x64-rex32-common-store-constant-register+sbyte]"
 				},
 				{
@@ -2608,7 +2608,7 @@
 					"Encoding": "[x64-rex32-common-store-register-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte][register]",
+					"Condition": "[ESP][constant_imm8][register]",
 					"Encoding": "[x64-rex32-common-store-register-esp+sbyte]"
 				},
 				{
@@ -2624,7 +2624,7 @@
 					"Encoding": "[x64-rex32-common-store-register-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte][register]",
+					"Condition": "[register][constant_imm8][register]",
 					"Encoding": "[x64-rex32-common-store-register-register+sbyte]"
 				},
 				{
@@ -2649,7 +2649,7 @@
 					"Encoding": "[x64-rex32-common-store-constant-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte][constant]",
+					"Condition": "[ESP][constant_imm8][constant]",
 					"Encoding": "[x64-rex32-common-store-constant-esp+sbyte]"
 				},
 				{
@@ -2665,7 +2665,7 @@
 					"Encoding": "[x64-rex32-common-store-constant-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte][constant]",
+					"Condition": "[register][constant_imm8][constant]",
 					"Encoding": "[x64-rex32-common-store-constant-register+sbyte]"
 				},
 				{
@@ -2715,7 +2715,7 @@
 					"Encoding": "[x64-rex64-common-store-register-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte][register]",
+					"Condition": "[ESP][constant_imm8][register]",
 					"Encoding": "[x64-rex64-common-store-register-esp+sbyte]"
 				},
 				{
@@ -2731,7 +2731,7 @@
 					"Encoding": "[x64-rex64-common-store-register-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte][register]",
+					"Condition": "[register][constant_imm8][register]",
 					"Encoding": "[x64-rex64-common-store-register-register+sbyte]"
 				},
 				{
@@ -2756,7 +2756,7 @@
 					"Encoding": "[x64-rex64-common-store-constant-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte][constant]",
+					"Condition": "[ESP][constant_imm8][constant]",
 					"Encoding": "[x64-rex64-common-store-constant-esp+sbyte]"
 				},
 				{
@@ -2772,7 +2772,7 @@
 					"Encoding": "[x64-rex64-common-store-constant-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte][constant]",
+					"Condition": "[register][constant_imm8][constant]",
 					"Encoding": "[x64-rex64-common-store-constant-register+sbyte]"
 				},
 				{
@@ -2917,7 +2917,7 @@
 					"Encoding": "[x64-rex32-common-load-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte]",
+					"Condition": "[ESP][constant_imm8]",
 					"Encoding": "[x64-rex32-common-load-esp+sbyte]"
 				},
 				{
@@ -2933,7 +2933,7 @@
 					"Encoding": "[x64-rex32-common-load-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte]",
+					"Condition": "[register][constant_imm8]",
 					"Encoding": "[x64-rex32-common-load-register+sbyte]"
 				},
 				{
@@ -2979,7 +2979,7 @@
 					"Encoding": "[x64-rex32-common-load-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte]",
+					"Condition": "[ESP][constant_imm8]",
 					"Encoding": "[x64-rex32-common-load-esp+sbyte]"
 				},
 				{
@@ -2995,7 +2995,7 @@
 					"Encoding": "[x64-rex32-common-load-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte]",
+					"Condition": "[register][constant_imm8]",
 					"Encoding": "[x64-rex32-common-load-register+sbyte]"
 				},
 				{
@@ -3041,7 +3041,7 @@
 					"Encoding": "[x64-rex32-common-load-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte]",
+					"Condition": "[ESP][constant_imm8]",
 					"Encoding": "[x64--rex32common-load-esp+sbyte]"
 				},
 				{
@@ -3057,7 +3057,7 @@
 					"Encoding": "[x64-rex32-common-load-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte]",
+					"Condition": "[register][constant_imm8]",
 					"Encoding": "[x64-rex32-common-load-register+sbyte]"
 				},
 				{
@@ -3117,7 +3117,7 @@
 					"Encoding": "[x64-rex32-common-load-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte]",
+					"Condition": "[ESP][constant_imm8]",
 					"Encoding": "[x64-rex32-common-load-esp+sbyte]"
 				},
 				{
@@ -3133,7 +3133,7 @@
 					"Encoding": "[x64-rex32-common-load-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte]",
+					"Condition": "[register][constant_imm8]",
 					"Encoding": "[x64-rex32-common-load-register+sbyte]"
 				},
 				{
@@ -3179,7 +3179,7 @@
 					"Encoding": "[x64-rex32-common-store-register-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte][register]",
+					"Condition": "[ESP][constant_imm8][register]",
 					"Encoding": "[x64-rex32-common-store-register-esp+sbyte]"
 				},
 				{
@@ -3195,7 +3195,7 @@
 					"Encoding": "[x64-rex32-common-store-register-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte][register]",
+					"Condition": "[register][constant_imm8][register]",
 					"Encoding": "[x64-rex32-common-store-register-register+sbyte]"
 				},
 				{
@@ -3332,7 +3332,7 @@
 					"Encoding": "[x64-rex32-common-load-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte]",
+					"Condition": "[ESP][constant_imm8]",
 					"Encoding": "[x64-rex32-common-load-esp+sbyte]"
 				},
 				{
@@ -3348,7 +3348,7 @@
 					"Encoding": "[x64-rex32-common-load-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte]",
+					"Condition": "[register][constant_imm8]",
 					"Encoding": "[x64-rex32-common-load-register+sbyte]"
 				},
 				{
@@ -3394,7 +3394,7 @@
 					"Encoding": "[x64-rex32-common-load-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte]",
+					"Condition": "[ESP][constant_imm8]",
 					"Encoding": "[x64-rex32-common-load-esp+sbyte]"
 				},
 				{
@@ -3410,7 +3410,7 @@
 					"Encoding": "[x64-rex32-common-load-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte]",
+					"Condition": "[register][constant_imm8]",
 					"Encoding": "[x64-rex32-common-load-register+sbyte]"
 				},
 				{
@@ -3456,7 +3456,7 @@
 					"Encoding": "[x64-rex32-common-load-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte]",
+					"Condition": "[ESP][constant_imm8]",
 					"Encoding": "[x64-rex32-common-load-esp+sbyte]"
 				},
 				{
@@ -3472,7 +3472,7 @@
 					"Encoding": "[x64-rex32-common-load-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte]",
+					"Condition": "[register][constant_imm8]",
 					"Encoding": "[x64-rex32-common-load-register+sbyte]"
 				},
 				{
@@ -4614,7 +4614,7 @@
 					"Encoding": "[x64-rex32-common-load-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte][register]",
+					"Condition": "[ESP][constant_imm8][register]",
 					"Encoding": "[x64-rex32-common-load-esp+sbyte]"
 				},
 				{
@@ -4630,7 +4630,7 @@
 					"Encoding": "[x64-rex32-common-load-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte][register]",
+					"Condition": "[register][constant_imm8][register]",
 					"Encoding": "[x64-rex32-common-load-register+sbyte]"
 				},
 				{
@@ -4672,7 +4672,7 @@
 					"Encoding": "[x64-rex64-common-load-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte][register]",
+					"Condition": "[ESP][constant_imm8][register]",
 					"Encoding": "[x64-rex64-common-load-esp+sbyte]"
 				},
 				{
@@ -4688,7 +4688,7 @@
 					"Encoding": "[x64-rex64-common-load-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte][register]",
+					"Condition": "[register][constant_imm8][register]",
 					"Encoding": "[x64-rex64-common-load-register+sbyte]"
 				},
 				{
@@ -4770,7 +4770,7 @@
 					"Encoding": "[x64-rex32-common-load-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte][register]",
+					"Condition": "[ESP][constant_imm8][register]",
 					"Encoding": "[x64-rex32-common-load-esp+sbyte]"
 				},
 				{
@@ -4786,7 +4786,7 @@
 					"Encoding": "[x64-rex32-common-load-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte][register]",
+					"Condition": "[register][constant_imm8][register]",
 					"Encoding": "[x64-rex32-common-load-register+sbyte]"
 				},
 				{
@@ -4828,7 +4828,7 @@
 					"Encoding": "[x64-rex64-common-load-esp+zero]"
 				},
 				{
-					"Condition": "[ESP][sbyte][register]",
+					"Condition": "[ESP][constant_imm8][register]",
 					"Encoding": "[x64-rex64-common-load-esp+sbyte]"
 				},
 				{
@@ -4844,7 +4844,7 @@
 					"Encoding": "[x64-rex64-common-load-register+zero]"
 				},
 				{
-					"Condition": "[register][sbyte][register]",
+					"Condition": "[register][constant_imm8][register]",
 					"Encoding": "[x64-rex64-common-load-register+sbyte]"
 				},
 				{
