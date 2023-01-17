@@ -548,8 +548,8 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.tabControl.Appearance = System.Windows.Forms.TabAppearance.Buttons;
 			this.tabControl.Controls.Add(this.tabStages);
-			this.tabControl.Controls.Add(this.tabStageDebug);
 			this.tabControl.Controls.Add(this.tabTransforms);
+			this.tabControl.Controls.Add(this.tabStageDebug);
 			this.tabControl.Controls.Add(this.tabMethodCounters);
 			this.tabControl.Controls.Add(this.tabLogs);
 			this.tabControl.Controls.Add(this.tabCompilerCounters);
@@ -650,7 +650,7 @@
 			this.tabStageDebug.Name = "tabStageDebug";
 			this.tabStageDebug.Size = new System.Drawing.Size(683, 361);
 			this.tabStageDebug.TabIndex = 1;
-			this.tabStageDebug.Text = "Debug";
+			this.tabStageDebug.Text = "Debug Log";
 			// 
 			// cbDebugStages
 			// 
