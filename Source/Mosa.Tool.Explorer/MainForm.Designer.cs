@@ -105,7 +105,7 @@
 			this.tabLogs = new System.Windows.Forms.TabPage();
 			this.cbCompilerSections = new System.Windows.Forms.ComboBox();
 			this.label4 = new System.Windows.Forms.Label();
-			this.tbLogs = new System.Windows.Forms.RichTextBox();
+			this.tbCompilerLogs = new System.Windows.Forms.RichTextBox();
 			this.tabCompilerCounters = new System.Windows.Forms.TabPage();
 			this.tabControl2 = new System.Windows.Forms.TabControl();
 			this.tabPage4 = new System.Windows.Forms.TabPage();
@@ -599,7 +599,7 @@
 			this.cbInstructionLabels.Name = "cbInstructionLabels";
 			this.cbInstructionLabels.Size = new System.Drawing.Size(122, 21);
 			this.cbInstructionLabels.TabIndex = 40;
-			this.cbInstructionLabels.SelectedIndexChanged += new System.EventHandler(this.CbLabels_SelectedIndexChanged);
+			this.cbInstructionLabels.SelectedIndexChanged += new System.EventHandler(this.cbInstructionLabels_SelectedIndexChanged);
 			// 
 			// cbInstructionStages
 			// 
@@ -663,7 +663,7 @@
 			this.cbDebugStages.Name = "cbDebugStages";
 			this.cbDebugStages.Size = new System.Drawing.Size(451, 21);
 			this.cbDebugStages.TabIndex = 40;
-			this.cbDebugStages.SelectedIndexChanged += new System.EventHandler(this.CbDebugStages_SelectedIndexChanged);
+			this.cbDebugStages.SelectedIndexChanged += new System.EventHandler(this.cbDebugStages_SelectedIndexChanged);
 			// 
 			// label3
 			// 
@@ -730,6 +730,7 @@
 			this.cbTransformLabels.Name = "cbTransformLabels";
 			this.cbTransformLabels.Size = new System.Drawing.Size(122, 21);
 			this.cbTransformLabels.TabIndex = 44;
+			this.cbTransformLabels.SelectedIndexChanged += new System.EventHandler(this.cbTransformLabels_SelectedIndexChanged);
 			// 
 			// cbTransformStages
 			// 
@@ -743,6 +744,7 @@
 			this.cbTransformStages.Name = "cbTransformStages";
 			this.cbTransformStages.Size = new System.Drawing.Size(282, 21);
 			this.cbTransformStages.TabIndex = 42;
+			this.cbTransformStages.SelectedIndexChanged += new System.EventHandler(this.cbTransformStages_SelectedIndexChanged);
 			// 
 			// label8
 			// 
@@ -927,7 +929,7 @@
 			this.tabLogs.BackColor = System.Drawing.Color.Gainsboro;
 			this.tabLogs.Controls.Add(this.cbCompilerSections);
 			this.tabLogs.Controls.Add(this.label4);
-			this.tabLogs.Controls.Add(this.tbLogs);
+			this.tabLogs.Controls.Add(this.tbCompilerLogs);
 			this.tabLogs.Location = new System.Drawing.Point(4, 28);
 			this.tabLogs.Margin = new System.Windows.Forms.Padding(0);
 			this.tabLogs.Name = "tabLogs";
@@ -958,19 +960,19 @@
 			this.label4.TabIndex = 45;
 			this.label4.Text = "Section:";
 			// 
-			// tbLogs
+			// tbCompilerLogs
 			// 
-			this.tbLogs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.tbCompilerLogs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.tbLogs.Font = new System.Drawing.Font("Lucida Console", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.tbLogs.Location = new System.Drawing.Point(0, 37);
-			this.tbLogs.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-			this.tbLogs.Name = "tbLogs";
-			this.tbLogs.Size = new System.Drawing.Size(683, 324);
-			this.tbLogs.TabIndex = 3;
-			this.tbLogs.Text = "";
-			this.tbLogs.WordWrap = false;
+			this.tbCompilerLogs.Font = new System.Drawing.Font("Lucida Console", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.tbCompilerLogs.Location = new System.Drawing.Point(0, 37);
+			this.tbCompilerLogs.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+			this.tbCompilerLogs.Name = "tbCompilerLogs";
+			this.tbCompilerLogs.Size = new System.Drawing.Size(683, 324);
+			this.tbCompilerLogs.TabIndex = 3;
+			this.tbCompilerLogs.Text = "";
+			this.tbCompilerLogs.WordWrap = false;
 			// 
 			// tabCompilerCounters
 			// 
@@ -1296,5 +1298,6 @@
 		private System.Windows.Forms.ComboBox cbTransformLabels;
 		private System.Windows.Forms.ComboBox cbTransformStages;
 		private System.Windows.Forms.Label label8;
+		private System.Windows.Forms.RichTextBox tbCompilerLogs;
 	}
 }

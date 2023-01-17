@@ -61,6 +61,8 @@ namespace Mosa.Tool.Explorer
 
 		private int TransformStep = 0;
 
+		private readonly object _statusLock = new object();
+
 		public MainForm()
 		{
 			InitializeComponent();
@@ -105,11 +107,11 @@ namespace Mosa.Tool.Explorer
 			CompilerData.DirtyLogSections = true;
 			CompilerData.DirtyLog = true;
 
-			RefreshLogDropDown();
-			RefreshLogViews();
+			RefreshCompilerSelectionDropDown();
+			RefreshCompilerLog();
 		}
 
-		private void RefreshLogDropDown()
+		private void RefreshCompilerSelectionDropDown()
 		{
 			if (!CompilerData.DirtyLogSections)
 				return;
@@ -127,7 +129,7 @@ namespace Mosa.Tool.Explorer
 			}
 		}
 
-		private void RefreshLogViews()
+		private void RefreshCompilerLog()
 		{
 			if (!CompilerData.DirtyLog)
 				return;
@@ -391,6 +393,11 @@ namespace Mosa.Tool.Explorer
 			return cbInstructionStages.SelectedItem.ToString();
 		}
 
+		private string GetCurrentInstructionLabel()
+		{
+			return cbInstructionLabels.SelectedItem as string;
+		}
+
 		private string GetCurrentDebugStage()
 		{
 			return cbDebugStages.SelectedItem.ToString();
@@ -401,9 +408,9 @@ namespace Mosa.Tool.Explorer
 			return cbTransformStages.SelectedItem.ToString();
 		}
 
-		private string GetCurrentInstructionLabel()
+		private string GetCurrentTransformLabel()
 		{
-			return cbInstructionLabels.SelectedItem as string;
+			return cbTransformLabels.SelectedItem as string;
 		}
 
 		private MethodData GetCurrentMethodData()
@@ -504,7 +511,7 @@ namespace Mosa.Tool.Explorer
 			if (methodData == null)
 				return;
 
-			foreach (string stage in methodData.OrderedTransformStageNames)
+			foreach (var stage in methodData.OrderedTransformStageNames)
 			{
 				cbTransformStages.Items.Add(stage);
 			}
@@ -543,9 +550,6 @@ namespace Mosa.Tool.Explorer
 
 		private void UpdateCompilerCounters()
 		{
-			//if (tabControl.SelectedTab != tabCompilerCounters)
-			//	return;
-
 			CompilerCounters.Clear();
 
 			var lines = CompilerData.GetLog("Counters");
@@ -625,26 +629,45 @@ namespace Mosa.Tool.Explorer
 			}
 		}
 
-		private void UpdateResults()
+		private void UpdateInstructions()
 		{
 			tbInstructions.Text = string.Empty;
 
-			var method = CurrentMethodSelected;
+			if (CurrentMethodSelected == null)
+				return;
+
 			var lines = GetCurrentInstructionLines();
 			var label = GetCurrentInstructionLabel();
 
-			if (method == null)
-				return;
-
-			SetStatus(method.FullName);
+			SetStatus(CurrentMethodSelected.FullName);
 
 			if (lines == null)
 				return;
 
 			if (string.IsNullOrWhiteSpace(label) || label == "All")
-				tbInstructions.Text = MethodStore.GetStageInstructions(lines, string.Empty, !showOperandTypes.Checked, padInstructions.Checked);
-			else
-				tbInstructions.Text = MethodStore.GetStageInstructions(lines, label, !showOperandTypes.Checked, padInstructions.Checked);
+				label = string.Empty;
+
+			tbInstructions.Text = MethodStore.GetStageInstructions(lines, label, !showOperandTypes.Checked, padInstructions.Checked);
+		}
+
+		private void UpdateTransforms()
+		{
+			tbTransforms.Text = string.Empty;
+
+			if (CurrentMethodSelected == null)
+				return;
+
+			var lines = GetCurrentTransformLines();
+			var stage = GetCurrentTransformStage();
+			var label = GetCurrentTransformLabel();
+
+			if (lines == null)
+				return;
+
+			if (string.IsNullOrWhiteSpace(label) || label == "All")
+				label = string.Empty;
+
+			tbTransforms.Text = MethodStore.GetStageInstructions(lines, label, !showOperandTypes.Checked, padInstructions.Checked);
 		}
 
 		private void UpdateDebugResults()
@@ -693,12 +716,36 @@ namespace Mosa.Tool.Explorer
 			else
 				cbInstructionLabels.SelectedIndex = 0;
 
-			CbLabels_SelectedIndexChanged(null, null);
+			cbInstructionLabels_SelectedIndexChanged(null, null);
 		}
 
-		private void CbDebugStages_SelectedIndexChanged(object sender, EventArgs e)
+		private void cbTransformStages_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			var previousItemLabel = cbTransformLabels.SelectedItem;
+
+			UpdateTransformLabels();
+
+			if (previousItemLabel != null && cbTransformLabels.Items.Contains(previousItemLabel))
+				cbTransformLabels.SelectedItem = previousItemLabel;
+			else
+				cbTransformLabels.SelectedIndex = 0;
+
+			cbTransformLabels_SelectedIndexChanged(null, null);
+		}
+
+		private void cbDebugStages_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			UpdateDebugResults();
+		}
+
+		private void cbInstructionLabels_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			UpdateInstructions();
+		}
+
+		private void cbTransformLabels_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			UpdateTransforms();
 		}
 
 		private void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> pipeline)
@@ -795,11 +842,6 @@ namespace Mosa.Tool.Explorer
 			CreateTree();
 
 			SetStatus("Assemblies Loaded!");
-		}
-
-		private void CbLabels_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			UpdateResults();
 		}
 
 		private static string CreateText(List<string> list)
@@ -917,7 +959,7 @@ namespace Mosa.Tool.Explorer
 
 				while (true)
 				{
-					CbDebugStages_SelectedIndexChanged(null, null);
+					cbDebugStages_SelectedIndexChanged(null, null);
 
 					var stage = GetCurrentDebugStage().Replace("\\", " - ").Replace("/", " - ");
 					var result = tbDebugResult.Text.Replace("\n", "\r\n");
@@ -954,12 +996,14 @@ namespace Mosa.Tool.Explorer
 
 		private void padInstructions_CheckStateChanged(object sender, EventArgs e)
 		{
-			UpdateResults();
+			UpdateInstructions();
+			UpdateTransforms();
 		}
 
 		private void showOperandTypes_CheckStateChanged(object sender, EventArgs e)
 		{
-			UpdateResults();
+			UpdateInstructions();
+			UpdateTransforms();
 		}
 
 		private void tbFilter_TextChanged(object sender, EventArgs e)
@@ -980,10 +1024,8 @@ namespace Mosa.Tool.Explorer
 
 			CompilerData.DirtyLog = true;
 
-			RefreshLogViews();
+			RefreshCompilerLog();
 		}
-
-		private readonly object _statusLock = new object();
 
 		private void RefreshStatus()
 		{
@@ -1000,8 +1042,8 @@ namespace Mosa.Tool.Explorer
 		private void timer1_Tick(object sender, EventArgs e)
 		{
 			UpdateProgressBar();
-			RefreshLogDropDown();
-			RefreshLogViews();
+			RefreshCompilerSelectionDropDown();
+			RefreshCompilerLog();
 			RefreshStatus();
 		}
 
@@ -1009,7 +1051,7 @@ namespace Mosa.Tool.Explorer
 		{
 			CompilerData.DirtyLog = true;
 
-			RefreshLogViews();
+			RefreshCompilerLog();
 		}
 
 		private void treeView_BeforeSelect(object sender, TreeViewCancelEventArgs e)
