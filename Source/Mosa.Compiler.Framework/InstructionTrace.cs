@@ -3,7 +3,6 @@
 using System.Collections.Generic;
 using System.Text;
 using Mosa.Compiler.MosaTypeSystem;
-using static Mosa.Compiler.Framework.CompilerHooks;
 
 namespace Mosa.Compiler.Framework.Trace
 {
@@ -12,25 +11,11 @@ namespace Mosa.Compiler.Framework.Trace
 	/// </summary>
 	public static class InstructionTrace
 	{
-		public static void Run(MethodCompiler methodCompiler, BaseMethodCompilerStage stage, NotifyTraceLogHandler handler, string section = null, int step = 0)
-		{
-			var trace = Run(
-				stage.FormattedStageName,
-				methodCompiler.Method,
-				methodCompiler.BasicBlocks,
-				methodCompiler.MethodData.Version,
-				section,
-				step
-			);
-
-			handler.Invoke(trace);
-		}
-
 		public static TraceLog Run(string stage, MosaMethod method, BasicBlocks basicBlocks, int version, string section, int step)
 		{
 			var traceLog = new TraceLog(TraceType.MethodInstructions, method, stage, section, version, step);
 
-			traceLog?.Log($"{method.FullName} [v{version}] after stage {stage}:");
+			traceLog?.Log($"{method.FullName} [v{version}] @ {step} after stage {stage}:");
 			traceLog?.Log();
 
 			if (basicBlocks.Count > 0)

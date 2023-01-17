@@ -18,6 +18,7 @@ namespace Mosa.Platform.x86
 			X86.Addsd,
 			X86.Addss,
 			X86.And32,
+			X86.AndN32,
 			X86.Break,
 			X86.Btr32,
 			X86.Bt32,

@@ -37,6 +37,7 @@ namespace Mosa.Compiler.Framework.Stages
 		protected bool AreCPURegistersAllocated;
 
 		protected int MaxPasses;
+		protected int Steps;
 
 		protected BitArray EmptyBlocks;
 
@@ -104,6 +105,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 			IsInSSAForm = MethodCompiler.IsInSSAForm;
 			AreCPURegistersAllocated = MethodCompiler.AreCPURegistersAllocated;
+
+			Steps = 0;
+			MethodCompiler.CreateTranformInstructionTrace(this, Steps++);
 
 			ExecutePasses();
 
@@ -236,6 +240,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 					if (MethodCompiler.Statistics)
 						UpdateCounter(transform.Name, 1);
+
+					MethodCompiler.CreateTranformInstructionTrace(this, Steps++);
 
 					if (CompilerSettings.FullCheckMode)
 						CheckAllPhiInstructions();

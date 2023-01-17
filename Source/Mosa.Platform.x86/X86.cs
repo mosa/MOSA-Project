@@ -16,6 +16,7 @@ namespace Mosa.Platform.x86
 		public static readonly Addsd Addsd = new Addsd();
 		public static readonly Addss Addss = new Addss();
 		public static readonly And32 And32 = new And32();
+		public static readonly AndN32 AndN32 = new AndN32();
 		public static readonly Break Break = new Break();
 		public static readonly Btr32 Btr32 = new Btr32();
 		public static readonly Bt32 Bt32 = new Bt32();
