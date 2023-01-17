@@ -1,11 +1,14 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections.Generic;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Tool.Explorer
 {
 	public class MethodData
 	{
+		//public MosaMethod Method;
+
 		public int Version;
 
 		public List<string> OrderedStageNames = new List<string>();

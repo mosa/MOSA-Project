@@ -50,7 +50,10 @@ namespace Mosa.Tool.Explorer
 		private MosaCompiler Compiler = null;
 		private int CompletedMethods = 0;
 		private string CurrentLogSection = string.Empty;
-		private MosaMethod CurrentMethodSelected = null;
+
+		private MosaMethod CurrentMethod = null;
+		private MethodData CurrentMethodData = null;
+
 		private string Status = null;
 		private int TotalMethods = 0;
 		private int TransformStep = 0;
@@ -88,7 +91,7 @@ namespace Mosa.Tool.Explorer
 
 		public int? GetMethodTraceLevel(MosaMethod method)
 		{
-			return method == CurrentMethodSelected ? 10 : -1;
+			return method == CurrentMethod ? 10 : -1;
 		}
 
 		public void LoadArguments(string[] args)
@@ -121,7 +124,7 @@ namespace Mosa.Tool.Explorer
 
 		public NotifyTraceLogHandler NotifyMethodInstructionTrace(MosaMethod method)
 		{
-			if (method != CurrentMethodSelected)
+			if (method != CurrentMethod)
 				return null;
 
 			return NotifyMethodInstructionTraceResponse;
@@ -308,6 +311,22 @@ namespace Mosa.Tool.Explorer
 
 		private void btnFirst_Click(object sender, EventArgs e)
 		{
+			SetTranformationStep(0);
+		}
+
+		private void btnLast_Click(object sender, EventArgs e)
+		{
+			SetTranformationStep(int.MaxValue);
+		}
+
+		private void btnNext_Click(object sender, EventArgs e)
+		{
+			SetTranformationStep(TransformStep + 1);
+		}
+
+		private void btnPrevious_Click(object sender, EventArgs e)
+		{
+			SetTranformationStep(TransformStep - 1);
 		}
 
 		private void cbCompilerSections_SelectedIndexChanged(object sender, EventArgs e)
@@ -375,6 +394,8 @@ namespace Mosa.Tool.Explorer
 				cbTransformLabels.SelectedItem = previousItemLabel;
 			else
 				cbTransformLabels.SelectedIndex = 0;
+
+			SetTranformationStep(0);
 
 			cbTransformLabels_SelectedIndexChanged(null, null);
 		}
@@ -461,7 +482,7 @@ namespace Mosa.Tool.Explorer
 
 		private void DumpAllMethodStagesToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			var method = CurrentMethodSelected;
+			var method = CurrentMethod;
 
 			if (method == null)
 				return;
@@ -529,14 +550,12 @@ namespace Mosa.Tool.Explorer
 
 		private List<string> GetCurrentDebugLines()
 		{
-			var methodData = GetCurrentMethodData();
-
-			if (methodData == null)
+			if (CurrentMethodData == null)
 				return null;
 
 			string stage = GetCurrentDebugStage();
 
-			return methodData.DebugLogs[stage];
+			return CurrentMethodData.DebugLogs[stage];
 		}
 
 		private string GetCurrentDebugStage()
@@ -551,14 +570,12 @@ namespace Mosa.Tool.Explorer
 
 		private List<string> GetCurrentInstructionLines()
 		{
-			var methodData = GetCurrentMethodData();
-
-			if (methodData == null)
+			if (CurrentMethodData == null)
 				return null;
 
 			var stage = GetCurrentInstructionStage();
 
-			return methodData.InstructionLogs[stage];
+			return CurrentMethodData.InstructionLogs[stage];
 		}
 
 		private string GetCurrentInstructionStage()
@@ -575,7 +592,7 @@ namespace Mosa.Tool.Explorer
 
 		private MethodData GetCurrentMethodData()
 		{
-			var method = CurrentMethodSelected;
+			var method = CurrentMethod;
 
 			if (method == null)
 				return null;
@@ -592,18 +609,28 @@ namespace Mosa.Tool.Explorer
 
 		private List<string> GetCurrentTransformLines()
 		{
-			var methodData = GetCurrentMethodData();
-
-			if (methodData == null)
+			if (CurrentMethodData == null)
 				return null;
 
 			var stage = GetCurrentTransformStage();
 
-			var logs = methodData.TransformLogs[stage];
+			var logs = CurrentMethodData.TransformLogs[stage];
 
-			var log = logs[TransformStep];
+			logs.TryGetValue(TransformStep, out var log);
 
 			return log;
+		}
+
+		private int GetTransformMaxSteps()
+		{
+			if (CurrentMethodData == null)
+				return 0;
+
+			var stage = GetCurrentTransformStage();
+
+			var logs = CurrentMethodData.TransformLogs[stage];
+
+			return logs.Count;
 		}
 
 		private string GetCurrentTransformStage()
@@ -638,7 +665,7 @@ namespace Mosa.Tool.Explorer
 
 			tbInstructions.Text = string.Empty;
 
-			var method = CurrentMethodSelected;
+			var method = CurrentMethod;
 
 			if (method == null)
 				return;
@@ -661,11 +688,14 @@ namespace Mosa.Tool.Explorer
 			}
 
 			SubmitTraceEvent(compilerEvent, message, threadID);
+
+			if (CurrentMethodData == null)
+				CurrentMethodData = GetCurrentMethodData();
 		}
 
 		private void NotifyMethodCompiled(MosaMethod method)
 		{
-			if (method == CurrentMethodSelected)
+			if (method == CurrentMethod)
 			{
 				Invoke((MethodInvoker)(() => UpdateMethodInformation(method)));
 			}
@@ -678,7 +708,7 @@ namespace Mosa.Tool.Explorer
 
 		private NotifyTraceLogHandler NotifyMethodTranformTrace(MosaMethod method)
 		{
-			if (method != CurrentMethodSelected)
+			if (method != CurrentMethod)
 				return null;
 
 			return NotifyMethodTransformTraceResponse;
@@ -863,6 +893,23 @@ namespace Mosa.Tool.Explorer
 			toolStripStatusLabel.Text = status;
 		}
 
+		private void SetTranformationStep(int step)
+		{
+			if (step <= 0)
+				step = 0;
+
+			int max = GetTransformMaxSteps();
+
+			if (step > max - 1)
+				step = max - 1;
+
+			TransformStep = step;
+
+			lbSteps.Text = $"{TransformStep} / {max - 1}";
+
+			UpdateTransforms();
+		}
+
 		private void showOperandTypes_CheckStateChanged(object sender, EventArgs e)
 		{
 			UpdateInstructions();
@@ -943,13 +990,15 @@ namespace Mosa.Tool.Explorer
 
 		private void TreeView_AfterSelect(object sender, TreeViewEventArgs e)
 		{
-			CurrentMethodSelected = GetCurrentMethod();
+			CurrentMethod = GetCurrentMethod();
+			CurrentMethodData = GetCurrentMethodData();
 			NodeSelected();
 		}
 
 		private void treeView_BeforeSelect(object sender, TreeViewCancelEventArgs e)
 		{
-			CurrentMethodSelected = GetCurrentMethod();
+			CurrentMethod = GetCurrentMethod();
+			CurrentMethodData = GetCurrentMethodData();
 		}
 
 		private void treeView_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
@@ -997,12 +1046,10 @@ namespace Mosa.Tool.Explorer
 		{
 			cbDebugStages.Items.Clear();
 
-			var methodData = GetCurrentMethodData();
-
-			if (methodData == null)
+			if (CurrentMethodData == null)
 				return;
 
-			foreach (string stage in methodData.OrderedDebugStageNames)
+			foreach (string stage in CurrentMethodData.OrderedDebugStageNames)
 			{
 				cbDebugStages.Items.Add(stage);
 			}
@@ -1064,13 +1111,13 @@ namespace Mosa.Tool.Explorer
 		{
 			tbInstructions.Text = string.Empty;
 
-			if (CurrentMethodSelected == null)
+			if (CurrentMethod == null)
 				return;
 
 			var lines = GetCurrentInstructionLines();
 			var label = GetCurrentInstructionLabel();
 
-			SetStatus(CurrentMethodSelected.FullName);
+			SetStatus(CurrentMethod.FullName);
 
 			if (lines == null)
 				return;
@@ -1085,12 +1132,10 @@ namespace Mosa.Tool.Explorer
 		{
 			cbInstructionStages.Items.Clear();
 
-			var methodData = GetCurrentMethodData();
-
-			if (methodData == null)
+			if (CurrentMethodData == null)
 				return;
 
-			foreach (var stage in methodData.OrderedStageNames)
+			foreach (var stage in CurrentMethodData.OrderedStageNames)
 			{
 				cbInstructionStages.Items.Add(stage);
 			}
@@ -1102,18 +1147,16 @@ namespace Mosa.Tool.Explorer
 		{
 			tbMethodCounters.Text = string.Empty;
 
-			var methodData = GetCurrentMethodData();
-
-			if (methodData == null)
+			if (CurrentMethodData == null)
 				return;
 
-			tbMethodCounters.Text = CreateText(methodData.MethodCounters);
+			tbMethodCounters.Text = CreateText(CurrentMethodData.MethodCounters);
 
 			MethodCounters.Clear();
 
 			var filter = tbCounterFilter.Text;
 
-			foreach (var line in methodData.MethodCounters)
+			foreach (var line in CurrentMethodData.MethodCounters)
 			{
 				if (!line.Contains(filter))
 					continue;
@@ -1184,11 +1227,6 @@ namespace Mosa.Tool.Explorer
 			Settings.AddPropertyListValue("SearchPaths", Path.GetDirectoryName(filename));
 		}
 
-		private void UpdateTransform()
-		{
-			//lbSteps.Text = $"{TransformStep} / {TransformTotalSteps}";
-		}
-
 		private void UpdateTransformLabels()
 		{
 			var lines = GetCurrentTransformLines();
@@ -1208,11 +1246,10 @@ namespace Mosa.Tool.Explorer
 		{
 			tbTransforms.Text = string.Empty;
 
-			if (CurrentMethodSelected == null)
+			if (CurrentMethod == null)
 				return;
 
 			var lines = GetCurrentTransformLines();
-			var stage = GetCurrentTransformStage();
 			var label = GetCurrentTransformLabel();
 
 			if (lines == null)
@@ -1228,12 +1265,10 @@ namespace Mosa.Tool.Explorer
 		{
 			cbTransformStages.Items.Clear();
 
-			var methodData = GetCurrentMethodData();
-
-			if (methodData == null)
+			if (CurrentMethodData == null)
 				return;
 
-			foreach (var stage in methodData.OrderedTransformStageNames)
+			foreach (var stage in CurrentMethodData.OrderedTransformStageNames)
 			{
 				cbTransformStages.Items.Add(stage);
 			}

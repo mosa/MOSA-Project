@@ -773,6 +773,7 @@
 			this.btnLast.TabIndex = 36;
 			this.btnLast.Text = "Last";
 			this.btnLast.UseVisualStyleBackColor = true;
+			this.btnLast.Click += new System.EventHandler(this.btnLast_Click);
 			// 
 			// btnNext
 			// 
@@ -782,6 +783,7 @@
 			this.btnNext.TabIndex = 35;
 			this.btnNext.Text = "Next";
 			this.btnNext.UseVisualStyleBackColor = true;
+			this.btnNext.Click += new System.EventHandler(this.btnNext_Click);
 			// 
 			// btnPrevious
 			// 
@@ -791,6 +793,7 @@
 			this.btnPrevious.TabIndex = 34;
 			this.btnPrevious.Text = "Previous";
 			this.btnPrevious.UseVisualStyleBackColor = true;
+			this.btnPrevious.Click += new System.EventHandler(this.btnPrevious_Click);
 			// 
 			// btnFirst
 			// 
