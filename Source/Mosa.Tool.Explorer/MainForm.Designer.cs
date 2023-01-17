@@ -613,7 +613,7 @@
 			this.cbInstructionStages.Name = "cbInstructionStages";
 			this.cbInstructionStages.Size = new System.Drawing.Size(282, 21);
 			this.cbInstructionStages.TabIndex = 38;
-			this.cbInstructionStages.SelectedIndexChanged += new System.EventHandler(this.CbInstructionStages_SelectedIndexChanged);
+			this.cbInstructionStages.SelectedIndexChanged += new System.EventHandler(this.cbInstructionStages_SelectedIndexChanged);
 			// 
 			// stageLabel
 			// 
