@@ -202,7 +202,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 					}
 					parameters.Add(indexParam);
 				}
-				method.Signature = new MosaMethodSignature(arrayType.ElementType.ToManagedPointer(), parameters);
+				method.Signature = new MosaMethodSignature(arrayType.ElementType?.ToManagedPointer(), parameters);
 			}
 			type.Methods.Add(methodAdrOf);
 
@@ -255,7 +255,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 		public static uint? GetPrimitiveSize(this MosaType type, uint nativeSize)
 		{
 			if (type.IsEnum)
-				return type.GetEnumUnderlyingType().GetPrimitiveSize(nativeSize);
+				return type.GetEnumUnderlyingType()?.GetPrimitiveSize(nativeSize);
 
 			if (type.IsPointer || type.IsN)
 				return nativeSize;
@@ -271,7 +271,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				return null;
 		}
 
-		public static MosaType GetEnumUnderlyingType(this MosaType type)
+		public static MosaType? GetEnumUnderlyingType(this MosaType type)
 		{
 			if (!type.IsEnum)
 				return type;
@@ -285,12 +285,14 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return null;
 		}
 
-		public static MosaType RemoveModifiers(this MosaType type)
+		public static MosaType? RemoveModifiers(this MosaType type)
 		{
-			while (type.Modifier != null)
-				type = type.ElementType;
+			MosaType? newType = null;
 
-			return type;
+			while (type.Modifier != null)
+				newType = type.ElementType;
+
+			return newType;
 		}
 	}
 }

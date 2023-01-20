@@ -20,7 +20,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public uint? Offset { get; private set; }
 
-		public byte[] Data { get; private set; }
+		public byte[]? Data { get; private set; }
 
 		public bool HasOpenGenericParams { get; private set; }
 
@@ -40,9 +40,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public class Mutator : MosaUnit.MutatorBase
 		{
-			private readonly MosaField? field;
+			private readonly MosaField field;
 
-			internal Mutator(MosaField? field)
+			internal Mutator(MosaField field)
 				: base(field)
 			{
 				this.field = field;
@@ -68,7 +68,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			public override void Dispose()
 			{
-				if (field?.FieldType != null)
+				if (field.FieldType != null)
 				{
 					field.FullName = string.Concat(field.DeclaringType?.FullName, "::", field.Name, " ", field.FieldType.FullName);
 					field.ShortName = string.Concat(field.Name, " : ", field.FieldType.ShortName);

@@ -1,7 +1,9 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
 using Mosa.Compiler.Common.Exceptions;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Mosa.Compiler.MosaTypeSystem
 {
@@ -10,16 +12,27 @@ namespace Mosa.Compiler.MosaTypeSystem
 	/// </summary>
 	public class TypeSystem
 	{
-		public BuiltInTypes BuiltIn { get; private set; }
+		[NotNull]
+		public BuiltInTypes? BuiltIn { get; private set; }
 
 		private MosaModule? corLib;
 
+		[NotNull]
 		public MosaModule? CorLib
 		{
-			get => corLib;
+			get
+			{
+				if (corLib == null)
+					throw new AssemblyLoadException();
+
+				return corLib;
+			}
 			set
 			{
 				corLib = value;
+				if (corLib == null)
+					throw new AssemblyLoadException();
+
 				BuiltIn = new BuiltInTypes(TypeResolver, corLib);
 			}
 		}
@@ -30,7 +43,11 @@ namespace Mosa.Compiler.MosaTypeSystem
 			{
 				foreach (var module in Modules)
 				{
-					foreach (var type in module?.Types.Values)
+					var types = module?.Types.Values;
+					if (types == null)
+						throw new InvalidOperationException("Types list is null!");
+
+					foreach (var type in types)
 					{
 						yield return type;
 					}
@@ -38,15 +55,18 @@ namespace Mosa.Compiler.MosaTypeSystem
 			}
 		}
 
-		public IList<MosaModule?> Modules { get; }
+		public IList<MosaModule> Modules { get; }
 
-		public MosaModule LinkerModule { get; private set; }
+		[NotNull]
+		public MosaModule? LinkerModule { get; private set; }
 
-		public MosaType DefaultLinkerType { get; private set; }
+		[NotNull]
+		public MosaType? DefaultLinkerType { get; private set; }
 
-		public MosaMethod EntryPoint { get; internal set; }
+		public MosaMethod? EntryPoint { get; internal set; }
 
-		public ITypeSystemController Controller { get; private set; }
+		[NotNull]
+		public ITypeSystemController? Controller { get; private set; }
 
 		public ITypeResolver TypeResolver { get; }
 
@@ -56,7 +76,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 		{
 			this.metadata = metadata;
 			TypeResolver = typeResolver;
-			Modules = new List<MosaModule?>();
+			Modules = new List<MosaModule>();
 		}
 
 		public static TypeSystem Load(IMetadata metadata, ITypeResolver typeResolver)
@@ -107,7 +127,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return string.IsNullOrEmpty(fullName) ? null : TypeResolver.GetTypeByName(Modules, fullName);
 		}
 
-		public MosaType? GetTypeByName(MosaModule? module, string fullName)
+		public MosaType? GetTypeByName(MosaModule module, string fullName)
 		{
 			return string.IsNullOrEmpty(fullName) ? null : TypeResolver.GetTypeByName(module, fullName);
 		}
@@ -128,14 +148,14 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return metadata.LookupUserString(module, token);
 		}
 
-		public MosaMethod CreateLinkerMethod(string methodName, MosaType returnType, bool hasThis = false, IList<MosaParameter?>? parameters = null)
+		public MosaMethod CreateLinkerMethod(string methodName, MosaType returnType, bool hasThis = false, IList<MosaParameter>? parameters = null)
 		{
 			return CreateLinkerMethod(DefaultLinkerType, methodName, returnType, hasThis, parameters);
 		}
 
-		public MosaMethod CreateLinkerMethod(MosaType type, string methodName, MosaType returnType, bool hasThis = false, IList<MosaParameter?>? parameters = null)
+		public MosaMethod CreateLinkerMethod(MosaType type, string methodName, MosaType returnType, bool hasThis = false, IList<MosaParameter>? parameters = null)
 		{
-			parameters ??= new List<MosaParameter?>();
+			parameters ??= new List<MosaParameter>();
 
 			var result = Controller.CreateMethod();
 

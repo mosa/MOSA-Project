@@ -8,7 +8,7 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 {
 	public class ClrMetadataCache
 	{
-		public Dictionary<string, MosaModule?> Modules { get; }
+		public Dictionary<string, MosaModule> Modules { get; }
 
 		private readonly Dictionary<ScopedToken, MosaType> typeLookup = new();
 		private readonly Dictionary<ScopedToken, MosaMethod> methodLookup = new();
@@ -21,17 +21,17 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 
 		public ClrMetadataCache()
 		{
-			Modules = new Dictionary<string, MosaModule?>();
+			Modules = new Dictionary<string, MosaModule>();
 		}
 
-		public void AddModule(MosaModule? module)
+		public void AddModule(MosaModule module)
 		{
-			Modules.Add(module?.Name, module);
+			Modules.Add(module.Name, module);
 
 			//var desc = module.GetUnderlyingObject<UnitDesc<ModuleDef, object>>();
 		}
 
-		public MosaModule? GetModuleByName(string name)
+		public MosaModule GetModuleByName(string name)
 		{
 			if (Modules.TryGetValue(name, out var result))
 				return result;
@@ -39,9 +39,13 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 			throw new CompilerException();
 		}
 
-		public void AddType(MosaType? type)
+		public void AddType(MosaType type)
 		{
-			typeLookup.Add(type.GetUnderlyingObject<UnitDesc<TypeDef, TypeSig>>().Token, type);
+			var unitDesc = type.GetUnderlyingObject<UnitDesc<TypeDef, TypeSig>>();
+			if (unitDesc == null)
+				throw new InvalidOperationException("Underlying object (unit description) of type is null!");
+
+			typeLookup.Add(unitDesc.Token, type);
 		}
 
 		public MosaType GetTypeByToken(ScopedToken token)
@@ -49,9 +53,13 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 			return typeLookup[token];
 		}
 
-		public void AddMethod(MosaMethod? method)
+		public void AddMethod(MosaMethod method)
 		{
-			methodLookup.Add(method.GetUnderlyingObject<UnitDesc<MethodDef, MethodSig>>().Token, method);
+			var unitDesc = method.GetUnderlyingObject<UnitDesc<MethodDef, MethodSig>>();
+			if (unitDesc == null)
+				throw new InvalidOperationException("Underlying object (unit description) of method is null!");
+
+			methodLookup.Add(unitDesc.Token, method);
 		}
 
 		public MosaMethod GetMethodByToken(ScopedToken token)
@@ -59,9 +67,13 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 			return methodLookup[token];
 		}
 
-		public void AddField(MosaField? field)
+		public void AddField(MosaField field)
 		{
-			fieldLookup.Add(field.GetUnderlyingObject<UnitDesc<FieldDef, FieldSig>>().Token, field);
+			var unitDesc = field.GetUnderlyingObject<UnitDesc<FieldDef, FieldSig>>();
+			if (unitDesc == null)
+				throw new InvalidOperationException("Underlying object (unit description) of field is null!");
+
+			fieldLookup.Add(unitDesc.Token, field);
 		}
 
 		public MosaField GetFieldByToken(ScopedToken token)
@@ -69,9 +81,13 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 			return fieldLookup[token];
 		}
 
-		public void AddProperty(MosaProperty? property)
+		public void AddProperty(MosaProperty property)
 		{
-			propertyLookup.Add(property.GetUnderlyingObject<UnitDesc<PropertyDef, PropertySig>>().Token, property);
+			var unitDesc = property.GetUnderlyingObject<UnitDesc<PropertyDef, PropertySig>>();
+			if (unitDesc == null)
+				throw new InvalidOperationException("Underlying object (unit description) of property is null!");
+
+			propertyLookup.Add(unitDesc.Token, property);
 		}
 
 		public MosaProperty GetPropertyByToken(ScopedToken token)

@@ -25,7 +25,7 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Utils
 		/// Pushes the type generic arguments into resolver stack.
 		/// </summary>
 		/// <param name="genericArgs">The generic arguments.</param>
-		public void PushTypeGenericArguments(IList<TypeSig?> genericArgs)
+		public void PushTypeGenericArguments(IList<TypeSig> genericArgs)
 		{
 			genericArguments?.PushTypeArgs(genericArgs);
 		}
@@ -34,7 +34,7 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Utils
 		/// Pushes the method generic arguments into resolver stack.
 		/// </summary>
 		/// <param name="genericArgs">The generic arguments.</param>
-		public void PushMethodGenericArguments(IList<TypeSig?> genericArgs)
+		public void PushMethodGenericArguments(IList<TypeSig> genericArgs)
 		{
 			genericArguments?.PushMethodArgs(genericArgs);
 		}
@@ -60,7 +60,7 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Utils
 		/// </summary>
 		/// <param name="typeSig">The type signature.</param>
 		/// <returns>Resolved type signature.</returns>
-		public TypeSig? Resolve(TypeSig? typeSig)
+		public TypeSig Resolve(TypeSig typeSig)
 		{
 			return ResolveGenericArgs(typeSig);
 		}
@@ -75,7 +75,7 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Utils
 			return ResolveGenericArgs(methodSig);
 		}
 
-		private bool ReplaceGenericArg(ref TypeSig? typeSig)
+		private bool ReplaceGenericArg(ref TypeSig typeSig)
 		{
 			if (genericArguments == null)
 				return false;
@@ -120,10 +120,10 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Utils
 			return sig;
 		}
 
-		private TypeSig? ResolveGenericArgs(TypeSig? typeSig)
+		private TypeSig ResolveGenericArgs(TypeSig typeSig)
 		{
 			if (!recursionCounter.Increment())
-				return null;
+				throw new InvalidOperationException("Could not increment recursion counter!");
 
 			if (ReplaceGenericArg(ref typeSig))
 			{
@@ -132,23 +132,23 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Utils
 			}
 
 			TypeSig? result;
-			switch (typeSig?.ElementType)
+			switch (typeSig.ElementType)
 			{
 				case ElementType.Ptr: result = new PtrSig(ResolveGenericArgs(typeSig.Next)); break;
 				case ElementType.ByRef: result = new ByRefSig(ResolveGenericArgs(typeSig.Next)); break;
-				case ElementType.Var: result = new GenericVar((typeSig as GenericVar).Number); break;
-				case ElementType.ValueArray: result = new ValueArraySig(ResolveGenericArgs(typeSig.Next), (typeSig as ValueArraySig).Size); break;
+				case ElementType.Var: result = new GenericVar(((GenericVar)typeSig).Number); break;
+				case ElementType.ValueArray: result = new ValueArraySig(ResolveGenericArgs(typeSig.Next), ((ValueArraySig)typeSig).Size); break;
 				case ElementType.SZArray: result = new SZArraySig(ResolveGenericArgs(typeSig.Next)); break;
-				case ElementType.MVar: result = new GenericMVar((typeSig as GenericMVar).Number); break;
-				case ElementType.CModReqd: result = new CModReqdSig((typeSig as ModifierSig).Modifier, ResolveGenericArgs(typeSig.Next)); break;
-				case ElementType.CModOpt: result = new CModOptSig((typeSig as ModifierSig).Modifier, ResolveGenericArgs(typeSig.Next)); break;
-				case ElementType.Module: result = new ModuleSig((typeSig as ModuleSig).Index, ResolveGenericArgs(typeSig.Next)); break;
+				case ElementType.MVar: result = new GenericMVar(((GenericMVar)typeSig).Number); break;
+				case ElementType.CModReqd: result = new CModReqdSig(((ModifierSig)typeSig).Modifier, ResolveGenericArgs(typeSig.Next)); break;
+				case ElementType.CModOpt: result = new CModOptSig(((ModifierSig)typeSig).Modifier, ResolveGenericArgs(typeSig.Next)); break;
+				case ElementType.Module: result = new ModuleSig(((ModuleSig)typeSig).Index, ResolveGenericArgs(typeSig.Next)); break;
 				case ElementType.Pinned: result = new PinnedSig(ResolveGenericArgs(typeSig.Next)); break;
 				case ElementType.FnPtr:
 					var fnPtrSig = typeSig as FnPtrSig;
 
 					if (fnPtrSig?.Signature is null)
-						return null;
+						throw new InvalidOperationException("Function pointer signature is n*ull!");
 
 					result = new FnPtrSig(fnPtrSig.Signature);
 					break;

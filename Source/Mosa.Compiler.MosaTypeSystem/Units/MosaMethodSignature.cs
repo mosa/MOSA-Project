@@ -10,12 +10,12 @@ namespace Mosa.Compiler.MosaTypeSystem
 	{
 		public MosaType? ReturnType { get; }
 
-		public IList<MosaParameter?> Parameters { get; }
+		public IList<MosaParameter> Parameters { get; }
 
-		public MosaMethodSignature(MosaType? returnType, IList<MosaParameter?> parameter)
+		public MosaMethodSignature(MosaType? returnType, IList<MosaParameter> parameter)
 		{
 			ReturnType = returnType;
-			Parameters = new List<MosaParameter?>(parameter).AsReadOnly();
+			Parameters = new List<MosaParameter>(parameter).AsReadOnly();
 		}
 
 		public bool Equals(MosaMethodSignature? sig)
@@ -24,11 +24,11 @@ namespace Mosa.Compiler.MosaTypeSystem
 				   Parameters.SequenceEquals(sig?.Parameters);
 		}
 
-		private string sig;
+		private string? sig;
 
 		public override string ToString()
 		{
-			return sig ?? (sig = SignatureName.GetSignature("", this, true));
+			return sig ??= SignatureName.GetSignature("", this, true);
 		}
 	}
 }

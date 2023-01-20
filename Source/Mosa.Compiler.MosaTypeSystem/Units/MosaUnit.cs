@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Mosa.Compiler.MosaTypeSystem
 {
@@ -11,6 +12,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public uint ID { get; internal set; }
 
+		[NotNull]
 		public TypeSystem? TypeSystem { get; internal set; }
 
 		public string Name { get; private set; }
@@ -65,9 +67,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public abstract class MutatorBase : IDisposable
 		{
-			private readonly MosaUnit? unit;
+			private readonly MosaUnit unit;
 
-			internal MutatorBase(MosaUnit? unit)
+			internal MutatorBase(MosaUnit unit)
 			{
 				this.unit = unit;
 			}
@@ -78,7 +80,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			public bool IsCompilerGenerated { set { unit.IsCompilerGenerated = value; } }
 
-			public IList<MosaCustomAttribute>? CustomAttributes { get { return unit?.customAttributes; } }
+			public IList<MosaCustomAttribute>? CustomAttributes { get { return unit.customAttributes; } }
 
 			public abstract void Dispose();
 		}

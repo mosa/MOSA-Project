@@ -30,6 +30,9 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Utils
 
 		public override int GetHashCode()
 		{
+			if (Module == null)
+				throw new InvalidOperationException("Module is null!");
+
 			return Module.GetHashCode() * 7 + (int)Token.Raw;
 		}
 

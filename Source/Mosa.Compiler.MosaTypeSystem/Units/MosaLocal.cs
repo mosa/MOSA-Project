@@ -6,13 +6,13 @@ namespace Mosa.Compiler.MosaTypeSystem
 {
 	public class MosaLocal : IEquatable<MosaLocal>, IEquatable<MosaType>
 	{
-		public string Name { get; private set; }
+		public string Name { get; }
 
-		public MosaType? Type { get; private set; }
+		public MosaType Type { get; }
 
-		public bool IsPinned { get; private set; }
+		public bool IsPinned { get; }
 
-		public MosaLocal(string name, MosaType? type, bool isPinned)
+		public MosaLocal(string name, MosaType type, bool isPinned)
 		{
 			Name = name;
 			Type = type;
@@ -26,12 +26,12 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public bool Equals(MosaLocal? local)
 		{
-			return Type?.Equals(local.Type) == true;
+			return Type.Equals(local?.Type);
 		}
 
 		public bool Equals(MosaType? type)
 		{
-			return Type?.Equals(type) == true;
+			return Type.Equals(type);
 		}
 	}
 }

@@ -8,7 +8,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 	{
 		public MosaParameterAttributes ParameterAttributes { get; private set; }
 
-		public MosaMethod DeclaringMethod { get; private set; }
+		public MosaMethod? DeclaringMethod { get; private set; }
 
 		public MosaType? ParameterType { get; private set; }
 
@@ -37,9 +37,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public class Mutator : MutatorBase
 		{
-			private readonly MosaParameter? parameter;
+			private readonly MosaParameter parameter;
 
-			internal Mutator(MosaParameter? parameter)
+			internal Mutator(MosaParameter parameter)
 				: base(parameter)
 			{
 				this.parameter = parameter;
@@ -47,15 +47,15 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			public MosaParameterAttributes ParameterAttributes { set { parameter.ParameterAttributes = value; } }
 
-			public MosaMethod DeclaringMethod { set { parameter.DeclaringMethod = value; } }
+			public MosaMethod? DeclaringMethod { set { parameter.DeclaringMethod = value; } }
 
 			public MosaType? ParameterType { set { parameter.ParameterType = value; } }
 
 			public override void Dispose()
 			{
-				if (parameter?.ParameterType != null)
+				if (parameter.ParameterType != null)
 				{
-					var signatureName = (parameter?.DeclaringMethod == null) ? "<FunctionPointer>" : parameter.DeclaringMethod.FullName;
+					var signatureName = parameter.DeclaringMethod == null ? "<FunctionPointer>" : parameter.DeclaringMethod.FullName;
 					parameter.FullName = string.Concat(signatureName, "::", parameter.Name, " ", parameter.ParameterType.FullName);
 					parameter.ShortName = string.Concat(parameter.Name, " : ", parameter.ParameterType.ShortName);
 				}

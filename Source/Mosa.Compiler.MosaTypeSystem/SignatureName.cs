@@ -13,11 +13,11 @@ namespace Mosa.Compiler.MosaTypeSystem
 			{
 				result.Append(name);
 				result.Append("(");
-				for (int i = 0; i < sig.Parameters.Count; i++)
+				for (var i = 0; i < sig.Parameters.Count; i++)
 				{
 					if (i != 0)
 						result.Append(", ");
-					result.Append(sig.Parameters[i]?.ParameterType?.ShortName);
+					result.Append(sig.Parameters[i].ParameterType?.ShortName);
 				}
 				result.Append(")");
 
@@ -30,11 +30,11 @@ namespace Mosa.Compiler.MosaTypeSystem
 			{
 				result.Append(name);
 				result.Append("(");
-				for (int i = 0; i < sig.Parameters.Count; i++)
+				for (var i = 0; i < sig.Parameters.Count; i++)
 				{
 					if (i != 0)
 						result.Append(", ");
-					result.Append(sig.Parameters[i]?.ParameterType?.FullName);
+					result.Append(sig.Parameters[i].ParameterType?.FullName);
 				}
 				result.Append(")");
 
@@ -45,11 +45,11 @@ namespace Mosa.Compiler.MosaTypeSystem
 			}
 		}
 
-		public static void UpdateType(MosaType? type)
+		public static void UpdateType(MosaType type)
 		{
 			var result = new StringBuilder();
 
-			if (type?.GenericArguments?.Count > 0)
+			if (type.GenericArguments?.Count > 0)
 			{
 				result.Append("<");
 				for (var i = 0; i < type.GenericArguments.Count; i++)
@@ -61,7 +61,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				result.Append(">");
 			}
 
-			switch (type?.TypeCode)
+			switch (type.TypeCode)
 			{
 				case MosaTypeCode.UnmanagedPointer:
 					result.Append(type.ElementType?.Signature);
@@ -76,18 +76,15 @@ namespace Mosa.Compiler.MosaTypeSystem
 				case MosaTypeCode.SZArray:
 				case MosaTypeCode.Array:
 					result.Append(type.ElementType?.Signature);
-					result.Append(type.ArrayInfo.ToString());
+					result.Append(type.ArrayInfo);
 					break;
 
 				case MosaTypeCode.FunctionPointer:
-					result.Append(type.FunctionPtrSig.ToString());
-					break;
-
-				default:
+					result.Append(type.FunctionPtrSig);
 					break;
 			}
 
-			if (type?.Modifier != null)
+			if (type.Modifier != null)
 			{
 				result.Append(" mod(");
 				result.Append(type.Modifier.Name);

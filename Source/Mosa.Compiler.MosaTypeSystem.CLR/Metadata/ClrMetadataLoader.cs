@@ -23,7 +23,7 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 			}
 		}
 
-		private readonly Dictionary<TypeSig, MosaType?> typeCache = new(new TypeSigComparer());
+		private readonly Dictionary<TypeSig, MosaType> typeCache = new(new TypeSigComparer());
 		private readonly MosaType?[] mvar = new MosaType?[0x100];
 		private readonly MosaType?[] var = new MosaType?[0x100];
 		private ClassOrValueTypeSig? szHelperEnumeratorSig;
@@ -42,11 +42,11 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 			LoadedUnits = new List<MosaUnit?>();
 		}
 
-		public MosaModule? Load(ModuleDef moduleDef)
+		public MosaModule Load(ModuleDef moduleDef)
 		{
-			var mosaModule = metadata.Controller?.CreateModule();
+			var mosaModule = metadata.Controller.CreateModule();
 
-			using (var module = metadata.Controller?.MutateModule(mosaModule))
+			using (var module = metadata.Controller.MutateModule(mosaModule))
 			{
 				module.UnderlyingObject = new UnitDesc<ModuleDef, object>(moduleDef, moduleDef, null);
 				module.Name = moduleDef.Name;
@@ -57,8 +57,8 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 					Load(mosaModule, typeDef);
 				}
 			}
-			metadata.Controller?.AddModule(mosaModule);
-			metadata.Cache?.AddModule(mosaModule);
+			metadata.Controller.AddModule(mosaModule);
+			metadata.Cache.AddModule(mosaModule);
 			LoadedUnits.Add(mosaModule);
 
 			if (moduleDef.Assembly.IsCorLib())
@@ -77,8 +77,8 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 			else if (typeDef.Name.Contains("IList`1"))
 				iListSig = typeSig as ClassOrValueTypeSig;
 
-			var mosaType = metadata.Controller?.CreateType();
-			using (var type = metadata.Controller?.MutateType(mosaType))
+			var mosaType = metadata.Controller.CreateType();
+			using (var type = metadata.Controller.MutateType(mosaType))
 			{
 				type.Module = module;
 				type.UnderlyingObject = new UnitDesc<TypeDef, TypeSig?>(typeDef.Module, typeDef, typeSig);
@@ -107,9 +107,9 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 				// Load members
 				foreach (var fieldDef in typeDef.Fields)
 				{
-					var mosaField = metadata.Controller?.CreateField();
+					var mosaField = metadata.Controller.CreateField();
 
-					using (var field = metadata.Controller?.MutateField(mosaField))
+					using (var field = metadata.Controller.MutateField(mosaField))
 					{
 						LoadField(mosaType, field, fieldDef);
 					}
@@ -121,9 +121,9 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 
 				foreach (var methodDef in typeDef.Methods)
 				{
-					var mosaMethod = metadata.Controller?.CreateMethod();
+					var mosaMethod = metadata.Controller.CreateMethod();
 
-					using (var method = metadata.Controller?.MutateMethod(mosaMethod))
+					using (var method = metadata.Controller.MutateMethod(mosaMethod))
 					{
 						LoadMethod(mosaType, method, methodDef);
 					}
@@ -135,9 +135,9 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 
 				foreach (var propertyDef in typeDef.Properties)
 				{
-					var mosaProperty = metadata.Controller?.CreateProperty();
+					var mosaProperty = metadata.Controller.CreateProperty();
 
-					using (var property = metadata.Controller?.MutateProperty(mosaProperty))
+					using (var property = metadata.Controller.MutateProperty(mosaProperty))
 					{
 						LoadProperty(mosaType, property, propertyDef);
 					}
@@ -148,20 +148,20 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 				}
 			}
 			typeCache[typeSig] = mosaType;
-			metadata.Controller?.AddType(mosaType);
+			metadata.Controller.AddType(mosaType);
 			metadata.Cache?.AddType(mosaType);
 			LoadedUnits.Add(mosaType);
 
 			if (typeDef.Name.Contains("SZArrayHelper"))
 			{
-				szHelperMethods = mosaType?
+				szHelperMethods = mosaType
 					.Methods
-					.Select(x => x?.GetUnderlyingObject<UnitDesc<MethodDef, MethodSig>>())
+					.Select(x => x.GetUnderlyingObject<UnitDesc<MethodDef, MethodSig>>())
 					.ToArray();
 			}
 		}
 
-		private static void LoadField(MosaType? declType, MosaField.Mutator? field, FieldDef fieldDef)
+		private static void LoadField(MosaType? declType, MosaField.Mutator field, FieldDef fieldDef)
 		{
 			var fieldSig = fieldDef.FieldSig;
 			field.UnderlyingObject = new UnitDesc<FieldDef, FieldSig>(fieldDef.Module, fieldDef, fieldSig);
@@ -177,7 +177,7 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 			field.FieldAttributes = (MosaFieldAttributes)fieldDef.Attributes;
 		}
 
-		private void LoadMethod(MosaType? declType, MosaMethod.Mutator? method, MethodDef methodDef)
+		private void LoadMethod(MosaType? declType, MosaMethod.Mutator method, MethodDef methodDef)
 		{
 			var methodSig = methodDef.MethodSig;
 			method.Module = declType?.Module;
@@ -213,7 +213,7 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 				foreach (var genericParam in methodDef.GenericParameters)
 				{
 					var genericArg = LoadGenericParam(new GenericMVar(genericParam.Number));
-					method.GenericArguments?.Add(genericArg);
+					method.GenericArguments.Add(genericArg);
 				}
 			}
 
@@ -221,11 +221,11 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 			if (methodDef.DeclaringType.Name == "SZArrayHelper" && methodDef.Name == ".ctor")
 			{
 				var genericArg = LoadGenericParam(new GenericMVar(0));
-				method.GenericArguments?.Add(genericArg);
+				method.GenericArguments.Add(genericArg);
 			}
 		}
 
-		private static void LoadProperty(MosaType? declType, MosaProperty.Mutator? property, PropertyDef propertyDef)
+		private static void LoadProperty(MosaType? declType, MosaProperty.Mutator property, PropertyDef propertyDef)
 		{
 			var propertySig = propertyDef.PropertySig;
 			property.UnderlyingObject = new UnitDesc<PropertyDef, PropertySig>(propertyDef.Module, propertyDef, propertySig);
@@ -236,7 +236,7 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 			property.PropertyAttributes = (MosaPropertyAttributes)propertyDef.Attributes;
 		}
 
-		public MosaType? GetType(TypeSig? typeSig)
+		public MosaType GetType(TypeSig typeSig)
 		{
 			if (typeCache.TryGetValue(typeSig, out var result))
 				return result;
@@ -246,7 +246,7 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 			return result;
 		}
 
-		public MosaType? GetTypeThrow(TypeSig typeSig)
+		public MosaType GetTypeThrow(TypeSig typeSig)
 		{
 			if (typeCache.TryGetValue(typeSig, out var result))
 				return result;
@@ -254,7 +254,7 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 			throw new AssemblyLoadException();
 		}
 
-		private MosaType? Load(TypeSig typeSig)
+		private MosaType Load(TypeSig typeSig)
 		{
 			if (typeSig is LeafSig)
 			{
@@ -270,12 +270,12 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 					{
 						var fnPtr = sig.MethodSig;
 						var returnType = GetType(fnPtr.RetType);
-						var pars = new List<MosaParameter?>();
+						var pars = new List<MosaParameter>();
 						for (var i = 0; i < fnPtr.Params.Count; i++)
 						{
-							var parameter = metadata.Controller?.CreateParameter();
+							var parameter = metadata.Controller.CreateParameter();
 
-							using (var mosaParameter = metadata.Controller?.MutateParameter(parameter))
+							using (var mosaParameter = metadata.Controller.MutateParameter(parameter))
 							{
 								mosaParameter.Name = "A_" + i;
 								mosaParameter.ParameterAttributes = MosaParameterAttributes.In;
@@ -284,7 +284,7 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 
 							pars.Add(parameter);
 						}
-						return metadata.TypeSystem?.ToFnPtr(new MosaMethodSignature(returnType, pars));
+						return metadata.TypeSystem.ToFnPtr(new MosaMethodSignature(returnType, pars));
 					}
 					default:
 						throw new NotSupportedException();
@@ -299,20 +299,26 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 			{
 				case ElementType.Ptr:
 					result = elementType?.ToUnmanagedPointer();
-					using (var ptrType = metadata.Controller?.MutateType(result))
+					if (result == null)
+						throw new InvalidOperationException("Unmanaged pointer of element type is null!");
+
+					using (var ptrType = metadata.Controller.MutateType(result))
 						ptrType.UnderlyingObject = elementType?.GetUnderlyingObject<UnitDesc<TypeDef, TypeSig>>()?.Clone(typeSig);
 					break;
 
 				case ElementType.ByRef:
 					result = elementType?.ToManagedPointer();
-					using (var ptrType = metadata.Controller?.MutateType(result))
+					if (result == null)
+						throw new InvalidOperationException("Unmanaged pointer of element type is null!");
+
+					using (var ptrType = metadata.Controller.MutateType(result))
 						ptrType.UnderlyingObject = elementType?.GetUnderlyingObject<UnitDesc<TypeDef, TypeSig>>()?.Clone(typeSig);
 					break;
 
 				case ElementType.CModReqd:
 				case ElementType.CModOpt:
-					result = metadata.Controller?.CreateType(elementType);
-					using (var modType = metadata.Controller?.MutateType(result))
+					result = metadata.Controller.CreateType(elementType);
+					using (var modType = metadata.Controller.MutateType(result))
 					{
 						modType.Modifier = GetType(((ModifierSig)typeSig).Modifier.ToTypeSig());
 						modType.UnderlyingObject = elementType?.GetUnderlyingObject<UnitDesc<TypeDef, TypeSig>>()?.Clone(typeSig);
@@ -326,7 +332,10 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 
 				case ElementType.SZArray:
 					result = elementType?.ToSZArray();
-					using (var arrayType = metadata.Controller?.MutateType(result))
+					if (result == null)
+						throw new InvalidOperationException("SZ array of element type is null!");
+
+					using (var arrayType = metadata.Controller.MutateType(result))
 					{
 						arrayType.UnderlyingObject = elementType?.GetUnderlyingObject<UnitDesc<TypeDef, TypeSig>>()?.Clone(typeSig);
 
@@ -335,6 +344,10 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 							var typeDesc = elementType?.GetUnderlyingObject<UnitDesc<TypeDef, TypeSig>>();
 							GetType(new GenericInstSig(szHelperEnumeratorSig, typeSig.Next));
 							GetType(new GenericInstSig(iListSig, typeSig.Next));
+
+							if (szHelperMethods == null)
+								throw new InvalidOperationException("szHelperMethods array is null!");
+
 							foreach (var method in szHelperMethods)
 							{
 								var methodSpec = new MethodSpecUser(method?.Definition, new GenericInstMethodSig(typeDesc?.Signature));
@@ -344,14 +357,17 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 					}
 
 					if (!typeSig.Next.HasOpenGenericParameter())
-						metadata.Resolver?.EnqueueForArrayResolve(result);
+						metadata.Resolver.EnqueueForArrayResolve(result);
 					return result;
 
 				case ElementType.Array:
 					var array = (ArraySig)typeSig;
 					var arrayInfo = new MosaArrayInfo(array.LowerBounds, array.Rank, array.Sizes);
 					result = elementType?.ToArray(arrayInfo);
-					using (var arrayType = metadata.Controller?.MutateType(result))
+					if (result == null)
+						throw new InvalidOperationException("Array of element type is null!");
+
+					using (var arrayType = metadata.Controller.MutateType(result))
 						arrayType.UnderlyingObject = elementType?.GetUnderlyingObject<UnitDesc<TypeDef, TypeSig>>()?.Clone(typeSig);
 					break;
 
@@ -359,11 +375,11 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 					throw new AssemblyLoadException();
 			}
 
-			metadata.Controller?.AddType(result);
+			metadata.Controller.AddType(result);
 			return result;
 		}
 
-		private MosaType? LoadGenericParam(GenericSig sig)
+		private MosaType LoadGenericParam(GenericSig sig)
 		{
 			//Debug.Assert(false, sig.FullName);
 			var pars = sig.IsTypeVar ? var : mvar;
@@ -371,8 +387,8 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 
 			if (type == null)
 			{
-				type = metadata.Controller?.CreateType();
-				using (var genericParam = metadata.Controller?.MutateType(type))
+				type = metadata.Controller.CreateType();
+				using (var genericParam = metadata.Controller.MutateType(type))
 				{
 					genericParam.Module = metadata.TypeSystem?.LinkerModule;
 					genericParam.Namespace = "";
@@ -383,7 +399,7 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 					genericParam.UnderlyingObject = new UnitDesc<TypeDef, TypeSig>(null, null, sig);
 				}
 				pars[sig.Number] = type;
-				metadata.Controller?.AddType(type);
+				metadata.Controller.AddType(type);
 			}
 
 			return type;
@@ -393,85 +409,92 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 		{
 			//Debug.Assert(false, typeSig.FullName);
 			var origin = GetType(typeSig.GenericType);
-			var result = metadata.Controller?.CreateType(origin);
-			var desc = result?.GetUnderlyingObject<UnitDesc<TypeDef, TypeSig>>();
+			var result = metadata.Controller.CreateType(origin);
+			var desc = result.GetUnderlyingObject<UnitDesc<TypeDef, TypeSig>>();
 
-			using (var resultType = metadata.Controller?.MutateType(result))
+			using (var resultType = metadata.Controller.MutateType(result))
 			{
 				resultType.UnderlyingObject = desc?.Clone(typeSig);
 				resultType.ElementType = origin;
 
 				foreach (var genericArg in typeSig.GenericArguments)
 				{
-					var t = GetType(genericArg);
-					resultType.GenericArguments?.Add(t);
+					resultType.GenericArguments.Add(GetType(genericArg));
 				}
 
-				metadata.Resolver?.EnqueueForResolve(result);
+				metadata.Resolver.EnqueueForResolve(result);
 
 				var resolver = new GenericArgumentResolver();
 				resolver.PushTypeGenericArguments(typeSig.GenericArguments);
 
-				for (var i = 0; i < result?.Methods.Count; i++)
+				for (var i = 0; i < result.Methods.Count; i++)
 				{
-					var method = metadata.Controller?.CreateMethod(result.Methods[i]);
+					var method = metadata.Controller.CreateMethod(result.Methods[i]);
 
-					using (var mosaMethod = metadata.Controller?.MutateMethod(method))
+					using (var mosaMethod = metadata.Controller.MutateMethod(method))
 					{
 						mosaMethod.DeclaringType = result;
-						mosaMethod.UnderlyingObject = method?.GetUnderlyingObject<UnitDesc<MethodDef, MethodSig>>();
+						mosaMethod.UnderlyingObject = method.GetUnderlyingObject<UnitDesc<MethodDef, MethodSig>>();
 					}
 
 					resultType.Methods[i] = method;
-					metadata.Resolver?.EnqueueForResolve(method);
+					metadata.Resolver.EnqueueForResolve(method);
 				}
 
 				for (var i = 0; i < result.Fields.Count; i++)
 				{
-					var field = metadata.Controller?.CreateField(result.Fields[i]);
+					var field = metadata.Controller.CreateField(result.Fields[i]);
 
-					using (var mosaField = metadata.Controller?.MutateField(field))
+					using (var mosaField = metadata.Controller.MutateField(field))
 					{
 						mosaField.DeclaringType = result;
-						mosaField.UnderlyingObject = field?.GetUnderlyingObject<UnitDesc<FieldDef, FieldSig>>();
+						mosaField.UnderlyingObject = field.GetUnderlyingObject<UnitDesc<FieldDef, FieldSig>>();
 					}
 
 					resultType.Fields[i] = field;
-					metadata.Resolver?.EnqueueForResolve(field);
+					metadata.Resolver.EnqueueForResolve(field);
 				}
 
 				for (int i = 0; i < result.Properties.Count; i++)
 				{
-					var property = metadata.Controller?.CreateProperty(result.Properties[i]);
+					var property = metadata.Controller.CreateProperty(result.Properties[i]);
+					var propertySig = property.GetPropertySig();
 
-					var newSig = property.GetPropertySig()?.Clone();
+					if (propertySig == null)
+						throw new InvalidOperationException("Property signature is null!");
+
+					var newSig = propertySig.Clone();
 					newSig.RetType = resolver.Resolve(newSig.RetType);
-					using (var mosaProperty = metadata.Controller?.MutateProperty(property))
+					using (var mosaProperty = metadata.Controller.MutateProperty(property))
 					{
 						mosaProperty.DeclaringType = result;
-						mosaProperty.UnderlyingObject = property?.GetUnderlyingObject<UnitDesc<PropertyDef, PropertySig>>();
+						mosaProperty.UnderlyingObject = property.GetUnderlyingObject<UnitDesc<PropertyDef, PropertySig>>();
 					}
 
 					resultType.Properties[i] = property;
-					metadata.Resolver?.EnqueueForResolve(property);
+					metadata.Resolver.EnqueueForResolve(property);
 				}
 
 				resultType.HasOpenGenericParams = typeSig.HasOpenGenericParameter();
 			}
 
-			metadata.Controller?.AddType(result);
+			metadata.Controller.AddType(result);
 
 			return result;
 		}
 
-		public MosaMethod? LoadGenericMethodInstance(MethodSpec methodSpec, GenericArgumentResolver? resolver)
+		public MosaMethod LoadGenericMethodInstance(MethodSpec methodSpec, GenericArgumentResolver resolver)
 		{
 			return LoadGenericMethodInstance(methodSpec.Method, methodSpec.GenericInstMethodSig.GenericArguments, resolver);
 		}
 
-		public MosaMethod? LoadGenericMethodInstance(IMethodDefOrRef method, IList<TypeSig> genericArguments, GenericArgumentResolver? resolver)
+		public MosaMethod LoadGenericMethodInstance(IMethodDefOrRef method, IList<TypeSig> genericArguments, GenericArgumentResolver resolver)
 		{
-			var declType = GetType(resolver?.Resolve(method.DeclaringType.ToTypeSig()));
+			var resolvedType = resolver.Resolve(method.DeclaringType.ToTypeSig());
+			if (resolvedType == null)
+				throw new InvalidOperationException("Resolved type of method's declaring type signature is null!");
+
+			var declType = GetType(resolvedType);
 
 			MDToken token;
 			if (method is MethodDef def)
@@ -481,9 +504,10 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 
 			MosaMethod? mosaMethod = null;
 			UnitDesc<MethodDef, MethodSig>? desc = null;
-			foreach (var m in declType?.Methods)
+
+			foreach (var m in declType.Methods)
 			{
-				desc = m?.GetUnderlyingObject<UnitDesc<MethodDef, MethodSig>>();
+				desc = m.GetUnderlyingObject<UnitDesc<MethodDef, MethodSig>>();
 				if (desc?.Token.Token == token)
 				{
 					mosaMethod = m;
@@ -494,28 +518,32 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 			if (mosaMethod == null)
 				throw new AssemblyLoadException();
 
-			var resolvedGenericArguments = new List<TypeSig?>();
+			var resolvedGenericArguments = new List<TypeSig>();
 			foreach (var genericArg in genericArguments)
 			{
-				resolvedGenericArguments.Add(resolver?.Resolve(genericArg));
+				var resolvedGenericArg = resolver.Resolve(genericArg);
+				if (resolvedGenericArg == null)
+					throw new InvalidOperationException("Resolved generic argument is null!");
+
+				resolvedGenericArguments.Add(resolvedGenericArg);
 			}
 
-			resolver?.PushMethodGenericArguments(resolvedGenericArguments);
+			resolver.PushMethodGenericArguments(resolvedGenericArguments);
 
 			// Check for existing generic method instance
-			var newSig = resolver?.Resolve(method.MethodSig);
+			var newSig = resolver.Resolve(method.MethodSig);
 
 			// Need to make sure we pop otherwise it will cause bugs
-			resolver?.PopMethodGenericArguments();
+			resolver.PopMethodGenericArguments();
 
 			var comparer = new SigComparer();
 			foreach (var m in declType.Methods)
 			{
-				var mDesc = m?.GetUnderlyingObject<UnitDesc<MethodDef, MethodSig>>();
+				var mDesc = m.GetUnderlyingObject<UnitDesc<MethodDef, MethodSig>>();
 				if (mDesc?.Definition != desc?.Definition || !comparer.Equals(mDesc?.Signature, newSig))
 					continue;
 
-				if (m?.GenericArguments.Count != resolvedGenericArguments.Count)
+				if (m.GenericArguments.Count != resolvedGenericArguments.Count)
 					continue;
 
 				if (m.GenericArguments.Count > 0)
@@ -523,7 +551,7 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 					var failedGenericArgumentMatch = false;
 					for (var i = 0; i < m.GenericArguments.Count; i++)
 					{
-						if (comparer.Equals(resolvedGenericArguments[i], m.GenericArguments[i].GetTypeSig()))
+						if (comparer.Equals(resolvedGenericArguments[i], m.GenericArguments[i]?.GetTypeSig()))
 							continue;
 
 						failedGenericArgumentMatch = true;
@@ -537,29 +565,28 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 				return m;
 			}
 
-			mosaMethod = metadata.Controller?.CreateMethod(mosaMethod);
+			mosaMethod = metadata.Controller.CreateMethod(mosaMethod);
 
-			using (var _mosaMethod = metadata.Controller?.MutateMethod(mosaMethod))
+			using (var _mosaMethod = metadata.Controller.MutateMethod(mosaMethod))
 			{
-				var hasOpening = mosaMethod?.DeclaringType.HasOpenGenericParams;
-				_mosaMethod?.GenericArguments?.Clear();
+				var hasOpening = mosaMethod.DeclaringType?.HasOpenGenericParams;
+				_mosaMethod.GenericArguments.Clear();
 				foreach (var resolvedGenericArg in resolvedGenericArguments)
 				{
-					hasOpening |= resolvedGenericArg?.HasOpenGenericParameter();
-					var t = GetType(resolvedGenericArg);
-					_mosaMethod?.GenericArguments?.Add(t);
+					hasOpening |= resolvedGenericArg.HasOpenGenericParameter();
+					_mosaMethod.GenericArguments.Add(GetType(resolvedGenericArg));
 				}
 
 				_mosaMethod.UnderlyingObject = desc?.Clone(newSig);
 				_mosaMethod.DeclaringType = declType;
 
-				_mosaMethod.HasOpenGenericParams = hasOpening;
+				_mosaMethod.HasOpenGenericParams = hasOpening == true;
 			}
 
-			using (var decl = metadata.Controller?.MutateType(declType))
-				decl?.Methods?.Add(mosaMethod);
+			using (var decl = metadata.Controller.MutateType(declType))
+				decl.Methods.Add(mosaMethod);
 
-			metadata.Resolver?.EnqueueForResolve(mosaMethod);
+			metadata.Resolver.EnqueueForResolve(mosaMethod);
 
 			return mosaMethod;
 		}

@@ -1,5 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Diagnostics.CodeAnalysis;
+using Mosa.Compiler.Common.Exceptions;
+
 namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 {
 	internal class ClrMetadata : IMetadata
@@ -15,15 +18,17 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 			Resolver = new ClrMetadataResolver(this);
 		}
 
+		[NotNull]
 		public TypeSystem? TypeSystem { get; private set; }
 
+		[NotNull]
 		public ITypeSystemController? Controller { get; private set; }
 
-		public ClrMetadataCache? Cache { get; }
+		public ClrMetadataCache Cache { get; }
 
-		public ClrMetadataLoader? Loader { get; }
+		public ClrMetadataLoader Loader { get; }
 
-		public ClrMetadataResolver? Resolver { get; }
+		public ClrMetadataResolver Resolver { get; }
 
 		public void Initialize(TypeSystem system, ITypeSystemController controller)
 		{
@@ -35,18 +40,25 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 		{
 			foreach (var module in moduleLoader.Modules)
 			{
-				Loader?.Load(module);
+				Loader.Load(module);
 			}
 
-			Controller?.SetCorLib(Loader?.CorLib);
+			if (Loader.CorLib == null)
+				throw new AssemblyLoadException();
 
-			Resolver?.Resolve();
+			Controller.SetCorLib(Loader.CorLib);
 
-			foreach (var module in Cache?.Modules.Values)
+			Resolver.Resolve();
+
+			var modules = Cache?.Modules.Values;
+			if (modules == null)
+				throw new InvalidOperationException("Modules list is empty!");
+
+			foreach (var module in modules)
 			{
-				if (module?.EntryPoint != null)
+				if (module.EntryPoint != null)
 				{
-					Controller?.SetEntryPoint(module.EntryPoint);
+					Controller.SetEntryPoint(module.EntryPoint);
 					break;
 				}
 			}

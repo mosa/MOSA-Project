@@ -111,52 +111,53 @@ namespace Mosa.Compiler.MosaTypeSystem
 			}
 		}
 
-		public MosaModule.Mutator MutateModule(MosaModule? module)
+		public MosaModule.Mutator MutateModule(MosaModule module)
 		{
 			return new MosaModule.Mutator(module);
 		}
 
-		public MosaType.Mutator MutateType(MosaType? type)
+		public MosaType.Mutator MutateType(MosaType type)
 		{
 			return new MosaType.Mutator(type);
 		}
 
-		public MosaMethod.Mutator MutateMethod(MosaMethod? method)
+		public MosaMethod.Mutator MutateMethod(MosaMethod method)
 		{
 			return new MosaMethod.Mutator(method);
 		}
 
-		public MosaField.Mutator MutateField(MosaField? field)
+		public MosaField.Mutator MutateField(MosaField field)
 		{
 			return new MosaField.Mutator(field);
 		}
 
-		public MosaProperty.Mutator MutateProperty(MosaProperty? property)
+		public MosaProperty.Mutator MutateProperty(MosaProperty property)
 		{
 			return new MosaProperty.Mutator(property);
 		}
 
-		public MosaParameter.Mutator MutateParameter(MosaParameter? parameter)
+		public MosaParameter.Mutator MutateParameter(MosaParameter parameter)
 		{
 			return new MosaParameter.Mutator(parameter);
 		}
 
-		public void AddModule(MosaModule? module)
+		public void AddModule(MosaModule module)
 		{
 			typeSystem.Modules.Add(module);
 		}
 
-		public void AddType(MosaType? type)
+		public void AddType(MosaType type)
 		{
-			if (type?.Module?.Types.ContainsKey(type.ID) == false)
-			{
-				type.Module.Types.Add(type.ID, type);
-			}
+			if (type.Module == null || type.FullName == null)
+				throw new InvalidOperationException("Type's module or full name is null!");
 
-			typeSystem.TypeResolver.AddType(Tuple.Create(type?.Module, type?.FullName), type);
+			if (!type.Module.Types.ContainsKey(type.ID))
+				type.Module.Types.Add(type.ID, type);
+
+			typeSystem.TypeResolver.AddType(Tuple.Create(type.Module, type.FullName), type);
 		}
 
-		public void SetCorLib(MosaModule? module)
+		public void SetCorLib(MosaModule module)
 		{
 			typeSystem.CorLib = module;
 		}

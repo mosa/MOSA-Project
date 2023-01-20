@@ -4,75 +4,41 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR
 {
 	public class ClrTypeResolver : ITypeResolver
 	{
-		private readonly Dictionary<Tuple<MosaModule?, string?>, MosaType?> typeLookup;
+		private readonly Dictionary<Tuple<MosaModule, string>, MosaType?> typeLookup;
 
 		public ClrTypeResolver()
 		{
 			typeLookup = new();
 		}
 
-		public void AddType(Tuple<MosaModule?, string?> key, MosaType? value)
+		public void AddType(Tuple<MosaModule, string> key, MosaType? value)
 		{
 			typeLookup[key] = value;
 		}
 
-		public MosaType? ResolveType(MosaModule? module, BuiltInType type)
+		public MosaType ResolveType(MosaModule module, BuiltInType type)
 		{
-			return type switch
-			{
-				BuiltInType.Void => GetTypeByName(module, "System.Void"),
-				BuiltInType.Boolean => GetTypeByName(module, "System.Boolean"),
-				BuiltInType.Char => GetTypeByName(module, "System.Char"),
-				BuiltInType.SByte => GetTypeByName(module, "System.SByte"),
-				BuiltInType.Byte => GetTypeByName(module, "System.Byte"),
-				BuiltInType.Int16 => GetTypeByName(module, "System.Int16"),
-				BuiltInType.UInt16 => GetTypeByName(module, "System.UInt16"),
-				BuiltInType.Int32 => GetTypeByName(module, "System.Int32"),
-				BuiltInType.UInt32 => GetTypeByName(module, "System.UInt32"),
-				BuiltInType.Int64 => GetTypeByName(module, "System.Int64"),
-				BuiltInType.UInt64 => GetTypeByName(module, "System.UInt64"),
-				BuiltInType.Single => GetTypeByName(module, "System.Single"),
-				BuiltInType.Double => GetTypeByName(module, "System.Double"),
-				BuiltInType.String => GetTypeByName(module, "System.String"),
-				BuiltInType.Object => GetTypeByName(module, "System.Object"),
-				BuiltInType.IntPtr => GetTypeByName(module, "System.IntPtr"),
-				BuiltInType.UIntPtr => GetTypeByName(module, "System.UIntPtr"),
-				BuiltInType.TypedReference => GetTypeByName(module, "System.TypedReference"),
-				BuiltInType.ValueType => GetTypeByName(module, "System.ValueType"),
-				_ => throw new CompilerException("Searching for invalid built-in type.")
-			};
+			var typeName = GetTypeName(type);
+			var resolvedType = GetTypeByName(module, typeName);
+
+			if (resolvedType == null)
+				throw new InvalidOperationException($"Type {typeName} is null or does not exist!");
+
+			return resolvedType;
 		}
 
-		public MosaType? ResolveType(MosaModule? module, MosaTypeCode type)
+		public MosaType ResolveType(MosaModule module, MosaTypeCode type)
 		{
-			return type switch
-			{
-				MosaTypeCode.Void => GetTypeByName(module, "System.Void"),
-				MosaTypeCode.Boolean => GetTypeByName(module, "System.Boolean"),
-				MosaTypeCode.Char => GetTypeByName(module, "System.Char"),
-				MosaTypeCode.I1 => GetTypeByName(module, "System.SByte"),
-				MosaTypeCode.U1 => GetTypeByName(module, "System.Byte"),
-				MosaTypeCode.I2 => GetTypeByName(module, "System.Int16"),
-				MosaTypeCode.U2 => GetTypeByName(module, "System.UInt16"),
-				MosaTypeCode.I4 => GetTypeByName(module, "System.Int32"),
-				MosaTypeCode.U4 => GetTypeByName(module, "System.UInt32"),
-				MosaTypeCode.I8 => GetTypeByName(module, "System.Int64"),
-				MosaTypeCode.U8 => GetTypeByName(module, "System.UInt64"),
-				MosaTypeCode.R4 => GetTypeByName(module, "System.Single"),
-				MosaTypeCode.R8 => GetTypeByName(module, "System.Double"),
-				MosaTypeCode.String => GetTypeByName(module, "System.String"),
-				MosaTypeCode.ValueType => GetTypeByName(module, "System.ValueType"),
-				MosaTypeCode.Array => GetTypeByName(module, "System.Array"),
-				MosaTypeCode.TypedRef => GetTypeByName(module, "System.TypedReference"),
-				MosaTypeCode.I => GetTypeByName(module, "System.IntPtr"),
-				MosaTypeCode.U => GetTypeByName(module, "System.UIntPtr"),
-				MosaTypeCode.Object => GetTypeByName(module, "System.Object"),
-				MosaTypeCode.SZArray => GetTypeByName(module, "System.Array"),
-				_ => throw new CompilerException("Searching for invalid type code.")
-			};
+			var typeName = GetTypeName(type);
+			var resolvedType = GetTypeByName(module, typeName);
+
+			if (resolvedType == null)
+				throw new InvalidOperationException($"Type {typeName} is null or does not exist!");
+
+			return resolvedType;
 		}
 
-		public MosaType? GetTypeByName(IList<MosaModule?> modules, string fullName)
+		public MosaType? GetTypeByName(IList<MosaModule> modules, string fullName)
 		{
 			foreach (var module in modules)
 			{
@@ -84,9 +50,65 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR
 			return null;
 		}
 
-		public MosaType? GetTypeByName(MosaModule? module, string fullName)
+		public MosaType? GetTypeByName(MosaModule module, string fullName)
 		{
 			return typeLookup.TryGetValue(Tuple.Create(module, fullName), out var result) ? result : null;
+		}
+
+		private string GetTypeName(BuiltInType type)
+		{
+			return type switch
+			{
+				BuiltInType.Void => "System.Void",
+				BuiltInType.Boolean => "System.Boolean",
+				BuiltInType.Char => "System.Char",
+				BuiltInType.SByte => "System.SByte",
+				BuiltInType.Byte => "System.Byte",
+				BuiltInType.Int16 => "System.Int16",
+				BuiltInType.UInt16 => "System.UInt16",
+				BuiltInType.Int32 => "System.Int32",
+				BuiltInType.UInt32 => "System.UInt32",
+				BuiltInType.Int64 => "System.Int64",
+				BuiltInType.UInt64 => "System.UInt64",
+				BuiltInType.Single => "System.Single",
+				BuiltInType.Double => "System.Double",
+				BuiltInType.String => "System.String",
+				BuiltInType.Object => "System.Object",
+				BuiltInType.IntPtr => "System.IntPtr",
+				BuiltInType.UIntPtr => "System.UIntPtr",
+				BuiltInType.TypedReference => "System.TypedReference",
+				BuiltInType.ValueType => "System.ValueType",
+				_ => throw new CompilerException("Searching for invalid built-in type.")
+			};
+		}
+
+		private string GetTypeName(MosaTypeCode type)
+		{
+			return type switch
+			{
+				MosaTypeCode.Void => "System.Void",
+				MosaTypeCode.Boolean => "System.Boolean",
+				MosaTypeCode.Char => "System.Char",
+				MosaTypeCode.I1 => "System.SByte",
+				MosaTypeCode.U1 => "System.Byte",
+				MosaTypeCode.I2 => "System.Int16",
+				MosaTypeCode.U2 => "System.UInt16",
+				MosaTypeCode.I4 => "System.Int32",
+				MosaTypeCode.U4 => "System.UInt32",
+				MosaTypeCode.I8 => "System.Int64",
+				MosaTypeCode.U8 => "System.UInt64",
+				MosaTypeCode.R4 => "System.Single",
+				MosaTypeCode.R8 => "System.Double",
+				MosaTypeCode.String => "System.String",
+				MosaTypeCode.Object => "System.Object",
+				MosaTypeCode.I => "System.IntPtr",
+				MosaTypeCode.U => "System.UIntPtr",
+				MosaTypeCode.TypedRef => "System.TypedReference",
+				MosaTypeCode.ValueType => "System.ValueType",
+				MosaTypeCode.Array => "System.Array",
+				MosaTypeCode.SZArray => "System.Array",
+				_ => throw new CompilerException("Searching for invalid type code.")
+			};
 		}
 	}
 }

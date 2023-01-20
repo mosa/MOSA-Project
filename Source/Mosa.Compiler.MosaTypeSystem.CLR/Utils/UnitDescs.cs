@@ -6,9 +6,9 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Utils
 {
 	internal class UnitDesc<TDef, TSig> where TDef : IMDTokenProvider
 	{
-		public ScopedToken Token { get; private set; }
+		public ScopedToken Token { get; }
 
-		public TDef? Definition { get; private set; }
+		public TDef? Definition { get; }
 
 		public TSig? Signature { get; private set; }
 

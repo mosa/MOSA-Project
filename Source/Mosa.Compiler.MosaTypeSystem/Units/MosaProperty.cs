@@ -12,22 +12,28 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public MosaType? PropertyType { get; private set; }
 
-		public string GetterMethodName { get; private set; }
+		public string? GetterMethodName { get; private set; }
 
 		public MosaMethod? GetterMethod
 		{
 			get
 			{
+				if (GetterMethodName == null)
+					throw new InvalidOperationException("Method name is null, unable to get getter method!");
+
 				return DeclaringType?.FindMethodByName(GetterMethodName);
 			}
 		}
 
-		public string SetterMethodName { get; private set; }
+		public string? SetterMethodName { get; private set; }
 
 		public MosaMethod? SetterMethod
 		{
 			get
 			{
+				if (SetterMethodName == null)
+					throw new InvalidOperationException("Method name is null, unable to get setter method!");
+
 				return DeclaringType?.FindMethodByName(SetterMethodName);
 			}
 		}
@@ -48,9 +54,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public class Mutator : MosaUnit.MutatorBase
 		{
-			private readonly MosaProperty? property;
+			private readonly MosaProperty property;
 
-			internal Mutator(MosaProperty? property)
+			internal Mutator(MosaProperty property)
 				: base(property)
 			{
 				this.property = property;
@@ -78,7 +84,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			public override void Dispose()
 			{
-				if (property?.PropertyType != null)
+				if (property.PropertyType != null)
 				{
 					property.FullName = string.Concat(property.DeclaringType?.FullName, "::", property.Name, " ", property.PropertyType.FullName);
 					property.ShortName = string.Concat(property.Name, " : ", property.PropertyType.ShortName);

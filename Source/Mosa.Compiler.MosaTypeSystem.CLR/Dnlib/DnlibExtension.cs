@@ -93,45 +93,53 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Dnlib
 			return signature is ModifierSig or PinnedSig;
 		}
 
-		public static TypeSig? GetTypeSig(this MosaType? type)
+		public static TypeSig GetTypeSig(this MosaType type)
 		{
-			return type?.GetUnderlyingObject<UnitDesc<TypeDef, TypeSig>>()?.Signature;
+			return type.GetUnderlyingObject<UnitDesc<TypeDef, TypeSig>>()?.Signature ?? throw new InvalidOperationException("Type signature is null!");
 		}
 
-		public static MethodSig? GetMethodSig(this MosaMethod? method)
+		public static MethodSig GetMethodSig(this MosaMethod method)
 		{
-			return method?.GetUnderlyingObject<UnitDesc<MethodDef, MethodSig>>()?.Signature;
+			return method.GetUnderlyingObject<UnitDesc<MethodDef, MethodSig>>()?.Signature ?? throw new InvalidOperationException("Method signature is null!");
 		}
 
-		public static FieldSig? GetFieldSig(this MosaField? field)
+		public static FieldSig GetFieldSig(this MosaField field)
 		{
-			return field?.GetUnderlyingObject<UnitDesc<FieldDef, FieldSig>>()?.Signature;
+			return field.GetUnderlyingObject<UnitDesc<FieldDef, FieldSig>>()?.Signature ?? throw new InvalidOperationException("Field signature is null!");
 		}
 
-		public static PropertySig? GetPropertySig(this MosaProperty? property)
+		public static PropertySig GetPropertySig(this MosaProperty property)
 		{
-			return property?.GetUnderlyingObject<UnitDesc<PropertyDef, PropertySig>>()?.Signature;
+			return property.GetUnderlyingObject<UnitDesc<PropertyDef, PropertySig>>()?.Signature ?? throw new InvalidOperationException("Property signature is null!");
 		}
 
-		public static IList<TypeSig?> GetGenericArguments(this IReadOnlyList<MosaType?> types)
+		public static IList<TypeSig> GetGenericArguments(this IReadOnlyList<MosaType> types)
 		{
-			var result = new List<TypeSig?>();
+			var result = new List<TypeSig>();
 
 			foreach (var type in types)
 			{
-				result.Add(type?.GetTypeSig());
+				var typeSig = type.GetTypeSig();
+				if (typeSig == null)
+					throw new InvalidOperationException("Type signature of type is null!");
+
+				result.Add(typeSig);
 			}
 
 			return result;
 		}
 
-		public static IList<TypeSig?> GetGenericArguments(this IList<MosaType?> types)
+		public static IList<TypeSig> GetGenericArguments(this IList<MosaType> types)
 		{
-			var result = new List<TypeSig?>();
+			var result = new List<TypeSig>();
 
 			foreach (var type in types)
 			{
-				result.Add(type?.GetTypeSig());
+				var typeSig = type.GetTypeSig();
+				if (typeSig == null)
+					throw new InvalidOperationException("Type signature of type is null!");
+
+				result.Add(typeSig);
 			}
 
 			return result;

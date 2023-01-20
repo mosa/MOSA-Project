@@ -70,7 +70,8 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR
 				// automatically, even if they are in the same directory.
 				// (maybe this has to do with linux / specific mono versions?)
 				// So, try to load them manually recursively first.
-				var subModuleFile = Path.Combine(Path.GetDirectoryName(module.Location), assemblyRef.Name + ".dll");
+				var directoryName = Path.GetDirectoryName(module.Location) ?? module.Location;
+				var subModuleFile = Path.Combine(directoryName, assemblyRef.Name + ".dll");
 				if (File.Exists(subModuleFile))
 				{
 					var subModule = ModuleDefMD.Load(subModuleFile, Resolver.DefaultModuleContext);
