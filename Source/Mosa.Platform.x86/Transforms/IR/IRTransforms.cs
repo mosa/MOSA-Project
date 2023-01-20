@@ -107,6 +107,8 @@ namespace Mosa.Platform.x86.Transforms.IR
 			new BitCopyR8To64(),
 			new BitCopy64ToR8(),
 			new ArithShiftRight64(),
+			new ArithShiftRight64Less32(),
+			new ArithShiftRight64Less64(),
 			new Call(),
 			new Compare32x64(),
 			new Compare64x32(),

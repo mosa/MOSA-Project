@@ -30,7 +30,9 @@ namespace Mosa.Compiler.Framework
 
 		private readonly NotifyTraceLogHandler NotifyInstructionTraceHandler;
 
-		private readonly bool Statistics;
+		private readonly NotifyTraceLogHandler NotifyTranformTraceHandler;
+
+		private int InstructionTraceStep;
 
 		#endregion Data Members
 
@@ -190,6 +192,8 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public bool IsStopped { get; private set; }
 
+		public bool Statistics { get; private set; }
+
 		/// <summary>
 		/// Gets the linker symbol.
 		/// </summary>
@@ -204,11 +208,13 @@ namespace Mosa.Compiler.Framework
 		public CompilerHooks CompilerHooks { get; }
 
 		public bool IsInSSAForm { get; set; }
+
 		public bool AreCPURegistersAllocated { get; set; }
 
 		public bool IsLocalStackFinalized { get; set; }
 
 		public bool Is32BitPlatform { get; }
+
 		public bool Is64BitPlatform { get; }
 
 		public int? MethodTraceLevel { get; }
@@ -240,7 +246,9 @@ namespace Mosa.Compiler.Framework
 			Is32BitPlatform = Architecture.Is32BitPlatform;
 			Is64BitPlatform = Architecture.Is64BitPlatform;
 
-			NotifyInstructionTraceHandler = CompilerHooks.NotifyMethodInstructionTrace != null ? CompilerHooks.NotifyMethodInstructionTrace.Invoke(Method) : null;
+			NotifyInstructionTraceHandler = CompilerHooks.NotifyMethodInstructionTrace != null ? CompilerHooks.NotifyMethodInstructionTrace(Method) : null;
+			NotifyTranformTraceHandler = CompilerHooks.NotifyMethodTranformTrace != null ? CompilerHooks.NotifyMethodTranformTrace(Method) : null;
+
 			MethodTraceLevel = compiler.CompilerHooks.GetMethodTraceLevel != null ? compiler.CompilerHooks.GetMethodTraceLevel(method) : null;
 
 			Statistics = compiler.Statistics;
@@ -263,6 +271,7 @@ namespace Mosa.Compiler.Framework
 
 			LocalVariables = emptyOperandList;
 			ThreadID = threadID;
+			InstructionTraceStep = 0;
 
 			IsStopped = false;
 			IsExecutePipeline = true;
@@ -290,7 +299,7 @@ namespace Mosa.Compiler.Framework
 				Symbol.RemovePatches();
 			}
 
-			var methodInfo = TypeLayout.__GetMethodInfo(Method);
+			var methodInfo = TypeLayout.GetMethodInfo(Method);
 
 			MethodData.ParameterSizes = methodInfo.ParameterSizes;
 			MethodData.ParameterOffsets = methodInfo.ParameterOffsets;
@@ -415,6 +424,7 @@ namespace Mosa.Compiler.Framework
 			if (Statistics)
 			{
 				var log = new TraceLog(TraceType.MethodCounters, Method, string.Empty, MethodData.Version);
+
 				log.Log(MethodData.Counters.Export());
 
 				Compiler.PostTraceLog(log);
@@ -491,7 +501,19 @@ namespace Mosa.Compiler.Framework
 			if (NotifyInstructionTraceHandler == null)
 				return;
 
-			InstructionTrace.Run(this, stage, NotifyInstructionTraceHandler);
+			var trace = InstructionTrace.Run(stage.FormattedStageName, Method, BasicBlocks, MethodData.Version, null, 0);
+
+			NotifyInstructionTraceHandler(trace);
+		}
+
+		public void CreateTranformInstructionTrace(BaseMethodCompilerStage stage, int step)
+		{
+			if (NotifyTranformTraceHandler == null)
+				return;
+
+			var trace = InstructionTrace.Run(stage.FormattedStageName, Method, BasicBlocks, MethodData.Version, null, step);
+
+			NotifyTranformTraceHandler(trace);
 		}
 
 		private void PlugMethod()
@@ -515,7 +537,7 @@ namespace Mosa.Compiler.Framework
 				var traceLog = new TraceLog(TraceType.MethodInstructions, Method, "XX-Plugged Method", MethodData.Version);
 				traceLog?.Log($"Plugged by {plugMethod.FullName}");
 
-				NotifyInstructionTraceHandler.Invoke(traceLog);
+				NotifyInstructionTraceHandler(traceLog);
 			}
 		}
 
@@ -588,7 +610,7 @@ namespace Mosa.Compiler.Framework
 			{
 				var traceLog = new TraceLog(TraceType.MethodInstructions, Method, "XX-External Method", MethodData.Version);
 				traceLog?.Log($"This method is external linked: {Method.ExternMethodName}");
-				NotifyInstructionTraceHandler.Invoke(traceLog);
+				NotifyInstructionTraceHandler(traceLog);
 			}
 		}
 
@@ -605,7 +627,7 @@ namespace Mosa.Compiler.Framework
 			{
 				var traceLog = new TraceLog(TraceType.MethodInstructions, Method, "XX-Internal Method", MethodData.Version);
 				traceLog?.Log($"This method is an internal method");
-				NotifyInstructionTraceHandler.Invoke(traceLog);
+				NotifyInstructionTraceHandler(traceLog);
 			}
 		}
 
@@ -643,7 +665,7 @@ namespace Mosa.Compiler.Framework
 			{
 				var traceLog = new TraceLog(TraceType.MethodInstructions, Method, "XX-Stubbed Method", MethodData.Version);
 				traceLog?.Log($"This method is a stubbed method");
-				NotifyInstructionTraceHandler.Invoke(traceLog);
+				NotifyInstructionTraceHandler(traceLog);
 			}
 		}
 

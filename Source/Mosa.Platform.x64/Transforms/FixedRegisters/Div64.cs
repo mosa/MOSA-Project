@@ -16,13 +16,16 @@ namespace Mosa.Platform.x64.Transforms.FixedRegisters
 
 		public override bool Match(Context context, TransformContext transform)
 		{
-			return !(context.Result.IsCPURegister
+			if (context.Result.IsCPURegister
 				&& context.Result2.IsCPURegister
 				&& context.Operand1.IsCPURegister
 				&& context.Result.Register == CPURegister.RDX
 				&& context.Result2.Register == CPURegister.RAX
 				&& context.Operand1.Register == CPURegister.RDX
-				&& context.Operand2.Register == CPURegister.RAX);
+				&& context.Operand2.Register == CPURegister.RAX)
+				return false;
+
+			return true;
 		}
 
 		public override void Transform(Context context, TransformContext transform)
@@ -33,8 +36,8 @@ namespace Mosa.Platform.x64.Transforms.FixedRegisters
 			var result = context.Result;
 			var result2 = context.Result2;
 
-			var rax = Operand.CreateCPURegister(transform.I4, CPURegister.RAX);
-			var rdx = Operand.CreateCPURegister(transform.I4, CPURegister.RDX);
+			var rax = Operand.CreateCPURegister(transform.I8, CPURegister.RAX);
+			var rdx = Operand.CreateCPURegister(transform.I8, CPURegister.RDX);
 
 			context.SetInstruction(X64.Mov64, rdx, operand1);
 			context.AppendInstruction(X64.Mov64, rax, operand2);
@@ -45,7 +48,7 @@ namespace Mosa.Platform.x64.Transforms.FixedRegisters
 			}
 			else
 			{
-				var v3 = transform.AllocateVirtualRegister32();
+				var v3 = transform.AllocateVirtualRegister64();
 				context.AppendInstruction(X64.Mov64, v3, operand3);
 				context.AppendInstruction2(X64.Div64, rdx, rax, rdx, rax, v3);
 			}

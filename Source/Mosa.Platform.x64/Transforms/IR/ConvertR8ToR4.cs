@@ -22,7 +22,7 @@ namespace Mosa.Platform.x64.Transforms.IR
 
 		public override void Transform(Context context, TransformContext transform)
 		{
-			Debug.Assert(context.Result.IsInteger && !context.Result.IsFloatingPoint);
+			Debug.Assert(context.Result.IsFloatingPoint && !context.Result.IsFloatingPoint);
 
 			var result = context.Result;
 			var operand1 = context.Operand1;

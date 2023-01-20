@@ -32,7 +32,7 @@ namespace Mosa.Platform.ARMv8A32
 		/// <value>
 		/// The name of the instruction family.
 		/// </value>
-		public override string FamilyName { get { return "ARMv8A32"; } }
+		public override string FamilyName => "ARMv8A32";
 
 		public static byte GetConditionCode(ConditionCode condition)
 		{

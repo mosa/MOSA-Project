@@ -15,6 +15,8 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
 		{
 		}
 
+		public override int Priority => 90;
+
 		public override bool Match(Context context, TransformContext transform)
 		{
 			if (!context.Operand1.IsVirtualRegister)
@@ -57,6 +59,8 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
 		public MulSigned32x2_v1() : base(IRInstruction.MulSigned32, TransformType.Auto | TransformType.Optimization)
 		{
 		}
+
+		public override int Priority => 90;
 
 		public override bool Match(Context context, TransformContext transform)
 		{
@@ -101,6 +105,8 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
 		{
 		}
 
+		public override int Priority => 90;
+
 		public override bool Match(Context context, TransformContext transform)
 		{
 			if (!context.Operand1.IsVirtualRegister)
@@ -143,6 +149,8 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
 		public MulSigned32x2_v3() : base(IRInstruction.MulSigned32, TransformType.Auto | TransformType.Optimization)
 		{
 		}
+
+		public override int Priority => 90;
 
 		public override bool Match(Context context, TransformContext transform)
 		{

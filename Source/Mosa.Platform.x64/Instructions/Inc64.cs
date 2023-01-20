@@ -30,8 +30,15 @@ namespace Mosa.Platform.x64.Instructions
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
+			opcodeEncoder.SuppressByte(0x40);
 			opcodeEncoder.Append4Bits(0b0100);
 			opcodeEncoder.Append1Bit(0b0);
+			opcodeEncoder.Append1Bit(0b0);
+			opcodeEncoder.Append1Bit(0b0);
+			opcodeEncoder.Append1Bit((node.Result.Register.RegisterCode >> 3));
+			opcodeEncoder.Append8Bits(0xFF);
+			opcodeEncoder.Append2Bits(0b11);
+			opcodeEncoder.Append3Bits(0b000);
 			opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
 		}
 	}

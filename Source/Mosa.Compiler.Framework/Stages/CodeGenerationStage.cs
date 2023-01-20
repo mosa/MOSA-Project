@@ -1,10 +1,12 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
+using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -13,8 +15,8 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public sealed class CodeGenerationStage : BaseMethodCompilerStage
 	{
-		private Counter GeneratedInstructionCount = new Counter("CodeGenerationStage.GeneratedInstructions");
-		private Counter GeneratedBlockCount = new Counter("CodeGenerationStage.GeneratedBlocks");
+		private readonly Counter GeneratedInstructionCount = new Counter("CodeGenerationStage.GeneratedInstructions");
+		private readonly Counter GeneratedBlockCount = new Counter("CodeGenerationStage.GeneratedBlocks");
 
 		#region Data Members
 
@@ -146,6 +148,9 @@ namespace Mosa.Compiler.Framework.Stages
 						node.Instruction.Emit(node, CodeEmitter.OpcodeEncoder);
 
 						GeneratedInstructionCount.Increment();
+
+						if (MethodCompiler.Statistics)
+							UpdateCounter(node.Instruction.OpcodeName, 1);
 
 						trace?.Log($"0x{node.Offset:X8} {node.Offset} = {node}");
 					}

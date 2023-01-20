@@ -198,6 +198,7 @@ namespace Mosa.Compiler.Framework
 				(compilerSettings.BitTracker) ? new BitTrackerStage() : null,
 				(compilerSettings.BasicOptimizations && compilerSettings.BitTracker) ? new OptimizationStage(false) : null,
 				(compilerSettings.BasicOptimizations && compilerSettings.LongExpansion) ? new OptimizationStage(compilerSettings.LongExpansion) : null,
+
 				(compilerSettings.TwoPass && compilerSettings.ValueNumbering && compilerSettings.SSA) ? new ValueNumberingStage() : null,
 				(compilerSettings.TwoPass && compilerSettings.LoopInvariantCodeMotion && compilerSettings.SSA) ? new LoopInvariantCodeMotionStage() : null,
 				(compilerSettings.TwoPass && compilerSettings.SparseConditionalConstantPropagation && compilerSettings.SSA) ? new SparseConditionalConstantPropagationStage() : null,

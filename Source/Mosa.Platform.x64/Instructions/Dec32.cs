@@ -17,8 +17,6 @@ namespace Mosa.Platform.x64.Instructions
 		{
 		}
 
-		public override bool ThreeTwoAddressConversion { get { return true; } }
-
 		public override bool IsZeroFlagModified { get { return true; } }
 
 		public override bool IsSignFlagModified { get { return true; } }
@@ -35,8 +33,15 @@ namespace Mosa.Platform.x64.Instructions
 			System.Diagnostics.Debug.Assert(node.Operand1.IsCPURegister);
 			System.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);
 
+			opcodeEncoder.SuppressByte(0x40);
 			opcodeEncoder.Append4Bits(0b0100);
-			opcodeEncoder.Append1Bit(0b1);
+			opcodeEncoder.Append1Bit(0b0);
+			opcodeEncoder.Append1Bit(0b0);
+			opcodeEncoder.Append1Bit(0b0);
+			opcodeEncoder.Append1Bit((node.Result.Register.RegisterCode >> 3));
+			opcodeEncoder.Append8Bits(0xFF);
+			opcodeEncoder.Append2Bits(0b11);
+			opcodeEncoder.Append3Bits(0b001);
 			opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
 		}
 	}

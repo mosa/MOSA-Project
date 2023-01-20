@@ -15,6 +15,8 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 		{
 		}
 
+		public override int Priority => 80;
+
 		public override bool Match(Context context, TransformContext transform)
 		{
 			if (!context.Operand2.IsResolvedConstant)
@@ -44,6 +46,8 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 		public Or64Zero_v1() : base(IRInstruction.Or64, TransformType.Auto | TransformType.Optimization)
 		{
 		}
+
+		public override int Priority => 80;
 
 		public override bool Match(Context context, TransformContext transform)
 		{

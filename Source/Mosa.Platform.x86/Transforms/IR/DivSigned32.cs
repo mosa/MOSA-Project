@@ -26,11 +26,13 @@ namespace Mosa.Platform.x86.Transforms.IR
 			var result = context.Result;
 
 			var v1 = transform.AllocateVirtualRegister32();
-			var v2 = transform.AllocateVirtualRegister32();
-			var v3 = transform.AllocateVirtualRegister32();
 
-			context.SetInstruction2(X86.Cdq32, v1, v2, operand1);
-			context.AppendInstruction2(X86.IDiv32, v3, result, v1, v2, operand2);
+			var eax = Operand.CreateCPURegister(transform.I4, CPURegister.EAX);
+			var edx = Operand.CreateCPURegister(transform.I4, CPURegister.EDX);
+
+			context.SetInstruction(X86.Mov32, eax, operand1);
+			context.AppendInstruction(X86.Cdq32, edx, eax);
+			context.AppendInstruction2(X86.IDiv32, v1, result, edx, eax, operand2);
 		}
 	}
 }

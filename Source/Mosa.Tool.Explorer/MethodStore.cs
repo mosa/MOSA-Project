@@ -16,6 +16,20 @@ namespace Mosa.Tool.Explorer
 			methodDataStore.Clear();
 		}
 
+		private static void ClearMethodDataOnNewVersion(int version, MethodData methodData)
+		{
+			if (methodData.Version != version)
+			{
+				methodData.InstructionLogs.Clear();
+				methodData.OrderedDebugStageNames.Clear();
+				methodData.OrderedStageNames.Clear();
+				methodData.MethodCounters.Clear();
+				methodData.DebugLogs.Clear();
+				methodData.TransformLogs.Clear();
+				methodData.Version = version;
+			}
+		}
+
 		public MethodData GetMethodData(MosaMethod method, bool create)
 		{
 			lock (methodDataStore)
@@ -46,16 +60,23 @@ namespace Mosa.Tool.Explorer
 			}
 		}
 
-		private static void ClearMethodDataOnNewVersion(int version, MethodData methodData)
+		public void SetTransformTraceInformation(MosaMethod method, string stage, List<string> lines, int version, int step)
 		{
-			if (methodData.Version != version)
+			var methodData = GetMethodData(method, true);
+
+			lock (methodData)
 			{
-				methodData.InstructionLogs.Clear();
-				methodData.OrderedDebugStageNames.Clear();
-				methodData.OrderedStageNames.Clear();
-				methodData.CounterData.Clear();
-				methodData.DebugLogs.Clear();
-				methodData.Version = version;
+				ClearMethodDataOnNewVersion(version, methodData);
+
+				methodData.OrderedTransformStageNames.AddIfNew(stage);
+
+				if (!methodData.TransformLogs.TryGetValue(stage, out var directionary))
+				{
+					directionary = new Dictionary<int, List<string>>();
+					methodData.TransformLogs.Add(stage, directionary);
+				}
+
+				directionary.Add(step, lines);
 			}
 		}
 
@@ -81,7 +102,7 @@ namespace Mosa.Tool.Explorer
 			{
 				ClearMethodDataOnNewVersion(version, methodData);
 
-				methodData.CounterData = lines;
+				methodData.MethodCounters = lines;
 			}
 		}
 

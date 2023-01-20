@@ -23,10 +23,8 @@ namespace Mosa.Platform.x86.Transforms.IR
 		{
 			transform.SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
 
-			var v1 = transform.AllocateVirtualRegister32();
-
-			context.SetInstruction(X86.Mov32, v1, context.Operand1);
-			context.AppendInstruction2(X86.Cdq32, resultHigh, resultLow, v1);
+			context.SetInstruction(X86.Mov32, resultLow, context.Operand1);
+			context.AppendInstruction(X86.Cdq32, resultHigh, context.Operand1);
 		}
 	}
 }

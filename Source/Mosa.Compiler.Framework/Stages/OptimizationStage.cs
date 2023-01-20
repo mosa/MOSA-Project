@@ -9,7 +9,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	///	Optimization Stage
 	/// </summary>
-	public class OptimizationStage : BaseTransformationStage
+	public class OptimizationStage : BaseTransformStage
 	{
 		private readonly bool LowerTo32;
 

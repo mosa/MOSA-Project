@@ -29,8 +29,7 @@ namespace Mosa.Compiler.Framework
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		public virtual string Name
-		{ get { return GetType().Name; } }
+		public virtual string Name => GetType().Name;
 
 		/// <summary>
 		/// Gets or sets the name of the formatted stage.
@@ -139,103 +138,87 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the method data.
 		/// </summary>
-		protected MethodData MethodData
-		{ get { return MethodCompiler.MethodData; } }
+		protected MethodData MethodData => MethodCompiler.MethodData;
 
 		/// <summary>
 		/// Gets the linker.
 		/// </summary>
-		protected MosaLinker Linker
-		{ get { return MethodCompiler.Linker; } }
+		protected MosaLinker Linker => MethodCompiler.Linker;
 
 		/// <summary>
 		/// Gets the type of the platform internal runtime.
 		/// </summary>
-		public MosaType PlatformInternalRuntimeType
-		{ get { return MethodCompiler.Compiler.PlatformInternalRuntimeType; } }
+		public MosaType PlatformInternalRuntimeType => MethodCompiler.Compiler.PlatformInternalRuntimeType;
 
 		/// <summary>
 		/// Gets the type of the internal runtime.
 		/// </summary>
-		public MosaType InternalRuntimeType
-		{ get { return MethodCompiler.Compiler.InternalRuntimeType; } }
+		public MosaType InternalRuntimeType => MethodCompiler.Compiler.InternalRuntimeType;
 
 		/// <summary>
 		/// Gets the method.
 		/// </summary>
-		protected MosaMethod Method
-		{ get { return MethodCompiler.Method; } }
+		protected MosaMethod Method => MethodCompiler.Method;
 
 		/// <summary>
 		/// Gets the constant zero.
 		/// </summary>
-		protected Operand ConstantZero
-		{ get { return MethodCompiler.ConstantZero; } }
+		protected Operand ConstantZero => MethodCompiler.ConstantZero;
 
 		/// <summary>
 		/// Gets the 32-bit constant zero.
 		/// </summary>
-		protected Operand ConstantZero32
-		{ get { return MethodCompiler.ConstantZero; } }
+		protected Operand ConstantZero32 => MethodCompiler.ConstantZero;
 
 		/// <summary>
 		/// Gets the 64-bit constant zero.
 		/// </summary>
-		protected Operand ConstantZero64
-		{ get { return MethodCompiler.ConstantZero; } }
+		protected Operand ConstantZero64 => MethodCompiler.ConstantZero;
 
 		/// <summary>
 		/// Gets the stack frame.
 		/// </summary>
-		protected Operand StackFrame
-		{ get { return MethodCompiler.Compiler.StackFrame; } }
+		protected Operand StackFrame => MethodCompiler.Compiler.StackFrame;
 
 		/// <summary>
 		/// Gets the stack pointer.
 		/// </summary>
-		protected Operand StackPointer
-		{ get { return MethodCompiler.Compiler.StackPointer; } }
+		protected Operand StackPointer => MethodCompiler.Compiler.StackPointer;
 
 		/// <summary>
 		/// Gets the link register.
 		/// </summary>
-		protected Operand LinkRegister
-		{ get { return MethodCompiler.Compiler.LinkRegister; } }
+		protected Operand LinkRegister => MethodCompiler.Compiler.LinkRegister;
 
 		/// <summary>
 		/// Gets the program counter
 		/// </summary>
-		protected Operand ProgramCounter
-		{ get { return MethodCompiler.Compiler.ProgramCounter; } }
+		protected Operand ProgramCounter => MethodCompiler.Compiler.ProgramCounter;
 
 		/// <summary>
 		/// Gets the exception register.
 		/// </summary>
-		protected Operand ExceptionRegister
-		{ get { return MethodCompiler.Compiler.ExceptionRegister; } }
+		protected Operand ExceptionRegister => MethodCompiler.Compiler.ExceptionRegister;
 
 		/// <summary>
 		/// Gets the leave target register.
 		/// </summary>
-		protected Operand LeaveTargetRegister
-		{ get { return MethodCompiler.Compiler.LeaveTargetRegister; } }
+		protected Operand LeaveTargetRegister => MethodCompiler.Compiler.LeaveTargetRegister;
 
 		/// <summary>
 		/// Gets a value indicating whether this instance has protected regions.
 		/// </summary>
-		protected bool HasProtectedRegions
-		{ get { return MethodCompiler.HasProtectedRegions; } }
+		protected bool HasProtectedRegions => MethodCompiler.HasProtectedRegions;
 
 		/// <summary>
 		/// Gets a value indicating whether this instance has code.
 		/// </summary>
-		protected bool HasCode
-		{ get { return BasicBlocks.HeadBlocks.Count != 0; } }
+		protected bool HasCode => BasicBlocks.HeadBlocks.Count != 0;
 
 		/// <summary>
 		/// The counters
 		/// </summary>
-		private readonly List<Counter> Counters = new List<Counter>();
+		private readonly List<Counter> RegisteredCounters = new List<Counter>();
 
 		protected uint ObjectHeaderSize;
 
@@ -303,17 +286,9 @@ namespace Mosa.Compiler.Framework
 			Setup();
 		}
 
-		protected void Register(Counter counter)
-		{
-			Counters.Add(counter);
-		}
-
 		public void Execute()
 		{
-			foreach (var counter in Counters)
-			{
-				counter.Reset();
-			}
+			ResetRegisteredCounters();
 
 			try
 			{
@@ -330,10 +305,7 @@ namespace Mosa.Compiler.Framework
 
 			Finish();
 
-			foreach (var counter in Counters)
-			{
-				UpdateCounter(counter);
-			}
+			UpdateRegisterCounters();
 
 			MethodCompiler = null;
 			traceLogs = null;
@@ -401,19 +373,43 @@ namespace Mosa.Compiler.Framework
 
 		#endregion Methods
 
+		#region Counters
+
+		public void Register(Counter counter)
+		{
+			RegisteredCounters.Add(counter);
+		}
+
+		private void ResetRegisteredCounters()
+		{
+			foreach (var counter in RegisteredCounters)
+			{
+				counter.Reset();
+			}
+		}
+
+		private void UpdateRegisterCounters()
+		{
+			foreach (var counter in RegisteredCounters)
+			{
+				UpdateCounter(counter.Name, counter.Count);
+			}
+		}
+
+		protected void UpdateCounter(string name, int count = 1)
+		{
+			MethodData.Counters.UpdateSkipLock(name, count);
+		}
+
+		#endregion Counters
+
 		#region Overrides
 
 		protected virtual void Initialize()
 		{ }
 
-		protected virtual bool CheckToRun()
-		{
-			return true;
-		}
-
 		protected virtual void Setup()
-		{
-		}
+		{ }
 
 		protected virtual void Run()
 		{ }
@@ -930,15 +926,6 @@ namespace Mosa.Compiler.Framework
 		public static bool IsSSAForm(Operand operand)
 		{
 			return operand.Definitions.Count == 1;
-		}
-
-		/// <summary>
-		/// Updates the counter.
-		/// </summary>
-		/// <param name="counter">The counter.</param>
-		public void UpdateCounter(Counter counter)
-		{
-			MethodData.Counters.UpdateSkipLock(counter.Name, counter.Count);
 		}
 
 		/// <summary>

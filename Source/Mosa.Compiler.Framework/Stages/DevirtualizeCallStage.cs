@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <seealso cref="Mosa.Compiler.Framework.BaseCodeTransformationStage" />
 	public sealed class DevirtualizeCallStage : BaseCodeTransformationStage
 	{
-		private Counter DevirtualizedMethodCallsCount = new Counter("DevirtualizeCallStage.DevirtualizedMethodCalls");
+		private readonly Counter DevirtualizedMethodCallsCount = new Counter("DevirtualizeCallStage.DevirtualizedMethodCalls");
 
 		private TraceLog trace;
 

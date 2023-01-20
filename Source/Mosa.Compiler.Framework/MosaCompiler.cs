@@ -25,7 +25,8 @@ namespace Mosa.Compiler.Framework
 
 		public ITypeResolver TypeResolver { get; }
 
-		private enum CompileStage { Initial, Loaded, Initialized, Ready, Executing, Completed }
+		private enum CompileStage
+		{ Initial, Loaded, Initialized, Ready, Executing, Completed }
 
 		private CompileStage Stage = CompileStage.Initial;
 

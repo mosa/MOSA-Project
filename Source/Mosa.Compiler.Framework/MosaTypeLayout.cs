@@ -111,10 +111,13 @@ namespace Mosa.Compiler.Framework
 			public bool ReturnInRegister { get; set; }
 
 			public int ParameterStackSize { get; set; }
+
 			public List<uint> ParameterOffsets { get; set; }
+
 			public List<uint> ParameterSizes { get; set; }
 
-			public int ParameterCount { get { return ParameterSizes.Count; } }
+			public int ParameterCount
+			{ get { return ParameterSizes.Count; } }
 		}
 
 		#endregion Nested Class
@@ -361,7 +364,7 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		public MethodInfo __GetMethodInfo(MosaMethod method)
+		public MethodInfo GetMethodInfo(MosaMethod method)
 		{
 			lock (_lock)
 			{

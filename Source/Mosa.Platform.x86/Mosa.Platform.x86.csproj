@@ -30,4 +30,9 @@
   <ItemGroup>
     <Compile Remove="Intrinsic\SuppressStackFrame.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Transforms\Optimizations\Auto\Ordering\" />
+    <Folder Include="Transforms\Optimizations\Manual\Simplification\" />
+    <Folder Include="Transforms\Special\" />
+  </ItemGroup>
 </Project>

@@ -36,6 +36,13 @@ namespace Mosa.Platform.x86.Instructions
 			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
+			if ((node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 0) && node.Operand2.IsConstant)
+			{
+				opcodeEncoder.Append8Bits(0xA9);
+				opcodeEncoder.Append32BitImmediate(node.Operand2);
+				return;
+			}
+
 			if (node.Operand2.IsCPURegister)
 			{
 				opcodeEncoder.Append8Bits(0x85);

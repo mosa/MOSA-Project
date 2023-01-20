@@ -1,7 +1,11 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
+using System.Collections;
+using System.Drawing;
+using System.Runtime.CompilerServices;
 using Mosa.Compiler.Common;
+using Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
 namespace Mosa.Compiler.Framework.Transforms
 {
@@ -9,18 +13,24 @@ namespace Mosa.Compiler.Framework.Transforms
 	public enum TransformType
 	{ Transform, Auto, Manual, Optimization }
 
-	public abstract class BaseTransform
+	public abstract class BaseTransform : IComparable<BaseTransform>
 	{
 		#region Properties
 
 		public BaseInstruction Instruction { get; private set; }
 
 		public bool Log { get; private set; } = false;
+
 		public string Name { get; }
 
+		public virtual int Priority { get; } = 0;
+
 		public virtual bool IsAuto { get; protected set; }
+
 		public bool IsManual => !IsAuto;
+
 		public virtual bool IsOptimization { get; protected set; }
+
 		public bool IsTranformation => !IsOptimization;
 
 		#endregion Properties
@@ -35,7 +45,7 @@ namespace Mosa.Compiler.Framework.Transforms
 			IsAuto = type.HasFlag(TransformType.Auto);
 			IsOptimization = type.HasFlag(TransformType.Optimization);
 
-			Name = ExtractName();
+			Name = GetType().FullName.Replace("Mosa.Platform.", string.Empty).Replace("Mosa.Compiler.Framework.Transforms", "IR").Replace("Transforms.", string.Empty);
 			TransformDirectory.Add(this);
 		}
 
@@ -48,13 +58,9 @@ namespace Mosa.Compiler.Framework.Transforms
 
 		#region Internals
 
-		private string ExtractName()
+		int IComparable<BaseTransform>.CompareTo(BaseTransform other)
 		{
-			string name = GetType().FullName;
-
-			var transform = name.Replace("Mosa.Platform.", string.Empty).Replace("Mosa.Compiler.Framework.", string.Empty).Replace("Transform.", string.Empty);
-
-			return transform;
+			return Priority.CompareTo(other.Priority);
 		}
 
 		#endregion Internals
@@ -244,6 +250,11 @@ namespace Mosa.Compiler.Framework.Transforms
 		public static bool IsCarryFlagUsed(Context context)
 		{
 			return IsCarryFlagUsed(context.Node) != TriState.No;
+		}
+
+		protected static bool IsResultAndOperand1Same(Context context)
+		{
+			return context.Result == context.Operand1;
 		}
 
 		#endregion Filter Methods
@@ -706,6 +717,11 @@ namespace Mosa.Compiler.Framework.Transforms
 			return a ^ b;
 		}
 
+		protected static uint UseCount(Operand operand)
+		{
+			return (uint)operand.Uses.Count;
+		}
+
 		#endregion Expression Methods
 
 		#region SignExtend Helpers
@@ -1033,6 +1049,5 @@ namespace Mosa.Compiler.Framework.Transforms
 		{
 			return BaseCodeTransformationStage.IsPhiInstruction(instruction);
 		}
-
 	}
 }

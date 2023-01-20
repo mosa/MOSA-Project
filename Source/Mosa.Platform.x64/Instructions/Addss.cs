@@ -19,8 +19,6 @@ namespace Mosa.Platform.x64.Instructions
 
 		public override bool IsCommutative { get { return true; } }
 
-		public override bool ThreeTwoAddressConversion { get { return true; } }
-
 		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);

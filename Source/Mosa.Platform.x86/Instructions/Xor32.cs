@@ -19,8 +19,6 @@ namespace Mosa.Platform.x86.Instructions
 
 		public override bool IsCommutative { get { return true; } }
 
-		public override bool ThreeTwoAddressConversion { get { return true; } }
-
 		public override bool IsZeroFlagModified { get { return true; } }
 
 		public override bool IsCarryFlagCleared { get { return true; } }
@@ -42,6 +40,23 @@ namespace Mosa.Platform.x86.Instructions
 			System.Diagnostics.Debug.Assert(node.Result.IsCPURegister);
 			System.Diagnostics.Debug.Assert(node.Operand1.IsCPURegister);
 			System.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);
+
+			if ((node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 0) && (node.Operand2.IsConstant && node.Operand2.ConstantSigned32 >= -128 && node.Operand2.ConstantSigned32 <= 127))
+			{
+				opcodeEncoder.Append8Bits(0x83);
+				opcodeEncoder.Append2Bits(0b11);
+				opcodeEncoder.Append3Bits(0b110);
+				opcodeEncoder.Append3Bits(0b000);
+				opcodeEncoder.Append8BitImmediate(node.Operand2);
+				return;
+			}
+
+			if ((node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 0) && node.Operand2.IsConstant)
+			{
+				opcodeEncoder.Append8Bits(0x35);
+				opcodeEncoder.Append32BitImmediate(node.Operand2);
+				return;
+			}
 
 			if (node.Operand2.IsCPURegister)
 			{

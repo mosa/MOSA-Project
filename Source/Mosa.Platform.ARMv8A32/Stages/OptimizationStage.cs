@@ -8,8 +8,8 @@ namespace Mosa.Platform.ARMv8A32.Stages
 	/// <summary>
 	/// ARMv8A32 Optimization Stage
 	/// </summary>
-	/// <seealso cref="Mosa.Compiler.Framework.Stages.BaseTransformationStage" />
-	public sealed class OptimizationStage : Compiler.Framework.Stages.BaseTransformationStage
+	/// <seealso cref="Mosa.Compiler.Framework.Stages.BaseTransformStage" />
+	public sealed class OptimizationStage : Compiler.Framework.Stages.BaseTransformStage
 	{
 		public override string Name => "ARMv8A32." + GetType().Name;
 

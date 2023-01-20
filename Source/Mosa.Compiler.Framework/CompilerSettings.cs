@@ -14,81 +14,84 @@ namespace Mosa.Compiler.Framework
 
 		public Settings Settings { get; } = new Settings();
 
-		public string Platform { get { return Settings.GetValue("Compiler.Platform", "x86"); } }
+		public string Platform => Settings.GetValue("Compiler.Platform", "x86");
 
-		public string OutputFile { get { return Settings.GetValue("Compiler.OutputFile", "_main.exe"); } }
+		public string OutputFile => Settings.GetValue("Compiler.OutputFile", "_main.exe");
 
-		public string MapFile { get { return Settings.GetValue("CompilerDebug.MapFile", null); } }
+		public string MapFile => Settings.GetValue("CompilerDebug.MapFile", null);
 
-		public string CompileTimeFile { get { return Settings.GetValue("CompilerDebug.CompileTimeFile", null); } }
+		public string CompileTimeFile => Settings.GetValue("CompilerDebug.CompileTimeFile", null);
 
-		public string DebugFile { get { return Settings.GetValue("CompilerDebug.DebugFile", null); } }
+		public string DebugFile => Settings.GetValue("CompilerDebug.DebugFile", null);
 
-		public string InlinedFile { get { return Settings.GetValue("CompilerDebug.InlinedFile", null); } }
+		public string InlinedFile => Settings.GetValue("CompilerDebug.InlinedFile", null);
 
-		public string PreLinkHashFile { get { return Settings.GetValue("CompilerDebug.PreLinkHashFile", null); } }
+		public string PreLinkHashFile => Settings.GetValue("CompilerDebug.PreLinkHashFile", null);
 
-		public string PostLinkHashFile { get { return Settings.GetValue("CompilerDebug.PostLinkHashFile", null); } }
+		public string PostLinkHashFile => Settings.GetValue("CompilerDebug.PostLinkHashFile", null);
 
-		public bool SSA { get { return Settings.GetValue("Optimizations.SSA", true); } }
+		public bool SSA => Settings.GetValue("Optimizations.SSA", true);
 
-		public bool BasicOptimizations { get { return Settings.GetValue("Optimizations.Basic", true); } }
+		public bool BasicOptimizations => Settings.GetValue("Optimizations.Basic", true);
 
-		public bool ValueNumbering { get { return Settings.GetValue("Optimizations.ValueNumbering", true); } }
+		public bool ValueNumbering => Settings.GetValue("Optimizations.ValueNumbering", true);
 
-		public bool SparseConditionalConstantPropagation { get { return Settings.GetValue("Optimizations.SCCP", true); } }
+		public bool SparseConditionalConstantPropagation => Settings.GetValue("Optimizations.SCCP", true);
 
-		public bool Devirtualization { get { return Settings.GetValue("Optimizations.Devirtualization", true); } }
+		public bool Devirtualization => Settings.GetValue("Optimizations.Devirtualization", true);
 
-		public bool LoopInvariantCodeMotion { get { return Settings.GetValue("Optimizations.LoopInvariantCodeMotion", true); } }
+		public bool LoopInvariantCodeMotion => Settings.GetValue("Optimizations.LoopInvariantCodeMotion", true);
 
-		public bool InlineMethods { get { return Settings.GetValue("Optimizations.Inline", true); } }
+		public bool InlineMethods => Settings.GetValue("Optimizations.Inline", true);
 
-		public bool InlineExplicit { get { return Settings.GetValue("Optimizations.Inline.Explicit", true); } }
+		public bool InlineExplicit => Settings.GetValue("Optimizations.Inline.Explicit", true);
 
-		public bool LongExpansion { get { return Settings.GetValue("Optimizations.LongExpansion", true); } }
+		public bool LongExpansion => Settings.GetValue("Optimizations.LongExpansion", true);
 
-		public bool TwoPassOptimizations { get { return Settings.GetValue("Optimizations.TwoPass", true); } }
+		public bool TwoPassOptimizations => Settings.GetValue("Optimizations.TwoPass", true);
 
-		public bool BitTracker { get { return Settings.GetValue("Optimizations.BitTracker", true); } }
+		public bool BitTracker
+		{ get { return Settings.GetValue("Optimizations.BitTracker", true); } }
 
-		public int OptimizationWindow { get { return Settings.GetValue("Optimizations.Basic.Window", 5); } }
+		public int OptimizationWindow => Settings.GetValue("Optimizations.Basic.Window", 5);
 
-		public int InlineMaximum { get { return Settings.GetValue("Optimizations.Inline.Maximum", 12); } }
+		public int InlineMaximum => Settings.GetValue("Optimizations.Inline.Maximum", 12);
 
-		public int InlineAggressiveMaximum { get { return Settings.GetValue("Optimizations.Inline.AggressiveMaximum", 24); } }
+		public int InlineAggressiveMaximum => Settings.GetValue("Optimizations.Inline.AggressiveMaximum", 24);
 
-		public bool PlatformOptimizations { get { return Settings.GetValue("Optimizations.Platform", true); } }
+		public bool PlatformOptimizations => Settings.GetValue("Optimizations.Platform", true);
 
-		public string LinkerFormat { get { return Settings.GetValue("Linker.Format", "elf32"); } }
+		public string LinkerFormat => Settings.GetValue("Linker.Format", "elf32");
 
-		public bool EmitBinary { get { return Settings.GetValue("Compiler.Binary", true); } }
+		public bool EmitBinary => Settings.GetValue("Compiler.Binary", true);
 
-		public bool EmitDrawf { get { return Settings.GetValue("Linker.Drawf", false); } }
+		public bool EmitDrawf => Settings.GetValue("Linker.Drawf", false);
 
-		public bool TwoPass { get { return Settings.GetValue("Optimizations.TwoPass", true); } }
+		public bool TwoPass => Settings.GetValue("Optimizations.TwoPass", true);
 
-		public bool Statistics { get { return Settings.GetValue("CompilerDebug.Statistics", true); } }
+		public bool Statistics => Settings.GetValue("CompilerDebug.Statistics", true);
 
-		public int TraceLevel { get { return Settings.GetValue("Compiler.TraceLevel", 0); } }
+		public int TraceLevel => Settings.GetValue("Compiler.TraceLevel", 0);
 
-		public bool MethodScanner { get { return Settings.GetValue("Compiler.MethodScanner", false); } }
+		public bool MethodScanner => Settings.GetValue("Compiler.MethodScanner", false);
 
-		public bool EmitInline { get { return Settings.GetValue("Compiler.EmitInline", false); } }
+		public bool EmitInline => Settings.GetValue("Compiler.EmitInline", false);
 
-		public int MaxThreads { get { return Settings.GetValue("Compiler.Multithreading.MaxThreads", 0); } }
+		public bool Multithreading => Settings.GetValue("Compiler.Multithreading", true);
 
-		public List<string> SearchPaths { get { return Settings.GetValueList("SearchPaths"); } }
+		public int MaxThreads => Settings.GetValue("Compiler.Multithreading.MaxThreads", 0);
 
-		public List<string> SourceFiles { get { return Settings.GetValueList("Compiler.SourceFiles"); } }
+		public List<string> SearchPaths => Settings.GetValueList("SearchPaths");
 
-		public List<string> InlineAggressiveList { get { return Settings.GetValueList("Optimizations.Inline.Aggressive"); } }
+		public List<string> SourceFiles => Settings.GetValueList("Compiler.SourceFiles");
 
-		public List<string> InlineExcludeList { get { return Settings.GetValueList("Optimizations.Inline.Exclude"); } }
+		public List<string> InlineAggressiveList => Settings.GetValueList("Optimizations.Inline.Aggressive");
 
-		public bool FullCheckMode { get { return Settings.GetValue("CompilerDebug.FullCheckMode", false); } }
+		public List<string> InlineExcludeList => Settings.GetValueList("Optimizations.Inline.Exclude");
 
-		public bool CILDecodingStageV2 { get { return Settings.GetValue("CompilerDebug.CILDecodingStageV2", false); } }
+		public bool FullCheckMode => Settings.GetValue("CompilerDebug.FullCheckMode", false);
+
+		public bool CILDecodingStageV2 => Settings.GetValue("CompilerDebug.CILDecodingStageV2", false);
 
 		#endregion Properties
 
@@ -100,6 +103,7 @@ namespace Mosa.Compiler.Framework
 			Settings.SetValue("Compiler.TraceLevel", 0);
 			Settings.SetValue("Compiler.Platform", "x86");
 			Settings.SetValue("Compiler.Multithreading", true);
+			//Settings.SetValue("Compiler.Multithreading.MaxThreads", 1);
 			Settings.SetValue("Optimizations.SSA", true);
 			Settings.SetValue("Optimizations.Basic", true);
 			Settings.SetValue("Optimizations.ValueNumbering", true);
