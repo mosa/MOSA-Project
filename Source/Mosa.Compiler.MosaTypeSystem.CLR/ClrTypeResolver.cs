@@ -55,7 +55,7 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR
 			return typeLookup.TryGetValue(Tuple.Create(module, fullName), out var result) ? result : null;
 		}
 
-		private string GetTypeName(BuiltInType type)
+		private static string GetTypeName(BuiltInType type)
 		{
 			return type switch
 			{
@@ -82,7 +82,7 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR
 			};
 		}
 
-		private string GetTypeName(MosaTypeCode type)
+		private static string GetTypeName(MosaTypeCode type)
 		{
 			return type switch
 			{
