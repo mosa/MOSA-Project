@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Text;
 using System.Threading;
@@ -16,35 +17,48 @@ using Mosa.Compiler.MosaTypeSystem.CLR;
 using Mosa.Tool.Explorer.Stages;
 using Mosa.Utility.Configuration;
 using Mosa.Utility.Launcher;
-using Reko.Core.Dfa;
 using static Mosa.Compiler.Framework.CompilerHooks;
 
 namespace Mosa.Tool.Explorer
 {
 	public partial class MainForm : Form
 	{
+		#region Classes
+
+		protected class CounterEntry
+		{
+			public CounterEntry(string name, int counter)
+			{
+				Name = name;
+				Value = counter;
+			}
+
+			//[Browsable(false)]
+			public string Name { get; set; }
+
+			public int Value { get; set; }
+		}
+
+		#endregion Classes
+
+		private readonly object _statusLock = new object();
+		private readonly BindingList<CounterEntry> CompilerCounters = new BindingList<CounterEntry>();
+		private readonly CompilerData CompilerData = new CompilerData();
+		private readonly BindingList<CounterEntry> MethodCounters = new BindingList<CounterEntry>();
+		private readonly MethodStore MethodStore = new MethodStore();
 		private readonly Settings Settings = new Settings();
 
-		private DateTime compileStartTime;
-
 		private MosaCompiler Compiler = null;
-
-		private readonly MethodStore methodStore = new MethodStore();
-
-		private TypeSystemTree typeSystemTree;
-
-		private int TotalMethods = 0;
 		private int CompletedMethods = 0;
-		private string Status = null;
-
-		private MosaMethod CurrentMethodSelected = null;
-
-		private readonly Dictionary<string, List<string>> Logs = new Dictionary<string, List<string>>();
-		private readonly List<string> LogSections = new List<string>();
-
 		private string CurrentLogSection = string.Empty;
-		private bool DirtyLogDropDown = true;
-		private bool DirtyLog = true;
+
+		private MosaMethod CurrentMethod = null;
+		private MethodData CurrentMethodData = null;
+
+		private string Status = null;
+		private int TotalMethods = 0;
+		private int TransformStep = 0;
+		private TypeSystemTree TypeSystemTree;
 
 		public MainForm()
 		{
@@ -52,178 +66,69 @@ namespace Mosa.Tool.Explorer
 
 			cbPlatform.SelectedIndex = 0;
 
+			gridMethodCounters.DataSource = MethodCounters;
+			gridMethodCounters.Columns[0].Width = 370;
+			gridMethodCounters.Columns[1].Width = 80;
+			gridMethodCounters.Columns[1].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+
+			gridCompilerCounters.DataSource = CompilerCounters;
+			gridCompilerCounters.Columns[0].Width = 370;
+			gridCompilerCounters.Columns[1].Width = 80;
+			gridCompilerCounters.Columns[1].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+
 			ClearAll();
 
 			RegisterPlatforms();
 		}
 
-		private static void RegisterPlatforms()
+		public void ClearAllLogs()
 		{
-			PlatformRegistry.Add(new Platform.x86.Architecture());
-			PlatformRegistry.Add(new Platform.x64.Architecture());
-			PlatformRegistry.Add(new Platform.ARMv8A32.Architecture());
-		}
-
-		private void ClearAllLogs()
-		{
-			lock (Logs)
-			{
-				Logs.Clear();
-				LogSections.Clear();
-			}
-
-			UpdateLog("Compiler", (string)null);
+			CompilerData.ClearAllLogs();
 
 			ClearSectionDropDown();
 
-			cbSectionLogs.SelectedIndex = 0;
+			cbCompilerSections.SelectedIndex = 0;
 		}
 
-		private void UpdateLog(string section, List<string> lines)
+		public int? GetMethodTraceLevel(MosaMethod method)
 		{
-			lock (Logs)
-			{
-				if (!Logs.TryGetValue(section, out List<string> log))
-				{
-					log = new List<string>(100);
-					Logs.Add(section, log);
-					LogSections.Add(section);
-					DirtyLogDropDown = true;
-				}
-
-				if (log != null)
-				{
-					log.AddRange(lines);
-					DirtyLog = CurrentLogSection == section;
-				}
-			}
+			return method == CurrentMethod ? 10 : -1;
 		}
 
-		private void UpdateLog(string section, string line)
+		public void LoadArguments(string[] args)
 		{
-			lock (Logs)
-			{
-				if (!Logs.TryGetValue(section, out List<string> log))
-				{
-					log = new List<string>(100);
-					Logs.Add(section, log);
-					LogSections.Add(section);
-					DirtyLogDropDown = true;
-				}
+			SetDefaultSettings();
 
-				if (line != null)
-				{
-					log.Add(line);
-					DirtyLog = CurrentLogSection == section;
-				}
-			}
+			var arguments = SettingsLoader.RecursiveReader(args);
+
+			Settings.Merge(arguments);
+
+			UpdateDisplay();
 		}
 
-		private void ClearSectionDropDown()
+		public void LoadAssembly()
 		{
-			cbSectionLogs.Items.Clear();
+			ClearAll();
 
-			DirtyLogDropDown = true;
-			DirtyLog = true;
+			UpdateSettings();
 
-			RefreshLogDropDown();
-			RefreshLog();
+			var compilerHooks = CreateCompilerHook();
+
+			Compiler = new MosaCompiler(Settings, compilerHooks, new ClrModuleLoader(), new ClrTypeResolver());
+
+			Compiler.Load();
+
+			CreateTree();
+
+			SetStatus("Assemblies Loaded!");
 		}
 
-		private void RefreshLogDropDown()
+		public NotifyTraceLogHandler NotifyMethodInstructionTrace(MosaMethod method)
 		{
-			if (!DirtyLogDropDown)
-				return;
+			if (method != CurrentMethod)
+				return null;
 
-			DirtyLogDropDown = false;
-
-			lock (Logs)
-			{
-				for (int i = cbSectionLogs.Items.Count; i < LogSections.Count; i++)
-				{
-					var formatted = "[" + i.ToString() + "] " + LogSections[i];
-
-					cbSectionLogs.Items.Add(formatted);
-				}
-			}
-		}
-
-		private void RefreshLog()
-		{
-			if (tabControl.SelectedTab != tabLogs)
-				return;
-
-			if (!DirtyLog)
-				return;
-
-			DirtyLog = false;
-
-			lock (Logs)
-			{
-				if (!Logs.ContainsKey(CurrentLogSection))
-				{
-					tbLogs.Text = string.Empty;
-					return;
-				}
-
-				var lines = Logs[CurrentLogSection];
-
-				if (lines == null)
-				{
-					tbLogs.Text = string.Empty;
-				}
-				else
-				{
-					tbLogs.Text = CreateText(lines);
-				}
-			}
-		}
-
-		private void SetStatus(string status)
-		{
-			toolStripStatusLabel.Text = status;
-		}
-
-		private void Main_Load(object sender, EventArgs e)
-		{
-			Text = "MOSA Explorer v" + CompilerVersion.VersionString;
-
-			SetStatus("Ready!");
-
-			var sourcefiles = Settings.GetValueList("Compiler.SourceFiles");
-
-			if (sourcefiles != null && sourcefiles.Count >= 1)
-			{
-				var filename = Path.GetFullPath(sourcefiles[0]);
-
-				openFileDialog.FileName = filename;
-
-				UpdateSettings(filename);
-
-				LoadAssembly();
-			}
-		}
-
-		private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			OpenFile();
-		}
-
-		private void ToolStripButton1_Click(object sender, EventArgs e)
-		{
-			OpenFile();
-		}
-
-		private void OpenFile()
-		{
-			if (openFileDialog.ShowDialog() == DialogResult.OK)
-			{
-				UpdateSettings();
-
-				UpdateSettings(openFileDialog.FileName);
-
-				LoadAssembly();
-			}
+			return NotifyMethodInstructionTraceResponse;
 		}
 
 		protected void CreateTree()
@@ -233,52 +138,16 @@ namespace Mosa.Tool.Explorer
 
 			if (Compiler.TypeSystem == null || Compiler.TypeLayout == null)
 			{
-				typeSystemTree = null;
+				TypeSystemTree = null;
 				treeView.Nodes.Clear();
 				return;
 			}
 
 			var include = GetIncluded(tbFilter.Text, out MosaUnit selected);
 
-			typeSystemTree = new TypeSystemTree(treeView, Compiler.TypeSystem, Compiler.TypeLayout, showSizes.Checked, include);
+			TypeSystemTree = new TypeSystemTree(treeView, Compiler.TypeSystem, Compiler.TypeLayout, showSizes.Checked, include);
 
 			Select(selected);
-		}
-
-		protected void Select(MosaUnit selected)
-		{
-			if (selected == null)
-				return;
-
-			foreach (System.Windows.Forms.TreeNode node in treeView.Nodes)
-			{
-				if (Select(node, selected))
-					return;
-			}
-		}
-
-		protected bool Select(System.Windows.Forms.TreeNode node, MosaUnit selected)
-		{
-			if (node == null)
-				return false;
-
-			if (node.Tag != null)
-			{
-				if (node.Tag == selected)
-				{
-					treeView.SelectedNode = node;
-					node.EnsureVisible();
-					return true;
-				}
-			}
-
-			foreach (System.Windows.Forms.TreeNode children in node.Nodes)
-			{
-				if (Select(children, selected))
-					return true;
-			}
-
-			return false;
 		}
 
 		protected HashSet<MosaUnit> GetIncluded(string value, out MosaUnit selected)
@@ -344,65 +213,218 @@ namespace Mosa.Tool.Explorer
 			return include;
 		}
 
+		protected void Select(MosaUnit selected)
+		{
+			if (selected == null)
+				return;
+
+			foreach (TreeNode node in treeView.Nodes)
+			{
+				if (Select(node, selected))
+					return;
+			}
+		}
+
+		protected bool Select(TreeNode node, MosaUnit selected)
+		{
+			if (node == null)
+				return false;
+
+			if (node.Tag != null)
+			{
+				if (node.Tag == selected)
+				{
+					treeView.SelectedNode = node;
+					node.EnsureVisible();
+					return true;
+				}
+			}
+
+			foreach (TreeNode children in node.Nodes)
+			{
+				if (Select(children, selected))
+					return true;
+			}
+
+			return false;
+		}
+
 		protected void UpdateTree()
 		{
-			if (typeSystemTree == null)
+			if (TypeSystemTree == null)
 			{
 				CreateTree();
 			}
 			else
 			{
-				typeSystemTree.Update();
+				TypeSystemTree.Update();
 			}
 		}
 
-		private void QuitToolStripMenuItem_Click(object sender, EventArgs e)
+		private static string CreateText(List<string> list)
 		{
-			Application.Exit();
-		}
+			if (list == null)
+				return string.Empty;
 
-		private void ShowSizes_Click(object sender, EventArgs e)
-		{
-			CreateTree();
-		}
+			var result = new StringBuilder();
 
-		private readonly object compilerStageLock = new object();
-
-		private void SubmitTraceEvent(CompilerEvent compilerEvent, string message, int threadID)
-		{
-			var part = string.IsNullOrWhiteSpace(message) ? string.Empty : ": " + message;
-			var msg = $"{compilerEvent.ToText()}{part}";
-
-			var timelog = $"{(DateTime.Now - compileStartTime).TotalSeconds:0.00} [{threadID}] {msg}";
-
-			lock (compilerStageLock)
+			foreach (var l in list)
 			{
-				if (compilerEvent == CompilerEvent.Error)
-				{
-					UpdateLog("Error", msg);
-					UpdateLog("Compiler", timelog);
-				}
-				if (compilerEvent == CompilerEvent.Exception)
-				{
-					UpdateLog("Exception", msg);
-					UpdateLog("Compiler", timelog);
-				}
-				else if (compilerEvent == CompilerEvent.Counter)
-				{
-					if (message.StartsWith("Transform-"))
-					{
-						UpdateLog("Transforms", message.Substring(10));
-					}
-					else
-					{
-						UpdateLog("Counters", message);
-					}
-				}
-				else
-				{
-					UpdateLog("Compiler", timelog);
-				}
+				result.AppendLine(l);
 			}
+
+			return result.ToString();
+		}
+
+		private static CounterEntry ExtractCounterData(string line)
+		{
+			var index = line.IndexOf(':');
+			var name = line.Substring(0, index).Trim();
+			var value = int.Parse(line.Substring(index + 1).Trim());
+			var entry = new CounterEntry(name, value);
+			return entry;
+		}
+
+		private static List<string> ExtractLabels(List<string> lines)
+		{
+			if (lines == null)
+				return null;
+
+			var labels = new List<string>();
+
+			foreach (var line in lines)
+			{
+				if (!line.StartsWith("Block #"))
+					continue;
+
+				labels.Add(line.Substring(line.IndexOf("L_")));
+			}
+
+			return labels;
+		}
+
+		private static void RegisterPlatforms()
+		{
+			PlatformRegistry.Add(new Platform.x86.Architecture());
+			PlatformRegistry.Add(new Platform.x64.Architecture());
+			PlatformRegistry.Add(new Platform.ARMv8A32.Architecture());
+		}
+
+		private void btnFirst_Click(object sender, EventArgs e)
+		{
+			SetTranformationStep(0);
+		}
+
+		private void btnLast_Click(object sender, EventArgs e)
+		{
+			SetTranformationStep(int.MaxValue);
+		}
+
+		private void btnNext_Click(object sender, EventArgs e)
+		{
+			SetTranformationStep(TransformStep + 1);
+		}
+
+		private void btnPrevious_Click(object sender, EventArgs e)
+		{
+			SetTranformationStep(TransformStep - 1);
+		}
+
+		private void cbCompilerSections_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			var formatted = cbCompilerSections.SelectedItem as string;
+
+			CurrentLogSection = formatted.Substring(formatted.IndexOf(' ') + 1);
+
+			CompilerData.DirtyLog = true;
+
+			RefreshCompilerLog();
+		}
+
+		private void cbDebugStages_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			UpdateDebugResults();
+		}
+
+		private void cbDisableAllOptimizations_Click(object sender, EventArgs e)
+		{
+			ToggleOptimization(false);
+		}
+
+		private void cbEnableAllOptimizations_Click(object sender, EventArgs e)
+		{
+			ToggleOptimization(true);
+		}
+
+		private void cbInstructionLabels_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			UpdateInstructions();
+		}
+
+		private void cbInstructionStages_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			var previousItemLabel = cbInstructionLabels.SelectedItem;
+
+			UpdateInstructionLabels();
+
+			if (previousItemLabel != null && cbInstructionLabels.Items.Contains(previousItemLabel))
+				cbInstructionLabels.SelectedItem = previousItemLabel;
+			else
+				cbInstructionLabels.SelectedIndex = 0;
+
+			cbInstructionLabels_SelectedIndexChanged(null, null);
+		}
+
+		private void cbPlatform_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			ClearAll();
+		}
+
+		private void cbTransformLabels_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			UpdateTransforms();
+		}
+
+		private void cbTransformStages_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			var previousItemLabel = cbTransformLabels.SelectedItem;
+
+			UpdateTransformLabels();
+
+			if (previousItemLabel != null && cbTransformLabels.Items.Contains(previousItemLabel))
+				cbTransformLabels.SelectedItem = previousItemLabel;
+			else
+				cbTransformLabels.SelectedIndex = 0;
+
+			SetTranformationStep(0);
+
+			cbTransformLabels_SelectedIndexChanged(null, null);
+		}
+
+		private void ClearAll()
+		{
+			Compiler = null;
+			TypeSystemTree = null;
+
+			treeView.Nodes.Clear();
+			tbInstructions.Text = string.Empty;
+			tbDebugResult.Text = string.Empty;
+			MethodStore.Clear();
+			MethodCounters.Clear();
+			CompilerCounters.Clear();
+
+			ClearAllLogs();
+		}
+
+		private void ClearSectionDropDown()
+		{
+			cbCompilerSections.Items.Clear();
+
+			CompilerData.DirtyLogSections = true;
+			CompilerData.DirtyLog = true;
+
+			RefreshCompilerSelectionDropDown();
+			RefreshCompilerLog();
 		}
 
 		private void CompileAll()
@@ -410,7 +432,7 @@ namespace Mosa.Tool.Explorer
 			if (Compiler == null)
 				return;
 
-			compileStartTime = DateTime.Now;
+			CompilerData.CompileStartTime = DateTime.Now;
 
 			Compiler.ScheduleAll();
 
@@ -429,254 +451,81 @@ namespace Mosa.Tool.Explorer
 			});
 		}
 
-		private void OnCompileCompleted() => Invoke((MethodInvoker)(() => CompileCompleted()));
-
 		private void CompileCompleted()
 		{
 			toolStrip1.Enabled = true;
 
 			SetStatus("Compiled!");
 
-			SortLog("Transforms");
-			SortLog("Counters");
+			CompilerData.SortLog("Counters");
 
 			UpdateTree();
 		}
 
-		private void SortLog(string section)
+		private CompilerHooks CreateCompilerHook()
 		{
-			lock (Logs)
+			var compilerHooks = new CompilerHooks
 			{
-				if (Logs.ContainsKey(section))
+				ExtendCompilerPipeline = ExtendCompilerPipeline,
+				ExtendMethodCompilerPipeline = ExtendMethodCompilerPipeline,
+
+				NotifyProgress = NotifyProgress,
+				NotifyEvent = NotifyEvent,
+				NotifyTraceLog = NotifyTraceLog,
+				NotifyMethodCompiled = NotifyMethodCompiled,
+				NotifyMethodInstructionTrace = NotifyMethodInstructionTrace,
+				NotifyMethodTranformTrace = NotifyMethodTranformTrace,
+				GetMethodTraceLevel = GetMethodTraceLevel,
+			};
+
+			return compilerHooks;
+		}
+
+		private void DumpAllMethodStagesToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			var method = CurrentMethod;
+
+			if (method == null)
+				return;
+
+			if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
+			{
+				var path = folderBrowserDialog1.SelectedPath;
+
+				cbInstructionStages.SelectedIndex = 0;
+
+				while (true)
 				{
-					var lines = Logs[section];
-					lines.Sort();
-					Logs[section] = lines;
+					cbInstructionStages_SelectedIndexChanged(null, null);
+
+					var stage = GetCurrentInstructionStage().Replace("\\", " - ").Replace("/", " - ");
+					var result = tbInstructions.Text.Replace("\n", "\r\n");
+
+					File.WriteAllText(Path.Combine(path, stage + "-stage.txt"), result);
+
+					if (cbInstructionStages.Items.Count == cbInstructionStages.SelectedIndex + 1)
+						break;
+
+					cbInstructionStages.SelectedIndex++;
 				}
-			}
-		}
 
-		private void NowToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			CompileAll();
-		}
-
-		private MosaMethod GetCurrentMethod()
-		{
-			var node = treeView.SelectedNode;
-
-			if (node == null)
-				return null;
-			else
-				return node.Tag as MosaMethod;
-		}
-
-		private string GetCurrentStage()
-		{
-			return cbStages.SelectedItem.ToString();
-		}
-
-		private string GetCurrentDebugStage()
-		{
-			return cbDebugStages.SelectedItem.ToString();
-		}
-
-		private string GetCurrentLabel()
-		{
-			return cbLabels.SelectedItem as string;
-		}
-
-		private List<string> GetCurrentLines()
-		{
-			var method = CurrentMethodSelected;
-
-			if (method == null)
-				return null;
-
-			var methodData = methodStore.GetMethodData(method, false);
-
-			if (methodData == null)
-				return null;
-
-			string stage = GetCurrentStage();
-
-			return methodData.InstructionLogs[stage];
-		}
-
-		private List<string> GetCurrentDebugLines()
-		{
-			var method = CurrentMethodSelected;
-
-			if (method == null)
-				return null;
-
-			var methodData = methodStore.GetMethodData(method, false);
-
-			if (methodData == null)
-				return null;
-
-			string stage = GetCurrentDebugStage();
-
-			return methodData.DebugLogs[stage];
-		}
-
-		private void UpdateStages()
-		{
-			var method = CurrentMethodSelected;
-
-			if (method == null)
-				return;
-
-			cbStages.Items.Clear();
-
-			var methodData = methodStore.GetMethodData(method, false);
-
-			if (methodData == null)
-				return;
-
-			foreach (string stage in methodData.OrderedStageNames)
-			{
-				cbStages.Items.Add(stage);
-			}
-
-			cbStages.SelectedIndex = cbStages.Items.Count == 0 ? -1 : 0;
-		}
-
-		private void UpdateDebugStages()
-		{
-			var method = CurrentMethodSelected;
-
-			if (method == null)
-				return;
-
-			cbDebugStages.Items.Clear();
-
-			var methodData = methodStore.GetMethodData(method, false);
-
-			if (methodData == null)
-				return;
-
-			foreach (string stage in methodData.OrderedDebugStageNames)
-			{
-				cbDebugStages.Items.Add(stage);
-			}
-
-			if (cbDebugStages.Items.Count > 0)
-			{
 				cbDebugStages.SelectedIndex = 0;
-			}
-		}
 
-		private void UpdateCounters()
-		{
-			var method = CurrentMethodSelected;
-
-			if (method == null)
-				return;
-
-			tbMethodCounters.Text = string.Empty;
-
-			var methodData = methodStore.GetMethodData(method, false);
-
-			if (methodData == null)
-				return;
-
-			tbMethodCounters.Text = CreateText(methodData.CounterData);
-		}
-
-		private void UpdateLabels()
-		{
-			var lines = GetCurrentLines();
-
-			cbLabels.Items.Clear();
-			cbLabels.Items.Add("All");
-
-			if (lines != null)
-			{
-				foreach (var line in lines)
+				while (true)
 				{
-					if (line.StartsWith("Block #"))
-					{
-						cbLabels.Items.Add(line.Substring(line.IndexOf("L_")));
-					}
+					cbDebugStages_SelectedIndexChanged(null, null);
+
+					var stage = GetCurrentDebugStage().Replace("\\", " - ").Replace("/", " - ");
+					var result = tbDebugResult.Text.Replace("\n", "\r\n");
+
+					File.WriteAllText(Path.Combine(path, stage + "-debug.txt"), result);
+
+					if (cbDebugStages.Items.Count == cbDebugStages.SelectedIndex + 1)
+						break;
+
+					cbDebugStages.SelectedIndex++;
 				}
 			}
-		}
-
-		private void UpdateResults()
-		{
-			tbInstructions.Text = string.Empty;
-
-			var method = CurrentMethodSelected;
-			var lines = GetCurrentLines();
-			var label = GetCurrentLabel();
-
-			if (method == null)
-				return;
-
-			SetStatus(method.FullName);
-
-			if (lines == null)
-				return;
-
-			if (string.IsNullOrWhiteSpace(label) || label == "All")
-				tbInstructions.Text = methodStore.GetStageInstructions(lines, string.Empty, !showOperandTypes.Checked, padInstructions.Checked);
-			else
-				tbInstructions.Text = methodStore.GetStageInstructions(lines, label, !showOperandTypes.Checked, padInstructions.Checked);
-		}
-
-		private void UpdateDebugResults()
-		{
-			tbDebugResult.Text = string.Empty;
-
-			var lines = GetCurrentDebugLines();
-
-			if (lines == null)
-				return;
-
-			tbDebugResult.Text = CreateText(lines);
-		}
-
-		private void TreeView_AfterSelect(object sender, TreeViewEventArgs e)
-		{
-			CurrentMethodSelected = GetCurrentMethod();
-			NodeSelected();
-		}
-
-		private void NodeSelected()
-		{
-			if (Compiler == null)
-				return;
-
-			tbInstructions.Text = string.Empty;
-
-			var method = CurrentMethodSelected;
-
-			if (method == null)
-				return;
-
-			compileStartTime = DateTime.Now;
-
-			Compiler.CompileSingleMethod(method);
-		}
-
-		private void CbStages_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			var previousItemLabel = cbLabels.SelectedItem;
-
-			UpdateLabels();
-
-			if (previousItemLabel != null && cbLabels.Items.Contains(previousItemLabel))
-				cbLabels.SelectedItem = previousItemLabel;
-			else
-				cbLabels.SelectedIndex = 0;
-
-			CbLabels_SelectedIndexChanged(null, null);
-		}
-
-		private void CbDebugStages_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			UpdateDebugResults();
 		}
 
 		private void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> pipeline)
@@ -700,91 +549,138 @@ namespace Mosa.Tool.Explorer
 			//pipeline.InsertAfterFirst<ExceptionStage>(new StopStage());
 		}
 
-		private CompilerHooks CreateCompilerHook()
+		private List<string> GetCurrentDebugLines()
 		{
-			var compilerHooks = new CompilerHooks
-			{
-				ExtendCompilerPipeline = ExtendCompilerPipeline,
-				ExtendMethodCompilerPipeline = ExtendMethodCompilerPipeline,
-
-				NotifyProgress = NotifyProgress,
-				NotifyEvent = NotifyEvent,
-				NotifyTraceLog = NotifyTraceLog,
-				NotifyMethodCompiled = NotifyMethodCompiled,
-				NotifyMethodInstructionTrace = NotifyMethodInstructionTrace,
-
-				GetMethodTraceLevel = GetMethodTraceLevel,
-			};
-
-			return compilerHooks;
-		}
-
-		public int? GetMethodTraceLevel(MosaMethod method)
-		{
-			return method == CurrentMethodSelected ? 10 : -1;
-		}
-
-		public NotifyTraceLogHandler NotifyMethodInstructionTrace(MosaMethod method)
-		{
-			if (method != CurrentMethodSelected)
+			if (CurrentMethodData == null)
 				return null;
 
-			return NotifyMethodInstructionTraceResponse;
+			string stage = GetCurrentDebugStage();
+
+			return CurrentMethodData.DebugLogs[stage];
 		}
 
-		public void LoadAssembly()
+		private string GetCurrentDebugStage()
 		{
-			ClearAll();
-
-			UpdateSettings();
-
-			var compilerHooks = CreateCompilerHook();
-
-			Compiler = new MosaCompiler(Settings, compilerHooks, new ClrModuleLoader(), new ClrTypeResolver());
-
-			Compiler.Load();
-
-			CreateTree();
-
-			SetStatus("Assemblies Loaded!");
+			return cbDebugStages.SelectedItem.ToString();
 		}
 
-		private void CbLabels_SelectedIndexChanged(object sender, EventArgs e)
+		private string GetCurrentInstructionLabel()
 		{
-			UpdateResults();
+			return cbInstructionLabels.SelectedItem as string;
 		}
 
-		private static string CreateText(List<string> list)
+		private List<string> GetCurrentInstructionLines()
 		{
-			if (list == null)
-				return string.Empty;
+			if (CurrentMethodData == null)
+				return null;
 
-			var result = new StringBuilder();
+			var stage = GetCurrentInstructionStage();
 
-			foreach (var l in list)
+			return CurrentMethodData.InstructionLogs[stage];
+		}
+
+		private string GetCurrentInstructionStage()
+		{
+			return cbInstructionStages.SelectedItem.ToString();
+		}
+
+		private MosaMethod GetCurrentMethod()
+		{
+			var node = treeView.SelectedNode;
+
+			return node == null ? null : node.Tag as MosaMethod;
+		}
+
+		private MethodData GetCurrentMethodData()
+		{
+			var method = CurrentMethod;
+
+			if (method == null)
+				return null;
+
+			var methodData = MethodStore.GetMethodData(method, false);
+
+			return methodData;
+		}
+
+		private string GetCurrentTransformLabel()
+		{
+			return cbTransformLabels.SelectedItem as string;
+		}
+
+		private List<string> GetCurrentTransformLines()
+		{
+			if (CurrentMethodData == null)
+				return null;
+
+			var stage = GetCurrentTransformStage();
+
+			var logs = CurrentMethodData.TransformLogs[stage];
+
+			logs.TryGetValue(TransformStep, out var log);
+
+			return log;
+		}
+
+		private int GetTransformMaxSteps()
+		{
+			if (CurrentMethodData == null)
+				return 0;
+
+			var stage = GetCurrentTransformStage();
+
+			var logs = CurrentMethodData.TransformLogs[stage];
+
+			return logs.Count;
+		}
+
+		private string GetCurrentTransformStage()
+		{
+			return cbTransformStages.SelectedItem.ToString();
+		}
+
+		private void Main_Load(object sender, EventArgs e)
+		{
+			Text = "MOSA Explorer v" + CompilerVersion.VersionString;
+
+			SetStatus("Ready!");
+
+			var sourcefiles = Settings.GetValueList("Compiler.SourceFiles");
+
+			if (sourcefiles != null && sourcefiles.Count >= 1)
 			{
-				result.AppendLine(l);
+				var filename = Path.GetFullPath(sourcefiles[0]);
+
+				openFileDialog.FileName = filename;
+
+				UpdateSettings(filename);
+
+				LoadAssembly();
 			}
-
-			return result.ToString();
 		}
 
-		private void ToolStripButton4_Click(object sender, EventArgs e)
+		private void NodeSelected()
 		{
-			CompileAll();
-		}
+			if (Compiler == null)
+				return;
 
-		private void UpdateProgressBar()
-		{
-			toolStripProgressBar1.Maximum = TotalMethods;
-			toolStripProgressBar1.Value = CompletedMethods;
+			tbInstructions.Text = string.Empty;
+
+			var method = CurrentMethod;
+
+			if (method == null)
+				return;
+
+			CompilerData.CompileStartTime = DateTime.Now;
+
+			Compiler.CompileSingleMethod(method);
 		}
 
 		private void NotifyEvent(CompilerEvent compilerEvent, string message, int threadID)
 		{
 			if (compilerEvent != CompilerEvent.Counter)
 			{
-				var status = compilerEvent.ToText() + (string.IsNullOrWhiteSpace(message) ? string.Empty : $": {message}");
+				var status = $"{compilerEvent.ToText()}{(string.IsNullOrWhiteSpace(message) ? string.Empty : $": {message}")}";
 
 				lock (_statusLock)
 				{
@@ -793,6 +689,35 @@ namespace Mosa.Tool.Explorer
 			}
 
 			SubmitTraceEvent(compilerEvent, message, threadID);
+
+			if (CurrentMethodData == null)
+				CurrentMethodData = GetCurrentMethodData();
+		}
+
+		private void NotifyMethodCompiled(MosaMethod method)
+		{
+			if (method == CurrentMethod)
+			{
+				Invoke((MethodInvoker)(() => UpdateMethodInformation(method)));
+			}
+		}
+
+		private void NotifyMethodInstructionTraceResponse(TraceLog traceLog)
+		{
+			MethodStore.SetInstructionTraceInformation(traceLog.Method, traceLog.Stage, traceLog.Lines, traceLog.Version);
+		}
+
+		private NotifyTraceLogHandler NotifyMethodTranformTrace(MosaMethod method)
+		{
+			if (method != CurrentMethod)
+				return null;
+
+			return NotifyMethodTransformTraceResponse;
+		}
+
+		private void NotifyMethodTransformTraceResponse(TraceLog traceLog)
+		{
+			MethodStore.SetTransformTraceInformation(traceLog.Method, traceLog.Stage, traceLog.Lines, traceLog.Version, traceLog.Step);
 		}
 
 		private void NotifyProgress(int totalMethods, int completedMethods)
@@ -811,13 +736,13 @@ namespace Mosa.Tool.Explorer
 				var stagesection = traceLog.Stage;
 
 				if (traceLog.Section != null)
-					stagesection = stagesection + "-" + traceLog.Section;
+					stagesection = $"{stagesection}-{traceLog.Section}";
 
-				methodStore.SetDebugStageInformation(traceLog.Method, stagesection, traceLog.Lines, traceLog.Version);
+				MethodStore.SetDebugStageInformation(traceLog.Method, stagesection, traceLog.Lines, traceLog.Version);
 			}
 			else if (traceLog.Type == TraceType.MethodCounters)
 			{
-				methodStore.SetMethodCounterInformation(traceLog.Method, traceLog.Lines, traceLog.Version);
+				MethodStore.SetMethodCounterInformation(traceLog.Method, traceLog.Lines, traceLog.Version);
 			}
 			else if (traceLog.Type == TraceType.MethodInstructions)
 			{
@@ -825,195 +750,91 @@ namespace Mosa.Tool.Explorer
 			}
 			else if (traceLog.Type == TraceType.GlobalDebug)
 			{
-				UpdateLog(traceLog.Section, traceLog.Lines);
+				CompilerData.UpdateLog(traceLog.Section, traceLog.Lines, traceLog.Section == CurrentLogSection);
 			}
 		}
 
-		private void NotifyMethodInstructionTraceResponse(TraceLog traceLog)
+		private void NowToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			//if (traceLog.Method != CurrentMethodSelected)
-			//	return;
-
-			methodStore.SetInstructionTraceInformation(traceLog.Method, traceLog.Stage, traceLog.Lines, traceLog.Version);
+			CompileAll();
 		}
 
-		private void NotifyMethodCompiled(MosaMethod method)
+		private void OnCompileCompleted() => Invoke((MethodInvoker)(() => CompileCompleted()));
+
+		private void OpenFile()
 		{
-			if (method == CurrentMethodSelected)
+			if (openFileDialog.ShowDialog() == DialogResult.OK)
 			{
-				Invoke((MethodInvoker)(() => UpdateMethodInformation(method)));
+				UpdateSettings();
+
+				UpdateSettings(openFileDialog.FileName);
+
+				LoadAssembly();
 			}
 		}
 
-		private void UpdateMethodInformation(MosaMethod method)
+		private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			UpdateStages();
-			UpdateDebugStages();
-			UpdateCounters();
-		}
-
-		private void DumpAllMethodStagesToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			var method = CurrentMethodSelected;
-
-			if (method == null)
-				return;
-
-			if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
-			{
-				var path = folderBrowserDialog1.SelectedPath;
-
-				cbStages.SelectedIndex = 0;
-
-				while (true)
-				{
-					CbStages_SelectedIndexChanged(null, null);
-
-					string stage = GetCurrentStage().Replace("\\", " - ").Replace("/", " - ");
-					var result = tbInstructions.Text.Replace("\n", "\r\n");
-
-					File.WriteAllText(Path.Combine(path, stage + "-stage.txt"), result);
-
-					if (cbStages.Items.Count == cbStages.SelectedIndex + 1)
-						break;
-
-					cbStages.SelectedIndex++;
-				}
-
-				cbDebugStages.SelectedIndex = 0;
-
-				while (true)
-				{
-					CbDebugStages_SelectedIndexChanged(null, null);
-
-					var stage = GetCurrentDebugStage().Replace("\\", " - ").Replace("/", " - ");
-					var result = tbDebugResult.Text.Replace("\n", "\r\n");
-
-					File.WriteAllText(Path.Combine(path, stage + "-debug.txt"), result);
-
-					if (cbDebugStages.Items.Count == cbDebugStages.SelectedIndex + 1)
-						break;
-
-					cbDebugStages.SelectedIndex++;
-				}
-			}
-		}
-
-		private void showSizesToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			CreateTree();
-		}
-
-		private void ClearAll()
-		{
-			Compiler = null;
-			typeSystemTree = null;
-
-			treeView.Nodes.Clear();
-			tbInstructions.Text = string.Empty;
-			tbDebugResult.Text = string.Empty;
-			methodStore.Clear();
-
-			ClearAllLogs();
+			OpenFile();
 		}
 
 		private void padInstructions_CheckStateChanged(object sender, EventArgs e)
 		{
-			UpdateResults();
+			UpdateInstructions();
+			UpdateTransforms();
 		}
 
-		private void showOperandTypes_CheckStateChanged(object sender, EventArgs e)
+		private void QuitToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			UpdateResults();
+			Application.Exit();
 		}
 
-		private void tbFilter_TextChanged(object sender, EventArgs e)
+		private void RefreshCompilerLog()
 		{
-			CreateTree();
+			if (!CompilerData.DirtyLog)
+				return;
+
+			if (tabControl.SelectedTab == tabLogs)
+			{
+				tbLogs.Text = CreateText(CompilerData.GetLog(CurrentLogSection));
+			}
+
+			if (tabControl.SelectedTab == tabCompilerCounters)
+			{
+				UpdateCompilerCounters();
+			}
+
+			CompilerData.DirtyLog = false;
 		}
 
-		private void treeView_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+		private void RefreshCompilerSelectionDropDown()
 		{
-			NodeSelected();
+			if (!CompilerData.DirtyLogSections)
+				return;
+
+			CompilerData.DirtyLogSections = false;
+
+			lock (CompilerData.Logs)
+			{
+				for (int i = cbCompilerSections.Items.Count; i < CompilerData.LogSections.Count; i++)
+				{
+					var formatted = $"[{i}] {CompilerData.LogSections[i]}";
+
+					cbCompilerSections.Items.Add(formatted);
+				}
+			}
 		}
-
-		private void cbSections_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			var formatted = cbSectionLogs.SelectedItem as string;
-			CurrentLogSection = formatted.Substring(formatted.IndexOf(' ') + 1);
-
-			DirtyLog = true;
-			RefreshLog();
-		}
-
-		private readonly object _statusLock = new object();
 
 		private void RefreshStatus()
 		{
 			lock (_statusLock)
 			{
-				if (Status != null)
-				{
-					SetStatus(Status);
-					Status = null;
-				}
+				if (Status == null)
+					return;
+
+				SetStatus(Status);
+				Status = null;
 			}
-		}
-
-		private void timer1_Tick(object sender, EventArgs e)
-		{
-			UpdateProgressBar();
-			RefreshLogDropDown();
-			RefreshLog();
-			RefreshStatus();
-		}
-
-		private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			RefreshLog();
-		}
-
-		private void treeView_BeforeSelect(object sender, TreeViewCancelEventArgs e)
-		{
-			CurrentMethodSelected = GetCurrentMethod();
-		}
-
-		private void cbEnableAllOptimizations_Click(object sender, EventArgs e)
-		{
-			ToggleOptimization(true);
-		}
-
-		private void cbDisableAllOptimizations_Click(object sender, EventArgs e)
-		{
-			ToggleOptimization(false);
-		}
-
-		private void ToggleOptimization(bool state)
-		{
-			cbEnableSSA.Checked = state;
-			cbEnableBasicOptimizations.Checked = state;
-			cbEnableValueNumbering.Checked = state;
-			cbEnableSparseConditionalConstantPropagation.Checked = state;
-			cbEnableBinaryCodeGeneration.Checked = state;
-			cbEnableInline.Checked = state;
-			cbInlineExplicit.Checked = state;
-			cbEnableLongExpansion.Checked = state;
-			cbEnableTwoPassOptimizations.Checked = state;
-			cbEnableBitTracker.Checked = state;
-			cbLoopInvariantCodeMotion.Checked = state;
-			cbPlatformOptimizations.Checked = state;
-			cbEnableDevirtualization.Checked = state;
-		}
-
-		public void LoadArguments(string[] args)
-		{
-			SetDefaultSettings();
-
-			var arguments = SettingsLoader.RecursiveReader(args);
-
-			Settings.Merge(arguments);
-
-			UpdateDisplay();
 		}
 
 		private void SetDefaultSettings()
@@ -1068,6 +889,299 @@ namespace Mosa.Tool.Explorer
 			Settings.SetValue("CompilerDebug.CILDecodingStageV2", false);
 		}
 
+		private void SetStatus(string status)
+		{
+			toolStripStatusLabel.Text = status;
+		}
+
+		private void SetTranformationStep(int step)
+		{
+			if (step <= 0)
+				step = 0;
+
+			int max = GetTransformMaxSteps();
+
+			if (step > max - 1)
+				step = max - 1;
+
+			TransformStep = step;
+
+			lbSteps.Text = $"{TransformStep} / {max - 1}";
+
+			UpdateTransforms();
+		}
+
+		private void showOperandTypes_CheckStateChanged(object sender, EventArgs e)
+		{
+			UpdateInstructions();
+			UpdateTransforms();
+		}
+
+		private void ShowSizes_Click(object sender, EventArgs e)
+		{
+			CreateTree();
+		}
+
+		private void showSizesToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			CreateTree();
+		}
+
+		private void SubmitTraceEvent(CompilerEvent compilerEvent, string message, int threadID)
+		{
+			CompilerData.AddTraceEvent(compilerEvent, message, threadID);
+		}
+
+		private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			CompilerData.DirtyLog = true;
+
+			RefreshCompilerLog();
+		}
+
+		private void tbCompilerCounterFilter_TextChanged(object sender, EventArgs e)
+		{
+			UpdateCompilerCounters();
+		}
+
+		private void tbFilter_TextChanged(object sender, EventArgs e)
+		{
+			CreateTree();
+		}
+
+		private void tbMethodCounterFilter_TextChanged(object sender, EventArgs e)
+		{
+			UpdateMethodCounters();
+		}
+
+		private void timer1_Tick(object sender, EventArgs e)
+		{
+			UpdateProgressBar();
+			RefreshCompilerSelectionDropDown();
+			RefreshCompilerLog();
+			RefreshStatus();
+		}
+
+		private void ToggleOptimization(bool state)
+		{
+			cbEnableSSA.Checked = state;
+			cbEnableBasicOptimizations.Checked = state;
+			cbEnableValueNumbering.Checked = state;
+			cbEnableSparseConditionalConstantPropagation.Checked = state;
+			cbEnableBinaryCodeGeneration.Checked = state;
+			cbEnableInline.Checked = state;
+			cbInlineExplicit.Checked = state;
+			cbEnableLongExpansion.Checked = state;
+			cbEnableTwoPassOptimizations.Checked = state;
+			cbEnableBitTracker.Checked = state;
+			cbLoopInvariantCodeMotion.Checked = state;
+			cbPlatformOptimizations.Checked = state;
+			cbEnableDevirtualization.Checked = state;
+		}
+
+		private void ToolStripButton1_Click(object sender, EventArgs e)
+		{
+			OpenFile();
+		}
+
+		private void ToolStripButton4_Click(object sender, EventArgs e)
+		{
+			CompileAll();
+		}
+
+		private void TreeView_AfterSelect(object sender, TreeViewEventArgs e)
+		{
+			CurrentMethod = GetCurrentMethod();
+			CurrentMethodData = GetCurrentMethodData();
+			NodeSelected();
+		}
+
+		private void treeView_BeforeSelect(object sender, TreeViewCancelEventArgs e)
+		{
+			CurrentMethod = GetCurrentMethod();
+			CurrentMethodData = GetCurrentMethodData();
+		}
+
+		private void treeView_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+		{
+			NodeSelected();
+		}
+
+		private void UpdateCompilerCounters()
+		{
+			CompilerCounters.Clear();
+
+			var lines = CompilerData.GetLog("Counters");
+
+			if (lines == null)
+				return;
+
+			var filter = tbCompilerCounterFilter.Text;
+
+			foreach (var line in lines)
+			{
+				if (!line.Contains(filter))
+					continue;
+
+				var entry = ExtractCounterData(line);
+
+				CompilerCounters.Add(entry);
+			}
+
+			tbCompilerCounters.Text = CreateText(lines);
+		}
+
+		private void UpdateDebugResults()
+		{
+			tbDebugResult.Text = string.Empty;
+
+			var lines = GetCurrentDebugLines();
+
+			if (lines == null)
+				return;
+
+			tbDebugResult.Text = CreateText(lines);
+		}
+
+		private void UpdateDebugStages()
+		{
+			cbDebugStages.Items.Clear();
+
+			if (CurrentMethodData == null)
+				return;
+
+			foreach (string stage in CurrentMethodData.OrderedDebugStageNames)
+			{
+				cbDebugStages.Items.Add(stage);
+			}
+
+			if (cbDebugStages.Items.Count > 0)
+			{
+				cbDebugStages.SelectedIndex = 0;
+			}
+		}
+
+		private void UpdateDisplay()
+		{
+			cbEnableInline.Checked = Settings.GetValue("Optimizations.Inline", cbEnableInline.Checked);
+			cbEnableSSA.Checked = Settings.GetValue("Optimizations.SSA", cbEnableSSA.Checked);
+			cbEnableBasicOptimizations.Checked = Settings.GetValue("Optimizations.Basic", cbEnableBasicOptimizations.Checked);
+			cbEnableSparseConditionalConstantPropagation.Checked = Settings.GetValue("Optimizations.SCCP", cbEnableSparseConditionalConstantPropagation.Checked);
+			cbEnableDevirtualization.Checked = Settings.GetValue("Optimizations.Devirtualization", cbEnableDevirtualization.Checked);
+			cbInlineExplicit.Checked = Settings.GetValue("Optimizations.Inline.Explicit", cbInlineExplicit.Checked);
+			cbPlatformOptimizations.Checked = Settings.GetValue("Optimizations.Platform", cbPlatformOptimizations.Checked);
+			cbEnableLongExpansion.Checked = Settings.GetValue("Optimizations.LongExpansion", cbEnableLongExpansion.Checked);
+			cbEnableTwoPassOptimizations.Checked = Settings.GetValue("Optimizations.TwoPass", cbEnableTwoPassOptimizations.Checked);
+			cbLoopInvariantCodeMotion.Checked = Settings.GetValue("Optimizations.LoopInvariantCodeMotion", cbLoopInvariantCodeMotion.Checked);
+			cbEnableValueNumbering.Checked = Settings.GetValue("Optimizations.ValueNumbering", cbEnableValueNumbering.Checked);
+			cbEnableBitTracker.Checked = Settings.GetValue("Optimizations.BitTracker", cbEnableBitTracker.Checked);
+			cbEnableBinaryCodeGeneration.Checked = Settings.GetValue("Compiler.Binary", cbEnableBinaryCodeGeneration.Checked);
+			cbEnableMethodScanner.Checked = Settings.GetValue("Compiler.MethodScanner", cbEnableMethodScanner.Checked);
+			CBEnableMultithreading.Checked = Settings.GetValue("Compiler.Multithreading", CBEnableMultithreading.Checked);
+
+			tbFilter.Text = Settings.GetValue("Explorer.Filter", tbFilter.Text);
+
+			var platform = Settings.GetValue("Compiler.Platform") ?? "x86";
+
+			switch (platform.ToLowerInvariant())
+			{
+				case "x86": cbPlatform.SelectedIndex = 0; break;
+				case "x64": cbPlatform.SelectedIndex = 1; break;
+				case "armv8a32": cbPlatform.SelectedIndex = 2; break;
+			}
+
+			cbCILDecoderStageV2Testing.Checked = Settings.GetValue("CompilerDebug.CILDecodingStageV2", cbEnableInline.Checked);
+		}
+
+		private void UpdateInstructionLabels()
+		{
+			var lines = GetCurrentInstructionLines();
+
+			cbInstructionLabels.Items.Clear();
+			cbInstructionLabels.Items.Add("All");
+
+			var labels = ExtractLabels(lines);
+
+			if (labels != null)
+			{
+				cbInstructionLabels.Items.AddRange(labels.ToArray());
+			}
+		}
+
+		private void UpdateInstructions()
+		{
+			tbInstructions.Text = string.Empty;
+
+			if (CurrentMethod == null)
+				return;
+
+			var lines = GetCurrentInstructionLines();
+			var label = GetCurrentInstructionLabel();
+
+			SetStatus(CurrentMethod.FullName);
+
+			if (lines == null)
+				return;
+
+			if (string.IsNullOrWhiteSpace(label) || label == "All")
+				label = string.Empty;
+
+			tbInstructions.Text = MethodStore.GetStageInstructions(lines, label, !showOperandTypes.Checked, padInstructions.Checked);
+		}
+
+		private void UpdateInstructionStages()
+		{
+			cbInstructionStages.Items.Clear();
+
+			if (CurrentMethodData == null)
+				return;
+
+			foreach (var stage in CurrentMethodData.OrderedStageNames)
+			{
+				cbInstructionStages.Items.Add(stage);
+			}
+
+			cbInstructionStages.SelectedIndex = cbInstructionStages.Items.Count == 0 ? -1 : 0;
+		}
+
+		private void UpdateMethodCounters()
+		{
+			tbMethodCounters.Text = string.Empty;
+
+			if (CurrentMethodData == null)
+				return;
+
+			tbMethodCounters.Text = CreateText(CurrentMethodData.MethodCounters);
+
+			MethodCounters.Clear();
+
+			var filter = tbCounterFilter.Text;
+
+			foreach (var line in CurrentMethodData.MethodCounters)
+			{
+				if (!line.Contains(filter))
+					continue;
+
+				var entry = ExtractCounterData(line);
+
+				MethodCounters.Add(entry);
+			}
+		}
+
+		private void UpdateMethodInformation(MosaMethod method)
+		{
+			UpdateInstructionStages();
+			UpdateDebugStages();
+			UpdateMethodCounters();
+			UpdateTransformStages();
+		}
+
+		private void UpdateProgressBar()
+		{
+			toolStripProgressBar1.Maximum = TotalMethods;
+			toolStripProgressBar1.Value = CompletedMethods;
+		}
+
 		private void UpdateSettings()
 		{
 			Settings.SetValue("Compiler.MethodScanner", cbEnableMethodScanner.Checked);
@@ -1114,43 +1228,56 @@ namespace Mosa.Tool.Explorer
 			Settings.AddPropertyListValue("SearchPaths", Path.GetDirectoryName(filename));
 		}
 
-		private void UpdateDisplay()
+		private void UpdateTransformLabels()
 		{
-			cbEnableInline.Checked = Settings.GetValue("Optimizations.Inline", cbEnableInline.Checked);
-			cbEnableSSA.Checked = Settings.GetValue("Optimizations.SSA", cbEnableSSA.Checked);
-			cbEnableBasicOptimizations.Checked = Settings.GetValue("Optimizations.Basic", cbEnableBasicOptimizations.Checked);
-			cbEnableSparseConditionalConstantPropagation.Checked = Settings.GetValue("Optimizations.SCCP", cbEnableSparseConditionalConstantPropagation.Checked);
-			cbEnableDevirtualization.Checked = Settings.GetValue("Optimizations.Devirtualization", cbEnableDevirtualization.Checked);
-			cbInlineExplicit.Checked = Settings.GetValue("Optimizations.Inline.Explicit", cbInlineExplicit.Checked);
-			cbPlatformOptimizations.Checked = Settings.GetValue("Optimizations.Platform", cbPlatformOptimizations.Checked);
-			cbEnableLongExpansion.Checked = Settings.GetValue("Optimizations.LongExpansion", cbEnableLongExpansion.Checked);
-			cbEnableTwoPassOptimizations.Checked = Settings.GetValue("Optimizations.TwoPass", cbEnableTwoPassOptimizations.Checked);
-			cbLoopInvariantCodeMotion.Checked = Settings.GetValue("Optimizations.LoopInvariantCodeMotion", cbLoopInvariantCodeMotion.Checked);
-			cbEnableValueNumbering.Checked = Settings.GetValue("Optimizations.ValueNumbering", cbEnableValueNumbering.Checked);
-			cbEnableBitTracker.Checked = Settings.GetValue("Optimizations.BitTracker", cbEnableBitTracker.Checked);
-			cbEnableBinaryCodeGeneration.Checked = Settings.GetValue("Compiler.Binary", cbEnableBinaryCodeGeneration.Checked);
-			cbEnableMethodScanner.Checked = Settings.GetValue("Compiler.MethodScanner", cbEnableMethodScanner.Checked);
+			var lines = GetCurrentTransformLines();
 
-			tbFilter.Text = Settings.GetValue("Explorer.Filter", tbFilter.Text);
+			cbTransformLabels.Items.Clear();
+			cbTransformLabels.Items.Add("All");
 
-			var platform = Settings.GetValue("Compiler.Platform");
+			var labels = ExtractLabels(lines);
 
-			if (platform != null)
+			if (labels != null)
 			{
-				if (platform.ToLowerInvariant() == "x86")
-					cbPlatform.SelectedIndex = 0;
-				else if (platform.ToLowerInvariant() == "x64")
-					cbPlatform.SelectedIndex = 1;
-				else if (platform.ToLowerInvariant() == "armv8a32")
-					cbPlatform.SelectedIndex = 2;
+				cbTransformLabels.Items.AddRange(labels.ToArray());
 			}
-
-			cbCILDecoderStageV2Testing.Checked = Settings.GetValue("CompilerDebug.CILDecodingStageV2", cbEnableInline.Checked);
 		}
 
-		private void cbPlatform_SelectedIndexChanged(object sender, EventArgs e)
+		private void UpdateTransforms()
 		{
-			ClearAll();
+			tbTransforms.Text = string.Empty;
+
+			if (CurrentMethod == null)
+				return;
+
+			var lines = GetCurrentTransformLines();
+			var label = GetCurrentTransformLabel();
+
+			if (lines == null)
+				return;
+
+			if (string.IsNullOrWhiteSpace(label) || label == "All")
+				label = string.Empty;
+
+			tbTransforms.Text = MethodStore.GetStageInstructions(lines, label, !showOperandTypes.Checked, padInstructions.Checked);
+		}
+
+		private void UpdateTransformStages()
+		{
+			cbTransformStages.Items.Clear();
+
+			if (CurrentMethodData == null)
+				return;
+
+			foreach (var stage in CurrentMethodData.OrderedTransformStageNames)
+			{
+				cbTransformStages.Items.Add(stage);
+			}
+
+			if (cbTransformStages.Items.Count > 0)
+			{
+				cbTransformStages.SelectedIndex = 0;
+			}
 		}
 	}
 }
