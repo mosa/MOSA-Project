@@ -12,7 +12,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 	{
 		protected override void Setup()
 		{
-			var startUpType = TypeSystem.GetTypeByName("Mosa.Runtime", "StartUp");
+			var startUpType = TypeSystem.GetTypeByName("Mosa.Runtime.StartUp");
 			var startUpMethod = startUpType.FindMethodByName("StartApplication");
 
 			Compiler.PlugSystem.CreatePlug(startUpMethod, TypeSystem.EntryPoint);

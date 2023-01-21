@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net7.0</TargetFramework>
 		<OutputType>Exe</OutputType>
 		<StartupObject>Mosa.Demo.SVGAWorld.x86.Boot</StartupObject>
 		<DebugType>full</DebugType>
-		<LangVersion>10.0</LangVersion>
+		<LangVersion>11.0</LangVersion>
 		<OutputPath>..\..\bin\</OutputPath>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<DisableStandardFrameworkResolution>true</DisableStandardFrameworkResolution>
@@ -27,5 +27,13 @@
 		<ProjectReference Include="..\Mosa.Korlib\Mosa.Korlib.csproj" />
 		<ProjectReference Include="..\Mosa.Runtime.x86\Mosa.Runtime.x86.csproj" />
 		<ProjectReference Include="..\Mosa.Runtime\Mosa.Runtime.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Update="Include\font.bin">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Include\font2.bin">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 </Project>

@@ -2,19 +2,19 @@
 
 namespace Mosa.Compiler.MosaTypeSystem
 {
-	internal interface ITypeSystemController
+	public interface ITypeSystemController
 	{
 		MosaModule CreateModule();
 
-		MosaType CreateType(MosaType source = null);
+		MosaType CreateType(MosaType? source = null);
 
-		MosaMethod CreateMethod(MosaMethod source = null);
+		MosaMethod CreateMethod(MosaMethod? source = null);
 
-		MosaField CreateField(MosaField source = null);
+		MosaField CreateField(MosaField? source = null);
 
-		MosaProperty CreateProperty(MosaProperty source = null);
+		MosaProperty CreateProperty(MosaProperty? source = null);
 
-		MosaParameter CreateParameter(MosaParameter source = null);
+		MosaParameter CreateParameter(MosaParameter? source = null);
 
 		MosaModule.Mutator MutateModule(MosaModule module);
 

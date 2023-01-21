@@ -310,7 +310,7 @@ namespace Mosa.Compiler.Framework
 			EvaluateParameterOperands();
 
 			MethodData.Counters.NewCountSkipLock("ExecutionTime.Setup.Ticks", (int)Stopwatch.ElapsedTicks);
-			MethodData.Counters.NewCountSkipLock("ExecutionTime.Setup.MicroSeconds", (int)Stopwatch.ElapsedMicroSeconds());
+			MethodData.Counters.NewCountSkipLock("ExecutionTime.Setup.MicroSeconds", Stopwatch.Elapsed.Microseconds);
 		}
 
 		#endregion Construction

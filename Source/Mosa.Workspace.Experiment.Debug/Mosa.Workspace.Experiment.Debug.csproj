@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net7.0</TargetFramework>
 		<AssemblyTitle>Mosa.Workspace.Experiment.Debug</AssemblyTitle>
 		<Company>MOSA Project</Company>
 		<Product>Mosa.Workspace.Experiment.Debug</Product>
 		<copyright>Copyright © MOSA Project 2022</copyright>
 		<DebugType>full</DebugType>
-		<LangVersion>10.0</LangVersion>
+		<LangVersion>11.0</LangVersion>
 		<OutputPath>..\..\bin\</OutputPath>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<NoWarn>1591</NoWarn>
@@ -19,7 +19,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
 		<ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj" />
-		<ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj" />
+		<ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem.CLR\Mosa.Compiler.MosaTypeSystem.CLR.csproj" />
 		<ProjectReference Include="..\Mosa.Platform.ARMv8A32\Mosa.Platform.ARMv8A32.csproj" />
 		<ProjectReference Include="..\Mosa.Platform.x64\Mosa.Platform.x64.csproj" />
 		<ProjectReference Include="..\Mosa.Platform.x86\Mosa.Platform.x86.csproj" />

@@ -48,7 +48,7 @@ namespace Mosa.Compiler.Common
 
 		public static void Write(this BinaryWriter writer, sbyte value, uint nativeSize)
 		{
-			Write(writer, BitConverter.GetBytes(value), nativeSize);
+			Write(writer, new[] { (byte)value }, nativeSize);
 		}
 
 		public static void Write(this BinaryWriter writer, char value, uint nativeSize)
@@ -73,7 +73,7 @@ namespace Mosa.Compiler.Common
 
 		public static void Write(this BinaryWriter writer, byte value, uint nativeSize)
 		{
-			Write(writer, BitConverter.GetBytes(value), nativeSize);
+			Write(writer, new[] { value }, nativeSize);
 		}
 
 		public static void Write(this BinaryWriter writer, ushort value, uint nativeSize)

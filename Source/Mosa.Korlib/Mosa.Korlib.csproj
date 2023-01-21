@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <AssemblyName>System.Runtime</AssemblyName>
     <RootNamespace>System</RootNamespace>
     <DebugType>full</DebugType>
-    <LangVersion>10.0</LangVersion>
+    <LangVersion>11.0</LangVersion>
     <OutputPath>..\..\bin\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <DisableStandardFrameworkResolution>true</DisableStandardFrameworkResolution>
@@ -17,7 +17,4 @@
     <RuntimeMetadataVersion>v4.0.30319</RuntimeMetadataVersion>
     <AssemblyVersion>5.0.0.0</AssemblyVersion>
   </PropertyGroup>
-  <ItemGroup>
-    <Folder Include="System.Runtime.Intrinsics\" />
-  </ItemGroup>
 </Project>

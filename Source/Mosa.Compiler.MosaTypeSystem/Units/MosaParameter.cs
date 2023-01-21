@@ -8,9 +8,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 	{
 		public MosaParameterAttributes ParameterAttributes { get; private set; }
 
-		public MosaMethod DeclaringMethod { get; private set; }
+		public MosaMethod? DeclaringMethod { get; private set; }
 
-		public MosaType ParameterType { get; private set; }
+		public MosaType? ParameterType { get; private set; }
 
 		internal MosaParameter()
 		{
@@ -21,18 +21,18 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return (MosaParameter)base.Clone();
 		}
 
-		public bool Equals(MosaParameter parameter)
+		public bool Equals(MosaParameter? parameter)
 		{
-			return ParameterType.Equals(parameter.ParameterType);
+			return ParameterType?.Equals(parameter?.ParameterType) == true;
 
 			//&& ParameterAttributes.Equals(parameter.ParameterAttributes)
 			//&& CustomAttributes.Equals(parameter.CustomAttributes)
 			//&& Name.Equals(parameter.Name);
 		}
 
-		public bool Equals(MosaType type)
+		public bool Equals(MosaType? type)
 		{
-			return ParameterType.Equals(type);
+			return ParameterType?.Equals(type) == true;
 		}
 
 		public class Mutator : MutatorBase
@@ -47,15 +47,15 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			public MosaParameterAttributes ParameterAttributes { set { parameter.ParameterAttributes = value; } }
 
-			public MosaMethod DeclaringMethod { set { parameter.DeclaringMethod = value; } }
+			public MosaMethod? DeclaringMethod { set { parameter.DeclaringMethod = value; } }
 
-			public MosaType ParameterType { set { parameter.ParameterType = value; } }
+			public MosaType? ParameterType { set { parameter.ParameterType = value; } }
 
 			public override void Dispose()
 			{
 				if (parameter.ParameterType != null)
 				{
-					string signatureName = (parameter.DeclaringMethod == null) ? "<FunctionPointer>" : parameter.DeclaringMethod.FullName;
+					var signatureName = parameter.DeclaringMethod == null ? "<FunctionPointer>" : parameter.DeclaringMethod.FullName;
 					parameter.FullName = string.Concat(signatureName, "::", parameter.Name, " ", parameter.ParameterType.FullName);
 					parameter.ShortName = string.Concat(parameter.Name, " : ", parameter.ParameterType.ShortName);
 				}

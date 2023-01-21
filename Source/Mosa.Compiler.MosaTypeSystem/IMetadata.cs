@@ -4,8 +4,10 @@ namespace Mosa.Compiler.MosaTypeSystem
 {
 	public interface IMetadata
 	{
+		void Initialize(TypeSystem system, ITypeSystemController controller);
+
 		void LoadMetadata();
 
-		string LookupUserString(MosaModule module, uint id);
+		string? LookupUserString(MosaModule module, uint id);
 	}
 }

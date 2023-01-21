@@ -6,6 +6,7 @@ using System.IO;
 using Mosa.Compiler.Common.Configuration;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.MosaTypeSystem;
+using Mosa.Compiler.MosaTypeSystem.CLR;
 
 namespace Mosa.Workspace.Experiment.Debug
 {
@@ -69,7 +70,7 @@ namespace Mosa.Workspace.Experiment.Debug
 
 			var stopwatch = new Stopwatch();
 
-			var compiler = new MosaCompiler(settings, new CompilerHooks());
+			var compiler = new MosaCompiler(settings, new CompilerHooks(), new ClrModuleLoader(), new ClrTypeResolver());
 
 			compiler.Load();
 			compiler.Initialize();

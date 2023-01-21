@@ -8,14 +8,14 @@ namespace Mosa.Compiler.MosaTypeSystem
 	{
 		public struct Argument
 		{
-			public Argument(MosaType type, object value)
+			public Argument(MosaType type, object? value)
 			{
 				Type = type;
 				Value = value;
 			}
 
 			public readonly MosaType Type;
-			public readonly object Value;
+			public readonly object? Value;
 		}
 
 		public class NamedArgument
@@ -59,22 +59,20 @@ namespace Mosa.Compiler.MosaTypeSystem
 		}
 
 		// This implementation isn't perfect but covers most cases
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
-			if (!(obj is MosaCustomAttributeList))
+			if (obj is not MosaCustomAttributeList customAttributeList)
 				return false;
 
 			if (ReferenceEquals(this, obj))
 				return true;
 
-			var customAttributeList = obj as MosaCustomAttributeList;
-
 			if (customAttributeList.Count != Count)
 				return false;
 
-			for (int i = 0; i < Count; i++)
+			for (var i = 0; i < Count; i++)
 			{
-				if (!customAttributeList[i].Constructor.DeclaringType.Equals(this[i].Constructor.DeclaringType))
+				if (!customAttributeList[i].Constructor.DeclaringType?.Equals(this[i].Constructor.DeclaringType) == true)
 					return false;
 
 				if (customAttributeList[i].Arguments.Length != this[i].Arguments.Length)

@@ -8,27 +8,33 @@ namespace Mosa.Compiler.MosaTypeSystem
 	{
 		public MosaPropertyAttributes PropertyAttributes { get; private set; }
 
-		public MosaType DeclaringType { get; private set; }
+		public MosaType? DeclaringType { get; private set; }
 
-		public MosaType PropertyType { get; private set; }
+		public MosaType? PropertyType { get; private set; }
 
-		public string GetterMethodName { get; private set; }
+		public string? GetterMethodName { get; private set; }
 
-		public MosaMethod GetterMethod
+		public MosaMethod? GetterMethod
 		{
 			get
 			{
-				return DeclaringType.FindMethodByName(GetterMethodName);
+				if (GetterMethodName == null)
+					throw new InvalidOperationException("Method name is null, unable to get getter method!");
+
+				return DeclaringType?.FindMethodByName(GetterMethodName);
 			}
 		}
 
-		public string SetterMethodName { get; private set; }
+		public string? SetterMethodName { get; private set; }
 
-		public MosaMethod SetterMethod
+		public MosaMethod? SetterMethod
 		{
 			get
 			{
-				return DeclaringType.FindMethodByName(SetterMethodName);
+				if (SetterMethodName == null)
+					throw new InvalidOperationException("Method name is null, unable to get setter method!");
+
+				return DeclaringType?.FindMethodByName(SetterMethodName);
 			}
 		}
 
@@ -41,9 +47,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return (MosaProperty)base.Clone();
 		}
 
-		public bool Equals(MosaProperty other)
+		public bool Equals(MosaProperty? other)
 		{
-			return SignatureComparer.Equals(PropertyType, other.PropertyType);
+			return SignatureComparer.Equals(PropertyType, other?.PropertyType);
 		}
 
 		public class Mutator : MosaUnit.MutatorBase
@@ -58,9 +64,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			public MosaPropertyAttributes PropertyAttributes { set { property.PropertyAttributes = value; } }
 
-			public MosaType DeclaringType { set { property.DeclaringType = value; } }
+			public MosaType? DeclaringType { set { property.DeclaringType = value; } }
 
-			public MosaType PropertyType { set { property.PropertyType = value; } }
+			public MosaType? PropertyType { set { property.PropertyType = value; } }
 
 			private string GetCleanMethodName(string fullName)
 			{
@@ -80,7 +86,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			{
 				if (property.PropertyType != null)
 				{
-					property.FullName = string.Concat(property.DeclaringType.FullName, "::", property.Name, " ", property.PropertyType.FullName);
+					property.FullName = string.Concat(property.DeclaringType?.FullName, "::", property.Name, " ", property.PropertyType.FullName);
 					property.ShortName = string.Concat(property.Name, " : ", property.PropertyType.ShortName);
 
 					if (GetCleanMethodName(property.Name) != GetUncleanMethodPrefix(property.Name))

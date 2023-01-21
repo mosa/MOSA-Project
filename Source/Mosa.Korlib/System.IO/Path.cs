@@ -16,5 +16,10 @@ namespace System.IO
 		/// Alterative Directory Separator
 		/// </summary>
 		public static readonly char AltDirectorySeparatorChar = '\\';
+
+		public static string Combine(string path1, string path2)
+		{
+			return path1 + DirectorySeparatorChar + path2;
+		}
 	}
 }

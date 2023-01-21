@@ -25,7 +25,7 @@ namespace Mosa.Platform.x86.Transforms.RuntimeCall
 			Debug.Assert(context.Result.IsR4);
 			Debug.Assert(context.Operand1.IsR4);
 
-			transform.ReplaceWithCall(context, "Mosa.Runtime.Math.x86", "Division", "RemR4");
+			transform.ReplaceWithCall(context, "Mosa.Runtime.Math.x86.Division", "RemR4");
 		}
 	}
 }

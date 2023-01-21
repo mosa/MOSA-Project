@@ -1,9 +1,9 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
-using System.Collections.Generic;
 using Mosa.Compiler.Common.Exceptions;
-using Mosa.Compiler.MosaTypeSystem.Metadata;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Mosa.Compiler.MosaTypeSystem
 {
@@ -12,20 +12,28 @@ namespace Mosa.Compiler.MosaTypeSystem
 	/// </summary>
 	public class TypeSystem
 	{
-		public BuiltInTypes BuiltIn { get; private set; }
+		[NotNull]
+		public BuiltInTypes? BuiltIn { get; private set; }
 
-		private MosaModule corLib;
+		private MosaModule? corLib;
 
-		public MosaModule CorLib
+		[NotNull]
+		public MosaModule? CorLib
 		{
 			get
 			{
+				if (corLib == null)
+					throw new AssemblyLoadException();
+
 				return corLib;
 			}
 			set
 			{
 				corLib = value;
-				BuiltIn = new BuiltInTypes(this, corLib);
+				if (corLib == null)
+					throw new AssemblyLoadException();
+
+				BuiltIn = new BuiltInTypes(TypeResolver, corLib);
 			}
 		}
 
@@ -35,7 +43,11 @@ namespace Mosa.Compiler.MosaTypeSystem
 			{
 				foreach (var module in Modules)
 				{
-					foreach (var type in module.Types.Values)
+					var types = module?.Types.Values;
+					if (types == null)
+						throw new InvalidOperationException("Types list is null!");
+
+					foreach (var type in types)
 					{
 						yield return type;
 					}
@@ -45,25 +57,31 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public IList<MosaModule> Modules { get; }
 
-		public MosaModule LinkerModule { get; private set; }
+		[NotNull]
+		public MosaModule? LinkerModule { get; private set; }
 
-		public MosaType DefaultLinkerType { get; private set; }
+		[NotNull]
+		public MosaType? DefaultLinkerType { get; private set; }
 
-		public MosaMethod EntryPoint { get; private set; }
+		public MosaMethod? EntryPoint { get; internal set; }
 
-		internal ITypeSystemController Controller { get; private set; }
+		[NotNull]
+		public ITypeSystemController? Controller { get; private set; }
 
-		internal readonly CLRMetadata metadata;
+		public ITypeResolver TypeResolver { get; }
 
-		private TypeSystem(CLRMetadata metadata)
+		private readonly IMetadata metadata;
+
+		private TypeSystem(IMetadata metadata, ITypeResolver typeResolver)
 		{
 			this.metadata = metadata;
+			TypeResolver = typeResolver;
 			Modules = new List<MosaModule>();
 		}
 
-		public static TypeSystem Load(IMetadata metadata)
+		public static TypeSystem Load(IMetadata metadata, ITypeResolver typeResolver)
 		{
-			var result = new TypeSystem(metadata as CLRMetadata);
+			var result = new TypeSystem(metadata, typeResolver);
 			result.Load();
 			return result;
 		}
@@ -100,86 +118,50 @@ namespace Mosa.Compiler.MosaTypeSystem
 				throw new AssemblyLoadException();
 		}
 
-		private readonly Dictionary<Tuple<MosaModule, string, string>, MosaType> typeLookup = new Dictionary<Tuple<MosaModule, string, string>, MosaType>();
-
-		public MosaType GetTypeByName(string @namespace, string name)
-		{
-			foreach (var module in Modules)
-			{
-				if (typeLookup.TryGetValue(Tuple.Create(module, @namespace, name), out MosaType result))
-					return result;
-			}
-
-			return null;
-		}
-
-		public MosaType GetTypeByName(MosaModule module, string @namespace, string name)
-		{
-			if (typeLookup.TryGetValue(Tuple.Create(module, @namespace, name), out MosaType result))
-				return result;
-
-			return null;
-		}
-
 		/// <summary>
 		/// Get a type by fullName
 		/// </summary>
 		/// <param name="fullName">fullName like namespace.typeName</param>
-		public MosaType GetTypeByName(string fullName)
+		public MosaType? GetTypeByName(string fullName)
 		{
-			if (string.IsNullOrEmpty(fullName))
-				return null;
-
-			string ns;
-			string typeName;
-
-			var indexOfLastDot = fullName.LastIndexOf('.');
-			if (indexOfLastDot == -1)
-			{
-				// type is in no namespace
-				ns = "";
-				typeName = fullName;
-			}
-			else
-			{
-				ns = fullName.Substring(0, indexOfLastDot);
-				typeName = fullName.Substring(indexOfLastDot + 1);
-			}
-
-			return GetTypeByName(ns, typeName);
+			return string.IsNullOrEmpty(fullName) ? null : TypeResolver.GetTypeByName(Modules, fullName);
 		}
 
-		public MosaModule GetModuleByAssembly(string name)
+		public MosaType? GetTypeByName(MosaModule module, string fullName)
+		{
+			return string.IsNullOrEmpty(fullName) ? null : TypeResolver.GetTypeByName(module, fullName);
+		}
+
+		public MosaModule? GetModuleByAssembly(string name)
 		{
 			foreach (var module in Modules)
 			{
-				if (module.Assembly == name)
+				if (module?.Assembly == name)
 					return module;
 			}
 
 			return null;
 		}
 
-		public string LookupUserString(MosaModule module, uint token)
+		public string? LookupUserString(MosaModule module, uint token)
 		{
 			return metadata.LookupUserString(module, token);
 		}
 
-		public MosaMethod CreateLinkerMethod(string methodName, MosaType returnType, bool hasThis = false, IList<MosaParameter> parameters = null)
+		public MosaMethod CreateLinkerMethod(string methodName, MosaType returnType, bool hasThis = false, IList<MosaParameter>? parameters = null)
 		{
 			return CreateLinkerMethod(DefaultLinkerType, methodName, returnType, hasThis, parameters);
 		}
 
-		public MosaMethod CreateLinkerMethod(MosaType type, string methodName, MosaType returnType, bool hasThis = false, IList<MosaParameter> parameters = null)
+		public MosaMethod CreateLinkerMethod(MosaType type, string methodName, MosaType returnType, bool hasThis = false, IList<MosaParameter>? parameters = null)
 		{
-			if (parameters == null)
-				parameters = new List<MosaParameter>();
+			parameters ??= new List<MosaParameter>();
 
 			var result = Controller.CreateMethod();
 
 			using (var mosaType = Controller.MutateType(type))
 			{
-				mosaType.Methods.Add(result);
+				mosaType.Methods?.Add(result);
 			}
 
 			using (var mosaMethod = Controller.MutateMethod(result))
@@ -206,13 +188,11 @@ namespace Mosa.Compiler.MosaTypeSystem
 		{
 			var mosaType = Controller.CreateType();
 
-			using (var type = Controller.MutateType(mosaType))
-			{
-				type.Module = LinkerModule;
-				type.Name = name;
-				type.IsCompilerGenerated = true;
-				type.TypeCode = MosaTypeCode.ReferenceType;
-			}
+			using var type = Controller.MutateType(mosaType);
+			type.Module = LinkerModule;
+			type.Name = name;
+			type.IsCompilerGenerated = true;
+			type.TypeCode = MosaTypeCode.ReferenceType;
 			return mosaType;
 		}
 
@@ -220,180 +200,13 @@ namespace Mosa.Compiler.MosaTypeSystem
 		{
 			var mosaParameter = Controller.CreateParameter();
 
-			using (var parameter = Controller.MutateParameter(mosaParameter))
-			{
-				parameter.Name = name;
-				parameter.ParameterAttributes = MosaParameterAttributes.In;
-				parameter.ParameterType = parameterType;
-				parameter.DeclaringMethod = method;
+			using var parameter = Controller.MutateParameter(mosaParameter);
+			parameter.Name = name;
+			parameter.ParameterAttributes = MosaParameterAttributes.In;
+			parameter.ParameterType = parameterType;
+			parameter.DeclaringMethod = method;
 
-				return mosaParameter;
-			}
-		}
-
-		private class TypeSystemController : ITypeSystemController
-		{
-			private readonly TypeSystem typeSystem;
-			private uint id = 1;
-
-			public TypeSystemController(TypeSystem typeSystem)
-			{
-				this.typeSystem = typeSystem;
-			}
-
-			public MosaModule CreateModule()
-			{
-				return new MosaModule()
-				{
-					ID = id++,
-					TypeSystem = typeSystem
-				};
-			}
-
-			public MosaType CreateType(MosaType source = null)
-			{
-				if (source == null)
-				{
-					return new MosaType()
-					{
-						ID = id++,
-						TypeSystem = typeSystem
-					};
-				}
-				else
-				{
-					var result = source.Clone();
-					result.ID = id++;
-					return result;
-				}
-			}
-
-			public MosaMethod CreateMethod(MosaMethod source = null)
-			{
-				if (source == null)
-				{
-					return new MosaMethod()
-					{
-						ID = id++,
-						TypeSystem = typeSystem
-					};
-				}
-				else
-				{
-					var result = source.Clone();
-					result.ID = id++;
-					return result;
-				}
-			}
-
-			public MosaField CreateField(MosaField source = null)
-			{
-				if (source == null)
-				{
-					return new MosaField()
-					{
-						ID = id++,
-						TypeSystem = typeSystem
-					};
-				}
-				else
-				{
-					var result = source.Clone();
-					result.ID = id++;
-					return result;
-				}
-			}
-
-			public MosaProperty CreateProperty(MosaProperty source = null)
-			{
-				if (source == null)
-				{
-					return new MosaProperty()
-					{
-						ID = id++,
-						TypeSystem = typeSystem
-					};
-				}
-				else
-				{
-					var result = source.Clone();
-					result.ID = id++;
-					return result;
-				}
-			}
-
-			public MosaParameter CreateParameter(MosaParameter source = null)
-			{
-				if (source == null)
-				{
-					return new MosaParameter()
-					{
-						ID = id++,
-						TypeSystem = typeSystem
-					};
-				}
-				else
-				{
-					var result = source.Clone();
-					result.ID = id++;
-					return result;
-				}
-			}
-
-			public MosaModule.Mutator MutateModule(MosaModule module)
-			{
-				return new MosaModule.Mutator(module);
-			}
-
-			public MosaType.Mutator MutateType(MosaType type)
-			{
-				return new MosaType.Mutator(type);
-			}
-
-			public MosaMethod.Mutator MutateMethod(MosaMethod method)
-			{
-				return new MosaMethod.Mutator(method);
-			}
-
-			public MosaField.Mutator MutateField(MosaField field)
-			{
-				return new MosaField.Mutator(field);
-			}
-
-			public MosaProperty.Mutator MutateProperty(MosaProperty property)
-			{
-				return new MosaProperty.Mutator(property);
-			}
-
-			public MosaParameter.Mutator MutateParameter(MosaParameter parameter)
-			{
-				return new MosaParameter.Mutator(parameter);
-			}
-
-			public void AddModule(MosaModule module)
-			{
-				typeSystem.Modules.Add(module);
-			}
-
-			public void AddType(MosaType type)
-			{
-				if (!type.Module.Types.ContainsKey(type.ID))
-				{
-					type.Module.Types.Add(type.ID, type);
-				}
-
-				typeSystem.typeLookup[Tuple.Create(type.Module, type.Namespace, type.ShortName)] = type;
-			}
-
-			public void SetCorLib(MosaModule module)
-			{
-				typeSystem.CorLib = module;
-			}
-
-			public void SetEntryPoint(MosaMethod entryPoint)
-			{
-				typeSystem.EntryPoint = entryPoint;
-			}
+			return mosaParameter;
 		}
 	}
 }

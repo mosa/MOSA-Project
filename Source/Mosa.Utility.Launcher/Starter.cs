@@ -388,7 +388,7 @@ namespace Mosa.Utility.Launcher
 			}
 
 			LaunchApplication(LauncherSettings.VirtualBox, $"createvm --name {LauncherSettings.OSName} --ostype Other --register", getOutput).WaitForExit();
-			LaunchApplication(LauncherSettings.VirtualBox, $"modifyvm {LauncherSettings.OSName} --memory {LauncherSettings.EmulatorMemory.ToString()} --cpus {LauncherSettings.EmulatorCores.ToString()}", getOutput).WaitForExit();
+			LaunchApplication(LauncherSettings.VirtualBox, $"modifyvm {LauncherSettings.OSName} --memory {LauncherSettings.EmulatorMemory.ToString()} --cpus {LauncherSettings.EmulatorCores.ToString()} --graphicscontroller vmsvga", getOutput).WaitForExit();
 			LaunchApplication(LauncherSettings.VirtualBox, $"storagectl {LauncherSettings.OSName} --name Controller --add ide --controller PIIX4", getOutput).WaitForExit();
 			LaunchApplication(LauncherSettings.VirtualBox, $"storageattach {LauncherSettings.OSName} --storagectl Controller --port 0 --device 0 --type {(LauncherSettings.ImageFormat == "iso" ? "dvddrive" : "hdd")} --medium {Quote(LauncherSettings.ImageFile)}", getOutput).WaitForExit();
 

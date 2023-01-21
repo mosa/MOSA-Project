@@ -21,6 +21,10 @@ namespace Mosa.Compiler.Framework
 
 		public CompilerHooks CompilerHooks { get; }
 
+		public IModuleLoader ModuleLoader { get; }
+
+		public ITypeResolver TypeResolver { get; }
+
 		private enum CompileStage
 		{ Initial, Loaded, Initialized, Ready, Executing, Completed }
 
@@ -30,22 +34,22 @@ namespace Mosa.Compiler.Framework
 
 		private readonly object _lock = new object();
 
-		public MosaCompiler(Settings settings, CompilerHooks compilerHook)
+		public MosaCompiler(Settings settings, CompilerHooks compilerHook, IModuleLoader moduleLoader, ITypeResolver typeResolver)
 		{
 			CompilerSettings = new CompilerSettings(settings.Clone());
 			CompilerHooks = compilerHook;
+			ModuleLoader = moduleLoader;
+			TypeResolver = typeResolver;
 		}
 
 		public void Load()
 		{
 			lock (_lock)
 			{
-				var moduleLoader = new MosaModuleLoader();
+				ModuleLoader.AddSearchPaths(CompilerSettings.SearchPaths);
+				ModuleLoader.LoadModuleFromFiles(CompilerSettings.SourceFiles);
 
-				moduleLoader.AddSearchPaths(CompilerSettings.SearchPaths);
-				moduleLoader.LoadModuleFromFiles(CompilerSettings.SourceFiles);
-
-				var typeSystem = TypeSystem.Load(moduleLoader.CreateMetadata());
+				var typeSystem = TypeSystem.Load(ModuleLoader.CreateMetadata(), TypeResolver);
 
 				Load(typeSystem);
 			}
@@ -142,7 +146,7 @@ namespace Mosa.Compiler.Framework
 				Stage = CompileStage.Executing;
 			}
 
-			var maxThreads = CompilerSettings.Multithreading ? CompilerSettings.MaxThreads != 0 ? CompilerSettings.MaxThreads : (int)(Environment.ProcessorCount * 1.2) : 1;
+			var maxThreads = CompilerSettings.MaxThreads != 0 ? CompilerSettings.MaxThreads : (int)(Environment.ProcessorCount * 1.2);
 
 			Compiler.ExecuteCompile(maxThreads);
 

@@ -2,22 +2,24 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Mosa.Compiler.MosaTypeSystem
 {
 	public abstract class MosaUnit
 	{
-		public object UnderlyingObject { get; private set; }
+		public object? UnderlyingObject { get; private set; }
 
 		public uint ID { get; internal set; }
 
-		public TypeSystem TypeSystem { get; internal set; }
+		[NotNull]
+		public TypeSystem? TypeSystem { get; internal set; }
 
 		public string Name { get; private set; }
 
-		public string FullName { get; internal set; }
+		public string? FullName { get; internal set; }
 
-		public string ShortName { get; internal set; }
+		public string? ShortName { get; internal set; }
 
 		public bool IsCompilerGenerated { get; private set; }
 
@@ -40,21 +42,21 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return result;
 		}
 
-		public T GetUnderlyingObject<T>()
+		public T? GetUnderlyingObject<T>()
 		{
-			return (T)UnderlyingObject;
+			return (T?)UnderlyingObject;
 		}
 
-		public override string ToString()
+		public override string? ToString()
 		{
 			return FullName;
 		}
 
-		public MosaCustomAttribute FindCustomAttribute(string fullName)
+		public MosaCustomAttribute? FindCustomAttribute(string fullName)
 		{
 			foreach (var attribute in customAttributes)
 			{
-				if (attribute.Constructor.DeclaringType.FullName == fullName)
+				if (attribute.Constructor.DeclaringType?.FullName == fullName)
 				{
 					return attribute;
 				}
@@ -72,13 +74,13 @@ namespace Mosa.Compiler.MosaTypeSystem
 				this.unit = unit;
 			}
 
-			public object UnderlyingObject { set { unit.UnderlyingObject = value; } }
+			public object? UnderlyingObject { set { unit.UnderlyingObject = value; } }
 
 			public string Name { set { unit.Name = value; } }
 
 			public bool IsCompilerGenerated { set { unit.IsCompilerGenerated = value; } }
 
-			public IList<MosaCustomAttribute> CustomAttributes { get { return unit.customAttributes; } }
+			public IList<MosaCustomAttribute>? CustomAttributes { get { return unit.customAttributes; } }
 
 			public abstract void Dispose();
 		}

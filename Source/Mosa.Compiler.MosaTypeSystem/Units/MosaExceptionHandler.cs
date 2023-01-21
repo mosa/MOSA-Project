@@ -35,7 +35,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 		/// <summary>
 		///
 		/// </summary>
-		public MosaType Type { get; private set; }
+		public MosaType? Type { get; private set; }
 
 		/// <summary>
 		///
@@ -71,7 +71,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return (label >= HandlerStart && label < HandlerEnd);
 		}
 
-		public MosaExceptionHandler(ExceptionHandlerType ehType, int tryStart, int tryEnd, int handlerStart, int handlerEnd, MosaType type, int? filterOffset)
+		public MosaExceptionHandler(ExceptionHandlerType ehType, int tryStart, int tryEnd, int handlerStart, int handlerEnd, MosaType? type, int? filterOffset)
 		{
 			ExceptionHandlerType = ehType;
 

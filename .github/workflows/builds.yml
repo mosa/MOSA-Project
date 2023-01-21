@@ -11,10 +11,10 @@ jobs:
     env:
       BUILD_VERSION: 2.2.1
     steps:
-      - name: Set net6.0
+      - name: Set net7.0
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '6.0.x'
+          dotnet-version: '7.0.x'
       - name: View Build Version
         run: echo ${{ env.BUILD_VERSION }}.${{ github.run_number }}
       - name: View Github Info
@@ -97,10 +97,10 @@ jobs:
     name: Linux Build
     runs-on: ubuntu-latest
     steps:
-      - name: Set net6.0
+      - name: Set net7.0
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '6.0.x'
+          dotnet-version: '7.0.x'
       - name: Checkout
         uses: actions/checkout@v1
         with:

@@ -1,5 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
+using System.Globalization;
 using System.IO;
 using Mosa.Compiler.Common;
 
@@ -35,9 +37,9 @@ namespace Mosa.Tool.Debugger.DebugData
 
 							var section = new SectionInfo()
 							{
-								Address = parts[0].ParseHex(),
-								Offset = parts[1].ToUInt32(),
-								Size = parts[2].ToInt32(),
+								Address = ulong.Parse(parts[0], NumberStyles.HexNumber),
+								Offset = Convert.ToUInt32(parts[1]),
+								Size = Convert.ToInt32(parts[2]),
 								Kind = parts[3],
 								Name = parts[4],
 							};
@@ -53,9 +55,9 @@ namespace Mosa.Tool.Debugger.DebugData
 
 							var symbol = new SymbolInfo()
 							{
-								Address = parts[0].ParseHex(),
-								Offset = parts[1].ToUInt32(),
-								Length = parts[2].ToUInt32(),
+								Address = ulong.Parse(parts[0], NumberStyles.HexNumber),
+								Offset = Convert.ToUInt32(parts[1]),
+								Length = Convert.ToUInt32(parts[2]),
 								Kind = parts[3],
 								Name = parts[4],
 							};
@@ -71,13 +73,13 @@ namespace Mosa.Tool.Debugger.DebugData
 
 							var type = new TypeInfo()
 							{
-								ID = parts[0].ToInt32(),
-								DefAddress = parts[1].ParseHex(),
-								Size = parts[2].ToUInt32(),
+								ID = Convert.ToInt32(parts[0]),
+								DefAddress = ulong.Parse(parts[1], NumberStyles.HexNumber),
+								Size = Convert.ToUInt32(parts[2]),
 								FullName = parts[3],
-								BaseTypeID = parts[4].ToInt32(),
-								DeclaringTypeID = parts[5].ToInt32(),
-								ElementTypeID = parts[6].ToInt32(),
+								BaseTypeID = Convert.ToInt32(parts[4]),
+								DeclaringTypeID = Convert.ToInt32(parts[5]),
+								ElementTypeID = Convert.ToInt32(parts[6]),
 							};
 
 							debugSource.Add(type);
@@ -91,16 +93,16 @@ namespace Mosa.Tool.Debugger.DebugData
 
 							var method = new MethodInfo()
 							{
-								ID = parts[0].ToInt32(),
-								Address = parts[1].ParseHex(),
-								Size = parts[2].ToUInt32(),
-								DefAddress = parts[3].ParseHex(),
+								ID = Convert.ToInt32(parts[0]),
+								Address = ulong.Parse(parts[1], NumberStyles.HexNumber),
+								Size = Convert.ToUInt32(parts[2]),
+								DefAddress = ulong.Parse(parts[3], NumberStyles.HexNumber),
 								FullName = parts[4],
-								ReturnTypeID = parts[5].ToInt32(),
-								StackSize = parts[6].ToUInt32(),
-								ParameterStackSize = parts[7].ToUInt32(),
-								Attributes = parts[8].ToUInt32(),
-								TypeID = parts[9].ToInt32(),
+								ReturnTypeID = Convert.ToInt32(parts[5]),
+								StackSize = Convert.ToUInt32(parts[6]),
+								ParameterStackSize = Convert.ToUInt32(parts[7]),
+								Attributes = Convert.ToUInt32(parts[8]),
+								TypeID = Convert.ToInt32(parts[9]),
 							};
 
 							debugSource.Add(method);
@@ -114,14 +116,14 @@ namespace Mosa.Tool.Debugger.DebugData
 
 							var parameter = new ParameterInfo()
 							{
-								MethodID = parts[0].ToInt32(),
-								Index = parts[1].ToUInt32(),
-								Offset = parts[2].ToUInt32(),
+								MethodID = Convert.ToInt32(parts[0]),
+								Index = Convert.ToUInt32(parts[1]),
+								Offset = Convert.ToUInt32(parts[2]),
 								Name = parts[3],
 								FullName = parts[4],
-								ParameterTypeID = parts[5].ToInt32(),
-								Attributes = parts[6].ToUInt32(),
-								Size = parts[7].ToUInt32(),
+								ParameterTypeID = Convert.ToInt32(parts[5]),
+								Attributes = Convert.ToUInt32(parts[6]),
+								Size = Convert.ToUInt32(parts[7]),
 							};
 
 							debugSource.Add(parameter);
@@ -135,16 +137,16 @@ namespace Mosa.Tool.Debugger.DebugData
 
 							var field = new FieldInfo()
 							{
-								TypeID = parts[0].ToInt32(),
-								Index = parts[1].ToUInt32(),
+								TypeID = Convert.ToInt32(parts[0]),
+								Index = Convert.ToUInt32(parts[1]),
 								FullName = parts[2],
 								Name = parts[3],
-								FieldTypeID = parts[4].ToInt32(),
-								Address = parts[5].ParseHex(),
-								Attributes = parts[6].ToUInt32(),
-								Offset = parts[7].ToUInt32(),
-								DataLength = parts[8].ToUInt32(),
-								DataAddress = parts[9].ParseHex(),
+								FieldTypeID = Convert.ToInt32(parts[4]),
+								Address = ulong.Parse(parts[5], NumberStyles.HexNumber),
+								Attributes = Convert.ToUInt32(parts[6]),
+								Offset = Convert.ToUInt32(parts[7]),
+								DataLength = Convert.ToUInt32(parts[8]),
+								DataAddress = ulong.Parse(parts[9], NumberStyles.HexNumber),
 							};
 
 							debugSource.Add(field);
@@ -157,10 +159,10 @@ namespace Mosa.Tool.Debugger.DebugData
 
 							var sourceLabel = new SourceLabelInfo()
 							{
-								MethodID = parts[0].ToInt32(),
-								Label = parts[1].ToInt32(),
-								StartOffset = parts[2].ToInt32(),
-								Length = parts[3].ToInt32(),
+								MethodID = Convert.ToInt32(parts[0]),
+								Label = Convert.ToInt32(parts[1]),
+								StartOffset = Convert.ToInt32(parts[2]),
+								Length = Convert.ToInt32(parts[3]),
 							};
 
 							debugSource.Add(sourceLabel);
@@ -173,7 +175,7 @@ namespace Mosa.Tool.Debugger.DebugData
 
 							var file = new SourceFileInfo()
 							{
-								SourceFileID = parts[0].ToInt32(),
+								SourceFileID = Convert.ToInt32(parts[0]),
 								Filename = parts[1]
 							};
 
@@ -187,13 +189,13 @@ namespace Mosa.Tool.Debugger.DebugData
 
 							var source = new SourceInfo()
 							{
-								MethodID = parts[0].ToInt32(),
-								Offset = parts[1].ToInt32(),
-								StartLine = parts[2].ToInt32(),
-								StartColumn = parts[3].ToInt32(),
-								EndLine = parts[4].ToInt32(),
-								EndColumn = parts[5].ToInt32(),
-								SourceFileID = parts[6].ToInt32()
+								MethodID = Convert.ToInt32(parts[0]),
+								Offset = Convert.ToInt32(parts[1]),
+								StartLine = Convert.ToInt32(parts[2]),
+								StartColumn = Convert.ToInt32(parts[3]),
+								EndLine = Convert.ToInt32(parts[4]),
+								EndColumn = Convert.ToInt32(parts[5]),
+								SourceFileID = Convert.ToInt32(parts[6])
 							};
 
 							debugSource.Add(source);

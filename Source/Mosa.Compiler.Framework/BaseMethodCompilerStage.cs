@@ -1168,21 +1168,17 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		protected MosaMethod GetMethod(string namespaceName, string typeName, string methodName)
+		protected MosaMethod GetMethod(string fullName, string methodName)
 		{
-			var type = TypeSystem.GetTypeByName(namespaceName, typeName);
-
-			if (type == null)
-				return null;
-
-			var method = type.FindMethodByName(methodName);
+			var type = TypeSystem.GetTypeByName(fullName);
+			var method = type?.FindMethodByName(methodName);
 
 			return method;
 		}
 
-		protected void ReplaceWithCall(Context context, string namespaceName, string typeName, string methodName)
+		protected void ReplaceWithCall(Context context, string fullName, string methodName)
 		{
-			var method = GetMethod(namespaceName, typeName, methodName);
+			var method = GetMethod(fullName, methodName);
 
 			Debug.Assert(method != null, $"Cannot find method: {methodName}");
 

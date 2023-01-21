@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using dnlib.DotNet.Resources;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 

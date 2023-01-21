@@ -614,12 +614,12 @@ namespace Mosa.Compiler.Framework
 
 		private MosaType GetPlatformInternalRuntimeType()
 		{
-			return TypeSystem.GetTypeByName("Mosa.Runtime." + Architecture.PlatformName, "Internal");
+			return TypeSystem.GetTypeByName("Mosa.Runtime." + Architecture.PlatformName + ".Internal");
 		}
 
 		private MosaType GeInternalRuntimeType()
 		{
-			return TypeSystem.GetTypeByName("Mosa.Runtime", "Internal");
+			return TypeSystem.GetTypeByName("Mosa.Runtime.Internal");
 		}
 
 		public MethodData GetMethodData(MosaMethod method)

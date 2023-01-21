@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using Mosa.Compiler.Common;
@@ -12,11 +13,13 @@ namespace Mosa.Compiler.MosaTypeSystem
 	{
 		public static readonly MosaArrayInfo Vector = new MosaArrayInfo(new List<int>(), 1, new List<uint>());
 
-		public IList<int> LowerBounds { get; }
+		[NotNull]
+		public IList<int>? LowerBounds { get; }
 
 		public uint Rank { get; }
 
-		public IList<uint> Sizes { get; }
+		[NotNull]
+		public IList<uint>? Sizes { get; }
 
 		public MosaArrayInfo(IList<int> lowerBounds, uint rank, IList<uint> sizes)
 		{
@@ -27,17 +30,17 @@ namespace Mosa.Compiler.MosaTypeSystem
 			Sizes = new List<uint>(sizes).AsReadOnly();
 		}
 
-		public bool Equals(MosaArrayInfo other)
+		public bool Equals(MosaArrayInfo? other)
 		{
 			if (this == Vector && other == Vector)
 				return true;
 
-			return Rank == other.Rank &&
+			return Rank == other?.Rank &&
 				   LowerBounds.SequenceEquals(other.LowerBounds) &&
 				   Sizes.SequenceEqual(other.Sizes);
 		}
 
-		private string sig;
+		private string? sig;
 
 		public override string ToString()
 		{
@@ -51,11 +54,11 @@ namespace Mosa.Compiler.MosaTypeSystem
 				{
 					if (i != 0)
 						result.Append(",");
-					if (i < LowerBounds.Count)
+					if (i < LowerBounds?.Count)
 					{
 						result.Append(LowerBounds[i]);
 						result.Append("..");
-						if (i < Sizes.Count)
+						if (i < Sizes?.Count)
 							result.Append(LowerBounds[i] + Sizes[i]);
 						else
 							result.Append(".");

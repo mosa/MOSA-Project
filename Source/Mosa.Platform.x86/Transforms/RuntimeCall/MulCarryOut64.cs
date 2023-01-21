@@ -23,7 +23,7 @@ namespace Mosa.Platform.x86.Transforms.RuntimeCall
 		public override void Transform(Context context, TransformContext transform)
 		{
 			var methodName = "mul64carry";
-			var method = transform.GetMethod("Mosa.Runtime.Math", "Multiplication", methodName);
+			var method = transform.GetMethod("Mosa.Runtime.Math.Multiplication", methodName);
 
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;

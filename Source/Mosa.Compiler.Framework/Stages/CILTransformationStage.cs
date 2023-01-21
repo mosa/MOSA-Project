@@ -628,7 +628,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var resultTypeString = type.IsU || type.IsI || type.IsPointer ? Is32BitPlatform ? "I4" : "I8" : type.TypeCode.ToString();
 
 			var methodName = $"{sourceTypeString}To{resultTypeString}";
-			var method = GetMethod("Mosa.Runtime.Math", "CheckedConversion", methodName);
+			var method = GetMethod("Mosa.Runtime.Math.CheckedConversion", methodName);
 
 			Debug.Assert(method != null);
 
@@ -663,7 +663,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var resultTypeString = type.IsU || type.IsI || type.IsPointer ? Is32BitPlatform ? "U4" : "U8" : type.TypeCode.ToString();
 
 			var methodName = $"{sourceTypeString}To{resultTypeString}";
-			var method = GetMethod("Mosa.Runtime.Math", "CheckedConversion", methodName);
+			var method = GetMethod("Mosa.Runtime.Math.CheckedConversion", methodName);
 
 			Debug.Assert(method != null);
 
@@ -2227,7 +2227,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Operand GetRuntimeTypeHandle(MosaType runtimeType)
 		{
-			return Operand.CreateLabel(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"), Metadata.TypeDefinition + runtimeType.FullName);
+			return Operand.CreateLabel(TypeSystem.GetTypeByName("System.RuntimeTypeHandle"), Metadata.TypeDefinition + runtimeType.FullName);
 		}
 
 		/// <summary>

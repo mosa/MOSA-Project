@@ -13,16 +13,16 @@ namespace Mosa.Compiler.MosaTypeSystem
 			{
 				result.Append(name);
 				result.Append("(");
-				for (int i = 0; i < sig.Parameters.Count; i++)
+				for (var i = 0; i < sig.Parameters.Count; i++)
 				{
 					if (i != 0)
 						result.Append(", ");
-					result.Append(sig.Parameters[i].ParameterType.ShortName);
+					result.Append(sig.Parameters[i].ParameterType?.ShortName);
 				}
 				result.Append(")");
 
 				result.Append(":");
-				result.Append(sig.ReturnType.ShortName);
+				result.Append(sig.ReturnType?.ShortName);
 
 				return result.ToString();
 			}
@@ -30,16 +30,16 @@ namespace Mosa.Compiler.MosaTypeSystem
 			{
 				result.Append(name);
 				result.Append("(");
-				for (int i = 0; i < sig.Parameters.Count; i++)
+				for (var i = 0; i < sig.Parameters.Count; i++)
 				{
 					if (i != 0)
 						result.Append(", ");
-					result.Append(sig.Parameters[i].ParameterType.FullName);
+					result.Append(sig.Parameters[i].ParameterType?.FullName);
 				}
 				result.Append(")");
 
 				result.Append(":");
-				result.Append(sig.ReturnType.FullName);
+				result.Append(sig.ReturnType?.FullName);
 
 				return result.ToString();
 			}
@@ -52,11 +52,11 @@ namespace Mosa.Compiler.MosaTypeSystem
 			if (type.GenericArguments?.Count > 0)
 			{
 				result.Append("<");
-				for (int i = 0; i < type.GenericArguments.Count; i++)
+				for (var i = 0; i < type.GenericArguments.Count; i++)
 				{
 					if (i != 0)
 						result.Append(", ");
-					result.Append(type.GenericArguments[i].FullName);
+					result.Append(type.GenericArguments[i]?.FullName);
 				}
 				result.Append(">");
 			}
@@ -64,26 +64,23 @@ namespace Mosa.Compiler.MosaTypeSystem
 			switch (type.TypeCode)
 			{
 				case MosaTypeCode.UnmanagedPointer:
-					result.Append(type.ElementType.Signature);
+					result.Append(type.ElementType?.Signature);
 					result.Append("*");
 					break;
 
 				case MosaTypeCode.ManagedPointer:
-					result.Append(type.ElementType.Signature);
+					result.Append(type.ElementType?.Signature);
 					result.Append("&");
 					break;
 
 				case MosaTypeCode.SZArray:
 				case MosaTypeCode.Array:
-					result.Append(type.ElementType.Signature);
-					result.Append(type.ArrayInfo.ToString());
+					result.Append(type.ElementType?.Signature);
+					result.Append(type.ArrayInfo);
 					break;
 
 				case MosaTypeCode.FunctionPointer:
-					result.Append(type.FunctionPtrSig.ToString());
-					break;
-
-				default:
+					result.Append(type.FunctionPtrSig);
 					break;
 			}
 

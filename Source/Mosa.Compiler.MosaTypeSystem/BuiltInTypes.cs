@@ -46,83 +46,55 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		//public MosaType ValueType { get; }
 
-		public BuiltInTypes(TypeSystem typeSystem, MosaModule corlib)
+		public BuiltInTypes(ITypeResolver typeResolver, MosaModule corlib)
 		{
-			Void = typeSystem.GetTypeByName(corlib, "System", "Void");
-			Boolean = typeSystem.GetTypeByName(corlib, "System", "Boolean");
-			Char = typeSystem.GetTypeByName(corlib, "System", "Char");
-			I1 = typeSystem.GetTypeByName(corlib, "System", "SByte");
-			U1 = typeSystem.GetTypeByName(corlib, "System", "Byte");
-			I2 = typeSystem.GetTypeByName(corlib, "System", "Int16");
-			U2 = typeSystem.GetTypeByName(corlib, "System", "UInt16");
-			I4 = typeSystem.GetTypeByName(corlib, "System", "Int32");
-			U4 = typeSystem.GetTypeByName(corlib, "System", "UInt32");
-			I8 = typeSystem.GetTypeByName(corlib, "System", "Int64");
-			U8 = typeSystem.GetTypeByName(corlib, "System", "UInt64");
-			R4 = typeSystem.GetTypeByName(corlib, "System", "Single");
-			R8 = typeSystem.GetTypeByName(corlib, "System", "Double");
-			String = typeSystem.GetTypeByName(corlib, "System", "String");
-			Object = typeSystem.GetTypeByName(corlib, "System", "Object");
-			I = typeSystem.GetTypeByName(corlib, "System", "IntPtr");
-			U = typeSystem.GetTypeByName(corlib, "System", "UIntPtr");
-			TypedRef = typeSystem.GetTypeByName(corlib, "System", "TypedReference");
+			Void = typeResolver.ResolveType(corlib, BuiltInType.Void);
+			Boolean = typeResolver.ResolveType(corlib, BuiltInType.Boolean);
+			Char = typeResolver.ResolveType(corlib, BuiltInType.Char);
+			I1 = typeResolver.ResolveType(corlib, BuiltInType.SByte);
+			U1 = typeResolver.ResolveType(corlib, BuiltInType.Byte);
+			I2 = typeResolver.ResolveType(corlib, BuiltInType.Int16);
+			U2 = typeResolver.ResolveType(corlib, BuiltInType.UInt16);
+			I4 = typeResolver.ResolveType(corlib, BuiltInType.Int32);
+			U4 = typeResolver.ResolveType(corlib, BuiltInType.UInt32);
+			I8 = typeResolver.ResolveType(corlib, BuiltInType.Int64);
+			U8 = typeResolver.ResolveType(corlib, BuiltInType.UInt64);
+			R4 = typeResolver.ResolveType(corlib, BuiltInType.Single);
+			R8 = typeResolver.ResolveType(corlib, BuiltInType.Double);
+			String = typeResolver.ResolveType(corlib, BuiltInType.String);
+			Object = typeResolver.ResolveType(corlib, BuiltInType.Object);
+			I = typeResolver.ResolveType(corlib, BuiltInType.IntPtr);
+			U = typeResolver.ResolveType(corlib, BuiltInType.UIntPtr);
+			TypedRef = typeResolver.ResolveType(corlib, BuiltInType.TypedReference);
 			Pointer = Void.ToUnmanagedPointer();
 
-			//ValueType = typeSystem.GetTypeByName(corlib, "System", "ValueType");
+			//ValueType = typeResolver.ResolveType(typeSystem, corlib, BuiltInType.ValueType);
 		}
 
 		public MosaType GetType(BuiltInType builtInType)
 		{
-			switch (builtInType)
+			return builtInType switch
 			{
-				case BuiltInType.Void: return Void;
-				case BuiltInType.Boolean: return Boolean;
-				case BuiltInType.Char: return Char;
-				case BuiltInType.SByte: return I1;
-				case BuiltInType.Byte: return U1;
-				case BuiltInType.Int16: return I2;
-				case BuiltInType.UInt16: return U2;
-				case BuiltInType.Int32: return I4;
-				case BuiltInType.UInt32: return U4;
-				case BuiltInType.Int64: return I8;
-				case BuiltInType.UInt64: return U8;
-				case BuiltInType.Single: return R4;
-				case BuiltInType.Double: return R8;
-				case BuiltInType.String: return String;
-				case BuiltInType.Object: return Object;
-				case BuiltInType.IntPtr: return I;
-				case BuiltInType.UIntPtr: return U;
-				case BuiltInType.TypedReference: return TypedRef;
-
-				//case BuiltInType.ValueType: return ValueType;
-				default: throw new CompilerException("Invalid BuildInType");
-			}
-		}
-
-		public MosaType GetType(string builtInTypeName)
-		{
-			switch (builtInTypeName)
-			{
-				case "Void": return Void;
-				case "Boolean": return Boolean;
-				case "Char": return Char;
-				case "SByte": return I1;
-				case "Byte": return U1;
-				case "Int16": return I2;
-				case "UInt16": return U2;
-				case "Int32": return I4;
-				case "UInt32": return U4;
-				case "Int64": return I8;
-				case "UInt64": return U8;
-				case "Single": return R4;
-				case "Double": return R8;
-				case "String": return String;
-				case "Object": return Object;
-				case "IntPtr": return I;
-				case "UIntPtr": return U;
-				case "TypedReference": return TypedRef;
-				default: throw new CompilerException("Invalid BuildInType");
-			}
+				BuiltInType.Void => Void,
+				BuiltInType.Boolean => Boolean,
+				BuiltInType.Char => Char,
+				BuiltInType.SByte => I1,
+				BuiltInType.Byte => U1,
+				BuiltInType.Int16 => I2,
+				BuiltInType.UInt16 => U2,
+				BuiltInType.Int32 => I4,
+				BuiltInType.UInt32 => U4,
+				BuiltInType.Int64 => I8,
+				BuiltInType.UInt64 => U8,
+				BuiltInType.Single => R4,
+				BuiltInType.Double => R8,
+				BuiltInType.String => String,
+				BuiltInType.Object => Object,
+				BuiltInType.IntPtr => I,
+				BuiltInType.UIntPtr => U,
+				BuiltInType.TypedReference => TypedRef,
+				_ => throw new CompilerException("Invalid BuildInType")
+			};
 		}
 	}
 }

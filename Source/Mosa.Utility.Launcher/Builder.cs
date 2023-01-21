@@ -4,11 +4,6 @@
 //using DiscUtils.Partitions;
 //using DiscUtils.Raw;
 //using DiscUtils.Streams;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.IO.Compression;
-using System.Text;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Configuration;
 using Mosa.Compiler.Common.Exceptions;
@@ -17,6 +12,14 @@ using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Utility.BootImage;
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
+using System.Text;
+using System.Linq;
+using Mosa.Compiler.MosaTypeSystem.CLR;
 
 namespace Mosa.Utility.Launcher
 {
@@ -140,7 +143,7 @@ namespace Mosa.Utility.Launcher
 				}
 			}
 
-			var compiler = new MosaCompiler(Settings, CompilerHooks);
+			var compiler = new MosaCompiler(Settings, CompilerHooks, new ClrModuleLoader(), new ClrTypeResolver());
 
 			compiler.Load();
 			compiler.Initialize();
@@ -233,14 +236,14 @@ namespace Mosa.Utility.Launcher
 			bootImageOptions.IncludeFiles.Add(new IncludeFile(LauncherSettings.OutputFile, "main.exe"));
 			bootImageOptions.IncludeFiles.Add(new IncludeFile("TEST.TXT", Encoding.ASCII.GetBytes("This is a test file.")));
 
-			if (LauncherSettings.FileSystemRootInclude != null)
+			if (!string.IsNullOrEmpty(LauncherSettings.FileSystemRootInclude))
 			{
-				var dir = Path.Combine(Path.GetDirectoryName(Environment.CurrentDirectory), LauncherSettings.FileSystemRootInclude);
+				var dir = Path.GetFullPath(LauncherSettings.FileSystemRootInclude);
 				foreach (var file in Directory.GetFiles(dir, "*.*", SearchOption.AllDirectories))
 				{
 					var name = Path.GetFileName(file).ToUpper();
 
-					Console.WriteLine("Adding file: " + name);
+					Output("Adding file: " + name);
 					bootImageOptions.IncludeFiles.Add(new IncludeFile(name, File.ReadAllBytes(file)));
 				}
 			}
@@ -402,12 +405,12 @@ namespace Mosa.Utility.Launcher
 
 			if (!string.IsNullOrEmpty(LauncherSettings.FileSystemRootInclude))
 			{
-				var dir = Path.Combine(Path.GetDirectoryName(Environment.CurrentDirectory), LauncherSettings.FileSystemRootInclude);
+				var dir = Path.GetFullPath(LauncherSettings.FileSystemRootInclude);
 				foreach (var file in Directory.GetFiles(dir, "*.*", SearchOption.AllDirectories))
 				{
 					var name = Path.GetFileName(file).ToUpper();
 
-					Console.WriteLine("Adding file: " + name);
+					Output("Adding file: " + name);
 					File.Copy(file, Path.Combine(isoDirectory, name));
 				}
 			}
@@ -463,14 +466,14 @@ namespace Mosa.Utility.Launcher
 				archive.ExtractToDirectory(Path.Combine(isoDirectory, "boot", "grub"));
 			}
 
-			if (LauncherSettings.FileSystemRootInclude != null)
+			if (!string.IsNullOrEmpty(LauncherSettings.FileSystemRootInclude))
 			{
-				var dir = Path.Combine(Path.GetDirectoryName(Environment.CurrentDirectory), LauncherSettings.FileSystemRootInclude);
+				var dir = Path.GetFullPath(LauncherSettings.FileSystemRootInclude);
 				foreach (var file in Directory.GetFiles(dir, "*.*", SearchOption.AllDirectories))
 				{
 					var name = Path.GetFileName(file).ToUpper();
 
-					Console.WriteLine("Adding file: " + name);
+					Output("Adding file: " + name);
 					File.Copy(file, Path.Combine(isoDirectory, name));
 				}
 			}

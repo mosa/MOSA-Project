@@ -8,9 +8,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 	{
 		public MosaFieldAttributes FieldAttributes { get; private set; }
 
-		public MosaType DeclaringType { get; private set; }
+		public MosaType? DeclaringType { get; private set; }
 
-		public MosaType FieldType { get; private set; }
+		public MosaType? FieldType { get; private set; }
 
 		public bool IsLiteral { get; private set; }
 
@@ -20,7 +20,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public uint? Offset { get; private set; }
 
-		public byte[] Data { get; private set; }
+		public byte[]? Data { get; private set; }
 
 		public bool HasOpenGenericParams { get; private set; }
 
@@ -33,9 +33,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return (MosaField)base.Clone();
 		}
 
-		public bool Equals(MosaField other)
+		public bool Equals(MosaField? other)
 		{
-			return SignatureComparer.Equals(FieldType, other.FieldType);
+			return SignatureComparer.Equals(FieldType, other?.FieldType);
 		}
 
 		public class Mutator : MosaUnit.MutatorBase
@@ -50,9 +50,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			public MosaFieldAttributes FieldAttributes { set { field.FieldAttributes = value; } }
 
-			public MosaType DeclaringType { set { field.DeclaringType = value; } }
+			public MosaType? DeclaringType { set { field.DeclaringType = value; } }
 
-			public MosaType FieldType { set { field.FieldType = value; } }
+			public MosaType? FieldType { set { field.FieldType = value; } }
 
 			public bool IsLiteral { set { field.IsLiteral = value; } }
 
@@ -70,7 +70,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			{
 				if (field.FieldType != null)
 				{
-					field.FullName = string.Concat(field.DeclaringType.FullName, "::", field.Name, " ", field.FieldType.FullName);
+					field.FullName = string.Concat(field.DeclaringType?.FullName, "::", field.Name, " ", field.FieldType.FullName);
 					field.ShortName = string.Concat(field.Name, " : ", field.FieldType.ShortName);
 				}
 			}

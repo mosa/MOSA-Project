@@ -6,11 +6,11 @@ namespace Mosa.Compiler.MosaTypeSystem
 {
 	public sealed class MosaModule : MosaUnit
 	{
-		public string Assembly { get; private set; }
+		public string? Assembly { get; private set; }
 
 		public bool IsReflectionOnly { get; private set; }
 
-		public MosaMethod EntryPoint { get; private set; }
+		public MosaMethod? EntryPoint { get; private set; }
 
 		public IDictionary<uint, MosaType> Types { get; private set; }
 
@@ -29,7 +29,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				this.module = module;
 			}
 
-			public string Assembly { set { module.Assembly = value; } }
+			public string? Assembly { set { module.Assembly = value; } }
 
 			public bool IsReflectionOnly { set { module.IsReflectionOnly = value; } }
 

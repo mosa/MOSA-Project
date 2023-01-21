@@ -21,7 +21,7 @@ namespace Mosa.Platform.x86.Transforms.RuntimeCall
 
 		public override void Transform(Context context, TransformContext transform)
 		{
-			transform.ReplaceWithCall(context, "Mosa.Runtime.Math", "Conversion", "R4ToU8");
+			transform.ReplaceWithCall(context, "Mosa.Runtime.Math.Conversion", "R4ToU8");
 		}
 	}
 }

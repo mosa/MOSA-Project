@@ -691,7 +691,7 @@ namespace Mosa.Compiler.Framework
 				if (field.Offset == null)
 					continue;
 
-				uint offset = field.Offset.Value;
+				var offset = field.Offset.Value;
 				fieldOffsets.Add(field, offset);
 				size = Math.Max(size, offset + ComputeFieldSize(field));
 

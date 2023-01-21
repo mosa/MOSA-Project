@@ -9,15 +9,15 @@ namespace Mosa.Compiler.MosaTypeSystem
 {
 	public class MosaType : MosaUnit, IEquatable<MosaType>
 	{
-		public MosaModule Module { get; private set; }
+		public MosaModule? Module { get; private set; }
 
 		public string Namespace { get; private set; }
 
-		public string Signature { get; internal set; }
+		public string? Signature { get; internal set; }
 
-		public MosaType BaseType { get; private set; }
+		public MosaType? BaseType { get; private set; }
 
-		public MosaType DeclaringType { get; private set; }
+		public MosaType? DeclaringType { get; private set; }
 
 		public bool IsInterface { get; private set; }
 
@@ -153,15 +153,15 @@ namespace Mosa.Compiler.MosaTypeSystem
 			}
 		}
 
-		public MosaType ElementType { get; private set; }
+		public MosaType? ElementType { get; private set; }
 
 		public int? GenericParamIndex { get; private set; }
 
-		public MosaType Modifier { get; private set; }
+		public MosaType? Modifier { get; private set; }
 
-		public MosaArrayInfo ArrayInfo { get; private set; }
+		public MosaArrayInfo? ArrayInfo { get; private set; }
 
-		public MosaMethodSignature FunctionPtrSig { get; private set; }
+		public MosaMethodSignature? FunctionPtrSig { get; private set; }
 
 		internal MosaType()
 		{
@@ -189,38 +189,41 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return result;
 		}
 
-		public bool Equals(MosaType other)
+		public bool Equals(MosaType? other)
 		{
 			return SignatureComparer.Equals(this, other);
 		}
 
-		public MosaMethod FindMethodByName(string name)
+		public MosaMethod? FindMethodByName(string name)
 		{
 			foreach (var method in Methods)
 			{
 				if (method.Name == name)
 					return method;
 			}
+
 			return null;
 		}
 
-		public MosaMethod FindMethodByNameAndParameters(string name, IList<MosaParameter> parameters)
+		public MosaMethod? FindMethodByNameAndParameters(string name, IList<MosaParameter> parameters)
 		{
 			foreach (var method in Methods)
 			{
-				if (method.Name == name && method.Signature.Parameters.SequenceEquals(parameters))
+				if (method.Name == name && method.Signature?.Parameters.SequenceEquals(parameters) == true)
 					return method;
 			}
+
 			return null;
 		}
 
-		public MosaMethod FindMethodBySignature(string name, MosaMethodSignature sig)
+		public MosaMethod? FindMethodBySignature(string name, MosaMethodSignature sig)
 		{
 			foreach (var method in Methods)
 			{
-				if (method.Name == name && method.Signature.Equals(sig))
+				if (method.Name == name && method.Signature?.Equals(sig) == true)
 					return method;
 			}
+
 			return null;
 		}
 
@@ -234,13 +237,13 @@ namespace Mosa.Compiler.MosaTypeSystem
 				this.type = type;
 			}
 
-			public MosaModule Module { set { type.Module = value; } }
+			public MosaModule? Module { set { type.Module = value; } }
 
 			public string Namespace { set { type.Namespace = value; } }
 
-			public MosaType BaseType { set { type.BaseType = value; } }
+			public MosaType? BaseType { set { type.BaseType = value; } }
 
-			public MosaType DeclaringType { set { type.DeclaringType = value; } }
+			public MosaType? DeclaringType { set { type.DeclaringType = value; } }
 
 			public bool IsInterface { set { type.IsInterface = value; } }
 
@@ -272,11 +275,11 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			public GenericArgumentsCollection GenericArguments { get { return type.genericArguments; } }
 
-			public MosaType ElementType { set { type.ElementType = value; } }
+			public MosaType? ElementType { set { type.ElementType = value; } }
 
 			public int? GenericParamIndex { set { type.GenericParamIndex = value; } }
 
-			public MosaType Modifier { set { type.Modifier = value; } }
+			public MosaType? Modifier { set { type.Modifier = value; } }
 
 			public MosaArrayInfo ArrayInfo { set { type.ArrayInfo = value; } }
 
@@ -311,9 +314,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 				}
 				else if (type.DeclaringType != null)
 				{
-					fName.Append(type.ElementType.FullName);
+					fName.Append(type.ElementType?.FullName);
 					fName.Append(type.Signature);
-					sName.Append(type.ElementType.ShortName);
+					sName.Append(type.ElementType?.ShortName);
 					sName.Append(type.Signature);
 
 					type.FullName = fName.ToString();

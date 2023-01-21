@@ -40,7 +40,7 @@ namespace Mosa.Utility.Launcher
 
 			if (emulator == "virtualbox" && imageformat == "IMG")
 			{
-				return "VirtualBox dose not support the IMG file format";
+				return "VirtualBox does not support the IMG file format";
 			}
 
 			if (bootloader == "grub0.97" && imageformat != "ISO")

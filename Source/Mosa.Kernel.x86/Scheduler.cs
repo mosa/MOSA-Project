@@ -240,7 +240,7 @@ namespace Mosa.Kernel.x86
 
 			SetThreadID(threadID);
 
-			PIC.SendEndOfInterrupt(ClockIRQ);
+			LocalAPIC.SendEndOfInterrupt(ClockIRQ);
 
 			Native.InterruptReturn((uint)thread.StackStatePointer.ToInt32());
 		}

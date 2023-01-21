@@ -1,7 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 using System;
+using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
@@ -9,7 +9,6 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Platform;
 using Avalonia.Threading;
-using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Configuration;
 using Mosa.Compiler.Framework;
 using Mosa.Utility.Configuration;
@@ -17,17 +16,27 @@ using Mosa.Utility.Launcher;
 
 namespace Mosa.Tool.Launcher
 {
+	// TODO: Implement settings for FmtCmb and FrmCmb
 	public partial class MainWindow : Window
 	{
 		private bool done;
+		private int totalMethods, completedMethods;
 		private Settings settings;
 		private Builder builder;
 		private OpenFileDialog source;
-		private OpenFolderDialog destination;
+		private OpenFolderDialog destination, include;
 
 		public MainWindow()
 		{
 			InitializeComponent();
+
+			var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(1) };
+			timer.Tick += (_, _) =>
+			{
+				OutputProgress.Maximum = totalMethods;
+				OutputProgress.Value = completedMethods;
+			};
+			timer.Start();
 
 			source = new OpenFileDialog
 			{
@@ -40,8 +49,18 @@ namespace Mosa.Tool.Launcher
 				Title = "Select the output directory"
 			};
 
-			// TODO: Implement settings for that option
-			FmtCmb.SelectedIndex = 0;
+			include = new OpenFolderDialog
+			{
+				Title = "Select the include directory"
+			};
+
+			DstLbl.Content = Path.Combine(Path.GetTempPath(), "MOSA");
+		}
+
+		private void NotifyProgress(int total, int at)
+		{
+			totalMethods = total;
+			completedMethods = at;
 		}
 
 		private void AddOutput(string data)
@@ -49,7 +68,7 @@ namespace Mosa.Tool.Launcher
 			if (string.IsNullOrEmpty(data))
 				return;
 
-			OutputTxt.Text += $"{data}\n";
+			OutputTxt.Text += data + Environment.NewLine;
 		}
 
 		public void Initialize(string[] args)
@@ -65,10 +84,22 @@ namespace Mosa.Tool.Launcher
 
 			var files = settings.GetValueList("Compiler.SourceFiles");
 			if (files != null)
-				foreach (var path in files.Select(Path.GetFullPath).Select(Path.GetDirectoryName).Where(path => !string.IsNullOrWhiteSpace(path)))
-					settings.AddPropertyListValue("SearchPaths", path);
-			else
-				settings.SetValue("Launcher.Start", false);
+			{
+				var src = files[0];
+				if (src != null)
+				{
+					OsNameTxt.Text = Path.GetFileNameWithoutExtension(src);
+					SrcLbl.Content = Path.GetFileName(src);
+				}
+
+				foreach (var file in files)
+				{
+					var path = Path.GetDirectoryName(Path.GetFullPath(file));
+
+					if (!string.IsNullOrWhiteSpace(path))
+						settings.AddPropertyListValue("SearchPaths", path);
+				}
+			} else settings.SetValue("Launcher.Start", false);
 
 			// Output the current directory
 			AddOutput($"Current Directory: {Environment.CurrentDirectory}");
@@ -82,7 +113,7 @@ namespace Mosa.Tool.Launcher
 			PlatformRegistry.Add(new Platform.ARMv8A32.Architecture());
 
 			// Initialize settings
-			UpdateDisplay();
+			UpdateSettings();
 			UpdateInterfaceAppLocations();
 
 			if (settings.GetValue("Launcher.Start", false))
@@ -91,7 +122,7 @@ namespace Mosa.Tool.Launcher
 				CompileBuildAndStart();
 			}
 
-			// Hacky method to center the screen
+			// Hacky method to center the window on the screen
 			this.GetObservable(IsVisibleProperty).Subscribe(value =>
 			{
 				if (!value || done)
@@ -104,13 +135,14 @@ namespace Mosa.Tool.Launcher
 
 		private void AddCounters(string data)
 		{
-			CountersTxt.Text += $"{data}\n";
+			CountersTxt.Text += data + Environment.NewLine;
 		}
 
 		private CompilerHooks CreateCompilerHook()
 		{
 			return new CompilerHooks
 			{
+				NotifyProgress = NotifyProgress,
 				NotifyStatus = NotifyStatus
 			};
 		}
@@ -149,7 +181,7 @@ namespace Mosa.Tool.Launcher
 			settings.SetValue("Linker.Symbols", EmtSymbs.IsChecked.Value);
 			settings.SetValue("Linker.StaticRelocations", EmtRelocs.IsChecked.Value);
 			settings.SetValue("Linker.Drawf", EmtDwarf.IsChecked.Value);
-			settings.SetValue("Compiler.BaseAddress", (uint)BaseAddrTxt.Text.ParseHexOrInteger());
+			settings.SetValue("Compiler.BaseAddress", BaseAddrTxt.Text.StartsWith("0x") ? uint.Parse(BaseAddrTxt.Text[2..], NumberStyles.HexNumber) : uint.Parse(BaseAddrTxt.Text));
 
 			settings.SetValue("CompilerDebug.NasmFile", NasmFile.IsChecked.Value ? "%DEFAULT%" : string.Empty);
 			settings.SetValue("CompilerDebug.AsmFile", AsmFile.IsChecked.Value ? "%DEFAULT%" : string.Empty);
@@ -180,6 +212,17 @@ namespace Mosa.Tool.Launcher
 
 			settings.SetValue("Launcher.PlugKorlib", PlugKorlib.IsChecked.Value);
 			settings.SetValue("OS.Name", OsNameTxt.Text);
+
+			var src = SrcLbl.Content.ToString();
+
+			settings.ClearProperty("Compiler.SourceFiles");
+			settings.AddPropertyListValue("Compiler.SourceFiles", src);
+
+			settings.ClearProperty("SearchPaths");
+			settings.AddPropertyListValue("SearchPaths", Path.GetDirectoryName(src));
+
+			settings.SetValue("Image.Folder", DstLbl.Content.ToString());
+			settings.SetValue("Image.FileSystem.RootInclude", IncDirTxt.Text);
 
 			switch (ImgCmb.SelectedIndex)
 			{
@@ -234,172 +277,31 @@ namespace Mosa.Tool.Launcher
 				case 4: settings.SetValue("Image.BootLoader", "limine"); break;
 				default: settings.ClearProperty("Image.BootLoader"); break;
 			}
-		}
 
-		private void UpdateDisplay()
-		{
-			SsaOpts.IsChecked = settings.GetValue("Optimizations.SSA", true);
-			BasicOpts.IsChecked = settings.GetValue("Optimizations.Basic", true);
-			SccpOpts.IsChecked = settings.GetValue("Optimizations.SCCP", true);
-			InlineOpts.IsChecked = settings.GetValue("Optimizations.Inline", true);
-			InlineExplOpts.IsChecked = settings.GetValue("Optimizations.Inline.Explicit", false);
-			LongExpOpts.IsChecked = settings.GetValue("Optimizations.LongExpansion", true);
-			TwoOptPass.IsChecked = settings.GetValue("Optimizations.TwoPass", true);
-			ValueNumOpts.IsChecked = settings.GetValue("Optimizations.ValueNumbering", true);
-			BtOpts.IsChecked = settings.GetValue("Optimizations.BitTracker", true);
-			PlatOpts.IsChecked = settings.GetValue("Optimizations.Platform", true);
-			LicmOpts.IsChecked = settings.GetValue("Optimizations.LoopInvariantCodeMotion", true);
-			DevirtOpts.IsChecked = settings.GetValue("Optimizations.Devirtualization", true);
-
-			EmtDwarf.IsChecked = settings.GetValue("Linker.Drawf", false);
-			EmtRelocs.IsChecked = settings.GetValue("Linker.StaticRelocations", false);
-			EmtSymbs.IsChecked = settings.GetValue("Linker.Symbols", false);
-			BaseAddrTxt.Text = "0x" + settings.GetValue("Compiler.BaseAddress", 0x00400000).ToString("x8");
-
-			NasmFile.IsChecked = settings.GetValue("CompilerDebug.NasmFile", string.Empty) == "%DEFAULT%";
-			AsmFile.IsChecked = settings.GetValue("CompilerDebug.AsmFile", string.Empty) == "%DEFAULT%";
-			MapFile.IsChecked = settings.GetValue("CompilerDebug.MapFile", string.Empty) == "%DEFAULT%";
-			DbgFile.IsChecked = settings.GetValue("CompilerDebug.DebugFile", string.Empty) == "%DEFAULT%";
-			InlLstFile.IsChecked = settings.GetValue("CompilerDebug.InlinedFile", string.Empty) == "%DEFAULT%";
-			HashFiles.IsChecked = settings.GetValue("CompilerDebug.PreLinkHashFile", string.Empty) == "%DEFAULT%";
-			CompTimeFile.IsChecked = settings.GetValue("CompilerDebug.CompileTimeFile", string.Empty) == "%DEFAULT%";
-
-			ExitOnLaunch.IsChecked = settings.GetValue("Launcher.Exit", true);
-
-			QemuGdb.IsChecked = settings.GetValue("Emulator.GDB", false);
-			LaunchGdb.IsChecked = settings.GetValue("Launcher.LaunchGDB", false);
-			MosaDbger.IsChecked = settings.GetValue("Launcher.LaunchDebugger", false);
-
-			MultiThreading.IsChecked = settings.GetValue("Compiler.Multithreading", false);
-			MethodScanner.IsChecked = settings.GetValue("Compiler.MethodScanner", false);
-
-			MemVal.Value = settings.GetValue("Emulator.Memory", 128);
-			CpuVal.Value = settings.GetValue("Emulator.Cores", 1);
-
-			EnableVbe.IsChecked = settings.GetValue("Multiboot.Video", false);
-			VbeWidth.Value = settings.GetValue("Multiboot.Width", 640);
-			VbeHeight.Value = settings.GetValue("Multiboot.Height", 480);
-			VbeDepth.Value = settings.GetValue("Multiboot.Depth", 32);
-
-			PlugKorlib.IsChecked = settings.GetValue("Launcher.PlugKorlib", true);
-			OsNameTxt.Text = settings.GetValue("OS.Name", "MOSA");
-
-			ImgCmb.SelectedIndex = settings.GetValue("Image.Format", string.Empty).ToUpperInvariant() switch
+			switch (FrmCmb.SelectedIndex)
 			{
-				"ISO" => 0,
-				"IMG" => 1,
-				"VHD" => 2,
-				"VDI" => 3,
-				"VMDK" => 4,
-				_ => ImgCmb.SelectedIndex
-			};
-
-			EmuCmb.SelectedIndex = settings.GetValue("Emulator", string.Empty).ToLowerInvariant() switch
-			{
-				"qemu" => 0,
-				"bochs" => 1,
-				"vmware" => 2,
-				"virtualbox" => 3,
-				_ => EmuCmb.SelectedIndex
-			};
-
-			FsCmb.SelectedIndex = settings.GetValue("Image.FileSystem", string.Empty).ToLowerInvariant() switch
-			{
-				"fat12" => 0,
-				"fat16" => 1,
-				"fat32" => 2,
-				_ => FsCmb.SelectedIndex
-			};
-
-			BldCmb.SelectedIndex = settings.GetValue("Image.BootLoader", string.Empty).ToLowerInvariant() switch
-			{
-				"grub2.00" => 0,
-				"grub0.97" => 1,
-				"syslinux6.03" => 2,
-				"syslinux3.72" => 3,
-				"limine" => 4,
-				_ => BldCmb.SelectedIndex
-			};
-
-			PltCmb.SelectedIndex = settings.GetValue("Compiler.Platform", string.Empty).ToLowerInvariant() switch
-			{
-				"x86" => 0,
-				"x64" => 1,
-				"armv8a32" => 2,
-				_ => PltCmb.SelectedIndex
-			};
-
-			CntCmb.SelectedIndex = settings.GetValue("Emulator.Serial", string.Empty).ToLowerInvariant() switch
-			{
-				"none" => 0,
-				"pipe" => 1,
-				"tcpserver" => 2,
-				"tcpclient" => 3,
-				_ => CntCmb.SelectedIndex
-			};
-
-			DstLbl.Content = settings.GetValue("Image.Folder", "No path specified");
-
-			var files = settings.GetValueList("Compiler.SourceFiles");
-			var name = files is { Count: >= 1 } ? files[0] : null;
-
-			SrcLbl.Content = name != null ? Path.GetFileName(name) : "No path specified";
+				case 0: settings.SetValue("Image.Firmware", "bios"); break;
+				default: settings.ClearProperty("Image.Firmware"); break;
+			}
 		}
 
 		private void SetDefaultSettings()
 		{
-			settings.SetValue("Compiler.BaseAddress", 0x00400000);
 			settings.SetValue("Compiler.Binary", true);
-			settings.SetValue("Compiler.MethodScanner", false);
-			settings.SetValue("Compiler.Multithreading", true);
 			settings.SetValue("Compiler.Multithreading.MaxThreads", Environment.ProcessorCount);
-			settings.SetValue("Compiler.Platform", "x86");
 			settings.SetValue("Compiler.TraceLevel", 0);
-			settings.SetValue("CompilerDebug.DebugFile", string.Empty);
-			settings.SetValue("CompilerDebug.AsmFile", string.Empty);
-			settings.SetValue("CompilerDebug.MapFile", string.Empty);
-			settings.SetValue("CompilerDebug.NasmFile", string.Empty);
-			settings.SetValue("CompilerDebug.InlineFile", string.Empty);
-			settings.SetValue("Optimizations.Basic", true);
-			settings.SetValue("Optimizations.BitTracker", true);
-			settings.SetValue("Optimizations.Inline", true);
 			settings.SetValue("Optimizations.Inline.AggressiveMaximum", 24);
-			settings.SetValue("Optimizations.Inline.Explicit", false);
 			settings.SetValue("Optimizations.Inline.Maximum", 12);
 			settings.SetValue("Optimizations.Basic.Window", 5);
-			settings.SetValue("Optimizations.LongExpansion", true);
-			settings.SetValue("Optimizations.LoopInvariantCodeMotion", true);
-			settings.SetValue("Optimizations.Platform", true);
-			settings.SetValue("Optimizations.SCCP", true);
-			settings.SetValue("Optimizations.Devirtualization", true);
-			settings.SetValue("Optimizations.SSA", true);
-			settings.SetValue("Optimizations.TwoPass", true);
-			settings.SetValue("Optimizations.ValueNumbering", true);
-			settings.SetValue("Image.BootLoader", "limine");
-			settings.SetValue("Image.Folder", Path.Combine(Path.GetTempPath(), "MOSA"));
-			settings.SetValue("Image.Format", "IMG");
-			settings.SetValue("Image.FileSystem", "FAT16");
 			settings.SetValue("Image.ImageFile", "%DEFAULT%");
 			settings.SetValue("Multiboot.Version", "v1");
-			settings.SetValue("Multiboot.Video", false);
-			settings.SetValue("Multiboot.Video.Width", 640);
-			settings.SetValue("Multiboot.Video.Height", 480);
-			settings.SetValue("Multiboot.Video.Depth", 32);
-			settings.SetValue("Emulator", "Qemu");
-			settings.SetValue("Emulator.Memory", 128);
-			settings.SetValue("Emulator.Cores", 1);
-			settings.SetValue("Emulator.Serial", "none");
 			settings.SetValue("Emulator.Serial.Host", "127.0.0.1");
 			settings.SetValue("Emulator.Serial.Port", new Random().Next(11111, 22222));
 			settings.SetValue("Emulator.Serial.Pipe", "MOSA");
 			settings.SetValue("Emulator.Display", true);
 			settings.SetValue("Launcher.Start", false);
 			settings.SetValue("Launcher.Launch", true);
-			settings.SetValue("Launcher.Exit", true);
 			settings.SetValue("Launcher.HuntForCorLib", true);
-			settings.SetValue("Launcher.PlugKorlib", true);
-			settings.SetValue("Linker.Drawf", false);
-			settings.SetValue("OS.Name", "MOSA");
 		}
 
 		private void CompileBuildAndStart()
@@ -466,7 +368,7 @@ namespace Mosa.Tool.Launcher
 			if (result == null)
 				CompileBuildAndStart();
 			else
-				AddOutput("ERROR: " + result);
+				AddOutput($"ERROR: {result}");
 		}
 
 		private async void SrcBtn_OnClick(object? _, RoutedEventArgs __)
@@ -475,15 +377,7 @@ namespace Mosa.Tool.Launcher
 			if (result == null)
 				return;
 
-			var file = result[0];
-
-			settings.ClearProperty("Compiler.SourceFiles");
-			settings.AddPropertyListValue("Compiler.SourceFiles", file);
-
-			settings.ClearProperty("SearchPaths");
-			settings.AddPropertyListValue("SearchPaths", Path.GetDirectoryName(file));
-
-			SrcLbl.Content = file;
+			SrcLbl.Content = result[0];
 		}
 
 		private async void DstBtn_OnClick(object? _, RoutedEventArgs __)
@@ -492,8 +386,16 @@ namespace Mosa.Tool.Launcher
 			if (result == null)
 				return;
 
-			settings.SetValue("Image.Folder", result);
 			DstLbl.Content = result;
+		}
+
+		private async void IncBtn_OnClick(object? _, RoutedEventArgs __)
+		{
+			var result = await include.ShowAsync(this);
+			if (result == null)
+				return;
+
+			IncDirTxt.Text = result;
 		}
 	}
 }

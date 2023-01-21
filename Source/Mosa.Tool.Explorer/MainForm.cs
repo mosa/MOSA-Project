@@ -13,6 +13,7 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.CompilerStages;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
+using Mosa.Compiler.MosaTypeSystem.CLR;
 using Mosa.Tool.Explorer.Stages;
 using Mosa.Utility.Configuration;
 using Mosa.Utility.Launcher;
@@ -113,7 +114,7 @@ namespace Mosa.Tool.Explorer
 
 			var compilerHooks = CreateCompilerHook();
 
-			Compiler = new MosaCompiler(Settings, compilerHooks);
+			Compiler = new MosaCompiler(Settings, compilerHooks, new ClrModuleLoader(), new ClrTypeResolver());
 
 			Compiler.Load();
 
@@ -279,7 +280,7 @@ namespace Mosa.Tool.Explorer
 		{
 			var index = line.IndexOf(':');
 			var name = line.Substring(0, index).Trim();
-			var value = line.Substring(index + 1).Trim().ToInt32();
+			var value = int.Parse(line.Substring(index + 1).Trim());
 			var entry = new CounterEntry(name, value);
 			return entry;
 		}

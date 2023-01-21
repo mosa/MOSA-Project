@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -7,11 +8,11 @@ namespace Mosa.Compiler.MosaTypeSystem
 {
 	public sealed class MosaMethod : MosaUnit//, IEquatable<MosaMethod>
 	{
-		public MosaModule Module { get; private set; }
+		public MosaModule? Module { get; private set; }
 
-		public MosaType DeclaringType { get; private set; }
+		public MosaType? DeclaringType { get; private set; }
 
-		public MosaMethodSignature Signature { get; private set; }
+		public MosaMethodSignature? Signature { get; private set; }
 
 		public bool IsAbstract { get; private set; }
 
@@ -59,15 +60,15 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public IList<MosaExceptionHandler> ExceptionHandlers { get; private set; }
 
-		private List<MosaMethod> overrides;
+		private List<MosaMethod?> overrides;
 
-		public IList<MosaMethod> Overrides { get; private set; }
+		public IList<MosaMethod?> Overrides { get; private set; }
 
 		public bool IsExternal { get; private set; }
 
-		public string ExternMethodName { get; private set; }
+		public string? ExternMethodName { get; private set; }
 
-		public string ExternMethodModule { get; private set; }
+		public string? ExternMethodModule { get; private set; }
 
 		public bool IsConstructor { get { return IsSpecialName && IsRTSpecialName && Name == ".ctor"; } }
 
@@ -81,7 +82,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			Code = (instructions = new List<MosaInstruction>()).AsReadOnly();
 			ExceptionHandlers = (exceptionHandlers = new List<MosaExceptionHandler>()).AsReadOnly();
 
-			Overrides = (overrides = new List<MosaMethod>()).AsReadOnly();
+			Overrides = (overrides = new List<MosaMethod?>()).AsReadOnly();
 		}
 
 		override internal MosaMethod Clone()
@@ -94,7 +95,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			result.Code = (result.instructions = new List<MosaInstruction>(instructions)).AsReadOnly();
 			result.ExceptionHandlers = (result.exceptionHandlers = new List<MosaExceptionHandler>(exceptionHandlers)).AsReadOnly();
 
-			result.Overrides = (result.overrides = new List<MosaMethod>(overrides)).AsReadOnly();
+			result.Overrides = (result.overrides = new List<MosaMethod?>(overrides)).AsReadOnly();
 
 			return result;
 		}
@@ -119,11 +120,11 @@ namespace Mosa.Compiler.MosaTypeSystem
 				this.method = method;
 			}
 
-			public MosaModule Module { set { method.Module = value; } }
+			public MosaModule? Module { set { method.Module = value; } }
 
-			public MosaType DeclaringType { set { method.DeclaringType = value; } }
+			public MosaType? DeclaringType { set { method.DeclaringType = value; } }
 
-			public MosaMethodSignature Signature { set { method.Signature = value; } }
+			public MosaMethodSignature? Signature { set { method.Signature = value; } }
 
 			public bool IsAbstract { set { method.IsAbstract = value; } }
 
@@ -163,13 +164,13 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			public IList<MosaExceptionHandler> ExceptionBlocks { get { return method.exceptionHandlers; } }
 
-			public IList<MosaMethod> Overrides { get { return method.overrides; } }
+			public IList<MosaMethod?> Overrides { get { return method.overrides; } }
 
 			public bool IsExternal { set { method.IsExternal = value; } }
 
-			public string ExternMethodName { set { method.ExternMethodName = value; } }
+			public string? ExternMethodName { set { method.ExternMethodName = value; } }
 
-			public string ExternMethodModule { set { method.ExternMethodModule = value; } }
+			public string? ExternMethodModule { set { method.ExternMethodModule = value; } }
 
 			public override void Dispose()
 			{
@@ -180,7 +181,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 					if (GenericArguments.Count > 0)
 					{
 						methodName.Append('<');
-						for (int i = 0; i < GenericArguments.Count; i++)
+						for (var i = 0; i < GenericArguments.Count; i++)
 						{
 							if (i != 0)
 								methodName.Append(", ");
@@ -198,13 +199,16 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 	public class MosaMethodFullNameComparer : IEqualityComparer<MosaMethod>
 	{
-		public bool Equals(MosaMethod x, MosaMethod y)
+		public bool Equals(MosaMethod? x, MosaMethod? y)
 		{
-			return x.FullName.Equals(y.FullName);
+			return x?.FullName?.Equals(y?.FullName) == true;
 		}
 
 		public int GetHashCode(MosaMethod obj)
 		{
+			if (obj.FullName == null)
+				throw new InvalidOperationException("Full name of method is null!");
+
 			return obj.FullName.GetHashCode();
 		}
 	}
