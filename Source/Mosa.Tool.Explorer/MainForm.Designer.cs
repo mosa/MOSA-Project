@@ -1278,7 +1278,6 @@
 		private System.Windows.Forms.TabPage tabLogs;
 		private System.Windows.Forms.ComboBox cbCompilerSections;
 		private System.Windows.Forms.Label label4;
-		private System.Windows.Forms.RichTextBox tbLogs;
 		private System.Windows.Forms.RichTextBox tbMethodCounters;
 		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.TextBox tbCounterFilter;

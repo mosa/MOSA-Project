@@ -796,7 +796,7 @@ namespace Mosa.Tool.Explorer
 
 			if (tabControl.SelectedTab == tabLogs)
 			{
-				tbLogs.Text = CreateText(CompilerData.GetLog(CurrentLogSection));
+				tbCompilerLogs.Text = CreateText(CompilerData.GetLog(CurrentLogSection));
 			}
 
 			if (tabControl.SelectedTab == tabCompilerCounters)
