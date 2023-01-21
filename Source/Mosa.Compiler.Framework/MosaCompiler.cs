@@ -17,7 +17,7 @@ namespace Mosa.Compiler.Framework
 
 		public BaseArchitecture Platform { get; private set; }
 
-		public MosaLinker Linker { get { return Compiler.Linker; } }
+		public MosaLinker Linker => Compiler.Linker;
 
 		public CompilerHooks CompilerHooks { get; }
 

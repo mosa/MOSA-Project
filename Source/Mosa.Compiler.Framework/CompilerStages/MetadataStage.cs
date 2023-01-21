@@ -203,7 +203,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			// 9. Constructor that accepts no parameters, if any, for this type
 			foreach (var method in type.Methods)
 			{
-				if (!method.IsConstructor || method.Signature.Parameters.Count != 0 || method.HasOpenGenericParams == true)
+				if (!method.IsConstructor || method.Signature.Parameters.Count != 0 || method.HasOpenGenericParams)
 					continue;
 
 				var targetMethodData = GetTargetMethodData(method);
@@ -524,14 +524,14 @@ namespace Mosa.Compiler.Framework.CompilerStages
 					// TODO: Replace .HasImpelement with .HasCode
 
 					// 5. Pointer to Getter Method Definition
-					if (property.GetterMethod != null && property.GetterMethod.HasImplementation && property.GetterMethod.HasOpenGenericParams == false)
+					if (property.GetterMethod != null && property.GetterMethod.HasImplementation && !property.GetterMethod.HasOpenGenericParams)
 					{
 						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, propertyDefSymbol, writer2.GetPosition(), Metadata.MethodDefinition + property.GetterMethod.FullName, 0);
 					}
 					writer2.WriteZeroBytes(NativePointerSize);
 
 					// 6. Pointer to Setter Method Definition
-					if (property.SetterMethod != null && property.SetterMethod.HasImplementation && property.SetterMethod.HasOpenGenericParams == false)
+					if (property.SetterMethod != null && property.SetterMethod.HasImplementation && !property.SetterMethod.HasOpenGenericParams)
 					{
 						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, propertyDefSymbol, writer2.GetPosition(), Metadata.MethodDefinition + property.SetterMethod.FullName, 0);
 					}

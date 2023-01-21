@@ -80,7 +80,7 @@ namespace Mosa.Compiler.Framework
 			if (method.IsAbstract && !method.HasImplementation)
 				return false;
 
-			if (method.HasOpenGenericParams == true)
+			if (method.HasOpenGenericParams)
 				return false;
 
 			if (method.IsCompilerGenerated)
