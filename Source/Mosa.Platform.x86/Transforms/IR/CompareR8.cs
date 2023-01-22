@@ -1,5 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Diagnostics;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
@@ -21,6 +22,8 @@ namespace Mosa.Platform.x86.Transforms.IR
 
 		public override void Transform(Context context, TransformContext transform)
 		{
+			Debug.Assert(context.ConditionCode != ConditionCode.Undefined);
+
 			//FloatCompare(context, X86.Ucomisd);
 
 			var instruction = X86.Ucomisd;

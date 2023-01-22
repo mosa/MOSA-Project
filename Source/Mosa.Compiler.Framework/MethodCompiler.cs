@@ -1,9 +1,11 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis;
+using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
@@ -407,27 +409,43 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public void Compile()
 		{
-			PlugMethod();
-
-			PatchDelegate();
-
-			ExternalMethod();
-
-			InternalMethod();
-
-			StubMethod();
-
-			ExecutePipeline();
-
-			Symbol.SetReplacementStatus(MethodData.Inlined);
-
-			if (Statistics)
+			try
 			{
-				var log = new TraceLog(TraceType.MethodCounters, Method, string.Empty, MethodData.Version);
+				PlugMethod();
 
-				log.Log(MethodData.Counters.Export());
+				PatchDelegate();
 
-				Compiler.PostTraceLog(log);
+				ExternalMethod();
+
+				InternalMethod();
+
+				StubMethod();
+
+				ExecutePipeline();
+
+				Symbol.SetReplacementStatus(MethodData.Inlined);
+
+				if (Statistics)
+				{
+					var log = new TraceLog(TraceType.MethodCounters, Method, string.Empty, MethodData.Version);
+
+					log.Log(MethodData.Counters.Export());
+
+					Compiler.PostTraceLog(log);
+				}
+			}
+			catch (Exception exception)
+			{
+				Compiler.PostEvent(CompilerEvent.Exception, $"Method: {Method} -> {exception}");
+
+				var exceptionLog = new TraceLog(TraceType.MethodDebug, Method, "Exception", MethodData.Version);
+
+				exceptionLog.Log(exception.ToString());
+
+				Compiler.PostTraceLog(exceptionLog);
+
+				Stop();
+				Compiler.Stop();
 			}
 		}
 

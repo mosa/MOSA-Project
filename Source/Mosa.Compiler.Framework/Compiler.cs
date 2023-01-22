@@ -183,6 +183,7 @@ namespace Mosa.Compiler.Framework
 				compilerSettings.Devirtualization ? new DevirtualizeCallStage() : null,
 				new PlugStage(),
 				new RuntimeCallStage(),
+				new ArrayStage(),
 				(compilerSettings.InlineMethods || compilerSettings.InlineExplicit) ? new InlineStage() : null,
 				new PromoteTemporaryVariables(),
 				new StaticLoadOptimizationStage(),

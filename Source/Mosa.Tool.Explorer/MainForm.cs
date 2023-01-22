@@ -268,9 +268,12 @@ namespace Mosa.Tool.Explorer
 
 			var result = new StringBuilder();
 
-			foreach (var l in list)
+			lock (list)
 			{
-				result.AppendLine(l);
+				foreach (var l in list)
+				{
+					result.AppendLine(l);
+				}
 			}
 
 			return result.ToString();

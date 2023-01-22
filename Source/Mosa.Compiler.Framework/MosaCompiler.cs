@@ -146,7 +146,7 @@ namespace Mosa.Compiler.Framework
 				Stage = CompileStage.Executing;
 			}
 
-			var maxThreads = CompilerSettings.MaxThreads != 0 ? CompilerSettings.MaxThreads : (int)(Environment.ProcessorCount * 1.2);
+			var maxThreads = CompilerSettings.Multithreading ? CompilerSettings.MaxThreads > 0 ? CompilerSettings.MaxThreads : (int)(Environment.ProcessorCount * 1.2) : 0;
 
 			Compiler.ExecuteCompile(maxThreads);
 

@@ -1453,7 +1453,7 @@ namespace Mosa.Compiler.Framework.Stages
 				case StackType.R4 when entry2.StackType == StackType.R4 && entry1.Operand.IsR4:
 					{
 						var result = AllocateVirtualRegisterI32();
-						context.AppendInstruction(IRInstruction.CompareR4, result, entry1.Operand, entry2.Operand);
+						context.AppendInstruction(IRInstruction.CompareR4, conditionCode, result, entry1.Operand, entry2.Operand);
 						context.AppendInstruction(IRInstruction.Branch32, ConditionCode.NotZero, null, result, ConstantZero32, block);
 						//context.AppendInstruction(IRInstruction.Jmp, nextblock);
 						return true;
@@ -1620,7 +1620,7 @@ namespace Mosa.Compiler.Framework.Stages
 			switch (entry1.StackType)
 			{
 				case StackType.R4 when entry2.StackType == StackType.R4 && entry1.Operand.IsR4:
-					context.AppendInstruction(IRInstruction.CompareR4, result, entry1.Operand, entry2.Operand);
+					context.AppendInstruction(IRInstruction.CompareR4, conditionCode, result, entry1.Operand, entry2.Operand);
 					return true;
 
 				case StackType.R8 when entry2.StackType == StackType.R8 && entry1.Operand.IsR8:
@@ -2677,8 +2677,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var type = (MosaType)instruction.Operand;
 
-			//var underlyingType = GetUnderlyingType(type.ElementType);
-			var isCompound = IsCompoundType(type);
+			var underlyingType = GetUnderlyingType(type);
+			var isCompound = IsCompoundType(underlyingType);
 
 			context.AppendInstruction(IRInstruction.CheckArrayBounds, null, array, index);
 
@@ -2698,7 +2698,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else
 			{
-				var stacktype = GetStackType(type);
+				var stacktype = GetStackType(underlyingType);
 				var result = AllocatedOperand(stacktype);
 				var elementType = GetElementType(stacktype);
 				var loadInstruction = GetLoadInstruction(elementType);
@@ -3825,6 +3825,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var value = entry1.Operand;
 
 			var type = (MosaType)instruction.Operand;
+
 			var underlyingType = GetUnderlyingType(type);
 			var isCompound = IsCompoundType(underlyingType);
 

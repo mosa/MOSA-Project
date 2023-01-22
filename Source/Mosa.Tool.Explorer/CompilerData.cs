@@ -39,12 +39,16 @@ namespace Mosa.Tool.Explorer
 					DirtyLogSections = true;
 				}
 
-				log.AddRange(lines);
+				lock (log)
+				{
+					log.AddRange(lines);
+				}
+
 				DirtyLog = dirty;
 			}
 		}
 
-		private void UpdateLog(string section, string line, bool dirty = false)
+		private void UpdateLog(string section, string line)
 		{
 			lock (Logs)
 			{
@@ -56,8 +60,12 @@ namespace Mosa.Tool.Explorer
 					DirtyLogSections = true;
 				}
 
-				log.Add(line);
-				DirtyLog = dirty;
+				lock (log)
+				{
+					log.Add(line);
+				}
+
+				DirtyLog = true;
 			}
 		}
 

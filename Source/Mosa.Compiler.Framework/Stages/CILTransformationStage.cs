@@ -2070,13 +2070,19 @@ namespace Mosa.Compiler.Framework.Stages
 			return !is64Bit ? instruction32 : instruction64;
 		}
 
+		private void AddArrayBoundsCheck(InstructionNode node, Operand arrayOperand, Operand arrayIndexOperand)
+		{
+			var before = new Context(node).InsertBefore();
+			before.AppendInstruction(IRInstruction.CheckArrayBounds, null, arrayOperand, arrayIndexOperand);
+		}
+
 		/// <summary>
 		/// Adds bounds check to the array access.
 		/// </summary>
 		/// <param name="node">The node.</param>
 		/// <param name="arrayOperand">The array operand.</param>
 		/// <param name="arrayIndexOperand">The index operand.</param>
-		private void AddArrayBoundsCheck(InstructionNode node, Operand arrayOperand, Operand arrayIndexOperand)
+		private void AddArrayBoundsCheck2(InstructionNode node, Operand arrayOperand, Operand arrayIndexOperand)
 		{
 			var before = new Context(node).InsertBefore();
 
