@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.MosaTypeSystem;
+using Mosa.Compiler.MosaTypeSystem.Units;
 
 namespace Mosa.Tool.Explorer
 {

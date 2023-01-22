@@ -2,7 +2,7 @@
 
 using System;
 using System.Collections.Generic;
-using Mosa.Compiler.Framework.Trace;
+using Mosa.Compiler.Framework;
 
 namespace Mosa.Tool.Explorer
 {

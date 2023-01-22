@@ -11,9 +11,8 @@ using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Configuration;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.CompilerStages;
-using Mosa.Compiler.Framework.Trace;
-using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.MosaTypeSystem.CLR;
+using Mosa.Compiler.MosaTypeSystem.Units;
 using Mosa.Tool.Explorer.Stages;
 using Mosa.Utility.Configuration;
 using Mosa.Utility.Launcher;
@@ -305,9 +304,9 @@ namespace Mosa.Tool.Explorer
 
 		private static void RegisterPlatforms()
 		{
-			PlatformRegistry.Add(new Platform.x86.Architecture());
-			PlatformRegistry.Add(new Platform.x64.Architecture());
-			PlatformRegistry.Add(new Platform.ARMv8A32.Architecture());
+			PlatformRegistry.Add(new Compiler.Platform.x86.Architecture());
+			PlatformRegistry.Add(new Compiler.Platform.x64.Architecture());
+			PlatformRegistry.Add(new Compiler.Platform.ARMv8A32.Architecture());
 		}
 
 		private void btnFirst_Click(object sender, EventArgs e)
