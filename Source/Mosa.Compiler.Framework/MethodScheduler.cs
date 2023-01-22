@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using Mosa.Compiler.MosaTypeSystem;
+using Mosa.Compiler.MosaTypeSystem.Units;
 using Priority_Queue;
 
 namespace Mosa.Compiler.Framework

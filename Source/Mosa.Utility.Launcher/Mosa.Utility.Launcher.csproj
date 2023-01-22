@@ -17,58 +17,13 @@
     <ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj" />
     <ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem.CLR\Mosa.Compiler.MosaTypeSystem.CLR.csproj" />
     <ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj" />
-    <ProjectReference Include="..\Mosa.Platform.x64\Mosa.Platform.x64.csproj" />
-    <ProjectReference Include="..\Mosa.Platform.x86\Mosa.Platform.x86.csproj" />
+    <ProjectReference Include="..\Mosa.Compiler.Platform.x64\Mosa.Compiler.Platform.x64.csproj" />
+    <ProjectReference Include="..\Mosa.Compiler.Platform.x86\Mosa.Compiler.Platform.x86.csproj" />
     <ProjectReference Include="..\Mosa.Utility.BootImage\Mosa.Utility.BootImage.csproj" />
     <ProjectReference Include="..\Mosa.Utility.Configuration\Mosa.Utility.Configuration.csproj" />
     <ProjectReference Include="..\Mosa.Utility.Disassembler\Mosa.Utility.Disassembler.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\..\Tools\syslinux\6.03\mbr.bin">
-      <Link>Resources\syslinux\6.03\mbr.bin</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\..\Tools\syslinux\6.03\ldlinux.bin">
-      <Link>Resources\syslinux\6.03\ldlinux.bin</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\..\Tools\syslinux\6.03\ldlinux.c32">
-      <Link>Resources\syslinux\6.03\ldlinux.c32</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\..\Tools\syslinux\6.03\ldlinux.sys">
-      <Link>Resources\syslinux\6.03\ldlinux.sys</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\..\Tools\syslinux\6.03\libcom32.c32">
-      <Link>Resources\syslinux\6.03\libcom32.c32</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\..\Tools\syslinux\6.03\mboot.c32">
-      <Link>Resources\syslinux\6.03\mboot.c32</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\..\Tools\syslinux\6.03\isolinux.bin">
-      <Link>Resources\syslinux\6.03\isolinux.bin</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\..\Tools\syslinux\3.72\mbr.bin">
-      <Link>Resources\syslinux\3.72\mbr.bin</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\..\Tools\syslinux\3.72\ldlinux.bin">
-      <Link>Resources\syslinux\3.72\ldlinux.bin</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\..\Tools\syslinux\3.72\ldlinux.sys">
-      <Link>Resources\syslinux\3.72\ldlinux.sys</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\..\Tools\syslinux\3.72\mboot.c32">
-      <Link>Resources\syslinux\3.72\mboot.c32</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\..\Tools\syslinux\3.72\isolinux.bin">
-      <Link>Resources\syslinux\3.72\isolinux.bin</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\..\Tools\grub\0.97\stage2_eltorito">
-      <Link>Resources\grub\0.97\stage2_eltorito</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\..\Tools\grub\2.00\eltorito.img">
-      <Link>Resources\grub\2.00\eltorito.img</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\..\Tools\grub\2.00\i386-pc.zip">
-      <Link>Resources\grub\2.00\i386-pc.zip</Link>
-    </EmbeddedResource>
     <EmbeddedResource Include="..\..\Tools\raspberrypi-firmware\bootcode.bin">
       <Link>Resources\raspberrypi-firmware\bootcode.bin</Link>
     </EmbeddedResource>

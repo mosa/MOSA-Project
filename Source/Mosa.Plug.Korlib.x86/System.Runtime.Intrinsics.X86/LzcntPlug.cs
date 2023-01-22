@@ -3,7 +3,7 @@
 using Mosa.Runtime.Plug;
 using Mosa.Runtime.x86;
 
-namespace Mosa.Plug.Korlib.System.Runtime.Intrinsics.X86
+namespace Mosa.Plug.Korlib.x86.System.Runtime.Intrinsics.X86
 {
 	internal static class LzcntPlug
 	{

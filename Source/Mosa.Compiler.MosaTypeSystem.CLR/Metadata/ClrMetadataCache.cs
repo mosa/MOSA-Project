@@ -3,6 +3,7 @@
 using dnlib.DotNet;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.MosaTypeSystem.CLR.Utils;
+using Mosa.Compiler.MosaTypeSystem.Units;
 
 namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 {
@@ -16,8 +17,7 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 		private readonly Dictionary<ScopedToken, MosaProperty> propertyLookup = new();
 
 		private uint stringIdCounter;
-		private readonly Dictionary<string, uint> stringHeapLookup = new(StringComparer.Ordinal);
-		private readonly Dictionary<uint, string> stringHeapLookup2 = new();
+		private readonly Dictionary<uint, string> stringHeapLookup = new();
 
 		public ClrMetadataCache()
 		{
@@ -97,18 +97,30 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 
 		public uint GetStringId(string value)
 		{
-			if (!stringHeapLookup.TryGetValue(value, out var id))
+			uint id = 0;
+
+			var found = false;
+
+			foreach (var val in stringHeapLookup)
+				if (val.Value == value)
+				{
+					id = val.Key;
+					found = true;
+					break;
+				}
+
+			if (!found)
 			{
 				id = stringIdCounter++;
-				stringHeapLookup[value] = id;
-				stringHeapLookup2[id] = value;
+				stringHeapLookup[id] = value;
 			}
+
 			return id;
 		}
 
 		public string GetStringById(uint id)
 		{
-			return stringHeapLookup2[id];
+			return stringHeapLookup[id];
 		}
 	}
 }

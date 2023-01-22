@@ -1,8 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections.Generic;
+using Mosa.DeviceDriver.ISA;
 using Mosa.DeviceDriver.PCI.Intel;
 using Mosa.DeviceDriver.PCI.Intel.QuarkSoC;
+using Mosa.DeviceDriver.PCI.VideoCard;
 using Mosa.DeviceSystem;
 using Mosa.DeviceSystem.PCI;
 
@@ -83,17 +85,17 @@ namespace Mosa.DeviceDriver
 					Factory = delegate { return new ISA.IDEController(); }
 				},
 
-				//new ISADeviceDriverRegistryEntry()
-				//{
-				//	Name = "VGAText",
-				//	Platforms = PlatformArchitecture.X86AndX64,
-				//	AutoLoad = true,
-				//	BasePort = 0x03B0,
-				//	PortRange = 0x1F,
-				//	BaseAddress = 0xB0000,
-				//	AddressRange = 0x10000,
-				//	Factory = delegate { return new VGAText(); }
-				//},
+				new ISADeviceDriverRegistryEntry()
+				{
+					Name = "VGAText",
+					Platforms = PlatformArchitecture.X86AndX64,
+					AutoLoad = true,
+					BasePort = 0x03B0,
+					PortRange = 0x1F,
+					BaseAddress = 0xB0000,
+					AddressRange = 0x10000,
+					Factory = delegate { return new VGAText(); }
+				},
 
 				/*new PCIDeviceDriverRegistryEntry()
 				{

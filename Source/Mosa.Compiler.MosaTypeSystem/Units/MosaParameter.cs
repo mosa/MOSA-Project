@@ -2,7 +2,7 @@
 
 using System;
 
-namespace Mosa.Compiler.MosaTypeSystem
+namespace Mosa.Compiler.MosaTypeSystem.Units
 {
 	public class MosaParameter : MosaUnit, IEquatable<MosaParameter>, IEquatable<MosaType>
 	{

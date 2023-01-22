@@ -14,7 +14,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 			Lines.AppendLine("using Mosa.Compiler.Framework;");
 			Lines.AppendLine("using System.Collections.Generic;");
 			Lines.AppendLine();
-			Lines.AppendLine("namespace Mosa.Platform.ARMv8A32");
+			Lines.AppendLine("namespace Mosa.Compiler.Platform.ARMv8A32");
 			Lines.AppendLine("{");
 			Lines.AppendLine("\t/// <summary>");
 			Lines.AppendLine("\t/// ARMv8A32 Instruction Map");

@@ -3,6 +3,8 @@
 
 // No run-time tests
 
+using Mosa.UnitTests;
+
 namespace Mosa.UnitTests.ValueType
 {
 	internal struct InitStruct

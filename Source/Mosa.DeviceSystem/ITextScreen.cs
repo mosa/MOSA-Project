@@ -1,5 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Drawing;
+
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
@@ -17,7 +19,7 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <param name="cursorX">The cursor X.</param>
 		/// <param name="cursorY">The cursor Y.</param>
-		void SetCursor(ushort cursorX, ushort cursorY);
+		void SetCursor(uint cursorX, uint cursorY);
 
 		/// <summary>
 		/// Writes the specified text to the screen.
@@ -41,5 +43,18 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <param name="text">The text.</param>
 		void WriteLine(string text);
+
+		/// <summary>
+		/// Sets the background and foreground color.
+		/// </summary>
+		/// <param name="foreground">The foreground color.</param>
+		/// <param name="background">The background color.</param>
+		void SetColor(Color foreground, Color background);
+
+		/// <summary>
+		/// Reads a line.
+		/// </summary>
+		/// <returns>The read line.</returns>
+		string ReadLine();
 	}
 }

@@ -64,8 +64,7 @@
 								<Label>ARMv8A32</Label>
 							</ComboBox>
 							<Label Margin="0,40, 0, 0">Image Format:</Label>
-							<ComboBox FontSize="12" SelectedIndex="1" HorizontalContentAlignment="Center" Name="ImgCmb" Margin="105,40, 0, 0" Width="195" BorderBrush="LightGray">
-								<Label>ISO (.iso)</Label>
+							<ComboBox FontSize="12" SelectedIndex="0" HorizontalContentAlignment="Center" Name="ImgCmb" Margin="105,40, 0, 0" Width="195" BorderBrush="LightGray">
 								<Label>IMG (.img)</Label>
 								<Label>Microsoft (.vhd)</Label>
 								<Label>VirtualBox (.vdi)</Label>
@@ -152,11 +151,7 @@
 								<Label>Multiboot v1</Label>
 							</ComboBox>
 							<Label Margin="0,80, 0, 0">Boot Loader:</Label>
-							<ComboBox FontSize="12" SelectedIndex="4" HorizontalContentAlignment="Center" Name="BldCmb" Margin="85,80, 0, 0" Width="146" BorderBrush="LightGray">
-								<Label>Grub 2.00</Label>
-								<Label>Grub 0.97</Label>
-								<Label>Syslinux 6.03</Label>
-								<Label>Syslinux 3.72</Label>
+							<ComboBox FontSize="12" SelectedIndex="0" HorizontalContentAlignment="Center" Name="BldCmb" Margin="85,80, 0, 0" Width="146" BorderBrush="LightGray">
 								<Label>Limine</Label>
 							</ComboBox>
 							<Label Margin="241,0, 0, 0">Firmware:</Label>
@@ -182,8 +177,6 @@
 					<Label FontSize="14" Name="vmwarePathLbl" Margin="165, -23, 0, 0">No path specified</Label>
 					<Label FontSize="14">VirtualBox:</Label>
 					<Label FontSize="14" Name="vboxPathLbl" Margin="165, -23, 0, 0">No path specified</Label>
-					<Label FontSize="14">mkisofs:</Label>
-					<Label FontSize="14" Name="mkisofsPathLbl" Margin="165, -23, 0, 0">No path specified</Label>
 					<Label FontSize="14">ndiasm:</Label>
 					<Label FontSize="14" Name="ndiasmPathLbl" Margin="165, -23, 0, 0">No path specified</Label>
 				</StackPanel>

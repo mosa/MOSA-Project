@@ -1,10 +1,11 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Runtime.CompilerServices;
+using Mosa.UnitTests;
 
 namespace Mosa.UnitTests.Optimization
 {
-	public static class SwitchTests
+	public static partial class SwitchTests
 	{
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static int SimpleSwitch(int a)

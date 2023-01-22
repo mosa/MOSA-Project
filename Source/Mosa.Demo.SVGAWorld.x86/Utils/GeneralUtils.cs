@@ -1,11 +1,12 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using Mosa.DeviceDriver.ISA;
 using Mosa.DeviceSystem;
 
-namespace Mosa.Demo.SVGAWorld.x86
+namespace Mosa.Demo.SVGAWorld.x86.Utils
 {
 	public static class GeneralUtils
 	{
@@ -24,27 +25,27 @@ namespace Mosa.Demo.SVGAWorld.x86
 		{
 			var stream = new DataStream(data);
 
-			var name = string.Empty;
-			var charset = string.Empty;
+			var name = String.Empty;
+			var charset = String.Empty;
 
 			// Name
 			for (; ; )
 			{
-				var ch = stream.ReadByte();
-				if (ch == byte.MaxValue)
+				var ch = stream.ReadChar();
+				if (ch == Byte.MaxValue)
 					break;
 
-				name += (char)ch;
+				name += ch;
 			}
 
 			// Charset
 			for (; ; )
 			{
-				var ch = stream.ReadByte();
-				if (ch == byte.MaxValue)
+				var ch = stream.ReadChar();
+				if (ch == Byte.MaxValue)
 					break;
 
-				charset += (char)ch;
+				charset += ch;
 			}
 
 			var width = stream.ReadByte();

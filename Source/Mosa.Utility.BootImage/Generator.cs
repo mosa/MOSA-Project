@@ -3,6 +3,7 @@
 using System;
 using System.IO;
 using Mosa.DeviceSystem;
+using Mosa.FileSystem;
 using Mosa.FileSystem.FAT;
 
 namespace Mosa.Utility.BootImage
@@ -49,8 +50,7 @@ namespace Mosa.Utility.BootImage
 			diskDeviceDriver.Initialize();
 			diskDeviceDriver.Start();
 
-			var isVdi = options.ImageFormat == ImageFormat.VDI;
-			if (isVdi)
+			/*if (options.ImageFormat == ImageFormat.VDI)
 			{
 				// Create header
 				var header = VDI.CreateHeader(
@@ -67,7 +67,7 @@ namespace Mosa.Utility.BootImage
 				diskDeviceDriver.WriteBlock(1, (uint)(map.Length / SectorSize), map);
 
 				diskDeviceDriver.BlockOffset = 1 + (uint)(map.Length / 512);
-			}
+			}*/
 
 			// Expand disk image
 			diskDeviceDriver.WriteBlock(blockCount - 1, 1, new byte[SectorSize]);
@@ -100,7 +100,6 @@ namespace Mosa.Utility.BootImage
 					case FileSystem.FAT12: mbr.Partitions[0].PartitionType = PartitionType.FAT12; break;
 					case FileSystem.FAT16: mbr.Partitions[0].PartitionType = PartitionType.FAT16; break;
 					case FileSystem.FAT32: mbr.Partitions[0].PartitionType = PartitionType.FAT32; break;
-					default: break;
 				}
 
 				mbr.Code = options.MBRCode;
@@ -137,12 +136,11 @@ namespace Mosa.Utility.BootImage
 				case FileSystem.FAT12: fatSettings.FATType = FatType.FAT12; break;
 				case FileSystem.FAT16: fatSettings.FATType = FatType.FAT16; break;
 				case FileSystem.FAT32: fatSettings.FATType = FatType.FAT32; break;
-				default: break;
 			}
 
 			fatSettings.FloppyMedia = false;
 			fatSettings.VolumeLabel = options.VolumeLabel;
-			fatSettings.SerialID = new byte[4] { 0x01, 0x02, 0x03, 0x04 };
+			fatSettings.SerialID = new byte[] { 0x01, 0x02, 0x03, 0x04 };
 			fatSettings.SectorsPerTrack = diskGeometry.SectorsPerTrack;
 			fatSettings.NumberOfHeads = diskGeometry.Heads;
 			fatSettings.HiddenSectors = diskGeometry.SectorsPerTrack;
@@ -177,18 +175,6 @@ namespace Mosa.Utility.BootImage
 				fatFileStream.Flush();
 			}
 
-			if (options.PatchSyslinuxOption)
-			{
-				if (options.BootLoader == BootLoader.Syslinux_6_03)
-				{
-					Syslinux.PatchSyslinux_6_03(partitionDevice, fat);
-				}
-				else if (options.BootLoader == BootLoader.Syslinux_3_72)
-				{
-					Syslinux.PatchSyslinux_3_72(partitionDevice, fat);
-				}
-			}
-
 			if (options.ImageFormat == ImageFormat.VHD)
 			{
 				// Create footer
@@ -205,7 +191,7 @@ namespace Mosa.Utility.BootImage
 			diskDeviceDriver.Dispose();
 
 			if (options.BootLoader == BootLoader.Limine)
-				Limine.Deploy(options.DiskImageFileName, isVdi);
+				Limine.Deploy(options.DiskImageFileName);
 		}
 	}
 }

@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using Mosa.Compiler.Common.Configuration;
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Platform.x86;
 using Mosa.Utility.Configuration;
 using Mosa.Utility.Launcher;
 
@@ -156,9 +157,9 @@ namespace Mosa.Tool.Launcher.Console
 
 		private static void RegisterPlatforms()
 		{
-			PlatformRegistry.Add(new Platform.x86.Architecture());
-			PlatformRegistry.Add(new Platform.x64.Architecture());
-			PlatformRegistry.Add(new Platform.ARMv8A32.Architecture());
+			PlatformRegistry.Add(new Architecture());
+			PlatformRegistry.Add(new Compiler.Platform.x64.Architecture());
+			PlatformRegistry.Add(new Compiler.Platform.ARMv8A32.Architecture());
 		}
 	}
 }

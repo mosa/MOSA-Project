@@ -1,5 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Drawing;
+
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
@@ -7,161 +9,162 @@ namespace Mosa.DeviceSystem
 	/// </summary>
 	public class TextScreen : ITextScreen
 	{
-		/// <summary>
-		///
-		/// </summary>
-		protected ITextDevice textDevice;
+		private readonly ITextDevice textDevice;
+		private readonly IKeyboard keyboard;
 
-		/// <summary>
-		///
-		/// </summary>
-		protected ushort cursorX;
+		private readonly char[] buffer = new char[2048];
 
-		/// <summary>
-		///
-		/// </summary>
-		protected ushort cursorY;
+		private Color background, foreground;
 
-		/// <summary>
-		///
-		/// </summary>
-		protected TextColor foreground;
+		private uint cursorX, cursorY;
 
-		/// <summary>
-		///
-		/// </summary>
-		protected TextColor background;
-
-		/// <summary>
-		///
-		/// </summary>
-		protected ushort width;
-
-		/// <summary>
-		///
-		/// </summary>
-		protected ushort height;
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="TextScreen"/> class.
-		/// </summary>
-		/// <param name="textDevice">The text device.</param>
-		public TextScreen(ITextDevice textDevice)
+		public TextScreen(ITextDevice textDevice, IKeyboard keyboard)
 		{
 			this.textDevice = textDevice;
-			width = textDevice.Width;
-			height = textDevice.Height;
-			foreground = TextColor.Black;
-			background = TextColor.White;
+			this.keyboard = keyboard;
+
+			SetColor(Color.White, Color.Black);
 			ClearScreen();
 		}
 
-		/// <summary>
-		/// Sets the cursor.
-		/// </summary>
-		protected void SetCursor()
+		public void SetCursor(uint x, uint y)
 		{
+			cursorX = x;
+			cursorY = y;
 			textDevice.SetCursor(cursorX, cursorY);
 		}
 
-		/// <summary>
-		/// Sets the cursor.
-		/// </summary>
-		/// <param name="cursorX">The cursor X.</param>
-		/// <param name="cursorY">The cursor Y.</param>
-		public void SetCursor(ushort cursorX, ushort cursorY)
-		{
-			this.cursorX = cursorX;
-			this.cursorY = cursorY;
-			SetCursor();
-		}
-
-		/// <summary>
-		/// Clears the screen.
-		/// </summary>
 		public void ClearScreen()
 		{
-			cursorX = 0;
-			cursorY = 0;
-			textDevice.ClearScreen();
-			SetCursor();
+			SetCursor(0, 0);
+			textDevice.ClearScreen(background);
 		}
 
-		/// <summary>
-		/// Writes the specified character.
-		/// </summary>
-		/// <param name="character">The character.</param>
-		protected void InternalWrite(char character)
-		{
-			if (cursorX == width || character == '\n')
-			{
-				cursorY++;
-				cursorX = 0;
-
-				if (cursorY == height)
-				{
-					textDevice.ScrollUp();
-					cursorY--;
-				}
-			}
-
-			if (character != '\n')
-			{
-				textDevice.WriteChar(cursorX, cursorY, character, foreground, background);
-				cursorX++;
-			}
-
-			SetCursor();
-		}
-
-		/// <summary>
-		/// Writes the specified text to the screen.
-		/// </summary>
-		/// <param name="text">The text.</param>
 		public void Write(string text)
 		{
-			foreach (char c in text)
-				InternalWrite(c);
-
-			SetCursor();
+			foreach (var c in text)
+				Write(c);
 		}
 
-		/// <summary>
-		/// Writes the specified character.
-		/// </summary>
-		/// <param name="character"></param>
 		public void Write(char character)
 		{
 			InternalWrite(character);
-			SetCursor();
+			textDevice.SetCursor(cursorX, cursorY);
 		}
 
-		/// <summary>
-		/// Writes an empty line to the screen.
-		/// </summary>
 		public void WriteLine()
 		{
 			Write('\n');
 		}
 
-		/// <summary>
-		/// Writes the line to the screen.
-		/// </summary>
-		/// <param name="text">The text.</param>
 		public void WriteLine(string text)
 		{
-			Write(text + "\n");
+			Write(text);
+			WriteLine();
 		}
 
-		/// <summary>
-		/// Sets the colors of the TextScreen for future writes.
-		/// </summary>
-		/// <param name="foreground">The text color.</param>
-		/// <param name="background">The background color.</param>
-		public void SetColor(TextColor foreground, TextColor background)
+		public void SetColor(Color foreground, Color background)
 		{
 			this.foreground = foreground;
 			this.background = background;
+		}
+
+		public string ReadLine()
+		{
+			var length = 0;
+
+			for (;;)
+			{
+				HAL.Pause();
+
+				var key = keyboard.GetKeyPressed();
+				if (key == null)
+					continue;
+
+				switch (key.Character)
+				{
+					// Enter key
+					case '\n':
+						NewLine();
+						textDevice.SetCursor(cursorX, cursorY);
+						return new string(buffer, 0, length);
+
+					// Backspace key
+					case '\b':
+						if (length > 0)
+						{
+							Previous();
+							InternalWrite(' ', false);
+							textDevice.SetCursor(cursorX, cursorY);
+							length--;
+						}
+						break;
+
+					// Any other key
+					default:
+						buffer[length++] = key.Character;
+						Write(key.Character);
+						break;
+				}
+			}
+		}
+
+		private void InternalWrite(char character, bool increaseX = true)
+		{
+			if (cursorX == textDevice.Width || character == '\n')
+			{
+				NewLine();
+				textDevice.SetCursor(cursorX, cursorY);
+				return;
+			}
+
+			switch (character)
+			{
+				case '\r':
+				{
+					cursorX = 0;
+					break;
+				}
+				case '\t':
+				{
+					cursorX += 4;
+					break;
+				}
+				default:
+				{
+					textDevice.WriteChar(cursorX, cursorY, character, foreground);
+					if (increaseX)
+						cursorX++;
+					break;
+				}
+			}
+
+			textDevice.SetCursor(cursorX, cursorY);
+		}
+
+		private void NewLine()
+		{
+			cursorY++;
+			cursorX = 0;
+
+			if (cursorY == textDevice.Height)
+			{
+				textDevice.ScrollUp();
+				cursorY--;
+			}
+		}
+
+		private void Previous()
+		{
+			if (cursorX == 0 && cursorY == 0)
+				return;
+
+			if (cursorX == 0)
+			{
+				cursorY--;
+				cursorX = textDevice.Width;
+			}
+			else cursorX--;
 		}
 	}
 }

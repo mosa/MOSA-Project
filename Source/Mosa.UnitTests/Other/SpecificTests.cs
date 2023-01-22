@@ -1,11 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.UnitTests.Basic;
+using Mosa.UnitTests;
 
 namespace Mosa.UnitTests.Other
 {
-	public static class SpecificTests
-
+	public static partial class SpecificTests
 	{
 		[MosaUnitTest(Series = "I8")]
 		public static long SwitchI8_v2(long a)

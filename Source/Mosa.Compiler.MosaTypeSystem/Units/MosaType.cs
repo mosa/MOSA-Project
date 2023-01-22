@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using Mosa.Compiler.Common;
 
-namespace Mosa.Compiler.MosaTypeSystem
+namespace Mosa.Compiler.MosaTypeSystem.Units
 {
 	public class MosaType : MosaUnit, IEquatable<MosaType>
 	{

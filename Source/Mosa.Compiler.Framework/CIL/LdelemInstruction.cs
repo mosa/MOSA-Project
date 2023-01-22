@@ -1,6 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.MosaTypeSystem;
+using Mosa.Compiler.MosaTypeSystem.Units;
 
 namespace Mosa.Compiler.Framework.CIL
 {

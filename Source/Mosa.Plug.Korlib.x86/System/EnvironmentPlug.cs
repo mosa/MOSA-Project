@@ -2,9 +2,8 @@
 
 using Mosa.Kernel.x86;
 using Mosa.Runtime.Plug;
-using System;
 
-namespace Mosa.Plug.Korlib.System.x86
+namespace Mosa.Plug.Korlib.x86.System
 {
 	public static class EnvironmentPlug
 	{

@@ -3,13 +3,13 @@
 using Mosa.Compiler.Common.Configuration;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Trace;
 using Mosa.Utility.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using Mosa.Compiler.MosaTypeSystem.CLR;
+using Mosa.Compiler.Platform.x86;
 
 namespace Mosa.Tool.Compiler
 {
@@ -110,9 +110,9 @@ Example: Mosa.Tool.Compiler.exe -o Mosa.HelloWorld.x86.bin -platform x86 Mosa.He
 
 		private static void RegisterPlatforms()
 		{
-			PlatformRegistry.Add(new Platform.x86.Architecture());
-			PlatformRegistry.Add(new Platform.x64.Architecture());
-			PlatformRegistry.Add(new Platform.ARMv8A32.Architecture());
+			PlatformRegistry.Add(new Architecture());
+			PlatformRegistry.Add(new Mosa.Compiler.Platform.x64.Architecture());
+			PlatformRegistry.Add(new Mosa.Compiler.Platform.ARMv8A32.Architecture());
 		}
 
 		#endregion Public Methods

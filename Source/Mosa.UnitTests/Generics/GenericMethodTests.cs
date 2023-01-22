@@ -1,8 +1,9 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections.Generic;
+using Mosa.UnitTests;
 
-namespace Mosa.UnitTests.Generics
+namespace Mosa.UnitTests.Generic
 {
 	public static class GenericMethodTests
 	{

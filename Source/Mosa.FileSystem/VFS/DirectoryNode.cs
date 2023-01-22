@@ -2,7 +2,7 @@
 
 using System.IO;
 
-namespace Mosa.FileSystem.VFS
+namespace Mosa.FileSystem
 {
 	/// <summary>
 	/// Represents a basic directory in the VFS namespace.

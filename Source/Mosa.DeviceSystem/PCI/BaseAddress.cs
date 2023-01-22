@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
 using Mosa.Runtime;
 
 namespace Mosa.DeviceSystem.PCI
@@ -69,10 +70,10 @@ namespace Mosa.DeviceSystem.PCI
 		}
 
 		/// <summary>
-		/// Returns a <see cref="System.String"/> that represents this instance.
+		/// Returns a <see cref="String"/> that represents this instance.
 		/// </summary>
 		/// <returns>
-		/// A <see cref="System.String"/> that represents this instance.
+		/// A <see cref="String"/> that represents this instance.
 		/// </returns>
 		public override string ToString()
 		{

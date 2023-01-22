@@ -4,7 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Compiler.Framework.Stages

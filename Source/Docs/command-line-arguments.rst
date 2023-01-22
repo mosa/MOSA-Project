@@ -145,12 +145,6 @@ Below are the command line arguments available:
     Launcher - Boot Loader:
     -bootloader,Image.BootLoader,{value}
     -limine,Image.BootLoader,limine
-    -grub,Image.BootLoader,grub0.97
-    -grub0.97,Image.BootLoader,grub0.97
-    -grub2.00,Image.BootLoader,grub2.00
-    -syslinux,Image.BootLoader,syslinux3.72
-    -syslinux3.72,Image.BootLoader,syslinux3.72
-    -syslinux6.0,Image.BootLoader,syslinux6.03
 
     Launcher - Advance:
     -hunt-corlib,Launcher.HuntForCorLib,true

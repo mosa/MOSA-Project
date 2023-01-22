@@ -1,14 +1,15 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using Mosa.Demo.SVGAWorld.x86.Apps;
 using Mosa.Demo.SVGAWorld.x86.Components;
 using Mosa.Demo.SVGAWorld.x86.HAL;
+using Mosa.Demo.SVGAWorld.x86.Utils;
 using Mosa.DeviceDriver;
 using Mosa.DeviceDriver.ISA;
-using Mosa.DeviceDriver.ScanCodeMap;
 using Mosa.DeviceSystem;
 using Mosa.DeviceSystem.Service;
 using Mosa.FileSystem.FAT;
@@ -24,8 +25,6 @@ namespace Mosa.Demo.SVGAWorld.x86
 	public static class Boot
 	{
 		public static DeviceService DeviceService;
-
-		public static DeviceSystem.Keyboard Keyboard;
 
 		public static Taskbar Taskbar;
 		public static Random Random;
@@ -49,6 +48,8 @@ namespace Mosa.Demo.SVGAWorld.x86
 
 			Serial.SetupPort(Serial.COM1);
 			IDT.SetInterruptHandler(ProcessInterrupt);
+
+			Log("<SELFTEST:PASSED>");
 
 			HAL = new Hardware();
 			Random = new Random();
@@ -91,19 +92,31 @@ namespace Mosa.Demo.SVGAWorld.x86
 				for (; ; );
 			}
 
-			var keyboard = DeviceService.GetFirstDevice<StandardKeyboard>().DeviceDriver as StandardKeyboard;
-			if (keyboard == null)
-				HAL.Abort("Keyboard not found.");
-
-			// Setup keyboard (state machine)
-			Keyboard = new DeviceSystem.Keyboard(keyboard, new US());
-
 			GeneralUtils.Mouse = DeviceService.GetFirstDevice<StandardMouse>().DeviceDriver as StandardMouse;
 			if (GeneralUtils.Mouse == null)
 				HAL.Abort("Mouse not found.");
 
-			Log("<SELFTEST:PASSED>");
 			DoGraphics();
+
+			/*var keyboardDevice = (IKeyboardDevice)DeviceService.GetFirstDevice<IKeyboardDevice>().DeviceDriver;
+			var graphicsDevice = (IGraphicsDevice)DeviceService.GetFirstDevice<IGraphicsDevice>().DeviceDriver;
+
+			graphicsDevice.SetMode(640, 480);
+
+			var font = new ASC16Font();
+			var textDevice = new GraphicalTextDevice(640, 480, font, graphicsDevice.FrameBuffer);
+			var keyboard = new DeviceSystem.Keyboard(keyboardDevice, new US());
+			var textScreen = new TextScreen(textDevice, keyboard);
+
+			textScreen.WriteLine("Hello, World!");
+			textScreen.WriteLine("Type something to get it echoed back at you.");
+
+			for (;;)
+			{
+				textScreen.Write("> ");
+				var line = textScreen.ReadLine();
+				textScreen.WriteLine("You typed: " + line);
+			}*/
 		}
 
 		private static void DoGraphics()
@@ -121,8 +134,6 @@ namespace Mosa.Demo.SVGAWorld.x86
 				() => { PCService.Reset(); return null; }));
 			Taskbar.Buttons.Add(new TaskbarButton(Taskbar, "Paint", Color.Coral, Color.White, Color.Red,
 				() => { WindowManager.Open(new Paint(70, 90, 400, 200, Color.MediumPurple, Color.Purple, Color.White)); return null; }));
-			Taskbar.Buttons.Add(new TaskbarButton(Taskbar, "Notepad", Color.Coral, Color.White, Color.Red,
-				() => { WindowManager.Open(new Notepad(70, 90, 400, 200, Color.MediumPurple, Color.Purple, Color.White)); return null; }));
 			Taskbar.Buttons.Add(new TaskbarButton(Taskbar, "Settings", Color.Coral, Color.White, Color.Red,
 				() => { WindowManager.Open(new Settings(70, 90, 400, 200, Color.MediumPurple, Color.Purple, Color.White)); return null; }));
 

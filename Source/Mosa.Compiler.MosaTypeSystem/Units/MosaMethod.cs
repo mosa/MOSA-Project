@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Mosa.Compiler.MosaTypeSystem
+namespace Mosa.Compiler.MosaTypeSystem.Units
 {
 	public sealed class MosaMethod : MosaUnit//, IEquatable<MosaMethod>
 	{

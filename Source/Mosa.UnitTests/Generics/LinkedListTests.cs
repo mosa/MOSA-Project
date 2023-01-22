@@ -1,6 +1,8 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.UnitTests.Generics
+using Mosa.UnitTests;
+
+namespace Mosa.UnitTests.Generic
 {
 	public static class LinkedListTests
 	{

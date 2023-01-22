@@ -1,6 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
+using System;
 using Mosa.DeviceSystem;
 using Mosa.Kernel.x86;
 using Mosa.Runtime;
@@ -155,8 +156,7 @@ namespace Mosa.Demo.SVGAWorld.x86.HAL
 		/// </summary>
 		public override void Pause()
 		{
-			for (var i = Scheduler.ClockTicks + 5; i > Scheduler.ClockTicks;)
-				Native.Hlt();
+			Native.Hlt();
 		}
 	}
 }

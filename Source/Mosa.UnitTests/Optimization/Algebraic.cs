@@ -1,5 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.UnitTests;
+
 namespace Mosa.UnitTests.Optimization
 {
 	public static class Algebraic

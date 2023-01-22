@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
 using System.Runtime.CompilerServices;
 
 namespace Mosa.Runtime.Math
@@ -9,7 +10,7 @@ namespace Mosa.Runtime.Math
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static long R4ToI8(float value)
 		{
-			var rawValue = (ulong)System.BitConverter.DoubleToInt64Bits(value);
+			var rawValue = (ulong)BitConverter.DoubleToInt64Bits(value);
 
 			const byte MantissaBits = 52;
 			const short ExponentBias = 1075;
@@ -43,7 +44,7 @@ namespace Mosa.Runtime.Math
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static long R8ToI8(double value)
 		{
-			var rawValue = (ulong)System.BitConverter.DoubleToInt64Bits(value);
+			var rawValue = (ulong)BitConverter.DoubleToInt64Bits(value);
 
 			const byte MantissaBits = 52;
 			const short ExponentBias = 1075;
@@ -77,7 +78,7 @@ namespace Mosa.Runtime.Math
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static ulong R4ToU8(float value)
 		{
-			var rawValue = (ulong)System.BitConverter.DoubleToInt64Bits(value);
+			var rawValue = (ulong)BitConverter.DoubleToInt64Bits(value);
 
 			const byte MantissaBits = 52;
 			const short ExponentBias = 1075;
@@ -121,7 +122,7 @@ namespace Mosa.Runtime.Math
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static ulong R8ToU8(double value)
 		{
-			var rawValue = (ulong)System.BitConverter.DoubleToInt64Bits(value);
+			var rawValue = (ulong)BitConverter.DoubleToInt64Bits(value);
 
 			const byte MantissaBits = 52;
 			const short ExponentBias = 1075;

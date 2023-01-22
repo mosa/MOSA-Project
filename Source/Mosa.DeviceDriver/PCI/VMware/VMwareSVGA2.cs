@@ -17,6 +17,8 @@
 // https://sourceforge.net/p/vmware-svga/git/ci/master/tree/lib/refdriver/svga.c
 // https://github.com/prepare/vmware-svga
 
+using System;
+using System;
 using Mosa.DeviceSystem;
 using Mosa.Runtime;
 
@@ -42,149 +44,34 @@ namespace Mosa.DeviceDriver.PCI.VMware
 		// Odd modes
 		// "320x200", "640x400", "800x480", "1280x768", "1280x1024"
 
-		// PCI Device IDs
-		internal struct PCI
-		{
-			internal const ushort VendorIDVmware = 0x15AD;
-			internal const ushort DeviceIDVmwareSVGA2 = 0x0405;
-		}
-
-		/* Port offsets, relative to BAR0 */
-
-		internal struct PORT
-		{
-			internal const byte Index = 0x00;
-			internal const byte Value = 0x01;
-			internal const byte Bios = 0x02;
-			internal const byte IRQStatus = 0x08;
-		}
-
-		internal struct SVGA_VERSION_ID
+		private struct SvgaVersionId
 		{
 			internal const uint Magic = 0x900000;
 			internal const uint V0 = (Magic << 8) | 0;
 			internal const uint V1 = (Magic << 8) | 1;
 			internal const uint V2 = (Magic << 8) | 2;
-			internal const uint Invalid = 0xFFFFFFFF;
 		}
 
-		/*
-		 * Interrupt source flags for IRQSTATUS_PORT and IRQMASK.
-		 *
-		 * Interrupts are only supported when the
-		 * SVGA_CAP_IRQMASK capability is present.
-		 */
-
-		internal struct IRQ_FLAGS
+		private struct FifoCapability
 		{
-			internal const byte AnyFence = 0x01;       /* Any fence was passed */
-			internal const byte FIFOProgress = 0x02;   /* Made forward progress in the FIFO */
-			internal const byte FenceGoal = 0x04;      /* SVGA_FIFO_FENCE_GOAL reached */
+			internal const uint None = 0;
+			internal const uint Fence = 1 << 0;
+			internal const uint AccelFront = 1 << 1;
+			internal const uint PitchLock = 1 << 2;
+			internal const uint Video = 1 << 3;
+			internal const uint CursorBypass3 = 1 << 4;
+			internal const uint Escape = 1 << 5;
+			internal const uint Reserve = 1 << 6;
+			internal const uint ScreenObject = 1 << 7;
+			internal const uint Gmr2 = 1 << 8;
+			internal const uint ThreeDHwVersionRevised = Gmr2;
+			internal const uint ScreenObject2 = 1 << 9;
+			internal const uint Dead = 1 << 10;
 		}
 
-		internal struct REG_ENABLE
+		private struct SvgaRegister
 		{
-			internal const byte Disable = 0x00;
-			internal const byte Enable = 0x01;
-			internal const byte Hide = 0x02;
-			internal const byte EnableHide = Enable | Hide;
-		}
-
-		/*
-		 * Legal values for the SVGA_REG_CURSOR_ON register in old-fashioned
-		 * cursor bypass mode. This is still supported, but no new guest
-		 * drivers should use it.
-		 */
-
-		internal struct CURSOR_ON
-		{
-			internal const byte Hide = 0x00;
-			internal const byte Show = 0x01;
-			internal const byte RemoveFromFB = 0x02;
-			internal const byte RestoreToFB = 0x03;
-		}
-
-		internal struct GUEST_OS
-		{
-			internal const ushort Base = 0x5000;
-			internal const ushort Dos = Base + 1;
-			internal const ushort Windows31 = Base + 2;
-			internal const ushort Windows95 = Base + 3;
-			internal const ushort Windows98 = Base + 4;
-			internal const ushort WindowsME = Base + 5;
-			internal const ushort WindowsNT = Base + 6;
-			internal const ushort Windows2000 = Base + 7;
-			internal const ushort Linux = Base + 8;
-			internal const ushort Os2 = Base + 9;
-			internal const ushort Other = Base + 10;
-			internal const ushort FreeBSD = Base + 11;
-			internal const ushort Whistler = Base + 12;
-		}
-
-		internal struct SVGA_CONSTANTS
-		{
-			internal const uint VRAMSize = 16 * 1024 * 1024;
-			internal const uint MemSize = 256 * 1024;
-
-			internal const uint FBMaxTraceableSize = 0x1000000;
-			internal const byte MaxPseudoColorDepth = 0x08;
-			internal const ushort MaxPseudoColors = 1 << MaxPseudoColorDepth;
-			internal const ushort NumPaletteRegs = 3 * MaxPseudoColors;
-
-			/* Base and Offset gets us headed the right way for PCI Base Addr Registers */
-			internal const ushort LegacyBasePort = 0x4560;
-			internal const byte NumPorts = 0x3;
-
-			internal const ushort PaletteBase = 1024;     /* Base of SVGA color map */
-			/* Next 768 (== 256*3) registers exist for colormap */
-			internal const ushort ScratchBase = PaletteBase + NumPaletteRegs; /* Base of scratch registers */
-			/* Next reg[SVGA_REG_SCRATCH_SIZE] registers exist for scratch usage:
-			   First 4 are reserved for VESA BIOS Extension; any remaining are for
-			   the use of the current SVGA driver. */
-
-			internal const byte NumOVerlayUnits = 32;
-
-			internal const byte VideoFlagColorKey = 0x01;
-			internal const uint CmdMaxDataSize = 256 * 1024;
-			internal const byte CmdMaxArgs = 64;
-
-			// FrameBufferStart
-			internal const uint FBLegacyStart = 0x7EFC0000;
-
-			internal const uint FBLegacyBigMem = 0xE0000000;
-
-			internal const byte ScreenMustBeSet = 1 << 0;
-			internal const byte ScreenHasRoot = 1 << 0;
-			internal const byte ScreenIsPrimary = 1 << 1;
-			internal const byte ScreenFullScreenHint = 1 << 2;
-			internal const byte ScreenDeactivate = 1 << 3;
-			internal const byte ScreenBlanking = 1 << 4;
-		}
-
-		internal struct SVGA_CAPABILITIES
-		{
-			internal const uint None = 0x00000000;
-			internal const uint RectCopy = 0x00000002;
-			internal const uint Cursor = 0x00000020;
-			internal const uint CursorByPass = 0x00000040;     // Legacy (Use Cursor Bypass 3 instead)
-			internal const uint CursorByPass2 = 0x00000080;   // Legacy (Use Cursor Bypass 3 instead)
-			internal const uint Emulation8Bit = 0x00000100;
-			internal const uint AlphaCursor = 0x00000200;
-			internal const uint HW3D = 0x00004000;
-			internal const uint ExtendedFifo = 0x00008000;
-			internal const uint MultiMon = 0x00010000;          // Legacy multi-monitor support
-			internal const uint PitchLock = 0x00020000;
-			internal const uint IRQMask = 0x00040000;
-			internal const uint DisplayTopology = 0x00080000;  // Legacy multi-monitor support
-			internal const uint GMR = 0x00100000;
-			internal const uint Traces = 0x00200000;
-			internal const uint GMR2 = 0x00400000;
-			internal const uint ScreenObject2 = 0x00800000;
-		}
-
-		internal struct SVGA_REGISTERS
-		{
-			internal const byte ID = 0;
+			internal const byte Id = 0;
 			internal const byte Enable = 1;
 			internal const byte Width = 2;
 			internal const byte Height = 3;
@@ -197,7 +84,7 @@ namespace Mosa.DeviceDriver.PCI.VMware
 			internal const byte GreenMask = 10;
 			internal const byte BlueMask = 11;
 			internal const byte BytesPerLine = 12;
-			internal const byte FrameBufferStart = 13;
+			internal const byte FrameBufferStart = 13; // Deprecated!
 			internal const byte FrameBufferOffset = 14;
 			internal const byte VRamSize = 15;
 			internal const byte FrameBufferSize = 16;
@@ -205,26 +92,20 @@ namespace Mosa.DeviceDriver.PCI.VMware
 			/* ID 0 implementation only had the above registers; then the palette */
 
 			internal const byte Capabilities = 17;
-			internal const byte MemStart = 18;          /* Memory for command FIFO and bitmaps */
 			internal const byte MemSize = 19;
 			internal const byte ConfigDone = 20;        /* Set when memory area configured */
 			internal const byte Sync = 21;              /* Write to force synchronization */
 			internal const byte Busy = 22;              /* Read to check if sync is done */
-			internal const byte GuestID = 23;           /* Set guest OS identifier */
-			internal const byte CursorID = 24;          /* ID of cursor */
-			internal const byte CursorX = 25;           /* Set cursor X position */
-			internal const byte CursorY = 26;           /* Set cursor Y position */
-			internal const byte CursorOn = 27;          /* Turn cursor on/off */
-			internal const byte HostBitsPerPixel = 28;  /* Current bpp in the host */
+			internal const byte GuestId = 23;           /* Set guest OS identifier */
 			internal const byte ScratchSize = 29;       /* Number of scratch registers */
 			internal const byte MemRegs = 30;           /* Number of FIFO registers */
 			internal const byte NumDisplays = 31;       /* Number of guest displays */
 			internal const byte PitchLock = 32;         /* Fixed pitch for all modes */
-			internal const byte IRQMask = 33;           /* Interrupt mask */
+			internal const byte IrqMask = 33;           /* Interrupt mask */
 
 			/* Legacy multi-monitor support */
 			internal const byte NumGuestDisplays = 34;  /* Number of guest displays in X/Y direction */
-			internal const byte DisplayID = 35;            /* Display ID for the following display attributes */
+			internal const byte DisplayId = 35;            /* Display ID for the following display attributes */
 			internal const byte DisplayIsPrimary = 36;    /* Whether this is a primary display */
 			internal const byte DisplayPositionX = 37;    /* The display position x */
 			internal const byte DisplayPositionY = 38;    /* The display position y */
@@ -232,18 +113,37 @@ namespace Mosa.DeviceDriver.PCI.VMware
 			internal const byte DisplayHeight = 40;        /* The display's height */
 
 			/* See "Guest memory regions" below. */
-			internal const byte GMRID = 41;
-			internal const byte GMRDescriptor = 42;
-			internal const byte GMRMaxIDs = 43;
-			internal const byte GMRMaxDescriptorLength = 44;
+			internal const byte GmrId = 41;
+			internal const byte GmrDescriptor = 42;
+			internal const byte GmrMaxIDs = 43;
+			internal const byte GmrMaxDescriptorLength = 44;
 
 			internal const byte Traces = 45;                /* Enable trace-based updates even when FIFO is on */
-			internal const byte GMRsMaxPages = 46;        /* Maximum number of 4KB pages for all GMRs */
+			internal const byte GmrSMaxPages = 46;        /* Maximum number of 4KB pages for all GMRs */
 			internal const byte MemorySize = 47;           /* Total dedicated device memory excluding FIFO */
 			internal const byte Top = 48;                   /* Must be 1 more than the last register */
 		}
 
-		internal struct FIFO_REGISTERS
+		private struct SvgaCapability
+		{
+			internal const uint None = 0x00000000;
+			internal const uint RectCopy = 0x00000002;
+			internal const uint Cursor = 0x00000020;
+			internal const uint EightBitEmulation = 0x00000100;
+			internal const uint AlphaCursor = 0x00000200;
+			internal const uint ThreeD = 0x00004000;
+			internal const uint ExtendedFifo = 0x00008000;
+			internal const uint MultiMonitor = 0x00010000;
+			internal const uint PitchLock = 0x00020000;
+			internal const uint IrqMask = 0x00040000;
+			internal const uint DisplayTopology = 0x00080000;
+			internal const uint Gmr = 0x00100000;
+			internal const uint Traces = 0x00200000;
+			internal const uint Gmr2 = 0x00400000;
+			internal const uint ScreenObject2 = 0x00800000;
+		}
+
+		private struct FifoRegister
 		{
 			internal const ushort Min = 0x00;
 			internal const ushort Max = 0x01;
@@ -252,7 +152,7 @@ namespace Mosa.DeviceDriver.PCI.VMware
 			internal const ushort Capabilities = 0x04;
 			internal const ushort Flags = 0x05;
 			internal const ushort Fence = 0x06;
-			internal const ushort HW3DVersion = 0x07;
+			internal const ushort Hw3DVersion = 0x07;
 			internal const ushort PitchLock = 0x08;
 			internal const ushort CursorOn = 0x09;
 			internal const ushort CursorX = 0x0A;
@@ -260,65 +160,23 @@ namespace Mosa.DeviceDriver.PCI.VMware
 			internal const ushort CursorCount = 0x0C;
 			internal const ushort CursorLastUpdated = 0x0D;
 			internal const ushort Reserved = 0x0E;
-			internal const ushort CursorScreenID = 0x0F;
+			internal const ushort CursorScreenId = 0x0F;
 			internal const ushort Dead = 0x10;
-			internal const ushort HW3DVersionRevised = 0x11;
+			internal const ushort Hw3DVersionRevised = 0x11;
 			internal const ushort Capabilities3D = 0x20;
 			internal const ushort Capabilities3DLast = 0x20 + 0xFF;
-			internal const ushort GuestHW3DVersion = 0x120;
+			internal const ushort GuestHw3DVersion = 0x120;
 			internal const ushort FenceGoal = 0x121;
 			internal const ushort Busy = 0x122;
 			internal const ushort NumRegs = 0x123;
 		}
 
-		internal struct FIFO_CAPABILITIES
-		{
-			internal const ushort None = 0;
-			internal const ushort Fence = 1 << 0;
-			internal const ushort AccelFront = 1 << 1;
-			internal const ushort PitchLock = 1 << 2;
-			internal const ushort Video = 1 << 3;
-			internal const ushort CursorByPass3 = 1 << 4;
-			internal const ushort Escape = 1 << 5;
-			internal const ushort Reserve = 1 << 6;
-			internal const ushort ScreenObject = 1 << 7;
-			internal const ushort GMR2 = 1 << 8;
-			internal const ushort HW3DVersionRevised = GMR2;
-			internal const ushort ScreenObject2 = 1 << 9;
-			internal const ushort Dead = 1 << 10;
-		}
-
-		internal struct FIFO_FLAGS
-		{
-			internal const uint None = 0;
-			internal const uint AccelFront = 1 << 0;
-			internal const uint Reserved = (uint)1 << 31;
-		}
-
-		internal struct FIFO_COMMANDS
+		private struct FifoCommand
 		{
 			internal const byte InvalidCmd = 0;
 			internal const byte Update = 1;
-			internal const byte RectFill = 2;
 			internal const byte RectCopy = 3;
-			internal const byte DefineBitmap = 4;
-			internal const byte DefineBitmapScanline = 5;
-			internal const byte DefinePixmap = 6;
-			internal const byte DefinePixmapScanline = 7;
-			internal const byte RectBitmapFill = 8;
-			internal const byte RectPixmapFill = 9;
-			internal const byte RectBitmapCopy = 10;
-			internal const byte RectPixmapCopy = 11;
-			internal const byte FreeObject = 12;
-			internal const byte RectRopFill = 13;
-			internal const byte RectRopCopy = 14;
-			internal const byte RectRopBitmapFill = 15;
-			internal const byte RectRopPixmapFill = 16;
-			internal const byte RectRopBitmapCopy = 17;
-			internal const byte RectRopPixmapCopy = 18;
 			internal const byte DefineCursor = 19;
-			internal const byte DisplayCursor = 20;
-			internal const byte MoveCursor = 21;
 			internal const byte DefineAlphaCursor = 22;
 			internal const byte UpdateVerbose = 25;
 			internal const byte FrontRopFill = 29;
@@ -326,13 +184,13 @@ namespace Mosa.DeviceDriver.PCI.VMware
 			internal const byte Escape = 33;
 			internal const byte DefineScreen = 34;
 			internal const byte DestroyScreen = 35;
-			internal const byte DefineGMRFB = 36;
-			internal const byte BlitGMRFBToScreen = 37;
-			internal const byte BlitScreenToGMRFB = 38;
+			internal const byte DefineGmrFb = 36;
+			internal const byte BlitGmrFbToScreen = 37;
+			internal const byte BlitScreenToGmrFb = 38;
 			internal const byte AnnotationFill = 39;
 			internal const byte AnnotationCopy = 40;
-			internal const byte DefineGMR2 = 41;
-			internal const byte RemapGMR2 = 42;
+			internal const byte DefineGmr2 = 41;
+			internal const byte RemapGmr2 = 42;
 			internal const byte Max = 43;
 		}
 
@@ -340,14 +198,19 @@ namespace Mosa.DeviceDriver.PCI.VMware
 
 		private BaseIOPortReadWrite indexPort, valuePort;
 
-		private ConstrainedPointer fifo;
+		private uint vramSize, bufferSize, fifoSize, capabilities;
 
-		/// <summary>The frame buffer.</summary>
+		private ConstrainedPointer buffer, fifo;
+
 		public FrameBuffer32 FrameBuffer { get; private set; }
 
 		public override void Initialize()
 		{
 			Device.Name = "VMWARE_SVGA2_0x" + Device.Resources.GetIOPortRegion(0).BaseIOPort.ToString("X");
+
+			// Doesn't work on VMware Workstation
+			//buffer = Device.Resources.GetMemory(0);
+			fifo = Device.Resources.GetMemory(1);
 
 			indexPort = Device.Resources.GetIOPortReadWrite(0, 0);
 			valuePort = Device.Resources.GetIOPortReadWrite(0, 1);
@@ -363,9 +226,27 @@ namespace Mosa.DeviceDriver.PCI.VMware
 			if (Device.Status != DeviceStatus.Available)
 				return;
 
-			var version = GetVersion();
-			if (version == SVGA_VERSION_ID.V1 || version == SVGA_VERSION_ID.V2)
-				WriteRegister(SVGA_REGISTERS.GuestID, GUEST_OS.Other); // 0x05010 == GUEST_OS_OTHER (vs GUEST_OS_WIN2000)
+			WriteRegister(SvgaRegister.Id, SvgaVersionId.V2);
+			if (ReadRegister(SvgaRegister.Id) != SvgaVersionId.V2)
+			{
+				HAL.Abort("VMware SVGA device version too old or invalid!");
+				return;
+			}
+
+			vramSize = ReadRegister(SvgaRegister.VRamSize);
+			fifoSize = ReadRegister(SvgaRegister.MemSize);
+			capabilities = ReadRegister(SvgaRegister.Capabilities);
+
+			WriteFifoRegister(FifoRegister.Min, FifoRegister.NumRegs * 4);
+			WriteFifoRegister(FifoRegister.Max, fifoSize);
+			WriteFifoRegister(FifoRegister.NextCmd, ReadFifoRegister(FifoRegister.Min));
+			WriteFifoRegister(FifoRegister.Stop, ReadFifoRegister(FifoRegister.Min));
+
+			if (HasFifoCapability(SvgaCapability.ExtendedFifo) && ReadRegister(FifoRegister.Min) > FifoRegister.GuestHw3DVersion << 2)
+				WriteFifoRegister(FifoRegister.GuestHw3DVersion, (2 << 16) | (1 & 0xFF));
+
+			Enable();
+			WriteRegister(SvgaRegister.ConfigDone, 1);
 
 			Device.Status = DeviceStatus.Online;
 		}
@@ -375,112 +256,94 @@ namespace Mosa.DeviceDriver.PCI.VMware
 			return false;
 		}
 
-		/// <summary>Sets the mode.</summary>
-		/// <param name="width">The width.</param>
-		/// <param name="height">The height.</param>
-		public void SetMode(ushort width, ushort height)
+		public void SetMode(uint width, uint height)
 		{
-			Disable();
+			if (ReadRegister(SvgaRegister.Enable) == 1)
+				Disable();
 
 			// Set width, height and bpp
-			WriteRegister(SVGA_REGISTERS.Width, width);
-			WriteRegister(SVGA_REGISTERS.Height, height);
-			WriteRegister(SVGA_REGISTERS.BitsPerPixel, 32);
+			WriteRegister(SvgaRegister.Width, width);
+			WriteRegister(SvgaRegister.Height, height);
+			WriteRegister(SvgaRegister.BitsPerPixel, 32);
 
 			Enable();
+			WriteRegister(SvgaRegister.ConfigDone, 1);
 
-			// Initialize FIFO
-			var fifoSize = ReadRegister(SVGA_REGISTERS.MemSize);
-			uint fifoNumRegs = FIFO_REGISTERS.NumRegs * 4;
+			bufferSize = ReadRegister(SvgaRegister.FrameBufferSize);
+			buffer = HAL.GetPhysicalMemory(new Pointer(ReadRegister(SvgaRegister.FrameBufferStart)), bufferSize);
 
-			fifo = HAL.GetPhysicalMemory(
-				new Pointer(ReadRegister(SVGA_REGISTERS.MemStart)),
-				fifoSize
-			);
-
-			WriteFifoRegister(FIFO_REGISTERS.Min, fifoNumRegs);
-			WriteFifoRegister(FIFO_REGISTERS.Max, fifoSize);
-			WriteFifoRegister(FIFO_REGISTERS.NextCmd, fifoNumRegs);
-			WriteFifoRegister(FIFO_REGISTERS.Stop, fifoNumRegs);
-
-			WriteRegister(SVGA_REGISTERS.ConfigDone, 1);
-
-			// Create frame buffer
-			FrameBuffer = new FrameBuffer32(
-				HAL.GetPhysicalMemory(
-					new Pointer(ReadRegister(SVGA_REGISTERS.FrameBufferStart)),
-					ReadRegister(SVGA_REGISTERS.FrameBufferSize)),
-
-				width, height,
-
-				ReadRegister(SVGA_REGISTERS.FrameBufferOffset),
-				ReadRegister(SVGA_REGISTERS.BytesPerLine)
-			);
+			FrameBuffer = new FrameBuffer32(buffer, width, height);
 		}
 
-		/// <summary>Disables the graphics device.</summary>
 		public void Disable()
 		{
-			WriteRegister(SVGA_REGISTERS.Enable, 0);
+			WriteRegister(SvgaRegister.Enable, 0);
 		}
 
-		/// <summary>Enables the graphics device.</summary>
 		public void Enable()
 		{
-			WriteRegister(SVGA_REGISTERS.Enable, 1);
+			WriteRegister(SvgaRegister.Enable, 1);
 		}
 
-		/// <summary>Updates the whole screen.</summary>
-		public void Update()
+		public void Update(uint x, uint y, uint width, uint height)
 		{
-			WriteToFifo(FIFO_COMMANDS.Update);
+			WriteToFifo(FifoCommand.Update);
 
-			WriteToFifo(0);
-			WriteToFifo(0);
-			WriteToFifo(FrameBuffer.Width);
-			WriteToFifo(FrameBuffer.Height);
-		}
-
-		/// <summary>Fills a rectangle on the screen.</summary>
-		public void FillRectangle(uint x, uint y, uint width, uint height, uint color)
-		{
-			WriteToFifo(FIFO_COMMANDS.RectFill);
-
-			WriteToFifo(color);
 			WriteToFifo(x);
 			WriteToFifo(y);
 			WriteToFifo(width);
 			WriteToFifo(height);
 		}
 
-		public void DefineCursor()
+		public void CopyRectangle(uint x, uint y, uint newX, uint newY, uint width, uint height)
 		{
-			WriteToFifo(FIFO_COMMANDS.DefineCursor);
+			if ((capabilities & SvgaCapability.RectCopy) == 0)
+				throw new InvalidOperationException();
 
-			WriteToFifo(1);
-			WriteToFifo(0);
-			WriteToFifo(0);
-			WriteToFifo(2);
-			WriteToFifo(2);
-			WriteToFifo(1);
-			WriteToFifo(1);
-			for (var i = 0; i < 4; i++)
-				WriteToFifo(0);
-			for (var i = 0; i < 4; i++)
-				WriteToFifo(0xFFFFFF);
+			WriteToFifo(FifoCommand.RectCopy);
+
+			WriteToFifo(x);
+			WriteToFifo(y);
+			WriteToFifo(newX);
+			WriteToFifo(newY);
+			WriteToFifo(width);
+			WriteToFifo(height);
+		}
+
+		public bool SupportsHardwareCursor()
+		{
+			return (capabilities & SvgaCapability.AlphaCursor) != 0;
+		}
+
+		public void DefineCursor(FrameBuffer32 image)
+		{
+			if (!SupportsHardwareCursor())
+				throw new InvalidOperationException();
+
+			WriteToFifo(FifoCommand.DefineAlphaCursor);
+			WriteToFifo(0); // ID
+			WriteToFifo(0); // Hotspot X
+			WriteToFifo(0); // Hotspot Y
+			WriteToFifo(image.Width); // Width
+			WriteToFifo(image.Height); // Height
+
+			for (uint y = 0; y < image.Height; y++)
+				for (uint x = 0; x < image.Width; x++)
+					WriteToFifo(image.GetPixel(x, y));
 		}
 
 		public void SetCursor(bool visible, uint x, uint y)
 		{
-			WriteRegister(SVGA_REGISTERS.CursorID, 1);
-			if (visible)
-			{
-				WriteToFifo(FIFO_COMMANDS.MoveCursor);
+			if (HasFifoCapability(FifoCapability.ScreenObject))
+				WriteFifoRegister(FifoRegister.CursorScreenId, 0);
 
-				WriteToFifo(x);
-				WriteToFifo(y);
-			}
-			WriteRegister(SVGA_REGISTERS.CursorOn, (uint)(visible ? 1 : 0));
+			if (!HasFifoCapability(FifoCapability.CursorBypass3))
+				throw new InvalidOperationException();
+
+			WriteFifoRegister(FifoRegister.CursorOn, (uint)(visible ? 1 : 0));
+			WriteFifoRegister(FifoRegister.CursorX, x);
+			WriteFifoRegister(FifoRegister.CursorY, y);
+			WriteFifoRegister(FifoRegister.CursorCount, ReadFifoRegister(FifoRegister.CursorCount) + 1);
 		}
 
 		#region Private
@@ -495,23 +358,6 @@ namespace Mosa.DeviceDriver.PCI.VMware
 		{
 			indexPort.Write32(command);
 			return valuePort.Read32();
-		}
-
-		private uint GetVersion()
-		{
-			WriteRegister(SVGA_REGISTERS.ID, SVGA_VERSION_ID.V2);
-			if (ReadRegister(SVGA_REGISTERS.ID) == SVGA_VERSION_ID.V2)
-				return SVGA_VERSION_ID.V2;
-
-			WriteRegister(SVGA_REGISTERS.ID, SVGA_VERSION_ID.V1);
-			if (ReadRegister(SVGA_REGISTERS.ID) == SVGA_VERSION_ID.V1)
-				return SVGA_VERSION_ID.V1;
-
-			WriteRegister(SVGA_REGISTERS.ID, SVGA_VERSION_ID.V0);
-			if (ReadRegister(SVGA_REGISTERS.ID) == SVGA_VERSION_ID.V0)
-				return SVGA_VERSION_ID.V0;
-
-			return SVGA_VERSION_ID.Invalid;
 		}
 
 		#endregion Private
@@ -530,23 +376,28 @@ namespace Mosa.DeviceDriver.PCI.VMware
 
 		private void WaitForFifo()
 		{
-			WriteRegister(SVGA_REGISTERS.Sync, 1);
+			WriteRegister(SvgaRegister.Sync, 1);
 
-			while (ReadRegister(SVGA_REGISTERS.Busy) != 0)
-				HAL.Sleep(5);
+			while (ReadRegister(SvgaRegister.Busy) != 0)
+				HAL.Pause();
 		}
 
 		private void WriteToFifo(uint value)
 		{
-			if (ReadFifoRegister(FIFO_REGISTERS.NextCmd) == ReadFifoRegister(FIFO_REGISTERS.Max) - 4 && ReadFifoRegister(FIFO_REGISTERS.Stop) == ReadFifoRegister(FIFO_REGISTERS.Min) ||
-				ReadFifoRegister(FIFO_REGISTERS.NextCmd) + 4 == ReadFifoRegister(FIFO_REGISTERS.Stop))
+			if (ReadFifoRegister(FifoRegister.NextCmd) == ReadFifoRegister(FifoRegister.Max) - 4 && ReadFifoRegister(FifoRegister.Stop) == ReadFifoRegister(FifoRegister.Min) ||
+				ReadFifoRegister(FifoRegister.NextCmd) + 4 == ReadFifoRegister(FifoRegister.Stop))
 				WaitForFifo();
 
-			WriteFifoRegister(ReadFifoRegister(FIFO_REGISTERS.NextCmd) / 4, value);
-			WriteFifoRegister(FIFO_REGISTERS.NextCmd, ReadFifoRegister(FIFO_REGISTERS.NextCmd) + 4);
+			WriteFifoRegister(ReadFifoRegister(FifoRegister.NextCmd) / 4, value);
+			WriteFifoRegister(FifoRegister.NextCmd, ReadFifoRegister(FifoRegister.NextCmd) + 4);
 
-			if (ReadFifoRegister(FIFO_REGISTERS.NextCmd) == ReadFifoRegister(FIFO_REGISTERS.Max))
-				WriteFifoRegister(FIFO_REGISTERS.NextCmd, ReadFifoRegister(FIFO_REGISTERS.Min));
+			if (ReadFifoRegister(FifoRegister.NextCmd) == ReadFifoRegister(FifoRegister.Max))
+				WriteFifoRegister(FifoRegister.NextCmd, ReadFifoRegister(FifoRegister.Min));
+		}
+
+		private bool HasFifoCapability(uint capability)
+		{
+			return (ReadFifoRegister(FifoRegister.Capabilities) & capability) != 0;
 		}
 
 		#endregion FIFO

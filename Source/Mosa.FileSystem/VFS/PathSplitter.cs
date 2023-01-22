@@ -2,7 +2,7 @@
 
 using System.IO;
 
-namespace Mosa.FileSystem.VFS
+namespace Mosa.FileSystem
 {
 	internal class PathSplitter
 	{

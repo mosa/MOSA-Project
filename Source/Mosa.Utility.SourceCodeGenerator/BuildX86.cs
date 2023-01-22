@@ -11,9 +11,9 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 		protected override void Body()
 		{
-			Lines.AppendLine("using Mosa.Platform.x86.Instructions;");
+			Lines.AppendLine("using Mosa.Compiler.Platform.x86.Instructions;");
 			Lines.AppendLine();
-			Lines.AppendLine("namespace Mosa.Platform.x86");
+			Lines.AppendLine("namespace Mosa.Compiler.Platform.x86");
 			Lines.AppendLine("{");
 			Lines.AppendLine("\t/// <summary>");
 			Lines.AppendLine("\t/// X86 Instructions");

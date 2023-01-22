@@ -2,6 +2,7 @@
 
 using System;
 using System.Runtime.CompilerServices;
+using Mosa.UnitTests;
 
 namespace Mosa.UnitTests.Reflection
 {

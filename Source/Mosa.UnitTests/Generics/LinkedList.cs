@@ -4,7 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Mosa.UnitTests.Generics
+namespace Mosa.UnitTests.Generic
 {
 	/// <summary>
 	/// Represents a doubly linked list.

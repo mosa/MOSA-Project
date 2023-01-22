@@ -3,7 +3,7 @@
 using System.IO;
 using Mosa.Kernel.x86;
 
-namespace Mosa.Demo.AppSystem
+namespace Mosa.Demo.CoolWorld.x86.Mosa.AppSystem
 {
 	/// <summary>
 	/// AppOutputStream

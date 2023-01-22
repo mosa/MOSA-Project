@@ -4,7 +4,7 @@ using System;
 using Mosa.Runtime.Plug;
 using Mosa.Runtime.x64;
 
-namespace Mosa.Plug.Korlib.System.Threading.x64
+namespace Mosa.Plug.Korlib.x64.System.Threading
 {
 	public static class InterlockedPlug
 	{

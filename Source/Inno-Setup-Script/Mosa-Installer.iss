@@ -61,9 +61,9 @@ Source: "..\..\bin\Mosa.Tool.Bootstrap.exe"; DestDir: "{app}\bin"; Flags: ignore
 Source: "..\..\bin\Mosa.Compiler.Common.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\Mosa.Compiler.Framework.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\Mosa.Compiler.MosaTypeSystem.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
-Source: "..\..\bin\Mosa.Platform.ARMv8A32.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
-Source: "..\..\bin\Mosa.Platform.x86.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
-Source: "..\..\bin\Mosa.Platform.x64.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\Mosa.Compiler.Platform.ARMv8A32.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\Mosa.Compiler.Platform.x86.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\Mosa.Compiler.Platform.x64.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\Mosa.Tool.Explorer.exe"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\Mosa.Tool.Debugger.exe"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\Mosa.Tool.Launcher.exe"; DestDir: "{app}\bin"; Flags: ignoreversion
@@ -92,7 +92,6 @@ Source: "..\..\Tools\nasm\*.*"; DestDir: "{app}\Tools\nasm"; Flags: ignoreversio
 Source: "..\..\Tools\ndisasm\*.*"; DestDir: "{app}\Tools\ndisasm"; Flags: ignoreversion
 Source: "..\..\Tools\Bochs\*.*"; DestDir: "{app}\Tools\Bochs"; Flags: ignoreversion
 Source: "..\..\Tools\7zip\*.*"; DestDir: "{app}\Tools\7zip"; Flags: ignoreversion
-Source: "..\..\Tools\mkisofs\*.*"; DestDir: "{app}\Tools\mkisofs"; Flags: ignoreversion
 ;Source: "..\..\Tools\rufus\*.*"; DestDir: "{app}\Tools\rufus"; Flags: ignoreversion
 
 [ThirdParty]

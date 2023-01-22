@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.UnitTests
+namespace Mosa.UnitTests.Primitive
 {
 	public static class BoxingTests
 	{

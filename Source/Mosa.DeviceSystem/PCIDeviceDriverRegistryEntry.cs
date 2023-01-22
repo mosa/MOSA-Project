@@ -1,5 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
+
 namespace Mosa.DeviceSystem
 {
 	public class PCIDeviceDriverRegistryEntry : DeviceDriverRegistryEntry
@@ -25,7 +27,7 @@ namespace Mosa.DeviceSystem
 		public PCIField PCIFields { get; set; }
 	}
 
-	[System.Flags]
+	[Flags]
 	public enum PCIField : byte
 	{
 		DeviceID = 1,

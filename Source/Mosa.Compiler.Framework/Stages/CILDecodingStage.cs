@@ -4,6 +4,7 @@ using System.Diagnostics;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.MosaTypeSystem;
+using Mosa.Compiler.MosaTypeSystem.Units;
 
 namespace Mosa.Compiler.Framework.Stages
 {

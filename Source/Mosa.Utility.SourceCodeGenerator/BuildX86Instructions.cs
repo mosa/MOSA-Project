@@ -14,7 +14,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 			Lines.AppendLine("using Mosa.Compiler.Framework;");
 			Lines.AppendLine("using System.Collections.Generic;");
 			Lines.AppendLine();
-			Lines.AppendLine("namespace Mosa.Platform.x86");
+			Lines.AppendLine("namespace Mosa.Compiler.Platform.x86");
 			Lines.AppendLine("{");
 			Lines.AppendLine("\t/// <summary>");
 			Lines.AppendLine("\t/// X86 Instruction Map");

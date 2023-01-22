@@ -3,7 +3,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Mosa.Compiler.Framework.Source
+namespace Mosa.Compiler.Framework
 {
 	public static class SourceRegions
 	{

@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <OutputType>Exe</OutputType>
-    <StartupObject>Mosa.BareMetal.HelloWorld.ARMv8A32.Boot</StartupObject>
+    <StartupObject>Mosa.BareMetal.HelloWorldARMv8A32.Boot</StartupObject>
     <DebugType>full</DebugType>
     <LangVersion>11.0</LangVersion>
     <OutputPath>..\..\bin\</OutputPath>

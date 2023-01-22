@@ -11,6 +11,7 @@ using Avalonia.Platform;
 using Avalonia.Threading;
 using Mosa.Compiler.Common.Configuration;
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Platform.x86;
 using Mosa.Utility.Configuration;
 using Mosa.Utility.Launcher;
 
@@ -108,9 +109,9 @@ namespace Mosa.Tool.Launcher
 			TitleLbl.Content += CompilerVersion.VersionString;
 
 			// Register all platforms supported by the compiler
-			PlatformRegistry.Add(new Platform.x86.Architecture());
-			PlatformRegistry.Add(new Platform.x64.Architecture());
-			PlatformRegistry.Add(new Platform.ARMv8A32.Architecture());
+			PlatformRegistry.Add(new Architecture());
+			PlatformRegistry.Add(new Compiler.Platform.x64.Architecture());
+			PlatformRegistry.Add(new Compiler.Platform.ARMv8A32.Architecture());
 
 			// Initialize settings
 			UpdateSettings();
@@ -157,7 +158,6 @@ namespace Mosa.Tool.Launcher
 			qemuBiosPathLbl.Content = settings.GetValue("AppLocation.QemuBIOS", "N/A");
 			qemuImgPathLbl.Content = settings.GetValue("AppLocation.QemuImg", "N/A");
 			vboxPathLbl.Content = settings.GetValue("AppLocation.VirtualBox", "N/A");
-			mkisofsPathLbl.Content = settings.GetValue("AppLocation.Mkisofs", "N/A");
 
 			var workstation = settings.GetValue("AppLocation.VmwareWorkstation", string.Empty);
 			vmwarePathLbl.Content = string.IsNullOrEmpty(workstation) ? settings.GetValue("AppLocation.VmwarePlayer", "N/A") : workstation;
@@ -226,11 +226,10 @@ namespace Mosa.Tool.Launcher
 
 			switch (ImgCmb.SelectedIndex)
 			{
-				case 0: settings.SetValue("Image.Format", "ISO"); break;
-				case 1: settings.SetValue("Image.Format", "IMG"); break;
-				case 2: settings.SetValue("Image.Format", "VHD"); break;
-				case 3: settings.SetValue("Image.Format", "VDI"); break;
-				case 4: settings.SetValue("Image.Format", "VMDK"); break;
+				case 0: settings.SetValue("Image.Format", "IMG"); break;
+				case 1: settings.SetValue("Image.Format", "VHD"); break;
+				case 2: settings.SetValue("Image.Format", "VDI"); break;
+				case 3: settings.SetValue("Image.Format", "VMDK"); break;
 				default: settings.ClearProperty("Image.Format"); break;
 			}
 
@@ -270,11 +269,7 @@ namespace Mosa.Tool.Launcher
 
 			switch (BldCmb.SelectedIndex)
 			{
-				case 0: settings.SetValue("Image.BootLoader", "grub2.00"); break;
-				case 1: settings.SetValue("Image.BootLoader", "grub0.97"); break;
-				case 2: settings.SetValue("Image.BootLoader", "syslinux6.03"); break;
-				case 3: settings.SetValue("Image.BootLoader", "syslinux3.72"); break;
-				case 4: settings.SetValue("Image.BootLoader", "limine"); break;
+				case 0: settings.SetValue("Image.BootLoader", "limine"); break;
 				default: settings.ClearProperty("Image.BootLoader"); break;
 			}
 

@@ -1,8 +1,10 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.UnitTests;
+
 namespace Mosa.UnitTests.Optimization
 {
-	public static class InterestingTests
+	public static partial class InterestingTests
 	{
 		[MosaUnitTest(Series = "I4")]
 		public static bool IsOddI4(int a)

@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Text;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.MosaTypeSystem;
+using Mosa.Compiler.MosaTypeSystem.Units;
 using Mosa.Utility.Configuration;
 
 namespace Mosa.Utility.UnitTests

@@ -1,6 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.FileSystem.VFS
+namespace Mosa.FileSystem
 {
 	/// <summary>
 	/// Interface, which a file system driver must implement.

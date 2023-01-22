@@ -1,9 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.UnitTests;
+
 namespace Mosa.UnitTests.FlowControl
 {
-
-	public static class SwitchTests
+	public static partial class SwitchTests
 	{
 
 		[MosaUnitTest(Series = "I1")]

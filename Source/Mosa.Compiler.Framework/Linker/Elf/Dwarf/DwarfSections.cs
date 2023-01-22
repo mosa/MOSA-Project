@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Mosa.Compiler.Common;
-using Mosa.Compiler.Framework.Source;
 using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.Linker.Elf.Dwarf

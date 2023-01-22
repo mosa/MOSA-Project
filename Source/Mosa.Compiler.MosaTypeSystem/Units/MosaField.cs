@@ -2,7 +2,7 @@
 
 using System;
 
-namespace Mosa.Compiler.MosaTypeSystem
+namespace Mosa.Compiler.MosaTypeSystem.Units
 {
 	public sealed class MosaField : MosaUnit, IEquatable<MosaField>
 	{

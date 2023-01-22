@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common.Exceptions;
+using Mosa.Compiler.MosaTypeSystem.Units;
 
 namespace Mosa.Compiler.MosaTypeSystem
 {

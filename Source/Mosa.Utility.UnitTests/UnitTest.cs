@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Mosa.Compiler.MosaTypeSystem;
+using Mosa.Compiler.MosaTypeSystem.Units;
 using Mosa.UnitTests;
 
 namespace Mosa.Utility.UnitTests

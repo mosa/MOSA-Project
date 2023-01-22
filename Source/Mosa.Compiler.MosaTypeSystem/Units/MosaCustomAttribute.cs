@@ -2,7 +2,7 @@
 
 using System.Collections.Generic;
 
-namespace Mosa.Compiler.MosaTypeSystem
+namespace Mosa.Compiler.MosaTypeSystem.Units
 {
 	public class MosaCustomAttribute
 	{

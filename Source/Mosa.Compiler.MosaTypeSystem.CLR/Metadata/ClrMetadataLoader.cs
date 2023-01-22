@@ -5,6 +5,7 @@ using dnlib.DotNet;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.MosaTypeSystem.CLR.Dnlib;
 using Mosa.Compiler.MosaTypeSystem.CLR.Utils;
+using Mosa.Compiler.MosaTypeSystem.Units;
 
 namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 {

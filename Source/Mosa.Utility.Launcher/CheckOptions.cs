@@ -10,7 +10,6 @@ namespace Mosa.Utility.Launcher
 		{
 			var emulator = settings.GetValue("Emulator", string.Empty).ToLowerInvariant();
 			var imageformat = settings.GetValue("Image.Format", string.Empty).ToUpperInvariant();
-			var bootloader = settings.GetValue("Image.BootLoader", string.Empty).ToLowerInvariant();
 			var platform = settings.GetValue("Compiler.Platform", string.Empty);
 
 			if (emulator == "qemu" && imageformat == "VDI")
@@ -41,21 +40,6 @@ namespace Mosa.Utility.Launcher
 			if (emulator == "virtualbox" && imageformat == "IMG")
 			{
 				return "VirtualBox does not support the IMG file format";
-			}
-
-			if (bootloader == "grub0.97" && imageformat != "ISO")
-			{
-				return "Grub boot loader does not support virtual disk formats";
-			}
-
-			if (bootloader == "grub2.00" && imageformat != "ISO")
-			{
-				return "Grub boot loader does not support virtual disk formats";
-			}
-
-			if (bootloader == "syslinux6.03" && imageformat != "ISO")
-			{
-				return "Syslinux boot loader v6.03 does not support virtual disk format";
 			}
 
 			if (platform != "x86" && platform != "x64")

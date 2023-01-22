@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
+using System;
+using Mosa.Kernel.BareMetal.BitMap;
 using Mosa.Kernel.BareMetal.BootMemory;
 using Mosa.Runtime;
 

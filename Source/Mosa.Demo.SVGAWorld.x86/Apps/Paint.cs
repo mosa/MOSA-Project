@@ -7,9 +7,9 @@ namespace Mosa.Demo.SVGAWorld.x86.Apps
 {
 	public class Paint : Window
 	{
-		public PaintArea PaintArea;
+		public readonly PaintArea PaintArea;
 
-		public Paint(int x, int y, int width, int height, Color inactiveTitlebarColor, Color activeTitlebarColor, Color bodyColor)
+		public Paint(uint x, uint y, uint width, uint height, Color inactiveTitlebarColor, Color activeTitlebarColor, Color bodyColor)
 			: base("Paint", x, y, width, height, inactiveTitlebarColor, activeTitlebarColor, bodyColor)
 		{
 			PaintArea = new PaintArea(x, y + TitlebarHeight, width, height, bodyColor);

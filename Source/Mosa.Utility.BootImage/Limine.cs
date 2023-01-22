@@ -1385,191 +1385,79 @@ namespace Mosa.Utility.BootImage
             0xb5, 0xd1, 0x4f, 0xc8, 0x0b, 0xd9, 0x72, 0xe9, 0x27, 0x64, 0x13, 0x5b, 0x41, 0xfd, 0x44, 0xcb,
             0x92, 0xd8, 0xa2, 0xea, 0x27, 0x64, 0x23, 0xd9, 0x06, 0xe4, 0x02, 0x70, 0x3a, 0x9b, 0x8a, 0x4a,
             0xef, 0x21, 0xbf, 0x3f, 0x8d, 0x09, 0xd0, 0x77, 0x4c, 0x9c, 0x38, 0x83, 0x09, 0x21, 0x98, 0x85,
-            0x7b, 0xea, 0xf8, 0x7f, 0xdf, 0xfd, 0x1f, 0x60, 0x25, 0xdd, 0x32, 0xf0, 0x72, 0x00, 0x00,
+            0x7b, 0xea, 0xf8, 0x7f, 0xdf, 0xfd, 0x1f, 0x60, 0x25, 0xdd, 0x32, 0xf0, 0x72, 0x00, 0x00
         };
 
-		private enum CacheState { Clean, Dirty }
+		private static DataBlock block;
 
-		private static FileStream Stream;
-		private static DataBlock DataCache;
-		private static ulong CachedBlock;
-		private static CacheState State;
-
-		private const int BlockSize = 512;
-
-		// TODO: Fix for VDI
-		public static void Deploy(string path, bool vdi)
+		public static void Deploy(string path)
 		{
-			Stream = File.Open(path, FileMode.Open);
-			DataCache = new DataBlock(new byte[BlockSize]);
-			CachedBlock = 0;
-			State = CacheState.Clean;
+			var data = File.ReadAllBytes(path);
 
-			Stream.Read(DataCache.Data);
-
-			// To not interfere with VDI header
-			var mbrLoc = vdi ? 512 : 0;
+			block = new DataBlock(data);
 
 			// Skip detecting if the device has a valid partition table, because we know it does
 
 			var stage2Size = BootloaderImg.Length - 512;
 			var stage2Sectors = DivRoundUp(stage2Size, 512);
 			var stage2SizeB = (ushort)(stage2Sectors / 2 * 512);
-			var stage2SizeA = (ushort)(stage2SizeB + ((stage2Sectors % 2 != 0) ? 512 : 0));
+			var stage2SizeA = (ushort)(stage2SizeB + (stage2Sectors % 2 != 0 ? 512 : 0));
 
 			// Default split of stage 2 for MBR (consecutive in post MBR gap)
-			ulong stage2LocA = 512;
+			uint stage2LocA = 512;
 			var stage2LocB = stage2LocA + stage2SizeA;
 
-			var origMbr = new byte[70];
-			var timestamp = new byte[6];
-
 			// Save original timestamp
-			Read(timestamp, 218, 6);
+			var timestamp = GetBytes(218, 6);
 
 			// Save the original partition table of the device
-			Read(origMbr, 440, 70);
+			var origMbr = GetBytes(440, 70);
 
-			// Write the bootsector from the bootloader to the device
-			Write(BootloaderImg, 0, 512);
+			// Write the boot sector from the bootloader to the device
+			SetBytes(BootloaderImg, 0, 512);
+
+			var stage2Part1 = BootloaderImg.Skip(512).ToArray();
+			var stage2Part2 = stage2Part1.Skip(stage2SizeA).ToArray();
 
 			// Write the rest of stage 2 to the device
-			Write(BootloaderImg.Skip(512).ToArray(), stage2LocA, stage2SizeA);
-			Write(BootloaderImg.Skip(512 + stage2SizeA).ToArray(), stage2LocB, (uint)(stage2Size - stage2SizeA));
+			SetBytes(stage2Part1, stage2LocA, stage2SizeA);
+			SetBytes(stage2Part2, stage2LocB, (uint)(stage2Size - stage2SizeA));
 
-			// Hardcode in the bootsector the location of stage 2 halves
-			WriteUShort(stage2SizeA, 0x1a4);
-			WriteUShort(stage2SizeB, 0x1a4 + 2);
-			WriteULong(stage2LocA, 0x1a4 + 4);
-			WriteULong(stage2LocB, 0x1a4 + 12);
+			// Hardcode in the boot sector the location of stage 2 halves
+			SetUShort(stage2SizeA, 0x1a4);
+			SetUShort(stage2SizeB, 0x1a4 + 2);
+			SetULong(stage2LocA, 0x1a4 + 4);
+			SetULong(stage2LocB, 0x1a4 + 12);
 
 			// Write back timestamp
-			Write(timestamp, 218, 6);
+			SetBytes(timestamp, 218, 6);
 
 			// Write back the saved partition table to the device
-			Write(origMbr, 440, 70);
+			SetBytes(origMbr, 440, 70);
 
-			FlushCache();
-			Stream.Flush();
-			Stream.Close();
+			File.WriteAllBytes(path, block.Data);
 		}
 
-		private static void Read(byte[] buffer, uint loc, uint count)
+		// Do not remove, for future VDI header creation
+
+		private static byte[] GetBytes(uint offset, uint length)
 		{
-			uint progress = 0;
-			while (progress < count)
-			{
-				var prog = loc + progress;
-				var block = prog / BlockSize;
-
-				CacheBlock(block);
-
-				var chunk = count - progress;
-				var offset = prog % BlockSize;
-
-				if (chunk > BlockSize - offset)
-					chunk = BlockSize - offset;
-
-				for (uint i = 0; i < chunk; i++)
-					buffer[progress + i] = DataCache.GetByte(offset + i);
-
-				progress += chunk;
-			}
+			return block.GetBytes(offset, length);
 		}
 
-		private static void Write(byte[] buffer, ulong loc, ulong count)
+		private static void SetBytes(byte[] data, uint offset, uint length)
 		{
-			ulong progress = 0;
-			while (progress < count)
-			{
-				var prog = loc + progress;
-				var block = prog / BlockSize;
-
-				CacheBlock(block);
-
-				var chunk = count - progress;
-				var offset = prog % BlockSize;
-
-				if (chunk > BlockSize - offset)
-					chunk = BlockSize - offset;
-
-				for (ulong i = 0; i < chunk; i++)
-					DataCache.SetByte((uint)(offset + i), buffer[progress + i]);
-
-				State = CacheState.Dirty;
-				progress += chunk;
-			}
+			block.SetBytes(offset, data, 0, length);
 		}
 
-		private static void WriteUShort(ushort num, ulong loc)
+		private static void SetUShort(ushort value, uint offset)
 		{
-			ulong progress = 0, count = sizeof(ushort);
-			while (progress < count)
-			{
-				var prog = loc + progress;
-				var block = prog / BlockSize;
-
-				CacheBlock(block);
-
-				var chunk = count - progress;
-				var offset = prog % BlockSize;
-
-				if (chunk > BlockSize - offset)
-					chunk = BlockSize - offset;
-
-				DataCache.SetUShort((uint)offset, num);
-
-				State = CacheState.Dirty;
-				progress += chunk;
-			}
+			block.SetUShort(offset, value);
 		}
 
-		private static void WriteULong(ulong num, ulong loc)
+		private static void SetULong(ulong value, uint offset)
 		{
-			ulong progress = 0, count = sizeof(ulong);
-			while (progress < count)
-			{
-				var prog = loc + progress;
-				var block = prog / BlockSize;
-
-				CacheBlock(block);
-
-				var chunk = count - progress;
-				var offset = prog % BlockSize;
-
-				if (chunk > BlockSize - offset)
-					chunk = BlockSize - offset;
-
-				DataCache.SetULong((uint)offset, num);
-
-				State = CacheState.Dirty;
-				progress += chunk;
-			}
-		}
-
-		private static void CacheBlock(ulong block)
-		{
-			if (CachedBlock == block)
-				return;
-
-			if (State == CacheState.Dirty)
-				FlushCache();
-
-			Stream.Seek((long)(block * BlockSize), SeekOrigin.Begin);
-			Stream.Read(DataCache.Data);
-
-			CachedBlock = block;
-		}
-
-		private static void FlushCache()
-		{
-			if (State == CacheState.Clean)
-				return;
-
-			Stream.Seek((long)(CachedBlock * BlockSize), SeekOrigin.Begin);
-			Stream.Write(DataCache.Data);
-
-			State = CacheState.Clean;
+			block.SetULong(offset, value);
 		}
 
 		private static int DivRoundUp(int a, int b)

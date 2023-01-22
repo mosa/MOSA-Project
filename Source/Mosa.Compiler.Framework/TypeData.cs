@@ -2,6 +2,7 @@
 
 using System;
 using Mosa.Compiler.MosaTypeSystem;
+using Mosa.Compiler.MosaTypeSystem.Units;
 
 namespace Mosa.Compiler.Framework
 {

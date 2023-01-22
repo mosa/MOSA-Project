@@ -1,10 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Demo.AppSystem;
+using Mosa.Demo.CoolWorld.x86.Mosa.AppSystem;
 using Mosa.DeviceSystem.PCI;
 using Mosa.DeviceSystem.Service;
 
-namespace Mosa.Demo.Application
+namespace Mosa.Demo.CoolWorld.x86.Mosa.Application
 {
 	/// <summary>
 	/// ShowPCI

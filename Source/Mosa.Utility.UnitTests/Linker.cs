@@ -3,6 +3,7 @@
 using System;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.MosaTypeSystem;
+using Mosa.Compiler.MosaTypeSystem.Units;
 
 namespace Mosa.Utility.UnitTests
 {

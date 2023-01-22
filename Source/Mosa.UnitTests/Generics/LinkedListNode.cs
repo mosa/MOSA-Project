@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.UnitTests.Generics
+namespace Mosa.UnitTests.Generic
 {
 	/// <summary>
 	/// Represents a node in a LinkedList<T>. This class cannot be inherited.

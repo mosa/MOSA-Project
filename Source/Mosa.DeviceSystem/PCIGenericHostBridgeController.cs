@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.DeviceSystem.PCI
+using Mosa.DeviceSystem.PCI;
+
+namespace Mosa.DeviceSystem
 {
 	/// <summary>
 	/// Generic PCI Host Bridge Controller

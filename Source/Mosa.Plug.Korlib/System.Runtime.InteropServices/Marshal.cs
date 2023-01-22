@@ -4,7 +4,7 @@ using System;
 using Mosa.Runtime;
 using Mosa.Runtime.Plug;
 
-namespace Mosa.Plug.Korlib.System
+namespace Mosa.Plug.Korlib.System.Runtime.InteropServices
 {
 	internal static class Marshal
 	{

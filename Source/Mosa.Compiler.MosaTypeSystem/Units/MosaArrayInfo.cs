@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using Mosa.Compiler.Common;
 
-namespace Mosa.Compiler.MosaTypeSystem
+namespace Mosa.Compiler.MosaTypeSystem.Units
 {
 	public class MosaArrayInfo : IEquatable<MosaArrayInfo>
 	{
@@ -44,28 +44,32 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public override string ToString()
 		{
-			if (this == Vector)
+			if (Vector == this)
 				return "[]";
-			else if (sig == null)
+
+			if (sig == null)
 			{
-				StringBuilder result = new StringBuilder();
-				result.Append("[");
-				for (int i = 0; i < Rank; i++)
+				var builder = new StringBuilder();
+				builder.Append('[');
+
+				for (var i = 0; i < Rank; i++)
 				{
-					if (i != 0)
-						result.Append(",");
-					if (i < LowerBounds?.Count)
+					if (i != 0) builder.Append(',');
+					if (!(i < LowerBounds?.Count)) continue;
+
+					builder.Append(LowerBounds[i]);
+					builder.Append("..");
+
+					if (i < Sizes?.Count)
 					{
-						result.Append(LowerBounds[i]);
-						result.Append("..");
-						if (i < Sizes?.Count)
-							result.Append(LowerBounds[i] + Sizes[i]);
-						else
-							result.Append(".");
+						builder.Append(LowerBounds[i]);
+						builder.Append(Sizes[i]);
 					}
+					else builder.Append('.');
 				}
-				result.Append("]");
-				sig = result.ToString();
+
+				builder.Append(']');
+				return builder.ToString();
 			}
 
 			return sig;

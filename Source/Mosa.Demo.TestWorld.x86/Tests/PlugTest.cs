@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Runtime.Intrinsics.X86;
 using Mosa.Runtime.Plug;
 
 namespace Mosa.Demo.TestWorld.x86.Tests
@@ -76,22 +77,22 @@ namespace Mosa.Demo.TestWorld.x86.Tests
 
 		public static bool PlugTest4()
 		{
-			return System.Runtime.Intrinsics.X86.Popcnt.PopCount(0b11) == 2;
+			return Popcnt.PopCount(0b11) == 2;
 		}
 
 		public static bool PlugTest5()
 		{
-			return System.Runtime.Intrinsics.X86.Lzcnt.LeadingZeroCount(0b1) == 31;
+			return Lzcnt.LeadingZeroCount(0b1) == 31;
 		}
 
 		public static bool PlugTest6()
 		{
-			return System.Runtime.Intrinsics.X86.Bmi1.TrailingZeroCount(0b10) == 1;
+			return Bmi1.TrailingZeroCount(0b10) == 1;
 		}
 
 		public static bool PlugTest7()
 		{
-			return System.Runtime.Intrinsics.X86.Bmi1.ResetLowestSetBit(0b11) == 0b10;
+			return Bmi1.ResetLowestSetBit(0b11) == 0b10;
 		}
 	}
 }

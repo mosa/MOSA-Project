@@ -1,8 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.FileSystem.VFS;
+using Mosa.FileSystem.FAT;
 
-namespace Mosa.FileSystem.FAT.Vfs
+namespace Mosa.FileSystem.Vfs
 {
 	/// <summary>
 	///

@@ -1,6 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.FileSystem.VFS
+namespace Mosa.FileSystem
 {
 	/// <summary>
 	/// Implements path resolution functionality for the Mosa.VFS.VirtualFileSystem.

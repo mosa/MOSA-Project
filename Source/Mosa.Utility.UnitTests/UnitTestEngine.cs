@@ -10,7 +10,6 @@ using System.Threading;
 using Mosa.Compiler.Common.Configuration;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Linker;
-using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Utility.DebugEngine;
 using Mosa.Utility.Launcher;

@@ -650,7 +650,6 @@ namespace Mosa.Tool.Debugger
 			{
 				case ".bin": return "BIN";
 				case ".img": return "IMG";
-				case ".iso": return "ISO";
 				default: return string.Empty;
 			}
 		}

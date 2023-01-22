@@ -1,5 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
+
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
@@ -21,7 +23,7 @@ namespace Mosa.DeviceSystem
 		public MACAddress(byte[] address)
 		{
 			if ((address == null) || (address.Length != 6))
-				throw new System.Exception("Invalid MAC address");
+				throw new Exception("Invalid MAC address");
 
 			this.address = new byte[6];
 
@@ -55,10 +57,10 @@ namespace Mosa.DeviceSystem
 		}
 
 		/// <summary>
-		/// Returns a <see cref="System.String"/> that represents this instance.
+		/// Returns a <see cref="String"/> that represents this instance.
 		/// </summary>
 		/// <returns>
-		/// A <see cref="System.String"/> that represents this instance.
+		/// A <see cref="String"/> that represents this instance.
 		/// </returns>
 		public override string ToString()
 		{

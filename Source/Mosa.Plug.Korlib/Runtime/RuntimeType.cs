@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
+using System;
 using System.Reflection;
 using Mosa.Runtime;
 using Mosa.Runtime.Metadata;

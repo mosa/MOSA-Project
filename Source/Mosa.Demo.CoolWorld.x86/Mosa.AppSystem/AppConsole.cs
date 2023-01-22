@@ -3,7 +3,7 @@
 using System;
 using System.IO;
 
-namespace Mosa.Demo.AppSystem
+namespace Mosa.Demo.CoolWorld.x86.Mosa.AppSystem
 {
 	/// <summary>
 	/// AppConsole

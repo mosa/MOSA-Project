@@ -6,16 +6,16 @@ namespace Mosa.Demo.SVGAWorld.x86.Components
 {
 	public class TaskbarWindowMenu
 	{
-		public int X, Y, Width, Height;
+		public uint X, Y, Width, Height;
 
 		public Color BackColor, ForeColor, HoverColor;
 
-		public TaskbarButton AttachedButton;
+		public readonly TaskbarButton AttachedButton;
 
 		// Controls
-		private Button CloseBtn, ShowHideBtn;
+		private readonly Button CloseBtn, ShowHideBtn;
 
-		private int Buttons = 2, Separation = 5, ButtonHeight = 20;
+		private readonly uint Buttons = 2, Separation = 5, ButtonHeight = 20;
 
 		public TaskbarWindowMenu(TaskbarButton btn, Color backColor, Color foreColor, Color hoverColor)
 		{

@@ -45,7 +45,7 @@ namespace Mosa.Compiler.Framework.Transforms
 			IsAuto = type.HasFlag(TransformType.Auto);
 			IsOptimization = type.HasFlag(TransformType.Optimization);
 
-			Name = GetType().FullName.Replace("Mosa.Platform.", string.Empty).Replace("Mosa.Compiler.Framework.Transforms", "IR").Replace("Transforms.", string.Empty);
+			Name = GetType().FullName.Replace("Mosa.Compiler.Platform.", string.Empty).Replace("Mosa.Compiler.Framework.Transforms", "IR").Replace("Transforms.", string.Empty);
 			TransformDirectory.Add(this);
 		}
 

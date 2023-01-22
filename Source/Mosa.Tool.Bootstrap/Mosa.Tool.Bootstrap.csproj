@@ -24,7 +24,7 @@
 		<ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
 		<ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj" />
 		<ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj" />
-		<ProjectReference Include="..\Mosa.Platform.x86\Mosa.Platform.x86.csproj" />
+		<ProjectReference Include="..\Mosa.Compiler.Platform.x86\Mosa.Compiler.Platform.x86.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<EmbeddedResource Update="StatusForm.resx">

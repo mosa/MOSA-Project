@@ -8,7 +8,7 @@ namespace Mosa.Utility.BootImage
 	/// <summary>
 	/// Block File Stream Driver
 	/// </summary>
-	/// <seealso cref="Mosa.DeviceSystem.BaseDeviceDriver" />
+	/// <seealso cref="BaseDeviceDriver" />
 	/// <seealso cref="Mosa.DeviceSystem.IDiskDevice" />
 	public class BlockFileStreamDriver : BaseDeviceDriver, IDiskDevice
 	{

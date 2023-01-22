@@ -4,6 +4,7 @@ using System;
 using Mosa.Compiler.Common.Exceptions;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using Mosa.Compiler.MosaTypeSystem.Units;
 
 namespace Mosa.Compiler.MosaTypeSystem
 {
@@ -143,7 +144,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return null;
 		}
 
-		public string? LookupUserString(MosaModule module, uint token)
+		public string LookupUserString(MosaModule module, uint token)
 		{
 			return metadata.LookupUserString(module, token);
 		}

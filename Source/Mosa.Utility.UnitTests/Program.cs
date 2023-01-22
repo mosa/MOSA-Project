@@ -2,6 +2,7 @@
 
 using System;
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Platform.x86;
 
 namespace Mosa.Utility.UnitTests
 {
@@ -31,8 +32,8 @@ namespace Mosa.Utility.UnitTests
 
 		private static void RegisterPlatforms()
 		{
-			PlatformRegistry.Add(new Platform.x86.Architecture());
-			PlatformRegistry.Add(new Platform.x64.Architecture());
+			PlatformRegistry.Add(new Architecture());
+			PlatformRegistry.Add(new Compiler.Platform.x64.Architecture());
 
 			//PlatformRegistry.Add(new Platform.ARMv8A32.Architecture());
 		}

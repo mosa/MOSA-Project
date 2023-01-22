@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using dnlib.DotNet;
+using Mosa.Compiler.MosaTypeSystem.CLR.Dnlib;
 
 namespace Mosa.Compiler.MosaTypeSystem.CLR.Utils
 {

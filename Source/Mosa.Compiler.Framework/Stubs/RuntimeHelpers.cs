@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Compiler.Framework.Intrinsics
+namespace Mosa.Compiler.Framework.Stubs
 {
 	/// <summary>
 	/// IntrinsicMethods

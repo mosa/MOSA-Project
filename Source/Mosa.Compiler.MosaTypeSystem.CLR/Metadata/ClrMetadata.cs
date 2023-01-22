@@ -2,6 +2,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 using Mosa.Compiler.Common.Exceptions;
+using Mosa.Compiler.MosaTypeSystem.Units;
 
 namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 {
@@ -50,7 +51,7 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 
 			Resolver.Resolve();
 
-			var modules = Cache?.Modules.Values;
+			var modules = Cache.Modules.Values;
 			if (modules == null)
 				throw new InvalidOperationException("Modules list is empty!");
 
@@ -64,9 +65,9 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 			}
 		}
 
-		public string? LookupUserString(MosaModule module, uint id)
+		public string LookupUserString(MosaModule module, uint id)
 		{
-			return Cache?.GetStringById(id);
+			return Cache.GetStringById(id);
 		}
 	}
 }

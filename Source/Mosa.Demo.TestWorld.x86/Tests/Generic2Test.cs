@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
 using System.Collections.Generic;
 
 namespace Mosa.Demo.TestWorld.x86.Tests
@@ -20,16 +21,16 @@ namespace Mosa.Demo.TestWorld.x86.Tests
 
 		public static bool GenericTest1()
 		{
-			var node = new LinkedListNode<uint>(10);
+			var node = new LinkedListNode<UInt32>(10);
 			return node.Value == 10;
 		}
 
 		public static bool GenericTest2()
 		{
-			var list = new LinkedList<uint>();
-			var node1 = new LinkedListNode<uint>(10);
-			var node2 = new LinkedListNode<uint>(20);
-			var node3 = new LinkedListNode<uint>(30);
+			var list = new LinkedList<UInt32>();
+			var node1 = new LinkedListNode<UInt32>(10);
+			var node2 = new LinkedListNode<UInt32>(20);
+			var node3 = new LinkedListNode<UInt32>(30);
 
 			list.AddLast(node1);
 			list.AddLast(node2);
@@ -40,7 +41,7 @@ namespace Mosa.Demo.TestWorld.x86.Tests
 
 		public static bool GenericTest3()
 		{
-			var list = new LinkedList<int>();
+			var list = new LinkedList<Int32>();
 
 			list.AddLast(10);
 			list.AddLast(20);
@@ -50,7 +51,7 @@ namespace Mosa.Demo.TestWorld.x86.Tests
 
 		public static bool GenericTest4()
 		{
-			var list = new LinkedList<int>();
+			var list = new LinkedList<Int32>();
 
 			list.AddLast(10);
 			list.AddLast(20);
@@ -61,7 +62,7 @@ namespace Mosa.Demo.TestWorld.x86.Tests
 
 		public static bool GenericTest5()
 		{
-			var list = new LinkedList<int>();
+			var list = new LinkedList<Int32>();
 
 			list.AddLast(30);
 			list.AddLast(10);
@@ -74,7 +75,7 @@ namespace Mosa.Demo.TestWorld.x86.Tests
 
 		public static bool GenericTest6()
 		{
-			var list = new LinkedList<int>();
+			var list = new LinkedList<Int32>();
 
 			list.AddLast(30);
 			list.AddLast(10);

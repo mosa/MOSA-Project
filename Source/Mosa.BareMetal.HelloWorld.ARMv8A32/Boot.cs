@@ -2,7 +2,7 @@
 
 using Mosa.UnitTests.Optimization;
 
-namespace Mosa.BareMetal.HelloWorld.ARMv8A32
+namespace Mosa.BareMetal.HelloWorldARMv8A32
 {
 	/// <summary>
 	/// Boot

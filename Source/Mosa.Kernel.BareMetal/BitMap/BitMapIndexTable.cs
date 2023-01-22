@@ -2,7 +2,7 @@
 
 using Mosa.Runtime;
 
-namespace Mosa.Kernel.BareMetal
+namespace Mosa.Kernel.BareMetal.BitMap
 {
 	public /*readonly*/ struct BitMapIndexTable
 	{

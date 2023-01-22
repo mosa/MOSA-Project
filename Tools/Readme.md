@@ -13,19 +13,9 @@ bochs
 - LGPL License
 - http://7-zip.org/
 
-syslinux
-- GNU License
-- http://syslinux.zytor.com/
-- Version: 3.72 & 6.03
-
 wget
 - GNU License
 - http://www.gnu.org/software/wget
-
-grub
-- GNU License
-- http://www.gnu.org/software/grub/
-- Version 0.97
 
 nasm & ndisasm
 - Simplified BSD License
@@ -36,11 +26,6 @@ xunit
 - Apache License, Version 2.0
 - https://github.com/xunit/xunit
 - Version: Build 2.4.1+
-
-mkisofs
-- GPLv2 License
-- http://code.google.com/p/mkisofs-md5/
-- Version: 2.01
 
 nuget
 - Apache License, Version 2.0

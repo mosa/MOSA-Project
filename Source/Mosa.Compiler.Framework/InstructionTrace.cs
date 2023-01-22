@@ -2,9 +2,9 @@
 
 using System.Collections.Generic;
 using System.Text;
-using Mosa.Compiler.MosaTypeSystem;
+using Mosa.Compiler.MosaTypeSystem.Units;
 
-namespace Mosa.Compiler.Framework.Trace
+namespace Mosa.Compiler.Framework
 {
 	/// <summary>
 	/// Logs all instructions.

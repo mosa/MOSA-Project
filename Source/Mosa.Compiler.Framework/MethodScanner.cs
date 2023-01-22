@@ -3,8 +3,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Mosa.Compiler.Common;
-using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
+using Mosa.Compiler.MosaTypeSystem.Units;
 
 namespace Mosa.Compiler.Framework
 {

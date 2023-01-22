@@ -1,8 +1,9 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Demo.AppSystem;
+using System;
+using Mosa.Demo.CoolWorld.x86.Mosa.AppSystem;
 
-namespace Mosa.Demo.Application
+namespace Mosa.Demo.CoolWorld.x86.Mosa.Application
 {
 	/// <summary>
 	/// Shell
@@ -25,7 +26,7 @@ namespace Mosa.Demo.Application
 
 				var line = Console.ReadLine().Trim();
 
-				if (string.IsNullOrEmpty(line))
+				if (String.IsNullOrEmpty(line))
 				{
 					Console.WriteLine();
 					continue;
@@ -43,7 +44,7 @@ namespace Mosa.Demo.Application
 					continue;
 				}
 
-				string param = string.Empty;
+				string param = String.Empty;
 
 				if (index > 0)
 				{

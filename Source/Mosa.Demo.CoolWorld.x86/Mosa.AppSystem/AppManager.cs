@@ -1,11 +1,11 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.IO;
-using Mosa.Demo.Application;
+using Mosa.Demo.CoolWorld.x86.Mosa.Application;
 using Mosa.DeviceSystem;
 using Mosa.Kernel.x86;
 
-namespace Mosa.Demo.AppSystem
+namespace Mosa.Demo.CoolWorld.x86.Mosa.AppSystem
 {
 	/// <summary>
 	/// App Manager
@@ -143,7 +143,7 @@ namespace Mosa.Demo.AppSystem
 
 			if (interrupt >= 0x20 && interrupt < 0x30)
 			{
-				HAL.ProcessInterrupt((byte)(interrupt - 0x20));
+				DeviceSystem.HAL.ProcessInterrupt((byte)(interrupt - 0x20));
 			}
 
 			debug.BackgroundColor = background;

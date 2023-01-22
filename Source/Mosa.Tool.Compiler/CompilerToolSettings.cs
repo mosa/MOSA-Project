@@ -208,12 +208,6 @@ namespace Mosa.Tool.Compiler
 
 		public bool MethodScanner { get { return Settings.GetValue("Compiler.MethodScanner", false); } }
 
-		public string Mkisofs
-		{
-			get { return Settings.GetValue("AppLocation.Mkisofs", null); }
-			set { Settings.SetValue("AppLocation.Mkisofs", value); }
-		}
-
 		public bool Multithreading
 		{
 			get { return Settings.GetValue("Compiler.Multithreading", true); }

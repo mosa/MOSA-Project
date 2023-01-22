@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Demo.AppSystem;
+using Mosa.Demo.CoolWorld.x86.Mosa.AppSystem;
 using Mosa.DeviceDriver;
 using Mosa.DeviceDriver.ISA;
 using Mosa.DeviceDriver.ScanCodeMap;

@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Mosa.Compiler.MosaTypeSystem;
+using Mosa.Compiler.MosaTypeSystem.Units;
 
 // FIXME -- not 64bit compatible
 

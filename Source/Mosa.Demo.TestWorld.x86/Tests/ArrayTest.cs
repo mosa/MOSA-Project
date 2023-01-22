@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
 using System.Collections.Generic;
 
 namespace Mosa.Demo.TestWorld.x86.Tests
@@ -61,7 +62,7 @@ namespace Mosa.Demo.TestWorld.x86.Tests
 		public static bool ArrayIListTest2()
 		{
 			int[] list = new int[] { 1, 3, 5 };
-			IList<int> iList = list;
+			IList<Int32> iList = list;
 
 			int result = 0;
 			foreach (var i in iList)

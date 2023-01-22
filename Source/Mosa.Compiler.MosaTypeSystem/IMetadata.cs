@@ -1,5 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.MosaTypeSystem.Units;
+
 namespace Mosa.Compiler.MosaTypeSystem
 {
 	public interface IMetadata
@@ -8,6 +10,6 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		void LoadMetadata();
 
-		string? LookupUserString(MosaModule module, uint id);
+		string LookupUserString(MosaModule module, uint id);
 	}
 }

@@ -11,9 +11,9 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 		protected override void Body()
 		{
-			Lines.AppendLine("using Mosa.Platform.ESP32.Instructions;");
+			Lines.AppendLine("using Mosa.Compiler.Platform.ESP32.Instructions;");
 			Lines.AppendLine();
-			Lines.AppendLine("namespace Mosa.Platform.ESP32");
+			Lines.AppendLine("namespace Mosa.Compiler.Platform.ESP32");
 			Lines.AppendLine("{");
 			Lines.AppendLine("\t/// <summary>");
 			Lines.AppendLine("\t/// ESP32 Instructions");

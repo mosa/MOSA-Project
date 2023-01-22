@@ -1,8 +1,10 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.UnitTests;
+
 namespace Mosa.UnitTests.Optimization
 {
-	public static class SpecificTests
+	public static partial class SpecificTests
 	{
 		[MosaUnitTest(Series = "I4I4")]
 		public static uint Xor32Xor32(uint x, uint y)

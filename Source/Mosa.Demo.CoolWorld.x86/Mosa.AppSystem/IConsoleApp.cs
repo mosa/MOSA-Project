@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Demo.AppSystem
+namespace Mosa.Demo.CoolWorld.x86.Mosa.AppSystem
 {
 	/// <summary>
 	///

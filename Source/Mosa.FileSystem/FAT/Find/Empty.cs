@@ -1,8 +1,9 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.DeviceSystem;
+using Mosa.FileSystem.FAT;
 
-namespace Mosa.FileSystem.FAT.Find
+namespace Mosa.FileSystem.Find
 {
 	/// <summary>
 	/// Empty

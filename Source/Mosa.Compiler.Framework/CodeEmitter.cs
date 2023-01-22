@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.IO;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Linker;
-using Mosa.Compiler.Framework.Trace;
 
 namespace Mosa.Compiler.Framework
 {

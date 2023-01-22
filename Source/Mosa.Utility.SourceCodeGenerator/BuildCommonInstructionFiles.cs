@@ -68,7 +68,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 			}
 
 			Lines.AppendLine();
-			Lines.AppendLine("namespace Mosa.Platform." + Platform + ".Instructions");
+			Lines.AppendLine("namespace Mosa.Compiler.Platform." + Platform + ".Instructions");
 			Lines.AppendLine("{");
 			Lines.AppendLine("\t/// <summary>");
 			Lines.Append("\t/// " + node.Name);
@@ -80,7 +80,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 			Lines.AppendLine();
 			Lines.AppendLine("\t/// </summary>");
-			Lines.AppendLine("\t/// <seealso cref=\"Mosa.Platform." + Platform + "." + NormalizedPlatform + "Instruction\" />");
+			Lines.AppendLine("\t/// <seealso cref=\"Mosa.Compiler.Platform." + Platform + "." + NormalizedPlatform + "Instruction\" />");
 			Lines.AppendLine("\tpublic sealed class " + node.Name + " : " + NormalizedPlatform + "Instruction");
 			Lines.AppendLine("\t{");
 			Lines.AppendLine("\t\tinternal " + node.Name + "()");

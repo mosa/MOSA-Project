@@ -2,8 +2,7 @@
 
 namespace Mosa.UnitTests.Other
 {
-	public static class InterestingTests
-
+	public static partial class InterestingTests
 	{
 		public struct Struct
 		{ public int X { get; set; } }

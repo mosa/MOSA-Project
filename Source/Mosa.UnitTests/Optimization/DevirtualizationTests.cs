@@ -3,6 +3,8 @@
 // Test1 is copied from: https://github.com/dotnet/coreclr/pull/9230#issuecomment-277876789
 // MOSA correctly devirtualizes it, inlines it, and then determines it returns a constant value.
 
+using Mosa.UnitTests;
+
 namespace Mosa.UnitTests.Optimization
 {
 	internal class DevirtualizationBase

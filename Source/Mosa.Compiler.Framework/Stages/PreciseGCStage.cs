@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework.Analysis.LiveVariableAnalysis;
-using Mosa.Compiler.Framework.Trace;
 
 namespace Mosa.Compiler.Framework.Stages
 {

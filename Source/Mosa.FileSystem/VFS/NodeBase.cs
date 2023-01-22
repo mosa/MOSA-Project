@@ -2,7 +2,7 @@
 
 using System.IO;
 
-namespace Mosa.FileSystem.VFS
+namespace Mosa.FileSystem
 {
 	/// <summary>
 	/// Provides a default implementation for INodes. A file system implementation

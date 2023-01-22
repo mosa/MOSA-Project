@@ -14,7 +14,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 			Lines.AppendLine("using Mosa.Compiler.Framework;");
 			Lines.AppendLine("using System.Collections.Generic;");
 			Lines.AppendLine();
-			Lines.AppendLine("namespace Mosa.Platform.ESP32");
+			Lines.AppendLine("namespace Mosa.Compiler.Platform.ESP32");
 			Lines.AppendLine("{");
 			Lines.AppendLine("\t/// <summary>");
 			Lines.AppendLine("\t/// ESP32 Instruction Map");

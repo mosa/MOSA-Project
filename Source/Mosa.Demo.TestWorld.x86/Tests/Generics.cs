@@ -7,7 +7,9 @@
  *
  */
 
-namespace Mosa.HelloWorld.Tests
+using System;
+
+namespace Mosa.Demo.TestWorld.x86.Tests
 {
 	public class Generics
 	{
@@ -38,13 +40,13 @@ namespace Mosa.HelloWorld.Tests
 
 		public static void Test()
 		{
-			MyGenericClass<object> genericObject = new MyGenericClass<object>();
+			MyGenericClass<Object> genericObject = new MyGenericClass<Object>();
 			genericObject.value = new object();
 		}
 
 		public static void Test2()
 		{
-			MyGenericClass<int> genericObject = new MyGenericClass<int>();
+			MyGenericClass<Int32> genericObject = new MyGenericClass<Int32>();
 			genericObject.value = 10;
 		}
 
@@ -56,14 +58,14 @@ namespace Mosa.HelloWorld.Tests
 
 		public static void Test4()
 		{
-			IMyInterface<int> genericInterface = new MyGenericClass<int>();
+			IMyInterface<Int32> genericInterface = new MyGenericClass<Int32>();
 		}
 
 		public static void Test5()
 		{
-			MyGenericClass<int> genericObject = new MyGenericClass<int>();
+			MyGenericClass<Int32> genericObject = new MyGenericClass<Int32>();
 			genericObject.value = 10;
-			IMyInterface<int> genericInterface = genericObject;
+			IMyInterface<Int32> genericInterface = genericObject;
 		}
 	}
 }

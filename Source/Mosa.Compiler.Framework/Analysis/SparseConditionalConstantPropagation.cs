@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using Mosa.Compiler.Common;
-using Mosa.Compiler.Framework.Trace;
 using static Mosa.Compiler.Framework.BaseMethodCompilerStage;
 
 namespace Mosa.Compiler.Framework.Analysis

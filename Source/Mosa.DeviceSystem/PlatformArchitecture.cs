@@ -1,11 +1,13 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
+
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
 	/// Platform Architecture
 	/// </summary>
-	[System.Flags]
+	[Flags]
 	public enum PlatformArchitecture
 	{
 		/// <summary>

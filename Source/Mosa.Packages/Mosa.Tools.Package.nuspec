@@ -26,9 +26,9 @@
 		<file src="..\..\bin\Mosa.Compiler.Framework.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Compiler.MosaTypeSystem.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Compiler.MosaTypeSystem.CLR.dll" target="tools" />
-		<file src="..\..\bin\Mosa.Platform.ARMv8A32.dll" target="tools" />
-		<file src="..\..\bin\Mosa.Platform.x86.dll" target="tools" />
-		<file src="..\..\bin\Mosa.Platform.x64.dll" target="tools" />
+		<file src="..\..\bin\Mosa.Compiler.Platform.ARMv8A32.dll" target="tools" />
+		<file src="..\..\bin\Mosa.Compiler.Platform.x86.dll" target="tools" />
+		<file src="..\..\bin\Mosa.Compiler.Platform.x64.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Tool.Explorer.exe" target="tools" />
 		<file src="..\..\bin\Mosa.Tool.Debugger.exe" target="tools" />
 		<file src="..\..\bin\Mosa.Tool.Launcher.exe" target="tools" />

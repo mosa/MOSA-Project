@@ -4,58 +4,28 @@ namespace Mosa.DeviceSystem
 {
 	public class DataStream
 	{
-		private byte[] Array;
+		public DataBlock Block { get; }
 
-		private int Position;
+		private uint position;
 
 		public DataStream(byte[] source)
 		{
-			Array = source;
-			Position = 0;
+			Block = new(source);
+
+			position = 0;
 		}
 
-		public byte[] ReadBytes(int offset, int length)
+		public byte ReadByte() => Block.GetByte(position++);
+
+		public char ReadChar() => Block.GetChar(position++);
+
+		public byte[] ReadBytes(uint length)
 		{
-			byte[] buffer = new byte[length];
-
-			for (var i = 0; i < length; i++)
-				buffer[i] = Array[Position + i + offset];
-
-			Skip(length);
-			return buffer;
+			var bytes = Block.GetBytes(position, length);
+			position += length;
+			return bytes;
 		}
 
-		public byte[] ReadEnd()
-		{
-			var length = Array.Length - Position;
-			var buffer = new byte[length];
-
-			for (var i = 0; i < length; i++)
-				buffer[i] = Array[Position + i];
-
-			Skip(length);
-			return buffer;
-		}
-
-		public byte ReadByte()
-		{
-			var b = Array[Position];
-			Skip(1);
-
-			return b;
-		}
-
-		public int ReadInt(bool bigEndian = true)
-		{
-			var i = Array[Position] << 24 | Array[Position + 1] << 16 | Array[Position + 2] << 8 | Array[Position + 3];
-			Skip(4);
-
-			return i;
-		}
-
-		public void Skip(int pos)
-		{
-			Position += pos;
-		}
+		public byte[] ReadEnd() => ReadBytes(Block.Length - position);
 	}
 }

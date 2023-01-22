@@ -1,9 +1,11 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
+using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Mosa.Runtime;
+using Mosa.UnitTests.Primitive;
 
 namespace Mosa.Demo.TestWorld.x86.Tests
 {
@@ -105,9 +107,9 @@ namespace Mosa.Demo.TestWorld.x86.Tests
 			return sum == 1200;
 		}
 
-		private static LinkedList<int> Populate()
+		private static LinkedList<Int32> Populate()
 		{
-			LinkedList<int> IntList = new LinkedList<int>();
+			LinkedList<Int32> IntList = new LinkedList<Int32>();
 
 			for (int i = 1; i < 10; i++)
 			{
@@ -117,9 +119,9 @@ namespace Mosa.Demo.TestWorld.x86.Tests
 			return IntList;
 		}
 
-		private static LinkedList<int> Populate2()
+		private static LinkedList<Int32> Populate2()
 		{
-			var IntList = new LinkedList<int>();
+			var IntList = new LinkedList<Int32>();
 
 			IntList.AddLast(100);
 			IntList.AddLast(300);
@@ -326,7 +328,7 @@ namespace Mosa.Demo.TestWorld.x86.Tests
 
 		public static bool BoxTestEqualsI4()
 		{
-			return Mosa.UnitTests.BoxingTests.EqualsI4(10);
+			return BoxingTests.EqualsI4(10);
 		}
 
 		public static bool MethodScanner()

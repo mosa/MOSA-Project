@@ -29,7 +29,6 @@ namespace Mosa.Utility.Launcher
 			Set(settings, "AppLocation.VmwareWorkstation", FindVmwareWorkstation());
 			Set(settings, "AppLocation.VirtualBox", FindVirtualBox());
 			Set(settings, "AppLocation.Ndisasm", FindNdisasm());
-			Set(settings, "AppLocation.Mkisofs", FindMkisofs());
 			Set(settings, "AppLocation.GDB", FindGDB());
 
 			return settings;
@@ -72,27 +71,6 @@ namespace Mosa.Utility.Launcher
 					@"C:\mingw\bin",
 					@"C:\mingw32\bin",
 
-					"/bin"
-				}
-			);
-		}
-
-		private static string FindMkisofs()
-		{
-			return TryFind(
-				new string[] { "mkisofs.exe", "mkisofs" },
-				new string[] {
-					@"%MOSA%\Tools\mkisofs",
-					@"%CURRENT%\..\Tools\mkisofs",
-					@"%CURRENT%\Tools\mkisofs",
-					@"%APPDIR%\Tools\mkisofs",
-					@"%APPDIR%\..\Tools\mkisofs",
-					@"%MOSATOOLS%\mkisofs",
-
-					@"%ProgramFiles%\VMware\VMware Player",
-					@"%ProgramFiles(x86)%\VMware\VMware Player",
-					@"%ProgramFiles%\cdrtools",
-					@"%ProgramFiles(x86)%\cdrtools",
 					"/bin"
 				}
 			);

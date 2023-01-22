@@ -3,6 +3,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Mosa.Compiler.MosaTypeSystem;
+using Mosa.Compiler.MosaTypeSystem.Units;
 
 namespace Mosa.Compiler.Framework
 {
