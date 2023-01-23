@@ -1322,7 +1322,6 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var newThis = MethodCompiler.CreateVirtualRegister(result.Type.ToManagedPointer());
 				before.SetInstruction(IRInstruction.AddressOf, newThis, result);
-				before.AppendInstruction(IRInstruction.Nop);
 
 				operands.Insert(0, newThis);
 			}

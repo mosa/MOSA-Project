@@ -1821,12 +1821,8 @@ namespace Mosa.Compiler.Framework.Stages
 					return true;
 
 				case StackType.Int64:
-					{
-						var v1 = AllocateVirtualRegisterI32();
-						context.AppendInstruction(IRInstruction.Truncate64x32, v1, entry.Operand);
-						context.AppendInstruction(IRInstruction.Move32, result, v1);
-						return true;
-					}
+					context.AppendInstruction(IRInstruction.Truncate64x32, result, entry.Operand);
+					return true;
 
 				case StackType.R4:
 					context.AppendInstruction(IRInstruction.ConvertR4ToI32, result, entry.Operand);
@@ -1851,15 +1847,11 @@ namespace Mosa.Compiler.Framework.Stages
 			switch (entry.StackType)
 			{
 				case StackType.Int32:
-					{
-						var v1 = AllocateVirtualRegisterI64();
-						context.AppendInstruction(IRInstruction.SignExtend32x64, v1, entry.Operand);
-						context.AppendInstruction(IRInstruction.Move32, result, v1);
-						return true;
-					}
+					context.AppendInstruction(IRInstruction.SignExtend32x64, result, entry.Operand);
+					return true;
 
 				case StackType.Int64:
-					context.AppendInstruction(IRInstruction.Move32, result, entry.Operand);
+					context.AppendInstruction(IRInstruction.Move64, result, entry.Operand);
 					return true;
 
 				case StackType.R4:
@@ -3836,7 +3828,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (isCompound)
 			{
-				context.AppendInstruction(IRInstruction.StoreCompound, null, array, totalElementOffset);
+				context.AppendInstruction(IRInstruction.StoreCompound, null, array, totalElementOffset, value);
 				context.MosaType = type;
 
 				return true;
@@ -3999,7 +3991,7 @@ namespace Mosa.Compiler.Framework.Stages
 						return true;
 
 					case StackType.Object:
-						context.AppendInstruction(IRInstruction.StoreParamObject, local, source);
+						context.AppendInstruction(IRInstruction.StoreParamObject, null, local, source);
 						return true;
 
 					case StackType.R4:

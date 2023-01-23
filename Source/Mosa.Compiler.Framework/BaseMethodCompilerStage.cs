@@ -292,17 +292,6 @@ namespace Mosa.Compiler.Framework
 
 			Run();
 
-			//try
-			//{
-			//	Run();
-			//}
-			//catch (Exception ex)
-			//{
-			//	MethodCompiler.Stop();
-			//	PostEvent(CompilerEvent.Exception, $"Method: {Method} -> {ex}");
-			//	MethodCompiler.Compiler.Stop();
-			//}
-
 			PostTraceLogs(traceLogs);
 
 			Finish();
