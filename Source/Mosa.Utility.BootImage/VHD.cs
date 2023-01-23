@@ -49,21 +49,21 @@ namespace Mosa.Utility.BootImage
 			var binaryFooter = new DataBlock(512);
 
 			binaryFooter.SetString(VHDFooterOffset.Cookie, "conectix", 8);
-			binaryFooter.SetUIntReversed(VHDFooterOffset.Features, 0x00000002);
-			binaryFooter.SetUIntReversed(VHDFooterOffset.FileFormatVersion, 0x00010000);
+			binaryFooter.SetUInt32Reversed(VHDFooterOffset.Features, 0x00000002);
+			binaryFooter.SetUInt32Reversed(VHDFooterOffset.FileFormatVersion, 0x00010000);
 			binaryFooter.SetULong(VHDFooterOffset.DataOffset, ~(ulong)0);
-			binaryFooter.SetUIntReversed(VHDFooterOffset.TimeStamp, timeStamp);
+			binaryFooter.SetUInt32Reversed(VHDFooterOffset.TimeStamp, timeStamp);
 			binaryFooter.SetString(VHDFooterOffset.CreatorApplication, "MOSA", 4);
-			binaryFooter.SetUIntReversed(VHDFooterOffset.CreatorVersion, 0x00050000);
-			binaryFooter.SetUIntReversed(VHDFooterOffset.CreatorHostOS, 0x5769326B); // Windows
+			binaryFooter.SetUInt32Reversed(VHDFooterOffset.CreatorVersion, 0x00050000);
+			binaryFooter.SetUInt32Reversed(VHDFooterOffset.CreatorHostOS, 0x5769326B); // Windows
 			binaryFooter.SetULongReversed(VHDFooterOffset.OriginalSize, blocks * 512);
 			binaryFooter.SetULongReversed(VHDFooterOffset.CurrentSize, blocks * 512);
 			binaryFooter.SetUShortReversed(VHDFooterOffset.DiskGeometryCylinders, diskGeometry.Cylinders);
 			binaryFooter.SetByte(VHDFooterOffset.DiskGeometryHeads, diskGeometry.Heads);
 			binaryFooter.SetByte(VHDFooterOffset.DiskGeometrySectors, (byte)diskGeometry.SectorsPerTrack);
 
-			binaryFooter.SetUIntReversed(VHDFooterOffset.DiskType, 0x02); // Fixed disk
-			binaryFooter.SetUIntReversed(VHDFooterOffset.Checksum, 0x00);
+			binaryFooter.SetUInt32Reversed(VHDFooterOffset.DiskType, 0x02); // Fixed disk
+			binaryFooter.SetUInt32Reversed(VHDFooterOffset.Checksum, 0x00);
 			binaryFooter.SetBytes(VHDFooterOffset.UniqueId, guid, 0, 16);
 			binaryFooter.SetByte(VHDFooterOffset.SavedState, 0x00); // No saved state
 
@@ -71,7 +71,7 @@ namespace Mosa.Utility.BootImage
 			for (uint index = 0; index < 512; index++)
 				checksum += binaryFooter.Data[index];
 
-			binaryFooter.SetUIntReversed(VHDFooterOffset.Checksum, ~checksum);
+			binaryFooter.SetUInt32Reversed(VHDFooterOffset.Checksum, ~checksum);
 
 			return binaryFooter.Data;
 		}

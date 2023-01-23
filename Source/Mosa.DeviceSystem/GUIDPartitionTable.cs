@@ -77,10 +77,10 @@ namespace Mosa.DeviceSystem
 				(gpt.GetByte(4) != 50) && (gpt.GetByte(5) != 41) && (gpt.GetByte(6) != 52) && (gpt.GetByte(7) != 54))
 				return false;
 
-			if ((gpt.GetUInt(GPT.Revision) != GPTConstant.SupportedRevision) ||
-				(gpt.GetUInt(GPT.HeaderSize) != GPTConstant.HeaderSize) ||
-				(gpt.GetUInt(GPT.Reserved) != 0) ||
-				(gpt.GetUInt(GPT.PartitionStartingLBA) != 2)
+			if ((gpt.GetUInt32(GPT.Revision) != GPTConstant.SupportedRevision) ||
+				(gpt.GetUInt32(GPT.HeaderSize) != GPTConstant.HeaderSize) ||
+				(gpt.GetUInt32(GPT.Reserved) != 0) ||
+				(gpt.GetUInt32(GPT.PartitionStartingLBA) != 2)
 				)
 				return false;
 

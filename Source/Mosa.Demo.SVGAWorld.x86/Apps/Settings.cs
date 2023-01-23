@@ -3,12 +3,13 @@
 using System.Collections.Generic;
 using System.Drawing;
 using Mosa.Demo.SVGAWorld.x86.Components;
+using Mosa.Demo.SVGAWorld.x86.Utils;
 
 namespace Mosa.Demo.SVGAWorld.x86.Apps
 {
 	public class MouseColorBtn : Button
 	{
-		public int BaseX, BaseY;
+		public readonly uint BaseX, BaseY;
 
 		public MouseColorBtn(Settings settings, Color color) : base(string.Empty, 0, 0, settings.ButtonWidthAndHeight, color,
 			color, color, () => Mouse.Color = color, settings.ButtonWidthAndHeight)
@@ -16,7 +17,7 @@ namespace Mosa.Demo.SVGAWorld.x86.Apps
 			BaseX = settings.X;
 			BaseY = settings.Y;
 
-			var count = 0;
+			uint count = 0;
 			foreach (var b in settings.Buttons)
 				if (b is MouseColorBtn)
 					count++;
@@ -25,7 +26,7 @@ namespace Mosa.Demo.SVGAWorld.x86.Apps
 				X = BaseX + settings.DefaultPadding;
 			else
 			{
-				var totalWidth = 0;
+				uint totalWidth = 0;
 				for (var i = 0; i < count; i++)
 					totalWidth += settings.Buttons[i].Width;
 				X = BaseX + totalWidth + settings.DefaultPadding * (count + 1);
@@ -37,7 +38,7 @@ namespace Mosa.Demo.SVGAWorld.x86.Apps
 
 	public class BackColorBtn : Button
 	{
-		public int BaseX, BaseY;
+		public readonly uint BaseX, BaseY;
 
 		public BackColorBtn(Settings settings, Color color) : base(string.Empty, 0, 0, settings.ButtonWidthAndHeight, color,
 			color, color, () => GeneralUtils.BackColor = color, settings.ButtonWidthAndHeight)
@@ -45,7 +46,7 @@ namespace Mosa.Demo.SVGAWorld.x86.Apps
 			BaseX = settings.X;
 			BaseY = settings.Y;
 
-			var count = 0;
+			uint count = 0;
 			foreach (var b in settings.Buttons)
 				if (b is BackColorBtn)
 					count++;
@@ -54,7 +55,7 @@ namespace Mosa.Demo.SVGAWorld.x86.Apps
 				X = BaseX + settings.DefaultPadding;
 			else
 			{
-				var totalWidth = 0;
+				uint totalWidth = 0;
 				for (var i = 0; i < count; i++)
 					totalWidth += settings.Buttons[i].Width;
 				X = BaseX + totalWidth + settings.DefaultPadding * (count + 1);
@@ -68,11 +69,11 @@ namespace Mosa.Demo.SVGAWorld.x86.Apps
 	{
 		private Label MouseColorLabel, BackColorLabel, FontLabel;
 
-		public List<Button> Buttons;
+		public readonly List<Button> Buttons;
 
-		public int DefaultPadding = 10, ButtonWidthAndHeight = 20;
+		public readonly uint DefaultPadding = 10, ButtonWidthAndHeight = 20;
 
-		public Settings(int x, int y, int width, int height, Color inactiveTitlebarColor, Color activeTitlebarColor,
+		public Settings(uint x, uint y, uint width, uint height, Color inactiveTitlebarColor, Color activeTitlebarColor,
 			Color bodyColor) : base("Settings", x, y, width, height, inactiveTitlebarColor, activeTitlebarColor,
 			bodyColor)
 		{

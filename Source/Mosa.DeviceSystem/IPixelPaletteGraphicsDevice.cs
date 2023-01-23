@@ -15,7 +15,7 @@ namespace Mosa.DeviceSystem
 		/// <param name="colorIndex">Index of the color.</param>
 		/// <param name="x">The x.</param>
 		/// <param name="y">The y.</param>
-		void WritePixel(byte colorIndex, ushort x, ushort y);
+		void WritePixel(Color color, uint x, uint y);
 
 		/// <summary>
 		/// Reads the pixel.
@@ -23,13 +23,13 @@ namespace Mosa.DeviceSystem
 		/// <param name="x">The x.</param>
 		/// <param name="y">The y.</param>
 		/// <returns></returns>
-		byte ReadPixel(ushort x, ushort y);
+		Color ReadPixel(uint x, uint y);
 
 		/// <summary>
 		/// Clears device with the specified color index.
 		/// </summary>
 		/// <param name="colorIndex">Index of the color.</param>
-		void Clear(byte colorIndex);
+		void Clear(Color color);
 
 		/// <summary>
 		/// Sets the palette.

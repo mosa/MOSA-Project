@@ -185,6 +185,14 @@ namespace Mosa.Utility.Launcher
 
 				CreateVMDK(tmpimagefile);
 			}
+			else if (LauncherSettings.ImageFormat == "vdi")
+			{
+				var tmpimagefile = Path.Combine(LauncherSettings.TemporaryFolder, $"{Path.GetFileNameWithoutExtension(LauncherSettings.ImageFile)}.img");
+
+				CreateDiskImage(tmpimagefile);
+
+				CreateVDI(tmpimagefile);
+			}
 			else
 			{
 				CreateDiskImage(LauncherSettings.ImageFile);
@@ -488,6 +496,13 @@ namespace Mosa.Utility.Launcher
 		private void CreateVMDK(string source)
 		{
 			string arg = $"convert -f raw -O vmdk {Quote(source)} {Quote(LauncherSettings.ImageFile)}";
+
+			LaunchApplication(LauncherSettings.QemuImg, arg, true);
+		}
+
+		private void CreateVDI(string source)
+		{
+			string arg = $"convert -f raw -O vdi {Quote(source)} {Quote(LauncherSettings.ImageFile)}";
 
 			LaunchApplication(LauncherSettings.QemuImg, arg, true);
 		}

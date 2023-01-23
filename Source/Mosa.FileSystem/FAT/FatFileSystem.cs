@@ -336,12 +336,12 @@ namespace Mosa.FileSystem.FAT
 			reservedSectors = bootSector.GetByte(BootSector.ReservedSectors);
 			nbrFats = bootSector.GetByte(BootSector.FatAllocationTables);
 			rootEntries = bootSector.GetUShort(BootSector.MaxRootDirEntries);
-			rootCluster32 = bootSector.GetUInt(BootSector.FAT32_ClusterNumberOfRoot);
+			rootCluster32 = bootSector.GetUInt32(BootSector.FAT32_ClusterNumberOfRoot);
 
 			uint sectorsPerFat16 = bootSector.GetUShort(BootSector.SectorsPerFAT);
-			uint sectorsPerFat32 = bootSector.GetUInt(BootSector.FAT32_SectorPerFAT);
+			uint sectorsPerFat32 = bootSector.GetUInt32(BootSector.FAT32_SectorPerFAT);
 			uint totalSectors16 = bootSector.GetUShort(BootSector.TotalSectors16);
-			uint totalSectors32 = bootSector.GetUInt(BootSector.TotalSectors32);
+			uint totalSectors32 = bootSector.GetUInt32(BootSector.TotalSectors32);
 			uint sectorsPerFat = (sectorsPerFat16 != 0) ? sectorsPerFat16 : sectorsPerFat32;
 			uint fatSectors = 0;
 
@@ -455,7 +455,7 @@ namespace Mosa.FileSystem.FAT
 
 			var bootSector = new DataBlock(512);
 
-			bootSector.SetUInt(BootSector.JumpInstruction, 0);
+			bootSector.SetUInt32(BootSector.JumpInstruction, 0);
 			bootSector.SetString(BootSector.EOMName, "MOSA    ");
 			bootSector.SetUShort(BootSector.BytesPerSector, (ushort)bytesPerSector);
 			bootSector.SetByte(BootSector.SectorsPerCluster, sectorsPerCluster);
@@ -467,12 +467,12 @@ namespace Mosa.FileSystem.FAT
 			if (totalSectors > 0xFFFF)
 			{
 				bootSector.SetUShort(BootSector.TotalSectors16, 0);
-				bootSector.SetUInt(BootSector.TotalSectors32, totalSectors);
+				bootSector.SetUInt32(BootSector.TotalSectors32, totalSectors);
 			}
 			else
 			{
 				bootSector.SetUShort(BootSector.TotalSectors16, (ushort)totalSectors);
-				bootSector.SetUInt(BootSector.TotalSectors32, 0);
+				bootSector.SetUInt32(BootSector.TotalSectors32, 0);
 			}
 
 			if (fatSettings.FloppyMedia)
@@ -487,7 +487,7 @@ namespace Mosa.FileSystem.FAT
 
 			bootSector.SetUShort(BootSector.SectorsPerTrack, fatSettings.SectorsPerTrack);
 			bootSector.SetUShort(BootSector.NumberOfHeads, fatSettings.NumberOfHeads);
-			bootSector.SetUInt(BootSector.HiddenSectors, fatSettings.HiddenSectors);
+			bootSector.SetUInt32(BootSector.HiddenSectors, fatSettings.HiddenSectors);
 
 			if (FATType != FatType.FAT32)
 			{
@@ -526,10 +526,10 @@ namespace Mosa.FileSystem.FAT
 			if (FATType == FatType.FAT32)
 			{
 				bootSector.SetUShort(BootSector.SectorsPerFAT, 0);
-				bootSector.SetUInt(BootSector.FAT32_SectorPerFAT, sectorsPerFat);
+				bootSector.SetUInt32(BootSector.FAT32_SectorPerFAT, sectorsPerFat);
 				bootSector.SetByte(BootSector.FAT32_Flags, 0);
 				bootSector.SetUShort(BootSector.FAT32_Version, 0);
-				bootSector.SetUInt(BootSector.FAT32_ClusterNumberOfRoot, 2);
+				bootSector.SetUInt32(BootSector.FAT32_ClusterNumberOfRoot, 2);
 				bootSector.SetUShort(BootSector.FAT32_SectorFSInformation, 1);
 				bootSector.SetUShort(BootSector.FAT32_SecondBootSector, 6);
 				bootSector.SetByte(BootSector.FAT32_PhysicalDriveNbr, 0x80);
@@ -566,15 +566,15 @@ namespace Mosa.FileSystem.FAT
 				// Create FSInfo Structure
 				var infoSector = new DataBlock(512);
 
-				infoSector.SetUInt(FSInfo.FSI_LeadSignature, 0x41615252);
+				infoSector.SetUInt32(FSInfo.FSI_LeadSignature, 0x41615252);
 
 				//FSInfo.FSI_Reserved1
-				infoSector.SetUInt(FSInfo.FSI_StructureSigature, 0x61417272);
-				infoSector.SetUInt(FSInfo.FSI_FreeCount, 0xFFFFFFFF);
-				infoSector.SetUInt(FSInfo.FSI_NextFree, 0xFFFFFFFF);
+				infoSector.SetUInt32(FSInfo.FSI_StructureSigature, 0x61417272);
+				infoSector.SetUInt32(FSInfo.FSI_FreeCount, 0xFFFFFFFF);
+				infoSector.SetUInt32(FSInfo.FSI_NextFree, 0xFFFFFFFF);
 
 				//FSInfo.FSI_Reserved2
-				bootSector.SetUInt(FSInfo.FSI_TrailSignature, 0xAA550000);
+				bootSector.SetUInt32(FSInfo.FSI_TrailSignature, 0xAA550000);
 
 				// Write FSInfo Structure
 				partition.WriteBlock(1, 1, infoSector.Data);
@@ -620,9 +620,9 @@ namespace Mosa.FileSystem.FAT
 			}
 			else // if (type == FatType.FAT32)
 			{
-				firstFat.SetUInt(0, 0x0FFFFFFF);
-				firstFat.SetUInt(4, 0x0FFFFFFF); // 0x0FFFFFF8
-				firstFat.SetUInt(8, 0x0FFFFFFF); // Also reserve the 2nd cluster for root directory
+				firstFat.SetUInt32(0, 0x0FFFFFFF);
+				firstFat.SetUInt32(4, 0x0FFFFFFF); // 0x0FFFFFF8
+				firstFat.SetUInt32(8, 0x0FFFFFFF); // Also reserve the 2nd cluster for root directory
 			}
 
 			if (fatSettings.FloppyMedia)
@@ -759,7 +759,7 @@ namespace Mosa.FileSystem.FAT
 			}
 			else //if (type == FatType.FAT32)
 			{
-				clusterValue = fat.GetUInt(sectorOffset) & 0x0FFFFFFF;
+				clusterValue = fat.GetUInt32(sectorOffset) & 0x0FFFFFFF;
 			}
 
 			return clusterValue;
@@ -812,7 +812,7 @@ namespace Mosa.FileSystem.FAT
 					}
 				default:
 					{
-						fat.SetUInt(sectorOffset, nextcluster);
+						fat.SetUInt32(sectorOffset, nextcluster);
 						break;
 					}
 			}
@@ -1071,7 +1071,7 @@ namespace Mosa.FileSystem.FAT
 		public uint GetFileSize(uint directoryBlock, uint index)
 		{
 			var directory = new DataBlock(partition.ReadBlock(directoryBlock, 1));
-			return directory.GetUInt((index * Entry.EntrySize) + Entry.FileSize);
+			return directory.GetUInt32((index * Entry.EntrySize) + Entry.FileSize);
 		}
 
 		/// <summary>
@@ -1087,10 +1087,10 @@ namespace Mosa.FileSystem.FAT
 			var entry = new DataBlock(partition.ReadBlock(directorySector, 1));
 
 			// Truncate the file length and set
-			entry.SetUInt(Entry.FileSize + (directorySectorIndex * Entry.EntrySize), size);
+			entry.SetUInt32(Entry.FileSize + (directorySectorIndex * Entry.EntrySize), size);
 
 			if (size == 0)
-				entry.SetUInt(Entry.FirstCluster + (directorySectorIndex * Entry.EntrySize), 0);
+				entry.SetUInt32(Entry.FirstCluster + (directorySectorIndex * Entry.EntrySize), 0);
 
 			partition.WriteBlock(directorySector, 1, entry.Data);
 
@@ -1128,8 +1128,8 @@ namespace Mosa.FileSystem.FAT
 				var entry = new DataBlock(partition.ReadBlock(location.DirectorySector, 1));
 
 				// Truncate the file length and reset the start cluster
-				entry.SetUInt(Entry.FileSize + (location.DirectorySectorIndex * Entry.EntrySize), 0);
-				entry.SetUInt(Entry.FirstCluster + (location.DirectorySectorIndex * Entry.EntrySize), 0);
+				entry.SetUInt32(Entry.FileSize + (location.DirectorySectorIndex * Entry.EntrySize), 0);
+				entry.SetUInt32(Entry.FirstCluster + (location.DirectorySectorIndex * Entry.EntrySize), 0);
 
 				partition.WriteBlock(location.DirectorySector, 1, entry.Data);
 
@@ -1169,7 +1169,7 @@ namespace Mosa.FileSystem.FAT
 			directory.SetUShort(Entry.LastModifiedTime + (location.DirectorySectorIndex * Entry.EntrySize), 0);
 			directory.SetUShort(Entry.LastModifiedDate + (location.DirectorySectorIndex * Entry.EntrySize), 0);
 			directory.SetUShort(Entry.FirstCluster + (location.DirectorySectorIndex * Entry.EntrySize), 0);
-			directory.SetUInt(Entry.FileSize + (location.DirectorySectorIndex * Entry.EntrySize), 0);
+			directory.SetUInt32(Entry.FileSize + (location.DirectorySectorIndex * Entry.EntrySize), 0);
 
 			partition.WriteBlock(location.DirectorySector, 1, directory.Data);
 
@@ -1229,7 +1229,7 @@ namespace Mosa.FileSystem.FAT
 			directory.SetUShort(Entry.LastModifiedTime + (location.DirectorySectorIndex * Entry.EntrySize), 0);
 			directory.SetUShort(Entry.LastModifiedDate + (location.DirectorySectorIndex * Entry.EntrySize), 0);
 			directory.SetUShort(Entry.FirstCluster + (location.DirectorySectorIndex * Entry.EntrySize), 0);
-			directory.SetUInt(Entry.FileSize + (location.DirectorySectorIndex * Entry.EntrySize), 0);
+			directory.SetUInt32(Entry.FileSize + (location.DirectorySectorIndex * Entry.EntrySize), 0);
 
 			partition.WriteBlock(location.DirectorySector, 1, directory.Data);
 		}
@@ -1358,7 +1358,7 @@ namespace Mosa.FileSystem.FAT
 
 			// Truncate set first cluster
 			var entry = new DataBlock(partition.ReadBlock(directorySector, 1));
-			entry.SetUInt(Entry.FirstCluster + (directorySectorIndex * Entry.EntrySize), newCluster);
+			entry.SetUInt32(Entry.FirstCluster + (directorySectorIndex * Entry.EntrySize), newCluster);
 			partition.WriteBlock(directorySector, 1, entry.Data);
 
 			return newCluster;

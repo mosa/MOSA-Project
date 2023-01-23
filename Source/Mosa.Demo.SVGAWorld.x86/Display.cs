@@ -13,9 +13,9 @@ namespace Mosa.Demo.SVGAWorld.x86
 
 		public static IGraphicsDevice Driver { get; set; }
 
-		public static int Width { get; private set; }
+		public static uint Width { get; private set; }
 
-		public static int Height { get; private set; }
+		public static uint Height { get; private set; }
 
 		public static ISimpleFont DefaultFont { get; set; }
 
@@ -38,36 +38,44 @@ namespace Mosa.Demo.SVGAWorld.x86
 			return true;
 		}
 
-		public static void DrawMosaLogo(int v)
+		public static void DrawMosaLogo(uint v)
 		{
 			MosaLogo.Draw(v);
 		}
 
-		public static void DrawPoint(int x, int y, Color color)
+		public static void DrawPoint(uint x, uint y, Color color)
 		{
-			BackFrame.SetPixel((uint)color.ToArgb(), (uint)x, (uint)y);
+			BackFrame.SetPixel((uint)color.ToArgb(), x, y);
 		}
 
-		public static void DrawImage(int x, int y, Image image, bool drawWithAlpha)
+		public static void DrawBuffer(uint x, uint y, FrameBuffer32 buffer, bool drawWithAlpha = false)
 		{
-			BackFrame.DrawImage(image, (uint)x, (uint)y, drawWithAlpha);
+			BackFrame.DrawBuffer(buffer, x, y, drawWithAlpha);
 		}
 
-		public static void DrawString(int x, int y, string text, ISimpleFont font, Color color)
+		public static void DrawString(uint x, uint y, string text, ISimpleFont font, Color color)
 		{
-			font.DrawString(BackFrame, (uint)color.ToArgb(), (uint)x, (uint)y, text);
+			font.DrawString(BackFrame, (uint)color.ToArgb(), x, y, text);
 		}
 
-		public static void DrawRectangle(int x, int y, int width, int height, Color color, bool fill)
+		public static void DrawRectangle(uint x, uint y, uint width, uint height, Color color, bool fill)
 		{
-			//Driver.FillRectangle((uint)x, (uint)y, (uint)width, (uint)height, (uint)color.ToArgb());
 			if (fill)
-				BackFrame.FillRectangle((uint)color.ToArgb(), (uint)x, (uint)y, (uint)width, (uint)height);
-			else
-				BackFrame.DrawRectangle((uint)color.ToArgb(), (uint)x, (uint)y, (uint)width, (uint)height, 1);
+			{
+				/*var col = (uint)color.ToArgb();
+
+				for (var xx = x; xx < x + width; xx++)
+					BackFrame.SetPixel(col, xx, y);
+
+				for (var yy = y; yy < y + height; yy++)
+					Driver.CopyRectangle(x, y, x, yy, width, 1);*/
+
+				BackFrame.FillRectangle((uint)color.ToArgb(), x, y, width, height);
+			}
+			else BackFrame.DrawRectangle((uint)color.ToArgb(), x, y, width, height, 1);
 		}
 
-		public static bool IsInBounds(int x1, int x2, int y1, int y2, int width, int height)
+		public static bool IsInBounds(uint x1, uint x2, uint y1, uint y2, uint width, uint height)
 		{
 			return x1 >= x2 && x1 <= x2 + width && y1 >= y2 && y1 <= y2 + height;
 		}
@@ -80,7 +88,7 @@ namespace Mosa.Demo.SVGAWorld.x86
 		public static void Update()
 		{
 			DisplayFrame.CopyFrame(BackFrame);
-			Driver.Update();
+			Driver.Update(0, 0, Width, Height);
 		}
 	}
 }

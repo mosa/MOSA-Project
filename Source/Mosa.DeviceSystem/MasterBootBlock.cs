@@ -155,7 +155,7 @@ namespace Mosa.DeviceSystem
 
 			valid = true;
 
-			diskSignature = masterboot.GetUInt(MBR.DiskSignature);
+			diskSignature = masterboot.GetUInt32(MBR.DiskSignature);
 
 			for (uint index = 0; index < MaxMBRPartitions; index++)
 			{
@@ -165,8 +165,8 @@ namespace Mosa.DeviceSystem
 				{
 					Bootable = masterboot.GetByte(offset + PartitionRecord.Status) == MBRConstant.Bootable,
 					PartitionType = masterboot.GetByte(offset + PartitionRecord.PartitionType),
-					StartLBA = masterboot.GetUInt(offset + PartitionRecord.LBA),
-					TotalBlocks = masterboot.GetUInt(offset + PartitionRecord.Sectors)
+					StartLBA = masterboot.GetUInt32(offset + PartitionRecord.LBA),
+					TotalBlocks = masterboot.GetUInt32(offset + PartitionRecord.Sectors)
 				};
 			}
 
@@ -192,7 +192,7 @@ namespace Mosa.DeviceSystem
 
 			var masterboot = new DataBlock(512);
 
-			masterboot.SetUInt(MBR.DiskSignature, diskSignature);
+			masterboot.SetUInt32(MBR.DiskSignature, diskSignature);
 			masterboot.SetUShort(MBR.MBRSignature, MBRConstant.MBRSignature);
 
 			if (code != null)
@@ -210,8 +210,8 @@ namespace Mosa.DeviceSystem
 					uint offset = MBR.FirstPartition + (index * 16);
 					masterboot.SetByte(offset + PartitionRecord.Status, (byte)(Partitions[index].Bootable ? 0x80 : 0x00));
 					masterboot.SetByte(offset + PartitionRecord.PartitionType, Partitions[index].PartitionType);
-					masterboot.SetUInt(offset + PartitionRecord.LBA, Partitions[index].StartLBA);
-					masterboot.SetUInt(offset + PartitionRecord.Sectors, Partitions[index].TotalBlocks);
+					masterboot.SetUInt32(offset + PartitionRecord.LBA, Partitions[index].StartLBA);
+					masterboot.SetUInt32(offset + PartitionRecord.Sectors, Partitions[index].TotalBlocks);
 
 					var diskGeometry = new DiskGeometry();
 					diskGeometry.GuessGeometry(diskDevice.TotalBlocks);

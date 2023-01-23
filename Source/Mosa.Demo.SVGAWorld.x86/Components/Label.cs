@@ -7,7 +7,7 @@ namespace Mosa.Demo.SVGAWorld.x86.Components
 {
 	public class Label
 	{
-		public int X, Y;
+		public uint X, Y;
 
 		public string Text;
 
@@ -15,7 +15,7 @@ namespace Mosa.Demo.SVGAWorld.x86.Components
 
 		public Color ForeColor;
 
-		public Label(string text, ISimpleFont font, int x, int y, Color foreColor)
+		public Label(string text, ISimpleFont font, uint x, uint y, Color foreColor)
 		{
 			Text = text;
 			Font = font;

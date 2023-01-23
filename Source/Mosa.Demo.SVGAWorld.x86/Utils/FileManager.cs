@@ -1,9 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
 using System.Collections.Generic;
 using Mosa.FileSystem.FAT;
 
-namespace Mosa.Demo.SVGAWorld.x86
+namespace Mosa.Demo.SVGAWorld.x86.Utils
 {
 	public static class FileManager
 	{
@@ -66,7 +67,7 @@ namespace Mosa.Demo.SVGAWorld.x86
 			var entry = existing.IsValid ? existing : fat.CreateFile(upper, FatFileAttributes.Unused);
 			var stream = new FatFileStream(fat, entry);
 
-			var list = new List<byte>();
+			var list = new List<Byte>();
 			foreach (var c in text)
 				list.Add((byte)c);
 
@@ -88,7 +89,7 @@ namespace Mosa.Demo.SVGAWorld.x86
 			var entry = existing.IsValid ? existing : fat.CreateFile(upper, FatFileAttributes.Unused);
 			var stream = new FatFileStream(fat, entry);
 
-			var list = new List<byte>();
+			var list = new List<Byte>();
 			foreach (var str in lines)
 			{
 				foreach (var c in str)
