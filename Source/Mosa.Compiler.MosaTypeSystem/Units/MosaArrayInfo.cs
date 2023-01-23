@@ -40,39 +40,32 @@ namespace Mosa.Compiler.MosaTypeSystem
 				   Sizes.SequenceEqual(other.Sizes);
 		}
 
-		private string? sig;
-
 		public override string ToString()
 		{
-			if (Vector == this)
+			if (this == Vector)
 				return "[]";
 
-			if (sig == null)
+			var builder = new StringBuilder();
+			builder.Append('[');
+
+			for (var i = 0; i < Rank; i++)
 			{
-				var builder = new StringBuilder();
-				builder.Append('[');
+				if (i != 0) builder.Append(',');
+				if (!(i < LowerBounds?.Count)) continue;
 
-				for (var i = 0; i < Rank; i++)
+				builder.Append(LowerBounds[i]);
+				builder.Append("..");
+
+				if (i < Sizes?.Count)
 				{
-					if (i != 0) builder.Append(',');
-					if (!(i < LowerBounds?.Count)) continue;
-
 					builder.Append(LowerBounds[i]);
-					builder.Append("..");
-
-					if (i < Sizes?.Count)
-					{
-						builder.Append(LowerBounds[i]);
-						builder.Append(Sizes[i]);
-					}
-					else builder.Append('.');
+					builder.Append(Sizes[i]);
 				}
-
-				builder.Append(']');
-				return builder.ToString();
+				else builder.Append('.');
 			}
 
-			return sig;
+			builder.Append(']');
+			return builder.ToString();
 		}
 	}
 }

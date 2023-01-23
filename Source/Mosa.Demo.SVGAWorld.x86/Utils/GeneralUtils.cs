@@ -25,14 +25,14 @@ namespace Mosa.Demo.SVGAWorld.x86.Utils
 		{
 			var stream = new DataStream(data);
 
-			var name = String.Empty;
-			var charset = String.Empty;
+			var name = string.Empty;
+			var charset = string.Empty;
 
 			// Name
 			for (; ; )
 			{
 				var ch = stream.ReadChar();
-				if (ch == Byte.MaxValue)
+				if (ch == byte.MaxValue)
 					break;
 
 				name += ch;
@@ -42,7 +42,7 @@ namespace Mosa.Demo.SVGAWorld.x86.Utils
 			for (; ; )
 			{
 				var ch = stream.ReadChar();
-				if (ch == Byte.MaxValue)
+				if (ch == byte.MaxValue)
 					break;
 
 				charset += ch;

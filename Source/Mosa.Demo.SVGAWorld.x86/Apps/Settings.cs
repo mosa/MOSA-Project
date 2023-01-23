@@ -17,7 +17,7 @@ namespace Mosa.Demo.SVGAWorld.x86.Apps
 			BaseX = settings.X;
 			BaseY = settings.Y;
 
-			uint count = 0;
+			var count = 0U;
 			foreach (var b in settings.Buttons)
 				if (b is MouseColorBtn)
 					count++;
@@ -46,7 +46,7 @@ namespace Mosa.Demo.SVGAWorld.x86.Apps
 			BaseX = settings.X;
 			BaseY = settings.Y;
 
-			uint count = 0;
+			var count = 0U;
 			foreach (var b in settings.Buttons)
 				if (b is BackColorBtn)
 					count++;
@@ -55,7 +55,7 @@ namespace Mosa.Demo.SVGAWorld.x86.Apps
 				X = BaseX + settings.DefaultPadding;
 			else
 			{
-				uint totalWidth = 0;
+				var totalWidth = 0U;
 				for (var i = 0; i < count; i++)
 					totalWidth += settings.Buttons[i].Width;
 				X = BaseX + totalWidth + settings.DefaultPadding * (count + 1);

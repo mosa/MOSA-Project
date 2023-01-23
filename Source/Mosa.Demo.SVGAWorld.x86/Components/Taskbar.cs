@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using Mosa.DeviceSystem;
@@ -15,7 +14,7 @@ namespace Mosa.Demo.SVGAWorld.x86.Components
 		public readonly Taskbar Taskbar;
 
 		public TaskbarButton(Taskbar taskbar, string text, Color backColor, Color foreColor, Color hoverColor,
-			Func<Object> action, Window attachedWindow = null)
+			Func<object> action, Window attachedWindow = null)
 			: base(text, 0, 0, 0, backColor, foreColor, hoverColor, action)
 		{
 			Taskbar = taskbar;

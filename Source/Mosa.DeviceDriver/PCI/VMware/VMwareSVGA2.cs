@@ -18,7 +18,6 @@
 // https://github.com/prepare/vmware-svga
 
 using System;
-using System;
 using Mosa.DeviceSystem;
 using Mosa.Runtime;
 

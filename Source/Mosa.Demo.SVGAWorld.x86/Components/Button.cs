@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
-using System;
 using System.Drawing;
 using Mosa.DeviceSystem;
 
@@ -21,7 +20,7 @@ namespace Mosa.Demo.SVGAWorld.x86.Components
 
 		private Label Label;
 
-		private Func<Object> Action;
+		private Func<object> Action;
 
 		private ISimpleFont LastFont;
 
