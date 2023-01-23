@@ -21,6 +21,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 		[NotNull]
 		public IList<uint>? Sizes { get; }
 
+		private string? sig;
+
 		public MosaArrayInfo(IList<int> lowerBounds, uint rank, IList<uint> sizes)
 		{
 			if (rank == 0)   // Should not be zero
@@ -45,27 +47,32 @@ namespace Mosa.Compiler.MosaTypeSystem
 			if (this == Vector)
 				return "[]";
 
-			var builder = new StringBuilder();
-			builder.Append('[');
-
-			for (var i = 0; i < Rank; i++)
+			if (sig == null)
 			{
-				if (i != 0) builder.Append(',');
-				if (!(i < LowerBounds?.Count)) continue;
+				var builder = new StringBuilder();
+				builder.Append('[');
 
-				builder.Append(LowerBounds[i]);
-				builder.Append("..");
-
-				if (i < Sizes?.Count)
+				for (var i = 0; i < Rank; i++)
 				{
+					if (i != 0) builder.Append(',');
+					if (!(i < LowerBounds?.Count)) continue;
+
 					builder.Append(LowerBounds[i]);
-					builder.Append(Sizes[i]);
+					builder.Append("..");
+
+					if (i < Sizes?.Count)
+					{
+						builder.Append(LowerBounds[i]);
+						builder.Append(Sizes[i]);
+					}
+					else builder.Append('.');
 				}
-				else builder.Append('.');
+
+				builder.Append(']');
+				sig = builder.ToString();
 			}
 
-			builder.Append(']');
-			return builder.ToString();
+			return sig;
 		}
 	}
 }
