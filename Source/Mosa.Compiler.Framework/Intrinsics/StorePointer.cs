@@ -16,7 +16,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 
 			if (context.OperandCount == 2)
 			{
-				context.SetInstruction(instruction, null, context.Operand1, methodCompiler.ConstantZero, context.Operand2);
+				context.SetInstruction(instruction, null, context.Operand1, methodCompiler.Constant64_0, context.Operand2);
 			}
 			else if (context.OperandCount == 3)
 			{

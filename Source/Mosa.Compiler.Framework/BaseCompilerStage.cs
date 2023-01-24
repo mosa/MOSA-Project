@@ -22,42 +22,42 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds the Architecture during compilation.
 		/// </summary>
-		protected BaseArchitecture Architecture { get { return Compiler.Architecture; } }
+		protected BaseArchitecture Architecture => Compiler.Architecture;
 
 		/// <summary>
 		/// Holds the current type system during compilation.
 		/// </summary>
-		protected TypeSystem TypeSystem { get { return Compiler.TypeSystem; } }
+		protected TypeSystem TypeSystem => Compiler.TypeSystem;
 
 		/// <summary>
 		/// Holds the current type layout during compilation.
 		/// </summary>
-		protected MosaTypeLayout TypeLayout { get { return Compiler.TypeLayout; } }
+		protected MosaTypeLayout TypeLayout => Compiler.TypeLayout;
 
 		/// <summary>
 		/// Holds the linker
 		/// </summary>
-		protected MosaLinker Linker { get { return Compiler.Linker; } }
+		protected MosaLinker Linker => Compiler.Linker;
 
 		/// <summary>
 		/// Holds the compiler options
 		/// </summary>
-		protected CompilerSettings CompilerSettings { get { return Compiler.CompilerSettings; } }
+		protected CompilerSettings CompilerSettings => Compiler.CompilerSettings;
 
 		/// <summary>
 		/// Holds the compiler scheduler
 		/// </summary>
-		protected MethodScheduler CompilationScheduler { get { return Compiler.MethodScheduler; } }
+		protected MethodScheduler CompilationScheduler => Compiler.MethodScheduler;
 
-		protected MethodScanner MethodScanner { get { return Compiler.MethodScanner; } }
-
-		#endregion Properties
+		protected MethodScanner MethodScanner => Compiler.MethodScanner;
 
 		/// <summary>
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		public virtual string Name { get { return GetType().Name; } }
+		public virtual string Name => GetType().Name;
+
+		#endregion Properties
 
 		/// <summary>
 		/// Executes the initialization stage.

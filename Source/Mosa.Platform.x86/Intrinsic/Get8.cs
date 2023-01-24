@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::Get8")]
 		private static void Get8(Context context, MethodCompiler methodCompiler)
 		{
-			context.SetInstruction(X86.MovzxLoad8, context.Result, context.Operand1, methodCompiler.ConstantZero32);
+			context.SetInstruction(X86.MovzxLoad8, context.Result, context.Operand1, methodCompiler.Constant32_0);
 		}
 	}
 }

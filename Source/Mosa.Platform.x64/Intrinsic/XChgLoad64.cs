@@ -20,7 +20,7 @@ namespace Mosa.Platform.x64.Intrinsic
 
 			context.SetInstruction(X64.Mov64, v1, value);
 			context.AppendInstruction(X64.Lock);
-			context.AppendInstruction(X64.XChgLoad64, v1, location, methodCompiler.ConstantZero32, v1);
+			context.AppendInstruction(X64.XChgLoad64, v1, location, methodCompiler.Constant32_0, v1);
 			context.AppendInstruction(X64.Mov64, result, v1);
 		}
 	}

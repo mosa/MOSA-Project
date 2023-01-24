@@ -233,7 +233,7 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 				else if (variable.IsInteger64)
 				{
-					prologue.AppendInstruction(IRInstruction.Move64, variable, ConstantZero64);
+					prologue.AppendInstruction(IRInstruction.Move64, variable, Constant64_0);
 				}
 				else if (variable.IsR4)
 				{
@@ -245,7 +245,7 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 				else
 				{
-					prologue.AppendInstruction(IRInstruction.Move32, variable, ConstantZero32);
+					prologue.AppendInstruction(IRInstruction.Move32, variable, Constant32_0);
 				}
 			}
 		}

@@ -480,23 +480,24 @@ namespace Mosa.Compiler.Framework.Stages
 						break;
 
 					case StackType.Int32:
-						prologue.AppendInstruction(IRInstruction.Move32, local, ConstantZero64);
+						prologue.AppendInstruction(IRInstruction.Move32, local, Constant64_0);
 						break;
 
 					case StackType.Int64:
-						prologue.AppendInstruction(IRInstruction.Move64, local, ConstantZero64);
+						prologue.AppendInstruction(IRInstruction.Move64, local, Constant64_0);
 						break;
 
 					case StackType.R4:
-						prologue.AppendInstruction(IRInstruction.MoveR4, local, CreateConstantR4(0.0f));
+
+						prologue.AppendInstruction(IRInstruction.MoveR4, local, ConstantR4_0);
 						break;
 
 					case StackType.R8:
-						prologue.AppendInstruction(IRInstruction.MoveR8, local, CreateConstantR8(0.0d));
+						prologue.AppendInstruction(IRInstruction.MoveR8, local, ConstantR8_0);
 						break;
 
 					default:
-						prologue.AppendInstruction(IRInstruction.Move32, local, ConstantZero32);
+						prologue.AppendInstruction(IRInstruction.Move32, local, Constant32_0);
 						break;
 				}
 			}
@@ -948,10 +949,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var block = BasicBlocks.GetByLabel(label);
 
-			if (block == null)
-			{
-				block = CreateNewBlock(label, label);
-			}
+			block ??= CreateNewBlock(label, label);
 
 			return block;
 		}
@@ -1454,7 +1452,7 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						var result = AllocateVirtualRegisterI32();
 						context.AppendInstruction(IRInstruction.CompareR4, conditionCode, result, entry1.Operand, entry2.Operand);
-						context.AppendInstruction(IRInstruction.Branch32, ConditionCode.NotZero, null, result, ConstantZero32, block);
+						context.AppendInstruction(IRInstruction.Branch32, ConditionCode.NotZero, null, result, Constant32_0, block);
 						//context.AppendInstruction(IRInstruction.Jmp, nextblock);
 						return true;
 					}
@@ -1463,7 +1461,7 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						var result = AllocateVirtualRegisterI32();
 						context.AppendInstruction(IRInstruction.CompareR8, conditionCode, result, entry1.Operand, entry2.Operand);
-						context.AppendInstruction(IRInstruction.Branch32, ConditionCode.NotZero, null, result, ConstantZero32, block);
+						context.AppendInstruction(IRInstruction.Branch32, ConditionCode.NotZero, null, result, Constant32_0, block);
 						//context.AppendInstruction(IRInstruction.Jmp, nextblock);
 						return true;
 					}
@@ -1502,12 +1500,12 @@ namespace Mosa.Compiler.Framework.Stages
 			switch (entry.StackType)
 			{
 				case StackType.Int32:
-					context.AppendInstruction(IRInstruction.Branch32, conditionCode, null, entry.Operand, ConstantZero32, block);
+					context.AppendInstruction(IRInstruction.Branch32, conditionCode, null, entry.Operand, Constant32_0, block);
 					context.AppendInstruction(IRInstruction.Jmp, nextblock);
 					return true;
 
 				case StackType.Int64:
-					context.AppendInstruction(IRInstruction.Branch64, conditionCode, null, entry.Operand, ConstantZero64, block);
+					context.AppendInstruction(IRInstruction.Branch64, conditionCode, null, entry.Operand, Constant64_0, block);
 					context.AppendInstruction(IRInstruction.Jmp, nextblock);
 					return true;
 
@@ -2322,7 +2320,6 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				case StackType.Int32:
 					{
-						var v1 = AllocateVirtualRegisterI32();
 						context.AppendInstruction(IRInstruction.And32, result, entry.Operand, CreateConstant32(0xFFFF));
 						return true;
 					}
@@ -3246,7 +3243,7 @@ namespace Mosa.Compiler.Framework.Stages
 				case StackType.Int32:
 					{
 						var result = AllocateVirtualRegisterI32();
-						context.AppendInstruction(IRInstruction.Sub32, result, ConstantZero32, entry.Operand);
+						context.AppendInstruction(IRInstruction.Sub32, result, Constant32_0, entry.Operand);
 						stack.Push(new StackEntry(StackType.Int32, result));
 						return true;
 					}
@@ -3254,7 +3251,7 @@ namespace Mosa.Compiler.Framework.Stages
 				case StackType.Int64:
 					{
 						var result = AllocateVirtualRegisterI64();
-						context.AppendInstruction(IRInstruction.Sub32, result, ConstantZero64, entry.Operand);
+						context.AppendInstruction(IRInstruction.Sub32, result, Constant64_0, entry.Operand);
 						stack.Push(new StackEntry(StackType.Int64, result));
 						return true;
 					}
@@ -4405,12 +4402,12 @@ namespace Mosa.Compiler.Framework.Stages
 			if (Is32BitPlatform)
 			{
 				lengthOperand = AllocateVirtualRegisterI32();
-				context.AppendInstruction(IRInstruction.Load32, lengthOperand, arrayOperand, ConstantZero32);
+				context.AppendInstruction(IRInstruction.Load32, lengthOperand, arrayOperand, Constant32_0);
 			}
 			else
 			{
 				lengthOperand = AllocateVirtualRegisterI64();
-				context.AppendInstruction(IRInstruction.Load64, lengthOperand, arrayOperand, ConstantZero64);
+				context.AppendInstruction(IRInstruction.Load64, lengthOperand, arrayOperand, Constant64_0);
 			}
 
 			// Now compare length with index

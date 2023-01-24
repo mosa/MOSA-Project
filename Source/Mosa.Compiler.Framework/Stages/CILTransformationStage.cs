@@ -312,7 +312,7 @@ namespace Mosa.Compiler.Framework.Stages
 				var instruction = (first.IsR4) ? (BaseInstruction)IRInstruction.CompareR4 : IRInstruction.CompareR8;
 
 				context.SetInstruction(instruction, cc, result, first, second);
-				context.AppendInstruction(Select(result, IRInstruction.Branch32, IRInstruction.Branch64), ConditionCode.NotEqual, null, result, ConstantZero32, target); // TODO: Constant should be 64bit
+				context.AppendInstruction(Select(result, IRInstruction.Branch32, IRInstruction.Branch64), ConditionCode.NotEqual, null, result, Constant32_0, target); // TODO: Constant should be 64bit
 			}
 			else
 			{

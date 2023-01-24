@@ -2,7 +2,6 @@
 
 using Mosa.Compiler.Framework;
 
-
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
@@ -19,7 +18,7 @@ namespace Mosa.Platform.x86.Intrinsic
 			var offset16 = methodCompiler.CreateConstant(16);
 
 			context.SetInstruction(X86.PXor, v0, v0, v0);
-			context.AppendInstruction(X86.MovupsStore, dest, methodCompiler.ConstantZero32, v0);
+			context.AppendInstruction(X86.MovupsStore, dest, methodCompiler.Constant32_0, v0);
 			context.AppendInstruction(X86.MovupsStore, dest, offset16, v0);
 		}
 	}

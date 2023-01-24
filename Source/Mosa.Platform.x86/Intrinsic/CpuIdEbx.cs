@@ -22,7 +22,7 @@ namespace Mosa.Platform.x86.Intrinsic
 			var edx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, CPURegister.EDX);
 
 			context.SetInstruction(X86.Mov32, eax, operand1);
-			context.AppendInstruction(X86.Mov32, ecx, operand2); context.AppendInstruction(X86.Mov32, ecx, methodCompiler.ConstantZero32);
+			context.AppendInstruction(X86.Mov32, ecx, operand2); context.AppendInstruction(X86.Mov32, ecx, methodCompiler.Constant32_0);
 			context.AppendInstruction(X86.CpuId, eax, eax, ecx);
 			context.AppendInstruction(IRInstruction.Gen, eax, ebx, ecx, edx);
 			context.AppendInstruction(X86.Mov32, result, ebx);

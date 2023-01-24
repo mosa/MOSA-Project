@@ -19,9 +19,9 @@ namespace Mosa.Platform.x64.Intrinsic
 			var v1 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.Void);
 			var offset16 = methodCompiler.CreateConstant(16);
 
-			context.SetInstruction(X64.MovupsLoad, v0, dest, methodCompiler.ConstantZero64);
+			context.SetInstruction(X64.MovupsLoad, v0, dest, methodCompiler.Constant64_0);
 			context.AppendInstruction(X64.MovupsLoad, v1, dest, offset16);
-			context.AppendInstruction(X64.MovupsStore, null, dest, methodCompiler.ConstantZero64, v0);
+			context.AppendInstruction(X64.MovupsStore, null, dest, methodCompiler.Constant64_0, v0);
 			context.AppendInstruction(X64.MovupsStore, null, dest, offset16, v1);
 		}
 	}

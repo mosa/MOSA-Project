@@ -147,22 +147,22 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the 32-bit constant zero.
 		/// </summary>
-		public Operand ConstantZero32 { get; }
+		public Operand Constant32_0 { get; }
 
 		/// <summary>
 		/// Gets the 64-bit constant zero.
 		/// </summary>
-		public Operand ConstantZero64 { get; }
+		public Operand Constant64_0 { get; }
 
 		/// <summary>
 		/// Gets the R4 constant zero.
 		/// </summary>
-		public Operand ConstantZeroR4 { get; }
+		public Operand ConstantR4_0 { get; }
 
 		/// <summary>
 		/// Gets the R4 constant zero.
 		/// </summary>
-		public Operand ConstantZeroR8 { get; }
+		public Operand ConstantR8_0 { get; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether this instance is execute pipeline.
@@ -264,12 +264,12 @@ namespace Mosa.Compiler.Framework
 
 			Parameters = new Operand[method.Signature.Parameters.Count + (method.HasThis || method.HasExplicitThis ? 1 : 0)];
 
-			ConstantZero32 = CreateConstant((uint)0);
-			ConstantZero64 = CreateConstant((ulong)0);
-			ConstantZeroR4 = CreateConstant(0.0f);
-			ConstantZeroR8 = CreateConstant(0.0d);
+			Constant32_0 = CreateConstant((uint)0);
+			Constant64_0 = CreateConstant((ulong)0);
+			ConstantR4_0 = CreateConstant(0.0f);
+			ConstantR8_0 = CreateConstant(0.0d);
 
-			ConstantZero = Is32BitPlatform ? ConstantZero32 : ConstantZero64;  // FUTURE: This could just be Constant64 or Constant32 once the caling stage uses the method signature intead of the operand types
+			Constant64_0 = Is32BitPlatform ? Constant32_0 : Constant64_0;  // FUTURE: This could just be Constant64 or Constant32 once the caling stage uses the method signature intead of the operand types
 
 			LocalVariables = emptyOperandList;
 			ThreadID = threadID;
@@ -755,7 +755,7 @@ namespace Mosa.Compiler.Framework
 			else
 			{
 				operandLow = operand;
-				operandHigh = ConstantZero32;
+				operandHigh = Constant32_0;
 			}
 		}
 

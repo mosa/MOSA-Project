@@ -132,10 +132,10 @@ namespace Mosa.Compiler.Framework.Transforms
 			R8 = TypeSystem.BuiltIn.R8;
 			O = TypeSystem.BuiltIn.Object;
 
-			ConstantR4_0 = MethodCompiler.ConstantZeroR4;
-			ConstantR8_0 = MethodCompiler.ConstantZeroR8;
-			Constant32_0 = MethodCompiler.ConstantZero32;
-			Constant64_0 = MethodCompiler.ConstantZero64;
+			ConstantR4_0 = MethodCompiler.ConstantR4_0;
+			ConstantR8_0 = MethodCompiler.ConstantR8_0;
+			Constant32_0 = MethodCompiler.Constant32_0;
+			Constant64_0 = MethodCompiler.Constant64_0;
 
 			Constant32_1 = CreateConstant32(1);
 			Constant32_2 = CreateConstant32(2);
