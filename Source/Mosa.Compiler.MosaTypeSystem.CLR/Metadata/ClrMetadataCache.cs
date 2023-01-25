@@ -16,7 +16,8 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 		private readonly Dictionary<ScopedToken, MosaProperty> propertyLookup = new();
 
 		private uint stringIdCounter;
-		private readonly Dictionary<uint, string> stringHeapLookup = new();
+		private readonly Dictionary<string, uint> stringHeapLookup = new(StringComparer.Ordinal);
+		private readonly Dictionary<uint, string> stringHeapLookup2 = new();
 
 		public ClrMetadataCache()
 		{
@@ -96,22 +97,11 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 
 		public uint GetStringId(string value)
 		{
-			uint id = 0;
-
-			var found = false;
-
-			foreach (var val in stringHeapLookup)
-				if (val.Value == value)
-				{
-					id = val.Key;
-					found = true;
-					break;
-				}
-
-			if (!found)
+			if (!stringHeapLookup.TryGetValue(value, out var id))
 			{
 				id = stringIdCounter++;
-				stringHeapLookup[id] = value;
+				stringHeapLookup[value] = id;
+				stringHeapLookup2[id] = value;
 			}
 
 			return id;
@@ -119,7 +109,7 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 
 		public string GetStringById(uint id)
 		{
-			return stringHeapLookup[id];
+			return stringHeapLookup2[id];
 		}
 	}
 }
