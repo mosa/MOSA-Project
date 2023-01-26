@@ -158,8 +158,8 @@ namespace Mosa.Utility.BootImage
 			var fatBootSector = new DataBlock(partitionDevice.ReadBlock(0, 1));
 
 			// Set the first sector location of the file
-			fatBootSector.SetUInt(sect1Ptr0, fat.GetSectorByCluster(location.FirstCluster));
-			fatBootSector.SetUInt(sect1Ptr1, 0);   // since only 32-bit offsets are support, the high portion of 64-bit value is zero
+			fatBootSector.SetUInt32(sect1Ptr0, fat.GetSectorByCluster(location.FirstCluster));
+			fatBootSector.SetUInt32(sect1Ptr1, 0);   // since only 32-bit offsets are support, the high portion of 64-bit value is zero
 
 			// Write back patched boot sector
 			partitionDevice.WriteBlock(0, 1, fatBootSector.Data);
@@ -179,10 +179,10 @@ namespace Mosa.Utility.BootImage
 				var bootSector = new DataBlock(partitionDevice.ReadBlock(0, 1));
 
 				// Set the first sector location of the file
-				bootSector.SetUInt(0x1F8, fat.GetSectorByCluster(location.FirstCluster));
+				bootSector.SetUInt32(0x1F8, fat.GetSectorByCluster(location.FirstCluster));
 
 				// Change jump address
-				bootSector.SetUInt(0x01, 0x58);
+				bootSector.SetUInt32(0x01, 0x58);
 
 				// Write back patched boot sector
 				partitionDevice.WriteBlock(0, 1, bootSector.Data);
@@ -208,7 +208,7 @@ namespace Mosa.Utility.BootImage
 				uint patchArea = 0;
 
 				// Search for 0x3EB202FE (magic)
-				for (patchArea = 0; (firstCluster.GetUInt(patchArea) != 0x3EB202FE) && (patchArea < fat.ClusterSizeInBytes); patchArea += 4) ;
+				for (patchArea = 0; (firstCluster.GetUInt32(patchArea) != 0x3EB202FE) && (patchArea < fat.ClusterSizeInBytes); patchArea += 4) ;
 
 				patchArea = patchArea + 8;
 
@@ -223,10 +223,10 @@ namespace Mosa.Utility.BootImage
 
 					// Set sector entries
 					for (nsec = 0; nsec < 64; nsec++)
-						firstCluster.SetUInt(patchArea + 8 + (nsec * 4), sectors[nsec + 1]);
+						firstCluster.SetUInt32(patchArea + 8 + (nsec * 4), sectors[nsec + 1]);
 
 					// Clear out checksum
-					firstCluster.SetUInt(patchArea + 4, 0);
+					firstCluster.SetUInt32(patchArea + 4, 0);
 
 					// Write back the updated cluster
 					fat.WriteCluster(location.FirstCluster, firstCluster.Data);
@@ -242,7 +242,7 @@ namespace Mosa.Utility.BootImage
 					}
 
 					// Set the checksum
-					firstCluster.SetUInt(patchArea + 4, csum);
+					firstCluster.SetUInt32(patchArea + 4, csum);
 
 					// Write patched cluster back to disk
 					fat.WriteCluster(location.FirstCluster, firstCluster.Data);

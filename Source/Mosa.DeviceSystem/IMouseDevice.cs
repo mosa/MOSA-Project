@@ -10,23 +10,17 @@ namespace Mosa.DeviceSystem
 		/// <summary>
 		/// The X coordinate.
 		/// </summary>
-		int X { get; set; }
+		uint X { get; set; }
 
 		/// <summary>
 		/// The Y coordinate.
 		/// </summary>
-		int Y { get; set; }
+		uint Y { get; set; }
 
 		/// <summary>
-		/// Get the current state of the mouse
-		///
-		/// 0 = Left
-		/// 1 = Right
-		/// 2 = Scroll wheel
-		/// 255 = None
+		/// The mouse state.
 		/// </summary>
-		/// <returns></returns>
-		int GetMouseState();
+		MouseState State { get; }
 
 		/// <summary>
 		/// Sets the screen resolution inside the mouse to make it work properly.
@@ -34,6 +28,6 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <param name="width"></param>
 		/// <param name="height"></param>
-		void SetScreenResolution(int width, int height);
+		void SetScreenResolution(uint width, uint height);
 	}
 }

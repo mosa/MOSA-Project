@@ -8,7 +8,7 @@ namespace Mosa.Demo.SVGAWorld.x86.Components
 {
 	public class Button
 	{
-		public int X, Y, Width, Height;
+		public uint X, Y, Width, Height;
 
 		public string Text;
 
@@ -24,7 +24,7 @@ namespace Mosa.Demo.SVGAWorld.x86.Components
 
 		private ISimpleFont LastFont;
 
-		public Button(string text, int x, int y, int height, Color backColor, Color foreColor, Color hoverColor, Func<object> action, int width = 0)
+		public Button(string text, uint x, uint y, uint height, Color backColor, Color foreColor, Color hoverColor, Func<Object> action, uint width = 0)
 		{
 			Text = text;
 
@@ -69,7 +69,7 @@ namespace Mosa.Demo.SVGAWorld.x86.Components
 
 			Label.Font = Display.DefaultFont;
 			Label.X = X;
-			Label.Y = /*Center.GetCenterBetweenYAndHeight(Y, Height, Display.DefaultFont.Height / 2)*/Y;
+			Label.Y = Y;
 			Label.Text = Text;
 
 			Label.Draw();
@@ -87,11 +87,11 @@ namespace Mosa.Demo.SVGAWorld.x86.Components
 		{
 			var state = Mouse.State;
 
-			if (state != (int)mouseState)
+			if (state != mouseState)
 				return false;
 
 			while (Mouse.State == state) ;
-			return Mouse.State == byte.MaxValue;
+			return Mouse.State == MouseState.None;
 		}
 
 		public bool IsClicked(MouseState state)

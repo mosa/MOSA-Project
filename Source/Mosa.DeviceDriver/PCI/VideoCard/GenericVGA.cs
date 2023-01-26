@@ -154,37 +154,15 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 		/// <summary>
 		///
 		/// </summary>
-		protected ConstrainedPointer memory;
+		private ConstrainedPointer memory;
 
-		/// <summary>
-		///
-		/// </summary>
-		protected uint offset = 0x8000;
+		private ushort width, height, colors;
 
-		/// <summary>
-		///
-		/// </summary>
-		protected ushort width;
-
-		/// <summary>
-		///
-		/// </summary>
-		protected ushort height;
-
-		/// <summary>
-		///
-		/// </summary>
-		protected ushort colors;
-
-		/// <summary>
-		///
-		/// </summary>
 		private enum WriteMethod : byte { Pixel1, Pixel2, Pixel4p, Pixel8, Pixel8x };
 
-		/// <summary>
-		///
-		/// </summary>
 		private WriteMethod writeMethod;
+
+		private ColorPalette colorPalette;
 
 		public override void Initialize()
 		{
@@ -235,42 +213,21 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 		}
 
 		/// <summary>
-		/// Sends the command.
-		/// </summary>
-		/// <param name="command">The command.</param>
-		/// <param name="value">The value.</param>
-		protected void SendCommand(byte command, byte value)
-		{
-			activeControllerIndex.Write8(command);
-			activeControllerData.Write8(value);
-		}
-
-		/// <summary>
-		/// Gets the value.
-		/// </summary>
-		/// <param name="command">The command.</param>
-		/// <returns></returns>
-		protected byte GetValue(byte command)
-		{
-			activeControllerIndex.Write8(command);
-			return activeControllerData.Read8();
-		}
-
-		/// <summary>
 		/// Writes the pixel.
 		/// </summary>
 		/// <param name="colorIndex">Index of the color.</param>
 		/// <param name="x">The x.</param>
 		/// <param name="y">The y.</param>
-		public void WritePixel(byte colorIndex, ushort x, ushort y)
+		public void WritePixel(Color color, uint x, uint y)
 		{
+			byte colorIndex = colorPalette.FindClosestMatch(color);
 			if (writeMethod == WriteMethod.Pixel8)
 			{
-				memory.Write8((uint)(y * 320 + x), colorIndex);
+				memory.Write8(y * 320 + x, colorIndex);
 			}
 			if (writeMethod == WriteMethod.Pixel2)
 			{ // ???
-				uint address = (uint)(y * 320 + x / 2);
+				uint address = y * 320 + x / 2;
 				colorIndex = (byte)(colorIndex & 0xF);
 
 				if ((x & 0x01) == 0)
@@ -288,27 +245,27 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 		/// <param name="x">The x.</param>
 		/// <param name="y">The y.</param>
 		/// <returns></returns>
-		public byte ReadPixel(ushort x, ushort y)
+		public Color ReadPixel(uint x, uint y)
 		{
 			if (writeMethod == WriteMethod.Pixel8)
 			{
-				return memory.Read8((uint)(y * 320 + x));
+				return colorPalette.GetColor(memory.Read8(y * 320 + x));
 			}
 
 			// TODO: Support more video modes
-			return 0;
+			return Color.Transparent;
 		}
 
 		/// <summary>
 		/// Clears device with the specified color index.
 		/// </summary>
 		/// <param name="colorIndex">Index of the color.</param>
-		public void Clear(byte colorIndex)
+		public void Clear(Color color)
 		{
 			// TODO: write faster version
 			for (ushort x = 0; x < width; x++)
 				for (ushort y = 0; y < height; y++)
-					WritePixel(colorIndex, x, y);
+					WritePixel(color, x, y);
 		}
 
 		/// <summary>
@@ -318,11 +275,7 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 		/// <param name="color">The color.</param>
 		public void SetPalette(byte colorIndex, Color color)
 		{
-			dacPaletteMask.Write8(0xFF);
-			dacIndexWrite.Write8(colorIndex);
-			dacData.Write8(color.R);
-			dacData.Write8(color.G);
-			dacData.Write8(color.B);
+			colorPalette.SetColor(colorIndex, color);
 		}
 
 		/// <summary>
@@ -332,10 +285,7 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 		/// <returns></returns>
 		public Color GetPalette(byte colorIndex)
 		{
-			dacPaletteMask.Write8(0xFF);
-			dacIndexRead.Write8(colorIndex);
-
-			return Color.FromArgb(dacData.Read8(), dacData.Read8(), dacData.Read8());
+			return colorPalette.GetColor(colorIndex);
 		}
 
 		/// <summary>
@@ -420,12 +370,12 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 		{
 			switch (mode)
 			{
-				case 4: { WriteSettings(VGA320x200x4); width = 320; height = 200; colors = 4; writeMethod = WriteMethod.Pixel2; return true; }
-				case 5: { WriteSettings(VGA320x200x4); width = 320; height = 200; colors = 4; writeMethod = WriteMethod.Pixel2; return true; }
+				case 4: { WriteSettings(VGA320x200x4); width = 320; height = 200; colors = 4; writeMethod = WriteMethod.Pixel2; colorPalette = ColorPalette.CreateStandard16ColorPalette(); return true; }
+				case 5: { WriteSettings(VGA320x200x4); width = 320; height = 200; colors = 4; writeMethod = WriteMethod.Pixel2; colorPalette = ColorPalette.CreateStandard16ColorPalette(); return true; }
 
 				//case 11: { WriteSettings(VGA640x480x2); width = 640; height = 480; colors = 2; writeMethod = WriteMethod.xxx; return true; }
 				//case 12: { WriteSettings(VGA640x480x16); width = 640; height = 480; colors = 16; writeMethod = WriteMethod.xxx; return true; }
-				case 13: { WriteSettings(VGA320x200x256); width = 320; height = 200; colors = 256; writeMethod = WriteMethod.Pixel8; return true; }
+				case 13: { WriteSettings(VGA320x200x256); width = 320; height = 200; colors = 256; writeMethod = WriteMethod.Pixel8; colorPalette = ColorPalette.CreateNetscape256ColorPalette(); return true; }
 
 				// Custom Standard Modes:
 				//case 99: { WriteSettings(VGA720x480x16); width = 720; height = 480; colors = 16; writeMethod = WriteMethod.xxx; return true; }

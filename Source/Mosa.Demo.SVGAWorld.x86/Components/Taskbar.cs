@@ -9,9 +9,9 @@ namespace Mosa.Demo.SVGAWorld.x86.Components
 {
 	public class TaskbarButton : Button
 	{
-		public Window AttachedWindow;
+		public readonly Window AttachedWindow;
 
-		public Taskbar Taskbar;
+		public readonly Taskbar Taskbar;
 
 		public TaskbarButton(Taskbar taskbar, string text, Color backColor, Color foreColor, Color hoverColor,
 			Func<object> action, Window attachedWindow = null)
@@ -23,7 +23,7 @@ namespace Mosa.Demo.SVGAWorld.x86.Components
 				X = taskbar.DefaultPadding;
 			else
 			{
-				int totalWidth = 0, count = taskbar.Buttons.Count;
+				uint totalWidth = 0, count = (uint)taskbar.Buttons.Count;
 				for (var i = 0; i < count; i++)
 					totalWidth += taskbar.Buttons[i].Width;
 				X = totalWidth + taskbar.DefaultPadding * (count + 1);
@@ -39,11 +39,11 @@ namespace Mosa.Demo.SVGAWorld.x86.Components
 
 	public class Taskbar
 	{
-		public int X, Y, Width = Display.Width, Height = 30, DefaultPadding = 5;
+		public uint X, Y, Width = Display.Width, Height = 30, DefaultPadding = 5;
 		public Color Color = Color.White;
 
-		public List<TaskbarButton> Buttons;
-		public List<TaskbarWindowMenu> Menus;
+		public readonly List<TaskbarButton> Buttons;
+		public readonly List<TaskbarWindowMenu> Menus;
 
 		public Taskbar()
 		{

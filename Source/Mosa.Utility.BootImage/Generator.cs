@@ -49,8 +49,7 @@ namespace Mosa.Utility.BootImage
 			diskDeviceDriver.Initialize();
 			diskDeviceDriver.Start();
 
-			var isVdi = options.ImageFormat == ImageFormat.VDI;
-			if (isVdi)
+			/*if (options.ImageFormat == ImageFormat.VDI)
 			{
 				// Create header
 				var header = VDI.CreateHeader(
@@ -67,7 +66,7 @@ namespace Mosa.Utility.BootImage
 				diskDeviceDriver.WriteBlock(1, (uint)(map.Length / SectorSize), map);
 
 				diskDeviceDriver.BlockOffset = 1 + (uint)(map.Length / 512);
-			}
+			}*/
 
 			// Expand disk image
 			diskDeviceDriver.WriteBlock(blockCount - 1, 1, new byte[SectorSize]);
@@ -205,7 +204,7 @@ namespace Mosa.Utility.BootImage
 			diskDeviceDriver.Dispose();
 
 			if (options.BootLoader == BootLoader.Limine)
-				Limine.Deploy(options.DiskImageFileName, isVdi);
+				Limine.Deploy(options.DiskImageFileName);
 		}
 	}
 }

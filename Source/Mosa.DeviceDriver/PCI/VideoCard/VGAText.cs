@@ -1,8 +1,9 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Drawing;
 using Mosa.DeviceSystem;
 
-namespace Mosa.DeviceDriver.ISA
+namespace Mosa.DeviceDriver.PCI.VideoCard
 {
 	/// <summary>
 	/// VGA Text Device Driver
@@ -27,117 +28,53 @@ namespace Mosa.DeviceDriver.ISA
 
 		#region Ports
 
-		/// <summary>
-		///
-		/// </summary>
 		protected BaseIOPortReadWrite miscellaneousOutput;
 
-		/// <summary>
-		///
-		/// </summary>
 		protected BaseIOPortReadWrite crtControllerIndex;
 
-		/// <summary>
-		///
-		/// </summary>
 		protected BaseIOPortReadWrite crtControllerData;
 
-		/// <summary>
-		///
-		/// </summary>
 		protected BaseIOPortReadWrite crtControllerIndexColor;
 
-		/// <summary>
-		///
-		/// </summary>
 		protected BaseIOPortReadWrite crtControllerDataColor;
 
-		/// <summary>
-		///
-		/// </summary>
 		protected BaseIOPortWrite miscellaneousOutputWrite;
 
-		/// <summary>
-		///
-		/// </summary>
 		protected BaseIOPortReadWrite sequencerAddress;
 
-		/// <summary>
-		///
-		/// </summary>
 		protected BaseIOPortReadWrite sequencerData;
 
-		/// <summary>
-		///
-		/// </summary>
 		protected BaseIOPortReadWrite graphicsControllerAddress;
 
-		/// <summary>
-		///
-		/// </summary>
 		protected BaseIOPortReadWrite graphicsControllerData;
 
-		/// <summary>
-		///
-		/// </summary>
 		protected BaseIOPortReadWrite inputStatus1ReadB;
 
-		/// <summary>
-		///
-		/// </summary>
 		protected BaseIOPortReadWrite attributeAddress;
 
-		/// <summary>
-		///
-		/// </summary>
 		protected BaseIOPortReadWrite attributeData;
 
-		/// <summary>
-		///
-		/// </summary>
 		protected ConstrainedPointer memory;
 
-		/// <summary>
-		///
-		/// </summary>
 		protected BaseIOPortReadWrite activeControllerIndex;
 
-		/// <summary>
-		///
-		/// </summary>
 		protected BaseIOPortReadWrite activeControllerData;
 
 		#endregion Ports
 
-		/// <summary>
-		///
-		/// </summary>
-		protected bool colorMode = false;
+		protected bool colorMode;
 
-		/// <summary>
-		///
-		/// </summary>
 		protected uint offset = 0x8000;
 
-		/// <summary>
-		///
-		/// </summary>
 		protected byte width = 80;
 
-		/// <summary>
-		///
-		/// </summary>
 		protected byte height = 25;
 
-		/// <summary>
-		///
-		/// </summary>
 		protected byte bytePerChar = 2;
 
-		/// <summary>
-		///
-		/// </summary>
-		protected TextColor defaultBackground = TextColor.White;
+		protected ColorPalette palette;
+
+		protected Color backgroundColor = Color.Black;
 
 		public override void Initialize()
 		{
@@ -159,6 +96,8 @@ namespace Mosa.DeviceDriver.ISA
 			attributeData = Device.Resources.GetIOPortReadWrite(0, 0x11);
 
 			memory = Device.Resources.GetMemory(0);
+
+			palette = ColorPalette.CreateStandard16ColorPalette();
 		}
 
 		public override void Probe() => Device.Status = DeviceStatus.Available;
@@ -240,14 +179,14 @@ namespace Mosa.DeviceDriver.ISA
 		/// </summary>
 		/// <value></value>
 		/// <returns></returns>
-		public byte Width => width;
+		public uint Width => width;
 
 		/// <summary>
 		/// Gets the height.
 		/// </summary>
 		/// <value></value>
 		/// <returns></returns>
-		public byte Height => height;
+		public uint Height => height;
 
 		/// <summary>
 		/// Writes the char at the position indicated.
@@ -256,14 +195,13 @@ namespace Mosa.DeviceDriver.ISA
 		/// <param name="y">The y position.</param>
 		/// <param name="c">The character.</param>
 		/// <param name="foreground">The foreground color.</param>
-		/// <param name="background">The background color.</param>
-		public void WriteChar(ushort x, ushort y, char c, TextColor foreground, TextColor background)
+		public void WriteChar(uint x, uint y, char c, Color foreground)
 		{
 			if (colorMode)
 			{
 				uint index = (ushort)(offset + (((y * width) + x) * 2));
 				memory[index] = (byte)c;
-				memory[index + 1] = (byte)((byte)foreground | ((byte)background << 4));
+				memory[index + 1] = (byte)(palette.FindClosestMatch(foreground) | (palette.FindClosestMatch(backgroundColor) << 4));
 			}
 			else
 			{
@@ -278,9 +216,9 @@ namespace Mosa.DeviceDriver.ISA
 		/// </summary>
 		/// <param name="x">The x position.</param>
 		/// <param name="y">The y position.</param>
-		public void SetCursor(ushort x, ushort y)
+		public void SetCursor(uint x, uint y)
 		{
-			uint position = (uint)(x + (y * width));
+			uint position = x + (y * width);
 			SendCommand(CRTCommands.CursorLocationHigh, (byte)((position >> 8) & 0xFF));
 			SendCommand(CRTCommands.CursorLocationLow, (byte)(position & 0xFF));
 		}
@@ -288,17 +226,19 @@ namespace Mosa.DeviceDriver.ISA
 		/// <summary>
 		/// Clears the screen.
 		/// </summary>
-		public void ClearScreen()
+		public void ClearScreen(Color background)
 		{
 			uint index = offset;
 			uint size = (uint)(height * width);
+
+			backgroundColor = background;
 
 			if (bytePerChar == 2)
 			{
 				for (int i = 0; i < size; i++)
 				{
 					memory[(uint)(index + (i * 2))] = 0;
-					memory[(uint)(index + (i * 2) + 1)] = (byte)((byte)defaultBackground << 4);
+					memory[(uint)(index + (i * 2) + 1)] = (byte)(palette.FindClosestMatch(background) << 4);
 				}
 			}
 			else

@@ -1,3 +1,3 @@
 #!/bin/bash
 cd ../bin
-./Mosa.Tool.Launcher.Console -autostart -qemu -o9 -output-asm -output-debug Mosa.Demo.HelloWorld.x86.dll
+./Mosa.Tool.Launcher.Console -autostart -oMax -output-asm -output-debug -output-hash Mosa.Demo.HelloWorld.x86.dll

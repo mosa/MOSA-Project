@@ -7,13 +7,13 @@ namespace Mosa.Demo.SVGAWorld.x86.Components
 {
 	public class PaintArea
 	{
-		public int X, Y, LastX, LastY, Width, Height;
+		public uint X, Y;
 
-		public Color Color;
+		public readonly FrameBuffer32 Buffer;
 
-		public readonly VirtualBitmap Bitmap;
+		private uint LastX, LastY, Width, Height;
 
-		public PaintArea(int x, int y, int width, int height, Color color)
+		public PaintArea(uint x, uint y, uint width, uint height, Color color)
 		{
 			X = x;
 			Y = y;
@@ -25,30 +25,24 @@ namespace Mosa.Demo.SVGAWorld.x86.Components
 			Width = width;
 			Height = height;
 
-			Color = color;
-
-			Bitmap = new VirtualBitmap((uint)width, (uint)height);
-			Bitmap.Clear(color);
+			Buffer = new(DeviceSystem.HAL.AllocateMemory(width * height * 4, 0), width, height);
+			Buffer.ClearScreen((uint)color.ToArgb());
 		}
 
 		public void Draw()
 		{
-			Display.DrawImage(X, Y, Bitmap.Image, false);
+			Display.DrawBuffer(X, Y, Buffer);
 		}
 
-		//https://github.com/nifanfa/MOSA-GUI-Sample/blob/master/MOSA1/Apps/Paint.cs
 		public void Update()
 		{
-			if (Mouse.State == (int)MouseState.Left && IsInBounds())
+			if (Mouse.State == MouseState.Left && IsInBounds())
 			{
-				Mouse.IsOnPaintingArea = true;
-
 				if (Mouse.X - X < LastX || Mouse.Y - Y < LastY)
-					Bitmap.DrawLine((uint)(Mouse.X - X), (uint)(Mouse.Y - Y), (uint)LastX, (uint)LastY, Mouse.Color);
+					Buffer.DrawLine((uint)Mouse.Color.ToArgb(), Mouse.X - X, Mouse.Y - Y, LastX, LastY);
 				else
-					Bitmap.DrawLine((uint)LastX, (uint)LastY, (uint)(Mouse.X - X), (uint)(Mouse.Y - Y), Mouse.Color);
+					Buffer.DrawLine((uint)Mouse.Color.ToArgb(), LastX, LastY, Mouse.X - X, Mouse.Y - Y);
 			}
-			else Mouse.IsOnPaintingArea = false;
 
 			LastX = Mouse.X - X;
 			LastY = Mouse.Y - Y;
@@ -56,8 +50,7 @@ namespace Mosa.Demo.SVGAWorld.x86.Components
 
 		public bool IsInBounds()
 		{
-			return !WindowManager.IsWindowMoving &&
-				Mouse.IsInBounds(X, Y, Width, Height);
+			return !WindowManager.IsWindowMoving && Mouse.IsInBounds(X, Y, Width, Height);
 		}
 	}
 }

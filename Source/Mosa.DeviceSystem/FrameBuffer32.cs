@@ -24,31 +24,21 @@ namespace Mosa.DeviceSystem
 		/// <value>The height.</value>
 		public uint Height { get; }
 
-		/// <summary>The offset</summary>
-		public uint Offset { get; }
-
-		/// <summary>The bytes per line</summary>
-		public uint BytesPerLine { get; }
-
 		/// <summary>Initializes a new instance of the <see cref="FrameBuffer32"/> class.</summary>
 		/// <param name="buffer">The memory.</param>
 		/// <param name="width">The width.</param>
 		/// <param name="height">The height.</param>
-		/// <param name="offset">The offset.</param>
-		/// <param name="bytesPerLine">The bytes per line.</param>
-		public FrameBuffer32(ConstrainedPointer buffer, uint width, uint height, uint offset, uint bytesPerLine)
+		public FrameBuffer32(ConstrainedPointer buffer, uint width, uint height)
 		{
 			Buffer = buffer;
 			Width = width;
 			Height = height;
-			Offset = offset;
-			BytesPerLine = bytesPerLine;
 		}
 
 		/// <summary>Creates a new frame buffer with identical properties.</summary>
 		public FrameBuffer32 Clone()
 		{
-			return new FrameBuffer32(HAL.AllocateMemory(Buffer.Size, 0), Width, Height, Offset, BytesPerLine);
+			return new FrameBuffer32(HAL.AllocateMemory(Buffer.Size, 0), Width, Height);
 		}
 
 		/// <summary>Gets the offset.</summary>
@@ -56,7 +46,7 @@ namespace Mosa.DeviceSystem
 		/// <param name="y">The y.</param>
 		private uint GetOffset(uint x, uint y)
 		{
-			return Offset + y * BytesPerLine + x * BytesPerPixel;
+			return (y * Width + x) * BytesPerPixel;
 		}
 
 		/// <summary>Sets the pixel.</summary>
@@ -119,15 +109,15 @@ namespace Mosa.DeviceSystem
 			FillCircle(color, x + w - r - 1, y + h - r - 1, r);
 		}
 
-		/// <summary>Draws an image with a transparent color.</summary>
-		/// <param name="image">The image.</param>
+		/// <summary>Draws a virtual buffer with a transparent color.</summary>
+		/// <param name="buffer">The virtual buffer.</param>
 		/// <param name="x">X of the top left of the image.</param>
 		/// <param name="y">Y of the top left of the image.</param>
 		/// <param name="transparentColor">Transparent color, to not draw.</param>
-		public void DrawImage(Image image, uint x, uint y, uint transparentColor)
+		public void DrawBuffer(FrameBuffer32 buffer, uint x, uint y, uint transparentColor)
 		{
-			var wi = Math.Clamp(image.Width, 0, Width - x);
-			var he = Math.Clamp(image.Height, 0, Height - y);
+			var wi = Math.Clamp(buffer.Width, 0, Width - x);
+			var he = Math.Clamp(buffer.Height, 0, Height - y);
 
 			if (x >= Width || y >= Height)
 				return;
@@ -135,26 +125,26 @@ namespace Mosa.DeviceSystem
 			for (uint h = 0; h < he; h++)
 				for (uint w = 0; w < wi; w++)
 				{
-					var color = image.GetColor(w, h);
+					var color = buffer.GetPixel(w, h);
 
 					if (color != transparentColor)
 						SetPixel(color, x + w, y + h);
 				}
 		}
 
-		/// <summary>Draws an image with or without alpha blending.</summary>
-		/// <param name="image">The image.</param>
+		/// <summary>Draws a virtual buffer with or without alpha blending.</summary>
+		/// <param name="buffer">The virtual buffer.</param>
 		/// <param name="x">X of the top left of the image.</param>
 		/// <param name="y">Y of the top left of the image.</param>
 		/// <param name="alpha">Draw the image with or without alpha blending.</param>
-		public void DrawImage(Image image, uint x, uint y, bool alpha = false)
+		public void DrawBuffer(FrameBuffer32 buffer, uint x, uint y, bool alpha)
 		{
 			if (alpha)
 			{
 				// Slow, find faster method (maybe?)
 
-				var wi = Math.Clamp(image.Width, 0, Width - x);
-				var he = Math.Clamp(image.Height, 0, Height - y);
+				var wi = Math.Clamp(buffer.Width, 0, Width - x);
+				var he = Math.Clamp(buffer.Height, 0, Height - y);
 
 				if (x >= Width || y >= Height)
 					return;
@@ -165,23 +155,23 @@ namespace Mosa.DeviceSystem
 						var xx = x + w;
 						var yy = y + h;
 
-						SetPixel((uint)AlphaBlend(xx, yy, image.GetColor(w, h)), xx, yy);
+						SetPixel(AlphaBlend(xx, yy, buffer.GetPixel(w, h)), xx, yy);
 					}
 			}
 			else
 			{
-				var wb = image.Width * image.BytesPerPixel;
-				var count = Math.Clamp(wb, 0, (Width - x) * image.BytesPerPixel);
+				var wb = buffer.Width * 4;
+				var count = Math.Clamp(wb, 0, (Width - x) * 4);
 
-				for (var h = 0; h < Math.Clamp(image.Height, 0, Height - y); h++)
+				for (var h = 0; h < Math.Clamp(buffer.Height, 0, Height - y); h++)
 					Internal.MemoryCopy(
 						Buffer.Address + (Width * (y + h) + x) * BytesPerPixel,
-						image.Pixels.Address + wb * h,
+						buffer.Buffer.Address + wb * h,
 						count);
 			}
 		}
 
-		private int AlphaBlend(uint x, uint y, uint color)
+		private uint AlphaBlend(uint x, uint y, uint color)
 		{
 			// TODO - replace without using the Color class
 
@@ -195,7 +185,7 @@ namespace Mosa.DeviceSystem
 			var newG = (byte)(((foreground.G * alphac + invAlpha * background.G) >> 8) & 0xFF);
 			var newB = (byte)(((foreground.B * alphac + invAlpha * background.B) >> 8) & 0xFF);
 
-			return Color.ToArgb(newR, newG, newB);
+			return (uint)Color.ToArgb(newR, newG, newB);
 		}
 
 		/// <summary>Fills a rectangle with color.</summary>

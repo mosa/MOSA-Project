@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
 using System.Text;
 
 namespace Mosa.DeviceSystem
@@ -43,10 +44,10 @@ namespace Mosa.DeviceSystem
 		}
 
 		/// <summary>
-		/// Gets or sets the <see cref="System.Byte" /> at the specified index.
+		/// Gets or sets the <see cref="Byte" /> at the specified index.
 		/// </summary>
 		/// <value>
-		/// The <see cref="System.Byte"/>.
+		/// The <see cref="Byte"/>.
 		/// </value>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
@@ -138,11 +139,49 @@ namespace Mosa.DeviceSystem
 		}
 
 		/// <summary>
-		/// Gets the unsigned int.
+		/// Gets the unsigned 24-bit int.
 		/// </summary>
 		/// <param name="offset">The offset.</param>
 		/// <returns></returns>
-		public uint GetUInt(uint offset)
+		public uint GetUInt24(uint offset)
+		{
+			uint value = Data[offset++];
+			value += (uint)(Data[offset++] << 8);
+			value += (uint)(Data[offset] << 16);
+
+			return value;
+		}
+
+		/// <summary>
+		/// Sets the unsigned 24-bit int.
+		/// </summary>
+		/// <param name="offset">The offset.</param>
+		/// <param name="value">The value.</param>
+		public void SetUInt24(uint offset, uint value)
+		{
+			Data[offset++] = (byte)(value & 0xFF);
+			Data[offset++] = (byte)((value >> 8) & 0xFF);
+			Data[offset] = (byte)((value >> 16) & 0xFF);
+		}
+
+		/// <summary>
+		/// Sets the unsigned int reversed.
+		/// </summary>
+		/// <param name="offset">The offset.</param>
+		/// <param name="value">The value.</param>
+		public void SetUInt24Reversed(uint offset, uint value)
+		{
+			Data[offset++] = (byte)((value >> 16) & 0xFF);
+			Data[offset++] = (byte)((value >> 8) & 0xFF);
+			Data[offset] = (byte)(value & 0xFF);
+		}
+
+		/// <summary>
+		/// Gets the unsigned 32-bit int.
+		/// </summary>
+		/// <param name="offset">The offset.</param>
+		/// <returns></returns>
+		public uint GetUInt32(uint offset)
 		{
 			uint value = Data[offset++];
 			value += (uint)(Data[offset++] << 8);
@@ -153,11 +192,11 @@ namespace Mosa.DeviceSystem
 		}
 
 		/// <summary>
-		/// Sets the unsigned int.
+		/// Sets the unsigned 32-bit int.
 		/// </summary>
 		/// <param name="offset">The offset.</param>
 		/// <param name="value">The value.</param>
-		public void SetUInt(uint offset, uint value)
+		public void SetUInt32(uint offset, uint value)
 		{
 			Data[offset++] = (byte)(value & 0xFF);
 			Data[offset++] = (byte)((value >> 8) & 0xFF);
@@ -166,11 +205,11 @@ namespace Mosa.DeviceSystem
 		}
 
 		/// <summary>
-		/// Sets the unsigned int reversed.
+		/// Sets the unsigned 32-bit int reversed.
 		/// </summary>
 		/// <param name="offset">The offset.</param>
 		/// <param name="value">The value.</param>
-		public void SetUIntReversed(uint offset, uint value)
+		public void SetUInt32Reversed(uint offset, uint value)
 		{
 			Data[offset++] = (byte)((value >> 24) & 0xFF);
 			Data[offset++] = (byte)((value >> 16) & 0xFF);
@@ -344,7 +383,7 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		public string GetString(uint offset, uint length)
 		{
-			return new ASCIIEncoding().GetString(Data, (int)offset, (int)length);
+			return Encoding.ASCII.GetString(Data, (int)offset, (int)length);
 		}
 	}
 }

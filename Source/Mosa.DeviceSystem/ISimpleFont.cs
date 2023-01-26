@@ -15,17 +15,22 @@ namespace Mosa.DeviceSystem
 		/// <summary>
 		/// Gets the size.
 		/// </summary>
-		int Size { get; }
+		uint Size { get; }
 
 		/// <summary>
 		/// Gets the width.
 		/// </summary>
-		int Width { get; }
+		uint Width { get; }
 
 		/// <summary>
 		/// Gets the height.
 		/// </summary>
-		int Height { get; }
+		uint Height { get; }
+
+		/// <summary>
+		/// Draws the character.
+		/// </summary>
+		void DrawChar(FrameBuffer32 frameBuffer, uint color, uint x, uint y, char c);
 
 		/// <summary>
 		/// Draws the string.
@@ -35,11 +40,16 @@ namespace Mosa.DeviceSystem
 		/// <summary>
 		/// Calculates the width of a character.
 		/// </summary>
-		int CalculateWidth(char c);
+		uint CalculateWidth(char c);
 
 		/// <summary>
 		/// Calculates the width of a string.
 		/// </summary>
-		int CalculateWidth(string s);
+		uint CalculateWidth(string s);
+
+		/// <summary>
+		/// Calculates the height of a character.
+		/// </summary>
+		uint CalculateHeight(char c);
 	}
 }

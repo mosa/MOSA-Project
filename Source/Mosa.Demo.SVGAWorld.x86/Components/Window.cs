@@ -9,17 +9,18 @@ namespace Mosa.Demo.SVGAWorld.x86.Components
 	{
 		public string Title;
 
-		public int Id, OffsetX, OffsetY, X, Y, Width, Height, TitlebarHeight = 20;
+		public int Id;
+		public uint OffsetX, OffsetY, X, Y, Width, Height, TitlebarHeight = 20;
 
 		public Color InactiveTitlebarColor, ActiveTitlebarColor, BodyColor;
 
 		public bool Held, Opened = false;
 
-		public Button CloseBtn;
+		public readonly Button CloseBtn;
 
-		public Label Label;
+		public readonly Label Label;
 
-		public Window(string title, int x, int y, int width, int height, Color inactiveTitlebarColor, Color activeTitlebarColor, Color bodyColor)
+		public Window(string title, uint x, uint y, uint width, uint height, Color inactiveTitlebarColor, Color activeTitlebarColor, Color bodyColor)
 		{
 			Title = title;
 			Id = Boot.Random.Next(1, int.MaxValue);
@@ -34,9 +35,10 @@ namespace Mosa.Demo.SVGAWorld.x86.Components
 			ActiveTitlebarColor = activeTitlebarColor;
 			BodyColor = bodyColor;
 
-			CloseBtn = new Button(" X ", x + width, y, TitlebarHeight, Color.Red, Color.White, Color.DarkRed,
-				() => { WindowManager.Close(this); return null; });
-			X -= CloseBtn.Width;
+			var closeBtnWidth = Display.DefaultFont.CalculateWidth(" X ");
+
+			CloseBtn = new Button(" X ", x + width - closeBtnWidth, y, TitlebarHeight, Color.Red, Color.White, Color.DarkRed,
+				() => { WindowManager.Close(this); return null; }, closeBtnWidth);
 
 			Label = new Label(title, Display.DefaultFont, x, y, bodyColor);
 		}
@@ -77,7 +79,7 @@ namespace Mosa.Demo.SVGAWorld.x86.Components
 				if (WindowManager.IsWindowMoving && WindowManager.ActiveWindow != this)
 					return;
 
-				if (!Held && Mouse.State == (int)MouseState.Left && IsInBounds())
+				if (!Held && Mouse.State == MouseState.Left && IsInBounds())
 				{
 					// Prevent inactive window from getting active if active window is overlapping that window
 					if (WindowManager.ActiveWindow != this && IsTitlebarColliding())
@@ -98,7 +100,7 @@ namespace Mosa.Demo.SVGAWorld.x86.Components
 				X = Mouse.X - OffsetX;
 				Y = Mouse.Y - OffsetY;
 
-				Held = Mouse.State == (int)MouseState.Left;
+				Held = Mouse.State == MouseState.Left;
 				WindowManager.IsWindowMoving = Held;
 			}
 		}

@@ -257,13 +257,13 @@ namespace Mosa.DeviceDriver.ISA
 			}
 
 			//Find the addressing mode
-			var lba28SectorCount = info.GetUInt(IdentifyDrive.MaxLBA28);
+			var lba28SectorCount = info.GetUInt32(IdentifyDrive.MaxLBA28);
 
 			AddressingMode aMode = AddressingMode.NotSupported;
 			if ((info.GetUShort(IdentifyDrive.CommandSetSupported83) & 0x200) == 0x200) //Check the LBA48 support bit
 			{
 				aMode = AddressingMode.LBA48;
-				driveInfo[index].MaxLBA = info.GetUInt(IdentifyDrive.MaxLBA48);
+				driveInfo[index].MaxLBA = info.GetUInt32(IdentifyDrive.MaxLBA48);
 			}
 			else if (lba28SectorCount > 0) //LBA48 not supported, check LBA28
 			{
@@ -385,7 +385,7 @@ namespace Mosa.DeviceDriver.ISA
 				//NOTE: Transferring 16bits at a time seems to fail(?) to write each second 16bits - transferring 32bits seems to fix this (???)
 				for (uint index = 0; index < 128; index++)
 				{
-					DataPort.Write32(sector.GetUInt(offset + (index * 4)));
+					DataPort.Write32(sector.GetUInt32(offset + (index * 4)));
 				}
 
 				//Cache flush
@@ -444,7 +444,7 @@ namespace Mosa.DeviceDriver.ISA
 			{
 				for (uint index = 0; index < 128; index++)
 				{
-					DataPort.Write32(sector.GetUInt(offset + (index * 4)));
+					DataPort.Write32(sector.GetUInt32(offset + (index * 4)));
 				}
 
 				//Cache flush

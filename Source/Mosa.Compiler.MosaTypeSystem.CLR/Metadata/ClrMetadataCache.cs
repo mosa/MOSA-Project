@@ -103,6 +103,7 @@ namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
 				stringHeapLookup[value] = id;
 				stringHeapLookup2[id] = value;
 			}
+
 			return id;
 		}
 

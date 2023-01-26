@@ -4,9 +4,6 @@ using Mosa.DeviceSystem;
 
 namespace Mosa.Utility.BootImage
 {
-	/// <summary>
-	/// VDI
-	/// </summary>
 	public static class VDI
 	{
 		// FIXME: Header creation (offsets and values)
@@ -39,7 +36,7 @@ namespace Mosa.Utility.BootImage
 			internal const uint UUIDParent = 0x1B8; // 16
 		}
 
-		internal const string HeaderText = "<<< Oracle VM VirtualBox Disk Image >>>";
+		internal const string HeaderText = "<<< QEMU VM Virtual Disk Image >>>";
 
 		#endregion Constants
 
@@ -60,23 +57,18 @@ namespace Mosa.Utility.BootImage
 			// Also some RE :)
 			binaryHeader.SetString(VHIHeaderOffset.HeaderText, HeaderText, textLength);
 			binaryHeader.SetByte(VHIHeaderOffset.HeaderText + textLength, 0x0A);
-			binaryHeader.SetUInt(VHIHeaderOffset.ImageSignature, 0xBEda107F);
-			binaryHeader.SetUInt(VHIHeaderOffset.Version, 0x00010001); // 1.1
-			binaryHeader.SetUInt(VHIHeaderOffset.HeaderSize, 0x190);
-			binaryHeader.SetUInt(VHIHeaderOffset.ImageType, 0x02); // Fixed VDI?
-			binaryHeader.SetUInt(VHIHeaderOffset.ImageFlags, 0x00);
-			// Checkpoint
-			binaryHeader.SetUInt(VHIHeaderOffset.OffsetBlocks, 0x200);
-			binaryHeader.SetUInt(VHIHeaderOffset.OffsetData, 0x400);
-			binaryHeader.SetUInt(VHIHeaderOffset.DiskGeometryCylinders, 0); // diskGeometry.Cylinders);
-			binaryHeader.SetUInt(VHIHeaderOffset.DiskGeometryHeads, 0); // diskGeometry.Heads);
-			binaryHeader.SetUInt(VHIHeaderOffset.DiskGeometrySectors, 0); // diskGeometry.SectorsPerTrack);
-			binaryHeader.SetUInt(VHIHeaderOffset.SectorSize, 512);
+			binaryHeader.SetUInt32(VHIHeaderOffset.ImageSignature, 0xBEDA107F);
+			binaryHeader.SetUInt32(VHIHeaderOffset.Version, 0x00010001); // 1.1
+			binaryHeader.SetUInt32(VHIHeaderOffset.HeaderSize, 0x190);
+			binaryHeader.SetUInt32(VHIHeaderOffset.ImageType, 0x01); // Dynamic VDI
+			binaryHeader.SetUInt32(VHIHeaderOffset.ImageFlags, 0x00);
+			binaryHeader.SetUInt32(VHIHeaderOffset.OffsetBlocks, 0x200);
+			binaryHeader.SetUInt32(VHIHeaderOffset.OffsetData, 0x400);
+			binaryHeader.SetUInt32(VHIHeaderOffset.SectorSize, 512);
 			binaryHeader.SetULong(VHIHeaderOffset.DiskSize, blocks * 512);
-			binaryHeader.SetUInt(VHIHeaderOffset.BlockSize, 0x100000);
-			binaryHeader.SetUInt(VHIHeaderOffset.BlockExtraData, 0);
-			binaryHeader.SetUInt(VHIHeaderOffset.BlocksInHDD, blocks * 512 / 0x100000);
-			binaryHeader.SetUInt(VHIHeaderOffset.BlocksAllocated, blocks * 512 / 0x100000);
+			binaryHeader.SetUInt32(VHIHeaderOffset.BlockSize, 0x100000);
+			binaryHeader.SetUInt32(VHIHeaderOffset.BlocksInHDD, blocks * 512 / 0x100000);
+			binaryHeader.SetUInt32(VHIHeaderOffset.BlocksAllocated, blocks * 512 / 0x100000);
 			binaryHeader.SetBytes(VHIHeaderOffset.UUID, guid, 0, 16);
 			binaryHeader.SetBytes(VHIHeaderOffset.UUIDLastSnap, lastSnapGuid, 0, 16);
 
@@ -95,19 +87,14 @@ namespace Mosa.Utility.BootImage
 			var binaryMap = new DataBlock(imageBlocks * 512);
 
 			for (uint i = 0; i < size / 4; i++)
-				binaryMap.SetUInt(i * 4, i);
+				binaryMap.SetUInt32(i * 4, i);
 
 			return binaryMap.Data;
 		}
 
-		/// <summary>
-		/// Gets the size of the aligned.
-		/// </summary>
-		/// <param name="size">The size.</param>
-		/// <returns></returns>
 		private static ulong GetAlignedSize(ulong size)
 		{
-			return (size + 511) & ~((ulong)511);
+			return (size + 511) & ~(ulong)511;
 		}
 	}
 }

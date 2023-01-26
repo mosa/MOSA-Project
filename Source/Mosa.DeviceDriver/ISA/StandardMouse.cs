@@ -11,18 +11,20 @@ namespace Mosa.DeviceDriver.ISA
 
 	public class StandardMouse : BaseDeviceDriver, IMouseDevice
 	{
-		private BaseIOPortReadWrite command;
-		private BaseIOPortReadWrite data;
+		private BaseIOPortReadWrite command, data;
 
 		private const byte SetDefaults = 0xF6, EnableDataReporting = 0xF4, SetSampleRate = 0xF3;
 
-		private int screenWidth, screenHeight, phase = 0, aX, aY, mouseState;
+		private uint screenWidth, screenHeight;
+		private int phase, aX, aY;
 
 		private byte[] mData = new byte[3];
 
-		public int X { get; set; }
+		public uint X { get; set; }
 
-		public int Y { get; set; }
+		public uint Y { get; set; }
+
+		public MouseState State { get; private set; }
 
 		public override void Initialize()
 		{
@@ -49,7 +51,7 @@ namespace Mosa.DeviceDriver.ISA
 			WriteRegister(EnableDataReporting);
 			WriteRegister(SetSampleRate, 200);
 
-			mouseState = byte.MaxValue;
+			State = MouseState.None;
 		}
 
 		/// <summary>
@@ -99,13 +101,13 @@ namespace Mosa.DeviceDriver.ISA
 				phase = 1;
 
 				mData[0] &= 0x07;
-				mouseState = mData[0] switch
+				State = mData[0] switch
 				{
-					0x01 => 0,
-					0x02 => 1,
+					0x01 => MouseState.Left,
+					0x02 => MouseState.Right,
 
 					// TODO: Add scroll wheel
-					_ => byte.MaxValue,
+					_ => MouseState.None,
 				};
 
 				if (mData[1] > 127)
@@ -118,19 +120,14 @@ namespace Mosa.DeviceDriver.ISA
 				else
 					aY = mData[2];
 
-				X = Math.Clamp(X + aX, 0, screenWidth);
-				Y = Math.Clamp(Y - aY, 0, screenHeight);
+				X = (uint)Math.Clamp(X + aX, 0, screenWidth);
+				Y = (uint)Math.Clamp(Y - aY, 0, screenHeight);
 			}
 
 			return true;
 		}
 
-		public int GetMouseState()
-		{
-			return mouseState;
-		}
-
-		public void SetScreenResolution(int width, int height)
+		public void SetScreenResolution(uint width, uint height)
 		{
 			screenWidth = width;
 			screenHeight = height;
