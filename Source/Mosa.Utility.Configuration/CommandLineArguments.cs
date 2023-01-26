@@ -116,7 +116,6 @@ namespace Mosa.Utility.Configuration
 				new Argument() { Name = "-vhd", Setting = "Image.Format", Value="vhd"},
 				new Argument() { Name = "-img", Setting = "Image.Format", Value="img"},
 				new Argument() { Name = "-vdi", Setting = "Image.Format", Value="vdi"},
-				new Argument() { Name = "-iso", Setting = "Image.Format", Value="iso"},
 				new Argument() { Name = "-vmdk", Setting = "Image.Format", Value="vmdk"},
 				new Argument() { Name = "-image", Setting = "Image.ImageFile"},
 
@@ -157,20 +156,11 @@ namespace Mosa.Utility.Configuration
 
 				new Argument() { Name = "-launch-gdb-debugger", Setting = "Launcher.LaunchDebugger", Value="true"},
 
-				// Base directory is the root MOSA directory
+				// Base directory is the output directory
 				new Argument() { Name = "-include", Setting = "Image.FileSystem.RootInclude" },
 
 				new Argument() { Name = "-bios", Setting = "Image.Firmware", Value="bios"},
 				new Argument() { Name = "-firmware", Setting = "Image.Firmware"},
-
-				new Argument() { Name = "-bootloader", Setting = "Image.BootLoader"},
-				new Argument() { Name = "-grub", Setting = "Image.BootLoader", Value = "grub0.97"},
-				new Argument() { Name = "-grub0.97", Setting = "Image.BootLoader", Value = "grub0.97"},
-				new Argument() { Name = "-grub2.00", Setting = "Image.BootLoader", Value = "grub2.00"},
-				new Argument() { Name = "-syslinux", Setting = "Image.BootLoader", Value = "syslinux3.72"},
-				new Argument() { Name = "-syslinux3.72", Setting = "Image.BootLoader", Value = "syslinux3.72"},
-				new Argument() { Name = "-syslinux6.0", Setting = "Image.BootLoader", Value = "syslinux6.03"},
-				new Argument() { Name = "-limine", Setting = "Image.BootLoader", Value = "limine"},
 
 				// Advance:
 				new Argument() { Name = "-hunt-corlib", Setting = "Launcher.HuntForCorLib", Value = "true"},

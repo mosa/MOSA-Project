@@ -57,7 +57,6 @@ namespace Mosa.Workspace.Experiment.Debug
 			settings.SetValue("Launcher.Launch", false);
 			settings.SetValue("Launcher.Exit", true);
 			settings.SetValue("Launcher.HuntForCorLib", true);
-			settings.SetValue("Image.BootLoader", "syslinux3.72");
 			settings.SetValue("Image.Folder", Path.Combine(Path.GetTempPath(), "MOSA-UnitTest"));
 			settings.SetValue("Image.Format", "IMG");
 			settings.SetValue("Image.FileSystem", "FAT16");

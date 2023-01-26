@@ -9,7 +9,6 @@ namespace Mosa.Utility.BootImage
 		IMG,
 		VHD,
 		VDI,
-		ISO,
 		VMDK
 	};
 }

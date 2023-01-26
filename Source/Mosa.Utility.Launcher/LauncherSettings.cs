@@ -142,12 +142,6 @@ namespace Mosa.Utility.Launcher
 			set { Settings.SetValue("Image.Firmware", value); }
 		}
 
-		public string ImageBootLoader
-		{
-			get { return Settings.GetValue("Image.BootLoader", null); }
-			set { Settings.SetValue("Image.BootLoader", value); }
-		}
-
 		public string ImageFolder
 		{
 			get { return Settings.GetValue("Image.Folder", null); }

@@ -13,19 +13,9 @@ bochs
 - LGPL License
 - http://7-zip.org/
 
-syslinux
-- GNU License
-- http://syslinux.zytor.com/
-- Version: 3.72 & 6.03
-
 wget
 - GNU License
 - http://www.gnu.org/software/wget
-
-grub
-- GNU License
-- http://www.gnu.org/software/grub/
-- Version 0.97
 
 nasm & ndisasm
 - Simplified BSD License
