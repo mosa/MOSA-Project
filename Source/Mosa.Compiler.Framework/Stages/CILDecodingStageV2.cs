@@ -92,6 +92,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private readonly Dictionary<BasicBlock, Stack<StackEntry>> stacks = new Dictionary<BasicBlock, Stack<StackEntry>>();
 
+		private readonly Dictionary<BasicBlock, StackEntry[]> OutgoingStacks = new Dictionary<BasicBlock, StackEntry[]>();
+
 		private Operand[] LocalStack;
 		private StackType[] LocalStackType;
 
@@ -348,7 +350,11 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					block = BasicBlocks.GetByLabel(label);
 
+					// BUG: This pulls stack that was pushed from one (not all) of the previous blocks
 					stack = GetEvaluationStack(block);
+
+					// SOLUTION: Pull all the previous stacks, compare them, any differences are resolved with inserted moves
+					var _stack = CreateIncomingStack(block);
 
 					context.Node = block.AfterFirst;
 					endNode = block.First;
@@ -392,14 +398,81 @@ namespace Mosa.Compiler.Framework.Stages
 						context.AppendInstruction(IRInstruction.Jmp, peekNextblock);
 					}
 
+					// BUG: This propagates the current stack to the next blocks
 					foreach (var nextblock in block.NextBlocks)
 					{
 						SaveEvaluationStack(nextblock, stack);
 					}
 
+					// ---- SOLUTION: Save the stack to the current block
+					OutgoingStacks.Add(block, stack.ToArray());
+
 					stack = null;
 					block = null;
 				}
+			}
+		}
+
+		private Stack<StackEntry> CreateIncomingStack(BasicBlock block)
+		{
+			if (block.PreviousBlocks.Count == 0)
+			{
+				return new Stack<StackEntry>();
+			}
+			else if (block.PreviousBlocks.Count == 1)
+			{
+				return new Stack<StackEntry>(OutgoingStacks[block.PreviousBlocks[0]]);
+			}
+			else
+			{
+				var total = OutgoingStacks[block.PreviousBlocks[0]].Length;
+				var incomingStack = new Stack<StackEntry>();
+
+				for (int index = 0; index < total; index++)
+				{
+					StackEntry first = null;
+					var identifcal = true;
+
+					foreach (var previousBlock in block.PreviousBlocks)
+					{
+						var outgoingStack = OutgoingStacks[previousBlock][index];
+
+						if (first == null)
+						{
+							first = outgoingStack;
+						}
+						else if (first != outgoingStack)
+						{
+							identifcal = false;
+							break;
+						}
+					}
+
+					if (identifcal)
+					{
+						incomingStack.Push(first);
+					}
+					else
+					{
+						var operand = (first.StackType == StackType.ValueType)
+							? AddStackLocal(first.Type)
+							: AllocateVirtualRegister(first.Type);
+
+						var instruction = (first.StackType == StackType.ValueType)
+							? IRInstruction.MoveCompound
+							: GetMoveInstruction(first.Type);
+
+						//
+
+						var incomingEntry = new StackEntry(first.StackType, operand, first.Type);
+
+						incomingStack.Push(incomingEntry);
+					}
+				}
+
+				var stack = new Stack<StackEntry>(total);
+
+				return stack;
 			}
 		}
 
@@ -2993,7 +3066,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (stacktype == StackType.ValueType)
 			{
-				//var result2 = AllocateVirtualRegister(local.Type);
 				var result2 = AddStackLocal(local.Type);
 				context.AppendInstruction(IRInstruction.MoveCompound, result2, local);
 				context.MosaType = local.Type;

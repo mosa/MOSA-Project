@@ -409,6 +409,35 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public void Compile()
 		{
+			PlugMethod();
+
+			PatchDelegate();
+
+			ExternalMethod();
+
+			InternalMethod();
+
+			StubMethod();
+
+			ExecutePipeline();
+
+			Symbol.SetReplacementStatus(MethodData.Inlined);
+
+			if (Statistics)
+			{
+				var log = new TraceLog(TraceType.MethodCounters, Method, string.Empty, MethodData.Version);
+
+				log.Log(MethodData.Counters.Export());
+
+				Compiler.PostTraceLog(log);
+			}
+		}
+
+		/// <summary>
+		/// Compiles the method referenced by this method compiler.
+		/// </summary>
+		public void Compile2()
+		{
 			try
 			{
 				PlugMethod();

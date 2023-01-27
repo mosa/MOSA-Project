@@ -300,7 +300,8 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// The branch targets count.
 		/// </value>
-		public int BranchTargetsCount { get { return BranchTargets?.Count ?? 0; } }
+		public int BranchTargetsCount
+		{ get { return BranchTargets?.Count ?? 0; } }
 
 		/// <summary>
 		/// Sets the branch target.
@@ -870,7 +871,7 @@ namespace Mosa.Compiler.Framework
 					sb.AppendFormat("{0}, ", block);
 				}
 				sb.Length -= 2;
-				sb.Append("}");
+				sb.Append('}');
 			}
 
 			if (BranchTargets != null)
