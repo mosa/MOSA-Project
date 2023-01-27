@@ -349,12 +349,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (block == null)
 				{
 					block = BasicBlocks.GetByLabel(label);
-
-					// BUG: This pulls stack that was pushed from one (not all) of the previous blocks
-					stack = GetEvaluationStack(block);
-
-					// SOLUTION: Pull all the previous stacks, compare them, any differences are resolved with inserted moves
-					var _stack = CreateIncomingStack(block);
+					stack = CreateIncomingStack(block);
 
 					context.Node = block.AfterFirst;
 					endNode = block.First;
@@ -398,13 +393,6 @@ namespace Mosa.Compiler.Framework.Stages
 						context.AppendInstruction(IRInstruction.Jmp, peekNextblock);
 					}
 
-					// BUG: This propagates the current stack to the next blocks
-					foreach (var nextblock in block.NextBlocks)
-					{
-						SaveEvaluationStack(nextblock, stack);
-					}
-
-					// ---- SOLUTION: Save the stack to the current block
 					OutgoingStacks.Add(block, stack.ToArray());
 
 					stack = null;
@@ -419,61 +407,68 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				return new Stack<StackEntry>();
 			}
-			else if (block.PreviousBlocks.Count == 1)
+
+			if (block.PreviousBlocks.Count == 1)
 			{
 				return new Stack<StackEntry>(OutgoingStacks[block.PreviousBlocks[0]]);
 			}
-			else
+
+			var total = OutgoingStacks[block.PreviousBlocks[0]].Length;
+			var incomingStack = new Stack<StackEntry>(total);
+
+			for (int index = 0; index < total; index++)
 			{
-				var total = OutgoingStacks[block.PreviousBlocks[0]].Length;
-				var incomingStack = new Stack<StackEntry>();
+				StackEntry first = null;
+				var identifcal = true;
 
-				for (int index = 0; index < total; index++)
+				foreach (var previousBlock in block.PreviousBlocks)
 				{
-					StackEntry first = null;
-					var identifcal = true;
+					var outgoing = OutgoingStacks[previousBlock][index];
 
-					foreach (var previousBlock in block.PreviousBlocks)
+					if (first == null)
 					{
-						var outgoingStack = OutgoingStacks[previousBlock][index];
-
-						if (first == null)
-						{
-							first = outgoingStack;
-						}
-						else if (first != outgoingStack)
-						{
-							identifcal = false;
-							break;
-						}
+						first = outgoing;
 					}
-
-					if (identifcal)
+					else if (first != outgoing)
 					{
-						incomingStack.Push(first);
-					}
-					else
-					{
-						var operand = (first.StackType == StackType.ValueType)
-							? AddStackLocal(first.Type)
-							: AllocateVirtualRegister(first.Type);
-
-						var instruction = (first.StackType == StackType.ValueType)
-							? IRInstruction.MoveCompound
-							: GetMoveInstruction(first.Type);
-
-						//
-
-						var incomingEntry = new StackEntry(first.StackType, operand, first.Type);
-
-						incomingStack.Push(incomingEntry);
+						identifcal = false;
+						break;
 					}
 				}
 
-				var stack = new Stack<StackEntry>(total);
+				if (identifcal)
+				{
+					incomingStack.Push(first);
+					continue;
+				}
 
-				return stack;
+				Operand destination = null;
+				BaseInstruction instruction = null;
+
+				if (first.StackType == StackType.ValueType)
+				{
+					destination = AddStackLocal(first.Type);
+					instruction = IRInstruction.MoveCompound;
+				}
+				else
+				{
+					destination = AllocateVirtualRegister(GetType(first));
+					instruction = GetMoveInstruction(GetType(first));
+				}
+
+				foreach (var previousBlock in block.PreviousBlocks)
+				{
+					var source = OutgoingStacks[previousBlock][index].Operand;
+
+					previousBlock.ContextBeforeBranch.AppendInstruction(instruction, destination, source);
+				}
+
+				var incomingEntry = new StackEntry(first.StackType, destination, first.Type);
+
+				incomingStack.Push(incomingEntry);
 			}
+
+			return incomingStack;
 		}
 
 		private void CreateLocalVariables()
@@ -982,30 +977,6 @@ namespace Mosa.Compiler.Framework.Stages
 			// TODO --- enums?
 
 			throw new CompilerException($"Cannot translate to Type {type} to ElementType");
-		}
-
-		private Stack<StackEntry> GetEvaluationStack(BasicBlock block)
-		{
-			if (!stacks.TryGetValue(block, out Stack<StackEntry> stack))
-			{
-				stack = new Stack<StackEntry>();
-			}
-
-			var newstack = new Stack<StackEntry>(stack);
-
-			return newstack;
-		}
-
-		private void SaveEvaluationStack(BasicBlock block, Stack<StackEntry> stack)
-		{
-			if (stacks.TryGetValue(block, out var foundstack))
-			{
-				// TODO: Check stack size
-			}
-			else
-			{
-				stacks.Add(block, stack);
-			}
 		}
 
 		private void SetInitalEvaluationStack(BasicBlock block, StackEntry stackEntry = null)

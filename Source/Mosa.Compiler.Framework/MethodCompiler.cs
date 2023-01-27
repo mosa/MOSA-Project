@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis;
-using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
@@ -33,8 +32,6 @@ namespace Mosa.Compiler.Framework
 		private readonly NotifyTraceLogHandler NotifyInstructionTraceHandler;
 
 		private readonly NotifyTraceLogHandler NotifyTranformTraceHandler;
-
-		private int InstructionTraceStep;
 
 		#endregion Data Members
 
@@ -269,11 +266,10 @@ namespace Mosa.Compiler.Framework
 			ConstantR4_0 = CreateConstant(0.0f);
 			ConstantR8_0 = CreateConstant(0.0d);
 
-			Constant64_0 = Is32BitPlatform ? Constant32_0 : Constant64_0;  // FUTURE: This could just be Constant64 or Constant32 once the caling stage uses the method signature intead of the operand types
+			ConstantZero = Is32BitPlatform ? Constant32_0 : Constant64_0;
 
 			LocalVariables = emptyOperandList;
 			ThreadID = threadID;
-			InstructionTraceStep = 0;
 
 			IsStopped = false;
 			IsExecutePipeline = true;
@@ -407,7 +403,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Compiles the method referenced by this method compiler.
 		/// </summary>
-		public void Compile()
+		public void Compile2()
 		{
 			PlugMethod();
 
@@ -436,7 +432,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Compiles the method referenced by this method compiler.
 		/// </summary>
-		public void Compile2()
+		public void Compile()
 		{
 			try
 			{
