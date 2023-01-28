@@ -1,11 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
-using System.Collections;
-using System.Drawing;
-using System.Runtime.CompilerServices;
 using Mosa.Compiler.Common;
-using Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
 namespace Mosa.Compiler.Framework.Transforms
 {

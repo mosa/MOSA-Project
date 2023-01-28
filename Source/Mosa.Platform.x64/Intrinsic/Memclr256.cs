@@ -19,7 +19,7 @@ namespace Mosa.Platform.x64.Intrinsic
 			var offset16 = methodCompiler.CreateConstant(16);
 
 			context.SetInstruction(X64.PXor, v0, v0, v0);
-			context.AppendInstruction(X64.MovupsStore, dest, methodCompiler.ConstantZero64, v0);
+			context.AppendInstruction(X64.MovupsStore, dest, methodCompiler.Constant64_0, v0);
 			context.AppendInstruction(X64.MovupsStore, dest, offset16, v0);
 		}
 	}

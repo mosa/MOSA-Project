@@ -12,7 +12,7 @@ namespace Mosa.Compiler.Framework
 			if (context.Operand1.IsResolvedConstant && context.Operand2.IsResolvedConstant)
 			{
 				context.Operand1 = methodCompiler.CreateConstant(context.Operand1.ConstantUnsigned64 + context.Operand2.ConstantUnsigned64);
-				context.Operand2 = methodCompiler.ConstantZero;
+				context.Operand2 = methodCompiler.Constant64_0;
 			}
 
 			if (context.Operand1.IsConstant && !context.Operand2.IsConstant)

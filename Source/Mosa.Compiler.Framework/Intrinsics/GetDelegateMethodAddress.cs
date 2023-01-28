@@ -12,7 +12,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 		{
 			var load = methodCompiler.Is32BitPlatform ? (BaseInstruction)IRInstruction.Load32 : IRInstruction.Load64;
 
-			context.SetInstruction(load, context.Result, context.Operand1, methodCompiler.ConstantZero);
+			context.SetInstruction(load, context.Result, context.Operand1, methodCompiler.Constant64_0);
 		}
 	}
 }

@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Intrinsic
 		[IntrinsicMethod("Mosa.Platform.x64.Intrinsic::Set8")]
 		private static void Set8(Context context, MethodCompiler methodCompiler)
 		{
-			context.SetInstruction(X64.MovStore8, null, context.Operand1, methodCompiler.ConstantZero32, context.Operand2);
+			context.SetInstruction(X64.MovStore8, null, context.Operand1, methodCompiler.Constant32_0, context.Operand2);
 		}
 	}
 }

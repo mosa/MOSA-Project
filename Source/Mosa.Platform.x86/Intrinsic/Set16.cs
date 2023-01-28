@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::Set16")]
 		private static void Set16(Context context, MethodCompiler methodCompiler)
 		{
-			context.SetInstruction(X86.MovStore16, null, context.Operand1, methodCompiler.ConstantZero32, context.Operand2);
+			context.SetInstruction(X86.MovStore16, null, context.Operand1, methodCompiler.Constant32_0, context.Operand2);
 		}
 	}
 }

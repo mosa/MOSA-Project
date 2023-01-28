@@ -123,8 +123,8 @@ namespace Mosa.Compiler.Framework
 
 			b0.AppendInstruction(loadInstruction, opMethod, thisOperand, methodPointerOffsetOperand);
 			b0.AppendInstruction(loadInstruction, opInstance, thisOperand, instanceOffsetOperand);
-			b0.AppendInstruction(compareInstruction, ConditionCode.Equal, opCompare, opInstance, methodCompiler.ConstantZero);
-			b0.AppendInstruction(branchInstruction, ConditionCode.Equal, null, opCompare, methodCompiler.ConstantZero, b2.Block);
+			b0.AppendInstruction(compareInstruction, ConditionCode.Equal, opCompare, opInstance, methodCompiler.Constant64_0);
+			b0.AppendInstruction(branchInstruction, ConditionCode.Equal, null, opCompare, methodCompiler.Constant64_0, b2.Block);
 			b0.AppendInstruction(IRInstruction.Jmp, b1.Block);
 
 			var operands = new List<Operand>(methodCompiler.Parameters.Length + 1);

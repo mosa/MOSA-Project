@@ -183,6 +183,7 @@ namespace Mosa.Compiler.Framework
 				compilerSettings.Devirtualization ? new DevirtualizeCallStage() : null,
 				new PlugStage(),
 				new RuntimeCallStage(),
+				new ArrayStage(),
 				(compilerSettings.InlineMethods || compilerSettings.InlineExplicit) ? new InlineStage() : null,
 				new PromoteTemporaryVariables(),
 				new StaticLoadOptimizationStage(),
@@ -243,55 +244,26 @@ namespace Mosa.Compiler.Framework
 			TraceLevel = CompilerSettings.TraceLevel;
 			Statistics = CompilerSettings.Statistics;
 
+			PostEvent(CompilerEvent.CompileStart);
+
 			Linker = new MosaLinker(this);
 
 			ObjectHeaderSize = Architecture.NativePointerSize + 4 + 4; // Hash Value (32-bit) + Lock & Status (32-bit) + Method Table
 
 			StackFrame = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackFrameRegister);
 			StackPointer = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackPointerRegister);
-			LinkRegister = Architecture.LinkRegister == null ? null : Operand.CreateCPURegister(TypeSystem.BuiltIn.Object, Architecture.LinkRegister);
-			ProgramCounter = Architecture.ProgramCounter == null ? null : Operand.CreateCPURegister(TypeSystem.BuiltIn.Object, Architecture.ProgramCounter);
-
 			ExceptionRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.Object, Architecture.ExceptionRegister);
 			LeaveTargetRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.Object, Architecture.LeaveTargetRegister);
 
-			PostEvent(CompilerEvent.CompileStart);
+			LinkRegister = Architecture.LinkRegister == null ? null : Operand.CreateCPURegister(TypeSystem.BuiltIn.Object, Architecture.LinkRegister);
+			ProgramCounter = Architecture.ProgramCounter == null ? null : Operand.CreateCPURegister(TypeSystem.BuiltIn.Object, Architecture.ProgramCounter);
 
 			MethodStagePipelines = new Pipeline<BaseMethodCompilerStage>[MaxThreads];
 
 			MethodScheduler = new MethodScheduler(this);
 			MethodScanner = new MethodScanner(this);
 
-			foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
-			{
-				if (!type.IsClass)
-					continue;
-
-				foreach (var method in type.GetRuntimeMethods())
-				{
-					// Now get all the IntrinsicMethodAttribute attributes
-					var intrinsicMethodAttributes = (IntrinsicMethodAttribute[])method.GetCustomAttributes(typeof(IntrinsicMethodAttribute), true);
-
-					for (int i = 0; i < intrinsicMethodAttributes.Length; i++)
-					{
-						var d = (IntrinsicMethodDelegate)System.Delegate.CreateDelegate(typeof(IntrinsicMethodDelegate), method);
-
-						// Finally add the dictionary entry mapping the target name and the delegate
-						InternalIntrinsicMethods.Add(intrinsicMethodAttributes[i].Target, d);
-					}
-
-					// Now get all the StubMethodAttribute attributes
-					var stubMethodAttributes = (StubMethodAttribute[])method.GetCustomAttributes(typeof(StubMethodAttribute), true);
-
-					for (int i = 0; i < stubMethodAttributes.Length; i++)
-					{
-						var d = (StubMethodDelegate)System.Delegate.CreateDelegate(typeof(StubMethodDelegate), method);
-
-						// Finally add the dictionary entry mapping the target name and the delegate
-						InternalStubMethods.Add(stubMethodAttributes[i].Target, d);
-					}
-				}
-			}
+			CollectntrinsicAndStubMethods();
 
 			PlugSystem = new PlugSystem(TypeSystem);
 
@@ -307,6 +279,40 @@ namespace Mosa.Compiler.Framework
 			Architecture.ExtendCompilerPipeline(CompilerPipeline, CompilerSettings);
 
 			IsStopped = false;
+		}
+
+		private void CollectntrinsicAndStubMethods()
+		{
+			foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
+			{
+				if (!type.IsClass)
+					continue;
+
+				foreach (var method in type.GetRuntimeMethods())
+				{
+					// Now get all the IntrinsicMethodAttribute attributes
+					var intrinsicMethodAttributes = (IntrinsicMethodAttribute[])method.GetCustomAttributes(typeof(IntrinsicMethodAttribute), true);
+
+					for (int i = 0; i < intrinsicMethodAttributes.Length; i++)
+					{
+						var d = (IntrinsicMethodDelegate)Delegate.CreateDelegate(typeof(IntrinsicMethodDelegate), method);
+
+						// Finally add the dictionary entry mapping the target name and the delegate
+						InternalIntrinsicMethods.Add(intrinsicMethodAttributes[i].Target, d);
+					}
+
+					// Now get all the StubMethodAttribute attributes
+					var stubMethodAttributes = (StubMethodAttribute[])method.GetCustomAttributes(typeof(StubMethodAttribute), true);
+
+					for (int i = 0; i < stubMethodAttributes.Length; i++)
+					{
+						var d = (StubMethodDelegate)Delegate.CreateDelegate(typeof(StubMethodDelegate), method);
+
+						// Finally add the dictionary entry mapping the target name and the delegate
+						InternalStubMethods.Add(stubMethodAttributes[i].Target, d);
+					}
+				}
+			}
 		}
 
 		/// <summary>

@@ -41,12 +41,12 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the before last instruction node.
 		/// </summary>
-		public InstructionNode BeforeLast { get { return Last.Previous; } }
+		public InstructionNode BeforeLast => Last.Previous;
 
 		/// <summary>
 		/// Gets the instruction after the first instruction.
 		/// </summary>
-		public InstructionNode AfterFirst { get { return First.Next; } }
+		public InstructionNode AfterFirst => First.Next;
 
 		/// <summary>
 		/// Retrieves the label, which uniquely identifies this block.
@@ -74,12 +74,12 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// <True/> if this Block has following blocks
 		/// </summary>
-		public bool HasNextBlocks { get { return NextBlocks.Count > 0; } }
+		public bool HasNextBlocks => NextBlocks.Count > 0;
 
 		/// <summary>
 		/// <True/> if this Block has previous blocks
 		/// </summary>
-		public bool HasPreviousBlocks { get { return PreviousBlocks.Count > 0; } }
+		public bool HasPreviousBlocks => PreviousBlocks.Count > 0;
 
 		/// <summary>
 		/// Gets a value indicating whether this instance is prologue.
@@ -87,7 +87,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// <c>true</c> if this instance is prologue; otherwise, <c>false</c>.
 		/// </value>
-		public bool IsPrologue { get { return Label == PrologueLabel; } }
+		public bool IsPrologue => Label == PrologueLabel;
 
 		/// <summary>
 		/// Gets a value indicating whether this instance is epilogue.
@@ -95,7 +95,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// <c>true</c> if this instance is epilogue; otherwise, <c>false</c>.
 		/// </value>
-		public bool IsEpilogue { get { return Label == EpilogueLabel; } }
+		public bool IsEpilogue => Label == EpilogueLabel;
 
 		/// <summary>
 		/// Gets a value indicating whether this instance is compiler block.
@@ -103,13 +103,33 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// <c>true</c> if this instance is compiler block; otherwise, <c>false</c>.
 		/// </value>
-		public bool IsCompilerBlock { get { return (Label >= CompilerBlockStartLabel) && (Label != EpilogueLabel) && (Label != PrologueLabel); } }
+		public bool IsCompilerBlock => (Label >= CompilerBlockStartLabel) && (Label != EpilogueLabel) && (Label != PrologueLabel);
 
 		public bool IsHandlerHeadBlock { get; internal set; }
 
 		public bool IsTryHeadBlock { get; internal set; }
 
 		public bool IsHeadBlock { get; internal set; }
+
+		public Context ContextBeforeBranch => new Context(BeforeBranch);
+
+		public InstructionNode BeforeBranch
+		{
+			get
+			{
+				var node = BeforeLast;
+
+				while (node.IsEmpty
+						|| node.Instruction.FlowControl == FlowControl.UnconditionalBranch
+						|| node.Instruction.FlowControl == FlowControl.ConditionalBranch
+						|| node.Instruction.FlowControl == FlowControl.Return)
+				{
+					node = node.Previous;
+				}
+
+				return node;
+			}
+		}
 
 		#endregion Properties
 

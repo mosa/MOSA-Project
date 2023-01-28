@@ -312,7 +312,7 @@ namespace Mosa.Compiler.Framework.Stages
 				var instruction = (first.IsR4) ? (BaseInstruction)IRInstruction.CompareR4 : IRInstruction.CompareR8;
 
 				context.SetInstruction(instruction, cc, result, first, second);
-				context.AppendInstruction(Select(result, IRInstruction.Branch32, IRInstruction.Branch64), ConditionCode.NotEqual, null, result, ConstantZero32, target); // TODO: Constant should be 64bit
+				context.AppendInstruction(Select(result, IRInstruction.Branch32, IRInstruction.Branch64), ConditionCode.NotEqual, null, result, Constant32_0, target); // TODO: Constant should be 64bit
 			}
 			else
 			{
@@ -1322,7 +1322,6 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var newThis = MethodCompiler.CreateVirtualRegister(result.Type.ToManagedPointer());
 				before.SetInstruction(IRInstruction.AddressOf, newThis, result);
-				before.AppendInstruction(IRInstruction.Nop);
 
 				operands.Insert(0, newThis);
 			}
@@ -2070,13 +2069,19 @@ namespace Mosa.Compiler.Framework.Stages
 			return !is64Bit ? instruction32 : instruction64;
 		}
 
+		private void AddArrayBoundsCheck(InstructionNode node, Operand arrayOperand, Operand arrayIndexOperand)
+		{
+			var before = new Context(node).InsertBefore();
+			before.AppendInstruction(IRInstruction.CheckArrayBounds, null, arrayOperand, arrayIndexOperand);
+		}
+
 		/// <summary>
 		/// Adds bounds check to the array access.
 		/// </summary>
 		/// <param name="node">The node.</param>
 		/// <param name="arrayOperand">The array operand.</param>
 		/// <param name="arrayIndexOperand">The index operand.</param>
-		private void AddArrayBoundsCheck(InstructionNode node, Operand arrayOperand, Operand arrayIndexOperand)
+		private void AddArrayBoundsCheck2(InstructionNode node, Operand arrayOperand, Operand arrayIndexOperand)
 		{
 			var before = new Context(node).InsertBefore();
 

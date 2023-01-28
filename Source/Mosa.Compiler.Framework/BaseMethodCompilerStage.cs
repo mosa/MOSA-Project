@@ -168,12 +168,22 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the 32-bit constant zero.
 		/// </summary>
-		protected Operand ConstantZero32 => MethodCompiler.ConstantZero;
+		protected Operand Constant32_0 => MethodCompiler.Constant32_0;
 
 		/// <summary>
 		/// Gets the 64-bit constant zero.
 		/// </summary>
-		protected Operand ConstantZero64 => MethodCompiler.ConstantZero;
+		protected Operand Constant64_0 => MethodCompiler.Constant64_0;
+
+		/// <summary>
+		/// Gets the floating point R4 constant zero.
+		/// </summary>
+		protected Operand ConstantR4_0 => MethodCompiler.ConstantR4_0;
+
+		/// <summary>
+		/// Gets the floating point R8 constant zero.
+		/// </summary>
+		protected Operand ConstantR8_0 => MethodCompiler.ConstantR8_0;
 
 		/// <summary>
 		/// Gets the stack frame.
@@ -290,16 +300,7 @@ namespace Mosa.Compiler.Framework
 		{
 			ResetRegisteredCounters();
 
-			try
-			{
-				Run();
-			}
-			catch (Exception ex)
-			{
-				MethodCompiler.Stop();
-				PostEvent(CompilerEvent.Exception, $"Method: {Method} -> {ex}");
-				MethodCompiler.Compiler.Stop();
-			}
+			Run();
 
 			PostTraceLogs(traceLogs);
 

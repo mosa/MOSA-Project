@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Array
+namespace Mosa.Compiler.Framework.Transforms.Array
 {
 	public sealed class CheckArrayBounds : BaseTransform
 	{
