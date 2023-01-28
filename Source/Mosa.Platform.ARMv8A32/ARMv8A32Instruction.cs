@@ -36,38 +36,31 @@ public abstract class ARMv8A32Instruction : BasePlatformInstruction
 
 	public static byte GetConditionCode(ConditionCode condition)
 	{
-		switch (condition)
+		return condition switch
 		{
-			case ConditionCode.Always: return 0b1110;
-
-			case ConditionCode.Zero: return 0b0000;
-			case ConditionCode.NotZero: return 0b0001;
-
-			case ConditionCode.Carry: return 0b0010;
-			case ConditionCode.NoCarry: return 0b0011;
-
-			case ConditionCode.Signed: return 0b0100;
-			case ConditionCode.NotSigned: return 0b0101;
-
-			case ConditionCode.Overflow: return 0b0110;
-			case ConditionCode.NoOverflow: return 0b0111;
-
-			case ConditionCode.Equal: return 0b0000;
-			case ConditionCode.NotEqual: return 0b0001;
-
-			case ConditionCode.GreaterOrEqual: return 0b1010;
-			case ConditionCode.Greater: return 0b1100;
-			case ConditionCode.LessOrEqual: return 0b1101;
-			case ConditionCode.Less: return 0b1011;
-			case ConditionCode.UnsignedGreaterOrEqual: return 0b0010;
-			case ConditionCode.UnsignedGreater: return 0b1000;
-			case ConditionCode.UnsignedLessOrEqual: return 0b1001;
-			case ConditionCode.UnsignedLess: return 0b0011;
-			case ConditionCode.Positive: return 0b0101;
-
-			case ConditionCode.Never: return 0b1111;
-			case ConditionCode.Undefined: return 0b1110;
-			default: throw new NotSupportedException();
-		}
+			ConditionCode.Always => 0b1110,
+			ConditionCode.Zero => 0b0000,
+			ConditionCode.NotZero => 0b0001,
+			ConditionCode.Carry => 0b0010,
+			ConditionCode.NoCarry => 0b0011,
+			ConditionCode.Signed => 0b0100,
+			ConditionCode.NotSigned => 0b0101,
+			ConditionCode.Overflow => 0b0110,
+			ConditionCode.NoOverflow => 0b0111,
+			ConditionCode.Equal => 0b0000,
+			ConditionCode.NotEqual => 0b0001,
+			ConditionCode.GreaterOrEqual => 0b1010,
+			ConditionCode.Greater => 0b1100,
+			ConditionCode.LessOrEqual => 0b1101,
+			ConditionCode.Less => 0b1011,
+			ConditionCode.UnsignedGreaterOrEqual => 0b0010,
+			ConditionCode.UnsignedGreater => 0b1000,
+			ConditionCode.UnsignedLessOrEqual => 0b1001,
+			ConditionCode.UnsignedLess => 0b0011,
+			ConditionCode.Positive => 0b0101,
+			ConditionCode.Never => 0b1111,
+			ConditionCode.Undefined => 0b1110,
+			_ => throw new NotSupportedException()
+		};
 	}
 }

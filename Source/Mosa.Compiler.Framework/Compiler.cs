@@ -639,29 +639,28 @@ public sealed class Compiler
 
 	public MosaType GetTypeFromTypeCode(MosaTypeCode code)
 	{
-		switch (code)
+		return code switch
 		{
-			case MosaTypeCode.Void: return TypeSystem.BuiltIn.Void;
-			case MosaTypeCode.Boolean: return TypeSystem.BuiltIn.Boolean;
-			case MosaTypeCode.Char: return TypeSystem.BuiltIn.Char;
-			case MosaTypeCode.I1: return TypeSystem.BuiltIn.I1;
-			case MosaTypeCode.U1: return TypeSystem.BuiltIn.U1;
-			case MosaTypeCode.I2: return TypeSystem.BuiltIn.I2;
-			case MosaTypeCode.U2: return TypeSystem.BuiltIn.U2;
-			case MosaTypeCode.I4: return TypeSystem.BuiltIn.I4;
-			case MosaTypeCode.U4: return TypeSystem.BuiltIn.U4;
-			case MosaTypeCode.I8: return TypeSystem.BuiltIn.I8;
-			case MosaTypeCode.U8: return TypeSystem.BuiltIn.U8;
-			case MosaTypeCode.R4: return TypeSystem.BuiltIn.R4;
-			case MosaTypeCode.R8: return TypeSystem.BuiltIn.R8;
-			case MosaTypeCode.I: return TypeSystem.BuiltIn.I;
-			case MosaTypeCode.U: return TypeSystem.BuiltIn.U;
-			case MosaTypeCode.String: return TypeSystem.BuiltIn.String;
-			case MosaTypeCode.TypedRef: return TypeSystem.BuiltIn.TypedRef;
-			case MosaTypeCode.Object: return TypeSystem.BuiltIn.Object;
-		}
-
-		throw new CompilerException("Can't convert type code {code} to type");
+			MosaTypeCode.Void => TypeSystem.BuiltIn.Void,
+			MosaTypeCode.Boolean => TypeSystem.BuiltIn.Boolean,
+			MosaTypeCode.Char => TypeSystem.BuiltIn.Char,
+			MosaTypeCode.I1 => TypeSystem.BuiltIn.I1,
+			MosaTypeCode.U1 => TypeSystem.BuiltIn.U1,
+			MosaTypeCode.I2 => TypeSystem.BuiltIn.I2,
+			MosaTypeCode.U2 => TypeSystem.BuiltIn.U2,
+			MosaTypeCode.I4 => TypeSystem.BuiltIn.I4,
+			MosaTypeCode.U4 => TypeSystem.BuiltIn.U4,
+			MosaTypeCode.I8 => TypeSystem.BuiltIn.I8,
+			MosaTypeCode.U8 => TypeSystem.BuiltIn.U8,
+			MosaTypeCode.R4 => TypeSystem.BuiltIn.R4,
+			MosaTypeCode.R8 => TypeSystem.BuiltIn.R8,
+			MosaTypeCode.I => TypeSystem.BuiltIn.I,
+			MosaTypeCode.U => TypeSystem.BuiltIn.U,
+			MosaTypeCode.String => TypeSystem.BuiltIn.String,
+			MosaTypeCode.TypedRef => TypeSystem.BuiltIn.TypedRef,
+			MosaTypeCode.Object => TypeSystem.BuiltIn.Object,
+			_ => throw new CompilerException("Can't convert type code {code} to type")
+		};
 	}
 
 	public StackTypeCode GetStackTypeCode(MosaType type)
@@ -752,31 +751,17 @@ public sealed class Compiler
 
 	public MosaType GetStackTypeFromCode(StackTypeCode code)
 	{
-		switch (code)
+		return code switch
 		{
-			case StackTypeCode.Int32:
-				return TypeSystem.BuiltIn.I4;
-
-			case StackTypeCode.Int64:
-				return TypeSystem.BuiltIn.I8;
-
-			case StackTypeCode.N:
-				return TypeSystem.BuiltIn.I;
-
-			case StackTypeCode.F:
-				return TypeSystem.BuiltIn.R8;
-
-			case StackTypeCode.O:
-				return TypeSystem.BuiltIn.Object;
-
-			case StackTypeCode.UnmanagedPointer:
-				return TypeSystem.BuiltIn.Pointer;
-
-			case StackTypeCode.ManagedPointer:
-				return TypeSystem.BuiltIn.Object.ToManagedPointer();
-		}
-
-		throw new CompilerException($"Can't convert stack type code {code} to type");
+			StackTypeCode.Int32 => TypeSystem.BuiltIn.I4,
+			StackTypeCode.Int64 => TypeSystem.BuiltIn.I8,
+			StackTypeCode.N => TypeSystem.BuiltIn.I,
+			StackTypeCode.F => TypeSystem.BuiltIn.R8,
+			StackTypeCode.O => TypeSystem.BuiltIn.Object,
+			StackTypeCode.UnmanagedPointer => TypeSystem.BuiltIn.Pointer,
+			StackTypeCode.ManagedPointer => TypeSystem.BuiltIn.Object.ToManagedPointer(),
+			_ => throw new CompilerException($"Can't convert stack type code {code} to type")
+		};
 	}
 
 	#endregion Type Methods

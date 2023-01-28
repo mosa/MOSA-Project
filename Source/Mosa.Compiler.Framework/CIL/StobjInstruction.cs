@@ -29,19 +29,19 @@ public sealed class StobjInstruction : BinaryInstruction
 	public StobjInstruction(OpCode opcode)
 		: base(opcode)
 	{
-		switch (opcode)
+		elementType = opcode switch
 		{
-			case OpCode.Stind_i1: elementType = MosaTypeCode.I1; break;
-			case OpCode.Stind_i2: elementType = MosaTypeCode.I2; break;
-			case OpCode.Stind_i4: elementType = MosaTypeCode.I4; break;
-			case OpCode.Stind_i8: elementType = MosaTypeCode.I8; break;
-			case OpCode.Stind_r4: elementType = MosaTypeCode.R4; break;
-			case OpCode.Stind_r8: elementType = MosaTypeCode.R8; break;
-			case OpCode.Stind_i: elementType = MosaTypeCode.I; break;
-			case OpCode.Stind_ref: elementType = MosaTypeCode.Object; break;
-			case OpCode.Stobj: elementType = null; break;
-			default: throw new NotImplementCompilerException();
-		}
+			OpCode.Stind_i1 => MosaTypeCode.I1,
+			OpCode.Stind_i2 => MosaTypeCode.I2,
+			OpCode.Stind_i4 => MosaTypeCode.I4,
+			OpCode.Stind_i8 => MosaTypeCode.I8,
+			OpCode.Stind_r4 => MosaTypeCode.R4,
+			OpCode.Stind_r8 => MosaTypeCode.R8,
+			OpCode.Stind_i => MosaTypeCode.I,
+			OpCode.Stind_ref => MosaTypeCode.Object,
+			OpCode.Stobj => null,
+			_ => throw new NotImplementCompilerException()
+		};
 	}
 
 	#endregion Construction

@@ -855,34 +855,34 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 	private static bool IsBranch(OpCode opcode)
 	{
-		switch (opcode)
+		return opcode switch
 		{
-			case OpCode.Beq: return true;
-			case OpCode.Beq_s: return true;
-			case OpCode.Bge: return true;
-			case OpCode.Bge_s: return true;
-			case OpCode.Bge_un: return true;
-			case OpCode.Bge_un_s: return true;
-			case OpCode.Bgt: return true;
-			case OpCode.Bgt_s: return true;
-			case OpCode.Bgt_un: return true;
-			case OpCode.Bgt_un_s: return true;
-			case OpCode.Ble: return true;
-			case OpCode.Ble_s: return true;
-			case OpCode.Ble_un: return true;
-			case OpCode.Ble_un_s: return true;
-			case OpCode.Blt: return true;
-			case OpCode.Blt_s: return true;
-			case OpCode.Blt_un: return true;
-			case OpCode.Blt_un_s: return true;
-			case OpCode.Bne_un: return true;
-			case OpCode.Bne_un_s: return true;
-			case OpCode.Brfalse_s: return true;
-			case OpCode.Brtrue_s: return true;
-			case OpCode.Brfalse: return true;
-			case OpCode.Brtrue: return true;
-			default: return false;
-		}
+			OpCode.Beq => true,
+			OpCode.Beq_s => true,
+			OpCode.Bge => true,
+			OpCode.Bge_s => true,
+			OpCode.Bge_un => true,
+			OpCode.Bge_un_s => true,
+			OpCode.Bgt => true,
+			OpCode.Bgt_s => true,
+			OpCode.Bgt_un => true,
+			OpCode.Bgt_un_s => true,
+			OpCode.Ble => true,
+			OpCode.Ble_s => true,
+			OpCode.Ble_un => true,
+			OpCode.Ble_un_s => true,
+			OpCode.Blt => true,
+			OpCode.Blt_s => true,
+			OpCode.Blt_un => true,
+			OpCode.Blt_un_s => true,
+			OpCode.Bne_un => true,
+			OpCode.Bne_un_s => true,
+			OpCode.Brfalse_s => true,
+			OpCode.Brtrue_s => true,
+			OpCode.Brfalse => true,
+			OpCode.Brtrue => true,
+			_ => false
+		};
 	}
 
 	private static bool IsCompoundType(MosaType underlyingType)
@@ -897,17 +897,17 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 	private Operand AllocatedOperand(StackType stackType, MosaType type = null)
 	{
-		switch (stackType)
+		return stackType switch
 		{
-			case StackType.Int32: return AllocateVirtualRegisterI32();
-			case StackType.Int64: return AllocateVirtualRegisterI64();
-			case StackType.R4: return AllocateVirtualRegisterR4();
-			case StackType.R8: return AllocateVirtualRegisterR8();
-			case StackType.Object: return AllocateVirtualRegisterObject();
-			case StackType.ManagedPointer: return AllocateVirtualRegisterManagedPointer();
-			case StackType.ValueType: return MethodCompiler.AddStackLocal(type);
-			default: throw new CompilerException("Not implemented yet");
-		}
+			StackType.Int32 => AllocateVirtualRegisterI32(),
+			StackType.Int64 => AllocateVirtualRegisterI64(),
+			StackType.R4 => AllocateVirtualRegisterR4(),
+			StackType.R8 => AllocateVirtualRegisterR8(),
+			StackType.Object => AllocateVirtualRegisterObject(),
+			StackType.ManagedPointer => AllocateVirtualRegisterManagedPointer(),
+			StackType.ValueType => MethodCompiler.AddStackLocal(type),
+			_ => throw new CompilerException("Not implemented yet")
+		};
 	}
 
 	private StackEntry CreateStateEntry(MosaType type)
@@ -939,19 +939,17 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 	private ElementType GetElementType(StackType stackType)
 	{
-		switch (stackType)
+		return stackType switch
 		{
-			case StackType.Int32: return ElementType.I4;
-			case StackType.Int64: return ElementType.I8;
-			case StackType.Object: return ElementType.Ref;
-			case StackType.R4: return ElementType.R4;
-			case StackType.R8: return ElementType.R8;
-
-			case StackType.ManagedPointer when Is32BitPlatform: return ElementType.I4;
-			case StackType.ManagedPointer when Is64BitPlatform: return ElementType.I8;
-		}
-
-		throw new CompilerException($"Unable to convert stacktype ({stackType}) to element type");
+			StackType.Int32 => ElementType.I4,
+			StackType.Int64 => ElementType.I8,
+			StackType.Object => ElementType.Ref,
+			StackType.R4 => ElementType.R4,
+			StackType.R8 => ElementType.R8,
+			StackType.ManagedPointer when Is32BitPlatform => ElementType.I4,
+			StackType.ManagedPointer when Is64BitPlatform => ElementType.I8,
+			_ => throw new CompilerException($"Unable to convert stacktype ({stackType}) to element type")
+		};
 	}
 
 	private ElementType GetElementType(MosaType type)
@@ -1015,22 +1013,21 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 	private uint GetSize(ElementType elementType)
 	{
-		switch (elementType)
+		return elementType switch
 		{
-			case ElementType.I1: return 1;
-			case ElementType.I2: return 2;
-			case ElementType.I4: return 4;
-			case ElementType.I8: return 8;
-			case ElementType.U1: return 1;
-			case ElementType.U2: return 2;
-			case ElementType.U4: return 4;
-			case ElementType.U8: return 8;
-			case ElementType.R4: return 4;
-			case ElementType.R8: return 8;
-			case ElementType.Ref: return Is32BitPlatform ? 4 : 8u;
-		}
-
-		throw new CompilerException($"Cannot get size of {elementType}");
+			ElementType.I1 => 1,
+			ElementType.I2 => 2,
+			ElementType.I4 => 4,
+			ElementType.I8 => 8,
+			ElementType.U1 => 1,
+			ElementType.U2 => 2,
+			ElementType.U4 => 4,
+			ElementType.U8 => 8,
+			ElementType.R4 => 4,
+			ElementType.R8 => 8,
+			ElementType.Ref => Is32BitPlatform ? 4 : 8u,
+			_ => throw new CompilerException($"Cannot get size of {elementType}")
+		};
 	}
 
 	private StackType GetStackType(MosaType type)
@@ -1062,35 +1059,34 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 	private StackType GetStackType(ElementType elementType)
 	{
-		switch (elementType)
+		return elementType switch
 		{
-			case ElementType.I1: return StackType.Int32;
-			case ElementType.I2: return StackType.Int32;
-			case ElementType.I4: return StackType.Int32;
-			case ElementType.I8: return StackType.Int64;
-			case ElementType.U1: return StackType.Int32;
-			case ElementType.U2: return StackType.Int32;
-			case ElementType.U4: return StackType.Int32;
-			case ElementType.U8: return StackType.Int64;
-			case ElementType.Ref: return StackType.Object;
-			case ElementType.R4: return StackType.R4;
-			case ElementType.R8: return StackType.R8;
-		}
-
-		throw new CompilerException($"Cannot translate to ElementType {elementType} to StackType");
+			ElementType.I1 => StackType.Int32,
+			ElementType.I2 => StackType.Int32,
+			ElementType.I4 => StackType.Int32,
+			ElementType.I8 => StackType.Int64,
+			ElementType.U1 => StackType.Int32,
+			ElementType.U2 => StackType.Int32,
+			ElementType.U4 => StackType.Int32,
+			ElementType.U8 => StackType.Int64,
+			ElementType.Ref => StackType.Object,
+			ElementType.R4 => StackType.R4,
+			ElementType.R8 => StackType.R8,
+			_ => throw new CompilerException($"Cannot translate to ElementType {elementType} to StackType")
+		};
 	}
 
 	private MosaType GetType(StackType stackType)
 	{
-		switch (stackType)
+		return stackType switch
 		{
-			case StackType.Int32: return TypeSystem.BuiltIn.I4;
-			case StackType.Int64: return TypeSystem.BuiltIn.I8;
-			case StackType.R4: return TypeSystem.BuiltIn.R4;
-			case StackType.R8: return TypeSystem.BuiltIn.R8;
-			case StackType.Object: return TypeSystem.BuiltIn.Object;
-			default: return null;
-		}
+			StackType.Int32 => TypeSystem.BuiltIn.I4,
+			StackType.Int64 => TypeSystem.BuiltIn.I8,
+			StackType.R4 => TypeSystem.BuiltIn.R4,
+			StackType.R8 => TypeSystem.BuiltIn.R8,
+			StackType.Object => TypeSystem.BuiltIn.Object,
+			_ => null
+		};
 	}
 
 	private MosaType GetType(StackEntry stackEntry)
@@ -1107,135 +1103,127 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 	private BaseIRInstruction GetBoxInstruction(ElementType elementType)
 	{
-		switch (elementType)
+		return elementType switch
 		{
-			case ElementType.R4: return IRInstruction.BoxR4;
-			case ElementType.R8: return IRInstruction.BoxR8;
-			case ElementType.U4: return IRInstruction.Box32;
-			case ElementType.I4: return IRInstruction.Box32;
-			case ElementType.U8: return IRInstruction.Box64;
-			case ElementType.I8: return IRInstruction.Box64;
-
-			case ElementType.I1: return IRInstruction.Box32;
-			case ElementType.U1: return IRInstruction.Box32;
-			case ElementType.I2: return IRInstruction.Box32;
-			case ElementType.U2: return IRInstruction.Box32;
-
-			case ElementType.I when Is32BitPlatform: return IRInstruction.Box32;
-			case ElementType.I when Is64BitPlatform: return IRInstruction.Box64;
-		}
-
-		throw new InvalidOperationException();
+			ElementType.R4 => IRInstruction.BoxR4,
+			ElementType.R8 => IRInstruction.BoxR8,
+			ElementType.U4 => IRInstruction.Box32,
+			ElementType.I4 => IRInstruction.Box32,
+			ElementType.U8 => IRInstruction.Box64,
+			ElementType.I8 => IRInstruction.Box64,
+			ElementType.I1 => IRInstruction.Box32,
+			ElementType.U1 => IRInstruction.Box32,
+			ElementType.I2 => IRInstruction.Box32,
+			ElementType.U2 => IRInstruction.Box32,
+			ElementType.I when Is32BitPlatform => IRInstruction.Box32,
+			ElementType.I when Is64BitPlatform => IRInstruction.Box64,
+			_ => throw new InvalidOperationException()
+		};
 	}
 
 	private BaseInstruction GetLoadInstruction(ElementType elementType)
 	{
-		switch (elementType)
+		return elementType switch
 		{
-			case ElementType.I1: return IRInstruction.LoadSignExtend8x32;
-			case ElementType.U1: return IRInstruction.LoadZeroExtend8x32;
-			case ElementType.I2: return IRInstruction.LoadSignExtend16x32;
-			case ElementType.U2: return IRInstruction.LoadZeroExtend16x32;
-			case ElementType.I4: return IRInstruction.Load32;
-			case ElementType.U4: return IRInstruction.Load32;
-			case ElementType.I8: return IRInstruction.Load64;
-			case ElementType.U8: return IRInstruction.Load64;
-			case ElementType.R4: return IRInstruction.LoadR4;
-			case ElementType.R8: return IRInstruction.LoadR8;
-			case ElementType.Ref: return IRInstruction.LoadObject;
-			case ElementType.I when Is32BitPlatform: return IRInstruction.Load32;
-			case ElementType.I when Is64BitPlatform: return IRInstruction.Load64;
-		}
-
-		throw new CompilerException($"Invalid ElementType {elementType}");
+			ElementType.I1 => IRInstruction.LoadSignExtend8x32,
+			ElementType.U1 => IRInstruction.LoadZeroExtend8x32,
+			ElementType.I2 => IRInstruction.LoadSignExtend16x32,
+			ElementType.U2 => IRInstruction.LoadZeroExtend16x32,
+			ElementType.I4 => IRInstruction.Load32,
+			ElementType.U4 => IRInstruction.Load32,
+			ElementType.I8 => IRInstruction.Load64,
+			ElementType.U8 => IRInstruction.Load64,
+			ElementType.R4 => IRInstruction.LoadR4,
+			ElementType.R8 => IRInstruction.LoadR8,
+			ElementType.Ref => IRInstruction.LoadObject,
+			ElementType.I when Is32BitPlatform => IRInstruction.Load32,
+			ElementType.I when Is64BitPlatform => IRInstruction.Load64,
+			_ => throw new CompilerException($"Invalid ElementType {elementType}")
+		};
 	}
 
 	private BaseInstruction GetLoadParamInstruction(ElementType elementType)
 	{
-		switch (elementType)
+		return elementType switch
 		{
-			case ElementType.I1: return IRInstruction.LoadParamSignExtend8x32;
-			case ElementType.U1: return IRInstruction.LoadParamZeroExtend8x32;
-			case ElementType.I2: return IRInstruction.LoadParamSignExtend16x32;
-			case ElementType.U2: return IRInstruction.LoadParamZeroExtend16x32;
-			case ElementType.I4: return IRInstruction.LoadParam32;
-			case ElementType.U4: return IRInstruction.LoadParam32;
-			case ElementType.I8: return IRInstruction.LoadParam64;
-			case ElementType.U8: return IRInstruction.LoadParam64;
-			case ElementType.R4: return IRInstruction.LoadParamR4;
-			case ElementType.R8: return IRInstruction.LoadParamR8;
-			case ElementType.Ref: return IRInstruction.LoadParamObject;
-			case ElementType.I when Is32BitPlatform: return IRInstruction.LoadParam32;
-			case ElementType.I when Is64BitPlatform: return IRInstruction.LoadParam64;
-		}
-
-		throw new CompilerException($"Invalid ElementType {elementType}");
+			ElementType.I1 => IRInstruction.LoadParamSignExtend8x32,
+			ElementType.U1 => IRInstruction.LoadParamZeroExtend8x32,
+			ElementType.I2 => IRInstruction.LoadParamSignExtend16x32,
+			ElementType.U2 => IRInstruction.LoadParamZeroExtend16x32,
+			ElementType.I4 => IRInstruction.LoadParam32,
+			ElementType.U4 => IRInstruction.LoadParam32,
+			ElementType.I8 => IRInstruction.LoadParam64,
+			ElementType.U8 => IRInstruction.LoadParam64,
+			ElementType.R4 => IRInstruction.LoadParamR4,
+			ElementType.R8 => IRInstruction.LoadParamR8,
+			ElementType.Ref => IRInstruction.LoadParamObject,
+			ElementType.I when Is32BitPlatform => IRInstruction.LoadParam32,
+			ElementType.I when Is64BitPlatform => IRInstruction.LoadParam64,
+			_ => throw new CompilerException($"Invalid ElementType {elementType}")
+		};
 	}
 
 	private BaseInstruction GetMoveInstruction(ElementType elementType)
 	{
-		switch (elementType)
+		return elementType switch
 		{
-			case ElementType.I1: return IRInstruction.Move32;
-			case ElementType.U1: return IRInstruction.Move32;
-			case ElementType.I2: return IRInstruction.Move32;
-			case ElementType.U2: return IRInstruction.Move32;
-			case ElementType.I4: return IRInstruction.Move32;
-			case ElementType.U4: return IRInstruction.Move32;
-			case ElementType.I8: return IRInstruction.Move64;
-			case ElementType.U8: return IRInstruction.Move64;
-			case ElementType.R4: return IRInstruction.MoveR4;
-			case ElementType.R8: return IRInstruction.MoveR8;
-			case ElementType.Ref: return IRInstruction.MoveObject;
-			case ElementType.I when Is32BitPlatform: return IRInstruction.Move32;
-			case ElementType.I when Is64BitPlatform: return IRInstruction.Move64;
-		}
-
-		throw new CompilerException($"Invalid ElementType {elementType}");
+			ElementType.I1 => IRInstruction.Move32,
+			ElementType.U1 => IRInstruction.Move32,
+			ElementType.I2 => IRInstruction.Move32,
+			ElementType.U2 => IRInstruction.Move32,
+			ElementType.I4 => IRInstruction.Move32,
+			ElementType.U4 => IRInstruction.Move32,
+			ElementType.I8 => IRInstruction.Move64,
+			ElementType.U8 => IRInstruction.Move64,
+			ElementType.R4 => IRInstruction.MoveR4,
+			ElementType.R8 => IRInstruction.MoveR8,
+			ElementType.Ref => IRInstruction.MoveObject,
+			ElementType.I when Is32BitPlatform => IRInstruction.Move32,
+			ElementType.I when Is64BitPlatform => IRInstruction.Move64,
+			_ => throw new CompilerException($"Invalid ElementType {elementType}")
+		};
 	}
 
 	private BaseInstruction GetStoreInstruction(ElementType elementType)
 	{
-		switch (elementType)
+		return elementType switch
 		{
-			case ElementType.I1: return IRInstruction.Store8;
-			case ElementType.U1: return IRInstruction.Store8;
-			case ElementType.I2: return IRInstruction.Store16;
-			case ElementType.U2: return IRInstruction.Store16;
-			case ElementType.I4: return IRInstruction.Store32;
-			case ElementType.U4: return IRInstruction.Store32;
-			case ElementType.I8: return IRInstruction.Store64;
-			case ElementType.U8: return IRInstruction.Store64;
-			case ElementType.R4: return IRInstruction.StoreR4;
-			case ElementType.R8: return IRInstruction.StoreR8;
-			case ElementType.Ref: return IRInstruction.StoreObject;
-			case ElementType.I when Is32BitPlatform: return IRInstruction.Store32;
-			case ElementType.I when Is64BitPlatform: return IRInstruction.Store64;
-		}
-
-		throw new CompilerException($"Invalid ElementType {elementType}");
+			ElementType.I1 => IRInstruction.Store8,
+			ElementType.U1 => IRInstruction.Store8,
+			ElementType.I2 => IRInstruction.Store16,
+			ElementType.U2 => IRInstruction.Store16,
+			ElementType.I4 => IRInstruction.Store32,
+			ElementType.U4 => IRInstruction.Store32,
+			ElementType.I8 => IRInstruction.Store64,
+			ElementType.U8 => IRInstruction.Store64,
+			ElementType.R4 => IRInstruction.StoreR4,
+			ElementType.R8 => IRInstruction.StoreR8,
+			ElementType.Ref => IRInstruction.StoreObject,
+			ElementType.I when Is32BitPlatform => IRInstruction.Store32,
+			ElementType.I when Is64BitPlatform => IRInstruction.Store64,
+			_ => throw new CompilerException($"Invalid ElementType {elementType}")
+		};
 	}
 
 	private BaseInstruction GetStoreParamInstruction(ElementType elementType)
 	{
-		switch (elementType)
+		return elementType switch
 		{
-			case ElementType.I1: return IRInstruction.StoreParam8;
-			case ElementType.U1: return IRInstruction.StoreParam8;
-			case ElementType.I2: return IRInstruction.StoreParam16;
-			case ElementType.U2: return IRInstruction.StoreParam16;
-			case ElementType.I4: return IRInstruction.StoreParam32;
-			case ElementType.U4: return IRInstruction.StoreParam32;
-			case ElementType.I8: return IRInstruction.StoreParam64;
-			case ElementType.U8: return IRInstruction.StoreParam64;
-			case ElementType.R4: return IRInstruction.StoreParamR4;
-			case ElementType.R8: return IRInstruction.StoreParamR8;
-			case ElementType.Ref: return IRInstruction.StoreParamObject;
-			case ElementType.I when Is32BitPlatform: return IRInstruction.StoreParam32;
-			case ElementType.I when Is64BitPlatform: return IRInstruction.StoreParam64;
-		}
-
-		throw new CompilerException($"Invalid ElementType {elementType}");
+			ElementType.I1 => IRInstruction.StoreParam8,
+			ElementType.U1 => IRInstruction.StoreParam8,
+			ElementType.I2 => IRInstruction.StoreParam16,
+			ElementType.U2 => IRInstruction.StoreParam16,
+			ElementType.I4 => IRInstruction.StoreParam32,
+			ElementType.U4 => IRInstruction.StoreParam32,
+			ElementType.I8 => IRInstruction.StoreParam64,
+			ElementType.U8 => IRInstruction.StoreParam64,
+			ElementType.R4 => IRInstruction.StoreParamR4,
+			ElementType.R8 => IRInstruction.StoreParamR8,
+			ElementType.Ref => IRInstruction.StoreParamObject,
+			ElementType.I when Is32BitPlatform => IRInstruction.StoreParam32,
+			ElementType.I when Is64BitPlatform => IRInstruction.StoreParam64,
+			_ => throw new CompilerException($"Invalid ElementType {elementType}")
+		};
 	}
 
 	#endregion Instruction Maps

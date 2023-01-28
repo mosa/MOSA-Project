@@ -23,22 +23,22 @@ public sealed class LdobjInstruction : UnaryInstruction
 	public LdobjInstruction(OpCode opcode)
 		: base(opcode, 1)
 	{
-		switch (opcode)
+		elementType = opcode switch
 		{
-			case OpCode.Ldind_i1: elementType = MosaTypeCode.I1; break;
-			case OpCode.Ldind_i2: elementType = MosaTypeCode.I2; break;
-			case OpCode.Ldind_i4: elementType = MosaTypeCode.I4; break;
-			case OpCode.Ldind_i8: elementType = MosaTypeCode.I8; break;
-			case OpCode.Ldind_u1: elementType = MosaTypeCode.U1; break;
-			case OpCode.Ldind_u2: elementType = MosaTypeCode.U2; break;
-			case OpCode.Ldind_u4: elementType = MosaTypeCode.U4; break;
-			case OpCode.Ldind_i: elementType = MosaTypeCode.I; break;
-			case OpCode.Ldind_r4: elementType = MosaTypeCode.R4; break;
-			case OpCode.Ldind_r8: elementType = MosaTypeCode.R8; break;
-			case OpCode.Ldind_ref: elementType = MosaTypeCode.Object; break;
-			case OpCode.Ldobj: elementType = null; break;
-			default: throw new NotImplementCompilerException();
-		}
+			OpCode.Ldind_i1 => MosaTypeCode.I1,
+			OpCode.Ldind_i2 => MosaTypeCode.I2,
+			OpCode.Ldind_i4 => MosaTypeCode.I4,
+			OpCode.Ldind_i8 => MosaTypeCode.I8,
+			OpCode.Ldind_u1 => MosaTypeCode.U1,
+			OpCode.Ldind_u2 => MosaTypeCode.U2,
+			OpCode.Ldind_u4 => MosaTypeCode.U4,
+			OpCode.Ldind_i => MosaTypeCode.I,
+			OpCode.Ldind_r4 => MosaTypeCode.R4,
+			OpCode.Ldind_r8 => MosaTypeCode.R8,
+			OpCode.Ldind_ref => MosaTypeCode.Object,
+			OpCode.Ldobj => null,
+			_ => throw new NotImplementCompilerException()
+		};
 	}
 
 	/// <summary>

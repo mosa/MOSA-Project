@@ -979,36 +979,36 @@ public class MosaTypeLayout
 		if (typeCode == MosaTypeCode.ValueType)
 			return false; // no search
 
-		switch (typeCode)
+		return typeCode switch
 		{
-			case MosaTypeCode.Void: return true;
-			case MosaTypeCode.MVar: return true;
-			case MosaTypeCode.Boolean: return true;
-			case MosaTypeCode.Char: return true;
-			case MosaTypeCode.I1: return true;
-			case MosaTypeCode.U1: return true;
-			case MosaTypeCode.I2: return true;
-			case MosaTypeCode.U2: return true;
-			case MosaTypeCode.I4: return true;
-			case MosaTypeCode.U4: return true;
-			case MosaTypeCode.I8: return true;
-			case MosaTypeCode.U8: return true;
-			case MosaTypeCode.R4: return true;
-			case MosaTypeCode.R8: return true;
-			case MosaTypeCode.String: return true;
-			case MosaTypeCode.UnmanagedPointer: return true;
-			case MosaTypeCode.ManagedPointer: return true;
-			case MosaTypeCode.ReferenceType: return true;
-			case MosaTypeCode.Array: return true;
-			case MosaTypeCode.TypedRef: return true;
-			case MosaTypeCode.I: return true;
-			case MosaTypeCode.U: return true;
-			case MosaTypeCode.FunctionPointer: return true;
-			case MosaTypeCode.Object: return true;
-			case MosaTypeCode.SZArray: return true;
-			case MosaTypeCode.Var: return false;
-			default: return false;
-		}
+			MosaTypeCode.Void => true,
+			MosaTypeCode.MVar => true,
+			MosaTypeCode.Boolean => true,
+			MosaTypeCode.Char => true,
+			MosaTypeCode.I1 => true,
+			MosaTypeCode.U1 => true,
+			MosaTypeCode.I2 => true,
+			MosaTypeCode.U2 => true,
+			MosaTypeCode.I4 => true,
+			MosaTypeCode.U4 => true,
+			MosaTypeCode.I8 => true,
+			MosaTypeCode.U8 => true,
+			MosaTypeCode.R4 => true,
+			MosaTypeCode.R8 => true,
+			MosaTypeCode.String => true,
+			MosaTypeCode.UnmanagedPointer => true,
+			MosaTypeCode.ManagedPointer => true,
+			MosaTypeCode.ReferenceType => true,
+			MosaTypeCode.Array => true,
+			MosaTypeCode.TypedRef => true,
+			MosaTypeCode.I => true,
+			MosaTypeCode.U => true,
+			MosaTypeCode.FunctionPointer => true,
+			MosaTypeCode.Object => true,
+			MosaTypeCode.SZArray => true,
+			MosaTypeCode.Var => false,
+			_ => false
+		};
 	}
 
 	private static (bool FitsIntegerRegister, bool FitsFloatRegister, bool Is64Bit, bool IsNative) GetRegisterTypeInfo(MosaType type)
@@ -1016,37 +1016,37 @@ public class MosaTypeLayout
 		if (type == null)
 			return (false, false, false, false);
 
-		switch (type.TypeCode)
+		return type.TypeCode switch
 		{
-			case MosaTypeCode.ValueType: return (true, false, false, true);
-			case MosaTypeCode.Void: return (true, false, false, true);
-			case MosaTypeCode.MVar: return (false, false, false, false);
-			case MosaTypeCode.Boolean: return (true, false, false, false);
-			case MosaTypeCode.Char: return (true, false, false, false);
-			case MosaTypeCode.I1: return (true, false, false, false);
-			case MosaTypeCode.U1: return (true, false, false, false);
-			case MosaTypeCode.I2: return (true, false, false, false);
-			case MosaTypeCode.U2: return (true, false, false, false);
-			case MosaTypeCode.I4: return (true, false, false, false);
-			case MosaTypeCode.U4: return (true, false, false, false);
-			case MosaTypeCode.I8: return (true, false, false, false);
-			case MosaTypeCode.U8: return (true, false, true, false);
-			case MosaTypeCode.R4: return (true, true, false, false);
-			case MosaTypeCode.R8: return (true, true, true, false);
-			case MosaTypeCode.String: return (true, false, false, true);
-			case MosaTypeCode.UnmanagedPointer: return (true, false, false, true);
-			case MosaTypeCode.ManagedPointer: return (true, false, false, true);
-			case MosaTypeCode.ReferenceType: return (true, false, false, true);
-			case MosaTypeCode.Array: return (true, false, false, true);
-			case MosaTypeCode.TypedRef: return (true, false, false, true);
-			case MosaTypeCode.I: return (true, false, true, true);
-			case MosaTypeCode.U: return (true, false, true, true);
-			case MosaTypeCode.FunctionPointer: return (true, false, true, false);
-			case MosaTypeCode.Object: return (true, false, true, false);
-			case MosaTypeCode.SZArray: return (true, false, true, false);
-			case MosaTypeCode.Var: return (false, false, false, false);
-			default: return (false, false, false, false);
-		}
+			MosaTypeCode.ValueType => (true, false, false, true),
+			MosaTypeCode.Void => (true, false, false, true),
+			MosaTypeCode.MVar => (false, false, false, false),
+			MosaTypeCode.Boolean => (true, false, false, false),
+			MosaTypeCode.Char => (true, false, false, false),
+			MosaTypeCode.I1 => (true, false, false, false),
+			MosaTypeCode.U1 => (true, false, false, false),
+			MosaTypeCode.I2 => (true, false, false, false),
+			MosaTypeCode.U2 => (true, false, false, false),
+			MosaTypeCode.I4 => (true, false, false, false),
+			MosaTypeCode.U4 => (true, false, false, false),
+			MosaTypeCode.I8 => (true, false, false, false),
+			MosaTypeCode.U8 => (true, false, true, false),
+			MosaTypeCode.R4 => (true, true, false, false),
+			MosaTypeCode.R8 => (true, true, true, false),
+			MosaTypeCode.String => (true, false, false, true),
+			MosaTypeCode.UnmanagedPointer => (true, false, false, true),
+			MosaTypeCode.ManagedPointer => (true, false, false, true),
+			MosaTypeCode.ReferenceType => (true, false, false, true),
+			MosaTypeCode.Array => (true, false, false, true),
+			MosaTypeCode.TypedRef => (true, false, false, true),
+			MosaTypeCode.I => (true, false, true, true),
+			MosaTypeCode.U => (true, false, true, true),
+			MosaTypeCode.FunctionPointer => (true, false, true, false),
+			MosaTypeCode.Object => (true, false, true, false),
+			MosaTypeCode.SZArray => (true, false, true, false),
+			MosaTypeCode.Var => (false, false, false, false),
+			_ => (false, false, false, false)
+		};
 	}
 
 	#endregion Internal

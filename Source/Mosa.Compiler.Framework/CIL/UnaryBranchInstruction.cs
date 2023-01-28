@@ -98,15 +98,15 @@ public class UnaryBranchInstruction : UnaryInstruction
 	{
 		get
 		{
-			switch (OpCode)
+			return OpCode switch
 			{
-				case OpCode.Brtrue: return "true";
-				case OpCode.Brtrue_s: return "true";
-				case OpCode.Brfalse: return "false";
-				case OpCode.Brfalse_s: return "false";
-				case OpCode.Switch: return "switch";
-				default: throw new CompilerException("Opcode not set");
-			}
+				OpCode.Brtrue => "true",
+				OpCode.Brtrue_s => "true",
+				OpCode.Brfalse => "false",
+				OpCode.Brfalse_s => "false",
+				OpCode.Switch => "switch",
+				_ => throw new CompilerException("Opcode not set")
+			};
 		}
 	}
 

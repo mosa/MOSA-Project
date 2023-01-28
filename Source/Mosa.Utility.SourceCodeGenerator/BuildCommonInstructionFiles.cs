@@ -570,13 +570,13 @@ public class BuildCommonInstructionFiles : BuildBaseTemplate
 
 				var subpart2 = opp ? subpart.Substring(1) : subpart;
 
-				switch (i)
+				operand = i switch
 				{
-					case 0: operand = "Operand1"; break;
-					case 1: operand = "Operand2"; break;
-					case 2: operand = "Operand3"; break;
-					default: operand = $"GetOperand({i})"; break;
-				}
+					0 => "Operand1",
+					1 => "Operand2",
+					2 => "Operand3",
+					_ => $"GetOperand({i})"
+				};
 
 				string cond1 = string.Empty;
 				string cond2 = string.Empty;
@@ -896,20 +896,18 @@ public class BuildCommonInstructionFiles : BuildBaseTemplate
 
 	private static string GetOperand(string part)
 	{
-		switch (part)
+		return part switch
 		{
-			case "o1": return "node.Operand1";
-			case "o2": return "node.Operand2";
-			case "o3": return "node.Operand3";
-			case "o4": return "node.GetOperand(3)";
-			case "r": return "node.Result";
-			case "r1": return "node.Result";
-			case "r2": return "node.Result2";
-			case "label": return "node.BranchTargets[0].Label";
-
-			case "status": return "node.StatusRegister";
-
-			default: return part; // pass as is
-		}
+			"o1" => "node.Operand1",
+			"o2" => "node.Operand2",
+			"o3" => "node.Operand3",
+			"o4" => "node.GetOperand(3)",
+			"r" => "node.Result",
+			"r1" => "node.Result",
+			"r2" => "node.Result2",
+			"label" => "node.BranchTargets[0].Label",
+			"status" => "node.StatusRegister",
+			_ => part
+		};
 	}
 }

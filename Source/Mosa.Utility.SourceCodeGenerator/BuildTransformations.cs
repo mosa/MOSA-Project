@@ -657,22 +657,20 @@ public class BuildTransformations : BuildBaseTemplate
 
 	private static string GetConditionText(ConditionCode condition)
 	{
-		switch (condition)
+		return condition switch
 		{
-			case ConditionCode.Equal: return "Equal";
-			case ConditionCode.NotEqual: return "NotEqual";
-			case ConditionCode.Less: return "Less";
-			case ConditionCode.LessOrEqual: return "LessOrEqual";
-			case ConditionCode.Greater: return "Greater";
-			case ConditionCode.GreaterOrEqual: return "GreaterOrEqual";
-
-			case ConditionCode.UnsignedLess: return "UnsignedLess";
-			case ConditionCode.UnsignedLessOrEqual: return "UnsignedLessOrEqual";
-			case ConditionCode.UnsignedGreater: return "UnsignedGreater";
-			case ConditionCode.UnsignedGreaterOrEqual: return "UnsignedGreaterOrEqual";
-
-			default: return null;
-		}
+			ConditionCode.Equal => "Equal",
+			ConditionCode.NotEqual => "NotEqual",
+			ConditionCode.Less => "Less",
+			ConditionCode.LessOrEqual => "LessOrEqual",
+			ConditionCode.Greater => "Greater",
+			ConditionCode.GreaterOrEqual => "GreaterOrEqual",
+			ConditionCode.UnsignedLess => "UnsignedLess",
+			ConditionCode.UnsignedLessOrEqual => "UnsignedLessOrEqual",
+			ConditionCode.UnsignedGreater => "UnsignedGreater",
+			ConditionCode.UnsignedGreaterOrEqual => "UnsignedGreaterOrEqual",
+			_ => null
+		};
 	}
 
 	private void EmitConditionStatement(string path)

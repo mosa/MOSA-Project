@@ -960,28 +960,27 @@ public sealed class Operand
 
 	private static string ShortenTypeName2(string value)
 	{
-		switch (value)
+		return value switch
 		{
-			case "System.Object": return "O";
-			case "System.Char": return "C";
-			case "System.Void": return "V";
-			case "System.String": return "String";
-			case "System.Byte": return "U1";
-			case "System.SByte": return "I1";
-			case "System.Boolean": return "B";
-			case "System.Int8": return "I1";
-			case "System.UInt8": return "U1";
-			case "System.Int16": return "I2";
-			case "System.UInt16": return "U2";
-			case "System.Int32": return "I4";
-			case "System.UInt32": return "U4";
-			case "System.Int64": return "I8";
-			case "System.UInt64": return "U8";
-			case "System.Single": return "R4";
-			case "System.Double": return "R8";
-		}
-
-		return value;
+			"System.Object" => "O",
+			"System.Char" => "C",
+			"System.Void" => "V",
+			"System.String" => "String",
+			"System.Byte" => "U1",
+			"System.SByte" => "I1",
+			"System.Boolean" => "B",
+			"System.Int8" => "I1",
+			"System.UInt8" => "U1",
+			"System.Int16" => "I2",
+			"System.UInt16" => "U2",
+			"System.Int32" => "I4",
+			"System.UInt32" => "U4",
+			"System.Int64" => "I8",
+			"System.UInt64" => "U8",
+			"System.Single" => "R4",
+			"System.Double" => "R8",
+			_ => value
+		};
 	}
 
 	#endregion Name Output

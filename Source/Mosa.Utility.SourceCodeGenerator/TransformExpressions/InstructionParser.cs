@@ -125,37 +125,23 @@ public static class InstructionParser
 
 			if (condition == ConditionCode.Always)
 			{
-				switch (t)
+				condition = t switch
 				{
-					case TokenType.Greater:
-						condition = ConditionCode.Greater;
-						break;
-
-					case TokenType.Less:
-						condition = ConditionCode.Less;
-						break;
-
-					case TokenType.Not:
-						condition = ConditionCode.NotEqual;
-						break;
-
-					case TokenType.Equal:
-						condition = ConditionCode.Equal;
-						break;
-				}
+					TokenType.Greater => ConditionCode.Greater,
+					TokenType.Less => ConditionCode.Less,
+					TokenType.Not => ConditionCode.NotEqual,
+					TokenType.Equal => ConditionCode.Equal,
+					_ => condition
+				};
 			}
 			else if (t == TokenType.Equal)
 			{
-				switch (condition)
+				condition = condition switch
 				{
-					case ConditionCode.Greater:
-						condition = ConditionCode.GreaterOrEqual;
-						break;
-
-					case ConditionCode.Less:
-						condition = ConditionCode.LessOrEqual;
-						break;
-				}
+					ConditionCode.Greater => ConditionCode.GreaterOrEqual,
+					ConditionCode.Less => ConditionCode.LessOrEqual,
+					_ => condition
+				};
 			}
 			else if (t == TokenType.Word)
 			{
@@ -163,24 +149,14 @@ public static class InstructionParser
 
 				if (text == "u")
 				{
-					switch (condition)
+					condition = condition switch
 					{
-						case ConditionCode.Greater:
-							condition = ConditionCode.UnsignedGreater;
-							break;
-
-						case ConditionCode.Less:
-							condition = ConditionCode.UnsignedLess;
-							break;
-
-						case ConditionCode.GreaterOrEqual:
-							condition = ConditionCode.UnsignedGreaterOrEqual;
-							break;
-
-						case ConditionCode.LessOrEqual:
-							condition = ConditionCode.UnsignedLessOrEqual;
-							break;
-					}
+						ConditionCode.Greater => ConditionCode.UnsignedGreater,
+						ConditionCode.Less => ConditionCode.UnsignedLess,
+						ConditionCode.GreaterOrEqual => ConditionCode.UnsignedGreaterOrEqual,
+						ConditionCode.LessOrEqual => ConditionCode.UnsignedLessOrEqual,
+						_ => condition
+					};
 				}
 
 				//else if (text == "set-equal")

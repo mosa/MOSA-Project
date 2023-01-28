@@ -9,357 +9,357 @@ public class LargeSwitchTest
 	[MosaUnitTest(Series = "I4")]
 	public static int LargeSwitchTest1(int a)
 	{
-		switch (a)
+		return a switch
 		{
-			case 1: return 3;
-			case 2: return 6;
-			case 3: return 9;
-			case 4: return 12;
-			case 5: return 15;
-			case 6: return 18;
-			case 7: return 21;
-			case 8: return 24;
-			case 9: return 27;
-			case 10: return 30;
-			case 11: return 33;
-			case 12: return 36;
-			case 13: return 39;
-			case 14: return 42;
-			case 15: return 45;
-			case 16: return 48;
-			case 17: return 51;
-			case 18: return 54;
-			case 19: return 57;
-			case 20: return 60;
-			case 21: return 63;
-			case 22: return 66;
-			case 23: return 69;
-			case 24: return 72;
-			case 25: return 75;
-			case 26: return 78;
-			case 27: return 81;
-			case 28: return 84;
-			case 29: return 87;
-			case 30: return 90;
-			case 31: return 93;
-			case 32: return 96;
-			case 33: return 99;
-			case 34: return 102;
-			case 35: return 105;
-			case 36: return 108;
-			case 37: return 111;
-			case 38: return 114;
-			case 39: return 117;
-			case 40: return 120;
-			case 41: return 123;
-			case 42: return 126;
-			case 43: return 129;
-			case 44: return 132;
-			case 45: return 135;
-			case 46: return 138;
-			case 47: return 141;
-			case 48: return 144;
-			case 49: return 147;
-			case 50: return 150;
-			case 51: return 153;
-			case 52: return 156;
-			case 53: return 159;
-			case 54: return 162;
-			case 55: return 165;
-			case 56: return 168;
-			case 57: return 171;
-			case 58: return 174;
-			case 59: return 177;
-			case 60: return 180;
-			case 61: return 183;
-			case 62: return 186;
-			case 63: return 189;
-			case 64: return 192;
-			case 65: return 195;
-			case 66: return 198;
-			case 67: return 201;
-			case 68: return 204;
-			case 69: return 207;
-			case 70: return 210;
-			case 71: return 213;
-			case 72: return 216;
-			case 73: return 219;
-			case 74: return 222;
-			case 75: return 225;
-			case 76: return 228;
-			case 77: return 231;
-			case 78: return 234;
-			case 79: return 237;
-			case 80: return 240;
-			case 81: return 243;
-			case 82: return 246;
-			case 83: return 249;
-			case 84: return 252;
-			case 85: return 255;
-			case 86: return 258;
-			case 87: return 261;
-			case 88: return 264;
-			case 89: return 267;
-			case 90: return 270;
-			case 91: return 273;
-			case 92: return 276;
-			case 93: return 279;
-			case 94: return 282;
-			case 95: return 285;
-			case 96: return 288;
-			case 97: return 291;
-			case 98: return 294;
-			case 99: return 297;
-			case 100: return 300;
-			case 101: return 303;
-			case 102: return 306;
-			case 103: return 309;
-			case 104: return 312;
-			case 105: return 315;
-			case 106: return 318;
-			case 107: return 321;
-			case 108: return 324;
-			case 109: return 327;
-			case 110: return 330;
-			case 111: return 333;
-			case 112: return 336;
-			case 113: return 339;
-			case 114: return 342;
-			case 115: return 345;
-			case 116: return 348;
-			case 117: return 351;
-			case 118: return 354;
-			case 119: return 357;
-			case 120: return 360;
-			case 121: return 363;
-			case 122: return 366;
-			case 123: return 369;
-			case 124: return 372;
-			case 125: return 375;
-			case 126: return 378;
-			case 127: return 381;
-			case 128: return 384;
-			case 129: return 387;
-			case 130: return 390;
-			case 131: return 393;
-			case 132: return 396;
-			case 133: return 399;
-			case 134: return 402;
-			case 135: return 405;
-			case 136: return 408;
-			case 137: return 411;
-			case 138: return 414;
-			case 139: return 417;
-			case 140: return 420;
-			case 141: return 423;
-			case 142: return 426;
-			case 143: return 429;
-			case 144: return 432;
-			case 145: return 435;
-			case 146: return 438;
-			case 147: return 441;
-			case 148: return 444;
-			case 149: return 447;
-			case 150: return 450;
-			case 151: return 453;
-			case 152: return 456;
-			case 153: return 459;
-			case 154: return 462;
-			case 155: return 465;
-			case 156: return 468;
-			case 157: return 471;
-			case 158: return 474;
-			case 159: return 477;
-			case 160: return 480;
-			case 161: return 483;
-			case 162: return 486;
-			case 163: return 489;
-			case 164: return 492;
-			case 165: return 495;
-			case 166: return 498;
-			case 167: return 501;
-			case 168: return 504;
-			case 169: return 507;
-			case 170: return 510;
-			case 171: return 513;
-			case 172: return 516;
-			case 173: return 519;
-			case 174: return 522;
-			case 175: return 525;
-			case 176: return 528;
-			case 177: return 531;
-			case 178: return 534;
-			case 179: return 537;
-			case 180: return 540;
-			case 181: return 543;
-			case 182: return 546;
-			case 183: return 549;
-			case 184: return 552;
-			case 185: return 555;
-			case 186: return 558;
-			case 187: return 561;
-			case 188: return 564;
-			case 189: return 567;
-			case 190: return 570;
-			case 191: return 573;
-			case 192: return 576;
-			case 193: return 579;
-			case 194: return 582;
-			case 195: return 585;
-			case 196: return 588;
-			case 197: return 591;
-			case 198: return 594;
-			case 199: return 597;
-			case 200: return 600;
-			case 201: return 603;
-			case 202: return 606;
-			case 203: return 609;
-			case 204: return 612;
-			case 205: return 615;
-			case 206: return 618;
-			case 207: return 621;
-			case 208: return 624;
-			case 209: return 627;
-			case 210: return 630;
-			case 211: return 633;
-			case 212: return 636;
-			case 213: return 639;
-			case 214: return 642;
-			case 215: return 645;
-			case 216: return 648;
-			case 217: return 651;
-			case 218: return 654;
-			case 219: return 657;
-			case 220: return 660;
-			case 221: return 663;
-			case 222: return 666;
-			case 223: return 669;
-			case 224: return 672;
-			case 225: return 675;
-			case 226: return 678;
-			case 227: return 681;
-			case 228: return 684;
-			case 229: return 687;
-			case 230: return 690;
-			case 231: return 693;
-			case 232: return 696;
-			case 233: return 699;
-			case 234: return 702;
-			case 235: return 705;
-			case 236: return 708;
-			case 237: return 711;
-			case 238: return 714;
-			case 239: return 717;
-			case 240: return 720;
-			case 241: return 723;
-			case 242: return 726;
-			case 243: return 729;
-			case 244: return 732;
-			case 245: return 735;
-			case 246: return 738;
-			case 247: return 741;
-			case 248: return 744;
-			case 249: return 747;
-			case 250: return 750;
-			case 251: return 753;
-			case 252: return 756;
-			case 253: return 759;
-			case 254: return 762;
-			case 255: return 765;
-			case 256: return 768;
-			case 257: return 771;
-			case 258: return 774;
-			case 259: return 777;
-			case 260: return 780;
-			case 261: return 783;
-			case 262: return 786;
-			case 263: return 789;
-			case 264: return 792;
-			case 265: return 795;
-			case 266: return 798;
-			case 267: return 801;
-			case 268: return 804;
-			case 269: return 807;
-			case 270: return 810;
-			case 271: return 813;
-			case 272: return 816;
-			case 273: return 819;
-			case 274: return 822;
-			case 275: return 825;
-			case 276: return 828;
-			case 277: return 831;
-			case 278: return 834;
-			case 279: return 837;
-			case 280: return 840;
-			case 281: return 843;
-			case 282: return 846;
-			case 283: return 849;
-			case 284: return 852;
-			case 285: return 855;
-			case 286: return 858;
-			case 287: return 861;
-			case 288: return 864;
-			case 289: return 867;
-			case 290: return 870;
-			case 291: return 873;
-			case 292: return 876;
-			case 293: return 879;
-			case 294: return 882;
-			case 295: return 885;
-			case 296: return 888;
-			case 297: return 891;
-			case 298: return 894;
-			case 299: return 897;
-			case 300: return 900;
-			case 301: return 903;
-			case 302: return 906;
-			case 303: return 909;
-			case 304: return 912;
-			case 305: return 915;
-			case 306: return 918;
-			case 307: return 921;
-			case 308: return 924;
-			case 309: return 927;
-			case 310: return 930;
-			case 311: return 933;
-			case 312: return 936;
-			case 313: return 939;
-			case 314: return 942;
-			case 315: return 945;
-			case 316: return 948;
-			case 317: return 951;
-			case 318: return 954;
-			case 319: return 957;
-			case 320: return 960;
-			case 321: return 963;
-			case 322: return 966;
-			case 323: return 969;
-			case 324: return 972;
-			case 325: return 975;
-			case 326: return 978;
-			case 327: return 981;
-			case 328: return 984;
-			case 329: return 987;
-			case 330: return 990;
-			case 331: return 993;
-			case 332: return 996;
-			case 333: return 999;
-			case 334: return 1002;
-			case 335: return 1005;
-			case 336: return 1008;
-			case 337: return 1011;
-			case 338: return 1014;
-			case 339: return 1017;
-			case 340: return 1020;
-			case 341: return 1023;
-			case 342: return 1026;
-			case 343: return 1029;
-			case 344: return 1032;
-			case 345: return 1035;
-			case 346: return 1038;
-			case 347: return 1041;
-			default: return a;
-		}
+			1 => 3,
+			2 => 6,
+			3 => 9,
+			4 => 12,
+			5 => 15,
+			6 => 18,
+			7 => 21,
+			8 => 24,
+			9 => 27,
+			10 => 30,
+			11 => 33,
+			12 => 36,
+			13 => 39,
+			14 => 42,
+			15 => 45,
+			16 => 48,
+			17 => 51,
+			18 => 54,
+			19 => 57,
+			20 => 60,
+			21 => 63,
+			22 => 66,
+			23 => 69,
+			24 => 72,
+			25 => 75,
+			26 => 78,
+			27 => 81,
+			28 => 84,
+			29 => 87,
+			30 => 90,
+			31 => 93,
+			32 => 96,
+			33 => 99,
+			34 => 102,
+			35 => 105,
+			36 => 108,
+			37 => 111,
+			38 => 114,
+			39 => 117,
+			40 => 120,
+			41 => 123,
+			42 => 126,
+			43 => 129,
+			44 => 132,
+			45 => 135,
+			46 => 138,
+			47 => 141,
+			48 => 144,
+			49 => 147,
+			50 => 150,
+			51 => 153,
+			52 => 156,
+			53 => 159,
+			54 => 162,
+			55 => 165,
+			56 => 168,
+			57 => 171,
+			58 => 174,
+			59 => 177,
+			60 => 180,
+			61 => 183,
+			62 => 186,
+			63 => 189,
+			64 => 192,
+			65 => 195,
+			66 => 198,
+			67 => 201,
+			68 => 204,
+			69 => 207,
+			70 => 210,
+			71 => 213,
+			72 => 216,
+			73 => 219,
+			74 => 222,
+			75 => 225,
+			76 => 228,
+			77 => 231,
+			78 => 234,
+			79 => 237,
+			80 => 240,
+			81 => 243,
+			82 => 246,
+			83 => 249,
+			84 => 252,
+			85 => 255,
+			86 => 258,
+			87 => 261,
+			88 => 264,
+			89 => 267,
+			90 => 270,
+			91 => 273,
+			92 => 276,
+			93 => 279,
+			94 => 282,
+			95 => 285,
+			96 => 288,
+			97 => 291,
+			98 => 294,
+			99 => 297,
+			100 => 300,
+			101 => 303,
+			102 => 306,
+			103 => 309,
+			104 => 312,
+			105 => 315,
+			106 => 318,
+			107 => 321,
+			108 => 324,
+			109 => 327,
+			110 => 330,
+			111 => 333,
+			112 => 336,
+			113 => 339,
+			114 => 342,
+			115 => 345,
+			116 => 348,
+			117 => 351,
+			118 => 354,
+			119 => 357,
+			120 => 360,
+			121 => 363,
+			122 => 366,
+			123 => 369,
+			124 => 372,
+			125 => 375,
+			126 => 378,
+			127 => 381,
+			128 => 384,
+			129 => 387,
+			130 => 390,
+			131 => 393,
+			132 => 396,
+			133 => 399,
+			134 => 402,
+			135 => 405,
+			136 => 408,
+			137 => 411,
+			138 => 414,
+			139 => 417,
+			140 => 420,
+			141 => 423,
+			142 => 426,
+			143 => 429,
+			144 => 432,
+			145 => 435,
+			146 => 438,
+			147 => 441,
+			148 => 444,
+			149 => 447,
+			150 => 450,
+			151 => 453,
+			152 => 456,
+			153 => 459,
+			154 => 462,
+			155 => 465,
+			156 => 468,
+			157 => 471,
+			158 => 474,
+			159 => 477,
+			160 => 480,
+			161 => 483,
+			162 => 486,
+			163 => 489,
+			164 => 492,
+			165 => 495,
+			166 => 498,
+			167 => 501,
+			168 => 504,
+			169 => 507,
+			170 => 510,
+			171 => 513,
+			172 => 516,
+			173 => 519,
+			174 => 522,
+			175 => 525,
+			176 => 528,
+			177 => 531,
+			178 => 534,
+			179 => 537,
+			180 => 540,
+			181 => 543,
+			182 => 546,
+			183 => 549,
+			184 => 552,
+			185 => 555,
+			186 => 558,
+			187 => 561,
+			188 => 564,
+			189 => 567,
+			190 => 570,
+			191 => 573,
+			192 => 576,
+			193 => 579,
+			194 => 582,
+			195 => 585,
+			196 => 588,
+			197 => 591,
+			198 => 594,
+			199 => 597,
+			200 => 600,
+			201 => 603,
+			202 => 606,
+			203 => 609,
+			204 => 612,
+			205 => 615,
+			206 => 618,
+			207 => 621,
+			208 => 624,
+			209 => 627,
+			210 => 630,
+			211 => 633,
+			212 => 636,
+			213 => 639,
+			214 => 642,
+			215 => 645,
+			216 => 648,
+			217 => 651,
+			218 => 654,
+			219 => 657,
+			220 => 660,
+			221 => 663,
+			222 => 666,
+			223 => 669,
+			224 => 672,
+			225 => 675,
+			226 => 678,
+			227 => 681,
+			228 => 684,
+			229 => 687,
+			230 => 690,
+			231 => 693,
+			232 => 696,
+			233 => 699,
+			234 => 702,
+			235 => 705,
+			236 => 708,
+			237 => 711,
+			238 => 714,
+			239 => 717,
+			240 => 720,
+			241 => 723,
+			242 => 726,
+			243 => 729,
+			244 => 732,
+			245 => 735,
+			246 => 738,
+			247 => 741,
+			248 => 744,
+			249 => 747,
+			250 => 750,
+			251 => 753,
+			252 => 756,
+			253 => 759,
+			254 => 762,
+			255 => 765,
+			256 => 768,
+			257 => 771,
+			258 => 774,
+			259 => 777,
+			260 => 780,
+			261 => 783,
+			262 => 786,
+			263 => 789,
+			264 => 792,
+			265 => 795,
+			266 => 798,
+			267 => 801,
+			268 => 804,
+			269 => 807,
+			270 => 810,
+			271 => 813,
+			272 => 816,
+			273 => 819,
+			274 => 822,
+			275 => 825,
+			276 => 828,
+			277 => 831,
+			278 => 834,
+			279 => 837,
+			280 => 840,
+			281 => 843,
+			282 => 846,
+			283 => 849,
+			284 => 852,
+			285 => 855,
+			286 => 858,
+			287 => 861,
+			288 => 864,
+			289 => 867,
+			290 => 870,
+			291 => 873,
+			292 => 876,
+			293 => 879,
+			294 => 882,
+			295 => 885,
+			296 => 888,
+			297 => 891,
+			298 => 894,
+			299 => 897,
+			300 => 900,
+			301 => 903,
+			302 => 906,
+			303 => 909,
+			304 => 912,
+			305 => 915,
+			306 => 918,
+			307 => 921,
+			308 => 924,
+			309 => 927,
+			310 => 930,
+			311 => 933,
+			312 => 936,
+			313 => 939,
+			314 => 942,
+			315 => 945,
+			316 => 948,
+			317 => 951,
+			318 => 954,
+			319 => 957,
+			320 => 960,
+			321 => 963,
+			322 => 966,
+			323 => 969,
+			324 => 972,
+			325 => 975,
+			326 => 978,
+			327 => 981,
+			328 => 984,
+			329 => 987,
+			330 => 990,
+			331 => 993,
+			332 => 996,
+			333 => 999,
+			334 => 1002,
+			335 => 1005,
+			336 => 1008,
+			337 => 1011,
+			338 => 1014,
+			339 => 1017,
+			340 => 1020,
+			341 => 1023,
+			342 => 1026,
+			343 => 1029,
+			344 => 1032,
+			345 => 1035,
+			346 => 1038,
+			347 => 1041,
+			_ => a
+		};
 	}
 
 	#endregion LargeSwitchFixture test

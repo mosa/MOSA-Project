@@ -357,17 +357,17 @@ public class Transformation
 
 	public static ConditionCode GetReverse(ConditionCode conditionCode)
 	{
-		switch (conditionCode)
+		return conditionCode switch
 		{
-			case ConditionCode.GreaterOrEqual: return ConditionCode.LessOrEqual;
-			case ConditionCode.Greater: return ConditionCode.LessOrEqual;
-			case ConditionCode.LessOrEqual: return ConditionCode.GreaterOrEqual;
-			case ConditionCode.Less: return ConditionCode.Greater;
-			case ConditionCode.UnsignedGreaterOrEqual: return ConditionCode.UnsignedLessOrEqual;
-			case ConditionCode.UnsignedGreater: return ConditionCode.UnsignedLess;
-			case ConditionCode.UnsignedLessOrEqual: return ConditionCode.UnsignedGreaterOrEqual;
-			case ConditionCode.UnsignedLess: return ConditionCode.UnsignedGreater;
-			default: return conditionCode;
-		}
+			ConditionCode.GreaterOrEqual => ConditionCode.LessOrEqual,
+			ConditionCode.Greater => ConditionCode.LessOrEqual,
+			ConditionCode.LessOrEqual => ConditionCode.GreaterOrEqual,
+			ConditionCode.Less => ConditionCode.Greater,
+			ConditionCode.UnsignedGreaterOrEqual => ConditionCode.UnsignedLessOrEqual,
+			ConditionCode.UnsignedGreater => ConditionCode.UnsignedLess,
+			ConditionCode.UnsignedLessOrEqual => ConditionCode.UnsignedGreaterOrEqual,
+			ConditionCode.UnsignedLess => ConditionCode.UnsignedGreater,
+			_ => conditionCode
+		};
 	}
 }

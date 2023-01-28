@@ -22,19 +22,19 @@ public sealed class StelemInstruction : NaryInstruction
 	public StelemInstruction(OpCode opcode)
 		: base(opcode, 3)
 	{
-		switch (opcode)
+		elementType = opcode switch
 		{
-			case OpCode.Stelem_i1: elementType = MosaTypeCode.I1; break;
-			case OpCode.Stelem_i2: elementType = MosaTypeCode.I2; break;
-			case OpCode.Stelem_i4: elementType = MosaTypeCode.I4; break;
-			case OpCode.Stelem_i8: elementType = MosaTypeCode.I8; break;
-			case OpCode.Stelem_i: elementType = MosaTypeCode.I; break;
-			case OpCode.Stelem_r4: elementType = MosaTypeCode.R4; break;
-			case OpCode.Stelem_r8: elementType = MosaTypeCode.R8; break;
-			case OpCode.Stelem_ref: elementType = MosaTypeCode.Object; break;
-			case OpCode.Stelem: elementType = null; break;
-			default: throw new NotImplementCompilerException("Not implemented: " + opcode);
-		}
+			OpCode.Stelem_i1 => MosaTypeCode.I1,
+			OpCode.Stelem_i2 => MosaTypeCode.I2,
+			OpCode.Stelem_i4 => MosaTypeCode.I4,
+			OpCode.Stelem_i8 => MosaTypeCode.I8,
+			OpCode.Stelem_i => MosaTypeCode.I,
+			OpCode.Stelem_r4 => MosaTypeCode.R4,
+			OpCode.Stelem_r8 => MosaTypeCode.R8,
+			OpCode.Stelem_ref => MosaTypeCode.Object,
+			OpCode.Stelem => null,
+			_ => throw new NotImplementCompilerException("Not implemented: " + opcode)
+		};
 	}
 
 	#endregion Construction

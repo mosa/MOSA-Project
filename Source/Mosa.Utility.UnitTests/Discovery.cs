@@ -166,16 +166,15 @@ public class Discovery
 
 	private static object GetParam(MosaUnitTestAttribute unitTest, int index)
 	{
-		switch (index)
+		return index switch
 		{
-			case 1: return unitTest.Param1 ?? unitTest.ParamSeries1;
-			case 2: return unitTest.Param2 ?? unitTest.ParamSeries2;
-			case 3: return unitTest.Param3 ?? unitTest.ParamSeries3;
-			case 4: return unitTest.Param4 ?? unitTest.ParamSeries4;
-			case 5: return unitTest.Param5 ?? unitTest.ParamSeries5;
-		}
-
-		return null;
+			1 => unitTest.Param1 ?? unitTest.ParamSeries1,
+			2 => unitTest.Param2 ?? unitTest.ParamSeries2,
+			3 => unitTest.Param3 ?? unitTest.ParamSeries3,
+			4 => unitTest.Param4 ?? unitTest.ParamSeries4,
+			5 => unitTest.Param5 ?? unitTest.ParamSeries5,
+			_ => null
+		};
 	}
 
 	private static void GetExpectedResult(UnitTestInfo unitTest)
