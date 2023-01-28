@@ -90,7 +90,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		private readonly Dictionary<BasicBlock, Stack<StackEntry>> stacks = new Dictionary<BasicBlock, Stack<StackEntry>>();
+		private readonly Dictionary<BasicBlock, StackEntry> ExceptionStackEntries = new Dictionary<BasicBlock, StackEntry>();
 
 		private readonly Dictionary<BasicBlock, StackEntry[]> OutgoingStacks = new Dictionary<BasicBlock, StackEntry[]>();
 
@@ -121,8 +121,6 @@ namespace Mosa.Compiler.Framework.Stages
 				Block = prologue
 			};
 			prologue.First.Insert(jmpNode);
-
-			SetInitalEvaluationStack(prologue);
 
 			var startBlock = CreateNewBlock(0);
 
@@ -271,7 +269,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 					context.AppendInstruction(IRInstruction.ExceptionStart, exceptionObject);
 
-					SetInitalEvaluationStack(handler, new StackEntry(StackType.Object, exceptionObject));
+					ExceptionStackEntries.Add(handler, new StackEntry(StackType.Object, exceptionObject));
 				}
 
 				if (clause.ExceptionHandlerType == ExceptionHandlerType.Filter)
@@ -283,7 +281,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 						context.AppendInstruction(IRInstruction.ExceptionStart, exceptionObject);
 
-						SetInitalEvaluationStack(handler, new StackEntry(StackType.Object, exceptionObject));
+						ExceptionStackEntries.Add(handler, new StackEntry(StackType.Object, exceptionObject));
 					}
 
 					{
@@ -293,7 +291,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 						context.AppendInstruction(IRInstruction.FilterStart, exceptionObject);
 
-						SetInitalEvaluationStack(handler, new StackEntry(StackType.Object, exceptionObject));
+						ExceptionStackEntries.Add(handler, new StackEntry(StackType.Object, exceptionObject));
 					}
 				}
 			}
@@ -403,6 +401,15 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Stack<StackEntry> CreateIncomingStack(BasicBlock block)
 		{
+			if (block.IsHandlerHeadBlock)
+			{
+				var incomingStack1 = new Stack<StackEntry>(1);
+
+				incomingStack1.Push(ExceptionStackEntries[block]);
+
+				return incomingStack1;
+			}
+
 			if (block.PreviousBlocks.Count == 0)
 			{
 				return new Stack<StackEntry>();
@@ -410,7 +417,14 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (block.PreviousBlocks.Count == 1)
 			{
-				return new Stack<StackEntry>(OutgoingStacks[block.PreviousBlocks[0]]);
+				var outgoingstack = new Stack<StackEntry>(1);
+
+				foreach (var stackentry in OutgoingStacks[block.PreviousBlocks[0]])
+				{
+					outgoingstack.Push(stackentry);
+				}
+
+				return outgoingstack;
 			}
 
 			var total = OutgoingStacks[block.PreviousBlocks[0]].Length;
@@ -423,7 +437,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 				foreach (var previousBlock in block.PreviousBlocks)
 				{
-					var outgoing = OutgoingStacks[previousBlock][index];
+					var outgoingstack = OutgoingStacks[previousBlock];
+					var outgoing = outgoingstack[index];
 
 					if (first == null)
 					{
@@ -463,9 +478,9 @@ namespace Mosa.Compiler.Framework.Stages
 					previousBlock.ContextBeforeBranch.AppendInstruction(instruction, destination, source);
 				}
 
-				var incomingEntry = new StackEntry(first.StackType, destination, first.Type);
+				var entry = new StackEntry(first.StackType, destination, first.Type);
 
-				incomingStack.Push(incomingEntry);
+				incomingStack.Push(entry);
 			}
 
 			return incomingStack;
@@ -977,16 +992,6 @@ namespace Mosa.Compiler.Framework.Stages
 			// TODO --- enums?
 
 			throw new CompilerException($"Cannot translate to Type {type} to ElementType");
-		}
-
-		private void SetInitalEvaluationStack(BasicBlock block, StackEntry stackEntry = null)
-		{
-			var stack = new Stack<StackEntry>();
-
-			stacks.Add(block, stack);
-
-			if (stackEntry != null)
-				stack.Push(stackEntry);
 		}
 
 		private BasicBlock GetOrCreateBlock(int label)
@@ -2597,9 +2602,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private bool Initblk(Context context, Stack<StackEntry> stack)
 		{
-			var entry1 = stack.Peek();
-			var entry2 = stack.Peek();
-			var entry3 = stack.Peek();
+			var entry1 = stack.Pop();
+			var entry2 = stack.Pop();
+			var entry3 = stack.Pop();
 
 			context.AppendInstruction(IRInstruction.MemorySet, null, entry1.Operand, entry2.Operand, entry3.Operand);
 
@@ -2608,7 +2613,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private bool InitObj(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
 		{
-			var entry = stack.Peek();
+			var entry = stack.Pop();
 
 			// Retrieve the type reference
 			var type = (MosaType)instruction.Operand;
