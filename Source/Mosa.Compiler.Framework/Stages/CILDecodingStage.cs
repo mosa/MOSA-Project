@@ -375,28 +375,28 @@ public sealed class CILDecodingStage : BaseMethodCompilerStage, IInstructionDeco
 	/// Gets the compiler, that is currently executing.
 	/// </summary>
 	/// <value></value>
-	MethodCompiler IInstructionDecoder.MethodCompiler { get { return MethodCompiler; } }
+	MethodCompiler IInstructionDecoder.MethodCompiler => MethodCompiler;
 
 	/// <summary>
 	/// Gets the MosaMethod being compiled.
 	/// </summary>
 	/// <value></value>
-	MosaMethod IInstructionDecoder.Method { get { return MethodCompiler.Method; } }
+	MosaMethod IInstructionDecoder.Method => MethodCompiler.Method;
 
 	/// <summary>
 	/// Gets the type system.
 	/// </summary>
-	TypeSystem IInstructionDecoder.TypeSystem { get { return TypeSystem; } }
+	TypeSystem IInstructionDecoder.TypeSystem => TypeSystem;
 
 	/// <summary>
 	/// Gets the type system.
 	/// </summary>
-	MethodScanner IInstructionDecoder.MethodScanner { get { return MethodCompiler.MethodScanner; } }
+	MethodScanner IInstructionDecoder.MethodScanner => MethodCompiler.MethodScanner;
 
 	/// <summary>
 	/// Gets the Instruction being decoded.
 	/// </summary>
-	MosaInstruction IInstructionDecoder.Instruction { get { return instruction; } }
+	MosaInstruction IInstructionDecoder.Instruction => instruction;
 
 	/// <summary>
 	/// Gets the block.

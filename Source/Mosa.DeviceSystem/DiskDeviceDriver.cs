@@ -26,7 +26,7 @@ public class DiskDeviceDriver : BaseDeviceDriver, IDiskDevice
 	/// Gets a value indicating whether this instance can write.
 	/// </summary>
 	/// <value><c>true</c> if this instance can write; otherwise, <c>false</c>.</value>
-	public bool CanWrite { get { return !readOnly; } }
+	public bool CanWrite => !readOnly;
 
 	/// <summary>
 	/// Gets the total blocks.
@@ -38,7 +38,7 @@ public class DiskDeviceDriver : BaseDeviceDriver, IDiskDevice
 	/// Gets the size of the block.
 	/// </summary>
 	/// <value>The size of the block.</value>
-	public uint BlockSize { get { return diskController.GetSectorSize(DriveNbr); } }
+	public uint BlockSize => diskController.GetSectorSize(DriveNbr);
 
 	public override void Initialize()
 	{

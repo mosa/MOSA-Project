@@ -15,5 +15,5 @@ public sealed class PhiObject : BaseIRInstruction
 	{
 	}
 
-	public override bool VariableOperands { get { return true; } }
+	public override bool VariableOperands => true;
 }

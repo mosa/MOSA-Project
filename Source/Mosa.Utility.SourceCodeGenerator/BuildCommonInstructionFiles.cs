@@ -10,8 +10,7 @@ public class BuildCommonInstructionFiles : BuildBaseTemplate
 {
 	protected virtual string Platform { get; }
 
-	protected string NormalizedPlatform
-	{ get { return Platform.Substring(0, 1).ToUpperInvariant() + Platform.Substring(1); } }
+	protected string NormalizedPlatform => Platform.Substring(0, 1).ToUpperInvariant() + Platform.Substring(1);
 
 	private readonly Dictionary<string, string> EncodingTemplates = new Dictionary<string, string>();
 

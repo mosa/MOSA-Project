@@ -18,7 +18,7 @@ public struct Range
 		End = end;
 	}
 
-	public int Length { get { return End - Start; } }
+	public int Length => End - Start;
 
 	public bool Intersects(int start, int end)
 	{

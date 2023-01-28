@@ -11,5 +11,5 @@ public struct LabelRegion
 	public int Start;
 	public int Length;
 
-	public int End { get { return Start + Length; } }
+	public int End => Start + Length;
 }

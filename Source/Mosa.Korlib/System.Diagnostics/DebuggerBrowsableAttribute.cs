@@ -28,8 +28,5 @@ public sealed class DebuggerBrowsableAttribute : Attribute
 		this.state = state;
 	}
 
-	public DebuggerBrowsableState State
-	{
-		get { return state; }
-	}
+	public DebuggerBrowsableState State => state;
 }

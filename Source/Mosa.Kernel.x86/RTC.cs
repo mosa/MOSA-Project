@@ -92,5 +92,5 @@ public class RTC
 		}
 	}
 
-	public static bool BCD { get { return (Get(0x0B) & 0x04) == 0x00; } }
+	public static bool BCD => (Get(0x0B) & 0x04) == 0x00;
 }

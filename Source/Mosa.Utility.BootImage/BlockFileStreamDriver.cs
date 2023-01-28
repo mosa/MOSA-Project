@@ -60,19 +60,19 @@ public class BlockFileStreamDriver : BaseDeviceDriver, IDiskDevice
 	/// Gets a value indicating whether this instance can write.
 	/// </summary>
 	/// <value><c>true</c> if this instance can write; otherwise, <c>false</c>.</value>
-	public bool CanWrite { get { return true; } }
+	public bool CanWrite => true;
 
 	/// <summary>
 	/// Gets the total blocks.
 	/// </summary>
 	/// <value>The total blocks.</value>
-	public uint TotalBlocks { get { return (uint)(diskFile.Length / 512); } }
+	public uint TotalBlocks => (uint)(diskFile.Length / 512);
 
 	/// <summary>
 	/// Gets the size of the block.
 	/// </summary>
 	/// <value>The size of the block.</value>
-	public uint BlockSize { get { return 512; } }
+	public uint BlockSize => 512;
 
 	/// <summary>
 	/// Reads the block.

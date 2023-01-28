@@ -17,7 +17,7 @@ public sealed class Lock : X64Instruction
 	{
 	}
 
-	public override bool HasUnspecifiedSideEffect { get { return true; } }
+	public override bool HasUnspecifiedSideEffect => true;
 
 	public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 	{

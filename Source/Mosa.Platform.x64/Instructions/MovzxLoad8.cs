@@ -17,7 +17,7 @@ public sealed class MovzxLoad8 : X64Instruction
 	{
 	}
 
-	public override bool IsMemoryRead { get { return true; } }
+	public override bool IsMemoryRead => true;
 
 	public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 	{

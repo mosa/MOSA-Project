@@ -292,21 +292,21 @@ public class GenericVGA : BaseDeviceDriver, IPixelPaletteGraphicsDevice
 	/// Gets the size of the palette.
 	/// </summary>
 	/// <value>The size of the palette.</value>
-	public ushort PaletteSize { get { return colors; } }
+	public ushort PaletteSize => colors;
 
 	/// <summary>
 	/// Gets the width.
 	/// </summary>
 	/// <value></value>
 	/// <returns></returns>
-	public ushort Width { get { return width; } }
+	public ushort Width => width;
 
 	/// <summary>
 	/// Gets the height.
 	/// </summary>
 	/// <value></value>
 	/// <returns></returns>
-	public ushort Height { get { return height; } }
+	public ushort Height => height;
 
 	/// <summary>
 	/// Writes the settings.

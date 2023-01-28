@@ -40,7 +40,7 @@ public class GUIDPartitionTable
 	/// Gets a value indicating whether this <see cref="GUIDPartitionTable"/> is valid.
 	/// </summary>
 	/// <value><c>true</c> if valid; otherwise, <c>false</c>.</value>
-	public bool Valid { get { return valid; } }
+	public bool Valid => valid;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="GUIDPartitionTable"/> class.

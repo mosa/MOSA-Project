@@ -243,7 +243,7 @@ public class FatFileSystem : GenericFileSystem
 	/// Gets the type of the settings.
 	/// </summary>
 	/// <value>The type of the settings.</value>
-	public GenericFileSystemSettings SettingsType { get { return new FatSettings(); } }
+	public GenericFileSystemSettings SettingsType => new FatSettings();
 
 	/// <summary>
 	/// Creates the VFS mount.
@@ -260,7 +260,7 @@ public class FatFileSystem : GenericFileSystem
 	/// <value>
 	/// 	<c>true</c> if this instance is read only; otherwise, <c>false</c>.
 	/// </value>
-	public bool IsReadOnly { get { return true; } }
+	public bool IsReadOnly => true;
 
 	/// <summary>
 	/// Gets the cluster size in bytes.
@@ -274,7 +274,7 @@ public class FatFileSystem : GenericFileSystem
 	/// Gets the sectors per cluster.
 	/// </summary>
 	/// <value>The sectors per cluster.</value>
-	public uint SectorsPerCluster { get { return sectorsPerCluster; } }
+	public uint SectorsPerCluster => sectorsPerCluster;
 
 	/// <summary>
 	/// Reads the cluster.

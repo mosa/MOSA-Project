@@ -20,10 +20,7 @@ public struct DataBlock
 	/// Gets the length.
 	/// </summary>
 	/// <value>The length.</value>
-	public uint Length
-	{
-		get { return (uint)Data.Length; }
-	}
+	public uint Length => (uint)Data.Length;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="DataBlock"/> struct.
@@ -53,8 +50,8 @@ public struct DataBlock
 	/// <returns></returns>
 	public byte this[int index]
 	{
-		get { return Data[index]; }
-		set { Data[index] = value; }
+		get => Data[index];
+		set => Data[index] = value;
 	}
 
 	/// <summary>

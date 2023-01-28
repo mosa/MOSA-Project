@@ -15,5 +15,5 @@ public sealed class Phi64 : BaseIRInstruction
 	{
 	}
 
-	public override bool VariableOperands { get { return true; } }
+	public override bool VariableOperands => true;
 }

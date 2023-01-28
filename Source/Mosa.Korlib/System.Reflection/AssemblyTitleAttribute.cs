@@ -10,10 +10,7 @@ public sealed class AssemblyTitleAttribute : Attribute
 	/// <summary>
 	/// The assembly title.
 	/// </summary>
-	public string Title
-	{
-		get { return title; }
-	}
+	public string Title => title;
 
 	/// <summary>
 	/// Initializes a new instance of the AssemblyTitleAttribute class.

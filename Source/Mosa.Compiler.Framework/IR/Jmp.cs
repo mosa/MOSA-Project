@@ -15,5 +15,5 @@ public sealed class Jmp : BaseIRInstruction
 	{
 	}
 
-	public override FlowControl FlowControl { get { return FlowControl.UnconditionalBranch; } }
+	public override FlowControl FlowControl => FlowControl.UnconditionalBranch;
 }

@@ -40,88 +40,55 @@ public class ParameterInfo
 	/// <summary>
 	/// Gets the attributes for this parameter.
 	/// </summary>
-	public virtual ParameterAttributes Attributes
-	{
-		get { return AttrsImpl; }
-	}
+	public virtual ParameterAttributes Attributes => AttrsImpl;
 
 	/// <summary>
 	/// Gets a collection that contains this parameter's custom attributes.
 	/// </summary>
-	public virtual IEnumerable<CustomAttributeData> CustomAttributes
-	{
-		get { return new CustomAttributeData[0]; }
-	}
+	public virtual IEnumerable<CustomAttributeData> CustomAttributes => new CustomAttributeData[0];
 
 	/// <summary>
 	/// Gets a value indicating the default value if the parameter has a default value.
 	/// </summary>
-	public virtual object DefaultValue
-	{
-		get { return DefaultValueImpl; }
-	}
+	public virtual object DefaultValue => DefaultValueImpl;
 
 	/// <summary>
 	/// Gets a value that indicates whether this parameter has a default value.
 	/// </summary>
-	public virtual bool HasDefaultValue
-	{
-		get { return (AttrsImpl & ParameterAttributes.HasDefault) == ParameterAttributes.HasDefault; }
-	}
+	public virtual bool HasDefaultValue => (AttrsImpl & ParameterAttributes.HasDefault) == ParameterAttributes.HasDefault;
 
 	/// <summary>
 	/// Gets a value indicating whether this is an input parameter.
 	/// </summary>
-	public bool IsIn
-	{
-		get { return (AttrsImpl & ParameterAttributes.In) == ParameterAttributes.In; }
-	}
+	public bool IsIn => (AttrsImpl & ParameterAttributes.In) == ParameterAttributes.In;
 
 	/// <summary>
 	/// Gets a value indicating whether this parameter is optional.
 	/// </summary>
-	public bool IsOptional
-	{
-		get { return (AttrsImpl & ParameterAttributes.Optional) == ParameterAttributes.Optional; }
-	}
+	public bool IsOptional => (AttrsImpl & ParameterAttributes.Optional) == ParameterAttributes.Optional;
 
 	/// <summary>
 	/// Gets a value indicating whether this is an output parameter.
 	/// </summary>
-	public bool IsOut
-	{
-		get { return (AttrsImpl & ParameterAttributes.Out) == ParameterAttributes.Out; }
-	}
+	public bool IsOut => (AttrsImpl & ParameterAttributes.Out) == ParameterAttributes.Out;
 
 	/// <summary>
 	/// Gets a value indicating the member in which the parameter is implemented.
 	/// </summary>
-	public virtual MemberInfo Member
-	{
-		get { return MemberImpl; }
-	}
+	public virtual MemberInfo Member => MemberImpl;
 
 	/// <summary>
 	/// Gets the name of the parameter.
 	/// </summary>
-	public virtual string Name
-	{
-		get { return NameImpl; }
-	}
+	public virtual string Name => NameImpl;
 
 	/// <summary>
 	/// Gets the <see cref="System.Type">Type</see> of this parameter.
 	/// </summary>
-	public virtual Type ParameterType
-	{
-		get { return ClassImpl; }
-	}
+	public virtual Type ParameterType => ClassImpl;
 
 	/// <summary>
 	/// Gets the zero-based position of the parameter in the formal parameter list.
 	/// </summary>
-	public virtual int Position
-	{
-		get { return PositionImpl; }
-	}
+	public virtual int Position => PositionImpl;
 }

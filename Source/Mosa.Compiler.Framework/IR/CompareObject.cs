@@ -17,5 +17,5 @@ public sealed class CompareObject : BaseIRInstruction
 	{
 	}
 
-	public override BuiltInType ResultType { get { return BuiltInType.Boolean; } }
+	public override BuiltInType ResultType => BuiltInType.Boolean;
 }

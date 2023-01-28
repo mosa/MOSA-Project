@@ -22,7 +22,7 @@ public sealed partial class IntervalTree<T>
 			//Debug.Assert(Start.CompareTo(End) <= 0);
 		}
 
-		public int Length { get { return End - Start; } }
+		public int Length => End - Start;
 
 		public bool IsSame(Interval interval)
 		{

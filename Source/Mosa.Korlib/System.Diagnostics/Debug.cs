@@ -8,24 +8,24 @@ public static class Debug
 
 	public static bool AutoFlush
 	{
-		get { return autoFlush; }
-		set { autoFlush = value; }
+		get => autoFlush;
+		set => autoFlush = value;
 	}
 
 	private static int indentLevel = 0;
 
 	public static int IndentLevel
 	{
-		get { return indentLevel; }
-		set { indentLevel = value; }
+		get => indentLevel;
+		set => indentLevel = value;
 	}
 
 	private static int indentSize = 2;
 
 	public static int IndentSize
 	{
-		get { return indentSize; }
-		set { indentSize = value; }
+		get => indentSize;
+		set => indentSize = value;
 	}
 
 	//public static TraceListenerCollection Listeners

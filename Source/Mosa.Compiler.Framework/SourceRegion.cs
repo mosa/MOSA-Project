@@ -28,11 +28,5 @@ public class SourceRegion
 	/// A valid source location requires at least a address, filename and line number to be usable.
 	/// Valid does not mean that all other properties are available, too.
 	/// </summary>
-	public bool IsValid
-	{
-		get
-		{
-			return !string.IsNullOrEmpty(Filename) && StartLine > 0 && Address >= 0;
-		}
-	}
+	public bool IsValid => !string.IsNullOrEmpty(Filename) && StartLine > 0 && Address >= 0;
 }

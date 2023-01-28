@@ -12,5 +12,5 @@ public class GDBNetworkStream : NetworkStream
 		socket.NoDelay = true;
 	}
 
-	public bool IsConnected { get { return Socket.Connected; } }
+	public bool IsConnected => Socket.Connected;
 }

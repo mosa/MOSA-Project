@@ -17,7 +17,7 @@ public sealed class Ret : X86Instruction
 	{
 	}
 
-	public override FlowControl FlowControl { get { return FlowControl.Return; } }
+	public override FlowControl FlowControl => FlowControl.Return;
 
 	public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 	{

@@ -13,189 +13,87 @@ public abstract class MethodBase : MemberInfo
 	/// <summary>
 	/// Gets a value indicating the calling conventions for this method.
 	/// </summary>
-	public virtual CallingConventions CallingConvention
-	{
-		get
-		{
-			return CallingConventions.Standard;
-		}
-	}
+	public virtual CallingConventions CallingConvention => CallingConventions.Standard;
 
 	/// <summary>
 	/// Gets a value indicating whether the generic method contains unassigned generic type parameters.
 	/// </summary>
-	public virtual bool ContainsGenericParameters
-	{
-		get
-		{
-			return false;
-		}
-	}
+	public virtual bool ContainsGenericParameters => false;
 
 	/// <summary>
 	/// Gets a value indicating whether the method is abstract.
 	/// </summary>
-	public bool IsAbstract
-	{
-		get
-		{
-			return (Attributes & MethodAttributes.Abstract) == MethodAttributes.Abstract;
-		}
-	}
+	public bool IsAbstract => (Attributes & MethodAttributes.Abstract) == MethodAttributes.Abstract;
 
 	/// <summary>
 	/// Gets a value indicating whether the potential visibility of this method or constructor is described by MethodAttributes.Assembly; that is, the method or constructor is visible at most to other types in the same assembly, and is not visible to derived types outside the assembly.
 	/// </summary>
-	public bool IsAssembly
-	{
-		get
-		{
-			return (Attributes & MethodAttributes.MemberAccessMask) == MethodAttributes.Assembly;
-		}
-	}
+	public bool IsAssembly => (Attributes & MethodAttributes.MemberAccessMask) == MethodAttributes.Assembly;
 
 	/// <summary>
 	/// Gets a value indicating whether the method is a constructor.
 	/// </summary>
-	public bool IsConstructor
-	{
-		get
-		{
-			return this is ConstructorInfo && !IsStatic && (Attributes & MethodAttributes.RTSpecialName) == MethodAttributes.RTSpecialName;
-		}
-	}
+	public bool IsConstructor => this is ConstructorInfo && !IsStatic && (Attributes & MethodAttributes.RTSpecialName) == MethodAttributes.RTSpecialName;
 
 	/// <summary>
 	/// Gets a value indicating whether the visibility of this method or constructor is described by MethodAttributes.Family; that is, the method or constructor is visible only within its class and derived classes.
 	/// </summary>
-	public bool IsFamily
-	{
-		get
-		{
-			return (Attributes & MethodAttributes.MemberAccessMask) == MethodAttributes.Assembly;
-		}
-	}
+	public bool IsFamily => (Attributes & MethodAttributes.MemberAccessMask) == MethodAttributes.Assembly;
 
 	/// <summary>
 	/// Gets a value indicating whether the visibility of this method or constructor is described by MethodAttributes.FamANDAssem; that is, the method or constructor can be called by derived classes, but only if they are in the same assembly.
 	/// </summary>
-	public bool IsFamilyAndAssembly
-	{
-		get
-		{
-			return (Attributes & MethodAttributes.MemberAccessMask) == MethodAttributes.FamANDAssem;
-		}
-	}
+	public bool IsFamilyAndAssembly => (Attributes & MethodAttributes.MemberAccessMask) == MethodAttributes.FamANDAssem;
 
 	/// <summary>
 	/// Gets a value indicating whether the potential visibility of this method or constructor is described by MethodAttributes.FamORAssem; that is, the method or constructor can be called by derived classes wherever they are, and by classes in the same assembly.
 	/// </summary>
-	public bool IsFamilyOrAssembly
-	{
-		get
-		{
-			return (Attributes & MethodAttributes.MemberAccessMask) == MethodAttributes.FamORAssem;
-		}
-	}
+	public bool IsFamilyOrAssembly => (Attributes & MethodAttributes.MemberAccessMask) == MethodAttributes.FamORAssem;
 
 	/// <summary>
 	/// Gets a value indicating whether this method is final.
 	/// </summary>
-	public bool IsFinal
-	{
-		get
-		{
-			return (Attributes & MethodAttributes.Final) == MethodAttributes.Final;
-		}
-	}
+	public bool IsFinal => (Attributes & MethodAttributes.Final) == MethodAttributes.Final;
 
 	/// <summary>
 	/// Gets a value indicating whether the method is generic.
 	/// </summary>
-	public virtual bool IsGenericMethod
-	{
-		get
-		{
-			return false;
-		}
-	}
+	public virtual bool IsGenericMethod => false;
 
 	/// <summary>
 	/// Gets a value indicating whether the method is a generic method definition.
 	/// </summary>
-	public virtual bool IsGenericMethodDefinition
-	{
-		get
-		{
-			return false;
-		}
-	}
+	public virtual bool IsGenericMethodDefinition => false;
 
 	/// <summary>
 	/// Gets a value indicating whether only a member of the same kind with exactly the same signature is hidden in the derived class.
 	/// </summary>
-	public bool IsHideBySig
-	{
-		get
-		{
-			return (Attributes & MethodAttributes.HideBySig) == MethodAttributes.HideBySig;
-		}
-	}
+	public bool IsHideBySig => (Attributes & MethodAttributes.HideBySig) == MethodAttributes.HideBySig;
 
 	/// <summary>
 	/// Gets a value indicating whether this method is private.
 	/// </summary>
-	public bool IsPrivate
-	{
-		get
-		{
-			return (Attributes & MethodAttributes.MemberAccessMask) == MethodAttributes.Private;
-		}
-	}
+	public bool IsPrivate => (Attributes & MethodAttributes.MemberAccessMask) == MethodAttributes.Private;
 
 	/// <summary>
 	/// Gets a value indicating whether this method is public.
 	/// </summary>
-	public bool IsPublic
-	{
-		get
-		{
-			return (Attributes & MethodAttributes.MemberAccessMask) == MethodAttributes.Public;
-		}
-	}
+	public bool IsPublic => (Attributes & MethodAttributes.MemberAccessMask) == MethodAttributes.Public;
 
 	/// <summary>
 	/// Gets a value indicating whether this method has a special name.
 	/// </summary>
-	public bool IsSpecialName
-	{
-		get
-		{
-			return (Attributes & MethodAttributes.SpecialName) == MethodAttributes.SpecialName;
-		}
-	}
+	public bool IsSpecialName => (Attributes & MethodAttributes.SpecialName) == MethodAttributes.SpecialName;
 
 	/// <summary>
 	/// Gets a value indicating whether this method is static.
 	/// </summary>
-	public bool IsStatic
-	{
-		get
-		{
-			return (Attributes & MethodAttributes.Static) == MethodAttributes.Static;
-		}
-	}
+	public bool IsStatic => (Attributes & MethodAttributes.Static) == MethodAttributes.Static;
 
 	/// <summary>
 	/// Gets a value indicating whether this method is virtual.
 	/// </summary>
-	public bool IsVirtual
-	{
-		get
-		{
-			return (Attributes & MethodAttributes.Virtual) == MethodAttributes.Virtual;
-		}
-	}
+	public bool IsVirtual => (Attributes & MethodAttributes.Virtual) == MethodAttributes.Virtual;
 
 	/// <summary>
 	/// Returns a value that indicates whether this instance is equal to a specified object.

@@ -15,7 +15,7 @@ public sealed class CallDynamic : BaseIRInstruction
 	{
 	}
 
-	public override FlowControl FlowControl { get { return FlowControl.Call; } }
+	public override FlowControl FlowControl => FlowControl.Call;
 
-	public override bool VariableOperands { get { return true; } }
+	public override bool VariableOperands => true;
 }

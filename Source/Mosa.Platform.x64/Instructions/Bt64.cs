@@ -17,19 +17,19 @@ public sealed class Bt64 : X64Instruction
 	{
 	}
 
-	public override bool IsCarryFlagModified { get { return true; } }
+	public override bool IsCarryFlagModified => true;
 
-	public override bool IsSignFlagUnchanged { get { return true; } }
+	public override bool IsSignFlagUnchanged => true;
 
-	public override bool IsSignFlagUndefined { get { return true; } }
+	public override bool IsSignFlagUndefined => true;
 
-	public override bool IsOverflowFlagUnchanged { get { return true; } }
+	public override bool IsOverflowFlagUnchanged => true;
 
-	public override bool IsOverflowFlagUndefined { get { return true; } }
+	public override bool IsOverflowFlagUndefined => true;
 
-	public override bool IsParityFlagUnchanged { get { return true; } }
+	public override bool IsParityFlagUnchanged => true;
 
-	public override bool IsParityFlagUndefined { get { return true; } }
+	public override bool IsParityFlagUndefined => true;
 
 	public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 	{

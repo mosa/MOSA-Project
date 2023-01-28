@@ -15,5 +15,5 @@ public sealed class LoadZeroExtend32x64 : BaseIRInstruction
 	{
 	}
 
-	public override bool IsMemoryRead { get { return true; } }
+	public override bool IsMemoryRead => true;
 }

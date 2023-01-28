@@ -12,35 +12,35 @@ public class Operand
 
 	public Method Method { get; set; }
 
-	public string Value { get { return Token.Value; } }
+	public string Value => Token.Value;
 
-	public bool IsInstruction { get { return InstructionNode != null; } }
+	public bool IsInstruction => InstructionNode != null;
 
-	public bool IsMethod { get { return Method != null; } }
+	public bool IsMethod => Method != null;
 
-	public bool IsLabel { get { return Token != null && Token.TokenType == TokenType.Label; } }
+	public bool IsLabel => Token != null && Token.TokenType == TokenType.Label;
 
-	public bool IsVirtualRegister { get { return IsInstruction; } }
+	public bool IsVirtualRegister => IsInstruction;
 
-	public bool IsAt { get { return Token != null && Token.TokenType == TokenType.At; } }
+	public bool IsAt => Token != null && Token.TokenType == TokenType.At;
 
-	public bool IsPercent { get { return Token != null && Token.TokenType == TokenType.Percent; } }
+	public bool IsPercent => Token != null && Token.TokenType == TokenType.Percent;
 
-	public bool IsInteger { get { return Token != null && Token.TokenType == TokenType.IntegerConstant; } }
+	public bool IsInteger => Token != null && Token.TokenType == TokenType.IntegerConstant;
 
-	public bool IsDouble { get { return Token != null && Token.TokenType == TokenType.DoubleConstant; } }
+	public bool IsDouble => Token != null && Token.TokenType == TokenType.DoubleConstant;
 
-	public bool IsFloat { get { return Token != null && Token.TokenType == TokenType.FloatConstant; } }
+	public bool IsFloat => Token != null && Token.TokenType == TokenType.FloatConstant;
 
-	public bool IsAny { get { return Token != null && Token.TokenType == TokenType.Underscore; } }
+	public bool IsAny => Token != null && Token.TokenType == TokenType.Underscore;
 
-	public ulong Integer { get { return Token.Integer; } }
+	public ulong Integer => Token.Integer;
 
-	public double Double { get { return Token.Double; } }
+	public double Double => Token.Double;
 
-	public double Float { get { return Token.Float; } }
+	public double Float => Token.Float;
 
-	public string LabelName { get { return Token.Value; } }
+	public string LabelName => Token.Value;
 
 	public Operand(Token token, int index)
 	{

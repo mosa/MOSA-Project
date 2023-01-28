@@ -17,7 +17,7 @@ public sealed class MovStore32 : X64Instruction
 	{
 	}
 
-	public override bool IsMemoryWrite { get { return true; } }
+	public override bool IsMemoryWrite => true;
 
 	public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 	{

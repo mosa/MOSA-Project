@@ -15,5 +15,5 @@ public sealed class NewString : BaseIRInstruction
 	{
 	}
 
-	public override bool IsMemoryWrite { get { return true; } }
+	public override bool IsMemoryWrite => true;
 }

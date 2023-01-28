@@ -17,15 +17,15 @@ public sealed class Mla : ARMv8A32Instruction
 	{
 	}
 
-	public override bool IsZeroFlagModified { get { return true; } }
+	public override bool IsZeroFlagModified => true;
 
-	public override bool IsCarryFlagModified { get { return true; } }
+	public override bool IsCarryFlagModified => true;
 
-	public override bool IsCarryFlagUnchanged { get { return true; } }
+	public override bool IsCarryFlagUnchanged => true;
 
-	public override bool IsCarryFlagUndefined { get { return true; } }
+	public override bool IsCarryFlagUndefined => true;
 
-	public override bool IsSignFlagModified { get { return true; } }
+	public override bool IsSignFlagModified => true;
 
 	public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 	{

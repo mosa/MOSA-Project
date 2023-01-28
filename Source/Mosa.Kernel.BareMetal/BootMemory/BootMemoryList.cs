@@ -15,8 +15,8 @@ public /*readonly*/ struct BootMemoryList
 
 	public uint Count
 	{
-		get { return Entry.Load32(); }
-		set { Entry.Store32(value); }
+		get => Entry.Load32();
+		set => Entry.Store32(value);
 	}
 
 	public BootMemoryMapEntry GetBootMemoryMapEntry(uint index)

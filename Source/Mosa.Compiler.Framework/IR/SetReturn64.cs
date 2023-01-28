@@ -15,5 +15,5 @@ public sealed class SetReturn64 : BaseIRInstruction
 	{
 	}
 
-	public override FlowControl FlowControl { get { return FlowControl.Return; } }
+	public override FlowControl FlowControl => FlowControl.Return;
 }

@@ -117,7 +117,7 @@ public static class PageFrameAllocator
 	/// <summary>
 	/// Retrieves the size of a single memory page.
 	/// </summary>
-	public static uint PageSize { get { return 4096; } }
+	public static uint PageSize => 4096;
 
 	/// <summary>
 	/// Retrieves the amount of total physical memory pages available in the system.

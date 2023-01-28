@@ -15,5 +15,5 @@ public sealed class Store8 : BaseIRInstruction
 	{
 	}
 
-	public override bool IsMemoryWrite { get { return true; } }
+	public override bool IsMemoryWrite => true;
 }

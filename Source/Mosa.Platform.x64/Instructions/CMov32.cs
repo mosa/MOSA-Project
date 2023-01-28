@@ -17,19 +17,19 @@ public sealed class CMov32 : X64Instruction
 	{
 	}
 
-	public override string AlternativeName { get { return "CMov"; } }
+	public override string AlternativeName => "CMov";
 
-	public override bool IsZeroFlagUsed { get { return true; } }
+	public override bool IsZeroFlagUsed => true;
 
-	public override bool IsCarryFlagUsed { get { return true; } }
+	public override bool IsCarryFlagUsed => true;
 
-	public override bool IsSignFlagUsed { get { return true; } }
+	public override bool IsSignFlagUsed => true;
 
-	public override bool IsOverflowFlagUsed { get { return true; } }
+	public override bool IsOverflowFlagUsed => true;
 
-	public override bool IsParityFlagUsed { get { return true; } }
+	public override bool IsParityFlagUsed => true;
 
-	public override bool AreFlagUseConditional { get { return true; } }
+	public override bool AreFlagUseConditional => true;
 
 	public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 	{

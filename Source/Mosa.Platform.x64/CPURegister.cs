@@ -7,29 +7,21 @@ public static class CPURegister
 {
 	#region Translations
 
-	public static PhysicalRegister R4
-	{ get { return RBP; } }
+	public static PhysicalRegister R4 => RBP;
 
-	public static PhysicalRegister R5
-	{ get { return RSP; } }
+	public static PhysicalRegister R5 => RSP;
 
-	public static PhysicalRegister RAX
-	{ get { return R0; } }
+	public static PhysicalRegister RAX => R0;
 
-	public static PhysicalRegister RCX
-	{ get { return R1; } }
+	public static PhysicalRegister RCX => R1;
 
-	public static PhysicalRegister RDX
-	{ get { return R2; } }
+	public static PhysicalRegister RDX => R2;
 
-	public static PhysicalRegister RBX
-	{ get { return R3; } }
+	public static PhysicalRegister RBX => R3;
 
-	public static PhysicalRegister RSI
-	{ get { return R6; } }
+	public static PhysicalRegister RSI => R6;
 
-	public static PhysicalRegister RDI
-	{ get { return R7; } }
+	public static PhysicalRegister RDI => R7;
 
 	#endregion Translations
 

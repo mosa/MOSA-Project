@@ -27,10 +27,7 @@ public sealed class CalliInstruction : InvokeInstruction
 	/// Gets the supported immediate metadata tokens in the instruction.
 	/// </summary>
 	/// <value></value>
-	protected override InvokeInstruction.InvokeSupportFlags InvokeSupport
-	{
-		get { return InvokeSupportFlags.CallSite; }
-	}
+	protected override InvokeInstruction.InvokeSupportFlags InvokeSupport => InvokeSupportFlags.CallSite;
 
 	#endregion Properties
 }

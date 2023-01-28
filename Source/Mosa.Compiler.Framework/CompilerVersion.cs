@@ -25,8 +25,5 @@ public static class CompilerVersion
 		return version;
 	}
 
-	public static string VersionString
-	{
-		get { return $"{Version.Major}.{Version.Minor}.{Version.Revision}.{Version.Build}"; }
-	}
+	public static string VersionString => $"{Version.Major}.{Version.Minor}.{Version.Revision}.{Version.Build}";
 }

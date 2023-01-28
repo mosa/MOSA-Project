@@ -17,7 +17,7 @@ public sealed class Lsl : ARMv8A32Instruction
 	{
 	}
 
-	public override bool IsCarryFlagModified { get { return true; } }
+	public override bool IsCarryFlagModified => true;
 
 	public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 	{

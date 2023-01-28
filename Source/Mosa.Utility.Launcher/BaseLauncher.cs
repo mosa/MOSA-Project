@@ -14,8 +14,7 @@ public class BaseLauncher
 
 	public LauncherSettings LauncherSettings { get; }
 
-	public Settings Settings
-	{ get { return LauncherSettings.Settings; } }
+	public Settings Settings => LauncherSettings.Settings;
 
 	public BaseLauncher(Settings settings, CompilerHooks compilerHook)
 	{

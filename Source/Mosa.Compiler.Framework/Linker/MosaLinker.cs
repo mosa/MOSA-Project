@@ -27,9 +27,9 @@ public sealed class MosaLinker
 
 	private LinkerSymbol FirstSymbol { get; set; }
 
-	public uint SectionAlignment { get { return ElfLinker.SectionAlignment; } }
+	public uint SectionAlignment => ElfLinker.SectionAlignment;
 
-	public uint BaseFileOffset { get { return ElfLinker.BaseFileOffset; } }
+	public uint BaseFileOffset => ElfLinker.BaseFileOffset;
 
 	public LinkerFormatType LinkerFormatType { get; }
 

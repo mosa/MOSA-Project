@@ -15,5 +15,5 @@ public sealed class ExceptionStart : BaseIRInstruction
 	{
 	}
 
-	public override bool IgnoreDuringCodeGeneration { get { return true; } }
+	public override bool IgnoreDuringCodeGeneration => true;
 }

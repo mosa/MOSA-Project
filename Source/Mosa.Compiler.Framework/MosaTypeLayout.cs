@@ -116,8 +116,7 @@ public class MosaTypeLayout
 
 		public List<uint> ParameterSizes { get; set; }
 
-		public int ParameterCount
-		{ get { return ParameterSizes.Count; } }
+		public int ParameterCount => ParameterSizes.Count;
 	}
 
 	#endregion Nested Class

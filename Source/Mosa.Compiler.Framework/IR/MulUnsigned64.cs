@@ -15,5 +15,5 @@ public sealed class MulUnsigned64 : BaseIRInstruction
 	{
 	}
 
-	public override bool IsCommutative { get { return true; } }
+	public override bool IsCommutative => true;
 }

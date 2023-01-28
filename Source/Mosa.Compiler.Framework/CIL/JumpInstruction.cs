@@ -31,10 +31,7 @@ public sealed class JumpInstruction : InvokeInstruction
 	/// Gets the supported immediate metadata tokens in the instruction.
 	/// </summary>
 	/// <value></value>
-	protected override InvokeInstruction.InvokeSupportFlags InvokeSupport
-	{
-		get { return InvokeSupportFlags.MemberRef | InvokeSupportFlags.MethodDef; }
-	}
+	protected override InvokeInstruction.InvokeSupportFlags InvokeSupport => InvokeSupportFlags.MemberRef | InvokeSupportFlags.MethodDef;
 
 	#endregion Properties
 }

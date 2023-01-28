@@ -17,23 +17,23 @@ public sealed class Mul64 : X64Instruction
 	{
 	}
 
-	public override bool IsCommutative { get { return true; } }
+	public override bool IsCommutative => true;
 
-	public override bool IsZeroFlagUnchanged { get { return true; } }
+	public override bool IsZeroFlagUnchanged => true;
 
-	public override bool IsZeroFlagUndefined { get { return true; } }
+	public override bool IsZeroFlagUndefined => true;
 
-	public override bool IsCarryFlagModified { get { return true; } }
+	public override bool IsCarryFlagModified => true;
 
-	public override bool IsSignFlagUnchanged { get { return true; } }
+	public override bool IsSignFlagUnchanged => true;
 
-	public override bool IsSignFlagUndefined { get { return true; } }
+	public override bool IsSignFlagUndefined => true;
 
-	public override bool IsOverflowFlagModified { get { return true; } }
+	public override bool IsOverflowFlagModified => true;
 
-	public override bool IsParityFlagUnchanged { get { return true; } }
+	public override bool IsParityFlagUnchanged => true;
 
-	public override bool IsParityFlagUndefined { get { return true; } }
+	public override bool IsParityFlagUndefined => true;
 
 	public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 	{

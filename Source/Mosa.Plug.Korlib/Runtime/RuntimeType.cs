@@ -22,10 +22,7 @@ public sealed unsafe class RuntimeType : Type
 	private Type declaringType = null;
 	private Type elementType = null;
 
-	public override string AssemblyQualifiedName
-	{
-		get { return assemblyQualifiedName; }
-	}
+	public override string AssemblyQualifiedName => assemblyQualifiedName;
 
 	public override Type DeclaringType
 	{
@@ -41,47 +38,25 @@ public sealed unsafe class RuntimeType : Type
 		}
 	}
 
-	public override string FullName
-	{
-		get { return fullname; }
-	}
+	public override string FullName => fullname;
 
-	public override int GenericParameterPosition
-	{
-		get { throw new NotSupportedException(); }
-	}
+	public override int GenericParameterPosition => throw new NotSupportedException();
 
-	public override Type[] GenericTypeArguments
-	{
-		get { return new Type[0]; }
-	}
+	public override Type[] GenericTypeArguments => new Type[0];
 
-	public override bool IsConstructedGenericType
-	{
+	public override bool IsConstructedGenericType =>
 		// We don't know so just return false
-		get { return false; }
-	}
+		false;
 
-	public override bool IsGenericParameter
-	{
+	public override bool IsGenericParameter =>
 		// We don't know so just return false
-		get { return false; }
-	}
+		false;
 
-	public override string Name
-	{
-		get { return name; }
-	}
+	public override string Name => name;
 
-	public override string Namespace
-	{
-		get { return @namespace; }
-	}
+	public override string Namespace => @namespace;
 
-	public override RuntimeTypeHandle TypeHandle
-	{
-		get { return handle; }
-	}
+	public override RuntimeTypeHandle TypeHandle => handle;
 
 	internal RuntimeType(RuntimeTypeHandle handle)
 	{

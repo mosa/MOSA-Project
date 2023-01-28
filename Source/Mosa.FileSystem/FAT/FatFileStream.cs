@@ -123,7 +123,7 @@ public class FatFileStream : Stream
 	/// <value></value>
 	/// <returns>true if the stream supports reading; otherwise, false.
 	/// </returns>
-	public override bool CanRead { get { return canRead; } }
+	public override bool CanRead => canRead;
 
 	/// <summary>
 	/// When overridden in a derived class, gets a value indicating whether the current stream supports seeking.
@@ -131,7 +131,7 @@ public class FatFileStream : Stream
 	/// <value></value>
 	/// <returns>true if the stream supports seeking; otherwise, false.
 	/// </returns>
-	public override bool CanSeek { get { return true; } }
+	public override bool CanSeek => true;
 
 	/// <summary>
 	/// When overridden in a derived class, gets a value indicating whether the current stream supports writing.
@@ -139,7 +139,7 @@ public class FatFileStream : Stream
 	/// <value></value>
 	/// <returns>true if the stream supports writing; otherwise, false.
 	/// </returns>
-	public override bool CanWrite { get { return canWrite; } }
+	public override bool CanWrite => canWrite;
 
 	/// <summary>
 	/// Gets a value that determines whether the current stream can time out.
@@ -148,7 +148,7 @@ public class FatFileStream : Stream
 	/// <returns>
 	/// A value that determines whether the current stream can time out.
 	/// </returns>
-	public override bool CanTimeout { get { return false; } }
+	public override bool CanTimeout => false;
 
 	/// <summary>
 	/// When overridden in a derived class, gets the length in bytes of the stream.
@@ -163,7 +163,7 @@ public class FatFileStream : Stream
 	/// <exception cref="T:System.ObjectDisposedException">
 	/// Methods were called after the stream was closed.
 	/// </exception>
-	public override long Length { get { return length; } }
+	public override long Length => length;
 
 	/// <summary>
 	/// When overridden in a derived class, gets or sets the position within the current stream.
@@ -183,14 +183,8 @@ public class FatFileStream : Stream
 	/// </exception>
 	public override long Position
 	{
-		get
-		{
-			return position;
-		}
-		set
-		{
-			Seek(value, SeekOrigin.Begin);
-		}
+		get => position;
+		set => Seek(value, SeekOrigin.Begin);
 	}
 
 	/// <summary>

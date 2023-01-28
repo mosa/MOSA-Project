@@ -30,30 +30,15 @@ public abstract class CollectionBase : IList
 		}
 	}
 
-	protected IList List
-	{
-		get { return this; }
-	}
+	protected IList List => this;
 
 	public int Capacity
 	{
-		get
-		{
-			return InnerList.Capacity;
-		}
-		set
-		{
-			InnerList.Capacity = value;
-		}
+		get => InnerList.Capacity;
+		set => InnerList.Capacity = value;
 	}
 
-	public int Count
-	{
-		get
-		{
-			return list == null ? 0 : list.Count;
-		}
-	}
+	public int Count => list == null ? 0 : list.Count;
 
 	public void Clear()
 	{
@@ -85,25 +70,13 @@ public abstract class CollectionBase : IList
 		}
 	}
 
-	bool IList.IsReadOnly
-	{
-		get { return InnerList.IsReadOnly; }
-	}
+	bool IList.IsReadOnly => InnerList.IsReadOnly;
 
-	bool IList.IsFixedSize
-	{
-		get { return InnerList.IsFixedSize; }
-	}
+	bool IList.IsFixedSize => InnerList.IsFixedSize;
 
-	bool ICollection.IsSynchronized
-	{
-		get { return InnerList.IsSynchronized; }
-	}
+	bool ICollection.IsSynchronized => InnerList.IsSynchronized;
 
-	Object ICollection.SyncRoot
-	{
-		get { return InnerList.SyncRoot; }
-	}
+	Object ICollection.SyncRoot => InnerList.SyncRoot;
 
 	void ICollection.CopyTo(Array array, int index)
 	{

@@ -48,23 +48,23 @@ public sealed class MosaField : MosaUnit, IEquatable<MosaField>
 			this.field = field;
 		}
 
-		public MosaFieldAttributes FieldAttributes { set { field.FieldAttributes = value; } }
+		public MosaFieldAttributes FieldAttributes { set => field.FieldAttributes = value; }
 
-		public MosaType? DeclaringType { set { field.DeclaringType = value; } }
+		public MosaType? DeclaringType { set => field.DeclaringType = value; }
 
-		public MosaType? FieldType { set { field.FieldType = value; } }
+		public MosaType? FieldType { set => field.FieldType = value; }
 
-		public bool IsLiteral { set { field.IsLiteral = value; } }
+		public bool IsLiteral { set => field.IsLiteral = value; }
 
-		public bool IsStatic { set { field.IsStatic = value; } }
+		public bool IsStatic { set => field.IsStatic = value; }
 
-		public bool HasDefault { set { field.HasDefault = value; } }
+		public bool HasDefault { set => field.HasDefault = value; }
 
-		public uint? Offset { set { field.Offset = value; } }
+		public uint? Offset { set => field.Offset = value; }
 
-		public byte[] Data { set { field.Data = value; } }
+		public byte[] Data { set => field.Data = value; }
 
-		public bool HasOpenGenericParams { set { field.HasOpenGenericParams = value; } }
+		public bool HasOpenGenericParams { set => field.HasOpenGenericParams = value; }
 
 		public override void Dispose()
 		{

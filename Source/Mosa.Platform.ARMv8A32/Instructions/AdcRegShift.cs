@@ -17,9 +17,9 @@ public sealed class AdcRegShift : ARMv8A32Instruction
 	{
 	}
 
-	public override bool IsCommutative { get { return true; } }
+	public override bool IsCommutative => true;
 
-	public override bool IsCarryFlagUsed { get { return true; } }
+	public override bool IsCarryFlagUsed => true;
 
 	public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 	{

@@ -15,5 +15,5 @@ public sealed class AddR4 : BaseIRInstruction
 	{
 	}
 
-	public override bool IsCommutative { get { return true; } }
+	public override bool IsCommutative => true;
 }

@@ -4,7 +4,7 @@ namespace Mosa.Utility.SourceCodeGenerator;
 
 public class BuildX86InstructionFiles : BuildCommonInstructionFiles
 {
-	protected override string Platform { get { return "x86"; } }
+	protected override string Platform => "x86";
 
 	public BuildX86InstructionFiles(string jsonFile, string destinationPath)
 		: base(jsonFile, destinationPath)

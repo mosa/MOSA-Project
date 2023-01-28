@@ -15,7 +15,7 @@ public sealed class Kill : BaseIRInstruction
 	{
 	}
 
-	public override bool IgnoreDuringCodeGeneration { get { return true; } }
+	public override bool IgnoreDuringCodeGeneration => true;
 
-	public override bool VariableOperands { get { return true; } }
+	public override bool VariableOperands => true;
 }

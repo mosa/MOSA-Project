@@ -15,7 +15,7 @@ public sealed class LoadParamCompound : BaseIRInstruction
 	{
 	}
 
-	public override bool IsMemoryRead { get { return true; } }
+	public override bool IsMemoryRead => true;
 
-	public override bool IsParameterLoad { get { return true; } }
+	public override bool IsParameterLoad => true;
 }

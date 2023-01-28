@@ -8,9 +8,9 @@ public class Token
 	public string Value { get; protected set; }
 	public int Position { get; protected set; } = -1;
 
-	public bool IsInteger { get { return TokenType == TokenType.IntegerConstant; } }
-	public bool IsFloat { get { return TokenType == TokenType.FloatConstant; } }
-	public bool IsDouble { get { return TokenType == TokenType.DoubleConstant; } }
+	public bool IsInteger => TokenType == TokenType.IntegerConstant;
+	public bool IsFloat => TokenType == TokenType.FloatConstant;
+	public bool IsDouble => TokenType == TokenType.DoubleConstant;
 	public ulong Integer { get; set; }
 
 	public double Double { get; }

@@ -17,5 +17,5 @@ public sealed class To64 : BaseIRInstruction
 	{
 	}
 
-	public override BuiltInType ResultType { get { return BuiltInType.UInt64; } }
+	public override BuiltInType ResultType => BuiltInType.UInt64;
 }

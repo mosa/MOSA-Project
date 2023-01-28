@@ -68,10 +68,7 @@ public class Queue : ICollection, ICloneable
 	}
 
 
-	public virtual int Count
-	{
-		get { return _size; }
-	}
+	public virtual int Count => _size;
 
 	public virtual object Clone()
 	{
@@ -89,10 +86,7 @@ public class Queue : ICollection, ICloneable
 		return q;
 	}
 
-	public virtual bool IsSynchronized
-	{
-		get { return false; }
-	}
+	public virtual bool IsSynchronized => false;
 
 	public virtual object SyncRoot => this;
 
@@ -305,18 +299,9 @@ public class Queue : ICollection, ICloneable
 			_root = _q.SyncRoot;
 		}
 
-		public override bool IsSynchronized
-		{
-			get { return true; }
-		}
+		public override bool IsSynchronized => true;
 
-		public override object SyncRoot
-		{
-			get
-			{
-				return _root;
-			}
-		}
+		public override object SyncRoot => _root;
 
 		public override int Count
 		{
@@ -490,12 +475,6 @@ public class Queue : ICollection, ICloneable
 		}
 
 		[DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-		public object[] Items
-		{
-			get
-			{
-				return _queue.ToArray();
-			}
-		}
+		public object[] Items => _queue.ToArray();
 	}
 }

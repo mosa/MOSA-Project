@@ -15,5 +15,5 @@ public sealed class Switch : BaseIRInstruction
 	{
 	}
 
-	public override FlowControl FlowControl { get { return FlowControl.Switch; } }
+	public override FlowControl FlowControl => FlowControl.Switch;
 }

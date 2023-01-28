@@ -17,29 +17,29 @@ public sealed class IRetd : X86Instruction
 	{
 	}
 
-	public override FlowControl FlowControl { get { return FlowControl.Return; } }
+	public override FlowControl FlowControl => FlowControl.Return;
 
-	public override bool HasUnspecifiedSideEffect { get { return true; } }
+	public override bool HasUnspecifiedSideEffect => true;
 
-	public override bool IsZeroFlagUnchanged { get { return true; } }
+	public override bool IsZeroFlagUnchanged => true;
 
-	public override bool IsZeroFlagUndefined { get { return true; } }
+	public override bool IsZeroFlagUndefined => true;
 
-	public override bool IsCarryFlagUnchanged { get { return true; } }
+	public override bool IsCarryFlagUnchanged => true;
 
-	public override bool IsCarryFlagUndefined { get { return true; } }
+	public override bool IsCarryFlagUndefined => true;
 
-	public override bool IsSignFlagUnchanged { get { return true; } }
+	public override bool IsSignFlagUnchanged => true;
 
-	public override bool IsSignFlagUndefined { get { return true; } }
+	public override bool IsSignFlagUndefined => true;
 
-	public override bool IsOverflowFlagUnchanged { get { return true; } }
+	public override bool IsOverflowFlagUnchanged => true;
 
-	public override bool IsOverflowFlagUndefined { get { return true; } }
+	public override bool IsOverflowFlagUndefined => true;
 
-	public override bool IsParityFlagUnchanged { get { return true; } }
+	public override bool IsParityFlagUnchanged => true;
 
-	public override bool IsParityFlagUndefined { get { return true; } }
+	public override bool IsParityFlagUndefined => true;
 
 	public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 	{

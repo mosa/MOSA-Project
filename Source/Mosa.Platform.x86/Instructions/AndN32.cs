@@ -17,17 +17,17 @@ public sealed class AndN32 : X86Instruction
 	{
 	}
 
-	public override bool IsCommutative { get { return true; } }
+	public override bool IsCommutative => true;
 
-	public override bool IsSignFlagModified { get { return true; } }
+	public override bool IsSignFlagModified => true;
 
-	public override bool IsOverflowFlagCleared { get { return true; } }
+	public override bool IsOverflowFlagCleared => true;
 
-	public override bool IsOverflowFlagModified { get { return true; } }
+	public override bool IsOverflowFlagModified => true;
 
-	public override bool IsParityFlagUnchanged { get { return true; } }
+	public override bool IsParityFlagUnchanged => true;
 
-	public override bool IsParityFlagUndefined { get { return true; } }
+	public override bool IsParityFlagUndefined => true;
 
 	public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 	{

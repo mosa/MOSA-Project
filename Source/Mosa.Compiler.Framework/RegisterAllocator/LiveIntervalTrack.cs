@@ -15,9 +15,9 @@ public sealed class LiveIntervalTrack
 
 	public readonly PhysicalRegister Register;
 
-	public bool IsFloatingPoint { get { return Register.IsFloatingPoint; } }
+	public bool IsFloatingPoint => Register.IsFloatingPoint;
 
-	public bool IsInteger { get { return Register.IsInteger; } }
+	public bool IsInteger => Register.IsInteger;
 
 	public LiveIntervalTrack(PhysicalRegister register, bool reserved)
 	{

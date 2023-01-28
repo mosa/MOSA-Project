@@ -45,11 +45,11 @@ public class MosaParameter : MosaUnit, IEquatable<MosaParameter>, IEquatable<Mos
 			this.parameter = parameter;
 		}
 
-		public MosaParameterAttributes ParameterAttributes { set { parameter.ParameterAttributes = value; } }
+		public MosaParameterAttributes ParameterAttributes { set => parameter.ParameterAttributes = value; }
 
-		public MosaMethod? DeclaringMethod { set { parameter.DeclaringMethod = value; } }
+		public MosaMethod? DeclaringMethod { set => parameter.DeclaringMethod = value; }
 
-		public MosaType? ParameterType { set { parameter.ParameterType = value; } }
+		public MosaType? ParameterType { set => parameter.ParameterType = value; }
 
 		public override void Dispose()
 		{

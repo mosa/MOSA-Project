@@ -17,21 +17,21 @@ public sealed class Branch : X86Instruction
 	{
 	}
 
-	public override string AlternativeName { get { return "Jxx"; } }
+	public override string AlternativeName => "Jxx";
 
-	public override FlowControl FlowControl { get { return FlowControl.ConditionalBranch; } }
+	public override FlowControl FlowControl => FlowControl.ConditionalBranch;
 
-	public override bool IsZeroFlagUsed { get { return true; } }
+	public override bool IsZeroFlagUsed => true;
 
-	public override bool IsCarryFlagUsed { get { return true; } }
+	public override bool IsCarryFlagUsed => true;
 
-	public override bool IsSignFlagUsed { get { return true; } }
+	public override bool IsSignFlagUsed => true;
 
-	public override bool IsOverflowFlagUsed { get { return true; } }
+	public override bool IsOverflowFlagUsed => true;
 
-	public override bool IsParityFlagUsed { get { return true; } }
+	public override bool IsParityFlagUsed => true;
 
-	public override bool AreFlagUseConditional { get { return true; } }
+	public override bool AreFlagUseConditional => true;
 
 	public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 	{

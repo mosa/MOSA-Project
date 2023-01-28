@@ -12,19 +12,19 @@ public struct Pointer
 	public static Pointer Zero
 	{
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		get { return new Pointer(0); }
+		get => new Pointer(0);
 	}
 
 	public unsafe static int Size
 	{
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		get { return sizeof(void*); }
+		get => sizeof(void*);
 	}
 
 	public bool IsNull
 	{
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		get { return ToInt64() == 0; }
+		get => ToInt64() == 0;
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

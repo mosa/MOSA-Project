@@ -15,5 +15,5 @@ public sealed class Branch32 : BaseIRInstruction
 	{
 	}
 
-	public override FlowControl FlowControl { get { return FlowControl.ConditionalBranch; } }
+	public override FlowControl FlowControl => FlowControl.ConditionalBranch;
 }

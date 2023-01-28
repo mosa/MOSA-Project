@@ -15,7 +15,7 @@ public sealed class StoreParamR8 : BaseIRInstruction
 	{
 	}
 
-	public override bool IsMemoryWrite { get { return true; } }
+	public override bool IsMemoryWrite => true;
 
-	public override bool IsParameterStore { get { return true; } }
+	public override bool IsParameterStore => true;
 }

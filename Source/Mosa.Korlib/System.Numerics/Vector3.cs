@@ -60,38 +60,23 @@ public partial struct Vector3 : IEquatable<Vector3>, IFormattable
 
 	/// <summary>Gets a vector whose 3 elements are equal to zero.</summary>
 	/// <value>A vector whose three elements are equal to zero (that is, it returns the vector <c>(0,0,0)</c>.</value>
-	public static Vector3 Zero
-	{
-		get => default;
-	}
+	public static Vector3 Zero => default;
 
 	/// <summary>Gets a vector whose 3 elements are equal to one.</summary>
 	/// <value>A vector whose three elements are equal to one (that is, it returns the vector <c>(1,1,1)</c>.</value>
-	public static Vector3 One
-	{
-		get => new Vector3(1.0f);
-	}
+	public static Vector3 One => new Vector3(1.0f);
 
 	/// <summary>Gets the vector (1,0,0).</summary>
 	/// <value>The vector <c>(1,0,0)</c>.</value>
-	public static Vector3 UnitX
-	{
-		get => new Vector3(1.0f, 0.0f, 0.0f);
-	}
+	public static Vector3 UnitX => new Vector3(1.0f, 0.0f, 0.0f);
 
 	/// <summary>Gets the vector (0,1,0).</summary>
 	/// <value>The vector <c>(0,1,0)</c>.</value>
-	public static Vector3 UnitY
-	{
-		get => new Vector3(0.0f, 1.0f, 0.0f);
-	}
+	public static Vector3 UnitY => new Vector3(0.0f, 1.0f, 0.0f);
 
 	/// <summary>Gets the vector (0,0,1).</summary>
 	/// <value>The vector <c>(0,0,1)</c>.</value>
-	public static Vector3 UnitZ
-	{
-		get => new Vector3(0.0f, 0.0f, 1.0f);
-	}
+	public static Vector3 UnitZ => new Vector3(0.0f, 0.0f, 1.0f);
 
 	/// <summary>Adds two vectors together.</summary>
 	/// <param name="left">The first vector to add.</param>

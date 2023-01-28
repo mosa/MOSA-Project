@@ -15,7 +15,7 @@ public sealed class TryStart : BaseIRInstruction
 	{
 	}
 
-	public override bool IgnoreDuringCodeGeneration { get { return true; } }
+	public override bool IgnoreDuringCodeGeneration => true;
 
-	public override bool IgnoreInstructionBasicBlockTargets { get { return true; } }
+	public override bool IgnoreInstructionBasicBlockTargets => true;
 }

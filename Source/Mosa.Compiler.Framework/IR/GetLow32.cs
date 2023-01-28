@@ -17,7 +17,7 @@ public sealed class GetLow32 : BaseIRInstruction
 	{
 	}
 
-	public override BuiltInType ResultType { get { return BuiltInType.UInt32; } }
+	public override BuiltInType ResultType => BuiltInType.UInt32;
 
-	public override BuiltInType ResultType2 { get { return BuiltInType.UInt32; } }
+	public override BuiltInType ResultType2 => BuiltInType.UInt32;
 }

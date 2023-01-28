@@ -11,11 +11,11 @@ public struct SlotIndex : IComparable<SlotIndex>
 
 	public readonly int Value;
 
-	public int Index { get { return Value >> 2; } }
+	public int Index => Value >> 2;
 
-	public SlotIndex Before { get { return new SlotIndex(this, false); } }
+	public SlotIndex Before => new SlotIndex(this, false);
 
-	public SlotIndex After { get { return new SlotIndex(this, true); } }
+	public SlotIndex After => new SlotIndex(this, true);
 
 	private SlotIndex(int index)
 	{
@@ -34,15 +34,15 @@ public struct SlotIndex : IComparable<SlotIndex>
 		Value = (slot.Value & ~0b11) | (after ? 0b11 : 0b00);
 	}
 
-	public bool IsBeforeSlot { get { return (Value & 0b11) == 0b00; } }
+	public bool IsBeforeSlot => (Value & 0b11) == 0b00;
 
-	public bool IsOnSlot { get { return (Value & 0b11) == 0b01; } }
+	public bool IsOnSlot => (Value & 0b11) == 0b01;
 
-	public bool IsAfterSlot { get { return (Value & 0b11) == 0b11; } }
+	public bool IsAfterSlot => (Value & 0b11) == 0b11;
 
-	public bool IsNull { get { return Value == 0b01; } }
+	public bool IsNull => Value == 0b01;
 
-	public bool IsNotNull { get { return !IsNull; } }
+	public bool IsNotNull => !IsNull;
 
 	public static bool operator ==(SlotIndex s1, SlotIndex s2)
 	{

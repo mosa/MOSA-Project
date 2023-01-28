@@ -17,19 +17,19 @@ public sealed class Adc64 : X64Instruction
 	{
 	}
 
-	public override bool IsCommutative { get { return true; } }
+	public override bool IsCommutative => true;
 
-	public override bool IsZeroFlagModified { get { return true; } }
+	public override bool IsZeroFlagModified => true;
 
-	public override bool IsCarryFlagUsed { get { return true; } }
+	public override bool IsCarryFlagUsed => true;
 
-	public override bool IsCarryFlagModified { get { return true; } }
+	public override bool IsCarryFlagModified => true;
 
-	public override bool IsSignFlagModified { get { return true; } }
+	public override bool IsSignFlagModified => true;
 
-	public override bool IsOverflowFlagModified { get { return true; } }
+	public override bool IsOverflowFlagModified => true;
 
-	public override bool IsParityFlagModified { get { return true; } }
+	public override bool IsParityFlagModified => true;
 
 	public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 	{

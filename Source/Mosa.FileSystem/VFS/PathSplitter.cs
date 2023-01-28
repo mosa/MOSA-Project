@@ -77,21 +77,9 @@ internal class PathSplitter
 		}
 	}
 
-	public int Length
-	{
-		get
-		{
-			return length;
-		}
-	}
+	public int Length => length;
 
-	public string Last
-	{
-		get
-		{
-			return GetPath(Length - 1);
-		}
-	}
+	public string Last => GetPath(Length - 1);
 
 	public int FindFirst(string path)
 	{

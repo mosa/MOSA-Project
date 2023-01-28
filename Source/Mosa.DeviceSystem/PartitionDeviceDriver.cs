@@ -39,7 +39,7 @@ public class PartitionDeviceDriver : BaseDeviceDriver, IPartitionDevice
 	/// Gets a value indicating whether this instance can write.
 	/// </summary>
 	/// <value><c>true</c> if this instance can write; otherwise, <c>false</c>.</value>
-	public bool CanWrite { get { return !ReadOnly; } }
+	public bool CanWrite => !ReadOnly;
 
 	public override void Initialize()
 	{

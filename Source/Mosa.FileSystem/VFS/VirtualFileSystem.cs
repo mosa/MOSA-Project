@@ -271,18 +271,15 @@ public sealed class VirtualFileSystem : IFileSystem, IFileSystemService
 
 	#region IFileSystem Members
 
-	bool IFileSystem.IsReadOnly { get { return false; } }
+	bool IFileSystem.IsReadOnly => false;
 
-	IVfsNode IFileSystem.Root
-	{
-		get { return VirtualFileSystem.rootDirectory; }
-	}
+	IVfsNode IFileSystem.Root => VirtualFileSystem.rootDirectory;
 
 	#endregion IFileSystem Members
 
 	#region IFileSystemService Members
 
-	GenericFileSystemSettings IFileSystemService.SettingsType { get { return null; } }
+	GenericFileSystemSettings IFileSystemService.SettingsType => null;
 
 	bool IFileSystemService.Mount()
 	{
