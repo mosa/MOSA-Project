@@ -33,7 +33,7 @@ public static class Tokenizer
 				{
 					c = expression[index];
 
-					if (IsDigit(c) || IsHexDigit(c) || c == '.' || c == 'l' || c == 'f' || c == 'd' || c == 'b' || c == 'u' || c == 'i')
+					if (IsDigit(c) || IsHexDigit(c) || c is '.' or 'l' or 'f' or 'd' or 'b' or 'u' or 'i')
 					{
 						index++;
 						continue;
@@ -160,12 +160,12 @@ public static class Tokenizer
 		int length = part.Length;
 		char last = length > 1 ? part[length - 1] : ' ';
 
-		if (last == 'd' || last == 'f')
+		if (last is 'd' or 'f')
 		{
 			part = part.Substring(0, length - 1);
 		}
 
-		if (last == 'l' || last == 'i' || last == 'u')
+		if (last is 'l' or 'i' or 'u')
 		{
 			;
 		}

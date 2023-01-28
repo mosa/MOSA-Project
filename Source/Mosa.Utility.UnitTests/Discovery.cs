@@ -186,7 +186,7 @@ public class Discovery
 		}
 		catch (Exception e)
 		{
-			if (e.InnerException is DivideByZeroException || e.InnerException is OverflowException)
+			if (e.InnerException is DivideByZeroException or OverflowException)
 			{
 				unitTest.Skip = true;
 			}

@@ -84,7 +84,7 @@ public static class Reader
 		{
 			var arg = args[at];
 
-			if (arg == "-s" || arg == "-p" || arg == "-setting" || arg == "-property")
+			if (arg is "-s" or "-p" or "-setting" or "-property")
 			{
 				var parts = args[++at].Split('=');
 

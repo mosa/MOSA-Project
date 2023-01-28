@@ -302,12 +302,12 @@ public static partial class MathF
 
 	public static unsafe float Round(float x, int digits, MidpointRounding mode)
 	{
-		if (digits < 0 || digits > maxRoundingDigits)
+		if (digits is < 0 or > maxRoundingDigits)
 		{
 			throw new ArgumentOutOfRangeException(nameof(digits), "SR.ArgumentOutOfRange_RoundingDigits");
 		}
 
-		if (mode < MidpointRounding.ToEven || mode > MidpointRounding.ToPositiveInfinity)
+		if (mode is < MidpointRounding.ToEven or > MidpointRounding.ToPositiveInfinity)
 		{
 			throw new ArgumentException("SR.Format(SR.Argument_InvalidEnumValue, mode, nameof(MidpointRounding)), nameof(mode)");
 		}

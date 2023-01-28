@@ -54,7 +54,7 @@ public class CMOS : BaseDeviceDriver, IDateTime
 		var month = BCDToBinary(bcd, Read(8));
 		var day = BCDToBinary(bcd, Read(7));
 
-		if (century == 19 || century == 21)
+		if (century is 19 or 21)
 		{
 			return new DateTime(century * 100 + year, month, day, hour, minute, second);
 		}

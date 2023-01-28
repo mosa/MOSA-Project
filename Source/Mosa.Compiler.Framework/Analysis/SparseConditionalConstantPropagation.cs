@@ -57,7 +57,7 @@ public sealed class SparseConditionalConstantPropagation
 
 		public bool HasMultipleConstants => Status == VariableStatusType.MultipleConstants;
 
-		public bool HasOnlyConstants => Status == VariableStatusType.SingleConstant || Status == VariableStatusType.MultipleConstants;
+		public bool HasOnlyConstants => Status is VariableStatusType.SingleConstant or VariableStatusType.MultipleConstants;
 
 		public bool IsVirtualRegister { get; set; }
 
@@ -1162,7 +1162,7 @@ public sealed class SparseConditionalConstantPropagation
 		if (result.IsOverDefined)
 			return;
 
-		if (operand1.IsOverDefined || operand1.IsOverDefined)
+		if (operand1.IsOverDefined is true or true)
 		{
 			UpdateToOverDefined(result);
 		}

@@ -88,7 +88,7 @@ public class MosaType : MosaUnit, IEquatable<MosaType>
 
 	public bool IsTypedRef => TypeCode == MosaTypeCode.TypedRef;
 
-	public bool IsArray => TypeCode == MosaTypeCode.Array || TypeCode == MosaTypeCode.SZArray;
+	public bool IsArray => TypeCode is MosaTypeCode.Array or MosaTypeCode.SZArray;
 
 	public bool IsMVar => TypeCode == MosaTypeCode.MVar;
 
@@ -117,17 +117,11 @@ public class MosaType : MosaUnit, IEquatable<MosaType>
 	public bool IsPointer => IsManagedPointer || IsUnmanagedPointer || IsFunctionPointer;
 
 	public bool IsReferenceType =>
-		TypeCode == MosaTypeCode.ReferenceType
-		|| TypeCode == MosaTypeCode.String
-		|| TypeCode == MosaTypeCode.Object
-		|| TypeCode == MosaTypeCode.Array
-		|| TypeCode == MosaTypeCode.SZArray;
+		TypeCode is MosaTypeCode.ReferenceType or MosaTypeCode.String or MosaTypeCode.Object or MosaTypeCode.Array or MosaTypeCode.SZArray;
 
 	public bool IsValueType =>
-		TypeCode == MosaTypeCode.ValueType
-		|| TypeCode == MosaTypeCode.Boolean
-		|| TypeCode == MosaTypeCode.Char
-		|| IsInteger
+		TypeCode is MosaTypeCode.ValueType or MosaTypeCode.Boolean or MosaTypeCode.Char 
+		|| IsInteger 
 		|| IsR;
 
 	public bool IsUserValueType =>

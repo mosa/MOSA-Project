@@ -163,7 +163,7 @@ public sealed unsafe class RuntimeTypeInfo : TypeInfo
 
 	protected override bool IsArrayImpl()
 	{
-		return typeCode == TypeCode.Array || typeCode == TypeCode.SZArray;
+		return typeCode is TypeCode.Array or TypeCode.SZArray;
 	}
 
 	protected override bool IsByRefImpl()
@@ -179,17 +179,15 @@ public sealed unsafe class RuntimeTypeInfo : TypeInfo
 
 	protected override bool IsPointerImpl()
 	{
-		return typeCode == TypeCode.ManagedPointer || typeCode == TypeCode.UnmanagedPointer;
+		return typeCode is TypeCode.ManagedPointer or TypeCode.UnmanagedPointer;
 	}
 
 	protected override bool IsPrimitiveImpl()
 	{
-		return typeCode == TypeCode.Boolean
-		       || typeCode == TypeCode.Char
-		       || (typeCode >= TypeCode.I && typeCode <= TypeCode.I8)
-		       || (typeCode >= TypeCode.U && typeCode <= TypeCode.U8)
-		       || typeCode == TypeCode.R4
-		       || typeCode == TypeCode.R8;
+		return typeCode is TypeCode.Boolean or TypeCode.Char 
+		       || (typeCode >= TypeCode.I && typeCode <= TypeCode.I8) 
+		       || (typeCode >= TypeCode.U && typeCode <= TypeCode.U8) 
+		       || typeCode is TypeCode.R4 or TypeCode.R8;
 	}
 
 	protected override bool IsValueTypeImpl()

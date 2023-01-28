@@ -90,7 +90,7 @@ internal class ClrMetadataLoader
 			type.IsEnum = typeDef.IsEnum;
 			type.IsDelegate = typeDef.BaseType != null
 			                  && typeDef.BaseType.DefinitionAssembly.IsCorLib()
-			                  && (typeDef.BaseType.FullName == "System.Delegate" || typeDef.BaseType.FullName == "System.MulticastDelegate");
+			                  && typeDef.BaseType.FullName is "System.Delegate" or "System.MulticastDelegate";
 			type.IsModule = typeDef.IsGlobalModuleType;
 
 			type.IsExplicitLayout = typeDef.IsExplicitLayout;

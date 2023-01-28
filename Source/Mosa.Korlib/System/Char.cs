@@ -106,7 +106,7 @@ public struct Char: IComparable, IComparable<char>, IEquatable<char>
 		// U+000d = <control> CARRIAGE RETURN
 		// U+0085 = <control> NEXT LINE
 		// U+00a0 = NO-BREAK SPACE
-		if (c == ' ' || (c >= '\x0009' && c <= '\x000d') || c == '\x00a0' || c == '\x0085')
+		if (c == ' ' || (c >= '\x0009' && c <= '\x000d') || c is '\x00a0' or '\x0085')
 		{
 			return true;
 		}

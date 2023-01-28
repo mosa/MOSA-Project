@@ -102,7 +102,7 @@ public class BaseLauncher
 
 		var defaultFolder = LauncherSettings.DefaultFolder;
 
-		if (LauncherSettings.OutputFile == null || LauncherSettings.OutputFile == "%DEFAULT%")
+		if (LauncherSettings.OutputFile is null or "%DEFAULT%")
 		{
 			LauncherSettings.OutputFile = Path.Combine(defaultFolder, $"{baseFilename}.bin");
 		}

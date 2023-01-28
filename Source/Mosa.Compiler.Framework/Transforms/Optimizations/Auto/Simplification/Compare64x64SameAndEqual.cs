@@ -19,7 +19,7 @@ public sealed class Compare64x64SameAndEqual : BaseTransform
 	{
 		var condition = context.ConditionCode;
 
-		if (!(context.ConditionCode == ConditionCode.Equal || context.ConditionCode == ConditionCode.GreaterOrEqual || context.ConditionCode == ConditionCode.LessOrEqual || context.ConditionCode == ConditionCode.UnsignedGreaterOrEqual || context.ConditionCode == ConditionCode.UnsignedLessOrEqual))
+		if (!(context.ConditionCode is ConditionCode.Equal or ConditionCode.GreaterOrEqual or ConditionCode.LessOrEqual or ConditionCode.UnsignedGreaterOrEqual or ConditionCode.UnsignedLessOrEqual))
 			return false;
 
 		if (!AreSame(context.Operand1, context.Operand2))

@@ -7,7 +7,7 @@ public static class FibonacciTests
 	[MosaUnitTest(Series = "I4Small")]
 	public static int Fibonacci(int n)
 	{
-		if (n == 1 || n == 0)
+		if (n is 1 or 0)
 			return n;
 
 		return Fibonacci(n - 1) + Fibonacci(n - 2);

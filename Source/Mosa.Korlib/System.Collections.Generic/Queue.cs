@@ -482,7 +482,7 @@ public class Queue<T> : IEnumerable<T>,
 
 		private void ThrowEnumerationNotStartedOrEnded()
 		{
-			Debug.Assert(_index == -1 || _index == -2);
+			Debug.Assert(_index is -1 or -2);
 			throw new InvalidOperationException(_index == -1 ? "Invalid operation, enumeration not started" : "Invalid operation, enumeration ended");
 		}
 

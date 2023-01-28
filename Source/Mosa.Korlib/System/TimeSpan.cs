@@ -69,7 +69,7 @@ public readonly struct TimeSpan : IComparable, IComparable<TimeSpan>, IEquatable
 	public TimeSpan(int days, int hours, int minutes, int seconds, int milliseconds)
 	{
 		long totalMilliSeconds = ((long)days * 3600 * 24 + (long)hours * 3600 + (long)minutes * 60 + seconds) * 1000 + milliseconds;
-		if (totalMilliSeconds > MaxMilliSeconds || totalMilliSeconds < MinMilliSeconds)
+		if (totalMilliSeconds is > MaxMilliSeconds or < MinMilliSeconds)
 			ThrowHelper.ThrowArgumentOutOfRange_TimeSpanTooLong();
 		_ticks = (long)totalMilliSeconds * TicksPerMillisecond;
 	}
@@ -201,7 +201,7 @@ public readonly struct TimeSpan : IComparable, IComparable<TimeSpan>, IEquatable
 
 	private static TimeSpan IntervalFromDoubleTicks(double ticks)
 	{
-		if (ticks > long.MaxValue || ticks < long.MinValue || double.IsNaN(ticks))
+		if (ticks is > long.MaxValue or < long.MinValue or Double.NaN)
 			ThrowHelper.ThrowOverflowException_TimeSpanTooLong();
 		if (ticks == long.MaxValue)
 			return TimeSpan.MaxValue;
@@ -259,7 +259,7 @@ public readonly struct TimeSpan : IComparable, IComparable<TimeSpan>, IEquatable
 		// totalSeconds is bounded by 2^31 * 2^12 + 2^31 * 2^8 + 2^31,
 		// which is less than 2^44, meaning we won't overflow totalSeconds.
 		long totalSeconds = (long)hour * 3600 + (long)minute * 60 + (long)second;
-		if (totalSeconds > MaxSeconds || totalSeconds < MinSeconds)
+		if (totalSeconds is > MaxSeconds or < MinSeconds)
 			ThrowHelper.ThrowArgumentOutOfRange_TimeSpanTooLong();
 		return totalSeconds * TicksPerSecond;
 	}

@@ -458,16 +458,15 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 		}
 
 		if (node.ResultCount != 1
-		    || node.OperandCount == 0
-		    || node.OperandCount > 2
-		    || node.Instruction.IsMemoryWrite
-		    || node.Instruction.IsMemoryRead
-		    || node.Instruction.IsIOOperation
-		    || node.Instruction.HasUnspecifiedSideEffect
-		    || node.Instruction.VariableOperands
-		    || node.Instruction.FlowControl != FlowControl.Next
-		    || node.Instruction.IgnoreDuringCodeGeneration
-		    || node.Operand1.IsUnresolvedConstant
+		    || node.OperandCount is 0 or > 2 
+		    || node.Instruction.IsMemoryWrite 
+		    || node.Instruction.IsMemoryRead 
+		    || node.Instruction.IsIOOperation 
+		    || node.Instruction.HasUnspecifiedSideEffect 
+		    || node.Instruction.VariableOperands 
+		    || node.Instruction.FlowControl != FlowControl.Next 
+		    || node.Instruction.IgnoreDuringCodeGeneration 
+		    || node.Operand1.IsUnresolvedConstant 
 		    || (node.OperandCount == 2 && node.Operand2.IsUnresolvedConstant))
 			return false;
 

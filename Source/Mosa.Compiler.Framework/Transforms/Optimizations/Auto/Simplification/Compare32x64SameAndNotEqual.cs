@@ -19,7 +19,7 @@ public sealed class Compare32x64SameAndNotEqual : BaseTransform
 	{
 		var condition = context.ConditionCode;
 
-		if (!(context.ConditionCode == ConditionCode.NotEqual || context.ConditionCode == ConditionCode.Greater || context.ConditionCode == ConditionCode.Less || context.ConditionCode == ConditionCode.UnsignedGreater || context.ConditionCode == ConditionCode.UnsignedLess))
+		if (!(context.ConditionCode is ConditionCode.NotEqual or ConditionCode.Greater or ConditionCode.Less or ConditionCode.UnsignedGreater or ConditionCode.UnsignedLess))
 			return false;
 
 		if (!AreSame(context.Operand1, context.Operand2))

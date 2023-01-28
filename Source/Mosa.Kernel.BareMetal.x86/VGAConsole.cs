@@ -106,7 +106,7 @@ public static class VGAConsole
 		{
 			SecondCharacter = b;
 
-			if (b == (byte)'=' || b == (byte)'>' || b == (byte)'<')
+			if (b is (byte)'=' or (byte)'>' or (byte)'<')
 			{
 				Evaluate();
 			}
