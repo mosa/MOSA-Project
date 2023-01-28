@@ -7,7 +7,7 @@ namespace Mosa.Utility.UnitTests.Numbers;
 
 public static class I8
 {
-	private static IList<long> series = null;
+	private static IList<long> series;
 
 	public static IEnumerable<long> Series
 	{

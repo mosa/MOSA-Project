@@ -4,7 +4,7 @@ namespace System.Diagnostics;
 
 public static class Debug
 {
-	private static bool autoFlush = false;
+	private static bool autoFlush;
 
 	public static bool AutoFlush
 	{
@@ -12,7 +12,7 @@ public static class Debug
 		set => autoFlush = value;
 	}
 
-	private static int indentLevel = 0;
+	private static int indentLevel;
 
 	public static int IndentLevel
 	{

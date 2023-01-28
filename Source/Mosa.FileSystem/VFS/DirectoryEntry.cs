@@ -12,7 +12,7 @@ public sealed class DirectoryEntry
 	/// <summary>
 	/// Holds the current directory of the current thread.
 	/// </summary>
-	private static DirectoryEntry currentDirectory = null;
+	private static DirectoryEntry currentDirectory;
 
 	#endregion Static data members
 

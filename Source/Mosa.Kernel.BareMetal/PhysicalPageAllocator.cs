@@ -12,14 +12,14 @@ public static class PhysicalPageAllocator
 
 	private static Pointer AvailableMemory;
 
-	private static uint TotalPages = 0;
+	private static uint TotalPages;
 
-	private static uint MinimumAvailablePage = 0;
-	private static uint MaximumAvailablePage = 0;
-	private static uint MinimumReservedPage = 0;
-	private static uint MaximumReservedPage = 0;
+	private static uint MinimumAvailablePage;
+	private static uint MaximumAvailablePage;
+	private static uint MinimumReservedPage;
+	private static uint MaximumReservedPage;
 
-	private static uint SearchNextStartPage = 0;
+	private static uint SearchNextStartPage;
 
 	public static void Setup()
 	{

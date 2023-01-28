@@ -24,7 +24,7 @@ public class DwarfWriteContext
 		return abbr;
 	}
 
-	private uint LastTagNumber = 0;
+	private uint LastTagNumber;
 
 	public uint GetNewTagNumber()
 	{

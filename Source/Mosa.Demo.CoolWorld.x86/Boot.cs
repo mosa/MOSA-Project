@@ -311,7 +311,7 @@ public static class Boot
 		Console.Color = restore;
 	}
 
-	private static uint counter = 0;
+	private static uint counter;
 
 	public static void ProcessInterrupt(uint interrupt, uint errorCode)
 	{

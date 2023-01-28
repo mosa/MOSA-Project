@@ -10,17 +10,17 @@ public class CHS
 	/// <summary>
 	/// Cylinder
 	/// </summary>
-	public ushort Cylinder = 0;
+	public ushort Cylinder;
 
 	/// <summary>
 	/// Head
 	/// </summary>
-	public byte Head = 0;
+	public byte Head;
 
 	/// <summary>
 	/// Sector
 	/// </summary>
-	public ushort Sector = 0;
+	public ushort Sector;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="CHS"/> struct.

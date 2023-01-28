@@ -14,7 +14,7 @@ public static class VGAText
 	private const uint Columns = 80;
 	private const uint Rows = 25;
 
-	private static ushort Offset = 0;
+	private static ushort Offset;
 
 	private static byte Color { get; set; }
 

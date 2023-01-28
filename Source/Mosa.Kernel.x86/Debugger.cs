@@ -45,16 +45,16 @@ public static class Debugger
 
 	private const int MaxBuffer = 1024 * 64 + 64;
 
-	private static bool enabled = false;
+	private static bool enabled;
 
 	private static ushort com = Serial.COM1;
 
-	private static uint index = 0;
+	private static uint index;
 
-	private static uint last = 0;
+	private static uint last;
 
-	private static bool ready = false;
-	private static bool readysent = false;
+	private static bool ready;
+	private static bool readysent;
 
 	private static unsafe IDTStack* idt_stack;
 

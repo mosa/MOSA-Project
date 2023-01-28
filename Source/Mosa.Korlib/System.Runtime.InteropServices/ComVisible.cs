@@ -13,7 +13,7 @@ namespace System.Runtime.InteropServices;
 [ComVisible(true)]
 public sealed class ComVisibleAttribute : Attribute
 {
-	private readonly bool Visible = false;
+	private readonly bool Visible;
 
 	/// <summary>
 	///

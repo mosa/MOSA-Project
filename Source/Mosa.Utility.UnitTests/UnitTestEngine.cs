@@ -35,8 +35,8 @@ public class UnitTestEngine : IDisposable
 
 	private readonly object _lock = new object();
 
-	private volatile bool Aborted = false;
-	private volatile bool Ready = false;
+	private volatile bool Aborted;
+	private volatile bool Ready;
 
 	private const int MaxSentQueue = 10000;
 	private const int MinSend = 2000;
@@ -47,13 +47,13 @@ public class UnitTestEngine : IDisposable
 
 	private Thread ProcessThread;
 
-	private int CompletedUnitTestCount = 0;
+	private int CompletedUnitTestCount;
 	private readonly Stopwatch StopWatch = new Stopwatch();
 
-	private volatile int LastResponse = 0;
+	private volatile int LastResponse;
 
 	private int SendOneCount = -1;
-	private int Errors = 0;
+	private int Errors;
 
 	private DateTime CompileStartTime;
 

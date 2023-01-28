@@ -59,23 +59,23 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 	private class PrefixValues
 	{
-		public bool Unaligned { get; set; } = false; // ldind, stind, ldfld, stfld, ldobj, stobj, initblk, or cpblk
+		public bool Unaligned { get; set; } // ldind, stind, ldfld, stfld, ldobj, stobj, initblk, or cpblk
 
-		public bool Volatile { get; set; } = false; // Ldsfld and Stsfld
+		public bool Volatile { get; set; } // Ldsfld and Stsfld
 
-		public bool Tailcall { get; set; } = false; // Call, Calli, or Callvirt
+		public bool Tailcall { get; set; } // Call, Calli, or Callvirt
 
-		public bool Constrained { get; set; } = false; // callvirt
+		public bool Constrained { get; set; } // callvirt
 
-		public bool Readonly { get; set; } = false; // ldelema
+		public bool Readonly { get; set; } // ldelema
 
-		public bool NoTypeCheck { get; set; } = false;
+		public bool NoTypeCheck { get; set; }
 
-		public bool NoRangeCheck { get; set; } = false;
+		public bool NoRangeCheck { get; set; }
 
-		public bool NoNullCheck { get; set; } = false;
+		public bool NoNullCheck { get; set; }
 
-		public bool Reset = false;
+		public bool Reset;
 
 		public void ResetAll()
 		{

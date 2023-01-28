@@ -6,10 +6,10 @@ namespace Mosa.Demo.SVGAWorld.x86;
 
 public static class FPSMeter
 {
-	public static int FPS = 0;
+	public static int FPS;
 
 	private static int LastS = -1;
-	private static int Ticken = 0;
+	private static int Ticken;
 
 	public static void Update()
 	{

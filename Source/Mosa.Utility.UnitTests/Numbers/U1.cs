@@ -7,7 +7,7 @@ namespace Mosa.Utility.UnitTests.Numbers;
 
 public static class U1
 {
-	private static IList<byte> series = null;
+	private static IList<byte> series;
 
 	public static IEnumerable<byte> Series
 	{

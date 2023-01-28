@@ -5,7 +5,7 @@ namespace Mosa.Compiler.Framework;
 public class Counter
 {
 	public readonly string Name;
-	public int Count = 0;
+	public int Count;
 
 	public Counter(string name)
 	{

@@ -12,7 +12,7 @@ public static class Internal
 {
 	#region Data Members
 
-	internal static int objectSequence = 0;
+	internal static int objectSequence;
 
 	/// <summary>
 	/// An object header the following memory layout:

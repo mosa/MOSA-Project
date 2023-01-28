@@ -6,7 +6,7 @@ public class StringBuilder
 {
 	private char[] Characters = new char[int.MaxValue];
 
-	private int Length = 0;
+	private int Length;
 
 	public StringBuilder Clear()
 	{
