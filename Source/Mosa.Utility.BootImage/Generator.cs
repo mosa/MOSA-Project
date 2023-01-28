@@ -176,18 +176,6 @@ namespace Mosa.Utility.BootImage
 				fatFileStream.Flush();
 			}
 
-			if (options.PatchSyslinuxOption)
-			{
-				if (options.BootLoader == BootLoader.Syslinux_6_03)
-				{
-					Syslinux.PatchSyslinux_6_03(partitionDevice, fat);
-				}
-				else if (options.BootLoader == BootLoader.Syslinux_3_72)
-				{
-					Syslinux.PatchSyslinux_3_72(partitionDevice, fat);
-				}
-			}
-
 			if (options.ImageFormat == ImageFormat.VHD)
 			{
 				// Create footer
@@ -203,8 +191,7 @@ namespace Mosa.Utility.BootImage
 
 			diskDeviceDriver.Dispose();
 
-			if (options.BootLoader == BootLoader.Limine)
-				Limine.Deploy(options.DiskImageFileName);
+			Limine.Deploy(options.DiskImageFileName);
 		}
 	}
 }

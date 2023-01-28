@@ -130,12 +130,6 @@ namespace Mosa.Tool.Compiler
 			set { Settings.SetValue("Launcher.HuntForCorLib", value); }
 		}
 
-		public string ImageBootLoader
-		{
-			get { return Settings.GetValue("Image.BootLoader", null); }
-			set { Settings.SetValue("Image.BootLoader", value); }
-		}
-
 		public string DefaultFolder
 		{
 			get { return Settings.GetValue("DefaultFolder", null); }

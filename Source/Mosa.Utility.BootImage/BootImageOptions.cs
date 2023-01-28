@@ -18,11 +18,9 @@ namespace Mosa.Utility.BootImage
 		public string VolumeLabel = string.Empty;
 		public ImageFormat ImageFormat = ImageFormat.IMG;
 		public bool MBROption = true;
-		public bool PatchSyslinuxOption = false;
 		public uint BlockCount = 0;
 		public FileSystem FileSystem = FileSystem.FAT12;
 		public List<IncludeFile> IncludeFiles = new List<IncludeFile>();
-		public BootLoader BootLoader = BootLoader.Syslinux_3_72;
 
 		public string DiskImageFileName = null;
 

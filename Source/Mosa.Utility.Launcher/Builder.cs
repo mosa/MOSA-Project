@@ -161,23 +161,7 @@ namespace Mosa.Utility.Launcher
 
 			Output($"Generating Image: {LauncherSettings.ImageFormat}");
 
-			if (LauncherSettings.ImageFormat == "iso")
-			{
-				// TODO: Limine ISO
-				switch (LauncherSettings.ImageBootLoader)
-				{
-					case "grub0.97":
-					case "grub2.00":
-						CreateISOImageWithGrub();
-						break;
-
-					case "syslinux3.72":
-					case "syslinux6.03":
-						CreateISOImageWithSyslinux();
-						break;
-				}
-			}
-			else if (LauncherSettings.ImageFormat == "vmdk")
+			if (LauncherSettings.ImageFormat == "vmdk")
 			{
 				var tmpimagefile = Path.Combine(LauncherSettings.TemporaryFolder, $"{Path.GetFileNameWithoutExtension(LauncherSettings.ImageFile)}.img");
 
@@ -213,34 +197,8 @@ namespace Mosa.Utility.Launcher
 		{
 			var bootImageOptions = new BootImageOptions();
 
-			switch (LauncherSettings.ImageBootLoader)
-			{
-				case "syslinux3.72":
-					bootImageOptions.MBRCode = GetResource(@"syslinux\3.72", "mbr.bin");
-					bootImageOptions.FatBootCode = GetResource(@"syslinux\3.72", "ldlinux.bin");
-					bootImageOptions.IncludeFiles.Add(new IncludeFile("ldlinux.sys", GetResource(@"syslinux\3.72", "ldlinux.sys")));
-					bootImageOptions.IncludeFiles.Add(new IncludeFile("mboot.c32", GetResource(@"syslinux\3.72", "mboot.c32")));
-					bootImageOptions.IncludeFiles.Add(new IncludeFile("syslinux.cfg", GetSyslinuxCFG()));
-					bootImageOptions.PatchSyslinuxOption = true;
-					break;
-
-				// NOT FULLY IMPLEMENTED YET!
-				case "syslinux6.03":
-					bootImageOptions.MBRCode = GetResource(@"syslinux\6.03", "mbr.bin");
-					bootImageOptions.FatBootCode = GetResource(@"syslinux\6.03", "ldlinux.bin");
-					bootImageOptions.IncludeFiles.Add(new IncludeFile("ldlinux.sys", GetResource(@"syslinux\6.03", "ldlinux.sys")));
-					bootImageOptions.IncludeFiles.Add(new IncludeFile("mboot.c32", GetResource(@"syslinux\6.03", "mboot.c32")));
-					bootImageOptions.IncludeFiles.Add(new IncludeFile("syslinux.cfg", GetSyslinuxCFG()));
-					bootImageOptions.PatchSyslinuxOption = false;
-					break;
-
-				case "limine":
-					bootImageOptions.IncludeFiles.Add(new IncludeFile("limine.cfg", GetLimineCFG()));
-					bootImageOptions.IncludeFiles.Add(new IncludeFile("limine.sys", GetResource("limine", "limine.sys")));
-					bootImageOptions.IncludeFiles.Add(new IncludeFile("limine-cd.bin", GetResource("limine", "limine-cd.bin")));
-					break;
-			}
-
+			bootImageOptions.IncludeFiles.Add(new IncludeFile("limine.cfg", GetLimineCFG()));
+			bootImageOptions.IncludeFiles.Add(new IncludeFile("limine.sys", GetResource("limine", "limine.sys")));
 			bootImageOptions.IncludeFiles.Add(new IncludeFile(LauncherSettings.OutputFile, "main.exe"));
 			bootImageOptions.IncludeFiles.Add(new IncludeFile("TEST.TXT", Encoding.ASCII.GetBytes("This is a test file.")));
 
@@ -251,7 +209,7 @@ namespace Mosa.Utility.Launcher
 				{
 					var name = Path.GetFileName(file).ToUpper();
 
-					Output("Adding file: " + name);
+					Output($"Adding file: {name}");
 					bootImageOptions.IncludeFiles.Add(new IncludeFile(name, File.ReadAllBytes(file)));
 				}
 			}
@@ -259,20 +217,9 @@ namespace Mosa.Utility.Launcher
 			bootImageOptions.VolumeLabel = LauncherSettings.OSName;
 			bootImageOptions.DiskImageFileName = imagefile;
 
-			switch (LauncherSettings.ImageBootLoader)
-			{
-				case "syslinux3.72": bootImageOptions.BootLoader = BootLoader.Syslinux_3_72; break;
-				case "syslinux6.03": bootImageOptions.BootLoader = BootLoader.Syslinux_6_03; break;
-				case "grub0.97": bootImageOptions.BootLoader = BootLoader.Grub_0_97; break;
-				case "grub2.00": bootImageOptions.BootLoader = BootLoader.Grub_2_00; break;
-				case "limine": bootImageOptions.BootLoader = BootLoader.Limine; break;
-				default: break;
-			}
-
 			switch (LauncherSettings.ImageFormat)
 			{
 				case "img": bootImageOptions.ImageFormat = ImageFormat.IMG; break;
-				case "iso": bootImageOptions.ImageFormat = ImageFormat.ISO; break;
 				case "vhd": bootImageOptions.ImageFormat = ImageFormat.VHD; break;
 				case "vdi": bootImageOptions.ImageFormat = ImageFormat.VDI; break;
 				case "vmdk": bootImageOptions.ImageFormat = ImageFormat.VMDK; break;
@@ -292,205 +239,7 @@ namespace Mosa.Utility.Launcher
 
 		private byte[] GetLimineCFG()
 		{
-			return Encoding.ASCII.GetBytes($"TIMEOUT=0\nINTERFACE_RESOLUTION=800x600\nINTERFACE_BRANDING=Managed Operating System Alliance\n:{LauncherSettings.OSName}\nPROTOCOL=multiboot1\nKERNEL_PATH=boot:///main.exe");
-		}
-
-		private byte[] GetSyslinuxCFG()
-		{
-			return Encoding.ASCII.GetBytes("DEFAULT {0}\nLABEL {0}\n  SAY Now trying to boot the {0} kernel...\n  KERNEL mboot.c32\n  APPEND main.exe\n".Replace("{0}", LauncherSettings.OSName));
-		}
-
-		//private void CreateDiskImageV2(string compiledFile)
-		//{
-		//	var SectorSize = 512;
-		//	var files = new List<IncludeFile>();
-		//	byte[] mbr = null;
-		//	byte[] fatBootCode = null;
-
-		//	if (File.Exists(LauncherSettings.ImageFile))
-		//	{
-		//		File.Delete(LauncherSettings.ImageFile);
-		//	}
-
-		//	// Get Files
-		//	if (LauncherSettings.ImageBootLoader == "syslinux6.03")
-		//	{
-		//		mbr = GetResource(@"syslinux\6.03", "mbr.bin");
-		//		fatBootCode = GetResource(@"syslinux\6.03", "ldlinux.bin");
-
-		//		files.Add(new IncludeFile("ldlinux.sys", GetResource(@"syslinux\6.03", "ldlinux.sys")));
-		//		files.Add(new IncludeFile("mboot.c32", GetResource(@"syslinux\6.03", "mboot.c32")));
-		//	}
-		//	else if (LauncherSettings.ImageBootLoader == "syslinux3.72")
-		//	{
-		//		mbr = GetResource(@"syslinux\3.72", "mbr.bin");
-		//		fatBootCode = GetResource(@"syslinux\3.72", "ldlinux.bin");
-
-		//		files.Add(new IncludeFile("ldlinux.sys", GetResource(@"syslinux\3.72", "ldlinux.sys")));
-		//		files.Add(new IncludeFile("mboot.c32", GetResource(@"syslinux\3.72", "mboot.c32")));
-		//	}
-
-		//	files.Add(new IncludeFile("syslinux.cfg", GetResource("syslinux", "syslinux.cfg")));
-		//	files.Add(new IncludeFile(compiledFile, "main.exe"));
-
-		//	files.Add(new IncludeFile("TEST.TXT", Encoding.ASCII.GetBytes("This is a test file.")));
-
-		//	//foreach (var include in IncludeFiles)
-		//	//{
-		//	//	File.WriteAllBytes(Path.Combine(isoDirectory, include.Filename), include.Content);
-		//	//}
-
-		//	// Estimate file system size
-		//	var blockCount = 8400 + 1;
-		//	foreach (var file in files)
-		//	{
-		//		blockCount += (file.Content.Length / SectorSize) + 1;
-		//	}
-
-		//	using (var imageStream = new MemoryStream())
-		//	{
-		//		var disk = Disk.Initialize(imageStream, Ownership.Dispose, blockCount * SectorSize);
-
-		//		BiosPartitionTable.Initialize(disk, WellKnownPartitionType.WindowsFat);
-
-		//		disk.SetMasterBootRecord(mbr);
-
-		//		using (var fs = FatFileSystem.FormatPartition(disk, 0, null))
-		//		{
-		//			foreach (var file in files)
-		//			{
-		//				var directory = Path.GetFullPath(file.Filename);
-
-		//				if (!string.IsNullOrWhiteSpace(directory) && !fs.DirectoryExists(directory))
-		//				{
-		//					fs.CreateDirectory(directory);
-		//				}
-
-		//				using (var f = fs.OpenFile(file.Filename, FileMode.Create))
-		//				{
-		//					f.Write(file.Content);
-		//					f.Close();
-		//				}
-		//			}
-		//		}
-
-		//		using (var partition = disk.Partitions.Partitions[0].Open())
-		//		{
-		//			partition.Seek(0x03, SeekOrigin.Begin);
-		//			partition.Write(fatBootCode, 0, 3);
-		//			partition.Seek(0x3E, SeekOrigin.Begin);
-		//			partition.Write(fatBootCode, 0x3E, Math.Max(448, fatBootCode.Length - 0x3E));
-		//			partition.Close();
-		//		}
-
-		//		imageStream.WriteTo(File.Create(LauncherSettings.ImageFile));
-		//	}
-		//}
-
-		private void CreateISOImageWithSyslinux()
-		{
-			string isoDirectory = Path.Combine(LauncherSettings.ImageFolder, "iso");
-
-			if (Directory.Exists(isoDirectory))
-			{
-				Directory.Delete(isoDirectory, true);
-			}
-
-			Directory.CreateDirectory(isoDirectory);
-
-			if (LauncherSettings.ImageBootLoader == "syslinux6.03")
-			{
-				File.WriteAllBytes(Path.Combine(isoDirectory, "isolinux.bin"), GetResource(@"syslinux\6.03", "isolinux.bin"));
-				File.WriteAllBytes(Path.Combine(isoDirectory, "mboot.c32"), GetResource(@"syslinux\6.03", "mboot.c32"));
-				File.WriteAllBytes(Path.Combine(isoDirectory, "ldlinux.c32"), GetResource(@"syslinux\6.03", "ldlinux.c32"));
-				File.WriteAllBytes(Path.Combine(isoDirectory, "libcom32.c32"), GetResource(@"syslinux\6.03", "libcom32.c32"));
-			}
-			else if (LauncherSettings.ImageBootLoader == "syslinux3.72")
-			{
-				File.WriteAllBytes(Path.Combine(isoDirectory, "isolinux.bin"), GetResource(@"syslinux\3.72", "isolinux.bin"));
-				File.WriteAllBytes(Path.Combine(isoDirectory, "mboot.c32"), GetResource(@"syslinux\3.72", "mboot.c32"));
-			}
-
-			if (!string.IsNullOrEmpty(LauncherSettings.FileSystemRootInclude))
-			{
-				var dir = Path.GetFullPath(LauncherSettings.FileSystemRootInclude);
-				foreach (var file in Directory.GetFiles(dir, "*.*", SearchOption.AllDirectories))
-				{
-					var name = Path.GetFileName(file).ToUpper();
-
-					Output("Adding file: " + name);
-					File.Copy(file, Path.Combine(isoDirectory, name));
-				}
-			}
-
-			File.WriteAllBytes(Path.Combine(isoDirectory, "isolinux.cfg"), GetSyslinuxCFG());
-
-			File.Copy(LauncherSettings.OutputFile, Path.Combine(isoDirectory, "main.exe"));
-
-			var arg = $"-relaxed-filenames -J -R -o {Quote(LauncherSettings.ImageFile)} -b isolinux.bin -no-emul-boot -boot-load-size 4 -boot-info-table {Quote(isoDirectory)}";
-
-			LaunchApplication(LauncherSettings.Mkisofs, arg, true);
-		}
-
-		private void CreateISOImageWithGrub()
-		{
-			string isoDirectory = Path.Combine(LauncherSettings.ImageFolder, "iso");
-
-			if (Directory.Exists(isoDirectory))
-			{
-				Directory.Delete(isoDirectory, true);
-			}
-
-			Directory.CreateDirectory(isoDirectory);
-			Directory.CreateDirectory(Path.Combine(isoDirectory, "boot"));
-			Directory.CreateDirectory(Path.Combine(isoDirectory, "boot", "grub"));
-			Directory.CreateDirectory(isoDirectory);
-
-			string loader = string.Empty;
-
-			if (LauncherSettings.ImageBootLoader == "grub0.97")
-			{
-				loader = "boot/grub/stage2_eltorito";
-				File.WriteAllBytes(Path.Combine(isoDirectory, "boot", "grub", "stage2_eltorito"), GetResource(@"grub\0.97", "stage2_eltorito"));
-
-				var menulist = Encoding.ASCII.GetBytes("default 0\ntimeout 1\n\ntitle {0} Live Disk\nkernel /boot/main.exe\n".Replace("{0}", LauncherSettings.OSName));
-				File.WriteAllBytes(Path.Combine(isoDirectory, "boot", "grub", "menu.lst"), menulist);
-			}
-			else if (LauncherSettings.ImageBootLoader == "grub2.00")
-			{
-				loader = "boot/grub/i386-pc/eltorito.img";
-
-				var grubcfg = Encoding.ASCII.GetBytes("set timeout=1\n\nmenuentry \"{0}\" {\n	multiboot /boot/main.exe\n}\n".Replace("{0}", LauncherSettings.OSName));
-
-				File.WriteAllBytes(Path.Combine(isoDirectory, "boot", "grub", "grub.cfg"), grubcfg);
-
-				Directory.CreateDirectory(Path.Combine(isoDirectory, "boot", "grub", "i386-pc"));
-
-				var data = GetResource(@"grub\2.00", "i386-pc.zip");
-				var dataStream = new MemoryStream(data);
-
-				var archive = new ZipArchive(dataStream);
-
-				archive.ExtractToDirectory(Path.Combine(isoDirectory, "boot", "grub"));
-			}
-
-			if (!string.IsNullOrEmpty(LauncherSettings.FileSystemRootInclude))
-			{
-				var dir = Path.GetFullPath(LauncherSettings.FileSystemRootInclude);
-				foreach (var file in Directory.GetFiles(dir, "*.*", SearchOption.AllDirectories))
-				{
-					var name = Path.GetFileName(file).ToUpper();
-
-					Output("Adding file: " + name);
-					File.Copy(file, Path.Combine(isoDirectory, name));
-				}
-			}
-
-			File.Copy(LauncherSettings.OutputFile, Path.Combine(isoDirectory, "boot", "main.exe"));
-
-			var arg = $"-relaxed-filenames -J -R -o {Quote(LauncherSettings.ImageFile)} -b {Quote(loader)} -no-emul-boot -boot-load-size 4 -boot-info-table {Quote(isoDirectory)}";
-
-			LaunchApplication(LauncherSettings.Mkisofs, arg, true);
+			return Encoding.ASCII.GetBytes($"TIMEOUT=0\nINTERFACE_RESOLUTION=640x480\nINTERFACE_BRANDING=Managed Operating System Alliance\n:{LauncherSettings.OSName}\nPROTOCOL=multiboot1\nKERNEL_PATH=boot:///main.exe");
 		}
 
 		private void CreateVMDK(string source)

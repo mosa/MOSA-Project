@@ -201,7 +201,6 @@ namespace Mosa.Utility.Launcher
 
 			switch (LauncherSettings.ImageFormat)
 			{
-				case "iso": arg.Append($" -cdrom {Quote(LauncherSettings.ImageFile)}"); break;
 				case "bin": arg.Append($" -kernel {Quote(LauncherSettings.ImageFile)}"); break;
 				default: arg.Append($" -hda {Quote(LauncherSettings.ImageFile)}"); break;
 			}
@@ -236,11 +235,7 @@ namespace Mosa.Utility.Launcher
 				sb.AppendLine($"display_library: x, options={Quote("gui_debug")}");
 			}
 
-			switch (LauncherSettings.ImageFormat)
-			{
-				case "iso": sb.AppendLine($"ata0-master: type=cdrom,path={Quote(LauncherSettings.ImageFile)},status=inserted"); break;
-				default: sb.AppendLine($"ata0-master: type=disk,path={Quote(LauncherSettings.ImageFile)},biosdetect=none,cylinders=0,heads=0,spt=0"); break;
-			}
+			sb.AppendLine($"ata0-master: type=disk,path={Quote(LauncherSettings.ImageFile)},biosdetect=none,cylinders=0,heads=0,spt=0");
 
 			switch (LauncherSettings.EmulatorSVGA)
 			{
@@ -323,11 +318,6 @@ namespace Mosa.Utility.Launcher
 			sb.AppendLine("sound.opl3.enabled = \"TRUE\"");
 			sb.AppendLine("sound.virtualDev = \"sb16\"");
 
-			if (LauncherSettings.ImageFormat == "iso")
-			{
-				sb.AppendLine("ide0:0.deviceType = \"cdrom-image\"");
-			}
-
 			sb.AppendLine("floppy0.present = \"FALSE\"");
 
 			// COM1 = Kernel Log
@@ -390,7 +380,7 @@ namespace Mosa.Utility.Launcher
 			LaunchApplication(LauncherSettings.VirtualBox, $"createvm --name {LauncherSettings.OSName} --ostype Other --register", getOutput).WaitForExit();
 			LaunchApplication(LauncherSettings.VirtualBox, $"modifyvm {LauncherSettings.OSName} --memory {LauncherSettings.EmulatorMemory.ToString()} --cpus {LauncherSettings.EmulatorCores.ToString()} --graphicscontroller vmsvga", getOutput).WaitForExit();
 			LaunchApplication(LauncherSettings.VirtualBox, $"storagectl {LauncherSettings.OSName} --name Controller --add ide --controller PIIX4", getOutput).WaitForExit();
-			LaunchApplication(LauncherSettings.VirtualBox, $"storageattach {LauncherSettings.OSName} --storagectl Controller --port 0 --device 0 --type {(LauncherSettings.ImageFormat == "iso" ? "dvddrive" : "hdd")} --medium {Quote(LauncherSettings.ImageFile)}", getOutput).WaitForExit();
+			LaunchApplication(LauncherSettings.VirtualBox, $"storageattach {LauncherSettings.OSName} --storagectl Controller --port 0 --device 0 --type hdd --medium {Quote(LauncherSettings.ImageFile)}", getOutput).WaitForExit();
 
 			return LaunchApplication(LauncherSettings.VirtualBox, $"startvm {LauncherSettings.OSName}");
 		}

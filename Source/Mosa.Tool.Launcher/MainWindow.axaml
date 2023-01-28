@@ -64,8 +64,7 @@
 								<Label>ARMv8A32</Label>
 							</ComboBox>
 							<Label Margin="0,40, 0, 0">Image Format:</Label>
-							<ComboBox FontSize="12" SelectedIndex="1" HorizontalContentAlignment="Center" Name="ImgCmb" Margin="105,40, 0, 0" Width="195" BorderBrush="LightGray">
-								<Label>ISO (.iso)</Label>
+							<ComboBox FontSize="12" SelectedIndex="0" HorizontalContentAlignment="Center" Name="ImgCmb" Margin="105,40, 0, 0" Width="195" BorderBrush="LightGray">
 								<Label>IMG (.img)</Label>
 								<Label>Microsoft (.vhd)</Label>
 								<Label>VirtualBox (.vdi)</Label>
@@ -151,16 +150,8 @@
 							<ComboBox FontSize="12" SelectedIndex="0" HorizontalContentAlignment="Center" Name="FmtCmb" Margin="85,40, 0, 0" Width="146" BorderBrush="LightGray">
 								<Label>Multiboot v1</Label>
 							</ComboBox>
-							<Label Margin="0,80, 0, 0">Boot Loader:</Label>
-							<ComboBox FontSize="12" SelectedIndex="4" HorizontalContentAlignment="Center" Name="BldCmb" Margin="85,80, 0, 0" Width="146" BorderBrush="LightGray">
-								<Label>Grub 2.00</Label>
-								<Label>Grub 0.97</Label>
-								<Label>Syslinux 6.03</Label>
-								<Label>Syslinux 3.72</Label>
-								<Label>Limine</Label>
-							</ComboBox>
-							<Label Margin="241,0, 0, 0">Firmware:</Label>
-							<ComboBox FontSize="12" SelectedIndex="0" HorizontalContentAlignment="Center" Name="FrmCmb" Margin="311,0, 0, 0" Width="146" BorderBrush="LightGray">
+							<Label Margin="0,80, 0, 0">Firmware:</Label>
+							<ComboBox FontSize="12" SelectedIndex="0" HorizontalContentAlignment="Center" Name="FrmCmb" Margin="85,80, 0, 0" Width="146" BorderBrush="LightGray">
 								<Label>BIOS</Label>
 							</ComboBox>
 						</Grid>

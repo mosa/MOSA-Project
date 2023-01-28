@@ -226,11 +226,10 @@ namespace Mosa.Tool.Launcher
 
 			switch (ImgCmb.SelectedIndex)
 			{
-				case 0: settings.SetValue("Image.Format", "ISO"); break;
-				case 1: settings.SetValue("Image.Format", "IMG"); break;
-				case 2: settings.SetValue("Image.Format", "VHD"); break;
-				case 3: settings.SetValue("Image.Format", "VDI"); break;
-				case 4: settings.SetValue("Image.Format", "VMDK"); break;
+				case 0: settings.SetValue("Image.Format", "IMG"); break;
+				case 1: settings.SetValue("Image.Format", "VHD"); break;
+				case 2: settings.SetValue("Image.Format", "VDI"); break;
+				case 3: settings.SetValue("Image.Format", "VMDK"); break;
 				default: settings.ClearProperty("Image.Format"); break;
 			}
 
@@ -266,16 +265,6 @@ namespace Mosa.Tool.Launcher
 				case 1: settings.SetValue("Compiler.Platform", "x64"); break;
 				case 2: settings.SetValue("Compiler.Platform", "ARMv8A32"); break;
 				default: settings.SetValue("Compiler.Platform", "x86"); break;
-			}
-
-			switch (BldCmb.SelectedIndex)
-			{
-				case 0: settings.SetValue("Image.BootLoader", "grub2.00"); break;
-				case 1: settings.SetValue("Image.BootLoader", "grub0.97"); break;
-				case 2: settings.SetValue("Image.BootLoader", "syslinux6.03"); break;
-				case 3: settings.SetValue("Image.BootLoader", "syslinux3.72"); break;
-				case 4: settings.SetValue("Image.BootLoader", "limine"); break;
-				default: settings.ClearProperty("Image.BootLoader"); break;
 			}
 
 			switch (FrmCmb.SelectedIndex)
