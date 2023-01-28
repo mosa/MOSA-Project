@@ -14,10 +14,10 @@ namespace Mosa.DeviceDriver.ISA;
 public unsafe struct RSDPDescriptor
 {
 	public fixed sbyte Signature[8];
-	public byte Checksum;
+	public readonly byte Checksum;
 	public fixed sbyte OEMID[6];
-	public byte Revision;
-	public uint RsdtAddress;
+	public readonly byte Revision;
+	public readonly uint RsdtAddress;
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -25,9 +25,9 @@ public unsafe struct RSDPDescriptor20
 {
 	public RSDPDescriptor FirstPart;
 
-	public uint Length;
-	public ulong XsdtAddress;
-	public byte ExtendedChecksum;
+	public readonly uint Length;
+	public readonly ulong XsdtAddress;
+	public readonly byte ExtendedChecksum;
 	public fixed byte Reserved[3];
 }
 
@@ -35,75 +35,75 @@ public unsafe struct RSDPDescriptor20
 public unsafe struct ACPISDTHeader
 {
 	public fixed sbyte Signature[4];
-	public uint Length;
-	public byte Revision;
-	public byte Checksum;
+	public readonly uint Length;
+	public readonly byte Revision;
+	public readonly byte Checksum;
 	public fixed sbyte OEMID[6];
 	public fixed sbyte OEMTableID[8];
-	public uint OEMRevision;
-	public uint CreatorID;
-	public uint CreatorRevision;
+	public readonly uint OEMRevision;
+	public readonly uint CreatorID;
+	public readonly uint CreatorRevision;
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public unsafe struct FADT
 {
 	public ACPISDTHeader h;
-	public uint FirmwareCtrl;
-	public uint Dsdt;
+	public readonly uint FirmwareCtrl;
+	public readonly uint Dsdt;
 
 	// Field used in ACPI 1.0; no longer in use, for compatibility only
-	public byte Reserved;
+	public readonly byte Reserved;
 
-	public byte PreferredPowerManagementProfile;
-	public ushort SCI_Interrupt;
-	public uint SMI_CommandPort;
-	public byte AcpiEnable;
-	public byte AcpiDisable;
-	public byte S4BIOS_REQ;
-	public byte PSTATE_Control;
-	public uint PM1aEventBlock;
-	public uint PM1bEventBlock;
-	public uint PM1aControlBlock;
-	public uint PM1bControlBlock;
-	public uint PM2ControlBlock;
-	public uint PMTimerBlock;
-	public uint GPE0Block;
-	public uint GPE1Block;
-	public byte PM1EventLength;
-	public byte PM1ControlLength;
-	public byte PM2ControlLength;
-	public byte PMTimerLength;
-	public byte GPE0Length;
-	public byte GPE1Length;
-	public byte GPE1Base;
-	public byte CStateControl;
-	public ushort WorstC2Latency;
-	public ushort WorstC3Latency;
-	public ushort FlushSize;
-	public ushort FlushStride;
-	public byte DutyOffset;
-	public byte DutyWidth;
-	public byte DayAlarm;
-	public byte MonthAlarm;
-	public byte Century;
+	public readonly byte PreferredPowerManagementProfile;
+	public readonly ushort SCI_Interrupt;
+	public readonly uint SMI_CommandPort;
+	public readonly byte AcpiEnable;
+	public readonly byte AcpiDisable;
+	public readonly byte S4BIOS_REQ;
+	public readonly byte PSTATE_Control;
+	public readonly uint PM1aEventBlock;
+	public readonly uint PM1bEventBlock;
+	public readonly uint PM1aControlBlock;
+	public readonly uint PM1bControlBlock;
+	public readonly uint PM2ControlBlock;
+	public readonly uint PMTimerBlock;
+	public readonly uint GPE0Block;
+	public readonly uint GPE1Block;
+	public readonly byte PM1EventLength;
+	public readonly byte PM1ControlLength;
+	public readonly byte PM2ControlLength;
+	public readonly byte PMTimerLength;
+	public readonly byte GPE0Length;
+	public readonly byte GPE1Length;
+	public readonly byte GPE1Base;
+	public readonly byte CStateControl;
+	public readonly ushort WorstC2Latency;
+	public readonly ushort WorstC3Latency;
+	public readonly ushort FlushSize;
+	public readonly ushort FlushStride;
+	public readonly byte DutyOffset;
+	public readonly byte DutyWidth;
+	public readonly byte DayAlarm;
+	public readonly byte MonthAlarm;
+	public readonly byte Century;
 
 	// Reserved in ACPI 1.0; used since ACPI 2.0+
-	public ushort BootArchitectureFlags;
+	public readonly ushort BootArchitectureFlags;
 
-	public byte Reserved2;
-	public uint Flags;
+	public readonly byte Reserved2;
+	public readonly uint Flags;
 
 	// 12 byte structure; see below for details
 	public GenericAddressStructure ResetReg;
 
-	public byte ResetValue;
+	public readonly byte ResetValue;
 	public fixed byte Reserved3[3];
 
 	// 64bit pointers - Available on ACPI 2.0+
-	public ulong X_FirmwareControl;
+	public readonly ulong X_FirmwareControl;
 
-	public ulong X_Dsdt;
+	public readonly ulong X_Dsdt;
 
 	public GenericAddressStructure X_PM1aEventBlock;
 	public GenericAddressStructure X_PM1bEventBlock;
@@ -118,11 +118,11 @@ public unsafe struct FADT
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public unsafe struct GenericAddressStructure
 {
-	public byte AddressSpace;
-	public byte BitWidth;
-	public byte BitOffset;
-	public byte AccessSize;
-	public ulong Address;
+	public readonly byte AddressSpace;
+	public readonly byte BitWidth;
+	public readonly byte BitOffset;
+	public readonly byte AccessSize;
+	public readonly ulong Address;
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -144,15 +144,15 @@ public unsafe struct MADT
 {
 	public ACPISDTHeader h;
 
-	public uint LocalApicAddress;
-	public uint Flags;
+	public readonly uint LocalApicAddress;
+	public readonly uint Flags;
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public unsafe struct MADTEntry
 {
-	public byte Type;
-	public byte Length;
+	public readonly byte Type;
+	public readonly byte Length;
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -160,10 +160,10 @@ public unsafe struct ProcessorLocalAPICEntry
 {
 	public MADTEntry Entry;
 
-	public byte AcpiProcessorID;
-	public byte ApicID;
+	public readonly byte AcpiProcessorID;
+	public readonly byte ApicID;
 
-	public uint Flags;
+	public readonly uint Flags;
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -171,11 +171,11 @@ public unsafe struct IOAPICEntry
 {
 	public MADTEntry Entry;
 
-	public byte ApicID;
-	public byte Reserved;
+	public readonly byte ApicID;
+	public readonly byte Reserved;
 
-	public uint ApicAddress;
-	public uint GlobalSystemInterruptBase;
+	public readonly uint ApicAddress;
+	public readonly uint GlobalSystemInterruptBase;
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -183,9 +183,9 @@ public unsafe struct LongLocalAPICEntry
 {
 	public MADTEntry Entry;
 
-	public sbyte Reserved;
+	public readonly sbyte Reserved;
 
-	public ulong ApicAddress;
+	public readonly ulong ApicAddress;
 }
 
 public unsafe class ACPI : BaseDeviceDriver, IACPI

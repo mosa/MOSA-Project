@@ -6,7 +6,7 @@ namespace Mosa.FileSystem.VFS;
 
 internal class PathSplitter
 {
-	protected string path;
+	protected readonly string path;
 	protected int[] seperators;
 	protected int length;
 

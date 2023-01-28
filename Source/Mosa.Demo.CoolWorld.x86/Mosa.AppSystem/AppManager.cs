@@ -14,13 +14,13 @@ public class AppManager
 {
 	protected IConsoleApp currentApp;
 
-	protected IConsoleApp shell;
+	protected readonly IConsoleApp shell;
 
-	protected IKeyboard keyboard;
+	protected readonly IKeyboard keyboard;
 
-	protected ConsoleSession debug;
+	protected readonly ConsoleSession debug;
 
-	public ServiceManager ServiceManager;
+	public readonly ServiceManager ServiceManager;
 
 	private uint tick;
 

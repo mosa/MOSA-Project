@@ -78,7 +78,7 @@ public sealed class CodeEmitter
 	/// <summary>
 	/// Gets the name of the method.
 	/// </summary>
-	public string MethodName;
+	public readonly string MethodName;
 
 	/// <summary>
 	/// Patches we need to perform.

@@ -16,7 +16,7 @@ public partial struct Vector2 : IEquatable<Vector2>, IFormattable
 	public float X;
 
 	/// <summary>The Y component of the vector.</summary>
-	public float Y;
+	public readonly float Y;
 
 	/// <summary>Creates a new <see cref="System.Numerics.Vector2" /> object whose two elements have the same value.</summary>
 	/// <param name="value">The value to assign to both elements.</param>

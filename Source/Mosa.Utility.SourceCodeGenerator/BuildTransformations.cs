@@ -8,18 +8,18 @@ namespace Mosa.Utility.SourceCodeGenerator;
 
 public class BuildTransformations : BuildBaseTemplate
 {
-	public static List<string> Transformations = new List<string>();
+	public static readonly List<string> Transformations = new List<string>();
 
-	protected List<string> CommutativeInstructions = new List<string>();
+	protected readonly List<string> CommutativeInstructions = new List<string>();
 
-	protected Dictionary<int, string> NodeNbrToNode = new Dictionary<int, string>();
+	protected readonly Dictionary<int, string> NodeNbrToNode = new Dictionary<int, string>();
 
-	protected Dictionary<string, string> OperandLabelToVariable = new Dictionary<string, string>();
+	protected readonly Dictionary<string, string> OperandLabelToVariable = new Dictionary<string, string>();
 
 	protected bool First = true;
 
-	protected string Namespace;
-	protected string Path;
+	protected readonly string Namespace;
+	protected readonly string Path;
 
 	public BuildTransformations(string jsonFile, string destinationPath, string path, string name)
 		: base(jsonFile, destinationPath)

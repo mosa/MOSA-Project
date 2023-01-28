@@ -6,7 +6,7 @@ namespace Mosa.Compiler.Framework.Transforms;
 
 public static class TransformDirectory
 {
-	public static List<BaseTransform> Transformations = new List<BaseTransform>();
+	public static readonly List<BaseTransform> Transformations = new List<BaseTransform>();
 
 	public static void Add(BaseTransform transform)
 	{

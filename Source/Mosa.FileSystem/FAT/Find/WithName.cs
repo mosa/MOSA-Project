@@ -12,7 +12,7 @@ internal class WithName : FatFileSystem.ICompare
 	/// <summary>
 	/// The name
 	/// </summary>
-	protected string name;
+	protected readonly string name;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="WithName"/> class.

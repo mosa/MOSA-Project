@@ -6,19 +6,19 @@ namespace Mosa.Compiler.Framework.Linker.Elf.Dwarf;
 
 public static class DwarfConstants
 {
-	public static byte DW_CHILDREN_no = 0;
-	public static byte DW_CHILDREN_yes = 1;
+	public static readonly byte DW_CHILDREN_no = 0;
+	public static readonly byte DW_CHILDREN_yes = 1;
 
 	// Custom helper for better reading:
-	public static uint NullAttributeName = 0x00;
+	public static readonly uint NullAttributeName = 0x00;
 
-	public static uint NullAttributeValue = 0x00;
-	public static uint NullTag = 0x00;
+	public static readonly uint NullAttributeValue = 0x00;
+	public static readonly uint NullTag = 0x00;
 
-	public static uint NullFileTime = 0x00;
-	public static uint NullFileLength = 0x00;
-	public static byte EndOfFiles = 0x00;
-	public static byte EndOfDirectories = 0x00;
+	public static readonly uint NullFileTime = 0x00;
+	public static readonly uint NullFileLength = 0x00;
+	public static readonly byte EndOfFiles = 0x00;
+	public static readonly byte EndOfDirectories = 0x00;
 }
 
 public enum DwarfTag : uint

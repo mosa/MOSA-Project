@@ -39,7 +39,11 @@ public class TaskbarButton : Button
 
 public class Taskbar
 {
-	public uint X, Y, Width = Display.Width, Height = 30, DefaultPadding = 5;
+	public uint X;
+	public readonly uint Y;
+	public readonly uint Width = Display.Width;
+	public readonly uint Height = 30;
+	public readonly uint DefaultPadding = 5;
 	public Color Color = Color.White;
 
 	public readonly List<TaskbarButton> Buttons;

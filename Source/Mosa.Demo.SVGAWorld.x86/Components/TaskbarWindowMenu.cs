@@ -6,7 +6,10 @@ namespace Mosa.Demo.SVGAWorld.x86.Components;
 
 public class TaskbarWindowMenu
 {
-	public uint X, Y, Width, Height;
+	public readonly uint X;
+	public readonly uint Y;
+	public readonly uint Width;
+	public readonly uint Height;
 
 	public Color BackColor, ForeColor, HoverColor;
 

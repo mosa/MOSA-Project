@@ -34,7 +34,7 @@ public class GUIDPartitionTable
 
 	protected bool valid;
 
-	protected IDiskDevice diskDevice;
+	protected readonly IDiskDevice diskDevice;
 
 	/// <summary>
 	/// Gets a value indicating whether this <see cref="GUIDPartitionTable"/> is valid.

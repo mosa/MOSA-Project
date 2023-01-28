@@ -14,17 +14,17 @@ public class VfsFile : NodeBase
 	/// <summary>
 	///
 	/// </summary>
-	protected uint fileCluster;
+	protected readonly uint fileCluster;
 
 	/// <summary>
 	///
 	/// </summary>
-	protected uint directorySector;
+	protected readonly uint directorySector;
 
 	/// <summary>
 	///
 	/// </summary>
-	protected uint directoryIndex;
+	protected readonly uint directoryIndex;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="VfsFile"/> class.

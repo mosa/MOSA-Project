@@ -14,7 +14,7 @@ public class VfsDirectory : DirectoryNode
 	/// <summary>
 	///
 	/// </summary>
-	protected uint directoryCluster;
+	protected readonly uint directoryCluster;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="VfsDirectory"/> class.

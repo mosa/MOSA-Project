@@ -12,12 +12,12 @@ public class MemoryResources
 	/// <summary>
 	/// The memory regions
 	/// </summary>
-	protected LinkedList<AddressRegion> memoryRegions;
+	protected readonly LinkedList<AddressRegion> memoryRegions;
 
 	/// <summary>
 	/// The spin lock
 	/// </summary>
-	protected object _lock = new object();
+	protected readonly object _lock = new object();
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="MemoryResources"/> class.

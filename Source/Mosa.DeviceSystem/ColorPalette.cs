@@ -12,12 +12,12 @@ public class ColorPalette
 	/// <summary>
 	///
 	/// </summary>
-	protected ushort entries;
+	protected readonly ushort entries;
 
 	/// <summary>
 	///
 	/// </summary>
-	protected Color[] colors;
+	protected readonly Color[] colors;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="ColorPalette"/> class.

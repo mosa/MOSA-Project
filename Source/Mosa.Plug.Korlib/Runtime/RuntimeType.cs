@@ -16,7 +16,7 @@ public sealed unsafe class RuntimeType : Type
 	private readonly string fullname;
 	private readonly RuntimeTypeHandle handle;
 	private readonly TypeCode typeCode;
-	internal TypeAttributes attributes; // FIXME: this should be private, only temporarily internal
+	internal readonly TypeAttributes attributes; // FIXME: this should be private, only temporarily internal
 	private readonly RuntimeTypeHandle declaringTypeHandle;
 	private readonly RuntimeTypeHandle elementTypeHandle;
 	private Type declaringType;

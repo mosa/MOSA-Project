@@ -19,7 +19,7 @@ public static class Display
 
 	public static ISimpleFont DefaultFont { get; set; }
 
-	public static string CurrentDriver = "VMware SVGA II";
+	public static readonly string CurrentDriver = "VMware SVGA II";
 
 	public static bool Initialize()
 	{

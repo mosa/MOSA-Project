@@ -6,7 +6,7 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions;
 
 public class LabelSet
 {
-	protected Dictionary<string, Label> LabelLookupByName = new Dictionary<string, Label>();
+	protected readonly Dictionary<string, Label> LabelLookupByName = new Dictionary<string, Label>();
 
 	public List<string> Labels { get; } = new List<string>();
 

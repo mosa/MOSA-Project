@@ -158,7 +158,7 @@ public class IDEController : BaseDeviceDriver, IDiskControllerDevice
 	/// <summary>
 	/// The drive information
 	/// </summary>
-	protected DriveInfo[] driveInfo = new DriveInfo[DrivesPerConroller];
+	protected readonly DriveInfo[] driveInfo = new DriveInfo[DrivesPerConroller];
 
 	public override void Initialize()
 	{

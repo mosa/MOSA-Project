@@ -45,12 +45,12 @@ public class MasterBootBlock
 	/// <summary>
 	/// The disk device
 	/// </summary>
-	protected IDiskDevice diskDevice;
+	protected readonly IDiskDevice diskDevice;
 
 	/// <summary>
 	/// The partitions
 	/// </summary>
-	public GenericPartition[] Partitions;
+	public readonly GenericPartition[] Partitions;
 
 	/// <summary>
 	/// The disk signature

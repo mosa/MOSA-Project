@@ -10,7 +10,7 @@ public class FatFileLocation
 	/// <summary>
 	///
 	/// </summary>
-	public bool IsValid;
+	public readonly bool IsValid;
 
 	/// <summary>
 	///
@@ -20,12 +20,12 @@ public class FatFileLocation
 	/// <summary>
 	///
 	/// </summary>
-	public uint DirectorySector;
+	public readonly uint DirectorySector;
 
 	/// <summary>
 	///
 	/// </summary>
-	public uint DirectorySectorIndex;
+	public readonly uint DirectorySectorIndex;
 
 	/// <summary>
 	///

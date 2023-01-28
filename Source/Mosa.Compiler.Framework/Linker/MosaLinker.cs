@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework.Linker;
 /// </summary>
 public sealed class MosaLinker
 {
-	public LinkerSettings LinkerSettings;
+	public readonly LinkerSettings LinkerSettings;
 
 	public List<LinkerSymbol> Symbols { get; } = new List<LinkerSymbol>();
 

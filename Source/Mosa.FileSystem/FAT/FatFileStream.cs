@@ -22,12 +22,12 @@ public class FatFileStream : Stream
 	/// <summary>
 	///
 	/// </summary>
-	protected uint directorySector;
+	protected readonly uint directorySector;
 
 	/// <summary>
 	///
 	/// </summary>
-	protected uint directorySectorIndex;
+	protected readonly uint directorySectorIndex;
 
 	/// <summary>
 	///
@@ -52,17 +52,17 @@ public class FatFileStream : Stream
 	/// <summary>
 	///
 	/// </summary>
-	protected bool canRead;
+	protected readonly bool canRead;
 
 	/// <summary>
 	///
 	/// </summary>
-	protected bool canWrite;
+	protected readonly bool canWrite;
 
 	/// <summary>
 	///
 	/// </summary>
-	protected byte[] data;
+	protected readonly byte[] data;
 
 	/// <summary>
 	///
@@ -72,12 +72,12 @@ public class FatFileStream : Stream
 	/// <summary>
 	///
 	/// </summary>
-	protected uint clusterSize;
+	protected readonly uint clusterSize;
 
 	/// <summary>
 	///
 	/// </summary>
-	protected FatFileSystem fs;
+	protected readonly FatFileSystem fs;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="FatFileStream"/> class.

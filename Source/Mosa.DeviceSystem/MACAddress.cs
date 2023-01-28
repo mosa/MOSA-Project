@@ -10,7 +10,7 @@ public class MACAddress
 	/// <summary>
 	///
 	/// </summary>
-	protected byte[] address;
+	protected readonly byte[] address;
 
 	public byte[] Address => address;
 

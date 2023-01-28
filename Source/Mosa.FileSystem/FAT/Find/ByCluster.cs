@@ -12,7 +12,7 @@ internal class ByCluster : FatFileSystem.ICompare
 	/// <summary>
 	/// The cluster
 	/// </summary>
-	protected uint cluster;
+	protected readonly uint cluster;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="ByCluster"/> class.

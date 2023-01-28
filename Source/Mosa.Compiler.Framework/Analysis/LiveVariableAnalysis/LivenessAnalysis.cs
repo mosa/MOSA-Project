@@ -15,12 +15,12 @@ namespace Mosa.Compiler.Framework.Analysis.LiveVariableAnalysis;
 /// </summary>
 public class LivenessAnalysis
 {
-	protected BaseLivenessAnalysisEnvironment Environment;
+	protected readonly BaseLivenessAnalysisEnvironment Environment;
 	protected BasicBlocks BasicBlocks => Environment.BasicBlocks;
 	protected int IndexCount => Environment.IndexCount;
 
 	protected List<ExtendedBlock2> ExtendedBlocks;
-	public LiveRanges[] LiveRanges;
+	public readonly LiveRanges[] LiveRanges;
 
 	private readonly CreateTraceHandler CreateTrace;
 

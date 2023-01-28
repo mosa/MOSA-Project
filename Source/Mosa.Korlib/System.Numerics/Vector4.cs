@@ -16,7 +16,7 @@ public partial struct Vector4 : IEquatable<Vector4>, IFormattable
 	public float X;
 
 	/// <summary>The Y component of the vector.</summary>
-	public float Y;
+	public readonly float Y;
 
 	/// <summary>The Z component of the vector.</summary>
 	public float Z;

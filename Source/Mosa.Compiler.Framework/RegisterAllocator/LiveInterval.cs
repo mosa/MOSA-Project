@@ -45,7 +45,7 @@ public sealed class LiveInterval
 
 	public Operand AssignedOperand => AssignedPhysicalRegister != null ? AssignedPhysicalOperand : VirtualRegister.SpillSlotOperand;
 
-	public bool ForceSpilled;
+	public readonly bool ForceSpilled;
 
 	public bool NeverSpill;
 

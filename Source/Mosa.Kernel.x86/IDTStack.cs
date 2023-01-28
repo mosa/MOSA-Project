@@ -11,41 +11,41 @@ namespace Mosa.Kernel.x86;
 internal struct IDTStack
 {
 	[FieldOffset(0x00)]
-	public uint EDI;
+	public readonly uint EDI;
 
 	[FieldOffset(0x04)]
-	public uint ESI;
+	public readonly uint ESI;
 
 	[FieldOffset(0x08)]
-	public uint EBP;
+	public readonly uint EBP;
 
 	[FieldOffset(0x0C)]
-	public uint ESP;
+	public readonly uint ESP;
 
 	[FieldOffset(0x10)]
-	public uint EBX;
+	public readonly uint EBX;
 
 	[FieldOffset(0x14)]
-	public uint EDX;
+	public readonly uint EDX;
 
 	[FieldOffset(0x18)]
-	public uint ECX;
+	public readonly uint ECX;
 
 	[FieldOffset(0x1C)]
-	public uint EAX;
+	public readonly uint EAX;
 
 	[FieldOffset(0x20)]
-	public uint Interrupt;
+	public readonly uint Interrupt;
 
 	[FieldOffset(0x24)]
-	public uint ErrorCode;
+	public readonly uint ErrorCode;
 
 	[FieldOffset(0x28)]
 	public uint EIP;
 
 	[FieldOffset(0x2C)]
-	public uint CS;
+	public readonly uint CS;
 
 	[FieldOffset(0x30)]
-	public uint EFLAGS;
+	public readonly uint EFLAGS;
 }

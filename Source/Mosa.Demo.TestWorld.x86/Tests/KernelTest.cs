@@ -11,7 +11,7 @@ public class KernelTest
 
 	protected delegate bool TestMethod();
 
-	protected List<TestMethod> testMethods = new List<TestMethod>();
+	protected readonly List<TestMethod> testMethods = new List<TestMethod>();
 
 	protected KernelTest(string testName)
 	{

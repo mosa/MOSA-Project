@@ -357,8 +357,8 @@ public struct NotBoxedStruct
 
 public struct Pair
 {
-	public int A;
-	public int B;
+	public readonly int A;
+	public readonly int B;
 
 	public Pair(int a, int b)
 	{

@@ -20,31 +20,31 @@ public static class CharUnicodeInfo
 	internal struct UnicodeDataHeader
 	{
 		[FieldOffset(0)]
-		internal char TableName;
+		internal readonly char TableName;
 
 		[FieldOffset(32)]
-		internal ushort version;
+		internal readonly ushort version;
 
 		[FieldOffset(40)]
-		internal uint OffsetToCategoriesIndex;
+		internal readonly uint OffsetToCategoriesIndex;
 
 		[FieldOffset(44)]
-		internal uint OffsetToCategoriesValue;
+		internal readonly uint OffsetToCategoriesValue;
 
 		[FieldOffset(48)]
-		internal uint OffsetToNumbericIndex;
+		internal readonly uint OffsetToNumbericIndex;
 
 		[FieldOffset(52)]
-		internal uint OffsetToDigitValue;
+		internal readonly uint OffsetToDigitValue;
 
 		[FieldOffset(56)]
-		internal uint OffsetToNumbericValue;
+		internal readonly uint OffsetToNumbericValue;
 	}
 
 	[StructLayout(LayoutKind.Sequential, Pack = 2)]
 	internal struct DigitValues
 	{
-		internal sbyte decimalDigit;
-		internal sbyte digit;
+		internal readonly sbyte decimalDigit;
+		internal readonly sbyte digit;
 	}
 }

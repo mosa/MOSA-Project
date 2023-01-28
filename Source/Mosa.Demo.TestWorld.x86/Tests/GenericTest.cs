@@ -183,7 +183,7 @@ public class TestObject
 
 public class TestObjectInherit : TestObject
 {
-	public int C;
+	public readonly int C;
 
 	public TestObjectInherit(int a, int b, int c)
 		: base(a, b)

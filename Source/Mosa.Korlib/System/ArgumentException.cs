@@ -10,7 +10,7 @@ public class ArgumentException : Exception
 	/// <summary>
 	///
 	/// </summary>
-	protected string paramName;
+	protected readonly string paramName;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="ArgumentException"/> class.

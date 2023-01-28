@@ -4,7 +4,7 @@ namespace Mosa.Utility.RSP.Command;
 
 public class SetBreakPoint : GDBCommand
 {
-	protected byte Type;
+	protected readonly byte Type;
 
 	public ulong Address { get; }
 	public ulong Size { get; }

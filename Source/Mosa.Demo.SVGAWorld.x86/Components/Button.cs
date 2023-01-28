@@ -10,7 +10,7 @@ public class Button
 {
 	public uint X, Y, Width, Height;
 
-	public string Text;
+	public readonly string Text;
 
 	private string LastText;
 

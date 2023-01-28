@@ -7,10 +7,13 @@ namespace Mosa.Demo.SVGAWorld.x86.Components;
 
 public class Window
 {
-	public string Title;
+	public readonly string Title;
 
-	public int Id;
-	public uint OffsetX, OffsetY, X, Y, Width, Height, TitlebarHeight = 20;
+	public readonly int Id;
+	public uint OffsetX, OffsetY, X, Y;
+	public readonly uint Width;
+	public readonly uint Height;
+	public readonly uint TitlebarHeight = 20;
 
 	public Color InactiveTitlebarColor, ActiveTitlebarColor, BodyColor;
 

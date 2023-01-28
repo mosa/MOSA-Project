@@ -4,8 +4,8 @@ namespace Mosa.UnitTests.Primitive;
 
 public static class StringTests
 {
-	public static string valueA = "Foo";
-	public static string valueB = "Something";
+	public static readonly string valueA = "Foo";
+	public static readonly string valueB = "Something";
 
 	[MosaUnitTest]
 	public static int CheckLength()

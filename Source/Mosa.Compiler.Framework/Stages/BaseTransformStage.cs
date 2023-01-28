@@ -30,12 +30,12 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 	protected TraceLog specialTrace;
 
-	protected bool EnableTransformOptimizations;
-	protected bool EnableBlockOptimizations;
+	protected readonly bool EnableTransformOptimizations;
+	protected readonly bool EnableBlockOptimizations;
 	protected bool IsInSSAForm;
 	protected bool AreCPURegistersAllocated;
 
-	protected int MaxPasses;
+	protected readonly int MaxPasses;
 	protected int Steps;
 
 	protected BitArray EmptyBlocks;

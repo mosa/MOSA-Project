@@ -26,7 +26,7 @@ public sealed class IOPortResources
 	/// <summary>
 	/// The port used
 	/// </summary>
-	public bool[] portUsed;
+	public readonly bool[] portUsed;
 
 	private readonly object _lock = new object();
 

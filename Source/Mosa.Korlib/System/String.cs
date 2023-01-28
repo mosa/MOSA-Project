@@ -25,7 +25,7 @@ public sealed class String : IEnumerable, IEnumerable<char>, IEquatable<String>,
 
 	public int Length => length;
 
-	public static string Empty = "";
+	public static readonly string Empty = "";
 
 	internal unsafe char* first_char
 	{

@@ -4,8 +4,8 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions;
 
 public struct LabelPosition
 {
-	public int NodeNbr;
-	public int OperandIndex;
+	public readonly int NodeNbr;
+	public readonly int OperandIndex;
 
 	public LabelPosition(int nodeNbr, int operandIndex)
 	{

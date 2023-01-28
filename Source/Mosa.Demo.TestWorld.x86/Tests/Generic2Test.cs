@@ -103,7 +103,7 @@ public class Generic2Test : KernelTest
 
 public class IntClass
 {
-	public int value;
+	public readonly int value;
 
 	public IntClass(int value)
 	{

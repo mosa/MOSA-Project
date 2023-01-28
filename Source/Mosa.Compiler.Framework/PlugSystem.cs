@@ -9,13 +9,13 @@ public class PlugSystem
 {
 	#region Data Members
 
-	protected TypeSystem TypeSystem;
+	protected readonly TypeSystem TypeSystem;
 
 	protected MosaType PlugMethodAttribute;
 
-	protected List<MosaMethod> PlugMethodList = new List<MosaMethod>();
-	protected Dictionary<MosaMethod, MosaMethod> PlugMethods = new Dictionary<MosaMethod, MosaMethod>();
-	protected HashSet<MosaMethod> NoReplacement = new HashSet<MosaMethod>();
+	protected readonly List<MosaMethod> PlugMethodList = new List<MosaMethod>();
+	protected readonly Dictionary<MosaMethod, MosaMethod> PlugMethods = new Dictionary<MosaMethod, MosaMethod>();
+	protected readonly HashSet<MosaMethod> NoReplacement = new HashSet<MosaMethod>();
 
 	private readonly object _lock = new object();
 

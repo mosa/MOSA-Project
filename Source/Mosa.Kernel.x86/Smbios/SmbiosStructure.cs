@@ -10,7 +10,7 @@ namespace Mosa.Kernel.x86.Smbios;
 public abstract class SmbiosStructure
 {
 	protected Pointer address;
-	protected uint length;
+	protected readonly uint length;
 	protected uint handle;
 
 	protected SmbiosStructure(Pointer address)

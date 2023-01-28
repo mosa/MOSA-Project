@@ -7,9 +7,9 @@ namespace Mosa.DeviceSystem;
 /// </summary>
 public class Keyboard : IKeyboard
 {
-	protected IKeyboardDevice keyboardDevice;
+	protected readonly IKeyboardDevice keyboardDevice;
 
-	protected IScanCodeMap scanCodeMap;
+	protected readonly IScanCodeMap scanCodeMap;
 
 	/// <summary>
 	/// Gets a value indicating whether [the scroll lock key is pressed].

@@ -17,17 +17,17 @@ public class BaseAddress
 	/// <summary>
 	///
 	/// </summary>
-	protected uint size;
+	protected readonly uint size;
 
 	/// <summary>
 	///
 	/// </summary>
-	protected AddressType region;
+	protected readonly AddressType region;
 
 	/// <summary>
 	///
 	/// </summary>
-	protected bool prefetchable;
+	protected readonly bool prefetchable;
 
 	/// <summary>
 	/// Gets the address.

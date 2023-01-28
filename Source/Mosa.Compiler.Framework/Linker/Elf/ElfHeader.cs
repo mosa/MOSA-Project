@@ -14,7 +14,7 @@ public class ElfHeader
 	/// The initial bytes mark the file as an object file and provide machine-independent
 	/// data with which to decode and interpret the file's contents.
 	/// </summary>
-	public byte[] Ident = new byte[16];
+	public readonly byte[] Ident = new byte[16];
 
 	/// <summary>
 	/// This member identifies the object file type

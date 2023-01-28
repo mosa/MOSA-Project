@@ -22,7 +22,7 @@ public class Compiler
 
 	protected MosaCompiler compiler;
 
-	protected Settings Settings = new Settings();
+	protected readonly Settings Settings = new Settings();
 
 	private DateTime CompileStartTime;
 

@@ -13,7 +13,7 @@ public abstract class GenericFileSystem
 	/// <summary>
 	/// The partition
 	/// </summary>
-	protected IPartitionDevice partition;
+	protected readonly IPartitionDevice partition;
 
 	/// <summary>
 	/// Gets or sets the size of the block.

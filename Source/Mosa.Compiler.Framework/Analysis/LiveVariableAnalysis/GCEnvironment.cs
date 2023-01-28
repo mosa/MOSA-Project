@@ -10,10 +10,10 @@ namespace Mosa.Compiler.Framework.Analysis.LiveVariableAnalysis;
 /// <seealso cref="Mosa.Compiler.Framework.Analysis.LiveVariableAnalysis .BaseLivenessAnalysisEnvironment" />
 public class GCEnvironment : BaseLivenessAnalysisEnvironment
 {
-	protected Dictionary<Operand, int> stackLookup = new Dictionary<Operand, int>();
-	protected Dictionary<int, Operand> stackLookupReverse = new Dictionary<int, Operand>();
+	protected readonly Dictionary<Operand, int> stackLookup = new Dictionary<Operand, int>();
+	protected readonly Dictionary<int, Operand> stackLookupReverse = new Dictionary<int, Operand>();
 	protected int PhysicalRegisterCount { get; }
-	protected bool[] StackLocalReference;
+	protected readonly bool[] StackLocalReference;
 
 	public GCEnvironment(BasicBlocks basicBlocks, BaseArchitecture architecture, List<Operand> localStack)
 	{

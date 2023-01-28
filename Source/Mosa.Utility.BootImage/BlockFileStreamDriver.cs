@@ -17,12 +17,12 @@ public class BlockFileStreamDriver : BaseDeviceDriver, IDiskDevice
 	/// <summary>
 	/// The disk file
 	/// </summary>
-	protected FileStream diskFile;
+	protected readonly FileStream diskFile;
 
 	/// <summary>
 	/// The block offset
 	/// </summary>
-	public uint BlockOffset = 0;
+	public readonly uint BlockOffset = 0;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="BlockFileStreamDriver" /> class.

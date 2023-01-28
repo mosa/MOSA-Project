@@ -14,7 +14,7 @@ public sealed class MethodScheduler
 {
 	#region Data Members
 
-	public Compiler Compiler;
+	public readonly Compiler Compiler;
 
 	private HashSet<MethodData> workingSet = new HashSet<MethodData>();
 

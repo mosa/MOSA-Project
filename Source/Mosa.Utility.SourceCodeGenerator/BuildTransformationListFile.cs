@@ -6,9 +6,9 @@ namespace Mosa.Utility.SourceCodeGenerator;
 
 public class BuildTransformationListFile : BuildBaseTemplate
 {
-	protected List<string> Filters;
-	protected string Namespace;
-	protected string Classname;
+	protected readonly List<string> Filters;
+	protected readonly string Namespace;
+	protected readonly string Classname;
 
 	public BuildTransformationListFile(string destinationPath, string destinationFile, string @namespace, string classname, List<string> filters)
 		: base(null, destinationPath, destinationFile)

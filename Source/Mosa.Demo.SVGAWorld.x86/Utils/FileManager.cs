@@ -10,7 +10,7 @@ public static class FileManager
 {
 	private static List<FatFileSystem> FAT;
 
-	public static int CurrentDrive = 0;
+	public static readonly int CurrentDrive = 0;
 
 	public static void Register(FatFileSystem fat)
 	{

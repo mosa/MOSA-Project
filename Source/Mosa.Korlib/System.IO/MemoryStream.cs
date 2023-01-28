@@ -59,9 +59,9 @@ public class MemoryStream : Stream       /* http://msdn.microsoft.com/en-us/libr
 
 	protected long length;
 
-	protected long blockSize = 65536;
+	protected readonly long blockSize = 65536;
 
-	protected List<byte[]> blocks = new List<byte[]>();
+	protected readonly List<byte[]> blocks = new List<byte[]>();
 
 	#endregion
 

@@ -11,8 +11,8 @@ public class ConsoleManager
 
 	protected ConsoleSession active;
 
-	public ConsoleSession Boot;
-	public ConsoleSession Debug;
+	public readonly ConsoleSession Boot;
+	public readonly ConsoleSession Debug;
 
 	public ConsoleSession Active { get => active;
 		set => Switch(value);

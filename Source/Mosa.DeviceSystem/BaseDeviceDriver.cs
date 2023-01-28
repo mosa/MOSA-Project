@@ -13,7 +13,7 @@ public abstract class BaseDeviceDriver
 
 	protected DeviceService DeviceService => Device.DeviceService;
 
-	protected object _lock = new object();
+	protected readonly object _lock = new object();
 
 	/// <summary>
 	/// Sets up the this device.

@@ -6,18 +6,18 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions;
 
 public class Transformation
 {
-	public string ExpressionText;
-	public string FilterText;
-	public string ResultText;
+	public readonly string ExpressionText;
+	public readonly string FilterText;
+	public readonly string ResultText;
 
-	protected List<Token> TokenizedExpression;
-	protected List<Token> TokenizedFilter;
-	protected List<Token> TokenizedResult;
+	protected readonly List<Token> TokenizedExpression;
+	protected readonly List<Token> TokenizedFilter;
+	protected readonly List<Token> TokenizedResult;
 
-	public LabelSet LabelSet;
-	public InstructionNode InstructionTree;
-	public InstructionNode ResultInstructionTree;
-	public List<Method> Filters;
+	public readonly LabelSet LabelSet;
+	public readonly InstructionNode InstructionTree;
+	public readonly InstructionNode ResultInstructionTree;
+	public readonly List<Method> Filters;
 
 	public Transformation(string expression, string filter, string result)
 	{
