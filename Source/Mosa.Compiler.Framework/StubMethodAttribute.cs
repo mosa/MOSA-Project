@@ -2,21 +2,20 @@
 
 using System;
 
-namespace Mosa.Compiler.Framework
+namespace Mosa.Compiler.Framework;
+
+public delegate void StubMethodDelegate(Context context, MethodCompiler methodCompiler);
+
+/// <summary>
+/// Used for defining targets when using intrinsic replacements
+/// </summary>
+[AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
+public class StubMethodAttribute : Attribute
 {
-	public delegate void StubMethodDelegate(Context context, MethodCompiler methodCompiler);
+	public string Target { get; }
 
-	/// <summary>
-	/// Used for defining targets when using intrinsic replacements
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
-	public class StubMethodAttribute : Attribute
+	public StubMethodAttribute(string target)
 	{
-		public string Target { get; }
-
-		public StubMethodAttribute(string target)
-		{
-			Target = target;
-		}
+		Target = target;
 	}
 }

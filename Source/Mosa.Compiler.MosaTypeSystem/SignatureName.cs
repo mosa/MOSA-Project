@@ -2,95 +2,94 @@
 
 using System.Text;
 
-namespace Mosa.Compiler.MosaTypeSystem
+namespace Mosa.Compiler.MosaTypeSystem;
+
+internal class SignatureName
 {
-	internal class SignatureName
+	public static string GetSignature(string name, MosaMethodSignature sig, bool shortSig)
 	{
-		public static string GetSignature(string name, MosaMethodSignature sig, bool shortSig)
+		var result = new StringBuilder();
+		if (shortSig)
 		{
-			var result = new StringBuilder();
-			if (shortSig)
+			result.Append(name);
+			result.Append("(");
+			for (var i = 0; i < sig.Parameters.Count; i++)
 			{
-				result.Append(name);
-				result.Append("(");
-				for (var i = 0; i < sig.Parameters.Count; i++)
-				{
-					if (i != 0)
-						result.Append(", ");
-					result.Append(sig.Parameters[i].ParameterType?.ShortName);
-				}
-				result.Append(")");
-
-				result.Append(":");
-				result.Append(sig.ReturnType?.ShortName);
-
-				return result.ToString();
+				if (i != 0)
+					result.Append(", ");
+				result.Append(sig.Parameters[i].ParameterType?.ShortName);
 			}
-			else
+			result.Append(")");
+
+			result.Append(":");
+			result.Append(sig.ReturnType?.ShortName);
+
+			return result.ToString();
+		}
+		else
+		{
+			result.Append(name);
+			result.Append("(");
+			for (var i = 0; i < sig.Parameters.Count; i++)
 			{
-				result.Append(name);
-				result.Append("(");
-				for (var i = 0; i < sig.Parameters.Count; i++)
-				{
-					if (i != 0)
-						result.Append(", ");
-					result.Append(sig.Parameters[i].ParameterType?.FullName);
-				}
-				result.Append(")");
-
-				result.Append(":");
-				result.Append(sig.ReturnType?.FullName);
-
-				return result.ToString();
+				if (i != 0)
+					result.Append(", ");
+				result.Append(sig.Parameters[i].ParameterType?.FullName);
 			}
+			result.Append(")");
+
+			result.Append(":");
+			result.Append(sig.ReturnType?.FullName);
+
+			return result.ToString();
+		}
+	}
+
+	public static void UpdateType(MosaType type)
+	{
+		var result = new StringBuilder();
+
+		if (type.GenericArguments?.Count > 0)
+		{
+			result.Append("<");
+			for (var i = 0; i < type.GenericArguments.Count; i++)
+			{
+				if (i != 0)
+					result.Append(", ");
+				result.Append(type.GenericArguments[i]?.FullName);
+			}
+			result.Append(">");
 		}
 
-		public static void UpdateType(MosaType type)
+		switch (type.TypeCode)
 		{
-			var result = new StringBuilder();
+			case MosaTypeCode.UnmanagedPointer:
+				result.Append(type.ElementType?.Signature);
+				result.Append("*");
+				break;
 
-			if (type.GenericArguments?.Count > 0)
-			{
-				result.Append("<");
-				for (var i = 0; i < type.GenericArguments.Count; i++)
-				{
-					if (i != 0)
-						result.Append(", ");
-					result.Append(type.GenericArguments[i]?.FullName);
-				}
-				result.Append(">");
-			}
+			case MosaTypeCode.ManagedPointer:
+				result.Append(type.ElementType?.Signature);
+				result.Append("&");
+				break;
 
-			switch (type.TypeCode)
-			{
-				case MosaTypeCode.UnmanagedPointer:
-					result.Append(type.ElementType?.Signature);
-					result.Append("*");
-					break;
+			case MosaTypeCode.SZArray:
+			case MosaTypeCode.Array:
+				result.Append(type.ElementType?.Signature);
+				result.Append(type.ArrayInfo);
+				break;
 
-				case MosaTypeCode.ManagedPointer:
-					result.Append(type.ElementType?.Signature);
-					result.Append("&");
-					break;
-
-				case MosaTypeCode.SZArray:
-				case MosaTypeCode.Array:
-					result.Append(type.ElementType?.Signature);
-					result.Append(type.ArrayInfo);
-					break;
-
-				case MosaTypeCode.FunctionPointer:
-					result.Append(type.FunctionPtrSig);
-					break;
-			}
-
-			if (type.Modifier != null)
-			{
-				result.Append(" mod(");
-				result.Append(type.Modifier.Name);
-				result.Append(")");
-			}
-			type.Signature = result.ToString();
+			case MosaTypeCode.FunctionPointer:
+				result.Append(type.FunctionPtrSig);
+				break;
 		}
+
+		if (type.Modifier != null)
+		{
+			result.Append(" mod(");
+			result.Append(type.Modifier.Name);
+			result.Append(")");
+		}
+		type.Signature = result.ToString();
 	}
 }

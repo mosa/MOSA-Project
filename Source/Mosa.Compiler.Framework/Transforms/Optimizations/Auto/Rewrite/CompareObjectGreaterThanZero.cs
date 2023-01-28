@@ -4,67 +4,66 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Rewrite
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Rewrite;
+
+/// <summary>
+/// CompareObjectGreaterThanZero
+/// </summary>
+public sealed class CompareObjectGreaterThanZero : BaseTransform
 {
-	/// <summary>
-	/// CompareObjectGreaterThanZero
-	/// </summary>
-	public sealed class CompareObjectGreaterThanZero : BaseTransform
+	public CompareObjectGreaterThanZero() : base(IRInstruction.CompareObject, TransformType.Auto | TransformType.Optimization)
 	{
-		public CompareObjectGreaterThanZero() : base(IRInstruction.CompareObject, TransformType.Auto | TransformType.Optimization)
-		{
-		}
-
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (context.ConditionCode != ConditionCode.UnsignedGreater)
-				return false;
-
-			if (!IsZero(context.Operand2))
-				return false;
-
-			return true;
-		}
-
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
-
-			var t1 = context.Operand1;
-			var t2 = context.Operand2;
-
-			context.SetInstruction(IRInstruction.CompareObject, ConditionCode.NotEqual, result, t1, t2);
-		}
 	}
 
-	/// <summary>
-	/// CompareObjectGreaterThanZero_v1
-	/// </summary>
-	public sealed class CompareObjectGreaterThanZero_v1 : BaseTransform
+	public override bool Match(Context context, TransformContext transform)
 	{
-		public CompareObjectGreaterThanZero_v1() : base(IRInstruction.CompareObject, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+		if (context.ConditionCode != ConditionCode.UnsignedGreater)
+			return false;
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (context.ConditionCode != ConditionCode.UnsignedLess)
-				return false;
+		if (!IsZero(context.Operand2))
+			return false;
 
-			if (!IsZero(context.Operand1))
-				return false;
+		return true;
+	}
 
-			return true;
-		}
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
+		var t1 = context.Operand1;
+		var t2 = context.Operand2;
 
-			var t1 = context.Operand1;
-			var t2 = context.Operand2;
+		context.SetInstruction(IRInstruction.CompareObject, ConditionCode.NotEqual, result, t1, t2);
+	}
+}
 
-			context.SetInstruction(IRInstruction.CompareObject, ConditionCode.NotEqual, result, t2, t1);
-		}
+/// <summary>
+/// CompareObjectGreaterThanZero_v1
+/// </summary>
+public sealed class CompareObjectGreaterThanZero_v1 : BaseTransform
+{
+	public CompareObjectGreaterThanZero_v1() : base(IRInstruction.CompareObject, TransformType.Auto | TransformType.Optimization)
+	{
+	}
+
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (context.ConditionCode != ConditionCode.UnsignedLess)
+			return false;
+
+		if (!IsZero(context.Operand1))
+			return false;
+
+		return true;
+	}
+
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
+
+		var t1 = context.Operand1;
+		var t2 = context.Operand2;
+
+		context.SetInstruction(IRInstruction.CompareObject, ConditionCode.NotEqual, result, t2, t1);
 	}
 }

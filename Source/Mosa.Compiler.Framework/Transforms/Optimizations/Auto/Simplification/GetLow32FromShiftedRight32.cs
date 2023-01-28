@@ -4,44 +4,43 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
+
+/// <summary>
+/// GetLow32FromShiftedRight32
+/// </summary>
+public sealed class GetLow32FromShiftedRight32 : BaseTransform
 {
-	/// <summary>
-	/// GetLow32FromShiftedRight32
-	/// </summary>
-	public sealed class GetLow32FromShiftedRight32 : BaseTransform
+	public GetLow32FromShiftedRight32() : base(IRInstruction.GetLow32, TransformType.Auto | TransformType.Optimization)
 	{
-		public GetLow32FromShiftedRight32() : base(IRInstruction.GetLow32, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+	}
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand1.IsVirtualRegister)
-				return false;
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!context.Operand1.IsVirtualRegister)
+			return false;
 
-			if (context.Operand1.Definitions.Count != 1)
-				return false;
+		if (context.Operand1.Definitions.Count != 1)
+			return false;
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.ShiftRight32)
-				return false;
+		if (context.Operand1.Definitions[0].Instruction != IRInstruction.ShiftRight32)
+			return false;
 
-			if (!context.Operand1.Definitions[0].Operand2.IsResolvedConstant)
-				return false;
+		if (!context.Operand1.Definitions[0].Operand2.IsResolvedConstant)
+			return false;
 
-			if (context.Operand1.Definitions[0].Operand2.ConstantUnsigned64 != 32)
-				return false;
+		if (context.Operand1.Definitions[0].Operand2.ConstantUnsigned64 != 32)
+			return false;
 
-			return true;
-		}
+		return true;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
 
-			var t1 = context.Operand1.Definitions[0].Operand1;
+		var t1 = context.Operand1.Definitions[0].Operand1;
 
-			context.SetInstruction(IRInstruction.Truncate64x32, result, t1);
-		}
+		context.SetInstruction(IRInstruction.Truncate64x32, result, t1);
 	}
 }

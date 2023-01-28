@@ -3,25 +3,24 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.x86.Transforms.RuntimeCall
+namespace Mosa.Platform.x86.Transforms.RuntimeCall;
+
+/// <summary>
+/// ConvertR4ToU64
+/// </summary>
+public sealed class ConvertR4ToU64 : BaseTransform
 {
-	/// <summary>
-	/// ConvertR4ToU64
-	/// </summary>
-	public sealed class ConvertR4ToU64 : BaseTransform
+	public ConvertR4ToU64() : base(IRInstruction.ConvertR4ToU64, TransformType.Manual | TransformType.Transform)
 	{
-		public ConvertR4ToU64() : base(IRInstruction.ConvertR4ToU64, TransformType.Manual | TransformType.Transform)
-		{
-		}
+	}
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			return true;
-		}
+	public override bool Match(Context context, TransformContext transform)
+	{
+		return true;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			transform.ReplaceWithCall(context, "Mosa.Runtime.Math.Conversion", "R4ToU8");
-		}
+	public override void Transform(Context context, TransformContext transform)
+	{
+		transform.ReplaceWithCall(context, "Mosa.Runtime.Math.Conversion", "R4ToU8");
 	}
 }

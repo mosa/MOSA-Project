@@ -2,60 +2,59 @@
 
 using System.Runtime.CompilerServices;
 
-namespace System.Threading
+namespace System.Threading;
+
+public struct SpinLock
 {
-	public struct SpinLock
+	private /*volatile*/ int m_owner;
+
+	private const int LOCK_UNOWNED = 0;
+	private const int LOCK_ANONYMOUS_OWNED = 0x1;
+	private const int LOCK_ID_DISABLE_MASK = unchecked((int)0x80000000);
+	private const int ID_DISABLED_AND_ANONYMOUS_OWNED = unchecked((int)0x80000001);
+
+	public SpinLock(bool enableThreadOwnerTracking)
 	{
-		private /*volatile*/ int m_owner;
+		m_owner = LOCK_UNOWNED;
+	}
 
-		private const int LOCK_UNOWNED = 0;
-		private const int LOCK_ANONYMOUS_OWNED = 0x1;
-		private const int LOCK_ID_DISABLE_MASK = unchecked((int)0x80000000);
-		private const int ID_DISABLED_AND_ANONYMOUS_OWNED = unchecked((int)0x80000001);
+	public void Enter(ref bool lockTaken)
+	{
+		if (lockTaken)
+			return;
 
-		public SpinLock(bool enableThreadOwnerTracking)
+		ContinueTryEnter(ref lockTaken);
+	}
+
+	private void ContinueTryEnter(ref bool lockTaken)
+	{
+		int observedOwner = 0; // m_owner;
+
+		while (CompareExchange(ref m_owner, observedOwner | LOCK_ANONYMOUS_OWNED, observedOwner, ref lockTaken) != observedOwner)
 		{
-			m_owner = LOCK_UNOWNED;
 		}
+	}
 
-		public void Enter(ref bool lockTaken)
+	public void Exit()
+	{
+		Interlocked.Decrement(ref m_owner);
+	}
+
+	public bool IsHeld
+	{
+		get
 		{
-			if (lockTaken)
-				return;
-
-			ContinueTryEnter(ref lockTaken);
+			return (m_owner & LOCK_ANONYMOUS_OWNED) != LOCK_UNOWNED;
 		}
+	}
 
-		private void ContinueTryEnter(ref bool lockTaken)
-		{
-			int observedOwner = 0; // m_owner;
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	private static int CompareExchange(ref int location, int value, int comparand, ref bool success)
+	{
+		int result = Interlocked.CompareExchange(ref location, value, comparand);
 
-			while (CompareExchange(ref m_owner, observedOwner | LOCK_ANONYMOUS_OWNED, observedOwner, ref lockTaken) != observedOwner)
-			{
-			}
-		}
+		success = (result == comparand);
 
-		public void Exit()
-		{
-			Interlocked.Decrement(ref m_owner);
-		}
-
-		public bool IsHeld
-		{
-			get
-			{
-				return (m_owner & LOCK_ANONYMOUS_OWNED) != LOCK_UNOWNED;
-			}
-		}
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		private static int CompareExchange(ref int location, int value, int comparand, ref bool success)
-		{
-			int result = Interlocked.CompareExchange(ref location, value, comparand);
-
-			success = (result == comparand);
-
-			return result;
-		}
+		return result;
 	}
 }

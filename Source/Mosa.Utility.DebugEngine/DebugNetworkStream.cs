@@ -2,16 +2,15 @@
 
 using System.Net.Sockets;
 
-namespace Mosa.Utility.DebugEngine
-{
-	public class DebugNetworkStream : NetworkStream
-	{
-		public DebugNetworkStream(Socket socket, bool ownsSocket) :
-			base(socket, ownsSocket)
-		{
-			socket.NoDelay = true;
-		}
+namespace Mosa.Utility.DebugEngine;
 
-		public bool IsConnected { get { return Socket.Connected; } }
+public class DebugNetworkStream : NetworkStream
+{
+	public DebugNetworkStream(Socket socket, bool ownsSocket) :
+		base(socket, ownsSocket)
+	{
+		socket.NoDelay = true;
 	}
+
+	public bool IsConnected { get { return Socket.Connected; } }
 }

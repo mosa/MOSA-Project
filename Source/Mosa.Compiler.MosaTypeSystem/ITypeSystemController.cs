@@ -1,39 +1,38 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Compiler.MosaTypeSystem
+namespace Mosa.Compiler.MosaTypeSystem;
+
+public interface ITypeSystemController
 {
-	public interface ITypeSystemController
-	{
-		MosaModule CreateModule();
+	MosaModule CreateModule();
 
-		MosaType CreateType(MosaType? source = null);
+	MosaType CreateType(MosaType? source = null);
 
-		MosaMethod CreateMethod(MosaMethod? source = null);
+	MosaMethod CreateMethod(MosaMethod? source = null);
 
-		MosaField CreateField(MosaField? source = null);
+	MosaField CreateField(MosaField? source = null);
 
-		MosaProperty CreateProperty(MosaProperty? source = null);
+	MosaProperty CreateProperty(MosaProperty? source = null);
 
-		MosaParameter CreateParameter(MosaParameter? source = null);
+	MosaParameter CreateParameter(MosaParameter? source = null);
 
-		MosaModule.Mutator MutateModule(MosaModule module);
+	MosaModule.Mutator MutateModule(MosaModule module);
 
-		MosaType.Mutator MutateType(MosaType type);
+	MosaType.Mutator MutateType(MosaType type);
 
-		MosaMethod.Mutator MutateMethod(MosaMethod method);
+	MosaMethod.Mutator MutateMethod(MosaMethod method);
 
-		MosaField.Mutator MutateField(MosaField field);
+	MosaField.Mutator MutateField(MosaField field);
 
-		MosaProperty.Mutator MutateProperty(MosaProperty property);
+	MosaProperty.Mutator MutateProperty(MosaProperty property);
 
-		MosaParameter.Mutator MutateParameter(MosaParameter parameter);
+	MosaParameter.Mutator MutateParameter(MosaParameter parameter);
 
-		void AddModule(MosaModule module);
+	void AddModule(MosaModule module);
 
-		void AddType(MosaType type);
+	void AddType(MosaType type);
 
-		void SetCorLib(MosaModule module);
+	void SetCorLib(MosaModule module);
 
-		void SetEntryPoint(MosaMethod entryPoint);
-	}
+	void SetEntryPoint(MosaMethod entryPoint);
 }

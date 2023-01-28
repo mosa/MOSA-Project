@@ -2,16 +2,15 @@
 
 using System.Net.Sockets;
 
-namespace Mosa.Utility.RSP
-{
-	public class GDBNetworkStream : NetworkStream
-	{
-		public GDBNetworkStream(Socket socket, bool ownsSocket) :
-			base(socket, ownsSocket)
-		{
-			socket.NoDelay = true;
-		}
+namespace Mosa.Utility.RSP;
 
-		public bool IsConnected { get { return Socket.Connected; } }
+public class GDBNetworkStream : NetworkStream
+{
+	public GDBNetworkStream(Socket socket, bool ownsSocket) :
+		base(socket, ownsSocket)
+	{
+		socket.NoDelay = true;
 	}
+
+	public bool IsConnected { get { return Socket.Connected; } }
 }

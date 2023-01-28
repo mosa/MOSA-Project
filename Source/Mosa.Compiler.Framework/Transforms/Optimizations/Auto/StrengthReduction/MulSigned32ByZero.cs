@@ -4,69 +4,68 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
+
+/// <summary>
+/// MulSigned32ByZero
+/// </summary>
+public sealed class MulSigned32ByZero : BaseTransform
 {
-	/// <summary>
-	/// MulSigned32ByZero
-	/// </summary>
-	public sealed class MulSigned32ByZero : BaseTransform
+	public MulSigned32ByZero() : base(IRInstruction.MulSigned32, TransformType.Auto | TransformType.Optimization)
 	{
-		public MulSigned32ByZero() : base(IRInstruction.MulSigned32, TransformType.Auto | TransformType.Optimization)
-		{
-		}
-
-		public override int Priority => 80;
-
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand2.IsResolvedConstant)
-				return false;
-
-			if (context.Operand2.ConstantUnsigned64 != 0)
-				return false;
-
-			return true;
-		}
-
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
-
-			var e1 = transform.CreateConstant(To32(0));
-
-			context.SetInstruction(IRInstruction.Move32, result, e1);
-		}
 	}
 
-	/// <summary>
-	/// MulSigned32ByZero_v1
-	/// </summary>
-	public sealed class MulSigned32ByZero_v1 : BaseTransform
+	public override int Priority => 80;
+
+	public override bool Match(Context context, TransformContext transform)
 	{
-		public MulSigned32ByZero_v1() : base(IRInstruction.MulSigned32, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+		if (!context.Operand2.IsResolvedConstant)
+			return false;
 
-		public override int Priority => 80;
+		if (context.Operand2.ConstantUnsigned64 != 0)
+			return false;
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand1.IsResolvedConstant)
-				return false;
+		return true;
+	}
 
-			if (context.Operand1.ConstantUnsigned64 != 0)
-				return false;
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
 
-			return true;
-		}
+		var e1 = transform.CreateConstant(To32(0));
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
+		context.SetInstruction(IRInstruction.Move32, result, e1);
+	}
+}
 
-			var e1 = transform.CreateConstant(To32(0));
+/// <summary>
+/// MulSigned32ByZero_v1
+/// </summary>
+public sealed class MulSigned32ByZero_v1 : BaseTransform
+{
+	public MulSigned32ByZero_v1() : base(IRInstruction.MulSigned32, TransformType.Auto | TransformType.Optimization)
+	{
+	}
 
-			context.SetInstruction(IRInstruction.Move32, result, e1);
-		}
+	public override int Priority => 80;
+
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!context.Operand1.IsResolvedConstant)
+			return false;
+
+		if (context.Operand1.ConstantUnsigned64 != 0)
+			return false;
+
+		return true;
+	}
+
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
+
+		var e1 = transform.CreateConstant(To32(0));
+
+		context.SetInstruction(IRInstruction.Move32, result, e1);
 	}
 }

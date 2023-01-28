@@ -5,280 +5,279 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Pipes;
 
-namespace Mosa.Utility.DebugEngine
+namespace Mosa.Utility.DebugEngine;
+
+public sealed class DebugServerEngine
 {
-	public sealed class DebugServerEngine
+	private readonly object sync = new object();
+	private Stream stream;
+
+	private readonly Dictionary<int, DebugMessage> pending = new Dictionary<int, DebugMessage>();
+	private int nextID = 0;
+
+	private readonly List<byte> buffer = new List<byte>();
+
+	private CallBack globalDispatch;
+	private readonly byte[] receivedData = new byte[2000];
+
+	private const int MaxBufferSize = (64 * 1024) + 64;
+
+	private static int packetCnt = 0;
+
+	public Stream Stream
 	{
-		private readonly object sync = new object();
-		private Stream stream;
-
-		private readonly Dictionary<int, DebugMessage> pending = new Dictionary<int, DebugMessage>();
-		private int nextID = 0;
-
-		private readonly List<byte> buffer = new List<byte>();
-
-		private CallBack globalDispatch;
-		private readonly byte[] receivedData = new byte[2000];
-
-		private const int MaxBufferSize = (64 * 1024) + 64;
-
-		private static int packetCnt = 0;
-
-		public Stream Stream
+		get
 		{
-			get
-			{
-				return stream;
-			}
-			set
-			{
-				stream = value;
+			return stream;
+		}
+		set
+		{
+			stream = value;
 
-				if (IsConnected)
-				{
-					stream.BeginRead(receivedData, 0, receivedData.Length, ReadAsyncCallback, null);
-				}
+			if (IsConnected)
+			{
+				stream.BeginRead(receivedData, 0, receivedData.Length, ReadAsyncCallback, null);
 			}
 		}
+	}
 
-		public DebugServerEngine()
+	public DebugServerEngine()
+	{
+		stream = null;
+	}
+
+	public void SetGlobalDispatch(CallBack dispatch)
+	{
+		globalDispatch = dispatch;
+	}
+
+	public bool SendCommand(DebugMessage message)
+	{
+		lock (sync)
 		{
-			stream = null;
+			if (!IsConnected)
+				return false;
+
+			message.ID = ++nextID;
+			pending.Add(message.ID, message);
+
+			var packet = CreatePacket(message);
+			SendPacket(packet);
+
+			return true;
+		}
+	}
+
+	public bool SendCommand(List<DebugMessage> messages)
+	{
+		foreach (var message in messages)
+		{
+			if (!SendCommand(message))
+				return false;
 		}
 
-		public void SetGlobalDispatch(CallBack dispatch)
-		{
-			globalDispatch = dispatch;
-		}
+		return true;
+	}
 
-		public bool SendCommand(DebugMessage message)
+	public bool SendCommand2(List<DebugMessage> messages)
+	{
+		lock (sync)
 		{
-			lock (sync)
+			if (!IsConnected)
+				return false;
+
+			var packets = new Packet();
+
+			foreach (var message in messages)
 			{
-				if (!IsConnected)
-					return false;
-
 				message.ID = ++nextID;
 				pending.Add(message.ID, message);
 
 				var packet = CreatePacket(message);
-				SendPacket(packet);
 
-				return true;
+				packets.AppendPacket(packet);
 			}
-		}
 
-		public bool SendCommand(List<DebugMessage> messages)
-		{
-			foreach (var message in messages)
-			{
-				if (!SendCommand(message))
-					return false;
-			}
+			SendPacket(packets);
+			packetCnt += messages.Count;
 
 			return true;
 		}
+	}
 
-		public bool SendCommand2(List<DebugMessage> messages)
+	public bool IsConnected
+	{
+		get
 		{
-			lock (sync)
-			{
-				if (!IsConnected)
-					return false;
-
-				var packets = new Packet();
-
-				foreach (var message in messages)
-				{
-					message.ID = ++nextID;
-					pending.Add(message.ID, message);
-
-					var packet = CreatePacket(message);
-
-					packets.AppendPacket(packet);
-				}
-
-				SendPacket(packets);
-				packetCnt += messages.Count;
-
-				return true;
-			}
-		}
-
-		public bool IsConnected
-		{
-			get
-			{
-				if (stream == null)
-					return false;
-
-				if (stream is NamedPipeClientStream)
-					return (stream as NamedPipeClientStream).IsConnected;
-
-				if (stream is DebugNetworkStream)
-					return (stream as DebugNetworkStream).IsConnected;
-
+			if (stream == null)
 				return false;
+
+			if (stream is NamedPipeClientStream)
+				return (stream as NamedPipeClientStream).IsConnected;
+
+			if (stream is DebugNetworkStream)
+				return (stream as DebugNetworkStream).IsConnected;
+
+			return false;
+		}
+	}
+
+	private void SendPacket(Packet packet)
+	{
+		var send = packet.Data.ToArray();
+
+		stream.Write(send, 0, send.Length);
+	}
+
+	private Packet CreatePacket(DebugMessage message)
+	{
+		var packet = new Packet();
+
+		packet.Add((byte)'!');
+		packet.Add(message.ID);
+		packet.Add(message.Code);
+
+		if (message.CommandData == null)
+		{
+			packet.Add(0);  // length
+		}
+		else
+		{
+			packet.Add(message.CommandData.Count); // length
+
+			foreach (var b in message.CommandData)
+			{
+				packet.Add(b);
 			}
 		}
 
-		private void SendPacket(Packet packet)
+		return packet;
+	}
+
+	private void PostResponse(int id, byte code, List<byte> data)
+	{
+		DebugMessage message = null;
+
+		lock (sync)
 		{
-			var send = packet.Data.ToArray();
-
-			stream.Write(send, 0, send.Length);
-		}
-
-		private Packet CreatePacket(DebugMessage message)
-		{
-			var packet = new Packet();
-
-			packet.Add((byte)'!');
-			packet.Add(message.ID);
-			packet.Add(message.Code);
-
-			if (message.CommandData == null)
+			if (id == 0 || !pending.TryGetValue(id, out message))
 			{
-				packet.Add(0);  // length
+				// message without command
+				message = new DebugMessage(code, data)
+				{
+					ID = id
+				};
+
+				// need to set a default notifier for this
 			}
 			else
 			{
-				packet.Add(message.CommandData.Count); // length
-
-				foreach (var b in message.CommandData)
-				{
-					packet.Add(b);
-				}
+				pending.Remove(message.ID);
 			}
 
-			return packet;
+			message.ResponseData = data;
 		}
 
-		private void PostResponse(int id, byte code, List<byte> data)
+		if (message != null)
 		{
-			DebugMessage message = null;
+			globalDispatch?.Invoke(message);
 
-			lock (sync)
-			{
-				if (id == 0 || !pending.TryGetValue(id, out message))
-				{
-					// message without command
-					message = new DebugMessage(code, data)
-					{
-						ID = id
-					};
+			message.CallBack?.Invoke(message);
+		}
+	}
 
-					// need to set a default notifier for this
-				}
-				else
-				{
-					pending.Remove(message.ID);
-				}
+	private byte GetByte(int index)
+	{
+		return buffer[index];
+	}
 
-				message.ResponseData = data;
-			}
+	private int GetInteger(int index)
+	{
+		return (buffer[index + 3] << 24) | (buffer[index + 2] << 16) | (buffer[index + 1] << 8) | buffer[index];
+	}
 
-			if (message != null)
-			{
-				globalDispatch?.Invoke(message);
+	private bool ParseResponse()
+	{
+		int id = GetInteger(1);
+		byte code = GetByte(5);
+		int len = GetInteger(6);
 
-				message.CallBack?.Invoke(message);
-			}
+		var data = new List<byte>();
+
+		for (int i = 0; i < len; i++)
+		{
+			data.Add(buffer[i + 10]);
 		}
 
-		private byte GetByte(int index)
+		//Console.WriteLine("ID: " + id + " CODE: " + code + " LEN: " + len);
+
+		PostResponse(id, code, data);
+
+		return true;
+	}
+
+	// Message format:	// [0]MAGIC[1]ID[5]CODE[6]LEN[10]DATA[LEN]
+
+	private void Push(byte b)
+	{
+		if (buffer.Count == 0 && b != (byte)'!')
+			return;
+
+		if (buffer.Count > MaxBufferSize)
 		{
-			return buffer[index];
+			buffer.Clear();
+			return;
 		}
 
-		private int GetInteger(int index)
+		buffer.Add(b);
+
+		if (buffer.Count >= 10)
 		{
-			return (buffer[index + 3] << 24) | (buffer[index + 2] << 16) | (buffer[index + 1] << 8) | buffer[index];
-		}
+			int length = GetInteger(6);
 
-		private bool ParseResponse()
-		{
-			int id = GetInteger(1);
-			byte code = GetByte(5);
-			int len = GetInteger(6);
-
-			var data = new List<byte>();
-
-			for (int i = 0; i < len; i++)
-			{
-				data.Add(buffer[i + 10]);
-			}
-
-			//Console.WriteLine("ID: " + id + " CODE: " + code + " LEN: " + len);
-
-			PostResponse(id, code, data);
-
-			return true;
-		}
-
-		// Message format:	// [0]MAGIC[1]ID[5]CODE[6]LEN[10]DATA[LEN]
-
-		private void Push(byte b)
-		{
-			if (buffer.Count == 0 && b != (byte)'!')
-				return;
-
-			if (buffer.Count > MaxBufferSize)
+			if (length > MaxBufferSize)
 			{
 				buffer.Clear();
 				return;
 			}
 
-			buffer.Add(b);
-
-			if (buffer.Count >= 10)
+			if (buffer.Count == length + 10)
 			{
-				int length = GetInteger(6);
-
-				if (length > MaxBufferSize)
-				{
-					buffer.Clear();
-					return;
-				}
-
-				if (buffer.Count == length + 10)
-				{
-					ParseResponse();
-					buffer.Clear();
-				}
+				ParseResponse();
+				buffer.Clear();
 			}
 		}
+	}
 
-		private void ReadAsyncCallback(IAsyncResult ar)
+	private void ReadAsyncCallback(IAsyncResult ar)
+	{
+		try
 		{
-			try
-			{
-				if (stream == null)
-					return;
+			if (stream == null)
+				return;
 
-				var bytes = stream.EndRead(ar);
+			var bytes = stream.EndRead(ar);
 
-				if (bytes == 0)
-				{
-					stream = null;
-					return;
-				}
-
-				for (int i = 0; i < bytes; i++)
-				{
-					Push(receivedData[i]);
-				}
-
-				stream.BeginRead(receivedData, 0, receivedData.Length, ReadAsyncCallback, null);
-			}
-			catch (IOException)
+			if (bytes == 0)
 			{
 				stream = null;
+				return;
 			}
-			catch
+
+			for (int i = 0; i < bytes; i++)
 			{
-				// nothing for now
+				Push(receivedData[i]);
 			}
+
+			stream.BeginRead(receivedData, 0, receivedData.Length, ReadAsyncCallback, null);
+		}
+		catch (IOException)
+		{
+			stream = null;
+		}
+		catch
+		{
+			// nothing for now
 		}
 	}
 }

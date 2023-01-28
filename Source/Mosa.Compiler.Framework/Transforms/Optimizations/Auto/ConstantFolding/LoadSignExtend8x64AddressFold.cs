@@ -4,47 +4,46 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
+
+/// <summary>
+/// LoadSignExtend8x64AddressFold
+/// </summary>
+public sealed class LoadSignExtend8x64AddressFold : BaseTransform
 {
-	/// <summary>
-	/// LoadSignExtend8x64AddressFold
-	/// </summary>
-	public sealed class LoadSignExtend8x64AddressFold : BaseTransform
+	public LoadSignExtend8x64AddressFold() : base(IRInstruction.LoadSignExtend8x64, TransformType.Auto | TransformType.Optimization)
 	{
-		public LoadSignExtend8x64AddressFold() : base(IRInstruction.LoadSignExtend8x64, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+	}
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand1.IsVirtualRegister)
-				return false;
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!context.Operand1.IsVirtualRegister)
+			return false;
 
-			if (!context.Operand2.IsResolvedConstant)
-				return false;
+		if (!context.Operand2.IsResolvedConstant)
+			return false;
 
-			if (context.Operand2.ConstantUnsigned64 != 0)
-				return false;
+		if (context.Operand2.ConstantUnsigned64 != 0)
+			return false;
 
-			if (context.Operand1.Definitions.Count != 1)
-				return false;
+		if (context.Operand1.Definitions.Count != 1)
+			return false;
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.AddressOf)
-				return false;
+		if (context.Operand1.Definitions[0].Instruction != IRInstruction.AddressOf)
+			return false;
 
-			if (!IsParameter(context.Operand1.Definitions[0].Operand1))
-				return false;
+		if (!IsParameter(context.Operand1.Definitions[0].Operand1))
+			return false;
 
-			return true;
-		}
+		return true;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
 
-			var t1 = context.Operand1.Definitions[0].Operand1;
+		var t1 = context.Operand1.Definitions[0].Operand1;
 
-			context.SetInstruction(IRInstruction.LoadParamSignExtend8x64, result, t1);
-		}
+		context.SetInstruction(IRInstruction.LoadParamSignExtend8x64, result, t1);
 	}
 }

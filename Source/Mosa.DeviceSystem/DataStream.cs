@@ -1,34 +1,33 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.DeviceSystem
+namespace Mosa.DeviceSystem;
+
+/// <summary>
+/// A position-based data block
+/// </summary>
+public class DataStream
 {
-	/// <summary>
-	/// A position-based data block
-	/// </summary>
-	public class DataStream
+	public DataBlock Block { get; }
+
+	private uint position;
+
+	public DataStream(byte[] source)
 	{
-		public DataBlock Block { get; }
+		Block = new(source);
 
-		private uint position;
-
-		public DataStream(byte[] source)
-		{
-			Block = new(source);
-
-			position = 0;
-		}
-
-		public byte ReadByte() => Block.GetByte(position++);
-
-		public char ReadChar() => Block.GetChar(position++);
-
-		public byte[] ReadBytes(uint length)
-		{
-			var bytes = Block.GetBytes(position, length);
-			position += length;
-			return bytes;
-		}
-
-		public byte[] ReadEnd() => ReadBytes(Block.Length - position);
+		position = 0;
 	}
+
+	public byte ReadByte() => Block.GetByte(position++);
+
+	public char ReadChar() => Block.GetChar(position++);
+
+	public byte[] ReadBytes(uint length)
+	{
+		var bytes = Block.GetBytes(position, length);
+		position += length;
+		return bytes;
+	}
+
+	public byte[] ReadEnd() => ReadBytes(Block.Length - position);
 }

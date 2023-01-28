@@ -4,26 +4,25 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x64.Instructions
+namespace Mosa.Platform.x64.Instructions;
+
+/// <summary>
+/// WrMSR
+/// </summary>
+/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
+public sealed class WrMSR : X64Instruction
 {
-	/// <summary>
-	/// WrMSR
-	/// </summary>
-	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
-	public sealed class WrMSR : X64Instruction
+	internal WrMSR()
+		: base(1, 2)
 	{
-		internal WrMSR()
-			: base(1, 2)
-		{
-		}
+	}
 
-		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
-		{
-			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
-			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
+	public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
+	{
+		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
+		System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
-			opcodeEncoder.Append8Bits(0x0F);
-			opcodeEncoder.Append8Bits(0x30);
-		}
+		opcodeEncoder.Append8Bits(0x0F);
+		opcodeEncoder.Append8Bits(0x30);
 	}
 }

@@ -5,30 +5,29 @@
 using System.Collections.Generic;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.x86.Transforms.Optimizations.Manual
+namespace Mosa.Platform.x86.Transforms.Optimizations.Manual;
+
+/// <summary>
+/// Optimizations Transformations
+/// </summary>
+public static class ManualTransforms
 {
-	/// <summary>
-	/// Optimizations Transformations
-	/// </summary>
-	public static class ManualTransforms
+	public static readonly List<BaseTransform> List = new List<BaseTransform>
 	{
-		public static readonly List<BaseTransform> List = new List<BaseTransform>
-		{
-			new Special.Deadcode(),
-			new Standard.Add32ToInc32(),
-			new Standard.Sub32ToDec32(),
-			new Standard.Lea32ToInc32(),
-			new Standard.Lea32ToDec32(),
-			new Standard.Cmp32ToZero(),
-			new Standard.Test32ToZero(),
-			new Standard.Cmp32ToTest32(),
+		new Special.Deadcode(),
+		new Standard.Add32ToInc32(),
+		new Standard.Sub32ToDec32(),
+		new Standard.Lea32ToInc32(),
+		new Standard.Lea32ToDec32(),
+		new Standard.Cmp32ToZero(),
+		new Standard.Test32ToZero(),
+		new Standard.Cmp32ToTest32(),
 
-			new Special.Mov32ConstantReuse(),
-			new Stack.Add32(),
+		new Special.Mov32ConstantReuse(),
+		new Stack.Add32(),
 
-			//new Special.Mov32Propagate(),
-			//Add32ToLea32
-			//Sub32ToLea32
-		};
-	}
+		//new Special.Mov32Propagate(),
+		//Add32ToLea32
+		//Sub32ToLea32
+	};
 }

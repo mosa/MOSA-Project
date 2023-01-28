@@ -1,185 +1,184 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.UnitTests.FlowControl
+namespace Mosa.UnitTests.FlowControl;
+
+public static class WhileTests
 {
-	public static class WhileTests
+	[MosaUnitTest(0, 20)]
+	[MosaUnitTest(-20, 0)]
+	[MosaUnitTest(-100, 100)]
+	public static int WhileIncI4(int start, int limit)
 	{
-		[MosaUnitTest(0, 20)]
-		[MosaUnitTest(-20, 0)]
-		[MosaUnitTest(-100, 100)]
-		public static int WhileIncI4(int start, int limit)
+		int count = 0;
+
+		while (start < limit)
 		{
-			int count = 0;
-
-			while (start < limit)
-			{
-				++count;
-				++start;
-			}
-
-			return count;
+			++count;
+			++start;
 		}
 
-		[MosaUnitTest(20, 0)]
-		[MosaUnitTest(0, -20)]
-		[MosaUnitTest(100, -100)]
-		public static int WhileDecI4(int start, int limit)
+		return count;
+	}
+
+	[MosaUnitTest(20, 0)]
+	[MosaUnitTest(0, -20)]
+	[MosaUnitTest(100, -100)]
+	public static int WhileDecI4(int start, int limit)
+	{
+		int count = 0;
+
+		while (start > limit)
 		{
-			int count = 0;
-
-			while (start > limit)
-			{
-				++count;
-				--start;
-			}
-
-			return count;
+			++count;
+			--start;
 		}
 
-		[MosaUnitTest]
-		public static bool WhileFalse()
+		return count;
+	}
+
+	[MosaUnitTest]
+	public static bool WhileFalse()
+	{
+		bool called = false;
+
+		while (false)
 		{
-			bool called = false;
-
-			while (false)
-			{
-				called = true;
-			}
-
-			return called;
+			called = true;
 		}
 
-		[MosaUnitTest]
-		public static bool WhileContinueBreak()
+		return called;
+	}
+
+	[MosaUnitTest]
+	public static bool WhileContinueBreak()
+	{
+		const int limit = 20;
+		int count = 0;
+
+		while (true)
 		{
-			const int limit = 20;
-			int count = 0;
+			++count;
 
-			while (true)
+			if (count == limit)
 			{
-				++count;
-
-				if (count == limit)
-				{
-					break;
-				}
-				else
-				{
-					continue;
-				}
+				break;
 			}
-
-			return count == 20;
+			else
+			{
+				continue;
+			}
 		}
 
-		[MosaUnitTest]
-		public static bool WhileContinueBreak2()
+		return count == 20;
+	}
+
+	[MosaUnitTest]
+	public static bool WhileContinueBreak2()
+	{
+		int start = 0;
+		const int limit = 20;
+		int count = 0;
+
+		while (true)
 		{
-			int start = 0;
-			const int limit = 20;
-			int count = 0;
+			++count;
+			++start;
 
-			while (true)
+			if (start == limit)
 			{
-				++count;
-				++start;
-
-				if (start == limit)
-				{
-					break;
-				}
-				else
-				{
-					continue;
-				}
+				break;
 			}
-
-			return start == limit && count == 20;
+			else
+			{
+				continue;
+			}
 		}
 
-		[MosaUnitTest]
-		public static int WhileContinueBreak2B()
+		return start == limit && count == 20;
+	}
+
+	[MosaUnitTest]
+	public static int WhileContinueBreak2B()
+	{
+		int start = 0;
+		int limit = 20;
+		int count = 0;
+
+		while (true)
 		{
-			int start = 0;
-			int limit = 20;
-			int count = 0;
+			++count;
+			++start;
 
-			while (true)
+			if (start == limit)
 			{
-				++count;
-				++start;
-
-				if (start == limit)
-				{
-					break;
-				}
-				else
-				{
-					continue;
-				}
+				break;
 			}
-
-			return count;
+			else
+			{
+				continue;
+			}
 		}
 
-		[MosaUnitTest((byte)254, (byte)1)]
-		[MosaUnitTest(byte.MaxValue, byte.MinValue)]
-		public static int WhileOverflowIncI1(byte start, byte limit)
+		return count;
+	}
+
+	[MosaUnitTest((byte)254, (byte)1)]
+	[MosaUnitTest(byte.MaxValue, byte.MinValue)]
+	public static int WhileOverflowIncI1(byte start, byte limit)
+	{
+		int count = 0;
+
+		while (start != limit)
 		{
-			int count = 0;
-
-			while (start != limit)
-			{
-				++start;
-				++count;
-			}
-
-			return count;
+			++start;
+			++count;
 		}
 
-		[MosaUnitTest((byte)1, (byte)254)]
-		[MosaUnitTest(byte.MinValue, byte.MaxValue)]
-		public static int WhileOverflowDecI1(byte start, byte limit)
+		return count;
+	}
+
+	[MosaUnitTest((byte)1, (byte)254)]
+	[MosaUnitTest(byte.MinValue, byte.MaxValue)]
+	public static int WhileOverflowDecI1(byte start, byte limit)
+	{
+		int count = 0;
+
+		while (start != limit)
 		{
-			int count = 0;
-
-			while (start != limit)
-			{
-				--start;
-				++count;
-			}
-
-			return count;
+			--start;
+			++count;
 		}
 
-		[MosaUnitTest(2, 3, 0, 20)]
-		[MosaUnitTest(0, 1, 100, 200)]
-		[MosaUnitTest(1, 0, -100, 100)]
-		[MosaUnitTest(int.MaxValue, int.MinValue, -2, 3)]
-		public static int WhileNestedEqualsI4(int a, int b, int start, int limit)
+		return count;
+	}
+
+	[MosaUnitTest(2, 3, 0, 20)]
+	[MosaUnitTest(0, 1, 100, 200)]
+	[MosaUnitTest(1, 0, -100, 100)]
+	[MosaUnitTest(int.MaxValue, int.MinValue, -2, 3)]
+	public static int WhileNestedEqualsI4(int a, int b, int start, int limit)
+	{
+		int count = 0;
+		int start2 = start;
+		int status = a;
+
+		while (status == a)
 		{
-			int count = 0;
-			int start2 = start;
-			int status = a;
+			start2 = 1;
 
-			while (status == a)
+			while (start2 < 5)
 			{
-				start2 = 1;
-
-				while (start2 < 5)
-				{
-					++start2;
-				}
-
-				++start;
-
-				if (start == limit)
-				{
-					status = b;
-				}
+				++start2;
 			}
 
-			return count;
+			++start;
+
+			if (start == limit)
+			{
+				status = b;
+			}
 		}
+
+		return count;
 	}
 }

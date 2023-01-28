@@ -3,15 +3,14 @@
 using System.Collections.Generic;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.x64.Transforms.Stack
+namespace Mosa.Platform.x64.Transforms.Stack;
+
+/// <summary>
+/// Special Transformation List
+/// </summary>
+public static class SpecialTransforms
 {
-	/// <summary>
-	/// Special Transformation List
-	/// </summary>
-	public static class SpecialTransforms
+	public static readonly List<BaseTransform> List = new List<BaseTransform>
 	{
-		public static readonly List<BaseTransform> List = new List<BaseTransform>
-		{
-		};
-	}
+	};
 }

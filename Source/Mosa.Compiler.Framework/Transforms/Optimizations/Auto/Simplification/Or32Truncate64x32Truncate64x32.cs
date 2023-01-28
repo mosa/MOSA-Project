@@ -4,51 +4,50 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
+
+/// <summary>
+/// Or32Truncate64x32Truncate64x32
+/// </summary>
+public sealed class Or32Truncate64x32Truncate64x32 : BaseTransform
 {
-	/// <summary>
-	/// Or32Truncate64x32Truncate64x32
-	/// </summary>
-	public sealed class Or32Truncate64x32Truncate64x32 : BaseTransform
+	public Or32Truncate64x32Truncate64x32() : base(IRInstruction.Or32, TransformType.Auto | TransformType.Optimization)
 	{
-		public Or32Truncate64x32Truncate64x32() : base(IRInstruction.Or32, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+	}
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand1.IsVirtualRegister)
-				return false;
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!context.Operand1.IsVirtualRegister)
+			return false;
 
-			if (!context.Operand2.IsVirtualRegister)
-				return false;
+		if (!context.Operand2.IsVirtualRegister)
+			return false;
 
-			if (context.Operand1.Definitions.Count != 1)
-				return false;
+		if (context.Operand1.Definitions.Count != 1)
+			return false;
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.Truncate64x32)
-				return false;
+		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Truncate64x32)
+			return false;
 
-			if (context.Operand2.Definitions.Count != 1)
-				return false;
+		if (context.Operand2.Definitions.Count != 1)
+			return false;
 
-			if (context.Operand2.Definitions[0].Instruction != IRInstruction.Truncate64x32)
-				return false;
+		if (context.Operand2.Definitions[0].Instruction != IRInstruction.Truncate64x32)
+			return false;
 
-			return true;
-		}
+		return true;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
 
-			var t1 = context.Operand1.Definitions[0].Operand1;
-			var t2 = context.Operand2.Definitions[0].Operand1;
+		var t1 = context.Operand1.Definitions[0].Operand1;
+		var t2 = context.Operand2.Definitions[0].Operand1;
 
-			var v1 = transform.AllocateVirtualRegister(transform.I8);
+		var v1 = transform.AllocateVirtualRegister(transform.I8);
 
-			context.SetInstruction(IRInstruction.Or64, v1, t1, t2);
-			context.AppendInstruction(IRInstruction.GetLow32, result, v1);
-		}
+		context.SetInstruction(IRInstruction.Or64, v1, t1, t2);
+		context.AppendInstruction(IRInstruction.GetLow32, result, v1);
 	}
 }

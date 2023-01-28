@@ -1,9 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.DeviceSystem
+namespace Mosa.DeviceSystem;
+
+public enum MouseState
 {
-	public enum MouseState
-	{
-		None = 0, Left, Right
-	}
+	None = 0, Left, Right
 }

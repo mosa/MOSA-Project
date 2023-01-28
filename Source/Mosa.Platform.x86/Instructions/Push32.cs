@@ -4,40 +4,39 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x86.Instructions
+namespace Mosa.Platform.x86.Instructions;
+
+/// <summary>
+/// Push32
+/// </summary>
+/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
+public sealed class Push32 : X86Instruction
 {
-	/// <summary>
-	/// Push32
-	/// </summary>
-	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed class Push32 : X86Instruction
+	internal Push32()
+		: base(0, 1)
 	{
-		internal Push32()
-			: base(0, 1)
+	}
+
+	public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
+	{
+		System.Diagnostics.Debug.Assert(node.ResultCount == 0);
+		System.Diagnostics.Debug.Assert(node.OperandCount == 1);
+
+		if (node.Operand1.IsCPURegister)
 		{
+			opcodeEncoder.Append4Bits(0b0101);
+			opcodeEncoder.Append1Bit(0b0);
+			opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
+			return;
 		}
 
-		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
+		if (node.Operand1.IsConstant)
 		{
-			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
-			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
-
-			if (node.Operand1.IsCPURegister)
-			{
-				opcodeEncoder.Append4Bits(0b0101);
-				opcodeEncoder.Append1Bit(0b0);
-				opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
-				return;
-			}
-
-			if (node.Operand1.IsConstant)
-			{
-				opcodeEncoder.Append8Bits(0x68);
-				opcodeEncoder.Append32BitImmediate(node.Operand1);
-				return;
-			}
-
-			throw new Compiler.Common.Exceptions.CompilerException("Invalid Opcode");
+			opcodeEncoder.Append8Bits(0x68);
+			opcodeEncoder.Append32BitImmediate(node.Operand1);
+			return;
 		}
+
+		throw new Compiler.Common.Exceptions.CompilerException("Invalid Opcode");
 	}
 }

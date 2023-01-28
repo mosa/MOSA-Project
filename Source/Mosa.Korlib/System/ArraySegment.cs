@@ -2,7 +2,7 @@
 
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
- 
+
 /*============================================================
 **
 **
@@ -13,314 +13,313 @@
 **
 **
 ===========================================================*/
- 
+
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
- 
-namespace System
+
+namespace System;
+
+// Note: users should make sure they copy the fields out of an ArraySegment onto their stack
+// then validate that the fields describe valid bounds within the array.  This must be done
+// because assignments to value types are not atomic, and also because one thread reading
+// three fields from an ArraySegment may not see the same ArraySegment from one call to another
+// (ie, users could assign a new value to the old location).
+[Serializable]
+public readonly struct ArraySegment<T> : IList<T>, IReadOnlyList<T>
 {
-	// Note: users should make sure they copy the fields out of an ArraySegment onto their stack
-	// then validate that the fields describe valid bounds within the array.  This must be done
-	// because assignments to value types are not atomic, and also because one thread reading
-	// three fields from an ArraySegment may not see the same ArraySegment from one call to another
-	// (ie, users could assign a new value to the old location).
-	[Serializable]
-	public readonly struct ArraySegment<T> : IList<T>, IReadOnlyList<T>
-	{
-		// Do not replace the array allocation with Array.Empty. We don't want to have the overhead of
-		// instantiating another generic type in addition to ArraySegment<T> for new type parameters.
+	// Do not replace the array allocation with Array.Empty. We don't want to have the overhead of
+	// instantiating another generic type in addition to ArraySegment<T> for new type parameters.
 #pragma warning disable CA1825
-		public static ArraySegment<T> Empty { get; } = new ArraySegment<T>(new T[0]);
+	public static ArraySegment<T> Empty { get; } = new ArraySegment<T>(new T[0]);
 #pragma warning restore CA1825
- 
-		private readonly T[] _array; // Do not rename (binary serialization)
-		private readonly int _offset; // Do not rename (binary serialization)
-		private readonly int _count; // Do not rename (binary serialization)
- 
-		public ArraySegment(T[] array)
+
+	private readonly T[] _array; // Do not rename (binary serialization)
+	private readonly int _offset; // Do not rename (binary serialization)
+	private readonly int _count; // Do not rename (binary serialization)
+
+	public ArraySegment(T[] array)
+	{
+		if (array == null)
+			throw new ArgumentNullException("Argument null for array");
+
+		_array = array;
+		_offset = 0;
+		_count = array.Length;
+	}
+
+	public ArraySegment(T[] array, int offset, int count)
+	{
+		// Validate arguments, check is minimal instructions with reduced branching for inlinable fast-path
+		// Negative values discovered though conversion to high values when converted to unsigned
+		// Failure should be rare and location determination and message is delegated to failure functions
+		if (array == null || (uint)offset > (uint)array.Length || (uint)count > (uint)(array.Length - offset))
+			throw new Exception("Ctor validation failed for array at offset " + offset + " length " + count);
+
+		_array = array;
+		_offset = offset;
+		_count = count;
+	}
+
+	public T[] Array => _array;
+
+	public int Offset => _offset;
+
+	public int Count => _count;
+
+	public T this[int index]
+	{
+		get
 		{
-			if (array == null)
-				throw new ArgumentNullException("Argument null for array");
- 
-			_array = array;
-			_offset = 0;
-			_count = array.Length;
-		}
- 
-		public ArraySegment(T[] array, int offset, int count)
-		{
-			// Validate arguments, check is minimal instructions with reduced branching for inlinable fast-path
-			// Negative values discovered though conversion to high values when converted to unsigned
-			// Failure should be rare and location determination and message is delegated to failure functions
-			if (array == null || (uint)offset > (uint)array.Length || (uint)count > (uint)(array.Length - offset))
-				throw new Exception("Ctor validation failed for array at offset " + offset + " length " + count);
- 
-			_array = array;
-			_offset = offset;
-			_count = count;
-		}
- 
-		public T[] Array => _array;
- 
-		public int Offset => _offset;
- 
-		public int Count => _count;
- 
-		public T this[int index]
-		{
-			get
-			{
-				if ((uint)index >= (uint)_count)
-				{
-					throw new ArgumentOutOfRangeException("Argument out of range for index");
-				}
- 
-				return _array![_offset + index];
-			}
-			set
-			{
-				if ((uint)index >= (uint)_count)
-				{
-					throw new ArgumentOutOfRangeException("Argument out of range for index");
-				}
- 
-				_array![_offset + index] = value;
-			}
-		}
- 
-		public Enumerator GetEnumerator()
-		{
-			ThrowInvalidOperationIfDefault();
-			return new Enumerator(this);
-		}
- 
-		public override int GetHashCode() =>
-			_array is null ? 0 : (_offset * _count * _array.GetHashCode());
- 
-		public void CopyTo(T[] destination) => CopyTo(destination, 0);
- 
-		public void CopyTo(T[] destination, int destinationIndex)
-		{
-			ThrowInvalidOperationIfDefault();
-			ArrayAccess.Copy(_array!, _offset, destination, destinationIndex, _count);
-		}
- 
-		public void CopyTo(ArraySegment<T> destination)
-		{
-			ThrowInvalidOperationIfDefault();
-			destination.ThrowInvalidOperationIfDefault();
- 
-			if (_count > destination._count)
-			{
-				throw new ArgumentException("Destination is too short");
-			}
- 
-			ArrayAccess.Copy(_array!, _offset, destination._array!, destination._offset, _count);
-		}
- 
-		public override bool Equals([NotNullWhen(true)] object obj) =>
-			obj is ArraySegment<T> && Equals((ArraySegment<T>)obj);
- 
-		public bool Equals(ArraySegment<T> obj) =>
-			obj._array == _array && obj._offset == _offset && obj._count == _count;
- 
-		public ArraySegment<T> Slice(int index)
-		{
-			ThrowInvalidOperationIfDefault();
- 
-			if ((uint)index > (uint)_count)
+			if ((uint)index >= (uint)_count)
 			{
 				throw new ArgumentOutOfRangeException("Argument out of range for index");
 			}
- 
-			return new ArraySegment<T>(_array!, _offset + index, _count - index);
+
+			return _array![_offset + index];
 		}
- 
-		public ArraySegment<T> Slice(int index, int count)
+		set
 		{
-			ThrowInvalidOperationIfDefault();
- 
-			if ((uint)index > (uint)_count || (uint)count > (uint)(_count - index))
+			if ((uint)index >= (uint)_count)
 			{
 				throw new ArgumentOutOfRangeException("Argument out of range for index");
 			}
- 
-			return new ArraySegment<T>(_array!, _offset + index, count);
+
+			_array![_offset + index] = value;
 		}
- 
-		public T[] ToArray()
+	}
+
+	public Enumerator GetEnumerator()
+	{
+		ThrowInvalidOperationIfDefault();
+		return new Enumerator(this);
+	}
+
+	public override int GetHashCode() =>
+		_array is null ? 0 : (_offset * _count * _array.GetHashCode());
+
+	public void CopyTo(T[] destination) => CopyTo(destination, 0);
+
+	public void CopyTo(T[] destination, int destinationIndex)
+	{
+		ThrowInvalidOperationIfDefault();
+		ArrayAccess.Copy(_array!, _offset, destination, destinationIndex, _count);
+	}
+
+	public void CopyTo(ArraySegment<T> destination)
+	{
+		ThrowInvalidOperationIfDefault();
+		destination.ThrowInvalidOperationIfDefault();
+
+		if (_count > destination._count)
+		{
+			throw new ArgumentException("Destination is too short");
+		}
+
+		ArrayAccess.Copy(_array!, _offset, destination._array!, destination._offset, _count);
+	}
+
+	public override bool Equals([NotNullWhen(true)] object obj) =>
+		obj is ArraySegment<T> && Equals((ArraySegment<T>)obj);
+
+	public bool Equals(ArraySegment<T> obj) =>
+		obj._array == _array && obj._offset == _offset && obj._count == _count;
+
+	public ArraySegment<T> Slice(int index)
+	{
+		ThrowInvalidOperationIfDefault();
+
+		if ((uint)index > (uint)_count)
+		{
+			throw new ArgumentOutOfRangeException("Argument out of range for index");
+		}
+
+		return new ArraySegment<T>(_array!, _offset + index, _count - index);
+	}
+
+	public ArraySegment<T> Slice(int index, int count)
+	{
+		ThrowInvalidOperationIfDefault();
+
+		if ((uint)index > (uint)_count || (uint)count > (uint)(_count - index))
+		{
+			throw new ArgumentOutOfRangeException("Argument out of range for index");
+		}
+
+		return new ArraySegment<T>(_array!, _offset + index, count);
+	}
+
+	public T[] ToArray()
+	{
+		ThrowInvalidOperationIfDefault();
+
+		if (_count == 0)
+		{
+			return Empty._array!;
+		}
+
+		var array = new T[_count];
+		ArrayAccess.Copy(_array!, _offset, array, 0, _count);
+		return array;
+	}
+
+	public static bool operator ==(ArraySegment<T> a, ArraySegment<T> b) => a.Equals(b);
+
+	public static bool operator !=(ArraySegment<T> a, ArraySegment<T> b) => !(a == b);
+
+	public static implicit operator ArraySegment<T>(T[] array) => array != null ? new ArraySegment<T>(array) : default;
+
+	#region IList<T>
+	T IList<T>.this[int index]
+	{
+		get
 		{
 			ThrowInvalidOperationIfDefault();
- 
-			if (_count == 0)
-			{
-				return Empty._array!;
-			}
- 
-			var array = new T[_count];
-			ArrayAccess.Copy(_array!, _offset, array, 0, _count);
-			return array;
+			if (index < 0 || index >= _count)
+				throw new ArgumentOutOfRangeException("Argument out of range for index");
+
+			return _array![_offset + index];
 		}
- 
-		public static bool operator ==(ArraySegment<T> a, ArraySegment<T> b) => a.Equals(b);
- 
-		public static bool operator !=(ArraySegment<T> a, ArraySegment<T> b) => !(a == b);
- 
-		public static implicit operator ArraySegment<T>(T[] array) => array != null ? new ArraySegment<T>(array) : default;
- 
-		#region IList<T>
-		T IList<T>.this[int index]
+
+		set
+		{
+			ThrowInvalidOperationIfDefault();
+			if (index < 0 || index >= _count)
+				throw new ArgumentOutOfRangeException("Argument out of range for index");
+
+			_array![_offset + index] = value;
+		}
+	}
+
+	int IList<T>.IndexOf(T item)
+	{
+		ThrowInvalidOperationIfDefault();
+
+		int index = ArrayAccess.IndexOf(_array!, item, _offset, _count);
+
+		Debug.Assert(index == -1 ||
+		             (index >= _offset && index < _offset + _count));
+
+		return index >= 0 ? index - _offset : -1;
+	}
+
+	void IList<T>.Insert(int index, T item) => throw new NotSupportedException();
+
+	void IList<T>.RemoveAt(int index) => throw new NotSupportedException();
+	#endregion
+
+	#region IReadOnlyList<T>
+	T IReadOnlyList<T>.this[int index]
+	{
+		get
+		{
+			ThrowInvalidOperationIfDefault();
+			if (index < 0 || index >= _count)
+				throw new ArgumentOutOfRangeException("Argument out of range for index");
+
+			return _array![_offset + index];
+		}
+	}
+	#endregion IReadOnlyList<T>
+
+	#region ICollection<T>
+	bool ICollection<T>.IsReadOnly =>
+		// the indexer setter does not throw an exception although IsReadOnly is true.
+		// This is to match the behavior of arrays.
+		true;
+
+	void ICollection<T>.Add(T item) => throw new NotSupportedException();
+
+	void ICollection<T>.Clear() => throw new NotSupportedException();
+
+	bool ICollection<T>.Contains(T item)
+	{
+		ThrowInvalidOperationIfDefault();
+
+		int index = ArrayAccess.IndexOf(_array!, item, _offset, _count);
+
+		Debug.Assert(index == -1 ||
+		             (index >= _offset && index < _offset + _count));
+
+		return index >= 0;
+	}
+
+	bool ICollection<T>.Remove(T item)
+	{
+		throw new NotSupportedException();
+	}
+	#endregion
+
+	#region IEnumerable<T>
+
+	IEnumerator<T> IEnumerable<T>.GetEnumerator() => GetEnumerator();
+	#endregion
+
+	#region IEnumerable
+
+	IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+	#endregion
+
+	private void ThrowInvalidOperationIfDefault()
+	{
+		if (_array == null)
+		{
+			throw new InvalidOperationException("Invalid operation, array is null");
+		}
+	}
+
+	public struct Enumerator : IEnumerator<T>
+	{
+		private readonly T[] _array;
+		private readonly int _start;
+		private readonly int _end; // cache Offset + Count, since it's a little slow
+		private int _current;
+
+		internal Enumerator(ArraySegment<T> arraySegment)
+		{
+			Debug.Assert(arraySegment.Array != null);
+			Debug.Assert(arraySegment.Offset >= 0);
+			Debug.Assert(arraySegment.Count >= 0);
+			Debug.Assert(arraySegment.Offset + arraySegment.Count <= arraySegment.Array.Length);
+
+			_array = arraySegment.Array;
+			_start = arraySegment.Offset;
+			_end = arraySegment.Offset + arraySegment.Count;
+			_current = arraySegment.Offset - 1;
+		}
+
+		public bool MoveNext()
+		{
+			if (_current < _end)
+			{
+				_current++;
+				return _current < _end;
+			}
+			return false;
+		}
+
+		public T Current
 		{
 			get
 			{
-				ThrowInvalidOperationIfDefault();
-				if (index < 0 || index >= _count)
-					throw new ArgumentOutOfRangeException("Argument out of range for index");
- 
-				return _array![_offset + index];
-			}
- 
-			set
-			{
-				ThrowInvalidOperationIfDefault();
-				if (index < 0 || index >= _count)
-					throw new ArgumentOutOfRangeException("Argument out of range for index");
- 
-				_array![_offset + index] = value;
+				if (_current < _start)
+					throw new InvalidOperationException("Invalid operation, enumeration not started");
+				if (_current >= _end)
+					throw new InvalidOperationException("Invalid operation, enumeration ended");
+				return _array![_current];
 			}
 		}
- 
-		int IList<T>.IndexOf(T item)
+
+		object IEnumerator.Current => Current;
+
+		void IEnumerator.Reset()
 		{
-			ThrowInvalidOperationIfDefault();
- 
-			int index = ArrayAccess.IndexOf(_array!, item, _offset, _count);
- 
-			Debug.Assert(index == -1 ||
-							(index >= _offset && index < _offset + _count));
- 
-			return index >= 0 ? index - _offset : -1;
+			_current = _start - 1;
 		}
- 
-		void IList<T>.Insert(int index, T item) => throw new NotSupportedException();
- 
-		void IList<T>.RemoveAt(int index) => throw new NotSupportedException();
-		#endregion
- 
-		#region IReadOnlyList<T>
-		T IReadOnlyList<T>.this[int index]
+
+		public void Dispose()
 		{
-			get
-			{
-				ThrowInvalidOperationIfDefault();
-				if (index < 0 || index >= _count)
-					throw new ArgumentOutOfRangeException("Argument out of range for index");
- 
-				return _array![_offset + index];
-			}
-		}
-		#endregion IReadOnlyList<T>
- 
-		#region ICollection<T>
-		bool ICollection<T>.IsReadOnly =>
-			// the indexer setter does not throw an exception although IsReadOnly is true.
-			// This is to match the behavior of arrays.
-			true;
- 
-		void ICollection<T>.Add(T item) => throw new NotSupportedException();
- 
-		void ICollection<T>.Clear() => throw new NotSupportedException();
- 
-		bool ICollection<T>.Contains(T item)
-		{
-			ThrowInvalidOperationIfDefault();
- 
-			int index = ArrayAccess.IndexOf(_array!, item, _offset, _count);
- 
-			Debug.Assert(index == -1 ||
-							(index >= _offset && index < _offset + _count));
- 
-			return index >= 0;
-		}
- 
-		bool ICollection<T>.Remove(T item)
-		{
-			throw new NotSupportedException();
-		}
-		#endregion
- 
-		#region IEnumerable<T>
- 
-		IEnumerator<T> IEnumerable<T>.GetEnumerator() => GetEnumerator();
-		#endregion
- 
-		#region IEnumerable
- 
-		IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-		#endregion
- 
-		private void ThrowInvalidOperationIfDefault()
-		{
-			if (_array == null)
-			{
-				throw new InvalidOperationException("Invalid operation, array is null");
-			}
-		}
- 
-		public struct Enumerator : IEnumerator<T>
-		{
-			private readonly T[] _array;
-			private readonly int _start;
-			private readonly int _end; // cache Offset + Count, since it's a little slow
-			private int _current;
- 
-			internal Enumerator(ArraySegment<T> arraySegment)
-			{
-				Debug.Assert(arraySegment.Array != null);
-				Debug.Assert(arraySegment.Offset >= 0);
-				Debug.Assert(arraySegment.Count >= 0);
-				Debug.Assert(arraySegment.Offset + arraySegment.Count <= arraySegment.Array.Length);
- 
-				_array = arraySegment.Array;
-				_start = arraySegment.Offset;
-				_end = arraySegment.Offset + arraySegment.Count;
-				_current = arraySegment.Offset - 1;
-			}
- 
-			public bool MoveNext()
-			{
-				if (_current < _end)
-				{
-					_current++;
-					return _current < _end;
-				}
-				return false;
-			}
- 
-			public T Current
-			{
-				get
-				{
-					if (_current < _start)
-						throw new InvalidOperationException("Invalid operation, enumeration not started");
-					if (_current >= _end)
-						throw new InvalidOperationException("Invalid operation, enumeration ended");
-					return _array![_current];
-				}
-			}
- 
-			object IEnumerator.Current => Current;
- 
-			void IEnumerator.Reset()
-			{
-				_current = _start - 1;
-			}
- 
-			public void Dispose()
-			{
-			}
 		}
 	}
 }

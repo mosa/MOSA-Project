@@ -2,96 +2,95 @@
 
 using Mosa.Compiler.MosaTypeSystem;
 
-namespace Mosa.Compiler.Framework.CompilerStages
+namespace Mosa.Compiler.Framework.CompilerStages;
+
+/// <summary>
+/// Inline Setup Stage
+/// </summary>
+/// <seealso cref="Mosa.Compiler.Framework.BaseCompilerStage" />
+public sealed class InlinedSetupStage : BaseCompilerStage
 {
-	/// <summary>
-	/// Inline Setup Stage
-	/// </summary>
-	/// <seealso cref="Mosa.Compiler.Framework.BaseCompilerStage" />
-	public sealed class InlinedSetupStage : BaseCompilerStage
+	#region Overrides
+
+	protected override void Setup()
 	{
-		#region Overrides
+		var excludeList = Compiler.CompilerSettings.InlineExcludeList;
+		var aggressiveList = Compiler.CompilerSettings.InlineAggressiveList;
 
-		protected override void Setup()
+		if ((excludeList == null || excludeList.Count == 0) && (aggressiveList == null || aggressiveList.Count == 0))
+			return;
+
+		foreach (var type in TypeSystem.AllTypes)
 		{
-			var excludeList = Compiler.CompilerSettings.InlineExcludeList;
-			var aggressiveList = Compiler.CompilerSettings.InlineAggressiveList;
-
-			if ((excludeList == null || excludeList.Count == 0) && (aggressiveList == null || aggressiveList.Count == 0))
-				return;
-
-			foreach (var type in TypeSystem.AllTypes)
+			foreach (var method in type.Methods)
 			{
-				foreach (var method in type.Methods)
+				bool excluded = false;
+
+				var name = InlinedSetupStage.RemoveReturnValue(method.FullName);
+
+				if (excludeList != null)
 				{
-					bool excluded = false;
-
-					var name = InlinedSetupStage.RemoveReturnValue(method.FullName);
-
-					if (excludeList != null)
+					foreach (var exclude in excludeList)
 					{
-						foreach (var exclude in excludeList)
+						var match = false;
+
+						if (name == exclude)
 						{
-							var match = false;
-
-							if (name == exclude)
-							{
-								match = true;
-							}
-
-							if (match)
-							{
-								var methodData = Compiler.GetMethodData(method);
-								methodData.DoNotInline = true;
-
-								excluded = true;
-								break;
-							}
+							match = true;
 						}
 
-						if (excluded)
-							continue;
+						if (match)
+						{
+							var methodData = Compiler.GetMethodData(method);
+							methodData.DoNotInline = true;
+
+							excluded = true;
+							break;
+						}
 					}
 
-					if (aggressiveList != null)
+					if (excluded)
+						continue;
+				}
+
+				if (aggressiveList != null)
+				{
+					foreach (var aggressive in aggressiveList)
 					{
-						foreach (var aggressive in aggressiveList)
+						var match = false;
+
+						if (name == aggressive)
 						{
-							var match = false;
+							match = true;
+						}
 
-							if (name == aggressive)
-							{
-								match = true;
-							}
+						if (match)
+						{
+							var methodData = Compiler.GetMethodData(method);
+							methodData.AggressiveInlineRequested = true;
 
-							if (match)
-							{
-								var methodData = Compiler.GetMethodData(method);
-								methodData.AggressiveInlineRequested = true;
-
-								excluded = true;
-								break;
-							}
+							excluded = true;
+							break;
 						}
 					}
 				}
 			}
 		}
-
-		protected override void Finalization()
-		{
-		}
-
-		public static string RemoveReturnValue(string methodName)
-		{
-			int pos = methodName.LastIndexOf(":");
-
-			if (pos < 0)
-				return string.Empty;
-
-			return methodName.Substring(0, pos);
-		}
-
-		#endregion Overrides
 	}
+
+	protected override void Finalization()
+	{
+	}
+
+	public static string RemoveReturnValue(string methodName)
+	{
+		int pos = methodName.LastIndexOf(":");
+
+		if (pos < 0)
+			return string.Empty;
+
+		return methodName.Substring(0, pos);
+	}
+
+	#endregion Overrides
 }

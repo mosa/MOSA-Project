@@ -4,106 +4,105 @@ using System;
 using System.Drawing;
 using Mosa.DeviceSystem;
 
-namespace Mosa.Demo.SVGAWorld.x86.Components
+namespace Mosa.Demo.SVGAWorld.x86.Components;
+
+public class Button
 {
-	public class Button
+	public uint X, Y, Width, Height;
+
+	public string Text;
+
+	private string LastText;
+
+	public Color BackColor, ForeColor, HoverColor;
+
+	private bool IsHovering, HasCustomWidth;
+
+	private Label Label;
+
+	private Func<object> Action;
+
+	private ISimpleFont LastFont;
+
+	public Button(string text, uint x, uint y, uint height, Color backColor, Color foreColor, Color hoverColor, Func<Object> action, uint width = 0)
 	{
-		public uint X, Y, Width, Height;
+		Text = text;
 
-		public string Text;
+		LastText = Text;
+		LastFont = Display.DefaultFont;
 
-		private string LastText;
+		X = x;
+		Y = y;
 
-		public Color BackColor, ForeColor, HoverColor;
+		HasCustomWidth = width != 0;
+		Width = !HasCustomWidth ? Display.DefaultFont.CalculateWidth(Text) : width;
 
-		private bool IsHovering, HasCustomWidth;
+		Height = height;
 
-		private Label Label;
+		BackColor = backColor;
+		ForeColor = foreColor;
+		HoverColor = hoverColor;
 
-		private Func<object> Action;
+		Label = new Label(Text, Display.DefaultFont, x, y, ForeColor);
 
-		private ISimpleFont LastFont;
+		if (action != null)
+			Action = action;
+	}
 
-		public Button(string text, uint x, uint y, uint height, Color backColor, Color foreColor, Color hoverColor, Func<Object> action, uint width = 0)
+	public void Draw()
+	{
+		// Update width in case the text has changed, and in case we're not using a custom width
+		if (!HasCustomWidth && (Text != LastText || Display.DefaultFont != LastFont))
 		{
-			Text = text;
+			Width = Display.DefaultFont.CalculateWidth(Text);
 
 			LastText = Text;
 			LastFont = Display.DefaultFont;
-
-			X = x;
-			Y = y;
-
-			HasCustomWidth = width != 0;
-			Width = !HasCustomWidth ? Display.DefaultFont.CalculateWidth(Text) : width;
-
-			Height = height;
-
-			BackColor = backColor;
-			ForeColor = foreColor;
-			HoverColor = hoverColor;
-
-			Label = new Label(Text, Display.DefaultFont, x, y, ForeColor);
-
-			if (action != null)
-				Action = action;
 		}
 
-		public void Draw()
+		Display.DrawRectangle(X, Y, Width, Height, BackColor, true);
+		if (IsHovering)
 		{
-			// Update width in case the text has changed, and in case we're not using a custom width
-			if (!HasCustomWidth && (Text != LastText || Display.DefaultFont != LastFont))
-			{
-				Width = Display.DefaultFont.CalculateWidth(Text);
-
-				LastText = Text;
-				LastFont = Display.DefaultFont;
-			}
-
-			Display.DrawRectangle(X, Y, Width, Height, BackColor, true);
-			if (IsHovering)
-			{
-				Display.DrawRectangle(X, Y, Width, Height, HoverColor, false);
-				IsHovering = false;
-			}
-
-			Label.Font = Display.DefaultFont;
-			Label.X = X;
-			Label.Y = Y;
-			Label.Text = Text;
-
-			Label.Draw();
+			Display.DrawRectangle(X, Y, Width, Height, HoverColor, false);
+			IsHovering = false;
 		}
 
-		public void Update()
-		{
-			IsHovering = IsHovered();
+		Label.Font = Display.DefaultFont;
+		Label.X = X;
+		Label.Y = Y;
+		Label.Text = Text;
 
-			if (Action != null && IsClicked(MouseState.Left))
-				Action.Invoke();
-		}
+		Label.Draw();
+	}
 
-		private static bool IsPressedOneTime(MouseState mouseState)
-		{
-			var state = Mouse.State;
+	public void Update()
+	{
+		IsHovering = IsHovered();
 
-			if (state != mouseState)
-				return false;
+		if (Action != null && IsClicked(MouseState.Left))
+			Action.Invoke();
+	}
 
-			while (Mouse.State == state) ;
-			return Mouse.State == MouseState.None;
-		}
+	private static bool IsPressedOneTime(MouseState mouseState)
+	{
+		var state = Mouse.State;
 
-		public bool IsClicked(MouseState state)
-		{
-			return IsHovered() &&
-				IsPressedOneTime(state);
-		}
+		if (state != mouseState)
+			return false;
 
-		public bool IsHovered()
-		{
-			return !WindowManager.IsWindowMoving &&
-				Mouse.IsInBounds(X, Y, Width, Height);
-		}
+		while (Mouse.State == state) ;
+		return Mouse.State == MouseState.None;
+	}
+
+	public bool IsClicked(MouseState state)
+	{
+		return IsHovered() &&
+		       IsPressedOneTime(state);
+	}
+
+	public bool IsHovered()
+	{
+		return !WindowManager.IsWindowMoving &&
+		       Mouse.IsInBounds(X, Y, Width, Height);
 	}
 }

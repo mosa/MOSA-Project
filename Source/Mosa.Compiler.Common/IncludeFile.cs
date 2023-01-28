@@ -2,60 +2,59 @@
 
 using System.IO;
 
-namespace Mosa.Compiler.Common
+namespace Mosa.Compiler.Common;
+
+/// <summary>
+/// Include File
+/// </summary>
+public class IncludeFile
 {
+	public string Filename { get; set; }
+
+	public byte[] Content { get; set; }
+
+	public int Length { get { return Content.Length; } }
+
+	public bool ReadOnly { get; set; } = false;
+	public bool Hidden { get; set; } = false;
+	public bool Archive { get; set; } = true;
+	public bool System { get; set; } = false;
+
+	public string SourceFileName { get; set; }
+
 	/// <summary>
-	/// Include File
+	/// Initializes a new instance of the <see cref="IncludeFile"/> class.
 	/// </summary>
-	public class IncludeFile
+	/// <param name="filename">The filename.</param>
+	public IncludeFile(string filename)
 	{
-		public string Filename { get; set; }
+		SourceFileName = filename;
 
-		public byte[] Content { get; set; }
+		Filename = Path.GetFileName(filename);
+		Content = File.ReadAllBytes(filename);
+	}
 
-		public int Length { get { return Content.Length; } }
+	/// <summary>
+	/// Initializes a new instance of the <see cref="IncludeFile"/> class.
+	/// </summary>
+	/// <param name="filename">The filename.</param>
+	/// <param name="newname">The newname.</param>
+	public IncludeFile(string filename, string newname)
+	{
+		SourceFileName = filename;
+		Filename = newname;
 
-		public bool ReadOnly { get; set; } = false;
-		public bool Hidden { get; set; } = false;
-		public bool Archive { get; set; } = true;
-		public bool System { get; set; } = false;
+		Content = File.ReadAllBytes(filename);
+	}
 
-		public string SourceFileName { get; set; }
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="IncludeFile"/> class.
-		/// </summary>
-		/// <param name="filename">The filename.</param>
-		public IncludeFile(string filename)
-		{
-			SourceFileName = filename;
-
-			Filename = Path.GetFileName(filename);
-			Content = File.ReadAllBytes(filename);
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="IncludeFile"/> class.
-		/// </summary>
-		/// <param name="filename">The filename.</param>
-		/// <param name="newname">The newname.</param>
-		public IncludeFile(string filename, string newname)
-		{
-			SourceFileName = filename;
-			Filename = newname;
-
-			Content = File.ReadAllBytes(filename);
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="IncludeFile"/> class.
-		/// </summary>
-		/// <param name="filename">The filename.</param>
-		/// <param name="content">The content.</param>
-		public IncludeFile(string filename, byte[] content)
-		{
-			Filename = filename;
-			Content = content;
-		}
+	/// <summary>
+	/// Initializes a new instance of the <see cref="IncludeFile"/> class.
+	/// </summary>
+	/// <param name="filename">The filename.</param>
+	/// <param name="content">The content.</param>
+	public IncludeFile(string filename, byte[] content)
+	{
+		Filename = filename;
+		Content = content;
 	}
 }

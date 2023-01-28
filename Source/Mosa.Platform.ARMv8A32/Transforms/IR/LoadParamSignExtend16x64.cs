@@ -3,30 +3,29 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.ARMv8A32.Transforms.IR
+namespace Mosa.Platform.ARMv8A32.Transforms.IR;
+
+/// <summary>
+/// LoadParamSignExtend16x64
+/// </summary>
+public sealed class LoadParamSignExtend16x64 : BaseTransform
 {
-	/// <summary>
-	/// LoadParamSignExtend16x64
-	/// </summary>
-	public sealed class LoadParamSignExtend16x64 : BaseTransform
+	public LoadParamSignExtend16x64() : base(IRInstruction.LoadParamSignExtend16x64, TransformType.Manual | TransformType.Transform)
 	{
-		public LoadParamSignExtend16x64() : base(IRInstruction.LoadParamSignExtend16x64, TransformType.Manual | TransformType.Transform)
-		{
-		}
+	}
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			return true;
-		}
+	public override bool Match(Context context, TransformContext transform)
+	{
+		return true;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			transform.SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
-			transform.SplitLongOperand(context.Operand1, out var lowOffset, out var highOffset);
+	public override void Transform(Context context, TransformContext transform)
+	{
+		transform.SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
+		transform.SplitLongOperand(context.Operand1, out var lowOffset, out var highOffset);
 
-			ARMv8A32TransformHelper.TransformLoad(transform, context, ARMv8A32.LdrS16, resultLow, transform.StackFrame, lowOffset);
+		ARMv8A32TransformHelper.TransformLoad(transform, context, ARMv8A32.LdrS16, resultLow, transform.StackFrame, lowOffset);
 
-			context.AppendInstruction(ARMv8A32.Asr, resultHigh, resultLow, transform.Constant32_31);
-		}
+		context.AppendInstruction(ARMv8A32.Asr, resultHigh, resultLow, transform.Constant32_31);
 	}
 }

@@ -1,35 +1,34 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.FileSystem
+namespace Mosa.FileSystem;
+
+/// <summary>
+/// File system settings base class for formatting purposes.
+/// </summary>
+/// <remarks>
+/// This base class holds properties and data members common to most file systems. A specialized
+/// derived class should be created for specific file systems.
+/// </remarks>
+public class GenericFileSystemSettings
 {
+	#region Data Members
+
 	/// <summary>
-	/// File system settings base class for formatting purposes.
+	/// The volume label.
 	/// </summary>
-	/// <remarks>
-	/// This base class holds properties and data members common to most file systems. A specialized
-	/// derived class should be created for specific file systems.
-	/// </remarks>
-	public class GenericFileSystemSettings
+	public string VolumeLabel { get; set; }
+
+	#endregion Data Members
+
+	#region Construction
+
+	/// <summary>
+	/// Initializes a new instance of <see cref="GenericFileSystemSettings"/>.
+	/// </summary>
+	public GenericFileSystemSettings()
 	{
-		#region Data Members
-
-		/// <summary>
-		/// The volume label.
-		/// </summary>
-		public string VolumeLabel { get; set; }
-
-		#endregion Data Members
-
-		#region Construction
-
-		/// <summary>
-		/// Initializes a new instance of <see cref="GenericFileSystemSettings"/>.
-		/// </summary>
-		public GenericFileSystemSettings()
-		{
-			VolumeLabel = "New Volume";
-		}
-
-		#endregion Construction
+		VolumeLabel = "New Volume";
 	}
+
+	#endregion Construction
 }

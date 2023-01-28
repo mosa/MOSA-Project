@@ -4,40 +4,39 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
+
+/// <summary>
+/// Compare32x32LessOrEqualThanZero
+/// </summary>
+public sealed class Compare32x32LessOrEqualThanZero : BaseTransform
 {
-	/// <summary>
-	/// Compare32x32LessOrEqualThanZero
-	/// </summary>
-	public sealed class Compare32x32LessOrEqualThanZero : BaseTransform
+	public Compare32x32LessOrEqualThanZero() : base(IRInstruction.Compare32x32, TransformType.Auto | TransformType.Optimization)
 	{
-		public Compare32x32LessOrEqualThanZero() : base(IRInstruction.Compare32x32, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+	}
 
-		public override int Priority => 100;
+	public override int Priority => 100;
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (context.ConditionCode != ConditionCode.UnsignedLessOrEqual)
-				return false;
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (context.ConditionCode != ConditionCode.UnsignedLessOrEqual)
+			return false;
 
-			if (!context.Operand1.IsResolvedConstant)
-				return false;
+		if (!context.Operand1.IsResolvedConstant)
+			return false;
 
-			if (context.Operand1.ConstantUnsigned64 != 0)
-				return false;
+		if (context.Operand1.ConstantUnsigned64 != 0)
+			return false;
 
-			return true;
-		}
+		return true;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
 
-			var c1 = transform.CreateConstant(1);
+		var c1 = transform.CreateConstant(1);
 
-			context.SetInstruction(IRInstruction.Move32, result, c1);
-		}
+		context.SetInstruction(IRInstruction.Move32, result, c1);
 	}
 }

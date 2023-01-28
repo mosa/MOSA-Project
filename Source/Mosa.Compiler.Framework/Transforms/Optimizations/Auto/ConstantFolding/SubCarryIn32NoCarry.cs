@@ -4,36 +4,35 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
+
+/// <summary>
+/// SubCarryIn32NoCarry
+/// </summary>
+public sealed class SubCarryIn32NoCarry : BaseTransform
 {
-	/// <summary>
-	/// SubCarryIn32NoCarry
-	/// </summary>
-	public sealed class SubCarryIn32NoCarry : BaseTransform
+	public SubCarryIn32NoCarry() : base(IRInstruction.SubCarryIn32, TransformType.Auto | TransformType.Optimization)
 	{
-		public SubCarryIn32NoCarry() : base(IRInstruction.SubCarryIn32, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+	}
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand3.IsResolvedConstant)
-				return false;
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!context.Operand3.IsResolvedConstant)
+			return false;
 
-			if (context.Operand3.ConstantUnsigned64 != 0)
-				return false;
+		if (context.Operand3.ConstantUnsigned64 != 0)
+			return false;
 
-			return true;
-		}
+		return true;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
 
-			var t1 = context.Operand1;
-			var t2 = context.Operand2;
+		var t1 = context.Operand1;
+		var t2 = context.Operand2;
 
-			context.SetInstruction(IRInstruction.Sub32, result, t1, t2);
-		}
+		context.SetInstruction(IRInstruction.Sub32, result, t1, t2);
 	}
 }

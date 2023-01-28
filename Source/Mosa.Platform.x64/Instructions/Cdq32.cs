@@ -4,25 +4,24 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x64.Instructions
+namespace Mosa.Platform.x64.Instructions;
+
+/// <summary>
+/// Cdq32
+/// </summary>
+/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
+public sealed class Cdq32 : X64Instruction
 {
-	/// <summary>
-	/// Cdq32
-	/// </summary>
-	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
-	public sealed class Cdq32 : X64Instruction
+	internal Cdq32()
+		: base(1, 1)
 	{
-		internal Cdq32()
-			: base(1, 1)
-		{
-		}
+	}
 
-		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
-		{
-			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
-			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
+	public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
+	{
+		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
+		System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
-			opcodeEncoder.Append8Bits(0x99);
-		}
+		opcodeEncoder.Append8Bits(0x99);
 	}
 }

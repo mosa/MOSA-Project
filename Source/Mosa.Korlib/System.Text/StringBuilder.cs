@@ -1,51 +1,50 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace System.Text
+namespace System.Text;
+
+public class StringBuilder
 {
-	public class StringBuilder
+	private char[] Characters = new char[int.MaxValue];
+
+	private int Length = 0;
+
+	public StringBuilder Clear()
 	{
-		private char[] Characters = new char[int.MaxValue];
+		Length = 0;
+		return this;
+	}
 
-		private int Length = 0;
-
-		public StringBuilder Clear()
+	public StringBuilder Append(char c)
+	{
+		if (Length >= Characters.Length)
 		{
-			Length = 0;
-			return this;
+			var chars = new char[Length + 100];
+			for (var i = 0; i < Length; i++)
+				chars[i] = Characters[i];
+			Characters = chars;
 		}
 
-		public StringBuilder Append(char c)
-		{
-			if (Length >= Characters.Length)
-			{
-				var chars = new char[Length + 100];
-				for (var i = 0; i < Length; i++)
-					chars[i] = Characters[i];
-				Characters = chars;
-			}
+		Characters[Length] = c;
+		Length++;
 
-			Characters[Length] = c;
-			Length++;
+		return this;
+	}
 
-			return this;
-		}
+	public StringBuilder AppendLine(string s)
+	{
+		for (var i = 0; i < s.length; i++)
+			Append(s[i]);
 
-		public StringBuilder AppendLine(string s)
-		{
-			for (var i = 0; i < s.length; i++)
-				Append(s[i]);
+		return this;
+	}
 
-			return this;
-		}
+	public char[] ToCharArray()
+	{
+		return Characters;
+	}
 
-		public char[] ToCharArray()
-		{
-			return Characters;
-		}
-
-		public override string ToString()
-		{
-			return new string(Characters, 0, Length);
-		}
+	public override string ToString()
+	{
+		return new string(Characters, 0, Length);
 	}
 }

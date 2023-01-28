@@ -2,11 +2,10 @@
 
 using System.Diagnostics.Contracts;
 
-namespace System
+namespace System;
+
+public interface IFormattable
 {
-	public interface IFormattable
-	{
-		[Pure]
-		String ToString(String format, IFormatProvider formatProvider);
-	}
+	[Pure]
+	String ToString(String format, IFormatProvider formatProvider);
 }

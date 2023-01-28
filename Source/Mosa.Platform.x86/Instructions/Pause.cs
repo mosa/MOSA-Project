@@ -4,26 +4,25 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x86.Instructions
+namespace Mosa.Platform.x86.Instructions;
+
+/// <summary>
+/// Pause
+/// </summary>
+/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
+public sealed class Pause : X86Instruction
 {
-	/// <summary>
-	/// Pause
-	/// </summary>
-	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed class Pause : X86Instruction
+	internal Pause()
+		: base(0, 0)
 	{
-		internal Pause()
-			: base(0, 0)
-		{
-		}
+	}
 
-		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
-		{
-			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
-			System.Diagnostics.Debug.Assert(node.OperandCount == 0);
+	public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
+	{
+		System.Diagnostics.Debug.Assert(node.ResultCount == 0);
+		System.Diagnostics.Debug.Assert(node.OperandCount == 0);
 
-			opcodeEncoder.Append8Bits(0xF3);
-			opcodeEncoder.Append8Bits(0x90);
-		}
+		opcodeEncoder.Append8Bits(0xF3);
+		opcodeEncoder.Append8Bits(0x90);
 	}
 }

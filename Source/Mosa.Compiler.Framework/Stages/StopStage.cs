@@ -1,15 +1,14 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Compiler.Framework.Stages
+namespace Mosa.Compiler.Framework.Stages;
+
+/// <summary>
+///	Stop the method compiler - use in development
+/// </summary>
+public class StopStage : BaseMethodCompilerStage
 {
-	/// <summary>
-	///	Stop the method compiler - use in development
-	/// </summary>
-	public class StopStage : BaseMethodCompilerStage
+	protected override void Run()
 	{
-		protected override void Run()
-		{
-			MethodCompiler.Stop();
-		}
+		MethodCompiler.Stop();
 	}
 }

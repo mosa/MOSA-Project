@@ -2,32 +2,31 @@
 
 using System.Runtime.CompilerServices;
 
-namespace System.Threading
+namespace System.Threading;
+
+public static class Monitor
 {
-	public static class Monitor
+	[MethodImplAttribute(MethodImplOptions.InternalCall)]
+	public static extern void Enter(Object obj);
+
+	public static void Enter(object obj, ref bool lockTaken)
 	{
-		[MethodImplAttribute(MethodImplOptions.InternalCall)]
-		public static extern void Enter(Object obj);
+		if (lockTaken)
+			ThrowLockTakenException();
 
-		public static void Enter(object obj, ref bool lockTaken)
-		{
-			if (lockTaken)
-				ThrowLockTakenException();
+		ReliableEnter(obj, ref lockTaken);
 
-			ReliableEnter(obj, ref lockTaken);
+		//Debug.Assert(lockTaken);
+	}
 
-			//Debug.Assert(lockTaken);
-		}
+	[MethodImplAttribute(MethodImplOptions.InternalCall)]
+	public static extern void Exit(Object obj);
 
-		[MethodImplAttribute(MethodImplOptions.InternalCall)]
-		public static extern void Exit(Object obj);
+	[MethodImpl(MethodImplOptions.InternalCall)]
+	private static extern void ReliableEnter(Object obj, ref bool lockTaken);
 
-		[MethodImpl(MethodImplOptions.InternalCall)]
-		private static extern void ReliableEnter(Object obj, ref bool lockTaken);
-
-		private static void ThrowLockTakenException()
-		{
-			throw new ArgumentException("MustBeFalse", "lockTaken");
-		}
+	private static void ThrowLockTakenException()
+	{
+		throw new ArgumentException("MustBeFalse", "lockTaken");
 	}
 }

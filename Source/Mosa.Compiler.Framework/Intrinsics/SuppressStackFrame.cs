@@ -2,18 +2,17 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x86.Intrinsic
+namespace Mosa.Platform.x86.Intrinsic;
+
+/// <summary>
+/// IntrinsicMethods
+/// </summary>
+static partial class IntrinsicMethods
 {
-	/// <summary>
-	/// IntrinsicMethods
-	/// </summary>
-	static partial class IntrinsicMethods
+	[IntrinsicMethod("Mosa.Runtime.Intrinsic::SuppressStackFrame")]
+	private static void SurpressStackFrame(Context context, MethodCompiler methodCompiler)
 	{
-		[IntrinsicMethod("Mosa.Runtime.Intrinsic::SuppressStackFrame")]
-		private static void SurpressStackFrame(Context context, MethodCompiler methodCompiler)
-		{
-			methodCompiler.IsStackFrameRequired = false;
-			context.Empty();
-		}
+		methodCompiler.IsStackFrameRequired = false;
+		context.Empty();
 	}
 }

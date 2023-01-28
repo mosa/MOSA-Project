@@ -6,47 +6,46 @@ using Mosa.Platform.x86;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.x86.Transforms.Optimizations.Auto.Consolidating
+namespace Mosa.Platform.x86.Transforms.Optimizations.Auto.Consolidating;
+
+/// <summary>
+/// IMul32Mov32ByZero
+/// </summary>
+public sealed class IMul32Mov32ByZero : BaseTransform
 {
-	/// <summary>
-	/// IMul32Mov32ByZero
-	/// </summary>
-	public sealed class IMul32Mov32ByZero : BaseTransform
+	public IMul32Mov32ByZero() : base(X86.IMul32, TransformType.Auto | TransformType.Optimization)
 	{
-		public IMul32Mov32ByZero() : base(X86.IMul32, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+	}
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand2.IsVirtualRegister)
-				return false;
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!context.Operand2.IsVirtualRegister)
+			return false;
 
-			if (context.Operand2.Definitions.Count != 1)
-				return false;
+		if (context.Operand2.Definitions.Count != 1)
+			return false;
 
-			if (context.Operand2.Definitions[0].Instruction != X86.Mov32)
-				return false;
+		if (context.Operand2.Definitions[0].Instruction != X86.Mov32)
+			return false;
 
-			if (!context.Operand2.Definitions[0].Operand1.IsResolvedConstant)
-				return false;
+		if (!context.Operand2.Definitions[0].Operand1.IsResolvedConstant)
+			return false;
 
-			if (context.Operand2.Definitions[0].Operand1.ConstantUnsigned64 != 0)
-				return false;
+		if (context.Operand2.Definitions[0].Operand1.ConstantUnsigned64 != 0)
+			return false;
 
-			if (AreStatusFlagUsed(context))
-				return false;
+		if (AreStatusFlagUsed(context))
+			return false;
 
-			return true;
-		}
+		return true;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
 
-			var c1 = transform.CreateConstant(0);
+		var c1 = transform.CreateConstant(0);
 
-			context.SetInstruction(X86.Mov32, result, c1);
-		}
+		context.SetInstruction(X86.Mov32, result, c1);
 	}
 }

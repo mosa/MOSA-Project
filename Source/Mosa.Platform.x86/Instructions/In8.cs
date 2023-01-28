@@ -4,42 +4,41 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x86.Instructions
+namespace Mosa.Platform.x86.Instructions;
+
+/// <summary>
+/// In8
+/// </summary>
+/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
+public sealed class In8 : X86Instruction
 {
-	/// <summary>
-	/// In8
-	/// </summary>
-	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed class In8 : X86Instruction
+	internal In8()
+		: base(1, 1)
 	{
-		internal In8()
-			: base(1, 1)
+	}
+
+	public override bool IsIOOperation { get { return true; } }
+
+	public override bool HasUnspecifiedSideEffect { get { return true; } }
+
+	public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
+	{
+		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
+		System.Diagnostics.Debug.Assert(node.OperandCount == 1);
+
+		if (node.Operand1.IsCPURegister)
 		{
+			opcodeEncoder.Append8Bits(0xEC);
+			return;
 		}
 
-		public override bool IsIOOperation { get { return true; } }
-
-		public override bool HasUnspecifiedSideEffect { get { return true; } }
-
-		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
+		if (node.Operand1.IsConstant)
 		{
-			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
-			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
-
-			if (node.Operand1.IsCPURegister)
-			{
-				opcodeEncoder.Append8Bits(0xEC);
-				return;
-			}
-
-			if (node.Operand1.IsConstant)
-			{
-				opcodeEncoder.Append8Bits(0xE4);
-				opcodeEncoder.Append8BitImmediate(node.Operand1);
-				return;
-			}
-
-			throw new Compiler.Common.Exceptions.CompilerException("Invalid Opcode");
+			opcodeEncoder.Append8Bits(0xE4);
+			opcodeEncoder.Append8BitImmediate(node.Operand1);
+			return;
 		}
+
+		throw new Compiler.Common.Exceptions.CompilerException("Invalid Opcode");
 	}
 }

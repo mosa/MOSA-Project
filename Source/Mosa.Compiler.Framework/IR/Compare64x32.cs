@@ -4,19 +4,18 @@
 
 using Mosa.Compiler.MosaTypeSystem;
 
-namespace Mosa.Compiler.Framework.IR
-{
-	/// <summary>
-	/// Compare64x32
-	/// </summary>
-	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
-	public sealed class Compare64x32 : BaseIRInstruction
-	{
-		public Compare64x32()
-			: base(2, 1)
-		{
-		}
+namespace Mosa.Compiler.Framework.IR;
 
-		public override BuiltInType ResultType { get { return BuiltInType.Boolean; } }
+/// <summary>
+/// Compare64x32
+/// </summary>
+/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
+public sealed class Compare64x32 : BaseIRInstruction
+{
+	public Compare64x32()
+		: base(2, 1)
+	{
 	}
+
+	public override BuiltInType ResultType { get { return BuiltInType.Boolean; } }
 }

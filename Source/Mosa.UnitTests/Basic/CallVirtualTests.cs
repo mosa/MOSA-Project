@@ -1,41 +1,40 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.UnitTests.Basic
+namespace Mosa.UnitTests.Basic;
+
+public class VirtualBase
 {
-	public class VirtualBase
+	public virtual int Test()
 	{
-		public virtual int Test()
-		{
-			return 5;
-		}
+		return 5;
+	}
+}
+
+public class VirtualDerived : VirtualBase
+{
+	public static VirtualDerived Instance;
+
+	[MosaUnitTest]
+	public static int TestVirtualCall()
+	{
+		Instance = new VirtualDerived();
+		return Instance.Test();
 	}
 
-	public class VirtualDerived : VirtualBase
+	[MosaUnitTest]
+	public static int TestBaseCall()
 	{
-		public static VirtualDerived Instance;
+		Instance = new VirtualDerived();
+		return Instance.TestBase();
+	}
 
-		[MosaUnitTest]
-		public static int TestVirtualCall()
-		{
-			Instance = new VirtualDerived();
-			return Instance.Test();
-		}
+	public override int Test()
+	{
+		return 7;
+	}
 
-		[MosaUnitTest]
-		public static int TestBaseCall()
-		{
-			Instance = new VirtualDerived();
-			return Instance.TestBase();
-		}
-
-		public override int Test()
-		{
-			return 7;
-		}
-
-		public int TestBase()
-		{
-			return Test() + base.Test();
-		}
+	public int TestBase()
+	{
+		return Test() + base.Test();
 	}
 }

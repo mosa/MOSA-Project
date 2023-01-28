@@ -4,69 +4,68 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
+
+/// <summary>
+/// And64Zero
+/// </summary>
+public sealed class And64Zero : BaseTransform
 {
-	/// <summary>
-	/// And64Zero
-	/// </summary>
-	public sealed class And64Zero : BaseTransform
+	public And64Zero() : base(IRInstruction.And64, TransformType.Auto | TransformType.Optimization)
 	{
-		public And64Zero() : base(IRInstruction.And64, TransformType.Auto | TransformType.Optimization)
-		{
-		}
-
-		public override int Priority => 80;
-
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand2.IsResolvedConstant)
-				return false;
-
-			if (context.Operand2.ConstantUnsigned64 != 0)
-				return false;
-
-			return true;
-		}
-
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
-
-			var e1 = transform.CreateConstant(To64(0));
-
-			context.SetInstruction(IRInstruction.Move64, result, e1);
-		}
 	}
 
-	/// <summary>
-	/// And64Zero_v1
-	/// </summary>
-	public sealed class And64Zero_v1 : BaseTransform
+	public override int Priority => 80;
+
+	public override bool Match(Context context, TransformContext transform)
 	{
-		public And64Zero_v1() : base(IRInstruction.And64, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+		if (!context.Operand2.IsResolvedConstant)
+			return false;
 
-		public override int Priority => 80;
+		if (context.Operand2.ConstantUnsigned64 != 0)
+			return false;
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand1.IsResolvedConstant)
-				return false;
+		return true;
+	}
 
-			if (context.Operand1.ConstantUnsigned64 != 0)
-				return false;
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
 
-			return true;
-		}
+		var e1 = transform.CreateConstant(To64(0));
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
+		context.SetInstruction(IRInstruction.Move64, result, e1);
+	}
+}
 
-			var e1 = transform.CreateConstant(To64(0));
+/// <summary>
+/// And64Zero_v1
+/// </summary>
+public sealed class And64Zero_v1 : BaseTransform
+{
+	public And64Zero_v1() : base(IRInstruction.And64, TransformType.Auto | TransformType.Optimization)
+	{
+	}
 
-			context.SetInstruction(IRInstruction.Move64, result, e1);
-		}
+	public override int Priority => 80;
+
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!context.Operand1.IsResolvedConstant)
+			return false;
+
+		if (context.Operand1.ConstantUnsigned64 != 0)
+			return false;
+
+		return true;
+	}
+
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
+
+		var e1 = transform.CreateConstant(To64(0));
+
+		context.SetInstruction(IRInstruction.Move64, result, e1);
 	}
 }

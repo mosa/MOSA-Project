@@ -4,32 +4,31 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
+
+/// <summary>
+/// And64Same
+/// </summary>
+public sealed class And64Same : BaseTransform
 {
-	/// <summary>
-	/// And64Same
-	/// </summary>
-	public sealed class And64Same : BaseTransform
+	public And64Same() : base(IRInstruction.And64, TransformType.Auto | TransformType.Optimization)
 	{
-		public And64Same() : base(IRInstruction.And64, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+	}
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!AreSame(context.Operand1, context.Operand2))
-				return false;
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!AreSame(context.Operand1, context.Operand2))
+			return false;
 
-			return true;
-		}
+		return true;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
 
-			var t1 = context.Operand1;
+		var t1 = context.Operand1;
 
-			context.SetInstruction(IRInstruction.Move64, result, t1);
-		}
+		context.SetInstruction(IRInstruction.Move64, result, t1);
 	}
 }

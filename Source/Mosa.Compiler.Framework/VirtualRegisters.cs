@@ -4,86 +4,85 @@ using System.Collections;
 using System.Collections.Generic;
 using Mosa.Compiler.MosaTypeSystem;
 
-namespace Mosa.Compiler.Framework
+namespace Mosa.Compiler.Framework;
+
+/// <summary>
+/// Virtual Registers
+/// </summary>
+public sealed class VirtualRegisters : IEnumerable<Operand>
 {
+	#region Data Members
+
+	private readonly List<Operand> virtualRegisters = new List<Operand>();
+
+	#endregion Data Members
+
+	#region Properties
+
+	public int Count
+	{ get { return virtualRegisters.Count; } }
+
+	public Operand this[int index]
+	{ get { return virtualRegisters[index]; } }
+
+	#endregion Properties
+
 	/// <summary>
-	/// Virtual Registers
+	/// Initializes a new instance of the <see cref="VirtualRegisters" /> class.
 	/// </summary>
-	public sealed class VirtualRegisters : IEnumerable<Operand>
+	public VirtualRegisters()
 	{
-		#region Data Members
+	}
 
-		private readonly List<Operand> virtualRegisters = new List<Operand>();
+	/// <summary>
+	/// Allocates the virtual register.
+	/// </summary>
+	/// <param name="type">The type.</param>
+	/// <returns></returns>
+	public Operand Allocate(MosaType type)
+	{
+		int index = virtualRegisters.Count + 1;
 
-		#endregion Data Members
+		var virtualRegister = Operand.CreateVirtualRegister(type, index);
 
-		#region Properties
+		virtualRegisters.Add(virtualRegister);
 
-		public int Count
-		{ get { return virtualRegisters.Count; } }
+		return virtualRegister;
+	}
 
-		public Operand this[int index]
-		{ get { return virtualRegisters[index]; } }
+	public void SplitLongOperand(TypeSystem typeSystem, Operand longOperand)
+	{
+		//Debug.Assert(longOperand.IsInteger64 || longOperand.IsParameter);
 
-		#endregion Properties
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="VirtualRegisters" /> class.
-		/// </summary>
-		public VirtualRegisters()
+		if (longOperand.Low == null && longOperand.High == null)
 		{
-		}
+			var low = Operand.CreateLowSplitForLong(longOperand, virtualRegisters.Count + 1, typeSystem);
+			var high = Operand.CreateHighSplitForLong(longOperand, virtualRegisters.Count + 2, typeSystem);
 
-		/// <summary>
-		/// Allocates the virtual register.
-		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <returns></returns>
-		public Operand Allocate(MosaType type)
-		{
-			int index = virtualRegisters.Count + 1;
-
-			var virtualRegister = Operand.CreateVirtualRegister(type, index);
-
-			virtualRegisters.Add(virtualRegister);
-
-			return virtualRegister;
-		}
-
-		public void SplitLongOperand(TypeSystem typeSystem, Operand longOperand)
-		{
-			//Debug.Assert(longOperand.IsInteger64 || longOperand.IsParameter);
-
-			if (longOperand.Low == null && longOperand.High == null)
+			if (longOperand.IsVirtualRegister)
 			{
-				var low = Operand.CreateLowSplitForLong(longOperand, virtualRegisters.Count + 1, typeSystem);
-				var high = Operand.CreateHighSplitForLong(longOperand, virtualRegisters.Count + 2, typeSystem);
-
-				if (longOperand.IsVirtualRegister)
-				{
-					virtualRegisters.Add(low);
-					virtualRegisters.Add(high);
-				}
+				virtualRegisters.Add(low);
+				virtualRegisters.Add(high);
 			}
 		}
+	}
 
-		public IEnumerator<Operand> GetEnumerator()
+	public IEnumerator<Operand> GetEnumerator()
+	{
+		foreach (var virtualRegister in virtualRegisters)
 		{
-			foreach (var virtualRegister in virtualRegisters)
-			{
-				yield return virtualRegister;
-			}
+			yield return virtualRegister;
 		}
+	}
 
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return GetEnumerator();
-		}
+	IEnumerator IEnumerable.GetEnumerator()
+	{
+		return GetEnumerator();
+	}
 
-		internal void ReOrdered(Operand virtualRegister, int index)
-		{
-			virtualRegisters[index - 1] = virtualRegister;
-			virtualRegister.RenameIndex(index);
-		}
+	internal void ReOrdered(Operand virtualRegister, int index)
+	{
+		virtualRegisters[index - 1] = virtualRegister;
+		virtualRegister.RenameIndex(index);
 	}
 }

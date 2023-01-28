@@ -3,211 +3,148 @@
 using System.Diagnostics;
 using Mosa.Compiler.Framework.Trace;
 
-namespace Mosa.Compiler.Framework.Stages
+namespace Mosa.Compiler.Framework.Stages;
+
+/// <summary>
+/// Promotes Temporary Variables to Virtual Registers
+/// </summary>
+public class PromoteTemporaryVariables : BaseMethodCompilerStage
 {
-	/// <summary>
-	/// Promotes Temporary Variables to Virtual Registers
-	/// </summary>
-	public class PromoteTemporaryVariables : BaseMethodCompilerStage
+	private Counter TemporariesPromoted = new Counter("PromoteTemporaryVariables.TemporariesPromoted");
+
+	private TraceLog trace;
+
+	protected override void Initialize()
 	{
-		private Counter TemporariesPromoted = new Counter("PromoteTemporaryVariables.TemporariesPromoted");
+		Register(TemporariesPromoted);
+	}
 
-		private TraceLog trace;
+	protected override void Setup()
+	{
+		trace = CreateTraceLog(5);
+	}
 
-		protected override void Initialize()
+	protected override void Run()
+	{
+		foreach (var operand in MethodCompiler.LocalStack)
 		{
-			Register(TemporariesPromoted);
-		}
+			Debug.Assert(operand.IsStackLocal);
 
-		protected override void Setup()
-		{
-			trace = CreateTraceLog(5);
-		}
-
-		protected override void Run()
-		{
-			foreach (var operand in MethodCompiler.LocalStack)
+			if (CanPromote(operand))
 			{
-				Debug.Assert(operand.IsStackLocal);
-
-				if (CanPromote(operand))
-				{
-					Promote(operand);
-				}
+				Promote(operand);
 			}
 		}
+	}
 
-		protected bool CanPromote(Operand operand)
+	protected bool CanPromote(Operand operand)
+	{
+		trace?.Log($"Check: {operand}");
+
+		if (operand.Uses.Count == 0)
 		{
-			trace?.Log($"Check: {operand}");
-
-			if (operand.Uses.Count == 0)
-			{
-				trace?.Log($"No uses: {operand}");
-				return false;
-			}
-
-			if (!MosaTypeLayout.CanFitInRegister(operand))
-			{
-				trace?.Log($"incompatible type: {operand}");
-				return false;
-			}
-
-			foreach (var node in operand.Uses)
-			{
-				if (node.Instruction == IRInstruction.AddressOf)
-				{
-					Debug.Assert(node.Operand1 == operand);
-
-					foreach (var node2 in node.Result.Uses)
-					{
-						if (!Check(node2))
-						{
-							return false;
-						}
-					}
-					continue;
-				}
-				else if (node.Instruction == IRInstruction.Load32 || node.Instruction == IRInstruction.Load64)
-				{
-					Debug.Assert(node.Operand2 == operand);
-					continue;
-				}
-				else if (node.Instruction == IRInstruction.Store32 || node.Instruction == IRInstruction.Store64)
-				{
-					Debug.Assert(node.Operand2 == operand);
-					continue;
-				}
-
-				trace?.Log($"A-No: {node}");
-				return false;
-			}
-
-			return true;
+			trace?.Log($"No uses: {operand}");
+			return false;
 		}
 
-		private bool Check(InstructionNode node)
+		if (!MosaTypeLayout.CanFitInRegister(operand))
 		{
-			if (node.Instruction == IRInstruction.Store32 || node.Instruction == IRInstruction.Store64)
-			{
-				// check offset
-				return true;
-			}
-			else if (node.Instruction == IRInstruction.MemorySet)
-			{
-				if (node.Operand3.ConstantUnsigned64 == 4)
-				{
-					return true;
-				}
-				else if (node.Operand3.ConstantUnsigned64 == 8)
-				{
-					return true;
-				}
+			trace?.Log($"incompatible type: {operand}");
+			return false;
+		}
 
-				trace?.Log($"B-No: {node}");
-				return false;
-			}
-			else if (node.Instruction == IRInstruction.Move32 || node.Instruction == IRInstruction.Move64)
+		foreach (var node in operand.Uses)
+		{
+			if (node.Instruction == IRInstruction.AddressOf)
 			{
+				Debug.Assert(node.Operand1 == operand);
+
 				foreach (var node2 in node.Result.Uses)
 				{
 					if (!Check(node2))
 					{
-						trace?.Log($"C-No (parent): {node}");
-						trace?.Log($"C-No: {node2}");
 						return false;
 					}
 				}
-
-				return true;
+				continue;
 			}
 			else if (node.Instruction == IRInstruction.Load32 || node.Instruction == IRInstruction.Load64)
 			{
-				// check offset
-				return true;
+				Debug.Assert(node.Operand2 == operand);
+				continue;
+			}
+			else if (node.Instruction == IRInstruction.Store32 || node.Instruction == IRInstruction.Store64)
+			{
+				Debug.Assert(node.Operand2 == operand);
+				continue;
 			}
 
-			trace?.Log($"D-No: {node}");
+			trace?.Log($"A-No: {node}");
 			return false;
 		}
 
-		protected void Promote(Operand operand)
+		return true;
+	}
+
+	private bool Check(InstructionNode node)
+	{
+		if (node.Instruction == IRInstruction.Store32 || node.Instruction == IRInstruction.Store64)
 		{
-			var virtualRegister = AllocateVirtualRegister(operand);
-			TemporariesPromoted.Increment();
-
-			trace?.Log($"VR: {virtualRegister}");
-
-			foreach (var node in operand.Uses.ToArray())
+			// check offset
+			return true;
+		}
+		else if (node.Instruction == IRInstruction.MemorySet)
+		{
+			if (node.Operand3.ConstantUnsigned64 == 4)
 			{
-				if (node.Instruction == IRInstruction.AddressOf)
+				return true;
+			}
+			else if (node.Operand3.ConstantUnsigned64 == 8)
+			{
+				return true;
+			}
+
+			trace?.Log($"B-No: {node}");
+			return false;
+		}
+		else if (node.Instruction == IRInstruction.Move32 || node.Instruction == IRInstruction.Move64)
+		{
+			foreach (var node2 in node.Result.Uses)
+			{
+				if (!Check(node2))
 				{
-					foreach (var node2 in node.Result.Uses.ToArray())
-					{
-						Promote(node2, virtualRegister);
-					}
-				}
-				else if (node.Instruction == IRInstruction.Load32)
-				{
-					trace?.Log($"BEFORE:\t{node}");
-					node.SetInstruction(IRInstruction.Move32, node.Result, virtualRegister);
-					trace?.Log($"AFTER: \t{node}");
-				}
-				else if (node.Instruction == IRInstruction.Load64)
-				{
-					trace?.Log($"BEFORE:\t{node}");
-					node.SetInstruction(IRInstruction.Move64, node.Result, virtualRegister);
-					trace?.Log($"AFTER: \t{node}");
-				}
-				else if (node.Instruction == IRInstruction.Store32)
-				{
-					trace?.Log($"BEFORE:\t{node}");
-					node.SetInstruction(IRInstruction.Move32, virtualRegister, node.Operand3);
-					trace?.Log($"AFTER: \t{node}");
-				}
-				else if (node.Instruction == IRInstruction.Store64)
-				{
-					trace?.Log($"BEFORE:\t{node}");
-					node.SetInstruction(IRInstruction.Move64, virtualRegister, node.Operand3);
-					trace?.Log($"AFTER: \t{node}");
+					trace?.Log($"C-No (parent): {node}");
+					trace?.Log($"C-No: {node2}");
+					return false;
 				}
 			}
+
+			return true;
+		}
+		else if (node.Instruction == IRInstruction.Load32 || node.Instruction == IRInstruction.Load64)
+		{
+			// check offset
+			return true;
 		}
 
-		private void Promote(InstructionNode node, Operand virtualRegister)
+		trace?.Log($"D-No: {node}");
+		return false;
+	}
+
+	protected void Promote(Operand operand)
+	{
+		var virtualRegister = AllocateVirtualRegister(operand);
+		TemporariesPromoted.Increment();
+
+		trace?.Log($"VR: {virtualRegister}");
+
+		foreach (var node in operand.Uses.ToArray())
 		{
-			if (node.Instruction == IRInstruction.Move32 || node.Instruction == IRInstruction.Move64)
+			if (node.Instruction == IRInstruction.AddressOf)
 			{
 				foreach (var node2 in node.Result.Uses.ToArray())
 				{
 					Promote(node2, virtualRegister);
-				}
-			}
-			else if (node.Instruction == IRInstruction.Store32)
-			{
-				trace?.Log($"BEFORE:\t{node}");
-				node.SetInstruction(IRInstruction.Move32, virtualRegister, node.Operand3);
-				trace?.Log($"AFTER: \t{node}");
-			}
-			else if (node.Instruction == IRInstruction.Store64)
-			{
-				trace?.Log($"BEFORE:\t{node}");
-				node.SetInstruction(IRInstruction.Move64, virtualRegister, node.Operand3);
-				trace?.Log($"AFTER: \t{node}");
-			}
-			else if (node.Instruction == IRInstruction.MemorySet)
-			{
-				if (node.Operand3.ConstantUnsigned64 == 4)
-				{
-					trace?.Log($"BEFORE:\t{node}");
-					node.SetInstruction(IRInstruction.Move32, virtualRegister, node.Operand2);
-					trace?.Log($"AFTER: \t{node}");
-				}
-				else if (node.Operand3.ConstantUnsigned64 == 8)
-				{
-					trace?.Log($"BEFORE:\t{node}");
-					node.SetInstruction(IRInstruction.Move64, virtualRegister, node.Operand2);
-					trace?.Log($"AFTER: \t{node}");
 				}
 			}
 			else if (node.Instruction == IRInstruction.Load32)
@@ -222,6 +159,68 @@ namespace Mosa.Compiler.Framework.Stages
 				node.SetInstruction(IRInstruction.Move64, node.Result, virtualRegister);
 				trace?.Log($"AFTER: \t{node}");
 			}
+			else if (node.Instruction == IRInstruction.Store32)
+			{
+				trace?.Log($"BEFORE:\t{node}");
+				node.SetInstruction(IRInstruction.Move32, virtualRegister, node.Operand3);
+				trace?.Log($"AFTER: \t{node}");
+			}
+			else if (node.Instruction == IRInstruction.Store64)
+			{
+				trace?.Log($"BEFORE:\t{node}");
+				node.SetInstruction(IRInstruction.Move64, virtualRegister, node.Operand3);
+				trace?.Log($"AFTER: \t{node}");
+			}
+		}
+	}
+
+	private void Promote(InstructionNode node, Operand virtualRegister)
+	{
+		if (node.Instruction == IRInstruction.Move32 || node.Instruction == IRInstruction.Move64)
+		{
+			foreach (var node2 in node.Result.Uses.ToArray())
+			{
+				Promote(node2, virtualRegister);
+			}
+		}
+		else if (node.Instruction == IRInstruction.Store32)
+		{
+			trace?.Log($"BEFORE:\t{node}");
+			node.SetInstruction(IRInstruction.Move32, virtualRegister, node.Operand3);
+			trace?.Log($"AFTER: \t{node}");
+		}
+		else if (node.Instruction == IRInstruction.Store64)
+		{
+			trace?.Log($"BEFORE:\t{node}");
+			node.SetInstruction(IRInstruction.Move64, virtualRegister, node.Operand3);
+			trace?.Log($"AFTER: \t{node}");
+		}
+		else if (node.Instruction == IRInstruction.MemorySet)
+		{
+			if (node.Operand3.ConstantUnsigned64 == 4)
+			{
+				trace?.Log($"BEFORE:\t{node}");
+				node.SetInstruction(IRInstruction.Move32, virtualRegister, node.Operand2);
+				trace?.Log($"AFTER: \t{node}");
+			}
+			else if (node.Operand3.ConstantUnsigned64 == 8)
+			{
+				trace?.Log($"BEFORE:\t{node}");
+				node.SetInstruction(IRInstruction.Move64, virtualRegister, node.Operand2);
+				trace?.Log($"AFTER: \t{node}");
+			}
+		}
+		else if (node.Instruction == IRInstruction.Load32)
+		{
+			trace?.Log($"BEFORE:\t{node}");
+			node.SetInstruction(IRInstruction.Move32, node.Result, virtualRegister);
+			trace?.Log($"AFTER: \t{node}");
+		}
+		else if (node.Instruction == IRInstruction.Load64)
+		{
+			trace?.Log($"BEFORE:\t{node}");
+			node.SetInstruction(IRInstruction.Move64, node.Result, virtualRegister);
+			trace?.Log($"AFTER: \t{node}");
 		}
 	}
 }

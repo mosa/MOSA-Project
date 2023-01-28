@@ -1,14 +1,13 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Utility.BootImage
+namespace Mosa.Utility.BootImage;
+
+public enum ImageFormat
 {
-	public enum ImageFormat
-	{
-		NotSpecified,
-		BIN, // Pure Kernel image. Used by Qemu Kernel Direct Boot.
-		IMG,
-		VHD,
-		VDI,
-		VMDK
-	};
-}
+	NotSpecified,
+	BIN, // Pure Kernel image. Used by Qemu Kernel Direct Boot.
+	IMG,
+	VHD,
+	VDI,
+	VMDK
+};

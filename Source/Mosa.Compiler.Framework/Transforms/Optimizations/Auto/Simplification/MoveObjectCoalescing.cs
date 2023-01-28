@@ -4,38 +4,37 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
+
+/// <summary>
+/// MoveObjectCoalescing
+/// </summary>
+public sealed class MoveObjectCoalescing : BaseTransform
 {
-	/// <summary>
-	/// MoveObjectCoalescing
-	/// </summary>
-	public sealed class MoveObjectCoalescing : BaseTransform
+	public MoveObjectCoalescing() : base(IRInstruction.MoveObject, TransformType.Auto | TransformType.Optimization)
 	{
-		public MoveObjectCoalescing() : base(IRInstruction.MoveObject, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+	}
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand1.IsVirtualRegister)
-				return false;
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!context.Operand1.IsVirtualRegister)
+			return false;
 
-			if (context.Operand1.Definitions.Count != 1)
-				return false;
+		if (context.Operand1.Definitions.Count != 1)
+			return false;
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.MoveObject)
-				return false;
+		if (context.Operand1.Definitions[0].Instruction != IRInstruction.MoveObject)
+			return false;
 
-			return true;
-		}
+		return true;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
 
-			var t1 = context.Operand1.Definitions[0].Operand1;
+		var t1 = context.Operand1.Definitions[0].Operand1;
 
-			context.SetInstruction(IRInstruction.MoveObject, result, t1);
-		}
+		context.SetInstruction(IRInstruction.MoveObject, result, t1);
 	}
 }

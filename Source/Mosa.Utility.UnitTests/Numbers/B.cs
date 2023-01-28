@@ -2,17 +2,16 @@
 
 using System.Collections.Generic;
 
-namespace Mosa.Utility.UnitTests.Numbers
+namespace Mosa.Utility.UnitTests.Numbers;
+
+public static class B
 {
-	public static class B
+	public static IEnumerable<bool> Series
 	{
-		public static IEnumerable<bool> Series
+		get
 		{
-			get
-			{
-				yield return true;
-				yield return false;
-			}
+			yield return true;
+			yield return false;
 		}
 	}
 }

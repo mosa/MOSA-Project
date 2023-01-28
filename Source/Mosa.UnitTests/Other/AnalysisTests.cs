@@ -1,37 +1,36 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.UnitTests.Other
+namespace Mosa.UnitTests.Other;
+
+public static class AnalysisTests
+
 {
-	public static class AnalysisTests
+	private struct Struct
+	{ public int X { get; set; } }
 
+	[MosaUnitTest]
+	public static int Slow()
 	{
-		private struct Struct
-		{ public int X { get; set; } }
+		Struct a = new Struct();
 
-		[MosaUnitTest]
-		public static int Slow()
+		for (int i = 0; i < 10000; i++)
 		{
-			Struct a = new Struct();
-
-			for (int i = 0; i < 10000; i++)
-			{
-				a.X += 1;
-			}
-
-			return a.X;
+			a.X += 1;
 		}
 
-		[MosaUnitTest]
-		public static int Fast()
+		return a.X;
+	}
+
+	[MosaUnitTest]
+	public static int Fast()
+	{
+		Struct a = new Struct();
+
+		for (int i = 0; i < 10000; i++)
 		{
-			Struct a = new Struct();
-
-			for (int i = 0; i < 10000; i++)
-			{
-				a.X = a.X + 1;
-			}
-
-			return a.X;
+			a.X = a.X + 1;
 		}
+
+		return a.X;
 	}
 }

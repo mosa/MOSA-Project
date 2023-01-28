@@ -1,223 +1,222 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.FileSystem.VFS
+namespace Mosa.FileSystem.VFS;
+
+/// <summary>
+/// Implements path resolution functionality for the Mosa.VFS.VirtualFileSystem.
+/// </summary>
+internal class PathResolver
 {
+	#region Constants
+
+	// FIXME: Make this configurable - do we have some sort of configuration provider?
 	/// <summary>
-	/// Implements path resolution functionality for the Mosa.VFS.VirtualFileSystem.
+	/// Controls the maximum number of symbolic links to follow while resolving a directory path.
 	/// </summary>
-	internal class PathResolver
+	private static readonly int MAX_SYMLINKS_TO_FOLLOW = 8;
+
+	// <summary>
+	// Array to split paths properly for the local system.
+	// </summary>
+	//private static readonly char[] splitChars = new char[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar };
+
+	#endregion Constants
+
+	#region Data Members
+
+	/// <summary>
+	/// Reference to the root directory of the system.
+	/// </summary>
+	private readonly DirectoryEntry rootDirectory;
+
+	/// <summary>
+	/// Reference to the current directory of the system.
+	/// </summary>
+	private DirectoryEntry currentDirectory;
+
+	/// <summary>
+	/// Remaining lookup depth for symbolic links.
+	/// </summary>
+	private int depth;
+
+	#endregion Data Members
+
+	#region Construction
+
+	private PathResolver(DirectoryEntry rootDirectory, DirectoryEntry currentDirectory)
 	{
-		#region Constants
+		this.rootDirectory = rootDirectory;
+		this.currentDirectory = currentDirectory;
+		depth = PathResolver.MAX_SYMLINKS_TO_FOLLOW;
+	}
 
-		// FIXME: Make this configurable - do we have some sort of configuration provider?
-		/// <summary>
-		/// Controls the maximum number of symbolic links to follow while resolving a directory path.
-		/// </summary>
-		private static readonly int MAX_SYMLINKS_TO_FOLLOW = 8;
+	#endregion Construction
 
-		// <summary>
-		// Array to split paths properly for the local system.
-		// </summary>
-		//private static readonly char[] splitChars = new char[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar };
+	#region Static methods
 
-		#endregion Constants
+	/// <summary>
+	/// Performs a standard path lookup.
+	/// </summary>
+	/// <param name="rootDirectory">The root directory.</param>
+	/// <param name="path">The path to resolve.</param>
+	/// <returns>
+	/// The directory entry of the resolved path.
+	/// </returns>
+	/// <remarks>
+	/// This call my result in other exceptions not specified in the above list. Other exceptions can be thrown by IVfsNode implementations, which are visited during the traversal
+	/// process. For example a network file system node may throw an exception, if the server is unreachable.
+	/// </remarks>
+	public static DirectoryEntry Resolve(DirectoryEntry rootDirectory, ref string path)
+	{
+		// FIXME: Remove the root argument. The file system root should be unique for a process as part of a security model similar to jails, e.g. give apps from
+		// untrusted sources their private file system regions.
 
-		#region Data Members
+		// FIXME: Get the root from the thread execution block
+		DirectoryEntry current = rootDirectory;
+		PathResolver resolver = new PathResolver(rootDirectory, current);
+		return resolver.Resolve(ref path, PathResolutionFlags.None);
+	}
 
-		/// <summary>
-		/// Reference to the root directory of the system.
-		/// </summary>
-		private readonly DirectoryEntry rootDirectory;
+	/// <summary>
+	/// Performs a path lookup obeying to the passed flags.
+	/// </summary>
+	/// <param name="rootDirectory">The root directory.</param>
+	/// <param name="path">The path to resolve.</param>
+	/// <param name="flags">Controls aspects of the path lookup process.</param>
+	/// <returns>
+	/// The directory entry of the resolved path.
+	/// </returns>
+	/// <remarks>
+	/// This call my result in other exceptions not specified in the above list. Other exceptions can be thrown by IVfsNode implementations, which are visited during the traversal
+	/// process. For example a network file system node may throw an exception, if the server is unreachable.
+	/// </remarks>
+	public static DirectoryEntry Resolve(DirectoryEntry rootDirectory, ref string path, PathResolutionFlags flags)
+	{
+		// FIXME: Get the root from the thread execution block
+		DirectoryEntry current = rootDirectory;
+		PathResolver resolver = new PathResolver(rootDirectory, current);
+		return resolver.Resolve(ref path, flags);
+	}
 
-		/// <summary>
-		/// Reference to the current directory of the system.
-		/// </summary>
-		private DirectoryEntry currentDirectory;
+	#endregion Static methods
 
-		/// <summary>
-		/// Remaining lookup depth for symbolic links.
-		/// </summary>
-		private int depth;
+	#region Methods
 
-		#endregion Data Members
+	/// <summary>
+	/// Performs an iterative lookup of the given path starting from the root and obeying to the specified flags.
+	/// </summary>
+	/// <param name="path">The path to lookup. This can be a relative or absolute path. Path.DirectorySeparatorChar or Path.AltDirectorySeparatorChar are valid delimiters.</param>
+	/// <param name="flags">The lookup flags, which control the lookup process.</param>
+	/// <returns>
+	/// The directory entry of the resolved path.
+	/// </returns>
+	/// <remarks>
+	/// This call may result in other exceptions not specified in the above list. Other exceptions can be thrown by IVfsNode implementations, which are visited during the traversal
+	/// process. For example a network file system node may throw an exception, if the server is unreachable.
+	/// </remarks>
+	private DirectoryEntry Resolve(ref string path, PathResolutionFlags flags)
+	{
+		// DirectoryNode entry found by stepping through the path
+		DirectoryEntry entry = null;
 
-		#region Construction
+		// Split the given path to its components
+		PathSplitter dirs = new PathSplitter(path);
 
-		private PathResolver(DirectoryEntry rootDirectory, DirectoryEntry currentDirectory)
+		// Determine the number of path components
+		int max = dirs.Length;
+
+		// Current path component
+		string item;
+
+		// Loop index
+		int index = 0;
+
+		// Perform an access check on the root directory
+		AccessCheck.Perform(currentDirectory, AccessMode.Traverse, AccessCheckFlags.None);
+
+		// Do not resolve the last name, if we want the parent directory.
+		if (PathResolutionFlags.RetrieveParent == (flags & PathResolutionFlags.RetrieveParent))
 		{
-			this.rootDirectory = rootDirectory;
-			this.currentDirectory = currentDirectory;
-			depth = PathResolver.MAX_SYMLINKS_TO_FOLLOW;
+			path = dirs[dirs.Length - 1];
+			max--;
 		}
 
-		#endregion Construction
-
-		#region Static methods
-
-		/// <summary>
-		/// Performs a standard path lookup.
-		/// </summary>
-		/// <param name="rootDirectory">The root directory.</param>
-		/// <param name="path">The path to resolve.</param>
-		/// <returns>
-		/// The directory entry of the resolved path.
-		/// </returns>
-		/// <remarks>
-		/// This call my result in other exceptions not specified in the above list. Other exceptions can be thrown by IVfsNode implementations, which are visited during the traversal
-		/// process. For example a network file system node may throw an exception, if the server is unreachable.
-		/// </remarks>
-		public static DirectoryEntry Resolve(DirectoryEntry rootDirectory, ref string path)
+		// Check if this is an absolute path?
+		if (dirs[0].Length == 0)
 		{
-			// FIXME: Remove the root argument. The file system root should be unique for a process as part of a security model similar to jails, e.g. give apps from
-			// untrusted sources their private file system regions.
-
-			// FIXME: Get the root from the thread execution block
-			DirectoryEntry current = rootDirectory;
-			PathResolver resolver = new PathResolver(rootDirectory, current);
-			return resolver.Resolve(ref path, PathResolutionFlags.None);
+			// Yes, replace the current directory
+			currentDirectory = rootDirectory;
+			index++;
 		}
 
-		/// <summary>
-		/// Performs a path lookup obeying to the passed flags.
-		/// </summary>
-		/// <param name="rootDirectory">The root directory.</param>
-		/// <param name="path">The path to resolve.</param>
-		/// <param name="flags">Controls aspects of the path lookup process.</param>
-		/// <returns>
-		/// The directory entry of the resolved path.
-		/// </returns>
-		/// <remarks>
-		/// This call my result in other exceptions not specified in the above list. Other exceptions can be thrown by IVfsNode implementations, which are visited during the traversal
-		/// process. For example a network file system node may throw an exception, if the server is unreachable.
-		/// </remarks>
-		public static DirectoryEntry Resolve(DirectoryEntry rootDirectory, ref string path, PathResolutionFlags flags)
+		// Iterate over the remaining path components
+		while ((currentDirectory != null) && (index < max))
 		{
-			// FIXME: Get the root from the thread execution block
-			DirectoryEntry current = rootDirectory;
-			PathResolver resolver = new PathResolver(rootDirectory, current);
-			return resolver.Resolve(ref path, flags);
-		}
-
-		#endregion Static methods
-
-		#region Methods
-
-		/// <summary>
-		/// Performs an iterative lookup of the given path starting from the root and obeying to the specified flags.
-		/// </summary>
-		/// <param name="path">The path to lookup. This can be a relative or absolute path. Path.DirectorySeparatorChar or Path.AltDirectorySeparatorChar are valid delimiters.</param>
-		/// <param name="flags">The lookup flags, which control the lookup process.</param>
-		/// <returns>
-		/// The directory entry of the resolved path.
-		/// </returns>
-		/// <remarks>
-		/// This call may result in other exceptions not specified in the above list. Other exceptions can be thrown by IVfsNode implementations, which are visited during the traversal
-		/// process. For example a network file system node may throw an exception, if the server is unreachable.
-		/// </remarks>
-		private DirectoryEntry Resolve(ref string path, PathResolutionFlags flags)
-		{
-			// DirectoryNode entry found by stepping through the path
-			DirectoryEntry entry = null;
-
-			// Split the given path to its components
-			PathSplitter dirs = new PathSplitter(path);
-
-			// Determine the number of path components
-			int max = dirs.Length;
-
-			// Current path component
-			string item;
-
-			// Loop index
-			int index = 0;
-
-			// Perform an access check on the root directory
-			AccessCheck.Perform(currentDirectory, AccessMode.Traverse, AccessCheckFlags.None);
-
-			// Do not resolve the last name, if we want the parent directory.
-			if (PathResolutionFlags.RetrieveParent == (flags & PathResolutionFlags.RetrieveParent))
+			item = dirs[index];
+			entry = null;
+			if (currentDirectory.Node.NodeType == VfsNodeType.SymbolicLink)
 			{
-				path = dirs[dirs.Length - 1];
-				max--;
-			}
-
-			// Check if this is an absolute path?
-			if (dirs[0].Length == 0)
-			{
-				// Yes, replace the current directory
-				currentDirectory = rootDirectory;
-				index++;
-			}
-
-			// Iterate over the remaining path components
-			while ((currentDirectory != null) && (index < max))
-			{
-				item = dirs[index];
-				entry = null;
-				if (currentDirectory.Node.NodeType == VfsNodeType.SymbolicLink)
+				SymbolicLinkNode link = (SymbolicLinkNode)currentDirectory.Node;
+				if (0 != depth--)
 				{
-					SymbolicLinkNode link = (SymbolicLinkNode)currentDirectory.Node;
-					if (0 != depth--)
-					{
-						// The symlink stores a relative path, use it for a current relative lookup.
-						string target = link.Target;
+					// The symlink stores a relative path, use it for a current relative lookup.
+					string target = link.Target;
 
-						// Build a new flags set for symlink lookups, as we do not want all of them.
-						PathResolutionFlags symflags = (flags & PathResolutionFlags.SymLinkLookupSafe);
-						entry = Resolve(ref target, symflags);
-					}
-					else
-					{
-						if (PathResolutionFlags.DoNotThrowNotFoundException != (PathResolutionFlags.DoNotThrowNotFoundException & flags))
-						{
-							// FIXME: Provide a MUI resource string for the exception
-#if VFS_EXCEPTIONS
-							throw new PathTooLongException();
-#endif // #if !VFS_EXCEPTIONS
-						}
-					}
+					// Build a new flags set for symlink lookups, as we do not want all of them.
+					PathResolutionFlags symflags = (flags & PathResolutionFlags.SymLinkLookupSafe);
+					entry = Resolve(ref target, symflags);
 				}
 				else
 				{
-					// Pass the lookup to the DirectoryEntry (and ultimately to the inode itself.)
-					entry = currentDirectory.Lookup(item);
-
-					// If lookup in the directory entry failed, ask the real INode to perform the lookup.
-					if (entry == null)
+					if (PathResolutionFlags.DoNotThrowNotFoundException != (PathResolutionFlags.DoNotThrowNotFoundException & flags))
 					{
-						IVfsNode node = currentDirectory.Node.Lookup(item);
-						if (node != null)
-						{
-							entry = DirectoryEntry.Allocate(currentDirectory, item, node);
-						}
+						// FIXME: Provide a MUI resource string for the exception
+#if VFS_EXCEPTIONS
+							throw new PathTooLongException();
+#endif // #if !VFS_EXCEPTIONS
 					}
 				}
+			}
+			else
+			{
+				// Pass the lookup to the DirectoryEntry (and ultimately to the inode itself.)
+				entry = currentDirectory.Lookup(item);
 
-				// Increment the path component index
-				index++;
-
-				// Check if we have a new path component?
-				if ((entry == null) && (PathResolutionFlags.DoNotThrowNotFoundException != (PathResolutionFlags.DoNotThrowNotFoundException & flags)))
+				// If lookup in the directory entry failed, ask the real INode to perform the lookup.
+				if (entry == null)
 				{
-					// FIXME: Move exception messages to MUI resources
+					IVfsNode node = currentDirectory.Node.Lookup(item);
+					if (node != null)
+					{
+						entry = DirectoryEntry.Allocate(currentDirectory, item, node);
+					}
+				}
+			}
+
+			// Increment the path component index
+			index++;
+
+			// Check if we have a new path component?
+			if ((entry == null) && (PathResolutionFlags.DoNotThrowNotFoundException != (PathResolutionFlags.DoNotThrowNotFoundException & flags)))
+			{
+				// FIXME: Move exception messages to MUI resources
 #if VFS_EXCEPTIONS
 					if (index == max)
 						throw new FileNotFoundException(@"Failed to resolve the path.", path);
 					else
 						throw new DirectoryNotFoundException(@"Failed to resolve the path.");
 #endif // #if VFS_EXCEPTIONS
-				}
-
-				// Set the current resolution directory
-				currentDirectory = entry;
-
-				// Check if the caller has traverse access to the directory
-				AccessCheck.Perform(currentDirectory, AccessMode.Traverse, AccessCheckFlags.None);
 			}
 
-			return currentDirectory;
+			// Set the current resolution directory
+			currentDirectory = entry;
+
+			// Check if the caller has traverse access to the directory
+			AccessCheck.Perform(currentDirectory, AccessMode.Traverse, AccessCheckFlags.None);
 		}
 
-		#endregion Methods
+		return currentDirectory;
 	}
+
+	#endregion Methods
 }

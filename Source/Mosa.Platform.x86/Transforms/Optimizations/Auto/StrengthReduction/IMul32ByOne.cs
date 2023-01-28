@@ -6,38 +6,37 @@ using Mosa.Platform.x86;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.x86.Transforms.Optimizations.Auto.StrengthReduction
+namespace Mosa.Platform.x86.Transforms.Optimizations.Auto.StrengthReduction;
+
+/// <summary>
+/// IMul32ByOne
+/// </summary>
+public sealed class IMul32ByOne : BaseTransform
 {
-	/// <summary>
-	/// IMul32ByOne
-	/// </summary>
-	public sealed class IMul32ByOne : BaseTransform
+	public IMul32ByOne() : base(X86.IMul32, TransformType.Auto | TransformType.Optimization)
 	{
-		public IMul32ByOne() : base(X86.IMul32, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+	}
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand2.IsResolvedConstant)
-				return false;
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!context.Operand2.IsResolvedConstant)
+			return false;
 
-			if (context.Operand2.ConstantUnsigned64 != 1)
-				return false;
+		if (context.Operand2.ConstantUnsigned64 != 1)
+			return false;
 
-			if (AreStatusFlagUsed(context))
-				return false;
+		if (AreStatusFlagUsed(context))
+			return false;
 
-			return true;
-		}
+		return true;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
 
-			var c1 = transform.CreateConstant(1);
+		var c1 = transform.CreateConstant(1);
 
-			context.SetInstruction(X86.Mov32, result, c1);
-		}
+		context.SetInstruction(X86.Mov32, result, c1);
 	}
 }

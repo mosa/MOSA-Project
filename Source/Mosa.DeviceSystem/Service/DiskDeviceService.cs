@@ -2,47 +2,46 @@
 
 using System.Runtime.CompilerServices;
 
-namespace Mosa.DeviceSystem.Service
+namespace Mosa.DeviceSystem.Service;
+
+public class DiskDeviceService : BaseService
 {
-	public class DiskDeviceService : BaseService
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public override void PostEvent(ServiceEvent serviceEvent)
 	{
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		public override void PostEvent(ServiceEvent serviceEvent)
+		//HAL.DebugWriteLine("DiskDeviceService:PostEvent()-A");
+		//HAL.Pause();
+
+		var device = MatchEvent<IDiskControllerDevice>(serviceEvent, ServiceEventType.Start);
+
+		if (device == null)
+			return;
+
+		// This mounts everything detected
+
+		var controller = device.DeviceDriver as IDiskControllerDevice;
+
+		var deviceService = device.DeviceService;
+
+		for (uint drive = 0; drive < controller.MaximunDriveCount; drive++)
 		{
-			//HAL.DebugWriteLine("DiskDeviceService:PostEvent()-A");
-			//HAL.Pause();
+			if (!controller.Open(drive))
+				continue;
 
-			var device = MatchEvent<IDiskControllerDevice>(serviceEvent, ServiceEventType.Start);
+			if (controller.GetTotalSectors(drive) == 0)
+				continue;
 
-			if (device == null)
+			// don't mount twice
+			if (deviceService.CheckExists(device, drive))
 				return;
 
-			// This mounts everything detected
-
-			var controller = device.DeviceDriver as IDiskControllerDevice;
-
-			var deviceService = device.DeviceService;
-
-			for (uint drive = 0; drive < controller.MaximunDriveCount; drive++)
+			var configuration = new DiskDeviceConfiguration()
 			{
-				if (!controller.Open(drive))
-					continue;
+				DriveNbr = drive,
+				ReadOnly = false
+			};
 
-				if (controller.GetTotalSectors(drive) == 0)
-					continue;
-
-				// don't mount twice
-				if (deviceService.CheckExists(device, drive))
-					return;
-
-				var configuration = new DiskDeviceConfiguration()
-				{
-					DriveNbr = drive,
-					ReadOnly = false
-				};
-
-				deviceService.Initialize(new DiskDeviceDriver(), device, true, configuration);
-			}
+			deviceService.Initialize(new DiskDeviceDriver(), device, true, configuration);
 		}
 	}
 }

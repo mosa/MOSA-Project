@@ -2,64 +2,63 @@
 
 using System.Collections.Generic;
 
-namespace Mosa.UnitTests.Generics
+namespace Mosa.UnitTests.Generics;
+
+public static class GenericMethodTests
 {
-	public static class GenericMethodTests
+	internal static List<object> CreateList()
 	{
-		internal static List<object> CreateList()
+		var list = new List<object>();
+
+		list.Add(1);
+		list.Add("string");
+		list.Add(new object());
+
+		return list;
+	}
+
+	internal static List<object> Get<T>(List<object> objects)
+	{
+		var list = new List<object>();
+
+		foreach (var item in objects)
 		{
-			var list = new List<object>();
-
-			list.Add(1);
-			list.Add("string");
-			list.Add(new object());
-
-			return list;
-		}
-
-		internal static List<object> Get<T>(List<object> objects)
-		{
-			var list = new List<object>();
-
-			foreach (var item in objects)
+			if (item is T)
 			{
-				if (item is T)
-				{
-					list.Add(item);
-				}
+				list.Add(item);
 			}
-
-			return list;
 		}
 
-		[MosaUnitTest]
-		public static int MethodTestInt()
-		{
-			var list = CreateList();
+		return list;
+	}
 
-			var ret = Get<int>(list);
+	[MosaUnitTest]
+	public static int MethodTestInt()
+	{
+		var list = CreateList();
 
-			return ret.Count;
-		}
+		var ret = Get<int>(list);
 
-		[MosaUnitTest]
-		public static int MethodTestObject()
-		{
-			var list = CreateList();
+		return ret.Count;
+	}
 
-			var ret = Get<object>(list);
+	[MosaUnitTest]
+	public static int MethodTestObject()
+	{
+		var list = CreateList();
 
-			return ret.Count;
-		}
+		var ret = Get<object>(list);
 
-		[MosaUnitTest]
-		public static int MethodTestString()
-		{
-			var list = CreateList();
+		return ret.Count;
+	}
 
-			var ret = Get<string>(list);
+	[MosaUnitTest]
+	public static int MethodTestString()
+	{
+		var list = CreateList();
 
-			return ret.Count;
-		}
+		var ret = Get<string>(list);
+
+		return ret.Count;
 	}
 }

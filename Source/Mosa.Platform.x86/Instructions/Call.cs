@@ -4,63 +4,62 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x86.Instructions
+namespace Mosa.Platform.x86.Instructions;
+
+/// <summary>
+/// Call
+/// </summary>
+/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
+public sealed class Call : X86Instruction
 {
-	/// <summary>
-	/// Call
-	/// </summary>
-	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed class Call : X86Instruction
+	internal Call()
+		: base(0, 1)
 	{
-		internal Call()
-			: base(0, 1)
+	}
+
+	public override FlowControl FlowControl { get { return FlowControl.Call; } }
+
+	public override bool IsZeroFlagUnchanged { get { return true; } }
+
+	public override bool IsZeroFlagUndefined { get { return true; } }
+
+	public override bool IsCarryFlagUnchanged { get { return true; } }
+
+	public override bool IsCarryFlagUndefined { get { return true; } }
+
+	public override bool IsSignFlagUnchanged { get { return true; } }
+
+	public override bool IsSignFlagUndefined { get { return true; } }
+
+	public override bool IsOverflowFlagUnchanged { get { return true; } }
+
+	public override bool IsOverflowFlagUndefined { get { return true; } }
+
+	public override bool IsParityFlagUnchanged { get { return true; } }
+
+	public override bool IsParityFlagUndefined { get { return true; } }
+
+	public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
+	{
+		System.Diagnostics.Debug.Assert(node.ResultCount == 0);
+		System.Diagnostics.Debug.Assert(node.OperandCount == 1);
+
+		if (node.Operand1.IsCPURegister)
 		{
+			opcodeEncoder.Append8Bits(0xFF);
+			opcodeEncoder.Append2Bits(0b11);
+			opcodeEncoder.Append3Bits(0b010);
+			opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
+			return;
 		}
 
-		public override FlowControl FlowControl { get { return FlowControl.Call; } }
-
-		public override bool IsZeroFlagUnchanged { get { return true; } }
-
-		public override bool IsZeroFlagUndefined { get { return true; } }
-
-		public override bool IsCarryFlagUnchanged { get { return true; } }
-
-		public override bool IsCarryFlagUndefined { get { return true; } }
-
-		public override bool IsSignFlagUnchanged { get { return true; } }
-
-		public override bool IsSignFlagUndefined { get { return true; } }
-
-		public override bool IsOverflowFlagUnchanged { get { return true; } }
-
-		public override bool IsOverflowFlagUndefined { get { return true; } }
-
-		public override bool IsParityFlagUnchanged { get { return true; } }
-
-		public override bool IsParityFlagUndefined { get { return true; } }
-
-		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
+		if (node.Operand1.IsConstant)
 		{
-			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
-			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
-
-			if (node.Operand1.IsCPURegister)
-			{
-				opcodeEncoder.Append8Bits(0xFF);
-				opcodeEncoder.Append2Bits(0b11);
-				opcodeEncoder.Append3Bits(0b010);
-				opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
-				return;
-			}
-
-			if (node.Operand1.IsConstant)
-			{
-				opcodeEncoder.Append8Bits(0xE8);
-				opcodeEncoder.EmitRelative32(node.Operand1);
-				return;
-			}
-
-			throw new Compiler.Common.Exceptions.CompilerException("Invalid Opcode");
+			opcodeEncoder.Append8Bits(0xE8);
+			opcodeEncoder.EmitRelative32(node.Operand1);
+			return;
 		}
+
+		throw new Compiler.Common.Exceptions.CompilerException("Invalid Opcode");
 	}
 }

@@ -3,25 +3,24 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.ARMv8A32.Transforms.IR
+namespace Mosa.Platform.ARMv8A32.Transforms.IR;
+
+/// <summary>
+/// ConvertR8ToI32
+/// </summary>
+public sealed class ConvertR8ToI32 : BaseTransform
 {
-	/// <summary>
-	/// ConvertR8ToI32
-	/// </summary>
-	public sealed class ConvertR8ToI32 : BaseTransform
+	public ConvertR8ToI32() : base(IRInstruction.ConvertR8ToI32, TransformType.Manual | TransformType.Transform)
 	{
-		public ConvertR8ToI32() : base(IRInstruction.ConvertR8ToI32, TransformType.Manual | TransformType.Transform)
-		{
-		}
+	}
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			return true;
-		}
+	public override bool Match(Context context, TransformContext transform)
+	{
+		return true;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			ARMv8A32TransformHelper.Translate(transform, context, ARMv8A32.Fix, true);
-		}
+	public override void Transform(Context context, TransformContext transform)
+	{
+		ARMv8A32TransformHelper.Translate(transform, context, ARMv8A32.Fix, true);
 	}
 }

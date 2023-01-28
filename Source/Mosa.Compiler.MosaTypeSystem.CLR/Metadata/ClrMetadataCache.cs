@@ -4,112 +4,111 @@ using dnlib.DotNet;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.MosaTypeSystem.CLR.Utils;
 
-namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
+namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata;
+
+public class ClrMetadataCache
 {
-	public class ClrMetadataCache
+	public Dictionary<string, MosaModule> Modules { get; }
+
+	private readonly Dictionary<ScopedToken, MosaType> typeLookup = new();
+	private readonly Dictionary<ScopedToken, MosaMethod> methodLookup = new();
+	private readonly Dictionary<ScopedToken, MosaField> fieldLookup = new();
+	private readonly Dictionary<ScopedToken, MosaProperty> propertyLookup = new();
+
+	private uint stringIdCounter;
+	private readonly Dictionary<string, uint> stringHeapLookup = new(StringComparer.Ordinal);
+	private readonly Dictionary<uint, string> stringHeapLookup2 = new();
+
+	public ClrMetadataCache()
 	{
-		public Dictionary<string, MosaModule> Modules { get; }
+		Modules = new Dictionary<string, MosaModule>();
+	}
 
-		private readonly Dictionary<ScopedToken, MosaType> typeLookup = new();
-		private readonly Dictionary<ScopedToken, MosaMethod> methodLookup = new();
-		private readonly Dictionary<ScopedToken, MosaField> fieldLookup = new();
-		private readonly Dictionary<ScopedToken, MosaProperty> propertyLookup = new();
+	public void AddModule(MosaModule module)
+	{
+		Modules.Add(module.Name, module);
 
-		private uint stringIdCounter;
-		private readonly Dictionary<string, uint> stringHeapLookup = new(StringComparer.Ordinal);
-		private readonly Dictionary<uint, string> stringHeapLookup2 = new();
+		//var desc = module.GetUnderlyingObject<UnitDesc<ModuleDef, object>>();
+	}
 
-		public ClrMetadataCache()
+	public MosaModule GetModuleByName(string name)
+	{
+		if (Modules.TryGetValue(name, out var result))
+			return result;
+
+		throw new CompilerException();
+	}
+
+	public void AddType(MosaType type)
+	{
+		var unitDesc = type.GetUnderlyingObject<UnitDesc<TypeDef, TypeSig>>();
+		if (unitDesc == null)
+			throw new InvalidOperationException("Underlying object (unit description) of type is null!");
+
+		typeLookup.Add(unitDesc.Token, type);
+	}
+
+	public MosaType GetTypeByToken(ScopedToken token)
+	{
+		return typeLookup[token];
+	}
+
+	public void AddMethod(MosaMethod method)
+	{
+		var unitDesc = method.GetUnderlyingObject<UnitDesc<MethodDef, MethodSig>>();
+		if (unitDesc == null)
+			throw new InvalidOperationException("Underlying object (unit description) of method is null!");
+
+		methodLookup.Add(unitDesc.Token, method);
+	}
+
+	public MosaMethod GetMethodByToken(ScopedToken token)
+	{
+		return methodLookup[token];
+	}
+
+	public void AddField(MosaField field)
+	{
+		var unitDesc = field.GetUnderlyingObject<UnitDesc<FieldDef, FieldSig>>();
+		if (unitDesc == null)
+			throw new InvalidOperationException("Underlying object (unit description) of field is null!");
+
+		fieldLookup.Add(unitDesc.Token, field);
+	}
+
+	public MosaField GetFieldByToken(ScopedToken token)
+	{
+		return fieldLookup[token];
+	}
+
+	public void AddProperty(MosaProperty property)
+	{
+		var unitDesc = property.GetUnderlyingObject<UnitDesc<PropertyDef, PropertySig>>();
+		if (unitDesc == null)
+			throw new InvalidOperationException("Underlying object (unit description) of property is null!");
+
+		propertyLookup.Add(unitDesc.Token, property);
+	}
+
+	public MosaProperty GetPropertyByToken(ScopedToken token)
+	{
+		return propertyLookup[token];
+	}
+
+	public uint GetStringId(string value)
+	{
+		if (!stringHeapLookup.TryGetValue(value, out var id))
 		{
-			Modules = new Dictionary<string, MosaModule>();
+			id = stringIdCounter++;
+			stringHeapLookup[value] = id;
+			stringHeapLookup2[id] = value;
 		}
 
-		public void AddModule(MosaModule module)
-		{
-			Modules.Add(module.Name, module);
+		return id;
+	}
 
-			//var desc = module.GetUnderlyingObject<UnitDesc<ModuleDef, object>>();
-		}
-
-		public MosaModule GetModuleByName(string name)
-		{
-			if (Modules.TryGetValue(name, out var result))
-				return result;
-
-			throw new CompilerException();
-		}
-
-		public void AddType(MosaType type)
-		{
-			var unitDesc = type.GetUnderlyingObject<UnitDesc<TypeDef, TypeSig>>();
-			if (unitDesc == null)
-				throw new InvalidOperationException("Underlying object (unit description) of type is null!");
-
-			typeLookup.Add(unitDesc.Token, type);
-		}
-
-		public MosaType GetTypeByToken(ScopedToken token)
-		{
-			return typeLookup[token];
-		}
-
-		public void AddMethod(MosaMethod method)
-		{
-			var unitDesc = method.GetUnderlyingObject<UnitDesc<MethodDef, MethodSig>>();
-			if (unitDesc == null)
-				throw new InvalidOperationException("Underlying object (unit description) of method is null!");
-
-			methodLookup.Add(unitDesc.Token, method);
-		}
-
-		public MosaMethod GetMethodByToken(ScopedToken token)
-		{
-			return methodLookup[token];
-		}
-
-		public void AddField(MosaField field)
-		{
-			var unitDesc = field.GetUnderlyingObject<UnitDesc<FieldDef, FieldSig>>();
-			if (unitDesc == null)
-				throw new InvalidOperationException("Underlying object (unit description) of field is null!");
-
-			fieldLookup.Add(unitDesc.Token, field);
-		}
-
-		public MosaField GetFieldByToken(ScopedToken token)
-		{
-			return fieldLookup[token];
-		}
-
-		public void AddProperty(MosaProperty property)
-		{
-			var unitDesc = property.GetUnderlyingObject<UnitDesc<PropertyDef, PropertySig>>();
-			if (unitDesc == null)
-				throw new InvalidOperationException("Underlying object (unit description) of property is null!");
-
-			propertyLookup.Add(unitDesc.Token, property);
-		}
-
-		public MosaProperty GetPropertyByToken(ScopedToken token)
-		{
-			return propertyLookup[token];
-		}
-
-		public uint GetStringId(string value)
-		{
-			if (!stringHeapLookup.TryGetValue(value, out var id))
-			{
-				id = stringIdCounter++;
-				stringHeapLookup[value] = id;
-				stringHeapLookup2[id] = value;
-			}
-
-			return id;
-		}
-
-		public string GetStringById(uint id)
-		{
-			return stringHeapLookup2[id];
-		}
+	public string GetStringById(uint id)
+	{
+		return stringHeapLookup2[id];
 	}
 }

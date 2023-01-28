@@ -4,56 +4,55 @@ using System.Collections.Generic;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 
-namespace Mosa.Compiler.Framework
+namespace Mosa.Compiler.Framework;
+
+public class CompilerHooks
 {
-	public class CompilerHooks
-	{
-		#region Delegates definitions
+	#region Delegates definitions
 
-		public delegate void NotifyStatusHandler(string status);
+	public delegate void NotifyStatusHandler(string status);
 
-		public delegate void NotifyProgressHandler(int totalMethods, int completedMethods);
+	public delegate void NotifyProgressHandler(int totalMethods, int completedMethods);
 
-		public delegate void NotifyEventHandler(CompilerEvent compilerEvent, string message, int threadID);
+	public delegate void NotifyEventHandler(CompilerEvent compilerEvent, string message, int threadID);
 
-		public delegate void NotifyTraceLogHandler(TraceLog traceLog);
+	public delegate void NotifyTraceLogHandler(TraceLog traceLog);
 
-		public delegate void NotifyMethodCompiledHandler(MosaMethod method);
+	public delegate void NotifyMethodCompiledHandler(MosaMethod method);
 
-		public delegate IList<CustomELFSection> CustomElfSectionsHandler();
+	public delegate IList<CustomELFSection> CustomElfSectionsHandler();
 
-		public delegate NotifyTraceLogHandler NotifyMethodInstructionTraceHandler(MosaMethod method);
+	public delegate NotifyTraceLogHandler NotifyMethodInstructionTraceHandler(MosaMethod method);
 
-		public delegate NotifyTraceLogHandler NotifyMethodTranformTraceHandler(MosaMethod method);
+	public delegate NotifyTraceLogHandler NotifyMethodTranformTraceHandler(MosaMethod method);
 
-		public delegate void ExtendCompilerPipelineHandler(Pipeline<BaseCompilerStage> pipeline);
+	public delegate void ExtendCompilerPipelineHandler(Pipeline<BaseCompilerStage> pipeline);
 
-		public delegate void ExtendMethodCompilerPipelineHandler(Pipeline<BaseMethodCompilerStage> pipeline);
+	public delegate void ExtendMethodCompilerPipelineHandler(Pipeline<BaseMethodCompilerStage> pipeline);
 
-		public delegate int? GetMethodTraceLevelHandler(MosaMethod method);
+	public delegate int? GetMethodTraceLevelHandler(MosaMethod method);
 
-		#endregion Delegates definitions
+	#endregion Delegates definitions
 
-		public NotifyStatusHandler NotifyStatus;
+	public NotifyStatusHandler NotifyStatus;
 
-		public NotifyProgressHandler NotifyProgress;
+	public NotifyProgressHandler NotifyProgress;
 
-		public NotifyEventHandler NotifyEvent;
+	public NotifyEventHandler NotifyEvent;
 
-		public NotifyTraceLogHandler NotifyTraceLog;
+	public NotifyTraceLogHandler NotifyTraceLog;
 
-		public NotifyMethodCompiledHandler NotifyMethodCompiled;
+	public NotifyMethodCompiledHandler NotifyMethodCompiled;
 
-		public CustomElfSectionsHandler CustomElfSections;
+	public CustomElfSectionsHandler CustomElfSections;
 
-		public NotifyMethodInstructionTraceHandler NotifyMethodInstructionTrace;
+	public NotifyMethodInstructionTraceHandler NotifyMethodInstructionTrace;
 
-		public NotifyMethodTranformTraceHandler NotifyMethodTranformTrace;
+	public NotifyMethodTranformTraceHandler NotifyMethodTranformTrace;
 
-		public ExtendCompilerPipelineHandler ExtendCompilerPipeline;
+	public ExtendCompilerPipelineHandler ExtendCompilerPipeline;
 
-		public ExtendMethodCompilerPipelineHandler ExtendMethodCompilerPipeline;
+	public ExtendMethodCompilerPipelineHandler ExtendMethodCompilerPipeline;
 
-		public GetMethodTraceLevelHandler GetMethodTraceLevel;
-	}
+	public GetMethodTraceLevelHandler GetMethodTraceLevel;
 }

@@ -4,97 +4,96 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
+
+/// <summary>
+/// UselessXor64ShiftLeft64
+/// </summary>
+public sealed class UselessXor64ShiftLeft64 : BaseTransform
 {
-	/// <summary>
-	/// UselessXor64ShiftLeft64
-	/// </summary>
-	public sealed class UselessXor64ShiftLeft64 : BaseTransform
+	public UselessXor64ShiftLeft64() : base(IRInstruction.ShiftLeft64, TransformType.Auto | TransformType.Optimization)
 	{
-		public UselessXor64ShiftLeft64() : base(IRInstruction.ShiftLeft64, TransformType.Auto | TransformType.Optimization)
-		{
-		}
-
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand1.IsVirtualRegister)
-				return false;
-
-			if (context.Operand1.Definitions.Count != 1)
-				return false;
-
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.Xor64)
-				return false;
-
-			if (!IsConstant(context.Operand1.Definitions[0].Operand2))
-				return false;
-
-			if (!IsConstant(context.Operand2))
-				return false;
-
-			if (IsZero(context.Operand2))
-				return false;
-
-			if (!IsGreaterOrEqual(CountTrailingZeros(To64(context.Operand1.Definitions[0].Operand2)), To64(context.Operand2)))
-				return false;
-
-			return true;
-		}
-
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
-
-			var t1 = context.Operand1.Definitions[0].Operand1;
-			var t2 = context.Operand2;
-
-			context.SetInstruction(IRInstruction.ShiftLeft64, result, t1, t2);
-		}
 	}
 
-	/// <summary>
-	/// UselessXor64ShiftLeft64_v1
-	/// </summary>
-	public sealed class UselessXor64ShiftLeft64_v1 : BaseTransform
+	public override bool Match(Context context, TransformContext transform)
 	{
-		public UselessXor64ShiftLeft64_v1() : base(IRInstruction.ShiftLeft64, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+		if (!context.Operand1.IsVirtualRegister)
+			return false;
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand1.IsVirtualRegister)
-				return false;
+		if (context.Operand1.Definitions.Count != 1)
+			return false;
 
-			if (context.Operand1.Definitions.Count != 1)
-				return false;
+		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Xor64)
+			return false;
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.Xor64)
-				return false;
+		if (!IsConstant(context.Operand1.Definitions[0].Operand2))
+			return false;
 
-			if (!IsConstant(context.Operand1.Definitions[0].Operand1))
-				return false;
+		if (!IsConstant(context.Operand2))
+			return false;
 
-			if (!IsConstant(context.Operand2))
-				return false;
+		if (IsZero(context.Operand2))
+			return false;
 
-			if (IsZero(context.Operand2))
-				return false;
+		if (!IsGreaterOrEqual(CountTrailingZeros(To64(context.Operand1.Definitions[0].Operand2)), To64(context.Operand2)))
+			return false;
 
-			if (!IsGreaterOrEqual(CountTrailingZeros(To64(context.Operand1.Definitions[0].Operand1)), To64(context.Operand2)))
-				return false;
+		return true;
+	}
 
-			return true;
-		}
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
+		var t1 = context.Operand1.Definitions[0].Operand1;
+		var t2 = context.Operand2;
 
-			var t1 = context.Operand1.Definitions[0].Operand2;
-			var t2 = context.Operand2;
+		context.SetInstruction(IRInstruction.ShiftLeft64, result, t1, t2);
+	}
+}
 
-			context.SetInstruction(IRInstruction.ShiftLeft64, result, t1, t2);
-		}
+/// <summary>
+/// UselessXor64ShiftLeft64_v1
+/// </summary>
+public sealed class UselessXor64ShiftLeft64_v1 : BaseTransform
+{
+	public UselessXor64ShiftLeft64_v1() : base(IRInstruction.ShiftLeft64, TransformType.Auto | TransformType.Optimization)
+	{
+	}
+
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!context.Operand1.IsVirtualRegister)
+			return false;
+
+		if (context.Operand1.Definitions.Count != 1)
+			return false;
+
+		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Xor64)
+			return false;
+
+		if (!IsConstant(context.Operand1.Definitions[0].Operand1))
+			return false;
+
+		if (!IsConstant(context.Operand2))
+			return false;
+
+		if (IsZero(context.Operand2))
+			return false;
+
+		if (!IsGreaterOrEqual(CountTrailingZeros(To64(context.Operand1.Definitions[0].Operand1)), To64(context.Operand2)))
+			return false;
+
+		return true;
+	}
+
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
+
+		var t1 = context.Operand1.Definitions[0].Operand2;
+		var t2 = context.Operand2;
+
+		context.SetInstruction(IRInstruction.ShiftLeft64, result, t1, t2);
 	}
 }

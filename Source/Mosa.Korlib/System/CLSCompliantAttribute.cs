@@ -1,25 +1,24 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace System
+namespace System;
+
+/// <summary>
+/// Implementation of the "CLSCompliantAttribute" class.
+/// </summary>
+public sealed class CLSCompliantAttribute : Attribute
 {
-	/// <summary>
-	/// Implementation of the "CLSCompliantAttribute" class.
-	/// </summary>
-	public sealed class CLSCompliantAttribute : Attribute
+	private readonly bool is_compliant;
+
+	public CLSCompliantAttribute(bool isCompliant)
 	{
-		private readonly bool is_compliant;
+		is_compliant = isCompliant;
+	}
 
-		public CLSCompliantAttribute(bool isCompliant)
+	public bool IsCompliant
+	{
+		get
 		{
-			is_compliant = isCompliant;
-		}
-
-		public bool IsCompliant
-		{
-			get
-			{
-				return is_compliant;
-			}
+			return is_compliant;
 		}
 	}
 }

@@ -4,52 +4,51 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Mosa.Compiler.Framework.CompilerStages
+namespace Mosa.Compiler.Framework.CompilerStages;
+
+/// <summary>
+/// An compilation stage, which generates a map file of the built binary file.
+/// </summary>
+/// <seealso cref="Mosa.Compiler.Framework.BaseCompilerStage" />
+public class MethodCompileTimeStage : BaseCompilerStage
 {
-	/// <summary>
-	/// An compilation stage, which generates a map file of the built binary file.
-	/// </summary>
-	/// <seealso cref="Mosa.Compiler.Framework.BaseCompilerStage" />
-	public class MethodCompileTimeStage : BaseCompilerStage
+	protected override void Finalization()
 	{
-		protected override void Finalization()
+		if (string.IsNullOrEmpty(CompilerSettings.CompileTimeFile))
+			return;
+
+		var methods = GetAndSortMethodData();
+
+		using (var writer = new StreamWriter(CompilerSettings.CompileTimeFile))
 		{
-			if (string.IsNullOrEmpty(CompilerSettings.CompileTimeFile))
-				return;
+			writer.WriteLine("Ticks\tMilliseconds\tCompiler Count\tMethod");
 
-			var methods = GetAndSortMethodData();
-
-			using (var writer = new StreamWriter(CompilerSettings.CompileTimeFile))
+			foreach (var data in methods)
 			{
-				writer.WriteLine("Ticks\tMilliseconds\tCompiler Count\tMethod");
+				writer.WriteLine($"{data.ElapsedTicks}{'\t'}{data.ElapsedTicks / TimeSpan.TicksPerMillisecond}{'\t'}{data.Version}{'\t'}{data.Method.FullName}");
+			}
+		}
+	}
 
-				foreach (var data in methods)
-				{
-					writer.WriteLine($"{data.ElapsedTicks}{'\t'}{data.ElapsedTicks / TimeSpan.TicksPerMillisecond}{'\t'}{data.Version}{'\t'}{data.Method.FullName}");
-				}
+	protected List<MethodData> GetAndSortMethodData()
+	{
+		var methods = new List<MethodData>();
+
+		foreach (var type in TypeSystem.AllTypes)
+		{
+			foreach (var method in type.Methods)
+			{
+				var data = Compiler.GetMethodData(method);
+
+				if (data == null)
+					continue;
+
+				methods.Add(data);
 			}
 		}
 
-		protected List<MethodData> GetAndSortMethodData()
-		{
-			var methods = new List<MethodData>();
+		methods.Sort((MethodData x, MethodData y) => (int)(y.ElapsedTicks - x.ElapsedTicks));
 
-			foreach (var type in TypeSystem.AllTypes)
-			{
-				foreach (var method in type.Methods)
-				{
-					var data = Compiler.GetMethodData(method);
-
-					if (data == null)
-						continue;
-
-					methods.Add(data);
-				}
-			}
-
-			methods.Sort((MethodData x, MethodData y) => (int)(y.ElapsedTicks - x.ElapsedTicks));
-
-			return methods;
-		}
+		return methods;
 	}
 }

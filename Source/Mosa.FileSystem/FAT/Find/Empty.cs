@@ -2,33 +2,32 @@
 
 using Mosa.DeviceSystem;
 
-namespace Mosa.FileSystem.FAT.Find
+namespace Mosa.FileSystem.FAT.Find;
+
+/// <summary>
+/// Empty
+/// </summary>
+internal class Empty : FatFileSystem.ICompare
 {
 	/// <summary>
-	/// Empty
+	/// Compares the specified data.
 	/// </summary>
-	internal class Empty : FatFileSystem.ICompare
+	/// <param name="data">The data.</param>
+	/// <param name="offset">The offset.</param>
+	/// <param name="type">The type.</param>
+	/// <returns></returns>
+	public bool Compare(byte[] data, uint offset, FatType type)
 	{
-		/// <summary>
-		/// Compares the specified data.
-		/// </summary>
-		/// <param name="data">The data.</param>
-		/// <param name="offset">The offset.</param>
-		/// <param name="type">The type.</param>
-		/// <returns></returns>
-		public bool Compare(byte[] data, uint offset, FatType type)
-		{
-			var entry = new DataBlock(data);
+		var entry = new DataBlock(data);
 
-			byte first = entry.GetByte(offset + Entry.DOSName);
+		byte first = entry.GetByte(offset + Entry.DOSName);
 
-			if (first == FileNameAttribute.LastEntry)
-				return true;
+		if (first == FileNameAttribute.LastEntry)
+			return true;
 
-			if ((first == FileNameAttribute.Deleted) | (first == FileNameAttribute.Dot))
-				return true;
+		if ((first == FileNameAttribute.Deleted) | (first == FileNameAttribute.Dot))
+			return true;
 
-			return false;
-		}
+		return false;
 	}
 }

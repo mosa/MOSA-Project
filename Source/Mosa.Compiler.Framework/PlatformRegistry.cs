@@ -3,39 +3,38 @@
 using System;
 using System.Collections.Generic;
 
-namespace Mosa.Compiler.Framework
+namespace Mosa.Compiler.Framework;
+
+public static class PlatformRegistry
 {
-	public static class PlatformRegistry
+	private static Dictionary<string, BaseArchitecture> Registry = new Dictionary<string, BaseArchitecture>();
+
+	public static void Register()
 	{
-		private static Dictionary<string, BaseArchitecture> Registry = new Dictionary<string, BaseArchitecture>();
+		Registry = new Dictionary<string, BaseArchitecture>();
 
-		public static void Register()
+		foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
 		{
-			Registry = new Dictionary<string, BaseArchitecture>();
-
-			foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+			foreach (var type in assembly.GetTypes())
 			{
-				foreach (var type in assembly.GetTypes())
+				if (!type.IsAbstract && typeof(BaseArchitecture).IsAssignableFrom(type))
 				{
-					if (!type.IsAbstract && typeof(BaseArchitecture).IsAssignableFrom(type))
-					{
-						var platform = (BaseArchitecture)Activator.CreateInstance(type);
-						Registry.Add(platform.PlatformName, platform);
-					}
+					var platform = (BaseArchitecture)Activator.CreateInstance(type);
+					Registry.Add(platform.PlatformName, platform);
 				}
 			}
 		}
+	}
 
-		public static void Add(BaseArchitecture platform)
-		{
-			Registry.Add(platform.PlatformName, platform);
-		}
+	public static void Add(BaseArchitecture platform)
+	{
+		Registry.Add(platform.PlatformName, platform);
+	}
 
-		public static BaseArchitecture GetPlatform(string platformName)
-		{
-			Registry.TryGetValue(platformName, out BaseArchitecture platform);
+	public static BaseArchitecture GetPlatform(string platformName)
+	{
+		Registry.TryGetValue(platformName, out BaseArchitecture platform);
 
-			return platform;
-		}
+		return platform;
 	}
 }

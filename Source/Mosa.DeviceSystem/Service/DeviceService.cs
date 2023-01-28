@@ -2,358 +2,357 @@
 
 using System.Collections.Generic;
 
-namespace Mosa.DeviceSystem.Service
+namespace Mosa.DeviceSystem.Service;
+
+/// <summary>
+/// Device Manager
+/// </summary>
+public sealed class DeviceService : BaseService
 {
 	/// <summary>
-	/// Device Manager
+	/// The maximum interrupts
 	/// </summary>
-	public sealed class DeviceService : BaseService
+	public const ushort MaxInterrupts = 32;
+
+	/// <summary>
+	/// The registered device drivers
+	/// </summary>
+	private readonly List<DeviceDriverRegistryEntry> Registry;
+
+	/// <summary>
+	/// The devices
+	/// </summary>
+	private readonly List<Device> Devices;
+
+	/// <summary>
+	/// The interrupt handlers
+	/// </summary>
+	private readonly List<Device>[] IRQDispatch;
+
+	/// <summary>
+	/// The pending on change
+	/// </summary>
+	private readonly List<Device> pendingOnChange;
+
+	private readonly object _lock = new object();
+
+	/// <summary>
+	/// Initializes a new instance of the <see cref="DeviceService" /> class.
+	/// </summary>
+	public DeviceService()
 	{
-		/// <summary>
-		/// The maximum interrupts
-		/// </summary>
-		public const ushort MaxInterrupts = 32;
+		Registry = new List<DeviceDriverRegistryEntry>();
+		Devices = new List<Device>();
+		pendingOnChange = new List<Device>();
 
-		/// <summary>
-		/// The registered device drivers
-		/// </summary>
-		private readonly List<DeviceDriverRegistryEntry> Registry;
+		IRQDispatch = new List<Device>[MaxInterrupts];
 
-		/// <summary>
-		/// The devices
-		/// </summary>
-		private readonly List<Device> Devices;
-
-		/// <summary>
-		/// The interrupt handlers
-		/// </summary>
-		private readonly List<Device>[] IRQDispatch;
-
-		/// <summary>
-		/// The pending on change
-		/// </summary>
-		private readonly List<Device> pendingOnChange;
-
-		private readonly object _lock = new object();
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="DeviceService" /> class.
-		/// </summary>
-		public DeviceService()
+		for (int i = 0; i < MaxInterrupts; i++)
 		{
-			Registry = new List<DeviceDriverRegistryEntry>();
-			Devices = new List<Device>();
-			pendingOnChange = new List<Device>();
-
-			IRQDispatch = new List<Device>[MaxInterrupts];
-
-			for (int i = 0; i < MaxInterrupts; i++)
-			{
-				IRQDispatch[i] = new List<Device>();
-			}
+			IRQDispatch[i] = new List<Device>();
 		}
+	}
 
-		#region Device Driver Registry
+	#region Device Driver Registry
 
-		public void RegisterDeviceDriver(List<DeviceDriverRegistryEntry> deviceDrivers)
+	public void RegisterDeviceDriver(List<DeviceDriverRegistryEntry> deviceDrivers)
+	{
+		foreach (var deviceDriver in deviceDrivers)
 		{
-			foreach (var deviceDriver in deviceDrivers)
-			{
-				RegisterDeviceDriver(deviceDriver);
-			}
+			RegisterDeviceDriver(deviceDriver);
 		}
+	}
 
-		public void RegisterDeviceDriver(DeviceDriverRegistryEntry deviceDriver)
+	public void RegisterDeviceDriver(DeviceDriverRegistryEntry deviceDriver)
+	{
+		lock (_lock)
 		{
-			lock (_lock)
-			{
-				Registry.Add(deviceDriver);
-			}
+			Registry.Add(deviceDriver);
 		}
+	}
 
-		public List<DeviceDriverRegistryEntry> GetDeviceDrivers(DeviceBusType busType)
+	public List<DeviceDriverRegistryEntry> GetDeviceDrivers(DeviceBusType busType)
+	{
+		var drivers = new List<DeviceDriverRegistryEntry>();
+
+		lock (_lock)
 		{
-			var drivers = new List<DeviceDriverRegistryEntry>();
-
-			lock (_lock)
+			foreach (var deviceDriver in Registry)
 			{
-				foreach (var deviceDriver in Registry)
+				if (deviceDriver.BusType == busType)
 				{
-					if (deviceDriver.BusType == busType)
-					{
-						drivers.Add(deviceDriver);
-					}
+					drivers.Add(deviceDriver);
 				}
 			}
-
-			return drivers;
 		}
 
-		#endregion Device Driver Registry
+		return drivers;
+	}
 
-		#region Initialize Devices Drivers
+	#endregion Device Driver Registry
 
-		public Device Initialize(DeviceDriverRegistryEntry deviceDriverRegistryEntry, Device parent, bool autoStart = true, BaseDeviceConfiguration configuration = null, HardwareResources resources = null)
+	#region Initialize Devices Drivers
+
+	public Device Initialize(DeviceDriverRegistryEntry deviceDriverRegistryEntry, Device parent, bool autoStart = true, BaseDeviceConfiguration configuration = null, HardwareResources resources = null)
+	{
+		var deviceDriver = deviceDriverRegistryEntry.Factory();
+
+		return Initialize(deviceDriver, parent, autoStart, configuration, resources, deviceDriverRegistryEntry);
+	}
+
+	public Device Initialize(BaseDeviceDriver deviceDriver, Device parent, bool autoStart = true, BaseDeviceConfiguration configuration = null, HardwareResources resources = null, DeviceDriverRegistryEntry deviceDriverRegistryEntry = null)
+	{
+		var device = new Device()
 		{
-			var deviceDriver = deviceDriverRegistryEntry.Factory();
+			DeviceDriver = deviceDriver,
+			DeviceDriverRegistryEntry = deviceDriverRegistryEntry,
+			Status = DeviceStatus.Initializing,
+			Parent = parent,
+			Configuration = configuration,
+			Resources = resources,
+			DeviceService = this,
 
-			return Initialize(deviceDriver, parent, autoStart, configuration, resources, deviceDriverRegistryEntry);
+			//Name = string.Empty,
+		};
+
+		if (autoStart)
+		{
+			StartDevice(device);
 		}
 
-		public Device Initialize(BaseDeviceDriver deviceDriver, Device parent, bool autoStart = true, BaseDeviceConfiguration configuration = null, HardwareResources resources = null, DeviceDriverRegistryEntry deviceDriverRegistryEntry = null)
+		return device;
+	}
+
+	/// <summary>
+	/// Adds the specified device.
+	/// </summary>
+	/// <param name="device">The device.</param>
+	private void StartDevice(Device device)
+	{
+		//HAL.DebugWriteLine($"DeviceService:StartDevice():Enter = " + (device.Name ?? string.Empty));
+		//HAL.Pause();
+
+		lock (_lock)
 		{
-			var device = new Device()
-			{
-				DeviceDriver = deviceDriver,
-				DeviceDriverRegistryEntry = deviceDriverRegistryEntry,
-				Status = DeviceStatus.Initializing,
-				Parent = parent,
-				Configuration = configuration,
-				Resources = resources,
-				DeviceService = this,
+			Devices.Add(device);
 
-				//Name = string.Empty,
-			};
-
-			if (autoStart)
+			if (device.Parent != null)
 			{
-				StartDevice(device);
+				device.Parent.Children.Add(device);
 			}
-
-			return device;
 		}
 
-		/// <summary>
-		/// Adds the specified device.
-		/// </summary>
-		/// <param name="device">The device.</param>
-		private void StartDevice(Device device)
+		device.Status = DeviceStatus.Initializing;
+
+		device.DeviceDriver.Setup(device);
+
+		if (device.Status == DeviceStatus.Initializing)
 		{
-			//HAL.DebugWriteLine($"DeviceService:StartDevice():Enter = " + (device.Name ?? string.Empty));
-			//HAL.Pause();
-
-			lock (_lock)
-			{
-				Devices.Add(device);
-
-				if (device.Parent != null)
-				{
-					device.Parent.Children.Add(device);
-				}
-			}
-
-			device.Status = DeviceStatus.Initializing;
-
-			device.DeviceDriver.Setup(device);
-
+			//HAL.DebugWriteLine("DeviceService:StartDevice():Initializing = " + (device.Name ?? string.Empty));
+			device.DeviceDriver.Initialize();
 			if (device.Status == DeviceStatus.Initializing)
 			{
-				//HAL.DebugWriteLine("DeviceService:StartDevice():Initializing = " + (device.Name ?? string.Empty));
-				device.DeviceDriver.Initialize();
-				if (device.Status == DeviceStatus.Initializing)
+				//HAL.DebugWriteLine("DeviceService:StartDevice():Probing = " + (device.Name ?? string.Empty));
+				device.DeviceDriver.Probe();
+
+				if (device.Status == DeviceStatus.Available)
 				{
-					//HAL.DebugWriteLine("DeviceService:StartDevice():Probing = " + (device.Name ?? string.Empty));
-					device.DeviceDriver.Probe();
+					//HAL.DebugWriteLine("DeviceService:StartDevice():Starting = " + (device.Name ?? string.Empty));
+					device.DeviceDriver.Start();
 
-					if (device.Status == DeviceStatus.Available)
-					{
-						//HAL.DebugWriteLine("DeviceService:StartDevice():Starting = " + (device.Name ?? string.Empty));
-						device.DeviceDriver.Start();
-
-						AddInterruptHandler(device);
-					}
-				}
-			}
-
-			ServiceManager.AddEvent(new ServiceEvent(ServiceEventType.Start, device));
-
-			//HAL.DebugWriteLine("DeviceService:StartDevice():Exit");
-		}
-
-		#endregion Initialize Devices Drivers
-
-		#region Get Devices
-
-		public Device GetFirstDevice<T>()
-		{
-			lock (_lock)
-			{
-				foreach (var device in Devices)
-				{
-					if (device.DeviceDriver is T)
-					{
-						return device;
-					}
-				}
-			}
-
-			return null;
-		}
-
-		public List<Device> GetDevices<T>()
-		{
-			var list = new List<Device>();
-
-			lock (_lock)
-			{
-				foreach (var device in Devices)
-				{
-					if (device.DeviceDriver is T)
-					{
-						list.Add(device);
-					}
-				}
-			}
-
-			return list;
-		}
-
-		public Device GetFirstDevice<T>(DeviceStatus status)
-		{
-			lock (_lock)
-			{
-				foreach (var device in Devices)
-				{
-					if (device.Status == status && device.DeviceDriver is T)
-					{
-						return device;
-					}
-				}
-			}
-
-			return null;
-		}
-
-		public List<Device> GetDevices<T>(DeviceStatus status)
-		{
-			var list = new List<Device>();
-
-			lock (_lock)
-			{
-				foreach (var device in Devices)
-				{
-					if (device.Status == status && device.DeviceDriver is T)
-					{
-						list.Add(device);
-					}
-				}
-			}
-
-			return list;
-		}
-
-		public List<Device> GetDevices(string name)
-		{
-			var list = new List<Device>();
-
-			lock (_lock)
-			{
-				foreach (var device in Devices)
-				{
-					if (device.Name == name)
-					{
-						list.Add(device);
-					}
-				}
-			}
-
-			return list;
-		}
-
-		public List<Device> GetChildrenOf(Device parent)
-		{
-			var list = new List<Device>();
-
-			lock (_lock)
-			{
-				foreach (var device in parent.Children)
-				{
-					list.Add(device);
-				}
-			}
-
-			return list;
-		}
-
-		public List<Device> GetAllDevices()
-		{
-			lock (_lock)
-			{
-				var list = new List<Device>(Devices.Count);
-
-				foreach (var device in Devices)
-				{
-					list.Add(device);
-				}
-
-				return list;
-			}
-		}
-
-		public bool CheckExists(Device parent, ulong componentID)
-		{
-			lock (_lock)
-			{
-				foreach (var device in Devices)
-				{
-					if (device.Parent == parent && device.ComponentID == componentID)
-					{
-						return true;
-					}
-				}
-			}
-
-			return false;
-		}
-
-		#endregion Get Devices
-
-		#region Interrupts
-
-		public void ProcessInterrupt(byte irq)
-		{
-			lock (_lock)
-			{
-				foreach (var device in IRQDispatch[irq])
-				{
-					var deviceDriver = device.DeviceDriver;
-					deviceDriver.OnInterrupt();
+					AddInterruptHandler(device);
 				}
 			}
 		}
 
-		public void AddInterruptHandler(Device device)
-		{
-			if (device.Resources != null)
-			{
-				byte irq = device.Resources.IRQ;
+		ServiceManager.AddEvent(new ServiceEvent(ServiceEventType.Start, device));
 
-				if (irq >= MaxInterrupts)
-					return;
-
-				lock (_lock)
-				{
-					IRQDispatch[irq].Add(device);
-				}
-			}
-		}
-
-		public void ReleaseInterruptHandler(Device device)
-		{
-			if (device.Resources != null)
-			{
-				byte irq = device.Resources.IRQ;
-
-				if (irq >= MaxInterrupts)
-					return;
-
-				lock (_lock)
-				{
-					IRQDispatch[irq].Remove(device);
-				}
-			}
-		}
-
-		#endregion Interrupts
+		//HAL.DebugWriteLine("DeviceService:StartDevice():Exit");
 	}
+
+	#endregion Initialize Devices Drivers
+
+	#region Get Devices
+
+	public Device GetFirstDevice<T>()
+	{
+		lock (_lock)
+		{
+			foreach (var device in Devices)
+			{
+				if (device.DeviceDriver is T)
+				{
+					return device;
+				}
+			}
+		}
+
+		return null;
+	}
+
+	public List<Device> GetDevices<T>()
+	{
+		var list = new List<Device>();
+
+		lock (_lock)
+		{
+			foreach (var device in Devices)
+			{
+				if (device.DeviceDriver is T)
+				{
+					list.Add(device);
+				}
+			}
+		}
+
+		return list;
+	}
+
+	public Device GetFirstDevice<T>(DeviceStatus status)
+	{
+		lock (_lock)
+		{
+			foreach (var device in Devices)
+			{
+				if (device.Status == status && device.DeviceDriver is T)
+				{
+					return device;
+				}
+			}
+		}
+
+		return null;
+	}
+
+	public List<Device> GetDevices<T>(DeviceStatus status)
+	{
+		var list = new List<Device>();
+
+		lock (_lock)
+		{
+			foreach (var device in Devices)
+			{
+				if (device.Status == status && device.DeviceDriver is T)
+				{
+					list.Add(device);
+				}
+			}
+		}
+
+		return list;
+	}
+
+	public List<Device> GetDevices(string name)
+	{
+		var list = new List<Device>();
+
+		lock (_lock)
+		{
+			foreach (var device in Devices)
+			{
+				if (device.Name == name)
+				{
+					list.Add(device);
+				}
+			}
+		}
+
+		return list;
+	}
+
+	public List<Device> GetChildrenOf(Device parent)
+	{
+		var list = new List<Device>();
+
+		lock (_lock)
+		{
+			foreach (var device in parent.Children)
+			{
+				list.Add(device);
+			}
+		}
+
+		return list;
+	}
+
+	public List<Device> GetAllDevices()
+	{
+		lock (_lock)
+		{
+			var list = new List<Device>(Devices.Count);
+
+			foreach (var device in Devices)
+			{
+				list.Add(device);
+			}
+
+			return list;
+		}
+	}
+
+	public bool CheckExists(Device parent, ulong componentID)
+	{
+		lock (_lock)
+		{
+			foreach (var device in Devices)
+			{
+				if (device.Parent == parent && device.ComponentID == componentID)
+				{
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	#endregion Get Devices
+
+	#region Interrupts
+
+	public void ProcessInterrupt(byte irq)
+	{
+		lock (_lock)
+		{
+			foreach (var device in IRQDispatch[irq])
+			{
+				var deviceDriver = device.DeviceDriver;
+				deviceDriver.OnInterrupt();
+			}
+		}
+	}
+
+	public void AddInterruptHandler(Device device)
+	{
+		if (device.Resources != null)
+		{
+			byte irq = device.Resources.IRQ;
+
+			if (irq >= MaxInterrupts)
+				return;
+
+			lock (_lock)
+			{
+				IRQDispatch[irq].Add(device);
+			}
+		}
+	}
+
+	public void ReleaseInterruptHandler(Device device)
+	{
+		if (device.Resources != null)
+		{
+			byte irq = device.Resources.IRQ;
+
+			if (irq >= MaxInterrupts)
+				return;
+
+			lock (_lock)
+			{
+				IRQDispatch[irq].Remove(device);
+			}
+		}
+	}
+
+	#endregion Interrupts
 }

@@ -1,67 +1,66 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace System.Collections.Generic
+namespace System.Collections.Generic;
+
+// Provides the Create factory method for KeyValuePair<TKey, TValue>.
+public static class KeyValuePair
 {
-	// Provides the Create factory method for KeyValuePair<TKey, TValue>.
-	public static class KeyValuePair
+	// Creates a new KeyValuePair<TKey, TValue> from the given values.
+	public static KeyValuePair<TKey, TValue> Create<TKey, TValue>(TKey key, TValue value)
 	{
-		// Creates a new KeyValuePair<TKey, TValue> from the given values.
-		public static KeyValuePair<TKey, TValue> Create<TKey, TValue>(TKey key, TValue value)
-		{
-			return new KeyValuePair<TKey, TValue>(key, value);
-		}
+		return new KeyValuePair<TKey, TValue>(key, value);
+	}
+}
+
+// A KeyValuePair holds a key and a value from a dictionary.
+// It is used by the IEnumerable<T> implementation for both IDictionary<TKey, TValue>
+// and IReadOnlyDictionary<TKey, TValue>.
+[Serializable]
+public struct KeyValuePair<TKey, TValue>
+{
+	private readonly TKey key;
+	private readonly TValue value;
+
+	public KeyValuePair(TKey key, TValue value)
+	{
+		this.key = key;
+		this.value = value;
 	}
 
-	// A KeyValuePair holds a key and a value from a dictionary.
-	// It is used by the IEnumerable<T> implementation for both IDictionary<TKey, TValue>
-	// and IReadOnlyDictionary<TKey, TValue>.
-	[Serializable]
-	public struct KeyValuePair<TKey, TValue>
+	public TKey Key
 	{
-		private readonly TKey key;
-		private readonly TValue value;
+		get { return key; }
+	}
 
-		public KeyValuePair(TKey key, TValue value)
-		{
-			this.key = key;
-			this.value = value;
-		}
+	public TValue Value
+	{
+		get { return value; }
+	}
 
-		public TKey Key
-		{
-			get { return key; }
-		}
+	public override string ToString()
+	{//TODO implmenet
+		//StringBuilder s = StringBuilderCache.Acquire();
 
-		public TValue Value
-		{
-			get { return value; }
-		}
+		//	s.Append('[');
+		//	if (Key != null)
+		//	{
+		//		s.Append(Key.ToString());
+		//	}
+		//	s.Append(", ");
+		//	if (Value != null)
+		//	{
+		//		s.Append(Value.ToString());
+		//	}
+		//	s.Append(']');
+		//	return StringBuilderCache.GetStringAndRelease(s);
 
-		public override string ToString()
-		{//TODO implmenet
-		 //StringBuilder s = StringBuilderCache.Acquire();
+		return "[" + Key.ToString() + ", " + Value.ToString() + "]";
+	}
 
-			//	s.Append('[');
-			//	if (Key != null)
-			//	{
-			//		s.Append(Key.ToString());
-			//	}
-			//	s.Append(", ");
-			//	if (Value != null)
-			//	{
-			//		s.Append(Value.ToString());
-			//	}
-			//	s.Append(']');
-			//	return StringBuilderCache.GetStringAndRelease(s);
-
-			return "[" + Key.ToString() + ", " + Value.ToString() + "]";
-		}
-
-		// BLOCKED (do not add now): [EditorBrowsable(EditorBrowsableState.Never)]
-		public void Deconstruct(out TKey key, out TValue value)
-		{
-			key = Key;
-			value = Value;
-		}
+	// BLOCKED (do not add now): [EditorBrowsable(EditorBrowsableState.Never)]
+	public void Deconstruct(out TKey key, out TValue value)
+	{
+		key = Key;
+		value = Value;
 	}
 }

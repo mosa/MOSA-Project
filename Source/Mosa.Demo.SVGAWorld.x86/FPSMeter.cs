@@ -2,30 +2,29 @@
 
 using RTC = Mosa.Kernel.x86.RTC;
 
-namespace Mosa.Demo.SVGAWorld.x86
+namespace Mosa.Demo.SVGAWorld.x86;
+
+public static class FPSMeter
 {
-	public static class FPSMeter
+	public static int FPS = 0;
+
+	private static int LastS = -1;
+	private static int Ticken = 0;
+
+	public static void Update()
 	{
-		public static int FPS = 0;
+		if (LastS == -1)
+			LastS = RTC.Second;
 
-		private static int LastS = -1;
-		private static int Ticken = 0;
-
-		public static void Update()
+		if (RTC.Second - LastS != 0)
 		{
-			if (LastS == -1)
-				LastS = RTC.Second;
+			if (RTC.Second > LastS)
+				FPS = Ticken / (RTC.Second - LastS);
 
-			if (RTC.Second - LastS != 0)
-			{
-				if (RTC.Second > LastS)
-					FPS = Ticken / (RTC.Second - LastS);
-
-				LastS = RTC.Second;
-				Ticken = 0;
-			}
-
-			Ticken++;
+			LastS = RTC.Second;
+			Ticken = 0;
 		}
+
+		Ticken++;
 	}
 }

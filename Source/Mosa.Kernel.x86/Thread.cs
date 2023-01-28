@@ -3,14 +3,13 @@
 using System.Threading;
 using Mosa.Runtime;
 
-namespace Mosa.Kernel.x86
+namespace Mosa.Kernel.x86;
+
+internal class Thread
 {
-	internal class Thread
-	{
-		public ThreadStatus Status = ThreadStatus.Empty;
-		public Pointer StackTop;
-		public Pointer StackBottom;
-		public Pointer StackStatePointer;
-		public uint Ticks;
-	}
+	public ThreadStatus Status = ThreadStatus.Empty;
+	public Pointer StackTop;
+	public Pointer StackBottom;
+	public Pointer StackStatePointer;
+	public uint Ticks;
 }

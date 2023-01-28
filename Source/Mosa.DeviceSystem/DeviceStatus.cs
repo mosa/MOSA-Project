@@ -28,12 +28,11 @@ namespace Mosa.DeviceSystem
 		NotFound,
 
 		/// <summary>
-		/// Something is wrong with this device
-		/// </summary>
-		Error,
+	/// Something is wrong with this device
+	/// </summary>
+	Error,
 
-		Offline,
+	Offline,
 
-		Disabled,
-	}
+	Disabled,
 }

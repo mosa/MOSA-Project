@@ -3,17 +3,16 @@
 using System.Collections.Generic;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.ARMv8A32.Transforms.Stack
+namespace Mosa.Platform.ARMv8A32.Transforms.Stack;
+
+/// <summary>
+/// Stack Build Transformation List
+/// </summary>
+public static class StackTransforms
 {
-	/// <summary>
-	/// Stack Build Transformation List
-	/// </summary>
-	public static class StackTransforms
+	public static readonly List<BaseTransform> List = new List<BaseTransform>
 	{
-		public static readonly List<BaseTransform> List = new List<BaseTransform>
-		{
-			new Epilogue(),
-			new Prologue(),
-		};
-	}
+		new Epilogue(),
+		new Prologue(),
+	};
 }

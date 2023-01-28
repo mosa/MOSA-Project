@@ -4,42 +4,41 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.ARMv8A32.Instructions
+namespace Mosa.Platform.ARMv8A32.Instructions;
+
+/// <summary>
+/// Uxtb - Unsigned Extend Byte
+/// </summary>
+/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
+public sealed class Uxtb : ARMv8A32Instruction
 {
-	/// <summary>
-	/// Uxtb - Unsigned Extend Byte
-	/// </summary>
-	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
-	public sealed class Uxtb : ARMv8A32Instruction
+	internal Uxtb()
+		: base(1, 1)
 	{
-		internal Uxtb()
-			: base(1, 1)
+	}
+
+	public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
+	{
+		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
+		System.Diagnostics.Debug.Assert(node.OperandCount == 1);
+
+		if (node.Operand1.IsCPURegister)
 		{
+			opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
+			opcodeEncoder.Append4Bits(0b0110);
+			opcodeEncoder.Append1Bit(0b1);
+			opcodeEncoder.Append1Bit(0b1);
+			opcodeEncoder.Append1Bit(0b1);
+			opcodeEncoder.Append1Bit(0b0);
+			opcodeEncoder.Append4Bits(0b1111);
+			opcodeEncoder.Append4Bits(node.Result.Register.RegisterCode);
+			opcodeEncoder.Append2Bits(0b00);
+			opcodeEncoder.Append2Bits(0b00);
+			opcodeEncoder.Append4Bits(0b0111);
+			opcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);
+			return;
 		}
 
-		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
-		{
-			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
-			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
-
-			if (node.Operand1.IsCPURegister)
-			{
-				opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
-				opcodeEncoder.Append4Bits(0b0110);
-				opcodeEncoder.Append1Bit(0b1);
-				opcodeEncoder.Append1Bit(0b1);
-				opcodeEncoder.Append1Bit(0b1);
-				opcodeEncoder.Append1Bit(0b0);
-				opcodeEncoder.Append4Bits(0b1111);
-				opcodeEncoder.Append4Bits(node.Result.Register.RegisterCode);
-				opcodeEncoder.Append2Bits(0b00);
-				opcodeEncoder.Append2Bits(0b00);
-				opcodeEncoder.Append4Bits(0b0111);
-				opcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);
-				return;
-			}
-
-			throw new Compiler.Common.Exceptions.CompilerException("Invalid Opcode");
-		}
+		throw new Compiler.Common.Exceptions.CompilerException("Invalid Opcode");
 	}
 }

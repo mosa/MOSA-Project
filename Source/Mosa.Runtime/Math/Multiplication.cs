@@ -2,46 +2,45 @@
 
 using System.Runtime.CompilerServices;
 
-namespace Mosa.Runtime.Math
+namespace Mosa.Runtime.Math;
+
+internal static class Multiplication
 {
-	internal static class Multiplication
+	/* Multiplies 64-bit A by 64-bit B and returns the result and carry. */
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static ulong mul64carry(ulong a, ulong b, out bool carry)
 	{
-		/* Multiplies 64-bit A by 64-bit B and returns the result and carry. */
+		var r = a * b;
 
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		public static ulong mul64carry(ulong a, ulong b, out bool carry)
+		if (a == 0 || b == 0)
 		{
-			var r = a * b;
-
-			if (a == 0 || b == 0)
-			{
-				carry = false;
-			}
-			else
-			{
-				carry = ulong.MaxValue / a < b;
-			}
-
-			return r;
+			carry = false;
+		}
+		else
+		{
+			carry = ulong.MaxValue / a < b;
 		}
 
-		/* Multiplies 64-bit A by 64-bit B and returns the result and overflow. */
+		return r;
+	}
 
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		public static long mul64overflow(long a, long b, out bool overflow)
+	/* Multiplies 64-bit A by 64-bit B and returns the result and overflow. */
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static long mul64overflow(long a, long b, out bool overflow)
+	{
+		var r = a * b;
+
+		if (a == 0 || b == 0)
 		{
-			var r = a * b;
-
-			if (a == 0 || b == 0)
-			{
-				overflow = false;
-			}
-			else
-			{
-				overflow = (b < 0 && a == long.MinValue) | (b != 0 && r / b != a);
-			}
-
-			return r;
+			overflow = false;
 		}
+		else
+		{
+			overflow = (b < 0 && a == long.MinValue) | (b != 0 && r / b != a);
+		}
+
+		return r;
 	}
 }

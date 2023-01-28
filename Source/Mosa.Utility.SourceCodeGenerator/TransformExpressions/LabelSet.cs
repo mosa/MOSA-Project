@@ -2,102 +2,101 @@
 
 using System.Collections.Generic;
 
-namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
+namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions;
+
+public class LabelSet
 {
-	public class LabelSet
+	protected Dictionary<string, Label> LabelLookupByName = new Dictionary<string, Label>();
+
+	public List<string> Labels { get; } = new List<string>();
+
+	public LabelSet(InstructionNode node)
 	{
-		protected Dictionary<string, Label> LabelLookupByName = new Dictionary<string, Label>();
+		AddPositions(node);
+	}
 
-		public List<string> Labels { get; } = new List<string>();
+	public LabelPosition GetFirstPosition(string name)
+	{
+		var label = LabelLookupByName[name];
 
-		public LabelSet(InstructionNode node)
+		return label.Positions[0];
+	}
+
+	public Label GetExpressionLabel(string name)
+	{
+		return LabelLookupByName[name];
+	}
+
+	protected void AddPosition(string name, int nodeNbr, int operandIndex)
+	{
+		if (!LabelLookupByName.TryGetValue(name, out Label expressionLabel))
 		{
-			AddPositions(node);
+			expressionLabel = new Label(name);
+			LabelLookupByName.Add(name, expressionLabel);
 		}
 
-		public LabelPosition GetFirstPosition(string name)
-		{
-			var label = LabelLookupByName[name];
+		expressionLabel.Add(nodeNbr, operandIndex);
+	}
 
-			return label.Positions[0];
-		}
-
-		public Label GetExpressionLabel(string name)
+	protected void AddPositions(InstructionNode node)
+	{
+		foreach (var operand in node.Operands)
 		{
-			return LabelLookupByName[name];
-		}
-
-		protected void AddPosition(string name, int nodeNbr, int operandIndex)
-		{
-			if (!LabelLookupByName.TryGetValue(name, out Label expressionLabel))
+			if (operand.IsLabel)
 			{
-				expressionLabel = new Label(name);
-				LabelLookupByName.Add(name, expressionLabel);
+				AddPosition(operand.LabelName, node.NodeNbr, operand.Index);
+
+				if (!Labels.Contains(operand.LabelName))
+				{
+					Labels.Add(operand.LabelName);
+				}
 			}
 
-			expressionLabel.Add(nodeNbr, operandIndex);
-		}
-
-		protected void AddPositions(InstructionNode node)
-		{
-			foreach (var operand in node.Operands)
+			if (operand.IsInstruction)
 			{
-				if (operand.IsLabel)
-				{
-					AddPosition(operand.LabelName, node.NodeNbr, operand.Index);
-
-					if (!Labels.Contains(operand.LabelName))
-					{
-						Labels.Add(operand.LabelName);
-					}
-				}
-
-				if (operand.IsInstruction)
-				{
-					AddPositions(operand.InstructionNode);
-				}
+				AddPositions(operand.InstructionNode);
 			}
 		}
+	}
 
-		public void AddUse(InstructionNode node)
+	public void AddUse(InstructionNode node)
+	{
+		foreach (var operand in node.Operands)
 		{
-			foreach (var operand in node.Operands)
+			if (operand.IsLabel)
 			{
-				if (operand.IsLabel)
-				{
-					var label = GetExpressionLabel(operand.LabelName);
+				var label = GetExpressionLabel(operand.LabelName);
 
-					label.IsInResult = true;
-				}
-				else if (operand.IsInstruction)
-				{
-					AddUse(operand.InstructionNode);
-				}
-				else if (operand.IsMethod)
-				{
-					AddUseMethod(operand.Method);
-				}
+				label.IsInResult = true;
+			}
+			else if (operand.IsInstruction)
+			{
+				AddUse(operand.InstructionNode);
+			}
+			else if (operand.IsMethod)
+			{
+				AddUseMethod(operand.Method);
 			}
 		}
+	}
 
-		public void AddUseMethod(Method method)
+	public void AddUseMethod(Method method)
+	{
+		foreach (var operand in method.Parameters)
 		{
-			foreach (var operand in method.Parameters)
+			if (operand.IsLabel)
 			{
-				if (operand.IsLabel)
-				{
-					var label = GetExpressionLabel(operand.LabelName);
+				var label = GetExpressionLabel(operand.LabelName);
 
-					label.IsInResult = true;
-				}
-				else if (operand.IsInstruction)
-				{
-					AddUse(operand.InstructionNode);
-				}
-				else if (operand.IsMethod)
-				{
-					AddUseMethod(operand.Method);
-				}
+				label.IsInResult = true;
+			}
+			else if (operand.IsInstruction)
+			{
+				AddUse(operand.InstructionNode);
+			}
+			else if (operand.IsMethod)
+			{
+				AddUseMethod(operand.Method);
 			}
 		}
 	}

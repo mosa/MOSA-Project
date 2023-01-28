@@ -4,30 +4,29 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x86.Instructions
+namespace Mosa.Platform.x86.Instructions;
+
+/// <summary>
+/// Movsd
+/// </summary>
+/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
+public sealed class Movsd : X86Instruction
 {
-	/// <summary>
-	/// Movsd
-	/// </summary>
-	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed class Movsd : X86Instruction
+	internal Movsd()
+		: base(1, 1)
 	{
-		internal Movsd()
-			: base(1, 1)
-		{
-		}
+	}
 
-		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
-		{
-			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
-			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
+	public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
+	{
+		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
+		System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
-			opcodeEncoder.Append8Bits(0xF2);
-			opcodeEncoder.Append8Bits(0x0F);
-			opcodeEncoder.Append8Bits(0x10);
-			opcodeEncoder.Append2Bits(0b11);
-			opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
-			opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
-		}
+		opcodeEncoder.Append8Bits(0xF2);
+		opcodeEncoder.Append8Bits(0x0F);
+		opcodeEncoder.Append8Bits(0x10);
+		opcodeEncoder.Append2Bits(0b11);
+		opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+		opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
 	}
 }

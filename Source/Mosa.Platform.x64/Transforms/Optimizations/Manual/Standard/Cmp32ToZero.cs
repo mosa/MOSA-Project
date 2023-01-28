@@ -3,45 +3,44 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.x64.Transforms.Optimizations.Manual.Standard
+namespace Mosa.Platform.x64.Transforms.Optimizations.Manual.Standard;
+
+public sealed class Cmp32ToZero : BaseTransform
 {
-	public sealed class Cmp32ToZero : BaseTransform
+	public Cmp32ToZero() : base(X64.Cmp32, TransformType.Manual | TransformType.Optimization)
 	{
-		public Cmp32ToZero() : base(X64.Cmp32, TransformType.Manual | TransformType.Optimization)
-		{
-		}
+	}
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand2.IsResolvedConstant)
-				return false;
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!context.Operand2.IsResolvedConstant)
+			return false;
 
-			if (!context.Operand2.IsConstantZero)
-				return false;
+		if (!context.Operand2.IsConstantZero)
+			return false;
 
-			var previous = GetPreviousNode(context);
+		var previous = GetPreviousNode(context);
 
-			if (previous == null)
-				return false;
+		if (previous == null)
+			return false;
 
-			if (previous.ResultCount != 1)
-				return false;
+		if (previous.ResultCount != 1)
+			return false;
 
-			if (previous.Instruction.IsMemoryRead)
-				return false;
+		if (previous.Instruction.IsMemoryRead)
+			return false;
 
-			if (previous.Result != context.Operand1)
-				return false;
+		if (previous.Result != context.Operand1)
+			return false;
 
-			if (!previous.Instruction.IsZeroFlagModified)
-				return false;
+		if (!previous.Instruction.IsZeroFlagModified)
+			return false;
 
-			return true;
-		}
+		return true;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			context.Empty();
-		}
+	public override void Transform(Context context, TransformContext transform)
+	{
+		context.Empty();
 	}
 }

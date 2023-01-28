@@ -3,124 +3,123 @@
 using System;
 using System.IO;
 
-namespace Mosa.Demo.AppSystem
+namespace Mosa.Demo.AppSystem;
+
+/// <summary>
+/// AppConsole
+/// </summary>
+public sealed class AppConsole
 {
-	/// <summary>
-	/// AppConsole
-	/// </summary>
-	public sealed class AppConsole
+	public Stream Output { get; set; }
+
+	public Stream Input { get; set; }
+
+	public bool EnableEcho { get; set; } = true;
+
+	private readonly char[] buffer;
+	private int bufferlen;
+
+	public AppConsole()
 	{
-		public Stream Output { get; set; }
+		buffer = new char[100];
+	}
 
-		public Stream Input { get; set; }
+	private static byte ConvertToByte(char c)
+	{
+		if (c == '\n')
+			return 10;
+		else
+			return (byte)c;
+	}
 
-		public bool EnableEcho { get; set; } = true;
+	public void Write(char c)
+	{
+		Output.WriteByte(ConvertToByte(c));
+	}
 
-		private readonly char[] buffer;
-		private int bufferlen;
-
-		public AppConsole()
+	public void Write(string s)
+	{
+		foreach (var c in s)
 		{
-			buffer = new char[100];
+			Write(c);
+		}
+	}
+
+	public void WriteLine(string line)
+	{
+		foreach (var c in line)
+		{
+			Write(c);
 		}
 
-		private static byte ConvertToByte(char c)
-		{
-			if (c == '\n')
-				return 10;
-			else
-				return (byte)c;
-		}
+		WriteLine();
+	}
 
-		public void Write(char c)
-		{
-			Output.WriteByte(ConvertToByte(c));
-		}
+	public void WriteLine()
+	{
+		Write('\n');
+	}
 
-		public void Write(string s)
+	public void ClearScreen()
+	{
+		Output.WriteByte(12);
+	}
+
+	private void AddToBuffer(char c)
+	{
+		if (bufferlen < buffer.Length)
 		{
-			foreach (var c in s)
+			buffer[bufferlen++] = c;
+		}
+	}
+
+	private void DeleteCharacterFromBuffer()
+	{
+		if (bufferlen > 0)
+			bufferlen--;
+	}
+
+	private byte ReadByte()
+	{
+		while (true)
+		{
+			var value = Input.ReadByte();
+
+			if (value > 0)
+				return (byte)value;
+
+			// Call Hlt so VM doesn't use up all the CPUs
+			Runtime.x86.Native.Hlt();
+		}
+	}
+
+	public char Read()
+	{
+		return (char)ReadByte();
+	}
+
+	public string ReadLine()
+	{
+		while (true)
+		{
+			char c = Read();
+
+			if (c == 0x08)
 			{
-				Write(c);
-			}
-		}
-
-		public void WriteLine(string line)
-		{
-			foreach (var c in line)
-			{
-				Write(c);
+				DeleteCharacterFromBuffer();
+				continue;
 			}
 
-			WriteLine();
-		}
+			AddToBuffer(c);
 
-		public void WriteLine()
-		{
-			Write('\n');
-		}
+			if (c != '\n')
+				continue;
 
-		public void ClearScreen()
-		{
-			Output.WriteByte(12);
-		}
+			var s = new String(buffer, 0, bufferlen);
 
-		private void AddToBuffer(char c)
-		{
-			if (bufferlen < buffer.Length)
-			{
-				buffer[bufferlen++] = c;
-			}
-		}
+			bufferlen = 0;
 
-		private void DeleteCharacterFromBuffer()
-		{
-			if (bufferlen > 0)
-				bufferlen--;
-		}
-
-		private byte ReadByte()
-		{
-			while (true)
-			{
-				var value = Input.ReadByte();
-
-				if (value > 0)
-					return (byte)value;
-
-				// Call Hlt so VM doesn't use up all the CPUs
-				Runtime.x86.Native.Hlt();
-			}
-		}
-
-		public char Read()
-		{
-			return (char)ReadByte();
-		}
-
-		public string ReadLine()
-		{
-			while (true)
-			{
-				char c = Read();
-
-				if (c == 0x08)
-				{
-					DeleteCharacterFromBuffer();
-					continue;
-				}
-
-				AddToBuffer(c);
-
-				if (c != '\n')
-					continue;
-
-				var s = new String(buffer, 0, bufferlen);
-
-				bufferlen = 0;
-
-				return s;
-			}
+			return s;
 		}
 	}
 }

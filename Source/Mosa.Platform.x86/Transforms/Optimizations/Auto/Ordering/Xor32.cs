@@ -6,44 +6,43 @@ using Mosa.Platform.x86;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.x86.Transforms.Optimizations.Auto.Ordering
+namespace Mosa.Platform.x86.Transforms.Optimizations.Auto.Ordering;
+
+/// <summary>
+/// Xor32
+/// </summary>
+public sealed class Xor32 : BaseTransform
 {
-	/// <summary>
-	/// Xor32
-	/// </summary>
-	public sealed class Xor32 : BaseTransform
+	public Xor32() : base(X86.Xor32, TransformType.Auto | TransformType.Optimization)
 	{
-		public Xor32() : base(X86.Xor32, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+	}
 
-		public override int Priority => 10;
+	public override int Priority => 10;
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!IsVirtualRegister(context.Operand1))
-				return false;
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!IsVirtualRegister(context.Operand1))
+			return false;
 
-			if (!IsVirtualRegister(context.Operand2))
-				return false;
+		if (!IsVirtualRegister(context.Operand2))
+			return false;
 
-			if (!IsGreater(UseCount(context.Operand1), UseCount(context.Operand2)))
-				return false;
+		if (!IsGreater(UseCount(context.Operand1), UseCount(context.Operand2)))
+			return false;
 
-			if (IsResultAndOperand1Same(context))
-				return false;
+		if (IsResultAndOperand1Same(context))
+			return false;
 
-			return true;
-		}
+		return true;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
 
-			var t1 = context.Operand1;
-			var t2 = context.Operand2;
+		var t1 = context.Operand1;
+		var t2 = context.Operand2;
 
-			context.SetInstruction(X86.Xor32, result, t2, t1);
-		}
+		context.SetInstruction(X86.Xor32, result, t2, t1);
 	}
 }

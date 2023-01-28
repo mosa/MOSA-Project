@@ -4,36 +4,35 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x64.Instructions
+namespace Mosa.Platform.x64.Instructions;
+
+/// <summary>
+/// Cvttss2si64
+/// </summary>
+/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
+public sealed class Cvttss2si64 : X64Instruction
 {
-	/// <summary>
-	/// Cvttss2si64
-	/// </summary>
-	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
-	public sealed class Cvttss2si64 : X64Instruction
+	internal Cvttss2si64()
+		: base(1, 1)
 	{
-		internal Cvttss2si64()
-			: base(1, 1)
-		{
-		}
+	}
 
-		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
-		{
-			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
-			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
+	public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
+	{
+		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
+		System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
-			opcodeEncoder.SuppressByte(0x40);
-			opcodeEncoder.Append4Bits(0b0100);
-			opcodeEncoder.Append1Bit(0b1);
-			opcodeEncoder.Append1Bit((node.Result.Register.RegisterCode >> 3));
-			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append1Bit((node.Operand1.Register.RegisterCode >> 3));
-			opcodeEncoder.Append8Bits(0xF3);
-			opcodeEncoder.Append8Bits(0x0F);
-			opcodeEncoder.Append8Bits(0x2C);
-			opcodeEncoder.Append2Bits(0b11);
-			opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
-			opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
-		}
+		opcodeEncoder.SuppressByte(0x40);
+		opcodeEncoder.Append4Bits(0b0100);
+		opcodeEncoder.Append1Bit(0b1);
+		opcodeEncoder.Append1Bit((node.Result.Register.RegisterCode >> 3));
+		opcodeEncoder.Append1Bit(0b0);
+		opcodeEncoder.Append1Bit((node.Operand1.Register.RegisterCode >> 3));
+		opcodeEncoder.Append8Bits(0xF3);
+		opcodeEncoder.Append8Bits(0x0F);
+		opcodeEncoder.Append8Bits(0x2C);
+		opcodeEncoder.Append2Bits(0b11);
+		opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+		opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
 	}
 }

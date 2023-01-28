@@ -4,85 +4,84 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Mosa.Compiler.MosaTypeSystem
+namespace Mosa.Compiler.MosaTypeSystem;
+
+public abstract class MosaUnit
 {
-	public abstract class MosaUnit
+	public object? UnderlyingObject { get; private set; }
+
+	public uint ID { get; internal set; }
+
+	[NotNull]
+	public TypeSystem? TypeSystem { get; internal set; }
+
+	public string Name { get; private set; }
+
+	public string? FullName { get; internal set; }
+
+	public string? ShortName { get; internal set; }
+
+	public bool IsCompilerGenerated { get; private set; }
+
+	private MosaCustomAttributeList customAttributes;
+
+	public IList<MosaCustomAttribute> CustomAttributes { get; private set; }
+
+	internal MosaUnit()
 	{
-		public object? UnderlyingObject { get; private set; }
+		CustomAttributes = (customAttributes = new MosaCustomAttributeList()).AsReadOnly();
+		Name = "";
+	}
 
-		public uint ID { get; internal set; }
+	virtual internal MosaUnit Clone()
+	{
+		var result = (MosaUnit)base.MemberwiseClone();
 
-		[NotNull]
-		public TypeSystem? TypeSystem { get; internal set; }
+		result.CustomAttributes = (result.customAttributes = new MosaCustomAttributeList(customAttributes)).AsReadOnly();
 
-		public string Name { get; private set; }
+		return result;
+	}
 
-		public string? FullName { get; internal set; }
+	public T? GetUnderlyingObject<T>()
+	{
+		return (T?)UnderlyingObject;
+	}
 
-		public string? ShortName { get; internal set; }
+	public override string? ToString()
+	{
+		return FullName;
+	}
 
-		public bool IsCompilerGenerated { get; private set; }
-
-		private MosaCustomAttributeList customAttributes;
-
-		public IList<MosaCustomAttribute> CustomAttributes { get; private set; }
-
-		internal MosaUnit()
+	public MosaCustomAttribute? FindCustomAttribute(string fullName)
+	{
+		foreach (var attribute in customAttributes)
 		{
-			CustomAttributes = (customAttributes = new MosaCustomAttributeList()).AsReadOnly();
-			Name = "";
-		}
-
-		virtual internal MosaUnit Clone()
-		{
-			var result = (MosaUnit)base.MemberwiseClone();
-
-			result.CustomAttributes = (result.customAttributes = new MosaCustomAttributeList(customAttributes)).AsReadOnly();
-
-			return result;
-		}
-
-		public T? GetUnderlyingObject<T>()
-		{
-			return (T?)UnderlyingObject;
-		}
-
-		public override string? ToString()
-		{
-			return FullName;
-		}
-
-		public MosaCustomAttribute? FindCustomAttribute(string fullName)
-		{
-			foreach (var attribute in customAttributes)
+			if (attribute.Constructor.DeclaringType?.FullName == fullName)
 			{
-				if (attribute.Constructor.DeclaringType?.FullName == fullName)
-				{
-					return attribute;
-				}
+				return attribute;
 			}
-
-			return null;
 		}
 
-		public abstract class MutatorBase : IDisposable
+		return null;
+	}
+
+	public abstract class MutatorBase : IDisposable
+	{
+		private readonly MosaUnit unit;
+
+		internal MutatorBase(MosaUnit unit)
 		{
-			private readonly MosaUnit unit;
-
-			internal MutatorBase(MosaUnit unit)
-			{
-				this.unit = unit;
-			}
-
-			public object? UnderlyingObject { set { unit.UnderlyingObject = value; } }
-
-			public string Name { set { unit.Name = value; } }
-
-			public bool IsCompilerGenerated { set { unit.IsCompilerGenerated = value; } }
-
-			public IList<MosaCustomAttribute>? CustomAttributes { get { return unit.customAttributes; } }
-
-			public abstract void Dispose();
+			this.unit = unit;
 		}
+
+		public object? UnderlyingObject { set { unit.UnderlyingObject = value; } }
+
+		public string Name { set { unit.Name = value; } }
+
+		public bool IsCompilerGenerated { set { unit.IsCompilerGenerated = value; } }
+
+		public IList<MosaCustomAttribute>? CustomAttributes { get { return unit.customAttributes; } }
+
+		public abstract void Dispose();
 	}
 }

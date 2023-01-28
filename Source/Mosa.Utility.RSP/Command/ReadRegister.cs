@@ -1,24 +1,23 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Utility.RSP.Command
+namespace Mosa.Utility.RSP.Command;
+
+public class ReadRegister : GDBCommand
 {
-	public class ReadRegister : GDBCommand
+	public int Register { get; }
+
+	protected override string PackArguments { get { return Register.ToString("x"); } }
+
+	public ReadRegister(int register, CallBack callBack = null) : base("p", callBack)
 	{
-		public int Register { get; }
+		Register = register;
+	}
 
-		protected override string PackArguments { get { return Register.ToString("x"); } }
+	internal override void Decode()
+	{
+		StandardErrorCheck();
 
-		public ReadRegister(int register, CallBack callBack = null) : base("p", callBack)
-		{
-			Register = register;
-		}
-
-		internal override void Decode()
-		{
-			StandardErrorCheck();
-
-			if (!IsResponseOk)
-				return;
-		}
+		if (!IsResponseOk)
+			return;
 	}
 }

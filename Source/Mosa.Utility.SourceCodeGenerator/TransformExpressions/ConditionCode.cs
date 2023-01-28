@@ -1,135 +1,134 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
+namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions;
+
+/// <summary>
+/// Specifies condition codes for <see cref="ConditionCode" />.
+/// </summary>
+public enum ConditionCode
 {
 	/// <summary>
-	/// Specifies condition codes for <see cref="ConditionCode" />.
+	/// The undefined
 	/// </summary>
-	public enum ConditionCode
-	{
-		/// <summary>
-		/// The undefined
-		/// </summary>
-		Undefined,
+	Undefined,
 
-		/// <summary>
-		/// Equality comparison.
-		/// </summary>
-		Equal,
+	/// <summary>
+	/// Equality comparison.
+	/// </summary>
+	Equal,
 
-		/// <summary>
-		/// Not equal comparison.
-		/// </summary>
-		NotEqual,
+	/// <summary>
+	/// Not equal comparison.
+	/// </summary>
+	NotEqual,
 
-		/// <summary>
-		/// Greater-than comparison.
-		/// </summary>
-		Greater,
+	/// <summary>
+	/// Greater-than comparison.
+	/// </summary>
+	Greater,
 
-		/// <summary>
-		/// Greater-than or equal comparison.
-		/// </summary>
-		GreaterOrEqual,
+	/// <summary>
+	/// Greater-than or equal comparison.
+	/// </summary>
+	GreaterOrEqual,
 
-		/// <summary>
-		/// Less-than comparison.
-		/// </summary>
-		Less,
+	/// <summary>
+	/// Less-than comparison.
+	/// </summary>
+	Less,
 
-		/// <summary>
-		/// Less-than or equal comparison.
-		/// </summary>
-		LessOrEqual,
+	/// <summary>
+	/// Less-than or equal comparison.
+	/// </summary>
+	LessOrEqual,
 
-		/// <summary>
-		/// Unsigned greater than comparison.
-		/// </summary>
-		UnsignedGreater,
+	/// <summary>
+	/// Unsigned greater than comparison.
+	/// </summary>
+	UnsignedGreater,
 
-		/// <summary>
-		/// Unsigned greater than or equal comparison.
-		/// </summary>
-		UnsignedGreaterOrEqual,
+	/// <summary>
+	/// Unsigned greater than or equal comparison.
+	/// </summary>
+	UnsignedGreaterOrEqual,
 
-		/// <summary>
-		/// Unsigned less than comparison.
-		/// </summary>
-		UnsignedLess,
+	/// <summary>
+	/// Unsigned less than comparison.
+	/// </summary>
+	UnsignedLess,
 
-		/// <summary>
-		/// Unsigned less than or equal comparison.
-		/// </summary>
-		UnsignedLessOrEqual,
+	/// <summary>
+	/// Unsigned less than or equal comparison.
+	/// </summary>
+	UnsignedLessOrEqual,
 
-		/// <summary>
-		/// Not unsigned
-		/// </summary>
-		NotSigned,
+	/// <summary>
+	/// Not unsigned
+	/// </summary>
+	NotSigned,
 
-		/// <summary>
-		/// signed
-		/// </summary>
-		Signed,
+	/// <summary>
+	/// signed
+	/// </summary>
+	Signed,
 
-		/// <summary>
-		/// Carry flag
-		/// </summary>
-		Carry,
+	/// <summary>
+	/// Carry flag
+	/// </summary>
+	Carry,
 
-		/// <summary>
-		/// No carry flag
-		/// </summary>
-		NoCarry,
+	/// <summary>
+	/// No carry flag
+	/// </summary>
+	NoCarry,
 
-		/// <summary>
-		/// Zero flag
-		/// </summary>
-		Zero,
+	/// <summary>
+	/// Zero flag
+	/// </summary>
+	Zero,
 
-		/// <summary>
-		/// No zero flag
-		/// </summary>
-		NotZero,
+	/// <summary>
+	/// No zero flag
+	/// </summary>
+	NotZero,
 
-		/// <summary>
-		/// Overflow flag
-		/// </summary>
-		Overflow,
+	/// <summary>
+	/// Overflow flag
+	/// </summary>
+	Overflow,
 
-		/// <summary>
-		/// No Overflow flag
-		/// </summary>
-		NoOverflow,
+	/// <summary>
+	/// No Overflow flag
+	/// </summary>
+	NoOverflow,
 
-		/// <summary>
-		/// Always
-		/// </summary>
-		Always,
+	/// <summary>
+	/// Always
+	/// </summary>
+	Always,
 
-		/// <summary>
-		/// Never
-		/// </summary>
-		Never,
+	/// <summary>
+	/// Never
+	/// </summary>
+	Never,
 
-		/// <summary>
-		/// The positive
-		/// </summary>
-		Positive,
+	/// <summary>
+	/// The positive
+	/// </summary>
+	Positive,
 
-		/// <summary>
-		/// The negative
-		/// </summary>
-		Negative,
+	/// <summary>
+	/// The negative
+	/// </summary>
+	Negative,
 
-		/// <summary>
-		/// No parity
-		/// </summary>
-		NoParity,
+	/// <summary>
+	/// No parity
+	/// </summary>
+	NoParity,
 
-		/// <summary>
-		/// Parity
-		/// </summary>
-		Parity,
-	}
+	/// <summary>
+	/// Parity
+	/// </summary>
+	Parity,
 }

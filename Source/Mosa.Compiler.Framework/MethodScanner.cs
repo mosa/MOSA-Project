@@ -6,479 +6,478 @@ using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 
-namespace Mosa.Compiler.Framework
+namespace Mosa.Compiler.Framework;
+
+public class MethodScanner
 {
-	public class MethodScanner
+	private const string UnitTestAttributeName = "Mosa.UnitTests.MosaUnitTestAttribute";
+	private const int TraceLevel = 5;
+
+	public bool IsEnabled { get; set; }
+
+	private Compiler Compiler { get; }
+	private MosaTypeLayout TypeLayout { get; }
+	private TypeSystem TypeSystem { get; }
+
+	private readonly HashSet<MosaType> allocatedTypes = new HashSet<MosaType>();
+	private readonly HashSet<MosaMethod> invokedMethods = new HashSet<MosaMethod>();
+	private readonly HashSet<MosaMethod> scheduledMethods = new HashSet<MosaMethod>();
+	private readonly HashSet<MosaField> accessedFields = new HashSet<MosaField>();
+
+	private readonly HashSet<MosaType> invokedInteraceTypes = new HashSet<MosaType>();
+	private readonly KeyedList<MosaType, uint> interfaceSlots = new KeyedList<MosaType, uint>();
+
+	private MosaMethod lastSource;
+
+	private readonly TraceLog trace;
+
+	private readonly object _lock = new object();
+
+	public MethodScanner(Compiler compiler)
 	{
-		private const string UnitTestAttributeName = "Mosa.UnitTests.MosaUnitTestAttribute";
-		private const int TraceLevel = 5;
+		Compiler = compiler;
+		TypeSystem = compiler.TypeSystem;
+		TypeLayout = compiler.TypeLayout;
+		IsEnabled = compiler.CompilerSettings.MethodScanner;
 
-		public bool IsEnabled { get; set; }
-
-		private Compiler Compiler { get; }
-		private MosaTypeLayout TypeLayout { get; }
-		private TypeSystem TypeSystem { get; }
-
-		private readonly HashSet<MosaType> allocatedTypes = new HashSet<MosaType>();
-		private readonly HashSet<MosaMethod> invokedMethods = new HashSet<MosaMethod>();
-		private readonly HashSet<MosaMethod> scheduledMethods = new HashSet<MosaMethod>();
-		private readonly HashSet<MosaField> accessedFields = new HashSet<MosaField>();
-
-		private readonly HashSet<MosaType> invokedInteraceTypes = new HashSet<MosaType>();
-		private readonly KeyedList<MosaType, uint> interfaceSlots = new KeyedList<MosaType, uint>();
-
-		private MosaMethod lastSource;
-
-		private readonly TraceLog trace;
-
-		private readonly object _lock = new object();
-
-		public MethodScanner(Compiler compiler)
+		if (Compiler.IsTraceable(TraceLevel))
 		{
-			Compiler = compiler;
-			TypeSystem = compiler.TypeSystem;
-			TypeLayout = compiler.TypeLayout;
-			IsEnabled = compiler.CompilerSettings.MethodScanner;
-
-			if (Compiler.IsTraceable(TraceLevel))
-			{
-				trace = new TraceLog(TraceType.GlobalDebug, null, null, "MethodScanner");
-			}
-
-			Initialize();
+			trace = new TraceLog(TraceType.GlobalDebug, null, null, "MethodScanner");
 		}
 
-		public void Complete()
+		Initialize();
+	}
+
+	public void Complete()
+	{
+		if (!IsEnabled)
+			return;
+
+		if (!Compiler.Statistics)
+			return;
+
+		MoreLogInfo();
+
+		Debug.WriteLine(trace?.ToString()); // REMOVE
+
+		int totalTypes = 0;
+		int totalMethods = 0;
+
+		foreach (var type in TypeSystem.AllTypes)
 		{
-			if (!IsEnabled)
+			if (type.IsModule)
+				continue;
+
+			totalTypes++;
+
+			foreach (var method in type.Methods)
+			{
+				if ((!(!method.HasImplementation && method.IsAbstract)) && !method.HasOpenGenericParams && !method.DeclaringType.HasOpenGenericParams)
+				{
+					totalMethods++;
+				}
+			}
+		}
+
+		Compiler.GlobalCounters.Update("MethodScanner.TotalTypes", totalTypes);
+		Compiler.GlobalCounters.Update("MethodScanner.TotalMethods", totalMethods);
+
+		Compiler.GlobalCounters.Update("MethodScanner.AllocatedTypes", allocatedTypes.Count);
+		Compiler.GlobalCounters.Update("MethodScanner.InvokedMethods", invokedMethods.Count);
+		Compiler.GlobalCounters.Update("MethodScanner.ScheduledMethods", scheduledMethods.Count);
+		Compiler.GlobalCounters.Update("MethodScanner.AccessedFields", accessedFields.Count);
+		Compiler.GlobalCounters.Update("MethodScanner.InvokedInterfaceType", invokedInteraceTypes.Count);
+
+		Compiler.PostTraceLog(trace);
+	}
+
+	private void MarkMethodInvoked(MosaMethod method)
+	{
+		var methodData = Compiler.GetMethodData(method);
+
+		if (methodData.IsInvoked)
+			return;
+
+		methodData.IsInvoked = true;
+
+		lock (invokedMethods)
+		{
+			invokedMethods.Add(method);
+		}
+	}
+
+	public void TypeAllocated(MosaType type, MosaMethod source)
+	{
+		if (!IsEnabled)
+			return;
+
+		lock (allocatedTypes)
+		{
+			if (allocatedTypes.Contains(type))
 				return;
 
-			if (!Compiler.Statistics)
-				return;
+			allocatedTypes.Add(type);
+		}
 
-			MoreLogInfo();
+		if (trace != null)
+		{
+			lock (trace)
+			{
+				if ((lastSource == null && source != null) || (lastSource != source))
+				{
+					trace.Log($"> Method: {(source == null ? "[NULL]" : source.FullName)}");
+					lastSource = source;
+				}
+				trace.Log($" >>> Allocated: {type.FullName}");
+			}
+		}
 
-			Debug.WriteLine(trace?.ToString()); // REMOVE
+		lock (_lock)
+		{
+			Compiler.CompilerData.GetTypeData(type).IsTypeAllocated = true;
 
-			int totalTypes = 0;
-			int totalMethods = 0;
+			// find all invoked methods for this type
+			ScheduleMethods(type);
+			ScheduleInterfaces(type);
+		}
+	}
 
+	private void ScheduleInterfaces(MosaType type)
+	{
+		if (type.Interfaces.Count == 0)
+			return;
+
+		// find all interfaces methods for this type
+		foreach (var interfaceType in type.Interfaces)
+		{
+			if (!invokedInteraceTypes.Contains(interfaceType))
+				continue;
+
+			var interfaceMethodTable = TypeLayout.GetInterfaceTable(type, interfaceType);
+
+			var list = interfaceSlots.Get(interfaceType);
+
+			foreach (var slot in list)
+			{
+				var imethod = interfaceMethodTable[slot];
+
+				ScheduleMethod(imethod);
+			}
+		}
+	}
+
+	public void MethodInvoked(MosaMethod method, MosaMethod source)
+	{
+		if (!IsEnabled)
+			return;
+
+		MethodInvoked(method, source, false);
+	}
+
+	public void MethodDirectInvoked(MosaMethod method, MosaMethod source)
+	{
+		if (!IsEnabled)
+			return;
+
+		MethodInvoked(method, source, true);
+		ScheduleMethod(method);
+	}
+
+	public void InterfaceMethodInvoked(MosaMethod method, MosaMethod source)
+	{
+		if (!IsEnabled)
+			return;
+
+		MarkMethodInvoked(method);
+
+		if (trace != null)
+		{
+			lock (trace)
+			{
+				if ((lastSource == null && source != null) || (lastSource != source))
+				{
+					trace.Log($"> Method: {(source == null ? "[NONE]" : source.FullName)}");
+					lastSource = source;
+				}
+
+				trace.Log($" >> Invoked: {method.FullName}{(method.IsStatic ? " [Static]" : " [Virtual]")}");
+			}
+		}
+
+		lock (_lock)
+		{
+			invokedInteraceTypes.Add(method.DeclaringType);
+
+			var slot = TypeLayout.GetMethodSlot(method);
+			var interfaceType = method.DeclaringType;
+
+			interfaceSlots.AddIfNew(interfaceType, slot);
+
+			// For every allocated type that implements this interface method, schedule the type's interface method
 			foreach (var type in TypeSystem.AllTypes)
 			{
-				if (type.IsModule)
+				if (type.IsInterface)
 					continue;
 
-				totalTypes++;
-
-				foreach (var method in type.Methods)
-				{
-					if ((!(!method.HasImplementation && method.IsAbstract)) && !method.HasOpenGenericParams && !method.DeclaringType.HasOpenGenericParams)
-					{
-						totalMethods++;
-					}
-				}
-			}
-
-			Compiler.GlobalCounters.Update("MethodScanner.TotalTypes", totalTypes);
-			Compiler.GlobalCounters.Update("MethodScanner.TotalMethods", totalMethods);
-
-			Compiler.GlobalCounters.Update("MethodScanner.AllocatedTypes", allocatedTypes.Count);
-			Compiler.GlobalCounters.Update("MethodScanner.InvokedMethods", invokedMethods.Count);
-			Compiler.GlobalCounters.Update("MethodScanner.ScheduledMethods", scheduledMethods.Count);
-			Compiler.GlobalCounters.Update("MethodScanner.AccessedFields", accessedFields.Count);
-			Compiler.GlobalCounters.Update("MethodScanner.InvokedInterfaceType", invokedInteraceTypes.Count);
-
-			Compiler.PostTraceLog(trace);
-		}
-
-		private void MarkMethodInvoked(MosaMethod method)
-		{
-			var methodData = Compiler.GetMethodData(method);
-
-			if (methodData.IsInvoked)
-				return;
-
-			methodData.IsInvoked = true;
-
-			lock (invokedMethods)
-			{
-				invokedMethods.Add(method);
-			}
-		}
-
-		public void TypeAllocated(MosaType type, MosaMethod source)
-		{
-			if (!IsEnabled)
-				return;
-
-			lock (allocatedTypes)
-			{
-				if (allocatedTypes.Contains(type))
-					return;
-
-				allocatedTypes.Add(type);
-			}
-
-			if (trace != null)
-			{
-				lock (trace)
-				{
-					if ((lastSource == null && source != null) || (lastSource != source))
-					{
-						trace.Log($"> Method: {(source == null ? "[NULL]" : source.FullName)}");
-						lastSource = source;
-					}
-					trace.Log($" >>> Allocated: {type.FullName}");
-				}
-			}
-
-			lock (_lock)
-			{
-				Compiler.CompilerData.GetTypeData(type).IsTypeAllocated = true;
-
-				// find all invoked methods for this type
-				ScheduleMethods(type);
-				ScheduleInterfaces(type);
-			}
-		}
-
-		private void ScheduleInterfaces(MosaType type)
-		{
-			if (type.Interfaces.Count == 0)
-				return;
-
-			// find all interfaces methods for this type
-			foreach (var interfaceType in type.Interfaces)
-			{
-				if (!invokedInteraceTypes.Contains(interfaceType))
+				if (!type.Interfaces.Contains(interfaceType))
 					continue;
 
-				var interfaceMethodTable = TypeLayout.GetInterfaceTable(type, interfaceType);
-
-				var list = interfaceSlots.Get(interfaceType);
-
-				foreach (var slot in list)
+				lock (allocatedTypes)
 				{
-					var imethod = interfaceMethodTable[slot];
-
-					ScheduleMethod(imethod);
-				}
-			}
-		}
-
-		public void MethodInvoked(MosaMethod method, MosaMethod source)
-		{
-			if (!IsEnabled)
-				return;
-
-			MethodInvoked(method, source, false);
-		}
-
-		public void MethodDirectInvoked(MosaMethod method, MosaMethod source)
-		{
-			if (!IsEnabled)
-				return;
-
-			MethodInvoked(method, source, true);
-			ScheduleMethod(method);
-		}
-
-		public void InterfaceMethodInvoked(MosaMethod method, MosaMethod source)
-		{
-			if (!IsEnabled)
-				return;
-
-			MarkMethodInvoked(method);
-
-			if (trace != null)
-			{
-				lock (trace)
-				{
-					if ((lastSource == null && source != null) || (lastSource != source))
-					{
-						trace.Log($"> Method: {(source == null ? "[NONE]" : source.FullName)}");
-						lastSource = source;
-					}
-
-					trace.Log($" >> Invoked: {method.FullName}{(method.IsStatic ? " [Static]" : " [Virtual]")}");
-				}
-			}
-
-			lock (_lock)
-			{
-				invokedInteraceTypes.Add(method.DeclaringType);
-
-				var slot = TypeLayout.GetMethodSlot(method);
-				var interfaceType = method.DeclaringType;
-
-				interfaceSlots.AddIfNew(interfaceType, slot);
-
-				// For every allocated type that implements this interface method, schedule the type's interface method
-				foreach (var type in TypeSystem.AllTypes)
-				{
-					if (type.IsInterface)
+					if (!allocatedTypes.Contains(type))
 						continue;
-
-					if (!type.Interfaces.Contains(interfaceType))
-						continue;
-
-					lock (allocatedTypes)
-					{
-						if (!allocatedTypes.Contains(type))
-							continue;
-					}
-
-					var interfaceMethodTable = TypeLayout.GetInterfaceTable(type, interfaceType); // this can be slow
-
-					var imethod = interfaceMethodTable[slot];
-
-					// schedule this type's interface method implementation
-					ScheduleMethod(imethod);
 				}
+
+				var interfaceMethodTable = TypeLayout.GetInterfaceTable(type, interfaceType); // this can be slow
+
+				var imethod = interfaceMethodTable[slot];
+
+				// schedule this type's interface method implementation
+				ScheduleMethod(imethod);
+			}
+		}
+	}
+
+	private void MethodInvoked(MosaMethod method, MosaMethod source, bool direct)
+	{
+		if (!IsEnabled)
+			return;
+
+		MarkMethodInvoked(method);
+
+		if (trace != null)
+		{
+			lock (trace)
+			{
+				if ((lastSource == null && source != null) || (lastSource != source))
+				{
+					trace.Log($"> Method: {(source == null ? "[NONE]" : source.FullName)}");
+					lastSource = source;
+				}
+
+				trace.Log($" >> Invoked: {method.FullName}{(method.IsStatic ? " [Static]" : " [Virtual]")}");
 			}
 		}
 
-		private void MethodInvoked(MosaMethod method, MosaMethod source, bool direct)
+		lock (_lock)
 		{
-			if (!IsEnabled)
-				return;
-
-			MarkMethodInvoked(method);
-
-			if (trace != null)
+			if (method.IsStatic || method.IsConstructor || method.DeclaringType.IsValueType || direct)
 			{
-				lock (trace)
-				{
-					if ((lastSource == null && source != null) || (lastSource != source))
-					{
-						trace.Log($"> Method: {(source == null ? "[NONE]" : source.FullName)}");
-						lastSource = source;
-					}
-
-					trace.Log($" >> Invoked: {method.FullName}{(method.IsStatic ? " [Static]" : " [Virtual]")}");
-				}
+				ScheduleMethod(method);
 			}
-
-			lock (_lock)
-			{
-				if (method.IsStatic || method.IsConstructor || method.DeclaringType.IsValueType || direct)
-				{
-					ScheduleMethod(method);
-				}
-				else
-				{
-					bool contains;
-
-					lock (allocatedTypes)
-					{
-						contains = allocatedTypes.Contains(method.DeclaringType);
-					}
-
-					if (contains)
-					{
-						ScheduleMethod(method);
-					}
-
-					var slot = TypeLayout.GetMethodSlot(method);
-
-					ScheduleDerivedMethods(method.DeclaringType, slot);
-				}
-			}
-		}
-
-		private void ScheduleDerivedMethods(MosaType type, uint slot)
-		{
-			var children = TypeLayout.GetDerivedTypes(type);
-
-			if (children == null)
-				return;
-
-			foreach (var derived in children)
+			else
 			{
 				bool contains;
 
 				lock (allocatedTypes)
 				{
-					contains = allocatedTypes.Contains(derived);
+					contains = allocatedTypes.Contains(method.DeclaringType);
 				}
 
 				if (contains)
 				{
-					var derivedMethod = TypeLayout.GetMethodBySlot(derived, slot);
-
-					MarkMethodInvoked(derivedMethod);
-
-					ScheduleMethod(derivedMethod);
+					ScheduleMethod(method);
 				}
 
-				ScheduleDerivedMethods(derived, slot);
+				var slot = TypeLayout.GetMethodSlot(method);
+
+				ScheduleDerivedMethods(method.DeclaringType, slot);
 			}
 		}
+	}
 
-		private void ScheduleMethods(MosaType type)
+	private void ScheduleDerivedMethods(MosaType type, uint slot)
+	{
+		var children = TypeLayout.GetDerivedTypes(type);
+
+		if (children == null)
+			return;
+
+		foreach (var derived in children)
 		{
-			var currentType = type;
+			bool contains;
 
-			var slots = new bool[TypeLayout.GetMethodTable(type).Count];
-
-			while (currentType != null)
+			lock (allocatedTypes)
 			{
-				foreach (var method in currentType.Methods)
+				contains = allocatedTypes.Contains(derived);
+			}
+
+			if (contains)
+			{
+				var derivedMethod = TypeLayout.GetMethodBySlot(derived, slot);
+
+				MarkMethodInvoked(derivedMethod);
+
+				ScheduleMethod(derivedMethod);
+			}
+
+			ScheduleDerivedMethods(derived, slot);
+		}
+	}
+
+	private void ScheduleMethods(MosaType type)
+	{
+		var currentType = type;
+
+		var slots = new bool[TypeLayout.GetMethodTable(type).Count];
+
+		while (currentType != null)
+		{
+			foreach (var method in currentType.Methods)
+			{
+				bool contains;
+
+				lock (invokedMethods)
 				{
-					bool contains;
-
-					lock (invokedMethods)
-					{
-						contains = invokedMethods.Contains(method);
-					}
-
-					if (contains)
-					{
-						var slot = TypeLayout.GetMethodSlot(method);
-
-						if (slots[slot])
-							continue;
-
-						slots[slot] = true;
-
-						ScheduleMethod(method);
-					}
+					contains = invokedMethods.Contains(method);
 				}
 
-				currentType = currentType.BaseType; // EXPLORE: base types may not need to be considered
-			}
-		}
-
-		private void ScheduleMethod(MosaMethod method)
-		{
-			lock (scheduledMethods)
-			{
-				if (scheduledMethods.Contains(method))
-					return;
-
-				scheduledMethods.Add(method);
-
-				trace?.Log($" ==> Scheduling: {method}{(method.IsStatic ? " [Static]" : " [Virtual]")}");
-
-				Compiler.MethodScheduler.Schedule(method);
-			}
-		}
-
-		public void Initialize()
-		{
-			if (!IsEnabled)
-				return;
-
-			var entryPoint = TypeSystem.EntryPoint;
-
-			if (entryPoint != null)
-			{
-				MarkMethodInvoked(entryPoint);
-				ScheduleMethod(entryPoint);
-			}
-
-			var objectType = TypeSystem.GetTypeByName("System.Object");
-			allocatedTypes.Add(objectType);
-
-			var stringType = TypeSystem.GetTypeByName("System.String");
-			allocatedTypes.Add(stringType);
-
-			var typeType = TypeSystem.GetTypeByName("System.Type");
-			allocatedTypes.Add(typeType);
-
-			var exceptionType = TypeSystem.GetTypeByName("System.Exception");
-			allocatedTypes.Add(exceptionType);
-
-			var delegateType = TypeSystem.GetTypeByName("System.Delegate");
-			allocatedTypes.Add(delegateType);
-
-			//var arrayType = TypeSystem.GetTypeByName("System", "Array");
-			//allocatedTypes.Add(arrayType);
-
-			// Collect all unit tests methods
-			foreach (var type in TypeSystem.AllTypes)
-			{
-				bool allocateType = false;
-
-				foreach (var method in type.Methods)
+				if (contains)
 				{
-					if (!method.IsStatic)
+					var slot = TypeLayout.GetMethodSlot(method);
+
+					if (slots[slot])
 						continue;
 
-					var methodAttribute = method.FindCustomAttribute(UnitTestAttributeName);
+					slots[slot] = true;
 
-					if (methodAttribute != null)
-					{
-						MarkMethodInvoked(method);
-
-						ScheduleMethod(method);
-						allocateType = true;
-					}
-				}
-
-				if (allocateType)
-				{
-					TypeAllocated(type, null);
+					ScheduleMethod(method);
 				}
 			}
-		}
 
-		public void AccessedField(MosaField field)
+			currentType = currentType.BaseType; // EXPLORE: base types may not need to be considered
+		}
+	}
+
+	private void ScheduleMethod(MosaMethod method)
+	{
+		lock (scheduledMethods)
 		{
-			if (!IsEnabled)
+			if (scheduledMethods.Contains(method))
 				return;
 
-			if (!field.IsStatic)
-				return;
+			scheduledMethods.Add(method);
 
-			lock (accessedFields)
+			trace?.Log($" ==> Scheduling: {method}{(method.IsStatic ? " [Static]" : " [Virtual]")}");
+
+			Compiler.MethodScheduler.Schedule(method);
+		}
+	}
+
+	public void Initialize()
+	{
+		if (!IsEnabled)
+			return;
+
+		var entryPoint = TypeSystem.EntryPoint;
+
+		if (entryPoint != null)
+		{
+			MarkMethodInvoked(entryPoint);
+			ScheduleMethod(entryPoint);
+		}
+
+		var objectType = TypeSystem.GetTypeByName("System.Object");
+		allocatedTypes.Add(objectType);
+
+		var stringType = TypeSystem.GetTypeByName("System.String");
+		allocatedTypes.Add(stringType);
+
+		var typeType = TypeSystem.GetTypeByName("System.Type");
+		allocatedTypes.Add(typeType);
+
+		var exceptionType = TypeSystem.GetTypeByName("System.Exception");
+		allocatedTypes.Add(exceptionType);
+
+		var delegateType = TypeSystem.GetTypeByName("System.Delegate");
+		allocatedTypes.Add(delegateType);
+
+		//var arrayType = TypeSystem.GetTypeByName("System", "Array");
+		//allocatedTypes.Add(arrayType);
+
+		// Collect all unit tests methods
+		foreach (var type in TypeSystem.AllTypes)
+		{
+			bool allocateType = false;
+
+			foreach (var method in type.Methods)
 			{
-				accessedFields.AddIfNew(field);
-			}
-		}
-
-		public bool IsFieldAccessed(MosaField field)
-		{
-			if (!IsEnabled)
-				return true; // always
-
-			return accessedFields.Contains(field);
-		}
-
-		public bool IsTypeAllocated(MosaType type)
-		{
-			if (!IsEnabled)
-				return true; // always
-
-			return allocatedTypes.Contains(type);
-		}
-
-		public bool IsMethodInvoked(MosaMethod method)
-		{
-			if (!IsEnabled)
-				return true; // always
-
-			return invokedMethods.Contains(method);
-		}
-
-		public void MoreLogInfo()
-		{
-			foreach (var type in TypeSystem.AllTypes)
-			{
-				if (type.IsModule)
+				if (!method.IsStatic)
 					continue;
 
-				if (!IsTypeAllocated(type))
-				{
-					trace?.Log($"Type Excluded: {type.FullName}");
-				}
+				var methodAttribute = method.FindCustomAttribute(UnitTestAttributeName);
 
-				foreach (var method in type.Methods)
+				if (methodAttribute != null)
 				{
-					if (!IsMethodInvoked(method))
-					{
-						trace?.Log($"Method Excluded: {method.FullName}");
-					}
+					MarkMethodInvoked(method);
+
+					ScheduleMethod(method);
+					allocateType = true;
+				}
+			}
+
+			if (allocateType)
+			{
+				TypeAllocated(type, null);
+			}
+		}
+	}
+
+	public void AccessedField(MosaField field)
+	{
+		if (!IsEnabled)
+			return;
+
+		if (!field.IsStatic)
+			return;
+
+		lock (accessedFields)
+		{
+			accessedFields.AddIfNew(field);
+		}
+	}
+
+	public bool IsFieldAccessed(MosaField field)
+	{
+		if (!IsEnabled)
+			return true; // always
+
+		return accessedFields.Contains(field);
+	}
+
+	public bool IsTypeAllocated(MosaType type)
+	{
+		if (!IsEnabled)
+			return true; // always
+
+		return allocatedTypes.Contains(type);
+	}
+
+	public bool IsMethodInvoked(MosaMethod method)
+	{
+		if (!IsEnabled)
+			return true; // always
+
+		return invokedMethods.Contains(method);
+	}
+
+	public void MoreLogInfo()
+	{
+		foreach (var type in TypeSystem.AllTypes)
+		{
+			if (type.IsModule)
+				continue;
+
+			if (!IsTypeAllocated(type))
+			{
+				trace?.Log($"Type Excluded: {type.FullName}");
+			}
+
+			foreach (var method in type.Methods)
+			{
+				if (!IsMethodInvoked(method))
+				{
+					trace?.Log($"Method Excluded: {method.FullName}");
 				}
 			}
 		}

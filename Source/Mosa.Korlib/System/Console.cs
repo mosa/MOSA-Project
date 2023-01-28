@@ -2,65 +2,64 @@
 
 using System.Runtime.CompilerServices;
 
-namespace System
+namespace System;
+
+public static class Console
 {
-	public static class Console
+	public static ConsoleColor ForegroundColor
 	{
-		public static ConsoleColor ForegroundColor
+		get
 		{
-			get
-			{
-				return GetForegroundColor();
-			}
-			set
-			{
-				SetForegroundColor(value);
-			}
+			return GetForegroundColor();
 		}
-
-		public static ConsoleColor BackgroundColor
+		set
 		{
-			get
-			{
-				return GetBackgroundColor();
-			}
-			set
-			{
-				SetBackgroundColor(value);
-			}
+			SetForegroundColor(value);
 		}
-
-		[MethodImpl(MethodImplOptions.InternalCall)]
-		private static extern ConsoleColor GetForegroundColor();
-
-		[MethodImpl(MethodImplOptions.InternalCall)]
-		private static extern ConsoleColor GetBackgroundColor();
-
-		[MethodImpl(MethodImplOptions.InternalCall)]
-		private static extern void SetForegroundColor(ConsoleColor color);
-
-		[MethodImpl(MethodImplOptions.InternalCall)]
-		private static extern void SetBackgroundColor(ConsoleColor color);
-
-		[MethodImpl(MethodImplOptions.InternalCall)]
-		public static extern void ResetColor();
-
-		[MethodImpl(MethodImplOptions.InternalCall)]
-		public static extern void Clear();
-
-		[MethodImpl(MethodImplOptions.InternalCall)]
-		public static extern void WriteLine();
-
-		[MethodImpl(MethodImplOptions.InternalCall)]
-		public static extern void WriteLine(string value);
-
-		[MethodImpl(MethodImplOptions.InternalCall)]
-		public static extern void Write(string value);
-
-		[MethodImpl(MethodImplOptions.InternalCall)]
-		public static extern void Write(char value);
-
-		[MethodImpl(MethodImplOptions.InternalCall)]
-		public static extern void SetCursorPosition(int left, int top);
 	}
+
+	public static ConsoleColor BackgroundColor
+	{
+		get
+		{
+			return GetBackgroundColor();
+		}
+		set
+		{
+			SetBackgroundColor(value);
+		}
+	}
+
+	[MethodImpl(MethodImplOptions.InternalCall)]
+	private static extern ConsoleColor GetForegroundColor();
+
+	[MethodImpl(MethodImplOptions.InternalCall)]
+	private static extern ConsoleColor GetBackgroundColor();
+
+	[MethodImpl(MethodImplOptions.InternalCall)]
+	private static extern void SetForegroundColor(ConsoleColor color);
+
+	[MethodImpl(MethodImplOptions.InternalCall)]
+	private static extern void SetBackgroundColor(ConsoleColor color);
+
+	[MethodImpl(MethodImplOptions.InternalCall)]
+	public static extern void ResetColor();
+
+	[MethodImpl(MethodImplOptions.InternalCall)]
+	public static extern void Clear();
+
+	[MethodImpl(MethodImplOptions.InternalCall)]
+	public static extern void WriteLine();
+
+	[MethodImpl(MethodImplOptions.InternalCall)]
+	public static extern void WriteLine(string value);
+
+	[MethodImpl(MethodImplOptions.InternalCall)]
+	public static extern void Write(string value);
+
+	[MethodImpl(MethodImplOptions.InternalCall)]
+	public static extern void Write(char value);
+
+	[MethodImpl(MethodImplOptions.InternalCall)]
+	public static extern void SetCursorPosition(int left, int top);
 }

@@ -1,63 +1,62 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.UnitTests.Generics
+namespace Mosa.UnitTests.Generics;
+
+public interface IInterfaceAA<T>
 {
-	public interface IInterfaceAA<T>
+	T GetValue(T value);
+}
+
+public interface IInterfaceBB<T>
+{
+	T Get(T value);
+}
+
+public class GenericInterfaceTestClass<T> : IInterfaceAA<T>, IInterfaceBB<T>
+{
+	public T GetValue(T value)
 	{
-		T GetValue(T value);
+		return value;
 	}
 
-	public interface IInterfaceBB<T>
+	T IInterfaceBB<T>.Get(T value)
 	{
-		T Get(T value);
+		return value;
+	}
+}
+
+public static class GenericInterfaceTests
+{
+	[MosaUnitTest(Series = "I4")]
+	public static int InterfaceTest1(int value)
+	{
+		var genericInterfaceTestClass = new GenericInterfaceTestClass<int>();
+		return genericInterfaceTestClass.GetValue(value);
 	}
 
-	public class GenericInterfaceTestClass<T> : IInterfaceAA<T>, IInterfaceBB<T>
+	[MosaUnitTest(Series = "I4")]
+	public static int InterfaceTest2(int value)
 	{
-		public T GetValue(T value)
-		{
-			return value;
-		}
-
-		T IInterfaceBB<T>.Get(T value)
-		{
-			return value;
-		}
+		IInterfaceAA<int> aa = new GenericInterfaceTestClass<int>();
+		return aa.GetValue(value);
 	}
 
-	public static class GenericInterfaceTests
+	[MosaUnitTest(Series = "I4")]
+	public static int InterfaceTest3(int value)
 	{
-		[MosaUnitTest(Series = "I4")]
-		public static int InterfaceTest1(int value)
-		{
-			var genericInterfaceTestClass = new GenericInterfaceTestClass<int>();
-			return genericInterfaceTestClass.GetValue(value);
-		}
+		IInterfaceBB<int> bb = new GenericInterfaceTestClass<int>();
+		return bb.Get(value);
+	}
 
-		[MosaUnitTest(Series = "I4")]
-		public static int InterfaceTest2(int value)
-		{
-			IInterfaceAA<int> aa = new GenericInterfaceTestClass<int>();
-			return aa.GetValue(value);
-		}
+	[MosaUnitTest]
+	public static int InterfaceTest4()
+	{
+		var iList = new int[] { 1, 3, 5 };
 
-		[MosaUnitTest(Series = "I4")]
-		public static int InterfaceTest3(int value)
-		{
-			IInterfaceBB<int> bb = new GenericInterfaceTestClass<int>();
-			return bb.Get(value);
-		}
+		int result = 0;
+		foreach (var i in iList)
+			result += i;
 
-		[MosaUnitTest]
-		public static int InterfaceTest4()
-		{
-			var iList = new int[] { 1, 3, 5 };
-
-			int result = 0;
-			foreach (var i in iList)
-				result += i;
-
-			return result;
-		}
+		return result;
 	}
 }

@@ -3,23 +3,22 @@
 using Mosa.Compiler.Framework;
 
 
-namespace Mosa.Platform.x64.Intrinsic
+namespace Mosa.Platform.x64.Intrinsic;
+
+/// <summary>
+/// IntrinsicMethods
+/// </summary>
+static partial class IntrinsicMethods
 {
-	/// <summary>
-	/// IntrinsicMethods
-	/// </summary>
-	static partial class IntrinsicMethods
+	[IntrinsicMethod("Mosa.Platform.x64.Intrinsic::AllocateStackSpace")]
+	private static void AllocateStackSpace(Context context, MethodCompiler methodCompiler)
 	{
-		[IntrinsicMethod("Mosa.Platform.x64.Intrinsic::AllocateStackSpace")]
-		private static void AllocateStackSpace(Context context, MethodCompiler methodCompiler)
-		{
-			Operand result = context.Result;
-			Operand size = context.Operand1;
+		Operand result = context.Result;
+		Operand size = context.Operand1;
 
-			Operand esp = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, CPURegister.RSP);
+		Operand esp = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, CPURegister.RSP);
 
-			context.SetInstruction(X64.Sub64, esp, esp, size);
-			context.AppendInstruction(X64.Mov64, result, esp);
-		}
+		context.SetInstruction(X64.Sub64, esp, esp, size);
+		context.AppendInstruction(X64.Mov64, result, esp);
 	}
 }

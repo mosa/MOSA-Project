@@ -1,14 +1,13 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
+namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree;
+
+public sealed partial class IntervalTree<T>
 {
-	public sealed partial class IntervalTree<T>
+	private enum Direction : byte
 	{
-		private enum Direction : byte
-		{
-			LEFT,
-			RIGHT,
-			NONE
-		}
+		LEFT,
+		RIGHT,
+		NONE
 	}
 }

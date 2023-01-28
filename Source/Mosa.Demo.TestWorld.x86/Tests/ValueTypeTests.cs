@@ -1,40 +1,39 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Demo.TestWorld.x86.Tests
+namespace Mosa.Demo.TestWorld.x86.Tests;
+
+public class ValueTypeTests
 {
-	public class ValueTypeTests
+	public static string Test1()
 	{
-		public static string Test1()
-		{
-			int i = 10;
+		int i = 10;
 
-			string s = i.ToString();
+		string s = i.ToString();
 
-			return s;
-		}
-
-		public static int Test2()
-		{
-			ValueType vt = new ValueType(2);
-
-			int i = vt.GetValue();
-
-			return i;
-		}
+		return s;
 	}
 
-	public struct ValueType
+	public static int Test2()
 	{
-		private readonly int z;
+		ValueType vt = new ValueType(2);
 
-		public ValueType(int x)
-		{
-			z = x;
-		}
+		int i = vt.GetValue();
 
-		public int GetValue()
-		{
-			return z;
-		}
+		return i;
+	}
+}
+
+public struct ValueType
+{
+	private readonly int z;
+
+	public ValueType(int x)
+	{
+		z = x;
+	}
+
+	public int GetValue()
+	{
+		return z;
 	}
 }

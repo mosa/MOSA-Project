@@ -2,173 +2,172 @@
 
 using Mosa.Runtime;
 
-namespace Mosa.DeviceSystem
+namespace Mosa.DeviceSystem;
+
+/// <summary>
+/// HAL
+/// </summary>
+public static class HAL
 {
 	/// <summary>
-	/// HAL
+	/// The hardware abstraction
 	/// </summary>
-	public static class HAL
+	static private BaseHardwareAbstraction hardwareAbstraction;
+
+	/// <summary>
+	/// Interrupt Delegate
+	/// </summary>
+	/// <param name="irq">The irq.</param>
+	public delegate void HandleInterrupt(byte irq);
+
+	static private HandleInterrupt handleInterrupt;
+
+	/// <summary>
+	/// Sets the hardware abstraction.
+	/// </summary>
+	/// <param name="hardwareAbstraction">The hardware abstraction.</param>
+	public static void SetHardwareAbstraction(BaseHardwareAbstraction hardwareAbstraction)
 	{
-		/// <summary>
-		/// The hardware abstraction
-		/// </summary>
-		static private BaseHardwareAbstraction hardwareAbstraction;
+		HAL.hardwareAbstraction = hardwareAbstraction;
+	}
 
-		/// <summary>
-		/// Interrupt Delegate
-		/// </summary>
-		/// <param name="irq">The irq.</param>
-		public delegate void HandleInterrupt(byte irq);
+	/// <summary>
+	/// Sets the interrupt handler.
+	/// </summary>
+	/// <param name="handleInterrupt">The handle interrupt.</param>
+	public static void SetInterruptHandler(HandleInterrupt handleInterrupt)
+	{
+		HAL.handleInterrupt = handleInterrupt;
+	}
 
-		static private HandleInterrupt handleInterrupt;
+	/// <summary>
+	/// Processes the interrupt.
+	/// </summary>
+	/// <param name="irq">The irq.</param>
+	public static void ProcessInterrupt(byte irq)
+	{
+		handleInterrupt?.Invoke(irq);
+	}
 
-		/// <summary>
-		/// Sets the hardware abstraction.
-		/// </summary>
-		/// <param name="hardwareAbstraction">The hardware abstraction.</param>
-		public static void SetHardwareAbstraction(BaseHardwareAbstraction hardwareAbstraction)
-		{
-			HAL.hardwareAbstraction = hardwareAbstraction;
-		}
+	/// <summary>
+	/// Requests an IO read/write port object from the kernel
+	/// </summary>
+	/// <param name="port">The port number.</param>
+	/// <returns></returns>
+	public static BaseIOPortReadWrite GetReadWriteIOPort(ushort port)
+	{
+		return hardwareAbstraction.GetReadWriteIOPort(port);
+	}
 
-		/// <summary>
-		/// Sets the interrupt handler.
-		/// </summary>
-		/// <param name="handleInterrupt">The handle interrupt.</param>
-		public static void SetInterruptHandler(HandleInterrupt handleInterrupt)
-		{
-			HAL.handleInterrupt = handleInterrupt;
-		}
+	/// <summary>
+	/// Requests an IO read port object from the kernel
+	/// </summary>
+	/// <param name="port">The port number.</param>
+	/// <returns></returns>
+	public static BaseIOPortRead GetReadIOPort(ushort port)
+	{
+		return hardwareAbstraction.GetReadIOPort(port);
+	}
 
-		/// <summary>
-		/// Processes the interrupt.
-		/// </summary>
-		/// <param name="irq">The irq.</param>
-		public static void ProcessInterrupt(byte irq)
-		{
-			handleInterrupt?.Invoke(irq);
-		}
+	/// <summary>
+	/// Requests an IO read/write port object from the kernel
+	/// </summary>
+	/// <param name="port">The port number.</param>
+	/// <returns></returns>
+	public static BaseIOPortWrite GetWriteIOPort(ushort port)
+	{
+		return hardwareAbstraction.GetWriteIOPort(port);
+	}
 
-		/// <summary>
-		/// Requests an IO read/write port object from the kernel
-		/// </summary>
-		/// <param name="port">The port number.</param>
-		/// <returns></returns>
-		public static BaseIOPortReadWrite GetReadWriteIOPort(ushort port)
-		{
-			return hardwareAbstraction.GetReadWriteIOPort(port);
-		}
+	/// <summary>
+	/// Requests a block of memory from the kernel
+	/// </summary>
+	/// <param name="address">The address.</param>
+	/// <param name="size">The size.</param>
+	/// <returns></returns>
+	public static ConstrainedPointer GetPhysicalMemory(Pointer address, uint size)
+	{
+		return hardwareAbstraction.GetPhysicalMemory(address, size);
+	}
 
-		/// <summary>
-		/// Requests an IO read port object from the kernel
-		/// </summary>
-		/// <param name="port">The port number.</param>
-		/// <returns></returns>
-		public static BaseIOPortRead GetReadIOPort(ushort port)
-		{
-			return hardwareAbstraction.GetReadIOPort(port);
-		}
+	/// <summary>
+	/// Disables all interrupts.
+	/// </summary>
+	internal static void DisableAllInterrupts()
+	{
+		hardwareAbstraction.DisableAllInterrupts();
+	}
 
-		/// <summary>
-		/// Requests an IO read/write port object from the kernel
-		/// </summary>
-		/// <param name="port">The port number.</param>
-		/// <returns></returns>
-		public static BaseIOPortWrite GetWriteIOPort(ushort port)
-		{
-			return hardwareAbstraction.GetWriteIOPort(port);
-		}
+	/// <summary>
+	/// Enables all interrupts.
+	/// </summary>
+	internal static void EnableAllInterrupts()
+	{
+		hardwareAbstraction.EnableAllInterrupts();
+	}
 
-		/// <summary>
-		/// Requests a block of memory from the kernel
-		/// </summary>
-		/// <param name="address">The address.</param>
-		/// <param name="size">The size.</param>
-		/// <returns></returns>
-		public static ConstrainedPointer GetPhysicalMemory(Pointer address, uint size)
-		{
-			return hardwareAbstraction.GetPhysicalMemory(address, size);
-		}
+	/// <summary>
+	/// Sleeps the specified milliseconds.
+	/// </summary>
+	/// <param name="milliseconds">The milliseconds.</param>
+	public static void Sleep(uint milliseconds)
+	{
+		hardwareAbstraction.Sleep(milliseconds);
+	}
 
-		/// <summary>
-		/// Disables all interrupts.
-		/// </summary>
-		internal static void DisableAllInterrupts()
-		{
-			hardwareAbstraction.DisableAllInterrupts();
-		}
+	/// <summary>
+	/// Allocates the memory.
+	/// </summary>
+	/// <param name="size">The size.</param>
+	/// <param name="alignment">The alignment.</param>
+	/// <returns></returns>
+	public static ConstrainedPointer AllocateMemory(uint size, uint alignment)
+	{
+		return hardwareAbstraction.AllocateVirtualMemory(size, alignment);
+	}
 
-		/// <summary>
-		/// Enables all interrupts.
-		/// </summary>
-		internal static void EnableAllInterrupts()
-		{
-			hardwareAbstraction.EnableAllInterrupts();
-		}
+	/// <summary>
+	/// Gets the physical address.
+	/// </summary>
+	/// <param name="memory">The memory.</param>
+	/// <returns></returns>
+	public static Pointer TranslateVirtualToPhysicalAddress(Pointer memory)
+	{
+		return hardwareAbstraction.TranslateVirtualToPhysicalAddress(memory);
+	}
 
-		/// <summary>
-		/// Sleeps the specified milliseconds.
-		/// </summary>
-		/// <param name="milliseconds">The milliseconds.</param>
-		public static void Sleep(uint milliseconds)
-		{
-			hardwareAbstraction.Sleep(milliseconds);
-		}
+	/// <summary>
+	/// Debugs the write.
+	/// </summary>
+	/// <param name="message">The message.</param>
+	public static void DebugWrite(string message)
+	{
+		hardwareAbstraction.DebugWrite(message);
+	}
 
-		/// <summary>
-		/// Allocates the memory.
-		/// </summary>
-		/// <param name="size">The size.</param>
-		/// <param name="alignment">The alignment.</param>
-		/// <returns></returns>
-		public static ConstrainedPointer AllocateMemory(uint size, uint alignment)
-		{
-			return hardwareAbstraction.AllocateVirtualMemory(size, alignment);
-		}
+	/// <summary>
+	/// Debugs the write line.
+	/// </summary>
+	/// <param name="message">The message.</param>
+	public static void DebugWriteLine(string message)
+	{
+		hardwareAbstraction.DebugWriteLine(message);
+	}
 
-		/// <summary>
-		/// Gets the physical address.
-		/// </summary>
-		/// <param name="memory">The memory.</param>
-		/// <returns></returns>
-		public static Pointer TranslateVirtualToPhysicalAddress(Pointer memory)
-		{
-			return hardwareAbstraction.TranslateVirtualToPhysicalAddress(memory);
-		}
+	/// <summary>
+	/// Aborts with the specified message.
+	/// </summary>
+	/// <param name="message">The message.</param>
+	public static void Abort(string message)
+	{
+		hardwareAbstraction.Abort(message);
+	}
 
-		/// <summary>
-		/// Debugs the write.
-		/// </summary>
-		/// <param name="message">The message.</param>
-		public static void DebugWrite(string message)
-		{
-			hardwareAbstraction.DebugWrite(message);
-		}
-
-		/// <summary>
-		/// Debugs the write line.
-		/// </summary>
-		/// <param name="message">The message.</param>
-		public static void DebugWriteLine(string message)
-		{
-			hardwareAbstraction.DebugWriteLine(message);
-		}
-
-		/// <summary>
-		/// Aborts with the specified message.
-		/// </summary>
-		/// <param name="message">The message.</param>
-		public static void Abort(string message)
-		{
-			hardwareAbstraction.Abort(message);
-		}
-
-		/// <summary>
-		/// Pause
-		/// </summary>
-		public static void Pause()
-		{
-			hardwareAbstraction.Pause();
-		}
+	/// <summary>
+	/// Pause
+	/// </summary>
+	public static void Pause()
+	{
+		hardwareAbstraction.Pause();
 	}
 }

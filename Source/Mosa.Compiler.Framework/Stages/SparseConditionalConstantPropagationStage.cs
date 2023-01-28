@@ -7,196 +7,195 @@ using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.Trace;
 
-namespace Mosa.Compiler.Framework.Stages
+namespace Mosa.Compiler.Framework.Stages;
+
+/// <summary>
+/// Sparse Conditional Constant Propagation Stage
+/// </summary>
+public class SparseConditionalConstantPropagationStage : BaseMethodCompilerStage
 {
-	/// <summary>
-	/// Sparse Conditional Constant Propagation Stage
-	/// </summary>
-	public class SparseConditionalConstantPropagationStage : BaseMethodCompilerStage
+	protected TraceLog trace;
+
+	private readonly Counter ConstantCount = new Counter("SparseConditionalConstantPropagationStage.ConstantVariables");
+	private Counter ConditionalConstantPropagationCount = new Counter("SparseConditionalConstantPropagationStage.ConstantPropagations");
+	private readonly Counter DeadBlockCount = new Counter("SparseConditionalConstantPropagationStage.DeadBlocks");
+	private Counter InstructionsRemovedCount = new Counter("SparseConditionalConstantPropagationStage.IRInstructionRemoved");
+
+	protected bool changed = false;
+
+	protected override void Initialize()
 	{
-		protected TraceLog trace;
+		Register(ConstantCount);
+		Register(ConditionalConstantPropagationCount);
+		Register(DeadBlockCount);
+		Register(InstructionsRemovedCount);
+	}
 
-		private readonly Counter ConstantCount = new Counter("SparseConditionalConstantPropagationStage.ConstantVariables");
-		private Counter ConditionalConstantPropagationCount = new Counter("SparseConditionalConstantPropagationStage.ConstantPropagations");
-		private readonly Counter DeadBlockCount = new Counter("SparseConditionalConstantPropagationStage.DeadBlocks");
-		private Counter InstructionsRemovedCount = new Counter("SparseConditionalConstantPropagationStage.IRInstructionRemoved");
+	protected override void Setup()
+	{
+		trace = CreateTraceLog();
 
-		protected bool changed = false;
+		changed = false;
+	}
 
-		protected override void Initialize()
+	protected override void Run()
+	{
+		if (!HasCode)
+			return;
+
+		if (!MethodCompiler.IsInSSAForm)
+			return;
+
+		if (HasProtectedRegions)
+			return;
+
+		var analysis = new SparseConditionalConstantPropagation(BasicBlocks, CreateTraceLog, Is32BitPlatform);
+
+		var deadBlocks = analysis.GetDeadBlocked();
+		var constants = analysis.GetIntegerConstants();
+
+		RemoveDeadBlocks(deadBlocks);
+		ReplaceVirtualRegistersWithConstants(constants);
+
+		ConstantCount.Set(constants.Count);
+		DeadBlockCount.Set(deadBlocks.Count);
+
+		if (CompilerSettings.FullCheckMode)
+			CheckAllPhiInstructions();
+	}
+
+	protected override void Finish()
+	{
+		trace = null;
+	}
+
+	protected void ReplaceVirtualRegistersWithConstants(List<Tuple<Operand, ulong>> constantVirtualRegisters)
+	{
+		foreach (var value in constantVirtualRegisters)
 		{
-			Register(ConstantCount);
-			Register(ConditionalConstantPropagationCount);
-			Register(DeadBlockCount);
-			Register(InstructionsRemovedCount);
+			ReplaceVirtualRegisterWithConstant(value.Item1, value.Item2);
 		}
+	}
 
-		protected override void Setup()
+	protected void ReplaceVirtualRegisterWithConstant(Operand target, ulong value)
+	{
+		trace?.Log($"{target} = {value} Uses: {target.Uses.Count}");
+
+		if (target.Definitions.Count == 0)
+			return;
+
+		if (target.Definitions.Count != 1)
+			throw new CompilerException($"SCCP: {target} definition has move than one value");
+
+		//Debug.Assert(target.Definitions.Count == 1);
+
+		if (target.Uses.Count != 0)
 		{
-			trace = CreateTraceLog();
+			var constant = CreateConstant(target.Type, value);
 
-			changed = false;
-		}
-
-		protected override void Run()
-		{
-			if (!HasCode)
-				return;
-
-			if (!MethodCompiler.IsInSSAForm)
-				return;
-
-			if (HasProtectedRegions)
-				return;
-
-			var analysis = new SparseConditionalConstantPropagation(BasicBlocks, CreateTraceLog, Is32BitPlatform);
-
-			var deadBlocks = analysis.GetDeadBlocked();
-			var constants = analysis.GetIntegerConstants();
-
-			RemoveDeadBlocks(deadBlocks);
-			ReplaceVirtualRegistersWithConstants(constants);
-
-			ConstantCount.Set(constants.Count);
-			DeadBlockCount.Set(deadBlocks.Count);
-
-			if (CompilerSettings.FullCheckMode)
-				CheckAllPhiInstructions();
-		}
-
-		protected override void Finish()
-		{
-			trace = null;
-		}
-
-		protected void ReplaceVirtualRegistersWithConstants(List<Tuple<Operand, ulong>> constantVirtualRegisters)
-		{
-			foreach (var value in constantVirtualRegisters)
+			// for each statement T that uses operand, substituted c in statement T
+			foreach (var node in target.Uses.ToArray())
 			{
-				ReplaceVirtualRegisterWithConstant(value.Item1, value.Item2);
-			}
-		}
+				Debug.Assert(node.Instruction != IRInstruction.AddressOf);
 
-		protected void ReplaceVirtualRegisterWithConstant(Operand target, ulong value)
-		{
-			trace?.Log($"{target} = {value} Uses: {target.Uses.Count}");
-
-			if (target.Definitions.Count == 0)
-				return;
-
-			if (target.Definitions.Count != 1)
-				throw new CompilerException($"SCCP: {target} definition has move than one value");
-
-			//Debug.Assert(target.Definitions.Count == 1);
-
-			if (target.Uses.Count != 0)
-			{
-				var constant = CreateConstant(target.Type, value);
-
-				// for each statement T that uses operand, substituted c in statement T
-				foreach (var node in target.Uses.ToArray())
+				for (int i = 0; i < node.OperandCount; i++)
 				{
-					Debug.Assert(node.Instruction != IRInstruction.AddressOf);
+					var operand = node.GetOperand(i);
 
-					for (int i = 0; i < node.OperandCount; i++)
-					{
-						var operand = node.GetOperand(i);
+					if (operand != target)
+						continue;
 
-						if (operand != target)
-							continue;
+					trace?.Log("*** ConditionalConstantPropagation");
+					trace?.Log($"BEFORE:\t{node}");
+					node.SetOperand(i, constant);
+					ConditionalConstantPropagationCount.Increment();
+					trace?.Log($"AFTER: \t{node}");
 
-						trace?.Log("*** ConditionalConstantPropagation");
-						trace?.Log($"BEFORE:\t{node}");
-						node.SetOperand(i, constant);
-						ConditionalConstantPropagationCount.Increment();
-						trace?.Log($"AFTER: \t{node}");
-
-						changed = true;
-					}
+					changed = true;
 				}
 			}
+		}
 
-			Debug.Assert(target.Uses.Count == 0);
+		Debug.Assert(target.Uses.Count == 0);
 
-			if (target.Definitions.Count == 0)
+		if (target.Definitions.Count == 0)
+			return;
+
+		var defNode = target.Definitions[0];
+
+		trace?.Log($"REMOVED:\t{defNode}");
+		defNode.SetNop();
+		InstructionsRemovedCount.Increment();
+	}
+
+	protected void RemoveDeadBlocks(List<BasicBlock> deadBlocks)
+	{
+		foreach (var block in deadBlocks)
+		{
+			RemoveBranchesToDeadBlocks(block);
+		}
+	}
+
+	protected void RemoveBranchesToDeadBlocks(BasicBlock deadBlock)
+	{
+		foreach (var previous in deadBlock.PreviousBlocks.ToArray())
+		{
+			// unable to handle more than two branch blocks
+			// and if only one branch, then this block is dead as well
+			if (previous.NextBlocks.Count != 2)
 				return;
 
-			var defNode = target.Definitions[0];
+			var otherBlock = previous.NextBlocks[0] == deadBlock ? previous.NextBlocks[1] : previous.NextBlocks[0];
 
-			trace?.Log($"REMOVED:\t{defNode}");
-			defNode.SetNop();
-			InstructionsRemovedCount.Increment();
-		}
-
-		protected void RemoveDeadBlocks(List<BasicBlock> deadBlocks)
-		{
-			foreach (var block in deadBlocks)
+			for (var node = previous.Last.Previous; !node.IsBlockStartInstruction; node = node.Previous)
 			{
-				RemoveBranchesToDeadBlocks(block);
-			}
-		}
+				if (node.IsEmptyOrNop)
+					continue;
 
-		protected void RemoveBranchesToDeadBlocks(BasicBlock deadBlock)
-		{
-			foreach (var previous in deadBlock.PreviousBlocks.ToArray())
-			{
-				// unable to handle more than two branch blocks
-				// and if only one branch, then this block is dead as well
-				if (previous.NextBlocks.Count != 2)
-					return;
+				if (node.BranchTargetsCount == 0)
+					continue;
 
-				var otherBlock = previous.NextBlocks[0] == deadBlock ? previous.NextBlocks[1] : previous.NextBlocks[0];
-
-				for (var node = previous.Last.Previous; !node.IsBlockStartInstruction; node = node.Previous)
+				if (node.Instruction == IRInstruction.Branch32 || node.Instruction == IRInstruction.Branch64 || node.Instruction == IRInstruction.BranchObject)
 				{
-					if (node.IsEmptyOrNop)
-						continue;
-
-					if (node.BranchTargetsCount == 0)
-						continue;
-
-					if (node.Instruction == IRInstruction.Branch32 || node.Instruction == IRInstruction.Branch64 || node.Instruction == IRInstruction.BranchObject)
-					{
-						trace?.Log("*** RemoveBranchesToDeadBlocks");
-						trace?.Log($"REMOVED:\t{node}");
-						node.SetNop();
-						InstructionsRemovedCount.Increment();
-						continue;
-					}
-
-					if (node.Instruction == IRInstruction.Jmp)
-					{
-						trace?.Log("*** RemoveBranchesToDeadBlocks");
-						trace?.Log($"BEFORE:\t{node}");
-						node.UpdateBranchTarget(0, otherBlock);
-						trace?.Log($"AFTER: \t{node}");
-						continue;
-					}
-
-					break;
+					trace?.Log("*** RemoveBranchesToDeadBlocks");
+					trace?.Log($"REMOVED:\t{node}");
+					node.SetNop();
+					InstructionsRemovedCount.Increment();
+					continue;
 				}
-			}
 
-			CheckAndClearEmptyBlock(deadBlock);
+				if (node.Instruction == IRInstruction.Jmp)
+				{
+					trace?.Log("*** RemoveBranchesToDeadBlocks");
+					trace?.Log($"BEFORE:\t{node}");
+					node.UpdateBranchTarget(0, otherBlock);
+					trace?.Log($"AFTER: \t{node}");
+					continue;
+				}
+
+				break;
+			}
 		}
 
-		private void CheckAndClearEmptyBlock(BasicBlock block)
+		CheckAndClearEmptyBlock(deadBlock);
+	}
+
+	private void CheckAndClearEmptyBlock(BasicBlock block)
+	{
+		if (block.PreviousBlocks.Count != 0 || block.IsHeadBlock)
+			return;
+
+		trace?.Log($"*** Removed Block: {block}");
+
+		var nextBlocks = block.NextBlocks.ToArray();
+
+		EmptyBlockOfAllInstructions(block, true);
+
+		//UpdatePhiBlocks(nextBlocks);
+
+		foreach (var next in nextBlocks)
 		{
-			if (block.PreviousBlocks.Count != 0 || block.IsHeadBlock)
-				return;
-
-			trace?.Log($"*** Removed Block: {block}");
-
-			var nextBlocks = block.NextBlocks.ToArray();
-
-			EmptyBlockOfAllInstructions(block, true);
-
-			//UpdatePhiBlocks(nextBlocks);
-
-			foreach (var next in nextBlocks)
-			{
-				CheckAndClearEmptyBlock(next);
-			}
+			CheckAndClearEmptyBlock(next);
 		}
 	}
 }

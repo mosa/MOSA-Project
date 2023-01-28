@@ -14,11 +14,10 @@
 **
 ===========================================================*/
 
-namespace System
+namespace System;
+
+public interface ICustomFormatter
 {
-	public interface ICustomFormatter
-	{
-		// Interface does not need to be marked with the serializable attribute
-		string Format(string format, object arg, IFormatProvider formatProvider);
-	}
+	// Interface does not need to be marked with the serializable attribute
+	string Format(string format, object arg, IFormatProvider formatProvider);
 }

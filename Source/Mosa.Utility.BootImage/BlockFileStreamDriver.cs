@@ -3,116 +3,115 @@
 using System.IO;
 using Mosa.DeviceSystem;
 
-namespace Mosa.Utility.BootImage
+namespace Mosa.Utility.BootImage;
+
+/// <summary>
+/// Block File Stream Driver
+/// </summary>
+/// <seealso cref="Mosa.DeviceSystem.BaseDeviceDriver" />
+/// <seealso cref="Mosa.DeviceSystem.IDiskDevice" />
+public class BlockFileStreamDriver : BaseDeviceDriver, IDiskDevice
 {
+	public string Filename { get; }
+
 	/// <summary>
-	/// Block File Stream Driver
+	/// The disk file
 	/// </summary>
-	/// <seealso cref="Mosa.DeviceSystem.BaseDeviceDriver" />
-	/// <seealso cref="Mosa.DeviceSystem.IDiskDevice" />
-	public class BlockFileStreamDriver : BaseDeviceDriver, IDiskDevice
+	protected FileStream diskFile;
+
+	/// <summary>
+	/// The block offset
+	/// </summary>
+	public uint BlockOffset = 0;
+
+	/// <summary>
+	/// Initializes a new instance of the <see cref="BlockFileStreamDriver" /> class.
+	/// </summary>
+	/// <param name="filename">The filename.</param>
+	public BlockFileStreamDriver(string filename)
 	{
-		public string Filename { get; }
+		Filename = filename;
+		diskFile = new FileStream(Filename, FileMode.OpenOrCreate);
+	}
 
-		/// <summary>
-		/// The disk file
-		/// </summary>
-		protected FileStream diskFile;
+	public override void Initialize()
+	{
+		Device.Name = "DiskDevice_" + Path.GetFileName(Filename);
+	}
 
-		/// <summary>
-		/// The block offset
-		/// </summary>
-		public uint BlockOffset = 0;
+	public override void Probe() => Device.Status = DeviceStatus.Available;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="BlockFileStreamDriver" /> class.
-		/// </summary>
-		/// <param name="filename">The filename.</param>
-		public BlockFileStreamDriver(string filename)
-		{
-			Filename = filename;
-			diskFile = new FileStream(Filename, FileMode.OpenOrCreate);
-		}
+	public override void Start()
+	{
+		Device.Status = DeviceStatus.Online;
+	}
 
-		public override void Initialize()
-		{
-			Device.Name = "DiskDevice_" + Path.GetFileName(Filename);
-		}
+	public override bool OnInterrupt() => true;
 
-		public override void Probe() => Device.Status = DeviceStatus.Available;
+	/// <summary>
+	/// Releases unmanaged and - optionally - managed resources
+	/// </summary>
+	public void Dispose()
+	{
+		diskFile.Close();
+	}
 
-		public override void Start()
-		{
-			Device.Status = DeviceStatus.Online;
-		}
+	/// <summary>
+	/// Gets a value indicating whether this instance can write.
+	/// </summary>
+	/// <value><c>true</c> if this instance can write; otherwise, <c>false</c>.</value>
+	public bool CanWrite { get { return true; } }
 
-		public override bool OnInterrupt() => true;
+	/// <summary>
+	/// Gets the total blocks.
+	/// </summary>
+	/// <value>The total blocks.</value>
+	public uint TotalBlocks { get { return (uint)(diskFile.Length / 512); } }
 
-		/// <summary>
-		/// Releases unmanaged and - optionally - managed resources
-		/// </summary>
-		public void Dispose()
-		{
-			diskFile.Close();
-		}
+	/// <summary>
+	/// Gets the size of the block.
+	/// </summary>
+	/// <value>The size of the block.</value>
+	public uint BlockSize { get { return 512; } }
 
-		/// <summary>
-		/// Gets a value indicating whether this instance can write.
-		/// </summary>
-		/// <value><c>true</c> if this instance can write; otherwise, <c>false</c>.</value>
-		public bool CanWrite { get { return true; } }
+	/// <summary>
+	/// Reads the block.
+	/// </summary>
+	/// <param name="block">The block.</param>
+	/// <param name="count">The count.</param>
+	/// <returns></returns>
+	public byte[] ReadBlock(uint block, uint count)
+	{
+		var data = new byte[count * 512];
+		ReadBlock(block, count, data);
+		return data;
+	}
 
-		/// <summary>
-		/// Gets the total blocks.
-		/// </summary>
-		/// <value>The total blocks.</value>
-		public uint TotalBlocks { get { return (uint)(diskFile.Length / 512); } }
+	/// <summary>
+	/// Reads the block.
+	/// </summary>
+	/// <param name="block">The block.</param>
+	/// <param name="count">The count.</param>
+	/// <param name="data">The data.</param>
+	/// <returns></returns>
+	public bool ReadBlock(uint block, uint count, byte[] data)
+	{
+		diskFile.Seek((block + BlockOffset) * 512, SeekOrigin.Begin);
+		diskFile.Read(data, 0, (int)(count * 512));
+		return true;
+	}
 
-		/// <summary>
-		/// Gets the size of the block.
-		/// </summary>
-		/// <value>The size of the block.</value>
-		public uint BlockSize { get { return 512; } }
-
-		/// <summary>
-		/// Reads the block.
-		/// </summary>
-		/// <param name="block">The block.</param>
-		/// <param name="count">The count.</param>
-		/// <returns></returns>
-		public byte[] ReadBlock(uint block, uint count)
-		{
-			var data = new byte[count * 512];
-			ReadBlock(block, count, data);
-			return data;
-		}
-
-		/// <summary>
-		/// Reads the block.
-		/// </summary>
-		/// <param name="block">The block.</param>
-		/// <param name="count">The count.</param>
-		/// <param name="data">The data.</param>
-		/// <returns></returns>
-		public bool ReadBlock(uint block, uint count, byte[] data)
-		{
-			diskFile.Seek((block + BlockOffset) * 512, SeekOrigin.Begin);
-			diskFile.Read(data, 0, (int)(count * 512));
-			return true;
-		}
-
-		/// <summary>
-		/// Writes the block.
-		/// </summary>
-		/// <param name="block">The block.</param>
-		/// <param name="count">The count.</param>
-		/// <param name="data">The data.</param>
-		/// <returns></returns>
-		public bool WriteBlock(uint block, uint count, byte[] data)
-		{
-			diskFile.Seek((block + BlockOffset) * 512, SeekOrigin.Begin);
-			diskFile.Write(data, 0, (int)(count * 512));
-			return true;
-		}
+	/// <summary>
+	/// Writes the block.
+	/// </summary>
+	/// <param name="block">The block.</param>
+	/// <param name="count">The count.</param>
+	/// <param name="data">The data.</param>
+	/// <returns></returns>
+	public bool WriteBlock(uint block, uint count, byte[] data)
+	{
+		diskFile.Seek((block + BlockOffset) * 512, SeekOrigin.Begin);
+		diskFile.Write(data, 0, (int)(count * 512));
+		return true;
 	}
 }

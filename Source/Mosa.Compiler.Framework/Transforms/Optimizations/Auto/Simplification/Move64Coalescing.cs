@@ -4,41 +4,40 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
+
+/// <summary>
+/// Move64Coalescing
+/// </summary>
+public sealed class Move64Coalescing : BaseTransform
 {
-	/// <summary>
-	/// Move64Coalescing
-	/// </summary>
-	public sealed class Move64Coalescing : BaseTransform
+	public Move64Coalescing() : base(IRInstruction.Move64, TransformType.Auto | TransformType.Optimization)
 	{
-		public Move64Coalescing() : base(IRInstruction.Move64, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+	}
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand1.IsVirtualRegister)
-				return false;
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!context.Operand1.IsVirtualRegister)
+			return false;
 
-			if (context.Operand1.Definitions.Count != 1)
-				return false;
+		if (context.Operand1.Definitions.Count != 1)
+			return false;
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.Move64)
-				return false;
+		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Move64)
+			return false;
 
-			if (IsCPURegister(context.Operand1.Definitions[0].Operand1))
-				return false;
+		if (IsCPURegister(context.Operand1.Definitions[0].Operand1))
+			return false;
 
-			return true;
-		}
+		return true;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
 
-			var t1 = context.Operand1.Definitions[0].Operand1;
+		var t1 = context.Operand1.Definitions[0].Operand1;
 
-			context.SetInstruction(IRInstruction.Move64, result, t1);
-		}
+		context.SetInstruction(IRInstruction.Move64, result, t1);
 	}
 }
