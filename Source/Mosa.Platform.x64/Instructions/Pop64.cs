@@ -25,7 +25,7 @@ public sealed class Pop64 : X64Instruction
 		opcodeEncoder.SuppressByte(0x40);
 		opcodeEncoder.Append4Bits(0b0100);
 		opcodeEncoder.Append1Bit(0b0);
-		opcodeEncoder.Append1Bit((node.Result.Register.RegisterCode >> 3));
+		opcodeEncoder.Append1Bit(node.Result.Register.RegisterCode >> 3);
 		opcodeEncoder.Append1Bit(0b0);
 		opcodeEncoder.Append1Bit(0b0);
 		opcodeEncoder.Append4Bits(0b0101);

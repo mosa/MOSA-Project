@@ -44,12 +44,12 @@ public struct UInt64: IComparable, IComparable<ulong>, IEquatable<ulong>
 
 	public bool Equals(ulong value)
 	{
-		return (m_value == value);
+		return m_value == value;
 	}
 
 	public override int GetHashCode()
 	{
-		return ((int)m_value) ^ (int)(m_value >> 32);
+		return (int)m_value ^ (int)(m_value >> 32);
 	}
 
 	public override unsafe string ToString()
@@ -67,7 +67,7 @@ public struct UInt64: IComparable, IComparable<ulong>, IEquatable<ulong>
 
 		for (int i = count - 1; i >= 0; i--)
 		{
-			s.first_char[i] = (char)((temp % 10) + 0x30);
+			s.first_char[i] = (char)(temp % 10 + 0x30);
 			temp /= 10;
 		}
 

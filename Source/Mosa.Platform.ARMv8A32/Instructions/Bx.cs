@@ -30,7 +30,7 @@ public sealed class Bx : ARMv8A32Instruction
 			opcodeEncoder.Append4Bits(0b1111);
 			opcodeEncoder.Append4Bits(0b1111);
 			opcodeEncoder.Append4Bits(0b0001);
-			opcodeEncoder.Append3Bits((node.Operand1.Register.RegisterCode >> 1));
+			opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode >> 1);
 			opcodeEncoder.Append1Bit(0b0);
 			return;
 		}

@@ -159,7 +159,7 @@ public class MasterBootBlock
 
 		for (uint index = 0; index < MaxMBRPartitions; index++)
 		{
-			uint offset = MBR.FirstPartition + (index * MBRConstant.PartitionSize);
+			uint offset = MBR.FirstPartition + index * MBRConstant.PartitionSize;
 
 			Partitions[index] = new GenericPartition(index)
 			{
@@ -197,7 +197,7 @@ public class MasterBootBlock
 
 		if (code != null)
 		{
-			for (uint index = 0; ((index < MBRConstant.CodeAreaSize) && (index < code.Length)); index++)
+			for (uint index = 0; index < MBRConstant.CodeAreaSize && index < code.Length; index++)
 			{
 				masterboot.SetByte(index, code[index]);
 			}
@@ -207,7 +207,7 @@ public class MasterBootBlock
 		{
 			if (Partitions[index].TotalBlocks != 0)
 			{
-				uint offset = MBR.FirstPartition + (index * 16);
+				uint offset = MBR.FirstPartition + index * 16;
 				masterboot.SetByte(offset + PartitionRecord.Status, (byte)(Partitions[index].Bootable ? 0x80 : 0x00));
 				masterboot.SetByte(offset + PartitionRecord.PartitionType, Partitions[index].PartitionType);
 				masterboot.SetUInt32(offset + PartitionRecord.LBA, Partitions[index].StartLBA);

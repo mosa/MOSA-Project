@@ -92,7 +92,7 @@ public static class EnumU1
 	{
 		var e = EnumU1Type.Positive50;
 		++e;
-		return (byte)(e);
+		return (byte)e;
 	}
 
 	[MosaUnitTest]
@@ -100,7 +100,7 @@ public static class EnumU1
 	{
 		var e = EnumU1Type.Positive50;
 		--e;
-		return (byte)(e);
+		return (byte)e;
 	}
 
 	[MosaUnitTest]
@@ -108,7 +108,7 @@ public static class EnumU1
 	{
 		var e = EnumU1Type.Positive50;
 		e++;
-		return (byte)(e);
+		return (byte)e;
 	}
 
 	[MosaUnitTest]
@@ -116,7 +116,7 @@ public static class EnumU1
 	{
 		var e = EnumU1Type.Positive50;
 		e--;
-		return (byte)(e);
+		return (byte)e;
 	}
 
 	[MosaUnitTest]
@@ -367,7 +367,7 @@ public static class EnumU2
 	{
 		var e = EnumU2Type.Positive50;
 		++e;
-		return (ushort)(e);
+		return (ushort)e;
 	}
 
 	[MosaUnitTest]
@@ -375,7 +375,7 @@ public static class EnumU2
 	{
 		var e = EnumU2Type.Positive50;
 		--e;
-		return (ushort)(e);
+		return (ushort)e;
 	}
 
 	[MosaUnitTest]
@@ -383,7 +383,7 @@ public static class EnumU2
 	{
 		var e = EnumU2Type.Positive50;
 		e++;
-		return (ushort)(e);
+		return (ushort)e;
 	}
 
 	[MosaUnitTest]
@@ -391,7 +391,7 @@ public static class EnumU2
 	{
 		var e = EnumU2Type.Positive50;
 		e--;
-		return (ushort)(e);
+		return (ushort)e;
 	}
 
 	[MosaUnitTest]
@@ -642,7 +642,7 @@ public static class EnumU4
 	{
 		var e = EnumU4Type.Positive50;
 		++e;
-		return (uint)(e);
+		return (uint)e;
 	}
 
 	[MosaUnitTest]
@@ -650,7 +650,7 @@ public static class EnumU4
 	{
 		var e = EnumU4Type.Positive50;
 		--e;
-		return (uint)(e);
+		return (uint)e;
 	}
 
 	[MosaUnitTest]
@@ -658,7 +658,7 @@ public static class EnumU4
 	{
 		var e = EnumU4Type.Positive50;
 		e++;
-		return (uint)(e);
+		return (uint)e;
 	}
 
 	[MosaUnitTest]
@@ -666,7 +666,7 @@ public static class EnumU4
 	{
 		var e = EnumU4Type.Positive50;
 		e--;
-		return (uint)(e);
+		return (uint)e;
 	}
 
 	[MosaUnitTest]
@@ -917,7 +917,7 @@ public static class EnumU8
 	{
 		var e = EnumU8Type.Positive50;
 		++e;
-		return (ulong)(e);
+		return (ulong)e;
 	}
 
 	[MosaUnitTest]
@@ -925,7 +925,7 @@ public static class EnumU8
 	{
 		var e = EnumU8Type.Positive50;
 		--e;
-		return (ulong)(e);
+		return (ulong)e;
 	}
 
 	[MosaUnitTest]
@@ -933,7 +933,7 @@ public static class EnumU8
 	{
 		var e = EnumU8Type.Positive50;
 		e++;
-		return (ulong)(e);
+		return (ulong)e;
 	}
 
 	[MosaUnitTest]
@@ -941,7 +941,7 @@ public static class EnumU8
 	{
 		var e = EnumU8Type.Positive50;
 		e--;
-		return (ulong)(e);
+		return (ulong)e;
 	}
 
 	[MosaUnitTest]
@@ -1195,7 +1195,7 @@ public static class EnumI1
 	{
 		var e = EnumI1Type.Positive50;
 		++e;
-		return (sbyte)(e);
+		return (sbyte)e;
 	}
 
 	[MosaUnitTest]
@@ -1203,7 +1203,7 @@ public static class EnumI1
 	{
 		var e = EnumI1Type.Positive50;
 		--e;
-		return (sbyte)(e);
+		return (sbyte)e;
 	}
 
 	[MosaUnitTest]
@@ -1211,7 +1211,7 @@ public static class EnumI1
 	{
 		var e = EnumI1Type.Positive50;
 		e++;
-		return (sbyte)(e);
+		return (sbyte)e;
 	}
 
 	[MosaUnitTest]
@@ -1219,7 +1219,7 @@ public static class EnumI1
 	{
 		var e = EnumI1Type.Positive50;
 		e--;
-		return (sbyte)(e);
+		return (sbyte)e;
 	}
 
 	[MosaUnitTest]
@@ -1459,7 +1459,7 @@ public static class EnumI1
 	{
 		var e = EnumI1Type.Negative50;
 		++e;
-		return (sbyte)(e);
+		return (sbyte)e;
 	}
 
 	[MosaUnitTest]
@@ -1467,7 +1467,7 @@ public static class EnumI1
 	{
 		var e = EnumI1Type.Negative50;
 		--e;
-		return (sbyte)(e);
+		return (sbyte)e;
 	}
 
 	[MosaUnitTest]
@@ -1475,7 +1475,7 @@ public static class EnumI1
 	{
 		var e = EnumI1Type.Negative50;
 		e++;
-		return (sbyte)(e);
+		return (sbyte)e;
 	}
 
 	[MosaUnitTest]
@@ -1483,7 +1483,7 @@ public static class EnumI1
 	{
 		var e = EnumI1Type.Negative50;
 		e--;
-		return (sbyte)(e);
+		return (sbyte)e;
 	}
 
 	[MosaUnitTest]
@@ -1737,7 +1737,7 @@ public static class EnumI2
 	{
 		var e = EnumI2Type.Positive50;
 		++e;
-		return (short)(e);
+		return (short)e;
 	}
 
 	[MosaUnitTest]
@@ -1745,7 +1745,7 @@ public static class EnumI2
 	{
 		var e = EnumI2Type.Positive50;
 		--e;
-		return (short)(e);
+		return (short)e;
 	}
 
 	[MosaUnitTest]
@@ -1753,7 +1753,7 @@ public static class EnumI2
 	{
 		var e = EnumI2Type.Positive50;
 		e++;
-		return (short)(e);
+		return (short)e;
 	}
 
 	[MosaUnitTest]
@@ -1761,7 +1761,7 @@ public static class EnumI2
 	{
 		var e = EnumI2Type.Positive50;
 		e--;
-		return (short)(e);
+		return (short)e;
 	}
 
 	[MosaUnitTest]
@@ -2001,7 +2001,7 @@ public static class EnumI2
 	{
 		var e = EnumI2Type.Negative50;
 		++e;
-		return (short)(e);
+		return (short)e;
 	}
 
 	[MosaUnitTest]
@@ -2009,7 +2009,7 @@ public static class EnumI2
 	{
 		var e = EnumI2Type.Negative50;
 		--e;
-		return (short)(e);
+		return (short)e;
 	}
 
 	[MosaUnitTest]
@@ -2017,7 +2017,7 @@ public static class EnumI2
 	{
 		var e = EnumI2Type.Negative50;
 		e++;
-		return (short)(e);
+		return (short)e;
 	}
 
 	[MosaUnitTest]
@@ -2025,7 +2025,7 @@ public static class EnumI2
 	{
 		var e = EnumI2Type.Negative50;
 		e--;
-		return (short)(e);
+		return (short)e;
 	}
 
 	[MosaUnitTest]
@@ -2279,7 +2279,7 @@ public static class EnumI4
 	{
 		var e = EnumI4Type.Positive50;
 		++e;
-		return (int)(e);
+		return (int)e;
 	}
 
 	[MosaUnitTest]
@@ -2287,7 +2287,7 @@ public static class EnumI4
 	{
 		var e = EnumI4Type.Positive50;
 		--e;
-		return (int)(e);
+		return (int)e;
 	}
 
 	[MosaUnitTest]
@@ -2295,7 +2295,7 @@ public static class EnumI4
 	{
 		var e = EnumI4Type.Positive50;
 		e++;
-		return (int)(e);
+		return (int)e;
 	}
 
 	[MosaUnitTest]
@@ -2303,7 +2303,7 @@ public static class EnumI4
 	{
 		var e = EnumI4Type.Positive50;
 		e--;
-		return (int)(e);
+		return (int)e;
 	}
 
 	[MosaUnitTest]
@@ -2543,7 +2543,7 @@ public static class EnumI4
 	{
 		var e = EnumI4Type.Negative50;
 		++e;
-		return (int)(e);
+		return (int)e;
 	}
 
 	[MosaUnitTest]
@@ -2551,7 +2551,7 @@ public static class EnumI4
 	{
 		var e = EnumI4Type.Negative50;
 		--e;
-		return (int)(e);
+		return (int)e;
 	}
 
 	[MosaUnitTest]
@@ -2559,7 +2559,7 @@ public static class EnumI4
 	{
 		var e = EnumI4Type.Negative50;
 		e++;
-		return (int)(e);
+		return (int)e;
 	}
 
 	[MosaUnitTest]
@@ -2567,7 +2567,7 @@ public static class EnumI4
 	{
 		var e = EnumI4Type.Negative50;
 		e--;
-		return (int)(e);
+		return (int)e;
 	}
 
 	[MosaUnitTest]
@@ -2821,7 +2821,7 @@ public static class EnumI8
 	{
 		var e = EnumI8Type.Positive50;
 		++e;
-		return (long)(e);
+		return (long)e;
 	}
 
 	[MosaUnitTest]
@@ -2829,7 +2829,7 @@ public static class EnumI8
 	{
 		var e = EnumI8Type.Positive50;
 		--e;
-		return (long)(e);
+		return (long)e;
 	}
 
 	[MosaUnitTest]
@@ -2837,7 +2837,7 @@ public static class EnumI8
 	{
 		var e = EnumI8Type.Positive50;
 		e++;
-		return (long)(e);
+		return (long)e;
 	}
 
 	[MosaUnitTest]
@@ -2845,7 +2845,7 @@ public static class EnumI8
 	{
 		var e = EnumI8Type.Positive50;
 		e--;
-		return (long)(e);
+		return (long)e;
 	}
 
 	[MosaUnitTest]
@@ -3085,7 +3085,7 @@ public static class EnumI8
 	{
 		var e = EnumI8Type.Negative50;
 		++e;
-		return (long)(e);
+		return (long)e;
 	}
 
 	[MosaUnitTest]
@@ -3093,7 +3093,7 @@ public static class EnumI8
 	{
 		var e = EnumI8Type.Negative50;
 		--e;
-		return (long)(e);
+		return (long)e;
 	}
 
 	[MosaUnitTest]
@@ -3101,7 +3101,7 @@ public static class EnumI8
 	{
 		var e = EnumI8Type.Negative50;
 		e++;
-		return (long)(e);
+		return (long)e;
 	}
 
 	[MosaUnitTest]
@@ -3109,7 +3109,7 @@ public static class EnumI8
 	{
 		var e = EnumI8Type.Negative50;
 		e--;
-		return (long)(e);
+		return (long)e;
 	}
 
 	[MosaUnitTest]

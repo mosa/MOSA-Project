@@ -84,7 +84,7 @@ public class OtherTest : KernelTest
 			}
 		}
 
-		return (sum + nestedSum) == 4556;
+		return sum + nestedSum == 4556;
 	}
 
 	public static bool ForeachNested2Test()
@@ -203,7 +203,7 @@ public class OtherTest : KernelTest
 
 	public static bool RemR4()
 	{
-		return (f1 % f2) == 0f;
+		return f1 % f2 == 0f;
 	}
 
 	private const double d1 = 1.232145E+10d;
@@ -211,7 +211,7 @@ public class OtherTest : KernelTest
 
 	public static bool RemR8()
 	{
-		return (d1 % d2) == 0d;
+		return d1 % d2 == 0d;
 	}
 
 	public static bool NullableTest1()
@@ -302,7 +302,7 @@ public class OtherTest : KernelTest
 			var addr1 = (uint)(pageDirectoryEntries + index);
 
 			//incrementing a UInt32
-			var addr2 = pageDirectoryAddress + (index * 4);  //struct PageDirectoryEntry as a size of 4 bytes
+			var addr2 = pageDirectoryAddress + index * 4;  //struct PageDirectoryEntry as a size of 4 bytes
 
 			return addr1 == addr2;
 		}

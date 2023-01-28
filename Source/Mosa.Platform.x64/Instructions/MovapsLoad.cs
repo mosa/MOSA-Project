@@ -27,12 +27,12 @@ public sealed class MovapsLoad : X64Instruction
 		System.Diagnostics.Debug.Assert(node.Operand1.IsCPURegister);
 		System.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);
 
-		if ((node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 5) && node.Operand2.IsConstantZero)
+		if (node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 5 && node.Operand2.IsConstantZero)
 		{
 			opcodeEncoder.SuppressByte(0x40);
 			opcodeEncoder.Append4Bits(0b0100);
 			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append1Bit((node.Result.Register.RegisterCode >> 3));
+			opcodeEncoder.Append1Bit(node.Result.Register.RegisterCode >> 3);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append8Bits(0x0F);
@@ -44,12 +44,12 @@ public sealed class MovapsLoad : X64Instruction
 			return;
 		}
 
-		if ((node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 4) && node.Operand2.IsConstantZero)
+		if (node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 4 && node.Operand2.IsConstantZero)
 		{
 			opcodeEncoder.SuppressByte(0x40);
 			opcodeEncoder.Append4Bits(0b0100);
 			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append1Bit((node.Result.Register.RegisterCode >> 3));
+			opcodeEncoder.Append1Bit(node.Result.Register.RegisterCode >> 3);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append8Bits(0x0F);
@@ -63,12 +63,12 @@ public sealed class MovapsLoad : X64Instruction
 			return;
 		}
 
-		if ((node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 4) && (node.Operand2.IsConstant && node.Operand2.ConstantSigned32 >= -128 && node.Operand2.ConstantSigned32 <= 127))
+		if (node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 4 && node.Operand2.IsConstant && node.Operand2.ConstantSigned32 >= -128 && node.Operand2.ConstantSigned32 <= 127)
 		{
 			opcodeEncoder.SuppressByte(0x40);
 			opcodeEncoder.Append4Bits(0b0100);
 			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append1Bit((node.Result.Register.RegisterCode >> 3));
+			opcodeEncoder.Append1Bit(node.Result.Register.RegisterCode >> 3);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append8Bits(0x0F);
@@ -83,12 +83,12 @@ public sealed class MovapsLoad : X64Instruction
 			return;
 		}
 
-		if ((node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 4) && node.Operand2.IsConstant)
+		if (node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 4 && node.Operand2.IsConstant)
 		{
 			opcodeEncoder.SuppressByte(0x40);
 			opcodeEncoder.Append4Bits(0b0100);
 			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append1Bit((node.Result.Register.RegisterCode >> 3));
+			opcodeEncoder.Append1Bit(node.Result.Register.RegisterCode >> 3);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append8Bits(0x0F);
@@ -105,8 +105,8 @@ public sealed class MovapsLoad : X64Instruction
 			opcodeEncoder.SuppressByte(0x40);
 			opcodeEncoder.Append4Bits(0b0100);
 			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append1Bit((node.Result.Register.RegisterCode >> 3));
-			opcodeEncoder.Append1Bit((node.Operand1.Register.RegisterCode >> 3));
+			opcodeEncoder.Append1Bit(node.Result.Register.RegisterCode >> 3);
+			opcodeEncoder.Append1Bit(node.Operand1.Register.RegisterCode >> 3);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append8Bits(0x0F);
 			opcodeEncoder.Append8Bits(0x29);
@@ -124,9 +124,9 @@ public sealed class MovapsLoad : X64Instruction
 			opcodeEncoder.SuppressByte(0x40);
 			opcodeEncoder.Append4Bits(0b0100);
 			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append1Bit((node.Result.Register.RegisterCode >> 3));
+			opcodeEncoder.Append1Bit(node.Result.Register.RegisterCode >> 3);
 			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append1Bit((node.Operand1.Register.RegisterCode >> 3));
+			opcodeEncoder.Append1Bit(node.Operand1.Register.RegisterCode >> 3);
 			opcodeEncoder.Append8Bits(0x0F);
 			opcodeEncoder.Append8Bits(0x29);
 			opcodeEncoder.Append2Bits(0b00);
@@ -135,14 +135,14 @@ public sealed class MovapsLoad : X64Instruction
 			return;
 		}
 
-		if (node.Operand1.IsCPURegister && (node.Operand2.IsConstant && node.Operand2.ConstantSigned32 >= -128 && node.Operand2.ConstantSigned32 <= 127))
+		if (node.Operand1.IsCPURegister && node.Operand2.IsConstant && node.Operand2.ConstantSigned32 >= -128 && node.Operand2.ConstantSigned32 <= 127)
 		{
 			opcodeEncoder.SuppressByte(0x40);
 			opcodeEncoder.Append4Bits(0b0100);
 			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append1Bit((node.Result.Register.RegisterCode >> 3));
+			opcodeEncoder.Append1Bit(node.Result.Register.RegisterCode >> 3);
 			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append1Bit((node.Operand1.Register.RegisterCode >> 3));
+			opcodeEncoder.Append1Bit(node.Operand1.Register.RegisterCode >> 3);
 			opcodeEncoder.Append8Bits(0x0F);
 			opcodeEncoder.Append8Bits(0x29);
 			opcodeEncoder.Append2Bits(0b01);
@@ -157,9 +157,9 @@ public sealed class MovapsLoad : X64Instruction
 			opcodeEncoder.SuppressByte(0x40);
 			opcodeEncoder.Append4Bits(0b0100);
 			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append1Bit((node.Result.Register.RegisterCode >> 3));
+			opcodeEncoder.Append1Bit(node.Result.Register.RegisterCode >> 3);
 			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append1Bit((node.Operand1.Register.RegisterCode >> 3));
+			opcodeEncoder.Append1Bit(node.Operand1.Register.RegisterCode >> 3);
 			opcodeEncoder.Append8Bits(0x0F);
 			opcodeEncoder.Append8Bits(0x29);
 			opcodeEncoder.Append2Bits(0b10);
@@ -174,7 +174,7 @@ public sealed class MovapsLoad : X64Instruction
 			opcodeEncoder.SuppressByte(0x40);
 			opcodeEncoder.Append4Bits(0b0100);
 			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append1Bit((node.Result.Register.RegisterCode >> 3));
+			opcodeEncoder.Append1Bit(node.Result.Register.RegisterCode >> 3);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append8Bits(0x0F);
@@ -191,7 +191,7 @@ public sealed class MovapsLoad : X64Instruction
 			opcodeEncoder.SuppressByte(0x40);
 			opcodeEncoder.Append4Bits(0b0100);
 			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append1Bit((node.Result.Register.RegisterCode >> 3));
+			opcodeEncoder.Append1Bit(node.Result.Register.RegisterCode >> 3);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append8Bits(0x0F);

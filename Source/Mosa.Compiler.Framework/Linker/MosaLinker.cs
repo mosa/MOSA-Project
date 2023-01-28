@@ -135,7 +135,7 @@ public sealed class MosaLinker
 			symbol.Alignment = aligned;
 			symbol.SectionKind = kind;
 
-			symbol.Stream = (size == 0) ? new MemoryStream() : new MemoryStream((int)size);
+			symbol.Stream = size == 0 ? new MemoryStream() : new MemoryStream((int)size);
 
 			if (size != 0)
 			{

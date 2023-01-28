@@ -29,6 +29,6 @@ public struct CustomAttribute
 
 	public CustomAttributeArgument GetCustomAttributeArgument(uint slot)
 	{
-		return new CustomAttributeArgument(Ptr.LoadPointer((Pointer.Size * 3) + (Pointer.Size * (int)slot)));
+		return new CustomAttributeArgument(Ptr.LoadPointer(Pointer.Size * 3 + Pointer.Size * (int)slot));
 	}
 }

@@ -42,7 +42,7 @@ public sealed class Shr32 : X64Instruction
 			opcodeEncoder.Append1Bit(0b1);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append1Bit((node.Result.Register.RegisterCode >> 3));
+			opcodeEncoder.Append1Bit(node.Result.Register.RegisterCode >> 3);
 			opcodeEncoder.Append8Bits(0xD3);
 			opcodeEncoder.Append2Bits(0b11);
 			opcodeEncoder.Append3Bits(0b101);
@@ -57,7 +57,7 @@ public sealed class Shr32 : X64Instruction
 			opcodeEncoder.Append1Bit(0b1);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append1Bit((node.Result.Register.RegisterCode >> 3));
+			opcodeEncoder.Append1Bit(node.Result.Register.RegisterCode >> 3);
 			opcodeEncoder.Append8Bits(0xD1);
 			opcodeEncoder.Append2Bits(0b11);
 			opcodeEncoder.Append3Bits(0b101);
@@ -70,7 +70,7 @@ public sealed class Shr32 : X64Instruction
 			opcodeEncoder.SuppressByte(0x40);
 			opcodeEncoder.Append4Bits(0b0100);
 			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append1Bit((node.Result.Register.RegisterCode >> 3));
+			opcodeEncoder.Append1Bit(node.Result.Register.RegisterCode >> 3);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append8Bits(0xC1);

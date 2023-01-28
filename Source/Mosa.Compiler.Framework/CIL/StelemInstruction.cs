@@ -51,7 +51,7 @@ public sealed class StelemInstruction : NaryInstruction
 		// Decode base classes first
 		base.Decode(node, decoder);
 
-		node.MosaType = (elementType == null)
+		node.MosaType = elementType == null
 			? (MosaType)decoder.Instruction.Operand
 			: decoder.MethodCompiler.Compiler.GetTypeFromTypeCode(elementType.Value);
 	}

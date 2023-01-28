@@ -35,7 +35,7 @@ public struct GDTTable
 
 	public void Setup()
 	{
-		Entry.Store16(0, (GDTEntryOffset.TotalSize * 3) - 1);
+		Entry.Store16(0, GDTEntryOffset.TotalSize * 3 - 1);
 		Entry.StorePointer(2, Entry + 6);
 
 		Set(0, 0, 0, 0, 0);                // Null segment
@@ -58,7 +58,7 @@ public struct GDTTable
 
 	private void Set(uint index, uint address, uint limit, byte access, byte granularity)
 	{
-		var entry = Entry + (6 + (index * GDTEntryOffset.TotalSize));
+		var entry = Entry + (6 + index * GDTEntryOffset.TotalSize);
 
 		entry.Store16(GDTEntryOffset.BaseLow, (ushort)(address & 0xFFFF));
 		entry.Store8(GDTEntryOffset.BaseMiddle, (byte)((address >> 16) & 0xFF));

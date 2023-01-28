@@ -36,7 +36,7 @@ internal static class PageTable
 		// Setup Page Directory
 		for (uint index = 0; index < 1024; index++)
 		{
-			PageDirectory.Store32(index << 2, (uint)(PageTables.ToInt32() + (index * 4096) | 0x04 | 0x02 | 0x01));
+			PageDirectory.Store32(index << 2, (uint)(PageTables.ToInt32() + index * 4096 | 0x04 | 0x02 | 0x01));
 		}
 
 		Console.WriteLine("Mosa.Kernel.BareMetal.x86.PageTable.Initialize:2");
@@ -46,7 +46,7 @@ internal static class PageTable
 		{
 			Console.WriteValue(index);
 
-			Page.ClearPage(PageTables + (index * Page.Size));
+			Page.ClearPage(PageTables + index * Page.Size);
 
 			Console.Write(' ');
 		}

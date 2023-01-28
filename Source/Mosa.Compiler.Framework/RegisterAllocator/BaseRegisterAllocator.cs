@@ -79,10 +79,10 @@ public abstract class BaseRegisterAllocator
 		// Setup extended physical registers
 		foreach (var physicalRegister in architecture.RegisterSet)
 		{
-			bool reserved = (physicalRegister == StackFrameRegister
-			                 || physicalRegister == StackPointerRegister
-			                 || (LinkRegister != null && physicalRegister == LinkRegister)
-			                 || (ProgramCounter != null && physicalRegister == ProgramCounter));
+			bool reserved = physicalRegister == StackFrameRegister
+			                || physicalRegister == StackPointerRegister
+			                || (LinkRegister != null && physicalRegister == LinkRegister)
+			                || (ProgramCounter != null && physicalRegister == ProgramCounter);
 
 			VirtualRegisters.Add(new VirtualRegister(physicalRegister, reserved));
 			LiveIntervalTracks.Add(new LiveIntervalTrack(physicalRegister, reserved));
@@ -282,7 +282,7 @@ public abstract class BaseRegisterAllocator
 	protected int GetIndex(Operand operand)
 	{
 		//FUTURE: Make private by refactoring
-		return (operand.IsCPURegister) ? (operand.Register.Index) : (operand.Index + PhysicalRegisterCount - 1);
+		return operand.IsCPURegister ? operand.Register.Index : operand.Index + PhysicalRegisterCount - 1;
 	}
 
 	private void CreateExtendedBlocks()
@@ -467,7 +467,7 @@ public abstract class BaseRegisterAllocator
 
 				for (int step = 0; step < 2; step++)
 				{
-					var innerslot = (step == 0) ? slot.Before : slot;
+					var innerslot = step == 0 ? slot.Before : slot;
 
 					var row = new string[RegisterCount];
 					map.Add(innerslot.Value, row);
@@ -1415,7 +1415,7 @@ public abstract class BaseRegisterAllocator
 				var to = ExtendedBlocks[nextBlock.Sequence];
 
 				// determine where to insert resolving moves
-				bool fromAnchorFlag = (from.BasicBlock.NextBlocks.Count == 1);
+				bool fromAnchorFlag = from.BasicBlock.NextBlocks.Count == 1;
 
 				ExtendedBlock anchor = fromAnchorFlag ? from : to;
 
@@ -1444,7 +1444,7 @@ public abstract class BaseRegisterAllocator
 						resolverTrace?.Log($"    FROM: {from,-7} {fromLiveInterval.AssignedOperand}");
 						resolverTrace?.Log($"      TO: {to,-7} {toLiveInterval.AssignedOperand}");
 
-						resolverTrace?.Log($"  INSERT: {(fromAnchorFlag ? "FROM (bottom)" : "TO (Before)")}{((toLiveInterval.AssignedPhysicalOperand == null) ? "  ****SKIPPED***" : string.Empty)}");
+						resolverTrace?.Log($"  INSERT: {(fromAnchorFlag ? "FROM (bottom)" : "TO (Before)")}{(toLiveInterval.AssignedPhysicalOperand == null ? "  ****SKIPPED***" : string.Empty)}");
 						resolverTrace?.Log();
 
 						// interval was spilled (spill moves are inserted elsewhere)

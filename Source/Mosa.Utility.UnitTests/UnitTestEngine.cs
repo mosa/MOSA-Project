@@ -202,7 +202,7 @@ public class UnitTestEngine : IDisposable
 
 				bool sendFlag = Queue.Count > 0 && Pending.Count < MaxSentQueue;
 
-				if ((MaxSentQueue - Pending.Count < MinSend) && Queue.Count > MinSend)
+				if (MaxSentQueue - Pending.Count < MinSend && Queue.Count > MinSend)
 				{
 					sendFlag = false;
 				}

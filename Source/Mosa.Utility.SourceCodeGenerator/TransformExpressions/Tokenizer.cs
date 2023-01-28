@@ -158,7 +158,7 @@ public static class Tokenizer
 	private static Token GetNumberToken(string part, int index)
 	{
 		int length = part.Length;
-		char last = (length > 1) ? part[length - 1] : ' ';
+		char last = length > 1 ? part[length - 1] : ' ';
 
 		if (last == 'd' || last == 'f')
 		{

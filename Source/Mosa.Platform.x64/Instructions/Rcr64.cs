@@ -38,7 +38,7 @@ public sealed class Rcr64 : X64Instruction
 			opcodeEncoder.Append1Bit(0b1);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append1Bit((node.Result.Register.RegisterCode >> 3));
+			opcodeEncoder.Append1Bit(node.Result.Register.RegisterCode >> 3);
 			opcodeEncoder.Append8Bits(0xD3);
 			opcodeEncoder.Append2Bits(0b11);
 			opcodeEncoder.Append3Bits(0b011);
@@ -53,7 +53,7 @@ public sealed class Rcr64 : X64Instruction
 			opcodeEncoder.Append1Bit(0b1);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append1Bit((node.Result.Register.RegisterCode >> 3));
+			opcodeEncoder.Append1Bit(node.Result.Register.RegisterCode >> 3);
 			opcodeEncoder.Append8Bits(0xD1);
 			opcodeEncoder.Append2Bits(0b11);
 			opcodeEncoder.Append3Bits(0b011);
@@ -68,7 +68,7 @@ public sealed class Rcr64 : X64Instruction
 			opcodeEncoder.Append1Bit(0b1);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append1Bit((node.Result.Register.RegisterCode >> 3));
+			opcodeEncoder.Append1Bit(node.Result.Register.RegisterCode >> 3);
 			opcodeEncoder.Append8Bits(0xC1);
 			opcodeEncoder.Append2Bits(0b11);
 			opcodeEncoder.Append3Bits(0b011);

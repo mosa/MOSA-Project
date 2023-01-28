@@ -57,7 +57,7 @@ public static class UnitTestSystem
 
 		stopwatch.Stop();
 
-		Console.WriteLine("Total Elapsed: " + (stopwatch.ElapsedMilliseconds / 1000.0) + " secs");
+		Console.WriteLine("Total Elapsed: " + stopwatch.ElapsedMilliseconds / 1000.0 + " secs");
 
 		unitTestEngine.Terminate();
 
@@ -221,7 +221,7 @@ public static class UnitTestSystem
 
 	private static void AddParameters(List<int> cmd, object parameter)
 	{
-		if ((parameter == null) || !(parameter is ValueType))
+		if (parameter == null || !(parameter is ValueType))
 		{
 			throw new InvalidProgramException();
 		}
@@ -256,7 +256,7 @@ public static class UnitTestSystem
 		}
 		else if (parameter is UInt32)
 		{
-			cmd.Add((int)((uint)parameter));
+			cmd.Add((int)(uint)parameter);
 		}
 		else if (parameter is UInt64)
 		{
@@ -278,7 +278,7 @@ public static class UnitTestSystem
 		{
 			var b = BitConverter.GetBytes((double)parameter);
 			var u = BitConverter.ToUInt64(b, 0);
-			cmd.Add((int)((long)u));
+			cmd.Add((int)(long)u);
 			cmd.Add((int)((long)u >> 32));
 		}
 		else

@@ -37,7 +37,7 @@ public sealed class Add32 : X86Instruction
 		System.Diagnostics.Debug.Assert(node.Operand1.IsCPURegister);
 		System.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);
 
-		if ((node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 0) && (node.Operand2.IsConstant && node.Operand2.ConstantSigned32 >= -128 && node.Operand2.ConstantSigned32 <= 127))
+		if (node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 0 && node.Operand2.IsConstant && node.Operand2.ConstantSigned32 >= -128 && node.Operand2.ConstantSigned32 <= 127)
 		{
 			opcodeEncoder.Append8Bits(0x83);
 			opcodeEncoder.Append2Bits(0b11);
@@ -47,7 +47,7 @@ public sealed class Add32 : X86Instruction
 			return;
 		}
 
-		if ((node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 0) && node.Operand2.IsConstant)
+		if (node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 0 && node.Operand2.IsConstant)
 		{
 			opcodeEncoder.Append8Bits(0x05);
 			opcodeEncoder.Append32BitImmediate(node.Operand2);

@@ -155,23 +155,23 @@ public class Keyboard : IKeyboard
 		}
 
 		if (keyEvent.KeyType == KeyType.CapsLock)
-			CapLock = (keyEvent.KeyPress == KeyEvent.KeyPressType.Make);
+			CapLock = keyEvent.KeyPress == KeyEvent.KeyPressType.Make;
 		else if (keyEvent.KeyType == KeyType.NumLock)
-			NumLock = (keyEvent.KeyPress == KeyEvent.KeyPressType.Make);
+			NumLock = keyEvent.KeyPress == KeyEvent.KeyPressType.Make;
 		else if (keyEvent.KeyType == KeyType.ScrollLock)
-			ScrollLock = (keyEvent.KeyPress == KeyEvent.KeyPressType.Make);
+			ScrollLock = keyEvent.KeyPress == KeyEvent.KeyPressType.Make;
 		else if (keyEvent.KeyType == KeyType.LeftControl)
-			LeftControl = (keyEvent.KeyPress == KeyEvent.KeyPressType.Make);
+			LeftControl = keyEvent.KeyPress == KeyEvent.KeyPressType.Make;
 		else if (keyEvent.KeyType == KeyType.RightControl)
-			RightControl = (keyEvent.KeyPress == KeyEvent.KeyPressType.Make);
+			RightControl = keyEvent.KeyPress == KeyEvent.KeyPressType.Make;
 		else if (keyEvent.KeyType == KeyType.LeftAlt)
-			LeftAlt = (keyEvent.KeyPress == KeyEvent.KeyPressType.Make);
+			LeftAlt = keyEvent.KeyPress == KeyEvent.KeyPressType.Make;
 		else if (keyEvent.KeyType == KeyType.RightAlt)
-			RightAlt = (keyEvent.KeyPress == KeyEvent.KeyPressType.Make);
+			RightAlt = keyEvent.KeyPress == KeyEvent.KeyPressType.Make;
 		else if (keyEvent.KeyType == KeyType.LeftShift)
-			LeftShift = (keyEvent.KeyPress == KeyEvent.KeyPressType.Make);
+			LeftShift = keyEvent.KeyPress == KeyEvent.KeyPressType.Make;
 		else if (keyEvent.KeyType == KeyType.RightShift)
-			RightShift = (keyEvent.KeyPress == KeyEvent.KeyPressType.Make);
+			RightShift = keyEvent.KeyPress == KeyEvent.KeyPressType.Make;
 
 		return null;
 	}

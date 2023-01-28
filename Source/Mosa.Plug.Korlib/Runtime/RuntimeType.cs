@@ -112,7 +112,7 @@ public sealed unsafe class RuntimeType : Type
 	public override int GetArrayRank()
 	{
 		// We don't know so just return 1 if array, 0 otherwise
-		return (IsArrayImpl()) ? 1 : 0;
+		return IsArrayImpl() ? 1 : 0;
 	}
 
 	public override Type GetElementType()

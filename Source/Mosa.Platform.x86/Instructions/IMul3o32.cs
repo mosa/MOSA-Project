@@ -41,7 +41,7 @@ public sealed class IMul3o32 : X86Instruction
 		System.Diagnostics.Debug.Assert(node.Operand1.IsCPURegister);
 		System.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);
 
-		if (node.Operand1.IsCPURegister && node.Operand2.IsCPURegister && (node.Operand3.IsConstant && node.Operand3.ConstantSigned32 >= -128 && node.Operand3.ConstantSigned32 <= 127))
+		if (node.Operand1.IsCPURegister && node.Operand2.IsCPURegister && node.Operand3.IsConstant && node.Operand3.ConstantSigned32 >= -128 && node.Operand3.ConstantSigned32 <= 127)
 		{
 			opcodeEncoder.Append8Bits(0x6B);
 			opcodeEncoder.Append2Bits(0b11);

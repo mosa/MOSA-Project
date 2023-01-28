@@ -787,8 +787,8 @@ public class BuildCommonInstructionFiles : BuildBaseTemplate
 
 				GetCodes(parts[0], ref code, ref postcode);
 
-				var operand = (parts.Length > 1) ? GetOperand(parts[1]) : string.Empty;
-				var operand2 = (parts.Length > 2) ? GetOperand(parts[2]) : null;
+				var operand = parts.Length > 1 ? GetOperand(parts[1]) : string.Empty;
+				var operand2 = parts.Length > 2 ? GetOperand(parts[2]) : null;
 
 				Lines.Append(tabs);
 
@@ -868,11 +868,11 @@ public class BuildCommonInstructionFiles : BuildBaseTemplate
 
 				if (start == 0)
 				{
-					postcode = ".Register.RegisterCode) & 0x" + ("111111111111111111111111111111".Substring(0, length));
+					postcode = ".Register.RegisterCode) & 0x" + "111111111111111111111111111111".Substring(0, length);
 				}
 				else
 				{
-					postcode = ".Register.RegisterCode >> " + start.ToString() + ") & 0x" + ("111111111111111111111111111111".Substring(0, length));
+					postcode = ".Register.RegisterCode >> " + start.ToString() + ") & 0x" + "111111111111111111111111111111".Substring(0, length);
 				}
 
 				switch (length)

@@ -108,7 +108,7 @@ internal static class Division
 		uint bit = 1;
 		uint res = 0;
 
-		while ((d < n && bit != 0) && ((d & (1L << 31)) == 0))
+		while (d < n && bit != 0 && (d & (1L << 31)) == 0)
 		{
 			d <<= 1;
 			bit <<= 1;
@@ -182,7 +182,7 @@ internal static class Division
 		}
 
 		// Catch divide by same number but opposite sign
-		if (dividend == (divisor * -1))
+		if (dividend == divisor * -1)
 		{
 			quotient = -1;
 			remainder = 0;

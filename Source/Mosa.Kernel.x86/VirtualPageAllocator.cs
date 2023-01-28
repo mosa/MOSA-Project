@@ -45,7 +45,7 @@ public static class VirtualPageAllocator
 	/// <param name="free">if set to <c>true</c> [free].</param>
 	private static void SetPageStatus(uint page, bool free)
 	{
-		var at = new Pointer(Address.VirtualPageAllocator + (page / 32));
+		var at = new Pointer(Address.VirtualPageAllocator + page / 32);
 		byte bit = (byte)(page % 32);
 		uint mask = (byte)(1 << bit);
 
@@ -66,7 +66,7 @@ public static class VirtualPageAllocator
 	/// <returns></returns>
 	private static bool GetPageStatus(uint page)  // true = available
 	{
-		var at = new Pointer(Address.VirtualPageAllocator + (page / 8));
+		var at = new Pointer(Address.VirtualPageAllocator + page / 8);
 		byte bit = (byte)(page % 8);
 		byte mask = (byte)(1 << bit);
 
@@ -85,7 +85,7 @@ public static class VirtualPageAllocator
 		Assert.True(initialized, "VirtualPageAllocator is not initialized");
 
 		uint first = 0xFFFFFFFF; // Marker
-		uint requested = ((size - 1) / PageFrameAllocator.PageSize) + 1;
+		uint requested = (size - 1) / PageFrameAllocator.PageSize + 1;
 
 		for (uint at = 0; at < pages; at++)
 		{
@@ -99,7 +99,7 @@ public static class VirtualPageAllocator
 					for (uint index = 0; index < requested; index++)
 						SetPageStatus(first + index, false);
 
-					return ((first * PageFrameAllocator.PageSize) + Address.ReserveMemory);
+					return first * PageFrameAllocator.PageSize + Address.ReserveMemory;
 				}
 			}
 			else

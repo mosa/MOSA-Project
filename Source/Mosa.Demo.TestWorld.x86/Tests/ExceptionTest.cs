@@ -33,7 +33,7 @@ public class ExceptionTest : KernelTest
 
 		a = a + 7;
 
-		return (a == 21);
+		return a == 21;
 	}
 
 	public static bool ExceptionTest2()
@@ -54,7 +54,7 @@ public class ExceptionTest : KernelTest
 
 		int c = b + a;
 
-		return (c == 41);
+		return c == 41;
 	}
 
 	public static bool ExceptionTest3()
@@ -78,7 +78,7 @@ public class ExceptionTest : KernelTest
 
 		a = a + 7;
 
-		return (a == 121);
+		return a == 121;
 	}
 
 	public static bool ExceptionTest4()
@@ -121,7 +121,7 @@ public class ExceptionTest : KernelTest
 
 		a = a + 7;
 
-		return (a == 232);
+		return a == 232;
 	}
 
 	public static bool ExceptionTest5()
@@ -141,7 +141,7 @@ public class ExceptionTest : KernelTest
 
 		a = a + 7;
 
-		return (a == 19);
+		return a == 19;
 	}
 
 	public static bool ExceptionTest6()
@@ -163,7 +163,7 @@ public class ExceptionTest : KernelTest
 
 		a = a + 50;
 
-		return (a == 120);
+		return a == 120;
 	}
 
 	public static bool ExceptionTest7()
@@ -198,7 +198,7 @@ public class ExceptionTest : KernelTest
 
 		a = a + 60;
 
-		return (a == 160);
+		return a == 160;
 	}
 
 	public static bool ExceptionTest8()
@@ -221,6 +221,6 @@ public class ExceptionTest : KernelTest
 
 		a = a + 7;
 
-		return (a == 69);
+		return a == 69;
 	}
 }

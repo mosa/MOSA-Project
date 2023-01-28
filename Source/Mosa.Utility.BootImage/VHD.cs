@@ -83,7 +83,7 @@ public static class VHD
 	/// <returns></returns>
 	static private ulong GetAlignedSize(ulong size)
 	{
-		return (size + 511) & ~((ulong)511);
+		return (size + 511) & ~(ulong)511;
 	}
 
 	/// <summary>

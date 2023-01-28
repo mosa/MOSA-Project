@@ -24,12 +24,12 @@ public sealed class MovLoad64 : X64Instruction
 		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
-		if ((node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 5) && node.Operand2.IsConstantZero)
+		if (node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 5 && node.Operand2.IsConstantZero)
 		{
 			opcodeEncoder.SuppressByte(0x40);
 			opcodeEncoder.Append4Bits(0b0100);
 			opcodeEncoder.Append1Bit(0b1);
-			opcodeEncoder.Append1Bit((node.Result.Register.RegisterCode >> 3));
+			opcodeEncoder.Append1Bit(node.Result.Register.RegisterCode >> 3);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append8Bits(0x8B);
@@ -40,13 +40,13 @@ public sealed class MovLoad64 : X64Instruction
 			return;
 		}
 
-		if ((node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 5) && node.Operand2.IsCPURegister)
+		if (node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 5 && node.Operand2.IsCPURegister)
 		{
 			opcodeEncoder.SuppressByte(0x40);
 			opcodeEncoder.Append4Bits(0b0100);
 			opcodeEncoder.Append1Bit(0b1);
-			opcodeEncoder.Append1Bit((node.Result.Register.RegisterCode >> 3));
-			opcodeEncoder.Append1Bit((node.Operand2.Register.RegisterCode >> 3));
+			opcodeEncoder.Append1Bit(node.Result.Register.RegisterCode >> 3);
+			opcodeEncoder.Append1Bit(node.Operand2.Register.RegisterCode >> 3);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append8Bits(0x8B);
 			opcodeEncoder.Append2Bits(0b01);
@@ -59,12 +59,12 @@ public sealed class MovLoad64 : X64Instruction
 			return;
 		}
 
-		if ((node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 4) && node.Operand2.IsConstantZero)
+		if (node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 4 && node.Operand2.IsConstantZero)
 		{
 			opcodeEncoder.SuppressByte(0x40);
 			opcodeEncoder.Append4Bits(0b0100);
 			opcodeEncoder.Append1Bit(0b1);
-			opcodeEncoder.Append1Bit((node.Result.Register.RegisterCode >> 3));
+			opcodeEncoder.Append1Bit(node.Result.Register.RegisterCode >> 3);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append8Bits(0x8B);
@@ -77,12 +77,12 @@ public sealed class MovLoad64 : X64Instruction
 			return;
 		}
 
-		if ((node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 4) && (node.Operand2.IsConstant && node.Operand2.ConstantSigned32 >= -128 && node.Operand2.ConstantSigned32 <= 127))
+		if (node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 4 && node.Operand2.IsConstant && node.Operand2.ConstantSigned32 >= -128 && node.Operand2.ConstantSigned32 <= 127)
 		{
 			opcodeEncoder.SuppressByte(0x40);
 			opcodeEncoder.Append4Bits(0b0100);
 			opcodeEncoder.Append1Bit(0b1);
-			opcodeEncoder.Append1Bit((node.Result.Register.RegisterCode >> 3));
+			opcodeEncoder.Append1Bit(node.Result.Register.RegisterCode >> 3);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append8Bits(0x8B);
@@ -96,12 +96,12 @@ public sealed class MovLoad64 : X64Instruction
 			return;
 		}
 
-		if ((node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 4) && node.Operand2.IsConstant)
+		if (node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 4 && node.Operand2.IsConstant)
 		{
 			opcodeEncoder.SuppressByte(0x40);
 			opcodeEncoder.Append4Bits(0b0100);
 			opcodeEncoder.Append1Bit(0b1);
-			opcodeEncoder.Append1Bit((node.Result.Register.RegisterCode >> 3));
+			opcodeEncoder.Append1Bit(node.Result.Register.RegisterCode >> 3);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append8Bits(0x8B);
@@ -117,8 +117,8 @@ public sealed class MovLoad64 : X64Instruction
 			opcodeEncoder.SuppressByte(0x40);
 			opcodeEncoder.Append4Bits(0b0100);
 			opcodeEncoder.Append1Bit(0b1);
-			opcodeEncoder.Append1Bit((node.Result.Register.RegisterCode >> 3));
-			opcodeEncoder.Append1Bit((node.Operand1.Register.RegisterCode >> 3));
+			opcodeEncoder.Append1Bit(node.Result.Register.RegisterCode >> 3);
+			opcodeEncoder.Append1Bit(node.Operand1.Register.RegisterCode >> 3);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append8Bits(0x8B);
 			opcodeEncoder.Append2Bits(0b00);
@@ -135,9 +135,9 @@ public sealed class MovLoad64 : X64Instruction
 			opcodeEncoder.SuppressByte(0x40);
 			opcodeEncoder.Append4Bits(0b0100);
 			opcodeEncoder.Append1Bit(0b1);
-			opcodeEncoder.Append1Bit((node.Result.Register.RegisterCode >> 3));
+			opcodeEncoder.Append1Bit(node.Result.Register.RegisterCode >> 3);
 			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append1Bit((node.Operand1.Register.RegisterCode >> 3));
+			opcodeEncoder.Append1Bit(node.Operand1.Register.RegisterCode >> 3);
 			opcodeEncoder.Append8Bits(0x8B);
 			opcodeEncoder.Append2Bits(0b00);
 			opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
@@ -145,14 +145,14 @@ public sealed class MovLoad64 : X64Instruction
 			return;
 		}
 
-		if (node.Operand1.IsCPURegister && (node.Operand2.IsConstant && node.Operand2.ConstantSigned32 >= -128 && node.Operand2.ConstantSigned32 <= 127))
+		if (node.Operand1.IsCPURegister && node.Operand2.IsConstant && node.Operand2.ConstantSigned32 >= -128 && node.Operand2.ConstantSigned32 <= 127)
 		{
 			opcodeEncoder.SuppressByte(0x40);
 			opcodeEncoder.Append4Bits(0b0100);
 			opcodeEncoder.Append1Bit(0b1);
-			opcodeEncoder.Append1Bit((node.Result.Register.RegisterCode >> 3));
+			opcodeEncoder.Append1Bit(node.Result.Register.RegisterCode >> 3);
 			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append1Bit((node.Operand1.Register.RegisterCode >> 3));
+			opcodeEncoder.Append1Bit(node.Operand1.Register.RegisterCode >> 3);
 			opcodeEncoder.Append8Bits(0x8B);
 			opcodeEncoder.Append2Bits(0b01);
 			opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
@@ -166,9 +166,9 @@ public sealed class MovLoad64 : X64Instruction
 			opcodeEncoder.SuppressByte(0x40);
 			opcodeEncoder.Append4Bits(0b0100);
 			opcodeEncoder.Append1Bit(0b1);
-			opcodeEncoder.Append1Bit((node.Result.Register.RegisterCode >> 3));
+			opcodeEncoder.Append1Bit(node.Result.Register.RegisterCode >> 3);
 			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append1Bit((node.Operand1.Register.RegisterCode >> 3));
+			opcodeEncoder.Append1Bit(node.Operand1.Register.RegisterCode >> 3);
 			opcodeEncoder.Append8Bits(0x8B);
 			opcodeEncoder.Append2Bits(0b10);
 			opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
@@ -182,7 +182,7 @@ public sealed class MovLoad64 : X64Instruction
 			opcodeEncoder.SuppressByte(0x40);
 			opcodeEncoder.Append4Bits(0b0100);
 			opcodeEncoder.Append1Bit(0b1);
-			opcodeEncoder.Append1Bit((node.Result.Register.RegisterCode >> 3));
+			opcodeEncoder.Append1Bit(node.Result.Register.RegisterCode >> 3);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append8Bits(0x8B);
@@ -198,7 +198,7 @@ public sealed class MovLoad64 : X64Instruction
 			opcodeEncoder.SuppressByte(0x40);
 			opcodeEncoder.Append4Bits(0b0100);
 			opcodeEncoder.Append1Bit(0b1);
-			opcodeEncoder.Append1Bit((node.Result.Register.RegisterCode >> 3));
+			opcodeEncoder.Append1Bit(node.Result.Register.RegisterCode >> 3);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append8Bits(0x8B);

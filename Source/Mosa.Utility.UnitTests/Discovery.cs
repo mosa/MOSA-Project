@@ -61,7 +61,7 @@ public class Discovery
 
 			var value = property.GetValue("Value");
 
-			foreach (var param in ((IEnumerable<object[]>)value))
+			foreach (var param in (IEnumerable<object[]>)value)
 			{
 				list.Add(param);
 			}

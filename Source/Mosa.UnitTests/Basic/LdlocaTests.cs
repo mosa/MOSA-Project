@@ -14,7 +14,7 @@ public static class LdlocaTests
 
 	private static bool LdlocaCheckValueRefU1(byte expect, ref byte a)
 	{
-		return (expect.Equals(a));
+		return expect.Equals(a);
 	}
 
 	[MosaUnitTest(Series = "U2")]
@@ -26,7 +26,7 @@ public static class LdlocaTests
 
 	private static bool LdlocaCheckValueRefU2(ushort expect, ref ushort a)
 	{
-		return (expect.Equals(a));
+		return expect.Equals(a);
 	}
 
 	[MosaUnitTest(Series = "U4")]
@@ -38,7 +38,7 @@ public static class LdlocaTests
 
 	private static bool LdlocaCheckValueRefU4(uint expect, ref uint a)
 	{
-		return (expect.Equals(a));
+		return expect.Equals(a);
 	}
 
 	[MosaUnitTest(Series = "U8")]
@@ -50,7 +50,7 @@ public static class LdlocaTests
 
 	private static bool LdlocaCheckValueRefU8(ulong expect, ref ulong a)
 	{
-		return (expect.Equals(a));
+		return expect.Equals(a);
 	}
 
 	[MosaUnitTest(Series = "I1")]
@@ -62,7 +62,7 @@ public static class LdlocaTests
 
 	private static bool LdlocaCheckValueRefI1(sbyte expect, ref sbyte a)
 	{
-		return (expect.Equals(a));
+		return expect.Equals(a);
 	}
 
 	[MosaUnitTest(Series = "I2")]
@@ -74,7 +74,7 @@ public static class LdlocaTests
 
 	private static bool LdlocaCheckValueRefI2(short expect, ref short a)
 	{
-		return (expect.Equals(a));
+		return expect.Equals(a);
 	}
 
 	[MosaUnitTest(Series = "I4")]
@@ -86,7 +86,7 @@ public static class LdlocaTests
 
 	private static bool LdlocaCheckValueRefI4(int expect, ref int a)
 	{
-		return (expect.Equals(a));
+		return expect.Equals(a);
 	}
 
 	[MosaUnitTest(Series = "I8")]
@@ -98,7 +98,7 @@ public static class LdlocaTests
 
 	private static bool LdlocaCheckValueRefI8(long expect, ref long a)
 	{
-		return (expect.Equals(a));
+		return expect.Equals(a);
 	}
 
 	[MosaUnitTest(Series = "R4")]
@@ -110,7 +110,7 @@ public static class LdlocaTests
 
 	private static bool LdlocaCheckValueRefR4(float expect, ref float a)
 	{
-		return (expect.Equals(a));
+		return expect.Equals(a);
 	}
 
 	[MosaUnitTest(Series = "R8")]
@@ -122,7 +122,7 @@ public static class LdlocaTests
 
 	private static bool LdlocaCheckValueRefR8(double expect, ref double a)
 	{
-		return (expect.Equals(a));
+		return expect.Equals(a);
 	}
 
 	[MosaUnitTest(Series = "C")]
@@ -134,6 +134,6 @@ public static class LdlocaTests
 
 	private static bool LdlocaCheckValueRefC(char expect, ref char a)
 	{
-		return (expect.Equals(a));
+		return expect.Equals(a);
 	}
 }

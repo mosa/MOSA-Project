@@ -520,7 +520,7 @@ public sealed class MethodCompiler
 			{
 				var pipelineTick = executionTimes[i];
 				var ticks = pipelineTick == 0 ? 0 : pipelineTick - previousTick;
-				var percentage = totalTick == 0 ? 0 : (ticks * 100) / (double)(totalTick);
+				var percentage = totalTick == 0 ? 0 : ticks * 100 / (double)totalTick;
 				previousTick = pipelineTick;
 
 				int per = (int)percentage / 5;

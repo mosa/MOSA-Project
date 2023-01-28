@@ -22,7 +22,7 @@ public sealed class Lea32 : X86Instruction
 		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
-		if ((node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 5) && node.Operand2.IsConstantZero)
+		if (node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 5 && node.Operand2.IsConstantZero)
 		{
 			opcodeEncoder.Append8Bits(0x8D);
 			opcodeEncoder.Append2Bits(0b01);
@@ -32,7 +32,7 @@ public sealed class Lea32 : X86Instruction
 			return;
 		}
 
-		if ((node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 4) && node.Operand2.IsConstantZero)
+		if (node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 4 && node.Operand2.IsConstantZero)
 		{
 			opcodeEncoder.Append8Bits(0x8D);
 			opcodeEncoder.Append2Bits(0b00);
@@ -44,7 +44,7 @@ public sealed class Lea32 : X86Instruction
 			return;
 		}
 
-		if ((node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 4) && (node.Operand2.IsConstant && node.Operand2.ConstantSigned32 >= -128 && node.Operand2.ConstantSigned32 <= 127))
+		if (node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 4 && node.Operand2.IsConstant && node.Operand2.ConstantSigned32 >= -128 && node.Operand2.ConstantSigned32 <= 127)
 		{
 			opcodeEncoder.Append8Bits(0x8D);
 			opcodeEncoder.Append2Bits(0b01);
@@ -57,7 +57,7 @@ public sealed class Lea32 : X86Instruction
 			return;
 		}
 
-		if ((node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 4) && node.Operand2.IsConstant)
+		if (node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 4 && node.Operand2.IsConstant)
 		{
 			opcodeEncoder.Append8Bits(0x8D);
 			opcodeEncoder.Append2Bits(0b10);
@@ -88,7 +88,7 @@ public sealed class Lea32 : X86Instruction
 			return;
 		}
 
-		if (node.Operand1.IsCPURegister && (node.Operand2.IsConstant && node.Operand2.ConstantSigned32 >= -128 && node.Operand2.ConstantSigned32 <= 127))
+		if (node.Operand1.IsCPURegister && node.Operand2.IsConstant && node.Operand2.ConstantSigned32 >= -128 && node.Operand2.ConstantSigned32 <= 127)
 		{
 			opcodeEncoder.Append8Bits(0x8D);
 			opcodeEncoder.Append2Bits(0b01);

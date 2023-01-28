@@ -193,7 +193,7 @@ public class IDEController : BaseDeviceDriver, IDiskControllerDevice
 
 		var found = LBALowPort.Read8() == 0x88;
 
-		Device.Status = (found) ? DeviceStatus.Available : DeviceStatus.NotFound;
+		Device.Status = found ? DeviceStatus.Available : DeviceStatus.NotFound;
 	}
 
 	public override void Start()
@@ -213,7 +213,7 @@ public class IDEController : BaseDeviceDriver, IDiskControllerDevice
 		driveInfo[index].Present = false;
 
 		//Send the identify command to the selected drive
-		DeviceHeadPort.Write8((byte)((index == 0) ? 0xA0 : 0xB0));
+		DeviceHeadPort.Write8((byte)(index == 0 ? 0xA0 : 0xB0));
 		SectorCountPort.Write8(0);
 		LBALowPort.Write8(0);
 		LBAMidPort.Write8(0);
@@ -313,7 +313,7 @@ public class IDEController : BaseDeviceDriver, IDiskControllerDevice
 		}
 		while ((status & StatusRegister.DataRequest) != StatusRegister.DataRequest && (status & StatusRegister.Error) != StatusRegister.Error);
 
-		return ((status & StatusRegister.Error) != StatusRegister.Error);
+		return (status & StatusRegister.Error) != StatusRegister.Error;
 	}
 
 	/// <summary>
@@ -365,7 +365,7 @@ public class IDEController : BaseDeviceDriver, IDiskControllerDevice
 		LBAMidPort.Write8((byte)((lba >> 8) & 0xFF));
 		LBALowPort.Write8((byte)(lba & 0xFF));
 
-		CommandPort.Write8((operation == SectorOperation.Write) ? IDECommand.WriteSectorsWithRetry : IDECommand.ReadSectorsWithRetry);
+		CommandPort.Write8(operation == SectorOperation.Write ? IDECommand.WriteSectorsWithRetry : IDECommand.ReadSectorsWithRetry);
 
 		if (!WaitForReadyStatus())
 			return false;
@@ -377,7 +377,7 @@ public class IDEController : BaseDeviceDriver, IDiskControllerDevice
 		{
 			for (uint index = 0; index < 256; index++)
 			{
-				sector.SetUShort(offset + (index * 2), DataPort.Read16());
+				sector.SetUShort(offset + index * 2, DataPort.Read16());
 			}
 		}
 		else
@@ -385,7 +385,7 @@ public class IDEController : BaseDeviceDriver, IDiskControllerDevice
 			//NOTE: Transferring 16bits at a time seems to fail(?) to write each second 16bits - transferring 32bits seems to fix this (???)
 			for (uint index = 0; index < 128; index++)
 			{
-				DataPort.Write32(sector.GetUInt32(offset + (index * 4)));
+				DataPort.Write32(sector.GetUInt32(offset + index * 4));
 			}
 
 			//Cache flush
@@ -425,7 +425,7 @@ public class IDEController : BaseDeviceDriver, IDiskControllerDevice
 		FeaturePort.Write8(0);
 		FeaturePort.Write8(0);
 
-		CommandPort.Write8((byte)((operation == SectorOperation.Write) ? 0x34 : 0x24));
+		CommandPort.Write8((byte)(operation == SectorOperation.Write ? 0x34 : 0x24));
 
 		if (!WaitForReadyStatus())
 			return false;
@@ -437,14 +437,14 @@ public class IDEController : BaseDeviceDriver, IDiskControllerDevice
 		{
 			for (uint index = 0; index < 256; index++)
 			{
-				sector.SetUShort(offset + (index * 2), DataPort.Read16());
+				sector.SetUShort(offset + index * 2, DataPort.Read16());
 			}
 		}
 		else
 		{
 			for (uint index = 0; index < 128; index++)
 			{
-				DataPort.Write32(sector.GetUInt32(offset + (index * 4)));
+				DataPort.Write32(sector.GetUInt32(offset + index * 4));
 			}
 
 			//Cache flush

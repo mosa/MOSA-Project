@@ -24,25 +24,25 @@ public struct Single: IComparable, IComparable<float>, IEquatable<float>
 	public static bool IsNaN(float s)
 	{
 #pragma warning disable 1718
-		return (s != s);
+		return s != s;
 #pragma warning restore 1718
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static bool IsNegativeInfinity(float s)
 	{
-		return (s < 0.0f && (s == NegativeInfinity || s == PositiveInfinity));
+		return s < 0.0f && (s == NegativeInfinity || s == PositiveInfinity);
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static bool IsPositiveInfinity(float s)
 	{
-		return (s > 0.0f && (s == NegativeInfinity || s == PositiveInfinity));
+		return s > 0.0f && (s == NegativeInfinity || s == PositiveInfinity);
 	}
 
 	public static bool IsInfinity(float s)
 	{
-		return (s == PositiveInfinity || s == NegativeInfinity);
+		return s == PositiveInfinity || s == NegativeInfinity;
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -128,14 +128,14 @@ public struct Single: IComparable, IComparable<float>, IEquatable<float>
 
 		if (m_value == value) { return true; }
 
-		return (IsNaN(m_value) && IsNaN(value));
+		return IsNaN(m_value) && IsNaN(value);
 	}
 
 	public bool Equals(float value)
 	{
 		if (m_value == value) { return true; }
 
-		return (IsNaN(m_value) && IsNaN(value));
+		return IsNaN(m_value) && IsNaN(value);
 	}
 
 	public override int GetHashCode()

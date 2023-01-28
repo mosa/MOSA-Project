@@ -74,7 +74,7 @@ public struct Pointer
 	{
 		if (obj is Pointer)
 		{
-			return (value == ((Pointer)obj).value);
+			return value == ((Pointer)obj).value;
 		}
 		return false;
 	}

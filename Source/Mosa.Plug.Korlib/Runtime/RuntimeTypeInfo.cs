@@ -26,7 +26,7 @@ public sealed unsafe class RuntimeTypeInfo : TypeInfo
 
 	public override TypeAttributes Attributes { get; }
 
-	public override Type BaseType { get { return (IsInterface) ? null : baseType; } }
+	public override Type BaseType { get { return IsInterface ? null : baseType; } }
 
 	public override bool ContainsGenericParameters => throw new NotImplementedException();
 

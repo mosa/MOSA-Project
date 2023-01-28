@@ -223,13 +223,13 @@ public class US : IScanCodeMap
 			keyState = KeyState.Normal;
 			return key;
 		}
-		else if ((keyState == KeyState.Escaped) || (keyState == KeyState.EscapeBreak))
+		else if (keyState == KeyState.Escaped || keyState == KeyState.EscapeBreak)
 		{
 			if (scancode == 0xE0)
 			{
 				key.KeyType = KeyType.RegularKey;
 
-				key.KeyPress = (((scancode & 0x80) != 0) || (keyState == KeyState.EscapeBreak)) ? key.KeyPress = KeyEvent.KeyPressType.Break : key.KeyPress = KeyEvent.KeyPressType.Make;
+				key.KeyPress = (scancode & 0x80) != 0 || keyState == KeyState.EscapeBreak ? key.KeyPress = KeyEvent.KeyPressType.Break : key.KeyPress = KeyEvent.KeyPressType.Make;
 
 				if (scancode == 0xF0)
 				{

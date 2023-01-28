@@ -39,7 +39,7 @@ public struct CustomAttributeTypedArgument
 		if (argumentType == null)
 			throw new ArgumentNullException(nameof(argumentType));
 
-		m_value = (value == null) ? null : CanonicalizeValue(value);
+		m_value = value == null ? null : CanonicalizeValue(value);
 		m_argumentType = argumentType;
 	}
 

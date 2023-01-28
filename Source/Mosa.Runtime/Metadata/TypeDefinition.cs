@@ -70,6 +70,6 @@ public struct TypeDefinition
 
 	public MethodDefinition GetMethodDefinition(uint slot)
 	{
-		return new MethodDefinition(Ptr.LoadPointer((Pointer.Size * 14) + (Pointer.Size * (int)slot)));
+		return new MethodDefinition(Ptr.LoadPointer(Pointer.Size * 14 + Pointer.Size * (int)slot));
 	}
 }

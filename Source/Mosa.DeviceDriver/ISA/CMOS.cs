@@ -88,6 +88,6 @@ public class CMOS : BaseDeviceDriver, IDateTime
 
 	private static byte BCDToBinary(byte bcd)
 	{
-		return (byte)(((bcd / 16) * 10) + (bcd & 0xF));
+		return (byte)(bcd / 16 * 10 + (bcd & 0xF));
 	}
 }

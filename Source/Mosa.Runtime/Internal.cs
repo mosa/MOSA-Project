@@ -75,7 +75,7 @@ public static class Internal
 		// Object references point to the end of the header
 		// so accessing the header requires negative offsets from the object reference
 
-		var memory = AllocateObject(methodTable, (uint)(Pointer.Size + (elements * elementSize)));
+		var memory = AllocateObject(methodTable, (uint)(Pointer.Size + elements * elementSize));
 
 		if (Pointer.Size == 4)
 		{
@@ -361,7 +361,7 @@ public static class Internal
 			var addr = table.LoadPointer();
 			uint size = table.Load32(Pointer.Size);
 
-			if (address >= addr && address < (addr + size))
+			if (address >= addr && address < addr + size)
 			{
 				return new MethodDefinition(table.LoadPointer(Pointer.Size * 2));
 			}
@@ -392,7 +392,7 @@ public static class Internal
 			var addr = table.LoadPointer();
 			uint size = table.Load32(Pointer.Size);
 
-			if (address >= addr && address < (addr + size))
+			if (address >= addr && address < addr + size)
 			{
 				return new MethodDefinition(table.LoadPointer(Pointer.Size * 2));
 			}
@@ -437,14 +437,14 @@ public static class Internal
 			uint start = prDef.StartOffset;
 			uint end = prDef.EndOffset;
 
-			if ((offset >= start) && (offset < end) && (start >= currentStart) && (end < currentEnd))
+			if (offset >= start && offset < end && start >= currentStart && end < currentEnd)
 			{
 				var handlerType = prDef.HandlerType;
 				var exType = prDef.ExceptionType;
 
 				// If the handler is a finally clause, accept without testing
 				// If the handler is a exception clause, accept if the exception type is in the is within the inheritance chain of the exception object
-				if ((handlerType == ExceptionHandlerType.Finally) ||
+				if (handlerType == ExceptionHandlerType.Finally ||
 				    (handlerType == ExceptionHandlerType.Exception && Runtime.Internal.IsTypeInInheritanceChain(exType, exceptionType)))
 				{
 					protectedRegionDefinition = prDef;

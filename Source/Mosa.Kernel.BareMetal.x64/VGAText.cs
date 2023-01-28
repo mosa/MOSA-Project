@@ -25,13 +25,13 @@ public static class VGAText
 	public static byte Column
 	{
 		get { return (byte)(Offset % Columns); }
-		private set { Offset = (short)((Columns * Row) + value); }
+		private set { Offset = (short)(Columns * Row + value); }
 	}
 
 	public static byte Row
 	{
 		get { return (byte)(Offset / Columns); }
-		private set { Offset = (short)((Columns * value) + Column); }
+		private set { Offset = (short)(Columns * value + Column); }
 	}
 
 	public static void SetColor(byte color)
@@ -115,7 +115,7 @@ public static class VGAText
 
 	public static void Write(byte b)
 	{
-		var address = new Pointer(Address + (Offset * 2));
+		var address = new Pointer(Address + Offset * 2);
 
 		address.Store8(0, b);
 		address.Store8(1, (byte)(Color | ((BackgroundColor & 0x0F) << 4)));
@@ -126,8 +126,8 @@ public static class VGAText
 	{
 		while (Offset >= Columns * Rows)
 		{
-			Runtime.Internal.MemoryCopy(new Pointer(Address), new Pointer(Address + (Columns * 2)), Columns * 2);
-			Runtime.Internal.MemorySet(new Pointer(Address + (Columns * (Rows - 1))), (byte)((BackgroundColor & 0x0F) << 4), (int)(Columns * 2));
+			Runtime.Internal.MemoryCopy(new Pointer(Address), new Pointer(Address + Columns * 2), Columns * 2);
+			Runtime.Internal.MemorySet(new Pointer(Address + Columns * (Rows - 1)), (byte)((BackgroundColor & 0x0F) << 4), (int)(Columns * 2));
 
 			Offset = (short)(Offset - Columns);
 		}
@@ -136,7 +136,7 @@ public static class VGAText
 
 	private static void UpdateCursor()
 	{
-		var location = (Row * Columns) + Column;
+		var location = Row * Columns + Column;
 
 		Native.Out8(0x3D4, 0x0F);
 		Native.Out8(0x3D5, (byte)(location & 0xFF));

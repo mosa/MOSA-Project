@@ -34,7 +34,7 @@ public static class StreamExtension
 	/// <param name="memoryStream">The memory stream.</param>
 	public static void WriteTo(this Stream stream, Stream dest)
 	{
-		int size = (stream.CanSeek) ? System.Math.Min((int)(stream.Length - stream.Position), 0x2000) : 0x2000;
+		int size = stream.CanSeek ? System.Math.Min((int)(stream.Length - stream.Position), 0x2000) : 0x2000;
 		byte[] buffer = new byte[size];
 		int n;
 		do

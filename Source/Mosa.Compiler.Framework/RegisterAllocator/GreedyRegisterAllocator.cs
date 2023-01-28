@@ -40,7 +40,7 @@ public sealed class GreedyRegisterAllocator : BasicRegisterAllocator
 
 		foreach (var moveHint in hints)
 		{
-			var register = (liveInterval.Start == moveHint.Slot) ? moveHint.FromRegister : moveHint.ToRegister;
+			var register = liveInterval.Start == moveHint.Slot ? moveHint.FromRegister : moveHint.ToRegister;
 
 			if (register == null)
 				continue;   // no usable hint

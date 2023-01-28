@@ -21,6 +21,6 @@ public /*readonly*/ struct GCHeapList
 
 	public GCHeap GetGCHeapEntry(uint index)
 	{
-		return new GCHeap(Entry + sizeof(uint) + (Pointer.Size * 2 * index));
+		return new GCHeap(Entry + sizeof(uint) + Pointer.Size * 2 * index);
 	}
 }

@@ -29,9 +29,9 @@ public sealed class Roundss : X64Instruction
 		opcodeEncoder.SuppressByte(0x40);
 		opcodeEncoder.Append4Bits(0b0100);
 		opcodeEncoder.Append1Bit(0b0);
-		opcodeEncoder.Append1Bit((node.Result.Register.RegisterCode >> 3));
+		opcodeEncoder.Append1Bit(node.Result.Register.RegisterCode >> 3);
 		opcodeEncoder.Append1Bit(0b0);
-		opcodeEncoder.Append1Bit((node.Operand1.Register.RegisterCode >> 3));
+		opcodeEncoder.Append1Bit(node.Operand1.Register.RegisterCode >> 3);
 		opcodeEncoder.Append8Bits(0x0F);
 		opcodeEncoder.Append8Bits(0x3A);
 		opcodeEncoder.Append8Bits(0x0A);

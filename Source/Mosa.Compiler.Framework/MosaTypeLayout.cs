@@ -666,13 +666,13 @@ public class MosaTypeLayout
 				// Pad the field in the type
 				if (packingSize != 0)
 				{
-					uint padding = (packingSize - (typeSize % packingSize)) % packingSize;
+					uint padding = (packingSize - typeSize % packingSize) % packingSize;
 					typeSize += padding;
 				}
 			}
 		}
 
-		typeSizes.Add(type, (type.ClassSize == null || type.ClassSize == -1) ? typeSize : (uint)type.ClassSize);
+		typeSizes.Add(type, type.ClassSize == null || type.ClassSize == -1 ? typeSize : (uint)type.ClassSize);
 	}
 
 	/// <summary>
@@ -700,7 +700,7 @@ public class MosaTypeLayout
 			Debug.Assert(fieldSizes[field] != 0, "Non-static field doesn't have layout!");
 		}
 
-		typeSizes.Add(type, (type.ClassSize == null || type.ClassSize == -1) ? size : (uint)type.ClassSize);
+		typeSizes.Add(type, type.ClassSize == null || type.ClassSize == -1 ? size : (uint)type.ClassSize);
 	}
 
 	private uint ComputeFieldSize(MosaField field)

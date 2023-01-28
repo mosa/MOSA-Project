@@ -125,7 +125,7 @@ public class MemoryStream : Stream       /* http://msdn.microsoft.com/en-us/libr
 			throw new ArgumentOutOfRangeException("count", "Number of bytes to copy cannot be negative.");
 		}
 
-		long remaining = (length - Position);
+		long remaining = length - Position;
 		if (lcount > remaining)
 			lcount = remaining;
 
@@ -142,7 +142,7 @@ public class MemoryStream : Stream       /* http://msdn.microsoft.com/en-us/libr
 		long copysize = 0;
 		do
 		{
-			copysize = Math.Min(lcount, (blockSize - blockOffset));
+			copysize = Math.Min(lcount, blockSize - blockOffset);
 			Array.Copy(block, (int)blockOffset, buffer, offset, (int)copysize);
 			lcount -= copysize;
 			offset += (int)copysize;
@@ -226,7 +226,7 @@ public class MemoryStream : Stream       /* http://msdn.microsoft.com/en-us/libr
 	protected void EnsureCapacity(long intended_length)
 	{
 		if (intended_length > length)
-			length = (intended_length);
+			length = intended_length;
 	}
 
 	#endregion

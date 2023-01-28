@@ -21,6 +21,6 @@ public /*readonly*/ struct BootMemoryList
 
 	public BootMemoryMapEntry GetBootMemoryMapEntry(uint index)
 	{
-		return new BootMemoryMapEntry(Entry + sizeof(uint) + (BootMemoryMapEntry.EntrySize * index));
+		return new BootMemoryMapEntry(Entry + sizeof(uint) + BootMemoryMapEntry.EntrySize * index);
 	}
 }

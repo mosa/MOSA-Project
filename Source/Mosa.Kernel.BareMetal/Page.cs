@@ -10,7 +10,7 @@ public static class Page
 
 	public static uint Size => (uint)(1 << (int)Shift);
 
-	public static ulong Mask => (~(Size - 1));
+	public static ulong Mask => ~(Size - 1);
 
 	public static Pointer ClearPage(Pointer page)
 	{

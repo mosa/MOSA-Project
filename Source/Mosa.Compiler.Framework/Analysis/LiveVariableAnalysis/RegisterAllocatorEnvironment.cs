@@ -19,7 +19,7 @@ public class RegisterAllocatorEnvironment : BaseLivenessAnalysisEnvironment
 
 	protected int GetIndex(Operand operand)
 	{
-		return (operand.IsCPURegister) ? (operand.Register.Index) : (operand.Index + PhysicalRegisterCount - 1);
+		return operand.IsCPURegister ? operand.Register.Index : operand.Index + PhysicalRegisterCount - 1;
 	}
 
 	public override IEnumerable<int> GetInputs(InstructionNode node)

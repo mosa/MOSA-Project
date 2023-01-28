@@ -22,7 +22,7 @@ public static class KernelMemory
 
 	static public IntPtr AllocateMemory(uint size)
 	{
-		if (heapStart == 0 || (heapSize - heapUsed) < size)
+		if (heapStart == 0 || heapSize - heapUsed < size)
 		{
 			// Go allocate memory
 			heapSize = 1024 * 1023 * 8; // 8Mb

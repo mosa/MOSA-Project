@@ -64,7 +64,7 @@ public struct DataBlock
 	/// <returns></returns>
 	public char GetChar(uint offset)
 	{
-		return (char)(Data[offset]);
+		return (char)Data[offset];
 	}
 
 	/// <summary>

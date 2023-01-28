@@ -39,6 +39,6 @@ public struct AddressRegion
 	/// </returns>
 	public bool Contains(Pointer address)
 	{
-		return address >= Address && address < (Address + Size);
+		return address >= Address && address < Address + Size;
 	}
 }

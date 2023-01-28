@@ -45,7 +45,7 @@ public sealed class PCIController : BaseDeviceDriver, IPCIControllerLegacy, IPCI
 
 		var found = configAddress.Read32() == BaseValue;
 
-		Device.Status = (found) ? DeviceStatus.Available : DeviceStatus.NotFound;
+		Device.Status = found ? DeviceStatus.Available : DeviceStatus.NotFound;
 	}
 
 	public override void Start()
@@ -110,7 +110,7 @@ public sealed class PCIController : BaseDeviceDriver, IPCIControllerLegacy, IPCI
 	ushort IPCIControllerLegacy.ReadConfig16(byte bus, byte slot, byte function, byte register)
 	{
 		configAddress.Write32(GetIndex(bus, slot, function, register));
-		return (ushort)((configData.Read32() >> ((register % 4) * 8)) & 0xFFFF);
+		return (ushort)((configData.Read32() >> (register % 4 * 8)) & 0xFFFF);
 	}
 
 	/// <summary>
@@ -124,7 +124,7 @@ public sealed class PCIController : BaseDeviceDriver, IPCIControllerLegacy, IPCI
 	byte IPCIControllerLegacy.ReadConfig8(byte bus, byte slot, byte function, byte register)
 	{
 		configAddress.Write32(GetIndex(bus, slot, function, register));
-		return (byte)((configData.Read32() >> ((register % 4) * 8)) & 0xFF);
+		return (byte)((configData.Read32() >> (register % 4 * 8)) & 0xFF);
 	}
 
 	/// <summary>
@@ -194,7 +194,7 @@ public sealed class PCIController : BaseDeviceDriver, IPCIControllerLegacy, IPCI
 	ushort IPCIController.ReadConfig16(PCIDevice pciDevice, byte register)
 	{
 		configAddress.Write32(GetIndex(pciDevice.Bus, pciDevice.Slot, pciDevice.Function, register));
-		return (ushort)((configData.Read32() >> ((register % 4) * 8)) & 0xFFFF);
+		return (ushort)((configData.Read32() >> (register % 4 * 8)) & 0xFFFF);
 	}
 
 	/// <summary>
@@ -206,7 +206,7 @@ public sealed class PCIController : BaseDeviceDriver, IPCIControllerLegacy, IPCI
 	byte IPCIController.ReadConfig8(PCIDevice pciDevice, byte register)
 	{
 		configAddress.Write32(GetIndex(pciDevice.Bus, pciDevice.Slot, pciDevice.Function, register));
-		return (byte)((configData.Read32() >> ((register % 4) * 8)) & 0xFF);
+		return (byte)((configData.Read32() >> (register % 4 * 8)) & 0xFF);
 	}
 
 	/// <summary>

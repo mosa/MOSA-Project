@@ -426,7 +426,7 @@ public static partial class Contract
 
 	#region Pointers
 
-	private static readonly ulong MaxWritableExtent = (UIntPtr.Size == 4) ? UInt32.MaxValue : UInt64.MaxValue;
+	private static readonly ulong MaxWritableExtent = UIntPtr.Size == 4 ? UInt32.MaxValue : UInt64.MaxValue;
 
 	[CLSCompliant(false)]
 	[Pure]

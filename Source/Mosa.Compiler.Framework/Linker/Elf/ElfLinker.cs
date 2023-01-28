@@ -441,7 +441,7 @@ public sealed class ElfLinker
 		elfheader.Type = FileType.Executable;
 		elfheader.Machine = MachineType;
 		elfheader.EntryAddress = (uint)Linker.EntryPoint.VirtualAddress;
-		elfheader.CreateIdent((LinkerFormatType == LinkerFormatType.Elf32) ? IdentClass.Class32 : IdentClass.Class64, IdentData.Data2LSB);
+		elfheader.CreateIdent(LinkerFormatType == LinkerFormatType.Elf32 ? IdentClass.Class32 : IdentClass.Class64, IdentData.Data2LSB);
 		elfheader.SectionHeaderNumber = (ushort)sections.Count;
 		elfheader.SectionHeaderStringIndex = sectionHeaderStringSection.Index;
 
@@ -477,8 +477,8 @@ public sealed class ElfLinker
 				PhysicalAddress = section.Address,
 				Type = ProgramHeaderType.Load,
 				Flags =
-					(section.SectionKind == SectionKind.Text) ? ProgramHeaderFlags.Read | ProgramHeaderFlags.Execute :
-					(section.SectionKind == SectionKind.ROData) ? ProgramHeaderFlags.Read : ProgramHeaderFlags.Read | ProgramHeaderFlags.Write
+					section.SectionKind == SectionKind.Text ? ProgramHeaderFlags.Read | ProgramHeaderFlags.Execute :
+					section.SectionKind == SectionKind.ROData ? ProgramHeaderFlags.Read : ProgramHeaderFlags.Read | ProgramHeaderFlags.Write
 			};
 
 			programHeader.Write(LinkerFormatType, writer);
@@ -489,7 +489,7 @@ public sealed class ElfLinker
 
 	private void WriteSectionHeader(BinaryWriter writer)
 	{
-		elfheader.SectionHeaderOffset = elfheader.ProgramHeaderOffset + (ProgramHeader.GetEntrySize(LinkerFormatType) * elfheader.ProgramHeaderNumber);
+		elfheader.SectionHeaderOffset = elfheader.ProgramHeaderOffset + ProgramHeader.GetEntrySize(LinkerFormatType) * elfheader.ProgramHeaderNumber;
 
 		writer.SetPosition(elfheader.SectionHeaderOffset);
 

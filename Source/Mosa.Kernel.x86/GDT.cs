@@ -31,7 +31,7 @@ public static class GDT
 		var gdt = new Pointer(Address.GDTTable);
 
 		Runtime.Internal.MemoryClear(gdt, 6);
-		gdt.Store16((Offset.TotalSize * 3) - 1);
+		gdt.Store16(Offset.TotalSize * 3 - 1);
 		gdt.Store32(2, Address.GDTTable + 6);
 
 		Set(0, 0, 0, 0, 0);                // Null segment
@@ -56,7 +56,7 @@ public static class GDT
 	/// <returns></returns>
 	private static Pointer GetEntryLocation(uint index)
 	{
-		return new Pointer(Address.GDTTable + 6 + (index * Offset.TotalSize));
+		return new Pointer(Address.GDTTable + 6 + index * Offset.TotalSize);
 	}
 
 	private static void Set(uint index, uint address, uint limit, byte access, byte granularity)

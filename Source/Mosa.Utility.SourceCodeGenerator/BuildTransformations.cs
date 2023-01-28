@@ -53,8 +53,8 @@ public class BuildTransformations : BuildBaseTemplate
 		string expression = node.Expression;
 		string filter = node.Filter;
 		string result = node.Result;
-		bool log = (node.Log != null && node.Log == "Yes");
-		bool variations = (node.Variations != null && node.Variations == "Yes");
+		bool log = node.Log != null && node.Log == "Yes";
+		bool variations = node.Variations != null && node.Variations == "Yes";
 
 		bool optimization = node.Optimization != null && node.Optimization == "Yes";
 		bool transformation = node.Transformation != null && node.Transformation == "Yes";

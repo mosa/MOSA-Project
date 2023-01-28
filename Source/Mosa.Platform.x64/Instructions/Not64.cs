@@ -30,7 +30,7 @@ public sealed class Not64 : X64Instruction
 		opcodeEncoder.Append1Bit(0b1);
 		opcodeEncoder.Append1Bit(0b0);
 		opcodeEncoder.Append1Bit(0b0);
-		opcodeEncoder.Append1Bit((node.Result.Register.RegisterCode >> 3));
+		opcodeEncoder.Append1Bit(node.Result.Register.RegisterCode >> 3);
 		opcodeEncoder.Append8Bits(0xF7);
 		opcodeEncoder.Append2Bits(0b11);
 		opcodeEncoder.Append3Bits(0b010);

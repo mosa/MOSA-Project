@@ -62,14 +62,14 @@ public struct DiskGeometry
 			if (Heads < 4)
 				Heads = 4;
 
-			if (cylinderTimesHeads >= (Heads * 1024) || Heads > 16)
+			if (cylinderTimesHeads >= Heads * 1024 || Heads > 16)
 			{
 				SectorsPerTrack = 31;
 				Heads = 16;
 				cylinderTimesHeads = (uint)(lba / SectorsPerTrack);
 			}
 
-			if (cylinderTimesHeads >= (Heads * 1024))
+			if (cylinderTimesHeads >= Heads * 1024)
 			{
 				SectorsPerTrack = 63;
 				Heads = 16;

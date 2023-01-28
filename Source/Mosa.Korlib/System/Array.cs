@@ -320,7 +320,7 @@ public abstract class Array : ICloneable, IList, ICollection, IEnumerable, IStru
 		{
 			T[] _this = RuntimeHelpers.UnsafeCast<T[]>(this);
 			int length = _this.length;
-			return (length == 0) ? SZGenericArrayEnumerator<T>.Empty : new SZGenericArrayEnumerator<T>(_this, length);
+			return length == 0 ? SZGenericArrayEnumerator<T>.Empty : new SZGenericArrayEnumerator<T>(_this, length);
 		}
 
 		// -----------------------------------------------------------
@@ -422,7 +422,7 @@ public abstract class Array : ICloneable, IList, ICollection, IEnumerable, IStru
 
 			internal SZGenericArrayEnumerator(T[] array, int length)
 			{
-				if (!((array == null && length == -1) || (array.Rank == 1 || array.GetLowerBound(0) == 0)))
+				if (!((array == null && length == -1) || array.Rank == 1 || array.GetLowerBound(0) == 0))
 					throw new InvalidOperationException("SZGenericArrayEnumerator only works on single dimension arrays with a lower bound of zero.");
 				this.array = array;
 				this.length = length;

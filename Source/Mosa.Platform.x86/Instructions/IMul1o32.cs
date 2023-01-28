@@ -41,7 +41,7 @@ public sealed class IMul1o32 : X86Instruction
 		System.Diagnostics.Debug.Assert(node.Operand1.IsCPURegister);
 		System.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);
 
-		if ((node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 0) && node.Operand2.IsCPURegister)
+		if (node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 0 && node.Operand2.IsCPURegister)
 		{
 			opcodeEncoder.Append8Bits(0xF7);
 			opcodeEncoder.Append2Bits(0b11);

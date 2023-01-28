@@ -24,7 +24,7 @@ public sealed class MovsxLoad8 : X86Instruction
 		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
-		if ((node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 5) && node.Operand2.IsConstantZero)
+		if (node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 5 && node.Operand2.IsConstantZero)
 		{
 			opcodeEncoder.Append8Bits(0x0F);
 			opcodeEncoder.Append8Bits(0xBE);
@@ -35,7 +35,7 @@ public sealed class MovsxLoad8 : X86Instruction
 			return;
 		}
 
-		if ((node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 5) && node.Operand2.IsCPURegister)
+		if (node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 5 && node.Operand2.IsCPURegister)
 		{
 			opcodeEncoder.Append8Bits(0x0F);
 			opcodeEncoder.Append8Bits(0xBE);
@@ -49,7 +49,7 @@ public sealed class MovsxLoad8 : X86Instruction
 			return;
 		}
 
-		if ((node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 4) && node.Operand2.IsConstantZero)
+		if (node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 4 && node.Operand2.IsConstantZero)
 		{
 			opcodeEncoder.Append8Bits(0x0F);
 			opcodeEncoder.Append8Bits(0xBE);
@@ -62,7 +62,7 @@ public sealed class MovsxLoad8 : X86Instruction
 			return;
 		}
 
-		if ((node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 4) && (node.Operand2.IsConstant && node.Operand2.ConstantSigned32 >= -128 && node.Operand2.ConstantSigned32 <= 127))
+		if (node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 4 && node.Operand2.IsConstant && node.Operand2.ConstantSigned32 >= -128 && node.Operand2.ConstantSigned32 <= 127)
 		{
 			opcodeEncoder.Append8Bits(0x0F);
 			opcodeEncoder.Append8Bits(0xBE);
@@ -76,7 +76,7 @@ public sealed class MovsxLoad8 : X86Instruction
 			return;
 		}
 
-		if ((node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 4) && node.Operand2.IsConstant)
+		if (node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 4 && node.Operand2.IsConstant)
 		{
 			opcodeEncoder.Append8Bits(0x0F);
 			opcodeEncoder.Append8Bits(0xBE);
@@ -110,7 +110,7 @@ public sealed class MovsxLoad8 : X86Instruction
 			return;
 		}
 
-		if (node.Operand1.IsCPURegister && (node.Operand2.IsConstant && node.Operand2.ConstantSigned32 >= -128 && node.Operand2.ConstantSigned32 <= 127))
+		if (node.Operand1.IsCPURegister && node.Operand2.IsConstant && node.Operand2.ConstantSigned32 >= -128 && node.Operand2.ConstantSigned32 <= 127)
 		{
 			opcodeEncoder.Append8Bits(0x0F);
 			opcodeEncoder.Append8Bits(0xBE);

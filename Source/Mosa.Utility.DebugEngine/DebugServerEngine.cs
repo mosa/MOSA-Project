@@ -20,7 +20,7 @@ public sealed class DebugServerEngine
 	private CallBack globalDispatch;
 	private readonly byte[] receivedData = new byte[2000];
 
-	private const int MaxBufferSize = (64 * 1024) + 64;
+	private const int MaxBufferSize = 64 * 1024 + 64;
 
 	private static int packetCnt = 0;
 

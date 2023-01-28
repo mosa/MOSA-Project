@@ -459,7 +459,7 @@ public sealed class Operand
 		{
 			IsConstant = true,
 			ConstantUnsigned64 = value,
-			IsNull = (type.IsReferenceType && value == 0),
+			IsNull = type.IsReferenceType && value == 0,
 			IsResolved = true
 		};
 	}
@@ -552,7 +552,7 @@ public sealed class Operand
 			{
 				IsConstant = true,
 				IsResolved = true,
-				ConstantUnsigned64 = ((uint)(longOperand.ConstantUnsigned64 >> 32)) & uint.MaxValue
+				ConstantUnsigned64 = (uint)(longOperand.ConstantUnsigned64 >> 32) & uint.MaxValue
 			};
 		}
 		else if (longOperand.IsVirtualRegister)

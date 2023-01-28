@@ -122,8 +122,8 @@ public sealed class LiveRange
 		LastUse = useCount == 0 ? SlotIndex.NullSlot : VirtualRegister.UsePositions[lastUseIndex];
 		LastDef = defCount == 0 ? SlotIndex.NullSlot : VirtualRegister.DefPositions[lastDefIndex];
 
-		First = (useCount == 0 || firstDefIndex < firstUseIndex) ? FirstDef : FirstUse;
-		Last = (useCount == 0 || lastDefIndex > lastUseIndex) ? LastDef : LastUse;
+		First = useCount == 0 || firstDefIndex < firstUseIndex ? FirstDef : FirstUse;
+		Last = useCount == 0 || lastDefIndex > lastUseIndex ? LastDef : LastUse;
 
 		IsDefFirst = defCount != 0 && (useCount == 0 || FirstDefIndex < FirstUseIndex);
 

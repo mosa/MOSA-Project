@@ -36,7 +36,7 @@ public static class ClassCodeTable
 			case 0x11: return "Signal processing controller";
 			case 0xFF: return "Misc";
 			default:
-				if ((classCode >= 0x0D) && (classCode <= 0xFE))
+				if (classCode >= 0x0D && classCode <= 0xFE)
 					return "Reserved";
 				else
 					return string.Empty;

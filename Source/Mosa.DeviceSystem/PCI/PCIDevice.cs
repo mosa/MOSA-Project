@@ -208,7 +208,7 @@ public class PCIDevice : BaseDeviceDriver, IPCIDevice, IPCIDeviceResource
 
 		for (byte i = 0; i < 6; i++)
 		{
-			byte barr = (byte)(PCIConfigurationHeader.BaseAddressRegisterBase + (i * 4));
+			byte barr = (byte)(PCIConfigurationHeader.BaseAddressRegisterBase + i * 4);
 
 			uint address = pciController.ReadConfig32(this, barr);
 
@@ -284,7 +284,7 @@ public class PCIDevice : BaseDeviceDriver, IPCIDevice, IPCIDeviceResource
 	/// </summary>
 	public void DisableDevice()
 	{
-		CommandRegister = (ushort)(CommandRegister & (~PCICommand.IOSpaceEnable & ~PCICommand.BusMasterFunctionEnable & PCICommand.MemorySpaceEnable));
+		CommandRegister = (ushort)(CommandRegister & ~PCICommand.IOSpaceEnable & ~PCICommand.BusMasterFunctionEnable & PCICommand.MemorySpaceEnable);
 	}
 
 	/// <summary>

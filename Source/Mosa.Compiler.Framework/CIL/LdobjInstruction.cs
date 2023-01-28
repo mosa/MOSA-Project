@@ -51,7 +51,7 @@ public sealed class LdobjInstruction : UnaryInstruction
 		// Decode base classes first
 		base.Decode(node, decoder);
 
-		var type = (elementType == null)
+		var type = elementType == null
 			? (MosaType)decoder.Instruction.Operand
 			: decoder.MethodCompiler.Compiler.GetTypeFromTypeCode(elementType.Value);
 

@@ -283,7 +283,7 @@ public class FatFileSystem : GenericFileSystem
 	/// <returns></returns>
 	public byte[] ReadCluster(uint cluster)
 	{
-		return partition.ReadBlock(dataAreaStart + ((cluster - 2) * sectorsPerCluster), sectorsPerCluster);
+		return partition.ReadBlock(dataAreaStart + (cluster - 2) * sectorsPerCluster, sectorsPerCluster);
 	}
 
 	/// <summary>
@@ -294,7 +294,7 @@ public class FatFileSystem : GenericFileSystem
 	/// <returns></returns>
 	public bool ReadCluster(uint cluster, byte[] block)
 	{
-		return partition.ReadBlock(dataAreaStart + ((cluster - 2) * sectorsPerCluster), sectorsPerCluster, block);
+		return partition.ReadBlock(dataAreaStart + (cluster - 2) * sectorsPerCluster, sectorsPerCluster, block);
 	}
 
 	/// <summary>
@@ -305,7 +305,7 @@ public class FatFileSystem : GenericFileSystem
 	/// <returns></returns>
 	public bool WriteCluster(uint cluster, byte[] block)
 	{
-		return partition.WriteBlock(dataAreaStart + ((cluster - 2) * sectorsPerCluster), sectorsPerCluster, block);
+		return partition.WriteBlock(dataAreaStart + (cluster - 2) * sectorsPerCluster, sectorsPerCluster, block);
 	}
 
 	/// <summary>
@@ -327,7 +327,7 @@ public class FatFileSystem : GenericFileSystem
 		byte extendedBootSignature = bootSector.GetByte(BootSector.ExtendedBootSignature);
 		byte extendedBootSignature32 = bootSector.GetByte(BootSector.FAT32_ExtendedBootSignature);
 
-		if ((extendedBootSignature != 0x29) && (extendedBootSignature != 0x28) && (extendedBootSignature32 != 0x29))
+		if (extendedBootSignature != 0x29 && extendedBootSignature != 0x28 && extendedBootSignature32 != 0x29)
 			return false;
 
 		VolumeLabel = bootSector.GetString(BootSector.VolumeLabel, 8).TrimEnd();
@@ -342,19 +342,19 @@ public class FatFileSystem : GenericFileSystem
 		uint sectorsPerFat32 = bootSector.GetUInt32(BootSector.FAT32_SectorPerFAT);
 		uint totalSectors16 = bootSector.GetUShort(BootSector.TotalSectors16);
 		uint totalSectors32 = bootSector.GetUInt32(BootSector.TotalSectors32);
-		uint sectorsPerFat = (sectorsPerFat16 != 0) ? sectorsPerFat16 : sectorsPerFat32;
+		uint sectorsPerFat = sectorsPerFat16 != 0 ? sectorsPerFat16 : sectorsPerFat32;
 		uint fatSectors = 0;
 
 		try
 		{
 			fatSectors = nbrFats * sectorsPerFat;
 			ClusterSizeInBytes = sectorsPerCluster * BlockSize;
-			rootDirSectors = (((rootEntries * 32) + (bytesPerSector - 1)) / bytesPerSector);
-			firstDataSector = reservedSectors + (nbrFats * sectorsPerFat) + rootDirSectors;
-			totalSectors = (totalSectors16 != 0) ? totalSectors16 : totalSectors32;
-			dataSectors = totalSectors - (reservedSectors + (nbrFats * sectorsPerFat) + rootDirSectors);
+			rootDirSectors = (rootEntries * 32 + (bytesPerSector - 1)) / bytesPerSector;
+			firstDataSector = reservedSectors + nbrFats * sectorsPerFat + rootDirSectors;
+			totalSectors = totalSectors16 != 0 ? totalSectors16 : totalSectors32;
+			dataSectors = totalSectors - (reservedSectors + nbrFats * sectorsPerFat + rootDirSectors);
 			totalClusters = dataSectors / sectorsPerCluster;
-			entriesPerSector = (bytesPerSector / 32);
+			entriesPerSector = bytesPerSector / 32;
 			firstRootDirectorySector = reservedSectors + fatSectors;
 			dataAreaStart = firstRootDirectorySector + rootDirSectors;
 		}
@@ -364,7 +364,7 @@ public class FatFileSystem : GenericFileSystem
 		}
 
 		// Some basic checks
-		if ((nbrFats == 0) || (nbrFats > 2) || (totalSectors == 0) || (sectorsPerFat == 0))
+		if (nbrFats == 0 || nbrFats > 2 || totalSectors == 0 || sectorsPerFat == 0)
 			return false;
 
 		if (totalClusters < 4085)
@@ -400,7 +400,7 @@ public class FatFileSystem : GenericFileSystem
 		}
 
 		// More basic checks
-		if ((FATType == FatType.FAT32) && (rootCluster32 == 0))
+		if (FATType == FatType.FAT32 && rootCluster32 == 0)
 			return false;
 
 		SerialNumber = bootSector.GetBytes(FATType != FatType.FAT32 ? BootSector.IDSerialNumber : BootSector.FAT32_IDSerialNumber, 4);
@@ -441,10 +441,10 @@ public class FatFileSystem : GenericFileSystem
 			rootEntries = 512;
 		}
 
-		rootDirSectors = (((rootEntries * 32) + (bytesPerSector - 1)) / bytesPerSector);
+		rootDirSectors = (rootEntries * 32 + (bytesPerSector - 1)) / bytesPerSector;
 
 		uint val1 = totalSectors - (reservedSectors + rootDirSectors);
-		uint val2 = (uint)((sectorsPerCluster * 256) + nbrFats);
+		uint val2 = (uint)(sectorsPerCluster * 256 + nbrFats);
 
 		if (FATType == FatType.FAT32)
 			val2 /= 2;
@@ -668,7 +668,7 @@ public class FatFileSystem : GenericFileSystem
 	/// </returns>
 	protected bool IsClusterReserved(uint cluster)
 	{
-		return ((cluster & fatMask) == 0x00) || (((cluster & fatMask) >= reservedClusterMark) && ((cluster & fatMask) < badClusterMark));
+		return (cluster & fatMask) == 0x00 || ((cluster & fatMask) >= reservedClusterMark && (cluster & fatMask) < badClusterMark);
 	}
 
 	/// <summary>
@@ -715,7 +715,7 @@ public class FatFileSystem : GenericFileSystem
 	/// <returns></returns>
 	public uint GetSectorByCluster(uint cluster)
 	{
-		return dataAreaStart + ((cluster - 2) * sectorsPerCluster);
+		return dataAreaStart + (cluster - 2) * sectorsPerCluster;
 	}
 
 	/// <summary>
@@ -728,17 +728,17 @@ public class FatFileSystem : GenericFileSystem
 		uint fatoffset = 0;
 
 		if (FATType == FatType.FAT12)
-			fatoffset = (cluster + (cluster / 2));
+			fatoffset = cluster + cluster / 2;
 		else if (FATType == FatType.FAT16)
 			fatoffset = cluster * 2;
 		else //if (type == FatType.FAT32)
 			fatoffset = cluster * 4;
 
-		uint sector = reservedSectors + (fatoffset / bytesPerSector);
+		uint sector = reservedSectors + fatoffset / bytesPerSector;
 		uint sectorOffset = fatoffset % bytesPerSector;
 		uint nbrSectors = 1;
 
-		if ((FATType == FatType.FAT12) && (sectorOffset == bytesPerSector - 1))
+		if (FATType == FatType.FAT12 && sectorOffset == bytesPerSector - 1)
 			nbrSectors = 2;
 
 		var fat = new DataBlock(partition.ReadBlock(sector, nbrSectors));
@@ -776,17 +776,17 @@ public class FatFileSystem : GenericFileSystem
 		uint fatOffset = 0;
 
 		if (FATType == FatType.FAT12)
-			fatOffset = (cluster + (cluster / 2));
+			fatOffset = cluster + cluster / 2;
 		else if (FATType == FatType.FAT16)
 			fatOffset = cluster * 2;
 		else //if (type == FatType.FAT32)
 			fatOffset = cluster * 4;
 
-		uint sector = reservedSectors + (fatOffset / bytesPerSector);
+		uint sector = reservedSectors + fatOffset / bytesPerSector;
 		uint sectorOffset = fatOffset % bytesPerSector;
 		uint nbrSectors = 1;
 
-		if ((FATType == FatType.FAT12) && (sectorOffset == bytesPerSector - 1))
+		if (FATType == FatType.FAT12 && sectorOffset == bytesPerSector - 1)
 			nbrSectors = 2;
 
 		var fat = new DataBlock(partition.ReadBlock(sector, nbrSectors));
@@ -798,9 +798,9 @@ public class FatFileSystem : GenericFileSystem
 				uint clustervalue = fat.GetUShort(sectorOffset);
 
 				if (cluster % 2 == 1)
-					clustervalue = ((clustervalue & 0x000F) | (nextcluster << 4));
+					clustervalue = (clustervalue & 0x000F) | (nextcluster << 4);
 				else
-					clustervalue = ((clustervalue & 0xF000) | (nextcluster & 0x0FFF));
+					clustervalue = (clustervalue & 0xF000) | (nextcluster & 0x0FFF);
 
 				fat.SetUShort(sectorOffset, (ushort)clustervalue);
 				break;
@@ -898,7 +898,7 @@ public class FatFileSystem : GenericFileSystem
 		}
 
 		// special case where real character is same as the delete
-		if ((len >= 1) && (name[0] == (char)FileNameAttribute.Escape))
+		if (len >= 1 && name[0] == (char)FileNameAttribute.Escape)
 			name[0] = (char)FileNameAttribute.Deleted;
 
 		name[len] = '.';
@@ -946,11 +946,11 @@ public class FatFileSystem : GenericFileSystem
 	/// </returns>
 	protected static bool IsValidFatCharacter(char c)
 	{
-		if ((c >= 'A') || (c <= 'Z'))
+		if (c >= 'A' || c <= 'Z')
 			return true;
-		if ((c >= '0') || (c <= '9'))
+		if (c >= '0' || c <= '9')
 			return true;
-		if ((c >= 128) || (c <= 255))
+		if (c >= 128 || c <= 255)
 			return true;
 
 		const string valid = " !#$%&'()-@^_`{}~";
@@ -977,10 +977,10 @@ public class FatFileSystem : GenericFileSystem
 	{
 		var entry = new DataBlock(data);
 
-		uint cluster = entry.GetUShort(Entry.FirstCluster + (index * Entry.EntrySize));
+		uint cluster = entry.GetUShort(Entry.FirstCluster + index * Entry.EntrySize);
 
 		if (type == FatType.FAT32)
-			cluster |= ((uint)entry.GetUShort(Entry.EAIndex + (index * Entry.EntrySize))) << 16;
+			cluster |= (uint)entry.GetUShort(Entry.EAIndex + index * Entry.EntrySize) << 16;
 
 		return cluster;
 	}
@@ -1001,7 +1001,7 @@ public class FatFileSystem : GenericFileSystem
 		uint activeSector = startCluster * sectorsPerCluster;
 
 		if (startCluster == 0)
-			activeSector = (FATType == FatType.FAT32) ? GetSectorByCluster(rootCluster32) : firstRootDirectorySector;
+			activeSector = FATType == FatType.FAT32 ? GetSectorByCluster(rootCluster32) : firstRootDirectorySector;
 
 		uint increment = 0;
 
@@ -1013,17 +1013,17 @@ public class FatFileSystem : GenericFileSystem
 			{
 				if (compare.Compare(directory.Data, index * 32, FATType))
 				{
-					var attribute = (FatFileAttributes)directory.GetByte((index * Entry.EntrySize) + Entry.FileAttributes);
+					var attribute = (FatFileAttributes)directory.GetByte(index * Entry.EntrySize + Entry.FileAttributes);
 					return new FatFileLocation(GetClusterEntry(directory.Data, index, FATType), activeSector, index, (attribute & FatFileAttributes.SubDirectory) != 0);
 				}
 
-				if (directory.GetByte(Entry.DOSName + (index * Entry.EntrySize)) == FileNameAttribute.LastEntry)
+				if (directory.GetByte(Entry.DOSName + index * Entry.EntrySize) == FileNameAttribute.LastEntry)
 					return new FatFileLocation();
 			}
 
 			++increment;
 
-			if ((startCluster == 0) && (FATType != FatType.FAT32))
+			if (startCluster == 0 && FATType != FatType.FAT32)
 			{
 				// FAT12/16 Root directory
 				if (increment >= rootDirSectors)
@@ -1052,10 +1052,10 @@ public class FatFileSystem : GenericFileSystem
 
 				uint nextCluster = GetClusterEntryValue(cluster);
 
-				if ((IsClusterLast(nextCluster)) || (IsClusterBad(nextCluster)) || (IsClusterFree(nextCluster)) || (IsClusterReserved(nextCluster)))
+				if (IsClusterLast(nextCluster) || IsClusterBad(nextCluster) || IsClusterFree(nextCluster) || IsClusterReserved(nextCluster))
 					return new FatFileLocation();
 
-				activeSector = (uint)(dataAreaStart + (nextCluster - (1 * sectorsPerCluster)));
+				activeSector = (uint)(dataAreaStart + (nextCluster - 1 * sectorsPerCluster));
 
 				continue;
 			}
@@ -1071,7 +1071,7 @@ public class FatFileSystem : GenericFileSystem
 	public uint GetFileSize(uint directoryBlock, uint index)
 	{
 		var directory = new DataBlock(partition.ReadBlock(directoryBlock, 1));
-		return directory.GetUInt32((index * Entry.EntrySize) + Entry.FileSize);
+		return directory.GetUInt32(index * Entry.EntrySize + Entry.FileSize);
 	}
 
 	/// <summary>
@@ -1087,10 +1087,10 @@ public class FatFileSystem : GenericFileSystem
 		var entry = new DataBlock(partition.ReadBlock(directorySector, 1));
 
 		// Truncate the file length and set
-		entry.SetUInt32(Entry.FileSize + (directorySectorIndex * Entry.EntrySize), size);
+		entry.SetUInt32(Entry.FileSize + directorySectorIndex * Entry.EntrySize, size);
 
 		if (size == 0)
-			entry.SetUInt32(Entry.FirstCluster + (directorySectorIndex * Entry.EntrySize), 0);
+			entry.SetUInt32(Entry.FirstCluster + directorySectorIndex * Entry.EntrySize, 0);
 
 		partition.WriteBlock(directorySector, 1, entry.Data);
 
@@ -1128,8 +1128,8 @@ public class FatFileSystem : GenericFileSystem
 			var entry = new DataBlock(partition.ReadBlock(location.DirectorySector, 1));
 
 			// Truncate the file length and reset the start cluster
-			entry.SetUInt32(Entry.FileSize + (location.DirectorySectorIndex * Entry.EntrySize), 0);
-			entry.SetUInt32(Entry.FirstCluster + (location.DirectorySectorIndex * Entry.EntrySize), 0);
+			entry.SetUInt32(Entry.FileSize + location.DirectorySectorIndex * Entry.EntrySize, 0);
+			entry.SetUInt32(Entry.FirstCluster + location.DirectorySectorIndex * Entry.EntrySize, 0);
 
 			partition.WriteBlock(location.DirectorySector, 1, entry.Data);
 
@@ -1158,18 +1158,18 @@ public class FatFileSystem : GenericFileSystem
 			filename = filename.Substring(0, 11);
 
 		// Create Entry
-		directory.SetString(Entry.DOSName + (location.DirectorySectorIndex * Entry.EntrySize), "            ", 11);
-		directory.SetString(Entry.DOSName + (location.DirectorySectorIndex * Entry.EntrySize), filename);
-		directory.SetByte(Entry.FileAttributes + (location.DirectorySectorIndex * Entry.EntrySize), (byte)fileAttributes);
-		directory.SetByte(Entry.Reserved + (location.DirectorySectorIndex * Entry.EntrySize), 0);
-		directory.SetByte(Entry.CreationTimeFine + (location.DirectorySectorIndex * Entry.EntrySize), 0);
-		directory.SetUShort(Entry.CreationTime + (location.DirectorySectorIndex * Entry.EntrySize), 0);
-		directory.SetUShort(Entry.CreationDate + (location.DirectorySectorIndex * Entry.EntrySize), 0);
-		directory.SetUShort(Entry.LastAccessDate + (location.DirectorySectorIndex * Entry.EntrySize), 0);
-		directory.SetUShort(Entry.LastModifiedTime + (location.DirectorySectorIndex * Entry.EntrySize), 0);
-		directory.SetUShort(Entry.LastModifiedDate + (location.DirectorySectorIndex * Entry.EntrySize), 0);
-		directory.SetUShort(Entry.FirstCluster + (location.DirectorySectorIndex * Entry.EntrySize), 0);
-		directory.SetUInt32(Entry.FileSize + (location.DirectorySectorIndex * Entry.EntrySize), 0);
+		directory.SetString(Entry.DOSName + location.DirectorySectorIndex * Entry.EntrySize, "            ", 11);
+		directory.SetString(Entry.DOSName + location.DirectorySectorIndex * Entry.EntrySize, filename);
+		directory.SetByte(Entry.FileAttributes + location.DirectorySectorIndex * Entry.EntrySize, (byte)fileAttributes);
+		directory.SetByte(Entry.Reserved + location.DirectorySectorIndex * Entry.EntrySize, 0);
+		directory.SetByte(Entry.CreationTimeFine + location.DirectorySectorIndex * Entry.EntrySize, 0);
+		directory.SetUShort(Entry.CreationTime + location.DirectorySectorIndex * Entry.EntrySize, 0);
+		directory.SetUShort(Entry.CreationDate + location.DirectorySectorIndex * Entry.EntrySize, 0);
+		directory.SetUShort(Entry.LastAccessDate + location.DirectorySectorIndex * Entry.EntrySize, 0);
+		directory.SetUShort(Entry.LastModifiedTime + location.DirectorySectorIndex * Entry.EntrySize, 0);
+		directory.SetUShort(Entry.LastModifiedDate + location.DirectorySectorIndex * Entry.EntrySize, 0);
+		directory.SetUShort(Entry.FirstCluster + location.DirectorySectorIndex * Entry.EntrySize, 0);
+		directory.SetUInt32(Entry.FileSize + location.DirectorySectorIndex * Entry.EntrySize, 0);
 
 		partition.WriteBlock(location.DirectorySector, 1, directory.Data);
 
@@ -1186,7 +1186,7 @@ public class FatFileSystem : GenericFileSystem
 	{
 		var entry = new DataBlock(partition.ReadBlock(directorySector, 1));
 
-		entry.SetByte(Entry.DOSName + (directorySectorIndex * Entry.EntrySize), (byte)FileNameAttribute.Deleted);
+		entry.SetByte(Entry.DOSName + directorySectorIndex * Entry.EntrySize, (byte)FileNameAttribute.Deleted);
 
 		partition.WriteBlock(directorySector, 1, entry.Data);
 
@@ -1218,18 +1218,18 @@ public class FatFileSystem : GenericFileSystem
 			volumeName = volumeName.Substring(0, 8);
 
 		// Create Entry
-		directory.SetString(Entry.DOSName + (location.DirectorySectorIndex * Entry.EntrySize), "            ", 11);
-		directory.SetString(Entry.DOSName + (location.DirectorySectorIndex * Entry.EntrySize), volumeName);
-		directory.SetByte(Entry.FileAttributes + (location.DirectorySectorIndex * Entry.EntrySize), (byte)FatFileAttributes.VolumeLabel);
-		directory.SetByte(Entry.Reserved + (location.DirectorySectorIndex * Entry.EntrySize), 0);
-		directory.SetByte(Entry.CreationTimeFine + (location.DirectorySectorIndex * Entry.EntrySize), 0);
-		directory.SetUShort(Entry.CreationTime + (location.DirectorySectorIndex * Entry.EntrySize), 0);
-		directory.SetUShort(Entry.CreationDate + (location.DirectorySectorIndex * Entry.EntrySize), 0);
-		directory.SetUShort(Entry.LastAccessDate + (location.DirectorySectorIndex * Entry.EntrySize), 0);
-		directory.SetUShort(Entry.LastModifiedTime + (location.DirectorySectorIndex * Entry.EntrySize), 0);
-		directory.SetUShort(Entry.LastModifiedDate + (location.DirectorySectorIndex * Entry.EntrySize), 0);
-		directory.SetUShort(Entry.FirstCluster + (location.DirectorySectorIndex * Entry.EntrySize), 0);
-		directory.SetUInt32(Entry.FileSize + (location.DirectorySectorIndex * Entry.EntrySize), 0);
+		directory.SetString(Entry.DOSName + location.DirectorySectorIndex * Entry.EntrySize, "            ", 11);
+		directory.SetString(Entry.DOSName + location.DirectorySectorIndex * Entry.EntrySize, volumeName);
+		directory.SetByte(Entry.FileAttributes + location.DirectorySectorIndex * Entry.EntrySize, (byte)FatFileAttributes.VolumeLabel);
+		directory.SetByte(Entry.Reserved + location.DirectorySectorIndex * Entry.EntrySize, 0);
+		directory.SetByte(Entry.CreationTimeFine + location.DirectorySectorIndex * Entry.EntrySize, 0);
+		directory.SetUShort(Entry.CreationTime + location.DirectorySectorIndex * Entry.EntrySize, 0);
+		directory.SetUShort(Entry.CreationDate + location.DirectorySectorIndex * Entry.EntrySize, 0);
+		directory.SetUShort(Entry.LastAccessDate + location.DirectorySectorIndex * Entry.EntrySize, 0);
+		directory.SetUShort(Entry.LastModifiedTime + location.DirectorySectorIndex * Entry.EntrySize, 0);
+		directory.SetUShort(Entry.LastModifiedDate + location.DirectorySectorIndex * Entry.EntrySize, 0);
+		directory.SetUShort(Entry.FirstCluster + location.DirectorySectorIndex * Entry.EntrySize, 0);
+		directory.SetUInt32(Entry.FileSize + location.DirectorySectorIndex * Entry.EntrySize, 0);
 
 		partition.WriteBlock(location.DirectorySector, 1, directory.Data);
 	}
@@ -1358,7 +1358,7 @@ public class FatFileSystem : GenericFileSystem
 
 		// Truncate set first cluster
 		var entry = new DataBlock(partition.ReadBlock(directorySector, 1));
-		entry.SetUInt32(Entry.FirstCluster + (directorySectorIndex * Entry.EntrySize), newCluster);
+		entry.SetUInt32(Entry.FirstCluster + directorySectorIndex * Entry.EntrySize, newCluster);
 		partition.WriteBlock(directorySector, 1, entry.Data);
 
 		return newCluster;

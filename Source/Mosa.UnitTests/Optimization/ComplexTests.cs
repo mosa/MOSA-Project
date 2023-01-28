@@ -13,7 +13,7 @@ public static class ComplexTests
 		int d = 1;
 		int e = 0;
 
-		int z = (a * b) + ((c * d) + (c * d) * e) + e;
+		int z = a * b + c * d + c * d * e + e;
 
 		return z;
 	}
@@ -26,7 +26,7 @@ public static class ComplexTests
 		var c = c1;
 		var d = d1;
 
-		int z = (a * b) + (c * d) + (c * d) + (a * b);
+		int z = a * b + c * d + c * d + a * b;
 
 		return z;
 	}
@@ -110,7 +110,7 @@ public static class ComplexTests
 			z = b << 8;
 		}
 
-		int p = (x * y) * 4;
+		int p = x * y * 4;
 		int q = z & 0xF;
 
 		return p >= 16 && q == 0;
@@ -248,7 +248,7 @@ public static class ComplexTests
 			z = b << 8;
 		}
 
-		int p = (x * y) * 4;
+		int p = x * y * 4;
 		int q = z & 0xF;
 		return p >= 16 && q == 0;
 	}
@@ -317,7 +317,7 @@ public static class ComplexTests
 		uint a = 10;
 		uint b = 20;
 
-		uint c = (x > 10) ? a : b;
+		uint c = x > 10 ? a : b;
 
 		uint d = c + 10;
 
