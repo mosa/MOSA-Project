@@ -25,14 +25,14 @@ public static class CompilerBugTests
 	}
 
 	[MosaUnitTest]
-	public unsafe static bool TestMethodGeneric()
+	public static unsafe bool TestMethodGeneric()
 	{
 		_ = new Span<byte>();
 		return true;
 	}
 
 	[MosaUnitTest]
-	public unsafe static bool TestSpan1()
+	public static unsafe bool TestSpan1()
 	{
 		var myArray = new int[3];
 		fixed (int* ptr = &myArray[0])
@@ -46,7 +46,7 @@ public static class CompilerBugTests
 	}
 
 	[MosaUnitTest]
-	public unsafe static bool TestSpan2()
+	public static unsafe bool TestSpan2()
 	{
 		var myArray = new int[3];
 		myArray[1] = 42;
@@ -58,7 +58,7 @@ public static class CompilerBugTests
 	}
 
 	[MosaUnitTest]
-	public unsafe static bool TestSpan3()
+	public static unsafe bool TestSpan3()
 	{
 		var myArray = new int[3];
 		fixed (int* ptr = &myArray[0])
@@ -70,13 +70,13 @@ public static class CompilerBugTests
 	}
 
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	internal unsafe static void TestSpan3Inner(Span<int> span)
+	internal static unsafe void TestSpan3Inner(Span<int> span)
 	{
 		span[1] = 42;
 	}
 
 	[MosaUnitTest]
-	public unsafe static bool TestReadOnlySpan1()
+	public static unsafe bool TestReadOnlySpan1()
 	{
 		var myArray = new int[3];
 		fixed (int* ptr = &myArray[0])
@@ -90,7 +90,7 @@ public static class CompilerBugTests
 	}
 
 	[MosaUnitTest]
-	public unsafe static bool TestReadOnlySpan2()
+	public static unsafe bool TestReadOnlySpan2()
 	{
 		var myArray = new int[3];
 		myArray[1] = 42;
@@ -107,7 +107,7 @@ public static class CompilerBugTests
 	}
 
 	[MosaUnitTest]
-	public unsafe static bool TestRefStore()
+	public static unsafe bool TestRefStore()
 	{
 		var value = new TestRefStoreStruct();
 		var ptr = 42;
@@ -115,7 +115,7 @@ public static class CompilerBugTests
 		return value.a == ptr;
 	}
 
-	internal unsafe static void TestRefStoreInner(ref TestRefStoreStruct value, ref int ptr)
+	internal static unsafe void TestRefStoreInner(ref TestRefStoreStruct value, ref int ptr)
 	{
 		value.a = ptr;
 	}

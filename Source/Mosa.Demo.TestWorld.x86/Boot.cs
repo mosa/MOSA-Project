@@ -218,7 +218,7 @@ public static class Boot
 		}
 	}
 
-	public unsafe static void StackTrace()
+	public static unsafe void StackTrace()
 	{
 		Screen.Color = ScreenColor.Yellow;
 		Screen.Write('[');

@@ -168,7 +168,7 @@ public class AppManager
 		ConsoleManager.Controller.Debug.WriteLine(data);
 	}
 
-	public unsafe static void DumpStackTrace(int line)
+	public static unsafe void DumpStackTrace(int line)
 	{
 		uint depth = 0;
 

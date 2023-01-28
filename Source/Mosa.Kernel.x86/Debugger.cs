@@ -56,7 +56,7 @@ public static class Debugger
 	private static bool ready = false;
 	private static bool readysent = false;
 
-	private unsafe static IDTStack* idt_stack;
+	private static unsafe IDTStack* idt_stack;
 
 	public static void Setup(ushort com)
 	{
@@ -197,7 +197,7 @@ public static class Debugger
 		return GetUInt32(6);
 	}
 
-	internal unsafe static void Process(IDTStack* stack)
+	internal static unsafe void Process(IDTStack* stack)
 	{
 		idt_stack = stack;
 
@@ -475,7 +475,7 @@ public static class Debugger
 		UnitTestQueue.ProcessQueue();
 	}
 
-	private unsafe static void HardJump()
+	private static unsafe void HardJump()
 	{
 		uint id = GetID();
 		uint address = GetDataUInt32(0);

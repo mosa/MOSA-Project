@@ -10,17 +10,17 @@ namespace Mosa.Kernel.x86;
 /// </summary>
 public static class KernelMemory
 {
-	static private uint heapStart;
-	static private uint heapSize;
-	static private uint heapUsed;
+	private static uint heapStart;
+	private static uint heapSize;
+	private static uint heapUsed;
 
 	[Plug("Mosa.Runtime.GC::AllocateMemory")]
-	static unsafe private Pointer _AllocateMemory(uint size)
+	private static unsafe Pointer _AllocateMemory(uint size)
 	{
 		return AllocateVirtualMemory(size);
 	}
 
-	static public Pointer AllocateVirtualMemory(uint size)
+	public static Pointer AllocateVirtualMemory(uint size)
 	{
 		if (heapStart == 0 || heapSize - heapUsed < size)
 		{
@@ -35,7 +35,7 @@ public static class KernelMemory
 		return at;
 	}
 
-	static public void SetInitialMemory(uint address, uint size)
+	public static void SetInitialMemory(uint address, uint size)
 	{
 		heapStart = address;
 		heapSize = size;

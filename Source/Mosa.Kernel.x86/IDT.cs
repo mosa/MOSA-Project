@@ -2146,7 +2146,7 @@ public static class IDT
 	/// Interrupts the handler.
 	/// </summary>
 	/// <param name="stackStatePointer">The stack state pointer.</param>
-	private unsafe static void ProcessInterrupt(uint stackStatePointer)
+	private static unsafe void ProcessInterrupt(uint stackStatePointer)
 	{
 		var stack = (IDTStack*)stackStatePointer;
 
@@ -2257,7 +2257,7 @@ public static class IDT
 		LocalAPIC.SendEndOfInterrupt(stack->Interrupt);
 	}
 
-	private unsafe static void Error(IDTStack* stack, string message)
+	private static unsafe void Error(IDTStack* stack, string message)
 	{
 		Panic.ESP = stack->ESP;
 		Panic.EBP = stack->EBP;

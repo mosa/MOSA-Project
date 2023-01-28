@@ -10,17 +10,17 @@ namespace Mosa.Kernel.x64;
 /// </summary>
 public static class KernelMemory
 {
-	static private uint heapStart = Address.GCInitialMemory;
-	static private uint heapSize = 0x02000000;
-	static private uint heapUsed = 0;
+	private static uint heapStart = Address.GCInitialMemory;
+	private static uint heapSize = 0x02000000;
+	private static uint heapUsed = 0;
 
 	[Plug("Mosa.Runtime.GC::AllocateMemory")]
-	static unsafe private IntPtr _AllocateMemory(uint size)
+	private static unsafe IntPtr _AllocateMemory(uint size)
 	{
 		return AllocateMemory(size);
 	}
 
-	static public IntPtr AllocateMemory(uint size)
+	public static IntPtr AllocateMemory(uint size)
 	{
 		if (heapStart == 0 || heapSize - heapUsed < size)
 		{
@@ -37,7 +37,7 @@ public static class KernelMemory
 		return at;
 	}
 
-	static public void SetInitialMemory(uint address, uint size)
+	public static void SetInitialMemory(uint address, uint size)
 	{
 		heapStart = address;
 		heapSize = size;

@@ -18,7 +18,7 @@ public static class Generator
 	/// Creates the specified options.
 	/// </summary>
 	/// <param name="options">The options.</param>
-	static public void Create(BootImageOptions options)
+	public static void Create(BootImageOptions options)
 	{
 		if (File.Exists(options.DiskImageFileName))
 		{

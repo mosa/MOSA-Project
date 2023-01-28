@@ -16,7 +16,7 @@ public class MosaParameter : MosaUnit, IEquatable<MosaParameter>, IEquatable<Mos
 	{
 	}
 
-	override internal MosaParameter Clone()
+	internal override MosaParameter Clone()
 	{
 		return (MosaParameter)base.Clone();
 	}

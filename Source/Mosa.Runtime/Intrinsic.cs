@@ -13,22 +13,22 @@ public static unsafe class Intrinsic
 	#region Intrinsic
 
 	[MethodImpl(MethodImplOptions.InternalCall)]
-	public extern static object CreateInstanceSimple(Pointer ctor, Pointer thisObject);
+	public static extern object CreateInstanceSimple(Pointer ctor, Pointer thisObject);
 
 	[MethodImpl(MethodImplOptions.InternalCall)]
-	public extern static Pointer GetAssemblyListTable();
+	public static extern Pointer GetAssemblyListTable();
 
 	[MethodImpl(MethodImplOptions.InternalCall)]
-	public extern static Pointer GetDelegateMethodAddress(Delegate d);
+	public static extern Pointer GetDelegateMethodAddress(Delegate d);
 
 	[MethodImpl(MethodImplOptions.InternalCall)]
-	public extern static Pointer GetDelegateTargetAddress(Delegate d);
+	public static extern Pointer GetDelegateTargetAddress(Delegate d);
 
 	[MethodImpl(MethodImplOptions.InternalCall)]
-	public extern static Pointer GetMethodExceptionLookupTable();
+	public static extern Pointer GetMethodExceptionLookupTable();
 
 	[MethodImpl(MethodImplOptions.InternalCall)]
-	public extern static Pointer GetMethodLookupTable();
+	public static extern Pointer GetMethodLookupTable();
 
 	[MethodImpl(MethodImplOptions.InternalCall)]
 	public static extern Pointer GetObjectAddress<T>(T obj) where T : class;
@@ -37,7 +37,7 @@ public static unsafe class Intrinsic
 	public static extern object GetObjectFromAddress(Pointer address);
 
 	[MethodImpl(MethodImplOptions.InternalCall)]
-	public extern static Pointer GetStringType();
+	public static extern Pointer GetStringType();
 
 	[MethodImpl(MethodImplOptions.InternalCall)]
 	public static extern Pointer GetValueTypeAddress<T>(T obj) where T : struct;
@@ -247,13 +247,13 @@ public static unsafe class Intrinsic
 	public static extern void StoreR8(Pointer address, uint offset, double value);
 
 	[MethodImpl(MethodImplOptions.InternalCall)]
-	public extern static void SuppressStackFrame();
+	public static extern void SuppressStackFrame();
 
 	[MethodImpl(MethodImplOptions.InternalCall)]
-	public extern static Pointer GetStackFrame();
+	public static extern Pointer GetStackFrame();
 
 	[MethodImpl(MethodImplOptions.InternalCall)]
-	public extern static Pointer GetExceptionRegister();
+	public static extern Pointer GetExceptionRegister();
 
 	#endregion Intrinsic
 }

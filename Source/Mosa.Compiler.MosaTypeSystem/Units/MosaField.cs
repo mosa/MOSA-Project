@@ -28,7 +28,7 @@ public sealed class MosaField : MosaUnit, IEquatable<MosaField>
 	{
 	}
 
-	override internal MosaField Clone()
+	internal override MosaField Clone()
 	{
 		return (MosaField)base.Clone();
 	}
