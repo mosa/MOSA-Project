@@ -4,36 +4,35 @@ using System.Diagnostics;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.x86.Transforms.Tweak
+namespace Mosa.Platform.x86.Transforms.Tweak;
+
+/// <summary>
+/// MovLoad8
+/// </summary>
+public sealed class MovLoad8 : BaseTransform
 {
-	/// <summary>
-	/// MovLoad8
-	/// </summary>
-	public sealed class MovLoad8 : BaseTransform
+	public MovLoad8() : base(X86.MovLoad8, TransformType.Manual | TransformType.Transform)
 	{
-		public MovLoad8() : base(X86.MovLoad8, TransformType.Manual | TransformType.Transform)
-		{
-		}
+	}
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Result.IsCPURegister)
-				return false;
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!context.Result.IsCPURegister)
+			return false;
 
-			return context.Result.Register == CPURegister.ESI || context.Result.Register == CPURegister.EDI;
-		}
+		return context.Result.Register == CPURegister.ESI || context.Result.Register == CPURegister.EDI;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			Debug.Assert(context.Result.IsCPURegister);
+	public override void Transform(Context context, TransformContext transform)
+	{
+		Debug.Assert(context.Result.IsCPURegister);
 
-			var result = context.Result;
+		var result = context.Result;
 
-			var source = context.Operand1;
-			var offset = context.Operand2;
+		var source = context.Operand1;
+		var offset = context.Operand2;
 
-			context.SetInstruction(X86.MovLoad32, result, source, offset);
-			context.AppendInstruction(X86.And32, result, result, transform.CreateConstant32(0x000000FF));
-		}
+		context.SetInstruction(X86.MovLoad32, result, source, offset);
+		context.AppendInstruction(X86.And32, result, result, transform.CreateConstant32(0x000000FF));
 	}
 }

@@ -2,21 +2,20 @@
 
 using System.Diagnostics;
 
-namespace Mosa.Compiler.Framework.RegisterAllocator
+namespace Mosa.Compiler.Framework.RegisterAllocator;
+
+public sealed class Move
 {
-	public sealed class Move
+	public readonly Operand Source;
+
+	public readonly Operand Destination;
+
+	public Move(Operand source, Operand destination)
 	{
-		public readonly Operand Source;
+		Debug.Assert(source != null);
+		Debug.Assert(destination != null);
 
-		public readonly Operand Destination;
-
-		public Move(Operand source, Operand destination)
-		{
-			Debug.Assert(source != null);
-			Debug.Assert(destination != null);
-
-			Source = source;
-			Destination = destination;
-		}
+		Source = source;
+		Destination = destination;
 	}
 }

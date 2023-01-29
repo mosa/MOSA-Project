@@ -1,12 +1,11 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.DeviceSystem
+namespace Mosa.DeviceSystem;
+
+public interface ITimer
 {
-	public interface ITimer
-	{
-		/// <summary>
-		/// Waits for a specific time, in milliseconds.
-		/// </summary>
-		void Wait(uint ms);
-	}
+	/// <summary>
+	/// Waits for a specific time, in milliseconds.
+	/// </summary>
+	void Wait(uint ms);
 }

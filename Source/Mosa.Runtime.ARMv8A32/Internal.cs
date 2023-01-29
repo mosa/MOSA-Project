@@ -2,14 +2,13 @@
 
 using System.Runtime.CompilerServices;
 
-namespace Mosa.Runtime.ARMv8A32
+namespace Mosa.Runtime.ARMv8A32;
+
+public static class Internal
 {
-	public static class Internal
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static void ExceptionHandler()
 	{
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		public static void ExceptionHandler()
-		{
-			// TODO
-		}
+		// TODO
 	}
 }

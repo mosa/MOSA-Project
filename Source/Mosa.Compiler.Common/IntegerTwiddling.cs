@@ -1,101 +1,100 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Compiler.Common
+namespace Mosa.Compiler.Common;
+
+public static class IntegerTwiddling
 {
-	public static class IntegerTwiddling
+	public static bool IsAddOverflow(ulong a, ulong b)
 	{
-		public static bool IsAddOverflow(ulong a, ulong b)
-		{
-			return (b > 0) && (a > (ulong.MaxValue - b));
-		}
+		return (b > 0) && (a > (ulong.MaxValue - b));
+	}
 
-		public static bool IsAddOverflow(uint a, uint b)
-		{
-			return (b > 0) && (a > (uint.MaxValue - b));
-		}
+	public static bool IsAddOverflow(uint a, uint b)
+	{
+		return (b > 0) && (a > (uint.MaxValue - b));
+	}
 
-		public static bool IsAddOverflow(int a, int b)
-		{
-			if (a > 0 && b > 0)
-				if (b > (int.MaxValue - a))
-					return true;
-
-			if (a < 0 && b < 0)
-				if (b < (int.MinValue - a))
-					return true;
-
-			return false;
-		}
-
-		public static bool IsAddOverflow(long a, long b)
-		{
-			if (a > 0 && b > 0)
-				if (b > (long.MaxValue - a))
-					return true;
-
-			if (a < 0 && b < 0)
-				if (b < (long.MinValue - a))
-					return true;
-
-			return false;
-		}
-
-		public static bool IsAddOverflow(uint a, uint b, bool carry)
-		{
-			if (IsAddOverflow(a, b))
+	public static bool IsAddOverflow(int a, int b)
+	{
+		if (a > 0 && b > 0)
+			if (b > (int.MaxValue - a))
 				return true;
 
-			if (carry & (a + b) == uint.MaxValue)
+		if (a < 0 && b < 0)
+			if (b < (int.MinValue - a))
 				return true;
 
+		return false;
+	}
+
+	public static bool IsAddOverflow(long a, long b)
+	{
+		if (a > 0 && b > 0)
+			if (b > (long.MaxValue - a))
+				return true;
+
+		if (a < 0 && b < 0)
+			if (b < (long.MinValue - a))
+				return true;
+
+		return false;
+	}
+
+	public static bool IsAddOverflow(uint a, uint b, bool carry)
+	{
+		if (IsAddOverflow(a, b))
+			return true;
+
+		if (carry & (a + b) == uint.MaxValue)
+			return true;
+
+		return false;
+	}
+
+	public static bool IsMultiplyOverflow(uint a, uint b)
+	{
+		var r = a * (ulong)b;
+
+		return r > uint.MaxValue;
+	}
+
+	public static bool IsMultiplyOverflow(int a, int b)
+	{
+		var z = a * b;
+		return (b < 0 && a == int.MinValue) | (b != 0 && z / b != a);
+	}
+
+	public static bool IsMultiplyOverflow(ulong a, ulong b)
+	{
+		if (a == 0 | b == 0)
 			return false;
-		}
 
-		public static bool IsMultiplyOverflow(uint a, uint b)
-		{
-			var r = a * (ulong)b;
+		return ulong.MaxValue / a < b;
+	}
 
-			return r > uint.MaxValue;
-		}
+	public static bool IsMultiplyOverflow(long a, long b)
+	{
+		var z = a * b;
+		return (b < 0 && a == long.MinValue) | (b != 0 && z / b != a);
+	}
 
-		public static bool IsMultiplyOverflow(int a, int b)
-		{
-			var z = a * b;
-			return (b < 0 && a == int.MinValue) | (b != 0 && z / b != a);
-		}
+	public static bool HasSignBitSet(int a)
+	{
+		return a < 0;
+	}
 
-		public static bool IsMultiplyOverflow(ulong a, ulong b)
-		{
-			if (a == 0 | b == 0)
-				return false;
+	public static bool HasSignBitSet(uint a)
+	{
+		return HasSignBitSet((int)a);
+	}
 
-			return ulong.MaxValue / a < b;
-		}
+	public static bool HasSignBitSet(long a)
+	{
+		return a < 0;
+	}
 
-		public static bool IsMultiplyOverflow(long a, long b)
-		{
-			var z = a * b;
-			return (b < 0 && a == long.MinValue) | (b != 0 && z / b != a);
-		}
-
-		public static bool HasSignBitSet(int a)
-		{
-			return a < 0;
-		}
-
-		public static bool HasSignBitSet(uint a)
-		{
-			return HasSignBitSet((int)a);
-		}
-
-		public static bool HasSignBitSet(long a)
-		{
-			return a < 0;
-		}
-
-		public static bool HasSignBitSet(ulong a)
-		{
-			return HasSignBitSet((long)a);
-		}
+	public static bool HasSignBitSet(ulong a)
+	{
+		return HasSignBitSet((long)a);
 	}
 }

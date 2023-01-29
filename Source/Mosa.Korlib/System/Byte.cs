@@ -1,70 +1,69 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace System
+namespace System;
+
+/// <summary>
+///
+/// </summary>
+[Serializable]
+public struct Byte: IComparable, IComparable<byte>, IEquatable<byte>
 {
-	/// <summary>
-	///
-	/// </summary>
-	[Serializable]
-	public struct Byte: IComparable, IComparable<byte>, IEquatable<byte>
+	internal byte m_value;
+
+	public const byte MinValue = 0;
+	public const byte MaxValue = 255;
+
+	public override bool Equals(object obj)
 	{
-		internal byte m_value;
-
-		public const byte MinValue = 0;
-		public const byte MaxValue = 255;
-
-		public override bool Equals(object obj)
+		if (obj is Byte)
 		{
-			if (obj is Byte)
-			{
-				return (this.m_value == ((Byte)obj).m_value);
-			}
-			else
-			{
-				return false;
-			}
+			return (this.m_value == ((Byte)obj).m_value);
 		}
-
-		public bool Equals(byte value)
+		else
 		{
-			return (m_value == value);
+			return false;
 		}
+	}
 
-		public int CompareTo(object value)
-		{
-			if (value == null) { return 1; }
+	public bool Equals(byte value)
+	{
+		return (m_value == value);
+	}
 
-			if (!(value is byte)) { throw new ArgumentException("Argument Type Must Be Byte", "value"); }
+	public int CompareTo(object value)
+	{
+		if (value == null) { return 1; }
 
-			if (m_value < (((byte)value).m_value)) return -1;
+		if (!(value is byte)) { throw new ArgumentException("Argument Type Must Be Byte", "value"); }
 
-			if (m_value > (((byte)value).m_value)) return 1;
+		if (m_value < (((byte)value).m_value)) return -1;
 
-			return 0;
-		}
+		if (m_value > (((byte)value).m_value)) return 1;
 
-		public int CompareTo(byte value)
-		{
-			if (m_value < value) return -1;
+		return 0;
+	}
 
-			if (m_value > value) return 1;
+	public int CompareTo(byte value)
+	{
+		if (m_value < value) return -1;
 
-			return 0;
-		}
+		if (m_value > value) return 1;
 
-		public override int GetHashCode()
-		{
-			return m_value;
-		}
+		return 0;
+	}
 
-		public override string ToString()
-		{
-			return int.CreateString(m_value, false, false);
-		}
+	public override int GetHashCode()
+	{
+		return m_value;
+	}
 
-		public string ToString(string format)
-		{
-			return int.CreateString(m_value, false, true);
-		}
+	public override string ToString()
+	{
+		return int.CreateString(m_value, false, false);
+	}
+
+	public string ToString(string format)
+	{
+		return int.CreateString(m_value, false, true);
 	}
 }

@@ -2,18 +2,17 @@
 
 using System.Runtime.InteropServices;
 
-namespace Mosa.Runtime.ARMv8A32
+namespace Mosa.Runtime.ARMv8A32;
+
+/// <summary>
+/// Provides stub methods for selected x86 native assembly instructions.
+/// </summary>
+public static class Native
 {
-	/// <summary>
-	/// Provides stub methods for selected x86 native assembly instructions.
-	/// </summary>
-	public static class Native
-	{
-		#region Intrinsic
+	#region Intrinsic
 
-		[DllImport("Mosa.Platform.ARMv8A32.Intrinsic::Nop")]
-		public extern static void Nop();
+	[DllImport("Mosa.Platform.ARMv8A32.Intrinsic::Nop")]
+	public extern static void Nop();
 
-		#endregion Intrinsic
-	}
+	#endregion Intrinsic
 }

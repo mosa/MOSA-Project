@@ -3,28 +3,27 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.x86.Transforms.Tweak
+namespace Mosa.Platform.x86.Transforms.Tweak;
+
+/// <summary>
+/// Shld32
+/// </summary>
+public sealed class Shld32 : BaseTransform
 {
-	/// <summary>
-	/// Shld32
-	/// </summary>
-	public sealed class Shld32 : BaseTransform
+	public Shld32() : base(X86.Shld32, TransformType.Manual | TransformType.Transform)
 	{
-		public Shld32() : base(X86.Shld32, TransformType.Manual | TransformType.Transform)
-		{
-		}
+	}
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand1.IsConstant && !context.Operand2.IsConstant)
-				return false;
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!context.Operand1.IsConstant && !context.Operand2.IsConstant)
+			return false;
 
-			return true;
-		}
+		return true;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			transform.MoveOperand1And2ToVirtualRegisters(context, X86.Mov32);
-		}
+	public override void Transform(Context context, TransformContext transform)
+	{
+		transform.MoveOperand1And2ToVirtualRegisters(context, X86.Mov32);
 	}
 }

@@ -3,31 +3,30 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.x64.Transforms.Tweak
+namespace Mosa.Platform.x64.Transforms.Tweak;
+
+/// <summary>
+/// CMov32
+/// </summary>
+public sealed class CMov32 : BaseTransform
 {
-	/// <summary>
-	/// CMov32
-	/// </summary>
-	public sealed class CMov32 : BaseTransform
+	public CMov32() : base(X64.CMov32, TransformType.Manual | TransformType.Transform)
 	{
-		public CMov32() : base(X64.CMov32, TransformType.Manual | TransformType.Transform)
-		{
-		}
+	}
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand1.IsConstant)
-				return false;
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!context.Operand1.IsConstant)
+			return false;
 
-			if (context.Operand1.IsCPURegister)
-				return false;
+		if (context.Operand1.IsCPURegister)
+			return false;
 
-			return true;
-		}
+		return true;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			transform.MoveOperand1ToVirtualRegister(context, X64.Mov32);
-		}
+	public override void Transform(Context context, TransformContext transform)
+	{
+		transform.MoveOperand1ToVirtualRegister(context, X64.Mov32);
 	}
 }

@@ -4,14 +4,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System
+namespace System;
+
+public enum MidpointRounding
 {
-	public enum MidpointRounding
-	{
-		ToEven = 0,
-		AwayFromZero = 1,
-		ToZero = 2,
-		ToNegativeInfinity = 3,
-		ToPositiveInfinity = 4
-	}
+	ToEven = 0,
+	AwayFromZero = 1,
+	ToZero = 2,
+	ToNegativeInfinity = 3,
+	ToPositiveInfinity = 4
 }

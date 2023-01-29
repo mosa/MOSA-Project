@@ -1,13 +1,12 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Utility.UnitTests
+namespace Mosa.Utility.UnitTests;
+
+public enum UnitTestStatus
 {
-	public enum UnitTestStatus
-	{
-		Skipped,
-		Pending,
-		Passed,
-		Failed,
-		FailedByCrash
-	}
+	Skipped,
+	Pending,
+	Passed,
+	Failed,
+	FailedByCrash
 }

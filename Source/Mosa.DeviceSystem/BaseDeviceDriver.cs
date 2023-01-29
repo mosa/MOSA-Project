@@ -2,65 +2,64 @@
 
 using Mosa.DeviceSystem.Service;
 
-namespace Mosa.DeviceSystem
+namespace Mosa.DeviceSystem;
+
+/// <summary>
+/// Abstract class for hardware devices
+/// </summary>
+public abstract class BaseDeviceDriver
 {
+	protected Device Device;
+
+	protected DeviceService DeviceService
+	{ get { return Device.DeviceService; } }
+
+	protected object _lock = new object();
+
 	/// <summary>
-	/// Abstract class for hardware devices
+	/// Sets up the this device.
 	/// </summary>
-	public abstract class BaseDeviceDriver
+	/// <param name="device">The device.</param>
+	public virtual void Setup(Device device)
 	{
-		protected Device Device;
+		Device = device;
+		Device.Status = DeviceStatus.Initializing;
+	}
 
-		protected DeviceService DeviceService
-		{ get { return Device.DeviceService; } }
+	/// <summary>
+	/// Initializes this device.
+	/// </summary>
+	public abstract void Initialize();
 
-		protected object _lock = new object();
+	/// <summary>
+	/// Probes this instance.
+	/// </summary>
+	public virtual void Probe()
+	{
+		Device.Status = DeviceStatus.NotFound;
+	}
 
-		/// <summary>
-		/// Sets up the this device.
-		/// </summary>
-		/// <param name="device">The device.</param>
-		public virtual void Setup(Device device)
-		{
-			Device = device;
-			Device.Status = DeviceStatus.Initializing;
-		}
+	/// <summary>
+	/// Starts this hardware device.
+	/// </summary>
+	public virtual void Start()
+	{
+		Device.Status = DeviceStatus.Error;
+	}
 
-		/// <summary>
-		/// Initializes this device.
-		/// </summary>
-		public abstract void Initialize();
+	/// <summary>
+	/// Stops this hardware device.
+	/// </summary>
+	public virtual void Stop()
+	{
+	}
 
-		/// <summary>
-		/// Probes this instance.
-		/// </summary>
-		public virtual void Probe()
-		{
-			Device.Status = DeviceStatus.NotFound;
-		}
-
-		/// <summary>
-		/// Starts this hardware device.
-		/// </summary>
-		public virtual void Start()
-		{
-			Device.Status = DeviceStatus.Error;
-		}
-
-		/// <summary>
-		/// Stops this hardware device.
-		/// </summary>
-		public virtual void Stop()
-		{
-		}
-
-		/// <summary>
-		/// Called when an interrupt is received.
-		/// </summary>
-		/// <returns></returns>
-		public virtual bool OnInterrupt()
-		{
-			return false;
-		}
+	/// <summary>
+	/// Called when an interrupt is received.
+	/// </summary>
+	/// <returns></returns>
+	public virtual bool OnInterrupt()
+	{
+		return false;
 	}
 }

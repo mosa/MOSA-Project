@@ -3,127 +3,126 @@
 using Mosa.Kernel.x86.Helpers;
 using Mosa.Runtime;
 
-namespace Mosa.Kernel.x86
+namespace Mosa.Kernel.x86;
+
+/// <summary>
+/// A virtual page allocator.
+/// </summary>
+/// <remarks>
+/// This is a simple bitmap implementation with no optimizations.
+/// </remarks>
+public static class VirtualPageAllocator
 {
+	private static uint pages;
+	private static bool initialized = false;
+
 	/// <summary>
-	/// A virtual page allocator.
+	/// Setups this instance.
 	/// </summary>
-	/// <remarks>
-	/// This is a simple bitmap implementation with no optimizations.
-	/// </remarks>
-	public static class VirtualPageAllocator
+	public static void Setup()
 	{
-		private static uint pages;
-		private static bool initialized = false;
+		pages = (PageFrameAllocator.TotalPages - Address.ReserveMemory) / PageFrameAllocator.PageSize;
 
-		/// <summary>
-		/// Setups this instance.
-		/// </summary>
-		public static void Setup()
+		// Bits: 0 = Available, 1 = Not Available
+		Internal.MemoryClear(new Pointer(Address.VirtualPageAllocator), pages / 8);
+		initialized = true;
+	}
+
+	/// <summary>
+	/// Gets the index of the page.
+	/// </summary>
+	/// <param name="address">The address.</param>
+	/// <returns></returns>
+	private static uint GetPageIndex(uint address)
+	{
+		return (address - Address.ReserveMemory) / PageFrameAllocator.PageSize;
+	}
+
+	/// <summary>
+	/// Sets the page status in the bitmap.
+	/// </summary>
+	/// <param name="page">The page.</param>
+	/// <param name="free">if set to <c>true</c> [free].</param>
+	private static void SetPageStatus(uint page, bool free)
+	{
+		var at = new Pointer(Address.VirtualPageAllocator + (page / 32));
+		byte bit = (byte)(page % 32);
+		uint mask = (byte)(1 << bit);
+
+		uint value = at.Load32();
+
+		if (free)
+			value &= ~mask;
+		else
+			value |= mask;
+
+		at.Store32(value);
+	}
+
+	/// <summary>
+	/// Gets the page status from the bitmap
+	/// </summary>
+	/// <param name="page">The page.</param>
+	/// <returns></returns>
+	private static bool GetPageStatus(uint page)  // true = available
+	{
+		var at = new Pointer(Address.VirtualPageAllocator + (page / 8));
+		byte bit = (byte)(page % 8);
+		byte mask = (byte)(1 << bit);
+
+		byte value = at.Load8();
+
+		return (value & mask) == 0;
+	}
+
+	/// <summary>
+	/// Reserves the pages.
+	/// </summary>
+	/// <param name="size">The size.</param>
+	/// <returns></returns>
+	public static uint Reserve(uint size)
+	{
+		Assert.True(initialized, "VirtualPageAllocator is not initialized");
+
+		uint first = 0xFFFFFFFF; // Marker
+		uint requested = ((size - 1) / PageFrameAllocator.PageSize) + 1;
+
+		for (uint at = 0; at < pages; at++)
 		{
-			pages = (PageFrameAllocator.TotalPages - Address.ReserveMemory) / PageFrameAllocator.PageSize;
+			if (GetPageStatus(at))
+			{
+				if (first == 0xFFFFFFFF)
+					first = at;
 
-			// Bits: 0 = Available, 1 = Not Available
-			Internal.MemoryClear(new Pointer(Address.VirtualPageAllocator), pages / 8);
-			initialized = true;
-		}
+				if (at - first == requested)
+				{
+					for (uint index = 0; index < requested; index++)
+						SetPageStatus(first + index, false);
 
-		/// <summary>
-		/// Gets the index of the page.
-		/// </summary>
-		/// <param name="address">The address.</param>
-		/// <returns></returns>
-		private static uint GetPageIndex(uint address)
-		{
-			return (address - Address.ReserveMemory) / PageFrameAllocator.PageSize;
-		}
-
-		/// <summary>
-		/// Sets the page status in the bitmap.
-		/// </summary>
-		/// <param name="page">The page.</param>
-		/// <param name="free">if set to <c>true</c> [free].</param>
-		private static void SetPageStatus(uint page, bool free)
-		{
-			var at = new Pointer(Address.VirtualPageAllocator + (page / 32));
-			byte bit = (byte)(page % 32);
-			uint mask = (byte)(1 << bit);
-
-			uint value = at.Load32();
-
-			if (free)
-				value &= ~mask;
+					return ((first * PageFrameAllocator.PageSize) + Address.ReserveMemory);
+				}
+			}
 			else
-				value |= mask;
-
-			at.Store32(value);
-		}
-
-		/// <summary>
-		/// Gets the page status from the bitmap
-		/// </summary>
-		/// <param name="page">The page.</param>
-		/// <returns></returns>
-		private static bool GetPageStatus(uint page)  // true = available
-		{
-			var at = new Pointer(Address.VirtualPageAllocator + (page / 8));
-			byte bit = (byte)(page % 8);
-			byte mask = (byte)(1 << bit);
-
-			byte value = at.Load8();
-
-			return (value & mask) == 0;
-		}
-
-		/// <summary>
-		/// Reserves the pages.
-		/// </summary>
-		/// <param name="size">The size.</param>
-		/// <returns></returns>
-		public static uint Reserve(uint size)
-		{
-			Assert.True(initialized, "VirtualPageAllocator is not initialized");
-
-			uint first = 0xFFFFFFFF; // Marker
-			uint requested = ((size - 1) / PageFrameAllocator.PageSize) + 1;
-
-			for (uint at = 0; at < pages; at++)
 			{
-				if (GetPageStatus(at))
-				{
-					if (first == 0xFFFFFFFF)
-						first = at;
-
-					if (at - first == requested)
-					{
-						for (uint index = 0; index < requested; index++)
-							SetPageStatus(first + index, false);
-
-						return ((first * PageFrameAllocator.PageSize) + Address.ReserveMemory);
-					}
-				}
-				else
-				{
-					first = 0xFFFFFFFF;
-				}
+				first = 0xFFFFFFFF;
 			}
-			Assert.True(false, "VirtualPageAllocator cannot reserve memory");
-			return 0;
 		}
+		Assert.True(false, "VirtualPageAllocator cannot reserve memory");
+		return 0;
+	}
 
-		/// <summary>
-		/// Releases the pages.
-		/// </summary>
-		/// <param name="address">The address.</param>
-		/// <param name="count">The count.</param>
-		public static void Release(uint address, uint count)
+	/// <summary>
+	/// Releases the pages.
+	/// </summary>
+	/// <param name="address">The address.</param>
+	/// <param name="count">The count.</param>
+	public static void Release(uint address, uint count)
+	{
+		uint start = GetPageIndex(address);
+
+		for (uint index = 0; index < count; index++)
 		{
-			uint start = GetPageIndex(address);
-
-			for (uint index = 0; index < count; index++)
-			{
-				SetPageStatus(start + index, true);
-			}
+			SetPageStatus(start + index, true);
 		}
 	}
 }

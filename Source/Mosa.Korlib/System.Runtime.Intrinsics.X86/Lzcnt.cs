@@ -3,38 +3,37 @@
 
 using System.Runtime.CompilerServices;
 
-namespace System.Runtime.Intrinsics.X86
+namespace System.Runtime.Intrinsics.X86;
+
+/// <summary>
+/// This class provides access to Intel LZCNT hardware instructions via intrinsics
+/// </summary>
+[Intrinsic]
+[CLSCompliant(false)]
+public abstract class Lzcnt : X86Base
 {
-    /// <summary>
-    /// This class provides access to Intel LZCNT hardware instructions via intrinsics
-    /// </summary>
-    [Intrinsic]
-    [CLSCompliant(false)]
-    public abstract class Lzcnt : X86Base
-    {
-        internal Lzcnt() { }
+	internal Lzcnt() { }
 
-        public static new bool IsSupported { get => IsSupported; }
+	public static new bool IsSupported { get => IsSupported; }
 
-        [Intrinsic]
-        public new abstract class X64 : X86Base.X64
-        {
-            internal X64() { }
+	[Intrinsic]
+	public new abstract class X64 : X86Base.X64
+	{
+		internal X64() { }
 
-            public static new bool IsSupported { get => IsSupported; }
+		public static new bool IsSupported { get => IsSupported; }
 
-            /// <summary>
-            /// unsigned __int64 _lzcnt_u64 (unsigned __int64 a)
-            ///   LZCNT reg, reg/m64
-            /// This intrinisc is only available on 64-bit processes
-            /// </summary>
-            public static ulong LeadingZeroCount(ulong value) => LeadingZeroCount(value);
-        }
+		/// <summary>
+		/// unsigned __int64 _lzcnt_u64 (unsigned __int64 a)
+		///   LZCNT reg, reg/m64
+		/// This intrinisc is only available on 64-bit processes
+		/// </summary>
+		public static ulong LeadingZeroCount(ulong value) => LeadingZeroCount(value);
+	}
 
-        /// <summary>
-        /// unsigned int _lzcnt_u32 (unsigned int a)
-        ///   LZCNT reg, reg/m32
-        /// </summary>
-        public static uint LeadingZeroCount(uint value) => LeadingZeroCount(value);
-    }
+	/// <summary>
+	/// unsigned int _lzcnt_u32 (unsigned int a)
+	///   LZCNT reg, reg/m32
+	/// </summary>
+	public static uint LeadingZeroCount(uint value) => LeadingZeroCount(value);
 }

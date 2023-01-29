@@ -1,29 +1,28 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Memory
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Memory;
+
+public sealed class StoreLoadParamObject : BaseTransform
 {
-	public sealed class StoreLoadParamObject : BaseTransform
+	public StoreLoadParamObject() : base(IRInstruction.StoreParamObject, TransformType.Manual | TransformType.Optimization)
 	{
-		public StoreLoadParamObject() : base(IRInstruction.StoreParamObject, TransformType.Manual | TransformType.Optimization)
-		{
-		}
+	}
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			var previous = GetPreviousNodeUntil(context, IRInstruction.LoadParamObject, transform.Window, context.Operand2);
+	public override bool Match(Context context, TransformContext transform)
+	{
+		var previous = GetPreviousNodeUntil(context, IRInstruction.LoadParamObject, transform.Window, context.Operand2);
 
-			if (previous == null)
-				return false;
+		if (previous == null)
+			return false;
 
-			if (previous.Operand1 != context.Operand1)
-				return false;
+		if (previous.Operand1 != context.Operand1)
+			return false;
 
-			return true;
-		}
+		return true;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			context.SetNop();
-		}
+	public override void Transform(Context context, TransformContext transform)
+	{
+		context.SetNop();
 	}
 }

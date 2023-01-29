@@ -1,26 +1,25 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Utility.RSP.Command
+namespace Mosa.Utility.RSP.Command;
+
+public class ReadMemory : GDBCommand
 {
-	public class ReadMemory : GDBCommand
+	public ulong Address { get; }
+	public uint SentBytes { get; }
+
+	protected override string PackArguments { get { return Address.ToString("x") + "," + SentBytes.ToString("x"); } }
+
+	public ReadMemory(ulong address, uint bytes, CallBack callBack = null) : base("m", callBack)
 	{
-		public ulong Address { get; }
-		public uint SentBytes { get; }
+		Address = address;
+		SentBytes = bytes;
+	}
 
-		protected override string PackArguments { get { return Address.ToString("x") + "," + SentBytes.ToString("x"); } }
+	internal override void Decode()
+	{
+		StandardErrorCheck();
 
-		public ReadMemory(ulong address, uint bytes, CallBack callBack = null) : base("m", callBack)
-		{
-			Address = address;
-			SentBytes = bytes;
-		}
-
-		internal override void Decode()
-		{
-			StandardErrorCheck();
-
-			if (!IsResponseOk)
-				return;
-		}
+		if (!IsResponseOk)
+			return;
 	}
 }

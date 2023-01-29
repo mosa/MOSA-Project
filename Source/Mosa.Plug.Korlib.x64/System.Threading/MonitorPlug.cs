@@ -5,27 +5,26 @@ using System.Runtime.CompilerServices;
 using Mosa.Runtime.Plug;
 using Mosa.Runtime.x64;
 
-namespace Mosa.Plug.Korlib.System.Threading.x64
+namespace Mosa.Plug.Korlib.System.Threading.x64;
+
+public static class MonitorPlug
 {
-	public static class MonitorPlug
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[Plug("System.Threading.Monitor::Enter")]
+	internal static void Enter(Object obj)
 	{
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		[Plug("System.Threading.Monitor::Enter")]
-		internal static void Enter(Object obj)
-		{
-			var sync = Runtime.Internal.GetObjectLockAndStatus(obj);
+		var sync = Runtime.Internal.GetObjectLockAndStatus(obj);
 
-			while (Native.CmpXChgLoad64(sync.ToInt64(), 1, 0) != 0)
-			{ }
-		}
+		while (Native.CmpXChgLoad64(sync.ToInt64(), 1, 0) != 0)
+		{ }
+	}
 
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		[Plug("System.Threading.Monitor::Exit")]
-		internal static void Exit(Object obj)
-		{
-			var sync = Runtime.Internal.GetObjectLockAndStatus(obj);
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[Plug("System.Threading.Monitor::Exit")]
+	internal static void Exit(Object obj)
+	{
+		var sync = Runtime.Internal.GetObjectLockAndStatus(obj);
 
-			Native.XAddLoad64(sync.ToInt64(), -1);
-		}
+		Native.XAddLoad64(sync.ToInt64(), -1);
 	}
 }

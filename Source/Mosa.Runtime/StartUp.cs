@@ -1,60 +1,59 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Runtime
+namespace Mosa.Runtime;
+
+public static class StartUp
 {
-	public static class StartUp
+	public static void Initialize()
 	{
-		public static void Initialize()
-		{
-			SetInitialMemory();             // Legacy
+		SetInitialMemory();             // Legacy
 
-			PlatformInitialization();
-			GarbageCollectionInitialization();
+		PlatformInitialization();
+		GarbageCollectionInitialization();
 
-			KernelInitialization();         // Legacy
+		KernelInitialization();         // Legacy
 
-			InitializeAssembly();
-			InitializeRuntimeMetadata();
+		InitializeAssembly();
+		InitializeRuntimeMetadata();
 
-			KernelEntryPoint();
+		KernelEntryPoint();
 
-			StartApplication();
-		}
+		StartApplication();
+	}
 
-		public static void PlatformInitialization()
-		{
-		}
+	public static void PlatformInitialization()
+	{
+	}
 
-		public static void GarbageCollectionInitialization()
-		{
-		}
+	public static void GarbageCollectionInitialization()
+	{
+	}
 
-		public static void KernelEntryPoint()
-		{
-		}
+	public static void KernelEntryPoint()
+	{
+	}
 
-		public static void KernelInitialization()
-		{
-		}
+	public static void KernelInitialization()
+	{
+	}
 
-		public static void SetInitialMemory()
-		{
-		}
+	public static void SetInitialMemory()
+	{
+	}
 
-		public static void InitializeAssembly()
-		{
-		}
+	public static void InitializeAssembly()
+	{
+	}
 
-		public static void InitializeRuntimeMetadata()
-		{
-		}
+	public static void InitializeRuntimeMetadata()
+	{
+	}
 
-		public static void FinalKernelInitialization()
-		{
-		}
+	public static void FinalKernelInitialization()
+	{
+	}
 
-		public static void StartApplication()
-		{
-		}
+	public static void StartApplication()
+	{
 	}
 }

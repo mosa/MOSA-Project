@@ -2,41 +2,40 @@
 
 using System.Collections.Generic;
 
-namespace Mosa.Compiler.Framework.Common
+namespace Mosa.Compiler.Framework.Common;
+
+public struct OperandVisitor
 {
-	public struct OperandVisitor
+	private readonly InstructionNode Node;
+
+	public OperandVisitor(InstructionNode node)
 	{
-		private readonly InstructionNode Node;
+		Node = node;
+	}
 
-		public OperandVisitor(InstructionNode node)
+	public IEnumerable<Operand> Input
+	{
+		get
 		{
-			Node = node;
-		}
-
-		public IEnumerable<Operand> Input
-		{
-			get
+			foreach (var operand in Node.Operands)
 			{
-				foreach (var operand in Node.Operands)
+				if (operand.IsVirtualRegister || operand.IsCPURegister)
 				{
-					if (operand.IsVirtualRegister || operand.IsCPURegister)
-					{
-						yield return operand;
-					}
+					yield return operand;
 				}
 			}
 		}
+	}
 
-		public IEnumerable<Operand> Output
+	public IEnumerable<Operand> Output
+	{
+		get
 		{
-			get
+			foreach (var operand in Node.Results)
 			{
-				foreach (var operand in Node.Results)
+				if (operand.IsVirtualRegister || operand.IsCPURegister)
 				{
-					if (operand.IsVirtualRegister || operand.IsCPURegister)
-					{
-						yield return operand;
-					}
+					yield return operand;
 				}
 			}
 		}

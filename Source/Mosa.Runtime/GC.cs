@@ -2,25 +2,24 @@
 
 using System.Runtime.CompilerServices;
 
-namespace Mosa.Runtime
+namespace Mosa.Runtime;
+
+public static class GC
 {
-	public static class GC
+	// This method will be plugged by the platform specific implementation;
+	// On x86, it is be Mosa.Kernel.x86.KernelMemory._AllocateMemory
+	private static Pointer AllocateMemory(uint size)
 	{
-		// This method will be plugged by the platform specific implementation;
-		// On x86, it is be Mosa.Kernel.x86.KernelMemory._AllocateMemory
-		private static Pointer AllocateMemory(uint size)
-		{
-			return Pointer.Zero;
-		}
+		return Pointer.Zero;
+	}
 
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		public static Pointer AllocateObject(uint size)
-		{
-			return AllocateMemory(size);
-		}
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static Pointer AllocateObject(uint size)
+	{
+		return AllocateMemory(size);
+	}
 
-		public static void Setup()
-		{
-		}
+	public static void Setup()
+	{
 	}
 }

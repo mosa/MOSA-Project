@@ -2,40 +2,39 @@
 
 using Mosa.Runtime;
 
-namespace Mosa.Kernel.BareMetal
+namespace Mosa.Kernel.BareMetal;
+
+public class BootPageAllocator
 {
-	public class BootPageAllocator
+	private static Pointer BootReserveStartPage;
+	private static uint BootReserveSize;
+	private static uint UsedPages;
+
+	internal static void Setup()
 	{
-		private static Pointer BootReserveStartPage;
-		private static uint BootReserveSize;
-		private static uint UsedPages;
+		var region = Platform.GetBootReservedRegion();
 
-		internal static void Setup()
-		{
-			var region = Platform.GetBootReservedRegion();
+		BootReserveStartPage = region.Address;
+		BootReserveSize = (uint)region.Size / Page.Size;
 
-			BootReserveStartPage = region.Address;
-			BootReserveSize = (uint)region.Size / Page.Size;
+		UsedPages = 0;
+	}
 
-			UsedPages = 0;
-		}
+	public static Pointer AllocatePage()
+	{
+		return AllocatePages(1);
+	}
 
-		public static Pointer AllocatePage()
-		{
-			return AllocatePages(1);
-		}
+	public static Pointer AllocatePages(uint pages = 1)
+	{
+		// TODO: Acquire lock
 
-		public static Pointer AllocatePages(uint pages = 1)
-		{
-			// TODO: Acquire lock
+		var result = BootReserveStartPage + (UsedPages * Page.Size);
 
-			var result = BootReserveStartPage + (UsedPages * Page.Size);
+		UsedPages += pages;
 
-			UsedPages += pages;
+		// TODO: Release lock
 
-			// TODO: Release lock
-
-			return result;
-		}
+		return result;
 	}
 }

@@ -2,52 +2,51 @@
 
 using System.Collections.Generic;
 
-namespace Mosa.Compiler.Common
+namespace Mosa.Compiler.Common;
+
+public class KeyedList<T, V>
 {
-	public class KeyedList<T, V>
+	public readonly Dictionary<T, List<V>> Collection;
+
+	public Dictionary<T, List<V>>.KeyCollection Keys { get { return Collection.Keys; } }
+
+	public List<V> this[T index] { get { return Collection.ContainsKey(index) ? Collection[index] : null; } }
+
+	public KeyedList()
 	{
-		public readonly Dictionary<T, List<V>> Collection;
+		Collection = new Dictionary<T, List<V>>();
+	}
 
-		public Dictionary<T, List<V>>.KeyCollection Keys { get { return Collection.Keys; } }
-
-		public List<V> this[T index] { get { return Collection.ContainsKey(index) ? Collection[index] : null; } }
-
-		public KeyedList()
+	public void Add(T key, V value)
+	{
+		if (!Collection.TryGetValue(key, out List<V> list))
 		{
-			Collection = new Dictionary<T, List<V>>();
+			list = new List<V>();
+			Collection.Add(key, list);
 		}
 
-		public void Add(T key, V value)
+		list.Add(value);
+	}
+
+	public void AddIfNew(T key, V value)
+	{
+		if (!Collection.TryGetValue(key, out List<V> list))
 		{
-			if (!Collection.TryGetValue(key, out List<V> list))
+			list = new List<V>();
+
+			if (!list.Contains(value))
 			{
-				list = new List<V>();
 				Collection.Add(key, list);
 			}
-
-			list.Add(value);
 		}
 
-		public void AddIfNew(T key, V value)
-		{
-			if (!Collection.TryGetValue(key, out List<V> list))
-			{
-				list = new List<V>();
+		list.Add(value);
+	}
 
-				if (!list.Contains(value))
-				{
-					Collection.Add(key, list);
-				}
-			}
+	public List<V> Get(T key)
+	{
+		Collection.TryGetValue(key, out List<V> list);
 
-			list.Add(value);
-		}
-
-		public List<V> Get(T key)
-		{
-			Collection.TryGetValue(key, out List<V> list);
-
-			return list;
-		}
+		return list;
 	}
 }

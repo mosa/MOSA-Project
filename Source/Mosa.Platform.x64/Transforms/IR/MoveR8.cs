@@ -3,30 +3,29 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.x64.Transforms.IR
+namespace Mosa.Platform.x64.Transforms.IR;
+
+/// <summary>
+/// MoveR8
+/// </summary>
+public sealed class MoveR8 : BaseTransform
 {
-	/// <summary>
-	/// MoveR8
-	/// </summary>
-	public sealed class MoveR8 : BaseTransform
+	public MoveR8() : base(IRInstruction.MoveR8, TransformType.Manual | TransformType.Transform)
 	{
-		public MoveR8() : base(IRInstruction.MoveR8, TransformType.Manual | TransformType.Transform)
-		{
-		}
+	}
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			return true;
-		}
+	public override bool Match(Context context, TransformContext transform)
+	{
+		return true;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
-			var operand1 = context.Operand1;
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
+		var operand1 = context.Operand1;
 
-			operand1 = X64TransformHelper.MoveConstantToFloatRegister(transform, context, operand1);
+		operand1 = X64TransformHelper.MoveConstantToFloatRegister(transform, context, operand1);
 
-			context.SetInstruction(X64.Movsd, result, operand1);
-		}
+		context.SetInstruction(X64.Movsd, result, operand1);
 	}
 }

@@ -1,15 +1,14 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.DeviceSystem
+namespace Mosa.DeviceSystem;
+
+public enum ServiceEventType
 {
-	public enum ServiceEventType
-	{
-		New,
-		Change,
-		Delete,
-		Start,
-		Stop,
-		Error,
-		Warning,
-	}
+	New,
+	Change,
+	Delete,
+	Start,
+	Stop,
+	Error,
+	Warning,
 }

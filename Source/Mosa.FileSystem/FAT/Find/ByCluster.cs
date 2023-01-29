@@ -2,55 +2,54 @@
 
 using Mosa.DeviceSystem;
 
-namespace Mosa.FileSystem.FAT.Find
+namespace Mosa.FileSystem.FAT.Find;
+
+/// <summary>
+/// ByCluster
+/// </summary>
+internal class ByCluster : FatFileSystem.ICompare
 {
 	/// <summary>
-	/// ByCluster
+	/// The cluster
 	/// </summary>
-	internal class ByCluster : FatFileSystem.ICompare
+	protected uint cluster;
+
+	/// <summary>
+	/// Initializes a new instance of the <see cref="ByCluster"/> class.
+	/// </summary>
+	/// <param name="cluster">The cluster.</param>
+	public ByCluster(uint cluster)
 	{
-		/// <summary>
-		/// The cluster
-		/// </summary>
-		protected uint cluster;
+		this.cluster = cluster;
+	}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ByCluster"/> class.
-		/// </summary>
-		/// <param name="cluster">The cluster.</param>
-		public ByCluster(uint cluster)
-		{
-			this.cluster = cluster;
-		}
+	/// <summary>
+	/// Compares the specified data.
+	/// </summary>
+	/// <param name="data">The data.</param>
+	/// <param name="offset">The offset.</param>
+	/// <param name="type">The type.</param>
+	/// <returns></returns>
+	public bool Compare(byte[] data, uint offset, FatType type)
+	{
+		var entry = new DataBlock(data);
 
-		/// <summary>
-		/// Compares the specified data.
-		/// </summary>
-		/// <param name="data">The data.</param>
-		/// <param name="offset">The offset.</param>
-		/// <param name="type">The type.</param>
-		/// <returns></returns>
-		public bool Compare(byte[] data, uint offset, FatType type)
-		{
-			var entry = new DataBlock(data);
+		byte first = entry.GetByte(offset + Entry.DOSName);
 
-			byte first = entry.GetByte(offset + Entry.DOSName);
-
-			if (first == FileNameAttribute.LastEntry)
-				return false;
-
-			if ((first == FileNameAttribute.Deleted) | (first == FileNameAttribute.Dot))
-				return false;
-
-			if (first == FileNameAttribute.Escape)
-				return false;
-
-			uint startcluster = FatFileSystem.GetClusterEntry(data, offset, type);
-
-			if (startcluster == cluster)
-				return true;
-
+		if (first == FileNameAttribute.LastEntry)
 			return false;
-		}
+
+		if ((first == FileNameAttribute.Deleted) | (first == FileNameAttribute.Dot))
+			return false;
+
+		if (first == FileNameAttribute.Escape)
+			return false;
+
+		uint startcluster = FatFileSystem.GetClusterEntry(data, offset, type);
+
+		if (startcluster == cluster)
+			return true;
+
+		return false;
 	}
 }

@@ -2,22 +2,21 @@
 
 using Mosa.Kernel.BareMetal.x86;
 
-namespace Mosa.BareMetal.HelloWorld.x86
+namespace Mosa.BareMetal.HelloWorld.x86;
+
+/// <summary>
+/// Boot
+/// </summary>
+public static class Boot
 {
 	/// <summary>
-	/// Boot
+	/// Main
 	/// </summary>
-	public static class Boot
+	public static void Main()
 	{
-		/// <summary>
-		/// Main
-		/// </summary>
-		public static void Main()
-		{
-			VGAText.Clear();
+		VGAText.Clear();
 
-			while (true)
-			{ }
-		}
+		while (true)
+		{ }
 	}
 }

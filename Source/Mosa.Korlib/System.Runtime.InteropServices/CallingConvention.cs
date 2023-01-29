@@ -1,15 +1,14 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace System.Runtime.InteropServices
+namespace System.Runtime.InteropServices;
+
+[Serializable]
+[ComVisible(true)]
+public enum CallingConvention
 {
-	[Serializable]
-	[ComVisible(true)]
-	public enum CallingConvention
-	{
-		Winapi = 1,
-		Cdecl = 2,
-		StdCall = 3,
-		ThisCall = 4,
-		FastCall = 5,
-	}
+	Winapi = 1,
+	Cdecl = 2,
+	StdCall = 3,
+	ThisCall = 4,
+	FastCall = 5,
 }

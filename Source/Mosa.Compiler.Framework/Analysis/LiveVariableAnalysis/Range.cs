@@ -2,52 +2,51 @@
 
 using System.Diagnostics;
 
-namespace Mosa.Compiler.Framework.Analysis.LiveVariableAnalysis
+namespace Mosa.Compiler.Framework.Analysis.LiveVariableAnalysis;
+
+public struct Range
 {
-	public struct Range
+	public int Start { get; }
+
+	public int End { get; }
+
+	public Range(int start, int end)
 	{
-		public int Start { get; }
+		Debug.Assert(start <= end);
 
-		public int End { get; }
+		Start = start;
+		End = end;
+	}
 
-		public Range(int start, int end)
-		{
-			Debug.Assert(start <= end);
+	public int Length { get { return End - Start; } }
 
-			Start = start;
-			End = end;
-		}
+	public bool Intersects(int start, int end)
+	{
+		return (Start <= start && End > start) || (start <= Start && end > Start);
+	}
 
-		public int Length { get { return End - Start; } }
+	public bool Intersects(Range other)
+	{
+		return Intersects(other.Start, other.End);
+	}
 
-		public bool Intersects(int start, int end)
-		{
-			return (Start <= start && End > start) || (start <= Start && end > Start);
-		}
+	public bool IsAdjacent(int start, int end)
+	{
+		return start == End || end == Start;
+	}
 
-		public bool Intersects(Range other)
-		{
-			return Intersects(other.Start, other.End);
-		}
+	public bool IsAdjacent(Range other)
+	{
+		return IsAdjacent(other.Start, other.End);
+	}
 
-		public bool IsAdjacent(int start, int end)
-		{
-			return start == End || end == Start;
-		}
+	public bool Contains(int index)
+	{
+		return index >= Start && index < End;
+	}
 
-		public bool IsAdjacent(Range other)
-		{
-			return IsAdjacent(other.Start, other.End);
-		}
-
-		public bool Contains(int index)
-		{
-			return index >= Start && index < End;
-		}
-
-		public override string ToString()
-		{
-			return $"[{Start}, {End}]";
-		}
+	public override string ToString()
+	{
+		return $"[{Start}, {End}]";
 	}
 }

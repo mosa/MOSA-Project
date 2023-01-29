@@ -3,47 +3,46 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.x86.Transforms.Optimizations.Manual.Special
+namespace Mosa.Platform.x86.Transforms.Optimizations.Manual.Special;
+
+public sealed class Mov32Propagation : BaseTransform
 {
-	public sealed class Mov32Propagation : BaseTransform
+	public Mov32Propagation() : base(X86.Mov32, TransformType.Manual | TransformType.Optimization)
 	{
-		public Mov32Propagation() : base(X86.Mov32, TransformType.Manual | TransformType.Optimization)
+	}
+
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!context.Operand1.IsVirtualRegister)
+			return false;
+
+		if (!context.Result.IsVirtualRegister)
+			return false;
+
+		if (!IsSSAForm(context.Result))
+			return false;
+
+		return true;
+	}
+
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
+		var operand1 = context.Operand1;
+
+		foreach (var use in result.Uses.ToArray())
 		{
-		}
-
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand1.IsVirtualRegister)
-				return false;
-
-			if (!context.Result.IsVirtualRegister)
-				return false;
-
-			if (!IsSSAForm(context.Result))
-				return false;
-
-			return true;
-		}
-
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
-			var operand1 = context.Operand1;
-
-			foreach (var use in result.Uses.ToArray())
+			for (int i = 0; i < use.OperandCount; i++)
 			{
-				for (int i = 0; i < use.OperandCount; i++)
-				{
-					var operand = use.GetOperand(i);
+				var operand = use.GetOperand(i);
 
-					if (operand == result)
-					{
-						use.SetOperand(i, operand1);
-					}
+				if (operand == result)
+				{
+					use.SetOperand(i, operand1);
 				}
 			}
-
-			context.Empty();
 		}
+
+		context.Empty();
 	}
 }

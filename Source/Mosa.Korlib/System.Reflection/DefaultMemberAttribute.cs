@@ -1,29 +1,28 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace System.Reflection
+namespace System.Reflection;
+
+/// <summary>
+/// Implementation of the "System.Reflection.DefaultMemberAttribute" class
+/// </summary>
+[AttributeUsage(AttributeTargets.All)]
+public class DefaultMemberAttribute : Attribute
 {
+	private readonly string member;
+
 	/// <summary>
-	/// Implementation of the "System.Reflection.DefaultMemberAttribute" class
+	/// Member
 	/// </summary>
-	[AttributeUsage(AttributeTargets.All)]
-	public class DefaultMemberAttribute : Attribute
+	public string Member
 	{
-		private readonly string member;
+		get { return member; }
+	}
 
-		/// <summary>
-		/// Member
-		/// </summary>
-		public string Member
-		{
-			get { return member; }
-		}
-
-		/// <summary>
-		///
-		/// </summary>
-		public DefaultMemberAttribute(string member)
-		{
-			this.member = member;
-		}
+	/// <summary>
+	///
+	/// </summary>
+	public DefaultMemberAttribute(string member)
+	{
+		this.member = member;
 	}
 }

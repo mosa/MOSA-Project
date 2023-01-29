@@ -9,170 +9,169 @@ using Reko.Arch.X86;
 using Reko.Core;
 using Reko.Core.Memory;
 
-namespace Mosa.Utility.Disassembler
+namespace Mosa.Utility.Disassembler;
+
+public partial class Disassembler
 {
-	public partial class Disassembler
+	private byte[] memory;
+
+	public ulong Offset { get; set; } = 0;
+
+	private readonly ProcessorArchitecture arch;
+	private MemoryArea memoryArea;
+
+	public Disassembler(string platform)
 	{
-		private byte[] memory;
+		var services = new ServiceContainer();
+		var options = new Dictionary<string, object>();
 
-		public ulong Offset { get; set; } = 0;
-
-		private readonly ProcessorArchitecture arch;
-		private MemoryArea memoryArea;
-
-		public Disassembler(string platform)
+		switch (platform.ToLowerInvariant())
 		{
-			var services = new ServiceContainer();
-			var options = new Dictionary<string, object>();
-
-			switch (platform.ToLowerInvariant())
-			{
-				case "armv8a32": arch = new Arm32Architecture(services, "arm32", options); break;
-				case "x86": arch = new X86ArchitectureFlat32(services, "x86-protected-32", options); break;
-				case "x64": arch = arch = new X86ArchitectureFlat64(services, "x86-protected-64", options); break;
-			}
+			case "armv8a32": arch = new Arm32Architecture(services, "arm32", options); break;
+			case "x86": arch = new X86ArchitectureFlat32(services, "x86-protected-32", options); break;
+			case "x64": arch = arch = new X86ArchitectureFlat64(services, "x86-protected-64", options); break;
 		}
+	}
 
-		public void SetMemory(byte[] memory, ulong address)
+	public void SetMemory(byte[] memory, ulong address)
+	{
+		this.memory = memory;
+		memoryArea = new ByteMemoryArea(Address.Ptr32((uint)address), memory);
+	}
+
+	public List<DecodedInstruction> Decode(int count = int.MaxValue)
+	{
+		var decoded = new List<DecodedInstruction>();
+
+		var sb = new StringBuilder(100);
+
+		try
 		{
-			this.memory = memory;
-			memoryArea = new ByteMemoryArea(Address.Ptr32((uint)address), memory);
-		}
+			var dasm = arch.CreateDisassembler(memoryArea.CreateLeReader((uint)Offset));
 
-		public List<DecodedInstruction> Decode(int count = int.MaxValue)
-		{
-			var decoded = new List<DecodedInstruction>();
-
-			var sb = new StringBuilder(100);
-
-			try
+			foreach (var instr in dasm)
 			{
-				var dasm = arch.CreateDisassembler(memoryArea.CreateLeReader((uint)Offset));
+				var len = instr.Length;
+				var address = instr.Address.Offset;
+				var instruction = instr.ToString().Replace('\t', ' ');
 
-				foreach (var instr in dasm)
+				// preference
+				instruction = instruction.Replace(",", ", ");
+
+				// fix up
+				instruction = ChangeHex(instruction);
+
+				sb.AppendFormat("{0:x8}", address);
+				sb.Append(' ');
+				var bytes = BytesToHex(memory, (uint)Offset, len);
+				sb.Append(bytes == null ? string.Empty : bytes.ToString());
+				sb.Append(string.Empty.PadRight(41 - sb.Length, ' '));
+				sb.Append(instruction);
+
+				decoded.Add(new DecodedInstruction()
 				{
-					var len = instr.Length;
-					var address = instr.Address.Offset;
-					var instruction = instr.ToString().Replace('\t', ' ');
+					Address = address,
+					Length = len,
+					Instruction = instruction,
+					Full = sb.ToString()
+				});
 
-					// preference
-					instruction = instruction.Replace(",", ", ");
+				sb.Clear();
 
-					// fix up
-					instruction = ChangeHex(instruction);
+				count--;
 
-					sb.AppendFormat("{0:x8}", address);
-					sb.Append(' ');
-					var bytes = BytesToHex(memory, (uint)Offset, len);
-					sb.Append(bytes == null ? string.Empty : bytes.ToString());
-					sb.Append(string.Empty.PadRight(41 - sb.Length, ' '));
-					sb.Append(instruction);
+				if (count == 0)
+					break;
 
-					decoded.Add(new DecodedInstruction()
-					{
-						Address = address,
-						Length = len,
-						Instruction = instruction,
-						Full = sb.ToString()
-					});
-
-					sb.Clear();
-
-					count--;
-
-					if (count == 0)
-						break;
-
-					Offset += (uint)len;
-				}
-
-				return decoded;
+				Offset += (uint)len;
 			}
-			catch
-			{
-				return decoded;
-			}
+
+			return decoded;
+		}
+		catch
+		{
+			return decoded;
+		}
+	}
+
+	private StringBuilder BytesToHex(byte[] memory, uint offset, int length)
+	{
+		if (length == 0)
+			return null;
+
+		var sb = new StringBuilder();
+
+		for (uint i = 0; i < length; i++)
+		{
+			var b = memory[i + offset];
+
+			sb.AppendFormat("{0:x2} ", b);
 		}
 
-		private StringBuilder BytesToHex(byte[] memory, uint offset, int length)
-		{
-			if (length == 0)
-				return null;
+		sb.Length--;
 
-			var sb = new StringBuilder();
+		return sb;
+	}
 
-			for (uint i = 0; i < length; i++)
-			{
-				var b = memory[i + offset];
+	private bool IsHex(char c)
+	{
+		if (c >= '0' && c <= '9')
+			return true;
 
-				sb.AppendFormat("{0:x2} ", b);
-			}
+		if (c >= 'a' && c <= 'f')
+			return true;
 
-			sb.Length--;
+		if (c >= 'A' && c <= 'F')
+			return true;
 
-			return sb;
-		}
+		return false;
+	}
 
-		private bool IsHex(char c)
-		{
-			if (c >= '0' && c <= '9')
-				return true;
-
-			if (c >= 'a' && c <= 'f')
-				return true;
-
-			if (c >= 'A' && c <= 'F')
-				return true;
-
+	private bool IsNext8Hex(string s, int start)
+	{
+		if (start + 8 > s.Length)
 			return false;
-		}
 
-		private bool IsNext8Hex(string s, int start)
+		for (int i = start; i < start + 8; i++)
 		{
-			if (start + 8 > s.Length)
+			char c = s[i];
+
+			if (!IsHex(c))
 				return false;
-
-			for (int i = start; i < start + 8; i++)
-			{
-				char c = s[i];
-
-				if (!IsHex(c))
-					return false;
-			}
-
-			if (start + 8 == s.Length)
-				return true;
-
-			return !IsHex(s[start + 8]);
 		}
 
-		private string ChangeHex(string s)
+		if (start + 8 == s.Length)
+			return true;
+
+		return !IsHex(s[start + 8]);
+	}
+
+	private string ChangeHex(string s)
+	{
+		var sb = new StringBuilder();
+
+		for (int i = 0; i < s.Length; i++)
 		{
-			var sb = new StringBuilder();
+			char c = s[i];
 
-			for (int i = 0; i < s.Length; i++)
+			if (!IsNext8Hex(s, i))
 			{
-				char c = s[i];
-
-				if (!IsNext8Hex(s, i))
-				{
-					sb.Append(c);
-					continue;
-				}
-				else
-				{
-					string hex = s.Substring(i, 8);
-					uint value = uint.Parse(hex, System.Globalization.NumberStyles.HexNumber);
-					string hex2 = Convert.ToString(value, 16);
-
-					sb.Append("0x");
-					sb.Append(hex2);
-
-					i += 8;
-				}
+				sb.Append(c);
+				continue;
 			}
+			else
+			{
+				string hex = s.Substring(i, 8);
+				uint value = uint.Parse(hex, System.Globalization.NumberStyles.HexNumber);
+				string hex2 = Convert.ToString(value, 16);
 
-			return sb.ToString();
+				sb.Append("0x");
+				sb.Append(hex2);
+
+				i += 8;
+			}
 		}
+
+		return sb.ToString();
 	}
 }

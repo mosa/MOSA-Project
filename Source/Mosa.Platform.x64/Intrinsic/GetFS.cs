@@ -3,17 +3,16 @@
 using Mosa.Compiler.Framework;
 
 
-namespace Mosa.Platform.x64.Intrinsic
+namespace Mosa.Platform.x64.Intrinsic;
+
+/// <summary>
+/// IntrinsicMethods
+/// </summary>
+static partial class IntrinsicMethods
 {
-	/// <summary>
-	/// IntrinsicMethods
-	/// </summary>
-	static partial class IntrinsicMethods
+	[IntrinsicMethod("Mosa.Platform.x64.Intrinsic::GetFS")]
+	private static void GetFS(Context context, MethodCompiler methodCompiler)
 	{
-		[IntrinsicMethod("Mosa.Platform.x64.Intrinsic::GetFS")]
-		private static void GetFS(Context context, MethodCompiler methodCompiler)
-		{
-			context.SetInstruction(X64.MovLoadSeg64, context.Result, Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U8, CPURegister.FS));
-		}
+		context.SetInstruction(X64.MovLoadSeg64, context.Result, Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U8, CPURegister.FS));
 	}
 }

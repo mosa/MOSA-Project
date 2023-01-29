@@ -3,57 +3,56 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.MosaTypeSystem;
 
-namespace Mosa.Platform.x86.CompilerStages
+namespace Mosa.Platform.x86.CompilerStages;
+
+public sealed class MultibootV1Stage : Mosa.Compiler.Framework.Platform.BaseMultibootV1Stage
 {
-	public sealed class MultibootV1Stage : Mosa.Compiler.Framework.Platform.BaseMultibootV1Stage
+	protected override void Finalization()
 	{
-		protected override void Finalization()
-		{
-			CreateMultibootMethod();
+		CreateMultibootMethod();
 
-			WriteMultibootHeader(Linker.EntryPoint);
-		}
+		WriteMultibootHeader(Linker.EntryPoint);
+	}
 
-		private void CreateMultibootMethod()
-		{
-			var startUpType = TypeSystem.GetTypeByName("Mosa.Runtime.StartUp");
-			var initializeMethod = startUpType.FindMethodByName("Initialize");
+	private void CreateMultibootMethod()
+	{
+		var startUpType = TypeSystem.GetTypeByName("Mosa.Runtime.StartUp");
+		var initializeMethod = startUpType.FindMethodByName("Initialize");
 
-			Compiler.GetMethodData(initializeMethod).DoNotInline = true;
+		Compiler.GetMethodData(initializeMethod).DoNotInline = true;
 
-			var entryPoint = Operand.CreateSymbolFromMethod(initializeMethod, TypeSystem);
+		var entryPoint = Operand.CreateSymbolFromMethod(initializeMethod, TypeSystem);
 
-			var eax = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.EAX);
-			var ebx = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.EBX);
-			var ebp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.EBP);
-			var esp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.ESP);
+		var eax = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.EAX);
+		var ebx = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.EBX);
+		var ebp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.EBP);
+		var esp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.ESP);
 
-			var multibootEAX = Operand.CreateUnmanagedSymbolPointer(MultibootEAX, TypeSystem);
-			var multibootEBX = Operand.CreateUnmanagedSymbolPointer(MultibootEBX, TypeSystem);
+		var multibootEAX = Operand.CreateUnmanagedSymbolPointer(MultibootEAX, TypeSystem);
+		var multibootEBX = Operand.CreateUnmanagedSymbolPointer(MultibootEBX, TypeSystem);
 
-			var stackTop = CreateConstant(InitialStackAddress);
-			var zero = CreateConstant(0);
-			var offset = CreateConstant(4);
+		var stackTop = CreateConstant(InitialStackAddress);
+		var zero = CreateConstant(0);
+		var offset = CreateConstant(4);
 
-			var basicBlocks = new BasicBlocks();
-			var block = basicBlocks.CreateBlock(BasicBlock.PrologueLabel);
-			basicBlocks.AddHeadBlock(block);
-			var ctx = new Context(block);
+		var basicBlocks = new BasicBlocks();
+		var block = basicBlocks.CreateBlock(BasicBlock.PrologueLabel);
+		basicBlocks.AddHeadBlock(block);
+		var ctx = new Context(block);
 
-			// Setup the stack and place the sentinel on the stack to indicate the start of the stack
-			ctx.AppendInstruction(X86.Mov32, esp, stackTop);
-			ctx.AppendInstruction(X86.Mov32, ebp, stackTop);
-			ctx.AppendInstruction(X86.MovStore32, null, esp, zero, zero);
-			ctx.AppendInstruction(X86.MovStore32, null, esp, offset, zero);
+		// Setup the stack and place the sentinel on the stack to indicate the start of the stack
+		ctx.AppendInstruction(X86.Mov32, esp, stackTop);
+		ctx.AppendInstruction(X86.Mov32, ebp, stackTop);
+		ctx.AppendInstruction(X86.MovStore32, null, esp, zero, zero);
+		ctx.AppendInstruction(X86.MovStore32, null, esp, offset, zero);
 
-			// Place the multiboot address into a static field
-			ctx.AppendInstruction(X86.MovStore32, null, multibootEAX, zero, eax);
-			ctx.AppendInstruction(X86.MovStore32, null, multibootEBX, zero, ebx);
+		// Place the multiboot address into a static field
+		ctx.AppendInstruction(X86.MovStore32, null, multibootEAX, zero, eax);
+		ctx.AppendInstruction(X86.MovStore32, null, multibootEBX, zero, ebx);
 
-			ctx.AppendInstruction(X86.Call, null, entryPoint);  // FUTURE: Remove line (SetupStage)
-			ctx.AppendInstruction(X86.Ret);
+		ctx.AppendInstruction(X86.Call, null, entryPoint);  // FUTURE: Remove line (SetupStage)
+		ctx.AppendInstruction(X86.Ret);
 
-			Compiler.CompileMethod(multibootMethod, basicBlocks);
-		}
+		Compiler.CompileMethod(multibootMethod, basicBlocks);
 	}
 }

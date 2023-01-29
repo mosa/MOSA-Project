@@ -3,27 +3,26 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.x86.Transforms.IR
+namespace Mosa.Platform.x86.Transforms.IR;
+
+/// <summary>
+/// Store8
+/// </summary>
+public sealed class Store8 : BaseTransform
 {
-	/// <summary>
-	/// Store8
-	/// </summary>
-	public sealed class Store8 : BaseTransform
+	public Store8() : base(IRInstruction.Store8, TransformType.Manual | TransformType.Transform)
 	{
-		public Store8() : base(IRInstruction.Store8, TransformType.Manual | TransformType.Transform)
-		{
-		}
+	}
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			return true;
-		}
+	public override bool Match(Context context, TransformContext transform)
+	{
+		return true;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			transform.OrderLoadStoreOperands(context);
+	public override void Transform(Context context, TransformContext transform)
+	{
+		transform.OrderLoadStoreOperands(context);
 
-			context.SetInstruction(X86.MovStore8, null, context.Operand1, context.Operand2, context.Operand3);
-		}
+		context.SetInstruction(X86.MovStore8, null, context.Operand1, context.Operand2, context.Operand3);
 	}
 }

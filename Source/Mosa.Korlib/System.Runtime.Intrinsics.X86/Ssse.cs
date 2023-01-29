@@ -5,27 +5,26 @@
 
 using System.Runtime.CompilerServices;
 
-namespace System.Runtime.Intrinsics.X86
+namespace System.Runtime.Intrinsics.X86;
+
+/// <summary>
+/// This class provides access to Intel SSE hardware instructions via intrinsics
+/// </summary>
+[Intrinsic]
+[CLSCompliant(false)]
+public abstract class Sse : X86Base
 {
-	/// <summary>
-	/// This class provides access to Intel SSE hardware instructions via intrinsics
-	/// </summary>
+	internal Sse()
+	{ }
+
+	public new static bool IsSupported { get => IsSupported; }
+
 	[Intrinsic]
-	[CLSCompliant(false)]
-	public abstract class Sse : X86Base
+	public abstract new class X64 : X86Base.X64
 	{
-		internal Sse()
+		internal X64()
 		{ }
 
 		public new static bool IsSupported { get => IsSupported; }
-
-		[Intrinsic]
-		public abstract new class X64 : X86Base.X64
-		{
-			internal X64()
-			{ }
-
-			public new static bool IsSupported { get => IsSupported; }
-		}
 	}
 }

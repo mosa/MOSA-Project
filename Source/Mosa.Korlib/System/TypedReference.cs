@@ -1,11 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace System
+namespace System;
+
+/// <summary>
+///
+/// </summary>
+public struct TypedReference
 {
-	/// <summary>
-	///
-	/// </summary>
-	public struct TypedReference
-	{
-	}
 }

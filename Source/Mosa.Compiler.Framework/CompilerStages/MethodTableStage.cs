@@ -5,86 +5,85 @@ using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 
-namespace Mosa.Compiler.Framework.CompilerStages
+namespace Mosa.Compiler.Framework.CompilerStages;
+
+/// <summary>
+/// Emits method lookup table
+/// </summary>
+/// <seealso cref="Mosa.Compiler.Framework.BaseCompilerStage" />
+public class MethodTableStage : BaseCompilerStage
 {
-	/// <summary>
-	/// Emits method lookup table
-	/// </summary>
-	/// <seealso cref="Mosa.Compiler.Framework.BaseCompilerStage" />
-	public class MethodTableStage : BaseCompilerStage
+	#region Data Members
+
+	private PatchType NativePatchType;
+
+	#endregion Data Members
+
+	protected override void Initialization()
 	{
-		#region Data Members
+		NativePatchType = (TypeLayout.NativePointerSize == 4) ? PatchType.I32 : NativePatchType = PatchType.I64;
+	}
 
-		private PatchType NativePatchType;
+	protected override void Finalization()
+	{
+		// Emit assembly list
+		var methodLookupTable = Linker.DefineSymbol(Metadata.MethodLookupTable, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
+		var writer = new BinaryWriter(methodLookupTable.Stream);
 
-		#endregion Data Members
+		// 1. Number of methods
+		int count = 0;
+		writer.Write(0);
 
-		protected override void Initialization()
+		foreach (var module in TypeSystem.Modules)
 		{
-			NativePatchType = (TypeLayout.NativePointerSize == 4) ? PatchType.I32 : NativePatchType = PatchType.I64;
-		}
-
-		protected override void Finalization()
-		{
-			// Emit assembly list
-			var methodLookupTable = Linker.DefineSymbol(Metadata.MethodLookupTable, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
-			var writer = new BinaryWriter(methodLookupTable.Stream);
-
-			// 1. Number of methods
-			int count = 0;
-			writer.Write(0);
-
-			foreach (var module in TypeSystem.Modules)
+			foreach (var type in module.Types.Values)
 			{
-				foreach (var type in module.Types.Values)
+				if (type.IsModule)
+					continue;
+
+				if (!Compiler.MethodScanner.IsTypeAllocated(type))
+					continue;
+
+				var methodList = TypeLayout.GetMethodTable(type);
+
+				if (methodList == null)
+					continue;
+
+				foreach (var method in methodList)
 				{
-					if (type.IsModule)
+					var targetMethodData = GetTargetMethodData(method);
+
+					if (!targetMethodData.HasCode)
 						continue;
 
-					if (!Compiler.MethodScanner.IsTypeAllocated(type))
-						continue;
+					// 1. Pointer to Method
+					Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodLookupTable, writer.GetPosition(), targetMethodData.Method.FullName, 0);
+					writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 
-					var methodList = TypeLayout.GetMethodTable(type);
+					// 2. Size of Method
+					Linker.Link(LinkType.Size, NativePatchType, methodLookupTable, writer.GetPosition(), targetMethodData.Method.FullName, 0);
+					writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 
-					if (methodList == null)
-						continue;
+					// 3. Pointer to Method Definition
+					Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodLookupTable, writer.GetPosition(), Metadata.MethodDefinition + method.FullName, 0);
+					writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 
-					foreach (var method in methodList)
-					{
-						var targetMethodData = GetTargetMethodData(method);
-
-						if (!targetMethodData.HasCode)
-							continue;
-
-						// 1. Pointer to Method
-						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodLookupTable, writer.GetPosition(), targetMethodData.Method.FullName, 0);
-						writer.WriteZeroBytes(TypeLayout.NativePointerSize);
-
-						// 2. Size of Method
-						Linker.Link(LinkType.Size, NativePatchType, methodLookupTable, writer.GetPosition(), targetMethodData.Method.FullName, 0);
-						writer.WriteZeroBytes(TypeLayout.NativePointerSize);
-
-						// 3. Pointer to Method Definition
-						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodLookupTable, writer.GetPosition(), Metadata.MethodDefinition + method.FullName, 0);
-						writer.WriteZeroBytes(TypeLayout.NativePointerSize);
-
-						count++;
-					}
+					count++;
 				}
 			}
-
-			writer.SetPosition(0);
-			writer.Write(count);
 		}
 
-		private MethodData GetTargetMethodData(MosaMethod method)
-		{
-			var methodData = Compiler.GetMethodData(method);
+		writer.SetPosition(0);
+		writer.Write(count);
+	}
 
-			if (methodData.ReplacedBy == null)
-				return methodData;
+	private MethodData GetTargetMethodData(MosaMethod method)
+	{
+		var methodData = Compiler.GetMethodData(method);
 
-			return Compiler.GetMethodData(methodData.ReplacedBy);
-		}
+		if (methodData.ReplacedBy == null)
+			return methodData;
+
+		return Compiler.GetMethodData(methodData.ReplacedBy);
 	}
 }

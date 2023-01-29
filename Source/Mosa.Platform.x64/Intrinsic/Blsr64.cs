@@ -2,17 +2,16 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x64.Intrinsic
+namespace Mosa.Platform.x64.Intrinsic;
+
+/// <summary>
+/// IntrinsicMethods
+/// </summary>
+internal static partial class IntrinsicMethods
 {
-	/// <summary>
-	/// IntrinsicMethods
-	/// </summary>
-	internal static partial class IntrinsicMethods
+	[IntrinsicMethod("Mosa.Platform.x64.Intrinsic::Blsr64")]
+	private static void Blsr64(Context context, MethodCompiler methodCompiler)
 	{
-		[IntrinsicMethod("Mosa.Platform.x64.Intrinsic::Blsr64")]
-		private static void Blsr64(Context context, MethodCompiler methodCompiler)
-		{
-			context.SetInstruction(X64.Blsr64, context.Result, context.Operand1);
-		}
+		context.SetInstruction(X64.Blsr64, context.Result, context.Operand1);
 	}
 }

@@ -2,45 +2,44 @@
 
 using Mosa.Compiler.Common.Configuration;
 
-namespace Mosa.Utility.Configuration
+namespace Mosa.Utility.Configuration;
+
+public static class SettingsLoader
 {
-	public static class SettingsLoader
+	public static Settings RecursiveReader(string[] args)
 	{
-		public static Settings RecursiveReader(string[] args)
+		var commandLineSettings = Reader.ParseArguments(args, CommandLineArguments.Map);
+
+		var final = RecursiveReader(commandLineSettings);
+
+		return final;
+	}
+
+	private static Settings RecursiveReader(Settings start)
+	{
+		var files = start.GetValueList("Settings");
+
+		Settings children = null;
+
+		if (files != null && files.Count > 0)
 		{
-			var commandLineSettings = Reader.ParseArguments(args, CommandLineArguments.Map);
-
-			var final = RecursiveReader(commandLineSettings);
-
-			return final;
-		}
-
-		private static Settings RecursiveReader(Settings start)
-		{
-			var files = start.GetValueList("Settings");
-
-			Settings children = null;
-
-			if (files != null && files.Count > 0)
+			foreach (var file in files)
 			{
-				foreach (var file in files)
-				{
-					var fileSettings = Reader.Import(file);
+				var fileSettings = Reader.Import(file);
 
-					var childSettings = RecursiveReader(fileSettings);
+				var childSettings = RecursiveReader(fileSettings);
 
-					var merge = Settings.Merge(childSettings, fileSettings);
+				var merge = Settings.Merge(childSettings, fileSettings);
 
-					children = merge;
-				}
+				children = merge;
 			}
-
-			if (children == null)
-				return start;
-
-			var merge2 = Settings.Merge(start, children);
-
-			return merge2;
 		}
+
+		if (children == null)
+			return start;
+
+		var merge2 = Settings.Merge(start, children);
+
+		return merge2;
 	}
 }

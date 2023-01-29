@@ -1,13 +1,12 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace System.Diagnostics
+namespace System.Diagnostics;
+
+[AttributeUsage(AttributeTargets.Constructor | AttributeTargets.Method | AttributeTargets.Property, Inherited = false)]
+public sealed class DebuggerHiddenAttribute : Attribute
 {
-	[AttributeUsage(AttributeTargets.Constructor | AttributeTargets.Method | AttributeTargets.Property, Inherited = false)]
-	public sealed class DebuggerHiddenAttribute : Attribute
+	public DebuggerHiddenAttribute()
+		: base()
 	{
-		public DebuggerHiddenAttribute()
-			: base()
-		{
-		}
 	}
 }

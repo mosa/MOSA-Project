@@ -1,59 +1,58 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.DeviceSystem.Service
+namespace Mosa.DeviceSystem.Service;
+
+/// <summary>
+/// Partition Manager
+/// </summary>
+public class PartitionService : BaseService
 {
 	/// <summary>
-	/// Partition Manager
+	/// The device service
 	/// </summary>
-	public class PartitionService : BaseService
+	protected DeviceService DeviceService;
+
+	/// <summary>
+	/// Initializes this instance.
+	/// </summary>
+	public override void Initialize()
 	{
-		/// <summary>
-		/// The device service
-		/// </summary>
-		protected DeviceService DeviceService;
+		DeviceService = ServiceManager.GetFirstService<DeviceService>();
+	}
 
-		/// <summary>
-		/// Initializes this instance.
-		/// </summary>
-		public override void Initialize()
+	/// <summary>
+	/// Creates the partition devices.
+	/// </summary>
+	public void CreatePartitionDevices()
+	{
+		// FIXME: Do not create multiple partition devices if this method executed more than once
+
+		var disks = DeviceService.GetDevices<IDiskDevice>(DeviceStatus.Online);
+
+		// Find all online disk devices
+		foreach (var device in disks)
 		{
-			DeviceService = ServiceManager.GetFirstService<DeviceService>();
-		}
+			var diskDevice = device.DeviceDriver as IDiskDevice;
 
-		/// <summary>
-		/// Creates the partition devices.
-		/// </summary>
-		public void CreatePartitionDevices()
-		{
-			// FIXME: Do not create multiple partition devices if this method executed more than once
+			var mbr = new MasterBootBlock(diskDevice);
 
-			var disks = DeviceService.GetDevices<IDiskDevice>(DeviceStatus.Online);
+			if (!mbr.Valid)
+				return;
 
-			// Find all online disk devices
-			foreach (var device in disks)
+			for (uint i = 0; i < MasterBootBlock.MaxMBRPartitions; i++)
 			{
-				var diskDevice = device.DeviceDriver as IDiskDevice;
+				if (mbr.Partitions[i].PartitionType == PartitionType.Empty)
+					continue;
 
-				var mbr = new MasterBootBlock(diskDevice);
-
-				if (!mbr.Valid)
-					return;
-
-				for (uint i = 0; i < MasterBootBlock.MaxMBRPartitions; i++)
+				var configuration = new DiskPartitionConfiguration()
 				{
-					if (mbr.Partitions[i].PartitionType == PartitionType.Empty)
-						continue;
+					Index = i,
+					StartLBA = mbr.Partitions[i].StartLBA,
+					TotalBlocks = mbr.Partitions[i].TotalBlocks,
+					ReadOnly = false,
+				};
 
-					var configuration = new DiskPartitionConfiguration()
-					{
-						Index = i,
-						StartLBA = mbr.Partitions[i].StartLBA,
-						TotalBlocks = mbr.Partitions[i].TotalBlocks,
-						ReadOnly = false,
-					};
-
-					DeviceService.Initialize(new PartitionDeviceDriver(), device, true, configuration, null, null);
-				}
+				DeviceService.Initialize(new PartitionDeviceDriver(), device, true, configuration, null, null);
 			}
 		}
 	}

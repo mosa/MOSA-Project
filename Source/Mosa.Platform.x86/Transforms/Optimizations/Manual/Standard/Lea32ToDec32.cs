@@ -5,39 +5,38 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.x86.Transforms.Optimizations.Manual.Standard
+namespace Mosa.Platform.x86.Transforms.Optimizations.Manual.Standard;
+
+public sealed class Lea32ToDec32 : BaseTransform
 {
-	public sealed class Lea32ToDec32 : BaseTransform
+	public Lea32ToDec32() : base(X86.Lea32, TransformType.Manual | TransformType.Optimization)
 	{
-		public Lea32ToDec32() : base(X86.Lea32, TransformType.Manual | TransformType.Optimization)
-		{
-		}
+	}
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand2.IsResolvedConstant)
-				return false;
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!context.Operand2.IsResolvedConstant)
+			return false;
 
-			if (context.Operand2.ConstantSigned64 != -1)
-				return false;
+		if (context.Operand2.ConstantSigned64 != -1)
+			return false;
 
-			if (context.Operand1 != context.Result)
-				return false;
+		if (context.Operand1 != context.Result)
+			return false;
 
-			if (context.Operand1.Register == CPURegister.ESP)
-				return false;
+		if (context.Operand1.Register == CPURegister.ESP)
+			return false;
 
-			if (!(AreStatusFlagsUsed(context.Node.Next, false, true, false, false, false) == TriState.No))
-				return false;
+		if (!(AreStatusFlagsUsed(context.Node.Next, false, true, false, false, false) == TriState.No))
+			return false;
 
-			return true;
-		}
+		return true;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
 
-			context.SetInstruction(X86.Dec32, result, result);
-		}
+		context.SetInstruction(X86.Dec32, result, result);
 	}
 }

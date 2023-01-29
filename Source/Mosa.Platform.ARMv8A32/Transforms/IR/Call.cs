@@ -3,35 +3,34 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.ARMv8A32.Transforms.IR
+namespace Mosa.Platform.ARMv8A32.Transforms.IR;
+
+/// <summary>
+/// Call
+/// </summary>
+public sealed class Call : BaseTransform
 {
-	/// <summary>
-	/// Call
-	/// </summary>
-	public sealed class Call : BaseTransform
+	public Call() : base(IRInstruction.Call, TransformType.Manual | TransformType.Transform)
 	{
-		public Call() : base(IRInstruction.Call, TransformType.Manual | TransformType.Transform)
+	}
+
+	public override bool Match(Context context, TransformContext transform)
+	{
+		return true;
+	}
+
+	public override void Transform(Context context, TransformContext transform)
+	{
+		if (context.Result?.IsInteger64 == true)
 		{
+			transform.SplitLongOperand(context.Result, out _, out _);
 		}
 
-		public override bool Match(Context context, TransformContext transform)
+		foreach (var operand in context.Operands)
 		{
-			return true;
-		}
-
-		public override void Transform(Context context, TransformContext transform)
-		{
-			if (context.Result?.IsInteger64 == true)
+			if (operand.IsInteger64)
 			{
-				transform.SplitLongOperand(context.Result, out _, out _);
-			}
-
-			foreach (var operand in context.Operands)
-			{
-				if (operand.IsInteger64)
-				{
-					transform.SplitLongOperand(operand, out _, out _);
-				}
+				transform.SplitLongOperand(operand, out _, out _);
 			}
 		}
 	}

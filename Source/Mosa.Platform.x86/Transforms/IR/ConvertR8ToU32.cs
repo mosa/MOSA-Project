@@ -3,30 +3,29 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.x86.Transforms.IR
+namespace Mosa.Platform.x86.Transforms.IR;
+
+/// <summary>
+/// ConvertR8ToU32
+/// </summary>
+public sealed class ConvertR8ToU32 : BaseTransform
 {
-	/// <summary>
-	/// ConvertR8ToU32
-	/// </summary>
-	public sealed class ConvertR8ToU32 : BaseTransform
+	public ConvertR8ToU32() : base(IRInstruction.ConvertR8ToU32, TransformType.Manual | TransformType.Transform)
 	{
-		public ConvertR8ToU32() : base(IRInstruction.ConvertR8ToU32, TransformType.Manual | TransformType.Transform)
-		{
-		}
+	}
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			return true;
-		}
+	public override bool Match(Context context, TransformContext transform)
+	{
+		return true;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
-			var operand1 = context.Operand1;
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
+		var operand1 = context.Operand1;
 
-			operand1 = X86TransformHelper.MoveConstantToFloatRegister(transform, context, operand1);
+		operand1 = X86TransformHelper.MoveConstantToFloatRegister(transform, context, operand1);
 
-			context.SetInstruction(X86.Cvttsd2si32, result, operand1);
-		}
+		context.SetInstruction(X86.Cvttsd2si32, result, operand1);
 	}
 }

@@ -3,25 +3,24 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.x86.Transforms.AddressMode
+namespace Mosa.Platform.x86.Transforms.AddressMode;
+
+/// <summary>
+/// Roundss
+/// </summary>
+public sealed class Roundss : BaseTransform
 {
-	/// <summary>
-	/// Roundss
-	/// </summary>
-	public sealed class Roundss : BaseTransform
+	public Roundss() : base(X86.Roundss, TransformType.Manual | TransformType.Transform)
 	{
-		public Roundss() : base(X86.Roundss, TransformType.Manual | TransformType.Transform)
-		{
-		}
+	}
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			return !X86TransformHelper.IsAddressMode(context);
-		}
+	public override bool Match(Context context, TransformContext transform)
+	{
+		return !X86TransformHelper.IsAddressMode(context);
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			X86TransformHelper.AddressModeConversion(context, X86.Movss);
-		}
+	public override void Transform(Context context, TransformContext transform)
+	{
+		X86TransformHelper.AddressModeConversion(context, X86.Movss);
 	}
 }

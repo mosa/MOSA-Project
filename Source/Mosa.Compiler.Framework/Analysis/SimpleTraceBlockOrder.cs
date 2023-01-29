@@ -3,53 +3,52 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Mosa.Compiler.Framework.Analysis
+namespace Mosa.Compiler.Framework.Analysis;
+
+/// <summary>
+/// The Simple Trace Block Order quickly reorders blocks to optimize loops and reduce the distance of jumps and branches.
+/// </summary>
+public class SimpleTraceBlockOrder : BaseBlockOrder
 {
-	/// <summary>
-	/// The Simple Trace Block Order quickly reorders blocks to optimize loops and reduce the distance of jumps and branches.
-	/// </summary>
-	public class SimpleTraceBlockOrder : BaseBlockOrder
+	public override int GetLoopDepth(BasicBlock block)
 	{
-		public override int GetLoopDepth(BasicBlock block)
+		return 0;
+	}
+
+	public override int GetLoopIndex(BasicBlock block)
+	{
+		return 0;
+	}
+
+	public override void Analyze(BasicBlocks basicBlocks)
+	{
+		// Create dictionary of referenced blocks
+		var referenced = new BitArray(basicBlocks.Count);
+
+		// Allocate list of ordered Blocks
+		NewBlockOrder = new List<BasicBlock>(basicBlocks.Count);
+
+		// Create sorted worklist
+		var workList = new Stack<BasicBlock>();
+
+		foreach (var head in basicBlocks.HeadBlocks)
 		{
-			return 0;
-		}
+			workList.Push(head);
 
-		public override int GetLoopIndex(BasicBlock block)
-		{
-			return 0;
-		}
-
-		public override void Analyze(BasicBlocks basicBlocks)
-		{
-			// Create dictionary of referenced blocks
-			var referenced = new BitArray(basicBlocks.Count);
-
-			// Allocate list of ordered Blocks
-			NewBlockOrder = new List<BasicBlock>(basicBlocks.Count);
-
-			// Create sorted worklist
-			var workList = new Stack<BasicBlock>();
-
-			foreach (var head in basicBlocks.HeadBlocks)
+			while (workList.Count != 0)
 			{
-				workList.Push(head);
+				var block = workList.Pop();
 
-				while (workList.Count != 0)
+				if (!referenced.Get(block.Sequence))
 				{
-					var block = workList.Pop();
+					referenced.Set(block.Sequence, true);
+					NewBlockOrder.Add(block);
 
-					if (!referenced.Get(block.Sequence))
+					foreach (var successor in block.NextBlocks)
 					{
-						referenced.Set(block.Sequence, true);
-						NewBlockOrder.Add(block);
-
-						foreach (var successor in block.NextBlocks)
+						if (!referenced.Get(successor.Sequence))
 						{
-							if (!referenced.Get(successor.Sequence))
-							{
-								workList.Push(successor);
-							}
+							workList.Push(successor);
 						}
 					}
 				}

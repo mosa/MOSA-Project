@@ -2,37 +2,36 @@
 
 using System;
 
-namespace Mosa.UnitTests.Basic
+namespace Mosa.UnitTests.Basic;
+
+public static class ArrayTest
 {
-	public static class ArrayTest
+	[MosaUnitTest]
+	public static bool BoundsCheck()
 	{
-		[MosaUnitTest]
-		public static bool BoundsCheck()
+		var myArray = new int[1];
+		try
 		{
-			var myArray = new int[1];
-			try
-			{
-				myArray[1] = 20;
-				return false;
-			}
-			catch (IndexOutOfRangeException ex)
-			{
-				return true;
-			}
+			myArray[1] = 20;
+			return false;
 		}
-
-		//public static bool MultiDimensionalArray2D()
-		//{
-		//	var d = new int[5, 5];
-
-		//	return true;
-		//}
-
-		//public static bool MultiDimensionalArray3D()
-		//{
-		//	var d = new int[5, 5, 5];
-
-		//	return true;
-		//}
+		catch (IndexOutOfRangeException ex)
+		{
+			return true;
+		}
 	}
+
+	//public static bool MultiDimensionalArray2D()
+	//{
+	//	var d = new int[5, 5];
+
+	//	return true;
+	//}
+
+	//public static bool MultiDimensionalArray3D()
+	//{
+	//	var d = new int[5, 5, 5];
+
+	//	return true;
+	//}
 }

@@ -6,593 +6,592 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using Mosa.Runtime.Metadata;
 
-namespace Mosa.Runtime
+namespace Mosa.Runtime;
+
+public static class Internal
 {
-	public static class Internal
+	#region Data Members
+
+	internal static int objectSequence = 0;
+
+	/// <summary>
+	/// An object header the following memory layout:
+	///   - Hash Value (32-bit)
+	///   - Lock & Status (32-bit)
+	///   - MethodTable (native int)
+	/// </summary>
+	internal static int ObjectHeaderSize
 	{
-		#region Data Members
-
-		internal static int objectSequence = 0;
-
-		/// <summary>
-		/// An object header the following memory layout:
-		///   - Hash Value (32-bit)
-		///   - Lock & Status (32-bit)
-		///   - MethodTable (native int)
-		/// </summary>
-		internal static int ObjectHeaderSize
-		{
-			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			get => 4 + 4 + Pointer.Size;
-		}
-
-		#endregion Data Members
-
-		#region Allocation
-
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		public static Pointer AllocateObject(Pointer methodTable, uint classSize)
-		{
-			var hashvalue = Interlocked.Increment(ref objectSequence);
-
-			// An object has the following memory layout:
-			//   - Object Header
-			//   - 0 .. n object data fields
-			//
-			// Object references point to the end of the header
-			// so accessing the header requires negative offsets from the object reference
-
-			var allocationSize = ObjectHeaderSize + classSize;
-
-			var memory = GC.AllocateObject((uint)allocationSize);
-
-			// Hash
-			memory.Store32(0, hashvalue);
-
-			// Lock & Status
-			memory.Store32(4, 0);
-
-			// Set MethodTable
-			memory.StorePointer(8, methodTable);
-
-			return memory + ObjectHeaderSize;
-		}
-
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static Pointer AllocateObject(Pointer methodTable, int classSize)
+		get => 4 + 4 + Pointer.Size;
+	}
+
+	#endregion Data Members
+
+	#region Allocation
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static Pointer AllocateObject(Pointer methodTable, uint classSize)
+	{
+		var hashvalue = Interlocked.Increment(ref objectSequence);
+
+		// An object has the following memory layout:
+		//   - Object Header
+		//   - 0 .. n object data fields
+		//
+		// Object references point to the end of the header
+		// so accessing the header requires negative offsets from the object reference
+
+		var allocationSize = ObjectHeaderSize + classSize;
+
+		var memory = GC.AllocateObject((uint)allocationSize);
+
+		// Hash
+		memory.Store32(0, hashvalue);
+
+		// Lock & Status
+		memory.Store32(4, 0);
+
+		// Set MethodTable
+		memory.StorePointer(8, methodTable);
+
+		return memory + ObjectHeaderSize;
+	}
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static Pointer AllocateObject(Pointer methodTable, int classSize)
+	{
+		return AllocateObject(methodTable, (uint)classSize);
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static Pointer AllocateArray(Pointer methodTable, uint elementSize, uint elements)
+	{
+		// An array has the following memory layout:
+		//   - Object Header
+		//   - Length (native int)
+		//   - ElementType[length] elements
+		//
+		// Object references point to the end of the header
+		// so accessing the header requires negative offsets from the object reference
+
+		var memory = AllocateObject(methodTable, (uint)(Pointer.Size + (elements * elementSize)));
+
+		if (Pointer.Size == 4)
 		{
-			return AllocateObject(methodTable, (uint)classSize);
+			memory.Store32(0, elements);
+		}
+		else
+		{
+			memory.Store64(0u, elements);
 		}
 
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		public static Pointer AllocateArray(Pointer methodTable, uint elementSize, uint elements)
+		return memory;
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static Pointer AllocateString(Pointer methodTable, uint length)
+	{
+		return AllocateArray(methodTable, sizeof(char), length);
+	}
+
+	#endregion Allocation
+
+	#region (Un)Boxing
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static Pointer Box8(Pointer methodTable, byte value)
+	{
+		var memory = AllocateObject(methodTable, 8);
+
+		memory.Store8(value);
+
+		return memory;
+	}
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static Pointer Box16(Pointer methodTable, ushort value)
+	{
+		var memory = AllocateObject(methodTable, 4);
+
+		memory.Store16(value);
+
+		return memory;
+	}
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static Pointer Box32(Pointer methodTable, uint value)
+	{
+		var memory = AllocateObject(methodTable, 4);
+
+		memory.Store32(value);
+
+		return memory;
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static Pointer Box64(Pointer methodTable, ulong value)
+	{
+		var memory = AllocateObject(methodTable, 8);
+
+		memory.Store64(0, value);
+
+		return memory;
+	}
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static Pointer BoxR4(Pointer methodTable, float value)
+	{
+		var memory = AllocateObject(methodTable, 4);
+
+		memory.StoreR4(value);
+
+		return memory;
+	}
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static Pointer BoxR8(Pointer methodTable, double value)
+	{
+		var memory = AllocateObject(methodTable, 8);
+
+		memory.StoreR8(value);
+
+		return memory;
+	}
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static Pointer Box(Pointer methodTable, Pointer value, uint size)
+	{
+		var memory = AllocateObject(methodTable, size);
+
+		MemoryCopy(memory, value, size);
+
+		return memory;
+	}
+
+	public static Pointer Unbox(Pointer box)
+	{
+		return box;
+	}
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static Pointer UnboxAny(Pointer box, Pointer vt, uint size)
+	{
+		MemoryCopy(vt, box, size);
+
+		return vt;
+	}
+
+	#endregion (Un)Boxing
+
+	#region Memory Manipulation
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static void MemoryCopy(Pointer dest, Pointer src, uint count)
+	{
+		var count32 = count >> 2;
+		for (var i = 0; i < count32; i++)
 		{
-			// An array has the following memory layout:
-			//   - Object Header
-			//   - Length (native int)
-			//   - ElementType[length] elements
-			//
-			// Object references point to the end of the header
-			// so accessing the header requires negative offsets from the object reference
-
-			var memory = AllocateObject(methodTable, (uint)(Pointer.Size + (elements * elementSize)));
-
-			if (Pointer.Size == 4)
-			{
-				memory.Store32(0, elements);
-			}
-			else
-			{
-				memory.Store64(0u, elements);
-			}
-
-			return memory;
+			var value = src.Load32(i << 2);
+			dest.Store32(i << 2, value);
 		}
 
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		public static Pointer AllocateString(Pointer methodTable, uint length)
+		var count8 = count & 0x03;
+		for (uint i = 0; i < count8; i++)
 		{
-			return AllocateArray(methodTable, sizeof(char), length);
+			var value = src.Load8(count32 + i);
+			dest.Store8(count32 + i, value);
+		}
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static void MemorySet(Pointer dest, byte value, uint count)
+	{
+		var value32 = (uint)(value << 24 | value << 16 | value << 8 | value);
+
+		var count32 = count >> 2;
+		for (var i = 0; i < count32; i++)
+		{
+			dest.Store32(i << 2, value32);
 		}
 
-		#endregion Allocation
-
-		#region (Un)Boxing
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static Pointer Box8(Pointer methodTable, byte value)
+		var count8 = count & 0x03;
+		for (uint i = 0; i < count8; i++)
 		{
-			var memory = AllocateObject(methodTable, 8);
+			dest.Store8(count32 + i, value);
+		}
+	}
 
-			memory.Store8(value);
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static void MemorySet(Pointer dest, ushort value, uint count)
+	{
+		var value32 = (uint)(value << 16 | value);
 
-			return memory;
+		var count32 = count >> 1;
+		for (var i = 0; i < count32; i++)
+		{
+			dest.Store32(i << 1, value32);
 		}
 
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static Pointer Box16(Pointer methodTable, ushort value)
+		var count16 = count & 0x01;
+		for (uint i = 0; i < count16; i += 2)
 		{
-			var memory = AllocateObject(methodTable, 4);
+			dest.Store16(count32 + i, value);
+		}
+	}
 
-			memory.Store16(value);
-
-			return memory;
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static void MemorySet(Pointer dest, uint value, uint count)
+	{
+		var count32 = count >> 2;
+		for (var i = 0; i < count32; i++)
+		{
+			dest.Store32(i << 2, value);
 		}
 
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static Pointer Box32(Pointer methodTable, uint value)
+		var count8 = count & 0x03;
+		for (uint i = 0; i < count8; i += 4)
 		{
-			var memory = AllocateObject(methodTable, 4);
+			dest.Store32(count32 + i, value);
+		}
+	}
 
-			memory.Store32(value);
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static void MemoryClear(Pointer dest, uint count, uint value = 0)
+	{
+		for (var i = 0; i < count; i += 4)
+		{
+			dest.Store32(i, value);
+		}
+	}
 
-			return memory;
+	#endregion Memory Manipulation
+
+	#region Virtual Machine
+
+	public static Pointer GetTypeDefinition(object obj)
+	{
+		var address = Intrinsic.GetObjectAddress(obj);
+		return address.LoadPointer(-Pointer.Size);
+	}
+
+	public static Pointer GetTypeDefinition(Pointer obj)
+	{
+		return obj.LoadPointer(-Pointer.Size);
+	}
+
+	public static Pointer GetObjectLockAndStatus(object obj)
+	{
+		var address = Intrinsic.GetObjectAddress(obj);
+
+		return address - Pointer.Size - 4;
+	}
+
+	public static Pointer GetObjectHashValue(object obj)
+	{
+		var address = Intrinsic.GetObjectAddress(obj);
+
+		return address - Pointer.Size - 4 - 4;
+	}
+
+	public static bool IsTypeInInheritanceChain(TypeDefinition typeDefinition, TypeDefinition chain)
+	{
+		while (!chain.IsNull)
+		{
+			if (chain.Handle == typeDefinition.Handle)
+				return true;
+
+			chain = chain.ParentType;
 		}
 
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		public static Pointer Box64(Pointer methodTable, ulong value)
-		{
-			var memory = AllocateObject(methodTable, 8);
+		return false;
+	}
 
-			memory.Store64(0, value);
-
-			return memory;
-		}
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static Pointer BoxR4(Pointer methodTable, float value)
-		{
-			var memory = AllocateObject(methodTable, 4);
-
-			memory.StoreR4(value);
-
-			return memory;
-		}
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static Pointer BoxR8(Pointer methodTable, double value)
-		{
-			var memory = AllocateObject(methodTable, 8);
-
-			memory.StoreR8(value);
-
-			return memory;
-		}
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static Pointer Box(Pointer methodTable, Pointer value, uint size)
-		{
-			var memory = AllocateObject(methodTable, size);
-
-			MemoryCopy(memory, value, size);
-
-			return memory;
-		}
-
-		public static Pointer Unbox(Pointer box)
-		{
-			return box;
-		}
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static Pointer UnboxAny(Pointer box, Pointer vt, uint size)
-		{
-			MemoryCopy(vt, box, size);
-
-			return vt;
-		}
-
-		#endregion (Un)Boxing
-
-		#region Memory Manipulation
-
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		public static void MemoryCopy(Pointer dest, Pointer src, uint count)
-		{
-			var count32 = count >> 2;
-			for (var i = 0; i < count32; i++)
-			{
-				var value = src.Load32(i << 2);
-				dest.Store32(i << 2, value);
-			}
-
-			var count8 = count & 0x03;
-			for (uint i = 0; i < count8; i++)
-			{
-				var value = src.Load8(count32 + i);
-				dest.Store8(count32 + i, value);
-			}
-		}
-
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		public static void MemorySet(Pointer dest, byte value, uint count)
-		{
-			var value32 = (uint)(value << 24 | value << 16 | value << 8 | value);
-
-			var count32 = count >> 2;
-			for (var i = 0; i < count32; i++)
-			{
-				dest.Store32(i << 2, value32);
-			}
-
-			var count8 = count & 0x03;
-			for (uint i = 0; i < count8; i++)
-			{
-				dest.Store8(count32 + i, value);
-			}
-		}
-
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		public static void MemorySet(Pointer dest, ushort value, uint count)
-		{
-			var value32 = (uint)(value << 16 | value);
-
-			var count32 = count >> 1;
-			for (var i = 0; i < count32; i++)
-			{
-				dest.Store32(i << 1, value32);
-			}
-
-			var count16 = count & 0x01;
-			for (uint i = 0; i < count16; i += 2)
-			{
-				dest.Store16(count32 + i, value);
-			}
-		}
-
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		public static void MemorySet(Pointer dest, uint value, uint count)
-		{
-			var count32 = count >> 2;
-			for (var i = 0; i < count32; i++)
-			{
-				dest.Store32(i << 2, value);
-			}
-
-			var count8 = count & 0x03;
-			for (uint i = 0; i < count8; i += 4)
-			{
-				dest.Store32(count32 + i, value);
-			}
-		}
-
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		public static void MemoryClear(Pointer dest, uint count, uint value = 0)
-		{
-			for (var i = 0; i < count; i += 4)
-			{
-				dest.Store32(i, value);
-			}
-		}
-
-		#endregion Memory Manipulation
-
-		#region Virtual Machine
-
-		public static Pointer GetTypeDefinition(object obj)
-		{
-			var address = Intrinsic.GetObjectAddress(obj);
-			return address.LoadPointer(-Pointer.Size);
-		}
-
-		public static Pointer GetTypeDefinition(Pointer obj)
-		{
-			return obj.LoadPointer(-Pointer.Size);
-		}
-
-		public static Pointer GetObjectLockAndStatus(object obj)
-		{
-			var address = Intrinsic.GetObjectAddress(obj);
-
-			return address - Pointer.Size - 4;
-		}
-
-		public static Pointer GetObjectHashValue(object obj)
-		{
-			var address = Intrinsic.GetObjectAddress(obj);
-
-			return address - Pointer.Size - 4 - 4;
-		}
-
-		public static bool IsTypeInInheritanceChain(TypeDefinition typeDefinition, TypeDefinition chain)
-		{
-			while (!chain.IsNull)
-			{
-				if (chain.Handle == typeDefinition.Handle)
-					return true;
-
-				chain = chain.ParentType;
-			}
-
-			return false;
-		}
-
-		public static object IsInstanceOfType(RuntimeTypeHandle handle, object obj)
-		{
-			if (obj == null)
-				return null;
-
-			var objTypeDefinition = new TypeDefinition(GetTypeDefinition(obj));
-			var typeDefinition = new TypeDefinition(new Pointer(handle.Value));
-
-			if (IsTypeInInheritanceChain(typeDefinition, objTypeDefinition))
-				return obj;
-
+	public static object IsInstanceOfType(RuntimeTypeHandle handle, object obj)
+	{
+		if (obj == null)
 			return null;
-		}
 
-		public static object IsInstanceOfInterfaceType(int interfaceSlot, object obj)
-		{
-			if (obj == null)
-				return null;
+		var objTypeDefinition = new TypeDefinition(GetTypeDefinition(obj));
+		var typeDefinition = new TypeDefinition(new Pointer(handle.Value));
 
-			var objTypeDefinition = new TypeDefinition(GetTypeDefinition(obj));
-
-			var bitmap = objTypeDefinition.Bitmap;
-
-			if (bitmap.IsNull)
-				return null;
-
-			int index = interfaceSlot / 32;
-			int bit = interfaceSlot % 32;
-
-			uint value = bitmap.Load32(index * 4);
-			uint result = value & (uint)(1 << bit);
-
-			if (result == 0)
-				return null;
-
+		if (IsTypeInInheritanceChain(typeDefinition, objTypeDefinition))
 			return obj;
-		}
 
-		#endregion Virtual Machine
+		return null;
+	}
 
-		#region Metadata
+	public static object IsInstanceOfInterfaceType(int interfaceSlot, object obj)
+	{
+		if (obj == null)
+			return null;
 
-		public static MethodDefinition GetMethodDefinition(Pointer address)
+		var objTypeDefinition = new TypeDefinition(GetTypeDefinition(obj));
+
+		var bitmap = objTypeDefinition.Bitmap;
+
+		if (bitmap.IsNull)
+			return null;
+
+		int index = interfaceSlot / 32;
+		int bit = interfaceSlot % 32;
+
+		uint value = bitmap.Load32(index * 4);
+		uint result = value & (uint)(1 << bit);
+
+		if (result == 0)
+			return null;
+
+		return obj;
+	}
+
+	#endregion Virtual Machine
+
+	#region Metadata
+
+	public static MethodDefinition GetMethodDefinition(Pointer address)
+	{
+		var table = Intrinsic.GetMethodLookupTable();
+		uint entries = table.Load32();
+
+		table += Pointer.Size; // skip count
+
+		while (entries > 0)
 		{
-			var table = Intrinsic.GetMethodLookupTable();
-			uint entries = table.Load32();
+			var addr = table.LoadPointer();
+			uint size = table.Load32(Pointer.Size);
 
-			table += Pointer.Size; // skip count
-
-			while (entries > 0)
+			if (address >= addr && address < (addr + size))
 			{
-				var addr = table.LoadPointer();
-				uint size = table.Load32(Pointer.Size);
-
-				if (address >= addr && address < (addr + size))
-				{
-					return new MethodDefinition(table.LoadPointer(Pointer.Size * 2));
-				}
-
-				table += Pointer.Size * 3;
-
-				entries--;
+				return new MethodDefinition(table.LoadPointer(Pointer.Size * 2));
 			}
 
+			table += Pointer.Size * 3;
+
+			entries--;
+		}
+
+		return new MethodDefinition(Pointer.Zero);
+	}
+
+	public static MethodDefinition GetMethodDefinitionViaMethodExceptionLookup(Pointer address)
+	{
+		var table = Intrinsic.GetMethodExceptionLookupTable();
+
+		if (table.IsNull)
+		{
 			return new MethodDefinition(Pointer.Zero);
 		}
 
-		public static MethodDefinition GetMethodDefinitionViaMethodExceptionLookup(Pointer address)
+		uint entries = table.Load32();
+
+		table += Pointer.Size;
+
+		while (entries > 0)
 		{
-			var table = Intrinsic.GetMethodExceptionLookupTable();
+			var addr = table.LoadPointer();
+			uint size = table.Load32(Pointer.Size);
 
-			if (table.IsNull)
+			if (address >= addr && address < (addr + size))
 			{
-				return new MethodDefinition(Pointer.Zero);
+				return new MethodDefinition(table.LoadPointer(Pointer.Size * 2));
 			}
 
-			uint entries = table.Load32();
+			table += Pointer.Size * 3;
 
-			table += Pointer.Size;
-
-			while (entries > 0)
-			{
-				var addr = table.LoadPointer();
-				uint size = table.Load32(Pointer.Size);
-
-				if (address >= addr && address < (addr + size))
-				{
-					return new MethodDefinition(table.LoadPointer(Pointer.Size * 2));
-				}
-
-				table += Pointer.Size * 3;
-
-				entries--;
-			}
-
-			return new MethodDefinition(Pointer.Zero);
+			entries--;
 		}
 
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		public static ProtectedRegionDefinition GetProtectedRegionEntryByAddress(Pointer address, TypeDefinition exceptionType, MethodDefinition methodDef)
+		return new MethodDefinition(Pointer.Zero);
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static ProtectedRegionDefinition GetProtectedRegionEntryByAddress(Pointer address, TypeDefinition exceptionType, MethodDefinition methodDef)
+	{
+		var protectedRegionTable = methodDef.ProtectedRegionTable;
+
+		if (protectedRegionTable.IsNull)
 		{
-			var protectedRegionTable = methodDef.ProtectedRegionTable;
-
-			if (protectedRegionTable.IsNull)
-			{
-				return new ProtectedRegionDefinition(Pointer.Zero);
-			}
-
-			var method = methodDef.Method;
-
-			if (method.IsNull)
-			{
-				return new ProtectedRegionDefinition(Pointer.Zero);
-			}
-
-			uint offset = (uint)method.GetOffset(address);
-			uint entries = protectedRegionTable.NumberOfRegions;
-
-			var protectedRegionDefinition = new ProtectedRegionDefinition(Pointer.Zero);
-			uint currentStart = uint.MinValue;
-			uint currentEnd = uint.MaxValue;
-			uint entry = 0;
-
-			while (entry < entries)
-			{
-				var prDef = protectedRegionTable.GetProtectedRegionDefinition(entry);
-
-				uint start = prDef.StartOffset;
-				uint end = prDef.EndOffset;
-
-				if ((offset >= start) && (offset < end) && (start >= currentStart) && (end < currentEnd))
-				{
-					var handlerType = prDef.HandlerType;
-					var exType = prDef.ExceptionType;
-
-					// If the handler is a finally clause, accept without testing
-					// If the handler is a exception clause, accept if the exception type is in the is within the inheritance chain of the exception object
-					if ((handlerType == ExceptionHandlerType.Finally) ||
-						(handlerType == ExceptionHandlerType.Exception && Runtime.Internal.IsTypeInInheritanceChain(exType, exceptionType)))
-					{
-						protectedRegionDefinition = prDef;
-						currentStart = start;
-						currentEnd = end;
-					}
-				}
-
-				entry++;
-			}
-
-			return protectedRegionDefinition;
+			return new ProtectedRegionDefinition(Pointer.Zero);
 		}
 
-		#endregion Metadata
+		var method = methodDef.Method;
 
-		#region Internal
-
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		public static Pointer GetPreviousStackFrame(Pointer stackFrame)
+		if (method.IsNull)
 		{
-			if (stackFrame < new Pointer(0x1000))
+			return new ProtectedRegionDefinition(Pointer.Zero);
+		}
+
+		uint offset = (uint)method.GetOffset(address);
+		uint entries = protectedRegionTable.NumberOfRegions;
+
+		var protectedRegionDefinition = new ProtectedRegionDefinition(Pointer.Zero);
+		uint currentStart = uint.MinValue;
+		uint currentEnd = uint.MaxValue;
+		uint entry = 0;
+
+		while (entry < entries)
+		{
+			var prDef = protectedRegionTable.GetProtectedRegionDefinition(entry);
+
+			uint start = prDef.StartOffset;
+			uint end = prDef.EndOffset;
+
+			if ((offset >= start) && (offset < end) && (start >= currentStart) && (end < currentEnd))
+			{
+				var handlerType = prDef.HandlerType;
+				var exType = prDef.ExceptionType;
+
+				// If the handler is a finally clause, accept without testing
+				// If the handler is a exception clause, accept if the exception type is in the is within the inheritance chain of the exception object
+				if ((handlerType == ExceptionHandlerType.Finally) ||
+				    (handlerType == ExceptionHandlerType.Exception && Runtime.Internal.IsTypeInInheritanceChain(exType, exceptionType)))
+				{
+					protectedRegionDefinition = prDef;
+					currentStart = start;
+					currentEnd = end;
+				}
+			}
+
+			entry++;
+		}
+
+		return protectedRegionDefinition;
+	}
+
+	#endregion Metadata
+
+	#region Internal
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static Pointer GetPreviousStackFrame(Pointer stackFrame)
+	{
+		if (stackFrame < new Pointer(0x1000))
+		{
+			return Pointer.Zero;
+		}
+
+		return stackFrame.LoadPointer();
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static Pointer GetStackFrame(uint depth)
+	{
+		return GetStackFrame(depth + 1, Pointer.Zero);
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static Pointer GetStackFrame(uint depth, Pointer stackFrame)
+	{
+		if (stackFrame.IsNull)
+		{
+			stackFrame = Intrinsic.GetStackFrame();
+		}
+
+		while (depth > 0)
+		{
+			depth--;
+
+			stackFrame = GetPreviousStackFrame(stackFrame);
+
+			if (stackFrame.IsNull)
 			{
 				return Pointer.Zero;
 			}
-
-			return stackFrame.LoadPointer();
 		}
 
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		public static Pointer GetStackFrame(uint depth)
+		return stackFrame;
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static Pointer GetReturnAddressFromStackFrame(Pointer stackframe)
+	{
+		if (stackframe < new Pointer(0x1000))
 		{
-			return GetStackFrame(depth + 1, Pointer.Zero);
+			return Pointer.Zero;
 		}
 
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		public static Pointer GetStackFrame(uint depth, Pointer stackFrame)
+		return stackframe.LoadPointer(Pointer.Size);
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static void SetReturnAddressForStackFrame(Pointer stackframe, uint value)
+	{
+		stackframe.Store32(Pointer.Size, value);
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static MethodDefinition GetMethodDefinitionFromStackFrameDepth(uint depth)
+	{
+		return GetMethodDefinitionFromStackFrameDepth(depth, Pointer.Zero);
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static MethodDefinition GetMethodDefinitionFromStackFrameDepth(uint depth, Pointer stackFrame)
+	{
+		if (stackFrame.IsNull)
+		{
+			stackFrame = Intrinsic.GetStackFrame();
+		}
+
+		stackFrame = GetStackFrame(depth + 0, stackFrame);
+
+		var address = GetReturnAddressFromStackFrame(stackFrame);
+
+		return Runtime.Internal.GetMethodDefinition(address);
+	}
+
+	public static SimpleStackTraceEntry GetStackTraceEntry(uint depth, Pointer stackFrame, Pointer eip)
+	{
+		var entry = new SimpleStackTraceEntry();
+
+		Pointer address;
+
+		if (depth == 0 && !eip.IsNull)
+		{
+			address = eip;
+		}
+		else
 		{
 			if (stackFrame.IsNull)
 			{
 				stackFrame = Intrinsic.GetStackFrame();
 			}
 
-			while (depth > 0)
+			if (!eip.IsNull)
 			{
 				depth--;
-
-				stackFrame = GetPreviousStackFrame(stackFrame);
-
-				if (stackFrame.IsNull)
-				{
-					return Pointer.Zero;
-				}
 			}
 
-			return stackFrame;
+			stackFrame = GetStackFrame(depth, stackFrame);
+
+			address = GetReturnAddressFromStackFrame(stackFrame);
 		}
 
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		public static Pointer GetReturnAddressFromStackFrame(Pointer stackframe)
-		{
-			if (stackframe < new Pointer(0x1000))
-			{
-				return Pointer.Zero;
-			}
+		var methodDef = Runtime.Internal.GetMethodDefinition(address);
 
-			return stackframe.LoadPointer(Pointer.Size);
-		}
-
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		public static void SetReturnAddressForStackFrame(Pointer stackframe, uint value)
-		{
-			stackframe.Store32(Pointer.Size, value);
-		}
-
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		public static MethodDefinition GetMethodDefinitionFromStackFrameDepth(uint depth)
-		{
-			return GetMethodDefinitionFromStackFrameDepth(depth, Pointer.Zero);
-		}
-
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		public static MethodDefinition GetMethodDefinitionFromStackFrameDepth(uint depth, Pointer stackFrame)
-		{
-			if (stackFrame.IsNull)
-			{
-				stackFrame = Intrinsic.GetStackFrame();
-			}
-
-			stackFrame = GetStackFrame(depth + 0, stackFrame);
-
-			var address = GetReturnAddressFromStackFrame(stackFrame);
-
-			return Runtime.Internal.GetMethodDefinition(address);
-		}
-
-		public static SimpleStackTraceEntry GetStackTraceEntry(uint depth, Pointer stackFrame, Pointer eip)
-		{
-			var entry = new SimpleStackTraceEntry();
-
-			Pointer address;
-
-			if (depth == 0 && !eip.IsNull)
-			{
-				address = eip;
-			}
-			else
-			{
-				if (stackFrame.IsNull)
-				{
-					stackFrame = Intrinsic.GetStackFrame();
-				}
-
-				if (!eip.IsNull)
-				{
-					depth--;
-				}
-
-				stackFrame = GetStackFrame(depth, stackFrame);
-
-				address = GetReturnAddressFromStackFrame(stackFrame);
-			}
-
-			var methodDef = Runtime.Internal.GetMethodDefinition(address);
-
-			if (methodDef.IsNull)
-				return entry;
-
-			entry.MethodDefinition = methodDef;
-			entry.Offset = (uint)methodDef.Method.GetOffset(address);
+		if (methodDef.IsNull)
 			return entry;
-		}
 
-		#endregion Internal
+		entry.MethodDefinition = methodDef;
+		entry.Offset = (uint)methodDef.Method.GetOffset(address);
+		return entry;
+	}
 
-		public static void Fault(uint code, uint extra = 0)
-		{
-			Debug.Fail("Fault: " + ((int)code).ToString("x") + " , Extra: " + ((int)extra).ToString("x"));
-		}
+	#endregion Internal
 
-		public static void ThrowIndexOutOfRangeException()
-		{
-			throw new IndexOutOfRangeException();
-		}
+	public static void Fault(uint code, uint extra = 0)
+	{
+		Debug.Fail("Fault: " + ((int)code).ToString("x") + " , Extra: " + ((int)extra).ToString("x"));
+	}
 
-		public static void ThrowOverflowException()
-		{
-			throw new OverflowException();
-		}
+	public static void ThrowIndexOutOfRangeException()
+	{
+		throw new IndexOutOfRangeException();
+	}
+
+	public static void ThrowOverflowException()
+	{
+		throw new OverflowException();
 	}
 }

@@ -2,17 +2,16 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x64.Intrinsic
+namespace Mosa.Platform.x64.Intrinsic;
+
+/// <summary>
+/// IntrinsicMethods
+/// </summary>
+static partial class IntrinsicMethods
 {
-	/// <summary>
-	/// IntrinsicMethods
-	/// </summary>
-	static partial class IntrinsicMethods
+	[IntrinsicMethod("Mosa.Platform.x64.Intrinsic::Roundss2Negative")]
+	private static void Roundss2Negative(Context context, MethodCompiler methodCompiler)
 	{
-		[IntrinsicMethod("Mosa.Platform.x64.Intrinsic::Roundss2Negative")]
-		private static void Roundss2Negative(Context context, MethodCompiler methodCompiler)
-		{
-			context.SetInstruction(X64.Roundss, context.Result, context.Operand1, methodCompiler.CreateConstant((byte)1));
-		}
+		context.SetInstruction(X64.Roundss, context.Result, context.Operand1, methodCompiler.CreateConstant((byte)1));
 	}
 }

@@ -2,25 +2,24 @@
 
 using Mosa.UnitTests.Optimization;
 
-namespace Mosa.BareMetal.HelloWorld.ARMv8A32
+namespace Mosa.BareMetal.HelloWorld.ARMv8A32;
+
+/// <summary>
+/// Boot
+/// </summary>
+public static class Boot
 {
 	/// <summary>
-	/// Boot
+	/// Main
 	/// </summary>
-	public static class Boot
+	public static void Main()
 	{
-		/// <summary>
-		/// Main
-		/// </summary>
-		public static void Main()
-		{
-			while (true)
-			{ }
-		}
+		while (true)
+		{ }
+	}
 
-		public static bool IncludeUnitTestAssembly()
-		{
-			return CommonTests.OptimizationTest1();
-		}
+	public static bool IncludeUnitTestAssembly()
+	{
+		return CommonTests.OptimizationTest1();
 	}
 }

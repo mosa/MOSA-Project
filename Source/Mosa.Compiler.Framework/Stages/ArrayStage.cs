@@ -2,19 +2,18 @@
 
 using Mosa.Compiler.Framework.Transforms.Array;
 
-namespace Mosa.Compiler.Framework.Stages
-{
-	/// <summary>
-	///	Optimization Stage
-	/// </summary>
-	public class ArrayStage : BaseTransformStage
-	{
-		private readonly bool LowerTo32;
+namespace Mosa.Compiler.Framework.Stages;
 
-		public ArrayStage()
-			: base(true, false)
-		{
-			AddTranformations(ArrayTransforms.List);
-		}
+/// <summary>
+///	Optimization Stage
+/// </summary>
+public class ArrayStage : BaseTransformStage
+{
+	private readonly bool LowerTo32;
+
+	public ArrayStage()
+		: base(true, false)
+	{
+		AddTranformations(ArrayTransforms.List);
 	}
 }

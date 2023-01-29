@@ -1,15 +1,14 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace System
+namespace System;
+
+/// <summary>
+/// Interface for "System.IDisposable"
+/// </summary>
+public interface IDisposable
 {
 	/// <summary>
-	/// Interface for "System.IDisposable"
+	/// Releases unmanaged and - optionally - managed resources
 	/// </summary>
-	public interface IDisposable
-	{
-		/// <summary>
-		/// Releases unmanaged and - optionally - managed resources
-		/// </summary>
-		void Dispose();
-	}
+	void Dispose();
 }

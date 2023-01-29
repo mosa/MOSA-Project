@@ -4,14 +4,13 @@ using System;
 using Mosa.Runtime;
 using Mosa.Runtime.Plug;
 
-namespace Mosa.Plug.Korlib.System
+namespace Mosa.Plug.Korlib.System;
+
+internal static class Marshal
 {
-	internal static class Marshal
+	[Plug("System.Runtime.InteropServices.Marshal::GetFunctionPointerForDelegateInternal")]
+	internal static IntPtr GetFunctionPointerForDelegateInternal(Delegate d)
 	{
-		[Plug("System.Runtime.InteropServices.Marshal::GetFunctionPointerForDelegateInternal")]
-		internal static IntPtr GetFunctionPointerForDelegateInternal(Delegate d)
-		{
-			return Intrinsic.GetObjectAddress(d).LoadPointer(0).ToIntPtr();
-		}
+		return Intrinsic.GetObjectAddress(d).LoadPointer(0).ToIntPtr();
 	}
 }

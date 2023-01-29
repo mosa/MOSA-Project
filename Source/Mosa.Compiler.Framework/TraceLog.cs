@@ -4,78 +4,77 @@ using System.Collections.Generic;
 using System.Text;
 using Mosa.Compiler.MosaTypeSystem;
 
-namespace Mosa.Compiler.Framework.Trace
+namespace Mosa.Compiler.Framework.Trace;
+
+public enum TraceType
+{ MethodInstructions, MethodDebug, MethodCounters, GlobalDebug }
+
+public sealed class TraceLog
 {
-	public enum TraceType
-	{ MethodInstructions, MethodDebug, MethodCounters, GlobalDebug }
+	public TraceType Type { get; }
 
-	public sealed class TraceLog
+	public MosaMethod Method { get; }
+
+	public string Stage { get; }
+
+	public string Section { get; }
+
+	public int Version { get; }
+
+	public int Step { get; set; }
+
+	public List<string> Lines { get; }
+
+	private TraceLog(TraceType type)
 	{
-		public TraceType Type { get; }
+		Type = type;
+		Lines = new List<string>();
+	}
 
-		public MosaMethod Method { get; }
+	public TraceLog(TraceType type, MosaMethod method, string stage, int version = 0, int step = 0)
+		: this(type)
+	{
+		Stage = stage;
+		Method = method;
+		Version = version;
+		Step = step;
+	}
 
-		public string Stage { get; }
+	public TraceLog(TraceType type, MosaMethod method, string stage, string section, int version = 0, int step = 0)
+		: this(type, method, stage)
+	{
+		Section = section;
+		Version = version;
+		Step = step;
+	}
 
-		public string Section { get; }
+	public void Log()
+	{
+		Log(string.Empty);
+	}
 
-		public int Version { get; }
+	public void Log(string line)
+	{
+		Lines.Add(line);
+	}
 
-		public int Step { get; set; }
-
-		public List<string> Lines { get; }
-
-		private TraceLog(TraceType type)
-		{
-			Type = type;
-			Lines = new List<string>();
-		}
-
-		public TraceLog(TraceType type, MosaMethod method, string stage, int version = 0, int step = 0)
-			: this(type)
-		{
-			Stage = stage;
-			Method = method;
-			Version = version;
-			Step = step;
-		}
-
-		public TraceLog(TraceType type, MosaMethod method, string stage, string section, int version = 0, int step = 0)
-			: this(type, method, stage)
-		{
-			Section = section;
-			Version = version;
-			Step = step;
-		}
-
-		public void Log()
-		{
-			Log(string.Empty);
-		}
-
-		public void Log(string line)
+	public void Log(IEnumerable<string> lines)
+	{
+		foreach (var line in lines)
 		{
 			Lines.Add(line);
 		}
+	}
 
-		public void Log(IEnumerable<string> lines)
+	public override string ToString()
+	{
+		var sb = new StringBuilder();
+
+		foreach (var line in Lines)
 		{
-			foreach (var line in lines)
-			{
-				Lines.Add(line);
-			}
+			sb.AppendLine(line);
 		}
 
-		public override string ToString()
-		{
-			var sb = new StringBuilder();
-
-			foreach (var line in Lines)
-			{
-				sb.AppendLine(line);
-			}
-
-			return sb.ToString();
-		}
+		return sb.ToString();
 	}
 }

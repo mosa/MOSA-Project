@@ -2,26 +2,25 @@
 
 using Mosa.Runtime;
 
-namespace Mosa.Kernel.BareMetal
+namespace Mosa.Kernel.BareMetal;
+
+public static class Page
 {
-	public static class Page
+	public static uint Shift => Platform.GetPageShift();
+
+	public static uint Size => (uint)(1 << (int)Shift);
+
+	public static ulong Mask => (~(Size - 1));
+
+	public static Pointer ClearPage(Pointer page)
 	{
-		public static uint Shift => Platform.GetPageShift();
+		var writes = Size / 4;
 
-		public static uint Size => (uint)(1 << (int)Shift);
-
-		public static ulong Mask => (~(Size - 1));
-
-		public static Pointer ClearPage(Pointer page)
+		for (uint i = 0; i < writes; i += 4)
 		{
-			var writes = Size / 4;
-
-			for (uint i = 0; i < writes; i += 4)
-			{
-				page.Store32(i, 0);
-			}
-
-			return page;
+			page.Store32(i, 0);
 		}
+
+		return page;
 	}
 }

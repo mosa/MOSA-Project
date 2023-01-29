@@ -2,36 +2,35 @@
 
 using System;
 
-namespace Mosa.Compiler.MosaTypeSystem
+namespace Mosa.Compiler.MosaTypeSystem;
+
+public class MosaLocal : IEquatable<MosaLocal>, IEquatable<MosaType>
 {
-	public class MosaLocal : IEquatable<MosaLocal>, IEquatable<MosaType>
+	public string Name { get; }
+
+	public MosaType Type { get; }
+
+	public bool IsPinned { get; }
+
+	public MosaLocal(string name, MosaType type, bool isPinned)
 	{
-		public string Name { get; }
+		Name = name;
+		Type = type;
+		IsPinned = isPinned;
+	}
 
-		public MosaType Type { get; }
+	public override string ToString()
+	{
+		return Name + (IsPinned ? " [Pinned]" : "") + " " + Type;
+	}
 
-		public bool IsPinned { get; }
+	public bool Equals(MosaLocal? local)
+	{
+		return Type.Equals(local?.Type);
+	}
 
-		public MosaLocal(string name, MosaType type, bool isPinned)
-		{
-			Name = name;
-			Type = type;
-			IsPinned = isPinned;
-		}
-
-		public override string ToString()
-		{
-			return Name + (IsPinned ? " [Pinned]" : "") + " " + Type;
-		}
-
-		public bool Equals(MosaLocal? local)
-		{
-			return Type.Equals(local?.Type);
-		}
-
-		public bool Equals(MosaType? type)
-		{
-			return Type.Equals(type);
-		}
+	public bool Equals(MosaType? type)
+	{
+		return Type.Equals(type);
 	}
 }

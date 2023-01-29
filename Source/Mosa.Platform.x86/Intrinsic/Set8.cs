@@ -2,17 +2,16 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x86.Intrinsic
+namespace Mosa.Platform.x86.Intrinsic;
+
+/// <summary>
+/// IntrinsicMethods
+/// </summary>
+internal static partial class IntrinsicMethods
 {
-	/// <summary>
-	/// IntrinsicMethods
-	/// </summary>
-	internal static partial class IntrinsicMethods
+	[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::Set8")]
+	private static void Set8(Context context, MethodCompiler methodCompiler)
 	{
-		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::Set8")]
-		private static void Set8(Context context, MethodCompiler methodCompiler)
-		{
-			context.SetInstruction(X86.MovStore8, null, context.Operand1, methodCompiler.Constant32_0, context.Operand2);
-		}
+		context.SetInstruction(X86.MovStore8, null, context.Operand1, methodCompiler.Constant32_0, context.Operand2);
 	}
 }

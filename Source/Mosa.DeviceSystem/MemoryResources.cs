@@ -2,72 +2,71 @@
 
 using System.Collections.Generic;
 
-namespace Mosa.DeviceSystem
+namespace Mosa.DeviceSystem;
+
+/// <summary>
+/// Memory Resources
+/// </summary>
+public class MemoryResources
 {
 	/// <summary>
-	/// Memory Resources
+	/// The memory regions
 	/// </summary>
-	public class MemoryResources
+	protected LinkedList<AddressRegion> memoryRegions;
+
+	/// <summary>
+	/// The spin lock
+	/// </summary>
+	protected object _lock = new object();
+
+	/// <summary>
+	/// Initializes a new instance of the <see cref="MemoryResources"/> class.
+	/// </summary>
+	public MemoryResources()
 	{
-		/// <summary>
-		/// The memory regions
-		/// </summary>
-		protected LinkedList<AddressRegion> memoryRegions;
+		memoryRegions = new LinkedList<AddressRegion>();
+	}
 
-		/// <summary>
-		/// The spin lock
-		/// </summary>
-		protected object _lock = new object();
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="MemoryResources"/> class.
-		/// </summary>
-		public MemoryResources()
+	/// <summary>
+	/// Claims the resources.
+	/// </summary>
+	/// <param name="hardwareResources">The hardware resources.</param>
+	/// <returns></returns>
+	public bool ClaimResources(HardwareResources hardwareResources)
+	{
+		lock (_lock)
 		{
-			memoryRegions = new LinkedList<AddressRegion>();
-		}
-
-		/// <summary>
-		/// Claims the resources.
-		/// </summary>
-		/// <param name="hardwareResources">The hardware resources.</param>
-		/// <returns></returns>
-		public bool ClaimResources(HardwareResources hardwareResources)
-		{
-			lock (_lock)
+			for (byte r = 0; r < hardwareResources.AddressRegionCount; r++)
 			{
-				for (byte r = 0; r < hardwareResources.AddressRegionCount; r++)
-				{
-					var region = hardwareResources.GetMemoryRegion(r);
+				var region = hardwareResources.GetMemoryRegion(r);
 
-					foreach (var memoryRegion in memoryRegions)
-					{
-						if (memoryRegion.Contains(region.Address) || memoryRegion.Contains(region.Address + region.Size))
-							return false;
-					}
-				}
-
-				for (byte r = 0; r < hardwareResources.AddressRegionCount; r++)
+				foreach (var memoryRegion in memoryRegions)
 				{
-					memoryRegions.AddLast(hardwareResources.GetMemoryRegion(r));
+					if (memoryRegion.Contains(region.Address) || memoryRegion.Contains(region.Address + region.Size))
+						return false;
 				}
 			}
 
-			return true;
+			for (byte r = 0; r < hardwareResources.AddressRegionCount; r++)
+			{
+				memoryRegions.AddLast(hardwareResources.GetMemoryRegion(r));
+			}
 		}
 
-		/// <summary>
-		/// Releases the resources.
-		/// </summary>
-		/// <param name="hardwareResources">The hardware resources.</param>
-		public void ReleaseResources(HardwareResources hardwareResources)
+		return true;
+	}
+
+	/// <summary>
+	/// Releases the resources.
+	/// </summary>
+	/// <param name="hardwareResources">The hardware resources.</param>
+	public void ReleaseResources(HardwareResources hardwareResources)
+	{
+		lock (_lock)
 		{
-			lock (_lock)
+			for (byte r = 0; r < hardwareResources.AddressRegionCount; r++)
 			{
-				for (byte r = 0; r < hardwareResources.AddressRegionCount; r++)
-				{
-					memoryRegions.Remove(hardwareResources.GetMemoryRegion(r));
-				}
+				memoryRegions.Remove(hardwareResources.GetMemoryRegion(r));
 			}
 		}
 	}

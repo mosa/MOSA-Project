@@ -5,15 +5,14 @@
 using System.Collections.Generic;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.ARMv8A32.Transforms.Optimizations.Auto
+namespace Mosa.Platform.ARMv8A32.Transforms.Optimizations.Auto;
+
+/// <summary>
+/// Transformations
+/// </summary>
+public static class AutoTransforms
 {
-	/// <summary>
-	/// Transformations
-	/// </summary>
-	public static class AutoTransforms
+	public static readonly List<BaseTransform> List = new List<BaseTransform>
 	{
-		public static readonly List<BaseTransform> List = new List<BaseTransform>
-		{
-		};
-	}
+	};
 }
