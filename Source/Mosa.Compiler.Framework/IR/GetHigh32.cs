@@ -4,21 +4,20 @@
 
 using Mosa.Compiler.MosaTypeSystem;
 
-namespace Mosa.Compiler.Framework.IR
+namespace Mosa.Compiler.Framework.IR;
+
+/// <summary>
+/// GetHigh32
+/// </summary>
+/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
+public sealed class GetHigh32 : BaseIRInstruction
 {
-	/// <summary>
-	/// GetHigh32
-	/// </summary>
-	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
-	public sealed class GetHigh32 : BaseIRInstruction
+	public GetHigh32()
+		: base(1, 1)
 	{
-		public GetHigh32()
-			: base(1, 1)
-		{
-		}
-
-		public override BuiltInType ResultType { get { return BuiltInType.UInt32; } }
-
-		public override BuiltInType ResultType2 { get { return BuiltInType.UInt32; } }
 	}
+
+	public override BuiltInType ResultType => BuiltInType.UInt32;
+
+	public override BuiltInType ResultType2 => BuiltInType.UInt32;
 }

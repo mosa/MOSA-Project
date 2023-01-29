@@ -6,44 +6,43 @@ using Mosa.Platform.x86;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.x86.Transforms.Optimizations.Auto.StrengthReduction
+namespace Mosa.Platform.x86.Transforms.Optimizations.Auto.StrengthReduction;
+
+/// <summary>
+/// Inc32Not32
+/// </summary>
+public sealed class Inc32Not32 : BaseTransform
 {
-	/// <summary>
-	/// Inc32Not32
-	/// </summary>
-	public sealed class Inc32Not32 : BaseTransform
+	public Inc32Not32() : base(X86.Inc32, TransformType.Auto | TransformType.Optimization)
 	{
-		public Inc32Not32() : base(X86.Inc32, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+	}
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand1.IsVirtualRegister)
-				return false;
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!context.Operand1.IsVirtualRegister)
+			return false;
 
-			if (context.Operand1.Definitions.Count != 1)
-				return false;
+		if (context.Operand1.Definitions.Count != 1)
+			return false;
 
-			if (context.Operand1.Definitions[0].Instruction != X86.Not32)
-				return false;
+		if (context.Operand1.Definitions[0].Instruction != X86.Not32)
+			return false;
 
-			if (!IsVirtualRegister(context.Operand1.Definitions[0].Operand1))
-				return false;
+		if (!IsVirtualRegister(context.Operand1.Definitions[0].Operand1))
+			return false;
 
-			if (IsCarryFlagUsed(context))
-				return false;
+		if (IsCarryFlagUsed(context))
+			return false;
 
-			return true;
-		}
+		return true;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
 
-			var t1 = context.Operand1.Definitions[0].Operand1;
+		var t1 = context.Operand1.Definitions[0].Operand1;
 
-			context.SetInstruction(X86.Neg32, result, t1);
-		}
+		context.SetInstruction(X86.Neg32, result, t1);
 	}
 }

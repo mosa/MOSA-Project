@@ -4,36 +4,35 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
+
+/// <summary>
+/// ConvertU32ToR8
+/// </summary>
+public sealed class ConvertU32ToR8 : BaseTransform
 {
-	/// <summary>
-	/// ConvertU32ToR8
-	/// </summary>
-	public sealed class ConvertU32ToR8 : BaseTransform
+	public ConvertU32ToR8() : base(IRInstruction.ConvertI32ToR8, TransformType.Auto | TransformType.Optimization)
 	{
-		public ConvertU32ToR8() : base(IRInstruction.ConvertI32ToR8, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+	}
 
-		public override int Priority => 100;
+	public override int Priority => 100;
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!IsResolvedConstant(context.Operand1))
-				return false;
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!IsResolvedConstant(context.Operand1))
+			return false;
 
-			return true;
-		}
+		return true;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
 
-			var t1 = context.Operand1;
+		var t1 = context.Operand1;
 
-			var e1 = transform.CreateConstant(ToR8(To32(t1)));
+		var e1 = transform.CreateConstant(ToR8(To32(t1)));
 
-			context.SetInstruction(IRInstruction.MoveR8, result, e1);
-		}
+		context.SetInstruction(IRInstruction.MoveR8, result, e1);
 	}
 }

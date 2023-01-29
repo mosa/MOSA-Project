@@ -4,157 +4,156 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
+
+/// <summary>
+/// Xor64Xor64
+/// </summary>
+public sealed class Xor64Xor64 : BaseTransform
 {
-	/// <summary>
-	/// Xor64Xor64
-	/// </summary>
-	public sealed class Xor64Xor64 : BaseTransform
+	public Xor64Xor64() : base(IRInstruction.Xor64, TransformType.Auto | TransformType.Optimization)
 	{
-		public Xor64Xor64() : base(IRInstruction.Xor64, TransformType.Auto | TransformType.Optimization)
-		{
-		}
-
-		public override int Priority => 80;
-
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand2.IsVirtualRegister)
-				return false;
-
-			if (context.Operand2.Definitions.Count != 1)
-				return false;
-
-			if (context.Operand2.Definitions[0].Instruction != IRInstruction.Xor64)
-				return false;
-
-			if (!AreSame(context.Operand1, context.Operand2.Definitions[0].Operand1))
-				return false;
-
-			return true;
-		}
-
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
-
-			var t1 = context.Operand2.Definitions[0].Operand2;
-
-			context.SetInstruction(IRInstruction.Move64, result, t1);
-		}
 	}
 
-	/// <summary>
-	/// Xor64Xor64_v1
-	/// </summary>
-	public sealed class Xor64Xor64_v1 : BaseTransform
+	public override int Priority => 80;
+
+	public override bool Match(Context context, TransformContext transform)
 	{
-		public Xor64Xor64_v1() : base(IRInstruction.Xor64, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+		if (!context.Operand2.IsVirtualRegister)
+			return false;
 
-		public override int Priority => 80;
+		if (context.Operand2.Definitions.Count != 1)
+			return false;
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand1.IsVirtualRegister)
-				return false;
+		if (context.Operand2.Definitions[0].Instruction != IRInstruction.Xor64)
+			return false;
 
-			if (context.Operand1.Definitions.Count != 1)
-				return false;
+		if (!AreSame(context.Operand1, context.Operand2.Definitions[0].Operand1))
+			return false;
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.Xor64)
-				return false;
-
-			if (!AreSame(context.Operand1.Definitions[0].Operand1, context.Operand2))
-				return false;
-
-			return true;
-		}
-
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
-
-			var t1 = context.Operand1.Definitions[0].Operand2;
-
-			context.SetInstruction(IRInstruction.Move64, result, t1);
-		}
+		return true;
 	}
 
-	/// <summary>
-	/// Xor64Xor64_v2
-	/// </summary>
-	public sealed class Xor64Xor64_v2 : BaseTransform
+	public override void Transform(Context context, TransformContext transform)
 	{
-		public Xor64Xor64_v2() : base(IRInstruction.Xor64, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+		var result = context.Result;
 
-		public override int Priority => 80;
+		var t1 = context.Operand2.Definitions[0].Operand2;
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand2.IsVirtualRegister)
-				return false;
+		context.SetInstruction(IRInstruction.Move64, result, t1);
+	}
+}
 
-			if (context.Operand2.Definitions.Count != 1)
-				return false;
-
-			if (context.Operand2.Definitions[0].Instruction != IRInstruction.Xor64)
-				return false;
-
-			if (!AreSame(context.Operand1, context.Operand2.Definitions[0].Operand2))
-				return false;
-
-			return true;
-		}
-
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
-
-			var t1 = context.Operand2.Definitions[0].Operand1;
-
-			context.SetInstruction(IRInstruction.Move64, result, t1);
-		}
+/// <summary>
+/// Xor64Xor64_v1
+/// </summary>
+public sealed class Xor64Xor64_v1 : BaseTransform
+{
+	public Xor64Xor64_v1() : base(IRInstruction.Xor64, TransformType.Auto | TransformType.Optimization)
+	{
 	}
 
-	/// <summary>
-	/// Xor64Xor64_v3
-	/// </summary>
-	public sealed class Xor64Xor64_v3 : BaseTransform
+	public override int Priority => 80;
+
+	public override bool Match(Context context, TransformContext transform)
 	{
-		public Xor64Xor64_v3() : base(IRInstruction.Xor64, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+		if (!context.Operand1.IsVirtualRegister)
+			return false;
 
-		public override int Priority => 80;
+		if (context.Operand1.Definitions.Count != 1)
+			return false;
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand1.IsVirtualRegister)
-				return false;
+		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Xor64)
+			return false;
 
-			if (context.Operand1.Definitions.Count != 1)
-				return false;
+		if (!AreSame(context.Operand1.Definitions[0].Operand1, context.Operand2))
+			return false;
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.Xor64)
-				return false;
+		return true;
+	}
 
-			if (!AreSame(context.Operand1.Definitions[0].Operand2, context.Operand2))
-				return false;
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
 
-			return true;
-		}
+		var t1 = context.Operand1.Definitions[0].Operand2;
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
+		context.SetInstruction(IRInstruction.Move64, result, t1);
+	}
+}
 
-			var t1 = context.Operand1.Definitions[0].Operand1;
+/// <summary>
+/// Xor64Xor64_v2
+/// </summary>
+public sealed class Xor64Xor64_v2 : BaseTransform
+{
+	public Xor64Xor64_v2() : base(IRInstruction.Xor64, TransformType.Auto | TransformType.Optimization)
+	{
+	}
 
-			context.SetInstruction(IRInstruction.Move64, result, t1);
-		}
+	public override int Priority => 80;
+
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!context.Operand2.IsVirtualRegister)
+			return false;
+
+		if (context.Operand2.Definitions.Count != 1)
+			return false;
+
+		if (context.Operand2.Definitions[0].Instruction != IRInstruction.Xor64)
+			return false;
+
+		if (!AreSame(context.Operand1, context.Operand2.Definitions[0].Operand2))
+			return false;
+
+		return true;
+	}
+
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
+
+		var t1 = context.Operand2.Definitions[0].Operand1;
+
+		context.SetInstruction(IRInstruction.Move64, result, t1);
+	}
+}
+
+/// <summary>
+/// Xor64Xor64_v3
+/// </summary>
+public sealed class Xor64Xor64_v3 : BaseTransform
+{
+	public Xor64Xor64_v3() : base(IRInstruction.Xor64, TransformType.Auto | TransformType.Optimization)
+	{
+	}
+
+	public override int Priority => 80;
+
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!context.Operand1.IsVirtualRegister)
+			return false;
+
+		if (context.Operand1.Definitions.Count != 1)
+			return false;
+
+		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Xor64)
+			return false;
+
+		if (!AreSame(context.Operand1.Definitions[0].Operand2, context.Operand2))
+			return false;
+
+		return true;
+	}
+
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
+
+		var t1 = context.Operand1.Definitions[0].Operand1;
+
+		context.SetInstruction(IRInstruction.Move64, result, t1);
 	}
 }

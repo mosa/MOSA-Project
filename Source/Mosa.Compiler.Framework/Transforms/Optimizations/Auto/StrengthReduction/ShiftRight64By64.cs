@@ -4,37 +4,36 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
+
+/// <summary>
+/// ShiftRight64By64
+/// </summary>
+public sealed class ShiftRight64By64 : BaseTransform
 {
-	/// <summary>
-	/// ShiftRight64By64
-	/// </summary>
-	public sealed class ShiftRight64By64 : BaseTransform
+	public ShiftRight64By64() : base(IRInstruction.ShiftRight64, TransformType.Auto | TransformType.Optimization)
 	{
-		public ShiftRight64By64() : base(IRInstruction.ShiftRight64, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+	}
 
-		public override int Priority => 80;
+	public override int Priority => 80;
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand2.IsResolvedConstant)
-				return false;
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!context.Operand2.IsResolvedConstant)
+			return false;
 
-			if (context.Operand2.ConstantUnsigned64 != 64)
-				return false;
+		if (context.Operand2.ConstantUnsigned64 != 64)
+			return false;
 
-			return true;
-		}
+		return true;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
 
-			var c1 = transform.CreateConstant(0);
+		var c1 = transform.CreateConstant(0);
 
-			context.SetInstruction(IRInstruction.Move64, result, c1);
-		}
+		context.SetInstruction(IRInstruction.Move64, result, c1);
 	}
 }

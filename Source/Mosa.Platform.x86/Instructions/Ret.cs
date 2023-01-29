@@ -4,27 +4,26 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x86.Instructions
+namespace Mosa.Platform.x86.Instructions;
+
+/// <summary>
+/// Ret
+/// </summary>
+/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
+public sealed class Ret : X86Instruction
 {
-	/// <summary>
-	/// Ret
-	/// </summary>
-	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed class Ret : X86Instruction
+	internal Ret()
+		: base(0, 0)
 	{
-		internal Ret()
-			: base(0, 0)
-		{
-		}
+	}
 
-		public override FlowControl FlowControl { get { return FlowControl.Return; } }
+	public override FlowControl FlowControl => FlowControl.Return;
 
-		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
-		{
-			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
-			System.Diagnostics.Debug.Assert(node.OperandCount == 0);
+	public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
+	{
+		System.Diagnostics.Debug.Assert(node.ResultCount == 0);
+		System.Diagnostics.Debug.Assert(node.OperandCount == 0);
 
-			opcodeEncoder.Append8Bits(0xC3);
-		}
+		opcodeEncoder.Append8Bits(0xC3);
 	}
 }

@@ -4,66 +4,65 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x86.Instructions
+namespace Mosa.Platform.x86.Instructions;
+
+/// <summary>
+/// Shl32
+/// </summary>
+/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
+public sealed class Shl32 : X86Instruction
 {
-	/// <summary>
-	/// Shl32
-	/// </summary>
-	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed class Shl32 : X86Instruction
+	internal Shl32()
+		: base(1, 2)
 	{
-		internal Shl32()
-			: base(1, 2)
+	}
+
+	public override bool IsZeroFlagModified => true;
+
+	public override bool IsCarryFlagModified => true;
+
+	public override bool IsSignFlagModified => true;
+
+	public override bool IsOverflowFlagModified => true;
+
+	public override bool IsParityFlagModified => true;
+
+	public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
+	{
+		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
+		System.Diagnostics.Debug.Assert(node.OperandCount == 2);
+		System.Diagnostics.Debug.Assert(node.Result.IsCPURegister);
+		System.Diagnostics.Debug.Assert(node.Operand1.IsCPURegister);
+		System.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);
+
+		if (node.Operand2.IsCPURegister)
 		{
+			opcodeEncoder.Append8Bits(0xD3);
+			opcodeEncoder.Append2Bits(0b11);
+			opcodeEncoder.Append3Bits(0b100);
+			opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+			return;
 		}
 
-		public override bool IsZeroFlagModified { get { return true; } }
-
-		public override bool IsCarryFlagModified { get { return true; } }
-
-		public override bool IsSignFlagModified { get { return true; } }
-
-		public override bool IsOverflowFlagModified { get { return true; } }
-
-		public override bool IsParityFlagModified { get { return true; } }
-
-		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
+		if (node.Operand2.IsConstantOne)
 		{
-			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
-			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
-			System.Diagnostics.Debug.Assert(node.Result.IsCPURegister);
-			System.Diagnostics.Debug.Assert(node.Operand1.IsCPURegister);
-			System.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);
-
-			if (node.Operand2.IsCPURegister)
-			{
-				opcodeEncoder.Append8Bits(0xD3);
-				opcodeEncoder.Append2Bits(0b11);
-				opcodeEncoder.Append3Bits(0b100);
-				opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
-				return;
-			}
-
-			if (node.Operand2.IsConstantOne)
-			{
-				opcodeEncoder.Append8Bits(0xD1);
-				opcodeEncoder.Append2Bits(0b11);
-				opcodeEncoder.Append3Bits(0b100);
-				opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
-				return;
-			}
-
-			if (node.Operand2.IsConstant)
-			{
-				opcodeEncoder.Append8Bits(0xC1);
-				opcodeEncoder.Append2Bits(0b11);
-				opcodeEncoder.Append3Bits(0b100);
-				opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
-				opcodeEncoder.Append8BitImmediate(node.Operand2);
-				return;
-			}
-
-			throw new Compiler.Common.Exceptions.CompilerException("Invalid Opcode");
+			opcodeEncoder.Append8Bits(0xD1);
+			opcodeEncoder.Append2Bits(0b11);
+			opcodeEncoder.Append3Bits(0b100);
+			opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+			return;
 		}
+
+		if (node.Operand2.IsConstant)
+		{
+			opcodeEncoder.Append8Bits(0xC1);
+			opcodeEncoder.Append2Bits(0b11);
+			opcodeEncoder.Append3Bits(0b100);
+			opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+			opcodeEncoder.Append8BitImmediate(node.Operand2);
+			return;
+		}
+
+		throw new Compiler.Common.Exceptions.CompilerException("Invalid Opcode");
 	}
 }

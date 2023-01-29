@@ -4,38 +4,37 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
+
+/// <summary>
+/// GetHigh32FromTo64
+/// </summary>
+public sealed class GetHigh32FromTo64 : BaseTransform
 {
-	/// <summary>
-	/// GetHigh32FromTo64
-	/// </summary>
-	public sealed class GetHigh32FromTo64 : BaseTransform
+	public GetHigh32FromTo64() : base(IRInstruction.GetHigh32, TransformType.Auto | TransformType.Optimization)
 	{
-		public GetHigh32FromTo64() : base(IRInstruction.GetHigh32, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+	}
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand1.IsVirtualRegister)
-				return false;
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!context.Operand1.IsVirtualRegister)
+			return false;
 
-			if (context.Operand1.Definitions.Count != 1)
-				return false;
+		if (context.Operand1.Definitions.Count != 1)
+			return false;
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.To64)
-				return false;
+		if (context.Operand1.Definitions[0].Instruction != IRInstruction.To64)
+			return false;
 
-			return true;
-		}
+		return true;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
 
-			var t1 = context.Operand1.Definitions[0].Operand2;
+		var t1 = context.Operand1.Definitions[0].Operand2;
 
-			context.SetInstruction(IRInstruction.Move32, result, t1);
-		}
+		context.SetInstruction(IRInstruction.Move32, result, t1);
 	}
 }

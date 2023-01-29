@@ -4,36 +4,35 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
+
+/// <summary>
+/// SignExtend8x64
+/// </summary>
+public sealed class SignExtend8x64 : BaseTransform
 {
-	/// <summary>
-	/// SignExtend8x64
-	/// </summary>
-	public sealed class SignExtend8x64 : BaseTransform
+	public SignExtend8x64() : base(IRInstruction.SignExtend8x64, TransformType.Auto | TransformType.Optimization)
 	{
-		public SignExtend8x64() : base(IRInstruction.SignExtend8x64, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+	}
 
-		public override int Priority => 100;
+	public override int Priority => 100;
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!IsResolvedConstant(context.Operand1))
-				return false;
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!IsResolvedConstant(context.Operand1))
+			return false;
 
-			return true;
-		}
+		return true;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
 
-			var t1 = context.Operand1;
+		var t1 = context.Operand1;
 
-			var e1 = transform.CreateConstant(SignExtend8x64(ToByte(t1)));
+		var e1 = transform.CreateConstant(SignExtend8x64(ToByte(t1)));
 
-			context.SetInstruction(IRInstruction.Move64, result, e1);
-		}
+		context.SetInstruction(IRInstruction.Move64, result, e1);
 	}
 }

@@ -4,39 +4,38 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.ARMv8A32.Instructions
+namespace Mosa.Platform.ARMv8A32.Instructions;
+
+/// <summary>
+/// Pop - Pop multiple registers off the stack
+/// </summary>
+/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
+public sealed class Pop : ARMv8A32Instruction
 {
-	/// <summary>
-	/// Pop - Pop multiple registers off the stack
-	/// </summary>
-	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
-	public sealed class Pop : ARMv8A32Instruction
+	internal Pop()
+		: base(0, 1)
 	{
-		internal Pop()
-			: base(0, 1)
+	}
+
+	public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
+	{
+		System.Diagnostics.Debug.Assert(node.ResultCount == 0);
+		System.Diagnostics.Debug.Assert(node.OperandCount == 1);
+
+		if (node.Operand1.IsConstant)
 		{
+			opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
+			opcodeEncoder.Append3Bits(0b100);
+			opcodeEncoder.Append1Bit(0b0);
+			opcodeEncoder.Append1Bit(0b1);
+			opcodeEncoder.Append1Bit(0b0);
+			opcodeEncoder.Append1Bit(0b1);
+			opcodeEncoder.Append1Bit(0b1);
+			opcodeEncoder.Append4Bits(0b1101);
+			opcodeEncoder.Append16BitImmediate(node.Operand1);
+			return;
 		}
 
-		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
-		{
-			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
-			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
-
-			if (node.Operand1.IsConstant)
-			{
-				opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
-				opcodeEncoder.Append3Bits(0b100);
-				opcodeEncoder.Append1Bit(0b0);
-				opcodeEncoder.Append1Bit(0b1);
-				opcodeEncoder.Append1Bit(0b0);
-				opcodeEncoder.Append1Bit(0b1);
-				opcodeEncoder.Append1Bit(0b1);
-				opcodeEncoder.Append4Bits(0b1101);
-				opcodeEncoder.Append16BitImmediate(node.Operand1);
-				return;
-			}
-
-			throw new Compiler.Common.Exceptions.CompilerException("Invalid Opcode");
-		}
+		throw new Compiler.Common.Exceptions.CompilerException("Invalid Opcode");
 	}
 }

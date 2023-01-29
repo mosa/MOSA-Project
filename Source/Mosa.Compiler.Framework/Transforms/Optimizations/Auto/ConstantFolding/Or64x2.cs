@@ -4,185 +4,184 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
+
+/// <summary>
+/// Or64x2
+/// </summary>
+public sealed class Or64x2 : BaseTransform
 {
-	/// <summary>
-	/// Or64x2
-	/// </summary>
-	public sealed class Or64x2 : BaseTransform
+	public Or64x2() : base(IRInstruction.Or64, TransformType.Auto | TransformType.Optimization)
 	{
-		public Or64x2() : base(IRInstruction.Or64, TransformType.Auto | TransformType.Optimization)
-		{
-		}
-
-		public override int Priority => 90;
-
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand1.IsVirtualRegister)
-				return false;
-
-			if (context.Operand1.Definitions.Count != 1)
-				return false;
-
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.Or64)
-				return false;
-
-			if (!IsResolvedConstant(context.Operand1.Definitions[0].Operand2))
-				return false;
-
-			if (!IsResolvedConstant(context.Operand2))
-				return false;
-
-			return true;
-		}
-
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
-
-			var t1 = context.Operand1.Definitions[0].Operand1;
-			var t2 = context.Operand1.Definitions[0].Operand2;
-			var t3 = context.Operand2;
-
-			var e1 = transform.CreateConstant(Or64(To64(t2), To64(t3)));
-
-			context.SetInstruction(IRInstruction.Or64, result, t1, e1);
-		}
 	}
 
-	/// <summary>
-	/// Or64x2_v1
-	/// </summary>
-	public sealed class Or64x2_v1 : BaseTransform
+	public override int Priority => 90;
+
+	public override bool Match(Context context, TransformContext transform)
 	{
-		public Or64x2_v1() : base(IRInstruction.Or64, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+		if (!context.Operand1.IsVirtualRegister)
+			return false;
 
-		public override int Priority => 90;
+		if (context.Operand1.Definitions.Count != 1)
+			return false;
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand2.IsVirtualRegister)
-				return false;
+		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Or64)
+			return false;
 
-			if (context.Operand2.Definitions.Count != 1)
-				return false;
+		if (!IsResolvedConstant(context.Operand1.Definitions[0].Operand2))
+			return false;
 
-			if (context.Operand2.Definitions[0].Instruction != IRInstruction.Or64)
-				return false;
+		if (!IsResolvedConstant(context.Operand2))
+			return false;
 
-			if (!IsResolvedConstant(context.Operand2.Definitions[0].Operand2))
-				return false;
-
-			if (!IsResolvedConstant(context.Operand1))
-				return false;
-
-			return true;
-		}
-
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
-
-			var t1 = context.Operand1;
-			var t2 = context.Operand2.Definitions[0].Operand1;
-			var t3 = context.Operand2.Definitions[0].Operand2;
-
-			var e1 = transform.CreateConstant(Or64(To64(t3), To64(t1)));
-
-			context.SetInstruction(IRInstruction.Or64, result, t2, e1);
-		}
+		return true;
 	}
 
-	/// <summary>
-	/// Or64x2_v2
-	/// </summary>
-	public sealed class Or64x2_v2 : BaseTransform
+	public override void Transform(Context context, TransformContext transform)
 	{
-		public Or64x2_v2() : base(IRInstruction.Or64, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+		var result = context.Result;
 
-		public override int Priority => 90;
+		var t1 = context.Operand1.Definitions[0].Operand1;
+		var t2 = context.Operand1.Definitions[0].Operand2;
+		var t3 = context.Operand2;
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand1.IsVirtualRegister)
-				return false;
+		var e1 = transform.CreateConstant(Or64(To64(t2), To64(t3)));
 
-			if (context.Operand1.Definitions.Count != 1)
-				return false;
+		context.SetInstruction(IRInstruction.Or64, result, t1, e1);
+	}
+}
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.Or64)
-				return false;
-
-			if (!IsResolvedConstant(context.Operand1.Definitions[0].Operand1))
-				return false;
-
-			if (!IsResolvedConstant(context.Operand2))
-				return false;
-
-			return true;
-		}
-
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
-
-			var t1 = context.Operand1.Definitions[0].Operand1;
-			var t2 = context.Operand1.Definitions[0].Operand2;
-			var t3 = context.Operand2;
-
-			var e1 = transform.CreateConstant(Or64(To64(t1), To64(t3)));
-
-			context.SetInstruction(IRInstruction.Or64, result, t2, e1);
-		}
+/// <summary>
+/// Or64x2_v1
+/// </summary>
+public sealed class Or64x2_v1 : BaseTransform
+{
+	public Or64x2_v1() : base(IRInstruction.Or64, TransformType.Auto | TransformType.Optimization)
+	{
 	}
 
-	/// <summary>
-	/// Or64x2_v3
-	/// </summary>
-	public sealed class Or64x2_v3 : BaseTransform
+	public override int Priority => 90;
+
+	public override bool Match(Context context, TransformContext transform)
 	{
-		public Or64x2_v3() : base(IRInstruction.Or64, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+		if (!context.Operand2.IsVirtualRegister)
+			return false;
 
-		public override int Priority => 90;
+		if (context.Operand2.Definitions.Count != 1)
+			return false;
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand2.IsVirtualRegister)
-				return false;
+		if (context.Operand2.Definitions[0].Instruction != IRInstruction.Or64)
+			return false;
 
-			if (context.Operand2.Definitions.Count != 1)
-				return false;
+		if (!IsResolvedConstant(context.Operand2.Definitions[0].Operand2))
+			return false;
 
-			if (context.Operand2.Definitions[0].Instruction != IRInstruction.Or64)
-				return false;
+		if (!IsResolvedConstant(context.Operand1))
+			return false;
 
-			if (!IsResolvedConstant(context.Operand2.Definitions[0].Operand1))
-				return false;
+		return true;
+	}
 
-			if (!IsResolvedConstant(context.Operand1))
-				return false;
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
 
-			return true;
-		}
+		var t1 = context.Operand1;
+		var t2 = context.Operand2.Definitions[0].Operand1;
+		var t3 = context.Operand2.Definitions[0].Operand2;
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
+		var e1 = transform.CreateConstant(Or64(To64(t3), To64(t1)));
 
-			var t1 = context.Operand1;
-			var t2 = context.Operand2.Definitions[0].Operand1;
-			var t3 = context.Operand2.Definitions[0].Operand2;
+		context.SetInstruction(IRInstruction.Or64, result, t2, e1);
+	}
+}
 
-			var e1 = transform.CreateConstant(Or64(To64(t2), To64(t1)));
+/// <summary>
+/// Or64x2_v2
+/// </summary>
+public sealed class Or64x2_v2 : BaseTransform
+{
+	public Or64x2_v2() : base(IRInstruction.Or64, TransformType.Auto | TransformType.Optimization)
+	{
+	}
 
-			context.SetInstruction(IRInstruction.Or64, result, t3, e1);
-		}
+	public override int Priority => 90;
+
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!context.Operand1.IsVirtualRegister)
+			return false;
+
+		if (context.Operand1.Definitions.Count != 1)
+			return false;
+
+		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Or64)
+			return false;
+
+		if (!IsResolvedConstant(context.Operand1.Definitions[0].Operand1))
+			return false;
+
+		if (!IsResolvedConstant(context.Operand2))
+			return false;
+
+		return true;
+	}
+
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
+
+		var t1 = context.Operand1.Definitions[0].Operand1;
+		var t2 = context.Operand1.Definitions[0].Operand2;
+		var t3 = context.Operand2;
+
+		var e1 = transform.CreateConstant(Or64(To64(t1), To64(t3)));
+
+		context.SetInstruction(IRInstruction.Or64, result, t2, e1);
+	}
+}
+
+/// <summary>
+/// Or64x2_v3
+/// </summary>
+public sealed class Or64x2_v3 : BaseTransform
+{
+	public Or64x2_v3() : base(IRInstruction.Or64, TransformType.Auto | TransformType.Optimization)
+	{
+	}
+
+	public override int Priority => 90;
+
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!context.Operand2.IsVirtualRegister)
+			return false;
+
+		if (context.Operand2.Definitions.Count != 1)
+			return false;
+
+		if (context.Operand2.Definitions[0].Instruction != IRInstruction.Or64)
+			return false;
+
+		if (!IsResolvedConstant(context.Operand2.Definitions[0].Operand1))
+			return false;
+
+		if (!IsResolvedConstant(context.Operand1))
+			return false;
+
+		return true;
+	}
+
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
+
+		var t1 = context.Operand1;
+		var t2 = context.Operand2.Definitions[0].Operand1;
+		var t3 = context.Operand2.Definitions[0].Operand2;
+
+		var e1 = transform.CreateConstant(Or64(To64(t2), To64(t1)));
+
+		context.SetInstruction(IRInstruction.Or64, result, t3, e1);
 	}
 }

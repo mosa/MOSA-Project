@@ -4,205 +4,204 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
+
+/// <summary>
+/// Sub32MultipleWithCommon
+/// </summary>
+public sealed class Sub32MultipleWithCommon : BaseTransform
 {
-	/// <summary>
-	/// Sub32MultipleWithCommon
-	/// </summary>
-	public sealed class Sub32MultipleWithCommon : BaseTransform
+	public Sub32MultipleWithCommon() : base(IRInstruction.Sub32, TransformType.Auto | TransformType.Optimization)
 	{
-		public Sub32MultipleWithCommon() : base(IRInstruction.Sub32, TransformType.Auto | TransformType.Optimization)
-		{
-		}
-
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand1.IsVirtualRegister)
-				return false;
-
-			if (!context.Operand2.IsVirtualRegister)
-				return false;
-
-			if (context.Operand1.Definitions.Count != 1)
-				return false;
-
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
-				return false;
-
-			if (context.Operand2.Definitions.Count != 1)
-				return false;
-
-			if (context.Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
-				return false;
-
-			if (!AreSame(context.Operand1.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand1))
-				return false;
-
-			return true;
-		}
-
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
-
-			var t1 = context.Operand1.Definitions[0].Operand1;
-			var t2 = context.Operand1.Definitions[0].Operand2;
-			var t3 = context.Operand2.Definitions[0].Operand2;
-
-			var v1 = transform.AllocateVirtualRegister(transform.I4);
-
-			context.SetInstruction(IRInstruction.Sub32, v1, t2, t3);
-			context.AppendInstruction(IRInstruction.MulUnsigned32, result, t1, v1);
-		}
 	}
 
-	/// <summary>
-	/// Sub32MultipleWithCommon_v1
-	/// </summary>
-	public sealed class Sub32MultipleWithCommon_v1 : BaseTransform
+	public override bool Match(Context context, TransformContext transform)
 	{
-		public Sub32MultipleWithCommon_v1() : base(IRInstruction.Sub32, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+		if (!context.Operand1.IsVirtualRegister)
+			return false;
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand1.IsVirtualRegister)
-				return false;
+		if (!context.Operand2.IsVirtualRegister)
+			return false;
 
-			if (!context.Operand2.IsVirtualRegister)
-				return false;
+		if (context.Operand1.Definitions.Count != 1)
+			return false;
 
-			if (context.Operand1.Definitions.Count != 1)
-				return false;
+		if (context.Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			return false;
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
-				return false;
+		if (context.Operand2.Definitions.Count != 1)
+			return false;
 
-			if (context.Operand2.Definitions.Count != 1)
-				return false;
+		if (context.Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			return false;
 
-			if (context.Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
-				return false;
+		if (!AreSame(context.Operand1.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand1))
+			return false;
 
-			if (!AreSame(context.Operand1.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand2))
-				return false;
-
-			return true;
-		}
-
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
-
-			var t1 = context.Operand1.Definitions[0].Operand1;
-			var t2 = context.Operand1.Definitions[0].Operand2;
-			var t3 = context.Operand2.Definitions[0].Operand1;
-
-			var v1 = transform.AllocateVirtualRegister(transform.I4);
-
-			context.SetInstruction(IRInstruction.Sub32, v1, t2, t3);
-			context.AppendInstruction(IRInstruction.MulUnsigned32, result, t1, v1);
-		}
+		return true;
 	}
 
-	/// <summary>
-	/// Sub32MultipleWithCommon_v2
-	/// </summary>
-	public sealed class Sub32MultipleWithCommon_v2 : BaseTransform
+	public override void Transform(Context context, TransformContext transform)
 	{
-		public Sub32MultipleWithCommon_v2() : base(IRInstruction.Sub32, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+		var result = context.Result;
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand1.IsVirtualRegister)
-				return false;
+		var t1 = context.Operand1.Definitions[0].Operand1;
+		var t2 = context.Operand1.Definitions[0].Operand2;
+		var t3 = context.Operand2.Definitions[0].Operand2;
 
-			if (!context.Operand2.IsVirtualRegister)
-				return false;
+		var v1 = transform.AllocateVirtualRegister(transform.I4);
 
-			if (context.Operand1.Definitions.Count != 1)
-				return false;
+		context.SetInstruction(IRInstruction.Sub32, v1, t2, t3);
+		context.AppendInstruction(IRInstruction.MulUnsigned32, result, t1, v1);
+	}
+}
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
-				return false;
-
-			if (context.Operand2.Definitions.Count != 1)
-				return false;
-
-			if (context.Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
-				return false;
-
-			if (!AreSame(context.Operand1.Definitions[0].Operand2, context.Operand2.Definitions[0].Operand1))
-				return false;
-
-			return true;
-		}
-
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
-
-			var t1 = context.Operand1.Definitions[0].Operand1;
-			var t2 = context.Operand1.Definitions[0].Operand2;
-			var t3 = context.Operand2.Definitions[0].Operand2;
-
-			var v1 = transform.AllocateVirtualRegister(transform.I4);
-
-			context.SetInstruction(IRInstruction.Sub32, v1, t1, t3);
-			context.AppendInstruction(IRInstruction.MulUnsigned32, result, t2, v1);
-		}
+/// <summary>
+/// Sub32MultipleWithCommon_v1
+/// </summary>
+public sealed class Sub32MultipleWithCommon_v1 : BaseTransform
+{
+	public Sub32MultipleWithCommon_v1() : base(IRInstruction.Sub32, TransformType.Auto | TransformType.Optimization)
+	{
 	}
 
-	/// <summary>
-	/// Sub32MultipleWithCommon_v3
-	/// </summary>
-	public sealed class Sub32MultipleWithCommon_v3 : BaseTransform
+	public override bool Match(Context context, TransformContext transform)
 	{
-		public Sub32MultipleWithCommon_v3() : base(IRInstruction.Sub32, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+		if (!context.Operand1.IsVirtualRegister)
+			return false;
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand1.IsVirtualRegister)
-				return false;
+		if (!context.Operand2.IsVirtualRegister)
+			return false;
 
-			if (!context.Operand2.IsVirtualRegister)
-				return false;
+		if (context.Operand1.Definitions.Count != 1)
+			return false;
 
-			if (context.Operand1.Definitions.Count != 1)
-				return false;
+		if (context.Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			return false;
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
-				return false;
+		if (context.Operand2.Definitions.Count != 1)
+			return false;
 
-			if (context.Operand2.Definitions.Count != 1)
-				return false;
+		if (context.Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			return false;
 
-			if (context.Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
-				return false;
+		if (!AreSame(context.Operand1.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand2))
+			return false;
 
-			if (!AreSame(context.Operand1.Definitions[0].Operand2, context.Operand2.Definitions[0].Operand2))
-				return false;
+		return true;
+	}
 
-			return true;
-		}
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
+		var t1 = context.Operand1.Definitions[0].Operand1;
+		var t2 = context.Operand1.Definitions[0].Operand2;
+		var t3 = context.Operand2.Definitions[0].Operand1;
 
-			var t1 = context.Operand1.Definitions[0].Operand1;
-			var t2 = context.Operand1.Definitions[0].Operand2;
-			var t3 = context.Operand2.Definitions[0].Operand1;
+		var v1 = transform.AllocateVirtualRegister(transform.I4);
 
-			var v1 = transform.AllocateVirtualRegister(transform.I4);
+		context.SetInstruction(IRInstruction.Sub32, v1, t2, t3);
+		context.AppendInstruction(IRInstruction.MulUnsigned32, result, t1, v1);
+	}
+}
 
-			context.SetInstruction(IRInstruction.Sub32, v1, t1, t3);
-			context.AppendInstruction(IRInstruction.MulUnsigned32, result, t2, v1);
-		}
+/// <summary>
+/// Sub32MultipleWithCommon_v2
+/// </summary>
+public sealed class Sub32MultipleWithCommon_v2 : BaseTransform
+{
+	public Sub32MultipleWithCommon_v2() : base(IRInstruction.Sub32, TransformType.Auto | TransformType.Optimization)
+	{
+	}
+
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!context.Operand1.IsVirtualRegister)
+			return false;
+
+		if (!context.Operand2.IsVirtualRegister)
+			return false;
+
+		if (context.Operand1.Definitions.Count != 1)
+			return false;
+
+		if (context.Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			return false;
+
+		if (context.Operand2.Definitions.Count != 1)
+			return false;
+
+		if (context.Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			return false;
+
+		if (!AreSame(context.Operand1.Definitions[0].Operand2, context.Operand2.Definitions[0].Operand1))
+			return false;
+
+		return true;
+	}
+
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
+
+		var t1 = context.Operand1.Definitions[0].Operand1;
+		var t2 = context.Operand1.Definitions[0].Operand2;
+		var t3 = context.Operand2.Definitions[0].Operand2;
+
+		var v1 = transform.AllocateVirtualRegister(transform.I4);
+
+		context.SetInstruction(IRInstruction.Sub32, v1, t1, t3);
+		context.AppendInstruction(IRInstruction.MulUnsigned32, result, t2, v1);
+	}
+}
+
+/// <summary>
+/// Sub32MultipleWithCommon_v3
+/// </summary>
+public sealed class Sub32MultipleWithCommon_v3 : BaseTransform
+{
+	public Sub32MultipleWithCommon_v3() : base(IRInstruction.Sub32, TransformType.Auto | TransformType.Optimization)
+	{
+	}
+
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!context.Operand1.IsVirtualRegister)
+			return false;
+
+		if (!context.Operand2.IsVirtualRegister)
+			return false;
+
+		if (context.Operand1.Definitions.Count != 1)
+			return false;
+
+		if (context.Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			return false;
+
+		if (context.Operand2.Definitions.Count != 1)
+			return false;
+
+		if (context.Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			return false;
+
+		if (!AreSame(context.Operand1.Definitions[0].Operand2, context.Operand2.Definitions[0].Operand2))
+			return false;
+
+		return true;
+	}
+
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
+
+		var t1 = context.Operand1.Definitions[0].Operand1;
+		var t2 = context.Operand1.Definitions[0].Operand2;
+		var t3 = context.Operand2.Definitions[0].Operand1;
+
+		var v1 = transform.AllocateVirtualRegister(transform.I4);
+
+		context.SetInstruction(IRInstruction.Sub32, v1, t1, t3);
+		context.AppendInstruction(IRInstruction.MulUnsigned32, result, t2, v1);
 	}
 }

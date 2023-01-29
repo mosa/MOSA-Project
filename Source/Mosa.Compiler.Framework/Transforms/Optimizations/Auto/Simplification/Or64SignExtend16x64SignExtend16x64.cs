@@ -4,97 +4,96 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
+
+/// <summary>
+/// Or64SignExtend16x64SignExtend16x64
+/// </summary>
+public sealed class Or64SignExtend16x64SignExtend16x64 : BaseTransform
 {
-	/// <summary>
-	/// Or64SignExtend16x64SignExtend16x64
-	/// </summary>
-	public sealed class Or64SignExtend16x64SignExtend16x64 : BaseTransform
+	public Or64SignExtend16x64SignExtend16x64() : base(IRInstruction.Or64, TransformType.Auto | TransformType.Optimization)
 	{
-		public Or64SignExtend16x64SignExtend16x64() : base(IRInstruction.Or64, TransformType.Auto | TransformType.Optimization)
-		{
-		}
-
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand1.IsVirtualRegister)
-				return false;
-
-			if (!context.Operand2.IsVirtualRegister)
-				return false;
-
-			if (context.Operand1.Definitions.Count != 1)
-				return false;
-
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.SignExtend16x64)
-				return false;
-
-			if (context.Operand2.Definitions.Count != 1)
-				return false;
-
-			if (context.Operand2.Definitions[0].Instruction != IRInstruction.SignExtend16x64)
-				return false;
-
-			return true;
-		}
-
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
-
-			var t1 = context.Operand1.Definitions[0].Operand1;
-			var t2 = context.Operand2.Definitions[0].Operand1;
-
-			var v1 = transform.AllocateVirtualRegister(transform.I8);
-
-			context.SetInstruction(IRInstruction.Or64, v1, t1, t2);
-			context.AppendInstruction(IRInstruction.SignExtend16x64, result, v1);
-		}
 	}
 
-	/// <summary>
-	/// Or64SignExtend16x64SignExtend16x64_v1
-	/// </summary>
-	public sealed class Or64SignExtend16x64SignExtend16x64_v1 : BaseTransform
+	public override bool Match(Context context, TransformContext transform)
 	{
-		public Or64SignExtend16x64SignExtend16x64_v1() : base(IRInstruction.Or64, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+		if (!context.Operand1.IsVirtualRegister)
+			return false;
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand1.IsVirtualRegister)
-				return false;
+		if (!context.Operand2.IsVirtualRegister)
+			return false;
 
-			if (!context.Operand2.IsVirtualRegister)
-				return false;
+		if (context.Operand1.Definitions.Count != 1)
+			return false;
 
-			if (context.Operand1.Definitions.Count != 1)
-				return false;
+		if (context.Operand1.Definitions[0].Instruction != IRInstruction.SignExtend16x64)
+			return false;
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.SignExtend16x64)
-				return false;
+		if (context.Operand2.Definitions.Count != 1)
+			return false;
 
-			if (context.Operand2.Definitions.Count != 1)
-				return false;
+		if (context.Operand2.Definitions[0].Instruction != IRInstruction.SignExtend16x64)
+			return false;
 
-			if (context.Operand2.Definitions[0].Instruction != IRInstruction.SignExtend16x64)
-				return false;
+		return true;
+	}
 
-			return true;
-		}
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
+		var t1 = context.Operand1.Definitions[0].Operand1;
+		var t2 = context.Operand2.Definitions[0].Operand1;
 
-			var t1 = context.Operand1.Definitions[0].Operand1;
-			var t2 = context.Operand2.Definitions[0].Operand1;
+		var v1 = transform.AllocateVirtualRegister(transform.I8);
 
-			var v1 = transform.AllocateVirtualRegister(transform.I8);
+		context.SetInstruction(IRInstruction.Or64, v1, t1, t2);
+		context.AppendInstruction(IRInstruction.SignExtend16x64, result, v1);
+	}
+}
 
-			context.SetInstruction(IRInstruction.Or64, v1, t2, t1);
-			context.AppendInstruction(IRInstruction.SignExtend16x64, result, v1);
-		}
+/// <summary>
+/// Or64SignExtend16x64SignExtend16x64_v1
+/// </summary>
+public sealed class Or64SignExtend16x64SignExtend16x64_v1 : BaseTransform
+{
+	public Or64SignExtend16x64SignExtend16x64_v1() : base(IRInstruction.Or64, TransformType.Auto | TransformType.Optimization)
+	{
+	}
+
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!context.Operand1.IsVirtualRegister)
+			return false;
+
+		if (!context.Operand2.IsVirtualRegister)
+			return false;
+
+		if (context.Operand1.Definitions.Count != 1)
+			return false;
+
+		if (context.Operand1.Definitions[0].Instruction != IRInstruction.SignExtend16x64)
+			return false;
+
+		if (context.Operand2.Definitions.Count != 1)
+			return false;
+
+		if (context.Operand2.Definitions[0].Instruction != IRInstruction.SignExtend16x64)
+			return false;
+
+		return true;
+	}
+
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
+
+		var t1 = context.Operand1.Definitions[0].Operand1;
+		var t2 = context.Operand2.Definitions[0].Operand1;
+
+		var v1 = transform.AllocateVirtualRegister(transform.I8);
+
+		context.SetInstruction(IRInstruction.Or64, v1, t2, t1);
+		context.AppendInstruction(IRInstruction.SignExtend16x64, result, v1);
 	}
 }

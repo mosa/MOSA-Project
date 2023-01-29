@@ -4,36 +4,35 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove;
+
+/// <summary>
+/// MulSigned64
+/// </summary>
+public sealed class MulSigned64 : BaseTransform
 {
-	/// <summary>
-	/// MulSigned64
-	/// </summary>
-	public sealed class MulSigned64 : BaseTransform
+	public MulSigned64() : base(IRInstruction.MulSigned64, TransformType.Auto | TransformType.Optimization)
 	{
-		public MulSigned64() : base(IRInstruction.MulSigned64, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+	}
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!IsResolvedConstant(context.Operand1))
-				return false;
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!IsResolvedConstant(context.Operand1))
+			return false;
 
-			if (IsResolvedConstant(context.Operand2))
-				return false;
+		if (IsResolvedConstant(context.Operand2))
+			return false;
 
-			return true;
-		}
+		return true;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
 
-			var t1 = context.Operand1;
-			var t2 = context.Operand2;
+		var t1 = context.Operand1;
+		var t2 = context.Operand2;
 
-			context.SetInstruction(IRInstruction.MulSigned64, result, t2, t1);
-		}
+		context.SetInstruction(IRInstruction.MulSigned64, result, t2, t1);
 	}
 }

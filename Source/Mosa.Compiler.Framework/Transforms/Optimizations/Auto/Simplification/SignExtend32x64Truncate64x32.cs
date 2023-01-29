@@ -4,38 +4,37 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
+
+/// <summary>
+/// SignExtend32x64Truncate64x32
+/// </summary>
+public sealed class SignExtend32x64Truncate64x32 : BaseTransform
 {
-	/// <summary>
-	/// SignExtend32x64Truncate64x32
-	/// </summary>
-	public sealed class SignExtend32x64Truncate64x32 : BaseTransform
+	public SignExtend32x64Truncate64x32() : base(IRInstruction.SignExtend32x64, TransformType.Auto | TransformType.Optimization)
 	{
-		public SignExtend32x64Truncate64x32() : base(IRInstruction.SignExtend32x64, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+	}
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand1.IsVirtualRegister)
-				return false;
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!context.Operand1.IsVirtualRegister)
+			return false;
 
-			if (context.Operand1.Definitions.Count != 1)
-				return false;
+		if (context.Operand1.Definitions.Count != 1)
+			return false;
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.Truncate64x32)
-				return false;
+		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Truncate64x32)
+			return false;
 
-			return true;
-		}
+		return true;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
 
-			var t1 = context.Operand1.Definitions[0].Operand1;
+		var t1 = context.Operand1.Definitions[0].Operand1;
 
-			context.SetInstruction(IRInstruction.SignExtend32x64, result, t1);
-		}
+		context.SetInstruction(IRInstruction.SignExtend32x64, result, t1);
 	}
 }

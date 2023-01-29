@@ -4,37 +4,36 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
+
+/// <summary>
+/// Compare64x64SameAndEqual
+/// </summary>
+public sealed class Compare64x64SameAndEqual : BaseTransform
 {
-	/// <summary>
-	/// Compare64x64SameAndEqual
-	/// </summary>
-	public sealed class Compare64x64SameAndEqual : BaseTransform
+	public Compare64x64SameAndEqual() : base(IRInstruction.Compare64x64, TransformType.Auto | TransformType.Optimization)
 	{
-		public Compare64x64SameAndEqual() : base(IRInstruction.Compare64x64, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+	}
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			var condition = context.ConditionCode;
+	public override bool Match(Context context, TransformContext transform)
+	{
+		var condition = context.ConditionCode;
 
-			if (!(context.ConditionCode == ConditionCode.Equal || context.ConditionCode == ConditionCode.GreaterOrEqual || context.ConditionCode == ConditionCode.LessOrEqual || context.ConditionCode == ConditionCode.UnsignedGreaterOrEqual || context.ConditionCode == ConditionCode.UnsignedLessOrEqual))
-				return false;
+		if (!(context.ConditionCode is ConditionCode.Equal or ConditionCode.GreaterOrEqual or ConditionCode.LessOrEqual or ConditionCode.UnsignedGreaterOrEqual or ConditionCode.UnsignedLessOrEqual))
+			return false;
 
-			if (!AreSame(context.Operand1, context.Operand2))
-				return false;
+		if (!AreSame(context.Operand1, context.Operand2))
+			return false;
 
-			return true;
-		}
+		return true;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
 
-			var e1 = transform.CreateConstant(To64(1));
+		var e1 = transform.CreateConstant(To64(1));
 
-			context.SetInstruction(IRInstruction.Move64, result, e1);
-		}
+		context.SetInstruction(IRInstruction.Move64, result, e1);
 	}
 }

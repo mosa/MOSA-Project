@@ -4,43 +4,42 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
+
+/// <summary>
+/// DivSigned64ByZero
+/// </summary>
+public sealed class DivSigned64ByZero : BaseTransform
 {
-	/// <summary>
-	/// DivSigned64ByZero
-	/// </summary>
-	public sealed class DivSigned64ByZero : BaseTransform
+	public DivSigned64ByZero() : base(IRInstruction.DivSigned64, TransformType.Auto | TransformType.Optimization)
 	{
-		public DivSigned64ByZero() : base(IRInstruction.DivSigned64, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+	}
 
-		public override int Priority => 80;
+	public override int Priority => 80;
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand1.IsResolvedConstant)
-				return false;
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!context.Operand1.IsResolvedConstant)
+			return false;
 
-			if (context.Operand1.ConstantUnsigned64 != 0)
-				return false;
+		if (context.Operand1.ConstantUnsigned64 != 0)
+			return false;
 
-			if (!IsResolvedConstant(context.Operand2))
-				return false;
+		if (!IsResolvedConstant(context.Operand2))
+			return false;
 
-			if (IsZero(context.Operand2))
-				return false;
+		if (IsZero(context.Operand2))
+			return false;
 
-			return true;
-		}
+		return true;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
 
-			var e1 = transform.CreateConstant(To64(0));
+		var e1 = transform.CreateConstant(To64(0));
 
-			context.SetInstruction(IRInstruction.Move64, result, e1);
-		}
+		context.SetInstruction(IRInstruction.Move64, result, e1);
 	}
 }

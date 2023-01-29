@@ -4,29 +4,28 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.ARMv8A32.Instructions
+namespace Mosa.Platform.ARMv8A32.Instructions;
+
+/// <summary>
+/// B - Call a subroutine
+/// </summary>
+/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
+public sealed class B : ARMv8A32Instruction
 {
-	/// <summary>
-	/// B - Call a subroutine
-	/// </summary>
-	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
-	public sealed class B : ARMv8A32Instruction
+	internal B()
+		: base(0, 0)
 	{
-		internal B()
-			: base(0, 0)
-		{
-		}
+	}
 
-		public override FlowControl FlowControl { get { return FlowControl.ConditionalBranch; } }
+	public override FlowControl FlowControl => FlowControl.ConditionalBranch;
 
-		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
-		{
-			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
-			System.Diagnostics.Debug.Assert(node.OperandCount == 0);
+	public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
+	{
+		System.Diagnostics.Debug.Assert(node.ResultCount == 0);
+		System.Diagnostics.Debug.Assert(node.OperandCount == 0);
 
-			opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
-			opcodeEncoder.Append4Bits(0b1010);
-			opcodeEncoder.EmitRelative24(node.BranchTargets[0].Label);
-		}
+		opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
+		opcodeEncoder.Append4Bits(0b1010);
+		opcodeEncoder.EmitRelative24(node.BranchTargets[0].Label);
 	}
 }
