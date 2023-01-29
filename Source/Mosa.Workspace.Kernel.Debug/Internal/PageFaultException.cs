@@ -14,8 +14,7 @@ namespace Mosa.Workspace.Kernel.Internal
 		}
 
 		public override string ToString()
-		{
-			return "Page Fault at 0x" + Address.ToString("X");
-		}
+	{
+		return "Page Fault at 0x" + Address.ToString("X");
 	}
 }

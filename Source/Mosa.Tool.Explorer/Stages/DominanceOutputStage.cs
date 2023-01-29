@@ -4,114 +4,113 @@ using System.Text;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Analysis;
 
-namespace Mosa.Tool.Explorer.Stages
+namespace Mosa.Tool.Explorer.Stages;
+
+public class DominanceOutputStage : BaseMethodCompilerStage
 {
-	public class DominanceOutputStage : BaseMethodCompilerStage
+	private const int TraceLevel = 5;
+
+	protected override void Run()
 	{
-		private const int TraceLevel = 5;
+		if (!IsTraceable(TraceLevel))
+			return;
 
-		protected override void Run()
+		OutputList();
+		OutputDiagram();
+		OutputDominanceBlock();
+	}
+
+	private void OutputList()
+	{
+		var trace = CreateTraceLog("List");
+		var sb = new StringBuilder();
+
+		foreach (var headBlock in BasicBlocks.HeadBlocks)
 		{
-			if (!IsTraceable(TraceLevel))
-				return;
+			trace.Log($"Head: {headBlock}");
+			var dominance = new SimpleFastDominance(BasicBlocks, headBlock);
 
-			OutputList();
-			OutputDiagram();
-			OutputDominanceBlock();
-		}
-
-		private void OutputList()
-		{
-			var trace = CreateTraceLog("List");
-			var sb = new StringBuilder();
-
-			foreach (var headBlock in BasicBlocks.HeadBlocks)
+			for (int i = 0; i < BasicBlocks.Count; i++)
 			{
-				trace.Log($"Head: {headBlock}");
-				var dominance = new SimpleFastDominance(BasicBlocks, headBlock);
+				var block = BasicBlocks[i];
 
-				for (int i = 0; i < BasicBlocks.Count; i++)
+				sb.Clear();
+				sb.Append($"  Block {block} : ");
+
+				var children = dominance.GetChildren(block);
+
+				if (children != null && children.Count != 0)
 				{
-					var block = BasicBlocks[i];
-
-					sb.Clear();
-					sb.Append($"  Block {block} : ");
-
-					var children = dominance.GetChildren(block);
-
-					if (children != null && children.Count != 0)
+					foreach (var child in children)
 					{
-						foreach (var child in children)
-						{
-							sb.Append(child);
-							sb.Append(", ");
-						}
-
-						sb.Length -= 2;
+						sb.Append(child);
+						sb.Append(", ");
 					}
 
-					trace.Log(sb.ToString());
+					sb.Length -= 2;
 				}
 
-				trace.Log();
+				trace.Log(sb.ToString());
 			}
+
+			trace.Log();
 		}
+	}
 
-		private void OutputDiagram()
+	private void OutputDiagram()
+	{
+		var trace = CreateTraceLog("Diagram");
+		var sb = new StringBuilder();
+
+		trace.Log("digraph blocks {");
+
+		foreach (var headBlock in BasicBlocks.HeadBlocks)
 		{
-			var trace = CreateTraceLog("Diagram");
-			var sb = new StringBuilder();
+			var dominance = new SimpleFastDominance(BasicBlocks, headBlock);
 
-			trace.Log("digraph blocks {");
-
-			foreach (var headBlock in BasicBlocks.HeadBlocks)
+			for (int i = 0; i < BasicBlocks.Count; i++)
 			{
-				var dominance = new SimpleFastDominance(BasicBlocks, headBlock);
+				var block = BasicBlocks[i];
 
-				for (int i = 0; i < BasicBlocks.Count; i++)
+				var children = dominance.GetChildren(block);
+				if (children != null && children.Count != 0)
 				{
-					var block = BasicBlocks[i];
-
-					var children = dominance.GetChildren(block);
-					if (children != null && children.Count != 0)
+					foreach (var child in children)
 					{
-						foreach (var child in children)
-						{
-							trace.Log($"\t{block} -> {child}");
-						}
+						trace.Log($"\t{block} -> {child}");
 					}
 				}
 			}
-
-			trace.Log("}");
 		}
 
-		private void OutputDominanceBlock()
+		trace.Log("}");
+	}
+
+	private void OutputDominanceBlock()
+	{
+		var trace = CreateTraceLog("DominanceBlock");
+		var sb = new StringBuilder();
+
+		foreach (var headBlock in BasicBlocks.HeadBlocks)
 		{
-			var trace = CreateTraceLog("DominanceBlock");
-			var sb = new StringBuilder();
+			trace.Log($"Head: {headBlock}");
+			var dominance = new SimpleFastDominance(BasicBlocks, headBlock);
 
-			foreach (var headBlock in BasicBlocks.HeadBlocks)
+			for (int i = 0; i < BasicBlocks.Count; i++)
 			{
-				trace.Log($"Head: {headBlock}");
-				var dominance = new SimpleFastDominance(BasicBlocks, headBlock);
+				var block = BasicBlocks[i];
 
-				for (int i = 0; i < BasicBlocks.Count; i++)
-				{
-					var block = BasicBlocks[i];
+				sb.Clear();
+				sb.Append($"  Block {block} : ");
 
-					sb.Clear();
-					sb.Append($"  Block {block} : ");
+				var dom = dominance.GetImmediateDominator(block);
 
-					var dom = dominance.GetImmediateDominator(block);
+				sb.Append((dom != null) ? dom.ToString() : string.Empty);
 
-					sb.Append((dom != null) ? dom.ToString() : string.Empty);
-
-					trace.Log(sb.ToString());
-				}
-
-				trace.Log();
+				trace.Log(sb.ToString());
 			}
+
+			trace.Log();
 		}
 	}
 }

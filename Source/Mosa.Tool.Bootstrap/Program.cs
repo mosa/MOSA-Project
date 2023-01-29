@@ -5,171 +5,170 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 
-namespace Mosa.Tool.Bootstrap
+namespace Mosa.Tool.Bootstrap;
+
+/// <summary>
+/// Class containing the entry point of the program.
+/// </summary>
+internal static class Program
 {
-	/// <summary>
-	/// Class containing the entry point of the program.
-	/// </summary>
-	internal static class Program
+	private static readonly string InstalledMosaTool = @"%ProgramFiles(x86)%\MOSA-Project\bin";
+	private static readonly string LauncherFileName = "Mosa.Tool.Launcher.exe";
+
+	private static readonly string GlobalPackageDirectory = @".nuget\packages";
+	private static readonly string ToolsPackage = "mosa.tools.package";
+
+	private static readonly string Korlib = "System.Runtime.dll";
+
+	internal static int Main(string[] args)
 	{
-		private static readonly string InstalledMosaTool = @"%ProgramFiles(x86)%\MOSA-Project\bin";
-		private static readonly string LauncherFileName = "Mosa.Tool.Launcher.exe";
+		var source = args[0];
 
-		private static readonly string GlobalPackageDirectory = @".nuget\packages";
-		private static readonly string ToolsPackage = "mosa.tools.package";
+		var location = FindLauncher(source);
 
-		private static readonly string Korlib = "System.Runtime.dll";
-
-		internal static int Main(string[] args)
+		if (location == null)
 		{
-			var source = args[0];
+			var status = new StatusForm("Unable to find Mosa.Launcher.Tool.exe!");
 
-			var location = FindLauncher(source);
+			Application.Run(status);
 
-			if (location == null)
-			{
-				var status = new StatusForm("Unable to find Mosa.Launcher.Tool.exe!");
-
-				Application.Run(status);
-
-				return 1;
-			}
-
-			var start = new ProcessStartInfo
-			{
-				FileName = location,
-
-				Arguments = string.Join(" ", args),
-				UseShellExecute = false,
-				CreateNoWindow = true,
-
-				WorkingDirectory = Environment.CurrentDirectory,
-			};
-
-			var process = Process.Start(start);
-
-			return 0;
+			return 1;
 		}
 
-		internal static string FindLauncher(string source)
+		var start = new ProcessStartInfo
 		{
-			var location = FindLauncherInCurrentDirectory();
+			FileName = location,
 
-			if (location != null)
-				return location;
+			Arguments = string.Join(" ", args),
+			UseShellExecute = false,
+			CreateNoWindow = true,
 
-			var targetVersion = GetIdealFileVersion(Environment.CurrentDirectory);
+			WorkingDirectory = Environment.CurrentDirectory,
+		};
 
-			if (targetVersion == null)
-			{
-				targetVersion = GetIdealFileVersion(source);
-			}
+		var process = Process.Start(start);
 
-			location = FindLauncherInGlobalCatalog(targetVersion);
+		return 0;
+	}
 
-			if (location != null)
-				return location;
+	internal static string FindLauncher(string source)
+	{
+		var location = FindLauncherInCurrentDirectory();
 
-			location = FindInstalledLauncher();
-
+		if (location != null)
 			return location;
+
+		var targetVersion = GetIdealFileVersion(Environment.CurrentDirectory);
+
+		if (targetVersion == null)
+		{
+			targetVersion = GetIdealFileVersion(source);
 		}
 
-		internal static string FindInstalledLauncher()
-		{
-			return CheckLauncher(InstalledMosaTool.Replace("%ProgramFiles(x86)%", Environment.GetEnvironmentVariable("ProgramFiles(x86)")));
-		}
+		location = FindLauncherInGlobalCatalog(targetVersion);
 
-		internal static string FindLauncherInCurrentDirectory()
-		{
-			return CheckLauncher(Environment.CurrentDirectory);
-		}
+		if (location != null)
+			return location;
 
-		internal static string FindLauncherExecutionPath()
-		{
-			return CheckLauncher(Application.ExecutablePath);
-		}
+		location = FindInstalledLauncher();
 
-		internal static string CheckLauncher(string directory)
-		{
-			if (directory == null)
-				return null;
+		return location;
+	}
 
-			var location = Path.Combine(directory, LauncherFileName);
+	internal static string FindInstalledLauncher()
+	{
+		return CheckLauncher(InstalledMosaTool.Replace("%ProgramFiles(x86)%", Environment.GetEnvironmentVariable("ProgramFiles(x86)")));
+	}
+
+	internal static string FindLauncherInCurrentDirectory()
+	{
+		return CheckLauncher(Environment.CurrentDirectory);
+	}
+
+	internal static string FindLauncherExecutionPath()
+	{
+		return CheckLauncher(Application.ExecutablePath);
+	}
+
+	internal static string CheckLauncher(string directory)
+	{
+		if (directory == null)
+			return null;
+
+		var location = Path.Combine(directory, LauncherFileName);
+
+		if (File.Exists(location))
+			return location;
+
+		return null;
+	}
+
+	internal static string FindLauncherInGlobalCatalog(FileVersionInfo targetVersion)
+	{
+		var userProfile = Environment.GetEnvironmentVariable("userprofile");
+
+		var globalPackageDirectory = Path.Combine(userProfile, GlobalPackageDirectory, ToolsPackage);
+
+		if (!Directory.Exists(globalPackageDirectory))
+			return null;
+
+		string bestLocation = null;
+		FileVersionInfo bestVerion = null;
+
+		foreach (var directory in Directory.GetDirectories(globalPackageDirectory))
+		{
+			var location = Path.Combine(directory, "tools", LauncherFileName);
 
 			if (File.Exists(location))
-				return location;
-
-			return null;
-		}
-
-		internal static string FindLauncherInGlobalCatalog(FileVersionInfo targetVersion)
-		{
-			var userProfile = Environment.GetEnvironmentVariable("userprofile");
-
-			var globalPackageDirectory = Path.Combine(userProfile, GlobalPackageDirectory, ToolsPackage);
-
-			if (!Directory.Exists(globalPackageDirectory))
-				return null;
-
-			string bestLocation = null;
-			FileVersionInfo bestVerion = null;
-
-			foreach (var directory in Directory.GetDirectories(globalPackageDirectory))
 			{
-				var location = Path.Combine(directory, "tools", LauncherFileName);
+				if (targetVersion == null)
+					return location;
 
-				if (File.Exists(location))
+				var locationVersion = FileVersionInfo.GetVersionInfo(location);
+
+				if (CompareTo(locationVersion, targetVersion) == 0)
+					return location;
+
+				if (bestLocation == null)
 				{
-					if (targetVersion == null)
-						return location;
-
-					var locationVersion = FileVersionInfo.GetVersionInfo(location);
-
-					if (CompareTo(locationVersion, targetVersion) == 0)
-						return location;
-
-					if (bestLocation == null)
-					{
-						bestLocation = location;
-						bestVerion = locationVersion;
-					}
-					else if (CompareTo(locationVersion, bestVerion) == 1)
-					{
-						bestLocation = location;
-						bestVerion = locationVersion;
-					}
+					bestLocation = location;
+					bestVerion = locationVersion;
+				}
+				else if (CompareTo(locationVersion, bestVerion) == 1)
+				{
+					bestLocation = location;
+					bestVerion = locationVersion;
 				}
 			}
-
-			return bestLocation;
 		}
 
-		internal static FileVersionInfo GetIdealFileVersion(string directory)
-		{
-			var location = Path.Combine(directory, Korlib);
+		return bestLocation;
+	}
 
-			if (!File.Exists(location))
-				return null;
+	internal static FileVersionInfo GetIdealFileVersion(string directory)
+	{
+		var location = Path.Combine(directory, Korlib);
 
-			return FileVersionInfo.GetVersionInfo(location);
-		}
+		if (!File.Exists(location))
+			return null;
 
-		private static int CompareTo(FileVersionInfo older, FileVersionInfo newer)
-		{
-			if (newer.ProductMajorPart > older.ProductMajorPart) return 1;
-			if (newer.ProductMajorPart < older.ProductMajorPart) return -1;
+		return FileVersionInfo.GetVersionInfo(location);
+	}
 
-			if (newer.ProductMinorPart > older.ProductMinorPart) return 1;
-			if (newer.ProductMinorPart < older.ProductMinorPart) return -1;
+	private static int CompareTo(FileVersionInfo older, FileVersionInfo newer)
+	{
+		if (newer.ProductMajorPart > older.ProductMajorPart) return 1;
+		if (newer.ProductMajorPart < older.ProductMajorPart) return -1;
 
-			if (newer.ProductBuildPart > older.ProductBuildPart) return 1;
-			if (newer.ProductBuildPart < older.ProductBuildPart) return -1;
+		if (newer.ProductMinorPart > older.ProductMinorPart) return 1;
+		if (newer.ProductMinorPart < older.ProductMinorPart) return -1;
 
-			if (newer.ProductPrivatePart == older.ProductPrivatePart)
-				return 0;
+		if (newer.ProductBuildPart > older.ProductBuildPart) return 1;
+		if (newer.ProductBuildPart < older.ProductBuildPart) return -1;
 
-			return newer.ProductPrivatePart > older.ProductPrivatePart ? 1 : -1;
-		}
+		if (newer.ProductPrivatePart == older.ProductPrivatePart)
+			return 0;
+
+		return newer.ProductPrivatePart > older.ProductPrivatePart ? 1 : -1;
 	}
 }

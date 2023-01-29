@@ -2,20 +2,19 @@
 
 using System;
 
-namespace Mosa.Workspace.Kernel.Internal
+namespace Mosa.Workspace.Kernel.Internal;
+
+public class InvalidMemoryAccess : Exception
 {
-	public class InvalidMemoryAccess : Exception
+	public ulong Address { get; private set; }
+
+	public InvalidMemoryAccess(ulong address)
 	{
-		public ulong Address { get; private set; }
+		Address = address;
+	}
 
-		public InvalidMemoryAccess(ulong address)
-		{
-			Address = address;
-		}
-
-		public override string ToString()
-		{
-			return "Invalid Memory Access at 0x" + Address.ToString("X");
-		}
+	public override string ToString()
+	{
+		return "Invalid Memory Access at 0x" + Address.ToString("X");
 	}
 }

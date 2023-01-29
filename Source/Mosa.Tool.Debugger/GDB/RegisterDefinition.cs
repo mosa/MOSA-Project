@@ -1,22 +1,21 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Tool.Debugger.GDB
+namespace Mosa.Tool.Debugger.GDB;
+
+public enum RegisterType { Int, Float };
+
+public class RegisterDefinition
 {
-	public enum RegisterType { Int, Float };
+	public string Name { get; set; }
+	public int Index { set; get; }
+	public int Offset { set; get; }
+	public uint Size { set; get; }
 
-	public class RegisterDefinition
+	public RegisterDefinition(int index, string name, uint size, int offset)
 	{
-		public string Name { get; set; }
-		public int Index { set; get; }
-		public int Offset { set; get; }
-		public uint Size { set; get; }
-
-		public RegisterDefinition(int index, string name, uint size, int offset)
-		{
-			Index = index;
-			Name = name;
-			Size = size;
-			Offset = offset;
-		}
+		Index = index;
+		Name = name;
+		Size = size;
+		Offset = offset;
 	}
 }

@@ -3,100 +3,99 @@
 using System;
 using System.Windows.Forms;
 
-namespace Mosa.Tool.Debugger.Views
+namespace Mosa.Tool.Debugger.Views;
+
+public partial class MemoryView : DebugDockContent
 {
-	public partial class MemoryView : DebugDockContent
+	private int Rows = 0;
+	private int Columns = 16;
+
+	public MemoryView(MainForm mainForm)
+		: base(mainForm)
 	{
-		private int Rows = 0;
-		private int Columns = 16;
+		InitializeComponent();
+		tbAddress.Text = "0xB8000";
+	}
 
-		public MemoryView(MainForm mainForm)
-			: base(mainForm)
+	public override void OnRunning()
+	{
+		ClearDisplay();
+	}
+
+	protected override void ClearDisplay()
+	{
+		lbMemory.Clear();
+	}
+
+	protected override void UpdateDisplay()
+	{
+		Columns = 6 * 4; // (lbMemory.Width - 100) / ((int)lbMemory.Font.Size * 3);
+		Rows = lbMemory.Height / (lbMemory.Font.Height + 2);
+
+		var address = MainForm.ParseHexAddress(tbAddress.Text);
+		uint bytes = (uint)(Rows * Columns);
+
+		MemoryCache.ReadMemory(address, bytes, OnMemoryRead);
+	}
+
+	private void OnMemoryRead(ulong address, byte[] bytes) => Invoke((MethodInvoker)(() => UpdateDisplay(address, bytes)));
+
+	private void UpdateDisplay(ulong address, byte[] memory)
+	{
+		ulong at = address;
+
+		var newlines = new string[Rows];
+
+		for (int line = 0; line < Rows; line++)
 		{
-			InitializeComponent();
-			tbAddress.Text = "0xB8000";
-		}
+			string l = at.ToString("X").PadLeft(8, '0') + ':';
+			string d = string.Empty;
 
-		public override void OnRunning()
-		{
-			ClearDisplay();
-		}
-
-		protected override void ClearDisplay()
-		{
-			lbMemory.Clear();
-		}
-
-		protected override void UpdateDisplay()
-		{
-			Columns = 6 * 4; // (lbMemory.Width - 100) / ((int)lbMemory.Font.Size * 3);
-			Rows = lbMemory.Height / (lbMemory.Font.Height + 2);
-
-			var address = MainForm.ParseHexAddress(tbAddress.Text);
-			uint bytes = (uint)(Rows * Columns);
-
-			MemoryCache.ReadMemory(address, bytes, OnMemoryRead);
-		}
-
-		private void OnMemoryRead(ulong address, byte[] bytes) => Invoke((MethodInvoker)(() => UpdateDisplay(address, bytes)));
-
-		private void UpdateDisplay(ulong address, byte[] memory)
-		{
-			ulong at = address;
-
-			var newlines = new string[Rows];
-
-			for (int line = 0; line < Rows; line++)
+			for (int x = 0; x < Columns; x++)
 			{
-				string l = at.ToString("X").PadLeft(8, '0') + ':';
-				string d = string.Empty;
+				int index = (line * Columns) + x;
 
-				for (int x = 0; x < Columns; x++)
-				{
-					int index = (line * Columns) + x;
+				if (index >= memory.Length)
+					break;
 
-					if (index >= memory.Length)
-						break;
+				byte mem = memory[index];
 
-					byte mem = memory[index];
+				if (x % 4 == 0)
+					l += ' ';
 
-					if (x % 4 == 0)
-						l += ' ';
+				l += mem.ToString("X").PadLeft(2, '0');
 
-					l += mem.ToString("X").PadLeft(2, '0');
+				var b = (char)mem;
 
-					var b = (char)mem;
+				d += (char.IsLetterOrDigit(b) ? b : '.');
 
-					d += (char.IsLetterOrDigit(b) ? b : '.');
-
-					at++;
-				}
-
-				newlines[line] = l + ' ' + d;
+				at++;
 			}
 
-			lbMemory.Lines = newlines;
+			newlines[line] = l + ' ' + d;
 		}
 
-		private void toolStripButton1_Click(object sender, EventArgs e)
+		lbMemory.Lines = newlines;
+	}
+
+	private void toolStripButton1_Click(object sender, EventArgs e)
+	{
+		if (IsReady)
+			UpdateDisplay();
+	}
+
+	private void MemoryView_Load(object sender, EventArgs e)
+	{
+		if (IsReady)
+			UpdateDisplay();
+	}
+
+	private void tbMemory_KeyDown(object sender, KeyEventArgs e)
+	{
+		if (e.KeyCode == Keys.Enter)
 		{
 			if (IsReady)
 				UpdateDisplay();
-		}
-
-		private void MemoryView_Load(object sender, EventArgs e)
-		{
-			if (IsReady)
-				UpdateDisplay();
-		}
-
-		private void tbMemory_KeyDown(object sender, KeyEventArgs e)
-		{
-			if (e.KeyCode == Keys.Enter)
-			{
-				if (IsReady)
-					UpdateDisplay();
-			}
 		}
 	}
 }

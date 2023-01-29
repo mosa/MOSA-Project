@@ -1,15 +1,15 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.LowerTo32
-{
-	public sealed class Move64 : BaseTransform
-	{
-		public Move64() : base(IRInstruction.Move64, TransformType.Manual | TransformType.Optimization)
-		{
-		}
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.LowerTo32;
 
-		public override bool Match(Context context, TransformContext transform)
-		{
+public sealed class Move64 : BaseTransform
+{
+	public Move64() : base(IRInstruction.Move64, TransformType.Manual | TransformType.Optimization)
+	{
+	}
+
+	public override bool Match(Context context, TransformContext transform)
+	{
 		return transform.LowerTo32;
 	}
 

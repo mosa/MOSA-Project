@@ -4,121 +4,120 @@ using System;
 using System.Collections.Generic;
 using Mosa.Compiler.Framework.Trace;
 
-namespace Mosa.Tool.Explorer
+namespace Mosa.Tool.Explorer;
+
+public class CompilerData
 {
-	public class CompilerData
+	public readonly Dictionary<string, List<string>> Logs = new Dictionary<string, List<string>>();
+	public readonly List<string> LogSections = new List<string>();
+
+	public DateTime CompileStartTime;
+
+	public bool DirtyLog = true;
+	public bool DirtyLogSections = true;
+
+	public void ClearAllLogs()
 	{
-		public readonly Dictionary<string, List<string>> Logs = new Dictionary<string, List<string>>();
-		public readonly List<string> LogSections = new List<string>();
-
-		public DateTime CompileStartTime;
-
-		public bool DirtyLog = true;
-		public bool DirtyLogSections = true;
-
-		public void ClearAllLogs()
+		lock (Logs)
 		{
-			lock (Logs)
-			{
-				Logs.Clear();
-				LogSections.Clear();
-			}
-
-			UpdateLog("Compiler", null);
+			Logs.Clear();
+			LogSections.Clear();
 		}
 
-		public void UpdateLog(string section, List<string> lines, bool dirty)
+		UpdateLog("Compiler", null);
+	}
+
+	public void UpdateLog(string section, List<string> lines, bool dirty)
+	{
+		lock (Logs)
 		{
-			lock (Logs)
+			if (!Logs.TryGetValue(section, out List<string> log))
 			{
-				if (!Logs.TryGetValue(section, out List<string> log))
-				{
-					log = new List<string>(100);
-					Logs.Add(section, log);
-					LogSections.Add(section);
-					DirtyLogSections = true;
-				}
-
-				lock (log)
-				{
-					log.AddRange(lines);
-				}
-
-				DirtyLog = dirty;
+				log = new List<string>(100);
+				Logs.Add(section, log);
+				LogSections.Add(section);
+				DirtyLogSections = true;
 			}
+
+			lock (log)
+			{
+				log.AddRange(lines);
+			}
+
+			DirtyLog = dirty;
+		}
+	}
+
+	private void UpdateLog(string section, string line)
+	{
+		lock (Logs)
+		{
+			if (!Logs.TryGetValue(section, out List<string> log))
+			{
+				log = new List<string>(100);
+				Logs.Add(section, log);
+				LogSections.Add(section);
+				DirtyLogSections = true;
+			}
+
+			lock (log)
+			{
+				log.Add(line);
+			}
+
+			DirtyLog = true;
+		}
+	}
+
+	public List<string> GetLog(string section)
+	{
+		lock (Logs)
+		{
+			if (Logs.TryGetValue(section, out List<string> log))
+				return log;
+
+			return null;
+		}
+	}
+
+	public void AddTraceEvent(CompilerEvent compilerEvent, string message, int threadID)
+	{
+		if (compilerEvent == CompilerEvent.Counter)
+		{
+			UpdateLog("Counters", message);
+			return;
 		}
 
-		private void UpdateLog(string section, string line)
+		var part = string.IsNullOrWhiteSpace(message) ? string.Empty : ": " + message;
+		var msg = $"{compilerEvent.ToText()}{part}";
+
+		var timelog = $"{(DateTime.Now - CompileStartTime).TotalSeconds:0.00} [{threadID}] {msg}";
+
+		if (compilerEvent == CompilerEvent.Error)
 		{
-			lock (Logs)
-			{
-				if (!Logs.TryGetValue(section, out List<string> log))
-				{
-					log = new List<string>(100);
-					Logs.Add(section, log);
-					LogSections.Add(section);
-					DirtyLogSections = true;
-				}
-
-				lock (log)
-				{
-					log.Add(line);
-				}
-
-				DirtyLog = true;
-			}
+			UpdateLog("Error", msg);
+			UpdateLog("Compiler", timelog);
 		}
-
-		public List<string> GetLog(string section)
+		if (compilerEvent == CompilerEvent.Exception)
 		{
-			lock (Logs)
-			{
-				if (Logs.TryGetValue(section, out List<string> log))
-					return log;
-
-				return null;
-			}
+			UpdateLog("Exception", msg);
+			UpdateLog("Compiler", timelog);
 		}
-
-		public void AddTraceEvent(CompilerEvent compilerEvent, string message, int threadID)
+		else
 		{
-			if (compilerEvent == CompilerEvent.Counter)
-			{
-				UpdateLog("Counters", message);
-				return;
-			}
-
-			var part = string.IsNullOrWhiteSpace(message) ? string.Empty : ": " + message;
-			var msg = $"{compilerEvent.ToText()}{part}";
-
-			var timelog = $"{(DateTime.Now - CompileStartTime).TotalSeconds:0.00} [{threadID}] {msg}";
-
-			if (compilerEvent == CompilerEvent.Error)
-			{
-				UpdateLog("Error", msg);
-				UpdateLog("Compiler", timelog);
-			}
-			if (compilerEvent == CompilerEvent.Exception)
-			{
-				UpdateLog("Exception", msg);
-				UpdateLog("Compiler", timelog);
-			}
-			else
-			{
-				UpdateLog("Compiler", timelog);
-			}
+			UpdateLog("Compiler", timelog);
 		}
+	}
 
-		public void SortLog(string section)
+	public void SortLog(string section)
+	{
+		lock (Logs)
 		{
-			lock (Logs)
+			if (Logs.ContainsKey(section))
 			{
-				if (Logs.ContainsKey(section))
-				{
-					var lines = Logs[section];
-					lines.Sort();
-					Logs[section] = lines;
-				}
+				var lines = Logs[section];
+				lines.Sort();
+				Logs[section] = lines;
 			}
 		}
 	}

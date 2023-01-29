@@ -5,242 +5,241 @@ using System.Text;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.MosaTypeSystem;
 
-namespace Mosa.Tool.Explorer
+namespace Mosa.Tool.Explorer;
+
+public class MethodStore
 {
-	public class MethodStore
+	private readonly Dictionary<MosaMethod, MethodData> methodDataStore = new Dictionary<MosaMethod, MethodData>();
+
+	public void Clear()
 	{
-		private readonly Dictionary<MosaMethod, MethodData> methodDataStore = new Dictionary<MosaMethod, MethodData>();
+		methodDataStore.Clear();
+	}
 
-		public void Clear()
+	private static void ClearMethodDataOnNewVersion(int version, MethodData methodData)
+	{
+		if (methodData.Version != version)
 		{
-			methodDataStore.Clear();
+			methodData.InstructionLogs.Clear();
+			methodData.OrderedDebugStageNames.Clear();
+			methodData.OrderedStageNames.Clear();
+			methodData.MethodCounters.Clear();
+			methodData.DebugLogs.Clear();
+			methodData.TransformLogs.Clear();
+			methodData.Version = version;
 		}
+	}
 
-		private static void ClearMethodDataOnNewVersion(int version, MethodData methodData)
+	public MethodData GetMethodData(MosaMethod method, bool create)
+	{
+		lock (methodDataStore)
 		{
-			if (methodData.Version != version)
+			if (!methodDataStore.TryGetValue(method, out MethodData methodData))
 			{
-				methodData.InstructionLogs.Clear();
-				methodData.OrderedDebugStageNames.Clear();
-				methodData.OrderedStageNames.Clear();
-				methodData.MethodCounters.Clear();
-				methodData.DebugLogs.Clear();
-				methodData.TransformLogs.Clear();
-				methodData.Version = version;
-			}
-		}
-
-		public MethodData GetMethodData(MosaMethod method, bool create)
-		{
-			lock (methodDataStore)
-			{
-				if (!methodDataStore.TryGetValue(method, out MethodData methodData))
+				if (create)
 				{
-					if (create)
-					{
-						methodData = new MethodData();
-						methodDataStore.Add(method, methodData);
-					}
+					methodData = new MethodData();
+					methodDataStore.Add(method, methodData);
 				}
-				return methodData;
 			}
+			return methodData;
 		}
+	}
 
-		public void SetInstructionTraceInformation(MosaMethod method, string stage, List<string> lines, int version)
+	public void SetInstructionTraceInformation(MosaMethod method, string stage, List<string> lines, int version)
+	{
+		var methodData = GetMethodData(method, true);
+
+		lock (methodData)
 		{
-			var methodData = GetMethodData(method, true);
+			ClearMethodDataOnNewVersion(version, methodData);
 
-			lock (methodData)
-			{
-				ClearMethodDataOnNewVersion(version, methodData);
-
-				methodData.OrderedStageNames.AddIfNew(stage);
-				methodData.InstructionLogs.Remove(stage);
-				methodData.InstructionLogs.Add(stage, lines);
-			}
+			methodData.OrderedStageNames.AddIfNew(stage);
+			methodData.InstructionLogs.Remove(stage);
+			methodData.InstructionLogs.Add(stage, lines);
 		}
+	}
 
-		public void SetTransformTraceInformation(MosaMethod method, string stage, List<string> lines, int version, int step)
+	public void SetTransformTraceInformation(MosaMethod method, string stage, List<string> lines, int version, int step)
+	{
+		var methodData = GetMethodData(method, true);
+
+		lock (methodData)
 		{
-			var methodData = GetMethodData(method, true);
+			ClearMethodDataOnNewVersion(version, methodData);
 
-			lock (methodData)
+			methodData.OrderedTransformStageNames.AddIfNew(stage);
+
+			if (!methodData.TransformLogs.TryGetValue(stage, out var directionary))
 			{
-				ClearMethodDataOnNewVersion(version, methodData);
-
-				methodData.OrderedTransformStageNames.AddIfNew(stage);
-
-				if (!methodData.TransformLogs.TryGetValue(stage, out var directionary))
-				{
-					directionary = new Dictionary<int, List<string>>();
-					methodData.TransformLogs.Add(stage, directionary);
-				}
-
-				directionary.Add(step, lines);
+				directionary = new Dictionary<int, List<string>>();
+				methodData.TransformLogs.Add(stage, directionary);
 			}
+
+			directionary.Add(step, lines);
 		}
+	}
 
-		public void SetDebugStageInformation(MosaMethod method, string stage, List<string> lines, int version)
+	public void SetDebugStageInformation(MosaMethod method, string stage, List<string> lines, int version)
+	{
+		var methodData = GetMethodData(method, true);
+
+		lock (methodData)
 		{
-			var methodData = GetMethodData(method, true);
+			ClearMethodDataOnNewVersion(version, methodData);
 
-			lock (methodData)
-			{
-				ClearMethodDataOnNewVersion(version, methodData);
-
-				methodData.OrderedDebugStageNames.AddIfNew(stage);
-				methodData.DebugLogs.Remove(stage);
-				methodData.DebugLogs.Add(stage, lines);
-			}
+			methodData.OrderedDebugStageNames.AddIfNew(stage);
+			methodData.DebugLogs.Remove(stage);
+			methodData.DebugLogs.Add(stage, lines);
 		}
+	}
 
-		public void SetMethodCounterInformation(MosaMethod method, List<string> lines, int version)
+	public void SetMethodCounterInformation(MosaMethod method, List<string> lines, int version)
+	{
+		var methodData = GetMethodData(method, true);
+
+		lock (methodData)
 		{
-			var methodData = GetMethodData(method, true);
+			ClearMethodDataOnNewVersion(version, methodData);
 
-			lock (methodData)
-			{
-				ClearMethodDataOnNewVersion(version, methodData);
-
-				methodData.MethodCounters = lines;
-			}
+			methodData.MethodCounters = lines;
 		}
+	}
 
-		public string GetStageInstructions(List<string> lines, string blockLabel, bool strip, bool pad)
+	public string GetStageInstructions(List<string> lines, string blockLabel, bool strip, bool pad)
+	{
+		var result = new StringBuilder();
+
+		if (lines == null)
+			return string.Empty;
+
+		if (string.IsNullOrWhiteSpace(blockLabel))
 		{
-			var result = new StringBuilder();
-
-			if (lines == null)
-				return string.Empty;
-
-			if (string.IsNullOrWhiteSpace(blockLabel))
-			{
-				foreach (var l in lines)
-				{
-					string line = l;
-
-					if (line.Contains("IR.BlockStart") || line.Contains("IR.BlockEnd"))
-						continue;
-
-					if (strip)
-						line = StripBracketContents(line);
-
-					if (pad)
-						line = PadInstruction(line);
-
-					line = Simplify(line);
-
-					result.Append(line);
-					result.Append('\n');
-				}
-
-				return result.ToString();
-			}
-
-			bool inBlock = false;
-
 			foreach (var l in lines)
 			{
 				string line = l;
 
-				if ((!inBlock) && line.StartsWith("Block #") && line.EndsWith(blockLabel))
-				{
-					inBlock = true;
-				}
+				if (line.Contains("IR.BlockStart") || line.Contains("IR.BlockEnd"))
+					continue;
 
-				if (inBlock)
-				{
-					if (line.Contains("IR.BlockStart") || line.Contains("IR.BlockEnd"))
-						continue;
+				if (strip)
+					line = StripBracketContents(line);
 
-					if (strip)
-						line = StripBracketContents(line);
+				if (pad)
+					line = PadInstruction(line);
 
-					if (pad)
-						line = PadInstruction(line);
+				line = Simplify(line);
 
-					line = Simplify(line);
-
-					result.Append(line);
-					result.Append("\n");
-
-					if (line.StartsWith("  Next:"))
-					{
-						return result.ToString();
-					}
-				}
+				result.Append(line);
+				result.Append('\n');
 			}
 
 			return result.ToString();
 		}
 
-		private string StripBracketContents(string s)
+		bool inBlock = false;
+
+		foreach (var l in lines)
 		{
-			if (string.IsNullOrEmpty(s) || s.Length < 5)
-				return s;
+			string line = l;
 
-			if (!char.IsDigit(s[0]))
-				return s;
-
-			int at = 0;
-
-			while (true)
+			if ((!inBlock) && line.StartsWith("Block #") && line.EndsWith(blockLabel))
 			{
-				int open = s.IndexOf(" [", at);
+				inBlock = true;
+			}
 
-				if (open < 0)
-					return s;
-
-				int close = s.IndexOf(']', open);
-
-				if (close < 0)
-					return s;
-
-				var part = s.Substring(open + 2, close - open - 2);
-
-				if (part == "NULL" || char.IsSymbol(part[0]) || char.IsPunctuation(part[0]))
-				{
-					at = close;
+			if (inBlock)
+			{
+				if (line.Contains("IR.BlockStart") || line.Contains("IR.BlockEnd"))
 					continue;
+
+				if (strip)
+					line = StripBracketContents(line);
+
+				if (pad)
+					line = PadInstruction(line);
+
+				line = Simplify(line);
+
+				result.Append(line);
+				result.Append("\n");
+
+				if (line.StartsWith("  Next:"))
+				{
+					return result.ToString();
 				}
-
-				s = s.Remove(open, close - open + 1);
-
-				at = open;
 			}
 		}
 
-		private string PadInstruction(string s)
-		{
-			const int padding = 30;
+		return result.ToString();
+	}
 
-			if (string.IsNullOrEmpty(s) || s.Length < 5)
-				return s;
-
-			if (!char.IsDigit(s[0]))
-				return s;
-
-			int first = s.IndexOf(':');
-
-			if (first < 0 || first > 15)
-				return s;
-
-			int second = s.IndexOf(' ', first + 2);
-
-			if (second < 0)
-				return s;
-
-			if (second > padding)
-				return s;
-
-			s = s.Insert(second, new string(' ', padding - second));
-
+	private string StripBracketContents(string s)
+	{
+		if (string.IsNullOrEmpty(s) || s.Length < 5)
 			return s;
-		}
 
-		private string Simplify(string s)
+		if (!char.IsDigit(s[0]))
+			return s;
+
+		int at = 0;
+
+		while (true)
 		{
-			return s.Replace("const=", string.Empty);
+			int open = s.IndexOf(" [", at);
+
+			if (open < 0)
+				return s;
+
+			int close = s.IndexOf(']', open);
+
+			if (close < 0)
+				return s;
+
+			var part = s.Substring(open + 2, close - open - 2);
+
+			if (part == "NULL" || char.IsSymbol(part[0]) || char.IsPunctuation(part[0]))
+			{
+				at = close;
+				continue;
+			}
+
+			s = s.Remove(open, close - open + 1);
+
+			at = open;
 		}
+	}
+
+	private string PadInstruction(string s)
+	{
+		const int padding = 30;
+
+		if (string.IsNullOrEmpty(s) || s.Length < 5)
+			return s;
+
+		if (!char.IsDigit(s[0]))
+			return s;
+
+		int first = s.IndexOf(':');
+
+		if (first < 0 || first > 15)
+			return s;
+
+		int second = s.IndexOf(' ', first + 2);
+
+		if (second < 0)
+			return s;
+
+		if (second > padding)
+			return s;
+
+		s = s.Insert(second, new string(' ', padding - second));
+
+		return s;
+	}
+
+	private string Simplify(string s)
+	{
+		return s.Replace("const=", string.Empty);
 	}
 }

@@ -7,127 +7,126 @@ using System.Windows.Forms;
 using Mosa.Tool.Debugger.GDB;
 using Mosa.Utility.Disassembler;
 
-namespace Mosa.Tool.Debugger.Views
+namespace Mosa.Tool.Debugger.Views;
+
+public partial class TraceView : DebugDockContent
 {
-	public partial class TraceView : DebugDockContent
+	public TraceView(MainForm mainForm)
+		: base(mainForm)
 	{
-		public TraceView(MainForm mainForm)
-			: base(mainForm)
-		{
-			InitializeComponent();
+		InitializeComponent();
 
-			dataGridView1.ColumnCount = 2;
-			dataGridView1.Columns[0].Name = "Address";
-			dataGridView1.Columns[1].Name = "Instruction";
-			dataGridView1.Columns[0].Width = 75;
-			dataGridView1.Columns[1].Width = 200;
+		dataGridView1.ColumnCount = 2;
+		dataGridView1.Columns[0].Name = "Address";
+		dataGridView1.Columns[1].Name = "Instruction";
+		dataGridView1.Columns[0].Width = 75;
+		dataGridView1.Columns[1].Width = 200;
+	}
+
+	private void SetupGrid()
+	{
+		if (dataGridView1.ColumnCount != 2)
+			return;
+
+		if (Platform == null)
+			return;
+
+		if (Platform.Registers == null)
+			return;
+
+		dataGridView1.ColumnCount = 2 + Platform.Registers.Count;
+
+		int index = 2;
+
+		foreach (var register in Platform.Registers)
+		{
+			dataGridView1.Columns[index].Name = register.Name;
+			dataGridView1.Columns[index].Width = 75;
+			index++;
 		}
+	}
 
-		private void SetupGrid()
+	public override void OnRunning()
+	{
+	}
+
+	public override void OnPause()
+	{
+		if (Platform == null)
+			return;
+
+		if (Platform.Registers == null)
+			return;
+
+		MemoryCache.ReadMemory(InstructionPointer, 16, OnMemoryRead);
+	}
+
+	private void OnMemoryRead(ulong address, byte[] bytes) => Invoke((MethodInvoker)(() => UpdateDisplay(address, bytes)));
+
+	private void UpdateDisplay(ulong address, byte[] memory)
+	{
+		SetupGrid();
+
+		string opinstruction = "N/A";
+
+		if (address == InstructionPointer)
 		{
-			if (dataGridView1.ColumnCount != 2)
-				return;
+			var disassembler = new Disassembler("x86");
+			disassembler.SetMemory(memory, address);
 
-			if (Platform == null)
-				return;
-
-			if (Platform.Registers == null)
-				return;
-
-			dataGridView1.ColumnCount = 2 + Platform.Registers.Count;
-
-			int index = 2;
-
-			foreach (var register in Platform.Registers)
+			foreach (var instruction in disassembler.Decode())
 			{
-				dataGridView1.Columns[index].Name = register.Name;
-				dataGridView1.Columns[index].Width = 75;
-				index++;
+				opinstruction = instruction.Instruction;
+				break;
 			}
 		}
 
-		public override void OnRunning()
+		var elements = new object[dataGridView1.ColumnCount];
+
+		elements[0] = Platform.InstructionPointer.ToHex();
+		elements[1] = opinstruction;
+
+		int index = 2;
+		foreach (var register in Platform.Registers)
 		{
+			elements[index++] = register.ToHex();
 		}
 
-		public override void OnPause()
+		dataGridView1.Rows.Add(elements);
+	}
+
+	private void btnClear_Click(object sender, EventArgs e)
+	{
+		dataGridView1.Rows.Clear();
+	}
+
+	private void btnSave_Click(object sender, EventArgs e)
+	{
+		if (saveFileDialog.ShowDialog() == DialogResult.OK)
 		{
-			if (Platform == null)
-				return;
+			var filename = saveFileDialog.FileName;
 
-			if (Platform.Registers == null)
-				return;
+			if (File.Exists(filename))
+				File.Delete(filename);
 
-			MemoryCache.ReadMemory(InstructionPointer, 16, OnMemoryRead);
-		}
-
-		private void OnMemoryRead(ulong address, byte[] bytes) => Invoke((MethodInvoker)(() => UpdateDisplay(address, bytes)));
-
-		private void UpdateDisplay(ulong address, byte[] memory)
-		{
-			SetupGrid();
-
-			string opinstruction = "N/A";
-
-			if (address == InstructionPointer)
+			int columnCount = dataGridView1.Columns.Count;
+			string columnNames = "";
+			string[] outputCsv = new string[dataGridView1.Rows.Count + 1];
+			for (int i = 0; i < columnCount; i++)
 			{
-				var disassembler = new Disassembler("x86");
-				disassembler.SetMemory(memory, address);
+				columnNames += dataGridView1.Columns[i].HeaderText.ToString() + "\t";
+			}
+			outputCsv[0] += columnNames;
 
-				foreach (var instruction in disassembler.Decode())
+			for (int i = 1; (i - 1) < dataGridView1.Rows.Count; i++)
+			{
+				for (int j = 0; j < columnCount; j++)
 				{
-					opinstruction = instruction.Instruction;
-					break;
+					outputCsv[i] += dataGridView1.Rows[i - 1].Cells[j].Value.ToString() + "\t";
 				}
 			}
 
-			var elements = new object[dataGridView1.ColumnCount];
-
-			elements[0] = Platform.InstructionPointer.ToHex();
-			elements[1] = opinstruction;
-
-			int index = 2;
-			foreach (var register in Platform.Registers)
-			{
-				elements[index++] = register.ToHex();
-			}
-
-			dataGridView1.Rows.Add(elements);
-		}
-
-		private void btnClear_Click(object sender, EventArgs e)
-		{
-			dataGridView1.Rows.Clear();
-		}
-
-		private void btnSave_Click(object sender, EventArgs e)
-		{
-			if (saveFileDialog.ShowDialog() == DialogResult.OK)
-			{
-				var filename = saveFileDialog.FileName;
-
-				if (File.Exists(filename))
-					File.Delete(filename);
-
-				int columnCount = dataGridView1.Columns.Count;
-				string columnNames = "";
-				string[] outputCsv = new string[dataGridView1.Rows.Count + 1];
-				for (int i = 0; i < columnCount; i++)
-				{
-					columnNames += dataGridView1.Columns[i].HeaderText.ToString() + "\t";
-				}
-				outputCsv[0] += columnNames;
-
-				for (int i = 1; (i - 1) < dataGridView1.Rows.Count; i++)
-				{
-					for (int j = 0; j < columnCount; j++)
-					{
-						outputCsv[i] += dataGridView1.Rows[i - 1].Cells[j].Value.ToString() + "\t";
-					}
-				}
-
-				File.WriteAllLines(filename, outputCsv, Encoding.UTF8);
-			}
+			File.WriteAllLines(filename, outputCsv, Encoding.UTF8);
 		}
 	}
 }
