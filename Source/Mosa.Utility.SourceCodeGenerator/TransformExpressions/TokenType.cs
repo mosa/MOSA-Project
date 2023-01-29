@@ -1,55 +1,54 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
+namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions;
+
+/// <summary>
+/// TokenType
+/// </summary>
+public enum TokenType
 {
-	/// <summary>
-	/// TokenType
-	/// </summary>
-	public enum TokenType
-	{
-		Unknown,
+	Unknown,
 
-		Word,  // temporary - until deducted
-		Method,
-		Instruction,
-		Label,
+	Word,  // temporary - until deducted
+	Method,
+	Instruction,
+	Label,
 
-		OpenParens, // syntax:
-		CloseParens,
-		OpenBracket,
-		CloseBracket,
-		Comma,
-		Underscore,
-		Period,
-		Hash,
-		Minus,
-		Dollar,
+	OpenParens, // syntax:
+	CloseParens,
+	OpenBracket,
+	CloseBracket,
+	Comma,
+	Underscore,
+	Period,
+	Hash,
+	Minus,
+	Dollar,
 
-		Greater,
-		Less,
-		Equal,
+	Greater,
+	Less,
+	Equal,
 
-		GreaterEqual,
-		LessEqual,
-		NotEqual,
-		Always,
+	GreaterEqual,
+	LessEqual,
+	NotEqual,
+	Always,
 
-		Number,     // constants:
-		IntegerConstant,
+	Number,     // constants:
+	IntegerConstant,
 
-		//LongConstant,
-		DoubleConstant,
+	//LongConstant,
+	DoubleConstant,
 
-		FloatConstant,
+	FloatConstant,
 
-		And,    // boolean logic:
-		Or,
-		Not,
+	And,    // boolean logic:
+	Or,
+	Not,
 
-		OpenCurly,
-		CloseCurly,
+	OpenCurly,
+	CloseCurly,
 
-		At,
-		Percent,
-	}
+	At,
+	Percent,
 }
