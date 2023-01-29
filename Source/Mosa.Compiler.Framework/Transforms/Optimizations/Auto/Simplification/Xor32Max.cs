@@ -4,65 +4,64 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
+
+/// <summary>
+/// Xor32Max
+/// </summary>
+public sealed class Xor32Max : BaseTransform
 {
-	/// <summary>
-	/// Xor32Max
-	/// </summary>
-	public sealed class Xor32Max : BaseTransform
+	public Xor32Max() : base(IRInstruction.Xor32, TransformType.Auto | TransformType.Optimization)
 	{
-		public Xor32Max() : base(IRInstruction.Xor32, TransformType.Auto | TransformType.Optimization)
-		{
-		}
-
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand2.IsResolvedConstant)
-				return false;
-
-			if (context.Operand2.ConstantUnsigned64 != 0xFFFFFFFF)
-				return false;
-
-			return true;
-		}
-
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
-
-			var t1 = context.Operand1;
-
-			context.SetInstruction(IRInstruction.Not32, result, t1);
-		}
 	}
 
-	/// <summary>
-	/// Xor32Max_v1
-	/// </summary>
-	public sealed class Xor32Max_v1 : BaseTransform
+	public override bool Match(Context context, TransformContext transform)
 	{
-		public Xor32Max_v1() : base(IRInstruction.Xor32, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+		if (!context.Operand2.IsResolvedConstant)
+			return false;
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand1.IsResolvedConstant)
-				return false;
+		if (context.Operand2.ConstantUnsigned64 != 0xFFFFFFFF)
+			return false;
 
-			if (context.Operand1.ConstantUnsigned64 != 0xFFFFFFFF)
-				return false;
+		return true;
+	}
 
-			return true;
-		}
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
+		var t1 = context.Operand1;
 
-			var t1 = context.Operand2;
+		context.SetInstruction(IRInstruction.Not32, result, t1);
+	}
+}
 
-			context.SetInstruction(IRInstruction.Not32, result, t1);
-		}
+/// <summary>
+/// Xor32Max_v1
+/// </summary>
+public sealed class Xor32Max_v1 : BaseTransform
+{
+	public Xor32Max_v1() : base(IRInstruction.Xor32, TransformType.Auto | TransformType.Optimization)
+	{
+	}
+
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!context.Operand1.IsResolvedConstant)
+			return false;
+
+		if (context.Operand1.ConstantUnsigned64 != 0xFFFFFFFF)
+			return false;
+
+		return true;
+	}
+
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
+
+		var t1 = context.Operand2;
+
+		context.SetInstruction(IRInstruction.Not32, result, t1);
 	}
 }

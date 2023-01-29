@@ -4,34 +4,33 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
+
+/// <summary>
+/// Xor32Same
+/// </summary>
+public sealed class Xor32Same : BaseTransform
 {
-	/// <summary>
-	/// Xor32Same
-	/// </summary>
-	public sealed class Xor32Same : BaseTransform
+	public Xor32Same() : base(IRInstruction.Xor32, TransformType.Auto | TransformType.Optimization)
 	{
-		public Xor32Same() : base(IRInstruction.Xor32, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+	}
 
-		public override int Priority => 80;
+	public override int Priority => 80;
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!AreSame(context.Operand1, context.Operand2))
-				return false;
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!AreSame(context.Operand1, context.Operand2))
+			return false;
 
-			return true;
-		}
+		return true;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
 
-			var e1 = transform.CreateConstant(To32(0));
+		var e1 = transform.CreateConstant(To32(0));
 
-			context.SetInstruction(IRInstruction.Move32, result, e1);
-		}
+		context.SetInstruction(IRInstruction.Move32, result, e1);
 	}
 }

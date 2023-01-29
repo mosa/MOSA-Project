@@ -4,69 +4,68 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
+
+/// <summary>
+/// Or32Max
+/// </summary>
+public sealed class Or32Max : BaseTransform
 {
-	/// <summary>
-	/// Or32Max
-	/// </summary>
-	public sealed class Or32Max : BaseTransform
+	public Or32Max() : base(IRInstruction.Or32, TransformType.Auto | TransformType.Optimization)
 	{
-		public Or32Max() : base(IRInstruction.Or32, TransformType.Auto | TransformType.Optimization)
-		{
-		}
-
-		public override int Priority => 80;
-
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand2.IsResolvedConstant)
-				return false;
-
-			if (context.Operand2.ConstantUnsigned64 != 0xFFFFFFFF)
-				return false;
-
-			return true;
-		}
-
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
-
-			var e1 = transform.CreateConstant(To32(0xFFFFFFFF));
-
-			context.SetInstruction(IRInstruction.Move32, result, e1);
-		}
 	}
 
-	/// <summary>
-	/// Or32Max_v1
-	/// </summary>
-	public sealed class Or32Max_v1 : BaseTransform
+	public override int Priority => 80;
+
+	public override bool Match(Context context, TransformContext transform)
 	{
-		public Or32Max_v1() : base(IRInstruction.Or32, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+		if (!context.Operand2.IsResolvedConstant)
+			return false;
 
-		public override int Priority => 80;
+		if (context.Operand2.ConstantUnsigned64 != 0xFFFFFFFF)
+			return false;
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand1.IsResolvedConstant)
-				return false;
+		return true;
+	}
 
-			if (context.Operand1.ConstantUnsigned64 != 0xFFFFFFFF)
-				return false;
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
 
-			return true;
-		}
+		var e1 = transform.CreateConstant(To32(0xFFFFFFFF));
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
+		context.SetInstruction(IRInstruction.Move32, result, e1);
+	}
+}
 
-			var e1 = transform.CreateConstant(To32(0xFFFFFFFF));
+/// <summary>
+/// Or32Max_v1
+/// </summary>
+public sealed class Or32Max_v1 : BaseTransform
+{
+	public Or32Max_v1() : base(IRInstruction.Or32, TransformType.Auto | TransformType.Optimization)
+	{
+	}
 
-			context.SetInstruction(IRInstruction.Move32, result, e1);
-		}
+	public override int Priority => 80;
+
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!context.Operand1.IsResolvedConstant)
+			return false;
+
+		if (context.Operand1.ConstantUnsigned64 != 0xFFFFFFFF)
+			return false;
+
+		return true;
+	}
+
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
+
+		var e1 = transform.CreateConstant(To32(0xFFFFFFFF));
+
+		context.SetInstruction(IRInstruction.Move32, result, e1);
 	}
 }

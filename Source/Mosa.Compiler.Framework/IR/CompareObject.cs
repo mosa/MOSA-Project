@@ -4,19 +4,18 @@
 
 using Mosa.Compiler.MosaTypeSystem;
 
-namespace Mosa.Compiler.Framework.IR
-{
-	/// <summary>
-	/// CompareObject
-	/// </summary>
-	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
-	public sealed class CompareObject : BaseIRInstruction
-	{
-		public CompareObject()
-			: base(2, 1)
-		{
-		}
+namespace Mosa.Compiler.Framework.IR;
 
-		public override BuiltInType ResultType { get { return BuiltInType.Boolean; } }
+/// <summary>
+/// CompareObject
+/// </summary>
+/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
+public sealed class CompareObject : BaseIRInstruction
+{
+	public CompareObject()
+		: base(2, 1)
+	{
 	}
+
+	public override BuiltInType ResultType => BuiltInType.Boolean;
 }

@@ -4,36 +4,35 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
+
+/// <summary>
+/// SignExtend16x32
+/// </summary>
+public sealed class SignExtend16x32 : BaseTransform
 {
-	/// <summary>
-	/// SignExtend16x32
-	/// </summary>
-	public sealed class SignExtend16x32 : BaseTransform
+	public SignExtend16x32() : base(IRInstruction.SignExtend16x32, TransformType.Auto | TransformType.Optimization)
 	{
-		public SignExtend16x32() : base(IRInstruction.SignExtend16x32, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+	}
 
-		public override int Priority => 100;
+	public override int Priority => 100;
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!IsResolvedConstant(context.Operand1))
-				return false;
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!IsResolvedConstant(context.Operand1))
+			return false;
 
-			return true;
-		}
+		return true;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
 
-			var t1 = context.Operand1;
+		var t1 = context.Operand1;
 
-			var e1 = transform.CreateConstant(SignExtend16x32(ToShort(t1)));
+		var e1 = transform.CreateConstant(SignExtend16x32(ToShort(t1)));
 
-			context.SetInstruction(IRInstruction.Move32, result, e1);
-		}
+		context.SetInstruction(IRInstruction.Move32, result, e1);
 	}
 }

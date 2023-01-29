@@ -4,36 +4,35 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
+
+/// <summary>
+/// AddCarryIn32Zero2
+/// </summary>
+public sealed class AddCarryIn32Zero2 : BaseTransform
 {
-	/// <summary>
-	/// AddCarryIn32Zero2
-	/// </summary>
-	public sealed class AddCarryIn32Zero2 : BaseTransform
+	public AddCarryIn32Zero2() : base(IRInstruction.AddCarryIn32, TransformType.Auto | TransformType.Optimization)
 	{
-		public AddCarryIn32Zero2() : base(IRInstruction.AddCarryIn32, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+	}
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand2.IsResolvedConstant)
-				return false;
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!context.Operand2.IsResolvedConstant)
+			return false;
 
-			if (context.Operand2.ConstantUnsigned64 != 0)
-				return false;
+		if (context.Operand2.ConstantUnsigned64 != 0)
+			return false;
 
-			return true;
-		}
+		return true;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
 
-			var t1 = context.Operand1;
-			var t2 = context.Operand3;
+		var t1 = context.Operand1;
+		var t2 = context.Operand3;
 
-			context.SetInstruction(IRInstruction.Add32, result, t1, t2);
-		}
+		context.SetInstruction(IRInstruction.Add32, result, t1, t2);
 	}
 }

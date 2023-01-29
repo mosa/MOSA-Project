@@ -4,52 +4,51 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x64.Instructions
+namespace Mosa.Platform.x64.Instructions;
+
+/// <summary>
+/// Mul32
+/// </summary>
+/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
+public sealed class Mul32 : X64Instruction
 {
-	/// <summary>
-	/// Mul32
-	/// </summary>
-	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
-	public sealed class Mul32 : X64Instruction
+	internal Mul32()
+		: base(2, 2)
 	{
-		internal Mul32()
-			: base(2, 2)
-		{
-		}
+	}
 
-		public override bool IsCommutative { get { return true; } }
+	public override bool IsCommutative => true;
 
-		public override bool IsZeroFlagUnchanged { get { return true; } }
+	public override bool IsZeroFlagUnchanged => true;
 
-		public override bool IsZeroFlagUndefined { get { return true; } }
+	public override bool IsZeroFlagUndefined => true;
 
-		public override bool IsCarryFlagModified { get { return true; } }
+	public override bool IsCarryFlagModified => true;
 
-		public override bool IsSignFlagUnchanged { get { return true; } }
+	public override bool IsSignFlagUnchanged => true;
 
-		public override bool IsSignFlagUndefined { get { return true; } }
+	public override bool IsSignFlagUndefined => true;
 
-		public override bool IsOverflowFlagModified { get { return true; } }
+	public override bool IsOverflowFlagModified => true;
 
-		public override bool IsParityFlagUnchanged { get { return true; } }
+	public override bool IsParityFlagUnchanged => true;
 
-		public override bool IsParityFlagUndefined { get { return true; } }
+	public override bool IsParityFlagUndefined => true;
 
-		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
-		{
-			System.Diagnostics.Debug.Assert(node.ResultCount == 2);
-			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
+	public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
+	{
+		System.Diagnostics.Debug.Assert(node.ResultCount == 2);
+		System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
-			opcodeEncoder.SuppressByte(0x40);
-			opcodeEncoder.Append4Bits(0b0100);
-			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append1Bit((node.Operand2.Register.RegisterCode >> 3));
-			opcodeEncoder.Append8Bits(0xF7);
-			opcodeEncoder.Append2Bits(0b11);
-			opcodeEncoder.Append3Bits(0b100);
-			opcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
-		}
+		opcodeEncoder.SuppressByte(0x40);
+		opcodeEncoder.Append4Bits(0b0100);
+		opcodeEncoder.Append1Bit(0b0);
+		opcodeEncoder.Append1Bit(0b0);
+		opcodeEncoder.Append1Bit(0b0);
+		opcodeEncoder.Append1Bit(node.Operand2.Register.RegisterCode >> 3);
+		opcodeEncoder.Append8Bits(0xF7);
+		opcodeEncoder.Append2Bits(0b11);
+		opcodeEncoder.Append3Bits(0b100);
+		opcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
 	}
 }

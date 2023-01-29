@@ -2,22 +2,21 @@
 
 using System.Collections.Generic;
 
-namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
+namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions;
+
+public class Method
 {
-	public class Method
+	public string MethodName { get; set; }
+
+	public bool IsNegated { get; set; } = false;
+
+	public List<Operand> Parameters { get; } = new List<Operand>();
+
+	public override string ToString()
 	{
-		public string MethodName { get; set; }
-
-		public bool IsNegated { get; set; } = false;
-
-		public List<Operand> Parameters { get; } = new List<Operand>();
-
-		public override string ToString()
-		{
-			if (IsNegated)
-				return $"!{MethodName}";
-			else
-				return $"{MethodName}";
-		}
+		if (IsNegated)
+			return $"!{MethodName}";
+		else
+			return $"{MethodName}";
 	}
 }

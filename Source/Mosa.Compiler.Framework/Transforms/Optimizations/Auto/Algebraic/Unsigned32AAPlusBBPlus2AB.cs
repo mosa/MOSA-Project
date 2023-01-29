@@ -4,749 +4,748 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Algebraic
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Algebraic;
+
+/// <summary>
+/// Unsigned32AAPlusBBPlus2AB
+/// </summary>
+public sealed class Unsigned32AAPlusBBPlus2AB : BaseTransform
 {
-	/// <summary>
-	/// Unsigned32AAPlusBBPlus2AB
-	/// </summary>
-	public sealed class Unsigned32AAPlusBBPlus2AB : BaseTransform
+	public Unsigned32AAPlusBBPlus2AB() : base(IRInstruction.Add32, TransformType.Auto | TransformType.Optimization)
 	{
-		public Unsigned32AAPlusBBPlus2AB() : base(IRInstruction.Add32, TransformType.Auto | TransformType.Optimization)
-		{
-		}
-
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand1.IsVirtualRegister)
-				return false;
-
-			if (!context.Operand2.IsVirtualRegister)
-				return false;
-
-			if (context.Operand1.Definitions.Count != 1)
-				return false;
-
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.Add32)
-				return false;
-
-			if (!context.Operand1.Definitions[0].Operand1.IsVirtualRegister)
-				return false;
-
-			if (!context.Operand1.Definitions[0].Operand2.IsVirtualRegister)
-				return false;
-
-			if (context.Operand1.Definitions[0].Operand1.Definitions.Count != 1)
-				return false;
-
-			if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
-				return false;
-
-			if (context.Operand1.Definitions[0].Operand2.Definitions.Count != 1)
-				return false;
-
-			if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
-				return false;
-
-			if (context.Operand2.Definitions.Count != 1)
-				return false;
-
-			if (context.Operand2.Definitions[0].Instruction != IRInstruction.ShiftLeft32)
-				return false;
-
-			if (!context.Operand2.Definitions[0].Operand1.IsVirtualRegister)
-				return false;
-
-			if (!context.Operand2.Definitions[0].Operand2.IsResolvedConstant)
-				return false;
-
-			if (context.Operand2.Definitions[0].Operand2.ConstantUnsigned64 != 1)
-				return false;
-
-			if (context.Operand2.Definitions[0].Operand1.Definitions.Count != 1)
-				return false;
-
-			if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulSigned32)
-				return false;
-
-			if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2))
-				return false;
-
-			if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand1.Definitions[0].Operand1))
-				return false;
-
-			if (!AreSame(context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1, context.Operand1.Definitions[0].Operand2.Definitions[0].Operand2))
-				return false;
-
-			if (!AreSame(context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand1.Definitions[0].Operand2))
-				return false;
-
-			return true;
-		}
-
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
-
-			var t1 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1;
-			var t2 = context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1;
-
-			var v1 = transform.AllocateVirtualRegister(transform.I4);
-			var v2 = transform.AllocateVirtualRegister(transform.I4);
-
-			context.SetInstruction(IRInstruction.Add32, v1, t1, t2);
-			context.AppendInstruction(IRInstruction.Add32, v2, t1, t2);
-			context.AppendInstruction(IRInstruction.MulUnsigned32, result, v2, v1);
-		}
 	}
 
-	/// <summary>
-	/// Unsigned32AAPlusBBPlus2AB_v1
-	/// </summary>
-	public sealed class Unsigned32AAPlusBBPlus2AB_v1 : BaseTransform
+	public override bool Match(Context context, TransformContext transform)
 	{
-		public Unsigned32AAPlusBBPlus2AB_v1() : base(IRInstruction.Add32, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+		if (!context.Operand1.IsVirtualRegister)
+			return false;
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand1.IsVirtualRegister)
-				return false;
+		if (!context.Operand2.IsVirtualRegister)
+			return false;
 
-			if (!context.Operand2.IsVirtualRegister)
-				return false;
+		if (context.Operand1.Definitions.Count != 1)
+			return false;
 
-			if (context.Operand1.Definitions.Count != 1)
-				return false;
+		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Add32)
+			return false;
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.ShiftLeft32)
-				return false;
+		if (!context.Operand1.Definitions[0].Operand1.IsVirtualRegister)
+			return false;
 
-			if (!context.Operand1.Definitions[0].Operand1.IsVirtualRegister)
-				return false;
+		if (!context.Operand1.Definitions[0].Operand2.IsVirtualRegister)
+			return false;
 
-			if (!context.Operand1.Definitions[0].Operand2.IsResolvedConstant)
-				return false;
+		if (context.Operand1.Definitions[0].Operand1.Definitions.Count != 1)
+			return false;
 
-			if (context.Operand1.Definitions[0].Operand2.ConstantUnsigned64 != 1)
-				return false;
+		if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			return false;
 
-			if (context.Operand1.Definitions[0].Operand1.Definitions.Count != 1)
-				return false;
+		if (context.Operand1.Definitions[0].Operand2.Definitions.Count != 1)
+			return false;
 
-			if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulSigned32)
-				return false;
+		if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			return false;
 
-			if (context.Operand2.Definitions.Count != 1)
-				return false;
+		if (context.Operand2.Definitions.Count != 1)
+			return false;
 
-			if (context.Operand2.Definitions[0].Instruction != IRInstruction.Add32)
-				return false;
+		if (context.Operand2.Definitions[0].Instruction != IRInstruction.ShiftLeft32)
+			return false;
 
-			if (!context.Operand2.Definitions[0].Operand1.IsVirtualRegister)
-				return false;
+		if (!context.Operand2.Definitions[0].Operand1.IsVirtualRegister)
+			return false;
 
-			if (!context.Operand2.Definitions[0].Operand2.IsVirtualRegister)
-				return false;
+		if (!context.Operand2.Definitions[0].Operand2.IsResolvedConstant)
+			return false;
 
-			if (context.Operand2.Definitions[0].Operand1.Definitions.Count != 1)
-				return false;
+		if (context.Operand2.Definitions[0].Operand2.ConstantUnsigned64 != 1)
+			return false;
 
-			if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
-				return false;
+		if (context.Operand2.Definitions[0].Operand1.Definitions.Count != 1)
+			return false;
 
-			if (context.Operand2.Definitions[0].Operand2.Definitions.Count != 1)
-				return false;
+		if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulSigned32)
+			return false;
 
-			if (context.Operand2.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
-				return false;
+		if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2))
+			return false;
 
-			if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand1.Definitions[0].Operand1))
-				return false;
+		if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand1.Definitions[0].Operand1))
+			return false;
 
-			if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand1.Definitions[0].Operand2))
-				return false;
+		if (!AreSame(context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1, context.Operand1.Definitions[0].Operand2.Definitions[0].Operand2))
+			return false;
 
-			if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2, context.Operand2.Definitions[0].Operand2.Definitions[0].Operand1))
-				return false;
+		if (!AreSame(context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand1.Definitions[0].Operand2))
+			return false;
 
-			if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2, context.Operand2.Definitions[0].Operand2.Definitions[0].Operand2))
-				return false;
-
-			return true;
-		}
-
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
-
-			var t1 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1;
-			var t2 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2;
-
-			var v1 = transform.AllocateVirtualRegister(transform.I4);
-			var v2 = transform.AllocateVirtualRegister(transform.I4);
-
-			context.SetInstruction(IRInstruction.Add32, v1, t1, t2);
-			context.AppendInstruction(IRInstruction.Add32, v2, t1, t2);
-			context.AppendInstruction(IRInstruction.MulUnsigned32, result, v2, v1);
-		}
+		return true;
 	}
 
-	/// <summary>
-	/// Unsigned32AAPlusBBPlus2AB_v2
-	/// </summary>
-	public sealed class Unsigned32AAPlusBBPlus2AB_v2 : BaseTransform
+	public override void Transform(Context context, TransformContext transform)
 	{
-		public Unsigned32AAPlusBBPlus2AB_v2() : base(IRInstruction.Add32, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+		var result = context.Result;
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand1.IsVirtualRegister)
-				return false;
+		var t1 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1;
+		var t2 = context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1;
 
-			if (!context.Operand2.IsVirtualRegister)
-				return false;
+		var v1 = transform.AllocateVirtualRegister(transform.I4);
+		var v2 = transform.AllocateVirtualRegister(transform.I4);
 
-			if (context.Operand1.Definitions.Count != 1)
-				return false;
+		context.SetInstruction(IRInstruction.Add32, v1, t1, t2);
+		context.AppendInstruction(IRInstruction.Add32, v2, t1, t2);
+		context.AppendInstruction(IRInstruction.MulUnsigned32, result, v2, v1);
+	}
+}
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.Add32)
-				return false;
-
-			if (!context.Operand1.Definitions[0].Operand1.IsVirtualRegister)
-				return false;
-
-			if (!context.Operand1.Definitions[0].Operand2.IsVirtualRegister)
-				return false;
-
-			if (context.Operand1.Definitions[0].Operand1.Definitions.Count != 1)
-				return false;
-
-			if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
-				return false;
-
-			if (context.Operand1.Definitions[0].Operand2.Definitions.Count != 1)
-				return false;
-
-			if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
-				return false;
-
-			if (context.Operand2.Definitions.Count != 1)
-				return false;
-
-			if (context.Operand2.Definitions[0].Instruction != IRInstruction.ShiftLeft32)
-				return false;
-
-			if (!context.Operand2.Definitions[0].Operand1.IsVirtualRegister)
-				return false;
-
-			if (!context.Operand2.Definitions[0].Operand2.IsResolvedConstant)
-				return false;
-
-			if (context.Operand2.Definitions[0].Operand2.ConstantUnsigned64 != 1)
-				return false;
-
-			if (context.Operand2.Definitions[0].Operand1.Definitions.Count != 1)
-				return false;
-
-			if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulSigned32)
-				return false;
-
-			if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2))
-				return false;
-
-			if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand1.Definitions[0].Operand2))
-				return false;
-
-			if (!AreSame(context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1, context.Operand1.Definitions[0].Operand2.Definitions[0].Operand2))
-				return false;
-
-			if (!AreSame(context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand1.Definitions[0].Operand1))
-				return false;
-
-			return true;
-		}
-
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
-
-			var t1 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1;
-			var t2 = context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1;
-
-			var v1 = transform.AllocateVirtualRegister(transform.I4);
-			var v2 = transform.AllocateVirtualRegister(transform.I4);
-
-			context.SetInstruction(IRInstruction.Add32, v1, t1, t2);
-			context.AppendInstruction(IRInstruction.Add32, v2, t1, t2);
-			context.AppendInstruction(IRInstruction.MulUnsigned32, result, v2, v1);
-		}
+/// <summary>
+/// Unsigned32AAPlusBBPlus2AB_v1
+/// </summary>
+public sealed class Unsigned32AAPlusBBPlus2AB_v1 : BaseTransform
+{
+	public Unsigned32AAPlusBBPlus2AB_v1() : base(IRInstruction.Add32, TransformType.Auto | TransformType.Optimization)
+	{
 	}
 
-	/// <summary>
-	/// Unsigned32AAPlusBBPlus2AB_v3
-	/// </summary>
-	public sealed class Unsigned32AAPlusBBPlus2AB_v3 : BaseTransform
+	public override bool Match(Context context, TransformContext transform)
 	{
-		public Unsigned32AAPlusBBPlus2AB_v3() : base(IRInstruction.Add32, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+		if (!context.Operand1.IsVirtualRegister)
+			return false;
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand1.IsVirtualRegister)
-				return false;
+		if (!context.Operand2.IsVirtualRegister)
+			return false;
 
-			if (!context.Operand2.IsVirtualRegister)
-				return false;
+		if (context.Operand1.Definitions.Count != 1)
+			return false;
 
-			if (context.Operand1.Definitions.Count != 1)
-				return false;
+		if (context.Operand1.Definitions[0].Instruction != IRInstruction.ShiftLeft32)
+			return false;
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.ShiftLeft32)
-				return false;
+		if (!context.Operand1.Definitions[0].Operand1.IsVirtualRegister)
+			return false;
 
-			if (!context.Operand1.Definitions[0].Operand1.IsVirtualRegister)
-				return false;
+		if (!context.Operand1.Definitions[0].Operand2.IsResolvedConstant)
+			return false;
 
-			if (!context.Operand1.Definitions[0].Operand2.IsResolvedConstant)
-				return false;
+		if (context.Operand1.Definitions[0].Operand2.ConstantUnsigned64 != 1)
+			return false;
 
-			if (context.Operand1.Definitions[0].Operand2.ConstantUnsigned64 != 1)
-				return false;
+		if (context.Operand1.Definitions[0].Operand1.Definitions.Count != 1)
+			return false;
 
-			if (context.Operand1.Definitions[0].Operand1.Definitions.Count != 1)
-				return false;
+		if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulSigned32)
+			return false;
 
-			if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulSigned32)
-				return false;
+		if (context.Operand2.Definitions.Count != 1)
+			return false;
 
-			if (context.Operand2.Definitions.Count != 1)
-				return false;
+		if (context.Operand2.Definitions[0].Instruction != IRInstruction.Add32)
+			return false;
 
-			if (context.Operand2.Definitions[0].Instruction != IRInstruction.Add32)
-				return false;
+		if (!context.Operand2.Definitions[0].Operand1.IsVirtualRegister)
+			return false;
 
-			if (!context.Operand2.Definitions[0].Operand1.IsVirtualRegister)
-				return false;
+		if (!context.Operand2.Definitions[0].Operand2.IsVirtualRegister)
+			return false;
 
-			if (!context.Operand2.Definitions[0].Operand2.IsVirtualRegister)
-				return false;
+		if (context.Operand2.Definitions[0].Operand1.Definitions.Count != 1)
+			return false;
 
-			if (context.Operand2.Definitions[0].Operand1.Definitions.Count != 1)
-				return false;
+		if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			return false;
 
-			if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
-				return false;
+		if (context.Operand2.Definitions[0].Operand2.Definitions.Count != 1)
+			return false;
 
-			if (context.Operand2.Definitions[0].Operand2.Definitions.Count != 1)
-				return false;
+		if (context.Operand2.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			return false;
 
-			if (context.Operand2.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
-				return false;
+		if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand1.Definitions[0].Operand1))
+			return false;
 
-			if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand2.Definitions[0].Operand1))
-				return false;
+		if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand1.Definitions[0].Operand2))
+			return false;
 
-			if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand2.Definitions[0].Operand2))
-				return false;
+		if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2, context.Operand2.Definitions[0].Operand2.Definitions[0].Operand1))
+			return false;
 
-			if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2, context.Operand2.Definitions[0].Operand1.Definitions[0].Operand1))
-				return false;
+		if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2, context.Operand2.Definitions[0].Operand2.Definitions[0].Operand2))
+			return false;
 
-			if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2, context.Operand2.Definitions[0].Operand1.Definitions[0].Operand2))
-				return false;
-
-			return true;
-		}
-
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
-
-			var t1 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1;
-			var t2 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2;
-
-			var v1 = transform.AllocateVirtualRegister(transform.I4);
-			var v2 = transform.AllocateVirtualRegister(transform.I4);
-
-			context.SetInstruction(IRInstruction.Add32, v1, t2, t1);
-			context.AppendInstruction(IRInstruction.Add32, v2, t2, t1);
-			context.AppendInstruction(IRInstruction.MulUnsigned32, result, v2, v1);
-		}
+		return true;
 	}
 
-	/// <summary>
-	/// Unsigned32AAPlusBBPlus2AB_v4
-	/// </summary>
-	public sealed class Unsigned32AAPlusBBPlus2AB_v4 : BaseTransform
+	public override void Transform(Context context, TransformContext transform)
 	{
-		public Unsigned32AAPlusBBPlus2AB_v4() : base(IRInstruction.Add32, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+		var result = context.Result;
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand1.IsVirtualRegister)
-				return false;
+		var t1 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1;
+		var t2 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2;
 
-			if (!context.Operand2.IsVirtualRegister)
-				return false;
+		var v1 = transform.AllocateVirtualRegister(transform.I4);
+		var v2 = transform.AllocateVirtualRegister(transform.I4);
 
-			if (context.Operand1.Definitions.Count != 1)
-				return false;
+		context.SetInstruction(IRInstruction.Add32, v1, t1, t2);
+		context.AppendInstruction(IRInstruction.Add32, v2, t1, t2);
+		context.AppendInstruction(IRInstruction.MulUnsigned32, result, v2, v1);
+	}
+}
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.Add32)
-				return false;
-
-			if (!context.Operand1.Definitions[0].Operand1.IsVirtualRegister)
-				return false;
-
-			if (!context.Operand1.Definitions[0].Operand2.IsVirtualRegister)
-				return false;
-
-			if (context.Operand1.Definitions[0].Operand1.Definitions.Count != 1)
-				return false;
-
-			if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
-				return false;
-
-			if (context.Operand1.Definitions[0].Operand2.Definitions.Count != 1)
-				return false;
-
-			if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
-				return false;
-
-			if (context.Operand2.Definitions.Count != 1)
-				return false;
-
-			if (context.Operand2.Definitions[0].Instruction != IRInstruction.ShiftLeft32)
-				return false;
-
-			if (!context.Operand2.Definitions[0].Operand1.IsVirtualRegister)
-				return false;
-
-			if (!context.Operand2.Definitions[0].Operand2.IsResolvedConstant)
-				return false;
-
-			if (context.Operand2.Definitions[0].Operand2.ConstantUnsigned64 != 1)
-				return false;
-
-			if (context.Operand2.Definitions[0].Operand1.Definitions.Count != 1)
-				return false;
-
-			if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulSigned32)
-				return false;
-
-			if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2))
-				return false;
-
-			if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand1.Definitions[0].Operand2))
-				return false;
-
-			if (!AreSame(context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1, context.Operand1.Definitions[0].Operand2.Definitions[0].Operand2))
-				return false;
-
-			if (!AreSame(context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand1.Definitions[0].Operand1))
-				return false;
-
-			return true;
-		}
-
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
-
-			var t1 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1;
-			var t2 = context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1;
-
-			var v1 = transform.AllocateVirtualRegister(transform.I4);
-			var v2 = transform.AllocateVirtualRegister(transform.I4);
-
-			context.SetInstruction(IRInstruction.Add32, v1, t2, t1);
-			context.AppendInstruction(IRInstruction.Add32, v2, t2, t1);
-			context.AppendInstruction(IRInstruction.MulUnsigned32, result, v2, v1);
-		}
+/// <summary>
+/// Unsigned32AAPlusBBPlus2AB_v2
+/// </summary>
+public sealed class Unsigned32AAPlusBBPlus2AB_v2 : BaseTransform
+{
+	public Unsigned32AAPlusBBPlus2AB_v2() : base(IRInstruction.Add32, TransformType.Auto | TransformType.Optimization)
+	{
 	}
 
-	/// <summary>
-	/// Unsigned32AAPlusBBPlus2AB_v5
-	/// </summary>
-	public sealed class Unsigned32AAPlusBBPlus2AB_v5 : BaseTransform
+	public override bool Match(Context context, TransformContext transform)
 	{
-		public Unsigned32AAPlusBBPlus2AB_v5() : base(IRInstruction.Add32, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+		if (!context.Operand1.IsVirtualRegister)
+			return false;
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand1.IsVirtualRegister)
-				return false;
+		if (!context.Operand2.IsVirtualRegister)
+			return false;
 
-			if (!context.Operand2.IsVirtualRegister)
-				return false;
+		if (context.Operand1.Definitions.Count != 1)
+			return false;
 
-			if (context.Operand1.Definitions.Count != 1)
-				return false;
+		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Add32)
+			return false;
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.ShiftLeft32)
-				return false;
+		if (!context.Operand1.Definitions[0].Operand1.IsVirtualRegister)
+			return false;
 
-			if (!context.Operand1.Definitions[0].Operand1.IsVirtualRegister)
-				return false;
+		if (!context.Operand1.Definitions[0].Operand2.IsVirtualRegister)
+			return false;
 
-			if (!context.Operand1.Definitions[0].Operand2.IsResolvedConstant)
-				return false;
+		if (context.Operand1.Definitions[0].Operand1.Definitions.Count != 1)
+			return false;
 
-			if (context.Operand1.Definitions[0].Operand2.ConstantUnsigned64 != 1)
-				return false;
+		if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			return false;
 
-			if (context.Operand1.Definitions[0].Operand1.Definitions.Count != 1)
-				return false;
+		if (context.Operand1.Definitions[0].Operand2.Definitions.Count != 1)
+			return false;
 
-			if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulSigned32)
-				return false;
+		if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			return false;
 
-			if (context.Operand2.Definitions.Count != 1)
-				return false;
+		if (context.Operand2.Definitions.Count != 1)
+			return false;
 
-			if (context.Operand2.Definitions[0].Instruction != IRInstruction.Add32)
-				return false;
+		if (context.Operand2.Definitions[0].Instruction != IRInstruction.ShiftLeft32)
+			return false;
 
-			if (!context.Operand2.Definitions[0].Operand1.IsVirtualRegister)
-				return false;
+		if (!context.Operand2.Definitions[0].Operand1.IsVirtualRegister)
+			return false;
 
-			if (!context.Operand2.Definitions[0].Operand2.IsVirtualRegister)
-				return false;
+		if (!context.Operand2.Definitions[0].Operand2.IsResolvedConstant)
+			return false;
 
-			if (context.Operand2.Definitions[0].Operand1.Definitions.Count != 1)
-				return false;
+		if (context.Operand2.Definitions[0].Operand2.ConstantUnsigned64 != 1)
+			return false;
 
-			if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
-				return false;
+		if (context.Operand2.Definitions[0].Operand1.Definitions.Count != 1)
+			return false;
 
-			if (context.Operand2.Definitions[0].Operand2.Definitions.Count != 1)
-				return false;
+		if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulSigned32)
+			return false;
 
-			if (context.Operand2.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
-				return false;
+		if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2))
+			return false;
 
-			if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand2.Definitions[0].Operand1))
-				return false;
+		if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand1.Definitions[0].Operand2))
+			return false;
 
-			if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand2.Definitions[0].Operand2))
-				return false;
+		if (!AreSame(context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1, context.Operand1.Definitions[0].Operand2.Definitions[0].Operand2))
+			return false;
 
-			if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2, context.Operand2.Definitions[0].Operand1.Definitions[0].Operand1))
-				return false;
+		if (!AreSame(context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand1.Definitions[0].Operand1))
+			return false;
 
-			if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2, context.Operand2.Definitions[0].Operand1.Definitions[0].Operand2))
-				return false;
-
-			return true;
-		}
-
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
-
-			var t1 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1;
-			var t2 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2;
-
-			var v1 = transform.AllocateVirtualRegister(transform.I4);
-			var v2 = transform.AllocateVirtualRegister(transform.I4);
-
-			context.SetInstruction(IRInstruction.Add32, v1, t1, t2);
-			context.AppendInstruction(IRInstruction.Add32, v2, t1, t2);
-			context.AppendInstruction(IRInstruction.MulUnsigned32, result, v2, v1);
-		}
+		return true;
 	}
 
-	/// <summary>
-	/// Unsigned32AAPlusBBPlus2AB_v6
-	/// </summary>
-	public sealed class Unsigned32AAPlusBBPlus2AB_v6 : BaseTransform
+	public override void Transform(Context context, TransformContext transform)
 	{
-		public Unsigned32AAPlusBBPlus2AB_v6() : base(IRInstruction.Add32, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+		var result = context.Result;
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand1.IsVirtualRegister)
-				return false;
+		var t1 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1;
+		var t2 = context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1;
 
-			if (!context.Operand2.IsVirtualRegister)
-				return false;
+		var v1 = transform.AllocateVirtualRegister(transform.I4);
+		var v2 = transform.AllocateVirtualRegister(transform.I4);
 
-			if (context.Operand1.Definitions.Count != 1)
-				return false;
+		context.SetInstruction(IRInstruction.Add32, v1, t1, t2);
+		context.AppendInstruction(IRInstruction.Add32, v2, t1, t2);
+		context.AppendInstruction(IRInstruction.MulUnsigned32, result, v2, v1);
+	}
+}
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.Add32)
-				return false;
-
-			if (!context.Operand1.Definitions[0].Operand1.IsVirtualRegister)
-				return false;
-
-			if (!context.Operand1.Definitions[0].Operand2.IsVirtualRegister)
-				return false;
-
-			if (context.Operand1.Definitions[0].Operand1.Definitions.Count != 1)
-				return false;
-
-			if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
-				return false;
-
-			if (context.Operand1.Definitions[0].Operand2.Definitions.Count != 1)
-				return false;
-
-			if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
-				return false;
-
-			if (context.Operand2.Definitions.Count != 1)
-				return false;
-
-			if (context.Operand2.Definitions[0].Instruction != IRInstruction.ShiftLeft32)
-				return false;
-
-			if (!context.Operand2.Definitions[0].Operand1.IsVirtualRegister)
-				return false;
-
-			if (!context.Operand2.Definitions[0].Operand2.IsResolvedConstant)
-				return false;
-
-			if (context.Operand2.Definitions[0].Operand2.ConstantUnsigned64 != 1)
-				return false;
-
-			if (context.Operand2.Definitions[0].Operand1.Definitions.Count != 1)
-				return false;
-
-			if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulSigned32)
-				return false;
-
-			if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2))
-				return false;
-
-			if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand1.Definitions[0].Operand1))
-				return false;
-
-			if (!AreSame(context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1, context.Operand1.Definitions[0].Operand2.Definitions[0].Operand2))
-				return false;
-
-			if (!AreSame(context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand1.Definitions[0].Operand2))
-				return false;
-
-			return true;
-		}
-
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
-
-			var t1 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1;
-			var t2 = context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1;
-
-			var v1 = transform.AllocateVirtualRegister(transform.I4);
-			var v2 = transform.AllocateVirtualRegister(transform.I4);
-
-			context.SetInstruction(IRInstruction.Add32, v1, t2, t1);
-			context.AppendInstruction(IRInstruction.Add32, v2, t2, t1);
-			context.AppendInstruction(IRInstruction.MulUnsigned32, result, v2, v1);
-		}
+/// <summary>
+/// Unsigned32AAPlusBBPlus2AB_v3
+/// </summary>
+public sealed class Unsigned32AAPlusBBPlus2AB_v3 : BaseTransform
+{
+	public Unsigned32AAPlusBBPlus2AB_v3() : base(IRInstruction.Add32, TransformType.Auto | TransformType.Optimization)
+	{
 	}
 
-	/// <summary>
-	/// Unsigned32AAPlusBBPlus2AB_v7
-	/// </summary>
-	public sealed class Unsigned32AAPlusBBPlus2AB_v7 : BaseTransform
+	public override bool Match(Context context, TransformContext transform)
 	{
-		public Unsigned32AAPlusBBPlus2AB_v7() : base(IRInstruction.Add32, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+		if (!context.Operand1.IsVirtualRegister)
+			return false;
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand1.IsVirtualRegister)
-				return false;
+		if (!context.Operand2.IsVirtualRegister)
+			return false;
 
-			if (!context.Operand2.IsVirtualRegister)
-				return false;
+		if (context.Operand1.Definitions.Count != 1)
+			return false;
 
-			if (context.Operand1.Definitions.Count != 1)
-				return false;
+		if (context.Operand1.Definitions[0].Instruction != IRInstruction.ShiftLeft32)
+			return false;
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.ShiftLeft32)
-				return false;
+		if (!context.Operand1.Definitions[0].Operand1.IsVirtualRegister)
+			return false;
 
-			if (!context.Operand1.Definitions[0].Operand1.IsVirtualRegister)
-				return false;
+		if (!context.Operand1.Definitions[0].Operand2.IsResolvedConstant)
+			return false;
 
-			if (!context.Operand1.Definitions[0].Operand2.IsResolvedConstant)
-				return false;
+		if (context.Operand1.Definitions[0].Operand2.ConstantUnsigned64 != 1)
+			return false;
 
-			if (context.Operand1.Definitions[0].Operand2.ConstantUnsigned64 != 1)
-				return false;
+		if (context.Operand1.Definitions[0].Operand1.Definitions.Count != 1)
+			return false;
 
-			if (context.Operand1.Definitions[0].Operand1.Definitions.Count != 1)
-				return false;
+		if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulSigned32)
+			return false;
 
-			if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulSigned32)
-				return false;
+		if (context.Operand2.Definitions.Count != 1)
+			return false;
 
-			if (context.Operand2.Definitions.Count != 1)
-				return false;
+		if (context.Operand2.Definitions[0].Instruction != IRInstruction.Add32)
+			return false;
 
-			if (context.Operand2.Definitions[0].Instruction != IRInstruction.Add32)
-				return false;
+		if (!context.Operand2.Definitions[0].Operand1.IsVirtualRegister)
+			return false;
 
-			if (!context.Operand2.Definitions[0].Operand1.IsVirtualRegister)
-				return false;
+		if (!context.Operand2.Definitions[0].Operand2.IsVirtualRegister)
+			return false;
 
-			if (!context.Operand2.Definitions[0].Operand2.IsVirtualRegister)
-				return false;
+		if (context.Operand2.Definitions[0].Operand1.Definitions.Count != 1)
+			return false;
 
-			if (context.Operand2.Definitions[0].Operand1.Definitions.Count != 1)
-				return false;
+		if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			return false;
 
-			if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
-				return false;
+		if (context.Operand2.Definitions[0].Operand2.Definitions.Count != 1)
+			return false;
 
-			if (context.Operand2.Definitions[0].Operand2.Definitions.Count != 1)
-				return false;
+		if (context.Operand2.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			return false;
 
-			if (context.Operand2.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
-				return false;
+		if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand2.Definitions[0].Operand1))
+			return false;
 
-			if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand1.Definitions[0].Operand1))
-				return false;
+		if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand2.Definitions[0].Operand2))
+			return false;
 
-			if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand1.Definitions[0].Operand2))
-				return false;
+		if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2, context.Operand2.Definitions[0].Operand1.Definitions[0].Operand1))
+			return false;
 
-			if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2, context.Operand2.Definitions[0].Operand2.Definitions[0].Operand1))
-				return false;
+		if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2, context.Operand2.Definitions[0].Operand1.Definitions[0].Operand2))
+			return false;
 
-			if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2, context.Operand2.Definitions[0].Operand2.Definitions[0].Operand2))
-				return false;
+		return true;
+	}
 
-			return true;
-		}
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
+		var t1 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1;
+		var t2 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2;
 
-			var t1 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1;
-			var t2 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2;
+		var v1 = transform.AllocateVirtualRegister(transform.I4);
+		var v2 = transform.AllocateVirtualRegister(transform.I4);
 
-			var v1 = transform.AllocateVirtualRegister(transform.I4);
-			var v2 = transform.AllocateVirtualRegister(transform.I4);
+		context.SetInstruction(IRInstruction.Add32, v1, t2, t1);
+		context.AppendInstruction(IRInstruction.Add32, v2, t2, t1);
+		context.AppendInstruction(IRInstruction.MulUnsigned32, result, v2, v1);
+	}
+}
 
-			context.SetInstruction(IRInstruction.Add32, v1, t2, t1);
-			context.AppendInstruction(IRInstruction.Add32, v2, t2, t1);
-			context.AppendInstruction(IRInstruction.MulUnsigned32, result, v2, v1);
-		}
+/// <summary>
+/// Unsigned32AAPlusBBPlus2AB_v4
+/// </summary>
+public sealed class Unsigned32AAPlusBBPlus2AB_v4 : BaseTransform
+{
+	public Unsigned32AAPlusBBPlus2AB_v4() : base(IRInstruction.Add32, TransformType.Auto | TransformType.Optimization)
+	{
+	}
+
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!context.Operand1.IsVirtualRegister)
+			return false;
+
+		if (!context.Operand2.IsVirtualRegister)
+			return false;
+
+		if (context.Operand1.Definitions.Count != 1)
+			return false;
+
+		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Add32)
+			return false;
+
+		if (!context.Operand1.Definitions[0].Operand1.IsVirtualRegister)
+			return false;
+
+		if (!context.Operand1.Definitions[0].Operand2.IsVirtualRegister)
+			return false;
+
+		if (context.Operand1.Definitions[0].Operand1.Definitions.Count != 1)
+			return false;
+
+		if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			return false;
+
+		if (context.Operand1.Definitions[0].Operand2.Definitions.Count != 1)
+			return false;
+
+		if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			return false;
+
+		if (context.Operand2.Definitions.Count != 1)
+			return false;
+
+		if (context.Operand2.Definitions[0].Instruction != IRInstruction.ShiftLeft32)
+			return false;
+
+		if (!context.Operand2.Definitions[0].Operand1.IsVirtualRegister)
+			return false;
+
+		if (!context.Operand2.Definitions[0].Operand2.IsResolvedConstant)
+			return false;
+
+		if (context.Operand2.Definitions[0].Operand2.ConstantUnsigned64 != 1)
+			return false;
+
+		if (context.Operand2.Definitions[0].Operand1.Definitions.Count != 1)
+			return false;
+
+		if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulSigned32)
+			return false;
+
+		if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2))
+			return false;
+
+		if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand1.Definitions[0].Operand2))
+			return false;
+
+		if (!AreSame(context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1, context.Operand1.Definitions[0].Operand2.Definitions[0].Operand2))
+			return false;
+
+		if (!AreSame(context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand1.Definitions[0].Operand1))
+			return false;
+
+		return true;
+	}
+
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
+
+		var t1 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1;
+		var t2 = context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1;
+
+		var v1 = transform.AllocateVirtualRegister(transform.I4);
+		var v2 = transform.AllocateVirtualRegister(transform.I4);
+
+		context.SetInstruction(IRInstruction.Add32, v1, t2, t1);
+		context.AppendInstruction(IRInstruction.Add32, v2, t2, t1);
+		context.AppendInstruction(IRInstruction.MulUnsigned32, result, v2, v1);
+	}
+}
+
+/// <summary>
+/// Unsigned32AAPlusBBPlus2AB_v5
+/// </summary>
+public sealed class Unsigned32AAPlusBBPlus2AB_v5 : BaseTransform
+{
+	public Unsigned32AAPlusBBPlus2AB_v5() : base(IRInstruction.Add32, TransformType.Auto | TransformType.Optimization)
+	{
+	}
+
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!context.Operand1.IsVirtualRegister)
+			return false;
+
+		if (!context.Operand2.IsVirtualRegister)
+			return false;
+
+		if (context.Operand1.Definitions.Count != 1)
+			return false;
+
+		if (context.Operand1.Definitions[0].Instruction != IRInstruction.ShiftLeft32)
+			return false;
+
+		if (!context.Operand1.Definitions[0].Operand1.IsVirtualRegister)
+			return false;
+
+		if (!context.Operand1.Definitions[0].Operand2.IsResolvedConstant)
+			return false;
+
+		if (context.Operand1.Definitions[0].Operand2.ConstantUnsigned64 != 1)
+			return false;
+
+		if (context.Operand1.Definitions[0].Operand1.Definitions.Count != 1)
+			return false;
+
+		if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulSigned32)
+			return false;
+
+		if (context.Operand2.Definitions.Count != 1)
+			return false;
+
+		if (context.Operand2.Definitions[0].Instruction != IRInstruction.Add32)
+			return false;
+
+		if (!context.Operand2.Definitions[0].Operand1.IsVirtualRegister)
+			return false;
+
+		if (!context.Operand2.Definitions[0].Operand2.IsVirtualRegister)
+			return false;
+
+		if (context.Operand2.Definitions[0].Operand1.Definitions.Count != 1)
+			return false;
+
+		if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			return false;
+
+		if (context.Operand2.Definitions[0].Operand2.Definitions.Count != 1)
+			return false;
+
+		if (context.Operand2.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			return false;
+
+		if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand2.Definitions[0].Operand1))
+			return false;
+
+		if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand2.Definitions[0].Operand2))
+			return false;
+
+		if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2, context.Operand2.Definitions[0].Operand1.Definitions[0].Operand1))
+			return false;
+
+		if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2, context.Operand2.Definitions[0].Operand1.Definitions[0].Operand2))
+			return false;
+
+		return true;
+	}
+
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
+
+		var t1 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1;
+		var t2 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2;
+
+		var v1 = transform.AllocateVirtualRegister(transform.I4);
+		var v2 = transform.AllocateVirtualRegister(transform.I4);
+
+		context.SetInstruction(IRInstruction.Add32, v1, t1, t2);
+		context.AppendInstruction(IRInstruction.Add32, v2, t1, t2);
+		context.AppendInstruction(IRInstruction.MulUnsigned32, result, v2, v1);
+	}
+}
+
+/// <summary>
+/// Unsigned32AAPlusBBPlus2AB_v6
+/// </summary>
+public sealed class Unsigned32AAPlusBBPlus2AB_v6 : BaseTransform
+{
+	public Unsigned32AAPlusBBPlus2AB_v6() : base(IRInstruction.Add32, TransformType.Auto | TransformType.Optimization)
+	{
+	}
+
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!context.Operand1.IsVirtualRegister)
+			return false;
+
+		if (!context.Operand2.IsVirtualRegister)
+			return false;
+
+		if (context.Operand1.Definitions.Count != 1)
+			return false;
+
+		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Add32)
+			return false;
+
+		if (!context.Operand1.Definitions[0].Operand1.IsVirtualRegister)
+			return false;
+
+		if (!context.Operand1.Definitions[0].Operand2.IsVirtualRegister)
+			return false;
+
+		if (context.Operand1.Definitions[0].Operand1.Definitions.Count != 1)
+			return false;
+
+		if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			return false;
+
+		if (context.Operand1.Definitions[0].Operand2.Definitions.Count != 1)
+			return false;
+
+		if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			return false;
+
+		if (context.Operand2.Definitions.Count != 1)
+			return false;
+
+		if (context.Operand2.Definitions[0].Instruction != IRInstruction.ShiftLeft32)
+			return false;
+
+		if (!context.Operand2.Definitions[0].Operand1.IsVirtualRegister)
+			return false;
+
+		if (!context.Operand2.Definitions[0].Operand2.IsResolvedConstant)
+			return false;
+
+		if (context.Operand2.Definitions[0].Operand2.ConstantUnsigned64 != 1)
+			return false;
+
+		if (context.Operand2.Definitions[0].Operand1.Definitions.Count != 1)
+			return false;
+
+		if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulSigned32)
+			return false;
+
+		if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2))
+			return false;
+
+		if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand1.Definitions[0].Operand1))
+			return false;
+
+		if (!AreSame(context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1, context.Operand1.Definitions[0].Operand2.Definitions[0].Operand2))
+			return false;
+
+		if (!AreSame(context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand1.Definitions[0].Operand2))
+			return false;
+
+		return true;
+	}
+
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
+
+		var t1 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1;
+		var t2 = context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1;
+
+		var v1 = transform.AllocateVirtualRegister(transform.I4);
+		var v2 = transform.AllocateVirtualRegister(transform.I4);
+
+		context.SetInstruction(IRInstruction.Add32, v1, t2, t1);
+		context.AppendInstruction(IRInstruction.Add32, v2, t2, t1);
+		context.AppendInstruction(IRInstruction.MulUnsigned32, result, v2, v1);
+	}
+}
+
+/// <summary>
+/// Unsigned32AAPlusBBPlus2AB_v7
+/// </summary>
+public sealed class Unsigned32AAPlusBBPlus2AB_v7 : BaseTransform
+{
+	public Unsigned32AAPlusBBPlus2AB_v7() : base(IRInstruction.Add32, TransformType.Auto | TransformType.Optimization)
+	{
+	}
+
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!context.Operand1.IsVirtualRegister)
+			return false;
+
+		if (!context.Operand2.IsVirtualRegister)
+			return false;
+
+		if (context.Operand1.Definitions.Count != 1)
+			return false;
+
+		if (context.Operand1.Definitions[0].Instruction != IRInstruction.ShiftLeft32)
+			return false;
+
+		if (!context.Operand1.Definitions[0].Operand1.IsVirtualRegister)
+			return false;
+
+		if (!context.Operand1.Definitions[0].Operand2.IsResolvedConstant)
+			return false;
+
+		if (context.Operand1.Definitions[0].Operand2.ConstantUnsigned64 != 1)
+			return false;
+
+		if (context.Operand1.Definitions[0].Operand1.Definitions.Count != 1)
+			return false;
+
+		if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulSigned32)
+			return false;
+
+		if (context.Operand2.Definitions.Count != 1)
+			return false;
+
+		if (context.Operand2.Definitions[0].Instruction != IRInstruction.Add32)
+			return false;
+
+		if (!context.Operand2.Definitions[0].Operand1.IsVirtualRegister)
+			return false;
+
+		if (!context.Operand2.Definitions[0].Operand2.IsVirtualRegister)
+			return false;
+
+		if (context.Operand2.Definitions[0].Operand1.Definitions.Count != 1)
+			return false;
+
+		if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			return false;
+
+		if (context.Operand2.Definitions[0].Operand2.Definitions.Count != 1)
+			return false;
+
+		if (context.Operand2.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			return false;
+
+		if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand1.Definitions[0].Operand1))
+			return false;
+
+		if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand1.Definitions[0].Operand2))
+			return false;
+
+		if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2, context.Operand2.Definitions[0].Operand2.Definitions[0].Operand1))
+			return false;
+
+		if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2, context.Operand2.Definitions[0].Operand2.Definitions[0].Operand2))
+			return false;
+
+		return true;
+	}
+
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
+
+		var t1 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1;
+		var t2 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2;
+
+		var v1 = transform.AllocateVirtualRegister(transform.I4);
+		var v2 = transform.AllocateVirtualRegister(transform.I4);
+
+		context.SetInstruction(IRInstruction.Add32, v1, t2, t1);
+		context.AppendInstruction(IRInstruction.Add32, v2, t2, t1);
+		context.AppendInstruction(IRInstruction.MulUnsigned32, result, v2, v1);
 	}
 }

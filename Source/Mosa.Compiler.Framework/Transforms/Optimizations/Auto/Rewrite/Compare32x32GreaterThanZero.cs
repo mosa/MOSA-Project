@@ -4,67 +4,66 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Rewrite
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Rewrite;
+
+/// <summary>
+/// Compare32x32GreaterThanZero
+/// </summary>
+public sealed class Compare32x32GreaterThanZero : BaseTransform
 {
-	/// <summary>
-	/// Compare32x32GreaterThanZero
-	/// </summary>
-	public sealed class Compare32x32GreaterThanZero : BaseTransform
+	public Compare32x32GreaterThanZero() : base(IRInstruction.Compare32x32, TransformType.Auto | TransformType.Optimization)
 	{
-		public Compare32x32GreaterThanZero() : base(IRInstruction.Compare32x32, TransformType.Auto | TransformType.Optimization)
-		{
-		}
-
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (context.ConditionCode != ConditionCode.UnsignedGreater)
-				return false;
-
-			if (!IsZero(context.Operand2))
-				return false;
-
-			return true;
-		}
-
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
-
-			var t1 = context.Operand1;
-			var t2 = context.Operand2;
-
-			context.SetInstruction(IRInstruction.Compare32x32, ConditionCode.NotEqual, result, t1, t2);
-		}
 	}
 
-	/// <summary>
-	/// Compare32x32GreaterThanZero_v1
-	/// </summary>
-	public sealed class Compare32x32GreaterThanZero_v1 : BaseTransform
+	public override bool Match(Context context, TransformContext transform)
 	{
-		public Compare32x32GreaterThanZero_v1() : base(IRInstruction.Compare32x32, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+		if (context.ConditionCode != ConditionCode.UnsignedGreater)
+			return false;
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (context.ConditionCode != ConditionCode.UnsignedLess)
-				return false;
+		if (!IsZero(context.Operand2))
+			return false;
 
-			if (!IsZero(context.Operand1))
-				return false;
+		return true;
+	}
 
-			return true;
-		}
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
+		var t1 = context.Operand1;
+		var t2 = context.Operand2;
 
-			var t1 = context.Operand1;
-			var t2 = context.Operand2;
+		context.SetInstruction(IRInstruction.Compare32x32, ConditionCode.NotEqual, result, t1, t2);
+	}
+}
 
-			context.SetInstruction(IRInstruction.Compare32x32, ConditionCode.NotEqual, result, t2, t1);
-		}
+/// <summary>
+/// Compare32x32GreaterThanZero_v1
+/// </summary>
+public sealed class Compare32x32GreaterThanZero_v1 : BaseTransform
+{
+	public Compare32x32GreaterThanZero_v1() : base(IRInstruction.Compare32x32, TransformType.Auto | TransformType.Optimization)
+	{
+	}
+
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (context.ConditionCode != ConditionCode.UnsignedLess)
+			return false;
+
+		if (!IsZero(context.Operand1))
+			return false;
+
+		return true;
+	}
+
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
+
+		var t1 = context.Operand1;
+		var t2 = context.Operand2;
+
+		context.SetInstruction(IRInstruction.Compare32x32, ConditionCode.NotEqual, result, t2, t1);
 	}
 }

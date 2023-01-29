@@ -4,26 +4,25 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x86.Instructions
+namespace Mosa.Platform.x86.Instructions;
+
+/// <summary>
+/// CpuId
+/// </summary>
+/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
+public sealed class CpuId : X86Instruction
 {
-	/// <summary>
-	/// CpuId
-	/// </summary>
-	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed class CpuId : X86Instruction
+	internal CpuId()
+		: base(1, 2)
 	{
-		internal CpuId()
-			: base(1, 2)
-		{
-		}
+	}
 
-		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
-		{
-			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
-			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
+	public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
+	{
+		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
+		System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
-			opcodeEncoder.Append8Bits(0x0F);
-			opcodeEncoder.Append8Bits(0xA2);
-		}
+		opcodeEncoder.Append8Bits(0x0F);
+		opcodeEncoder.Append8Bits(0xA2);
 	}
 }

@@ -4,35 +4,34 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Reorder
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Reorder;
+
+/// <summary>
+/// SubToAdd64
+/// </summary>
+public sealed class SubToAdd64 : BaseTransform
 {
-	/// <summary>
-	/// SubToAdd64
-	/// </summary>
-	public sealed class SubToAdd64 : BaseTransform
+	public SubToAdd64() : base(IRInstruction.Sub64, TransformType.Auto | TransformType.Optimization)
 	{
-		public SubToAdd64() : base(IRInstruction.Sub64, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+	}
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!IsResolvedConstant(context.Operand2))
-				return false;
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!IsResolvedConstant(context.Operand2))
+			return false;
 
-			return true;
-		}
+		return true;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
 
-			var t1 = context.Operand1;
-			var t2 = context.Operand2;
+		var t1 = context.Operand1;
+		var t2 = context.Operand2;
 
-			var e1 = transform.CreateConstant(Neg64(ToSigned64(t2)));
+		var e1 = transform.CreateConstant(Neg64(ToSigned64(t2)));
 
-			context.SetInstruction(IRInstruction.Add64, result, t1, e1);
-		}
+		context.SetInstruction(IRInstruction.Add64, result, t1, e1);
 	}
 }

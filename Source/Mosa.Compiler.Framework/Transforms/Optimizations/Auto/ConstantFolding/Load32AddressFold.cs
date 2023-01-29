@@ -4,50 +4,49 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
+
+/// <summary>
+/// Load32AddressFold
+/// </summary>
+public sealed class Load32AddressFold : BaseTransform
 {
-	/// <summary>
-	/// Load32AddressFold
-	/// </summary>
-	public sealed class Load32AddressFold : BaseTransform
+	public Load32AddressFold() : base(IRInstruction.Load32, TransformType.Auto | TransformType.Optimization)
 	{
-		public Load32AddressFold() : base(IRInstruction.Load32, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+	}
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand1.IsVirtualRegister)
-				return false;
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!context.Operand1.IsVirtualRegister)
+			return false;
 
-			if (!context.Operand2.IsResolvedConstant)
-				return false;
+		if (!context.Operand2.IsResolvedConstant)
+			return false;
 
-			if (context.Operand2.ConstantUnsigned64 != 0)
-				return false;
+		if (context.Operand2.ConstantUnsigned64 != 0)
+			return false;
 
-			if (context.Operand1.Definitions.Count != 1)
-				return false;
+		if (context.Operand1.Definitions.Count != 1)
+			return false;
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.AddressOf)
-				return false;
+		if (context.Operand1.Definitions[0].Instruction != IRInstruction.AddressOf)
+			return false;
 
-			if (!IsParameter(context.Operand1.Definitions[0].Operand1))
-				return false;
+		if (!IsParameter(context.Operand1.Definitions[0].Operand1))
+			return false;
 
-			if (IsFloatingPoint(context.Operand1.Definitions[0].Operand1))
-				return false;
+		if (IsFloatingPoint(context.Operand1.Definitions[0].Operand1))
+			return false;
 
-			return true;
-		}
+		return true;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
 
-			var t1 = context.Operand1.Definitions[0].Operand1;
+		var t1 = context.Operand1.Definitions[0].Operand1;
 
-			context.SetInstruction(IRInstruction.LoadParam32, result, t1);
-		}
+		context.SetInstruction(IRInstruction.LoadParam32, result, t1);
 	}
 }

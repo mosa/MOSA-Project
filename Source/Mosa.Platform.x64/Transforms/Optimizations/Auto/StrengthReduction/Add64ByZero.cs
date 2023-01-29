@@ -6,38 +6,37 @@ using Mosa.Platform.x64;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.x64.Transforms.Optimizations.Auto.StrengthReduction
+namespace Mosa.Platform.x64.Transforms.Optimizations.Auto.StrengthReduction;
+
+/// <summary>
+/// Add64ByZero
+/// </summary>
+public sealed class Add64ByZero : BaseTransform
 {
-	/// <summary>
-	/// Add64ByZero
-	/// </summary>
-	public sealed class Add64ByZero : BaseTransform
+	public Add64ByZero() : base(X64.Add64, TransformType.Auto | TransformType.Optimization)
 	{
-		public Add64ByZero() : base(X64.Add64, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+	}
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand2.IsResolvedConstant)
-				return false;
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!context.Operand2.IsResolvedConstant)
+			return false;
 
-			if (context.Operand2.ConstantUnsigned64 != 0)
-				return false;
+		if (context.Operand2.ConstantUnsigned64 != 0)
+			return false;
 
-			if (AreStatusFlagUsed(context))
-				return false;
+		if (AreStatusFlagUsed(context))
+			return false;
 
-			return true;
-		}
+		return true;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
 
-			var t1 = context.Operand1;
+		var t1 = context.Operand1;
 
-			context.SetInstruction(X64.Mov64, result, t1);
-		}
+		context.SetInstruction(X64.Mov64, result, t1);
 	}
 }

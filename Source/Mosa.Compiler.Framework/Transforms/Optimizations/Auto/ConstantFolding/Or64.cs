@@ -4,40 +4,39 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
+
+/// <summary>
+/// Or64
+/// </summary>
+public sealed class Or64 : BaseTransform
 {
-	/// <summary>
-	/// Or64
-	/// </summary>
-	public sealed class Or64 : BaseTransform
+	public Or64() : base(IRInstruction.Or64, TransformType.Auto | TransformType.Optimization)
 	{
-		public Or64() : base(IRInstruction.Or64, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+	}
 
-		public override int Priority => 100;
+	public override int Priority => 100;
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!IsResolvedConstant(context.Operand1))
-				return false;
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!IsResolvedConstant(context.Operand1))
+			return false;
 
-			if (!IsResolvedConstant(context.Operand2))
-				return false;
+		if (!IsResolvedConstant(context.Operand2))
+			return false;
 
-			return true;
-		}
+		return true;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
 
-			var t1 = context.Operand1;
-			var t2 = context.Operand2;
+		var t1 = context.Operand1;
+		var t2 = context.Operand2;
 
-			var e1 = transform.CreateConstant(Or64(To64(t1), To64(t2)));
+		var e1 = transform.CreateConstant(Or64(To64(t1), To64(t2)));
 
-			context.SetInstruction(IRInstruction.Move64, result, e1);
-		}
+		context.SetInstruction(IRInstruction.Move64, result, e1);
 	}
 }

@@ -4,37 +4,36 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
+
+/// <summary>
+/// ShiftLeft32ByZero
+/// </summary>
+public sealed class ShiftLeft32ByZero : BaseTransform
 {
-	/// <summary>
-	/// ShiftLeft32ByZero
-	/// </summary>
-	public sealed class ShiftLeft32ByZero : BaseTransform
+	public ShiftLeft32ByZero() : base(IRInstruction.ShiftLeft32, TransformType.Auto | TransformType.Optimization)
 	{
-		public ShiftLeft32ByZero() : base(IRInstruction.ShiftLeft32, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+	}
 
-		public override int Priority => 80;
+	public override int Priority => 80;
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand2.IsResolvedConstant)
-				return false;
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!context.Operand2.IsResolvedConstant)
+			return false;
 
-			if (context.Operand2.ConstantUnsigned64 != 0)
-				return false;
+		if (context.Operand2.ConstantUnsigned64 != 0)
+			return false;
 
-			return true;
-		}
+		return true;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
 
-			var t1 = context.Operand1;
+		var t1 = context.Operand1;
 
-			context.SetInstruction(IRInstruction.Move32, result, t1);
-		}
+		context.SetInstruction(IRInstruction.Move32, result, t1);
 	}
 }

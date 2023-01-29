@@ -4,31 +4,30 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x64.Instructions
+namespace Mosa.Platform.x64.Instructions;
+
+/// <summary>
+/// Cdq64
+/// </summary>
+/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
+public sealed class Cdq64 : X64Instruction
 {
-	/// <summary>
-	/// Cdq64
-	/// </summary>
-	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
-	public sealed class Cdq64 : X64Instruction
+	internal Cdq64()
+		: base(1, 1)
 	{
-		internal Cdq64()
-			: base(1, 1)
-		{
-		}
+	}
 
-		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
-		{
-			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
-			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
+	public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
+	{
+		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
+		System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
-			opcodeEncoder.SuppressByte(0x40);
-			opcodeEncoder.Append4Bits(0b0100);
-			opcodeEncoder.Append1Bit(0b1);
-			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append8Bits(0x99);
-		}
+		opcodeEncoder.SuppressByte(0x40);
+		opcodeEncoder.Append4Bits(0b0100);
+		opcodeEncoder.Append1Bit(0b1);
+		opcodeEncoder.Append1Bit(0b0);
+		opcodeEncoder.Append1Bit(0b0);
+		opcodeEncoder.Append1Bit(0b0);
+		opcodeEncoder.Append8Bits(0x99);
 	}
 }

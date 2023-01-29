@@ -4,36 +4,35 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
+
+/// <summary>
+/// AddCarryIn64Zero1
+/// </summary>
+public sealed class AddCarryIn64Zero1 : BaseTransform
 {
-	/// <summary>
-	/// AddCarryIn64Zero1
-	/// </summary>
-	public sealed class AddCarryIn64Zero1 : BaseTransform
+	public AddCarryIn64Zero1() : base(IRInstruction.AddCarryIn64, TransformType.Auto | TransformType.Optimization)
 	{
-		public AddCarryIn64Zero1() : base(IRInstruction.AddCarryIn64, TransformType.Auto | TransformType.Optimization)
-		{
-		}
+	}
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand1.IsResolvedConstant)
-				return false;
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!context.Operand1.IsResolvedConstant)
+			return false;
 
-			if (context.Operand1.ConstantUnsigned64 != 0)
-				return false;
+		if (context.Operand1.ConstantUnsigned64 != 0)
+			return false;
 
-			return true;
-		}
+		return true;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
 
-			var t1 = context.Operand2;
-			var t2 = context.Operand3;
+		var t1 = context.Operand2;
+		var t2 = context.Operand3;
 
-			context.SetInstruction(IRInstruction.Add64, result, t1, t2);
-		}
+		context.SetInstruction(IRInstruction.Add64, result, t1, t2);
 	}
 }

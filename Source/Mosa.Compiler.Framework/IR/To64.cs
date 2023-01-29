@@ -4,19 +4,18 @@
 
 using Mosa.Compiler.MosaTypeSystem;
 
-namespace Mosa.Compiler.Framework.IR
-{
-	/// <summary>
-	/// To64
-	/// </summary>
-	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
-	public sealed class To64 : BaseIRInstruction
-	{
-		public To64()
-			: base(2, 1)
-		{
-		}
+namespace Mosa.Compiler.Framework.IR;
 
-		public override BuiltInType ResultType { get { return BuiltInType.UInt64; } }
+/// <summary>
+/// To64
+/// </summary>
+/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
+public sealed class To64 : BaseIRInstruction
+{
+	public To64()
+		: base(2, 1)
+	{
 	}
+
+	public override BuiltInType ResultType => BuiltInType.UInt64;
 }
