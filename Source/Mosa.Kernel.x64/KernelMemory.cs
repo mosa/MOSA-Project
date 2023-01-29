@@ -3,45 +3,44 @@
 using System;
 using Mosa.Runtime.Plug;
 
-namespace Mosa.Kernel.x64
+namespace Mosa.Kernel.x64;
+
+/// <summary>
+/// Kernel Memory Allocator
+/// </summary>
+public static class KernelMemory
 {
-	/// <summary>
-	/// Kernel Memory Allocator
-	/// </summary>
-	public static class KernelMemory
+	static private uint heapStart = Address.GCInitialMemory;
+	static private uint heapSize = 0x02000000;
+	static private uint heapUsed = 0;
+
+	[Plug("Mosa.Runtime.GC::AllocateMemory")]
+	static unsafe private IntPtr _AllocateMemory(uint size)
 	{
-		static private uint heapStart = Address.GCInitialMemory;
-		static private uint heapSize = 0x02000000;
-		static private uint heapUsed = 0;
+		return AllocateMemory(size);
+	}
 
-		[Plug("Mosa.Runtime.GC::AllocateMemory")]
-		static unsafe private IntPtr _AllocateMemory(uint size)
+	static public IntPtr AllocateMemory(uint size)
+	{
+		if (heapStart == 0 || (heapSize - heapUsed) < size)
 		{
-			return AllocateMemory(size);
-		}
+			// Go allocate memory
+			heapSize = 1024 * 1023 * 8; // 8Mb
 
-		static public IntPtr AllocateMemory(uint size)
-		{
-			if (heapStart == 0 || (heapSize - heapUsed) < size)
-			{
-				// Go allocate memory
-				heapSize = 1024 * 1023 * 8; // 8Mb
-
-				// FIXME
-				//heapStart = VirtualPageAllocator.Reserve(heapSize);
-				heapUsed = 0;
-			}
-
-			var at = new IntPtr(heapStart + heapUsed);
-			heapUsed += size;
-			return at;
-		}
-
-		static public void SetInitialMemory(uint address, uint size)
-		{
-			heapStart = address;
-			heapSize = size;
+			// FIXME
+			//heapStart = VirtualPageAllocator.Reserve(heapSize);
 			heapUsed = 0;
 		}
+
+		var at = new IntPtr(heapStart + heapUsed);
+		heapUsed += size;
+		return at;
+	}
+
+	static public void SetInitialMemory(uint address, uint size)
+	{
+		heapStart = address;
+		heapSize = size;
+		heapUsed = 0;
 	}
 }

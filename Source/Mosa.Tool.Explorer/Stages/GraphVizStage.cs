@@ -2,32 +2,31 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Tool.Explorer.Stages
+namespace Mosa.Tool.Explorer.Stages;
+
+public class GraphVizStage : BaseMethodCompilerStage
 {
-	public class GraphVizStage : BaseMethodCompilerStage
+	private const int TraceLevel = 6;
+
+	protected override void Run()
 	{
-		private const int TraceLevel = 6;
+		if (!IsTraceable(TraceLevel))
+			return;
 
-		protected override void Run()
+		var trace = CreateTraceLog();
+
+		trace.Log("digraph blocks {");
+
+		foreach (var block in BasicBlocks)
 		{
-			if (!IsTraceable(TraceLevel))
-				return;
+			//trace.Log("\t" + block);
 
-			var trace = CreateTraceLog();
-
-			trace.Log("digraph blocks {");
-
-			foreach (var block in BasicBlocks)
+			foreach (var next in block.NextBlocks)
 			{
-				//trace.Log("\t" + block);
-
-				foreach (var next in block.NextBlocks)
-				{
-					trace.Log($"\t{block} -> {next}");
-				}
+				trace.Log($"\t{block} -> {next}");
 			}
-
-			trace.Log("}");
 		}
+
+		trace.Log("}");
 	}
 }

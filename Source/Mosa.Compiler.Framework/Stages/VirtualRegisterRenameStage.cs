@@ -3,59 +3,58 @@
 using System.Collections.Generic;
 using Mosa.Compiler.Common;
 
-namespace Mosa.Compiler.Framework.Stages
+namespace Mosa.Compiler.Framework.Stages;
+
+/// <summary>
+/// Virtual Register Rename Stage
+/// </summary>
+/// <seealso cref="Mosa.Compiler.Framework.BaseCodeTransformationStage" />
+public sealed class VirtualRegisterRenameStage : BaseCodeTransformationStage
 {
-	/// <summary>
-	/// Virtual Register Rename Stage
-	/// </summary>
-	/// <seealso cref="Mosa.Compiler.Framework.BaseCodeTransformationStage" />
-	public sealed class VirtualRegisterRenameStage : BaseCodeTransformationStage
+	protected override void PopulateVisitationDictionary()
 	{
-		protected override void PopulateVisitationDictionary()
-		{
-			// Nothing to do
-		}
+		// Nothing to do
+	}
 
-		protected override void Run()
-		{
-			var vr = new List<Operand>();
+	protected override void Run()
+	{
+		var vr = new List<Operand>();
 
-			foreach (var block in BasicBlocks)
+		foreach (var block in BasicBlocks)
+		{
+			for (var node = block.BeforeLast; !node.IsBlockStartInstruction; node = node.Previous)
 			{
-				for (var node = block.BeforeLast; !node.IsBlockStartInstruction; node = node.Previous)
+				if (node.IsEmpty)
+					continue;
+
+				foreach (var op in node.Operands)
 				{
-					if (node.IsEmpty)
-						continue;
-
-					foreach (var op in node.Operands)
+					if (op.IsVirtualRegister)
 					{
-						if (op.IsVirtualRegister)
-						{
-							vr.AddIfNew(op);
-						}
+						vr.AddIfNew(op);
 					}
+				}
 
-					foreach (var op in node.Results)
+				foreach (var op in node.Results)
+				{
+					if (op.IsVirtualRegister)
 					{
-						if (op.IsVirtualRegister)
-						{
-							vr.AddIfNew(op);
-						}
+						vr.AddIfNew(op);
 					}
 				}
 			}
+		}
 
-			foreach (var v in MethodCompiler.VirtualRegisters)
-			{
-				vr.AddIfNew(v);
-			}
+		foreach (var v in MethodCompiler.VirtualRegisters)
+		{
+			vr.AddIfNew(v);
+		}
 
-			int index = 0;
+		int index = 0;
 
-			foreach (var v in vr)
-			{
-				MethodCompiler.VirtualRegisters.ReOrdered(v, ++index);
-			}
+		foreach (var v in vr)
+		{
+			MethodCompiler.VirtualRegisters.ReOrdered(v, ++index);
 		}
 	}
 }

@@ -1,11 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace System
+namespace System;
+
+/// <summary>
+/// WaitHandle
+/// </summary>
+public class WaitHandle
 {
-	/// <summary>
-	/// WaitHandle
-	/// </summary>
-	public class WaitHandle
-	{
-	}
 }

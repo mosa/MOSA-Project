@@ -1,37 +1,36 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.UnitTests.Optimization
+namespace Mosa.UnitTests.Optimization;
+
+public static class NullCheckTests
 {
-	public static class NullCheckTests
+	[MosaUnitTest]
+	public static bool NullTest1()
 	{
-		[MosaUnitTest]
-		public static bool NullTest1()
-		{
-			var o = new object();
+		var o = new object();
 
-			if (o == null)
-			{
-				return false;
-			}
-			else
-			{
-				return true;
-			}
+		if (o == null)
+		{
+			return false;
 		}
-
-		[MosaUnitTest]
-		public static bool NullTest2()
+		else
 		{
-			var o = new object();
+			return true;
+		}
+	}
 
-			if (o != null)
-			{
-				return false;
-			}
-			else
-			{
-				return true;
-			}
+	[MosaUnitTest]
+	public static bool NullTest2()
+	{
+		var o = new object();
+
+		if (o != null)
+		{
+			return false;
+		}
+		else
+		{
+			return true;
 		}
 	}
 }

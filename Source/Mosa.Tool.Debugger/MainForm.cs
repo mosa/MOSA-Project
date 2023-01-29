@@ -16,917 +16,916 @@ using Mosa.Utility.Configuration;
 using Mosa.Utility.Launcher;
 using WeifenLuo.WinFormsUI.Docking;
 
-namespace Mosa.Tool.Debugger
+namespace Mosa.Tool.Debugger;
+
+public partial class MainForm : Form
 {
-	public partial class MainForm : Form
+	public readonly OutputView outputView;
+
+	private readonly RegisterView registersView;
+
+	private readonly DisplayView displayView;
+	private readonly ControlView controlView;
+
+	private readonly CallStackView callStackView;
+	private readonly StackFrameView stackFrameView;
+
+	private readonly StatusView statusView;
+
+	private readonly InstructionView instructionView;
+
+	private readonly SymbolView symbolView;
+	private readonly WatchView watchView;
+	private readonly BreakpointView breakPointView;
+	private readonly MethodView methodView;
+
+	private readonly SourceView sourceView;
+	private readonly SourceDataView sourceDataView;
+
+	private readonly LaunchView launchView;
+	private readonly MethodParametersView methodParametersView;
+
+	private readonly TraceView traceView;
+
+	//private ScriptView scriptView;
+
+	public string Status
+	{ set { toolStripStatusLabel1.Text = value; toolStrip1.Refresh(); } }
+
+	public Connector GDBConnector { get; private set; }
+
+	public MemoryCache MemoryCache { get; private set; }
+
+	public Settings Settings { get; }
+
+	public DebugSource DebugSource { get; set; } = new DebugSource();
+
+	public List<BreakPoint> BreakPoints { get; } = new List<BreakPoint>();
+
+	public List<Watch> Watchs { get; } = new List<Watch>();
+
+	public BasePlatform Platform
+	{ get { return GDBConnector?.Platform; } }
+
+	public ulong InstructionPointer
+	{ get { return Platform == null ? 0 : Platform.InstructionPointer.Value; } }
+
+	public ulong StackFrame
+	{ get { return Platform == null ? 0 : Platform.StackFrame.Value; } }
+
+	public ulong StackPointer
+	{ get { return Platform == null ? 0 : Platform.StackPointer.Value; } }
+
+	public ulong StatusFlag
+	{ get { return Platform == null ? 0 : Platform.StatusFlag.Value; } }
+
+	private Process VMProcess;
+
+	public string VMHash;
+
+	#region Settings
+
+	public string BreakpointFile
 	{
-		public readonly OutputView outputView;
+		get { return Settings.GetValue("Debugger.BreakpointFile", null); }
+		set { Settings.SetValue("Debugger.BreakpointFile", value); }
+	}
 
-		private readonly RegisterView registersView;
+	public string WatchFile
+	{
+		get { return Settings.GetValue("Debugger.WatchFile", null); }
+		set { Settings.SetValue("Debugger.WatchFile", value); }
+	}
 
-		private readonly DisplayView displayView;
-		private readonly ControlView controlView;
+	public string DebugFile
+	{
+		get { return Settings.GetValue("CompilerDebug.DebugFile", "%DEFAULT%"); }
+		set { Settings.SetValue("CompilerDebug.DebugFile", value); }
+	}
 
-		private readonly CallStackView callStackView;
-		private readonly StackFrameView stackFrameView;
+	public string ImageFile
+	{
+		get { return Settings.GetValue("Image.ImageFile", null); }
+		set { Settings.SetValue("Image.ImageFile", value); }
+	}
 
-		private readonly StatusView statusView;
+	public int GDBPort
+	{
+		get { return Settings.GetValue("GDB.Port", 0); }
+		set { Settings.SetValue("GDB.Port", value); }
+	}
 
-		private readonly InstructionView instructionView;
+	public string GDBHost
+	{
+		get { return Settings.GetValue("GDB.Host", "localhost"); }
+		set { Settings.SetValue("GDB.Host", value); }
+	}
 
-		private readonly SymbolView symbolView;
-		private readonly WatchView watchView;
-		private readonly BreakpointView breakPointView;
-		private readonly MethodView methodView;
+	public string ImageFormat
+	{
+		get { return Settings.GetValue("Image.Format", null); }
+		set { Settings.SetValue("Image.Format", value); }
+	}
 
-		private readonly SourceView sourceView;
-		private readonly SourceDataView sourceDataView;
+	public bool LauncherStart
+	{
+		get { return Settings.GetValue("Launcher.Start", false); }
+		set { Settings.SetValue("Launcher.Start", value); }
+	}
 
-		private readonly LaunchView launchView;
-		private readonly MethodParametersView methodParametersView;
+	public bool EmulatorDisplay
+	{
+		get { return Settings.GetValue("Emulator.Display", false); }
+		set { Settings.SetValue("Emulator.Display", value); }
+	}
 
-		private readonly TraceView traceView;
+	public string QEMU
+	{
+		get { return Settings.GetValue("AppLocation.Qemu", null); }
+		set { Settings.SetValue("AppLocation.Qemu", value); }
+	}
 
-		//private ScriptView scriptView;
+	public string QEMUBios
+	{
+		get { return Settings.GetValue("AppLocation.QemuBIOS", null); }
+		set { Settings.SetValue("AppLocation.QemuBIOS", value); }
+	}
 
-		public string Status
-		{ set { toolStripStatusLabel1.Text = value; toolStrip1.Refresh(); } }
+	#endregion Settings
 
-		public Connector GDBConnector { get; private set; }
+	public MainForm()
+	{
+		InitializeComponent();
 
-		public MemoryCache MemoryCache { get; private set; }
+		outputView = new OutputView(this);
 
-		public Settings Settings { get; }
+		registersView = new RegisterView(this);
 
-		public DebugSource DebugSource { get; set; } = new DebugSource();
+		displayView = new DisplayView(this);
+		controlView = new ControlView(this);
+		traceView = new TraceView(this);
 
-		public List<BreakPoint> BreakPoints { get; } = new List<BreakPoint>();
+		callStackView = new CallStackView(this);
+		stackFrameView = new StackFrameView(this);
 
-		public List<Watch> Watchs { get; } = new List<Watch>();
+		statusView = new StatusView(this);
+		symbolView = new SymbolView(this);
+		watchView = new WatchView(this);
+		breakPointView = new BreakpointView(this);
+		instructionView = new InstructionView(this);
+		methodView = new MethodView(this);
+		methodParametersView = new MethodParametersView(this);
 
-		public BasePlatform Platform
-		{ get { return GDBConnector?.Platform; } }
+		//scriptView = new ScriptView(this);
 
-		public ulong InstructionPointer
-		{ get { return Platform == null ? 0 : Platform.InstructionPointer.Value; } }
+		sourceView = new SourceView(this);
 
-		public ulong StackFrame
-		{ get { return Platform == null ? 0 : Platform.StackFrame.Value; } }
+		sourceDataView = new SourceDataView(this);  // only useful when debugging this tool
 
-		public ulong StackPointer
-		{ get { return Platform == null ? 0 : Platform.StackPointer.Value; } }
+		launchView = new LaunchView(this);
 
-		public ulong StatusFlag
-		{ get { return Platform == null ? 0 : Platform.StatusFlag.Value; } }
+		Settings = AppLocationsSettings.GetAppLocations();
 
-		private Process VMProcess;
+		Settings.SetValue("Emulator.GDB", true);
+		Settings.SetValue("Emulator.Serial", "TCPServer");
+		Settings.SetValue("Emulator.Serial.Port", 1250);
+		Settings.SetValue("Emulator.Display", false);
 
-		public string VMHash;
+		GDBPort = 1234;
 
-		#region Settings
+		AppDomain.CurrentDomain.DomainUnload += (s, e) => { KillVMProcess(); };
+		AppDomain.CurrentDomain.ProcessExit += (s, e) => { KillVMProcess(); };
+		AppDomain.CurrentDomain.UnhandledException += (s, e) => { KillVMProcess(); };
+	}
 
-		public string BreakpointFile
+	private void MainForm_Load(object sender, EventArgs e)
+	{
+		Text = "MOSA GDB Debugger v" + CompilerVersion.VersionString;
+
+		dockPanel.SuspendLayout(true);
+		dockPanel.Theme = new VS2015DarkTheme();
+		dockPanel.DockTopPortion = 88;
+
+		controlView.Show(dockPanel, DockState.DockTop);
+		statusView.Show(controlView.PanelPane, DockAlignment.Right, 0.50);
+
+		breakPointView.Show(dockPanel, DockState.DockBottom);
+		watchView.Show(breakPointView.PanelPane, DockAlignment.Right, 0.50);
+
+		launchView.Show(dockPanel, DockState.Document);
+		displayView.Show(dockPanel, DockState.Document);
+		traceView.Show(dockPanel, DockState.Document);
+		outputView.Show(dockPanel, DockState.Document);
+
+		//scriptView.Show(dockPanel, DockState.Document);
+		registersView.Show(dockPanel, DockState.DockRight);
+		stackFrameView.Show(registersView.Pane, DockAlignment.Bottom, 0.5);
+
+		sourceView.Show(dockPanel, DockState.Document);
+
+		sourceDataView.Show(dockPanel, DockState.Document);
+
+		var memoryView = new MemoryView(this);
+		memoryView.Show(dockPanel, DockState.Document);
+
+		symbolView.Show(dockPanel, DockState.Document);
+
+		methodParametersView.Show(symbolView.PanelPane, DockAlignment.Right, 0.35);
+
+		instructionView.Show(methodParametersView.PanelPane, DockAlignment.Bottom, 0.85);
+		methodView.Show(instructionView.PanelPane, instructionView);
+
+		callStackView.Show(instructionView.PanelPane, DockAlignment.Bottom, 0.25);
+
+		registersView.Show();
+		launchView.Show();
+
+		dockPanel.ResumeLayout(true, true);
+
+		if (ImageFile != null)
 		{
-			get { return Settings.GetValue("Debugger.BreakpointFile", null); }
-			set { Settings.SetValue("Debugger.BreakpointFile", value); }
+			LaunchImage();
 		}
+	}
 
-		public string WatchFile
+	private void LogEvent(string status)
+	{
+		Invoke((MethodInvoker)(() => OutputLogEvent(status)));
+	}
+
+	private void OutputLogEvent(string info)
+	{
+		outputView.LogEvent(info);
+	}
+
+	private void LoadDebugFile()
+	{
+		if (DebugFile != null && File.Exists(DebugFile))
 		{
-			get { return Settings.GetValue("Debugger.WatchFile", null); }
-			set { Settings.SetValue("Debugger.WatchFile", value); }
+			DebugSource = new DebugSource();
+			LoadDebugData.LoadDebugInfo(DebugFile, DebugSource);
 		}
+	}
 
-		public string DebugFile
+	private void OnPause() => Invoke((MethodInvoker)(() => NotifyPause()));
+
+	private void OnRunning() => Invoke((MethodInvoker)(() => NotifyRunning()));
+
+	private void NotifyPause()
+	{
+		DeleteTemporaryBreakPonts();
+
+		foreach (var dock in dockPanel.Contents)
 		{
-			get { return Settings.GetValue("CompilerDebug.DebugFile", "%DEFAULT%"); }
-			set { Settings.SetValue("CompilerDebug.DebugFile", value); }
-		}
-
-		public string ImageFile
-		{
-			get { return Settings.GetValue("Image.ImageFile", null); }
-			set { Settings.SetValue("Image.ImageFile", value); }
-		}
-
-		public int GDBPort
-		{
-			get { return Settings.GetValue("GDB.Port", 0); }
-			set { Settings.SetValue("GDB.Port", value); }
-		}
-
-		public string GDBHost
-		{
-			get { return Settings.GetValue("GDB.Host", "localhost"); }
-			set { Settings.SetValue("GDB.Host", value); }
-		}
-
-		public string ImageFormat
-		{
-			get { return Settings.GetValue("Image.Format", null); }
-			set { Settings.SetValue("Image.Format", value); }
-		}
-
-		public bool LauncherStart
-		{
-			get { return Settings.GetValue("Launcher.Start", false); }
-			set { Settings.SetValue("Launcher.Start", value); }
-		}
-
-		public bool EmulatorDisplay
-		{
-			get { return Settings.GetValue("Emulator.Display", false); }
-			set { Settings.SetValue("Emulator.Display", value); }
-		}
-
-		public string QEMU
-		{
-			get { return Settings.GetValue("AppLocation.Qemu", null); }
-			set { Settings.SetValue("AppLocation.Qemu", value); }
-		}
-
-		public string QEMUBios
-		{
-			get { return Settings.GetValue("AppLocation.QemuBIOS", null); }
-			set { Settings.SetValue("AppLocation.QemuBIOS", value); }
-		}
-
-		#endregion Settings
-
-		public MainForm()
-		{
-			InitializeComponent();
-
-			outputView = new OutputView(this);
-
-			registersView = new RegisterView(this);
-
-			displayView = new DisplayView(this);
-			controlView = new ControlView(this);
-			traceView = new TraceView(this);
-
-			callStackView = new CallStackView(this);
-			stackFrameView = new StackFrameView(this);
-
-			statusView = new StatusView(this);
-			symbolView = new SymbolView(this);
-			watchView = new WatchView(this);
-			breakPointView = new BreakpointView(this);
-			instructionView = new InstructionView(this);
-			methodView = new MethodView(this);
-			methodParametersView = new MethodParametersView(this);
-
-			//scriptView = new ScriptView(this);
-
-			sourceView = new SourceView(this);
-
-			sourceDataView = new SourceDataView(this);  // only useful when debugging this tool
-
-			launchView = new LaunchView(this);
-
-			Settings = AppLocationsSettings.GetAppLocations();
-
-			Settings.SetValue("Emulator.GDB", true);
-			Settings.SetValue("Emulator.Serial", "TCPServer");
-			Settings.SetValue("Emulator.Serial.Port", 1250);
-			Settings.SetValue("Emulator.Display", false);
-
-			GDBPort = 1234;
-
-			AppDomain.CurrentDomain.DomainUnload += (s, e) => { KillVMProcess(); };
-			AppDomain.CurrentDomain.ProcessExit += (s, e) => { KillVMProcess(); };
-			AppDomain.CurrentDomain.UnhandledException += (s, e) => { KillVMProcess(); };
-		}
-
-		private void MainForm_Load(object sender, EventArgs e)
-		{
-			Text = "MOSA GDB Debugger v" + CompilerVersion.VersionString;
-
-			dockPanel.SuspendLayout(true);
-			dockPanel.Theme = new VS2015DarkTheme();
-			dockPanel.DockTopPortion = 88;
-
-			controlView.Show(dockPanel, DockState.DockTop);
-			statusView.Show(controlView.PanelPane, DockAlignment.Right, 0.50);
-
-			breakPointView.Show(dockPanel, DockState.DockBottom);
-			watchView.Show(breakPointView.PanelPane, DockAlignment.Right, 0.50);
-
-			launchView.Show(dockPanel, DockState.Document);
-			displayView.Show(dockPanel, DockState.Document);
-			traceView.Show(dockPanel, DockState.Document);
-			outputView.Show(dockPanel, DockState.Document);
-
-			//scriptView.Show(dockPanel, DockState.Document);
-			registersView.Show(dockPanel, DockState.DockRight);
-			stackFrameView.Show(registersView.Pane, DockAlignment.Bottom, 0.5);
-
-			sourceView.Show(dockPanel, DockState.Document);
-
-			sourceDataView.Show(dockPanel, DockState.Document);
-
-			var memoryView = new MemoryView(this);
-			memoryView.Show(dockPanel, DockState.Document);
-
-			symbolView.Show(dockPanel, DockState.Document);
-
-			methodParametersView.Show(symbolView.PanelPane, DockAlignment.Right, 0.35);
-
-			instructionView.Show(methodParametersView.PanelPane, DockAlignment.Bottom, 0.85);
-			methodView.Show(instructionView.PanelPane, instructionView);
-
-			callStackView.Show(instructionView.PanelPane, DockAlignment.Bottom, 0.25);
-
-			registersView.Show();
-			launchView.Show();
-
-			dockPanel.ResumeLayout(true, true);
-
-			if (ImageFile != null)
+			if (dock.DockHandler.Content is DebugDockContent debugdock)
 			{
-				LaunchImage();
+				debugdock.UpdateDockFocus();
+				debugdock.OnPause();
 			}
 		}
+	}
 
-		private void LogEvent(string status)
+	private void NotifyRunning()
+	{
+		foreach (var dock in dockPanel.Contents)
 		{
-			Invoke((MethodInvoker)(() => OutputLogEvent(status)));
-		}
-
-		private void OutputLogEvent(string info)
-		{
-			outputView.LogEvent(info);
-		}
-
-		private void LoadDebugFile()
-		{
-			if (DebugFile != null && File.Exists(DebugFile))
+			if (dock.DockHandler.Content is DebugDockContent debugdock)
 			{
-				DebugSource = new DebugSource();
-				LoadDebugData.LoadDebugInfo(DebugFile, DebugSource);
+				debugdock.OnRunning();
 			}
 		}
+	}
 
-		private void OnPause() => Invoke((MethodInvoker)(() => NotifyPause()));
-
-		private void OnRunning() => Invoke((MethodInvoker)(() => NotifyRunning()));
-
-		private void NotifyPause()
+	private void NotifyBreakPointChange()
+	{
+		foreach (var dock in dockPanel.Contents)
 		{
-			DeleteTemporaryBreakPonts();
-
-			foreach (var dock in dockPanel.Contents)
+			if (dock.DockHandler.Content is DebugDockContent debugdock)
 			{
-				if (dock.DockHandler.Content is DebugDockContent debugdock)
-				{
-					debugdock.UpdateDockFocus();
-					debugdock.OnPause();
-				}
+				debugdock.OnBreakpointChange();
 			}
 		}
+	}
 
-		private void NotifyRunning()
+	private void NotifyWatchChange()
+	{
+		foreach (var dock in dockPanel.Contents)
 		{
-			foreach (var dock in dockPanel.Contents)
+			if (dock.DockHandler.Content is DebugDockContent debugdock)
 			{
-				if (dock.DockHandler.Content is DebugDockContent debugdock)
-				{
-					debugdock.OnRunning();
-				}
+				debugdock.OnWatchChange();
 			}
 		}
+	}
 
-		private void NotifyBreakPointChange()
+	private static bool IsDigitsOnly(string str)
+	{
+		foreach (char c in str)
 		{
-			foreach (var dock in dockPanel.Contents)
-			{
-				if (dock.DockHandler.Content is DebugDockContent debugdock)
-				{
-					debugdock.OnBreakpointChange();
-				}
-			}
+			if (c < '0' || c > '9')
+				return false;
 		}
 
-		private void NotifyWatchChange()
+		return true;
+	}
+
+	private static bool IsHexDigitsOnly(string str)
+	{
+		foreach (char c in str)
 		{
-			foreach (var dock in dockPanel.Contents)
-			{
-				if (dock.DockHandler.Content is DebugDockContent debugdock)
-				{
-					debugdock.OnWatchChange();
-				}
-			}
+			if (!((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f')))
+				return false;
 		}
 
-		private static bool IsDigitsOnly(string str)
-		{
-			foreach (char c in str)
-			{
-				if (c < '0' || c > '9')
-					return false;
-			}
+		return true;
+	}
 
-			return true;
+	public static char[] separators = new char[] { '\t', ' ', ',', '[', ']' };
+
+	public static ulong ParseAddress(string decode)
+	{
+		var parts = decode.Split(separators);
+
+		foreach (var part in parts)
+		{
+			if (part.Length <= 6)
+				continue;
+
+			var address = ParseHexAddress(part);
+
+			if (address > 0)
+				return address;
 		}
 
-		private static bool IsHexDigitsOnly(string str)
-		{
-			foreach (char c in str)
-			{
-				if (!((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f')))
-					return false;
-			}
+		return 0;
+	}
 
-			return true;
+	public static ulong ParseHexAddress(string input)
+	{
+		string nbr = input.ToLowerInvariant().Trim().Trim(',').Trim('[').Trim('[');
+
+		int where = nbr.IndexOf('x');
+
+		if (where >= 0)
+		{
+			nbr = nbr.Substring(where + 1);
 		}
 
-		public static char[] separators = new char[] { '\t', ' ', ',', '[', ']' };
-
-		public static ulong ParseAddress(string decode)
+		if (nbr.EndsWith("h"))
 		{
-			var parts = decode.Split(separators);
+			nbr = nbr.Substring(0, nbr.Length - 1);
+		}
 
-			foreach (var part in parts)
-			{
-				if (part.Length <= 6)
-					continue;
-
-				var address = ParseHexAddress(part);
-
-				if (address > 0)
-					return address;
-			}
-
+		if (!IsHexDigitsOnly(nbr))
 			return 0;
-		}
 
-		public static ulong ParseHexAddress(string input)
+		return Convert.ToUInt64(nbr, 16);
+	}
+
+	private void btnConnect_Click(object sender, EventArgs e)
+	{
+		using (var connect = new ConnectWindow(Settings))
 		{
-			string nbr = input.ToLowerInvariant().Trim().Trim(',').Trim('[').Trim('[');
-
-			int where = nbr.IndexOf('x');
-
-			if (where >= 0)
+			if (connect.ShowDialog(this) == DialogResult.OK)
 			{
-				nbr = nbr.Substring(where + 1);
-			}
-
-			if (nbr.EndsWith("h"))
-			{
-				nbr = nbr.Substring(0, nbr.Length - 1);
-			}
-
-			if (!IsHexDigitsOnly(nbr))
-				return 0;
-
-			return Convert.ToUInt64(nbr, 16);
-		}
-
-		private void btnConnect_Click(object sender, EventArgs e)
-		{
-			using (var connect = new ConnectWindow(Settings))
-			{
-				if (connect.ShowDialog(this) == DialogResult.OK)
-				{
-					Connect();
-				}
+				Connect();
 			}
 		}
+	}
 
-		private void Connect()
+	private void Connect()
+	{
+		Disconnect();
+
+		if (GDBPort == 0)
 		{
-			Disconnect();
+			GDBPort = 1234;
+		}
 
-			if (GDBPort == 0)
+		GDBConnector = new Connector(new X86Platform(), GDBHost, GDBPort);
+
+		GDBConnector.Connect();
+		GDBConnector.OnPause = OnPause;
+		GDBConnector.OnRunning = OnRunning;
+
+		if (!GDBConnector.IsConnected)
+		{
+			MessageBox.Show($"Could not connect to '{GDBConnector.ConnectionHost}' on port {GDBConnector.ConnectionPort}.");
+			return;
+		}
+
+		GDBConnector.GDBClient.LogEvent = LogGDBEvent;
+
+		GDBConnector.ExtendedMode();
+		GDBConnector.ClearAllBreakPoints();
+		ResendBreakPoints();
+		MemoryCache = new MemoryCache(GDBConnector);
+	}
+
+	private void LogGDBEvent(string info)
+	{
+		//if (info.Length > 100)
+		//	info = $"{info[..100]} ...";
+
+		//LogEvent($"GDB >> {info}");
+		//Debug.WriteLine($"GDB >> {info}");
+	}
+
+	private void Disconnect()
+	{
+		if (GDBConnector != null)
+		{
+			GDBConnector.Disconnect();
+			GDBConnector = null;
+			MemoryCache = null;
+		}
+	}
+
+	private void btnViewMemory_Click(object sender, EventArgs e)
+	{
+		var memoryView = new MemoryView(this);
+		memoryView.Show(dockPanel, DockState.Document);
+	}
+
+	public void ResendBreakPoints()
+	{
+		foreach (var breakpoint in BreakPoints)
+		{
+			GDBConnector.AddBreakPoint(breakpoint.Address);
+		}
+	}
+
+	public string CreateBreakPointName(ulong address)
+	{
+		var list = DebugSource.GetSymbolsStartingAt(address);
+
+		if (list?.Count >= 1)
+		{
+			return list[0].CommonName;
+		}
+
+		return GetAddressInfo(address);
+	}
+
+	public string CreateWatchName(ulong address)
+	{
+		var list = DebugSource.GetSymbolsStartingAt(address);
+
+		if (list?.Count >= 1)
+		{
+			return list[0].CommonName;
+		}
+
+		return string.Empty;
+	}
+
+	public void AddBreakPoint(BreakPoint breakpoint)
+	{
+		if (!BreakPoints.Any(b => b.Address == breakpoint.Address))
+		{
+			BreakPoints.Add(breakpoint);
+			GDBConnector.AddBreakPoint(breakpoint.Address);
+			NotifyBreakPointChange();
+		}
+	}
+
+	public void AddBreakPoint(ulong address, string name, string description = null)
+	{
+		if (string.IsNullOrWhiteSpace(name))
+			name = CreateBreakPointName(address);
+
+		var breakpoint = new BreakPoint(name, address, description);
+		AddBreakPoint(breakpoint);
+	}
+
+	public void AddBreakPoint(ulong address, bool temporary = false)
+	{
+		string name = CreateBreakPointName(address);
+		var breakpoint = new BreakPoint(name, address, temporary);
+		AddBreakPoint(breakpoint);
+	}
+
+	public void RemoveBreakPoint(BreakPoint breakpoint)
+	{
+		BreakPoints.Remove(breakpoint);
+		GDBConnector.ClearBreakPoint(breakpoint.Address);
+		NotifyBreakPointChange();
+	}
+
+	public void DeleteAllBreakPonts()
+	{
+		BreakPoints.Clear();
+		GDBConnector.ClearAllBreakPoints();
+		NotifyBreakPointChange();
+	}
+
+	public void DeleteTemporaryBreakPonts()
+	{
+		if (Platform == null)
+			return;
+
+		if (BreakPoints.Count == 0)
+			return;
+
+		var temps = new List<BreakPoint>();
+
+		foreach (var breakpoint in BreakPoints)
+		{
+			if (breakpoint.Temporary && breakpoint.Address == InstructionPointer)
 			{
-				GDBPort = 1234;
-			}
-
-			GDBConnector = new Connector(new X86Platform(), GDBHost, GDBPort);
-
-			GDBConnector.Connect();
-			GDBConnector.OnPause = OnPause;
-			GDBConnector.OnRunning = OnRunning;
-
-			if (!GDBConnector.IsConnected)
-			{
-				MessageBox.Show($"Could not connect to '{GDBConnector.ConnectionHost}' on port {GDBConnector.ConnectionPort}.");
-				return;
-			}
-
-			GDBConnector.GDBClient.LogEvent = LogGDBEvent;
-
-			GDBConnector.ExtendedMode();
-			GDBConnector.ClearAllBreakPoints();
-			ResendBreakPoints();
-			MemoryCache = new MemoryCache(GDBConnector);
-		}
-
-		private void LogGDBEvent(string info)
-		{
-			//if (info.Length > 100)
-			//	info = $"{info[..100]} ...";
-
-			//LogEvent($"GDB >> {info}");
-			//Debug.WriteLine($"GDB >> {info}");
-		}
-
-		private void Disconnect()
-		{
-			if (GDBConnector != null)
-			{
-				GDBConnector.Disconnect();
-				GDBConnector = null;
-				MemoryCache = null;
+				temps.Add(breakpoint);
 			}
 		}
 
-		private void btnViewMemory_Click(object sender, EventArgs e)
-		{
-			var memoryView = new MemoryView(this);
-			memoryView.Show(dockPanel, DockState.Document);
-		}
-
-		public void ResendBreakPoints()
-		{
-			foreach (var breakpoint in BreakPoints)
-			{
-				GDBConnector.AddBreakPoint(breakpoint.Address);
-			}
-		}
-
-		public string CreateBreakPointName(ulong address)
-		{
-			var list = DebugSource.GetSymbolsStartingAt(address);
-
-			if (list?.Count >= 1)
-			{
-				return list[0].CommonName;
-			}
-
-			return GetAddressInfo(address);
-		}
-
-		public string CreateWatchName(ulong address)
-		{
-			var list = DebugSource.GetSymbolsStartingAt(address);
-
-			if (list?.Count >= 1)
-			{
-				return list[0].CommonName;
-			}
-
-			return string.Empty;
-		}
-
-		public void AddBreakPoint(BreakPoint breakpoint)
-		{
-			if (!BreakPoints.Any(b => b.Address == breakpoint.Address))
-			{
-				BreakPoints.Add(breakpoint);
-				GDBConnector.AddBreakPoint(breakpoint.Address);
-				NotifyBreakPointChange();
-			}
-		}
-
-		public void AddBreakPoint(ulong address, string name, string description = null)
-		{
-			if (string.IsNullOrWhiteSpace(name))
-				name = CreateBreakPointName(address);
-
-			var breakpoint = new BreakPoint(name, address, description);
-			AddBreakPoint(breakpoint);
-		}
-
-		public void AddBreakPoint(ulong address, bool temporary = false)
-		{
-			string name = CreateBreakPointName(address);
-			var breakpoint = new BreakPoint(name, address, temporary);
-			AddBreakPoint(breakpoint);
-		}
-
-		public void RemoveBreakPoint(BreakPoint breakpoint)
+		foreach (var breakpoint in temps)
 		{
 			BreakPoints.Remove(breakpoint);
 			GDBConnector.ClearBreakPoint(breakpoint.Address);
+		}
+
+		if (temps.Count != 0)
+		{
 			NotifyBreakPointChange();
 		}
+	}
 
-		public void DeleteAllBreakPonts()
+	public void AddWatch(Watch watch)
+	{
+		Watchs.Add(watch);
+		NotifyWatchChange();
+	}
+
+	public void AddWatch(string name, ulong address, uint size, bool signed = false)
+	{
+		if (string.IsNullOrWhiteSpace(name))
+			name = CreateWatchName(address);
+
+		var watch = new Watch(name, address, size, signed);
+		AddWatch(watch);
+	}
+
+	public void RemoveWatch(Watch watch)
+	{
+		Watchs.Remove(watch);
+		NotifyWatchChange();
+	}
+
+	public void RemoveAllWatches()
+	{
+		Watchs.Clear();
+		NotifyWatchChange();
+	}
+
+	public void OnAddBreakPoint(Object sender, EventArgs e)
+	{
+		var args = (sender as ToolStripMenuItem).Tag as AddBreakPointArgs;
+
+		if (string.IsNullOrWhiteSpace(args.Name))
 		{
-			BreakPoints.Clear();
-			GDBConnector.ClearAllBreakPoints();
-			NotifyBreakPointChange();
+			AddBreakPoint(args.Address);
+		}
+		else
+		{
+			AddBreakPoint(args.Address, args.Name);
+		}
+	}
+
+	public void OnCopyToClipboardAsBreakPoint(Object sender, EventArgs e)
+	{
+		var text = (((sender as ToolStripMenuItem).Tag) as BreakPoint).Name;
+
+		Clipboard.SetText(text);
+	}
+
+	public void OnCopyToClipboard(Object sender, EventArgs e)
+	{
+		var text = (((sender as ToolStripMenuItem).Tag) as string);
+
+		Clipboard.SetText(text);
+	}
+
+	public void OnRemoveBreakPoint(Object sender, EventArgs e)
+	{
+		var breakpoint = (sender as ToolStripMenuItem).Tag as BreakPoint;
+
+		RemoveBreakPoint(breakpoint);
+	}
+
+	public void OnAddWatch(Object sender, EventArgs e)
+	{
+		var args = (sender as ToolStripMenuItem).Tag as AddWatchArgs;
+
+		AddWatch(args.Name, args.Address, args.Length);
+	}
+
+	public void OnRemoveWatch(Object sender, EventArgs e)
+	{
+		var watch = (sender as ToolStripMenuItem).Tag as Watch;
+
+		RemoveWatch(watch);
+	}
+
+	public void LoadArguments(string[] args)
+	{
+		var arguments = Reader.ParseArguments(args, CommandLineArguments.Map);
+
+		Settings.Merge(arguments);
+
+		//UpdateDisplay(Settings);
+	}
+
+	private void toolStripButton2_Click(object sender, EventArgs e)
+	{
+		using (var debug = new DebugAppLocationsWindow(this))
+		{
+			if (debug.ShowDialog(this) == DialogResult.OK)
+			{
+			}
+		}
+	}
+
+	private static string GetFormat(string fileName)
+	{
+		switch (Path.GetExtension(fileName).ToLowerInvariant())
+		{
+			case ".bin": return "BIN";
+			case ".img": return "IMG";
+			case ".iso": return "ISO";
+			default: return string.Empty;
+		}
+	}
+
+	public void LaunchImage(string imageFile, string debugFile, string breakpointFile, string watchFile)
+	{
+		ImageFile = imageFile;
+		ImageFormat = GetFormat(imageFile);
+
+		DebugFile = debugFile;
+		BreakpointFile = breakpointFile;
+		WatchFile = watchFile;
+
+		LaunchImage();
+	}
+
+	public void LaunchImage(bool skipImports = false)
+	{
+		Disconnect();
+		KillVMProcess();
+
+		CalculateVMHash();
+
+		StartQEMU();
+
+		Connect();
+
+		if (!skipImports)
+		{
+			LoadDebugFile();
+			LoadBreakPoints();
+			LoadWatches();
 		}
 
-		public void DeleteTemporaryBreakPonts()
+		displayView.Show();
+	}
+
+	private void KillVMProcess()
+	{
+		if (VMProcess == null)
+			return;
+
+		if (!VMProcess.HasExited)
 		{
-			if (Platform == null)
-				return;
+			VMProcess.Kill();
+			VMProcess.WaitForExit();
+		}
 
-			if (BreakPoints.Count == 0)
-				return;
+		VMProcess = null;
+	}
 
-			var temps = new List<BreakPoint>();
+	private CompilerHooks CreateCompilerHooks()
+	{
+		var compilerHooks = new CompilerHooks
+		{
+			NotifyStatus = LogCompilerEvent
+		};
 
-			foreach (var breakpoint in BreakPoints)
+		return compilerHooks;
+	}
+
+	private void LogCompilerEvent(string info)
+	{
+		LogEvent($"Compiler >> {info}");
+	}
+
+	private void StartQEMU()
+	{
+		var compilerHook = CreateCompilerHooks();
+
+		var starter = new Starter(Settings, compilerHook);
+
+		VMProcess = starter.LaunchVM();
+	}
+
+	private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
+	{
+		Disconnect();
+
+		KillVMProcess();
+	}
+
+	public void LoadBreakPoints()
+	{
+		if (BreakpointFile == null || !File.Exists(BreakpointFile))
+			return;
+
+		bool remap = false;
+
+		foreach (var line in File.ReadAllLines(BreakpointFile))
+		{
+			if (string.IsNullOrEmpty(line))
+				continue;
+
+			if (line.StartsWith("#HASH: "))
 			{
-				if (breakpoint.Temporary && breakpoint.Address == InstructionPointer)
+				if (ImageFile != null && File.Exists(ImageFile))
 				{
-					temps.Add(breakpoint);
+					var hash = line.Substring(7).Trim();
+
+					remap = VMHash != hash;
 				}
+				continue;
 			}
 
-			foreach (var breakpoint in temps)
+			if (line.StartsWith("#"))
+				continue;
+
+			var parts = line.Split('\t');
+
+			if (parts.Length == 0)
+				continue;
+
+			var address = ParseHexAddress(parts[0]);
+			var symbol = parts.Length >= 2 ? parts[1] : null;
+
+			if (symbol != null && remap)
 			{
-				BreakPoints.Remove(breakpoint);
-				GDBConnector.ClearBreakPoint(breakpoint.Address);
+				if (symbol.StartsWith("0x") && symbol.Contains('+'))
+					continue;
+
+				address = DebugSource.GetFirstSymbolByName(symbol);
+
+				if (address == 0)
+					continue;
 			}
 
-			if (temps.Count != 0)
+			AddBreakPoint(address, symbol);
+		}
+	}
+
+	public void LoadWatches()
+	{
+		if (WatchFile == null || !File.Exists(WatchFile))
+			return;
+
+		bool remap = false;
+
+		foreach (var line in File.ReadAllLines(WatchFile))
+		{
+			if (string.IsNullOrEmpty(line))
+				continue;
+
+			if (line.StartsWith("#HASH: "))
 			{
-				NotifyBreakPointChange();
-			}
-		}
-
-		public void AddWatch(Watch watch)
-		{
-			Watchs.Add(watch);
-			NotifyWatchChange();
-		}
-
-		public void AddWatch(string name, ulong address, uint size, bool signed = false)
-		{
-			if (string.IsNullOrWhiteSpace(name))
-				name = CreateWatchName(address);
-
-			var watch = new Watch(name, address, size, signed);
-			AddWatch(watch);
-		}
-
-		public void RemoveWatch(Watch watch)
-		{
-			Watchs.Remove(watch);
-			NotifyWatchChange();
-		}
-
-		public void RemoveAllWatches()
-		{
-			Watchs.Clear();
-			NotifyWatchChange();
-		}
-
-		public void OnAddBreakPoint(Object sender, EventArgs e)
-		{
-			var args = (sender as ToolStripMenuItem).Tag as AddBreakPointArgs;
-
-			if (string.IsNullOrWhiteSpace(args.Name))
-			{
-				AddBreakPoint(args.Address);
-			}
-			else
-			{
-				AddBreakPoint(args.Address, args.Name);
-			}
-		}
-
-		public void OnCopyToClipboardAsBreakPoint(Object sender, EventArgs e)
-		{
-			var text = (((sender as ToolStripMenuItem).Tag) as BreakPoint).Name;
-
-			Clipboard.SetText(text);
-		}
-
-		public void OnCopyToClipboard(Object sender, EventArgs e)
-		{
-			var text = (((sender as ToolStripMenuItem).Tag) as string);
-
-			Clipboard.SetText(text);
-		}
-
-		public void OnRemoveBreakPoint(Object sender, EventArgs e)
-		{
-			var breakpoint = (sender as ToolStripMenuItem).Tag as BreakPoint;
-
-			RemoveBreakPoint(breakpoint);
-		}
-
-		public void OnAddWatch(Object sender, EventArgs e)
-		{
-			var args = (sender as ToolStripMenuItem).Tag as AddWatchArgs;
-
-			AddWatch(args.Name, args.Address, args.Length);
-		}
-
-		public void OnRemoveWatch(Object sender, EventArgs e)
-		{
-			var watch = (sender as ToolStripMenuItem).Tag as Watch;
-
-			RemoveWatch(watch);
-		}
-
-		public void LoadArguments(string[] args)
-		{
-			var arguments = Reader.ParseArguments(args, CommandLineArguments.Map);
-
-			Settings.Merge(arguments);
-
-			//UpdateDisplay(Settings);
-		}
-
-		private void toolStripButton2_Click(object sender, EventArgs e)
-		{
-			using (var debug = new DebugAppLocationsWindow(this))
-			{
-				if (debug.ShowDialog(this) == DialogResult.OK)
+				if (ImageFile != null && File.Exists(ImageFile))
 				{
+					var hash = line.Substring(7).Trim();
+
+					remap = VMHash != hash;
 				}
-			}
-		}
-
-		private static string GetFormat(string fileName)
-		{
-			switch (Path.GetExtension(fileName).ToLowerInvariant())
-			{
-				case ".bin": return "BIN";
-				case ".img": return "IMG";
-				case ".iso": return "ISO";
-				default: return string.Empty;
-			}
-		}
-
-		public void LaunchImage(string imageFile, string debugFile, string breakpointFile, string watchFile)
-		{
-			ImageFile = imageFile;
-			ImageFormat = GetFormat(imageFile);
-
-			DebugFile = debugFile;
-			BreakpointFile = breakpointFile;
-			WatchFile = watchFile;
-
-			LaunchImage();
-		}
-
-		public void LaunchImage(bool skipImports = false)
-		{
-			Disconnect();
-			KillVMProcess();
-
-			CalculateVMHash();
-
-			StartQEMU();
-
-			Connect();
-
-			if (!skipImports)
-			{
-				LoadDebugFile();
-				LoadBreakPoints();
-				LoadWatches();
+				continue;
 			}
 
-			displayView.Show();
-		}
+			if (line.StartsWith("#"))
+				continue;
 
-		private void KillVMProcess()
-		{
-			if (VMProcess == null)
-				return;
+			var parts = line.Split('\t');
 
-			if (!VMProcess.HasExited)
+			if (parts.Length < 2)
+				continue;
+
+			var address = ParseHexAddress(parts[0]);
+			var size = parts.Length >= 2 ? Convert.ToUInt32(parts[1]) : 0;
+			var symbol = parts.Length >= 3 ? parts[2] : null;
+
+			if (symbol != null && remap)
 			{
-				VMProcess.Kill();
-				VMProcess.WaitForExit();
-			}
-
-			VMProcess = null;
-		}
-
-		private CompilerHooks CreateCompilerHooks()
-		{
-			var compilerHooks = new CompilerHooks
-			{
-				NotifyStatus = LogCompilerEvent
-			};
-
-			return compilerHooks;
-		}
-
-		private void LogCompilerEvent(string info)
-		{
-			LogEvent($"Compiler >> {info}");
-		}
-
-		private void StartQEMU()
-		{
-			var compilerHook = CreateCompilerHooks();
-
-			var starter = new Starter(Settings, compilerHook);
-
-			VMProcess = starter.LaunchVM();
-		}
-
-		private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
-		{
-			Disconnect();
-
-			KillVMProcess();
-		}
-
-		public void LoadBreakPoints()
-		{
-			if (BreakpointFile == null || !File.Exists(BreakpointFile))
-				return;
-
-			bool remap = false;
-
-			foreach (var line in File.ReadAllLines(BreakpointFile))
-			{
-				if (string.IsNullOrEmpty(line))
+				if (symbol.StartsWith("0x") && symbol.Contains('+'))
 					continue;
 
-				if (line.StartsWith("#HASH: "))
-				{
-					if (ImageFile != null && File.Exists(ImageFile))
-					{
-						var hash = line.Substring(7).Trim();
+				address = DebugSource.GetFirstSymbolByName(symbol);
 
-						remap = VMHash != hash;
-					}
+				if (address == 0)
 					continue;
-				}
-
-				if (line.StartsWith("#"))
-					continue;
-
-				var parts = line.Split('\t');
-
-				if (parts.Length == 0)
-					continue;
-
-				var address = ParseHexAddress(parts[0]);
-				var symbol = parts.Length >= 2 ? parts[1] : null;
-
-				if (symbol != null && remap)
-				{
-					if (symbol.StartsWith("0x") && symbol.Contains('+'))
-						continue;
-
-					address = DebugSource.GetFirstSymbolByName(symbol);
-
-					if (address == 0)
-						continue;
-				}
-
-				AddBreakPoint(address, symbol);
 			}
+
+			AddWatch(symbol, address, size);
+		}
+	}
+
+	public static ulong ToLong(byte[] bytes)
+	{
+		return ToLong(bytes, 0, (uint)bytes.Length);
+	}
+
+	public static ulong ToLong(byte[] bytes, uint size)
+	{
+		return ToLong(bytes, 0, size);
+	}
+
+	public static ulong ToLong(byte[] bytes, uint start, uint size)
+	{
+		ulong value = 0;
+
+		for (int i = 0; i < size; i++)
+		{
+			ulong shifted = (ulong)(bytes[start + i] << (i * 8));
+			value |= shifted;
 		}
 
-		public void LoadWatches()
+		return value;
+	}
+
+	private void CalculateVMHash()
+	{
+		VMHash = null;
+
+		if (ImageFile != null && File.Exists(ImageFile))
 		{
-			if (WatchFile == null || !File.Exists(WatchFile))
-				return;
+			VMHash = CalculateFileHash(ImageFile);
+		}
+	}
 
-			bool remap = false;
-
-			foreach (var line in File.ReadAllLines(WatchFile))
+	public static string CalculateFileHash(string filename)
+	{
+		using (var md5 = MD5.Create())
+		{
+			using (var stream = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
 			{
-				if (string.IsNullOrEmpty(line))
-					continue;
-
-				if (line.StartsWith("#HASH: "))
-				{
-					if (ImageFile != null && File.Exists(ImageFile))
-					{
-						var hash = line.Substring(7).Trim();
-
-						remap = VMHash != hash;
-					}
-					continue;
-				}
-
-				if (line.StartsWith("#"))
-					continue;
-
-				var parts = line.Split('\t');
-
-				if (parts.Length < 2)
-					continue;
-
-				var address = ParseHexAddress(parts[0]);
-				var size = parts.Length >= 2 ? Convert.ToUInt32(parts[1]) : 0;
-				var symbol = parts.Length >= 3 ? parts[2] : null;
-
-				if (symbol != null && remap)
-				{
-					if (symbol.StartsWith("0x") && symbol.Contains('+'))
-						continue;
-
-					address = DebugSource.GetFirstSymbolByName(symbol);
-
-					if (address == 0)
-						continue;
-				}
-
-				AddWatch(symbol, address, size);
+				var hash = md5.ComputeHash(stream);
+				return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
 			}
 		}
+	}
 
-		public static ulong ToLong(byte[] bytes)
+	public string GetAddressInfo(ulong address)
+	{
+		if (address < 4096)
+			return null;
+
+		var symbol = DebugSource.GetFirstSymbol(address);
+
+		if (symbol != null)
 		{
-			return ToLong(bytes, 0, (uint)bytes.Length);
-		}
+			int delta = (int)(address - symbol.Address);
 
-		public static ulong ToLong(byte[] bytes, uint size)
-		{
-			return ToLong(bytes, 0, size);
-		}
-
-		public static ulong ToLong(byte[] bytes, uint start, uint size)
-		{
-			ulong value = 0;
-
-			for (int i = 0; i < size; i++)
-			{
-				ulong shifted = (ulong)(bytes[start + i] << (i * 8));
-				value |= shifted;
-			}
-
-			return value;
-		}
-
-		private void CalculateVMHash()
-		{
-			VMHash = null;
-
-			if (ImageFile != null && File.Exists(ImageFile))
-			{
-				VMHash = CalculateFileHash(ImageFile);
-			}
-		}
-
-		public static string CalculateFileHash(string filename)
-		{
-			using (var md5 = MD5.Create())
-			{
-				using (var stream = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-				{
-					var hash = md5.ComputeHash(stream);
-					return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
-				}
-			}
-		}
-
-		public string GetAddressInfo(ulong address)
-		{
-			if (address < 4096)
+			if (delta > 1024 * 16)
 				return null;
 
-			var symbol = DebugSource.GetFirstSymbol(address);
+			if (delta == 0)
+				return symbol.CommonName;
 
-			if (symbol != null)
-			{
-				int delta = (int)(address - symbol.Address);
-
-				if (delta > 1024 * 16)
-					return null;
-
-				if (delta == 0)
-					return symbol.CommonName;
-
-				return $"0x{delta.ToString("X2")}+{symbol.CommonName}";
-			}
-
-			return null;
+			return $"0x{delta.ToString("X2")}+{symbol.CommonName}";
 		}
 
-		public void SetFocus(ulong instructionPointer, ulong stackFrame, ulong stackPointer)
-		{
-			sourceView.InstructionPointer = instructionPointer;
-			sourceView.StackFrame = stackFrame;
-			sourceView.StackPointer = stackPointer;
+		return null;
+	}
 
-			methodView.InstructionPointer = instructionPointer;
-			methodView.StackFrame = stackFrame;
-			methodView.StackPointer = stackPointer;
+	public void SetFocus(ulong instructionPointer, ulong stackFrame, ulong stackPointer)
+	{
+		sourceView.InstructionPointer = instructionPointer;
+		sourceView.StackFrame = stackFrame;
+		sourceView.StackPointer = stackPointer;
 
-			instructionView.InstructionPointer = instructionPointer;
-			instructionView.StackFrame = stackFrame;
-			instructionView.StackPointer = stackPointer;
+		methodView.InstructionPointer = instructionPointer;
+		methodView.StackFrame = stackFrame;
+		methodView.StackPointer = stackPointer;
 
-			methodParametersView.InstructionPointer = instructionPointer;
-			methodParametersView.StackFrame = stackFrame;
-			methodParametersView.StackPointer = stackPointer;
+		instructionView.InstructionPointer = instructionPointer;
+		instructionView.StackFrame = stackFrame;
+		instructionView.StackPointer = stackPointer;
 
-			stackFrameView.InstructionPointer = instructionPointer;
-			stackFrameView.StackFrame = stackFrame;
-			stackFrameView.StackPointer = stackPointer;
+		methodParametersView.InstructionPointer = instructionPointer;
+		methodParametersView.StackFrame = stackFrame;
+		methodParametersView.StackPointer = stackPointer;
 
-			methodView.OnPause();
-			instructionView.OnPause();
-			sourceView.OnPause();
-			methodParametersView.OnPause();
-			stackFrameView.OnPause();
-		}
+		stackFrameView.InstructionPointer = instructionPointer;
+		stackFrameView.StackFrame = stackFrame;
+		stackFrameView.StackPointer = stackPointer;
+
+		methodView.OnPause();
+		instructionView.OnPause();
+		sourceView.OnPause();
+		methodParametersView.OnPause();
+		stackFrameView.OnPause();
 	}
 }

@@ -1,38 +1,37 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Runtime.Metadata
+namespace Mosa.Runtime.Metadata;
+
+public struct CustomAttributeArgument
 {
-	public struct CustomAttributeArgument
+	#region layout
+
+	// Pointer _name;
+	// bool _isField;
+	// Pointer _argumentType;
+	// int _argumentSize;
+
+	#endregion layout
+
+	public Pointer Ptr;
+
+	public CustomAttributeArgument(Pointer ptr)
 	{
-		#region layout
+		Ptr = ptr;
+	}
 
-		// Pointer _name;
-		// bool _isField;
-		// Pointer _argumentType;
-		// int _argumentSize;
+	public bool IsNull => Ptr.IsNull;
 
-		#endregion layout
+	public string Name => (string)Intrinsic.GetObjectFromAddress(Ptr.LoadPointer());
 
-		public Pointer Ptr;
+	public bool IsField => Ptr.Load8(Pointer.Size) == 0;
 
-		public CustomAttributeArgument(Pointer ptr)
-		{
-			Ptr = ptr;
-		}
+	public TypeDefinition ArgumentType => new TypeDefinition(Ptr.LoadPointer(Pointer.Size * 2));
 
-		public bool IsNull => Ptr.IsNull;
+	public uint ArgumentSize => Ptr.Load32(Pointer.Size * 3);
 
-		public string Name => (string)Intrinsic.GetObjectFromAddress(Ptr.LoadPointer());
-
-		public bool IsField => Ptr.Load8(Pointer.Size) == 0;
-
-		public TypeDefinition ArgumentType => new TypeDefinition(Ptr.LoadPointer(Pointer.Size * 2));
-
-		public uint ArgumentSize => Ptr.Load32(Pointer.Size * 3);
-
-		public Pointer GetArgumentValue()
-		{
-			return Ptr.LoadPointer(Pointer.Size * 4);
-		}
+	public Pointer GetArgumentValue()
+	{
+		return Ptr.LoadPointer(Pointer.Size * 4);
 	}
 }

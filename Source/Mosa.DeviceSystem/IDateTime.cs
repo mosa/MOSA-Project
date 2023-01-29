@@ -2,10 +2,9 @@
 
 using System;
 
-namespace Mosa.DeviceSystem
+namespace Mosa.DeviceSystem;
+
+public interface IDateTime
 {
-	public interface IDateTime
-	{
-		DateTime GetDateTime();
-	}
+	DateTime GetDateTime();
 }

@@ -3,33 +3,32 @@
 using System.Drawing;
 using Mosa.DeviceSystem;
 
-namespace Mosa.Demo.SVGAWorld.x86.Components
+namespace Mosa.Demo.SVGAWorld.x86.Components;
+
+public class Label
 {
-	public class Label
+	public uint X, Y;
+
+	public string Text;
+
+	public ISimpleFont Font;
+
+	public Color ForeColor;
+
+	public Label(string text, ISimpleFont font, uint x, uint y, Color foreColor)
 	{
-		public uint X, Y;
+		Text = text;
+		Font = font;
 
-		public string Text;
+		X = x;
+		Y = y;
 
-		public ISimpleFont Font;
+		ForeColor = foreColor;
+	}
 
-		public Color ForeColor;
-
-		public Label(string text, ISimpleFont font, uint x, uint y, Color foreColor)
-		{
-			Text = text;
-			Font = font;
-
-			X = x;
-			Y = y;
-
-			ForeColor = foreColor;
-		}
-
-		public void Draw()
-		{
-			if (!string.IsNullOrEmpty(Text))
-				Display.DrawString(X, Y, Text, Font, ForeColor);
-		}
+	public void Draw()
+	{
+		if (!string.IsNullOrEmpty(Text))
+			Display.DrawString(X, Y, Text, Font, ForeColor);
 	}
 }

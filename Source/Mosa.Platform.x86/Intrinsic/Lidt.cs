@@ -2,19 +2,18 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x86.Intrinsic
-{
-	/// <summary>
-	/// IntrinsicMethods
-	/// </summary>
-	static partial class IntrinsicMethods
-	{
-		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::Lidt")]
-		private static void Lidt(Context context, MethodCompiler methodCompiler)
-		{
-			//Helper.FoldOperand1ToConstant(context);
+namespace Mosa.Platform.x86.Intrinsic;
 
-			context.SetInstruction(X86.Lidt, null, context.Operand1);
-		}
+/// <summary>
+/// IntrinsicMethods
+/// </summary>
+static partial class IntrinsicMethods
+{
+	[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::Lidt")]
+	private static void Lidt(Context context, MethodCompiler methodCompiler)
+	{
+		//Helper.FoldOperand1ToConstant(context);
+
+		context.SetInstruction(X86.Lidt, null, context.Operand1);
 	}
 }

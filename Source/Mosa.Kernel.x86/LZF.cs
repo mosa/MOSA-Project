@@ -49,103 +49,102 @@
 
 using Mosa.Runtime;
 
-namespace Mosa.Kernel.x86
+namespace Mosa.Kernel.x86;
+
+/// <summary>
+/// Improved C# LZF Compressor, a very small data compression library. The compression algorithm is extremely fast.
+/// </summary>
+public static class LZF
 {
 	/// <summary>
-	/// Improved C# LZF Compressor, a very small data compression library. The compression algorithm is extremely fast.
+	/// Decompresses the data using LibLZF algorithm
 	/// </summary>
-	public static class LZF
+	/// <param name="input">Reference to the data to decompress</param>
+	/// <param name="inputLength">Length of the data to decompress</param>
+	/// <param name="output">Reference to a buffer which will contain the decompressed data</param>
+	/// <param name="outputLength">The size of the decompressed archive in the output buffer</param>
+	/// <returns></returns>
+	public static bool Decompress(Pointer input, uint inputLength, Pointer output, uint outputLength)
 	{
-		/// <summary>
-		/// Decompresses the data using LibLZF algorithm
-		/// </summary>
-		/// <param name="input">Reference to the data to decompress</param>
-		/// <param name="inputLength">Length of the data to decompress</param>
-		/// <param name="output">Reference to a buffer which will contain the decompressed data</param>
-		/// <param name="outputLength">The size of the decompressed archive in the output buffer</param>
-		/// <returns></returns>
-		public static bool Decompress(Pointer input, uint inputLength, Pointer output, uint outputLength)
-		{
-			uint iidx = 0;
-			uint oidx = 0;
+		uint iidx = 0;
+		uint oidx = 0;
 
-			do
+		do
+		{
+			//uint ctrl = input[iidx++];
+			uint ctrl = Intrinsic.Load8(input, iidx);
+			iidx++;
+
+			if (ctrl < (1 << 5)) /* literal run */
 			{
-				//uint ctrl = input[iidx++];
-				uint ctrl = Intrinsic.Load8(input, iidx);
+				ctrl++;
+
+				if (oidx + ctrl > outputLength)
+				{
+					//SET_ERRNO (E2BIG);
+					return false;
+				}
+
+				do
+				{
+					//output[oidx++] = input[iidx++];
+					Intrinsic.Store8(output, oidx, Intrinsic.Load8(input, iidx));
+					oidx++;
+					iidx++;
+				}
+				while ((--ctrl) != 0);
+			}
+			else /* back reference */
+			{
+				uint len = ctrl >> 5;
+
+				uint reference = oidx - ((ctrl & 0x1f) << 8) - 1;
+
+				if (len == 7)
+				{
+					//len += input[iidx++];
+					len += Intrinsic.Load8(input, iidx);
+					iidx++;
+				}
+
+				//reference -= input[iidx++];
+				reference -= Intrinsic.Load8(input, iidx);
 				iidx++;
 
-				if (ctrl < (1 << 5)) /* literal run */
+				if (oidx + len + 2 > outputLength)
 				{
-					ctrl++;
-
-					if (oidx + ctrl > outputLength)
-					{
-						//SET_ERRNO (E2BIG);
-						return false;
-					}
-
-					do
-					{
-						//output[oidx++] = input[iidx++];
-						Intrinsic.Store8(output, oidx, Intrinsic.Load8(input, iidx));
-						oidx++;
-						iidx++;
-					}
-					while ((--ctrl) != 0);
+					//SET_ERRNO (E2BIG);
+					return false;
 				}
-				else /* back reference */
+
+				//if (reference < 0)
+				//{
+				//	//SET_ERRNO (EINVAL);
+				//	return false;
+				//}
+
+				//output[oidx++] = output[reference++];
+				Intrinsic.Store8(output, oidx, Intrinsic.Load8(output, reference));
+				oidx++;
+				reference++;
+
+				//output[oidx++] = output[reference++];
+				Intrinsic.Store8(output, oidx, Intrinsic.Load8(output, reference));
+				oidx++;
+				reference++;
+
+				do
 				{
-					uint len = ctrl >> 5;
-
-					uint reference = oidx - ((ctrl & 0x1f) << 8) - 1;
-
-					if (len == 7)
-					{
-						//len += input[iidx++];
-						len += Intrinsic.Load8(input, iidx);
-						iidx++;
-					}
-
-					//reference -= input[iidx++];
-					reference -= Intrinsic.Load8(input, iidx);
-					iidx++;
-
-					if (oidx + len + 2 > outputLength)
-					{
-						//SET_ERRNO (E2BIG);
-						return false;
-					}
-
-					//if (reference < 0)
-					//{
-					//	//SET_ERRNO (EINVAL);
-					//	return false;
-					//}
-
 					//output[oidx++] = output[reference++];
 					Intrinsic.Store8(output, oidx, Intrinsic.Load8(output, reference));
 					oidx++;
 					reference++;
-
-					//output[oidx++] = output[reference++];
-					Intrinsic.Store8(output, oidx, Intrinsic.Load8(output, reference));
-					oidx++;
-					reference++;
-
-					do
-					{
-						//output[oidx++] = output[reference++];
-						Intrinsic.Store8(output, oidx, Intrinsic.Load8(output, reference));
-						oidx++;
-						reference++;
-					}
-					while ((--len) != 0);
 				}
+				while ((--len) != 0);
 			}
-			while (iidx < inputLength);
-
-			return true;
 		}
+		while (iidx < inputLength);
+
+		return true;
 	}
 }

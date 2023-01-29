@@ -4,16 +4,15 @@
 
 using System.Collections.Generic;
 
-namespace Mosa.Compiler.Framework.Transforms.Array
+namespace Mosa.Compiler.Framework.Transforms.Array;
+
+/// <summary>
+/// Transformations
+/// </summary>
+public static class ArrayTransforms
 {
-	/// <summary>
-	/// Transformations
-	/// </summary>
-	public static class ArrayTransforms
+	public static readonly List<BaseTransform> List = new List<BaseTransform>
 	{
-		public static readonly List<BaseTransform> List = new List<BaseTransform>
-		{
-			new CheckArrayBounds(),
-		};
-	}
+		new CheckArrayBounds(),
+	};
 }

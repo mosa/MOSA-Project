@@ -1,24 +1,23 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Platform.x64.Transforms.Tweak
-{
-	/// <summary>
-	/// Tzcnt32
-	/// </summary>
-	//public sealed class Tzcnt32 : BaseTransform
-	//{
-	//	public Tzcnt32() : base(X64.Tzcnt32, TransformType.Manual | TransformType.Transform)
-	//	{
-	//	}
+namespace Mosa.Platform.x64.Transforms.Tweak;
 
-	//	public override bool Match(Context context, TransformContext transform)
-	//	{
-	//		return true;
-	//	}
+/// <summary>
+/// Tzcnt32
+/// </summary>
+//public sealed class Tzcnt32 : BaseTransform
+//{
+//	public Tzcnt32() : base(X64.Tzcnt32, TransformType.Manual | TransformType.Transform)
+//	{
+//	}
 
-	//	public override void Transform(Context context, TransformContext transform)
-	//	{
-	//		transform.MoveOperand1ToVirtualRegister(context, X64.Mov32);
-	//	}
-	//}
-}
+//	public override bool Match(Context context, TransformContext transform)
+//	{
+//		return true;
+//	}
+
+//	public override void Transform(Context context, TransformContext transform)
+//	{
+//		transform.MoveOperand1ToVirtualRegister(context, X64.Mov32);
+//	}
+//}

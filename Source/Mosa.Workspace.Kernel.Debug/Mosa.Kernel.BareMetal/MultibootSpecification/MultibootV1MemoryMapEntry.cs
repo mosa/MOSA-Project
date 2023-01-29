@@ -2,48 +2,47 @@
 
 using Mosa.Runtime;
 
-namespace Mosa.Kernel.BareMetal.MultibootSpecification
+namespace Mosa.Kernel.BareMetal.MultibootSpecification;
+
+/// <summary>
+/// Multiboot V1 Memory Map
+/// </summary>
+public /*readonly*/ struct MultibootV1MemoryMapEntry
 {
-	/// <summary>
-	/// Multiboot V1 Memory Map
-	/// </summary>
-	public /*readonly*/ struct MultibootV1MemoryMapEntry
+	public readonly Pointer Entry;
+
+	#region Multiboot Memory Map Offsets
+
+	private struct MultiBootMemoryMapOffset
 	{
-		public readonly Pointer Entry;
+		public const byte Size = 0;
+		public const byte BaseAddr = 4;
+		public const byte Length = 12;
+		public const byte Type = 20;
+	}
 
-		#region Multiboot Memory Map Offsets
+	#endregion Multiboot Memory Map Offsets
 
-		private struct MultiBootMemoryMapOffset
-		{
-			public const byte Size = 0;
-			public const byte BaseAddr = 4;
-			public const byte Length = 12;
-			public const byte Type = 20;
-		}
+	/// <summary>
+	/// Setup Multiboot V1 Memory Map Entry.
+	/// </summary>
+	public MultibootV1MemoryMapEntry(Pointer entry)
+	{
+		Entry = entry;
+	}
 
-		#endregion Multiboot Memory Map Offsets
+	public uint Size { get { return Entry.Load32(MultiBootMemoryMapOffset.Size); } }
 
-		/// <summary>
-		/// Setup Multiboot V1 Memory Map Entry.
-		/// </summary>
-		public MultibootV1MemoryMapEntry(Pointer entry)
-		{
-			Entry = entry;
-		}
+	public Pointer BaseAddr { get { return Entry.LoadPointer(MultiBootMemoryMapOffset.BaseAddr); } }
 
-		public uint Size { get { return Entry.Load32(MultiBootMemoryMapOffset.Size); } }
+	public ulong Length { get { return Entry.Load64(MultiBootMemoryMapOffset.Length); } }
 
-		public Pointer BaseAddr { get { return Entry.LoadPointer(MultiBootMemoryMapOffset.BaseAddr); } }
+	public byte Type { get { return Entry.Load8(MultiBootMemoryMapOffset.Type); } }
 
-		public ulong Length { get { return Entry.Load64(MultiBootMemoryMapOffset.Length); } }
+	public MultibootV1MemoryMapEntry GetNext()
+	{
+		var next = Entry + Size + sizeof(uint);
 
-		public byte Type { get { return Entry.Load8(MultiBootMemoryMapOffset.Type); } }
-
-		public MultibootV1MemoryMapEntry GetNext()
-		{
-			var next = Entry + Size + sizeof(uint);
-
-			return new MultibootV1MemoryMapEntry(next);
-		}
+		return new MultibootV1MemoryMapEntry(next);
 	}
 }

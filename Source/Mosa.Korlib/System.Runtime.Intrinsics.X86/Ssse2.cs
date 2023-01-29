@@ -5,27 +5,26 @@
 
 using System.Runtime.CompilerServices;
 
-namespace System.Runtime.Intrinsics.X86
+namespace System.Runtime.Intrinsics.X86;
+
+/// <summary>
+/// This class provides access to Intel SSE2 hardware instructions via intrinsics
+/// </summary>
+[Intrinsic]
+[CLSCompliant(false)]
+public abstract class Sse2 : Sse
 {
-	/// <summary>
-	/// This class provides access to Intel SSE2 hardware instructions via intrinsics
-	/// </summary>
+	internal Sse2()
+	{ }
+
+	public new static bool IsSupported { get => IsSupported; }
+
 	[Intrinsic]
-	[CLSCompliant(false)]
-	public abstract class Sse2 : Sse
+	public abstract new class X64 : Sse.X64
 	{
-		internal Sse2()
+		internal X64()
 		{ }
 
 		public new static bool IsSupported { get => IsSupported; }
-
-		[Intrinsic]
-		public abstract new class X64 : Sse.X64
-		{
-			internal X64()
-			{ }
-
-			public new static bool IsSupported { get => IsSupported; }
-		}
 	}
 }

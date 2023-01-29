@@ -4,27 +4,26 @@
 
 using System.Runtime.CompilerServices;
 
-namespace System.Runtime.Intrinsics.X86
+namespace System.Runtime.Intrinsics.X86;
+
+/// <summary>
+/// This class provides access to Intel SSSE3 hardware instructions via intrinsics
+/// </summary>
+[Intrinsic]
+[CLSCompliant(false)]
+public abstract class Ssse3 : Sse3
 {
-	/// <summary>
-	/// This class provides access to Intel SSSE3 hardware instructions via intrinsics
-	/// </summary>
+	internal Ssse3()
+	{ }
+
+	public new static bool IsSupported { get => IsSupported; }
+
 	[Intrinsic]
-	[CLSCompliant(false)]
-	public abstract class Ssse3 : Sse3
+	public abstract new class X64 : Sse3.X64
 	{
-		internal Ssse3()
+		internal X64()
 		{ }
 
 		public new static bool IsSupported { get => IsSupported; }
-
-		[Intrinsic]
-		public abstract new class X64 : Sse3.X64
-		{
-			internal X64()
-			{ }
-
-			public new static bool IsSupported { get => IsSupported; }
-		}
 	}
 }

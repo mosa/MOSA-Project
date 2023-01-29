@@ -3,25 +3,24 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.x86.Transforms.AddressMode
+namespace Mosa.Platform.x86.Transforms.AddressMode;
+
+/// <summary>
+/// Divss
+/// </summary>
+public sealed class Divss : BaseTransform
 {
-	/// <summary>
-	/// Divss
-	/// </summary>
-	public sealed class Divss : BaseTransform
+	public Divss() : base(X86.Divss, TransformType.Manual | TransformType.Transform)
 	{
-		public Divss() : base(X86.Divss, TransformType.Manual | TransformType.Transform)
-		{
-		}
+	}
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			return !X86TransformHelper.IsAddressMode(context);
-		}
+	public override bool Match(Context context, TransformContext transform)
+	{
+		return !X86TransformHelper.IsAddressMode(context);
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			X86TransformHelper.AddressModeConversion(context, X86.Movss);
-		}
+	public override void Transform(Context context, TransformContext transform)
+	{
+		X86TransformHelper.AddressModeConversion(context, X86.Movss);
 	}
 }

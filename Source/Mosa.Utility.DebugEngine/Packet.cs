@@ -2,36 +2,35 @@
 
 using System.Collections.Generic;
 
-namespace Mosa.Utility.DebugEngine
+namespace Mosa.Utility.DebugEngine;
+
+internal sealed class Packet
 {
-	internal sealed class Packet
+	public List<byte> Data { get; internal set; }
+
+	public Packet()
 	{
-		public List<byte> Data { get; internal set; }
+		Data = new List<byte>(64);
+	}
 
-		public Packet()
-		{
-			Data = new List<byte>(64);
-		}
+	public void Add(byte b)
+	{
+		Data.Add(b);
+	}
 
-		public void Add(byte b)
-		{
-			Data.Add(b);
-		}
+	public void Add(int i)
+	{
+		Add((byte)(i & 0xFF));
+		Add((byte)(i >> 8 & 0xFF));
+		Add((byte)(i >> 16 & 0xFF));
+		Add((byte)(i >> 24 & 0xFF));
+	}
 
-		public void Add(int i)
+	public void AppendPacket(Packet packet)
+	{
+		foreach (var b in packet.Data)
 		{
-			Add((byte)(i & 0xFF));
-			Add((byte)(i >> 8 & 0xFF));
-			Add((byte)(i >> 16 & 0xFF));
-			Add((byte)(i >> 24 & 0xFF));
-		}
-
-		public void AppendPacket(Packet packet)
-		{
-			foreach (var b in packet.Data)
-			{
-				Add(b);
-			}
+			Add(b);
 		}
 	}
 }

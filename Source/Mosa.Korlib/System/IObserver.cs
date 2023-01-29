@@ -1,13 +1,12 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace System
+namespace System;
+
+public interface IObserver<in T>
 {
-	public interface IObserver<in T>
-	{
-		void OnNext(T value);
+	void OnNext(T value);
 
-		void OnError(Exception error);
+	void OnError(Exception error);
 
-		void OnCompleted();
-	}
+	void OnCompleted();
 }

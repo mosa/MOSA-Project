@@ -3,25 +3,24 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.x64.Transforms.AddressMode
+namespace Mosa.Platform.x64.Transforms.AddressMode;
+
+/// <summary>
+/// Subsd
+/// </summary>
+public sealed class Subsd : BaseTransform
 {
-	/// <summary>
-	/// Subsd
-	/// </summary>
-	public sealed class Subsd : BaseTransform
+	public Subsd() : base(X64.Subsd, TransformType.Manual | TransformType.Transform)
 	{
-		public Subsd() : base(X64.Subsd, TransformType.Manual | TransformType.Transform)
-		{
-		}
+	}
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			return !X64TransformHelper.IsAddressMode(context);
-		}
+	public override bool Match(Context context, TransformContext transform)
+	{
+		return !X64TransformHelper.IsAddressMode(context);
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			X64TransformHelper.AddressModeConversion(context, X64.Mov32);
-		}
+	public override void Transform(Context context, TransformContext transform)
+	{
+		X64TransformHelper.AddressModeConversion(context, X64.Mov32);
 	}
 }

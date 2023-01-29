@@ -3,70 +3,69 @@
 using System.Diagnostics.CodeAnalysis;
 using Mosa.Compiler.Common.Exceptions;
 
-namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata
+namespace Mosa.Compiler.MosaTypeSystem.CLR.Metadata;
+
+internal class ClrMetadata : IMetadata
 {
-	internal class ClrMetadata : IMetadata
+	private readonly ClrModuleLoader moduleLoader;
+
+	public ClrMetadata(ClrModuleLoader loader)
 	{
-		private readonly ClrModuleLoader moduleLoader;
+		moduleLoader = loader;
 
-		public ClrMetadata(ClrModuleLoader loader)
+		Cache = new ClrMetadataCache();
+		Loader = new ClrMetadataLoader(this);
+		Resolver = new ClrMetadataResolver(this);
+	}
+
+	[NotNull]
+	public TypeSystem? TypeSystem { get; private set; }
+
+	[NotNull]
+	public ITypeSystemController? Controller { get; private set; }
+
+	public ClrMetadataCache Cache { get; }
+
+	public ClrMetadataLoader Loader { get; }
+
+	public ClrMetadataResolver Resolver { get; }
+
+	public void Initialize(TypeSystem system, ITypeSystemController controller)
+	{
+		TypeSystem = system;
+		Controller = controller;
+	}
+
+	public void LoadMetadata()
+	{
+		foreach (var module in moduleLoader.Modules)
 		{
-			moduleLoader = loader;
-
-			Cache = new ClrMetadataCache();
-			Loader = new ClrMetadataLoader(this);
-			Resolver = new ClrMetadataResolver(this);
+			Loader.Load(module);
 		}
 
-		[NotNull]
-		public TypeSystem? TypeSystem { get; private set; }
+		if (Loader.CorLib == null)
+			throw new AssemblyLoadException();
 
-		[NotNull]
-		public ITypeSystemController? Controller { get; private set; }
+		Controller.SetCorLib(Loader.CorLib);
 
-		public ClrMetadataCache Cache { get; }
+		Resolver.Resolve();
 
-		public ClrMetadataLoader Loader { get; }
+		var modules = Cache?.Modules.Values;
+		if (modules == null)
+			throw new InvalidOperationException("Modules list is empty!");
 
-		public ClrMetadataResolver Resolver { get; }
-
-		public void Initialize(TypeSystem system, ITypeSystemController controller)
+		foreach (var module in modules)
 		{
-			TypeSystem = system;
-			Controller = controller;
-		}
-
-		public void LoadMetadata()
-		{
-			foreach (var module in moduleLoader.Modules)
+			if (module.EntryPoint != null)
 			{
-				Loader.Load(module);
-			}
-
-			if (Loader.CorLib == null)
-				throw new AssemblyLoadException();
-
-			Controller.SetCorLib(Loader.CorLib);
-
-			Resolver.Resolve();
-
-			var modules = Cache?.Modules.Values;
-			if (modules == null)
-				throw new InvalidOperationException("Modules list is empty!");
-
-			foreach (var module in modules)
-			{
-				if (module.EntryPoint != null)
-				{
-					Controller.SetEntryPoint(module.EntryPoint);
-					break;
-				}
+				Controller.SetEntryPoint(module.EntryPoint);
+				break;
 			}
 		}
+	}
 
-		public string? LookupUserString(MosaModule module, uint id)
-		{
-			return Cache?.GetStringById(id);
-		}
+	public string? LookupUserString(MosaModule module, uint id)
+	{
+		return Cache?.GetStringById(id);
 	}
 }

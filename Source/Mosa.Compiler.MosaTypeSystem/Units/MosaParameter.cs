@@ -2,63 +2,62 @@
 
 using System;
 
-namespace Mosa.Compiler.MosaTypeSystem
+namespace Mosa.Compiler.MosaTypeSystem;
+
+public class MosaParameter : MosaUnit, IEquatable<MosaParameter>, IEquatable<MosaType>
 {
-	public class MosaParameter : MosaUnit, IEquatable<MosaParameter>, IEquatable<MosaType>
+	public MosaParameterAttributes ParameterAttributes { get; private set; }
+
+	public MosaMethod? DeclaringMethod { get; private set; }
+
+	public MosaType? ParameterType { get; private set; }
+
+	internal MosaParameter()
 	{
-		public MosaParameterAttributes ParameterAttributes { get; private set; }
+	}
 
-		public MosaMethod? DeclaringMethod { get; private set; }
+	override internal MosaParameter Clone()
+	{
+		return (MosaParameter)base.Clone();
+	}
 
-		public MosaType? ParameterType { get; private set; }
+	public bool Equals(MosaParameter? parameter)
+	{
+		return ParameterType?.Equals(parameter?.ParameterType) == true;
 
-		internal MosaParameter()
+		//&& ParameterAttributes.Equals(parameter.ParameterAttributes)
+		//&& CustomAttributes.Equals(parameter.CustomAttributes)
+		//&& Name.Equals(parameter.Name);
+	}
+
+	public bool Equals(MosaType? type)
+	{
+		return ParameterType?.Equals(type) == true;
+	}
+
+	public class Mutator : MutatorBase
+	{
+		private readonly MosaParameter parameter;
+
+		internal Mutator(MosaParameter parameter)
+			: base(parameter)
 		{
+			this.parameter = parameter;
 		}
 
-		override internal MosaParameter Clone()
+		public MosaParameterAttributes ParameterAttributes { set { parameter.ParameterAttributes = value; } }
+
+		public MosaMethod? DeclaringMethod { set { parameter.DeclaringMethod = value; } }
+
+		public MosaType? ParameterType { set { parameter.ParameterType = value; } }
+
+		public override void Dispose()
 		{
-			return (MosaParameter)base.Clone();
-		}
-
-		public bool Equals(MosaParameter? parameter)
-		{
-			return ParameterType?.Equals(parameter?.ParameterType) == true;
-
-			//&& ParameterAttributes.Equals(parameter.ParameterAttributes)
-			//&& CustomAttributes.Equals(parameter.CustomAttributes)
-			//&& Name.Equals(parameter.Name);
-		}
-
-		public bool Equals(MosaType? type)
-		{
-			return ParameterType?.Equals(type) == true;
-		}
-
-		public class Mutator : MutatorBase
-		{
-			private readonly MosaParameter parameter;
-
-			internal Mutator(MosaParameter parameter)
-				: base(parameter)
+			if (parameter.ParameterType != null)
 			{
-				this.parameter = parameter;
-			}
-
-			public MosaParameterAttributes ParameterAttributes { set { parameter.ParameterAttributes = value; } }
-
-			public MosaMethod? DeclaringMethod { set { parameter.DeclaringMethod = value; } }
-
-			public MosaType? ParameterType { set { parameter.ParameterType = value; } }
-
-			public override void Dispose()
-			{
-				if (parameter.ParameterType != null)
-				{
-					var signatureName = parameter.DeclaringMethod == null ? "<FunctionPointer>" : parameter.DeclaringMethod.FullName;
-					parameter.FullName = string.Concat(signatureName, "::", parameter.Name, " ", parameter.ParameterType.FullName);
-					parameter.ShortName = string.Concat(parameter.Name, " : ", parameter.ParameterType.ShortName);
-				}
+				var signatureName = parameter.DeclaringMethod == null ? "<FunctionPointer>" : parameter.DeclaringMethod.FullName;
+				parameter.FullName = string.Concat(signatureName, "::", parameter.Name, " ", parameter.ParameterType.FullName);
+				parameter.ShortName = string.Concat(parameter.Name, " : ", parameter.ParameterType.ShortName);
 			}
 		}
 	}

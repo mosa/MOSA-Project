@@ -3,35 +3,34 @@
 using Mosa.DeviceDriver.ISA;
 using Mosa.DeviceSystem;
 
-namespace Mosa.DeviceDriver
+namespace Mosa.DeviceDriver;
+
+/// <summary>
+/// X86 System
+/// </summary>
+public class X86System : BaseDeviceDriver
 {
-	/// <summary>
-	/// X86 System
-	/// </summary>
-	public class X86System : BaseDeviceDriver
+	public override void Initialize()
 	{
-		public override void Initialize()
-		{
-			Device.Name = "X86System";
-		}
+		Device.Name = "X86System";
+	}
 
-		public override void Probe()
-		{
-			Device.Status = DeviceStatus.Available;
-		}
+	public override void Probe()
+	{
+		Device.Status = DeviceStatus.Available;
+	}
 
-		public override void Start()
-		{
-			CreateISABusDevices();
+	public override void Start()
+	{
+		CreateISABusDevices();
 
-			Device.Status = DeviceStatus.Online;
-		}
+		Device.Status = DeviceStatus.Online;
+	}
 
-		public override bool OnInterrupt() => true;
+	public override bool OnInterrupt() => true;
 
-		protected void CreateISABusDevices()
-		{
-			DeviceService.Initialize(new ISABus(), Device, true, null, null, null);
-		}
+	protected void CreateISABusDevices()
+	{
+		DeviceService.Initialize(new ISABus(), Device, true, null, null, null);
 	}
 }

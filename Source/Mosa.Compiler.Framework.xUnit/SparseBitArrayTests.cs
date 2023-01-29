@@ -3,36 +3,35 @@
 using Mosa.Compiler.Common;
 using Xunit;
 
-namespace Mosa.Compiler.Framework.xUnit
+namespace Mosa.Compiler.Framework.xUnit;
+
+public class SparseBitArrayTests
 {
-	public class SparseBitArrayTests
+	[Fact]
+	public void AllZeroAfterCreation()
 	{
-		[Fact]
-		public void AllZeroAfterCreation()
-		{
-			var bitarray = new SparseBitArray();
+		var bitarray = new SparseBitArray();
 
-			Assert.True(!bitarray.Get(0));
-			Assert.True(!bitarray.Get(1));
-			Assert.True(!bitarray.Get(2));
-			Assert.True(!bitarray.Get(100));
-			Assert.True(!bitarray.Get(1000));
-		}
+		Assert.True(!bitarray.Get(0));
+		Assert.True(!bitarray.Get(1));
+		Assert.True(!bitarray.Get(2));
+		Assert.True(!bitarray.Get(100));
+		Assert.True(!bitarray.Get(1000));
+	}
 
-		[Fact]
-		public void SimpleSets()
-		{
-			var bitarray = new SparseBitArray();
-			bitarray.Set(0, true);
-			bitarray.Set(1, true);
-			bitarray.Set(2, true);
-			bitarray.Set(3, true);
+	[Fact]
+	public void SimpleSets()
+	{
+		var bitarray = new SparseBitArray();
+		bitarray.Set(0, true);
+		bitarray.Set(1, true);
+		bitarray.Set(2, true);
+		bitarray.Set(3, true);
 
-			Assert.True(bitarray.Get(0));
-			Assert.True(bitarray.Get(1));
-			Assert.True(bitarray.Get(2));
-			Assert.True(bitarray.Get(3));
-			Assert.True(!bitarray.Get(4));
-		}
+		Assert.True(bitarray.Get(0));
+		Assert.True(bitarray.Get(1));
+		Assert.True(bitarray.Get(2));
+		Assert.True(bitarray.Get(3));
+		Assert.True(!bitarray.Get(4));
 	}
 }

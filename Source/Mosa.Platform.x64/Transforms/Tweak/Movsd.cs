@@ -4,28 +4,27 @@ using System.Diagnostics;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.x64.Transforms.Tweak
+namespace Mosa.Platform.x64.Transforms.Tweak;
+
+/// <summary>
+/// Movsd
+/// </summary>
+public sealed class Movsd : BaseTransform
 {
-	/// <summary>
-	/// Movsd
-	/// </summary>
-	public sealed class Movsd : BaseTransform
+	public Movsd() : base(X64.Movsd, TransformType.Manual | TransformType.Transform)
 	{
-		public Movsd() : base(X64.Movsd, TransformType.Manual | TransformType.Transform)
-		{
-		}
+	}
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			return context.Operand1.IsCPURegister && context.Result.Register == context.Operand1.Register;
-		}
+	public override bool Match(Context context, TransformContext transform)
+	{
+		return context.Operand1.IsCPURegister && context.Result.Register == context.Operand1.Register;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			Debug.Assert(context.Result.IsCPURegister);
-			Debug.Assert(context.Operand1.IsCPURegister);
+	public override void Transform(Context context, TransformContext transform)
+	{
+		Debug.Assert(context.Result.IsCPURegister);
+		Debug.Assert(context.Operand1.IsCPURegister);
 
-			context.Empty();
-		}
+		context.Empty();
 	}
 }

@@ -3,192 +3,191 @@
 using System.Collections.Generic;
 using Mosa.Compiler.Common;
 
-namespace Mosa.Compiler.Framework.RegisterAllocator
+namespace Mosa.Compiler.Framework.RegisterAllocator;
+
+public sealed class VirtualRegister
 {
-	public sealed class VirtualRegister
+	public readonly List<SlotIndex> UsePositions;
+
+	public readonly List<SlotIndex> DefPositions;
+
+	public readonly Operand VirtualRegisterOperand;
+
+	public readonly PhysicalRegister PhysicalRegister;
+
+	public bool IsPhysicalRegister { get { return VirtualRegisterOperand == null; } }
+
+	public bool IsVirtualRegister { get { return VirtualRegisterOperand != null; } }
+
+	public List<LiveInterval> LiveIntervals { get; } = new List<LiveInterval>(1);
+
+	public int Count { get { return LiveIntervals.Count; } }
+
+	public LiveInterval LastRange { get { return LiveIntervals.Count == 0 ? null : LiveIntervals[LiveIntervals.Count - 1]; } }
+
+	public LiveInterval FirstRange { get { return LiveIntervals.Count == 0 ? null : LiveIntervals[0]; } set { LiveIntervals[0] = value; } }
+
+	public Operand SpillSlotOperand;
+
+	public bool IsFloatingPoint { get { return VirtualRegisterOperand.IsFloatingPoint; } }
+
+	public bool IsReserved { get; }
+
+	public bool IsSpilled;
+
+	public bool IsUsed { get { return Count != 0; } }
+
+	public VirtualRegister(Operand virtualRegister)
 	{
-		public readonly List<SlotIndex> UsePositions;
+		VirtualRegisterOperand = virtualRegister;
+		IsReserved = false;
+		IsSpilled = false;
 
-		public readonly List<SlotIndex> DefPositions;
-
-		public readonly Operand VirtualRegisterOperand;
-
-		public readonly PhysicalRegister PhysicalRegister;
-
-		public bool IsPhysicalRegister { get { return VirtualRegisterOperand == null; } }
-
-		public bool IsVirtualRegister { get { return VirtualRegisterOperand != null; } }
-
-		public List<LiveInterval> LiveIntervals { get; } = new List<LiveInterval>(1);
-
-		public int Count { get { return LiveIntervals.Count; } }
-
-		public LiveInterval LastRange { get { return LiveIntervals.Count == 0 ? null : LiveIntervals[LiveIntervals.Count - 1]; } }
-
-		public LiveInterval FirstRange { get { return LiveIntervals.Count == 0 ? null : LiveIntervals[0]; } set { LiveIntervals[0] = value; } }
-
-		public Operand SpillSlotOperand;
-
-		public bool IsFloatingPoint { get { return VirtualRegisterOperand.IsFloatingPoint; } }
-
-		public bool IsReserved { get; }
-
-		public bool IsSpilled;
-
-		public bool IsUsed { get { return Count != 0; } }
-
-		public VirtualRegister(Operand virtualRegister)
+		if (virtualRegister.IsVirtualRegister)
 		{
-			VirtualRegisterOperand = virtualRegister;
-			IsReserved = false;
-			IsSpilled = false;
+			UsePositions = new List<SlotIndex>(VirtualRegisterOperand.Uses.Count);
+			DefPositions = new List<SlotIndex>(VirtualRegisterOperand.Definitions.Count);
+		}
+	}
 
-			if (virtualRegister.IsVirtualRegister)
-			{
-				UsePositions = new List<SlotIndex>(VirtualRegisterOperand.Uses.Count);
-				DefPositions = new List<SlotIndex>(VirtualRegisterOperand.Definitions.Count);
-			}
+	public void UpdatePositions()
+	{
+		var usePositions = UsePositions;
+
+		foreach (var use in VirtualRegisterOperand.Uses)
+		{
+			usePositions.AddIfNew(new SlotIndex(use));
 		}
 
-		public void UpdatePositions()
+		usePositions.Sort();
+
+		var defPositions = DefPositions;
+		foreach (var def in VirtualRegisterOperand.Definitions)
 		{
-			var usePositions = UsePositions;
-
-			foreach (var use in VirtualRegisterOperand.Uses)
-			{
-				usePositions.AddIfNew(new SlotIndex(use));
-			}
-
-			usePositions.Sort();
-
-			var defPositions = DefPositions;
-			foreach (var def in VirtualRegisterOperand.Definitions)
-			{
-				defPositions.AddIfNew(new SlotIndex(def));
-			}
-
-			defPositions.Sort();
+			defPositions.AddIfNew(new SlotIndex(def));
 		}
 
-		public VirtualRegister(PhysicalRegister physicalRegister, bool reserved)
+		defPositions.Sort();
+	}
+
+	public VirtualRegister(PhysicalRegister physicalRegister, bool reserved)
+	{
+		PhysicalRegister = physicalRegister;
+		IsReserved = reserved;
+		IsSpilled = false;
+	}
+
+	public void Add(LiveInterval liveInterval)
+	{
+		LiveIntervals.Add(liveInterval);
+	}
+
+	public void Remove(LiveInterval liveInterval)
+	{
+		LiveIntervals.Remove(liveInterval);
+	}
+
+	public void AddLiveInterval(SlotIndex start, SlotIndex end)
+	{
+		if (LiveIntervals.Count == 0)
 		{
-			PhysicalRegister = physicalRegister;
-			IsReserved = reserved;
-			IsSpilled = false;
+			LiveIntervals.Add(new LiveInterval(this, start, end));
+			return;
 		}
 
-		public void Add(LiveInterval liveInterval)
+		for (int i = 0; i < LiveIntervals.Count; i++)
 		{
-			LiveIntervals.Add(liveInterval);
-		}
+			var liveRange = LiveIntervals[i];
 
-		public void Remove(LiveInterval liveInterval)
-		{
-			LiveIntervals.Remove(liveInterval);
-		}
-
-		public void AddLiveInterval(SlotIndex start, SlotIndex end)
-		{
-			if (LiveIntervals.Count == 0)
-			{
-				LiveIntervals.Add(new LiveInterval(this, start, end));
+			if (liveRange.Start == start && liveRange.End == end)
 				return;
-			}
 
-			for (int i = 0; i < LiveIntervals.Count; i++)
+			if (liveRange.IsAdjacent(start, end) || liveRange.Intersects(start, end))
 			{
-				var liveRange = LiveIntervals[i];
+				liveRange = liveRange.CreateExpandedLiveRange(start, end);
+				LiveIntervals[i] = liveRange;
 
-				if (liveRange.Start == start && liveRange.End == end)
-					return;
-
-				if (liveRange.IsAdjacent(start, end) || liveRange.Intersects(start, end))
+				for (int z = i + 1; z < LiveIntervals.Count; z++)
 				{
-					liveRange = liveRange.CreateExpandedLiveRange(start, end);
-					LiveIntervals[i] = liveRange;
-
-					for (int z = i + 1; z < LiveIntervals.Count; z++)
+					var nextLiveRange = LiveIntervals[z];
+					if (liveRange.IsAdjacent(nextLiveRange) || liveRange.Intersects(nextLiveRange))
 					{
-						var nextLiveRange = LiveIntervals[z];
-						if (liveRange.IsAdjacent(nextLiveRange) || liveRange.Intersects(nextLiveRange))
-						{
-							liveRange = liveRange.CreateExpandedLiveInterval(nextLiveRange);
-							LiveIntervals[i] = liveRange;
-							LiveIntervals.RemoveAt(z);
+						liveRange = liveRange.CreateExpandedLiveInterval(nextLiveRange);
+						LiveIntervals[i] = liveRange;
+						LiveIntervals.RemoveAt(z);
 
-							continue;
-						}
-
-						return;
+						continue;
 					}
 
 					return;
 				}
 
-				if (liveRange.Start > end)
-				{
-					// new range is before the current range (so insert before)
-					LiveIntervals.Insert(i, new LiveInterval(this, start, end));
-					return;
-				}
+				return;
 			}
 
-			// new range is after the last range
-			LiveIntervals.Add(new LiveInterval(this, start, end));
-		}
-
-		/// <summary>
-		/// Gets the interval at.
-		/// </summary>
-		/// <param name="at">At.</param>
-		/// <returns></returns>
-		public LiveInterval GetIntervalAt(SlotIndex at)
-		{
-			foreach (var liveInterval in LiveIntervals)
+			if (liveRange.Start > end)
 			{
-				if (liveInterval.Contains(at))
-					return liveInterval;
-			}
-
-			return null;
-		}
-
-		/// <summary>
-		/// Gets the interval at or ends at.
-		/// </summary>
-		/// <param name="at">At.</param>
-		/// <returns></returns>
-		public LiveInterval GetIntervalAtOrEndsAt(SlotIndex at)
-		{
-			foreach (var liveInterval in LiveIntervals)
-			{
-				if (liveInterval.Contains(at) || at == liveInterval.End)
-					return liveInterval;
-			}
-
-			return null;
-		}
-
-		public void ReplaceWithSplit(LiveInterval source, List<LiveInterval> liveIntervals)
-		{
-			Remove(source);
-
-			foreach (var liveInterval in liveIntervals)
-			{
-				Add(liveInterval);
+				// new range is before the current range (so insert before)
+				LiveIntervals.Insert(i, new LiveInterval(this, start, end));
+				return;
 			}
 		}
 
-		public override string ToString()
+		// new range is after the last range
+		LiveIntervals.Add(new LiveInterval(this, start, end));
+	}
+
+	/// <summary>
+	/// Gets the interval at.
+	/// </summary>
+	/// <param name="at">At.</param>
+	/// <returns></returns>
+	public LiveInterval GetIntervalAt(SlotIndex at)
+	{
+		foreach (var liveInterval in LiveIntervals)
 		{
-			if (IsPhysicalRegister)
-			{
-				return PhysicalRegister.ToString();
-			}
-			else
-			{
-				return $"V_{VirtualRegisterOperand.Index}";
-			}
+			if (liveInterval.Contains(at))
+				return liveInterval;
+		}
+
+		return null;
+	}
+
+	/// <summary>
+	/// Gets the interval at or ends at.
+	/// </summary>
+	/// <param name="at">At.</param>
+	/// <returns></returns>
+	public LiveInterval GetIntervalAtOrEndsAt(SlotIndex at)
+	{
+		foreach (var liveInterval in LiveIntervals)
+		{
+			if (liveInterval.Contains(at) || at == liveInterval.End)
+				return liveInterval;
+		}
+
+		return null;
+	}
+
+	public void ReplaceWithSplit(LiveInterval source, List<LiveInterval> liveIntervals)
+	{
+		Remove(source);
+
+		foreach (var liveInterval in liveIntervals)
+		{
+			Add(liveInterval);
+		}
+	}
+
+	public override string ToString()
+	{
+		if (IsPhysicalRegister)
+		{
+			return PhysicalRegister.ToString();
+		}
+		else
+		{
+			return $"V_{VirtualRegisterOperand.Index}";
 		}
 	}
 }

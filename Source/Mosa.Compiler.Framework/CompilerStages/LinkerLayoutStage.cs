@@ -2,25 +2,24 @@
 
 using Mosa.Compiler.Framework.Linker;
 
-namespace Mosa.Compiler.Framework.CompilerStages
+namespace Mosa.Compiler.Framework.CompilerStages;
+
+/// <summary>
+/// Linker Layout Stage
+/// </summary>
+/// <seealso cref="Mosa.Compiler.Framework.BaseCompilerStage" />
+public sealed class LinkerLayoutStage : BaseCompilerStage
 {
-	/// <summary>
-	/// Linker Layout Stage
-	/// </summary>
-	/// <seealso cref="Mosa.Compiler.Framework.BaseCompilerStage" />
-	public sealed class LinkerLayoutStage : BaseCompilerStage
+	protected override void Finalization()
 	{
-		protected override void Finalization()
-		{
-			if (string.IsNullOrEmpty(CompilerSettings.OutputFile))
-				return;
+		if (string.IsNullOrEmpty(CompilerSettings.OutputFile))
+			return;
 
-			Linker.FinalizeLayout();
+		Linker.FinalizeLayout();
 
-			Compiler.GlobalCounters.Update("Linker.Text", (int)Linker.Sections[(int)SectionKind.Text].Size);
-			Compiler.GlobalCounters.Update("Linker.Data", (int)Linker.Sections[(int)SectionKind.Data].Size);
-			Compiler.GlobalCounters.Update("Linker.ROData", (int)Linker.Sections[(int)SectionKind.ROData].Size);
-			Compiler.GlobalCounters.Update("Linker.BSS", (int)Linker.Sections[(int)SectionKind.BSS].Size);
-		}
+		Compiler.GlobalCounters.Update("Linker.Text", (int)Linker.Sections[(int)SectionKind.Text].Size);
+		Compiler.GlobalCounters.Update("Linker.Data", (int)Linker.Sections[(int)SectionKind.Data].Size);
+		Compiler.GlobalCounters.Update("Linker.ROData", (int)Linker.Sections[(int)SectionKind.ROData].Size);
+		Compiler.GlobalCounters.Update("Linker.BSS", (int)Linker.Sections[(int)SectionKind.BSS].Size);
 	}
 }

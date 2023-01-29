@@ -2,65 +2,64 @@
 
 using Mosa.Compiler.Framework.Trace;
 
-namespace Mosa.Compiler.Framework.Stages
+namespace Mosa.Compiler.Framework.Stages;
+
+/// <summary>
+/// Devirtualize Call Stage
+/// </summary>
+/// <seealso cref="Mosa.Compiler.Framework.BaseCodeTransformationStage" />
+public sealed class DevirtualizeCallStage : BaseCodeTransformationStage
 {
-	/// <summary>
-	/// Devirtualize Call Stage
-	/// </summary>
-	/// <seealso cref="Mosa.Compiler.Framework.BaseCodeTransformationStage" />
-	public sealed class DevirtualizeCallStage : BaseCodeTransformationStage
+	private readonly Counter DevirtualizedMethodCallsCount = new Counter("DevirtualizeCallStage.DevirtualizedMethodCalls");
+
+	private TraceLog trace;
+
+	protected override void Initialize()
 	{
-		private readonly Counter DevirtualizedMethodCallsCount = new Counter("DevirtualizeCallStage.DevirtualizedMethodCalls");
+		base.Initialize();
 
-		private TraceLog trace;
+		Register(DevirtualizedMethodCallsCount);
+	}
 
-		protected override void Initialize()
-		{
-			base.Initialize();
+	protected override void PopulateVisitationDictionary()
+	{
+		AddVisitation(IRInstruction.CallVirtual, CallVirtual);
+	}
 
-			Register(DevirtualizedMethodCallsCount);
-		}
+	protected override void Setup()
+	{
+		trace = CreateTraceLog();
+	}
 
-		protected override void PopulateVisitationDictionary()
-		{
-			AddVisitation(IRInstruction.CallVirtual, CallVirtual);
-		}
+	protected override void Finish()
+	{
+		trace = null;
+	}
 
-		protected override void Setup()
-		{
-			trace = CreateTraceLog();
-		}
+	private void CallVirtual(Context context)
+	{
+		var method = context.Operand1.Method;
 
-		protected override void Finish()
-		{
-			trace = null;
-		}
+		// Next lines are not necessary but faster then getting the method data
+		if (!method.HasImplementation && method.IsAbstract)
+			return;
 
-		private void CallVirtual(Context context)
-		{
-			var method = context.Operand1.Method;
+		var methodData = MethodCompiler.Compiler.GetMethodData(method);
 
-			// Next lines are not necessary but faster then getting the method data
-			if (!method.HasImplementation && method.IsAbstract)
-				return;
+		if (!methodData.IsDevirtualized)
+			return;
 
-			var methodData = MethodCompiler.Compiler.GetMethodData(method);
+		var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
 
-			if (!methodData.IsDevirtualized)
-				return;
+		var operands = context.GetOperands();
+		operands.RemoveAt(0);
 
-			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
+		trace?.Log($"De-virtualize: {method}");
 
-			var operands = context.GetOperands();
-			operands.RemoveAt(0);
+		DevirtualizedMethodCallsCount.Increment();
 
-			trace?.Log($"De-virtualize: {method}");
+		context.SetInstruction(IRInstruction.CallStatic, context.Result, symbol, operands);
 
-			DevirtualizedMethodCallsCount.Increment();
-
-			context.SetInstruction(IRInstruction.CallStatic, context.Result, symbol, operands);
-
-			MethodScanner.MethodInvoked(method, Method);
-		}
+		MethodScanner.MethodInvoked(method, Method);
 	}
 }

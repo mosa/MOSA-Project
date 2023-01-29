@@ -2,259 +2,258 @@
 
 using System.Diagnostics.Contracts;
 
-namespace System.Collections
+namespace System.Collections;
+
+// Useful base class for typed read/write collections where items derive from object
+[Serializable]
+public abstract class CollectionBase : IList
 {
-	// Useful base class for typed read/write collections where items derive from object
-	[Serializable]
-	public abstract class CollectionBase : IList
+	private ArrayList list;
+
+	protected CollectionBase()
 	{
-		private ArrayList list;
+		list = new ArrayList();
+	}
 
-		protected CollectionBase()
+	protected CollectionBase(int capacity)
+	{
+		list = new ArrayList(capacity);
+	}
+
+	protected ArrayList InnerList
+	{
+		get
 		{
-			list = new ArrayList();
+			if (list == null)
+				list = new ArrayList();
+			return list;
 		}
+	}
 
-		protected CollectionBase(int capacity)
+	protected IList List
+	{
+		get { return this; }
+	}
+
+	public int Capacity
+	{
+		get
 		{
-			list = new ArrayList(capacity);
+			return InnerList.Capacity;
 		}
-
-		protected ArrayList InnerList
+		set
 		{
-			get
-			{
-				if (list == null)
-					list = new ArrayList();
-				return list;
-			}
+			InnerList.Capacity = value;
 		}
+	}
 
-		protected IList List
+	public int Count
+	{
+		get
 		{
-			get { return this; }
+			return list == null ? 0 : list.Count;
 		}
+	}
 
-		public int Capacity
+	public void Clear()
+	{
+		OnClear();
+		InnerList.Clear();
+		OnClearComplete();
+	}
+
+	public void RemoveAt(int index)
+	{
+		if (index < 0 || index >= Count)
+			throw new ArgumentOutOfRangeException();
+
+		//throw new ArgumentOutOfRangeException(nameof(index), Environment.GetResourceString("ArgumentOutOfRange_Index"));
+		Contract.EndContractBlock();
+		Object temp = InnerList[index];
+		OnValidate(temp);
+		OnRemove(index, temp);
+		InnerList.RemoveAt(index);
+		try
 		{
-			get
-			{
-				return InnerList.Capacity;
-			}
-			set
-			{
-				InnerList.Capacity = value;
-			}
+			OnRemoveComplete(index, temp);
 		}
-
-		public int Count
+		catch
 		{
-			get
-			{
-				return list == null ? 0 : list.Count;
-			}
-		}
+			InnerList.Insert(index, temp);
 
-		public void Clear()
-		{
-			OnClear();
-			InnerList.Clear();
-			OnClearComplete();
+			//throw; FIME: --- not support!
 		}
+	}
 
-		public void RemoveAt(int index)
+	bool IList.IsReadOnly
+	{
+		get { return InnerList.IsReadOnly; }
+	}
+
+	bool IList.IsFixedSize
+	{
+		get { return InnerList.IsFixedSize; }
+	}
+
+	bool ICollection.IsSynchronized
+	{
+		get { return InnerList.IsSynchronized; }
+	}
+
+	Object ICollection.SyncRoot
+	{
+		get { return InnerList.SyncRoot; }
+	}
+
+	void ICollection.CopyTo(Array array, int index)
+	{
+		InnerList.CopyTo(array, index);
+	}
+
+	Object IList.this[int index]
+	{
+		get
 		{
 			if (index < 0 || index >= Count)
 				throw new ArgumentOutOfRangeException();
 
 			//throw new ArgumentOutOfRangeException(nameof(index), Environment.GetResourceString("ArgumentOutOfRange_Index"));
 			Contract.EndContractBlock();
-			Object temp = InnerList[index];
-			OnValidate(temp);
-			OnRemove(index, temp);
-			InnerList.RemoveAt(index);
-			try
-			{
-				OnRemoveComplete(index, temp);
-			}
-			catch
-			{
-				InnerList.Insert(index, temp);
-
-				//throw; FIME: --- not support!
-			}
+			return InnerList[index];
 		}
-
-		bool IList.IsReadOnly
+		set
 		{
-			get { return InnerList.IsReadOnly; }
-		}
-
-		bool IList.IsFixedSize
-		{
-			get { return InnerList.IsFixedSize; }
-		}
-
-		bool ICollection.IsSynchronized
-		{
-			get { return InnerList.IsSynchronized; }
-		}
-
-		Object ICollection.SyncRoot
-		{
-			get { return InnerList.SyncRoot; }
-		}
-
-		void ICollection.CopyTo(Array array, int index)
-		{
-			InnerList.CopyTo(array, index);
-		}
-
-		Object IList.this[int index]
-		{
-			get
-			{
-				if (index < 0 || index >= Count)
-					throw new ArgumentOutOfRangeException();
-
-				//throw new ArgumentOutOfRangeException(nameof(index), Environment.GetResourceString("ArgumentOutOfRange_Index"));
-				Contract.EndContractBlock();
-				return InnerList[index];
-			}
-			set
-			{
-				if (index < 0 || index >= Count)
-					throw new ArgumentOutOfRangeException();
-
-				//throw new ArgumentOutOfRangeException(nameof(index), Environment.GetResourceString("ArgumentOutOfRange_Index"));
-				Contract.EndContractBlock();
-				OnValidate(value);
-				Object temp = InnerList[index];
-				OnSet(index, temp, value);
-				InnerList[index] = value;
-				try
-				{
-					OnSetComplete(index, temp, value);
-				}
-				catch
-				{
-					InnerList[index] = temp;
-
-					//throw; FIME: --- not support!
-				}
-			}
-		}
-
-		bool IList.Contains(Object value)
-		{
-			return InnerList.Contains(value);
-		}
-
-		int IList.Add(Object value)
-		{
-			OnValidate(value);
-			OnInsert(InnerList.Count, value);
-			int index = InnerList.Add(value);
-			try
-			{
-				OnInsertComplete(index, value);
-			}
-			catch
-			{
-				InnerList.RemoveAt(index);
-
-				//throw; FIME: --- not support!
-			}
-			return index;
-		}
-
-		void IList.Remove(Object value)
-		{
-			OnValidate(value);
-			int index = InnerList.IndexOf(value);
-			if (index < 0) throw new ArgumentException();//throw new ArgumentException(Environment.GetResourceString("Arg_RemoveArgNotFound"));
-			OnRemove(index, value);
-			InnerList.RemoveAt(index);
-			try
-			{
-				OnRemoveComplete(index, value);
-			}
-			catch
-			{
-				InnerList.Insert(index, value);
-
-				//throw; FIME: --- not support!
-			}
-		}
-
-		int IList.IndexOf(Object value)
-		{
-			return InnerList.IndexOf(value);
-		}
-
-		void IList.Insert(int index, Object value)
-		{
-			if (index < 0 || index > Count)
+			if (index < 0 || index >= Count)
 				throw new ArgumentOutOfRangeException();
 
 			//throw new ArgumentOutOfRangeException(nameof(index), Environment.GetResourceString("ArgumentOutOfRange_Index"));
 			Contract.EndContractBlock();
 			OnValidate(value);
-			OnInsert(index, value);
-			InnerList.Insert(index, value);
+			Object temp = InnerList[index];
+			OnSet(index, temp, value);
+			InnerList[index] = value;
 			try
 			{
-				OnInsertComplete(index, value);
+				OnSetComplete(index, temp, value);
 			}
 			catch
 			{
-				InnerList.RemoveAt(index);
+				InnerList[index] = temp;
 
 				//throw; FIME: --- not support!
 			}
 		}
+	}
 
-		public IEnumerator GetEnumerator()
-		{
-			return InnerList.GetEnumerator();
-		}
+	bool IList.Contains(Object value)
+	{
+		return InnerList.Contains(value);
+	}
 
-		protected virtual void OnSet(int index, Object oldValue, Object newValue)
+	int IList.Add(Object value)
+	{
+		OnValidate(value);
+		OnInsert(InnerList.Count, value);
+		int index = InnerList.Add(value);
+		try
 		{
+			OnInsertComplete(index, value);
 		}
+		catch
+		{
+			InnerList.RemoveAt(index);
 
-		protected virtual void OnInsert(int index, Object value)
-		{
+			//throw; FIME: --- not support!
 		}
+		return index;
+	}
 
-		protected virtual void OnClear()
+	void IList.Remove(Object value)
+	{
+		OnValidate(value);
+		int index = InnerList.IndexOf(value);
+		if (index < 0) throw new ArgumentException();//throw new ArgumentException(Environment.GetResourceString("Arg_RemoveArgNotFound"));
+		OnRemove(index, value);
+		InnerList.RemoveAt(index);
+		try
 		{
+			OnRemoveComplete(index, value);
 		}
+		catch
+		{
+			InnerList.Insert(index, value);
 
-		protected virtual void OnRemove(int index, Object value)
-		{
+			//throw; FIME: --- not support!
 		}
+	}
 
-		protected virtual void OnValidate(Object value)
-		{
-			if (value == null) throw new ArgumentNullException(nameof(value));
-			Contract.EndContractBlock();
-		}
+	int IList.IndexOf(Object value)
+	{
+		return InnerList.IndexOf(value);
+	}
 
-		protected virtual void OnSetComplete(int index, Object oldValue, Object newValue)
-		{
-		}
+	void IList.Insert(int index, Object value)
+	{
+		if (index < 0 || index > Count)
+			throw new ArgumentOutOfRangeException();
 
-		protected virtual void OnInsertComplete(int index, Object value)
+		//throw new ArgumentOutOfRangeException(nameof(index), Environment.GetResourceString("ArgumentOutOfRange_Index"));
+		Contract.EndContractBlock();
+		OnValidate(value);
+		OnInsert(index, value);
+		InnerList.Insert(index, value);
+		try
 		{
+			OnInsertComplete(index, value);
 		}
+		catch
+		{
+			InnerList.RemoveAt(index);
 
-		protected virtual void OnClearComplete()
-		{
+			//throw; FIME: --- not support!
 		}
+	}
 
-		protected virtual void OnRemoveComplete(int index, Object value)
-		{
-		}
+	public IEnumerator GetEnumerator()
+	{
+		return InnerList.GetEnumerator();
+	}
+
+	protected virtual void OnSet(int index, Object oldValue, Object newValue)
+	{
+	}
+
+	protected virtual void OnInsert(int index, Object value)
+	{
+	}
+
+	protected virtual void OnClear()
+	{
+	}
+
+	protected virtual void OnRemove(int index, Object value)
+	{
+	}
+
+	protected virtual void OnValidate(Object value)
+	{
+		if (value == null) throw new ArgumentNullException(nameof(value));
+		Contract.EndContractBlock();
+	}
+
+	protected virtual void OnSetComplete(int index, Object oldValue, Object newValue)
+	{
+	}
+
+	protected virtual void OnInsertComplete(int index, Object value)
+	{
+	}
+
+	protected virtual void OnClearComplete()
+	{
+	}
+
+	protected virtual void OnRemoveComplete(int index, Object value)
+	{
 	}
 }

@@ -2,75 +2,74 @@
 
 using System.Reflection;
 
-namespace Mosa.Runtime.Metadata
+namespace Mosa.Runtime.Metadata;
+
+public struct TypeDefinition
 {
-	public struct TypeDefinition
+	#region layout
+
+	// 0: Pointer name;
+	// 1: Pointer customAttributes;
+	// 2: uint attributes;
+	// 3: uint size;
+	// 4: Pointer assembly;
+	// 5: Pointer parentType;
+	// 6: Pointer declaringType;
+	// 7: Pointer elementType;
+	// 8: Pointer defaultConstructor;
+	// 9: Pointer properties;
+	// 10:Pointer fields;
+	// 11:Pointer slotTable;
+	// 12:Pointer bitmap;
+	// 13:uint numberOfMethods;
+	// 14:Pointer method table
+	// 15:Pointer method defination table
+
+	#endregion layout
+
+	public readonly Pointer Ptr;
+
+	public TypeDefinition(Pointer ptr)
 	{
-		#region layout
+		Ptr = ptr;
+	}
 
-		// 0: Pointer name;
-		// 1: Pointer customAttributes;
-		// 2: uint attributes;
-		// 3: uint size;
-		// 4: Pointer assembly;
-		// 5: Pointer parentType;
-		// 6: Pointer declaringType;
-		// 7: Pointer elementType;
-		// 8: Pointer defaultConstructor;
-		// 9: Pointer properties;
-		// 10:Pointer fields;
-		// 11:Pointer slotTable;
-		// 12:Pointer bitmap;
-		// 13:uint numberOfMethods;
-		// 14:Pointer method table
-		// 15:Pointer method defination table
+	public bool IsNull => Ptr.IsNull;
 
-		#endregion layout
+	public long Handle => Ptr.ToInt64();
 
-		public readonly Pointer Ptr;
+	public string Name => (string)Intrinsic.GetObjectFromAddress(Ptr.LoadPointer());
 
-		public TypeDefinition(Pointer ptr)
-		{
-			Ptr = ptr;
-		}
+	public CustomAttributeTable CustomAttributes => new CustomAttributeTable(Ptr.LoadPointer(Pointer.Size));
 
-		public bool IsNull => Ptr.IsNull;
+	public TypeCode TypeCode => (TypeCode)(Ptr.Load32(Pointer.Size * 2) >> 24);
 
-		public long Handle => Ptr.ToInt64();
+	public TypeAttributes Attributes => (TypeAttributes)(Ptr.Load32(Pointer.Size * 2) & 0x00FFFFFF);
 
-		public string Name => (string)Intrinsic.GetObjectFromAddress(Ptr.LoadPointer());
+	public uint Size => Ptr.Load32(Pointer.Size * 3);
 
-		public CustomAttributeTable CustomAttributes => new CustomAttributeTable(Ptr.LoadPointer(Pointer.Size));
+	public AssemblyDefinition Assembly => new AssemblyDefinition(Ptr.LoadPointer(Pointer.Size * 4));
 
-		public TypeCode TypeCode => (TypeCode)(Ptr.Load32(Pointer.Size * 2) >> 24);
+	public TypeDefinition ParentType => new TypeDefinition(Ptr.LoadPointer(Pointer.Size * 5));
 
-		public TypeAttributes Attributes => (TypeAttributes)(Ptr.Load32(Pointer.Size * 2) & 0x00FFFFFF);
+	public TypeDefinition DeclaringType => new TypeDefinition(Ptr.LoadPointer(Pointer.Size * 6));
 
-		public uint Size => Ptr.Load32(Pointer.Size * 3);
+	public TypeDefinition ElementType => new TypeDefinition(Ptr.LoadPointer(Pointer.Size * 7));
 
-		public AssemblyDefinition Assembly => new AssemblyDefinition(Ptr.LoadPointer(Pointer.Size * 4));
+	public MethodDefinition DefaultConstructor => new MethodDefinition(Ptr.LoadPointer(Pointer.Size * 8));
 
-		public TypeDefinition ParentType => new TypeDefinition(Ptr.LoadPointer(Pointer.Size * 5));
+	public Pointer Properties => Ptr.LoadPointer(Pointer.Size * 9);
 
-		public TypeDefinition DeclaringType => new TypeDefinition(Ptr.LoadPointer(Pointer.Size * 6));
+	public Pointer Fields => Ptr.LoadPointer(Pointer.Size * 10);
 
-		public TypeDefinition ElementType => new TypeDefinition(Ptr.LoadPointer(Pointer.Size * 7));
+	public Pointer SlotTable => Ptr.LoadPointer(Pointer.Size * 11);
 
-		public MethodDefinition DefaultConstructor => new MethodDefinition(Ptr.LoadPointer(Pointer.Size * 8));
+	public Pointer Bitmap => Ptr.LoadPointer(Pointer.Size * 12);
 
-		public Pointer Properties => Ptr.LoadPointer(Pointer.Size * 9);
+	public uint NumberOfMethods => Ptr.Load32(Pointer.Size * 13);
 
-		public Pointer Fields => Ptr.LoadPointer(Pointer.Size * 10);
-
-		public Pointer SlotTable => Ptr.LoadPointer(Pointer.Size * 11);
-
-		public Pointer Bitmap => Ptr.LoadPointer(Pointer.Size * 12);
-
-		public uint NumberOfMethods => Ptr.Load32(Pointer.Size * 13);
-
-		public MethodDefinition GetMethodDefinition(uint slot)
-		{
-			return new MethodDefinition(Ptr.LoadPointer((Pointer.Size * 14) + (Pointer.Size * (int)slot)));
-		}
+	public MethodDefinition GetMethodDefinition(uint slot)
+	{
+		return new MethodDefinition(Ptr.LoadPointer((Pointer.Size * 14) + (Pointer.Size * (int)slot)));
 	}
 }

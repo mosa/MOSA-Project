@@ -2,17 +2,16 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x86.Intrinsic
+namespace Mosa.Platform.x86.Intrinsic;
+
+/// <summary>
+/// IntrinsicMethods
+/// </summary>
+static partial class IntrinsicMethods
 {
-	/// <summary>
-	/// IntrinsicMethods
-	/// </summary>
-	static partial class IntrinsicMethods
+	[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::Cli")]
+	private static void Cli(Context context, MethodCompiler methodCompiler)
 	{
-		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::Cli")]
-		private static void Cli(Context context, MethodCompiler methodCompiler)
-		{
-			context.SetInstruction(X86.Cli);
-		}
+		context.SetInstruction(X86.Cli);
 	}
 }

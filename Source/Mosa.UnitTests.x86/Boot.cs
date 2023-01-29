@@ -4,65 +4,64 @@ using Mosa.Kernel.x86;
 using Mosa.Runtime.Plug;
 using Mosa.UnitTests.Optimization;
 
-namespace Mosa.UnitTests.x86
+namespace Mosa.UnitTests.x86;
+
+/// <summary>
+/// Boot
+/// </summary>
+public static class Boot
 {
-	/// <summary>
-	/// Boot
-	/// </summary>
-	public static class Boot
+	[Plug("Mosa.Runtime.StartUp::SetInitialMemory")]
+	public static void SetInitialMemory()
 	{
-		[Plug("Mosa.Runtime.StartUp::SetInitialMemory")]
-		public static void SetInitialMemory()
-		{
-			KernelMemory.SetInitialMemory(Address.GCInitialMemory, 0x01000000);
-		}
+		KernelMemory.SetInitialMemory(Address.GCInitialMemory, 0x01000000);
+	}
 
-		/// <summary>
-		/// Main
-		/// </summary>
-		public static void Main()
-		{
-			Setup();
+	/// <summary>
+	/// Main
+	/// </summary>
+	public static void Main()
+	{
+		Setup();
 
-			EnterTestReadyLoop();
-		}
+		EnterTestReadyLoop();
+	}
 
-		private static void Setup()
-		{
-			Logger.Log("Initialize Kernel");
+	private static void Setup()
+	{
+		Logger.Log("Initialize Kernel");
 
-			IDT.SetInterruptHandler(null);
-			Panic.Setup();
-			Debugger.Setup(Serial.COM2);
+		IDT.SetInterruptHandler(null);
+		Panic.Setup();
+		Debugger.Setup(Serial.COM2);
 
-			// Initialize interrupts
-			PIC.Setup();
-			IDT.Setup();
-			GDT.Setup();
+		// Initialize interrupts
+		PIC.Setup();
+		IDT.Setup();
+		GDT.Setup();
 
-			Logger.Log("Kernel initialized");
-		}
+		Logger.Log("Kernel initialized");
+	}
 
-		public static void EnterTestReadyLoop()
-		{
-			Screen.Color = 0x0;
-			Screen.Clear();
-			Screen.GotoTop();
-			Screen.Color = ScreenColor.Yellow;
-			Screen.Write("MOSA OS Version 1.6 - UnitTest");
-			Screen.NextLine();
-			Screen.NextLine();
+	public static void EnterTestReadyLoop()
+	{
+		Screen.Color = 0x0;
+		Screen.Clear();
+		Screen.GotoTop();
+		Screen.Color = ScreenColor.Yellow;
+		Screen.Write("MOSA OS Version 1.6 - UnitTest");
+		Screen.NextLine();
+		Screen.NextLine();
 
-			UnitTestQueue.Setup();
-			UnitTestRunner.Setup();
+		UnitTestQueue.Setup();
+		UnitTestRunner.Setup();
 
-			UnitTestRunner.EnterTestReadyLoop();
-		}
+		UnitTestRunner.EnterTestReadyLoop();
+	}
 
-		private static void ForceTestCollection()
-		{
-			// required to force assembly to be referenced and loaded
-			CommonTests.OptimizationTest1();
-		}
+	private static void ForceTestCollection()
+	{
+		// required to force assembly to be referenced and loaded
+		CommonTests.OptimizationTest1();
 	}
 }

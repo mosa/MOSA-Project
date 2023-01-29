@@ -3,25 +3,24 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.x86.Transforms.IR
+namespace Mosa.Platform.x86.Transforms.IR;
+
+/// <summary>
+/// Xor32
+/// </summary>
+public sealed class Xor32 : BaseTransform
 {
-	/// <summary>
-	/// Xor32
-	/// </summary>
-	public sealed class Xor32 : BaseTransform
+	public Xor32() : base(IRInstruction.Xor32, TransformType.Manual | TransformType.Transform)
 	{
-		public Xor32() : base(IRInstruction.Xor32, TransformType.Manual | TransformType.Transform)
-		{
-		}
+	}
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			return true;
-		}
+	public override bool Match(Context context, TransformContext transform)
+	{
+		return true;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			context.ReplaceInstruction(X86.Xor32);
-		}
+	public override void Transform(Context context, TransformContext transform)
+	{
+		context.ReplaceInstruction(X86.Xor32);
 	}
 }

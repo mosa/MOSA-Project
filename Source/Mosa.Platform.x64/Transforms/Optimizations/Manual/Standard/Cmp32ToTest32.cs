@@ -3,28 +3,27 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.x64.Transforms.Optimizations.Manual.Standard
+namespace Mosa.Platform.x64.Transforms.Optimizations.Manual.Standard;
+
+public sealed class Cmp32ToTest32 : BaseTransform
 {
-	public sealed class Cmp32ToTest32 : BaseTransform
+	public Cmp32ToTest32() : base(X64.Cmp32, TransformType.Manual | TransformType.Optimization)
 	{
-		public Cmp32ToTest32() : base(X64.Cmp32, TransformType.Manual | TransformType.Optimization)
-		{
-		}
+	}
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			if (!context.Operand2.IsResolvedConstant)
-				return false;
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!context.Operand2.IsResolvedConstant)
+			return false;
 
-			if (!context.Operand2.IsConstantZero)
-				return false;
+		if (!context.Operand2.IsConstantZero)
+			return false;
 
-			return true;
-		}
+		return true;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			context.SetInstruction(X64.Test32, null, context.Operand1, context.Operand1);
-		}
+	public override void Transform(Context context, TransformContext transform)
+	{
+		context.SetInstruction(X64.Test32, null, context.Operand1, context.Operand1);
 	}
 }

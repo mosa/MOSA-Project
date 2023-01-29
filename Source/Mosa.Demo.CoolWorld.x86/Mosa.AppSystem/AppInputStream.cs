@@ -2,97 +2,96 @@
 
 using System.IO;
 
-namespace Mosa.Demo.AppSystem
+namespace Mosa.Demo.AppSystem;
+
+/// <summary>
+/// AppInputStream
+/// </summary>
+public class AppInputStream : Stream
 {
+	// todo: replace with specialized buffer class
+	private readonly byte[] buffer;
+
+	private int position;
+	private int length;
+
 	/// <summary>
-	/// AppInputStream
+	/// Initializes a new instance of the <see cref="AppInputStream"/> class.
 	/// </summary>
-	public class AppInputStream : Stream
+	public AppInputStream()
 	{
-		// todo: replace with specialized buffer class
-		private readonly byte[] buffer;
+		buffer = new byte[1024];
+		Position = 0;
+		length = 0;
+	}
 
-		private int position;
-		private int length;
+	#region Overrides
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="AppInputStream"/> class.
-		/// </summary>
-		public AppInputStream()
-		{
-			buffer = new byte[1024];
-			Position = 0;
-			length = 0;
-		}
+	public override bool CanRead { get { return true; } }
 
-		#region Overrides
+	public override bool CanSeek { get { return false; } }
 
-		public override bool CanRead { get { return true; } }
+	public override bool CanWrite { get { return false; } }
 
-		public override bool CanSeek { get { return false; } }
+	public override bool CanTimeout { get { return false; } }
 
-		public override bool CanWrite { get { return false; } }
+	public override long Length { get { return length; } }
 
-		public override bool CanTimeout { get { return false; } }
+	public override long Position { get { return 0; } set { return; } }
 
-		public override long Length { get { return length; } }
+	public override void Flush()
+	{ }
 
-		public override long Position { get { return 0; } set { return; } }
+	public override int Read(byte[] buffer, int offset, int count)
+	{
+		return -1;
+	}
 
-		public override void Flush()
-		{ }
-
-		public override int Read(byte[] buffer, int offset, int count)
-		{
+	public override int ReadByte()
+	{
+		if (length == 0)
 			return -1;
-		}
 
-		public override int ReadByte()
-		{
-			if (length == 0)
-				return -1;
+		int value = buffer[position];
 
-			int value = buffer[position];
+		position--;
 
-			position--;
+		if (position < 0)
+			position = buffer.Length;
 
-			if (position < 0)
-				position = buffer.Length;
+		length--;
 
-			length--;
+		return value;
+	}
 
-			return value;
-		}
+	public override long Seek(long offset, SeekOrigin origin)
+	{
+		return Position;
+	}
 
-		public override long Seek(long offset, SeekOrigin origin)
-		{
-			return Position;
-		}
+	public override void SetLength(long value)
+	{ }
 
-		public override void SetLength(long value)
-		{ }
+	public override void Write(byte[] buffer, int offset, int count)
+	{ }
 
-		public override void Write(byte[] buffer, int offset, int count)
-		{ }
+	public override void WriteByte(byte value)
+	{ }
 
-		public override void WriteByte(byte value)
-		{ }
+	#endregion Overrides
 
-		#endregion Overrides
+	public void Write(byte value)
+	{
+		if (length == buffer.Length)
+			return; // byte will be dropped
 
-		public void Write(byte value)
-		{
-			if (length == buffer.Length)
-				return; // byte will be dropped
+		position++;
 
-			position++;
+		if (position == buffer.Length)
+			position = 0;
 
-			if (position == buffer.Length)
-				position = 0;
+		buffer[position] = value;
 
-			buffer[position] = value;
-
-			length++;
-		}
+		length++;
 	}
 }

@@ -3,32 +3,31 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.x86.Transforms.IR
+namespace Mosa.Platform.x86.Transforms.IR;
+
+/// <summary>
+/// AddR8
+/// </summary>
+public sealed class AddR8 : BaseTransform
 {
-	/// <summary>
-	/// AddR8
-	/// </summary>
-	public sealed class AddR8 : BaseTransform
+	public AddR8() : base(IRInstruction.AddR8, TransformType.Manual | TransformType.Transform)
 	{
-		public AddR8() : base(IRInstruction.AddR8, TransformType.Manual | TransformType.Transform)
-		{
-		}
+	}
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			return true;
-		}
+	public override bool Match(Context context, TransformContext transform)
+	{
+		return true;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			var result = context.Result;
-			var operand1 = context.Operand1;
-			var operand2 = context.Operand2;
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
+		var operand1 = context.Operand1;
+		var operand2 = context.Operand2;
 
-			operand1 = X86TransformHelper.MoveConstantToFloatRegister(transform, context, operand1);
-			operand2 = X86TransformHelper.MoveConstantToFloatRegister(transform, context, operand2);
+		operand1 = X86TransformHelper.MoveConstantToFloatRegister(transform, context, operand1);
+		operand2 = X86TransformHelper.MoveConstantToFloatRegister(transform, context, operand2);
 
-			context.SetInstruction(X86.Addsd, result, operand1, operand2);
-		}
+		context.SetInstruction(X86.Addsd, result, operand1, operand2);
 	}
 }

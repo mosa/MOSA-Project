@@ -1,11 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Kernel.BareMetal.BootMemory
+namespace Mosa.Kernel.BareMetal.BootMemory;
+
+public enum BootMemoryType
 {
-	public enum BootMemoryType
-	{
-		Available,
-		Reserved,
-		Kernel,
-	}
+	Available,
+	Reserved,
+	Kernel,
 }

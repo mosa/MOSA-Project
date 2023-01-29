@@ -3,17 +3,16 @@
 using Mosa.Compiler.Framework;
 
 
-namespace Mosa.Platform.x86.Intrinsic
+namespace Mosa.Platform.x86.Intrinsic;
+
+/// <summary>
+/// IntrinsicMethods
+/// </summary>
+static partial class IntrinsicMethods
 {
-	/// <summary>
-	/// IntrinsicMethods
-	/// </summary>
-	static partial class IntrinsicMethods
+	[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::GetCR2")]
+	private static void GetCR2(Context context, MethodCompiler methodCompiler)
 	{
-		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::GetCR2")]
-		private static void GetCR2(Context context, MethodCompiler methodCompiler)
-		{
-			context.SetInstruction(X86.MovCRLoad32, context.Result, Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, CPURegister.CR2));
-		}
+		context.SetInstruction(X86.MovCRLoad32, context.Result, Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, CPURegister.CR2));
 	}
 }

@@ -2,95 +2,94 @@
 
 using Mosa.Compiler.MosaTypeSystem;
 
-namespace Mosa.Compiler.Framework.CompilerStages
+namespace Mosa.Compiler.Framework.CompilerStages;
+
+/// <summary>
+/// De-virtualization Stage
+/// </summary>
+/// <seealso cref="Mosa.Compiler.Framework.BaseCompilerStage" />
+public sealed class DevirtualizationStage : BaseCompilerStage
 {
-	/// <summary>
-	/// De-virtualization Stage
-	/// </summary>
-	/// <seealso cref="Mosa.Compiler.Framework.BaseCompilerStage" />
-	public sealed class DevirtualizationStage : BaseCompilerStage
+	private readonly Counter DevirtualizedMethodsCount = new Counter("DevirtualizationStage.DevirtualizedMethodsCount");
+
+	#region Overrides
+
+	protected override void Setup()
 	{
-		private readonly Counter DevirtualizedMethodsCount = new Counter("DevirtualizationStage.DevirtualizedMethodsCount");
-
-		#region Overrides
-
-		protected override void Setup()
+		foreach (var type in TypeSystem.AllTypes)
 		{
-			foreach (var type in TypeSystem.AllTypes)
+			// If type has an interface - don't consider either type for de-virtualization
+			// FUTURE: be more specific and check each method
+			if (HasInterface(type))
+				continue;
+
+			foreach (var method in type.Methods)
 			{
-				// If type has an interface - don't consider either type for de-virtualization
-				// FUTURE: be more specific and check each method
-				if (HasInterface(type))
+				if (method.IsStatic || !method.IsVirtual)
 					continue;
 
-				foreach (var method in type.Methods)
-				{
-					if (method.IsStatic || !method.IsVirtual)
-						continue;
+				if (!method.HasImplementation && method.IsAbstract)
+					continue;
 
-					if (!method.HasImplementation && method.IsAbstract)
-						continue;
+				if (TypeLayout.IsMethodOverridden(method))
+					continue;
 
-					if (TypeLayout.IsMethodOverridden(method))
-						continue;
+				var methodData = Compiler.GetMethodData(method);
 
-					var methodData = Compiler.GetMethodData(method);
-
-					methodData.IsDevirtualized = true;
-					DevirtualizedMethodsCount.Increment();
-				}
+				methodData.IsDevirtualized = true;
+				DevirtualizedMethodsCount.Increment();
 			}
 		}
+	}
 
-		protected override void Finalization()
+	protected override void Finalization()
+	{
+		//if (CompilerOptions.Statistics)
+		//{
+		//	//var log = new TraceLog(TraceType.MethodCounters, null, string.Empty);
+		//	//log.Log(MethodData.Counters.Export());
+		//	//CompilerTrace.PostTraceLog(log);
+		//}
+	}
+
+	#endregion Overrides
+
+	private bool HasInterface(MosaType type)
+	{
+		return CheckBaseTypesForInterface(type) || CheckDerivedTypesForInterface(type);
+	}
+
+	private bool CheckBaseTypesForInterface(MosaType type)
+	{
+		var baseType = type;
+
+		while (baseType != null)
 		{
-			//if (CompilerOptions.Statistics)
-			//{
-			//	//var log = new TraceLog(TraceType.MethodCounters, null, string.Empty);
-			//	//log.Log(MethodData.Counters.Export());
-			//	//CompilerTrace.PostTraceLog(log);
-			//}
+			if (baseType.Interfaces.Count >= 1)
+				return true;
+
+			baseType = baseType.BaseType;
 		}
 
-		#endregion Overrides
+		return false;
+	}
 
-		private bool HasInterface(MosaType type)
-		{
-			return CheckBaseTypesForInterface(type) || CheckDerivedTypesForInterface(type);
-		}
+	private bool CheckDerivedTypesForInterface(MosaType type)
+	{
+		var derivedTypes = TypeLayout.GetDerivedTypes(type);
 
-		private bool CheckBaseTypesForInterface(MosaType type)
-		{
-			var baseType = type;
-
-			while (baseType != null)
-			{
-				if (baseType.Interfaces.Count >= 1)
-					return true;
-
-				baseType = baseType.BaseType;
-			}
-
+		if (derivedTypes == null || derivedTypes.Length == 0)
 			return false;
-		}
 
-		private bool CheckDerivedTypesForInterface(MosaType type)
+		foreach (var dervided in derivedTypes)
 		{
-			var derivedTypes = TypeLayout.GetDerivedTypes(type);
+			if (dervided.Interfaces.Count >= 1)
+				return true;
 
-			if (derivedTypes == null || derivedTypes.Length == 0)
-				return false;
-
-			foreach (var dervided in derivedTypes)
-			{
-				if (dervided.Interfaces.Count >= 1)
-					return true;
-
-				if (CheckDerivedTypesForInterface(dervided))
-					return true;
-			}
-
-			return false;
+			if (CheckDerivedTypesForInterface(dervided))
+				return true;
 		}
+
+		return false;
 	}
 }

@@ -1,46 +1,45 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Tool.Debugger.DebugData
+namespace Mosa.Tool.Debugger.DebugData;
+
+public static class Source
 {
-	public static class Source
+	public static SourceLocation Find(DebugSource debugSource, ulong address)
 	{
-		public static SourceLocation Find(DebugSource debugSource, ulong address)
+		var method = debugSource.GetMethod(address);
+
+		if (method == null)
+			return null;
+
+		var sourceLabel = debugSource.GetSourceLabel(method.ID, (int)(address - method.Address));
+
+		if (sourceLabel == null)
+			return null;
+
+		var sourceInfo = debugSource.GetSourcePreviousClosest(method.ID, sourceLabel.Label);
+
+		if (sourceInfo == null)
+			return null;
+
+		var sourceFileInfo = debugSource.GetSourceFile(sourceInfo.SourceFileID);
+
+		var sourceLocation = new SourceLocation()
 		{
-			var method = debugSource.GetMethod(address);
+			Address = method.Address + (ulong)sourceLabel.StartOffset,
+			Length = sourceLabel.Length,
+			Label = sourceLabel.Label,
+			SourceLabel = sourceInfo.Label,
+			MethodFullName = method.FullName,
+			StartLine = sourceInfo.StartLine,
+			StartColumn = sourceInfo.StartColumn,
+			EndLine = sourceInfo.EndLine,
+			EndColumn = sourceInfo.EndColumn,
+			SourceFilename = sourceFileInfo.Filename,
+			MethodID = method.ID,
+			SourceFileID = sourceInfo.SourceFileID,
+		};
 
-			if (method == null)
-				return null;
-
-			var sourceLabel = debugSource.GetSourceLabel(method.ID, (int)(address - method.Address));
-
-			if (sourceLabel == null)
-				return null;
-
-			var sourceInfo = debugSource.GetSourcePreviousClosest(method.ID, sourceLabel.Label);
-
-			if (sourceInfo == null)
-				return null;
-
-			var sourceFileInfo = debugSource.GetSourceFile(sourceInfo.SourceFileID);
-
-			var sourceLocation = new SourceLocation()
-			{
-				Address = method.Address + (ulong)sourceLabel.StartOffset,
-				Length = sourceLabel.Length,
-				Label = sourceLabel.Label,
-				SourceLabel = sourceInfo.Label,
-				MethodFullName = method.FullName,
-				StartLine = sourceInfo.StartLine,
-				StartColumn = sourceInfo.StartColumn,
-				EndLine = sourceInfo.EndLine,
-				EndColumn = sourceInfo.EndColumn,
-				SourceFilename = sourceFileInfo.Filename,
-				MethodID = method.ID,
-				SourceFileID = sourceInfo.SourceFileID,
-			};
-
-			return sourceLocation;
-		}
+		return sourceLocation;
 	}
 }
 

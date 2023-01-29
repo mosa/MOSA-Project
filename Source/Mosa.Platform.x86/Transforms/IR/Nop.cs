@@ -3,27 +3,26 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.x86.Transforms.IR
+namespace Mosa.Platform.x86.Transforms.IR;
+
+/// <summary>
+/// Nop
+/// </summary>
+public sealed class Nop : BaseTransform
 {
-	/// <summary>
-	/// Nop
-	/// </summary>
-	public sealed class Nop : BaseTransform
+	public Nop() : base(IRInstruction.Nop, TransformType.Manual | TransformType.Transform)
 	{
-		public Nop() : base(IRInstruction.Nop, TransformType.Manual | TransformType.Transform)
-		{
-		}
+	}
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			return true;
-		}
+	public override bool Match(Context context, TransformContext transform)
+	{
+		return true;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			context.Empty();
+	public override void Transform(Context context, TransformContext transform)
+	{
+		context.Empty();
 
-			//context.SetInstruction(X86.Nop);
-		}
+		//context.SetInstruction(X86.Nop);
 	}
 }

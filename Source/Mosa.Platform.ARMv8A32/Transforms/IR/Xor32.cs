@@ -3,27 +3,26 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.ARMv8A32.Transforms.IR
+namespace Mosa.Platform.ARMv8A32.Transforms.IR;
+
+/// <summary>
+/// Xor32
+/// </summary>
+public sealed class Xor32 : BaseTransform
 {
-	/// <summary>
-	/// Xor32
-	/// </summary>
-	public sealed class Xor32 : BaseTransform
+	public Xor32() : base(IRInstruction.Xor32, TransformType.Manual | TransformType.Transform)
 	{
-		public Xor32() : base(IRInstruction.Xor32, TransformType.Manual | TransformType.Transform)
-		{
-		}
+	}
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			return true;
-		}
+	public override bool Match(Context context, TransformContext transform)
+	{
+		return true;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			transform.MoveConstantRight(context);
+	public override void Transform(Context context, TransformContext transform)
+	{
+		transform.MoveConstantRight(context);
 
-			ARMv8A32TransformHelper.Translate(transform, context, ARMv8A32.Eor, true);
-		}
+		ARMv8A32TransformHelper.Translate(transform, context, ARMv8A32.Eor, true);
 	}
 }

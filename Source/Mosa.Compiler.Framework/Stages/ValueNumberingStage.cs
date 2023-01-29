@@ -7,109 +7,120 @@ using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.Trace;
 
-namespace Mosa.Compiler.Framework.Stages
+namespace Mosa.Compiler.Framework.Stages;
+
+/// <summary>
+/// Value Numbering Stage
+/// </summary>
+public sealed class ValueNumberingStage : BaseMethodCompilerStage
 {
-	/// <summary>
-	/// Value Numbering Stage
-	/// </summary>
-	public sealed class ValueNumberingStage : BaseMethodCompilerStage
+	private SimpleFastDominance AnalysisDominance;
+	private List<BasicBlock> ReversePostOrder;
+
+	private Dictionary<Operand, Operand> MapToValueNumber;
+	private BitArray Processed;
+
+	private TraceLog trace;
+
+	private BitArray ParamReadOnly;
+
+	private readonly Counter InstructionRemovalCount = new Counter("ValueNumberingStage.IRInstructionRemoved");
+	private readonly Counter ConstantFoldingAndStrengthReductionCount = new Counter("ValueNumberingStage.ConstantFoldingAndStrengthReduction");
+	private readonly Counter SubexpressionEliminationCount = new Counter("ValueNumberingStage.SubexpressionElimination");
+	private readonly Counter ParameterLoadEliminationCount = new Counter("ValueNumberingStage.ParameterLoadElimination");
+	private readonly Counter DeadCodeEliminationCount = new Counter("ValueNumberingStage.DeadCodeElimination");
+	private readonly Counter StrengthReductionAndSimplificationCount = new Counter("ValueNumberingStage.StrengthReductionAndSimplification");
+
+	private class Expression
 	{
-		private SimpleFastDominance AnalysisDominance;
-		private List<BasicBlock> ReversePostOrder;
+		public int Hash;
+		public BaseInstruction Instruction;
+		public Operand Operand1;
+		public Operand Operand2;
+		public ConditionCode ConditionCode;
+		public Operand ValueNumber;
+	}
 
-		private Dictionary<Operand, Operand> MapToValueNumber;
-		private BitArray Processed;
+	private Dictionary<int, List<Expression>> Expressions;
 
-		private TraceLog trace;
+	protected override void Initialize()
+	{
+		Register(ConstantFoldingAndStrengthReductionCount);
+		Register(InstructionRemovalCount);
+		Register(SubexpressionEliminationCount);
+		Register(ParameterLoadEliminationCount);
+		Register(DeadCodeEliminationCount);
+		Register(StrengthReductionAndSimplificationCount);
+	}
 
-		private BitArray ParamReadOnly;
+	protected override void Run()
+	{
+		if (HasProtectedRegions)
+			return;
 
-		private readonly Counter InstructionRemovalCount = new Counter("ValueNumberingStage.IRInstructionRemoved");
-		private readonly Counter ConstantFoldingAndStrengthReductionCount = new Counter("ValueNumberingStage.ConstantFoldingAndStrengthReduction");
-		private readonly Counter SubexpressionEliminationCount = new Counter("ValueNumberingStage.SubexpressionElimination");
-		private readonly Counter ParameterLoadEliminationCount = new Counter("ValueNumberingStage.ParameterLoadElimination");
-		private readonly Counter DeadCodeEliminationCount = new Counter("ValueNumberingStage.DeadCodeElimination");
-		private readonly Counter StrengthReductionAndSimplificationCount = new Counter("ValueNumberingStage.StrengthReductionAndSimplification");
+		// Method is empty - must be a plugged method
+		if (BasicBlocks.HeadBlocks.Count != 1)
+			return;
 
-		private class Expression
+		if (BasicBlocks.PrologueBlock == null)
+			return;
+
+		trace = CreateTraceLog(5);
+
+		MapToValueNumber = new Dictionary<Operand, Operand>(MethodCompiler.VirtualRegisters.Count);
+		Expressions = new Dictionary<int, List<Expression>>();
+		Processed = new BitArray(BasicBlocks.Count, false);
+
+		AnalysisDominance = new SimpleFastDominance(BasicBlocks, BasicBlocks.PrologueBlock);
+
+		ReversePostOrder = AnalysisDominance.GetReversePostOrder();
+
+		DetermineReadOnlyParameters();
+
+		ValueNumber();
+
+		if (CompilerSettings.FullCheckMode)
+			CheckAllPhiInstructions();
+	}
+
+	protected override void Finish()
+	{
+		MapToValueNumber = null;
+		Expressions = null;
+		Processed = null;
+
+		AnalysisDominance = null;
+		ReversePostOrder = null;
+		ParamReadOnly = null;
+
+		trace = null;
+	}
+
+	private void DetermineReadOnlyParameters()
+	{
+		if (MethodCompiler.Parameters.Length == 0)
+			return;
+
+		ParamReadOnly = new BitArray(MethodCompiler.Parameters.Length, false);
+
+		var traceParameters = CreateTraceLog("Parameters", 5);
+
+		foreach (var operand in MethodCompiler.Parameters)
 		{
-			public int Hash;
-			public BaseInstruction Instruction;
-			public Operand Operand1;
-			public Operand Operand2;
-			public ConditionCode ConditionCode;
-			public Operand ValueNumber;
-		}
+			bool write = false;
 
-		private Dictionary<int, List<Expression>> Expressions;
-
-		protected override void Initialize()
-		{
-			Register(ConstantFoldingAndStrengthReductionCount);
-			Register(InstructionRemovalCount);
-			Register(SubexpressionEliminationCount);
-			Register(ParameterLoadEliminationCount);
-			Register(DeadCodeEliminationCount);
-			Register(StrengthReductionAndSimplificationCount);
-		}
-
-		protected override void Run()
-		{
-			if (HasProtectedRegions)
-				return;
-
-			// Method is empty - must be a plugged method
-			if (BasicBlocks.HeadBlocks.Count != 1)
-				return;
-
-			if (BasicBlocks.PrologueBlock == null)
-				return;
-
-			trace = CreateTraceLog(5);
-
-			MapToValueNumber = new Dictionary<Operand, Operand>(MethodCompiler.VirtualRegisters.Count);
-			Expressions = new Dictionary<int, List<Expression>>();
-			Processed = new BitArray(BasicBlocks.Count, false);
-
-			AnalysisDominance = new SimpleFastDominance(BasicBlocks, BasicBlocks.PrologueBlock);
-
-			ReversePostOrder = AnalysisDominance.GetReversePostOrder();
-
-			DetermineReadOnlyParameters();
-
-			ValueNumber();
-
-			if (CompilerSettings.FullCheckMode)
-				CheckAllPhiInstructions();
-		}
-
-		protected override void Finish()
-		{
-			MapToValueNumber = null;
-			Expressions = null;
-			Processed = null;
-
-			AnalysisDominance = null;
-			ReversePostOrder = null;
-			ParamReadOnly = null;
-
-			trace = null;
-		}
-
-		private void DetermineReadOnlyParameters()
-		{
-			if (MethodCompiler.Parameters.Length == 0)
-				return;
-
-			ParamReadOnly = new BitArray(MethodCompiler.Parameters.Length, false);
-
-			var traceParameters = CreateTraceLog("Parameters", 5);
-
-			foreach (var operand in MethodCompiler.Parameters)
+			foreach (var use in operand.Uses)
 			{
-				bool write = false;
+				if (use.Instruction.IsParameterStore)
+				{
+					write = true;
+					break;
+				}
+			}
 
-				foreach (var use in operand.Uses)
+			if (!write && operand.Low != null)
+			{
+				foreach (var use in operand.Low.Uses)
 				{
 					if (use.Instruction.IsParameterStore)
 					{
@@ -117,599 +128,587 @@ namespace Mosa.Compiler.Framework.Stages
 						break;
 					}
 				}
+			}
 
-				if (!write && operand.Low != null)
+			if (!write && operand.High != null)
+			{
+				foreach (var use in operand.High.Uses)
 				{
-					foreach (var use in operand.Low.Uses)
+					if (use.Instruction.IsParameterStore)
 					{
-						if (use.Instruction.IsParameterStore)
+						write = true;
+						break;
+					}
+				}
+			}
+
+			ParamReadOnly[operand.Index] = !write;
+
+			traceParameters?.Log($"{operand}: {(write ? "Writable" : "ReadOnly")}");
+		}
+	}
+
+	private void ValueNumber()
+	{
+		var blockWorklist = new Stack<BasicBlock>();
+		var expressionWorklist = new Stack<List<Expression>>();
+
+		blockWorklist.Push(BasicBlocks.PrologueBlock);
+		expressionWorklist.Push(null);
+
+		while (blockWorklist.Count != 0)
+		{
+			var block = blockWorklist.Pop();
+
+			if (block != null)
+			{
+				ValueNumber(block, out List<BasicBlock> nextBlocks, out List<Expression> newExpressions);
+
+				if (nextBlocks != null)
+				{
+					if (newExpressions != null)
+					{
+						blockWorklist.Push(null);
+
+						expressionWorklist.Push(newExpressions);
+					}
+
+					for (int i = nextBlocks.Count - 1; i >= 0; i--)
+					{
+						blockWorklist.Push(nextBlocks[i]);
+					}
+				}
+			}
+			else
+			{
+				var expressions = expressionWorklist.Pop();
+
+				if (expressions != null)
+				{
+					// Cleanup scope by removing new expressions
+					foreach (var expression in expressions)
+					{
+						RemoveExpressionFromHashTable(expression);
+					}
+				}
+			}
+		}
+	}
+
+	private void ValueNumber(BasicBlock block, out List<BasicBlock> nextblocks, out List<Expression> newExpressions)
+	{
+		trace?.Log($"Processing Block: {block}");
+
+		//Debug.Assert(!Processed.Get(block.Sequence));
+
+		newExpressions = null;
+		nextblocks = null;
+
+		// Mark the beginning of the new scope by keeping a list
+		bool successorValidated = false;
+		bool successorProcessed = true;
+
+		Processed.Set(block.Sequence, true);
+
+		for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
+		{
+			if (node.IsEmptyOrNop)
+				continue;
+
+			if (IsPhiInstruction(node.Instruction))
+			{
+				// Validate all successor are already processed
+				// and if not, just set the value number
+				if (!successorValidated)
+				{
+					successorValidated = true;
+					foreach (var processed in block.PreviousBlocks)
+					{
+						if (!Processed.Get(block.Sequence))
 						{
-							write = true;
+							successorProcessed = false;
 							break;
 						}
 					}
 				}
 
-				if (!write && operand.High != null)
+				if (successorValidated && !successorProcessed)
 				{
-					foreach (var use in operand.High.Uses)
-					{
-						if (use.Instruction.IsParameterStore)
-						{
-							write = true;
-							break;
-						}
-					}
-				}
-
-				ParamReadOnly[operand.Index] = !write;
-
-				traceParameters?.Log($"{operand}: {(write ? "Writable" : "ReadOnly")}");
-			}
-		}
-
-		private void ValueNumber()
-		{
-			var blockWorklist = new Stack<BasicBlock>();
-			var expressionWorklist = new Stack<List<Expression>>();
-
-			blockWorklist.Push(BasicBlocks.PrologueBlock);
-			expressionWorklist.Push(null);
-
-			while (blockWorklist.Count != 0)
-			{
-				var block = blockWorklist.Pop();
-
-				if (block != null)
-				{
-					ValueNumber(block, out List<BasicBlock> nextBlocks, out List<Expression> newExpressions);
-
-					if (nextBlocks != null)
-					{
-						if (newExpressions != null)
-						{
-							blockWorklist.Push(null);
-
-							expressionWorklist.Push(newExpressions);
-						}
-
-						for (int i = nextBlocks.Count - 1; i >= 0; i--)
-						{
-							blockWorklist.Push(nextBlocks[i]);
-						}
-					}
-				}
-				else
-				{
-					var expressions = expressionWorklist.Pop();
-
-					if (expressions != null)
-					{
-						// Cleanup scope by removing new expressions
-						foreach (var expression in expressions)
-						{
-							RemoveExpressionFromHashTable(expression);
-						}
-					}
-				}
-			}
-		}
-
-		private void ValueNumber(BasicBlock block, out List<BasicBlock> nextblocks, out List<Expression> newExpressions)
-		{
-			trace?.Log($"Processing Block: {block}");
-
-			//Debug.Assert(!Processed.Get(block.Sequence));
-
-			newExpressions = null;
-			nextblocks = null;
-
-			// Mark the beginning of the new scope by keeping a list
-			bool successorValidated = false;
-			bool successorProcessed = true;
-
-			Processed.Set(block.Sequence, true);
-
-			for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
-			{
-				if (node.IsEmptyOrNop)
-					continue;
-
-				if (IsPhiInstruction(node.Instruction))
-				{
-					// Validate all successor are already processed
-					// and if not, just set the value number
-					if (!successorValidated)
-					{
-						successorValidated = true;
-						foreach (var processed in block.PreviousBlocks)
-						{
-							if (!Processed.Get(block.Sequence))
-							{
-								successorProcessed = false;
-								break;
-							}
-						}
-					}
-
-					if (successorValidated && !successorProcessed)
-					{
-						SetValueNumber(node.Result, node.Result);
-						continue;
-					}
-
-					// check for useless
-					if (IsPhiUseless(node))
-					{
-						var w = GetValueNumber(node.Operand1);
-						SetValueNumber(node.Result, w);
-
-						trace?.Log($"Removed Unless PHI: {node}");
-
-						node.SetNop();
-						InstructionRemovalCount.Increment();
-						continue;
-					}
-
-					// check for redundant
-					var redundant = CheckRedundant(node);
-
-					if (redundant != null)
-					{
-						var w = GetValueNumber(redundant);
-						SetValueNumber(node.Result, w);
-
-						trace?.Log($"Removed Redundant PHI: {node}");
-
-						node.SetNop();
-						InstructionRemovalCount.Increment();
-						continue;
-					}
-
 					SetValueNumber(node.Result, node.Result);
-
 					continue;
 				}
 
-				UpdateNodeWithValueNumbers(node);
-
-				// move constant to right for commutative operations - helpful later
-				if (node.Instruction.IsCommutative && node.Operand1.IsResolvedConstant && node.Operand2.IsVirtualRegister)
+				// check for useless
+				if (IsPhiUseless(node))
 				{
-					var operand1 = node.Operand1;
-					node.Operand1 = node.Operand2;
-					node.Operand2 = operand1;
-				}
-
-				if (IsMoveInstruction(node.Instruction))
-				{
-					if (node.Result.IsCPURegister || node.Operand1.IsCPURegister)
-					{
-						SetValueNumber(node.Result, node.Result);
-						continue;
-					}
-
-					if (node.Operand1.IsStackLocal || node.Operand1.IsOnStack || node.Operand1.IsLabel)
-					{
-						SetValueNumber(node.Result, node.Result);
-						continue;
-					}
-
-					SetValueNumber(node.Result, node.Operand1);
-					node.SetNop();
-					InstructionRemovalCount.Increment();
-					continue;
-				}
-
-				if (!CanAssignValueNumberToExpression(node))
-				{
-					if (node.ResultCount == 1)
-					{
-						SetValueNumber(node.Result, node.Result);
-					}
-					else if (node.ResultCount == 2)
-					{
-						SetValueNumber(node.Result, node.Result);
-						SetValueNumber(node.Result2, node.Result2);
-					}
-
-					continue;
-				}
-
-				var hash = ComputeExpressionHash(node);
-				var list = GetExpressionsByHash(hash);
-				var match = FindMatch(list, node);
-
-				if (match != null)
-				{
-					var w = GetValueNumber(match.ValueNumber);
-
-					trace?.Log($"Found Expression Match: {node}");
-
+					var w = GetValueNumber(node.Operand1);
 					SetValueNumber(node.Result, w);
 
-					if (node.Instruction.IsParameterLoad)
-						ParameterLoadEliminationCount.Increment();
+					trace?.Log($"Removed Unless PHI: {node}");
 
 					node.SetNop();
 					InstructionRemovalCount.Increment();
-					SubexpressionEliminationCount.Increment();
 					continue;
 				}
-				else
+
+				// check for redundant
+				var redundant = CheckRedundant(node);
+
+				if (redundant != null)
 				{
-					trace?.Log($"No Expression Found: {node}");
+					var w = GetValueNumber(redundant);
+					SetValueNumber(node.Result, w);
+
+					trace?.Log($"Removed Redundant PHI: {node}");
+
+					node.SetNop();
+					InstructionRemovalCount.Increment();
+					continue;
 				}
 
-				var newExpression = new Expression()
+				SetValueNumber(node.Result, node.Result);
+
+				continue;
+			}
+
+			UpdateNodeWithValueNumbers(node);
+
+			// move constant to right for commutative operations - helpful later
+			if (node.Instruction.IsCommutative && node.Operand1.IsResolvedConstant && node.Operand2.IsVirtualRegister)
+			{
+				var operand1 = node.Operand1;
+				node.Operand1 = node.Operand2;
+				node.Operand2 = operand1;
+			}
+
+			if (IsMoveInstruction(node.Instruction))
+			{
+				if (node.Result.IsCPURegister || node.Operand1.IsCPURegister)
+				{
+					SetValueNumber(node.Result, node.Result);
+					continue;
+				}
+
+				if (node.Operand1.IsStackLocal || node.Operand1.IsOnStack || node.Operand1.IsLabel)
+				{
+					SetValueNumber(node.Result, node.Result);
+					continue;
+				}
+
+				SetValueNumber(node.Result, node.Operand1);
+				node.SetNop();
+				InstructionRemovalCount.Increment();
+				continue;
+			}
+
+			if (!CanAssignValueNumberToExpression(node))
+			{
+				if (node.ResultCount == 1)
+				{
+					SetValueNumber(node.Result, node.Result);
+				}
+				else if (node.ResultCount == 2)
+				{
+					SetValueNumber(node.Result, node.Result);
+					SetValueNumber(node.Result2, node.Result2);
+				}
+
+				continue;
+			}
+
+			var hash = ComputeExpressionHash(node);
+			var list = GetExpressionsByHash(hash);
+			var match = FindMatch(list, node);
+
+			if (match != null)
+			{
+				var w = GetValueNumber(match.ValueNumber);
+
+				trace?.Log($"Found Expression Match: {node}");
+
+				SetValueNumber(node.Result, w);
+
+				if (node.Instruction.IsParameterLoad)
+					ParameterLoadEliminationCount.Increment();
+
+				node.SetNop();
+				InstructionRemovalCount.Increment();
+				SubexpressionEliminationCount.Increment();
+				continue;
+			}
+			else
+			{
+				trace?.Log($"No Expression Found: {node}");
+			}
+
+			var newExpression = new Expression()
+			{
+				Hash = hash,
+				Instruction = node.Instruction,
+				ConditionCode = node.ConditionCode,
+				Operand1 = node.Operand1,
+				Operand2 = node.Operand2,
+				ValueNumber = node.Result
+			};
+
+			AddExpressionToHashTable(newExpression);
+
+			Debug.Assert(FindMatch(GetExpressionsByHash(ComputeExpressionHash(node)), node) == newExpression);
+
+			(newExpressions ?? (newExpressions = new List<Expression>())).Add(newExpression);
+
+			if (node.Instruction.IsCommutative && node.Operand1 != node.Operand2)
+			{
+				var newExpression2 = new Expression()
 				{
 					Hash = hash,
 					Instruction = node.Instruction,
 					ConditionCode = node.ConditionCode,
-					Operand1 = node.Operand1,
-					Operand2 = node.Operand2,
+					Operand1 = node.Operand2,
+					Operand2 = node.Operand1,
 					ValueNumber = node.Result
 				};
 
-				AddExpressionToHashTable(newExpression);
-
-				Debug.Assert(FindMatch(GetExpressionsByHash(ComputeExpressionHash(node)), node) == newExpression);
-
-				(newExpressions ?? (newExpressions = new List<Expression>())).Add(newExpression);
-
-				if (node.Instruction.IsCommutative && node.Operand1 != node.Operand2)
+				AddExpressionToHashTable(newExpression2);
+				newExpressions.Add(newExpression2);
+			}
+			else if (IsCompareInstruction(node.Instruction) && node.Operand1 != node.Operand2 && node.ConditionCode != ConditionCode.Equal && node.ConditionCode != ConditionCode.NotEqual)
+			{
+				var newExpression2 = new Expression()
 				{
-					var newExpression2 = new Expression()
-					{
-						Hash = hash,
-						Instruction = node.Instruction,
-						ConditionCode = node.ConditionCode,
-						Operand1 = node.Operand2,
-						Operand2 = node.Operand1,
-						ValueNumber = node.Result
-					};
+					Hash = hash,
+					Instruction = node.Instruction,
+					ConditionCode = node.ConditionCode.GetReverse(),
+					Operand1 = node.Operand2,
+					Operand2 = node.Operand1,
+					ValueNumber = node.Result
+				};
 
-					AddExpressionToHashTable(newExpression2);
-					newExpressions.Add(newExpression2);
-				}
-				else if (IsCompareInstruction(node.Instruction) && node.Operand1 != node.Operand2 && node.ConditionCode != ConditionCode.Equal && node.ConditionCode != ConditionCode.NotEqual)
-				{
-					var newExpression2 = new Expression()
-					{
-						Hash = hash,
-						Instruction = node.Instruction,
-						ConditionCode = node.ConditionCode.GetReverse(),
-						Operand1 = node.Operand2,
-						Operand2 = node.Operand1,
-						ValueNumber = node.Result
-					};
-
-					AddExpressionToHashTable(newExpression2);
-					newExpressions.Add(newExpression2);
-				}
-
-				SetValueNumber(node.Result, node.Result);
+				AddExpressionToHashTable(newExpression2);
+				newExpressions.Add(newExpression2);
 			}
 
-			// For each successor of the block, adjust the φ-function inputs
-			UpdatePhiSuccesors(block);
+			SetValueNumber(node.Result, node.Result);
+		}
 
-			var children = AnalysisDominance.GetChildren(block);
-			if (children != null || children.Count == 0)
+		// For each successor of the block, adjust the φ-function inputs
+		UpdatePhiSuccesors(block);
+
+		var children = AnalysisDominance.GetChildren(block);
+		if (children != null || children.Count == 0)
+		{
+			nextblocks = new List<BasicBlock>(children.Capacity);
+
+			if (children.Count == 1)
 			{
-				nextblocks = new List<BasicBlock>(children.Capacity);
+				// Efficient!
+				nextblocks.Add(children[0]);
 
-				if (children.Count == 1)
+				//trace?.Log("Queue Block:" + children[0]);
+			}
+			else if (ReversePostOrder.Count < 32)
+			{
+				// Efficient for small sets
+				foreach (var child in ReversePostOrder)
 				{
-					// Efficient!
-					nextblocks.Add(children[0]);
-
-					//trace?.Log("Queue Block:" + children[0]);
-				}
-				else if (ReversePostOrder.Count < 32)
-				{
-					// Efficient for small sets
-					foreach (var child in ReversePostOrder)
+					if (children.Contains(child))
 					{
-						if (children.Contains(child))
-						{
-							nextblocks.Add(child);
+						nextblocks.Add(child);
 
-							//trace?.Log("Queue Block:" + child);
-						}
+						//trace?.Log("Queue Block:" + child);
+					}
+				}
+			}
+			else
+			{
+				// Scalable for large sets
+				var bitArray = new BitArray(BasicBlocks.Count, false);
+
+				foreach (var child in children)
+				{
+					bitArray.Set(child.Sequence, true);
+				}
+
+				foreach (var child in ReversePostOrder)
+				{
+					if (bitArray.Get(child.Sequence))
+					{
+						nextblocks.Add(child);
+
+						//trace?.Log("Queue Block:" + child);
+					}
+				}
+			}
+		}
+	}
+
+	private bool CanAssignValueNumberToExpression(InstructionNode node)
+	{
+		if (node.Instruction.IsParameterLoad
+		    && node.Instruction != IRInstruction.LoadParamCompound
+		    && ParamReadOnly.Get(node.Operand1.Index))
+		{
+			return true;
+		}
+
+		if (node.Instruction == IRInstruction.AddressOf
+		    && (node.Operand1.IsStackLocal || node.Operand1.IsStaticField))
+		{
+			return true;
+		}
+
+		if (node.ResultCount != 1
+		    || node.OperandCount == 0
+		    || node.OperandCount > 2
+		    || node.Instruction.IsMemoryWrite
+		    || node.Instruction.IsMemoryRead
+		    || node.Instruction.IsIOOperation
+		    || node.Instruction.HasUnspecifiedSideEffect
+		    || node.Instruction.VariableOperands
+		    || node.Instruction.FlowControl != FlowControl.Next
+		    || node.Instruction.IgnoreDuringCodeGeneration
+		    || node.Operand1.IsUnresolvedConstant
+		    || (node.OperandCount == 2 && node.Operand2.IsUnresolvedConstant))
+			return false;
+
+		return true;
+	}
+
+	private static int UpdateHash(int hash, int addition)
+	{
+		return (hash << 8) + addition;
+	}
+
+	private static int ComputeExpressionHash(InstructionNode node)
+	{
+		int hash = node.Instruction.ID;
+
+		hash = hash | ((int)node.ConditionCode << 16);
+
+		if (node.Operand1.IsConstant)
+			hash = UpdateHash(hash, (int)node.Operand1.ConstantUnsigned64);
+		else if (node.Operand1.IsVirtualRegister || node.Operand1.IsStackLocal)
+			hash = UpdateHash(hash, node.Operand1.Index);
+
+		if (node.OperandCount >= 2)
+			if (node.Operand2.IsConstant)
+				hash = UpdateHash(hash, (int)node.Operand2.ConstantUnsigned64);
+			else if (node.Operand2.IsVirtualRegister || node.Operand2.IsStackLocal)
+				hash = UpdateHash(hash, node.Operand2.Index);
+
+		return hash;
+	}
+
+	private List<Expression> GetExpressionsByHash(int hash)
+	{
+		Expressions.TryGetValue(hash, out List<Expression> list);
+		return list;
+	}
+
+	private static bool IsEqual(Operand operand1, Operand operand2, BaseInstruction instruction = null)
+	{
+		if (operand1 == operand2)
+			return true;
+
+		if (operand1.IsResolvedConstant
+		    && operand2.IsResolvedConstant
+		    && operand1.IsInteger
+		    && operand2.IsInteger
+		    && operand1.ConstantUnsigned64 == operand2.ConstantUnsigned64)
+			return true;
+
+		if (operand1.IsResolvedConstant
+		    && operand2.IsResolvedConstant
+		    && operand1.IsFloatingPoint
+		    && operand2.IsFloatingPoint
+		    && operand1.ConstantDouble == operand2.ConstantDouble)
+			return true;
+
+		if (instruction != null
+		    && instruction == IRInstruction.AddressOf
+		    && operand1.IsStaticField
+		    && operand2.IsStaticField
+		    && operand1.Field == operand2.Field)
+			return true;
+
+		if (instruction != null
+		    && instruction == IRInstruction.AddressOf
+		    && operand1.IsStackLocal
+		    && operand2.IsStackLocal
+		    && operand1.Index == operand2.Index)
+			return true;
+
+		return false;
+	}
+
+	private static Expression FindMatch(List<Expression> expressions, InstructionNode node)
+	{
+		if (expressions == null)
+			return null;
+
+		foreach (var expression in expressions)
+		{
+			if (node.Instruction == expression.Instruction
+			    && node.ConditionCode == expression.ConditionCode
+			    && IsEqual(node.Operand1, expression.Operand1, node.Instruction)
+			    && (node.OperandCount == 1 || (node.OperandCount == 2 && IsEqual(node.Operand2, expression.Operand2))))
+			{
+				return expression;
+			}
+		}
+
+		return null;
+	}
+
+	private Operand GetValueNumber(Operand operand)
+	{
+		if (MapToValueNumber.TryGetValue(operand, out Operand value))
+			return value;
+		else
+			return null;
+	}
+
+	private void SetValueNumber(Operand operand, Operand valueVumber)
+	{
+		trace?.Log($"Set: {operand} => {valueVumber}");
+
+		MapToValueNumber[operand] = valueVumber;
+	}
+
+	private bool IsPhiUseless(InstructionNode node)
+	{
+		Debug.Assert(IsPhiInstruction(node.Instruction));
+
+		var operand = node.Operand1;
+		var operandVN = GetValueNumber(operand);
+
+		foreach (var op in node.Operands)
+		{
+			if (operandVN == GetValueNumber(op))
+				return false;
+		}
+
+		return true;
+	}
+
+	private bool ArePhisRedundant(InstructionNode a, InstructionNode b)
+	{
+		Debug.Assert(IsPhiInstruction(a.Instruction));
+		Debug.Assert(IsPhiInstruction(b.Instruction));
+
+		if (a.OperandCount != b.OperandCount)
+			return false;
+
+		for (int i = 0; i < a.OperandCount; i++)
+		{
+			var va = a.GetOperand(i);
+			var vb = b.GetOperand(i);
+
+			if (va == null || vb == null || va != vb)
+				return false;
+		}
+
+		return true;
+	}
+
+	private void AddExpressionToHashTable(Expression expression)
+	{
+		if (!Expressions.TryGetValue(expression.Hash, out List<Expression> list))
+		{
+			list = new List<Expression>();
+			Expressions.Add(expression.Hash, list);
+		}
+
+		list.Add(expression);
+
+		trace?.Log($"Added Expression: {expression.ValueNumber} <= {expression.Instruction} {expression.Operand1} {expression.Operand2}" ?? string.Empty);
+	}
+
+	private void RemoveExpressionFromHashTable(Expression expression)
+	{
+		var list = Expressions[expression.Hash];
+
+		list.Remove(expression);
+
+		trace?.Log($"Removed Expression: {expression.ValueNumber} <= {expression.Instruction} {expression.Operand1} {expression.Operand2}" ?? string.Empty);
+	}
+
+	private void UpdateNodeWithValueNumbers(InstructionNode node)
+	{
+		// update operands with their value number
+		for (int i = 0; i < node.OperandCount; i++)
+		{
+			var operand = node.GetOperand(i);
+
+			if (operand.IsVirtualRegister)
+			{
+				var valueNumber = GetValueNumber(operand);
+
+				if (valueNumber != null)
+				{
+					if (operand != valueNumber)
+					{
+						//trace?.Log($"BEFORE: {node}");
+						//trace?.Log($"Replaced: {operand} with {valueNumber}");
+						node.SetOperand(i, valueNumber);
+
+						trace?.Log($"UPDATED: {node}");
 					}
 				}
 				else
 				{
-					// Scalable for large sets
-					var bitArray = new BitArray(BasicBlocks.Count, false);
-
-					foreach (var child in children)
-					{
-						bitArray.Set(child.Sequence, true);
-					}
-
-					foreach (var child in ReversePostOrder)
-					{
-						if (bitArray.Get(child.Sequence))
-						{
-							nextblocks.Add(child);
-
-							//trace?.Log("Queue Block:" + child);
-						}
-					}
-				}
-			}
-		}
-
-		private bool CanAssignValueNumberToExpression(InstructionNode node)
-		{
-			if (node.Instruction.IsParameterLoad
-				&& node.Instruction != IRInstruction.LoadParamCompound
-				&& ParamReadOnly.Get(node.Operand1.Index))
-			{
-				return true;
-			}
-
-			if (node.Instruction == IRInstruction.AddressOf
-				&& (node.Operand1.IsStackLocal || node.Operand1.IsStaticField))
-			{
-				return true;
-			}
-
-			if (node.ResultCount != 1
-				|| node.OperandCount == 0
-				|| node.OperandCount > 2
-				|| node.Instruction.IsMemoryWrite
-				|| node.Instruction.IsMemoryRead
-				|| node.Instruction.IsIOOperation
-				|| node.Instruction.HasUnspecifiedSideEffect
-				|| node.Instruction.VariableOperands
-				|| node.Instruction.FlowControl != FlowControl.Next
-				|| node.Instruction.IgnoreDuringCodeGeneration
-				|| node.Operand1.IsUnresolvedConstant
-				|| (node.OperandCount == 2 && node.Operand2.IsUnresolvedConstant))
-				return false;
-
-			return true;
-		}
-
-		private static int UpdateHash(int hash, int addition)
-		{
-			return (hash << 8) + addition;
-		}
-
-		private static int ComputeExpressionHash(InstructionNode node)
-		{
-			int hash = node.Instruction.ID;
-
-			hash = hash | ((int)node.ConditionCode << 16);
-
-			if (node.Operand1.IsConstant)
-				hash = UpdateHash(hash, (int)node.Operand1.ConstantUnsigned64);
-			else if (node.Operand1.IsVirtualRegister || node.Operand1.IsStackLocal)
-				hash = UpdateHash(hash, node.Operand1.Index);
-
-			if (node.OperandCount >= 2)
-				if (node.Operand2.IsConstant)
-					hash = UpdateHash(hash, (int)node.Operand2.ConstantUnsigned64);
-				else if (node.Operand2.IsVirtualRegister || node.Operand2.IsStackLocal)
-					hash = UpdateHash(hash, node.Operand2.Index);
-
-			return hash;
-		}
-
-		private List<Expression> GetExpressionsByHash(int hash)
-		{
-			Expressions.TryGetValue(hash, out List<Expression> list);
-			return list;
-		}
-
-		private static bool IsEqual(Operand operand1, Operand operand2, BaseInstruction instruction = null)
-		{
-			if (operand1 == operand2)
-				return true;
-
-			if (operand1.IsResolvedConstant
-				&& operand2.IsResolvedConstant
-				&& operand1.IsInteger
-				&& operand2.IsInteger
-				&& operand1.ConstantUnsigned64 == operand2.ConstantUnsigned64)
-				return true;
-
-			if (operand1.IsResolvedConstant
-				&& operand2.IsResolvedConstant
-				&& operand1.IsFloatingPoint
-				&& operand2.IsFloatingPoint
-				&& operand1.ConstantDouble == operand2.ConstantDouble)
-				return true;
-
-			if (instruction != null
-				&& instruction == IRInstruction.AddressOf
-				&& operand1.IsStaticField
-				&& operand2.IsStaticField
-				&& operand1.Field == operand2.Field)
-				return true;
-
-			if (instruction != null
-				&& instruction == IRInstruction.AddressOf
-				&& operand1.IsStackLocal
-				&& operand2.IsStackLocal
-				&& operand1.Index == operand2.Index)
-				return true;
-
-			return false;
-		}
-
-		private static Expression FindMatch(List<Expression> expressions, InstructionNode node)
-		{
-			if (expressions == null)
-				return null;
-
-			foreach (var expression in expressions)
-			{
-				if (node.Instruction == expression.Instruction
-					&& node.ConditionCode == expression.ConditionCode
-					&& IsEqual(node.Operand1, expression.Operand1, node.Instruction)
-					&& (node.OperandCount == 1 || (node.OperandCount == 2 && IsEqual(node.Operand2, expression.Operand2))))
-				{
-					return expression;
-				}
-			}
-
-			return null;
-		}
-
-		private Operand GetValueNumber(Operand operand)
-		{
-			if (MapToValueNumber.TryGetValue(operand, out Operand value))
-				return value;
-			else
-				return null;
-		}
-
-		private void SetValueNumber(Operand operand, Operand valueVumber)
-		{
-			trace?.Log($"Set: {operand} => {valueVumber}");
-
-			MapToValueNumber[operand] = valueVumber;
-		}
-
-		private bool IsPhiUseless(InstructionNode node)
-		{
-			Debug.Assert(IsPhiInstruction(node.Instruction));
-
-			var operand = node.Operand1;
-			var operandVN = GetValueNumber(operand);
-
-			foreach (var op in node.Operands)
-			{
-				if (operandVN == GetValueNumber(op))
-					return false;
-			}
-
-			return true;
-		}
-
-		private bool ArePhisRedundant(InstructionNode a, InstructionNode b)
-		{
-			Debug.Assert(IsPhiInstruction(a.Instruction));
-			Debug.Assert(IsPhiInstruction(b.Instruction));
-
-			if (a.OperandCount != b.OperandCount)
-				return false;
-
-			for (int i = 0; i < a.OperandCount; i++)
-			{
-				var va = a.GetOperand(i);
-				var vb = b.GetOperand(i);
-
-				if (va == null || vb == null || va != vb)
-					return false;
-			}
-
-			return true;
-		}
-
-		private void AddExpressionToHashTable(Expression expression)
-		{
-			if (!Expressions.TryGetValue(expression.Hash, out List<Expression> list))
-			{
-				list = new List<Expression>();
-				Expressions.Add(expression.Hash, list);
-			}
-
-			list.Add(expression);
-
-			trace?.Log($"Added Expression: {expression.ValueNumber} <= {expression.Instruction} {expression.Operand1} {expression.Operand2}" ?? string.Empty);
-		}
-
-		private void RemoveExpressionFromHashTable(Expression expression)
-		{
-			var list = Expressions[expression.Hash];
-
-			list.Remove(expression);
-
-			trace?.Log($"Removed Expression: {expression.ValueNumber} <= {expression.Instruction} {expression.Operand1} {expression.Operand2}" ?? string.Empty);
-		}
-
-		private void UpdateNodeWithValueNumbers(InstructionNode node)
-		{
-			// update operands with their value number
-			for (int i = 0; i < node.OperandCount; i++)
-			{
-				var operand = node.GetOperand(i);
-
-				if (operand.IsVirtualRegister)
-				{
-					var valueNumber = GetValueNumber(operand);
-
-					if (valueNumber != null)
-					{
-						if (operand != valueNumber)
-						{
-							//trace?.Log($"BEFORE: {node}");
-							//trace?.Log($"Replaced: {operand} with {valueNumber}");
-							node.SetOperand(i, valueNumber);
-
-							trace?.Log($"UPDATED: {node}");
-						}
-					}
-					else
-					{
-						// value has not been encountered yet --- skip it for now
-						if (IsPhiInstruction(node.Instruction))
-							continue;
-
-						//Debug.Assert(IsPhiInstruction(node.Instruction));
-
-						//MethodCompiler.Compiler.Stop();
-						//return;
-						throw new CompilerException("ValueNumbering Stage: Expected PHI instruction but found instead: " + node + " for " + operand);
-					}
-				}
-			}
-		}
-
-		private void UpdatePhiSuccesors(BasicBlock block)
-		{
-			// For each successor of the block, adjust the φ-function inputs
-
-			foreach (var next in block.NextBlocks)
-			{
-				for (var node = next.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
-				{
-					if (node.IsEmptyOrNop)
+					// value has not been encountered yet --- skip it for now
+					if (IsPhiInstruction(node.Instruction))
 						continue;
 
-					if (!IsPhiInstruction(node.Instruction))
-						break;
+					//Debug.Assert(IsPhiInstruction(node.Instruction));
 
-					// update operands with their value number
-					UpdateNodeWithValueNumbers(node);
+					//MethodCompiler.Compiler.Stop();
+					//return;
+					throw new CompilerException("ValueNumbering Stage: Expected PHI instruction but found instead: " + node + " for " + operand);
 				}
 			}
 		}
+	}
 
-		private Operand CheckRedundant(InstructionNode node)
+	private void UpdatePhiSuccesors(BasicBlock block)
+	{
+		// For each successor of the block, adjust the φ-function inputs
+
+		foreach (var next in block.NextBlocks)
 		{
-			Operand redundant = null;
-
-			for (var previousPhi = node.Previous; !previousPhi.IsBlockStartInstruction; previousPhi = previousPhi.Previous)
+			for (var node = next.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 			{
-				if (previousPhi.IsEmptyOrNop)
+				if (node.IsEmptyOrNop)
 					continue;
 
-				Debug.Assert(IsPhiInstruction(previousPhi.Instruction));
-
-				if (ArePhisRedundant(node, previousPhi))
-				{
-					redundant = previousPhi.Result;
+				if (!IsPhiInstruction(node.Instruction))
 					break;
-				}
-			}
 
-			return redundant;
+				// update operands with their value number
+				UpdateNodeWithValueNumbers(node);
+			}
 		}
+	}
+
+	private Operand CheckRedundant(InstructionNode node)
+	{
+		Operand redundant = null;
+
+		for (var previousPhi = node.Previous; !previousPhi.IsBlockStartInstruction; previousPhi = previousPhi.Previous)
+		{
+			if (previousPhi.IsEmptyOrNop)
+				continue;
+
+			Debug.Assert(IsPhiInstruction(previousPhi.Instruction));
+
+			if (ArePhisRedundant(node, previousPhi))
+			{
+				redundant = previousPhi.Result;
+				break;
+			}
+		}
+
+		return redundant;
 	}
 }

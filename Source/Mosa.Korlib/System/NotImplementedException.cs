@@ -1,26 +1,25 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace System
+namespace System;
+
+/// <summary>
+/// Implementation of the "System.NotImplementedException" class
+/// </summary>
+[Serializable]
+public class NotImplementedException : SystemException
 {
 	/// <summary>
-	/// Implementation of the "System.NotImplementedException" class
+	/// Initializes a new instance of the <see cref="NotImplementedException"/> class.
 	/// </summary>
-	[Serializable]
-	public class NotImplementedException : SystemException
-	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="NotImplementedException"/> class.
-		/// </summary>
-		public NotImplementedException()
-			: base("A Not Implemented exception was thrown.")
-		{ }
+	public NotImplementedException()
+		: base("A Not Implemented exception was thrown.")
+	{ }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="NotImplementedException"/> class.
-		/// </summary>
-		/// <param name="message">The message.</param>
-		public NotImplementedException(string message)
-			: base(message)
-		{ }
-	}
+	/// <summary>
+	/// Initializes a new instance of the <see cref="NotImplementedException"/> class.
+	/// </summary>
+	/// <param name="message">The message.</param>
+	public NotImplementedException(string message)
+		: base(message)
+	{ }
 }

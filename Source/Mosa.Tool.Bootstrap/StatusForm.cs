@@ -3,19 +3,18 @@
 using System;
 using System.Windows.Forms;
 
-namespace Mosa.Tool.Bootstrap
-{
-	public partial class StatusForm : Form
-	{
-		public StatusForm(string status)
-		{
-			InitializeComponent();
-			this.lbStatus.Text = status;
-		}
+namespace Mosa.Tool.Bootstrap;
 
-		private void button1_Click(object sender, EventArgs e)
-		{
-			Application.Exit();
-		}
+public partial class StatusForm : Form
+{
+	public StatusForm(string status)
+	{
+		InitializeComponent();
+		this.lbStatus.Text = status;
+	}
+
+	private void button1_Click(object sender, EventArgs e)
+	{
+		Application.Exit();
 	}
 }

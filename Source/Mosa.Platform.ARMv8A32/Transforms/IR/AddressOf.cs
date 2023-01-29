@@ -4,53 +4,52 @@ using System.Diagnostics;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.ARMv8A32.Transforms.IR
+namespace Mosa.Platform.ARMv8A32.Transforms.IR;
+
+/// <summary>
+/// AddressOf
+/// </summary>
+public sealed class AddressOf : BaseTransform
 {
-	/// <summary>
-	/// AddressOf
-	/// </summary>
-	public sealed class AddressOf : BaseTransform
+	public AddressOf() : base(IRInstruction.AddressOf, TransformType.Manual | TransformType.Transform)
 	{
-		public AddressOf() : base(IRInstruction.AddressOf, TransformType.Manual | TransformType.Transform)
+	}
+
+	public override bool Match(Context context, TransformContext transform)
+	{
+		return true;
+	}
+
+	public override void Transform(Context context, TransformContext transform)
+	{
+		Debug.Assert(context.Operand1.IsOnStack || context.Operand1.IsStaticField);
+
+		var result = context.Result;
+		var operand1 = context.Operand1;
+
+		operand1 = ARMv8A32TransformHelper.MoveConstantToRegisterOrImmediate(transform, context, operand1);
+
+		if (operand1.IsStaticField)
 		{
+			context.SetInstruction(ARMv8A32.Mov, result, operand1);
 		}
-
-		public override bool Match(Context context, TransformContext transform)
+		else if (operand1.IsStackLocal)
 		{
-			return true;
+			context.SetInstruction(ARMv8A32.Add, result, transform.StackFrame, operand1);
 		}
-
-		public override void Transform(Context context, TransformContext transform)
+		else if (context.Operand1.IsUnresolvedConstant)
 		{
-			Debug.Assert(context.Operand1.IsOnStack || context.Operand1.IsStaticField);
+			var offset = ARMv8A32TransformHelper.MoveConstantToRegister(transform, context, operand1);
 
-			var result = context.Result;
-			var operand1 = context.Operand1;
+			context.SetInstruction(ARMv8A32.Add, result, transform.StackFrame, offset);
+		}
+		else
+		{
+			var offset = transform.CreateConstant32(context.Operand1.Offset);
 
-			operand1 = ARMv8A32TransformHelper.MoveConstantToRegisterOrImmediate(transform, context, operand1);
+			offset = ARMv8A32TransformHelper.MoveConstantToRegisterOrImmediate(transform, context, offset);
 
-			if (operand1.IsStaticField)
-			{
-				context.SetInstruction(ARMv8A32.Mov, result, operand1);
-			}
-			else if (operand1.IsStackLocal)
-			{
-				context.SetInstruction(ARMv8A32.Add, result, transform.StackFrame, operand1);
-			}
-			else if (context.Operand1.IsUnresolvedConstant)
-			{
-				var offset = ARMv8A32TransformHelper.MoveConstantToRegister(transform, context, operand1);
-
-				context.SetInstruction(ARMv8A32.Add, result, transform.StackFrame, offset);
-			}
-			else
-			{
-				var offset = transform.CreateConstant32(context.Operand1.Offset);
-
-				offset = ARMv8A32TransformHelper.MoveConstantToRegisterOrImmediate(transform, context, offset);
-
-				context.SetInstruction(ARMv8A32.Add, result, transform.StackFrame, offset);
-			}
+			context.SetInstruction(ARMv8A32.Add, result, transform.StackFrame, offset);
 		}
 	}
 }

@@ -1,30 +1,29 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace System
+namespace System;
+
+/// <summary>
+///
+/// </summary>
+public interface IAsyncResult
 {
-	/// <summary>
-	///
-	/// </summary>
-	public interface IAsyncResult
+	object AsyncState
 	{
-		object AsyncState
-		{
-			get;
-		}
+		get;
+	}
 
-		WaitHandle AsyncWaitHandle
-		{
-			get;
-		}
+	WaitHandle AsyncWaitHandle
+	{
+		get;
+	}
 
-		bool CompletedSynchronously
-		{
-			get;
-		}
+	bool CompletedSynchronously
+	{
+		get;
+	}
 
-		bool IsCompleted
-		{
-			get;
-		}
+	bool IsCompleted
+	{
+		get;
 	}
 }

@@ -1,83 +1,82 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.DeviceSystem
+namespace Mosa.DeviceSystem;
+
+/// <summary>
+/// Disk Geometry (Heads, Cylinders, SectorsPerTrack)
+/// </summary>
+public struct DiskGeometry
 {
 	/// <summary>
-	/// Disk Geometry (Heads, Cylinders, SectorsPerTrack)
+	/// Cylinder
 	/// </summary>
-	public struct DiskGeometry
+	public ushort Cylinders;
+
+	/// <summary>
+	/// Head
+	/// </summary>
+	public byte Heads;
+
+	/// <summary>
+	/// Sector
+	/// </summary>
+	public ushort SectorsPerTrack;
+
+	/// <summary>
+	/// Initializes a new instance of the <see cref="DiskGeometry"/> struct.
+	/// </summary>
+	/// <param name="cylinders">The cylinders.</param>
+	/// <param name="heads">The heads.</param>
+	/// <param name="sectorsPerTrack">The sectors per track.</param>
+	public DiskGeometry(ushort cylinders, byte heads, ushort sectorsPerTrack)
 	{
-		/// <summary>
-		/// Cylinder
-		/// </summary>
-		public ushort Cylinders;
+		Cylinders = cylinders;
+		Heads = heads;
+		SectorsPerTrack = sectorsPerTrack;
+	}
 
-		/// <summary>
-		/// Head
-		/// </summary>
-		public byte Heads;
+	/// <summary>
+	/// Guesses the geometry.
+	/// </summary>
+	/// <param name="lba">The lba.</param>
+	public void GuessGeometry(ulong lba)
+	{
+		uint cylinderTimesHeads;
 
-		/// <summary>
-		/// Sector
-		/// </summary>
-		public ushort SectorsPerTrack;
+		if (lba > 65535 * 16 * 255)
+			lba = 65535 * 16 * 255;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="DiskGeometry"/> struct.
-		/// </summary>
-		/// <param name="cylinders">The cylinders.</param>
-		/// <param name="heads">The heads.</param>
-		/// <param name="sectorsPerTrack">The sectors per track.</param>
-		public DiskGeometry(ushort cylinders, byte heads, ushort sectorsPerTrack)
+		if (lba >= 65535 * 16 * 63)
 		{
-			Cylinders = cylinders;
-			Heads = heads;
-			SectorsPerTrack = sectorsPerTrack;
+			SectorsPerTrack = 255;
+			Heads = 16;
+			cylinderTimesHeads = (uint)(lba / SectorsPerTrack);
 		}
-
-		/// <summary>
-		/// Guesses the geometry.
-		/// </summary>
-		/// <param name="lba">The lba.</param>
-		public void GuessGeometry(ulong lba)
+		else
 		{
-			uint cylinderTimesHeads;
+			SectorsPerTrack = 17;
+			cylinderTimesHeads = (uint)(lba / SectorsPerTrack);
 
-			if (lba > 65535 * 16 * 255)
-				lba = 65535 * 16 * 255;
+			Heads = (byte)((cylinderTimesHeads + 1023) / 1024);
 
-			if (lba >= 65535 * 16 * 63)
+			if (Heads < 4)
+				Heads = 4;
+
+			if (cylinderTimesHeads >= (Heads * 1024) || Heads > 16)
 			{
-				SectorsPerTrack = 255;
+				SectorsPerTrack = 31;
 				Heads = 16;
 				cylinderTimesHeads = (uint)(lba / SectorsPerTrack);
 			}
-			else
+
+			if (cylinderTimesHeads >= (Heads * 1024))
 			{
-				SectorsPerTrack = 17;
+				SectorsPerTrack = 63;
+				Heads = 16;
 				cylinderTimesHeads = (uint)(lba / SectorsPerTrack);
-
-				Heads = (byte)((cylinderTimesHeads + 1023) / 1024);
-
-				if (Heads < 4)
-					Heads = 4;
-
-				if (cylinderTimesHeads >= (Heads * 1024) || Heads > 16)
-				{
-					SectorsPerTrack = 31;
-					Heads = 16;
-					cylinderTimesHeads = (uint)(lba / SectorsPerTrack);
-				}
-
-				if (cylinderTimesHeads >= (Heads * 1024))
-				{
-					SectorsPerTrack = 63;
-					Heads = 16;
-					cylinderTimesHeads = (uint)(lba / SectorsPerTrack);
-				}
 			}
-
-			Cylinders = (ushort)(cylinderTimesHeads / Heads);
 		}
+
+		Cylinders = (ushort)(cylinderTimesHeads / Heads);
 	}
 }

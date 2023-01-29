@@ -3,25 +3,24 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.x64.Transforms.AddressMode
+namespace Mosa.Platform.x64.Transforms.AddressMode;
+
+/// <summary>
+/// Sar64
+/// </summary>
+public sealed class Sar64 : BaseTransform
 {
-	/// <summary>
-	/// Sar64
-	/// </summary>
-	public sealed class Sar64 : BaseTransform
+	public Sar64() : base(X64.Sar64, TransformType.Manual | TransformType.Transform)
 	{
-		public Sar64() : base(X64.Sar64, TransformType.Manual | TransformType.Transform)
-		{
-		}
+	}
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			return !X64TransformHelper.IsAddressMode(context);
-		}
+	public override bool Match(Context context, TransformContext transform)
+	{
+		return !X64TransformHelper.IsAddressMode(context);
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			X64TransformHelper.AddressModeConversion(context, X64.Mov64);
-		}
+	public override void Transform(Context context, TransformContext transform)
+	{
+		X64TransformHelper.AddressModeConversion(context, X64.Mov64);
 	}
 }

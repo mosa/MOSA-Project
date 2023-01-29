@@ -3,25 +3,24 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.x86.Transforms.AddressMode
+namespace Mosa.Platform.x86.Transforms.AddressMode;
+
+/// <summary>
+/// And32
+/// </summary>
+public sealed class And32 : BaseTransform
 {
-	/// <summary>
-	/// And32
-	/// </summary>
-	public sealed class And32 : BaseTransform
+	public And32() : base(X86.And32, TransformType.Manual | TransformType.Transform)
 	{
-		public And32() : base(X86.And32, TransformType.Manual | TransformType.Transform)
-		{
-		}
+	}
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			return !X86TransformHelper.IsAddressMode(context);
-		}
+	public override bool Match(Context context, TransformContext transform)
+	{
+		return !X86TransformHelper.IsAddressMode(context);
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			X86TransformHelper.AddressModeConversionCummulative(context, X86.Mov32);
-		}
+	public override void Transform(Context context, TransformContext transform)
+	{
+		X86TransformHelper.AddressModeConversionCummulative(context, X86.Mov32);
 	}
 }

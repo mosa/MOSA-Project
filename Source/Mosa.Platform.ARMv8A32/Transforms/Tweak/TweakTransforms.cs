@@ -3,17 +3,16 @@
 using System.Collections.Generic;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.ARMv8A32.Transforms.Tweak
+namespace Mosa.Platform.ARMv8A32.Transforms.Tweak;
+
+/// <summary>
+/// Tweak Transformation List
+/// </summary>
+public static class TweakTransforms
 {
-	/// <summary>
-	/// Tweak Transformation List
-	/// </summary>
-	public static class TweakTransforms
+	public static readonly List<BaseTransform> List = new List<BaseTransform>
 	{
-		public static readonly List<BaseTransform> List = new List<BaseTransform>
-		{
-			new Mov(),
-			new Mvf(),
-		};
-	}
+		new Mov(),
+		new Mvf(),
+	};
 }

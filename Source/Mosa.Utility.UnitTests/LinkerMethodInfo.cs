@@ -3,15 +3,14 @@
 using System;
 using Mosa.Compiler.MosaTypeSystem;
 
-namespace Mosa.Utility.UnitTests
-{
-	public class LinkerMethodInfo
-	{
-		public MosaMethod MosaMethod { get; set; }
-		public IntPtr MosaMethodAddress { get; set; }
+namespace Mosa.Utility.UnitTests;
 
-		public string MethodNamespaceName { get; set; }
-		public string MethodTypeName { get; set; }
-		public string MethodName { get; set; }
-	}
+public class LinkerMethodInfo
+{
+	public MosaMethod MosaMethod { get; set; }
+	public IntPtr MosaMethodAddress { get; set; }
+
+	public string MethodNamespaceName { get; set; }
+	public string MethodTypeName { get; set; }
+	public string MethodName { get; set; }
 }

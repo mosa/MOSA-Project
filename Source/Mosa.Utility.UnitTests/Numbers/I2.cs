@@ -3,56 +3,55 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Mosa.Utility.UnitTests.Numbers
+namespace Mosa.Utility.UnitTests.Numbers;
+
+public static class I2
 {
-	public static class I2
+	private static IList<short> series = null;
+
+	public static IEnumerable<short> Series
 	{
-		private static IList<short> series = null;
-
-		public static IEnumerable<short> Series
+		get
 		{
-			get
-			{
-				if (series == null) series = GetSeries();
+			if (series == null) series = GetSeries();
 
-				foreach (short value in series)
-					yield return value;
-			}
+			foreach (short value in series)
+				yield return value;
 		}
+	}
 
-		public static IList<short> GetSeries()
+	public static IList<short> GetSeries()
+	{
+		var list = new List<short>
 		{
-			var list = new List<short>
-			{
-				0,
-				1,
-				2,
-				sbyte.MinValue,
-				sbyte.MaxValue,
-				sbyte.MinValue + 1,
-				sbyte.MaxValue - 1,
-				byte.MaxValue,
-				byte.MinValue,
-				short.MinValue,
-				short.MaxValue,
-				short.MinValue + 1,
-				short.MaxValue - 1
-			};
+			0,
+			1,
+			2,
+			sbyte.MinValue,
+			sbyte.MaxValue,
+			sbyte.MinValue + 1,
+			sbyte.MaxValue - 1,
+			byte.MaxValue,
+			byte.MinValue,
+			short.MinValue,
+			short.MaxValue,
+			short.MinValue + 1,
+			short.MaxValue - 1
+		};
 
-			AddNegatives(list);
-			list = list.Distinct().ToList();
-			list.Sort();
+		AddNegatives(list);
+		list = list.Distinct().ToList();
+		list.Sort();
 
-			return list;
-		}
+		return list;
+	}
 
-		private static void AddNegatives(IList<short> list)
+	private static void AddNegatives(IList<short> list)
+	{
+		foreach (var value in list.ToArray())
 		{
-			foreach (var value in list.ToArray())
-			{
-				if (value > 0)
-					list.Add((short)-value);
-			}
+			if (value > 0)
+				list.Add((short)-value);
 		}
 	}
 }

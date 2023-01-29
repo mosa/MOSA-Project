@@ -1,11 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Utility.BootImage
+namespace Mosa.Utility.BootImage;
+
+public enum FileSystem
 {
-	public enum FileSystem
-	{
-		FAT12,
-		FAT16,
-		FAT32
-	};
-}
+	FAT12,
+	FAT16,
+	FAT32
+};

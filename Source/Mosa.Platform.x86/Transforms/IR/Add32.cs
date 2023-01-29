@@ -3,25 +3,24 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.x86.Transforms.IR
+namespace Mosa.Platform.x86.Transforms.IR;
+
+/// <summary>
+/// Add32
+/// </summary>
+public sealed class Add32 : BaseTransform
 {
-	/// <summary>
-	/// Add32
-	/// </summary>
-	public sealed class Add32 : BaseTransform
+	public Add32() : base(IRInstruction.Add32, TransformType.Manual | TransformType.Transform)
 	{
-		public Add32() : base(IRInstruction.Add32, TransformType.Manual | TransformType.Transform)
-		{
-		}
+	}
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			return true;
-		}
+	public override bool Match(Context context, TransformContext transform)
+	{
+		return true;
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			context.ReplaceInstruction(X86.Add32);
-		}
+	public override void Transform(Context context, TransformContext transform)
+	{
+		context.ReplaceInstruction(X86.Add32);
 	}
 }

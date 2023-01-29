@@ -4,52 +4,51 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Mosa.Compiler.Framework.CompilerStages
+namespace Mosa.Compiler.Framework.CompilerStages;
+
+/// <summary>
+/// An compilation stage, which generates a map file of the built binary file.
+/// </summary>
+/// <seealso cref="Mosa.Compiler.Framework.BaseCompilerStage" />
+public class InlinedFileStage : BaseCompilerStage
 {
-	/// <summary>
-	/// An compilation stage, which generates a map file of the built binary file.
-	/// </summary>
-	/// <seealso cref="Mosa.Compiler.Framework.BaseCompilerStage" />
-	public class InlinedFileStage : BaseCompilerStage
+	protected override void Finalization()
 	{
-		protected override void Finalization()
+		if (string.IsNullOrEmpty(CompilerSettings.InlinedFile))
+			return;
+
+		var methods = GetAndSortMethodData();
+
+		using (var writer = new StreamWriter(CompilerSettings.InlinedFile))
 		{
-			if (string.IsNullOrEmpty(CompilerSettings.InlinedFile))
-				return;
+			writer.WriteLine("Method\tCompilations");
 
-			var methods = GetAndSortMethodData();
-
-			using (var writer = new StreamWriter(CompilerSettings.InlinedFile))
+			foreach (var data in methods)
 			{
-				writer.WriteLine("Method\tCompilations");
+				writer.WriteLine($"{InlinedSetupStage.RemoveReturnValue(data.Method.FullName)}\t{data.Version}");
+			}
+		}
+	}
 
-				foreach (var data in methods)
+	protected List<MethodData> GetAndSortMethodData()
+	{
+		var methods = new List<MethodData>();
+
+		foreach (var type in TypeSystem.AllTypes)
+		{
+			foreach (var method in type.Methods)
+			{
+				var data = Compiler.GetMethodData(method);
+
+				if (data.Inlined)
 				{
-					writer.WriteLine($"{InlinedSetupStage.RemoveReturnValue(data.Method.FullName)}\t{data.Version}");
+					methods.Add(data);
 				}
 			}
 		}
 
-		protected List<MethodData> GetAndSortMethodData()
-		{
-			var methods = new List<MethodData>();
+		methods.Sort((MethodData x, MethodData y) => String.Compare(x.Method.FullName, y.Method.FullName));
 
-			foreach (var type in TypeSystem.AllTypes)
-			{
-				foreach (var method in type.Methods)
-				{
-					var data = Compiler.GetMethodData(method);
-
-					if (data.Inlined)
-					{
-						methods.Add(data);
-					}
-				}
-			}
-
-			methods.Sort((MethodData x, MethodData y) => String.Compare(x.Method.FullName, y.Method.FullName));
-
-			return methods;
-		}
+		return methods;
 	}
 }

@@ -2,38 +2,37 @@
 
 using System.Drawing;
 
-namespace Mosa.Demo.SVGAWorld.x86
+namespace Mosa.Demo.SVGAWorld.x86;
+
+internal static class MosaLogo
 {
-	internal static class MosaLogo
+	//Size in tiles
+	private const uint Width = 23;
+
+	private const uint Height = 7;
+
+	public static void Draw(uint tileSize)
 	{
-		//Size in tiles
-		private const uint Width = 23;
+		var positionX = Display.Width / 2 - Width * tileSize / 2;
+		var positionY = Display.Height / 2 - Height * tileSize / 2;
 
-		private const uint Height = 7;
+		// Can't store these as a static fields, they seem to break something
+		int[] logo = { 0x39E391, 0x44145B, 0x7CE455, 0x450451, 0x450451, 0x451451, 0x44E391 };
+		int[] colors = { 0x00FF0000, 0x0000FF00, 0x000000FF, 0x00FFFF00 }; // Colors for each pixel
 
-		public static void Draw(uint tileSize)
+		for (uint ty = 0; ty < Height; ty++)
 		{
-			var positionX = Display.Width / 2 - Width * tileSize / 2;
-			var positionY = Display.Height / 2 - Height * tileSize / 2;
+			var data = logo[ty];
 
-			// Can't store these as a static fields, they seem to break something
-			int[] logo = { 0x39E391, 0x44145B, 0x7CE455, 0x450451, 0x450451, 0x451451, 0x44E391 };
-			int[] colors = { 0x00FF0000, 0x0000FF00, 0x000000FF, 0x00FFFF00 }; // Colors for each pixel
-
-			for (uint ty = 0; ty < Height; ty++)
+			for (uint tx = 0; tx < Width; tx++)
 			{
-				var data = logo[ty];
+				var mask = 1 << (int)tx;
 
-				for (uint tx = 0; tx < Width; tx++)
+				if ((data & mask) == mask)
 				{
-					var mask = 1 << (int)tx;
-
-					if ((data & mask) == mask)
-					{
-						//Each pixel is approximately 5 tiles in width
-						Display.DrawRectangle(positionX + tileSize * tx, positionY + tileSize * ty, tileSize,
-							tileSize, Color.FromArgb(colors[tx / 6]), true);
-					}
+					//Each pixel is approximately 5 tiles in width
+					Display.DrawRectangle(positionX + tileSize * tx, positionY + tileSize * ty, tileSize,
+						tileSize, Color.FromArgb(colors[tx / 6]), true);
 				}
 			}
 		}

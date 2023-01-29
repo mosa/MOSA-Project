@@ -2,84 +2,83 @@
 
 using System.Drawing;
 
-namespace Mosa.Demo.SVGAWorld.x86.Components
+namespace Mosa.Demo.SVGAWorld.x86.Components;
+
+public class TaskbarWindowMenu
 {
-	public class TaskbarWindowMenu
+	public uint X, Y, Width, Height;
+
+	public Color BackColor, ForeColor, HoverColor;
+
+	public readonly TaskbarButton AttachedButton;
+
+	// Controls
+	private readonly Button CloseBtn, ShowHideBtn;
+
+	private readonly uint Buttons = 2, Separation = 5, ButtonHeight = 20;
+
+	public TaskbarWindowMenu(TaskbarButton btn, Color backColor, Color foreColor, Color hoverColor)
 	{
-		public uint X, Y, Width, Height;
+		AttachedButton = btn;
 
-		public Color BackColor, ForeColor, HoverColor;
+		Width = btn.Width;
+		Height = ButtonHeight * Buttons + Separation * (Buttons - 1);
 
-		public readonly TaskbarButton AttachedButton;
+		X = btn.X;
+		Y = btn.Y - Separation - Height;
 
-		// Controls
-		private readonly Button CloseBtn, ShowHideBtn;
+		BackColor = backColor;
+		ForeColor = foreColor;
+		HoverColor = hoverColor;
 
-		private readonly uint Buttons = 2, Separation = 5, ButtonHeight = 20;
-
-		public TaskbarWindowMenu(TaskbarButton btn, Color backColor, Color foreColor, Color hoverColor)
+		ShowHideBtn = new Button(btn.AttachedWindow.Opened ? "Hide" : "Show", X, Y, ButtonHeight, BackColor, ForeColor, HoverColor, () =>
 		{
-			AttachedButton = btn;
+			btn.AttachedWindow.Opened = !btn.AttachedWindow.Opened;
 
-			Width = btn.Width;
-			Height = ButtonHeight * Buttons + Separation * (Buttons - 1);
-
-			X = btn.X;
-			Y = btn.Y - Separation - Height;
-
-			BackColor = backColor;
-			ForeColor = foreColor;
-			HoverColor = hoverColor;
-
-			ShowHideBtn = new Button(btn.AttachedWindow.Opened ? "Hide" : "Show", X, Y, ButtonHeight, BackColor, ForeColor, HoverColor, () =>
+			for (var j = 0; j < btn.Taskbar.Menus.Count; j++)
 			{
-				btn.AttachedWindow.Opened = !btn.AttachedWindow.Opened;
+				var m = btn.Taskbar.Menus[j];
 
-				for (var j = 0; j < btn.Taskbar.Menus.Count; j++)
-				{
-					var m = btn.Taskbar.Menus[j];
+				if (m.AttachedButton != AttachedButton)
+					continue;
 
-					if (m.AttachedButton != AttachedButton)
-						continue;
+				btn.Taskbar.Menus.RemoveAt(j);
+				break;
+			}
 
-					btn.Taskbar.Menus.RemoveAt(j);
-					break;
-				}
+			return null;
+		}, Width);
 
-				return null;
-			}, Width);
+		CloseBtn = new Button("Close", X, Y + Separation * Separation, ButtonHeight, BackColor, ForeColor, HoverColor, () =>
+		{
+			WindowManager.Close(btn.AttachedWindow);
 
-			CloseBtn = new Button("Close", X, Y + Separation * Separation, ButtonHeight, BackColor, ForeColor, HoverColor, () =>
+			for (var j = 0; j < btn.Taskbar.Menus.Count; j++)
 			{
-				WindowManager.Close(btn.AttachedWindow);
+				var m = btn.Taskbar.Menus[j];
 
-				for (var j = 0; j < btn.Taskbar.Menus.Count; j++)
-				{
-					var m = btn.Taskbar.Menus[j];
+				if (m.AttachedButton != AttachedButton)
+					continue;
 
-					if (m.AttachedButton != AttachedButton)
-						continue;
+				btn.Taskbar.Menus.RemoveAt(j);
+				break;
+			}
 
-					btn.Taskbar.Menus.RemoveAt(j);
-					break;
-				}
+			return null;
+		}, Width);
+	}
 
-				return null;
-			}, Width);
-		}
+	public void Draw()
+	{
+		Display.DrawRectangle(X, Y, Width, Height, BackColor, true);
 
-		public void Draw()
-		{
-			Display.DrawRectangle(X, Y, Width, Height, BackColor, true);
+		ShowHideBtn.Draw();
+		CloseBtn.Draw();
+	}
 
-			ShowHideBtn.Draw();
-			CloseBtn.Draw();
-		}
-
-		public void Update()
-		{
-			ShowHideBtn.Update();
-			CloseBtn.Update();
-		}
+	public void Update()
+	{
+		ShowHideBtn.Update();
+		CloseBtn.Update();
 	}
 }

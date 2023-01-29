@@ -1,30 +1,29 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.DeviceSystem
+namespace Mosa.DeviceSystem;
+
+/// <summary>
+/// Stub class for a SpinLock object
+/// </summary>
+public struct SpinLock
 {
+	private System.Threading.SpinLock spinlock;
+
 	/// <summary>
-	/// Stub class for a SpinLock object
+	/// Enters spinlock
 	/// </summary>
-	public struct SpinLock
+	public bool Enter()
 	{
-		private System.Threading.SpinLock spinlock;
+		bool lockTaken = false;
+		spinlock.Enter(ref lockTaken);
+		return lockTaken;
+	}
 
-		/// <summary>
-		/// Enters spinlock
-		/// </summary>
-		public bool Enter()
-		{
-			bool lockTaken = false;
-			spinlock.Enter(ref lockTaken);
-			return lockTaken;
-		}
-
-		/// <summary>
-		/// Exits spinlock
-		/// </summary>
-		public void Exit()
-		{
-			spinlock.Exit();
-		}
+	/// <summary>
+	/// Exits spinlock
+	/// </summary>
+	public void Exit()
+	{
+		spinlock.Exit();
 	}
 }

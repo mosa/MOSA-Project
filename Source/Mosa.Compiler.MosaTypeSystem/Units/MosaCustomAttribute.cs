@@ -2,92 +2,91 @@
 
 using System.Collections.Generic;
 
-namespace Mosa.Compiler.MosaTypeSystem
+namespace Mosa.Compiler.MosaTypeSystem;
+
+public class MosaCustomAttribute
 {
-	public class MosaCustomAttribute
+	public struct Argument
 	{
-		public struct Argument
+		public Argument(MosaType type, object? value)
 		{
-			public Argument(MosaType type, object? value)
-			{
-				Type = type;
-				Value = value;
-			}
-
-			public readonly MosaType Type;
-			public readonly object? Value;
+			Type = type;
+			Value = value;
 		}
 
-		public class NamedArgument
-		{
-			public NamedArgument(string name, bool isField, Argument arg)
-			{
-				Name = name;
-				IsField = isField;
-				Argument = arg;
-			}
-
-			public string Name { get; private set; }
-
-			public bool IsField { get; private set; }
-
-			public Argument Argument { get; set; }
-		}
-
-		public MosaMethod Constructor { get; private set; }
-
-		public Argument[] Arguments { get; private set; }
-
-		public NamedArgument[] NamedArguments { get; private set; }
-
-		public MosaCustomAttribute(MosaMethod ctor, Argument[] args, NamedArgument[] namedArgs)
-		{
-			Constructor = ctor;
-			Arguments = args;
-			NamedArguments = namedArgs;
-		}
+		public readonly MosaType Type;
+		public readonly object? Value;
 	}
 
-	public class MosaCustomAttributeList : List<MosaCustomAttribute>
+	public class NamedArgument
 	{
-		public MosaCustomAttributeList() : base()
+		public NamedArgument(string name, bool isField, Argument arg)
 		{
+			Name = name;
+			IsField = isField;
+			Argument = arg;
 		}
 
-		public MosaCustomAttributeList(IEnumerable<MosaCustomAttribute> collection) : base(collection)
-		{
-		}
+		public string Name { get; private set; }
 
-		// This implementation isn't perfect but covers most cases
-		public override bool Equals(object? obj)
-		{
-			if (obj is not MosaCustomAttributeList customAttributeList)
-				return false;
+		public bool IsField { get; private set; }
 
-			if (ReferenceEquals(this, obj))
-				return true;
+		public Argument Argument { get; set; }
+	}
 
-			if (customAttributeList.Count != Count)
-				return false;
+	public MosaMethod Constructor { get; private set; }
 
-			for (var i = 0; i < Count; i++)
-			{
-				if (!customAttributeList[i].Constructor.DeclaringType?.Equals(this[i].Constructor.DeclaringType) == true)
-					return false;
+	public Argument[] Arguments { get; private set; }
 
-				if (customAttributeList[i].Arguments.Length != this[i].Arguments.Length)
-					return false;
+	public NamedArgument[] NamedArguments { get; private set; }
 
-				if (customAttributeList[i].NamedArguments.Length != this[i].NamedArguments.Length)
-					return false;
-			}
+	public MosaCustomAttribute(MosaMethod ctor, Argument[] args, NamedArgument[] namedArgs)
+	{
+		Constructor = ctor;
+		Arguments = args;
+		NamedArguments = namedArgs;
+	}
+}
 
+public class MosaCustomAttributeList : List<MosaCustomAttribute>
+{
+	public MosaCustomAttributeList() : base()
+	{
+	}
+
+	public MosaCustomAttributeList(IEnumerable<MosaCustomAttribute> collection) : base(collection)
+	{
+	}
+
+	// This implementation isn't perfect but covers most cases
+	public override bool Equals(object? obj)
+	{
+		if (obj is not MosaCustomAttributeList customAttributeList)
+			return false;
+
+		if (ReferenceEquals(this, obj))
 			return true;
+
+		if (customAttributeList.Count != Count)
+			return false;
+
+		for (var i = 0; i < Count; i++)
+		{
+			if (!customAttributeList[i].Constructor.DeclaringType?.Equals(this[i].Constructor.DeclaringType) == true)
+				return false;
+
+			if (customAttributeList[i].Arguments.Length != this[i].Arguments.Length)
+				return false;
+
+			if (customAttributeList[i].NamedArguments.Length != this[i].NamedArguments.Length)
+				return false;
 		}
 
-		public override int GetHashCode()
-		{
-			return base.GetHashCode();
-		}
+		return true;
+	}
+
+	public override int GetHashCode()
+	{
+		return base.GetHashCode();
 	}
 }

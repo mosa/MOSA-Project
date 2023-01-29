@@ -2,10 +2,9 @@
 
 using System.IO;
 
-namespace Mosa.Compiler.Framework.Platform
+namespace Mosa.Compiler.Framework.Platform;
+
+public abstract class BaseOpcodeEncoder
 {
-	public abstract class BaseOpcodeEncoder
-	{
-		public abstract void WriteTo(Stream writer);
-	}
+	public abstract void WriteTo(Stream writer);
 }

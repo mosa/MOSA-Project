@@ -2,518 +2,517 @@
 
 using System.IO;
 
-namespace Mosa.FileSystem.FAT
+namespace Mosa.FileSystem.FAT;
+
+/// <summary>
+///
+/// </summary>
+public class FatFileStream : Stream
 {
 	/// <summary>
 	///
 	/// </summary>
-	public class FatFileStream : Stream
+	protected uint startCluster;
+
+	/// <summary>
+	///
+	/// </summary>
+	protected uint currentCluster;
+
+	/// <summary>
+	///
+	/// </summary>
+	protected uint directorySector;
+
+	/// <summary>
+	///
+	/// </summary>
+	protected uint directorySectorIndex;
+
+	/// <summary>
+	///
+	/// </summary>
+	protected uint nthCluster;
+
+	/// <summary>
+	///
+	/// </summary>
+	protected long position;
+
+	/// <summary>
+	///
+	/// </summary>
+	protected long length;
+
+	/// <summary>
+	///
+	/// </summary>
+	protected long lengthOnDisk;
+
+	/// <summary>
+	///
+	/// </summary>
+	protected bool canRead;
+
+	/// <summary>
+	///
+	/// </summary>
+	protected bool canWrite;
+
+	/// <summary>
+	///
+	/// </summary>
+	protected byte[] data;
+
+	/// <summary>
+	///
+	/// </summary>
+	protected bool isDirty;
+
+	/// <summary>
+	///
+	/// </summary>
+	protected uint clusterSize;
+
+	/// <summary>
+	///
+	/// </summary>
+	protected FatFileSystem fs;
+
+	/// <summary>
+	/// Initializes a new instance of the <see cref="FatFileStream"/> class.
+	/// </summary>
+	/// <param name="fs">The fs.</param>
+	/// <param name="location">The location.</param>
+	public FatFileStream(FatFileSystem fs, FatFileLocation location)
+		: this(fs, location.FirstCluster, location.DirectorySector, location.DirectorySectorIndex)
 	{
-		/// <summary>
-		///
-		/// </summary>
-		protected uint startCluster;
+	}
 
-		/// <summary>
-		///
-		/// </summary>
-		protected uint currentCluster;
+	/// <summary>
+	/// Initializes a new instance of the <see cref="FatFileStream"/> class.
+	/// </summary>
+	/// <param name="fs">The fs.</param>
+	/// <param name="startCluster">The start cluster.</param>
+	/// <param name="directorySector">The directory sector.</param>
+	/// <param name="directorySectorIndex">Index of the directory sector.</param>
+	public FatFileStream(FatFileSystem fs, uint startCluster, uint directorySector, uint directorySectorIndex)
+	{
+		this.fs = fs;
+		clusterSize = fs.ClusterSizeInBytes;
+		data = new byte[clusterSize];
+		this.startCluster = startCluster;
+		this.directorySector = directorySector;
+		this.directorySectorIndex = directorySectorIndex;
+		position = 0;
+		canRead = true;
+		canWrite = true;
+		isDirty = false;
 
-		/// <summary>
-		///
-		/// </summary>
-		protected uint directorySector;
+		nthCluster = System.UInt32.MaxValue; // Not positioned yet
 
-		/// <summary>
-		///
-		/// </summary>
-		protected uint directorySectorIndex;
+		lengthOnDisk = fs.GetFileSize(directorySector, directorySectorIndex);
+		length = lengthOnDisk;
 
-		/// <summary>
-		///
-		/// </summary>
-		protected uint nthCluster;
+		currentCluster = 0;
+	}
 
-		/// <summary>
-		///
-		/// </summary>
-		protected long position;
+	/// <summary>
+	/// When overridden in a derived class, gets a value indicating whether the current stream supports reading.
+	/// </summary>
+	/// <value></value>
+	/// <returns>true if the stream supports reading; otherwise, false.
+	/// </returns>
+	public override bool CanRead { get { return canRead; } }
 
-		/// <summary>
-		///
-		/// </summary>
-		protected long length;
+	/// <summary>
+	/// When overridden in a derived class, gets a value indicating whether the current stream supports seeking.
+	/// </summary>
+	/// <value></value>
+	/// <returns>true if the stream supports seeking; otherwise, false.
+	/// </returns>
+	public override bool CanSeek { get { return true; } }
 
-		/// <summary>
-		///
-		/// </summary>
-		protected long lengthOnDisk;
+	/// <summary>
+	/// When overridden in a derived class, gets a value indicating whether the current stream supports writing.
+	/// </summary>
+	/// <value></value>
+	/// <returns>true if the stream supports writing; otherwise, false.
+	/// </returns>
+	public override bool CanWrite { get { return canWrite; } }
 
-		/// <summary>
-		///
-		/// </summary>
-		protected bool canRead;
+	/// <summary>
+	/// Gets a value that determines whether the current stream can time out.
+	/// </summary>
+	/// <value></value>
+	/// <returns>
+	/// A value that determines whether the current stream can time out.
+	/// </returns>
+	public override bool CanTimeout { get { return false; } }
 
-		/// <summary>
-		///
-		/// </summary>
-		protected bool canWrite;
+	/// <summary>
+	/// When overridden in a derived class, gets the length in bytes of the stream.
+	/// </summary>
+	/// <value></value>
+	/// <returns>
+	/// A long value representing the length of the stream in bytes.
+	/// </returns>
+	/// <exception cref="T:System.NotSupportedException">
+	/// A class derived from Stream does not support seeking.
+	/// </exception>
+	/// <exception cref="T:System.ObjectDisposedException">
+	/// Methods were called after the stream was closed.
+	/// </exception>
+	public override long Length { get { return length; } }
 
-		/// <summary>
-		///
-		/// </summary>
-		protected byte[] data;
-
-		/// <summary>
-		///
-		/// </summary>
-		protected bool isDirty;
-
-		/// <summary>
-		///
-		/// </summary>
-		protected uint clusterSize;
-
-		/// <summary>
-		///
-		/// </summary>
-		protected FatFileSystem fs;
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="FatFileStream"/> class.
-		/// </summary>
-		/// <param name="fs">The fs.</param>
-		/// <param name="location">The location.</param>
-		public FatFileStream(FatFileSystem fs, FatFileLocation location)
-			: this(fs, location.FirstCluster, location.DirectorySector, location.DirectorySectorIndex)
+	/// <summary>
+	/// When overridden in a derived class, gets or sets the position within the current stream.
+	/// </summary>
+	/// <value></value>
+	/// <returns>
+	/// The current position within the stream.
+	/// </returns>
+	/// <exception cref="T:IOException">
+	/// An I/O error occurs.
+	/// </exception>
+	/// <exception cref="T:System.NotSupportedException">
+	/// The stream does not support seeking.
+	/// </exception>
+	/// <exception cref="T:System.ObjectDisposedException">
+	/// Methods were called after the stream was closed.
+	/// </exception>
+	public override long Position
+	{
+		get
 		{
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="FatFileStream"/> class.
-		/// </summary>
-		/// <param name="fs">The fs.</param>
-		/// <param name="startCluster">The start cluster.</param>
-		/// <param name="directorySector">The directory sector.</param>
-		/// <param name="directorySectorIndex">Index of the directory sector.</param>
-		public FatFileStream(FatFileSystem fs, uint startCluster, uint directorySector, uint directorySectorIndex)
-		{
-			this.fs = fs;
-			clusterSize = fs.ClusterSizeInBytes;
-			data = new byte[clusterSize];
-			this.startCluster = startCluster;
-			this.directorySector = directorySector;
-			this.directorySectorIndex = directorySectorIndex;
-			position = 0;
-			canRead = true;
-			canWrite = true;
-			isDirty = false;
-
-			nthCluster = System.UInt32.MaxValue; // Not positioned yet
-
-			lengthOnDisk = fs.GetFileSize(directorySector, directorySectorIndex);
-			length = lengthOnDisk;
-
-			currentCluster = 0;
-		}
-
-		/// <summary>
-		/// When overridden in a derived class, gets a value indicating whether the current stream supports reading.
-		/// </summary>
-		/// <value></value>
-		/// <returns>true if the stream supports reading; otherwise, false.
-		/// </returns>
-		public override bool CanRead { get { return canRead; } }
-
-		/// <summary>
-		/// When overridden in a derived class, gets a value indicating whether the current stream supports seeking.
-		/// </summary>
-		/// <value></value>
-		/// <returns>true if the stream supports seeking; otherwise, false.
-		/// </returns>
-		public override bool CanSeek { get { return true; } }
-
-		/// <summary>
-		/// When overridden in a derived class, gets a value indicating whether the current stream supports writing.
-		/// </summary>
-		/// <value></value>
-		/// <returns>true if the stream supports writing; otherwise, false.
-		/// </returns>
-		public override bool CanWrite { get { return canWrite; } }
-
-		/// <summary>
-		/// Gets a value that determines whether the current stream can time out.
-		/// </summary>
-		/// <value></value>
-		/// <returns>
-		/// A value that determines whether the current stream can time out.
-		/// </returns>
-		public override bool CanTimeout { get { return false; } }
-
-		/// <summary>
-		/// When overridden in a derived class, gets the length in bytes of the stream.
-		/// </summary>
-		/// <value></value>
-		/// <returns>
-		/// A long value representing the length of the stream in bytes.
-		/// </returns>
-		/// <exception cref="T:System.NotSupportedException">
-		/// A class derived from Stream does not support seeking.
-		/// </exception>
-		/// <exception cref="T:System.ObjectDisposedException">
-		/// Methods were called after the stream was closed.
-		/// </exception>
-		public override long Length { get { return length; } }
-
-		/// <summary>
-		/// When overridden in a derived class, gets or sets the position within the current stream.
-		/// </summary>
-		/// <value></value>
-		/// <returns>
-		/// The current position within the stream.
-		/// </returns>
-		/// <exception cref="T:IOException">
-		/// An I/O error occurs.
-		/// </exception>
-		/// <exception cref="T:System.NotSupportedException">
-		/// The stream does not support seeking.
-		/// </exception>
-		/// <exception cref="T:System.ObjectDisposedException">
-		/// Methods were called after the stream was closed.
-		/// </exception>
-		public override long Position
-		{
-			get
-			{
-				return position;
-			}
-			set
-			{
-				Seek(value, SeekOrigin.Begin);
-			}
-		}
-
-		/// <summary>
-		/// When overridden in a derived class, clears all buffers for this stream and causes any buffered data to be written to the underlying device.
-		/// </summary>
-		/// <exception cref="T:IOException">
-		/// An I/O error occurs.
-		/// </exception>
-		public override void Flush()
-		{
-			if (!isDirty)
-				return;
-
-			fs.WriteCluster(currentCluster, data);
-			SetLength(length);
-
-			isDirty = false;
-		}
-
-		/// <summary>
-		/// When overridden in a derived class, reads a sequence of bytes from the current stream and advances the position within the stream by the number of bytes read.
-		/// </summary>
-		/// <param name="buffer">An array of bytes. When this method returns, the buffer contains the specified byte array with the values between <paramref name="offset"/> and (<paramref name="offset"/> + <paramref name="count"/> - 1) replaced by the bytes read from the current source.</param>
-		/// <param name="offset">The zero-based byte offset in <paramref name="buffer"/> at which to begin storing the data read from the current stream.</param>
-		/// <param name="count">The maximum number of bytes to be read from the current stream.</param>
-		/// <returns>
-		/// The total number of bytes read into the buffer. This can be less than the number of bytes requested if that many bytes are not currently available, or zero (0) if the end of the stream has been reached.
-		/// </returns>
-		/// <exception cref="T:System.ArgumentException">
-		/// The sum of <paramref name="offset"/> and <paramref name="count"/> is larger than the buffer length.
-		/// </exception>
-		/// <exception cref="T:System.ArgumentNullException">
-		/// 	<paramref name="buffer"/> is null.
-		/// </exception>
-		/// <exception cref="T:System.ArgumentOutOfRangeException">
-		/// 	<paramref name="offset"/> or <paramref name="count"/> is negative.
-		/// </exception>
-		/// <exception cref="T:IOException">
-		/// An I/O error occurs.
-		/// </exception>
-		/// <exception cref="T:System.NotSupportedException">
-		/// The stream does not support reading.
-		/// </exception>
-		/// <exception cref="T:System.ObjectDisposedException">
-		/// Methods were called after the stream was closed.
-		/// </exception>
-		public override int Read(byte[] buffer, int offset, int count)
-		{
-			if (position >= length)
-				return -1;  // EOF
-
-			int index = 0;
-
-			for (; (position < length) && (index < count); index++)
-			{
-				buffer[offset + index] = (byte)ReadByte();
-			}
-
-			return index;
-		}
-
-		/// <summary>
-		/// Reads a byte from the stream and advances the position within the stream by one byte, or returns -1 if at the end of the stream.
-		/// </summary>
-		/// <returns>
-		/// The unsigned byte cast to an Int32, or -1 if at the end of the stream.
-		/// </returns>
-		/// <exception cref="T:System.NotSupportedException">
-		/// The stream does not support reading.
-		/// </exception>
-		/// <exception cref="T:System.ObjectDisposedException">
-		/// Methods were called after the stream was closed.
-		/// </exception>
-		public override int ReadByte()
-		{
-			if (position >= length)
-				return -1;  // EOF
-
-			uint index = (uint)(position % clusterSize);
-			position++;
-
-			if (index == 0)
-			{
-				NextCluster();
-			}
-
-			return data[index];
-		}
-
-		/// <summary>
-		/// When overridden in a derived class, sets the position within the current stream.
-		/// </summary>
-		/// <param name="offset">A byte offset relative to the <paramref name="origin"/> parameter.</param>
-		/// <param name="origin">A value of type <see cref="T:SeekOrigin"/> indicating the reference point used to obtain the new position.</param>
-		/// <returns>
-		/// The new position within the current stream.
-		/// </returns>
-		/// <exception cref="T:IOException">
-		/// An I/O error occurs.
-		/// </exception>
-		/// <exception cref="T:System.NotSupportedException">
-		/// The stream does not support seeking, such as if the stream is constructed from a pipe or console output.
-		/// </exception>
-		/// <exception cref="T:System.ObjectDisposedException">
-		/// Methods were called after the stream was closed.
-		/// </exception>
-		public override long Seek(long offset, SeekOrigin origin)
-		{
-			long newposition = position;
-
-			switch (origin)
-			{
-				case SeekOrigin.Begin: newposition = offset; break;
-				case SeekOrigin.Current: newposition = position + offset; break;
-				case SeekOrigin.End: newposition = length + offset; break;
-			}
-
-			// find cluster number of new position
-			uint newNthCluster = (uint)(newposition / clusterSize);
-			uint currentNthCluster = (uint)(position / clusterSize);
-			int diff = (int)(newNthCluster - currentNthCluster);
-
-			uint newCluster = 0;
-
-			if (newNthCluster == currentNthCluster)
-			{
-				newCluster = currentCluster;
-			}
-			else if (newNthCluster > currentNthCluster)
-			{
-				newCluster = fs.FindNthCluster(currentCluster, (uint)diff);
-				currentNthCluster = currentNthCluster + (uint)diff;
-			}
-			else if (newNthCluster < currentNthCluster)
-			{
-				newCluster = fs.FindNthCluster(startCluster, newNthCluster);
-				currentNthCluster = newNthCluster;
-			}
-
-			ReadCluster(newCluster);
-			position = newposition;
 			return position;
 		}
-
-		/// <summary>
-		/// Gets the next cluster.
-		/// </summary>
-		protected bool NextCluster()
+		set
 		{
-			uint newcluster = (currentCluster == 0) ? startCluster : fs.GetNextCluster(currentCluster);
+			Seek(value, SeekOrigin.Begin);
+		}
+	}
 
-			ReadCluster(newcluster);
+	/// <summary>
+	/// When overridden in a derived class, clears all buffers for this stream and causes any buffered data to be written to the underlying device.
+	/// </summary>
+	/// <exception cref="T:IOException">
+	/// An I/O error occurs.
+	/// </exception>
+	public override void Flush()
+	{
+		if (!isDirty)
+			return;
 
-			return true;
+		fs.WriteCluster(currentCluster, data);
+		SetLength(length);
+
+		isDirty = false;
+	}
+
+	/// <summary>
+	/// When overridden in a derived class, reads a sequence of bytes from the current stream and advances the position within the stream by the number of bytes read.
+	/// </summary>
+	/// <param name="buffer">An array of bytes. When this method returns, the buffer contains the specified byte array with the values between <paramref name="offset"/> and (<paramref name="offset"/> + <paramref name="count"/> - 1) replaced by the bytes read from the current source.</param>
+	/// <param name="offset">The zero-based byte offset in <paramref name="buffer"/> at which to begin storing the data read from the current stream.</param>
+	/// <param name="count">The maximum number of bytes to be read from the current stream.</param>
+	/// <returns>
+	/// The total number of bytes read into the buffer. This can be less than the number of bytes requested if that many bytes are not currently available, or zero (0) if the end of the stream has been reached.
+	/// </returns>
+	/// <exception cref="T:System.ArgumentException">
+	/// The sum of <paramref name="offset"/> and <paramref name="count"/> is larger than the buffer length.
+	/// </exception>
+	/// <exception cref="T:System.ArgumentNullException">
+	/// 	<paramref name="buffer"/> is null.
+	/// </exception>
+	/// <exception cref="T:System.ArgumentOutOfRangeException">
+	/// 	<paramref name="offset"/> or <paramref name="count"/> is negative.
+	/// </exception>
+	/// <exception cref="T:IOException">
+	/// An I/O error occurs.
+	/// </exception>
+	/// <exception cref="T:System.NotSupportedException">
+	/// The stream does not support reading.
+	/// </exception>
+	/// <exception cref="T:System.ObjectDisposedException">
+	/// Methods were called after the stream was closed.
+	/// </exception>
+	public override int Read(byte[] buffer, int offset, int count)
+	{
+		if (position >= length)
+			return -1;  // EOF
+
+		int index = 0;
+
+		for (; (position < length) && (index < count); index++)
+		{
+			buffer[offset + index] = (byte)ReadByte();
 		}
 
-		/// <summary>
-		/// Gets the next cluster
-		/// </summary>
-		/// <returns></returns>
-		protected bool NextClusterExpand()
+		return index;
+	}
+
+	/// <summary>
+	/// Reads a byte from the stream and advances the position within the stream by one byte, or returns -1 if at the end of the stream.
+	/// </summary>
+	/// <returns>
+	/// The unsigned byte cast to an Int32, or -1 if at the end of the stream.
+	/// </returns>
+	/// <exception cref="T:System.NotSupportedException">
+	/// The stream does not support reading.
+	/// </exception>
+	/// <exception cref="T:System.ObjectDisposedException">
+	/// Methods were called after the stream was closed.
+	/// </exception>
+	public override int ReadByte()
+	{
+		if (position >= length)
+			return -1;  // EOF
+
+		uint index = (uint)(position % clusterSize);
+		position++;
+
+		if (index == 0)
 		{
-			Flush();
-
-			uint newcluster = 0;
-
-			if (currentCluster == 0)
-			{
-				if (startCluster == 0)
-				{
-					uint newCluster = fs.AllocateFirstCluster(directorySector, directorySectorIndex);
-
-					if (newCluster == 0)
-						return false;
-
-					startCluster = newCluster;
-					currentCluster = newCluster;
-					isDirty = true;
-
-					// Clear cluster
-					for (int i = 0; i < clusterSize; i++)
-						data[i] = 0;
-
-					return true;
-				}
-
-				newcluster = startCluster;
-			}
-			else
-			{
-				newcluster = fs.GetNextCluster(currentCluster);
-
-				if (newcluster == 0)
-				{
-					uint newCluster = fs.AddCluster(currentCluster);
-
-					if (newCluster == 0)
-						return false;
-
-					currentCluster = newCluster;
-					isDirty = true;
-
-					// Clear cluster
-					for (int i = 0; i < clusterSize; i++)
-						data[i] = 0;
-
-					return true;
-				}
-			}
-
-			ReadCluster(newcluster);
-
-			return true;
+			NextCluster();
 		}
 
-		/// <summary>
-		/// Reads the cluster.
-		/// </summary>
-		/// <param name="cluster">The cluster.</param>
-		protected void ReadCluster(uint cluster)
+		return data[index];
+	}
+
+	/// <summary>
+	/// When overridden in a derived class, sets the position within the current stream.
+	/// </summary>
+	/// <param name="offset">A byte offset relative to the <paramref name="origin"/> parameter.</param>
+	/// <param name="origin">A value of type <see cref="T:SeekOrigin"/> indicating the reference point used to obtain the new position.</param>
+	/// <returns>
+	/// The new position within the current stream.
+	/// </returns>
+	/// <exception cref="T:IOException">
+	/// An I/O error occurs.
+	/// </exception>
+	/// <exception cref="T:System.NotSupportedException">
+	/// The stream does not support seeking, such as if the stream is constructed from a pipe or console output.
+	/// </exception>
+	/// <exception cref="T:System.ObjectDisposedException">
+	/// Methods were called after the stream was closed.
+	/// </exception>
+	public override long Seek(long offset, SeekOrigin origin)
+	{
+		long newposition = position;
+
+		switch (origin)
 		{
-			if (currentCluster == cluster)
-				return;
-
-			Flush();
-
-			currentCluster = cluster;
-			fs.ReadCluster(cluster, data);
+			case SeekOrigin.Begin: newposition = offset; break;
+			case SeekOrigin.Current: newposition = position + offset; break;
+			case SeekOrigin.End: newposition = length + offset; break;
 		}
 
-		/// <summary>
-		/// When overridden in a derived class, sets the length of the current stream.
-		/// </summary>
-		/// <param name="value">The desired length of the current stream in bytes.</param>
-		/// <exception cref="T:IOException">
-		/// An I/O error occurs.
-		/// </exception>
-		/// <exception cref="T:System.NotSupportedException">
-		/// The stream does not support both writing and seeking, such as if the stream is constructed from a pipe or console output.
-		/// </exception>
-		/// <exception cref="T:System.ObjectDisposedException">
-		/// Methods were called after the stream was closed.
-		/// </exception>
-		public override void SetLength(long value)
+		// find cluster number of new position
+		uint newNthCluster = (uint)(newposition / clusterSize);
+		uint currentNthCluster = (uint)(position / clusterSize);
+		int diff = (int)(newNthCluster - currentNthCluster);
+
+		uint newCluster = 0;
+
+		if (newNthCluster == currentNthCluster)
 		{
-			if (value == lengthOnDisk)
-				return;
-
-			lengthOnDisk = value;
-
-			fs.UpdateLength((uint)lengthOnDisk, startCluster, directorySector, directorySectorIndex);
+			newCluster = currentCluster;
+		}
+		else if (newNthCluster > currentNthCluster)
+		{
+			newCluster = fs.FindNthCluster(currentCluster, (uint)diff);
+			currentNthCluster = currentNthCluster + (uint)diff;
+		}
+		else if (newNthCluster < currentNthCluster)
+		{
+			newCluster = fs.FindNthCluster(startCluster, newNthCluster);
+			currentNthCluster = newNthCluster;
 		}
 
-		/// <summary>
-		/// When overridden in a derived class, writes a sequence of bytes to the current stream and advances the current position within this stream by the number of bytes written.
-		/// </summary>
-		/// <param name="buffer">An array of bytes. This method copies <paramref name="count"/> bytes from <paramref name="buffer"/> to the current stream.</param>
-		/// <param name="offset">The zero-based byte offset in <paramref name="buffer"/> at which to begin copying bytes to the current stream.</param>
-		/// <param name="count">The number of bytes to be written to the current stream.</param>
-		/// <exception cref="T:System.ArgumentException">
-		/// The sum of <paramref name="offset"/> and <paramref name="count"/> is greater than the buffer length.
-		/// </exception>
-		/// <exception cref="T:System.ArgumentNullException">
-		/// 	<paramref name="buffer"/> is null.
-		/// </exception>
-		/// <exception cref="T:System.ArgumentOutOfRangeException">
-		/// 	<paramref name="offset"/> or <paramref name="count"/> is negative.
-		/// </exception>
-		/// <exception cref="T:IOException">
-		/// An I/O error occurs.
-		/// </exception>
-		/// <exception cref="T:System.NotSupportedException">
-		/// The stream does not support writing.
-		/// </exception>
-		/// <exception cref="T:System.ObjectDisposedException">
-		/// Methods were called after the stream was closed.
-		/// </exception>
-		public override void Write(byte[] buffer, int offset, int count)
-		{
-			if ((count == 0) || (buffer.Length == 0))
-				return;
+		ReadCluster(newCluster);
+		position = newposition;
+		return position;
+	}
 
-			if (buffer.Length - offset < count)
+	/// <summary>
+	/// Gets the next cluster.
+	/// </summary>
+	protected bool NextCluster()
+	{
+		uint newcluster = (currentCluster == 0) ? startCluster : fs.GetNextCluster(currentCluster);
+
+		ReadCluster(newcluster);
+
+		return true;
+	}
+
+	/// <summary>
+	/// Gets the next cluster
+	/// </summary>
+	/// <returns></returns>
+	protected bool NextClusterExpand()
+	{
+		Flush();
+
+		uint newcluster = 0;
+
+		if (currentCluster == 0)
+		{
+			if (startCluster == 0)
 			{
-				count = buffer.Length - offset;
+				uint newCluster = fs.AllocateFirstCluster(directorySector, directorySectorIndex);
+
+				if (newCluster == 0)
+					return false;
+
+				startCluster = newCluster;
+				currentCluster = newCluster;
+				isDirty = true;
+
+				// Clear cluster
+				for (int i = 0; i < clusterSize; i++)
+					data[i] = 0;
+
+				return true;
 			}
 
-			for (int i = 0; i < count; i++)
+			newcluster = startCluster;
+		}
+		else
+		{
+			newcluster = fs.GetNextCluster(currentCluster);
+
+			if (newcluster == 0)
 			{
-				WriteByte(buffer[offset + i]);
+				uint newCluster = fs.AddCluster(currentCluster);
+
+				if (newCluster == 0)
+					return false;
+
+				currentCluster = newCluster;
+				isDirty = true;
+
+				// Clear cluster
+				for (int i = 0; i < clusterSize; i++)
+					data[i] = 0;
+
+				return true;
 			}
 		}
 
-		/// <summary>
-		/// Writes a byte to the current position in the stream and advances the position within the stream by one byte.
-		/// </summary>
-		/// <param name="value">The byte to write to the stream.</param>
-		/// <exception cref="T:IOException">
-		/// An I/O error occurs.
-		/// </exception>
-		/// <exception cref="T:System.NotSupportedException">
-		/// The stream does not support writing, or the stream is already closed.
-		/// </exception>
-		/// <exception cref="T:System.ObjectDisposedException">
-		/// Methods were called after the stream was closed.
-		/// </exception>
-		public override void WriteByte(byte value)
+		ReadCluster(newcluster);
+
+		return true;
+	}
+
+	/// <summary>
+	/// Reads the cluster.
+	/// </summary>
+	/// <param name="cluster">The cluster.</param>
+	protected void ReadCluster(uint cluster)
+	{
+		if (currentCluster == cluster)
+			return;
+
+		Flush();
+
+		currentCluster = cluster;
+		fs.ReadCluster(cluster, data);
+	}
+
+	/// <summary>
+	/// When overridden in a derived class, sets the length of the current stream.
+	/// </summary>
+	/// <param name="value">The desired length of the current stream in bytes.</param>
+	/// <exception cref="T:IOException">
+	/// An I/O error occurs.
+	/// </exception>
+	/// <exception cref="T:System.NotSupportedException">
+	/// The stream does not support both writing and seeking, such as if the stream is constructed from a pipe or console output.
+	/// </exception>
+	/// <exception cref="T:System.ObjectDisposedException">
+	/// Methods were called after the stream was closed.
+	/// </exception>
+	public override void SetLength(long value)
+	{
+		if (value == lengthOnDisk)
+			return;
+
+		lengthOnDisk = value;
+
+		fs.UpdateLength((uint)lengthOnDisk, startCluster, directorySector, directorySectorIndex);
+	}
+
+	/// <summary>
+	/// When overridden in a derived class, writes a sequence of bytes to the current stream and advances the current position within this stream by the number of bytes written.
+	/// </summary>
+	/// <param name="buffer">An array of bytes. This method copies <paramref name="count"/> bytes from <paramref name="buffer"/> to the current stream.</param>
+	/// <param name="offset">The zero-based byte offset in <paramref name="buffer"/> at which to begin copying bytes to the current stream.</param>
+	/// <param name="count">The number of bytes to be written to the current stream.</param>
+	/// <exception cref="T:System.ArgumentException">
+	/// The sum of <paramref name="offset"/> and <paramref name="count"/> is greater than the buffer length.
+	/// </exception>
+	/// <exception cref="T:System.ArgumentNullException">
+	/// 	<paramref name="buffer"/> is null.
+	/// </exception>
+	/// <exception cref="T:System.ArgumentOutOfRangeException">
+	/// 	<paramref name="offset"/> or <paramref name="count"/> is negative.
+	/// </exception>
+	/// <exception cref="T:IOException">
+	/// An I/O error occurs.
+	/// </exception>
+	/// <exception cref="T:System.NotSupportedException">
+	/// The stream does not support writing.
+	/// </exception>
+	/// <exception cref="T:System.ObjectDisposedException">
+	/// Methods were called after the stream was closed.
+	/// </exception>
+	public override void Write(byte[] buffer, int offset, int count)
+	{
+		if ((count == 0) || (buffer.Length == 0))
+			return;
+
+		if (buffer.Length - offset < count)
 		{
-			uint index = (uint)(position % clusterSize);
+			count = buffer.Length - offset;
+		}
 
-			if (index == 0)
-			{
-				NextClusterExpand();
-			}
+		for (int i = 0; i < count; i++)
+		{
+			WriteByte(buffer[offset + i]);
+		}
+	}
 
-			isDirty = true;
-			data[index] = value;
-			position++;
+	/// <summary>
+	/// Writes a byte to the current position in the stream and advances the position within the stream by one byte.
+	/// </summary>
+	/// <param name="value">The byte to write to the stream.</param>
+	/// <exception cref="T:IOException">
+	/// An I/O error occurs.
+	/// </exception>
+	/// <exception cref="T:System.NotSupportedException">
+	/// The stream does not support writing, or the stream is already closed.
+	/// </exception>
+	/// <exception cref="T:System.ObjectDisposedException">
+	/// Methods were called after the stream was closed.
+	/// </exception>
+	public override void WriteByte(byte value)
+	{
+		uint index = (uint)(position % clusterSize);
 
-			if (position > length)
-			{
-				length = position;
-			}
+		if (index == 0)
+		{
+			NextClusterExpand();
+		}
+
+		isDirty = true;
+		data[index] = value;
+		position++;
+
+		if (position > length)
+		{
+			length = position;
 		}
 	}
 }

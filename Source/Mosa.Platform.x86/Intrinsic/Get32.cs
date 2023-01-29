@@ -2,17 +2,16 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x86.Intrinsic
+namespace Mosa.Platform.x86.Intrinsic;
+
+/// <summary>
+/// IntrinsicMethods
+/// </summary>
+internal static partial class IntrinsicMethods
 {
-	/// <summary>
-	/// IntrinsicMethods
-	/// </summary>
-	internal static partial class IntrinsicMethods
+	[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::Get32")]
+	private static void Get32(Context context, MethodCompiler methodCompiler)
 	{
-		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::Get32")]
-		private static void Get32(Context context, MethodCompiler methodCompiler)
-		{
-			context.SetInstruction(X86.MovLoad32, context.Result, context.Operand1, methodCompiler.Constant32_0);
-		}
+		context.SetInstruction(X86.MovLoad32, context.Result, context.Operand1, methodCompiler.Constant32_0);
 	}
 }

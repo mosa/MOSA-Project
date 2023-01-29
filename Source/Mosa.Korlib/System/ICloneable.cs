@@ -1,12 +1,11 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace System
+namespace System;
+
+/// <summary>
+/// Interface for "System.ICloneable"
+/// </summary>
+public interface ICloneable
 {
-	/// <summary>
-	/// Interface for "System.ICloneable"
-	/// </summary>
-	public interface ICloneable
-	{
-		object Clone();
-	}
+	object Clone();
 }

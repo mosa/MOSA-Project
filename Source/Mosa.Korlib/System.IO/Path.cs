@@ -1,25 +1,24 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace System.IO
+namespace System.IO;
+
+/// <summary>
+/// Implementation of the "System.IO.Path" class
+/// </summary>
+public static class Path
 {
 	/// <summary>
-	/// Implementation of the "System.IO.Path" class
+	/// Directory Separator
 	/// </summary>
-	public static class Path
+	public static readonly char DirectorySeparatorChar = '/';
+
+	/// <summary>
+	/// Alterative Directory Separator
+	/// </summary>
+	public static readonly char AltDirectorySeparatorChar = '\\';
+
+	public static string Combine(string path1, string path2)
 	{
-		/// <summary>
-		/// Directory Separator
-		/// </summary>
-		public static readonly char DirectorySeparatorChar = '/';
-
-		/// <summary>
-		/// Alterative Directory Separator
-		/// </summary>
-		public static readonly char AltDirectorySeparatorChar = '\\';
-
-		public static string Combine(string path1, string path2)
-		{
-			return path1 + DirectorySeparatorChar + path2;
-		}
+		return path1 + DirectorySeparatorChar + path2;
 	}
 }

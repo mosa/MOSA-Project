@@ -15,28 +15,27 @@
 
 //using System.Runtime.Serialization;
 
-namespace System
+namespace System;
+
+[Serializable]
+public class OverflowException : ArithmeticException
 {
-	[Serializable]
-	public class OverflowException : ArithmeticException
+	public OverflowException()
+		: base("SR.Arg_OverflowException")
 	{
-		public OverflowException()
-			: base("SR.Arg_OverflowException")
-		{
-		}
-
-		public OverflowException(string message)
-			: base(message)
-		{
-		}
-
-		public OverflowException(string message, Exception innerException)
-			: base(message, innerException)
-		{
-		}
-
-		//protected OverflowException(SerializationInfo info, StreamingContext context) : base(info, context)
-		//{
-		//}
 	}
+
+	public OverflowException(string message)
+		: base(message)
+	{
+	}
+
+	public OverflowException(string message, Exception innerException)
+		: base(message, innerException)
+	{
+	}
+
+	//protected OverflowException(SerializationInfo info, StreamingContext context) : base(info, context)
+	//{
+	//}
 }

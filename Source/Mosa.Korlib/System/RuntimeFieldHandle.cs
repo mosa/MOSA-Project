@@ -1,51 +1,50 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace System
+namespace System;
+
+/// <summary>
+/// Represents a field using an internal metadata token.
+/// </summary>
+public struct RuntimeFieldHandle
 {
-	/// <summary>
-	/// Represents a field using an internal metadata token.
-	/// </summary>
-	public struct RuntimeFieldHandle
+	internal RuntimeFieldHandle(IntPtr handle)
 	{
-		internal RuntimeFieldHandle(IntPtr handle)
+		m_ptr = handle;
+	}
+
+	private readonly IntPtr m_ptr;
+
+	/// <summary>
+	/// Gets a handle to the type represented by this instance.
+	/// </summary>
+	public IntPtr Value
+	{
+		get
 		{
-			m_ptr = handle;
+			return m_ptr;
 		}
+	}
 
-		private readonly IntPtr m_ptr;
+	public override bool Equals(object obj)
+	{
+		if (!(obj is RuntimeFieldHandle))
+			return false;
 
-		/// <summary>
-		/// Gets a handle to the type represented by this instance.
-		/// </summary>
-		public IntPtr Value
-		{
-			get
-			{
-				return m_ptr;
-			}
-		}
+		return ((RuntimeFieldHandle)obj).m_ptr == m_ptr;
+	}
 
-		public override bool Equals(object obj)
-		{
-			if (!(obj is RuntimeFieldHandle))
-				return false;
+	public static bool operator ==(RuntimeFieldHandle left, RuntimeFieldHandle right)
+	{
+		return left.m_ptr == right.m_ptr;
+	}
 
-			return ((RuntimeFieldHandle)obj).m_ptr == m_ptr;
-		}
+	public static bool operator !=(RuntimeFieldHandle left, RuntimeFieldHandle right)
+	{
+		return !(left == right);
+	}
 
-		public static bool operator ==(RuntimeFieldHandle left, RuntimeFieldHandle right)
-		{
-			return left.m_ptr == right.m_ptr;
-		}
-
-		public static bool operator !=(RuntimeFieldHandle left, RuntimeFieldHandle right)
-		{
-			return !(left == right);
-		}
-
-		public override int GetHashCode()
-		{
-			return m_ptr.ToInt32();
-		}
+	public override int GetHashCode()
+	{
+		return m_ptr.ToInt32();
 	}
 }

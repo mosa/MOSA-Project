@@ -3,25 +3,24 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.x64.Transforms.AddressMode
+namespace Mosa.Platform.x64.Transforms.AddressMode;
+
+/// <summary>
+/// IMul32
+/// </summary>
+public sealed class IMul32 : BaseTransform
 {
-	/// <summary>
-	/// IMul32
-	/// </summary>
-	public sealed class IMul32 : BaseTransform
+	public IMul32() : base(X64.IMul32, TransformType.Manual | TransformType.Transform)
 	{
-		public IMul32() : base(X64.IMul32, TransformType.Manual | TransformType.Transform)
-		{
-		}
+	}
 
-		public override bool Match(Context context, TransformContext transform)
-		{
-			return !X64TransformHelper.IsAddressMode(context);
-		}
+	public override bool Match(Context context, TransformContext transform)
+	{
+		return !X64TransformHelper.IsAddressMode(context);
+	}
 
-		public override void Transform(Context context, TransformContext transform)
-		{
-			X64TransformHelper.AddressModeConversionCummulative(context, X64.Mov32);
-		}
+	public override void Transform(Context context, TransformContext transform)
+	{
+		X64TransformHelper.AddressModeConversionCummulative(context, X64.Mov32);
 	}
 }
