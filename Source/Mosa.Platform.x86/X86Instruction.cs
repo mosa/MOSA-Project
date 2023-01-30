@@ -68,46 +68,46 @@ public abstract class X86Instruction : BasePlatformInstruction
 	public static bool IsUsedZeroFlagWithCondition(ConditionCode condition)
 	{
 		return condition == ConditionCode.Equal
-		       || condition == ConditionCode.NotEqual
-		       || condition == ConditionCode.Zero
-		       || condition == ConditionCode.NotZero
-		       || condition == ConditionCode.UnsignedGreater
-		       || condition == ConditionCode.UnsignedLessOrEqual;
+			   || condition == ConditionCode.NotEqual
+			   || condition == ConditionCode.Zero
+			   || condition == ConditionCode.NotZero
+			   || condition == ConditionCode.UnsignedGreater
+			   || condition == ConditionCode.UnsignedLessOrEqual;
 	}
 
 	public static bool IsCarryFlagUsedWithCondition(ConditionCode condition)
 	{
 		return condition == ConditionCode.UnsignedGreaterOrEqual
-		       || condition == ConditionCode.UnsignedGreater
-		       || condition == ConditionCode.UnsignedLessOrEqual
-		       || condition == ConditionCode.UnsignedLess
-		       || condition == ConditionCode.Carry
-		       || condition == ConditionCode.NoCarry;
+			   || condition == ConditionCode.UnsignedGreater
+			   || condition == ConditionCode.UnsignedLessOrEqual
+			   || condition == ConditionCode.UnsignedLess
+			   || condition == ConditionCode.Carry
+			   || condition == ConditionCode.NoCarry;
 	}
 
 	public static bool IsOverflowFlagUsedWithCondition(ConditionCode condition)
 	{
 		return condition == ConditionCode.Overflow
-		       || condition == ConditionCode.NoOverflow
-		       || condition == ConditionCode.GreaterOrEqual
-		       || condition == ConditionCode.Greater
-		       || condition == ConditionCode.LessOrEqual
-		       || condition == ConditionCode.Less;
+			   || condition == ConditionCode.NoOverflow
+			   || condition == ConditionCode.GreaterOrEqual
+			   || condition == ConditionCode.Greater
+			   || condition == ConditionCode.LessOrEqual
+			   || condition == ConditionCode.Less;
 	}
 
 	public static bool IsSignFlagUsedWithCondition(ConditionCode condition)
 	{
 		return condition == ConditionCode.GreaterOrEqual
-		       || condition == ConditionCode.Greater
-		       || condition == ConditionCode.LessOrEqual
-		       || condition == ConditionCode.Less
-		       || condition == ConditionCode.Signed
-		       || condition == ConditionCode.NotSigned;
+			   || condition == ConditionCode.Greater
+			   || condition == ConditionCode.LessOrEqual
+			   || condition == ConditionCode.Less
+			   || condition == ConditionCode.Signed
+			   || condition == ConditionCode.NotSigned;
 	}
 
 	public static bool IsParityFlagUsedWithCondition(ConditionCode condition)
 	{
 		return condition == ConditionCode.Parity
-		       || condition == ConditionCode.NoParity;
+			   || condition == ConditionCode.NoParity;
 	}
 }
