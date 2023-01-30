@@ -209,7 +209,7 @@ public class UnitTestEngine : IDisposable
 
 				// check if queue has requests or too many have already been sent
 				while ((SendOneCount < 0 && sendFlag && Pending.Count < MaxSentQueue && Queue.Count > 0)
-				       || (SendOneCount >= 0 && Queue.Count > 0 && Pending.Count == 0))
+					   || (SendOneCount >= 0 && Queue.Count > 0 && Pending.Count == 0))
 				{
 					var message = Queue.Dequeue();
 
@@ -309,12 +309,12 @@ public class UnitTestEngine : IDisposable
 	private void NotifyEvent(CompilerEvent compilerEvent, string message, int threadID)
 	{
 		if (compilerEvent != CompilerEvent.MethodCompileEnd
-		    && compilerEvent != CompilerEvent.MethodCompileStart
-		    && compilerEvent != CompilerEvent.Counter
-		    && compilerEvent != CompilerEvent.SetupStageStart
-		    && compilerEvent != CompilerEvent.SetupStageEnd
-		    && compilerEvent != CompilerEvent.FinalizationStageStart
-		    && compilerEvent != CompilerEvent.FinalizationStageEnd
+			&& compilerEvent != CompilerEvent.MethodCompileStart
+			&& compilerEvent != CompilerEvent.Counter
+			&& compilerEvent != CompilerEvent.SetupStageStart
+			&& compilerEvent != CompilerEvent.SetupStageEnd
+			&& compilerEvent != CompilerEvent.FinalizationStageStart
+			&& compilerEvent != CompilerEvent.FinalizationStageEnd
 		   )
 		{
 			message = string.IsNullOrWhiteSpace(message) ? string.Empty : $": {message}";
@@ -400,19 +400,19 @@ public class UnitTestEngine : IDisposable
 		switch (serial)
 		{
 			case "tcpserver":
-			{
-				var client = new TcpClient(Settings.GetValue("Emulator.Serial.Host", "localhost"), Settings.GetValue("Emulator.Serial.Port", 11110));
-				DebugServerEngine.Stream = new DebugNetworkStream(client.Client, true);
-				break;
-			}
+				{
+					var client = new TcpClient(Settings.GetValue("Emulator.Serial.Host", "localhost"), Settings.GetValue("Emulator.Serial.Port", 11110));
+					DebugServerEngine.Stream = new DebugNetworkStream(client.Client, true);
+					break;
+				}
 
 			case "pipe":
-			{
-				var pipeStream = new NamedPipeClientStream(".", Settings.GetValue("Emulator.Serial.Pipe", "MOSA"), PipeDirection.InOut);
-				pipeStream.Connect();
-				DebugServerEngine.Stream = pipeStream;
-				break;
-			}
+				{
+					var pipeStream = new NamedPipeClientStream(".", Settings.GetValue("Emulator.Serial.Pipe", "MOSA"), PipeDirection.InOut);
+					pipeStream.Connect();
+					DebugServerEngine.Stream = pipeStream;
+					break;
+				}
 		}
 	}
 

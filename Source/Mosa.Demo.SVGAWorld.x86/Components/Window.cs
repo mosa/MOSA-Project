@@ -108,9 +108,9 @@ public class Window
 	public bool IsTitlebarColliding()
 	{
 		return WindowManager.ActiveWindow.X < X + Width &&
-		       WindowManager.ActiveWindow.X + WindowManager.ActiveWindow.Width > X &&
-		       WindowManager.ActiveWindow.Y < Y + TitlebarHeight &&
-		       WindowManager.ActiveWindow.TitlebarHeight + WindowManager.ActiveWindow.Y > Y;
+			   WindowManager.ActiveWindow.X + WindowManager.ActiveWindow.Width > X &&
+			   WindowManager.ActiveWindow.Y < Y + TitlebarHeight &&
+			   WindowManager.ActiveWindow.TitlebarHeight + WindowManager.ActiveWindow.Y > Y;
 	}
 
 	public bool IsInBounds()

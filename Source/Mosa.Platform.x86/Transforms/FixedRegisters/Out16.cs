@@ -17,9 +17,9 @@ public sealed class Out16 : BaseTransform
 	public override bool Match(Context context, TransformContext transform)
 	{
 		if (context.Operand1.IsCPURegister
-		    && context.Operand2.IsCPURegister
-		    && (context.Operand1.Register == CPURegister.EDX || context.Operand1.IsConstant)
-		    && context.Operand2.Register == CPURegister.EAX)
+			&& context.Operand2.IsCPURegister
+			&& (context.Operand1.Register == CPURegister.EDX || context.Operand1.IsConstant)
+			&& context.Operand2.Register == CPURegister.EAX)
 			return false;
 
 		return true;

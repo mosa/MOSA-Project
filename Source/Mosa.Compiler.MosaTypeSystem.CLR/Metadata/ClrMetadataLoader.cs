@@ -89,8 +89,8 @@ internal class ClrMetadataLoader
 			type.IsInterface = typeDef.IsInterface;
 			type.IsEnum = typeDef.IsEnum;
 			type.IsDelegate = typeDef.BaseType != null
-			                  && typeDef.BaseType.DefinitionAssembly.IsCorLib()
-			                  && (typeDef.BaseType.FullName == "System.Delegate" || typeDef.BaseType.FullName == "System.MulticastDelegate");
+							  && typeDef.BaseType.DefinitionAssembly.IsCorLib()
+							  && (typeDef.BaseType.FullName == "System.Delegate" || typeDef.BaseType.FullName == "System.MulticastDelegate");
 			type.IsModule = typeDef.IsGlobalModuleType;
 
 			type.IsExplicitLayout = typeDef.IsExplicitLayout;
@@ -267,25 +267,25 @@ internal class ClrMetadataLoader
 				case GenericSig sig:
 					return LoadGenericParam(sig);
 				case FnPtrSig sig:
-				{
-					var fnPtr = sig.MethodSig;
-					var returnType = GetType(fnPtr.RetType);
-					var pars = new List<MosaParameter>();
-					for (var i = 0; i < fnPtr.Params.Count; i++)
 					{
-						var parameter = metadata.Controller.CreateParameter();
-
-						using (var mosaParameter = metadata.Controller.MutateParameter(parameter))
+						var fnPtr = sig.MethodSig;
+						var returnType = GetType(fnPtr.RetType);
+						var pars = new List<MosaParameter>();
+						for (var i = 0; i < fnPtr.Params.Count; i++)
 						{
-							mosaParameter.Name = "A_" + i;
-							mosaParameter.ParameterAttributes = MosaParameterAttributes.In;
-							mosaParameter.ParameterType = GetType(fnPtr.Params[i]);
-						}
+							var parameter = metadata.Controller.CreateParameter();
 
-						pars.Add(parameter);
+							using (var mosaParameter = metadata.Controller.MutateParameter(parameter))
+							{
+								mosaParameter.Name = "A_" + i;
+								mosaParameter.ParameterAttributes = MosaParameterAttributes.In;
+								mosaParameter.ParameterType = GetType(fnPtr.Params[i]);
+							}
+
+							pars.Add(parameter);
+						}
+						return metadata.TypeSystem.ToFnPtr(new MosaMethodSignature(returnType, pars));
 					}
-					return metadata.TypeSystem.ToFnPtr(new MosaMethodSignature(returnType, pars));
-				}
 				default:
 					throw new NotSupportedException();
 			}

@@ -405,10 +405,10 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 					continue;
 
 				if (block.IsEpilogue
-				    || block.IsPrologue
-				    || block.IsTryHeadBlock
-				    || block.IsHandlerHeadBlock
-				    || (!block.IsCompilerBlock && HasProtectedRegions))
+					|| block.IsPrologue
+					|| block.IsTryHeadBlock
+					|| block.IsHandlerHeadBlock
+					|| (!block.IsCompilerBlock && HasProtectedRegions))
 					continue;
 
 				// don't remove block if it jumps back to itself
@@ -421,9 +421,9 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 					continue;
 
 				if (next.IsEpilogue
-				    || next.IsPrologue
-				    || next.IsTryHeadBlock
-				    || next.IsHandlerHeadBlock)
+					|| next.IsPrologue
+					|| next.IsTryHeadBlock
+					|| next.IsHandlerHeadBlock)
 					continue;
 
 				trace?.Log($"Merge Blocking: {block} with: {next}");

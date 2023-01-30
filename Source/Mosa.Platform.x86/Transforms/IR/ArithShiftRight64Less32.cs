@@ -2,7 +2,6 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
-using Mosa.Platform.x86;
 
 namespace Mosa.Platform.x86.Transforms.IR;
 

@@ -17,11 +17,11 @@ public sealed class RdMSR : BaseTransform
 	public override bool Match(Context context, TransformContext transform)
 	{
 		if (context.Result.IsCPURegister
-		    && context.Result2.IsCPURegister
-		    && context.Operand1.IsCPURegister
-		    && context.Result.Register == CPURegister.EAX
-		    && context.Result2.Register == CPURegister.EDX
-		    && context.Operand1.Register == CPURegister.ECX)
+			&& context.Result2.IsCPURegister
+			&& context.Operand1.IsCPURegister
+			&& context.Result.Register == CPURegister.EAX
+			&& context.Result2.Register == CPURegister.EDX
+			&& context.Operand1.Register == CPURegister.ECX)
 			return false;
 
 		return true;

@@ -38,8 +38,8 @@ public class MosaArrayInfo : IEquatable<MosaArrayInfo>
 			return true;
 
 		return Rank == other?.Rank &&
-		       LowerBounds.SequenceEquals(other.LowerBounds) &&
-		       Sizes.SequenceEqual(other.Sizes);
+			   LowerBounds.SequenceEquals(other.LowerBounds) &&
+			   Sizes.SequenceEqual(other.Sizes);
 	}
 
 	public override string ToString()

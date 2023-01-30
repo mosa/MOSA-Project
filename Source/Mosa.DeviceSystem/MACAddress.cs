@@ -63,6 +63,6 @@ public class MACAddress
 	public override string ToString()
 	{
 		return address[0].ToString("X") + ':' + address[1].ToString("X") + ':' + address[2].ToString("X") + ':' +
-		       address[3].ToString("X") + ':' + address[4].ToString("X") + ':' + address[5].ToString("X");
+			   address[3].ToString("X") + ':' + address[4].ToString("X") + ':' + address[5].ToString("X");
 	}
 }

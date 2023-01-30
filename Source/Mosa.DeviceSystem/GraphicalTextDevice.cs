@@ -42,5 +42,5 @@ public class GraphicalTextDevice : ITextDevice
 		throw new NotImplementedException();
 	}
 
-	public void SetCursor(uint x, uint y) {}
+	public void SetCursor(uint x, uint y) { }
 }

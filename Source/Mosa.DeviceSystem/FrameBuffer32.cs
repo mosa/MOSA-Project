@@ -123,13 +123,13 @@ public sealed class FrameBuffer32
 			return;
 
 		for (uint h = 0; h < he; h++)
-		for (uint w = 0; w < wi; w++)
-		{
-			var color = buffer.GetPixel(w, h);
+			for (uint w = 0; w < wi; w++)
+			{
+				var color = buffer.GetPixel(w, h);
 
-			if (color != transparentColor)
-				SetPixel(color, x + w, y + h);
-		}
+				if (color != transparentColor)
+					SetPixel(color, x + w, y + h);
+			}
 	}
 
 	/// <summary>Draws a virtual buffer with or without alpha blending.</summary>
@@ -150,13 +150,13 @@ public sealed class FrameBuffer32
 				return;
 
 			for (uint h = 0; h < he; h++)
-			for (uint w = 0; w < wi; w++)
-			{
-				var xx = x + w;
-				var yy = y + h;
+				for (uint w = 0; w < wi; w++)
+				{
+					var xx = x + w;
+					var yy = y + h;
 
-				SetPixel(AlphaBlend(xx, yy, buffer.GetPixel(w, h)), xx, yy);
-			}
+					SetPixel(AlphaBlend(xx, yy, buffer.GetPixel(w, h)), xx, yy);
+				}
 		}
 		else
 		{

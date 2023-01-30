@@ -77,10 +77,10 @@ public sealed class PCIController : BaseDeviceDriver, IPCIControllerLegacy, IPCI
 	protected uint GetIndex(byte bus, byte slot, byte function, byte register)
 	{
 		return BaseValue
-		       | (uint)((bus & 0xFF) << 16)
-		       | (uint)((slot & 0x0F) << 11)
-		       | (uint)((function & 0x07) << 8)
-		       | (uint)(register & 0xFC);
+			   | (uint)((bus & 0xFF) << 16)
+			   | (uint)((slot & 0x0F) << 11)
+			   | (uint)((function & 0x07) << 8)
+			   | (uint)(register & 0xFC);
 	}
 
 	#region IPCIController

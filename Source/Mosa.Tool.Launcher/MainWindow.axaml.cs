@@ -99,7 +99,8 @@ public partial class MainWindow : Window
 				if (!string.IsNullOrWhiteSpace(path))
 					settings.AddPropertyListValue("SearchPaths", path);
 			}
-		} else settings.SetValue("Launcher.Start", false);
+		}
+		else settings.SetValue("Launcher.Start", false);
 
 		// Output the current directory
 		AddOutput($"Current Directory: {Environment.CurrentDirectory}");

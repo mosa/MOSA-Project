@@ -18,12 +18,12 @@ public sealed class Mul32 : BaseTransform
 	public override bool Match(Context context, TransformContext transform)
 	{
 		if (context.Result.IsCPURegister
-		    && context.Result2.IsCPURegister
-		    && context.Operand1.IsCPURegister
-		    && !context.Operand2.IsConstant
-		    && context.Result.Register == CPURegister.EDX
-		    && context.Result2.Register == CPURegister.EAX
-		    && context.Operand1.Register == CPURegister.EAX)
+			&& context.Result2.IsCPURegister
+			&& context.Operand1.IsCPURegister
+			&& !context.Operand2.IsConstant
+			&& context.Result.Register == CPURegister.EDX
+			&& context.Result2.Register == CPURegister.EAX
+			&& context.Operand1.Register == CPURegister.EAX)
 			return false;
 
 		return true;

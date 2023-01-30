@@ -525,20 +525,20 @@ public class IDEController : BaseDeviceDriver, IDiskControllerDevice
 				switch (driveInfo[drive].AddressingMode)
 				{
 					case AddressingMode.LBA28:
-					{
-						if (!PerformLBA28(SectorOperation.Read, drive, block + index, data, index * 512))
-							return false;
+						{
+							if (!PerformLBA28(SectorOperation.Read, drive, block + index, data, index * 512))
+								return false;
 
-						break;
-					}
+							break;
+						}
 
 					case AddressingMode.LBA48:
-					{
-						if (!PerformLBA48(SectorOperation.Read, drive, block + index, data, index * 512))
-							return false;
+						{
+							if (!PerformLBA48(SectorOperation.Read, drive, block + index, data, index * 512))
+								return false;
 
-						break;
-					}
+							break;
+						}
 				}
 			}
 			return true;

@@ -17,12 +17,12 @@ public sealed class Div32 : BaseTransform
 	public override bool Match(Context context, TransformContext transform)
 	{
 		if (context.Result.IsCPURegister
-		    && context.Result2.IsCPURegister
-		    && context.Operand1.IsCPURegister
-		    && context.Result.Register == CPURegister.RDX
-		    && context.Result2.Register == CPURegister.RAX
-		    && context.Operand1.Register == CPURegister.RDX
-		    && context.Operand2.Register == CPURegister.RAX)
+			&& context.Result2.IsCPURegister
+			&& context.Operand1.IsCPURegister
+			&& context.Result.Register == CPURegister.RDX
+			&& context.Result2.Register == CPURegister.RAX
+			&& context.Operand1.Register == CPURegister.RDX
+			&& context.Operand2.Register == CPURegister.RAX)
 			return false;
 
 		return true;

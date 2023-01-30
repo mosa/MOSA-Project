@@ -327,8 +327,8 @@ public class VMwareSVGA2 : BaseDeviceDriver, IGraphicsDevice
 		WriteToFifo(image.Height); // Height
 
 		for (uint y = 0; y < image.Height; y++)
-		for (uint x = 0; x < image.Width; x++)
-			WriteToFifo(image.GetPixel(x, y));
+			for (uint x = 0; x < image.Width; x++)
+				WriteToFifo(image.GetPixel(x, y));
 	}
 
 	public void SetCursor(bool visible, uint x, uint y)
@@ -384,7 +384,7 @@ public class VMwareSVGA2 : BaseDeviceDriver, IGraphicsDevice
 	private void WriteToFifo(uint value)
 	{
 		if (ReadFifoRegister(FifoRegister.NextCmd) == ReadFifoRegister(FifoRegister.Max) - 4 && ReadFifoRegister(FifoRegister.Stop) == ReadFifoRegister(FifoRegister.Min) ||
-		    ReadFifoRegister(FifoRegister.NextCmd) + 4 == ReadFifoRegister(FifoRegister.Stop))
+			ReadFifoRegister(FifoRegister.NextCmd) + 4 == ReadFifoRegister(FifoRegister.Stop))
 			WaitForFifo();
 
 		WriteFifoRegister(ReadFifoRegister(FifoRegister.NextCmd) / 4, value);

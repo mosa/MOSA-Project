@@ -90,9 +90,9 @@ public partial class StackFrameView : DebugDockContent
 				HexValue = BasePlatform.ToHex(value, NativeIntegerSize),
 				Value = value,
 				Offset = Platform.StackFrame.Name.ToUpperInvariant() +
-				         (offset >= 0
-					         ? "-" + BasePlatform.ToHex(offset, 1)
-					         : "+" + BasePlatform.ToHex(-(long)offset, 1)),
+						 (offset >= 0
+							 ? "-" + BasePlatform.ToHex(offset, 1)
+							 : "+" + BasePlatform.ToHex(-(long)offset, 1)),
 				Index = stackentries.Count,
 				Info = MainForm.GetAddressInfo(value)
 			};

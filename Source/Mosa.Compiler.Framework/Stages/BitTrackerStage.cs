@@ -1486,10 +1486,10 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		// TODO: Special power of two handling for bits, handle similar to shift left
 
 		if (!IntegerTwiddling.HasSignBitSet((int)value1.MaxValue)
-		    && !IntegerTwiddling.HasSignBitSet((int)value2.MaxValue)
-		    && !IntegerTwiddling.HasSignBitSet((int)value1.MinValue)
-		    && !IntegerTwiddling.HasSignBitSet((int)value2.MinValue)
-		    && !IntegerTwiddling.IsMultiplyOverflow((int)value1.MaxValue, (int)value2.MaxValue))
+			&& !IntegerTwiddling.HasSignBitSet((int)value2.MaxValue)
+			&& !IntegerTwiddling.HasSignBitSet((int)value1.MinValue)
+			&& !IntegerTwiddling.HasSignBitSet((int)value2.MinValue)
+			&& !IntegerTwiddling.IsMultiplyOverflow((int)value1.MaxValue, (int)value2.MaxValue))
 		{
 			var max = Math.Max(value1.MaxValue, value2.MaxValue);
 			var min = Math.Min(value1.MinValue, value2.MinValue);
@@ -1554,10 +1554,10 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		// TODO: Special power of two handling for bits, handle similar to shift left
 
 		if (!IntegerTwiddling.HasSignBitSet((long)value1.MaxValue)
-		    && !IntegerTwiddling.HasSignBitSet((long)value2.MaxValue)
-		    && !IntegerTwiddling.HasSignBitSet((long)value1.MinValue)
-		    && !IntegerTwiddling.HasSignBitSet((long)value2.MinValue)
-		    && !IntegerTwiddling.IsMultiplyOverflow((long)value1.MaxValue, (long)value2.MaxValue))
+			&& !IntegerTwiddling.HasSignBitSet((long)value2.MaxValue)
+			&& !IntegerTwiddling.HasSignBitSet((long)value1.MinValue)
+			&& !IntegerTwiddling.HasSignBitSet((long)value2.MinValue)
+			&& !IntegerTwiddling.IsMultiplyOverflow((long)value1.MaxValue, (long)value2.MaxValue))
 		{
 			var max = Math.Max(value1.MaxValue, value2.MaxValue);
 			var min = Math.Min(value1.MinValue, value2.MinValue);

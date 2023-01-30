@@ -235,9 +235,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Runtime Tables", "Runtime T
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.BareMetal.HelloWorld.x64", "Mosa.BareMetal.HelloWorld.x64\Mosa.BareMetal.HelloWorld.x64.csproj", "{5F4136A8-EB83-41BE-9D81-B16E723AAE29}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{3A1D736A-450F-47A4-B050-3CAF338AECFC}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Compiler.MosaTypeSystem.CLR", "Mosa.Compiler.MosaTypeSystem.CLR\Mosa.Compiler.MosaTypeSystem.CLR.csproj", "{337FA0F7-7E6E-427F-874F-5C43B6D04755}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Compiler.MosaTypeSystem.CLR", "Mosa.Compiler.MosaTypeSystem.CLR\Mosa.Compiler.MosaTypeSystem.CLR.csproj", "{337FA0F7-7E6E-427F-874F-5C43B6D04755}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

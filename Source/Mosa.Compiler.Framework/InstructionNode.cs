@@ -641,25 +641,25 @@ public sealed class InstructionNode
 			case 1: Operand2 = operand; return;
 			case 2: Operand3 = operand; return;
 			default:
-			{
-				var current = GetAdditionalOperand(index);
-				if (current == operand) return;
-				if (current != null)
 				{
-					current.Uses.Remove(this);
-				}
-
-				if (operand != null)
-				{
-					if (operand.IsVirtualRegister || operand.IsOnStack)
+					var current = GetAdditionalOperand(index);
+					if (current == operand) return;
+					if (current != null)
 					{
-						operand.Uses.Add(this);
+						current.Uses.Remove(this);
 					}
-				}
 
-				SetAdditionalOperand(index, operand);
-				return;
-			}
+					if (operand != null)
+					{
+						if (operand.IsVirtualRegister || operand.IsOnStack)
+						{
+							operand.Uses.Add(this);
+						}
+					}
+
+					SetAdditionalOperand(index, operand);
+					return;
+				}
 		}
 	}
 

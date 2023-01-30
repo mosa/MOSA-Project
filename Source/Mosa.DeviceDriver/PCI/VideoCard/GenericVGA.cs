@@ -156,8 +156,6 @@ public class GenericVGA : BaseDeviceDriver, IPixelPaletteGraphicsDevice
 	/// </summary>
 	private ConstrainedPointer memory;
 
-	private ushort width, height, colors;
-
 	private enum WriteMethod : byte { Pixel1, Pixel2, Pixel4p, Pixel8, Pixel8x };
 
 	private WriteMethod writeMethod;
@@ -263,9 +261,9 @@ public class GenericVGA : BaseDeviceDriver, IPixelPaletteGraphicsDevice
 	public void Clear(Color color)
 	{
 		// TODO: write faster version
-		for (ushort x = 0; x < width; x++)
-		for (ushort y = 0; y < height; y++)
-			WritePixel(color, x, y);
+		for (ushort x = 0; x < Width; x++)
+			for (ushort y = 0; y < Height; y++)
+				WritePixel(color, x, y);
 	}
 
 	/// <summary>
@@ -292,21 +290,21 @@ public class GenericVGA : BaseDeviceDriver, IPixelPaletteGraphicsDevice
 	/// Gets the size of the palette.
 	/// </summary>
 	/// <value>The size of the palette.</value>
-	public ushort PaletteSize { get { return colors; } }
+	public ushort PaletteSize { get; private set; }
 
 	/// <summary>
 	/// Gets the width.
 	/// </summary>
 	/// <value></value>
 	/// <returns></returns>
-	public ushort Width { get { return width; } }
+	public ushort Width { get; private set; }
 
 	/// <summary>
 	/// Gets the height.
 	/// </summary>
 	/// <value></value>
 	/// <returns></returns>
-	public ushort Height { get { return height; } }
+	public ushort Height { get; private set; }
 
 	/// <summary>
 	/// Writes the settings.
@@ -370,12 +368,12 @@ public class GenericVGA : BaseDeviceDriver, IPixelPaletteGraphicsDevice
 	{
 		switch (mode)
 		{
-			case 4: { WriteSettings(VGA320x200x4); width = 320; height = 200; colors = 4; writeMethod = WriteMethod.Pixel2; colorPalette = ColorPalette.CreateStandard16ColorPalette(); return true; }
-			case 5: { WriteSettings(VGA320x200x4); width = 320; height = 200; colors = 4; writeMethod = WriteMethod.Pixel2; colorPalette = ColorPalette.CreateStandard16ColorPalette(); return true; }
+			case 4: { WriteSettings(VGA320x200x4); Width = 320; Height = 200; PaletteSize = 4; writeMethod = WriteMethod.Pixel2; colorPalette = ColorPalette.CreateStandard16ColorPalette(); return true; }
+			case 5: { WriteSettings(VGA320x200x4); Width = 320; Height = 200; PaletteSize = 4; writeMethod = WriteMethod.Pixel2; colorPalette = ColorPalette.CreateStandard16ColorPalette(); return true; }
 
 			//case 11: { WriteSettings(VGA640x480x2); width = 640; height = 480; colors = 2; writeMethod = WriteMethod.xxx; return true; }
 			//case 12: { WriteSettings(VGA640x480x16); width = 640; height = 480; colors = 16; writeMethod = WriteMethod.xxx; return true; }
-			case 13: { WriteSettings(VGA320x200x256); width = 320; height = 200; colors = 256; writeMethod = WriteMethod.Pixel8; colorPalette = ColorPalette.CreateNetscape256ColorPalette(); return true; }
+			case 13: { WriteSettings(VGA320x200x256); Width = 320; Height = 200; PaletteSize = 256; writeMethod = WriteMethod.Pixel8; colorPalette = ColorPalette.CreateNetscape256ColorPalette(); return true; }
 
 			// Custom Standard Modes:
 			//case 99: { WriteSettings(VGA720x480x16); width = 720; height = 480; colors = 16; writeMethod = WriteMethod.xxx; return true; }

@@ -794,27 +794,27 @@ public class FatFileSystem : GenericFileSystem
 		switch (FATType)
 		{
 			case FatType.FAT12:
-			{
-				uint clustervalue = fat.GetUShort(sectorOffset);
+				{
+					uint clustervalue = fat.GetUShort(sectorOffset);
 
-				if (cluster % 2 == 1)
-					clustervalue = ((clustervalue & 0x000F) | (nextcluster << 4));
-				else
-					clustervalue = ((clustervalue & 0xF000) | (nextcluster & 0x0FFF));
+					if (cluster % 2 == 1)
+						clustervalue = ((clustervalue & 0x000F) | (nextcluster << 4));
+					else
+						clustervalue = ((clustervalue & 0xF000) | (nextcluster & 0x0FFF));
 
-				fat.SetUShort(sectorOffset, (ushort)clustervalue);
-				break;
-			}
+					fat.SetUShort(sectorOffset, (ushort)clustervalue);
+					break;
+				}
 			case FatType.FAT16:
-			{
-				fat.SetUShort(sectorOffset, (ushort)(nextcluster & 0xFFFF));
-				break;
-			}
+				{
+					fat.SetUShort(sectorOffset, (ushort)(nextcluster & 0xFFFF));
+					break;
+				}
 			default:
-			{
-				fat.SetUInt32(sectorOffset, nextcluster);
-				break;
-			}
+				{
+					fat.SetUInt32(sectorOffset, nextcluster);
+					break;
+				}
 		}
 
 		partition.WriteBlock(sector, nbrSectors, fat.Data);
@@ -833,36 +833,36 @@ public class FatFileSystem : GenericFileSystem
 		switch (type)
 		{
 			case FatType.FAT12:
-			{
-				if (sectors < 512) return 1;
-				else if (sectors == 720) return 2;
-				else if (sectors == 1440) return 2;
-				else if (sectors <= 2880) return 1;
-				else if (sectors <= 5760) return 2;
-				else if (sectors <= 16384) return 4;
-				else if (sectors <= 32768) return 8;
-				else return 0;
-			}
+				{
+					if (sectors < 512) return 1;
+					else if (sectors == 720) return 2;
+					else if (sectors == 1440) return 2;
+					else if (sectors <= 2880) return 1;
+					else if (sectors <= 5760) return 2;
+					else if (sectors <= 16384) return 4;
+					else if (sectors <= 32768) return 8;
+					else return 0;
+				}
 			case FatType.FAT16:
-			{
-				if (sectors < 8400) return 0;
-				else if (sectors < 32680) return 2;
-				else if (sectors < 262144) return 4;
-				else if (sectors < 524288) return 8;
-				else if (sectors < 1048576) return 16;
-				else if (sectors < 2097152) return 32;
-				else if (sectors < 4194304) return 64;
-				else return 0;
-			}
+				{
+					if (sectors < 8400) return 0;
+					else if (sectors < 32680) return 2;
+					else if (sectors < 262144) return 4;
+					else if (sectors < 524288) return 8;
+					else if (sectors < 1048576) return 16;
+					else if (sectors < 2097152) return 32;
+					else if (sectors < 4194304) return 64;
+					else return 0;
+				}
 			case FatType.FAT32:
-			{
-				if (sectors < 66600) return 0;
-				else if (sectors < 532480) return 1;
-				else if (sectors < 16777216) return 8;
-				else if (sectors < 33554432) return 16;
-				else if (sectors < 67108864) return 32;
-				else return 64;
-			}
+				{
+					if (sectors < 66600) return 0;
+					else if (sectors < 532480) return 1;
+					else if (sectors < 16777216) return 8;
+					else if (sectors < 33554432) return 16;
+					else if (sectors < 67108864) return 32;
+					else return 64;
+				}
 			default: return 0;
 		}
 	}

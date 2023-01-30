@@ -107,23 +107,23 @@ internal sealed class GenericArguments
 		switch (typeSig)
 		{
 			case GenericMVar genericMVar:
-			{
-				var newSig = methodArgsStack.Resolve(genericMVar.Number);
-				if (newSig == null || newSig == typeSig)
-					return typeSig;
-				return newSig;
-			}
+				{
+					var newSig = methodArgsStack.Resolve(genericMVar.Number);
+					if (newSig == null || newSig == typeSig)
+						return typeSig;
+					return newSig;
+				}
 			case GenericVar genericVar:
-			{
-				var newSig = typeArgsStack.Resolve(genericVar.Number);
-				if (newSig == null || newSig == typeSig)
-					return typeSig;
-				return newSig;
-			}
+				{
+					var newSig = typeArgsStack.Resolve(genericVar.Number);
+					if (newSig == null || newSig == typeSig)
+						return typeSig;
+					return newSig;
+				}
 			default:
-			{
-				return typeSig;
-			}
+				{
+					return typeSig;
+				}
 		}
 	}
 }

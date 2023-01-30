@@ -28,12 +28,12 @@ public class GenericPartition
 	/// </summary>
 	/// <value>The partition index.</value>
 
-/* Unmerged change from project 'Mosa.Utility.FileSystem'
-Before:
-		public uint Index { get { return index; } }
-After:
-		public uint Index { get; } }
-*/
+	/* Unmerged change from project 'Mosa.Utility.FileSystem'
+	Before:
+			public uint Index { get { return index; } }
+	After:
+			public uint Index { get; } }
+	*/
 	public uint Index { get; private set; }
 
 	/// <summary>

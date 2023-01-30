@@ -97,12 +97,12 @@ public class Button
 	public bool IsClicked(MouseState state)
 	{
 		return IsHovered() &&
-		       IsPressedOneTime(state);
+			   IsPressedOneTime(state);
 	}
 
 	public bool IsHovered()
 	{
 		return !WindowManager.IsWindowMoving &&
-		       Mouse.IsInBounds(X, Y, Width, Height);
+			   Mouse.IsInBounds(X, Y, Width, Height);
 	}
 }

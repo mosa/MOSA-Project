@@ -144,10 +144,10 @@ public sealed class CILOperandAssignmentStage : BaseMethodCompilerStage
 		context.GotoPrevious();
 
 		while (context.IsEmpty
-		       || context.Instruction.FlowControl == FlowControl.ConditionalBranch
-		       || context.Instruction.FlowControl == FlowControl.UnconditionalBranch
-		       || context.Instruction.FlowControl == FlowControl.Return
-		       || context.Instruction == IRInstruction.Jmp)
+			   || context.Instruction.FlowControl == FlowControl.ConditionalBranch
+			   || context.Instruction.FlowControl == FlowControl.UnconditionalBranch
+			   || context.Instruction.FlowControl == FlowControl.Return
+			   || context.Instruction == IRInstruction.Jmp)
 		{
 			context.GotoPrevious();
 		}
@@ -179,17 +179,17 @@ public sealed class CILOperandAssignmentStage : BaseMethodCompilerStage
 		for (var ctx = new Context(block); !ctx.IsBlockEndInstruction; ctx.GotoNext())
 		{
 			if (ctx.IsEmpty
-			    || ctx.IsBlockEndInstruction
-			    || ctx.IsBlockStartInstruction
-			    || ctx.Instruction == IRInstruction.Jmp)
+				|| ctx.IsBlockEndInstruction
+				|| ctx.IsBlockStartInstruction
+				|| ctx.Instruction == IRInstruction.Jmp)
 				continue;
 
 			if (ctx.Instruction.FlowControl != FlowControl.ConditionalBranch
-			    && ctx.Instruction.FlowControl != FlowControl.UnconditionalBranch
-			    && ctx.Instruction.FlowControl != FlowControl.Return
-			    && ctx.Instruction != IRInstruction.ExceptionStart
-			    && ctx.Instruction != IRInstruction.FilterStart
-			    && !(ctx.Instruction is BaseCILInstruction))
+				&& ctx.Instruction.FlowControl != FlowControl.UnconditionalBranch
+				&& ctx.Instruction.FlowControl != FlowControl.Return
+				&& ctx.Instruction != IRInstruction.ExceptionStart
+				&& ctx.Instruction != IRInstruction.FilterStart
+				&& !(ctx.Instruction is BaseCILInstruction))
 				continue;
 
 			AssignOperandsFromCILStack(ctx, operandStack);
@@ -231,8 +231,8 @@ public sealed class CILOperandAssignmentStage : BaseMethodCompilerStage
 			return;
 
 		if (ctx.Instruction != IRInstruction.ExceptionStart
-		    && ctx.Instruction != IRInstruction.FilterStart
-		    && !(ctx.Instruction as BaseCILInstruction).PushResult)
+			&& ctx.Instruction != IRInstruction.FilterStart
+			&& !(ctx.Instruction as BaseCILInstruction).PushResult)
 			return;
 
 		currentStack.Push(ctx.Result);
