@@ -30,9 +30,9 @@ public sealed class Deadcode : BaseTransform
 
 		if (context.Instruction.IsIOOperation
 
-		    //|| context.Instruction.IsMemoryRead
-		    || context.Instruction.IsMemoryWrite
-		    || context.Instruction.HasUnspecifiedSideEffect)
+			//|| context.Instruction.IsMemoryRead
+			|| context.Instruction.IsMemoryWrite
+			|| context.Instruction.HasUnspecifiedSideEffect)
 			return false;
 
 		// Check is split child, if so check is parent in use (Manual.Return for example)
@@ -48,10 +48,10 @@ public sealed class Deadcode : BaseTransform
 		//	return false;
 
 		if (instruction.IsCarryFlagModified
-		    || instruction.IsOverflowFlagModified
-		    || instruction.IsZeroFlagModified
-		    || instruction.IsSignFlagModified
-		    || instruction.IsParityFlagModified)
+			|| instruction.IsOverflowFlagModified
+			|| instruction.IsZeroFlagModified
+			|| instruction.IsSignFlagModified
+			|| instruction.IsParityFlagModified)
 		{
 			return !AreStatusFlagUsed(context);
 		}

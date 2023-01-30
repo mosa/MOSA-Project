@@ -31,7 +31,7 @@ public class SignatureComparer : IEqualityComparer<MosaType>, IEqualityComparer<
 
 			case MosaTypeCode.Array:
 				return Equals(x.ElementType, y?.ElementType)
-				       && Equals(x.ArrayInfo, y?.ArrayInfo);
+					   && Equals(x.ArrayInfo, y?.ArrayInfo);
 
 			case MosaTypeCode.FunctionPointer:
 				return Equals(x.FunctionPtrSig, y?.FunctionPtrSig);
@@ -91,7 +91,7 @@ public class SignatureComparer : IEqualityComparer<MosaType>, IEqualityComparer<
 	public static bool Equals(MosaMethodSignature? x, MosaMethodSignature? y)
 	{
 		return Equals(x?.ReturnType, y?.ReturnType)
-		       && x?.Parameters.SequenceEquals(y?.Parameters) == true;
+			   && x?.Parameters.SequenceEquals(y?.Parameters) == true;
 	}
 
 	bool IEqualityComparer<MosaMethodSignature>.Equals(MosaMethodSignature? x, MosaMethodSignature? y)

@@ -1,9 +1,9 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Diagnostics;
 using dnlib.DotNet;
 using dnlib.DotNet.Emit;
 using Mosa.Compiler.Common.Exceptions;
-using System.Diagnostics;
 using Mosa.Compiler.MosaTypeSystem.CLR.Dnlib;
 using Mosa.Compiler.MosaTypeSystem.CLR.Utils;
 
@@ -38,49 +38,49 @@ internal class ClrMetadataResolver
 			switch (unit)
 			{
 				case MosaType type:
-				{
-					using (var mosaType = metadata.Controller.MutateType(type))
 					{
-						var typeDef = type.GetUnderlyingObject<UnitDesc<TypeDef, TypeSig>>()?.Definition;
-						if (typeDef == null)
-							throw new InvalidOperationException("Definition of type is null!");
-
-						if (typeDef.BaseType != null)
+						using (var mosaType = metadata.Controller.MutateType(type))
 						{
-							mosaType.BaseType = metadata.Loader.GetType(typeDef.BaseType.ToTypeSig());
-						}
+							var typeDef = type.GetUnderlyingObject<UnitDesc<TypeDef, TypeSig>>()?.Definition;
+							if (typeDef == null)
+								throw new InvalidOperationException("Definition of type is null!");
 
-						if (typeDef.DeclaringType != null)
-						{
-							mosaType.DeclaringType = metadata.Loader.GetType(typeDef.DeclaringType.ToTypeSig());
-						}
+							if (typeDef.BaseType != null)
+							{
+								mosaType.BaseType = metadata.Loader.GetType(typeDef.BaseType.ToTypeSig());
+							}
 
-						if (typeDef.IsEnum)
-						{
-							mosaType.ElementType = metadata.Loader.GetType(typeDef.GetEnumUnderlyingType());
-						}
+							if (typeDef.DeclaringType != null)
+							{
+								mosaType.DeclaringType = metadata.Loader.GetType(typeDef.DeclaringType.ToTypeSig());
+							}
 
-						foreach (var iface in typeDef.Interfaces)
-						{
-							mosaType.Interfaces.Add(metadata.Loader.GetType(iface.Interface.ToTypeSig()));
-						}
+							if (typeDef.IsEnum)
+							{
+								mosaType.ElementType = metadata.Loader.GetType(typeDef.GetEnumUnderlyingType());
+							}
 
-						if (typeDef.BaseType != null && type.BaseType != null)
-						{
-							ResolveInterfacesInBaseTypes(mosaType, type.BaseType);
+							foreach (var iface in typeDef.Interfaces)
+							{
+								mosaType.Interfaces.Add(metadata.Loader.GetType(iface.Interface.ToTypeSig()));
+							}
+
+							if (typeDef.BaseType != null && type.BaseType != null)
+							{
+								ResolveInterfacesInBaseTypes(mosaType, type.BaseType);
+							}
 						}
+						ResolveType(type);
+						break;
 					}
-					ResolveType(type);
-					break;
-				}
 				case MosaField:
 				case MosaMethod:
 				case MosaModule:
 				case MosaProperty:
-				{
-					resolveQueue.Enqueue(unit);
-					break;
-				}
+					{
+						resolveQueue.Enqueue(unit);
+						break;
+					}
 			}
 		}
 
@@ -90,36 +90,36 @@ internal class ClrMetadataResolver
 			switch (unit)
 			{
 				case MosaType type:
-				{
-					ResolveType(type);
-					break;
-				}
+					{
+						ResolveType(type);
+						break;
+					}
 				case MosaField field:
-				{
-					ResolveField(field);
-					break;
-				}
+					{
+						ResolveField(field);
+						break;
+					}
 				case MosaMethod method:
-				{
-					ResolveMethod(method);
-					break;
-				}
+					{
+						ResolveMethod(method);
+						break;
+					}
 				case MosaProperty property:
-				{
-					ResolveProperty(property);
-					break;
-				}
+					{
+						ResolveProperty(property);
+						break;
+					}
 				case MosaModule module:
-				{
-					using var mosaModule = metadata.Controller.MutateModule(module);
+					{
+						using var mosaModule = metadata.Controller.MutateModule(module);
 
-					var definition = module.GetUnderlyingObject<UnitDesc<ModuleDef, object>>()?.Definition;
-					if (definition == null)
-						throw new InvalidOperationException("Module's definition is null!");
+						var definition = module.GetUnderlyingObject<UnitDesc<ModuleDef, object>>()?.Definition;
+						if (definition == null)
+							throw new InvalidOperationException("Module's definition is null!");
 
-					ResolveCustomAttributes(mosaModule, definition);
-					break;
-				}
+						ResolveCustomAttributes(mosaModule, definition);
+						break;
+					}
 			}
 		}
 
@@ -163,25 +163,25 @@ internal class ClrMetadataResolver
 		switch (value)
 		{
 			case UTF8String utf8String:
-			{
-				value = utf8String.String;
-				break;
-			}
-			case TypeSig sig:
-			{
-				value = metadata.Loader.GetType(sig);
-				break;
-			}
-			case CAArgument[] valueArray:
-			{
-				var resultArray = new MosaCustomAttribute.Argument[valueArray.Length];
-				for (var i = 0; i < resultArray.Length; i++)
 				{
-					resultArray[i] = ToMosaCAArgument(valueArray[i]);
+					value = utf8String.String;
+					break;
 				}
+			case TypeSig sig:
+				{
+					value = metadata.Loader.GetType(sig);
+					break;
+				}
+			case CAArgument[] valueArray:
+				{
+					var resultArray = new MosaCustomAttribute.Argument[valueArray.Length];
+					for (var i = 0; i < resultArray.Length; i++)
+					{
+						resultArray[i] = ToMosaCAArgument(valueArray[i]);
+					}
 
-				break;
-			}
+					break;
+				}
 		}
 
 		return new MosaCustomAttribute.Argument(metadata.Loader.GetType(arg.Type), value);
@@ -281,7 +281,7 @@ internal class ClrMetadataResolver
 		mosaField.FieldType = metadata.Loader.GetType(resolver.Resolve(field.GetFieldSig().Type));
 
 		mosaField.HasOpenGenericParams = field.DeclaringType?.HasOpenGenericParams == true
-		                                 || field.FieldType?.GetTypeSig().HasOpenGenericParameter() == true;
+										 || field.FieldType?.GetTypeSig().HasOpenGenericParameter() == true;
 
 		var definition = field.GetUnderlyingObject<UnitDesc<FieldDef, FieldSig>>()?.Definition;
 		if (definition == null)
@@ -452,64 +452,64 @@ internal class ClrMetadataResolver
 			operand = metadata.Loader.GetType(szArraySig);
 		}
 		else switch (instruction.Operand)
-		{
-			case ITypeDefOrRef @ref:
 			{
-				operand = ResolveTypeOperand(@ref, resolver);
-				break;
-			}
-			case MemberRef { IsFieldRef: true } memberRef:
-			{
-				operand = ResolveFieldOperand(memberRef, resolver);
-				break;
-			}
-			case MemberRef memberRef:
-			{
-				operand = ResolveMethodOperand(memberRef, resolver);
-				break;
-			}
-			case IField field:
-			{
-				operand = ResolveFieldOperand(field, resolver);
-				break;
-			}
-			case IMethod method:
-			{
-				operand = ResolveMethodOperand(method, resolver);
-				break;
-			}
-			case Local local:
-			{
-				operand = local.Index;
-				break;
-			}
-			case Parameter parameter:
-			{
-				operand = parameter.Index;
-				break;
-			}
-			case Instruction instructionOperand:
-			{
-				operand = (int)instructionOperand.Offset;
-				break;
-			}
-			case Instruction[] targets:
-			{
-				var offsets = new int[targets.Length];
-				for (var i = 0; i < offsets.Length; i++)
-				{
-					offsets[i] = (int)targets[i].Offset;
-				}
+				case ITypeDefOrRef @ref:
+					{
+						operand = ResolveTypeOperand(@ref, resolver);
+						break;
+					}
+				case MemberRef { IsFieldRef: true } memberRef:
+					{
+						operand = ResolveFieldOperand(memberRef, resolver);
+						break;
+					}
+				case MemberRef memberRef:
+					{
+						operand = ResolveMethodOperand(memberRef, resolver);
+						break;
+					}
+				case IField field:
+					{
+						operand = ResolveFieldOperand(field, resolver);
+						break;
+					}
+				case IMethod method:
+					{
+						operand = ResolveMethodOperand(method, resolver);
+						break;
+					}
+				case Local local:
+					{
+						operand = local.Index;
+						break;
+					}
+				case Parameter parameter:
+					{
+						operand = parameter.Index;
+						break;
+					}
+				case Instruction instructionOperand:
+					{
+						operand = (int)instructionOperand.Offset;
+						break;
+					}
+				case Instruction[] targets:
+					{
+						var offsets = new int[targets.Length];
+						for (var i = 0; i < offsets.Length; i++)
+						{
+							offsets[i] = (int)targets[i].Offset;
+						}
 
-				operand = offsets;
-				break;
+						operand = offsets;
+						break;
+					}
+				case string s:
+					{
+						operand = metadata.Cache.GetStringId(s);
+						break;
+					}
 			}
-			case string s:
-			{
-				operand = metadata.Cache.GetStringId(s);
-				break;
-			}
-		}
 
 		var code = (ushort)instruction.OpCode.Code;
 		if (code > 0xff)    // To match compiler's opcode values

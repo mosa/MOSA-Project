@@ -271,7 +271,7 @@ public static class ComplexTests
 		int q = -1;
 		int value = 10;
 
-		top:
+	top:
 		if (q > 0)
 		{
 			while (true)
@@ -294,7 +294,7 @@ public static class ComplexTests
 		int q = -1;
 		int value = 10;
 
-		top:
+	top:
 		if (q > 0)
 		{
 			value = 30;

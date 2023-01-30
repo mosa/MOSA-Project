@@ -33,9 +33,9 @@ public static class SourceRegions
 		}
 
 		if (methodData.Method.HasImplementation
-		    && methodData.HasCode
-		    && !methodData.IsMethodImplementationReplaced
-		    && !methodData.IsCompilerGenerated)
+			&& methodData.HasCode
+			&& !methodData.IsMethodImplementationReplaced
+			&& !methodData.IsCompilerGenerated)
 		{
 			// Add method header
 			var regions = new List<SourceRegion>(methodData.LabelRegions.Count + 1);

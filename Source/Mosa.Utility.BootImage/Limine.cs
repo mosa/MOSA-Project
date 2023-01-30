@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using System.IO;
 using System.Linq;
 using Mosa.DeviceSystem;
 

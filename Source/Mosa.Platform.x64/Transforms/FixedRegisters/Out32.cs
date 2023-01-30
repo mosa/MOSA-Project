@@ -17,9 +17,9 @@ public sealed class Out32 : BaseTransform
 	public override bool Match(Context context, TransformContext transform)
 	{
 		return !(context.Operand1.IsCPURegister
-		         && context.Operand2.IsCPURegister
-		         && (context.Operand1.Register == CPURegister.RDX || context.Operand1.IsConstant)
-		         && context.Operand2.Register == CPURegister.RAX);
+				 && context.Operand2.IsCPURegister
+				 && (context.Operand1.Register == CPURegister.RDX || context.Operand1.IsConstant)
+				 && context.Operand2.Register == CPURegister.RAX);
 	}
 
 	public override void Transform(Context context, TransformContext transform)

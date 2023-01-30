@@ -186,7 +186,7 @@ public static class VGAConsole
 	private static bool IsCharacter(byte b)
 	{
 		return ((b >= (byte)'a' && b <= (byte)'z'))
-		       || ((b >= (byte)'A' && b <= (byte)'Z'));
+			   || ((b >= (byte)'A' && b <= (byte)'Z'));
 	}
 
 	private static void ConvertBufferToParameter()

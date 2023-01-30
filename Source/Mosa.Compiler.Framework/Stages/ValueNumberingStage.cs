@@ -445,30 +445,30 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 	private bool CanAssignValueNumberToExpression(InstructionNode node)
 	{
 		if (node.Instruction.IsParameterLoad
-		    && node.Instruction != IRInstruction.LoadParamCompound
-		    && ParamReadOnly.Get(node.Operand1.Index))
+			&& node.Instruction != IRInstruction.LoadParamCompound
+			&& ParamReadOnly.Get(node.Operand1.Index))
 		{
 			return true;
 		}
 
 		if (node.Instruction == IRInstruction.AddressOf
-		    && (node.Operand1.IsStackLocal || node.Operand1.IsStaticField))
+			&& (node.Operand1.IsStackLocal || node.Operand1.IsStaticField))
 		{
 			return true;
 		}
 
 		if (node.ResultCount != 1
-		    || node.OperandCount == 0
-		    || node.OperandCount > 2
-		    || node.Instruction.IsMemoryWrite
-		    || node.Instruction.IsMemoryRead
-		    || node.Instruction.IsIOOperation
-		    || node.Instruction.HasUnspecifiedSideEffect
-		    || node.Instruction.VariableOperands
-		    || node.Instruction.FlowControl != FlowControl.Next
-		    || node.Instruction.IgnoreDuringCodeGeneration
-		    || node.Operand1.IsUnresolvedConstant
-		    || (node.OperandCount == 2 && node.Operand2.IsUnresolvedConstant))
+			|| node.OperandCount == 0
+			|| node.OperandCount > 2
+			|| node.Instruction.IsMemoryWrite
+			|| node.Instruction.IsMemoryRead
+			|| node.Instruction.IsIOOperation
+			|| node.Instruction.HasUnspecifiedSideEffect
+			|| node.Instruction.VariableOperands
+			|| node.Instruction.FlowControl != FlowControl.Next
+			|| node.Instruction.IgnoreDuringCodeGeneration
+			|| node.Operand1.IsUnresolvedConstant
+			|| (node.OperandCount == 2 && node.Operand2.IsUnresolvedConstant))
 			return false;
 
 		return true;
@@ -511,31 +511,31 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 			return true;
 
 		if (operand1.IsResolvedConstant
-		    && operand2.IsResolvedConstant
-		    && operand1.IsInteger
-		    && operand2.IsInteger
-		    && operand1.ConstantUnsigned64 == operand2.ConstantUnsigned64)
+			&& operand2.IsResolvedConstant
+			&& operand1.IsInteger
+			&& operand2.IsInteger
+			&& operand1.ConstantUnsigned64 == operand2.ConstantUnsigned64)
 			return true;
 
 		if (operand1.IsResolvedConstant
-		    && operand2.IsResolvedConstant
-		    && operand1.IsFloatingPoint
-		    && operand2.IsFloatingPoint
-		    && operand1.ConstantDouble == operand2.ConstantDouble)
+			&& operand2.IsResolvedConstant
+			&& operand1.IsFloatingPoint
+			&& operand2.IsFloatingPoint
+			&& operand1.ConstantDouble == operand2.ConstantDouble)
 			return true;
 
 		if (instruction != null
-		    && instruction == IRInstruction.AddressOf
-		    && operand1.IsStaticField
-		    && operand2.IsStaticField
-		    && operand1.Field == operand2.Field)
+			&& instruction == IRInstruction.AddressOf
+			&& operand1.IsStaticField
+			&& operand2.IsStaticField
+			&& operand1.Field == operand2.Field)
 			return true;
 
 		if (instruction != null
-		    && instruction == IRInstruction.AddressOf
-		    && operand1.IsStackLocal
-		    && operand2.IsStackLocal
-		    && operand1.Index == operand2.Index)
+			&& instruction == IRInstruction.AddressOf
+			&& operand1.IsStackLocal
+			&& operand2.IsStackLocal
+			&& operand1.Index == operand2.Index)
 			return true;
 
 		return false;
@@ -549,9 +549,9 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 		foreach (var expression in expressions)
 		{
 			if (node.Instruction == expression.Instruction
-			    && node.ConditionCode == expression.ConditionCode
-			    && IsEqual(node.Operand1, expression.Operand1, node.Instruction)
-			    && (node.OperandCount == 1 || (node.OperandCount == 2 && IsEqual(node.Operand2, expression.Operand2))))
+				&& node.ConditionCode == expression.ConditionCode
+				&& IsEqual(node.Operand1, expression.Operand1, node.Instruction)
+				&& (node.OperandCount == 1 || (node.OperandCount == 2 && IsEqual(node.Operand2, expression.Operand2))))
 			{
 				return expression;
 			}

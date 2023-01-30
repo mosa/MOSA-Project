@@ -27,8 +27,8 @@ public static class TransformDirectory
 			foreach (var transform in Transformations)
 			{
 				if ((type == MatchType.StartsWith && transform.Name.StartsWith(match))
-				    || (type == MatchType.Contains && transform.Name.Contains(match))
-				    || (type == MatchType.EndsWith && transform.Name.EndsWith(match)))
+					|| (type == MatchType.Contains && transform.Name.Contains(match))
+					|| (type == MatchType.EndsWith && transform.Name.EndsWith(match)))
 				{
 					matches.Add(transform);
 				}

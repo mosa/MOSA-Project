@@ -80,9 +80,9 @@ public abstract class BaseRegisterAllocator
 		foreach (var physicalRegister in architecture.RegisterSet)
 		{
 			bool reserved = (physicalRegister == StackFrameRegister
-			                 || physicalRegister == StackPointerRegister
-			                 || (LinkRegister != null && physicalRegister == LinkRegister)
-			                 || (ProgramCounter != null && physicalRegister == ProgramCounter));
+							 || physicalRegister == StackPointerRegister
+							 || (LinkRegister != null && physicalRegister == LinkRegister)
+							 || (ProgramCounter != null && physicalRegister == ProgramCounter));
 
 			VirtualRegisters.Add(new VirtualRegister(physicalRegister, reserved));
 			LiveIntervalTracks.Add(new LiveIntervalTrack(physicalRegister, reserved));
@@ -1551,7 +1551,7 @@ public abstract class BaseRegisterAllocator
 
 					// check if source and destination operands of the move are the same
 					if (nextInterval.AssignedOperand == currentInterval.AssignedOperand
-					    || nextInterval.AssignedOperand.Register == currentInterval.AssignedOperand.Register)
+						|| nextInterval.AssignedOperand.Register == currentInterval.AssignedOperand.Register)
 					{
 						break;
 					}

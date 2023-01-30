@@ -784,11 +784,11 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 				return TriState.Unknown;
 
 			if (at.Instruction == IRInstruction.StableObjectTracking
-			    || at.Instruction == IRInstruction.UnstableObjectTracking
-			    || at.Instruction == IRInstruction.Kill
-			    || at.Instruction == IRInstruction.KillAll
-			    || at.Instruction == IRInstruction.KillAllExcept
-			    || at.Instruction == IRInstruction.Gen)
+				|| at.Instruction == IRInstruction.UnstableObjectTracking
+				|| at.Instruction == IRInstruction.Kill
+				|| at.Instruction == IRInstruction.KillAll
+				|| at.Instruction == IRInstruction.KillAllExcept
+				|| at.Instruction == IRInstruction.Gen)
 				continue;
 
 			if (at.Instruction.FlowControl == FlowControl.Return)
@@ -812,10 +812,10 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 				return TriState.Unknown; // Unknown IR instruction
 
 			if ((checkZero && instruction.IsZeroFlagUsed)
-			    || (checkCarry && instruction.IsCarryFlagUsed)
-			    || (checkSign && instruction.IsSignFlagUsed)
-			    || (checkOverlow && instruction.IsOverflowFlagUsed)
-			    || (checkParity && instruction.IsParityFlagUsed))
+				|| (checkCarry && instruction.IsCarryFlagUsed)
+				|| (checkSign && instruction.IsSignFlagUsed)
+				|| (checkOverlow && instruction.IsOverflowFlagUsed)
+				|| (checkParity && instruction.IsParityFlagUsed))
 				return TriState.Yes;
 
 			if (checkZero && (instruction.IsZeroFlagCleared || instruction.IsZeroFlagSet || instruction.IsZeroFlagUndefined || instruction.IsZeroFlagModified))
@@ -904,17 +904,17 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 			}
 
 			if (previous.IsBlockStartInstruction
-			    || previous.Instruction.IsMemoryRead
-			    || previous.Instruction.IsMemoryWrite
-			    || previous.Instruction.IsIOOperation
-			    || previous.Instruction.HasUnspecifiedSideEffect
-			    || previous.Instruction.FlowControl != FlowControl.Next)
+				|| previous.Instruction.IsMemoryRead
+				|| previous.Instruction.IsMemoryWrite
+				|| previous.Instruction.IsIOOperation
+				|| previous.Instruction.HasUnspecifiedSideEffect
+				|| previous.Instruction.FlowControl != FlowControl.Next)
 				return null;
 
 			if (operand1 != null)
 			{
 				if ((previous.ResultCount >= 1 && previous.Result == operand1)
-				    || (previous.ResultCount >= 2 && previous.Result2 == operand1))
+					|| (previous.ResultCount >= 2 && previous.Result2 == operand1))
 
 					return null;
 			}
@@ -922,7 +922,7 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 			if (operand2 != null)
 			{
 				if ((previous.ResultCount >= 1 && previous.Result == operand2)
-				    || (previous.ResultCount >= 2 && previous.Result2 == operand2))
+					|| (previous.ResultCount >= 2 && previous.Result2 == operand2))
 
 					return null;
 			}
@@ -960,17 +960,17 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 			}
 
 			if (next.IsBlockEndInstruction
-			    || next.Instruction.IsMemoryRead
-			    || next.Instruction.IsMemoryWrite
-			    || next.Instruction.IsIOOperation
-			    || next.Instruction.HasUnspecifiedSideEffect
-			    || next.Instruction.FlowControl != FlowControl.Next)
+				|| next.Instruction.IsMemoryRead
+				|| next.Instruction.IsMemoryWrite
+				|| next.Instruction.IsIOOperation
+				|| next.Instruction.HasUnspecifiedSideEffect
+				|| next.Instruction.FlowControl != FlowControl.Next)
 				return null;
 
 			if (operand != null)
 			{
 				if ((next.ResultCount >= 1 && next.Result == operand)
-				    || (next.ResultCount >= 2 && next.Result2 == operand))
+					|| (next.ResultCount >= 2 && next.Result2 == operand))
 
 					return null;
 			}

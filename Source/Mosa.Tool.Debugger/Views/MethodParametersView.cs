@@ -130,9 +130,9 @@ public partial class MethodParametersView : DebugDockContent
 				Index = (int)parameter.Index,
 				Name = parameter.Name,
 				Offset = Platform.StackFrame.Name.ToUpperInvariant() +
-				         (offset >= 0
-					         ? "+" + BasePlatform.ToHex(offset + parameter.Offset, 1)
-					         : "-" + BasePlatform.ToHex(-offset + parameter.Offset, 1)),
+						 (offset >= 0
+							 ? "+" + BasePlatform.ToHex(offset + parameter.Offset, 1)
+							 : "-" + BasePlatform.ToHex(-offset + parameter.Offset, 1)),
 				Address = BasePlatform.ToHex(StackFrame + parameter.Offset, size),
 				Size = size,
 				Value = value,

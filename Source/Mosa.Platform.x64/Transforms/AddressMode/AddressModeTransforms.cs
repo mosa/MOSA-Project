@@ -2,7 +2,6 @@
 
 using System.Collections.Generic;
 using Mosa.Compiler.Framework.Transforms;
-using Mosa.Platform.x64.Instructions;
 
 namespace Mosa.Platform.x64.Transforms.AddressMode;
 

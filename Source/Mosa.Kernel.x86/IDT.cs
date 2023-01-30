@@ -2248,10 +2248,10 @@ public static class IDT
 				break;
 
 			default:
-			{
-				Interrupt?.Invoke(stack->Interrupt, stack->ErrorCode);
-				break;
-			}
+				{
+					Interrupt?.Invoke(stack->Interrupt, stack->ErrorCode);
+					break;
+				}
 		}
 
 		LocalAPIC.SendEndOfInterrupt(stack->Interrupt);

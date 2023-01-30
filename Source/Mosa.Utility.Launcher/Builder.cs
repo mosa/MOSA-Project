@@ -4,6 +4,10 @@
 //using DiscUtils.Partitions;
 //using DiscUtils.Raw;
 //using DiscUtils.Streams;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Configuration;
 using Mosa.Compiler.Common.Exceptions;
@@ -11,15 +15,8 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
-using Mosa.Utility.BootImage;
-
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.IO.Compression;
-using System.Text;
-using System.Linq;
 using Mosa.Compiler.MosaTypeSystem.CLR;
+using Mosa.Utility.BootImage;
 
 namespace Mosa.Utility.Launcher;
 
@@ -330,15 +327,15 @@ public class Builder : BaseLauncher
 	private void NotifyEvent(CompilerEvent compilerEvent, string message, int threadID)
 	{
 		if (compilerEvent == CompilerEvent.CompileStart
-		    || compilerEvent == CompilerEvent.CompileEnd
-		    || compilerEvent == CompilerEvent.CompilingMethods
-		    || compilerEvent == CompilerEvent.CompilingMethodsCompleted
-		    || compilerEvent == CompilerEvent.InlineMethodsScheduled
-		    || compilerEvent == CompilerEvent.LinkingStart
-		    || compilerEvent == CompilerEvent.LinkingEnd
-		    || compilerEvent == CompilerEvent.Warning
-		    || compilerEvent == CompilerEvent.Error
-		    || compilerEvent == CompilerEvent.Exception)
+			|| compilerEvent == CompilerEvent.CompileEnd
+			|| compilerEvent == CompilerEvent.CompilingMethods
+			|| compilerEvent == CompilerEvent.CompilingMethodsCompleted
+			|| compilerEvent == CompilerEvent.InlineMethodsScheduled
+			|| compilerEvent == CompilerEvent.LinkingStart
+			|| compilerEvent == CompilerEvent.LinkingEnd
+			|| compilerEvent == CompilerEvent.Warning
+			|| compilerEvent == CompilerEvent.Error
+			|| compilerEvent == CompilerEvent.Exception)
 		{
 			string status = $"Compiling: {$"{(DateTime.Now - CompileStartTime).TotalSeconds:0.00}"} secs: {compilerEvent.ToText()}";
 

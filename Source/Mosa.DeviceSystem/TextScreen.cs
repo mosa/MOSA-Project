@@ -73,7 +73,7 @@ public class TextScreen : ITextScreen
 	{
 		var length = 0;
 
-		for (;;)
+		for (; ; )
 		{
 			HAL.Pause();
 
@@ -121,22 +121,22 @@ public class TextScreen : ITextScreen
 		switch (character)
 		{
 			case '\r':
-			{
-				cursorX = 0;
-				break;
-			}
+				{
+					cursorX = 0;
+					break;
+				}
 			case '\t':
-			{
-				cursorX += 4;
-				break;
-			}
+				{
+					cursorX += 4;
+					break;
+				}
 			default:
-			{
-				textDevice.WriteChar(cursorX, cursorY, character, foreground);
-				if (increaseX)
-					cursorX++;
-				break;
-			}
+				{
+					textDevice.WriteChar(cursorX, cursorY, character, foreground);
+					if (increaseX)
+						cursorX++;
+					break;
+				}
 		}
 
 		textDevice.SetCursor(cursorX, cursorY);

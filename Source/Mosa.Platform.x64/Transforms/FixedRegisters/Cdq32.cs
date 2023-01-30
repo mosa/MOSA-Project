@@ -17,9 +17,9 @@ public sealed class Cdq32 : BaseTransform
 	public override bool Match(Context context, TransformContext transform)
 	{
 		if (context.Result.IsCPURegister
-		    && context.Operand1.IsCPURegister
-		    && context.Result.Register == CPURegister.RDX
-		    && context.Operand1.Register == CPURegister.RAX)
+			&& context.Operand1.IsCPURegister
+			&& context.Result.Register == CPURegister.RDX
+			&& context.Operand1.Register == CPURegister.RAX)
 			return false;
 
 		return true;

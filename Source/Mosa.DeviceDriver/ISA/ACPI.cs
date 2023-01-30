@@ -377,10 +377,10 @@ public unsafe class ACPI : BaseDeviceDriver, IACPI
 			var h = (ACPISDTHeader*)HAL.GetPhysicalMemory((Pointer)(xsdt ? XSDT->PointerToOtherSDT[i] : RSDT->PointerToOtherSDT[i]), 0xfff).Address;
 
 			if (h != null &&
-			    h->Signature[0] == signature[0] &&
-			    h->Signature[1] == signature[1] &&
-			    h->Signature[2] == signature[2] &&
-			    h->Signature[3] == signature[3])
+				h->Signature[0] == signature[0] &&
+				h->Signature[1] == signature[1] &&
+				h->Signature[2] == signature[2] &&
+				h->Signature[3] == signature[3])
 				return (Pointer)h;
 		}
 

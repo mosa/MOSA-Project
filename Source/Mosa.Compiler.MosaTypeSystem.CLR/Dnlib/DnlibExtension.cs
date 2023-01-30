@@ -45,31 +45,31 @@ internal static class DnlibExtension
 		switch (signature)
 		{
 			case NonLeafSig:
-			{
-				return HasOpenGenericParameter(signature.Next);
-			}
-
-			case TypeDefOrRefSig sig:
-			{
-				if (sig.TypeDefOrRef is TypeSpec type && HasOpenGenericParameter(type.TypeSig))
-					return true;
-
-				return sig.TypeDefOrRef.ResolveTypeDef().HasGenericParameters;
-			}
-
-			case GenericInstSig sig:
-			{
-				foreach (var genericArg in sig.GenericArguments)
 				{
-					if (HasOpenGenericParameter(genericArg))
-						return true;
+					return HasOpenGenericParameter(signature.Next);
 				}
 
-				if (sig.GenericType.TypeDefOrRef is TypeSpec genericType && HasOpenGenericParameter(genericType.TypeSig))
-					return true;
+			case TypeDefOrRefSig sig:
+				{
+					if (sig.TypeDefOrRef is TypeSpec type && HasOpenGenericParameter(type.TypeSig))
+						return true;
 
-				break;
-			}
+					return sig.TypeDefOrRef.ResolveTypeDef().HasGenericParameters;
+				}
+
+			case GenericInstSig sig:
+				{
+					foreach (var genericArg in sig.GenericArguments)
+					{
+						if (HasOpenGenericParameter(genericArg))
+							return true;
+					}
+
+					if (sig.GenericType.TypeDefOrRef is TypeSpec genericType && HasOpenGenericParameter(genericType.TypeSig))
+						return true;
+
+					break;
+				}
 		}
 
 		return false;

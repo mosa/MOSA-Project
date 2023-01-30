@@ -48,17 +48,17 @@ public class SimpleBitFont : ISimpleFont
 			return;
 
 		for (var h = 0; h < Size; h++)
-		for (var aw = 0; aw < size8; aw++)
-		for (var ww = 0; ww < 8; ww++)
-			if ((Buffer[sizePerFont + h * size8 + aw] & (0x80 >> ww)) != 0)
-			{
-				var max = aw * 8 + ww;
+			for (var aw = 0; aw < size8; aw++)
+				for (var ww = 0; ww < 8; ww++)
+					if ((Buffer[sizePerFont + h * size8 + aw] & (0x80 >> ww)) != 0)
+					{
+						var max = aw * 8 + ww;
 
-				frameBuffer.SetPixel(color, (uint)(x + max), (uint)(y + h));
+						frameBuffer.SetPixel(color, (uint)(x + max), (uint)(y + h));
 
-				if (max > _maxX)
-					_maxX = (uint)max;
-			}
+						if (max > _maxX)
+							_maxX = (uint)max;
+					}
 	}
 
 	public void DrawString(FrameBuffer32 frameBuffer, uint color, uint x, uint y, string text)
@@ -84,15 +84,15 @@ public class SimpleBitFont : ISimpleFont
 		var sizePerFont = Size * size8 * index;
 
 		for (var h = 0; h < Size; h++)
-		for (var aw = 0; aw < size8; aw++)
-		for (var ww = 0; ww < 8; ww++)
-			if ((Buffer[sizePerFont + h * size8 + aw] & (0x80 >> ww)) != 0)
-			{
-				var max = aw * 8 + ww;
+			for (var aw = 0; aw < size8; aw++)
+				for (var ww = 0; ww < 8; ww++)
+					if ((Buffer[sizePerFont + h * size8 + aw] & (0x80 >> ww)) != 0)
+					{
+						var max = aw * 8 + ww;
 
-				if (max > maxX)
-					maxX = (uint)max;
-			}
+						if (max > maxX)
+							maxX = (uint)max;
+					}
 
 		return maxX;
 	}

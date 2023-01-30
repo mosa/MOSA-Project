@@ -24,9 +24,9 @@ public class ASC16Font : ISimpleFont
 		var offset = (c & 0xFF) * Height;
 
 		for (var i = 0; i < Height; i++)
-		for (var j = 0; j < Width; j++)
-			if ((_buffer[offset + i] & (0x80 >> j)) != 0)
-				frameBuffer.SetPixel(color, (uint)(x + j), (uint)(y + i));
+			for (var j = 0; j < Width; j++)
+				if ((_buffer[offset + i] & (0x80 >> j)) != 0)
+					frameBuffer.SetPixel(color, (uint)(x + j), (uint)(y + i));
 	}
 
 	public void DrawString(FrameBuffer32 frameBuffer, uint color, uint x, uint y, string text)

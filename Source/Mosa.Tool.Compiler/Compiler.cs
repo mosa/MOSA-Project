@@ -1,15 +1,15 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common.Configuration;
-using Mosa.Compiler.Common.Exceptions;
-using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Trace;
-using Mosa.Utility.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using Mosa.Compiler.Common.Configuration;
+using Mosa.Compiler.Common.Exceptions;
+using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem.CLR;
+using Mosa.Utility.Configuration;
 
 namespace Mosa.Tool.Compiler;
 
@@ -217,12 +217,12 @@ Example: Mosa.Tool.Compiler.exe -o Mosa.HelloWorld.x86.bin -platform x86 Mosa.He
 	private void NotifyEvent(CompilerEvent compilerEvent, string message, int threadID)
 	{
 		if (compilerEvent != CompilerEvent.MethodCompileEnd
-		    && compilerEvent != CompilerEvent.MethodCompileStart
-		    && compilerEvent != CompilerEvent.Counter
-		    && compilerEvent != CompilerEvent.SetupStageStart
-		    && compilerEvent != CompilerEvent.SetupStageEnd
-		    && compilerEvent != CompilerEvent.FinalizationStageStart
-		    && compilerEvent != CompilerEvent.FinalizationStageEnd)
+			&& compilerEvent != CompilerEvent.MethodCompileStart
+			&& compilerEvent != CompilerEvent.Counter
+			&& compilerEvent != CompilerEvent.SetupStageStart
+			&& compilerEvent != CompilerEvent.SetupStageEnd
+			&& compilerEvent != CompilerEvent.FinalizationStageStart
+			&& compilerEvent != CompilerEvent.FinalizationStageEnd)
 		{
 			message = string.IsNullOrWhiteSpace(message) ? string.Empty : $": {message}";
 			Console.WriteLine($"{(DateTime.Now - CompileStartTime).TotalSeconds:0.00} [{threadID}] {compilerEvent.ToText()}{message}");

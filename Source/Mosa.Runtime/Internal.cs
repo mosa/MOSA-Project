@@ -445,7 +445,7 @@ public static class Internal
 				// If the handler is a finally clause, accept without testing
 				// If the handler is a exception clause, accept if the exception type is in the is within the inheritance chain of the exception object
 				if ((handlerType == ExceptionHandlerType.Finally) ||
-				    (handlerType == ExceptionHandlerType.Exception && Runtime.Internal.IsTypeInInheritanceChain(exType, exceptionType)))
+					(handlerType == ExceptionHandlerType.Exception && Runtime.Internal.IsTypeInInheritanceChain(exType, exceptionType)))
 				{
 					protectedRegionDefinition = prDef;
 					currentStart = start;

@@ -102,31 +102,31 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 					}
 
 					if (node.Instruction == IRInstruction.SetReturn32
-					    || node.Instruction == IRInstruction.SetReturn64
-					    || node.Instruction == IRInstruction.SetReturnR4
-					    || node.Instruction == IRInstruction.SetReturnR8
-					    || node.Instruction == IRInstruction.SetReturnObject
-					    || node.Instruction == IRInstruction.LoadParamObject
-					    || node.Instruction == IRInstruction.LoadParam32
-					    || node.Instruction == IRInstruction.LoadParam64
-					    || node.Instruction == IRInstruction.LoadParamCompound
-					    || node.Instruction == IRInstruction.LoadParamR4
-					    || node.Instruction == IRInstruction.LoadParamR8
-					    || node.Instruction == IRInstruction.LoadParamSignExtend16x32
-					    || node.Instruction == IRInstruction.LoadParamSignExtend16x64
-					    || node.Instruction == IRInstruction.LoadParamSignExtend32x64
-					    || node.Instruction == IRInstruction.LoadParamSignExtend8x32
-					    || node.Instruction == IRInstruction.LoadParamSignExtend8x64
-					    || node.Instruction == IRInstruction.LoadParamZeroExtend16x32
-					    || node.Instruction == IRInstruction.LoadParamZeroExtend16x64
-					    || node.Instruction == IRInstruction.LoadParamZeroExtend32x64
-					    || node.Instruction == IRInstruction.LoadParamZeroExtend8x32
-					    || node.Instruction == IRInstruction.LoadParamZeroExtend8x64
+						|| node.Instruction == IRInstruction.SetReturn64
+						|| node.Instruction == IRInstruction.SetReturnR4
+						|| node.Instruction == IRInstruction.SetReturnR8
+						|| node.Instruction == IRInstruction.SetReturnObject
+						|| node.Instruction == IRInstruction.LoadParamObject
+						|| node.Instruction == IRInstruction.LoadParam32
+						|| node.Instruction == IRInstruction.LoadParam64
+						|| node.Instruction == IRInstruction.LoadParamCompound
+						|| node.Instruction == IRInstruction.LoadParamR4
+						|| node.Instruction == IRInstruction.LoadParamR8
+						|| node.Instruction == IRInstruction.LoadParamSignExtend16x32
+						|| node.Instruction == IRInstruction.LoadParamSignExtend16x64
+						|| node.Instruction == IRInstruction.LoadParamSignExtend32x64
+						|| node.Instruction == IRInstruction.LoadParamSignExtend8x32
+						|| node.Instruction == IRInstruction.LoadParamSignExtend8x64
+						|| node.Instruction == IRInstruction.LoadParamZeroExtend16x32
+						|| node.Instruction == IRInstruction.LoadParamZeroExtend16x64
+						|| node.Instruction == IRInstruction.LoadParamZeroExtend32x64
+						|| node.Instruction == IRInstruction.LoadParamZeroExtend8x32
+						|| node.Instruction == IRInstruction.LoadParamZeroExtend8x64
 
-					    //|| node.Instruction == IRInstruction.Epilogue
-					    //|| node.Instruction == IRInstruction.Prologue
-					    || node.Block.IsEpilogue
-					    || node.Block.IsPrologue
+						//|| node.Instruction == IRInstruction.Epilogue
+						//|| node.Instruction == IRInstruction.Prologue
+						|| node.Block.IsEpilogue
+						|| node.Block.IsPrologue
 					   )
 					{
 						totalStackParameterInstruction++;
@@ -231,9 +231,9 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 			return true;
 
 		if (method.DeclaringType.IsValueType
-		    && method.IsVirtual
-		    && !method.IsConstructor
-		    && !method.IsStatic)
+			&& method.IsVirtual
+			&& !method.IsConstructor
+			&& !method.IsStatic)
 			return true;
 
 		var returnType = methodData.Method.Signature.ReturnType;

@@ -28,8 +28,8 @@ public class PlugStage : BaseMethodCompilerStage
 					continue;
 
 				if (node.Instruction == IRInstruction.CallStatic
-				    || node.Instruction == IRInstruction.CallDirect
-				    || node.Instruction == IRInstruction.CallVirtual)
+					|| node.Instruction == IRInstruction.CallDirect
+					|| node.Instruction == IRInstruction.CallVirtual)
 				{
 					CheckForReplacement(node);
 				}

@@ -805,7 +805,7 @@ public abstract class BaseMethodCompilerStage
 			var entry = Method.ExceptionHandlers[i];
 
 			if (entry.ExceptionHandlerType != ExceptionHandlerType.Finally
-			    || !entry.IsLabelWithinTry(at))
+				|| !entry.IsLabelWithinTry(at))
 				continue;
 
 			return entry;
@@ -898,30 +898,30 @@ public abstract class BaseMethodCompilerStage
 	public static bool IsMoveInstruction(BaseInstruction instruction)
 	{
 		return instruction == IRInstruction.Move32
-		       || instruction == IRInstruction.Move64
-		       || instruction == IRInstruction.MoveObject
-		       || instruction == IRInstruction.MoveR8
-		       || instruction == IRInstruction.MoveR4;
+			   || instruction == IRInstruction.Move64
+			   || instruction == IRInstruction.MoveObject
+			   || instruction == IRInstruction.MoveR8
+			   || instruction == IRInstruction.MoveR4;
 	}
 
 	public static bool IsCompareInstruction(BaseInstruction instruction)
 	{
 		return instruction == IRInstruction.Compare32x32
-		       || instruction == IRInstruction.Compare32x64
-		       || instruction == IRInstruction.Compare64x32
-		       || instruction == IRInstruction.Compare64x64
-		       || instruction == IRInstruction.CompareObject
-		       || instruction == IRInstruction.CompareR4
-		       || instruction == IRInstruction.CompareR8;
+			   || instruction == IRInstruction.Compare32x64
+			   || instruction == IRInstruction.Compare64x32
+			   || instruction == IRInstruction.Compare64x64
+			   || instruction == IRInstruction.CompareObject
+			   || instruction == IRInstruction.CompareR4
+			   || instruction == IRInstruction.CompareR8;
 	}
 
 	public static bool IsPhiInstruction(BaseInstruction instruction)
 	{
 		return instruction == IRInstruction.Phi32
-		       || instruction == IRInstruction.Phi64
-		       || instruction == IRInstruction.PhiObject
-		       || instruction == IRInstruction.PhiR4
-		       || instruction == IRInstruction.PhiR8;
+			   || instruction == IRInstruction.Phi64
+			   || instruction == IRInstruction.PhiObject
+			   || instruction == IRInstruction.PhiR4
+			   || instruction == IRInstruction.PhiR8;
 	}
 
 	public static bool IsSSAForm(Operand operand)

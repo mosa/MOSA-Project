@@ -21,7 +21,7 @@ public class MosaMethodSignature : IEquatable<MosaMethodSignature>
 	public bool Equals(MosaMethodSignature? sig)
 	{
 		return SignatureComparer.Equals(ReturnType, sig?.ReturnType) &&
-		       Parameters.SequenceEquals(sig?.Parameters);
+			   Parameters.SequenceEquals(sig?.Parameters);
 	}
 
 	private string? sig;

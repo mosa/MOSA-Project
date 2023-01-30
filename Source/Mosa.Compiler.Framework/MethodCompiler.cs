@@ -763,10 +763,10 @@ public sealed class MethodCompiler
 			if (Is64BitPlatform)
 			{
 				if (underlyingType.IsPointer
-				    || underlyingType.IsFunctionPointer
-				    || underlyingType.IsN
-				    || underlyingType.IsManagedPointer
-				    || underlyingType.IsReferenceType)
+					|| underlyingType.IsFunctionPointer
+					|| underlyingType.IsN
+					|| underlyingType.IsManagedPointer
+					|| underlyingType.IsReferenceType)
 					is64Bit = true;
 			}
 		}
