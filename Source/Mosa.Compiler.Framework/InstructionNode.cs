@@ -670,13 +670,13 @@ public sealed class InstructionNode
 	/// <returns></returns>
 	public Operand GetOperand(int opIndex)
 	{
-		switch (opIndex)
+		return opIndex switch
 		{
-			case 0: return Operand1;
-			case 1: return Operand2;
-			case 2: return Operand3;
-			default: return GetAdditionalOperand(opIndex);
-		}
+			0 => Operand1,
+			1 => Operand2,
+			2 => Operand3,
+			_ => GetAdditionalOperand(opIndex)
+		};
 	}
 
 	/// <summary>
@@ -686,12 +686,12 @@ public sealed class InstructionNode
 	/// <returns></returns>
 	public Operand GetResult(int index)
 	{
-		switch (index)
+		return index switch
 		{
-			case 0: return Result;
-			case 1: return Result2;
-			default: throw new IndexOutOfRangeException();
-		}
+			0 => Result,
+			1 => Result2,
+			_ => throw new IndexOutOfRangeException()
+		};
 	}
 
 	/// <summary>

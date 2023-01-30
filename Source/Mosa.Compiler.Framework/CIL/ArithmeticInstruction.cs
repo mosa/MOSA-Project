@@ -94,12 +94,12 @@ public class ArithmeticInstruction : BinaryInstruction
 		var op1 = methodCompiler.Compiler.GetStackTypeCode(context.Operand1.Type);
 		var op2 = methodCompiler.Compiler.GetStackTypeCode(context.Operand2.Type);
 
-		switch (opcode)
+		result = opcode switch
 		{
-			case OpCode.Add: result = addTable[(int)op1][(int)op2]; break;
-			case OpCode.Sub: result = subTable[(int)op1][(int)op2]; break;
-			default: result = operandTable[(int)op1][(int)op2]; break;
-		}
+			OpCode.Add => addTable[(int)op1][(int)op2],
+			OpCode.Sub => subTable[(int)op1][(int)op2],
+			_ => operandTable[(int)op1][(int)op2]
+		};
 
 		if (result == StackTypeCode.Unknown)
 		{

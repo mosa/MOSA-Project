@@ -231,16 +231,16 @@ public static class VGAConsole
 
 	private static int GetParameter(int index)
 	{
-		switch (index)
+		return index switch
 		{
-			case 1: return Parameter1;
-			case 2: return Parameter2;
-			case 3: return Parameter3;
-			case 4: return Parameter4;
-			case 5: return Parameter5;
-			case 6: return Parameter6;
-			default: return 0;
-		}
+			1 => Parameter1,
+			2 => Parameter2,
+			3 => Parameter3,
+			4 => Parameter4,
+			5 => Parameter5,
+			6 => Parameter6,
+			_ => 0
+		};
 	}
 
 	public static void ClearControlSequences()

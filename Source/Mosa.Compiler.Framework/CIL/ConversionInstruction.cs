@@ -36,45 +36,44 @@ public sealed class ConversionInstruction : UnaryArithmeticInstruction
 		base.Resolve(context, methodCompiler);
 
 		// Validate the typecode & determine the resulting stack type
-		MosaType resultType;
 
-		switch (opcode)
+		MosaType resultType = opcode switch
 		{
-			case OpCode.Conv_u: resultType = methodCompiler.TypeSystem.BuiltIn.U; break;
-			case OpCode.Conv_i: resultType = methodCompiler.TypeSystem.BuiltIn.I; break;
-			case OpCode.Conv_i1: resultType = methodCompiler.TypeSystem.BuiltIn.I1; break;
-			case OpCode.Conv_i2: resultType = methodCompiler.TypeSystem.BuiltIn.I2; break;
-			case OpCode.Conv_i4: resultType = methodCompiler.TypeSystem.BuiltIn.I4; break;
-			case OpCode.Conv_i8: resultType = methodCompiler.TypeSystem.BuiltIn.I8; break;
-			case OpCode.Conv_r4: resultType = methodCompiler.TypeSystem.BuiltIn.R4; break;
-			case OpCode.Conv_r8: resultType = methodCompiler.TypeSystem.BuiltIn.R8; break;
-			case OpCode.Conv_u1: resultType = methodCompiler.TypeSystem.BuiltIn.U1; break;
-			case OpCode.Conv_u2: resultType = methodCompiler.TypeSystem.BuiltIn.U2; break;
-			case OpCode.Conv_u4: resultType = methodCompiler.TypeSystem.BuiltIn.U4; break;
-			case OpCode.Conv_u8: resultType = methodCompiler.TypeSystem.BuiltIn.U8; break;
-			case OpCode.Conv_ovf_u: resultType = methodCompiler.TypeSystem.BuiltIn.U; break;
-			case OpCode.Conv_ovf_i: resultType = methodCompiler.TypeSystem.BuiltIn.I; break;
-			case OpCode.Conv_ovf_i1: resultType = methodCompiler.TypeSystem.BuiltIn.I1; break;
-			case OpCode.Conv_ovf_i2: resultType = methodCompiler.TypeSystem.BuiltIn.I2; break;
-			case OpCode.Conv_ovf_i4: resultType = methodCompiler.TypeSystem.BuiltIn.I4; break;
-			case OpCode.Conv_ovf_i8: resultType = methodCompiler.TypeSystem.BuiltIn.I8; break;
-			case OpCode.Conv_ovf_u1: resultType = methodCompiler.TypeSystem.BuiltIn.U1; break;
-			case OpCode.Conv_ovf_u2: resultType = methodCompiler.TypeSystem.BuiltIn.U2; break;
-			case OpCode.Conv_ovf_u4: resultType = methodCompiler.TypeSystem.BuiltIn.U4; break;
-			case OpCode.Conv_ovf_u8: resultType = methodCompiler.TypeSystem.BuiltIn.U8; break;
-			case OpCode.Conv_ovf_u_un: resultType = methodCompiler.TypeSystem.BuiltIn.U; break;
-			case OpCode.Conv_ovf_i_un: resultType = methodCompiler.TypeSystem.BuiltIn.I; break;
-			case OpCode.Conv_ovf_i1_un: resultType = methodCompiler.TypeSystem.BuiltIn.I1; break;
-			case OpCode.Conv_ovf_i2_un: resultType = methodCompiler.TypeSystem.BuiltIn.I2; break;
-			case OpCode.Conv_ovf_i4_un: resultType = methodCompiler.TypeSystem.BuiltIn.I4; break;
-			case OpCode.Conv_ovf_i8_un: resultType = methodCompiler.TypeSystem.BuiltIn.I8; break;
-			case OpCode.Conv_ovf_u1_un: resultType = methodCompiler.TypeSystem.BuiltIn.U1; break;
-			case OpCode.Conv_ovf_u2_un: resultType = methodCompiler.TypeSystem.BuiltIn.U2; break;
-			case OpCode.Conv_ovf_u4_un: resultType = methodCompiler.TypeSystem.BuiltIn.U4; break;
-			case OpCode.Conv_ovf_u8_un: resultType = methodCompiler.TypeSystem.BuiltIn.U8; break;
-			case OpCode.Conv_r_un: resultType = methodCompiler.TypeSystem.BuiltIn.R8; break;
-			default: throw new CompilerException("Unknown conversion");
-		}
+			OpCode.Conv_u => methodCompiler.TypeSystem.BuiltIn.U,
+			OpCode.Conv_i => methodCompiler.TypeSystem.BuiltIn.I,
+			OpCode.Conv_i1 => methodCompiler.TypeSystem.BuiltIn.I1,
+			OpCode.Conv_i2 => methodCompiler.TypeSystem.BuiltIn.I2,
+			OpCode.Conv_i4 => methodCompiler.TypeSystem.BuiltIn.I4,
+			OpCode.Conv_i8 => methodCompiler.TypeSystem.BuiltIn.I8,
+			OpCode.Conv_r4 => methodCompiler.TypeSystem.BuiltIn.R4,
+			OpCode.Conv_r8 => methodCompiler.TypeSystem.BuiltIn.R8,
+			OpCode.Conv_u1 => methodCompiler.TypeSystem.BuiltIn.U1,
+			OpCode.Conv_u2 => methodCompiler.TypeSystem.BuiltIn.U2,
+			OpCode.Conv_u4 => methodCompiler.TypeSystem.BuiltIn.U4,
+			OpCode.Conv_u8 => methodCompiler.TypeSystem.BuiltIn.U8,
+			OpCode.Conv_ovf_u => methodCompiler.TypeSystem.BuiltIn.U,
+			OpCode.Conv_ovf_i => methodCompiler.TypeSystem.BuiltIn.I,
+			OpCode.Conv_ovf_i1 => methodCompiler.TypeSystem.BuiltIn.I1,
+			OpCode.Conv_ovf_i2 => methodCompiler.TypeSystem.BuiltIn.I2,
+			OpCode.Conv_ovf_i4 => methodCompiler.TypeSystem.BuiltIn.I4,
+			OpCode.Conv_ovf_i8 => methodCompiler.TypeSystem.BuiltIn.I8,
+			OpCode.Conv_ovf_u1 => methodCompiler.TypeSystem.BuiltIn.U1,
+			OpCode.Conv_ovf_u2 => methodCompiler.TypeSystem.BuiltIn.U2,
+			OpCode.Conv_ovf_u4 => methodCompiler.TypeSystem.BuiltIn.U4,
+			OpCode.Conv_ovf_u8 => methodCompiler.TypeSystem.BuiltIn.U8,
+			OpCode.Conv_ovf_u_un => methodCompiler.TypeSystem.BuiltIn.U,
+			OpCode.Conv_ovf_i_un => methodCompiler.TypeSystem.BuiltIn.I,
+			OpCode.Conv_ovf_i1_un => methodCompiler.TypeSystem.BuiltIn.I1,
+			OpCode.Conv_ovf_i2_un => methodCompiler.TypeSystem.BuiltIn.I2,
+			OpCode.Conv_ovf_i4_un => methodCompiler.TypeSystem.BuiltIn.I4,
+			OpCode.Conv_ovf_i8_un => methodCompiler.TypeSystem.BuiltIn.I8,
+			OpCode.Conv_ovf_u1_un => methodCompiler.TypeSystem.BuiltIn.U1,
+			OpCode.Conv_ovf_u2_un => methodCompiler.TypeSystem.BuiltIn.U2,
+			OpCode.Conv_ovf_u4_un => methodCompiler.TypeSystem.BuiltIn.U4,
+			OpCode.Conv_ovf_u8_un => methodCompiler.TypeSystem.BuiltIn.U8,
+			OpCode.Conv_r_un => methodCompiler.TypeSystem.BuiltIn.R8,
+			_ => throw new CompilerException("Unknown conversion")
+		};
 
 		var result = methodCompiler.Compiler.GetStackType(resultType);
 

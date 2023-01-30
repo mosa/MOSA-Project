@@ -1106,46 +1106,42 @@ public sealed class SparseConditionalConstantPropagation
 
 	private static bool? Compare32(uint operand1, uint operand2, ConditionCode conditionCode)
 	{
-		switch (conditionCode)
+		return conditionCode switch
 		{
-			case ConditionCode.Equal: return operand1 == operand2;
-			case ConditionCode.NotEqual: return operand1 != operand2;
-			case ConditionCode.GreaterOrEqual: return (int)operand1 >= (int)operand2;
-			case ConditionCode.Greater: return (int)operand1 > (int)operand2;
-			case ConditionCode.LessOrEqual: return (int)operand1 <= (int)operand2;
-			case ConditionCode.Less: return (int)operand1 < (int)operand2;
-			case ConditionCode.UnsignedGreaterOrEqual: return operand1 >= operand2;
-			case ConditionCode.UnsignedGreater: return operand1 > operand2;
-			case ConditionCode.UnsignedLessOrEqual: return operand1 <= operand2;
-			case ConditionCode.UnsignedLess: return operand1 < operand2;
-			case ConditionCode.Always: return true;
-			case ConditionCode.Never: return false;
-
-			// unknown integer comparison
-			default: return null;
-		}
+			ConditionCode.Equal => operand1 == operand2,
+			ConditionCode.NotEqual => operand1 != operand2,
+			ConditionCode.GreaterOrEqual => (int)operand1 >= (int)operand2,
+			ConditionCode.Greater => (int)operand1 > (int)operand2,
+			ConditionCode.LessOrEqual => (int)operand1 <= (int)operand2,
+			ConditionCode.Less => (int)operand1 < (int)operand2,
+			ConditionCode.UnsignedGreaterOrEqual => operand1 >= operand2,
+			ConditionCode.UnsignedGreater => operand1 > operand2,
+			ConditionCode.UnsignedLessOrEqual => operand1 <= operand2,
+			ConditionCode.UnsignedLess => operand1 < operand2,
+			ConditionCode.Always => true,
+			ConditionCode.Never => false,
+			_ => null
+		};
 	}
 
 	private static bool? Compare64(ulong operand1, ulong operand2, ConditionCode conditionCode)
 	{
-		switch (conditionCode)
+		return conditionCode switch
 		{
-			case ConditionCode.Equal: return operand1 == operand2;
-			case ConditionCode.NotEqual: return operand1 != operand2;
-			case ConditionCode.GreaterOrEqual: return (long)operand1 >= (long)operand2;
-			case ConditionCode.Greater: return (long)operand1 > (long)operand2;
-			case ConditionCode.LessOrEqual: return (long)operand1 <= (long)operand2;
-			case ConditionCode.Less: return (long)operand1 < (long)operand2;
-			case ConditionCode.UnsignedGreaterOrEqual: return operand1 >= operand2;
-			case ConditionCode.UnsignedGreater: return operand1 > operand2;
-			case ConditionCode.UnsignedLessOrEqual: return operand1 <= operand2;
-			case ConditionCode.UnsignedLess: return operand1 < operand2;
-			case ConditionCode.Always: return true;
-			case ConditionCode.Never: return false;
-
-			// unknown integer comparison
-			default: return null;
-		}
+			ConditionCode.Equal => operand1 == operand2,
+			ConditionCode.NotEqual => operand1 != operand2,
+			ConditionCode.GreaterOrEqual => (long)operand1 >= (long)operand2,
+			ConditionCode.Greater => (long)operand1 > (long)operand2,
+			ConditionCode.LessOrEqual => (long)operand1 <= (long)operand2,
+			ConditionCode.Less => (long)operand1 < (long)operand2,
+			ConditionCode.UnsignedGreaterOrEqual => operand1 >= operand2,
+			ConditionCode.UnsignedGreater => operand1 > operand2,
+			ConditionCode.UnsignedLessOrEqual => operand1 <= operand2,
+			ConditionCode.UnsignedLess => operand1 < operand2,
+			ConditionCode.Always => true,
+			ConditionCode.Never => false,
+			_ => null
+		};
 	}
 
 	private void Branch(InstructionNode node)

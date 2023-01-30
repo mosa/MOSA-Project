@@ -138,14 +138,14 @@ public class Starter : BaseLauncher
 
 	public Process LaunchVM()
 	{
-		switch (LauncherSettings.Emulator)
+		return LauncherSettings.Emulator switch
 		{
-			case "qemu": return LaunchQemu(false);
-			case "bochs": return LaunchBochs(false);
-			case "vmware": return LaunchVMware(false);
-			case "virtualbox": return LaunchVirtualBox(false);
-			default: throw new InvalidOperationException();
-		}
+			"qemu" => LaunchQemu(false),
+			"bochs" => LaunchBochs(false),
+			"vmware" => LaunchVMware(false),
+			"virtualbox" => LaunchVirtualBox(false),
+			_ => throw new InvalidOperationException()
+		};
 	}
 
 	private Process LaunchQemu(bool getOutput)

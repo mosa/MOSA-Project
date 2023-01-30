@@ -1085,12 +1085,13 @@ public partial class MainForm : Form
 
 		var platform = Settings.GetValue("Compiler.Platform") ?? "x86";
 
-		switch (platform.ToLowerInvariant())
+		cbPlatform.SelectedIndex = platform.ToLowerInvariant() switch
 		{
-			case "x86": cbPlatform.SelectedIndex = 0; break;
-			case "x64": cbPlatform.SelectedIndex = 1; break;
-			case "armv8a32": cbPlatform.SelectedIndex = 2; break;
-		}
+			"x86" => 0,
+			"x64" => 1,
+			"armv8a32" => 2,
+			_ => cbPlatform.SelectedIndex
+		};
 
 		cbCILDecoderStageV2Testing.Checked = Settings.GetValue("CompilerDebug.CILDecodingStageV2", cbEnableInline.Checked);
 	}

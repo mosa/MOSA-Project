@@ -98,25 +98,31 @@ public class DebugMessage
 
 	public override string ToString()
 	{
-		switch (Code)
+		return Code switch
 		{
-			case DebugCode.Connected: return "Connected";
-			case DebugCode.Connecting: return "Connecting";
-			case DebugCode.Disconnected: return "Disconnected";
-			case DebugCode.UnknownData: return "Unknown Data: " + System.Text.Encoding.UTF8.GetString(CreateByteArray(ResponseData));
-			case DebugCode.InformationalMessage: return "Informational Message: " + System.Text.Encoding.UTF8.GetString(CreateByteArray(ResponseData));
-			case DebugCode.ErrorMessage: return "Error Message: " + System.Text.Encoding.UTF8.GetString(CreateByteArray(ResponseData));
-			case DebugCode.WarningMessage: return "Warning Message: " + System.Text.Encoding.UTF8.GetString(CreateByteArray(ResponseData));
-			case DebugCode.Ping: return "Ping ACK";
-			case DebugCode.Alive: return "Alive";
-			case DebugCode.ReadCR3: return "ReadCR3";
-			case DebugCode.ReadMemory: return "ReadMemory";
-			case DebugCode.Scattered32BitReadMemory: return "Scattered32BitReadMemory";
-			case DebugCode.WriteMemory: return "WriteMemory";
-			case DebugCode.CompressedWriteMemory: return "CompressedWriteMemory";
-			case DebugCode.SendNumber: return "#: " + ((ResponseData[0] << 24) | (ResponseData[1] << 16) | (ResponseData[2] << 8) | ResponseData[3]).ToString();
-			default: return "Code: " + Code.ToString();
-		}
+			DebugCode.Connected => "Connected",
+			DebugCode.Connecting => "Connecting",
+			DebugCode.Disconnected => "Disconnected",
+			DebugCode.UnknownData => "Unknown Data: " +
+			                         System.Text.Encoding.UTF8.GetString(CreateByteArray(ResponseData)),
+			DebugCode.InformationalMessage => "Informational Message: " +
+			                                  System.Text.Encoding.UTF8.GetString(CreateByteArray(ResponseData)),
+			DebugCode.ErrorMessage => "Error Message: " +
+			                          System.Text.Encoding.UTF8.GetString(CreateByteArray(ResponseData)),
+			DebugCode.WarningMessage => "Warning Message: " +
+			                            System.Text.Encoding.UTF8.GetString(CreateByteArray(ResponseData)),
+			DebugCode.Ping => "Ping ACK",
+			DebugCode.Alive => "Alive",
+			DebugCode.ReadCR3 => "ReadCR3",
+			DebugCode.ReadMemory => "ReadMemory",
+			DebugCode.Scattered32BitReadMemory => "Scattered32BitReadMemory",
+			DebugCode.WriteMemory => "WriteMemory",
+			DebugCode.CompressedWriteMemory => "CompressedWriteMemory",
+			DebugCode.SendNumber => "#: " +
+			                        ((ResponseData[0] << 24) | (ResponseData[1] << 16) | (ResponseData[2] << 8) |
+			                         ResponseData[3]).ToString(),
+			_ => "Code: " + Code.ToString()
+		};
 	}
 
 	private static byte[] CreateByteArray(List<byte> data)

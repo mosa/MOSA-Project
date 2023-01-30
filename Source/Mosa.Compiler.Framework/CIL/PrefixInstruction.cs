@@ -20,17 +20,16 @@ public class PrefixInstruction : BaseCILInstruction
 	{
 		get
 		{
-			switch (OpCode)
+			return OpCode switch
 			{
-				case OpCode.Constrained: return Prefix.Constrained;
-				case OpCode.No: return Prefix.No;
-				case OpCode.ReadOnly: return Prefix.ReadOnly;
-				case OpCode.Tailcall: return Prefix.Tail;
-				case OpCode.Unaligned: return Prefix.Unaligned;
-				case OpCode.Volatile: return Prefix.Volatile;
-				default:
-					throw new InvalidOperationException("Unknown prefix instruction codeReader.");
-			}
+				OpCode.Constrained => Prefix.Constrained,
+				OpCode.No => Prefix.No,
+				OpCode.ReadOnly => Prefix.ReadOnly,
+				OpCode.Tailcall => Prefix.Tail,
+				OpCode.Unaligned => Prefix.Unaligned,
+				OpCode.Volatile => Prefix.Volatile,
+				_ => throw new InvalidOperationException("Unknown prefix instruction codeReader.")
+			};
 		}
 	}
 

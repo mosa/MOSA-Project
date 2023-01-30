@@ -22,21 +22,21 @@ public sealed class LdelemInstruction : BinaryInstruction
 	public LdelemInstruction(OpCode opcode)
 		: base(opcode, 1)
 	{
-		switch (opcode)
+		elementType = opcode switch
 		{
-			case OpCode.Ldelem_i1: elementType = MosaTypeCode.I1; break;
-			case OpCode.Ldelem_i2: elementType = MosaTypeCode.I2; break;
-			case OpCode.Ldelem_i4: elementType = MosaTypeCode.I4; break;
-			case OpCode.Ldelem_i8: elementType = MosaTypeCode.I8; break;
-			case OpCode.Ldelem_u1: elementType = MosaTypeCode.U1; break;
-			case OpCode.Ldelem_u2: elementType = MosaTypeCode.U2; break;
-			case OpCode.Ldelem_u4: elementType = MosaTypeCode.U4; break;
-			case OpCode.Ldelem_i: elementType = MosaTypeCode.I; break;
-			case OpCode.Ldelem_r4: elementType = MosaTypeCode.R4; break;
-			case OpCode.Ldelem_r8: elementType = MosaTypeCode.R8; break;
-			case OpCode.Ldelem_ref: elementType = MosaTypeCode.Object; break;
-			default: elementType = null; break;
-		}
+			OpCode.Ldelem_i1 => MosaTypeCode.I1,
+			OpCode.Ldelem_i2 => MosaTypeCode.I2,
+			OpCode.Ldelem_i4 => MosaTypeCode.I4,
+			OpCode.Ldelem_i8 => MosaTypeCode.I8,
+			OpCode.Ldelem_u1 => MosaTypeCode.U1,
+			OpCode.Ldelem_u2 => MosaTypeCode.U2,
+			OpCode.Ldelem_u4 => MosaTypeCode.U4,
+			OpCode.Ldelem_i => MosaTypeCode.I,
+			OpCode.Ldelem_r4 => MosaTypeCode.R4,
+			OpCode.Ldelem_r8 => MosaTypeCode.R8,
+			OpCode.Ldelem_ref => MosaTypeCode.Object,
+			_ => null
+		};
 	}
 
 	/// <summary>
