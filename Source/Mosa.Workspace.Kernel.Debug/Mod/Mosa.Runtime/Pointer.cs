@@ -15,7 +15,7 @@ public struct Pointer
 		get { return new Pointer(0); }
 	}
 
-	public unsafe static int Size
+	public static unsafe int Size
 	{
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		get { return sizeof(void*); }
@@ -69,7 +69,7 @@ public struct Pointer
 		this.value = value;
 	}
 
-	public unsafe override bool Equals(Object obj)
+	public override unsafe bool Equals(Object obj)
 	{
 		if (obj is Pointer)
 		{
@@ -79,7 +79,7 @@ public struct Pointer
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public unsafe override int GetHashCode()
+	public override unsafe int GetHashCode()
 	{
 		return (int)value;
 	}
@@ -264,7 +264,7 @@ public struct Pointer
 		return value;
 	}
 
-	public unsafe override string ToString()
+	public override unsafe string ToString()
 	{
 		return ((long)value).ToString();
 	}

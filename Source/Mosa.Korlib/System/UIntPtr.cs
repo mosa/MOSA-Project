@@ -33,7 +33,7 @@ public struct UIntPtr
 		_value = value;
 	}
 
-	public unsafe override bool Equals(Object obj)
+	public override unsafe bool Equals(Object obj)
 	{
 		if (obj is UIntPtr)
 		{
@@ -42,7 +42,7 @@ public struct UIntPtr
 		return false;
 	}
 
-	public unsafe override int GetHashCode()
+	public override unsafe int GetHashCode()
 	{
 		return ((int)_value);
 	}
@@ -146,7 +146,7 @@ public struct UIntPtr
 		return _value;
 	}
 
-	public unsafe override string ToString()
+	public override unsafe string ToString()
 	{
 		return ((long)_value).ToString();
 	}

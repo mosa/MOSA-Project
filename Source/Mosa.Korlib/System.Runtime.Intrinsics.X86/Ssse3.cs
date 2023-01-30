@@ -16,14 +16,14 @@ public abstract class Ssse3 : Sse3
 	internal Ssse3()
 	{ }
 
-	public new static bool IsSupported { get => IsSupported; }
+	public static new bool IsSupported { get => IsSupported; }
 
 	[Intrinsic]
-	public abstract new class X64 : Sse3.X64
+	public new abstract class X64 : Sse3.X64
 	{
 		internal X64()
 		{ }
 
-		public new static bool IsSupported { get => IsSupported; }
+		public static new bool IsSupported { get => IsSupported; }
 	}
 }

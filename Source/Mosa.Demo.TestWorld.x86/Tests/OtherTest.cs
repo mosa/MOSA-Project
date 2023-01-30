@@ -280,7 +280,7 @@ public class OtherTest : KernelTest
 		return ForeachU1() == 10;
 	}
 
-	unsafe public static class PointerBugClass
+	public static unsafe class PointerBugClass
 	{
 		private const uint pageDirectoryAddress = 0x1000;
 		private static PageDirectoryEntry* pageDirectoryEntries;
@@ -308,7 +308,7 @@ public class OtherTest : KernelTest
 		}
 
 		[StructLayout(LayoutKind.Explicit)]
-		unsafe public struct PageDirectoryEntry
+		public unsafe struct PageDirectoryEntry
 		{
 			[FieldOffset(0)]
 			private readonly uint data;

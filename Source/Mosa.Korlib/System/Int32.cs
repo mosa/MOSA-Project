@@ -57,7 +57,7 @@ public struct Int32: IComparable, IComparable<int>, IEquatable<int>
 		return CreateString((uint)m_value, false, true);
 	}
 
-	unsafe internal static string CreateString(uint value, bool signed, bool hex)
+	internal static unsafe string CreateString(uint value, bool signed, bool hex)
 	{
 		int offset = 0;
 

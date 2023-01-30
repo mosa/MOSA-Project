@@ -42,7 +42,7 @@ public class MosaProperty : MosaUnit, IEquatable<MosaProperty>
 	{
 	}
 
-	override internal MosaProperty Clone()
+	internal override MosaProperty Clone()
 	{
 		return (MosaProperty)base.Clone();
 	}
