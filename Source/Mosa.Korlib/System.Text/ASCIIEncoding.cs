@@ -10,7 +10,7 @@ public class ASCIIEncoding : Encoding
 	public string CharacterSet { get; } = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
 
 	// Decode a buffer of bytes into a string.
-	public override unsafe string GetString(byte[] bytes, int byteIndex, int count)
+	public unsafe override string GetString(byte[] bytes, int byteIndex, int count)
 	{
 		if (count == 0)
 			return String.Empty;

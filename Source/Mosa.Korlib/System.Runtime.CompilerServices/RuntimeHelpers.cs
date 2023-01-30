@@ -14,7 +14,7 @@ public static class RuntimeHelpers
 	public static extern int GetHashCode(object o);
 
 	[MethodImpl(MethodImplOptions.InternalCall)]
-	public static extern new bool Equals(object o1, object o2);
+	public new static extern bool Equals(object o1, object o2);
 
 	[MethodImpl(MethodImplOptions.InternalCall)]
 	internal static extern T UnsafeCast<T>(object o) where T : class;

@@ -441,7 +441,7 @@ public static partial class Contract
 	[CLSCompliant(false)]
 	[Pure]
 	[ContractRuntimeIgnored]
-	public static unsafe ulong WritableBytes(void* startAddress) { return MaxWritableExtent - (ulong)startAddress; }
+	unsafe public static ulong WritableBytes(void* startAddress) { return MaxWritableExtent - (ulong)startAddress; }
 
 	[CLSCompliant(false)]
 	[Pure]

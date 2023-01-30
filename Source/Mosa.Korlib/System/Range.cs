@@ -53,7 +53,7 @@ public readonly struct Range : IEquatable<Range>
 	}
 
 	/// <summary>Converts the value of the current Range object to its equivalent string representation.</summary>
-	public override unsafe string ToString()
+	public unsafe override string ToString()
 	{
 		return Start.ToString() + ".." + End.ToString();
 	}

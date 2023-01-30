@@ -38,7 +38,7 @@ public struct IntPtr
 		_value = value;
 	}
 
-	public override unsafe bool Equals(Object obj)
+	public unsafe override bool Equals(Object obj)
 	{
 		if (obj is IntPtr)
 		{
@@ -47,7 +47,7 @@ public struct IntPtr
 		return false;
 	}
 
-	public override unsafe int GetHashCode()
+	public unsafe override int GetHashCode()
 	{
 		return ((int)_value);
 	}
@@ -148,7 +148,7 @@ public struct IntPtr
 		return new IntPtr((long)pointer._value - offset);
 	}
 
-	public static unsafe int Size
+	public unsafe static int Size
 	{
 		[NonVersionable]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -165,7 +165,7 @@ public struct IntPtr
 		return _value;
 	}
 
-	public override unsafe string ToString()
+	public unsafe override string ToString()
 	{
 		return ((long)_value).ToString();
 	}

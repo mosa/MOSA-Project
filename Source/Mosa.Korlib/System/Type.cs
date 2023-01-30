@@ -212,7 +212,7 @@ public abstract class Type
 	/// <param name="throwOnError">True to throw an exception if the type cannot be found; False to return null. Specifying False also suppresses some other exception conditions, but not all of them.</param>
 	/// <returns>The type with the specified name. If the type is not found, the throwOnError parameter specifies whether null is returned or an exception is thrown. In some cases, an exception is thrown regardless of the value of throwOnError.</returns>
 	[MethodImpl(MethodImplOptions.InternalCall)]
-	public static extern Type GetType(string typeName, bool throwOnError);
+	public extern static Type GetType(string typeName, bool throwOnError);
 
 	/// <summary>
 	/// Gets the type referenced by the specified type handle.
@@ -220,7 +220,7 @@ public abstract class Type
 	/// <param name="handle">The object that refers to the type.</param>
 	/// <returns></returns>
 	[MethodImpl(MethodImplOptions.InternalCall)]
-	public static extern Type GetTypeFromHandle(RuntimeTypeHandle handle);
+	public extern static Type GetTypeFromHandle(RuntimeTypeHandle handle);
 
 	/// <summary>
 	/// When overridden in a derived class, implements the HasElementType property and determines whether the current Type encompasses or refers to another type; that is, whether the current Type is an array, a pointer, or is passed by reference.

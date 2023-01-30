@@ -75,10 +75,10 @@ public sealed class String : IEnumerable, IEnumerable<char>, IEquatable<String>,
 	//public unsafe extern String(sbyte* value, int startIndex, int length, Encoding enc);
 
 	[MethodImpl(MethodImplOptions.InternalCall)]
-	public extern unsafe String(char* value);
+	public unsafe extern String(char* value);
 
 	[MethodImpl(MethodImplOptions.InternalCall)]
-	public extern unsafe String(char* value, int startIndex, int length);
+	public unsafe extern String(char* value, int startIndex, int length);
 
 	[MethodImpl(MethodImplOptions.InternalCall)]
 	internal static extern string InternalAllocateString(int length);
@@ -467,7 +467,7 @@ public sealed class String : IEnumerable, IEnumerable<char>, IEquatable<String>,
 	}
 
 	// TODO: Seems some compiler bugs prevent the original algorithms from working...
-	public static unsafe string Concat(string a, string b)
+	public unsafe static string Concat(string a, string b)
 	{
 		string result = InternalAllocateString(a.length + b.length);
 		char* chars = result.first_char;
@@ -488,7 +488,7 @@ public sealed class String : IEnumerable, IEnumerable<char>, IEquatable<String>,
 		return result;
 	}
 
-	public static unsafe string Concat(string a, string b, string c)
+	public unsafe static string Concat(string a, string b, string c)
 	{
 		string result = InternalAllocateString(a.length + b.length + c.length);
 		char* chars = result.first_char;
@@ -515,7 +515,7 @@ public sealed class String : IEnumerable, IEnumerable<char>, IEquatable<String>,
 		return result;
 	}
 
-	public static unsafe string Concat(string a, string b, string c, string d)
+	public unsafe static string Concat(string a, string b, string c, string d)
 	{
 		string result = InternalAllocateString(a.length + b.length + c.length + d.length);
 		char* chars = result.first_char;
