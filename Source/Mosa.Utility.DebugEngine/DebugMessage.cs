@@ -120,8 +120,8 @@ public class DebugMessage
 			DebugCode.CompressedWriteMemory => "CompressedWriteMemory",
 			DebugCode.SendNumber => "#: " +
 			                        ((ResponseData[0] << 24) | (ResponseData[1] << 16) | (ResponseData[2] << 8) |
-			                         ResponseData[3]).ToString(),
-			_ => "Code: " + Code.ToString()
+			                         ResponseData[3]),
+			_ => "Code: " + Code
 		};
 	}
 

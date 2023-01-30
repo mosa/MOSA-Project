@@ -17,7 +17,7 @@ public class ShowPCI : BaseApplication, IConsoleApp
 
 		Console.Write("> Probing for PCI devices...");
 		var devices = deviceService.GetDevices<PCIDevice>();
-		Console.WriteLine("[Completed: " + devices.Count.ToString() + " found]");
+		Console.WriteLine("[Completed: " + devices.Count + " found]");
 
 		foreach (var device in devices)
 		{

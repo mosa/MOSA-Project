@@ -885,7 +885,7 @@ public sealed class InstructionNode
 					sb.Append(", ");
 				}
 
-				sb.Append(BranchTargets[i].ToString());
+				sb.Append(BranchTargets[i]);
 			}
 
 			if (BranchTargetsCount > 2)

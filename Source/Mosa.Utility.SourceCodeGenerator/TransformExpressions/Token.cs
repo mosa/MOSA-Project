@@ -48,6 +48,6 @@ public class Token
 
 	public override string ToString()
 	{
-		return TokenType.ToString() + (Value != null ? " = " + Value : string.Empty);
+		return TokenType + (Value != null ? " = " + Value : string.Empty);
 	}
 }

@@ -57,7 +57,7 @@ public class PartitionDeviceDriver : BaseDeviceDriver, IPartitionDevice
 		if (StartBlock == 0)
 			Device.Name = Device.Parent.Name + "/Raw";
 		else
-			Device.Name = Device.Parent.Name + "/Partition" + (configuration.Index + 1).ToString();
+			Device.Name = Device.Parent.Name + "/Partition" + (configuration.Index + 1);
 	}
 
 	public override void Probe() => Device.Status = DeviceStatus.Available;

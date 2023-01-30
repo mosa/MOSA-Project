@@ -48,7 +48,7 @@ public class DiskDeviceDriver : BaseDeviceDriver, IDiskDevice
 		readOnly = configuration.ReadOnly;
 
 		Device.ComponentID = DriveNbr;
-		Device.Name = Device.Parent.Name + "/Disk" + DriveNbr.ToString();
+		Device.Name = Device.Parent.Name + "/Disk" + DriveNbr;
 
 		diskController = Device.Parent.DeviceDriver as IDiskControllerDevice;
 
