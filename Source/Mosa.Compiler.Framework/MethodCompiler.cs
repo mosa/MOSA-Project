@@ -461,10 +461,12 @@ public sealed class MethodCompiler
 		}
 		catch (Exception exception)
 		{
-			Compiler.PostEvent(CompilerEvent.Exception, $"Method: {Method} -> {exception}");
+			Compiler.PostEvent(CompilerEvent.Exception, $"Method: {Method} -> {exception.Message}");
 
 			var exceptionLog = new TraceLog(TraceType.MethodDebug, Method, "Exception", MethodData.Version);
 
+			exceptionLog.Log(exception.Message);
+			exceptionLog.Log("");
 			exceptionLog.Log(exception.ToString());
 
 			Compiler.PostTraceLog(exceptionLog);

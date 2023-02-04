@@ -225,7 +225,7 @@ public sealed class Compiler
 
 			//new PreciseGCStage(),
 
-			new CodeGenerationStage(compilerSettings.EmitBinary),
+			new CodeGenerationStage(),
 			(compilerSettings.EmitBinary) ? new ProtectedRegionLayoutStage() : null,
 		};
 	}
@@ -513,12 +513,29 @@ public sealed class Compiler
 	{
 		PostEvent(CompilerEvent.FinalizationStart);
 
-		foreach (BaseCompilerStage stage in CompilerPipeline)
+		foreach (var stage in CompilerPipeline)
 		{
 			PostEvent(CompilerEvent.FinalizationStageStart, stage.Name);
 
-			// Execute stage
-			stage.ExecuteFinalization();
+			try
+			{
+				// Execute stage
+				stage.ExecuteFinalization();
+			}
+			catch (Exception exception)
+			{
+				PostEvent(CompilerEvent.Exception, $"Stage: {stage.Name} -> {exception.Message}");
+
+				var exceptionLog = new TraceLog(TraceType.GlobalDebug, null, stage.Name, "Exception");
+
+				exceptionLog.Log(exception.Message);
+				exceptionLog.Log("");
+				exceptionLog.Log(exception.ToString());
+
+				PostTraceLog(exceptionLog);
+
+				//Stop();
+			}
 
 			PostEvent(CompilerEvent.FinalizationStageEnd, stage.Name);
 		}
