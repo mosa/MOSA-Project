@@ -14,13 +14,13 @@ internal static class RuntimeHelpersPlug
 	internal static int ObjectSequence = 0;
 
 	[Plug("System.Runtime.CompilerServices.RuntimeHelpers::GetHashCode")]
-	internal unsafe static int GetHashCode(object o)
+	internal static unsafe int GetHashCode(object o)
 	{
 		return (int)Mosa.Runtime.Internal.GetObjectHashValue(o);
 	}
 
 	[Plug("System.Runtime.CompilerServices.RuntimeHelpers::Equals")]
-	internal new static bool Equals(object o1, object o2)
+	internal static new bool Equals(object o1, object o2)
 	{
 		// For now just compare the object locations
 		return o1 == o2;
@@ -40,7 +40,7 @@ internal static class RuntimeHelpersPlug
 	}
 
 	[Plug("System.Runtime.CompilerServices.RuntimeHelpers::UnsafeCast")]
-	internal unsafe static object UnsafeCast(object o)
+	internal static unsafe object UnsafeCast(object o)
 	{
 		return o;
 	}

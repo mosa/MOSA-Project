@@ -124,8 +124,8 @@ internal class Program
 			fatFileStream.Write(includeFile.Content, 0, includeFile.Content.Length);
 			fatFileStream.Flush();
 
-			Console.WriteLine("  Source Length: " + includeFile.Content.Length.ToString());
-			Console.WriteLine("  Stream Length: " + fatFileStream.Length.ToString());
+			Console.WriteLine("  Source Length: " + includeFile.Content.Length);
+			Console.WriteLine("  Stream Length: " + fatFileStream.Length);
 		}
 
 		foreach (var includeFile in files)
@@ -139,7 +139,7 @@ internal class Program
 				Console.WriteLine("  Found: " + includeFile.Filename);
 
 				var fatFileStream = new FatFileStream(fat, location);
-				Console.WriteLine("  Length: " + fatFileStream.Length.ToString());
+				Console.WriteLine("  Length: " + fatFileStream.Length);
 
 				for (; ; )
 				{

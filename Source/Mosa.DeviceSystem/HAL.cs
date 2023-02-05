@@ -12,7 +12,7 @@ public static class HAL
 	/// <summary>
 	/// The hardware abstraction
 	/// </summary>
-	static private BaseHardwareAbstraction hardwareAbstraction;
+	private static BaseHardwareAbstraction hardwareAbstraction;
 
 	/// <summary>
 	/// Interrupt Delegate
@@ -20,7 +20,7 @@ public static class HAL
 	/// <param name="irq">The irq.</param>
 	public delegate void HandleInterrupt(byte irq);
 
-	static private HandleInterrupt handleInterrupt;
+	private static HandleInterrupt handleInterrupt;
 
 	/// <summary>
 	/// Sets the hardware abstraction.

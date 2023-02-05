@@ -33,7 +33,7 @@ public abstract class MosaUnit
 		Name = "";
 	}
 
-	virtual internal MosaUnit Clone()
+	internal virtual MosaUnit Clone()
 	{
 		var result = (MosaUnit)base.MemberwiseClone();
 

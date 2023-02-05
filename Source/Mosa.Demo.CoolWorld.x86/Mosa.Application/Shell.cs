@@ -63,15 +63,15 @@ public class Shell : BaseApplication, IConsoleApp
 
 	public static IConsoleApp AppFactory(string name)
 	{
-		switch (name)
+		return name switch
 		{
-			case "clear": return new Clear();
-			case "mem": return new Mem();
-			case "showpci": return new ShowPCI();
-			case "credits": return new Credits();
-			case "shutdown": return new Shutdown();
-			case "reboot": return new Reboot();
-			default: return null;
-		}
+			"clear" => new Clear(),
+			"mem" => new Mem(),
+			"showpci" => new ShowPCI(),
+			"credits" => new Credits(),
+			"shutdown" => new Shutdown(),
+			"reboot" => new Reboot(),
+			_ => null
+		};
 	}
 }

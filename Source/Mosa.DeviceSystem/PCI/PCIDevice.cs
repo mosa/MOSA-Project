@@ -201,7 +201,7 @@ public class PCIDevice : BaseDeviceDriver, IPCIDevice, IPCIDeviceResource
 		Slot = configuration.Slot;
 		Function = configuration.Function;
 
-		base.Device.Name = base.Device.Parent.Name + '/' + Bus.ToString() + '.' + Slot.ToString() + '.' + Function.ToString();
+		base.Device.Name = base.Device.Parent.Name + '/' + Bus + '.' + Slot + '.' + Function;
 
 		ioPortRegionCount = memoryRegionCount = 0;
 		BaseAddresses = new BaseAddress[8];

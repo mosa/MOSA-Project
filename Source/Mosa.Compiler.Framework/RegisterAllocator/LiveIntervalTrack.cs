@@ -85,12 +85,12 @@ public sealed class LiveIntervalTrack
 	{
 		var sb = new StringBuilder();
 
-		sb.Append(Register.ToString());
+		sb.Append(Register);
 		sb.Append(' ');
 
 		foreach (var interval in intervals)
 		{
-			sb.Append(interval.ToString());
+			sb.Append(interval);
 			sb.Append(", ");
 		}
 

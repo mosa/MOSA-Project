@@ -44,7 +44,7 @@ public static class VHD
 	/// <param name="guid">The GUID.</param>
 	/// <param name="diskGeometry">The disk geometry.</param>
 	/// <returns></returns>
-	static public byte[] CreateFooter(ulong blocks, uint timeStamp, byte[] guid, DiskGeometry diskGeometry)
+	public static byte[] CreateFooter(ulong blocks, uint timeStamp, byte[] guid, DiskGeometry diskGeometry)
 	{
 		var binaryFooter = new DataBlock(512);
 
@@ -81,7 +81,7 @@ public static class VHD
 	/// </summary>
 	/// <param name="size">The size.</param>
 	/// <returns></returns>
-	static private ulong GetAlignedSize(ulong size)
+	private static ulong GetAlignedSize(ulong size)
 	{
 		return (size + 511) & ~((ulong)511);
 	}
@@ -91,7 +91,7 @@ public static class VHD
 	/// </summary>
 	/// <param name="size">The size.</param>
 	/// <returns></returns>
-	static public uint GetAlignmentPadding(ulong size)
+	public static uint GetAlignmentPadding(ulong size)
 	{
 		return (uint)(GetAlignedSize(size) - size);
 	}

@@ -115,6 +115,6 @@ public sealed class LinkerSymbol
 
 	public override string ToString()
 	{
-		return SectionKind.ToString() + ": " + Name;
+		return SectionKind + ": " + Name;
 	}
 }

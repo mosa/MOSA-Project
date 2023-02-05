@@ -232,26 +232,24 @@ public sealed class MosaLinker
 
 	private static byte GetPatchTypeSize(PatchType patchType)
 	{
-		switch (patchType)
+		return patchType switch
 		{
-			case PatchType.I32: return 32;
-			case PatchType.I64: return 64;
-			case PatchType.I24o8: return 24;
-		}
-
-		throw new CompilerException($"unknown patch type: {patchType}");
+			PatchType.I32 => 32,
+			PatchType.I64 => 64,
+			PatchType.I24o8 => 24,
+			_ => throw new CompilerException($"unknown patch type: {patchType}")
+		};
 	}
 
 	private static byte GetPatchTypeShift(PatchType patchType)
 	{
-		switch (patchType)
+		return patchType switch
 		{
-			case PatchType.I32: return 0;
-			case PatchType.I64: return 0;
-			case PatchType.I24o8: return 8;
-		}
-
-		throw new CompilerException($"unknown patch type: {patchType}");
+			PatchType.I32 => 0,
+			PatchType.I64 => 0,
+			PatchType.I24o8 => 8,
+			_ => throw new CompilerException($"unknown patch type: {patchType}")
+		};
 	}
 
 	private uint ResolveSymbolLocation(SectionKind section, ulong VirtualAddress)

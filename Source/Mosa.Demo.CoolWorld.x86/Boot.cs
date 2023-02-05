@@ -103,7 +103,7 @@ public static class Boot
 
 		Console.Write("> Probing for ISA devices...");
 		var isaDevices = DeviceService.GetChildrenOf(DeviceService.GetFirstDevice<ISABus>());
-		Console.WriteLine("[Completed: " + isaDevices.Count.ToString() + " found]");
+		Console.WriteLine("[Completed: " + isaDevices.Count + " found]");
 
 		foreach (var device in isaDevices)
 		{
@@ -116,7 +116,7 @@ public static class Boot
 
 		Console.Write("> Probing for PCI devices...");
 		var devices = DeviceService.GetDevices<PCIDevice>();
-		Console.WriteLine("[Completed: " + devices.Count.ToString() + " found]");
+		Console.WriteLine("[Completed: " + devices.Count + " found]");
 
 		foreach (var device in devices)
 		{
@@ -145,7 +145,7 @@ public static class Boot
 
 		Console.Write("> Probing for disk controllers...");
 		var diskcontrollers = DeviceService.GetDevices<IDiskControllerDevice>();
-		Console.WriteLine("[Completed: " + diskcontrollers.Count.ToString() + " found]");
+		Console.WriteLine("[Completed: " + diskcontrollers.Count + " found]");
 
 		foreach (var device in diskcontrollers)
 		{
@@ -158,7 +158,7 @@ public static class Boot
 
 		Console.Write("> Probing for disks...");
 		var disks = DeviceService.GetDevices<IDiskDevice>();
-		Console.WriteLine("[Completed: " + disks.Count.ToString() + " found]");
+		Console.WriteLine("[Completed: " + disks.Count + " found]");
 
 		foreach (var disk in disks)
 		{
@@ -166,7 +166,7 @@ public static class Boot
 			Bullet(ScreenColor.Yellow);
 			Console.Write(" ");
 			InBrackets(disk.Name, ScreenColor.White, ScreenColor.Green);
-			Console.Write(" " + (disk.DeviceDriver as IDiskDevice).TotalBlocks.ToString() + " blocks");
+			Console.Write(" " + (disk.DeviceDriver as IDiskDevice).TotalBlocks + " blocks");
 			Console.WriteLine();
 		}
 
@@ -174,7 +174,7 @@ public static class Boot
 
 		Console.Write("> Finding partitions...");
 		var partitions = DeviceService.GetDevices<IPartitionDevice>();
-		Console.WriteLine("[Completed: " + partitions.Count.ToString() + " found]");
+		Console.WriteLine("[Completed: " + partitions.Count + " found]");
 
 		//foreach (var partition in partitions)
 		//{
@@ -208,7 +208,7 @@ public static class Boot
 
 					uint len = (uint)fatFileStream.Length;
 
-					Console.WriteLine(" - Length: " + len.ToString() + " bytes");
+					Console.WriteLine(" - Length: " + len + " bytes");
 
 					Console.Write("Reading File: ");
 
@@ -237,7 +237,7 @@ public static class Boot
 
 					uint len = (uint)fatFileStream.Length;
 
-					Console.WriteLine(" - Length: " + len.ToString() + " bytes");
+					Console.WriteLine(" - Length: " + len + " bytes");
 					Console.WriteLine();
 				}
 			}

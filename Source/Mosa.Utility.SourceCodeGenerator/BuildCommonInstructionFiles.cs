@@ -599,9 +599,9 @@ public class BuildCommonInstructionFiles : BuildBaseTemplate
 					case "0": cond1 = ".IsConstantZero"; break;
 					case "one":
 					case "1": cond1 = ".IsConstantOne"; break;
-					case "constant_imm8": cond1 = ".IsConstant"; cond2 = ".ConstantSigned32 >= " + sbyte.MinValue.ToString(); cond3 = ".ConstantSigned32 <= " + sbyte.MaxValue.ToString(); break;
-					case "constant_imm16": cond1 = ".IsConstant"; cond2 = ".ConstantSigned32 >= " + short.MinValue.ToString(); cond3 = ".ConstantSigned32 <= " + short.MaxValue.ToString(); break;
-					case "constant_imm32": cond1 = ".IsConstant"; cond2 = ".ConstantSigned32 >= " + int.MinValue.ToString(); cond3 = ".ConstantSigned32 <= " + int.MaxValue.ToString(); break;
+					case "constant_imm8": cond1 = ".IsConstant"; cond2 = ".ConstantSigned32 >= " + sbyte.MinValue; cond3 = ".ConstantSigned32 <= " + sbyte.MaxValue; break;
+					case "constant_imm16": cond1 = ".IsConstant"; cond2 = ".ConstantSigned32 >= " + short.MinValue; cond3 = ".ConstantSigned32 <= " + short.MaxValue; break;
+					case "constant_imm32": cond1 = ".IsConstant"; cond2 = ".ConstantSigned32 >= " + int.MinValue; cond3 = ".ConstantSigned32 <= " + int.MaxValue; break;
 				}
 
 				string subexpression = $"node.{operand}{cond1}";
@@ -863,7 +863,7 @@ public class BuildCommonInstructionFiles : BuildBaseTemplate
 				}
 				else
 				{
-					postcode = ".Register.RegisterCode >> " + start.ToString() + ") & 0x" + "111111111111111111111111111111".Substring(0, length);
+					postcode = ".Register.RegisterCode >> " + start + ") & 0x" + "111111111111111111111111111111".Substring(0, length);
 				}
 
 				switch (length)
@@ -876,7 +876,7 @@ public class BuildCommonInstructionFiles : BuildBaseTemplate
 					case 6: code = "Append6Bits("; break;
 					case 7: code = "Append7Bits("; break;
 					case 8: code = "Append8Bits("; break;
-					default: code = "AppendBits("; postcode += ", " + length.ToString(); break;
+					default: code = "AppendBits("; postcode += ", " + length; break;
 				}
 
 				return;

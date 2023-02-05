@@ -12,7 +12,7 @@ public static class Native
 	#region Intrinsic
 
 	[DllImport("Mosa.Platform.ARMv8A32.Intrinsic::Nop")]
-	public extern static void Nop();
+	public static extern void Nop();
 
 	#endregion Intrinsic
 }

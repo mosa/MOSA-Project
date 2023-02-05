@@ -83,7 +83,7 @@ public sealed class ProtectedRegionLayoutStage : BaseMethodCompilerStage
 
 				sectioncount++;
 
-				var name = Metadata.ProtectedRegionTable + Method.FullName + "$" + sectioncount.ToString();
+				var name = Metadata.ProtectedRegionTable + Method.FullName + "$" + sectioncount;
 				var protectedRegionDefinition = CreateProtectedRegionDefinition(name, (uint)start, (uint)end, handler, region.Handler.ExceptionHandlerType, region.Handler.Type);
 				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, protectedRegionTableSymbol, writer.GetPosition(), protectedRegionDefinition, 0);
 				writer.WriteZeroBytes(TypeLayout.NativePointerSize);

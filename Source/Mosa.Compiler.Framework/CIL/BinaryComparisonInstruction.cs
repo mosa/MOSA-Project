@@ -47,15 +47,15 @@ public sealed class BinaryComparisonInstruction : BinaryInstruction
 	{
 		get
 		{
-			switch (OpCode)
+			return OpCode switch
 			{
-				case OpCode.Ceq: return "==";
-				case OpCode.Cgt: return ">";
-				case OpCode.Cgt_un: return "> unordered";
-				case OpCode.Clt: return "<";
-				case OpCode.Clt_un: return "< unordered";
-				default: throw new InvalidOperationException("Invalid opcode.");
-			}
+				OpCode.Ceq => "==",
+				OpCode.Cgt => ">",
+				OpCode.Cgt_un => "> unordered",
+				OpCode.Clt => "<",
+				OpCode.Clt_un => "< unordered",
+				_ => throw new InvalidOperationException("Invalid opcode.")
+			};
 		}
 	}
 

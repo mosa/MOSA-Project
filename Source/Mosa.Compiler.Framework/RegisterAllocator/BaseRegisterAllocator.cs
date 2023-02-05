@@ -521,7 +521,7 @@ public abstract class BaseRegisterAllocator
 									if (vr.SpillSlotOperand == null)
 										s = "x";
 									else
-										s = "T_" + vr.SpillSlotOperand.Index.ToString(); //vr.SpillSlotOperand.ToString(false);
+										s = "T_" + vr.SpillSlotOperand.Index; //vr.SpillSlotOperand.ToString(false);
 								}
 								else
 								{
@@ -571,7 +571,7 @@ public abstract class BaseRegisterAllocator
 				continue;
 
 			var sb = new StringBuilder();
-			sb.Append(vr.ToString());
+			sb.Append(vr);
 			sb.Append('\t');
 
 			foreach (var s in slots)

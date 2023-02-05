@@ -44,79 +44,79 @@ public static class ConditionCodeExtension
 	/// <exception cref="System.NotSupportedException"></exception>
 	public static ConditionCode GetOpposite(this ConditionCode conditionCode)
 	{
-		switch (conditionCode)
+		return conditionCode switch
 		{
-			case ConditionCode.Equal: return ConditionCode.NotEqual;
-			case ConditionCode.NotEqual: return ConditionCode.Equal;
-			case ConditionCode.GreaterOrEqual: return ConditionCode.Less;
-			case ConditionCode.Greater: return ConditionCode.LessOrEqual;
-			case ConditionCode.LessOrEqual: return ConditionCode.Greater;
-			case ConditionCode.Less: return ConditionCode.GreaterOrEqual;
-			case ConditionCode.UnsignedGreaterOrEqual: return ConditionCode.UnsignedLess;
-			case ConditionCode.UnsignedGreater: return ConditionCode.UnsignedLessOrEqual;
-			case ConditionCode.UnsignedLessOrEqual: return ConditionCode.UnsignedGreater;
-			case ConditionCode.UnsignedLess: return ConditionCode.UnsignedGreaterOrEqual;
-			case ConditionCode.Signed: return ConditionCode.NotSigned;
-			case ConditionCode.NotSigned: return ConditionCode.Signed;
-			case ConditionCode.Carry: return ConditionCode.NoCarry;
-			case ConditionCode.NoCarry: return ConditionCode.Carry;
-			case ConditionCode.Overflow: return ConditionCode.NoOverflow;
-			case ConditionCode.NoOverflow: return ConditionCode.Overflow;
-			case ConditionCode.Positive: return ConditionCode.Negative;
-			case ConditionCode.Negative: return ConditionCode.Positive;
-			case ConditionCode.Always: return ConditionCode.Never;
-			case ConditionCode.Never: return ConditionCode.Always;
-			case ConditionCode.Parity: return ConditionCode.NoParity;
-			case ConditionCode.NoParity: return ConditionCode.Parity;
-			default: throw new NotSupportedException();
-		}
+			ConditionCode.Equal => ConditionCode.NotEqual,
+			ConditionCode.NotEqual => ConditionCode.Equal,
+			ConditionCode.GreaterOrEqual => ConditionCode.Less,
+			ConditionCode.Greater => ConditionCode.LessOrEqual,
+			ConditionCode.LessOrEqual => ConditionCode.Greater,
+			ConditionCode.Less => ConditionCode.GreaterOrEqual,
+			ConditionCode.UnsignedGreaterOrEqual => ConditionCode.UnsignedLess,
+			ConditionCode.UnsignedGreater => ConditionCode.UnsignedLessOrEqual,
+			ConditionCode.UnsignedLessOrEqual => ConditionCode.UnsignedGreater,
+			ConditionCode.UnsignedLess => ConditionCode.UnsignedGreaterOrEqual,
+			ConditionCode.Signed => ConditionCode.NotSigned,
+			ConditionCode.NotSigned => ConditionCode.Signed,
+			ConditionCode.Carry => ConditionCode.NoCarry,
+			ConditionCode.NoCarry => ConditionCode.Carry,
+			ConditionCode.Overflow => ConditionCode.NoOverflow,
+			ConditionCode.NoOverflow => ConditionCode.Overflow,
+			ConditionCode.Positive => ConditionCode.Negative,
+			ConditionCode.Negative => ConditionCode.Positive,
+			ConditionCode.Always => ConditionCode.Never,
+			ConditionCode.Never => ConditionCode.Always,
+			ConditionCode.Parity => ConditionCode.NoParity,
+			ConditionCode.NoParity => ConditionCode.Parity,
+			_ => throw new NotSupportedException()
+		};
 	}
 
 	public static ConditionCode GetReverse(this ConditionCode conditionCode)
 	{
-		switch (conditionCode)
+		return conditionCode switch
 		{
-			case ConditionCode.GreaterOrEqual: return ConditionCode.LessOrEqual;
-			case ConditionCode.Greater: return ConditionCode.Less;
-			case ConditionCode.LessOrEqual: return ConditionCode.GreaterOrEqual;
-			case ConditionCode.Less: return ConditionCode.Greater;
-			case ConditionCode.UnsignedGreaterOrEqual: return ConditionCode.UnsignedLessOrEqual;
-			case ConditionCode.UnsignedGreater: return ConditionCode.UnsignedLess;
-			case ConditionCode.UnsignedLessOrEqual: return ConditionCode.UnsignedGreaterOrEqual;
-			case ConditionCode.UnsignedLess: return ConditionCode.UnsignedGreater;
-			default: return conditionCode;
-		}
+			ConditionCode.GreaterOrEqual => ConditionCode.LessOrEqual,
+			ConditionCode.Greater => ConditionCode.Less,
+			ConditionCode.LessOrEqual => ConditionCode.GreaterOrEqual,
+			ConditionCode.Less => ConditionCode.Greater,
+			ConditionCode.UnsignedGreaterOrEqual => ConditionCode.UnsignedLessOrEqual,
+			ConditionCode.UnsignedGreater => ConditionCode.UnsignedLess,
+			ConditionCode.UnsignedLessOrEqual => ConditionCode.UnsignedGreaterOrEqual,
+			ConditionCode.UnsignedLess => ConditionCode.UnsignedGreater,
+			_ => conditionCode
+		};
 	}
 
 	public static string GetConditionString(this ConditionCode conditioncode)
 	{
-		switch (conditioncode)
+		return conditioncode switch
 		{
-			case ConditionCode.Equal: return "==";
-			case ConditionCode.GreaterOrEqual: return ">=";
-			case ConditionCode.Greater: return ">";
-			case ConditionCode.LessOrEqual: return "<=";
-			case ConditionCode.Less: return "<";
-			case ConditionCode.NotEqual: return "!=";
-			case ConditionCode.UnsignedGreaterOrEqual: return ">= (U)";
-			case ConditionCode.UnsignedGreater: return "> (U)";
-			case ConditionCode.UnsignedLessOrEqual: return "<= (U)";
-			case ConditionCode.UnsignedLess: return "< (U)";
-			case ConditionCode.NotSigned: return "not signed";
-			case ConditionCode.Signed: return "signed";
-			case ConditionCode.Zero: return "zero";
-			case ConditionCode.NotZero: return "not zero";
-			case ConditionCode.Carry: return "carry";
-			case ConditionCode.NoCarry: return "no carry";
-			case ConditionCode.Overflow: return "overflow";
-			case ConditionCode.NoOverflow: return "no overflow";
-			case ConditionCode.Always: return "always";
-			case ConditionCode.Parity: return "parity";
-			case ConditionCode.NoParity: return "no parity";
-			case ConditionCode.Positive: return "positive";
-			case ConditionCode.Negative: return "negative";
-			default: throw new NotSupportedException();
-		}
+			ConditionCode.Equal => "==",
+			ConditionCode.GreaterOrEqual => ">=",
+			ConditionCode.Greater => ">",
+			ConditionCode.LessOrEqual => "<=",
+			ConditionCode.Less => "<",
+			ConditionCode.NotEqual => "!=",
+			ConditionCode.UnsignedGreaterOrEqual => ">= (U)",
+			ConditionCode.UnsignedGreater => "> (U)",
+			ConditionCode.UnsignedLessOrEqual => "<= (U)",
+			ConditionCode.UnsignedLess => "< (U)",
+			ConditionCode.NotSigned => "not signed",
+			ConditionCode.Signed => "signed",
+			ConditionCode.Zero => "zero",
+			ConditionCode.NotZero => "not zero",
+			ConditionCode.Carry => "carry",
+			ConditionCode.NoCarry => "no carry",
+			ConditionCode.Overflow => "overflow",
+			ConditionCode.NoOverflow => "no overflow",
+			ConditionCode.Always => "always",
+			ConditionCode.Parity => "parity",
+			ConditionCode.NoParity => "no parity",
+			ConditionCode.Positive => "positive",
+			ConditionCode.Negative => "negative",
+			_ => throw new NotSupportedException()
+		};
 	}
 
 	#endregion Utility Methods

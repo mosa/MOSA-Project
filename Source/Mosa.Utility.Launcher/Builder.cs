@@ -223,13 +223,13 @@ public class Builder : BaseLauncher
 			default: break;
 		}
 
-		switch (LauncherSettings.FileSystem)
+		bootImageOptions.FileSystem = LauncherSettings.FileSystem switch
 		{
-			case "fat12": bootImageOptions.FileSystem = BootImage.FileSystem.FAT12; break;
-			case "fat16": bootImageOptions.FileSystem = BootImage.FileSystem.FAT16; break;
-			case "fat32": bootImageOptions.FileSystem = BootImage.FileSystem.FAT32; break;
-			default: throw new NotImplementCompilerException("unknown file system");
-		}
+			"fat12" => BootImage.FileSystem.FAT12,
+			"fat16" => BootImage.FileSystem.FAT16,
+			"fat32" => BootImage.FileSystem.FAT32,
+			_ => throw new NotImplementCompilerException("unknown file system")
+		};
 
 		Generator.Create(bootImageOptions);
 	}

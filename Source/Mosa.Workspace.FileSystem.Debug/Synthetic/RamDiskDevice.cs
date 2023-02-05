@@ -33,7 +33,7 @@ public class RamDiskDevice : BaseDeviceDriver, IDiskDevice
 
 	public override void Initialize()
 	{
-		Device.Name = "RamDiskDevice_" + ((TotalBlocks * 512) / (1024 * 1024)).ToString() + "Mb";
+		Device.Name = "RamDiskDevice_" + ((TotalBlocks * 512) / (1024 * 1024)) + "Mb";
 	}
 
 	public override void Probe() => Device.Status = DeviceStatus.Available;

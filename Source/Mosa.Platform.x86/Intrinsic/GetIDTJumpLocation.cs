@@ -32,7 +32,7 @@ static partial class IntrinsicMethods
 		int irq = (int)operand.ConstantSigned64;
 
 		// Find the method
-		var method = methodCompiler.TypeSystem.DefaultLinkerType.FindMethodByName("InterruptISR" + irq.ToString());
+		var method = methodCompiler.TypeSystem.DefaultLinkerType.FindMethodByName("InterruptISR" + irq);
 
 		if (method == null)
 		{

@@ -84,7 +84,7 @@ public sealed class MoveHint
 
 		if (From.IsPhysicalRegister)
 		{
-			sb.Append(From.PhysicalRegister.ToString());
+			sb.Append(From.PhysicalRegister);
 		}
 		else
 		{
@@ -100,7 +100,7 @@ public sealed class MoveHint
 		sb.Append(" TO: ");
 		if (To.IsPhysicalRegister)
 		{
-			sb.Append(To.PhysicalRegister.ToString());
+			sb.Append(To.PhysicalRegister);
 		}
 		else
 		{

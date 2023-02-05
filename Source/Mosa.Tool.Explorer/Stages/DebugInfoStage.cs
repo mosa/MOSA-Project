@@ -74,7 +74,7 @@ public class DebugInfoStage : BaseMethodCompilerStage
 				if (Address == -1)
 					continue;
 
-				trace.Log($"{Label:X5}\t{Address}\t{Length}\t{StartLine}\t{EndLine}\t{StartColumn}\t{EndColumn}\t{node.ToString()}\t{Document}");
+				trace.Log($"{Label:X5}\t{Address}\t{Length}\t{StartLine}\t{EndLine}\t{StartColumn}\t{EndColumn}\t{node}\t{Document}");
 			}
 		}
 	}
