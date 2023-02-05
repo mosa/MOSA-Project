@@ -1,5 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Collections.Generic;
 using System.Diagnostics;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.CIL;
@@ -85,7 +86,29 @@ public sealed class CILDecodingStage : BaseMethodCompilerStage, IInstructionDeco
 		InsertFlowOrJumpInstructions();
 
 		// This makes it easier to review --- it's not necessary
-		//BasicBlocks.OrderByLabel();
+		OrderByLabel();
+	}
+
+	public void OrderByLabel()
+	{
+		var blocks = new SortedList<int, BasicBlock>(BasicBlocks.Count);
+
+		foreach (var block in BasicBlocks)
+		{
+			blocks.Add(block.Label, block);
+		}
+
+		var blocks2 = new List<BasicBlock>(BasicBlocks.Count);
+
+		foreach (var item in blocks)
+		{
+			if (item.Value.IsPrologue)
+				blocks2.Insert(0, item.Value);
+			else
+				blocks2.Add(item.Value);
+		}
+
+		BasicBlocks.ReorderBlocks(blocks2);
 	}
 
 	protected override void Finish()

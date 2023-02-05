@@ -510,20 +510,20 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 			{
 				method = GetMethodOrOverride(type, method);
 
-				if (!type.Methods.Contains(method))
-				{
-					var elementType = context.Operand1.Type.ElementType;
-					var typeSize = Alignment.AlignUp(TypeLayout.GetTypeSize(elementType), TypeLayout.NativePointerAlignment);
+				//if (!type.Methods.Contains(method))
+				//{
+				//	var elementType = context.Operand1.Type.ElementType;
+				//	var typeSize = Alignment.AlignUp(TypeLayout.GetTypeSize(elementType), TypeLayout.NativePointerAlignment);
 
-					// Create a virtual register to hold our boxed value
-					var boxedValue = AllocateVirtualRegister(TypeSystem.BuiltIn.Object);
+				//	// Create a virtual register to hold our boxed value
+				//	var boxedValue = AllocateVirtualRegister(TypeSystem.BuiltIn.Object);
 
-					var before = context.InsertBefore();
-					before.SetInstruction(IRInstruction.Box, boxedValue, GetRuntimeTypeHandle(type), context.Operand1, CreateConstant32(typeSize));
+				//	var before = context.InsertBefore();
+				//	before.SetInstruction(IRInstruction.Box, boxedValue, GetRuntimeTypeHandle(type), context.Operand1, CreateConstant32(typeSize));
 
-					// Now replace the value type pointer with the boxed value virtual register
-					context.Operand1 = boxedValue;
-				}
+				//	// Now replace the value type pointer with the boxed value virtual register
+				//	//context.Operand1 = boxedValue;
+				//}
 
 				var symbol2 = Operand.CreateSymbolFromMethod(method, TypeSystem);
 				context.SetInstruction(IRInstruction.CallStatic, result, symbol2, operands);

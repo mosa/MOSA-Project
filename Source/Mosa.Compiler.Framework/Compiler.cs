@@ -178,6 +178,8 @@ public sealed class Compiler
 			(!compilerSettings.CILDecodingStageV2) ? new CILProtectedRegionStage(): null,
 			(!compilerSettings.CILDecodingStageV2) ? new CILTransformationStage(): null,
 
+			new VirtualRegisterRenameStage(),
+
 			new ExceptionStage(),
 			new StackSetupStage(),
 			compilerSettings.Devirtualization ? new DevirtualizeCallStage() : null,

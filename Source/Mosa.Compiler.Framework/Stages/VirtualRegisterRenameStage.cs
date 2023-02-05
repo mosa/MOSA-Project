@@ -22,10 +22,19 @@ public sealed class VirtualRegisterRenameStage : BaseCodeTransformationStage
 
 		foreach (var block in BasicBlocks)
 		{
-			for (var node = block.BeforeLast; !node.IsBlockStartInstruction; node = node.Previous)
+			//for (var node = block.BeforeLast; !node.IsBlockStartInstruction; node = node.Previous)
+			for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 			{
 				if (node.IsEmpty)
 					continue;
+
+				foreach (var op in node.Results)
+				{
+					if (op.IsVirtualRegister)
+					{
+						vr.AddIfNew(op);
+					}
+				}
 
 				foreach (var op in node.Operands)
 				{
@@ -35,13 +44,7 @@ public sealed class VirtualRegisterRenameStage : BaseCodeTransformationStage
 					}
 				}
 
-				foreach (var op in node.Results)
-				{
-					if (op.IsVirtualRegister)
-					{
-						vr.AddIfNew(op);
-					}
-				}
+
 			}
 		}
 
