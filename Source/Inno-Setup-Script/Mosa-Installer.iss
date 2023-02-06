@@ -1,7 +1,7 @@
 #define MyAppName "MOSA-Project"
 #define MyAppPublisher "MOSA-Project"
 #define MyAppURL "http://www.mosa-project.org"
-#define MyAppVersion "2.2"
+#define MyAppVersion "2.3"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
