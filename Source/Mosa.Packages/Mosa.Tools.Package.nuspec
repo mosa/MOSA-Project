@@ -49,5 +49,8 @@
 		<file src="..\..\bin\PriorityQueue.dll" target="tools" />
 		<file src="..\..\bin\WinFormsUI.dll" target="tools" />
 		<file src="..\..\bin\WeifenLuo.WinFormsUI.Docking.ThemeVS2015.dll" target="tools" />
+		<file src="..\..\bin\System.Reactive.dll" target="tools" />
+		<file src="..\..\bin\SkiaSharp.dll" target="tools" />
+		<file src="..\..\bin\HarfBuzzSharp.dll" target="tools" />
 	</files>
 </package>
