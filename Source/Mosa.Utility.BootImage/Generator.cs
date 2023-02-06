@@ -40,7 +40,7 @@ public static class Generator
 		diskGeometry.GuessGeometry(blockCount);
 
 		// Create disk image file
-		using var diskDeviceDriver = new BlockFileStreamDriver(options.DiskImageFileName);
+		var diskDeviceDriver = new BlockFileStreamDriver(options.DiskImageFileName);
 
 		var diskDevice = new Device() { DeviceDriver = diskDeviceDriver };
 
@@ -188,6 +188,8 @@ public static class Generator
 
 			diskDeviceDriver.WriteBlock(blockCount, 1, footer);
 		}
+
+		diskDeviceDriver.Dispose();
 
 		// Not needed for UEFI
 		if (options.ImageFirmware == ImageFirmware.Bios)
