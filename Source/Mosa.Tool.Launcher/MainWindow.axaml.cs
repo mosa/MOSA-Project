@@ -115,7 +115,7 @@ public partial class MainWindow : Window
 		PlatformRegistry.Add(new Platform.x64.Architecture());
 		PlatformRegistry.Add(new Platform.ARMv8A32.Architecture());
 
-		// Initialize settings
+		// Initialize paths
 		UpdatePaths();
 		UpdateInterfaceAppLocations();
 
