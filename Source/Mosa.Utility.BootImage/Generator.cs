@@ -40,7 +40,7 @@ public static class Generator
 		diskGeometry.GuessGeometry(blockCount);
 
 		// Create disk image file
-		var diskDeviceDriver = new BlockFileStreamDriver(options.DiskImageFileName);
+		using var diskDeviceDriver = new BlockFileStreamDriver(options.DiskImageFileName);
 
 		var diskDevice = new Device() { DeviceDriver = diskDeviceDriver };
 
@@ -189,8 +189,8 @@ public static class Generator
 			diskDeviceDriver.WriteBlock(blockCount, 1, footer);
 		}
 
-		diskDeviceDriver.Dispose();
-
-		Limine.Deploy(options.DiskImageFileName);
+		// Not needed for UEFI
+		if (options.ImageFirmware == ImageFirmware.Bios)
+			Limine.Deploy(options.DiskImageFileName);
 	}
 }

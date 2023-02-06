@@ -46,11 +46,6 @@ public static class BinaryWriterExtensions
 		Write(writer, BitConverter.GetBytes(value), nativeSize);
 	}
 
-	public static void Write(this BinaryWriter writer, sbyte value, uint nativeSize)
-	{
-		Write(writer, new[] { (byte)value }, nativeSize);
-	}
-
 	public static void Write(this BinaryWriter writer, char value, uint nativeSize)
 	{
 		Write(writer, BitConverter.GetBytes(value), nativeSize);

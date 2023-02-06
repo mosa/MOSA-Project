@@ -24,29 +24,25 @@ public sealed class FrameBuffer32
 	/// <value>The height.</value>
 	public uint Height { get; }
 
+	/// <summary>Gets the offset.</summary>
+	private readonly Func<uint, uint, uint> GetOffset;
+
 	/// <summary>Initializes a new instance of the <see cref="FrameBuffer32"/> class.</summary>
 	/// <param name="buffer">The memory.</param>
 	/// <param name="width">The width.</param>
 	/// <param name="height">The height.</param>
-	public FrameBuffer32(ConstrainedPointer buffer, uint width, uint height)
+	public FrameBuffer32(ConstrainedPointer buffer, uint width, uint height, Func<uint, uint, uint> getOffset)
 	{
 		Buffer = buffer;
 		Width = width;
 		Height = height;
+		GetOffset = getOffset;
 	}
 
 	/// <summary>Creates a new frame buffer with identical properties.</summary>
 	public FrameBuffer32 Clone()
 	{
-		return new FrameBuffer32(HAL.AllocateMemory(Buffer.Size, 0), Width, Height);
-	}
-
-	/// <summary>Gets the offset.</summary>
-	/// <param name="x">The x.</param>
-	/// <param name="y">The y.</param>
-	private uint GetOffset(uint x, uint y)
-	{
-		return (y * Width + x) * BytesPerPixel;
+		return new FrameBuffer32(HAL.AllocateMemory(Buffer.Size, 0), Width, Height, GetOffset);
 	}
 
 	/// <summary>Sets the pixel.</summary>

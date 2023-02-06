@@ -15,7 +15,7 @@ public class LinkerSettings
 
 	public ulong BaseAddress { get { return (ulong)Settings.GetValue("Compiler.BaseAddress", 0x00400000); } }
 
-	public string OutputFile { get { return Settings.GetValue("Compiler.OutputFile", "_main.exe"); } }
+	public string OutputFile { get { return Settings.GetValue("Compiler.OutputFile", "_kernel.bin"); } }
 
 	public string LinkerFormat { get { return Settings.GetValue("Linker.Format", "elf32"); } }
 
