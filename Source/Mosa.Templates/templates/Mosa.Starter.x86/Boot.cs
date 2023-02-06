@@ -4,7 +4,7 @@ using Mosa.DeviceSystem;
 using Mosa.Kernel.x86;
 using Mosa.Runtime.Plug;
 
-namespace $safeprojectname$
+namespace Mosa.Starter.x86
 {
     public static class Boot
     {

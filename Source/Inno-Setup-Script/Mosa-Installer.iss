@@ -37,6 +37,7 @@ Name: "{group}\{cm:ProgramOnTheWeb,{#MyAppName}}"; Filename: "{#MyAppURL}"
 Name: "{group}\{cm:UninstallProgram, {#MyAppName}}"; Filename: "{uninstallexe}"
 
 [Run]
+Filename: "dotnet.exe"; Parameters: "new install Mosa.Templates"
 
 [Dirs]
 Name: "{app}\Tools"
@@ -47,13 +48,6 @@ Name: "{app}\Lib"
 Source: "..\..\Tools\readme.md"; DestDir: "{app}\Tools"; Flags: ignoreversion
 Source: "..\..\*.txt"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\..\*.md"; DestDir: "{app}"; Flags: ignoreversion
-
-Source: "..\Mosa.VisualStudio.ProjectTemplate\Boot.cs"; DestDir: "{userdocs}\Visual Studio 2022\Templates\ProjectTemplates\Mosa Project"; Flags: ignoreversion
-Source: "..\Mosa.VisualStudio.ProjectTemplate\Mosa.Starter.x86.csproj"; DestDir: "{userdocs}\Visual Studio 2022\Templates\ProjectTemplates\Mosa Project"; Flags: ignoreversion
-Source: "..\Mosa.VisualStudio.ProjectTemplate\MyTemplate.vstemplate"; DestDir: "{userdocs}\Visual Studio 2022\Templates\ProjectTemplates\Mosa Project"; Flags: ignoreversion
-Source: "..\Mosa.VisualStudio.ProjectTemplate\Program.cs"; DestDir: "{userdocs}\Visual Studio 2022\Templates\ProjectTemplates\Mosa Project"; Flags: ignoreversion
-Source: "..\Mosa.VisualStudio.ProjectTemplate\__TemplateIcon.ico"; DestDir: "{userdocs}\Visual Studio 2022\Templates\ProjectTemplates\Mosa Project"; Flags: ignoreversion
-Source: "..\Mosa.VisualStudio.ProjectTemplate\Properties\launchSettings.json"; DestDir: "{userdocs}\Visual Studio 2022\Templates\ProjectTemplates\Mosa Project\Properties"; Flags: ignoreversion
 
 Source: "..\..\bin\runtimes\*"; DestDir: "{app}\bin\runtimes"; Flags: ignoreversion recursesubdirs
 Source: "..\..\bin\Avalonia*.dll"; DestDir: "{app}\bin"; flags: recursesubdirs
