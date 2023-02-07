@@ -102,6 +102,8 @@ public partial class MainWindow : Window
 		}
 		else settings.SetValue("Launcher.Start", false);
 
+		IncDirTxt.Text = settings.GetValue("Image.FileSystem.RootInclude");
+
 		// Output the current directory
 		AddOutput($"Current Directory: {Environment.CurrentDirectory}");
 
@@ -113,8 +115,8 @@ public partial class MainWindow : Window
 		PlatformRegistry.Add(new Platform.x64.Architecture());
 		PlatformRegistry.Add(new Platform.ARMv8A32.Architecture());
 
-		// Initialize settings
-		UpdateSettings();
+		// Initialize paths
+		UpdatePaths();
 		UpdateInterfaceAppLocations();
 
 		if (settings.GetValue("Launcher.Start", false))
@@ -214,16 +216,7 @@ public partial class MainWindow : Window
 		settings.SetValue("Launcher.PlugKorlib", PlugKorlib.IsChecked.Value);
 		settings.SetValue("OS.Name", OsNameTxt.Text);
 
-		var src = SrcLbl.Content.ToString();
-
-		settings.ClearProperty("Compiler.SourceFiles");
-		settings.AddPropertyListValue("Compiler.SourceFiles", src);
-
-		settings.ClearProperty("SearchPaths");
-		settings.AddPropertyListValue("SearchPaths", Path.GetDirectoryName(src));
-
-		settings.SetValue("Image.Folder", DstLbl.Content.ToString());
-		settings.SetValue("Image.FileSystem.RootInclude", IncDirTxt.Text);
+		UpdatePaths();
 
 		switch (ImgCmb.SelectedIndex)
 		{
@@ -275,23 +268,73 @@ public partial class MainWindow : Window
 		}
 	}
 
+	private void UpdatePaths()
+	{
+		var src = SrcLbl.Content.ToString();
+
+		settings.ClearProperty("Compiler.SourceFiles");
+		settings.AddPropertyListValue("Compiler.SourceFiles", src);
+
+		settings.ClearProperty("SearchPaths");
+		settings.AddPropertyListValue("SearchPaths", Path.GetDirectoryName(src));
+
+		settings.SetValue("Image.Folder", DstLbl.Content.ToString());
+		settings.SetValue("Image.FileSystem.RootInclude", IncDirTxt.Text);
+	}
+
 	private void SetDefaultSettings()
 	{
+		settings.SetValue("Compiler.BaseAddress", 0x00400000);
 		settings.SetValue("Compiler.Binary", true);
-		settings.SetValue("Compiler.Multithreading.MaxThreads", Environment.ProcessorCount);
+		settings.SetValue("Compiler.MethodScanner", false);
+		settings.SetValue("Compiler.Multithreading", true);
+		settings.SetValue("Compiler.Platform", "x86");
 		settings.SetValue("Compiler.TraceLevel", 0);
+		settings.SetValue("CompilerDebug.DebugFile", string.Empty);
+		settings.SetValue("CompilerDebug.AsmFile", string.Empty);
+		settings.SetValue("CompilerDebug.MapFile", string.Empty);
+		settings.SetValue("CompilerDebug.NasmFile", string.Empty);
+		settings.SetValue("CompilerDebug.InlineFile", string.Empty);
+		settings.SetValue("Optimizations.Basic", true);
+		settings.SetValue("Optimizations.BitTracker", true);
+		settings.SetValue("Optimizations.Inline", true);
 		settings.SetValue("Optimizations.Inline.AggressiveMaximum", 24);
+		settings.SetValue("Optimizations.Inline.Explicit", true);
 		settings.SetValue("Optimizations.Inline.Maximum", 12);
 		settings.SetValue("Optimizations.Basic.Window", 5);
+		settings.SetValue("Optimizations.LongExpansion", true);
+		settings.SetValue("Optimizations.LoopInvariantCodeMotion", true);
+		settings.SetValue("Optimizations.Platform", true);
+		settings.SetValue("Optimizations.SCCP", true);
+		settings.SetValue("Optimizations.Devirtualization", true);
+		settings.SetValue("Optimizations.SSA", true);
+		settings.SetValue("Optimizations.TwoPass", true);
+		settings.SetValue("Optimizations.ValueNumbering", true);
+		settings.SetValue("Image.Folder", Path.Combine(Path.GetTempPath(), "MOSA"));
+		settings.SetValue("Image.Format", "IMG");
+		settings.SetValue("Image.FileSystem", "FAT16");
 		settings.SetValue("Image.ImageFile", "%DEFAULT%");
+		settings.SetValue("Image.Firmware", "bios");
 		settings.SetValue("Multiboot.Version", "v1");
+		settings.SetValue("Multiboot.Video", false);
+		settings.SetValue("Multiboot.Video.Width", 640);
+		settings.SetValue("Multiboot.Video.Height", 480);
+		settings.SetValue("Multiboot.Video.Depth", 32);
+		settings.SetValue("Emulator", "Qemu");
+		settings.SetValue("Emulator.Memory", 128);
+		settings.SetValue("Emulator.Cores", 1);
+		settings.SetValue("Emulator.Serial", "none");
 		settings.SetValue("Emulator.Serial.Host", "127.0.0.1");
 		settings.SetValue("Emulator.Serial.Port", new Random().Next(11111, 22222));
 		settings.SetValue("Emulator.Serial.Pipe", "MOSA");
 		settings.SetValue("Emulator.Display", true);
-		settings.SetValue("Launcher.Start", false);
+		settings.SetValue("Launcher.Start", true);
 		settings.SetValue("Launcher.Launch", true);
+		settings.SetValue("Launcher.Exit", true);
+		settings.SetValue("Launcher.PlugKorlib", true);
 		settings.SetValue("Launcher.HuntForCorLib", true);
+		settings.SetValue("Linker.Drawf", false);
+		settings.SetValue("OS.Name", OsNameTxt.Text);
 	}
 
 	private void CompileBuildAndStart()

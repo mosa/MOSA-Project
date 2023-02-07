@@ -16,7 +16,7 @@ public class CompilerSettings
 
 	public string Platform => Settings.GetValue("Compiler.Platform", "x86");
 
-	public string OutputFile => Settings.GetValue("Compiler.OutputFile", "_main.exe");
+	public string OutputFile => Settings.GetValue("Compiler.OutputFile", "_kernel.bin");
 
 	public string MapFile => Settings.GetValue("CompilerDebug.MapFile", null);
 

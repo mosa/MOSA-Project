@@ -25,7 +25,7 @@ public class PaintArea
 		Width = width;
 		Height = height;
 
-		Buffer = new(DeviceSystem.HAL.AllocateMemory(width * height * 4, 0), width, height);
+		Buffer = new(DeviceSystem.HAL.AllocateMemory(width * height * 4, 0), width, height, (xx, yy) => (yy * width + xx) * 4);
 		Buffer.ClearScreen((uint)color.ToArgb());
 	}
 

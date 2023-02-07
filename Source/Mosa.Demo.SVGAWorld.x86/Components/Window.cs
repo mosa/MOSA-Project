@@ -97,8 +97,8 @@ public class Window
 			if (!Held)
 				return;
 
-			X = Mouse.X - OffsetX;
-			Y = Mouse.Y - OffsetY;
+			try { X = checked(Mouse.X - OffsetX); } catch { X = 1; }
+			try { Y = checked(Mouse.Y - OffsetY); } catch { Y = 1; }
 
 			Held = Mouse.State == MouseState.Left;
 			WindowManager.IsWindowMoving = Held;

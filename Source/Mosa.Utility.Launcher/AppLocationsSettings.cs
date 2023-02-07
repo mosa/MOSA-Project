@@ -129,7 +129,7 @@ public static class AppLocationsSettings
 	private static string FindVmwareWorkstation()
 	{
 		return TryFind(
-			new string[] { "vmware.exe", "vmworkstation" },
+			new string[] { "vmware.exe", "vmworkstation", "vmware" },
 			new string[] {
 				@"%ProgramFiles%\VMware\VMware Workstation",
 				@"%ProgramFiles(x86)%\VMware\VMware Workstation",

@@ -16,6 +16,7 @@ public class BootImageOptions
 	public byte[] MBRCode = null;
 	public byte[] FatBootCode = null;
 	public string VolumeLabel = string.Empty;
+	public ImageFirmware ImageFirmware = ImageFirmware.Bios;
 	public ImageFormat ImageFormat = ImageFormat.IMG;
 	public bool MBROption = true;
 	public uint BlockCount = 0;

@@ -1,18 +1,21 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
 	<PropertyGroup>
 		<TargetFramework>net7.0</TargetFramework>
 		<OutputType>Exe</OutputType>
-		<StartupObject>$safeprojectname$.Boot</StartupObject>
 		<DebugType>full</DebugType>
 		<LangVersion>11.0</LangVersion>
-		<OutputPath>bin\</OutputPath>
+		<OutputPath>bin</OutputPath>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
+
+	<PropertyGroup>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<DisableStandardFrameworkResolution>true</DisableStandardFrameworkResolution>
 		<DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
 		<UseAppHost>false</UseAppHost>
-		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
+
 	<ItemGroup>
 		<PackageReference Include="Mosa.Korlib" Version="*" />
 		<PackageReference Include="Mosa.DeviceSystem" Version="*" />
@@ -21,4 +24,5 @@
 		<PackageReference Include="Mosa.Runtime" Version="*" />
 		<PackageReference Include="Mosa.Tools.Package" Version="*" />
 	</ItemGroup>
+
 </Project>

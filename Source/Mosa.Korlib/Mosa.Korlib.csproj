@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <AssemblyName>System.Runtime</AssemblyName>
-    <RootNamespace>System</RootNamespace>
+    <RootNamespace />
     <DebugType>full</DebugType>
     <LangVersion>11.0</LangVersion>
     <OutputPath>..\..\bin\</OutputPath>
