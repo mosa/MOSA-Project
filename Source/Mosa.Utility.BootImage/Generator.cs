@@ -131,17 +131,16 @@ public static class Generator
 		// Set FAT settings
 		var fatSettings = new FatSettings();
 
-		switch (options.FileSystem)
+		fatSettings.FATType = options.FileSystem switch
 		{
-			case FileSystem.FAT12: fatSettings.FATType = FatType.FAT12; break;
-			case FileSystem.FAT16: fatSettings.FATType = FatType.FAT16; break;
-			case FileSystem.FAT32: fatSettings.FATType = FatType.FAT32; break;
-			default: break;
-		}
-
+			FileSystem.FAT12 => FatType.FAT12,
+			FileSystem.FAT16 => FatType.FAT16,
+			FileSystem.FAT32 => FatType.FAT32,
+			_ => fatSettings.FATType
+		};
 		fatSettings.FloppyMedia = false;
 		fatSettings.VolumeLabel = options.VolumeLabel;
-		fatSettings.SerialID = new byte[4] { 0x01, 0x02, 0x03, 0x04 };
+		fatSettings.SerialID = new byte[] { 0x01, 0x02, 0x03, 0x04 };
 		fatSettings.SectorsPerTrack = diskGeometry.SectorsPerTrack;
 		fatSettings.NumberOfHeads = diskGeometry.Heads;
 		fatSettings.HiddenSectors = diskGeometry.SectorsPerTrack;
