@@ -45,7 +45,9 @@ public static class LauncherHunter
 			UseShellExecute = false,
 			CreateNoWindow = true,
 			WorkingDirectory = Environment.CurrentDirectory
-		});
+		})?.WaitForExit();
+
+		Environment.Exit(0);
 	}
 
 	private static string? FindLauncher(string source)
