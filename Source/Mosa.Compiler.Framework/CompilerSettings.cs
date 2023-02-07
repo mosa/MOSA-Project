@@ -65,7 +65,7 @@ public class CompilerSettings
 
 	public bool EmitBinary => Settings.GetValue("Compiler.Binary", true);
 
-	public bool EmitDrawf => Settings.GetValue("Linker.Drawf", false);
+	public bool EmitDwarf => Settings.GetValue("Linker.Dwarf", false);
 
 	public bool TwoPass => Settings.GetValue("Optimizations.TwoPass", true);
 

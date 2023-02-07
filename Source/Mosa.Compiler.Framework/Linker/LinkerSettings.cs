@@ -27,7 +27,7 @@ public class LinkerSettings
 
 	public bool ShortSymbolNames { get { return Settings.GetValue("Linker.ShortSymbolNames", false); } }
 
-	public bool Drawf { get { return Settings.GetValue("Linker.Drawf", false); } }
+	public bool Dwarf { get { return Settings.GetValue("Linker.Dwarf", false); } }
 
 	public bool Statistics { get { return Settings.GetValue("CompilerDebug.Statistics", true); } }
 

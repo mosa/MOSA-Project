@@ -183,7 +183,7 @@ public partial class MainWindow : Window
 
 		settings.SetValue("Linker.Symbols", EmtSymbs.IsChecked.Value);
 		settings.SetValue("Linker.StaticRelocations", EmtRelocs.IsChecked.Value);
-		settings.SetValue("Linker.Drawf", EmtDwarf.IsChecked.Value);
+		settings.SetValue("Linker.Dwarf", EmtDwarf.IsChecked.Value);
 		settings.SetValue("Compiler.BaseAddress", BaseAddrTxt.Text.StartsWith("0x") ? uint.Parse(BaseAddrTxt.Text[2..], NumberStyles.HexNumber) : uint.Parse(BaseAddrTxt.Text));
 
 		settings.SetValue("CompilerDebug.NasmFile", NasmFile.IsChecked.Value ? "%DEFAULT%" : string.Empty);
@@ -333,7 +333,7 @@ public partial class MainWindow : Window
 		settings.SetValue("Launcher.Exit", true);
 		settings.SetValue("Launcher.PlugKorlib", true);
 		settings.SetValue("Launcher.HuntForCorLib", true);
-		settings.SetValue("Linker.Drawf", false);
+		settings.SetValue("Linker.Dwarf", false);
 		settings.SetValue("OS.Name", OsNameTxt.Text);
 	}
 
