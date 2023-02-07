@@ -51,5 +51,6 @@
 		<file src="..\..\bin\System.Reactive.dll" target="tools" />
 		<file src="..\..\bin\SkiaSharp.dll" target="tools" />
 		<file src="..\..\bin\HarfBuzzSharp.dll" target="tools" />
+		<file src="..\..\bin\Tmds.DBus.dll" target="tools" />
 	</files>
 </package>

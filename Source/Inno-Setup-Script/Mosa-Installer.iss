@@ -1,7 +1,6 @@
 #define MyAppName "MOSA-Project"
 #define MyAppPublisher "MOSA-Project"
 #define MyAppURL "http://www.mosa-project.org"
-#define MyAppVersion "2.3"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -84,6 +83,7 @@ Source: "..\..\bin\Reko.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\System.Reactive.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\SkiaSharp.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\HarfBuzzSharp.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\Tmds.DBus.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\Tools\qemu\*.*"; DestDir: "{app}\Tools\qemu"; Flags: ignoreversion
 Source: "..\..\Tools\wget\*.*"; DestDir: "{app}\Tools\wget"; Flags: ignoreversion
 Source: "..\..\Tools\nasm\*.*"; DestDir: "{app}\Tools\nasm"; Flags: ignoreversion
