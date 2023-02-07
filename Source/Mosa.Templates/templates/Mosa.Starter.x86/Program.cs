@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Kernel.x86;
+using System;
 
 namespace Mosa.Starter.x86
 {
@@ -8,9 +8,9 @@ namespace Mosa.Starter.x86
     {
         public static void Setup()
         {
-            Screen.ResetColor();
-            Screen.Clear();
-            Screen.WriteLine("Hello World!");
+            Console.ResetColor();
+            Console.Clear();
+            Console.WriteLine("Hello World!");
         }
 
         public static void Loop()
