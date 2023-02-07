@@ -19,9 +19,6 @@ using RTC = Mosa.Kernel.x86.RTC;
 
 namespace Mosa.Demo.SVGAWorld.x86;
 
-/// <summary>
-/// Boot
-/// </summary>
 public static class Boot
 {
 	public static DeviceService DeviceService;
@@ -39,17 +36,12 @@ public static class Boot
 		KernelMemory.SetInitialMemory(Address.GCInitialMemory, 0x01000000);
 	}
 
-	/// <summary>
-	/// Main
-	/// </summary>
 	public static void Main()
 	{
 		Kernel.x86.Kernel.Setup();
-
-		Serial.SetupPort(Serial.COM1);
 		IDT.SetInterruptHandler(ProcessInterrupt);
 
-		Log("<SELFTEST:PASSED>");
+		Console.WriteLine("<SELFTEST:PASSED>");
 
 		HAL = new Hardware();
 		Random = new Random();
@@ -88,7 +80,7 @@ public static class Boot
 
 		if (!Display.Initialize())
 		{
-			Log("An error occured when initializing the graphics driver.");
+			Console.WriteLine("An error occured when initializing the graphics driver.");
 			for (; ; );
 		}
 
@@ -153,12 +145,6 @@ public static class Boot
 			Display.Update();
 			FPSMeter.Update();
 		}
-	}
-
-	public static void Log(string line)
-	{
-		Serial.Write(Serial.COM1, line + "\r\n");
-		Console.WriteLine(line);
 	}
 
 	public static void ProcessInterrupt(uint interrupt, uint errorCode)

@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
 using System.Diagnostics;
 
 namespace Mosa.Kernel.x86.Helpers;
@@ -8,7 +9,7 @@ public static class Assert
 {
 	private static void AssertError(string message)
 	{
-		Panic.Error(message);
+		Environment.FailFast(message);
 	}
 
 	//[Conditional("DEBUG")]
