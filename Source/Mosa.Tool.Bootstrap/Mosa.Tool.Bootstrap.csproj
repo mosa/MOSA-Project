@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
 	<PropertyGroup>
-		<TargetFramework>net7.0-windows</TargetFramework>
 		<OutputType>WinExe</OutputType>
-		<UseWindowsForms>true</UseWindowsForms>
-		<Title>Mosa.Tool.Bootstrap</Title>
+		<TargetFramework>net7.0</TargetFramework>
+		<Nullable>enable</Nullable>
 		<Company>MOSA Project</Company>
 		<copyright>Copyright © MOSA Project 2022</copyright>
 		<LangVersion>11.0</LangVersion>
@@ -12,23 +12,20 @@
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<WarningLevel>2</WarningLevel>
 		<DebugSymbols>True</DebugSymbols>
+		<BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+		<ApplicationManifest>app.manifest</ApplicationManifest>
 	</PropertyGroup>
-	<PropertyGroup>
-		<StartupObject>Mosa.Tool.Bootstrap.Program</StartupObject>
-	</PropertyGroup>
+
 	<ItemGroup>
-		<Compile Update="StatusForm.cs" />
-		<Compile Update="StatusForm.Designer.cs">
-			<DependentUpon>StatusForm.cs</DependentUpon>
-		</Compile>
-		<ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
-		<ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj" />
-		<ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj" />
-		<ProjectReference Include="..\Mosa.Platform.x86\Mosa.Platform.x86.csproj" />
+		<TrimmerRootDescriptor Include="Roots.xml" />
 	</ItemGroup>
+
 	<ItemGroup>
-		<EmbeddedResource Update="StatusForm.resx">
-			<DependentUpon>StatusForm.cs</DependentUpon>
-		</EmbeddedResource>
+		<PackageReference Include="Avalonia" Version="0.10.18" />
+		<PackageReference Include="Avalonia.Desktop" Version="0.10.18" />
+		<!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+		<PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="0.10.18" />
+		<PackageReference Include="XamlNameReferenceGenerator" Version="1.5.1" />
 	</ItemGroup>
+
 </Project>
