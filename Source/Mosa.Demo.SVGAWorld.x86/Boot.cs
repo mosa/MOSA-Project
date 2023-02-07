@@ -7,7 +7,6 @@ using System.IO;
 using Mosa.Demo.SVGAWorld.x86.Apps;
 using Mosa.Demo.SVGAWorld.x86.Components;
 using Mosa.Demo.SVGAWorld.x86.HAL;
-using Mosa.Demo.SVGAWorld.x86.Plugs;
 using Mosa.DeviceDriver;
 using Mosa.DeviceDriver.ISA;
 using Mosa.DeviceSystem;
@@ -68,7 +67,7 @@ public static class Boot
 		partitionService.CreatePartitionDevices();
 
 		foreach (var partition in DeviceService.GetDevices<IPartitionDevice>())
-			FilePlug.Register(new FatFileSystem(partition.DeviceDriver as IPartitionDevice));
+			FileManager.Register(new FatFileSystem(partition.DeviceDriver as IPartitionDevice));
 
 		Display.DefaultFont = Utils.Load(File.ReadAllBytes("font.bin"));
 
