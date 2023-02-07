@@ -33,7 +33,6 @@
 		<file src="..\..\bin\Mosa.Tool.Debugger.*" target="tools" />
 		<file src="..\..\bin\Mosa.Tool.Launcher.*" target="tools" />
 		<file src="..\..\bin\Mosa.Tool.Compiler.*" target="tools" />
-		<file src="..\..\bin\Mosa.Tool.Launcher.Console.*" target="tools" />
 		<file src="..\..\bin\Mosa.Utility.BootImage.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Utility.Configuration.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Utility.DebugEngine.dll" target="tools" />

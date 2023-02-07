@@ -11,7 +11,7 @@
 		<PackageVersion>2.3</PackageVersion>
 		<PackageId>Mosa.Templates</PackageId>
 		<Title>MOSA Templates</Title>
-		<Authors>MOSA-Project</Authors>
+		<Author>MOSA-Project</Author>
 		<Description>MOSA starter templates.</Description>
 		<PackageTags>dotnet-new;templates;mosa</PackageTags>
 		<IncludeContentInPack>true</IncludeContentInPack>
