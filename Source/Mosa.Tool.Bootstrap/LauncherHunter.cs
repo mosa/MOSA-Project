@@ -134,10 +134,16 @@ public static class LauncherHunter
 
 	private static int CompareTo(FileVersionInfo? older, FileVersionInfo? newer)
 	{
-		if (newer == null || older == null)
+		if (newer == null && older != null)
+			return -1;
+
+		if (newer != null && older == null)
+			return 1;
+
+		if (newer == null && older == null)
 			return 0;
 
-		if (newer.ProductMajorPart > older.ProductMajorPart) return 1;
+		if (newer!.ProductMajorPart > older!.ProductMajorPart) return 1;
 		if (newer.ProductMajorPart < older.ProductMajorPart) return -1;
 
 		if (newer.ProductMinorPart > older.ProductMinorPart) return 1;
