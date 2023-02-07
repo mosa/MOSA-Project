@@ -2,7 +2,7 @@
 	"profiles": {
 		"Mosa.Starter.x86": {
 			"commandName": "Executable",
-			"executablePath": "C:\\Program Files (x86)\\MOSA-Project\\bin\\Mosa.Tool.Launcher.exe",
+			"executablePath": "Tools/Mosa.Tool.Launcher.exe",
 			"commandLineArgs": "Mosa.Starter.x86.dll",
 			"workingDirectory": "bin"
 		}
