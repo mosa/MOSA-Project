@@ -3,10 +3,11 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using Mosa.Demo.SVGAWorld.x86.Apps;
 using Mosa.Demo.SVGAWorld.x86.Components;
 using Mosa.Demo.SVGAWorld.x86.HAL;
-using Mosa.Demo.SVGAWorld.x86.Utils;
+using Mosa.Demo.SVGAWorld.x86.Plugs;
 using Mosa.DeviceDriver;
 using Mosa.DeviceDriver.ISA;
 using Mosa.DeviceSystem;
@@ -28,9 +29,9 @@ public static class Boot
 	public static Taskbar Taskbar;
 	public static Random Random;
 
-	private static Hardware HAL;
+	public static PCService PCService;
 
-	private static PCService PCService;
+	private static Hardware HAL;
 
 	[Plug("Mosa.Runtime.StartUp::SetInitialMemory")]
 	public static void SetInitialMemory()
@@ -75,14 +76,14 @@ public static class Boot
 		partitionService.CreatePartitionDevices();
 
 		foreach (var partition in DeviceService.GetDevices<IPartitionDevice>())
-			FileManager.Register(new FatFileSystem(partition.DeviceDriver as IPartitionDevice));
+			FilePlug.Register(new FatFileSystem(partition.DeviceDriver as IPartitionDevice));
 
-		Display.DefaultFont = GeneralUtils.Load(FileManager.ReadAllBytes("font.bin"));
+		Display.DefaultFont = Utils.Load(File.ReadAllBytes("font.bin"));
 
-		GeneralUtils.Fonts = new List<ISimpleFont>
+		Utils.Fonts = new List<ISimpleFont>
 		{
 			Display.DefaultFont,
-			GeneralUtils.Load(FileManager.ReadAllBytes("font2.bin"))
+			Utils.Load(File.ReadAllBytes("font2.bin"))
 		};
 
 		if (!Display.Initialize())
@@ -91,44 +92,24 @@ public static class Boot
 			for (; ; );
 		}
 
-		GeneralUtils.Mouse = DeviceService.GetFirstDevice<StandardMouse>().DeviceDriver as StandardMouse;
-		if (GeneralUtils.Mouse == null)
+		Utils.Mouse = DeviceService.GetFirstDevice<StandardMouse>().DeviceDriver as StandardMouse;
+		if (Utils.Mouse == null)
 			HAL.Abort("Mouse not found.");
 
 		DoGraphics();
-
-		/*var keyboardDevice = (IKeyboardDevice)DeviceService.GetFirstDevice<IKeyboardDevice>().DeviceDriver;
-		var graphicsDevice = (IGraphicsDevice)DeviceService.GetFirstDevice<IGraphicsDevice>().DeviceDriver;
-
-		graphicsDevice.SetMode(640, 480);
-
-		var font = new ASC16Font();
-		var textDevice = new GraphicalTextDevice(640, 480, font, graphicsDevice.FrameBuffer);
-		var keyboard = new DeviceSystem.Keyboard(keyboardDevice, new US());
-		var textScreen = new TextScreen(textDevice, keyboard);
-
-		textScreen.WriteLine("Hello, World!");
-		textScreen.WriteLine("Type something to get it echoed back at you.");
-
-		for (;;)
-		{
-			textScreen.Write("> ");
-			var line = textScreen.ReadLine();
-			textScreen.WriteLine("You typed: " + line);
-		}*/
 	}
 
 	private static void DoGraphics()
 	{
-		GeneralUtils.BackColor = Color.Indigo;
-		GeneralUtils.Mouse.SetScreenResolution(Display.Width, Display.Height);
+		Utils.BackColor = Color.Indigo;
+		Utils.Mouse.SetScreenResolution(Display.Width, Display.Height);
 
 		Mouse.Initialize();
 		WindowManager.Initialize();
 
 		Taskbar = new Taskbar();
 		Taskbar.Buttons.Add(new TaskbarButton(Taskbar, "Shutdown", Color.Blue, Color.White, Color.Navy,
-			() => { PCService.Shutdown(); return null; }));
+			() => { Environment.Exit(0); return null; }));
 		Taskbar.Buttons.Add(new TaskbarButton(Taskbar, "Reset", Color.Blue, Color.White, Color.Navy,
 			() => { PCService.Reset(); return null; }));
 		Taskbar.Buttons.Add(new TaskbarButton(Taskbar, "Paint", Color.Coral, Color.White, Color.Red,
@@ -139,7 +120,7 @@ public static class Boot
 		for (; ; )
 		{
 			// Clear screen
-			Display.Clear(GeneralUtils.BackColor);
+			Display.Clear(Utils.BackColor);
 
 			// Draw MOSA logo
 			Display.DrawMosaLogo(10);

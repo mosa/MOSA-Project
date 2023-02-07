@@ -4,7 +4,7 @@ using System;
 using Mosa.Kernel.x86;
 using Mosa.Runtime.Plug;
 
-namespace Mosa.Plug.Korlib.System.x86;
+namespace Mosa.Demo.SVGAWorld.x86.Plugs;
 
 public static class ConsolePlug
 {
