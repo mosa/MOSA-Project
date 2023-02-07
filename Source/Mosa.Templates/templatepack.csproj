@@ -8,7 +8,7 @@
 
 	<PropertyGroup>
 		<PackageType>Template</PackageType>
-		<PackageVersion>$version$</PackageVersion>
+		<PackageVersion>2.3</PackageVersion>
 		<PackageId>Mosa.Templates</PackageId>
 		<Title>MOSA Templates</Title>
 		<Authors>MOSA-Project</Authors>
