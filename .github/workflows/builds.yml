@@ -34,8 +34,9 @@ jobs:
         run: dotnet build Source/Mosa.sln /p:Version=${{ env.BUILD_VERSION }}
       - name: Create Installer
         run: ISCC.exe /DMyAppVersion=${{ env.BUILD_VERSION }}.${{ github.run_number }} Source/Inno-Setup-Script/Mosa-Installer.iss
-      - name: Create Package - Mosa.Templates
+      - name: Build Project - Mosa.Templates
         run: dotnet build Source\Mosa.Templates\templatepack.csproj
+      - name: Create Package - Mosa.Templates
         run: nuget pack Source\Mosa.Templates\templatepack.csproj -Tool -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ github.run_number }}
       - name: Create Package - Mosa.Tools.Package
         run: nuget pack Source\Mosa.Packages\Mosa.Tools.Package.nuspec -Tool -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ github.run_number }}
