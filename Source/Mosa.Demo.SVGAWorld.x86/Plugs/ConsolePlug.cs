@@ -4,7 +4,7 @@ using System;
 using Mosa.Kernel.x86;
 using Mosa.Runtime.Plug;
 
-namespace Mosa.Plug.Korlib.System.x86;
+namespace Mosa.Demo.SVGAWorld.x86.Plugs;
 
 public static class ConsolePlug
 {
@@ -24,24 +24,29 @@ public static class ConsolePlug
 	[Plug("System.Console::WriteLine")]
 	internal static void WriteLine()
 	{
+		Serial.Write(Serial.COM1, "\r\n");
 		Screen.WriteLine();
 	}
 
 	[Plug("System.Console::WriteLine")]
 	internal static void WriteLine(string value)
 	{
+		Serial.Write(Serial.COM1, value);
+		Serial.Write(Serial.COM1, "\r\n");
 		Screen.WriteLine(value);
 	}
 
 	[Plug("System.Console::Write")]
 	internal static void Write(string value)
 	{
+		Serial.Write(Serial.COM1, value);
 		Screen.Write(value);
 	}
 
 	[Plug("System.Console::Write")]
 	internal static void Write(char value)
 	{
+		Serial.Write(Serial.COM1, (byte)value);
 		Screen.Write(value);
 	}
 
