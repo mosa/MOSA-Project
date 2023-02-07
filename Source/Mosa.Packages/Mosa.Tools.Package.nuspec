@@ -17,10 +17,10 @@
 		<tags>MOSA Compiler</tags>
 		<dependencies>
 		</dependencies>
+		<contentFiles>
+			<files include="**/*.*" buildAction="None" copyToOutput="true" />
+		</contentFiles>
 	</metadata>
-	<contentFiles>
-		<files include="**/*.*" buildAction="None" copyToOutput="true" />
-	</contentFiles>
 	<files>
 		<file src="..\Art\Mosa Icon.png" target="images" />
 		<file src="..\..\bin\runtimes\**\*.*" target="contentFiles/any/net7.0/Tools/runtimes" />
