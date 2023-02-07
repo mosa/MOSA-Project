@@ -1,75 +1,82 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
+using Mosa.Kernel.x86;
 using Mosa.Runtime.Plug;
 
-namespace Mosa.Demo.TestWorld.x64.Plugs;
+namespace Mosa.Plug.Korlib.System.x86;
 
 public static class ConsolePlug
 {
 	[Plug("System.Console::ResetColor")]
 	internal static void ResetColor()
 	{
-		throw new NotImplementedException();
+		Screen.Color = (byte)ConsoleColor.White;
+		Screen.BackgroundColor = (byte)ConsoleColor.Black;
 	}
 
 	[Plug("System.Console::Clear")]
 	internal static void Clear()
 	{
-		throw new NotImplementedException();
+		Screen.Clear();
 	}
 
 	[Plug("System.Console::WriteLine")]
 	internal static void WriteLine()
 	{
-		throw new NotImplementedException();
+		Serial.Write(Serial.COM1, "\r\n");
+		Screen.WriteLine();
 	}
 
 	[Plug("System.Console::WriteLine")]
 	internal static void WriteLine(string value)
 	{
-		throw new NotImplementedException();
+		Serial.Write(Serial.COM1, value);
+		Serial.Write(Serial.COM1, "\r\n");
+		Screen.WriteLine(value);
 	}
 
 	[Plug("System.Console::Write")]
 	internal static void Write(string value)
 	{
-		throw new NotImplementedException();
+		Serial.Write(Serial.COM1, value);
+		Screen.Write(value);
 	}
 
 	[Plug("System.Console::Write")]
 	internal static void Write(char value)
 	{
-		throw new NotImplementedException();
+		Serial.Write(Serial.COM1, (byte)value);
+		Screen.Write(value);
 	}
 
 	[Plug("System.Console::SetCursorPosition")]
 	internal static void SetCursorPosition(int left, int top)
 	{
-		throw new NotImplementedException();
+		Screen.Goto((uint)left, (uint)top);
 	}
 
 	[Plug("System.Console::GetForegroundColor")]
 	internal static ConsoleColor GetForegroundColor()
 	{
-		throw new NotImplementedException();
+		return (ConsoleColor)Screen.Color;
 	}
 
 	[Plug("System.Console::GetBackgroundColor")]
 	internal static ConsoleColor GetBackgroundColor()
 	{
-		throw new NotImplementedException();
+		return (ConsoleColor)Screen.BackgroundColor;
 	}
 
 	[Plug("System.Console::SetForegroundColor")]
 	internal static void SetForegroundColor(ConsoleColor color)
 	{
-		throw new NotImplementedException();
+		Screen.Color = (byte)color;
 	}
 
 	[Plug("System.Console::SetBackgroundColor")]
 	internal static void SetBackgroundColor(ConsoleColor color)
 	{
-		throw new NotImplementedException();
+		Screen.BackgroundColor = (byte)color;
 	}
 }

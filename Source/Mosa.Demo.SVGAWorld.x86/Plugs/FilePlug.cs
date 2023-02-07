@@ -1,6 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
 using Mosa.Runtime.Plug;
 
 namespace Mosa.Demo.SVGAWorld.x86.Plugs;
@@ -9,18 +8,6 @@ public static class FilePlug
 {
 	[Plug("System.IO.File::ReadAllBytes")]
 	internal static byte[] ReadAllBytes(string path) => FileManager.ReadAllBytes(path);
-
-	[Plug("System.IO.File::ReadAllLines")]
-	internal static string[] ReadAllLines(string path)
-	{
-		throw new NotImplementedException();
-	}
-
-	[Plug("System.IO.File::ReadAllText")]
-	internal static string ReadAllText(string path)
-	{
-		throw new NotImplementedException();
-	}
 
 	[Plug("System.IO.File::WriteAllBytes")]
 	internal static void WriteAllBytes(string path, byte[] bytes) => FileManager.WriteAllBytes(path, bytes);

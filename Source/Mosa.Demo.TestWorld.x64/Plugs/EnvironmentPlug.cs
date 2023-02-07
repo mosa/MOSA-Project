@@ -7,12 +7,6 @@ namespace Mosa.Demo.TestWorld.x64.Plugs;
 
 public static class EnvironmentPlug
 {
-	[Plug("System.Environment::Exit")]
-	internal static void Exit(int exitCode)
-	{
-		throw new NotImplementedException();
-	}
-
 	[Plug("System.Environment::FailFast")]
 	internal static void FailFast(string message)
 	{

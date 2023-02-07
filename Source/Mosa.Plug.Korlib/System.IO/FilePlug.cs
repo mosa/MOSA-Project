@@ -3,7 +3,7 @@
 using System;
 using Mosa.Runtime.Plug;
 
-namespace Mosa.Demo.TestWorld.x86.Plugs;
+namespace Mosa.Plug.Korlib.System.IO;
 
 public static class FilePlug
 {
