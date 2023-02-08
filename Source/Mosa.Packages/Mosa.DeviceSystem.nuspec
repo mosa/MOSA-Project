@@ -8,7 +8,7 @@
 		<owners>MOSA Project</owners>
 		<license type="expression">BSD-3-Clause-Clear</license>
 		<projectUrl>http://www.mosa-project.org</projectUrl>
-		<icon>images\Mosa Icon.png</icon>
+		<icon>images/Mosa Icon.png</icon>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<summary>MOSA Device And File System</summary>
 		<description>MOSA Device And File System</description>
@@ -21,9 +21,9 @@
 		</dependencies>
 	</metadata>
 	<files>
-		<file src="..\Art\Mosa Icon.png" target="images\" />
-		<file src="..\..\bin\Mosa.DeviceSystem.dll" target="lib\net5.0" />
-		<file src="..\..\bin\Mosa.DeviceDriver.dll" target="lib\net5.0" />
-		<file src="..\..\bin\Mosa.FileSystem.dll" target="lib\net5.0" />
+		<file src="..\Art\Mosa Icon.png" target="images" />
+		<file src="..\..\bin\Mosa.DeviceSystem.dll" target="lib\net7.0" />
+		<file src="..\..\bin\Mosa.DeviceDriver.dll" target="lib\net7.0" />
+		<file src="..\..\bin\Mosa.FileSystem.dll" target="lib\net7.0" />
 	</files>
 </package>

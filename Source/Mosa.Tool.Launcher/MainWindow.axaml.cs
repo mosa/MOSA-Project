@@ -1,4 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
+
 using System;
 using System.Globalization;
 using System.IO;
@@ -168,52 +169,52 @@ public partial class MainWindow : Window
 
 	private void UpdateSettings()
 	{
-		settings.SetValue("Optimizations.SSA", SsaOpts.IsChecked.Value);
-		settings.SetValue("Optimizations.Basic", BasicOpts.IsChecked.Value);
-		settings.SetValue("Optimizations.SCCP", SccpOpts.IsChecked.Value);
-		settings.SetValue("Optimizations.Devirtualization", DevirtOpts.IsChecked.Value);
-		settings.SetValue("Optimizations.Inline", InlineOpts.IsChecked.Value);
-		settings.SetValue("Optimizations.Inline.Explicit", InlineExplOpts.IsChecked.Value);
-		settings.SetValue("Optimizations.LongExpansion", LongExpOpts.IsChecked.Value);
-		settings.SetValue("Optimizations.TwoPass", TwoOptPass.IsChecked.Value);
-		settings.SetValue("Optimizations.ValueNumbering", ValueNumOpts.IsChecked.Value);
-		settings.SetValue("Optimizations.BitTracker", BtOpts.IsChecked.Value);
-		settings.SetValue("Optimizations.Platform", PlatOpts.IsChecked.Value);
-		settings.SetValue("Optimizations.LoopInvariantCodeMotion", LicmOpts.IsChecked.Value);
+		settings.SetValue("Optimizations.SSA", SsaOpts.IsChecked!.Value);
+		settings.SetValue("Optimizations.Basic", BasicOpts.IsChecked!.Value);
+		settings.SetValue("Optimizations.SCCP", SccpOpts.IsChecked!.Value);
+		settings.SetValue("Optimizations.Devirtualization", DevirtOpts.IsChecked!.Value);
+		settings.SetValue("Optimizations.Inline", InlineOpts.IsChecked!.Value);
+		settings.SetValue("Optimizations.Inline.Explicit", InlineExplOpts.IsChecked!.Value);
+		settings.SetValue("Optimizations.LongExpansion", LongExpOpts.IsChecked!.Value);
+		settings.SetValue("Optimizations.TwoPass", TwoOptPass.IsChecked!.Value);
+		settings.SetValue("Optimizations.ValueNumbering", ValueNumOpts.IsChecked!.Value);
+		settings.SetValue("Optimizations.BitTracker", BtOpts.IsChecked!.Value);
+		settings.SetValue("Optimizations.Platform", PlatOpts.IsChecked!.Value);
+		settings.SetValue("Optimizations.LoopInvariantCodeMotion", LicmOpts.IsChecked!.Value);
 
-		settings.SetValue("Linker.Symbols", EmtSymbs.IsChecked.Value);
-		settings.SetValue("Linker.StaticRelocations", EmtRelocs.IsChecked.Value);
-		settings.SetValue("Linker.Drawf", EmtDwarf.IsChecked.Value);
+		settings.SetValue("Linker.Symbols", EmtSymbs.IsChecked!.Value);
+		settings.SetValue("Linker.StaticRelocations", EmtRelocs.IsChecked!.Value);
+		settings.SetValue("Linker.Dwarf", EmtDwarf.IsChecked!.Value);
 		settings.SetValue("Compiler.BaseAddress", BaseAddrTxt.Text.StartsWith("0x") ? uint.Parse(BaseAddrTxt.Text[2..], NumberStyles.HexNumber) : uint.Parse(BaseAddrTxt.Text));
 
-		settings.SetValue("CompilerDebug.NasmFile", NasmFile.IsChecked.Value ? "%DEFAULT%" : string.Empty);
-		settings.SetValue("CompilerDebug.AsmFile", AsmFile.IsChecked.Value ? "%DEFAULT%" : string.Empty);
-		settings.SetValue("CompilerDebug.MapFile", MapFile.IsChecked.Value ? "%DEFAULT%" : string.Empty);
-		settings.SetValue("CompilerDebug.DebugFile", DbgFile.IsChecked.Value ? "%DEFAULT%" : string.Empty);
-		settings.SetValue("CompilerDebug.InlinedFile", InlLstFile.IsChecked.Value ? "%DEFAULT%" : string.Empty);
-		settings.SetValue("CompilerDebug.PreLinkHashFile", HashFiles.IsChecked.Value ? "%DEFAULT%" : string.Empty);
+		settings.SetValue("CompilerDebug.NasmFile", NasmFile.IsChecked!.Value ? "%DEFAULT%" : string.Empty);
+		settings.SetValue("CompilerDebug.AsmFile", AsmFile.IsChecked!.Value ? "%DEFAULT%" : string.Empty);
+		settings.SetValue("CompilerDebug.MapFile", MapFile.IsChecked!.Value ? "%DEFAULT%" : string.Empty);
+		settings.SetValue("CompilerDebug.DebugFile", DbgFile.IsChecked!.Value ? "%DEFAULT%" : string.Empty);
+		settings.SetValue("CompilerDebug.InlinedFile", InlLstFile.IsChecked!.Value ? "%DEFAULT%" : string.Empty);
+		settings.SetValue("CompilerDebug.PreLinkHashFile", HashFiles.IsChecked!.Value ? "%DEFAULT%" : string.Empty);
 		settings.SetValue("CompilerDebug.PostLinkHashFile", HashFiles.IsChecked.Value ? "%DEFAULT%" : string.Empty);
-		settings.SetValue("CompilerDebug.CompileTimeFile", CompTimeFile.IsChecked.Value ? "%DEFAULT%" : string.Empty);
+		settings.SetValue("CompilerDebug.CompileTimeFile", CompTimeFile.IsChecked!.Value ? "%DEFAULT%" : string.Empty);
 
-		settings.SetValue("Launcher.Exit", ExitOnLaunch.IsChecked.Value);
+		settings.SetValue("Launcher.Exit", ExitOnLaunch.IsChecked!.Value);
 
-		settings.SetValue("Emulator.GDB", QemuGdb.IsChecked.Value);
-		settings.SetValue("Launcher.LaunchGDB", LaunchGdb.IsChecked.Value);
-		settings.SetValue("Launcher.LaunchDebugger", MosaDbger.IsChecked.Value);
+		settings.SetValue("Emulator.GDB", QemuGdb.IsChecked!.Value);
+		settings.SetValue("Launcher.LaunchGDB", LaunchGdb.IsChecked!.Value);
+		settings.SetValue("Launcher.LaunchDebugger", MosaDbger.IsChecked!.Value);
 
-		settings.SetValue("Compiler.Multithreading", MultiThreading.IsChecked.Value);
+		settings.SetValue("Compiler.Multithreading", MultiThreading.IsChecked!.Value);
 		settings.SetValue("Compiler.Multithreading.MaxThreads", 0);
-		settings.SetValue("Compiler.MethodScanner", MethodScanner.IsChecked.Value);
+		settings.SetValue("Compiler.MethodScanner", MethodScanner.IsChecked!.Value);
 
 		settings.SetValue("Emulator.Memory", (int)MemVal.Value);
 		settings.SetValue("Emulator.Cores", (int)CpuVal.Value);
 
-		settings.SetValue("Multiboot.Video", EnableVbe.IsChecked.Value);
+		settings.SetValue("Multiboot.Video", EnableVbe.IsChecked!.Value);
 		settings.SetValue("Multiboot.Width", (int)VbeWidth.Value);
 		settings.SetValue("Multiboot.Height", (int)VbeHeight.Value);
 		settings.SetValue("Multiboot.Depth", (int)VbeDepth.Value);
 
-		settings.SetValue("Launcher.PlugKorlib", PlugKorlib.IsChecked.Value);
+		settings.SetValue("Launcher.PlugKorlib", PlugKorlib.IsChecked!.Value);
 		settings.SetValue("OS.Name", OsNameTxt.Text);
 
 		UpdatePaths();
@@ -333,7 +334,7 @@ public partial class MainWindow : Window
 		settings.SetValue("Launcher.Exit", true);
 		settings.SetValue("Launcher.PlugKorlib", true);
 		settings.SetValue("Launcher.HuntForCorLib", true);
-		settings.SetValue("Linker.Drawf", false);
+		settings.SetValue("Linker.Dwarf", false);
 		settings.SetValue("OS.Name", OsNameTxt.Text);
 	}
 
@@ -392,7 +393,7 @@ public partial class MainWindow : Window
 		Position = new PixelPoint(x, y);
 	}
 
-	private void LnchBtn_OnClick(object? _, RoutedEventArgs e)
+	private void LnchBtn_OnClick(object? _, RoutedEventArgs __)
 	{
 		Tabs.SelectedIndex = 4;
 		UpdateSettings();

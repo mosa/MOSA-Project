@@ -11,17 +11,10 @@
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<WarningLevel>2</WarningLevel>
 		<DebugSymbols>True</DebugSymbols>
-		<!--Avalonia doesen't support TrimMode=link currently,but we are working on that https://github.com/AvaloniaUI/Avalonia/issues/6892 -->
-		<TrimMode>copyused</TrimMode>
 		<BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+		<ApplicationManifest>app.manifest</ApplicationManifest>
 	</PropertyGroup>
-	<ItemGroup>
-		<!--This helps with theme dll-s trimming.
-		If you will publish your application in self-contained mode with p:PublishTrimmed=true and it will use Fluent theme Default theme will be trimmed from the output and vice versa.
-		https://github.com/AvaloniaUI/Avalonia/issues/5593 -->
-		<TrimmableAssembly Include="Avalonia.Themes.Fluent" />
-		<TrimmableAssembly Include="Avalonia.Themes.Default" />
-	</ItemGroup>
+
 	<ItemGroup>
 		<PackageReference Include="Avalonia" Version="0.10.18" />
 		<PackageReference Include="Avalonia.Desktop" Version="0.10.18" />
@@ -29,9 +22,15 @@
 		<PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="0.10.18" />
 		<PackageReference Include="XamlNameReferenceGenerator" Version="1.5.1" />
 	</ItemGroup>
+
+	<ItemGroup>
+		<TrimmerRootDescriptor Include="Roots.xml" />
+	</ItemGroup>
+
 	<ItemGroup>
 		<ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
 		<ProjectReference Include="..\Mosa.Utility.Configuration\Mosa.Utility.Configuration.csproj" />
 		<ProjectReference Include="..\Mosa.Utility.Launcher\Mosa.Utility.Launcher.csproj" />
 	</ItemGroup>
+
 </Project>

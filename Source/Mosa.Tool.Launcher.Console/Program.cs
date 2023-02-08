@@ -110,7 +110,7 @@ internal static class Program
 		Settings.SetValue("Launcher.Exit", true);
 		Settings.SetValue("Launcher.PlugKorlib", true);
 		Settings.SetValue("Launcher.HuntForCorLib", true);
-		Settings.SetValue("Linker.Drawf", false);
+		Settings.SetValue("Linker.Dwarf", false);
 	}
 
 	private static void LoadArguments(string[] args)

@@ -44,7 +44,7 @@ public class CompilerToolSettings
 
 	public bool EmitBinary { get { return Settings.GetValue("Compiler.Binary", true); } }
 
-	public bool EmitDrawf { get { return Settings.GetValue("Linker.Drawf", false); } }
+	public bool EmitDwarf { get { return Settings.GetValue("Linker.Dwarf", false); } }
 
 	public string Emulator
 	{

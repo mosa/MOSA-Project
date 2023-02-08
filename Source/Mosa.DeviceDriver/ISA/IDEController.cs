@@ -332,7 +332,7 @@ public class IDEController : BaseDeviceDriver, IDiskControllerDevice
 	/// </summary>
 	/// <param name="drive">The drive.</param>
 	/// <returns></returns>
-	bool IDiskControllerDevice.Open(uint drive)
+	public bool Open(uint drive)
 	{
 		//HAL.DebugWriteLine("Open()" + drive.ToString() + " : " + MaximumDriveCount.ToString() + " : " + (driveInfo[drive].Present ? "Y" : "N"));
 
@@ -461,27 +461,27 @@ public class IDEController : BaseDeviceDriver, IDiskControllerDevice
 	/// </summary>
 	/// <param name="drive">The drive.</param>
 	/// <returns></returns>
-	bool IDiskControllerDevice.Release(uint drive) => true;
+	public bool Release(uint drive) => true;
 
 	/// <summary>
 	/// Gets the maximum drive count.
 	/// </summary>
 	/// <value>The drive count.</value>
-	uint IDiskControllerDevice.MaximunDriveCount => MaximumDriveCount;
+	public uint MaximunDriveCount => MaximumDriveCount;
 
 	/// <summary>
 	/// Gets the size of the sector.
 	/// </summary>
 	/// <param name="drive">The drive NBR.</param>
 	/// <returns></returns>
-	uint IDiskControllerDevice.GetSectorSize(uint drive) => 512;
+	public uint GetSectorSize(uint drive) => 512;
 
 	/// <summary>
 	/// Gets the total sectors.
 	/// </summary>
 	/// <param name="drive">The drive NBR.</param>
 	/// <returns></returns>
-	uint IDiskControllerDevice.GetTotalSectors(uint drive)
+	public uint GetTotalSectors(uint drive)
 	{
 		if (drive >= MaximumDriveCount || !driveInfo[drive].Present)
 			return 0;
@@ -496,7 +496,7 @@ public class IDEController : BaseDeviceDriver, IDiskControllerDevice
 	/// <returns>
 	/// 	<c>true</c> if this instance can write to the specified drive; otherwise, <c>false</c>.
 	/// </returns>
-	bool IDiskControllerDevice.CanWrite(uint drive)
+	public bool CanWrite(uint drive)
 	{
 		// TODO
 		return true;
@@ -510,7 +510,7 @@ public class IDEController : BaseDeviceDriver, IDiskControllerDevice
 	/// <param name="count">The count.</param>
 	/// <param name="data">The data.</param>
 	/// <returns></returns>
-	bool IDiskControllerDevice.ReadBlock(uint drive, uint block, uint count, byte[] data)
+	public bool ReadBlock(uint drive, uint block, uint count, byte[] data)
 	{
 		if (drive >= MaximumDriveCount || !driveInfo[drive].Present)
 			return false;
@@ -553,7 +553,7 @@ public class IDEController : BaseDeviceDriver, IDiskControllerDevice
 	/// <param name="count">The count.</param>
 	/// <param name="data">The data.</param>
 	/// <returns></returns>
-	bool IDiskControllerDevice.WriteBlock(uint drive, uint block, uint count, byte[] data)
+	public bool WriteBlock(uint drive, uint block, uint count, byte[] data)
 	{
 		if (drive >= MaximumDriveCount || !driveInfo[drive].Present)
 			return false;

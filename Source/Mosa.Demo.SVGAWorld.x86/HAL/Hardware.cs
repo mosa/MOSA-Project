@@ -147,7 +147,7 @@ public sealed class Hardware : BaseHardwareAbstraction
 	/// <param name="message">The message.</param>
 	public override void Abort(string message)
 	{
-		Panic.Error(message);
+		Environment.FailFast(message);
 	}
 
 	/// <summary>

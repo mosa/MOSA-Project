@@ -3,7 +3,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using Mosa.Demo.SVGAWorld.x86.Components;
-using Mosa.Demo.SVGAWorld.x86.Utils;
 
 namespace Mosa.Demo.SVGAWorld.x86.Apps;
 
@@ -41,7 +40,7 @@ public class BackColorBtn : Button
 	public readonly uint BaseX, BaseY;
 
 	public BackColorBtn(Settings settings, Color color) : base(string.Empty, 0, 0, settings.ButtonWidthAndHeight, color,
-		color, color, () => GeneralUtils.BackColor = color, settings.ButtonWidthAndHeight)
+		color, color, () => Utils.BackColor = color, settings.ButtonWidthAndHeight)
 	{
 		BaseX = settings.X;
 		BaseY = settings.Y;
@@ -78,11 +77,11 @@ public class Settings : Window
 		bodyColor)
 	{
 		MouseColorLabel = new Label("Mouse color:", Display.DefaultFont, x + DefaultPadding, y + TitlebarHeight
-			+ DefaultPadding, GeneralUtils.Invert(bodyColor));
+			+ DefaultPadding, Utils.Invert(bodyColor));
 		BackColorLabel = new Label("Background color:", Display.DefaultFont, x + DefaultPadding, y + TitlebarHeight
-			+ DefaultPadding + 60, GeneralUtils.Invert(bodyColor));
+			+ DefaultPadding + 60, Utils.Invert(bodyColor));
 		FontLabel = new Label("Font:", Display.DefaultFont, x + DefaultPadding, y + TitlebarHeight
-			+ DefaultPadding + 110, GeneralUtils.Invert(bodyColor));
+			+ DefaultPadding + 110, Utils.Invert(bodyColor));
 
 		Buttons = new List<Button>();
 
@@ -150,12 +149,12 @@ public class Settings : Window
 		Buttons.Add(new BackColorBtn(this, Color.Orange));
 		Buttons.Add(new BackColorBtn(this, Color.Indigo));
 		Buttons.Add(new BackColorBtn(this, Color.Pink));
-		var def = new Button(GeneralUtils.Fonts[0].Name, X + DefaultPadding, Y + TitlebarHeight + DefaultPadding + 130,
+		var def = new Button(Utils.Fonts[0].Name, X + DefaultPadding, Y + TitlebarHeight + DefaultPadding + 130,
 			20, Color.Crimson, Color.White, Color.Firebrick,
-			() => Display.DefaultFont = GeneralUtils.Fonts[0]);
+			() => Display.DefaultFont = Utils.Fonts[0]);
 		Buttons.Add(def);
-		Buttons.Add(new Button(GeneralUtils.Fonts[1].Name, X + DefaultPadding * 2 + def.Width,
+		Buttons.Add(new Button(Utils.Fonts[1].Name, X + DefaultPadding * 2 + def.Width,
 			Y + TitlebarHeight + DefaultPadding + 130, 20, Color.Crimson, Color.White,
-			Color.Firebrick, () => Display.DefaultFont = GeneralUtils.Fonts[1]));
+			Color.Firebrick, () => Display.DefaultFont = Utils.Fonts[1]));
 	}
 }

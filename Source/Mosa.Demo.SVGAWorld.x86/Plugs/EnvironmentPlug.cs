@@ -1,28 +1,28 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
-using Mosa.Kernel.x86;
 using Mosa.Runtime.Plug;
 
-namespace Mosa.Plug.Korlib.System.x86;
+namespace Mosa.Demo.SVGAWorld.x86.Plugs;
 
 public static class EnvironmentPlug
 {
 	[Plug("System.Environment::Exit")]
 	internal static void Exit(int exitCode)
 	{
-		throw new NotImplementedException();
+		Boot.PCService.Shutdown();
 	}
 
 	[Plug("System.Environment::FailFast")]
 	internal static void FailFast(string message)
 	{
-		Panic.Error(message);
+		Display.Driver.Disable();
+		Console.BackgroundColor = ConsoleColor.Black;
+		Console.ForegroundColor = ConsoleColor.Red;
+		Console.WriteLine("***FAIL FAST*** " + message);
+		for (;;) ;
 	}
 
 	[Plug("System.Environment::GetProcessorCount")]
-	internal static int GetProcessorCount()
-	{
-		throw new NotImplementedException();
-	}
+	internal static int GetProcessorCount() => 1; // TODO: APIC
 }
