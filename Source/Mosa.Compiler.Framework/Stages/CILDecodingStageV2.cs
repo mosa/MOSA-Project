@@ -166,7 +166,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 			var opcode = (OpCode)instruction.OpCode;
 
-			if (opcode == OpCode.Br || opcode == OpCode.Br_s)
+			if (opcode is OpCode.Br or OpCode.Br_s)
 			{
 				AddTarget((int)instruction.Operand);
 			}
@@ -184,7 +184,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 				AddTarget(code[index + 1].Offset);
 			}
-			else if (opcode == OpCode.Leave || opcode == OpCode.Leave_s)
+			else if (opcode is OpCode.Leave or OpCode.Leave_s)
 			{
 				AddTarget((int)instruction.Operand);
 			}
@@ -506,7 +506,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 			var opcode = (OpCode)instruction.OpCode;
 
-			if (opcode == OpCode.Ldloca || opcode == OpCode.Ldloca_s)
+			if (opcode is OpCode.Ldloca or OpCode.Ldloca_s)
 			{
 				var index = (int)instruction.Operand;
 
@@ -2427,7 +2427,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		var source = stack.Pop();
 		var destination = stack.Pop();
 
-		if ((source.StackType == StackType.Int32 || source.StackType == StackType.Int64) && (destination.StackType == StackType.Int32 || destination.StackType == StackType.Int64))
+		if (source.StackType is StackType.Int32 or StackType.Int64 && destination.StackType is StackType.Int32 or StackType.Int64)
 		{
 			context.AppendInstruction(IRInstruction.MemoryCopy, null, source.Operand, destination.Operand);
 			return true;
@@ -3378,7 +3378,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 			return true;
 		}
-		else if (stackType == StackType.Int32 || stackType == StackType.Int64)
+		else if (stackType is StackType.Int32 or StackType.Int64)
 		{
 			var newThisLocal = AddStackLocal(classType);
 			var newThis = AllocateVirtualRegisterManagedPointer();

@@ -169,7 +169,7 @@ public class MosaTypeLayout
 	/// <param name="nativePointerAlignment">The native pointer alignment.</param>
 	public MosaTypeLayout(TypeSystem typeSystem, uint nativePointerSize, uint nativePointerAlignment)
 	{
-		Debug.Assert(nativePointerSize == 4 || nativePointerSize == 8);
+		Debug.Assert(nativePointerSize is 4 or 8);
 
 		NativePointerAlignment = nativePointerAlignment;
 		NativePointerSize = nativePointerSize;
@@ -418,11 +418,8 @@ public class MosaTypeLayout
 
 		var typeCode = underlyingType.TypeCode;
 
-		if (typeCode == MosaTypeCode.ValueType)
+		if (typeCode is MosaTypeCode.ValueType or MosaTypeCode.Var)
 			return false; // no search
-
-		if (typeCode == MosaTypeCode.Var)
-			return false;
 
 		return true;
 	}
@@ -434,11 +431,8 @@ public class MosaTypeLayout
 
 		var typeCode = underlyingType.TypeCode;
 
-		if (typeCode == MosaTypeCode.ValueType)
+		if (typeCode is MosaTypeCode.ValueType or MosaTypeCode.Var)
 			return true; // no search
-
-		if (typeCode == MosaTypeCode.Var)
-			return true;
 
 		return false;
 	}
@@ -672,7 +666,7 @@ public class MosaTypeLayout
 			}
 		}
 
-		typeSizes.Add(type, (type.ClassSize == null || type.ClassSize == -1) ? typeSize : (uint)type.ClassSize);
+		typeSizes.Add(type, type.ClassSize is null or -1 ? typeSize : (uint)type.ClassSize);
 	}
 
 	/// <summary>
@@ -700,7 +694,7 @@ public class MosaTypeLayout
 			Debug.Assert(fieldSizes[field] != 0, "Non-static field doesn't have layout!");
 		}
 
-		typeSizes.Add(type, (type.ClassSize == null || type.ClassSize == -1) ? size : (uint)type.ClassSize);
+		typeSizes.Add(type, type.ClassSize is null or -1 ? size : (uint)type.ClassSize);
 	}
 
 	private uint ComputeFieldSize(MosaField field)

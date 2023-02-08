@@ -12,7 +12,7 @@ public sealed class Compare64x64RestInSSA : BaseTransform
 
 	public override bool Match(Context context, TransformContext transform)
 	{
-		if (context.ConditionCode == ConditionCode.Equal || context.ConditionCode == ConditionCode.NotEqual)
+		if (context.ConditionCode is ConditionCode.Equal or ConditionCode.NotEqual)
 			return false;
 
 		if (!transform.IsInSSAForm)

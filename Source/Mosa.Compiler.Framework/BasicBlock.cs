@@ -120,9 +120,7 @@ public sealed class BasicBlock
 			var node = BeforeLast;
 
 			while (node.IsEmpty
-				   || node.Instruction.FlowControl == FlowControl.UnconditionalBranch
-				   || node.Instruction.FlowControl == FlowControl.ConditionalBranch
-				   || node.Instruction.FlowControl == FlowControl.Return)
+			       || node.Instruction.FlowControl is FlowControl.UnconditionalBranch or FlowControl.ConditionalBranch or FlowControl.Return)
 			{
 				node = node.Previous;
 			}

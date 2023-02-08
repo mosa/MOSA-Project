@@ -188,7 +188,7 @@ public sealed class CILDecodingStage : BaseMethodCompilerStage, IInstructionDeco
 
 			var flow = node.Instruction.FlowControl;
 
-			if (flow == FlowControl.Next || flow == FlowControl.Call || flow == FlowControl.ConditionalBranch || flow == FlowControl.Switch)
+			if (flow is FlowControl.Next or FlowControl.Call or FlowControl.ConditionalBranch or FlowControl.Switch)
 			{
 				var nextInstruction = code[i + 1];
 

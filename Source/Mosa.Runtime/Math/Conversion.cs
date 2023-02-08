@@ -22,7 +22,7 @@ internal static class Conversion
 		short Exponent = (short)(ExponentBias - RawExponent);
 		ulong Sign = rawValue >> 63;
 
-		if (rawValue == RawPositiveInfinity || rawValue == RawNegativeInfinity || rawValue == RawNaN || Exponent < -11)
+		if (rawValue is RawPositiveInfinity or RawNegativeInfinity or RawNaN || Exponent < -11)
 		{
 			return long.MinValue;
 		}
@@ -56,7 +56,7 @@ internal static class Conversion
 		short Exponent = (short)(ExponentBias - RawExponent);
 		ulong Sign = rawValue >> 63;
 
-		if (rawValue == RawPositiveInfinity || rawValue == RawNegativeInfinity || rawValue == RawNaN || Exponent < -11)
+		if (rawValue is RawPositiveInfinity or RawNegativeInfinity or RawNaN || Exponent < -11)
 		{
 			return long.MinValue;
 		}
@@ -95,7 +95,7 @@ internal static class Conversion
 			return unchecked((ulong)long.MinValue);
 		}
 
-		if (rawValue == RawPositiveInfinity || rawValue == RawNaN)
+		if (rawValue is RawPositiveInfinity or RawNaN)
 		{
 			return ulong.MinValue;
 		}
@@ -139,7 +139,7 @@ internal static class Conversion
 			return unchecked((ulong)long.MinValue);
 		}
 
-		if (rawValue == RawPositiveInfinity || rawValue == RawNaN)
+		if (rawValue is RawPositiveInfinity or RawNaN)
 		{
 			return ulong.MinValue;
 		}

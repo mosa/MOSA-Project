@@ -139,7 +139,7 @@ public sealed unsafe class RuntimeType : Type
 
 	protected override bool IsArrayImpl()
 	{
-		return typeCode == TypeCode.Array || typeCode == TypeCode.SZArray;
+		return typeCode is TypeCode.Array or TypeCode.SZArray;
 	}
 
 	protected override bool IsByRefImpl()
@@ -155,7 +155,7 @@ public sealed unsafe class RuntimeType : Type
 
 	protected override bool IsPointerImpl()
 	{
-		return typeCode == TypeCode.ManagedPointer || typeCode == TypeCode.UnmanagedPointer;
+		return typeCode is TypeCode.ManagedPointer or TypeCode.UnmanagedPointer;
 	}
 
 	public override Type MakeArrayType()

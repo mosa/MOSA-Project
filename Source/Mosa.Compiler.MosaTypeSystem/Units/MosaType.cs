@@ -88,7 +88,7 @@ public class MosaType : MosaUnit, IEquatable<MosaType>
 
 	public bool IsTypedRef { get { return TypeCode == MosaTypeCode.TypedRef; } }
 
-	public bool IsArray { get { return TypeCode == MosaTypeCode.Array || TypeCode == MosaTypeCode.SZArray; } }
+	public bool IsArray { get { return TypeCode is MosaTypeCode.Array or MosaTypeCode.SZArray; } }
 
 	public bool IsMVar { get { return TypeCode == MosaTypeCode.MVar; } }
 
@@ -120,11 +120,7 @@ public class MosaType : MosaUnit, IEquatable<MosaType>
 	{
 		get
 		{
-			return TypeCode == MosaTypeCode.ReferenceType
-				   || TypeCode == MosaTypeCode.String
-				   || TypeCode == MosaTypeCode.Object
-				   || TypeCode == MosaTypeCode.Array
-				   || TypeCode == MosaTypeCode.SZArray;
+			return TypeCode is MosaTypeCode.ReferenceType or MosaTypeCode.String or MosaTypeCode.Object or MosaTypeCode.Array or MosaTypeCode.SZArray;
 		}
 	}
 
@@ -132,11 +128,9 @@ public class MosaType : MosaUnit, IEquatable<MosaType>
 	{
 		get
 		{
-			return TypeCode == MosaTypeCode.ValueType
-				   || TypeCode == MosaTypeCode.Boolean
-				   || TypeCode == MosaTypeCode.Char
-				   || IsInteger
-				   || IsR;
+			return TypeCode is MosaTypeCode.ValueType or MosaTypeCode.Boolean or MosaTypeCode.Char 
+			       || IsInteger 
+			       || IsR;
 		}
 	}
 

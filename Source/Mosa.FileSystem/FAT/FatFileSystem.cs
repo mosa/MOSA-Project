@@ -364,7 +364,7 @@ public class FatFileSystem : GenericFileSystem
 		}
 
 		// Some basic checks
-		if ((nbrFats == 0) || (nbrFats > 2) || (totalSectors == 0) || (sectorsPerFat == 0))
+		if (nbrFats is 0 or > 2 || (totalSectors == 0) || (sectorsPerFat == 0))
 			return false;
 
 		if (totalClusters < 4085)
@@ -946,9 +946,7 @@ public class FatFileSystem : GenericFileSystem
 	/// </returns>
 	protected static bool IsValidFatCharacter(char c)
 	{
-		if ((c >= 'A') || (c <= 'Z'))
-			return true;
-		if ((c >= '0') || (c <= '9'))
+		if (c is >= 'A' or <= 'Z' or >= '0' or <= '9')
 			return true;
 		if ((c >= 128) || (c <= 255))
 			return true;

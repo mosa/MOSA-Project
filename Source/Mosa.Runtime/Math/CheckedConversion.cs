@@ -86,7 +86,7 @@ internal static class CheckedConversion
 	public static int U4ToI4(uint value)
 	{
 		var sValue = (int)value;
-		if (sValue < 0 || sValue > int.MaxValue)
+		if (sValue is < 0 or > int.MaxValue)
 			Internal.ThrowOverflowException();
 		return (int)value;
 	}
@@ -94,7 +94,7 @@ internal static class CheckedConversion
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static int I8ToI4(long value)
 	{
-		if (value < int.MinValue || value > int.MaxValue)
+		if (value is < int.MinValue or > int.MaxValue)
 			Internal.ThrowOverflowException();
 		return (int)value;
 	}
@@ -139,7 +139,7 @@ internal static class CheckedConversion
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static uint I8ToU4(long value)
 	{
-		if (value < 0 || value > uint.MaxValue)
+		if (value is < 0 or > uint.MaxValue)
 			Internal.ThrowOverflowException();
 		return (uint)value;
 	}
@@ -176,7 +176,7 @@ internal static class CheckedConversion
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static short I4ToI2(int value)
 	{
-		if (value < short.MinValue || value > short.MaxValue)
+		if (value is < short.MinValue or > short.MaxValue)
 			Internal.ThrowOverflowException();
 		return (short)value;
 	}
@@ -185,7 +185,7 @@ internal static class CheckedConversion
 	public static short U4ToI2(uint value)
 	{
 		var sValue = (int)value;
-		if (sValue < 0 || sValue > short.MaxValue)
+		if (sValue is < 0 or > short.MaxValue)
 			Internal.ThrowOverflowException();
 		return (short)value;
 	}
@@ -193,7 +193,7 @@ internal static class CheckedConversion
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static short I8ToI2(long value)
 	{
-		if (value < short.MinValue || value > short.MaxValue)
+		if (value is < short.MinValue or > short.MaxValue)
 			Internal.ThrowOverflowException();
 		return (short)value;
 	}
@@ -202,7 +202,7 @@ internal static class CheckedConversion
 	public static short U8ToI2(ulong value)
 	{
 		var sValue = (long)value;
-		if (sValue < 0 || sValue > short.MaxValue)
+		if (sValue is < 0 or > short.MaxValue)
 			Internal.ThrowOverflowException();
 		return (short)value;
 	}
@@ -230,7 +230,7 @@ internal static class CheckedConversion
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static ushort I4ToU2(int value)
 	{
-		if (value < 0 || value > ushort.MaxValue)
+		if (value is < 0 or > ushort.MaxValue)
 			Internal.ThrowOverflowException();
 		return (ushort)value;
 	}
@@ -246,7 +246,7 @@ internal static class CheckedConversion
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static ushort I8ToU2(long value)
 	{
-		if (value < 0 || value > ushort.MaxValue)
+		if (value is < 0 or > ushort.MaxValue)
 			Internal.ThrowOverflowException();
 		return (ushort)value;
 	}
@@ -282,7 +282,7 @@ internal static class CheckedConversion
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static sbyte I4ToI1(int value)
 	{
-		if (value < sbyte.MinValue || value > sbyte.MaxValue)
+		if (value is < sbyte.MinValue or > sbyte.MaxValue)
 			Internal.ThrowOverflowException();
 		return (sbyte)value;
 	}
@@ -291,7 +291,7 @@ internal static class CheckedConversion
 	public static sbyte U4ToI1(uint value)
 	{
 		var sValue = (int)value;
-		if (sValue < 0 || sValue > sbyte.MaxValue)
+		if (sValue is < 0 or > sbyte.MaxValue)
 			Internal.ThrowOverflowException();
 		return (sbyte)value;
 	}
@@ -299,7 +299,7 @@ internal static class CheckedConversion
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static sbyte I8ToI1(long value)
 	{
-		if (value < sbyte.MinValue || value > sbyte.MaxValue)
+		if (value is < sbyte.MinValue or > sbyte.MaxValue)
 			Internal.ThrowOverflowException();
 		return (sbyte)value;
 	}
@@ -308,7 +308,7 @@ internal static class CheckedConversion
 	public static sbyte U8ToI1(ulong value)
 	{
 		var sValue = (long)value;
-		if (sValue < 0 || sValue > sbyte.MaxValue)
+		if (sValue is < 0 or > sbyte.MaxValue)
 			Internal.ThrowOverflowException();
 		return (sbyte)value;
 	}
@@ -336,7 +336,7 @@ internal static class CheckedConversion
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static byte I4ToU1(int value)
 	{
-		if (value < 0 || value > byte.MaxValue)
+		if (value is < 0 or > byte.MaxValue)
 			Internal.ThrowOverflowException();
 		return (byte)value;
 	}
@@ -345,7 +345,7 @@ internal static class CheckedConversion
 	public static byte U4ToU1(uint value)
 	{
 		var sValue = (int)value;
-		if (sValue < 0 || sValue > byte.MaxValue)
+		if (sValue is < 0 or > byte.MaxValue)
 			Internal.ThrowOverflowException();
 		return (byte)value;
 	}
@@ -353,7 +353,7 @@ internal static class CheckedConversion
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static byte I8ToU1(long value)
 	{
-		if (value < 0 || value > byte.MaxValue)
+		if (value is < 0 or > byte.MaxValue)
 			Internal.ThrowOverflowException();
 		return (byte)value;
 	}
@@ -362,7 +362,7 @@ internal static class CheckedConversion
 	public static byte U8ToU1(ulong value)
 	{
 		var sValue = (long)value;
-		if (sValue < 0 || sValue > byte.MaxValue)
+		if (sValue is < 0 or > byte.MaxValue)
 			Internal.ThrowOverflowException();
 		return (byte)value;
 	}

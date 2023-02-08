@@ -10,7 +10,7 @@ public sealed class Deadcode : BaseTransform
 
 	public override bool Match(Context context, TransformContext transform)
 	{
-		if (context.ResultCount == 0 || context.ResultCount > 2)
+		if (context.ResultCount is 0 or > 2)
 			return false;
 
 		if (!IsSSAForm(context.Result))
