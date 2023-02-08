@@ -34,7 +34,7 @@ public sealed class BinaryBranchInstruction : BinaryInstruction
 	/// building. Any instruction that alters the control flow must override
 	/// this property and correctly identify its control flow modifications.
 	/// </remarks>
-	public override FlowControl FlowControl { get { return FlowControl.ConditionalBranch; } }
+	public override FlowControl FlowControl => FlowControl.ConditionalBranch;
 
 	#endregion Properties
 

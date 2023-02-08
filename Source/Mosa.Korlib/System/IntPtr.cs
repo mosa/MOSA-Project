@@ -152,10 +152,7 @@ public struct IntPtr
 	{
 		[NonVersionable]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		get
-		{
-			return sizeof(void*);
-		}
+		get => sizeof(void*);
 	}
 
 	[Intrinsic]

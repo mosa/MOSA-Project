@@ -26,8 +26,5 @@ public sealed class ComVisibleAttribute : Attribute
 	/// <summary>
 	/// Value
 	/// </summary>
-	public bool Value
-	{
-		get { return Visible; }
-	}
+	public bool Value => Visible;
 }

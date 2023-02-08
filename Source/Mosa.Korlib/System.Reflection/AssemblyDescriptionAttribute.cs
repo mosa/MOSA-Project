@@ -10,10 +10,7 @@ public sealed class AssemblyDescriptionAttribute : Attribute
 	/// <summary>
 	/// The assembly description.
 	/// </summary>
-	public string Description
-	{
-		get { return description; }
-	}
+	public string Description => description;
 
 	/// <summary>
 	/// Initializes a new instance of the AssemblyDescriptionAttribute class.

@@ -7,7 +7,7 @@ public class ReadMemory : GDBCommand
 	public ulong Address { get; }
 	public uint SentBytes { get; }
 
-	protected override string PackArguments { get { return Address.ToString("x") + "," + SentBytes.ToString("x"); } }
+	protected override string PackArguments => Address.ToString("x") + "," + SentBytes.ToString("x");
 
 	public ReadMemory(ulong address, uint bytes, CallBack callBack = null) : base("m", callBack)
 	{

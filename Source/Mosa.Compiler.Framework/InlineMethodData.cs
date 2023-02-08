@@ -16,7 +16,7 @@ public sealed class InlineMethodData
 
 	public HashSet<MosaMethod> References { get; private set; }
 
-	public bool IsInlined { get { return BasicBlocks != null; } }
+	public bool IsInlined => BasicBlocks != null;
 
 	public InlineMethodData(BasicBlocks basicBlocks, int version)
 	{

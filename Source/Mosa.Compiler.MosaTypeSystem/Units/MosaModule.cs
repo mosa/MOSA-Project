@@ -29,11 +29,11 @@ public sealed class MosaModule : MosaUnit
 			this.module = module;
 		}
 
-		public string? Assembly { set { module.Assembly = value; } }
+		public string? Assembly { set => module.Assembly = value; }
 
-		public bool IsReflectionOnly { set { module.IsReflectionOnly = value; } }
+		public bool IsReflectionOnly { set => module.IsReflectionOnly = value; }
 
-		public MosaMethod EntryPoint { set { module.EntryPoint = value; } }
+		public MosaMethod EntryPoint { set => module.EntryPoint = value; }
 
 		public override void Dispose()
 		{

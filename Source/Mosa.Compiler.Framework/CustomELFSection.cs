@@ -12,7 +12,7 @@ public class CustomELFSection
 
 	public ulong PhysicalAddress { get; set; } = 0;
 
-	public long Size { get { return Stream.Length; } }
+	public long Size => Stream.Length;
 
 	public bool Read { get; set; } = true;
 

@@ -16,34 +16,25 @@ public sealed class LinkedListNode<T>
 	/// <summary>
 	/// Gets the LinkedList<T> that the LinkedListNode<T> belongs to.
 	/// </summary>
-	public LinkedList<T> List
-	{
-		get { return list; }
-	}
+	public LinkedList<T> List => list;
 
 	/// <summary>
 	/// Gets the next node in the LinkedList<T>.
 	/// </summary>
-	public LinkedListNode<T> Next
-	{
-		get { return next; }
-	}
+	public LinkedListNode<T> Next => next;
 
 	/// <summary>
 	/// Gets the previous node in the LinkedList<T>.
 	/// </summary>
-	public LinkedListNode<T> Previous
-	{
-		get { return previous; }
-	}
+	public LinkedListNode<T> Previous => previous;
 
 	/// <summary>
 	/// Gets the value contained in the node.
 	/// </summary>
 	public T Value
 	{
-		get { return value; }
-		set { this.value = value; }
+		get => value;
+		set => this.value = value;
 	}
 
 	/// <summary>

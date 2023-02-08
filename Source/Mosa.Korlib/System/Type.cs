@@ -45,26 +45,17 @@ public abstract class Type
 	/// <summary>
 	/// Gets a value indicating whether the current Type encompasses or refers to another type; that is, whether the current Type is an array, a pointer, or is passed by reference.
 	/// </summary>
-	public bool HasElementType
-	{
-		get { return HasElementTypeImpl(); }
-	}
+	public bool HasElementType => HasElementTypeImpl();
 
 	/// <summary>
 	/// Gets a value indicating whether the Type is an array.
 	/// </summary>
-	public bool IsArray
-	{
-		get { return IsArrayImpl(); }
-	}
+	public bool IsArray => IsArrayImpl();
 
 	/// <summary>
 	/// Gets a value indicating whether the Type is passed by reference.
 	/// </summary>
-	public bool IsByRef
-	{
-		get { return IsByRefImpl(); }
-	}
+	public bool IsByRef => IsByRefImpl();
 
 	/// <summary>
 	/// Gets a value that indicates whether this object represents a constructed generic type. You can create instances of a constructed generic type.
@@ -79,18 +70,12 @@ public abstract class Type
 	/// <summary>
 	/// Gets a value indicating whether the current Type object represents a type whose definition is nested inside the definition of another type.
 	/// </summary>
-	public bool IsNested
-	{
-		get { return IsNestedImpl(); }
-	}
+	public bool IsNested => IsNestedImpl();
 
 	/// <summary>
 	/// Gets a value indicating whether the Type is a pointer.
 	/// </summary>
-	public bool IsPointer
-	{
-		get { return IsPointerImpl(); }
-	}
+	public bool IsPointer => IsPointerImpl();
 
 	/// <summary>
 	/// Gets the name of the System.Type.
@@ -105,10 +90,7 @@ public abstract class Type
 	/// <summary>
 	/// Gets the handle for the current Type.
 	/// </summary>
-	public virtual RuntimeTypeHandle TypeHandle
-	{
-		get { throw new NotImplementedException(); }
-	}
+	public virtual RuntimeTypeHandle TypeHandle => throw new NotImplementedException();
 
 	/// <summary>
 	/// Determines if the underlying system type of the current Type is the same as the underlying system type of the specified Object.
@@ -162,10 +144,7 @@ public abstract class Type
 	public virtual bool IsSerializable
 	{
 		[Pure]
-		get
-		{
-			throw new NotImplementedException();
-		}
+		get => throw new NotImplementedException();
 	}
 
 	/// <summary>

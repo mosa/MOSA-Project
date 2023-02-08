@@ -52,13 +52,7 @@ public sealed class ObsoleteAttribute : Attribute
 		_error = error;
 	}
 
-	public String Message
-	{
-		get { return _message; }
-	}
+	public String Message => _message;
 
-	public bool IsError
-	{
-		get { return _error; }
-	}
+	public bool IsError => _error;
 }

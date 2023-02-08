@@ -26,7 +26,7 @@ public sealed unsafe class RuntimeTypeInfo : TypeInfo
 
 	public override TypeAttributes Attributes { get; }
 
-	public override Type BaseType { get { return (IsInterface) ? null : baseType; } }
+	public override Type BaseType => (IsInterface) ? null : baseType;
 
 	public override bool ContainsGenericParameters => throw new NotImplementedException();
 
@@ -60,44 +60,27 @@ public sealed unsafe class RuntimeTypeInfo : TypeInfo
 
 	public override string FullName { get; }
 
-	public override int GenericParameterPosition
-	{
-		get { throw new NotSupportedException(); }
-	}
+	public override int GenericParameterPosition => throw new NotSupportedException();
 
-	public override Type[] GenericTypeArguments
-	{
-		get { return new Type[0]; }
-	}
+	public override Type[] GenericTypeArguments => new Type[0];
 
-	public override bool IsEnum
-	{
-		get { return BaseType == EnumType; }
-	}
+	public override bool IsEnum => BaseType == EnumType;
 
-	public override bool IsGenericParameter
-	{
+	public override bool IsGenericParameter =>
 		// We don't know so just return false
-		get { return false; }
-	}
+		false;
 
-	public override bool IsGenericType
-	{
+	public override bool IsGenericType =>
 		// We don't know so just return false
-		get { return false; }
-	}
+		false;
 
-	public override bool IsGenericTypeDefinition
-	{
+	public override bool IsGenericTypeDefinition =>
 		// We don't know so just return false
-		get { return false; }
-	}
+		false;
 
-	public override bool IsSerializable
-	{
+	public override bool IsSerializable =>
 		// We don't know so just return false
-		get { return false; }
-	}
+		false;
 
 	public override string Name { get; }
 
@@ -201,9 +184,9 @@ public sealed unsafe class RuntimeTypeInfo : TypeInfo
 
 	protected override bool IsPrimitiveImpl()
 	{
-		return typeCode is TypeCode.Boolean or TypeCode.Char 
-		       || (typeCode >= TypeCode.I && typeCode <= TypeCode.I8) 
-		       || (typeCode >= TypeCode.U && typeCode <= TypeCode.U8) 
+		return typeCode is TypeCode.Boolean or TypeCode.Char
+		       || (typeCode >= TypeCode.I && typeCode <= TypeCode.I8)
+		       || (typeCode >= TypeCode.U && typeCode <= TypeCode.U8)
 		       || typeCode is TypeCode.R4 or TypeCode.R8;
 	}
 

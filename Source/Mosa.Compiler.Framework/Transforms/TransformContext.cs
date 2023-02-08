@@ -76,44 +76,35 @@ public sealed class TransformContext
 
 	public int Window { get; private set; }
 
-	public Operand StackFrame
-	{ get { return MethodCompiler.Compiler.StackFrame; } }
+	public Operand StackFrame => MethodCompiler.Compiler.StackFrame;
 
-	public Operand StackPointer
-	{ get { return MethodCompiler.Compiler.StackPointer; } }
+	public Operand StackPointer => MethodCompiler.Compiler.StackPointer;
 
 	/// <summary>
 	/// Gets the link register.
 	/// </summary>
-	public Operand LinkRegister
-	{ get { return MethodCompiler.Compiler.LinkRegister; } }
+	public Operand LinkRegister => MethodCompiler.Compiler.LinkRegister;
 
 	/// <summary>
 	/// Gets the program counter
 	/// </summary>
-	public Operand ProgramCounter
-	{ get { return MethodCompiler.Compiler.ProgramCounter; } }
+	public Operand ProgramCounter => MethodCompiler.Compiler.ProgramCounter;
 
 	/// <summary>
 	/// Gets the exception register.
 	/// </summary>
-	public Operand ExceptionRegister
-	{ get { return MethodCompiler.Compiler.ExceptionRegister; } }
+	public Operand ExceptionRegister => MethodCompiler.Compiler.ExceptionRegister;
 
 	/// <summary>
 	/// Gets the leave target register.
 	/// </summary>
-	public Operand LeaveTargetRegister
-	{ get { return MethodCompiler.Compiler.LeaveTargetRegister; } }
+	public Operand LeaveTargetRegister => MethodCompiler.Compiler.LeaveTargetRegister;
 
-	public uint NativePointerSize
-	{ get { return Compiler.Architecture.NativePointerSize; } }
+	public uint NativePointerSize => Compiler.Architecture.NativePointerSize;
 
-	public BaseArchitecture Architecture
-	{ get { return Compiler.Architecture; } }
+	public BaseArchitecture Architecture => Compiler.Architecture;
 
-	public MosaLinker Linker
-	{ get { return Compiler.Linker; } }
+	public MosaLinker Linker => Compiler.Linker;
 
 	public TransformContext(MethodCompiler methodCompiler, BitValueManager bitValueManager = null)
 	{

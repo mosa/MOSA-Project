@@ -4,7 +4,7 @@ namespace Mosa.DeviceSystem;
 
 public class PCIDeviceDriverRegistryEntry : DeviceDriverRegistryEntry
 {
-	public override DeviceBusType BusType { get { return DeviceBusType.PCI; } }
+	public override DeviceBusType BusType => DeviceBusType.PCI;
 
 	public ushort DeviceID { get; set; }
 

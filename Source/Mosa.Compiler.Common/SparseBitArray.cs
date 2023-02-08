@@ -9,7 +9,7 @@ public sealed class SparseBitArray
 {
 	private ulong[] Bits;
 
-	private int Length { get { return Bits == null ? 0 : Bits.Length * 8; } }
+	private int Length => Bits == null ? 0 : Bits.Length * 8;
 
 	public SparseBitArray()
 	{

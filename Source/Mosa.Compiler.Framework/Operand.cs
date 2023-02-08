@@ -142,8 +142,7 @@ public sealed class Operand
 	/// </summary>
 	public bool IsCPURegister { get; private set; }
 
-	public bool IsFloatingPoint
-	{ get { return IsR4 | IsR8; } }
+	public bool IsFloatingPoint => IsR4 | IsR8;
 
 	public bool IsFunctionPointer { get; private set; }
 

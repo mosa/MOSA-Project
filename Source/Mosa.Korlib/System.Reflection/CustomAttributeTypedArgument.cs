@@ -82,21 +82,9 @@ public struct CustomAttributeTypedArgument
 
 	#region Public Members
 
-	public Type ArgumentType
-	{
-		get
-		{
-			return m_argumentType;
-		}
-	}
+	public Type ArgumentType => m_argumentType;
 
-	public object Value
-	{
-		get
-		{
-			return m_value;
-		}
-	}
+	public object Value => m_value;
 
 	#endregion Public Members
 }

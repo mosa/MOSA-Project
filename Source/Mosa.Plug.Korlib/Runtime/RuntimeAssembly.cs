@@ -66,10 +66,7 @@ public sealed unsafe class RuntimeAssembly : Assembly
 		}
 	}
 
-	public override string FullName
-	{
-		get { return fullName; }
-	}
+	public override string FullName => fullName;
 
 	public override IEnumerable<Type> ExportedTypes
 	{

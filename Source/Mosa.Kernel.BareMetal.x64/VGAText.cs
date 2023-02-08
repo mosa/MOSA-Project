@@ -24,14 +24,14 @@ public static class VGAText
 
 	public static byte Column
 	{
-		get { return (byte)(Offset % Columns); }
-		private set { Offset = (short)((Columns * Row) + value); }
+		get => (byte)(Offset % Columns);
+		private set => Offset = (short)((Columns * Row) + value);
 	}
 
 	public static byte Row
 	{
-		get { return (byte)(Offset / Columns); }
-		private set { Offset = (short)((Columns * value) + Column); }
+		get => (byte)(Offset / Columns);
+		private set => Offset = (short)((Columns * value) + Column);
 	}
 
 	public static void SetColor(byte color)

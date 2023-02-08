@@ -19,11 +19,9 @@ public sealed class VirtualRegisters : IEnumerable<Operand>
 
 	#region Properties
 
-	public int Count
-	{ get { return virtualRegisters.Count; } }
+	public int Count => virtualRegisters.Count;
 
-	public Operand this[int index]
-	{ get { return virtualRegisters[index]; } }
+	public Operand this[int index] => virtualRegisters[index];
 
 	#endregion Properties
 

@@ -11,28 +11,19 @@ public abstract class Assembly
 	/// <summary>
 	/// Gets a collection that contains this assembly's custom attributes.
 	/// </summary>
-	public virtual IEnumerable<CustomAttributeData> CustomAttributes
-	{
-		get { return new CustomAttributeData[0]; }
-	}
+	public virtual IEnumerable<CustomAttributeData> CustomAttributes => new CustomAttributeData[0];
 
 	/// <summary>
 	/// Gets a collection of the types defined in this assembly.
 	/// </summary>
 	public abstract IEnumerable<TypeInfo> DefinedTypes { get; }
 
-	public virtual IEnumerable<Type> ExportedTypes
-	{
-		get { return new Type[0]; }
-	}
+	public virtual IEnumerable<Type> ExportedTypes => new Type[0];
 
 	/// <summary>
 	/// Gets the display name of the assembly.
 	/// </summary>
-	public virtual string FullName
-	{
-		get { return ""; }
-	}
+	public virtual string FullName => "";
 
 	/// <summary>
 	/// Determines whether this assembly and the specified object are equal.

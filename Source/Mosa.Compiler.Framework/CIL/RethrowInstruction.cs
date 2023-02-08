@@ -32,7 +32,7 @@ public sealed class RethrowInstruction : BaseCILInstruction
 	/// building. Any instruction that alters the control flow must override
 	/// this property and correctly identify its control flow modifications.
 	/// </remarks>
-	public override FlowControl FlowControl { get { return FlowControl.Throw; } }
+	public override FlowControl FlowControl => FlowControl.Throw;
 
 	#endregion Properties
 }

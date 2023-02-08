@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Linker;
 /// </summary>
 public sealed class LinkerSection
 {
-	public string Name { get { return SectionKind.ToString(); } }
+	public string Name => SectionKind.ToString();
 
 	public SectionKind SectionKind { get; }
 

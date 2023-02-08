@@ -46,7 +46,7 @@ public class GenericPartition
 	/// Gets the end LBA.
 	/// </summary>
 	/// <value>The end LBA.</value>
-	public uint EndLBA { get { return StartLBA + TotalBlocks; } }
+	public uint EndLBA => StartLBA + TotalBlocks;
 
 	/// <summary>
 	/// Gets or sets the total blocks.

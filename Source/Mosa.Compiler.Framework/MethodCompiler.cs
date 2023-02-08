@@ -197,7 +197,9 @@ public sealed class MethodCompiler
 	/// Gets the linker symbol.
 	/// </summary>
 	public LinkerSymbol Symbol
-	{ get { return MethodData.Symbol; } set { MethodData.Symbol = value; } }
+	{ get => MethodData.Symbol;
+		set => MethodData.Symbol = value;
+	}
 
 	/// <summary>
 	/// Gets the method scanner.

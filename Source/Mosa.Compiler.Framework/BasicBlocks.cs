@@ -53,7 +53,7 @@ public sealed class BasicBlocks : IEnumerable<BasicBlock>
 	/// <summary>
 	/// Gets the count.
 	/// </summary>
-	public int Count { get { return basicBlocks.Count; } }
+	public int Count => basicBlocks.Count;
 
 	/// <summary>
 	/// Returns an enumerator that iterates through a collection.
@@ -84,8 +84,8 @@ public sealed class BasicBlocks : IEnumerable<BasicBlock>
 	/// <returns></returns>
 	public BasicBlock this[int index]
 	{
-		get { return basicBlocks[index]; }
-		set { basicBlocks[index] = value; }
+		get => basicBlocks[index];
+		set => basicBlocks[index] = value;
 	}
 
 	/// <summary>

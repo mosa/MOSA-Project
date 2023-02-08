@@ -29,12 +29,12 @@ public class RelocationEntry
 	/// <summary>
 	/// Gets the Info field for 32bit elf
 	/// </summary>
-	public ushort Info32 { get { return (ushort)((Symbol << 8) | ((uint)RelocationType & 0xFF)); } }
+	public ushort Info32 => (ushort)((Symbol << 8) | ((uint)RelocationType & 0xFF));
 
 	/// <summary>
 	/// Gets the Info field for 64bit elf
 	/// </summary>
-	public ushort Info64 { get { return (ushort)((Symbol << 32) | ((ushort)RelocationType & 0xFFFFFFFF)); } }
+	public ushort Info64 => (ushort)((Symbol << 32) | ((ushort)RelocationType & 0xFFFFFFFF));
 
 	public static uint GetEntrySize(LinkerFormatType elfType)
 	{

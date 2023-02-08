@@ -23,7 +23,7 @@ public sealed class String : IEnumerable, IEnumerable<char>, IEquatable<String>,
 
 	private readonly char start_char;
 
-	public int Length { get { return length; } }
+	public int Length => length;
 
 	public static string Empty = "";
 

@@ -21,5 +21,5 @@ public sealed class EndFinallyInstruction : BaseCILInstruction
 
 	#endregion Construction
 
-	public override FlowControl FlowControl { get { return FlowControl.EndFinally; } }
+	public override FlowControl FlowControl => FlowControl.EndFinally;
 }

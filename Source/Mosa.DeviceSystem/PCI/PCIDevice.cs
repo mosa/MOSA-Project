@@ -113,55 +113,55 @@ public class PCIDevice : BaseDeviceDriver, IPCIDevice, IPCIDeviceResource
 	/// Gets the vendor ID.
 	/// </summary>
 	/// <value>The vendor ID.</value>
-	public ushort VendorID { get { return pciController.ReadConfig16(this, PCIConfigurationHeader.VendorID); } }
+	public ushort VendorID => pciController.ReadConfig16(this, PCIConfigurationHeader.VendorID);
 
 	/// <summary>
 	/// Gets the device ID.
 	/// </summary>
 	/// <value>The device ID.</value>
-	public ushort DeviceID { get { return pciController.ReadConfig16(this, PCIConfigurationHeader.DeviceID); } }
+	public ushort DeviceID => pciController.ReadConfig16(this, PCIConfigurationHeader.DeviceID);
 
 	/// <summary>
 	/// Gets the revision ID.
 	/// </summary>
 	/// <value>The revision ID.</value>
-	public byte RevisionID { get { return pciController.ReadConfig8(this, PCIConfigurationHeader.RevisionID); } }
+	public byte RevisionID => pciController.ReadConfig8(this, PCIConfigurationHeader.RevisionID);
 
 	/// <summary>
 	/// Gets the class code.
 	/// </summary>
 	/// <value>The class code.</value>
-	public byte ClassCode { get { return pciController.ReadConfig8(this, PCIConfigurationHeader.ClassCode); } }
+	public byte ClassCode => pciController.ReadConfig8(this, PCIConfigurationHeader.ClassCode);
 
 	/// <summary>
 	/// Gets the prog IF.
 	/// </summary>
 	/// <value>The prog IF.</value>
-	public byte ProgIF { get { return pciController.ReadConfig8(this, PCIConfigurationHeader.ProgrammingInterface); } }
+	public byte ProgIF => pciController.ReadConfig8(this, PCIConfigurationHeader.ProgrammingInterface);
 
 	/// <summary>
 	/// Gets the sub class code.
 	/// </summary>
 	/// <value>The sub class code.</value>
-	public byte SubClassCode { get { return pciController.ReadConfig8(this, PCIConfigurationHeader.SubClassCode); } }
+	public byte SubClassCode => pciController.ReadConfig8(this, PCIConfigurationHeader.SubClassCode);
 
 	/// <summary>
 	/// Gets the sub vendor ID.
 	/// </summary>
 	/// <value>The sub vendor ID.</value>
-	public ushort SubSystemVendorID { get { return pciController.ReadConfig16(this, PCIConfigurationHeader.SubSystemVendorID); } }
+	public ushort SubSystemVendorID => pciController.ReadConfig16(this, PCIConfigurationHeader.SubSystemVendorID);
 
 	/// <summary>
 	/// Gets the sub device ID.
 	/// </summary>
 	/// <value>The sub device ID.</value>
-	public ushort SubSystemID { get { return pciController.ReadConfig16(this, PCIConfigurationHeader.SubSystemID); } }
+	public ushort SubSystemID => pciController.ReadConfig16(this, PCIConfigurationHeader.SubSystemID);
 
 	/// <summary>
 	/// Gets the IRQ.
 	/// </summary>
 	/// <value>The IRQ.</value>
-	public byte IRQ { get { return pciController.ReadConfig8(this, PCIConfigurationHeader.InterruptLineRegister); } }
+	public byte IRQ => pciController.ReadConfig8(this, PCIConfigurationHeader.InterruptLineRegister);
 
 	/// <summary>
 	/// Gets or sets the status register.
@@ -169,8 +169,8 @@ public class PCIDevice : BaseDeviceDriver, IPCIDevice, IPCIDeviceResource
 	/// <value>The status.</value>
 	public ushort StatusRegister
 	{
-		get { return pciController.ReadConfig16(this, PCIConfigurationHeader.StatusRegister); }
-		set { pciController.WriteConfig16(this, PCIConfigurationHeader.StatusRegister, value); }
+		get => pciController.ReadConfig16(this, PCIConfigurationHeader.StatusRegister);
+		set => pciController.WriteConfig16(this, PCIConfigurationHeader.StatusRegister, value);
 	}
 
 	/// <summary>
@@ -179,8 +179,8 @@ public class PCIDevice : BaseDeviceDriver, IPCIDevice, IPCIDeviceResource
 	/// <value>The status.</value>
 	public ushort CommandRegister
 	{
-		get { return pciController.ReadConfig16(this, PCIConfigurationHeader.CommandRegister); }
-		set { pciController.WriteConfig16(this, PCIConfigurationHeader.CommandRegister, value); }
+		get => pciController.ReadConfig16(this, PCIConfigurationHeader.CommandRegister);
+		set => pciController.WriteConfig16(this, PCIConfigurationHeader.CommandRegister, value);
 	}
 
 	/// <summary>

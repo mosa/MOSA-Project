@@ -38,10 +38,7 @@ public abstract class TypeInfo : MemberInfo, IReflectableType
 	/// <summary>
 	/// Gets a collection of the constructors declared by the current type.
 	/// </summary>
-	public virtual IEnumerable<ConstructorInfo> DeclaredConstructors
-	{
-		get { throw new NotImplementedException(); }
-	}
+	public virtual IEnumerable<ConstructorInfo> DeclaredConstructors => throw new NotImplementedException();
 
 	/// <summary>
 	/// Gets a collection of the events defined by the current type.
@@ -54,42 +51,27 @@ public abstract class TypeInfo : MemberInfo, IReflectableType
 	/// <summary>
 	/// Gets a collection of the fields defined by the current type.
 	/// </summary>
-	public virtual IEnumerable<FieldInfo> DeclaredFields
-	{
-		get { throw new NotImplementedException(); }
-	}
+	public virtual IEnumerable<FieldInfo> DeclaredFields => throw new NotImplementedException();
 
 	/// <summary>
 	/// Gets a collection of the members defined by the current type.
 	/// </summary>
-	public virtual IEnumerable<MemberInfo> DeclaredMembers
-	{
-		get { throw new NotImplementedException(); }
-	}
+	public virtual IEnumerable<MemberInfo> DeclaredMembers => throw new NotImplementedException();
 
 	/// <summary>
 	/// Gets a collection of the methods defined by the current type.
 	/// </summary>
-	public virtual IEnumerable<MethodInfo> DeclaredMethods
-	{
-		get { throw new NotImplementedException(); }
-	}
+	public virtual IEnumerable<MethodInfo> DeclaredMethods => throw new NotImplementedException();
 
 	/// <summary>
 	/// Gets a collection of the nested types defined by the current type.
 	/// </summary>
-	public virtual IEnumerable<TypeInfo> DeclaredNestedTypes
-	{
-		get { throw new NotImplementedException(); }
-	}
+	public virtual IEnumerable<TypeInfo> DeclaredNestedTypes => throw new NotImplementedException();
 
 	/// <summary>
 	/// Gets a collection of the properties defined by the current type.
 	/// </summary>
-	public virtual IEnumerable<PropertyInfo> DeclaredProperties
-	{
-		get { throw new NotImplementedException(); }
-	}
+	public virtual IEnumerable<PropertyInfo> DeclaredProperties => throw new NotImplementedException();
 
 	/// <summary>
 	/// Gets a MethodBase that represents the declaring method, if the current Type represents a type parameter of a generic method.
@@ -119,82 +101,52 @@ public abstract class TypeInfo : MemberInfo, IReflectableType
 	/// <summary>
 	/// Gets an array of the generic parameters of the current type.
 	/// </summary>
-	public virtual Type[] GenericTypeParameters
-	{
-		get { throw new NotImplementedException(); }
-	}
+	public virtual Type[] GenericTypeParameters => throw new NotImplementedException();
 
 	/// <summary>
 	/// Gets a value indicating whether the current Type encompasses or refers to another type; that is, whether the current Type is an array, a pointer, or is passed by reference.
 	/// </summary>
-	public bool HasElementType
-	{
-		get { return HasElementTypeImpl(); }
-	}
+	public bool HasElementType => HasElementTypeImpl();
 
 	/// <summary>
 	/// Gets a collection of the interfaces implemented by the current type.
 	/// </summary>
-	public virtual IEnumerable<Type> ImplementedInterfaces
-	{
-		get { throw new NotImplementedException(); }
-	}
+	public virtual IEnumerable<Type> ImplementedInterfaces => throw new NotImplementedException();
 
 	/// <summary>
 	/// Gets a value indicating whether the Type is abstract and must be overridden.
 	/// </summary>
-	public bool IsAbstract
-	{
-		get { return (Attributes & TypeAttributes.Abstract) == TypeAttributes.Abstract; }
-	}
+	public bool IsAbstract => (Attributes & TypeAttributes.Abstract) == TypeAttributes.Abstract;
 
 	/// <summary>
 	/// Gets a value indicating whether the string format attribute AnsiClass is selected for the Type.
 	/// </summary>
-	public bool IsAnsiClass
-	{
-		get { return (Attributes & TypeAttributes.StringFormatMask) == TypeAttributes.AnsiClass; }
-	}
+	public bool IsAnsiClass => (Attributes & TypeAttributes.StringFormatMask) == TypeAttributes.AnsiClass;
 
 	/// <summary>
 	/// Gets a value indicating whether the Type is an array.
 	/// </summary>
-	public bool IsArray
-	{
-		get { return IsArrayImpl(); }
-	}
+	public bool IsArray => IsArrayImpl();
 
 	/// <summary>
 	/// Gets a value indicating whether the string format attribute AutoClass is selected for the Type.
 	/// </summary>
-	public bool IsAutoClass
-	{
-		get { return (Attributes & TypeAttributes.StringFormatMask) == TypeAttributes.AutoClass; }
-	}
+	public bool IsAutoClass => (Attributes & TypeAttributes.StringFormatMask) == TypeAttributes.AutoClass;
 
 	/// <summary>
 	/// Gets a value indicating whether the fields of the current type are laid out automatically by the common language runtime.
 	/// </summary>
-	public bool IsAutoLayout
-	{
-		get { return (Attributes & TypeAttributes.LayoutMask) == TypeAttributes.AutoLayout; }
-	}
+	public bool IsAutoLayout => (Attributes & TypeAttributes.LayoutMask) == TypeAttributes.AutoLayout;
 
 	/// <summary>
 	/// Gets a value indicating whether the Type is passed by reference.
 	/// </summary>
-	public bool IsByRef
-	{
-		get { return IsByRefImpl(); }
-	}
+	public bool IsByRef => IsByRefImpl();
 
 	/// <summary>
 	/// Gets a value indicating whether the Type is a class; that is, not a value type or interface.
 	/// </summary>
-	public bool IsClass
-	{
-		get { return !(IsInterface || IsValueType); }
-	}
+	public bool IsClass => !(IsInterface || IsValueType);
 
 	/// <summary>
 	/// Gets a value indicating whether the current Type represents an enumeration.
@@ -204,10 +156,7 @@ public abstract class TypeInfo : MemberInfo, IReflectableType
 	/// <summary>
 	/// Gets a value indicating whether the fields of the current type are laid out at explicitly specified offsets.
 	/// </summary>
-	public bool IsExplicitLayout
-	{
-		get { return (Attributes & TypeAttributes.LayoutMask) == TypeAttributes.ExplicitLayout; }
-	}
+	public bool IsExplicitLayout => (Attributes & TypeAttributes.LayoutMask) == TypeAttributes.ExplicitLayout;
 
 	/// <summary>
 	/// Gets a value indicating whether the current System.Type represents a type parameter in the definition of a generic type or method.
@@ -227,122 +176,77 @@ public abstract class TypeInfo : MemberInfo, IReflectableType
 	/// <summary>
 	/// Gets a value indicating whether the Type has a ComImportAttribute attribute applied, indicating that it was imported from a COM type library.
 	/// </summary>
-	public bool IsImport
-	{
-		get { return (Attributes & TypeAttributes.Import) == TypeAttributes.Import; }
-	}
+	public bool IsImport => (Attributes & TypeAttributes.Import) == TypeAttributes.Import;
 
 	/// <summary>
 	/// Gets a value indicating whether the Type is an interface; that is, not a class or a value type.
 	/// </summary>
-	public bool IsInterface
-	{
-		get { return (Attributes & TypeAttributes.ClassSemanticsMask) == TypeAttributes.Interface; }
-	}
+	public bool IsInterface => (Attributes & TypeAttributes.ClassSemanticsMask) == TypeAttributes.Interface;
 
 	/// <summary>
 	/// Gets a value indicating whether the fields of the current type are laid out sequentially, in the order that they were defined or emitted to the metadata.
 	/// </summary>
-	public bool IsLayoutSequential
-	{
-		get { return (Attributes & TypeAttributes.LayoutMask) == TypeAttributes.SequentialLayout; }
-	}
+	public bool IsLayoutSequential => (Attributes & TypeAttributes.LayoutMask) == TypeAttributes.SequentialLayout;
 
 	/// <summary>
 	/// Gets a value indicating whether the current Type object represents a type whose definition is nested inside the definition of another type.
 	/// </summary>
-	public bool IsNested
-	{
-		get { return (Attributes & TypeAttributes.VisibilityMask) > TypeAttributes.Public; }
-	}
+	public bool IsNested => (Attributes & TypeAttributes.VisibilityMask) > TypeAttributes.Public;
 
 	/// <summary>
 	/// Gets a value indicating whether the Type is nested and visible only within its own assembly.
 	/// </summary>
-	public bool IsNestedAssembly
-	{
-		get { return (Attributes & TypeAttributes.VisibilityMask) == TypeAttributes.NestedAssembly; }
-	}
+	public bool IsNestedAssembly => (Attributes & TypeAttributes.VisibilityMask) == TypeAttributes.NestedAssembly;
 
 	/// <summary>
 	/// Gets a value indicating whether the Type is nested and visible only to classes that belong to both its own family and its own assembly.
 	/// </summary>
-	public bool IsNestedFamANDAssem
-	{
-		get { return (Attributes & TypeAttributes.VisibilityMask) == TypeAttributes.NestedFamANDAssem; }
-	}
+	public bool IsNestedFamANDAssem => (Attributes & TypeAttributes.VisibilityMask) == TypeAttributes.NestedFamANDAssem;
 
 	/// <summary>
 	/// Gets a value indicating whether the Type is nested and visible only within its own family.
 	/// </summary>
-	public bool IsNestedFamily
-	{
-		get { return (Attributes & TypeAttributes.VisibilityMask) == TypeAttributes.NestedFamily; }
-	}
+	public bool IsNestedFamily => (Attributes & TypeAttributes.VisibilityMask) == TypeAttributes.NestedFamily;
 
 	/// <summary>
 	/// Gets a value indicating whether the Type is nested and visible only to classes that belong to either its own family or to its own assembly.
 	/// </summary>
-	public bool IsNestedFamORAssem
-	{
-		get { return (Attributes & TypeAttributes.VisibilityMask) == TypeAttributes.NestedFamORAssem; }
-	}
+	public bool IsNestedFamORAssem => (Attributes & TypeAttributes.VisibilityMask) == TypeAttributes.NestedFamORAssem;
 
 	/// <summary>
 	/// Gets a value indicating whether the Type is nested and declared private.
 	/// </summary>
-	public bool IsNestedPrivate
-	{
-		get { return (Attributes & TypeAttributes.VisibilityMask) == TypeAttributes.NestedPrivate; }
-	}
+	public bool IsNestedPrivate => (Attributes & TypeAttributes.VisibilityMask) == TypeAttributes.NestedPrivate;
 
 	/// <summary>
 	/// Gets a value indicating whether a class is nested and declared public.
 	/// </summary>
-	public bool IsNestedPublic
-	{
-		get { return (Attributes & TypeAttributes.VisibilityMask) == TypeAttributes.NestedPublic; }
-	}
+	public bool IsNestedPublic => (Attributes & TypeAttributes.VisibilityMask) == TypeAttributes.NestedPublic;
 
 	/// <summary>
 	/// Gets a value indicating whether the Type is not declared public.
 	/// </summary>
-	public bool IsNotPublic
-	{
-		get { return (Attributes & TypeAttributes.VisibilityMask) == TypeAttributes.NotPublic; }
-	}
+	public bool IsNotPublic => (Attributes & TypeAttributes.VisibilityMask) == TypeAttributes.NotPublic;
 
 	/// <summary>
 	/// Gets a value indicating whether the Type is a pointer.
 	/// </summary>
-	public bool IsPointer
-	{
-		get { return IsPointerImpl(); }
-	}
+	public bool IsPointer => IsPointerImpl();
 
 	/// <summary>
 	/// Gets a value indicating whether the Type is one of the primitive types.
 	/// </summary>
-	public bool IsPrimitive
-	{
-		get { return IsPrimitiveImpl(); }
-	}
+	public bool IsPrimitive => IsPrimitiveImpl();
 
 	/// <summary>
 	/// Gets a value indicating whether the Type is declared public.
 	/// </summary>
-	public bool IsPublic
-	{
-		get { return (Attributes & TypeAttributes.VisibilityMask) == TypeAttributes.Public; }
-	}
+	public bool IsPublic => (Attributes & TypeAttributes.VisibilityMask) == TypeAttributes.Public;
 
 	/// <summary>
 	/// Gets a value indicating whether the Type is declared sealed.
 	/// </summary>
-	public bool IsSealed
-	{
-		get { return (Attributes & TypeAttributes.Sealed) == TypeAttributes.Sealed; }
-	}
+	public bool IsSealed => (Attributes & TypeAttributes.Sealed) == TypeAttributes.Sealed;
 
 	/// <summary>
 	/// Gets a value indicating whether the Type is serializable.
@@ -352,26 +256,17 @@ public abstract class TypeInfo : MemberInfo, IReflectableType
 	/// <summary>
 	/// Gets a value indicating whether the Type has a name that requires special handling.
 	/// </summary>
-	public bool IsSpecialName
-	{
-		get { return (Attributes & TypeAttributes.SpecialName) == TypeAttributes.SpecialName; }
-	}
+	public bool IsSpecialName => (Attributes & TypeAttributes.SpecialName) == TypeAttributes.SpecialName;
 
 	/// <summary>
 	/// Gets a value indicating whether the string format attribute UnicodeClass is selected for the Type.
 	/// </summary>
-	public bool IsUnicodeClass
-	{
-		get { return (Attributes & TypeAttributes.StringFormatMask) == TypeAttributes.UnicodeClass; }
-	}
+	public bool IsUnicodeClass => (Attributes & TypeAttributes.StringFormatMask) == TypeAttributes.UnicodeClass;
 
 	/// <summary>
 	/// Gets a value indicating whether the Type is a value type.
 	/// </summary>
-	public bool IsValueType
-	{
-		get { return IsValueTypeImpl(); }
-	}
+	public bool IsValueType => IsValueTypeImpl();
 
 	/// <summary>
 	/// Gets a value indicating whether the Type can be accessed by code outside the assembly.

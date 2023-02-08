@@ -134,10 +134,7 @@ public struct UIntPtr
 	public static unsafe int Size
 	{
 		[NonVersionable]
-		get
-		{
-			return sizeof(void*);
-		}
+		get => sizeof(void*);
 	}
 
 	[NonVersionable]

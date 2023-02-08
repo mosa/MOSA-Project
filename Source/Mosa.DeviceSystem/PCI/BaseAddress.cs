@@ -33,25 +33,25 @@ public class BaseAddress
 	/// Gets the address.
 	/// </summary>
 	/// <value>The address.</value>
-	public Pointer Address { get { return address; } }
+	public Pointer Address => address;
 
 	/// <summary>
 	/// Gets the size.
 	/// </summary>
 	/// <value>The size.</value>
-	public uint Size { get { return size; } }
+	public uint Size => size;
 
 	/// <summary>
 	/// Gets the region.
 	/// </summary>
 	/// <value>The region.</value>
-	public AddressType Region { get { return region; } }
+	public AddressType Region => region;
 
 	/// <summary>
 	/// Gets a value indicating whether this <see cref="BaseAddress"/> is prefetchable.
 	/// </summary>
 	/// <value><c>true</c> if prefetchable; otherwise, <c>false</c>.</value>
-	public bool Prefetchable { get { return prefetchable; } }
+	public bool Prefetchable => prefetchable;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="BaseAddress"/> class.

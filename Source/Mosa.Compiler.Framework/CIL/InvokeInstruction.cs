@@ -73,7 +73,7 @@ public abstract class InvokeInstruction : BaseCILInstruction
 	/// building. Any instruction that alters the control flow must override
 	/// this property and correctly identify its control flow modifications.
 	/// </remarks>
-	public override FlowControl FlowControl { get { return FlowControl.Call; } }
+	public override FlowControl FlowControl => FlowControl.Call;
 
 	/// <summary>
 	/// Gets the supported immediate metadata tokens in the instruction.

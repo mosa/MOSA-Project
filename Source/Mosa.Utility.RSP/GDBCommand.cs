@@ -11,15 +11,15 @@ public abstract class GDBCommand
 
 	public string CommandName { get; protected set; }
 
-	public string Pack { get { return CommandName + PackArguments; } }
+	public string Pack => CommandName + PackArguments;
 
-	protected virtual string PackArguments { get { return string.Empty; } }
+	protected virtual string PackArguments => string.Empty;
 
 	public bool IsResponseOk { get; internal set; }
 
 	public byte[] ResponseData { get; internal set; }
 
-	public string ResponseAsString { get { return Encoding.UTF8.GetString(ResponseData); } }
+	public string ResponseAsString => Encoding.UTF8.GetString(ResponseData);
 
 	public CallBack Callback { get; }
 
@@ -47,7 +47,7 @@ public abstract class GDBCommand
 			IsResponseOk = false;
 	}
 
-	public int ReceivedBytes { get { return IsResponseOk ? ResponseData.Length / 2 : 0; } }
+	public int ReceivedBytes => IsResponseOk ? ResponseData.Length / 2 : 0;
 
 	public byte GetByte(int i)
 	{

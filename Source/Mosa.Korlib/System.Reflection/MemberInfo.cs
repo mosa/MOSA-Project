@@ -13,10 +13,7 @@ public abstract class MemberInfo
 	/// <summary>
 	/// A collection that contains this member's custom attributes.
 	/// </summary>
-	public virtual IEnumerable<CustomAttributeData> CustomAttributes
-	{
-		get { return new CustomAttributeData[0]; }
-	}
+	public virtual IEnumerable<CustomAttributeData> CustomAttributes => new CustomAttributeData[0];
 
 	/// <summary>
 	/// Gets the class that declares this member.

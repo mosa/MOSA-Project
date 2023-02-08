@@ -27,15 +27,9 @@ public struct KeyValuePair<TKey, TValue>
 		this.value = value;
 	}
 
-	public TKey Key
-	{
-		get { return key; }
-	}
+	public TKey Key => key;
 
-	public TValue Value
-	{
-		get { return value; }
-	}
+	public TValue Value => value;
 
 	public override string ToString()
 	{//TODO implmenet

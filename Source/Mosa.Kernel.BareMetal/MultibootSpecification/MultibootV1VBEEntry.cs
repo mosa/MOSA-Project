@@ -65,67 +65,67 @@ public /*readonly*/ struct MultibootV1VBEEntry
 		Entry = entry;
 	}
 
-	public ushort Attributes { get { return Entry.Load16(VBEModeInfoOffset.Attributes); } }
+	public ushort Attributes => Entry.Load16(VBEModeInfoOffset.Attributes);
 
-	public byte WindowA { get { return Entry.Load8(VBEModeInfoOffset.WindowA); } }
+	public byte WindowA => Entry.Load8(VBEModeInfoOffset.WindowA);
 
-	public byte WindowB { get { return Entry.Load8(VBEModeInfoOffset.WindowB); } }
+	public byte WindowB => Entry.Load8(VBEModeInfoOffset.WindowB);
 
-	public ushort Granularity { get { return Entry.Load16(VBEModeInfoOffset.Granularity); } }
+	public ushort Granularity => Entry.Load16(VBEModeInfoOffset.Granularity);
 
-	public ushort WindowSize { get { return Entry.Load16(VBEModeInfoOffset.WindowSize); } }
+	public ushort WindowSize => Entry.Load16(VBEModeInfoOffset.WindowSize);
 
-	public ushort SegmentA { get { return Entry.Load16(VBEModeInfoOffset.SegmentA); } }
+	public ushort SegmentA => Entry.Load16(VBEModeInfoOffset.SegmentA);
 
-	public ushort SegmentB { get { return Entry.Load16(VBEModeInfoOffset.SegmentB); } }
+	public ushort SegmentB => Entry.Load16(VBEModeInfoOffset.SegmentB);
 
-	public uint WinFuncPtr { get { return Entry.Load32(VBEModeInfoOffset.WinFuncPtr); } }
+	public uint WinFuncPtr => Entry.Load32(VBEModeInfoOffset.WinFuncPtr);
 
-	public ushort Pitch { get { return Entry.Load16(VBEModeInfoOffset.Pitch); } }
+	public ushort Pitch => Entry.Load16(VBEModeInfoOffset.Pitch);
 
-	public ushort ScreenWidth { get { return Entry.Load16(VBEModeInfoOffset.ScreenWidth); } }
+	public ushort ScreenWidth => Entry.Load16(VBEModeInfoOffset.ScreenWidth);
 
-	public ushort ScreenHeight { get { return Entry.Load16(VBEModeInfoOffset.ScreenHeight); } }
+	public ushort ScreenHeight => Entry.Load16(VBEModeInfoOffset.ScreenHeight);
 
-	public byte WChar { get { return Entry.Load8(VBEModeInfoOffset.WChar); } }
+	public byte WChar => Entry.Load8(VBEModeInfoOffset.WChar);
 
-	public byte YChar { get { return Entry.Load8(VBEModeInfoOffset.YChar); } }
+	public byte YChar => Entry.Load8(VBEModeInfoOffset.YChar);
 
-	public byte Planes { get { return Entry.Load8(VBEModeInfoOffset.Planes); } }
+	public byte Planes => Entry.Load8(VBEModeInfoOffset.Planes);
 
-	public byte BitsPerPixel { get { return Entry.Load8(VBEModeInfoOffset.BitsPerPixel); } }
+	public byte BitsPerPixel => Entry.Load8(VBEModeInfoOffset.BitsPerPixel);
 
-	public byte Banks { get { return Entry.Load8(VBEModeInfoOffset.Banks); } }
+	public byte Banks => Entry.Load8(VBEModeInfoOffset.Banks);
 
-	public byte MemoryModel { get { return Entry.Load8(VBEModeInfoOffset.MemoryModel); } }
+	public byte MemoryModel => Entry.Load8(VBEModeInfoOffset.MemoryModel);
 
-	public byte BankSize { get { return Entry.Load8(VBEModeInfoOffset.BankSize); } }
+	public byte BankSize => Entry.Load8(VBEModeInfoOffset.BankSize);
 
-	public byte ImagePages { get { return Entry.Load8(VBEModeInfoOffset.ImagePages); } }
+	public byte ImagePages => Entry.Load8(VBEModeInfoOffset.ImagePages);
 
-	public byte Reserved0 { get { return Entry.Load8(VBEModeInfoOffset.Reserved0); } }
+	public byte Reserved0 => Entry.Load8(VBEModeInfoOffset.Reserved0);
 
-	public byte RedMask { get { return Entry.Load8(VBEModeInfoOffset.RedMask); } }
+	public byte RedMask => Entry.Load8(VBEModeInfoOffset.RedMask);
 
-	public byte RedPosition { get { return Entry.Load8(VBEModeInfoOffset.RedPosition); } }
+	public byte RedPosition => Entry.Load8(VBEModeInfoOffset.RedPosition);
 
-	public byte GreenMask { get { return Entry.Load8(VBEModeInfoOffset.GreenMask); } }
+	public byte GreenMask => Entry.Load8(VBEModeInfoOffset.GreenMask);
 
-	public byte GreenPosition { get { return Entry.Load8(VBEModeInfoOffset.GreenPosition); } }
+	public byte GreenPosition => Entry.Load8(VBEModeInfoOffset.GreenPosition);
 
-	public byte BlueMask { get { return Entry.Load8(VBEModeInfoOffset.BlueMask); } }
+	public byte BlueMask => Entry.Load8(VBEModeInfoOffset.BlueMask);
 
-	public byte BluePosition { get { return Entry.Load8(VBEModeInfoOffset.BluePosition); } }
+	public byte BluePosition => Entry.Load8(VBEModeInfoOffset.BluePosition);
 
-	public byte ReservedMask { get { return Entry.Load8(VBEModeInfoOffset.ReservedMask); } }
+	public byte ReservedMask => Entry.Load8(VBEModeInfoOffset.ReservedMask);
 
-	public byte ReservedPosition { get { return Entry.Load8(VBEModeInfoOffset.ReservedPosition); } }
+	public byte ReservedPosition => Entry.Load8(VBEModeInfoOffset.ReservedPosition);
 
-	public byte DirectColorAttributes { get { return Entry.Load8(VBEModeInfoOffset.DirectColorAttributes); } }
+	public byte DirectColorAttributes => Entry.Load8(VBEModeInfoOffset.DirectColorAttributes);
 
-	public Pointer MemoryPhysicalLocation { get { return Entry.LoadPointer(VBEModeInfoOffset.PhysBase); } }
+	public Pointer MemoryPhysicalLocation => Entry.LoadPointer(VBEModeInfoOffset.PhysBase);
 
-	public uint OffScreenMemoryOff { get { return Entry.Load32(VBEModeInfoOffset.OffScreenMemoryOff); } }
+	public uint OffScreenMemoryOff => Entry.Load32(VBEModeInfoOffset.OffScreenMemoryOff);
 
-	public ushort OffScreenMemorSize { get { return Entry.Load16(VBEModeInfoOffset.OffScreenMemorSize); } }
+	public ushort OffScreenMemorSize => Entry.Load16(VBEModeInfoOffset.OffScreenMemorSize);
 }

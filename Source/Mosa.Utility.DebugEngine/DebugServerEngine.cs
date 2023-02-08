@@ -26,10 +26,7 @@ public sealed class DebugServerEngine
 
 	public Stream Stream
 	{
-		get
-		{
-			return stream;
-		}
+		get => stream;
 		set
 		{
 			stream = value;

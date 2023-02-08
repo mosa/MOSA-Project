@@ -35,10 +35,7 @@ public sealed class GDBClient
 
 	public GDBNetworkStream Stream
 	{
-		get
-		{
-			return stream;
-		}
+		get => stream;
 		set
 		{
 			stream = value;

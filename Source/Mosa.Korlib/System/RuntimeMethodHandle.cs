@@ -17,13 +17,7 @@ public struct RuntimeMethodHandle
 	/// <summary>
 	/// Gets a handle to the type represented by this instance.
 	/// </summary>
-	public IntPtr Value
-	{
-		get
-		{
-			return m_ptr;
-		}
-	}
+	public IntPtr Value => m_ptr;
 
 	public override bool Equals(object obj)
 	{

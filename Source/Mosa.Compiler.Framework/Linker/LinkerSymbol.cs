@@ -20,11 +20,11 @@ public sealed class LinkerSymbol
 
 	public uint Alignment { get; internal set; }
 
-	public bool IsDataAvailable { get { return Stream != null; } }
+	public bool IsDataAvailable => Stream != null;
 
-	public uint Size { get { return Stream != null ? (uint)Stream.Length : 0; } }
+	public uint Size => Stream != null ? (uint)Stream.Length : 0;
 
-	public bool IsResolved { get { return VirtualAddress != 0; } }
+	public bool IsResolved => VirtualAddress != 0;
 
 	public string ExternalSymbolName { get; internal set; }
 

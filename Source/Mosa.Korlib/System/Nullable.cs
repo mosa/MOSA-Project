@@ -19,13 +19,7 @@ public struct Nullable<T> where T : struct
 		hasValue = true;
 	}
 
-	public bool HasValue
-	{
-		get
-		{
-			return hasValue;
-		}
-	}
+	public bool HasValue => hasValue;
 
 	public T Value
 	{
