@@ -228,7 +228,7 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 		AddVisitation(CILInstruction.Switch, Switch);
 		AddVisitation(CILInstruction.Throw, Throw);
 		AddVisitation(CILInstruction.Unbox, Unbox);
-		AddVisitation(CILInstruction.Unbox_any, Unbox);
+		AddVisitation(CILInstruction.Unbox_any, UnboxAny);
 		AddVisitation(CILInstruction.Xor, BinaryLogic);
 
 		AddVisitation(CILInstruction.PreReadOnly, PreReadOnly);
@@ -1747,6 +1747,22 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 	/// </summary>
 	/// <param name="context">The context.</param>
 	private void Unbox(Context context)
+	{
+		var value = context.Operand1;
+		var result = context.Result;
+		var type = context.MosaType;
+
+		var v1 = AllocateVirtualRegister(type.ToManagedPointer());
+
+		context.SetInstruction(IRInstruction.Unbox, v1, value);
+
+		var loadInstruction = GetLoadInstruction(type);
+
+		context.AppendInstruction(loadInstruction, result, v1, ConstantZero);
+		context.MosaType = type;
+	}
+
+	private void UnboxAny(Context context)
 	{
 		var value = context.Operand1;
 		var result = context.Result;
