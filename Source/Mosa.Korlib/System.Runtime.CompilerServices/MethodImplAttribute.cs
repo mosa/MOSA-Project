@@ -22,5 +22,11 @@ public sealed class MethodImplAttribute : Attribute
 		this.options = options;
 	}
 
-	public MethodImplOptions Value => options;
+	public MethodImplOptions Value
+	{
+		get
+		{
+			return options;
+		}
+	}
 }

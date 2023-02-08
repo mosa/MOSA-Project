@@ -19,7 +19,10 @@ public class Exception
 	/// <summary>
 	/// Gets the Exception instance that caused the current exception.
 	/// </summary>
-	public Exception InnerException => innerException;
+	public Exception InnerException
+	{
+		get { return innerException; }
+	}
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="Exception"/> class.
@@ -52,5 +55,8 @@ public class Exception
 	/// Gets the message.
 	/// </summary>
 	/// <value>The message.</value>
-	public virtual string Message => message;
+	public virtual string Message
+	{
+		get { return message; }
+	}
 }

@@ -42,11 +42,29 @@ internal sealed class EmptyReadOnlyDictionaryInternal : IDictionary
 		// the actual copy is a NOP
 	}
 
-	public int Count => 0;
+	public int Count
+	{
+		get
+		{
+			return 0;
+		}
+	}
 
-	public Object SyncRoot => this;
+	public Object SyncRoot
+	{
+		get
+		{
+			return this;
+		}
+	}
 
-	public bool IsSynchronized => false;
+	public bool IsSynchronized
+	{
+		get
+		{
+			return false;
+		}
+	}
 
 	// IDictionary members
 
@@ -79,9 +97,21 @@ internal sealed class EmptyReadOnlyDictionaryInternal : IDictionary
 		}
 	}
 
-	public ICollection Keys => EmptyArray<Object>.Value;
+	public ICollection Keys
+	{
+		get
+		{
+			return EmptyArray<Object>.Value;
+		}
+	}
 
-	public ICollection Values => EmptyArray<Object>.Value;
+	public ICollection Values
+	{
+		get
+		{
+			return EmptyArray<Object>.Value;
+		}
+	}
 
 	public bool Contains(Object key)
 	{
@@ -110,9 +140,21 @@ internal sealed class EmptyReadOnlyDictionaryInternal : IDictionary
 		throw new InvalidOperationException("InvalidOperation_ReadOnly");
 	}
 
-	public bool IsReadOnly => true;
+	public bool IsReadOnly
+	{
+		get
+		{
+			return true;
+		}
+	}
 
-	public bool IsFixedSize => true;
+	public bool IsFixedSize
+	{
+		get
+		{
+			return true;
+		}
+	}
 
 	public IDictionaryEnumerator GetEnumerator()
 	{
@@ -137,7 +179,13 @@ internal sealed class EmptyReadOnlyDictionaryInternal : IDictionary
 			return false;
 		}
 
-		public Object Current => throw new InvalidOperationException("InvalidOperation_EnumOpCantHappen");
+		public Object Current
+		{
+			get
+			{
+				throw new InvalidOperationException("InvalidOperation_EnumOpCantHappen");
+			}
+		}
 
 		public void Reset()
 		{
@@ -145,10 +193,28 @@ internal sealed class EmptyReadOnlyDictionaryInternal : IDictionary
 
 		// IDictionaryEnumerator members
 
-		public Object Key => throw new InvalidOperationException("InvalidOperation_EnumOpCantHappen");
+		public Object Key
+		{
+			get
+			{
+				throw new InvalidOperationException("InvalidOperation_EnumOpCantHappen");
+			}
+		}
 
-		public Object Value => throw new InvalidOperationException("InvalidOperation_EnumOpCantHappen");
+		public Object Value
+		{
+			get
+			{
+				throw new InvalidOperationException("InvalidOperation_EnumOpCantHappen");
+			}
+		}
 
-		public DictionaryEntry Entry => throw new InvalidOperationException("InvalidOperation_EnumOpCantHappen");
+		public DictionaryEntry Entry
+		{
+			get
+			{
+				throw new InvalidOperationException("InvalidOperation_EnumOpCantHappen");
+			}
+		}
 	}
 }

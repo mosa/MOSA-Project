@@ -13,7 +13,10 @@ public class DefaultMemberAttribute : Attribute
 	/// <summary>
 	/// Member
 	/// </summary>
-	public string Member => member;
+	public string Member
+	{
+		get { return member; }
+	}
 
 	/// <summary>
 	///

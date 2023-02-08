@@ -31,18 +31,18 @@ public struct Single: IComparable, IComparable<float>, IEquatable<float>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static bool IsNegativeInfinity(float s)
 	{
-		return (s < 0.0f && s is NegativeInfinity or PositiveInfinity);
+		return (s < 0.0f && (s == NegativeInfinity || s == PositiveInfinity));
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static bool IsPositiveInfinity(float s)
 	{
-		return (s > 0.0f && s is NegativeInfinity or PositiveInfinity);
+		return (s > 0.0f && (s == NegativeInfinity || s == PositiveInfinity));
 	}
 
 	public static bool IsInfinity(float s)
 	{
-		return s is PositiveInfinity or NegativeInfinity;
+		return (s == PositiveInfinity || s == NegativeInfinity);
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

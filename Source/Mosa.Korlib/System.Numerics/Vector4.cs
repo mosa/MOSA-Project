@@ -74,28 +74,46 @@ public partial struct Vector4 : IEquatable<Vector4>, IFormattable
 
 	/// <summary>Gets a vector whose 4 elements are equal to zero.</summary>
 	/// <value>A vector whose four elements are equal to zero (that is, it returns the vector <c>(0,0,0,0)</c>.</value>
-	public static Vector4 Zero => default;
+	public static Vector4 Zero
+	{
+		get => default;
+	}
 
 	/// <summary>Gets a vector whose 4 elements are equal to one.</summary>
 	/// <value>Returns <see cref="System.Numerics.Vector4" />.</value>
 	/// <remarks>A vector whose four elements are equal to one (that is, it returns the vector <c>(1,1,1,1)</c>.</remarks>
-	public static Vector4 One => new Vector4(1.0f);
+	public static Vector4 One
+	{
+		get => new Vector4(1.0f);
+	}
 
 	/// <summary>Gets the vector (1,0,0,0).</summary>
 	/// <value>The vector <c>(1,0,0,0)</c>.</value>
-	public static Vector4 UnitX => new Vector4(1.0f, 0.0f, 0.0f, 0.0f);
+	public static Vector4 UnitX
+	{
+		get => new Vector4(1.0f, 0.0f, 0.0f, 0.0f);
+	}
 
 	/// <summary>Gets the vector (0,1,0,0).</summary>
 	/// <value>The vector <c>(0,1,0,0)</c>.</value>
-	public static Vector4 UnitY => new Vector4(0.0f, 1.0f, 0.0f, 0.0f);
+	public static Vector4 UnitY
+	{
+		get => new Vector4(0.0f, 1.0f, 0.0f, 0.0f);
+	}
 
 	/// <summary>Gets the vector (0,0,1,0).</summary>
 	/// <value>The vector <c>(0,0,1,0)</c>.</value>
-	public static Vector4 UnitZ => new Vector4(0.0f, 0.0f, 1.0f, 0.0f);
+	public static Vector4 UnitZ
+	{
+		get => new Vector4(0.0f, 0.0f, 1.0f, 0.0f);
+	}
 
 	/// <summary>Gets the vector (0,0,0,1).</summary>
 	/// <value>The vector <c>(0,0,0,1)</c>.</value>
-	public static Vector4 UnitW => new Vector4(0.0f, 0.0f, 0.0f, 1.0f);
+	public static Vector4 UnitW
+	{
+		get => new Vector4(0.0f, 0.0f, 0.0f, 1.0f);
+	}
 
 	/// <summary>Adds two vectors together.</summary>
 	/// <param name="left">The first vector to add.</param>

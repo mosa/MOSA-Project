@@ -8,7 +8,7 @@ namespace System;
 public class Delegate
 {
 	protected IntPtr methodPointer;
-	protected object instance;
+	protected object instance = null;
 
 	internal Delegate()
 	{

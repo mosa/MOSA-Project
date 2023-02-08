@@ -26,12 +26,18 @@ public abstract class PropertyInfo : MemberInfo
 	/// <summary>
 	/// Gets the get accessor for this property.
 	/// </summary>
-	public virtual MethodInfo GetMethod => null;
+	public virtual MethodInfo GetMethod
+	{
+		get { return null; }
+	}
 
 	/// <summary>
 	/// Gets a value indicating whether the property is the special name.
 	/// </summary>
-	public bool IsSpecialName => (Attributes & PropertyAttributes.SpecialName) == PropertyAttributes.SpecialName;
+	public bool IsSpecialName
+	{
+		get { return (Attributes & PropertyAttributes.SpecialName) == PropertyAttributes.SpecialName; }
+	}
 
 	/// <summary>
 	/// Gets the type of this property.
@@ -41,7 +47,10 @@ public abstract class PropertyInfo : MemberInfo
 	/// <summary>
 	/// Gets the set accessor for this property.
 	/// </summary>
-	public virtual MethodInfo SetMethod => null;
+	public virtual MethodInfo SetMethod
+	{
+		get { return null; }
+	}
 
 	/// <summary>
 	/// Returns a value that indicates whether this instance is equal to a specified object.

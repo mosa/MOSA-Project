@@ -8,14 +8,26 @@ public static class Console
 {
 	public static ConsoleColor ForegroundColor
 	{
-		get => GetForegroundColor();
-		set => SetForegroundColor(value);
+		get
+		{
+			return GetForegroundColor();
+		}
+		set
+		{
+			SetForegroundColor(value);
+		}
 	}
 
 	public static ConsoleColor BackgroundColor
 	{
-		get => GetBackgroundColor();
-		set => SetBackgroundColor(value);
+		get
+		{
+			return GetBackgroundColor();
+		}
+		set
+		{
+			SetBackgroundColor(value);
+		}
 	}
 
 	[MethodImpl(MethodImplOptions.InternalCall)]

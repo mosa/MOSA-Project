@@ -39,17 +39,29 @@ public class MemoryStream : Stream       /* http://msdn.microsoft.com/en-us/libr
 
 	#region Status Properties
 
-	public override bool CanRead => true;
+	public override bool CanRead
+	{
+		get { return true; }
+	}
 
-	public override bool CanSeek => true;
+	public override bool CanSeek
+	{
+		get { return true; }
+	}
 
-	public override bool CanWrite => true;
+	public override bool CanWrite
+	{
+		get { return true; }
+	}
 
 	#endregion
 
 	#region Public Properties
 
-	public override long Length => length;
+	public override long Length
+	{
+		get { return length; }
+	}
 
 	public override long Position { get; set; }
 
@@ -57,7 +69,7 @@ public class MemoryStream : Stream       /* http://msdn.microsoft.com/en-us/libr
 
 	#region Members
 
-	protected long length;
+	protected long length = 0;
 
 	protected long blockSize = 65536;
 
@@ -84,12 +96,17 @@ public class MemoryStream : Stream       /* http://msdn.microsoft.com/en-us/libr
 	/// <summary>
 	/// The id of the block currently addressed by Position
 	/// </summary>
-	protected long blockId => Position / blockSize;
-
+	protected long blockId
+	{
+		get { return Position / blockSize; }
+	}
 	/// <summary>
 	/// The offset of the byte currently addressed by Position, into the block that contains it
 	/// </summary>
-	protected long blockOffset => Position % blockSize;
+	protected long blockOffset
+	{
+		get { return Position % blockSize; }
+	}
 
 	#endregion
 

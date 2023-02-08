@@ -115,21 +115,42 @@ public class List<T> : IList<T>, IList, IReadOnlyList<T>
 		}
 	}
 
-	bool IList.IsFixedSize => false;
+	bool IList.IsFixedSize
+	{
+		get
+		{
+			return false;
+		}
+	}
 
-	bool ICollection<T>.IsReadOnly => false;
+	bool ICollection<T>.IsReadOnly
+	{
+		get { return false; }
+	}
 
-	bool IList.IsReadOnly => false;
+	bool IList.IsReadOnly
+	{
+		get { return false; }
+	}
 
-	bool ICollection.IsSynchronized => false;
+	bool ICollection.IsSynchronized
+	{
+		get { return false; }
+	}
 
-	object ICollection.SyncRoot => throw new NotImplementedException();
-
-	/*
+	object ICollection.SyncRoot
+	{
+		get
+		{
+			throw new NotImplementedException();
+			/*
 			 if( _syncRoot == null) {
                 System.Threading.Interlocked.CompareExchange<Object>(ref _syncRoot, new Object(), null);
             }
             return _syncRoot;*/
+		}
+	}
+
 	/// <summary>
 	/// Gets or sets the T at the specified index.
 	/// </summary>
@@ -170,19 +191,26 @@ public class List<T> : IList<T>, IList, IReadOnlyList<T>
 
 	Object IList.this[int index]
 	{
-		get => this[index];
-		set => throw
+		get
+		{
+			return this[index];
+		}
+		set
+		{
 			//ThrowHelper.IfNullAndNullsAreIllegalThenThrow<T>(value, ExceptionArgument.value);
-			new ArgumentNullException();
-		////TODO fix
-		//try
-		//{
-		//	this[index] = (T)value;
-		//}
-		//catch (Exception e)
-		//{
-		//	//ThrowHelper.ThrowWrongValueTypeArgumentException(value, typeof(T));
-		//}
+
+			throw new ArgumentNullException();
+
+			////TODO fix
+			//try
+			//{
+			//	this[index] = (T)value;
+			//}
+			//catch (Exception e)
+			//{
+			//	//ThrowHelper.ThrowWrongValueTypeArgumentException(value, typeof(T));
+			//}
+		}
 	}
 
 	private void Copy(T[] source, int sourceIndex, T[] destination, int destinationIndex, int size)
@@ -198,7 +226,10 @@ public class List<T> : IList<T>, IList, IReadOnlyList<T>
 		Copy(source, sourceIndex, (T[])destination, destinationIndex, size);
 	}
 
-	int ICollection.Count => _size;
+	int ICollection.Count
+	{
+		get { return _size; }
+	}
 
 	public void Add(T item)
 	{
@@ -471,9 +502,15 @@ public class List<T> : IList<T>, IList, IReadOnlyList<T>
 			current = default(T);
 		}
 
-		public T Current => current;
+		public T Current
+		{
+			get { return current; }
+		}
 
-		object IEnumerator.Current => current;
+		object IEnumerator.Current
+		{
+			get { return current; }
+		}
 
 		public void Dispose()
 		{

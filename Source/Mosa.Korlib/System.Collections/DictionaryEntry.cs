@@ -17,16 +17,28 @@ public struct DictionaryEntry
 
 	public Object Key
 	{
-		get => _key;
+		get
+		{
+			return _key;
+		}
 
-		set => _key = value;
+		set
+		{
+			_key = value;
+		}
 	}
 
 	public Object Value
 	{
-		get => _value;
+		get
+		{
+			return _value;
+		}
 
-		set => _value = value;
+		set
+		{
+			_value = value;
+		}
 	}
 
 	// BLOCKED (do not add now): [EditorBrowsable(EditorBrowsableState.Never)]

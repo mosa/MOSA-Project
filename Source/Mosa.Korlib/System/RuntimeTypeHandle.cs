@@ -17,7 +17,7 @@ public struct RuntimeTypeHandle
 	/// <summary>
 	/// Gets a handle to the type represented by this instance.
 	/// </summary>
-	public IntPtr Value => m_type;
+	public IntPtr Value { get { return m_type; } }
 
 	public bool Equals(RuntimeTypeHandle obj)
 	{

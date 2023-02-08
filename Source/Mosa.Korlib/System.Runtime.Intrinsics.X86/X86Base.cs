@@ -12,7 +12,8 @@ public abstract partial class X86Base
 	internal X86Base()
 	{ }
 
-	public static bool IsSupported => throw null;
+	public static bool IsSupported
+	{ get { throw null; } }
 
 	//public static (int Eax, int Ebx, int Ecx, int Edx) CpuId(int functionId, int subFunctionId)
 	//{ throw null; }
@@ -25,6 +26,7 @@ public abstract partial class X86Base
 		internal X64()
 		{ }
 
-		public static bool IsSupported => throw null;
+		public static bool IsSupported
+		{ get { throw null; } }
 	}
 }

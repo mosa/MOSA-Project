@@ -52,7 +52,13 @@ internal class CompatibleComparer : IEqualityComparer
 	}
 
 	// These are helpers for the Hashtable to query the IKeyComparer infrastructure.
-	internal IComparer Comparer => _comparer;
+	internal IComparer Comparer
+	{
+		get
+		{
+			return _comparer;
+		}
+	}
 
 	// These are helpers for the Hashtable to query the IKeyComparer infrastructure.
 #pragma warning disable CS0618 // Type or member is obsolete

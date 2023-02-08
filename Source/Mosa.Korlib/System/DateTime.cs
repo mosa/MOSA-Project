@@ -266,7 +266,7 @@ public readonly partial struct DateTime : IComparable, IComparable<DateTime>, IE
 	private DateTime Add(double value, int scale)
 	{
 		double millis_double = value * scale + (value >= 0 ? 0.5 : -0.5);
-		if (millis_double is <= -MaxMillis or >= MaxMillis) ThrowOutOfRange();
+		if (millis_double <= -MaxMillis || millis_double >= MaxMillis) ThrowOutOfRange();
 		return AddTicks((long)millis_double * TicksPerMillisecond);
 
 		static void ThrowOutOfRange() => throw new ArgumentOutOfRangeException(nameof(value), SR.ArgumentOutOfRange_AddValue);
@@ -335,14 +335,14 @@ public readonly partial struct DateTime : IComparable, IComparable<DateTime>, IE
 	//
 	public DateTime AddMonths(int months)
 	{
-		if (months is < -120000 or > 120000) throw new ArgumentOutOfRangeException(nameof(months), SR.ArgumentOutOfRange_DateTimeBadMonths);
+		if (months < -120000 || months > 120000) throw new ArgumentOutOfRangeException(nameof(months), SR.ArgumentOutOfRange_DateTimeBadMonths);
 		GetDate(out int year, out int month, out int day);
 		int y = year, d = day;
 		int m = month + months;
 		int q = m > 0 ? (int)((uint)(m - 1) / 12) : m / 12 - 1;
 		y += q;
 		m -= q * 12;
-		if (y is < 1 or > 9999) ThrowDateArithmetic(2);
+		if (y < 1 || y > 9999) ThrowDateArithmetic(2);
 		uint[] daysTo = IsLeapYear(y) ? s_daysToMonth366 : s_daysToMonth365;
 		uint daysToMonth = daysTo[m - 1];
 		int days = (int)(daysTo[m] - daysToMonth);
@@ -396,13 +396,13 @@ public readonly partial struct DateTime : IComparable, IComparable<DateTime>, IE
 	//
 	public DateTime AddYears(int value)
 	{
-		if (value is < -10000 or > 10000)
+		if (value < -10000 || value > 10000)
 		{
 			throw new ArgumentOutOfRangeException(nameof(value), SR.ArgumentOutOfRange_DateTimeBadYears);
 		}
 		GetDate(out int year, out int month, out int day);
 		int y = year + value;
-		if (y is < 1 or > 9999) ThrowDateArithmetic(0);
+		if (y < 1 || y > 9999) ThrowDateArithmetic(0);
 		uint n = DaysToYear((uint)y);
 
 		int m = month - 1, d = day - 1;
@@ -458,7 +458,7 @@ public readonly partial struct DateTime : IComparable, IComparable<DateTime>, IE
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private static ulong DateToTicks(int year, int month, int day)
 	{
-		if (year is < 1 or > 9999 || month is < 1 or > 12 || day < 1)
+		if (year < 1 || year > 9999 || month < 1 || month > 12 || day < 1)
 		{
 			ThrowHelper.ThrowArgumentOutOfRange_BadYearMonthDay();
 		}
@@ -513,7 +513,7 @@ public readonly partial struct DateTime : IComparable, IComparable<DateTime>, IE
 	//
 	public static int DaysInMonth(int year, int month)
 	{
-		if (month is < 1 or > 12) ThrowHelper.ThrowArgumentOutOfRange_Month(month);
+		if (month < 1 || month > 12) ThrowHelper.ThrowArgumentOutOfRange_Month(month);
 
 		// IsLeapYear checks the year argument
 		return (IsLeapYear(year) ? DaysInMonth366 : DaysInMonth365)[month - 1];
@@ -540,7 +540,7 @@ public readonly partial struct DateTime : IComparable, IComparable<DateTime>, IE
 
 		millis += DoubleDateOffset / TicksPerMillisecond;
 
-		if (millis is < 0 or >= MaxMillis) throw new ArgumentException(SR.Arg_OleAutDateScale);
+		if (millis < 0 || millis >= MaxMillis) throw new ArgumentException(SR.Arg_OleAutDateScale);
 		return millis * TicksPerMillisecond;
 	}
 
@@ -849,7 +849,7 @@ public readonly partial struct DateTime : IComparable, IComparable<DateTime>, IE
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static bool IsLeapYear(int year)
 	{
-		if (year is < 1 or > 9999)
+		if (year < 1 || year > 9999)
 		{
 			ThrowHelper.ThrowArgumentOutOfRange_Year();
 		}
@@ -934,7 +934,7 @@ public readonly partial struct DateTime : IComparable, IComparable<DateTime>, IE
 	internal static bool TryCreate(int year, int month, int day, int hour, int minute, int second, int millisecond, out DateTime result)
 	{
 		result = default;
-		if (year is < 1 or > 9999 || month is < 1 or > 12 || day < 1)
+		if (year < 1 || year > 9999 || month < 1 || month > 12 || day < 1)
 		{
 			return false;
 		}

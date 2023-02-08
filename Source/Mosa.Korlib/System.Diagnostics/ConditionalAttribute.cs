@@ -7,7 +7,10 @@ public sealed class ConditionalAttribute : Attribute
 {
 	private readonly string conditionString;
 
-	public string ConditionString => conditionString;
+	public string ConditionString
+	{
+		get { return conditionString; }
+	}
 
 	public ConditionalAttribute(string conditionString)
 	{

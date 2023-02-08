@@ -42,5 +42,8 @@ public class ArgumentException : Exception
 	/// Gets the name of the param.
 	/// </summary>
 	/// <value>The name of the param.</value>
-	public virtual string ParamName => paramName;
+	public virtual string ParamName
+	{
+		get { return paramName; }
+	}
 }

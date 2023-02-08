@@ -124,13 +124,22 @@ public class ArrayList : IList, ICloneable
 		}
 	}
 
-	public virtual bool IsFixedSize => false;
+	public virtual bool IsFixedSize
+	{
+		get { return false; }
+	}
 
 	// Is this ArrayList read-only?
-	public virtual bool IsReadOnly => false;
+	public virtual bool IsReadOnly
+	{
+		get { return false; }
+	}
 
 	// Is this ArrayList synchronized (thread-safe)?
-	public virtual bool IsSynchronized => false;
+	public virtual bool IsSynchronized
+	{
+		get { return false; }
+	}
 
 	// Synchronization root for this object.
 	public virtual Object SyncRoot
@@ -785,7 +794,10 @@ public class ArrayList : IList, ICloneable
 
 		public override int Capacity
 		{
-			get => _list.Count;
+			get
+			{
+				return _list.Count;
+			}
 			set
 			{
 				if (value < Count) throw new ArgumentOutOfRangeException();//(nameof(value), Environment.GetResourceString("ArgumentOutOfRange_SmallCapacity"));
@@ -793,17 +805,32 @@ public class ArrayList : IList, ICloneable
 			}
 		}
 
-		public override int Count => _list.Count;
+		public override int Count
+		{
+			get { return _list.Count; }
+		}
 
-		public override bool IsReadOnly => _list.IsReadOnly;
+		public override bool IsReadOnly
+		{
+			get { return _list.IsReadOnly; }
+		}
 
-		public override bool IsFixedSize => _list.IsFixedSize;
+		public override bool IsFixedSize
+		{
+			get { return _list.IsFixedSize; }
+		}
 
-		public override bool IsSynchronized => _list.IsSynchronized;
+		public override bool IsSynchronized
+		{
+			get { return _list.IsSynchronized; }
+		}
 
 		public override Object this[int index]
 		{
-			get => _list[index];
+			get
+			{
+				return _list[index];
+			}
 			set
 			{
 				_list[index] = value;
@@ -811,7 +838,10 @@ public class ArrayList : IList, ICloneable
 			}
 		}
 
-		public override Object SyncRoot => _list.SyncRoot;
+		public override Object SyncRoot
+		{
+			get { return _list.SyncRoot; }
+		}
 
 		public override int Add(Object obj)
 		{
@@ -1247,11 +1277,20 @@ public class ArrayList : IList, ICloneable
 			get { lock (_root) { return _list.Count; } }
 		}
 
-		public override bool IsReadOnly => _list.IsReadOnly;
+		public override bool IsReadOnly
+		{
+			get { return _list.IsReadOnly; }
+		}
 
-		public override bool IsFixedSize => _list.IsFixedSize;
+		public override bool IsFixedSize
+		{
+			get { return _list.IsFixedSize; }
+		}
 
-		public override bool IsSynchronized => true;
+		public override bool IsSynchronized
+		{
+			get { return true; }
+		}
 
 		public override Object this[int index]
 		{
@@ -1271,7 +1310,10 @@ public class ArrayList : IList, ICloneable
 			}
 		}
 
-		public override Object SyncRoot => _root;
+		public override Object SyncRoot
+		{
+			get { return _root; }
+		}
 
 		public override int Add(Object value)
 		{
@@ -1569,11 +1611,20 @@ public class ArrayList : IList, ICloneable
 			get { lock (_root) { return _list.Count; } }
 		}
 
-		public virtual bool IsReadOnly => _list.IsReadOnly;
+		public virtual bool IsReadOnly
+		{
+			get { return _list.IsReadOnly; }
+		}
 
-		public virtual bool IsFixedSize => _list.IsFixedSize;
+		public virtual bool IsFixedSize
+		{
+			get { return _list.IsFixedSize; }
+		}
 
-		public virtual bool IsSynchronized => true;
+		public virtual bool IsSynchronized
+		{
+			get { return true; }
+		}
 
 		public virtual Object this[int index]
 		{
@@ -1593,7 +1644,10 @@ public class ArrayList : IList, ICloneable
 			}
 		}
 
-		public virtual Object SyncRoot => _root;
+		public virtual Object SyncRoot
+		{
+			get { return _root; }
+		}
 
 		public virtual int Add(Object value)
 		{
@@ -1678,21 +1732,42 @@ public class ArrayList : IList, ICloneable
 			_list = l;
 		}
 
-		public virtual int Count => _list.Count;
+		public virtual int Count
+		{
+			get { return _list.Count; }
+		}
 
-		public virtual bool IsReadOnly => _list.IsReadOnly;
+		public virtual bool IsReadOnly
+		{
+			get { return _list.IsReadOnly; }
+		}
 
-		public virtual bool IsFixedSize => true;
+		public virtual bool IsFixedSize
+		{
+			get { return true; }
+		}
 
-		public virtual bool IsSynchronized => _list.IsSynchronized;
+		public virtual bool IsSynchronized
+		{
+			get { return _list.IsSynchronized; }
+		}
 
 		public virtual Object this[int index]
 		{
-			get => _list[index];
-			set => _list[index] = value;
+			get
+			{
+				return _list[index];
+			}
+			set
+			{
+				_list[index] = value;
+			}
 		}
 
-		public virtual Object SyncRoot => _list.SyncRoot;
+		public virtual Object SyncRoot
+		{
+			get { return _list.SyncRoot; }
+		}
 
 		public virtual int Add(Object obj)
 		{
@@ -1751,17 +1826,32 @@ public class ArrayList : IList, ICloneable
 			_version = _list._version;
 		}
 
-		public override int Count => _list.Count;
+		public override int Count
+		{
+			get { return _list.Count; }
+		}
 
-		public override bool IsReadOnly => _list.IsReadOnly;
+		public override bool IsReadOnly
+		{
+			get { return _list.IsReadOnly; }
+		}
 
-		public override bool IsFixedSize => true;
+		public override bool IsFixedSize
+		{
+			get { return true; }
+		}
 
-		public override bool IsSynchronized => _list.IsSynchronized;
+		public override bool IsSynchronized
+		{
+			get { return _list.IsSynchronized; }
+		}
 
 		public override Object this[int index]
 		{
-			get => _list[index];
+			get
+			{
+				return _list[index];
+			}
 			set
 			{
 				_list[index] = value;
@@ -1769,7 +1859,10 @@ public class ArrayList : IList, ICloneable
 			}
 		}
 
-		public override Object SyncRoot => _list.SyncRoot;
+		public override Object SyncRoot
+		{
+			get { return _list.SyncRoot; }
+		}
 
 		public override int Add(Object obj)
 		{
@@ -1789,10 +1882,10 @@ public class ArrayList : IList, ICloneable
 
 		public override int Capacity
 		{
-			get => _list.Capacity;
+			get { return _list.Capacity; }
 
 			//[SuppressMessage("Microsoft.Contracts", "CC1055")]  // Skip extra error checking to avoid *potential* AppCompat problems.
-			set => throw new NotSupportedException("NotSupported_FixedSizeCollection");
+			set { throw new NotSupportedException("NotSupported_FixedSizeCollection"); }
 		}
 
 		public override void Clear()
@@ -1954,21 +2047,42 @@ public class ArrayList : IList, ICloneable
 			_list = l;
 		}
 
-		public virtual int Count => _list.Count;
+		public virtual int Count
+		{
+			get { return _list.Count; }
+		}
 
-		public virtual bool IsReadOnly => true;
+		public virtual bool IsReadOnly
+		{
+			get { return true; }
+		}
 
-		public virtual bool IsFixedSize => true;
+		public virtual bool IsFixedSize
+		{
+			get { return true; }
+		}
 
-		public virtual bool IsSynchronized => _list.IsSynchronized;
+		public virtual bool IsSynchronized
+		{
+			get { return _list.IsSynchronized; }
+		}
 
 		public virtual Object this[int index]
 		{
-			get => _list[index];
-			set => throw new NotSupportedException("NotSupported_ReadOnlyCollection");
+			get
+			{
+				return _list[index];
+			}
+			set
+			{
+				throw new NotSupportedException("NotSupported_ReadOnlyCollection");
+			}
 		}
 
-		public virtual Object SyncRoot => _list.SyncRoot;
+		public virtual Object SyncRoot
+		{
+			get { return _list.SyncRoot; }
+		}
 
 		public virtual int Add(Object obj)
 		{
@@ -2026,21 +2140,42 @@ public class ArrayList : IList, ICloneable
 			_list = l;
 		}
 
-		public override int Count => _list.Count;
+		public override int Count
+		{
+			get { return _list.Count; }
+		}
 
-		public override bool IsReadOnly => true;
+		public override bool IsReadOnly
+		{
+			get { return true; }
+		}
 
-		public override bool IsFixedSize => true;
+		public override bool IsFixedSize
+		{
+			get { return true; }
+		}
 
-		public override bool IsSynchronized => _list.IsSynchronized;
+		public override bool IsSynchronized
+		{
+			get { return _list.IsSynchronized; }
+		}
 
 		public override Object this[int index]
 		{
-			get => _list[index];
-			set => throw new NotSupportedException("NotSupported_ReadOnlyCollection");
+			get
+			{
+				return _list[index];
+			}
+			set
+			{
+				throw new NotSupportedException("NotSupported_ReadOnlyCollection");
+			}
 		}
 
-		public override Object SyncRoot => _list.SyncRoot;
+		public override Object SyncRoot
+		{
+			get { return _list.SyncRoot; }
+		}
 
 		public override int Add(Object obj)
 		{
@@ -2060,10 +2195,10 @@ public class ArrayList : IList, ICloneable
 
 		public override int Capacity
 		{
-			get => _list.Capacity;
+			get { return _list.Capacity; }
 
 			//[SuppressMessage("Microsoft.Contracts", "CC1055")]  // Skip extra error checking to avoid *potential* AppCompat problems.
-			set => throw new NotSupportedException("NotSupported_ReadOnlyCollection");
+			set { throw new NotSupportedException("NotSupported_ReadOnlyCollection"); }
 		}
 
 		public override void Clear()
@@ -2356,7 +2491,10 @@ public class ArrayList : IList, ICloneable
 
 		public override int Capacity
 		{
-			get => _baseList.Capacity;
+			get
+			{
+				return _baseList.Capacity;
+			}
 
 			set
 			{
@@ -2446,11 +2584,20 @@ public class ArrayList : IList, ICloneable
 			}
 		}
 
-		public override bool IsReadOnly => _baseList.IsReadOnly;
+		public override bool IsReadOnly
+		{
+			get { return _baseList.IsReadOnly; }
+		}
 
-		public override bool IsFixedSize => _baseList.IsFixedSize;
+		public override bool IsFixedSize
+		{
+			get { return _baseList.IsFixedSize; }
+		}
 
-		public override bool IsSynchronized => _baseList.IsSynchronized;
+		public override bool IsSynchronized
+		{
+			get { return _baseList.IsSynchronized; }
+		}
 
 		public override IEnumerator GetEnumerator()
 		{
@@ -2481,7 +2628,13 @@ public class ArrayList : IList, ICloneable
 			return new Range(this, index, count);
 		}
 
-		public override Object SyncRoot => _baseList.SyncRoot;
+		public override Object SyncRoot
+		{
+			get
+			{
+				return _baseList.SyncRoot;
+			}
+		}
 
 		public override int IndexOf(Object value)
 		{
@@ -2798,6 +2951,12 @@ public class ArrayList : IList, ICloneable
 		}
 
 		[DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-		public Object[] Items => arrayList.ToArray();
+		public Object[] Items
+		{
+			get
+			{
+				return arrayList.ToArray();
+			}
+		}
 	}
 }

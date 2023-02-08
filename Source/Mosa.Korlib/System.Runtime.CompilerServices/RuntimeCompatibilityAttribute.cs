@@ -12,7 +12,7 @@ public sealed class RuntimeCompatibilityAttribute : Attribute
 
 	public bool WrapNonExceptionThrows
 	{
-		get => false;
+		get { return false; }
 		set { }
 	}
 }

@@ -17,15 +17,24 @@ public class CustomAttributeData
 	/// <summary>
 	/// The type of the attribute.
 	/// </summary>
-	public Type AttributeType => attributeType;
+	public Type AttributeType
+	{
+		get { return attributeType; }
+	}
 
 	/// <summary>
 	/// A collection of structures that represent the positional arguments specified for the custom attribute instance.
 	/// </summary>
-	public virtual IList<CustomAttributeTypedArgument> ConstructorArguments => ctorArgs;
+	public virtual IList<CustomAttributeTypedArgument> ConstructorArguments
+	{
+		get { return ctorArgs; }
+	}
 
 	/// <summary>
 	/// A collection of structures that represent the named arguments specified for the custom attribute instance.
 	/// </summary>
-	public virtual IList<CustomAttributeNamedArgument> NamedArguments => namedArgs;
+	public virtual IList<CustomAttributeNamedArgument> NamedArguments
+	{
+		get { return namedArgs; }
+	}
 }

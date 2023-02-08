@@ -8,12 +8,18 @@ public abstract class MethodInfo : MethodBase
 	/// <summary>
 	/// Gets a ParameterInfo object that contains information about the return type of the method, such as whether the return type has custom modifiers.
 	/// </summary>
-	public virtual ParameterInfo ReturnParameter => throw new NotImplementedException();
+	public virtual ParameterInfo ReturnParameter
+	{
+		get { throw new NotImplementedException(); }
+	}
 
 	/// <summary>
 	/// Gets the return type of this method.
 	/// </summary>
-	public virtual Type ReturnType => throw new NotImplementedException();
+	public virtual Type ReturnType
+	{
+		get { throw new NotImplementedException(); }
+	}
 
 	/// <summary>
 	/// Creates a delegate of the specified type from this method.

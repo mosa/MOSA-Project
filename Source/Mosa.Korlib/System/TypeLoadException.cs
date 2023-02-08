@@ -38,7 +38,13 @@ public class TypeLoadException : SystemException
 	/// Gets the message.
 	/// </summary>
 	/// <value>The message.</value>
-	public override string Message => base.Message + " " + typeName;
+	public override string Message
+	{
+		get { return base.Message + " " + typeName; }
+	}
 
-	public string TypeName => typeName;
+	public string TypeName
+	{
+		get { return typeName; }
+	}
 }

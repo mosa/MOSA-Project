@@ -31,7 +31,13 @@ public abstract class Array : ICloneable, IList, ICollection, IEnumerable, IStru
 {
 	private readonly int length;
 
-	public int Length => length;
+	public int Length
+	{
+		get
+		{
+			return length;
+		}
+	}
 
 	// TODO: Detect if it's a byte array, if yes then use MaxByteArrayLength, else just use MaxArrayLength
 	public static int MaxLength => MaxArrayLength;
@@ -42,9 +48,11 @@ public abstract class Array : ICloneable, IList, ICollection, IEnumerable, IStru
 	/// <summary>
 	/// Gets the rank (number of dimensions) of the Array. For example, a one-dimensional array returns 1, a two-dimensional array returns 2, and so on.
 	/// </summary>
-	public int Rank =>
+	public int Rank
+	{
 		// TODO: support multidimensional arrays
-		1;
+		get { return 1; }
+	}
 
 	/// <summary>
 	/// SetValue
@@ -119,14 +127,26 @@ public abstract class Array : ICloneable, IList, ICollection, IEnumerable, IStru
 		return null;
 	}
 
-	bool IList.IsFixedSize => true;
+	bool IList.IsFixedSize
+	{
+		get { return true; }
+	}
 
-	bool IList.IsReadOnly => true;
+	bool IList.IsReadOnly
+	{
+		get { return true; }
+	}
 
 	object IList.this[int index]
 	{
-		get => throw new NotImplementedException();
-		set => throw new NotImplementedException();
+		get
+		{
+			throw new NotImplementedException();
+		}
+		set
+		{
+			throw new NotImplementedException();
+		}
 	}
 
 	int IList.Add(object value)
@@ -168,15 +188,31 @@ public abstract class Array : ICloneable, IList, ICollection, IEnumerable, IStru
 		throw new NotSupportedException();
 	}
 
-	int ICollection.Count => length;
+	int ICollection.Count
+	{
+		get
+		{
+			return length;
+		}
+	}
 
-	bool ICollection.IsSynchronized =>
+	bool ICollection.IsSynchronized
+	{
 		//TODO
-		true;
+		get
+		{
+			return true;
+		}
+	}
 
-	object ICollection.SyncRoot =>
+	object ICollection.SyncRoot
+	{
 		//TODO
-		this;
+		get
+		{
+			return this;
+		}
+	}
 
 	public void CopyTo(Array array, int arrayIndex)
 	{
@@ -424,7 +460,10 @@ public abstract class Array : ICloneable, IList, ICollection, IEnumerable, IStru
 			{
 			}
 
-			object IEnumerator.Current => Current;
+			object IEnumerator.Current
+			{
+				get { return Current; }
+			}
 
 			void IEnumerator.Reset()
 			{

@@ -24,7 +24,10 @@ public sealed class PureAttribute : Attribute
 		_sophisticated = sophisticated;
 	}
 
-	public bool Sophisticated => _sophisticated;
+	public bool Sophisticated
+	{
+		get => _sophisticated;
+	}
 }
 
 /// <summary>
@@ -42,7 +45,10 @@ public sealed class ContractClassAttribute : Attribute
 		_typeWithContracts = typeContainingContracts;
 	}
 
-	public Type TypeContainingContracts => _typeWithContracts;
+	public Type TypeContainingContracts
+	{
+		get { return _typeWithContracts; }
+	}
 }
 
 /// <summary>
@@ -59,7 +65,10 @@ public sealed class ContractClassForAttribute : Attribute
 		_typeIAmAContractFor = typeContractsAreFor;
 	}
 
-	public Type TypeContractsAreFor => _typeIAmAContractFor;
+	public Type TypeContractsAreFor
+	{
+		get { return _typeIAmAContractFor; }
+	}
 }
 
 /// <summary>
@@ -109,7 +118,10 @@ public sealed class ContractVerificationAttribute : Attribute
 		_value = value;
 	}
 
-	public bool Value => _value;
+	public bool Value
+	{
+		get { return _value; }
+	}
 }
 
 /// <summary>
@@ -127,7 +139,10 @@ public sealed class ContractPublicPropertyNameAttribute : Attribute
 		_publicName = name;
 	}
 
-	public String Name => _publicName;
+	public String Name
+	{
+		get { return _publicName; }
+	}
 }
 
 /// <summary>
@@ -171,13 +186,25 @@ public sealed class ContractOptionAttribute : Attribute
 		_value = value;
 	}
 
-	public string Category => _category;
+	public string Category
+	{
+		get { return _category; }
+	}
 
-	public string Setting => _setting;
+	public string Setting
+	{
+		get { return _setting; }
+	}
 
-	public bool Enabled => _enabled;
+	public bool Enabled
+	{
+		get { return _enabled; }
+	}
 
-	public string Value => _value;
+	public string Value
+	{
+		get { return _value; }
+	}
 }
 
 #endregion Attributes

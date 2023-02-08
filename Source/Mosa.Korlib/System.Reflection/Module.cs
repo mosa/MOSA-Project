@@ -4,5 +4,8 @@ namespace System.Reflection;
 
 public class Module
 {
-	public virtual Assembly Assembly => throw new NotImplementedException();
+	public virtual Assembly Assembly
+	{
+		get { throw new NotImplementedException(); }
+	}
 }

@@ -30,17 +30,23 @@ public class LinkedList<T> : IEnumerable<T>, ICollection<T>
 		}
 	}
 
-	public bool IsEmpty => first == null;
+	public bool IsEmpty { get { return first == null; } }
 
 	/// <summary>
 	/// Gets the first node of the LinkedList<T>.
 	/// </summary>
-	public LinkedListNode<T> First => first;
+	public LinkedListNode<T> First
+	{
+		get { return first; }
+	}
 
 	/// <summary>
 	/// Gets the last node of the LinkedList<T>.
 	/// </summary>
-	public LinkedListNode<T> Last => last;
+	public LinkedListNode<T> Last
+	{
+		get { return last; }
+	}
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="T:LinkedList"/> class.
@@ -394,7 +400,7 @@ public class LinkedList<T> : IEnumerable<T>, ICollection<T>
 	/// <value></value>
 	/// <returns>true if the <see cref="T:ICollection`1"/> is read-only; otherwise, false.
 	/// </returns>
-	bool ICollection<T>.IsReadOnly => false;
+	bool ICollection<T>.IsReadOnly { get { return false; } }
 
 	/// <summary>
 	/// Returns an enumerator that iterates through the collection.
@@ -477,7 +483,10 @@ public class LinkedList<T> : IEnumerable<T>, ICollection<T>
 			list = null;
 		}
 
-		object IEnumerator.Current => Current;
+		object IEnumerator.Current
+		{
+			get { return Current; }
+		}
 
 		void IEnumerator.Reset()
 		{

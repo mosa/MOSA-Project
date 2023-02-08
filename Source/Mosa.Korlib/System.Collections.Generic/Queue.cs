@@ -49,9 +49,15 @@ public class Queue<T> : IEnumerable<T>,
 		if (_size != _array.Length) _tail = _size;
 	}
 
-	public int Count => _size;
+	public int Count
+	{
+		get { return _size; }
+	}
 
-	bool ICollection.IsSynchronized => false;
+	bool ICollection.IsSynchronized
+	{
+		get { return false; }
+	}
 
 	object ICollection.SyncRoot => this;
 
@@ -482,11 +488,14 @@ public class Queue<T> : IEnumerable<T>,
 
 		private void ThrowEnumerationNotStartedOrEnded()
 		{
-			Debug.Assert(_index is -1 or -2);
+			Debug.Assert(_index == -1 || _index == -2);
 			throw new InvalidOperationException(_index == -1 ? "Invalid operation, enumeration not started" : "Invalid operation, enumeration ended");
 		}
 
-		object IEnumerator.Current => Current;
+		object IEnumerator.Current
+		{
+			get { return Current; }
+		}
 
 		void IEnumerator.Reset()
 		{

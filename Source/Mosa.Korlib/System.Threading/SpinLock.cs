@@ -40,7 +40,13 @@ public struct SpinLock
 		Interlocked.Decrement(ref m_owner);
 	}
 
-	public bool IsHeld => (m_owner & LOCK_ANONYMOUS_OWNED) != LOCK_UNOWNED;
+	public bool IsHeld
+	{
+		get
+		{
+			return (m_owner & LOCK_ANONYMOUS_OWNED) != LOCK_UNOWNED;
+		}
+	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private static int CompareExchange(ref int location, int value, int comparand, ref bool success)

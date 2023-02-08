@@ -10,7 +10,7 @@ public class SecurityPermissionAttribute : Attribute
 
 	public bool SkipVerification
 	{
-		get => true;
+		get { return true; }
 		set { }
 	}
 }

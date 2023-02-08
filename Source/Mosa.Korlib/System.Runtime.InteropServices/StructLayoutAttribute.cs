@@ -19,5 +19,8 @@ public sealed class StructLayoutAttribute : Attribute
 		lkind = layoutKind;
 	}
 
-	public LayoutKind Value => lkind;
+	public LayoutKind Value
+	{
+		get { return lkind; }
+	}
 }

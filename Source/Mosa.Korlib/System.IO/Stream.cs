@@ -42,7 +42,13 @@ public abstract class Stream : IDisposable // MarshalByRefObject,
 	/// <summary>
 	///
 	/// </summary>
-	public virtual bool CanTimeout => false;
+	public virtual bool CanTimeout
+	{
+		get
+		{
+			return false;
+		}
+	}
 
 	/// <summary>
 	///
@@ -115,8 +121,14 @@ public abstract class Stream : IDisposable // MarshalByRefObject,
 	/// </summary>
 	public virtual int ReadTimeout
 	{
-		get => throw new InvalidOperationException("Timeouts are not supported on this stream.");
-		set => throw new InvalidOperationException("Timeouts are not supported on this stream.");
+		get
+		{
+			throw new InvalidOperationException("Timeouts are not supported on this stream.");
+		}
+		set
+		{
+			throw new InvalidOperationException("Timeouts are not supported on this stream.");
+		}
 	}
 
 	/// <summary>
@@ -124,8 +136,14 @@ public abstract class Stream : IDisposable // MarshalByRefObject,
 	/// </summary>
 	public virtual int WriteTimeout
 	{
-		get => throw new InvalidOperationException("Timeouts are not supported on this stream.");
-		set => throw new InvalidOperationException("Timeouts are not supported on this stream.");
+		get
+		{
+			throw new InvalidOperationException("Timeouts are not supported on this stream.");
+		}
+		set
+		{
+			throw new InvalidOperationException("Timeouts are not supported on this stream.");
+		}
 	}
 
 	/// <summary>

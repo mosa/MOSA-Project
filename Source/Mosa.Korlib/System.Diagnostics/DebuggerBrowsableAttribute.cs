@@ -22,11 +22,14 @@ public sealed class DebuggerBrowsableAttribute : Attribute
 
 	public DebuggerBrowsableAttribute(DebuggerBrowsableState state)
 	{
-		if (state is < DebuggerBrowsableState.Never or > DebuggerBrowsableState.RootHidden)
+		if (state < DebuggerBrowsableState.Never || state > DebuggerBrowsableState.RootHidden)
 			throw new ArgumentOutOfRangeException("state");
 
 		this.state = state;
 	}
 
-	public DebuggerBrowsableState State => state;
+	public DebuggerBrowsableState State
+	{
+		get { return state; }
+	}
 }

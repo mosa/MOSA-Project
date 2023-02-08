@@ -47,19 +47,31 @@ public partial struct Vector2 : IEquatable<Vector2>, IFormattable
 
 	/// <summary>Returns a vector whose 2 elements are equal to zero.</summary>
 	/// <value>A vector whose two elements are equal to zero (that is, it returns the vector <c>(0,0)</c>.</value>
-	public static Vector2 Zero => default;
+	public static Vector2 Zero
+	{
+		get => default;
+	}
 
 	/// <summary>Gets a vector whose 2 elements are equal to one.</summary>
 	/// <value>A vector whose two elements are equal to one (that is, it returns the vector <c>(1,1)</c>.</value>
-	public static Vector2 One => new Vector2(1.0f);
+	public static Vector2 One
+	{
+		get => new Vector2(1.0f);
+	}
 
 	/// <summary>Gets the vector (1,0).</summary>
 	/// <value>The vector <c>(1,0)</c>.</value>
-	public static Vector2 UnitX => new Vector2(1.0f, 0.0f);
+	public static Vector2 UnitX
+	{
+		get => new Vector2(1.0f, 0.0f);
+	}
 
 	/// <summary>Gets the vector (0,1).</summary>
 	/// <value>The vector <c>(0,1)</c>.</value>
-	public static Vector2 UnitY => new Vector2(0.0f, 1.0f);
+	public static Vector2 UnitY
+	{
+		get => new Vector2(0.0f, 1.0f);
+	}
 
 	/// <summary>Adds two vectors together.</summary>
 	/// <param name="left">The first vector to add.</param>

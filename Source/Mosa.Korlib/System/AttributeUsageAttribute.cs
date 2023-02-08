@@ -30,11 +30,11 @@ public sealed class AttributeUsageAttribute : Attribute
 	/// <value><c>true</c> if [allow multiple]; otherwise, <c>false</c>.</value>
 	public bool AllowMultiple
 	{
-		get => allowMultiple;
-		set => allowMultiple = value;
+		get { return allowMultiple; }
+		set { allowMultiple = value; }
 	}
 
-	private bool inherited;
+	private bool inherited = false;
 
 	/// <summary>
 	/// Gets or sets a <see cref="Boolean"/> value indicating whether the indicated attribute can
@@ -43,8 +43,8 @@ public sealed class AttributeUsageAttribute : Attribute
 	/// <value><c>true</c> if inherited; otherwise, <c>false</c>.</value>
 	public bool Inherited
 	{
-		get => inherited;
-		set => inherited = value;
+		get { return inherited; }
+		set { inherited = value; }
 	}
 
 	private readonly AttributeTargets validOn;
@@ -54,5 +54,8 @@ public sealed class AttributeUsageAttribute : Attribute
 	/// attribute can be applied to.
 	/// </summary>
 	/// <value>The valid on.</value>
-	public AttributeTargets ValidOn => validOn;
+	public AttributeTargets ValidOn
+	{
+		get { return validOn; }
+	}
 }

@@ -31,19 +31,19 @@ public struct Double: IComparable, IComparable<double>, IEquatable<double>
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static bool IsNegativeInfinity(double d)
 	{
-		return (d < 0.0d && d is NegativeInfinity or PositiveInfinity);
+		return (d < 0.0d && (d == NegativeInfinity || d == PositiveInfinity));
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static bool IsPositiveInfinity(double d)
 	{
-		return (d > 0.0d && d is NegativeInfinity or PositiveInfinity);
+		return (d > 0.0d && (d == NegativeInfinity || d == PositiveInfinity));
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static bool IsInfinity(double d)
 	{
-		return d is PositiveInfinity or NegativeInfinity;
+		return (d == PositiveInfinity || d == NegativeInfinity);
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

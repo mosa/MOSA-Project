@@ -19,7 +19,13 @@ internal class KeyValuePairs
 		this.key = key;
 	}
 
-	public object Key => key;
+	public object Key
+	{
+		get { return key; }
+	}
 
-	public object Value => value;
+	public object Value
+	{
+		get { return value; }
+	}
 }

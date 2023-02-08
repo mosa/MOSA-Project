@@ -14,5 +14,11 @@ public sealed class CLSCompliantAttribute : Attribute
 		is_compliant = isCompliant;
 	}
 
-	public bool IsCompliant => is_compliant;
+	public bool IsCompliant
+	{
+		get
+		{
+			return is_compliant;
+		}
+	}
 }
