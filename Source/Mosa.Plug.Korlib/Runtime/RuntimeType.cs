@@ -19,8 +19,8 @@ public sealed unsafe class RuntimeType : Type
 	internal TypeAttributes attributes; // FIXME: this should be private, only temporarily internal
 	private readonly RuntimeTypeHandle declaringTypeHandle;
 	private readonly RuntimeTypeHandle elementTypeHandle;
-	private Type declaringType = null;
-	private Type elementType = null;
+	private Type declaringType;
+	private Type elementType;
 
 	public override string AssemblyQualifiedName
 	{

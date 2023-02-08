@@ -11,7 +11,7 @@ public static class UnitTestQueue
 {
 	private static Pointer queueNext;
 	private static Pointer queueCurrent;
-	private static uint count = 0;
+	private static uint count;
 
 	private static readonly uint TestQueueSize = 0x00100000;
 

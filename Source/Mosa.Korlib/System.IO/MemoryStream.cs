@@ -69,7 +69,7 @@ public class MemoryStream : Stream       /* http://msdn.microsoft.com/en-us/libr
 
 	#region Members
 
-	protected long length = 0;
+	protected long length;
 
 	protected long blockSize = 65536;
 

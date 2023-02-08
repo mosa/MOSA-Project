@@ -15,7 +15,7 @@ public abstract class GDBCommand
 
 	protected virtual string PackArguments { get { return string.Empty; } }
 
-	public bool IsResponseOk { get; internal set; } = false;
+	public bool IsResponseOk { get; internal set; }
 
 	public byte[] ResponseData { get; internal set; }
 
@@ -23,7 +23,7 @@ public abstract class GDBCommand
 
 	public CallBack Callback { get; }
 
-	private static int sequence = 0;
+	private static int sequence;
 
 	public override string ToString()
 	{

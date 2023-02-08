@@ -10,8 +10,8 @@ namespace Mosa.Kernel.x64;
 /// </summary>
 public static class Screen
 {
-	public static uint column = 0;
-	public static uint row = 0;
+	public static uint column;
+	public static uint row;
 	private static byte color = 23;
 
 	/// <summary>

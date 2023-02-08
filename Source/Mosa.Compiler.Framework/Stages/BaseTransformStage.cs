@@ -42,7 +42,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 	protected Dictionary<string, Counter> TransformCounters = new Dictionary<string, Counter>();
 
-	private bool SortedByPriority = false;
+	private bool SortedByPriority;
 
 	public BaseTransformStage(bool enableTransformOptimizations = false, bool enableBlockOptimizations = false, int maxPasses = MaximumPasses)
 	{

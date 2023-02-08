@@ -22,7 +22,7 @@ public class AppManager
 
 	public ServiceManager ServiceManager;
 
-	private uint tick = 0;
+	private uint tick;
 
 	public AppManager(ConsoleSession debug, IKeyboard keyboard, ServiceManager serviceManager)
 	{

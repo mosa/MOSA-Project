@@ -34,7 +34,7 @@ public sealed class AttributeUsageAttribute : Attribute
 		set { allowMultiple = value; }
 	}
 
-	private bool inherited = false;
+	private bool inherited;
 
 	/// <summary>
 	/// Gets or sets a <see cref="Boolean"/> value indicating whether the indicated attribute can

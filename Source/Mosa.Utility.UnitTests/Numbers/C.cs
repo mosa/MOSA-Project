@@ -6,7 +6,7 @@ namespace Mosa.Utility.UnitTests.Numbers;
 
 public static class C
 {
-	private static IList<char> series = null;
+	private static IList<char> series;
 
 	public static IEnumerable<char> Series
 	{

@@ -15,7 +15,7 @@ public sealed unsafe class RuntimeTypeInfo : TypeInfo
 	private readonly Type baseType;
 	private readonly Type elementType;
 	private readonly Type asType;
-	private List<CustomAttributeData> customAttributesData = null;
+	private List<CustomAttributeData> customAttributesData;
 
 	internal readonly Type ValueType = typeof(ValueType);
 	internal readonly Type EnumType = typeof(Enum);

@@ -15,7 +15,7 @@ public partial class Disassembler
 {
 	private byte[] memory;
 
-	public ulong Offset { get; set; } = 0;
+	public ulong Offset { get; set; }
 
 	private readonly ProcessorArchitecture arch;
 	private MemoryArea memoryArea;

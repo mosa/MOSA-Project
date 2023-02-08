@@ -1303,7 +1303,7 @@ public class FatFileSystem : GenericFileSystem
 		return at;
 	}
 
-	protected uint lastFreeHint = 0;
+	protected uint lastFreeHint;
 
 	/// <summary>
 	/// Allocates the cluster.

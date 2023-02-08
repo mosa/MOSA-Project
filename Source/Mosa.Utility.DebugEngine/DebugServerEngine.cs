@@ -13,7 +13,7 @@ public sealed class DebugServerEngine
 	private Stream stream;
 
 	private readonly Dictionary<int, DebugMessage> pending = new Dictionary<int, DebugMessage>();
-	private int nextID = 0;
+	private int nextID;
 
 	private readonly List<byte> buffer = new List<byte>();
 
@@ -22,7 +22,7 @@ public sealed class DebugServerEngine
 
 	private const int MaxBufferSize = (64 * 1024) + 64;
 
-	private static int packetCnt = 0;
+	private static int packetCnt;
 
 	public Stream Stream
 	{

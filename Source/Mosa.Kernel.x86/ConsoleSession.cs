@@ -9,12 +9,12 @@ public class ConsoleSession
 {
 	protected readonly byte[] text;
 	protected readonly byte[] textcolor;
-	protected uint column = 0;
-	protected uint row = 0;
-	protected byte color = 0;
+	protected uint column;
+	protected uint row;
+	protected byte color;
 	protected ConsoleManager consoleManager;
 
-	protected uint scrollRow = 0;
+	protected uint scrollRow;
 
 	/// <summary>
 	/// The columns
