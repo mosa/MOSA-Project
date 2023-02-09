@@ -25,41 +25,53 @@ public sealed class Context
 	/// Gets or sets the basic block currently processed.
 	/// </summary>
 	public BasicBlock Block
-	{ get { return Node.Block; } internal set { Node.Block = value; } }
+	{ get => Node.Block;
+		internal set => Node.Block = value;
+	}
 
 	/// <summary>
 	/// Gets the instruction.
 	/// </summary>
 	/// <value>The instruction at the current index.</value>
 	public BaseInstruction Instruction
-	{ get { return Node.Instruction; } private set { Node.Instruction = value; } }
+	{ get => Node.Instruction;
+		private set => Node.Instruction = value;
+	}
 
 	/// <summary>
 	/// Gets or sets the label.
 	/// </summary>
 	/// <value>The label.</value>
 	public int Label
-	{ get { return Node.Label; } set { Node.Label = value; } }
+	{ get => Node.Label;
+		set => Node.Label = value;
+	}
 
 	/// <summary>
 	/// The order slot number (initialized by some stage)
 	/// </summary>
 	/// <value>The label.</value>
 	public int Offset
-	{ get { return Node.Offset; } set { Node.Offset = value; } }
+	{ get => Node.Offset;
+		set => Node.Offset = value;
+	}
 
 	/// <summary>
 	/// Gets or sets the label.
 	/// </summary>
 	/// <value>The label.</value>
 	public bool Marked
-	{ get { return Node.Marked; } set { Node.Marked = value; } }
+	{ get => Node.Marked;
+		set => Node.Marked = value;
+	}
 
 	/// <summary>
 	/// Gets or sets status resister setting.
 	/// </summary>
 	public StatusRegister StatusRegister
-	{ get { return Node.StatusRegister; } set { Node.StatusRegister = value; } }
+	{ get => Node.StatusRegister;
+		set => Node.StatusRegister = value;
+	}
 
 	/// <summary>
 	/// Gets the branch targets.
@@ -82,21 +94,27 @@ public sealed class Context
 	/// </summary>
 	/// <value>The first operand.</value>
 	public Operand Operand1
-	{ get { return Node.Operand1; } set { Node.Operand1 = value; } }
+	{ get => Node.Operand1;
+		set => Node.Operand1 = value;
+	}
 
 	/// <summary>
 	/// Gets or sets the second operand.
 	/// </summary>
 	/// <value>The second operand.</value>
 	public Operand Operand2
-	{ get { return Node.Operand2; } set { Node.Operand2 = value; } }
+	{ get => Node.Operand2;
+		set => Node.Operand2 = value;
+	}
 
 	/// <summary>
 	/// Gets or sets the third operand.
 	/// </summary>
 	/// <value>The third operand.</value>
 	public Operand Operand3
-	{ get { return Node.Operand3; } set { Node.Operand3 = value; } }
+	{ get => Node.Operand3;
+		set => Node.Operand3 = value;
+	}
 
 	/// <summary>
 	/// Gets all operands.
@@ -115,28 +133,36 @@ public sealed class Context
 	/// </summary>
 	/// <value>The result operand.</value>
 	public Operand Result
-	{ get { return Node.Result; } set { Node.Result = value; } }
+	{ get => Node.Result;
+		set => Node.Result = value;
+	}
 
 	/// <summary>
 	/// Gets or sets the result operand.
 	/// </summary>
 	/// <value>The result operand.</value>
 	public Operand Result2
-	{ get { return Node.Result2; } set { Node.Result2 = value; } }
+	{ get => Node.Result2;
+		set => Node.Result2 = value;
+	}
 
 	/// <summary>
 	/// Gets or sets the number of operands.
 	/// </summary>
 	/// <value>The number of operands.</value>
 	public int OperandCount
-	{ get { return Node.OperandCount; } set { Node.OperandCount = value; } }
+	{ get => Node.OperandCount;
+		set => Node.OperandCount = value;
+	}
 
 	/// <summary>
 	/// Gets or sets number of operand results.
 	/// </summary>
 	/// <value>The number of operand results.</value>
 	public int ResultCount
-	{ get { return Node.ResultCount; } set { Node.ResultCount = value; } }
+	{ get => Node.ResultCount;
+		set => Node.ResultCount = value;
+	}
 
 	/// <summary>
 	/// Gets a value indicating whether this instance is empty.
@@ -152,28 +178,36 @@ public sealed class Context
 	/// Gets or sets the runtime method.
 	/// </summary>
 	public MosaMethod InvokeMethod
-	{ get { return Node.InvokeMethod; } set { Node.InvokeMethod = value; } }
+	{ get => Node.InvokeMethod;
+		set => Node.InvokeMethod = value;
+	}
 
 	/// <summary>
 	/// Gets or sets the runtime field.
 	/// </summary>
 	/// <value>The runtime field.</value>
 	public MosaField MosaField
-	{ get { return Node.MosaField; } set { Node.MosaField = value; } }
+	{ get => Node.MosaField;
+		set => Node.MosaField = value;
+	}
 
 	/// <summary>
 	/// Gets or sets the runtime field.
 	/// </summary>
 	/// <value>The runtime field.</value>
 	public MosaType MosaType
-	{ get { return Node.MosaType; } set { Node.MosaType = value; } }
+	{ get => Node.MosaType;
+		set => Node.MosaType = value;
+	}
 
 	/// <summary>
 	/// Gets or sets the condition code.
 	/// </summary>
 	/// <value>The condition code.</value>
 	public ConditionCode ConditionCode
-	{ get { return Node.ConditionCode; } set { Node.ConditionCode = value; } }
+	{ get => Node.ConditionCode;
+		set => Node.ConditionCode = value;
+	}
 
 	/// <summary>
 	/// Gets or sets the phi blocks.
@@ -182,7 +216,9 @@ public sealed class Context
 	/// The phi blocks.
 	/// </value>
 	public List<BasicBlock> PhiBlocks
-	{ get { return Node.PhiBlocks; } set { Node.PhiBlocks = value; } }
+	{ get => Node.PhiBlocks;
+		set => Node.PhiBlocks = value;
+	}
 
 	/// <summary>
 	/// Gets a value indicating whether this is the start instruction.
