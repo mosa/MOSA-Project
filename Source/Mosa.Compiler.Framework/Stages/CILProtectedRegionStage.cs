@@ -44,7 +44,7 @@ public class CILProtectedRegionStage : BaseMethodCompilerStage
 			if (handler.ExceptionHandlerType == ExceptionHandlerType.Finally)
 			{
 				var exceptionObject = AllocateVirtualRegister(TypeSystem.BuiltIn.Object);
-				var finallyOperand = Is32BitPlatform ? AllocateVirtualRegisterI32() : AllocateVirtualRegisterI64();
+				var finallyOperand = Is32BitPlatform ? AllocateVirtualRegister32() : AllocateVirtualRegister64();
 
 				context.AppendInstruction2(IRInstruction.FinallyStart, exceptionObject, finallyOperand);
 			}

@@ -9,8 +9,6 @@ namespace Mosa.Compiler.Framework.Stages;
 /// </summary>
 public class ArrayStage : BaseTransformStage
 {
-	private readonly bool LowerTo32;
-
 	public ArrayStage()
 		: base(true, false)
 	{

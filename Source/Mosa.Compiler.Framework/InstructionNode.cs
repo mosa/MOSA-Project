@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using Mosa.Compiler.MosaTypeSystem;
 
@@ -730,6 +731,24 @@ public sealed class InstructionNode
 		{
 			SetOperand(OperandCount++, operands[i]);
 		}
+	}
+
+	public void RemoveOperand(int index)
+	{
+		SetOperand(index, null);
+
+		for (int i = index; i < OperandCount - 1; i++)
+		{
+			switch (i)
+			{
+				case 0: operand1 = operand2; continue;
+				case 1: operand2 = operand3; continue;
+				case 2: operand3 = addition.AdditionalOperands[i - 2]; continue;
+				case 3: addition.AdditionalOperands[i - 3] = addition.AdditionalOperands[i - 2 + 1]; continue;
+			}
+		}
+
+		OperandCount--;
 	}
 
 	/// <summary>
