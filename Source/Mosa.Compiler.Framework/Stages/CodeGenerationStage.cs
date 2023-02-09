@@ -42,16 +42,6 @@ public sealed class CodeGenerationStage : BaseMethodCompilerStage
 	/// </summary>
 	public CodeGenerationStage()
 	{
-		EmitBinary = true;
-	}
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="CodeGenerationStage" /> class.
-	/// </summary>
-	/// <param name="emitBinary">if set to <c>true</c> [emit binary].</param>
-	public CodeGenerationStage(bool emitBinary)
-	{
-		EmitBinary = emitBinary;
 	}
 
 	#endregion Construction
@@ -60,6 +50,11 @@ public sealed class CodeGenerationStage : BaseMethodCompilerStage
 	{
 		Register(GeneratedInstructionCount);
 		Register(GeneratedBlockCount);
+	}
+
+	protected override void Setup()
+	{
+		EmitBinary = CompilerSettings.EmitBinary;
 	}
 
 	protected override void Run()

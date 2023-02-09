@@ -27,9 +27,11 @@ public sealed class MosaLinker
 
 	private LinkerSymbol FirstSymbol { get; set; }
 
-	public uint SectionAlignment => ElfLinker.SectionAlignment;
+	public uint SectionAlignment
+	{ get { return ElfLinker.SectionAlignment; } }
 
-	public uint BaseFileOffset => ElfLinker.BaseFileOffset;
+	public uint BaseFileOffset
+	{ get { return ElfLinker.BaseFileOffset; } }
 
 	public LinkerFormatType LinkerFormatType { get; }
 
@@ -210,6 +212,12 @@ public sealed class MosaLinker
 		}
 		else
 		{
+			if (linkRequest.ReferenceSymbol.VirtualAddress == 0)
+				throw new CompilerException($"Linker: ReferenceSymbol not resolved: {linkRequest.ReferenceSymbol}");
+
+			if (linkRequest.PatchSymbol.VirtualAddress == 0)
+				throw new CompilerException($"Linker: PatchSymbol not resolved: {linkRequest.PatchSymbol}");
+
 			Debug.Assert(linkRequest.ReferenceSymbol.VirtualAddress != 0);
 			Debug.Assert(linkRequest.PatchSymbol.VirtualAddress != 0);
 

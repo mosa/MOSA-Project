@@ -44,7 +44,10 @@ public class SimpleTraceBlockOrder : BaseBlockOrder
 					referenced.Set(block.Sequence, true);
 					NewBlockOrder.Add(block);
 
-					foreach (var successor in block.NextBlocks)
+					var nextBlocks = new List<BasicBlock>(block.NextBlocks);
+					nextBlocks.Sort();
+
+					foreach (var successor in nextBlocks)
 					{
 						if (!referenced.Get(successor.Sequence))
 						{

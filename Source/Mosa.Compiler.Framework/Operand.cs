@@ -745,6 +745,8 @@ public sealed class Operand
 	/// <returns></returns>
 	public static Operand CreateSymbolFromMethod(MosaMethod method, TypeSystem typeSystem)
 	{
+		Debug.Assert(method != null);
+
 		return new Operand(typeSystem.BuiltIn.Pointer)
 		{
 			IsLabel = true,

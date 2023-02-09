@@ -15,27 +15,27 @@ public sealed class CheckArrayBounds : BaseTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		var arrayOperand = context.Operand1;
-		var arrayIndexOperand = context.Operand2;
+		var array = context.Operand1;
+		var index = context.Operand2;
 
 		// First create new block and split current block
 		var newBlocks = transform.CreateNewBlockContexts(1, context.Label);
 		var nextBlock = transform.Split(context);
 
 		// Get array length
-		var lengthOperand = transform.AllocateVirtualRegister32();
+		var v1_length = transform.AllocateVirtualRegister32();
 
 		// Now compare length with index
 		// If index is greater than or equal to the length then jump to exception block, otherwise jump to next block
 		if (transform.Is32BitPlatform)
 		{
-			context.SetInstruction(IRInstruction.Load32, lengthOperand, arrayOperand, transform.Constant32_0);
-			context.AppendInstruction(IRInstruction.Branch32, ConditionCode.UnsignedGreaterOrEqual, null, arrayIndexOperand, lengthOperand, newBlocks[0].Block);
+			context.SetInstruction(IRInstruction.Load32, v1_length, array, transform.Constant32_0);
+			context.AppendInstruction(IRInstruction.Branch32, ConditionCode.UnsignedGreaterOrEqual, null, index, v1_length, newBlocks[0].Block);
 		}
 		else
 		{
-			context.SetInstruction(IRInstruction.Load64, lengthOperand, arrayOperand, transform.Constant64_0);
-			context.AppendInstruction(IRInstruction.Branch64, ConditionCode.UnsignedGreaterOrEqual, null, arrayIndexOperand, lengthOperand, newBlocks[0].Block);
+			context.SetInstruction(IRInstruction.Load64, v1_length, array, transform.Constant64_0);
+			context.AppendInstruction(IRInstruction.Branch64, ConditionCode.UnsignedGreaterOrEqual, null, index, v1_length, newBlocks[0].Block);
 		}
 
 		context.AppendInstruction(IRInstruction.Jmp, nextBlock.Block);

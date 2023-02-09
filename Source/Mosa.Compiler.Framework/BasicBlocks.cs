@@ -69,10 +69,7 @@ public sealed class BasicBlocks : IEnumerable<BasicBlock>
 		}
 	}
 
-	IEnumerator IEnumerable.GetEnumerator()
-	{
-		return GetEnumerator();
-	}
+	IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
 	/// <summary>
 	/// Gets the <see cref="Mosa.Compiler.Framework.BasicBlock" /> at the specified index.
@@ -106,24 +103,12 @@ public sealed class BasicBlocks : IEnumerable<BasicBlock>
 	/// <summary>
 	/// Gets the prologue block.
 	/// </summary>
-	public BasicBlock PrologueBlock
-	{
-		get
-		{
-			return prologueBlock ??= GetByLabel(BasicBlock.PrologueLabel);
-		}
-	}
+	public BasicBlock PrologueBlock => prologueBlock ??= GetByLabel(BasicBlock.PrologueLabel);
 
 	/// <summary>
 	/// Gets the epilogue block.
 	/// </summary>
-	public BasicBlock EpilogueBlock
-	{
-		get
-		{
-			return epilogueBlock ??= GetByLabel(BasicBlock.EpilogueLabel);
-		}
-	}
+	public BasicBlock EpilogueBlock => epilogueBlock ??= GetByLabel(BasicBlock.EpilogueLabel);
 
 	#endregion Properties
 

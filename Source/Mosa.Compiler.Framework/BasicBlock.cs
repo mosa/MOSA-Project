@@ -1,5 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Mosa.Compiler.Common;
@@ -9,7 +10,7 @@ namespace Mosa.Compiler.Framework;
 /// <summary>
 /// Represents a block of instructions with no internal jumps and only one entry and exit.
 /// </summary>
-public sealed class BasicBlock
+public sealed class BasicBlock : IComparable<BasicBlock>
 {
 	public const int PrologueLabel = 0x10000;
 	public const int StartLabel = 0;
@@ -267,4 +268,12 @@ public sealed class BasicBlock
 	}
 
 	#endregion Methods
+
+	public int CompareTo(BasicBlock other)
+	{
+		if (other == null)
+			return 1;
+
+		return Label.CompareTo(other.Label);
+	}
 }
