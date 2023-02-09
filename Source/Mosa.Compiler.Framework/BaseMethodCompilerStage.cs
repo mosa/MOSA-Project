@@ -300,9 +300,14 @@ public abstract class BaseMethodCompilerStage
 	{
 		ResetRegisteredCounters();
 
-		Run();
-
-		PostTraceLogs(traceLogs);
+		try
+		{
+			Run();
+		}
+		finally
+		{
+			PostTraceLogs(traceLogs);
+		}
 
 		Finish();
 
