@@ -80,11 +80,11 @@ public class BaseAddress
 			return string.Empty;
 
 		if (region == AddressType.IO)
-			return "I/O Port at 0x" + address.ToInt32().ToString("X") + " [size=" + size.ToString() + "]";
+			return "I/O Port at 0x" + address.ToInt32().ToString("X") + " [size=" + size + "]";
 
 		if (prefetchable)
-			return "Memory at 0x" + address.ToInt32().ToString("X") + " [size=" + size.ToString() + "] (prefetchable)";
+			return "Memory at 0x" + address.ToInt32().ToString("X") + " [size=" + size + "] (prefetchable)";
 
-		return "Memory at 0x" + address.ToInt32().ToString("X") + " [size=" + size.ToString() + "] (non-prefetchable)";
+		return "Memory at 0x" + address.ToInt32().ToString("X") + " [size=" + size + "] (non-prefetchable)";
 	}
 }

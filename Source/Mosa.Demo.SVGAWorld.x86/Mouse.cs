@@ -2,18 +2,18 @@
 
 using System.Collections.Generic;
 using System.Drawing;
-using Mosa.Demo.SVGAWorld.x86.Utils;
+using System.IO;
 using Mosa.DeviceSystem;
 
 namespace Mosa.Demo.SVGAWorld.x86;
 
 public static class Mouse
 {
-	public static uint X => GeneralUtils.Mouse.X;
+	public static uint X => Utils.Mouse.X;
 
-	public static uint Y => GeneralUtils.Mouse.Y;
+	public static uint Y => Utils.Mouse.Y;
 
-	public static MouseState State => GeneralUtils.Mouse.State;
+	public static MouseState State => Utils.Mouse.State;
 
 	public static Color Color { get; set; }
 
@@ -27,7 +27,7 @@ public static class Mouse
 
 		if (HardwareCursor)
 		{
-			var data = FileManager.ReadAllBytes("cur.bmp");
+			var data = File.ReadAllBytes("cur.bmp");
 			var image = Bitmap.CreateImage(data);
 			Display.Driver.DefineCursor(image);
 		}

@@ -156,7 +156,7 @@ public static class Boot
 			lock (spinlock)
 			{
 				Screen.Goto(18 + thread, 0);
-				Screen.Write("Thread #" + thread.ToString() + ": " + ticks.ToString());
+				Screen.Write("Thread #" + thread + ": " + ticks);
 			}
 
 			//Native.Hlt();
@@ -218,7 +218,7 @@ public static class Boot
 		}
 	}
 
-	public unsafe static void StackTrace()
+	public static unsafe void StackTrace()
 	{
 		Screen.Color = ScreenColor.Yellow;
 		Screen.Write('[');

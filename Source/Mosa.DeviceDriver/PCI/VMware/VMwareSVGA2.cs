@@ -271,7 +271,10 @@ public class VMwareSVGA2 : BaseDeviceDriver, IGraphicsDevice
 		bufferSize = ReadRegister(SvgaRegister.FrameBufferSize);
 		buffer = HAL.GetPhysicalMemory(new Pointer(ReadRegister(SvgaRegister.FrameBufferStart)), bufferSize);
 
-		FrameBuffer = new FrameBuffer32(buffer, width, height);
+		var offset = ReadRegister(SvgaRegister.FrameBufferOffset);
+		var bytesPerLine = ReadRegister(SvgaRegister.BytesPerLine);
+
+		FrameBuffer = new FrameBuffer32(buffer, width, height, (x, y) => offset + y * bytesPerLine + x * 4);
 	}
 
 	public void Disable()

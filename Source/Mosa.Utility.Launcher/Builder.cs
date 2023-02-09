@@ -196,7 +196,7 @@ public class Builder : BaseLauncher
 
 		bootImageOptions.IncludeFiles.Add(new IncludeFile("limine.cfg", GetLimineCFG()));
 		bootImageOptions.IncludeFiles.Add(new IncludeFile("limine.sys", GetResource("limine", "limine.sys")));
-		bootImageOptions.IncludeFiles.Add(new IncludeFile(LauncherSettings.OutputFile, "main.exe"));
+		bootImageOptions.IncludeFiles.Add(new IncludeFile(LauncherSettings.OutputFile, "kernel.bin"));
 		bootImageOptions.IncludeFiles.Add(new IncludeFile("TEST.TXT", Encoding.ASCII.GetBytes("This is a test file.")));
 
 		if (!string.IsNullOrEmpty(LauncherSettings.FileSystemRootInclude))
@@ -213,30 +213,33 @@ public class Builder : BaseLauncher
 
 		bootImageOptions.VolumeLabel = LauncherSettings.OSName;
 		bootImageOptions.DiskImageFileName = imagefile;
-
-		switch (LauncherSettings.ImageFormat)
+		bootImageOptions.ImageFirmware = LauncherSettings.ImageFirmware switch
 		{
-			case "img": bootImageOptions.ImageFormat = ImageFormat.IMG; break;
-			case "vhd": bootImageOptions.ImageFormat = ImageFormat.VHD; break;
-			case "vdi": bootImageOptions.ImageFormat = ImageFormat.VDI; break;
-			case "vmdk": bootImageOptions.ImageFormat = ImageFormat.VMDK; break;
-			default: break;
-		}
-
-		switch (LauncherSettings.FileSystem)
+			"bios" => ImageFirmware.Bios,
+			_ => throw new NotImplementCompilerException($"Unknown image firmware: {LauncherSettings.ImageFirmware}")
+		};
+		bootImageOptions.ImageFormat = LauncherSettings.ImageFormat switch
 		{
-			case "fat12": bootImageOptions.FileSystem = BootImage.FileSystem.FAT12; break;
-			case "fat16": bootImageOptions.FileSystem = BootImage.FileSystem.FAT16; break;
-			case "fat32": bootImageOptions.FileSystem = BootImage.FileSystem.FAT32; break;
-			default: throw new NotImplementCompilerException("unknown file system");
-		}
+			"img" => ImageFormat.IMG,
+			"vhd" => ImageFormat.VHD,
+			"vdi" => ImageFormat.VDI,
+			"vmdk" => ImageFormat.VMDK,
+			_ => throw new NotImplementCompilerException($"Unknown image format: {LauncherSettings.ImageFormat}")
+		};
+		bootImageOptions.FileSystem = LauncherSettings.FileSystem switch
+		{
+			"fat12" => BootImage.FileSystem.FAT12,
+			"fat16" => BootImage.FileSystem.FAT16,
+			"fat32" => BootImage.FileSystem.FAT32,
+			_ => throw new NotImplementCompilerException($"Unknown file system: {LauncherSettings.FileSystem}")
+		};
 
 		Generator.Create(bootImageOptions);
 	}
 
 	private byte[] GetLimineCFG()
 	{
-		return Encoding.ASCII.GetBytes($"TIMEOUT=0\nINTERFACE_RESOLUTION=640x480\nINTERFACE_BRANDING=Managed Operating System Alliance\n:{LauncherSettings.OSName}\nPROTOCOL=multiboot1\nKERNEL_PATH=boot:///main.exe");
+		return Encoding.ASCII.GetBytes($"TIMEOUT=0\nINTERFACE_RESOLUTION=640x480\nINTERFACE_BRANDING=Managed Operating System Alliance\n:{LauncherSettings.OSName}\nPROTOCOL=multiboot1\nKERNEL_PATH=boot:///kernel.bin");
 	}
 
 	private void CreateVMDK(string source)

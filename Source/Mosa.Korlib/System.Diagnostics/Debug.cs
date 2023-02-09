@@ -4,34 +4,11 @@ namespace System.Diagnostics;
 
 public static class Debug
 {
-	private static bool autoFlush = false;
+	public static bool AutoFlush { get; set; }
 
-	public static bool AutoFlush
-	{
-		get { return autoFlush; }
-		set { autoFlush = value; }
-	}
+	public static int IndentLevel { get; set; }
 
-	private static int indentLevel = 0;
-
-	public static int IndentLevel
-	{
-		get { return indentLevel; }
-		set { indentLevel = value; }
-	}
-
-	private static int indentSize = 2;
-
-	public static int IndentSize
-	{
-		get { return indentSize; }
-		set { indentSize = value; }
-	}
-
-	//public static TraceListenerCollection Listeners
-	//{
-	//	get { return null; }
-	//}
+	public static int IndentSize { get; set; } = 2;
 
 	[Conditional("DEBUG")]
 	public static void Assert(bool condition)
@@ -48,7 +25,8 @@ public static class Debug
 	[Conditional("DEBUG")]
 	public static void Assert(bool condition, string message, string detailMessage)
 	{
-		throw new NotImplementedException(); //Plug
+		if (!condition)
+			Fail(message, detailMessage);
 	}
 
 	[Conditional("DEBUG")]
@@ -73,7 +51,7 @@ public static class Debug
 	[Conditional("DEBUG")]
 	public static void Fail(string message, string detailMessage)
 	{
-		throw new NotImplementedException(); //Plug
+		Environment.FailFast(message + "\nDetails: " + detailMessage);
 	}
 
 	[Conditional("DEBUG")]
@@ -85,13 +63,13 @@ public static class Debug
 	[Conditional("DEBUG")]
 	public static void Indent()
 	{
-		indentLevel++;
+		IndentLevel++;
 	}
 
 	[Conditional("DEBUG")]
 	public static void Unindent()
 	{
-		indentLevel--;
+		IndentLevel--;
 	}
 
 	[Conditional("DEBUG")]
@@ -109,13 +87,15 @@ public static class Debug
 	[Conditional("DEBUG")]
 	public static void Write(object value, string category)
 	{
-		throw new NotImplementedException(); //Plug
+		if (value == null)
+			return;
+		Console.Write("DEBUG (" + category + "): " + value);
 	}
 
 	[Conditional("DEBUG")]
 	public static void Write(string message, string category)
 	{
-		throw new NotImplementedException(); //Plug
+		Console.Write("DEBUG (" + category + "): " + message);
 	}
 
 	[Conditional("DEBUG")]
@@ -169,13 +149,15 @@ public static class Debug
 	[Conditional("DEBUG")]
 	public static void WriteLine(object value, string category)
 	{
-		throw new NotImplementedException(); //Plug
+		if (value == null)
+			return;
+		Console.WriteLine("DEBUG (" + category + "): " + value);
 	}
 
 	[Conditional("DEBUG")]
 	public static void WriteLine(string message, string category)
 	{
-		throw new NotImplementedException(); //Plug
+		Console.WriteLine("DEBUG (" + category + "): " + message);
 	}
 
 	[Conditional("DEBUG")]
@@ -201,11 +183,11 @@ public static class Debug
 	[Conditional("DEBUG")]
 	public static void Print(string message)
 	{
-		throw new NotImplementedException(); //Plug
+		Console.Write(message);
 	}
 
 	[Conditional("DEBUG")]
-	public static void Print(string format, params Object[] args)
+	public static void Print(string format, params object[] args)
 	{
 		throw new NotImplementedException();
 

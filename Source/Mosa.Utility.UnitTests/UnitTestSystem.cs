@@ -26,7 +26,7 @@ public static class UnitTestSystem
 
 		Console.WriteLine("Discovering Unit Tests...");
 		var discoveredUnitTests = Discovery.DiscoverUnitTests();
-		Console.WriteLine("Found Tests: " + discoveredUnitTests.Count.ToString());
+		Console.WriteLine("Found Tests: " + discoveredUnitTests.Count);
 		var elapsedDiscovery = stopwatch.ElapsedMilliseconds;
 		Console.WriteLine("Elapsed: " + (elapsedDiscovery / 1000.0).ToString("F2") + " secs");
 		Console.WriteLine();
@@ -387,7 +387,7 @@ public static class UnitTestSystem
 
 		foreach (var param in unitTest.Values)
 		{
-			sb.Append(param.ToString());
+			sb.Append(param);
 			sb.Append(",");
 		}
 

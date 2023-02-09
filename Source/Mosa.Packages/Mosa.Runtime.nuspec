@@ -8,7 +8,7 @@
 		<owners>MOSA Project</owners>
 		<license type="expression">BSD-3-Clause-Clear</license>
 		<projectUrl>http://www.mosa-project.org</projectUrl>
-		<icon>images\Mosa Icon.png</icon>
+		<icon>images/Mosa Icon.png</icon>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<summary>MOSA Runtime Library</summary>
 		<description>MOSA Runtime Library</description>
@@ -20,7 +20,7 @@
 		</dependencies>
 	</metadata>
 	<files>
-		<file src="..\Art\Mosa Icon.png" target="images\" />
-		<file src="..\..\bin\Mosa.Runtime.dll" target="lib\net5.0" />
+		<file src="..\Art\Mosa Icon.png" target="images" />
+		<file src="..\..\bin\Mosa.Runtime.dll" target="lib\net7.0" />
 	</files>
 </package>

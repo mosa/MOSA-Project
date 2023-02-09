@@ -581,7 +581,7 @@ public class UnitTestEngine : IDisposable
 
 			if (CompletedUnitTestCount % 1000 == 0 && StopWatch.Elapsed.Seconds != 0)
 			{
-				Console.WriteLine("Unit Tests - Count: " + CompletedUnitTestCount.ToString() + " Elapsed: " + ((int)StopWatch.Elapsed.TotalSeconds).ToString() + " (" + (CompletedUnitTestCount / StopWatch.Elapsed.TotalSeconds).ToString("F2") + " per second)");
+				Console.WriteLine("Unit Tests - Count: " + CompletedUnitTestCount + " Elapsed: " + ((int)StopWatch.Elapsed.TotalSeconds) + " (" + (CompletedUnitTestCount / StopWatch.Elapsed.TotalSeconds).ToString("F2") + " per second)");
 			}
 		}
 

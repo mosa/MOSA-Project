@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
 using System.IO;
 using Mosa.DeviceSystem;
 
@@ -10,7 +11,7 @@ namespace Mosa.Utility.BootImage;
 /// </summary>
 /// <seealso cref="Mosa.DeviceSystem.BaseDeviceDriver" />
 /// <seealso cref="Mosa.DeviceSystem.IDiskDevice" />
-public class BlockFileStreamDriver : BaseDeviceDriver, IDiskDevice
+public class BlockFileStreamDriver : BaseDeviceDriver, IDiskDevice, IDisposable
 {
 	public string Filename { get; }
 

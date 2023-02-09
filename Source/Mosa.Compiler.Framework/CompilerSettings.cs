@@ -16,7 +16,7 @@ public class CompilerSettings
 
 	public string Platform => Settings.GetValue("Compiler.Platform", "x86");
 
-	public string OutputFile => Settings.GetValue("Compiler.OutputFile", "_main.exe");
+	public string OutputFile => Settings.GetValue("Compiler.OutputFile", "_kernel.bin");
 
 	public string MapFile => Settings.GetValue("CompilerDebug.MapFile", null);
 
@@ -65,7 +65,7 @@ public class CompilerSettings
 
 	public bool EmitBinary => Settings.GetValue("Compiler.Binary", true);
 
-	public bool EmitDrawf => Settings.GetValue("Linker.Drawf", false);
+	public bool EmitDwarf => Settings.GetValue("Linker.Dwarf", false);
 
 	public bool TwoPass => Settings.GetValue("Optimizations.TwoPass", true);
 

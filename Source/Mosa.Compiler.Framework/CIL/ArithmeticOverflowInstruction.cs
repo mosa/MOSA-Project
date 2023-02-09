@@ -92,12 +92,12 @@ public sealed class ArithmeticOverflowInstruction : BinaryInstruction
 		var op1 = methodCompiler.Compiler.GetStackTypeCode(context.Operand1.Type);
 		var op2 = methodCompiler.Compiler.GetStackTypeCode(context.Operand2.Type);
 
-		switch (opcode)
+		result = opcode switch
 		{
-			case OpCode.Add_ovf_un: result = addovfunTable[(int)op1][(int)op2]; break;
-			case OpCode.Sub_ovf_un: result = subovfunTable[(int)op1][(int)op2]; break;
-			default: result = operandTable[(int)op1][(int)op2]; break;
-		}
+			OpCode.Add_ovf_un => addovfunTable[(int)op1][(int)op2],
+			OpCode.Sub_ovf_un => subovfunTable[(int)op1][(int)op2],
+			_ => operandTable[(int)op1][(int)op2]
+		};
 
 		if (StackTypeCode.Unknown == result)
 		{

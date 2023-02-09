@@ -198,7 +198,7 @@ public class TypeSystemTree
 		{
 			var fieldsNode = new TreeNode("Fields");
 			if (ShowSizes)
-				fieldsNode.Text = fieldsNode.Text + " (Count: " + type.Fields.Count.ToString() + " - Size: " + TypeLayout.GetTypeSize(type).ToString() + ")";
+				fieldsNode.Text = fieldsNode.Text + " (Count: " + type.Fields.Count + " - Size: " + TypeLayout.GetTypeSize(type) + ")";
 
 			typeNode.Nodes.Add(fieldsNode);
 
@@ -212,10 +212,10 @@ public class TypeSystemTree
 
 				if (ShowSizes)
 				{
-					fieldNode.Text = fieldNode.Text + " (Size: " + TypeLayout.GetFieldSize(field).ToString();
+					fieldNode.Text = fieldNode.Text + " (Size: " + TypeLayout.GetFieldSize(field);
 
 					if (!field.IsStatic)
-						fieldNode.Text = fieldNode.Text + " - Offset: " + TypeLayout.GetFieldOffset(field).ToString();
+						fieldNode.Text = fieldNode.Text + " - Offset: " + TypeLayout.GetFieldOffset(field);
 
 					fieldNode.Text += ")";
 				}
@@ -227,7 +227,7 @@ public class TypeSystemTree
 			var propertiesNode = new TreeNode("Properties");
 
 			if (ShowSizes)
-				propertiesNode.Text = propertiesNode.Text + " (Count: " + type.Properties.Count.ToString() + ")";
+				propertiesNode.Text = propertiesNode.Text + " (Count: " + type.Properties.Count + ")";
 
 			typeNode.Nodes.Add(propertiesNode);
 

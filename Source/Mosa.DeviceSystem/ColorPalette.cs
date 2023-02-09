@@ -98,7 +98,7 @@ public class ColorPalette
 	/// Gets the Standard 16 color palette.
 	/// </summary>
 	/// <returns></returns>
-	static public ColorPalette CreateStandard16ColorPalette()
+	public static ColorPalette CreateStandard16ColorPalette()
 	{
 		ColorPalette palette = new ColorPalette(16);
 
@@ -126,7 +126,7 @@ public class ColorPalette
 	/// Gets the Netscape 256 color palette.
 	/// </summary>
 	/// <returns></returns>
-	static public ColorPalette CreateNetscape256ColorPalette()
+	public static ColorPalette CreateNetscape256ColorPalette()
 	{
 		ColorPalette palette = new ColorPalette(256);
 
@@ -394,7 +394,7 @@ public class ColorPalette
 	/// Gets the Standard 256 color palette.
 	/// </summary>
 	/// <returns></returns>
-	static public ColorPalette CreateStandardIBM256ColorPalette()
+	public static ColorPalette CreateStandardIBM256ColorPalette()
 	{
 		ColorPalette palette = new ColorPalette(256);
 

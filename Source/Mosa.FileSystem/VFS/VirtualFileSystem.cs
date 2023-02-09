@@ -182,21 +182,13 @@ public sealed class VirtualFileSystem : IFileSystem, IFileSystemService
 		 */
 
 		// FIXME: Perform access checks on the DirectoryEntry/IVfsNode.
-		AccessMode modeFlags = AccessMode.Exists;
-		switch (access)
+		AccessMode modeFlags = access switch
 		{
-			case System.IO.FileAccess.Read:
-				modeFlags = AccessMode.Read;
-				break;
-
-			case System.IO.FileAccess.Write:
-				modeFlags = AccessMode.Write;
-				break;
-
-			case System.IO.FileAccess.ReadWrite:
-				modeFlags = AccessMode.Read | AccessMode.Write;
-				break;
-		}
+			System.IO.FileAccess.Read => AccessMode.Read,
+			System.IO.FileAccess.Write => AccessMode.Write,
+			System.IO.FileAccess.ReadWrite => AccessMode.Read | AccessMode.Write,
+			_ => AccessMode.Exists
+		};
 
 		AccessCheck.Perform(entry, modeFlags, AccessCheckFlags.None);
 

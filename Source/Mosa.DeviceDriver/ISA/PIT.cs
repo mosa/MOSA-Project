@@ -113,7 +113,7 @@ public class PIT : BaseDeviceDriver, ITimer
 	/// <summary>
 	/// Waits for a specific time, in milliseconds.
 	/// </summary>
-	void ITimer.Wait(uint ms)
+	public void Wait(uint ms)
 	{
 		Ticks = 0;
 		IsWaiting = true;

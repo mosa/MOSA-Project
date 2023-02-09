@@ -132,14 +132,14 @@ public sealed class ElfLinker
 
 		RegisterRelocationSections();
 
-		RegisterDrawfSections();
+		RegisterDwarfSections();
 
 		RegisterSectionHeaderStringSection();
 	}
 
-	private void RegisterDrawfSections()
+	private void RegisterDwarfSections()
 	{
-		if (Linker.LinkerSettings.Drawf)
+		if (Linker.LinkerSettings.Dwarf)
 		{
 			var dwarf = new DwarfSections(Linker.Compiler, this);
 		}

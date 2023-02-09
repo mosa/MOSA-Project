@@ -1,30 +1,26 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
 using System.Collections.Generic;
 using Mosa.FileSystem.FAT;
 
-namespace Mosa.Demo.SVGAWorld.x86.Utils;
+namespace Mosa.Demo.SVGAWorld.x86;
 
-public static class FileManager
+public class FileManager
 {
-	private static List<FatFileSystem> FAT;
-
-	public static int CurrentDrive = 0;
+	private static List<FatFileSystem> fileSystems;
+	private static int currentDrive = 0;
 
 	public static void Register(FatFileSystem fat)
 	{
-		if (FAT == null)
-			FAT = new List<FatFileSystem>();
+		fileSystems ??= new List<FatFileSystem>();
 
 		if (fat.IsValid)
-			FAT.Add(fat);
+			fileSystems.Add(fat);
 	}
 
 	public static byte[] ReadAllBytes(string path)
 	{
-		var fat = FAT[CurrentDrive];
-
+		var fat = fileSystems[currentDrive];
 		var entry = fat.FindEntry(path.ToUpper());
 
 		if (!entry.IsValid)
@@ -40,7 +36,7 @@ public static class FileManager
 
 	public static void WriteAllBytes(string path, byte[] bytes)
 	{
-		var fat = FAT[CurrentDrive];
+		var fat = fileSystems[currentDrive];
 
 		if (fat.IsReadOnly)
 			return;
@@ -50,35 +46,13 @@ public static class FileManager
 
 		var entry = existing.IsValid ? existing : fat.CreateFile(upper, FatFileAttributes.Unused);
 		var stream = new FatFileStream(fat, entry);
-
-		stream.Write(bytes, 0, bytes.Length);
-	}
-
-	public static void WriteAllText(string path, string text)
-	{
-		var fat = FAT[CurrentDrive];
-
-		if (fat.IsReadOnly)
-			return;
-
-		var upper = path.ToUpper();
-		var existing = fat.FindEntry(upper);
-
-		var entry = existing.IsValid ? existing : fat.CreateFile(upper, FatFileAttributes.Unused);
-		var stream = new FatFileStream(fat, entry);
-
-		var list = new List<Byte>();
-		foreach (var c in text)
-			list.Add((byte)c);
-
-		var bytes = list.ToArray();
 
 		stream.Write(bytes, 0, bytes.Length);
 	}
 
 	public static void WriteAllLines(string path, string[] lines)
 	{
-		var fat = FAT[CurrentDrive];
+		var fat = fileSystems[currentDrive];
 
 		if (fat.IsReadOnly)
 			return;
@@ -89,7 +63,7 @@ public static class FileManager
 		var entry = existing.IsValid ? existing : fat.CreateFile(upper, FatFileAttributes.Unused);
 		var stream = new FatFileStream(fat, entry);
 
-		var list = new List<Byte>();
+		var list = new List<byte>();
 		foreach (var str in lines)
 		{
 			foreach (var c in str)
@@ -102,9 +76,33 @@ public static class FileManager
 		stream.Write(bytes, 0, bytes.Length);
 	}
 
-	public static void CreateFile(string path)
+	public static void WriteAllText(string path, string text)
 	{
-		var fat = FAT[CurrentDrive];
+		var fat = fileSystems[currentDrive];
+
+		if (fat.IsReadOnly)
+			return;
+
+		var upper = path.ToUpper();
+		var existing = fat.FindEntry(upper);
+
+		var entry = existing.IsValid ? existing : fat.CreateFile(upper, FatFileAttributes.Unused);
+		var stream = new FatFileStream(fat, entry);
+
+		var list = new List<byte>();
+		foreach (var c in text)
+			list.Add((byte)c);
+
+		var bytes = list.ToArray();
+
+		stream.Write(bytes, 0, bytes.Length);
+	}
+
+	public static bool Exists(string path) => fileSystems[currentDrive].FindEntry(path.ToUpper()).IsValid;
+
+	public static void Create(string path)
+	{
+		var fat = fileSystems[currentDrive];
 
 		if (fat.IsReadOnly)
 			return;
@@ -114,11 +112,6 @@ public static class FileManager
 		if (fat.FindEntry(upper).IsValid)
 			return;
 
-		_ = fat.CreateFile(upper, FatFileAttributes.Unused);
-	}
-
-	public static bool Exists(string path)
-	{
-		return FAT[CurrentDrive].FindEntry(path.ToUpper()).IsValid;
+		fat.CreateFile(upper, FatFileAttributes.Unused);
 	}
 }

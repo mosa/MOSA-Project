@@ -15,7 +15,7 @@ public class LinkerSettings
 
 	public ulong BaseAddress { get { return (ulong)Settings.GetValue("Compiler.BaseAddress", 0x00400000); } }
 
-	public string OutputFile { get { return Settings.GetValue("Compiler.OutputFile", "_main.exe"); } }
+	public string OutputFile { get { return Settings.GetValue("Compiler.OutputFile", "_kernel.bin"); } }
 
 	public string LinkerFormat { get { return Settings.GetValue("Linker.Format", "elf32"); } }
 
@@ -27,7 +27,7 @@ public class LinkerSettings
 
 	public bool ShortSymbolNames { get { return Settings.GetValue("Linker.ShortSymbolNames", false); } }
 
-	public bool Drawf { get { return Settings.GetValue("Linker.Drawf", false); } }
+	public bool Dwarf { get { return Settings.GetValue("Linker.Dwarf", false); } }
 
 	public bool Statistics { get { return Settings.GetValue("CompilerDebug.Statistics", true); } }
 

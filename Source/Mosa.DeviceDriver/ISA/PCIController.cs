@@ -13,19 +13,19 @@ public sealed class PCIController : BaseDeviceDriver, IPCIControllerLegacy, IPCI
 {
 	#region Definitions
 
-	protected static readonly uint BaseValue = 0x80000000;
+	private const uint BaseValue = 0x80000000;
 
 	#endregion Definitions
 
 	/// <summary>
 	/// The configuration address
 	/// </summary>
-	protected BaseIOPortReadWrite configAddress;
+	private BaseIOPortReadWrite configAddress;
 
 	/// <summary>
 	/// The configuration data
 	/// </summary>
-	protected BaseIOPortReadWrite configData;
+	private BaseIOPortReadWrite configData;
 
 	public override void Initialize()
 	{
@@ -74,7 +74,7 @@ public sealed class PCIController : BaseDeviceDriver, IPCIControllerLegacy, IPCI
 	/// <param name="function">The function.</param>
 	/// <param name="register">The register.</param>
 	/// <returns></returns>
-	protected uint GetIndex(byte bus, byte slot, byte function, byte register)
+	private static uint GetIndex(byte bus, byte slot, byte function, byte register)
 	{
 		return BaseValue
 			   | (uint)((bus & 0xFF) << 16)
@@ -93,7 +93,7 @@ public sealed class PCIController : BaseDeviceDriver, IPCIControllerLegacy, IPCI
 	/// <param name="function">The function.</param>
 	/// <param name="register">The register.</param>
 	/// <returns></returns>
-	uint IPCIControllerLegacy.ReadConfig32(byte bus, byte slot, byte function, byte register)
+	public uint ReadConfig32(byte bus, byte slot, byte function, byte register)
 	{
 		configAddress.Write32(GetIndex(bus, slot, function, register));
 		return configData.Read32();
@@ -107,7 +107,7 @@ public sealed class PCIController : BaseDeviceDriver, IPCIControllerLegacy, IPCI
 	/// <param name="function">The function.</param>
 	/// <param name="register">The register.</param>
 	/// <returns></returns>
-	ushort IPCIControllerLegacy.ReadConfig16(byte bus, byte slot, byte function, byte register)
+	public ushort ReadConfig16(byte bus, byte slot, byte function, byte register)
 	{
 		configAddress.Write32(GetIndex(bus, slot, function, register));
 		return (ushort)((configData.Read32() >> ((register % 4) * 8)) & 0xFFFF);
@@ -121,7 +121,7 @@ public sealed class PCIController : BaseDeviceDriver, IPCIControllerLegacy, IPCI
 	/// <param name="function">The function.</param>
 	/// <param name="register">The register.</param>
 	/// <returns></returns>
-	byte IPCIControllerLegacy.ReadConfig8(byte bus, byte slot, byte function, byte register)
+	public byte ReadConfig8(byte bus, byte slot, byte function, byte register)
 	{
 		configAddress.Write32(GetIndex(bus, slot, function, register));
 		return (byte)((configData.Read32() >> ((register % 4) * 8)) & 0xFF);
@@ -135,7 +135,7 @@ public sealed class PCIController : BaseDeviceDriver, IPCIControllerLegacy, IPCI
 	/// <param name="function">The function.</param>
 	/// <param name="register">The register.</param>
 	/// <param name="value">The value.</param>
-	void IPCIControllerLegacy.WriteConfig32(byte bus, byte slot, byte function, byte register, uint value)
+	public void WriteConfig32(byte bus, byte slot, byte function, byte register, uint value)
 	{
 		configAddress.Write32(GetIndex(bus, slot, function, register));
 		configData.Write32(value);
@@ -149,7 +149,7 @@ public sealed class PCIController : BaseDeviceDriver, IPCIControllerLegacy, IPCI
 	/// <param name="function">The function.</param>
 	/// <param name="register">The register.</param>
 	/// <param name="value">The value.</param>
-	void IPCIControllerLegacy.WriteConfig16(byte bus, byte slot, byte function, byte register, ushort value)
+	public void WriteConfig16(byte bus, byte slot, byte function, byte register, ushort value)
 	{
 		configAddress.Write32(GetIndex(bus, slot, function, register));
 		configData.Write16(value);
@@ -163,7 +163,7 @@ public sealed class PCIController : BaseDeviceDriver, IPCIControllerLegacy, IPCI
 	/// <param name="function">The function.</param>
 	/// <param name="register">The register.</param>
 	/// <param name="value">The value.</param>
-	void IPCIControllerLegacy.WriteConfig8(byte bus, byte slot, byte function, byte register, byte value)
+	public void WriteConfig8(byte bus, byte slot, byte function, byte register, byte value)
 	{
 		configAddress.Write32(GetIndex(bus, slot, function, register));
 		configData.Write8(value);
@@ -179,7 +179,7 @@ public sealed class PCIController : BaseDeviceDriver, IPCIControllerLegacy, IPCI
 	/// <param name="pciDevice">The PCI Device.</param>
 	/// <param name="register">The register.</param>
 	/// <returns></returns>
-	uint IPCIController.ReadConfig32(PCIDevice pciDevice, byte register)
+	public uint ReadConfig32(PCIDevice pciDevice, byte register)
 	{
 		configAddress.Write32(GetIndex(pciDevice.Bus, pciDevice.Slot, pciDevice.Function, register));
 		return configData.Read32();
@@ -191,7 +191,7 @@ public sealed class PCIController : BaseDeviceDriver, IPCIControllerLegacy, IPCI
 	/// <param name="pciDevice">The PCI Device.</param>
 	/// <param name="register">The register.</param>
 	/// <returns></returns>
-	ushort IPCIController.ReadConfig16(PCIDevice pciDevice, byte register)
+	public ushort ReadConfig16(PCIDevice pciDevice, byte register)
 	{
 		configAddress.Write32(GetIndex(pciDevice.Bus, pciDevice.Slot, pciDevice.Function, register));
 		return (ushort)((configData.Read32() >> ((register % 4) * 8)) & 0xFFFF);
@@ -203,7 +203,7 @@ public sealed class PCIController : BaseDeviceDriver, IPCIControllerLegacy, IPCI
 	/// <param name="pciDevice">The PCI Device.</param>
 	/// <param name="register">The register.</param>
 	/// <returns></returns>
-	byte IPCIController.ReadConfig8(PCIDevice pciDevice, byte register)
+	public byte ReadConfig8(PCIDevice pciDevice, byte register)
 	{
 		configAddress.Write32(GetIndex(pciDevice.Bus, pciDevice.Slot, pciDevice.Function, register));
 		return (byte)((configData.Read32() >> ((register % 4) * 8)) & 0xFF);
@@ -215,7 +215,7 @@ public sealed class PCIController : BaseDeviceDriver, IPCIControllerLegacy, IPCI
 	/// <param name="pciDevice">The PCI Device.</param>
 	/// <param name="register">The register.</param>
 	/// <param name="value">The value.</param>
-	void IPCIController.WriteConfig32(PCIDevice pciDevice, byte register, uint value)
+	public void WriteConfig32(PCIDevice pciDevice, byte register, uint value)
 	{
 		configAddress.Write32(GetIndex(pciDevice.Bus, pciDevice.Slot, pciDevice.Function, register));
 		configData.Write32(value);
@@ -227,7 +227,7 @@ public sealed class PCIController : BaseDeviceDriver, IPCIControllerLegacy, IPCI
 	/// <param name="pciDevice">The PCI Device.</param>
 	/// <param name="register">The register.</param>
 	/// <param name="value">The value.</param>
-	void IPCIController.WriteConfig16(PCIDevice pciDevice, byte register, ushort value)
+	public void WriteConfig16(PCIDevice pciDevice, byte register, ushort value)
 	{
 		configAddress.Write32(GetIndex(pciDevice.Bus, pciDevice.Slot, pciDevice.Function, register));
 		configData.Write16(value);
@@ -239,7 +239,7 @@ public sealed class PCIController : BaseDeviceDriver, IPCIControllerLegacy, IPCI
 	/// <param name="pciDevice">The PCI Device.</param>
 	/// <param name="register">The register.</param>
 	/// <param name="value">The value.</param>
-	void IPCIController.WriteConfig8(PCIDevice pciDevice, byte register, byte value)
+	public void WriteConfig8(PCIDevice pciDevice, byte register, byte value)
 	{
 		configAddress.Write32(GetIndex(pciDevice.Bus, pciDevice.Slot, pciDevice.Function, register));
 		configData.Write8(value);

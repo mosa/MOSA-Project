@@ -1,7 +1,6 @@
 #define MyAppName "MOSA-Project"
 #define MyAppPublisher "MOSA-Project"
 #define MyAppURL "http://www.mosa-project.org"
-#define MyAppVersion "2.2"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -37,6 +36,7 @@ Name: "{group}\{cm:ProgramOnTheWeb,{#MyAppName}}"; Filename: "{#MyAppURL}"
 Name: "{group}\{cm:UninstallProgram, {#MyAppName}}"; Filename: "{uninstallexe}"
 
 [Run]
+Filename: "dotnet.exe"; Parameters: "new install Mosa.Templates"
 
 [Dirs]
 Name: "{app}\Tools"
@@ -48,27 +48,21 @@ Source: "..\..\Tools\readme.md"; DestDir: "{app}\Tools"; Flags: ignoreversion
 Source: "..\..\*.txt"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\..\*.md"; DestDir: "{app}"; Flags: ignoreversion
 
-Source: "..\Mosa.VisualStudio.ProjectTemplate\Boot.cs"; DestDir: "{userdocs}\Visual Studio 2022\Templates\ProjectTemplates\Mosa Project"; Flags: ignoreversion
-Source: "..\Mosa.VisualStudio.ProjectTemplate\Mosa.Starter.x86.csproj"; DestDir: "{userdocs}\Visual Studio 2022\Templates\ProjectTemplates\Mosa Project"; Flags: ignoreversion
-Source: "..\Mosa.VisualStudio.ProjectTemplate\MyTemplate.vstemplate"; DestDir: "{userdocs}\Visual Studio 2022\Templates\ProjectTemplates\Mosa Project"; Flags: ignoreversion
-Source: "..\Mosa.VisualStudio.ProjectTemplate\Program.cs"; DestDir: "{userdocs}\Visual Studio 2022\Templates\ProjectTemplates\Mosa Project"; Flags: ignoreversion
-Source: "..\Mosa.VisualStudio.ProjectTemplate\__TemplateIcon.ico"; DestDir: "{userdocs}\Visual Studio 2022\Templates\ProjectTemplates\Mosa Project"; Flags: ignoreversion
-Source: "..\Mosa.VisualStudio.ProjectTemplate\Properties\launchSettings.json"; DestDir: "{userdocs}\Visual Studio 2022\Templates\ProjectTemplates\Mosa Project\Properties"; Flags: ignoreversion
-
 Source: "..\..\bin\runtimes\*"; DestDir: "{app}\bin\runtimes"; Flags: ignoreversion recursesubdirs
 Source: "..\..\bin\Avalonia*.dll"; DestDir: "{app}\bin"; flags: recursesubdirs
-Source: "..\..\bin\Mosa.Tool.Bootstrap.exe"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\Mosa.Compiler.Common.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\Mosa.Compiler.Framework.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\Mosa.Compiler.MosaTypeSystem.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\Mosa.Compiler.MosaTypeSystem.CLR.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\Mosa.Platform.ARMv8A32.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\Mosa.Platform.x86.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\Mosa.Platform.x64.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
-Source: "..\..\bin\Mosa.Tool.Explorer.exe"; DestDir: "{app}\bin"; Flags: ignoreversion
-Source: "..\..\bin\Mosa.Tool.Debugger.exe"; DestDir: "{app}\bin"; Flags: ignoreversion
-Source: "..\..\bin\Mosa.Tool.Launcher.exe"; DestDir: "{app}\bin"; Flags: ignoreversion
-Source: "..\..\bin\Mosa.Tool.Compiler.exe"; DestDir: "{app}\bin"; Flags: ignoreversion
-Source: "..\..\bin\Mosa.Tool.Launcher.Console.exe"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\Mosa.Tool.Bootstrap.*"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\Mosa.Tool.Explorer.*"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\Mosa.Tool.Debugger.*"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\Mosa.Tool.Launcher.*"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\Mosa.Tool.Compiler.*"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\Mosa.Tool.Launcher.Console.*"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\Mosa.Utility.BootImage.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\Mosa.Utility.Configuration.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\Mosa.Utility.DebugEngine.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
@@ -86,6 +80,10 @@ Source: "..\..\bin\Reko.Arch.Arm.dll"; DestDir: "{app}\bin"; Flags: ignoreversio
 Source: "..\..\bin\Reko.Arch.X86.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\Reko.Core.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\Reko.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\System.Reactive.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\SkiaSharp.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\HarfBuzzSharp.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\Tmds.DBus.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\Tools\qemu\*.*"; DestDir: "{app}\Tools\qemu"; Flags: ignoreversion
 Source: "..\..\Tools\wget\*.*"; DestDir: "{app}\Tools\wget"; Flags: ignoreversion
 Source: "..\..\Tools\nasm\*.*"; DestDir: "{app}\Tools\nasm"; Flags: ignoreversion

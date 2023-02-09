@@ -5,7 +5,7 @@ using Mosa.Runtime.Metadata;
 
 namespace Mosa.Runtime.x64;
 
-public unsafe static class Internal
+public static unsafe class Internal
 {
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static void ExceptionHandler()

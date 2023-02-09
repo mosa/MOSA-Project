@@ -5,9 +5,9 @@ using System.Drawing;
 using Mosa.DeviceDriver.ISA;
 using Mosa.DeviceSystem;
 
-namespace Mosa.Demo.SVGAWorld.x86.Utils;
+namespace Mosa.Demo.SVGAWorld.x86;
 
-public static class GeneralUtils
+public static class Utils
 {
 	public static StandardMouse Mouse;
 

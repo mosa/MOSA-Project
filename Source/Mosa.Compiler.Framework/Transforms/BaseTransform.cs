@@ -984,56 +984,60 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 
 	protected static bool Compare64(Context context)
 	{
-		switch (context.ConditionCode)
+		return context.ConditionCode switch
 		{
-			case ConditionCode.Equal: return context.Operand1.ConstantSigned64 == context.Operand2.ConstantSigned64;
-			case ConditionCode.NotEqual: return context.Operand1.ConstantSigned64 != context.Operand2.ConstantSigned64;
-			case ConditionCode.GreaterOrEqual: return context.Operand1.ConstantSigned64 >= context.Operand2.ConstantSigned64;
-			case ConditionCode.Greater: return context.Operand1.ConstantSigned64 > context.Operand2.ConstantSigned64;
-			case ConditionCode.LessOrEqual: return context.Operand1.ConstantSigned64 <= context.Operand2.ConstantSigned64;
-			case ConditionCode.Less: return context.Operand1.ConstantSigned64 < context.Operand2.ConstantSigned64;
-			case ConditionCode.UnsignedGreater: return context.Operand1.ConstantUnsigned64 > context.Operand2.ConstantUnsigned64;
-			case ConditionCode.UnsignedGreaterOrEqual: return context.Operand1.ConstantUnsigned64 >= context.Operand2.ConstantUnsigned64;
-			case ConditionCode.UnsignedLess: return context.Operand1.ConstantUnsigned64 < context.Operand2.ConstantUnsigned64;
-			case ConditionCode.UnsignedLessOrEqual: return context.Operand1.ConstantUnsigned64 <= context.Operand2.ConstantUnsigned64;
-			default: throw new InvalidOperationException();
-		}
+			ConditionCode.Equal => context.Operand1.ConstantSigned64 == context.Operand2.ConstantSigned64,
+			ConditionCode.NotEqual => context.Operand1.ConstantSigned64 != context.Operand2.ConstantSigned64,
+			ConditionCode.GreaterOrEqual => context.Operand1.ConstantSigned64 >= context.Operand2.ConstantSigned64,
+			ConditionCode.Greater => context.Operand1.ConstantSigned64 > context.Operand2.ConstantSigned64,
+			ConditionCode.LessOrEqual => context.Operand1.ConstantSigned64 <= context.Operand2.ConstantSigned64,
+			ConditionCode.Less => context.Operand1.ConstantSigned64 < context.Operand2.ConstantSigned64,
+			ConditionCode.UnsignedGreater => context.Operand1.ConstantUnsigned64 > context.Operand2.ConstantUnsigned64,
+			ConditionCode.UnsignedGreaterOrEqual => context.Operand1.ConstantUnsigned64 >=
+			                                        context.Operand2.ConstantUnsigned64,
+			ConditionCode.UnsignedLess => context.Operand1.ConstantUnsigned64 < context.Operand2.ConstantUnsigned64,
+			ConditionCode.UnsignedLessOrEqual => context.Operand1.ConstantUnsigned64 <=
+			                                     context.Operand2.ConstantUnsigned64,
+			_ => throw new InvalidOperationException()
+		};
 	}
 
 	protected static bool Compare32(Context context)
 	{
-		switch (context.ConditionCode)
+		return context.ConditionCode switch
 		{
-			case ConditionCode.Equal: return context.Operand1.ConstantSigned32 == context.Operand2.ConstantSigned32;
-			case ConditionCode.NotEqual: return context.Operand1.ConstantSigned32 != context.Operand2.ConstantSigned32;
-			case ConditionCode.GreaterOrEqual: return context.Operand1.ConstantSigned32 >= context.Operand2.ConstantSigned32;
-			case ConditionCode.Greater: return context.Operand1.ConstantSigned32 > context.Operand2.ConstantSigned32;
-			case ConditionCode.LessOrEqual: return context.Operand1.ConstantSigned32 <= context.Operand2.ConstantSigned32;
-			case ConditionCode.Less: return context.Operand1.ConstantSigned32 < context.Operand2.ConstantSigned32;
-			case ConditionCode.UnsignedGreater: return context.Operand1.ConstantUnsigned32 > context.Operand2.ConstantUnsigned32;
-			case ConditionCode.UnsignedGreaterOrEqual: return context.Operand1.ConstantUnsigned32 >= context.Operand2.ConstantUnsigned32;
-			case ConditionCode.UnsignedLess: return context.Operand1.ConstantUnsigned32 < context.Operand2.ConstantUnsigned32;
-			case ConditionCode.UnsignedLessOrEqual: return context.Operand1.ConstantUnsigned32 <= context.Operand2.ConstantUnsigned32;
-			default: throw new InvalidOperationException();
-		}
+			ConditionCode.Equal => context.Operand1.ConstantSigned32 == context.Operand2.ConstantSigned32,
+			ConditionCode.NotEqual => context.Operand1.ConstantSigned32 != context.Operand2.ConstantSigned32,
+			ConditionCode.GreaterOrEqual => context.Operand1.ConstantSigned32 >= context.Operand2.ConstantSigned32,
+			ConditionCode.Greater => context.Operand1.ConstantSigned32 > context.Operand2.ConstantSigned32,
+			ConditionCode.LessOrEqual => context.Operand1.ConstantSigned32 <= context.Operand2.ConstantSigned32,
+			ConditionCode.Less => context.Operand1.ConstantSigned32 < context.Operand2.ConstantSigned32,
+			ConditionCode.UnsignedGreater => context.Operand1.ConstantUnsigned32 > context.Operand2.ConstantUnsigned32,
+			ConditionCode.UnsignedGreaterOrEqual => context.Operand1.ConstantUnsigned32 >=
+			                                        context.Operand2.ConstantUnsigned32,
+			ConditionCode.UnsignedLess => context.Operand1.ConstantUnsigned32 < context.Operand2.ConstantUnsigned32,
+			ConditionCode.UnsignedLessOrEqual => context.Operand1.ConstantUnsigned32 <=
+			                                     context.Operand2.ConstantUnsigned32,
+			_ => throw new InvalidOperationException()
+		};
 	}
 
 	protected static bool IsNormal(ConditionCode conditionCode)
 	{
-		switch (conditionCode)
+		return conditionCode switch
 		{
-			case ConditionCode.Equal: return true;
-			case ConditionCode.NotEqual: return true;
-			case ConditionCode.GreaterOrEqual: return true;
-			case ConditionCode.Greater: return true;
-			case ConditionCode.LessOrEqual: return true;
-			case ConditionCode.Less: return true;
-			case ConditionCode.UnsignedGreater: return true;
-			case ConditionCode.UnsignedGreaterOrEqual: return true;
-			case ConditionCode.UnsignedLess: return true;
-			case ConditionCode.UnsignedLessOrEqual: return true;
-			default: return false;
-		}
+			ConditionCode.Equal => true,
+			ConditionCode.NotEqual => true,
+			ConditionCode.GreaterOrEqual => true,
+			ConditionCode.Greater => true,
+			ConditionCode.LessOrEqual => true,
+			ConditionCode.Less => true,
+			ConditionCode.UnsignedGreater => true,
+			ConditionCode.UnsignedGreaterOrEqual => true,
+			ConditionCode.UnsignedLess => true,
+			ConditionCode.UnsignedLessOrEqual => true,
+			_ => false
+		};
 	}
 
 	protected static BasicBlock GetOtherBranchTarget(BasicBlock block, BasicBlock target)

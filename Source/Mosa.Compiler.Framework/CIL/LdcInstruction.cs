@@ -35,29 +35,27 @@ public sealed class LdcInstruction : LoadInstruction
 		// Decode base classes first
 		base.Decode(node, decoder);
 
-		Operand constantValueOperand;
-
 		// Opcode specific handling
-		switch (opcode)
+		Operand constantValueOperand = opcode switch
 		{
-			case OpCode.Ldc_i4: constantValueOperand = decoder.MethodCompiler.CreateConstant((int)decoder.Instruction.Operand); break;
-			case OpCode.Ldc_i4_s: constantValueOperand = decoder.MethodCompiler.CreateConstant((sbyte)decoder.Instruction.Operand); break;
-			case OpCode.Ldc_i8: constantValueOperand = decoder.MethodCompiler.CreateConstant((long)decoder.Instruction.Operand); break;
-			case OpCode.Ldc_r4: constantValueOperand = decoder.MethodCompiler.CreateConstant((float)decoder.Instruction.Operand); break;
-			case OpCode.Ldc_r8: constantValueOperand = decoder.MethodCompiler.CreateConstant((double)decoder.Instruction.Operand); break;
-			case OpCode.Ldnull: constantValueOperand = Operand.GetNullObject(decoder.TypeSystem); break;
-			case OpCode.Ldc_i4_0: constantValueOperand = decoder.MethodCompiler.CreateConstant(0); break;
-			case OpCode.Ldc_i4_1: constantValueOperand = decoder.MethodCompiler.CreateConstant(1); break;
-			case OpCode.Ldc_i4_2: constantValueOperand = decoder.MethodCompiler.CreateConstant(2); break;
-			case OpCode.Ldc_i4_3: constantValueOperand = decoder.MethodCompiler.CreateConstant(3); break;
-			case OpCode.Ldc_i4_4: constantValueOperand = decoder.MethodCompiler.CreateConstant(4); break;
-			case OpCode.Ldc_i4_5: constantValueOperand = decoder.MethodCompiler.CreateConstant(5); break;
-			case OpCode.Ldc_i4_6: constantValueOperand = decoder.MethodCompiler.CreateConstant(6); break;
-			case OpCode.Ldc_i4_7: constantValueOperand = decoder.MethodCompiler.CreateConstant(7); break;
-			case OpCode.Ldc_i4_8: constantValueOperand = decoder.MethodCompiler.CreateConstant(8); break;
-			case OpCode.Ldc_i4_m1: constantValueOperand = decoder.MethodCompiler.CreateConstant(-1); break;
-			default: throw new NotImplementCompilerException();
-		}
+			OpCode.Ldc_i4 => decoder.MethodCompiler.CreateConstant((int)decoder.Instruction.Operand),
+			OpCode.Ldc_i4_s => decoder.MethodCompiler.CreateConstant((sbyte)decoder.Instruction.Operand),
+			OpCode.Ldc_i8 => decoder.MethodCompiler.CreateConstant((long)decoder.Instruction.Operand),
+			OpCode.Ldc_r4 => decoder.MethodCompiler.CreateConstant((float)decoder.Instruction.Operand),
+			OpCode.Ldc_r8 => decoder.MethodCompiler.CreateConstant((double)decoder.Instruction.Operand),
+			OpCode.Ldnull => Operand.GetNullObject(decoder.TypeSystem),
+			OpCode.Ldc_i4_0 => decoder.MethodCompiler.CreateConstant(0),
+			OpCode.Ldc_i4_1 => decoder.MethodCompiler.CreateConstant(1),
+			OpCode.Ldc_i4_2 => decoder.MethodCompiler.CreateConstant(2),
+			OpCode.Ldc_i4_3 => decoder.MethodCompiler.CreateConstant(3),
+			OpCode.Ldc_i4_4 => decoder.MethodCompiler.CreateConstant(4),
+			OpCode.Ldc_i4_5 => decoder.MethodCompiler.CreateConstant(5),
+			OpCode.Ldc_i4_6 => decoder.MethodCompiler.CreateConstant(6),
+			OpCode.Ldc_i4_7 => decoder.MethodCompiler.CreateConstant(7),
+			OpCode.Ldc_i4_8 => decoder.MethodCompiler.CreateConstant(8),
+			OpCode.Ldc_i4_m1 => decoder.MethodCompiler.CreateConstant(-1),
+			_ => throw new NotImplementCompilerException()
+		};
 
 		node.Operand1 = constantValueOperand;
 		node.Result = decoder.MethodCompiler.CreateVirtualRegister(constantValueOperand.Type);

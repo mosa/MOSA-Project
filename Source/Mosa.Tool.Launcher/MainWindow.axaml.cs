@@ -1,4 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
+
 using System;
 using System.Globalization;
 using System.IO;
@@ -102,6 +103,8 @@ public partial class MainWindow : Window
 		}
 		else settings.SetValue("Launcher.Start", false);
 
+		IncDirTxt.Text = settings.GetValue("Image.FileSystem.RootInclude");
+
 		// Output the current directory
 		AddOutput($"Current Directory: {Environment.CurrentDirectory}");
 
@@ -113,8 +116,8 @@ public partial class MainWindow : Window
 		PlatformRegistry.Add(new Platform.x64.Architecture());
 		PlatformRegistry.Add(new Platform.ARMv8A32.Architecture());
 
-		// Initialize settings
-		UpdateSettings();
+		// Initialize paths
+		UpdatePaths();
 		UpdateInterfaceAppLocations();
 
 		if (settings.GetValue("Launcher.Start", false))
@@ -166,64 +169,55 @@ public partial class MainWindow : Window
 
 	private void UpdateSettings()
 	{
-		settings.SetValue("Optimizations.SSA", SsaOpts.IsChecked.Value);
-		settings.SetValue("Optimizations.Basic", BasicOpts.IsChecked.Value);
-		settings.SetValue("Optimizations.SCCP", SccpOpts.IsChecked.Value);
-		settings.SetValue("Optimizations.Devirtualization", DevirtOpts.IsChecked.Value);
-		settings.SetValue("Optimizations.Inline", InlineOpts.IsChecked.Value);
-		settings.SetValue("Optimizations.Inline.Explicit", InlineExplOpts.IsChecked.Value);
-		settings.SetValue("Optimizations.LongExpansion", LongExpOpts.IsChecked.Value);
-		settings.SetValue("Optimizations.TwoPass", TwoOptPass.IsChecked.Value);
-		settings.SetValue("Optimizations.ValueNumbering", ValueNumOpts.IsChecked.Value);
-		settings.SetValue("Optimizations.BitTracker", BtOpts.IsChecked.Value);
-		settings.SetValue("Optimizations.Platform", PlatOpts.IsChecked.Value);
-		settings.SetValue("Optimizations.LoopInvariantCodeMotion", LicmOpts.IsChecked.Value);
+		settings.SetValue("Optimizations.SSA", SsaOpts.IsChecked!.Value);
+		settings.SetValue("Optimizations.Basic", BasicOpts.IsChecked!.Value);
+		settings.SetValue("Optimizations.SCCP", SccpOpts.IsChecked!.Value);
+		settings.SetValue("Optimizations.Devirtualization", DevirtOpts.IsChecked!.Value);
+		settings.SetValue("Optimizations.Inline", InlineOpts.IsChecked!.Value);
+		settings.SetValue("Optimizations.Inline.Explicit", InlineExplOpts.IsChecked!.Value);
+		settings.SetValue("Optimizations.LongExpansion", LongExpOpts.IsChecked!.Value);
+		settings.SetValue("Optimizations.TwoPass", TwoOptPass.IsChecked!.Value);
+		settings.SetValue("Optimizations.ValueNumbering", ValueNumOpts.IsChecked!.Value);
+		settings.SetValue("Optimizations.BitTracker", BtOpts.IsChecked!.Value);
+		settings.SetValue("Optimizations.Platform", PlatOpts.IsChecked!.Value);
+		settings.SetValue("Optimizations.LoopInvariantCodeMotion", LicmOpts.IsChecked!.Value);
 
-		settings.SetValue("Linker.Symbols", EmtSymbs.IsChecked.Value);
-		settings.SetValue("Linker.StaticRelocations", EmtRelocs.IsChecked.Value);
-		settings.SetValue("Linker.Drawf", EmtDwarf.IsChecked.Value);
+		settings.SetValue("Linker.Symbols", EmtSymbs.IsChecked!.Value);
+		settings.SetValue("Linker.StaticRelocations", EmtRelocs.IsChecked!.Value);
+		settings.SetValue("Linker.Dwarf", EmtDwarf.IsChecked!.Value);
 		settings.SetValue("Compiler.BaseAddress", BaseAddrTxt.Text.StartsWith("0x") ? uint.Parse(BaseAddrTxt.Text[2..], NumberStyles.HexNumber) : uint.Parse(BaseAddrTxt.Text));
 
-		settings.SetValue("CompilerDebug.NasmFile", NasmFile.IsChecked.Value ? "%DEFAULT%" : string.Empty);
-		settings.SetValue("CompilerDebug.AsmFile", AsmFile.IsChecked.Value ? "%DEFAULT%" : string.Empty);
-		settings.SetValue("CompilerDebug.MapFile", MapFile.IsChecked.Value ? "%DEFAULT%" : string.Empty);
-		settings.SetValue("CompilerDebug.DebugFile", DbgFile.IsChecked.Value ? "%DEFAULT%" : string.Empty);
-		settings.SetValue("CompilerDebug.InlinedFile", InlLstFile.IsChecked.Value ? "%DEFAULT%" : string.Empty);
-		settings.SetValue("CompilerDebug.PreLinkHashFile", HashFiles.IsChecked.Value ? "%DEFAULT%" : string.Empty);
+		settings.SetValue("CompilerDebug.NasmFile", NasmFile.IsChecked!.Value ? "%DEFAULT%" : string.Empty);
+		settings.SetValue("CompilerDebug.AsmFile", AsmFile.IsChecked!.Value ? "%DEFAULT%" : string.Empty);
+		settings.SetValue("CompilerDebug.MapFile", MapFile.IsChecked!.Value ? "%DEFAULT%" : string.Empty);
+		settings.SetValue("CompilerDebug.DebugFile", DbgFile.IsChecked!.Value ? "%DEFAULT%" : string.Empty);
+		settings.SetValue("CompilerDebug.InlinedFile", InlLstFile.IsChecked!.Value ? "%DEFAULT%" : string.Empty);
+		settings.SetValue("CompilerDebug.PreLinkHashFile", HashFiles.IsChecked!.Value ? "%DEFAULT%" : string.Empty);
 		settings.SetValue("CompilerDebug.PostLinkHashFile", HashFiles.IsChecked.Value ? "%DEFAULT%" : string.Empty);
-		settings.SetValue("CompilerDebug.CompileTimeFile", CompTimeFile.IsChecked.Value ? "%DEFAULT%" : string.Empty);
+		settings.SetValue("CompilerDebug.CompileTimeFile", CompTimeFile.IsChecked!.Value ? "%DEFAULT%" : string.Empty);
 
-		settings.SetValue("Launcher.Exit", ExitOnLaunch.IsChecked.Value);
+		settings.SetValue("Launcher.Exit", ExitOnLaunch.IsChecked!.Value);
 
-		settings.SetValue("Emulator.GDB", QemuGdb.IsChecked.Value);
-		settings.SetValue("Launcher.LaunchGDB", LaunchGdb.IsChecked.Value);
-		settings.SetValue("Launcher.LaunchDebugger", MosaDbger.IsChecked.Value);
+		settings.SetValue("Emulator.GDB", QemuGdb.IsChecked!.Value);
+		settings.SetValue("Launcher.LaunchGDB", LaunchGdb.IsChecked!.Value);
+		settings.SetValue("Launcher.LaunchDebugger", MosaDbger.IsChecked!.Value);
 
-		settings.SetValue("Compiler.Multithreading", MultiThreading.IsChecked.Value);
+		settings.SetValue("Compiler.Multithreading", MultiThreading.IsChecked!.Value);
 		settings.SetValue("Compiler.Multithreading.MaxThreads", 0);
-		settings.SetValue("Compiler.MethodScanner", MethodScanner.IsChecked.Value);
+		settings.SetValue("Compiler.MethodScanner", MethodScanner.IsChecked!.Value);
 
 		settings.SetValue("Emulator.Memory", (int)MemVal.Value);
 		settings.SetValue("Emulator.Cores", (int)CpuVal.Value);
 
-		settings.SetValue("Multiboot.Video", EnableVbe.IsChecked.Value);
+		settings.SetValue("Multiboot.Video", EnableVbe.IsChecked!.Value);
 		settings.SetValue("Multiboot.Width", (int)VbeWidth.Value);
 		settings.SetValue("Multiboot.Height", (int)VbeHeight.Value);
 		settings.SetValue("Multiboot.Depth", (int)VbeDepth.Value);
 
-		settings.SetValue("Launcher.PlugKorlib", PlugKorlib.IsChecked.Value);
+		settings.SetValue("Launcher.PlugKorlib", PlugKorlib.IsChecked!.Value);
 		settings.SetValue("OS.Name", OsNameTxt.Text);
 
-		var src = SrcLbl.Content.ToString();
-
-		settings.ClearProperty("Compiler.SourceFiles");
-		settings.AddPropertyListValue("Compiler.SourceFiles", src);
-
-		settings.ClearProperty("SearchPaths");
-		settings.AddPropertyListValue("SearchPaths", Path.GetDirectoryName(src));
-
-		settings.SetValue("Image.Folder", DstLbl.Content.ToString());
-		settings.SetValue("Image.FileSystem.RootInclude", IncDirTxt.Text);
+		UpdatePaths();
 
 		switch (ImgCmb.SelectedIndex)
 		{
@@ -275,23 +269,73 @@ public partial class MainWindow : Window
 		}
 	}
 
+	private void UpdatePaths()
+	{
+		var src = SrcLbl.Content.ToString();
+
+		settings.ClearProperty("Compiler.SourceFiles");
+		settings.AddPropertyListValue("Compiler.SourceFiles", src);
+
+		settings.ClearProperty("SearchPaths");
+		settings.AddPropertyListValue("SearchPaths", Path.GetDirectoryName(src));
+
+		settings.SetValue("Image.Folder", DstLbl.Content.ToString());
+		settings.SetValue("Image.FileSystem.RootInclude", IncDirTxt.Text);
+	}
+
 	private void SetDefaultSettings()
 	{
+		settings.SetValue("Compiler.BaseAddress", 0x00400000);
 		settings.SetValue("Compiler.Binary", true);
-		settings.SetValue("Compiler.Multithreading.MaxThreads", Environment.ProcessorCount);
+		settings.SetValue("Compiler.MethodScanner", false);
+		settings.SetValue("Compiler.Multithreading", true);
+		settings.SetValue("Compiler.Platform", "x86");
 		settings.SetValue("Compiler.TraceLevel", 0);
+		settings.SetValue("CompilerDebug.DebugFile", string.Empty);
+		settings.SetValue("CompilerDebug.AsmFile", string.Empty);
+		settings.SetValue("CompilerDebug.MapFile", string.Empty);
+		settings.SetValue("CompilerDebug.NasmFile", string.Empty);
+		settings.SetValue("CompilerDebug.InlineFile", string.Empty);
+		settings.SetValue("Optimizations.Basic", true);
+		settings.SetValue("Optimizations.BitTracker", true);
+		settings.SetValue("Optimizations.Inline", true);
 		settings.SetValue("Optimizations.Inline.AggressiveMaximum", 24);
+		settings.SetValue("Optimizations.Inline.Explicit", true);
 		settings.SetValue("Optimizations.Inline.Maximum", 12);
 		settings.SetValue("Optimizations.Basic.Window", 5);
+		settings.SetValue("Optimizations.LongExpansion", true);
+		settings.SetValue("Optimizations.LoopInvariantCodeMotion", true);
+		settings.SetValue("Optimizations.Platform", true);
+		settings.SetValue("Optimizations.SCCP", true);
+		settings.SetValue("Optimizations.Devirtualization", true);
+		settings.SetValue("Optimizations.SSA", true);
+		settings.SetValue("Optimizations.TwoPass", true);
+		settings.SetValue("Optimizations.ValueNumbering", true);
+		settings.SetValue("Image.Folder", Path.Combine(Path.GetTempPath(), "MOSA"));
+		settings.SetValue("Image.Format", "IMG");
+		settings.SetValue("Image.FileSystem", "FAT16");
 		settings.SetValue("Image.ImageFile", "%DEFAULT%");
+		settings.SetValue("Image.Firmware", "bios");
 		settings.SetValue("Multiboot.Version", "v1");
+		settings.SetValue("Multiboot.Video", false);
+		settings.SetValue("Multiboot.Video.Width", 640);
+		settings.SetValue("Multiboot.Video.Height", 480);
+		settings.SetValue("Multiboot.Video.Depth", 32);
+		settings.SetValue("Emulator", "Qemu");
+		settings.SetValue("Emulator.Memory", 128);
+		settings.SetValue("Emulator.Cores", 1);
+		settings.SetValue("Emulator.Serial", "none");
 		settings.SetValue("Emulator.Serial.Host", "127.0.0.1");
 		settings.SetValue("Emulator.Serial.Port", new Random().Next(11111, 22222));
 		settings.SetValue("Emulator.Serial.Pipe", "MOSA");
 		settings.SetValue("Emulator.Display", true);
-		settings.SetValue("Launcher.Start", false);
+		settings.SetValue("Launcher.Start", true);
 		settings.SetValue("Launcher.Launch", true);
+		settings.SetValue("Launcher.Exit", true);
+		settings.SetValue("Launcher.PlugKorlib", true);
 		settings.SetValue("Launcher.HuntForCorLib", true);
+		settings.SetValue("Linker.Dwarf", false);
+		settings.SetValue("OS.Name", OsNameTxt.Text);
 	}
 
 	private void CompileBuildAndStart()
@@ -349,7 +393,7 @@ public partial class MainWindow : Window
 		Position = new PixelPoint(x, y);
 	}
 
-	private void LnchBtn_OnClick(object? _, RoutedEventArgs e)
+	private void LnchBtn_OnClick(object? _, RoutedEventArgs __)
 	{
 		Tabs.SelectedIndex = 4;
 		UpdateSettings();

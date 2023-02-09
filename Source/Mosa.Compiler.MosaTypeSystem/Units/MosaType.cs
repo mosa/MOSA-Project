@@ -175,7 +175,7 @@ public class MosaType : MosaUnit, IEquatable<MosaType>
 		GenericArguments = (genericArguments = new GenericArgumentsCollection());
 	}
 
-	override internal MosaType Clone()
+	internal override MosaType Clone()
 	{
 		var result = (MosaType)base.Clone();
 

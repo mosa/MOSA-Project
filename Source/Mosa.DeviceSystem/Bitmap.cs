@@ -20,7 +20,7 @@ public static class Bitmap
 		var height = stream.GetUInt32(0x16);
 		var dataSectionOffset = stream.GetUInt32(0xA);
 
-		var buffer = new FrameBuffer32(HAL.AllocateMemory(width * height * bytesPerPixel, 0), width, height);
+		var buffer = new FrameBuffer32(HAL.AllocateMemory(width * height * bytesPerPixel, 0), width, height, (x, y) => (y * width + x) * 4);
 
 		do
 		{

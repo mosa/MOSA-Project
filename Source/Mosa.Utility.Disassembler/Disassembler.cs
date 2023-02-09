@@ -25,12 +25,13 @@ public partial class Disassembler
 		var services = new ServiceContainer();
 		var options = new Dictionary<string, object>();
 
-		switch (platform.ToLowerInvariant())
+		arch = platform.ToLowerInvariant() switch
 		{
-			case "armv8a32": arch = new Arm32Architecture(services, "arm32", options); break;
-			case "x86": arch = new X86ArchitectureFlat32(services, "x86-protected-32", options); break;
-			case "x64": arch = arch = new X86ArchitectureFlat64(services, "x86-protected-64", options); break;
-		}
+			"armv8a32" => new Arm32Architecture(services, "arm32", options),
+			"x86" => new X86ArchitectureFlat32(services, "x86-protected-32", options),
+			"x64" => new X86ArchitectureFlat64(services, "x86-protected-64", options),
+			_ => arch
+		};
 	}
 
 	public void SetMemory(byte[] memory, ulong address)

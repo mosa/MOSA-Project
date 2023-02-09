@@ -85,7 +85,7 @@ public sealed class MosaMethod : MosaUnit//, IEquatable<MosaMethod>
 		Overrides = (overrides = new List<MosaMethod?>()).AsReadOnly();
 	}
 
-	override internal MosaMethod Clone()
+	internal override MosaMethod Clone()
 	{
 		var result = (MosaMethod)base.Clone();
 

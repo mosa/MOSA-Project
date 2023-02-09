@@ -65,30 +65,30 @@ public sealed class BinaryBranchInstruction : BinaryInstruction
 	{
 		get
 		{
-			switch (OpCode)
+			return OpCode switch
 			{
-				case OpCode.Beq_s: return "==";
-				case OpCode.Beq: return "==";
-				case OpCode.Bge_s: return ">=";
-				case OpCode.Bge: return ">=";
-				case OpCode.Bge_un_s: return ">= unordered";
-				case OpCode.Bge_un: return ">= unordered";
-				case OpCode.Bgt_s: return ">";
-				case OpCode.Bgt: return ">";
-				case OpCode.Bgt_un_s: return "> unordered";
-				case OpCode.Bgt_un: return "> unordered";
-				case OpCode.Ble_s: return "<=";
-				case OpCode.Ble: return "<=";
-				case OpCode.Ble_un_s: return "<= unordered";
-				case OpCode.Ble_un: return "<= unordered";
-				case OpCode.Blt_s: return "<";
-				case OpCode.Blt: return "<";
-				case OpCode.Blt_un_s: return "< unordered";
-				case OpCode.Blt_un: return "< unordered";
-				case OpCode.Bne_un_s: return "!= unordered";
-				case OpCode.Bne_un: return "!= unordered";
-				default: throw new InvalidOperationException("Opcode not set.");
-			}
+				OpCode.Beq_s => "==",
+				OpCode.Beq => "==",
+				OpCode.Bge_s => ">=",
+				OpCode.Bge => ">=",
+				OpCode.Bge_un_s => ">= unordered",
+				OpCode.Bge_un => ">= unordered",
+				OpCode.Bgt_s => ">",
+				OpCode.Bgt => ">",
+				OpCode.Bgt_un_s => "> unordered",
+				OpCode.Bgt_un => "> unordered",
+				OpCode.Ble_s => "<=",
+				OpCode.Ble => "<=",
+				OpCode.Ble_un_s => "<= unordered",
+				OpCode.Ble_un => "<= unordered",
+				OpCode.Blt_s => "<",
+				OpCode.Blt => "<",
+				OpCode.Blt_un_s => "< unordered",
+				OpCode.Blt_un => "< unordered",
+				OpCode.Bne_un_s => "!= unordered",
+				OpCode.Bne_un => "!= unordered",
+				_ => throw new InvalidOperationException("Opcode not set.")
+			};
 		}
 	}
 

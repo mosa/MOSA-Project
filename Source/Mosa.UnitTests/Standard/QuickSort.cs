@@ -4,7 +4,7 @@ namespace Mosa.UnitTests.Standard;
 
 public static class QuickSort
 {
-	static public int Partition(int[] numbers, int left, int right)
+	public static int Partition(int[] numbers, int left, int right)
 	{
 		int pivot = numbers[left];
 		while (true)
@@ -28,7 +28,7 @@ public static class QuickSort
 		}
 	}
 
-	static public void SortQuick(int[] arr, int left, int right)
+	public static void SortQuick(int[] arr, int left, int right)
 	{
 		if (left < right)
 		{

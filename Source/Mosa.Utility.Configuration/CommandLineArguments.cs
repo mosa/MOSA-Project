@@ -79,9 +79,9 @@ public static class CommandLineArguments
 			new Argument() { Name = "-emit-relocations", Setting = "Linker.StaticRelocations", Value = "true"},
 			new Argument() { Name = "-emit-relocations-off", Setting = "Linker.StaticRelocations", Value = "false"},
 			new Argument() { Name = "-emit-static-relocations", Setting = "Linker.StaticRelocations", Value = "true"},
-			new Argument() { Name = "-emit-drawf", Setting = "Linker.Drawf", Value = "true"},
-			new Argument() { Name = "-emit-drawf-off", Setting = "Linker.Drawf", Value = "false"},
-			new Argument() { Name = "-drawf", Setting = "Linker.Drawf", Value = "true"},
+			new Argument() { Name = "-emit-dwarf", Setting = "Linker.Dwarf", Value = "true"},
+			new Argument() { Name = "-emit-dwarf-off", Setting = "Linker.Dwarf", Value = "false"},
+			new Argument() { Name = "-dwarf", Setting = "Linker.Dwarf", Value = "true"},
 
 			// Explorer:
 			new Argument() { Name = "-filter", Setting = "Explorer.Filter", Value = null},

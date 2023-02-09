@@ -299,14 +299,13 @@ public class FatFileStream : Stream
 	/// </exception>
 	public override long Seek(long offset, SeekOrigin origin)
 	{
-		long newposition = position;
-
-		switch (origin)
+		long newposition = origin switch
 		{
-			case SeekOrigin.Begin: newposition = offset; break;
-			case SeekOrigin.Current: newposition = position + offset; break;
-			case SeekOrigin.End: newposition = length + offset; break;
-		}
+			SeekOrigin.Begin => offset,
+			SeekOrigin.Current => position + offset,
+			SeekOrigin.End => length + offset,
+			_ => position
+		};
 
 		// find cluster number of new position
 		uint newNthCluster = (uint)(newposition / clusterSize);

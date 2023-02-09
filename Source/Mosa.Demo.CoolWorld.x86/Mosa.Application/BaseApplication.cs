@@ -26,12 +26,12 @@ public abstract class BaseApplication
 	/// </returns>
 	public abstract int Start(string parameters);
 
-	public unsafe static void DumpStackTrace(int line)
+	public static unsafe void DumpStackTrace(int line)
 	{
 		AppManager.DumpStackTrace(line);
 	}
 
-	public unsafe static void DumpData(string data)
+	public static unsafe void DumpData(string data)
 	{
 		AppManager.DumpData(data);
 	}

@@ -102,6 +102,7 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 					}
 
 					if (node.Instruction == IRInstruction.SetReturn32
+
 						|| node.Instruction == IRInstruction.SetReturn64
 						|| node.Instruction == IRInstruction.SetReturnR4
 						|| node.Instruction == IRInstruction.SetReturnR8
@@ -123,7 +124,6 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 						//|| node.Instruction == IRInstruction.LoadParamZeroExtend8x32
 						//|| node.Instruction == IRInstruction.LoadParamZeroExtend8x64
 						|| node.Instruction.IsParameterLoad
-
 						//|| node.Instruction == IRInstruction.Epilogue
 						//|| node.Instruction == IRInstruction.Prologue
 						|| node.Block.IsEpilogue
