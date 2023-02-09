@@ -67,8 +67,7 @@ public sealed class Context
 	/// <value>
 	/// The targets.
 	/// </value>
-	public IList<BasicBlock> BranchTargets
-	{ get { return Node.BranchTargets; } }
+	public IList<BasicBlock> BranchTargets => Node.BranchTargets;
 
 	/// <summary>
 	/// Gets the branch targets count.
@@ -76,8 +75,7 @@ public sealed class Context
 	/// <value>
 	/// The branch targets count.
 	/// </value>
-	public int BranchTargetsCount
-	{ get { return Node.BranchTargetsCount; } }
+	public int BranchTargetsCount => Node.BranchTargetsCount;
 
 	/// <summary>
 	/// Gets or sets the first operand.
@@ -104,15 +102,13 @@ public sealed class Context
 	/// Gets all operands.
 	/// </summary>
 	/// <value>The operands.</value>
-	public IEnumerable<Operand> Operands
-	{ get { return Node.Operands; } }
+	public IEnumerable<Operand> Operands => Node.Operands;
 
 	/// <summary>
 	/// Gets all results.
 	/// </summary>
 	/// <value>The operands.</value>
-	public IEnumerable<Operand> Results
-	{ get { return Node.Results; } }
+	public IEnumerable<Operand> Results => Node.Results;
 
 	/// <summary>
 	/// Gets or sets the result operand.
@@ -148,11 +144,9 @@ public sealed class Context
 	/// <value>
 	///   <c>true</c> if this instance is empty; otherwise, <c>false</c>.
 	/// </value>
-	public bool IsEmpty
-	{ get { return Node.IsEmpty; } }
+	public bool IsEmpty => Node.IsEmpty;
 
-	public bool IsEmptyOrNop
-	{ get { return Node.IsEmptyOrNop; } }
+	public bool IsEmptyOrNop => Node.IsEmptyOrNop;
 
 	/// <summary>
 	/// Gets or sets the runtime method.
@@ -196,15 +190,13 @@ public sealed class Context
 	/// <value>
 	/// 	<c>true</c> if this is the first instruction; otherwise, <c>false</c>.
 	/// </value>
-	public bool IsBlockStartInstruction
-	{ get { return Node.IsBlockStartInstruction; } }
+	public bool IsBlockStartInstruction => Node.IsBlockStartInstruction;
 
 	/// <summary>
 	/// Gets a value indicating whether this is the last instruction.
 	/// </summary>
 	/// <value><c>true</c> if this is the last instruction; otherwise, <c>false</c>.</value>
-	public bool IsBlockEndInstruction
-	{ get { return Node.IsBlockEndInstruction; } }
+	public bool IsBlockEndInstruction => Node.IsBlockEndInstruction;
 
 	#endregion Properties
 
