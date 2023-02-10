@@ -8,7 +8,7 @@ internal static class CheckedConversion
 {
 	#region I8
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static long U8ToI8(ulong value)
 	{
 		if (value > long.MaxValue)
@@ -16,7 +16,7 @@ internal static class CheckedConversion
 		return (long)value;
 	}
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static long R4ToI8(float value)
 	{
 		var r8Value = (double)value;
@@ -28,7 +28,7 @@ internal static class CheckedConversion
 		return (long)value;
 	}
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static long R8ToI8(double value)
 	{
 		const double two63 = 2147483648.0 * 4294967296.0;
@@ -43,7 +43,7 @@ internal static class CheckedConversion
 
 	#region U8
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static ulong I4ToU8(long value)
 	{
 		if (value < 0)
@@ -51,7 +51,7 @@ internal static class CheckedConversion
 		return (ulong)value;
 	}
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static ulong I8ToU8(long value)
 	{
 		if (value < 0)
@@ -59,7 +59,7 @@ internal static class CheckedConversion
 		return (ulong)value;
 	}
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static ulong R4ToU8(float value)
 	{
 		var r8Value = (double)value;
@@ -69,7 +69,7 @@ internal static class CheckedConversion
 		return (ulong)value;
 	}
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static ulong R8ToU8(double value)
 	{
 		const double two64 = 4294967296.0 * 4294967296.0;
@@ -82,7 +82,7 @@ internal static class CheckedConversion
 
 	#region I4
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static int U4ToI4(uint value)
 	{
 		var sValue = (int)value;
@@ -91,7 +91,7 @@ internal static class CheckedConversion
 		return (int)value;
 	}
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static int I8ToI4(long value)
 	{
 		if (value < int.MinValue || value > int.MaxValue)
@@ -99,7 +99,7 @@ internal static class CheckedConversion
 		return (int)value;
 	}
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static int U8ToI4(ulong value)
 	{
 		if (value > int.MaxValue)
@@ -107,7 +107,7 @@ internal static class CheckedConversion
 		return (int)value;
 	}
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static int R4ToI4(float value)
 	{
 		var r8Value = (double)value;
@@ -116,7 +116,7 @@ internal static class CheckedConversion
 		return (int)value;
 	}
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static int R8ToI4(double value)
 	{
 		if (!(value > ((double)int.MinValue - 1) && value < ((double)int.MaxValue + 1)))
@@ -128,7 +128,7 @@ internal static class CheckedConversion
 
 	#region U4
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static uint I4ToU4(int value)
 	{
 		if (value < 0)
@@ -136,7 +136,7 @@ internal static class CheckedConversion
 		return (uint)value;
 	}
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static uint I8ToU4(long value)
 	{
 		if (value < 0 || value > uint.MaxValue)
@@ -144,7 +144,7 @@ internal static class CheckedConversion
 		return (uint)value;
 	}
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static uint U8ToU4(ulong value)
 	{
 		if (value > uint.MaxValue)
@@ -152,7 +152,7 @@ internal static class CheckedConversion
 		return (uint)value;
 	}
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static uint R4ToU4(float value)
 	{
 		var r8Value = (double)value;
@@ -161,7 +161,7 @@ internal static class CheckedConversion
 		return (uint)value;
 	}
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static uint R8ToU4(double value)
 	{
 		if (!(value > -1.0 && value < ((double)uint.MaxValue + 1)))
@@ -173,7 +173,7 @@ internal static class CheckedConversion
 
 	#region I2
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static short I4ToI2(int value)
 	{
 		if (value < short.MinValue || value > short.MaxValue)
@@ -181,7 +181,7 @@ internal static class CheckedConversion
 		return (short)value;
 	}
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static short U4ToI2(uint value)
 	{
 		var sValue = (int)value;
@@ -190,7 +190,7 @@ internal static class CheckedConversion
 		return (short)value;
 	}
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static short I8ToI2(long value)
 	{
 		if (value < short.MinValue || value > short.MaxValue)
@@ -198,7 +198,7 @@ internal static class CheckedConversion
 		return (short)value;
 	}
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static short U8ToI2(ulong value)
 	{
 		var sValue = (long)value;
@@ -207,7 +207,7 @@ internal static class CheckedConversion
 		return (short)value;
 	}
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static short R4ToI2(float value)
 	{
 		if (!(value > (short.MinValue - 1) && value < (short.MaxValue + 1)))
@@ -215,7 +215,7 @@ internal static class CheckedConversion
 		return (short)value;
 	}
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static short R8ToI2(double value)
 	{
 		if (!(value > (short.MinValue - 1) && value < (short.MaxValue + 1)))
@@ -227,7 +227,7 @@ internal static class CheckedConversion
 
 	#region U2
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static ushort I4ToU2(int value)
 	{
 		if (value < 0 || value > ushort.MaxValue)
@@ -235,7 +235,7 @@ internal static class CheckedConversion
 		return (ushort)value;
 	}
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static ushort U4ToU2(uint value)
 	{
 		if (value > ushort.MaxValue)
@@ -243,7 +243,7 @@ internal static class CheckedConversion
 		return (ushort)value;
 	}
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static ushort I8ToU2(long value)
 	{
 		if (value < 0 || value > ushort.MaxValue)
@@ -251,7 +251,7 @@ internal static class CheckedConversion
 		return (ushort)value;
 	}
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static ushort U8ToU2(ulong value)
 	{
 		if (value > ushort.MaxValue)
@@ -259,7 +259,7 @@ internal static class CheckedConversion
 		return (ushort)value;
 	}
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static ushort R4ToU2(float value)
 	{
 		if (!(value > -1.0f && value < (ushort.MaxValue + 1)))
@@ -267,7 +267,7 @@ internal static class CheckedConversion
 		return (ushort)value;
 	}
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static ushort R8ToU2(double value)
 	{
 		if (!(value > -1.0 && value < (ushort.MaxValue + 1)))
@@ -279,7 +279,7 @@ internal static class CheckedConversion
 
 	#region I1
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static sbyte I4ToI1(int value)
 	{
 		if (value < sbyte.MinValue || value > sbyte.MaxValue)
@@ -287,7 +287,7 @@ internal static class CheckedConversion
 		return (sbyte)value;
 	}
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static sbyte U4ToI1(uint value)
 	{
 		var sValue = (int)value;
@@ -296,7 +296,7 @@ internal static class CheckedConversion
 		return (sbyte)value;
 	}
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static sbyte I8ToI1(long value)
 	{
 		if (value < sbyte.MinValue || value > sbyte.MaxValue)
@@ -304,7 +304,7 @@ internal static class CheckedConversion
 		return (sbyte)value;
 	}
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static sbyte U8ToI1(ulong value)
 	{
 		var sValue = (long)value;
@@ -313,7 +313,7 @@ internal static class CheckedConversion
 		return (sbyte)value;
 	}
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static sbyte R4ToI1(float value)
 	{
 		if (!(value > (sbyte.MinValue - 1) && value < (sbyte.MaxValue + 1)))
@@ -321,7 +321,7 @@ internal static class CheckedConversion
 		return (sbyte)value;
 	}
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static sbyte R8ToI1(double value)
 	{
 		if (!(value > (sbyte.MinValue - 1) && value < (sbyte.MaxValue + 1)))
@@ -333,7 +333,7 @@ internal static class CheckedConversion
 
 	#region U1
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static byte I4ToU1(int value)
 	{
 		if (value < 0 || value > byte.MaxValue)
@@ -341,7 +341,7 @@ internal static class CheckedConversion
 		return (byte)value;
 	}
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static byte U4ToU1(uint value)
 	{
 		var sValue = (int)value;
@@ -350,7 +350,7 @@ internal static class CheckedConversion
 		return (byte)value;
 	}
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static byte I8ToU1(long value)
 	{
 		if (value < 0 || value > byte.MaxValue)
@@ -358,7 +358,7 @@ internal static class CheckedConversion
 		return (byte)value;
 	}
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static byte U8ToU1(ulong value)
 	{
 		var sValue = (long)value;
@@ -367,7 +367,7 @@ internal static class CheckedConversion
 		return (byte)value;
 	}
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static byte R4ToU1(float value)
 	{
 		if (!(value > -1.0f && value < (byte.MaxValue + 1)))
@@ -375,7 +375,7 @@ internal static class CheckedConversion
 		return (byte)value;
 	}
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static byte R8ToU1(double value)
 	{
 		if (!(value > -1.0 && value < (byte.MaxValue + 1)))

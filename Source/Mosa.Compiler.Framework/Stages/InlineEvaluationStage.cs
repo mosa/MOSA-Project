@@ -102,11 +102,11 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 					}
 
 					if (node.Instruction == IRInstruction.SetReturn32
+
 						|| node.Instruction == IRInstruction.SetReturn64
 						|| node.Instruction == IRInstruction.SetReturnR4
 						|| node.Instruction == IRInstruction.SetReturnR8
 						|| node.Instruction == IRInstruction.SetReturnObject
-						|| node.Instruction.IsParameterLoad
 						|| node.Block.IsEpilogue
 						|| node.Block.IsPrologue
 					   )
