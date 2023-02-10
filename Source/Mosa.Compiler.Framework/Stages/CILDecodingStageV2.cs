@@ -2885,7 +2885,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 		var isPrimary = IsPrimitive(underlyingType);
 
-		var result = AllocatedOperand(stacktype, underlyingType);
+		var result = AllocatedOperand(stacktype, isPrimary ? underlyingType : type);
 
 		PushStack(stack, new StackEntry(stacktype, result));
 
