@@ -71,18 +71,9 @@ public static class Boot
 		Screen.WriteLine();
 		Screen.WriteLine();
 
-		//Screen.Write("CompilerBugTests: ");
-
-		//bool value1 = Test1();
-
-		//if (value1)
-		//	Screen.WriteLine("Ok");
-		//else
-		//	Screen.WriteLine("Failed");
-
 		//Screen.Write("FindTypeOfTest: ");
 
-		Test3();
+		//Test1();
 
 		//if (value3)
 		//	Screen.WriteLine("Ok");
@@ -96,13 +87,22 @@ public static class Boot
 
 		TestHash();
 
-		int value2 = CallReturn10();
+		Screen.Write("CheckedTests.MulI8I8: ");
 
-		Screen.Write("Return10 Test: ");
-		if (value2 == 10)
+		var value1 = Test1();
+
+		if (value1 == 0)
 			Screen.WriteLine("Ok");
 		else
 			Screen.WriteLine("Failed");
+
+		//int value2 = CallReturn10();
+
+		//Screen.Write("Return10 Test: ");
+		//if (value2 == 10)
+		//	Screen.WriteLine("Ok");
+		//else
+		//	Screen.WriteLine("Failed");
 
 		StartThreadTest();
 
@@ -288,9 +288,9 @@ public static class Boot
 	}
 
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static bool Test1()
+	public static long Test1()
 	{
-		return CompilerBugTests.Test();
+		return UnitTests.Primitive.CheckedTests.MulI8I8(0, 0);
 	}
 
 	[MethodImpl(MethodImplOptions.NoInlining)]

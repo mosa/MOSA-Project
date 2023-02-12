@@ -9,7 +9,7 @@ internal static class Multiplication
 	/* Multiplies 64-bit A by 64-bit B and returns the result and carry. */
 
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static ulong mul64carry(ulong a, ulong b, out bool carry)
+	public static ulong Mul64Carry(ulong a, ulong b, out bool carry)
 	{
 		var r = a * b;
 
@@ -28,7 +28,7 @@ internal static class Multiplication
 	/* Multiplies 64-bit A by 64-bit B and returns the result and overflow. */
 
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static long mul64overflow(long a, long b, out bool overflow)
+	public static long Mul64Overflow(long a, long b, out bool overflow)
 	{
 		var r = a * b;
 
