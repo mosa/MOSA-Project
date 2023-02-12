@@ -19,7 +19,7 @@ public sealed class CheckArrayBounds : BaseTransform
 		var index = context.Operand2;
 
 		// First create new block and split current block
-		var newBlocks = transform.CreateNewBlockContexts(1, context.Label);
+		var newBlock = transform.CreateNewBlockContexts(1, context.Label)[0];
 		var nextBlock = transform.Split(context);
 
 		// Get array length
@@ -27,19 +27,10 @@ public sealed class CheckArrayBounds : BaseTransform
 
 		// Now compare length with index
 		// If index is greater than or equal to the length then jump to exception block, otherwise jump to next block
-		if (transform.Is32BitPlatform)
-		{
-			context.SetInstruction(IRInstruction.Load32, v1_length, array, transform.Constant32_0);
-			context.AppendInstruction(IRInstruction.Branch32, ConditionCode.UnsignedGreaterOrEqual, null, index, v1_length, newBlocks[0].Block);
-		}
-		else
-		{
-			context.SetInstruction(IRInstruction.Load64, v1_length, array, transform.Constant64_0);
-			context.AppendInstruction(IRInstruction.Branch64, ConditionCode.UnsignedGreaterOrEqual, null, index, v1_length, newBlocks[0].Block);
-		}
-
+		context.SetInstruction(transform.LoadInstruction, v1_length, array, transform.Constant32_0);
+		context.AppendInstruction(transform.BranchInstruction, ConditionCode.UnsignedGreaterOrEqual, null, index, v1_length, newBlock.Block);
 		context.AppendInstruction(IRInstruction.Jmp, nextBlock.Block);
 
-		newBlocks[0].AppendInstruction(IRInstruction.ThrowIndexOutOfRange);
+		newBlock.AppendInstruction(IRInstruction.ThrowIndexOutOfRange);
 	}
 }

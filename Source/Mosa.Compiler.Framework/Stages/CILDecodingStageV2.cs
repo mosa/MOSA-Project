@@ -4654,41 +4654,6 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 	#region Array Helpers
 
-	/// <summary>Adds bounds check to the array access.</summary>
-	/// <param name="context">The node.</param>
-	/// <param name="arrayOperand">The array operand.</param>
-	/// <param name="arrayIndexOperand">The index operand.</param>
-	private void AddArrayBoundsCheck(Context context, Operand arrayOperand, Operand arrayIndexOperand)
-	{
-		// First create new block and split current block
-		var exceptionContext = CreateNewBlockContexts(1, context.Label)[0];
-		var nextContext = Split(context);
-
-		Operand lengthOperand;
-
-		if (Is32BitPlatform)
-		{
-			lengthOperand = AllocateVirtualRegister32();
-			context.AppendInstruction(IRInstruction.Load32, lengthOperand, arrayOperand, Constant32_0);
-		}
-		else
-		{
-			lengthOperand = AllocateVirtualRegister64();
-			context.AppendInstruction(IRInstruction.Load64, lengthOperand, arrayOperand, Constant64_0);
-		}
-
-		// Now compare length with index
-		// If index is greater than or equal to the length then jump to exception block, otherwise jump to next block
-		context.AppendInstruction(BranchInstruction, ConditionCode.UnsignedGreaterOrEqual, null, arrayIndexOperand, lengthOperand, exceptionContext.Block);
-		context.AppendInstruction(IRInstruction.Jmp, nextContext.Block);
-
-		// Build exception block which is just a call to throw exception
-		var method = InternalRuntimeType.FindMethodByName("ThrowIndexOutOfRangeException");
-		var symbolOperand = Operand.CreateSymbolFromMethod(method, TypeSystem);
-
-		exceptionContext.AppendInstruction(IRInstruction.CallStatic, null, symbolOperand);
-	}
-
 	/// <summary>Calculates the element offset for the specified index.</summary>
 	/// <param name="context">The node.</param>
 	/// <param name="elementType">The array type.</param>
@@ -4746,26 +4711,4 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 	}
 
 	#endregion Array Helpers
-
-	/// <summary>Adds overflow check using boolean result operand.</summary>
-	/// <param name="node">The node.</param>
-	/// <param name="resultOperand">The overflow or carry result operand.</param>
-	private void AddOverflowCheck(InstructionNode node, Operand resultOperand)
-	{
-		var after = new Context(node).InsertAfter();
-
-		// First create new block and split current block
-		var exceptionContext = CreateNewBlockContexts(1, node.Label)[0];
-		var nextContext = Split(after);
-
-		// If result is equal to true then jump to exception block, otherwise jump to next block
-		after.AppendInstruction(BranchInstruction, ConditionCode.NotEqual, null, resultOperand, ConstantZero, exceptionContext.Block);
-		after.AppendInstruction(IRInstruction.Jmp, nextContext.Block);
-
-		// Build exception block which is just a call to throw exception
-		var method = InternalRuntimeType.FindMethodByName("ThrowOverflowException");
-		var symbolOperand = Operand.CreateSymbolFromMethod(method, TypeSystem);
-
-		exceptionContext.AppendInstruction(IRInstruction.CallStatic, null, symbolOperand);
-	}
 }

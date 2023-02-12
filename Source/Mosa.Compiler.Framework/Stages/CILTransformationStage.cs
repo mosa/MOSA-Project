@@ -2092,37 +2092,6 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 	}
 
 	/// <summary>
-	/// Adds bounds check to the array access.
-	/// </summary>
-	/// <param name="node">The node.</param>
-	/// <param name="arrayOperand">The array operand.</param>
-	/// <param name="arrayIndexOperand">The index operand.</param>
-	private void AddArrayBoundsCheck2(InstructionNode node, Operand arrayOperand, Operand arrayIndexOperand)
-	{
-		var before = new Context(node).InsertBefore();
-
-		// First create new block and split current block
-		var exceptionContext = CreateNewBlockContexts(1, node.Label)[0];
-		var nextContext = Split(before);
-
-		// Get array length
-		var lengthOperand = AllocateVirtualRegister32();
-
-		before.SetInstruction(Select(lengthOperand, IRInstruction.Load32, IRInstruction.Load64), lengthOperand, arrayOperand, ConstantZero);
-
-		// Now compare length with index
-		// If index is greater than or equal to the length then jump to exception block, otherwise jump to next block
-		before.AppendInstruction(BranchInstruction, ConditionCode.UnsignedGreaterOrEqual, null, arrayIndexOperand, lengthOperand, exceptionContext.Block);
-		before.AppendInstruction(IRInstruction.Jmp, nextContext.Block);
-
-		// Build exception block which is just a call to throw exception
-		var method = InternalRuntimeType.FindMethodByName("ThrowIndexOutOfRangeException");
-		var symbolOperand = Operand.CreateSymbolFromMethod(method, TypeSystem);
-
-		exceptionContext.AppendInstruction(IRInstruction.CallStatic, null, symbolOperand);
-	}
-
-	/// <summary>
 	/// Adds overflow check using boolean result operand.
 	/// </summary>
 	/// <param name="node">The node.</param>
@@ -2139,11 +2108,7 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 		after.SetInstruction(BranchInstruction, ConditionCode.NotEqual, null, resultOperand, ConstantZero, exceptionContext.Block);
 		after.AppendInstruction(IRInstruction.Jmp, nextContext.Block);
 
-		// Build exception block which is just a call to throw exception
-		var method = InternalRuntimeType.FindMethodByName("ThrowOverflowException");
-		var symbolOperand = Operand.CreateSymbolFromMethod(method, TypeSystem);
-
-		exceptionContext.AppendInstruction(IRInstruction.CallStatic, null, symbolOperand);
+		exceptionContext.AppendInstruction(IRInstruction.ThrowOverflow);
 	}
 
 	/// <summary>
