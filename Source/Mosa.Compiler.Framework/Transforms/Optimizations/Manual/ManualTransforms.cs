@@ -245,5 +245,9 @@ public static class ManualTransforms
 		new Rewrite.Branch64LessOrEqualThanZero(),
 
 		new PHI.Phi32Add32(),
+
+		new Checked.CheckThrowDivideByZero(),
+		new Checked.CheckThrowIndexOutOfRange(),
+		new Checked.CheckThrowOverflow(),
 	};
 }

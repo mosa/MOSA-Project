@@ -15,6 +15,8 @@ public sealed class AddCarryOut64 : BaseTransform
 	{
 	}
 
+	public override int Priority => 100;
+
 	public override bool Match(Context context, TransformContext transform)
 	{
 		if (!IsResolvedConstant(context.Operand1))

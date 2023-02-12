@@ -35,11 +35,11 @@ public sealed class MulOverflowOut32ByZero : BaseTransform
 }
 
 /// <summary>
-/// MulSigned32ByZero_v1
+/// MulOverflowOut32ByZero_v1
 /// </summary>
-public sealed class MulSigned32ByZero_v1 : BaseTransform
+public sealed class MulOverflowOut32ByZero_v1 : BaseTransform
 {
-	public MulSigned32ByZero_v1() : base(IRInstruction.MulSigned32, TransformType.Auto | TransformType.Optimization)
+	public MulOverflowOut32ByZero_v1() : base(IRInstruction.MulOverflowOut32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -59,9 +59,11 @@ public sealed class MulSigned32ByZero_v1 : BaseTransform
 	public override void Transform(Context context, TransformContext transform)
 	{
 		var result = context.Result;
+		var result2 = context.Result2;
 
 		var e1 = transform.CreateConstant(To32(0));
 
 		context.SetInstruction(IRInstruction.Move32, result, e1);
+		context.AppendInstruction(IRInstruction.Move32, result2, transform.Constant32_1);
 	}
 }

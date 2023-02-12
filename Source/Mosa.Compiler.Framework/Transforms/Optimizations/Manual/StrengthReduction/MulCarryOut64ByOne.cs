@@ -37,11 +37,11 @@ public sealed class MulCarryOut64ByOne : BaseTransform
 }
 
 /// <summary>
-/// MulUnsigned64ByOne_v1
+/// MulCarryOut64ByOne_v1
 /// </summary>
-public sealed class MulUnsigned64ByOne_v1 : BaseTransform
+public sealed class MulCarryOut64ByOne_v1 : BaseTransform
 {
-	public MulUnsigned64ByOne_v1() : base(IRInstruction.MulUnsigned64, TransformType.Auto | TransformType.Optimization)
+	public MulCarryOut64ByOne_v1() : base(IRInstruction.MulCarryOut64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -61,9 +61,11 @@ public sealed class MulUnsigned64ByOne_v1 : BaseTransform
 	public override void Transform(Context context, TransformContext transform)
 	{
 		var result = context.Result;
+		var result2 = context.Result2;
 
 		var t1 = context.Operand2;
 
 		context.SetInstruction(IRInstruction.Move64, result, t1);
+		context.AppendInstruction(IRInstruction.Move64, result2, transform.Constant64_1);
 	}
 }

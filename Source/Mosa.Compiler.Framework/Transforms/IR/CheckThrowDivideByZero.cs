@@ -17,6 +17,20 @@ public sealed class CheckThrowDivideByZero : BaseTransform
 	{
 		var operand1 = context.Operand1;
 
+		// optional - built-in optimization
+		if (operand1.IsResolvedConstant)
+		{
+			if (operand1.ConstantUnsigned64 == 0)
+			{
+				context.SetNop();
+			}
+			else
+			{
+				context.SetInstruction(IRInstruction.ThrowDivideByZero);
+			}
+			return;
+		}
+
 		var newBlock = transform.CreateNewBlockContexts(1, context.Label)[0];
 		var nextBlock = transform.Split(context);
 
