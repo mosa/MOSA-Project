@@ -585,6 +585,8 @@ public static class Internal
 		Debug.Fail("Fault: " + ((int)code).ToString("x") + " , Extra: " + ((int)extra).ToString("x"));
 	}
 
+	#region Throw Exceptions
+
 	public static void ThrowIndexOutOfRangeException()
 	{
 		throw new IndexOutOfRangeException();
@@ -594,4 +596,11 @@ public static class Internal
 	{
 		throw new OverflowException();
 	}
+
+	public static void ThrowDivideByZeroException()
+	{
+		throw new DivideByZeroException();
+	}
+
+	#endregion Throw Exceptions
 }
