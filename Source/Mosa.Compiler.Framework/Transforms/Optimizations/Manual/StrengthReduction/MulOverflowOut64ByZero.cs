@@ -27,10 +27,10 @@ public sealed class MulOverflowOut64ByZero : BaseTransform
 	public override void Transform(Context context, TransformContext transform)
 	{
 		var result = context.Result;
+		var result2 = context.Result2;
 
-		var e1 = transform.CreateConstant(To64(0));
-
-		context.SetInstruction(IRInstruction.Move64, result, e1);
+		context.SetInstruction(IRInstruction.Move64, result, transform.Constant64_0);
+		context.AppendInstruction(IRInstruction.Move64, result2, transform.Constant64_1);
 	}
 }
 

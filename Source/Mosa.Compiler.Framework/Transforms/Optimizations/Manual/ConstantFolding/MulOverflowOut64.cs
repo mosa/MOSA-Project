@@ -32,6 +32,7 @@ public sealed class MulOverflowOut64 : BaseTransform
 	public override void Transform(Context context, TransformContext transform)
 	{
 		var result = context.Result;
+		var result2 = context.Result2;
 
 		var t1 = context.Operand1;
 		var t2 = context.Operand2;
@@ -39,5 +40,6 @@ public sealed class MulOverflowOut64 : BaseTransform
 		var e1 = transform.CreateConstant(MulSigned64(ToSigned64(t1), ToSigned64(t2)));
 
 		context.SetInstruction(IRInstruction.Move64, result, e1);
+		context.AppendInstruction(IRInstruction.Move64, result2, transform.Constant64_1);
 	}
 }

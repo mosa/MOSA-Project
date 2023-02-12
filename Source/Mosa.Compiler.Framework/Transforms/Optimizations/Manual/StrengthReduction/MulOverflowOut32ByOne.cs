@@ -27,10 +27,12 @@ public sealed class MulOverflowOut32ByOne : BaseTransform
 	public override void Transform(Context context, TransformContext transform)
 	{
 		var result = context.Result;
+		var result2 = context.Result2;
 
 		var t1 = context.Operand1;
 
 		context.SetInstruction(IRInstruction.Move32, result, t1);
+		context.AppendInstruction(IRInstruction.Move32, result2, transform.Constant32_1);
 	}
 }
 

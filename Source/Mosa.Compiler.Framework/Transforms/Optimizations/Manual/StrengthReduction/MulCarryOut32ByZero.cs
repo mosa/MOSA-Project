@@ -27,10 +27,10 @@ public sealed class MulCarryOut32ByZero : BaseTransform
 	public override void Transform(Context context, TransformContext transform)
 	{
 		var result = context.Result;
+		var result2 = context.Result2;
 
-		var e1 = transform.CreateConstant(To32(0));
-
-		context.SetInstruction(IRInstruction.Move32, result, e1);
+		context.SetInstruction(IRInstruction.Move32, result, transform.Constant32_0);
+		context.AppendInstruction(IRInstruction.Move32, result2, transform.Constant32_1);
 	}
 }
 

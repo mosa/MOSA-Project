@@ -33,6 +33,7 @@ public sealed class MulCarryOut32 : BaseTransform
 	public override void Transform(Context context, TransformContext transform)
 	{
 		var result = context.Result;
+		var result2 = context.Result2;
 
 		var t1 = context.Operand1;
 		var t2 = context.Operand2;
@@ -40,5 +41,6 @@ public sealed class MulCarryOut32 : BaseTransform
 		var e1 = transform.CreateConstant(MulUnsigned32(To32(t1), To32(t2)));
 
 		context.SetInstruction(IRInstruction.Move32, result, e1);
+		context.AppendInstruction(IRInstruction.Move32, result2, transform.Constant32_1);
 	}
 }

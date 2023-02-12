@@ -28,6 +28,8 @@ public sealed class TransformContext
 
 	public Operand Constant64_0 { get; private set; }
 
+	public Operand Constant64_1 { get; private set; }
+
 	public Operand ConstantR4_0 { get; private set; }
 
 	public Operand ConstantR8_0 { get; private set; }
@@ -76,44 +78,35 @@ public sealed class TransformContext
 
 	public int Window { get; private set; }
 
-	public Operand StackFrame
-	{ get { return MethodCompiler.Compiler.StackFrame; } }
+	public Operand StackFrame => MethodCompiler.Compiler.StackFrame;
 
-	public Operand StackPointer
-	{ get { return MethodCompiler.Compiler.StackPointer; } }
+	public Operand StackPointer => MethodCompiler.Compiler.StackPointer;
 
 	/// <summary>
 	/// Gets the link register.
 	/// </summary>
-	public Operand LinkRegister
-	{ get { return MethodCompiler.Compiler.LinkRegister; } }
+	public Operand LinkRegister => MethodCompiler.Compiler.LinkRegister;
 
 	/// <summary>
 	/// Gets the program counter
 	/// </summary>
-	public Operand ProgramCounter
-	{ get { return MethodCompiler.Compiler.ProgramCounter; } }
+	public Operand ProgramCounter => MethodCompiler.Compiler.ProgramCounter;
 
 	/// <summary>
 	/// Gets the exception register.
 	/// </summary>
-	public Operand ExceptionRegister
-	{ get { return MethodCompiler.Compiler.ExceptionRegister; } }
+	public Operand ExceptionRegister => MethodCompiler.Compiler.ExceptionRegister;
 
 	/// <summary>
 	/// Gets the leave target register.
 	/// </summary>
-	public Operand LeaveTargetRegister
-	{ get { return MethodCompiler.Compiler.LeaveTargetRegister; } }
+	public Operand LeaveTargetRegister => MethodCompiler.Compiler.LeaveTargetRegister;
 
-	public uint NativePointerSize
-	{ get { return Compiler.Architecture.NativePointerSize; } }
+	public uint NativePointerSize => Compiler.Architecture.NativePointerSize;
 
-	public BaseArchitecture Architecture
-	{ get { return Compiler.Architecture; } }
+	public BaseArchitecture Architecture => Compiler.Architecture;
 
-	public MosaLinker Linker
-	{ get { return Compiler.Linker; } }
+	public MosaLinker Linker => Compiler.Linker;
 
 	public TransformContext(MethodCompiler methodCompiler, BitValueManager bitValueManager = null)
 	{
@@ -147,6 +140,7 @@ public sealed class TransformContext
 		Constant32_64 = CreateConstant32(64);
 		Constant32_24 = CreateConstant32(24);
 
+		Constant64_1 = CreateConstant64(1);
 		Constant64_32 = CreateConstant64(32);
 
 		Is32BitPlatform = Compiler.Architecture.Is32BitPlatform;
