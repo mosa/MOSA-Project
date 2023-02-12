@@ -6,7 +6,7 @@ namespace Mosa.Runtime.Math;
 
 internal static class Conversion
 {
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static long R4ToI8(float value)
 	{
 		var rawValue = (ulong)System.BitConverter.DoubleToInt64Bits(value);
@@ -40,7 +40,7 @@ internal static class Conversion
 		return Sign == 0uL ? result : -result;
 	}
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static long R8ToI8(double value)
 	{
 		var rawValue = (ulong)System.BitConverter.DoubleToInt64Bits(value);
@@ -74,7 +74,7 @@ internal static class Conversion
 		return Sign == 0uL ? result : -result;
 	}
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static ulong R4ToU8(float value)
 	{
 		var rawValue = (ulong)System.BitConverter.DoubleToInt64Bits(value);
@@ -118,7 +118,7 @@ internal static class Conversion
 		return unchecked((ulong)(Sign == 0uL ? result : -result));
 	}
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static ulong R8ToU8(double value)
 	{
 		var rawValue = (ulong)System.BitConverter.DoubleToInt64Bits(value);
