@@ -621,8 +621,8 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		switch (opcode)
 		{
 			case OpCode.Add: return Add(context, stack);
-			case OpCode.Add_ovf: return Add(context, stack);                    // TODO: implement overflow check
-			case OpCode.Add_ovf_un: return Add(context, stack);                 // TODO: implement overflow check
+			case OpCode.Add_ovf: return AddSigned(context, stack);
+			case OpCode.Add_ovf_un: return AddUnsigned(context, stack);
 			case OpCode.And: return And(context, stack);
 			case OpCode.Arglist: return false;                                  // TODO: Not implemented in v1 either
 			case OpCode.Beq: return Branch(context, stack, ConditionCode.Equal, instruction);
@@ -1425,7 +1425,209 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 					var result = AllocateVirtualRegister64();
 					var v1 = AllocateVirtualRegister64();
 					context.AppendInstruction(IRInstruction.SignExtend32x64, v1, entry2.Operand);
-					context.AppendInstruction(IRInstruction.Add32, result, entry1.Operand, v1);
+					context.AppendInstruction(IRInstruction.Add64, result, entry1.Operand, v1);
+					PushStack(stack, new StackEntry(StackType.ManagedPointer, result));
+					return true;
+				}
+
+			default: return false;
+		}
+	}
+
+	private bool AddUnsigned(Context context, Stack<StackEntry> stack)
+	{
+		var entry1 = PopStack(stack);
+		var entry2 = PopStack(stack);
+
+		switch (entry1.StackType)
+		{
+			case StackType.Int32 when entry2.StackType == StackType.Int32:
+				{
+					var result = AllocateVirtualRegister32();
+					var result2 = AllocateVirtualRegister32();
+					context.AppendInstruction2(IRInstruction.AddCarryOut32, result, result2, entry2.Operand, entry1.Operand);
+					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
+					PushStack(stack, new StackEntry(StackType.Int32, result));
+					return true;
+				}
+
+			case StackType.Int64 when entry2.StackType == StackType.Int64:
+				{
+					var result = AllocateVirtualRegister64();
+					var result2 = AllocateVirtualRegister64();
+					context.AppendInstruction2(IRInstruction.AddCarryOut64, result, result2, entry2.Operand, entry1.Operand);
+					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
+					PushStack(stack, new StackEntry(StackType.Int64, result));
+					return true;
+				}
+
+			case StackType.Int32 when entry2.StackType == StackType.Int64:
+				{
+					var v1 = AllocateVirtualRegister64();
+					var result = AllocateVirtualRegister64();
+					var result2 = AllocateVirtualRegister64();
+					context.AppendInstruction(IRInstruction.ZeroExtend32x64, v1, entry1.Operand);
+					context.AppendInstruction2(IRInstruction.AddCarryOut64, result, result2, v1, entry2.Operand);
+					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
+					PushStack(stack, new StackEntry(StackType.Int64, result));
+					return true;
+				}
+
+			case StackType.Int64 when entry2.StackType == StackType.Int32:
+				{
+					var v1 = AllocateVirtualRegister64();
+					var result = AllocateVirtualRegister64();
+					var result2 = AllocateVirtualRegister64();
+					context.AppendInstruction(IRInstruction.ZeroExtend32x64, v1, entry2.Operand);
+					context.AppendInstruction2(IRInstruction.AddCarryOut64, result, result2, entry1.Operand, v1);
+					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
+					PushStack(stack, new StackEntry(StackType.Int64, result));
+					return true;
+				}
+
+			case StackType.Int32 when entry2.StackType == StackType.ManagedPointer && Is32BitPlatform:
+			case StackType.ManagedPointer when entry2.StackType == StackType.Int32 && Is32BitPlatform:
+				{
+					var result = AllocateVirtualRegister32();
+					var result2 = AllocateVirtualRegister32();
+					context.AppendInstruction2(IRInstruction.AddCarryOut32, result, result2, entry2.Operand, entry1.Operand);
+					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
+					PushStack(stack, new StackEntry(StackType.ManagedPointer, result));
+					return true;
+				}
+
+			case StackType.Int64 when entry2.StackType == StackType.ManagedPointer && Is64BitPlatform:
+			case StackType.Int64 when entry2.StackType == StackType.ManagedPointer && Is64BitPlatform:
+				{
+					var result = AllocateVirtualRegister64();
+					var result2 = AllocateVirtualRegister64();
+					context.AppendInstruction2(IRInstruction.AddCarryOut64, result, result2, entry2.Operand, entry1.Operand);
+					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
+					PushStack(stack, new StackEntry(StackType.ManagedPointer, result));
+					return true;
+				}
+
+			case StackType.Int32 when entry2.StackType == StackType.ManagedPointer && Is64BitPlatform:
+				{
+					var result = AllocateVirtualRegister64();
+					var result2 = AllocateVirtualRegister64();
+					var v1 = AllocateVirtualRegister64();
+					context.AppendInstruction(IRInstruction.ZeroExtend32x64, v1, entry1.Operand);
+					context.AppendInstruction2(IRInstruction.AddCarryOut64, result, result2, v1, entry2.Operand);
+					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
+					PushStack(stack, new StackEntry(StackType.ManagedPointer, result));
+					return true;
+				}
+
+			case StackType.ManagedPointer when entry2.StackType == StackType.Int32 && Is64BitPlatform:
+				{
+					var result = AllocateVirtualRegister64();
+					var result2 = AllocateVirtualRegister64();
+					var v1 = AllocateVirtualRegister64();
+					context.AppendInstruction(IRInstruction.ZeroExtend32x64, v1, entry2.Operand);
+					context.AppendInstruction2(IRInstruction.AddCarryOut64, result, result2, entry1.Operand, v1);
+					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
+					PushStack(stack, new StackEntry(StackType.ManagedPointer, result));
+					return true;
+				}
+
+			default: return false;
+		}
+	}
+
+	private bool AddSigned(Context context, Stack<StackEntry> stack)
+	{
+		var entry1 = PopStack(stack);
+		var entry2 = PopStack(stack);
+
+		switch (entry1.StackType)
+		{
+			case StackType.Int32 when entry2.StackType == StackType.Int32:
+				{
+					var result = AllocateVirtualRegister32();
+					var result2 = AllocateVirtualRegister32();
+					context.AppendInstruction2(IRInstruction.AddOverflowOut32, result, result2, entry2.Operand, entry1.Operand);
+					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
+					PushStack(stack, new StackEntry(StackType.Int32, result));
+					return true;
+				}
+
+			case StackType.Int64 when entry2.StackType == StackType.Int64:
+				{
+					var result = AllocateVirtualRegister64();
+					var result2 = AllocateVirtualRegister64();
+					context.AppendInstruction2(IRInstruction.AddOverflowOut64, result, result2, entry2.Operand, entry1.Operand);
+					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
+					PushStack(stack, new StackEntry(StackType.Int64, result));
+					return true;
+				}
+
+			case StackType.Int32 when entry2.StackType == StackType.Int64:
+				{
+					var v1 = AllocateVirtualRegister64();
+					var result = AllocateVirtualRegister64();
+					var result2 = AllocateVirtualRegister64();
+					context.AppendInstruction(IRInstruction.SignExtend32x64, v1, entry1.Operand);
+					context.AppendInstruction2(IRInstruction.AddOverflowOut64, result, result2, v1, entry2.Operand);
+					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
+					PushStack(stack, new StackEntry(StackType.Int64, result));
+					return true;
+				}
+
+			case StackType.Int64 when entry2.StackType == StackType.Int32:
+				{
+					var v1 = AllocateVirtualRegister64();
+					var result = AllocateVirtualRegister64();
+					var result2 = AllocateVirtualRegister64();
+					context.AppendInstruction(IRInstruction.SignExtend32x64, v1, entry2.Operand);
+					context.AppendInstruction2(IRInstruction.AddOverflowOut64, result, result2, entry1.Operand, v1);
+					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
+					PushStack(stack, new StackEntry(StackType.Int64, result));
+					return true;
+				}
+
+			case StackType.Int32 when entry2.StackType == StackType.ManagedPointer && Is32BitPlatform:
+			case StackType.ManagedPointer when entry2.StackType == StackType.Int32 && Is32BitPlatform:
+				{
+					var result = AllocateVirtualRegister32();
+					var result2 = AllocateVirtualRegister32();
+					context.AppendInstruction2(IRInstruction.AddOverflowOut32, result, result2, entry2.Operand, entry1.Operand);
+					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
+					PushStack(stack, new StackEntry(StackType.ManagedPointer, result));
+					return true;
+				}
+
+			case StackType.Int64 when entry2.StackType == StackType.ManagedPointer && Is64BitPlatform:
+			case StackType.Int64 when entry2.StackType == StackType.ManagedPointer && Is64BitPlatform:
+				{
+					var result = AllocateVirtualRegister64();
+					var result2 = AllocateVirtualRegister64();
+					context.AppendInstruction2(IRInstruction.AddOverflowOut64, result, result2, entry2.Operand, entry1.Operand);
+					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
+					PushStack(stack, new StackEntry(StackType.ManagedPointer, result));
+					return true;
+				}
+
+			case StackType.Int32 when entry2.StackType == StackType.ManagedPointer && Is64BitPlatform:
+				{
+					var result = AllocateVirtualRegister64();
+					var result2 = AllocateVirtualRegister64();
+					var v1 = AllocateVirtualRegister64();
+					context.AppendInstruction(IRInstruction.SignExtend32x64, v1, entry1.Operand);
+					context.AppendInstruction2(IRInstruction.AddOverflowOut64, result, result2, v1, entry2.Operand);
+					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
+					PushStack(stack, new StackEntry(StackType.ManagedPointer, result));
+					return true;
+				}
+
+			case StackType.ManagedPointer when entry2.StackType == StackType.Int32 && Is64BitPlatform:
+				{
+					var result = AllocateVirtualRegister64();
+					var result2 = AllocateVirtualRegister64();
+					var v1 = AllocateVirtualRegister64();
+					context.AppendInstruction(IRInstruction.SignExtend32x64, v1, entry2.Operand);
+					context.AppendInstruction2(IRInstruction.AddOverflowOut64, result, result2, entry1.Operand, v1);
+					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
 					PushStack(stack, new StackEntry(StackType.ManagedPointer, result));
 					return true;
 				}
