@@ -4552,18 +4552,13 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		return true;
 	}
 
-	/// <summary>
-	/// Processes external method calls.
-	/// </summary>
+	/// <summary>Processes external method calls.</summary>
 	/// <param name="context">The transformation context.</param>
 	/// <returns>
-	///   <c>true</c> if the method was replaced by an intrinsic; <c>false</c> otherwise.
-	/// </returns>
-	/// <remarks>
-	/// This method checks if the call target has an Intrinsic-Attribute applied with
+	///   <c>true</c> if the method was replaced by an intrinsic; <c>false</c> otherwise.</returns>
+	/// <remarks>This method checks if the call target has an Intrinsic-Attribute applied with
 	/// the current architecture. If it has, the method call is replaced by the specified
-	/// native instruction.
-	/// </remarks>
+	/// native instruction.</remarks>
 	private bool ProcessExternalCall(Context context)
 	{
 		var method = context.Operand1.Method;
@@ -4659,9 +4654,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 	#region Array Helpers
 
-	/// <summary>
-	/// Adds bounds check to the array access.
-	/// </summary>
+	/// <summary>Adds bounds check to the array access.</summary>
 	/// <param name="context">The node.</param>
 	/// <param name="arrayOperand">The array operand.</param>
 	/// <param name="arrayIndexOperand">The index operand.</param>
@@ -4696,15 +4689,11 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		exceptionContext.AppendInstruction(IRInstruction.CallStatic, null, symbolOperand);
 	}
 
-	/// <summary>
-	/// Calculates the element offset for the specified index.
-	/// </summary>
+	/// <summary>Calculates the element offset for the specified index.</summary>
 	/// <param name="context">The node.</param>
 	/// <param name="elementType">The array type.</param>
 	/// <param name="index">The index operand.</param>
-	/// <returns>
-	/// Element offset operand.
-	/// </returns>
+	/// <returns>Element offset operand.</returns>
 	private Operand CalculateArrayElementOffset(Context context, MosaType elementType, Operand index)
 	{
 		var size = GetTypeSize(elementType, false);
@@ -4712,15 +4701,11 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		return CalculateArrayElementOffset(context, size, index);
 	}
 
-	/// <summary>
-	/// Calculates the element offset for the specified index.
-	/// </summary>
+	/// <summary>Calculates the element offset for the specified index.</summary>
 	/// <param name="context">The node.</param>
 	/// <param name="size">The element size.</param>
 	/// <param name="index">The index operand.</param>
-	/// <returns>
-	/// Element offset operand.
-	/// </returns>
+	/// <returns>Element offset operand.</returns>
 	private Operand CalculateArrayElementOffset(Context context, uint size, Operand index)
 	{
 		if (Is32BitPlatform)
@@ -4743,14 +4728,10 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		}
 	}
 
-	/// <summary>
-	/// Calculates the base of the array elements.
-	/// </summary>
-	/// <param name="node">The node.</param>
+	/// <summary>Calculates the base of the array elements.</summary>
+	/// <param name="context"></param>
 	/// <param name="elementOffset">The array.</param>
-	/// <returns>
-	/// Base address for array elements.
-	/// </returns>
+	/// <returns>Base address for array elements.</returns>
 	private Operand CalculateTotalArrayOffset(Context context, Operand elementOffset)
 	{
 		var fixedOffset = CreateConstant32(NativePointerSize);
@@ -4765,4 +4746,26 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 	}
 
 	#endregion Array Helpers
+
+	/// <summary>Adds overflow check using boolean result operand.</summary>
+	/// <param name="node">The node.</param>
+	/// <param name="resultOperand">The overflow or carry result operand.</param>
+	private void AddOverflowCheck(InstructionNode node, Operand resultOperand)
+	{
+		var after = new Context(node).InsertAfter();
+
+		// First create new block and split current block
+		var exceptionContext = CreateNewBlockContexts(1, node.Label)[0];
+		var nextContext = Split(after);
+
+		// If result is equal to true then jump to exception block, otherwise jump to next block
+		after.AppendInstruction(BranchInstruction, ConditionCode.NotEqual, null, resultOperand, ConstantZero, exceptionContext.Block);
+		after.AppendInstruction(IRInstruction.Jmp, nextContext.Block);
+
+		// Build exception block which is just a call to throw exception
+		var method = InternalRuntimeType.FindMethodByName("ThrowOverflowException");
+		var symbolOperand = Operand.CreateSymbolFromMethod(method, TypeSystem);
+
+		exceptionContext.AppendInstruction(IRInstruction.CallStatic, null, symbolOperand);
+	}
 }

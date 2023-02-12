@@ -228,5 +228,11 @@ public static class IRInstruction
 	public static readonly BitCopyR8To64 BitCopyR8To64 = new BitCopyR8To64();
 	public static readonly BitCopy32ToR4 BitCopy32ToR4 = new BitCopy32ToR4();
 	public static readonly BitCopy64ToR8 BitCopy64ToR8 = new BitCopy64ToR8();
+	public static readonly ThrowOverflow ThrowOverflow = new ThrowOverflow();
+	public static readonly ThrowIndexOutOfRange ThrowIndexOutOfRange = new ThrowIndexOutOfRange();
+	public static readonly ThrowDivideByZero ThrowDivideByZero = new ThrowDivideByZero();
 	public static readonly CheckArrayBounds CheckArrayBounds = new CheckArrayBounds();
+	public static readonly CheckThrowOverflow CheckThrowOverflow = new CheckThrowOverflow();
+	public static readonly CheckThrowIndexOutOfRange CheckThrowIndexOutOfRange = new CheckThrowIndexOutOfRange();
+	public static readonly CheckThrowDivideByZero CheckThrowDivideByZero = new CheckThrowDivideByZero();
 }

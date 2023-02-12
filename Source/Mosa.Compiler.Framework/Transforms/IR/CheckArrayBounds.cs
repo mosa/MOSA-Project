@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Compiler.Framework.Transforms.Array;
+namespace Mosa.Compiler.Framework.Transforms.IR;
 
 public sealed class CheckArrayBounds : BaseTransform
 {
@@ -40,10 +40,6 @@ public sealed class CheckArrayBounds : BaseTransform
 
 		context.AppendInstruction(IRInstruction.Jmp, nextBlock.Block);
 
-		// Build exception block which is just a call to throw exception
-		var method = transform.Compiler.InternalRuntimeType.FindMethodByName("ThrowIndexOutOfRangeException");
-		var symbolOperand = Operand.CreateSymbolFromMethod(method, transform.TypeSystem);
-
-		newBlocks[0].AppendInstruction(IRInstruction.CallStatic, null, symbolOperand);
+		newBlocks[0].AppendInstruction(IRInstruction.ThrowIndexOutOfRange);
 	}
 }

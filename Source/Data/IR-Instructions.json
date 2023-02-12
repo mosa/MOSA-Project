@@ -1494,10 +1494,46 @@
 			"OperandCount": 1
 		},
 		{
+			"Name": "ThrowOverflow",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0
+		},
+		{
+			"Name": "ThrowIndexOutOfRange",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0
+		},
+		{
+			"Name": "ThrowDivideByZero",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0
+		},
+		{
 			"Name": "CheckArrayBounds",
 			"FamilyName": "IR",
 			"ResultCount": 2,
 			"OperandCount": 0
+		},
+		{
+			"Name": "CheckThrowOverflow",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 1
+		},
+		{
+			"Name": "CheckThrowIndexOutOfRange",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 1
+		},
+		{
+			"Name": "CheckThrowDivideByZero",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 1
 		}
 	]
 }
