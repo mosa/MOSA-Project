@@ -40,6 +40,17 @@ public static class IntegerTwiddling
 		return false;
 	}
 
+	public static bool IsAddUnsignedCarry(uint a, uint b, bool carry)
+	{
+		if (IsAddUnsignedCarry(a, b))
+			return true;
+
+		if (carry & (a + b) == uint.MaxValue)
+			return true;
+
+		return false;
+	}
+
 	public static bool IsSubSignedOverflow(int a, int b)
 	{
 		if ((b < 0) && (a < int.MinValue - b))
@@ -62,15 +73,14 @@ public static class IntegerTwiddling
 		return false;
 	}
 
-	public static bool IsAddUnsignedCarry(uint a, uint b, bool carry)
+	public static bool IsSubUnsignedCarry(uint a, uint b)
 	{
-		if (IsAddUnsignedCarry(a, b))
-			return true;
+		return b > a;
+	}
 
-		if (carry & (a + b) == uint.MaxValue)
-			return true;
-
-		return false;
+	public static bool IsSubUnsignedCarry(ulong a, ulong b)
+	{
+		return b > a;
 	}
 
 	public static bool IsMultiplyUnsignedCarry(uint a, uint b)

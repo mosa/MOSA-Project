@@ -23,4 +23,13 @@ public class IntegerTwiddlingTests
 		Debug.Assert(!IntegerTwiddling.IsAddUnsignedCarry(0ul, 0ul));
 		Debug.Assert(!IntegerTwiddling.IsAddUnsignedCarry(0ul, ulong.MaxValue));
 	}
+
+	[Fact]
+	public void IsSubUnsignedCarry()
+	{
+		Debug.Assert(!IntegerTwiddling.IsSubUnsignedCarry(ulong.MaxValue, 1ul));
+		Debug.Assert(!IntegerTwiddling.IsSubUnsignedCarry(ulong.MaxValue, 0ul));
+		Debug.Assert(!IntegerTwiddling.IsSubUnsignedCarry(0ul, 0ul));
+		Debug.Assert(IntegerTwiddling.IsSubUnsignedCarry(0ul, ulong.MaxValue));
+	}
 }
