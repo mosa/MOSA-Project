@@ -118,17 +118,21 @@ public sealed class TransformContext
 
 	#region Instructions Properties
 
-	public BaseInstruction LoadInstruction { get; private set; }
+	public BaseInstruction LoadInstruction => Is32BitPlatform ? IRInstruction.Load32 : IRInstruction.Load64;
 
-	public BaseInstruction StoreInstruction { get; private set; }
+	public BaseInstruction StoreInstruction => Is32BitPlatform ? IRInstruction.Store32 : IRInstruction.Store64;
 
-	public BaseInstruction MoveInstruction { get; private set; }
+	public BaseInstruction MoveInstruction => Is32BitPlatform ? IRInstruction.Move32 : IRInstruction.Move64;
 
-	public BaseInstruction SubInstruction { get; private set; }
+	public BaseInstruction AddInstruction => Is32BitPlatform ? IRInstruction.Add32 : IRInstruction.Add64;
 
-	public BaseInstruction AddInstruction { get; private set; }
+	public BaseInstruction SubInstruction => Is32BitPlatform ? IRInstruction.Sub32 : IRInstruction.Sub64;
 
-	public BaseInstruction BranchInstruction { get; private set; }
+	public BaseInstruction MulSignedInstruction => Is32BitPlatform ? IRInstruction.MulSigned32 : IRInstruction.MulSigned64;
+
+	public BaseInstruction MulUnsignedInstruction => Is32BitPlatform ? IRInstruction.MulUnsigned32 : IRInstruction.MulUnsigned64;
+
+	public BaseInstruction BranchInstruction => Is32BitPlatform ? IRInstruction.Branch32 : IRInstruction.Branch64;
 
 	#endregion Instructions Properties
 
@@ -172,25 +176,6 @@ public sealed class TransformContext
 
 		IsInSSAForm = MethodCompiler.IsInSSAForm;
 		AreCPURegistersAllocated = MethodCompiler.AreCPURegistersAllocated;
-
-		if (Is32BitPlatform)
-		{
-			LoadInstruction = IRInstruction.Load32;
-			StoreInstruction = IRInstruction.Store32;
-			MoveInstruction = IRInstruction.Move32;
-			AddInstruction = IRInstruction.Add32;
-			SubInstruction = IRInstruction.Sub32;
-			BranchInstruction = IRInstruction.Branch32;
-		}
-		else
-		{
-			LoadInstruction = IRInstruction.Load64;
-			StoreInstruction = IRInstruction.Store64;
-			MoveInstruction = IRInstruction.Move64;
-			AddInstruction = IRInstruction.Add64;
-			SubInstruction = IRInstruction.Sub64;
-			BranchInstruction = IRInstruction.Branch64;
-		}
 
 		Window = Math.Max(Compiler.CompilerSettings.OptimizationWindow, 1);
 	}

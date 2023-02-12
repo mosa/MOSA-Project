@@ -20,7 +20,7 @@ public sealed class CheckThrowOverflow : BaseTransform
 		var newBlock = transform.CreateNewBlockContexts(1, context.Label)[0];
 		var nextBlock = transform.Split(context);
 
-		context.SetInstruction(transform.BranchInstruction, ConditionCode.Equal, null, operand1, transform.Constant32_0, newBlock.Block);
+		context.SetInstruction(transform.BranchInstruction, ConditionCode.NotEqual, null, operand1, transform.Constant32_0, newBlock.Block);
 		context.AppendInstruction(IRInstruction.Jmp, nextBlock.Block);
 
 		newBlock.AppendInstruction(IRInstruction.ThrowOverflow);

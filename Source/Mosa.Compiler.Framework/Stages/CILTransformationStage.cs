@@ -2095,20 +2095,12 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 	/// Adds overflow check using boolean result operand.
 	/// </summary>
 	/// <param name="node">The node.</param>
-	/// <param name="resultOperand">The overflow or carry result operand.</param>
-	private void AddOverflowCheck(InstructionNode node, Operand resultOperand)
+	/// <param name="result">The overflow or carry result operand.</param>
+	private void AddOverflowCheck(InstructionNode node, Operand result)
 	{
 		var after = new Context(node).InsertAfter();
 
-		// First create new block and split current block
-		var exceptionContext = CreateNewBlockContexts(1, node.Label)[0];
-		var nextContext = Split(after);
-
-		// If result is equal to true then jump to exception block, otherwise jump to next block
-		after.SetInstruction(BranchInstruction, ConditionCode.NotEqual, null, resultOperand, ConstantZero, exceptionContext.Block);
-		after.AppendInstruction(IRInstruction.Jmp, nextContext.Block);
-
-		exceptionContext.AppendInstruction(IRInstruction.ThrowOverflow);
+		after.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result);
 	}
 
 	/// <summary>
