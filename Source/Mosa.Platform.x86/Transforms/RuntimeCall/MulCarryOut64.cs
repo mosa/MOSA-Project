@@ -22,7 +22,7 @@ public sealed class MulCarryOut64 : BaseTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		var methodName = "mul64carry";
+		var methodName = "Mul64Carry";
 		var method = transform.GetMethod("Mosa.Runtime.Math.Multiplication", methodName);
 
 		var operand1 = context.Operand1;
@@ -39,7 +39,7 @@ public sealed class MulCarryOut64 : BaseTransform
 
 		context.SetInstruction(IRInstruction.AddressOf, v2, v1);
 		context.AppendInstruction(IRInstruction.CallStatic, result, symbol, operand1, operand2, v2);
-		context.AppendInstruction(IRInstruction.Load32, result2, v2, transform.Constant32_0);
+		context.AppendInstruction(IRInstruction.LoadZeroExtend8x32, result2, v2, transform.Constant32_0);
 
 		transform.MethodCompiler.MethodScanner.MethodInvoked(method, transform.MethodCompiler.Method);
 	}

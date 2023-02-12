@@ -1,0 +1,67 @@
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.StrengthReduction;
+
+/// <summary>
+/// MulOverflowOut64ByZero
+/// </summary>
+public sealed class MulOverflowOut64ByZero : BaseTransform
+{
+	public MulOverflowOut64ByZero() : base(IRInstruction.MulOverflowOut64, TransformType.Auto | TransformType.Optimization, true)
+	{
+	}
+
+	public override int Priority => 80;
+
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!context.Operand2.IsResolvedConstant)
+			return false;
+
+		if (context.Operand2.ConstantUnsigned64 != 0)
+			return false;
+
+		return true;
+	}
+
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
+
+		var e1 = transform.CreateConstant(To64(0));
+
+		context.SetInstruction(IRInstruction.Move64, result, e1);
+	}
+}
+
+/// <summary>
+/// MulSigned64ByZero_v1
+/// </summary>
+public sealed class MulSigned64ByZero_v1 : BaseTransform
+{
+	public MulSigned64ByZero_v1() : base(IRInstruction.MulSigned64, TransformType.Auto | TransformType.Optimization)
+	{
+	}
+
+	public override int Priority => 80;
+
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (!context.Operand1.IsResolvedConstant)
+			return false;
+
+		if (context.Operand1.ConstantUnsigned64 != 0)
+			return false;
+
+		return true;
+	}
+
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
+
+		var e1 = transform.CreateConstant(To64(0));
+
+		context.SetInstruction(IRInstruction.Move64, result, e1);
+	}
+}

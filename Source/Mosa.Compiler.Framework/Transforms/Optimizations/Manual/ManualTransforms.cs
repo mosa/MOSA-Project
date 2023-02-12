@@ -33,6 +33,20 @@ public static class ManualTransforms
 		new ConstantFolding.Branch64(),
 		new ConstantFolding.Switch(),
 
+		new ConstantFolding.MulCarryOut32(),
+		new ConstantFolding.MulCarryOut64(),
+		new ConstantFolding.MulOverflowOut32(),
+		new ConstantFolding.MulOverflowOut64(),
+
+		new StrengthReduction.MulCarryOut32ByOne(),
+		new StrengthReduction.MulCarryOut32ByZero(),
+		new StrengthReduction.MulCarryOut64ByOne(),
+		new StrengthReduction.MulCarryOut64ByZero(),
+		new StrengthReduction.MulOverflowOut32ByOne(),
+		new StrengthReduction.MulOverflowOut32ByZero(),
+		new StrengthReduction.MulOverflowOut64ByOne(),
+		new StrengthReduction.MulOverflowOut64ByZero(),
+
 		new Special.Deadcode(),
 		new Special.GetLow32From64(),
 
