@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.IR;
 
 public sealed class ThrowOverflow : BaseTransform
 {
-	public ThrowOverflow() : base(IRInstruction.ThrowOverflow, TransformType.Manual | TransformType.Transform, true)
+	public ThrowOverflow() : base(IRInstruction.ThrowOverflow, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

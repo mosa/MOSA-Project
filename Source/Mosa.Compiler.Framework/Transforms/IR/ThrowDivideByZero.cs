@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.IR;
 
 public sealed class ThrowDivideByZero : BaseTransform
 {
-	public ThrowDivideByZero() : base(IRInstruction.ThrowDivideByZero, TransformType.Manual | TransformType.Transform, true)
+	public ThrowDivideByZero() : base(IRInstruction.ThrowDivideByZero, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

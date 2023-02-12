@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.IR;
 
 public sealed class CheckThrowIndexOutOfRange : BaseTransform
 {
-	public CheckThrowIndexOutOfRange() : base(IRInstruction.CheckThrowIndexOutOfRange, TransformType.Manual | TransformType.Transform, true)
+	public CheckThrowIndexOutOfRange() : base(IRInstruction.CheckThrowIndexOutOfRange, TransformType.Manual | TransformType.Transform)
 	{
 	}
 
