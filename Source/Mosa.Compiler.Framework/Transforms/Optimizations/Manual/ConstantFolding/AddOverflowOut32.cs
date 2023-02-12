@@ -35,7 +35,7 @@ public sealed class AddOverflowOut32 : BaseTransform
 		var t2 = context.Operand2.ConstantSigned32;
 
 		var e1 = transform.CreateConstant(t1 + t2);
-		var carry = IntegerTwiddling.IsAddOverflow(t1, t2);
+		var carry = IntegerTwiddling.IsAddSignedOverflow(t1, t2);
 
 		context.SetInstruction(IRInstruction.Move32, result, e1);
 		context.AppendInstruction(IRInstruction.Move32, result2, carry ? transform.Constant32_1 : transform.Constant32_0);

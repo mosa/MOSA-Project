@@ -23,7 +23,7 @@ public sealed class MulOverflowOut64 : BaseTransform
 		if (!IsResolvedConstant(context.Operand2))
 			return false;
 
-		if (IntegerTwiddling.IsMultiplyOverflow(context.Operand1.ConstantSigned64, context.Operand2.ConstantSigned64))
+		if (IntegerTwiddling.IsMultiplySignedOverflow(context.Operand1.ConstantSigned64, context.Operand2.ConstantSigned64))
 			return false;
 
 		return true;

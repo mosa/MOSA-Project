@@ -4,17 +4,17 @@ namespace Mosa.Compiler.Common;
 
 public static class IntegerTwiddling
 {
-	public static bool IsAddOverflow(ulong a, ulong b)
+	public static bool IsAddUnsignedCarry(ulong a, ulong b)
 	{
 		return (b > 0) && (a > (ulong.MaxValue - b));
 	}
 
-	public static bool IsAddOverflow(uint a, uint b)
+	public static bool IsAddUnsignedCarry(uint a, uint b)
 	{
 		return (b > 0) && (a > (uint.MaxValue - b));
 	}
 
-	public static bool IsAddOverflow(int a, int b)
+	public static bool IsAddSignedOverflow(int a, int b)
 	{
 		if (a > 0 && b > 0)
 			if (b > (int.MaxValue - a))
@@ -27,7 +27,7 @@ public static class IntegerTwiddling
 		return false;
 	}
 
-	public static bool IsAddOverflow(long a, long b)
+	public static bool IsAddSignedOverflow(long a, long b)
 	{
 		if (a > 0 && b > 0)
 			if (b > (long.MaxValue - a))
@@ -40,9 +40,31 @@ public static class IntegerTwiddling
 		return false;
 	}
 
-	public static bool IsAddOverflow(uint a, uint b, bool carry)
+	public static bool IsSubSignedOverflow(int a, int b)
 	{
-		if (IsAddOverflow(a, b))
+		if ((b < 0) && (a < int.MinValue - b))
+			return true;
+
+		if ((b > 0) && (a > int.MaxValue - b))
+			return true;
+
+		return false;
+	}
+
+	public static bool IsSubSignedOverflow(long a, long b)
+	{
+		if ((b < 0) && (a < long.MinValue - b))
+			return true;
+
+		if ((b > 0) && (a > long.MaxValue - b))
+			return true;
+
+		return false;
+	}
+
+	public static bool IsAddUnsignedCarry(uint a, uint b, bool carry)
+	{
+		if (IsAddUnsignedCarry(a, b))
 			return true;
 
 		if (carry & (a + b) == uint.MaxValue)
@@ -51,20 +73,20 @@ public static class IntegerTwiddling
 		return false;
 	}
 
-	public static bool IsMultiplyOverflow(uint a, uint b)
+	public static bool IsMultiplyUnsignedCarry(uint a, uint b)
 	{
 		var r = a * (ulong)b;
 
 		return r > uint.MaxValue;
 	}
 
-	public static bool IsMultiplyOverflow(int a, int b)
+	public static bool IsMultiplySignedOverflow(int a, int b)
 	{
 		var z = a * b;
 		return (b < 0 && a == int.MinValue) | (b != 0 && z / b != a);
 	}
 
-	public static bool IsMultiplyOverflow(ulong a, ulong b)
+	public static bool IsMultiplyUnsignedCarry(ulong a, ulong b)
 	{
 		if (a == 0 | b == 0)
 			return false;
@@ -72,7 +94,7 @@ public static class IntegerTwiddling
 		return ulong.MaxValue / a < b;
 	}
 
-	public static bool IsMultiplyOverflow(long a, long b)
+	public static bool IsMultiplySignedOverflow(long a, long b)
 	{
 		var z = a * b;
 		return (b < 0 && a == long.MinValue) | (b != 0 && z / b != a);

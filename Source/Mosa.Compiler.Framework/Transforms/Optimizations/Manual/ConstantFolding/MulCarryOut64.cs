@@ -23,7 +23,7 @@ public sealed class MulCarryOut64 : BaseTransform
 		if (!IsResolvedConstant(context.Operand2))
 			return false;
 
-		if (IntegerTwiddling.IsMultiplyOverflow(context.Operand1.ConstantUnsigned64, context.Operand2.ConstantUnsigned64))
+		if (IntegerTwiddling.IsMultiplyUnsignedCarry(context.Operand1.ConstantUnsigned64, context.Operand2.ConstantUnsigned64))
 			return false;
 
 		return true;

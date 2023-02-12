@@ -787,12 +787,12 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			return value1;
 		}
 
-		if (IntegerTwiddling.IsAddOverflow((uint)value1.MaxValue, (uint)value2.MaxValue) || value1.MaxValue > uint.MaxValue || value2.MaxValue > uint.MaxValue)
+		if (IntegerTwiddling.IsAddUnsignedCarry((uint)value1.MaxValue, (uint)value2.MaxValue) || value1.MaxValue > uint.MaxValue || value2.MaxValue > uint.MaxValue)
 		{
 			return BitValue.Any32;
 		}
 
-		if (IntegerTwiddling.IsAddOverflow((uint)value1.MinValue, (uint)value2.MinValue) || value1.MaxValue > uint.MaxValue || value2.MaxValue > uint.MaxValue)
+		if (IntegerTwiddling.IsAddUnsignedCarry((uint)value1.MinValue, (uint)value2.MinValue) || value1.MaxValue > uint.MaxValue || value2.MaxValue > uint.MaxValue)
 		{
 			return BitValue.Any32;
 		}
@@ -830,12 +830,12 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			return value1;
 		}
 
-		if (IntegerTwiddling.IsAddOverflow(value1.MaxValue, value2.MaxValue))
+		if (IntegerTwiddling.IsAddUnsignedCarry(value1.MaxValue, value2.MaxValue))
 		{
 			return BitValue.Any64;
 		}
 
-		if (IntegerTwiddling.IsAddOverflow(value1.MinValue, value2.MinValue))
+		if (IntegerTwiddling.IsAddUnsignedCarry(value1.MinValue, value2.MinValue))
 		{
 			return BitValue.Any64;
 		}
@@ -1489,7 +1489,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			&& !IntegerTwiddling.HasSignBitSet((int)value2.MaxValue)
 			&& !IntegerTwiddling.HasSignBitSet((int)value1.MinValue)
 			&& !IntegerTwiddling.HasSignBitSet((int)value2.MinValue)
-			&& !IntegerTwiddling.IsMultiplyOverflow((int)value1.MaxValue, (int)value2.MaxValue))
+			&& !IntegerTwiddling.IsMultiplySignedOverflow((int)value1.MaxValue, (int)value2.MaxValue))
 		{
 			var max = Math.Max(value1.MaxValue, value2.MaxValue);
 			var min = Math.Min(value1.MinValue, value2.MinValue);
@@ -1557,7 +1557,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			&& !IntegerTwiddling.HasSignBitSet((long)value2.MaxValue)
 			&& !IntegerTwiddling.HasSignBitSet((long)value1.MinValue)
 			&& !IntegerTwiddling.HasSignBitSet((long)value2.MinValue)
-			&& !IntegerTwiddling.IsMultiplyOverflow((long)value1.MaxValue, (long)value2.MaxValue))
+			&& !IntegerTwiddling.IsMultiplySignedOverflow((long)value1.MaxValue, (long)value2.MaxValue))
 		{
 			var max = Math.Max(value1.MaxValue, value2.MaxValue);
 			var min = Math.Min(value1.MinValue, value2.MinValue);
@@ -1626,7 +1626,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			bitsClear: Upper32BitsSet | BitTwiddling.GetBitsOver(value1.MaxValue * value2.MaxValue),
 			maxValue: (uint)(value1.MaxValue * value2.MaxValue),
 			minValue: (uint)(value1.MinValue * value2.MinValue),
-			rangeDeterminate: !IntegerTwiddling.IsMultiplyOverflow((uint)value1.MaxValue, (uint)value2.MaxValue),
+			rangeDeterminate: !IntegerTwiddling.IsMultiplyUnsignedCarry((uint)value1.MaxValue, (uint)value2.MaxValue),
 			is32Bit: true
 		);
 	}
@@ -1681,7 +1681,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			bitsClear: BitTwiddling.GetBitsOver(value1.MaxValue * value2.MaxValue),
 			maxValue: value1.MaxValue * value2.MaxValue,
 			minValue: value1.MinValue * value2.MinValue,
-			rangeDeterminate: !IntegerTwiddling.IsMultiplyOverflow(value1.MaxValue, value2.MaxValue),
+			rangeDeterminate: !IntegerTwiddling.IsMultiplyUnsignedCarry(value1.MaxValue, value2.MaxValue),
 			is32Bit: false
 		);
 	}
