@@ -1,8 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common;
-
-namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.ConstantFolding;
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.ConstantMove;
 
 /// <summary>
 /// AddOverflowOut64
@@ -28,16 +26,6 @@ public sealed class AddOverflowOut64 : BaseTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		var result = context.Result;
-		var result2 = context.Result2;
-
-		var t1 = context.Operand1.ConstantSigned64;
-		var t2 = context.Operand2.ConstantSigned64;
-
-		var e1 = transform.CreateConstant(t1 + t2);
-		var carry = IntegerTwiddling.IsAddOverflow(t1, t2);
-
-		context.SetInstruction(IRInstruction.Move64, result, e1);
-		context.AppendInstruction(IRInstruction.Move64, result2, carry ? transform.Constant64_1 : transform.Constant64_0);
+		SwapOperands1And2(context);
 	}
 }
