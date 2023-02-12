@@ -17,22 +17,22 @@ public static class ManualTransforms
 		new ConstantMove.Compare32x64(),
 		new ConstantMove.Compare64x32(),
 		new ConstantMove.Compare64x64(),
+		new ConstantMove.Branch32(),
+		new ConstantMove.Branch64(),
+		new ConstantMove.MulCarryOut32(),
+		new ConstantMove.MulCarryOut64(),
+		new ConstantMove.MulOverflowOut32(),
+		new ConstantMove.MulOverflowOut64(),
 
 		new ConstantFolding.AddCarryOut32(),
 		new ConstantFolding.AddCarryOut64(),
-
-		new ConstantMove.Branch32(),
-		new ConstantMove.Branch64(),
-
 		new ConstantFolding.Compare32x32(),
 		new ConstantFolding.Compare32x64(),
 		new ConstantFolding.Compare64x32(),
 		new ConstantFolding.Compare64x64(),
-
 		new ConstantFolding.Branch32(),
 		new ConstantFolding.Branch64(),
 		new ConstantFolding.Switch(),
-
 		new ConstantFolding.MulCarryOut32(),
 		new ConstantFolding.MulCarryOut64(),
 		new ConstantFolding.MulOverflowOut32(),

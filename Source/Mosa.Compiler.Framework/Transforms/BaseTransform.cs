@@ -994,10 +994,10 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 			ConditionCode.Less => context.Operand1.ConstantSigned64 < context.Operand2.ConstantSigned64,
 			ConditionCode.UnsignedGreater => context.Operand1.ConstantUnsigned64 > context.Operand2.ConstantUnsigned64,
 			ConditionCode.UnsignedGreaterOrEqual => context.Operand1.ConstantUnsigned64 >=
-			                                        context.Operand2.ConstantUnsigned64,
+													context.Operand2.ConstantUnsigned64,
 			ConditionCode.UnsignedLess => context.Operand1.ConstantUnsigned64 < context.Operand2.ConstantUnsigned64,
 			ConditionCode.UnsignedLessOrEqual => context.Operand1.ConstantUnsigned64 <=
-			                                     context.Operand2.ConstantUnsigned64,
+												 context.Operand2.ConstantUnsigned64,
 			_ => throw new InvalidOperationException()
 		};
 	}
@@ -1014,10 +1014,10 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 			ConditionCode.Less => context.Operand1.ConstantSigned32 < context.Operand2.ConstantSigned32,
 			ConditionCode.UnsignedGreater => context.Operand1.ConstantUnsigned32 > context.Operand2.ConstantUnsigned32,
 			ConditionCode.UnsignedGreaterOrEqual => context.Operand1.ConstantUnsigned32 >=
-			                                        context.Operand2.ConstantUnsigned32,
+													context.Operand2.ConstantUnsigned32,
 			ConditionCode.UnsignedLess => context.Operand1.ConstantUnsigned32 < context.Operand2.ConstantUnsigned32,
 			ConditionCode.UnsignedLessOrEqual => context.Operand1.ConstantUnsigned32 <=
-			                                     context.Operand2.ConstantUnsigned32,
+												 context.Operand2.ConstantUnsigned32,
 			_ => throw new InvalidOperationException()
 		};
 	}
@@ -1048,5 +1048,14 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 	public static bool IsPhiInstruction(BaseInstruction instruction)
 	{
 		return BaseCodeTransformationStage.IsPhiInstruction(instruction);
+	}
+
+	public static void SwapOperands1And2(Context context)
+	{
+		var operand1 = context.Operand1;
+		var operand2 = context.Operand2;
+
+		context.Operand1 = operand2;
+		context.Operand2 = operand1;
 	}
 }

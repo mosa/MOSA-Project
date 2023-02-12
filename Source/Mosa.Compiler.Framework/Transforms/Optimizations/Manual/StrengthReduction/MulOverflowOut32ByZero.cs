@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.StrengthReduct
 /// </summary>
 public sealed class MulOverflowOut32ByZero : BaseTransform
 {
-	public MulOverflowOut32ByZero() : base(IRInstruction.MulOverflowOut32, TransformType.Auto | TransformType.Optimization, true)
+	public MulOverflowOut32ByZero() : base(IRInstruction.MulOverflowOut32, TransformType.Manual | TransformType.Optimization, true)
 	{
 	}
 
@@ -30,40 +30,6 @@ public sealed class MulOverflowOut32ByZero : BaseTransform
 		var result2 = context.Result2;
 
 		context.SetInstruction(IRInstruction.Move32, result, transform.Constant32_0);
-		context.AppendInstruction(IRInstruction.Move32, result2, transform.Constant32_1);
-	}
-}
-
-/// <summary>
-/// MulOverflowOut32ByZero_v1
-/// </summary>
-public sealed class MulOverflowOut32ByZero_v1 : BaseTransform
-{
-	public MulOverflowOut32ByZero_v1() : base(IRInstruction.MulOverflowOut32, TransformType.Auto | TransformType.Optimization)
-	{
-	}
-
-	public override int Priority => 80;
-
-	public override bool Match(Context context, TransformContext transform)
-	{
-		if (!context.Operand1.IsResolvedConstant)
-			return false;
-
-		if (context.Operand1.ConstantUnsigned64 != 0)
-			return false;
-
-		return true;
-	}
-
-	public override void Transform(Context context, TransformContext transform)
-	{
-		var result = context.Result;
-		var result2 = context.Result2;
-
-		var e1 = transform.CreateConstant(To32(0));
-
-		context.SetInstruction(IRInstruction.Move32, result, e1);
 		context.AppendInstruction(IRInstruction.Move32, result2, transform.Constant32_1);
 	}
 }
