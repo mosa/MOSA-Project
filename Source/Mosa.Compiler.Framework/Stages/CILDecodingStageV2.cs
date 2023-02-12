@@ -25,10 +25,10 @@ namespace Mosa.Compiler.Framework.Stages;
 public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 {
 	private enum StackType
-	{ Int32, Int64, R4, R8, ManagedPointer, Object, ValueType };
+	{ Int32, Int64, R4, R8, Object, ManagedPointer, ValueType };
 
 	private enum ElementType
-	{ I1, I2, I4, I8, U1, U2, U4, U8, R4, R8, I, Ref /* Object */, ManagedPointer };
+	{ I1, I2, I4, I8, U1, U2, U4, U8, R4, R8, I, Object, ManagedPointer };
 
 	#region StackEntry Class
 
@@ -739,7 +739,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 			case OpCode.Ldelem_i8: return Ldelem(context, stack, ElementType.I8);
 			case OpCode.Ldelem_r4: return Ldelem(context, stack, ElementType.R4);
 			case OpCode.Ldelem_r8: return Ldelem(context, stack, ElementType.R8);
-			case OpCode.Ldelem_ref: return Ldelem(context, stack, ElementType.Ref);
+			case OpCode.Ldelem_ref: return Ldelem(context, stack, ElementType.Object);
 			case OpCode.Ldelem_u1: return Ldelem(context, stack, ElementType.U1);
 			case OpCode.Ldelem_u2: return Ldelem(context, stack, ElementType.U2);
 			case OpCode.Ldelem_u4: return Ldelem(context, stack, ElementType.U4);
@@ -754,7 +754,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 			case OpCode.Ldind_i8: return Ldind(context, stack, ElementType.I8);
 			case OpCode.Ldind_r4: return Ldind(context, stack, ElementType.R4);
 			case OpCode.Ldind_r8: return Ldind(context, stack, ElementType.R8);
-			case OpCode.Ldind_ref: return Ldind(context, stack, ElementType.Ref);
+			case OpCode.Ldind_ref: return Ldind(context, stack, ElementType.Object);
 			case OpCode.Ldind_u1: return Ldind(context, stack, ElementType.U1);
 			case OpCode.Ldind_u2: return Ldind(context, stack, ElementType.U2);
 			case OpCode.Ldind_u4: return Ldind(context, stack, ElementType.U4);
@@ -779,8 +779,8 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 			case OpCode.Localalloc: return false;                               // TODO: Not implemented in v1 either
 			case OpCode.Mkrefany: return false;                                 // TODO: Not implemented in v1 either
 			case OpCode.Mul: return Mul(context, stack);
-			case OpCode.Mul_ovf: return Mul(context, stack);                    // TODO: implement overflow check
-			case OpCode.Mul_ovf_un: return Mul(context, stack);                 // TODO: implement overflow check
+			case OpCode.Mul_ovf: return MulSigned(context, stack);
+			case OpCode.Mul_ovf_un: return MulUnsigned(context, stack);
 			case OpCode.Neg: return Neg(context, stack);
 			case OpCode.Newarr: return Newarr(context, stack, instruction);
 			case OpCode.Newobj: return Newobj(context, stack, instruction);
@@ -814,7 +814,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 			case OpCode.Stelem_i8: return Stelem(context, stack, ElementType.I8);
 			case OpCode.Stelem_r4: return Stelem(context, stack, ElementType.R4);
 			case OpCode.Stelem_r8: return Stelem(context, stack, ElementType.R8);
-			case OpCode.Stelem_ref: return Stelem(context, stack, ElementType.Ref);
+			case OpCode.Stelem_ref: return Stelem(context, stack, ElementType.Object);
 			case OpCode.Stfld: return Stfld(context, stack, instruction);
 			case OpCode.Stind_i: return Stind(context, stack, ElementType.I);
 			case OpCode.Stind_i1: return Stind(context, stack, ElementType.I1);
@@ -823,7 +823,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 			case OpCode.Stind_i8: return Stind(context, stack, ElementType.I8);
 			case OpCode.Stind_r4: return Stind(context, stack, ElementType.R4);
 			case OpCode.Stind_r8: return Stind(context, stack, ElementType.R8);
-			case OpCode.Stind_ref: return Stind(context, stack, ElementType.Ref);
+			case OpCode.Stind_ref: return Stind(context, stack, ElementType.Object);
 			case OpCode.Stloc: return Stloc(context, stack, (int)instruction.Operand);
 			case OpCode.Stloc_0: return Stloc(context, stack, 0);
 			case OpCode.Stloc_1: return Stloc(context, stack, 1);
@@ -984,7 +984,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		{
 			case StackType.Int32: return ElementType.I4;
 			case StackType.Int64: return ElementType.I8;
-			case StackType.Object: return ElementType.Ref;
+			case StackType.Object: return ElementType.Object;
 			case StackType.R4: return ElementType.R4;
 			case StackType.R8: return ElementType.R8;
 			case StackType.ManagedPointer: return ElementType.ManagedPointer;
@@ -998,7 +998,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 	private ElementType GetElementType(MosaType type)
 	{
 		if (type.IsReferenceType)
-			return ElementType.Ref;
+			return ElementType.Object;
 		else if (type.IsI1)
 			return ElementType.I1;
 		else if (type.IsI2)
@@ -1068,7 +1068,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 			case ElementType.U8: return 8;
 			case ElementType.R4: return 4;
 			case ElementType.R8: return 8;
-			case ElementType.Ref: return Is32BitPlatform ? 4 : 8u;
+			case ElementType.Object: return Is32BitPlatform ? 4 : 8u;
 			case ElementType.ManagedPointer: return Is32BitPlatform ? 4 : 8u;
 			default: throw new CompilerException($"Cannot get size of {elementType}");
 		}
@@ -1114,7 +1114,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 			case ElementType.U8: return StackType.Int64;
 			case ElementType.R4: return StackType.R4;
 			case ElementType.R8: return StackType.R8;
-			case ElementType.Ref: return StackType.Object;
+			case ElementType.Object: return StackType.Object;
 			case ElementType.ManagedPointer: return StackType.ManagedPointer;
 		}
 
@@ -1184,7 +1184,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 			case ElementType.U8: return IRInstruction.Load64;
 			case ElementType.R4: return IRInstruction.LoadR4;
 			case ElementType.R8: return IRInstruction.LoadR8;
-			case ElementType.Ref: return IRInstruction.LoadObject;
+			case ElementType.Object: return IRInstruction.LoadObject;
 			case ElementType.I when Is32BitPlatform: return IRInstruction.Load32;
 			case ElementType.I when Is64BitPlatform: return IRInstruction.Load64;
 			case ElementType.ManagedPointer when Is32BitPlatform: return IRInstruction.Load32;
@@ -1207,7 +1207,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 			case ElementType.U8: return IRInstruction.LoadParam64;
 			case ElementType.R4: return IRInstruction.LoadParamR4;
 			case ElementType.R8: return IRInstruction.LoadParamR8;
-			case ElementType.Ref: return IRInstruction.LoadParamObject;
+			case ElementType.Object: return IRInstruction.LoadParamObject;
 			case ElementType.I when Is32BitPlatform: return IRInstruction.LoadParam32;
 			case ElementType.I when Is64BitPlatform: return IRInstruction.LoadParam64;
 			case ElementType.ManagedPointer when Is32BitPlatform: return IRInstruction.LoadParam32;
@@ -1230,7 +1230,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 			case ElementType.U8: return IRInstruction.Move64;
 			case ElementType.R4: return IRInstruction.MoveR4;
 			case ElementType.R8: return IRInstruction.MoveR8;
-			case ElementType.Ref: return IRInstruction.MoveObject;
+			case ElementType.Object: return IRInstruction.MoveObject;
 			case ElementType.I when Is32BitPlatform: return IRInstruction.Move32;
 			case ElementType.I when Is64BitPlatform: return IRInstruction.Move64;
 			case ElementType.ManagedPointer when Is32BitPlatform: return IRInstruction.Move32;
@@ -1253,7 +1253,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 			case ElementType.U8: return IRInstruction.Store64;
 			case ElementType.R4: return IRInstruction.StoreR4;
 			case ElementType.R8: return IRInstruction.StoreR8;
-			case ElementType.Ref: return IRInstruction.StoreObject;
+			case ElementType.Object: return IRInstruction.StoreObject;
 			case ElementType.I when Is32BitPlatform: return IRInstruction.Store32;
 			case ElementType.I when Is64BitPlatform: return IRInstruction.Store64;
 			case ElementType.ManagedPointer when Is32BitPlatform: return IRInstruction.Store32;
@@ -1276,7 +1276,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 			case ElementType.U8: return IRInstruction.StoreParam64;
 			case ElementType.R4: return IRInstruction.StoreParamR4;
 			case ElementType.R8: return IRInstruction.StoreParamR8;
-			case ElementType.Ref: return IRInstruction.StoreParamObject;
+			case ElementType.Object: return IRInstruction.StoreParamObject;
 			case ElementType.I when Is32BitPlatform: return IRInstruction.StoreParam32;
 			case ElementType.I when Is64BitPlatform: return IRInstruction.StoreParam64;
 			case ElementType.ManagedPointer when Is32BitPlatform: return IRInstruction.StoreParam32;
@@ -3533,8 +3533,117 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 					return true;
 				}
 
-			default:
-				return false;
+			default: return false;
+		}
+	}
+
+	private bool MulSigned(Context context, Stack<StackEntry> stack)
+	{
+		var entry1 = PopStack(stack);
+		var entry2 = PopStack(stack);
+
+		switch (entry1.StackType)
+		{
+			case StackType.Int32 when entry2.StackType == StackType.Int32:
+				{
+					var result = AllocateVirtualRegister32();
+					var result2 = AllocateVirtualRegister32();
+					context.AppendInstruction2(IRInstruction.MulOverflowOut32, result, result2, entry2.Operand, entry1.Operand);
+					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
+					PushStack(stack, new StackEntry(StackType.Int32, result));
+					return true;
+				}
+
+			case StackType.Int64 when entry2.StackType == StackType.Int64:
+				{
+					var result = AllocateVirtualRegister64();
+					var result2 = AllocateVirtualRegister64();
+					context.AppendInstruction2(IRInstruction.MulOverflowOut64, result, result2, entry2.Operand, entry1.Operand);
+					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
+					PushStack(stack, new StackEntry(StackType.Int64, result));
+					return true;
+				}
+
+			case StackType.Int32 when entry2.StackType == StackType.Int64:
+				{
+					var v1 = AllocateVirtualRegister64();
+					var result = AllocateVirtualRegister64();
+					var result2 = AllocateVirtualRegister64();
+					context.AppendInstruction(IRInstruction.SignExtend32x64, v1, entry1.Operand);
+					context.AppendInstruction2(IRInstruction.MulOverflowOut64, result, result2, entry2.Operand, v1);
+					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
+					PushStack(stack, new StackEntry(StackType.Int64, result));
+					return true;
+				}
+
+			case StackType.Int64 when entry2.StackType == StackType.Int32:
+				{
+					var v1 = AllocateVirtualRegister64();
+					var result = AllocateVirtualRegister64();
+					var result2 = AllocateVirtualRegister64();
+					context.AppendInstruction(IRInstruction.SignExtend32x64, v1, entry2.Operand);
+					context.AppendInstruction2(IRInstruction.MulOverflowOut64, result, result2, entry1.Operand, v1);
+					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
+					PushStack(stack, new StackEntry(StackType.Int64, result));
+					return true;
+				}
+
+			default: return false;
+		}
+	}
+
+	private bool MulUnsigned(Context context, Stack<StackEntry> stack)
+	{
+		var entry1 = PopStack(stack);
+		var entry2 = PopStack(stack);
+
+		switch (entry1.StackType)
+		{
+			case StackType.Int32 when entry2.StackType == StackType.Int32:
+				{
+					var result = AllocateVirtualRegister32();
+					var result2 = AllocateVirtualRegister32();
+					context.AppendInstruction2(IRInstruction.MulCarryOut32, result, result2, entry2.Operand, entry1.Operand);
+					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
+					PushStack(stack, new StackEntry(StackType.Int32, result));
+					return true;
+				}
+
+			case StackType.Int64 when entry2.StackType == StackType.Int64:
+				{
+					var result = AllocateVirtualRegister64();
+					var result2 = AllocateVirtualRegister64();
+					context.AppendInstruction2(IRInstruction.MulCarryOut64, result, result2, entry2.Operand, entry1.Operand);
+					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
+					PushStack(stack, new StackEntry(StackType.Int64, result));
+					return true;
+				}
+
+			case StackType.Int32 when entry2.StackType == StackType.Int64:
+				{
+					var v1 = AllocateVirtualRegister64();
+					var result = AllocateVirtualRegister64();
+					var result2 = AllocateVirtualRegister64();
+					context.AppendInstruction(IRInstruction.ZeroExtend32x64, v1, entry1.Operand);
+					context.AppendInstruction2(IRInstruction.MulCarryOut64, result, result2, entry2.Operand, v1);
+					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
+					PushStack(stack, new StackEntry(StackType.Int64, result));
+					return true;
+				}
+
+			case StackType.Int64 when entry2.StackType == StackType.Int32:
+				{
+					var v1 = AllocateVirtualRegister64();
+					var result = AllocateVirtualRegister64();
+					var result2 = AllocateVirtualRegister64();
+					context.AppendInstruction(IRInstruction.ZeroExtend32x64, v1, entry2.Operand);
+					context.AppendInstruction2(IRInstruction.MulCarryOut64, result, result2, entry1.Operand, v1);
+					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
+					PushStack(stack, new StackEntry(StackType.Int64, result));
+					return true;
+				}
+
+			default: return false;
 		}
 	}
 

@@ -7,7 +7,7 @@ using Mosa.Compiler.Common;
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.ConstantFolding;
 
 /// <summary>
-/// Add32
+/// AddCarryOut32
 /// </summary>
 public sealed class AddCarryOut32 : BaseTransform
 {

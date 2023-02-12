@@ -7,11 +7,11 @@ using Mosa.Compiler.Common;
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.ConstantFolding;
 
 /// <summary>
-/// AddCarryOut64
+/// AddOverflowOut32
 /// </summary>
-public sealed class AddCarryOut64 : BaseTransform
+public sealed class AddOverflowOut32 : BaseTransform
 {
-	public AddCarryOut64() : base(IRInstruction.AddCarryOut64, TransformType.Manual | TransformType.Optimization)
+	public AddOverflowOut32() : base(IRInstruction.AddOverflowOut32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -33,13 +33,13 @@ public sealed class AddCarryOut64 : BaseTransform
 		var result = context.Result;
 		var result2 = context.Result2;
 
-		var t1 = context.Operand1.ConstantUnsigned64;
-		var t2 = context.Operand2.ConstantUnsigned64;
+		var t1 = context.Operand1.ConstantSigned32;
+		var t2 = context.Operand2.ConstantSigned32;
 
 		var e1 = transform.CreateConstant(t1 + t2);
 		var carry = IntegerTwiddling.IsAddOverflow(t1, t2);
 
-		context.SetInstruction(IRInstruction.Move64, result, e1);
-		context.AppendInstruction(IRInstruction.Move64, result2, carry ? transform.Constant64_1 : transform.Constant64_0);
+		context.SetInstruction(IRInstruction.Move32, result, e1);
+		context.AppendInstruction(IRInstruction.Move32, result2, carry ? transform.Constant32_1 : transform.Constant32_0);
 	}
 }

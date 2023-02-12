@@ -6,6 +6,9 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Transforms\Optimizations\Manual\ConstantFolding\SubCarryOut32.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="OptimizedPriorityQueue" Version="5.1.0" />
     <PackageReference Include="System.Threading.Channels" Version="7.0.0" />
   </ItemGroup>

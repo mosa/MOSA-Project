@@ -26,6 +26,8 @@ public static class ManualTransforms
 
 		new ConstantFolding.AddCarryOut32(),
 		new ConstantFolding.AddCarryOut64(),
+		new ConstantFolding.AddOverflowOut32(),
+		new ConstantFolding.AddOverflowOut64(),
 		new ConstantFolding.Compare32x32(),
 		new ConstantFolding.Compare32x64(),
 		new ConstantFolding.Compare64x32(),
