@@ -22,28 +22,28 @@ public sealed class LiveInterval
 	public readonly SlotIndex Start;
 	public readonly SlotIndex End;
 
-	public int Length { get { return End - Start; } }
+	public int Length => End - Start;
 
 	public readonly LiveRange LiveRange;
 
-	public int StartValue { get { return LiveRange.Start.Value; } }
-	public int EndValue { get { return LiveRange.End.Value; } }
+	public int StartValue => LiveRange.Start.Value;
+	public int EndValue => LiveRange.End.Value;
 
 	public int SpillValue;
 
-	public int SpillCost { get { return NeverSpill || TooSmallToSplit ? int.MaxValue : (SpillValue / (Length + 1)); } }
+	public int SpillCost => NeverSpill || TooSmallToSplit ? int.MaxValue : (SpillValue / (Length + 1));
 
 	public LiveIntervalTrack LiveIntervalTrack;
 
 	public AllocationStage Stage;
 
-	public bool IsPhysicalRegister { get { return VirtualRegister.IsPhysicalRegister; } }
+	public bool IsPhysicalRegister => VirtualRegister.IsPhysicalRegister;
 
-	public PhysicalRegister AssignedPhysicalRegister { get { return LiveIntervalTrack?.Register; } }
+	public PhysicalRegister AssignedPhysicalRegister => LiveIntervalTrack?.Register;
 
 	public Operand AssignedPhysicalOperand;
 
-	public Operand AssignedOperand { get { return (AssignedPhysicalRegister != null) ? AssignedPhysicalOperand : VirtualRegister.SpillSlotOperand; } }
+	public Operand AssignedOperand => (AssignedPhysicalRegister != null) ? AssignedPhysicalOperand : VirtualRegister.SpillSlotOperand;
 
 	public bool ForceSpilled;
 
@@ -53,15 +53,15 @@ public sealed class LiveInterval
 
 	#region Short Cuts
 
-	public IEnumerable<SlotIndex> UsePositions { get { return LiveRange.UsePositions; } }
+	public IEnumerable<SlotIndex> UsePositions => LiveRange.UsePositions;
 
-	public IEnumerable<SlotIndex> DefPositions { get { return LiveRange.DefPositions; } }
+	public IEnumerable<SlotIndex> DefPositions => LiveRange.DefPositions;
 
-	public bool IsEmpty { get { return LiveRange.IsEmpty; } }
+	public bool IsEmpty => LiveRange.IsEmpty;
 
-	public SlotIndex First { get { return LiveRange.First; } }
+	public SlotIndex First => LiveRange.First;
 
-	public SlotIndex Last { get { return LiveRange.Last; } }
+	public SlotIndex Last => LiveRange.Last;
 
 	public bool IsAdjacent(SlotIndex start, SlotIndex end)
 	{

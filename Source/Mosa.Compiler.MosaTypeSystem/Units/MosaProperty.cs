@@ -62,11 +62,11 @@ public class MosaProperty : MosaUnit, IEquatable<MosaProperty>
 			this.property = property;
 		}
 
-		public MosaPropertyAttributes PropertyAttributes { set { property.PropertyAttributes = value; } }
+		public MosaPropertyAttributes PropertyAttributes { set => property.PropertyAttributes = value; }
 
-		public MosaType? DeclaringType { set { property.DeclaringType = value; } }
+		public MosaType? DeclaringType { set => property.DeclaringType = value; }
 
-		public MosaType? PropertyType { set { property.PropertyType = value; } }
+		public MosaType? PropertyType { set => property.PropertyType = value; }
 
 		private string GetCleanMethodName(string fullName)
 		{

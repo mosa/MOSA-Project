@@ -63,7 +63,7 @@ public static class SmbiosManager
 	/// <value>
 	///   <c>true</c> if this instance is available; otherwise, <c>false</c>.
 	/// </value>
-	public static bool IsAvailable { get { return EntryPoint != new Pointer(0x100000); } }
+	public static bool IsAvailable => EntryPoint != new Pointer(0x100000);
 
 	/// <summary>
 	/// Setups this instance.

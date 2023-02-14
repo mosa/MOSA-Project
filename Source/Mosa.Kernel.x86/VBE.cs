@@ -84,67 +84,67 @@ public static class VBE
 		return VBEModeInfo.LoadPointer(offset);
 	}
 
-	public static ushort Attributes { get { return GetValue16(VBEModeInfoOffset.Attributes); } }
+	public static ushort Attributes => GetValue16(VBEModeInfoOffset.Attributes);
 
-	public static byte WindowA { get { return GetValue8(VBEModeInfoOffset.WindowA); } }
+	public static byte WindowA => GetValue8(VBEModeInfoOffset.WindowA);
 
-	public static byte WindowB { get { return GetValue8(VBEModeInfoOffset.WindowB); } }
+	public static byte WindowB => GetValue8(VBEModeInfoOffset.WindowB);
 
-	public static ushort Granularity { get { return GetValue16(VBEModeInfoOffset.Granularity); } }
+	public static ushort Granularity => GetValue16(VBEModeInfoOffset.Granularity);
 
-	public static ushort WindowSize { get { return GetValue16(VBEModeInfoOffset.WindowSize); } }
+	public static ushort WindowSize => GetValue16(VBEModeInfoOffset.WindowSize);
 
-	public static ushort SegmentA { get { return GetValue16(VBEModeInfoOffset.SegmentA); } }
+	public static ushort SegmentA => GetValue16(VBEModeInfoOffset.SegmentA);
 
-	public static ushort SegmentB { get { return GetValue16(VBEModeInfoOffset.SegmentB); } }
+	public static ushort SegmentB => GetValue16(VBEModeInfoOffset.SegmentB);
 
-	public static uint WinFuncPtr { get { return GetValue32(VBEModeInfoOffset.WinFuncPtr); } }
+	public static uint WinFuncPtr => GetValue32(VBEModeInfoOffset.WinFuncPtr);
 
-	public static ushort Pitch { get { return GetValue16(VBEModeInfoOffset.Pitch); } }
+	public static ushort Pitch => GetValue16(VBEModeInfoOffset.Pitch);
 
-	public static ushort ScreenWidth { get { return GetValue16(VBEModeInfoOffset.ScreenWidth); } }
+	public static ushort ScreenWidth => GetValue16(VBEModeInfoOffset.ScreenWidth);
 
-	public static ushort ScreenHeight { get { return GetValue16(VBEModeInfoOffset.ScreenHeight); } }
+	public static ushort ScreenHeight => GetValue16(VBEModeInfoOffset.ScreenHeight);
 
-	public static byte WChar { get { return GetValue8(VBEModeInfoOffset.WChar); } }
+	public static byte WChar => GetValue8(VBEModeInfoOffset.WChar);
 
-	public static byte YChar { get { return GetValue8(VBEModeInfoOffset.YChar); } }
+	public static byte YChar => GetValue8(VBEModeInfoOffset.YChar);
 
-	public static byte Planes { get { return GetValue8(VBEModeInfoOffset.Planes); } }
+	public static byte Planes => GetValue8(VBEModeInfoOffset.Planes);
 
-	public static byte BitsPerPixel { get { return GetValue8(VBEModeInfoOffset.BitsPerPixel); } }
+	public static byte BitsPerPixel => GetValue8(VBEModeInfoOffset.BitsPerPixel);
 
-	public static byte Banks { get { return GetValue8(VBEModeInfoOffset.Banks); } }
+	public static byte Banks => GetValue8(VBEModeInfoOffset.Banks);
 
-	public static byte MemoryModel { get { return GetValue8(VBEModeInfoOffset.MemoryModel); } }
+	public static byte MemoryModel => GetValue8(VBEModeInfoOffset.MemoryModel);
 
-	public static byte BankSize { get { return GetValue8(VBEModeInfoOffset.BankSize); } }
+	public static byte BankSize => GetValue8(VBEModeInfoOffset.BankSize);
 
-	public static byte ImagePages { get { return GetValue8(VBEModeInfoOffset.ImagePages); } }
+	public static byte ImagePages => GetValue8(VBEModeInfoOffset.ImagePages);
 
-	public static byte Reserved0 { get { return GetValue8(VBEModeInfoOffset.Reserved0); } }
+	public static byte Reserved0 => GetValue8(VBEModeInfoOffset.Reserved0);
 
-	public static byte RedMask { get { return GetValue8(VBEModeInfoOffset.RedMask); } }
+	public static byte RedMask => GetValue8(VBEModeInfoOffset.RedMask);
 
-	public static byte RedPosition { get { return GetValue8(VBEModeInfoOffset.RedPosition); } }
+	public static byte RedPosition => GetValue8(VBEModeInfoOffset.RedPosition);
 
-	public static byte GreenMask { get { return GetValue8(VBEModeInfoOffset.GreenMask); } }
+	public static byte GreenMask => GetValue8(VBEModeInfoOffset.GreenMask);
 
-	public static byte GreenPosition { get { return GetValue8(VBEModeInfoOffset.GreenPosition); } }
+	public static byte GreenPosition => GetValue8(VBEModeInfoOffset.GreenPosition);
 
-	public static byte BlueMask { get { return GetValue8(VBEModeInfoOffset.BlueMask); } }
+	public static byte BlueMask => GetValue8(VBEModeInfoOffset.BlueMask);
 
-	public static byte BluePosition { get { return GetValue8(VBEModeInfoOffset.BluePosition); } }
+	public static byte BluePosition => GetValue8(VBEModeInfoOffset.BluePosition);
 
-	public static byte ReservedMask { get { return GetValue8(VBEModeInfoOffset.ReservedMask); } }
+	public static byte ReservedMask => GetValue8(VBEModeInfoOffset.ReservedMask);
 
-	public static byte ReservedPosition { get { return GetValue8(VBEModeInfoOffset.ReservedPosition); } }
+	public static byte ReservedPosition => GetValue8(VBEModeInfoOffset.ReservedPosition);
 
-	public static byte DirectColorAttributes { get { return GetValue8(VBEModeInfoOffset.DirectColorAttributes); } }
+	public static byte DirectColorAttributes => GetValue8(VBEModeInfoOffset.DirectColorAttributes);
 
-	public static Pointer MemoryPhysicalLocation { get { return GetPointer(VBEModeInfoOffset.PhysBase); } }
+	public static Pointer MemoryPhysicalLocation => GetPointer(VBEModeInfoOffset.PhysBase);
 
-	public static uint OffScreenMemoryOff { get { return GetValue32(VBEModeInfoOffset.OffScreenMemoryOff); } }
+	public static uint OffScreenMemoryOff => GetValue32(VBEModeInfoOffset.OffScreenMemoryOff);
 
-	public static ushort OffScreenMemorySize { get { return GetValue16(VBEModeInfoOffset.OffScreenMemorySize); } }
+	public static ushort OffScreenMemorySize => GetValue16(VBEModeInfoOffset.OffScreenMemorySize);
 }

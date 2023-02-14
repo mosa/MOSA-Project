@@ -162,7 +162,7 @@ public class HU : IScanCodeMap
 				return new KeyEvent();
 		}
 
-		if ((key.KeyType == KeyType.LeftShift || key.KeyType == KeyType.RightShift))
+		if (key.KeyType is KeyType.LeftShift or KeyType.RightShift)
 			_shifted = (key.KeyPress == KeyEvent.KeyPressType.Make);
 		if (key.KeyType == KeyType.CapsLock)
 			_shifted = !_shifted;

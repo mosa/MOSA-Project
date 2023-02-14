@@ -14,8 +14,7 @@ public class BaseLauncher
 
 	public LauncherSettings LauncherSettings { get; }
 
-	public Settings Settings
-	{ get { return LauncherSettings.Settings; } }
+	public Settings Settings => LauncherSettings.Settings;
 
 	public BaseLauncher(Settings settings, CompilerHooks compilerHook)
 	{
@@ -103,7 +102,7 @@ public class BaseLauncher
 
 		var defaultFolder = LauncherSettings.DefaultFolder;
 
-		if (LauncherSettings.OutputFile == null || LauncherSettings.OutputFile == "%DEFAULT%")
+		if (LauncherSettings.OutputFile is null or "%DEFAULT%")
 		{
 			LauncherSettings.OutputFile = Path.Combine(defaultFolder, $"{baseFilename}.bin");
 		}

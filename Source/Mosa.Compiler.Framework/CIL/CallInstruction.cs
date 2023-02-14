@@ -31,10 +31,7 @@ public sealed class CallInstruction : InvokeInstruction
 	/// Gets the supported immediate metadata tokens in the instruction.
 	/// </summary>
 	/// <value></value>
-	protected override InvokeSupportFlags InvokeSupport
-	{
-		get { return InvokeSupportFlags.MemberRef | InvokeSupportFlags.MethodDef | InvokeSupportFlags.MethodSpec; }
-	}
+	protected override InvokeSupportFlags InvokeSupport => InvokeSupportFlags.MemberRef | InvokeSupportFlags.MethodDef | InvokeSupportFlags.MethodSpec;
 
 	#endregion Properties
 }

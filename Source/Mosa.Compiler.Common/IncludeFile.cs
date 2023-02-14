@@ -13,7 +13,7 @@ public class IncludeFile
 
 	public byte[] Content { get; set; }
 
-	public int Length { get { return Content.Length; } }
+	public int Length => Content.Length;
 
 	public bool ReadOnly { get; set; } = false;
 	public bool Hidden { get; set; } = false;

@@ -30,9 +30,9 @@ public abstract class BaseIRInstruction : BaseInstruction
 	/// <value>
 	/// The name of the instruction family.
 	/// </value>
-	public override string FamilyName { get { return "IR"; } }
+	public override string FamilyName => "IR";
 
-	public override bool IsIRInstruction { get { return true; } }
+	public override bool IsIRInstruction => true;
 
 	#endregion Properties
 }

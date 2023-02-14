@@ -26,12 +26,12 @@ public sealed class BasicBlocks : IEnumerable<BasicBlock>
 	/// <summary>
 	/// The prologue block
 	/// </summary>
-	private BasicBlock prologueBlock = null;
+	private BasicBlock prologueBlock;
 
 	/// <summary>
 	/// The epilogue block
 	/// </summary>
-	private BasicBlock epilogueBlock = null;
+	private BasicBlock epilogueBlock;
 
 	private int nextAvailableLabel = BasicBlock.CompilerBlockStartLabel;
 
@@ -81,8 +81,8 @@ public sealed class BasicBlocks : IEnumerable<BasicBlock>
 	/// <returns></returns>
 	public BasicBlock this[int index]
 	{
-		get { return basicBlocks[index]; }
-		set { basicBlocks[index] = value; }
+		get => basicBlocks[index];
+		set => basicBlocks[index] = value;
 	}
 
 	/// <summary>

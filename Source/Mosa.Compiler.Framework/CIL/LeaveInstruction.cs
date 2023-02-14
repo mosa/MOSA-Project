@@ -31,7 +31,7 @@ public sealed class LeaveInstruction : BranchInstruction
 	/// building. Any instruction that alters the control flow must override
 	/// this property and correctly identify its control flow modifications.
 	/// </remarks>
-	public override FlowControl FlowControl { get { return FlowControl.Leave; } }
+	public override FlowControl FlowControl => FlowControl.Leave;
 
 	/// <summary>
 	/// Gets a value indicating whether to [ignore instruction's basic block].
@@ -39,7 +39,7 @@ public sealed class LeaveInstruction : BranchInstruction
 	/// <value>
 	/// <c>true</c> if [ignore instruction basic block]; otherwise, <c>false</c>.
 	/// </value>
-	public override bool IgnoreInstructionBasicBlockTargets { get { return true; } }
+	public override bool IgnoreInstructionBasicBlockTargets => true;
 
 	#endregion Properties
 

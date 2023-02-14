@@ -1724,14 +1724,14 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 		var first = context.Operand1;
 		var opcode = ((BaseCILInstruction)context.Instruction).OpCode;
 
-		if (opcode == OpCode.Brtrue || opcode == OpCode.Brtrue_s)
+		if (opcode is OpCode.Brtrue or OpCode.Brtrue_s)
 		{
 			context.SetInstruction(Select(first, IRInstruction.Branch32, IRInstruction.Branch64), ConditionCode.NotEqual, null, first, ConstantZero, target); // TODO: Constant should be 64bit
 
 			//context.AddBranchTarget(target);
 			return;
 		}
-		else if (opcode == OpCode.Brfalse || opcode == OpCode.Brfalse_s)
+		else if (opcode is OpCode.Brfalse or OpCode.Brfalse_s)
 		{
 			context.SetInstruction(Select(first, IRInstruction.Branch32, IRInstruction.Branch64), ConditionCode.Equal, null, first, ConstantZero, target); // TODO: Constant should be 64bit
 

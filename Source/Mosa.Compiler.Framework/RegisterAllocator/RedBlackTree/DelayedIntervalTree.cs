@@ -11,8 +11,8 @@ public sealed class DelayedIntervalTree<T> where T : class
 {
 	private readonly IntervalTree<T> tree = new IntervalTree<T>();
 
-	private bool delayedDelete = false;
-	private bool delayedAdd = false;
+	private bool delayedDelete;
+	private bool delayedAdd;
 
 	private int delayedDeleteStart;
 	private int delayedDeleteEnd;

@@ -40,7 +40,7 @@ public sealed class MosaMethod : MosaUnit//, IEquatable<MosaMethod>
 
 	public bool HasOpenGenericParams { get; private set; }
 
-	public bool HasImplementation { get { return Code.Count != 0; } }
+	public bool HasImplementation => Code.Count != 0;
 
 	private GenericArgumentsCollection genericArguments;
 
@@ -70,9 +70,9 @@ public sealed class MosaMethod : MosaUnit//, IEquatable<MosaMethod>
 
 	public string? ExternMethodModule { get; private set; }
 
-	public bool IsConstructor { get { return IsSpecialName && IsRTSpecialName && Name == ".ctor"; } }
+	public bool IsConstructor => IsSpecialName && IsRTSpecialName && Name == ".ctor";
 
-	public bool IsTypeConstructor { get { return IsSpecialName && IsRTSpecialName && IsStatic && Name == ".cctor"; } }
+	public bool IsTypeConstructor => IsSpecialName && IsRTSpecialName && IsStatic && Name == ".cctor";
 
 	internal MosaMethod()
 	{
@@ -120,57 +120,57 @@ public sealed class MosaMethod : MosaUnit//, IEquatable<MosaMethod>
 			this.method = method;
 		}
 
-		public MosaModule? Module { set { method.Module = value; } }
+		public MosaModule? Module { set => method.Module = value; }
 
-		public MosaType? DeclaringType { set { method.DeclaringType = value; } }
+		public MosaType? DeclaringType { set => method.DeclaringType = value; }
 
-		public MosaMethodSignature? Signature { set { method.Signature = value; } }
+		public MosaMethodSignature? Signature { set => method.Signature = value; }
 
-		public bool IsAbstract { set { method.IsAbstract = value; } }
+		public bool IsAbstract { set => method.IsAbstract = value; }
 
-		public bool IsStatic { set { method.IsStatic = value; } }
+		public bool IsStatic { set => method.IsStatic = value; }
 
-		public bool HasThis { set { method.HasThis = value; } }
+		public bool HasThis { set => method.HasThis = value; }
 
-		public bool HasExplicitThis { set { method.HasExplicitThis = value; } }
+		public bool HasExplicitThis { set => method.HasExplicitThis = value; }
 
-		public bool IsInternalCall { set { method.IsInternal = value; } }
+		public bool IsInternalCall { set => method.IsInternal = value; }
 
-		public bool IsNoInlining { set { method.IsNoInlining = value; } }
+		public bool IsNoInlining { set => method.IsNoInlining = value; }
 
-		public bool IsAggressiveInlining { set { method.IsAggressiveInlining = value; } }
+		public bool IsAggressiveInlining { set => method.IsAggressiveInlining = value; }
 
-		public bool IsSpecialName { set { method.IsSpecialName = value; } }
+		public bool IsSpecialName { set => method.IsSpecialName = value; }
 
-		public bool IsRTSpecialName { set { method.IsRTSpecialName = value; } }
+		public bool IsRTSpecialName { set => method.IsRTSpecialName = value; }
 
-		public bool IsVirtual { set { method.IsVirtual = value; } }
+		public bool IsVirtual { set => method.IsVirtual = value; }
 
-		public bool IsNewSlot { set { method.IsNewSlot = value; } }
+		public bool IsNewSlot { set => method.IsNewSlot = value; }
 
-		public bool IsFinal { set { method.IsFinal = value; } }
+		public bool IsFinal { set => method.IsFinal = value; }
 
-		public bool HasOpenGenericParams { set { method.HasOpenGenericParams = value; } }
+		public bool HasOpenGenericParams { set => method.HasOpenGenericParams = value; }
 
-		public GenericArgumentsCollection GenericArguments { get { return method.genericArguments; } }
+		public GenericArgumentsCollection GenericArguments => method.genericArguments;
 
-		public MosaMethodAttributes MethodAttributes { set { method.MethodAttributes = value; } }
+		public MosaMethodAttributes MethodAttributes { set => method.MethodAttributes = value; }
 
-		public IList<MosaLocal> LocalVariables { get { return method.localVars; } }
+		public IList<MosaLocal> LocalVariables => method.localVars;
 
-		public uint MaxStack { set { method.MaxStack = value; } }
+		public uint MaxStack { set => method.MaxStack = value; }
 
-		public List<MosaInstruction> Code { get { return method.instructions; } }
+		public List<MosaInstruction> Code => method.instructions;
 
-		public IList<MosaExceptionHandler> ExceptionBlocks { get { return method.exceptionHandlers; } }
+		public IList<MosaExceptionHandler> ExceptionBlocks => method.exceptionHandlers;
 
-		public IList<MosaMethod?> Overrides { get { return method.overrides; } }
+		public IList<MosaMethod?> Overrides => method.overrides;
 
-		public bool IsExternal { set { method.IsExternal = value; } }
+		public bool IsExternal { set => method.IsExternal = value; }
 
-		public string? ExternMethodName { set { method.ExternMethodName = value; } }
+		public string? ExternMethodName { set => method.ExternMethodName = value; }
 
-		public string? ExternMethodModule { set { method.ExternMethodModule = value; } }
+		public string? ExternMethodModule { set => method.ExternMethodModule = value; }
 
 		public override void Dispose()
 		{

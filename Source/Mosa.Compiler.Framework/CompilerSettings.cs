@@ -50,8 +50,7 @@ public class CompilerSettings
 
 	public bool TwoPassOptimizations => Settings.GetValue("Optimizations.TwoPass", true);
 
-	public bool BitTracker
-	{ get { return Settings.GetValue("Optimizations.BitTracker", true); } }
+	public bool BitTracker => Settings.GetValue("Optimizations.BitTracker", true);
 
 	public int OptimizationWindow => Settings.GetValue("Optimizations.Basic.Window", 5);
 

@@ -63,23 +63,23 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 	private class PrefixValues
 	{
-		public bool Unaligned { get; set; } = false; // ldind, stind, ldfld, stfld, ldobj, stobj, initblk, or cpblk
+		public bool Unaligned { get; set; } // ldind, stind, ldfld, stfld, ldobj, stobj, initblk, or cpblk
 
-		public bool Volatile { get; set; } = false; // Ldsfld and Stsfld
+		public bool Volatile { get; set; } // Ldsfld and Stsfld
 
-		public bool Tailcall { get; set; } = false; // Call, Calli, or Callvirt
+		public bool Tailcall { get; set; } // Call, Calli, or Callvirt
 
 		public bool Constrained => ContrainedType != null;
 
-		public bool Readonly { get; set; } = false; // ldelema
+		public bool Readonly { get; set; } // ldelema
 
-		public bool NoTypeCheck { get; set; } = false;
+		public bool NoTypeCheck { get; set; }
 
-		public bool NoRangeCheck { get; set; } = false;
+		public bool NoRangeCheck { get; set; }
 
-		public bool NoNullCheck { get; set; } = false;
+		public bool NoNullCheck { get; set; }
 
-		public bool Reset = false;
+		public bool Reset;
 
 		public MosaType ContrainedType { get; set; }
 
@@ -181,7 +181,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 			var opcode = (OpCode)instruction.OpCode;
 
-			if (opcode == OpCode.Br || opcode == OpCode.Br_s)
+			if (opcode is OpCode.Br or OpCode.Br_s)
 			{
 				AddTarget((int)instruction.Operand);
 			}
@@ -199,7 +199,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 				AddTarget(code[index + 1].Offset);
 			}
-			else if (opcode == OpCode.Leave || opcode == OpCode.Leave_s)
+			else if (opcode is OpCode.Leave or OpCode.Leave_s)
 			{
 				AddTarget((int)instruction.Operand);
 			}
@@ -532,7 +532,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 			var opcode = (OpCode)instruction.OpCode;
 
-			if (opcode == OpCode.Ldloca || opcode == OpCode.Ldloca_s)
+			if (opcode is OpCode.Ldloca or OpCode.Ldloca_s)
 			{
 				var index = (int)instruction.Operand;
 
@@ -2510,7 +2510,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		var source = PopStack(stack);
 		var destination = PopStack(stack);
 
-		if ((source.StackType == StackType.Int32 || source.StackType == StackType.Int64) && (destination.StackType == StackType.Int32 || destination.StackType == StackType.Int64))
+		if (source.StackType is StackType.Int32 or StackType.Int64 && destination.StackType is StackType.Int32 or StackType.Int64)
 		{
 			context.AppendInstruction(IRInstruction.MemoryCopy, null, source.Operand, destination.Operand);
 			return true;
@@ -3464,7 +3464,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 			return true;
 		}
-		else if (stackType == StackType.Int32 || stackType == StackType.Int64)
+		else if (stackType is StackType.Int32 or StackType.Int64)
 		{
 			//var result = stackType == StackType.Int32 ? AllocateVirtualRegister32() : AllocateVirtualRegister64();
 			var result = AllocateVirtualRegister(GetType(stackType));

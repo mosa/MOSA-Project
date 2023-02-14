@@ -56,12 +56,12 @@ public class SymbolEntry
 	/// <summary>
 	/// Gets the Info value.
 	/// </summary>
-	public byte Info { get { return (byte)((((byte)SymbolBinding) << 4) | (((byte)SymbolType) & 0xF)); } }
+	public byte Info => (byte)((((byte)SymbolBinding) << 4) | (((byte)SymbolType) & 0xF));
 
 	/// <summary>
 	/// Gets the other value.
 	/// </summary>
-	public byte Other { get { return (byte)(((byte)SymbolVisibility) & 0x3); } }
+	public byte Other => (byte)(((byte)SymbolVisibility) & 0x3);
 
 	public static uint GetEntrySize(LinkerFormatType elfType)
 	{

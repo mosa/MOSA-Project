@@ -38,7 +38,7 @@ public class UnaryBranchInstruction : UnaryInstruction
 	/// building. Any instruction that alters the control flow must override
 	/// this property and correctly identify its control flow modifications.
 	/// </remarks>
-	public override FlowControl FlowControl { get { return FlowControl.ConditionalBranch; } }
+	public override FlowControl FlowControl => FlowControl.ConditionalBranch;
 
 	#endregion Properties
 
@@ -46,8 +46,7 @@ public class UnaryBranchInstruction : UnaryInstruction
 
 	public override bool DecodeTargets(IInstructionDecoder decoder)
 	{
-		if (opcode == OpCode.Brfalse_s || opcode == OpCode.Brtrue_s
-									   || opcode == OpCode.Brfalse || opcode == OpCode.Brtrue)
+		if (opcode is OpCode.Brfalse_s or OpCode.Brtrue_s or OpCode.Brfalse or OpCode.Brtrue)
 		{
 			decoder.GetBlock((int)decoder.Instruction.Operand);
 			return true;
@@ -72,8 +71,7 @@ public class UnaryBranchInstruction : UnaryInstruction
 
 		// Read the branch target
 		// Is this a short branch target?
-		if (opcode == OpCode.Brfalse_s || opcode == OpCode.Brtrue_s
-									   || opcode == OpCode.Brfalse || opcode == OpCode.Brtrue)
+		if (opcode is OpCode.Brfalse_s or OpCode.Brtrue_s or OpCode.Brfalse or OpCode.Brtrue)
 		{
 			var block = decoder.GetBlock((int)decoder.Instruction.Operand);
 

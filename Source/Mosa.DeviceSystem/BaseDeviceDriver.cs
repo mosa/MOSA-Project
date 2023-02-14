@@ -11,8 +11,7 @@ public abstract class BaseDeviceDriver
 {
 	protected Device Device;
 
-	protected DeviceService DeviceService
-	{ get { return Device.DeviceService; } }
+	protected DeviceService DeviceService => Device.DeviceService;
 
 	protected object _lock = new object();
 

@@ -8,7 +8,7 @@ public sealed class ExtendedBlock
 {
 	public BasicBlock BasicBlock { get; }
 
-	public int Sequence { get { return BasicBlock.Sequence; } }
+	public int Sequence => BasicBlock.Sequence;
 
 	public int LoopDepth { get; }
 

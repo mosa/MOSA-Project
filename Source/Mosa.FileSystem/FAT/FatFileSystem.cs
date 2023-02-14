@@ -243,7 +243,7 @@ public class FatFileSystem : GenericFileSystem
 	/// Gets the type of the settings.
 	/// </summary>
 	/// <value>The type of the settings.</value>
-	public GenericFileSystemSettings SettingsType { get { return new FatSettings(); } }
+	public GenericFileSystemSettings SettingsType => new FatSettings();
 
 	/// <summary>
 	/// Creates the VFS mount.
@@ -260,7 +260,7 @@ public class FatFileSystem : GenericFileSystem
 	/// <value>
 	/// 	<c>true</c> if this instance is read only; otherwise, <c>false</c>.
 	/// </value>
-	public bool IsReadOnly { get { return true; } }
+	public bool IsReadOnly => true;
 
 	/// <summary>
 	/// Gets the cluster size in bytes.
@@ -274,7 +274,7 @@ public class FatFileSystem : GenericFileSystem
 	/// Gets the sectors per cluster.
 	/// </summary>
 	/// <value>The sectors per cluster.</value>
-	public uint SectorsPerCluster { get { return sectorsPerCluster; } }
+	public uint SectorsPerCluster => sectorsPerCluster;
 
 	/// <summary>
 	/// Reads the cluster.
@@ -364,7 +364,7 @@ public class FatFileSystem : GenericFileSystem
 		}
 
 		// Some basic checks
-		if ((nbrFats == 0) || (nbrFats > 2) || (totalSectors == 0) || (sectorsPerFat == 0))
+		if (nbrFats is 0 or > 2 || (totalSectors == 0) || (sectorsPerFat == 0))
 			return false;
 
 		if (totalClusters < 4085)
@@ -946,9 +946,7 @@ public class FatFileSystem : GenericFileSystem
 	/// </returns>
 	protected static bool IsValidFatCharacter(char c)
 	{
-		if ((c >= 'A') || (c <= 'Z'))
-			return true;
-		if ((c >= '0') || (c <= '9'))
+		if (c is >= 'A' or <= 'Z' or >= '0' or <= '9')
 			return true;
 		if ((c >= 128) || (c <= 255))
 			return true;
@@ -1305,7 +1303,7 @@ public class FatFileSystem : GenericFileSystem
 		return at;
 	}
 
-	protected uint lastFreeHint = 0;
+	protected uint lastFreeHint;
 
 	/// <summary>
 	/// Allocates the cluster.

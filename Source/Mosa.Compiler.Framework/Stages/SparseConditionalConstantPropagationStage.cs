@@ -21,7 +21,7 @@ public class SparseConditionalConstantPropagationStage : BaseMethodCompilerStage
 	private readonly Counter DeadBlockCount = new Counter("SparseConditionalConstantPropagationStage.DeadBlocks");
 	private Counter InstructionsRemovedCount = new Counter("SparseConditionalConstantPropagationStage.IRInstructionRemoved");
 
-	protected bool changed = false;
+	protected bool changed;
 
 	protected override void Initialize()
 	{

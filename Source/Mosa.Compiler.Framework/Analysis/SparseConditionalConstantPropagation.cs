@@ -29,16 +29,13 @@ public sealed class SparseConditionalConstantPropagation
 
 		private ReferenceStatusType ReferenceStatus;
 
-		public int ConstantCount
-		{ get { return Constants?.Count ?? 0; } }
+		public int ConstantCount => Constants?.Count ?? 0;
 
 		public List<ulong> Constants { get; private set; }
 
-		public ulong ConstantUnsignedLongInteger
-		{ get { return Constants[0]; } }
+		public ulong ConstantUnsignedLongInteger => Constants[0];
 
-		public long ConstantSignedLongInteger
-		{ get { return (long)Constants[0]; } }
+		public long ConstantSignedLongInteger => (long)Constants[0];
 
 		public bool ConstantsContainZero { get; set; }
 
@@ -46,38 +43,31 @@ public sealed class SparseConditionalConstantPropagation
 
 		public bool IsOverDefined
 		{
-			get { return Status == VariableStatusType.OverDefined; }
+			get => Status == VariableStatusType.OverDefined;
 			set { Status = VariableStatusType.OverDefined; Constants = null; Debug.Assert(value); }
 		}
 
-		public bool IsUnknown
-		{ get { return Status == VariableStatusType.Unknown; } }
+		public bool IsUnknown => Status == VariableStatusType.Unknown;
 
 		public bool IsSingleConstant
 		{
-			get { return Status == VariableStatusType.SingleConstant; }
+			get => Status == VariableStatusType.SingleConstant;
 			set { Status = VariableStatusType.SingleConstant; Debug.Assert(value); }
 		}
 
-		public bool HasMultipleConstants
-		{ get { return Status == VariableStatusType.MultipleConstants; } }
+		public bool HasMultipleConstants => Status == VariableStatusType.MultipleConstants;
 
-		public bool HasOnlyConstants
-		{ get { return Status == VariableStatusType.SingleConstant || Status == VariableStatusType.MultipleConstants; } }
+		public bool HasOnlyConstants => Status is VariableStatusType.SingleConstant or VariableStatusType.MultipleConstants;
 
 		public bool IsVirtualRegister { get; set; }
 
 		public bool IsReferenceType { get; set; }
 
-		public bool IsReferenceDefinedUnknown
-		{ get { return ReferenceStatus == ReferenceStatusType.Unknown; } }
+		public bool IsReferenceDefinedUnknown => ReferenceStatus == ReferenceStatusType.Unknown;
 
 		public bool IsReferenceDefinedNotNull
 		{
-			get
-			{
-				return ReferenceStatus == ReferenceStatusType.DefinedNotNull;
-			}
+			get => ReferenceStatus == ReferenceStatusType.DefinedNotNull;
 			set
 			{
 				Debug.Assert(value);
@@ -87,10 +77,7 @@ public sealed class SparseConditionalConstantPropagation
 
 		public bool IsReferenceOverDefined
 		{
-			get
-			{
-				return ReferenceStatus == ReferenceStatusType.OverDefined;
-			}
+			get => ReferenceStatus == ReferenceStatusType.OverDefined;
 			set
 			{
 				Debug.Assert(value);
@@ -1171,7 +1158,7 @@ public sealed class SparseConditionalConstantPropagation
 		if (result.IsOverDefined)
 			return;
 
-		if (operand1.IsOverDefined || operand1.IsOverDefined)
+		if (operand1.IsOverDefined is true or true)
 		{
 			UpdateToOverDefined(result);
 		}

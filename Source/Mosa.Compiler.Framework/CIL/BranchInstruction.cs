@@ -32,7 +32,7 @@ public class BranchInstruction : BaseCILInstruction
 	/// building. Any instruction that alters the control flow must override
 	/// this property and correctly identify its control flow modifications.
 	/// </remarks>
-	public override FlowControl FlowControl { get { return FlowControl.UnconditionalBranch; } }
+	public override FlowControl FlowControl => FlowControl.UnconditionalBranch;
 
 	#endregion Properties
 

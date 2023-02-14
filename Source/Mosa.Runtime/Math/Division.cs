@@ -174,7 +174,7 @@ internal static class Division
 		}
 
 		// Catch divide by one
-		if (divisor == 1 || divisor == -1)
+		if (divisor is 1 or -1)
 		{
 			quotient = dividend * divisor;
 			remainder = 0;

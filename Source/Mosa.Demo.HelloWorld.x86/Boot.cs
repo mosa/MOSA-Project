@@ -305,7 +305,7 @@ public static class Boot
 		Console.Write(')');
 	}
 
-	private static uint counter = 0;
+	private static uint counter;
 
 	public static object _lock { get; private set; }
 

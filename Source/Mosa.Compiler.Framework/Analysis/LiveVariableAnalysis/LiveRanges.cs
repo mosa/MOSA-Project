@@ -10,11 +10,13 @@ public sealed class LiveRanges
 {
 	public List<Range> Ranges { get; } = new List<Range>(1);
 
-	public int Count { get { return Ranges.Count; } }
+	public int Count => Ranges.Count;
 
-	public Range LastRange { get { return Ranges[Count - 1]; } }
+	public Range LastRange => Ranges[Count - 1];
 
-	public Range FirstRange { get { return Ranges[0]; } set { Ranges[0] = value; } }
+	public Range FirstRange { get => Ranges[0];
+		set => Ranges[0] = value;
+	}
 
 	public void Add(int start, int end)
 	{

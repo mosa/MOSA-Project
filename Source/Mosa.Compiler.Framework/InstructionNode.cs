@@ -85,10 +85,7 @@ public sealed class InstructionNode
 	/// </summary>
 	public BasicBlock Block
 	{
-		get
-		{
-			return basicBlock;
-		}
+		get => basicBlock;
 		internal set
 		{
 			basicBlock?.RemoveBranchInstruction(this);
@@ -105,10 +102,7 @@ public sealed class InstructionNode
 	/// <value>The first operand.</value>
 	public Operand Operand1
 	{
-		get
-		{
-			return operand1;
-		}
+		get => operand1;
 		set
 		{
 			var current = operand1;
@@ -135,10 +129,7 @@ public sealed class InstructionNode
 	/// <value>The second operand.</value>
 	public Operand Operand2
 	{
-		get
-		{
-			return operand2;
-		}
+		get => operand2;
 		set
 		{
 			var current = operand2;
@@ -164,10 +155,7 @@ public sealed class InstructionNode
 	/// <value>The third operand.</value>
 	public Operand Operand3
 	{
-		get
-		{
-			return operand3;
-		}
+		get => operand3;
 		set
 		{
 			var current = operand3;
@@ -233,10 +221,7 @@ public sealed class InstructionNode
 	/// <value>The result operand.</value>
 	public Operand Result
 	{
-		get
-		{
-			return result;
-		}
+		get => result;
 		set
 		{
 			var current = result;
@@ -261,10 +246,7 @@ public sealed class InstructionNode
 	/// <value>The result operand.</value>
 	public Operand Result2
 	{
-		get
-		{
-			return result2;
-		}
+		get => result2;
 		set
 		{
 			var current = result2;
@@ -301,8 +283,7 @@ public sealed class InstructionNode
 	/// <value>
 	/// The branch targets count.
 	/// </value>
-	public int BranchTargetsCount
-	{ get { return BranchTargets?.Count ?? 0; } }
+	public int BranchTargetsCount => BranchTargets?.Count ?? 0;
 
 	/// <summary>
 	/// Sets the branch target.
@@ -361,7 +342,7 @@ public sealed class InstructionNode
 	/// </value>
 	public MosaMethod InvokeMethod
 	{
-		get { return addition?.InvokeMethod; }
+		get => addition?.InvokeMethod;
 		set { CheckAddition(); addition.InvokeMethod = value; }
 	}
 
@@ -371,7 +352,7 @@ public sealed class InstructionNode
 	/// <value>The runtime field.</value>
 	public MosaField MosaField
 	{
-		get { return addition?.MosaField; }
+		get => addition?.MosaField;
 		set { CheckAddition(); addition.MosaField = value; }
 	}
 
@@ -381,7 +362,7 @@ public sealed class InstructionNode
 	/// <value>The runtime field.</value>
 	public MosaType MosaType
 	{
-		get { return addition?.MosaType; }
+		get => addition?.MosaType;
 		set { CheckAddition(); addition.MosaType = value; }
 	}
 
@@ -393,7 +374,7 @@ public sealed class InstructionNode
 	/// </value>
 	public List<BasicBlock> PhiBlocks
 	{
-		get { return addition?.PhiBlocks; }
+		get => addition?.PhiBlocks;
 		set { CheckAddition(); addition.PhiBlocks = value; }
 	}
 
@@ -403,19 +384,13 @@ public sealed class InstructionNode
 	/// <value>
 	/// 	<c>true</c> if this is the first instruction; otherwise, <c>false</c>.
 	/// </value>
-	public bool IsBlockStartInstruction
-	{
-		get { return Instruction == IRInstruction.BlockStart; }
-	}
+	public bool IsBlockStartInstruction => Instruction == IRInstruction.BlockStart;
 
 	/// <summary>
 	/// Gets a value indicating whether this is the last instruction.
 	/// </summary>
 	/// <value><c>true</c> if this is the last instruction; otherwise, <c>false</c>.</value>
-	public bool IsBlockEndInstruction
-	{
-		get { return Instruction == IRInstruction.BlockEnd; }
-	}
+	public bool IsBlockEndInstruction => Instruction == IRInstruction.BlockEnd;
 
 	/// <summary>
 	/// Gets a value indicating whether this node is empty.
@@ -423,10 +398,7 @@ public sealed class InstructionNode
 	/// <value>
 	///   <c>true</c> if this instance is empty; otherwise, <c>false</c>.
 	/// </value>
-	public bool IsEmpty
-	{
-		get { return Instruction == null; }
-	}
+	public bool IsEmpty => Instruction == null;
 
 	/// <summary>
 	/// Gets a value indicating whether this node is a NOP instruction.
@@ -434,10 +406,7 @@ public sealed class InstructionNode
 	/// <value>
 	///   <c>true</c> if this instance is nop; otherwise, <c>false</c>.
 	/// </value>
-	public bool IsNop
-	{
-		get { return Instruction == IRInstruction.Nop; }
-	}
+	public bool IsNop => Instruction == IRInstruction.Nop;
 
 	/// <summary>
 	/// Gets a value indicating whether this node is empty or a NOP instruction.
@@ -445,10 +414,7 @@ public sealed class InstructionNode
 	/// <value>
 	///   <c>true</c> if this instance is empty or nop; otherwise, <c>false</c>.
 	/// </value>
-	public bool IsEmptyOrNop
-	{
-		get { return Instruction == null || Instruction == IRInstruction.Nop; }
-	}
+	public bool IsEmptyOrNop => Instruction == null || Instruction == IRInstruction.Nop;
 
 	#endregion Properties
 

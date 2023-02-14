@@ -31,13 +31,13 @@ public /*readonly*/ struct MultibootV1MemoryMapEntry
 		Entry = entry;
 	}
 
-	public uint Size { get { return Entry.Load32(MultiBootMemoryMapOffset.Size); } }
+	public uint Size => Entry.Load32(MultiBootMemoryMapOffset.Size);
 
-	public Pointer BaseAddr { get { return Entry.LoadPointer(MultiBootMemoryMapOffset.BaseAddr); } }
+	public Pointer BaseAddr => Entry.LoadPointer(MultiBootMemoryMapOffset.BaseAddr);
 
-	public ulong Length { get { return Entry.Load64(MultiBootMemoryMapOffset.Length); } }
+	public ulong Length => Entry.Load64(MultiBootMemoryMapOffset.Length);
 
-	public byte Type { get { return Entry.Load8(MultiBootMemoryMapOffset.Type); } }
+	public byte Type => Entry.Load8(MultiBootMemoryMapOffset.Type);
 
 	public MultibootV1MemoryMapEntry GetNext()
 	{

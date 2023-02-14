@@ -13,8 +13,8 @@ public sealed unsafe class RuntimeAssembly : Assembly
 	internal readonly List<RuntimeType> typeList;
 	internal AssemblyDefinition assemblyDefinition;
 	internal readonly List<RuntimeTypeHandle> typeHandles;
-	internal List<RuntimeTypeInfo> typeInfoList = null;
-	internal List<CustomAttributeData> customAttributesData = null;
+	internal List<RuntimeTypeInfo> typeInfoList;
+	internal List<CustomAttributeData> customAttributesData;
 
 	private readonly string fullName;
 
@@ -66,10 +66,7 @@ public sealed unsafe class RuntimeAssembly : Assembly
 		}
 	}
 
-	public override string FullName
-	{
-		get { return fullName; }
-	}
+	public override string FullName => fullName;
 
 	public override IEnumerable<Type> ExportedTypes
 	{

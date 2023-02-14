@@ -107,102 +107,102 @@ public static class Multiboot
 	/// <summary>
 	/// Gets the flags.
 	/// </summary>
-	public static uint Flags { get { return GetValue(MultiBootInfoOffset.Flags); } }
+	public static uint Flags => GetValue(MultiBootInfoOffset.Flags);
 
 	/// <summary>
 	/// Gets the memory lower.
 	/// </summary>
-	public static Pointer MemoryLower { get { return GetPointer(MultiBootInfoOffset.MemLower); } }
+	public static Pointer MemoryLower => GetPointer(MultiBootInfoOffset.MemLower);
 
 	/// <summary>
 	/// Gets the memory upper.
 	/// </summary>
-	public static Pointer MemoryUpper { get { return GetPointer(MultiBootInfoOffset.MemUpper); } }
+	public static Pointer MemoryUpper => GetPointer(MultiBootInfoOffset.MemUpper);
 
 	/// <summary>
 	/// Gets the boot device.
 	/// </summary>
-	public static uint BootDevice { get { return GetValue(MultiBootInfoOffset.BootDevice); } }
+	public static uint BootDevice => GetValue(MultiBootInfoOffset.BootDevice);
 
 	/// <summary>
 	/// Gets the command line address.
 	/// </summary>
-	public static Pointer CommandLineAddress { get { return GetPointer(MultiBootInfoOffset.CommandLine); } }
+	public static Pointer CommandLineAddress => GetPointer(MultiBootInfoOffset.CommandLine);
 
 	/// <summary>
 	/// Gets the module count.
 	/// </summary>
-	public static uint ModuleCount { get { return GetValue(MultiBootInfoOffset.ModuleCount); } }
+	public static uint ModuleCount => GetValue(MultiBootInfoOffset.ModuleCount);
 
 	/// <summary>
 	/// Gets the module start.
 	/// </summary>
-	public static Pointer ModuleStart { get { return GetPointer(MultiBootInfoOffset.ModuleAddress); } }
+	public static Pointer ModuleStart => GetPointer(MultiBootInfoOffset.ModuleAddress);
 
 	/// <summary>
 	/// Gets the length of the memory map.
 	/// </summary>
-	public static uint MemoryMapLength { get { return GetValue(MultiBootInfoOffset.MemMapLength); } }
+	public static uint MemoryMapLength => GetValue(MultiBootInfoOffset.MemMapLength);
 
 	/// <summary>
 	/// Gets the memory map start.
 	/// </summary>
-	public static Pointer MemoryMapStart { get { return GetPointer(MultiBootInfoOffset.MemMapAddress); } }
+	public static Pointer MemoryMapStart => GetPointer(MultiBootInfoOffset.MemMapAddress);
 
 	/// <summary>
 	/// Gets the length of the drive.
 	/// </summary>
-	public static uint DriveLength { get { return GetValue(MultiBootInfoOffset.DriveLength); } }
+	public static uint DriveLength => GetValue(MultiBootInfoOffset.DriveLength);
 
 	/// <summary>
 	/// Gets the drive start.
 	/// </summary>
-	public static uint DriveStart { get { return GetValue(MultiBootInfoOffset.DriveAddress); } }
+	public static uint DriveStart => GetValue(MultiBootInfoOffset.DriveAddress);
 
 	/// <summary>
 	/// Gets the configuration table.
 	/// </summary>
-	public static uint ConfigurationTable { get { return GetValue(MultiBootInfoOffset.ConfigTable); } }
+	public static uint ConfigurationTable => GetValue(MultiBootInfoOffset.ConfigTable);
 
 	/// <summary>
 	/// Gets the name of the boot loader address.
 	/// </summary>
-	public static uint BootLoaderName { get { return GetValue(MultiBootInfoOffset.BootLoaderName); } }
+	public static uint BootLoaderName => GetValue(MultiBootInfoOffset.BootLoaderName);
 
 	/// <summary>
 	/// Gets the APM table.
 	/// </summary>
-	public static Pointer APMTable { get { return GetPointer(MultiBootInfoOffset.ApmTable); } }
+	public static Pointer APMTable => GetPointer(MultiBootInfoOffset.ApmTable);
 
 	/// <summary>
 	/// Gets the VBE control information.
 	/// </summary>
-	public static uint VBEControlInformation { get { return GetValue(MultiBootInfoOffset.VbeControlInfo); } }
+	public static uint VBEControlInformation => GetValue(MultiBootInfoOffset.VbeControlInfo);
 
 	/// <summary>
 	/// Gets the VBE mode info.
 	/// </summary>
-	public static Pointer VBEModeInfo { get { return GetPointer(MultiBootInfoOffset.VbeModeInfo); } }
+	public static Pointer VBEModeInfo => GetPointer(MultiBootInfoOffset.VbeModeInfo);
 
 	/// <summary>
 	/// Gets the VBE mode.
 	/// </summary>
-	public static uint VBEMode { get { return GetValue(MultiBootInfoOffset.VbeMode); } }
+	public static uint VBEMode => GetValue(MultiBootInfoOffset.VbeMode);
 
 	/// <summary>
 	/// Gets the VBE interface seg.
 	/// </summary>
-	public static uint VBEInterfaceSeg { get { return GetValue(MultiBootInfoOffset.VbeInterfaceSeg); } }
+	public static uint VBEInterfaceSeg => GetValue(MultiBootInfoOffset.VbeInterfaceSeg);
 
 	/// <summary>
 	/// Gets the VBE interface off.
 	/// </summary>
-	public static uint VBEInterfaceOff { get { return GetValue(MultiBootInfoOffset.VbeInterfaceOff); } }
+	public static uint VBEInterfaceOff => GetValue(MultiBootInfoOffset.VbeInterfaceOff);
 
 	/// <summary>
 	/// Gets the VBE interface len.
 	/// </summary>
-	public static uint VBEInterfaceLen { get { return GetValue(MultiBootInfoOffset.VbeInterfaceLength); } }
+	public static uint VBEInterfaceLen => GetValue(MultiBootInfoOffset.VbeInterfaceLength);
 
 	/// <summary>
 	/// Counts the memory map.

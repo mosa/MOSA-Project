@@ -6,20 +6,15 @@ namespace Mosa.Kernel.x86;
 
 public class CpuInfo
 {
-	public uint NumberOfCores
-	{ get { return (Native.CpuIdEAX(4, 0) >> 26) + 1; } }
+	public uint NumberOfCores => (Native.CpuIdEAX(4, 0) >> 26) + 1;
 
-	public uint Type
-	{ get { return (Native.CpuIdEAX(1, 0) & 0x3000) >> 12; } }
+	public uint Type => (Native.CpuIdEAX(1, 0) & 0x3000) >> 12;
 
-	public uint Stepping
-	{ get { return Native.CpuIdEAX(1, 0) & 0xF; } }
+	public uint Stepping => Native.CpuIdEAX(1, 0) & 0xF;
 
-	public uint Model
-	{ get { return (Native.CpuIdEAX(1, 0) & 0xF0) >> 4; } }
+	public uint Model => (Native.CpuIdEAX(1, 0) & 0xF0) >> 4;
 
-	public uint Family
-	{ get { return (Native.CpuIdEAX(1, 0) & 0xF00) >> 8; } }
+	public uint Family => (Native.CpuIdEAX(1, 0) & 0xF00) >> 8;
 
 	public bool SupportsExtendedCpuid
 	{ get { uint identifier = Native.CpuIdEAX(0x80000000, 0); return (identifier & 0x80000000) != 0; } }

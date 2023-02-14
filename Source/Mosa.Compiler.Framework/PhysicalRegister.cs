@@ -38,7 +38,7 @@ public sealed class PhysicalRegister
 	/// Gets a value indicating whether this register is special register that the
 	/// register allocator should not consider.
 	/// </summary>
-	public bool IsSpecial { get { return !(IsInteger || IsFloatingPoint); } }
+	public bool IsSpecial => !(IsInteger || IsFloatingPoint);
 
 	#endregion Properties
 

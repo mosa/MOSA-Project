@@ -10,8 +10,8 @@ namespace Mosa.Kernel.x64;
 /// </summary>
 public static class Screen
 {
-	public static uint column = 0;
-	public static uint row = 0;
+	public static uint column;
+	public static uint row;
 	private static byte color = 23;
 
 	/// <summary>
@@ -32,8 +32,8 @@ public static class Screen
 	/// </value>
 	public static uint Column
 	{
-		get { return column; }
-		set { column = value; }
+		get => column;
+		set => column = value;
 	}
 
 	/// <summary>
@@ -44,19 +44,19 @@ public static class Screen
 	/// </value>
 	public static uint Row
 	{
-		get { return row; }
-		set { row = value; }
+		get => row;
+		set => row = value;
 	}
 
 	public static byte Color
 	{
-		get { return (byte)(color & 0x0F); }
+		get => (byte)(color & 0x0F);
 		set { color &= 0xF0; color |= (byte)(value & 0x0F); }
 	}
 
 	public static byte BackgroundColor
 	{
-		get { return (byte)(color >> 4); }
+		get => (byte)(color >> 4);
 		set { color &= 0x0F; color |= (byte)((value & 0x0F) << 4); }
 	}
 

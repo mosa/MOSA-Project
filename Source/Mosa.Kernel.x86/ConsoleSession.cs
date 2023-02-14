@@ -9,12 +9,12 @@ public class ConsoleSession
 {
 	protected readonly byte[] text;
 	protected readonly byte[] textcolor;
-	protected uint column = 0;
-	protected uint row = 0;
-	protected byte color = 0;
+	protected uint column;
+	protected uint row;
+	protected byte color;
 	protected ConsoleManager consoleManager;
 
-	protected uint scrollRow = 0;
+	protected uint scrollRow;
 
 	/// <summary>
 	/// The columns
@@ -34,7 +34,7 @@ public class ConsoleSession
 	/// </value>
 	public uint Column
 	{
-		get { return column; }
+		get => column;
 		set { column = value; consoleManager.UpdateCursor(this); }
 	}
 
@@ -46,32 +46,32 @@ public class ConsoleSession
 	/// </value>
 	public uint Row
 	{
-		get { return row; }
+		get => row;
 		set { row = value; consoleManager.UpdateCursor(this); }
 	}
 
 	public uint ScrollRow
 	{
-		get { return scrollRow; }
-		set { scrollRow = value; }
+		get => scrollRow;
+		set => scrollRow = value;
 	}
 
 	public byte Color
 	{
-		get { return (byte)(color & 0x0F); }
+		get => (byte)(color & 0x0F);
 		set { color &= 0xF0; color |= (byte)(value & 0x0F); }
 	}
 
 	public byte BackgroundColor
 	{
-		get { return (byte)(color >> 4); }
+		get => (byte)(color >> 4);
 		set { color &= 0x0F; color |= (byte)((value & 0x0F) << 4); }
 	}
 
 	public ConsoleManager ConsoleManager
 	{
-		get { return consoleManager; }
-		set { consoleManager = value; }
+		get => consoleManager;
+		set => consoleManager = value;
 	}
 
 	public ConsoleSession(uint columns, uint rows, ConsoleManager consoleManager, uint scrollRow)

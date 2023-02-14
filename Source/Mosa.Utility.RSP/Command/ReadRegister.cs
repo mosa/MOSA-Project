@@ -6,7 +6,7 @@ public class ReadRegister : GDBCommand
 {
 	public int Register { get; }
 
-	protected override string PackArguments { get { return Register.ToString("x"); } }
+	protected override string PackArguments => Register.ToString("x");
 
 	public ReadRegister(int register, CallBack callBack = null) : base("p", callBack)
 	{

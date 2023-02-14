@@ -7,7 +7,7 @@ namespace Mosa.Utility.UnitTests.Numbers;
 
 public static class R4
 {
-	private static IList<float> series = null;
+	private static IList<float> series;
 
 	public static IEnumerable<float> Series
 	{

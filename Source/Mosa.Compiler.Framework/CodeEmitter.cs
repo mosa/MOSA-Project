@@ -93,8 +93,7 @@ public sealed class CodeEmitter
 	/// Gets the current position.
 	/// </summary>
 	/// <value>The current position.</value>
-	public int CurrentPosition
-	{ get { return (int)CodeStream.Position; } }
+	public int CurrentPosition => (int)CodeStream.Position;
 
 	/// <summary>
 	/// List of labels that were emitted.

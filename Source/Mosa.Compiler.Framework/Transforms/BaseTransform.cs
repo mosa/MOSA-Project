@@ -15,7 +15,7 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 
 	public BaseInstruction Instruction { get; private set; }
 
-	public bool Log { get; private set; } = false;
+	public bool Log { get; private set; }
 
 	public string Name { get; }
 

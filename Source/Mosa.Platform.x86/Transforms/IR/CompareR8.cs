@@ -56,28 +56,28 @@ public sealed class CompareR8 : BaseTransform
 			context.AppendInstruction(X86.Movzx8To32, result, result);
 			return;
 		}
-		else if (condition == ConditionCode.Greater || condition == ConditionCode.UnsignedGreater)
+		else if (condition is ConditionCode.Greater or ConditionCode.UnsignedGreater)
 		{
 			context.SetInstruction(instruction, null, operand1, operand2);
 			context.AppendInstruction(X86.Setcc, ConditionCode.UnsignedGreater, v1);
 			context.AppendInstruction(X86.Movzx8To32, result, v1);
 			return;
 		}
-		else if (condition == ConditionCode.Less || condition == ConditionCode.UnsignedLess)
+		else if (condition is ConditionCode.Less or ConditionCode.UnsignedLess)
 		{
 			context.SetInstruction(instruction, null, operand2, operand1);
 			context.AppendInstruction(X86.Setcc, ConditionCode.UnsignedGreater, v1);
 			context.AppendInstruction(X86.Movzx8To32, result, v1);
 			return;
 		}
-		else if (condition == ConditionCode.GreaterOrEqual || condition == ConditionCode.UnsignedGreaterOrEqual)
+		else if (condition is ConditionCode.GreaterOrEqual or ConditionCode.UnsignedGreaterOrEqual)
 		{
 			context.SetInstruction(instruction, null, operand2, operand1);
 			context.AppendInstruction(X86.Setcc, ConditionCode.NoCarry, v1);
 			context.AppendInstruction(X86.Movzx8To32, result, v1);
 			return;
 		}
-		else if (condition == ConditionCode.LessOrEqual || condition == ConditionCode.UnsignedLessOrEqual)
+		else if (condition is ConditionCode.LessOrEqual or ConditionCode.UnsignedLessOrEqual)
 		{
 			context.SetInstruction(instruction, null, operand2, operand1);
 			context.AppendInstruction(X86.Setcc, ConditionCode.NoCarry, v1);

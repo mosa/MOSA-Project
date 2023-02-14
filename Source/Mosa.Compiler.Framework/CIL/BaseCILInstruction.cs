@@ -23,7 +23,7 @@ public abstract class BaseCILInstruction : BaseInstruction
 	/// Gets the op code.
 	/// </summary>
 	/// <value>The op code.</value>
-	public OpCode OpCode { get { return opcode; } }
+	public OpCode OpCode => opcode;
 
 	/// <summary>
 	/// Gets the name of the instruction family.
@@ -31,7 +31,7 @@ public abstract class BaseCILInstruction : BaseInstruction
 	/// <value>
 	/// The name of the instruction family.
 	/// </value>
-	public override string FamilyName { get { return "CIL"; } }
+	public override string FamilyName => "CIL";
 
 	public override string Name
 	{
@@ -103,10 +103,7 @@ public abstract class BaseCILInstruction : BaseInstruction
 	/// Determines if the IL decoder pushes the results of this instruction onto the IL operand stack.
 	/// </summary>
 	/// <value><c>true</c> if [push result]; otherwise, <c>false</c>.</value>
-	public virtual bool PushResult
-	{
-		get { return true; }
-	}
+	public virtual bool PushResult => true;
 
 	/// <summary>
 	/// Validates the specified instruction.

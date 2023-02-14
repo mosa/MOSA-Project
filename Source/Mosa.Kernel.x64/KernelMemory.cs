@@ -12,7 +12,7 @@ public static class KernelMemory
 {
 	private static uint heapStart = Address.GCInitialMemory;
 	private static uint heapSize = 0x02000000;
-	private static uint heapUsed = 0;
+	private static uint heapUsed;
 
 	[Plug("Mosa.Runtime.GC::AllocateMemory")]
 	private static unsafe IntPtr _AllocateMemory(uint size)

@@ -15,7 +15,7 @@ public sealed class Hardware : BaseHardwareAbstraction
 	/// <summary>
 	/// Gets the size of the page.
 	/// </summary>
-	public override uint PageSize { get { return PageFrameAllocator.PageSize; } }
+	public override uint PageSize => PageFrameAllocator.PageSize;
 
 	/// <summary>
 	/// Gets a block of memory from the kernel

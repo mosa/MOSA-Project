@@ -33,13 +33,13 @@ public static class Series
 
 	#region B Types
 
-	public static IEnumerable<bool> B { get { return Numbers.B.Series; } }
+	public static IEnumerable<bool> B => Numbers.B.Series;
 
 	#endregion B Types
 
 	#region C Types
 
-	public static IEnumerable<char> C { get { return Numbers.C.Series; } }
+	public static IEnumerable<char> C => Numbers.C.Series;
 
 	public static IEnumerable<char> CNotZero
 	{
@@ -75,7 +75,7 @@ public static class Series
 
 	#region I1 Types
 
-	public static IEnumerable<sbyte> I1 { get { return Numbers.I1.Series; } }
+	public static IEnumerable<sbyte> I1 => Numbers.I1.Series;
 
 	public static IEnumerable<sbyte> I1NotZero
 	{
@@ -111,7 +111,7 @@ public static class Series
 
 	#region U1 Types
 
-	public static IEnumerable<byte> U1 { get { return Numbers.U1.Series; } }
+	public static IEnumerable<byte> U1 => Numbers.U1.Series;
 
 	public static IEnumerable<byte> U1NotZero
 	{
@@ -147,7 +147,7 @@ public static class Series
 
 	#region I2 Types
 
-	public static IEnumerable<short> I2 { get { return Numbers.I2.Series; } }
+	public static IEnumerable<short> I2 => Numbers.I2.Series;
 
 	public static IEnumerable<short> I2NotZero
 	{
@@ -183,7 +183,7 @@ public static class Series
 
 	#region U2 Types
 
-	public static IEnumerable<ushort> U2 { get { return Numbers.U2.Series; } }
+	public static IEnumerable<ushort> U2 => Numbers.U2.Series;
 
 	public static IEnumerable<ushort> U2NotZero
 	{
@@ -214,7 +214,7 @@ public static class Series
 
 	#region I4 Types
 
-	public static IEnumerable<int> I4 { get { return Numbers.I4.Series; } }
+	public static IEnumerable<int> I4 => Numbers.I4.Series;
 
 	public static IEnumerable<int> I4NotZero
 	{
@@ -270,7 +270,7 @@ public static class Series
 
 	#region U4 Types
 
-	public static IEnumerable<uint> U4 { get { return Numbers.U4.Series; } }
+	public static IEnumerable<uint> U4 => Numbers.U4.Series;
 
 	public static IEnumerable<uint> U4NotZero
 	{
@@ -306,7 +306,7 @@ public static class Series
 
 	#region I8 Types
 
-	public static IEnumerable<long> I8 { get { return Numbers.I8.Series; } }
+	public static IEnumerable<long> I8 => Numbers.I8.Series;
 
 	public static IEnumerable<long> I8NotZero
 	{
@@ -353,7 +353,7 @@ public static class Series
 
 	#region U8 Types
 
-	public static IEnumerable<ulong> U8 { get { return Numbers.U8.Series; } }
+	public static IEnumerable<ulong> U8 => Numbers.U8.Series;
 
 	public static IEnumerable<ulong> U8NotZero
 	{
@@ -389,7 +389,7 @@ public static class Series
 
 	#region R4 Types
 
-	public static IEnumerable<float> R4 { get { return Numbers.R4.Series; } }
+	public static IEnumerable<float> R4 => Numbers.R4.Series;
 
 	public static IEnumerable<float> R4Mini
 	{
@@ -480,7 +480,7 @@ public static class Series
 
 	#region R8 Types
 
-	public static IEnumerable<double> R8 { get { return Numbers.R8.Series; } }
+	public static IEnumerable<double> R8 => Numbers.R8.Series;
 
 	public static IEnumerable<double> R8Mini
 	{
