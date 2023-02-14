@@ -8,9 +8,9 @@ public class KeyedList<T, V>
 {
 	public readonly Dictionary<T, List<V>> Collection;
 
-	public Dictionary<T, List<V>>.KeyCollection Keys { get { return Collection.Keys; } }
+	public Dictionary<T, List<V>>.KeyCollection Keys => Collection.Keys;
 
-	public List<V> this[T index] { get { return Collection.ContainsKey(index) ? Collection[index] : null; } }
+	public List<V> this[T index] => Collection.ContainsKey(index) ? Collection[index] : null;
 
 	public KeyedList()
 	{

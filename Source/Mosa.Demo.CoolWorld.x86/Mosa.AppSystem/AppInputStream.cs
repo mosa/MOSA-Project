@@ -27,17 +27,18 @@ public class AppInputStream : Stream
 
 	#region Overrides
 
-	public override bool CanRead { get { return true; } }
+	public override bool CanRead => true;
 
-	public override bool CanSeek { get { return false; } }
+	public override bool CanSeek => false;
 
-	public override bool CanWrite { get { return false; } }
+	public override bool CanWrite => false;
 
-	public override bool CanTimeout { get { return false; } }
+	public override bool CanTimeout => false;
 
-	public override long Length { get { return length; } }
+	public override long Length => length;
 
-	public override long Position { get { return 0; } set { return; } }
+	public override long Position { get => 0;
+		set { return; } }
 
 	public override void Flush()
 	{ }

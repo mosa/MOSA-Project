@@ -29,10 +29,7 @@ public sealed class StlocInstruction : StoreInstruction
 	/// Stloc has a result, but doesn't push it on the stack.
 	/// </summary>
 	/// <value><c>true</c> if [push result]; otherwise, <c>false</c>.</value>
-	public override bool PushResult
-	{
-		get { return false; }
-	}
+	public override bool PushResult => false;
 
 	/// <summary>
 	/// Decodes the specified instruction.

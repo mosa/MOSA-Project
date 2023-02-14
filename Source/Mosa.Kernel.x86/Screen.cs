@@ -28,7 +28,7 @@ public static class Screen
 	/// <value>
 	/// The column.
 	/// </value>
-	public static uint Column { get; set; } = 0;
+	public static uint Column { get; set; }
 
 	/// <summary>
 	/// Gets or sets the row.
@@ -36,17 +36,17 @@ public static class Screen
 	/// <value>
 	/// The row.
 	/// </value>
-	public static uint Row { get; set; } = 0;
+	public static uint Row { get; set; }
 
 	public static byte Color
 	{
-		get { return (byte)(color & 0x0F); }
+		get => (byte)(color & 0x0F);
 		set { color &= 0xF0; color |= (byte)(value & 0x0F); }
 	}
 
 	public static byte BackgroundColor
 	{
-		get { return (byte)(color >> 4); }
+		get => (byte)(color >> 4);
 		set { color &= 0x0F; color |= (byte)((value & 0x0F) << 4); }
 	}
 

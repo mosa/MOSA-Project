@@ -60,13 +60,13 @@ public sealed class HardwareResources
 	/// Gets the IO point region count.
 	/// </summary>
 	/// <value>The IO point region count.</value>
-	public byte IOPointRegionCount { get { return (byte)ioPortRegions.Count; } }
+	public byte IOPointRegionCount => (byte)ioPortRegions.Count;
 
 	/// <summary>
 	/// Gets the memory region count.
 	/// </summary>
 	/// <value>The memory region count.</value>
-	public byte AddressRegionCount { get { return (byte)addressRegions.Count; } }
+	public byte AddressRegionCount => (byte)addressRegions.Count;
 
 	/// <summary>
 	/// Gets the IO port.

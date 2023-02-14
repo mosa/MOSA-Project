@@ -22,7 +22,7 @@ public class VfsFileSystem : IFileSystemService, IFileSystem
 	/// <summary>
 	/// </summary>
 	/// <value></value>
-	public bool IsReadOnly { get { return Fat.IsReadOnly; } }
+	public bool IsReadOnly => Fat.IsReadOnly;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="VfsFileSystem"/> class.
@@ -37,7 +37,7 @@ public class VfsFileSystem : IFileSystemService, IFileSystem
 	/// Retrieves the type of the file system settings class to pass to IFileSystemService.Format
 	/// </summary>
 	/// <value></value>
-	public GenericFileSystemSettings SettingsType { get { return Fat.SettingsType; } }
+	public GenericFileSystemSettings SettingsType => Fat.SettingsType;
 
 	/// <summary>
 	/// Mounts a file system from the specified stream/device.

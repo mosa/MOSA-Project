@@ -74,13 +74,13 @@ public abstract class MosaUnit
 			this.unit = unit;
 		}
 
-		public object? UnderlyingObject { set { unit.UnderlyingObject = value; } }
+		public object? UnderlyingObject { set => unit.UnderlyingObject = value; }
 
-		public string Name { set { unit.Name = value; } }
+		public string Name { set => unit.Name = value; }
 
-		public bool IsCompilerGenerated { set { unit.IsCompilerGenerated = value; } }
+		public bool IsCompilerGenerated { set => unit.IsCompilerGenerated = value; }
 
-		public IList<MosaCustomAttribute>? CustomAttributes { get { return unit.customAttributes; } }
+		public IList<MosaCustomAttribute>? CustomAttributes => unit.customAttributes;
 
 		public abstract void Dispose();
 	}

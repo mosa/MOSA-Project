@@ -8,15 +8,15 @@ public sealed class ExtendedBlock2
 {
 	public BasicBlock BasicBlock { get; }
 
-	public int Sequence { get { return BasicBlock.Sequence; } }
+	public int Sequence => BasicBlock.Sequence;
 
 	public int LoopDepth { get; }
 
 	public Range Range { get; set; }
 
-	public int Start { get { return Range.Start; } }
+	public int Start => Range.Start;
 
-	public int End { get { return Range.End; } }
+	public int End => Range.End;
 
 	public BitArray LiveGen { get; set; }
 

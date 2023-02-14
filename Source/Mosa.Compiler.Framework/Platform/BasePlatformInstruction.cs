@@ -10,7 +10,7 @@ public abstract class BasePlatformInstruction : BaseInstruction
 {
 	#region Properties
 
-	public override bool IsPlatformInstruction { get { return true; } }
+	public override bool IsPlatformInstruction => true;
 
 	#endregion Properties
 

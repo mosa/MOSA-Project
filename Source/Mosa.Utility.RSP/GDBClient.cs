@@ -18,14 +18,14 @@ public sealed class GDBClient
 	private const char Suffix = '#';
 
 	private readonly object sync = new object();
-	private GDBNetworkStream stream = null;
+	private GDBNetworkStream stream;
 
 	private readonly byte[] receiveBuffer = new byte[1024];
 	private readonly List<byte> receivedData = new List<byte>();
 
 	private readonly Queue<GDBCommand> commandQueue = new Queue<GDBCommand>();
 
-	private GDBCommand currentCommand = null;
+	private GDBCommand currentCommand;
 
 	private static readonly byte[] breakData = new byte[1] { 3 };
 
@@ -35,10 +35,7 @@ public sealed class GDBClient
 
 	public GDBNetworkStream Stream
 	{
-		get
-		{
-			return stream;
-		}
+		get => stream;
 		set
 		{
 			stream = value;

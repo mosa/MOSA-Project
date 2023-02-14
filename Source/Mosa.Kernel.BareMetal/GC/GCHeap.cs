@@ -15,24 +15,21 @@ public /*readonly*/ struct GCHeap
 
 	public Pointer Address
 	{
-		get { return Entry.LoadPointer(); }
-		set { Entry.StorePointer(value); }
+		get => Entry.LoadPointer();
+		set => Entry.StorePointer(value);
 	}
 
 	public uint Size
 	{
-		get { return Entry.Load32(Pointer.Size); }
-		set { Entry.Store32(Pointer.Size, value); }
+		get => Entry.Load32(Pointer.Size);
+		set => Entry.Store32(Pointer.Size, value);
 	}
 
 	public uint Used
 	{
-		get { return Entry.Load32(Pointer.Size + sizeof(uint)); }
-		set { Entry.Store32(Pointer.Size + sizeof(uint), value); }
+		get => Entry.Load32(Pointer.Size + sizeof(uint));
+		set => Entry.Store32(Pointer.Size + sizeof(uint), value);
 	}
 
-	public Pointer EndAddress
-	{
-		get { return Address + Size; }
-	}
+	public Pointer EndAddress => Address + Size;
 }

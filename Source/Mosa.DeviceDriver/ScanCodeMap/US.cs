@@ -223,7 +223,7 @@ public class US : IScanCodeMap
 			keyState = KeyState.Normal;
 			return key;
 		}
-		else if ((keyState == KeyState.Escaped) || (keyState == KeyState.EscapeBreak))
+		else if (keyState is KeyState.Escaped or KeyState.EscapeBreak)
 		{
 			if (scancode == 0xE0)
 			{

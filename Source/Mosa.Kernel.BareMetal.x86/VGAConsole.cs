@@ -11,20 +11,20 @@ public static class VGAConsole
 
 	private static ControlState State = ControlState.Normal;
 
-	private static byte BufferLength = 0;
-	private static ulong BufferData = 0; // small 8 bit buffer
+	private static byte BufferLength;
+	private static ulong BufferData; // small 8 bit buffer
 
 	private static byte FirstCharacter;
 	private static byte SecondCharacter;
 	private static byte FinalCharacter;
 
-	private static int Parameter1 = 0;
-	private static int Parameter2 = 0;
-	private static int Parameter3 = 0;
-	private static int Parameter4 = 0;
-	private static int Parameter5 = 0;
-	private static int Parameter6 = 0;
-	private static int ParameterCount = 0;
+	private static int Parameter1;
+	private static int Parameter2;
+	private static int Parameter3;
+	private static int Parameter4;
+	private static int Parameter5;
+	private static int Parameter6;
+	private static int ParameterCount;
 
 	public static void Initialize()
 	{
@@ -106,7 +106,7 @@ public static class VGAConsole
 		{
 			SecondCharacter = b;
 
-			if ((b == (byte)'=') || (b == (byte)'>') || (b == (byte)'<'))
+			if (b is (byte)'=' or (byte)'>' or (byte)'<')
 			{
 				Evaluate();
 			}

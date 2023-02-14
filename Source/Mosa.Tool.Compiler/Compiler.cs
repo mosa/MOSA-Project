@@ -287,7 +287,7 @@ Example: Mosa.Tool.Compiler.exe -o Mosa.HelloWorld.x86.bin -platform x86 Mosa.He
 			baseFilename = "_mosa_";
 		}
 
-		if (compilerToolSettings.OutputFile == null || compilerToolSettings.OutputFile == "%DEFAULT%")
+		if (compilerToolSettings.OutputFile is null or "%DEFAULT%")
 		{
 			compilerToolSettings.OutputFile = Path.Combine(defaultFolder, $"{baseFilename}.bin");
 		}

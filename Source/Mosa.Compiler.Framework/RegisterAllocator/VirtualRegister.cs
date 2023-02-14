@@ -15,27 +15,29 @@ public sealed class VirtualRegister
 
 	public readonly PhysicalRegister PhysicalRegister;
 
-	public bool IsPhysicalRegister { get { return VirtualRegisterOperand == null; } }
+	public bool IsPhysicalRegister => VirtualRegisterOperand == null;
 
-	public bool IsVirtualRegister { get { return VirtualRegisterOperand != null; } }
+	public bool IsVirtualRegister => VirtualRegisterOperand != null;
 
 	public List<LiveInterval> LiveIntervals { get; } = new List<LiveInterval>(1);
 
-	public int Count { get { return LiveIntervals.Count; } }
+	public int Count => LiveIntervals.Count;
 
-	public LiveInterval LastRange { get { return LiveIntervals.Count == 0 ? null : LiveIntervals[LiveIntervals.Count - 1]; } }
+	public LiveInterval LastRange => LiveIntervals.Count == 0 ? null : LiveIntervals[LiveIntervals.Count - 1];
 
-	public LiveInterval FirstRange { get { return LiveIntervals.Count == 0 ? null : LiveIntervals[0]; } set { LiveIntervals[0] = value; } }
+	public LiveInterval FirstRange { get => LiveIntervals.Count == 0 ? null : LiveIntervals[0];
+		set => LiveIntervals[0] = value;
+	}
 
 	public Operand SpillSlotOperand;
 
-	public bool IsFloatingPoint { get { return VirtualRegisterOperand.IsFloatingPoint; } }
+	public bool IsFloatingPoint => VirtualRegisterOperand.IsFloatingPoint;
 
 	public bool IsReserved { get; }
 
 	public bool IsSpilled;
 
-	public bool IsUsed { get { return Count != 0; } }
+	public bool IsUsed => Count != 0;
 
 	public VirtualRegister(Operand virtualRegister)
 	{

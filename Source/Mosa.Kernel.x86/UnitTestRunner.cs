@@ -14,16 +14,16 @@ public static class UnitTestRunner
 
 	private static readonly uint counter = 0;
 
-	private static int testReady = 0;
-	private static int testResultReady = 0;
-	private static int testResultReported = 0;
+	private static int testReady;
+	private static int testResultReady;
+	private static int testResultReported;
 
-	private static uint testID = 0;
-	private static uint testParameters = 0;
-	private static uint testMethodAddress = 0;
-	private static uint testResultType = 0;
+	private static uint testID;
+	private static uint testParameters;
+	private static uint testMethodAddress;
+	private static uint testResultType;
 
-	private static ulong testResult = 0;
+	private static ulong testResult;
 
 	public static void Setup()
 	{

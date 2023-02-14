@@ -14,7 +14,9 @@ public class ConsoleManager
 	public ConsoleSession Boot;
 	public ConsoleSession Debug;
 
-	public ConsoleSession Active { get { return active; } set { Switch(value); } }
+	public ConsoleSession Active { get => active;
+		set => Switch(value);
+	}
 
 	public static void Setup()
 	{

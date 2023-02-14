@@ -27,7 +27,7 @@ public sealed class StaticLoadOptimizationStage : BaseCodeTransformationStage
 			return;
 
 		// HARD CODED
-		if (operand1.Field.DeclaringType.IsValueType && (operand1.Field.DeclaringType.Name == "System.IntPtr" || operand1.Field.DeclaringType.Name == "System.UIntPtr") && operand1.Field.Name == "Zero")
+		if (operand1.Field.DeclaringType.IsValueType && operand1.Field.DeclaringType.Name is "System.IntPtr" or "System.UIntPtr" && operand1.Field.Name == "Zero")
 		{
 			context.SetInstruction(IRInstruction.Move32, context.Result, Constant32_0);
 			return;
@@ -45,7 +45,7 @@ public sealed class StaticLoadOptimizationStage : BaseCodeTransformationStage
 			return;
 
 		// HARD CODED
-		if (operand1.Field.DeclaringType.IsValueType && (operand1.Field.DeclaringType.Name == "System.IntPtr" || operand1.Field.DeclaringType.Name == "System.UIntPtr") && operand1.Field.Name == "Zero")
+		if (operand1.Field.DeclaringType.IsValueType && operand1.Field.DeclaringType.Name is "System.IntPtr" or "System.UIntPtr" && operand1.Field.Name == "Zero")
 		{
 			context.SetInstruction(IRInstruction.Move64, context.Result, Constant64_0);
 			return;

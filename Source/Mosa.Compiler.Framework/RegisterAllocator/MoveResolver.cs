@@ -180,9 +180,7 @@ public sealed class MoveResolver
 
 			// Note: This won't work for expanded switch statements... but we can't insert into the end of those blocks anyway
 			while (context.IsEmpty
-				   || context.Instruction.FlowControl == FlowControl.UnconditionalBranch
-				   || context.Instruction.FlowControl == FlowControl.ConditionalBranch
-				   || context.Instruction.FlowControl == FlowControl.Return)
+			       || context.Instruction.FlowControl is FlowControl.UnconditionalBranch or FlowControl.ConditionalBranch or FlowControl.Return)
 			{
 				context.GotoPrevious();
 			}

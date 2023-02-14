@@ -19,13 +19,10 @@ public sealed unsafe class RuntimeType : Type
 	internal TypeAttributes attributes; // FIXME: this should be private, only temporarily internal
 	private readonly RuntimeTypeHandle declaringTypeHandle;
 	private readonly RuntimeTypeHandle elementTypeHandle;
-	private Type declaringType = null;
-	private Type elementType = null;
+	private Type declaringType;
+	private Type elementType;
 
-	public override string AssemblyQualifiedName
-	{
-		get { return assemblyQualifiedName; }
-	}
+	public override string AssemblyQualifiedName => assemblyQualifiedName;
 
 	public override Type DeclaringType
 	{
@@ -41,47 +38,25 @@ public sealed unsafe class RuntimeType : Type
 		}
 	}
 
-	public override string FullName
-	{
-		get { return fullname; }
-	}
+	public override string FullName => fullname;
 
-	public override int GenericParameterPosition
-	{
-		get { throw new NotSupportedException(); }
-	}
+	public override int GenericParameterPosition => throw new NotSupportedException();
 
-	public override Type[] GenericTypeArguments
-	{
-		get { return new Type[0]; }
-	}
+	public override Type[] GenericTypeArguments => new Type[0];
 
-	public override bool IsConstructedGenericType
-	{
+	public override bool IsConstructedGenericType =>
 		// We don't know so just return false
-		get { return false; }
-	}
+		false;
 
-	public override bool IsGenericParameter
-	{
+	public override bool IsGenericParameter =>
 		// We don't know so just return false
-		get { return false; }
-	}
+		false;
 
-	public override string Name
-	{
-		get { return name; }
-	}
+	public override string Name => name;
 
-	public override string Namespace
-	{
-		get { return @namespace; }
-	}
+	public override string Namespace => @namespace;
 
-	public override RuntimeTypeHandle TypeHandle
-	{
-		get { return handle; }
-	}
+	public override RuntimeTypeHandle TypeHandle => handle;
 
 	internal RuntimeType(RuntimeTypeHandle handle)
 	{
@@ -139,7 +114,7 @@ public sealed unsafe class RuntimeType : Type
 
 	protected override bool IsArrayImpl()
 	{
-		return typeCode == TypeCode.Array || typeCode == TypeCode.SZArray;
+		return typeCode is TypeCode.Array or TypeCode.SZArray;
 	}
 
 	protected override bool IsByRefImpl()
@@ -155,7 +130,7 @@ public sealed unsafe class RuntimeType : Type
 
 	protected override bool IsPointerImpl()
 	{
-		return typeCode == TypeCode.ManagedPointer || typeCode == TypeCode.UnmanagedPointer;
+		return typeCode is TypeCode.ManagedPointer or TypeCode.UnmanagedPointer;
 	}
 
 	public override Type MakeArrayType()

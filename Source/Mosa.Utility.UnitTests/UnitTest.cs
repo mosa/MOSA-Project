@@ -13,17 +13,17 @@ public class UnitTest
 	private readonly UnitTestInfo UnitTestInfo;
 	private readonly LinkerMethodInfo LinkerMethodInfo;
 
-	public string FullMethodName { get { return UnitTestInfo.FullMethodName; } }
-	public MethodInfo MethodInfo { get { return UnitTestInfo.MethodInfo; } }
-	public MosaUnitTestAttribute UnitTestAttribute { get { return UnitTestInfo.UnitTestAttribute; } }
-	public object[] Values { get { return UnitTestInfo.Values; } }
-	public object Expected { get { return UnitTestInfo.Expected; } }
+	public string FullMethodName => UnitTestInfo.FullMethodName;
+	public MethodInfo MethodInfo => UnitTestInfo.MethodInfo;
+	public MosaUnitTestAttribute UnitTestAttribute => UnitTestInfo.UnitTestAttribute;
+	public object[] Values => UnitTestInfo.Values;
+	public object Expected => UnitTestInfo.Expected;
 
-	public MosaMethod MosaMethod { get { return LinkerMethodInfo.MosaMethod; } }
-	public IntPtr MosaMethodAddress { get { return LinkerMethodInfo.MosaMethodAddress; } }
-	public string MethodNamespaceName { get { return LinkerMethodInfo.MethodNamespaceName; } }
-	public string MethodTypeName { get { return LinkerMethodInfo.MethodTypeName; } }
-	public string MethodName { get { return LinkerMethodInfo.MethodName; } }
+	public MosaMethod MosaMethod => LinkerMethodInfo.MosaMethod;
+	public IntPtr MosaMethodAddress => LinkerMethodInfo.MosaMethodAddress;
+	public string MethodNamespaceName => LinkerMethodInfo.MethodNamespaceName;
+	public string MethodTypeName => LinkerMethodInfo.MethodTypeName;
+	public string MethodName => LinkerMethodInfo.MethodName;
 
 	public object Result { get; set; }
 

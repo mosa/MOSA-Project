@@ -38,20 +38,14 @@ public sealed class Pipeline<T> : IEnumerable<T> where T : class
 	/// <summary>
 	/// Returns the number of stages in the compiler pipeline.
 	/// </summary>
-	public int Count
-	{
-		get { return pipeline.Count; }
-	}
+	public int Count => pipeline.Count;
 
 	/// <summary>
 	/// Retrieves the indexed compilation stage.
 	/// </summary>
 	/// <param name="index">The index of the compilation stage to return.</param>
 	/// <returns>The compilation stage at the requested index.</returns>
-	public T this[int index]
-	{
-		get { return pipeline[index]; }
-	}
+	public T this[int index] => pipeline[index];
 
 	#endregion Properties
 

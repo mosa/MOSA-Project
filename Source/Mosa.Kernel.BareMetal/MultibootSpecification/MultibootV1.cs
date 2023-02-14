@@ -58,100 +58,100 @@ public /*readonly*/ struct MultibootV1
 	/// <summary>
 	/// Gets the flags.
 	/// </summary>
-	public uint Flags { get { return Entry.Load32(MultiBootInfoOffset.Flags); } }
+	public uint Flags => Entry.Load32(MultiBootInfoOffset.Flags);
 
 	/// <summary>
 	/// Gets the memory lower.
 	/// </summary>
-	public uint MemoryLower { get { return Entry.Load32(MultiBootInfoOffset.MemLower); } }
+	public uint MemoryLower => Entry.Load32(MultiBootInfoOffset.MemLower);
 
 	/// <summary>
 	/// Gets the memory upper.
 	/// </summary>
-	public uint MemoryUpper { get { return Entry.Load32(MultiBootInfoOffset.MemUpper); } }
+	public uint MemoryUpper => Entry.Load32(MultiBootInfoOffset.MemUpper);
 
 	/// <summary>
 	/// Gets the boot device.
 	/// </summary>
-	public uint BootDevice { get { return Entry.Load32(MultiBootInfoOffset.BootDevice); } }
+	public uint BootDevice => Entry.Load32(MultiBootInfoOffset.BootDevice);
 
 	/// <summary>
 	/// Gets the command line address.
 	/// </summary>
-	public Pointer CommandLineAddress { get { return Entry.LoadPointer(MultiBootInfoOffset.CommandLine); } }
+	public Pointer CommandLineAddress => Entry.LoadPointer(MultiBootInfoOffset.CommandLine);
 
 	/// <summary>
 	/// Gets the module count.
 	/// </summary>
-	public uint ModuleCount { get { return Entry.Load32(MultiBootInfoOffset.ModuleCount); } }
+	public uint ModuleCount => Entry.Load32(MultiBootInfoOffset.ModuleCount);
 
 	/// <summary>
 	/// Gets the module start.
 	/// </summary>
-	public Pointer ModuleStart { get { return Entry.LoadPointer(MultiBootInfoOffset.ModuleAddress); } }
+	public Pointer ModuleStart => Entry.LoadPointer(MultiBootInfoOffset.ModuleAddress);
 
 	/// <summary>
 	/// Gets the length of the memory map.
 	/// </summary>
-	public uint MemoryMapLength { get { return Entry.Load32(MultiBootInfoOffset.MemMapLength); } }
+	public uint MemoryMapLength => Entry.Load32(MultiBootInfoOffset.MemMapLength);
 
 	/// <summary>
 	/// Gets the memory map start.
 	/// </summary>
-	public Pointer MemoryMapStart { get { return Entry.LoadPointer(MultiBootInfoOffset.MemMapAddress); } }
+	public Pointer MemoryMapStart => Entry.LoadPointer(MultiBootInfoOffset.MemMapAddress);
 
 	/// <summary>
 	/// Gets the length of the drive.
 	/// </summary>
-	public uint DriveLength { get { return Entry.Load32(MultiBootInfoOffset.DriveLength); } }
+	public uint DriveLength => Entry.Load32(MultiBootInfoOffset.DriveLength);
 
 	/// <summary>
 	/// Gets the drive start.
 	/// </summary>
-	public uint DriveStart { get { return Entry.Load32(MultiBootInfoOffset.DriveAddress); } }
+	public uint DriveStart => Entry.Load32(MultiBootInfoOffset.DriveAddress);
 
 	/// <summary>
 	/// Gets the configuration table.
 	/// </summary>
-	public uint ConfigurationTable { get { return Entry.Load32(MultiBootInfoOffset.ConfigTable); } }
+	public uint ConfigurationTable => Entry.Load32(MultiBootInfoOffset.ConfigTable);
 
 	/// <summary>
 	/// Gets the name of the boot loader address.
 	/// </summary>
-	public uint BootLoaderName { get { return Entry.Load32(MultiBootInfoOffset.BootLoaderName); } }
+	public uint BootLoaderName => Entry.Load32(MultiBootInfoOffset.BootLoaderName);
 
 	/// <summary>
 	/// Gets the APM table.
 	/// </summary>
-	public Pointer APMTable { get { return Entry.LoadPointer(MultiBootInfoOffset.ApmTable); } }
+	public Pointer APMTable => Entry.LoadPointer(MultiBootInfoOffset.ApmTable);
 
 	/// <summary>
 	/// Gets the VBE control information.
 	/// </summary>
-	public uint VBEControlInformation { get { return Entry.Load32(MultiBootInfoOffset.VbeControlInfo); } }
+	public uint VBEControlInformation => Entry.Load32(MultiBootInfoOffset.VbeControlInfo);
 
 	/// <summary>
 	/// Gets the VBE mode info.
 	/// </summary>
-	public Pointer VBEModeInfo { get { return Entry.LoadPointer(MultiBootInfoOffset.VbeModeInfo); } }
+	public Pointer VBEModeInfo => Entry.LoadPointer(MultiBootInfoOffset.VbeModeInfo);
 
 	/// <summary>
 	/// Gets the VBE mode.
 	/// </summary>
-	public uint VBEMode { get { return Entry.Load32(MultiBootInfoOffset.VbeMode); } }
+	public uint VBEMode => Entry.Load32(MultiBootInfoOffset.VbeMode);
 
 	/// <summary>
 	/// Gets the VBE interface seg.
 	/// </summary>
-	public uint VBEInterfaceSeg { get { return Entry.Load32(MultiBootInfoOffset.VbeInterfaceSeg); } }
+	public uint VBEInterfaceSeg => Entry.Load32(MultiBootInfoOffset.VbeInterfaceSeg);
 
 	/// <summary>
 	/// Gets the VBE interface off.
 	/// </summary>
-	public uint VBEInterfaceOff { get { return Entry.Load32(MultiBootInfoOffset.VbeInterfaceOff); } }
+	public uint VBEInterfaceOff => Entry.Load32(MultiBootInfoOffset.VbeInterfaceOff);
 
 	/// <summary>
 	/// Gets the VBE interface len.
 	/// </summary>
-	public uint VBEInterfaceLen { get { return Entry.Load32(MultiBootInfoOffset.VbeInterfaceLength); } }
+	public uint VBEInterfaceLen => Entry.Load32(MultiBootInfoOffset.VbeInterfaceLength);
 }

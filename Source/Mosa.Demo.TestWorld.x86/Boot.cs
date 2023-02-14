@@ -145,7 +145,7 @@ public static class Boot
 
 	private static readonly object spinlock = new object();
 
-	private static uint totalticks = 0;
+	private static uint totalticks;
 
 	private static void UpdateThreadTicks(uint thread, uint ticks)
 	{
@@ -251,7 +251,7 @@ public static class Boot
 		}
 	}
 
-	private static uint counter = 0;
+	private static uint counter;
 
 	public static void ProcessInterrupt(uint interrupt, uint errorCode)
 	{

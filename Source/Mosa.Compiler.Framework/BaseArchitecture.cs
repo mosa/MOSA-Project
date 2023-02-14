@@ -76,7 +76,7 @@ public abstract class BaseArchitecture
 	/// <summary>
 	/// Gets the native alignment of the architecture in bytes.
 	/// </summary>
-	public uint NativeAlignment { get { return NativePointerSize; } }
+	public uint NativeAlignment => NativePointerSize;
 
 	/// <summary>
 	/// Gets the native size of architecture in bytes.
@@ -86,7 +86,7 @@ public abstract class BaseArchitecture
 	/// <summary>
 	/// Gets the size of the native instruction.
 	/// </summary>
-	public virtual InstructionSize NativeInstructionSize { get { return NativePointerSize == 4 ? InstructionSize.Size32 : InstructionSize.Size64; } }
+	public virtual InstructionSize NativeInstructionSize => NativePointerSize == 4 ? InstructionSize.Size32 : InstructionSize.Size64;
 
 	/// <summary>
 	/// Is the platform is 32 bit
@@ -94,22 +94,22 @@ public abstract class BaseArchitecture
 	/// <value>
 	///   <c>true</c> if [is32 bit]; otherwise, <c>false</c>.
 	/// </value>
-	public virtual bool Is32BitPlatform { get { return NativePointerSize == 4; } }
+	public virtual bool Is32BitPlatform => NativePointerSize == 4;
 
 	/// <summary>
 	/// Is the platform is 64 bit
 	/// </summary>
-	public virtual bool Is64BitPlatform { get { return NativePointerSize == 8; } }
+	public virtual bool Is64BitPlatform => NativePointerSize == 8;
 
 	/// <summary>
 	/// Gets the offset of first local.
 	/// </summary>
-	public virtual int OffsetOfFirstLocal { get { return 0; } }
+	public virtual int OffsetOfFirstLocal => 0;
 
 	/// <summary>
 	/// Gets the offset of first parameter.
 	/// </summary>
-	public virtual int OffsetOfFirstParameter { get { return (int)NativePointerSize * 2; } }
+	public virtual int OffsetOfFirstParameter => (int)NativePointerSize * 2;
 
 	/// <summary>
 	/// Gets the instructions.

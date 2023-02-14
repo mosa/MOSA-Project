@@ -21,7 +21,7 @@ public sealed class EndFilterInstruction : UnaryInstruction
 
 	#endregion Construction
 
-	public override FlowControl FlowControl { get { return FlowControl.EndFilter; } }
+	public override FlowControl FlowControl => FlowControl.EndFilter;
 
 	#region Methods
 

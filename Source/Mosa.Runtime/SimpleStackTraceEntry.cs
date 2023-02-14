@@ -9,7 +9,7 @@ namespace Mosa.Runtime;
 /// </summary>
 public struct SimpleStackTraceEntry
 {
-	public unsafe string MethodName { get { return MethodDefinition.Name; } }
+	public unsafe string MethodName => MethodDefinition.Name;
 
 	public MethodDefinition MethodDefinition;
 
@@ -41,8 +41,5 @@ public struct SimpleStackTraceEntry
 		}
 	}
 
-	public bool Valid
-	{
-		get { return !MethodDefinition.IsNull && MethodName != null; }
-	}
+	public bool Valid => !MethodDefinition.IsNull && MethodName != null;
 }

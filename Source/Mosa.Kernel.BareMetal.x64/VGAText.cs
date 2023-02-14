@@ -16,7 +16,7 @@ public static class VGAText
 	private const uint Columns = 80;
 	private const uint Rows = 25;
 
-	private static short Offset = 0;
+	private static short Offset;
 
 	private static byte Color { get; set; }
 
@@ -24,14 +24,14 @@ public static class VGAText
 
 	public static byte Column
 	{
-		get { return (byte)(Offset % Columns); }
-		private set { Offset = (short)((Columns * Row) + value); }
+		get => (byte)(Offset % Columns);
+		private set => Offset = (short)((Columns * Row) + value);
 	}
 
 	public static byte Row
 	{
-		get { return (byte)(Offset / Columns); }
-		private set { Offset = (short)((Columns * value) + Column); }
+		get => (byte)(Offset / Columns);
+		private set => Offset = (short)((Columns * value) + Column);
 	}
 
 	public static void SetColor(byte color)

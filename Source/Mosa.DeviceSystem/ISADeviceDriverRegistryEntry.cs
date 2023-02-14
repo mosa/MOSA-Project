@@ -4,7 +4,7 @@ namespace Mosa.DeviceSystem;
 
 public class ISADeviceDriverRegistryEntry : DeviceDriverRegistryEntry
 {
-	public override DeviceBusType BusType { get { return DeviceBusType.ISA; } }
+	public override DeviceBusType BusType => DeviceBusType.ISA;
 
 	public ushort BasePort { get; set; }
 

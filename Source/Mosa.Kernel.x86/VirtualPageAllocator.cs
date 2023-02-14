@@ -14,7 +14,7 @@ namespace Mosa.Kernel.x86;
 public static class VirtualPageAllocator
 {
 	private static uint pages;
-	private static bool initialized = false;
+	private static bool initialized;
 
 	/// <summary>
 	/// Setups this instance.

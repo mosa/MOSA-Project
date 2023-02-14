@@ -20,9 +20,9 @@ public static class Scheduler
 
 	private static uint CurrentThreadID;
 
-	private static int clockTicks = 0;
+	private static int clockTicks;
 
-	public static uint ClockTicks { get { return (uint)clockTicks; } }
+	public static uint ClockTicks => (uint)clockTicks;
 
 	public static void Setup()
 	{
