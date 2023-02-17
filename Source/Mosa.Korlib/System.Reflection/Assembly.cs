@@ -41,10 +41,10 @@ public abstract class Assembly
 	/// <returns>True if o is equal to this instance; otherwise, False.</returns>
 	public override bool Equals(object obj)
 	{
-		if (!(obj is Assembly assembly))
+		if (!(obj is Assembly))
 			return false;
 
-		return assembly.FullName == FullName;
+		return ((Assembly)obj).FullName == FullName;
 	}
 
 	public override int GetHashCode()

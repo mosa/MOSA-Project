@@ -123,8 +123,8 @@ public partial struct Vector2 : IEquatable<Vector2>, IFormattable
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static bool operator ==(Vector2 left, Vector2 right)
 	{
-		return left.X == right.X
-		       && left.Y == right.Y;
+		return (left.X == right.X)
+		       && (left.Y == right.Y);
 	}
 
 	/// <summary>Returns a value that indicates whether two specified vectors are not equal.</summary>
@@ -285,8 +285,8 @@ public partial struct Vector2 : IEquatable<Vector2>, IFormattable
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static float Dot(Vector2 value1, Vector2 value2)
 	{
-		return value1.X * value2.X
-		       + value1.Y * value2.Y;
+		return (value1.X * value2.X)
+		       + (value1.Y * value2.Y);
 	}
 
 	/// <summary>Performs a linear interpolation between two vectors based on the given weighting.</summary>
@@ -300,7 +300,7 @@ public partial struct Vector2 : IEquatable<Vector2>, IFormattable
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static Vector2 Lerp(Vector2 value1, Vector2 value2, float amount)
 	{
-		return value1 * (1.0f - amount) + value2 * amount;
+		return (value1 * (1.0f - amount)) + (value2 * amount);
 	}
 
 	/// <summary>Returns a vector whose elements are the maximum of each of the pairs of elements in two specified vectors.</summary>
@@ -312,8 +312,8 @@ public partial struct Vector2 : IEquatable<Vector2>, IFormattable
 	public static Vector2 Max(Vector2 value1, Vector2 value2)
 	{
 		return new Vector2(
-			value1.X > value2.X ? value1.X : value2.X,
-			value1.Y > value2.Y ? value1.Y : value2.Y
+			(value1.X > value2.X) ? value1.X : value2.X,
+			(value1.Y > value2.Y) ? value1.Y : value2.Y
 		);
 	}
 
@@ -326,8 +326,8 @@ public partial struct Vector2 : IEquatable<Vector2>, IFormattable
 	public static Vector2 Min(Vector2 value1, Vector2 value2)
 	{
 		return new Vector2(
-			value1.X < value2.X ? value1.X : value2.X,
-			value1.Y < value2.Y ? value1.Y : value2.Y
+			(value1.X < value2.X) ? value1.X : value2.X,
+			(value1.Y < value2.Y) ? value1.Y : value2.Y
 		);
 	}
 
@@ -387,7 +387,7 @@ public partial struct Vector2 : IEquatable<Vector2>, IFormattable
 	public static Vector2 Reflect(Vector2 vector, Vector2 normal)
 	{
 		float dot = Dot(vector, normal);
-		return vector - 2 * dot * normal;
+		return vector - (2 * dot * normal);
 	}
 
 	/// <summary>Returns a vector whose elements are the square root of each of a specified vector's elements.</summary>
@@ -519,12 +519,12 @@ public partial struct Vector2 : IEquatable<Vector2>, IFormattable
 			throw new ArgumentNullException(nameof(array));
 		}
 
-		if (index < 0 || index >= array.Length)
+		if ((index < 0) || (index >= array.Length))
 		{
 			throw new ArgumentOutOfRangeException(nameof(index));
 		}
 
-		if (array.Length - index < 2)
+		if ((array.Length - index) < 2)
 		{
 			throw new ArgumentException("array.Length - index < 2");
 		}
@@ -564,7 +564,7 @@ public partial struct Vector2 : IEquatable<Vector2>, IFormattable
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public override readonly bool Equals([NotNullWhen(true)] object obj)
 	{
-		return obj != null && obj is Vector2 vector2 && Equals(vector2);
+		return obj != null && (obj is Vector2) && Equals((Vector2)obj);
 	}
 
 	/// <summary>Returns a value that indicates whether this instance and another vector are equal.</summary>

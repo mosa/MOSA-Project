@@ -17,9 +17,9 @@ public struct Int64: IComparable, IComparable<long>, IEquatable<long>
 	{
 		if (value == null) { return 1; }
 
-		if (!(value is long l)) { throw new ArgumentException("Argument Type Must Be Int64", "value"); }
+		if (!(value is long)) { throw new ArgumentException("Argument Type Must Be Int64", "value"); }
 
-		long l_value = l.m_value;
+		long l_value = ((long)value).m_value;
 
 		if (m_value < l_value) return -1;
 		if (m_value > l_value) return 1;
@@ -37,9 +37,9 @@ public struct Int64: IComparable, IComparable<long>, IEquatable<long>
 
 	public override bool Equals(object obj)
 	{
-		if (!(obj is long l)) { return false; }
+		if (!(obj is long)) { return false; }
 
-		return m_value == l.m_value;
+		return m_value == ((long)obj).m_value;
 	}
 
 	public bool Equals(long obj)
@@ -91,7 +91,7 @@ public struct Int64: IComparable, IComparable<long>, IEquatable<long>
 			{
 				throw new Exception("Format is incorrect");
 			}
-			result = result * 10 + ind;
+			result = (result * 10) + ind;
 		}
 
 		if (neg) result *= -1;

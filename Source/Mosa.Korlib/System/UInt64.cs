@@ -17,9 +17,9 @@ public struct UInt64: IComparable, IComparable<ulong>, IEquatable<ulong>
 	{
 		if (value == null) { return 1; }
 
-		if (!(value is ulong value1)) { throw new ArgumentException("Argument Type Must Be UInt64", "value"); }
+		if (!(value is ulong)) { throw new ArgumentException("Argument Type Must Be UInt64", "value"); }
 
-		ulong u_value = value1.m_value;
+		ulong u_value = ((ulong)value).m_value;
 
 		if (m_value < u_value) return -1;
 		if (m_value > u_value) return 1;
@@ -37,19 +37,19 @@ public struct UInt64: IComparable, IComparable<ulong>, IEquatable<ulong>
 
 	public override bool Equals(object obj)
 	{
-		if (!(obj is ulong @ulong)) { return false; }
+		if (!(obj is ulong)) { return false; }
 
-		return m_value == @ulong.m_value;
+		return m_value == ((ulong)obj).m_value;
 	}
 
 	public bool Equals(ulong value)
 	{
-		return m_value == value;
+		return (m_value == value);
 	}
 
 	public override int GetHashCode()
 	{
-		return (int)m_value ^ (int)(m_value >> 32);
+		return ((int)m_value) ^ (int)(m_value >> 32);
 	}
 
 	public override unsafe string ToString()
@@ -67,7 +67,7 @@ public struct UInt64: IComparable, IComparable<ulong>, IEquatable<ulong>
 
 		for (int i = count - 1; i >= 0; i--)
 		{
-			s.first_char[i] = (char)(temp % 10 + 0x30);
+			s.first_char[i] = (char)((temp % 10) + 0x30);
 			temp /= 10;
 		}
 

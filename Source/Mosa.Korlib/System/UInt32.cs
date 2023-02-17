@@ -17,9 +17,9 @@ public struct UInt32: IComparable, IComparable<uint>, IEquatable<uint>
 	{
 		if (value == null) { return 1; }
 
-		if (!(value is uint u)) { throw new ArgumentException("Argument Type Must Be UInt32", "value"); }
+		if (!(value is uint)) { throw new ArgumentException("Argument Type Must Be UInt32", "value"); }
 
-		uint u_value = u.m_value;
+		uint u_value = ((uint)value).m_value;
 
 		if (m_value < u_value) return -1;
 		if (m_value > u_value) return 1;
@@ -37,9 +37,9 @@ public struct UInt32: IComparable, IComparable<uint>, IEquatable<uint>
 
 	public override bool Equals(object obj)
 	{
-		if (!(obj is uint u)) { return false; }
+		if (!(obj is uint)) { return false; }
 
-		return m_value == u.m_value;
+		return m_value == ((uint)obj).m_value;
 	}
 
 	public bool Equals(uint value)
@@ -85,7 +85,7 @@ public struct UInt32: IComparable, IComparable<uint>, IEquatable<uint>
 		var i = 0;
 		while (i < len)
 		{
-			if (n > 0xFFFFFFFF / 10)
+			if (n > (0xFFFFFFFF / 10))
 			{
 				return false;
 			}

@@ -114,8 +114,9 @@ public class Stack : ICollection, IEnumerable, ICloneable
 			throw new ArgumentException("Argument_InvalidOffLen");
 
 		int num = 0;
-		if (array is object[] objArray)
+		if (array is object[])
 		{
+			object[] objArray = (object[])array;
 			for (; num < _size; ++num)
 				objArray[num + index] = _array[_size - num - 1];
 		}
@@ -166,8 +167,8 @@ public class Stack : ICollection, IEnumerable, ICloneable
 
 	private class SyncStack : Stack
 	{
-		private readonly Stack _s;
-		private readonly object _root;
+		private Stack _s;
+		private object _root;
 
 		internal SyncStack(Stack stack)
 		{
@@ -247,9 +248,9 @@ public class Stack : ICollection, IEnumerable, ICloneable
 
 	public class StackEnumerator : IEnumerator, ICloneable
 	{
-		private readonly Stack _stack;
+		private Stack _stack;
 		private int _index;
-		private readonly int _version;
+		private int _version;
 		private object currentElement;
 
 		internal StackEnumerator(Stack stack)

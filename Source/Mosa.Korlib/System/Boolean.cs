@@ -47,7 +47,7 @@ public struct Boolean: IComparable, IComparable<bool>, IEquatable<bool>
 
 	public override int GetHashCode()
 	{
-		return m_value ? True : False;
+		return (m_value) ? True : False;
 	}
 
 	public override string ToString()
@@ -59,9 +59,9 @@ public struct Boolean: IComparable, IComparable<bool>, IEquatable<bool>
 	//
 	public override bool Equals(object obj)
 	{
-		if (obj is Boolean b)
+		if (obj is Boolean)
 		{
-			return this.m_value == b.m_value;
+			return (this.m_value == ((Boolean)obj).m_value);
 		}
 		else
 		{
@@ -71,16 +71,16 @@ public struct Boolean: IComparable, IComparable<bool>, IEquatable<bool>
 
 	public bool Equals(bool obj)
 	{
-		return this.m_value == obj.m_value;
+		return (this.m_value == obj.m_value);
 	}
 
 	public int CompareTo(object obj)
 	{
 		if (obj == null) { return 1; }
 
-		if (!(obj is bool b)) { throw new ArgumentException("Argument Type Must Be Boolean", "obj"); }
+		if (!(obj is bool)) { throw new ArgumentException("Argument Type Must Be Boolean", "obj"); }
 
-		if (this.m_value == b.m_value) { return 0; }
+		if (this.m_value == ((bool)obj).m_value) { return 0; }
 
 		if (this.m_value == false) { return -1; }
 

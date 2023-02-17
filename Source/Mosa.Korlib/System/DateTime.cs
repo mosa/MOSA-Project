@@ -146,7 +146,7 @@ public readonly partial struct DateTime : IComparable, IComparable<DateTime>, IE
 	{
 		if ((ulong)ticks > MaxTicks) ThrowTicksOutOfRange();
 		Debug.Assert(kind == DateTimeKind.Local, "Internal Constructor is for local times only");
-		_dateData = (ulong)ticks | (isAmbiguousDst ? KindLocalAmbiguousDst : KindLocal);
+		_dateData = ((ulong)ticks | (isAmbiguousDst ? KindLocalAmbiguousDst : KindLocal));
 	}
 
 	private static void ThrowTicksOutOfRange() => throw new ArgumentOutOfRangeException("ticks", SR.ArgumentOutOfRange_DateTimeBadTicks);
@@ -440,12 +440,12 @@ public readonly partial struct DateTime : IComparable, IComparable<DateTime>, IE
 	public int CompareTo(object value)
 	{
 		if (value == null) return 1;
-		if (!(value is DateTime time))
+		if (!(value is DateTime))
 		{
 			throw new ArgumentException(SR.Arg_MustBeDateTime);
 		}
 
-		return Compare(this, time);
+		return Compare(this, (DateTime)value);
 	}
 
 	public int CompareTo(DateTime value)
@@ -535,7 +535,7 @@ public readonly partial struct DateTime : IComparable, IComparable<DateTime>, IE
 		// This line below fixes up the millis in the negative case
 		if (millis < 0)
 		{
-			millis -= millis % MillisPerDay * 2;
+			millis -= (millis % MillisPerDay) * 2;
 		}
 
 		millis += DoubleDateOffset / TicksPerMillisecond;
@@ -551,9 +551,9 @@ public readonly partial struct DateTime : IComparable, IComparable<DateTime>, IE
 	//
 	public override bool Equals(object value)
 	{
-		if (value is DateTime time)
+		if (value is DateTime)
 		{
-			return Ticks == time.Ticks;
+			return Ticks == ((DateTime)value).Ticks;
 		}
 		return false;
 	}
@@ -725,9 +725,9 @@ public readonly partial struct DateTime : IComparable, IComparable<DateTime>, IE
 	{
 		ulong seconds = UTicks / TicksPerSecond;
 		ulong minutes = seconds / 60;
-		second = (int)(seconds - minutes * 60);
+		second = (int)(seconds - (minutes * 60));
 		ulong hours = minutes / 60;
-		minute = (int)(minutes - hours * 60);
+		minute = (int)(minutes - (hours * 60));
 		hour = (int)((uint)hours % 24);
 	}
 
@@ -736,11 +736,11 @@ public readonly partial struct DateTime : IComparable, IComparable<DateTime>, IE
 	{
 		ulong milliseconds = UTicks / TicksPerMillisecond;
 		ulong seconds = milliseconds / 1000;
-		millisecond = (int)(milliseconds - seconds * 1000);
+		millisecond = (int)(milliseconds - (seconds * 1000));
 		ulong minutes = seconds / 60;
-		second = (int)(seconds - minutes * 60);
+		second = (int)(seconds - (minutes * 60));
 		ulong hours = minutes / 60;
-		minute = (int)(minutes - hours * 60);
+		minute = (int)(minutes - (hours * 60));
 		hour = (int)((uint)hours % 24);
 	}
 
@@ -749,11 +749,11 @@ public readonly partial struct DateTime : IComparable, IComparable<DateTime>, IE
 	{
 		ulong ticks = UTicks;
 		ulong seconds = ticks / TicksPerSecond;
-		tick = (int)(ticks - seconds * TicksPerSecond);
+		tick = (int)(ticks - (seconds * TicksPerSecond));
 		ulong minutes = seconds / 60;
-		second = (int)(seconds - minutes * 60);
+		second = (int)(seconds - (minutes * 60));
 		ulong hours = minutes / 60;
-		minute = (int)(minutes - hours * 60);
+		minute = (int)(minutes - (hours * 60));
 		hour = (int)((uint)hours % 24);
 	}
 
@@ -804,12 +804,12 @@ public readonly partial struct DateTime : IComparable, IComparable<DateTime>, IE
 	// Returns the millisecond part of this DateTime. The returned value
 	// is an integer between 0 and 999.
 	//
-	public int Millisecond => (int)(UTicks / TicksPerMillisecond % 1000);
+	public int Millisecond => (int)((UTicks / TicksPerMillisecond) % 1000);
 
 	// Returns the minute part of this DateTime. The returned value is
 	// an integer between 0 and 59.
 	//
-	public int Minute => (int)(UTicks / TicksPerMinute % 60);
+	public int Minute => (int)((UTicks / TicksPerMinute) % 60);
 
 	// Returns the month part of this DateTime. The returned value is an
 	// integer between 1 and 12.
@@ -819,7 +819,7 @@ public readonly partial struct DateTime : IComparable, IComparable<DateTime>, IE
 	// Returns the second part of this DateTime. The returned value is
 	// an integer between 0 and 59.
 	//
-	public int Second => (int)(UTicks / TicksPerSecond % 60);
+	public int Second => (int)((UTicks / TicksPerSecond) % 60);
 
 	// Returns the tick count for this DateTime. The returned value is
 	// the number of 100-nanosecond intervals that have elapsed since 1/1/0001
@@ -916,7 +916,7 @@ public readonly partial struct DateTime : IComparable, IComparable<DateTime>, IE
 
 	public static TimeSpan operator -(DateTime d1, DateTime d2) => new TimeSpan(d1.Ticks - d2.Ticks);
 
-	public static bool operator ==(DateTime d1, DateTime d2) => (d1._dateData ^ d2._dateData) << 2 == 0;
+	public static bool operator ==(DateTime d1, DateTime d2) => ((d1._dateData ^ d2._dateData) << 2) == 0;
 
 	public static bool operator !=(DateTime d1, DateTime d2) => !(d1 == d2);
 

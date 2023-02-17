@@ -17,9 +17,9 @@ public struct Int16: IComparable, IComparable<short>, IEquatable<short>
 	{
 		if (value == null) { return 1; }
 
-		if (!(value is short s)) { throw new ArgumentException("Argument Type Must Be Int16", "value"); }
+		if (!(value is short)) { throw new ArgumentException("Argument Type Must Be Int16", "value"); }
 
-		short s_value = s.m_value;
+		short s_value = ((short)value).m_value;
 
 		if (m_value < s_value) return -1;
 		if (m_value > s_value) return 1;
@@ -37,9 +37,9 @@ public struct Int16: IComparable, IComparable<short>, IEquatable<short>
 
 	public override bool Equals(object obj)
 	{
-		if (!(obj is short s)) { return false; }
+		if (!(obj is short)) { return false; }
 
-		return m_value == s.m_value;
+		return m_value == ((short)obj).m_value;
 	}
 
 	public bool Equals(short obj)
@@ -96,7 +96,7 @@ public struct Int16: IComparable, IComparable<short>, IEquatable<short>
 			{
 				throw new Exception("Format is incorrect");
 			}
-			result = (short)(result * 10 + ind);
+			result = (short)((result * 10) + ind);
 		}
 
 		if (neg) result *= -1;

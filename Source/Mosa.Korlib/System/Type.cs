@@ -117,10 +117,10 @@ public abstract class Type
 	/// <returns>True if the underlying system type of o is the same as the underlying system type of the current Type; otherwise, False. This method also returns False if the object specified by the o parameter is not a Type.</returns>
 	public override bool Equals(object obj)
 	{
-		if (!(obj is Type type))
+		if (!(obj is Type))
 			return false;
 
-		return type.TypeHandle.Equals(TypeHandle);
+		return ((Type)obj).TypeHandle.Equals(TypeHandle);
 	}
 
 	public static bool operator ==(Type left, Type right)

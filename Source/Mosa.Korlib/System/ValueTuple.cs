@@ -18,8 +18,9 @@ public struct ValueTuple<T1, T2> //: IEquatable<ValueTuple<T1, T2>>
 
 	public override bool Equals(object obj)
 	{
-		if (obj is ValueTuple<T1, T2> other)
+		if (obj is ValueTuple<T1, T2>)
 		{
+			var other = (ValueTuple<T1, T2>)obj;
 			return Equals(other);
 		}
 

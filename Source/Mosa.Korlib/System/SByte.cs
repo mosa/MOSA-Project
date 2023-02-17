@@ -17,9 +17,9 @@ public readonly struct SByte: IComparable, IComparable<sbyte>, IEquatable<sbyte>
 	{
 		if (value == null) { return 1; }
 
-		if (!(value is sbyte value1)) { throw new ArgumentException("Argument Type Must Be SByte", "value"); }
+		if (!(value is sbyte)) { throw new ArgumentException("Argument Type Must Be SByte", "value"); }
 
-		sbyte s_value = value1.m_value;
+		sbyte s_value = ((sbyte)value).m_value;
 
 		if (m_value < s_value) return -1;
 		if (m_value > s_value) return 1;
@@ -37,9 +37,9 @@ public readonly struct SByte: IComparable, IComparable<sbyte>, IEquatable<sbyte>
 
 	public override bool Equals(object obj)
 	{
-		if (!(obj is sbyte @sbyte)) { return false; }
+		if (!(obj is sbyte)) { return false; }
 
-		return m_value == @sbyte.m_value;
+		return m_value == ((sbyte)obj).m_value;
 	}
 
 	public bool Equals(sbyte obj)

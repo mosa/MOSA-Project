@@ -61,7 +61,7 @@ public abstract class MethodBase : MemberInfo
 	{
 		get
 		{
-			return this is ConstructorInfo && !IsStatic && (Attributes & MethodAttributes.RTSpecialName) == MethodAttributes.RTSpecialName;
+			return (this is ConstructorInfo && !IsStatic && (Attributes & MethodAttributes.RTSpecialName) == MethodAttributes.RTSpecialName);
 		}
 	}
 

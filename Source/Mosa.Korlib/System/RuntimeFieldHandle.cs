@@ -27,10 +27,10 @@ public struct RuntimeFieldHandle
 
 	public override bool Equals(object obj)
 	{
-		if (!(obj is RuntimeFieldHandle handle))
+		if (!(obj is RuntimeFieldHandle))
 			return false;
 
-		return handle.m_ptr == m_ptr;
+		return ((RuntimeFieldHandle)obj).m_ptr == m_ptr;
 	}
 
 	public static bool operator ==(RuntimeFieldHandle left, RuntimeFieldHandle right)

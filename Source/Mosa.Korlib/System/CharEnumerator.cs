@@ -25,7 +25,7 @@ public sealed class CharEnumerator : IEnumerator, ICloneable, IEnumerator<char>,
 
 	public bool MoveNext()
 	{
-		if (currentPosition < str.Length - 1)
+		if (currentPosition < (str.Length - 1))
 		{
 			currentPosition++;
 			currentElement = str[currentPosition];

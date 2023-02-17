@@ -97,7 +97,7 @@ public readonly struct ArraySegment<T> : IList<T>, IReadOnlyList<T>
 	}
 
 	public override int GetHashCode() =>
-		_array is null ? 0 : _offset * _count * _array.GetHashCode();
+		_array is null ? 0 : (_offset * _count * _array.GetHashCode());
 
 	public void CopyTo(T[] destination) => CopyTo(destination, 0);
 
@@ -121,7 +121,7 @@ public readonly struct ArraySegment<T> : IList<T>, IReadOnlyList<T>
 	}
 
 	public override bool Equals([NotNullWhen(true)] object obj) =>
-		obj is ArraySegment<T> segment && Equals(segment);
+		obj is ArraySegment<T> && Equals((ArraySegment<T>)obj);
 
 	public bool Equals(ArraySegment<T> obj) =>
 		obj._array == _array && obj._offset == _offset && obj._count == _count;

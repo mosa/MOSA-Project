@@ -21,7 +21,7 @@ public abstract partial class EqualityComparer<T> : IEqualityComparer, IEquality
 	int IEqualityComparer.GetHashCode(object obj)
 	{
 		if (obj == null) return 0;
-		if (obj is T obj1) return GetHashCode(obj1);
+		if (obj is T) return GetHashCode((T)obj);
 
 		throw new ArgumentException("Invalid argument for comparison");
 	}
@@ -30,7 +30,7 @@ public abstract partial class EqualityComparer<T> : IEqualityComparer, IEquality
 	{
 		if (x == y) return true;
 		if (x == null || y == null) return false;
-		if (x is T x1 && y is T y1) return Equals(x1, y1);
+		if ((x is T) && (y is T)) return Equals((T)x, (T)y);
 
 		throw new ArgumentException("Invalid argument for comparison");
 	}
