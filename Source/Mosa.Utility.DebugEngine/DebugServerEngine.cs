@@ -109,11 +109,11 @@ public sealed class DebugServerEngine
 			if (stream == null)
 				return false;
 
-			if (stream is NamedPipeClientStream)
-				return (stream as NamedPipeClientStream).IsConnected;
+			if (stream is NamedPipeClientStream clientStream)
+				return clientStream.IsConnected;
 
-			if (stream is DebugNetworkStream)
-				return (stream as DebugNetworkStream).IsConnected;
+			if (stream is DebugNetworkStream networkStream)
+				return networkStream.IsConnected;
 
 			return false;
 		}

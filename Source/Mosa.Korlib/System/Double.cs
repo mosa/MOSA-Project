@@ -56,12 +56,12 @@ public struct Double: IComparable, IComparable<double>, IEquatable<double>
 	{
 		if (value == null) { return 1; }
 
-		if (!(value is double))
+		if (!(value is double d))
 		{
 			throw new ArgumentException("Argument Type Must Be Double", "value");
 		}
 
-		double d_value = ((double)value).m_value;
+		double d_value = d.m_value;
 
 		if (IsPositiveInfinity(m_value) && IsPositiveInfinity(d_value))
 			return 0;
@@ -123,9 +123,9 @@ public struct Double: IComparable, IComparable<double>, IEquatable<double>
 
 	public override bool Equals(object obj)
 	{
-		if (!(obj is Double)) { return false; }
+		if (!(obj is Double d)) { return false; }
 
-		double value = ((double)obj).m_value;
+		double value = d.m_value;
 
 		if (m_value == value) { return true; }
 

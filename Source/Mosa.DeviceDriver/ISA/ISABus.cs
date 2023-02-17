@@ -34,9 +34,9 @@ public class ISABus : BaseDeviceDriver
 
 		foreach (var driver in drivers)
 		{
-			if (driver is ISADeviceDriverRegistryEntry)
+			if (driver is ISADeviceDriverRegistryEntry entry)
 			{
-				StartISADevice(driver as ISADeviceDriverRegistryEntry);
+				StartISADevice(entry);
 			}
 		}
 	}

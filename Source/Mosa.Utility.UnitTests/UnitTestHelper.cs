@@ -25,9 +25,9 @@ public static class UnitTestHelper
 		{
 			return String.Format("0x{0:X}", Convert.ToUInt32(o));
 		}
-		else if (o is Boolean)
+		else if (o is Boolean b)
 		{
-			return (bool)o ? "True" : "False";
+			return b ? "True" : "False";
 		}
 
 		return o.ToString();

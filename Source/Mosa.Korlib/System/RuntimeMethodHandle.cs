@@ -27,10 +27,10 @@ public struct RuntimeMethodHandle
 
 	public override bool Equals(object obj)
 	{
-		if (!(obj is RuntimeMethodHandle))
+		if (!(obj is RuntimeMethodHandle handle))
 			return false;
 
-		return ((RuntimeMethodHandle)obj).m_ptr == m_ptr;
+		return handle.m_ptr == m_ptr;
 	}
 
 	public static bool operator ==(RuntimeMethodHandle left, RuntimeMethodHandle right)

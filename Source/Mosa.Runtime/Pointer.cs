@@ -72,9 +72,9 @@ public struct Pointer
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public override unsafe bool Equals(Object obj)
 	{
-		if (obj is Pointer)
+		if (obj is Pointer pointer)
 		{
-			return value == ((Pointer)obj).value;
+			return value == pointer.value;
 		}
 		return false;
 	}

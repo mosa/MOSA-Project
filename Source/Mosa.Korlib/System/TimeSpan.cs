@@ -135,9 +135,9 @@ public readonly struct TimeSpan : IComparable, IComparable<TimeSpan>, IEquatable
 	public int CompareTo(object value)
 	{
 		if (value == null) return 1;
-		if (!(value is TimeSpan))
+		if (!(value is TimeSpan span))
 			throw new ArgumentException(SR.Arg_MustBeTimeSpan);
-		long t = ((TimeSpan)value)._ticks;
+		long t = span._ticks;
 		if (_ticks > t) return 1;
 		if (_ticks < t) return -1;
 		return 0;
@@ -165,9 +165,9 @@ public readonly struct TimeSpan : IComparable, IComparable<TimeSpan>, IEquatable
 
 	public override bool Equals([NotNullWhen(true)] object value)
 	{
-		if (value is TimeSpan)
+		if (value is TimeSpan span)
 		{
-			return _ticks == ((TimeSpan)value)._ticks;
+			return _ticks == span._ticks;
 		}
 		return false;
 	}

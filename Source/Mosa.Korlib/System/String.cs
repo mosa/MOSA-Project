@@ -324,10 +324,10 @@ public sealed class String : IEnumerable, IEnumerable<char>, IEquatable<String>,
 
 	public override bool Equals(object obj)
 	{
-		if (!(obj is string))
+		if (!(obj is string s))
 			return false;
 
-		return Equals(this, (string)obj);
+		return Equals(this, s);
 	}
 
 	public static bool operator ==(string a, string b)
@@ -360,9 +360,9 @@ public sealed class String : IEnumerable, IEnumerable<char>, IEquatable<String>,
 	{
 		if (ReferenceEquals(this, obj)) { return 0; }
 		if (obj == null) { return 1; }
-		if (!(obj is string)) { throw new ArgumentException("Argument Type Must Be String", "value"); }
+		if (!(obj is string s)) { throw new ArgumentException("Argument Type Must Be String", "value"); }
 
-		return CompareTo((string)obj);
+		return CompareTo(s);
 	}
 
 	// Favor Invariant Culture & Ignore Case

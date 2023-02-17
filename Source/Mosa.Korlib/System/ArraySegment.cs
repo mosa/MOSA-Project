@@ -121,7 +121,7 @@ public readonly struct ArraySegment<T> : IList<T>, IReadOnlyList<T>
 	}
 
 	public override bool Equals([NotNullWhen(true)] object obj) =>
-		obj is ArraySegment<T> && Equals((ArraySegment<T>)obj);
+		obj is ArraySegment<T> segment && Equals(segment);
 
 	public bool Equals(ArraySegment<T> obj) =>
 		obj._array == _array && obj._offset == _offset && obj._count == _count;

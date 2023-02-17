@@ -37,19 +37,19 @@ public sealed class LdtokenInstruction : LoadInstruction
 
 		// See Partition III, 4.17 (ldtoken)
 
-		if (decoder.Instruction.Operand is MosaType)
+		if (decoder.Instruction.Operand is MosaType type)
 		{
-			node.MosaType = (MosaType)decoder.Instruction.Operand;
+			node.MosaType = type;
 			node.Result = decoder.MethodCompiler.CreateVirtualRegister(decoder.TypeSystem.GetTypeByName("System.RuntimeTypeHandle"));
 		}
-		else if (decoder.Instruction.Operand is MosaMethod)
+		else if (decoder.Instruction.Operand is MosaMethod method)
 		{
-			node.InvokeMethod = (MosaMethod)decoder.Instruction.Operand;
+			node.InvokeMethod = method;
 			node.Result = decoder.MethodCompiler.CreateVirtualRegister(decoder.TypeSystem.GetTypeByName("System.RuntimeMethodHandle"));
 		}
-		else if (decoder.Instruction.Operand is MosaField)
+		else if (decoder.Instruction.Operand is MosaField field)
 		{
-			node.MosaField = (MosaField)decoder.Instruction.Operand;
+			node.MosaField = field;
 			node.Result = decoder.MethodCompiler.CreateVirtualRegister(decoder.TypeSystem.GetTypeByName("System.RuntimeFieldHandle"));
 		}
 		node.OperandCount = 0;

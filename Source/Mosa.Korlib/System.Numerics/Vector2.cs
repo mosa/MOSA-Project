@@ -564,7 +564,7 @@ public partial struct Vector2 : IEquatable<Vector2>, IFormattable
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public override readonly bool Equals([NotNullWhen(true)] object obj)
 	{
-		return obj != null && obj is Vector2 && Equals((Vector2)obj);
+		return obj != null && obj is Vector2 vector2 && Equals(vector2);
 	}
 
 	/// <summary>Returns a value that indicates whether this instance and another vector are equal.</summary>

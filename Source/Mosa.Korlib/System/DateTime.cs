@@ -440,12 +440,12 @@ public readonly partial struct DateTime : IComparable, IComparable<DateTime>, IE
 	public int CompareTo(object value)
 	{
 		if (value == null) return 1;
-		if (!(value is DateTime))
+		if (!(value is DateTime time))
 		{
 			throw new ArgumentException(SR.Arg_MustBeDateTime);
 		}
 
-		return Compare(this, (DateTime)value);
+		return Compare(this, time);
 	}
 
 	public int CompareTo(DateTime value)
@@ -551,9 +551,9 @@ public readonly partial struct DateTime : IComparable, IComparable<DateTime>, IE
 	//
 	public override bool Equals(object value)
 	{
-		if (value is DateTime)
+		if (value is DateTime time)
 		{
-			return Ticks == ((DateTime)value).Ticks;
+			return Ticks == time.Ticks;
 		}
 		return false;
 	}

@@ -35,9 +35,9 @@ public struct UIntPtr
 
 	public unsafe override bool Equals(Object obj)
 	{
-		if (obj is UIntPtr)
+		if (obj is UIntPtr ptr)
 		{
-			return _value == ((UIntPtr)obj)._value;
+			return _value == ptr._value;
 		}
 		return false;
 	}

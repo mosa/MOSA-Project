@@ -26,10 +26,8 @@ public struct RuntimeTypeHandle
 
 	public override bool Equals(object obj)
 	{
-		if (!(obj is RuntimeTypeHandle))
+		if (!(obj is RuntimeTypeHandle handle))
 			return false;
-
-		var handle = (RuntimeTypeHandle)obj;
 
 		return handle.m_type == m_type;
 	}

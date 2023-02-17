@@ -114,9 +114,8 @@ public class Stack : ICollection, IEnumerable, ICloneable
 			throw new ArgumentException("Argument_InvalidOffLen");
 
 		int num = 0;
-		if (array is object[])
+		if (array is object[] objArray)
 		{
-			object[] objArray = (object[])array;
 			for (; num < _size; ++num)
 				objArray[num + index] = _array[_size - num - 1];
 		}

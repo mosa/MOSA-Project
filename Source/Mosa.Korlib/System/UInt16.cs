@@ -17,9 +17,9 @@ public struct UInt16: IComparable, IComparable<ushort>, IEquatable<ushort>
 	{
 		if (value == null) { return 1; }
 
-		if (!(value is ushort)) { throw new ArgumentException("Argument Type Must Be UInt16", "value"); }
+		if (!(value is ushort value1)) { throw new ArgumentException("Argument Type Must Be UInt16", "value"); }
 
-		ushort u_value = ((ushort)value).m_value;
+		ushort u_value = value1.m_value;
 
 		if (m_value < u_value) return -1;
 		if (m_value > u_value) return 1;
@@ -37,9 +37,9 @@ public struct UInt16: IComparable, IComparable<ushort>, IEquatable<ushort>
 
 	public override bool Equals(object obj)
 	{
-		if (!(obj is ushort)) { return false; }
+		if (!(obj is ushort @ushort)) { return false; }
 
-		return m_value == ((ushort)obj).m_value;
+		return m_value == @ushort.m_value;
 	}
 
 	public bool Equals(ushort obj)

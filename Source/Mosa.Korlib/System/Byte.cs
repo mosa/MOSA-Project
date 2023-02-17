@@ -15,9 +15,9 @@ public struct Byte: IComparable, IComparable<byte>, IEquatable<byte>
 
 	public override bool Equals(object obj)
 	{
-		if (obj is Byte)
+		if (obj is Byte b)
 		{
-			return this.m_value == ((Byte)obj).m_value;
+			return this.m_value == b.m_value;
 		}
 		else
 		{
@@ -34,11 +34,11 @@ public struct Byte: IComparable, IComparable<byte>, IEquatable<byte>
 	{
 		if (value == null) { return 1; }
 
-		if (!(value is byte)) { throw new ArgumentException("Argument Type Must Be Byte", "value"); }
+		if (!(value is byte b)) { throw new ArgumentException("Argument Type Must Be Byte", "value"); }
 
-		if (m_value < ((byte)value).m_value) return -1;
+		if (m_value < b.m_value) return -1;
 
-		if (m_value > ((byte)value).m_value) return 1;
+		if (m_value > b.m_value) return 1;
 
 		return 0;
 	}

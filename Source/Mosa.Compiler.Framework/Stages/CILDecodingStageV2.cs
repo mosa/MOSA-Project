@@ -2958,19 +2958,16 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 		Operand source = null;
 
-		if (instruction.Operand is MosaType)
+		if (instruction.Operand is MosaType type)
 		{
-			var type = (MosaType)instruction.Operand;
 			source = Operand.CreateUnmanagedSymbolPointer(Metadata.TypeDefinition + type.FullName, TypeSystem);
 		}
-		else if (instruction.Operand is MosaMethod)
+		else if (instruction.Operand is MosaMethod method)
 		{
-			var method = (MosaMethod)instruction.Operand;
 			source = Operand.CreateUnmanagedSymbolPointer(Metadata.MethodDefinition + method.FullName, TypeSystem);
 		}
-		else if (instruction.Operand is MosaField)
+		else if (instruction.Operand is MosaField field)
 		{
-			var field = (MosaField)instruction.Operand;
 			source = Operand.CreateUnmanagedSymbolPointer(Metadata.FieldDefinition + field.FullName, TypeSystem);
 			MethodScanner.AccessedField(context.MosaField);
 		}

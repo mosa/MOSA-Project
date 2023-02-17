@@ -40,9 +40,9 @@ public struct IntPtr
 
 	public unsafe override bool Equals(Object obj)
 	{
-		if (obj is IntPtr)
+		if (obj is IntPtr ptr)
 		{
-			return _value == ((IntPtr)obj)._value;
+			return _value == ptr._value;
 		}
 		return false;
 	}

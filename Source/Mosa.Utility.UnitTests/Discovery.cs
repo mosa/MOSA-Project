@@ -143,10 +143,8 @@ public class Discovery
 	{
 		var param = GetParam(unitTest, index);
 
-		if (param is string)
+		if (param is string s)
 		{
-			var s = param as string;
-
 			var property = SeriesType.GetProperty(s);
 
 			var values = property.GetValue("Value");

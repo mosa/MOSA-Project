@@ -684,7 +684,7 @@ public partial struct Vector4 : IEquatable<Vector4>, IFormattable
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public override readonly bool Equals([NotNullWhen(true)] object obj)
 	{
-		return obj != null && obj is Vector4 && Equals((Vector4)obj);
+		return obj != null && obj is Vector4 vector4 && Equals(vector4);
 	}
 
 	/// <summary>Returns the hash code for this instance.</summary>

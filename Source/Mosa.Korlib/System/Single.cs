@@ -55,12 +55,12 @@ public struct Single: IComparable, IComparable<float>, IEquatable<float>
 	{
 		if (value == null) { return 1; }
 
-		if (!(value is float))
+		if (!(value is float f))
 		{
 			throw new ArgumentException("Argument Type Must Be Single", "value");
 		}
 
-		float f_value = ((float)value).m_value;
+		float f_value = f.m_value;
 
 		if (IsPositiveInfinity(m_value) && IsPositiveInfinity(f_value))
 			return 0;
@@ -122,9 +122,9 @@ public struct Single: IComparable, IComparable<float>, IEquatable<float>
 
 	public override bool Equals(object obj)
 	{
-		if (!(obj is Single)) { return false; }
+		if (!(obj is Single f)) { return false; }
 
-		float value = ((float)obj).m_value;
+		float value = f.m_value;
 
 		if (m_value == value) { return true; }
 

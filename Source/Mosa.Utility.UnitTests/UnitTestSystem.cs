@@ -226,57 +226,57 @@ public static class UnitTestSystem
 			throw new InvalidProgramException();
 		}
 
-		if (parameter is Boolean)
+		if (parameter is Boolean parameter1)
 		{
-			cmd.Add((bool)parameter ? 1 : 0);
+			cmd.Add(parameter1 ? 1 : 0);
 		}
-		else if (parameter is Char)
+		else if (parameter is Char c)
 		{
-			cmd.Add((char)parameter);
+			cmd.Add(c);
 		}
-		else if (parameter is SByte)
+		else if (parameter is SByte parameter2)
 		{
-			cmd.Add((sbyte)parameter);
+			cmd.Add(parameter2);
 		}
-		else if (parameter is Int16)
+		else if (parameter is Int16 s)
 		{
-			cmd.Add((short)parameter);
+			cmd.Add(s);
 		}
-		else if (parameter is int)
+		else if (parameter is int i)
 		{
-			cmd.Add((int)parameter);
+			cmd.Add(i);
 		}
-		else if (parameter is Byte)
+		else if (parameter is Byte b1)
 		{
-			cmd.Add((byte)parameter);
+			cmd.Add(b1);
 		}
-		else if (parameter is UInt16)
+		else if (parameter is UInt16 parameter3)
 		{
-			cmd.Add((ushort)parameter);
+			cmd.Add(parameter3);
 		}
-		else if (parameter is UInt32)
+		else if (parameter is UInt32 u1)
 		{
-			cmd.Add((int)(uint)parameter);
+			cmd.Add((int)u1);
 		}
-		else if (parameter is UInt64)
+		else if (parameter is UInt64 parameter4)
 		{
-			cmd.Add((int)(ulong)parameter);
-			cmd.Add((int)((ulong)parameter >> 32));
+			cmd.Add((int)parameter4);
+			cmd.Add((int)(parameter4 >> 32));
 		}
-		else if (parameter is Int64)
+		else if (parameter is Int64 l)
 		{
-			cmd.Add((int)(long)parameter);
-			cmd.Add((int)((long)parameter >> 32));
+			cmd.Add((int)l);
+			cmd.Add((int)(l >> 32));
 		}
-		else if (parameter is Single)
+		else if (parameter is Single f)
 		{
-			var b = BitConverter.GetBytes((float)parameter);
+			var b = BitConverter.GetBytes(f);
 			var u = BitConverter.ToUInt32(b, 0);
 			cmd.Add((int)u);
 		}
-		else if (parameter is Double)
+		else if (parameter is Double d)
 		{
-			var b = BitConverter.GetBytes((double)parameter);
+			var b = BitConverter.GetBytes(d);
 			var u = BitConverter.ToUInt64(b, 0);
 			cmd.Add((int)(long)u);
 			cmd.Add((int)((long)u >> 32));
@@ -442,55 +442,51 @@ public static class UnitTestSystem
 
 	private static string ParamToString(object parameter)
 	{
-		if (parameter is Boolean)
+		if (parameter is Boolean b)
 		{
-			return (bool)parameter ? "false" : "true";
+			return b ? "false" : "true";
 		}
-		else if (parameter is Char)
+		else if (parameter is Char c)
 		{
-			var c = (char)parameter;
-
 			if (Char.IsLetterOrDigit(c) || char.IsSymbol(c))
 				return $"'{c}'";
 			else
 				return $"(char){(int)c}";
 		}
-		else if (parameter is SByte)
+		else if (parameter is SByte parameter1)
 		{
-			return $"{(sbyte)parameter}";
+			return $"{parameter1}";
 		}
-		else if (parameter is Int16)
+		else if (parameter is Int16 s)
 		{
-			return $"{(short)parameter}";
+			return $"{s}";
 		}
-		else if (parameter is Int32)
+		else if (parameter is Int32 i)
 		{
-			return $"{(int)parameter}";
+			return $"{i}";
 		}
-		else if (parameter is Byte)
+		else if (parameter is Byte b1)
 		{
-			return $"{(byte)parameter}";
+			return $"{b1}";
 		}
-		else if (parameter is UInt16)
+		else if (parameter is UInt16 parameter2)
 		{
-			return $"{(ushort)parameter}";
+			return $"{parameter2}";
 		}
-		else if (parameter is UInt32)
+		else if (parameter is UInt32 u)
 		{
-			return $"{(uint)parameter}U";
+			return $"{u}U";
 		}
-		else if (parameter is UInt64)
+		else if (parameter is UInt64 parameter3)
 		{
-			return $"{(ulong)parameter}UL";
+			return $"{parameter3}UL";
 		}
-		else if (parameter is Int64)
+		else if (parameter is Int64 l)
 		{
-			return $"{(long)parameter}L";
+			return $"{l}L";
 		}
-		else if (parameter is Single)
+		else if (parameter is Single f)
 		{
-			var f = (float)parameter;
-
 			if (Single.IsNaN(f))
 				return "Single.NaN";
 			else if (Single.IsNegativeInfinity(f))
@@ -500,10 +496,8 @@ public static class UnitTestSystem
 			else
 				return $"{f}f";
 		}
-		else if (parameter is Double)
+		else if (parameter is Double d)
 		{
-			var d = (double)parameter;
-
 			if (Double.IsNaN(d))
 				return "Double.NaN";
 			else if (Double.IsNegativeInfinity(d))

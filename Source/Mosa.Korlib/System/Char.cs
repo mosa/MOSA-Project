@@ -18,9 +18,9 @@ public struct Char: IComparable, IComparable<char>, IEquatable<char>
 
 	public override bool Equals(object obj)
 	{
-		if (obj is Char)
+		if (obj is Char c)
 		{
-			return this.m_value == ((Char)obj).m_value;
+			return this.m_value == c.m_value;
 		}
 		else
 		{
@@ -38,11 +38,11 @@ public struct Char: IComparable, IComparable<char>, IEquatable<char>
 	{
 		if (value == null) return 1;
 
-		if (!(value is char)) throw new ArgumentException("Argument Type Must Be Char", "value");
+		if (!(value is char c)) throw new ArgumentException("Argument Type Must Be Char", "value");
 
-		if (m_value < ((char)value).m_value) return -1;
+		if (m_value < c.m_value) return -1;
 
-		if (m_value > ((char)value).m_value) return 1;
+		if (m_value > c.m_value) return 1;
 
 		return 0;
 	}

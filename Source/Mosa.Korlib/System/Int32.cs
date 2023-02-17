@@ -17,9 +17,9 @@ public struct Int32: IComparable, IComparable<int>, IEquatable<int>
 	{
 		if (value == null) { return 1; }
 
-		if (!(value is int)) { throw new ArgumentException("Argument Type Must Be Int32", "value"); }
+		if (!(value is int i)) { throw new ArgumentException("Argument Type Must Be Int32", "value"); }
 
-		int i_value = ((int)value).m_value;
+		int i_value = i.m_value;
 
 		if (m_value < i_value) return -1;
 		if (m_value > i_value) return 1;
@@ -37,9 +37,9 @@ public struct Int32: IComparable, IComparable<int>, IEquatable<int>
 
 	public override bool Equals(object obj)
 	{
-		if (!(obj is int)) { return false; }
+		if (!(obj is int i)) { return false; }
 
-		return m_value == ((int)obj).m_value;
+		return m_value == i.m_value;
 	}
 
 	public bool Equals(int obj)
