@@ -34,7 +34,7 @@ public class RTC
 		get
 		{
 			B = Get(0);
-			return (byte)((B & 0x0F) + ((B / 16) * 10));
+			return (byte)((B & 0x0F) + B / 16 * 10);
 		}
 	}
 
@@ -43,7 +43,7 @@ public class RTC
 		get
 		{
 			B = Get(2);
-			return (byte)((B & 0x0F) + ((B / 16) * 10));
+			return (byte)((B & 0x0F) + B / 16 * 10);
 		}
 	}
 
@@ -52,7 +52,7 @@ public class RTC
 		get
 		{
 			B = Get(4);
-			return (byte)(((B & 0x0F) + ((B & 0x70) / 16 * 10)) | (B & 0x80));
+			return (byte)(((B & 0x0F) + (B & 0x70) / 16 * 10) | (B & 0x80));
 		}
 	}
 
@@ -61,7 +61,7 @@ public class RTC
 		get
 		{
 			B = Get(0x32);
-			return (byte)((B & 0x0F) + ((B / 16) * 10));
+			return (byte)((B & 0x0F) + B / 16 * 10);
 		}
 	}
 
@@ -70,7 +70,7 @@ public class RTC
 		get
 		{
 			B = Get(9);
-			return (byte)((B & 0x0F) + ((B / 16) * 10));
+			return (byte)((B & 0x0F) + B / 16 * 10);
 		}
 	}
 
@@ -79,7 +79,7 @@ public class RTC
 		get
 		{
 			B = Get(8);
-			return (byte)((B & 0x0F) + ((B / 16) * 10));
+			return (byte)((B & 0x0F) + B / 16 * 10);
 		}
 	}
 
@@ -88,7 +88,7 @@ public class RTC
 		get
 		{
 			B = Get(7);
-			return (byte)((B & 0x0F) + ((B / 16) * 10));
+			return (byte)((B & 0x0F) + B / 16 * 10);
 		}
 	}
 

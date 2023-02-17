@@ -48,7 +48,7 @@ public static class Console
 	{
 		Write(Escape);
 		Write("[3");
-		Write((byte)((byte)'0' + (byte)(color) % 10));
+		Write((byte)((byte)'0' + (byte)color % 10));
 		Write("m");
 	}
 
@@ -56,7 +56,7 @@ public static class Console
 	{
 		Write(Escape);
 		Write("[4");
-		Write((byte)((byte)'0' + (byte)(color) % 10));
+		Write((byte)((byte)'0' + (byte)color % 10));
 		Write("m");
 	}
 
@@ -98,7 +98,7 @@ public static class Console
 
 	private static void WriteValue(ulong value, byte @base, int length)
 	{
-		int minlength = (length >= 0) ? length : (int)GetValueLength(value, @base);
+		int minlength = length >= 0 ? length : (int)GetValueLength(value, @base);
 
 		for (int i = minlength - 1; i >= 0; i--)
 		{

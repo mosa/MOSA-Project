@@ -125,7 +125,7 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 
 	protected static bool IsEvenInteger(Operand operand)
 	{
-		return operand.IsInteger && ((operand.ConstantUnsigned64 & 1) == 0);
+		return operand.IsInteger && (operand.ConstantUnsigned64 & 1) == 0;
 	}
 
 	protected static bool IsFloatingPoint(Operand operand)
@@ -190,7 +190,7 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 
 	protected static bool IsOddInteger(Operand operand)
 	{
-		return operand.IsInteger && ((operand.ConstantUnsigned64 & 1) == 1);
+		return operand.IsInteger && (operand.ConstantUnsigned64 & 1) == 1;
 	}
 
 	protected static bool IsOne(Operand operand)
@@ -519,12 +519,12 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 
 	protected static uint ArithmeticShiftRight32(uint a, int b)
 	{
-		return (uint)(((int)a) >> b);
+		return (uint)((int)a >> b);
 	}
 
 	protected static ulong ArithmeticShiftRight64(ulong a, long b)
 	{
-		return (ulong)(((long)a) >> (int)b);
+		return (ulong)((long)a >> (int)b);
 	}
 
 	protected static ulong Sqrt32(uint num)
@@ -532,13 +532,13 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 		if (0 == num)
 			return 0;
 
-		uint n = (num / 2) + 1;
-		uint n1 = (n + (num / n)) / 2;
+		uint n = num / 2 + 1;
+		uint n1 = (n + num / n) / 2;
 
 		while (n1 < n)
 		{
 			n = n1;
-			n1 = (n + (num / n)) / 2;
+			n1 = (n + num / n) / 2;
 		}
 
 		return n;
@@ -549,13 +549,13 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 		if (0 == num)
 			return 0;
 
-		ulong n = (num / 2) + 1;
-		ulong n1 = (n + (num / n)) / 2;
+		ulong n = num / 2 + 1;
+		ulong n1 = (n + num / n) / 2;
 
 		while (n1 < n)
 		{
 			n = n1;
-			n1 = (n + (num / n)) / 2;
+			n1 = (n + num / n) / 2;
 		}
 
 		return n;
@@ -566,13 +566,13 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 		if (0 == num)
 			return 0;
 
-		long n = (num / 2) + 1;
-		long n1 = (n + (num / n)) / 2;
+		long n = num / 2 + 1;
+		long n1 = (n + num / n) / 2;
 
 		while (n1 < n)
 		{
 			n = n1;
-			n1 = (n + (num / n)) / 2;
+			n1 = (n + num / n) / 2;
 		}
 
 		return n;
@@ -724,27 +724,27 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 
 	protected static uint SignExtend16x32(ushort value)
 	{
-		return ((value & 0x8000) == 0) ? value : (value | 0xFFFF0000);
+		return (value & 0x8000) == 0 ? value : value | 0xFFFF0000;
 	}
 
 	protected static ulong SignExtend16x64(ushort value)
 	{
-		return ((value & 0x8000) == 0) ? value : (value | 0xFFFFFFFFFFFF0000ul);
+		return (value & 0x8000) == 0 ? value : value | 0xFFFFFFFFFFFF0000ul;
 	}
 
 	protected static ulong SignExtend32x64(uint value)
 	{
-		return ((value & 0x80000000) == 0) ? value : (value | 0xFFFFFFFF00000000ul);
+		return (value & 0x80000000) == 0 ? value : value | 0xFFFFFFFF00000000ul;
 	}
 
 	protected static uint SignExtend8x32(byte value)
 	{
-		return ((value & 0x80) == 0) ? value : (value | 0xFFFFFF00);
+		return (value & 0x80) == 0 ? value : value | 0xFFFFFF00;
 	}
 
 	protected static ulong SignExtend8x64(byte value)
 	{
-		return ((value & 0x80) == 0) ? value : (value | 0xFFFFFFFFFFFFFF00ul);
+		return (value & 0x80) == 0 ? value : value | 0xFFFFFFFFFFFFFF00ul;
 	}
 
 	#endregion SignExtend Helpers

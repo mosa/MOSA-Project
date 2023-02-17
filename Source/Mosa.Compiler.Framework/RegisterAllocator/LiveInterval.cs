@@ -31,7 +31,7 @@ public sealed class LiveInterval
 
 	public int SpillValue;
 
-	public int SpillCost => NeverSpill || TooSmallToSplit ? int.MaxValue : (SpillValue / (Length + 1));
+	public int SpillCost => NeverSpill || TooSmallToSplit ? int.MaxValue : SpillValue / (Length + 1);
 
 	public LiveIntervalTrack LiveIntervalTrack;
 
@@ -43,7 +43,7 @@ public sealed class LiveInterval
 
 	public Operand AssignedPhysicalOperand;
 
-	public Operand AssignedOperand => (AssignedPhysicalRegister != null) ? AssignedPhysicalOperand : VirtualRegister.SpillSlotOperand;
+	public Operand AssignedOperand => AssignedPhysicalRegister != null ? AssignedPhysicalOperand : VirtualRegister.SpillSlotOperand;
 
 	public bool ForceSpilled;
 

@@ -97,7 +97,7 @@ public readonly struct ArraySegment<T> : IList<T>, IReadOnlyList<T>
 	}
 
 	public override int GetHashCode() =>
-		_array is null ? 0 : (_offset * _count * _array.GetHashCode());
+		_array is null ? 0 : _offset * _count * _array.GetHashCode();
 
 	public void CopyTo(T[] destination) => CopyTo(destination, 0);
 

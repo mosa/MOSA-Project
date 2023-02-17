@@ -78,15 +78,15 @@ public readonly struct TimeSpan : IComparable, IComparable<TimeSpan>, IEquatable
 
 	public int Days => (int)(_ticks / TicksPerDay);
 
-	public int Hours => (int)((_ticks / TicksPerHour) % 24);
+	public int Hours => (int)(_ticks / TicksPerHour % 24);
 
-	public int Milliseconds => (int)((_ticks / TicksPerMillisecond) % 1000);
+	public int Milliseconds => (int)(_ticks / TicksPerMillisecond % 1000);
 
-	public int Minutes => (int)((_ticks / TicksPerMinute) % 60);
+	public int Minutes => (int)(_ticks / TicksPerMinute % 60);
 
-	public int Seconds => (int)((_ticks / TicksPerSecond) % 60);
+	public int Seconds => (int)(_ticks / TicksPerSecond % 60);
 
-	public double TotalDays => ((double)_ticks) / TicksPerDay;
+	public double TotalDays => (double)_ticks / TicksPerDay;
 
 	public double TotalHours => (double)_ticks / TicksPerHour;
 
@@ -116,7 +116,7 @@ public readonly struct TimeSpan : IComparable, IComparable<TimeSpan>, IEquatable
 		// Overflow if signs of operands was identical and result's
 		// sign was opposite.
 		// >> 63 gives the sign bit (either 64 1's or 64 0's).
-		if ((_ticks >> 63 == ts._ticks >> 63) && (_ticks >> 63 != result >> 63))
+		if (_ticks >> 63 == ts._ticks >> 63 && _ticks >> 63 != result >> 63)
 			throw new OverflowException(SR.Overflow_TimeSpanTooLong);
 		return new TimeSpan(result);
 	}
@@ -201,7 +201,7 @@ public readonly struct TimeSpan : IComparable, IComparable<TimeSpan>, IEquatable
 
 	private static TimeSpan IntervalFromDoubleTicks(double ticks)
 	{
-		if ((ticks > long.MaxValue) || (ticks < long.MinValue) || double.IsNaN(ticks))
+		if (ticks > long.MaxValue || ticks < long.MinValue || double.IsNaN(ticks))
 			ThrowHelper.ThrowOverflowException_TimeSpanTooLong();
 		if (ticks == long.MaxValue)
 			return TimeSpan.MaxValue;
@@ -237,7 +237,7 @@ public readonly struct TimeSpan : IComparable, IComparable<TimeSpan>, IEquatable
 		// Overflow if signs of operands was different and result's
 		// sign was opposite from the first argument's sign.
 		// >> 63 gives the sign bit (either 64 1's or 64 0's).
-		if ((_ticks >> 63 != ts._ticks >> 63) && (_ticks >> 63 != result >> 63))
+		if (_ticks >> 63 != ts._ticks >> 63 && _ticks >> 63 != result >> 63)
 			throw new OverflowException(SR.Overflow_TimeSpanTooLong);
 		return new TimeSpan(result);
 	}

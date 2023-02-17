@@ -29,7 +29,7 @@ public static class ARMHelper
 			value >>= 1;
 			value |= r;
 
-			if (((value & 0xFF) == value) && (shift % 2 == 0))
+			if ((value & 0xFF) == value && shift % 2 == 0)
 			{
 				rotation4 = (byte)(shift / 2);
 				imm8 = (byte)value;

@@ -80,7 +80,7 @@ public class ColorPalette
 				return i;
 
 			// very simple implementation
-			int dist = (colors[i].R * color.R) + (colors[i].G * color.G) + (colors[i].B * color.B);
+			int dist = colors[i].R * color.R + colors[i].G * color.G + colors[i].B * color.B;
 
 			if (dist < bestDiff)
 			{

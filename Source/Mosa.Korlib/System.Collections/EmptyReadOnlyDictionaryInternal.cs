@@ -89,7 +89,7 @@ internal sealed class EmptyReadOnlyDictionaryInternal : IDictionary
 			if (!key.GetType().IsSerializable)
 				throw new ArgumentException("Argument_NotSerializable", nameof(key));
 
-			if ((value != null) && (!value.GetType().IsSerializable))
+			if (value != null && !value.GetType().IsSerializable)
 				throw new ArgumentException("Argument_NotSerializable", nameof(value));
 			Contract.EndContractBlock();
 
@@ -128,7 +128,7 @@ internal sealed class EmptyReadOnlyDictionaryInternal : IDictionary
 		if (!key.GetType().IsSerializable)
 			throw new ArgumentException("Argument_NotSerializable", nameof(key));
 
-		if ((value != null) && (!value.GetType().IsSerializable))
+		if (value != null && !value.GetType().IsSerializable)
 			throw new ArgumentException("Argument_NotSerializable", nameof(value));
 		Contract.EndContractBlock();
 

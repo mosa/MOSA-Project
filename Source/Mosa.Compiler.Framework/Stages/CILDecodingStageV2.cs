@@ -388,7 +388,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 			UpdateLabel(context.Node, label, endNode);
 			endNode = context.Node;
 
-			var peekNextblock = (index + 1 == totalCode) ? null : BasicBlocks.GetByLabel(code[index + 1].Offset);
+			var peekNextblock = index + 1 == totalCode ? null : BasicBlocks.GetByLabel(code[index + 1].Offset);
 
 			if (peekNextblock != null || index + 1 == totalCode)
 			{
@@ -961,13 +961,13 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 		var operand = AllocatedOperand(stackType, type);
 
-		return (stackType == StackType.ValueType) ? new StackEntry(stackType, operand, type) : new StackEntry(stackType, operand);
+		return stackType == StackType.ValueType ? new StackEntry(stackType, operand, type) : new StackEntry(stackType, operand);
 	}
 
 	private string EmitString(string data, uint token)
 	{
 		string symbolName = $"$ldstr${Method.Module.Name}${token}";
-		var linkerSymbol = Linker.DefineSymbol(symbolName, SectionKind.ROData, NativeAlignment, (uint)(ObjectHeaderSize + NativePointerSize + (data.Length * 2)));
+		var linkerSymbol = Linker.DefineSymbol(symbolName, SectionKind.ROData, NativeAlignment, (uint)(ObjectHeaderSize + NativePointerSize + data.Length * 2));
 		var writer = new BinaryWriter(linkerSymbol.Stream);
 
 		Linker.Link(LinkType.AbsoluteAddress, PatchType.I32, linkerSymbol, ObjectHeaderSize - NativePointerSize, Metadata.TypeDefinition + "System.String", 0);

@@ -23,7 +23,7 @@ public static class RegisterAllocatorTests
 		else
 			j++;
 
-		int z = ((((((a >> b) + c + (d * e) - f) * g) - h) * j) * k) >> 2;
+		int z = ((((a >> b) + c + d * e - f) * g - h) * j * k) >> 2;
 
 		return z;
 	}
@@ -39,7 +39,7 @@ public static class RegisterAllocatorTests
 		else
 			j++;
 
-		int z = (((((((a >> b) + c + (d * e) - f) * g) - h) * j) * k) >> 2) + a + b + c + d + e + (f * g);
+		int z = (((((a >> b) + c + d * e - f) * g - h) * j * k) >> 2) + a + b + c + d + e + f * g;
 
 		return z;
 	}
@@ -59,7 +59,7 @@ public static class RegisterAllocatorTests
 			j++; c++; d--;
 		}
 
-		int z = (((((((a >> b) + c * (d * e) - f) * g) - h) * j) * k) >> 2) + a % b + c * d + e % (f * g + 1);
+		int z = (((((a >> b) + c * d * e - f) * g - h) * j * k) >> 2) + a % b + c * d + e % (f * g + 1);
 
 		if (z % 2 == c)
 		{

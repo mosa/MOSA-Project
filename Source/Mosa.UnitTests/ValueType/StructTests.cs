@@ -12,7 +12,7 @@ public class StructTests
 
 		structure.One = one;
 
-		return (structure.One.Equals(one));
+		return structure.One.Equals(one);
 	}
 
 	//[MosaUnitTest(Series = "U1MiniU1Mini")]
@@ -23,7 +23,7 @@ public class StructTests
 		structure.One = one;
 		structure.Two = two;
 
-		return (structure.One.Equals(one) && structure.Two.Equals(two));
+		return structure.One.Equals(one) && structure.Two.Equals(two);
 	}
 
 	//[MosaUnitTest(Series = "U1MiniU1MiniU1Mini")]
@@ -35,7 +35,7 @@ public class StructTests
 		structure.Two = two;
 		structure.Three = three;
 
-		return (structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three));
+		return structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three);
 	}
 
 	[MosaUnitTest(Series = "U2")]
@@ -45,7 +45,7 @@ public class StructTests
 
 		structure.One = one;
 
-		return (structure.One.Equals(one));
+		return structure.One.Equals(one);
 	}
 
 	//[MosaUnitTest(Series = "U2MiniU2Mini")]
@@ -56,7 +56,7 @@ public class StructTests
 		structure.One = one;
 		structure.Two = two;
 
-		return (structure.One.Equals(one) && structure.Two.Equals(two));
+		return structure.One.Equals(one) && structure.Two.Equals(two);
 	}
 
 	//[MosaUnitTest(Series = "U2MiniU2MiniU2Mini")]
@@ -68,7 +68,7 @@ public class StructTests
 		structure.Two = two;
 		structure.Three = three;
 
-		return (structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three));
+		return structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three);
 	}
 
 	[MosaUnitTest(Series = "U4")]
@@ -78,7 +78,7 @@ public class StructTests
 
 		structure.One = one;
 
-		return (structure.One.Equals(one));
+		return structure.One.Equals(one);
 	}
 
 	//[MosaUnitTest(Series = "U4MiniU4Mini")]
@@ -89,7 +89,7 @@ public class StructTests
 		structure.One = one;
 		structure.Two = two;
 
-		return (structure.One.Equals(one) && structure.Two.Equals(two));
+		return structure.One.Equals(one) && structure.Two.Equals(two);
 	}
 
 	//[MosaUnitTest(Series = "U4MiniU4MiniU4Mini")]
@@ -101,7 +101,7 @@ public class StructTests
 		structure.Two = two;
 		structure.Three = three;
 
-		return (structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three));
+		return structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three);
 	}
 
 	[MosaUnitTest(Series = "U8")]
@@ -111,7 +111,7 @@ public class StructTests
 
 		structure.One = one;
 
-		return (structure.One.Equals(one));
+		return structure.One.Equals(one);
 	}
 
 	//[MosaUnitTest(Series = "U8MiniU8Mini")]
@@ -139,7 +139,7 @@ public class StructTests
 		structure.One = one;
 		structure.Two = two;
 
-		return (structure.One.Equals(one) && structure.Two.Equals(two));
+		return structure.One.Equals(one) && structure.Two.Equals(two);
 	}
 
 	//[MosaUnitTest(Series = "U8MiniU8MiniU8Mini")]
@@ -179,7 +179,7 @@ public class StructTests
 		*/
 		structure.Three = three;
 
-		return (structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three));
+		return structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three);
 	}
 
 	[MosaUnitTest(Series = "I1")]
@@ -200,7 +200,7 @@ public class StructTests
 
 		structure.One = one;
 
-		return (structure.One.Equals(one));
+		return structure.One.Equals(one);
 	}
 
 	//[MosaUnitTest(Series = "I1MiniI1Mini")]
@@ -228,7 +228,7 @@ public class StructTests
 		structure.One = one;
 		structure.Two = two;
 
-		return (structure.One.Equals(one) && structure.Two.Equals(two));
+		return structure.One.Equals(one) && structure.Two.Equals(two);
 	}
 
 	//[MosaUnitTest(Series = "I1MiniI1MiniI1Mini")]
@@ -268,7 +268,7 @@ public class StructTests
 		*/
 		structure.Three = three;
 
-		return (structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three));
+		return structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three);
 	}
 
 	[MosaUnitTest(Series = "I2")]
@@ -289,7 +289,7 @@ public class StructTests
 
 		structure.One = one;
 
-		return (structure.One.Equals(one));
+		return structure.One.Equals(one);
 	}
 
 	//[MosaUnitTest(Series = "I2MiniI2Mini")]
@@ -317,7 +317,7 @@ public class StructTests
 		structure.One = one;
 		structure.Two = two;
 
-		return (structure.One.Equals(one) && structure.Two.Equals(two));
+		return structure.One.Equals(one) && structure.Two.Equals(two);
 	}
 
 	//[MosaUnitTest(Series = "I2MiniI2MiniI2Mini")]
@@ -357,7 +357,7 @@ public class StructTests
 		*/
 		structure.Three = three;
 
-		return (structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three));
+		return structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three);
 	}
 
 	[MosaUnitTest(Series = "I4")]
@@ -378,7 +378,7 @@ public class StructTests
 
 		structure.One = one;
 
-		return (structure.One.Equals(one));
+		return structure.One.Equals(one);
 	}
 
 	//[MosaUnitTest(Series = "I4MiniI4Mini")]
@@ -406,7 +406,7 @@ public class StructTests
 		structure.One = one;
 		structure.Two = two;
 
-		return (structure.One.Equals(one) && structure.Two.Equals(two));
+		return structure.One.Equals(one) && structure.Two.Equals(two);
 	}
 
 	//[MosaUnitTest(Series = "I4MiniI4MiniI4Mini")]
@@ -440,7 +440,7 @@ public class StructTests
 		*/
 		structure.Three = three;
 
-		return (structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three));
+		return structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three);
 	}
 
 	[MosaUnitTest(Series = "I8")]
@@ -461,7 +461,7 @@ public class StructTests
 
 		structure.One = one;
 
-		return (structure.One.Equals(one));
+		return structure.One.Equals(one);
 	}
 
 	//[MosaUnitTest(Series = "I8MiniI8Mini")]
@@ -489,7 +489,7 @@ public class StructTests
 		structure.One = one;
 		structure.Two = two;
 
-		return (structure.One.Equals(one) && structure.Two.Equals(two));
+		return structure.One.Equals(one) && structure.Two.Equals(two);
 	}
 
 	//[MosaUnitTest(Series = "I8MiniI8MiniI8Mini")]
@@ -529,7 +529,7 @@ public class StructTests
 		*/
 		structure.Three = three;
 
-		return (structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three));
+		return structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three);
 	}
 
 	[MosaUnitTest(Series = "R4")]
@@ -550,7 +550,7 @@ public class StructTests
 
 		structure.One = one;
 
-		return (structure.One.Equals(one));
+		return structure.One.Equals(one);
 	}
 
 	//[MosaUnitTest(Series = "R4MiniR4Mini")]
@@ -578,7 +578,7 @@ public class StructTests
 		structure.One = one;
 		structure.Two = two;
 
-		return (structure.One.Equals(one) && structure.Two.Equals(two));
+		return structure.One.Equals(one) && structure.Two.Equals(two);
 	}
 
 	//[MosaUnitTest(Series = "R4MiniR4MiniR4Mini")]
@@ -618,7 +618,7 @@ public class StructTests
 		*/
 		structure.Three = three;
 
-		return (structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three));
+		return structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three);
 	}
 
 	[MosaUnitTest(Series = "R8")]
@@ -639,7 +639,7 @@ public class StructTests
 
 		structure.One = one;
 
-		return (structure.One.Equals(one));
+		return structure.One.Equals(one);
 	}
 
 	//[MosaUnitTest(Series = "R8MiniR8Mini")]
@@ -667,7 +667,7 @@ public class StructTests
 		structure.One = one;
 		structure.Two = two;
 
-		return (structure.One.Equals(one) && structure.Two.Equals(two));
+		return structure.One.Equals(one) && structure.Two.Equals(two);
 	}
 
 	//[MosaUnitTest(Series = "R8MiniR8MiniR8Mini")]
@@ -707,7 +707,7 @@ public class StructTests
 		*/
 		structure.Three = three;
 
-		return (structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three));
+		return structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three);
 	}
 
 	[MosaUnitTest(Series = "C")]
@@ -728,7 +728,7 @@ public class StructTests
 
 		structure.One = one;
 
-		return (structure.One.Equals(one));
+		return structure.One.Equals(one);
 	}
 
 	//[MosaUnitTest(Series = "CMiniCMini")]
@@ -756,7 +756,7 @@ public class StructTests
 		structure.One = one;
 		structure.Two = two;
 
-		return (structure.One.Equals(one) && structure.Two.Equals(two));
+		return structure.One.Equals(one) && structure.Two.Equals(two);
 	}
 
 	//[MosaUnitTest(Series = "CMiniCMiniCMini")]
@@ -768,7 +768,7 @@ public class StructTests
 		structure.Two = two;
 		structure.Three = three;
 
-		return (structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three));
+		return structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three);
 	}
 
 }

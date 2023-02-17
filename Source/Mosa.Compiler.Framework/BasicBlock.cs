@@ -104,7 +104,7 @@ public sealed class BasicBlock : IComparable<BasicBlock>
 	/// <value>
 	/// <c>true</c> if this instance is compiler block; otherwise, <c>false</c>.
 	/// </value>
-	public bool IsCompilerBlock => (Label >= CompilerBlockStartLabel) && (Label != EpilogueLabel) && (Label != PrologueLabel);
+	public bool IsCompilerBlock => Label >= CompilerBlockStartLabel && Label != EpilogueLabel && Label != PrologueLabel;
 
 	public bool IsHandlerHeadBlock { get; internal set; }
 

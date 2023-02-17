@@ -30,7 +30,7 @@ public static class BootMemoryMap
 		if (Multiboot.MultibootV1.MemoryMapStart.IsNull)
 			return;
 
-		AvailableMemory = new Pointer((Multiboot.MultibootV1.MemoryUpper * 1024) + (1024 * 1024));  // assuming all of lower memory
+		AvailableMemory = new Pointer(Multiboot.MultibootV1.MemoryUpper * 1024 + 1024 * 1024);  // assuming all of lower memory
 
 		var memoryMapEnd = Multiboot.MultibootV1.MemoryMapStart + Multiboot.MultibootV1.MemoryMapLength;
 

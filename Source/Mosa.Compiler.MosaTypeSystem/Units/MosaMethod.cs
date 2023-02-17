@@ -76,7 +76,7 @@ public sealed class MosaMethod : MosaUnit//, IEquatable<MosaMethod>
 
 	internal MosaMethod()
 	{
-		GenericArguments = (genericArguments = new GenericArgumentsCollection());
+		GenericArguments = genericArguments = new GenericArgumentsCollection();
 
 		LocalVariables = (localVars = new List<MosaLocal>()).AsReadOnly();
 		Code = (instructions = new List<MosaInstruction>()).AsReadOnly();
@@ -89,7 +89,7 @@ public sealed class MosaMethod : MosaUnit//, IEquatable<MosaMethod>
 	{
 		var result = (MosaMethod)base.Clone();
 
-		result.GenericArguments = (result.genericArguments = new GenericArgumentsCollection(genericArguments));
+		result.GenericArguments = result.genericArguments = new GenericArgumentsCollection(genericArguments);
 
 		result.LocalVariables = (result.localVars = new List<MosaLocal>(localVars)).AsReadOnly();
 		result.Code = (result.instructions = new List<MosaInstruction>(instructions)).AsReadOnly();

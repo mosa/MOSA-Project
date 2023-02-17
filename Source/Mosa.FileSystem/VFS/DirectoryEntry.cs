@@ -102,7 +102,7 @@ public sealed class DirectoryEntry
 		 */
 
 		DirectoryEntry e = child;
-		while ((e != null) && (e.Name != name))
+		while (e != null && e.Name != name)
 			e = e.next;
 
 		return e;

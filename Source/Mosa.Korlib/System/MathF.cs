@@ -46,7 +46,7 @@ public static partial class MathF
 			// NaN returns NaN
 			// -Infinity returns -Infinity
 			// +Infinity returns float.MaxValue
-			return (bits == 0x7F800000) ? float.MaxValue : x;
+			return bits == 0x7F800000 ? float.MaxValue : x;
 		}
 
 		if (bits == 0x00000000)
@@ -58,7 +58,7 @@ public static partial class MathF
 		// Negative values need to be incremented
 		// Positive values need to be decremented
 
-		bits += ((bits < 0) ? +1 : -1);
+		bits += bits < 0 ? +1 : -1;
 		return BitConverter.Int32BitsToSingle(bits);
 	}
 
@@ -71,10 +71,10 @@ public static partial class MathF
 			// NaN returns NaN
 			// -Infinity returns float.MinValue
 			// +Infinity returns +Infinity
-			return (bits == unchecked((int)(0xFF800000))) ? float.MinValue : x;
+			return bits == unchecked((int)0xFF800000) ? float.MinValue : x;
 		}
 
-		if (bits == unchecked((int)(0x80000000)))
+		if (bits == unchecked((int)0x80000000))
 		{
 			// -0.0 returns float.Epsilon
 			return float.Epsilon;
@@ -83,7 +83,7 @@ public static partial class MathF
 		// Negative values need to be decremented
 		// Positive values need to be incremented
 
-		bits += ((bits < 0) ? -1 : +1);
+		bits += bits < 0 ? -1 : +1;
 		return BitConverter.Int32BitsToSingle(bits);
 	}
 
@@ -126,12 +126,12 @@ public static partial class MathF
 			return float.NaN;
 		}
 
-		if ((regularMod == 0) && float.IsNegative(x))
+		if (regularMod == 0 && float.IsNegative(x))
 		{
 			return float.NegativeZero;
 		}
 
-		var alternativeResult = (regularMod - (Abs(y) * Sign(x)));
+		var alternativeResult = regularMod - Abs(y) * Sign(x);
 
 		if (Abs(alternativeResult) == Abs(regularMod))
 		{
@@ -175,7 +175,7 @@ public static partial class MathF
 			return float.NaN;
 		}
 
-		if ((x != 1) && ((y == 0) || float.IsPositiveInfinity(y)))
+		if (x != 1 && (y == 0 || float.IsPositiveInfinity(y)))
 		{
 			return float.NaN;
 		}
@@ -218,7 +218,7 @@ public static partial class MathF
 			return float.IsNegative(x) ? y : x;
 		}
 
-		return (ax < ay) ? y : x;
+		return ax < ay ? y : x;
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -256,7 +256,7 @@ public static partial class MathF
 			return float.IsNegative(x) ? x : y;
 		}
 
-		return (ax < ay) ? x : y;
+		return ax < ay ? x : y;
 	}
 
 	[Intrinsic]
@@ -280,7 +280,7 @@ public static partial class MathF
 
 		float flrTempVal = Floor(x + 0.5f);
 
-		if ((x == (Floor(x) + 0.5f)) && (FMod(flrTempVal, 2.0f) != 0))
+		if (x == Floor(x) + 0.5f && FMod(flrTempVal, 2.0f) != 0)
 		{
 			flrTempVal -= 1.0f;
 		}
@@ -302,7 +302,7 @@ public static partial class MathF
 
 	public static unsafe float Round(float x, int digits, MidpointRounding mode)
 	{
-		if ((digits < 0) || (digits > maxRoundingDigits))
+		if (digits < 0 || digits > maxRoundingDigits)
 		{
 			throw new ArgumentOutOfRangeException(nameof(digits), "SR.ArgumentOutOfRange_RoundingDigits");
 		}

@@ -60,10 +60,10 @@ public class Random
 		y ^= y << 5;
 		y ^= y >> 7;
 		y ^= y << 22;
-		ulong t = ((ulong)4294584393 * z + c);
+		ulong t = (ulong)4294584393 * z + c;
 		c = (uint)(t >> 32);
 		z = (uint)t;
-		return (x + y + z);
+		return x + y + z;
 	}
 
 	public virtual int Next(int minValue, int maxValue)
@@ -77,7 +77,7 @@ public class Random
 		if (diff <= 1)
 			return minValue;
 
-		return minValue + ((int)(JKiss() % diff));
+		return minValue + (int)(JKiss() % diff);
 	}
 
 	public virtual int Next(int maxValue)
@@ -109,7 +109,7 @@ public class Random
 		// each random `int` can fill 4 bytes
 		int p = 0;
 		uint random;
-		for (int i = 0; i < (buffer.Length >> 2); i++)
+		for (int i = 0; i < buffer.Length >> 2; i++)
 		{
 			random = JKiss();
 			buffer[p++] = (byte)(random >> 24);

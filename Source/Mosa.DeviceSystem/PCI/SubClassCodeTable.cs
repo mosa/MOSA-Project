@@ -16,7 +16,7 @@ public static class SubClassCodeTable
 	/// <returns></returns>
 	public static string Lookup(byte classCode, byte subClassCode, byte progIF)
 	{
-		return ((classCode << 16) | (subClassCode << 8) | (progIF)) switch
+		return ((classCode << 16) | (subClassCode << 8) | progIF) switch
 		{
 			0x000000 => "Non-VGA Device",
 			0x000001 => "VGA Device",

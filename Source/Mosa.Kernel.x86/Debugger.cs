@@ -43,7 +43,7 @@ public static class Debugger
 
 	#endregion Codes
 
-	private const int MaxBuffer = (1024 * 64) + 64;
+	private const int MaxBuffer = 1024 * 64 + 64;
 
 	private static bool enabled;
 

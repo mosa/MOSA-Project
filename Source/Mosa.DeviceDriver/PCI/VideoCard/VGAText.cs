@@ -109,7 +109,7 @@ public class VGAText : BaseDeviceDriver, ITextDevice
 
 		WriteSettings(VGAText80x25);
 
-		colorMode = ((miscellaneousOutput.Read8() & 1) == 1);
+		colorMode = (miscellaneousOutput.Read8() & 1) == 1;
 
 		if (colorMode)
 		{
@@ -199,13 +199,13 @@ public class VGAText : BaseDeviceDriver, ITextDevice
 	{
 		if (colorMode)
 		{
-			uint index = (ushort)(offset + (((y * width) + x) * 2));
+			uint index = (ushort)(offset + (y * width + x) * 2);
 			memory[index] = (byte)c;
 			memory[index + 1] = (byte)(palette.FindClosestMatch(foreground) | (palette.FindClosestMatch(backgroundColor) << 4));
 		}
 		else
 		{
-			uint index = (ushort)(offset + (y * width) + x);
+			uint index = (ushort)(offset + y * width + x);
 			index = index + x;
 			memory[index] = (byte)c;
 		}
@@ -218,7 +218,7 @@ public class VGAText : BaseDeviceDriver, ITextDevice
 	/// <param name="y">The y position.</param>
 	public void SetCursor(uint x, uint y)
 	{
-		uint position = x + (y * width);
+		uint position = x + y * width;
 		SendCommand(CRTCommands.CursorLocationHigh, (byte)((position >> 8) & 0xFF));
 		SendCommand(CRTCommands.CursorLocationLow, (byte)(position & 0xFF));
 	}
@@ -237,8 +237,8 @@ public class VGAText : BaseDeviceDriver, ITextDevice
 		{
 			for (int i = 0; i < size; i++)
 			{
-				memory[(uint)(index + (i * 2))] = 0;
-				memory[(uint)(index + (i * 2) + 1)] = (byte)(palette.FindClosestMatch(background) << 4);
+				memory[(uint)(index + i * 2)] = 0;
+				memory[(uint)(index + i * 2 + 1)] = (byte)(palette.FindClosestMatch(background) << 4);
 			}
 		}
 		else
@@ -256,14 +256,14 @@ public class VGAText : BaseDeviceDriver, ITextDevice
 	public void ScrollUp()
 	{
 		uint index = offset;
-		uint size = (uint)(((height * width) - width) * bytePerChar);
+		uint size = (uint)((height * width - width) * bytePerChar);
 
-		for (uint i = index; i < (index + size); i++)
+		for (uint i = index; i < index + size; i++)
 		{
-			memory[i] = memory[(uint)(i + (width * bytePerChar))];
+			memory[i] = memory[(uint)(i + width * bytePerChar)];
 		}
 
-		index = (uint)(index + ((height - 1) * width * bytePerChar));
+		index = (uint)(index + (height - 1) * width * bytePerChar);
 
 		for (int i = 0; i < width * 2; i++)
 		{

@@ -46,7 +46,7 @@ static partial class IntrinsicMethods
 		var esp = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, CPURegister.ESP);
 
 		context.SetInstruction(X86.Cli);
-		if (irq <= 7 || (irq >= 16 | irq == 9)) // For IRQ 8, 10, 11, 12, 13, 14 the cpu will automatically pushed the error code
+		if (irq <= 7 || irq >= 16 | irq == 9) // For IRQ 8, 10, 11, 12, 13, 14 the cpu will automatically pushed the error code
 		{
 			context.AppendInstruction(X86.Push32, null, methodCompiler.CreateConstant(0));
 		}

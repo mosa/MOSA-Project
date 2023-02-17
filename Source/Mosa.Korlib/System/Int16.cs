@@ -96,7 +96,7 @@ public struct Int16: IComparable, IComparable<short>, IEquatable<short>
 			{
 				throw new Exception("Format is incorrect");
 			}
-			result = (short)((result * 10) + ind);
+			result = (short)(result * 10 + ind);
 		}
 
 		if (neg) result *= -1;

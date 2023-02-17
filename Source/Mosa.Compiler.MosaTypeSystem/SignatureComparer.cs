@@ -52,7 +52,7 @@ public class SignatureComparer : IEqualityComparer<MosaType>, IEqualityComparer<
 
 		foreach (var genericArg in type.GenericArguments)
 		{
-			result += (result * 7) + GetHashCode(genericArg);
+			result += result * 7 + GetHashCode(genericArg);
 		}
 
 		switch (type.TypeCode)
@@ -66,7 +66,7 @@ public class SignatureComparer : IEqualityComparer<MosaType>, IEqualityComparer<
 				if (type.ElementType == null)
 					throw new InvalidOperationException("Element type of type is null!");
 
-				result += (result * 7) + GetHashCode(type.ElementType);
+				result += result * 7 + GetHashCode(type.ElementType);
 				break;
 
 			case MosaTypeCode.FunctionPointer:
@@ -77,7 +77,7 @@ public class SignatureComparer : IEqualityComparer<MosaType>, IEqualityComparer<
 				break;
 
 			default:
-				result += (result * 7) + type.Name.GetHashCode() + type.Namespace.GetHashCode();
+				result += result * 7 + type.Name.GetHashCode() + type.Namespace.GetHashCode();
 				break;
 		}
 		return result;
@@ -111,7 +111,7 @@ public class SignatureComparer : IEqualityComparer<MosaType>, IEqualityComparer<
 			if (param.ParameterType == null)
 				throw new InvalidOperationException("Type of parameter is null!");
 
-			result += (result * 7) + GetHashCode(param.ParameterType);
+			result += result * 7 + GetHashCode(param.ParameterType);
 		}
 		return result;
 	}

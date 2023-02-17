@@ -284,7 +284,7 @@ public class ArrayList : IList, ICloneable
 		else
 		{
 			for (int i = 0; i < _size; i++)
-				if ((_items[i] != null) && (_items[i].Equals(item)))
+				if (_items[i] != null && _items[i].Equals(item))
 					return true;
 			return false;
 		}
@@ -303,7 +303,7 @@ public class ArrayList : IList, ICloneable
 	//
 	public virtual void CopyTo(Array array, int arrayIndex)
 	{
-		if ((array != null) && (array.Rank != 1))
+		if (array != null && array.Rank != 1)
 			throw new ArgumentException();//(Environment.GetResourceString("Arg_RankMultiDimNotSupported"));
 		Contract.EndContractBlock();
 
@@ -319,7 +319,7 @@ public class ArrayList : IList, ICloneable
 	{
 		if (_size - index < count)
 			throw new ArgumentException();//(Environment.GetResourceString("Argument_InvalidOffLen"));
-		if ((array != null) && (array.Rank != 1))
+		if (array != null && array.Rank != 1)
 			throw new ArgumentException();//(Environment.GetResourceString("Arg_RankMultiDimNotSupported"));
 		Contract.EndContractBlock();
 
@@ -639,7 +639,7 @@ public class ArrayList : IList, ICloneable
 		Contract.Ensures(Contract.Result<ArrayList>() != null);
 		Contract.EndContractBlock();
 
-		ArrayList list = new ArrayList((count > _defaultCapacity) ? count : _defaultCapacity);
+		ArrayList list = new ArrayList(count > _defaultCapacity ? count : _defaultCapacity);
 		for (int i = 0; i < count; i++)
 			list.Add(value);
 		return list;
@@ -2310,7 +2310,7 @@ public class ArrayList : IList, ICloneable
 		public override ArrayList GetRange(int index, int count)
 		{
 			if (index < 0 || count < 0)
-				throw new ArgumentOutOfRangeException((index < 0 ? nameof(index) : nameof(count)), "ArgumentOutOfRange_NeedNonNegNum");
+				throw new ArgumentOutOfRangeException(index < 0 ? nameof(index) : nameof(count), "ArgumentOutOfRange_NeedNonNegNum");
 			if (Count - index < count)
 				throw new ArgumentException("Argument_InvalidOffLen");
 			Contract.EndContractBlock();
@@ -2478,7 +2478,7 @@ public class ArrayList : IList, ICloneable
 		public override int BinarySearch(int index, int count, Object value, IComparer comparer)
 		{
 			if (index < 0 || count < 0)
-				throw new ArgumentOutOfRangeException((index < 0 ? nameof(index) : nameof(count)), "ArgumentOutOfRange_NeedNonNegNum");
+				throw new ArgumentOutOfRangeException(index < 0 ? nameof(index) : nameof(count), "ArgumentOutOfRange_NeedNonNegNum");
 			if (_baseSize - index < count)
 				throw new ArgumentException("Argument_InvalidOffLen");
 			Contract.EndContractBlock();
@@ -2564,7 +2564,7 @@ public class ArrayList : IList, ICloneable
 			if (array.Rank != 1)
 				throw new ArgumentException("Arg_RankMultiDimNotSupported");
 			if (index < 0 || count < 0)
-				throw new ArgumentOutOfRangeException((index < 0 ? nameof(index) : nameof(count)), "ArgumentOutOfRange_NeedNonNegNum");
+				throw new ArgumentOutOfRangeException(index < 0 ? nameof(index) : nameof(count), "ArgumentOutOfRange_NeedNonNegNum");
 			if (array.Length - arrayIndex < count)
 				throw new ArgumentException("Argument_InvalidOffLen");
 			if (_baseSize - index < count)
@@ -2607,7 +2607,7 @@ public class ArrayList : IList, ICloneable
 		public override IEnumerator GetEnumerator(int index, int count)
 		{
 			if (index < 0 || count < 0)
-				throw new ArgumentOutOfRangeException((index < 0 ? nameof(index) : nameof(count)), "ArgumentOutOfRange_NeedNonNegNum");
+				throw new ArgumentOutOfRangeException(index < 0 ? nameof(index) : nameof(count), "ArgumentOutOfRange_NeedNonNegNum");
 			if (_baseSize - index < count)
 				throw new ArgumentException("Argument_InvalidOffLen");
 			Contract.EndContractBlock();
@@ -2619,7 +2619,7 @@ public class ArrayList : IList, ICloneable
 		public override ArrayList GetRange(int index, int count)
 		{
 			if (index < 0 || count < 0)
-				throw new ArgumentOutOfRangeException((index < 0 ? nameof(index) : nameof(count)), "ArgumentOutOfRange_NeedNonNegNum");
+				throw new ArgumentOutOfRangeException(index < 0 ? nameof(index) : nameof(count), "ArgumentOutOfRange_NeedNonNegNum");
 			if (_baseSize - index < count)
 				throw new ArgumentException("Argument_InvalidOffLen");
 			Contract.EndContractBlock();
@@ -2663,7 +2663,7 @@ public class ArrayList : IList, ICloneable
 			if (startIndex < 0 || startIndex > _baseSize)
 				throw new ArgumentOutOfRangeException(nameof(startIndex), "ArgumentOutOfRange_Index");
 
-			if (count < 0 || (startIndex > _baseSize - count))
+			if (count < 0 || startIndex > _baseSize - count)
 				throw new ArgumentOutOfRangeException(nameof(count), "ArgumentOutOfRange_Count");
 			Contract.EndContractBlock();
 
@@ -2750,7 +2750,7 @@ public class ArrayList : IList, ICloneable
 		public override void RemoveRange(int index, int count)
 		{
 			if (index < 0 || count < 0)
-				throw new ArgumentOutOfRangeException((index < 0 ? nameof(index) : nameof(count)), "ArgumentOutOfRange_NeedNonNegNum");
+				throw new ArgumentOutOfRangeException(index < 0 ? nameof(index) : nameof(count), "ArgumentOutOfRange_NeedNonNegNum");
 			if (_baseSize - index < count)
 				throw new ArgumentException("Argument_InvalidOffLen");
 			Contract.EndContractBlock();
@@ -2770,7 +2770,7 @@ public class ArrayList : IList, ICloneable
 		public override void Reverse(int index, int count)
 		{
 			if (index < 0 || count < 0)
-				throw new ArgumentOutOfRangeException((index < 0 ? nameof(index) : nameof(count)), "ArgumentOutOfRange_NeedNonNegNum");
+				throw new ArgumentOutOfRangeException(index < 0 ? nameof(index) : nameof(count), "ArgumentOutOfRange_NeedNonNegNum");
 			if (_baseSize - index < count)
 				throw new ArgumentException("Argument_InvalidOffLen");
 			Contract.EndContractBlock();
@@ -2795,7 +2795,7 @@ public class ArrayList : IList, ICloneable
 		public override void Sort(int index, int count, IComparer comparer)
 		{
 			if (index < 0 || count < 0)
-				throw new ArgumentOutOfRangeException((index < 0 ? nameof(index) : nameof(count)), "ArgumentOutOfRange_NeedNonNegNum");
+				throw new ArgumentOutOfRangeException(index < 0 ? nameof(index) : nameof(count), "ArgumentOutOfRange_NeedNonNegNum");
 			if (_baseSize - index < count)
 				throw new ArgumentException("Argument_InvalidOffLen");
 			Contract.EndContractBlock();
@@ -2859,7 +2859,7 @@ public class ArrayList : IList, ICloneable
 			this.list = list;
 			this.index = -1;
 			version = list._version;
-			isArrayList = (list.GetType() == typeof(ArrayList));
+			isArrayList = list.GetType() == typeof(ArrayList);
 			currentElement = dummyObject;
 		}
 

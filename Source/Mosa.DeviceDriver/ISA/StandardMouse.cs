@@ -79,7 +79,7 @@ public class StandardMouse : BaseDeviceDriver, IMouseDevice
 
 		if (phase == 1)
 		{
-			if ((D & (1 << 3)) == (1 << 3))
+			if ((D & (1 << 3)) == 1 << 3)
 			{
 				mData[0] = D;
 				phase = 2;

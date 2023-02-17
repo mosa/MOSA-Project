@@ -29,7 +29,7 @@ public class BootPageAllocator
 	{
 		// TODO: Acquire lock
 
-		var result = BootReserveStartPage + (UsedPages * Page.Size);
+		var result = BootReserveStartPage + UsedPages * Page.Size;
 
 		UsedPages += pages;
 

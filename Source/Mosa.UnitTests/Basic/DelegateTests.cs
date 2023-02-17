@@ -72,7 +72,7 @@ public static class DelegateTests
 
 	private static void DelegateParametersTarget(int a, int b)
 	{
-		status = (a * 10000) + b;
+		status = a * 10000 + b;
 	}
 
 	#endregion DelegateParameters
@@ -108,7 +108,7 @@ public static class DelegateTests
 
 	private static int DelegateParametersReturnTarget(int a, int b)
 	{
-		return (a * 10000) + b;
+		return a * 10000 + b;
 	}
 
 	#endregion DelegateParametersReturn

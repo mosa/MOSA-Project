@@ -46,7 +46,7 @@ public class CHS
 	/// <param name="lba">The lba.</param>
 	public void SetCHS(DiskGeometry diskGeometry, ulong lba)
 	{
-		if ((lba / (uint)(diskGeometry.SectorsPerTrack * diskGeometry.Heads) > 1023))
+		if (lba / (uint)(diskGeometry.SectorsPerTrack * diskGeometry.Heads) > 1023)
 			lba = (uint)diskGeometry.Heads * diskGeometry.SectorsPerTrack * 1024 - 1;
 
 		Sector = (ushort)(lba % diskGeometry.SectorsPerTrack + 1);

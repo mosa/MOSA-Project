@@ -18,7 +18,7 @@ public static class PageTable
 		// Setup Page Directory
 		for (int index = 0; index < 1024; index++)
 		{
-			new Pointer(Address.PageDirectory).Store32(index << 2, (uint)(Address.PageTable + (index * 4096) | 0x04 | 0x02 | 0x01));
+			new Pointer(Address.PageDirectory).Store32(index << 2, (uint)(Address.PageTable + index * 4096 | 0x04 | 0x02 | 0x01));
 		}
 
 		// Map the first 128MB of memory (32786 4K pages) (why 128MB?)

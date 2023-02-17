@@ -38,7 +38,7 @@ public sealed class IsInstInstruction : UnaryInstruction
 		var type = (MosaType)decoder.Instruction.Operand;
 
 		// result must be a reference
-		var resultType = (type.IsReferenceType) ? type : type.ToManagedPointer();
+		var resultType = type.IsReferenceType ? type : type.ToManagedPointer();
 
 		node.Result = decoder.MethodCompiler.AllocateVirtualRegisterOrStackSlot(resultType);
 		node.MosaType = type;

@@ -158,25 +158,25 @@ public sealed class Compiler
 			new MethodTableStage(),
 			new ExceptionTableStage(),
 			new MetadataStage(),
-			(!string.IsNullOrEmpty(compilerSettings.PreLinkHashFile)) ? new PreLinkHashFileStage() : null,
+			!string.IsNullOrEmpty(compilerSettings.PreLinkHashFile) ? new PreLinkHashFileStage() : null,
 			new LinkerLayoutStage(),
-			(!string.IsNullOrEmpty(compilerSettings.PostLinkHashFile)) ? new PostLinkHashFileStage() : null,
-			(!string.IsNullOrEmpty(compilerSettings.CompileTimeFile)) ? new MethodCompileTimeStage() : null,
-			(!string.IsNullOrEmpty(compilerSettings.OutputFile) && compilerSettings.EmitBinary) ? new LinkerEmitStage() : null,
-			(!string.IsNullOrEmpty(compilerSettings.MapFile)) ? new MapFileStage() : null,
-			(!string.IsNullOrEmpty(compilerSettings.DebugFile)) ? new DebugFileStage() : null,
-			(!string.IsNullOrEmpty(compilerSettings.InlinedFile)) ? new InlinedFileStage() : null,
+			!string.IsNullOrEmpty(compilerSettings.PostLinkHashFile) ? new PostLinkHashFileStage() : null,
+			!string.IsNullOrEmpty(compilerSettings.CompileTimeFile) ? new MethodCompileTimeStage() : null,
+			!string.IsNullOrEmpty(compilerSettings.OutputFile) && compilerSettings.EmitBinary ? new LinkerEmitStage() : null,
+			!string.IsNullOrEmpty(compilerSettings.MapFile) ? new MapFileStage() : null,
+			!string.IsNullOrEmpty(compilerSettings.DebugFile) ? new DebugFileStage() : null,
+			!string.IsNullOrEmpty(compilerSettings.InlinedFile) ? new InlinedFileStage() : null,
 		};
 	}
 
 	private static List<BaseMethodCompilerStage> GetDefaultMethodPipeline(CompilerSettings compilerSettings, bool is64BitPlatform)
 	{
 		return new List<BaseMethodCompilerStage>() {
-			(!compilerSettings.CILDecodingStageV2) ? new CILDecodingStage() : null,
-			(compilerSettings.CILDecodingStageV2) ? new CILDecodingStageV2() : null,
-			(!compilerSettings.CILDecodingStageV2) ? new CILOperandAssignmentStage(): null,
-			(!compilerSettings.CILDecodingStageV2) ? new CILProtectedRegionStage(): null,
-			(!compilerSettings.CILDecodingStageV2) ? new CILTransformationStage(): null,
+			!compilerSettings.CILDecodingStageV2 ? new CILDecodingStage() : null,
+			compilerSettings.CILDecodingStageV2 ? new CILDecodingStageV2() : null,
+			!compilerSettings.CILDecodingStageV2 ? new CILOperandAssignmentStage(): null,
+			!compilerSettings.CILDecodingStageV2 ? new CILProtectedRegionStage(): null,
+			!compilerSettings.CILDecodingStageV2 ? new CILTransformationStage(): null,
 
 			new VirtualRegisterRenameStage(),
 
@@ -186,32 +186,32 @@ public sealed class Compiler
 			new PlugStage(),
 			new RuntimeCallStage(),
 			new ArrayStage(),
-			(compilerSettings.InlineMethods || compilerSettings.InlineExplicit) ? new InlineStage() : null,
+			compilerSettings.InlineMethods || compilerSettings.InlineExplicit ? new InlineStage() : null,
 			new PromoteTemporaryVariables(),
 			new StaticLoadOptimizationStage(),
 
-			(compilerSettings.BasicOptimizations) ? new OptimizationStage(false) : null,
-			(compilerSettings.SSA) ? new EdgeSplitStage() : null,
-			(compilerSettings.SSA) ? new EnterSSAStage() : null,
-			(compilerSettings.BasicOptimizations && compilerSettings.SSA) ? new OptimizationStage(false) : null,
-			(compilerSettings.ValueNumbering && compilerSettings.SSA) ? new ValueNumberingStage() : null,
-			(compilerSettings.LoopInvariantCodeMotion && compilerSettings.SSA) ? new LoopInvariantCodeMotionStage() : null,
-			(compilerSettings.SparseConditionalConstantPropagation && compilerSettings.SSA) ? new SparseConditionalConstantPropagationStage() : null,
-			(compilerSettings.BasicOptimizations && compilerSettings.SSA && (compilerSettings.ValueNumbering || compilerSettings.LoopInvariantCodeMotion || compilerSettings.SparseConditionalConstantPropagation)) ? new OptimizationStage(false) : null,
-			(compilerSettings.BitTracker) ? new BitTrackerStage() : null,
-			(compilerSettings.BasicOptimizations && compilerSettings.BitTracker) ? new OptimizationStage(false) : null,
-			(compilerSettings.BasicOptimizations && compilerSettings.LongExpansion) ? new OptimizationStage(compilerSettings.LongExpansion) : null,
+			compilerSettings.BasicOptimizations ? new OptimizationStage(false) : null,
+			compilerSettings.SSA ? new EdgeSplitStage() : null,
+			compilerSettings.SSA ? new EnterSSAStage() : null,
+			compilerSettings.BasicOptimizations && compilerSettings.SSA ? new OptimizationStage(false) : null,
+			compilerSettings.ValueNumbering && compilerSettings.SSA ? new ValueNumberingStage() : null,
+			compilerSettings.LoopInvariantCodeMotion && compilerSettings.SSA ? new LoopInvariantCodeMotionStage() : null,
+			compilerSettings.SparseConditionalConstantPropagation && compilerSettings.SSA ? new SparseConditionalConstantPropagationStage() : null,
+			compilerSettings.BasicOptimizations && compilerSettings.SSA && (compilerSettings.ValueNumbering || compilerSettings.LoopInvariantCodeMotion || compilerSettings.SparseConditionalConstantPropagation) ? new OptimizationStage(false) : null,
+			compilerSettings.BitTracker ? new BitTrackerStage() : null,
+			compilerSettings.BasicOptimizations && compilerSettings.BitTracker ? new OptimizationStage(false) : null,
+			compilerSettings.BasicOptimizations && compilerSettings.LongExpansion ? new OptimizationStage(compilerSettings.LongExpansion) : null,
 
-			(compilerSettings.TwoPass && compilerSettings.ValueNumbering && compilerSettings.SSA) ? new ValueNumberingStage() : null,
-			(compilerSettings.TwoPass && compilerSettings.LoopInvariantCodeMotion && compilerSettings.SSA) ? new LoopInvariantCodeMotionStage() : null,
-			(compilerSettings.TwoPass && compilerSettings.SparseConditionalConstantPropagation && compilerSettings.SSA) ? new SparseConditionalConstantPropagationStage() : null,
-			(compilerSettings.TwoPass && compilerSettings.BitTracker) ? new BitTrackerStage() : null,
-			(compilerSettings.TwoPass && compilerSettings.BasicOptimizations && compilerSettings.SSA) ? new OptimizationStage(compilerSettings.LongExpansion) : null,
+			compilerSettings.TwoPass && compilerSettings.ValueNumbering && compilerSettings.SSA ? new ValueNumberingStage() : null,
+			compilerSettings.TwoPass && compilerSettings.LoopInvariantCodeMotion && compilerSettings.SSA ? new LoopInvariantCodeMotionStage() : null,
+			compilerSettings.TwoPass && compilerSettings.SparseConditionalConstantPropagation && compilerSettings.SSA ? new SparseConditionalConstantPropagationStage() : null,
+			compilerSettings.TwoPass && compilerSettings.BitTracker ? new BitTrackerStage() : null,
+			compilerSettings.TwoPass && compilerSettings.BasicOptimizations && compilerSettings.SSA ? new OptimizationStage(compilerSettings.LongExpansion) : null,
 
-			(compilerSettings.SSA) ? new ExitSSAStage() : null,
+			compilerSettings.SSA ? new ExitSSAStage() : null,
 			new IRCleanupStage(),
 			new NewObjectStage(),
-			(compilerSettings.InlineMethods || compilerSettings.InlineExplicit) ? new InlineEvaluationStage() : null,
+			compilerSettings.InlineMethods || compilerSettings.InlineExplicit ? new InlineEvaluationStage() : null,
 
 			//new StopStage(),
 
@@ -228,7 +228,7 @@ public sealed class Compiler
 			//new PreciseGCStage(),
 
 			new CodeGenerationStage(),
-			(compilerSettings.EmitBinary) ? new ProtectedRegionLayoutStage() : null,
+			compilerSettings.EmitBinary ? new ProtectedRegionLayoutStage() : null,
 		};
 	}
 

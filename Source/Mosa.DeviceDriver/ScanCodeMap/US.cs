@@ -229,7 +229,7 @@ public class US : IScanCodeMap
 			{
 				key.KeyType = KeyType.RegularKey;
 
-				key.KeyPress = (((scancode & 0x80) != 0) || (keyState == KeyState.EscapeBreak)) ? key.KeyPress = KeyEvent.KeyPressType.Break : key.KeyPress = KeyEvent.KeyPressType.Make;
+				key.KeyPress = (scancode & 0x80) != 0 || keyState == KeyState.EscapeBreak ? key.KeyPress = KeyEvent.KeyPressType.Break : key.KeyPress = KeyEvent.KeyPressType.Make;
 
 				if (scancode == 0xF0)
 				{

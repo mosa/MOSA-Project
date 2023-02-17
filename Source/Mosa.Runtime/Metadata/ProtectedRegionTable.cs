@@ -27,6 +27,6 @@ public struct ProtectedRegionTable
 
 	public ProtectedRegionDefinition GetProtectedRegionDefinition(uint slot)
 	{
-		return new ProtectedRegionDefinition(Ptr.LoadPointer(Pointer.Size + (Pointer.Size * (int)slot)));
+		return new ProtectedRegionDefinition(Ptr.LoadPointer(Pointer.Size + Pointer.Size * (int)slot));
 	}
 }

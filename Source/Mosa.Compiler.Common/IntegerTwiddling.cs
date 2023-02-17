@@ -6,22 +6,22 @@ public static class IntegerTwiddling
 {
 	public static bool IsAddOverflow(ulong a, ulong b)
 	{
-		return (b > 0) && (a > (ulong.MaxValue - b));
+		return b > 0 && a > ulong.MaxValue - b;
 	}
 
 	public static bool IsAddOverflow(uint a, uint b)
 	{
-		return (b > 0) && (a > (uint.MaxValue - b));
+		return b > 0 && a > uint.MaxValue - b;
 	}
 
 	public static bool IsAddOverflow(int a, int b)
 	{
 		if (a > 0 && b > 0)
-			if (b > (int.MaxValue - a))
+			if (b > int.MaxValue - a)
 				return true;
 
 		if (a < 0 && b < 0)
-			if (b < (int.MinValue - a))
+			if (b < int.MinValue - a)
 				return true;
 
 		return false;
@@ -30,11 +30,11 @@ public static class IntegerTwiddling
 	public static bool IsAddOverflow(long a, long b)
 	{
 		if (a > 0 && b > 0)
-			if (b > (long.MaxValue - a))
+			if (b > long.MaxValue - a)
 				return true;
 
 		if (a < 0 && b < 0)
-			if (b < (long.MinValue - a))
+			if (b < long.MinValue - a)
 				return true;
 
 		return false;
@@ -45,7 +45,7 @@ public static class IntegerTwiddling
 		if (IsAddOverflow(a, b))
 			return true;
 
-		if (carry & (a + b) == uint.MaxValue)
+		if (carry & a + b == uint.MaxValue)
 			return true;
 
 		return false;

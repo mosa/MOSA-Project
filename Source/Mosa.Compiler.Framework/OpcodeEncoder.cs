@@ -213,14 +213,14 @@ public sealed class OpcodeEncoder
 
 	public void Append24BitImmediate(uint value)
 	{
-		AppendByte((byte)(value));
+		AppendByte((byte)value);
 		AppendByte((byte)(value >> 8));
 		AppendByte((byte)(value >> 16));
 	}
 
 	public void Append32BitImmediate(uint value)
 	{
-		AppendByte((byte)(value));
+		AppendByte((byte)value);
 		AppendByte((byte)(value >> 8));
 		AppendByte((byte)(value >> 16));
 		AppendByte((byte)(value >> 24));
@@ -228,7 +228,7 @@ public sealed class OpcodeEncoder
 
 	public void Append64BitImmediate(ulong value)
 	{
-		AppendByte((byte)(value));
+		AppendByte((byte)value);
 		AppendByte((byte)(value >> 8));
 		AppendByte((byte)(value >> 16));
 		AppendByte((byte)(value >> 24));

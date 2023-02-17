@@ -174,7 +174,7 @@ public /*readonly*/ partial struct Decimal
 		if (cy < 0)
 		{
 			isNegative = true;
-			absoluteCy = (ulong)(-cy);
+			absoluteCy = (ulong)-cy;
 		}
 		else
 		{
@@ -187,7 +187,7 @@ public /*readonly*/ partial struct Decimal
 		int scale = 4;
 		if (absoluteCy != 0)  // For compatibility, a currency of 0 emits the Decimal "0.0000" (scale set to 4).
 		{
-			while (scale != 0 && ((absoluteCy % 10) == 0))
+			while (scale != 0 && absoluteCy % 10 == 0)
 			{
 				scale--;
 				absoluteCy /= 10;
@@ -197,7 +197,7 @@ public /*readonly*/ partial struct Decimal
 		return new decimal((int)absoluteCy, (int)(absoluteCy >> 32), 0, isNegative, (byte)scale);
 	}
 
-	private static bool IsValid(int flags) => (flags & ~(SignMask | ScaleMask)) == 0 && ((uint)(flags & ScaleMask) <= (28 << ScaleShift));
+	private static bool IsValid(int flags) => (flags & ~(SignMask | ScaleMask)) == 0 && (uint)(flags & ScaleMask) <= 28 << ScaleShift;
 
 	// Constructs a Decimal from an integer array containing a binary
 	// representation. The bits argument must be a non-null integer

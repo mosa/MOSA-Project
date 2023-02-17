@@ -20,7 +20,7 @@ internal static class Marvin
 	public static int ComputeHash32(ReadOnlySpan<byte> data, ulong seed)
 	{
 		long hash64 = ComputeHash(data, seed);
-		return ((int)(hash64 >> 32)) ^ (int)hash64;
+		return (int)(hash64 >> 32) ^ (int)hash64;
 	}
 
 	/// <summary>
@@ -44,7 +44,7 @@ internal static class Marvin
 			// byteOffset = data.Length - data.Length % 4
 			// is equivalent to clearing last 2 bits of length
 			// Using it directly gives a perf hit for short strings making it at least 5% or more slower.
-			int byteOffset = data.Length & (~3);
+			int byteOffset = data.Length & ~3;
 			data = data.Slice(byteOffset);
 		}
 
@@ -63,7 +63,7 @@ internal static class Marvin
 				break;
 
 			case 3:
-				p0 += 0x80000000u | (((uint)data[2]) << 16) | (uint)(MemoryMarshal.Cast<byte, ushort>(data)[0]);
+				p0 += 0x80000000u | ((uint)data[2] << 16) | (uint)MemoryMarshal.Cast<byte, ushort>(data)[0];
 				break;
 
 			default:
@@ -74,7 +74,7 @@ internal static class Marvin
 		Block(ref p0, ref p1);
 		Block(ref p0, ref p1);
 
-		return (((long)p1) << 32) | p0;
+		return ((long)p1 << 32) | p0;
 	}
 
 	/// <summary>

@@ -17,7 +17,7 @@ public struct Byte: IComparable, IComparable<byte>, IEquatable<byte>
 	{
 		if (obj is Byte)
 		{
-			return (this.m_value == ((Byte)obj).m_value);
+			return this.m_value == ((Byte)obj).m_value;
 		}
 		else
 		{
@@ -27,7 +27,7 @@ public struct Byte: IComparable, IComparable<byte>, IEquatable<byte>
 
 	public bool Equals(byte value)
 	{
-		return (m_value == value);
+		return m_value == value;
 	}
 
 	public int CompareTo(object value)
@@ -36,9 +36,9 @@ public struct Byte: IComparable, IComparable<byte>, IEquatable<byte>
 
 		if (!(value is byte)) { throw new ArgumentException("Argument Type Must Be Byte", "value"); }
 
-		if (m_value < (((byte)value).m_value)) return -1;
+		if (m_value < ((byte)value).m_value) return -1;
 
-		if (m_value > (((byte)value).m_value)) return 1;
+		if (m_value > ((byte)value).m_value) return 1;
 
 		return 0;
 	}

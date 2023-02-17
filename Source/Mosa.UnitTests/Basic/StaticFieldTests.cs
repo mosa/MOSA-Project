@@ -10,7 +10,7 @@ public static class StaticFieldTestU1
 	public static bool StaticFieldU1(byte value)
 	{
 		field = value;
-		return (value == field);
+		return value == field;
 	}
 
 	[MosaUnitTest(Series = "U1")]
@@ -29,7 +29,7 @@ public static class StaticFieldTestU2
 	public static bool StaticFieldU2(ushort value)
 	{
 		field = value;
-		return (value == field);
+		return value == field;
 	}
 
 	[MosaUnitTest(Series = "U2")]
@@ -48,7 +48,7 @@ public static class StaticFieldTestU4
 	public static bool StaticFieldU4(uint value)
 	{
 		field = value;
-		return (value == field);
+		return value == field;
 	}
 
 	[MosaUnitTest(Series = "U4")]
@@ -67,7 +67,7 @@ public static class StaticFieldTestU8
 	public static bool StaticFieldU8(ulong value)
 	{
 		field = value;
-		return (value == field);
+		return value == field;
 	}
 
 	[MosaUnitTest(Series = "U8")]
@@ -86,7 +86,7 @@ public static class StaticFieldTestI1
 	public static bool StaticFieldI1(sbyte value)
 	{
 		field = value;
-		return (value == field);
+		return value == field;
 	}
 
 	[MosaUnitTest(Series = "I1")]
@@ -105,7 +105,7 @@ public static class StaticFieldTestI2
 	public static bool StaticFieldI2(short value)
 	{
 		field = value;
-		return (value == field);
+		return value == field;
 	}
 
 	[MosaUnitTest(Series = "I2")]
@@ -124,7 +124,7 @@ public static class StaticFieldTestI4
 	public static bool StaticFieldI4(int value)
 	{
 		field = value;
-		return (value == field);
+		return value == field;
 	}
 
 	[MosaUnitTest(Series = "I4")]
@@ -143,7 +143,7 @@ public static class StaticFieldTestI8
 	public static bool StaticFieldI8(long value)
 	{
 		field = value;
-		return (value == field);
+		return value == field;
 	}
 
 	[MosaUnitTest(Series = "I8")]
@@ -162,7 +162,7 @@ public static class StaticFieldTestR4
 	public static bool StaticFieldR4(float value)
 	{
 		field = value;
-		return (value == field);
+		return value == field;
 	}
 
 	[MosaUnitTest(Series = "R4")]
@@ -181,7 +181,7 @@ public static class StaticFieldTestR8
 	public static bool StaticFieldR8(double value)
 	{
 		field = value;
-		return (value == field);
+		return value == field;
 	}
 
 	[MosaUnitTest(Series = "R8")]
@@ -200,7 +200,7 @@ public static class StaticFieldTestB
 	public static bool StaticFieldB(bool value)
 	{
 		field = value;
-		return (value == field);
+		return value == field;
 	}
 
 	[MosaUnitTest(Series = "B")]
@@ -219,7 +219,7 @@ public static class StaticFieldTestC
 	public static bool StaticFieldC(char value)
 	{
 		field = value;
-		return (value == field);
+		return value == field;
 	}
 
 	[MosaUnitTest(Series = "C")]

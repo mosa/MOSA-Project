@@ -136,7 +136,7 @@ public sealed class BitValue
 
 	public ulong BitsUnknown => ~BitsKnown;
 
-	public ulong BitsUnknown32 => (~BitsKnown) & uint.MaxValue;
+	public ulong BitsUnknown32 => ~BitsKnown & uint.MaxValue;
 
 	public bool AreAnyBitsKnown => BitsClear != 0 || BitsSet != 0;
 

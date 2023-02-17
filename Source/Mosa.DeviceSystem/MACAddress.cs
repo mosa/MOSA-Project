@@ -20,7 +20,7 @@ public class MACAddress
 	/// <param name="address">The address.</param>
 	public MACAddress(byte[] address)
 	{
-		if ((address == null) || (address.Length != 6))
+		if (address == null || address.Length != 6)
 			throw new System.Exception("Invalid MAC address");
 
 		this.address = new byte[6];

@@ -151,7 +151,7 @@ public class Queue<T> : IEnumerable<T>,
 
 		try
 		{
-			int firstPart = (_array.Length - _head < numToCopy) ? _array.Length - _head : numToCopy;
+			int firstPart = _array.Length - _head < numToCopy ? _array.Length - _head : numToCopy;
 			Array.Copy(_array, _head, array, index, firstPart);
 			numToCopy -= firstPart;
 
@@ -335,7 +335,7 @@ public class Queue<T> : IEnumerable<T>,
 
 		_array = newarray;
 		_head = 0;
-		_tail = (_size == capacity) ? 0 : _size;
+		_tail = _size == capacity ? 0 : _size;
 		_version++;
 	}
 

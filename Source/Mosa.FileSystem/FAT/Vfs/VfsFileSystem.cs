@@ -65,7 +65,7 @@ public class VfsFileSystem : IFileSystemService, IFileSystem
 	/// <returns>The created and mounted file system.</returns>
 	public bool Format(GenericFileSystemSettings settings)
 	{
-		return (Fat.Format(((FatSettings)settings)));
+		return Fat.Format((FatSettings)settings);
 	}
 
 	/// <summary>
