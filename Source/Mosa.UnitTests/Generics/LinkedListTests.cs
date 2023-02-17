@@ -194,9 +194,9 @@ public static class LinkedListTests
 
 	private struct Holder
 	{
-		public int value1;
-		public int value2;
-		public int value3;
+		public readonly int value1;
+		public readonly int value2;
+		public readonly int value3;
 
 		public Holder(int v1, int v2, int v3)
 		{

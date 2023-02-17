@@ -34,9 +34,9 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 	private class StackEntry
 	{
-		public Operand Operand;
-		public StackType StackType;
-		public MosaType Type;   // for ValueTypes
+		public readonly Operand Operand;
+		public readonly StackType StackType;
+		public readonly MosaType Type;   // for ValueTypes
 
 		public StackEntry(StackType stackType, Operand operand)
 		{

@@ -2332,9 +2332,9 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 
 	private struct ConversionEntry
 	{
-		public int BitsToMask;
-		public BaseInstruction Instruction;
-		public BaseInstruction PostInstruction;
+		public readonly int BitsToMask;
+		public readonly BaseInstruction Instruction;
+		public readonly BaseInstruction PostInstruction;
 
 		public ConversionEntry(BaseInstruction instruction)
 		{

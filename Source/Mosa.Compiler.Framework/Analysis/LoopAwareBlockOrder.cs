@@ -39,8 +39,8 @@ public sealed class LoopAwareBlockOrder : BaseBlockOrder
 	/// </summary>
 	private class Priority : IComparable<Priority>
 	{
-		public int Depth;
-		public int Order;
+		public readonly int Depth;
+		public readonly int Order;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Priority" /> class.

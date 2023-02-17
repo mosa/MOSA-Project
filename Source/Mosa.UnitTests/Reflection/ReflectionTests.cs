@@ -89,7 +89,7 @@ public static class ReflectionTests
 
 	private class TestClass123
 	{
-		public int i;
+		public readonly int i;
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public TestClass123()

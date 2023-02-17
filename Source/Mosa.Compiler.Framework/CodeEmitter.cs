@@ -25,12 +25,12 @@ public sealed class CodeEmitter
 		/// <summary>
 		/// Patch label
 		/// </summary>
-		public int Label;
+		public readonly int Label;
 
 		/// <summary>
 		/// The patch's position in the stream
 		/// </summary>
-		public int Position;
+		public readonly int Position;
 
 		/// <summary>
 		/// The patch size

@@ -152,7 +152,7 @@ public static class DelegateTests
 
 	private struct A
 	{
-		public int Value;
+		public readonly int Value;
 
 		public A(int x)
 		{
@@ -176,8 +176,8 @@ public static class DelegateTests
 
 	private struct B
 	{
-		public int Value1;
-		public int Value2;
+		public readonly int Value1;
+		public readonly int Value2;
 
 		public B(int x)
 		{
