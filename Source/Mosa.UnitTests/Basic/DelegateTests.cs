@@ -352,7 +352,7 @@ public static class DelegateTests
 
 	public static int TestInstanceDelegate1(int a)
 	{
-		var w = new Worker()
+		var w = new Worker
 		{
 			Value = 25
 		};
@@ -365,7 +365,7 @@ public static class DelegateTests
 
 	public static int TestInstanceDelegate2(int a, int b)
 	{
-		var w = new Worker()
+		var w = new Worker
 		{
 			Value = 25
 		};

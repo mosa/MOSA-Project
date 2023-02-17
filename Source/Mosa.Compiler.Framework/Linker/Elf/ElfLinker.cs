@@ -154,7 +154,7 @@ public sealed class ElfLinker
 			if (linkerSection.Size == 0 && linkerSection.SectionKind != SectionKind.BSS)
 				continue;
 
-			var section = new Section()
+			var section = new Section
 			{
 				Name = SectionNames[(int)linkerSection.SectionKind],
 				Address = linkerSection.VirtualAddress,
@@ -196,7 +196,7 @@ public sealed class ElfLinker
 
 	private void RegisterNullSection()
 	{
-		nullSection = new Section()
+		nullSection = new Section
 		{
 			Name = null,
 			Type = SectionType.Null
@@ -253,7 +253,7 @@ public sealed class ElfLinker
 
 		foreach (var section in sections)
 		{
-			var newsection = new Section()
+			var newsection = new Section
 			{
 				Name = section.Name,
 				Address = section.VirtualAddress,
@@ -289,7 +289,7 @@ public sealed class ElfLinker
 				continue;
 			}
 
-			var section = new Section()
+			var section = new Section
 			{
 				Name = sectionName,
 				Address = (ulong)sectionAddress,
@@ -355,7 +355,7 @@ public sealed class ElfLinker
 
 	private void RegisterRelocationSection(SectionKind kind, bool addend)
 	{
-		var relocationSection = new Section()
+		var relocationSection = new Section
 		{
 			Name = (addend ? ".rela" : ".rel") + SectionNames[(int)kind],
 			Type = addend ? SectionType.RelocationA : SectionType.Relocation,
@@ -539,7 +539,7 @@ public sealed class ElfLinker
 
 			var name = GetFinalSymboName(symbol);
 
-			var symbolEntry = new SymbolEntry()
+			var symbolEntry = new SymbolEntry
 			{
 				Name = AddToStringTable(name),
 				Value = symbol.VirtualAddress,
@@ -583,7 +583,7 @@ public sealed class ElfLinker
 				if (!patch.ReferenceSymbol.IsExternalSymbol) // FUTURE: include relocations for static symbols, if option selected
 					continue;
 
-				var relocationEntry = new RelocationEntry()
+				var relocationEntry = new RelocationEntry
 				{
 					RelocationType = ConvertType(MachineType, patch.LinkType, patch.PatchType),
 					Symbol = symbolTableOffset[patch.ReferenceSymbol],
@@ -621,7 +621,7 @@ public sealed class ElfLinker
 				if (!patch.ReferenceSymbol.IsExternalSymbol) // FUTURE: include relocations for static symbols, if option selected
 					continue;
 
-				var relocationAddendEntry = new RelocationAddendEntry()
+				var relocationAddendEntry = new RelocationAddendEntry
 				{
 					RelocationType = ConvertType(MachineType, patch.LinkType, patch.PatchType),
 					Symbol = symbolTableOffset[patch.ReferenceSymbol],

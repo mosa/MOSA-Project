@@ -53,7 +53,7 @@ public sealed class CILDecodingStage : BaseMethodCompilerStage, IInstructionDeco
 		var prologue = CreateNewBlock(BasicBlock.PrologueLabel);
 		BasicBlocks.AddHeadBlock(prologue);
 
-		var jmpNode = new InstructionNode()
+		var jmpNode = new InstructionNode
 		{
 			Label = BasicBlock.PrologueLabel,
 			Block = prologue
@@ -194,7 +194,7 @@ public sealed class CILDecodingStage : BaseMethodCompilerStage, IInstructionDeco
 			var cil = CILInstruction.Get(op);
 
 			// Create and initialize the corresponding instruction
-			var node = new InstructionNode()
+			var node = new InstructionNode
 			{
 				Label = instruction.Offset,
 

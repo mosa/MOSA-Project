@@ -14,7 +14,7 @@ public static class ResultParser
 
 	private static (InstructionNode node, int end, int nodeNbr) ParseInstructionNode(List<Token> tokens, int start, int nodeNbr, InstructionNode parent)
 	{
-		var node = new InstructionNode() { NodeNbr = nodeNbr, Parent = parent };
+		var node = new InstructionNode { NodeNbr = nodeNbr, Parent = parent };
 		var length = tokens.Count;
 
 		for (int index = start; index < length; index++)

@@ -171,7 +171,8 @@ public sealed class Compiler
 
 	private static List<BaseMethodCompilerStage> GetDefaultMethodPipeline(CompilerSettings compilerSettings, bool is64BitPlatform)
 	{
-		return new List<BaseMethodCompilerStage>() {
+		return new List<BaseMethodCompilerStage>
+		{
 			!compilerSettings.CILDecodingStageV2 ? new CILDecodingStage() : null,
 			compilerSettings.CILDecodingStageV2 ? new CILDecodingStageV2() : null,
 			!compilerSettings.CILDecodingStageV2 ? new CILOperandAssignmentStage(): null,

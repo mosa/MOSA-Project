@@ -42,7 +42,7 @@ public static class Generator
 		// Create disk image file
 		using (var diskDeviceDriver = new BlockFileStreamDriver(options.DiskImageFileName))
 		{
-			var diskDevice = new Device() { DeviceDriver = diskDeviceDriver };
+			var diskDevice = new Device { DeviceDriver = diskDeviceDriver };
 
 			// Setup device -- required as part of framework in operating system
 			diskDeviceDriver.Setup(diskDevice);
@@ -75,7 +75,7 @@ public static class Generator
 			var partitionDevice = new PartitionDeviceDriver();
 
 			// Setup partition configuration
-			var configuraiton = new DiskPartitionConfiguration()
+			var configuraiton = new DiskPartitionConfiguration
 			{
 				Index = 0,
 				ReadOnly = false,
@@ -116,7 +116,7 @@ public static class Generator
 			}
 
 			// Setup device -- required as part of framework in operating system
-			var device = new Device()
+			var device = new Device
 			{
 				Configuration = configuraiton,
 				DeviceDriver = partitionDevice,

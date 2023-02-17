@@ -12,9 +12,9 @@ public static class Setup
 {
 	public static List<DeviceDriverRegistryEntry> GetDeviceDriverRegistryEntries()
 	{
-		return new List<DeviceDriverRegistryEntry>()
+		return new List<DeviceDriverRegistryEntry>
 		{
-			new ISADeviceDriverRegistryEntry()
+			new ISADeviceDriverRegistryEntry
 			{
 				Name = "ACPI",
 				Platforms = PlatformArchitecture.X86,
@@ -22,7 +22,7 @@ public static class Setup
 				Factory = delegate { return new ISA.ACPI(); }
 			},
 
-			new ISADeviceDriverRegistryEntry()
+			new ISADeviceDriverRegistryEntry
 			{
 				Name = "StandardKeyboard",
 				Platforms = PlatformArchitecture.X86AndX64,
@@ -35,7 +35,7 @@ public static class Setup
 				Factory = delegate { return new ISA.StandardKeyboard(); }
 			},
 
-			new ISADeviceDriverRegistryEntry()
+			new ISADeviceDriverRegistryEntry
 			{
 				Name = "StandardMouse",
 				Platforms = PlatformArchitecture.X86AndX64,
@@ -48,7 +48,7 @@ public static class Setup
 				Factory = delegate { return new ISA.StandardMouse(); }
 			},
 
-			new ISADeviceDriverRegistryEntry()
+			new ISADeviceDriverRegistryEntry
 			{
 				Name = "PCIController",
 				Platforms = PlatformArchitecture.X86AndX64,
@@ -58,7 +58,7 @@ public static class Setup
 				Factory = delegate { return new ISA.PCIController(); }
 			},
 
-			new ISADeviceDriverRegistryEntry()
+			new ISADeviceDriverRegistryEntry
 			{
 				Name = "IDEController",
 				Platforms = PlatformArchitecture.X86AndX64,
@@ -70,7 +70,7 @@ public static class Setup
 				Factory = delegate { return new ISA.IDEController(); }
 			},
 
-			new ISADeviceDriverRegistryEntry()
+			new ISADeviceDriverRegistryEntry
 			{
 				Name = "IDEController (Secondary)",
 				Platforms = PlatformArchitecture.X86AndX64,
@@ -106,7 +106,7 @@ public static class Setup
 				Factory = delegate { return new PCI.NVMe(); }
 			},*/
 
-			new PCIDeviceDriverRegistryEntry()
+			new PCIDeviceDriverRegistryEntry
 			{
 				Name = "VMwareSVGA2",
 				Platforms = PlatformArchitecture.X86AndX64,
@@ -117,7 +117,7 @@ public static class Setup
 				Factory = delegate { return new PCI.VMware.VMwareSVGA2(); }
 			},
 
-			new PCIDeviceDriverRegistryEntry()
+			new PCIDeviceDriverRegistryEntry
 			{
 				Name = "Intel4SeriesChipsetDRAMController",
 				Platforms = PlatformArchitecture.X86AndX64,
@@ -128,7 +128,7 @@ public static class Setup
 				Factory = delegate { return new Intel4SeriesChipsetDRAMController(); }
 			},
 
-			new PCIDeviceDriverRegistryEntry()
+			new PCIDeviceDriverRegistryEntry
 			{
 				Name = "Intel4SeriesChipsetIntegratedGraphicsController",
 				Platforms = PlatformArchitecture.X86AndX64,
@@ -139,7 +139,7 @@ public static class Setup
 				Factory = delegate { return new Intel4SeriesChipsetIntegratedGraphicsController(); }
 			},
 
-			new PCIDeviceDriverRegistryEntry()
+			new PCIDeviceDriverRegistryEntry
 			{
 				Name = "Intel4SeriesChipsetIntegratedGraphicsController2E13",
 				Platforms = PlatformArchitecture.X86AndX64,
@@ -150,7 +150,7 @@ public static class Setup
 				Factory = delegate { return new Intel4SeriesChipsetIntegratedGraphicsController2E13(); }
 			},
 
-			new PCIDeviceDriverRegistryEntry()
+			new PCIDeviceDriverRegistryEntry
 			{
 				Name = "Intel4SeriesChipsetPCIExpressRootPort",
 				Platforms = PlatformArchitecture.X86AndX64,
@@ -161,7 +161,7 @@ public static class Setup
 				Factory = delegate { return new Intel4SeriesChipsetPCIExpressRootPort(); }
 			},
 
-			new PCIDeviceDriverRegistryEntry()
+			new PCIDeviceDriverRegistryEntry
 			{
 				Name = "Intel4SeriesChipsetPCIExpressRootPort",
 				Platforms = PlatformArchitecture.X86AndX64,
@@ -172,7 +172,7 @@ public static class Setup
 				Factory = delegate { return new Intel4SeriesChipsetPCIExpressRootPort(); }
 			},
 
-			new PCIDeviceDriverRegistryEntry()
+			new PCIDeviceDriverRegistryEntry
 			{
 				Name = "Intel440FX",
 				Platforms = PlatformArchitecture.X86AndX64,
@@ -185,7 +185,7 @@ public static class Setup
 				Factory = delegate { return new Intel440FX(); }
 			},
 
-			new PCIDeviceDriverRegistryEntry()
+			new PCIDeviceDriverRegistryEntry
 			{
 				Name = "PCIGenericHostBridge",
 				Platforms = PlatformArchitecture.X86AndX64,
@@ -207,7 +207,7 @@ public static class Setup
 				Factory = delegate { return new Intel82540EM(); }
 			},*/
 
-			new PCIDeviceDriverRegistryEntry()
+			new PCIDeviceDriverRegistryEntry
 			{
 				Name = "IntelPIIX3",
 				Platforms = PlatformArchitecture.X86AndX64,
@@ -218,7 +218,7 @@ public static class Setup
 				Factory = delegate { return new IntelPIIX3(); }
 			},
 
-			new PCIDeviceDriverRegistryEntry()
+			new PCIDeviceDriverRegistryEntry
 			{
 				Name = "IntelPIIX4",
 				Platforms = PlatformArchitecture.X86AndX64,
@@ -229,7 +229,7 @@ public static class Setup
 				Factory = delegate { return new IntelPIIX4(); }
 			},
 
-			new PCIDeviceDriverRegistryEntry()
+			new PCIDeviceDriverRegistryEntry
 			{
 				Name = "IntelGPIOController",
 				Platforms = PlatformArchitecture.X86AndX64,
@@ -244,7 +244,7 @@ public static class Setup
 				Factory = delegate { return new IntelGPIOController(); }
 			},
 
-			new PCIDeviceDriverRegistryEntry()
+			new PCIDeviceDriverRegistryEntry
 			{
 				Name = "IntelHSUART",
 				Platforms = PlatformArchitecture.X86AndX64,
@@ -259,7 +259,7 @@ public static class Setup
 				Factory = delegate { return new IntelHSUART(); }
 			},
 
-			new PCIDeviceDriverRegistryEntry()
+			new PCIDeviceDriverRegistryEntry
 			{
 				Name = "PCIIDEInterface",
 				Platforms = PlatformArchitecture.X86AndX64,

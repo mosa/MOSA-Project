@@ -33,7 +33,7 @@ public class Discovery
 			{
 				foreach (var paramValues in GetParameters(attribute))
 				{
-					var unitTest = new UnitTestInfo()
+					var unitTest = new UnitTestInfo
 					{
 						MethodInfo = method,
 						FullMethodName = fullMethodName,

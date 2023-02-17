@@ -53,7 +53,7 @@ public class PCIControllerService : BaseService
 
 					// TODO: Check for duplicate
 
-					var configuration = new PCIDeviceConfiguration()
+					var configuration = new PCIDeviceConfiguration
 					{
 						Bus = (byte)bus,
 						Slot = (byte)slot,

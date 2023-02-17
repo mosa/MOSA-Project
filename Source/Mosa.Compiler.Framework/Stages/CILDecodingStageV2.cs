@@ -130,7 +130,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		var prologue = CreateNewBlock(BasicBlock.PrologueLabel);
 		BasicBlocks.AddHeadBlock(prologue);
 
-		var jmpNode = new InstructionNode()
+		var jmpNode = new InstructionNode
 		{
 			Label = BasicBlock.PrologueLabel,
 			Block = prologue

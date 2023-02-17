@@ -44,7 +44,7 @@ public class PartitionService : BaseService
 				if (mbr.Partitions[i].PartitionType == PartitionType.Empty)
 					continue;
 
-				var configuration = new DiskPartitionConfiguration()
+				var configuration = new DiskPartitionConfiguration
 				{
 					Index = i,
 					StartLBA = mbr.Partitions[i].StartLBA,

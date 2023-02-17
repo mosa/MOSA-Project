@@ -143,7 +143,7 @@ public class Keyboard : IKeyboard
 
 		if (keyEvent.KeyType == KeyType.RegularKey && keyEvent.KeyPress == KeyEvent.KeyPressType.Make)
 		{
-			var key = new Key()
+			var key = new Key
 			{
 				KeyType = keyEvent.KeyType,
 				Character = keyEvent.Character,
