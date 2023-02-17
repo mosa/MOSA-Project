@@ -84,7 +84,7 @@ internal sealed class DwarfSections
 		};
 		cu.Emit(context);
 
-		uint compilationUnitSize = (uint)(writer.GetPosition() - compilationUnitSizePosition - sizeof(uint));
+		var compilationUnitSize = (uint)(writer.GetPosition() - compilationUnitSizePosition - sizeof(uint));
 		writer.SetPosition(compilationUnitSizePosition);
 		writer.Write(compilationUnitSize);
 		writer.SetPosition(writer.BaseStream.Length);
@@ -173,14 +173,14 @@ internal sealed class DwarfSections
 		EmitFiles(writer);
 
 		// Write header size
-		uint headerSize = (uint)(writer.GetPosition() - headerSizePosition - sizeof(uint));
+		var headerSize = (uint)(writer.GetPosition() - headerSizePosition - sizeof(uint));
 		writer.SetPosition(headerSizePosition);
 		writer.Write(headerSize);
 		writer.SetPosition(writer.BaseStream.Length);
 
 		EmitDebugLineTypes(writer);
 
-		uint compilationUnitSize = (uint)(writer.GetPosition() - compilationUnitSizePosition - sizeof(uint));
+		var compilationUnitSize = (uint)(writer.GetPosition() - compilationUnitSizePosition - sizeof(uint));
 		writer.SetPosition(compilationUnitSizePosition);
 		writer.Write(compilationUnitSize);
 		writer.SetPosition(writer.BaseStream.Length);
@@ -207,7 +207,7 @@ internal sealed class DwarfSections
 		var filenames = new List<string>();
 		var hashset = new HashSet<string>();
 
-		string last = string.Empty;
+		var last = string.Empty;
 
 		foreach (var type in TypeSystem.AllTypes)
 		{
@@ -326,7 +326,7 @@ internal sealed class DwarfSections
 				if (methodData == null)
 					continue;
 
-				uint methodVirtAddr = (uint)symbol.VirtualAddress;
+				var methodVirtAddr = (uint)symbol.VirtualAddress;
 
 				var locations = SourceRegions.GetSourceRegions(methodData);
 
@@ -345,10 +345,10 @@ internal sealed class DwarfSections
 					if (loc.StartLine == 0xFEEFEE)
 						continue;
 
-					uint newPc = methodVirtAddr + (uint)loc.Address;
-					uint pcDiff = newPc - pc;
+					var newPc = methodVirtAddr + (uint)loc.Address;
+					var pcDiff = newPc - pc;
 
-					int lineDiff = loc.StartLine - (int)line;
+					var lineDiff = loc.StartLine - (int)line;
 
 					//if (Math.Abs(lineDiff) > 100000)
 					//	PostCompilerTraceEvent(CompilerEvent.Warning, $"Warning Line Numbers wrong: Location={loc} Method={method} lineDiff={lineDiff}");

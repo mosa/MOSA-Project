@@ -15,7 +15,7 @@ public static class U8
 		{
 			if (series == null) series = GetSeries();
 
-			foreach (ulong value in series)
+			foreach (var value in series)
 				yield return value;
 		}
 	}

@@ -162,7 +162,7 @@ public sealed class DebugFileStage : BaseCompilerStage
 
 			foreach (var method in type.Methods)
 			{
-				int index = 0;
+				var index = 0;
 
 				var methodData = Compiler.GetMethodData(method);
 
@@ -196,7 +196,7 @@ public sealed class DebugFileStage : BaseCompilerStage
 			if (type.IsModule)
 				continue;
 
-			int index = 0;
+			var index = 0;
 
 			foreach (var field in type.Fields)
 			{
@@ -268,7 +268,7 @@ public sealed class DebugFileStage : BaseCompilerStage
 		var filenames = new List<string>();
 		var hashset = new HashSet<string>();
 
-		string last = string.Empty;
+		var last = string.Empty;
 
 		foreach (var type in TypeSystem.AllTypes)
 		{
@@ -303,7 +303,7 @@ public sealed class DebugFileStage : BaseCompilerStage
 		writer.WriteLine("[SourceFile]");
 		writer.WriteLine("SourceFileID\tFileName");
 
-		int index = 0;
+		var index = 0;
 
 		foreach (var filename in filenames)
 		{

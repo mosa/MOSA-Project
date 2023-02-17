@@ -60,8 +60,8 @@ public class MethodScanner
 
 		Debug.WriteLine(trace?.ToString()); // REMOVE
 
-		int totalTypes = 0;
-		int totalMethods = 0;
+		var totalTypes = 0;
+		var totalMethods = 0;
 
 		foreach (var type in TypeSystem.AllTypes)
 		{
@@ -398,7 +398,7 @@ public class MethodScanner
 		// Collect all unit tests methods
 		foreach (var type in TypeSystem.AllTypes)
 		{
-			bool allocateType = false;
+			var allocateType = false;
 
 			foreach (var method in type.Methods)
 			{

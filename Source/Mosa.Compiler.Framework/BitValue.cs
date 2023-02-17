@@ -192,8 +192,8 @@ public sealed class BitValue
 
 	public static BitValue CreateValue(ulong bitsSet, ulong bitsClear, ulong maxValue, ulong minValue, bool rangeDeterminate, bool is32Bit)
 	{
-		ulong _maxValue = rangeDeterminate ? maxValue : ulong.MaxValue;
-		ulong _minValue = rangeDeterminate ? minValue : 0;
+		var _maxValue = rangeDeterminate ? maxValue : ulong.MaxValue;
+		var _minValue = rangeDeterminate ? minValue : 0;
 
 		if (is32Bit)
 		{

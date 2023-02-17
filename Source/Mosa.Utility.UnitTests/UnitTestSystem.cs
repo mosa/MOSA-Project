@@ -61,9 +61,9 @@ public static class UnitTestSystem
 
 		unitTestEngine.Terminate();
 
-		int failures = 0;
-		int passed = 0;
-		int skipped = 0;
+		var failures = 0;
+		var passed = 0;
+		var skipped = 0;
 
 		if (!unitTestEngine.IsAborted)
 		{
@@ -116,7 +116,7 @@ public static class UnitTestSystem
 	{
 		var unitTests = new List<UnitTest>(discoveredUnitTests.Count);
 
-		int id = 0;
+		var id = 0;
 
 		foreach (var unitTestInfo in discoveredUnitTests)
 		{
@@ -344,7 +344,7 @@ public static class UnitTestSystem
 		{
 			var value = new byte[8];
 
-			for (int i = 0; i < 8; i++)
+			for (var i = 0; i < 8; i++)
 				value[i] = data[i];
 
 			return BitConverter.ToSingle(value, 0);
@@ -353,7 +353,7 @@ public static class UnitTestSystem
 		{
 			var value = new byte[8];
 
-			for (int i = 0; i < 8; i++)
+			for (var i = 0; i < 8; i++)
 				value[i] = data[i];
 
 			return BitConverter.ToDouble(value, 0);
@@ -448,7 +448,7 @@ public static class UnitTestSystem
 		}
 		else if (parameter is Char)
 		{
-			char c = (char)parameter;
+			var c = (char)parameter;
 
 			if (Char.IsLetterOrDigit(c) || char.IsSymbol(c))
 				return $"'{c}'";
@@ -489,7 +489,7 @@ public static class UnitTestSystem
 		}
 		else if (parameter is Single)
 		{
-			float f = (float)parameter;
+			var f = (float)parameter;
 
 			if (Single.IsNaN(f))
 				return "Single.NaN";
@@ -502,7 +502,7 @@ public static class UnitTestSystem
 		}
 		else if (parameter is Double)
 		{
-			double d = (double)parameter;
+			var d = (double)parameter;
 
 			if (Double.IsNaN(d))
 				return "Double.NaN";

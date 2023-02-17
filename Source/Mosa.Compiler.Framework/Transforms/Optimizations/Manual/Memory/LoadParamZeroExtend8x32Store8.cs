@@ -10,7 +10,7 @@ public sealed class LoadParamZeroExtend8x32Store8 : BaseTransform
 
 	public override bool Match(Context context, TransformContext transform)
 	{
-		var previous = GetPreviousNodeUntil(context, IRInstruction.StoreParam8, transform.Window, out bool immediate);
+		var previous = GetPreviousNodeUntil(context, IRInstruction.StoreParam8, transform.Window, out var immediate);
 
 		if (previous == null)
 			return false;

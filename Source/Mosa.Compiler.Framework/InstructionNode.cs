@@ -192,7 +192,7 @@ public sealed class InstructionNode
 
 			if (OperandCount >= 3)
 			{
-				for (int i = 3; i < OperandCount; i++)
+				for (var i = 3; i < OperandCount; i++)
 				{
 					yield return GetAdditionalOperand(i);
 				}
@@ -589,7 +589,7 @@ public sealed class InstructionNode
 		Result = null;
 		Result2 = null;
 
-		for (int i = 3; i < OperandCount; i++)
+		for (var i = 3; i < OperandCount; i++)
 		{
 			SetOperand(i, null);
 		}
@@ -693,7 +693,7 @@ public sealed class InstructionNode
 	/// <param name="offset">The offset.</param>
 	public void AppendOperands(IList<Operand> operands, int offset = 0)
 	{
-		for (int i = offset; i < operands.Count; i++)
+		for (var i = offset; i < operands.Count; i++)
 		{
 			SetOperand(OperandCount++, operands[i]);
 		}
@@ -703,7 +703,7 @@ public sealed class InstructionNode
 	{
 		SetOperand(index, null);
 
-		for (int i = index; i < OperandCount - 1; i++)
+		for (var i = index; i < OperandCount - 1; i++)
 		{
 			switch (i)
 			{
@@ -763,7 +763,7 @@ public sealed class InstructionNode
 
 		addition.AdditionalOperands = new Operand[newsize];
 
-		for (int i = 0; i < old.Length; i++)
+		for (var i = 0; i < old.Length; i++)
 		{
 			addition.AdditionalOperands[i] = old[i];
 		}
@@ -821,7 +821,7 @@ public sealed class InstructionNode
 			sb.Append($" [{Instruction.Modifier}]");
 		}
 
-		for (int i = 0; i < ResultCount; i++)
+		for (var i = 0; i < ResultCount; i++)
 		{
 			var op = GetResult(i);
 			sb.Append($" {(op == null ? "[NULL]" : op.ToString(false))},");
@@ -837,7 +837,7 @@ public sealed class InstructionNode
 			sb.Append(" <=");
 		}
 
-		for (int i = 0; i < OperandCount; i++)
+		for (var i = 0; i < OperandCount; i++)
 		{
 			var op = GetOperand(i);
 			sb.Append($" {(op == null ? "[NULL]" : op.ToString(false))},");
@@ -863,7 +863,7 @@ public sealed class InstructionNode
 		{
 			sb.Append(' ');
 
-			for (int i = 0; i < 2 && i < BranchTargetsCount; i++)
+			for (var i = 0; i < 2 && i < BranchTargetsCount; i++)
 			{
 				if (i != 0)
 				{
@@ -1079,7 +1079,7 @@ public sealed class InstructionNode
 		Debug.Assert(!IsBlockStartInstruction);
 		Debug.Assert(!IsBlockEndInstruction);
 
-		int label = Label;
+		var label = Label;
 		var block = Block;
 
 		Clear();

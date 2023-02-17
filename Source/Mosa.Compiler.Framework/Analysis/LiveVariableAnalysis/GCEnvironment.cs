@@ -78,7 +78,7 @@ public class GCEnvironment : BaseLivenessAnalysisEnvironment
 	{
 		if (node.Instruction.FlowControl == FlowControl.Call || node.Instruction == IRInstruction.KillAll)
 		{
-			for (int reg = 0; reg < IndexCount; reg++)
+			for (var reg = 0; reg < IndexCount; reg++)
 			{
 				yield return reg;
 			}
@@ -88,7 +88,7 @@ public class GCEnvironment : BaseLivenessAnalysisEnvironment
 		{
 			var except = node.Operand1.Register.Index;
 
-			for (int reg = 0; reg < IndexCount; reg++)
+			for (var reg = 0; reg < IndexCount; reg++)
 			{
 				if (reg != except)
 				{

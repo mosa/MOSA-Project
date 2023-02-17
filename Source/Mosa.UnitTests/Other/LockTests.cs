@@ -7,7 +7,7 @@ public static class LockTests
 	[MosaUnitTest]
 	public static bool Test1()
 	{
-		object o = new object();
+		var o = new object();
 
 		lock (o)
 		{
@@ -19,7 +19,7 @@ public static class LockTests
 	[MosaUnitTest]
 	public static bool Test2()
 	{
-		object o = new object();
+		var o = new object();
 
 		lock (o)
 		{

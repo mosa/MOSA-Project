@@ -202,7 +202,7 @@ public sealed class LoopInvariantCodeMotionStage : BaseMethodCompilerStage
 		var invariantsSet = new HashSet<InstructionNode>();
 		var invariantsList = new List<InstructionNode>();
 
-		bool changed = true;
+		var changed = true;
 
 		trace?.Log($"Loop: {loop.Header}");
 
@@ -313,7 +313,7 @@ public sealed class LoopInvariantCodeMotionStage : BaseMethodCompilerStage
 			headerSourceBlocks.Add(landingpadBlock);
 			headerSourceOperands.Add(transitionOperand);
 
-			for (int i = 0; i < node.PhiBlocks.Count; i++)
+			for (var i = 0; i < node.PhiBlocks.Count; i++)
 			{
 				var sourceOperand = node.GetOperand(i);
 				var sourceBlock = node.PhiBlocks[i];

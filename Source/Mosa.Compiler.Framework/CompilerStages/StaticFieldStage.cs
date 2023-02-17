@@ -24,7 +24,7 @@ public sealed class StaticFieldStage : BaseCompilerStage
 					continue;
 
 				var section = field.Data != null ? SectionKind.ROData : SectionKind.BSS;
-				uint size = TypeLayout.GetFieldSize(field);
+				var size = TypeLayout.GetFieldSize(field);
 
 				var symbol = Compiler.Linker.DefineSymbol(field.FullName, section, Architecture.NativeAlignment, size);
 

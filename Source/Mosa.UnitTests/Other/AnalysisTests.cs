@@ -13,7 +13,7 @@ public static class AnalysisTests
 	{
 		Struct a = new Struct();
 
-		for (int i = 0; i < 10000; i++)
+		for (var i = 0; i < 10000; i++)
 		{
 			a.X += 1;
 		}
@@ -26,7 +26,7 @@ public static class AnalysisTests
 	{
 		Struct a = new Struct();
 
-		for (int i = 0; i < 10000; i++)
+		for (var i = 0; i < 10000; i++)
 		{
 			a.X = a.X + 1;
 		}

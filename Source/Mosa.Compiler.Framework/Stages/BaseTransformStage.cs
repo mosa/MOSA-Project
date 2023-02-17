@@ -76,7 +76,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 	public void AddTranformation(BaseTransform transform)
 	{
-		int id = transform.Instruction == null ? 0 : transform.Instruction.ID;
+		var id = transform.Instruction == null ? 0 : transform.Instruction.ID;
 
 		if (transforms[id] == null)
 		{
@@ -136,7 +136,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 	private void ExecutePasses()
 	{
-		int pass = 1;
+		var pass = 1;
 
 		var changed = true;
 
@@ -175,7 +175,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 		var changed = false;
 
-		for (int i = 0; i < BasicBlocks.Count; i++)
+		for (var i = 0; i < BasicBlocks.Count; i++)
 		{
 			for (var node = BasicBlocks[i].AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 			{
@@ -191,8 +191,8 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 	private bool Process(Context context)
 	{
-		bool updated = true;
-		bool changed = false;
+		var updated = true;
+		var changed = false;
 
 		while (updated)
 		{
@@ -222,9 +222,9 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 		if (instructionTransforms == null)
 			return false;
 
-		int count = instructionTransforms.Count;
+		var count = instructionTransforms.Count;
 
-		for (int i = 0; i < count; i++)
+		for (var i = 0; i < count; i++)
 		{
 			var transform = instructionTransforms[i];
 
@@ -271,7 +271,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 	protected bool RemoveUnreachableBlocks()
 	{
-		int emptied = 0;
+		var emptied = 0;
 
 		var stack = new Stack<BasicBlock>();
 		var bitmap = new BitArray(BasicBlocks.Count, false);
@@ -335,7 +335,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 	protected bool SkipEmptyBlocks()
 	{
-		int emptied = 0;
+		var emptied = 0;
 
 		foreach (var block in BasicBlocks)
 		{
@@ -392,7 +392,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 	protected bool MergeBlocks()
 	{
-		int emptied = 0;
+		var emptied = 0;
 		var changed = true;
 
 		while (changed)

@@ -79,10 +79,10 @@ public abstract class BaseRegisterAllocator
 		// Setup extended physical registers
 		foreach (var physicalRegister in architecture.RegisterSet)
 		{
-			bool reserved = physicalRegister == StackFrameRegister
-			                || physicalRegister == StackPointerRegister
-			                || (LinkRegister != null && physicalRegister == LinkRegister)
-			                || (ProgramCounter != null && physicalRegister == ProgramCounter);
+			var reserved = physicalRegister == StackFrameRegister
+			               || physicalRegister == StackPointerRegister
+			               || (LinkRegister != null && physicalRegister == LinkRegister)
+			               || (ProgramCounter != null && physicalRegister == ProgramCounter);
 
 			VirtualRegisters.Add(new VirtualRegister(physicalRegister, reserved));
 			LiveIntervalTracks.Add(new LiveIntervalTrack(physicalRegister, reserved));
@@ -294,7 +294,7 @@ public abstract class BaseRegisterAllocator
 		//basicBlocks.ReorderBlocks(loopAwareBlockOrder.NewBlockOrder);
 
 		// Allocate and setup extended blocks
-		for (int i = 0; i < BasicBlocks.Count; i++)
+		for (var i = 0; i < BasicBlocks.Count; i++)
 		{
 			ExtendedBlocks.Add(new ExtendedBlock(BasicBlocks[i], RegisterCount, blockOrder.GetLoopDepth(BasicBlocks[i])));
 		}
@@ -353,7 +353,7 @@ public abstract class BaseRegisterAllocator
 				if (node.IsEmpty)
 					continue;
 
-				string log = $"{node.Offset} = {node}";
+				var log = $"{node.Offset} = {node}";
 
 				if (node.IsBlockStartInstruction)
 				{
@@ -465,7 +465,7 @@ public abstract class BaseRegisterAllocator
 					blockEnds.Add(slot.Value);
 				}
 
-				for (int step = 0; step < 2; step++)
+				for (var step = 0; step < 2; step++)
 				{
 					var innerslot = step == 0 ? slot.Before : slot;
 
@@ -502,7 +502,7 @@ public abstract class BaseRegisterAllocator
 						}
 					}
 
-					for (int index = 0; index < RegisterCount; index++)
+					for (var index = 0; index < RegisterCount; index++)
 					{
 						var vr = VirtualRegisters[index];
 
@@ -537,7 +537,7 @@ public abstract class BaseRegisterAllocator
 								{
 									if (r.AssignedPhysicalRegister != null)
 									{
-										int index2 = r.AssignedPhysicalRegister.Index;
+										var index2 = r.AssignedPhysicalRegister.Index;
 
 										var s2 = row[index2] ?? string.Empty;
 
@@ -564,7 +564,7 @@ public abstract class BaseRegisterAllocator
 
 		usageMap.Log(header.ToString());
 
-		for (int index = 0; index < RegisterCount; index++)
+		for (var index = 0; index < RegisterCount; index++)
 		{
 			var vr = VirtualRegisters[index];
 			if (vr.LiveIntervals.Count == 0)
@@ -615,7 +615,7 @@ public abstract class BaseRegisterAllocator
 
 			if (block.BasicBlock.IsHeadBlock)
 			{
-				for (int s = 0; s < PhysicalRegisterCount; s++)
+				for (var s = 0; s < PhysicalRegisterCount; s++)
 				{
 					liveKill.Set(s, true);
 				}
@@ -639,7 +639,7 @@ public abstract class BaseRegisterAllocator
 
 					liveSetTrace?.Log($"INPUT:  {op}");
 
-					int index = GetIndex(op);
+					var index = GetIndex(op);
 					if (!liveKill.Get(index))
 					{
 						liveGen.Set(index, true);
@@ -650,7 +650,7 @@ public abstract class BaseRegisterAllocator
 
 				if (node.Instruction.FlowControl == FlowControl.Call || node.Instruction == IRInstruction.KillAll)
 				{
-					for (int reg = 0; reg < PhysicalRegisterCount; reg++)
+					for (var reg = 0; reg < PhysicalRegisterCount; reg++)
 					{
 						liveKill.Set(reg, true);
 					}
@@ -661,7 +661,7 @@ public abstract class BaseRegisterAllocator
 				{
 					var except = node.Operand1.Register.Index;
 
-					for (int reg = 0; reg < PhysicalRegisterCount; reg++)
+					for (var reg = 0; reg < PhysicalRegisterCount; reg++)
 					{
 						if (reg != except)
 						{
@@ -679,7 +679,7 @@ public abstract class BaseRegisterAllocator
 
 					liveSetTrace?.Log($"OUTPUT: {op}");
 
-					int index = GetIndex(op);
+					var index = GetIndex(op);
 					liveKill.Set(index, true);
 
 					liveSetTrace?.Log($"KILL: {index} {op}");
@@ -699,12 +699,12 @@ public abstract class BaseRegisterAllocator
 
 	private void ComputeGlobalLiveSets()
 	{
-		bool changed = true;
+		var changed = true;
 		while (changed)
 		{
 			changed = false;
 
-			for (int i = BasicBlocks.Count - 1; i >= 0; i--)
+			for (var i = BasicBlocks.Count - 1; i >= 0; i--)
 			{
 				var block = ExtendedBlocks[i];
 
@@ -743,13 +743,13 @@ public abstract class BaseRegisterAllocator
 	{
 		var intervalTrace = CreateTrace("BuildLiveIntervals", 9);
 
-		for (int b = BasicBlocks.Count - 1; b >= 0; b--)
+		for (var b = BasicBlocks.Count - 1; b >= 0; b--)
 		{
 			var block = ExtendedBlocks[b];
 
 			intervalTrace?.Log($"Block # {block.BasicBlock.Sequence}");
 
-			for (int r = 0; r < RegisterCount; r++)
+			for (var r = 0; r < RegisterCount; r++)
 			{
 				if (!block.LiveOut.Get(r))
 					continue;
@@ -782,7 +782,7 @@ public abstract class BaseRegisterAllocator
 
 				if (node.Instruction.FlowControl == FlowControl.Call || node.Instruction == IRInstruction.KillAll)
 				{
-					for (int s = 0; s < PhysicalRegisterCount; s++)
+					for (var s = 0; s < PhysicalRegisterCount; s++)
 					{
 						var register = VirtualRegisters[s];
 
@@ -796,7 +796,7 @@ public abstract class BaseRegisterAllocator
 				}
 				else if (node.Instruction == IRInstruction.KillAllExcept)
 				{
-					for (int s = 0; s < PhysicalRegisterCount; s++)
+					for (var s = 0; s < PhysicalRegisterCount; s++)
 					{
 						var except = node.Operand1.Register.Index;
 
@@ -940,7 +940,7 @@ public abstract class BaseRegisterAllocator
 		Debug.Assert(liveInterval.LiveIntervalTrack == null);
 
 		// priority is based on allocation stage (primary, lower first) and interval size (secondary, higher first)
-		int value = CalculatePriorityValue(liveInterval);
+		var value = CalculatePriorityValue(liveInterval);
 
 		PriorityQueue.Enqueue(liveInterval, int.MaxValue - value);
 	}
@@ -1021,7 +1021,7 @@ public abstract class BaseRegisterAllocator
 
 			var intersections = track.GetIntersections(liveInterval);
 
-			bool evict = true;
+			var evict = true;
 
 			foreach (var intersection in intersections)
 			{
@@ -1280,7 +1280,7 @@ public abstract class BaseRegisterAllocator
 
 	private IEnumerable<VirtualRegister> GetVirtualRegisters(BitArray array)
 	{
-		for (int i = 0; i < array.Count; i++)
+		for (var i = 0; i < array.Count; i++)
 		{
 			if (array.Get(i))
 			{
@@ -1381,7 +1381,7 @@ public abstract class BaseRegisterAllocator
 
 	protected void AssignPhysicalRegistersToInstructions(InstructionNode node, Operand old, Operand replacement)
 	{
-		for (int i = 0; i < node.OperandCount; i++)
+		for (var i = 0; i < node.OperandCount; i++)
 		{
 			var operand = node.GetOperand(i);
 
@@ -1391,7 +1391,7 @@ public abstract class BaseRegisterAllocator
 			}
 		}
 
-		for (int i = 0; i < node.ResultCount; i++)
+		for (var i = 0; i < node.ResultCount; i++)
 		{
 			var operand = node.GetResult(i);
 
@@ -1415,7 +1415,7 @@ public abstract class BaseRegisterAllocator
 				var to = ExtendedBlocks[nextBlock.Sequence];
 
 				// determine where to insert resolving moves
-				bool fromAnchorFlag = from.BasicBlock.NextBlocks.Count == 1;
+				var fromAnchorFlag = from.BasicBlock.NextBlocks.Count == 1;
 
 				ExtendedBlock anchor = fromAnchorFlag ? from : to;
 
@@ -1459,9 +1459,9 @@ public abstract class BaseRegisterAllocator
 			}
 		}
 
-		for (int b = 0; b < BasicBlocks.Count; b++)
+		for (var b = 0; b < BasicBlocks.Count; b++)
 		{
-			for (int fromTag = 0; fromTag < 2; fromTag++)
+			for (var fromTag = 0; fromTag < 2; fromTag++)
 			{
 				var moveResolver = moveResolvers[fromTag, b];
 

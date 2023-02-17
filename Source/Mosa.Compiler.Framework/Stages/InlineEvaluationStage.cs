@@ -69,9 +69,9 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 			return;
 		}
 
-		int totalIRCount = 0;
-		int totalNonIRCount = 0;
-		int totalStackParameterInstruction = 0;
+		var totalIRCount = 0;
+		var totalNonIRCount = 0;
+		var totalStackParameterInstruction = 0;
 
 		if (!Method.IsNoInlining)
 		{
@@ -126,7 +126,7 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 		MethodData.NonIRInstructionCount = totalNonIRCount;
 		MethodData.IRStackParameterInstructionCount = totalStackParameterInstruction;
 
-		bool inline = CanInline(MethodData);
+		var inline = CanInline(MethodData);
 
 		if (inline)
 		{
@@ -247,7 +247,7 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 			return false;   // too many compiles - cyclic loop suspected
 
 		// methods with aggressive inline attribute will double the allow IR instruction count
-		int max = methodData.HasAggressiveInliningAttribute || MethodData.AggressiveInlineRequested ? InlineAggressiveMaximum : InlineMaximum;
+		var max = methodData.HasAggressiveInliningAttribute || MethodData.AggressiveInlineRequested ? InlineAggressiveMaximum : InlineMaximum;
 
 		if (methodData.IRInstructionCount - methodData.IRStackParameterInstructionCount > max)
 			return false;
@@ -326,7 +326,7 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 				}
 
 				// copy results
-				for (int i = 0; i < node.ResultCount; i++)
+				for (var i = 0; i < node.ResultCount; i++)
 				{
 					var op = node.GetResult(i);
 					var newOp = Map(op, map);
@@ -335,7 +335,7 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 				}
 
 				// copy operands
-				for (int i = 0; i < node.OperandCount; i++)
+				for (var i = 0; i < node.OperandCount; i++)
 				{
 					var op = node.GetOperand(i);
 					var newOp = Map(op, map);

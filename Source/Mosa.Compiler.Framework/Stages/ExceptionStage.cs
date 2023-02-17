@@ -199,7 +199,7 @@ public class ExceptionStage : BaseCodeTransformationStage
 
 		if (targets != null)
 		{
-			for (int i = 0; i < targets.Count; i++)
+			for (var i = 0; i < targets.Count; i++)
 			{
 				var target = targets[i];
 				var conditionBlock = newBlocks[i + 1];

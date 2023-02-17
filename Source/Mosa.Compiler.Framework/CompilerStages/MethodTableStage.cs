@@ -31,7 +31,7 @@ public class MethodTableStage : BaseCompilerStage
 		var writer = new BinaryWriter(methodLookupTable.Stream);
 
 		// 1. Number of methods
-		int count = 0;
+		var count = 0;
 		writer.Write(0);
 
 		foreach (var module in TypeSystem.Modules)

@@ -9,9 +9,9 @@ public static class LoopUnrollingTests
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static int SimpleUnroll()
 	{
-		int v = 0;
+		var v = 0;
 
-		for (int i = 0; i < 2; i++)
+		for (var i = 0; i < 2; i++)
 		{
 			v = v + 1;
 		}

@@ -19,7 +19,7 @@ public sealed class NewObjectStage : BaseCodeTransformationStage
 
 	private MosaMethod GetVMCallMethod(VmCall vmcall)
 	{
-		string methodName = vmcall.ToString();
+		var methodName = vmcall.ToString();
 
 		var method = InternalRuntimeType.FindMethodByName(methodName) ?? PlatformInternalRuntimeType.FindMethodByName(methodName);
 

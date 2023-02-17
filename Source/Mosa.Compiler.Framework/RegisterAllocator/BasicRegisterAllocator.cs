@@ -27,7 +27,7 @@ public class BasicRegisterAllocator : BaseRegisterAllocator
 
 	protected override void CalculateSpillCost(LiveInterval liveInterval)
 	{
-		int spillvalue = 0;
+		var spillvalue = 0;
 
 		foreach (var use in liveInterval.UsePositions)
 		{
@@ -56,7 +56,7 @@ public class BasicRegisterAllocator : BaseRegisterAllocator
 			if (virtualRegister.IsPhysicalRegister)
 				continue;
 
-			for (int i = 0; i < virtualRegister.LiveIntervals.Count; i++)
+			for (var i = 0; i < virtualRegister.LiveIntervals.Count; i++)
 			{
 				var liveInterval = virtualRegister.LiveIntervals[i];
 

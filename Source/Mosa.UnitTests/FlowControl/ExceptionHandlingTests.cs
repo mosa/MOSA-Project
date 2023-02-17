@@ -9,7 +9,7 @@ public static class _ExceptionHandlingTests
 	[MosaUnitTest]
 	public static int ExceptionTest0()
 	{
-		int a = 10;
+		var a = 10;
 
 		try
 		{
@@ -30,7 +30,7 @@ public static class _ExceptionHandlingTests
 	[MosaUnitTest]
 	public static int ExceptionTest1()
 	{
-		int a = 10;
+		var a = 10;
 
 		try
 		{
@@ -54,7 +54,7 @@ public static class _ExceptionHandlingTests
 	[MosaUnitTest]
 	public static int ExceptionTest2()
 	{
-		int a = 10;
+		var a = 10;
 
 		try
 		{
@@ -82,7 +82,7 @@ public static class _ExceptionHandlingTests
 	[MosaUnitTest]
 	public static int ExceptionTest3()
 	{
-		int a = 10;
+		var a = 10;
 
 		try
 		{
@@ -117,7 +117,7 @@ public static class _ExceptionHandlingTests
 	[MosaUnitTest]
 	public static int ExceptionTest4()
 	{
-		int a = 10;
+		var a = 10;
 
 		try
 		{
@@ -157,11 +157,11 @@ public static class _ExceptionHandlingTests
 	[MosaUnitTest]
 	public static int ExceptionTest5()
 	{
-		int a = 10;
+		var a = 10;
 
 		try
 		{
-			int b = ExceptionTest5Exception();
+			var b = ExceptionTest5Exception();
 			a = a + b;
 		}
 		catch
@@ -180,11 +180,11 @@ public static class _ExceptionHandlingTests
 	[MosaUnitTest]
 	public static int ExceptionTest6()
 	{
-		int a = 10;
+		var a = 10;
 
 		try
 		{
-			int b = ExceptionTest6Exception();
+			var b = ExceptionTest6Exception();
 			a = a + b;
 		}
 		catch
@@ -214,11 +214,11 @@ public static class _ExceptionHandlingTests
 	[MosaUnitTest]
 	public static int ExceptionTest7()
 	{
-		int a = 10;
+		var a = 10;
 
 		try
 		{
-			int b = ExceptionTest7Thru();
+			var b = ExceptionTest7Thru();
 			a = a + b;
 		}
 		catch
@@ -253,11 +253,11 @@ public static class _ExceptionHandlingTests
 	[MosaUnitTest]
 	public static int ExceptionTest8()
 	{
-		int a = 10;
+		var a = 10;
 
 		try
 		{
-			int b = ExceptionTest8Finally();
+			var b = ExceptionTest8Finally();
 			a = a + b;
 		}
 		catch
@@ -274,7 +274,7 @@ public static class _ExceptionHandlingTests
 
 	private static int ExceptionTest8Finally()
 	{
-		int a = 0;
+		var a = 0;
 
 		try
 		{
@@ -384,7 +384,7 @@ public static class _ExceptionHandlingTests
 	[MosaUnitTest]
 	public static int ExceptionTest11()
 	{
-		int a = 10;
+		var a = 10;
 
 		try
 		{
@@ -405,7 +405,7 @@ public static class _ExceptionHandlingTests
 	[MosaUnitTest]
 	public static int ExceptionTest12()
 	{
-		int a = 10;
+		var a = 10;
 
 		try
 		{
@@ -432,7 +432,7 @@ public static class _ExceptionHandlingTests
 	{
 		try
 		{
-			int a = ExceptionTest13b();
+			var a = ExceptionTest13b();
 		}
 		catch
 		{
@@ -444,7 +444,7 @@ public static class _ExceptionHandlingTests
 
 	private static int ExceptionTest13b()
 	{
-		int a = 10;
+		var a = 10;
 
 		try
 		{

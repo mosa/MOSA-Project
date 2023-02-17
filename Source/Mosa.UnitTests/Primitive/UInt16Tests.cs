@@ -109,21 +109,21 @@ public static class UInt16Tests
 	[MosaUnitTest]
 	public static bool Newarr()
 	{
-		ushort[] arr = new ushort[0];
+		var arr = new ushort[0];
 		return arr != null;
 	}
 
 	[MosaUnitTest(Series = "I4Small")]
 	public static bool Ldlen(int length)
 	{
-		ushort[] arr = new ushort[length];
+		var arr = new ushort[length];
 		return arr.Length == length;
 	}
 
 	[MosaUnitTest(Series = "I4SmallU2")]
 	public static ushort Ldelem(int index, ushort value)
 	{
-		ushort[] arr = new ushort[index + 1];
+		var arr = new ushort[index + 1];
 		arr[index] = value;
 		return arr[index];
 	}
@@ -131,7 +131,7 @@ public static class UInt16Tests
 	[MosaUnitTest(Series = "I4SmallU2")]
 	public static bool Stelem(int index, ushort value)
 	{
-		ushort[] arr = new ushort[index + 1];
+		var arr = new ushort[index + 1];
 		arr[index] = value;
 		return true;
 	}
@@ -139,7 +139,7 @@ public static class UInt16Tests
 	[MosaUnitTest(Series = "I4SmallU2")]
 	public static ushort Ldelema(int index, ushort value)
 	{
-		ushort[] arr = new ushort[index + 1];
+		var arr = new ushort[index + 1];
 		SetValueInRefValue(ref arr[index], value);
 		return arr[index];
 	}

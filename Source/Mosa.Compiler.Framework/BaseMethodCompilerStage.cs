@@ -479,7 +479,7 @@ public abstract class BaseMethodCompilerStage
 		// Allocate the block array
 		var result = new BasicBlock[blocks];
 
-		for (int index = 0; index < blocks; index++)
+		for (var index = 0; index < blocks; index++)
 		{
 			result[index] = CreateNewBlock(-1, instructionLabel);
 		}
@@ -508,7 +508,7 @@ public abstract class BaseMethodCompilerStage
 		// Allocate the context array
 		var result = new Context[blocks];
 
-		for (int index = 0; index < blocks; index++)
+		for (var index = 0; index < blocks; index++)
 		{
 			result[index] = CreateNewBlockContext(instructionLabel);
 		}
@@ -570,7 +570,7 @@ public abstract class BaseMethodCompilerStage
 	/// <param name="block">The block.</param>
 	protected static bool EmptyBlockOfAllInstructions(BasicBlock block, bool useNop = false)
 	{
-		bool found = false;
+		var found = false;
 
 		for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 		{
@@ -613,7 +613,7 @@ public abstract class BaseMethodCompilerStage
 
 			var targets = node.BranchTargets;
 
-			for (int index = 0; index < targets.Count; index++)
+			for (var index = 0; index < targets.Count; index++)
 			{
 				if (targets[index] == oldTarget)
 				{
@@ -680,7 +680,7 @@ public abstract class BaseMethodCompilerStage
 		var previousBlocks = node.Block.PreviousBlocks;
 		var phiBlocks = node.PhiBlocks;
 
-		for (int index = 0; index < node.OperandCount; index++)
+		for (var index = 0; index < node.OperandCount; index++)
 		{
 			var phiBlock = phiBlocks[index];
 
@@ -689,7 +689,7 @@ public abstract class BaseMethodCompilerStage
 
 			phiBlocks.RemoveAt(index);
 
-			for (int i = index; index < node.OperandCount - 1; index++)
+			for (var i = index; index < node.OperandCount - 1; index++)
 			{
 				node.SetOperand(i, node.GetOperand(i + 1));
 			}
@@ -720,14 +720,14 @@ public abstract class BaseMethodCompilerStage
 
 			var sourceBlocks = node.PhiBlocks;
 
-			int index = sourceBlocks.IndexOf(removedBlock);
+			var index = sourceBlocks.IndexOf(removedBlock);
 
 			if (index < 0)
 				continue;
 
 			sourceBlocks.RemoveAt(index);
 
-			for (int i = index; index < node.OperandCount - 1; index++)
+			for (var i = index; index < node.OperandCount - 1; index++)
 			{
 				node.SetOperand(i, node.GetOperand(i + 1));
 			}
@@ -757,7 +757,7 @@ public abstract class BaseMethodCompilerStage
 			if (!IsPhiInstruction(node.Instruction))
 				break;
 
-			int index = node.PhiBlocks.IndexOf(source);
+			var index = node.PhiBlocks.IndexOf(source);
 
 			//Debug.Assert(index >= 0);
 
@@ -805,7 +805,7 @@ public abstract class BaseMethodCompilerStage
 		var index = Method.ExceptionHandlers.IndexOf(exceptionHandler);
 		var at = exceptionHandler.TryStart;
 
-		for (int i = index + 1; i < Method.ExceptionHandlers.Count; i++)
+		for (var i = index + 1; i < Method.ExceptionHandlers.Count; i++)
 		{
 			var entry = Method.ExceptionHandlers[i];
 
@@ -1162,7 +1162,7 @@ public abstract class BaseMethodCompilerStage
 	{
 		foreach (var node in target.Uses.ToArray())
 		{
-			for (int i = 0; i < node.OperandCount; i++)
+			for (var i = 0; i < node.OperandCount; i++)
 			{
 				var operand = node.GetOperand(i);
 

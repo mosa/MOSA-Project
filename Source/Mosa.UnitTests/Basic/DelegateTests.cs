@@ -102,7 +102,7 @@ public static class DelegateTests
 	public static int CallDelegateParametersReturn(int a, int b)
 	{
 		DelegateParametersReturn d = DelegateParametersReturnTarget;
-		int result = d(a, b);
+		var result = d(a, b);
 		return result;
 	}
 
@@ -358,7 +358,7 @@ public static class DelegateTests
 		};
 		SumValue executeSum = w.SumValue;
 
-		int sum = executeSum(a);
+		var sum = executeSum(a);
 
 		return sum;
 	}
@@ -371,7 +371,7 @@ public static class DelegateTests
 		};
 		SumPlusValue executeSum = w.SumPlusValue;
 
-		int sum = executeSum(a, b);
+		var sum = executeSum(a, b);
 
 		return sum;
 	}

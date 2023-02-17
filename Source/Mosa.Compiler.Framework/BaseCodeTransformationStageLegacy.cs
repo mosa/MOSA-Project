@@ -33,7 +33,7 @@ public abstract class BaseCodeTransformationStageLegacy : BaseMethodCompilerStag
 
 		var context = new Context(null as InstructionNode);
 
-		for (int index = 0; index < BasicBlocks.Count; index++)
+		for (var index = 0; index < BasicBlocks.Count; index++)
 		{
 			for (var node = BasicBlocks[index].AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 			{

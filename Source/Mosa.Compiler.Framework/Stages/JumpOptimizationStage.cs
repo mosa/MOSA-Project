@@ -14,7 +14,7 @@ public sealed class JumpOptimizationStage : BaseMethodCompilerStage
 	{
 		var trace = CreateTraceLog();
 
-		for (int f = 0; f < BasicBlocks.Count - 1; f++)
+		for (var f = 0; f < BasicBlocks.Count - 1; f++)
 		{
 			var from = BasicBlocks[f];
 			var next = BasicBlocks[f + 1];

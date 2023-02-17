@@ -10,10 +10,10 @@ public static class Linker
 {
 	public static LinkerMethodInfo GetMethodInfo(TypeSystem typeSystem, MosaLinker linker, UnitTestInfo unitTestInfo)
 	{
-		string fullMethodName = unitTestInfo.FullMethodName;
+		var fullMethodName = unitTestInfo.FullMethodName;
 
-		int first = fullMethodName.LastIndexOf(".");
-		int second = fullMethodName.LastIndexOf(".", first - 1);
+		var first = fullMethodName.LastIndexOf(".");
+		var second = fullMethodName.LastIndexOf(".", first - 1);
 
 		var methodNamespaceName = fullMethodName.Substring(0, second);
 		var methodTypeName = fullMethodName.Substring(second + 1, first - second - 1);

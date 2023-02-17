@@ -84,7 +84,7 @@ public static class DelegatePatcher
 		var instanceOffsetOperand = methodCompiler.CreateConstant(instanceOffset);
 
 		var size = methodCompiler.Architecture.NativeInstructionSize;
-		bool withReturn = methodCompiler.Method.Signature.ReturnType == null ? false : !methodCompiler.Method.Signature.ReturnType.IsVoid;
+		var withReturn = methodCompiler.Method.Signature.ReturnType == null ? false : !methodCompiler.Method.Signature.ReturnType.IsVoid;
 
 		var b0 = new Context(CreateMethodStructure(methodCompiler));
 		var b1 = new Context(methodCompiler.BasicBlocks.CreateBlock());
@@ -93,7 +93,7 @@ public static class DelegatePatcher
 
 		var vrs = new Operand[methodCompiler.Parameters.Length];
 
-		for (int i = 0; i < methodCompiler.Parameters.Length; i++)
+		for (var i = 0; i < methodCompiler.Parameters.Length; i++)
 		{
 			var type = methodCompiler.Parameters[i].Type;
 
@@ -128,7 +128,7 @@ public static class DelegatePatcher
 		b0.AppendInstruction(IRInstruction.Jmp, b1.Block);
 
 		var operands = new List<Operand>(methodCompiler.Parameters.Length + 1);
-		for (int i = 1; i < methodCompiler.Parameters.Length; i++)
+		for (var i = 1; i < methodCompiler.Parameters.Length; i++)
 		{
 			operands.Add(vrs[i]);
 		}

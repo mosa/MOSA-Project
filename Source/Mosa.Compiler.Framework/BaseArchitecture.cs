@@ -224,7 +224,7 @@ public abstract class BaseArchitecture
 				// Now get all the IntrinsicMethodAttribute attributes
 				var attributes = (IntrinsicMethodAttribute[])method.GetCustomAttributes(typeof(IntrinsicMethodAttribute), true);
 
-				for (int i = 0; i < attributes.Length; i++)
+				for (var i = 0; i < attributes.Length; i++)
 				{
 					var d = (IntrinsicMethodDelegate)System.Delegate.CreateDelegate(typeof(IntrinsicMethodDelegate), method);
 

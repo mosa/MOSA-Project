@@ -336,7 +336,7 @@ public sealed class TransformContext
 		// Allocate the context array
 		var result = new Context[blocks];
 
-		for (int index = 0; index < blocks; index++)
+		for (var index = 0; index < blocks; index++)
 		{
 			result[index] = CreateNewBlockContext(instructionLabel);
 		}

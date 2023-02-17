@@ -207,9 +207,9 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		if (valueTrace == null)
 			return;
 
-		int count = MethodCompiler.VirtualRegisters.Count;
+		var count = MethodCompiler.VirtualRegisters.Count;
 
-		for (int i = 0; i < count; i++)
+		for (var i = 0; i < count; i++)
 		{
 			var virtualRegister = MethodCompiler.VirtualRegisters[i];
 			var value = BitValueManager.GetBitValue(virtualRegister);
@@ -239,7 +239,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 	private void EvaluateVirtualRegisters()
 	{
-		bool change = true;
+		var change = true;
 
 		while (change)
 		{
@@ -406,7 +406,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		{
 			trace?.Log($"BEFORE:\t{node2}");
 
-			for (int i = 0; i < node2.OperandCount; i++)
+			for (var i = 0; i < node2.OperandCount; i++)
 			{
 				if (node2.GetOperand(i) == virtualRegister)
 				{
@@ -888,8 +888,8 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			return null;
 
 		var shift = (int)(value2.BitsSet & 0b11111);
-		bool knownSignedBit = ((value1.BitsKnown >> 31) & 1) == 1;
-		bool signed = ((value1.BitsSet >> 31) & 1) == 1 || ((value1.BitsClear >> 31) & 1) != 1;
+		var knownSignedBit = ((value1.BitsKnown >> 31) & 1) == 1;
+		var signed = ((value1.BitsSet >> 31) & 1) == 1 || ((value1.BitsClear >> 31) & 1) != 1;
 		ulong highbits = knownSignedBit && signed ? ~(~uint.MaxValue >> shift) : 0;
 
 		if (value1.AreLower32BitsKnown && value2.AreLower5BitsKnown)
@@ -931,9 +931,9 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			return null;
 
 		var shift = (int)(value2.BitsSet & 0b111111);
-		bool knownSignedBit = ((value1.BitsKnown >> 63) & 1) == 1;
-		bool signed = ((value1.BitsSet >> 63) & 1) == 1 || ((value1.BitsClear >> 63) & 1) != 1;
-		ulong highbits = knownSignedBit && signed ? ~(~ulong.MaxValue >> shift) : 0;
+		var knownSignedBit = ((value1.BitsKnown >> 63) & 1) == 1;
+		var signed = ((value1.BitsSet >> 63) & 1) == 1 || ((value1.BitsClear >> 63) & 1) != 1;
+		var highbits = knownSignedBit && signed ? ~(~ulong.MaxValue >> shift) : 0;
 
 		if (value1.AreAll64BitsKnown && value2.AreLower6BitsKnown)
 		{
@@ -1373,7 +1373,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			return BitValue.CreateValue((value1.BitsSet32 ^ value2.BitsSet32) & uint.MaxValue, true);
 		}
 
-		ulong bitsKnown = value1.BitsKnown & value2.BitsKnown & uint.MaxValue;
+		var bitsKnown = value1.BitsKnown & value2.BitsKnown & uint.MaxValue;
 
 		return BitValue.CreateValue(
 			bitsSet: (value1.BitsSet ^ value2.BitsSet) & bitsKnown,
@@ -1398,7 +1398,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			return BitValue.CreateValue(value1.BitsSet ^ value2.BitsSet, true);
 		}
 
-		ulong bitsKnown = value1.BitsKnown & value2.BitsKnown;
+		var bitsKnown = value1.BitsKnown & value2.BitsKnown;
 
 		return BitValue.CreateValue(
 			bitsSet: (value1.BitsSet ^ value2.BitsSet) & bitsKnown,
@@ -1695,12 +1695,12 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		if (value1 == null)
 			return null;
 
-		ulong max = value1.MaxValue;
-		ulong min = value1.MinValue;
-		ulong bitsset = value1.BitsSet;
-		ulong bitsclear = value1.BitsClear;
+		var max = value1.MaxValue;
+		var min = value1.MinValue;
+		var bitsset = value1.BitsSet;
+		var bitsclear = value1.BitsClear;
 
-		for (int i = 1; i < node.OperandCount; i++)
+		for (var i = 1; i < node.OperandCount; i++)
 		{
 			var operand = node.GetOperand(i);
 			var value = transform.GetBitValue(operand);
@@ -1733,12 +1733,12 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		if (value1 == null)
 			return null;
 
-		ulong max = value1.MaxValue;
-		ulong min = value1.MinValue;
-		ulong bitsset = value1.BitsSet;
-		ulong bitsclear = value1.BitsClear;
+		var max = value1.MaxValue;
+		var min = value1.MinValue;
+		var bitsset = value1.BitsSet;
+		var bitsclear = value1.BitsClear;
 
-		for (int i = 1; i < node.OperandCount; i++)
+		for (var i = 1; i < node.OperandCount; i++)
 		{
 			var operand = node.GetOperand(i);
 			var value = transform.GetBitValue(operand);
@@ -2123,7 +2123,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			return BitValue.CreateValue(value1.BitsSet16 | (((value1.BitsSet >> 15) & 1) == 1 ? Upper48BitsSet : 0), true);
 		}
 
-		bool knownSignedBit = ((value1.BitsKnown >> 15) & 1) == 1;
+		var knownSignedBit = ((value1.BitsKnown >> 15) & 1) == 1;
 
 		if (!knownSignedBit)
 		{
@@ -2137,7 +2137,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			);
 		}
 
-		bool signed = ((value1.BitsSet >> 15) & 1) == 1 || ((value1.BitsClear >> 15) & 1) != 1;
+		var signed = ((value1.BitsSet >> 15) & 1) == 1 || ((value1.BitsClear >> 15) & 1) != 1;
 
 		return BitValue.CreateValue(
 			bitsSet: value1.BitsSet16 | (signed ? Upper48BitsSet : 0),
@@ -2161,7 +2161,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			return BitValue.CreateValue(value1.BitsSet16 | (((value1.BitsSet >> 15) & 1) == 1 ? Upper48BitsSet : 0), true);
 		}
 
-		bool knownSignedBit = ((value1.BitsKnown >> 15) & 1) == 1;
+		var knownSignedBit = ((value1.BitsKnown >> 15) & 1) == 1;
 
 		if (!knownSignedBit)
 		{
@@ -2175,7 +2175,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			);
 		}
 
-		bool signed = ((value1.BitsSet >> 15) & 1) == 1 || ((value1.BitsClear >> 15) & 1) != 1;
+		var signed = ((value1.BitsSet >> 15) & 1) == 1 || ((value1.BitsClear >> 15) & 1) != 1;
 
 		return BitValue.CreateValue(
 			bitsSet: value1.BitsSet16 | (signed ? Upper48BitsSet : 0),
@@ -2199,7 +2199,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			return BitValue.CreateValue(value1.BitsSet32 | (((value1.BitsSet >> 31) & 1) == 1 ? Upper32BitsSet : 0), false);
 		}
 
-		bool knownSignedBit = ((value1.BitsKnown >> 31) & 1) == 1;
+		var knownSignedBit = ((value1.BitsKnown >> 31) & 1) == 1;
 
 		if (!knownSignedBit)
 		{
@@ -2213,7 +2213,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			);
 		}
 
-		bool signed = ((value1.BitsSet >> 31) & 1) == 1 || ((value1.BitsClear >> 31) & 1) != 1;
+		var signed = ((value1.BitsSet >> 31) & 1) == 1 || ((value1.BitsClear >> 31) & 1) != 1;
 
 		return BitValue.CreateValue(
 			bitsSet: value1.BitsSet32 | (signed ? Upper56BitsSet : 0),
@@ -2237,7 +2237,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			return BitValue.CreateValue(value1.BitsSet16 | (((value1.BitsSet >> 7) & 1) == 1 ? Upper56BitsSet : 0), true);
 		}
 
-		bool knownSignedBit = ((value1.BitsKnown >> 7) & 1) == 1;
+		var knownSignedBit = ((value1.BitsKnown >> 7) & 1) == 1;
 
 		if (!knownSignedBit)
 		{
@@ -2251,7 +2251,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			);
 		}
 
-		bool signed = ((value1.BitsSet >> 7) & 1) == 1 || ((value1.BitsClear >> 7) & 1) != 1;
+		var signed = ((value1.BitsSet >> 7) & 1) == 1 || ((value1.BitsClear >> 7) & 1) != 1;
 
 		return BitValue.CreateValue(
 			bitsSet: value1.BitsSet8 | (signed ? Upper56BitsSet : 0),
@@ -2275,7 +2275,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			return BitValue.CreateValue(value1.BitsSet16 | (((value1.BitsSet >> 7) & 1) == 1 ? Upper56BitsSet : 0), false);
 		}
 
-		bool knownSignedBit = ((value1.BitsKnown >> 7) & 1) == 1;
+		var knownSignedBit = ((value1.BitsKnown >> 7) & 1) == 1;
 
 		if (!knownSignedBit)
 		{
@@ -2289,7 +2289,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			);
 		}
 
-		bool signed = ((value1.BitsSet >> 7) & 1) == 1 || ((value1.BitsClear >> 7) & 1) != 1;
+		var signed = ((value1.BitsSet >> 7) & 1) == 1 || ((value1.BitsClear >> 7) & 1) != 1;
 
 		return BitValue.CreateValue(
 			bitsSet: value1.BitsSet8 | (signed ? Upper56BitsSet : 0),

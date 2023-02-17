@@ -62,7 +62,7 @@ public class BuildBaseTemplate
 				return;
 		}
 
-		string path = Path.GetDirectoryName(destination);
+		var path = Path.GetDirectoryName(destination);
 
 		if (!Directory.Exists(path))
 		{

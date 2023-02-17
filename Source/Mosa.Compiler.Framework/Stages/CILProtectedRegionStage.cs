@@ -69,7 +69,7 @@ public class CILProtectedRegionStage : BaseMethodCompilerStage
 
 					// Find enclosing try or finally handler
 					var exceptionHandler = FindImmediateExceptionHandler(headerBlock.Label);
-					bool inTry = exceptionHandler.IsLabelWithinTry(headerBlock.Label);
+					var inTry = exceptionHandler.IsLabelWithinTry(headerBlock.Label);
 
 					var instruction = inTry ? (BaseInstruction)IRInstruction.TryEnd : IRInstruction.ExceptionEnd;
 

@@ -97,7 +97,7 @@ public sealed class VirtualRegister
 			return;
 		}
 
-		for (int i = 0; i < LiveIntervals.Count; i++)
+		for (var i = 0; i < LiveIntervals.Count; i++)
 		{
 			var liveRange = LiveIntervals[i];
 
@@ -109,7 +109,7 @@ public sealed class VirtualRegister
 				liveRange = liveRange.CreateExpandedLiveRange(start, end);
 				LiveIntervals[i] = liveRange;
 
-				for (int z = i + 1; z < LiveIntervals.Count; z++)
+				for (var z = i + 1; z < LiveIntervals.Count; z++)
 				{
 					var nextLiveRange = LiveIntervals[z];
 					if (liveRange.IsAdjacent(nextLiveRange) || liveRange.Intersects(nextLiveRange))

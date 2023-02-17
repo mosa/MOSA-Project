@@ -10,8 +10,8 @@ public static class ReflectionTests
 	[MosaUnitTest]
 	public static bool PointerTest()
 	{
-		IntPtr ptr1 = new IntPtr(30);
-		IntPtr ptr2 = new IntPtr(30);
+		var ptr1 = new IntPtr(30);
+		var ptr2 = new IntPtr(30);
 		return ptr1 == ptr2;
 	}
 
@@ -47,7 +47,7 @@ public static class ReflectionTests
 	[MosaUnitTest]
 	public static bool TypeHandleFromObjectTest()
 	{
-		string hello = "hi";
+		var hello = "hi";
 		return hello.GetType() != null;
 	}
 

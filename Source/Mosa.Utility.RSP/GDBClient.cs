@@ -74,9 +74,9 @@ public sealed class GDBClient
 		{
 			try
 			{
-				int bytes = stream.EndRead(ar);
+				var bytes = stream.EndRead(ar);
 
-				for (int i = 0; i < bytes; i++)
+				for (var i = 0; i < bytes; i++)
 				{
 					receivedData.Add(receiveBuffer[i]);
 					IncomingPatcket();
@@ -141,7 +141,7 @@ public sealed class GDBClient
 
 	private void IncomingPatcket()
 	{
-		int len = receivedData.Count;
+		var len = receivedData.Count;
 
 		if (len == 0)
 			return;
@@ -171,12 +171,12 @@ public sealed class GDBClient
 
 			var data = Rle.Decode(receivedData, 1, receivedData.Count - 3).ToArray();
 
-			bool ok = false;
+			var ok = false;
 
 			if (data != null)
 			{
 				// Compare checksum
-				byte receivedChecksum = HexToDecimal(receivedData[len - 2], receivedData[len - 1]);
+				var receivedChecksum = HexToDecimal(receivedData[len - 2], receivedData[len - 1]);
 				uint calculatedChecksum = Checksum.Calculate(data);
 
 				if (receivedChecksum == calculatedChecksum)

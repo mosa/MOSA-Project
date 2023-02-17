@@ -7,10 +7,10 @@ public static class CommonTests
 	[MosaUnitTest]
 	public static bool OptimizationTest1()
 	{
-		int a = 10;
-		int b = 20;
+		var a = 10;
+		var b = 20;
 
-		int c = a + b;
+		var c = a + b;
 
 		return c == 30;
 	}
@@ -21,7 +21,7 @@ public static class CommonTests
 		uint a = 10;
 		uint b = 20;
 
-		uint c = a + b;
+		var c = a + b;
 
 		return c == 30;
 	}
@@ -32,7 +32,7 @@ public static class CommonTests
 		byte a = 10;
 		uint b = 20;
 
-		uint c = a + b;
+		var c = a + b;
 
 		return c == 30;
 	}
@@ -43,7 +43,7 @@ public static class CommonTests
 		ulong a = 10;
 		ulong b = 20;
 
-		ulong c = a + b;
+		var c = a + b;
 
 		return c == 30;
 	}
@@ -51,10 +51,10 @@ public static class CommonTests
 	[MosaUnitTest]
 	public static bool OptimizationTest5()
 	{
-		ulong a = ulong.MaxValue;
+		var a = ulong.MaxValue;
 		ulong b = 20;
 
-		ulong c = a + b;
+		var c = a + b;
 
 		return c == unchecked(ulong.MaxValue + 20);
 	}
@@ -62,10 +62,10 @@ public static class CommonTests
 	[MosaUnitTest]
 	public static bool OptimizationTest6()
 	{
-		char a = (char)10;
-		char b = (char)20;
+		var a = (char)10;
+		var b = (char)20;
 
-		char c = (char)(a + b);
+		var c = (char)(a + b);
 
 		return c == 30;
 	}
@@ -76,7 +76,7 @@ public static class CommonTests
 		ulong a = 10;
 		ulong b = 0;
 
-		ulong c = a * b;
+		var c = a * b;
 
 		return c == 0;
 	}
@@ -84,10 +84,10 @@ public static class CommonTests
 	[MosaUnitTest]
 	public static bool OptimizationTest8()
 	{
-		int a = 10;
-		int b = 0;
+		var a = 10;
+		var b = 0;
 
-		int c = a * b;
+		var c = a * b;
 
 		return c == 0;
 	}
@@ -98,7 +98,7 @@ public static class CommonTests
 		ulong a = 10;
 		ulong b = 1;
 
-		ulong c = a * b;
+		var c = a * b;
 
 		return c == 10;
 	}
@@ -106,10 +106,10 @@ public static class CommonTests
 	[MosaUnitTest]
 	public static bool OptimizationTest10()
 	{
-		int a = 1;
-		int b = 10;
+		var a = 1;
+		var b = 10;
 
-		int c = a * b;
+		var c = a * b;
 
 		return c == 10;
 	}
@@ -117,10 +117,10 @@ public static class CommonTests
 	[MosaUnitTest]
 	public static bool OptimizationTest11()
 	{
-		int a = 0;
-		int b = 10;
+		var a = 0;
+		var b = 10;
 
-		int c = a * b;
+		var c = a * b;
 
 		return c == 0;
 	}
@@ -128,13 +128,13 @@ public static class CommonTests
 	[MosaUnitTest]
 	public static int OptimizationTest12()
 	{
-		int a = 32;
-		int b = 10;
-		int c = 10;
-		int d = 1;
-		int e = 0;
+		var a = 32;
+		var b = 10;
+		var c = 10;
+		var d = 1;
+		var e = 0;
 
-		int z = a * b + c * d + c * d * e + e;
+		var z = a * b + c * d + c * d * e + e;
 
 		return z;
 	}
@@ -142,10 +142,10 @@ public static class CommonTests
 	[MosaUnitTest(Series = "I4")]
 	public static int OptimizationTest13(int q)
 	{
-		int a = 10;
-		int b = 20;
+		var a = 10;
+		var b = 20;
 
-		int c = a + b + q;
+		var c = a + b + q;
 
 		return c;
 	}

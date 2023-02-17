@@ -244,14 +244,14 @@ public class Builder : BaseLauncher
 
 	private void CreateVMDK(string source)
 	{
-		string arg = $"convert -f raw -O vmdk {Quote(source)} {Quote(LauncherSettings.ImageFile)}";
+		var arg = $"convert -f raw -O vmdk {Quote(source)} {Quote(LauncherSettings.ImageFile)}";
 
 		LaunchApplication(LauncherSettings.QemuImg, arg, true);
 	}
 
 	private void CreateVDI(string source)
 	{
-		string arg = $"convert -f raw -O vdi {Quote(source)} {Quote(LauncherSettings.ImageFile)}";
+		var arg = $"convert -f raw -O vdi {Quote(source)} {Quote(LauncherSettings.ImageFile)}";
 
 		LaunchApplication(LauncherSettings.QemuImg, arg, true);
 	}
@@ -262,7 +262,7 @@ public class Builder : BaseLauncher
 		var startingAddress = LauncherSettings.BaseAddress + MultibootHeaderLength;
 		var fileOffset = Linker.BaseFileOffset + MultibootHeaderLength;
 
-		string arg = $"-b 32 -o0x{startingAddress:x} -e0x{fileOffset:x} {Quote(LauncherSettings.OutputFile)}";
+		var arg = $"-b 32 -o0x{startingAddress:x} -e0x{fileOffset:x} {Quote(LauncherSettings.OutputFile)}";
 
 		//var nasmfile = Path.Combine(LauncherSettings.ImageFolder, $"{Path.GetFileNameWithoutExtension(LauncherSettings.SourceFiles[0])}.nasm");
 
@@ -331,7 +331,7 @@ public class Builder : BaseLauncher
 	{
 		if (compilerEvent is CompilerEvent.CompileStart or CompilerEvent.CompileEnd or CompilerEvent.CompilingMethods or CompilerEvent.CompilingMethodsCompleted or CompilerEvent.InlineMethodsScheduled or CompilerEvent.LinkingStart or CompilerEvent.LinkingEnd or CompilerEvent.Warning or CompilerEvent.Error or CompilerEvent.Exception)
 		{
-			string status = $"Compiling: {$"{(DateTime.Now - CompileStartTime).TotalSeconds:0.00}"} secs: {compilerEvent.ToText()}";
+			var status = $"Compiling: {$"{(DateTime.Now - CompileStartTime).TotalSeconds:0.00}"} secs: {compilerEvent.ToText()}";
 
 			if (!string.IsNullOrEmpty(message))
 				status += $"- {message}";

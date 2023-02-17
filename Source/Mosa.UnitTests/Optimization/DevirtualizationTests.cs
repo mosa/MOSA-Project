@@ -25,7 +25,7 @@ public class DevirtualizationTests
 	public static int Test1()
 	{
 		DevirtualizationBase b = DevirtualizationBase.Default;
-		int x = b.Foo();
+		var x = b.Foo();
 		return x == 33 ? 100 : -1;
 	}
 }

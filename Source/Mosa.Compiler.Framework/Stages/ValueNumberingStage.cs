@@ -107,7 +107,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 
 		foreach (var operand in MethodCompiler.Parameters)
 		{
-			bool write = false;
+			var write = false;
 
 			foreach (var use in operand.Uses)
 			{
@@ -173,7 +173,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 						expressionWorklist.Push(newExpressions);
 					}
 
-					for (int i = nextBlocks.Count - 1; i >= 0; i--)
+					for (var i = nextBlocks.Count - 1; i >= 0; i--)
 					{
 						blockWorklist.Push(nextBlocks[i]);
 					}
@@ -205,8 +205,8 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 		nextblocks = null;
 
 		// Mark the beginning of the new scope by keeping a list
-		bool successorValidated = false;
-		bool successorProcessed = true;
+		var successorValidated = false;
+		var successorProcessed = true;
 
 		Processed.Set(block.Sequence, true);
 
@@ -480,7 +480,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 
 	private static int ComputeExpressionHash(InstructionNode node)
 	{
-		int hash = node.Instruction.ID;
+		var hash = node.Instruction.ID;
 
 		hash = hash | ((int)node.ConditionCode << 16);
 
@@ -598,7 +598,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 		if (a.OperandCount != b.OperandCount)
 			return false;
 
-		for (int i = 0; i < a.OperandCount; i++)
+		for (var i = 0; i < a.OperandCount; i++)
 		{
 			var va = a.GetOperand(i);
 			var vb = b.GetOperand(i);
@@ -635,7 +635,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 	private void UpdateNodeWithValueNumbers(InstructionNode node)
 	{
 		// update operands with their value number
-		for (int i = 0; i < node.OperandCount; i++)
+		for (var i = 0; i < node.OperandCount; i++)
 		{
 			var operand = node.GetOperand(i);
 

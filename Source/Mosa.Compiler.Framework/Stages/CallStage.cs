@@ -230,10 +230,10 @@ public sealed class CallStage : BaseCodeTransformationStage
 
 		//var data = TypeLayout.__GetMethodInfo(method);
 
-		uint stackSize = CalculateParameterStackSize(operands);
-		uint returnSize = CalculateReturnSize(result);
+		var stackSize = CalculateParameterStackSize(operands);
+		var returnSize = CalculateReturnSize(result);
 
-		uint totalStack = returnSize + stackSize;
+		var totalStack = returnSize + stackSize;
 
 		ReserveStackSizeForCall(context, totalStack);
 		PushOperands(context, operands, totalStack);
@@ -265,7 +265,7 @@ public sealed class CallStage : BaseCodeTransformationStage
 	{
 		uint stackSize = 0;
 
-		for (int index = operands.Count - 1; index >= 0; index--)
+		for (var index = operands.Count - 1; index >= 0; index--)
 		{
 			var operand = operands[index];
 
@@ -293,7 +293,7 @@ public sealed class CallStage : BaseCodeTransformationStage
 
 	private void PushOperands(Context context, List<Operand> operands, uint space)
 	{
-		for (int index = operands.Count - 1; index >= 0; index--)
+		for (var index = operands.Count - 1; index >= 0; index--)
 		{
 			var operand = operands[index];
 

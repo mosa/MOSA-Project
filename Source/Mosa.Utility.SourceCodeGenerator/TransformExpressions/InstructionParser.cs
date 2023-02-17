@@ -22,7 +22,7 @@ public static class InstructionParser
 		var node = new InstructionNode { NodeNbr = nodeNbr };
 		var length = tokens.Count;
 
-		for (int index = start; index < length; index++)
+		for (var index = start; index < length; index++)
 		{
 			var token = tokens[index];
 

@@ -9,7 +9,7 @@ public static class WhileTests
 	[MosaUnitTest(-100, 100)]
 	public static int WhileIncI4(int start, int limit)
 	{
-		int count = 0;
+		var count = 0;
 
 		while (start < limit)
 		{
@@ -25,7 +25,7 @@ public static class WhileTests
 	[MosaUnitTest(100, -100)]
 	public static int WhileDecI4(int start, int limit)
 	{
-		int count = 0;
+		var count = 0;
 
 		while (start > limit)
 		{
@@ -39,7 +39,7 @@ public static class WhileTests
 	[MosaUnitTest]
 	public static bool WhileFalse()
 	{
-		bool called = false;
+		var called = false;
 
 		while (false)
 		{
@@ -53,7 +53,7 @@ public static class WhileTests
 	public static bool WhileContinueBreak()
 	{
 		const int limit = 20;
-		int count = 0;
+		var count = 0;
 
 		while (true)
 		{
@@ -75,9 +75,9 @@ public static class WhileTests
 	[MosaUnitTest]
 	public static bool WhileContinueBreak2()
 	{
-		int start = 0;
+		var start = 0;
 		const int limit = 20;
-		int count = 0;
+		var count = 0;
 
 		while (true)
 		{
@@ -100,9 +100,9 @@ public static class WhileTests
 	[MosaUnitTest]
 	public static int WhileContinueBreak2B()
 	{
-		int start = 0;
-		int limit = 20;
-		int count = 0;
+		var start = 0;
+		var limit = 20;
+		var count = 0;
 
 		while (true)
 		{
@@ -126,7 +126,7 @@ public static class WhileTests
 	[MosaUnitTest(byte.MaxValue, byte.MinValue)]
 	public static int WhileOverflowIncI1(byte start, byte limit)
 	{
-		int count = 0;
+		var count = 0;
 
 		while (start != limit)
 		{
@@ -141,7 +141,7 @@ public static class WhileTests
 	[MosaUnitTest(byte.MinValue, byte.MaxValue)]
 	public static int WhileOverflowDecI1(byte start, byte limit)
 	{
-		int count = 0;
+		var count = 0;
 
 		while (start != limit)
 		{
@@ -158,9 +158,9 @@ public static class WhileTests
 	[MosaUnitTest(int.MaxValue, int.MinValue, -2, 3)]
 	public static int WhileNestedEqualsI4(int a, int b, int start, int limit)
 	{
-		int count = 0;
-		int start2 = start;
-		int status = a;
+		var count = 0;
+		var start2 = start;
+		var status = a;
 
 		while (status == a)
 		{
