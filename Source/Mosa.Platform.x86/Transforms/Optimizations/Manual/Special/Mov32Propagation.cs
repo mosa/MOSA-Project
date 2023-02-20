@@ -22,6 +22,9 @@ public sealed class Mov32Propagation : BaseTransform
 		if (!IsSSAForm(context.Result))
 			return false;
 
+		if (!IsSSAForm(context.Operand1))
+			return false;
+
 		return true;
 	}
 

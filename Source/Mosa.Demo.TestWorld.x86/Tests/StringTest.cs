@@ -108,7 +108,7 @@ public class StringTest : KernelTest
 		string main = "abcdefghi";
 		string sub1 = main.Substring(6);
 
-		return sub1.Length == 6;
+		return sub1.Length == 3;
 	}
 
 	public static bool SubStringTest2b()

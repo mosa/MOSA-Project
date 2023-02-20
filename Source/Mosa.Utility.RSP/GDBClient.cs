@@ -18,6 +18,8 @@ public sealed class GDBClient
 	private const char Suffix = '#';
 
 	private readonly object sync = new object();
+	private readonly object sync2 = new object();
+
 	private GDBNetworkStream stream;
 
 	private readonly byte[] receiveBuffer = new byte[1024];
@@ -74,9 +76,9 @@ public sealed class GDBClient
 		{
 			try
 			{
-				int bytes = stream.EndRead(ar);
+				var bytes = stream.EndRead(ar);
 
-				for (int i = 0; i < bytes; i++)
+				for (var i = 0; i < bytes; i++)
 				{
 					receivedData.Add(receiveBuffer[i]);
 					IncomingPatcket();
@@ -141,71 +143,70 @@ public sealed class GDBClient
 
 	private void IncomingPatcket()
 	{
-		int len = receivedData.Count;
-
-		if (len == 0)
-			return;
-
-		if (len == 1 && receivedData[0] == '+')
+		lock (sync2)
 		{
-			receivedData.Clear();
-			return;
-		}
+			var len = receivedData.Count;
 
-		if (len == 1 && receivedData[0] == '-')
-		{
-			// todo: re-transmit
-			receivedData.Clear();
-			return;
-		}
+			if (len == 0)
+				return;
 
-		if (len >= 4 && receivedData[0] == '$' && receivedData[len - 3] == '#')
-		{
-			LogEvent?.Invoke($"RECEIVED: {Encoding.UTF8.GetString(receivedData.ToArray())}");
-
-			if (currentCommand == null)
+			if (len == 1 && receivedData[0] == '+')
 			{
 				receivedData.Clear();
 				return;
 			}
 
-			var data = Rle.Decode(receivedData, 1, receivedData.Count - 3).ToArray();
-
-			bool ok = false;
-
-			if (data != null)
+			if (len == 1 && receivedData[0] == '-')
 			{
-				// Compare checksum
-				byte receivedChecksum = HexToDecimal(receivedData[len - 2], receivedData[len - 1]);
-				uint calculatedChecksum = Checksum.Calculate(data);
+				// todo: re-transmit
+				receivedData.Clear();
+				return;
+			}
 
-				if (receivedChecksum == calculatedChecksum)
+			if (len >= 4 && receivedData[0] == '$' && receivedData[len - 3] == '#')
+			{
+				LogEvent?.Invoke($"RECEIVED: {Encoding.UTF8.GetString(receivedData.ToArray())}");
+
+				if (currentCommand == null)
 				{
-					ok = true;
+					receivedData.Clear();
+					return;
+				}
+
+				var data = Rle.Decode(receivedData, 1, receivedData.Count - 3).ToArray();
+
+				var ok = false;
+
+				if (data != null)
+				{
+					// Compare checksum
+					var receivedChecksum = HexToDecimal(receivedData[len - 2], receivedData[len - 1]);
+					var calculatedChecksum = Checksum.Calculate(data);
+
+					if (receivedChecksum == calculatedChecksum)
+					{
+						ok = true;
+					}
+				}
+
+				currentCommand.IsResponseOk = ok;
+				currentCommand.ResponseData = data;
+
+				if (ok)
+				{
+					currentCommand.Decode();
+				}
+
+				var cmd = currentCommand;
+				currentCommand = null;
+				receivedData.Clear();
+
+				if (cmd.Callback != null)
+				{
+					ThreadPool.QueueUserWorkItem(state => { cmd.Callback.Invoke(cmd); });
 				}
 			}
-
-			currentCommand.IsResponseOk = ok;
-			currentCommand.ResponseData = data;
-
-			if (ok)
-			{
-				currentCommand.Decode();
-			}
-
-			var cmd = currentCommand;
-			currentCommand = null;
-			receivedData.Clear();
-
-			if (cmd.Callback != null)
-			{
-				ThreadPool.QueueUserWorkItem(state => { cmd.Callback.Invoke(cmd); });
-			}
-
-			return;
 		}
-
-		return;
 	}
 
 	private static byte[] ToBinary(GDBCommand packet)
