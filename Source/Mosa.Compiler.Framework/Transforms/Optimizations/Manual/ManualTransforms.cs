@@ -61,8 +61,6 @@ public static class ManualTransforms
 		new StrengthReduction.AddCarryOut64ByZero2(),
 		new StrengthReduction.AddOverflowOut32ByZero2(),
 		new StrengthReduction.AddOverflowOut64ByZero2(),
-		new StrengthReduction.SubCarryOut32ByZero2(),
-		new StrengthReduction.SubCarryOut64ByZero2(),
 		new StrengthReduction.SubOverflowOut32ByZero2(),
 		new StrengthReduction.SubOverflowOut64ByZero2(),
 
@@ -147,14 +145,12 @@ public static class ManualTransforms
 		new Simplification.Compare64x32SameHigh(),
 		new Simplification.Compare64x32SameLow(),
 
-		// LowerTo32
 		new LowerTo32.Add64(),
 		new LowerTo32.And64(),
 		new LowerTo32.Branch64Extends(),
 		new LowerTo32.Compare64x32EqualOrNotEqual(),
 		new LowerTo32.Compare64x64EqualOrNotEqual(),
-
-		//LowerTo32.Compare64x32UnsignedGreater(),
+		//LowerTo32.Compare64x32UnsignedGreater(), //
 		new LowerTo32.ArithShiftRight64By32(),
 		new LowerTo32.ShiftRight64ByConstant32(),
 		new LowerTo32.ShiftRight64ByConstant32Plus(),
