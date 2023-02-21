@@ -185,7 +185,7 @@ public sealed class Compiler
 			compilerSettings.Devirtualization ? new DevirtualizeCallStage() : null,
 			new PlugStage(),
 			new RuntimeCallStage(),
-			new ArrayStage(),
+			new IRStage(),
 			(compilerSettings.InlineMethods || compilerSettings.InlineExplicit) ? new InlineStage() : null,
 			new PromoteTemporaryVariables(),
 			new StaticLoadOptimizationStage(),

@@ -231,6 +231,12 @@ public static class IRInstructions
 		IRInstruction.BitCopyR8To64,
 		IRInstruction.BitCopy32ToR4,
 		IRInstruction.BitCopy64ToR8,
+		IRInstruction.ThrowOverflow,
+		IRInstruction.ThrowIndexOutOfRange,
+		IRInstruction.ThrowDivideByZero,
 		IRInstruction.CheckArrayBounds,
+		IRInstruction.CheckThrowOverflow,
+		IRInstruction.CheckThrowIndexOutOfRange,
+		IRInstruction.CheckThrowDivideByZero,
 	};
 }

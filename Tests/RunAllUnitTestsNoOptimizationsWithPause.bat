@@ -1,3 +1,3 @@
-..\bin\Mosa.Utility.UnitTests.exe -display-off -o0 -output-hash
+..\bin\Mosa.Utility.UnitTests.exe -display-off -oNone -output-hash
 
 pause

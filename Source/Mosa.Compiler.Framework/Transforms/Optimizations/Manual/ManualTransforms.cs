@@ -17,21 +17,61 @@ public static class ManualTransforms
 		new ConstantMove.Compare32x64(),
 		new ConstantMove.Compare64x32(),
 		new ConstantMove.Compare64x64(),
+		new ConstantMove.Branch32(),
+		new ConstantMove.Branch64(),
+		new ConstantMove.AddCarryOut32(),
+		new ConstantMove.AddCarryOut64(),
+		new ConstantMove.AddOverflowOut32(),
+		new ConstantMove.AddOverflowOut64(),
+		new ConstantMove.MulCarryOut32(),
+		new ConstantMove.MulCarryOut64(),
+		new ConstantMove.MulOverflowOut32(),
+		new ConstantMove.MulOverflowOut64(),
 
 		new ConstantFolding.AddCarryOut32(),
 		new ConstantFolding.AddCarryOut64(),
-
-		new ConstantMove.Branch32(),
-		new ConstantMove.Branch64(),
-
+		new ConstantFolding.AddOverflowOut32(),
+		new ConstantFolding.AddOverflowOut64(),
+		new ConstantFolding.SubCarryOut32(),
+		new ConstantFolding.SubCarryOut64(),
+		new ConstantFolding.SubOverflowOut32(),
+		new ConstantFolding.SubOverflowOut64(),
+		new ConstantFolding.MulCarryOut32(),
+		new ConstantFolding.MulCarryOut64(),
+		new ConstantFolding.MulOverflowOut32(),
+		new ConstantFolding.MulOverflowOut64(),
 		new ConstantFolding.Compare32x32(),
 		new ConstantFolding.Compare32x64(),
 		new ConstantFolding.Compare64x32(),
 		new ConstantFolding.Compare64x64(),
-
 		new ConstantFolding.Branch32(),
 		new ConstantFolding.Branch64(),
 		new ConstantFolding.Switch(),
+
+		new StrengthReduction.AddCarryOut32ByZero(),
+		new StrengthReduction.AddCarryOut64ByZero(),
+		new StrengthReduction.AddOverflowOut32ByZero(),
+		new StrengthReduction.AddOverflowOut64ByZero(),
+		new StrengthReduction.SubCarryOut32ByZero(),
+		new StrengthReduction.SubCarryOut64ByZero(),
+		new StrengthReduction.SubOverflowOut32ByZero(),
+		new StrengthReduction.SubOverflowOut64ByZero(),
+
+		new StrengthReduction.AddCarryOut32ByZero2(),
+		new StrengthReduction.AddCarryOut64ByZero2(),
+		new StrengthReduction.AddOverflowOut32ByZero2(),
+		new StrengthReduction.AddOverflowOut64ByZero2(),
+		new StrengthReduction.SubOverflowOut32ByZero2(),
+		new StrengthReduction.SubOverflowOut64ByZero2(),
+
+		new StrengthReduction.MulCarryOut32ByOne(),
+		new StrengthReduction.MulCarryOut32ByZero(),
+		new StrengthReduction.MulCarryOut64ByOne(),
+		new StrengthReduction.MulCarryOut64ByZero(),
+		new StrengthReduction.MulOverflowOut32ByOne(),
+		new StrengthReduction.MulOverflowOut32ByZero(),
+		new StrengthReduction.MulOverflowOut64ByOne(),
+		new StrengthReduction.MulOverflowOut64ByZero(),
 
 		new Special.Deadcode(),
 		new Special.GetLow32From64(),
@@ -105,14 +145,12 @@ public static class ManualTransforms
 		new Simplification.Compare64x32SameHigh(),
 		new Simplification.Compare64x32SameLow(),
 
-		// LowerTo32
 		new LowerTo32.Add64(),
 		new LowerTo32.And64(),
 		new LowerTo32.Branch64Extends(),
 		new LowerTo32.Compare64x32EqualOrNotEqual(),
 		new LowerTo32.Compare64x64EqualOrNotEqual(),
-
-		//LowerTo32.Compare64x32UnsignedGreater(),
+		//LowerTo32.Compare64x32UnsignedGreater(), //
 		new LowerTo32.ArithShiftRight64By32(),
 		new LowerTo32.ShiftRight64ByConstant32(),
 		new LowerTo32.ShiftRight64ByConstant32Plus(),
@@ -231,5 +269,9 @@ public static class ManualTransforms
 		new Rewrite.Branch64LessOrEqualThanZero(),
 
 		new PHI.Phi32Add32(),
+
+		new Checked.CheckThrowDivideByZero(),
+		new Checked.CheckThrowIndexOutOfRange(),
+		new Checked.CheckThrowOverflow(),
 	};
 }

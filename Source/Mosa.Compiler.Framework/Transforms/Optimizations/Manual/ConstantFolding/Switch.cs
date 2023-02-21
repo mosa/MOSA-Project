@@ -10,6 +10,8 @@ public sealed class Switch : BaseTransform
 	{
 	}
 
+	public override int Priority => 100;
+
 	public override bool Match(Context context, TransformContext transform)
 	{
 		if (!context.Operand1.IsResolvedConstant)

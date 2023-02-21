@@ -9,18 +9,27 @@ namespace Mosa.Compiler.Framework.xUnit;
 public class IntegerTwiddlingTests
 {
 	[Fact]
-	public void SignedIntegerOverflow()
+	public void IsAddSignedOverflow()
 	{
-		Debug.Assert(IntegerTwiddling.IsAddOverflow(2147483640, 10));
-		Debug.Assert(!IntegerTwiddling.IsAddOverflow(0, 0));
+		Debug.Assert(IntegerTwiddling.IsAddSignedOverflow(2147483640, 10));
+		Debug.Assert(!IntegerTwiddling.IsAddSignedOverflow(0, 0));
 	}
 
 	[Fact]
-	public void UnsignedIntegerOverflow()
+	public void IsAddUnsignedCarry()
 	{
-		Debug.Assert(IntegerTwiddling.IsAddOverflow(ulong.MaxValue, 1ul));
-		Debug.Assert(!IntegerTwiddling.IsAddOverflow(ulong.MaxValue, 0ul));
-		Debug.Assert(!IntegerTwiddling.IsAddOverflow(0ul, 0ul));
-		Debug.Assert(!IntegerTwiddling.IsAddOverflow(0ul, ulong.MaxValue));
+		Debug.Assert(IntegerTwiddling.IsAddUnsignedCarry(ulong.MaxValue, 1ul));
+		Debug.Assert(!IntegerTwiddling.IsAddUnsignedCarry(ulong.MaxValue, 0ul));
+		Debug.Assert(!IntegerTwiddling.IsAddUnsignedCarry(0ul, 0ul));
+		Debug.Assert(!IntegerTwiddling.IsAddUnsignedCarry(0ul, ulong.MaxValue));
+	}
+
+	[Fact]
+	public void IsSubUnsignedCarry()
+	{
+		Debug.Assert(!IntegerTwiddling.IsSubUnsignedCarry(ulong.MaxValue, 1ul));
+		Debug.Assert(!IntegerTwiddling.IsSubUnsignedCarry(ulong.MaxValue, 0ul));
+		Debug.Assert(!IntegerTwiddling.IsSubUnsignedCarry(0ul, 0ul));
+		Debug.Assert(IntegerTwiddling.IsSubUnsignedCarry(0ul, ulong.MaxValue));
 	}
 }
