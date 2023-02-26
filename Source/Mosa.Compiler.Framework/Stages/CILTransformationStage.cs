@@ -26,8 +26,8 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 	protected override void PopulateVisitationDictionary()
 	{
 		AddVisitation(CILInstruction.Add, Add);
-		AddVisitation(CILInstruction.Add_ovf, AddOverflow);
-		AddVisitation(CILInstruction.Add_ovf_un, AddOverflowUnsigned);
+		AddVisitation(CILInstruction.Add_ovf, AddSignedOverflow);
+		AddVisitation(CILInstruction.Add_ovf_un, AddUnsignedCarry);
 		AddVisitation(CILInstruction.And, BinaryLogic);
 		AddVisitation(CILInstruction.Beq, BinaryBranch);
 		AddVisitation(CILInstruction.Beq_s, BinaryBranch);
@@ -177,8 +177,8 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 		AddVisitation(CILInstruction.Leave, Leave);
 		AddVisitation(CILInstruction.Leave_s, Leave);
 		AddVisitation(CILInstruction.Mul, Mul);
-		AddVisitation(CILInstruction.Mul_ovf, MulOverflow);
-		AddVisitation(CILInstruction.Mul_ovf_un, MulOverflowUnsigned);
+		AddVisitation(CILInstruction.Mul_ovf, MulSignedOverflow);
+		AddVisitation(CILInstruction.Mul_ovf_un, MulUnsignedCarry);
 		AddVisitation(CILInstruction.Neg, Neg);
 		AddVisitation(CILInstruction.Newarr, Newarr);
 		AddVisitation(CILInstruction.Newobj, Newobj);
@@ -223,8 +223,8 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 		AddVisitation(CILInstruction.Stobj, Stobj);
 		AddVisitation(CILInstruction.Stsfld, Stsfld);
 		AddVisitation(CILInstruction.Sub, Sub);
-		AddVisitation(CILInstruction.Sub_ovf, SubOverflow);
-		AddVisitation(CILInstruction.Sub_ovf_un, SubOverflowUnsigned);
+		AddVisitation(CILInstruction.Sub_ovf, SubSignedOverflow);
+		AddVisitation(CILInstruction.Sub_ovf_un, SubUnsignedCarry);
 		AddVisitation(CILInstruction.Switch, Switch);
 		AddVisitation(CILInstruction.Throw, Throw);
 		AddVisitation(CILInstruction.Unbox, Unbox);
@@ -272,7 +272,7 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 	/// Visitation function for Add Overflow instruction
 	/// </summary>
 	/// <param name="node">The node.</param>
-	private void AddOverflow(InstructionNode node)
+	private void AddSignedOverflow(InstructionNode node)
 	{
 		var overflowResult = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
 
@@ -285,7 +285,7 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 	/// Visitation function for Add Overflow Unsigned instruction
 	/// </summary>
 	/// <param name="node">The node.</param>
-	private void AddOverflowUnsigned(InstructionNode node)
+	private void AddUnsignedCarry(InstructionNode node)
 	{
 		var carryResult = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
 
@@ -1210,7 +1210,7 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 	/// Visitation function for Mul Overflow instruction
 	/// </summary>
 	/// <param name="node">The node.</param>
-	private void MulOverflow(InstructionNode node)
+	private void MulSignedOverflow(InstructionNode node)
 	{
 		var overflowResult = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
 
@@ -1223,7 +1223,7 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 	/// Visitation function for Mul Overflow Unsigned instruction
 	/// </summary>
 	/// <param name="node">The node.</param>
-	private void MulOverflowUnsigned(InstructionNode node)
+	private void MulUnsignedCarry(InstructionNode node)
 	{
 		var carryResult = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
 
@@ -1674,7 +1674,7 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 	/// Visitation function for Sub Overflow instruction
 	/// </summary>
 	/// <param name="node">The node.</param>
-	private void SubOverflow(InstructionNode node)
+	private void SubSignedOverflow(InstructionNode node)
 	{
 		var overflowResult = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
 
@@ -1687,7 +1687,7 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 	/// Visitation function for Sub Overflow Unsigned instruction
 	/// </summary>
 	/// <param name="node">The node.</param>
-	private void SubOverflowUnsigned(InstructionNode node)
+	private void SubUnsignedCarry(InstructionNode node)
 	{
 		var carryResult = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
 
@@ -2092,58 +2092,14 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 	}
 
 	/// <summary>
-	/// Adds bounds check to the array access.
-	/// </summary>
-	/// <param name="node">The node.</param>
-	/// <param name="arrayOperand">The array operand.</param>
-	/// <param name="arrayIndexOperand">The index operand.</param>
-	private void AddArrayBoundsCheck2(InstructionNode node, Operand arrayOperand, Operand arrayIndexOperand)
-	{
-		var before = new Context(node).InsertBefore();
-
-		// First create new block and split current block
-		var exceptionContext = CreateNewBlockContexts(1, node.Label)[0];
-		var nextContext = Split(before);
-
-		// Get array length
-		var lengthOperand = AllocateVirtualRegister32();
-
-		before.SetInstruction(Select(lengthOperand, IRInstruction.Load32, IRInstruction.Load64), lengthOperand, arrayOperand, ConstantZero);
-
-		// Now compare length with index
-		// If index is greater than or equal to the length then jump to exception block, otherwise jump to next block
-		before.AppendInstruction(BranchInstruction, ConditionCode.UnsignedGreaterOrEqual, null, arrayIndexOperand, lengthOperand, exceptionContext.Block);
-		before.AppendInstruction(IRInstruction.Jmp, nextContext.Block);
-
-		// Build exception block which is just a call to throw exception
-		var method = InternalRuntimeType.FindMethodByName("ThrowIndexOutOfRangeException");
-		var symbolOperand = Operand.CreateSymbolFromMethod(method, TypeSystem);
-
-		exceptionContext.AppendInstruction(IRInstruction.CallStatic, null, symbolOperand);
-	}
-
-	/// <summary>
 	/// Adds overflow check using boolean result operand.
 	/// </summary>
 	/// <param name="node">The node.</param>
-	/// <param name="resultOperand">The overflow or carry result operand.</param>
-	private void AddOverflowCheck(InstructionNode node, Operand resultOperand)
+	/// <param name="result">The overflow or carry result operand.</param>
+	private void AddOverflowCheck(InstructionNode node, Operand result)
 	{
 		var after = new Context(node).InsertAfter();
-
-		// First create new block and split current block
-		var exceptionContext = CreateNewBlockContexts(1, node.Label)[0];
-		var nextContext = Split(after);
-
-		// If result is equal to true then jump to exception block, otherwise jump to next block
-		after.SetInstruction(BranchInstruction, ConditionCode.NotEqual, null, resultOperand, ConstantZero, exceptionContext.Block);
-		after.AppendInstruction(IRInstruction.Jmp, nextContext.Block);
-
-		// Build exception block which is just a call to throw exception
-		var method = InternalRuntimeType.FindMethodByName("ThrowOverflowException");
-		var symbolOperand = Operand.CreateSymbolFromMethod(method, TypeSystem);
-
-		exceptionContext.AppendInstruction(IRInstruction.CallStatic, null, symbolOperand);
+		after.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result);
 	}
 
 	/// <summary>

@@ -13,13 +13,14 @@ public class StringTest : KernelTest
 		testMethods.Add(ConcatTest2);
 		testMethods.Add(ConcatTest3);
 		testMethods.Add(ConcatTest4);
-		testMethods.Add(SubStringTest);
 		testMethods.Add(IndexOfTest);
 		testMethods.Add(LengthTest);
 		testMethods.Add(ToUpperTest);
 		testMethods.Add(ToLowerTest);
+		testMethods.Add(SubStringTest);
 		testMethods.Add(SubStringTest2);
 		testMethods.Add(SubStringTest3);
+		testMethods.Add(SubStringTest4);
 	}
 
 	public static bool ConcatTest1()
@@ -66,15 +67,6 @@ public class StringTest : KernelTest
 		return String.Equals(combined, abcde);
 	}
 
-	public static bool SubStringTest()
-	{
-		string main = "abcdefghi";
-		string sub1 = main.Substring(6);
-		string sub2 = main.Substring(0, 3);
-
-		return string.Equals("ghi", sub1) && string.Equals("abc", sub2);
-	}
-
 	public static bool IndexOfTest()
 	{
 		string main = "abcdefghi";
@@ -102,7 +94,24 @@ public class StringTest : KernelTest
 		return s1.Equals(s2);
 	}
 
+	public static bool SubStringTest()
+	{
+		string main = "abcdefghi";
+		string sub1 = main.Substring(6);
+		string sub2 = main.Substring(0, 3);
+
+		return string.Equals("ghi", sub1) && string.Equals("abc", sub2);
+	}
+
 	public static bool SubStringTest2()
+	{
+		string main = "abcdefghi";
+		string sub1 = main.Substring(6);
+
+		return sub1.Length == 3;
+	}
+
+	public static bool SubStringTest2b()
 	{
 		string main = "abcdefghi";
 		string sub1 = main.Substring(6);
@@ -116,5 +125,13 @@ public class StringTest : KernelTest
 		string sub2 = main.Substring(0, 3);
 
 		return string.Equals("abc", sub2);
+	}
+
+	public static bool SubStringTest4()
+	{
+		string main = "abcdefghi";
+		string sub2 = main.Substring(0, 1);
+
+		return sub2 == "a";
 	}
 }

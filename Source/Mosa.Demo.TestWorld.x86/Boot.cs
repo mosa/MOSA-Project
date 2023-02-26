@@ -89,9 +89,9 @@ public static class Boot
 
 		Screen.Write("CheckedTests.MulI8I8: ");
 
-		var value1 = Test1();
+		var value1 = Test2();
 
-		if (value1 == 0)
+		if (value1)
 			Screen.WriteLine("Ok");
 		else
 			Screen.WriteLine("Failed");
@@ -288,19 +288,25 @@ public static class Boot
 	}
 
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static long Test1()
+	public static bool Test1()
 	{
-		return UnitTests.Primitive.CheckedTests.MulI8I8(0, 0);
+		return UnitTests.Primitive.CheckedTests.MulI8I8(0, 0) == 0;
 	}
 
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static int Test2()
+	public static bool Test2()
+	{
+		return UnitTests.Primitive.CheckedTests.MulI8I8(-2147483646, -2) == 4294967292;
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static int Test3()
 	{
 		return Unsafe.SizeOf<int>();
 	}
 
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static long Test3()
+	public static long Test4()
 	{
 		return SpecificTests.SwitchI8_v2(9223372036854775807);
 	}

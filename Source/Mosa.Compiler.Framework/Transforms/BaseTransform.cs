@@ -1025,4 +1025,13 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 	{
 		return BaseCodeTransformationStage.IsPhiInstruction(instruction);
 	}
+
+	public static void SwapOperands1And2(Context context)
+	{
+		var operand1 = context.Operand1;
+		var operand2 = context.Operand2;
+
+		context.Operand1 = operand2;
+		context.Operand2 = operand1;
+	}
 }

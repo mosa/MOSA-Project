@@ -24,9 +24,13 @@ public sealed class TransformContext
 
 	public TraceLog SpecialTraceLog { get; private set; }
 
+	#region Constants
+
 	public Operand Constant32_0 { get; private set; }
 
 	public Operand Constant64_0 { get; private set; }
+
+	public Operand Constant64_1 { get; private set; }
 
 	public Operand ConstantR4_0 { get; private set; }
 
@@ -52,6 +56,8 @@ public sealed class TransformContext
 
 	public Operand Constant64_32 { get; private set; }
 
+	#endregion Constants
+
 	public MosaType I4 { get; private set; }
 
 	public MosaType I8 { get; private set; }
@@ -75,6 +81,8 @@ public sealed class TransformContext
 	public bool Is32BitPlatform { get; private set; }
 
 	public int Window { get; private set; }
+
+	#region Registers
 
 	public Operand StackFrame => MethodCompiler.Compiler.StackFrame;
 
@@ -100,11 +108,33 @@ public sealed class TransformContext
 	/// </summary>
 	public Operand LeaveTargetRegister => MethodCompiler.Compiler.LeaveTargetRegister;
 
+	#endregion Registers
+
 	public uint NativePointerSize => Compiler.Architecture.NativePointerSize;
 
 	public BaseArchitecture Architecture => Compiler.Architecture;
 
 	public MosaLinker Linker => Compiler.Linker;
+
+	#region Instructions Properties
+
+	public BaseInstruction LoadInstruction => Is32BitPlatform ? IRInstruction.Load32 : IRInstruction.Load64;
+
+	public BaseInstruction StoreInstruction => Is32BitPlatform ? IRInstruction.Store32 : IRInstruction.Store64;
+
+	public BaseInstruction MoveInstruction => Is32BitPlatform ? IRInstruction.Move32 : IRInstruction.Move64;
+
+	public BaseInstruction AddInstruction => Is32BitPlatform ? IRInstruction.Add32 : IRInstruction.Add64;
+
+	public BaseInstruction SubInstruction => Is32BitPlatform ? IRInstruction.Sub32 : IRInstruction.Sub64;
+
+	public BaseInstruction MulSignedInstruction => Is32BitPlatform ? IRInstruction.MulSigned32 : IRInstruction.MulSigned64;
+
+	public BaseInstruction MulUnsignedInstruction => Is32BitPlatform ? IRInstruction.MulUnsigned32 : IRInstruction.MulUnsigned64;
+
+	public BaseInstruction BranchInstruction => Is32BitPlatform ? IRInstruction.Branch32 : IRInstruction.Branch64;
+
+	#endregion Instructions Properties
 
 	public TransformContext(MethodCompiler methodCompiler, BitValueManager bitValueManager = null)
 	{
@@ -138,6 +168,7 @@ public sealed class TransformContext
 		Constant32_64 = CreateConstant32(64);
 		Constant32_24 = CreateConstant32(24);
 
+		Constant64_1 = CreateConstant64(1);
 		Constant64_32 = CreateConstant64(32);
 
 		Is32BitPlatform = Compiler.Architecture.Is32BitPlatform;

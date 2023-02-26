@@ -1,17 +1,17 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework.Transforms.Array;
+using Mosa.Compiler.Framework.Transforms.IR;
 
 namespace Mosa.Compiler.Framework.Stages;
 
 /// <summary>
 ///	Optimization Stage
 /// </summary>
-public class ArrayStage : BaseTransformStage
+public class IRStage : BaseTransformStage
 {
-	public ArrayStage()
+	public IRStage()
 		: base(true, false)
 	{
-		AddTranformations(ArrayTransforms.List);
+		AddTranformations(IRTransforms.List);
 	}
 }
