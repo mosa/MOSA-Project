@@ -854,30 +854,6 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 		}
 	}
 
-	protected static InstructionNode GetPreviousNode(Context context)
-	{
-		var previous = context.Node.Previous;
-
-		while (previous.IsEmptyOrNop)
-		{
-			previous = previous.Previous;
-		}
-
-		return previous.IsBlockStartInstruction ? null : previous;
-	}
-
-	protected static InstructionNode GetNextNode(Context context)
-	{
-		var next = context.Node.Next;
-
-		while (next.IsEmptyOrNop)
-		{
-			next = next.Next;
-		}
-
-		return next.IsBlockEndInstruction ? null : next;
-	}
-
 	protected static InstructionNode GetPreviousNodeUntil(Context context, BaseInstruction untilInstruction, int window, Operand operand1 = null, Operand operand2 = null)
 	{
 		return GetPreviousNodeUntil(context, untilInstruction, window, out _, operand1, operand2);

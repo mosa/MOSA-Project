@@ -19,7 +19,7 @@ public sealed class Cmp32ToZero : BaseTransform
 		if (!context.Operand2.IsConstantZero)
 			return false;
 
-		var previous = GetPreviousNode(context);
+		var previous = context.Node.PreviousNonEmpty;
 
 		if (previous == null)
 			return false;

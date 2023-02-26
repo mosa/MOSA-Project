@@ -5,9 +5,9 @@ using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x86.Transforms.Optimizations.Manual.Special;
 
-public sealed class Mov32Propagation : BaseTransform
+public sealed class Mov32Consolidate : BaseTransform
 {
-	public Mov32Propagation() : base(X86.Mov32, TransformType.Manual | TransformType.Optimization)
+	public Mov32Consolidate() : base(X86.Mov32, TransformType.Manual | TransformType.Optimization, true)
 	{
 	}
 
@@ -19,7 +19,16 @@ public sealed class Mov32Propagation : BaseTransform
 		if (!context.Result.IsVirtualRegister)
 			return false;
 
-		if (!IsSSAForm(context.Result))
+		if (context.Result.Definitions.Count != 2)
+			return false;
+
+		if (!IsSSAForm(context.Operand1))
+			return false;
+
+		if (context.Operand1.Uses.Count != 1)
+			return false;
+
+		if (context.Block != context.Operand1.Definitions[0].Block)
 			return false;
 
 		return true;
@@ -27,21 +36,7 @@ public sealed class Mov32Propagation : BaseTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		var result = context.Result;
-		var operand1 = context.Operand1;
-
-		foreach (var use in result.Uses.ToArray())
-		{
-			for (int i = 0; i < use.OperandCount; i++)
-			{
-				var operand = use.GetOperand(i);
-
-				if (operand == result)
-				{
-					use.SetOperand(i, operand1);
-				}
-			}
-		}
+		context.Operand1.Definitions[0].Result = context.Result;
 
 		context.SetNop();
 	}

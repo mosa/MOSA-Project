@@ -15,6 +15,7 @@ public static class ManualTransforms
 	public static readonly List<BaseTransform> List = new List<BaseTransform>
 	{
 		new Special.Deadcode(),
+
 		new Standard.Add32ToInc32(),
 		new Standard.Sub32ToDec32(),
 		new Standard.Lea32ToInc32(),
@@ -24,9 +25,10 @@ public static class ManualTransforms
 		new Standard.Cmp32ToTest32(),
 
 		new Special.Mov32ConstantReuse(),
-		new Stack.Add32(),
-
+		new Special.Mov32Consolidate(),
 		new Special.Bt32Movzx8To32Setcc(),
+
+		new Stack.Add32(),
 
 		//new Special.Mov32Propagate(),
 		//Add32ToLea32

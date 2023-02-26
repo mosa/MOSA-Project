@@ -25,7 +25,7 @@ public sealed class Mov32Unless : BaseTransform
 		//if (context.Result.Register != CPURegister.ESP)
 		//	return false;
 
-		var previous = GetPreviousNode(context);
+		var previous = context.Node.PreviousNonEmpty;
 
 		if (previous == null || previous.Instruction != X86.Mov32)
 			return false;
@@ -50,6 +50,6 @@ public sealed class Mov32Unless : BaseTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		context.Empty();
+		context.SetNop();
 	}
 }
