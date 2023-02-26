@@ -906,39 +906,73 @@ public sealed class InstructionNode
 		Instruction = instruction;
 	}
 
-	/// <summary>
-	/// Returns the 1st non empty node (including the current) by traversing the instructions forward
-	/// </summary>
-	/// <returns></returns>
-	public InstructionNode GoForwardToNonEmpty()
-	{
-		var node = this;
-
-		while (node.IsEmpty)
-		{
-			node = node.Next;
-		}
-
-		return node;
-	}
-
-	/// <summary>
-	/// Returns the 1st non empty node (including the current) by traversing the instructions backwards
-	/// </summary>
-	/// <returns></returns>
-	public InstructionNode GoBackwardsToNonEmpty()
-	{
-		var node = this;
-
-		while (node.IsEmpty)
-		{
-			node = node.Previous;
-		}
-
-		return node;
-	}
-
 	#endregion Methods
+
+	#region Navigation
+
+	public InstructionNode NextNonEmpty
+	{
+		get
+		{
+			var next = Next;
+
+			while (next.IsEmptyOrNop)
+			{
+				next = next.Next;
+			}
+
+			return next.IsBlockEndInstruction ? null : next;
+		}
+	}
+
+	public InstructionNode PreviousNonEmpty
+	{
+		get
+		{
+			var previous = Previous;
+
+			while (previous.IsEmptyOrNop)
+			{
+				previous = previous.Previous;
+			}
+
+			return previous.IsBlockStartInstruction ? null : previous;
+		}
+	}
+
+	/// <summary>Returns the 1st non empty node (including the current) by traversing the instructions forward</summary>
+	public InstructionNode ForwardToNonEmpty
+	{
+		get
+		{
+			var node = this;
+
+			while (node.IsEmpty)
+			{
+				node = node.Next;
+			}
+
+			return node;
+		}
+	}
+
+	/// <summary>Returns the 1st non empty node (including the current) by traversing the instructions backwards</summary>
+	public InstructionNode BackwardsToNonEmpty
+	{
+		get
+		{
+			var node = this;
+
+			while (node.IsEmpty)
+			{
+				node = node.Previous;
+			}
+
+			return node;
+		}
+	}
+
+	#endregion Navigation
 
 	#region Constructors
 

@@ -26,6 +26,8 @@ public static class ManualTransforms
 		new Special.Mov32ConstantReuse(),
 		new Stack.Add32(),
 
+		new Special.Bt32Movzx8To32Setcc(),
+
 		//new Special.Mov32Propagate(),
 		//Add32ToLea32
 		//Sub32ToLea32

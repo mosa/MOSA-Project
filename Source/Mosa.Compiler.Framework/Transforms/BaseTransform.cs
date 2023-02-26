@@ -840,7 +840,7 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 
 	#endregion Status Helpers
 
-	protected static void RemoveRestOfInstructions(Context context)
+	protected static void RemoveRemainingInstructionInBlock(Context context)
 	{
 		var node = context.Node.Next;
 
@@ -994,10 +994,10 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 			ConditionCode.Less => context.Operand1.ConstantSigned64 < context.Operand2.ConstantSigned64,
 			ConditionCode.UnsignedGreater => context.Operand1.ConstantUnsigned64 > context.Operand2.ConstantUnsigned64,
 			ConditionCode.UnsignedGreaterOrEqual => context.Operand1.ConstantUnsigned64 >=
-			                                        context.Operand2.ConstantUnsigned64,
+													context.Operand2.ConstantUnsigned64,
 			ConditionCode.UnsignedLess => context.Operand1.ConstantUnsigned64 < context.Operand2.ConstantUnsigned64,
 			ConditionCode.UnsignedLessOrEqual => context.Operand1.ConstantUnsigned64 <=
-			                                     context.Operand2.ConstantUnsigned64,
+												 context.Operand2.ConstantUnsigned64,
 			_ => throw new InvalidOperationException()
 		};
 	}
@@ -1014,10 +1014,10 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 			ConditionCode.Less => context.Operand1.ConstantSigned32 < context.Operand2.ConstantSigned32,
 			ConditionCode.UnsignedGreater => context.Operand1.ConstantUnsigned32 > context.Operand2.ConstantUnsigned32,
 			ConditionCode.UnsignedGreaterOrEqual => context.Operand1.ConstantUnsigned32 >=
-			                                        context.Operand2.ConstantUnsigned32,
+													context.Operand2.ConstantUnsigned32,
 			ConditionCode.UnsignedLess => context.Operand1.ConstantUnsigned32 < context.Operand2.ConstantUnsigned32,
 			ConditionCode.UnsignedLessOrEqual => context.Operand1.ConstantUnsigned32 <=
-			                                     context.Operand2.ConstantUnsigned32,
+												 context.Operand2.ConstantUnsigned32,
 			_ => throw new InvalidOperationException()
 		};
 	}

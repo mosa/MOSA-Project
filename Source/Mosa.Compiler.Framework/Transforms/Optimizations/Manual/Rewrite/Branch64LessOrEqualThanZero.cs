@@ -27,7 +27,7 @@ public sealed class Branch64LessOrEqualThanZero : BaseTransform
 
 		context.SetInstruction(IRInstruction.Jmp, target);
 
-		RemoveRestOfInstructions(context);
+		RemoveRemainingInstructionInBlock(context);
 
 		TransformContext.UpdatePhiBlock(phiBlock);
 	}

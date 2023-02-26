@@ -230,15 +230,6 @@ public sealed class Context
 	}
 
 	/// <summary>
-	/// Clones this instance.
-	/// </summary>
-	/// <returns>A new instance with the same instruction set, basic block and index.</returns>
-	public Context Clone()
-	{
-		return new Context(Node);
-	}
-
-	/// <summary>
 	/// Goes to the next instruction.
 	/// </summary>
 	public void GotoNext()
