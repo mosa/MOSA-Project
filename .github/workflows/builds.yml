@@ -141,18 +141,18 @@ jobs:
       - name: Unit Tests - No Optimizations
         run: dotnet bin/Mosa.Utility.UnitTests.dll -oNone -s Emulator.Display=false
       - name: Unit Tests - Optimization Level - 1
-        run: dotnet bin/Mosa.Utility.UnitTests.exe -o1 -s Emulator.Display=false
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -o1 -s Emulator.Display=false
       - name: Unit Tests - Optimization Level 2
-        run: dotnet bin/Mosa.Utility.UnitTests.exe -o2 -s Emulator.Display=false
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -o2 -s Emulator.Display=false
       - name: Unit Tests - Optimization Level 3
-        run: dotnet bin/Mosa.Utility.UnitTests.exe -o3 -s Emulator.Display=false
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -o3 -s Emulator.Display=false
       - name: Unit Tests - Optimization Level 4
-        run: dotnet bin/Mosa.Utility.UnitTests.exe -o4 -s Emulator.Display=false
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -o4 -s Emulator.Display=false
       - name: Unit Tests - Optimization Level 5
-        run: dotnet bin/Mosa.Utility.UnitTests.exe -o5 -s Emulator.Display=false
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -o5 -s Emulator.Display=false
       - name: Unit Tests - Optimization Level 6
-        run: dotnet bin/Mosa.Utility.UnitTests.exe -o6 -s Emulator.Display=false
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -o6 -s Emulator.Display=false
       - name: Unit Tests - Optimization Level 7
-        run: dotnet bin/Mosa.Utility.UnitTests.exe -o7 -s Emulator.Display=false
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -o7 -s Emulator.Display=false
       - name: Unit Tests - Optimization Level 8
-        run: dotnet bin/Mosa.Utility.UnitTests.exe -o8 -s Emulator.Display=false
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -o8 -s Emulator.Display=false
