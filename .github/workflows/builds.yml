@@ -32,6 +32,30 @@ jobs:
         working-directory: Source
       - name: Build
         run: dotnet build Source/Mosa.sln /p:Version=${{ env.BUILD_VERSION }}
+      - name: Unit Tests - All Performance Optimizations
+        run: bin\Mosa.Utility.UnitTests.exe -oMax -s Emulator.Display=false
+      - name: Unit Tests - No Optimizations
+        run: bin\Mosa.Utility.UnitTests.exe -oNone -s Emulator.Display=false
+      - name: Unit Tests - Optimization Level 1
+        run: bin\Mosa.Utility.UnitTests.exe -o1 -s Emulator.Display=false
+      - name: Unit Tests - Optimization Level 2
+        run: bin\Mosa.Utility.UnitTests.exe -o2 -s Emulator.Display=false
+      - name: Unit Tests - Optimization Level3
+        run: bin\Mosa.Utility.UnitTests.exe -o3 -s Emulator.Display=false
+      - name: Unit Tests - Optimization Level 4
+        run: bin\Mosa.Utility.UnitTests.exe -o4 -s Emulator.Display=false
+      - name: Unit Tests - Optimization Level 5
+        run: bin\Mosa.Utility.UnitTests.exe -o5 -s Emulator.Display=false
+      - name: Unit Tests - Optimization Level 6
+        run: bin\Mosa.Utility.UnitTests.exe -o6 -s Emulator.Display=false
+      - name: Unit Tests - Optimization Level 7
+        run: bin\Mosa.Utility.UnitTests.exe -o7 -s Emulator.Display=false
+      - name: Unit Tests - Optimization Level 8
+        run: bin\Mosa.Utility.UnitTests.exe -o8 -s Emulator.Display=false
+#      - name: Test Demo - Mosa.Demo.HelloWorld.x86 
+#        run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.Demo.HelloWorld.x86.dll -s Launcher.Test=true
+#      - name: Test Demo - Mosa.Demo.CoolWorld.x86 
+#        run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.Demo.CoolWorld.x86.dll -s Launcher.Test=true
       - name: Create Installer
         run: ISCC.exe /DMyAppVersion=${{ env.BUILD_VERSION }}.${{ github.run_number }} Source/Inno-Setup-Script/Mosa-Installer.iss
       - name: Build Project - Mosa.Templates
@@ -64,30 +88,6 @@ jobs:
         with:
           name: Nuget Packages
           path: bin\nupkg
-      - name: Unit Tests - All Performance Optimizations
-        run: bin\Mosa.Utility.UnitTests.exe -oMax -s Emulator.Display=false
-      - name: Unit Tests - No Optimizations
-        run: bin\Mosa.Utility.UnitTests.exe -oNone -s Emulator.Display=false
-      - name: Unit Tests - Optimization Level 1
-        run: bin\Mosa.Utility.UnitTests.exe -o1 -s Emulator.Display=false
-      - name: Unit Tests - Optimization Level 2
-        run: bin\Mosa.Utility.UnitTests.exe -o2 -s Emulator.Display=false
-      - name: Unit Tests - Optimization Level3
-        run: bin\Mosa.Utility.UnitTests.exe -o3 -s Emulator.Display=false
-      - name: Unit Tests - Optimization Level 4
-        run: bin\Mosa.Utility.UnitTests.exe -o4 -s Emulator.Display=false
-      - name: Unit Tests - Optimization Level 5
-        run: bin\Mosa.Utility.UnitTests.exe -o5 -s Emulator.Display=false
-      - name: Unit Tests - Optimization Level 6
-        run: bin\Mosa.Utility.UnitTests.exe -o6 -s Emulator.Display=false
-      - name: Unit Tests - Optimization Level 7
-        run: bin\Mosa.Utility.UnitTests.exe -o7 -s Emulator.Display=false
-      - name: Unit Tests - Optimization Level 8
-        run: bin\Mosa.Utility.UnitTests.exe -o8 -s Emulator.Display=false
-#      - name: Test Demo - Mosa.Demo.HelloWorld.x86 
-#        run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.Demo.HelloWorld.x86.dll -s Launcher.Test=true
-#      - name: Test Demo - Mosa.Demo.CoolWorld.x86 
-#        run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.Demo.CoolWorld.x86.dll -s Launcher.Test=true
       - name: Publish Package - Mosa.Templates
         run: dotnet nuget push bin\nupkg\Mosa.Templates.${{ env.BUILD_VERSION }}.${{ github.run_number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
         if: github.event_name == 'push' && github.repository == 'mosa/MOSA-Project' && github.ref == 'refs/heads/master'
