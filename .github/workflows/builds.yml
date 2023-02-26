@@ -40,7 +40,7 @@ jobs:
         run: bin\Mosa.Utility.UnitTests.exe -o1 -s Emulator.Display=false
       - name: Unit Tests - Optimization Level 2
         run: bin\Mosa.Utility.UnitTests.exe -o2 -s Emulator.Display=false
-      - name: Unit Tests - Optimization Level3
+      - name: Unit Tests - Optimization Level 3
         run: bin\Mosa.Utility.UnitTests.exe -o3 -s Emulator.Display=false
       - name: Unit Tests - Optimization Level 4
         run: bin\Mosa.Utility.UnitTests.exe -o4 -s Emulator.Display=false
