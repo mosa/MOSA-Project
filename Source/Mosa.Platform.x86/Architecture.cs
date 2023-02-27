@@ -152,6 +152,7 @@ public sealed class Architecture : BaseArchitecture
 				new IRTransformationStage(),
 				compilerSettings.PlatformOptimizations ? new Stages.OptimizationStage() : null,
 				new PlatformStage(),
+				//compilerSettings.PlatformOptimizations ? new Stages.OptimizationStage() : null,
 			});
 
 		pipeline.InsertBefore<CodeGenerationStage>(
@@ -159,11 +160,8 @@ public sealed class Architecture : BaseArchitecture
 			{
 				new PlatformStage(),
 				compilerSettings.PlatformOptimizations ? new Stages.OptimizationStage() : null,
+				new JumpOptimizationStage()
 			});
-
-		pipeline.InsertBefore<CodeGenerationStage>(
-			new JumpOptimizationStage()
-		);
 	}
 
 	/// <summary>

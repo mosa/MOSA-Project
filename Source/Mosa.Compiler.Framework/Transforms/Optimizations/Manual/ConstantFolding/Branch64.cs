@@ -38,7 +38,7 @@ public sealed class Branch64 : BaseTransform
 
 			context.SetInstruction(IRInstruction.Jmp, target);
 
-			RemoveRestOfInstructions(context);
+			RemoveRemainingInstructionInBlock(context);
 
 			TransformContext.UpdatePhiBlock(phiBlock);
 		}

@@ -25,7 +25,7 @@ public sealed class Mov64ConstantReuse : BaseTransform
 		if (context.Result.Register != CPURegister.RSP)
 			return false;
 
-		var previous = GetPreviousNode(context);
+		var previous = context.Node.PreviousNonEmpty;
 
 		if (previous == null || previous.Instruction != X64.Mov64)
 			return false;
@@ -47,7 +47,7 @@ public sealed class Mov64ConstantReuse : BaseTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		var previous = GetPreviousNode(context);
+		var previous = context.Node.PreviousNonEmpty;
 
 		context.Operand1 = previous.Result;
 	}

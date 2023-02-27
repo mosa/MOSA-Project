@@ -10,7 +10,7 @@ namespace Mosa.Platform.x86.Transforms.AddressMode;
 /// </summary>
 public sealed class Neg32 : BaseTransform
 {
-	public Neg32() : base(X86.Adc32, TransformType.Manual | TransformType.Transform)
+	public Neg32() : base(X86.Neg32, TransformType.Manual | TransformType.Transform)
 	{
 	}
 
