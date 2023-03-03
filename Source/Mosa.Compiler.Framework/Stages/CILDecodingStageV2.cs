@@ -3091,9 +3091,8 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 		PushStack(stack, new StackEntry(stacktype, result));
 
-		switch (entry.StackType)
+		switch (stacktype)
 		{
-			case StackType.ManagedPointer:
 			case StackType.Object:
 				{
 					if (isPrimary)
@@ -3114,6 +3113,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 					}
 				}
 
+			case StackType.ManagedPointer:
 			case StackType.Int64:
 			case StackType.Int32:
 			case StackType.R4:

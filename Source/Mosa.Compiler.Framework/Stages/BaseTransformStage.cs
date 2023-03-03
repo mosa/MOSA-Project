@@ -433,9 +433,9 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 					UpdatePhiTargets(next.NextBlocks, next, block);
 				}
 
-				var insertPoint = block.BeforeLast.GoBackwardsToNonEmpty();
+				var insertPoint = block.BeforeLast.BackwardsToNonEmpty;
 
-				var beforeInsertPoint = insertPoint.Previous.GoBackwardsToNonEmpty();
+				var beforeInsertPoint = insertPoint.Previous.BackwardsToNonEmpty;
 
 				if (beforeInsertPoint.BranchTargetsCount != 0)
 				{
@@ -444,7 +444,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 				}
 
 				insertPoint.Empty();
-				insertPoint.CutFrom(next.AfterFirst.GoForwardToNonEmpty(), next.Last.Previous.GoBackwardsToNonEmpty());
+				insertPoint.CutFrom(next.AfterFirst.ForwardToNonEmpty, next.Last.Previous.BackwardsToNonEmpty);
 				emptied++;
 				changed = true;
 			}

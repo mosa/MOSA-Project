@@ -1,13 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Reflection.Metadata;
-using System.Runtime.InteropServices;
 using Mosa.Compiler.Common;
-using Mosa.Compiler.Framework.CIL;
-using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.Transforms;
 
@@ -846,30 +840,18 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 
 	#endregion Status Helpers
 
-	#region Node Nagivation
-
-	protected static InstructionNode GetPreviousNode(Context context)
+	protected static void RemoveRemainingInstructionInBlock(Context context)
 	{
-		var previous = context.Node.Previous;
+		var node = context.Node.Next;
 
-		while (previous.IsEmptyOrNop)
+		while (!node.IsBlockEndInstruction)
 		{
-			previous = previous.Previous;
+			if (!node.IsEmptyOrNop)
+			{
+				node.SetNop();
+			}
+			node = node.Next;
 		}
-
-		return previous.IsBlockStartInstruction ? null : previous;
-	}
-
-	protected static InstructionNode GetNextNode(Context context)
-	{
-		var next = context.Node.Next;
-
-		while (next.IsEmptyOrNop)
-		{
-			next = next.Next;
-		}
-
-		return next.IsBlockEndInstruction ? null : next;
 	}
 
 	protected static InstructionNode GetPreviousNodeUntil(Context context, BaseInstruction untilInstruction, int window, Operand operand1 = null, Operand operand2 = null)
@@ -974,22 +956,6 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 		}
 
 		return null;
-	}
-
-	#endregion Node Nagivation
-
-	protected static void RemoveRestOfInstructions(Context context)
-	{
-		var node = context.Node.Next;
-
-		while (!node.IsBlockEndInstruction)
-		{
-			if (!node.IsEmptyOrNop)
-			{
-				node.SetNop();
-			}
-			node = node.Next;
-		}
 	}
 
 	protected static bool Compare64(Context context)

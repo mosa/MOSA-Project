@@ -31,7 +31,7 @@ public sealed class Add32 : BaseTransform
 		if (!context.Operand2.IsConstant)
 			return false;
 
-		var next = GetNextNode(context);
+		var next = context.Node.NextNonEmpty;
 
 		if (next == null)
 			return false;
@@ -50,7 +50,7 @@ public sealed class Add32 : BaseTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		var next = GetNextNode(context);
+		var next = context.Node.NextNonEmpty;
 
 		var value1 = context.Operand2.ConstantSigned32;
 		var value2 = next.Operand2.ConstantSigned32;

@@ -22,7 +22,7 @@ public sealed class JumpOptimizationStage : BaseMethodCompilerStage
 			if (!from.NextBlocks.Contains(next))
 				continue;
 
-			var node = from.BeforeLast.GoBackwardsToNonEmpty();
+			var node = from.BeforeLast.BackwardsToNonEmpty;
 
 			//Debug.Assert(node.Instruction.FlowControl == FlowControl.UnconditionalBranch);
 			Debug.Assert(node.BranchTargetsCount != 0);
@@ -42,7 +42,7 @@ public sealed class JumpOptimizationStage : BaseMethodCompilerStage
 
 				// reverse the condition and swap branch and jump target, and remove jump instruction
 				var jumpNode = node;
-				var branchNode = node.Previous.GoBackwardsToNonEmpty();
+				var branchNode = node.Previous.BackwardsToNonEmpty;
 
 				Debug.Assert(node.BranchTargetsCount == 1);
 

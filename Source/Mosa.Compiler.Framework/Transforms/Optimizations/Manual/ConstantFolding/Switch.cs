@@ -38,7 +38,7 @@ public sealed class Switch : BaseTransform
 
 			context.SetInstruction(IRInstruction.Jmp, newtarget);
 
-			RemoveRestOfInstructions(context);
+			RemoveRemainingInstructionInBlock(context);
 		}
 		else
 		{

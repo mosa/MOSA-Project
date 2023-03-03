@@ -130,6 +130,17 @@
 			"Filter": "IsVirtualRegister(x) && !IsCarryFlagUsed(@)",
 			"Result": "(X86.Blsr32 x)",
 			"Variations": "Yes"
+		},
+		{
+			"FamilyName": "x86",
+			"Type": "Simplication",
+			"Name": "SubFromZero",
+			"SubName": "",
+			"Expression": "X86.Sub32 0 x",
+			"Filter": "IsVirtualRegister(x)",
+			"Result": "(X86.Neg32 x)",
+			"Variations": "No",
+			"Log": "Yes"
 		}
 	]
 }
