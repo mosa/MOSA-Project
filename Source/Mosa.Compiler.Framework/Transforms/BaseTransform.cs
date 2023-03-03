@@ -1,7 +1,13 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Reflection.Metadata;
+using System.Runtime.InteropServices;
 using Mosa.Compiler.Common;
+using Mosa.Compiler.Framework.CIL;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.Transforms;
 
@@ -840,19 +846,7 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 
 	#endregion Status Helpers
 
-	protected static void RemoveRestOfInstructions(Context context)
-	{
-		var node = context.Node.Next;
-
-		while (!node.IsBlockEndInstruction)
-		{
-			if (!node.IsEmptyOrNop)
-			{
-				node.SetNop();
-			}
-			node = node.Next;
-		}
-	}
+	#region Node Nagivation
 
 	protected static InstructionNode GetPreviousNode(Context context)
 	{
@@ -980,6 +974,22 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 		}
 
 		return null;
+	}
+
+	#endregion Node Nagivation
+
+	protected static void RemoveRestOfInstructions(Context context)
+	{
+		var node = context.Node.Next;
+
+		while (!node.IsBlockEndInstruction)
+		{
+			if (!node.IsEmptyOrNop)
+			{
+				node.SetNop();
+			}
+			node = node.Next;
+		}
 	}
 
 	protected static bool Compare64(Context context)

@@ -171,13 +171,13 @@ public sealed class Architecture : BaseArchitecture
 			{
 				new IRTransformationStage(),
 				compilerSettings.PlatformOptimizations ? new Stages.OptimizationStage() : null,
-				new PlatformStage(),
+				new PlatformTransformationStage(),
 			});
 
 		pipeline.InsertBefore<CodeGenerationStage>(
 			new BaseMethodCompilerStage[]
 			{
-				new PlatformStage(),
+				new PlatformTransformationStage(),
 				compilerSettings.PlatformOptimizations ? new Stages.OptimizationStage() : null,
 			});
 

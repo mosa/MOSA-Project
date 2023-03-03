@@ -12,11 +12,11 @@ namespace Mosa.Platform.x86.Stages;
 /// Platform Transformation Stage
 /// </summary>
 /// <seealso cref="Mosa.Compiler.Framework.Stages.BaseTransformStage" />
-public sealed class PlatformStage : Compiler.Framework.Stages.BaseTransformStage
+public sealed class PlatformTransformationStage : Compiler.Framework.Stages.BaseTransformStage
 {
 	public override string Name => "x86." + GetType().Name;
 
-	public PlatformStage()
+	public PlatformTransformationStage()
 		: base(true, false, 0)
 	{
 		AddTranformations(TweakTransforms.List);

@@ -128,7 +128,8 @@ public static class DelegatePatcher
 		b0.AppendInstruction(IRInstruction.Jmp, b1.Block);
 
 		var operands = new List<Operand>(methodCompiler.Parameters.Length + 1);
-		for (int i = 1; i < methodCompiler.Parameters.Length; i++)
+
+		for (var i = 1; i < methodCompiler.Parameters.Length; i++)
 		{
 			operands.Add(vrs[i]);
 		}

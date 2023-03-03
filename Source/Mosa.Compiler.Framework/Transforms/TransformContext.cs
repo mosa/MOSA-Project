@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Reflection.Metadata;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
@@ -68,6 +69,10 @@ public sealed class TransformContext
 
 	public MosaType O { get; private set; }
 
+	public MosaType TypedRef { get; set; }
+
+	public MosaType NativeInteger { get; private set; }
+
 	public VirtualRegisters VirtualRegisters { get; private set; }
 
 	public BasicBlocks BasicBlocks { get; set; }
@@ -114,6 +119,10 @@ public sealed class TransformContext
 
 	public BaseArchitecture Architecture => Compiler.Architecture;
 
+	public MosaMethod Method => MethodCompiler.Method;
+
+	public MosaTypeLayout TypeLayout => MethodCompiler.TypeLayout;
+
 	public MosaLinker Linker => Compiler.Linker;
 
 	#region Instructions Properties
@@ -141,6 +150,7 @@ public sealed class TransformContext
 		MethodCompiler = methodCompiler;
 		Compiler = methodCompiler.Compiler;
 		BitValueManager = bitValueManager;
+		Is32BitPlatform = Compiler.Architecture.Is32BitPlatform;
 
 		TypeSystem = Compiler.TypeSystem;
 
@@ -152,6 +162,9 @@ public sealed class TransformContext
 		R4 = TypeSystem.BuiltIn.R4;
 		R8 = TypeSystem.BuiltIn.R8;
 		O = TypeSystem.BuiltIn.Object;
+		TypedRef = TypeSystem.BuiltIn.TypedRef;
+
+		NativeInteger = Is32BitPlatform ? I4 : I8;
 
 		ConstantR4_0 = MethodCompiler.ConstantR4_0;
 		ConstantR8_0 = MethodCompiler.ConstantR8_0;
@@ -171,7 +184,6 @@ public sealed class TransformContext
 		Constant64_1 = CreateConstant64(1);
 		Constant64_32 = CreateConstant64(32);
 
-		Is32BitPlatform = Compiler.Architecture.Is32BitPlatform;
 		LowerTo32 = Compiler.CompilerSettings.LongExpansion;
 
 		IsInSSAForm = MethodCompiler.IsInSSAForm;
@@ -224,6 +236,16 @@ public sealed class TransformContext
 	public Operand AllocateVirtualRegisterObject()
 	{
 		return VirtualRegisters.Allocate(O);
+	}
+
+	public Operand AllocateVirtualRegisterNativeInteger()
+	{
+		return VirtualRegisters.Allocate(NativeInteger);
+	}
+
+	public Operand AllocateVirtualRegisterTypedRef()
+	{
+		return VirtualRegisters.Allocate(TypedRef);
 	}
 
 	public bool ApplyTransform(Context context, BaseTransform transform)
