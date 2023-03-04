@@ -1,10 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Special;
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Phi;
 
-public sealed class Phi64Update : BaseTransform
+public sealed class PhiR4Update : BaseTransform
 {
-	public Phi64Update() : base(IRInstruction.Phi32, TransformType.Manual | TransformType.Optimization)
+	public PhiR4Update() : base(IRInstruction.Phi32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

@@ -444,7 +444,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 				}
 
 				insertPoint.Empty();
-				insertPoint.CutFrom(next.AfterFirst.ForwardToNonEmpty, next.Last.Previous.BackwardsToNonEmpty);
+				insertPoint.MoveFrom(next.AfterFirst.ForwardToNonEmpty, next.Last.Previous.BackwardsToNonEmpty);
 				emptied++;
 				changed = true;
 			}

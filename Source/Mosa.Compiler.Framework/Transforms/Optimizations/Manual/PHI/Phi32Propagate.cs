@@ -1,10 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Special;
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Phi;
 
-public sealed class PhiR8Propagate : BaseTransform
+public sealed class Phi32Propagate : BaseTransform
 {
-	public PhiR8Propagate() : base(IRInstruction.PhiR8, TransformType.Manual | TransformType.Optimization)
+	public Phi32Propagate() : base(IRInstruction.Phi32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -31,7 +31,7 @@ public sealed class PhiR8Propagate : BaseTransform
 
 		foreach (var use in result.Uses.ToArray())
 		{
-			for (int i = 0; i < use.OperandCount; i++)
+			for (var i = 0; i < use.OperandCount; i++)
 			{
 				var operand = use.GetOperand(i);
 

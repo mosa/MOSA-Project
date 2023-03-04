@@ -1,10 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Special;
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Phi;
 
-public sealed class Phi64Propagate : BaseTransform
+public sealed class PhiObjectPropagate : BaseTransform
 {
-	public Phi64Propagate() : base(IRInstruction.Phi64, TransformType.Manual | TransformType.Optimization)
+	public PhiObjectPropagate() : base(IRInstruction.PhiObject, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -31,7 +31,7 @@ public sealed class Phi64Propagate : BaseTransform
 
 		foreach (var use in result.Uses.ToArray())
 		{
-			for (int i = 0; i < use.OperandCount; i++)
+			for (var i = 0; i < use.OperandCount; i++)
 			{
 				var operand = use.GetOperand(i);
 

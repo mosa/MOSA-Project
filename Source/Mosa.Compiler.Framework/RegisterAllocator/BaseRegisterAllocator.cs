@@ -52,6 +52,10 @@ public abstract class BaseRegisterAllocator
 
 	private readonly List<InstructionNode> SlotsToNodes;
 
+	public int SpillMoves = 0;
+	public int DataFlowMoves = 0;
+	public int ResolvingMoves = 0;
+
 	protected BaseRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters virtualRegisters, BaseArchitecture architecture, AddStackLocalDelegate addStackLocal, Operand stackFrame, CreateTraceHandler createTrace)
 	{
 		CreateTrace = createTrace;
@@ -1351,6 +1355,8 @@ public abstract class BaseRegisterAllocator
 
 					Architecture.InsertStoreInstruction(context, StackFrame, register.SpillSlotOperand, liveInterval.AssignedPhysicalOperand);
 
+					SpillMoves++;
+
 					context.Marked = true;
 				}
 			}
@@ -1415,11 +1421,11 @@ public abstract class BaseRegisterAllocator
 				var to = ExtendedBlocks[nextBlock.Sequence];
 
 				// determine where to insert resolving moves
-				bool fromAnchorFlag = (from.BasicBlock.NextBlocks.Count == 1);
+				var fromAnchorFlag = (from.BasicBlock.NextBlocks.Count == 1);
 
-				ExtendedBlock anchor = fromAnchorFlag ? from : to;
+				var anchor = fromAnchorFlag ? from : to;
 
-				MoveResolver moveResolver = moveResolvers[fromAnchorFlag ? 0 : 1, anchor.Sequence];
+				var moveResolver = moveResolvers[fromAnchorFlag ? 0 : 1, anchor.Sequence];
 
 				if (moveResolver == null)
 				{
@@ -1468,7 +1474,7 @@ public abstract class BaseRegisterAllocator
 				if (moveResolver == null)
 					continue;
 
-				moveResolver.InsertResolvingMoves(Architecture, StackFrame);
+				DataFlowMoves += moveResolver.InsertResolvingMoves(Architecture, StackFrame);
 			}
 		}
 	}
@@ -1491,7 +1497,7 @@ public abstract class BaseRegisterAllocator
 		{
 			var moveResolver = new MoveResolver(GetNode(key), !key.IsAfterSlot, moves[key]);
 
-			moveResolver.InsertResolvingMoves(Architecture, StackFrame);
+			ResolvingMoves += moveResolver.InsertResolvingMoves(Architecture, StackFrame);
 
 			if (insertTrace != null)
 			{

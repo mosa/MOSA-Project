@@ -164,10 +164,10 @@ public sealed class MoveResolver
 		return moves;
 	}
 
-	public void InsertResolvingMoves(BaseArchitecture architecture, Operand stackFrame)
+	public int InsertResolvingMoves(BaseArchitecture architecture, Operand stackFrame)
 	{
 		if (Moves.Count == 0)
-			return;
+			return 0;
 
 		var moves = GetResolveMoves();
 
@@ -201,5 +201,7 @@ public sealed class MoveResolver
 		}
 
 		Debug.Assert(Moves.Count == 0);
+
+		return Moves.Count;
 	}
 }

@@ -16,6 +16,10 @@ public sealed class GreedyRegisterAllocatorStage : BaseMethodCompilerStage
 
 		allocator.Start();
 
+		UpdateCounter("RegisterAllocator.SpillMoves", allocator.SpillMoves);
+		UpdateCounter("RegisterAllocator.DataFlowMoves", allocator.DataFlowMoves);
+		UpdateCounter("RegisterAllocator.ResolvingMoves", allocator.ResolvingMoves);
+
 		MethodCompiler.AreCPURegistersAllocated = true;
 	}
 }

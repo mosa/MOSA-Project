@@ -1,10 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Special;
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Phi;
 
-public sealed class PhiR4Dead : BaseTransform
+public sealed class Phi64Dead : BaseTransform
 {
-	public PhiR4Dead() : base(IRInstruction.PhiR4, TransformType.Manual | TransformType.Optimization)
+	public Phi64Dead() : base(IRInstruction.Phi64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

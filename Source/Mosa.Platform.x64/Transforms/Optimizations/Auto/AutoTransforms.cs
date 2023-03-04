@@ -37,5 +37,7 @@ public static class AutoTransforms
 		new Specific.And64Add64ToBlsr64_v1(),
 		new Specific.And64Add64ToBlsr64_v2(),
 		new Specific.And64Add64ToBlsr64_v3(),
+		new Simplication.SubFromZero(),
+		new Simplication.SubFromZero(),
 	};
 }
