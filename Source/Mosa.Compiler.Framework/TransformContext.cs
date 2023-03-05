@@ -280,12 +280,12 @@ public sealed class TransformContext
 		return VirtualRegisters.Allocate(TypedRef);
 	}
 
-	public bool ApplyTransform(Context context, BaseTransform transform)
+	public bool ApplyTransform(Context context, BaseTransform transform, int count)
 	{
 		if (!transform.Match(context, this))
 			return false;
 
-		TraceBefore(context, transform);
+		TraceBefore(context, transform, count);
 
 		transform.Transform(context, this);
 
@@ -296,10 +296,9 @@ public sealed class TransformContext
 
 	#region Trace
 
-	public void TraceBefore(Context context, BaseTransform transformation)
+	public void TraceBefore(Context context, BaseTransform transformation, int count)
 	{
-		if (transformation.Name != null)
-			TraceLog?.Log($"*** {transformation.Name}");
+		TraceLog?.Log($"*** {transformation.Name} [{count}]");
 
 		if (transformation.Log)
 			SpecialTraceLog?.Log($"{transformation.Name}\t{Method.FullName} at {context}");

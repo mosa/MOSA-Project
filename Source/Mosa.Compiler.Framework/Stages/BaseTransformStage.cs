@@ -17,11 +17,12 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 	private const int MaximumInstructionID = 1000;
 	private const int MaximumPasses = 20;
 
-	private readonly Counter OptimizationCount;
-	private readonly Counter TransformCount;
-	private readonly Counter SkippedEmptyBlocksCount;
-	private readonly Counter RemoveUnreachableBlocksCount;
-	private readonly Counter BlocksMergedCount;
+	private int TotalTransformCount;
+	private int TransformCount;
+	private int OptimizationCount;
+	private int SkippedEmptyBlocksCount;
+	private int RemoveUnreachableBlocksCount;
+	private int BlocksMergedCount;
 
 	private readonly List<BaseTransform>[] transforms = new List<BaseTransform>[MaximumInstructionID];
 
@@ -45,51 +46,50 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 	private bool SortedByPriority;
 
+	private string TransformCountStage;
+	private string OptimizationCountStage;
+	private string SkippedEmptyBlocksCountStage;
+	private string RemoveUnreachableBlocksCountStage;
+	private string BlocksMergedCountStage;
+
 	public BaseTransformStage(bool enableTransformOptimizations = false, bool enableBlockOptimizations = false, int maxPasses = MaximumPasses)
 	{
 		EnableTransformOptimizations = enableTransformOptimizations;
 		EnableBlockOptimizations = enableBlockOptimizations;
 		MaxPasses = maxPasses;
-
-		TransformCount = new Counter($"{Name}.Transforms");
-		OptimizationCount = new Counter($"{Name}.Optimizations");
-		SkippedEmptyBlocksCount = new Counter($"{Name}.SkippedEmptyBlocks");
-		RemoveUnreachableBlocksCount = new Counter($"{Name}.RemoveUnreachableBlocks");
-		BlocksMergedCount = new Counter($"{Name}.BlockMergeStage.BlocksMerged");
 	}
 
 	protected override void Initialize()
 	{
-		Register(TransformCount);
-		Register(OptimizationCount);
-		Register(SkippedEmptyBlocksCount);
-		Register(RemoveUnreachableBlocksCount);
-		Register(BlocksMergedCount);
-	}
-
-	protected void AddTranformations(List<BaseTransform> list)
-	{
-		foreach (var transform in list)
-		{
-			AddTranformation(transform);
-		}
-	}
-
-	public void AddTranformation(BaseTransform transform)
-	{
-		int id = transform.Instruction == null ? 0 : transform.Instruction.ID;
-
-		if (transforms[id] == null)
-		{
-			transforms[id] = new List<BaseTransform>();
-		}
-
-		transforms[id].Add(transform);
+		TransformCountStage = $"{Name}.Transforms";
+		OptimizationCountStage = $"{Name}.Optimizations";
+		SkippedEmptyBlocksCountStage = $"{Name}.SkippedEmptyBlocks";
+		RemoveUnreachableBlocksCountStage = $"{Name}.RemoveUnreachableBlocks";
+		BlocksMergedCountStage = $"{Name}.BlocksMerged";
 	}
 
 	protected override void Finish()
 	{
+		UpdateCounter("Transform.Transforms", TransformCount);
+		UpdateCounter("Transform.Optimizations", OptimizationCount);
+		UpdateCounter("Transform.SkippedEmptyBlocks", SkippedEmptyBlocksCount);
+		UpdateCounter("Transform.RemoveUnreachableBlocks", RemoveUnreachableBlocksCount);
+		UpdateCounter("Transform.BlocksMerged", BlocksMergedCount);
+
+		UpdateCounter(TransformCountStage, TransformCount);
+		UpdateCounter(OptimizationCountStage, OptimizationCount);
+		UpdateCounter(SkippedEmptyBlocksCountStage, SkippedEmptyBlocksCount);
+		UpdateCounter(RemoveUnreachableBlocksCountStage, RemoveUnreachableBlocksCount);
+		UpdateCounter(BlocksMergedCountStage, BlocksMergedCount);
+
 		MethodCompiler.Compiler.PostTraceLog(specialTrace);
+
+		TotalTransformCount = 0;
+		TransformCount = 0;
+		OptimizationCount = 0;
+		SkippedEmptyBlocksCount = 0;
+		RemoveUnreachableBlocksCount = 0;
+		BlocksMergedCount = 0;
 
 		EmptyBlocks = null;
 		TransformContext = null;
@@ -113,6 +113,26 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 		if (CompilerSettings.FullCheckMode)
 			CheckAllPhiInstructions();
+	}
+
+	protected void AddTranformations(List<BaseTransform> list)
+	{
+		foreach (var transform in list)
+		{
+			AddTranformation(transform);
+		}
+	}
+
+	public void AddTranformation(BaseTransform transform)
+	{
+		int id = transform.Instruction == null ? 0 : transform.Instruction.ID;
+
+		if (transforms[id] == null)
+		{
+			transforms[id] = new List<BaseTransform>();
+		}
+
+		transforms[id].Add(transform);
 	}
 
 	private void SortByPriority()
@@ -229,14 +249,16 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 		{
 			var transform = instructionTransforms[i];
 
-			var updated = TransformContext.ApplyTransform(context, transform);
+			var updated = TransformContext.ApplyTransform(context, transform, TotalTransformCount);
 
 			if (updated)
 			{
+				TotalTransformCount++;
+
 				if (transform.IsOptimization)
-					OptimizationCount.Increment();
+					OptimizationCount++;
 				else if (transform.IsTranformation)
-					TransformCount.Increment();
+					TransformCount++;
 
 				if (MethodCompiler.Statistics)
 					UpdateCounter(transform.Name, 1);
@@ -329,7 +351,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 			trace?.Log($"Removed Unreachable Block: {block}");
 		}
 
-		RemoveUnreachableBlocksCount.Increment(emptied);
+		RemoveUnreachableBlocksCount += emptied;
 
 		return emptied != 0;
 	}
@@ -386,7 +408,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 			//	CheckAllPhiInstructions();
 		}
 
-		SkippedEmptyBlocksCount.Increment(emptied);
+		SkippedEmptyBlocksCount += emptied;
 
 		return emptied != 0;
 	}
@@ -451,7 +473,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 			}
 		}
 
-		BlocksMergedCount.Increment(emptied);
+		BlocksMergedCount += emptied;
 
 		return emptied != 0;
 	}

@@ -1,5 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Framework.Managers;
+
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.CodeMotion;
 
 /// <summary>
@@ -25,11 +27,13 @@ public sealed class LoadParamObject : BaseTransform
 		if (context.Node == context.Result.Uses[0].PreviousNonEmpty)
 			return false;
 
-		return true;
+		return !CheckCodeMotion(context, transform);
 	}
 
 	public override void Transform(Context context, TransformContext transform)
 	{
+		transform.GetManager<CodeMotionManager>().MarkMotion(context.Node);
+
 		context.Result.Uses[0].Previous.MoveFrom(context.Node);
 	}
 }
