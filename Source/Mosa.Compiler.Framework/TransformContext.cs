@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
@@ -154,6 +155,12 @@ public sealed class TransformContext
 
 	#endregion Constants
 
+	#region Data
+
+	private Dictionary<Type, BaseTransformManager> Managers = new Dictionary<Type, BaseTransformManager>();
+
+	#endregion Data
+
 	public TransformContext(MethodCompiler methodCompiler, BitValueManager bitValueManager = null)
 	{
 		MethodCompiler = methodCompiler;
@@ -200,6 +207,22 @@ public sealed class TransformContext
 
 		Window = Math.Max(Compiler.CompilerSettings.OptimizationWindow, 1);
 	}
+
+	#region Manager
+
+	public T GetManager<T>() where T : class
+	{
+		Managers.TryGetValue(typeof(T), out var manager);
+
+		return manager as T;
+	}
+
+	public void AddManager(BaseTransformManager transformManager)
+	{
+		Managers.Add(transformManager.GetType(), transformManager);
+	}
+
+	#endregion Manager
 
 	public void SetLog(TraceLog traceLog)
 	{

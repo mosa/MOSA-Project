@@ -3,13 +3,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Net;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Compiler.Framework.Stages;
 
 /// <summary>
-///	Optimization Stage
+///	Base Transform Stage
 /// </summary>
 public abstract class BaseTransformStage : BaseMethodCompilerStage
 {
@@ -24,7 +25,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 	private readonly List<BaseTransform>[] transforms = new List<BaseTransform>[MaximumInstructionID];
 
-	protected TransformContext TransformContext;
+	private TransformContext TransformContext;
 
 	protected TraceLog trace;
 
@@ -131,7 +132,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 		SortedByPriority = true;
 	}
 
-	protected virtual void CustomizeTransformation()
+	protected virtual void CustomizeTransformation(TransformContext transformContext)
 	{ }
 
 	private void ExecutePasses()
@@ -168,7 +169,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 			TransformContext = new TransformContext(MethodCompiler);
 			TransformContext.SetLogs(trace, specialTrace);
 
-			CustomizeTransformation();
+			CustomizeTransformation(TransformContext);
 		}
 
 		var context = new Context(BasicBlocks.PrologueBlock);

@@ -26,7 +26,7 @@ public sealed class Branch64 : BaseTransform
 		var target = context.BranchTargets[0];
 		var block = context.Block;
 
-		if (!Compare64(context))
+		if (!Compare64(context.ConditionCode, context.Operand1, context.Operand2))
 		{
 			context.SetNop();
 

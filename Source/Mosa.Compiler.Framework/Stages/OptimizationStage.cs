@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Framework.Managers;
 using Mosa.Compiler.Framework.Transforms;
 using Mosa.Compiler.Framework.Transforms.Optimizations.Auto;
 using Mosa.Compiler.Framework.Transforms.Optimizations.Manual;
@@ -12,6 +13,7 @@ namespace Mosa.Compiler.Framework.Stages;
 public class OptimizationStage : BaseTransformStage
 {
 	private readonly bool LowerTo32;
+	private readonly CodeMotionManager CodeMotion = new CodeMotionManager();
 
 	public OptimizationStage(bool lowerTo32)
 		: base(true, true)
@@ -21,8 +23,9 @@ public class OptimizationStage : BaseTransformStage
 		AddTranformations(AutoTransforms.List);
 	}
 
-	protected override void CustomizeTransformation()
+	protected override void CustomizeTransformation(TransformContext transformContext)
 	{
-		TransformContext.SetStageOptions(LowerTo32 && CompilerSettings.LongExpansion && Is32BitPlatform);
+		transformContext.SetStageOptions(LowerTo32 && CompilerSettings.LongExpansion && Is32BitPlatform);
+		transformContext.AddManager(CodeMotion);
 	}
 }

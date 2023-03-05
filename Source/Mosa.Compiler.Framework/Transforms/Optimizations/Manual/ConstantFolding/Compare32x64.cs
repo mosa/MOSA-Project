@@ -23,7 +23,7 @@ public sealed class Compare32x64 : BaseTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		var compare = Compare32(context);
+		var compare = Compare32(context.ConditionCode, context.Operand1, context.Operand2);
 
 		var e1 = transform.CreateConstant(BoolTo64(compare));
 

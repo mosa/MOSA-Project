@@ -2,6 +2,7 @@
 
 using System;
 using Mosa.Compiler.Common;
+using Mosa.Compiler.Framework.Managers;
 
 namespace Mosa.Compiler.Framework.Transforms;
 
@@ -61,9 +62,13 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 
 	#endregion Internals
 
+	#region Abstract Methods
+
 	public abstract bool Match(Context context, TransformContext transform);
 
 	public abstract void Transform(Context context, TransformContext transform);
+
+	#endregion Abstract Methods
 
 	#region Filter Methods
 
@@ -948,56 +953,40 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 
 	#endregion Navigation
 
-	protected static void RemoveRemainingInstructionInBlock(Context context)
-	{
-		var node = context.Node.Next;
+	#region Helpers
 
-		while (!node.IsBlockEndInstruction)
-		{
-			if (!node.IsEmptyOrNop)
-			{
-				node.SetNop();
-			}
-			node = node.Next;
-		}
-	}
-
-	protected static bool Compare64(Context context)
+	protected static bool Compare32(ConditionCode conditionCode, Operand a, Operand b)
 	{
-		return context.ConditionCode switch
+		return conditionCode switch
 		{
-			ConditionCode.Equal => context.Operand1.ConstantSigned64 == context.Operand2.ConstantSigned64,
-			ConditionCode.NotEqual => context.Operand1.ConstantSigned64 != context.Operand2.ConstantSigned64,
-			ConditionCode.GreaterOrEqual => context.Operand1.ConstantSigned64 >= context.Operand2.ConstantSigned64,
-			ConditionCode.Greater => context.Operand1.ConstantSigned64 > context.Operand2.ConstantSigned64,
-			ConditionCode.LessOrEqual => context.Operand1.ConstantSigned64 <= context.Operand2.ConstantSigned64,
-			ConditionCode.Less => context.Operand1.ConstantSigned64 < context.Operand2.ConstantSigned64,
-			ConditionCode.UnsignedGreater => context.Operand1.ConstantUnsigned64 > context.Operand2.ConstantUnsigned64,
-			ConditionCode.UnsignedGreaterOrEqual => context.Operand1.ConstantUnsigned64 >=
-													context.Operand2.ConstantUnsigned64,
-			ConditionCode.UnsignedLess => context.Operand1.ConstantUnsigned64 < context.Operand2.ConstantUnsigned64,
-			ConditionCode.UnsignedLessOrEqual => context.Operand1.ConstantUnsigned64 <=
-												 context.Operand2.ConstantUnsigned64,
+			ConditionCode.Equal => a.ConstantSigned32 == b.ConstantSigned32,
+			ConditionCode.NotEqual => a.ConstantSigned32 != b.ConstantSigned32,
+			ConditionCode.GreaterOrEqual => a.ConstantSigned32 >= b.ConstantSigned32,
+			ConditionCode.Greater => a.ConstantSigned32 > b.ConstantSigned32,
+			ConditionCode.LessOrEqual => a.ConstantSigned32 <= b.ConstantSigned32,
+			ConditionCode.Less => a.ConstantSigned32 < b.ConstantSigned32,
+			ConditionCode.UnsignedGreater => a.ConstantUnsigned32 > b.ConstantUnsigned32,
+			ConditionCode.UnsignedGreaterOrEqual => a.ConstantUnsigned32 >= b.ConstantUnsigned32,
+			ConditionCode.UnsignedLess => a.ConstantUnsigned32 < b.ConstantUnsigned32,
+			ConditionCode.UnsignedLessOrEqual => a.ConstantUnsigned32 <= b.ConstantUnsigned32,
 			_ => throw new InvalidOperationException()
 		};
 	}
 
-	protected static bool Compare32(Context context)
+	protected static bool Compare64(ConditionCode conditionCode, Operand a, Operand b)
 	{
-		return context.ConditionCode switch
+		return conditionCode switch
 		{
-			ConditionCode.Equal => context.Operand1.ConstantSigned32 == context.Operand2.ConstantSigned32,
-			ConditionCode.NotEqual => context.Operand1.ConstantSigned32 != context.Operand2.ConstantSigned32,
-			ConditionCode.GreaterOrEqual => context.Operand1.ConstantSigned32 >= context.Operand2.ConstantSigned32,
-			ConditionCode.Greater => context.Operand1.ConstantSigned32 > context.Operand2.ConstantSigned32,
-			ConditionCode.LessOrEqual => context.Operand1.ConstantSigned32 <= context.Operand2.ConstantSigned32,
-			ConditionCode.Less => context.Operand1.ConstantSigned32 < context.Operand2.ConstantSigned32,
-			ConditionCode.UnsignedGreater => context.Operand1.ConstantUnsigned32 > context.Operand2.ConstantUnsigned32,
-			ConditionCode.UnsignedGreaterOrEqual => context.Operand1.ConstantUnsigned32 >=
-													context.Operand2.ConstantUnsigned32,
-			ConditionCode.UnsignedLess => context.Operand1.ConstantUnsigned32 < context.Operand2.ConstantUnsigned32,
-			ConditionCode.UnsignedLessOrEqual => context.Operand1.ConstantUnsigned32 <=
-												 context.Operand2.ConstantUnsigned32,
+			ConditionCode.Equal => a.ConstantSigned64 == b.ConstantSigned64,
+			ConditionCode.NotEqual => a.ConstantSigned64 != b.ConstantSigned64,
+			ConditionCode.GreaterOrEqual => a.ConstantSigned64 >= b.ConstantSigned64,
+			ConditionCode.Greater => a.ConstantSigned64 > b.ConstantSigned64,
+			ConditionCode.LessOrEqual => a.ConstantSigned64 <= b.ConstantSigned64,
+			ConditionCode.Less => a.ConstantSigned64 < b.ConstantSigned64,
+			ConditionCode.UnsignedGreater => a.ConstantUnsigned64 > b.ConstantUnsigned64,
+			ConditionCode.UnsignedGreaterOrEqual => a.ConstantUnsigned64 >= b.ConstantUnsigned64,
+			ConditionCode.UnsignedLess => a.ConstantUnsigned64 < b.ConstantUnsigned64,
+			ConditionCode.UnsignedLessOrEqual => a.ConstantUnsigned64 <= b.ConstantUnsigned64,
 			_ => throw new InvalidOperationException()
 		};
 	}
@@ -1020,15 +1009,37 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 		};
 	}
 
+	public static bool IsPhiInstruction(BaseInstruction instruction)
+	{
+		return BaseCodeTransformationStage.IsPhiInstruction(instruction);
+	}
+
+	#endregion Helpers
+
+	#region Block Helpers
+
+	protected static void RemoveRemainingInstructionInBlock(Context context)
+	{
+		var node = context.Node.Next;
+
+		while (!node.IsBlockEndInstruction)
+		{
+			if (!node.IsEmptyOrNop)
+			{
+				node.SetNop();
+			}
+			node = node.Next;
+		}
+	}
+
 	protected static BasicBlock GetOtherBranchTarget(BasicBlock block, BasicBlock target)
 	{
 		return block.NextBlocks[0] == target ? block.NextBlocks[1] : block.NextBlocks[0];
 	}
 
-	public static bool IsPhiInstruction(BaseInstruction instruction)
-	{
-		return BaseCodeTransformationStage.IsPhiInstruction(instruction);
-	}
+	#endregion Block Helpers
+
+	#region Transform Helpers
 
 	public static void SwapOperands1And2(Context context)
 	{
@@ -1037,5 +1048,17 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 
 		context.Operand1 = operand2;
 		context.Operand2 = operand1;
+	}
+
+	#endregion Transform Helpers
+
+	public static bool CheckCodeMotion(Context context, TransformContext transform)
+	{
+		var motion = transform.GetManager<CodeMotionManager>();
+
+		if (motion == null)
+			return false;
+
+		return motion.CheckMotion(context.Node);
 	}
 }
