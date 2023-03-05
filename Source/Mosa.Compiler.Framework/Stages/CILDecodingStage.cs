@@ -49,21 +49,12 @@ public sealed class CILDecodingStage : BaseMethodCompilerStage, IInstructionDeco
 
 		MethodCompiler.SetLocalVariables(Method.LocalVariables);
 
-		// Create the prologue block
-		var prologue = CreateNewBlock(BasicBlock.PrologueLabel);
-		BasicBlocks.AddHeadBlock(prologue);
+		var prologueBlock = BasicBlocks.CreatePrologueBlock();
+		var startBlock = BasicBlocks.CreateStartBlock();
 
-		var jmpNode = new InstructionNode()
-		{
-			Label = BasicBlock.PrologueLabel,
-			Block = prologue
-		};
-		prologue.First.Insert(jmpNode);
-
-		// Create starting block
-		var startBlock = CreateNewBlock(0);
-
-		jmpNode.SetInstruction(IRInstruction.Jmp, startBlock);
+		var prologue = new Context(prologueBlock.First);
+		prologue.AppendInstruction(IRInstruction.Prologue);
+		prologue.AppendInstruction(IRInstruction.Jmp, startBlock);
 
 		DecodeInstructionTargets();
 
@@ -86,7 +77,7 @@ public sealed class CILDecodingStage : BaseMethodCompilerStage, IInstructionDeco
 		InsertFlowOrJumpInstructions();
 
 		// This makes it easier to review --- it's not necessary
-		OrderByLabel();
+		//OrderByLabel();
 	}
 
 	public void OrderByLabel()
@@ -243,7 +234,7 @@ public sealed class CILDecodingStage : BaseMethodCompilerStage, IInstructionDeco
 		if (Method.LocalVariables.Count == 0)
 			return;
 
-		var prologue = new Context(BasicBlocks.PrologueBlock.First);
+		var prologue = new Context(BasicBlocks.PrologueBlock.First.NextNonEmpty);
 
 		foreach (var variable in MethodCompiler.LocalVariables)
 		{

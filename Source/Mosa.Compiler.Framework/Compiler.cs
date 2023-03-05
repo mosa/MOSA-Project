@@ -181,7 +181,7 @@ public sealed class Compiler
 			new VirtualRegisterRenameStage(),
 
 			new ExceptionStage(),
-			new StackSetupStage(),
+			//new StackSetupStage(),
 			compilerSettings.Devirtualization ? new DevirtualizeCallStage() : null,
 			new PlugStage(),
 			new RuntimeCallStage(),

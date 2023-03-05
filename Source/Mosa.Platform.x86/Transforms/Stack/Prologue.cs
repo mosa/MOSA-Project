@@ -1,5 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Diagnostics;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
@@ -22,7 +23,10 @@ public sealed class Prologue : BaseTransform
 	public override void Transform(Context context, TransformContext transform)
 	{
 		if (!transform.MethodCompiler.IsStackFrameRequired)
+		{
+			context.SetNop();
 			return;
+		}
 
 		context.SetInstruction(X86.Push32, null, transform.StackFrame);
 		context.AppendInstruction(X86.Mov32, transform.StackFrame, transform.StackPointer);

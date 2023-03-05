@@ -176,21 +176,19 @@ public static class DelegatePatcher
 
 	private static BasicBlock CreateMethodStructure(MethodCompiler methodCompiler)
 	{
-		var basicBlocks = methodCompiler.BasicBlocks;
+		// Create the blocks
+		var prologueBlock = methodCompiler.BasicBlocks.CreatePrologueBlock();
+		var startBlock = methodCompiler.BasicBlocks.CreateStartBlock();
+		var epilogueBlock = methodCompiler.BasicBlocks.CreateEpilogueBlock();
 
-		// Create the prologue block
-		var prologue = basicBlocks.CreateBlock(BasicBlock.PrologueLabel);
-		basicBlocks.AddHeadBlock(prologue);
+		var prologue = new Context(prologueBlock);
+		prologue.AppendInstruction(IRInstruction.Prologue);
+		prologue.AppendInstruction(IRInstruction.Jmp, startBlock);
 
-		// Create the epilogue block
-		var epilogue = basicBlocks.CreateBlock(BasicBlock.EpilogueLabel);
+		var epilogue = new Context(epilogueBlock);
+		epilogue.AppendInstruction(IRInstruction.Epilogue);
 
-		var start = basicBlocks.CreateBlock(BasicBlock.StartLabel);
-
-		// Add a jump instruction to the first block from the prologue
-		prologue.First.Insert(new InstructionNode(IRInstruction.Jmp, start));
-
-		return start;
+		return startBlock;
 	}
 
 	private static MosaField GetField(MosaType type, string name)

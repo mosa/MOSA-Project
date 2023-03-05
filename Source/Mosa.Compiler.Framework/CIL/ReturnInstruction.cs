@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
+using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework.CIL;
 
@@ -59,9 +60,17 @@ public sealed class ReturnInstruction : UnaryInstruction
 		else
 			node.OperandCount = 1;
 
-		var block = decoder.GetBlock(BasicBlock.EpilogueLabel);
+		var epilogueBlock = decoder.MethodCompiler.BasicBlocks.EpilogueBlock;
 
-		node.AddBranchTarget(block);
+		if (epilogueBlock == null)
+		{
+			epilogueBlock = decoder.MethodCompiler.BasicBlocks.CreateEpilogueBlock();
+
+			var epilogue = new Context(epilogueBlock);
+			epilogue.AppendInstruction(IRInstruction.Epilogue);
+		}
+
+		node.AddBranchTarget(epilogueBlock);
 	}
 
 	#endregion Methods

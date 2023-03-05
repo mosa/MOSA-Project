@@ -692,24 +692,25 @@ public sealed class MethodCompiler
 		IsCILStream = false;
 		IsExecutePipeline = true;
 
-		// Create the prologue block
-		var prologue = BasicBlocks.CreateBlock(BasicBlock.PrologueLabel);
-		BasicBlocks.AddHeadBlock(prologue);
+		var prologueBlock = BasicBlocks.CreatePrologueBlock();
+		var startBlock = BasicBlocks.CreateStartBlock();
+		var epilogueBlock = BasicBlocks.CreateEpilogueBlock();
 
-		// Create the epilogue block
-		var epilogue = BasicBlocks.CreateBlock(BasicBlock.EpilogueLabel);
+		var prologue = new Context(prologueBlock);
+		prologue.AppendInstruction(IRInstruction.Prologue);
+		prologue.AppendInstruction(IRInstruction.Jmp, startBlock);
 
-		var start = BasicBlocks.CreateBlock(BasicBlock.StartLabel);
+		var epilogue = new Context(epilogueBlock);
+		epilogue.AppendInstruction(IRInstruction.Epilogue);
 
-		// Add a jump instruction to the first block from the prologue
-		prologue.First.Insert(new InstructionNode(IRInstruction.Jmp, start));
+		var start = new Context(startBlock);
 
-		stub(new Context(start), this);
+		stub(start, this);
 
 		if (NotifyInstructionTraceHandler != null)
 		{
 			var traceLog = new TraceLog(TraceType.MethodInstructions, Method, "XX-Stubbed Method", MethodData.Version);
-			traceLog?.Log($"This method is a stubbed method");
+			traceLog?.Log($"This method is stubbed");
 			NotifyInstructionTraceHandler(traceLog);
 		}
 	}

@@ -134,6 +134,25 @@ public sealed class BasicBlocks : IEnumerable<BasicBlock>
 		return basicBlock;
 	}
 
+	public BasicBlock CreatePrologueBlock()
+	{
+		var block = CreateBlock(BasicBlock.PrologueLabel, BasicBlock.PrologueLabel);
+		AddHeadBlock(block);
+		return block;
+	}
+
+	public BasicBlock CreateEpilogueBlock()
+	{
+		var block = CreateBlock(BasicBlock.EpilogueLabel, BasicBlock.EpilogueLabel);
+		return block;
+	}
+
+	public BasicBlock CreateStartBlock()
+	{
+		var block = CreateBlock(BasicBlock.StartLabel, BasicBlock.StartLabel);
+		return block;
+	}
+
 	/// <summary>
 	/// Retrieves a basic block from its label.
 	/// </summary>

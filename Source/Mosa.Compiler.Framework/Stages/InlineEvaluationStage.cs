@@ -268,7 +268,7 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 			mapBlocks.Add(block, newBlock);
 		}
 
-		var newPrologueBlock = newBasicBlocks.GetByLabel(BasicBlock.PrologueLabel);
+		var newPrologueBlock = newBasicBlocks.PrologueBlock;
 
 		foreach (var operand in MethodCompiler.Parameters)
 		{
