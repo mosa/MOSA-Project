@@ -7,7 +7,7 @@ namespace Mosa.Platform.x64.Intrinsic;
 /// <summary>
 /// IntrinsicMethods
 /// </summary>
-static partial class IntrinsicMethods
+internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Platform.x64.Intrinsic::BochsDebug")]
 	private static void BochsDebug(Context context, MethodCompiler methodCompiler)

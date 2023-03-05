@@ -264,8 +264,10 @@ internal class ClrMetadataLoader
 					throw new AssemblyLoadException();  // Should have been loaded in MetadataLoader
 				case GenericInstSig sig:
 					return LoadGenericTypeInstanceSig(sig);
+
 				case GenericSig sig:
 					return LoadGenericParam(sig);
+
 				case FnPtrSig sig:
 					{
 						var fnPtr = sig.MethodSig;

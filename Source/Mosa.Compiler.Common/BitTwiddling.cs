@@ -33,6 +33,7 @@ public static class BitTwiddling
 	{
 		return BitOperations.LeadingZeroCount(value);
 	}
+
 	public static int CountLeadingZeros(uint value)
 	{
 		return BitOperations.LeadingZeroCount(value);
@@ -67,5 +68,4 @@ public static class BitTwiddling
 	{
 		return BitOperations.PopCount(value);
 	}
-
 }

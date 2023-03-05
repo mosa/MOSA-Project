@@ -2,7 +2,6 @@
 
 using Mosa.Compiler.Framework;
 
-
 namespace Mosa.Platform.x64.Intrinsic;
 
 /// <summary>
