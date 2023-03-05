@@ -144,8 +144,8 @@ public sealed class CILOperandAssignmentStage : BaseMethodCompilerStage
 		context.GotoPrevious();
 
 		while (context.IsEmpty
-		       || context.Instruction.FlowControl is FlowControl.ConditionalBranch or FlowControl.UnconditionalBranch or FlowControl.Return 
-		       || context.Instruction == IRInstruction.Jmp)
+			   || context.Instruction.FlowControl is FlowControl.ConditionalBranch or FlowControl.UnconditionalBranch or FlowControl.Return
+			   || context.Instruction == IRInstruction.Jmp)
 		{
 			context.GotoPrevious();
 		}

@@ -14,7 +14,9 @@ public sealed class LiveRanges
 
 	public Range LastRange => Ranges[Count - 1];
 
-	public Range FirstRange { get => Ranges[0];
+	public Range FirstRange
+	{
+		get => Ranges[0];
 		set => Ranges[0] = value;
 	}
 

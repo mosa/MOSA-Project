@@ -25,7 +25,9 @@ public sealed class VirtualRegister
 
 	public LiveInterval LastRange => LiveIntervals.Count == 0 ? null : LiveIntervals[LiveIntervals.Count - 1];
 
-	public LiveInterval FirstRange { get => LiveIntervals.Count == 0 ? null : LiveIntervals[0];
+	public LiveInterval FirstRange
+	{
+		get => LiveIntervals.Count == 0 ? null : LiveIntervals[0];
 		set => LiveIntervals[0] = value;
 	}
 
