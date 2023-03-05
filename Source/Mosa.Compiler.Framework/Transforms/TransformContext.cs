@@ -3,7 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Reflection.Metadata;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
@@ -13,6 +12,8 @@ namespace Mosa.Compiler.Framework.Transforms;
 
 public sealed class TransformContext
 {
+	#region Properties
+
 	public MethodCompiler MethodCompiler { get; private set; }
 
 	public Compiler Compiler { get; private set; }
@@ -24,6 +25,98 @@ public sealed class TransformContext
 	public TraceLog TraceLog { get; private set; }
 
 	public TraceLog SpecialTraceLog { get; private set; }
+
+	public MosaType I4 { get; private set; }
+
+	public MosaType I8 { get; private set; }
+
+	public MosaType R4 { get; private set; }
+
+	public MosaType R8 { get; private set; }
+
+	public MosaType O { get; private set; }
+
+	public MosaType TypedRef { get; set; }
+
+	public MosaType NativeInteger { get; private set; }
+
+	public VirtualRegisters VirtualRegisters { get; private set; }
+
+	public BasicBlocks BasicBlocks { get; set; }
+
+	public bool LowerTo32 { get; private set; }
+
+	public bool IsInSSAForm { get; private set; }
+
+	public bool AreCPURegistersAllocated { get; private set; }
+
+	public bool Is32BitPlatform { get; private set; }
+
+	public int Window { get; private set; }
+
+	#endregion Properties
+
+	#region Properties - Indirect
+
+	public uint NativePointerSize => Compiler.Architecture.NativePointerSize;
+
+	public BaseArchitecture Architecture => Compiler.Architecture;
+
+	public MosaMethod Method => MethodCompiler.Method;
+
+	public MosaTypeLayout TypeLayout => MethodCompiler.TypeLayout;
+
+	public MosaLinker Linker => Compiler.Linker;
+
+	#endregion Properties - Indirect
+
+	#region Properties - Registers
+
+	public Operand StackFrame => MethodCompiler.Compiler.StackFrame;
+
+	public Operand StackPointer => MethodCompiler.Compiler.StackPointer;
+
+	/// <summary>
+	/// Gets the link register.
+	/// </summary>
+	public Operand LinkRegister => MethodCompiler.Compiler.LinkRegister;
+
+	/// <summary>
+	/// Gets the program counter
+	/// </summary>
+	public Operand ProgramCounter => MethodCompiler.Compiler.ProgramCounter;
+
+	/// <summary>
+	/// Gets the exception register.
+	/// </summary>
+	public Operand ExceptionRegister => MethodCompiler.Compiler.ExceptionRegister;
+
+	/// <summary>
+	/// Gets the leave target register.
+	/// </summary>
+	public Operand LeaveTargetRegister => MethodCompiler.Compiler.LeaveTargetRegister;
+
+	#endregion Properties - Registers
+
+	#region Properties - Instructions
+
+	public BaseInstruction LoadInstruction => Is32BitPlatform ? IRInstruction.Load32 : IRInstruction.Load64;
+
+	public BaseInstruction StoreInstruction => Is32BitPlatform ? IRInstruction.Store32 : IRInstruction.Store64;
+
+	public BaseInstruction MoveInstruction => Is32BitPlatform ? IRInstruction.Move32 : IRInstruction.Move64;
+
+	public BaseInstruction AddInstruction => Is32BitPlatform ? IRInstruction.Add32 : IRInstruction.Add64;
+
+	public BaseInstruction SubInstruction => Is32BitPlatform ? IRInstruction.Sub32 : IRInstruction.Sub64;
+
+	public BaseInstruction MulSignedInstruction => Is32BitPlatform ? IRInstruction.MulSigned32 : IRInstruction.MulSigned64;
+
+	public BaseInstruction MulUnsignedInstruction => Is32BitPlatform ? IRInstruction.MulUnsigned32 : IRInstruction.MulUnsigned64;
+
+	public BaseInstruction BranchInstruction => Is32BitPlatform ? IRInstruction.Branch32 : IRInstruction.Branch64;
+
+	#endregion Properties - Instructions
 
 	#region Constants
 
@@ -58,92 +151,6 @@ public sealed class TransformContext
 	public Operand Constant64_32 { get; private set; }
 
 	#endregion Constants
-
-	public MosaType I4 { get; private set; }
-
-	public MosaType I8 { get; private set; }
-
-	public MosaType R4 { get; private set; }
-
-	public MosaType R8 { get; private set; }
-
-	public MosaType O { get; private set; }
-
-	public MosaType TypedRef { get; set; }
-
-	public MosaType NativeInteger { get; private set; }
-
-	public VirtualRegisters VirtualRegisters { get; private set; }
-
-	public BasicBlocks BasicBlocks { get; set; }
-
-	public bool LowerTo32 { get; private set; }
-
-	public bool IsInSSAForm { get; private set; }
-
-	public bool AreCPURegistersAllocated { get; private set; }
-
-	public bool Is32BitPlatform { get; private set; }
-
-	public int Window { get; private set; }
-
-	#region Registers
-
-	public Operand StackFrame => MethodCompiler.Compiler.StackFrame;
-
-	public Operand StackPointer => MethodCompiler.Compiler.StackPointer;
-
-	/// <summary>
-	/// Gets the link register.
-	/// </summary>
-	public Operand LinkRegister => MethodCompiler.Compiler.LinkRegister;
-
-	/// <summary>
-	/// Gets the program counter
-	/// </summary>
-	public Operand ProgramCounter => MethodCompiler.Compiler.ProgramCounter;
-
-	/// <summary>
-	/// Gets the exception register.
-	/// </summary>
-	public Operand ExceptionRegister => MethodCompiler.Compiler.ExceptionRegister;
-
-	/// <summary>
-	/// Gets the leave target register.
-	/// </summary>
-	public Operand LeaveTargetRegister => MethodCompiler.Compiler.LeaveTargetRegister;
-
-	#endregion Registers
-
-	public uint NativePointerSize => Compiler.Architecture.NativePointerSize;
-
-	public BaseArchitecture Architecture => Compiler.Architecture;
-
-	public MosaMethod Method => MethodCompiler.Method;
-
-	public MosaTypeLayout TypeLayout => MethodCompiler.TypeLayout;
-
-	public MosaLinker Linker => Compiler.Linker;
-
-	#region Instructions Properties
-
-	public BaseInstruction LoadInstruction => Is32BitPlatform ? IRInstruction.Load32 : IRInstruction.Load64;
-
-	public BaseInstruction StoreInstruction => Is32BitPlatform ? IRInstruction.Store32 : IRInstruction.Store64;
-
-	public BaseInstruction MoveInstruction => Is32BitPlatform ? IRInstruction.Move32 : IRInstruction.Move64;
-
-	public BaseInstruction AddInstruction => Is32BitPlatform ? IRInstruction.Add32 : IRInstruction.Add64;
-
-	public BaseInstruction SubInstruction => Is32BitPlatform ? IRInstruction.Sub32 : IRInstruction.Sub64;
-
-	public BaseInstruction MulSignedInstruction => Is32BitPlatform ? IRInstruction.MulSigned32 : IRInstruction.MulSigned64;
-
-	public BaseInstruction MulUnsignedInstruction => Is32BitPlatform ? IRInstruction.MulUnsigned32 : IRInstruction.MulUnsigned64;
-
-	public BaseInstruction BranchInstruction => Is32BitPlatform ? IRInstruction.Branch32 : IRInstruction.Branch64;
-
-	#endregion Instructions Properties
 
 	public TransformContext(MethodCompiler methodCompiler, BitValueManager bitValueManager = null)
 	{

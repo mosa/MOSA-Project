@@ -840,19 +840,7 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 
 	#endregion Status Helpers
 
-	protected static void RemoveRemainingInstructionInBlock(Context context)
-	{
-		var node = context.Node.Next;
-
-		while (!node.IsBlockEndInstruction)
-		{
-			if (!node.IsEmptyOrNop)
-			{
-				node.SetNop();
-			}
-			node = node.Next;
-		}
-	}
+	#region Navigation
 
 	protected static InstructionNode GetPreviousNodeUntil(Context context, BaseInstruction untilInstruction, int window, Operand operand1 = null, Operand operand2 = null)
 	{
@@ -956,6 +944,22 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 		}
 
 		return null;
+	}
+
+	#endregion Navigation
+
+	protected static void RemoveRemainingInstructionInBlock(Context context)
+	{
+		var node = context.Node.Next;
+
+		while (!node.IsBlockEndInstruction)
+		{
+			if (!node.IsEmptyOrNop)
+			{
+				node.SetNop();
+			}
+			node = node.Next;
+		}
 	}
 
 	protected static bool Compare64(Context context)
