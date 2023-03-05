@@ -1,6 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections.Generic;
+using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.Framework.Transforms.PlatformIntrinsic;

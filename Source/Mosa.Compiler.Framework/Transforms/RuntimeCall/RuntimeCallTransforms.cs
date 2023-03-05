@@ -1,7 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections.Generic;
-using Mosa.Compiler.Framework.Transforms;
+using Mosa.Compiler.Framework;
 
 namespace Mosa.Platform.Framework.Transforms.RuntimeCall;
 
