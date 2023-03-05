@@ -58,7 +58,7 @@ public sealed class ProtectedRegionLayoutStage : BaseMethodCompilerStage
 		{
 			var handler = (uint)MethodCompiler.GetPosition(region.Handler.HandlerStart);
 
-			trace?.Log($"Handler: {region.Handler.TryStart.ToString("X4")} to {region.Handler.TryEnd.ToString("X4")} Handler: {region.Handler.HandlerStart.ToString("X4")} Offset: [{handler.ToString("X4")}]");
+			trace?.Log($"Handler: {region.Handler.TryStart:X4} to {region.Handler.TryEnd:X4} Handler: {region.Handler.HandlerStart:X4} Offset: [{handler:X4}]");
 
 			var sections = new List<Tuple<int, int>>();
 
