@@ -7,7 +7,7 @@ namespace Mosa.Platform.x86.Intrinsic;
 /// <summary>
 /// IntrinsicMethods
 /// </summary>
-static partial class IntrinsicMethods
+internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::Hlt")]
 	private static void Hlt(Context context, MethodCompiler methodCompiler)
