@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Stages;
 /// <summary>
 /// Exception Stage
 /// </summary>
-/// <seealso cref="Mosa.Compiler.Framework.BaseMethodCompilerStage" />
+/// <seealso cref="Mosa.Compiler.Framework.BaseCodeTransformationStage" />
 public class ExceptionStage : BaseCodeTransformationStage
 {
 	private Operand nullOperand;
