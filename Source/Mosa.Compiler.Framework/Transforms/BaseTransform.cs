@@ -43,7 +43,7 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 		IsOptimization = type.HasFlag(TransformType.Optimization);
 
 		Name = GetType().FullName.Replace("Mosa.Platform.", string.Empty).Replace("Mosa.Compiler.Framework.Transforms", "IR").Replace("Transforms.", string.Empty);
-		TransformDirectory.Add(this);
+		//TransformDirectory.Add(this);
 	}
 
 	public BaseTransform(TransformType type, bool log = false)
