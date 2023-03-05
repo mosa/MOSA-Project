@@ -8,10 +8,10 @@ public class CodeMotionManager : BaseTransformManager
 {
 	private HashSet<InstructionNode> Motion = new HashSet<InstructionNode>();
 
-	public override void Reset()
-	{
-		Motion.Clear();
-	}
+	//public override void Reset()
+	//{
+	//	Motion.Clear();
+	//}
 
 	public void MarkMotion(InstructionNode node)
 	{

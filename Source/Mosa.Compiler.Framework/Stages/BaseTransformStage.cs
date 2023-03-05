@@ -3,7 +3,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Net;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.Framework.Transforms;
 
@@ -42,7 +41,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 	protected BitArray EmptyBlocks;
 
-	protected Dictionary<string, Counter> TransformCounters = new Dictionary<string, Counter>();
+	protected readonly Dictionary<string, Counter> TransformCounters = new Dictionary<string, Counter>();
 
 	private bool SortedByPriority;
 
@@ -70,6 +69,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 	protected override void Finish()
 	{
+		UpdateCounter("Transform.Total", TotalTransformCount);
 		UpdateCounter("Transform.Transforms", TransformCount);
 		UpdateCounter("Transform.Optimizations", OptimizationCount);
 		UpdateCounter("Transform.SkippedEmptyBlocks", SkippedEmptyBlocksCount);

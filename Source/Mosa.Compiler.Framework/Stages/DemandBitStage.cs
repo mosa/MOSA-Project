@@ -1,13 +1,14 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework.Analysis;
+using Mosa.Compiler.Framework.Managers;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Compiler.Framework.Stages;
 
 /// <summary>
-/// Bit Tracker Stage
+/// Demand Tracker Stage   --- IN PROCESS
 /// </summary>
 public sealed class DemandBitStage : BaseMethodCompilerStage
 {
