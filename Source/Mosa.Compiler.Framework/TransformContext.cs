@@ -298,7 +298,7 @@ public sealed class TransformContext
 
 	public void TraceBefore(Context context, BaseTransform transformation, int count)
 	{
-		TraceLog?.Log($"*** {transformation.Name} [{count}]");
+		TraceLog?.Log($"[{count}] {transformation.Name}");
 
 		if (transformation.Log)
 			SpecialTraceLog?.Log($"{transformation.Name}\t{Method.FullName} at {context}");
@@ -309,6 +309,7 @@ public sealed class TransformContext
 	public void TraceAfter(Context context)
 	{
 		TraceLog?.Log($"AFTER: \t{context}");
+		TraceLog?.Log();
 	}
 
 	#endregion Trace
