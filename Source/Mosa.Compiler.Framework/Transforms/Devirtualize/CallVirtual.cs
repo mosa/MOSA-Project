@@ -8,6 +8,8 @@ public sealed class CallVirtual : BaseTransform
 	{
 	}
 
+	public override int Priority => 80;
+
 	public override bool Match(Context context, TransformContext transform)
 	{
 		if (!transform.Devirtualization)

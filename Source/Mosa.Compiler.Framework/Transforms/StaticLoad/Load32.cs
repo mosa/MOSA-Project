@@ -15,6 +15,8 @@ public sealed class Load32 : BaseTransform
 	{
 	}
 
+	public override int Priority => 100;
+
 	public override bool Match(Context context, TransformContext transform)
 	{
 		var operand1 = context.Operand1;

@@ -14,6 +14,8 @@ public sealed class GetVirtualFunctionPtr : BaseTransform
 	{
 	}
 
+	public override int Priority => -10;
+
 	public override bool Match(Context context, TransformContext transform)
 	{
 		return true;

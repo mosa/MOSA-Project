@@ -3,26 +3,26 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.Framework.Transforms.RuntimeCall;
+namespace Mosa.Platform.Framework.Transforms.Plug;
 
 /// <summary>
-/// Unbox
+/// CallVirtual
 /// </summary>
-public sealed class Unbox : BaseTransform
+public sealed class CallVirtual : BaseTransform
 {
-	public Unbox() : base(IRInstruction.Unbox, TransformType.Manual | TransformType.Transform)
+	public CallVirtual() : base(IRInstruction.CallVirtual, TransformType.Manual | TransformType.Transform)
 	{
 	}
 
-	public override int Priority => -10;
+	public override int Priority => 100;
 
 	public override bool Match(Context context, TransformContext transform)
 	{
-		return true;
+		return PlugHelper.IsPlugged(context, transform);
 	}
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		VMHelper.SetVMCall(transform, context, "Unbox", context.Result, context.GetOperands());
+		PlugHelper.Plug(context, transform);
 	}
 }
