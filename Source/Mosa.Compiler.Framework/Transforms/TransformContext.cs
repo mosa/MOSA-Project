@@ -554,11 +554,6 @@ public sealed class TransformContext
 
 	#endregion Linker Helpers
 
-	public void SplitLongOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
-	{
-		MethodCompiler.SplitLongOperand(operand, out operandLow, out operandHigh);
-	}
-
 	#region BitValue (experimental)
 
 	public BitValue GetBitValue(Operand operand)
@@ -572,6 +567,53 @@ public sealed class TransformContext
 	}
 
 	#endregion BitValue (experimental)
+
+	#region Floating Point Helpers
+
+	public Operand LoadValueR4(Context context, float value, BaseInstruction loadInstruction)
+	{
+		var label = CreateR4Label(value);
+
+		var v1 = AllocateVirtualRegisterR4();
+
+		context.InsertBefore().SetInstruction(loadInstruction, v1, label, Constant32_0);
+
+		return v1;
+	}
+
+	public Operand LoadValueR8(Context context, double value, BaseInstruction loadInstruction)
+	{
+		var label = CreateR8Label(value);
+
+		var v1 = AllocateVirtualRegisterR8();
+
+		context.InsertBefore().SetInstruction(loadInstruction, v1, label, Constant32_0);
+
+		return v1;
+	}
+
+	public Operand MoveConstantToFloatRegister(Context context, Operand operand, BaseInstruction instructionR4, BaseInstruction instructionR8)
+	{
+		if (!operand.IsConstant)
+			return operand;
+
+		var label = CreateFloatingPointLabel(operand);
+
+		var v1 = operand.IsR4 ? AllocateVirtualRegisterR4() : AllocateVirtualRegisterR8();
+
+		var instruction = operand.IsR4 ? instructionR4 : instructionR8;
+
+		context.InsertBefore().SetInstruction(instruction, v1, label, Constant32_0);
+
+		return v1;
+	}
+
+	#endregion Floating Point Helpers
+
+	public void SplitLongOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
+	{
+		MethodCompiler.SplitLongOperand(operand, out operandLow, out operandHigh);
+	}
 
 	public MosaMethod GetMethod(string fullName, string methodName)
 	{
@@ -642,46 +684,4 @@ public sealed class TransformContext
 			context.Operand1 = operand2;
 		}
 	}
-
-	#region Floating Point Helpers
-
-	public Operand LoadValueR4(Context context, float value, BaseInstruction loadInstruction)
-	{
-		var label = CreateR4Label(value);
-
-		var v1 = AllocateVirtualRegisterR4();
-
-		context.InsertBefore().SetInstruction(loadInstruction, v1, label, Constant32_0);
-
-		return v1;
-	}
-
-	public Operand LoadValueR8(Context context, double value, BaseInstruction loadInstruction)
-	{
-		var label = CreateR8Label(value);
-
-		var v1 = AllocateVirtualRegisterR8();
-
-		context.InsertBefore().SetInstruction(loadInstruction, v1, label, Constant32_0);
-
-		return v1;
-	}
-
-	public Operand MoveConstantToFloatRegister(Context context, Operand operand, BaseInstruction instructionR4, BaseInstruction instructionR8)
-	{
-		if (!operand.IsConstant)
-			return operand;
-
-		var label = CreateFloatingPointLabel(operand);
-
-		var v1 = operand.IsR4 ? AllocateVirtualRegisterR4() : AllocateVirtualRegisterR8();
-
-		var instruction = operand.IsR4 ? instructionR4 : instructionR8;
-
-		context.InsertBefore().SetInstruction(instruction, v1, label, Constant32_0);
-
-		return v1;
-	}
-
-	#endregion Floating Point Helpers
 }
