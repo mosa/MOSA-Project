@@ -43,10 +43,10 @@ namespace Mosa.Platform.Framework.Call
 			var interfaceSlotTableOffset = transform.CreateConstant32(transform.NativePointerSize * 11);
 
 			// Offset for InterfaceMethodTable in InterfaceSlotTable
-			var interfaceMethodTableOffset = transform.CreateConstant32(CallingConvention.CalculateInterfaceSlotOffset(transform, method));
+			var interfaceMethodTableOffset = transform.CreateConstant32(CallingConventionHelper.CalculateInterfaceSlotOffset(transform, method));
 
 			// Offset for Method Def in InterfaceMethodTable
-			var methodDefinitionOffset = transform.CreateConstant32(CallingConvention.CalculateInterfaceMethodTableOffset(transform, method));
+			var methodDefinitionOffset = transform.CreateConstant32(CallingConventionHelper.CalculateInterfaceMethodTableOffset(transform, method));
 
 			// Offset for Method pointer in MethodDef
 			var methodPointerOffset = transform.CreateConstant32(transform.NativePointerSize * 4);
@@ -74,7 +74,7 @@ namespace Mosa.Platform.Framework.Call
 			// Get the address of the method
 			context.AppendInstruction(transform.LoadInstruction, callTarget, methodDefinition, methodPointerOffset);
 
-			CallingConvention.MakeCall(transform, context, callTarget, result, operands, method);
+			CallingConventionHelper.MakeCall(transform, context, callTarget, result, operands, method);
 
 			transform.MethodScanner.InterfaceMethodInvoked(method, transform.Method);
 		}

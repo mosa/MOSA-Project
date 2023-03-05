@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Diagnostics;
-using Mosa.Compiler.MosaTypeSystem;
+using Mosa.Platform.Framework.VM;
 
 namespace Mosa.Compiler.Framework.Stages;
 
@@ -9,46 +8,11 @@ namespace Mosa.Compiler.Framework.Stages;
 /// New Object Stage
 /// </summary>
 /// <seealso cref="Mosa.Compiler.Framework.BaseCodeTransformationStage" />
-public sealed class NewObjectStage : BaseCodeTransformationStage
+public sealed class NewObjectStage : BaseTransformStage
 {
-	protected override void PopulateVisitationDictionary()
+	public NewObjectStage()
+		: base(true, false, 1)
 	{
-		AddVisitation(IRInstruction.NewObject, NewObject);
-		AddVisitation(IRInstruction.NewArray, NewArray);
-	}
-
-	private MosaMethod GetVMCallMethod(VmCall vmcall)
-	{
-		string methodName = vmcall.ToString();
-
-		var method = InternalRuntimeType.FindMethodByName(methodName) ?? PlatformInternalRuntimeType.FindMethodByName(methodName);
-
-		Debug.Assert(method != null, "Cannot find method: " + methodName);
-
-		MethodScanner.MethodInvoked(method, Method);
-
-		return method;
-	}
-
-	private void NewObject(Context context)
-	{
-		var method = GetVMCallMethod(VmCall.AllocateObject);
-		var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
-		var classType = context.MosaType;
-
-		context.SetInstruction(IRInstruction.CallStatic, context.Result, symbol, context.GetOperands());
-
-		MethodScanner.TypeAllocated(classType, Method);
-	}
-
-	private void NewArray(Context context)
-	{
-		var method = GetVMCallMethod(VmCall.AllocateArray);
-		var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
-		var arrayType = context.MosaType;
-
-		context.SetInstruction(IRInstruction.CallStatic, context.Result, symbol, context.GetOperands());
-
-		MethodScanner.TypeAllocated(arrayType, method);
+		AddTranformations(VMTransforms.NewList);
 	}
 }

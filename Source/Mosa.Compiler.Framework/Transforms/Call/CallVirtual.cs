@@ -37,7 +37,7 @@ namespace Mosa.Platform.Framework.Call
 			var typeDefOffset = transform.CreateConstant32(-transform.NativePointerSize);
 
 			// Offset to the method pointer on the MethodTable
-			var methodPointerOffset = transform.CreateConstant32(CallingConvention.CalculateMethodTableOffset(transform, method));
+			var methodPointerOffset = transform.CreateConstant32(CallingConventionHelper.CalculateMethodTableOffset(transform, method));
 
 			var typeDef = transform.AllocateVirtualRegister(transform.TypeSystem.BuiltIn.Pointer);
 			var callTarget = transform.AllocateVirtualRegister(transform.TypeSystem.BuiltIn.Pointer);
@@ -48,7 +48,7 @@ namespace Mosa.Platform.Framework.Call
 			// Get the address of the method
 			context.AppendInstruction(transform.LoadInstruction, callTarget, typeDef, methodPointerOffset);
 
-			CallingConvention.MakeCall(transform, context, callTarget, result, operands, method);
+			CallingConventionHelper.MakeCall(transform, context, callTarget, result, operands, method);
 
 			transform.MethodScanner.MethodInvoked(method, transform.Method);
 		}

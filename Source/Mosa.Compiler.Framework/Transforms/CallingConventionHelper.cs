@@ -3,12 +3,11 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Mosa.Compiler.Common;
-using Mosa.Compiler.Framework.Transforms;
 using Mosa.Compiler.MosaTypeSystem;
 
-namespace Mosa.Compiler.Framework
+namespace Mosa.Compiler.Framework.Transforms
 {
-	public static class CallingConvention
+	public static class CallingConventionHelper
 	{
 		public static uint CalculateInterfaceMethodTableOffset(TransformContext transform, MosaMethod invokeTarget)
 		{
@@ -41,7 +40,7 @@ namespace Mosa.Compiler.Framework
 		{
 			uint stackSize = 0;
 
-			for (int index = operands.Count - 1; index >= 0; index--)
+			for (var index = operands.Count - 1; index >= 0; index--)
 			{
 				var operand = operands[index];
 
@@ -58,10 +57,10 @@ namespace Mosa.Compiler.Framework
 
 			//var data = TypeLayout.__GetMethodInfo(method);
 
-			uint stackSize = CalculateParameterStackSize(transform, operands);
-			uint returnSize = CalculateReturnSize(transform, result);
+			var stackSize = CalculateParameterStackSize(transform, operands);
+			var returnSize = CalculateReturnSize(transform, result);
 
-			uint totalStack = returnSize + stackSize;
+			var totalStack = returnSize + stackSize;
 
 			ReserveStackSizeForCall(transform, context, totalStack);
 			PushOperands(transform, context, operands, totalStack);
@@ -200,7 +199,7 @@ namespace Mosa.Compiler.Framework
 
 		private static void PushOperands(TransformContext transform, Context context, List<Operand> operands, uint space)
 		{
-			for (int index = operands.Count - 1; index >= 0; index--)
+			for (var index = operands.Count - 1; index >= 0; index--)
 			{
 				var operand = operands[index];
 

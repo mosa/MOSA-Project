@@ -3,7 +3,6 @@
 using System;
 using System.Diagnostics;
 using Mosa.Compiler.Common;
-using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.Managers;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.Framework.Transforms;
@@ -15,7 +14,8 @@ namespace Mosa.Compiler.Framework.Stages;
 /// </summary>
 public sealed class BitTrackerStage : BaseMethodCompilerStage
 {
-	// This stage propagates bit and value range knowledge thru the various operations. This additional knowledge may enable additional optimizations opportunities.
+	// This stage propagates bit and value range knowledge thru the various operations.
+	// This additional knowledge may enable additional optimizations opportunities.
 
 	private const int MaxInstructions = 1024;
 

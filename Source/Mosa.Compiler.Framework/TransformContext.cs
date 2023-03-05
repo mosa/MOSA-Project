@@ -56,6 +56,8 @@ public sealed class TransformContext
 
 	public int Window { get; private set; }
 
+	public bool Devirtualization { get; private set; }
+
 	#endregion Properties
 
 	#region Properties - Indirect
@@ -202,6 +204,7 @@ public sealed class TransformContext
 		Constant64_32 = CreateConstant64(32);
 
 		LowerTo32 = Compiler.CompilerSettings.LongExpansion;
+		Devirtualization = Compiler.CompilerSettings.Devirtualization;
 
 		IsInSSAForm = MethodCompiler.IsInSSAForm;
 		AreCPURegistersAllocated = MethodCompiler.AreCPURegistersAllocated;
