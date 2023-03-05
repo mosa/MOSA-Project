@@ -43,6 +43,6 @@ public sealed class MulCarryOut64 : BaseTransform
 		context.AppendInstruction(IRInstruction.CallStatic, result, symbol, operand1, operand2, v2);
 		context.AppendInstruction(IRInstruction.LoadZeroExtend8x32, result2, v2, transform.Constant32_0);
 
-		transform.MethodCompiler.MethodScanner.MethodInvoked(method, transform.MethodCompiler.Method);
+		transform.MethodScanner.MethodInvoked(method, transform.Method);
 	}
 }

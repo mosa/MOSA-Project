@@ -68,6 +68,8 @@ public sealed class TransformContext
 
 	public MosaLinker Linker => Compiler.Linker;
 
+	public MethodScanner MethodScanner => MethodCompiler.MethodScanner;
+
 	#endregion Properties - Indirect
 
 	#region Properties - Registers
@@ -277,7 +279,7 @@ public sealed class TransformContext
 			TraceLog?.Log($"*** {transformation.Name}");
 
 		if (transformation.Log)
-			SpecialTraceLog?.Log($"{transformation.Name}\t{MethodCompiler.Method.FullName} at {context}");
+			SpecialTraceLog?.Log($"{transformation.Name}\t{Method.FullName} at {context}");
 
 		TraceLog?.Log($"BEFORE:\t{context}");
 	}
@@ -606,7 +608,7 @@ public sealed class TransformContext
 			// FUTURE: throw compiler exception
 		}
 
-		MethodCompiler.MethodScanner.MethodInvoked(method, MethodCompiler.Method);
+		MethodScanner.MethodInvoked(method, Method);
 	}
 
 	public void MoveConstantRight(Context context) // static

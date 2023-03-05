@@ -50,7 +50,7 @@ namespace Mosa.Platform.Framework.Call
 
 			CallingConvention.MakeCall(transform, context, callTarget, result, operands, method);
 
-			transform.MethodCompiler.MethodScanner.MethodInvoked(method, transform.Method);
+			transform.MethodScanner.MethodInvoked(method, transform.Method);
 		}
 	}
 }

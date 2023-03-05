@@ -12,7 +12,7 @@ namespace Mosa.Compiler.Framework
 	{
 		public static uint CalculateInterfaceMethodTableOffset(TransformContext transform, MosaMethod invokeTarget)
 		{
-			var slot = transform.MethodCompiler.TypeLayout.GetMethodSlot(invokeTarget);
+			var slot = transform.TypeLayout.GetMethodSlot(invokeTarget);
 
 			// Skip the first two entries (TypeDef and Count)
 			slot += 2;
@@ -32,7 +32,7 @@ namespace Mosa.Compiler.Framework
 
 		public static uint CalculateMethodTableOffset(TransformContext transform, MosaMethod invokeTarget)
 		{
-			var slot = transform.MethodCompiler.TypeLayout.GetMethodSlot(invokeTarget);
+			var slot = transform.TypeLayout.GetMethodSlot(invokeTarget);
 
 			return transform.NativePointerSize * (slot + 14); // 14 is the offset into the TypeDef to the start of the MethodTable
 		}
@@ -75,7 +75,7 @@ namespace Mosa.Compiler.Framework
 
 		private static uint CalculateInterfaceSlot(TransformContext transform, MosaType interaceType)
 		{
-			return transform.MethodCompiler.TypeLayout.GetInterfaceSlot(interaceType);
+			return transform.TypeLayout.GetInterfaceSlot(interaceType);
 		}
 
 		private static uint CalculateReturnSize(TransformContext transform, Operand result)
@@ -87,7 +87,7 @@ namespace Mosa.Compiler.Framework
 
 			if (!MosaTypeLayout.CanFitInRegister(returnType))
 			{
-				return Alignment.AlignUp(transform.MethodCompiler.TypeLayout.GetTypeSize(returnType), transform.Architecture.NativeAlignment);
+				return Alignment.AlignUp(transform.TypeLayout.GetTypeSize(returnType), transform.Architecture.NativeAlignment);
 			}
 
 			return 0;

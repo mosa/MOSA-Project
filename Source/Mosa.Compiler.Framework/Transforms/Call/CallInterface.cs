@@ -76,7 +76,7 @@ namespace Mosa.Platform.Framework.Call
 
 			CallingConvention.MakeCall(transform, context, callTarget, result, operands, method);
 
-			transform.MethodCompiler.MethodScanner.InterfaceMethodInvoked(method, transform.Method);
+			transform.MethodScanner.InterfaceMethodInvoked(method, transform.Method);
 		}
 	}
 }
