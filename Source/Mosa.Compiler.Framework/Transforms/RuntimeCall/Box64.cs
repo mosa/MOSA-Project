@@ -23,6 +23,6 @@ public sealed class Box64 : BaseTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		VMHelper.SetVMCall(transform, context, "Box64", context.Result, context.GetOperands());
+		VMTransformHelper.SetVMCall(transform, context, "Box64", context.Result, context.GetOperands());
 	}
 }

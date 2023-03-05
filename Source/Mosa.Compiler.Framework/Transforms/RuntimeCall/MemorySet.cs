@@ -23,6 +23,6 @@ public sealed class MemorySet : BaseTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		VMHelper.SetVMCall(transform, context, "MemorySet", context.Result, context.GetOperands());
+		VMTransformHelper.SetVMCall(transform, context, "MemorySet", context.Result, context.GetOperands());
 	}
 }

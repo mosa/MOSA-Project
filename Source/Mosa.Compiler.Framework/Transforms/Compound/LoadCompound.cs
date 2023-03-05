@@ -23,6 +23,6 @@ public sealed class LoadCompound : BaseTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		CompoundHelper.Copy(transform, context, context.Result.Type, transform.StackFrame, context.Result, context.Operand1, context.Operand2);
+		CompoundTransformHelper.Copy(transform, context, context.Result.Type, transform.StackFrame, context.Result, context.Operand1, context.Operand2);
 	}
 }

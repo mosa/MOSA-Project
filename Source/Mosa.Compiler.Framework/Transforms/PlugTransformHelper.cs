@@ -2,7 +2,7 @@
 
 namespace Mosa.Compiler.Framework.Transforms
 {
-	public static class PlugHelper
+	public static class PlugTransformHelper
 	{
 		public static bool IsPlugged(Context context, TransformContext transform)
 		{

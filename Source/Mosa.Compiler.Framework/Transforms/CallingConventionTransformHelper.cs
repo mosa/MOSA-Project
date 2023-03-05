@@ -7,7 +7,7 @@ using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.Transforms
 {
-	public static class CallingConventionHelper
+	public static class CallingConventionTransformHelper
 	{
 		public static uint CalculateInterfaceMethodTableOffset(TransformContext transform, MosaMethod invokeTarget)
 		{

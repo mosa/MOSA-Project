@@ -23,7 +23,7 @@ public sealed class NewArray : BaseTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		var method = VMHelper.GetVMCallMethod(transform, "AllocateArray");
+		var method = VMTransformHelper.GetVMCallMethod(transform, "AllocateArray");
 		var symbol = Operand.CreateSymbolFromMethod(method, transform.TypeSystem);
 		var arrayType = context.MosaType;
 

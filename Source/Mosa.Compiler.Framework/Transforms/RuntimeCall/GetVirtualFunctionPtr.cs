@@ -23,6 +23,6 @@ public sealed class GetVirtualFunctionPtr : BaseTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		VMHelper.SetVMCall(transform, context, "GetVirtualFunctionPtr", context.Result, context.GetOperands());
+		VMTransformHelper.SetVMCall(transform, context, "GetVirtualFunctionPtr", context.Result, context.GetOperands());
 	}
 }

@@ -23,6 +23,6 @@ public sealed class UnboxAny : BaseTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		VMHelper.SetVMCall(transform, context, "UnboxAny", context.Result, context.GetOperands());
+		VMTransformHelper.SetVMCall(transform, context, "UnboxAny", context.Result, context.GetOperands());
 	}
 }

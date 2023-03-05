@@ -6,7 +6,7 @@ using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.Transforms
 {
-	public static class VMHelper
+	public static class VMTransformHelper
 	{
 		public static MosaMethod GetVMCallMethod(TransformContext transform, string vmcall)
 		{

@@ -32,7 +32,7 @@ namespace Mosa.Platform.Framework.Call
 			operands.RemoveAt(0);
 			context.Empty();
 
-			CallingConventionHelper.MakeCall(transform, context, call, result, operands, method);
+			CallingConventionTransformHelper.MakeCall(transform, context, call, result, operands, method);
 
 			transform.MethodScanner.MethodDirectInvoked(call.Method, transform.Method);
 		}

@@ -23,6 +23,6 @@ public sealed class Box32 : BaseTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		VMHelper.SetVMCall(transform, context, "Box32", context.Result, context.GetOperands());
+		VMTransformHelper.SetVMCall(transform, context, "Box32", context.Result, context.GetOperands());
 	}
 }

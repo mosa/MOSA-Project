@@ -23,6 +23,6 @@ public sealed class Rethrow : BaseTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		VMHelper.SetVMCall(transform, context, "Rethrow", context.Result, context.GetOperands());
+		VMTransformHelper.SetVMCall(transform, context, "Rethrow", context.Result, context.GetOperands());
 	}
 }

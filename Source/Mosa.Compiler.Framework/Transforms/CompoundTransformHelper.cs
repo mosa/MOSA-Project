@@ -5,7 +5,7 @@ using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.Transforms
 {
-	public static class CompoundHelper
+	public static class CompoundTransformHelper
 	{
 		public static void Copy(TransformContext transform, Context context, MosaType type, Operand destinationBase, Operand destination, Operand sourceBase, Operand source)
 		{

@@ -23,6 +23,6 @@ public sealed class BoxR4 : BaseTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		VMHelper.SetVMCall(transform, context, "BoxR4", context.Result, context.GetOperands());
+		VMTransformHelper.SetVMCall(transform, context, "BoxR4", context.Result, context.GetOperands());
 	}
 }

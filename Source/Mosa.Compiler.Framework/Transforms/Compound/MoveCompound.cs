@@ -23,6 +23,6 @@ public sealed class MoveCompound : BaseTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		CompoundHelper.Copy(transform, context, context.Result.Type, transform.StackFrame, context.Result, transform.StackFrame, context.Operand1);
+		CompoundTransformHelper.Copy(transform, context, context.Result.Type, transform.StackFrame, context.Result, transform.StackFrame, context.Operand1);
 	}
 }

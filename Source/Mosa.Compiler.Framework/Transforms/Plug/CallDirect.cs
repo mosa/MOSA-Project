@@ -18,11 +18,11 @@ public sealed class CallDirect : BaseTransform
 
 	public override bool Match(Context context, TransformContext transform)
 	{
-		return PlugHelper.IsPlugged(context, transform);
+		return PlugTransformHelper.IsPlugged(context, transform);
 	}
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		PlugHelper.Plug(context, transform);
+		PlugTransformHelper.Plug(context, transform);
 	}
 }

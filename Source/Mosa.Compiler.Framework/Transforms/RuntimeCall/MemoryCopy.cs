@@ -23,6 +23,6 @@ public sealed class MemoryCopy : BaseTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		VMHelper.SetVMCall(transform, context, "MemoryCopy", context.Result, context.GetOperands());
+		VMTransformHelper.SetVMCall(transform, context, "MemoryCopy", context.Result, context.GetOperands());
 	}
 }
