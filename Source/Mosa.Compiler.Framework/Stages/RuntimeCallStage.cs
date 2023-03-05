@@ -13,6 +13,6 @@ public sealed class RuntimeCallStage : BaseTransformStage
 	public RuntimeCallStage()
 		: base(true, false, 1)
 	{
-		AddTranformations(RuntimeCallTransforms.List);
+		AddTranformations(StaticLoadTransforms.List);
 	}
 }
