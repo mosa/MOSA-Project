@@ -8,7 +8,7 @@ namespace Mosa.Platform.Framework.Transforms.RuntimeCall;
 /// <summary>
 /// Transformations
 /// </summary>
-public static class StaticLoadTransforms
+public static class RuntimeCallTransforms
 {
 	public static readonly List<BaseTransform> List = new List<BaseTransform>
 	{

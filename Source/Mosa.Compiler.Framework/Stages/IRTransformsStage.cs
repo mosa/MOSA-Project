@@ -5,11 +5,11 @@ using Mosa.Compiler.Framework.Transforms.IR;
 namespace Mosa.Compiler.Framework.Stages;
 
 /// <summary>
-///	Optimization Stage
+///	IR Transform Stage
 /// </summary>
-public class IRStage : BaseTransformStage
+public class IRTransformsStage : BaseTransformStage
 {
-	public IRStage()
+	public IRTransformsStage()
 		: base(true, false)
 	{
 		AddTranformations(IRTransforms.List);

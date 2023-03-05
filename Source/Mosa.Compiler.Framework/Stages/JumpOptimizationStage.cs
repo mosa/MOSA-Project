@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Stages;
 /// <summary>
 /// This stages removes jumps to the next instruction
 /// </summary>
-/// <seealso cref="Mosa.Compiler.Framework.BaseCodeTransformationStage" />
+/// <seealso cref="Mosa.Compiler.Framework.BaseMethodCompilerStage" />
 public sealed class JumpOptimizationStage : BaseMethodCompilerStage
 {
 	protected override void Run()
