@@ -1,7 +1,7 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.Framework.VM;
+namespace Mosa.Platform.Framework.Transforms.VM;
 
 /// <summary>
 /// NewArray
@@ -19,7 +19,7 @@ public sealed class NewArray : BaseTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		var method = VMHelper.GetVMCallMethod(transform, VmCall.AllocateArray);
+		var method = VMHelper.GetVMCallMethod(transform, "AllocateArray");
 		var symbol = Operand.CreateSymbolFromMethod(method, transform.TypeSystem);
 		var arrayType = context.MosaType;
 

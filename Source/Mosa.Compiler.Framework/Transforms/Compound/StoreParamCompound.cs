@@ -1,7 +1,7 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.Framework.Compound;
+namespace Mosa.Platform.Framework.Transforms.Compound;
 
 /// <summary>
 /// StoreParamCompound

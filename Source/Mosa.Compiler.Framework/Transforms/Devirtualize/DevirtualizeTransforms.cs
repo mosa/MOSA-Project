@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Mosa.Compiler.Framework.Transforms;
 using Mosa.Compiler.Framework.Transforms.Devirtualize;
 
-namespace Mosa.Platform.Framework.Devirtualize;
+namespace Mosa.Platform.Framework.Transforms.Devirtualize;
 
 /// <summary>
 /// Transformations

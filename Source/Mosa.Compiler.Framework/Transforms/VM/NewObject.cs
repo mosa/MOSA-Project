@@ -1,7 +1,7 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.Framework.VM;
+namespace Mosa.Platform.Framework.Transforms.VM;
 
 /// <summary>
 /// NewObject
@@ -19,7 +19,7 @@ public sealed class NewObject : BaseTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		var method = VMHelper.GetVMCallMethod(transform, VmCall.AllocateObject);
+		var method = VMHelper.GetVMCallMethod(transform, "AllocateObject");
 		var symbol = Operand.CreateSymbolFromMethod(method, transform.TypeSystem);
 		var classType = context.MosaType;
 
