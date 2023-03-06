@@ -24,7 +24,7 @@ public sealed class ConvertR8ToR4 : BaseIRTransform
 		var result = context.Result;
 		var operand1 = context.Operand1;
 
-		operand1 = X86TransformHelper.MoveConstantToFloatRegister(transform, context, operand1);
+		operand1 = MoveConstantToFloatRegister(transform, context, operand1);
 
 		context.SetInstruction(X86.Cvtsd2ss, result, operand1);
 	}

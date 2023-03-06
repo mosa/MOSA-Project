@@ -8,19 +8,14 @@ namespace Mosa.Platform.x64.Transforms.AddressMode;
 /// <summary>
 /// Rcr64
 /// </summary>
-public sealed class Rcr64 : BaseTransform
+public sealed class Rcr64 : BaseAddressModeTransform
 {
 	public Rcr64() : base(X64.Rcr64, TransformType.Manual | TransformType.Transform)
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
-	{
-		return !X64TransformHelper.IsAddressMode(context);
-	}
-
 	public override void Transform(Context context, TransformContext transform)
 	{
-		X64TransformHelper.AddressModeConversion(context, X64.Mov64);
+		AddressModeConversion(context, X64.Mov64);
 	}
 }

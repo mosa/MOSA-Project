@@ -8,19 +8,14 @@ namespace Mosa.Platform.x64.Transforms.AddressMode;
 /// <summary>
 /// Shl32
 /// </summary>
-public sealed class Shl32 : BaseTransform
+public sealed class Shl32 : BaseAddressModeTransform
 {
 	public Shl32() : base(X64.Shl32, TransformType.Manual | TransformType.Transform)
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
-	{
-		return !X64TransformHelper.IsAddressMode(context);
-	}
-
 	public override void Transform(Context context, TransformContext transform)
 	{
-		X64TransformHelper.AddressModeConversion(context, X64.Mov32);
+		AddressModeConversion(context, X64.Mov32);
 	}
 }

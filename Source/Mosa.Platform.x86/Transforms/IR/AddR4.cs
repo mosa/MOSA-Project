@@ -25,8 +25,8 @@ public sealed class AddR4 : BaseIRTransform
 		var operand1 = context.Operand1;
 		var operand2 = context.Operand2;
 
-		operand1 = X86TransformHelper.MoveConstantToFloatRegister(transform, context, operand1);
-		operand2 = X86TransformHelper.MoveConstantToFloatRegister(transform, context, operand2);
+		operand1 = MoveConstantToFloatRegister(transform, context, operand1);
+		operand2 = MoveConstantToFloatRegister(transform, context, operand2);
 
 		context.SetInstruction(X86.Addss, result, operand1, operand2);
 	}

@@ -24,7 +24,7 @@ public sealed class StoreParamR8 : BaseIRTransform
 		var operand1 = context.Operand1;
 		var operand2 = context.Operand2;
 
-		operand2 = X86TransformHelper.MoveConstantToFloatRegister(transform, context, operand2);
+		operand2 = MoveConstantToFloatRegister(transform, context, operand2);
 
 		context.SetInstruction(X86.MovsdStore, null, transform.StackFrame, operand1, operand2);
 	}

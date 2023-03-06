@@ -8,19 +8,14 @@ namespace Mosa.Platform.x64.Transforms.AddressMode;
 /// <summary>
 /// Bts32
 /// </summary>
-public sealed class Bts32 : BaseTransform
+public sealed class Bts32 : BaseAddressModeTransform
 {
 	public Bts32() : base(X64.Bts32, TransformType.Manual | TransformType.Transform)
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
-	{
-		return !X64TransformHelper.IsAddressMode(context);
-	}
-
 	public override void Transform(Context context, TransformContext transform)
 	{
-		X64TransformHelper.AddressModeConversion(context, X64.Mov32);
+		AddressModeConversion(context, X64.Mov32);
 	}
 }

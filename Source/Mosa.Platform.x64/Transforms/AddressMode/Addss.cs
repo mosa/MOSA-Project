@@ -8,19 +8,14 @@ namespace Mosa.Platform.x64.Transforms.AddressMode;
 /// <summary>
 /// Addss
 /// </summary>
-public sealed class Addss : BaseTransform
+public sealed class Addss : BaseAddressModeTransform
 {
 	public Addss() : base(X64.Addss, TransformType.Manual | TransformType.Transform)
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
-	{
-		return !X64TransformHelper.IsAddressMode(context);
-	}
-
 	public override void Transform(Context context, TransformContext transform)
 	{
-		X64TransformHelper.AddressModeConversionCummulative(context, X64.Movss);
+		AddressModeConversionCummulative(context, X64.Movss);
 	}
 }
