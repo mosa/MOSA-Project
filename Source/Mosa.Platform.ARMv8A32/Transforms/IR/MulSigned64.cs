@@ -8,15 +8,10 @@ namespace Mosa.Platform.ARMv8A32.Transforms.IR;
 /// <summary>
 /// MulSigned64
 /// </summary>
-public sealed class MulSigned64 : BaseTransform
+public sealed class MulSigned64 : BaseIRTransform
 {
 	public MulSigned64() : base(IRInstruction.MulSigned64, TransformType.Manual | TransformType.Transform)
 	{
-	}
-
-	public override bool Match(Context context, TransformContext transform)
-	{
-		return true;
 	}
 
 	public override void Transform(Context context, TransformContext transform)
@@ -28,10 +23,10 @@ public sealed class MulSigned64 : BaseTransform
 		var v1 = transform.AllocateVirtualRegister32();
 		var v2 = transform.AllocateVirtualRegister32();
 
-		op1L = ARMv8A32TransformHelper.MoveConstantToRegister(transform, context, op1L);
-		op1H = ARMv8A32TransformHelper.MoveConstantToRegister(transform, context, op1H);
-		op2L = ARMv8A32TransformHelper.MoveConstantToRegister(transform, context, op2L);
-		op2H = ARMv8A32TransformHelper.MoveConstantToRegister(transform, context, op2H);
+		op1L = MoveConstantToRegister(transform, context, op1L);
+		op1H = MoveConstantToRegister(transform, context, op1H);
+		op2L = MoveConstantToRegister(transform, context, op2L);
+		op2H = MoveConstantToRegister(transform, context, op2H);
 
 		//umull		low, v1 <= op1l, op2l
 		//mla		v2, <= op1l, op2h, v1

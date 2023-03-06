@@ -9,15 +9,10 @@ namespace Mosa.Platform.ARMv8A32.Transforms.IR;
 /// <summary>
 /// LoadSignExtend16x32
 /// </summary>
-public sealed class LoadSignExtend16x32 : BaseTransform
+public sealed class LoadSignExtend16x32 : BaseIRTransform
 {
 	public LoadSignExtend16x32() : base(IRInstruction.LoadSignExtend16x32, TransformType.Manual | TransformType.Transform)
 	{
-	}
-
-	public override bool Match(Context context, TransformContext transform)
-	{
-		return true;
 	}
 
 	public override void Transform(Context context, TransformContext transform)
@@ -27,6 +22,6 @@ public sealed class LoadSignExtend16x32 : BaseTransform
 
 		transform.OrderLoadStoreOperands(context);
 
-		ARMv8A32TransformHelper.TransformLoad(transform, context, ARMv8A32.LdrS16, context.Result, transform.StackFrame, context.Operand1);
+		TransformLoad(transform, context, ARMv8A32.LdrS16, context.Result, transform.StackFrame, context.Operand1);
 	}
 }

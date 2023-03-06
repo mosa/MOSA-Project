@@ -14,11 +14,6 @@ public sealed class CompareR4 : BaseIRTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
-	{
-		return true;
-	}
-
 	public override void Transform(Context context, TransformContext transform)
 	{
 		//FloatCompare(context, X64.Ucomiss);

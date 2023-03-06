@@ -9,15 +9,10 @@ namespace Mosa.Platform.ARMv8A32.Transforms.IR;
 /// <summary>
 /// AddressOf
 /// </summary>
-public sealed class AddressOf : BaseTransform
+public sealed class AddressOf : BaseIRTransform
 {
 	public AddressOf() : base(IRInstruction.AddressOf, TransformType.Manual | TransformType.Transform)
 	{
-	}
-
-	public override bool Match(Context context, TransformContext transform)
-	{
-		return true;
 	}
 
 	public override void Transform(Context context, TransformContext transform)
@@ -27,7 +22,7 @@ public sealed class AddressOf : BaseTransform
 		var result = context.Result;
 		var operand1 = context.Operand1;
 
-		operand1 = ARMv8A32TransformHelper.MoveConstantToRegisterOrImmediate(transform, context, operand1);
+		operand1 = MoveConstantToRegisterOrImmediate(transform, context, operand1);
 
 		if (operand1.IsStaticField)
 		{
@@ -39,7 +34,7 @@ public sealed class AddressOf : BaseTransform
 		}
 		else if (context.Operand1.IsUnresolvedConstant)
 		{
-			var offset = ARMv8A32TransformHelper.MoveConstantToRegister(transform, context, operand1);
+			var offset = MoveConstantToRegister(transform, context, operand1);
 
 			context.SetInstruction(ARMv8A32.Add, result, transform.StackFrame, offset);
 		}
@@ -47,7 +42,7 @@ public sealed class AddressOf : BaseTransform
 		{
 			var offset = transform.CreateConstant32(context.Operand1.Offset);
 
-			offset = ARMv8A32TransformHelper.MoveConstantToRegisterOrImmediate(transform, context, offset);
+			offset = MoveConstantToRegisterOrImmediate(transform, context, offset);
 
 			context.SetInstruction(ARMv8A32.Add, result, transform.StackFrame, offset);
 		}

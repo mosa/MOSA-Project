@@ -8,15 +8,10 @@ namespace Mosa.Platform.ARMv8A32.Transforms.IR;
 /// <summary>
 /// CallDirect
 /// </summary>
-public sealed class CallDirect : BaseTransform
+public sealed class CallDirect : BaseIRTransform
 {
 	public CallDirect() : base(IRInstruction.CallDirect, TransformType.Manual | TransformType.Transform)
 	{
-	}
-
-	public override bool Match(Context context, TransformContext transform)
-	{
-		return true;
 	}
 
 	public override void Transform(Context context, TransformContext transform)
@@ -25,7 +20,7 @@ public sealed class CallDirect : BaseTransform
 
 		if (operand1.IsCPURegister || operand1.IsVirtualRegister || operand1.IsResolvedConstant)
 		{
-			operand1 = ARMv8A32TransformHelper.MoveConstantToRegister(transform, context, operand1);
+			operand1 = MoveConstantToRegister(transform, context, operand1);
 
 			context.SetInstruction(ARMv8A32.Add, transform.LinkRegister, transform.ProgramCounter, transform.Constant32_4);
 			context.AppendInstruction(ARMv8A32.Mov, transform.ProgramCounter, operand1);

@@ -14,11 +14,6 @@ public sealed class LoadParam32 : BaseIRTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
-	{
-		return true;
-	}
-
 	public override void Transform(Context context, TransformContext transform)
 	{
 		context.SetInstruction(X64.MovLoad32, context.Result, transform.StackFrame, context.Operand1);

@@ -14,11 +14,6 @@ public sealed class ZeroExtend8x32 : BaseIRTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
-	{
-		return true;
-	}
-
 	public override void Transform(Context context, TransformContext transform)
 	{
 		context.ReplaceInstruction(X64.Movzx8To32);

@@ -14,11 +14,6 @@ public sealed class ConvertI64ToR8 : BaseIRTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
-	{
-		return true;
-	}
-
 	public override void Transform(Context context, TransformContext transform)
 	{
 		context.SetInstruction(X64.Cvtsi2sd64, context.Result, context.Operand1);

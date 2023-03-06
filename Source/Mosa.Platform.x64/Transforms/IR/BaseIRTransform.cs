@@ -10,6 +10,15 @@ namespace Mosa.Platform.x64.Transforms.IR
 			: base(instruction, type, log)
 		{ }
 
+		#region Overrides
+
+		public override bool Match(Context context, TransformContext transform)
+		{
+			return true;
+		}
+
+		#endregion Overrides
+
 		#region Helpers
 
 		//

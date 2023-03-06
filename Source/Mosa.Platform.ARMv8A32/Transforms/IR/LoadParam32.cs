@@ -9,15 +9,10 @@ namespace Mosa.Platform.ARMv8A32.Transforms.IR;
 /// <summary>
 /// LoadParam32
 /// </summary>
-public sealed class LoadParam32 : BaseTransform
+public sealed class LoadParam32 : BaseIRTransform
 {
 	public LoadParam32() : base(IRInstruction.LoadParam32, TransformType.Manual | TransformType.Transform)
 	{
-	}
-
-	public override bool Match(Context context, TransformContext transform)
-	{
-		return true;
 	}
 
 	public override void Transform(Context context, TransformContext transform)
@@ -25,6 +20,6 @@ public sealed class LoadParam32 : BaseTransform
 		Debug.Assert(!context.Result.IsR4);
 		Debug.Assert(!context.Result.IsR8);
 
-		ARMv8A32TransformHelper.TransformLoad(transform, context, ARMv8A32.Ldr32, context.Result, transform.StackFrame, context.Operand1);
+		TransformLoad(transform, context, ARMv8A32.Ldr32, context.Result, transform.StackFrame, context.Operand1);
 	}
 }

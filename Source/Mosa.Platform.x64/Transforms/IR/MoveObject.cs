@@ -14,11 +14,6 @@ public sealed class MoveObject : BaseIRTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
-	{
-		return true;
-	}
-
 	public override void Transform(Context context, TransformContext transform)
 	{
 		context.ReplaceInstruction(X64.Mov32);

@@ -8,15 +8,10 @@ namespace Mosa.Platform.ARMv8A32.Transforms.IR;
 /// <summary>
 /// ShiftRight64
 /// </summary>
-public sealed class ShiftRight64 : BaseTransform
+public sealed class ShiftRight64 : BaseIRTransform
 {
 	public ShiftRight64() : base(IRInstruction.ShiftRight64, TransformType.Manual | TransformType.Transform)
 	{
-	}
-
-	public override bool Match(Context context, TransformContext transform)
-	{
-		return true;
 	}
 
 	public override void Transform(Context context, TransformContext transform)
@@ -42,9 +37,9 @@ public sealed class ShiftRight64 : BaseTransform
 		var v3 = transform.AllocateVirtualRegister32();
 		var v4 = transform.AllocateVirtualRegister32();
 
-		op1L = ARMv8A32TransformHelper.MoveConstantToRegister(transform, context, op1L);
-		op1H = ARMv8A32TransformHelper.MoveConstantToRegister(transform, context, op1H);
-		op2L = ARMv8A32TransformHelper.MoveConstantToRegister(transform, context, op2L);
+		op1L = MoveConstantToRegister(transform, context, op1L);
+		op1H = MoveConstantToRegister(transform, context, op1H);
+		op2L = MoveConstantToRegister(transform, context, op2L);
 
 		context.SetInstruction(ARMv8A32.Rsb, v1, op2L, transform.Constant32_32);
 		context.AppendInstruction(ARMv8A32.Sub, StatusRegister.Set, v2, op2L, transform.Constant32_32);

@@ -8,15 +8,10 @@ namespace Mosa.Platform.ARMv8A32.Transforms.IR;
 /// <summary>
 /// AddCarryOut32
 /// </summary>
-public sealed class AddCarryOut32 : BaseTransform
+public sealed class AddCarryOut32 : BaseIRTransform
 {
 	public AddCarryOut32() : base(IRInstruction.AddCarryOut32, TransformType.Manual | TransformType.Transform)
 	{
-	}
-
-	public override bool Match(Context context, TransformContext transform)
-	{
-		return true;
 	}
 
 	public override void Transform(Context context, TransformContext transform)
@@ -26,8 +21,8 @@ public sealed class AddCarryOut32 : BaseTransform
 		var operand1 = context.Operand1;
 		var operand2 = context.Operand2;
 
-		operand1 = ARMv8A32TransformHelper.MoveConstantToRegister(transform, context, operand1);
-		operand2 = ARMv8A32TransformHelper.MoveConstantToRegisterOrImmediate(transform, context, operand2);
+		operand1 = MoveConstantToRegister(transform, context, operand1);
+		operand2 = MoveConstantToRegisterOrImmediate(transform, context, operand2);
 
 		context.SetInstruction(ARMv8A32.Add, StatusRegister.Set, result, operand1, operand2);
 		context.AppendInstruction(ARMv8A32.Mov, ConditionCode.Carry, result2, transform.Constant32_1);

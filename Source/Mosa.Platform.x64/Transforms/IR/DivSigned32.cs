@@ -14,11 +14,6 @@ public sealed class DivSigned32 : BaseIRTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
-	{
-		return true;
-	}
-
 	public override void Transform(Context context, TransformContext transform)
 	{
 		var operand1 = context.Operand1;

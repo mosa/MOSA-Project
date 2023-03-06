@@ -8,21 +8,16 @@ namespace Mosa.Platform.ARMv8A32.Transforms.IR;
 /// <summary>
 /// And32
 /// </summary>
-public sealed class And32 : BaseTransform
+public sealed class And32 : BaseIRTransform
 {
 	public And32() : base(IRInstruction.And32, TransformType.Manual | TransformType.Transform)
 	{
-	}
-
-	public override bool Match(Context context, TransformContext transform)
-	{
-		return true;
 	}
 
 	public override void Transform(Context context, TransformContext transform)
 	{
 		transform.MoveConstantRight(context);
 
-		ARMv8A32TransformHelper.Translate(transform, context, ARMv8A32.And, true);
+		Translate(transform, context, ARMv8A32.And, true);
 	}
 }

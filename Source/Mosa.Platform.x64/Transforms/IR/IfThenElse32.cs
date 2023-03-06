@@ -14,11 +14,6 @@ public sealed class IfThenElse32 : BaseIRTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
-	{
-		return true;
-	}
-
 	public override void Transform(Context context, TransformContext transform)
 	{
 		var result = context.Result;

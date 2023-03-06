@@ -8,15 +8,10 @@ namespace Mosa.Platform.ARMv8A32.Transforms.IR;
 /// <summary>
 /// Load64
 /// </summary>
-public sealed class Load64 : BaseTransform
+public sealed class Load64 : BaseIRTransform
 {
 	public Load64() : base(IRInstruction.Load64, TransformType.Manual | TransformType.Transform)
 	{
-	}
-
-	public override bool Match(Context context, TransformContext transform)
-	{
-		return true;
 	}
 
 	public override void Transform(Context context, TransformContext transform)
@@ -26,8 +21,8 @@ public sealed class Load64 : BaseTransform
 		var address = context.Operand1;
 		var offset = context.Operand2;
 
-		address = ARMv8A32TransformHelper.MoveConstantToRegister(transform, context, address);
-		offset = ARMv8A32TransformHelper.MoveConstantToRegisterOrImmediate(transform, context, offset);
+		address = MoveConstantToRegister(transform, context, address);
+		offset = MoveConstantToRegisterOrImmediate(transform, context, offset);
 
 		var v1 = transform.AllocateVirtualRegister32();
 		var v2 = transform.AllocateVirtualRegister32();

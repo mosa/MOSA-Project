@@ -14,11 +14,6 @@ public sealed class StoreParam8 : BaseIRTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
-	{
-		return true;
-	}
-
 	public override void Transform(Context context, TransformContext transform)
 	{
 		context.SetInstruction(X64.MovStore8, null, transform.StackFrame, context.Operand1, context.Operand2);

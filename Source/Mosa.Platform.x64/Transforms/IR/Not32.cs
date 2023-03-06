@@ -14,11 +14,6 @@ public sealed class Not32 : BaseIRTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
-	{
-		return true;
-	}
-
 	public override void Transform(Context context, TransformContext transform)
 	{
 		context.SetInstruction(X64.Not32, context.Result, context.Operand1);

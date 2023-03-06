@@ -14,11 +14,6 @@ public sealed class LoadParamSignExtend16x64 : BaseIRTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
-	{
-		return true;
-	}
-
 	public override void Transform(Context context, TransformContext transform)
 	{
 		context.SetInstruction(X64.MovsxLoad16, context.Result, transform.StackFrame, context.Operand1);

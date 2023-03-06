@@ -15,11 +15,6 @@ public sealed class ConvertR8ToR4 : BaseIRTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
-	{
-		return true;
-	}
-
 	public override void Transform(Context context, TransformContext transform)
 	{
 		Debug.Assert(context.Result.IsFloatingPoint && !context.Result.IsFloatingPoint);

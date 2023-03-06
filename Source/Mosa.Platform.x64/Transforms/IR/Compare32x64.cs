@@ -14,11 +14,6 @@ public sealed class Compare32x64 : BaseIRTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
-	{
-		return true;
-	}
-
 	public override void Transform(Context context, TransformContext transform)
 	{
 		var condition = context.ConditionCode;
