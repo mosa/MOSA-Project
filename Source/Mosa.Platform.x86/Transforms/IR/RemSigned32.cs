@@ -8,7 +8,7 @@ namespace Mosa.Platform.x86.Transforms.IR;
 /// <summary>
 /// RemSigned32
 /// </summary>
-public sealed class RemSigned32 : BaseTransform
+public sealed class RemSigned32 : BaseIRTransform
 {
 	public RemSigned32() : base(IRInstruction.RemSigned32, TransformType.Manual | TransformType.Transform)
 	{

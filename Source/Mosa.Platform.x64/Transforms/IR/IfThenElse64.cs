@@ -8,7 +8,7 @@ namespace Mosa.Platform.x64.Transforms.IR;
 /// <summary>
 /// IfThenElse64
 /// </summary>
-public sealed class IfThenElse64 : BaseTransform
+public sealed class IfThenElse64 : BaseIRTransform
 {
 	public IfThenElse64() : base(IRInstruction.IfThenElse64, TransformType.Manual | TransformType.Transform)
 	{

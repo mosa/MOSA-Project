@@ -8,7 +8,7 @@ namespace Mosa.Platform.x64.Transforms.IR;
 /// <summary>
 /// Truncate64x32
 /// </summary>
-public sealed class Truncate64x32 : BaseTransform
+public sealed class Truncate64x32 : BaseIRTransform
 {
 	public Truncate64x32() : base(IRInstruction.Truncate64x32, TransformType.Manual | TransformType.Transform)
 	{

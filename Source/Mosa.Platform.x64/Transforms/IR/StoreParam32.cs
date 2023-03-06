@@ -8,7 +8,7 @@ namespace Mosa.Platform.x64.Transforms.IR;
 /// <summary>
 /// StoreParam32
 /// </summary>
-public sealed class StoreParam32 : BaseTransform
+public sealed class StoreParam32 : BaseIRTransform
 {
 	public StoreParam32() : base(IRInstruction.StoreParam32, TransformType.Manual | TransformType.Transform)
 	{

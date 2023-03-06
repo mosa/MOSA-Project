@@ -8,7 +8,7 @@ namespace Mosa.Platform.x64.Transforms.IR;
 /// <summary>
 /// And64
 /// </summary>
-public sealed class And64 : BaseTransform
+public sealed class And64 : BaseIRTransform
 {
 	public And64() : base(IRInstruction.And64, TransformType.Manual | TransformType.Transform)
 	{

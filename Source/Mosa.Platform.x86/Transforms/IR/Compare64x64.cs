@@ -9,7 +9,7 @@ namespace Mosa.Platform.x86.Transforms.IR;
 /// <summary>
 /// Compare64x64
 /// </summary>
-public sealed class Compare64x64 : BaseTransform
+public sealed class Compare64x64 : BaseIRTransform
 {
 	public Compare64x64() : base(IRInstruction.Compare64x64, TransformType.Manual | TransformType.Transform)
 	{

@@ -8,7 +8,7 @@ namespace Mosa.Platform.x86.Transforms.IR;
 /// <summary>
 /// Store64
 /// </summary>
-public sealed class Store64 : BaseTransform
+public sealed class Store64 : BaseIRTransform
 {
 	public Store64() : base(IRInstruction.Store64, TransformType.Manual | TransformType.Transform)
 	{

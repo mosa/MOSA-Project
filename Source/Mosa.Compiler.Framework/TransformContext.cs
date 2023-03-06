@@ -8,7 +8,7 @@ using Mosa.Compiler.Framework.Managers;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 
-namespace Mosa.Compiler.Framework.Transforms;
+namespace Mosa.Compiler.Framework;
 
 public sealed class TransformContext
 {

@@ -8,7 +8,7 @@ namespace Mosa.Platform.x64.Transforms.IR;
 /// <summary>
 /// RemUnsigned64
 /// </summary>
-public sealed class RemUnsigned64 : BaseTransform
+public sealed class RemUnsigned64 : BaseIRTransform
 {
 	public RemUnsigned64() : base(IRInstruction.RemUnsigned64, TransformType.Manual | TransformType.Transform)
 	{

@@ -9,7 +9,7 @@ namespace Mosa.Platform.x64.Transforms.IR;
 /// <summary>
 /// ConvertR8ToR4
 /// </summary>
-public sealed class ConvertR8ToR4 : BaseTransform
+public sealed class ConvertR8ToR4 : BaseIRTransform
 {
 	public ConvertR8ToR4() : base(IRInstruction.ConvertR8ToR4, TransformType.Manual | TransformType.Transform)
 	{
@@ -27,7 +27,7 @@ public sealed class ConvertR8ToR4 : BaseTransform
 		var result = context.Result;
 		var operand1 = context.Operand1;
 
-		operand1 = X64TransformHelper.MoveConstantToFloatRegister(transform, context, operand1);
+		operand1 = MoveConstantToFloatRegister(transform, context, operand1);
 
 		context.SetInstruction(X64.Cvtsd2ss, result, operand1);
 	}

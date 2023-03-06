@@ -8,7 +8,7 @@ namespace Mosa.Platform.x86.Transforms.IR;
 /// <summary>
 /// ShiftLeft32
 /// </summary>
-public sealed class ShiftLeft32 : BaseTransform
+public sealed class ShiftLeft32 : BaseIRTransform
 {
 	public ShiftLeft32() : base(IRInstruction.ShiftLeft32, TransformType.Manual | TransformType.Transform)
 	{

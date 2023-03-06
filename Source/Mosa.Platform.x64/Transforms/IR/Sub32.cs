@@ -8,7 +8,7 @@ namespace Mosa.Platform.x64.Transforms.IR;
 /// <summary>
 /// Sub32
 /// </summary>
-public sealed class Sub32 : BaseTransform
+public sealed class Sub32 : BaseIRTransform
 {
 	public Sub32() : base(IRInstruction.Sub32, TransformType.Manual | TransformType.Transform)
 	{

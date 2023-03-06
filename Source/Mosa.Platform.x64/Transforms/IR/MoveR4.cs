@@ -8,7 +8,7 @@ namespace Mosa.Platform.x64.Transforms.IR;
 /// <summary>
 /// MoveR4
 /// </summary>
-public sealed class MoveR4 : BaseTransform
+public sealed class MoveR4 : BaseIRTransform
 {
 	public MoveR4() : base(IRInstruction.MoveR4, TransformType.Manual | TransformType.Transform)
 	{
@@ -24,7 +24,7 @@ public sealed class MoveR4 : BaseTransform
 		var result = context.Result;
 		var operand1 = context.Operand1;
 
-		operand1 = X64TransformHelper.MoveConstantToFloatRegister(transform, context, operand1);
+		operand1 = MoveConstantToFloatRegister(transform, context, operand1);
 
 		context.SetInstruction(X64.Movss, result, operand1);
 	}

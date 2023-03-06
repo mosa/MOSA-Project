@@ -8,7 +8,7 @@ namespace Mosa.Platform.x64.Transforms.IR;
 /// <summary>
 /// Move32
 /// </summary>
-public sealed class Move32 : BaseTransform
+public sealed class Move32 : BaseIRTransform
 {
 	public Move32() : base(IRInstruction.Move32, TransformType.Manual | TransformType.Transform)
 	{

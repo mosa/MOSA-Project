@@ -8,7 +8,7 @@ namespace Mosa.Platform.x64.Transforms.IR;
 /// <summary>
 /// ZeroExtend16x32
 /// </summary>
-public sealed class ZeroExtend16x32 : BaseTransform
+public sealed class ZeroExtend16x32 : BaseIRTransform
 {
 	public ZeroExtend16x32() : base(IRInstruction.ZeroExtend16x32, TransformType.Manual | TransformType.Transform)
 	{

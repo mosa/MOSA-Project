@@ -9,7 +9,7 @@ namespace Mosa.Platform.x86.Transforms.IR;
 /// <summary>
 /// LoadObject
 /// </summary>
-public sealed class LoadObject : BaseTransform
+public sealed class LoadObject : BaseIRTransform
 {
 	public LoadObject() : base(IRInstruction.LoadObject, TransformType.Manual | TransformType.Transform)
 	{

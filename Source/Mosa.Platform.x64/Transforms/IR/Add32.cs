@@ -8,7 +8,7 @@ namespace Mosa.Platform.x64.Transforms.IR;
 /// <summary>
 /// Add32
 /// </summary>
-public sealed class Add32 : BaseTransform
+public sealed class Add32 : BaseIRTransform
 {
 	public Add32() : base(IRInstruction.Add32, TransformType.Manual | TransformType.Transform)
 	{

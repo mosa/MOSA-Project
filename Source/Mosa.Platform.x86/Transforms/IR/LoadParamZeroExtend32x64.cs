@@ -8,7 +8,7 @@ namespace Mosa.Platform.x86.Transforms.IR;
 /// <summary>
 /// LoadParamZeroExtend32x64
 /// </summary>
-public sealed class LoadParamZeroExtend32x64 : BaseTransform
+public sealed class LoadParamZeroExtend32x64 : BaseIRTransform
 {
 	public LoadParamZeroExtend32x64() : base(IRInstruction.LoadParamZeroExtend32x64, TransformType.Manual | TransformType.Transform)
 	{

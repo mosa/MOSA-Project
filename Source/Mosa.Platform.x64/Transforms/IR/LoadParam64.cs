@@ -8,7 +8,7 @@ namespace Mosa.Platform.x64.Transforms.IR;
 /// <summary>
 /// LoadParam64
 /// </summary>
-public sealed class LoadParam64 : BaseTransform
+public sealed class LoadParam64 : BaseIRTransform
 {
 	public LoadParam64() : base(IRInstruction.LoadParam64, TransformType.Manual | TransformType.Transform)
 	{

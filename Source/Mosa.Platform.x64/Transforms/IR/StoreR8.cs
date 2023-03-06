@@ -8,7 +8,7 @@ namespace Mosa.Platform.x64.Transforms.IR;
 /// <summary>
 /// StoreR8
 /// </summary>
-public sealed class StoreR8 : BaseTransform
+public sealed class StoreR8 : BaseIRTransform
 {
 	public StoreR8() : base(IRInstruction.StoreR8, TransformType.Manual | TransformType.Transform)
 	{
@@ -25,7 +25,7 @@ public sealed class StoreR8 : BaseTransform
 		var operand2 = context.Operand2;
 		var operand3 = context.Operand3;
 
-		operand3 = X64TransformHelper.MoveConstantToFloatRegister(transform, context, operand3);
+		operand3 = MoveConstantToFloatRegister(transform, context, operand3);
 
 		context.SetInstruction(X64.MovsdStore, null, operand1, operand2, operand3);
 	}

@@ -8,7 +8,7 @@ namespace Mosa.Platform.x86.Transforms.IR;
 /// <summary>
 /// SubR4
 /// </summary>
-public sealed class SubR4 : BaseTransform
+public sealed class SubR4 : BaseIRTransform
 {
 	public SubR4() : base(IRInstruction.SubR4, TransformType.Manual | TransformType.Transform)
 	{

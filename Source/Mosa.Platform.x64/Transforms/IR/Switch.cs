@@ -8,7 +8,7 @@ namespace Mosa.Platform.x64.Transforms.IR;
 /// <summary>
 /// Switch
 /// </summary>
-public sealed class Switch : BaseTransform
+public sealed class Switch : BaseIRTransform
 {
 	public Switch() : base(IRInstruction.Switch, TransformType.Manual | TransformType.Transform)
 	{

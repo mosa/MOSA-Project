@@ -8,7 +8,7 @@ namespace Mosa.Platform.x64.Transforms.IR;
 /// <summary>
 /// AddR4
 /// </summary>
-public sealed class AddR4 : BaseTransform
+public sealed class AddR4 : BaseIRTransform
 {
 	public AddR4() : base(IRInstruction.AddR4, TransformType.Manual | TransformType.Transform)
 	{
@@ -25,8 +25,8 @@ public sealed class AddR4 : BaseTransform
 		var operand1 = context.Operand1;
 		var operand2 = context.Operand2;
 
-		operand1 = X64TransformHelper.MoveConstantToFloatRegister(transform, context, operand1);
-		operand2 = X64TransformHelper.MoveConstantToFloatRegister(transform, context, operand2);
+		operand1 = MoveConstantToFloatRegister(transform, context, operand1);
+		operand2 = MoveConstantToFloatRegister(transform, context, operand2);
 
 		context.SetInstruction(X64.Addss, result, operand1, operand2);
 	}

@@ -9,7 +9,7 @@ namespace Mosa.Platform.x64.Transforms.IR;
 /// <summary>
 /// ConvertR8ToI64
 /// </summary>
-public sealed class ConvertR8ToI64 : BaseTransform
+public sealed class ConvertR8ToI64 : BaseIRTransform
 {
 	public ConvertR8ToI64() : base(IRInstruction.ConvertR8ToI64, TransformType.Manual | TransformType.Transform)
 	{

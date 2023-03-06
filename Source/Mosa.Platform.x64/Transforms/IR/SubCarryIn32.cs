@@ -8,7 +8,7 @@ namespace Mosa.Platform.x64.Transforms.IR;
 /// <summary>
 /// SubCarryIn32
 /// </summary>
-public sealed class SubCarryIn32 : BaseTransform
+public sealed class SubCarryIn32 : BaseIRTransform
 {
 	public SubCarryIn32() : base(IRInstruction.SubCarryIn32, TransformType.Manual | TransformType.Transform)
 	{

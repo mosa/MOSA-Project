@@ -2,7 +2,6 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
-using Mosa.Compiler.Framework.Transforms.Call;
 
 namespace Mosa.Platform.Framework.Call;
 

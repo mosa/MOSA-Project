@@ -9,7 +9,7 @@ namespace Mosa.Platform.x86.Transforms.IR;
 /// <summary>
 /// AddressOf
 /// </summary>
-public sealed class AddressOf : BaseTransform
+public sealed class AddressOf : BaseIRTransform
 {
 	public AddressOf() : base(IRInstruction.AddressOf, TransformType.Manual | TransformType.Transform)
 	{
