@@ -1,9 +1,15 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Compiler.Framework.Transforms
+namespace Mosa.Compiler.Framework.Transforms.Plug
 {
-	public static class PlugTransformHelper
+	public abstract class BasePlugTransform : BaseTransform
 	{
+		public BasePlugTransform(BaseInstruction instruction, TransformType type, bool log = false)
+			: base(instruction, type, log)
+		{ }
+
+		#region Helpers
+
 		public static bool IsPlugged(Context context, TransformContext transform)
 		{
 			if (context.Operand1.Method == null)
@@ -26,5 +32,7 @@ namespace Mosa.Compiler.Framework.Transforms
 				context.Operand1 = Operand.CreateSymbolFromMethod(newTarget, transform.TypeSystem);
 			}
 		}
+
+		#endregion Helpers
 	}
 }

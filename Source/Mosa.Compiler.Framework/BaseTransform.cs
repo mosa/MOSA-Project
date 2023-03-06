@@ -1051,14 +1051,4 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 	}
 
 	#endregion Transform Helpers
-
-	public static bool CheckCodeMotion(Context context, TransformContext transform)
-	{
-		var motion = transform.GetManager<CodeMotionManager>();
-
-		if (motion == null)
-			return false;
-
-		return motion.CheckMotion(context.Node);
-	}
 }

@@ -3,12 +3,12 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.Framework.Transforms.VM;
+namespace Mosa.Compiler.Framework.Transforms.RuntimeTime;
 
 /// <summary>
 /// NewObject
 /// </summary>
-public sealed class NewObject : BaseTransform
+public sealed class NewObject : BaseRuntimeTransform
 {
 	public NewObject() : base(IRInstruction.NewObject, TransformType.Manual | TransformType.Transform)
 	{
@@ -23,7 +23,7 @@ public sealed class NewObject : BaseTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		var method = VMTransformHelper.GetVMCallMethod(transform, "AllocateObject");
+		var method = GetVMCallMethod(transform, "AllocateObject");
 		var symbol = Operand.CreateSymbolFromMethod(method, transform.TypeSystem);
 		var classType = context.MosaType;
 

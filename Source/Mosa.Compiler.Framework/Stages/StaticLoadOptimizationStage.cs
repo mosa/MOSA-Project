@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Platform.Framework.Transforms.StaticLoad;
+using Mosa.Compiler.Framework.Transforms.StaticLoad;
 
 namespace Mosa.Compiler.Framework.Stages;
 

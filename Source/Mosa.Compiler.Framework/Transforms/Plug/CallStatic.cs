@@ -3,12 +3,12 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.Framework.Transforms.Plug;
+namespace Mosa.Compiler.Framework.Transforms.Plug;
 
 /// <summary>
 /// CallStatic
 /// </summary>
-public sealed class CallStatic : BaseTransform
+public sealed class CallStatic : BasePlugTransform
 {
 	public CallStatic() : base(IRInstruction.CallStatic, TransformType.Manual | TransformType.Transform)
 	{
@@ -18,11 +18,11 @@ public sealed class CallStatic : BaseTransform
 
 	public override bool Match(Context context, TransformContext transform)
 	{
-		return PlugTransformHelper.IsPlugged(context, transform);
+		return IsPlugged(context, transform);
 	}
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		PlugTransformHelper.Plug(context, transform);
+		Plug(context, transform);
 	}
 }

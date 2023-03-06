@@ -2,13 +2,14 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
+using Mosa.Compiler.Framework.Transforms.Compound;
 
-namespace Mosa.Platform.Framework.Transforms.Compound;
+namespace Mosa.Compiler.Framework.Transforms.Compound;
 
 /// <summary>
 /// StoreParamCompound
 /// </summary>
-public sealed class StoreParamCompound : BaseTransform
+public sealed class StoreParamCompound : BaseRuntimeTransform
 {
 	public StoreParamCompound() : base(IRInstruction.StoreParamCompound, TransformType.Manual | TransformType.Transform)
 	{
@@ -23,6 +24,6 @@ public sealed class StoreParamCompound : BaseTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		CompoundTransformHelper.Copy(transform, context, context.Operand2.Type, transform.StackFrame, context.Operand1, transform.StackFrame, context.Operand2);
+		CopyCompound(transform, context, context.Operand2.Type, transform.StackFrame, context.Operand1, transform.StackFrame, context.Operand2);
 	}
 }

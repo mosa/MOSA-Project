@@ -1,14 +1,13 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.Framework.Transforms.VM;
+namespace Mosa.Compiler.Framework.Transforms.RuntimeTime;
 
 /// <summary>
 /// NewArray
 /// </summary>
-public sealed class NewArray : BaseTransform
+public sealed class NewArray : BaseRuntimeTransform
 {
 	public NewArray() : base(IRInstruction.NewArray, TransformType.Manual | TransformType.Transform)
 	{
@@ -23,7 +22,7 @@ public sealed class NewArray : BaseTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		var method = VMTransformHelper.GetVMCallMethod(transform, "AllocateArray");
+		var method = GetVMCallMethod(transform, "AllocateArray");
 		var symbol = Operand.CreateSymbolFromMethod(method, transform.TypeSystem);
 		var arrayType = context.MosaType;
 

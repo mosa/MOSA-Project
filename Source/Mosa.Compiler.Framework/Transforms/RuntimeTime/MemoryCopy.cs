@@ -3,12 +3,12 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.Framework.Transforms.RuntimeCall;
+namespace Mosa.Compiler.Framework.Transforms.RuntimeTime;
 
 /// <summary>
 /// MemoryCopy
 /// </summary>
-public sealed class MemoryCopy : BaseTransform
+public sealed class MemoryCopy : BaseRuntimeTransform
 {
 	public MemoryCopy() : base(IRInstruction.MemoryCopy, TransformType.Manual | TransformType.Transform)
 	{
@@ -23,6 +23,6 @@ public sealed class MemoryCopy : BaseTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		VMTransformHelper.SetVMCall(transform, context, "MemoryCopy", context.Result, context.GetOperands());
+		SetVMCall(transform, context, "MemoryCopy", context.Result, context.GetOperands());
 	}
 }

@@ -4,7 +4,7 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 using Mosa.Compiler.MosaTypeSystem;
 
-namespace Mosa.Platform.Framework.Transforms.StaticLoad;
+namespace Mosa.Compiler.Framework.Transforms.StaticLoad;
 
 /// <summary>
 /// Load32

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.Framework.Transforms.Compound;
+namespace Mosa.Compiler.Framework.Transforms.Compound;
 
 /// <summary>
 /// Transformations

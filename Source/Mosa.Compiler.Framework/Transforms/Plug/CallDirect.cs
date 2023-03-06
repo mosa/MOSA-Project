@@ -2,13 +2,14 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
+using Mosa.Compiler.Framework.Transforms.Plug;
 
-namespace Mosa.Platform.Framework.Transforms.Plug;
+namespace Mosa.Compiler.Framework.Transforms.Plug;
 
 /// <summary>
 /// CallDirect
 /// </summary>
-public sealed class CallDirect : BaseTransform
+public sealed class CallDirect : BasePlugTransform
 {
 	public CallDirect() : base(IRInstruction.CallDirect, TransformType.Manual | TransformType.Transform)
 	{
@@ -18,11 +19,11 @@ public sealed class CallDirect : BaseTransform
 
 	public override bool Match(Context context, TransformContext transform)
 	{
-		return PlugTransformHelper.IsPlugged(context, transform);
+		return IsPlugged(context, transform);
 	}
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		PlugTransformHelper.Plug(context, transform);
+		Plug(context, transform);
 	}
 }

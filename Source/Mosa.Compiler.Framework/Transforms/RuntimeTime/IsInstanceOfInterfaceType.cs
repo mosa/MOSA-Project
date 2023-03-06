@@ -3,14 +3,14 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.Framework.Transforms.RuntimeCall;
+namespace Mosa.Compiler.Framework.Transforms.RuntimeTime;
 
 /// <summary>
-/// UnboxAny
+/// IsInstanceOfInterfaceType
 /// </summary>
-public sealed class UnboxAny : BaseTransform
+public sealed class IsInstanceOfInterfaceType : BaseRuntimeTransform
 {
-	public UnboxAny() : base(IRInstruction.UnboxAny, TransformType.Manual | TransformType.Transform)
+	public IsInstanceOfInterfaceType() : base(IRInstruction.IsInstanceOfInterfaceType, TransformType.Manual | TransformType.Transform)
 	{
 	}
 
@@ -23,6 +23,6 @@ public sealed class UnboxAny : BaseTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		VMTransformHelper.SetVMCall(transform, context, "UnboxAny", context.Result, context.GetOperands());
+		SetVMCall(transform, context, "IsInstanceOfInterfaceType", context.Result, context.GetOperands());
 	}
 }

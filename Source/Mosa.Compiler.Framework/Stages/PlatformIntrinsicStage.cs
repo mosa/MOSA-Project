@@ -1,6 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Platform.Framework.Transforms.PlatformIntrinsic;
+using Mosa.Compiler.Framework.Transforms.PlatformIntrinsic;
 
 namespace Mosa.Compiler.Framework.Stages;
 

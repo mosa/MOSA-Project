@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Platform.Framework.Transforms.VM;
+using Mosa.Compiler.Framework.Transforms.RuntimeTime;
 
 namespace Mosa.Compiler.Framework.Stages;
 
@@ -13,6 +13,6 @@ public sealed class NewObjectStage : BaseTransformStage
 	public NewObjectStage()
 		: base(true, false, 1)
 	{
-		AddTranformations(RuntimeCallTransforms.NewList);
+		AddTranformations(RuntimeTimeTransforms.NewList);
 	}
 }

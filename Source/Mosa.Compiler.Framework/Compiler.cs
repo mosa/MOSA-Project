@@ -183,7 +183,7 @@ public sealed class Compiler
 			new ExceptionStage(),
 			compilerSettings.Devirtualization ? new DevirtualizeCallStage() : null,
 			new PlugStage(),
-			new RuntimeCallStage(),
+			new RuntimeTimeStage(),
 			new IRTransformsStage(),
 			(compilerSettings.InlineMethods || compilerSettings.InlineExplicit) ? new InlineStage() : null,
 			new PromoteTemporaryVariables(),

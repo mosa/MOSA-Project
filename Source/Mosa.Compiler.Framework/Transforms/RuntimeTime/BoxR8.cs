@@ -3,14 +3,14 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.Framework.Transforms.RuntimeCall;
+namespace Mosa.Compiler.Framework.Transforms.RuntimeTime;
 
 /// <summary>
-/// BoxR4
+/// BoxR8
 /// </summary>
-public sealed class BoxR4 : BaseTransform
+public sealed class BoxR8 : BaseRuntimeTransform
 {
-	public BoxR4() : base(IRInstruction.BoxR4, TransformType.Manual | TransformType.Transform)
+	public BoxR8() : base(IRInstruction.BoxR8, TransformType.Manual | TransformType.Transform)
 	{
 	}
 
@@ -23,6 +23,6 @@ public sealed class BoxR4 : BaseTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		VMTransformHelper.SetVMCall(transform, context, "BoxR4", context.Result, context.GetOperands());
+		SetVMCall(transform, context, "BoxR8", context.Result, context.GetOperands());
 	}
 }

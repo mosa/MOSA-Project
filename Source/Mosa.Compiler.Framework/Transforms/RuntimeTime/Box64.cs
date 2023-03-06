@@ -3,12 +3,12 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.Framework.Transforms.RuntimeCall;
+namespace Mosa.Compiler.Framework.Transforms.RuntimeTime;
 
 /// <summary>
 /// Box64
 /// </summary>
-public sealed class Box64 : BaseTransform
+public sealed class Box64 : BaseRuntimeTransform
 {
 	public Box64() : base(IRInstruction.Box64, TransformType.Manual | TransformType.Transform)
 	{
@@ -23,6 +23,6 @@ public sealed class Box64 : BaseTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		VMTransformHelper.SetVMCall(transform, context, "Box64", context.Result, context.GetOperands());
+		SetVMCall(transform, context, "Box64", context.Result, context.GetOperands());
 	}
 }

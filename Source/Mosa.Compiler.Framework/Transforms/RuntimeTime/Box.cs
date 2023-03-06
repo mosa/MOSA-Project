@@ -3,14 +3,14 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.Framework.Transforms.RuntimeCall;
+namespace Mosa.Compiler.Framework.Transforms.RuntimeTime;
 
 /// <summary>
-/// GetVirtualFunctionPtr
+/// Box
 /// </summary>
-public sealed class GetVirtualFunctionPtr : BaseTransform
+public sealed class Box : BaseRuntimeTransform
 {
-	public GetVirtualFunctionPtr() : base(IRInstruction.GetVirtualFunctionPtr, TransformType.Manual | TransformType.Transform)
+	public Box() : base(IRInstruction.Box, TransformType.Manual | TransformType.Transform)
 	{
 	}
 
@@ -23,6 +23,6 @@ public sealed class GetVirtualFunctionPtr : BaseTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		VMTransformHelper.SetVMCall(transform, context, "GetVirtualFunctionPtr", context.Result, context.GetOperands());
+		SetVMCall(transform, context, "Box", context.Result, context.GetOperands());
 	}
 }

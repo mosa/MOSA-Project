@@ -3,14 +3,14 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.Framework.Transforms.RuntimeCall;
+namespace Mosa.Compiler.Framework.Transforms.RuntimeTime;
 
 /// <summary>
-/// Box
+/// MemorySet
 /// </summary>
-public sealed class Box : BaseTransform
+public sealed class MemorySet : BaseRuntimeTransform
 {
-	public Box() : base(IRInstruction.Box, TransformType.Manual | TransformType.Transform)
+	public MemorySet() : base(IRInstruction.MemorySet, TransformType.Manual | TransformType.Transform)
 	{
 	}
 
@@ -23,6 +23,6 @@ public sealed class Box : BaseTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		VMTransformHelper.SetVMCall(transform, context, "Box", context.Result, context.GetOperands());
+		SetVMCall(transform, context, "MemorySet", context.Result, context.GetOperands());
 	}
 }

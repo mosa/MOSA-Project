@@ -3,14 +3,14 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.Framework.Transforms.RuntimeCall;
+namespace Mosa.Compiler.Framework.Transforms.RuntimeTime;
 
 /// <summary>
-/// IsInstanceOfType
+/// GetVirtualFunctionPtr
 /// </summary>
-public sealed class IsInstanceOfType : BaseTransform
+public sealed class GetVirtualFunctionPtr : BaseRuntimeTransform
 {
-	public IsInstanceOfType() : base(IRInstruction.IsInstanceOfType, TransformType.Manual | TransformType.Transform)
+	public GetVirtualFunctionPtr() : base(IRInstruction.GetVirtualFunctionPtr, TransformType.Manual | TransformType.Transform)
 	{
 	}
 
@@ -23,6 +23,6 @@ public sealed class IsInstanceOfType : BaseTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		VMTransformHelper.SetVMCall(transform, context, "IsInstanceOfType", context.Result, context.GetOperands());
+		SetVMCall(transform, context, "GetVirtualFunctionPtr", context.Result, context.GetOperands());
 	}
 }

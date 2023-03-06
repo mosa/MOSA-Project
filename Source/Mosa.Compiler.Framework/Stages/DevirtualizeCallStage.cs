@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Platform.Framework.Transforms.Devirtualize;
+using Mosa.Compiler.Framework.Transforms.Devirtualize;
 
 namespace Mosa.Compiler.Framework.Stages;
 

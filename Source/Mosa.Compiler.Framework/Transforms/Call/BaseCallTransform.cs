@@ -5,10 +5,16 @@ using System.Diagnostics;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.MosaTypeSystem;
 
-namespace Mosa.Compiler.Framework.Transforms
+namespace Mosa.Compiler.Framework.Transforms.Call
 {
-	public static class CallingConventionTransformHelper
+	public abstract class BasePlugTransform : BaseTransform
 	{
+		public BasePlugTransform(BaseInstruction instruction, TransformType type, bool log = false)
+			: base(instruction, type, log)
+		{ }
+
+		#region Helpers
+
 		public static uint CalculateInterfaceMethodTableOffset(TransformContext transform, MosaMethod invokeTarget)
 		{
 			var slot = transform.TypeLayout.GetMethodSlot(invokeTarget);
@@ -217,5 +223,7 @@ namespace Mosa.Compiler.Framework.Transforms
 
 			context.AppendInstruction(transform.SubInstruction, transform.StackPointer, transform.StackPointer, transform.CreateConstant32(stackSize));
 		}
+
+		#endregion Helpers
 	}
 }

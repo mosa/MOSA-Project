@@ -3,14 +3,14 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.Framework.Transforms.RuntimeCall;
+namespace Mosa.Compiler.Framework.Transforms.RuntimeTime;
 
 /// <summary>
-/// Rethrow
+/// Box32
 /// </summary>
-public sealed class Rethrow : BaseTransform
+public sealed class Box32 : BaseRuntimeTransform
 {
-	public Rethrow() : base(IRInstruction.Rethrow, TransformType.Manual | TransformType.Transform)
+	public Box32() : base(IRInstruction.Box32, TransformType.Manual | TransformType.Transform)
 	{
 	}
 
@@ -23,6 +23,6 @@ public sealed class Rethrow : BaseTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		VMTransformHelper.SetVMCall(transform, context, "Rethrow", context.Result, context.GetOperands());
+		SetVMCall(transform, context, "Box32", context.Result, context.GetOperands());
 	}
 }

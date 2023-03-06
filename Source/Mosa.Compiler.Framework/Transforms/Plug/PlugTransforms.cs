@@ -3,7 +3,7 @@
 using System.Collections.Generic;
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.Framework.Transforms.Plug;
+namespace Mosa.Compiler.Framework.Transforms.Plug;
 
 /// <summary>
 /// Transformations

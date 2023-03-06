@@ -1,13 +1,21 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Collections.Generic;
 using System.Diagnostics;
+using Mosa.Compiler.Common;
 using Mosa.Compiler.MosaTypeSystem;
 
-namespace Mosa.Compiler.Framework.Transforms
+namespace Mosa.Compiler.Framework.Transforms.Compound
 {
-	public static class CompoundTransformHelper
+	public abstract class BaseRuntimeTransform : BaseTransform
 	{
-		public static void Copy(TransformContext transform, Context context, MosaType type, Operand destinationBase, Operand destination, Operand sourceBase, Operand source)
+		public BaseRuntimeTransform(BaseInstruction instruction, TransformType type, bool log = false)
+			: base(instruction, type, log)
+		{ }
+
+		#region Helpers
+
+		public static void CopyCompound(TransformContext transform, Context context, MosaType type, Operand destinationBase, Operand destination, Operand sourceBase, Operand source)
 		{
 			var size = transform.TypeLayout.GetTypeSize(type);
 
@@ -66,5 +74,7 @@ namespace Mosa.Compiler.Framework.Transforms
 
 			context.AppendInstruction(IRInstruction.StableObjectTracking);
 		}
+
+		#endregion Helpers
 	}
 }

@@ -3,14 +3,14 @@
 using System.Collections.Generic;
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.Framework.Transforms.RuntimeCall;
+namespace Mosa.Compiler.Framework.Transforms.RuntimeTime;
 
 /// <summary>
 /// Transformations
 /// </summary>
-public static class RuntimeCallTransforms
+public static class RuntimeTimeTransforms
 {
-	public static readonly List<BaseTransform> List = new List<BaseTransform>
+	public static readonly List<BaseTransform> RuntimeList = new List<BaseTransform>
 	{
 		new MemorySet(),
 		new MemoryCopy(),
@@ -25,5 +25,11 @@ public static class RuntimeCallTransforms
 		new BoxR8(),
 		new UnboxAny(),
 		new Unbox(),
+	};
+
+	public static readonly List<BaseTransform> NewList = new List<BaseTransform>
+	{
+		new NewObject(),
+		new NewArray(),
 	};
 }

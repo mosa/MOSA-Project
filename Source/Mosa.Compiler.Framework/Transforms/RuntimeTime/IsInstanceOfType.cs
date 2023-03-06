@@ -3,14 +3,14 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.Framework.Transforms.RuntimeCall;
+namespace Mosa.Compiler.Framework.Transforms.RuntimeTime;
 
 /// <summary>
-/// Box32
+/// IsInstanceOfType
 /// </summary>
-public sealed class Box32 : BaseTransform
+public sealed class IsInstanceOfType : BaseRuntimeTransform
 {
-	public Box32() : base(IRInstruction.Box32, TransformType.Manual | TransformType.Transform)
+	public IsInstanceOfType() : base(IRInstruction.IsInstanceOfType, TransformType.Manual | TransformType.Transform)
 	{
 	}
 
@@ -23,6 +23,6 @@ public sealed class Box32 : BaseTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		VMTransformHelper.SetVMCall(transform, context, "Box32", context.Result, context.GetOperands());
+		SetVMCall(transform, context, "IsInstanceOfType", context.Result, context.GetOperands());
 	}
 }

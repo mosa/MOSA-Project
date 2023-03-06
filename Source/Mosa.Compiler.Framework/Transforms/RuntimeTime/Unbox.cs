@@ -3,12 +3,12 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms;
 
-namespace Mosa.Platform.Framework.Transforms.RuntimeCall;
+namespace Mosa.Compiler.Framework.Transforms.RuntimeTime;
 
 /// <summary>
 /// Unbox
 /// </summary>
-public sealed class Unbox : BaseTransform
+public sealed class Unbox : BaseRuntimeTransform
 {
 	public Unbox() : base(IRInstruction.Unbox, TransformType.Manual | TransformType.Transform)
 	{
@@ -23,6 +23,6 @@ public sealed class Unbox : BaseTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		VMTransformHelper.SetVMCall(transform, context, "Unbox", context.Result, context.GetOperands());
+		SetVMCall(transform, context, "Unbox", context.Result, context.GetOperands());
 	}
 }
