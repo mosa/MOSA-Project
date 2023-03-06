@@ -21,7 +21,7 @@ public class ExceptionStage : BaseCodeTransformationStage
 	private List<BasicBlock> leaveTargets;
 
 	private MosaMethod exceptionHandler;
-	private Operand exceptionHandlerMethod;
+	//private Operand exceptionHandlerMethod;
 
 	private delegate void Dispatch(Context context);
 
@@ -53,7 +53,7 @@ public class ExceptionStage : BaseCodeTransformationStage
 		if (exceptionHandler == null)
 		{
 			exceptionHandler = PlatformInternalRuntimeType.FindMethodByName("ExceptionHandler");
-			exceptionHandlerMethod = Operand.CreateSymbolFromMethod(exceptionHandler, TypeSystem);
+			//exceptionHandlerMethod = Operand.CreateSymbolFromMethod(exceptionHandler, TypeSystem);
 		}
 
 		CollectLeaveTargets();
