@@ -13,6 +13,6 @@ public sealed class DevirtualizeCallStage : BaseTransformStage
 	public DevirtualizeCallStage()
 		: base(true, false, 1)
 	{
-		AddTranformations(DevirtualizeTransforms.List);
+		AddTranforms(DevirtualizeTransforms.List);
 	}
 }

@@ -15,6 +15,6 @@ public sealed class RuntimeCallStage : Compiler.Framework.Stages.BaseTransformSt
 	public RuntimeCallStage()
 		: base(true, false, 1)
 	{
-		AddTranformations(RuntimeCallTransforms.List);
+		AddTranforms(RuntimeCallTransforms.List);
 	}
 }

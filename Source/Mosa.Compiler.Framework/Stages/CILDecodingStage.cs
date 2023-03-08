@@ -77,7 +77,7 @@ public sealed class CILDecodingStage : BaseMethodCompilerStage, IInstructionDeco
 		InsertFlowOrJumpInstructions();
 
 		// This makes it easier to review --- it's not necessary
-		//OrderByLabel();
+		OrderByLabel();
 	}
 
 	public void OrderByLabel()

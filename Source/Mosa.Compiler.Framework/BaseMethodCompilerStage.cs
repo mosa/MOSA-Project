@@ -40,21 +40,23 @@ public abstract class BaseMethodCompilerStage
 
 	#region Instructions Properties
 
-	protected BaseInstruction LoadInstruction { get; private set; }
-
-	protected BaseInstruction StoreInstruction { get; private set; }
-
 	protected BaseInstruction MoveInstruction { get; private set; }
 
-	protected BaseInstruction SubInstruction { get; private set; }
+	//protected BaseInstruction LoadInstruction { get; private set; }
 
-	protected BaseInstruction AddInstruction { get; private set; }
+	//protected BaseInstruction StoreInstruction { get; private set; }
 
-	protected BaseInstruction BranchInstruction { get; private set; }
+	//protected BaseInstruction SubInstruction { get; private set; }
+
+	//protected BaseInstruction AddInstruction { get; private set; }
+
+	//protected BaseInstruction BranchInstruction { get; private set; }
 
 	#endregion Instructions Properties
 
 	#region Compiler Properties
+
+	protected Compiler Compiler { get; private set; }
 
 	/// <summary>
 	/// The architecture of the compilation process
@@ -242,6 +244,7 @@ public abstract class BaseMethodCompilerStage
 	/// <param name="compiler">The base compiler.</param>
 	public void Initialize(Compiler compiler)
 	{
+		Compiler = compiler;
 		Architecture = compiler.Architecture;
 		TypeSystem = compiler.TypeSystem;
 		TypeLayout = compiler.TypeLayout;
@@ -259,21 +262,21 @@ public abstract class BaseMethodCompilerStage
 
 		if (Is32BitPlatform)
 		{
-			LoadInstruction = IRInstruction.Load32;
-			StoreInstruction = IRInstruction.Store32;
 			MoveInstruction = IRInstruction.Move32;
-			AddInstruction = IRInstruction.Add32;
-			SubInstruction = IRInstruction.Sub32;
-			BranchInstruction = IRInstruction.Branch32;
+			//LoadInstruction = IRInstruction.Load32;
+			//StoreInstruction = IRInstruction.Store32;
+			//AddInstruction = IRInstruction.Add32;
+			//SubInstruction = IRInstruction.Sub32;
+			//BranchInstruction = IRInstruction.Branch32;
 		}
 		else
 		{
-			LoadInstruction = IRInstruction.Load64;
-			StoreInstruction = IRInstruction.Store64;
 			MoveInstruction = IRInstruction.Move64;
-			AddInstruction = IRInstruction.Add64;
-			SubInstruction = IRInstruction.Sub64;
-			BranchInstruction = IRInstruction.Branch64;
+			//LoadInstruction = IRInstruction.Load64;
+			//StoreInstruction = IRInstruction.Store64;
+			//AddInstruction = IRInstruction.Add64;
+			//SubInstruction = IRInstruction.Sub64;
+			//BranchInstruction = IRInstruction.Branch64;
 		}
 
 		Initialize();

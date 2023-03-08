@@ -154,6 +154,8 @@ public sealed class TransformContext
 
 	public Operand Constant64_32 { get; private set; }
 
+	public Operand NullOperand { get; private set; }
+
 	#endregion Constants
 
 	#region Data
@@ -162,17 +164,12 @@ public sealed class TransformContext
 
 	#endregion Data
 
-	public TransformContext(MethodCompiler methodCompiler, BitValueManager bitValueManager = null)
+	public void SetCompiler(Compiler compiler)
 	{
-		MethodCompiler = methodCompiler;
-		Compiler = methodCompiler.Compiler;
-		BitValueManager = bitValueManager;
+		Compiler = compiler;
+
 		Is32BitPlatform = Compiler.Architecture.Is32BitPlatform;
-
 		TypeSystem = Compiler.TypeSystem;
-
-		VirtualRegisters = MethodCompiler.VirtualRegisters;
-		BasicBlocks = methodCompiler.BasicBlocks;
 
 		I4 = TypeSystem.BuiltIn.I4;
 		I8 = TypeSystem.BuiltIn.I8;
@@ -183,10 +180,10 @@ public sealed class TransformContext
 
 		NativeInteger = Is32BitPlatform ? I4 : I8;
 
-		ConstantR4_0 = MethodCompiler.ConstantR4_0;
-		ConstantR8_0 = MethodCompiler.ConstantR8_0;
-		Constant32_0 = MethodCompiler.Constant32_0;
-		Constant64_0 = MethodCompiler.Constant64_0;
+		Constant32_0 = Operand.CreateConstant(I4, (uint)0); 
+		Constant64_0 = Operand.CreateConstant(I4, (ulong)0); 
+		ConstantR4_0 = Operand.CreateConstant(R4, 0.0f);
+		ConstantR8_0 = Operand.CreateConstant(R4, 0.0d);
 
 		Constant32_1 = CreateConstant32(1);
 		Constant32_2 = CreateConstant32(2);
@@ -201,13 +198,35 @@ public sealed class TransformContext
 		Constant64_1 = CreateConstant64(1);
 		Constant64_32 = CreateConstant64(32);
 
+		NullOperand = Operand.GetNullObject(Compiler.TypeSystem);
+
 		LowerTo32 = Compiler.CompilerSettings.LongExpansion;
 		Devirtualization = Compiler.CompilerSettings.Devirtualization;
-
-		IsInSSAForm = MethodCompiler.IsInSSAForm;
-		AreCPURegistersAllocated = MethodCompiler.AreCPURegistersAllocated;
-
 		Window = Math.Max(Compiler.CompilerSettings.OptimizationWindow, 1);
+
+		LowerTo32 = Compiler.CompilerSettings.LongExpansion;
+	}
+
+	public void SetMethodCompiler(MethodCompiler methodCompiler)
+	{
+		MethodCompiler = methodCompiler;
+
+		VirtualRegisters = methodCompiler.VirtualRegisters;
+		BasicBlocks = methodCompiler.BasicBlocks;
+
+		AreCPURegistersAllocated = methodCompiler.AreCPURegistersAllocated;
+		IsInSSAForm = methodCompiler.IsInSSAForm;
+
+		LowerTo32 = false;
+		TraceLog = null;
+		Managers.Clear();
+
+		BitValueManager = null;
+	}
+
+	public void SetStageOptions(bool lowerTo32)
+	{
+		LowerTo32 = Compiler.CompilerSettings.LongExpansion && lowerTo32;
 	}
 
 	#region Manager
@@ -222,6 +241,9 @@ public sealed class TransformContext
 	public void AddManager(BaseTransformManager transformManager)
 	{
 		Managers.Add(transformManager.GetType(), transformManager);
+
+		// minor hack for now
+		BitValueManager = transformManager as BitValueManager;
 	}
 
 	#endregion Manager
@@ -235,11 +257,6 @@ public sealed class TransformContext
 	{
 		TraceLog = traceLog;
 		SpecialTraceLog = specialTraceLog;
-	}
-
-	public void SetStageOptions(bool lowerTo32)
-	{
-		LowerTo32 = Compiler.CompilerSettings.LongExpansion && lowerTo32;
 	}
 
 	public Operand AllocateVirtualRegister(MosaType type)

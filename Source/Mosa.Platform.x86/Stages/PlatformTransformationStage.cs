@@ -19,14 +19,14 @@ public sealed class PlatformTransformationStage : Compiler.Framework.Stages.Base
 	public PlatformTransformationStage()
 		: base(true, false, 0)
 	{
-		AddTranformations(TweakTransforms.List);
-		AddTranformations(FixedRegistersTransforms.List);
-		AddTranformations(StackTransforms.List);
-		AddTranformations(AddressModeTransforms.List);
+		AddTranforms(TweakTransforms.List);
+		AddTranforms(FixedRegistersTransforms.List);
+		AddTranforms(StackTransforms.List);
+		AddTranforms(AddressModeTransforms.List);
 
-		AddTranformation(new Mov32Unless());
-		AddTranformation(new Mov32Propagation());
-		AddTranformation(new Mov32Consolidate());
-		AddTranformation(new Deadcode());
+		AddTranform(new Mov32Unless());
+		AddTranform(new Mov32Propagation());
+		AddTranform(new Mov32Consolidate());
+		AddTranform(new Deadcode());
 	}
 }

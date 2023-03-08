@@ -7,5 +7,12 @@ namespace Mosa.Compiler.Framework;
 /// </summary>
 public abstract class BaseTransformManager
 {
-	//public abstract void Reset();
+	public virtual void Initialize(Compiler compiler)
+	{ }
+
+	public virtual void Setup(MethodCompiler methodCompiler)
+	{ }
+
+	public virtual void Finish()
+	{ }
 }

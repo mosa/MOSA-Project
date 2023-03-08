@@ -13,6 +13,6 @@ public class PlugStage : BaseTransformStage
 	public PlugStage()
 		: base(true, false)
 	{
-		AddTranformations(PlugTransforms.List);
+		AddTranforms(PlugTransforms.List);
 	}
 }

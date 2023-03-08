@@ -12,6 +12,6 @@ public class IRTransformsStage : BaseTransformStage
 	public IRTransformsStage()
 		: base(true, false)
 	{
-		AddTranformations(IRTransforms.List);
+		AddTranforms(IRTransforms.List);
 	}
 }

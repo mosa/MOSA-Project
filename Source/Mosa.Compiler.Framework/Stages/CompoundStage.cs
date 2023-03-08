@@ -12,6 +12,6 @@ public sealed class CompoundStage : BaseTransformStage
 	public CompoundStage()
 		: base(true, false, 1)
 	{
-		AddTranformations(CompoundTransforms.List);
+		AddTranforms(CompoundTransforms.List);
 	}
 }

@@ -13,6 +13,6 @@ public sealed class RuntimeTimeStage : BaseTransformStage
 	public RuntimeTimeStage()
 		: base(true, false, 1)
 	{
-		AddTranformations(RuntimeTimeTransforms.RuntimeList);
+		AddTranforms(RuntimeTimeTransforms.RuntimeList);
 	}
 }

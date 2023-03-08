@@ -5,7 +5,7 @@ namespace Mosa.Compiler.Framework.Transforms.Compound;
 /// <summary>
 /// MoveCompound
 /// </summary>
-public sealed class MoveCompound : BaseRuntimeTransform
+public sealed class MoveCompound : BaseCompoundTransform
 {
 	public MoveCompound() : base(IRInstruction.MoveCompound, TransformType.Manual | TransformType.Transform)
 	{

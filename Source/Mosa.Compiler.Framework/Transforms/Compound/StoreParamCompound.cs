@@ -5,7 +5,7 @@ namespace Mosa.Compiler.Framework.Transforms.Compound;
 /// <summary>
 /// StoreParamCompound
 /// </summary>
-public sealed class StoreParamCompound : BaseRuntimeTransform
+public sealed class StoreParamCompound : BaseCompoundTransform
 {
 	public StoreParamCompound() : base(IRInstruction.StoreParamCompound, TransformType.Manual | TransformType.Transform)
 	{

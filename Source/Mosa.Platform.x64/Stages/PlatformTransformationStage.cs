@@ -17,9 +17,9 @@ public sealed class PlatformTransformationStage : Compiler.Framework.Stages.Base
 	public PlatformTransformationStage()
 		: base(true, false, 0)
 	{
-		AddTranformations(TweakTransforms.List);
-		AddTranformations(FixedRegistersTransforms.List);
-		AddTranformations(StackTransforms.List);
-		AddTranformations(SpecialTransforms.List);
+		AddTranforms(TweakTransforms.List);
+		AddTranforms(FixedRegistersTransforms.List);
+		AddTranforms(StackTransforms.List);
+		AddTranforms(SpecialTransforms.List);
 	}
 }

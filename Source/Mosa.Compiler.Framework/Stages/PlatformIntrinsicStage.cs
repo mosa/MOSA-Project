@@ -13,6 +13,6 @@ public class PlatformIntrinsicStage : BaseTransformStage
 	public PlatformIntrinsicStage()
 		: base(true, false)
 	{
-		AddTranformations(PlatformIntrinsicTransforms.List);
+		AddTranforms(PlatformIntrinsicTransforms.List);
 	}
 }

@@ -12,6 +12,6 @@ public class CallStage : BaseTransformStage
 	public CallStage()
 		: base(true, false)
 	{
-		AddTranformations(CallTransforms.List);
+		AddTranforms(CallTransforms.List);
 	}
 }

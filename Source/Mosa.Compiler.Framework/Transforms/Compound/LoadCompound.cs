@@ -5,7 +5,7 @@ namespace Mosa.Compiler.Framework.Transforms.Compound;
 /// <summary>
 /// LoadCompound
 /// </summary>
-public sealed class LoadCompound : BaseRuntimeTransform
+public sealed class LoadCompound : BaseCompoundTransform
 {
 	public LoadCompound() : base(IRInstruction.LoadCompound, TransformType.Manual | TransformType.Transform)
 	{

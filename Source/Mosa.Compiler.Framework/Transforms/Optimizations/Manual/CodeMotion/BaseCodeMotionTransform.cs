@@ -42,12 +42,12 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.CodeMotion
 
 		public static bool CheckCodeMotion(TransformContext transform, Context context)
 		{
-			var motion = transform.GetManager<CodeMotionManager>();
+			var codeMotion = transform.GetManager<CodeMotionManager>();
 
-			if (motion == null)
+			if (codeMotion == null)
 				return false;
 
-			return motion.CheckMotion(context.Node);
+			return codeMotion.CheckMotion(context.Node);
 		}
 
 		#endregion Helpers

@@ -13,6 +13,6 @@ public sealed class StaticLoadOptimizationStage : BaseTransformStage
 	public StaticLoadOptimizationStage()
 		: base(true, false, 1)
 	{
-		AddTranformations(StaticLoadTransforms.List);
+		AddTranforms(StaticLoadTransforms.List);
 	}
 }

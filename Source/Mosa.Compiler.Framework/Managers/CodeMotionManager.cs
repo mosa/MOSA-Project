@@ -6,12 +6,7 @@ namespace Mosa.Compiler.Framework.Managers;
 
 public class CodeMotionManager : BaseTransformManager
 {
-	private HashSet<InstructionNode> Motion = new HashSet<InstructionNode>();
-
-	//public override void Reset()
-	//{
-	//	Motion.Clear();
-	//}
+	private readonly HashSet<InstructionNode> Motion = new HashSet<InstructionNode>();
 
 	public void MarkMotion(InstructionNode node)
 	{

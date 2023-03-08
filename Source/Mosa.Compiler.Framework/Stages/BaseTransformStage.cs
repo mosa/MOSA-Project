@@ -4,7 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Mosa.Compiler.Framework.Trace;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Compiler.Framework.Stages;
 
@@ -25,7 +24,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 	private readonly List<BaseTransform>[] transforms = new List<BaseTransform>[MaximumInstructionID];
 
-	private TransformContext TransformContext;
+	private readonly TransformContext TransformContext = new TransformContext();
 
 	protected TraceLog trace;
 
@@ -60,6 +59,8 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 	protected override void Initialize()
 	{
+		TransformContext.SetCompiler(Compiler);
+
 		TransformCountStage = $"{Name}.Transforms";
 		OptimizationCountStage = $"{Name}.Optimizations";
 		SkippedEmptyBlocksCountStage = $"{Name}.SkippedEmptyBlocks";
@@ -92,13 +93,13 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 		BlocksMergedCount = 0;
 
 		EmptyBlocks = null;
-		TransformContext = null;
-		specialTrace = null;
 		trace = null;
 	}
 
 	protected override void Run()
 	{
+		TransformContext.SetMethodCompiler(MethodCompiler);
+
 		SortByPriority();
 
 		trace = CreateTraceLog(5);
@@ -109,21 +110,28 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 		Steps = 0;
 		MethodCompiler.CreateTranformInstructionTrace(this, Steps++);
 
+		specialTrace = new TraceLog(TraceType.GlobalDebug, null, null, "Special Optimizations");
+
+		TransformContext.SetMethodCompiler(MethodCompiler);
+		TransformContext.SetLogs(trace, specialTrace);
+
+		CustomizeTransform(TransformContext);
+
 		ExecutePasses();
 
 		if (CompilerSettings.FullCheckMode)
 			CheckAllPhiInstructions();
 	}
 
-	protected void AddTranformations(List<BaseTransform> list)
+	protected void AddTranforms(List<BaseTransform> list)
 	{
 		foreach (var transform in list)
 		{
-			AddTranformation(transform);
+			AddTranform(transform);
 		}
 	}
 
-	public void AddTranformation(BaseTransform transform)
+	public void AddTranform(BaseTransform transform)
 	{
 		int id = transform.Instruction == null ? 0 : transform.Instruction.ID;
 
@@ -152,13 +160,12 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 		SortedByPriority = true;
 	}
 
-	protected virtual void CustomizeTransformation(TransformContext transformContext)
+	protected virtual void CustomizeTransform(TransformContext transformContext)
 	{ }
 
 	private void ExecutePasses()
 	{
 		int pass = 1;
-
 		var changed = true;
 
 		while (changed)
@@ -181,16 +188,6 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 	{
 		if (!EnableTransformOptimizations)
 			return false;
-
-		if (TransformContext == null)
-		{
-			specialTrace = new TraceLog(TraceType.GlobalDebug, null, null, "Special Optimizations");
-
-			TransformContext = new TransformContext(MethodCompiler);
-			TransformContext.SetLogs(trace, specialTrace);
-
-			CustomizeTransformation(TransformContext);
-		}
 
 		var context = new Context(BasicBlocks.PrologueBlock);
 
