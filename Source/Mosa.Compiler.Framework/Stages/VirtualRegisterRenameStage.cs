@@ -43,8 +43,6 @@ public sealed class VirtualRegisterRenameStage : BaseCodeTransformationStage
 						vr.AddIfNew(op);
 					}
 				}
-
-
 			}
 		}
 

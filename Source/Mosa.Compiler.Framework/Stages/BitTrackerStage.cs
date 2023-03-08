@@ -5,7 +5,6 @@ using System.Diagnostics;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Managers;
 using Mosa.Compiler.Framework.Trace;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Compiler.Framework.Stages;
 
