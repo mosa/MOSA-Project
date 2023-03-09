@@ -284,7 +284,7 @@ public static class ManualTransforms
 		new CodeMotion.LoadSignExtend16x32(),
 		new CodeMotion.LoadSignExtend8x32(),
 		new CodeMotion.LoadZeroExtend16x32(),
-		new CodeMotion.LoadZeroExtend8x32(),
+		//new CodeMotion.LoadZeroExtend8x32(),
 
 		new CodeMotion.LoadParam32(),
 		new CodeMotion.LoadParam64(),
