@@ -26,6 +26,8 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.CodeMotion
 			if (context.Node == context.Result.Uses[0].PreviousNonEmpty)
 				return false;
 
+			// FIXME: and no memory store operation between load and use, or load can't move past memory store operation
+
 			return !CheckCodeMotion(transform, context);
 		}
 
