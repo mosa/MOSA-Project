@@ -23,7 +23,6 @@ public static class ManualTransforms
 		new Standard.Cmp32ToTest32(),
 
 		new Special.Mov32ConstantReuse(),
-		new Special.Mov32Consolidate(),
 		new Special.Bt32Movzx8To32Setcc(),
 
 		new Stack.Add32(),

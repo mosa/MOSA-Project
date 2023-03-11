@@ -25,8 +25,7 @@ public sealed class PlatformTransformationStage : Compiler.Framework.Stages.Base
 		AddTranforms(AddressModeTransforms.List);
 
 		AddTranform(new Mov32Unless());
-		AddTranform(new Mov32Propagation());
-		AddTranform(new Mov32Consolidate());
+		AddTranform(new Mov32Coalescing());
 		AddTranform(new Deadcode());
 	}
 }

@@ -87,9 +87,9 @@ public static class Boot
 
 		TestHash();
 
-		Screen.Write("CheckedTests.MulI8I8: ");
+		Screen.Write("StringTest.SubStringTest4: ");
 
-		var value1 = Test2();
+		var value1 = Test5();
 
 		if (value1)
 			Screen.WriteLine("Ok");
@@ -309,5 +309,11 @@ public static class Boot
 	public static long Test4()
 	{
 		return SpecificTests.SwitchI8_v2(9223372036854775807);
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static bool Test5()
+	{
+		return StringTest.SubStringTest4();
 	}
 }
