@@ -13,6 +13,6 @@ public sealed class NewObjectStage : BaseTransformStage
 	public NewObjectStage()
 		: base(true, false, 1)
 	{
-		AddTranforms(RuntimeTimeTransforms.NewList);
+		AddTranforms(RuntimeTransforms.NewList);
 	}
 }

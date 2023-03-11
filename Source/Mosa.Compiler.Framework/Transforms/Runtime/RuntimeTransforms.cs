@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Transforms.Runtime;
 /// <summary>
 /// Transformations
 /// </summary>
-public static class RuntimeTimeTransforms
+public static class RuntimeTransforms
 {
 	public static readonly List<BaseTransform> RuntimeList = new List<BaseTransform>
 	{
