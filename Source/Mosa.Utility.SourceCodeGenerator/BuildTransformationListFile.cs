@@ -21,7 +21,7 @@ public class BuildTransformationListFile : BuildBaseTemplate
 	protected override void Body()
 	{
 		Lines.AppendLine("using System.Collections.Generic;");
-		Lines.AppendLine("using Mosa.Compiler.Framework.Transforms;");
+		Lines.AppendLine("using Mosa.Compiler.Framework;");
 		Lines.AppendLine();
 
 		Lines.AppendLine($"namespace {Namespace};");
@@ -37,7 +37,7 @@ public class BuildTransformationListFile : BuildBaseTemplate
 		{
 			bool include = false;
 
-			foreach (string filter in Filters)
+			foreach (var filter in Filters)
 			{
 				if (name.StartsWith(filter))
 				{

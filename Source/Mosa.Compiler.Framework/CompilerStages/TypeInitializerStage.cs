@@ -43,23 +43,16 @@ public sealed class TypeInitializerStage : BaseCompilerStage
 	{
 		basicBlocks = new BasicBlocks();
 
-		// Create the blocks
-		var prologueBlock = basicBlocks.CreateBlock(BasicBlock.PrologueLabel);
-		var startBlock = basicBlocks.CreateBlock(BasicBlock.StartLabel);
-		var epilogueBlock = basicBlocks.CreateBlock(BasicBlock.EpilogueLabel);
+		var prologueBlock = basicBlocks.CreatePrologueBlock();
+		var startBlock = basicBlocks.CreateStartBlock();
+		var epilogueBlock = basicBlocks.CreateEpilogueBlock();
 
-		// Create the prologue block
-		basicBlocks.AddHeadBlock(prologueBlock);
 		var prologue = new Context(prologueBlock);
-
-		//prologue.AppendInstruction(IRInstruction.Prologue);
-		prologue.Label = -1;
+		prologue.AppendInstruction(IRInstruction.Prologue);
 		prologue.AppendInstruction(IRInstruction.Jmp, startBlock);
 
-		// Create the epilogue block
 		var epilogue = new Context(epilogueBlock);
-
-		//epilogue.AppendInstruction(IRInstruction.Epilogue);
+		epilogue.AppendInstruction(IRInstruction.Epilogue);
 
 		body = new Context(startBlock);
 		body.AppendInstruction(IRInstruction.Jmp, epilogueBlock);

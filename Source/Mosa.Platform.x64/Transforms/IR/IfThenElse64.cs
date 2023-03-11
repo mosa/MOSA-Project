@@ -1,22 +1,16 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x64.Transforms.IR;
 
 /// <summary>
 /// IfThenElse64
 /// </summary>
-public sealed class IfThenElse64 : BaseTransform
+public sealed class IfThenElse64 : BaseIRTransform
 {
 	public IfThenElse64() : base(IRInstruction.IfThenElse64, TransformType.Manual | TransformType.Transform)
 	{
-	}
-
-	public override bool Match(Context context, TransformContext transform)
-	{
-		return true;
 	}
 
 	public override void Transform(Context context, TransformContext transform)

@@ -2,13 +2,12 @@
 
 using Mosa.Compiler.Framework;
 
-
 namespace Mosa.Platform.x86.Intrinsic;
 
 /// <summary>
 /// IntrinsicMethods
 /// </summary>
-static partial class IntrinsicMethods
+internal static partial class IntrinsicMethods
 {
 	private static readonly string DefaultInterruptMethodName = "Mosa.Kernel.x86.IDT::ProcessInterrupt";
 

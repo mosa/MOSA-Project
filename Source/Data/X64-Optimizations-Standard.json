@@ -2,9 +2,9 @@
 	"Commutative": [
 		"X64.Add32",
 		"X64.And32",
+		"X64.Or32",
 		"X64.Add64",
 		"X64.And64",
-		"X64.Or32",
 		"X64.Or64"
 	],
 	"Optimizations": [
@@ -84,9 +84,9 @@
 			"Type": "Simplication",
 			"Name": "SubFromZero",
 			"SubName": "",
-			"Expression": "X86.Sub## 0 x",
+			"Expression": "X64.Sub## 0 x",
 			"Filter": "IsVirtualRegister(x)",
-			"Result": "(X86.Neg## x)",
+			"Result": "(X64.Neg## x)",
 			"Variations": "No",
 			"Log": "No"
 		}

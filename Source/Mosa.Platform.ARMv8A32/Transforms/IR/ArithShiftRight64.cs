@@ -8,15 +8,10 @@ namespace Mosa.Platform.ARMv8A32.Transforms.IR;
 /// <summary>
 /// ArithShiftRight64
 /// </summary>
-public sealed class ArithShiftRight64 : BaseTransform
+public sealed class ArithShiftRight64 : BaseIRTransform
 {
 	public ArithShiftRight64() : base(IRInstruction.ArithShiftRight64, TransformType.Manual | TransformType.Transform)
 	{
-	}
-
-	public override bool Match(Context context, TransformContext transform)
-	{
-		return true;
 	}
 
 	public override void Transform(Context context, TransformContext transform)
@@ -25,9 +20,9 @@ public sealed class ArithShiftRight64 : BaseTransform
 		transform.SplitLongOperand(context.Operand1, out var op1L, out var op1H);
 		transform.SplitLongOperand(context.Operand2, out var op2L, out var op2H);
 
-		op1L = ARMv8A32TransformHelper.MoveConstantToRegister(transform, context, op1L);
-		op1H = ARMv8A32TransformHelper.MoveConstantToRegister(transform, context, op1H);
-		op2L = ARMv8A32TransformHelper.MoveConstantToRegister(transform, context, op2L);
+		op1L = MoveConstantToRegister(transform, context, op1L);
+		op1H = MoveConstantToRegister(transform, context, op1H);
+		op2L = MoveConstantToRegister(transform, context, op2L);
 
 		var v1 = transform.AllocateVirtualRegister32();
 		var v2 = transform.AllocateVirtualRegister32();

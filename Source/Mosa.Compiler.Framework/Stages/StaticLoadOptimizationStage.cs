@@ -1,54 +1,18 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.MosaTypeSystem;
+using Mosa.Compiler.Framework.Transforms.StaticLoad;
 
 namespace Mosa.Compiler.Framework.Stages;
 
 /// <summary>
-/// Lower IR Stage
+/// Static Load Optimization Stage
 /// </summary>
-/// <seealso cref="Mosa.Compiler.Framework.BaseCodeTransformationStage" />
-public sealed class StaticLoadOptimizationStage : BaseCodeTransformationStage
+/// <seealso cref="Mosa.Compiler.Framework.BaseTransformStage" />
+public sealed class StaticLoadOptimizationStage : BaseTransformStage
 {
-	protected override void PopulateVisitationDictionary()
+	public StaticLoadOptimizationStage()
+		: base(true, false, 1)
 	{
-		AddVisitation(IRInstruction.Load32, LoadInt32);
-		AddVisitation(IRInstruction.Load64, LoadInt64);
-	}
-
-	private void LoadInt32(Context context)
-	{
-		var operand1 = context.Operand1;
-
-		if (!operand1.IsStaticField || !operand1.Field.IsStatic)
-			return;
-
-		if ((operand1.Field.FieldAttributes & MosaFieldAttributes.InitOnly) == 0)
-			return;
-
-		// HARD CODED
-		if (operand1.Field.DeclaringType.IsValueType && operand1.Field.DeclaringType.Name is "System.IntPtr" or "System.UIntPtr" && operand1.Field.Name == "Zero")
-		{
-			context.SetInstruction(IRInstruction.Move32, context.Result, Constant32_0);
-			return;
-		}
-	}
-
-	private void LoadInt64(Context context)
-	{
-		var operand1 = context.Operand1;
-
-		if (!operand1.IsStaticField || !operand1.Field.IsStatic)
-			return;
-
-		if ((operand1.Field.FieldAttributes & MosaFieldAttributes.InitOnly) == 0)
-			return;
-
-		// HARD CODED
-		if (operand1.Field.DeclaringType.IsValueType && operand1.Field.DeclaringType.Name is "System.IntPtr" or "System.UIntPtr" && operand1.Field.Name == "Zero")
-		{
-			context.SetInstruction(IRInstruction.Move64, context.Result, Constant64_0);
-			return;
-		}
+		AddTranforms(StaticLoadTransforms.List);
 	}
 }

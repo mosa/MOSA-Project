@@ -13,7 +13,7 @@ namespace Mosa.Platform.x86.Transforms.Optimizations.Auto.Simplication;
 /// </summary>
 public sealed class SubFromZero : BaseTransform
 {
-	public SubFromZero() : base(X86.Sub32, TransformType.Auto | TransformType.Optimization, true)
+	public SubFromZero() : base(X86.Sub32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

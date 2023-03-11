@@ -16,7 +16,7 @@ public sealed class OptimizationStage : Compiler.Framework.Stages.BaseTransformS
 	public OptimizationStage()
 		: base(true, false)
 	{
-		AddTranformations(AutoTransforms.List);
-		AddTranformations(ManualTransforms.List);
+		AddTranforms(AutoTransforms.List);
+		AddTranforms(ManualTransforms.List);
 	}
 }

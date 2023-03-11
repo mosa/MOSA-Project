@@ -8,15 +8,10 @@ namespace Mosa.Platform.ARMv8A32.Transforms.IR;
 /// <summary>
 /// Nop
 /// </summary>
-public sealed class Nop : BaseTransform
+public sealed class Nop : BaseIRTransform
 {
 	public Nop() : base(IRInstruction.Nop, TransformType.Manual | TransformType.Transform)
 	{
-	}
-
-	public override bool Match(Context context, TransformContext transform)
-	{
-		return true;
 	}
 
 	public override void Transform(Context context, TransformContext transform)

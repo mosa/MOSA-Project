@@ -164,10 +164,10 @@ public sealed class MoveResolver
 		return moves;
 	}
 
-	public void InsertResolvingMoves(BaseArchitecture architecture, Operand stackFrame)
+	public int InsertResolvingMoves(BaseArchitecture architecture, Operand stackFrame)
 	{
 		if (Moves.Count == 0)
-			return;
+			return 0;
 
 		var moves = GetResolveMoves();
 
@@ -180,7 +180,7 @@ public sealed class MoveResolver
 
 			// Note: This won't work for expanded switch statements... but we can't insert into the end of those blocks anyway
 			while (context.IsEmpty
-			       || context.Instruction.FlowControl is FlowControl.UnconditionalBranch or FlowControl.ConditionalBranch or FlowControl.Return)
+				   || context.Instruction.FlowControl is FlowControl.UnconditionalBranch or FlowControl.ConditionalBranch or FlowControl.Return)
 			{
 				context.GotoPrevious();
 			}
@@ -201,5 +201,7 @@ public sealed class MoveResolver
 		}
 
 		Debug.Assert(Moves.Count == 0);
+
+		return Moves.Count;
 	}
 }

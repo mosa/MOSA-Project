@@ -1,22 +1,16 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x64.Transforms.IR;
 
 /// <summary>
 /// StoreParam16
 /// </summary>
-public sealed class StoreParam16 : BaseTransform
+public sealed class StoreParam16 : BaseIRTransform
 {
 	public StoreParam16() : base(IRInstruction.StoreParam16, TransformType.Manual | TransformType.Transform)
 	{
-	}
-
-	public override bool Match(Context context, TransformContext transform)
-	{
-		return true;
 	}
 
 	public override void Transform(Context context, TransformContext transform)

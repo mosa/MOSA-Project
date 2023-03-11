@@ -26,7 +26,7 @@ public sealed class Branch32 : BaseTransform
 		var target = context.BranchTargets[0];
 		var block = context.Block;
 
-		if (!Compare32(context))
+		if (!Compare32(context.ConditionCode, context.Operand1, context.Operand2))
 		{
 			context.SetNop();
 

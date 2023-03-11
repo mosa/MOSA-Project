@@ -152,6 +152,7 @@ internal class GenericArgumentResolver
 
 				result = new FnPtrSig(fnPtrSig.Signature);
 				break;
+
 			case ElementType.Array:
 				var arraySig = (ArraySig)typeSig;
 				var sizes = new List<uint>(arraySig.Sizes);

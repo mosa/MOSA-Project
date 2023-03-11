@@ -2,22 +2,16 @@
 
 using System.Diagnostics;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x64.Transforms.IR;
 
 /// <summary>
 /// LoadR8
 /// </summary>
-public sealed class LoadR8 : BaseTransform
+public sealed class LoadR8 : BaseIRTransform
 {
 	public LoadR8() : base(IRInstruction.LoadR8, TransformType.Manual | TransformType.Transform)
 	{
-	}
-
-	public override bool Match(Context context, TransformContext transform)
-	{
-		return true;
 	}
 
 	public override void Transform(Context context, TransformContext transform)

@@ -2,7 +2,7 @@
 	"Commutative": [
 		"X86.Add32",
 		"X86.And32",
-		"x64.Or32"
+		"X86.Or32"
 	],
 	"Optimizations": [
 		{
@@ -140,7 +140,7 @@
 			"Filter": "IsVirtualRegister(x)",
 			"Result": "(X86.Neg32 x)",
 			"Variations": "No",
-			"Log": "Yes"
+			"Log": "No"
 		}
 	]
 }

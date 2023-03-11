@@ -21,7 +21,7 @@ public sealed class Epilogue : BaseTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		context.Empty();
+		context.SetNop();
 
 		if (!transform.MethodCompiler.IsStackFrameRequired)
 			return;

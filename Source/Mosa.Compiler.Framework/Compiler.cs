@@ -181,11 +181,10 @@ public sealed class Compiler
 			new VirtualRegisterRenameStage(),
 
 			new ExceptionStage(),
-			new StackSetupStage(),
 			compilerSettings.Devirtualization ? new DevirtualizeCallStage() : null,
 			new PlugStage(),
-			new RuntimeCallStage(),
-			new IRStage(),
+			new RuntimeStage(),
+			new IRTransformsStage(),
 			(compilerSettings.InlineMethods || compilerSettings.InlineExplicit) ? new InlineStage() : null,
 			new PromoteTemporaryVariables(),
 			new StaticLoadOptimizationStage(),
@@ -210,14 +209,15 @@ public sealed class Compiler
 
 			(compilerSettings.SSA) ? new ExitSSAStage() : null,
 			new IRCleanupStage(),
-			new NewObjectStage(),
 			(compilerSettings.InlineMethods || compilerSettings.InlineExplicit) ? new InlineEvaluationStage() : null,
 
 			//new StopStage(),
 
+			new NewObjectStage(),
 			new CallStage(),
 			new CompoundStage(),
 			new PlatformIntrinsicStage(),
+
 			new PlatformEdgeSplitStage(),
 			new VirtualRegisterRenameStage(),
 			new GreedyRegisterAllocatorStage(),

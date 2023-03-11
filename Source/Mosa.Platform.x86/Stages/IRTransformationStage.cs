@@ -1,6 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-
 using Mosa.Platform.x86.Transforms.IR;
 
 namespace Mosa.Platform.x86.Stages;
@@ -16,6 +15,6 @@ public sealed class IRTransformationStage : Compiler.Framework.Stages.BaseTransf
 	public IRTransformationStage()
 		: base(true, false)
 	{
-		AddTranformations(IRTransforms.List);
+		AddTranforms(IRTransforms.List);
 	}
 }

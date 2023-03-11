@@ -8,15 +8,10 @@ namespace Mosa.Platform.ARMv8A32.Transforms.IR;
 /// <summary>
 /// Call
 /// </summary>
-public sealed class Call : BaseTransform
+public sealed class Call : BaseIRTransform
 {
 	public Call() : base(IRInstruction.Call, TransformType.Manual | TransformType.Transform)
 	{
-	}
-
-	public override bool Match(Context context, TransformContext transform)
-	{
-		return true;
 	}
 
 	public override void Transform(Context context, TransformContext transform)

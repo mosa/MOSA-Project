@@ -1,22 +1,16 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x64.Transforms.IR;
 
 /// <summary>
 /// MulUnsigned64
 /// </summary>
-public sealed class MulUnsigned64 : BaseTransform
+public sealed class MulUnsigned64 : BaseIRTransform
 {
 	public MulUnsigned64() : base(IRInstruction.MulUnsigned64, TransformType.Manual | TransformType.Transform)
 	{
-	}
-
-	public override bool Match(Context context, TransformContext transform)
-	{
-		return true;
 	}
 
 	public override void Transform(Context context, TransformContext transform)

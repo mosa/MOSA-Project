@@ -22,7 +22,10 @@ public sealed class Prologue : BaseTransform
 	public override void Transform(Context context, TransformContext transform)
 	{
 		if (!transform.MethodCompiler.IsStackFrameRequired)
+		{
+			context.SetNop();
 			return;
+		}
 
 		context.SetInstruction(X86.Push32, null, transform.StackFrame);
 		context.AppendInstruction(X86.Mov32, transform.StackFrame, transform.StackPointer);

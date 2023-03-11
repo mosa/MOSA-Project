@@ -16,8 +16,11 @@ public class IncludeFile
 	public int Length => Content.Length;
 
 	public bool ReadOnly { get; set; } = false;
+
 	public bool Hidden { get; set; } = false;
+
 	public bool Archive { get; set; } = true;
+
 	public bool System { get; set; } = false;
 
 	public string SourceFileName { get; set; }

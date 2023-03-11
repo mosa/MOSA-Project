@@ -218,16 +218,16 @@ public sealed class LoopInvariantCodeMotionStage : BaseMethodCompilerStage
 
 					// note - same code from ValueNumberingStage::CanAssignValueNumberToExpression()
 					if (node.ResultCount != 1
-					    || node.OperandCount is 0 or > 2 
-					    || node.Instruction.IsMemoryWrite 
-					    || node.Instruction.IsIOOperation 
-					    || node.Instruction.HasUnspecifiedSideEffect 
-					    || node.Instruction.VariableOperands 
-					    || node.Instruction.FlowControl != FlowControl.Next 
-					    || node.Instruction.IgnoreDuringCodeGeneration 
-					    || node.Operand1.IsUnresolvedConstant 
-					    || (node.OperandCount == 2 && node.Operand2.IsUnresolvedConstant) 
-					    || (node.Instruction.IsMemoryRead && !(node.Instruction.IsParameterLoad && !ParamStoreSet.Contains(node.Operand1))))
+						|| node.OperandCount is 0 or > 2
+						|| node.Instruction.IsMemoryWrite
+						|| node.Instruction.IsIOOperation
+						|| node.Instruction.HasUnspecifiedSideEffect
+						|| node.Instruction.VariableOperands
+						|| node.Instruction.FlowControl != FlowControl.Next
+						|| node.Instruction.IgnoreDuringCodeGeneration
+						|| node.Operand1.IsUnresolvedConstant
+						|| (node.OperandCount == 2 && node.Operand2.IsUnresolvedConstant)
+						|| (node.Instruction.IsMemoryRead && !(node.Instruction.IsParameterLoad && !ParamStoreSet.Contains(node.Operand1))))
 						continue;
 
 					if (invariantsSet.Contains(node))
@@ -369,7 +369,7 @@ public sealed class LoopInvariantCodeMotionStage : BaseMethodCompilerStage
 
 		foreach (var node in nodes)
 		{
-			at.CutFrom(node);
+			at.MoveFrom(node);
 			at = node;
 		}
 

@@ -9,7 +9,7 @@ namespace Mosa.Platform.x64.Intrinsic;
 /// <summary>
 /// IntrinsicMethods
 /// </summary>
-static partial class IntrinsicMethods
+internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Platform.x64.Intrinsic::GetIDTJumpLocation")]
 	private static void GetIDTJumpLocation(Context context, MethodCompiler methodCompiler)

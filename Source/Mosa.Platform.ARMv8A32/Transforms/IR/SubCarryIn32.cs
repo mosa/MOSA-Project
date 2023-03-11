@@ -8,15 +8,10 @@ namespace Mosa.Platform.ARMv8A32.Transforms.IR;
 /// <summary>
 /// SubCarryIn32
 /// </summary>
-public sealed class SubCarryIn32 : BaseTransform
+public sealed class SubCarryIn32 : BaseIRTransform
 {
 	public SubCarryIn32() : base(IRInstruction.SubCarryIn32, TransformType.Manual | TransformType.Transform)
 	{
-	}
-
-	public override bool Match(Context context, TransformContext transform)
-	{
-		return true;
 	}
 
 	public override void Transform(Context context, TransformContext transform)
@@ -26,9 +21,9 @@ public sealed class SubCarryIn32 : BaseTransform
 		var operand2 = context.Operand2;
 		var operand3 = context.Operand3;
 
-		operand1 = ARMv8A32TransformHelper.MoveConstantToRegister(transform, context, operand1);
-		operand2 = ARMv8A32TransformHelper.MoveConstantToRegisterOrImmediate(transform, context, operand2);
-		operand3 = ARMv8A32TransformHelper.MoveConstantToRegisterOrImmediate(transform, context, operand3);
+		operand1 = MoveConstantToRegister(transform, context, operand1);
+		operand2 = MoveConstantToRegisterOrImmediate(transform, context, operand2);
+		operand3 = MoveConstantToRegisterOrImmediate(transform, context, operand3);
 
 		var v1 = transform.AllocateVirtualRegister32();
 

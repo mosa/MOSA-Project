@@ -8,15 +8,10 @@ namespace Mosa.Platform.ARMv8A32.Transforms.IR;
 /// <summary>
 /// IfThenElse64
 /// </summary>
-public sealed class IfThenElse64 : BaseTransform
+public sealed class IfThenElse64 : BaseIRTransform
 {
 	public IfThenElse64() : base(IRInstruction.IfThenElse64, TransformType.Manual | TransformType.Transform)
 	{
-	}
-
-	public override bool Match(Context context, TransformContext transform)
-	{
-		return true;
 	}
 
 	public override void Transform(Context context, TransformContext transform)
@@ -28,12 +23,12 @@ public sealed class IfThenElse64 : BaseTransform
 
 		var v1 = transform.AllocateVirtualRegister32();
 
-		op1L = ARMv8A32TransformHelper.MoveConstantToRegister(transform, context, op1L);
-		op1H = ARMv8A32TransformHelper.MoveConstantToRegisterOrImmediate(transform, context, op1H);
-		op2L = ARMv8A32TransformHelper.MoveConstantToRegisterOrImmediate(transform, context, op2L);
-		op2H = ARMv8A32TransformHelper.MoveConstantToRegisterOrImmediate(transform, context, op2H);
-		op3L = ARMv8A32TransformHelper.MoveConstantToRegisterOrImmediate(transform, context, op3L);
-		op3H = ARMv8A32TransformHelper.MoveConstantToRegisterOrImmediate(transform, context, op3H);
+		op1L = MoveConstantToRegister(transform, context, op1L);
+		op1H = MoveConstantToRegisterOrImmediate(transform, context, op1H);
+		op2L = MoveConstantToRegisterOrImmediate(transform, context, op2L);
+		op2H = MoveConstantToRegisterOrImmediate(transform, context, op2H);
+		op3L = MoveConstantToRegisterOrImmediate(transform, context, op3L);
+		op3H = MoveConstantToRegisterOrImmediate(transform, context, op3H);
 
 		context.SetInstruction(ARMv8A32.Orr, v1, op1L, op1H);
 		context.AppendInstruction(ARMv8A32.Cmp, StatusRegister.Set, null, v1, transform.Constant32_0);

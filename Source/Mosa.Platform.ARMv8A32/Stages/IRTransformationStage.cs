@@ -15,6 +15,6 @@ public sealed class IRTransformationStage : Compiler.Framework.Stages.BaseTransf
 	public IRTransformationStage()
 		: base(true, false)
 	{
-		AddTranformations(IRTransforms.List);
+		AddTranforms(IRTransforms.List);
 	}
 }

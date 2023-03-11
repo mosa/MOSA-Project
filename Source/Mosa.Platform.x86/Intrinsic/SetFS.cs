@@ -2,13 +2,12 @@
 
 using Mosa.Compiler.Framework;
 
-
 namespace Mosa.Platform.x86.Intrinsic;
 
 /// <summary>
 /// IntrinsicMethods
 /// </summary>
-static partial class IntrinsicMethods
+internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::SetFS")]
 	private static void SetFS(Context context, MethodCompiler methodCompiler)

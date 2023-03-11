@@ -8,19 +8,14 @@ namespace Mosa.Platform.ARMv8A32.Transforms.IR;
 /// <summary>
 /// StoreParamR8
 /// </summary>
-public sealed class StoreParamR8 : BaseTransform
+public sealed class StoreParamR8 : BaseIRTransform
 {
 	public StoreParamR8() : base(IRInstruction.StoreParamR8, TransformType.Manual | TransformType.Transform)
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
-	{
-		return true;
-	}
-
 	public override void Transform(Context context, TransformContext transform)
 	{
-		ARMv8A32TransformHelper.TransformStore(transform, context, ARMv8A32.Stf, transform.StackFrame, context.Operand1, context.Operand2);
+		TransformStore(transform, context, ARMv8A32.Stf, transform.StackFrame, context.Operand1, context.Operand2);
 	}
 }

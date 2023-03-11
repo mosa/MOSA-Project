@@ -1,22 +1,16 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x86.Transforms.IR;
 
 /// <summary>
 /// AddCarryOut64
 /// </summary>
-public sealed class AddCarryOut64 : BaseTransform
+public sealed class AddCarryOut64 : BaseIRTransform
 {
 	public AddCarryOut64() : base(IRInstruction.AddCarryOut64, TransformType.Manual | TransformType.Transform)
 	{
-	}
-
-	public override bool Match(Context context, TransformContext transform)
-	{
-		return true;
 	}
 
 	public override void Transform(Context context, TransformContext transform)

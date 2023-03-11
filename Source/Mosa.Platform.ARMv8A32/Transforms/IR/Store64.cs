@@ -8,15 +8,10 @@ namespace Mosa.Platform.ARMv8A32.Transforms.IR;
 /// <summary>
 /// Store64
 /// </summary>
-public sealed class Store64 : BaseTransform
+public sealed class Store64 : BaseIRTransform
 {
 	public Store64() : base(IRInstruction.Store64, TransformType.Manual | TransformType.Transform)
 	{
-	}
-
-	public override bool Match(Context context, TransformContext transform)
-	{
-		return true;
 	}
 
 	public override void Transform(Context context, TransformContext transform)
@@ -25,7 +20,7 @@ public sealed class Store64 : BaseTransform
 		transform.SplitLongOperand(context.Operand2, out var lowOffset, out var highOffset);
 		transform.SplitLongOperand(context.Operand3, out var valueLow, out var valueHigh);
 
-		ARMv8A32TransformHelper.TransformStore(transform, context, ARMv8A32.Str32, baseLow, lowOffset, valueLow);
-		ARMv8A32TransformHelper.TransformStore(transform, context.InsertAfter(), ARMv8A32.Str32, baseLow, highOffset, valueHigh);
+		TransformStore(transform, context, ARMv8A32.Str32, baseLow, lowOffset, valueLow);
+		TransformStore(transform, context.InsertAfter(), ARMv8A32.Str32, baseLow, highOffset, valueHigh);
 	}
 }

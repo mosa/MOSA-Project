@@ -1,13 +1,12 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework.Analysis;
+using Mosa.Compiler.Framework.Managers;
 using Mosa.Compiler.Framework.Trace;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Compiler.Framework.Stages;
 
 /// <summary>
-/// Bit Tracker Stage
+/// Demand Tracker Stage   --- IN PROCESS
 /// </summary>
 public sealed class DemandBitStage : BaseMethodCompilerStage
 {
@@ -21,16 +20,17 @@ public sealed class DemandBitStage : BaseMethodCompilerStage
 
 	private delegate ulong NodeVisitationDelegate(InstructionNode node, TransformContext transform);
 
-	private TransformContext TransformContext;
+	private readonly TransformContext TransformContext = new TransformContext();
 
 	protected override void Finish()
 	{
 		trace = null;
-		TransformContext = null;
 	}
 
 	protected override void Initialize()
 	{
+		TransformContext.SetCompiler(Compiler);
+
 		Register(InstructionsRemovedCount);
 
 		RegisterAffected(IRInstruction.Or32, AffectedBits_Or32);
@@ -73,7 +73,8 @@ public sealed class DemandBitStage : BaseMethodCompilerStage
 
 		var bitValueManager = new BitValueManager(Is32BitPlatform);
 
-		TransformContext = new TransformContext(MethodCompiler, bitValueManager);
+		TransformContext.SetMethodCompiler(MethodCompiler);
+		TransformContext.AddManager(bitValueManager);
 		TransformContext.SetLog(trace);
 
 		// TODO

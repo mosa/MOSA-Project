@@ -1,22 +1,16 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x86.Transforms.IR;
 
 /// <summary>
 /// AddOverflowOut64
 /// </summary>
-public sealed class AddOverflowOut64 : BaseTransform
+public sealed class AddOverflowOut64 : BaseIRTransform
 {
 	public AddOverflowOut64() : base(IRInstruction.AddOverflowOut64, TransformType.Manual | TransformType.Transform)
 	{
-	}
-
-	public override bool Match(Context context, TransformContext transform)
-	{
-		return true;
 	}
 
 	public override void Transform(Context context, TransformContext transform)

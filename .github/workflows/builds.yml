@@ -140,7 +140,7 @@ jobs:
         run: dotnet bin/Mosa.Utility.UnitTests.dll -oMax -s Emulator.Display=false
       - name: Unit Tests - No Optimizations
         run: dotnet bin/Mosa.Utility.UnitTests.dll -oNone -s Emulator.Display=false
-      - name: Unit Tests - Optimization Level - 1
+      - name: Unit Tests - Optimization Level 1
         run: dotnet bin/Mosa.Utility.UnitTests.dll -o1 -s Emulator.Display=false
       - name: Unit Tests - Optimization Level 2
         run: dotnet bin/Mosa.Utility.UnitTests.dll -o2 -s Emulator.Display=false

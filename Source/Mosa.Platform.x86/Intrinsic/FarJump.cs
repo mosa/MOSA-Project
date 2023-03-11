@@ -7,7 +7,7 @@ namespace Mosa.Platform.x86.Intrinsic;
 /// <summary>
 /// IntrinsicMethods
 /// </summary>
-static partial class IntrinsicMethods
+internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::FarJump")]
 	private static void FarJump(Context context, MethodCompiler methodCompiler)

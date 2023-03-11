@@ -58,7 +58,7 @@ public sealed class ProtectedRegionLayoutStage : BaseMethodCompilerStage
 		{
 			var handler = (uint)MethodCompiler.GetPosition(region.Handler.HandlerStart);
 
-			trace?.Log($"Handler: {region.Handler.TryStart.ToString("X4")} to {region.Handler.TryEnd.ToString("X4")} Handler: {region.Handler.HandlerStart.ToString("X4")} Offset: [{handler.ToString("X4")}]");
+			trace?.Log($"Handler: {region.Handler.TryStart:X4} to {region.Handler.TryEnd:X4} Handler: {region.Handler.HandlerStart:X4} Offset: [{handler:X4}]");
 
 			var sections = new List<Tuple<int, int>>();
 
@@ -71,7 +71,7 @@ public sealed class ProtectedRegionLayoutStage : BaseMethodCompilerStage
 				int start = MethodCompiler.GetPosition(block.Label);
 				int end = MethodCompiler.GetPosition(block.Label + 0x0F000000);
 
-				trace?.Log($"   Block: {block} [{start.ToString()}-{end.ToString()}]");
+				trace?.Log($"   Block: {block} [{start}-{end}]");
 
 				AddSection(sections, start, end);
 			}
@@ -83,12 +83,12 @@ public sealed class ProtectedRegionLayoutStage : BaseMethodCompilerStage
 
 				sectioncount++;
 
-				var name = Metadata.ProtectedRegionTable + Method.FullName + "$" + sectioncount;
+				var name = $"{Metadata.ProtectedRegionTable}{Method.FullName}${sectioncount}";
 				var protectedRegionDefinition = CreateProtectedRegionDefinition(name, (uint)start, (uint)end, handler, region.Handler.ExceptionHandlerType, region.Handler.Type);
 				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, protectedRegionTableSymbol, writer.GetPosition(), protectedRegionDefinition, 0);
 				writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 
-				trace?.Log($"     Section: [{start.ToString()}-{end.ToString()}]");
+				trace?.Log($"     Section: [{start}-{end}]");
 			}
 		}
 

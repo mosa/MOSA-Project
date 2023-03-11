@@ -3,7 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Text;
 using Mosa.Compiler.MosaTypeSystem;
 
@@ -487,7 +486,7 @@ public sealed class InstructionNode
 		//Block.DebugCheck();
 	}
 
-	public void CutFrom(InstructionNode startNode, InstructionNode endNode)
+	public void MoveFrom(InstructionNode startNode, InstructionNode endNode)
 	{
 		//var cutBlock = startNode.Previous.Block;
 
@@ -502,7 +501,7 @@ public sealed class InstructionNode
 		Insert(startNode);
 	}
 
-	public void CutFrom(InstructionNode node)
+	public void MoveFrom(InstructionNode node)
 	{
 		//var cutBlock = node.Previous.Block;
 

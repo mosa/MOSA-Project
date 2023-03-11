@@ -3,9 +3,8 @@
 using System;
 using System.Diagnostics;
 using Mosa.Compiler.Common;
-using Mosa.Compiler.Framework.Analysis;
+using Mosa.Compiler.Framework.Managers;
 using Mosa.Compiler.Framework.Trace;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Compiler.Framework.Stages;
 
@@ -14,7 +13,8 @@ namespace Mosa.Compiler.Framework.Stages;
 /// </summary>
 public sealed class BitTrackerStage : BaseMethodCompilerStage
 {
-	// This stage propagates bit and value range knowledge thru the various operations. This additional knowledge may enable additional optimizations opportunities.
+	// This stage propagates bit and value range knowledge thru the various operations.
+	// This additional knowledge may enable additional optimizations opportunities.
 
 	private const int MaxInstructions = 1024;
 
@@ -33,19 +33,20 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 	private delegate (BitValue, BitValue) NodeVisitationDelegate2(InstructionNode node, TransformContext transform);
 
-	private TransformContext TransformContext;
+	private readonly TransformContext TransformContext = new TransformContext();
 
 	private BitValueManager BitValueManager;
 
 	protected override void Finish()
 	{
 		trace = null;
-		TransformContext = null;
 		BitValueManager = null;
 	}
 
 	protected override void Initialize()
 	{
+		TransformContext.SetCompiler(Compiler);
+
 		Register(InstructionsUpdatedCount);
 		Register(InstructionsRemovedCount);
 		Register(BranchesRemovedCount);
@@ -186,8 +187,8 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 		BitValueManager = new BitValueManager(Is32BitPlatform);
 
-		TransformContext = new TransformContext(MethodCompiler, BitValueManager);
-
+		TransformContext.SetMethodCompiler(MethodCompiler);
+		TransformContext.AddManager(BitValueManager);
 		TransformContext.SetLog(trace);
 
 		EvaluateVirtualRegisters();

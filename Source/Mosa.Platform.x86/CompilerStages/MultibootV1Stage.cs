@@ -36,22 +36,23 @@ public sealed class MultibootV1Stage : Mosa.Compiler.Framework.Platform.BaseMult
 		var offset = CreateConstant(4);
 
 		var basicBlocks = new BasicBlocks();
-		var block = basicBlocks.CreateBlock(BasicBlock.PrologueLabel);
-		basicBlocks.AddHeadBlock(block);
-		var ctx = new Context(block);
+
+		var prologueBlock = basicBlocks.CreatePrologueBlock();
+
+		var context = new Context(prologueBlock);
 
 		// Setup the stack and place the sentinel on the stack to indicate the start of the stack
-		ctx.AppendInstruction(X86.Mov32, esp, stackTop);
-		ctx.AppendInstruction(X86.Mov32, ebp, stackTop);
-		ctx.AppendInstruction(X86.MovStore32, null, esp, zero, zero);
-		ctx.AppendInstruction(X86.MovStore32, null, esp, offset, zero);
+		context.AppendInstruction(X86.Mov32, esp, stackTop);
+		context.AppendInstruction(X86.Mov32, ebp, stackTop);
+		context.AppendInstruction(X86.MovStore32, null, esp, zero, zero);
+		context.AppendInstruction(X86.MovStore32, null, esp, offset, zero);
 
 		// Place the multiboot address into a static field
-		ctx.AppendInstruction(X86.MovStore32, null, multibootEAX, zero, eax);
-		ctx.AppendInstruction(X86.MovStore32, null, multibootEBX, zero, ebx);
+		context.AppendInstruction(X86.MovStore32, null, multibootEAX, zero, eax);
+		context.AppendInstruction(X86.MovStore32, null, multibootEBX, zero, ebx);
 
-		ctx.AppendInstruction(X86.Call, null, entryPoint);  // FUTURE: Remove line (SetupStage)
-		ctx.AppendInstruction(X86.Ret);
+		context.AppendInstruction(X86.Call, null, entryPoint);  // FUTURE: Remove line (SetupStage)
+		context.AppendInstruction(X86.Ret);
 
 		Compiler.CompileMethod(multibootMethod, basicBlocks);
 	}

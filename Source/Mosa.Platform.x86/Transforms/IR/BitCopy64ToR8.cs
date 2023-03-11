@@ -1,22 +1,16 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x86.Transforms.IR;
 
 /// <summary>
 /// BitCopy64ToR8
 /// </summary>
-public sealed class BitCopy64ToR8 : BaseTransform
+public sealed class BitCopy64ToR8 : BaseIRTransform
 {
 	public BitCopy64ToR8() : base(IRInstruction.BitCopy64ToR8, TransformType.Manual | TransformType.Transform)
 	{
-	}
-
-	public override bool Match(Context context, TransformContext transform)
-	{
-		return true;
 	}
 
 	public override void Transform(Context context, TransformContext transform)
