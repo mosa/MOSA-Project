@@ -1,11 +1,14 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Diagnostics;
 using Mosa.Compiler.Framework.Managers;
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.CodeMotion
 {
 	public abstract class BaseCodeMotionTransform : BaseTransform
 	{
+		public const int MotionWindows = 30;
+
 		public BaseCodeMotionTransform(BaseInstruction instruction, TransformType type, bool log = false)
 			: base(instruction, type, log)
 		{ }
@@ -26,7 +29,14 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.CodeMotion
 			if (context.Node == context.Result.Uses[0].PreviousNonEmpty)
 				return false;
 
-			// FIXME: and no memory store operation between load and use, or load can't move past memory store operation
+			// find locations before any memory store operation or use
+			var location = GetMotionLocation(context.Node, context.Result.Uses[0], MotionWindows);
+
+			if (location == null || location.Previous == null)
+				return false;
+
+			if (context.Node == location.PreviousNonEmpty)
+				return false;
 
 			return !CheckCodeMotion(transform, context);
 		}
@@ -35,7 +45,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.CodeMotion
 		{
 			transform.GetManager<CodeMotionManager>().MarkMotion(context.Node);
 
-			context.Result.Uses[0].Previous.MoveFrom(context.Node);
+			var location = GetMotionLocation(context.Node, context.Result.Uses[0], MotionWindows);
+
+			location.Previous.MoveFrom(context.Node);
 		}
 
 		#endregion Overrides
@@ -50,6 +62,36 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.CodeMotion
 				return false;
 
 			return codeMotion.CheckMotion(context.Node);
+		}
+
+		protected static InstructionNode GetMotionLocation(InstructionNode start, InstructionNode end, int window)
+		{
+			int count = 0;
+
+			var next = start.Next;
+
+			while (count < window)
+			{
+				if (next == end)
+					return end;
+
+				if (next.IsEmptyOrNop)
+				{
+					next = next.Next;
+					continue;
+				}
+
+				if (next.IsBlockEndInstruction
+					|| next.Instruction.IsMemoryWrite
+					|| next.Instruction.FlowControl != FlowControl.Next
+					|| next.Instruction.HasUnspecifiedSideEffect)
+					return next;
+
+				next = next.Next;
+				count++;
+			}
+
+			return next;
 		}
 
 		#endregion Helpers
