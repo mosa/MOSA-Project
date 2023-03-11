@@ -2,7 +2,7 @@
 
 using System.Collections.Generic;
 
-namespace Mosa.Compiler.Framework.Transforms.RuntimeTime;
+namespace Mosa.Compiler.Framework.Transforms.Runtime;
 
 /// <summary>
 /// Transformations

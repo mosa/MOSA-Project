@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Mosa.Compiler.MosaTypeSystem;
 
-namespace Mosa.Compiler.Framework.Transforms.RuntimeTime
+namespace Mosa.Compiler.Framework.Transforms.Runtime
 {
 	public abstract class BaseRuntimeTransform : BaseTransform
 	{

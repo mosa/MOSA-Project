@@ -1,6 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Compiler.Framework.Transforms.RuntimeTime;
+namespace Mosa.Compiler.Framework.Transforms.Runtime;
 
 /// <summary>
 /// Rethrow

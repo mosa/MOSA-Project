@@ -1,13 +1,13 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Compiler.Framework.Transforms.RuntimeTime;
+namespace Mosa.Compiler.Framework.Transforms.Runtime;
 
 /// <summary>
-/// Unbox
+/// Box
 /// </summary>
-public sealed class Unbox : BaseRuntimeTransform
+public sealed class Box : BaseRuntimeTransform
 {
-	public Unbox() : base(IRInstruction.Unbox, TransformType.Manual | TransformType.Transform)
+	public Box() : base(IRInstruction.Box, TransformType.Manual | TransformType.Transform)
 	{
 	}
 
@@ -20,6 +20,6 @@ public sealed class Unbox : BaseRuntimeTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		SetVMCall(transform, context, "Unbox", context.Result, context.GetOperands());
+		SetVMCall(transform, context, "Box", context.Result, context.GetOperands());
 	}
 }

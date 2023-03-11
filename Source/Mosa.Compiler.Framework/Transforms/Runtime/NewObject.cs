@@ -1,13 +1,13 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Compiler.Framework.Transforms.RuntimeTime;
+namespace Mosa.Compiler.Framework.Transforms.Runtime;
 
 /// <summary>
-/// NewArray
+/// NewObject
 /// </summary>
-public sealed class NewArray : BaseRuntimeTransform
+public sealed class NewObject : BaseRuntimeTransform
 {
-	public NewArray() : base(IRInstruction.NewArray, TransformType.Manual | TransformType.Transform)
+	public NewObject() : base(IRInstruction.NewObject, TransformType.Manual | TransformType.Transform)
 	{
 	}
 
@@ -20,12 +20,12 @@ public sealed class NewArray : BaseRuntimeTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		var method = GetVMCallMethod(transform, "AllocateArray");
+		var method = GetVMCallMethod(transform, "AllocateObject");
 		var symbol = Operand.CreateSymbolFromMethod(method, transform.TypeSystem);
-		var arrayType = context.MosaType;
+		var classType = context.MosaType;
 
 		context.SetInstruction(IRInstruction.CallStatic, context.Result, symbol, context.GetOperands());
 
-		transform.MethodScanner.TypeAllocated(arrayType, method);
+		transform.MethodScanner.TypeAllocated(classType, transform.Method);
 	}
 }

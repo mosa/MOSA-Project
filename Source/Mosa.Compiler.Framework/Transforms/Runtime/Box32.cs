@@ -1,13 +1,13 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Compiler.Framework.Transforms.RuntimeTime;
+namespace Mosa.Compiler.Framework.Transforms.Runtime;
 
 /// <summary>
-/// BoxR8
+/// Box32
 /// </summary>
-public sealed class BoxR8 : BaseRuntimeTransform
+public sealed class Box32 : BaseRuntimeTransform
 {
-	public BoxR8() : base(IRInstruction.BoxR8, TransformType.Manual | TransformType.Transform)
+	public Box32() : base(IRInstruction.Box32, TransformType.Manual | TransformType.Transform)
 	{
 	}
 
@@ -20,6 +20,6 @@ public sealed class BoxR8 : BaseRuntimeTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		SetVMCall(transform, context, "BoxR8", context.Result, context.GetOperands());
+		SetVMCall(transform, context, "Box32", context.Result, context.GetOperands());
 	}
 }
