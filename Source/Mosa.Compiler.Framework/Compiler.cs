@@ -185,6 +185,7 @@ public sealed class Compiler
 			new PlugStage(),
 			new RuntimeStage(),
 			new IRTransformsStage(),
+
 			(compilerSettings.InlineMethods || compilerSettings.InlineExplicit) ? new InlineStage() : null,
 			new PromoteTemporaryVariables(),
 			new StaticLoadOptimizationStage(),

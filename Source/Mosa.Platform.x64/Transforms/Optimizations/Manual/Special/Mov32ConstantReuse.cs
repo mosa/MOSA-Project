@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x64.Transforms.Optimizations.Manual.Special;
 
@@ -13,6 +12,9 @@ public sealed class Mov32ConstantReuse : BaseTransform
 
 	public override bool Match(Context context, TransformContext transform)
 	{
+		if (!transform.AreCPURegistersAllocated)
+			return false;
+
 		if (!context.Operand1.IsResolvedConstant)
 			return false;
 

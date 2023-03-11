@@ -13,6 +13,9 @@ public sealed class Mov64ConstantReuse : BaseTransform
 
 	public override bool Match(Context context, TransformContext transform)
 	{
+		if (!transform.AreCPURegistersAllocated)
+			return false;
+
 		if (!context.Operand1.IsResolvedConstant)
 			return false;
 
@@ -27,7 +30,7 @@ public sealed class Mov64ConstantReuse : BaseTransform
 
 		var previous = context.Node.PreviousNonEmpty;
 
-		if (previous == null || previous.Instruction != X64.Mov64)
+		if (previous == null || previous.Instruction != X64.Mov32)
 			return false;
 
 		if (previous.Result.Register != CPURegister.RSP)
