@@ -423,19 +423,6 @@ public class MosaTypeLayout
 		return true;
 	}
 
-	public static bool IsCompoundType(MosaType underlyingType)
-	{
-		if (underlyingType == null)
-			return false;
-
-		var typeCode = underlyingType.TypeCode;
-
-		if (typeCode is MosaTypeCode.ValueType or MosaTypeCode.Var)
-			return true; // no search
-
-		return false;
-	}
-
 	public static MosaType GetUnderlyingType(MosaType type)
 	{
 		if (type.IsValueType)
@@ -512,7 +499,7 @@ public class MosaTypeLayout
 		{
 			ResolveType(type.BaseType);
 
-			Addchildren(type.BaseType, type);
+			AddChildren(type.BaseType, type);
 		}
 
 		if (type.IsInterface)
@@ -958,7 +945,7 @@ public class MosaTypeLayout
 		}
 	}
 
-	private void Addchildren(MosaType baseType, MosaType child)
+	private void AddChildren(MosaType baseType, MosaType child)
 	{
 		if (!derivedTypes.TryGetValue(baseType, out List<MosaType> children))
 		{

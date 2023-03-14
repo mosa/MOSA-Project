@@ -114,7 +114,7 @@ public class InlineStage : BaseMethodCompilerStage
 		// create basic blocks
 		foreach (var block in blocks)
 		{
-			var newBlock = CreateNewBlock();
+			var newBlock = BasicBlocks.CreateBlock();
 			mapBlocks.Add(block, newBlock);
 		}
 

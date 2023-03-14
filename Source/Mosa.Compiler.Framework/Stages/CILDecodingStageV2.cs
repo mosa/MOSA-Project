@@ -918,11 +918,6 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		}
 	}
 
-	private static bool IsCompoundType(MosaType underlyingType)
-	{
-		return !IsPrimitive(underlyingType);
-	}
-
 	private static bool IsPrimitive(MosaType underlyingType)
 	{
 		return MosaTypeLayout.IsPrimitive(underlyingType);
@@ -1031,7 +1026,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 	{
 		var block = BasicBlocks.GetByLabel(label);
 
-		block ??= CreateNewBlock(label, label);
+		block ??= BasicBlocks.CreateBlock(label, label);
 
 		return block;
 	}
@@ -3076,66 +3071,79 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 		var underlyingType = GetUnderlyingType(type);
 		var stacktype = underlyingType != null ? GetStackType(underlyingType) : StackType.ValueType;
+		var isPrimitive = IsPrimitive(underlyingType);
 
-		var isPrimary = IsPrimitive(underlyingType);
-
-		var result = AllocatedOperand(stacktype, isPrimary ? underlyingType : type);
+		var result = AllocatedOperand(stacktype, isPrimitive ? underlyingType : type);
 
 		PushStack(stack, new StackEntry(stacktype, result));
+
+		var offsetbase = entry.Operand;
+
+		if (entry.StackType == StackType.ValueType)
+		{
+			var address = MethodCompiler.CreateVirtualRegister(entry.Type.ToUnmanagedPointer());
+
+			context.AppendInstruction(IRInstruction.AddressOf, address, entry.Operand);
+
+			offsetbase = address;
+		}
+
+		if (entry.StackType == StackType.Int32 || entry.StackType == StackType.Int64)
+		{
+			var elementType = GetElementType(stacktype);
+			var moveInstruction = GetMoveInstruction(elementType);
+
+			context.AppendInstruction(moveInstruction, result, offsetbase);
+
+			return true;
+		}
 
 		switch (stacktype)
 		{
 			case StackType.Object:
-				{
-					if (isPrimary)
-					{
-						var elementType = GetElementType(stacktype);
-						var loadInstruction = GetLoadInstruction(elementType);
-
-						context.AppendInstruction(loadInstruction, result, entry.Operand, CreateConstant32(offset));
-
-						return true;
-					}
-					else
-					{
-						context.AppendInstruction(IRInstruction.LoadCompound, result, entry.Operand, CreateConstant32(offset));
-						context.MosaType = type;
-
-						return true;
-					}
-				}
-
 			case StackType.ManagedPointer:
 			case StackType.Int64:
 			case StackType.Int32:
 			case StackType.R4:
 			case StackType.R8:
 				{
-					var elementType = GetElementType(stacktype);
-					var moveInstruction = GetMoveInstruction(elementType);
+					var fixedOffset = CreateConstant32(offset);
 
-					context.AppendInstruction(moveInstruction, result, entry.Operand);
-
-					return true;
-				}
-			case StackType.ValueType:
-				{
-					if (isPrimary)
+					if (isPrimitive)
 					{
-						var elementType = GetElementType(stacktype);
-						var loadInstruction = GetLoadInstruction(elementType);
+						//var elementType = GetElementType(stacktype);
+						var loadInstruction = GetLoadInstruction(underlyingType);
 
-						var address = AllocateVirtualRegisterManagedPointer();
-						var fixedOffset = CreateConstant32(offset);
-
-						context.AppendInstruction(IRInstruction.AddressOf, address, entry.Operand);
-						context.AppendInstruction(loadInstruction, result, address, fixedOffset);
+						context.AppendInstruction(loadInstruction, result, offsetbase, fixedOffset);
 
 						return true;
 					}
 					else
 					{
-						context.AppendInstruction(IRInstruction.LoadCompound, result, entry.Operand, CreateConstant32(offset));
+						context.AppendInstruction(IRInstruction.LoadCompound, result, offsetbase, fixedOffset);
+						context.MosaType = type;
+
+						return true;
+					}
+				}
+
+			case StackType.ValueType:
+				{
+					if (isPrimitive)
+					{
+						var elementType = GetElementType(stacktype);
+						var loadInstruction = GetLoadInstruction(elementType);
+						var fixedOffset = CreateConstant32(offset);
+
+						context.AppendInstruction(loadInstruction, result, offsetbase, fixedOffset);
+
+						return true;
+					}
+					else
+					{
+						var fixedOffset = CreateConstant32(offset);
+
+						context.AppendInstruction(IRInstruction.LoadCompound, result, offsetbase, fixedOffset);
 						context.MosaType = type;
 
 						return true;
@@ -3144,6 +3152,8 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 			default: return false;
 		}
+
+
 	}
 
 	private bool Ldtoken(Context context, Stack<StackEntry> stack, MosaInstruction instruction)

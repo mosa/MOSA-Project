@@ -900,20 +900,9 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 		var operand = context.Operand1;
 		var field = context.MosaField;
 
-		uint offset = TypeLayout.GetFieldOffset(field);
 		bool isPointer = operand.IsPointer || operand.Type == TypeSystem.BuiltIn.I || operand.Type == TypeSystem.BuiltIn.U;
 
-		if (!result.IsOnStack && MosaTypeLayout.CanFitInRegister(operand.Type) && !operand.IsReferenceType && isPointer)
-		{
-			var loadInstruction = GetLoadInstruction(field.FieldType);
-			var fixedOffset = CreateConstant32(offset);
-
-			context.SetInstruction(loadInstruction, result, operand, fixedOffset);
-
-			return;
-		}
-
-		if (!result.IsOnStack && MosaTypeLayout.CanFitInRegister(operand.Type) && !operand.IsReferenceType && !isPointer)
+		if (MosaTypeLayout.CanFitInRegister(operand.Type) && !result.IsOnStack && !operand.IsReferenceType && !isPointer)
 		{
 			// simple move
 			Debug.Assert(result.IsVirtualRegister);
@@ -925,11 +914,22 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 			return;
 		}
 
+		var offset = TypeLayout.GetFieldOffset(field);
+		var fixedOffset = CreateConstant32(offset);
+
+		if (MosaTypeLayout.CanFitInRegister(operand.Type) && !result.IsOnStack && !operand.IsReferenceType && isPointer)
+		{
+			var loadInstruction = GetLoadInstruction(field.FieldType);
+
+			context.SetInstruction(loadInstruction, result, operand, fixedOffset);
+
+			return;
+		}
+
 		if (MosaTypeLayout.CanFitInRegister(result.Type) && operand.IsOnStack)
 		{
 			var loadInstruction = GetLoadInstruction(field.FieldType);
 			var address = MethodCompiler.CreateVirtualRegister(operand.Type.ToUnmanagedPointer());
-			var fixedOffset = CreateConstant32(offset);
 
 			context.SetInstruction(IRInstruction.AddressOf, address, operand);
 			context.AppendInstruction(loadInstruction, result, address, fixedOffset);
@@ -940,7 +940,6 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 		if (MosaTypeLayout.CanFitInRegister(result.Type) && !operand.IsOnStack)
 		{
 			var loadInstruction = GetLoadInstruction(field.FieldType);
-			var fixedOffset = CreateConstant32(offset);
 
 			context.SetInstruction(loadInstruction, result, operand, fixedOffset);
 
@@ -949,8 +948,6 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 
 		if (result.IsOnStack && !operand.IsOnStack)
 		{
-			var fixedOffset = CreateConstant32(offset);
-
 			context.SetInstruction(IRInstruction.LoadCompound, result, operand, fixedOffset);
 			context.MosaType = field.FieldType;
 
@@ -960,7 +957,6 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 		if (result.IsOnStack && operand.IsOnStack)
 		{
 			var address = MethodCompiler.CreateVirtualRegister(operand.Type.ToUnmanagedPointer());
-			var fixedOffset = CreateConstant32(offset);
 
 			context.SetInstruction(IRInstruction.AddressOf, address, operand);
 			context.AppendInstruction(IRInstruction.LoadCompound, result, address, fixedOffset);

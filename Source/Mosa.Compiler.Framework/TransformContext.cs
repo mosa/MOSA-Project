@@ -180,8 +180,8 @@ public sealed class TransformContext
 
 		NativeInteger = Is32BitPlatform ? I4 : I8;
 
-		Constant32_0 = Operand.CreateConstant(I4, (uint)0); 
-		Constant64_0 = Operand.CreateConstant(I4, (ulong)0); 
+		Constant32_0 = Operand.CreateConstant(I4, (uint)0);
+		Constant64_0 = Operand.CreateConstant(I4, (ulong)0);
 		ConstantR4_0 = Operand.CreateConstant(R4, 0.0f);
 		ConstantR8_0 = Operand.CreateConstant(R4, 0.0d);
 
@@ -317,7 +317,7 @@ public sealed class TransformContext
 
 	public void TraceBefore(Context context, BaseTransform transformation, int count)
 	{
-		TraceLog?.Log($"[{count}] {transformation.Name}");
+		TraceLog?.Log($"[{context.Block}-{count}] {transformation.Name}");
 
 		if (transformation.Log)
 			SpecialTraceLog?.Log($"{transformation.Name}\t{Method.FullName} at {context}");
