@@ -145,6 +145,14 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 		CreateInstructions();
 
+		var epilogueBlock = BasicBlocks.EpilogueBlock;
+
+		if (epilogueBlock != null)
+		{
+			var epilogue = new Context(epilogueBlock.First);
+			epilogue.AppendInstruction(IRInstruction.Epilogue);
+		}
+
 		MethodCompiler.ProtectedRegions = ProtectedRegion.CreateProtectedRegions(BasicBlocks, Method.ExceptionHandlers);
 
 		InsertBlockProtectInstructions();
@@ -3111,7 +3119,6 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 					if (isPrimitive)
 					{
-						//var elementType = GetElementType(stacktype);
 						var loadInstruction = GetLoadInstruction(underlyingType);
 
 						context.AppendInstruction(loadInstruction, result, offsetbase, fixedOffset);
@@ -3152,8 +3159,6 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 			default: return false;
 		}
-
-
 	}
 
 	private bool Ldtoken(Context context, Stack<StackEntry> stack, MosaInstruction instruction)

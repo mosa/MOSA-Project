@@ -142,4 +142,5 @@ public static class X86
 	public static readonly Popcnt32 Popcnt32 = new Popcnt32();
 	public static readonly Lzcnt32 Lzcnt32 = new Lzcnt32();
 	public static readonly Tzcnt32 Tzcnt32 = new Tzcnt32();
+	public static readonly Xorps Xorps = new Xorps();
 }

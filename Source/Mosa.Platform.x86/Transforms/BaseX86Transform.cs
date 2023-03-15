@@ -28,6 +28,28 @@ namespace Mosa.Platform.x86.Transforms
 			return v1;
 		}
 
+		public static Operand MoveConstantToFloatRegister(TransformContext transform, Context context, float value)
+		{
+			var label = transform.CreateR4Label(value);
+
+			var v1 = transform.AllocateVirtualRegisterR4();
+
+			context.InsertBefore().SetInstruction(X86.MovssLoad, v1, label, transform.Constant32_0);
+
+			return v1;
+		}
+
+		public static Operand MoveConstantToFloatRegister(TransformContext transform, Context context, double value)
+		{
+			var label = transform.CreateR8Label(value);
+
+			var v1 = transform.AllocateVirtualRegisterR8();
+
+			context.InsertBefore().SetInstruction(X86.MovsdLoad, v1, label, transform.Constant32_0);
+
+			return v1;
+		}
+
 		#endregion Helpers
 	}
 }
