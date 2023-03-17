@@ -904,8 +904,8 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 
 		if (MosaTypeLayout.CanFitInRegister(operand.Type) && !result.IsOnStack && !operand.IsReferenceType && !isPointer)
 		{
-			// simple move
 			Debug.Assert(result.IsVirtualRegister);
+			Debug.Assert(TypeLayout.GetFieldOffset(field) == 0);
 
 			var moveInstruction = GetMoveInstruction(field.FieldType);
 

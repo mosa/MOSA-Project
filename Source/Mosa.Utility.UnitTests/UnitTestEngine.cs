@@ -78,6 +78,7 @@ public class UnitTestEngine : IDisposable
 		Settings.SetValue("Optimizations.Inline.AggressiveMaximum", 24);
 		Settings.SetValue("Optimizations.Inline.Explicit", true);
 		Settings.SetValue("Optimizations.Inline.Maximum", 12);
+		Settings.SetValue("Optimizations.Basic.Window", 5);
 		Settings.SetValue("Optimizations.LongExpansion", true);
 		Settings.SetValue("Optimizations.LoopInvariantCodeMotion", true);
 		Settings.SetValue("Optimizations.Platform", true);
