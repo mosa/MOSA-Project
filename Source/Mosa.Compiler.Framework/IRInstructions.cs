@@ -253,6 +253,7 @@ public static class IRInstructions
 		IRInstruction.CheckedConversionR8ToI64,
 		IRInstruction.CheckedConversionU64ToI64,
 		IRInstruction.CheckedConversionI32ToI8,
+		IRInstruction.CheckedConversionI64ToI8,
 		IRInstruction.CheckedConversionR4ToI8,
 		IRInstruction.CheckedConversionR8ToI8,
 		IRInstruction.CheckedConversionU32ToI8,

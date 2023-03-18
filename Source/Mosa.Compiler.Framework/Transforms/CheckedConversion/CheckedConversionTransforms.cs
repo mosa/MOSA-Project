@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections.Generic;
+using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework.Transforms.CheckedConversion;
 
@@ -39,6 +40,11 @@ public static class CheckedConversionTransforms
 		new CheckedConversionU64ToI64(),
 		new CheckedConversionU64ToI8(),
 		new CheckedConversionU64ToU16(),
-		new CheckedConversionU64ToU32()
+		new CheckedConversionU64ToU32(),
+		new CheckedConversionU64ToI32(),
+		new CheckedConversionI64ToU8(),
+		new CheckedConversionR4ToI32(),
+		new CheckedConversionR8ToI32(),
+		new CheckedConversionI64ToI32()
 	};
 }

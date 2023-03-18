@@ -1,9 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Collections.Generic;
 using System.Diagnostics;
-using Mosa.Compiler.Common;
-using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.Transforms.CheckedConversion
 {
@@ -24,7 +21,7 @@ namespace Mosa.Compiler.Framework.Transforms.CheckedConversion
 
 			var symbol = Operand.CreateSymbolFromMethod(method, transform.TypeSystem);
 
-			context.AppendInstruction(IRInstruction.CallStatic, result, symbol, source);
+			context.SetInstruction(IRInstruction.CallStatic, result, symbol, source);
 
 			transform.MethodScanner.MethodInvoked(method, transform.Method);
 		}
