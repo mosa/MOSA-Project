@@ -47,7 +47,7 @@ public class PromoteTemporaryVariables : BaseMethodCompilerStage
 			return false;
 		}
 
-		if (!MosaTypeLayout.CanFitInRegister(operand))
+		if (!MosaTypeLayout.CanFitInRegister(operand.Type))
 		{
 			trace?.Log($"incompatible type: {operand}");
 			return false;

@@ -278,7 +278,7 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 
 				var newOperand = Operand.CreateVirtualRegister(operand.Type, -operand.Index);
 
-				var moveInstruction = !MosaTypeLayout.CanFitInRegister(newOperand)
+				var moveInstruction = !MosaTypeLayout.CanFitInRegister(newOperand.Type)
 					? IRInstruction.MoveCompound
 					: GetMoveInstruction(newOperand.Type);
 
