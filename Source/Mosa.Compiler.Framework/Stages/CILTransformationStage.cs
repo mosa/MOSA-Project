@@ -274,7 +274,7 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 	/// <param name="node">The node.</param>
 	private void AddSignedOverflow(InstructionNode node)
 	{
-		var overflowResult = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
+		var overflowResult = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
 		node.SetInstruction2(Select(node.Result, IRInstruction.AddOverflowOut32, IRInstruction.AddOverflowOut64), node.Result, overflowResult, node.Operand1, node.Operand2);
 
@@ -287,7 +287,7 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 	/// <param name="node">The node.</param>
 	private void AddUnsignedCarry(InstructionNode node)
 	{
-		var carryResult = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
+		var carryResult = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
 		node.SetInstruction2(Select(node.Result, IRInstruction.AddCarryOut32, IRInstruction.AddCarryOut64), node.Result, carryResult, node.Operand1, node.Operand2);
 
@@ -1208,7 +1208,7 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 	/// <param name="node">The node.</param>
 	private void MulSignedOverflow(InstructionNode node)
 	{
-		var overflowResult = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
+		var overflowResult = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
 		node.SetInstruction2(Select(node.Result, IRInstruction.MulOverflowOut32, IRInstruction.MulOverflowOut64), node.Result, overflowResult, node.Operand1, node.Operand2);
 
@@ -1221,7 +1221,7 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 	/// <param name="node">The node.</param>
 	private void MulUnsignedCarry(InstructionNode node)
 	{
-		var carryResult = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
+		var carryResult = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
 		node.SetInstruction2(Select(node.Result, IRInstruction.MulCarryOut32, IRInstruction.MulCarryOut64), node.Result, carryResult, node.Operand1, node.Operand2);
 
@@ -1672,7 +1672,7 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 	/// <param name="node">The node.</param>
 	private void SubSignedOverflow(InstructionNode node)
 	{
-		var overflowResult = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
+		var overflowResult = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
 		node.SetInstruction2(Select(node.Result, IRInstruction.SubOverflowOut32, IRInstruction.SubOverflowOut64), node.Result, overflowResult, node.Operand1, node.Operand2);
 
@@ -1685,7 +1685,7 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 	/// <param name="node">The node.</param>
 	private void SubUnsignedCarry(InstructionNode node)
 	{
-		var carryResult = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
+		var carryResult = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
 		node.SetInstruction2(Select(node.Result, IRInstruction.SubCarryOut32, IRInstruction.SubCarryOut64), node.Result, carryResult, node.Operand1, node.Operand2);
 
