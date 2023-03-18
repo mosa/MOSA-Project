@@ -106,6 +106,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 	private Operand[] LocalStack;
 	private StackType[] LocalStackType;
+	private ElementType[] LocalElementType;
 
 	private SortedList<int, int> Targets;
 
@@ -728,8 +729,9 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 			}
 			else
 			{
-				destination = AllocateVirtualRegister(GetType(first));
-				instruction = GetMoveInstruction(GetType(first));
+				var firstType = GetType(first);
+				destination = AllocateVirtualRegister(firstType);
+				instruction = GetMoveInstruction(firstType);
 			}
 
 			foreach (var previousBlock in block.PreviousBlocks)
@@ -783,17 +785,16 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		}
 
 		LocalStackType = new StackType[count];
+		LocalElementType = new ElementType[count];
 
 		for (int index = 0; index < count; index++)
 		{
 			var type = Method.LocalVariables[index];
-			var underlyingType = GetUnderlyingType(type.Type);
 
+			var underlyingType = GetUnderlyingType(type.Type);
 			var stackType = underlyingType != null ? GetStackType(underlyingType) : StackType.ValueType;
 
-			LocalStackType[index] = stackType;
-
-			//LocalStack[index] = MethodCompiler.AddStackLocal(type.Type, type.IsPinned);
+			var isPrimitive = IsPrimitive(underlyingType);
 
 			if (stackType == StackType.ValueType || arg[index] || type.IsPinned)
 			{
@@ -803,6 +804,9 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 			{
 				LocalStack[index] = AllocatedOperand(stackType, type.Type);
 			}
+
+			LocalStackType[index] = stackType;
+			LocalElementType[index] = isPrimitive ? GetElementType(underlyingType) : Is32BitPlatform ? ElementType.I4 : ElementType.I8;
 		}
 	}
 
@@ -825,7 +829,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 					break;
 
 				case StackType.Int32:
-					prologue.AppendInstruction(IRInstruction.Move32, local, Constant64_0);
+					prologue.AppendInstruction(IRInstruction.Move32, local, Constant32_0);
 					break;
 
 				case StackType.Int64:
@@ -1733,7 +1737,6 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 		var target = (int)instruction.Operand;
 		var block = BasicBlocks.GetByLabel(target);
-		//var nextblock = BasicBlocks.GetByLabel(instruction.Next.Value);
 
 		switch (entry1.StackType)
 		{
@@ -1742,7 +1745,6 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 					var result = AllocateVirtualRegister32();
 					context.AppendInstruction(IRInstruction.CompareR4, conditionCode, result, entry1.Operand, entry2.Operand);
 					context.AppendInstruction(IRInstruction.Branch32, ConditionCode.NotEqual, null, result, Constant32_0, block);
-					//context.AppendInstruction(IRInstruction.Jmp, nextblock);
 					return true;
 				}
 
@@ -1751,23 +1753,19 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 					var result = AllocateVirtualRegister32();
 					context.AppendInstruction(IRInstruction.CompareR8, conditionCode, result, entry1.Operand, entry2.Operand);
 					context.AppendInstruction(IRInstruction.Branch32, ConditionCode.NotEqual, null, result, Constant32_0, block);
-					//context.AppendInstruction(IRInstruction.Jmp, nextblock);
 					return true;
 				}
 
 			case StackType.Object when entry2.StackType == StackType.Object:
 				context.AppendInstruction(IRInstruction.BranchObject, conditionCode, null, entry1.Operand, entry2.Operand, block);
-				//context.AppendInstruction(IRInstruction.Jmp, nextblock);
 				return true;
 
 			case StackType.Int32 when entry2.StackType == StackType.Int32:
 				context.AppendInstruction(IRInstruction.Branch32, conditionCode, null, entry1.Operand, entry2.Operand, block);
-				//context.AppendInstruction(IRInstruction.Jmp, nextblock);
 				return true;
 
 			case StackType.Int64 when entry2.StackType == StackType.Int64:
 				context.AppendInstruction(IRInstruction.Branch64, conditionCode, null, entry1.Operand, entry2.Operand, block);
-				//context.AppendInstruction(IRInstruction.Jmp, nextblock);
 				return true;
 
 			default:
@@ -3617,7 +3615,6 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 					if (isFieldPrimitive)
 					{
 						var loadInstruction = GetLoadInstruction(fieldUnderlyingType);
-
 						context.AppendInstruction(loadInstruction, result, offsetbase, fixedOffset);
 
 						return true;
@@ -3636,8 +3633,8 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 					if (isFieldPrimitive)
 					{
 						var elementType = GetElementType(fieldStacktype);
-						var loadInstruction = GetLoadInstruction(elementType);
 						var fixedOffset = CreateConstant32(offset);
+						var loadInstruction = GetLoadInstruction(elementType);
 
 						context.AppendInstruction(loadInstruction, result, offsetbase, fixedOffset);
 
@@ -3835,7 +3832,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 		PushStack(stack, new StackEntry(stacktype, result));
 
-		var elementType = GetElementType(stacktype);
+		var elementType = LocalElementType[index];
 
 		if (local.IsVirtualRegister)
 		{
@@ -3846,7 +3843,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		}
 		else
 		{
-			var loadInstruction = GetLoadInstruction(elementType); //GetLoadParamInstruction
+			var loadInstruction = GetLoadInstruction(elementType);
 
 			context.AppendInstruction(loadInstruction, result, StackFrame, local);
 			return true;
@@ -4295,7 +4292,6 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 			//context.InvokeMethod = method;  // optional??
 
 			var loadInstruction = GetLoadInstruction(newThisLocal.Type);
-
 			context.AppendInstruction(loadInstruction, result, StackFrame, newThisLocal);
 
 			PushStack(stack, new StackEntry(stackType, result));
@@ -4880,6 +4876,8 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 			return true;
 		}
 
+		// var elementType = LocalElementType[index];
+
 		if (local.IsVirtualRegister)
 		{
 			switch (stacktype)
@@ -5459,13 +5457,10 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		//else
 		//	context.AppendInstruction(IRInstruction.Add64, result, entry.Operand, CreateConstant64(8));
 
-		// LEGACY:
-		var v1 = AllocateVirtualRegister(type.ToManagedPointer());
-
-		context.AppendInstruction(IRInstruction.Unbox, v1, entry.Operand);
-
+		var v1 = AllocateVirtualRegisterManagedPointer();
 		var loadInstruction = GetLoadInstruction(type);
 
+		context.AppendInstruction(IRInstruction.Unbox, v1, entry.Operand);
 		context.AppendInstruction(loadInstruction, result, v1, ConstantZero);
 		context.MosaType = type;
 
