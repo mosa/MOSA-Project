@@ -90,7 +90,7 @@ namespace Mosa.Compiler.Framework.Transforms.Call
 
 			var returnType = result.Type;
 
-			if (!MosaTypeLayout.CanFitInRegister(returnType))
+			if (!MosaTypeLayout.IsUnderlyingPrimitive(returnType))
 			{
 				return Alignment.AlignUp(transform.TypeLayout.GetTypeSize(returnType), transform.Architecture.NativeAlignment);
 			}
@@ -144,7 +144,7 @@ namespace Mosa.Compiler.Framework.Transforms.Call
 				context.AppendInstruction(IRInstruction.Gen, returnFP);
 				context.AppendInstruction(IRInstruction.MoveR8, result, returnFP);
 			}
-			else if (!MosaTypeLayout.CanFitInRegister(result.Type))
+			else if (!MosaTypeLayout.IsUnderlyingPrimitive(result.Type))
 			{
 				Debug.Assert(result.IsStackLocal);
 				context.AppendInstruction(IRInstruction.LoadCompound, result, transform.StackPointer, transform.Constant32_0);
@@ -193,7 +193,7 @@ namespace Mosa.Compiler.Framework.Transforms.Call
 			{
 				context.AppendInstruction(IRInstruction.StoreR8, null, transform.StackPointer, offsetOperand, operand);
 			}
-			else if (!MosaTypeLayout.CanFitInRegister(operand.Type))
+			else if (!MosaTypeLayout.IsUnderlyingPrimitive(operand.Type))
 			{
 				context.AppendInstruction(IRInstruction.StoreCompound, null, transform.StackPointer, offsetOperand, operand);
 			}

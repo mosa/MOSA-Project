@@ -3555,54 +3555,45 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 		var field = (MosaField)instruction.Operand;
 		var offset = TypeLayout.GetFieldOffset(field);
-		var type = field.FieldType;
+		var fieldType = field.FieldType;
 
-		var fieldUnderlyingType = GetUnderlyingType(type);
+		var fieldUnderlyingType = GetUnderlyingType(fieldType);
 		var fieldStacktype = GetStackTypeDefaultValueType(fieldUnderlyingType);
 		var isFieldPrimitive = IsPrimitive(fieldUnderlyingType);
 
-		var result = AllocatedOperand(fieldStacktype, isFieldPrimitive ? fieldUnderlyingType : type);
+		var result = AllocatedOperand(fieldStacktype, isFieldPrimitive ? fieldUnderlyingType : fieldType);
 
 		PushStack(stack, new StackEntry(fieldStacktype, result));
 
-		var offsetbase = entry.Operand;
+		var operand = entry.Operand;
 
 		if (entry.StackType == StackType.ValueType)
 		{
 			var address = AllocateVirtualRegisterManagedPointer();
 
-			context.AppendInstruction(IRInstruction.AddressOf, address, entry.Operand);
+			context.AppendInstruction(IRInstruction.AddressOf, address, operand);
 
-			offsetbase = address;
+			operand = address;
 		}
 
 		var classUnderlyingType = GetUnderlyingType(field.DeclaringType);
 		var classStacktype = GetStackTypeDefaultValueType(classUnderlyingType);
 		var isClassPrimitive = IsPrimitive(classUnderlyingType);
 
-		bool isPointer = entry.Operand.IsPointer || entry.Operand.Type == TypeSystem.BuiltIn.I || entry.Operand.Type == TypeSystem.BuiltIn.U;
-		bool isMove = (MosaTypeLayout.CanFitInRegister(entry.Operand.Type) && !result.IsOnStack && !entry.Operand.IsReferenceType && !isPointer);
+		bool isPointer = operand.IsManagedPointer || operand.Type == TypeSystem.BuiltIn.I || operand.Type == TypeSystem.BuiltIn.U;
+		bool isMove = (MosaTypeLayout.IsUnderlyingPrimitive(operand.Type) && !result.IsOnStack && !operand.IsReferenceType && !isPointer);
 
-		if (isFieldPrimitive && isClassPrimitive) // && (entry.StackType is StackType.ManagedPointer or StackType.Int32 or StackType.Int64))
+		if (isFieldPrimitive && isClassPrimitive && !isPointer)
 		{
-			if (classStacktype == StackType.ValueType)
-			{
-				Debug.Assert(offset == 0);
+			//&& (entry.StackType is StackType.ManagedPointer or StackType.Int32 or StackType.Int64)
+			Debug.Assert(offset == 0);
 
-				var elementType = GetElementType(fieldStacktype);
-				var moveInstruction = GetMoveInstruction(elementType);
+			var elementType = GetElementType(fieldStacktype);
+			var moveInstruction = GetMoveInstruction(elementType);
 
-				context.AppendInstruction(moveInstruction, result, entry.Operand);
+			context.AppendInstruction(moveInstruction, result, entry.Operand);
 
-				return true;
-			}
-			else
-			{
-				if (isMove)
-				{
-					Debug.Assert(offset == 0);
-				}
-			}
+			return true;
 		}
 
 		var fixedOffset = CreateConstant32(offset);
@@ -3614,23 +3605,23 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 				var elementType = GetElementType(fieldStacktype);
 				var loadInstruction = GetLoadInstruction(elementType);
 
-				context.AppendInstruction(loadInstruction, result, offsetbase, fixedOffset);
+				context.AppendInstruction(loadInstruction, result, operand, fixedOffset);
 			}
 			else
 			{
-				context.AppendInstruction(IRInstruction.LoadCompound, result, offsetbase, fixedOffset);
-				context.MosaType = type;
+				context.AppendInstruction(IRInstruction.LoadCompound, result, operand, fixedOffset);
+				context.MosaType = fieldType;
 			}
 		}
 		else if (isFieldPrimitive)
 		{
 			var loadInstruction = GetLoadInstruction(fieldUnderlyingType);
-			context.AppendInstruction(loadInstruction, result, offsetbase, fixedOffset);
+			context.AppendInstruction(loadInstruction, result, operand, fixedOffset);
 		}
 		else
 		{
-			context.AppendInstruction(IRInstruction.LoadCompound, result, offsetbase, fixedOffset);
-			context.MosaType = type;
+			context.AppendInstruction(IRInstruction.LoadCompound, result, operand, fixedOffset);
+			context.MosaType = fieldType;
 		}
 		return true;
 	}

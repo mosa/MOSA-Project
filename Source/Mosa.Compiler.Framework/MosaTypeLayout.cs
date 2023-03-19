@@ -389,7 +389,7 @@ public class MosaTypeLayout
 		return null;
 	}
 
-	public static bool CanFitInRegister(MosaType type)
+	public static bool IsUnderlyingPrimitive(MosaType type)
 	{
 		var basetype = GetUnderlyingType(type);
 

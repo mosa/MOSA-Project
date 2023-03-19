@@ -176,6 +176,8 @@ public sealed class Operand
 
 	public bool IsPinned { get; private set; }
 
+	public bool IsEnum { get; private set; }
+
 	public bool IsPointer => IsManagedPointer || IsUnmanagedPointer || IsFunctionPointer;
 
 	public bool IsR4 { get; private set; }
@@ -286,6 +288,7 @@ public sealed class Operand
 		IsParameter = false;
 		IsResolved = false;
 		IsString = false;
+		IsEnum = false;
 	}
 
 	/// <summary>
@@ -311,6 +314,8 @@ public sealed class Operand
 
 		IsInteger64 = type.IsUI8 || Type.GetEnumUnderlyingType().IsUI8;
 		IsInteger32 = type.IsUI4 || Type.GetEnumUnderlyingType().IsUI4;
+
+		IsEnum = type.IsEnum;
 	}
 
 	#endregion Construction
@@ -436,6 +441,31 @@ public sealed class Operand
 			IsResolved = true,
 			IsReferenceType = true,
 			Size = 0, // depends on platform
+		};
+	}
+
+	public static Operand CreateManagedPointer()
+	{
+		return new Operand()
+		{
+			IsConstant = false,
+			ConstantUnsigned64 = 0,
+			IsNull = false,
+			IsResolved = true,
+			IsReferenceType = false,
+			IsManagedPointer = true,
+			Size = 0, // depends on platform
+		};
+	}
+
+	public static Operand CreateLabel(string label)
+	{
+		return new Operand()
+		{
+			IsLabel = true,
+			Name = label,
+			Offset = 0,
+			IsConstant = true
 		};
 	}
 

@@ -363,7 +363,7 @@ public sealed class MethodCompiler
 
 		//offset += MethodData.ReturnInRegister ? MethodData.ReturnSize : 0;
 
-		if (!MosaTypeLayout.CanFitInRegister(Method.Signature.ReturnType))
+		if (!MosaTypeLayout.IsUnderlyingPrimitive(Method.Signature.ReturnType))
 		{
 			offset += (int)TypeLayout.GetTypeSize(Method.Signature.ReturnType);
 		}
@@ -794,7 +794,7 @@ public sealed class MethodCompiler
 	/// <returns></returns>
 	public Operand AllocateVirtualRegisterOrStackSlot(MosaType type)
 	{
-		if (MosaTypeLayout.CanFitInRegister(type))
+		if (MosaTypeLayout.IsUnderlyingPrimitive(type))
 		{
 			var resultType = Compiler.GetStackType(type);
 			return CreateVirtualRegister(resultType);
@@ -816,7 +816,7 @@ public sealed class MethodCompiler
 		int index = 0;
 		foreach (var local in locals)
 		{
-			if (MosaTypeLayout.CanFitInRegister(local.Type) && !local.IsPinned)
+			if (MosaTypeLayout.IsUnderlyingPrimitive(local.Type) && !local.IsPinned)
 			{
 				var stacktype = Compiler.GetStackType(local.Type);
 				LocalVariables[index++] = CreateVirtualRegister(stacktype);

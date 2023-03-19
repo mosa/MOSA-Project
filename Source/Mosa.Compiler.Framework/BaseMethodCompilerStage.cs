@@ -362,7 +362,7 @@ public abstract class BaseMethodCompilerStage
 
 	protected Operand AllocateVirtualRegisterManagedPointer()
 	{
-		return AllocateVirtualRegisterI(); // temp
+		return AllocateVirtualRegisterI();
 	}
 
 	protected Operand AllocateVirtualRegisterI()
@@ -1077,7 +1077,7 @@ public abstract class BaseMethodCompilerStage
 			return IRInstruction.SetReturn64;
 		else if (type.IsUI8 || (type.IsEnum && type.ElementType.IsUI8))
 			return IRInstruction.SetReturn64;
-		else if (!MosaTypeLayout.CanFitInRegister(type))
+		else if (!MosaTypeLayout.IsUnderlyingPrimitive(type))
 			return IRInstruction.SetReturnCompound;
 
 		return IRInstruction.SetReturn32;
