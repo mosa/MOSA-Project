@@ -11,7 +11,7 @@ public sealed class Unbox : BaseRuntimeTransform
 	{
 	}
 
-	public override int Priority => -10;
+	public override int Priority => 50;
 
 	public override bool Match(Context context, TransformContext transform)
 	{
@@ -20,6 +20,8 @@ public sealed class Unbox : BaseRuntimeTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		SetVMCall(transform, context, "Unbox", context.Result, context.GetOperands());
+		//SetVMCall(transform, context, "Unbox", context.Result, context.GetOperands());
+
+		context.SetInstruction(transform.MoveInstruction, context.Result, context.Operand1);
 	}
 }

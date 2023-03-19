@@ -32,8 +32,6 @@ public sealed class UnboxInstruction : UnaryInstruction
 
 		var type = (MosaType)decoder.Instruction.Operand;
 
-		//Operand result = decoder.Compiler.CreateVirtualRegister(type);
-		//ctx.Result = result;
 		node.Result = decoder.MethodCompiler.AllocateVirtualRegisterOrStackSlot(type);
 		node.MosaType = type;
 	}

@@ -1,7 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x64.Transforms.FixedRegisters;
 
@@ -24,7 +23,7 @@ public sealed class MovStoreSeg64 : BaseTransform
 		var result = context.Result;
 		var operand1 = context.Operand1;
 
-		var v1 = transform.AllocateVirtualRegister(operand1.Type);
+		var v1 = transform.AllocateVirtualRegister(operand1);
 
 		context.SetInstruction(X64.Mov64, v1, operand1);
 		context.AppendInstruction(X64.MovStoreSeg64, result, v1);

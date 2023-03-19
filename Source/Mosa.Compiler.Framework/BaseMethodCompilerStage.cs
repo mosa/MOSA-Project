@@ -362,10 +362,10 @@ public abstract class BaseMethodCompilerStage
 
 	protected Operand AllocateVirtualRegisterManagedPointer()
 	{
-		return AllocateVirtualRegisterI();
+		return MethodCompiler.VirtualRegisters.Allocate(TypeSystem.BuiltIn.ManagedPointer);
 	}
 
-	protected Operand AllocateVirtualRegisterI()
+	protected Operand AllocateVirtualRegisterNativeInteger()
 	{
 		return Is32BitPlatform ? MethodCompiler.VirtualRegisters.Allocate(TypeSystem.BuiltIn.I4) : MethodCompiler.VirtualRegisters.Allocate(TypeSystem.BuiltIn.I8);
 	}

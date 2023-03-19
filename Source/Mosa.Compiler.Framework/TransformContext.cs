@@ -3,6 +3,8 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Reflection;
+using System.Reflection.Emit;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Managers;
 using Mosa.Compiler.Framework.Trace;
@@ -34,9 +36,9 @@ public sealed class TransformContext
 
 	public MosaType R8 { get; private set; }
 
-	public MosaType O { get; private set; }
+	public MosaType Pointer { get; private set; }
 
-	public MosaType TypedRef { get; set; }
+	public MosaType O { get; private set; }
 
 	public MosaType NativeInteger { get; private set; }
 
@@ -176,7 +178,7 @@ public sealed class TransformContext
 		R4 = TypeSystem.BuiltIn.R4;
 		R8 = TypeSystem.BuiltIn.R8;
 		O = TypeSystem.BuiltIn.Object;
-		TypedRef = TypeSystem.BuiltIn.TypedRef;
+		Pointer = TypeSystem.BuiltIn.Pointer;
 
 		NativeInteger = Is32BitPlatform ? I4 : I8;
 
@@ -259,6 +261,11 @@ public sealed class TransformContext
 		SpecialTraceLog = specialTraceLog;
 	}
 
+	public Operand AllocateVirtualRegister(Operand operand)
+	{
+		return VirtualRegisters.Allocate(operand.Type);
+	}
+
 	public Operand AllocateVirtualRegister(MosaType type)
 	{
 		return VirtualRegisters.Allocate(type);
@@ -292,11 +299,6 @@ public sealed class TransformContext
 	public Operand AllocateVirtualRegisterNativeInteger()
 	{
 		return VirtualRegisters.Allocate(NativeInteger);
-	}
-
-	public Operand AllocateVirtualRegisterTypedRef()
-	{
-		return VirtualRegisters.Allocate(TypedRef);
 	}
 
 	public bool ApplyTransform(Context context, BaseTransform transform, int count)
@@ -502,7 +504,7 @@ public sealed class TransformContext
 
 		var operand1 = context.Operand1;
 
-		var v1 = AllocateVirtualRegister(operand1.Type);
+		var v1 = AllocateVirtualRegister(operand1);
 
 		context.InsertBefore().AppendInstruction(moveInstruction, v1, operand1);
 		context.Operand1 = v1;
@@ -514,7 +516,7 @@ public sealed class TransformContext
 
 		var operand2 = context.Operand2;
 
-		var v1 = AllocateVirtualRegister(operand2.Type);
+		var v1 = AllocateVirtualRegister(operand2);
 
 		context.InsertBefore().AppendInstruction(moveInstruction, v1, operand2);
 		context.Operand2 = v1;
@@ -529,7 +531,7 @@ public sealed class TransformContext
 
 		if (operand1.IsConstant && operand2.IsConstant && operand1.ConstantUnsigned64 == operand2.ConstantUnsigned64)
 		{
-			var v1 = AllocateVirtualRegister(operand1.Type);
+			var v1 = AllocateVirtualRegister(operand1);
 
 			context.InsertBefore().AppendInstruction(moveInstruction, v1, operand1);
 			context.Operand1 = v1;
@@ -538,8 +540,8 @@ public sealed class TransformContext
 		}
 		else if (operand1.IsConstant && operand2.IsConstant)
 		{
-			var v1 = AllocateVirtualRegister(operand1.Type);
-			var v2 = AllocateVirtualRegister(operand2.Type);
+			var v1 = AllocateVirtualRegister(operand1);
+			var v2 = AllocateVirtualRegister(operand2);
 
 			context.InsertBefore().AppendInstruction(moveInstruction, v1, operand1);
 			context.InsertBefore().AppendInstruction(moveInstruction, v2, operand2);
@@ -549,14 +551,14 @@ public sealed class TransformContext
 		}
 		else if (operand1.IsConstant)
 		{
-			var v1 = AllocateVirtualRegister(operand1.Type);
+			var v1 = AllocateVirtualRegister(operand1);
 
 			context.InsertBefore().AppendInstruction(moveInstruction, v1, operand1);
 			context.Operand1 = v1;
 		}
 		else if (operand2.IsConstant)
 		{
-			var v1 = AllocateVirtualRegister(operand2.Type);
+			var v1 = AllocateVirtualRegister(operand2);
 
 			context.InsertBefore().AppendInstruction(moveInstruction, v1, operand2);
 			context.Operand2 = v1;

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 
 using Mosa.Compiler.Common;
@@ -1076,6 +1077,8 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 	{
 		if (type.IsReferenceType)
 			return StackType.Object;
+		else if (type.IsManagedPointer)
+			return StackType.ManagedPointer;
 		else if (type.IsI1 || type.IsI2 || type.IsI4 || type.IsU1 || type.IsU2 || type.IsU4 || type.IsChar || type.IsBoolean)
 			return StackType.Int32;
 		else if (type.IsI8 || type.IsU8)
@@ -1086,8 +1089,6 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 			return StackType.R4;
 		else if (type.IsI)
 			return Is32BitPlatform ? StackType.Int32 : StackType.Int64;
-		else if (type.IsManagedPointer)
-			return StackType.ManagedPointer;
 		else if (type.IsPointer)
 			return Is32BitPlatform ? StackType.Int32 : StackType.Int64;
 		else if (type.IsValueType)
@@ -3583,7 +3584,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		bool isPointer = operand.IsManagedPointer || operand.Type == TypeSystem.BuiltIn.I || operand.Type == TypeSystem.BuiltIn.U;
 		bool isMove = (MosaTypeLayout.IsUnderlyingPrimitive(operand.Type) && !result.IsOnStack && !operand.IsReferenceType && !isPointer);
 
-		if (isFieldPrimitive && isClassPrimitive && !isPointer)
+		if (isFieldPrimitive && isClassPrimitive && field.DeclaringType.IsValueType && !isPointer)
 		{
 			//&& (entry.StackType is StackType.ManagedPointer or StackType.Int32 or StackType.Int64)
 			Debug.Assert(offset == 0);
@@ -5424,27 +5425,35 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 	private bool Unbox(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
 	{
 		var entry = PopStack(stack);
-
 		var type = (MosaType)instruction.Operand;
 
-		// FUTURE: Check for valid cast
-		//var methodTable = GetMethodTablePointer(type);
+		var underlyingType = GetUnderlyingType(type);
+		var isPrimitive = IsPrimitive(underlyingType);
 
-		var result = AllocatedOperand(StackType.ManagedPointer);
-		PushStack(stack, new StackEntry(StackType.ManagedPointer, result));
+		if (isPrimitive)
+		{
+			var elementType = GetElementType(underlyingType);
 
-		// FUTURE:
-		//if (Is32BitPlatform)
-		//	context.AppendInstruction(IRInstruction.Add32, result, entry.Operand, CreateConstant32(8));
-		//else
-		//	context.AppendInstruction(IRInstruction.Add64, result, entry.Operand, CreateConstant64(8));
+			var loadInstruction = GetLoadInstruction(elementType);
+			var stackType = GetStackType(elementType);
+			var result = AllocatedOperand(stackType);
 
-		var v1 = AllocateVirtualRegisterManagedPointer();
-		var loadInstruction = GetLoadInstruction(type);
+			context.AppendInstruction(loadInstruction, result, entry.Operand, ConstantZero); //CreateConstant32(8)
 
-		context.AppendInstruction(IRInstruction.Unbox, v1, entry.Operand);
-		context.AppendInstruction(loadInstruction, result, v1, ConstantZero);
-		context.MosaType = type;
+			PushStack(stack, new StackEntry(stackType, result));
+		}
+		else
+		{
+			var result = AllocatedOperand(StackType.ManagedPointer);
+			PushStack(stack, new StackEntry(StackType.ManagedPointer, result));
+
+			var v1 = AllocateVirtualRegisterManagedPointer();
+			var loadInstruction = GetLoadInstruction(type);
+
+			context.AppendInstruction(IRInstruction.Unbox, v1, entry.Operand);
+			context.AppendInstruction(loadInstruction, result, v1, ConstantZero);
+			context.MosaType = type;
+		}
 
 		return true;
 	}
