@@ -5434,11 +5434,11 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		{
 			var elementType = GetElementType(underlyingType);
 
-			var loadInstruction = GetLoadInstruction(elementType);
+			var moveInstruction = GetMoveInstruction(elementType);
 			var stackType = GetStackType(elementType);
 			var result = AllocatedOperand(stackType);
 
-			context.AppendInstruction(loadInstruction, result, entry.Operand, ConstantZero); //CreateConstant32(8)
+			context.AppendInstruction(moveInstruction, result, entry.Operand, ConstantZero); //CreateConstant32(8)
 
 			PushStack(stack, new StackEntry(stackType, result));
 		}
