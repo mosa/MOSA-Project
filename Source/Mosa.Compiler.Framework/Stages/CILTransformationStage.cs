@@ -274,7 +274,7 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 	/// <param name="node">The node.</param>
 	private void AddSignedOverflow(InstructionNode node)
 	{
-		var overflowResult = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
+		var overflowResult = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
 		node.SetInstruction2(Select(node.Result, IRInstruction.AddOverflowOut32, IRInstruction.AddOverflowOut64), node.Result, overflowResult, node.Operand1, node.Operand2);
 
@@ -287,7 +287,7 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 	/// <param name="node">The node.</param>
 	private void AddUnsignedCarry(InstructionNode node)
 	{
-		var carryResult = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
+		var carryResult = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
 		node.SetInstruction2(Select(node.Result, IRInstruction.AddCarryOut32, IRInstruction.AddCarryOut64), node.Result, carryResult, node.Operand1, node.Operand2);
 
@@ -359,14 +359,14 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 	/// <param name="node">The node.</param>
 	private void BinaryLogic(InstructionNode node)
 	{
-		if (node.Operand1.Type.IsEnum)
+		if (node.Operand1.IsEnum)
 		{
 			var type = node.Operand1.Type;
 			var operand = Operand.CreateStaticField(type.Fields[0], TypeSystem);
 			node.SetOperand(0, operand);
 		}
 
-		if (node.Operand2.Type.IsEnum)
+		if (node.Operand2.IsEnum)
 		{
 			var type = node.Operand2.Type;
 			var operand = Operand.CreateStaticField(type.Fields[0], TypeSystem);
@@ -798,7 +798,7 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 
 		var type = MosaTypeLayout.GetUnderlyingType(node.Operand1.Type);
 
-		if (type != null && MosaTypeLayout.CanFitInRegister(type))
+		if (type != null && MosaTypeLayout.IsUnderlyingPrimitive(type))
 		{
 			var loadInstruction = GetLoadParameterInstruction(type);
 
@@ -831,7 +831,7 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 		var source = node.Operand1;
 		var destination = node.Result;
 
-		Debug.Assert(MosaTypeLayout.CanFitInRegister(destination.Type));
+		Debug.Assert(MosaTypeLayout.IsUnderlyingPrimitive(destination.Type));
 		var moveInstruction = GetMoveInstruction(destination.Type);
 		node.SetInstruction(moveInstruction, destination, source);
 	}
@@ -855,7 +855,7 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 
 		Debug.Assert(elementOffset != null);
 
-		if (MosaTypeLayout.CanFitInRegister(arrayType.ElementType))
+		if (MosaTypeLayout.IsUnderlyingPrimitive(arrayType.ElementType))
 		{
 			var loadInstruction = GetLoadInstruction(arrayType.ElementType);
 
@@ -900,23 +900,12 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 		var operand = context.Operand1;
 		var field = context.MosaField;
 
-		uint offset = TypeLayout.GetFieldOffset(field);
 		bool isPointer = operand.IsPointer || operand.Type == TypeSystem.BuiltIn.I || operand.Type == TypeSystem.BuiltIn.U;
 
-		if (!result.IsOnStack && MosaTypeLayout.CanFitInRegister(operand.Type) && !operand.IsReferenceType && isPointer)
+		if (MosaTypeLayout.IsUnderlyingPrimitive(operand.Type) && !result.IsOnStack && !operand.IsReferenceType && !isPointer)
 		{
-			var loadInstruction = GetLoadInstruction(field.FieldType);
-			var fixedOffset = CreateConstant32(offset);
-
-			context.SetInstruction(loadInstruction, result, operand, fixedOffset);
-
-			return;
-		}
-
-		if (!result.IsOnStack && MosaTypeLayout.CanFitInRegister(operand.Type) && !operand.IsReferenceType && !isPointer)
-		{
-			// simple move
 			Debug.Assert(result.IsVirtualRegister);
+			Debug.Assert(TypeLayout.GetFieldOffset(field) == 0);
 
 			var moveInstruction = GetMoveInstruction(field.FieldType);
 
@@ -925,11 +914,22 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 			return;
 		}
 
-		if (MosaTypeLayout.CanFitInRegister(result.Type) && operand.IsOnStack)
+		var offset = TypeLayout.GetFieldOffset(field);
+		var fixedOffset = CreateConstant32(offset);
+
+		if (MosaTypeLayout.IsUnderlyingPrimitive(operand.Type) && !result.IsOnStack && !operand.IsReferenceType && isPointer)
+		{
+			var loadInstruction = GetLoadInstruction(field.FieldType);
+
+			context.SetInstruction(loadInstruction, result, operand, fixedOffset);
+
+			return;
+		}
+
+		if (MosaTypeLayout.IsUnderlyingPrimitive(result.Type) && operand.IsOnStack)
 		{
 			var loadInstruction = GetLoadInstruction(field.FieldType);
 			var address = MethodCompiler.CreateVirtualRegister(operand.Type.ToUnmanagedPointer());
-			var fixedOffset = CreateConstant32(offset);
 
 			context.SetInstruction(IRInstruction.AddressOf, address, operand);
 			context.AppendInstruction(loadInstruction, result, address, fixedOffset);
@@ -937,10 +937,9 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 			return;
 		}
 
-		if (MosaTypeLayout.CanFitInRegister(result.Type) && !operand.IsOnStack)
+		if (MosaTypeLayout.IsUnderlyingPrimitive(result.Type) && !operand.IsOnStack)
 		{
 			var loadInstruction = GetLoadInstruction(field.FieldType);
-			var fixedOffset = CreateConstant32(offset);
 
 			context.SetInstruction(loadInstruction, result, operand, fixedOffset);
 
@@ -949,8 +948,6 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 
 		if (result.IsOnStack && !operand.IsOnStack)
 		{
-			var fixedOffset = CreateConstant32(offset);
-
 			context.SetInstruction(IRInstruction.LoadCompound, result, operand, fixedOffset);
 			context.MosaType = field.FieldType;
 
@@ -960,7 +957,6 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 		if (result.IsOnStack && operand.IsOnStack)
 		{
 			var address = MethodCompiler.CreateVirtualRegister(operand.Type.ToUnmanagedPointer());
-			var fixedOffset = CreateConstant32(offset);
 
 			context.SetInstruction(IRInstruction.AddressOf, address, operand);
 			context.AppendInstruction(IRInstruction.LoadCompound, result, address, fixedOffset);
@@ -1039,7 +1035,7 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 		var destination = node.Result;
 		var source = node.Operand1;
 
-		if (MosaTypeLayout.CanFitInRegister(source.Type))
+		if (MosaTypeLayout.IsUnderlyingPrimitive(source.Type))
 		{
 			if (!source.IsVirtualRegister)
 			{
@@ -1082,7 +1078,7 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 
 		// This is actually ldind.* and ldobj - the opcodes have the same meanings
 
-		if (MosaTypeLayout.CanFitInRegister(type))
+		if (MosaTypeLayout.IsUnderlyingPrimitive(type))
 		{
 			var loadInstruction = GetLoadInstruction(type);
 
@@ -1212,7 +1208,7 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 	/// <param name="node">The node.</param>
 	private void MulSignedOverflow(InstructionNode node)
 	{
-		var overflowResult = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
+		var overflowResult = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
 		node.SetInstruction2(Select(node.Result, IRInstruction.MulOverflowOut32, IRInstruction.MulOverflowOut64), node.Result, overflowResult, node.Operand1, node.Operand2);
 
@@ -1225,7 +1221,7 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 	/// <param name="node">The node.</param>
 	private void MulUnsignedCarry(InstructionNode node)
 	{
-		var carryResult = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
+		var carryResult = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
 		node.SetInstruction2(Select(node.Result, IRInstruction.MulCarryOut32, IRInstruction.MulCarryOut64), node.Result, carryResult, node.Operand1, node.Operand2);
 
@@ -1292,7 +1288,7 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 		var before = context.InsertBefore();
 
 		// If the type is value type we don't need to call AllocateObject
-		if (MosaTypeLayout.CanFitInRegister(result.Type))
+		if (MosaTypeLayout.IsUnderlyingPrimitive(result.Type))
 		{
 			if (result.IsValueType)
 			{
@@ -1452,7 +1448,7 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 	{
 		Debug.Assert(node.Result.IsParameter);
 
-		if (MosaTypeLayout.CanFitInRegister(node.Operand1.Type))
+		if (MosaTypeLayout.IsUnderlyingPrimitive(node.Operand1.Type))
 		{
 			var storeInstruction = GetStoreParameterInstruction(node.Result.Type);
 			node.SetInstruction(storeInstruction, null, node.Result, node.Operand1);
@@ -1482,7 +1478,7 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 		var elementOffset = CalculateArrayElementOffset(node, arrayType, arrayIndex);
 		var totalElementOffset = CalculateTotalArrayOffset(node, elementOffset);
 
-		if (MosaTypeLayout.CanFitInRegister(value.Type))
+		if (MosaTypeLayout.IsUnderlyingPrimitive(value.Type))
 		{
 			var storeInstruction = GetStoreInstruction(arrayType.ElementType);
 
@@ -1512,7 +1508,7 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 		var valueOperand = node.Operand2;
 		var fieldType = field.FieldType;
 
-		if (MosaTypeLayout.CanFitInRegister(fieldType))
+		if (MosaTypeLayout.IsUnderlyingPrimitive(fieldType))
 		{
 			var storeInstruction = GetStoreInstruction(fieldType);
 			node.SetInstruction(storeInstruction, null, objectOperand, offsetOperand, valueOperand);
@@ -1542,7 +1538,7 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 			return;
 		}
 
-		if (MosaTypeLayout.CanFitInRegister(type))
+		if (MosaTypeLayout.IsUnderlyingPrimitive(type))
 		{
 			if (node.Operand1.IsVirtualRegister)
 			{
@@ -1570,7 +1566,7 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 		// This is actually stind.* and stobj - the opcodes have the same meanings
 		var type = node.MosaType;  // pass thru
 
-		if (MosaTypeLayout.CanFitInRegister(type))
+		if (MosaTypeLayout.IsUnderlyingPrimitive(type))
 		{
 			var storeInstruction = GetStoreInstruction(type);
 
@@ -1596,7 +1592,7 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 		var result = node.Result;
 		var fieldOperand = Operand.CreateStaticField(field, TypeSystem);
 
-		if (MosaTypeLayout.CanFitInRegister(fieldType))
+		if (MosaTypeLayout.IsUnderlyingPrimitive(fieldType))
 		{
 			var loadInstruction = GetLoadInstruction(fieldType);
 
@@ -1635,7 +1631,7 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 		var fieldType = field.FieldType;
 		var operand1 = node.Operand1;
 
-		if (MosaTypeLayout.CanFitInRegister(fieldType))
+		if (MosaTypeLayout.IsUnderlyingPrimitive(fieldType))
 		{
 			var storeInstruction = GetStoreInstruction(fieldType);
 
@@ -1676,7 +1672,7 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 	/// <param name="node">The node.</param>
 	private void SubSignedOverflow(InstructionNode node)
 	{
-		var overflowResult = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
+		var overflowResult = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
 		node.SetInstruction2(Select(node.Result, IRInstruction.SubOverflowOut32, IRInstruction.SubOverflowOut64), node.Result, overflowResult, node.Operand1, node.Operand2);
 
@@ -1689,7 +1685,7 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 	/// <param name="node">The node.</param>
 	private void SubUnsignedCarry(InstructionNode node)
 	{
-		var carryResult = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
+		var carryResult = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
 		node.SetInstruction2(Select(node.Result, IRInstruction.SubCarryOut32, IRInstruction.SubCarryOut64), node.Result, carryResult, node.Operand1, node.Operand2);
 
@@ -1754,7 +1750,7 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 
 		var v1 = AllocateVirtualRegister(type.ToManagedPointer());
 
-		context.SetInstruction(IRInstruction.Unbox, v1, value);
+		context.SetInstruction(MoveInstruction, v1, value);
 
 		var loadInstruction = GetLoadInstruction(type);
 
@@ -1790,7 +1786,7 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 			context.AppendInstruction(IRInstruction.UnboxAny, tmp, value, adr, CreateConstant32(typeSize));
 		}
 
-		if (MosaTypeLayout.CanFitInRegister(type))
+		if (MosaTypeLayout.IsUnderlyingPrimitive(type))
 		{
 			var loadInstruction = GetLoadInstruction(type);
 

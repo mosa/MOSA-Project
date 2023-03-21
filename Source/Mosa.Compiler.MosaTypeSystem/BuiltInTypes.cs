@@ -44,7 +44,7 @@ public class BuiltInTypes
 
 	public MosaType Pointer { get; }
 
-	//public MosaType ValueType { get; }
+	public MosaType ManagedPointer { get; }
 
 	public BuiltInTypes(ITypeResolver typeResolver, MosaModule corlib)
 	{
@@ -66,9 +66,9 @@ public class BuiltInTypes
 		I = typeResolver.ResolveType(corlib, BuiltInType.IntPtr);
 		U = typeResolver.ResolveType(corlib, BuiltInType.UIntPtr);
 		TypedRef = typeResolver.ResolveType(corlib, BuiltInType.TypedReference);
-		Pointer = Void.ToUnmanagedPointer();
 
-		//ValueType = typeResolver.ResolveType(typeSystem, corlib, BuiltInType.ValueType);
+		Pointer = Void.ToUnmanagedPointer();
+		ManagedPointer = Void.ToManagedPointer();
 	}
 
 	public MosaType GetType(BuiltInType builtInType)

@@ -41,5 +41,6 @@ public static class AddressModeTransforms
 		new Subsd(),
 		new Subss(),
 		new Xor32(),
+		new Xorps(),
 	};
 }

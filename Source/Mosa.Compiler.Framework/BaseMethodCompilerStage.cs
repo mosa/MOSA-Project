@@ -362,10 +362,10 @@ public abstract class BaseMethodCompilerStage
 
 	protected Operand AllocateVirtualRegisterManagedPointer()
 	{
-		return AllocateVirtualRegisterI(); // temp
+		return MethodCompiler.VirtualRegisters.Allocate(TypeSystem.BuiltIn.ManagedPointer);
 	}
 
-	protected Operand AllocateVirtualRegisterI()
+	protected Operand AllocateVirtualRegisterNativeInteger()
 	{
 		return Is32BitPlatform ? MethodCompiler.VirtualRegisters.Allocate(TypeSystem.BuiltIn.I4) : MethodCompiler.VirtualRegisters.Allocate(TypeSystem.BuiltIn.I8);
 	}
@@ -433,61 +433,12 @@ public abstract class BaseMethodCompilerStage
 	/// <summary>
 	/// Create an empty block.
 	/// </summary>
-	/// <returns></returns>
-	protected BasicBlock CreateNewBlock()
-	{
-		return BasicBlocks.CreateBlock();
-	}
-
-	/// <summary>
-	/// Create an empty block.
-	/// </summary>
-	/// <param name="blockLabel">The label.</param>
-	/// <returns></returns>
-	protected BasicBlock CreateNewBlock(int blockLabel)
-	{
-		return BasicBlocks.CreateBlock(blockLabel);
-	}
-
-	/// <summary>
-	/// Creates the new block.
-	/// </summary>
-	/// <param name="blockLabel">The label.</param>
-	/// <param name="instructionLabel">The instruction label.</param>
-	/// <returns></returns>
-	protected BasicBlock CreateNewBlock(int blockLabel, int instructionLabel)
-	{
-		return BasicBlocks.CreateBlock(blockLabel, instructionLabel);
-	}
-
-	/// <summary>
-	/// Create an empty block.
-	/// </summary>
 	/// <param name="blockLabel">The label.</param>
 	/// <param name="instructionLabel">The instruction label.</param>
 	/// <returns></returns>
 	protected Context CreateNewBlockContext(int blockLabel, int instructionLabel)
 	{
-		return new Context(CreateNewBlock(blockLabel, instructionLabel));
-	}
-
-	/// <summary>
-	/// Creates empty blocks.
-	/// </summary>
-	/// <param name="blocks">The Blocks.</param>
-	/// <param name="instructionLabel">The instruction label.</param>
-	/// <returns></returns>
-	protected BasicBlock[] CreateNewBlocks(int blocks, int instructionLabel)
-	{
-		// Allocate the block array
-		var result = new BasicBlock[blocks];
-
-		for (int index = 0; index < blocks; index++)
-		{
-			result[index] = CreateNewBlock(-1, instructionLabel);
-		}
-
-		return result;
+		return new Context(BasicBlocks.CreateBlock(blockLabel, instructionLabel));
 	}
 
 	/// <summary>
@@ -497,7 +448,7 @@ public abstract class BaseMethodCompilerStage
 	/// <returns></returns>
 	protected Context CreateNewBlockContext(int instructionLabel)
 	{
-		return new Context(CreateNewBlock(-1, instructionLabel));
+		return new Context(BasicBlocks.CreateBlock(-1, instructionLabel));
 	}
 
 	/// <summary>
@@ -526,7 +477,7 @@ public abstract class BaseMethodCompilerStage
 	/// <returns></returns>
 	protected BasicBlock Split(InstructionNode node)
 	{
-		var newblock = CreateNewBlock(-1, node.Label);
+		var newblock = BasicBlocks.CreateBlock(-1, node.Label);
 
 		node.Split(newblock);
 
@@ -641,6 +592,8 @@ public abstract class BaseMethodCompilerStage
 
 		Debug.Assert(block.PreviousBlocks.Count == 0);
 	}
+
+	#endregion Block Operations
 
 	#region Phi Helpers
 
@@ -785,8 +738,6 @@ public abstract class BaseMethodCompilerStage
 	}
 
 	#endregion Phi Helpers
-
-	#endregion Block Operations
 
 	#region Protected Region Methods
 
@@ -1126,7 +1077,7 @@ public abstract class BaseMethodCompilerStage
 			return IRInstruction.SetReturn64;
 		else if (type.IsUI8 || (type.IsEnum && type.ElementType.IsUI8))
 			return IRInstruction.SetReturn64;
-		else if (!MosaTypeLayout.CanFitInRegister(type))
+		else if (!MosaTypeLayout.IsUnderlyingPrimitive(type))
 			return IRInstruction.SetReturnCompound;
 
 		return IRInstruction.SetReturn32;

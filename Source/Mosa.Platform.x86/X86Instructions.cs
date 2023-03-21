@@ -144,5 +144,6 @@ public static class X86Instructions
 		X86.Popcnt32,
 		X86.Lzcnt32,
 		X86.Tzcnt32,
+		X86.Xorps,
 	};
 }

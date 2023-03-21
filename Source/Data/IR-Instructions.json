@@ -1534,6 +1534,253 @@
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 1
+		},
+		{
+			"Name": "CheckedConversionI32ToU8",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "CheckedConversionI64ToU8",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "CheckedConversionR4ToU8",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "CheckedConversionR8ToU8",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "CheckedConversionU32ToU8",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "CheckedConversionU64ToU8",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "CheckedConversionI64ToI32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "CheckedConversionR4ToI32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "CheckedConversionR8ToI32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "CheckedConversionU32ToI32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "CheckedConversionU64ToI32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "CheckedConversionR4ToI64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "CheckedConversionR8ToI64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "CheckedConversionU64ToI64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "CheckedConversionI32ToI8",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "CheckedConversionI64ToI8",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "CheckedConversionR4ToI8",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "CheckedConversionR8ToI8",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "CheckedConversionU32ToI8",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "CheckedConversionU64ToI8",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "CheckedConversionI32ToI16",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "CheckedConversionI64ToI16",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "CheckedConversionR4ToI16",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "CheckedConversionR8ToI16",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "CheckedConversionU32ToI16",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "CheckedConversionU64ToI16",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "CheckedConversionI32ToU32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "CheckedConversionI64ToU32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "CheckedConversionR4ToU32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "CheckedConversionR8ToU32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "CheckedConversionU64ToU32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "CheckedConversionI32ToU64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "CheckedConversionI64ToU64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "CheckedConversionR4ToU64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "CheckedConversionR8ToU64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "CheckedConversionI32ToU16",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "CheckedConversionI64ToU16",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "CheckedConversionR4ToU16",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "CheckedConversionR8ToU16",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "CheckedConversionU32ToU16",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "CheckedConversionU64ToU16",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
 		}
+
 	]
 }

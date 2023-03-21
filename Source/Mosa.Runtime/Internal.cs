@@ -169,10 +169,10 @@ public static class Internal
 		return memory;
 	}
 
-	public static Pointer Unbox(Pointer box)
-	{
-		return box;
-	}
+	//public static Pointer Unbox(Pointer box)
+	//{
+	//	return box;
+	//}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static Pointer UnboxAny(Pointer box, Pointer vt, uint size)

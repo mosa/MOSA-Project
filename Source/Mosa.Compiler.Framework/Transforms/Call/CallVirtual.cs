@@ -2,7 +2,6 @@
 
 using System.Diagnostics;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 using Mosa.Compiler.Framework.Transforms.Call;
 
 namespace Mosa.Platform.Framework.Call;
@@ -40,8 +39,8 @@ public sealed class CallVirtual : BasePlugTransform
 		// Offset to the method pointer on the MethodTable
 		var methodPointerOffset = transform.CreateConstant32(CalculateMethodTableOffset(transform, method));
 
-		var typeDef = transform.AllocateVirtualRegister(transform.TypeSystem.BuiltIn.Pointer);
-		var callTarget = transform.AllocateVirtualRegister(transform.TypeSystem.BuiltIn.Pointer);
+		var typeDef = transform.AllocateVirtualRegister(transform.Pointer);
+		var callTarget = transform.AllocateVirtualRegister(transform.Pointer);
 
 		// Get the Method Table pointer
 		context.SetInstruction(transform.LoadInstruction, typeDef, thisPtr, typeDefOffset);

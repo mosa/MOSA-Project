@@ -155,7 +155,7 @@ public sealed class CILOperandAssignmentStage : BaseMethodCompilerStage
 			var source = sourceOperands[i];
 			var destination = destinationOperands[i];
 
-			if (MosaTypeLayout.CanFitInRegister(source.Type))
+			if (MosaTypeLayout.IsUnderlyingPrimitive(source.Type))
 			{
 				var moveInstruction = GetMoveInstruction(source.Type);
 				context.AppendInstruction(moveInstruction, destination, source);

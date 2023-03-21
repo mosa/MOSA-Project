@@ -37,6 +37,8 @@ public static class IRTransforms
 		new ConvertR8ToU32(),
 		new ConvertI32ToR4(),
 		new ConvertI32ToR8(),
+		new ConvertU32ToR4(),
+		new ConvertU32ToR8(),
 		new DivR4(),
 		new DivR8(),
 		new DivSigned32(),

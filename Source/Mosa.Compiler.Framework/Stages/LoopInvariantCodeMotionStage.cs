@@ -281,7 +281,7 @@ public sealed class LoopInvariantCodeMotionStage : BaseMethodCompilerStage
 		var header = loop.Header;
 
 		// Create pre-header block
-		var landingpadBlock = CreateNewBlock();
+		var landingpadBlock = BasicBlocks.CreateBlock();
 		var landingpad = new Context(landingpadBlock);
 
 		var previousBlocks = new List<BasicBlock>(header.PreviousBlocks);

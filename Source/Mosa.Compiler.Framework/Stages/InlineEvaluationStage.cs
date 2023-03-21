@@ -221,7 +221,7 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 		var returnType = methodData.Method.Signature.ReturnType;
 
 		// FIXME: Add rational
-		if (!(returnType.IsVoid || returnType.IsUI8 || returnType.IsR8 || MosaTypeLayout.CanFitInRegister(returnType) || TypeLayout.GetTypeSize(returnType) <= 8))
+		if (!(returnType.IsVoid || returnType.IsUI8 || returnType.IsR8 || MosaTypeLayout.IsUnderlyingPrimitive(returnType) || TypeLayout.GetTypeSize(returnType) <= 8))
 			return true;
 
 		// FUTURE: Don't hardcode namepsace
@@ -278,7 +278,7 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 
 				var newOperand = Operand.CreateVirtualRegister(operand.Type, -operand.Index);
 
-				var moveInstruction = !MosaTypeLayout.CanFitInRegister(newOperand)
+				var moveInstruction = !MosaTypeLayout.IsUnderlyingPrimitive(newOperand.Type)
 					? IRInstruction.MoveCompound
 					: GetMoveInstruction(newOperand.Type);
 

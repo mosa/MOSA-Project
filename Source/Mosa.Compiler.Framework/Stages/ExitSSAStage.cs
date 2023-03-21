@@ -93,7 +93,7 @@ public class ExitSSAStage : BaseMethodCompilerStage
 
 		var context = new Context(node);
 
-		if (!MosaTypeLayout.CanFitInRegister(destination))
+		if (!MosaTypeLayout.IsUnderlyingPrimitive(destination.Type))
 		{
 			context.AppendInstruction(IRInstruction.MoveCompound, destination, source);
 			context.MosaType = destination.Type;

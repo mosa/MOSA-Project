@@ -222,7 +222,7 @@ public sealed class CILDecodingStage : BaseMethodCompilerStage, IInstructionDeco
 
 	private BasicBlock GetBlockByLabel(int label)
 	{
-		var block = BasicBlocks.GetByLabel(label) ?? CreateNewBlock(label, label);
+		var block = BasicBlocks.GetByLabel(label) ?? BasicBlocks.CreateBlock(label, label);
 
 		return block;
 	}

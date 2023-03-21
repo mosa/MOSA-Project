@@ -12,7 +12,7 @@ public sealed class StackLayoutStage : BaseMethodCompilerStage
 	protected override void Run()
 	{
 		// Layout stack variables
-		int size = MethodCompiler.IsStackFrameRequired ? LayoutVariables(MethodCompiler.LocalStack, Architecture.OffsetOfFirstLocal) : 0;
+		var size = MethodCompiler.IsStackFrameRequired ? LayoutVariables(MethodCompiler.LocalStack, Architecture.OffsetOfFirstLocal) : 0;
 
 		MethodCompiler.StackSize = size;
 		MethodData.LocalMethodStackSize = -size;
@@ -48,7 +48,7 @@ public sealed class StackLayoutStage : BaseMethodCompilerStage
 	/// <returns></returns>
 	private int LayoutVariables(List<Operand> locals, int offsetOfFirst)
 	{
-		int offset = offsetOfFirst;
+		var offset = offsetOfFirst;
 
 		foreach (var local in locals)
 		{

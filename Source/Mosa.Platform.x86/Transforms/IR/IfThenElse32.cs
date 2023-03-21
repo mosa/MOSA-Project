@@ -22,7 +22,7 @@ public sealed class IfThenElse32 : BaseIRTransform
 
 		if (operand2.IsConstant && operand3.IsConstant)
 		{
-			var v1 = transform.AllocateVirtualRegister(result.Type);
+			var v1 = transform.AllocateVirtualRegister(result);
 
 			context.SetInstruction(X86.Cmp32, null, operand1, transform.Constant32_0);
 			context.AppendInstruction(X86.Mov32, result, operand2);                                     // true

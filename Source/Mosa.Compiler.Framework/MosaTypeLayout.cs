@@ -389,25 +389,13 @@ public class MosaTypeLayout
 		return null;
 	}
 
-	public static bool CanFitInRegister(Operand operand)
-	{
-		return CanFitInRegister(operand.Type);
-	}
-
-	public static bool CanFitInRegister(MosaType type)
+	public static bool IsUnderlyingPrimitive(MosaType type)
 	{
 		var basetype = GetUnderlyingType(type);
 
-		var fits = FitsInRegister(basetype);
+		var fits = IsPrimitive(basetype);
 
 		return fits;
-	}
-
-	public static (bool FitsIntegerRegister, bool FitsFloatRegister, bool Is64Bit, bool IsNative) GetRegisterType(MosaType type)
-	{
-		var basetype = GetUnderlyingType(type);
-
-		return GetRegisterTypeInfo(basetype);
 	}
 
 	public static bool IsPrimitive(MosaType underlyingType)
@@ -415,25 +403,10 @@ public class MosaTypeLayout
 		if (underlyingType == null)
 			return false;
 
-		var typeCode = underlyingType.TypeCode;
-
-		if (typeCode is MosaTypeCode.ValueType or MosaTypeCode.Var)
+		if (underlyingType.TypeCode is MosaTypeCode.ValueType or MosaTypeCode.Var)
 			return false; // no search
 
 		return true;
-	}
-
-	public static bool IsCompoundType(MosaType underlyingType)
-	{
-		if (underlyingType == null)
-			return false;
-
-		var typeCode = underlyingType.TypeCode;
-
-		if (typeCode is MosaTypeCode.ValueType or MosaTypeCode.Var)
-			return true; // no search
-
-		return false;
 	}
 
 	public static MosaType GetUnderlyingType(MosaType type)
@@ -512,7 +485,7 @@ public class MosaTypeLayout
 		{
 			ResolveType(type.BaseType);
 
-			Addchildren(type.BaseType, type);
+			AddChildren(type.BaseType, type);
 		}
 
 		if (type.IsInterface)
@@ -595,7 +568,7 @@ public class MosaTypeLayout
 			ParameterOffsets = offsets,
 			ParameterSizes = sizes,
 			ParameterStackSize = (int)stacksize,
-			ReturnInRegister = !returnType.IsVoid && FitsInRegister(returnType),
+			ReturnInRegister = !returnType.IsVoid && IsPrimitive(returnType),
 			HasThis = method.HasThis
 		};
 
@@ -958,7 +931,7 @@ public class MosaTypeLayout
 		}
 	}
 
-	private void Addchildren(MosaType baseType, MosaType child)
+	private void AddChildren(MosaType baseType, MosaType child)
 	{
 		if (!derivedTypes.TryGetValue(baseType, out List<MosaType> children))
 		{
@@ -967,86 +940,6 @@ public class MosaTypeLayout
 		}
 
 		children.Add(child);
-	}
-
-	private static bool FitsInRegister(MosaType type)
-	{
-		if (type == null)
-			return false;
-
-		var typeCode = type.TypeCode;
-
-		if (typeCode == MosaTypeCode.ValueType)
-			return false; // no search
-
-		return typeCode switch
-		{
-			MosaTypeCode.Void => true,
-			MosaTypeCode.MVar => true,
-			MosaTypeCode.Boolean => true,
-			MosaTypeCode.Char => true,
-			MosaTypeCode.I1 => true,
-			MosaTypeCode.U1 => true,
-			MosaTypeCode.I2 => true,
-			MosaTypeCode.U2 => true,
-			MosaTypeCode.I4 => true,
-			MosaTypeCode.U4 => true,
-			MosaTypeCode.I8 => true,
-			MosaTypeCode.U8 => true,
-			MosaTypeCode.R4 => true,
-			MosaTypeCode.R8 => true,
-			MosaTypeCode.String => true,
-			MosaTypeCode.UnmanagedPointer => true,
-			MosaTypeCode.ManagedPointer => true,
-			MosaTypeCode.ReferenceType => true,
-			MosaTypeCode.Array => true,
-			MosaTypeCode.TypedRef => true,
-			MosaTypeCode.I => true,
-			MosaTypeCode.U => true,
-			MosaTypeCode.FunctionPointer => true,
-			MosaTypeCode.Object => true,
-			MosaTypeCode.SZArray => true,
-			MosaTypeCode.Var => false,
-			_ => false
-		};
-	}
-
-	private static (bool FitsIntegerRegister, bool FitsFloatRegister, bool Is64Bit, bool IsNative) GetRegisterTypeInfo(MosaType type)
-	{
-		if (type == null)
-			return (false, false, false, false);
-
-		return type.TypeCode switch
-		{
-			MosaTypeCode.ValueType => (true, false, false, true),
-			MosaTypeCode.Void => (true, false, false, true),
-			MosaTypeCode.MVar => (false, false, false, false),
-			MosaTypeCode.Boolean => (true, false, false, false),
-			MosaTypeCode.Char => (true, false, false, false),
-			MosaTypeCode.I1 => (true, false, false, false),
-			MosaTypeCode.U1 => (true, false, false, false),
-			MosaTypeCode.I2 => (true, false, false, false),
-			MosaTypeCode.U2 => (true, false, false, false),
-			MosaTypeCode.I4 => (true, false, false, false),
-			MosaTypeCode.U4 => (true, false, false, false),
-			MosaTypeCode.I8 => (true, false, false, false),
-			MosaTypeCode.U8 => (true, false, true, false),
-			MosaTypeCode.R4 => (true, true, false, false),
-			MosaTypeCode.R8 => (true, true, true, false),
-			MosaTypeCode.String => (true, false, false, true),
-			MosaTypeCode.UnmanagedPointer => (true, false, false, true),
-			MosaTypeCode.ManagedPointer => (true, false, false, true),
-			MosaTypeCode.ReferenceType => (true, false, false, true),
-			MosaTypeCode.Array => (true, false, false, true),
-			MosaTypeCode.TypedRef => (true, false, false, true),
-			MosaTypeCode.I => (true, false, true, true),
-			MosaTypeCode.U => (true, false, true, true),
-			MosaTypeCode.FunctionPointer => (true, false, true, false),
-			MosaTypeCode.Object => (true, false, true, false),
-			MosaTypeCode.SZArray => (true, false, true, false),
-			MosaTypeCode.Var => (false, false, false, false),
-			_ => (false, false, false, false)
-		};
 	}
 
 	#endregion Internal

@@ -97,7 +97,7 @@ public static class DelegatePatcher
 		{
 			var type = methodCompiler.Parameters[i].Type;
 
-			if (MosaTypeLayout.CanFitInRegister(type))
+			if (MosaTypeLayout.IsUnderlyingPrimitive(type))
 			{
 				vrs[i] = methodCompiler.VirtualRegisters.Allocate(methodCompiler.Parameters[i].Type);
 
