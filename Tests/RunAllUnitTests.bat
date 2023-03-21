@@ -1,1 +1,1 @@
-..\bin\Mosa.Utility.UnitTests.exe -display-off -o0 -output-hash -!cilv2
+..\bin\Mosa.Utility.UnitTests.exe -display-off -oMax -output-hash
