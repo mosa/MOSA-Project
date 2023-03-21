@@ -1750,7 +1750,7 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 
 		var v1 = AllocateVirtualRegister(type.ToManagedPointer());
 
-		context.SetInstruction(IRInstruction.Unbox, v1, value);
+		context.SetInstruction(MoveInstruction, v1, value);
 
 		var loadInstruction = GetLoadInstruction(type);
 

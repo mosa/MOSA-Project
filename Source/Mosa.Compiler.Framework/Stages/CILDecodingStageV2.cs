@@ -803,7 +803,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 			}
 			else
 			{
-				LocalStack[index] = AllocatedOperand(stackType, type.Type);
+				LocalStack[index] = Allocate(stackType, type.Type);
 			}
 
 			LocalStackType[index] = stackType;
@@ -938,7 +938,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		return MosaTypeLayout.IsPrimitive(underlyingType);
 	}
 
-	private Operand AllocatedOperand(StackType stackType, MosaType type = null)
+	private Operand Allocate(StackType stackType, MosaType type = null)
 	{
 		return stackType switch
 		{
@@ -961,7 +961,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		var underlyingType = GetUnderlyingType(type);
 		var stackType = GetStackTypeDefaultValueType(underlyingType);
 
-		var operand = AllocatedOperand(stackType, type);
+		var operand = Allocate(stackType, type);
 
 		return (stackType == StackType.ValueType) ? new StackEntry(stackType, operand, type) : new StackEntry(stackType, operand);
 	}
@@ -3422,7 +3422,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		{
 			var elementType = GetElementType(underlyingType);
 			var stacktype = GetStackType(elementType);
-			var result = AllocatedOperand(stacktype);
+			var result = Allocate(stacktype);
 
 			var loadInstruction = GetLoadParamInstruction(elementType);
 			context.AppendInstruction(loadInstruction, result, parameter);
@@ -3432,7 +3432,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		else
 		{
 			var stacktype = GetStackType(type);
-			var result = AllocatedOperand(stacktype, type);
+			var result = Allocate(stacktype, type);
 
 			context.AppendInstruction(IRInstruction.LoadParamCompound, result, parameter);
 			context.MosaType = type;
@@ -3476,8 +3476,8 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		if (isPrimitive)
 		{
 			var stacktype = GetStackType(underlyingType);
-			var result = AllocatedOperand(stacktype);
-			var elementType = GetElementType(stacktype);
+			var result = Allocate(stacktype);
+			var elementType = GetElementType(underlyingType);
 			var loadInstruction = GetLoadInstruction(elementType);
 
 			context.AppendInstruction(loadInstruction, result, array, totalElementOffset);
@@ -3486,7 +3486,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		}
 		else
 		{
-			var result = AllocatedOperand(StackType.ValueType, type);
+			var result = Allocate(StackType.ValueType, type);
 
 			context.AppendInstruction(IRInstruction.LoadCompound, result, array, totalElementOffset);
 			context.MosaType = type.ElementType;
@@ -3513,7 +3513,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		var totalElementOffset = CalculateTotalArrayOffset(context, elementOffset);
 
 		var stacktype = GetStackType(elementType);
-		var result = AllocatedOperand(stacktype);
+		var result = Allocate(stacktype);
 		PushStack(stack, new StackEntry(stacktype, result));
 
 		var loadInstruction = GetLoadInstruction(elementType);
@@ -3535,7 +3535,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 		//var underlyingType = GetUnderlyingType(type);
 
-		var result = AllocatedOperand(StackType.ManagedPointer);
+		var result = Allocate(StackType.ManagedPointer);
 
 		// Array bounds check
 		context.AppendInstruction(IRInstruction.CheckArrayBounds, null, array, index);
@@ -3562,7 +3562,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		var fieldStacktype = GetStackTypeDefaultValueType(fieldUnderlyingType);
 		var isFieldPrimitive = IsPrimitive(fieldUnderlyingType);
 
-		var result = AllocatedOperand(fieldStacktype, isFieldPrimitive ? fieldUnderlyingType : fieldType);
+		var result = Allocate(fieldStacktype, isFieldPrimitive ? fieldUnderlyingType : fieldType);
 
 		PushStack(stack, new StackEntry(fieldStacktype, result));
 
@@ -3690,7 +3690,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		uint offset = TypeLayout.GetFieldOffset(field);
 		var fieldPtr = field.FieldType.ToManagedPointer(); // FUTURE: AllocateVirtualRegisterManagedPointer();
 
-		var result = AllocatedOperand(StackType.ManagedPointer, fieldPtr);
+		var result = Allocate(StackType.ManagedPointer, fieldPtr);
 
 		if (offset == 0)
 		{
@@ -3718,7 +3718,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		var functionPointer = TypeSystem.ToFnPtr(method.Signature);
 
 		var stacktype = GetStackType(functionPointer);
-		var result = AllocatedOperand(stacktype);
+		var result = Allocate(stacktype);
 
 		var move = GetMoveInstruction(ElementType.I);
 
@@ -3745,7 +3745,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		var entry = PopStack(stack);
 
 		var stacktype = GetStackType(elementType);
-		var result = AllocatedOperand(stacktype);
+		var result = Allocate(stacktype);
 
 		PushStack(stack, new StackEntry(stacktype, result));
 
@@ -3847,7 +3847,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		{
 			var elementType = GetElementType(underlyingType);
 			var stacktype = GetStackType(elementType);
-			var result = AllocatedOperand(stacktype);
+			var result = Allocate(stacktype);
 
 			PushStack(stack, new StackEntry(stacktype, result));
 
@@ -3880,7 +3880,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		{
 			var elementType = GetElementType(underlyingType);
 			var stacktype = GetStackType(elementType);
-			var result = AllocatedOperand(stacktype);
+			var result = Allocate(stacktype);
 
 			PushStack(stack, new StackEntry(stacktype, result));
 
@@ -4723,8 +4723,8 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 		if (isPrimitive)
 		{
-			var stacktype = GetStackType(underlyingType);
-			var elementType = GetElementType(stacktype);
+			//var stacktype = GetStackType(underlyingType);
+			var elementType = GetElementType(underlyingType);
 			var storeInstruction = GetStoreInstruction(elementType);
 
 			context.AppendInstruction(storeInstruction, null, array, totalElementOffset, value);
@@ -5427,33 +5427,10 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		var entry = PopStack(stack);
 		var type = (MosaType)instruction.Operand;
 
-		var underlyingType = GetUnderlyingType(type);
-		var isPrimitive = IsPrimitive(underlyingType);
+		var result = Allocate(StackType.ManagedPointer); // AllocateVirtualRegisterManagedPointer();
+		PushStack(stack, new StackEntry(StackType.ManagedPointer, result));
 
-		if (isPrimitive)
-		{
-			var elementType = GetElementType(underlyingType);
-
-			var moveInstruction = GetMoveInstruction(elementType);
-			var stackType = GetStackType(elementType);
-			var result = AllocatedOperand(stackType);
-
-			context.AppendInstruction(moveInstruction, result, entry.Operand, ConstantZero); //CreateConstant32(8)
-
-			PushStack(stack, new StackEntry(stackType, result));
-		}
-		else
-		{
-			var result = AllocatedOperand(StackType.ManagedPointer);
-			PushStack(stack, new StackEntry(StackType.ManagedPointer, result));
-
-			var v1 = AllocateVirtualRegisterManagedPointer();
-			var loadInstruction = GetLoadInstruction(type);
-
-			context.AppendInstruction(IRInstruction.Unbox, v1, entry.Operand);
-			context.AppendInstruction(loadInstruction, result, v1, ConstantZero);
-			context.MosaType = type;
-		}
+		context.AppendInstruction(IRInstruction.Unbox, result, entry.Operand);
 
 		return true;
 	}
@@ -5483,7 +5460,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 			var loadInstruction = GetLoadInstruction(elementType);
 			var stackType = GetStackType(elementType);
-			var result = AllocatedOperand(stackType);
+			var result = Allocate(stackType);
 
 			context.AppendInstruction(loadInstruction, result, entry.Operand, ConstantZero); //CreateConstant32(8)
 
@@ -5492,7 +5469,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		}
 		else
 		{
-			var result = AllocatedOperand(StackType.ValueType, type);
+			var result = Allocate(StackType.ValueType, type);
 
 			//var tmpLocal = AddStackLocal(type);
 			//var typeSize = Alignment.AlignUp(TypeLayout.GetTypeSize(type), TypeLayout.NativePointerAlignment);
