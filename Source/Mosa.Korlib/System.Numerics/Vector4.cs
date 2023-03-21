@@ -169,10 +169,10 @@ public partial struct Vector4 : IEquatable<Vector4>, IFormattable
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static bool operator ==(Vector4 left, Vector4 right)
 	{
-		return left.X == right.X
-		       && left.Y == right.Y
-		       && left.Z == right.Z
-		       && left.W == right.W;
+		return (left.X == right.X)
+		       && (left.Y == right.Y)
+		       && (left.Z == right.Z)
+		       && (left.W == right.W);
 	}
 
 	/// <summary>Returns a value that indicates whether two specified vectors are not equal.</summary>
@@ -339,10 +339,10 @@ public partial struct Vector4 : IEquatable<Vector4>, IFormattable
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static float Dot(Vector4 vector1, Vector4 vector2)
 	{
-		return vector1.X * vector2.X
-		       + vector1.Y * vector2.Y
-		       + vector1.Z * vector2.Z
-		       + vector1.W * vector2.W;
+		return (vector1.X * vector2.X)
+		       + (vector1.Y * vector2.Y)
+		       + (vector1.Z * vector2.Z)
+		       + (vector1.W * vector2.W);
 	}
 
 	/// <summary>Performs a linear interpolation between two vectors based on the given weighting.</summary>
@@ -356,7 +356,7 @@ public partial struct Vector4 : IEquatable<Vector4>, IFormattable
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static Vector4 Lerp(Vector4 value1, Vector4 value2, float amount)
 	{
-		return value1 * (1.0f - amount) + value2 * amount;
+		return (value1 * (1.0f - amount)) + (value2 * amount);
 	}
 
 	/// <summary>Returns a vector whose elements are the maximum of each of the pairs of elements in two specified vectors.</summary>
@@ -368,10 +368,10 @@ public partial struct Vector4 : IEquatable<Vector4>, IFormattable
 	public static Vector4 Max(Vector4 value1, Vector4 value2)
 	{
 		return new Vector4(
-			value1.X > value2.X ? value1.X : value2.X,
-			value1.Y > value2.Y ? value1.Y : value2.Y,
-			value1.Z > value2.Z ? value1.Z : value2.Z,
-			value1.W > value2.W ? value1.W : value2.W
+			(value1.X > value2.X) ? value1.X : value2.X,
+			(value1.Y > value2.Y) ? value1.Y : value2.Y,
+			(value1.Z > value2.Z) ? value1.Z : value2.Z,
+			(value1.W > value2.W) ? value1.W : value2.W
 		);
 	}
 
@@ -384,10 +384,10 @@ public partial struct Vector4 : IEquatable<Vector4>, IFormattable
 	public static Vector4 Min(Vector4 value1, Vector4 value2)
 	{
 		return new Vector4(
-			value1.X < value2.X ? value1.X : value2.X,
-			value1.Y < value2.Y ? value1.Y : value2.Y,
-			value1.Z < value2.Z ? value1.Z : value2.Z,
-			value1.W < value2.W ? value1.W : value2.W
+			(value1.X < value2.X) ? value1.X : value2.X,
+			(value1.Y < value2.Y) ? value1.Y : value2.Y,
+			(value1.Z < value2.Z) ? value1.Z : value2.Z,
+			(value1.W < value2.W) ? value1.W : value2.W
 		);
 	}
 
@@ -627,12 +627,12 @@ public partial struct Vector4 : IEquatable<Vector4>, IFormattable
 			throw new ArgumentNullException(nameof(array));
 		}
 
-		if (index < 0 || index >= array.Length)
+		if ((index < 0) || (index >= array.Length))
 		{
 			throw new ArgumentOutOfRangeException(nameof(index));
 		}
 
-		if (array.Length - index < 4)
+		if ((array.Length - index) < 4)
 		{
 			throw new ArgumentException("array.Length - index < 4");
 		}
@@ -684,7 +684,7 @@ public partial struct Vector4 : IEquatable<Vector4>, IFormattable
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public override readonly bool Equals([NotNullWhen(true)] object obj)
 	{
-		return obj != null && obj is Vector4 && Equals((Vector4)obj);
+		return obj != null && (obj is Vector4) && Equals((Vector4)obj);
 	}
 
 	/// <summary>Returns the hash code for this instance.</summary>

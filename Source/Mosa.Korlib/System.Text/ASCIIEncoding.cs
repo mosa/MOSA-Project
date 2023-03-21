@@ -20,7 +20,7 @@ public class ASCIIEncoding : Encoding
 		for (int index = byteIndex; index < byteIndex + count; index++)
 		{
 			byte b = bytes[index];
-			result += new string(b <= 0x7F ? (char)b : '?', 1);
+			result += new string((b <= 0x7F) ? (char)b : '?', 1);
 		}
 
 		return result;

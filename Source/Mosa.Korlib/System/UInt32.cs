@@ -85,7 +85,7 @@ public struct UInt32: IComparable, IComparable<uint>, IEquatable<uint>
 		var i = 0;
 		while (i < len)
 		{
-			if (n > 0xFFFFFFFF / 10)
+			if (n > (0xFFFFFFFF / 10))
 			{
 				return false;
 			}

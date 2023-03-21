@@ -27,7 +27,7 @@ public struct Color
 	/// </summary>
 	public byte A { get; }
 
-	private readonly int argb;
+	private int argb;
 
 	/// <summary>
 	/// Transparent Color

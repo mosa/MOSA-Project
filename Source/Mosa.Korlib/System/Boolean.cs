@@ -47,7 +47,7 @@ public struct Boolean: IComparable, IComparable<bool>, IEquatable<bool>
 
 	public override int GetHashCode()
 	{
-		return m_value ? True : False;
+		return (m_value) ? True : False;
 	}
 
 	public override string ToString()
@@ -61,7 +61,7 @@ public struct Boolean: IComparable, IComparable<bool>, IEquatable<bool>
 	{
 		if (obj is Boolean)
 		{
-			return this.m_value == ((Boolean)obj).m_value;
+			return (this.m_value == ((Boolean)obj).m_value);
 		}
 		else
 		{
@@ -71,7 +71,7 @@ public struct Boolean: IComparable, IComparable<bool>, IEquatable<bool>
 
 	public bool Equals(bool obj)
 	{
-		return this.m_value == obj.m_value;
+		return (this.m_value == obj.m_value);
 	}
 
 	public int CompareTo(object obj)

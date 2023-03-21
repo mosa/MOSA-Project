@@ -145,9 +145,9 @@ public partial struct Vector3 : IEquatable<Vector3>, IFormattable
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static bool operator ==(Vector3 left, Vector3 right)
 	{
-		return left.X == right.X
-		       && left.Y == right.Y
-		       && left.Z == right.Z;
+		return (left.X == right.X)
+		       && (left.Y == right.Y)
+		       && (left.Z == right.Z);
 	}
 
 	/// <summary>Returns a value that indicates whether two specified vectors are not equal.</summary>
@@ -269,9 +269,9 @@ public partial struct Vector3 : IEquatable<Vector3>, IFormattable
 	public static Vector3 Cross(Vector3 vector1, Vector3 vector2)
 	{
 		return new Vector3(
-			vector1.Y * vector2.Z - vector1.Z * vector2.Y,
-			vector1.Z * vector2.X - vector1.X * vector2.Z,
-			vector1.X * vector2.Y - vector1.Y * vector2.X
+			(vector1.Y * vector2.Z) - (vector1.Z * vector2.Y),
+			(vector1.Z * vector2.X) - (vector1.X * vector2.Z),
+			(vector1.X * vector2.Y) - (vector1.Y * vector2.X)
 		);
 	}
 
@@ -325,9 +325,9 @@ public partial struct Vector3 : IEquatable<Vector3>, IFormattable
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static float Dot(Vector3 vector1, Vector3 vector2)
 	{
-		return vector1.X * vector2.X
-		       + vector1.Y * vector2.Y
-		       + vector1.Z * vector2.Z;
+		return (vector1.X * vector2.X)
+		       + (vector1.Y * vector2.Y)
+		       + (vector1.Z * vector2.Z);
 	}
 
 	/// <summary>Performs a linear interpolation between two vectors based on the given weighting.</summary>
@@ -338,7 +338,7 @@ public partial struct Vector3 : IEquatable<Vector3>, IFormattable
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static Vector3 Lerp(Vector3 value1, Vector3 value2, float amount)
 	{
-		return value1 * (1f - amount) + value2 * amount;
+		return (value1 * (1f - amount)) + (value2 * amount);
 	}
 
 	/// <summary>Returns a vector whose elements are the maximum of each of the pairs of elements in two specified vectors.</summary>
@@ -350,9 +350,9 @@ public partial struct Vector3 : IEquatable<Vector3>, IFormattable
 	public static Vector3 Max(Vector3 value1, Vector3 value2)
 	{
 		return new Vector3(
-			value1.X > value2.X ? value1.X : value2.X,
-			value1.Y > value2.Y ? value1.Y : value2.Y,
-			value1.Z > value2.Z ? value1.Z : value2.Z
+			(value1.X > value2.X) ? value1.X : value2.X,
+			(value1.Y > value2.Y) ? value1.Y : value2.Y,
+			(value1.Z > value2.Z) ? value1.Z : value2.Z
 		);
 	}
 
@@ -364,9 +364,9 @@ public partial struct Vector3 : IEquatable<Vector3>, IFormattable
 	public static Vector3 Min(Vector3 value1, Vector3 value2)
 	{
 		return new Vector3(
-			value1.X < value2.X ? value1.X : value2.X,
-			value1.Y < value2.Y ? value1.Y : value2.Y,
-			value1.Z < value2.Z ? value1.Z : value2.Z
+			(value1.X < value2.X) ? value1.X : value2.X,
+			(value1.Y < value2.Y) ? value1.Y : value2.Y,
+			(value1.Z < value2.Z) ? value1.Z : value2.Z
 		);
 	}
 
@@ -426,7 +426,7 @@ public partial struct Vector3 : IEquatable<Vector3>, IFormattable
 	public static Vector3 Reflect(Vector3 vector, Vector3 normal)
 	{
 		float dot = Dot(vector, normal);
-		return vector - 2 * dot * normal;
+		return vector - (2 * dot * normal);
 	}
 
 	/// <summary>Returns a vector whose elements are the square root of each of a specified vector's elements.</summary>
@@ -542,12 +542,12 @@ public partial struct Vector3 : IEquatable<Vector3>, IFormattable
 			throw new ArgumentNullException(nameof(array));
 		}
 
-		if (index < 0 || index >= array.Length)
+		if ((index < 0) || (index >= array.Length))
 		{
 			throw new ArgumentOutOfRangeException(nameof(index));
 		}
 
-		if (array.Length - index < 3)
+		if ((array.Length - index) < 3)
 		{
 			throw new ArgumentException("array.Length - index < 3");
 		}
@@ -588,7 +588,7 @@ public partial struct Vector3 : IEquatable<Vector3>, IFormattable
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public override readonly bool Equals([NotNullWhen(true)] object obj)
 	{
-		return obj != null && obj is Vector3 && Equals((Vector3)obj);
+		return obj != null && (obj is Vector3) && Equals((Vector3)obj);
 	}
 
 	/// <summary>Returns a value that indicates whether this instance and another vector are equal.</summary>

@@ -53,7 +53,7 @@ public struct SpinLock
 	{
 		int result = Interlocked.CompareExchange(ref location, value, comparand);
 
-		success = result == comparand;
+		success = (result == comparand);
 
 		return result;
 	}

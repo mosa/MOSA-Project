@@ -57,7 +57,7 @@ public class Queue : ICollection, ICloneable
 	// Fills a Queue with the elements of an ICollection.  Uses the enumerator
 	// to get each of the elements.
 	//
-	public Queue(ICollection col) : this(col == null ? 32 : col.Count)
+	public Queue(ICollection col) : this((col == null ? 32 : col.Count))
 	{
 		if (col == null)
 			throw new ArgumentNullException(nameof(col));
@@ -79,7 +79,7 @@ public class Queue : ICollection, ICloneable
 		q._size = _size;
 
 		int numToCopy = _size;
-		int firstPart = _array.Length - _head < numToCopy ? _array.Length - _head : numToCopy;
+		int firstPart = (_array.Length - _head < numToCopy) ? _array.Length - _head : numToCopy;
 		Array.Copy(_array, _head, q._array, 0, firstPart);
 		numToCopy -= firstPart;
 		if (numToCopy > 0)
@@ -136,7 +136,7 @@ public class Queue : ICollection, ICloneable
 		int numToCopy = _size;
 		if (numToCopy == 0)
 			return;
-		int firstPart = _array.Length - _head < numToCopy ? _array.Length - _head : numToCopy;
+		int firstPart = (_array.Length - _head < numToCopy) ? _array.Length - _head : numToCopy;
 		Array.Copy(_array, _head, array, index, firstPart);
 		numToCopy -= firstPart;
 		if (numToCopy > 0)
@@ -283,7 +283,7 @@ public class Queue : ICollection, ICloneable
 
 		_array = newarray;
 		_head = 0;
-		_tail = _size == capacity ? 0 : _size;
+		_tail = (_size == capacity) ? 0 : _size;
 		_version++;
 	}
 

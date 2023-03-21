@@ -20,7 +20,7 @@ public struct Char: IComparable, IComparable<char>, IEquatable<char>
 	{
 		if (obj is Char)
 		{
-			return this.m_value == ((Char)obj).m_value;
+			return (this.m_value == ((Char)obj).m_value);
 		}
 		else
 		{
@@ -106,11 +106,11 @@ public struct Char: IComparable, IComparable<char>, IEquatable<char>
 		// U+000d = <control> CARRIAGE RETURN
 		// U+0085 = <control> NEXT LINE
 		// U+00a0 = NO-BREAK SPACE
-		if (c == ' ' || (c >= '\x0009' && c <= '\x000d') || c == '\x00a0' || c == '\x0085')
+		if ((c == ' ') || (c >= '\x0009' && c <= '\x000d') || c == '\x00a0' || c == '\x0085')
 		{
-			return true;
+			return (true);
 		}
-		return false;
+		return (false);
 	}
 
 	private static bool IsLatin1(char ch) => ch <= 'ÿ';
@@ -119,7 +119,7 @@ public struct Char: IComparable, IComparable<char>, IEquatable<char>
 
 	public static bool IsWhiteSpace(char c)
 	{
-		return IsWhiteSpaceLatin1(c);
+		return (IsWhiteSpaceLatin1(c));
 	}
 
 	public static bool IsLetter(char c)
@@ -139,7 +139,7 @@ public struct Char: IComparable, IComparable<char>, IEquatable<char>
 
 	public static bool IsLetterOrDigit(char c)
 	{
-		return IsLetter(c) || IsDigit(c);
+		return (IsLetter(c) || IsDigit(c));
 	}
 
 	public static char ToUpper(char c)
@@ -168,7 +168,7 @@ public struct Char: IComparable, IComparable<char>, IEquatable<char>
 		if (s == null)
 			throw new ArgumentNullException(nameof(s));
 
-		if ((uint)index >= (uint)s.Length)
+		if (((uint)index) >= ((uint)s.Length))
 			throw new ArgumentOutOfRangeException(nameof(index));
 
 		return IsSurrogate(s[index]);
@@ -176,7 +176,7 @@ public struct Char: IComparable, IComparable<char>, IEquatable<char>
 
 	public static bool IsHighSurrogate(char c)
 	{
-		return c >= '\ud800' && c <= '\udbff';
+		return (c >= '\ud800') && (c <= '\udbff');
 	}
 
 	public static bool IsHighSurrogate(string s, int index)
@@ -192,7 +192,7 @@ public struct Char: IComparable, IComparable<char>, IEquatable<char>
 
 	public static bool IsLowSurrogate(char c)
 	{
-		return c >= '\udc00' && c <= '\udfff';
+		return (c >= '\udc00') && (c <= '\udfff');
 	}
 
 	public static bool IsLowSurrogate(string s, int index)

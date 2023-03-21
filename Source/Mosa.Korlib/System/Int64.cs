@@ -91,7 +91,7 @@ public struct Int64: IComparable, IComparable<long>, IEquatable<long>
 			{
 				throw new Exception("Format is incorrect");
 			}
-			result = result * 10 + ind;
+			result = (result * 10) + ind;
 		}
 
 		if (neg) result *= -1;

@@ -690,7 +690,7 @@ public sealed class String : IEnumerable, IEnumerable<char>, IEquatable<String>,
 
 	public static bool IsNullOrEmpty(string value)
 	{
-		return value == null || value.Length == 0;
+		return (value == null) || (value.Length == 0);
 	}
 
 	public bool Contains(string value)
@@ -733,7 +733,7 @@ public sealed class String : IEnumerable, IEnumerable<char>, IEquatable<String>,
 		if (startIndex > length - count)
 			throw new ArgumentOutOfRangeException("startIndex + count > this.length");
 
-		if ((startIndex == 0 && length == 0) || startIndex == length || count == 0)
+		if ((startIndex == 0 && length == 0) || (startIndex == length) || (count == 0))
 			return -1;
 
 		return IndexOfImpl(value, startIndex, count);
@@ -799,9 +799,9 @@ public sealed class String : IEnumerable, IEnumerable<char>, IEquatable<String>,
 	{
 		if (anyOf == null)
 			throw new ArgumentNullException("anyOf");
-		if (startIndex < 0 || startIndex >= Length)
+		if ((startIndex < 0) || (startIndex >= Length))
 			throw new ArgumentOutOfRangeException("startIndex", "< 0 || > this.Length");
-		if (count < 0 || count > Length)
+		if ((count < 0) || (count > Length))
 			throw new ArgumentOutOfRangeException("count", "< 0 || > this.Length");
 		if (startIndex - count + 1 < 0)
 			throw new ArgumentOutOfRangeException("startIndex - count + 1 < 0");
@@ -829,9 +829,9 @@ public sealed class String : IEnumerable, IEnumerable<char>, IEquatable<String>,
 	{
 		if (startIndex == 0 && length == 0)
 			return -1;
-		if (startIndex < 0 || startIndex >= Length)
+		if ((startIndex < 0) || (startIndex >= Length))
 			throw new ArgumentOutOfRangeException("startIndex", "< 0 || >= this.Length");
-		if (count < 0 || count > Length)
+		if ((count < 0) || (count > Length))
 			throw new ArgumentOutOfRangeException("count", "< 0 || > this.Length");
 		if (startIndex - count + 1 < 0)
 			throw new ArgumentOutOfRangeException("startIndex - count + 1 < 0");

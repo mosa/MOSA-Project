@@ -106,7 +106,7 @@ public class Object
 	[NonVersionable]
 	public static bool ReferenceEquals(object left, object right)
 	{
-		return left == right;
+		return (left == right);
 	}
 
 	/// <summary>

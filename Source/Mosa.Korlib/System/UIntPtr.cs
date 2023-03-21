@@ -24,7 +24,7 @@ public struct UIntPtr
 	[NonVersionable]
 	public unsafe UIntPtr(ulong value)
 	{
-		_value = (void*)(uint)value;
+		_value = (void*)((uint)value);
 	}
 
 	[NonVersionable]
@@ -37,20 +37,20 @@ public struct UIntPtr
 	{
 		if (obj is UIntPtr)
 		{
-			return _value == ((UIntPtr)obj)._value;
+			return (_value == ((UIntPtr)obj)._value);
 		}
 		return false;
 	}
 
 	public unsafe override int GetHashCode()
 	{
-		return (int)_value;
+		return ((int)_value);
 	}
 
 	[NonVersionable]
 	public unsafe uint ToUInt32()
 	{
-		return (uint)_value;
+		return ((uint)_value);
 	}
 
 	[NonVersionable]
