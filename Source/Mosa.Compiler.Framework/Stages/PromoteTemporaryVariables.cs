@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Stages;
 /// </summary>
 public class PromoteTemporaryVariables : BaseMethodCompilerStage
 {
-	private Counter TemporariesPromoted = new Counter("PromoteTemporaryVariables.TemporariesPromoted");
+	private readonly Counter TemporariesPromoted = new Counter("PromoteTemporaryVariables.TemporariesPromoted");
 
 	private TraceLog trace;
 

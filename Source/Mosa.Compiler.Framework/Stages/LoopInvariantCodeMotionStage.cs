@@ -16,9 +16,9 @@ namespace Mosa.Compiler.Framework.Stages;
 /// </summary>
 public sealed class LoopInvariantCodeMotionStage : BaseMethodCompilerStage
 {
-	private Counter LandingPadsCount = new Counter("LoopInvariantCodeMotionStage.LandingPads");
-	private Counter CodeMotionCount = new Counter("LoopInvariantCodeMotionStage.CodeMotion");
-	private Counter Methods = new Counter("LoopInvariantCodeMotionStage.Methods");
+	private readonly Counter LandingPadsCount = new Counter("LoopInvariantCodeMotionStage.LandingPads");
+	private readonly Counter CodeMotionCount = new Counter("LoopInvariantCodeMotionStage.CodeMotion");
+	private readonly Counter Methods = new Counter("LoopInvariantCodeMotionStage.Methods");
 
 	private SimpleFastDominance AnalysisDominance;
 

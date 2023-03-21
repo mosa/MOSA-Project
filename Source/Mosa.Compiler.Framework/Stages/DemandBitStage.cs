@@ -15,8 +15,8 @@ public sealed class DemandBitStage : BaseMethodCompilerStage
 	private readonly Counter InstructionsRemovedCount = new Counter("DemandBitStage.InstructionsRemoved");
 	private TraceLog trace;
 
-	private NodeVisitationDelegate[] affected = new NodeVisitationDelegate[MaxInstructions];
-	private NodeVisitationDelegate[] demanded = new NodeVisitationDelegate[MaxInstructions];
+	private readonly NodeVisitationDelegate[] affected = new NodeVisitationDelegate[MaxInstructions];
+	private readonly NodeVisitationDelegate[] demanded = new NodeVisitationDelegate[MaxInstructions];
 
 	private delegate ulong NodeVisitationDelegate(InstructionNode node, TransformContext transform);
 

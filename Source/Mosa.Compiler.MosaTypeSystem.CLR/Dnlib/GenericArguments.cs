@@ -67,8 +67,8 @@ internal readonly struct GenericArgumentsStack
 /// </summary>
 internal sealed class GenericArguments
 {
-	private GenericArgumentsStack typeArgsStack = new(true);
-	private GenericArgumentsStack methodArgsStack = new(false);
+	private readonly GenericArgumentsStack typeArgsStack = new(true);
+	private readonly GenericArgumentsStack methodArgsStack = new(false);
 
 	/// <summary>
 	/// Pushes generic arguments

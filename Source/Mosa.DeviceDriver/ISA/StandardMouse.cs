@@ -17,7 +17,7 @@ public class StandardMouse : BaseDeviceDriver, IMouseDevice
 	private uint screenWidth, screenHeight;
 	private int phase, aX, aY;
 
-	private byte[] mData = new byte[3];
+	private readonly byte[] mData = new byte[3];
 
 	public uint X { get; set; }
 

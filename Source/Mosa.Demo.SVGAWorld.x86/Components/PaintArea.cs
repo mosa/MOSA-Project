@@ -11,7 +11,9 @@ public class PaintArea
 
 	public readonly FrameBuffer32 Buffer;
 
-	private uint LastX, LastY, Width, Height;
+	private uint LastX, LastY;
+	private readonly uint Width;
+	private readonly uint Height;
 
 	public PaintArea(uint x, uint y, uint width, uint height, Color color)
 	{

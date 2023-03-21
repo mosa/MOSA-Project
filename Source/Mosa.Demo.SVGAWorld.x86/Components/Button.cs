@@ -16,11 +16,12 @@ public class Button
 
 	public Color BackColor, ForeColor, HoverColor;
 
-	private bool IsHovering, HasCustomWidth;
+	private bool IsHovering;
+	private readonly bool HasCustomWidth;
 
-	private Label Label;
+	private readonly Label Label;
 
-	private Func<object> Action;
+	private readonly Func<object> Action;
 
 	private ISimpleFont LastFont;
 

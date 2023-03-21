@@ -9,9 +9,9 @@ public sealed partial class IntervalTree<T>
 	/// </summary>
 	private struct Interval
 	{
-		public int Start;
+		public readonly int Start;
 
-		public int End;
+		public readonly int End;
 
 		public Interval(int start, int end)
 		{

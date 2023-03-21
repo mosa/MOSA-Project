@@ -8,7 +8,7 @@ namespace Mosa.Demo.SVGAWorld.x86;
 public class FileManager
 {
 	private static List<FatFileSystem> fileSystems;
-	private static int currentDrive = 0;
+	private static readonly int currentDrive = 0;
 
 	public static void Register(FatFileSystem fat)
 	{

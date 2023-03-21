@@ -16,9 +16,9 @@ public sealed class MethodScheduler
 
 	public Compiler Compiler;
 
-	private HashSet<MethodData> workingSet = new HashSet<MethodData>();
+	private readonly HashSet<MethodData> workingSet = new HashSet<MethodData>();
 
-	private SimplePriorityQueue<MethodData> queue = new SimplePriorityQueue<MethodData>();
+	private readonly SimplePriorityQueue<MethodData> queue = new SimplePriorityQueue<MethodData>();
 
 	private int totalMethods;
 	private int totalQueued;

@@ -66,7 +66,9 @@ public class BackColorBtn : Button
 
 public class Settings : Window
 {
-	private Label MouseColorLabel, BackColorLabel, FontLabel;
+	private readonly Label MouseColorLabel;
+	private readonly Label BackColorLabel;
+	private readonly Label FontLabel;
 
 	public readonly List<Button> Buttons;
 

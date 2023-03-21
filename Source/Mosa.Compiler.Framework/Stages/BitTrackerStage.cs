@@ -27,7 +27,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 	private readonly Counter InstructionsUpdatedCount = new Counter("BitTrackerStage.InstructionsUpdated");
 	private TraceLog trace;
 
-	private NodeVisitationDelegate[] visitation = new NodeVisitationDelegate[MaxInstructions];
+	private readonly NodeVisitationDelegate[] visitation = new NodeVisitationDelegate[MaxInstructions];
 
 	private delegate BitValue NodeVisitationDelegate(InstructionNode node, TransformContext transform);
 
