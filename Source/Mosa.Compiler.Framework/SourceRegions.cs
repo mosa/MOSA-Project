@@ -90,7 +90,7 @@ public static class SourceRegions
 					if (instruction.Offset != searchForLabel)
 						continue;
 
-					var region = new SourceRegion()
+					var region = new SourceRegion
 					{
 						Address = labelRegion.Start,
 						Length = labelRegion.Length,

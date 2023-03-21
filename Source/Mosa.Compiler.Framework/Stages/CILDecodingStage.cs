@@ -185,7 +185,7 @@ public sealed class CILDecodingStage : BaseMethodCompilerStage, IInstructionDeco
 			var cil = CILInstruction.Get(op);
 
 			// Create and initialize the corresponding instruction
-			var node = new InstructionNode()
+			var node = new InstructionNode
 			{
 				Label = instruction.Offset,
 

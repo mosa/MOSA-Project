@@ -149,7 +149,7 @@ public sealed class BasicBlock : IComparable<BasicBlock>
 			Block = this
 		};
 
-		var middle = new InstructionNode()
+		var middle = new InstructionNode
 		{
 			Label = instructionLabel,
 			Block = this

@@ -12,7 +12,7 @@ public class InstructionNode
 
 	public ConditionCode Condition { get; set; } = ConditionCode.Always;
 
-	public List<ConditionCode> Conditions { get; set; } = new List<ConditionCode>() { ConditionCode.Always };
+	public List<ConditionCode> Conditions { get; set; } = new List<ConditionCode> { ConditionCode.Always };
 
 	public List<Operand> Operands { get; } = new List<Operand>();
 
@@ -30,7 +30,7 @@ public class InstructionNode
 
 	public InstructionNode Clone(InstructionNode parent)
 	{
-		var node = new InstructionNode()
+		var node = new InstructionNode
 		{
 			InstructionName = InstructionName,
 			ResultType = ResultType,

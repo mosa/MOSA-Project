@@ -69,7 +69,7 @@ public partial class Disassembler
 				sb.Append(string.Empty.PadRight(41 - sb.Length, ' '));
 				sb.Append(instruction);
 
-				decoded.Add(new DecodedInstruction()
+				decoded.Add(new DecodedInstruction
 				{
 					Address = address,
 					Length = len,

@@ -341,7 +341,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 				trace?.Log($"No Expression Found: {node}");
 			}
 
-			var newExpression = new Expression()
+			var newExpression = new Expression
 			{
 				Hash = hash,
 				Instruction = node.Instruction,
@@ -359,7 +359,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 
 			if (node.Instruction.IsCommutative && node.Operand1 != node.Operand2)
 			{
-				var newExpression2 = new Expression()
+				var newExpression2 = new Expression
 				{
 					Hash = hash,
 					Instruction = node.Instruction,
@@ -374,7 +374,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 			}
 			else if (IsCompareInstruction(node.Instruction) && node.Operand1 != node.Operand2 && node.ConditionCode != ConditionCode.Equal && node.ConditionCode != ConditionCode.NotEqual)
 			{
-				var newExpression2 = new Expression()
+				var newExpression2 = new Expression
 				{
 					Hash = hash,
 					Instruction = node.Instruction,
