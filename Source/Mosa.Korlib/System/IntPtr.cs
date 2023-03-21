@@ -28,7 +28,7 @@ public struct IntPtr
 	[NonVersionable]
 	public unsafe IntPtr(long value)
 	{
-		_value = (void*)((int)value);
+		_value = (void*)(int)value;
 	}
 
 	[Intrinsic]
@@ -42,14 +42,14 @@ public struct IntPtr
 	{
 		if (obj is IntPtr)
 		{
-			return (_value == ((IntPtr)obj)._value);
+			return _value == ((IntPtr)obj)._value;
 		}
 		return false;
 	}
 
 	public unsafe override int GetHashCode()
 	{
-		return ((int)_value);
+		return (int)_value;
 	}
 
 	[Intrinsic]

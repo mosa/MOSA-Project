@@ -23,7 +23,7 @@ public class DerivedNewObjectTests : NewObjectTests
 
 	public DerivedNewObjectTests(int v1, int v2, int v3)
 	{
-		int32 = (v1 * v2) + v3;
+		int32 = v1 * v2 + v3;
 	}
 
 	[MosaUnitTest]
@@ -37,20 +37,20 @@ public class DerivedNewObjectTests : NewObjectTests
 	public static bool WithOneArg()
 	{
 		DerivedNewObjectTests d = new DerivedNewObjectTests(42);
-		return (d.int32 == 42);
+		return d.int32 == 42;
 	}
 
 	[MosaUnitTest]
 	public static bool WithTwoArgs()
 	{
 		DerivedNewObjectTests d = new DerivedNewObjectTests(42, 3);
-		return (d.int32 == 45);
+		return d.int32 == 45;
 	}
 
 	[MosaUnitTest]
 	public static bool WithThreeArgs()
 	{
 		DerivedNewObjectTests d = new DerivedNewObjectTests(21, 2, 7);
-		return (d.int32 == 49);
+		return d.int32 == 49;
 	}
 }

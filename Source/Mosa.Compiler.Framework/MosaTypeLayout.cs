@@ -632,7 +632,7 @@ public class MosaTypeLayout
 				// Pad the field in the type
 				if (packingSize != 0)
 				{
-					uint padding = (packingSize - (typeSize % packingSize)) % packingSize;
+					uint padding = (packingSize - typeSize % packingSize) % packingSize;
 					typeSize += padding;
 				}
 			}

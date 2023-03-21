@@ -25,13 +25,13 @@ public static class RemAndModTests
 	[MosaUnitTest(Series = "U4")]
 	public static bool even_bool(uint n)
 	{
-		return (n % 2) != 0;
+		return n % 2 != 0;
 	}
 
 	[MosaUnitTest(Series = "U4")]
 	public static bool aligned4_bool(uint n)
 	{
-		return (n % 4) != 0;
+		return n % 4 != 0;
 	}
 
 	[MosaUnitTest(Series = "U4")]

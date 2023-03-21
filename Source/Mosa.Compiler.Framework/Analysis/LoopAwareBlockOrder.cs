@@ -203,12 +203,12 @@ public sealed class LoopAwareBlockOrder : BaseBlockOrder
 
 	private void SetLoopMap(int l, BasicBlock b)
 	{
-		loopMap.Set((l * blockCount) + b.Sequence, true);
+		loopMap.Set(l * blockCount + b.Sequence, true);
 	}
 
 	private bool GetLoopMap(int l, BasicBlock b)
 	{
-		return loopMap.Get((l * blockCount) + b.Sequence);
+		return loopMap.Get(l * blockCount + b.Sequence);
 	}
 
 	#endregion Helpers

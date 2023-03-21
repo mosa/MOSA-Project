@@ -309,7 +309,7 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 		if (first.IsFloatingPoint)
 		{
 			var result = Is32BitPlatform ? AllocateVirtualRegister32() : AllocateVirtualRegister64();
-			var instruction = (first.IsR4) ? (BaseInstruction)IRInstruction.CompareR4 : IRInstruction.CompareR8;
+			var instruction = first.IsR4 ? (BaseInstruction)IRInstruction.CompareR4 : IRInstruction.CompareR8;
 
 			context.SetInstruction(instruction, cc, result, first, second);
 			context.AppendInstruction(Select(result, IRInstruction.Branch32, IRInstruction.Branch64), ConditionCode.NotEqual, null, result, Constant32_0, target); // TODO: Constant should be 64bit
@@ -616,13 +616,13 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 
 		// First check to see if we have a matching checked conversion function
 
-		var sourceTypeString = (source.Type.IsI4) ? "I4" :
-			(source.Type.IsI8) ? "I8" :
-			(source.Type.IsR4) ? "R4" :
-			(source.Type.IsR8) ? "R8" :
-			(source.Type.IsI) ? Is32BitPlatform ? "I4" : "I8" :
-			(source.Type.IsPointer) ? Is32BitPlatform ? "I4" : "I8" :
-			(!source.Type.IsValueType) ? Is32BitPlatform ? "I4" : "I8" :
+		var sourceTypeString = source.Type.IsI4 ? "I4" :
+			source.Type.IsI8 ? "I8" :
+			source.Type.IsR4 ? "R4" :
+			source.Type.IsR8 ? "R8" :
+			source.Type.IsI ? Is32BitPlatform ? "I4" : "I8" :
+			source.Type.IsPointer ? Is32BitPlatform ? "I4" : "I8" :
+			!source.Type.IsValueType ? Is32BitPlatform ? "I4" : "I8" :
 			throw new CompilerException();
 
 		var resultTypeString = type.IsU || type.IsI || type.IsPointer ? Is32BitPlatform ? "I4" : "I8" : type.TypeCode.ToString();
@@ -651,13 +651,13 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 
 		// First check to see if we have a matching checked conversion function
 
-		var sourceTypeString = (source.Type.IsI4) ? "U4" :
-			(source.Type.IsI8) ? "U8" :
-			(source.Type.IsR4) ? "R4" :
-			(source.Type.IsR8) ? "R8" :
-			(source.Type.IsI) ? Is32BitPlatform ? "U4" : "U8" :
-			(source.Type.IsPointer) ? Is32BitPlatform ? "U4" : "U8" :
-			(!source.Type.IsValueType) ? Is32BitPlatform ? "U4" : "U8" :
+		var sourceTypeString = source.Type.IsI4 ? "U4" :
+			source.Type.IsI8 ? "U8" :
+			source.Type.IsR4 ? "R4" :
+			source.Type.IsR8 ? "R8" :
+			source.Type.IsI ? Is32BitPlatform ? "U4" : "U8" :
+			source.Type.IsPointer ? Is32BitPlatform ? "U4" : "U8" :
+			!source.Type.IsValueType ? Is32BitPlatform ? "U4" : "U8" :
 			throw new CompilerException();
 
 		var resultTypeString = type.IsU || type.IsI || type.IsPointer ? Is32BitPlatform ? "U4" : "U8" : type.TypeCode.ToString();
@@ -1129,7 +1129,7 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 		var symbolName = node.Operand1.Name;
 		var data = node.Operand1.StringData;
 
-		var symbol = Linker.DefineSymbol(symbolName, SectionKind.ROData, NativeAlignment, (uint)(ObjectHeaderSize + NativePointerSize + (data.Length * 2)));
+		var symbol = Linker.DefineSymbol(symbolName, SectionKind.ROData, NativeAlignment, (uint)(ObjectHeaderSize + NativePointerSize + data.Length * 2));
 		var writer = new BinaryWriter(symbol.Stream);
 
 		Linker.Link(LinkType.AbsoluteAddress, PatchType.I32, symbol, ObjectHeaderSize - NativePointerSize, Metadata.TypeDefinition + "System.String", 0);

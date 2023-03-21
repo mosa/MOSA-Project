@@ -28,7 +28,7 @@ public static class UnitTestQueue
 	{
 		uint len = (uint)start.GetOffset(end);
 
-		if ((queueNext + len + 32) > (new Pointer(Address.UnitTestQueue) + TestQueueSize))
+		if (queueNext + len + 32 > new Pointer(Address.UnitTestQueue) + TestQueueSize)
 		{
 			if (new Pointer(Address.UnitTestQueue + len + 32) >= queueCurrent)
 				return false; // no space
@@ -87,7 +87,7 @@ public static class UnitTestQueue
 
 		for (uint index = 0; index < paramcnt; index++)
 		{
-			uint value = queueCurrent.Load32(20 + (index * 4));
+			uint value = queueCurrent.Load32(20 + index * 4);
 			UnitTestRunner.SetUnitTestMethodParameter(index, value);
 		}
 

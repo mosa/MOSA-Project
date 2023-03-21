@@ -26,6 +26,6 @@ public struct CustomAttributeTable
 
 	public CustomAttribute GetCustomAttribute(uint slot)
 	{
-		return new CustomAttribute(Ptr.LoadPointer(Pointer.Size + (Pointer.Size * (int)slot)));
+		return new CustomAttribute(Ptr.LoadPointer(Pointer.Size + Pointer.Size * (int)slot));
 	}
 }

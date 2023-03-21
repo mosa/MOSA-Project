@@ -915,7 +915,7 @@ public sealed class SparseConditionalConstantPropagation
 		}
 		else if (instruction == IRInstruction.ArithShiftRight32 || instruction == IRInstruction.ArithShiftRight64)
 		{
-			result = (ulong)(((long)operand1) >> (int)operand2);
+			result = (ulong)((long)operand1 >> (int)operand2);
 			return true;
 		}
 		else if (instruction == IRInstruction.ShiftRight32 || instruction == IRInstruction.ShiftRight64)

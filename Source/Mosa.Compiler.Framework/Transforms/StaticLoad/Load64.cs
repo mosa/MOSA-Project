@@ -25,7 +25,7 @@ public sealed class Load64 : BaseTransform
 		if ((operand1.Field.FieldAttributes & MosaFieldAttributes.InitOnly) == 0)
 			return false;
 
-		return (operand1.Field.DeclaringType.IsValueType && operand1.Field.DeclaringType.Name is "System.IntPtr" or "System.UIntPtr" && operand1.Field.Name == "Zero");
+		return operand1.Field.DeclaringType.IsValueType && operand1.Field.DeclaringType.Name is "System.IntPtr" or "System.UIntPtr" && operand1.Field.Name == "Zero";
 	}
 
 	public override void Transform(Context context, TransformContext transform)

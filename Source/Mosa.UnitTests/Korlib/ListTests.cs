@@ -197,7 +197,7 @@ public static class ListTests
 		}
 
 		var found = FindHolder(holderList);
-		return (found.value1 + found.value2 + found.value3);
+		return found.value1 + found.value2 + found.value3;
 	}
 
 	private static Holder2 FindHolder(List<Holder2> holderList)

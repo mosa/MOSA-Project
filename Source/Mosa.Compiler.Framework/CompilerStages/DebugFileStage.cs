@@ -108,9 +108,9 @@ public sealed class DebugFileStage : BaseCompilerStage
 				Linker.GetSymbol(type.FullName).VirtualAddress,
 				TypeLayout.GetTypeSize(type),
 				type.FullName,
-				(type.BaseType != null) ? type.BaseType.ID : 0,
-				(type.DeclaringType != null) ? type.DeclaringType.ID : 0,
-				(type.ElementType != null) ? type.ElementType.ID : 0
+				type.BaseType != null ? type.BaseType.ID : 0,
+				type.DeclaringType != null ? type.DeclaringType.ID : 0,
+				type.ElementType != null ? type.ElementType.ID : 0
 			);
 		}
 	}

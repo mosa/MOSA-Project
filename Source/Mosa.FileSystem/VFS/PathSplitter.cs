@@ -27,7 +27,7 @@ internal class PathSplitter
 
 		int count = 0;
 		for (int i = 0; i < path.Length; i++)
-			if ((path[i] == Path.DirectorySeparatorChar) || (path[i] == Path.AltDirectorySeparatorChar))
+			if (path[i] == Path.DirectorySeparatorChar || path[i] == Path.AltDirectorySeparatorChar)
 				count++;
 
 		seperators = new int[count];
@@ -40,7 +40,7 @@ internal class PathSplitter
 
 		count = 0;
 		for (int i = 0; i < path.Length; i++)
-			if ((path[i] == Path.DirectorySeparatorChar) || (path[i] == Path.AltDirectorySeparatorChar))
+			if (path[i] == Path.DirectorySeparatorChar || path[i] == Path.AltDirectorySeparatorChar)
 				seperators[count++] = i;
 
 		if (seperators[count - 1] == path.Length - 1)
@@ -51,14 +51,14 @@ internal class PathSplitter
 
 	public string GetPath(int index)
 	{
-		if ((index > length) || (length == 0))
+		if (index > length || length == 0)
 			return string.Empty;
 
 		//if ((length == 0) && (seperators.Length == 0))
 		//    return path;
 
-		int start = (index == 0) ? 0 : seperators[index - 1] + 1;
-		int end = (index == seperators.Length) ? path.Length : seperators[index];
+		int start = index == 0 ? 0 : seperators[index - 1] + 1;
+		int end = index == seperators.Length ? path.Length : seperators[index];
 
 		if (start >= end)
 			return string.Empty;

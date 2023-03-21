@@ -108,7 +108,7 @@ public static partial class Math
 
 	public static long BigMul(int a, int b)
 	{
-		return ((long)a) * b;
+		return (long)a * b;
 	}
 
 	public static double BitDecrement(double x)
@@ -120,7 +120,7 @@ public static partial class Math
 			// NaN returns NaN
 			// -Infinity returns -Infinity
 			// +Infinity returns double.MaxValue
-			return (bits == 0x7FF00000_00000000) ? double.MaxValue : x;
+			return bits == 0x7FF00000_00000000 ? double.MaxValue : x;
 		}
 
 		if (bits == 0x00000000_00000000)
@@ -132,7 +132,7 @@ public static partial class Math
 		// Negative values need to be incremented
 		// Positive values need to be decremented
 
-		bits += ((bits < 0) ? +1 : -1);
+		bits += bits < 0 ? +1 : -1;
 		return BitConverter.Int64BitsToDouble(bits);
 	}
 
@@ -145,10 +145,10 @@ public static partial class Math
 			// NaN returns NaN
 			// -Infinity returns double.MinValue
 			// +Infinity returns +Infinity
-			return (bits == unchecked((long)(0xFFF00000_00000000))) ? double.MinValue : x;
+			return bits == unchecked((long)0xFFF00000_00000000) ? double.MinValue : x;
 		}
 
-		if (bits == unchecked((long)(0x80000000_00000000)))
+		if (bits == unchecked((long)0x80000000_00000000))
 		{
 			// -0.0 returns double.Epsilon
 			return double.Epsilon;
@@ -157,7 +157,7 @@ public static partial class Math
 		// Negative values need to be decremented
 		// Positive values need to be incremented
 
-		bits += ((bits < 0) ? -1 : +1);
+		bits += bits < 0 ? -1 : +1;
 		return BitConverter.Int64BitsToDouble(bits);
 	}
 
@@ -188,28 +188,28 @@ public static partial class Math
 		// In the meantime, a * and - is measurably faster than an extra /.
 
 		int div = a / b;
-		result = a - (div * b);
+		result = a - div * b;
 		return div;
 	}
 
 	public static long DivRem(long a, long b, out long result)
 	{
 		long div = a / b;
-		result = a - (div * b);
+		result = a - div * b;
 		return div;
 	}
 
 	internal static uint DivRem(uint a, uint b, out uint result)
 	{
 		uint div = a / b;
-		result = a - (div * b);
+		result = a - div * b;
 		return div;
 	}
 
 	internal static ulong DivRem(ulong a, ulong b, out ulong result)
 	{
 		ulong div = a / b;
-		result = a - (div * b);
+		result = a - div * b;
 		return div;
 	}
 
@@ -450,12 +450,12 @@ public static partial class Math
 			return double.NaN;
 		}
 
-		if ((regularMod == 0) && double.IsNegative(x))
+		if (regularMod == 0 && double.IsNegative(x))
 		{
 			return double.NegativeZero;
 		}
 
-		var alternativeResult = (regularMod - (Abs(y) * Sign(x)));
+		var alternativeResult = regularMod - Abs(y) * Sign(x);
 
 		if (Abs(alternativeResult) == Abs(regularMod))
 		{
@@ -499,18 +499,18 @@ public static partial class Math
 			return double.NaN;
 		}
 
-		if ((a != 1) && ((newBase == 0) || double.IsPositiveInfinity(newBase)))
+		if (a != 1 && (newBase == 0 || double.IsPositiveInfinity(newBase)))
 		{
 			return double.NaN;
 		}
 
-		return (Log(a) / Log(newBase));
+		return Log(a) / Log(newBase);
 	}
 
 	[NonVersionable]
 	public static byte Max(byte val1, byte val2)
 	{
-		return (val1 >= val2) ? val1 : val2;
+		return val1 >= val2 ? val1 : val2;
 	}
 
 	//[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -545,32 +545,32 @@ public static partial class Math
 			return double.IsNegative(val1) ? val2 : val1;
 		}
 
-		return (val1 < val2) ? val2 : val1;
+		return val1 < val2 ? val2 : val1;
 	}
 
 	[NonVersionable]
 	public static short Max(short val1, short val2)
 	{
-		return (val1 >= val2) ? val1 : val2;
+		return val1 >= val2 ? val1 : val2;
 	}
 
 	[NonVersionable]
 	public static int Max(int val1, int val2)
 	{
-		return (val1 >= val2) ? val1 : val2;
+		return val1 >= val2 ? val1 : val2;
 	}
 
 	[NonVersionable]
 	public static long Max(long val1, long val2)
 	{
-		return (val1 >= val2) ? val1 : val2;
+		return val1 >= val2 ? val1 : val2;
 	}
 
 	//[CLSCompliant(false)]
 	[NonVersionable]
 	public static sbyte Max(sbyte val1, sbyte val2)
 	{
-		return (val1 >= val2) ? val1 : val2;
+		return val1 >= val2 ? val1 : val2;
 	}
 
 	public static float Max(float val1, float val2)
@@ -599,28 +599,28 @@ public static partial class Math
 			return float.IsNegative(val1) ? val2 : val1;
 		}
 
-		return (val1 < val2) ? val2 : val1;
+		return val1 < val2 ? val2 : val1;
 	}
 
 	//[CLSCompliant(false)]
 	[NonVersionable]
 	public static ushort Max(ushort val1, ushort val2)
 	{
-		return (val1 >= val2) ? val1 : val2;
+		return val1 >= val2 ? val1 : val2;
 	}
 
 	// [CLSCompliant(false)]
 	[NonVersionable]
 	public static uint Max(uint val1, uint val2)
 	{
-		return (val1 >= val2) ? val1 : val2;
+		return val1 >= val2 ? val1 : val2;
 	}
 
 	//[CLSCompliant(false)]
 	[NonVersionable]
 	public static ulong Max(ulong val1, ulong val2)
 	{
-		return (val1 >= val2) ? val1 : val2;
+		return val1 >= val2 ? val1 : val2;
 	}
 
 	public static double MaxMagnitude(double x, double y)
@@ -652,13 +652,13 @@ public static partial class Math
 			return double.IsNegative(x) ? y : x;
 		}
 
-		return (ax < ay) ? y : x;
+		return ax < ay ? y : x;
 	}
 
 	[NonVersionable]
 	public static byte Min(byte val1, byte val2)
 	{
-		return (val1 <= val2) ? val1 : val2;
+		return val1 <= val2 ? val1 : val2;
 	}
 
 	//[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -693,32 +693,32 @@ public static partial class Math
 			return double.IsNegative(val1) ? val1 : val2;
 		}
 
-		return (val1 < val2) ? val1 : val2;
+		return val1 < val2 ? val1 : val2;
 	}
 
 	[NonVersionable]
 	public static short Min(short val1, short val2)
 	{
-		return (val1 <= val2) ? val1 : val2;
+		return val1 <= val2 ? val1 : val2;
 	}
 
 	[NonVersionable]
 	public static int Min(int val1, int val2)
 	{
-		return (val1 <= val2) ? val1 : val2;
+		return val1 <= val2 ? val1 : val2;
 	}
 
 	[NonVersionable]
 	public static long Min(long val1, long val2)
 	{
-		return (val1 <= val2) ? val1 : val2;
+		return val1 <= val2 ? val1 : val2;
 	}
 
 	//[CLSCompliant(false)]
 	[NonVersionable]
 	public static sbyte Min(sbyte val1, sbyte val2)
 	{
-		return (val1 <= val2) ? val1 : val2;
+		return val1 <= val2 ? val1 : val2;
 	}
 
 	public static float Min(float val1, float val2)
@@ -747,28 +747,28 @@ public static partial class Math
 			return float.IsNegative(val1) ? val1 : val2;
 		}
 
-		return (val1 < val2) ? val1 : val2;
+		return val1 < val2 ? val1 : val2;
 	}
 
 	//[CLSCompliant(false)]
 	[NonVersionable]
 	public static ushort Min(ushort val1, ushort val2)
 	{
-		return (val1 <= val2) ? val1 : val2;
+		return val1 <= val2 ? val1 : val2;
 	}
 
 	//[CLSCompliant(false)]
 	[NonVersionable]
 	public static uint Min(uint val1, uint val2)
 	{
-		return (val1 <= val2) ? val1 : val2;
+		return val1 <= val2 ? val1 : val2;
 	}
 
 	//[CLSCompliant(false)]
 	[NonVersionable]
 	public static ulong Min(ulong val1, ulong val2)
 	{
-		return (val1 <= val2) ? val1 : val2;
+		return val1 <= val2 ? val1 : val2;
 	}
 
 	public static double MinMagnitude(double x, double y)
@@ -800,7 +800,7 @@ public static partial class Math
 			return double.IsNegative(x) ? x : y;
 		}
 
-		return (ax < ay) ? x : y;
+		return ax < ay ? x : y;
 	}
 
 	//[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -848,7 +848,7 @@ public static partial class Math
 
 		double flrTempVal = Floor(a + 0.5);
 
-		if ((a == (Floor(a) + 0.5)) && (FMod(flrTempVal, 2.0) != 0))
+		if (a == Floor(a) + 0.5 && FMod(flrTempVal, 2.0) != 0)
 		{
 			flrTempVal -= 1.0;
 		}
@@ -870,7 +870,7 @@ public static partial class Math
 
 	public static unsafe double Round(double value, int digits, MidpointRounding mode)
 	{
-		if ((digits < 0) || (digits > maxRoundingDigits))
+		if (digits < 0 || digits > maxRoundingDigits)
 		{
 			throw new ArgumentOutOfRangeException(nameof(digits), "SR.ArgumentOutOfRange_RoundingDigits");
 		}

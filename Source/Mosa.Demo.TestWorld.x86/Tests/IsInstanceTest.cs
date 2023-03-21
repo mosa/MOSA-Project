@@ -38,14 +38,14 @@ public class IsInstanceTest : KernelTest
 	{
 		object o = new AA();
 
-		return (o is AA);
+		return o is AA;
 	}
 
 	public static bool IsInstTest2()
 	{
 		object o = new BB();
 
-		return (o is AA);
+		return o is AA;
 	}
 
 	public static bool IsInstTest3()
@@ -66,14 +66,14 @@ public class IsInstanceTest : KernelTest
 	{
 		object o = new DD();
 
-		return (o is AA);
+		return o is AA;
 	}
 
 	public static bool IsInstTest6()
 	{
 		object o = new DD();
 
-		return (o is BB);
+		return o is BB;
 	}
 
 	public static bool IsInstTest7()
@@ -87,14 +87,14 @@ public class IsInstanceTest : KernelTest
 	{
 		object o = new AA();
 
-		return (o is IAA);
+		return o is IAA;
 	}
 
 	public static bool IsInstTest9()
 	{
 		object o = new BB();
 
-		return (o is IAA);
+		return o is IAA;
 	}
 
 	public static bool IsInstTest10()

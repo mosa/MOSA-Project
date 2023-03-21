@@ -24,7 +24,7 @@ public class InterfaceTest : KernelTest
 	{
 		TestClass tc = new TestClass();
 		IInterfaceAB b = tc;
-		bool result = (b.B() == 3);
+		bool result = b.B() == 3;
 		return result;
 	}
 
@@ -32,7 +32,7 @@ public class InterfaceTest : KernelTest
 	{
 		TestClass tc = new TestClass();
 		IInterfaceAB b = tc;
-		bool result = (b.A() == 2);
+		bool result = b.A() == 2;
 		return result;
 	}
 
@@ -40,7 +40,7 @@ public class InterfaceTest : KernelTest
 	{
 		TestClassB tc = new TestClassB();
 		IInterfaceA a = tc;
-		bool result = (a.A() == 1);
+		bool result = a.A() == 1;
 		return result;
 	}
 }

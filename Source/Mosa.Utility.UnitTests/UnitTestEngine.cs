@@ -203,7 +203,7 @@ public class UnitTestEngine : IDisposable
 
 				bool sendFlag = Queue.Count > 0 && Pending.Count < MaxSentQueue;
 
-				if ((MaxSentQueue - Pending.Count < MinSend) && Queue.Count > MinSend)
+				if (MaxSentQueue - Pending.Count < MinSend && Queue.Count > MinSend)
 				{
 					sendFlag = false;
 				}
@@ -582,7 +582,7 @@ public class UnitTestEngine : IDisposable
 
 			if (CompletedUnitTestCount % 1000 == 0 && StopWatch.Elapsed.Seconds != 0)
 			{
-				Console.WriteLine("Unit Tests - Count: " + CompletedUnitTestCount + " Elapsed: " + ((int)StopWatch.Elapsed.TotalSeconds) + " (" + (CompletedUnitTestCount / StopWatch.Elapsed.TotalSeconds).ToString("F2") + " per second)");
+				Console.WriteLine("Unit Tests - Count: " + CompletedUnitTestCount + " Elapsed: " + (int)StopWatch.Elapsed.TotalSeconds + " (" + (CompletedUnitTestCount / StopWatch.Elapsed.TotalSeconds).ToString("F2") + " per second)");
 			}
 		}
 

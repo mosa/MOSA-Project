@@ -35,7 +35,7 @@ public static class IDT
 	{
 		// Setup IDT table
 		Runtime.Internal.MemoryClear(new Pointer(Address.IDTTable), 6);
-		new Pointer(Address.IDTTable).Store16((IDTEntryOffset.TotalSize * 256) - 1);
+		new Pointer(Address.IDTTable).Store16(IDTEntryOffset.TotalSize * 256 - 1);
 		new Pointer(Address.IDTTable).Store32(2, Address.IDTTable + 6);
 
 		SetTableEntries();
@@ -64,7 +64,7 @@ public static class IDT
 	/// <param name="flags">The flags.</param>
 	private static void Set(uint index, uint address, ushort select, byte flags)
 	{
-		var entry = new Pointer(Address.IDTTable + 6 + (index * IDTEntryOffset.TotalSize));
+		var entry = new Pointer(Address.IDTTable + 6 + index * IDTEntryOffset.TotalSize);
 		entry.Store16(IDTEntryOffset.BaseLow, (ushort)(address & 0xFFFF));
 		entry.Store16(IDTEntryOffset.BaseHigh, (ushort)((address >> 16) & 0xFFFF));
 		entry.Store16(IDTEntryOffset.Select, select);
@@ -2207,7 +2207,7 @@ public static class IDT
 
 				var cr2 = Native.GetCR2();
 
-				if ((cr2 >> 5) < 0x1000)
+				if (cr2 >> 5 < 0x1000)
 				{
 					Error(stack, "Null Pointer Exception");
 				}

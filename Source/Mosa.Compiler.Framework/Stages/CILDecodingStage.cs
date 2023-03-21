@@ -196,7 +196,7 @@ public sealed class CILDecodingStage : BaseMethodCompilerStage, IInstructionDeco
 
 			cil.Decode(node, this);
 
-			prefix = (cil is PrefixInstruction);
+			prefix = cil is PrefixInstruction;
 
 			//instructionCount++;
 

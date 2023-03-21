@@ -56,7 +56,7 @@ public static class PageFrameAllocator
 	/// <param name="size">The size.</param>
 	private static void AddFreeMemory(uint start, uint size)
 	{
-		if ((start > Address.MaximumMemory) || (start + size < Address.ReserveMemory))
+		if (start > Address.MaximumMemory || start + size < Address.ReserveMemory)
 			return;
 
 		// Normalize
@@ -67,10 +67,10 @@ public static class PageFrameAllocator
 		// Adjust if memory below is reserved
 		if (normstart < Address.ReserveMemory)
 		{
-			if ((normstart + normsize) < Address.ReserveMemory)
+			if (normstart + normsize < Address.ReserveMemory)
 				return;
 
-			normsize = (normstart + normsize) - Address.ReserveMemory;
+			normsize = normstart + normsize - Address.ReserveMemory;
 			normstart = Address.ReserveMemory;
 		}
 
@@ -81,7 +81,7 @@ public static class PageFrameAllocator
 		}
 
 		at -= 4;
-		TotalPages += (normsize / PageSize);
+		TotalPages += normsize / PageSize;
 	}
 
 	/// <summary>

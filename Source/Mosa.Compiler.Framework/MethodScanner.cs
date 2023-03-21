@@ -72,7 +72,7 @@ public class MethodScanner
 
 			foreach (var method in type.Methods)
 			{
-				if ((!(!method.HasImplementation && method.IsAbstract)) && !method.HasOpenGenericParams && !method.DeclaringType.HasOpenGenericParams)
+				if (!(!method.HasImplementation && method.IsAbstract) && !method.HasOpenGenericParams && !method.DeclaringType.HasOpenGenericParams)
 				{
 					totalMethods++;
 				}
@@ -123,7 +123,7 @@ public class MethodScanner
 		{
 			lock (trace)
 			{
-				if ((lastSource == null && source != null) || (lastSource != source))
+				if ((lastSource == null && source != null) || lastSource != source)
 				{
 					trace.Log($"> Method: {(source == null ? "[NULL]" : source.FullName)}");
 					lastSource = source;
@@ -194,7 +194,7 @@ public class MethodScanner
 		{
 			lock (trace)
 			{
-				if ((lastSource == null && source != null) || (lastSource != source))
+				if ((lastSource == null && source != null) || lastSource != source)
 				{
 					trace.Log($"> Method: {(source == null ? "[NONE]" : source.FullName)}");
 					lastSource = source;
@@ -249,7 +249,7 @@ public class MethodScanner
 		{
 			lock (trace)
 			{
-				if ((lastSource == null && source != null) || (lastSource != source))
+				if ((lastSource == null && source != null) || lastSource != source)
 				{
 					trace.Log($"> Method: {(source == null ? "[NONE]" : source.FullName)}");
 					lastSource = source;

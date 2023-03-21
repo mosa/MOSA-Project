@@ -45,8 +45,8 @@ public static class ArrayPlug
 		var size = IntPtr.Size;
 
 		Mosa.Runtime.Internal.MemoryCopy(
-			destinationArrayPtr + (IntPtr.Size * 2) + (destinationIndex * size),
-			sourceArrayPtr + (IntPtr.Size * 2) + (sourceIndex * size),
+			destinationArrayPtr + IntPtr.Size * 2 + destinationIndex * size,
+			sourceArrayPtr + IntPtr.Size * 2 + sourceIndex * size,
 			(uint)(length * size)
 		);
 	}
@@ -78,7 +78,7 @@ public static class ArrayPlug
 		var size = IntPtr.Size;
 
 		Mosa.Runtime.Internal.MemoryClear(
-			arrayPtr + (IntPtr.Size * 2) + (index * size),
+			arrayPtr + IntPtr.Size * 2 + index * size,
 			(uint)(length * size)
 		);
 	}
@@ -86,7 +86,7 @@ public static class ArrayPlug
 	[Plug("System.Array::GetLength")]
 	internal static int GetLength(IntPtr array, int dimension)
 	{
-		return (int)(new Pointer(array)).Load32(IntPtr.Size * 2);
+		return (int)new Pointer(array).Load32(IntPtr.Size * 2);
 	}
 
 	[Plug("System.Array::GetLowerBound")]

@@ -13,7 +13,7 @@ public static class BitConverter
 	public static byte[] GetBytes(bool value)
 	{
 		byte[] r = new byte[1];
-		r[0] = (value ? (byte)1 : (byte)0);
+		r[0] = value ? (byte)1 : (byte)0;
 		return r;
 	}
 
@@ -100,25 +100,25 @@ public static class BitConverter
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static unsafe long DoubleToInt64Bits(double value)
 	{
-		return *((long*)&value);
+		return *(long*)&value;
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static unsafe double Int64BitsToDouble(long value)
 	{
-		return *((double*)&value);
+		return *(double*)&value;
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static unsafe int SingleToInt32Bits(float value)
 	{
-		return *((int*)&value);
+		return *(int*)&value;
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static unsafe float Int32BitsToSingle(int value)
 	{
-		return *((float*)&value);
+		return *(float*)&value;
 	}
 
 	/// <summary>

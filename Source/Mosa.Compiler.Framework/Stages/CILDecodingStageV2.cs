@@ -392,7 +392,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 			UpdateLabel(context.Node, label, endNode);
 			endNode = context.Node;
 
-			var peekNextblock = (index + 1 == totalCode) ? null : BasicBlocks.GetByLabel(code[index + 1].Offset);
+			var peekNextblock = index + 1 == totalCode ? null : BasicBlocks.GetByLabel(code[index + 1].Offset);
 
 			if (peekNextblock != null || index + 1 == totalCode)
 			{
@@ -963,13 +963,13 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 		var operand = Allocate(stackType, type);
 
-		return (stackType == StackType.ValueType) ? new StackEntry(stackType, operand, type) : new StackEntry(stackType, operand);
+		return stackType == StackType.ValueType ? new StackEntry(stackType, operand, type) : new StackEntry(stackType, operand);
 	}
 
 	private string EmitString(string data, uint token)
 	{
 		string symbolName = $"$ldstr${Method.Module.Name}${token}";
-		var linkerSymbol = Linker.DefineSymbol(symbolName, SectionKind.ROData, NativeAlignment, (uint)(ObjectHeaderSize + NativePointerSize + (data.Length * 2)));
+		var linkerSymbol = Linker.DefineSymbol(symbolName, SectionKind.ROData, NativeAlignment, (uint)(ObjectHeaderSize + NativePointerSize + data.Length * 2));
 		var writer = new BinaryWriter(linkerSymbol.Stream);
 
 		Linker.Link(LinkType.AbsoluteAddress, PatchType.I32, linkerSymbol, ObjectHeaderSize - NativePointerSize, Metadata.TypeDefinition + "System.String", 0);
@@ -1099,7 +1099,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 	private StackType GetStackTypeDefaultValueType(MosaType type)
 	{
-		return (type == null) ? StackType.ValueType : GetStackType(type);
+		return type == null ? StackType.ValueType : GetStackType(type);
 	}
 
 	private StackType GetStackType(ElementType elementType)
@@ -3582,7 +3582,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		var isClassPrimitive = IsPrimitive(classUnderlyingType);
 
 		bool isPointer = operand.IsManagedPointer || operand.Type == TypeSystem.BuiltIn.I || operand.Type == TypeSystem.BuiltIn.U;
-		bool isMove = (MosaTypeLayout.IsUnderlyingPrimitive(operand.Type) && !result.IsOnStack && !operand.IsReferenceType && !isPointer);
+		bool isMove = MosaTypeLayout.IsUnderlyingPrimitive(operand.Type) && !result.IsOnStack && !operand.IsReferenceType && !isPointer;
 
 		if (isFieldPrimitive && isClassPrimitive && field.DeclaringType.IsValueType && !isPointer)
 		{
@@ -5739,13 +5739,13 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 		// First check to see if we have a matching checked conversion function
 
-		var sourceTypeString = (source.Type.IsI4) ? "U4" :
-			(source.Type.IsI8) ? "U8" :
-			(source.Type.IsR4) ? "R4" :
-			(source.Type.IsR8) ? "R8" :
-			(source.Type.IsI) ? Is32BitPlatform ? "U4" : "U8" :
-			(source.Type.IsPointer) ? Is32BitPlatform ? "U4" : "U8" :
-			(!source.Type.IsValueType) ? Is32BitPlatform ? "U4" : "U8" :
+		var sourceTypeString = source.Type.IsI4 ? "U4" :
+			source.Type.IsI8 ? "U8" :
+			source.Type.IsR4 ? "R4" :
+			source.Type.IsR8 ? "R8" :
+			source.Type.IsI ? Is32BitPlatform ? "U4" : "U8" :
+			source.Type.IsPointer ? Is32BitPlatform ? "U4" : "U8" :
+			!source.Type.IsValueType ? Is32BitPlatform ? "U4" : "U8" :
 			throw new CompilerException();
 
 		var resultTypeString = type.IsU || type.IsI || type.IsPointer ? Is32BitPlatform ? "U4" : "U8" : type.TypeCode.ToString();

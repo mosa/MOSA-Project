@@ -27,7 +27,7 @@ public static class UnitTestHelper
 		}
 		else if (o is Boolean)
 		{
-			return ((bool)o) ? "True" : "False";
+			return (bool)o ? "True" : "False";
 		}
 
 		return o.ToString();

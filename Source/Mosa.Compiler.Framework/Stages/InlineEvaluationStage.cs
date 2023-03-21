@@ -225,7 +225,7 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 			return true;
 
 		// FUTURE: Don't hardcode namepsace
-		if (((method.MethodAttributes & MosaMethodAttributes.Public) == MosaMethodAttributes.Public) && method.DeclaringType.BaseType != null && method.DeclaringType.BaseType.Namespace == "Mosa.UnitTests")
+		if ((method.MethodAttributes & MosaMethodAttributes.Public) == MosaMethodAttributes.Public && method.DeclaringType.BaseType != null && method.DeclaringType.BaseType.Namespace == "Mosa.UnitTests")
 			return true;
 
 		return false;
@@ -249,7 +249,7 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 		// methods with aggressive inline attribute will double the allow IR instruction count
 		int max = methodData.HasAggressiveInliningAttribute || MethodData.AggressiveInlineRequested ? InlineAggressiveMaximum : InlineMaximum;
 
-		if ((methodData.IRInstructionCount - methodData.IRStackParameterInstructionCount) > max)
+		if (methodData.IRInstructionCount - methodData.IRStackParameterInstructionCount > max)
 			return false;
 
 		return true;

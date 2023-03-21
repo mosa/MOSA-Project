@@ -117,7 +117,7 @@ public static class Boot
 
 	private static void TestHash()
 	{
-		int i = (10).GetHashCode();
+		int i = 10.GetHashCode();
 		Screen.Write("Hash:");
 		Screen.Write((uint)i, 10, 3);
 		Screen.WriteLine();

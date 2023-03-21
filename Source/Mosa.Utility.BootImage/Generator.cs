@@ -29,10 +29,10 @@ public static class Generator
 
 		if (blockCount == 0)
 		{
-			blockCount = (2048 * 4) + 1;
+			blockCount = 2048 * 4 + 1;
 			foreach (var file in options.IncludeFiles)
 			{
-				blockCount += ((uint)file.Content.Length / SectorSize) + 10;
+				blockCount += (uint)file.Content.Length / SectorSize + 10;
 			}
 		}
 
@@ -180,7 +180,7 @@ public static class Generator
 				// Create footer
 				var footer = VHD.CreateFooter(
 					blockCount,
-					(uint)(DateTime.Now - (new DateTime(2000, 1, 1, 0, 0, 0))).Seconds,
+					(uint)(DateTime.Now - new DateTime(2000, 1, 1, 0, 0, 0)).Seconds,
 					options.MediaGuid.ToByteArray(),
 					diskGeometry
 				);

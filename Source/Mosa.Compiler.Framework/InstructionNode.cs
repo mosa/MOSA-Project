@@ -862,7 +862,7 @@ public sealed class InstructionNode
 		{
 			sb.Append(' ');
 
-			for (int i = 0; (i < 2) && (i < BranchTargetsCount); i++)
+			for (int i = 0; i < 2 && i < BranchTargetsCount; i++)
 			{
 				if (i != 0)
 				{
@@ -1232,7 +1232,7 @@ public sealed class InstructionNode
 	/// <param name="operand1">The operand1.</param>
 	public void SetInstruction(BaseInstruction instruction, Operand result, Operand operand1)
 	{
-		SetInstruction(instruction, 1, (byte)((result == null) ? 0 : 1));
+		SetInstruction(instruction, 1, (byte)(result == null ? 0 : 1));
 		Result = result;
 		Operand1 = operand1;
 	}
@@ -1245,7 +1245,7 @@ public sealed class InstructionNode
 	/// <param name="operands">The operands.</param>
 	public void SetInstruction(BaseInstruction instruction, Operand result, List<Operand> operands)
 	{
-		SetInstruction(instruction, 0, (byte)((result == null) ? 0 : 1));
+		SetInstruction(instruction, 0, (byte)(result == null ? 0 : 1));
 		Result = result;
 		AppendOperands(operands);
 	}
@@ -1286,7 +1286,7 @@ public sealed class InstructionNode
 	/// <param name="operand1">The operand1.</param>
 	public void SetInstruction(BaseInstruction instruction, StatusRegister statusRegister, Operand result, Operand operand1)
 	{
-		SetInstruction(instruction, 1, (byte)((result == null) ? 0 : 1));
+		SetInstruction(instruction, 1, (byte)(result == null ? 0 : 1));
 		Result = result;
 		Operand1 = operand1;
 		StatusRegister = statusRegister;
@@ -1367,7 +1367,7 @@ public sealed class InstructionNode
 	/// <param name="operand2">The operand2.</param>
 	public void SetInstruction(BaseInstruction instruction, Operand result, Operand operand1, Operand operand2)
 	{
-		SetInstruction(instruction, 2, (byte)((result == null) ? 0 : 1));
+		SetInstruction(instruction, 2, (byte)(result == null ? 0 : 1));
 		Result = result;
 		Operand1 = operand1;
 		Operand2 = operand2;
@@ -1383,7 +1383,7 @@ public sealed class InstructionNode
 	/// <param name="operand3">The operand3.</param>
 	public void SetInstruction(BaseInstruction instruction, Operand result, Operand operand1, Operand operand2, Operand operand3)
 	{
-		SetInstruction(instruction, 3, (byte)((result == null) ? 0 : 1));
+		SetInstruction(instruction, 3, (byte)(result == null ? 0 : 1));
 		Result = result;
 		Operand1 = operand1;
 		Operand2 = operand2;
@@ -1401,7 +1401,7 @@ public sealed class InstructionNode
 	/// <param name="operand4">The operand4.</param>
 	public void SetInstruction(BaseInstruction instruction, Operand result, Operand operand1, Operand operand2, Operand operand3, Operand operand4)
 	{
-		SetInstruction(instruction, 4, (byte)((result == null) ? 0 : 1));
+		SetInstruction(instruction, 4, (byte)(result == null ? 0 : 1));
 		Result = result;
 		Operand1 = operand1;
 		Operand2 = operand2;
@@ -1411,7 +1411,7 @@ public sealed class InstructionNode
 
 	public void SetInstruction(BaseInstruction instruction, ConditionCode conditionCode, Operand result, Operand operand1, Operand operand2, Operand operand3, Operand operand4)
 	{
-		SetInstruction(instruction, 4, (byte)((result == null) ? 0 : 1));
+		SetInstruction(instruction, 4, (byte)(result == null ? 0 : 1));
 		Result = result;
 		Operand1 = operand1;
 		Operand2 = operand2;
@@ -1430,7 +1430,7 @@ public sealed class InstructionNode
 	/// <param name="operand2">The operand2.</param>
 	public void SetInstruction(BaseInstruction instruction, StatusRegister statusRegister, Operand result, Operand operand1, Operand operand2)
 	{
-		SetInstruction(instruction, 2, (byte)((result == null) ? 0 : 1));
+		SetInstruction(instruction, 2, (byte)(result == null ? 0 : 1));
 		Result = result;
 		Operand1 = operand1;
 		Operand2 = operand2;
@@ -1446,7 +1446,7 @@ public sealed class InstructionNode
 	/// <param name="operand1">The operand1.</param>
 	public void SetInstruction(BaseInstruction instruction, ConditionCode condition, Operand result, Operand operand1)
 	{
-		SetInstruction(instruction, 1, (byte)((result == null) ? 0 : 1));
+		SetInstruction(instruction, 1, (byte)(result == null ? 0 : 1));
 		Result = result;
 		Operand1 = operand1;
 		ConditionCode = condition;
@@ -1462,7 +1462,7 @@ public sealed class InstructionNode
 	/// <param name="operand1">The operand1.</param>
 	public void SetInstruction(BaseInstruction instruction, StatusRegister statusRegister, ConditionCode condition, Operand result, Operand operand1)
 	{
-		SetInstruction(instruction, 1, (byte)((result == null) ? 0 : 1));
+		SetInstruction(instruction, 1, (byte)(result == null ? 0 : 1));
 		Result = result;
 		Operand1 = operand1;
 		ConditionCode = condition;
@@ -1477,7 +1477,7 @@ public sealed class InstructionNode
 	/// <param name="result">The result.</param>
 	public void SetInstruction(BaseInstruction instruction, ConditionCode condition, Operand result)
 	{
-		SetInstruction(instruction, 0, (byte)((result == null) ? 0 : 1));
+		SetInstruction(instruction, 0, (byte)(result == null ? 0 : 1));
 		Result = result;
 		ConditionCode = condition;
 	}
@@ -1492,7 +1492,7 @@ public sealed class InstructionNode
 	/// <param name="operand2">The operand2.</param>
 	public void SetInstruction(BaseInstruction instruction, ConditionCode condition, Operand result, Operand operand1, Operand operand2)
 	{
-		SetInstruction(instruction, 2, (byte)((result == null) ? 0 : 1));
+		SetInstruction(instruction, 2, (byte)(result == null ? 0 : 1));
 		Result = result;
 		Operand1 = operand1;
 		Operand2 = operand2;
@@ -1510,7 +1510,7 @@ public sealed class InstructionNode
 	/// <param name="operand3">The operand3.</param>
 	public void SetInstruction(BaseInstruction instruction, ConditionCode condition, Operand result, Operand operand1, Operand operand2, Operand operand3)
 	{
-		SetInstruction(instruction, 3, (byte)((result == null) ? 0 : 1));
+		SetInstruction(instruction, 3, (byte)(result == null ? 0 : 1));
 		Result = result;
 		Operand1 = operand1;
 		Operand2 = operand2;
@@ -1529,7 +1529,7 @@ public sealed class InstructionNode
 	/// <param name="block">The block.</param>
 	public void SetInstruction(BaseInstruction instruction, ConditionCode condition, Operand result, Operand operand1, Operand operand2, BasicBlock block)
 	{
-		SetInstruction(instruction, 2, (byte)((result == null) ? 0 : 1));
+		SetInstruction(instruction, 2, (byte)(result == null ? 0 : 1));
 		Result = result;
 		Operand1 = operand1;
 		Operand2 = operand2;
@@ -1548,7 +1548,7 @@ public sealed class InstructionNode
 	/// <param name="operand2">The operand2.</param>
 	public void SetInstruction(BaseInstruction instruction, StatusRegister statusRegister, ConditionCode condition, Operand result, Operand operand1, Operand operand2)
 	{
-		SetInstruction(instruction, 2, (byte)((result == null) ? 0 : 1));
+		SetInstruction(instruction, 2, (byte)(result == null ? 0 : 1));
 		Result = result;
 		Operand1 = operand1;
 		Operand2 = operand2;
@@ -1568,7 +1568,7 @@ public sealed class InstructionNode
 	/// <param name="operand3">The operand3.</param>
 	public void SetInstruction(BaseInstruction instruction, StatusRegister statusRegister, Operand result, Operand operand1, Operand operand2, Operand operand3)
 	{
-		SetInstruction(instruction, 3, (byte)((result == null) ? 0 : 1));
+		SetInstruction(instruction, 3, (byte)(result == null ? 0 : 1));
 		Result = result;
 		Operand1 = operand1;
 		Operand2 = operand2;

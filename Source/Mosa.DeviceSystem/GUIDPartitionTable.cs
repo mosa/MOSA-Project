@@ -64,23 +64,23 @@ public class GUIDPartitionTable
 		if (!mbr.Valid)
 			return false;
 
-		if ((mbr.Partitions[0].PartitionType != PartitionType.GPT) ||
-			(mbr.Partitions[1].PartitionType != PartitionType.Empty) ||
-			(mbr.Partitions[2].PartitionType != PartitionType.Empty) ||
-			(mbr.Partitions[3].PartitionType != PartitionType.Empty) ||
-			(!mbr.Partitions[0].Bootable) || (mbr.Partitions[0].StartLBA != 1))
+		if (mbr.Partitions[0].PartitionType != PartitionType.GPT ||
+			mbr.Partitions[1].PartitionType != PartitionType.Empty ||
+			mbr.Partitions[2].PartitionType != PartitionType.Empty ||
+			mbr.Partitions[3].PartitionType != PartitionType.Empty ||
+			!mbr.Partitions[0].Bootable || mbr.Partitions[0].StartLBA != 1)
 			return false;
 
 		var gpt = new DataBlock(diskDevice.ReadBlock(1, 1));
 
-		if ((gpt.GetByte(0) != 45) && (gpt.GetByte(1) != 46) && (gpt.GetByte(2) != 49) && (gpt.GetByte(3) != 20) &&
-			(gpt.GetByte(4) != 50) && (gpt.GetByte(5) != 41) && (gpt.GetByte(6) != 52) && (gpt.GetByte(7) != 54))
+		if (gpt.GetByte(0) != 45 && gpt.GetByte(1) != 46 && gpt.GetByte(2) != 49 && gpt.GetByte(3) != 20 &&
+			gpt.GetByte(4) != 50 && gpt.GetByte(5) != 41 && gpt.GetByte(6) != 52 && gpt.GetByte(7) != 54)
 			return false;
 
-		if ((gpt.GetUInt32(GPT.Revision) != GPTConstant.SupportedRevision) ||
-			(gpt.GetUInt32(GPT.HeaderSize) != GPTConstant.HeaderSize) ||
-			(gpt.GetUInt32(GPT.Reserved) != 0) ||
-			(gpt.GetUInt32(GPT.PartitionStartingLBA) != 2)
+		if (gpt.GetUInt32(GPT.Revision) != GPTConstant.SupportedRevision ||
+			gpt.GetUInt32(GPT.HeaderSize) != GPTConstant.HeaderSize ||
+			gpt.GetUInt32(GPT.Reserved) != 0 ||
+			gpt.GetUInt32(GPT.PartitionStartingLBA) != 2
 		   )
 			return false;
 

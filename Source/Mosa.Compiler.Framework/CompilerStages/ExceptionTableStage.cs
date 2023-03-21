@@ -21,7 +21,7 @@ public class ExceptionTableStage : BaseCompilerStage
 
 	protected override void Initialization()
 	{
-		NativePatchType = (TypeLayout.NativePointerSize == 4) ? PatchType.I32 : NativePatchType = PatchType.I64;
+		NativePatchType = TypeLayout.NativePointerSize == 4 ? PatchType.I32 : NativePatchType = PatchType.I64;
 	}
 
 	protected override void Finalization()

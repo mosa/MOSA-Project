@@ -134,7 +134,7 @@ public static class CommonTests
 		int d = 1;
 		int e = 0;
 
-		int z = (a * b) + ((c * d) + (c * d) * e) + e;
+		int z = a * b + c * d + c * d * e + e;
 
 		return z;
 	}

@@ -82,7 +82,7 @@ public static unsafe class Unsafe
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static void* Add<T>(void* source, int elementOffset)
 	{
-		return (byte*)source + (elementOffset * (nint)SizeOf<T>());
+		return (byte*)source + elementOffset * (nint)SizeOf<T>();
 	}
 
 	/// <summary>

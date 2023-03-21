@@ -106,7 +106,7 @@ internal class LinkedList<T> : IEnumerable<T>, ICollection<T>
 	/// </returns>
 	public bool Contains(T value)
 	{
-		return (Find(value) != null);
+		return Find(value) != null;
 	}
 
 	/// <summary>
