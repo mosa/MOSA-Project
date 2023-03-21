@@ -537,8 +537,8 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 		if (0 == num)
 			return 0;
 
-		uint n = num / 2 + 1;
-		uint n1 = (n + num / n) / 2;
+		var n = num / 2 + 1;
+		var n1 = (n + num / n) / 2;
 
 		while (n1 < n)
 		{
@@ -554,8 +554,8 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 		if (0 == num)
 			return 0;
 
-		ulong n = num / 2 + 1;
-		ulong n1 = (n + num / n) / 2;
+		var n = num / 2 + 1;
+		var n1 = (n + num / n) / 2;
 
 		while (n1 < n)
 		{
@@ -571,8 +571,8 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 		if (0 == num)
 			return 0;
 
-		long n = num / 2 + 1;
-		long n1 = (n + num / n) / 2;
+		var n = num / 2 + 1;
+		var n1 = (n + num / n) / 2;
 
 		while (n1 < n)
 		{
@@ -855,7 +855,7 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 	protected static InstructionNode GetPreviousNodeUntil(Context context, BaseInstruction untilInstruction, int window, out bool immediate, Operand operand1 = null, Operand operand2 = null)
 	{
 		var previous = context.Node.Previous;
-		int count = 0;
+		var count = 0;
 		immediate = false;
 
 		while (count < window)
@@ -911,7 +911,7 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 	protected static InstructionNode GetNextNodeUntil(Context context, BaseInstruction untilInstruction, int window, out bool immediate, Operand operand = null)
 	{
 		var next = context.Node.Next;
-		int count = 0;
+		var count = 0;
 		immediate = false;
 
 		while (count < window)

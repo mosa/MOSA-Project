@@ -15,7 +15,7 @@ public static class R4
 		{
 			if (series == null) series = GetSeries();
 
-			foreach (float value in series)
+			foreach (var value in series)
 				yield return value;
 		}
 	}
@@ -56,7 +56,7 @@ public static class R4
 	{
 		var negs = new List<float>();
 
-		foreach (float value in list)
+		foreach (var value in list)
 		{
 			if (value > 0)
 				negs.Add(-value);

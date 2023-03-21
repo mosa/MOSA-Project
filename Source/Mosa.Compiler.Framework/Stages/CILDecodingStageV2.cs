@@ -179,7 +179,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 	{
 		var code = Method.Code;
 
-		for (int index = 0; index < code.Count; index++)
+		for (var index = 0; index < code.Count; index++)
 		{
 			var instruction = code[index];
 
@@ -359,7 +359,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 		trace?.Log($"Block => {block}");
 
-		for (int index = 0; index < totalCode; index++)
+		for (var index = 0; index < totalCode; index++)
 		{
 			var instruction = code[index];
 			var opcode = (OpCode)instruction.OpCode;
@@ -377,7 +377,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 				trace?.Log($" Start Stack Size: {stack.Count}");
 			}
 
-			bool processed = Translate(stack, context, instruction, opcode, block, prefixValues, label);
+			var processed = Translate(stack, context, instruction, opcode, block, prefixValues, label);
 
 			if (!processed)
 			{
@@ -693,7 +693,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		var total = OutgoingStacks[block.PreviousBlocks[0]].Length;
 		var incomingStack = new Stack<StackEntry>(total);
 
-		for (int index = 0; index < total; index++)
+		for (var index = 0; index < total; index++)
 		{
 			StackEntry first = null;
 			var identifcal = true;
@@ -752,7 +752,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 	private void CreateLocalVariables()
 	{
-		int count = Method.LocalVariables.Count;
+		var count = Method.LocalVariables.Count;
 
 		LocalStack = new Operand[count];
 
@@ -764,7 +764,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 		var code = Method.Code;
 
-		for (int label = 0; label < code.Count; label++)
+		for (var label = 0; label < code.Count; label++)
 		{
 			var instruction = code[label];
 
@@ -788,7 +788,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		LocalStackType = new StackType[count];
 		LocalElementType = new ElementType[count];
 
-		for (int index = 0; index < count; index++)
+		for (var index = 0; index < count; index++)
 		{
 			var type = Method.LocalVariables[index];
 
@@ -815,7 +815,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 	{
 		var prologue = new Context(BasicBlocks.PrologueBlock.AfterFirst);
 
-		for (int index = 0; index < LocalStack.Length; index++)
+		for (var index = 0; index < LocalStack.Length; index++)
 		{
 			var local = LocalStack[index];
 			var localstacktype = LocalStackType[index];
@@ -885,7 +885,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 		var operands = new List<Operand>(count);
 
-		for (int i = 0; i < count; i++)
+		for (var i = 0; i < count; i++)
 		{
 			var operand = PopStack(stack).Operand;
 			operands.Add(operand);
@@ -968,7 +968,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 	private string EmitString(string data, uint token)
 	{
-		string symbolName = $"$ldstr${Method.Module.Name}${token}";
+		var symbolName = $"$ldstr${Method.Module.Name}${token}";
 		var linkerSymbol = Linker.DefineSymbol(symbolName, SectionKind.ROData, NativeAlignment, (uint)(ObjectHeaderSize + NativePointerSize + data.Length * 2));
 		var writer = new BinaryWriter(linkerSymbol.Stream);
 
@@ -3581,8 +3581,8 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		var classStacktype = GetStackTypeDefaultValueType(classUnderlyingType);
 		var isClassPrimitive = IsPrimitive(classUnderlyingType);
 
-		bool isPointer = operand.IsManagedPointer || operand.Type == TypeSystem.BuiltIn.I || operand.Type == TypeSystem.BuiltIn.U;
-		bool isMove = MosaTypeLayout.IsUnderlyingPrimitive(operand.Type) && !result.IsOnStack && !operand.IsReferenceType && !isPointer;
+		var isPointer = operand.IsManagedPointer || operand.Type == TypeSystem.BuiltIn.I || operand.Type == TypeSystem.BuiltIn.U;
+		var isMove = MosaTypeLayout.IsUnderlyingPrimitive(operand.Type) && !result.IsOnStack && !operand.IsReferenceType && !isPointer;
 
 		if (isFieldPrimitive && isClassPrimitive && field.DeclaringType.IsValueType && !isPointer)
 		{
@@ -3670,7 +3670,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 		// Find enclosing try or finally handler
 		var exceptionHandler = FindImmediateExceptionHandler(headerBlock.Label);
-		bool inTry = exceptionHandler.IsLabelWithinTry(headerBlock.Label);
+		var inTry = exceptionHandler.IsLabelWithinTry(headerBlock.Label);
 
 		var endInstruction = inTry ? (BaseInstruction)IRInstruction.TryEnd : IRInstruction.ExceptionEnd;
 
@@ -3687,7 +3687,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 		MethodScanner.AccessedField(field);
 
-		uint offset = TypeLayout.GetFieldOffset(field);
+		var offset = TypeLayout.GetFieldOffset(field);
 		var fieldPtr = field.FieldType.ToManagedPointer(); // FUTURE: AllocateVirtualRegisterManagedPointer();
 
 		var result = Allocate(StackType.ManagedPointer, fieldPtr);
@@ -4185,7 +4185,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 	{
 		var method = (MosaMethod)instruction.Operand;
 		var classType = method.DeclaringType;
-		int paramCount = method.Signature.Parameters.Count;
+		var paramCount = method.Signature.Parameters.Count;
 
 		var underlyingType = GetUnderlyingType(classType);
 		var stackType = GetStackTypeDefaultValueType(underlyingType);
@@ -4194,7 +4194,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 		var operands = new List<Operand>();
 
-		for (int i = 0; i < paramCount; i++)
+		for (var i = 0; i < paramCount; i++)
 		{
 			var param = PopStack(stack);
 			operands.Add(param.Operand);

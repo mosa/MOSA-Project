@@ -98,7 +98,7 @@ public class SparseConditionalConstantPropagationStage : BaseMethodCompilerStage
 			{
 				Debug.Assert(node.Instruction != IRInstruction.AddressOf);
 
-				for (int i = 0; i < node.OperandCount; i++)
+				for (var i = 0; i < node.OperandCount; i++)
 				{
 					var operand = node.GetOperand(i);
 

@@ -12,7 +12,7 @@ public static class InterestingTests
 	{
 		Struct a = new Struct();
 
-		for (int i = 0; i < 10000000; i++)
+		for (var i = 0; i < 10000000; i++)
 		{
 			a.X += 1;
 		}
@@ -24,7 +24,7 @@ public static class InterestingTests
 	{
 		Struct a = new Struct();
 
-		for (int i = 0; i < 10000000; i++)
+		for (var i = 0; i < 10000000; i++)
 		{
 			a.X = a.X + 1;
 		}

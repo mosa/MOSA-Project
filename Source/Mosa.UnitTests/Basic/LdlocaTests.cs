@@ -8,7 +8,7 @@ public static class LdlocaTests
 	[MosaUnitTest(Series = "U1")]
 	public static bool LdlocaCheckValueU1(byte expect)
 	{
-		byte a = expect;
+		var a = expect;
 		return LdlocaCheckValueRefU1(expect, ref a);
 	}
 
@@ -20,7 +20,7 @@ public static class LdlocaTests
 	[MosaUnitTest(Series = "U2")]
 	public static bool LdlocaCheckValueU2(ushort expect)
 	{
-		ushort a = expect;
+		var a = expect;
 		return LdlocaCheckValueRefU2(expect, ref a);
 	}
 
@@ -32,7 +32,7 @@ public static class LdlocaTests
 	[MosaUnitTest(Series = "U4")]
 	public static bool LdlocaCheckValueU4(uint expect)
 	{
-		uint a = expect;
+		var a = expect;
 		return LdlocaCheckValueRefU4(expect, ref a);
 	}
 
@@ -44,7 +44,7 @@ public static class LdlocaTests
 	[MosaUnitTest(Series = "U8")]
 	public static bool LdlocaCheckValueU8(ulong expect)
 	{
-		ulong a = expect;
+		var a = expect;
 		return LdlocaCheckValueRefU8(expect, ref a);
 	}
 
@@ -56,7 +56,7 @@ public static class LdlocaTests
 	[MosaUnitTest(Series = "I1")]
 	public static bool LdlocaCheckValueI1(sbyte expect)
 	{
-		sbyte a = expect;
+		var a = expect;
 		return LdlocaCheckValueRefI1(expect, ref a);
 	}
 
@@ -68,7 +68,7 @@ public static class LdlocaTests
 	[MosaUnitTest(Series = "I2")]
 	public static bool LdlocaCheckValueI2(short expect)
 	{
-		short a = expect;
+		var a = expect;
 		return LdlocaCheckValueRefI2(expect, ref a);
 	}
 
@@ -80,7 +80,7 @@ public static class LdlocaTests
 	[MosaUnitTest(Series = "I4")]
 	public static bool LdlocaCheckValueI4(int expect)
 	{
-		int a = expect;
+		var a = expect;
 		return LdlocaCheckValueRefI4(expect, ref a);
 	}
 
@@ -92,7 +92,7 @@ public static class LdlocaTests
 	[MosaUnitTest(Series = "I8")]
 	public static bool LdlocaCheckValueI8(long expect)
 	{
-		long a = expect;
+		var a = expect;
 		return LdlocaCheckValueRefI8(expect, ref a);
 	}
 
@@ -104,7 +104,7 @@ public static class LdlocaTests
 	[MosaUnitTest(Series = "R4")]
 	public static bool LdlocaCheckValueR4(float expect)
 	{
-		float a = expect;
+		var a = expect;
 		return LdlocaCheckValueRefR4(expect, ref a);
 	}
 
@@ -116,7 +116,7 @@ public static class LdlocaTests
 	[MosaUnitTest(Series = "R8")]
 	public static bool LdlocaCheckValueR8(double expect)
 	{
-		double a = expect;
+		var a = expect;
 		return LdlocaCheckValueRefR8(expect, ref a);
 	}
 
@@ -128,7 +128,7 @@ public static class LdlocaTests
 	[MosaUnitTest(Series = "C")]
 	public static bool LdlocaCheckValueC(char expect)
 	{
-		char a = expect;
+		var a = expect;
 		return LdlocaCheckValueRefC(expect, ref a);
 	}
 

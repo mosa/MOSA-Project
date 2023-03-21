@@ -359,7 +359,7 @@ public sealed class MethodCompiler
 	/// </summary>
 	private void EvaluateParameterOperands()
 	{
-		int offset = Architecture.OffsetOfFirstParameter;
+		var offset = Architecture.OffsetOfFirstParameter;
 
 		//offset += MethodData.ReturnInRegister ? MethodData.ReturnSize : 0;
 
@@ -370,7 +370,7 @@ public sealed class MethodCompiler
 
 		//Debug.Assert((MethodData.ReturnInRegister ? MethodData.ReturnSize : 0) == TypeLayout.GetTypeSize(Method.Signature.ReturnType));
 
-		int index = 0;
+		var index = 0;
 
 		if (Method.HasThis || Method.HasExplicitThis)
 		{
@@ -486,7 +486,7 @@ public sealed class MethodCompiler
 		var startTick = Stopwatch.ElapsedTicks;
 		var startMS = Stopwatch.ElapsedMilliseconds;
 
-		for (int i = 0; i < Pipeline.Count; i++)
+		for (var i = 0; i < Pipeline.Count; i++)
 		{
 			var stage = Pipeline[i];
 
@@ -515,17 +515,17 @@ public sealed class MethodCompiler
 
 			var executionTimeLog = new TraceLog(TraceType.MethodDebug, Method, "Execution Time/Ticks", MethodData.Version);
 
-			long previousTick = startTick;
+			var previousTick = startTick;
 			var totalTick = lastTick - startTick;
 
-			for (int i = 0; i < Pipeline.Count; i++)
+			for (var i = 0; i < Pipeline.Count; i++)
 			{
 				var pipelineTick = executionTimes[i];
 				var ticks = pipelineTick == 0 ? 0 : pipelineTick - previousTick;
 				var percentage = totalTick == 0 ? 0 : ticks * 100 / (double)totalTick;
 				previousTick = pipelineTick;
 
-				int per = (int)percentage / 5;
+				var per = (int)percentage / 5;
 
 				var entry = $"[{i:00}] {Pipeline[i].Name.PadRight(45)} : {percentage:00.00} % [{string.Empty.PadRight(per, '#').PadRight(20, ' ')}] ({ticks})";
 
@@ -753,7 +753,7 @@ public sealed class MethodCompiler
 	/// <param name="operandHigh">The operand high.</param>
 	public void SplitLongOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
 	{
-		bool is64Bit = operand.IsInteger64;
+		var is64Bit = operand.IsInteger64;
 
 		if (!operand.IsInteger64 && !operand.IsInteger32)
 		{
@@ -813,7 +813,7 @@ public sealed class MethodCompiler
 	{
 		LocalVariables = new Operand[locals.Count];
 
-		int index = 0;
+		var index = 0;
 		foreach (var local in locals)
 		{
 			if (MosaTypeLayout.IsUnderlyingPrimitive(local.Type) && !local.IsPinned)

@@ -53,7 +53,7 @@ public sealed class SimpleFastDominance
 	/// <param name="entryBlock">The entry block.</param>
 	public SimpleFastDominance(BasicBlocks basicBlocks, BasicBlock entryBlock)
 	{
-		int blockCount = basicBlocks.Count;
+		var blockCount = basicBlocks.Count;
 
 		doms = new BasicBlock[blockCount];
 		domFrontierOfBlock = new List<BasicBlock>[blockCount];
@@ -64,7 +64,7 @@ public sealed class SimpleFastDominance
 		reversePostOrder = basicBlocks.ReversePostorder(entryBlock);
 
 		// Map block to reverse postorder index
-		int i = reversePostOrder.Count;
+		var i = reversePostOrder.Count;
 		foreach (var block in reversePostOrder)
 		{
 			blockToPostorderIndex[block.Sequence] = --i;
@@ -83,7 +83,7 @@ public sealed class SimpleFastDominance
 		var startNode = reversePostOrder[0];
 		doms[startNode.Sequence] = startNode;
 
-		bool changed = true;
+		var changed = true;
 
 		while (changed)
 		{

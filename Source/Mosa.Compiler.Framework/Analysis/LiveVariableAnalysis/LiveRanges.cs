@@ -45,7 +45,7 @@ public sealed class LiveRanges
 			return;
 		}
 
-		for (int i = 0; i < Count; i++)
+		for (var i = 0; i < Count; i++)
 		{
 			var liveRange = Ranges[i];
 
@@ -57,7 +57,7 @@ public sealed class LiveRanges
 				liveRange = new Range(Math.Min(range.Start, liveRange.Start), Math.Max(range.End, liveRange.End));
 				Ranges[i] = liveRange;
 
-				for (int z = i + 1; z < Count; z++)
+				for (var z = i + 1; z < Count; z++)
 				{
 					var nextLiveRange = Ranges[z];
 					if (liveRange.IsAdjacent(nextLiveRange) || liveRange.Intersects(nextLiveRange))

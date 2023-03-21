@@ -101,8 +101,8 @@ public sealed class CodeGenerationStage : BaseMethodCompilerStage
 		var trace = CreateTraceLog(9);
 
 		MethodData.LabelRegions.Clear();
-		int labelCurrent = BasicBlock.ReservedLabel;
-		int labelStart = 0;
+		var labelCurrent = BasicBlock.ReservedLabel;
+		var labelStart = 0;
 
 		foreach (var block in BasicBlocks)
 		{

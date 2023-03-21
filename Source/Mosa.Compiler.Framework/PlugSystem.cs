@@ -120,7 +120,7 @@ public class PlugSystem
 		if (targetMethod.Signature.Parameters.Count != plugMethod.Signature.Parameters.Count)
 			return false;
 
-		for (int i = 0; i < targetMethod.Signature.Parameters.Count; i++)
+		for (var i = 0; i < targetMethod.Signature.Parameters.Count; i++)
 		{
 			if (!targetMethod.Signature.Parameters[i].Equals(plugMethod.Signature.Parameters[i]))
 			{
@@ -136,7 +136,7 @@ public class PlugSystem
 		if (targetMethod.Signature.Parameters.Count != plugMethod.Signature.Parameters.Count - 1)
 			return false;
 
-		for (int i = 0; i < targetMethod.Signature.Parameters.Count; i++)
+		for (var i = 0; i < targetMethod.Signature.Parameters.Count; i++)
 		{
 			if (!targetMethod.Signature.Parameters[i].Equals(plugMethod.Signature.Parameters[i + 1]))
 			{

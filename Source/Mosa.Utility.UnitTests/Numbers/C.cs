@@ -14,7 +14,7 @@ public static class C
 		{
 			if (series == null) series = GetSeries();
 
-			foreach (char value in series)
+			foreach (var value in series)
 				yield return value;
 		}
 	}

@@ -11,8 +11,8 @@ public static class FilterParser
 	{
 		var methods = new List<Method>();
 
-		int length = tokens.Count;
-		int index = 0;
+		var length = tokens.Count;
+		var index = 0;
 
 		while (index < length)
 		{
@@ -36,7 +36,7 @@ public static class FilterParser
 			start++;
 		}
 
-		for (int index = start; index < length;)
+		for (var index = start; index < length;)
 		{
 			var token = tokens[index++];
 

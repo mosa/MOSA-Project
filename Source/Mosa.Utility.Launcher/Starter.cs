@@ -81,7 +81,7 @@ public class Starter : BaseLauncher
 
 	private bool MonitorTest(Process process, int timeoutMS, string successText)
 	{
-		bool success = false;
+		var success = false;
 
 		if (process != null)
 		{
@@ -407,7 +407,7 @@ public class Starter : BaseLauncher
 		arg = $"{arg} -x {Quote(gdbscript)}";
 
 		// FIXME!
-		ulong startingAddress = Linker.Sections[(int)SectionKind.Text].VirtualAddress + Builder.MultibootHeaderLength;
+		var startingAddress = Linker.Sections[(int)SectionKind.Text].VirtualAddress + Builder.MultibootHeaderLength;
 
 		var sb = new StringBuilder();
 

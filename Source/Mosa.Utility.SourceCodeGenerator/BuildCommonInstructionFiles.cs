@@ -48,8 +48,8 @@ public class BuildCommonInstructionFiles : BuildBaseTemplate
 
 			var position = line.IndexOf('=');
 
-			string name = line.Substring(0, position);
-			string value = line.Substring(position + 1);
+			var name = line.Substring(0, position);
+			var value = line.Substring(position + 1);
 
 			EncodingTemplates.Add(name, value);
 		}
@@ -406,8 +406,8 @@ public class BuildCommonInstructionFiles : BuildBaseTemplate
 
 	private void CreateEncoding(dynamic node)
 	{
-		bool first = true;
-		bool cond = false;
+		var first = true;
+		var cond = false;
 
 		foreach (var entry in node.OpcodeEncoding)
 		{
@@ -457,7 +457,7 @@ public class BuildCommonInstructionFiles : BuildBaseTemplate
 		if (string.IsNullOrWhiteSpace(template))
 			return string.Empty;
 
-		string encoding = string.Empty;
+		var encoding = string.Empty;
 
 		var parts = template.Split(',');
 
@@ -480,7 +480,7 @@ public class BuildCommonInstructionFiles : BuildBaseTemplate
 			else if (part.StartsWith("["))
 			{
 				// template
-				string subTemplate = string.Empty;
+				var subTemplate = string.Empty;
 
 				EncodingTemplates.TryGetValue(part, out subTemplate);
 
@@ -525,7 +525,7 @@ public class BuildCommonInstructionFiles : BuildBaseTemplate
 		if (string.IsNullOrWhiteSpace(line))
 			return null;
 
-		string rawEncoding = line.Trim();
+		var rawEncoding = line.Trim();
 
 		if (!string.IsNullOrWhiteSpace(append))
 		{
@@ -540,10 +540,10 @@ public class BuildCommonInstructionFiles : BuildBaseTemplate
 		if (string.IsNullOrWhiteSpace(condition))
 			return null;
 
-		string expression = string.Empty;
+		var expression = string.Empty;
 
 		var parts = condition.Split(']');
-		for (int i = 0; i < parts.Length; i++)
+		for (var i = 0; i < parts.Length; i++)
 		{
 			var part = parts[i];
 			var normalized = part.Replace(" ", string.Empty).TrimStart('[').ToLowerInvariant();
@@ -577,9 +577,9 @@ public class BuildCommonInstructionFiles : BuildBaseTemplate
 					_ => $"GetOperand({i})"
 				};
 
-				string cond1 = string.Empty;
-				string cond2 = string.Empty;
-				string cond3 = string.Empty;
+				var cond1 = string.Empty;
+				var cond2 = string.Empty;
+				var cond3 = string.Empty;
 
 				switch (subpart2.ToLowerInvariant())
 				{
@@ -604,7 +604,7 @@ public class BuildCommonInstructionFiles : BuildBaseTemplate
 					case "constant_imm32": cond1 = ".IsConstant"; cond2 = ".ConstantSigned32 >= " + int.MinValue; cond3 = ".ConstantSigned32 <= " + int.MaxValue; break;
 				}
 
-				string subexpression = $"node.{operand}{cond1}";
+				var subexpression = $"node.{operand}{cond1}";
 
 				if (!string.IsNullOrWhiteSpace(cond3))
 				{
@@ -674,7 +674,7 @@ public class BuildCommonInstructionFiles : BuildBaseTemplate
 			if (s.StartsWith("0x") | s.StartsWith("x"))
 			{
 				// hex
-				string hex = s.StartsWith("x") ? s.Substring(1) : s.Substring(2);
+				var hex = s.StartsWith("x") ? s.Substring(1) : s.Substring(2);
 
 				Lines.Append(tabs);
 
@@ -714,7 +714,7 @@ public class BuildCommonInstructionFiles : BuildBaseTemplate
 			else if (s.StartsWith("0b") | s.StartsWith("b") | s.StartsWith("0") | s.StartsWith("1"))
 			{
 				// binary
-				string binary = s;
+				var binary = s;
 
 				if (binary.StartsWith("0b"))
 					binary = s.Substring(2);
@@ -847,15 +847,15 @@ public class BuildCommonInstructionFiles : BuildBaseTemplate
 
 		if (part.StartsWith("reg("))
 		{
-			int open = part.IndexOf('(');
-			int comma = part.IndexOf('-');
-			int closed = part.IndexOf(')');
+			var open = part.IndexOf('(');
+			var comma = part.IndexOf('-');
+			var closed = part.IndexOf(')');
 
 			if (open >= 0)
 			{
-				int start = Convert.ToInt32(part.Substring(open + 1, comma - open - 1).Trim());
-				int end = comma < 0 ? start : Convert.ToInt32(part.Substring(comma + 1, closed - comma - 1).Trim());
-				int length = end - start + 1;
+				var start = Convert.ToInt32(part.Substring(open + 1, comma - open - 1).Trim());
+				var end = comma < 0 ? start : Convert.ToInt32(part.Substring(comma + 1, closed - comma - 1).Trim());
+				var length = end - start + 1;
 
 				if (start == 0)
 				{

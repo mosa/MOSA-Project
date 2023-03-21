@@ -109,21 +109,21 @@ public static class Int64Tests
 	[MosaUnitTest]
 	public static bool Newarr()
 	{
-		long[] arr = new long[0];
+		var arr = new long[0];
 		return arr != null;
 	}
 
 	[MosaUnitTest(Series = "I4Small")]
 	public static bool Ldlen(int length)
 	{
-		long[] arr = new long[length];
+		var arr = new long[length];
 		return arr.Length == length;
 	}
 
 	[MosaUnitTest(Series = "I4SmallI8")]
 	public static long Ldelem(int index, long value)
 	{
-		long[] arr = new long[index + 1];
+		var arr = new long[index + 1];
 		arr[index] = value;
 		return arr[index];
 	}
@@ -131,7 +131,7 @@ public static class Int64Tests
 	[MosaUnitTest(Series = "I4SmallI8")]
 	public static bool Stelem(int index, long value)
 	{
-		long[] arr = new long[index + 1];
+		var arr = new long[index + 1];
 		arr[index] = value;
 		return true;
 	}
@@ -139,7 +139,7 @@ public static class Int64Tests
 	[MosaUnitTest(Series = "I4SmallI8")]
 	public static long Ldelema(int index, long value)
 	{
-		long[] arr = new long[index + 1];
+		var arr = new long[index + 1];
 		SetValueInRefValue(ref arr[index], value);
 		return arr[index];
 	}

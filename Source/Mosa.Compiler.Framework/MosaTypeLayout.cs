@@ -230,7 +230,7 @@ public class MosaTypeLayout
 		{
 			ResolveType(type);
 
-			typeSizes.TryGetValue(type, out uint size);
+			typeSizes.TryGetValue(type, out var size);
 
 			return size;
 		}
@@ -260,7 +260,7 @@ public class MosaTypeLayout
 		{
 			ResolveType(field.DeclaringType);
 
-			fieldOffsets.TryGetValue(field, out uint offset);
+			fieldOffsets.TryGetValue(field, out var offset);
 
 			return offset;
 		}
@@ -309,7 +309,7 @@ public class MosaTypeLayout
 			var methodTable = new MosaMethod[interfaceType.Methods.Count];
 
 			// Implicit Interface Methods
-			for (int slot = 0; slot < interfaceType.Methods.Count; slot++)
+			for (var slot = 0; slot < interfaceType.Methods.Count; slot++)
 			{
 				methodTable[slot] = FindInterfaceMethod(type, interfaceType.Methods[slot]);
 			}
@@ -626,13 +626,13 @@ public class MosaTypeLayout
 				// Set the field address
 				fieldOffsets.Add(field, typeSize);
 
-				uint fieldSize = GetFieldSize(field);
+				var fieldSize = GetFieldSize(field);
 				typeSize += fieldSize;
 
 				// Pad the field in the type
 				if (packingSize != 0)
 				{
-					uint padding = (packingSize - typeSize % packingSize) % packingSize;
+					var padding = (packingSize - typeSize % packingSize) % packingSize;
 					typeSize += padding;
 				}
 			}
@@ -671,7 +671,7 @@ public class MosaTypeLayout
 
 	private uint ComputeFieldSize(MosaField field)
 	{
-		if (fieldSizes.TryGetValue(field, out uint size))
+		if (fieldSizes.TryGetValue(field, out var size))
 		{
 			return size;
 		}
@@ -708,7 +708,7 @@ public class MosaTypeLayout
 				// Get clean name for overrideTarget
 				var cleanOverrideTargetName = GetNonExplicitMethodName(overrideTarget);
 
-				int slot = 0;
+				var slot = 0;
 				foreach (var interfaceMethod in interfaceType.Methods)
 				{
 					// Get clean name for interfaceMethod
@@ -744,7 +744,7 @@ public class MosaTypeLayout
 			if (IsExplicitInterfaceMethod(method) && methodFound != null)
 				continue;
 
-			string cleanMethodName = GetNonExplicitMethodName(method);
+			var cleanMethodName = GetNonExplicitMethodName(method);
 
 			if (cleanInterfaceMethodName.Equals(cleanMethodName))
 			{
@@ -780,7 +780,7 @@ public class MosaTypeLayout
 			if (IsExplicitInterfaceMethod(method))
 				continue;
 
-			string cleanMethodName = GetNonExplicitMethodName(method);
+			var cleanMethodName = GetNonExplicitMethodName(method);
 
 			if (cleanInterfaceMethodName.Equals(cleanMethodName) && interfaceMethod.SameSignature(method))
 			{
@@ -801,7 +801,7 @@ public class MosaTypeLayout
 		if (!IsExplicitInterfaceMethod(method))
 			return method.Name;
 
-		int pos = method.Name.LastIndexOf(".");
+		var pos = method.Name.LastIndexOf(".");
 
 		var name = method.Name.Substring(pos + 1);
 
@@ -882,7 +882,7 @@ public class MosaTypeLayout
 
 	private int FindOverrideSlot(List<MosaMethod> methodTable, MosaMethod method)
 	{
-		int slot = -1;
+		var slot = -1;
 
 		foreach (var baseMethod in methodTable)
 		{

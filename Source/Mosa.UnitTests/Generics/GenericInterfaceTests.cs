@@ -53,7 +53,7 @@ public static class GenericInterfaceTests
 	{
 		var iList = new int[] { 1, 3, 5 };
 
-		int result = 0;
+		var result = 0;
 		foreach (var i in iList)
 			result += i;
 

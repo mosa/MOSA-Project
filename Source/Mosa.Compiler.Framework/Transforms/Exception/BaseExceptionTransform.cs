@@ -39,7 +39,7 @@ public abstract class BaseExceptionTransform : BaseTransform
 		var index = transform.Method.ExceptionHandlers.IndexOf(exceptionHandler);
 		var at = exceptionHandler.TryStart;
 
-		for (int i = index + 1; i < transform.Method.ExceptionHandlers.Count; i++)
+		for (var i = index + 1; i < transform.Method.ExceptionHandlers.Count; i++)
 		{
 			var entry = transform.Method.ExceptionHandlers[i];
 

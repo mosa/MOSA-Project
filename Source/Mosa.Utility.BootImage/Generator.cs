@@ -25,7 +25,7 @@ public static class Generator
 			File.Delete(options.DiskImageFileName);
 		}
 
-		uint blockCount = options.BlockCount;
+		var blockCount = options.BlockCount;
 
 		if (blockCount == 0)
 		{
@@ -164,7 +164,7 @@ public static class Generator
 				if (includeFile.Hidden) fileAttributes |= FatFileAttributes.Hidden;
 				if (includeFile.System) fileAttributes |= FatFileAttributes.System;
 
-				string newname = (Path.GetFileNameWithoutExtension(includeFile.Filename).PadRight(8).Substring(0, 8) + Path.GetExtension(includeFile.Filename).PadRight(4).Substring(1, 3)).ToUpperInvariant();
+				var newname = (Path.GetFileNameWithoutExtension(includeFile.Filename).PadRight(8).Substring(0, 8) + Path.GetExtension(includeFile.Filename).PadRight(4).Substring(1, 3)).ToUpperInvariant();
 				var location = fat.CreateFile(newname, fileAttributes);
 
 				if (!location.IsValid)

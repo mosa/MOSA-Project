@@ -10,7 +10,7 @@ public static class Series2
 
 	public static IEnumerable<object> GetUpTo(int end)
 	{
-		for (int i = 0; i < end; i++)
+		for (var i = 0; i < end; i++)
 			yield return i;
 	}
 
@@ -35,7 +35,7 @@ public static class Series2
 
 	public static IEnumerable<object> B
 	{
-		get { foreach (bool a in Numbers.B.Series) yield return a; }
+		get { foreach (var a in Numbers.B.Series) yield return a; }
 	}
 
 	#endregion B Types
@@ -44,7 +44,7 @@ public static class Series2
 
 	public static IEnumerable<object> C
 	{
-		get { foreach (char a in Numbers.C.Series) yield return a; }
+		get { foreach (var a in Numbers.C.Series) yield return a; }
 	}
 
 	public static IEnumerable<object> CNotZero
@@ -83,7 +83,7 @@ public static class Series2
 
 	public static IEnumerable<object> I1
 	{
-		get { foreach (sbyte a in Numbers.I1.Series) yield return a; }
+		get { foreach (var a in Numbers.I1.Series) yield return a; }
 	}
 
 	public static IEnumerable<object> I1NotZero
@@ -122,7 +122,7 @@ public static class Series2
 
 	public static IEnumerable<object> U1
 	{
-		get { foreach (byte a in Numbers.U1.Series) yield return a; }
+		get { foreach (var a in Numbers.U1.Series) yield return a; }
 	}
 
 	public static IEnumerable<object> U1NotZero
@@ -161,7 +161,7 @@ public static class Series2
 
 	public static IEnumerable<object> I2
 	{
-		get { foreach (short a in Numbers.I2.Series) yield return a; }
+		get { foreach (var a in Numbers.I2.Series) yield return a; }
 	}
 
 	public static IEnumerable<object> I2NotZero
@@ -200,7 +200,7 @@ public static class Series2
 
 	public static IEnumerable<object> U2
 	{
-		get { foreach (ushort a in Numbers.U2.Series) yield return a; }
+		get { foreach (var a in Numbers.U2.Series) yield return a; }
 	}
 
 	public static IEnumerable<object> U2NotZero
@@ -234,7 +234,7 @@ public static class Series2
 
 	public static IEnumerable<object> I4
 	{
-		get { foreach (int a in Numbers.I4.Series) yield return a; }
+		get { foreach (var a in Numbers.I4.Series) yield return a; }
 	}
 
 	public static IEnumerable<object> I4NotZero
@@ -293,7 +293,7 @@ public static class Series2
 
 	public static IEnumerable<object> U4
 	{
-		get { foreach (uint a in Numbers.U4.Series) yield return a; }
+		get { foreach (var a in Numbers.U4.Series) yield return a; }
 	}
 
 	public static IEnumerable<object> U4NotZero
@@ -332,7 +332,7 @@ public static class Series2
 
 	public static IEnumerable<object> I8
 	{
-		get { foreach (long a in Numbers.I8.Series) yield return a; }
+		get { foreach (var a in Numbers.I8.Series) yield return a; }
 	}
 
 	public static IEnumerable<object> I8NotZero
@@ -382,7 +382,7 @@ public static class Series2
 
 	public static IEnumerable<object> U8
 	{
-		get { foreach (ulong a in Numbers.U8.Series) yield return a; }
+		get { foreach (var a in Numbers.U8.Series) yield return a; }
 	}
 
 	public static IEnumerable<object> U8NotZero
@@ -421,7 +421,7 @@ public static class Series2
 
 	public static IEnumerable<float> R4
 	{
-		get { foreach (float a in Numbers.R4.Series) yield return a; }
+		get { foreach (var a in Numbers.R4.Series) yield return a; }
 	}
 
 	public static IEnumerable<float> R4Mini
@@ -438,12 +438,12 @@ public static class Series2
 
 	public static IEnumerable<float> R4NotNaN
 	{
-		get { foreach (float a in R4) if (!float.IsNaN(a)) yield return a; }
+		get { foreach (var a in R4) if (!float.IsNaN(a)) yield return a; }
 	}
 
 	public static IEnumerable<float> R4Number
 	{
-		get { foreach (float a in R4) if (!float.IsNaN(a) && !float.IsInfinity(a)) yield return a; }
+		get { foreach (var a in R4) if (!float.IsNaN(a) && !float.IsInfinity(a)) yield return a; }
 	}
 
 	public static IEnumerable<float> R4NumberNotZero
@@ -453,27 +453,27 @@ public static class Series2
 
 	public static IEnumerable<float> R4NumberNoExtremes
 	{
-		get { foreach (float a in R4Number) if (!(float.MaxValue == a) && !(float.MinValue == a)) yield return a; }
+		get { foreach (var a in R4Number) if (!(float.MaxValue == a) && !(float.MinValue == a)) yield return a; }
 	}
 
 	public static IEnumerable<float> R4NumberNoExtremesOrZero
 	{
-		get { foreach (float a in R4NumberNoExtremes) if (a != 0) yield return a; }
+		get { foreach (var a in R4NumberNoExtremes) if (a != 0) yield return a; }
 	}
 
 	public static IEnumerable<float> R4NotZero
 	{
-		get { foreach (float a in R4) if (a != 0) yield return a; }
+		get { foreach (var a in R4) if (a != 0) yield return a; }
 	}
 
 	public static IEnumerable<float> R4AboveZero
 	{
-		get { foreach (float a in R4) if (a > 0) yield return a; }
+		get { foreach (var a in R4) if (a > 0) yield return a; }
 	}
 
 	public static IEnumerable<float> R4BelowZero
 	{
-		get { foreach (float a in R4) if (a < 0) yield return a; }
+		get { foreach (var a in R4) if (a < 0) yield return a; }
 	}
 
 	public static IEnumerable<float> R4UpTo8
@@ -493,7 +493,7 @@ public static class Series2
 
 	public static IEnumerable<float> R4FitsI4
 	{
-		get { foreach (float a in R4) if (!float.IsNaN(a) && a <= int.MaxValue && a >= int.MinValue) yield return a; }
+		get { foreach (var a in R4) if (!float.IsNaN(a) && a <= int.MaxValue && a >= int.MinValue) yield return a; }
 	}
 
 	public static IEnumerable<float> R4Simple
@@ -515,7 +515,7 @@ public static class Series2
 
 	public static IEnumerable<double> R8
 	{
-		get { foreach (double a in Numbers.R8.Series) yield return a; }
+		get { foreach (var a in Numbers.R8.Series) yield return a; }
 	}
 
 	public static IEnumerable<double> R8Mini
@@ -532,42 +532,42 @@ public static class Series2
 
 	public static IEnumerable<double> R8NotNaN
 	{
-		get { foreach (double a in R8) if (!double.IsNaN(a)) yield return a; }
+		get { foreach (var a in R8) if (!double.IsNaN(a)) yield return a; }
 	}
 
 	public static IEnumerable<double> R8Number
 	{
-		get { foreach (double a in R8) if (!double.IsNaN(a) && !double.IsInfinity(a)) yield return a; }
+		get { foreach (var a in R8) if (!double.IsNaN(a) && !double.IsInfinity(a)) yield return a; }
 	}
 
 	public static IEnumerable<double> R8NumberNotZero
 	{
-		get { foreach (double a in R8) if (a != 0) if (!double.IsNaN(a) && !double.IsInfinity(a)) yield return a; }
+		get { foreach (var a in R8) if (a != 0) if (!double.IsNaN(a) && !double.IsInfinity(a)) yield return a; }
 	}
 
 	public static IEnumerable<double> R8NumberNoExtremes
 	{
-		get { foreach (double a in R8Number) if (!(double.MaxValue == a) && !(double.MinValue == a)) yield return a; }
+		get { foreach (var a in R8Number) if (!(double.MaxValue == a) && !(double.MinValue == a)) yield return a; }
 	}
 
 	public static IEnumerable<double> R8NumberNoExtremesOrZero
 	{
-		get { foreach (double a in R8NumberNoExtremes) if (a != 0) yield return a; }
+		get { foreach (var a in R8NumberNoExtremes) if (a != 0) yield return a; }
 	}
 
 	public static IEnumerable<double> R8NotZero
 	{
-		get { foreach (double a in R8) if (a != 0) yield return a; }
+		get { foreach (var a in R8) if (a != 0) yield return a; }
 	}
 
 	public static IEnumerable<double> R8AboveZero
 	{
-		get { foreach (double a in R8) if (a > 0) yield return a; }
+		get { foreach (var a in R8) if (a > 0) yield return a; }
 	}
 
 	public static IEnumerable<double> R8BelowZero
 	{
-		get { foreach (double a in R8) if (a < 0) yield return a; }
+		get { foreach (var a in R8) if (a < 0) yield return a; }
 	}
 
 	public static IEnumerable<double> R8UpTo8
@@ -587,7 +587,7 @@ public static class Series2
 
 	public static IEnumerable<double> R8FitsI4
 	{
-		get { foreach (double a in R8) if (!double.IsNaN(a) && a <= int.MaxValue && a >= int.MinValue) yield return a; }
+		get { foreach (var a in R8) if (!double.IsNaN(a) && a <= int.MaxValue && a >= int.MinValue) yield return a; }
 	}
 
 	public static IEnumerable<double> R8Simple

@@ -36,9 +36,9 @@ public sealed class LdstrInstruction : BaseCILInstruction
 
 		var token = (uint)decoder.Instruction.Operand;
 
-		string data = decoder.TypeSystem.LookupUserString(decoder.Method.Module, token);
+		var data = decoder.TypeSystem.LookupUserString(decoder.Method.Module, token);
 
-		string symbolName = $"$ldstr${decoder.Method.Module.Name}${token}";
+		var symbolName = $"$ldstr${decoder.Method.Module.Name}${token}";
 
 		node.Operand1 = Operand.CreateStringSymbol(decoder.TypeSystem.BuiltIn.String, symbolName, decoder.MethodCompiler.Compiler.ObjectHeaderSize, data);
 

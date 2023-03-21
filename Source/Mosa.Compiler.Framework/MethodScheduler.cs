@@ -194,7 +194,7 @@ public sealed class MethodScheduler
 		if (methodData.DoNotInline)
 			return 200;
 
-		int adjustment = 0;
+		var adjustment = 0;
 
 		if (methodData.HasAggressiveInliningAttribute)
 			adjustment += 75;

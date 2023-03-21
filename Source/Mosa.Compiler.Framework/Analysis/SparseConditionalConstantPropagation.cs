@@ -248,7 +248,7 @@ public sealed class SparseConditionalConstantPropagation
 
 		blockStates = new bool[BasicBlocks.Count];
 
-		for (int i = 0; i < BasicBlocks.Count; i++)
+		for (var i = 0; i < BasicBlocks.Count; i++)
 		{
 			blockStates[i] = false;
 		}
@@ -287,7 +287,7 @@ public sealed class SparseConditionalConstantPropagation
 	{
 		var list = new List<BasicBlock>();
 
-		for (int i = 0; i < BasicBlocks.Count; i++)
+		for (var i = 0; i < BasicBlocks.Count; i++)
 		{
 			if (!blockStates[i])
 			{
@@ -329,7 +329,7 @@ public sealed class SparseConditionalConstantPropagation
 
 		var blockTrace = CreateTrace("Blocks", 5);
 
-		for (int i = 0; i < BasicBlocks.Count; i++)
+		for (var i = 0; i < BasicBlocks.Count; i++)
 		{
 			blockTrace.Log($"{BasicBlocks[i]} = {(blockStates[i] ? "Executable" : "Dead")}");
 		}
@@ -407,7 +407,7 @@ public sealed class SparseConditionalConstantPropagation
 			if (node.IsEmpty)
 				continue;
 
-			bool @continue = ProcessInstruction(node);
+			var @continue = ProcessInstruction(node);
 
 			executedStatements.Add(node);
 
@@ -642,7 +642,7 @@ public sealed class SparseConditionalConstantPropagation
 		var operand1 = GetVariableState(node.Operand1);
 		var operand2 = GetVariableState(node.Operand2);
 
-		bool? compare = NullComparisionCheck(node.ConditionCode, operand1, operand2);
+		var compare = NullComparisionCheck(node.ConditionCode, operand1, operand2);
 
 		if (compare.HasValue)
 		{
@@ -837,7 +837,7 @@ public sealed class SparseConditionalConstantPropagation
 		}
 		else if (operand1.IsSingleConstant && operand2.IsSingleConstant)
 		{
-			if (IntegerOperation(node.Instruction, operand1.ConstantUnsignedLongInteger, operand2.ConstantUnsignedLongInteger, node.ConditionCode, out ulong value))
+			if (IntegerOperation(node.Instruction, operand1.ConstantUnsignedLongInteger, operand2.ConstantUnsignedLongInteger, node.ConditionCode, out var value))
 			{
 				UpdateToConstant(result, value);
 				return;
@@ -854,7 +854,7 @@ public sealed class SparseConditionalConstantPropagation
 			{
 				foreach (var c2 in operand2.Constants)
 				{
-					if (IntegerOperation(node.Instruction, c1, c2, node.ConditionCode, out ulong value))
+					if (IntegerOperation(node.Instruction, c1, c2, node.ConditionCode, out var value))
 					{
 						UpdateToConstant(result, value);
 					}
@@ -930,7 +930,7 @@ public sealed class SparseConditionalConstantPropagation
 		}
 		else if (instruction == IRInstruction.Compare32x32)
 		{
-			bool? compare = Compare32((uint)operand1, (uint)operand2, conditionCode);
+			var compare = Compare32((uint)operand1, (uint)operand2, conditionCode);
 
 			if (compare.HasValue)
 			{
@@ -941,7 +941,7 @@ public sealed class SparseConditionalConstantPropagation
 		else if (instruction == IRInstruction.Compare64x32
 				 || instruction == IRInstruction.Compare64x64)
 		{
-			bool? compare = Compare64(operand1, operand2, conditionCode);
+			var compare = Compare64(operand1, operand2, conditionCode);
 
 			if (compare.HasValue)
 			{
@@ -1015,7 +1015,7 @@ public sealed class SparseConditionalConstantPropagation
 			return !compareNull.Value;
 		}
 
-		bool is32Bit = node.Instruction == IRInstruction.Branch32 || (node.Instruction == IRInstruction.BranchObject && Is32BitPlatform);
+		var is32Bit = node.Instruction == IRInstruction.Branch32 || (node.Instruction == IRInstruction.BranchObject && Is32BitPlatform);
 
 		if (operand1.IsOverDefined || operand2.IsOverDefined)
 		{
@@ -1024,7 +1024,7 @@ public sealed class SparseConditionalConstantPropagation
 		}
 		else if (operand1.IsSingleConstant && operand2.IsSingleConstant)
 		{
-			bool? compare = is32Bit
+			var compare = is32Bit
 				? Compare32((uint)operand1.ConstantUnsignedLongInteger, (uint)operand2.ConstantUnsignedLongInteger, node.ConditionCode)
 				: Compare64(operand1.ConstantUnsignedLongInteger, operand2.ConstantUnsignedLongInteger, node.ConditionCode);
 
@@ -1052,7 +1052,7 @@ public sealed class SparseConditionalConstantPropagation
 				{
 					//bool? compare = Compare(c1, c2, node.ConditionCode);
 
-					bool? compare = is32Bit
+					var compare = is32Bit
 						? Compare32((uint)c1, (uint)c2, node.ConditionCode)
 						: Compare64(c1, c2, node.ConditionCode);
 
@@ -1209,7 +1209,7 @@ public sealed class SparseConditionalConstantPropagation
 
 			phiStatements.AddIfNew(predecessor, node);
 
-			bool executable = blockStates[predecessor.Sequence];
+			var executable = blockStates[predecessor.Sequence];
 
 			MainTrace?.Log($"# {index}: {predecessor} {(executable ? "Yes" : "No")}");
 

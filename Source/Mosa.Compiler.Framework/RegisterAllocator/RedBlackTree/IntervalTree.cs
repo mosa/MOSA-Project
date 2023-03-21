@@ -740,7 +740,7 @@ public sealed partial class IntervalTree<T> where T : class
 	/// </summary>
 	private void RecalculateMaxEnd(Node<T> node)
 	{
-		int max = node.Interval.End;
+		var max = node.Interval.End;
 
 		if (node.Right != Sentinel)
 		{

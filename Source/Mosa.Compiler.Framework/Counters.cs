@@ -27,7 +27,7 @@ public sealed class Counters
 
 	public void UpdateSkipLock(string name, int count)
 	{
-		if (Entry.TryGetValue(name, out int current))
+		if (Entry.TryGetValue(name, out var current))
 		{
 			Entry[name] = current + count;
 		}

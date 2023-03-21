@@ -39,7 +39,7 @@ public static class UnitTestHelper
 
 		if (objects != null)
 		{
-			bool first = true;
+			var first = true;
 			foreach (var param in objects)
 			{
 				if (first)

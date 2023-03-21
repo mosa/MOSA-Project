@@ -968,8 +968,8 @@ public sealed class Operand
 		if (value.Length < 2)
 			return value;
 
-		string type = value;
-		string end = string.Empty;
+		var type = value;
+		var end = string.Empty;
 
 		if (value.EndsWith("*"))
 		{

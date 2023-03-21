@@ -17,7 +17,7 @@ public static class ResultParser
 		var node = new InstructionNode { NodeNbr = nodeNbr, Parent = parent };
 		var length = tokens.Count;
 
-		for (int index = start; index < length; index++)
+		for (var index = start; index < length; index++)
 		{
 			var token = tokens[index];
 
@@ -100,7 +100,7 @@ public static class ResultParser
 		var method = new Method();
 		var length = tokens.Count;
 
-		int index = start;
+		var index = start;
 		for (; index < length;)
 		{
 			var token = tokens[index++];

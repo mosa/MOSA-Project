@@ -150,7 +150,7 @@ public sealed class CILOperandAssignmentStage : BaseMethodCompilerStage
 			context.GotoPrevious();
 		}
 
-		for (int i = 0; i < sourceOperands.Count; i++)
+		for (var i = 0; i < sourceOperands.Count; i++)
 		{
 			var source = sourceOperands[i];
 			var destination = destinationOperands[i];
@@ -209,7 +209,7 @@ public sealed class CILOperandAssignmentStage : BaseMethodCompilerStage
 	/// <param name="currentStack">The current stack.</param>
 	private void AssignOperandsFromCILStack(Context ctx, Stack<Operand> currentStack)
 	{
-		for (int index = ctx.OperandCount - 1; index >= 0; --index)
+		for (var index = ctx.OperandCount - 1; index >= 0; --index)
 		{
 			if (ctx.GetOperand(index) != null)
 				continue;

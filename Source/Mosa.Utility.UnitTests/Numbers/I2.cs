@@ -15,7 +15,7 @@ public static class I2
 		{
 			if (series == null) series = GetSeries();
 
-			foreach (short value in series)
+			foreach (var value in series)
 				yield return value;
 		}
 	}

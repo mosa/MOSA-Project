@@ -15,7 +15,7 @@ public static class I1
 		{
 			if (series == null) series = GetSeries();
 
-			foreach (sbyte value in series)
+			foreach (var value in series)
 				yield return value;
 		}
 	}

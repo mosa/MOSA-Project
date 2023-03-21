@@ -12,7 +12,7 @@ public static class LSBEncoding
 		var origIdx = idxStart;
 		do
 		{
-			byte bt = (byte)((byte)value & 0x7f);
+			var bt = (byte)((byte)value & 0x7f);
 			value >>= 7;
 			if (value != 0 || padding != 0)
 				bt |= 0x80; // Mark this byte to show that more bytes will follow.

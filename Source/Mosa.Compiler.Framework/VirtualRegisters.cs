@@ -39,7 +39,7 @@ public sealed class VirtualRegisters : IEnumerable<Operand>
 	/// <returns></returns>
 	public Operand Allocate(MosaType type)
 	{
-		int index = virtualRegisters.Count + 1;
+		var index = virtualRegisters.Count + 1;
 
 		var virtualRegister = Operand.CreateVirtualRegister(type, index);
 

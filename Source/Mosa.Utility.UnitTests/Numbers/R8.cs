@@ -15,7 +15,7 @@ public static class R8
 		{
 			if (series == null) series = GetSeries();
 
-			foreach (double value in series)
+			foreach (var value in series)
 				yield return value;
 		}
 	}

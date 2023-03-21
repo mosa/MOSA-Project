@@ -31,7 +31,7 @@ public class BlockOrderingStage : BaseMethodCompilerStage
 		if (trace == null)
 			return;
 
-		int index = 0;
+		var index = 0;
 
 		foreach (var block in blockOrderAnalysis.NewBlockOrder)
 		{
@@ -47,8 +47,8 @@ public class BlockOrderingStage : BaseMethodCompilerStage
 
 		foreach (var block in BasicBlocks)
 		{
-			int depth = blockOrderAnalysis.GetLoopDepth(block);
-			int depthindex = blockOrderAnalysis.GetLoopIndex(block);
+			var depth = blockOrderAnalysis.GetLoopDepth(block);
+			var depthindex = blockOrderAnalysis.GetLoopIndex(block);
 
 			trace.Log($"Block {block} #{block.Sequence} -> Depth: {depth} Index: {depthindex}");
 		}

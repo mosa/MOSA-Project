@@ -119,7 +119,7 @@ public sealed class MosaLinker
 
 	public LinkerSymbol DefineSymbol(string name, SectionKind kind, uint alignment, uint size)
 	{
-		uint aligned = alignment != 0 ? alignment : 1;
+		var aligned = alignment != 0 ? alignment : 1;
 
 		lock (_lock)
 		{
@@ -312,7 +312,7 @@ public sealed class MosaLinker
 
 	public LinkerSymbol GetConstantSymbol(ulong value)
 	{
-		string name = $"$const64${value:x}";
+		var name = $"$const64${value:x}";
 
 		var data = BitConverter.GetBytes(value);
 

@@ -10,7 +10,7 @@ public sealed class LoadStoreParamObject : BaseTransform
 
 	public override bool Match(Context context, TransformContext transform)
 	{
-		var previous = GetPreviousNodeUntil(context, IRInstruction.StoreParamObject, transform.Window, out bool immediate);
+		var previous = GetPreviousNodeUntil(context, IRInstruction.StoreParamObject, transform.Window, out var immediate);
 
 		if (previous == null)
 			return false;

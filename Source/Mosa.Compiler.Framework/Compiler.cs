@@ -298,7 +298,7 @@ public sealed class Compiler
 				// Now get all the IntrinsicMethodAttribute attributes
 				var intrinsicMethodAttributes = (IntrinsicMethodAttribute[])method.GetCustomAttributes(typeof(IntrinsicMethodAttribute), true);
 
-				for (int i = 0; i < intrinsicMethodAttributes.Length; i++)
+				for (var i = 0; i < intrinsicMethodAttributes.Length; i++)
 				{
 					var d = (IntrinsicMethodDelegate)Delegate.CreateDelegate(typeof(IntrinsicMethodDelegate), method);
 
@@ -309,7 +309,7 @@ public sealed class Compiler
 				// Now get all the StubMethodAttribute attributes
 				var stubMethodAttributes = (StubMethodAttribute[])method.GetCustomAttributes(typeof(StubMethodAttribute), true);
 
-				for (int i = 0; i < stubMethodAttributes.Length; i++)
+				for (var i = 0; i < stubMethodAttributes.Length; i++)
 				{
 					var d = (StubMethodDelegate)Delegate.CreateDelegate(typeof(StubMethodDelegate), method);
 
@@ -494,7 +494,7 @@ public sealed class Compiler
 	private void CompilePass() //TODO: Add IProgress<> to report progress
 	{
 		var threadID = Thread.CurrentThread.ManagedThreadId;
-		int success = 0;
+		var success = 0;
 
 		while (true)
 		{

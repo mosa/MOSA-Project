@@ -54,7 +54,7 @@ public class RegisterAllocatorEnvironment : BaseLivenessAnalysisEnvironment
 	{
 		if (node.Instruction.FlowControl == FlowControl.Call || node.Instruction == IRInstruction.KillAll)
 		{
-			for (int reg = 0; reg < PhysicalRegisterCount; reg++)
+			for (var reg = 0; reg < PhysicalRegisterCount; reg++)
 			{
 				yield return reg;
 			}
@@ -63,7 +63,7 @@ public class RegisterAllocatorEnvironment : BaseLivenessAnalysisEnvironment
 		{
 			var except = node.Operand1.Register.Index;
 
-			for (int reg = 0; reg < PhysicalRegisterCount; reg++)
+			for (var reg = 0; reg < PhysicalRegisterCount; reg++)
 			{
 				if (reg != except)
 				{

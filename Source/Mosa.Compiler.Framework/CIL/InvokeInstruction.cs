@@ -117,7 +117,7 @@ public abstract class InvokeInstruction : BaseCILInstruction
 		node.InvokeMethod = method;
 
 		// Fix the parameter list
-		int paramCount = method.Signature.Parameters.Count;
+		var paramCount = method.Signature.Parameters.Count;
 
 		if (method.HasThis && !method.HasExplicitThis)
 			paramCount++;

@@ -16,7 +16,7 @@ public sealed class LoadZeroExtend8x64Store8 : BaseTransform
 		if (!context.Operand2.IsResolvedConstant)
 			return false;
 
-		var previous = GetPreviousNodeUntil(context, IRInstruction.Store8, transform.Window, out bool immediate, context.Operand1);
+		var previous = GetPreviousNodeUntil(context, IRInstruction.Store8, transform.Window, out var immediate, context.Operand1);
 
 		if (previous == null)
 			return false;

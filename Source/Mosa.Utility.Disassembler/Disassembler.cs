@@ -133,9 +133,9 @@ public partial class Disassembler
 		if (start + 8 > s.Length)
 			return false;
 
-		for (int i = start; i < start + 8; i++)
+		for (var i = start; i < start + 8; i++)
 		{
-			char c = s[i];
+			var c = s[i];
 
 			if (!IsHex(c))
 				return false;
@@ -151,9 +151,9 @@ public partial class Disassembler
 	{
 		var sb = new StringBuilder();
 
-		for (int i = 0; i < s.Length; i++)
+		for (var i = 0; i < s.Length; i++)
 		{
-			char c = s[i];
+			var c = s[i];
 
 			if (!IsNext8Hex(s, i))
 			{
@@ -162,9 +162,9 @@ public partial class Disassembler
 			}
 			else
 			{
-				string hex = s.Substring(i, 8);
-				uint value = uint.Parse(hex, System.Globalization.NumberStyles.HexNumber);
-				string hex2 = Convert.ToString(value, 16);
+				var hex = s.Substring(i, 8);
+				var value = uint.Parse(hex, System.Globalization.NumberStyles.HexNumber);
+				var hex2 = Convert.ToString(value, 16);
 
 				sb.Append("0x");
 				sb.Append(hex2);

@@ -82,7 +82,7 @@ public sealed class Pipeline<T> : IEnumerable<T> where T : class
 		if (stage == null)
 			return;
 
-		for (int i = 0; i < pipeline.Count; i++)
+		for (var i = 0; i < pipeline.Count; i++)
 		{
 			if (pipeline[i] is StageType result)
 			{
@@ -104,7 +104,7 @@ public sealed class Pipeline<T> : IEnumerable<T> where T : class
 		if (stage == null)
 			return;
 
-		for (int i = pipeline.Count - 1; i >= 0; i--)
+		for (var i = pipeline.Count - 1; i >= 0; i--)
 		{
 			if (pipeline[i] is StageType result)
 			{
@@ -124,7 +124,7 @@ public sealed class Pipeline<T> : IEnumerable<T> where T : class
 	/// <exception cref="ArgumentNullException"><paramref name="stages"/> is <c>null</c>.</exception>
 	public void InsertAfterLast<StageType>(IEnumerable<T> stages) where StageType : class, T
 	{
-		for (int i = pipeline.Count - 1; i >= 0; i--)
+		for (var i = pipeline.Count - 1; i >= 0; i--)
 		{
 			if (pipeline[i] is StageType result)
 			{
@@ -146,7 +146,7 @@ public sealed class Pipeline<T> : IEnumerable<T> where T : class
 		if (stage == null)
 			return;
 
-		for (int i = 0; i < pipeline.Count; i++)
+		for (var i = 0; i < pipeline.Count; i++)
 		{
 			if (pipeline[i] is StageType result)
 			{
@@ -165,7 +165,7 @@ public sealed class Pipeline<T> : IEnumerable<T> where T : class
 	/// <param name="stages">The stages.</param>
 	public void InsertBefore<StageType>(IEnumerable<T> stages) where StageType : class, T
 	{
-		for (int i = 0; i < pipeline.Count; i++)
+		for (var i = 0; i < pipeline.Count; i++)
 		{
 			if (pipeline[i] is StageType result)
 			{

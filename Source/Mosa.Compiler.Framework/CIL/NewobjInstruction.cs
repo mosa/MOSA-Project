@@ -100,7 +100,7 @@ public sealed class NewobjInstruction : InvokeInstruction
 			throw new System.ArgumentNullException(nameof(context));
 
 		// Validate the operands...
-		int offset = context.InvokeMethod.HasExplicitThis ? 1 : 0;
+		var offset = context.InvokeMethod.HasExplicitThis ? 1 : 0;
 
 		Debug.Assert(context.OperandCount == context.InvokeMethod.Signature.Parameters.Count - offset, "Operand count doesn't match parameter count.");
 	}

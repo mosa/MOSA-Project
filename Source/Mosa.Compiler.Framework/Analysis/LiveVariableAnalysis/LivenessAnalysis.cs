@@ -31,7 +31,7 @@ public class LivenessAnalysis
 
 		LiveRanges = new LiveRanges[IndexCount];
 
-		for (int i = 0; i < IndexCount; i++)
+		for (var i = 0; i < IndexCount; i++)
 		{
 			LiveRanges[i] = new LiveRanges();
 		}
@@ -55,7 +55,7 @@ public class LivenessAnalysis
 	protected void NumberInstructions()
 	{
 		const int increment = 2;
-		int index = increment;
+		var index = increment;
 
 		foreach (var block in BasicBlocks)
 		{
@@ -89,7 +89,7 @@ public class LivenessAnalysis
 				if (node.IsEmpty)
 					continue;
 
-				string log = $"{node.Offset} = {node}";
+				var log = $"{node.Offset} = {node}";
 
 				if (node.IsBlockStartInstruction)
 				{
@@ -130,7 +130,7 @@ public class LivenessAnalysis
 
 			if (block.BasicBlock.IsHeadBlock)
 			{
-				for (int s = 0; s < IndexCount; s++)
+				for (var s = 0; s < IndexCount; s++)
 				{
 					liveKill.Set(s, true);
 				}
@@ -174,13 +174,13 @@ public class LivenessAnalysis
 
 	protected void ComputeGlobalLiveSets()
 	{
-		bool changed = true;
+		var changed = true;
 
 		while (changed)
 		{
 			changed = false;
 
-			for (int i = BasicBlocks.Count - 1; i >= 0; i--)
+			for (var i = BasicBlocks.Count - 1; i >= 0; i--)
 			{
 				var block = ExtendedBlocks[i];
 
@@ -212,11 +212,11 @@ public class LivenessAnalysis
 
 	protected void BuildLiveIntervals()
 	{
-		for (int b = BasicBlocks.Count - 1; b >= 0; b--)
+		for (var b = BasicBlocks.Count - 1; b >= 0; b--)
 		{
 			var block = ExtendedBlocks[b];
 
-			for (int r = 0; r < IndexCount; r++)
+			for (var r = 0; r < IndexCount; r++)
 			{
 				if (!block.LiveOut.Get(r))
 					continue;

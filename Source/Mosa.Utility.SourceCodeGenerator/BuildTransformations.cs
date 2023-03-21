@@ -142,7 +142,7 @@ public class BuildTransformations : BuildBaseTemplate
 
 		var derivedVariations = transform.DeriveVariations(CommutativeInstructions);
 
-		int index = 1;
+		var index = 1;
 		foreach (var variation in derivedVariations)
 		{
 			GenerateTransformation2(name, familyName, type, $"{subName}_v{index}", variation, log, optimization, priority);
@@ -172,8 +172,8 @@ public class BuildTransformations : BuildBaseTemplate
 		Lines.AppendLine($"public sealed class {name}{subName} : BaseTransform");
 		Lines.AppendLine("{");
 
-		string typestring = "TransformType.Auto" +
-							(optimization ? " | TransformType.Optimization" : string.Empty);
+		var typestring = "TransformType.Auto" +
+		                 (optimization ? " | TransformType.Optimization" : string.Empty);
 
 		if (log)
 			Lines.AppendLine($"\tpublic {name}{subName}() : base({instructionName}, " + typestring + ", true)");
@@ -222,7 +222,7 @@ public class BuildTransformations : BuildBaseTemplate
 		Lines.AppendLine("");
 
 		// Capture all the labeled operands into variables
-		int labelCount = 0;
+		var labelCount = 0;
 		var labelToLabelNbr = new Dictionary<string, int>();
 		foreach (var name in transform.LabelSet.Labels)
 		{
@@ -248,7 +248,7 @@ public class BuildTransformations : BuildBaseTemplate
 		var postOrder = transform.GetPostorder(transform.ResultInstructionTree);
 
 		// Create virtual register for each child instruction
-		int virtualRegisterNbr = 0;
+		var virtualRegisterNbr = 0;
 		var nodeNbrToVirtualRegisterNbr = new Dictionary<int, int>();
 		foreach (var node in postOrder)
 		{
@@ -267,17 +267,17 @@ public class BuildTransformations : BuildBaseTemplate
 
 		// Create all the constants variables
 		var operandList = transform.GetAllOperands(transform.ResultInstructionTree);
-		int constantNbr = 0;
+		var constantNbr = 0;
 		var constantTextToConstantNbr = new Dictionary<string, int>();
 		var constantToConstantNbr = new Dictionary<Operand, int>();
 		foreach (var operand in operandList)
 		{
-			string name = CreateConstantName(operand);
+			var name = CreateConstantName(operand);
 
 			if (name == null)
 				continue;
 
-			if (constantTextToConstantNbr.TryGetValue(name, out int found))
+			if (constantTextToConstantNbr.TryGetValue(name, out var found))
 			{
 				constantToConstantNbr.Add(operand, found);
 				Lines.AppendLine($"\t\tvar c{operand} = transform.CreateConstant({name});");
@@ -294,7 +294,7 @@ public class BuildTransformations : BuildBaseTemplate
 			Lines.AppendLine("");
 
 		// Evaluate functions
-		int methodNbr = 0;
+		var methodNbr = 0;
 		var methodToExpressionText = new Dictionary<string, int>();
 		var methodToMethodNbr = new Dictionary<Method, int>();
 		foreach (var node in postOrder)
@@ -304,9 +304,9 @@ public class BuildTransformations : BuildBaseTemplate
 				if (!operand.IsMethod)
 					continue;
 
-				string name = CreateExpression(operand.Method, labelToLabelNbr, constantToConstantNbr);
+				var name = CreateExpression(operand.Method, labelToLabelNbr, constantToConstantNbr);
 
-				if (methodToExpressionText.TryGetValue(name, out int found))
+				if (methodToExpressionText.TryGetValue(name, out var found))
 				{
 					methodToMethodNbr.Add(operand.Method, found);
 					continue;
@@ -327,7 +327,7 @@ public class BuildTransformations : BuildBaseTemplate
 			Lines.AppendLine("");
 
 		// Create Instructions
-		bool firstInstruction = true;
+		var firstInstruction = true;
 		foreach (var node in postOrder)
 		{
 			var sb = new StringBuilder();
@@ -491,7 +491,7 @@ public class BuildTransformations : BuildBaseTemplate
 			var firstOperandName = GetOperandName(first.OperandIndex);
 			var firstName = $"context.{firstParent}{firstOperandName}";
 
-			for (int i = 1; i < label.Positions.Count; i++)
+			for (var i = 1; i < label.Positions.Count; i++)
 			{
 				var other = label.Positions[i];
 				var otherParent = NodeNbrToNode[other.NodeNbr];
@@ -527,7 +527,7 @@ public class BuildTransformations : BuildBaseTemplate
 		sb.Append(filter.MethodName);
 		sb.Append('(');
 
-		bool register = false;
+		var register = false;
 
 		foreach (var parameter in filter.Parameters)
 		{
@@ -638,7 +638,7 @@ public class BuildTransformations : BuildBaseTemplate
 
 			var sb = new StringBuilder();
 
-			bool first = true;
+			var first = true;
 			foreach (var condition in node.Conditions)
 			{
 				if (first)

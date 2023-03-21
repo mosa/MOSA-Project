@@ -277,25 +277,25 @@ public static class Extension
 	public static uint SetBits(this uint self, byte index, byte count, uint value, byte sourceIndex)
 	{
 		value = value >> sourceIndex;
-		uint mask = 0xFFFFFFFFU >> (32 - count);
-		uint bits = (value & mask) << index;
+		var mask = 0xFFFFFFFFU >> (32 - count);
+		var bits = (value & mask) << index;
 		return (self & ~(mask << index)) | bits;
 	}
 
 	public static ulong SetBits(this ulong self, byte index, byte count, ulong value, byte sourceIndex)
 	{
 		value = value >> sourceIndex;
-		ulong mask = 0xFFFFFFFFFFFFFFFFU >> (64 - count);
-		ulong bits = (value & mask) << index;
+		var mask = 0xFFFFFFFFFFFFFFFFU >> (64 - count);
+		var bits = (value & mask) << index;
 		return (self & ~(mask << index)) | bits;
 	}
 
 	public static int PRETest(bool cond, int b, int c)
 	{
-		int a = 2;
+		var a = 2;
 
-		int b1 = b;
-		int c1 = c;
+		var b1 = b;
+		var c1 = c;
 
 		if (cond)
 		{
@@ -305,7 +305,7 @@ public static class Extension
 		{
 		}
 
-		int d = b1 + c1;
+		var d = b1 + c1;
 
 		return d * a;
 	}

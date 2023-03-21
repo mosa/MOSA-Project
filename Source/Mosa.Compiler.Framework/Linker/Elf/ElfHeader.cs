@@ -182,7 +182,7 @@ public class ElfHeader
 
 		Ident[7] = 0x00;
 
-		for (int i = 8; i < 16; ++i)
+		for (var i = 8; i < 16; ++i)
 			Ident[i] = 0x00;
 	}
 

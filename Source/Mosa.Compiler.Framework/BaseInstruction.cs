@@ -240,9 +240,9 @@ public abstract class BaseInstruction
 			ID = ++NextInstructionID;
 		}
 
-		string name = GetType().ToString();
+		var name = GetType().ToString();
 
-		int index = name.LastIndexOf('.');
+		var index = name.LastIndexOf('.');
 
 		if (index > 0)
 			name = name.Substring(index + 1);

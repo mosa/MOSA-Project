@@ -33,7 +33,7 @@ public sealed class UnalignedPrefixInstruction : PrefixInstruction
 		// Decode base classes first
 		base.Decode(node, decoder);
 
-		byte alignment = (byte)decoder.Instruction.Operand;
+		var alignment = (byte)decoder.Instruction.Operand;
 
 		//FUTURE:
 		//ctx.Other = alignment;

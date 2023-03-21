@@ -163,7 +163,7 @@ public sealed class LoopAwareBlockOrder : BaseBlockOrder
 
 	private void CountEdges(BasicBlock current, BasicBlock parent)
 	{
-		int blockId = current.Sequence;
+		var blockId = current.Sequence;
 
 		if (active.Get(blockId))
 		{
@@ -223,7 +223,7 @@ public sealed class LoopAwareBlockOrder : BaseBlockOrder
 		foreach (var loopEnd in loopEnds)
 		{
 			var loopStart = loopEnd.NextBlocks[0]; // assuming the first one?
-			int loopStartIndex = loopBlockIndex[loopStart.Sequence];
+			var loopStartIndex = loopBlockIndex[loopStart.Sequence];
 
 			worklist.Push(loopEnd);
 
@@ -264,9 +264,9 @@ public sealed class LoopAwareBlockOrder : BaseBlockOrder
 			{
 				visited.Set(current.Sequence, true);
 
-				int currentLoopDepth = 0;
-				int minLoopIndex = -1;
-				for (int i = loopCount - 1; i >= 0; i--)
+				var currentLoopDepth = 0;
+				var minLoopIndex = -1;
+				for (var i = loopCount - 1; i >= 0; i--)
 				{
 					if (GetLoopMap(i, current))
 					{

@@ -13,7 +13,7 @@ internal static class Rle
 
 		var decoded = new List<byte>(length);
 
-		for (int i = start; i < length; i++)
+		for (var i = start; i < length; i++)
 		{
 			var c = data[i];
 
@@ -27,12 +27,12 @@ internal static class Rle
 				return null; // error --- repeat character can not at the start
 
 			var repeated = data[i - 1];
-			int len = data[i + 1] - 28;
+			var len = data[i + 1] - 28;
 
 			if (!(len >= 4 && len <= 97 && len != 6 && len != 7))
 				return null; // error --- invalid length
 
-			for (int j = 0; j < len - 1; j++)
+			for (var j = 0; j < len - 1; j++)
 			{
 				decoded.Add(repeated);
 			}

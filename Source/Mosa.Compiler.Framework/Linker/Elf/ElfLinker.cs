@@ -309,8 +309,8 @@ public sealed class ElfLinker
 
 		foreach (var kind in MosaLinker.SectionKinds)
 		{
-			bool reloc = false;
-			bool relocAddend = false;
+			var reloc = false;
+			var relocAddend = false;
 
 			foreach (var symbol in Linker.Symbols)
 			{
@@ -375,7 +375,7 @@ public sealed class ElfLinker
 	{
 		var completed = new HashSet<Section>();
 
-		for (int i = 0; i < sections.Count;)
+		for (var i = 0; i < sections.Count;)
 		{
 			var section = sections[i];
 
@@ -385,7 +385,7 @@ public sealed class ElfLinker
 				continue;
 			}
 
-			bool dependency = false;
+			var dependency = false;
 
 			foreach (var dep in section.Dependencies)
 			{
@@ -671,9 +671,9 @@ public sealed class ElfLinker
 		if (text.Length == 0)
 			return 0;
 
-		uint index = (uint)stringTable.Count;
+		var index = (uint)stringTable.Count;
 
-		foreach (char c in text)
+		foreach (var c in text)
 		{
 			stringTable.Add((byte)c);
 		}
@@ -688,9 +688,9 @@ public sealed class ElfLinker
 		if (text.Length == 0)
 			return 0;
 
-		uint index = (uint)sectionHeaderStringTable.Count;
+		var index = (uint)sectionHeaderStringTable.Count;
 
-		foreach (char c in text)
+		foreach (var c in text)
 		{
 			sectionHeaderStringTable.Add((byte)c);
 		}
@@ -711,7 +711,7 @@ public sealed class ElfLinker
 		if (!EmitShortSymbolName)
 			return symbol.Name;
 
-		int pos = symbol.Name.LastIndexOf(") ");
+		var pos = symbol.Name.LastIndexOf(") ");
 
 		if (pos < 0)
 			return symbol.Name;

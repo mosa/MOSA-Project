@@ -26,7 +26,7 @@ public sealed class MoveObjectPropagate : BaseTransform
 
 		foreach (var use in result.Uses.ToArray())
 		{
-			for (int i = 0; i < use.OperandCount; i++)
+			for (var i = 0; i < use.OperandCount; i++)
 			{
 				var operand = use.GetOperand(i);
 

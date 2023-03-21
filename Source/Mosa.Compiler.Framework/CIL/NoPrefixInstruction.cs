@@ -33,7 +33,7 @@ public sealed class NoPrefixInstruction : PrefixInstruction
 		// Decode base classes first
 		base.Decode(node, decoder);
 
-		byte nocheck = (byte)decoder.Instruction.Operand;
+		var nocheck = (byte)decoder.Instruction.Operand;
 
 		//FUTURE:
 		//ctx.Other = nocheck;

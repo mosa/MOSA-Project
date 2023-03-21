@@ -168,7 +168,7 @@ public static class ValueTypeTests
 
 	private static bool ByRefModify(ref valuetype p)
 	{
-		bool result = p.Check(3, 11, 41, 83);
+		var result = p.Check(3, 11, 41, 83);
 		p.a = 1;
 		p.b = 7;
 		p.c = 21;

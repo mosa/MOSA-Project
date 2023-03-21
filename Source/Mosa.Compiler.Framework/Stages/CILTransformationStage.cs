@@ -573,12 +573,12 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 		var source = context.Operand1;
 		var type = context.MosaType;
 
-		int destIndex = GetIndex(type ?? result.Type);
-		int srcIndex = GetIndex(source.Type);
+		var destIndex = GetIndex(type ?? result.Type);
+		var srcIndex = GetIndex(source.Type);
 
 		var conversion = Is32BitPlatform ? ConversionTable32[destIndex][srcIndex] : ConversionTable64[destIndex][srcIndex];
 
-		ulong mask = GetBitMask(conversion.BitsToMask);
+		var mask = GetBitMask(conversion.BitsToMask);
 
 		if (mask == 0 && conversion.PostInstruction != null)
 		{
@@ -900,7 +900,7 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 		var operand = context.Operand1;
 		var field = context.MosaField;
 
-		bool isPointer = operand.IsPointer || operand.Type == TypeSystem.BuiltIn.I || operand.Type == TypeSystem.BuiltIn.U;
+		var isPointer = operand.IsPointer || operand.Type == TypeSystem.BuiltIn.I || operand.Type == TypeSystem.BuiltIn.U;
 
 		if (MosaTypeLayout.IsUnderlyingPrimitive(operand.Type) && !result.IsOnStack && !operand.IsReferenceType && !isPointer)
 		{
@@ -977,7 +977,7 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 
 		MethodScanner.AccessedField(field);
 
-		uint offset = TypeLayout.GetFieldOffset(field);
+		var offset = TypeLayout.GetFieldOffset(field);
 
 		var fieldAddress = node.Result;
 		var objectOperand = node.Operand1;
@@ -1501,7 +1501,7 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 
 		MethodScanner.AccessedField(field);
 
-		uint offset = TypeLayout.GetFieldOffset(field);
+		var offset = TypeLayout.GetFieldOffset(field);
 		var offsetOperand = CreateConstant32(offset);
 
 		var objectOperand = node.Operand1;

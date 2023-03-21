@@ -49,7 +49,7 @@ public sealed class QuickBlockSetLookup
 
 	public IEnumerable<BasicBlock> GetBlocks(BasicBlocks basicBlocks)
 	{
-		for (int i = 0; i < array.Count; i++)
+		for (var i = 0; i < array.Count; i++)
 		{
 			if (array.Get(i))
 			{

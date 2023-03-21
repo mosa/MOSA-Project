@@ -145,7 +145,7 @@ public class Discovery
 
 		if (param is string)
 		{
-			string s = param as string;
+			var s = param as string;
 
 			var property = SeriesType.GetProperty(s);
 

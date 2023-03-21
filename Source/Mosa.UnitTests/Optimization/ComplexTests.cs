@@ -7,13 +7,13 @@ public static class ComplexTests
 	[MosaUnitTest]
 	public static int OptimizationTest12()
 	{
-		int a = 32;
-		int b = 10;
-		int c = 10;
-		int d = 1;
-		int e = 0;
+		var a = 32;
+		var b = 10;
+		var c = 10;
+		var d = 1;
+		var e = 0;
 
-		int z = a * b + c * d + c * d * e + e;
+		var z = a * b + c * d + c * d * e + e;
 
 		return z;
 	}
@@ -26,7 +26,7 @@ public static class ComplexTests
 		var c = c1;
 		var d = d1;
 
-		int z = a * b + c * d + c * d + a * b;
+		var z = a * b + c * d + c * d + a * b;
 
 		return z;
 	}
@@ -34,8 +34,8 @@ public static class ComplexTests
 	[MosaUnitTest(1, true)]
 	public static int OptimizationTest15(int j, bool b1)
 	{
-		int i = j;
-		int a = 4 * i;
+		var i = j;
+		var a = 4 * i;
 		int d;
 
 		if (b1)
@@ -53,9 +53,9 @@ public static class ComplexTests
 	[MosaUnitTest]
 	public static int ConditionalConstantPropagation1()
 	{
-		int i = 1;
-		int j = 1;
-		int k = 0;
+		var i = 1;
+		var j = 1;
+		var k = 0;
 
 		while (k < 100)
 		{
@@ -76,13 +76,13 @@ public static class ComplexTests
 	[MosaUnitTest]
 	public static int ConditionalConstantPropagation2()
 	{
-		int a = 3;
-		int b = 7;
-		int c = 20;
+		var a = 3;
+		var b = 7;
+		var c = 20;
 
 		int z;
 
-		int g = a + b;
+		var g = a + b;
 
 		if (g < c)
 			z = 9;
@@ -110,8 +110,8 @@ public static class ComplexTests
 			z = b << 8;
 		}
 
-		int p = x * y * 4;
-		int q = z & 0xF;
+		var p = x * y * 4;
+		var q = z & 0xF;
 
 		return p >= 16 && q == 0;
 	}
@@ -248,8 +248,8 @@ public static class ComplexTests
 			z = b << 8;
 		}
 
-		int p = x * y * 4;
-		int q = z & 0xF;
+		var p = x * y * 4;
+		var q = z & 0xF;
 		return p >= 16 && q == 0;
 	}
 
@@ -268,8 +268,8 @@ public static class ComplexTests
 	[MosaUnitTest]
 	public static int OptimizationTest75()
 	{
-		int q = -1;
-		int value = 10;
+		var q = -1;
+		var value = 10;
 
 	top:
 		if (q > 0)
@@ -291,8 +291,8 @@ public static class ComplexTests
 	//[MosaUnitTest]
 	public static int OptimizationTest76()
 	{
-		int q = -1;
-		int value = 10;
+		var q = -1;
+		var value = 10;
 
 	top:
 		if (q > 0)
@@ -317,9 +317,9 @@ public static class ComplexTests
 		uint a = 10;
 		uint b = 20;
 
-		uint c = x > 10 ? a : b;
+		var c = x > 10 ? a : b;
 
-		uint d = c + 10;
+		var d = c + 10;
 
 		return d;
 	}
