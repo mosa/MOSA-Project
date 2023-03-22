@@ -36,7 +36,7 @@ public sealed class LdargaInstruction : LoadInstruction
 		base.Decode(node, decoder);
 
 		// Opcode specific handling
-		int index = (int)decoder.Instruction.Operand;
+		var index = (int)decoder.Instruction.Operand;
 
 		var parameterOperand = decoder.MethodCompiler.Parameters[index];
 		node.Operand1 = parameterOperand;

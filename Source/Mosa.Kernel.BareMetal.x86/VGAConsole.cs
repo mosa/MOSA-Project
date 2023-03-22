@@ -55,7 +55,7 @@ public static class VGAConsole
 
 	private static void Normal(byte b)
 	{
-		if ((b >= 32 && b <= 126))
+		if (b >= 32 && b <= 126)
 		{
 			VGAText.Write(b);
 			return;
@@ -180,13 +180,13 @@ public static class VGAConsole
 
 	private static bool IsDigit(byte b)
 	{
-		return (b >= (byte)'0' && b <= (byte)'9');
+		return b >= (byte)'0' && b <= (byte)'9';
 	}
 
 	private static bool IsCharacter(byte b)
 	{
-		return ((b >= (byte)'a' && b <= (byte)'z'))
-		       || ((b >= (byte)'A' && b <= (byte)'Z'));
+		return (b >= (byte)'a' && b <= (byte)'z')
+		       || (b >= (byte)'A' && b <= (byte)'Z');
 	}
 
 	private static void ConvertBufferToParameter()
@@ -196,7 +196,7 @@ public static class VGAConsole
 		for (int i = 0; i < BufferLength; i++)
 		{
 			var b = GetBuffer(i);
-			value = (value * 10) + (b - (byte)'0');
+			value = value * 10 + (b - (byte)'0');
 		}
 
 		ParameterCount++;

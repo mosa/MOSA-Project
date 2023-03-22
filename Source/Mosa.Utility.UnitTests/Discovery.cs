@@ -33,7 +33,7 @@ public class Discovery
 			{
 				foreach (var paramValues in GetParameters(attribute))
 				{
-					var unitTest = new UnitTestInfo()
+					var unitTest = new UnitTestInfo
 					{
 						MethodInfo = method,
 						FullMethodName = fullMethodName,
@@ -61,7 +61,7 @@ public class Discovery
 
 			var value = property.GetValue("Value");
 
-			foreach (var param in ((IEnumerable<object[]>)value))
+			foreach (var param in (IEnumerable<object[]>)value)
 			{
 				list.Add(param);
 			}
@@ -145,7 +145,7 @@ public class Discovery
 
 		if (param is string)
 		{
-			string s = param as string;
+			var s = param as string;
 
 			var property = SeriesType.GetProperty(s);
 

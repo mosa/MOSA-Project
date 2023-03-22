@@ -154,7 +154,7 @@ public sealed class ElfLinker
 			if (linkerSection.Size == 0 && linkerSection.SectionKind != SectionKind.BSS)
 				continue;
 
-			var section = new Section()
+			var section = new Section
 			{
 				Name = SectionNames[(int)linkerSection.SectionKind],
 				Address = linkerSection.VirtualAddress,
@@ -196,7 +196,7 @@ public sealed class ElfLinker
 
 	private void RegisterNullSection()
 	{
-		nullSection = new Section()
+		nullSection = new Section
 		{
 			Name = null,
 			Type = SectionType.Null
@@ -253,7 +253,7 @@ public sealed class ElfLinker
 
 		foreach (var section in sections)
 		{
-			var newsection = new Section()
+			var newsection = new Section
 			{
 				Name = section.Name,
 				Address = section.VirtualAddress,
@@ -289,7 +289,7 @@ public sealed class ElfLinker
 				continue;
 			}
 
-			var section = new Section()
+			var section = new Section
 			{
 				Name = sectionName,
 				Address = (ulong)sectionAddress,
@@ -309,8 +309,8 @@ public sealed class ElfLinker
 
 		foreach (var kind in MosaLinker.SectionKinds)
 		{
-			bool reloc = false;
-			bool relocAddend = false;
+			var reloc = false;
+			var relocAddend = false;
 
 			foreach (var symbol in Linker.Symbols)
 			{
@@ -355,7 +355,7 @@ public sealed class ElfLinker
 
 	private void RegisterRelocationSection(SectionKind kind, bool addend)
 	{
-		var relocationSection = new Section()
+		var relocationSection = new Section
 		{
 			Name = (addend ? ".rela" : ".rel") + SectionNames[(int)kind],
 			Type = addend ? SectionType.RelocationA : SectionType.Relocation,
@@ -375,7 +375,7 @@ public sealed class ElfLinker
 	{
 		var completed = new HashSet<Section>();
 
-		for (int i = 0; i < sections.Count;)
+		for (var i = 0; i < sections.Count;)
 		{
 			var section = sections[i];
 
@@ -385,7 +385,7 @@ public sealed class ElfLinker
 				continue;
 			}
 
-			bool dependency = false;
+			var dependency = false;
 
 			foreach (var dep in section.Dependencies)
 			{
@@ -441,7 +441,7 @@ public sealed class ElfLinker
 		elfheader.Type = FileType.Executable;
 		elfheader.Machine = MachineType;
 		elfheader.EntryAddress = (uint)Linker.EntryPoint.VirtualAddress;
-		elfheader.CreateIdent((LinkerFormatType == LinkerFormatType.Elf32) ? IdentClass.Class32 : IdentClass.Class64, IdentData.Data2LSB);
+		elfheader.CreateIdent(LinkerFormatType == LinkerFormatType.Elf32 ? IdentClass.Class32 : IdentClass.Class64, IdentData.Data2LSB);
 		elfheader.SectionHeaderNumber = (ushort)sections.Count;
 		elfheader.SectionHeaderStringIndex = sectionHeaderStringSection.Index;
 
@@ -477,8 +477,8 @@ public sealed class ElfLinker
 				PhysicalAddress = section.Address,
 				Type = ProgramHeaderType.Load,
 				Flags =
-					(section.SectionKind == SectionKind.Text) ? ProgramHeaderFlags.Read | ProgramHeaderFlags.Execute :
-					(section.SectionKind == SectionKind.ROData) ? ProgramHeaderFlags.Read : ProgramHeaderFlags.Read | ProgramHeaderFlags.Write
+					section.SectionKind == SectionKind.Text ? ProgramHeaderFlags.Read | ProgramHeaderFlags.Execute :
+					section.SectionKind == SectionKind.ROData ? ProgramHeaderFlags.Read : ProgramHeaderFlags.Read | ProgramHeaderFlags.Write
 			};
 
 			programHeader.Write(LinkerFormatType, writer);
@@ -489,7 +489,7 @@ public sealed class ElfLinker
 
 	private void WriteSectionHeader(BinaryWriter writer)
 	{
-		elfheader.SectionHeaderOffset = elfheader.ProgramHeaderOffset + (ProgramHeader.GetEntrySize(LinkerFormatType) * elfheader.ProgramHeaderNumber);
+		elfheader.SectionHeaderOffset = elfheader.ProgramHeaderOffset + ProgramHeader.GetEntrySize(LinkerFormatType) * elfheader.ProgramHeaderNumber;
 
 		writer.SetPosition(elfheader.SectionHeaderOffset);
 
@@ -539,7 +539,7 @@ public sealed class ElfLinker
 
 			var name = GetFinalSymboName(symbol);
 
-			var symbolEntry = new SymbolEntry()
+			var symbolEntry = new SymbolEntry
 			{
 				Name = AddToStringTable(name),
 				Value = symbol.VirtualAddress,
@@ -583,7 +583,7 @@ public sealed class ElfLinker
 				if (!patch.ReferenceSymbol.IsExternalSymbol) // FUTURE: include relocations for static symbols, if option selected
 					continue;
 
-				var relocationEntry = new RelocationEntry()
+				var relocationEntry = new RelocationEntry
 				{
 					RelocationType = ConvertType(MachineType, patch.LinkType, patch.PatchType),
 					Symbol = symbolTableOffset[patch.ReferenceSymbol],
@@ -621,7 +621,7 @@ public sealed class ElfLinker
 				if (!patch.ReferenceSymbol.IsExternalSymbol) // FUTURE: include relocations for static symbols, if option selected
 					continue;
 
-				var relocationAddendEntry = new RelocationAddendEntry()
+				var relocationAddendEntry = new RelocationAddendEntry
 				{
 					RelocationType = ConvertType(MachineType, patch.LinkType, patch.PatchType),
 					Symbol = symbolTableOffset[patch.ReferenceSymbol],
@@ -671,9 +671,9 @@ public sealed class ElfLinker
 		if (text.Length == 0)
 			return 0;
 
-		uint index = (uint)stringTable.Count;
+		var index = (uint)stringTable.Count;
 
-		foreach (char c in text)
+		foreach (var c in text)
 		{
 			stringTable.Add((byte)c);
 		}
@@ -688,9 +688,9 @@ public sealed class ElfLinker
 		if (text.Length == 0)
 			return 0;
 
-		uint index = (uint)sectionHeaderStringTable.Count;
+		var index = (uint)sectionHeaderStringTable.Count;
 
-		foreach (char c in text)
+		foreach (var c in text)
 		{
 			sectionHeaderStringTable.Add((byte)c);
 		}
@@ -711,7 +711,7 @@ public sealed class ElfLinker
 		if (!EmitShortSymbolName)
 			return symbol.Name;
 
-		int pos = symbol.Name.LastIndexOf(") ");
+		var pos = symbol.Name.LastIndexOf(") ");
 
 		if (pos < 0)
 			return symbol.Name;

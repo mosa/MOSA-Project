@@ -35,7 +35,7 @@ public class DiskDeviceService : BaseService
 			if (deviceService.CheckExists(device, drive))
 				return;
 
-			var configuration = new DiskDeviceConfiguration()
+			var configuration = new DiskDeviceConfiguration
 			{
 				DriveNbr = drive,
 				ReadOnly = false

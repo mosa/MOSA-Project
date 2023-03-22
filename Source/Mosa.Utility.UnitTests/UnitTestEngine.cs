@@ -201,9 +201,9 @@ public class UnitTestEngine : IDisposable
 				if (Aborted)
 					return;
 
-				bool sendFlag = Queue.Count > 0 && Pending.Count < MaxSentQueue;
+				var sendFlag = Queue.Count > 0 && Pending.Count < MaxSentQueue;
 
-				if ((MaxSentQueue - Pending.Count < MinSend) && Queue.Count > MinSend)
+				if (MaxSentQueue - Pending.Count < MinSend && Queue.Count > MinSend)
 				{
 					sendFlag = false;
 				}
@@ -368,7 +368,7 @@ public class UnitTestEngine : IDisposable
 			DebugServerEngine.SetGlobalDispatch(GlobalDispatch);
 		}
 
-		for (int attempt = 0; attempt < 100; attempt++)
+		for (var attempt = 0; attempt < 100; attempt++)
 		{
 			try
 			{
@@ -433,7 +433,7 @@ public class UnitTestEngine : IDisposable
 
 	private bool WaitForReady()
 	{
-		for (int attempt = 0; attempt < 100; attempt++)
+		for (var attempt = 0; attempt < 100; attempt++)
 		{
 			if (Ready)
 			{
@@ -452,7 +452,7 @@ public class UnitTestEngine : IDisposable
 	{
 		lock (_lock)
 		{
-			for (int attempt = 0; attempt < 5; attempt++)
+			for (var attempt = 0; attempt < 5; attempt++)
 			{
 				Console.WriteLine("Starting Engine...");
 
@@ -491,7 +491,7 @@ public class UnitTestEngine : IDisposable
 
 	private void CheckEngine()
 	{
-		bool restart = false;
+		var restart = false;
 
 		lock (_lock)
 		{
@@ -582,7 +582,7 @@ public class UnitTestEngine : IDisposable
 
 			if (CompletedUnitTestCount % 1000 == 0 && StopWatch.Elapsed.Seconds != 0)
 			{
-				Console.WriteLine("Unit Tests - Count: " + CompletedUnitTestCount + " Elapsed: " + ((int)StopWatch.Elapsed.TotalSeconds) + " (" + (CompletedUnitTestCount / StopWatch.Elapsed.TotalSeconds).ToString("F2") + " per second)");
+				Console.WriteLine("Unit Tests - Count: " + CompletedUnitTestCount + " Elapsed: " + (int)StopWatch.Elapsed.TotalSeconds + " (" + (CompletedUnitTestCount / StopWatch.Elapsed.TotalSeconds).ToString("F2") + " per second)");
 			}
 		}
 

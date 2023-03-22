@@ -16,7 +16,7 @@ internal class TypeSystemController : ITypeSystemController
 
 	public MosaModule CreateModule()
 	{
-		return new MosaModule()
+		return new MosaModule
 		{
 			ID = id++,
 			TypeSystem = typeSystem
@@ -27,7 +27,7 @@ internal class TypeSystemController : ITypeSystemController
 	{
 		if (source == null)
 		{
-			return new MosaType()
+			return new MosaType
 			{
 				ID = id++,
 				TypeSystem = typeSystem
@@ -45,7 +45,7 @@ internal class TypeSystemController : ITypeSystemController
 	{
 		if (source == null)
 		{
-			return new MosaMethod()
+			return new MosaMethod
 			{
 				ID = id++,
 				TypeSystem = typeSystem
@@ -63,7 +63,7 @@ internal class TypeSystemController : ITypeSystemController
 	{
 		if (source == null)
 		{
-			return new MosaField()
+			return new MosaField
 			{
 				ID = id++,
 				TypeSystem = typeSystem
@@ -81,7 +81,7 @@ internal class TypeSystemController : ITypeSystemController
 	{
 		if (source == null)
 		{
-			return new MosaProperty()
+			return new MosaProperty
 			{
 				ID = id++,
 				TypeSystem = typeSystem
@@ -99,7 +99,7 @@ internal class TypeSystemController : ITypeSystemController
 	{
 		if (source == null)
 		{
-			return new MosaParameter()
+			return new MosaParameter
 			{
 				ID = id++,
 				TypeSystem = typeSystem

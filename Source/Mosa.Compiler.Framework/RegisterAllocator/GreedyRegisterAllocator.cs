@@ -40,7 +40,7 @@ public sealed class GreedyRegisterAllocator : BasicRegisterAllocator
 
 		foreach (var moveHint in hints)
 		{
-			var register = (liveInterval.Start == moveHint.Slot) ? moveHint.FromRegister : moveHint.ToRegister;
+			var register = liveInterval.Start == moveHint.Slot ? moveHint.FromRegister : moveHint.ToRegister;
 
 			if (register == null)
 				continue;   // no usable hint
@@ -66,7 +66,7 @@ public sealed class GreedyRegisterAllocator : BasicRegisterAllocator
 			moveHints.TryGetValue(liveInterval.End, out endMoveHint);
 		}
 
-		int cnt = (startMoveHint == null ? 0 : 1) + (endMoveHint == null ? 0 : 1);
+		var cnt = (startMoveHint == null ? 0 : 1) + (endMoveHint == null ? 0 : 1);
 
 		if (cnt == 0)
 			return null;
@@ -422,9 +422,9 @@ public sealed class GreedyRegisterAllocator : BasicRegisterAllocator
 				var from = VirtualRegisters[GetIndex(node.Operand1)];
 				var to = VirtualRegisters[GetIndex(node.Result)];
 
-				int factor = (from.IsPhysicalRegister ? 5 : 1) + (to.IsPhysicalRegister ? 20 : 1);
+				var factor = (from.IsPhysicalRegister ? 5 : 1) + (to.IsPhysicalRegister ? 20 : 1);
 
-				int bonus = ExtendedBlocks[block.Sequence].LoopDepth * factor;
+				var bonus = ExtendedBlocks[block.Sequence].LoopDepth * factor;
 
 				var slot = new SlotIndex(node);
 

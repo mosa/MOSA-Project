@@ -93,14 +93,14 @@ public class GenericTest : KernelTest
 	{
 		GenericClassTest<int> genericObject = new GenericClassTest<int>();
 
-		return (genericObject.Return10() == 10);
+		return genericObject.Return10() == 10;
 	}
 
 	public static bool GenericTest7()
 	{
 		IGenericInterface<int> genericInterface = new GenericClassTest<int>();
 
-		return (genericInterface.Return10() == 10);
+		return genericInterface.Return10() == 10;
 	}
 
 	public static bool GenericTest8()
@@ -111,7 +111,7 @@ public class GenericTest : KernelTest
 
 		IGenericInterface<int> genericInterface = genericObject;
 
-		return (genericInterface.ReturnIt() == 10);
+		return genericInterface.ReturnIt() == 10;
 	}
 
 	public static bool GenericTest9()
@@ -120,7 +120,7 @@ public class GenericTest : KernelTest
 
 		genericObject.value = 10;
 
-		return (genericObject.ReturnIt() == 10);
+		return genericObject.ReturnIt() == 10;
 	}
 
 	public static bool GenericTest10()
@@ -133,7 +133,7 @@ public class GenericTest : KernelTest
 		TestObject objBase = genericInterface.ReturnIt();
 		TestObjectInherit objDerived = (TestObjectInherit)objBase;
 
-		return (objDerived.A == 5 && objDerived.B == 9 && objDerived.C == 6);
+		return objDerived.A == 5 && objDerived.B == 9 && objDerived.C == 6;
 	}
 }
 

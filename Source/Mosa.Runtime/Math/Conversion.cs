@@ -35,7 +35,7 @@ internal static class Conversion
 		ulong RawMantissa = rawValue & 0x000F_FFFF_FFFF_FFFF;
 
 		int shift = Exponent;
-		var mantissa = (RawMantissa | (1uL << MantissaBits));
+		var mantissa = RawMantissa | (1uL << MantissaBits);
 		long result = (long)(shift <= 0 ? mantissa << -shift : mantissa >> shift);
 		return Sign == 0uL ? result : -result;
 	}
@@ -69,7 +69,7 @@ internal static class Conversion
 		ulong RawMantissa = rawValue & 0x000F_FFFF_FFFF_FFFF;
 
 		int shift = Exponent;
-		var mantissa = (RawMantissa | (1uL << MantissaBits));
+		var mantissa = RawMantissa | (1uL << MantissaBits);
 		long result = (long)(shift <= 0 ? mantissa << -shift : mantissa >> shift);
 		return Sign == 0uL ? result : -result;
 	}
@@ -113,7 +113,7 @@ internal static class Conversion
 		ulong RawMantissa = rawValue & 0x000F_FFFF_FFFF_FFFF;
 
 		int shift = Exponent;
-		var mantissa = (RawMantissa | (1uL << MantissaBits));
+		var mantissa = RawMantissa | (1uL << MantissaBits);
 		long result = unchecked((long)(shift <= 0 ? mantissa << -shift : mantissa >> shift));
 		return unchecked((ulong)(Sign == 0uL ? result : -result));
 	}
@@ -157,7 +157,7 @@ internal static class Conversion
 		ulong RawMantissa = rawValue & 0x000F_FFFF_FFFF_FFFF;
 
 		int shift = Exponent;
-		var mantissa = (RawMantissa | (1uL << MantissaBits));
+		var mantissa = RawMantissa | (1uL << MantissaBits);
 		long result = unchecked((long)(shift <= 0 ? mantissa << -shift : mantissa >> shift));
 		return unchecked((ulong)(Sign == 0uL ? result : -result));
 	}

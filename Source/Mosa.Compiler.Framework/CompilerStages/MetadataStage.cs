@@ -29,7 +29,7 @@ public sealed class MetadataStage : BaseCompilerStage
 	protected override void Initialization()
 	{
 		NativePointerSize = TypeLayout.NativePointerSize;
-		NativePatchType = (NativePointerSize == 4) ? PatchType.I32 : PatchType.I64;
+		NativePatchType = NativePointerSize == 4 ? PatchType.I32 : PatchType.I64;
 	}
 
 	protected override void Finalization()
@@ -44,7 +44,7 @@ public sealed class MetadataStage : BaseCompilerStage
 	private LinkerSymbol EmitStringWithLength(string name, string data)
 	{
 		// Strings are now going to be embedded objects since they are immutable
-		var symbol = Linker.DefineSymbol(name, SectionKind.ROData, TypeLayout.NativePointerAlignment, (uint)(Compiler.ObjectHeaderSize + NativePointerSize + (data.Length * 2)));
+		var symbol = Linker.DefineSymbol(name, SectionKind.ROData, TypeLayout.NativePointerAlignment, (uint)(Compiler.ObjectHeaderSize + NativePointerSize + data.Length * 2));
 		var writer = new BinaryWriter(symbol.Stream);
 
 		Linker.Link(LinkType.AbsoluteAddress, NativePatchType, symbol, Compiler.ObjectHeaderSize - NativePointerSize, Metadata.TypeDefinition + "System.String", 0);
@@ -298,9 +298,9 @@ public sealed class MetadataStage : BaseCompilerStage
 
 	private LinkerSymbol CreateInterfaceBitmap(MosaType type, List<MosaType> interfaces)
 	{
-		var bitmap = new byte[((Interfaces.Count - 1) / 8) + 1];
+		var bitmap = new byte[(Interfaces.Count - 1) / 8 + 1];
 
-		int at = 0;
+		var at = 0;
 		byte bit = 0;
 		foreach (var interfaceType in Interfaces)
 		{
@@ -685,7 +685,7 @@ public sealed class MetadataStage : BaseCompilerStage
 		writer.Write(unit.CustomAttributes.Count, NativePointerSize);
 
 		// 2. Pointers to Custom Attributes
-		for (int i = 0; i < unit.CustomAttributes.Count; i++)
+		for (var i = 0; i < unit.CustomAttributes.Count; i++)
 		{
 			// Get custom attribute
 			var ca = unit.CustomAttributes[i];
@@ -704,7 +704,7 @@ public sealed class MetadataStage : BaseCompilerStage
 	private LinkerSymbol CreateCustomAttribute(MosaUnit unit, MosaCustomAttribute ca, int position)
 	{
 		// Emit custom attribute list
-		string name = $"{unit.FullName}>>{position.ToString()}:{ca.Constructor.DeclaringType.Name}";
+		var name = $"{unit.FullName}>>{position.ToString()}:{ca.Constructor.DeclaringType.Name}";
 
 		var customAttributeSymbol = Linker.DefineSymbol(Metadata.CustomAttribute + name, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
 		var writer1 = new BinaryWriter(customAttributeSymbol.Stream);
@@ -722,7 +722,7 @@ public sealed class MetadataStage : BaseCompilerStage
 		writer1.Write((uint)(ca.Arguments.Length + ca.NamedArguments.Length), NativePointerSize);
 
 		// 4. Pointers to Custom Attribute Arguments (Both unnamed and named)
-		for (int i = 0; i < ca.Arguments.Length; i++)
+		for (var i = 0; i < ca.Arguments.Length; i++)
 		{
 			// Build definition
 			var customAttributeArgumentSymbol = CreateCustomAttributeArgument(name, i, null, ca.Arguments[i], false);
@@ -747,7 +747,7 @@ public sealed class MetadataStage : BaseCompilerStage
 
 	private LinkerSymbol CreateCustomAttributeArgument(string name, int count, string argName, MosaCustomAttribute.Argument arg, bool isField)
 	{
-		var attributeName = $"{name}:{(argName ?? count.ToString())}";
+		var attributeName = $"{name}:{argName ?? count.ToString()}";
 		var symbolName = Metadata.CustomAttributeArgument + attributeName;
 
 		var customAttributeArgumentSymbol = Linker.GetSymbol(symbolName);

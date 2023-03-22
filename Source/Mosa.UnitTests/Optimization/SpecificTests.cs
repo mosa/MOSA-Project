@@ -7,13 +7,13 @@ public static class SpecificTests
 	[MosaUnitTest(Series = "I4I4")]
 	public static uint Xor32Xor32(uint x, uint y)
 	{
-		return x ^ (x ^ y);
+		return x ^ x ^ y;
 	}
 
 	[MosaUnitTest(Series = "I8I8")]
 	public static ulong Xor64Xor64(ulong x, ulong y)
 	{
-		return x ^ (x ^ y);
+		return x ^ x ^ y;
 	}
 
 	[MosaUnitTest(Series = "I4")]

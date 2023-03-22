@@ -150,7 +150,7 @@ public class MosaType : MosaUnit, IEquatable<MosaType>
 		Properties = (properties = new List<MosaProperty>()).AsReadOnly();
 		Interfaces = (interfaces = new List<MosaType>()).AsReadOnly();
 
-		GenericArguments = (genericArguments = new GenericArgumentsCollection());
+		GenericArguments = genericArguments = new GenericArgumentsCollection();
 	}
 
 	internal override MosaType Clone()
@@ -162,7 +162,7 @@ public class MosaType : MosaUnit, IEquatable<MosaType>
 		result.Properties = (result.properties = new List<MosaProperty>(properties)).AsReadOnly();
 		result.Interfaces = (result.interfaces = new List<MosaType>(interfaces)).AsReadOnly();
 
-		result.GenericArguments = (result.genericArguments = new GenericArgumentsCollection(genericArguments));
+		result.GenericArguments = result.genericArguments = new GenericArgumentsCollection(genericArguments);
 
 		return result;
 	}

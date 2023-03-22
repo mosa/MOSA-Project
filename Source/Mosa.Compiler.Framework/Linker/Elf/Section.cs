@@ -57,7 +57,7 @@ public class Section
 
 	public void WriteSectionHeader(LinkerFormatType elfType, BinaryWriter writer)
 	{
-		var header = new SectionHeaderEntry()
+		var header = new SectionHeaderEntry
 		{
 			Name = NameIndex,
 			Address = Address,

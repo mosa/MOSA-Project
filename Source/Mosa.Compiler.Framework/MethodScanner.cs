@@ -60,8 +60,8 @@ public class MethodScanner
 
 		Debug.WriteLine(trace?.ToString()); // REMOVE
 
-		int totalTypes = 0;
-		int totalMethods = 0;
+		var totalTypes = 0;
+		var totalMethods = 0;
 
 		foreach (var type in TypeSystem.AllTypes)
 		{
@@ -72,7 +72,7 @@ public class MethodScanner
 
 			foreach (var method in type.Methods)
 			{
-				if ((!(!method.HasImplementation && method.IsAbstract)) && !method.HasOpenGenericParams && !method.DeclaringType.HasOpenGenericParams)
+				if (!(!method.HasImplementation && method.IsAbstract) && !method.HasOpenGenericParams && !method.DeclaringType.HasOpenGenericParams)
 				{
 					totalMethods++;
 				}
@@ -123,7 +123,7 @@ public class MethodScanner
 		{
 			lock (trace)
 			{
-				if ((lastSource == null && source != null) || (lastSource != source))
+				if ((lastSource == null && source != null) || lastSource != source)
 				{
 					trace.Log($"> Method: {(source == null ? "[NULL]" : source.FullName)}");
 					lastSource = source;
@@ -194,7 +194,7 @@ public class MethodScanner
 		{
 			lock (trace)
 			{
-				if ((lastSource == null && source != null) || (lastSource != source))
+				if ((lastSource == null && source != null) || lastSource != source)
 				{
 					trace.Log($"> Method: {(source == null ? "[NONE]" : source.FullName)}");
 					lastSource = source;
@@ -249,7 +249,7 @@ public class MethodScanner
 		{
 			lock (trace)
 			{
-				if ((lastSource == null && source != null) || (lastSource != source))
+				if ((lastSource == null && source != null) || lastSource != source)
 				{
 					trace.Log($"> Method: {(source == null ? "[NONE]" : source.FullName)}");
 					lastSource = source;
@@ -398,7 +398,7 @@ public class MethodScanner
 		// Collect all unit tests methods
 		foreach (var type in TypeSystem.AllTypes)
 		{
-			bool allocateType = false;
+			var allocateType = false;
 
 			foreach (var method in type.Methods)
 			{

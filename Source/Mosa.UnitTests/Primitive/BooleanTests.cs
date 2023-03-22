@@ -37,21 +37,21 @@ public static class BooleanTests
 	[MosaUnitTest]
 	public static bool Newarr()
 	{
-		bool[] arr = new bool[0];
+		var arr = new bool[0];
 		return arr != null;
 	}
 
 	[MosaUnitTest(Series = "I4Small")]
 	public static bool Ldlen(int length)
 	{
-		bool[] arr = new bool[length];
+		var arr = new bool[length];
 		return arr.Length == length;
 	}
 
 	[MosaUnitTest(Series = "I4SmallB")]
 	public static bool Ldelem(int index, bool value)
 	{
-		bool[] arr = new bool[index + 1];
+		var arr = new bool[index + 1];
 		arr[index] = value;
 		return value == arr[index];
 	}
@@ -59,7 +59,7 @@ public static class BooleanTests
 	[MosaUnitTest(Series = "I4SmallB")]
 	public static bool Stelem(int index, bool value)
 	{
-		bool[] arr = new bool[index + 1];
+		var arr = new bool[index + 1];
 		arr[index] = value;
 		return true;
 	}
@@ -67,7 +67,7 @@ public static class BooleanTests
 	[MosaUnitTest(Series = "I4SmallB")]
 	public static bool Ldelema(int index, bool value)
 	{
-		bool[] arr = new bool[index + 1];
+		var arr = new bool[index + 1];
 		SetValueInRefValue(ref arr[index], value);
 		return arr[index] == value;
 	}

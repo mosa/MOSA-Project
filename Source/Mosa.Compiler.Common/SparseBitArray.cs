@@ -73,7 +73,7 @@ public sealed class SparseBitArray
 
 		if (value)
 		{
-			Bits[index / 64] |= (1u << (index % 64));
+			Bits[index / 64] |= 1u << (index % 64);
 		}
 		else
 

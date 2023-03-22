@@ -324,7 +324,7 @@ public sealed class Operand
 
 	public static Operand CreateVirtual32(int index)
 	{
-		return new Operand()
+		return new Operand
 		{
 			IsVirtualRegister = true,
 			IsConstant = false,
@@ -338,7 +338,7 @@ public sealed class Operand
 
 	public static Operand CreateVirtual64(int index)
 	{
-		return new Operand()
+		return new Operand
 		{
 			IsVirtualRegister = true,
 			IsInteger = true,
@@ -350,7 +350,7 @@ public sealed class Operand
 
 	public static Operand CreateVirtualR4(int index)
 	{
-		return new Operand()
+		return new Operand
 		{
 			IsVirtualRegister = true,
 			IsR4 = true,
@@ -361,7 +361,7 @@ public sealed class Operand
 
 	public static Operand CreateVirtualR8(int index)
 	{
-		return new Operand()
+		return new Operand
 		{
 			IsVirtualRegister = true,
 			IsR8 = true,
@@ -372,7 +372,7 @@ public sealed class Operand
 
 	public static Operand CreateConstant32(uint value)
 	{
-		return new Operand()
+		return new Operand
 		{
 			IsConstant = true,
 			ConstantUnsigned32 = value,
@@ -385,7 +385,7 @@ public sealed class Operand
 
 	public static Operand CreateConstant64(ulong value)
 	{
-		return new Operand()
+		return new Operand
 		{
 			IsConstant = true,
 			ConstantUnsigned64 = value,
@@ -398,7 +398,7 @@ public sealed class Operand
 
 	public static Operand CreateConstantR4(float value)
 	{
-		return new Operand()
+		return new Operand
 		{
 			IsConstant = true,
 			ConstantFloat = value,
@@ -410,7 +410,7 @@ public sealed class Operand
 
 	public static Operand CreateConstantR8(double value)
 	{
-		return new Operand()
+		return new Operand
 		{
 			IsConstant = true,
 			ConstantDouble = value,
@@ -422,7 +422,7 @@ public sealed class Operand
 
 	public static Operand CreateVirtualObject(int index)
 	{
-		return new Operand()
+		return new Operand
 		{
 			IsVirtualRegister = true,
 			IsReferenceType = true,
@@ -433,7 +433,7 @@ public sealed class Operand
 
 	public static Operand CreateObjectNull()
 	{
-		return new Operand()
+		return new Operand
 		{
 			IsConstant = true,
 			ConstantUnsigned64 = 0,
@@ -446,7 +446,7 @@ public sealed class Operand
 
 	public static Operand CreateManagedPointer()
 	{
-		return new Operand()
+		return new Operand
 		{
 			IsConstant = false,
 			ConstantUnsigned64 = 0,
@@ -460,7 +460,7 @@ public sealed class Operand
 
 	public static Operand CreateLabel(string label)
 	{
-		return new Operand()
+		return new Operand
 		{
 			IsLabel = true,
 			Name = label,
@@ -488,7 +488,7 @@ public sealed class Operand
 		{
 			IsConstant = true,
 			ConstantUnsigned64 = value,
-			IsNull = (type.IsReferenceType && value == 0),
+			IsNull = type.IsReferenceType && value == 0,
 			IsResolved = true
 		};
 	}
@@ -581,7 +581,7 @@ public sealed class Operand
 			{
 				IsConstant = true,
 				IsResolved = true,
-				ConstantUnsigned64 = ((uint)(longOperand.ConstantUnsigned64 >> 32)) & uint.MaxValue
+				ConstantUnsigned64 = (uint)(longOperand.ConstantUnsigned64 >> 32) & uint.MaxValue
 			};
 		}
 		else if (longOperand.IsVirtualRegister)
@@ -968,8 +968,8 @@ public sealed class Operand
 		if (value.Length < 2)
 			return value;
 
-		string type = value;
-		string end = string.Empty;
+		var type = value;
+		var end = string.Empty;
 
 		if (value.EndsWith("*"))
 		{

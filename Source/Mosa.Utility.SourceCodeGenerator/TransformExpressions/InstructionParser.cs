@@ -19,10 +19,10 @@ public static class InstructionParser
 
 	private static (InstructionNode node, int end, int nodeNbr) ParseInstructionNode(List<Token> tokens, int start, int nodeNbr)
 	{
-		var node = new InstructionNode() { NodeNbr = nodeNbr };
+		var node = new InstructionNode { NodeNbr = nodeNbr };
 		var length = tokens.Count;
 
-		for (int index = start; index < length; index++)
+		for (var index = start; index < length; index++)
 		{
 			var token = tokens[index];
 

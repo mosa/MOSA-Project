@@ -238,7 +238,7 @@ public class FatFileStream : Stream
 
 		int index = 0;
 
-		for (; (position < length) && (index < count); index++)
+		for (; position < length && index < count; index++)
 		{
 			buffer[offset + index] = (byte)ReadByte();
 		}
@@ -333,7 +333,7 @@ public class FatFileStream : Stream
 	/// </summary>
 	protected bool NextCluster()
 	{
-		uint newcluster = (currentCluster == 0) ? startCluster : fs.GetNextCluster(currentCluster);
+		uint newcluster = currentCluster == 0 ? startCluster : fs.GetNextCluster(currentCluster);
 
 		ReadCluster(newcluster);
 
@@ -463,7 +463,7 @@ public class FatFileStream : Stream
 	/// </exception>
 	public override void Write(byte[] buffer, int offset, int count)
 	{
-		if ((count == 0) || (buffer.Length == 0))
+		if (count == 0 || buffer.Length == 0)
 			return;
 
 		if (buffer.Length - offset < count)

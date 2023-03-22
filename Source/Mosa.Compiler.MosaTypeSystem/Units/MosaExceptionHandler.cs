@@ -42,7 +42,7 @@ public class MosaExceptionHandler
 	/// </summary>
 	public int? FilterStart { get; private set; }
 
-	public int? FilterEnd => (ExceptionHandlerType == ExceptionHandlerType.Filter) ? HandlerStart : null;
+	public int? FilterEnd => ExceptionHandlerType == ExceptionHandlerType.Filter ? HandlerStart : null;
 
 	/// <summary>
 	/// Determines whether [is label within try] [the specified label].
@@ -53,7 +53,7 @@ public class MosaExceptionHandler
 	/// </returns>
 	public bool IsLabelWithinTry(int label)
 	{
-		return (label >= TryStart && label < TryEnd);
+		return label >= TryStart && label < TryEnd;
 	}
 
 	/// <summary>
@@ -65,7 +65,7 @@ public class MosaExceptionHandler
 	/// </returns>
 	public bool IsLabelWithinHandler(int label)
 	{
-		return (label >= HandlerStart && label < HandlerEnd);
+		return label >= HandlerStart && label < HandlerEnd;
 	}
 
 	public MosaExceptionHandler(ExceptionHandlerType ehType, int tryStart, int tryEnd, int handlerStart, int handlerEnd, MosaType? type, int? filterOffset)

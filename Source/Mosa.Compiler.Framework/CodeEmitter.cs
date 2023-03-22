@@ -25,12 +25,12 @@ public sealed class CodeEmitter
 		/// <summary>
 		/// Patch label
 		/// </summary>
-		public int Label;
+		public readonly int Label;
 
 		/// <summary>
 		/// The patch's position in the stream
 		/// </summary>
-		public int Position;
+		public readonly int Position;
 
 		/// <summary>
 		/// The patch size
@@ -165,11 +165,11 @@ public sealed class CodeEmitter
 	public void ResolvePatches(TraceLog trace)
 	{
 		// Save the current position
-		long currentPosition = CodeStream.Position;
+		var currentPosition = CodeStream.Position;
 
 		foreach (var patch in Patches)
 		{
-			if (!TryGetLabel(patch.Label, out int labelPosition))
+			if (!TryGetLabel(patch.Label, out var labelPosition))
 			{
 				throw new ArgumentException("Missing label while resolving patches.", $"label={labelPosition}");
 			}
@@ -177,7 +177,7 @@ public sealed class CodeEmitter
 			CodeStream.Position = patch.Position;
 
 			// Compute relative branch offset
-			int relOffset = labelPosition - (patch.Position + 4);
+			var relOffset = labelPosition - (patch.Position + 4);
 
 			// Write relative offset to stream
 			CodeStream.Write(relOffset);
@@ -278,7 +278,7 @@ public sealed class CodeEmitter
 
 	public int EmitRelative(int label, int offset, int size)
 	{
-		if (TryGetLabel(label, out int position))
+		if (TryGetLabel(label, out var position))
 		{
 			// Yes, calculate the relative offset
 			return position - (int)CodeStream.Position - offset;

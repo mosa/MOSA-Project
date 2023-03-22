@@ -51,7 +51,7 @@ public sealed class VirtualRegisterRenameStage : BaseCodeTransformationStage
 			vr.AddIfNew(v);
 		}
 
-		int index = 0;
+		var index = 0;
 
 		foreach (var v in vr)
 		{

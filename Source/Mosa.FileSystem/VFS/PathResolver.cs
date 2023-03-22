@@ -150,7 +150,7 @@ internal class PathResolver
 		}
 
 		// Iterate over the remaining path components
-		while ((currentDirectory != null) && (index < max))
+		while (currentDirectory != null && index < max)
 		{
 			item = dirs[index];
 			entry = null;
@@ -163,7 +163,7 @@ internal class PathResolver
 					string target = link.Target;
 
 					// Build a new flags set for symlink lookups, as we do not want all of them.
-					PathResolutionFlags symflags = (flags & PathResolutionFlags.SymLinkLookupSafe);
+					PathResolutionFlags symflags = flags & PathResolutionFlags.SymLinkLookupSafe;
 					entry = Resolve(ref target, symflags);
 				}
 				else
@@ -197,7 +197,7 @@ internal class PathResolver
 			index++;
 
 			// Check if we have a new path component?
-			if ((entry == null) && (PathResolutionFlags.DoNotThrowNotFoundException != (PathResolutionFlags.DoNotThrowNotFoundException & flags)))
+			if (entry == null && PathResolutionFlags.DoNotThrowNotFoundException != (PathResolutionFlags.DoNotThrowNotFoundException & flags))
 			{
 				// FIXME: Move exception messages to MUI resources
 #if VFS_EXCEPTIONS

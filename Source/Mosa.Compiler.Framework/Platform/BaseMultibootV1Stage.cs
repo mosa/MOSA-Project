@@ -138,7 +138,7 @@ public abstract class BaseMultibootV1Stage : BaseCompilerStage
 		var writer = new BinaryWriter(multibootHeader.Stream, Encoding.ASCII);
 
 		// flags - multiboot flags
-		uint flags =
+		var flags =
 			HEADER_MB_FLAG_MEMORY_INFO_REQUIRED
 			| HEADER_MB_FLAG_MODULES_PAGE_ALIGNED
 			| (HasVideo ? HEADER_MB_FLAG_VIDEO_MODES_REQUIRED : 0);

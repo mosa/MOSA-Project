@@ -39,7 +39,7 @@ public class InlineStage : BaseMethodCompilerStage
 			cache = new Dictionary<MosaMethod, KeyValuePair<MethodData, InlineMethodData>>();
 		}
 
-		int callSiteCount = 0;
+		var callSiteCount = 0;
 
 		// find all call sites
 		var callSites = new List<InstructionNode>();
@@ -192,7 +192,7 @@ public class InlineStage : BaseMethodCompilerStage
 				}
 
 				// copy results
-				for (int i = 0; i < node.ResultCount; i++)
+				for (var i = 0; i < node.ResultCount; i++)
 				{
 					var op = node.GetResult(i);
 
@@ -202,7 +202,7 @@ public class InlineStage : BaseMethodCompilerStage
 				}
 
 				// copy operands
-				for (int i = 0; i < node.OperandCount; i++)
+				for (var i = 0; i < node.OperandCount; i++)
 				{
 					var op = node.GetOperand(i);
 
@@ -231,7 +231,7 @@ public class InlineStage : BaseMethodCompilerStage
 		{
 			var context = new Context(prologue);
 
-			for (int i = 1; i < callSiteOperands.Count; i++)
+			for (var i = 1; i < callSiteOperands.Count; i++)
 			{
 				var operand = callSiteOperands[i];
 

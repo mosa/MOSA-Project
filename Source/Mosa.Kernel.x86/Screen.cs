@@ -80,7 +80,7 @@ public static class Screen
 	/// <param name="chr">The character.</param>
 	public static void RawWrite(uint row, uint column, char chr, byte color)
 	{
-		var address = new Pointer(0x0B8000 + ((row * Columns + column) * 2));
+		var address = new Pointer(0x0B8000 + (row * Columns + column) * 2);
 
 		address.Store8((byte)chr);
 		address.Store8(1, color);
@@ -92,7 +92,7 @@ public static class Screen
 	/// <param name="chr">The character.</param>
 	public static void Write(char chr)
 	{
-		var address = new Pointer(0x0B8000 + ((Row * Columns + Column) * 2));
+		var address = new Pointer(0x0B8000 + (Row * Columns + Column) * 2);
 
 		address.Store8((byte)chr);
 		address.Store8(1, color);
@@ -188,7 +188,7 @@ public static class Screen
 	/// <param name="column">The column.</param>
 	public static void SetCursor(uint row, uint column)
 	{
-		uint location = (row * Columns) + column;
+		uint location = row * Columns + column;
 
 		Native.Out8(0x3D4, 0x0F);
 		Native.Out8(0x3D5, (byte)(location & 0xFF));

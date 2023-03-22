@@ -162,7 +162,7 @@ public sealed class TransformContext
 
 	#region Data
 
-	private Dictionary<Type, BaseTransformManager> Managers = new Dictionary<Type, BaseTransformManager>();
+	private readonly Dictionary<Type, BaseTransformManager> Managers = new Dictionary<Type, BaseTransformManager>();
 
 	#endregion Data
 
@@ -442,7 +442,7 @@ public sealed class TransformContext
 		// Allocate the context array
 		var result = new Context[blocks];
 
-		for (int index = 0; index < blocks; index++)
+		for (var index = 0; index < blocks; index++)
 		{
 			result[index] = CreateNewBlockContext(instructionLabel);
 		}

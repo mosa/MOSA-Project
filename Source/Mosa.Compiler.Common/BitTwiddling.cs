@@ -56,7 +56,7 @@ public static class BitTwiddling
 		if (count == 0)
 			return 0;
 
-		return ~((1uL << ((64 - count) + 1)) - 1uL);
+		return ~((1uL << (64 - count + 1)) - 1uL);
 	}
 
 	public static int CountBits(ulong value)

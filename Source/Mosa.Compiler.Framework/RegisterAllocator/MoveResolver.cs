@@ -50,7 +50,7 @@ public sealed class MoveResolver
 
 	private int FindIndex(PhysicalRegister register, bool source)
 	{
-		for (int i = 0; i < Moves.Count; i++)
+		for (var i = 0; i < Moves.Count; i++)
 		{
 			var move = Moves[i];
 
@@ -68,20 +68,20 @@ public sealed class MoveResolver
 
 	private void TrySimpleMoves(ResolvedMoveList moves)
 	{
-		bool loop = true;
+		var loop = true;
 
 		while (loop)
 		{
 			loop = false;
 
-			for (int i = 0; i < Moves.Count; i++)
+			for (var i = 0; i < Moves.Count; i++)
 			{
 				var move = Moves[i];
 
 				if (!(move.Source.IsCPURegister || move.Destination.IsCPURegister))
 					continue;
 
-				int other = FindIndex(move.Destination.Register, true);
+				var other = FindIndex(move.Destination.Register, true);
 
 				if (other != -1)
 					continue;
@@ -99,20 +99,20 @@ public sealed class MoveResolver
 
 	private void TryExchange(ResolvedMoveList moves)
 	{
-		bool loop = true;
+		var loop = true;
 
 		while (loop)
 		{
 			loop = false;
 
-			for (int i = 0; i < Moves.Count; i++)
+			for (var i = 0; i < Moves.Count; i++)
 			{
 				var move = Moves[i];
 
 				if (!(move.Source.IsCPURegister || move.Destination.IsCPURegister))
 					continue;
 
-				int other = FindIndex(move.Destination.Register, true);
+				var other = FindIndex(move.Destination.Register, true);
 
 				if (other == -1)
 					continue;
@@ -139,7 +139,7 @@ public sealed class MoveResolver
 
 	private void CreateMemoryMoves(ResolvedMoveList moves)
 	{
-		for (int i = 0; i < Moves.Count; i++)
+		for (var i = 0; i < Moves.Count; i++)
 		{
 			var move = Moves[i];
 

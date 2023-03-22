@@ -139,11 +139,11 @@ public sealed class CILDecodingStage : BaseMethodCompilerStage, IInstructionDeco
 
 	private void DecodeInstructionTargets()
 	{
-		bool branched = false;
+		var branched = false;
 
 		var code = Method.Code;
 
-		for (int i = 0; i < code.Count; i++)
+		for (var i = 0; i < code.Count; i++)
 		{
 			instruction = code[i];
 
@@ -170,11 +170,11 @@ public sealed class CILDecodingStage : BaseMethodCompilerStage, IInstructionDeco
 		block = null;
 
 		// Prefix instruction
-		bool prefix = false;
+		var prefix = false;
 
 		var code = Method.Code;
 
-		for (int i = 0; i < code.Count; i++)
+		for (var i = 0; i < code.Count; i++)
 		{
 			instruction = code[i];
 
@@ -185,7 +185,7 @@ public sealed class CILDecodingStage : BaseMethodCompilerStage, IInstructionDeco
 			var cil = CILInstruction.Get(op);
 
 			// Create and initialize the corresponding instruction
-			var node = new InstructionNode()
+			var node = new InstructionNode
 			{
 				Label = instruction.Offset,
 
@@ -196,7 +196,7 @@ public sealed class CILDecodingStage : BaseMethodCompilerStage, IInstructionDeco
 
 			cil.Decode(node, this);
 
-			prefix = (cil is PrefixInstruction);
+			prefix = cil is PrefixInstruction;
 
 			//instructionCount++;
 
@@ -306,13 +306,13 @@ public sealed class CILDecodingStage : BaseMethodCompilerStage, IInstructionDeco
 
 	private bool IsSourceAndTargetWithinSameTryOrException(InstructionNode node)
 	{
-		int leaveLabel = TraverseBackToNativeBlock(node.Block).Label;
-		int targetLabel = TraverseBackToNativeBlock(node.BranchTargets[0]).Label;
+		var leaveLabel = TraverseBackToNativeBlock(node.Block).Label;
+		var targetLabel = TraverseBackToNativeBlock(node.BranchTargets[0]).Label;
 
 		foreach (var handler in Method.ExceptionHandlers)
 		{
-			bool one = handler.IsLabelWithinTry(leaveLabel);
-			bool two = handler.IsLabelWithinTry(targetLabel);
+			var one = handler.IsLabelWithinTry(leaveLabel);
+			var two = handler.IsLabelWithinTry(targetLabel);
 
 			if (one && !two)
 				return false;
@@ -432,7 +432,7 @@ public sealed class CILDecodingStage : BaseMethodCompilerStage, IInstructionDeco
 		if (virtualRegister.IsStackLocal)
 			return virtualRegister;
 
-		int index = 0;
+		var index = 0;
 
 		foreach (var op in MethodCompiler.LocalVariables)
 		{
@@ -451,7 +451,7 @@ public sealed class CILDecodingStage : BaseMethodCompilerStage, IInstructionDeco
 		//ReplaceOperand(virtualRegister, stackLocal);
 		foreach (var node in virtualRegister.Uses.ToArray())
 		{
-			for (int i = 0; i < node.OperandCount; i++)
+			for (var i = 0; i < node.OperandCount; i++)
 			{
 				var op = node.GetOperand(i);
 
@@ -464,7 +464,7 @@ public sealed class CILDecodingStage : BaseMethodCompilerStage, IInstructionDeco
 
 		foreach (var node in virtualRegister.Definitions.ToArray())
 		{
-			for (int i = 0; i < node.ResultCount; i++)
+			for (var i = 0; i < node.ResultCount; i++)
 			{
 				var op = node.GetResult(i);
 

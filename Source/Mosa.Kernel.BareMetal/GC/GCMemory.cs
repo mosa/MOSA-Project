@@ -33,7 +33,7 @@ public static class GCMemory
 		var heapSize = CurrentHeap.Size;
 		var heapUsed = CurrentHeap.Used;
 
-		if (heapStart.IsNull || (heapSize - heapUsed) < size)
+		if (heapStart.IsNull || heapSize - heapUsed < size)
 		{
 			// TODO - allocate memory for new heap
 		}

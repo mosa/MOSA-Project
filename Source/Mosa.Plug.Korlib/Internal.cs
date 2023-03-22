@@ -24,7 +24,7 @@ internal static class Internal
 		for (int i = 0; i < assemblyCount; i++)
 		{
 			// Get the pointer to the Assembly Metadata
-			var ptr = assemblyListTable.LoadPointer(Pointer.Size + (Pointer.Size * i));
+			var ptr = assemblyListTable.LoadPointer(Pointer.Size + Pointer.Size * i);
 			Assemblies.Add(new RuntimeAssembly(ptr.ToIntPtr()));
 		}
 	}

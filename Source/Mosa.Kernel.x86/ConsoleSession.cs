@@ -251,13 +251,13 @@ public class ConsoleSession
 
 	public char GetText(byte column, byte row)
 	{
-		uint address = (row * Columns + column);
+		uint address = row * Columns + column;
 		return (char)text[address];
 	}
 
 	public byte GetColor(byte column, byte row)
 	{
-		uint address = (row * Columns + column);
+		uint address = row * Columns + column;
 		return textcolor[address];
 	}
 

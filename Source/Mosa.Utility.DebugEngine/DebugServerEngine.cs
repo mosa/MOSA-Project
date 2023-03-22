@@ -20,7 +20,7 @@ public sealed class DebugServerEngine
 	private CallBack globalDispatch;
 	private readonly byte[] receivedData = new byte[2000];
 
-	private const int MaxBufferSize = (64 * 1024) + 64;
+	private const int MaxBufferSize = 64 * 1024 + 64;
 
 	private static int packetCnt;
 
@@ -195,13 +195,13 @@ public sealed class DebugServerEngine
 
 	private bool ParseResponse()
 	{
-		int id = GetInteger(1);
-		byte code = GetByte(5);
-		int len = GetInteger(6);
+		var id = GetInteger(1);
+		var code = GetByte(5);
+		var len = GetInteger(6);
 
 		var data = new List<byte>();
 
-		for (int i = 0; i < len; i++)
+		for (var i = 0; i < len; i++)
 		{
 			data.Add(buffer[i + 10]);
 		}
@@ -230,7 +230,7 @@ public sealed class DebugServerEngine
 
 		if (buffer.Count >= 10)
 		{
-			int length = GetInteger(6);
+			var length = GetInteger(6);
 
 			if (length > MaxBufferSize)
 			{
@@ -261,7 +261,7 @@ public sealed class DebugServerEngine
 				return;
 			}
 
-			for (int i = 0; i < bytes; i++)
+			for (var i = 0; i < bytes; i++)
 			{
 				Push(receivedData[i]);
 			}

@@ -31,7 +31,7 @@ public struct SlotIndex : IComparable<SlotIndex>
 	{
 		Debug.Assert(slot.IsOnSlot);
 
-		Value = (slot.Value & (~0b11)) | (after ? 0b11 : 0b00);
+		Value = (slot.Value & ~0b11) | (after ? 0b11 : 0b00);
 	}
 
 	public bool IsBeforeSlot => (Value & 0b11) == 0b00;

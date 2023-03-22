@@ -10,7 +10,7 @@ public sealed class LoadStoreParam64 : BaseTransform
 
 	public override bool Match(Context context, TransformContext transform)
 	{
-		var previous = GetPreviousNodeUntil(context, IRInstruction.StoreParam64, transform.Window, out bool immediate);
+		var previous = GetPreviousNodeUntil(context, IRInstruction.StoreParam64, transform.Window, out var immediate);
 
 		if (previous == null)
 			return false;

@@ -15,7 +15,7 @@ public static class U4
 		{
 			if (series == null) series = GetSeries();
 
-			foreach (uint value in series)
+			foreach (var value in series)
 				yield return value;
 		}
 	}

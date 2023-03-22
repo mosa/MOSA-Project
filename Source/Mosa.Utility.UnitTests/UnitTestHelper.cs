@@ -27,7 +27,7 @@ public static class UnitTestHelper
 		}
 		else if (o is Boolean)
 		{
-			return ((bool)o) ? "True" : "False";
+			return (bool)o ? "True" : "False";
 		}
 
 		return o.ToString();
@@ -39,7 +39,7 @@ public static class UnitTestHelper
 
 		if (objects != null)
 		{
-			bool first = true;
+			var first = true;
 			foreach (var param in objects)
 			{
 				if (first)

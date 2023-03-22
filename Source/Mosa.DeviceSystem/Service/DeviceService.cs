@@ -102,7 +102,7 @@ public sealed class DeviceService : BaseService
 
 	public Device Initialize(BaseDeviceDriver deviceDriver, Device parent, bool autoStart = true, BaseDeviceConfiguration configuration = null, HardwareResources resources = null, DeviceDriverRegistryEntry deviceDriverRegistryEntry = null)
 	{
-		var device = new Device()
+		var device = new Device
 		{
 			DeviceDriver = deviceDriver,
 			DeviceDriverRegistryEntry = deviceDriverRegistryEntry,

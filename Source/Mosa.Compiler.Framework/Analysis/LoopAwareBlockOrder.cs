@@ -39,8 +39,8 @@ public sealed class LoopAwareBlockOrder : BaseBlockOrder
 	/// </summary>
 	private class Priority : IComparable<Priority>
 	{
-		public int Depth;
-		public int Order;
+		public readonly int Depth;
+		public readonly int Order;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Priority" /> class.
@@ -163,7 +163,7 @@ public sealed class LoopAwareBlockOrder : BaseBlockOrder
 
 	private void CountEdges(BasicBlock current, BasicBlock parent)
 	{
-		int blockId = current.Sequence;
+		var blockId = current.Sequence;
 
 		if (active.Get(blockId))
 		{
@@ -203,12 +203,12 @@ public sealed class LoopAwareBlockOrder : BaseBlockOrder
 
 	private void SetLoopMap(int l, BasicBlock b)
 	{
-		loopMap.Set((l * blockCount) + b.Sequence, true);
+		loopMap.Set(l * blockCount + b.Sequence, true);
 	}
 
 	private bool GetLoopMap(int l, BasicBlock b)
 	{
-		return loopMap.Get((l * blockCount) + b.Sequence);
+		return loopMap.Get(l * blockCount + b.Sequence);
 	}
 
 	#endregion Helpers
@@ -223,7 +223,7 @@ public sealed class LoopAwareBlockOrder : BaseBlockOrder
 		foreach (var loopEnd in loopEnds)
 		{
 			var loopStart = loopEnd.NextBlocks[0]; // assuming the first one?
-			int loopStartIndex = loopBlockIndex[loopStart.Sequence];
+			var loopStartIndex = loopBlockIndex[loopStart.Sequence];
 
 			worklist.Push(loopEnd);
 
@@ -264,9 +264,9 @@ public sealed class LoopAwareBlockOrder : BaseBlockOrder
 			{
 				visited.Set(current.Sequence, true);
 
-				int currentLoopDepth = 0;
-				int minLoopIndex = -1;
-				for (int i = loopCount - 1; i >= 0; i--)
+				var currentLoopDepth = 0;
+				var minLoopIndex = -1;
+				for (var i = loopCount - 1; i >= 0; i--)
 				{
 					if (GetLoopMap(i, current))
 					{

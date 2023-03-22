@@ -109,21 +109,21 @@ public static class UInt64Tests
 	[MosaUnitTest]
 	public static bool Newarr()
 	{
-		ulong[] arr = new ulong[0];
+		var arr = new ulong[0];
 		return arr != null;
 	}
 
 	[MosaUnitTest(Series = "I4Small")]
 	public static bool Ldlen(int length)
 	{
-		ulong[] arr = new ulong[length];
+		var arr = new ulong[length];
 		return arr.Length == length;
 	}
 
 	[MosaUnitTest(Series = "I4SmallU8")]
 	public static ulong Ldelem(int index, ulong value)
 	{
-		ulong[] arr = new ulong[index + 1];
+		var arr = new ulong[index + 1];
 		arr[index] = value;
 		return arr[index];
 	}
@@ -131,7 +131,7 @@ public static class UInt64Tests
 	[MosaUnitTest(Series = "I4SmallU8")]
 	public static bool Stelem(int index, ulong value)
 	{
-		ulong[] arr = new ulong[index + 1];
+		var arr = new ulong[index + 1];
 		arr[index] = value;
 		return true;
 	}
@@ -139,7 +139,7 @@ public static class UInt64Tests
 	[MosaUnitTest(Series = "I4SmallU8")]
 	public static ulong Ldelema(int index, ulong value)
 	{
-		ulong[] arr = new ulong[index + 1];
+		var arr = new ulong[index + 1];
 		SetValueInRefValue(ref arr[index], value);
 		return arr[index];
 	}

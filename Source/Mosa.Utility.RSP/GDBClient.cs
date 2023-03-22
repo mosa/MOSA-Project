@@ -233,6 +233,6 @@ public sealed class GDBClient
 		h = HexToDecimal(h);
 		l = HexToDecimal(l);
 
-		return (byte)((h * 16) + l);
+		return (byte)(h * 16 + l);
 	}
 }

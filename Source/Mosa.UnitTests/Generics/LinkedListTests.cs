@@ -87,7 +87,7 @@ public static class LinkedListTests
 	{
 		var IntList = new LinkedList<int>();
 
-		for (int i = 1; i < 10; i++)
+		for (var i = 1; i < 10; i++)
 		{
 			IntList.AddLast(101 * i);
 		}
@@ -117,7 +117,7 @@ public static class LinkedListTests
 	public static int Foreach()
 	{
 		var list = Populate();
-		int sum = 0;
+		var sum = 0;
 
 		foreach (var item in list)
 		{
@@ -131,7 +131,7 @@ public static class LinkedListTests
 	public static int ForeachNested()
 	{
 		var list = Populate2();
-		int sum = 0;
+		var sum = 0;
 
 		foreach (var item in list)
 		{
@@ -151,9 +151,9 @@ public static class LinkedListTests
 	{
 		var list = Populate();
 		var nestedList = Populate();
-		int sum = 0;
-		int nestedSum = 0;
-		int nestedCount = 0;
+		var sum = 0;
+		var nestedSum = 0;
+		var nestedCount = 0;
 
 		foreach (var item in list)
 		{
@@ -172,7 +172,7 @@ public static class LinkedListTests
 	public static int ForeachBreak()
 	{
 		var holderList = new LinkedList<Holder>();
-		for (int i = 1; i < 10; i++)
+		for (var i = 1; i < 10; i++)
 		{
 			var p = new Holder(10 * i, 20 * i, 30 * i);
 			holderList.AddLast(p);
@@ -194,9 +194,9 @@ public static class LinkedListTests
 
 	private struct Holder
 	{
-		public int value1;
-		public int value2;
-		public int value3;
+		public readonly int value1;
+		public readonly int value2;
+		public readonly int value3;
 
 		public Holder(int v1, int v2, int v3)
 		{

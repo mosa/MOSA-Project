@@ -49,7 +49,7 @@ public sealed class ProtectedRegionLayoutStage : BaseMethodCompilerStage
 		var protectedRegionTableSymbol = Linker.DefineSymbol(Metadata.ProtectedRegionTable + Method.FullName, SectionKind.ROData, NativeAlignment, 0);
 		var writer = new BinaryWriter(protectedRegionTableSymbol.Stream);
 
-		int sectioncount = 0;
+		var sectioncount = 0;
 
 		// 1. Number of Regions (filled in later)
 		writer.Write((uint)0);
@@ -68,8 +68,8 @@ public sealed class ProtectedRegionLayoutStage : BaseMethodCompilerStage
 				if (!BasicBlocks.Contains(block))
 					continue;
 
-				int start = MethodCompiler.GetPosition(block.Label);
-				int end = MethodCompiler.GetPosition(block.Label + 0x0F000000);
+				var start = MethodCompiler.GetPosition(block.Label);
+				var end = MethodCompiler.GetPosition(block.Label + 0x0F000000);
 
 				trace?.Log($"   Block: {block} [{start}-{end}]");
 
@@ -78,8 +78,8 @@ public sealed class ProtectedRegionLayoutStage : BaseMethodCompilerStage
 
 			foreach (var s in sections)
 			{
-				int start = s.Item1;
-				int end = s.Item2;
+				var start = s.Item1;
+				var end = s.Item2;
 
 				sectioncount++;
 

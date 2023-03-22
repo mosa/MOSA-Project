@@ -16,9 +16,9 @@ public sealed class MethodScheduler
 
 	public Compiler Compiler;
 
-	private HashSet<MethodData> workingSet = new HashSet<MethodData>();
+	private readonly HashSet<MethodData> workingSet = new HashSet<MethodData>();
 
-	private SimplePriorityQueue<MethodData> queue = new SimplePriorityQueue<MethodData>();
+	private readonly SimplePriorityQueue<MethodData> queue = new SimplePriorityQueue<MethodData>();
 
 	private int totalMethods;
 	private int totalQueued;
@@ -194,7 +194,7 @@ public sealed class MethodScheduler
 		if (methodData.DoNotInline)
 			return 200;
 
-		int adjustment = 0;
+		var adjustment = 0;
 
 		if (methodData.HasAggressiveInliningAttribute)
 			adjustment += 75;

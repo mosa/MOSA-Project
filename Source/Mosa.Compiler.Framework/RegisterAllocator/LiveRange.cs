@@ -60,14 +60,14 @@ public sealed class LiveRange
 			return;
 		}
 
-		int lastUseIndex = -1;
-		int firstUseIndex = -1;
-		int lastDefIndex = -1;
-		int firstDefIndex = -1;
-		int useCount = 0;
-		int defCount = 0;
+		var lastUseIndex = -1;
+		var firstUseIndex = -1;
+		var lastDefIndex = -1;
+		var firstDefIndex = -1;
+		var useCount = 0;
+		var defCount = 0;
 
-		for (int i = startIndex; i < virtualRegister.UsePositions.Count && i <= endIndex; i++)
+		for (var i = startIndex; i < virtualRegister.UsePositions.Count && i <= endIndex; i++)
 		{
 			var use = virtualRegister.UsePositions[i];
 
@@ -85,7 +85,7 @@ public sealed class LiveRange
 			}
 		}
 
-		for (int i = startIndex; i < virtualRegister.DefPositions.Count && i <= endIndex; i++)
+		for (var i = startIndex; i < virtualRegister.DefPositions.Count && i <= endIndex; i++)
 		{
 			var def = virtualRegister.DefPositions[i];
 
@@ -122,8 +122,8 @@ public sealed class LiveRange
 		LastUse = useCount == 0 ? SlotIndex.NullSlot : VirtualRegister.UsePositions[lastUseIndex];
 		LastDef = defCount == 0 ? SlotIndex.NullSlot : VirtualRegister.DefPositions[lastDefIndex];
 
-		First = (useCount == 0 || firstDefIndex < firstUseIndex) ? FirstDef : FirstUse;
-		Last = (useCount == 0 || lastDefIndex > lastUseIndex) ? LastDef : LastUse;
+		First = useCount == 0 || firstDefIndex < firstUseIndex ? FirstDef : FirstUse;
+		Last = useCount == 0 || lastDefIndex > lastUseIndex ? LastDef : LastUse;
 
 		IsDefFirst = defCount != 0 && (useCount == 0 || FirstDefIndex < FirstUseIndex);
 
@@ -187,7 +187,7 @@ public sealed class LiveRange
 		if (UseCount == 0 || at < FirstUse || at > LastUse)
 			return false;
 
-		for (int i = FirstUseIndex; i <= LastUseIndex; i++)
+		for (var i = FirstUseIndex; i <= LastUseIndex; i++)
 		{
 			var use = VirtualRegister.UsePositions[i];
 
@@ -209,7 +209,7 @@ public sealed class LiveRange
 		if (DefCount == 0 || at < FirstDef || at > LastDef)
 			return false;
 
-		for (int i = FirstDefIndex; i <= LastDefIndex; i++)
+		for (var i = FirstDefIndex; i <= LastDefIndex; i++)
 		{
 			var def = VirtualRegister.DefPositions[i];
 
@@ -228,7 +228,7 @@ public sealed class LiveRange
 		if (UseCount == 0 || at < Start || at > LastUse) // || at > End
 			return SlotIndex.NullSlot;
 
-		for (int i = FirstUseIndex; i <= LastUseIndex; i++)
+		for (var i = FirstUseIndex; i <= LastUseIndex; i++)
 		{
 			var use = VirtualRegister.UsePositions[i];
 
@@ -244,7 +244,7 @@ public sealed class LiveRange
 		if (DefCount == 0 || at < Start || at > LastDef) // || at > End
 			return SlotIndex.NullSlot;
 
-		for (int i = FirstDefIndex; i <= LastDefIndex; i++)
+		for (var i = FirstDefIndex; i <= LastDefIndex; i++)
 		{
 			var def = VirtualRegister.DefPositions[i];
 
@@ -260,7 +260,7 @@ public sealed class LiveRange
 		if (UseCount == 0 || at < Start || at < FirstUse) // || at > End
 			return SlotIndex.NullSlot;
 
-		for (int i = LastUseIndex; i >= FirstUseIndex; i--)
+		for (var i = LastUseIndex; i >= FirstUseIndex; i--)
 		{
 			var use = VirtualRegister.UsePositions[i];
 
@@ -276,7 +276,7 @@ public sealed class LiveRange
 		if (DefCount == 0 || at < Start || at < FirstDef)  // || at > End
 			return SlotIndex.NullSlot;
 
-		for (int i = LastDefIndex; i >= FirstDefIndex; i--)
+		for (var i = LastDefIndex; i >= FirstDefIndex; i--)
 		{
 			var def = VirtualRegister.DefPositions[i];
 
@@ -359,7 +359,7 @@ public sealed class LiveRange
 			if (UseCount == 0)
 				yield break;
 
-			for (int i = FirstUseIndex; i <= LastUseIndex; i++)
+			for (var i = FirstUseIndex; i <= LastUseIndex; i++)
 			{
 				yield return VirtualRegister.UsePositions[i];
 			}
@@ -373,7 +373,7 @@ public sealed class LiveRange
 			if (DefCount == 0)
 				yield break;
 
-			for (int i = FirstDefIndex; i <= LastDefIndex; i++)
+			for (var i = FirstDefIndex; i <= LastDefIndex; i++)
 			{
 				yield return VirtualRegister.DefPositions[i];
 			}

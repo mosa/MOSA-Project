@@ -21,7 +21,7 @@ public class MethodTableStage : BaseCompilerStage
 
 	protected override void Initialization()
 	{
-		NativePatchType = (TypeLayout.NativePointerSize == 4) ? PatchType.I32 : NativePatchType = PatchType.I64;
+		NativePatchType = TypeLayout.NativePointerSize == 4 ? PatchType.I32 : NativePatchType = PatchType.I64;
 	}
 
 	protected override void Finalization()
@@ -31,7 +31,7 @@ public class MethodTableStage : BaseCompilerStage
 		var writer = new BinaryWriter(methodLookupTable.Stream);
 
 		// 1. Number of methods
-		int count = 0;
+		var count = 0;
 		writer.Write(0);
 
 		foreach (var module in TypeSystem.Modules)

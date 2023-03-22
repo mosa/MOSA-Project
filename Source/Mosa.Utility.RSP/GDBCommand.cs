@@ -51,7 +51,7 @@ public abstract class GDBCommand
 
 	public byte GetByte(int i)
 	{
-		return GDBClient.HexToDecimal(ResponseData[i * 2], ResponseData[(i * 2) + 1]);
+		return GDBClient.HexToDecimal(ResponseData[i * 2], ResponseData[i * 2 + 1]);
 	}
 
 	public ulong GetInteger(int index, uint size)
@@ -59,7 +59,7 @@ public abstract class GDBCommand
 		index *= 2;
 		ulong value = 0;
 
-		for (int i = index + ((int)size * 2) - 2; i >= index; i -= 2)
+		for (var i = index + (int)size * 2 - 2; i >= index; i -= 2)
 		{
 			var b = GDBClient.HexToDecimal(ResponseData[i], ResponseData[i + 1]);
 			value <<= 8;
@@ -73,7 +73,7 @@ public abstract class GDBCommand
 	{
 		var bytes = new byte[ResponseData.Length / 2];
 
-		for (int i = 0; i < bytes.Length; i++)
+		for (var i = 0; i < bytes.Length; i++)
 		{
 			bytes[i] = GetByte(i);
 		}

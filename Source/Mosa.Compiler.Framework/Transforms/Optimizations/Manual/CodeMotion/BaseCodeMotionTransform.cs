@@ -65,7 +65,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.CodeMotion
 
 		protected static InstructionNode GetMotionLocation(InstructionNode start, InstructionNode end, int window)
 		{
-			int count = 0;
+			var count = 0;
 
 			var next = start.Next;
 

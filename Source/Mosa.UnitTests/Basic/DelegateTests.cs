@@ -72,7 +72,7 @@ public static class DelegateTests
 
 	private static void DelegateParametersTarget(int a, int b)
 	{
-		status = (a * 10000) + b;
+		status = a * 10000 + b;
 	}
 
 	#endregion DelegateParameters
@@ -102,13 +102,13 @@ public static class DelegateTests
 	public static int CallDelegateParametersReturn(int a, int b)
 	{
 		DelegateParametersReturn d = DelegateParametersReturnTarget;
-		int result = d(a, b);
+		var result = d(a, b);
 		return result;
 	}
 
 	private static int DelegateParametersReturnTarget(int a, int b)
 	{
-		return (a * 10000) + b;
+		return a * 10000 + b;
 	}
 
 	#endregion DelegateParametersReturn
@@ -152,7 +152,7 @@ public static class DelegateTests
 
 	private struct A
 	{
-		public int Value;
+		public readonly int Value;
 
 		public A(int x)
 		{
@@ -176,8 +176,8 @@ public static class DelegateTests
 
 	private struct B
 	{
-		public int Value1;
-		public int Value2;
+		public readonly int Value1;
+		public readonly int Value2;
 
 		public B(int x)
 		{
@@ -352,26 +352,26 @@ public static class DelegateTests
 
 	public static int TestInstanceDelegate1(int a)
 	{
-		var w = new Worker()
+		var w = new Worker
 		{
 			Value = 25
 		};
 		SumValue executeSum = w.SumValue;
 
-		int sum = executeSum(a);
+		var sum = executeSum(a);
 
 		return sum;
 	}
 
 	public static int TestInstanceDelegate2(int a, int b)
 	{
-		var w = new Worker()
+		var w = new Worker
 		{
 			Value = 25
 		};
 		SumPlusValue executeSum = w.SumPlusValue;
 
-		int sum = executeSum(a, b);
+		var sum = executeSum(a, b);
 
 		return sum;
 	}

@@ -76,21 +76,21 @@ public static class DoubleTests
 	[MosaUnitTest]
 	public static bool Newarr()
 	{
-		double[] arr = new double[0];
+		var arr = new double[0];
 		return arr != null;
 	}
 
 	[MosaUnitTest(Series = "I4Small")]
 	public static bool Ldlen(int length)
 	{
-		double[] arr = new double[length];
+		var arr = new double[length];
 		return arr.Length == length;
 	}
 
 	[MosaUnitTest(Series = "I4SmallR8Simple")]
 	public static bool Ldelem(int index, double value)
 	{
-		double[] arr = new double[index + 1];
+		var arr = new double[index + 1];
 		arr[index] = value;
 		return value == arr[index];
 	}
@@ -98,7 +98,7 @@ public static class DoubleTests
 	[MosaUnitTest(Series = "I4SmallR8Simple")]
 	public static bool Stelem(int index, double value)
 	{
-		double[] arr = new double[index + 1];
+		var arr = new double[index + 1];
 		arr[index] = value;
 		return true;
 	}
@@ -106,7 +106,7 @@ public static class DoubleTests
 	[MosaUnitTest(Series = "I4SmallR8Simple")]
 	public static bool Ldelema(int index, double value)
 	{
-		double[] arr = new double[index + 1];
+		var arr = new double[index + 1];
 		SetValueInRefValue(ref arr[index], value);
 		return arr[index] == value;
 	}

@@ -24,7 +24,7 @@ static partial class IntrinsicMethods
 
 			foreach (var use in operand1.Uses)
 			{
-				for (int i = 0; i < use.OperandCount; i++)
+				for (var i = 0; i < use.OperandCount; i++)
 				{
 					if (use.GetOperand(i) == operand1)
 					{

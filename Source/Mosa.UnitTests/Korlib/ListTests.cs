@@ -114,7 +114,7 @@ public static class ListTests
 	{
 		var list = new List<int>();
 
-		for (int i = 0; i < count; i++)
+		for (var i = 0; i < count; i++)
 		{
 			list.Add(101 * i);
 		}
@@ -132,7 +132,7 @@ public static class ListTests
 
 	private static int SumAll(List<int> list)
 	{
-		int sum = 0;
+		var sum = 0;
 
 		foreach (var item in list)
 		{
@@ -145,11 +145,11 @@ public static class ListTests
 	[MosaUnitTest]
 	public static bool CheckPopulate()
 	{
-		int size = 50;
+		var size = 50;
 
 		var list = Populate(size);
 
-		for (int i = 0; i < size; i++)
+		for (var i = 0; i < size; i++)
 		{
 			if (list[i] != 101 * i)
 				return false;
@@ -170,7 +170,7 @@ public static class ListTests
 	public static int ForeachNested()
 	{
 		var list = Populate(9);
-		int sum = 0;
+		var sum = 0;
 
 		foreach (var item in list)
 		{
@@ -190,14 +190,14 @@ public static class ListTests
 	{
 		var holderList = new List<Holder2>();
 
-		for (int i = 1; i < 10; i++)
+		for (var i = 1; i < 10; i++)
 		{
 			var p = new Holder2(10 * i, 20 * i, 30 * i);
 			holderList.Add(p);
 		}
 
 		var found = FindHolder(holderList);
-		return (found.value1 + found.value2 + found.value3);
+		return found.value1 + found.value2 + found.value3;
 	}
 
 	private static Holder2 FindHolder(List<Holder2> holderList)
@@ -212,9 +212,9 @@ public static class ListTests
 
 	private struct Holder2
 	{
-		public int value1;
-		public int value2;
-		public int value3;
+		public readonly int value1;
+		public readonly int value2;
+		public readonly int value3;
 
 		public Holder2(int v1, int v2, int v3)
 		{

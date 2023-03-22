@@ -51,7 +51,7 @@ public static class Serial
 
 	public static bool IsDataReady(ushort com)
 	{
-		return ((Native.In8((ushort)(com + COM_ModemStatus)) & 0x01) == 0x01);
+		return (Native.In8((ushort)(com + COM_ModemStatus)) & 0x01) == 0x01;
 	}
 
 	public static byte Read(ushort com)

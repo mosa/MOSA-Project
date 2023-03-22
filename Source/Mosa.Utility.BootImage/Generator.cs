@@ -25,14 +25,14 @@ public static class Generator
 			File.Delete(options.DiskImageFileName);
 		}
 
-		uint blockCount = options.BlockCount;
+		var blockCount = options.BlockCount;
 
 		if (blockCount == 0)
 		{
-			blockCount = (2048 * 4) + 1;
+			blockCount = 2048 * 4 + 1;
 			foreach (var file in options.IncludeFiles)
 			{
-				blockCount += ((uint)file.Content.Length / SectorSize) + 10;
+				blockCount += (uint)file.Content.Length / SectorSize + 10;
 			}
 		}
 
@@ -42,7 +42,7 @@ public static class Generator
 		// Create disk image file
 		using (var diskDeviceDriver = new BlockFileStreamDriver(options.DiskImageFileName))
 		{
-			var diskDevice = new Device() { DeviceDriver = diskDeviceDriver };
+			var diskDevice = new Device { DeviceDriver = diskDeviceDriver };
 
 			// Setup device -- required as part of framework in operating system
 			diskDeviceDriver.Setup(diskDevice);
@@ -75,7 +75,7 @@ public static class Generator
 			var partitionDevice = new PartitionDeviceDriver();
 
 			// Setup partition configuration
-			var configuraiton = new DiskPartitionConfiguration()
+			var configuraiton = new DiskPartitionConfiguration
 			{
 				Index = 0,
 				ReadOnly = false,
@@ -116,7 +116,7 @@ public static class Generator
 			}
 
 			// Setup device -- required as part of framework in operating system
-			var device = new Device()
+			var device = new Device
 			{
 				Configuration = configuraiton,
 				DeviceDriver = partitionDevice,
@@ -164,7 +164,7 @@ public static class Generator
 				if (includeFile.Hidden) fileAttributes |= FatFileAttributes.Hidden;
 				if (includeFile.System) fileAttributes |= FatFileAttributes.System;
 
-				string newname = (Path.GetFileNameWithoutExtension(includeFile.Filename).PadRight(8).Substring(0, 8) + Path.GetExtension(includeFile.Filename).PadRight(4).Substring(1, 3)).ToUpperInvariant();
+				var newname = (Path.GetFileNameWithoutExtension(includeFile.Filename).PadRight(8).Substring(0, 8) + Path.GetExtension(includeFile.Filename).PadRight(4).Substring(1, 3)).ToUpperInvariant();
 				var location = fat.CreateFile(newname, fileAttributes);
 
 				if (!location.IsValid)
@@ -180,7 +180,7 @@ public static class Generator
 				// Create footer
 				var footer = VHD.CreateFooter(
 					blockCount,
-					(uint)(DateTime.Now - (new DateTime(2000, 1, 1, 0, 0, 0))).Seconds,
+					(uint)(DateTime.Now - new DateTime(2000, 1, 1, 0, 0, 0)).Seconds,
 					options.MediaGuid.ToByteArray(),
 					diskGeometry
 				);

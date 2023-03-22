@@ -52,7 +52,7 @@ public sealed class IOPortResources
 	/// </returns>
 	public bool IsPortInISALegacyRegion(ushort port)
 	{
-		return (port >= StartLegacyISAPort) && (port <= EndLegacyISAPort);
+		return port >= StartLegacyISAPort && port <= EndLegacyISAPort;
 	}
 
 	/// <summary>

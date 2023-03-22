@@ -228,7 +228,7 @@ public sealed class BasicBlocks : IEnumerable<BasicBlock>
 		basicBlocks.Clear();
 		basicBlocksByLabel.Clear();
 
-		int sequence = 0;
+		var sequence = 0;
 		foreach (var block in newBlockOrder)
 		{
 			if (block != null)

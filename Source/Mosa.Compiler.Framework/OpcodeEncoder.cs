@@ -84,7 +84,7 @@ public sealed class OpcodeEncoder
 		}
 		else
 		{
-			for (int i = size - 1; i >= 0; i--)
+			for (var i = size - 1; i >= 0; i--)
 			{
 				AppendBit((byte)((value >> i) & 1));
 			}
@@ -213,14 +213,14 @@ public sealed class OpcodeEncoder
 
 	public void Append24BitImmediate(uint value)
 	{
-		AppendByte((byte)(value));
+		AppendByte((byte)value);
 		AppendByte((byte)(value >> 8));
 		AppendByte((byte)(value >> 16));
 	}
 
 	public void Append32BitImmediate(uint value)
 	{
-		AppendByte((byte)(value));
+		AppendByte((byte)value);
 		AppendByte((byte)(value >> 8));
 		AppendByte((byte)(value >> 16));
 		AppendByte((byte)(value >> 24));
@@ -228,7 +228,7 @@ public sealed class OpcodeEncoder
 
 	public void Append64BitImmediate(ulong value)
 	{
-		AppendByte((byte)(value));
+		AppendByte((byte)value);
 		AppendByte((byte)(value >> 8));
 		AppendByte((byte)(value >> 16));
 		AppendByte((byte)(value >> 24));
@@ -428,13 +428,13 @@ public sealed class OpcodeEncoder
 	public void EmitRelative24(int label)
 	{
 		// TODO
-		int offset = Emitter.EmitRelative(label, 3, 3);
+		var offset = Emitter.EmitRelative(label, 3, 3);
 		Append24BitImmediate((uint)offset);
 	}
 
 	public void EmitRelative32(int label)
 	{
-		int offset = Emitter.EmitRelative(label, 4, 4);
+		var offset = Emitter.EmitRelative(label, 4, 4);
 		Append32BitImmediate((uint)offset);
 	}
 

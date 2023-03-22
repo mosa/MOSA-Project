@@ -7,7 +7,7 @@ public static class FinallyTests
 	[MosaUnitTest]
 	public static int TryFinally1()
 	{
-		int a = 10;
+		var a = 10;
 		try
 		{
 			a = a + 1;
@@ -25,8 +25,8 @@ public static class FinallyTests
 	[MosaUnitTest]
 	public static int TryFinally2()
 	{
-		int a = 10;
-		int b = 13;
+		var a = 10;
+		var b = 13;
 		try
 		{
 			a = a + 1;
@@ -39,7 +39,7 @@ public static class FinallyTests
 		b = b + 3;
 		a = a + 3;
 
-		int c = b + a;
+		var c = b + a;
 
 		return c;
 	}
@@ -47,7 +47,7 @@ public static class FinallyTests
 	[MosaUnitTest]
 	public static int TryFinally3()
 	{
-		int a = 10;
+		var a = 10;
 		try
 		{
 			try
@@ -72,7 +72,7 @@ public static class FinallyTests
 	[MosaUnitTest]
 	public static int TryFinally4()
 	{
-		int a = 10;
+		var a = 10;
 
 		try
 		{
@@ -116,7 +116,7 @@ public static class FinallyTests
 	[MosaUnitTest]
 	public static int TryFinally5()
 	{
-		int a = 10;
+		var a = 10;
 
 		try
 		{
@@ -139,7 +139,7 @@ public static class FinallyTests
 	[MosaUnitTest]
 	public static int TryFinally6()
 	{
-		int a = 10;
+		var a = 10;
 
 		try
 		{
@@ -184,8 +184,8 @@ public static class FinallyTests
 	[MosaUnitTest]
 	private static int TryFinally7Part()
 	{
-		int[] b = new int[10];
-		for (int i = 0; i < b.Length; i++)
+		var b = new int[10];
+		for (var i = 0; i < b.Length; i++)
 		{
 			b[i] = 100 * i;
 		}
@@ -213,7 +213,7 @@ public static class FinallyTests
 		b = b + 3;
 		a = a + 3;
 
-		int c = b + a;
+		var c = b + a;
 
 		return c;
 	}

@@ -144,7 +144,7 @@ public class Transformation
 				if (contains.Contains(node))
 					continue;
 
-				bool children = true;
+				var children = true;
 
 				foreach (var operand in node.Operands)
 				{
@@ -184,7 +184,7 @@ public class Transformation
 				if (contains.Contains(node))
 					continue;
 
-				bool children = true;
+				var children = true;
 
 				foreach (var operand in node.Parameters)
 				{
@@ -295,7 +295,7 @@ public class Transformation
 	{
 		var variations = new List<Transformation>();
 
-		int bits = 0;
+		var bits = 0;
 
 		foreach (var node in GetPreorder(InstructionTree))
 		{
@@ -308,9 +308,9 @@ public class Transformation
 			}
 		}
 
-		int total = 1 << bits;
+		var total = 1 << bits;
 
-		for (int index = 1; index < total; index++)
+		for (var index = 1; index < total; index++)
 		{
 			var variation = CreateVariation(cumulativeInstructions, index);
 
@@ -327,7 +327,7 @@ public class Transformation
 
 		var instructionNodes = GetPreorder(instructionTree);
 
-		int bit = 0;
+		var bit = 0;
 
 		foreach (var node in instructionNodes)
 		{

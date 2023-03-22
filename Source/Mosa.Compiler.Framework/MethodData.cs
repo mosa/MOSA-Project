@@ -117,7 +117,7 @@ public sealed class MethodData
 
 	public void AddLabelRegion(int label, int start, int length)
 	{
-		LabelRegions.Add(new LabelRegion()
+		LabelRegions.Add(new LabelRegion
 		{
 			Label = label,
 			Start = start,

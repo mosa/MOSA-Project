@@ -26,7 +26,7 @@ public class PreciseGCStage : BaseMethodCompilerStage
 
 		if (trace != null)
 		{
-			for (int i = 0; i < LiveAnalysis.LiveRanges.Length; i++)
+			for (var i = 0; i < LiveAnalysis.LiveRanges.Length; i++)
 			{
 				var range = LiveAnalysis.LiveRanges[i];
 

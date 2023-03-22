@@ -6,22 +6,22 @@ public static class IntegerTwiddling
 {
 	public static bool IsAddUnsignedCarry(ulong a, ulong b)
 	{
-		return (b > 0) && (a > (ulong.MaxValue - b));
+		return b > 0 && a > ulong.MaxValue - b;
 	}
 
 	public static bool IsAddUnsignedCarry(uint a, uint b)
 	{
-		return (b > 0) && (a > (uint.MaxValue - b));
+		return b > 0 && a > uint.MaxValue - b;
 	}
 
 	public static bool IsAddSignedOverflow(int a, int b)
 	{
 		if (a > 0 && b > 0)
-			if (b > (int.MaxValue - a))
+			if (b > int.MaxValue - a)
 				return true;
 
 		if (a < 0 && b < 0)
-			if (b < (int.MinValue - a))
+			if (b < int.MinValue - a)
 				return true;
 
 		return false;
@@ -30,11 +30,11 @@ public static class IntegerTwiddling
 	public static bool IsAddSignedOverflow(long a, long b)
 	{
 		if (a > 0 && b > 0)
-			if (b > (long.MaxValue - a))
+			if (b > long.MaxValue - a)
 				return true;
 
 		if (a < 0 && b < 0)
-			if (b < (long.MinValue - a))
+			if (b < long.MinValue - a)
 				return true;
 
 		return false;
@@ -45,7 +45,7 @@ public static class IntegerTwiddling
 		if (IsAddUnsignedCarry(a, b))
 			return true;
 
-		if (carry & (a + b) == uint.MaxValue)
+		if (carry & a + b == uint.MaxValue)
 			return true;
 
 		return false;
@@ -53,10 +53,10 @@ public static class IntegerTwiddling
 
 	public static bool IsSubSignedOverflow(int a, int b)
 	{
-		if ((b < 0) && (a < int.MinValue - b))
+		if (b < 0 && a < int.MinValue - b)
 			return true;
 
-		if ((b > 0) && (a > int.MaxValue - b))
+		if (b > 0 && a > int.MaxValue - b)
 			return true;
 
 		return false;
@@ -64,10 +64,10 @@ public static class IntegerTwiddling
 
 	public static bool IsSubSignedOverflow(long a, long b)
 	{
-		if ((b < 0) && (a < long.MinValue - b))
+		if (b < 0 && a < long.MinValue - b)
 			return true;
 
-		if ((b > 0) && (a > long.MaxValue - b))
+		if (b > 0 && a > long.MaxValue - b)
 			return true;
 
 		return false;

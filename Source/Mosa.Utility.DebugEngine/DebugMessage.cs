@@ -31,7 +31,7 @@ public class DebugMessage
 		Code = code;
 		CommandData = new List<byte>(data.Length);
 
-		foreach (byte b in data)
+		foreach (var b in data)
 		{
 			CommandData.Add(b);
 		}
@@ -42,7 +42,7 @@ public class DebugMessage
 		Code = code;
 		CommandData = new List<byte>(data.Length);
 
-		for (int i = 0; i < length; i++)
+		for (var i = 0; i < length; i++)
 		{
 			CommandData.Add(data[i]);
 		}
@@ -53,7 +53,7 @@ public class DebugMessage
 		Code = code;
 		CommandData = new List<byte>(data.Count * 4);
 
-		foreach (int i in data)
+		foreach (var i in data)
 		{
 			CommandData.Add((byte)(i & 0xFF));
 			CommandData.Add((byte)((i >> 8) & 0xFF));

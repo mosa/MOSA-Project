@@ -24,8 +24,9 @@ public partial class MainWindow : Window
 	private int totalMethods, completedMethods;
 	private Settings settings;
 	private Builder builder;
-	private OpenFileDialog source;
-	private OpenFolderDialog destination, include;
+	private readonly OpenFileDialog source;
+	private readonly OpenFolderDialog destination;
+	private readonly OpenFolderDialog include;
 
 	public MainWindow()
 	{

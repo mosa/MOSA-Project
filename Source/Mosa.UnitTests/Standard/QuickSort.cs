@@ -6,7 +6,7 @@ public static class QuickSort
 {
 	public static int Partition(int[] numbers, int left, int right)
 	{
-		int pivot = numbers[left];
+		var pivot = numbers[left];
 		while (true)
 		{
 			while (numbers[left] < pivot)
@@ -17,7 +17,7 @@ public static class QuickSort
 
 			if (left < right)
 			{
-				int temp = numbers[right];
+				var temp = numbers[right];
 				numbers[right] = numbers[left];
 				numbers[left] = temp;
 			}
@@ -32,7 +32,7 @@ public static class QuickSort
 	{
 		if (left < right)
 		{
-			int pivot = Partition(arr, left, right);
+			var pivot = Partition(arr, left, right);
 
 			if (pivot > 1)
 				SortQuick(arr, left, pivot - 1);

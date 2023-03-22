@@ -18,7 +18,7 @@ public static class CompilerBugTests
 		ProcessManager.ProcessList.Add(new Process { ProcessID = 2 });
 		ProcessManager.ProcessList.Add(new Process { ProcessID = 3 });
 
-		int targetProcessID = 2;
+		var targetProcessID = 2;
 		var proc = ProcessManager.GetProcess(targetProcessID);
 
 		return proc.ProcessID == 2;

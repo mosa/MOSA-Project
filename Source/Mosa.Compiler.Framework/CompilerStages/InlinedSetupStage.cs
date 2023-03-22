@@ -24,7 +24,7 @@ public sealed class InlinedSetupStage : BaseCompilerStage
 		{
 			foreach (var method in type.Methods)
 			{
-				bool excluded = false;
+				var excluded = false;
 
 				var name = InlinedSetupStage.RemoveReturnValue(method.FullName);
 
@@ -84,7 +84,7 @@ public sealed class InlinedSetupStage : BaseCompilerStage
 
 	public static string RemoveReturnValue(string methodName)
 	{
-		int pos = methodName.LastIndexOf(":");
+		var pos = methodName.LastIndexOf(":");
 
 		if (pos < 0)
 			return string.Empty;

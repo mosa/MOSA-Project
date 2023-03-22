@@ -35,7 +35,7 @@ public class BuildTransformationListFile : BuildBaseTemplate
 
 		foreach (var name in BuildTransformations.Transformations)
 		{
-			bool include = false;
+			var include = false;
 
 			foreach (var filter in Filters)
 			{

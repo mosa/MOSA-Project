@@ -191,7 +191,7 @@ public static class PhysicalPageAllocator
 
 	private static void SetPageBitMapEntry(uint start, uint count, bool set)
 	{
-		var indexShift = (Pointer.Size == 4) ? 10 : 9;
+		var indexShift = Pointer.Size == 4 ? 10 : 9;
 		var maskOffIndex = (uint)((1 << (indexShift + 1)) - 1);
 
 		var at = start;
@@ -306,7 +306,7 @@ public static class PhysicalPageAllocator
 			return false;
 		}
 
-		var indexShift = (Pointer.Size == 4) ? 10 : 9;
+		var indexShift = Pointer.Size == 4 ? 10 : 9;
 		var maskOffIndex = (uint)((1 << (indexShift + 1)) - 1);
 
 		var at = start;

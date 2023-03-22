@@ -32,6 +32,6 @@ public struct AssemblyDefinition
 
 	public TypeDefinition GetTypeDefinition(uint slot)
 	{
-		return new TypeDefinition(Ptr.LoadPointer((Pointer.Size * 4) + (Pointer.Size * (int)slot)));
+		return new TypeDefinition(Ptr.LoadPointer(Pointer.Size * 4 + Pointer.Size * (int)slot));
 	}
 }

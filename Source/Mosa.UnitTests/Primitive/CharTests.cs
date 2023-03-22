@@ -109,21 +109,21 @@ public static class CharTests
 	[MosaUnitTest]
 	public static bool Newarr()
 	{
-		char[] arr = new char[0];
+		var arr = new char[0];
 		return arr != null;
 	}
 
 	[MosaUnitTest(Series = "I4Small")]
 	public static bool Ldlen(int length)
 	{
-		char[] arr = new char[length];
+		var arr = new char[length];
 		return arr.Length == length;
 	}
 
 	[MosaUnitTest(Series = "I4SmallC")]
 	public static bool Ldelem(int index, char value)
 	{
-		char[] arr = new char[index + 1];
+		var arr = new char[index + 1];
 		arr[index] = value;
 		return value == arr[index];
 	}
@@ -131,7 +131,7 @@ public static class CharTests
 	[MosaUnitTest(Series = "I4SmallC")]
 	public static bool Stelem(int index, char value)
 	{
-		char[] arr = new char[index + 1];
+		var arr = new char[index + 1];
 		arr[index] = value;
 		return true;
 	}
@@ -139,7 +139,7 @@ public static class CharTests
 	[MosaUnitTest(Series = "I4SmallC")]
 	public static bool Ldelema(int index, char value)
 	{
-		char[] arr = new char[index + 1];
+		var arr = new char[index + 1];
 		SetValueInRefValue(ref arr[index], value);
 		return arr[index] == value;
 	}
@@ -147,7 +147,7 @@ public static class CharTests
 	[MosaUnitTest]
 	public static bool BitConversion()
 	{
-		byte[] bytes = System.BitConverter.GetBytes('a');
+		var bytes = System.BitConverter.GetBytes('a');
 		return bytes[0] == 97;
 	}
 

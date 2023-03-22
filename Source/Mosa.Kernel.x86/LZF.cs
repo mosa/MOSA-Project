@@ -75,7 +75,7 @@ public static class LZF
 			uint ctrl = Intrinsic.Load8(input, iidx);
 			iidx++;
 
-			if (ctrl < (1 << 5)) /* literal run */
+			if (ctrl < 1 << 5) /* literal run */
 			{
 				ctrl++;
 
@@ -92,7 +92,7 @@ public static class LZF
 					oidx++;
 					iidx++;
 				}
-				while ((--ctrl) != 0);
+				while (--ctrl != 0);
 			}
 			else /* back reference */
 			{
@@ -140,7 +140,7 @@ public static class LZF
 					oidx++;
 					reference++;
 				}
-				while ((--len) != 0);
+				while (--len != 0);
 			}
 		}
 		while (iidx < inputLength);

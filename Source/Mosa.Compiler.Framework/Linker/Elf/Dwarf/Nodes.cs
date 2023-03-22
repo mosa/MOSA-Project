@@ -19,7 +19,8 @@ public class DwarfCompilationUnit : DwarfDebugInformationEntry
 
 	public override void Emit(DwarfWriteContext ctx)
 	{
-		var abbr = ctx.CreateAbbrev(DwarfTag.DW_TAG_compile_unit, new List<DwarfAbbrevAttribute>() {
+		var abbr = ctx.CreateAbbrev(DwarfTag.DW_TAG_compile_unit, new List<DwarfAbbrevAttribute>
+		{
 			new DwarfAbbrevAttribute { Attribute = DwarfAttribute.DW_AT_producer, Form = DwarfForm.DW_FORM_string },
 			new DwarfAbbrevAttribute { Attribute = DwarfAttribute.DW_AT_low_pc, Form = DwarfForm.DW_FORM_addr },
 			new DwarfAbbrevAttribute { Attribute = DwarfAttribute.DW_AT_high_pc, Form = DwarfForm.DW_FORM_addr },

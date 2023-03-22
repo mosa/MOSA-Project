@@ -65,21 +65,21 @@ public class HU : IScanCodeMap
 		if (scancode == 0)
 			return key;
 
-		key.KeyPress = ((scancode & 0x80) != 0) ? KeyEvent.KeyPressType.Break : key.KeyPress = KeyEvent.KeyPressType.Make;
+		key.KeyPress = (scancode & 0x80) != 0 ? KeyEvent.KeyPressType.Break : key.KeyPress = KeyEvent.KeyPressType.Make;
 		key.KeyType = KeyType.RegularKey;
 
 		switch (scancode & 0x7F)
 		{
 			case 1: key.Character = (char)27; break;
-			case 2: key.Character = (_shifted ? '\'' : '1'); break;
-			case 3: key.Character = (_shifted ? '"' : '2'); break;
-			case 4: key.Character = (_shifted ? '+' : '3'); break;
-			case 5: key.Character = (_shifted ? '!' : '4'); break;
-			case 6: key.Character = (_shifted ? '%' : '5'); break;
-			case 7: key.Character = (_shifted ? '/' : '6'); break;
-			case 8: key.Character = (_shifted ? '=' : '7'); break;
-			case 9: key.Character = (_shifted ? '(' : '8'); break;
-			case 10: key.Character = (_shifted ? ')' : '9'); break;
+			case 2: key.Character = _shifted ? '\'' : '1'; break;
+			case 3: key.Character = _shifted ? '"' : '2'; break;
+			case 4: key.Character = _shifted ? '+' : '3'; break;
+			case 5: key.Character = _shifted ? '!' : '4'; break;
+			case 6: key.Character = _shifted ? '%' : '5'; break;
+			case 7: key.Character = _shifted ? '/' : '6'; break;
+			case 8: key.Character = _shifted ? '=' : '7'; break;
+			case 9: key.Character = _shifted ? '(' : '8'; break;
+			case 10: key.Character = _shifted ? ')' : '9'; break;
 			case 11: key.Character = TransformCharacter('ö'); break;
 			case 12: key.Character = TransformCharacter('ü'); break;
 			case 13: key.Character = TransformCharacter('ó'); break;
@@ -120,9 +120,9 @@ public class HU : IScanCodeMap
 			case 48: key.Character = TransformCharacter('b'); break;
 			case 49: key.Character = TransformCharacter('n'); break;
 			case 50: key.Character = TransformCharacter('m'); break;
-			case 51: key.Character = (_shifted ? '?' : ','); break;
-			case 52: key.Character = (_shifted ? ':' : '.'); break;
-			case 53: key.Character = (_shifted ? '_' : '-'); break;
+			case 51: key.Character = _shifted ? '?' : ','; break;
+			case 52: key.Character = _shifted ? ':' : '.'; break;
+			case 53: key.Character = _shifted ? '_' : '-'; break;
 			case 54: key.KeyType = KeyType.RightShift; break;
 
 			case 56: key.KeyType = KeyType.LeftAlt; break;
@@ -163,11 +163,11 @@ public class HU : IScanCodeMap
 		}
 
 		if (key.KeyType is KeyType.LeftShift or KeyType.RightShift)
-			_shifted = (key.KeyPress == KeyEvent.KeyPressType.Make);
+			_shifted = key.KeyPress == KeyEvent.KeyPressType.Make;
 		if (key.KeyType == KeyType.CapsLock)
 			_shifted = !_shifted;
 		if (key.KeyType == KeyType.LeftAlt)
-			_alted = (key.KeyPress == KeyEvent.KeyPressType.Make);
+			_alted = key.KeyPress == KeyEvent.KeyPressType.Make;
 
 		return key;
 	}

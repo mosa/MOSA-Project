@@ -15,7 +15,7 @@ public static class U2
 		{
 			if (series == null) series = GetSeries();
 
-			foreach (ushort value in series)
+			foreach (var value in series)
 				yield return value;
 		}
 	}

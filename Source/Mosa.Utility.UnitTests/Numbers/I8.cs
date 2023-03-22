@@ -15,7 +15,7 @@ public static class I8
 		{
 			if (series == null) series = GetSeries();
 
-			foreach (long value in series)
+			foreach (var value in series)
 				yield return value;
 		}
 	}

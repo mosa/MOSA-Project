@@ -129,7 +129,7 @@ public static class Program
 			"AutoTransforms.cs",
 			"Mosa.Compiler.Framework.Transforms.Optimizations.Auto",
 			"AutoTransforms",
-			new List<string>()
+			new List<string>
 			{
 				"IR."
 			}
@@ -140,7 +140,7 @@ public static class Program
 			"AutoTransforms.cs",
 			"Mosa.Platform.x86.Transforms.Optimizations.Auto",
 			"AutoTransforms",
-			new List<string>()
+			new List<string>
 			{
 				"x86."
 			}
@@ -151,7 +151,7 @@ public static class Program
 			"AutoTransforms.cs",
 			"Mosa.Platform.x64.Transforms.Optimizations.Auto",
 			"AutoTransforms",
-			new List<string>()
+			new List<string>
 			{
 				"X64."
 			}

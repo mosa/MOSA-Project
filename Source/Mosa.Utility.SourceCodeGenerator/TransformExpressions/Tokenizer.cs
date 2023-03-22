@@ -11,13 +11,13 @@ public static class Tokenizer
 	public static List<Token> Parse(string expression)
 	{
 		var tokens = new List<Token>();
-		int length = expression.Length;
+		var length = expression.Length;
 
-		int index = 0;
+		var index = 0;
 
 		while (index < length)
 		{
-			char c = expression[index];
+			var c = expression[index];
 
 			if (c == ' ' | c == '\t')
 			{
@@ -27,7 +27,7 @@ public static class Tokenizer
 			else if (IsDigit(c) || c == '-')
 			{
 				// Number
-				int start = index++;
+				var start = index++;
 
 				while (index < length)
 				{
@@ -50,7 +50,7 @@ public static class Tokenizer
 			else if (IsCharacter(c))
 			{
 				// Word
-				int start = index++;
+				var start = index++;
 
 				while (index < length)
 				{
@@ -157,8 +157,8 @@ public static class Tokenizer
 
 	private static Token GetNumberToken(string part, int index)
 	{
-		int length = part.Length;
-		char last = length > 1 ? part[length - 1] : ' ';
+		var length = part.Length;
+		var last = length > 1 ? part[length - 1] : ' ';
 
 		if (last is 'd' or 'f')
 		{
@@ -200,7 +200,7 @@ public static class Tokenizer
 		}
 
 		// integer
-		ulong l = (ulong)long.Parse(part);
+		var l = (ulong)long.Parse(part);
 
 		return new Token(TokenType.IntegerConstant, index, part, l);
 	}

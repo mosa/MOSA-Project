@@ -116,7 +116,7 @@ public class StandardKeyboard : BaseDeviceDriver, IKeyboardDevice
 	/// </returns>
 	protected bool IsFIFOFull()
 	{
-		return (((fifoEnd + 1) == fifoSize) ? 0 : fifoEnd + 1) == fifoStart;
+		return (fifoEnd + 1 == fifoSize ? 0 : fifoEnd + 1) == fifoStart;
 	}
 
 	/// <summary>

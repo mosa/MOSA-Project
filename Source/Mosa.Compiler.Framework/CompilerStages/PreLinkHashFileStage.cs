@@ -68,7 +68,7 @@ public class PreLinkHashFileStage : BaseCompilerStage
 				if (symbol.SectionKind != kind)
 					continue;
 
-				info.Add(new HashInfo()
+				info.Add(new HashInfo
 				{
 					Name = symbol.Name,
 					Hash = symbol.Stream.Length == 0 ? "-ZERO-" : ComputeHash(symbol.Stream)

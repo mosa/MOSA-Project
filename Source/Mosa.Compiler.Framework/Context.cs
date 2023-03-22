@@ -253,7 +253,7 @@ public sealed class Context
 		Debug.Assert(!IsBlockEndInstruction);
 		Debug.Assert(Block != null);
 
-		var node = new InstructionNode()
+		var node = new InstructionNode
 		{
 			Label = Label
 		};
@@ -270,7 +270,7 @@ public sealed class Context
 	{
 		Debug.Assert(!IsBlockStartInstruction);
 
-		var node = new InstructionNode()
+		var node = new InstructionNode
 		{
 			Label = Label
 		};
@@ -287,7 +287,7 @@ public sealed class Context
 	{
 		Debug.Assert(!IsBlockStartInstruction);
 
-		var node = new InstructionNode()
+		var node = new InstructionNode
 		{
 			Label = Label
 		};
