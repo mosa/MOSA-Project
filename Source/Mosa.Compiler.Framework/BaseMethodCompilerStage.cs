@@ -1067,20 +1067,21 @@ public abstract class BaseMethodCompilerStage
 		if (type == null)
 			return null;
 
+		type = MosaTypeLayout.GetUnderlyingType(type);
+
+		if (type == null)
+			return IRInstruction.SetReturnCompound;
+
 		if (type.IsReferenceType)
 			return IRInstruction.SetReturnObject;
 		else if (type.IsR4)
 			return IRInstruction.SetReturnR4;
 		else if (type.IsR8)
 			return IRInstruction.SetReturnR8;
-		else if (!is32bitPlatform)
-			return IRInstruction.SetReturn64;
 		else if (type.IsUI8 || (type.IsEnum && type.ElementType.IsUI8))
 			return IRInstruction.SetReturn64;
-		else if (!MosaTypeLayout.IsUnderlyingPrimitive(type))
-			return IRInstruction.SetReturnCompound;
 
-		return IRInstruction.SetReturn32;
+		return is32bitPlatform ? IRInstruction.SetReturn32 : IRInstruction.SetReturn64;
 	}
 
 	public BaseIRInstruction GetStoreInstruction(MosaType type)

@@ -1829,7 +1829,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
 
 		context.AppendInstruction(IRInstruction.CallStatic, result, symbol, operands);
-		//context.InvokeMethod = method;
+		context.InvokeMethod = method;
 
 		if (ProcessExternalCall(context))
 			return true;
