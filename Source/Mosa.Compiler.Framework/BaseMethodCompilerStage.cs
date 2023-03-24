@@ -930,6 +930,11 @@ public abstract class BaseMethodCompilerStage
 
 	protected BaseInstruction GetLoadInstruction(MosaType type)
 	{
+		type = MosaTypeLayout.GetUnderlyingType(type);
+
+		if (type == null)
+			return IRInstruction.LoadCompound;
+
 		if (type.IsReferenceType)
 			return IRInstruction.LoadObject;
 		else if (type.IsPointer)
@@ -964,9 +969,14 @@ public abstract class BaseMethodCompilerStage
 
 	public BaseInstruction GetMoveInstruction(MosaType type)
 	{
+		type = MosaTypeLayout.GetUnderlyingType(type);
+
+		if (type == null)
+			return IRInstruction.MoveCompound;
+
 		if (type.IsReferenceType)
 			return IRInstruction.MoveObject;
-		if (type.IsPointer)
+		else if (type.IsPointer)
 			return Select(IRInstruction.Move32, IRInstruction.Move64);
 		else if (type.IsI1)
 			return Select(IRInstruction.SignExtend8x32, IRInstruction.SignExtend8x64);

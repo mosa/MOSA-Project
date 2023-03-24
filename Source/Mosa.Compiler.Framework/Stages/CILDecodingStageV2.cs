@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection.Metadata;
 using System.Text;
 
 using Mosa.Compiler.Common;
@@ -3614,7 +3613,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		}
 		else if (isFieldPrimitive)
 		{
-			var loadInstruction = GetLoadInstruction(fieldUnderlyingType);
+			var loadInstruction = GetLoadInstruction(fieldUnderlyingType); // TODO: replace with element
 			context.AppendInstruction(loadInstruction, result, operand, fixedOffset);
 		}
 		else
@@ -4251,9 +4250,9 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 			operands.Insert(0, newThis);
 
 			context.AppendInstruction(IRInstruction.CallStatic, null, symbol, operands);
-			//context.InvokeMethod = method;  // optional??
 
-			var loadInstruction = GetLoadInstruction(newThisLocal.Type);
+			var loadInstruction = GetLoadInstruction(newThisLocal.Type); // TODO: replace with element
+
 			context.AppendInstruction(loadInstruction, result, StackFrame, newThisLocal);
 
 			PushStack(stack, new StackEntry(stackType, result));

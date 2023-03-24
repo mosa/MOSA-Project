@@ -1282,4 +1282,14 @@ public partial class MainForm : Form
 			cbTransformStages.SelectedIndex = 0;
 		}
 	}
+
+	private void btnSaveA_Click(object sender, EventArgs e)
+	{
+		File.WriteAllText(Path.Combine(Path.GetTempPath(), "MOSA", "A.txt"), tbInstructions.Text);
+	}
+
+	private void btnSaveB_Click(object sender, EventArgs e)
+	{
+		File.WriteAllText(Path.Combine(Path.GetTempPath(), "MOSA", "B.txt"), tbInstructions.Text);
+	}
 }
