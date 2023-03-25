@@ -109,6 +109,7 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 						|| node.Instruction == IRInstruction.SetReturnObject
 						|| node.Block.IsEpilogue
 						|| node.Block.IsPrologue
+						|| node.Instruction.IsParameterLoad
 					   )
 					{
 						totalStackParameterInstruction++;

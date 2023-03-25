@@ -241,7 +241,28 @@ public sealed class CILDecodingStage : BaseMethodCompilerStage, IInstructionDeco
 			if (!variable.IsVirtualRegister)
 				continue;
 
-			if (variable.IsReferenceType)
+			if (variable.IsValueType)
+			{
+				var type = MosaTypeLayout.GetUnderlyingType(variable.Type);
+
+				if (type.IsR4)
+				{
+					prologue.AppendInstruction(IRInstruction.MoveR4, variable, CreateConstantR4(0.0f));
+				}
+				else if (type.IsR8)
+				{
+					prologue.AppendInstruction(IRInstruction.MoveR8, variable, CreateConstantR8(0.0d));
+				}
+				else if (type.IsUI8 || (Is64BitPlatform && (type.IsU || type.IsI)))
+				{
+					prologue.AppendInstruction(IRInstruction.Move64, variable, Constant64_0);
+				}
+				else
+				{
+					prologue.AppendInstruction(IRInstruction.Move32, variable, Constant32_0);
+				}
+			}
+			else if (variable.IsReferenceType)
 			{
 				prologue.AppendInstruction(IRInstruction.MoveObject, variable, Operand.GetNull(variable.Type));
 			}

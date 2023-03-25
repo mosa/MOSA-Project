@@ -816,14 +816,18 @@ public sealed class MethodCompiler
 		var index = 0;
 		foreach (var local in locals)
 		{
-			if (MosaTypeLayout.IsUnderlyingPrimitive(local.Type) && !local.IsPinned)
+			var localtype = local.Type;
+			var underlyingType = localtype;
+			//var underlyingType = MosaTypeLayout.GetUnderlyingType(local.Type);
+
+			if (MosaTypeLayout.IsUnderlyingPrimitive(underlyingType) && !local.IsPinned)
 			{
-				var stacktype = Compiler.GetStackType(local.Type);
+				var stacktype = Compiler.GetStackType(underlyingType);
 				LocalVariables[index++] = CreateVirtualRegister(stacktype);
 			}
 			else
 			{
-				LocalVariables[index++] = AddStackLocal(local.Type, local.IsPinned);
+				LocalVariables[index++] = AddStackLocal(underlyingType, local.IsPinned);
 			}
 		}
 	}

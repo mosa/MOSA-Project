@@ -864,7 +864,6 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 		else
 		{
 			node.SetInstruction(IRInstruction.LoadCompound, result, array, totalElementOffset);
-			node.MosaType = arrayType.ElementType;
 		}
 	}
 
@@ -949,7 +948,6 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 		if (result.IsOnStack && !operand.IsOnStack)
 		{
 			context.SetInstruction(IRInstruction.LoadCompound, result, operand, fixedOffset);
-			context.MosaType = field.FieldType;
 
 			return;
 		}
@@ -1088,8 +1086,6 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 		{
 			node.SetInstruction(IRInstruction.LoadCompound, destination, source, ConstantZero);
 		}
-
-		node.MosaType = type;
 	}
 
 	/// <summary>
@@ -1594,8 +1590,6 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 
 		if (MosaTypeLayout.IsUnderlyingPrimitive(fieldType))
 		{
-			var loadInstruction = GetLoadInstruction(fieldType);
-
 			if (fieldType.IsReferenceType)
 			{
 				var symbol = GetStaticSymbol(field);
@@ -1605,15 +1599,15 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 			}
 			else
 			{
+				var loadInstruction = GetLoadInstruction(fieldType);
+
 				node.SetInstruction(loadInstruction, result, fieldOperand, ConstantZero);
-				node.MosaType = fieldType;
 			}
 		}
 		else
 		{
 			// Interesting -- this code appears to never be executed
 			node.SetInstruction(IRInstruction.LoadCompound, result, fieldOperand, ConstantZero);
-			node.MosaType = fieldType;
 		}
 
 		MethodScanner.AccessedField(field);
@@ -1755,7 +1749,6 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 		var loadInstruction = GetLoadInstruction(type);
 
 		context.AppendInstruction(loadInstruction, result, v1, ConstantZero);
-		context.MosaType = type;
 	}
 
 	private void UnboxAny(Context context)
@@ -1780,10 +1773,7 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 		}
 		else
 		{
-			var adr = AllocateVirtualRegister(type.ToManagedPointer());
-
-			context.SetInstruction(IRInstruction.AddressOf, adr, AddStackLocal(type));
-			context.AppendInstruction(IRInstruction.UnboxAny, tmp, value, adr, CreateConstant32(typeSize));
+			context.SetInstruction(MoveInstruction, tmp, value);
 		}
 
 		if (MosaTypeLayout.IsUnderlyingPrimitive(type))
@@ -1791,12 +1781,10 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 			var loadInstruction = GetLoadInstruction(type);
 
 			context.AppendInstruction(loadInstruction, result, tmp, ConstantZero);
-			context.MosaType = type;
 		}
 		else
 		{
 			context.AppendInstruction(IRInstruction.LoadCompound, result, tmp, ConstantZero);
-			context.MosaType = type;
 		}
 	}
 

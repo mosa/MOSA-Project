@@ -175,11 +175,13 @@ public static class Internal
 	//}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static Pointer UnboxAny(Pointer box, Pointer vt, uint size)
+	public static Pointer UnboxAny(Pointer src, Pointer dest, uint size)
 	{
-		MemoryCopy(vt, box, size);
+		// TODO: Check if compatible type
 
-		return vt;
+		MemoryCopy(dest, src, size);
+
+		return dest;
 	}
 
 	#endregion (Un)Boxing

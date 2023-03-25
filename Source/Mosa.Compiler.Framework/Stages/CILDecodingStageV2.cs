@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection.Metadata;
 using System.Text;
 
 using Mosa.Compiler.Common;
@@ -1902,6 +1901,9 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		var result = AllocateVirtualRegister(TypeSystem.BuiltIn.Object);
 		PushStack(stack, new StackEntry(StackType.Object, result));
 
+		// FUTURE: Check for valid cast
+		//var methodTable = GetMethodTablePointer(type);
+
 		if (entry.StackType == StackType.Object)
 		{
 			// TODO: Do this right
@@ -3489,7 +3491,6 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 			var result = Allocate(StackType.ValueType, type);
 
 			context.AppendInstruction(IRInstruction.LoadCompound, result, array, totalElementOffset);
-			context.MosaType = type.ElementType;
 
 			PushStack(stack, new StackEntry(StackType.ValueType, result, type));
 		}
@@ -3611,18 +3612,16 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 			else
 			{
 				context.AppendInstruction(IRInstruction.LoadCompound, result, operand, fixedOffset);
-				context.MosaType = fieldType;
 			}
 		}
 		else if (isFieldPrimitive)
 		{
-			var loadInstruction = GetLoadInstruction(fieldUnderlyingType);
+			var loadInstruction = GetLoadInstruction(fieldUnderlyingType); // TODO: replace with element
 			context.AppendInstruction(loadInstruction, result, operand, fixedOffset);
 		}
 		else
 		{
 			context.AppendInstruction(IRInstruction.LoadCompound, result, operand, fixedOffset);
-			context.MosaType = fieldType;
 		}
 		return true;
 	}
@@ -3789,7 +3788,6 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		{
 			var result2 = AddStackLocal(local.Type);
 			context.AppendInstruction(IRInstruction.MoveCompound, result2, local);
-			context.MosaType = local.Type;
 
 			PushStack(stack, new StackEntry(stacktype, result2, local.Type));
 
@@ -3858,9 +3856,9 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		}
 		else
 		{
-			var result = MethodCompiler.AddStackLocal(type);
+			var result = Allocate(StackType.ValueType, type);
+
 			context.AppendInstruction(IRInstruction.LoadCompound, result, address, ConstantZero);
-			context.MosaType = type;
 			PushStack(stack, new StackEntry(StackType.ValueType, result, type));
 			return true;
 		}
@@ -3896,14 +3894,12 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 				var loadInstruction = GetLoadInstruction(elementType);
 
 				context.AppendInstruction(loadInstruction, result, fieldOperand, ConstantZero);
-				context.MosaType = type;
 			}
 		}
 		else
 		{
 			var result = AllocateVirtualRegister(type);
 			context.AppendInstruction(IRInstruction.LoadCompound, result, fieldOperand, ConstantZero);
-			context.MosaType = type;
 			PushStack(stack, new StackEntry(StackType.ValueType, result, type));
 		}
 
@@ -4258,9 +4254,9 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 			operands.Insert(0, newThis);
 
 			context.AppendInstruction(IRInstruction.CallStatic, null, symbol, operands);
-			//context.InvokeMethod = method;  // optional??
 
-			var loadInstruction = GetLoadInstruction(newThisLocal.Type);
+			var loadInstruction = GetLoadInstruction(newThisLocal.Type); // TODO: replace with element
+
 			context.AppendInstruction(loadInstruction, result, StackFrame, newThisLocal);
 
 			PushStack(stack, new StackEntry(stackType, result));
@@ -4519,7 +4515,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 				case StackType.ValueType:
 					context.AppendInstruction(IRInstruction.SetReturnCompound, null, entry.Operand);
-					context.MosaType = entry.Type;
+					//context.MosaType = entry.Type;
 					break;
 
 				case StackType.ManagedPointer when Is32BitPlatform:
@@ -4860,79 +4856,6 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 			context.AppendInstruction(storeInstruction, null, StackFrame, local, source);
 			return true;
 		}
-
-		//if (local.IsVirtualRegister)
-		//{
-		//	switch (stacktype)
-		//	{
-		//		case StackType.Int32:
-		//			context.AppendInstruction(IRInstruction.Move32, local, source);
-		//			return true;
-
-		//		case StackType.Int64:
-		//			context.AppendInstruction(IRInstruction.Move64, local, source);
-		//			return true;
-
-		//		case StackType.Object:
-		//			context.AppendInstruction(IRInstruction.MoveObject, local, source);
-		//			return true;
-
-		//		case StackType.R4:
-		//			context.AppendInstruction(IRInstruction.MoveR4, local, source);
-		//			return true;
-
-		//		case StackType.R8:
-		//			context.AppendInstruction(IRInstruction.MoveR8, local, source);
-		//			return true;
-
-		//		case StackType.ManagedPointer when Is32BitPlatform:
-		//			context.AppendInstruction(IRInstruction.Move32, local, source);
-		//			return true;
-
-		//		case StackType.ManagedPointer when Is64BitPlatform:
-		//			context.AppendInstruction(IRInstruction.Move64, local, source);
-		//			return true;
-
-		//		default: return false;
-		//	}
-		//}
-		//else
-		//{
-		//	switch (stacktype)
-		//	{
-		//		case StackType.Int32:
-		//			context.AppendInstruction(IRInstruction.Store32, null, StackFrame, local, source);
-		//			return true;
-
-		//		case StackType.Int64:
-		//			context.AppendInstruction(IRInstruction.Store64, null, StackFrame, local, source);
-		//			return true;
-
-		//		case StackType.Object:
-		//			context.AppendInstruction(IRInstruction.StoreObject, null, StackFrame, local, source);
-		//			return true;
-
-		//		case StackType.R4:
-		//			context.AppendInstruction(IRInstruction.StoreR4, null, StackFrame, local, source);
-		//			return true;
-
-		//		case StackType.R8:
-		//			context.AppendInstruction(IRInstruction.StoreR8, null, StackFrame, local, source);
-		//			return true;
-
-		//		case StackType.ManagedPointer when Is32BitPlatform:
-		//			context.AppendInstruction(IRInstruction.Store32, null, StackFrame, local, source);
-		//			return true;
-
-		//		case StackType.ManagedPointer when Is64BitPlatform:
-		//			context.AppendInstruction(IRInstruction.Store64, null, StackFrame, local, source);
-		//			return true;
-
-		//		default: return false;
-		//	}
-		//}
-
-		//return false;
 	}
 
 	private bool Stobj(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
@@ -5427,7 +5350,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		var entry = PopStack(stack);
 		var type = (MosaType)instruction.Operand;
 
-		var result = Allocate(StackType.ManagedPointer); // AllocateVirtualRegisterManagedPointer();
+		var result = Allocate(StackType.ManagedPointer, type); 
 		PushStack(stack, new StackEntry(StackType.ManagedPointer, result));
 
 		context.AppendInstruction(IRInstruction.Unbox, result, entry.Operand);
@@ -5437,19 +5360,19 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 	private bool UnboxAny(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
 	{
-		var entry = PopStack(stack);
-
 		var type = (MosaType)instruction.Operand;
-
-		// FUTURE: Check for valid cast
-		var methodTable = GetMethodTablePointer(type);
-
+		
 		if (type.IsReferenceType)
 		{
-			// FUTURE: treat as castclass
-			PushStack(stack, entry);
-			return true;
+			// treat as castclass, per spec
+			return Castclass(context, stack);
 		}
+
+		Debug.Assert(type.IsValueType);
+
+		var entry = PopStack(stack);
+
+		//equivalent to unbox followed by ldobj
 
 		var underlyingType = GetUnderlyingType(type);
 		var isPrimitive = IsPrimitive(underlyingType);
@@ -5462,28 +5385,20 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 			var stackType = GetStackType(elementType);
 			var result = Allocate(stackType);
 
-			context.AppendInstruction(loadInstruction, result, entry.Operand, ConstantZero); //CreateConstant32(8)
-
 			PushStack(stack, new StackEntry(stackType, result));
+
+			context.AppendInstruction(loadInstruction, result, entry.Operand, ConstantZero); 
+
 			return true;
 		}
 		else
 		{
 			var result = Allocate(StackType.ValueType, type);
+			var address = Allocate(StackType.ManagedPointer);
 
-			//var tmpLocal = AddStackLocal(type);
-			//var typeSize = Alignment.AlignUp(TypeLayout.GetTypeSize(type), TypeLayout.NativePointerAlignment);
-
-			//var adr = AllocateVirtualRegisterManagedPointer();
-			//context.AppendInstruction(IRInstruction.AddressOf, adr, tmpLocal);
-			//context.AppendInstruction(IRInstruction.UnboxAny, tmpLocal, entry.Operand, adr, CreateConstant32(typeSize));
-			//context.AppendInstruction(IRInstruction.LoadCompound, result, tmpLocal, ConstantZero);
-
-			//context.AppendInstruction(IRInstruction.LoadCompound, result, tmpLocal, ConstantZero);
-
-			var adr = AllocateVirtualRegisterManagedPointer();
-			context.AppendInstruction(IRInstruction.Unbox, adr, entry.Operand);
-			context.AppendInstruction(IRInstruction.LoadCompound, result, adr, ConstantZero);
+			context.AppendInstruction(MoveInstruction, address, entry.Operand);
+			// FUTURE: Add type check
+			context.AppendInstruction(IRInstruction.LoadCompound, result, address, ConstantZero);
 
 			PushStack(stack, new StackEntry(StackType.ValueType, result, type));
 			return true;
