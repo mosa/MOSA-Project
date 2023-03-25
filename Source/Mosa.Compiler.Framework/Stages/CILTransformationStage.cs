@@ -1621,15 +1621,59 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 	{
 		var field = node.MosaField;
 
+		var fieldType = field.FieldType;
+		var operand1 = node.Operand1;
+
+		var underlyingType = MosaTypeLayout.GetUnderlyingType(fieldType);
+
+		if (underlyingType == null)
+		{
+			var fieldOperand = Operand.CreateStaticField(field, TypeSystem);
+			node.SetInstruction(IRInstruction.StoreCompound, null, fieldOperand, ConstantZero, node.Operand1);
+			node.MosaType = fieldType;
+		}
+		else
+		{
+			if (fieldType.IsReferenceType)
+			{
+				var symbol = GetStaticSymbol(field);
+				var staticReference = Operand.CreateLabel(TypeSystem.BuiltIn.Object, symbol.Name);
+
+				node.SetInstruction(IRInstruction.StoreObject, null, staticReference, ConstantZero, operand1);
+			}
+			else
+			{
+				var fieldOperand = Operand.CreateStaticField(field, TypeSystem);
+				var storeInstruction = GetStoreInstruction(fieldType);
+
+				node.SetInstruction(storeInstruction, null, fieldOperand, ConstantZero, operand1);
+				node.MosaType = fieldType;
+			}
+		}
+
+		MethodScanner.AccessedField(field);
+	}
+
+	private void Stsfld2(InstructionNode node)
+	{
+		var field = node.MosaField;
+
 		var fieldOperand = Operand.CreateStaticField(field, TypeSystem);
 		var fieldType = field.FieldType;
 		var operand1 = node.Operand1;
 
-		if (MosaTypeLayout.IsUnderlyingPrimitive(fieldType))
-		{
-			var storeInstruction = GetStoreInstruction(fieldType);
+		var underlyingType = MosaTypeLayout.GetUnderlyingType(fieldType);
 
-			if (fieldType.IsReferenceType)
+		if (underlyingType == null)
+		{
+			node.SetInstruction(IRInstruction.StoreCompound, null, fieldOperand, ConstantZero, node.Operand1);
+			node.MosaType = fieldType;
+		}
+		else
+		{
+			var storeInstruction = GetStoreInstruction(underlyingType);
+
+			if (underlyingType.IsReferenceType)
 			{
 				var symbol = GetStaticSymbol(field);
 				var staticReference = Operand.CreateLabel(TypeSystem.BuiltIn.Object, symbol.Name);
@@ -1641,11 +1685,6 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 				node.SetInstruction(storeInstruction, null, fieldOperand, ConstantZero, operand1);
 				node.MosaType = fieldType;
 			}
-		}
-		else
-		{
-			node.SetInstruction(IRInstruction.StoreCompound, null, fieldOperand, ConstantZero, node.Operand1);
-			node.MosaType = fieldType;
 		}
 
 		MethodScanner.AccessedField(field);

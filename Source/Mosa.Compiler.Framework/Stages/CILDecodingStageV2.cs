@@ -3852,7 +3852,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 			var loadInstruction = GetLoadInstruction(elementType);
 			context.AppendInstruction(loadInstruction, result, address, ConstantZero);
 
-			return Ldind(context, stack, elementType);
+			return true; // Ldind(context, stack, elementType);
 		}
 		else
 		{
@@ -5350,7 +5350,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		var entry = PopStack(stack);
 		var type = (MosaType)instruction.Operand;
 
-		var result = Allocate(StackType.ManagedPointer, type); 
+		var result = Allocate(StackType.ManagedPointer, type);
 		PushStack(stack, new StackEntry(StackType.ManagedPointer, result));
 
 		context.AppendInstruction(IRInstruction.Unbox, result, entry.Operand);
@@ -5361,7 +5361,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 	private bool UnboxAny(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
 	{
 		var type = (MosaType)instruction.Operand;
-		
+
 		if (type.IsReferenceType)
 		{
 			// treat as castclass, per spec
@@ -5387,7 +5387,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 			PushStack(stack, new StackEntry(stackType, result));
 
-			context.AppendInstruction(loadInstruction, result, entry.Operand, ConstantZero); 
+			context.AppendInstruction(loadInstruction, result, entry.Operand, ConstantZero);
 
 			return true;
 		}
