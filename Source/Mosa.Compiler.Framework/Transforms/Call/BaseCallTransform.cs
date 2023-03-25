@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Mosa.Compiler.Common;
+using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.Transforms.Call
@@ -193,9 +194,38 @@ namespace Mosa.Compiler.Framework.Transforms.Call
 			{
 				context.AppendInstruction(IRInstruction.StoreR8, null, transform.StackPointer, offsetOperand, operand);
 			}
-			else if (!MosaTypeLayout.IsUnderlyingPrimitive(operand.Type))
+			else if (operand.IsValueType)
 			{
-				context.AppendInstruction(IRInstruction.StoreCompound, null, transform.StackPointer, offsetOperand, operand);
+				var underlyingType = MosaTypeLayout.GetUnderlyingType(operand.Type);
+
+				if (underlyingType == null)
+				{
+					context.AppendInstruction(IRInstruction.StoreCompound, null, transform.StackPointer, offsetOperand, operand);
+				}
+				else if (underlyingType.IsUI1 || underlyingType.IsUI2 || underlyingType.IsUI4 || (transform.Is32BitPlatform && (underlyingType.IsU || underlyingType.IsI)))
+				{
+					context.AppendInstruction(IRInstruction.Store32, null, transform.StackPointer, offsetOperand, operand);
+				}
+				else if (underlyingType.IsUI8 || (!transform.Is32BitPlatform && (underlyingType.IsU || underlyingType.IsI)))
+				{
+					context.AppendInstruction(IRInstruction.Store64, null, transform.StackPointer, offsetOperand, operand);
+				}
+				else if (underlyingType.IsR4)
+				{
+					context.AppendInstruction(IRInstruction.StoreR4, null, transform.StackPointer, offsetOperand, operand);
+				}
+				else if (underlyingType.IsR8)
+				{
+					context.AppendInstruction(IRInstruction.StoreR8, null, transform.StackPointer, offsetOperand, operand);
+				}
+				else if (underlyingType.IsValueType)
+				{
+					context.AppendInstruction(IRInstruction.StoreCompound, null, transform.StackPointer, offsetOperand, operand);
+				}
+				else
+				{
+					context.AppendInstruction(transform.StoreInstruction, null, transform.StackPointer, offsetOperand, operand);
+				}
 			}
 			else
 			{

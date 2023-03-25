@@ -1901,6 +1901,9 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		var result = AllocateVirtualRegister(TypeSystem.BuiltIn.Object);
 		PushStack(stack, new StackEntry(StackType.Object, result));
 
+		// FUTURE: Check for valid cast
+		//var methodTable = GetMethodTablePointer(type);
+
 		if (entry.StackType == StackType.Object)
 		{
 			// TODO: Do this right
@@ -3853,7 +3856,8 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		}
 		else
 		{
-			var result = MethodCompiler.AddStackLocal(type);
+			var result = Allocate(StackType.ValueType, type);
+
 			context.AppendInstruction(IRInstruction.LoadCompound, result, address, ConstantZero);
 			PushStack(stack, new StackEntry(StackType.ValueType, result, type));
 			return true;
@@ -5346,7 +5350,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		var entry = PopStack(stack);
 		var type = (MosaType)instruction.Operand;
 
-		var result = Allocate(StackType.ManagedPointer); // AllocateVirtualRegisterManagedPointer();
+		var result = Allocate(StackType.ManagedPointer, type); 
 		PushStack(stack, new StackEntry(StackType.ManagedPointer, result));
 
 		context.AppendInstruction(IRInstruction.Unbox, result, entry.Operand);
@@ -5356,19 +5360,19 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 	private bool UnboxAny(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
 	{
-		var entry = PopStack(stack);
-
 		var type = (MosaType)instruction.Operand;
-
-		// FUTURE: Check for valid cast
-		var methodTable = GetMethodTablePointer(type);
-
+		
 		if (type.IsReferenceType)
 		{
-			// FUTURE: treat as castclass
-			PushStack(stack, entry);
-			return true;
+			// treat as castclass, per spec
+			return Castclass(context, stack);
 		}
+
+		Debug.Assert(type.IsValueType);
+
+		var entry = PopStack(stack);
+
+		//equivalent to unbox followed by ldobj
 
 		var underlyingType = GetUnderlyingType(type);
 		var isPrimitive = IsPrimitive(underlyingType);
@@ -5381,28 +5385,20 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 			var stackType = GetStackType(elementType);
 			var result = Allocate(stackType);
 
-			context.AppendInstruction(loadInstruction, result, entry.Operand, ConstantZero); //CreateConstant32(8)
-
 			PushStack(stack, new StackEntry(stackType, result));
+
+			context.AppendInstruction(loadInstruction, result, entry.Operand, ConstantZero); 
+
 			return true;
 		}
 		else
 		{
 			var result = Allocate(StackType.ValueType, type);
+			var address = Allocate(StackType.ManagedPointer);
 
-			//var tmpLocal = AddStackLocal(type);
-			//var typeSize = Alignment.AlignUp(TypeLayout.GetTypeSize(type), TypeLayout.NativePointerAlignment);
-
-			//var adr = AllocateVirtualRegisterManagedPointer();
-			//context.AppendInstruction(IRInstruction.AddressOf, adr, tmpLocal);
-			//context.AppendInstruction(IRInstruction.UnboxAny, tmpLocal, entry.Operand, adr, CreateConstant32(typeSize));
-			//context.AppendInstruction(IRInstruction.LoadCompound, result, tmpLocal, ConstantZero);
-
-			//context.AppendInstruction(IRInstruction.LoadCompound, result, tmpLocal, ConstantZero);
-
-			var adr = AllocateVirtualRegisterManagedPointer();
-			context.AppendInstruction(IRInstruction.Unbox, adr, entry.Operand);
-			context.AppendInstruction(IRInstruction.LoadCompound, result, adr, ConstantZero);
+			context.AppendInstruction(MoveInstruction, address, entry.Operand);
+			// FUTURE: Add type check
+			context.AppendInstruction(IRInstruction.LoadCompound, result, address, ConstantZero);
 
 			PushStack(stack, new StackEntry(StackType.ValueType, result, type));
 			return true;

@@ -1773,10 +1773,7 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 		}
 		else
 		{
-			var adr = AllocateVirtualRegister(type.ToManagedPointer());
-
-			context.SetInstruction(IRInstruction.AddressOf, adr, AddStackLocal(type));
-			context.AppendInstruction(IRInstruction.UnboxAny, tmp, value, adr, CreateConstant32(typeSize));
+			context.SetInstruction(MoveInstruction, tmp, value);
 		}
 
 		if (MosaTypeLayout.IsUnderlyingPrimitive(type))
