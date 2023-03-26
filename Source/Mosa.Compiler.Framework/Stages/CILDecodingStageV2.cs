@@ -1163,6 +1163,8 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 			ElementType.U2 => IRInstruction.Box32,
 			ElementType.I when Is32BitPlatform => IRInstruction.Box32,
 			ElementType.I when Is64BitPlatform => IRInstruction.Box64,
+			ElementType.ManagedPointer when Is32BitPlatform => IRInstruction.Box32,
+			ElementType.ManagedPointer when Is64BitPlatform => IRInstruction.Box64,
 			_ => throw new CompilerException($"Invalid ElementType = {elementType}"),
 		};
 	}
@@ -1696,11 +1698,13 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		}
 
 		var methodTable = GetMethodTablePointer(type);
-		var isPrimitive = IsPrimitive(type);
+
+		var underlyingType = GetUnderlyingType(type);
+		var isPrimitive = IsPrimitive(underlyingType);
 
 		if (isPrimitive)
 		{
-			var elementType = GetElementType(type);
+			var elementType = GetElementType(underlyingType);
 			var boxInstruction = GetBoxInstruction(elementType);
 
 			context.AppendInstruction(boxInstruction, result, methodTable, entry.Operand);
@@ -1709,11 +1713,17 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		{
 			var typeSize = Alignment.AlignUp(TypeLayout.GetTypeSize(type), TypeLayout.NativePointerAlignment);
 
-			//var address = AllocateVirtualRegisterManagedPointer();
-			//context.AppendInstruction(IRInstruction.AddressOf, address, entry.Operand);
+			if (typeSize == 8)
+			{
+				context.AppendInstruction(IRInstruction.Box64, result, methodTable, entry.Operand);
 
-			context.AppendInstruction(IRInstruction.Box, result, methodTable, entry.Operand, CreateConstant32(typeSize));
+			}
+			else
+			{
+				context.AppendInstruction(IRInstruction.Box, result, methodTable, entry.Operand, CreateConstant32(typeSize));
+			}
 		}
+
 		return true;
 	}
 
@@ -4830,10 +4840,10 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		var entry = PopStack(stack);
 		var source = entry.Operand;
 
-		var stacktype = LocalStackType[index];
+		var stackType = LocalStackType[index];
 		var local = LocalStack[index];
 
-		if (stacktype == StackType.ValueType)
+		if (stackType == StackType.ValueType)
 		{
 			context.AppendInstruction(IRInstruction.MoveCompound, local, source);
 			context.MosaType = local.Type;
@@ -4851,7 +4861,10 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		}
 		else
 		{
-			var storeInstruction = GetStoreInstruction(elementType);
+			//var stackType = GetStackType(underlyingType);
+			var stackElementType = GetElementType(stackType);
+
+			var storeInstruction = GetStoreInstruction(stackElementType);
 
 			context.AppendInstruction(storeInstruction, null, StackFrame, local, source);
 			return true;

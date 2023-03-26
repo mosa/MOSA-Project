@@ -1644,44 +1644,8 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 			else
 			{
 				var fieldOperand = Operand.CreateStaticField(field, TypeSystem);
-				var storeInstruction = GetStoreInstruction(fieldType);
+				var storeInstruction = GetStoreInstruction(underlyingType);
 
-				node.SetInstruction(storeInstruction, null, fieldOperand, ConstantZero, operand1);
-				node.MosaType = fieldType;
-			}
-		}
-
-		MethodScanner.AccessedField(field);
-	}
-
-	private void Stsfld2(InstructionNode node)
-	{
-		var field = node.MosaField;
-
-		var fieldOperand = Operand.CreateStaticField(field, TypeSystem);
-		var fieldType = field.FieldType;
-		var operand1 = node.Operand1;
-
-		var underlyingType = MosaTypeLayout.GetUnderlyingType(fieldType);
-
-		if (underlyingType == null)
-		{
-			node.SetInstruction(IRInstruction.StoreCompound, null, fieldOperand, ConstantZero, node.Operand1);
-			node.MosaType = fieldType;
-		}
-		else
-		{
-			var storeInstruction = GetStoreInstruction(underlyingType);
-
-			if (underlyingType.IsReferenceType)
-			{
-				var symbol = GetStaticSymbol(field);
-				var staticReference = Operand.CreateLabel(TypeSystem.BuiltIn.Object, symbol.Name);
-
-				node.SetInstruction(IRInstruction.StoreObject, null, staticReference, ConstantZero, operand1);
-			}
-			else
-			{
 				node.SetInstruction(storeInstruction, null, fieldOperand, ConstantZero, operand1);
 				node.MosaType = fieldType;
 			}
