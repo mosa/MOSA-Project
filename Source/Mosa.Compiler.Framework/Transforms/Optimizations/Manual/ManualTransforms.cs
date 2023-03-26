@@ -81,18 +81,22 @@ public static class ManualTransforms
 		new Simplification.SubCarryOut32CarryNotUsed(),
 		new Simplification.SubCarryOut64CarryNotUsed(),
 
-		new Special.Move32Propagate(),
-		new Special.Move32PropagateConstant(),
-		new Special.Move64Propagate(),
-		new Special.Move64PropagateConstant(),
-		new Special.MoveR4Propagate(),
-		new Special.MoveR8Propagate(),
+		new Propagate.Move32Propagate(),
+		new Propagate.Move32PropagateConstant(),
+		new Propagate.Move64Propagate(),
+		new Propagate.Move64PropagateConstant(),
+		new Propagate.MoveR4Propagate(),
+		new Propagate.MoveR8Propagate(),
 
-		new Phi.Phi32Propagate(),
-		new Phi.Phi64Propagate(),
-		new Phi.PhiObjectPropagate(),
-		new Phi.PhiR4Propagate(),
-		new Phi.PhiR8Propagate(),
+		new Propagate.MoveCompoundPropagate(),
+		new Propagate.MoveObjectPropagate(),
+		new Propagate.MoveObjectPropagateConstant(),
+
+		new Propagate.Phi32Propagate(),
+		new Propagate.Phi64Propagate(),
+		new Propagate.PhiObjectPropagate(),
+		new Propagate.PhiR4Propagate(),
+		new Propagate.PhiR8Propagate(),
 
 		new Phi.Phi32Dead(),
 		new Phi.Phi64Dead(),
@@ -115,11 +119,6 @@ public static class ManualTransforms
 		new Rewrite.Branch64Object(),
 		new Rewrite.Branch32From64(),
 		new Rewrite.Branch64From32(),
-
-		new Special.MoveCompoundPropagate(),
-
-		new Special.MoveObjectPropagate(),
-		new Special.MoveObjectPropagateConstant(),
 
 		new Rewrite.Compare32x32Combine32x32(),
 		new Rewrite.Compare32x32Combine64x32(),

@@ -1,20 +1,25 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Special;
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Propagate;
 
-public sealed class MoveObjectPropagate : BaseTransform
+public sealed class Phi32Propagate : BaseTransform
 {
-	public MoveObjectPropagate() : base(IRInstruction.MoveObject, TransformType.Manual | TransformType.Optimization)
+	public Phi32Propagate() : base(IRInstruction.Phi32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
 	public override bool Match(Context context, TransformContext transform)
 	{
-		if (!IsSSAForm(context.Result))
-			return false;
+		if (context.OperandCount == 1)
+			return true;
 
-		if (!IsSSAForm(context.Operand1))
-			return false;
+		var operand = context.Operand1;
+
+		foreach (var op in context.Operands)
+		{
+			if (!AreSame(op, operand))
+				return false;
+		}
 
 		return true;
 	}

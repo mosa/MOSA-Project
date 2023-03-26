@@ -1,10 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Special;
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Propagate;
 
-public sealed class MoveR4Propagate : BaseTransform
+public sealed class Move32PropagateConstant : BaseTransform
 {
-	public MoveR4Propagate() : base(IRInstruction.MoveR4, TransformType.Manual | TransformType.Optimization)
+	public Move32PropagateConstant() : base(IRInstruction.Move32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -13,7 +13,7 @@ public sealed class MoveR4Propagate : BaseTransform
 		if (!IsSSAForm(context.Result))
 			return false;
 
-		if (!IsSSAForm(context.Operand1))
+		if (!context.Operand1.IsResolvedConstant)
 			return false;
 
 		return true;

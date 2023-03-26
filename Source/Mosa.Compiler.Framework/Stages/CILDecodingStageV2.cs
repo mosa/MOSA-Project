@@ -484,8 +484,9 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 			case OpCode.Conv_i2: return ConvertI2(context, stack);
 			case OpCode.Conv_i4: return ConvertI4(context, stack);
 			case OpCode.Conv_i8: return ConvertI8(context, stack);
-			case OpCode.Conv_ovf_i: return ConvertIWithOverflow(context, stack);
-			case OpCode.Conv_ovf_i_un: return false;                            // TODO
+			case OpCode.Conv_ovf_i: return ConvertToIWithOverflow(context, stack);
+			case OpCode.Conv_ovf_i_un: return ConvertUToIWithOverflow(context, stack);
+
 			case OpCode.Conv_ovf_i1: return ConvertI1WithOverflow(context, stack);
 			case OpCode.Conv_ovf_i1_un: return ConvertUToI1WithOverflow(context, stack);
 			case OpCode.Conv_ovf_i2: return ConvertI2WithOverflow(context, stack);
@@ -494,8 +495,9 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 			case OpCode.Conv_ovf_i4_un: return ConvertUToI4WithOverflow(context, stack);
 			case OpCode.Conv_ovf_i8: return ConvertI8WithOverflow(context, stack);
 			case OpCode.Conv_ovf_i8_un: return ConvertUToI8WithOverflow(context, stack);
-			case OpCode.Conv_ovf_u: return ConvertUWithOverflow(context, stack);
-			case OpCode.Conv_ovf_u_un: return false;                            // TODO
+			case OpCode.Conv_ovf_u: return ConvertToUWithOverflow(context, stack);
+			case OpCode.Conv_ovf_u_un: return ConvertUToUWithOverflow(context, stack);
+
 			case OpCode.Conv_ovf_u1: return ConvertU1WithOverflow(context, stack);
 			case OpCode.Conv_ovf_u1_un: return ConvertUToU1WithOverflow(context, stack);
 			case OpCode.Conv_ovf_u2: return ConvertU2WithOverflow(context, stack);
@@ -1716,11 +1718,13 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 			if (typeSize == 8)
 			{
 				context.AppendInstruction(IRInstruction.Box64, result, methodTable, entry.Operand);
-
 			}
 			else
 			{
-				context.AppendInstruction(IRInstruction.Box, result, methodTable, entry.Operand, CreateConstant32(typeSize));
+				var address = AllocateVirtualRegister(type.ToManagedPointer());
+
+				context.AppendInstruction(IRInstruction.AddressOf, address, entry.Operand);
+				context.AppendInstruction(IRInstruction.Box, result, methodTable, address, CreateConstant32(typeSize));
 			}
 		}
 
@@ -2686,7 +2690,47 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		}
 	}
 
-	private bool ConvertIWithOverflow(Context context, Stack<StackEntry> stack)
+	private bool ConvertUToIWithOverflow(Context context, Stack<StackEntry> stack)
+	{
+		var entry = PopStack(stack);
+
+		if (Is32BitPlatform)
+		{
+			var result = AllocateVirtualRegister32();
+			PushStack(stack, new StackEntry(StackType.Int32, result));
+
+			switch (entry.StackType)
+			{
+				case StackType.Int32:
+					context.AppendInstruction(IRInstruction.CheckedConversionU32ToI32, result, entry.Operand);
+					return true;
+
+				case StackType.Int64:
+					context.AppendInstruction(IRInstruction.CheckedConversionU64ToI32, result, entry.Operand);
+					return true;
+			}
+		}
+		else
+		{
+			var result = AllocateVirtualRegister64();
+			PushStack(stack, new StackEntry(StackType.Int64, result));
+
+			switch (entry.StackType)
+			{
+				case StackType.Int32:
+					context.AppendInstruction(IRInstruction.ZeroExtend32x64, result, entry.Operand);
+					return true;
+
+				case StackType.Int64:
+					context.AppendInstruction(IRInstruction.CheckedConversionU64ToI64, result, entry.Operand);
+					return true;
+			}
+		}
+
+		return false;
+	}
+
+	private bool ConvertToIWithOverflow(Context context, Stack<StackEntry> stack)
 	{
 		var entry = PopStack(stack);
 
@@ -2742,7 +2786,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		return false;
 	}
 
-	private bool ConvertUWithOverflow(Context context, Stack<StackEntry> stack)
+	private bool ConvertToUWithOverflow(Context context, Stack<StackEntry> stack)
 	{
 		var entry = PopStack(stack);
 
@@ -2988,6 +3032,46 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 			default:
 				return false;
 		}
+	}
+
+	private bool ConvertUToUWithOverflow(Context context, Stack<StackEntry> stack)
+	{
+		var entry = PopStack(stack);
+
+		if (Is32BitPlatform)
+		{
+			var result = AllocateVirtualRegister32();
+			PushStack(stack, new StackEntry(StackType.Int32, result));
+
+			switch (entry.StackType)
+			{
+				case StackType.Int32:
+					context.AppendInstruction(IRInstruction.Move32, result, entry.Operand);
+					return true;
+
+				case StackType.Int64:
+					context.AppendInstruction(IRInstruction.CheckedConversionU64ToU32, result, entry.Operand);
+					return true;
+			}
+		}
+		else
+		{
+			var result = AllocateVirtualRegister64();
+			PushStack(stack, new StackEntry(StackType.Int64, result));
+
+			switch (entry.StackType)
+			{
+				case StackType.Int32:
+					context.AppendInstruction(IRInstruction.ZeroExtend32x64, result, entry.Operand);
+					return true;
+
+				case StackType.Int64:
+					context.AppendInstruction(IRInstruction.Move64, result, entry.Operand);
+					return true;
+			}
+		}
+
+		return false;
 	}
 
 	private bool ConvertU1WithOverflow(Context context, Stack<StackEntry> stack)

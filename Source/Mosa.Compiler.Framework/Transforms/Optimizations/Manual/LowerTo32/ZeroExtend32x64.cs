@@ -18,9 +18,6 @@ public sealed class ZeroExtend32x64 : BaseTransform
 		var result = context.Result;
 		var operand1 = context.Operand1;
 
-		var resultLow = transform.AllocateVirtualRegister32();
-
-		context.SetInstruction(IRInstruction.GetLow32, resultLow, operand1);
-		context.AppendInstruction(IRInstruction.To64, result, resultLow, transform.Constant32_0);
+		context.SetInstruction(IRInstruction.To64, result, operand1, transform.Constant32_0);
 	}
 }
