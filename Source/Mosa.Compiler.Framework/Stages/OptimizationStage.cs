@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework.Managers;
+using Mosa.Compiler.Framework.Transforms.LowerTo32;
 using Mosa.Compiler.Framework.Transforms.Optimizations.Auto;
 using Mosa.Compiler.Framework.Transforms.Optimizations.Manual;
 
@@ -18,8 +19,12 @@ public class OptimizationStage : BaseTransformStage
 		: base(true, true)
 	{
 		LowerTo32 = lowerTo32;
+
 		AddTranforms(ManualTransforms.List);
 		AddTranforms(AutoTransforms.List);
+
+		if (LowerTo32)
+			AddTranforms(Lower32Transforms.List);
 	}
 
 	protected override void CustomizeTransform(TransformContext transformContext)
