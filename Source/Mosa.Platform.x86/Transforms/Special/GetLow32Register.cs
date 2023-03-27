@@ -22,6 +22,9 @@ public sealed class GetLow32Register : BaseTransform
 		if (!context.Operand1.IsCPURegister)
 			return false;
 
+		if (!(context.Operand1.Register == CPURegister.EBP || context.Operand1.Register == CPURegister.ESP))
+			return false;
+
 		return true;
 	}
 

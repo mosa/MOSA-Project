@@ -37,5 +37,6 @@ public sealed class Blsr64 : X64Instruction
 	{
 		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 1);
+
 	}
 }
