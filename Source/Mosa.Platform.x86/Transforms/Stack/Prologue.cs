@@ -1,13 +1,13 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x86.Transforms.Stack;
 
 /// <summary>
 /// ConvertR4ToI64
 /// </summary>
+[Transform("x86.Stack")]
 public sealed class Prologue : BaseTransform
 {
 	public Prologue() : base(IRInstruction.Prologue, TransformType.Manual | TransformType.Transform)

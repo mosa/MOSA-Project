@@ -1,13 +1,13 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x86.Transforms.Tweak;
 
 /// <summary>
 /// Movss
 /// </summary>
+[Transform("x86.Tweak")]
 public sealed class Movss : BaseTransform
 {
 	public Movss() : base(X86.Movss, TransformType.Manual | TransformType.Transform)

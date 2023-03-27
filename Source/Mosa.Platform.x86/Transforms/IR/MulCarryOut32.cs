@@ -7,6 +7,7 @@ namespace Mosa.Platform.x86.Transforms.IR;
 /// <summary>
 /// MulCarryOut32
 /// </summary>
+[Transform("x86.IR")]
 public sealed class MulCarryOut32 : BaseIRTransform
 {
 	public MulCarryOut32() : base(IRInstruction.MulCarryOut32, TransformType.Manual | TransformType.Transform)

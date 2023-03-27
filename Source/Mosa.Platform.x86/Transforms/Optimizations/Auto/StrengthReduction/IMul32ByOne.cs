@@ -4,13 +4,13 @@
 
 using Mosa.Platform.x86;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x86.Transforms.Optimizations.Auto.StrengthReduction;
 
 /// <summary>
 /// IMul32ByOne
 /// </summary>
+[Transform("x86.Optimizations.Auto.StrengthReduction")]
 public sealed class IMul32ByOne : BaseTransform
 {
 	public IMul32ByOne() : base(X86.IMul32, TransformType.Auto | TransformType.Optimization)

@@ -9,6 +9,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 /// <summary>
 /// Compare64x32SwapToZero
 /// </summary>
+[Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class Compare64x32SwapToZero : BaseTransform
 {
 	public Compare64x32SwapToZero() : base(IRInstruction.Compare64x32, TransformType.Auto | TransformType.Optimization)
@@ -63,6 +64,7 @@ public sealed class Compare64x32SwapToZero : BaseTransform
 /// <summary>
 /// Compare64x32SwapToZero_v1
 /// </summary>
+[Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class Compare64x32SwapToZero_v1 : BaseTransform
 {
 	public Compare64x32SwapToZero_v1() : base(IRInstruction.Compare64x32, TransformType.Auto | TransformType.Optimization)

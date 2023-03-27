@@ -9,6 +9,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 /// <summary>
 /// Xor64Max
 /// </summary>
+[Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class Xor64Max : BaseTransform
 {
 	public Xor64Max() : base(IRInstruction.Xor64, TransformType.Auto | TransformType.Optimization)
@@ -41,6 +42,7 @@ public sealed class Xor64Max : BaseTransform
 /// <summary>
 /// Xor64Max_v1
 /// </summary>
+[Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class Xor64Max_v1 : BaseTransform
 {
 	public Xor64Max_v1() : base(IRInstruction.Xor64, TransformType.Auto | TransformType.Optimization)

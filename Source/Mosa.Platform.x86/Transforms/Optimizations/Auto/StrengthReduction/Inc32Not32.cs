@@ -4,13 +4,13 @@
 
 using Mosa.Platform.x86;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x86.Transforms.Optimizations.Auto.StrengthReduction;
 
 /// <summary>
 /// Inc32Not32
 /// </summary>
+[Transform("x86.Optimizations.Auto.StrengthReduction")]
 public sealed class Inc32Not32 : BaseTransform
 {
 	public Inc32Not32() : base(X86.Inc32, TransformType.Auto | TransformType.Optimization)

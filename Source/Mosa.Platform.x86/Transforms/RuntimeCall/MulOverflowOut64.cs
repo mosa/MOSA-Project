@@ -2,13 +2,13 @@
 
 using System.Diagnostics;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x86.Transforms.RuntimeCall;
 
 /// <summary>
 /// MulOverflowOut64
 /// </summary>
+[Transform("x86.RuntimeCall")]
 public sealed class MulOverflowOut64 : BaseTransform
 {
 	public MulOverflowOut64() : base(IRInstruction.MulOverflowOut64, TransformType.Manual | TransformType.Transform)

@@ -9,6 +9,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Rewrite;
 /// <summary>
 /// IfThenElse64Compare64v1
 /// </summary>
+[Transform("IR.Optimizations.Auto.Rewrite")]
 public sealed class IfThenElse64Compare64v1 : BaseTransform
 {
 	public IfThenElse64Compare64v1() : base(IRInstruction.IfThenElse64, TransformType.Auto | TransformType.Optimization)
@@ -53,6 +54,7 @@ public sealed class IfThenElse64Compare64v1 : BaseTransform
 /// <summary>
 /// IfThenElse64Compare64v1_v1
 /// </summary>
+[Transform("IR.Optimizations.Auto.Rewrite")]
 public sealed class IfThenElse64Compare64v1_v1 : BaseTransform
 {
 	public IfThenElse64Compare64v1_v1() : base(IRInstruction.IfThenElse64, TransformType.Auto | TransformType.Optimization)

@@ -9,6 +9,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 /// <summary>
 /// DivSigned32ByOne
 /// </summary>
+[Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class DivSigned32ByOne : BaseTransform
 {
 	public DivSigned32ByOne() : base(IRInstruction.DivSigned32, TransformType.Auto | TransformType.Optimization)

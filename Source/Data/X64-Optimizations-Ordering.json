@@ -1,9 +1,10 @@
 ﻿{
+	"Family": "x64",
+	"Section": "Optimizations.Auto",
 	"Commutative": [
 	],
 	"Optimizations": [
 		{
-			"FamilyName": "x64",
 			"Type": "Ordering",
 			"Name": "Adc##",
 			"SubName": "",
@@ -14,7 +15,6 @@
 			"Variations": "No"
 		},
 		{
-			"FamilyName": "x64",
 			"Type": "Ordering",
 			"Name": "Add##",
 			"SubName": "",
@@ -25,7 +25,6 @@
 			"Variations": "No"
 		},
 		{
-			"FamilyName": "x64",
 			"Type": "Ordering",
 			"Name": "Addss",
 			"SubName": "",
@@ -36,7 +35,6 @@
 			"Variations": "No"
 		},
 		{
-			"FamilyName": "x64",
 			"Type": "Ordering",
 			"Name": "Addsd",
 			"SubName": "",
@@ -47,7 +45,6 @@
 			"Variations": "No"
 		},
 		{
-			"FamilyName": "x64",
 			"Type": "Ordering",
 			"Name": "And##",
 			"SubName": "",
@@ -58,7 +55,6 @@
 			"Variations": "No"
 		},
 		{
-			"FamilyName": "x64",
 			"Type": "Ordering",
 			"Name": "IMul##",
 			"SubName": "",
@@ -69,7 +65,6 @@
 			"Variations": "No"
 		},
 		{
-			"FamilyName": "x64",
 			"Type": "Ordering",
 			"Name": "Mulss",
 			"SubName": "",
@@ -80,7 +75,6 @@
 			"Variations": "No"
 		},
 		{
-			"FamilyName": "x64",
 			"Type": "Ordering",
 			"Name": "Mulsd",
 			"SubName": "",
@@ -91,7 +85,6 @@
 			"Variations": "No"
 		},
 		{
-			"FamilyName": "x64",
 			"Type": "Ordering",
 			"Name": "Or##",
 			"SubName": "",
@@ -102,7 +95,6 @@
 			"Variations": "No"
 		},
 		{
-			"FamilyName": "x64",
 			"Type": "Ordering",
 			"Name": "Xor##",
 			"SubName": "",

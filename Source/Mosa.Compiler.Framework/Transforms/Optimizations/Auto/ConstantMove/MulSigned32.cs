@@ -9,6 +9,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove;
 /// <summary>
 /// MulSigned32
 /// </summary>
+[Transform("IR.Optimizations.Auto.ConstantMove")]
 public sealed class MulSigned32 : BaseTransform
 {
 	public MulSigned32() : base(IRInstruction.MulSigned32, TransformType.Auto | TransformType.Optimization)

@@ -1,13 +1,13 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x86.Transforms.Tweak;
 
 /// <summary>
 /// Movsd
 /// </summary>
+[Transform("x86.Tweak")]
 public sealed class Movsd : BaseTransform
 {
 	public Movsd() : base(X86.Movsd, TransformType.Manual | TransformType.Optimization)

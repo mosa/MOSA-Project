@@ -7,6 +7,7 @@ namespace Mosa.Platform.x86.Transforms.IR;
 /// <summary>
 /// And32
 /// </summary>
+[Transform("x86.IR")]
 public sealed class And32 : BaseIRTransform
 {
 	public And32() : base(IRInstruction.And32, TransformType.Manual | TransformType.Transform)

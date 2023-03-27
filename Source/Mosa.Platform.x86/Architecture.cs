@@ -143,7 +143,7 @@ public sealed class Architecture : BaseArchitecture
 	public override void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> pipeline, CompilerSettings compilerSettings)
 	{
 		pipeline.InsertBefore<CallStage>(
-			new Stages.RuntimeCallStage()
+			new RuntimeCallStage()
 		);
 
 		pipeline.InsertAfterLast<PlatformIntrinsicStage>(

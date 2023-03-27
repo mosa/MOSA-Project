@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections.Generic;
+using System.Security;
 using System.Text;
 using Mosa.Utility.SourceCodeGenerator.TransformExpressions;
 
@@ -21,6 +22,9 @@ public class BuildTransformations : BuildBaseTemplate
 	protected readonly string Namespace;
 	protected readonly string Path;
 
+	private string Family;
+	private string Section;
+
 	public BuildTransformations(string jsonFile, string destinationPath, string path, string name)
 		: base(jsonFile, destinationPath)
 	{
@@ -38,6 +42,9 @@ public class BuildTransformations : BuildBaseTemplate
 			}
 		}
 
+		Family = Entries.Family;
+		Section = Entries.Section;
+
 		foreach (var entry in Entries.Optimizations)
 		{
 			Body(entry);
@@ -47,7 +54,7 @@ public class BuildTransformations : BuildBaseTemplate
 	protected override void Body(dynamic node = null)
 	{
 		string name = node.Name;
-		string familyName = node.FamilyName;
+		//string familyName = Family; // node.FamilyName;
 		string type = node.Type;
 		string subName = node.SubName;
 		string expression = node.Expression;
@@ -64,7 +71,7 @@ public class BuildTransformations : BuildBaseTemplate
 		if (!optimization && !transformation)
 			optimization = true;
 
-		GenerateTranformations(name, familyName, type, subName, expression, filter, result, variations, log, optimization, priority);
+		GenerateTranformations(name, Family, type, subName, expression, filter, result, variations, log, optimization, priority);
 	}
 
 	private void GenerateTranformations(string name, string familyName, string type, string subName, string expression, string filter, string result, bool variations, bool log, bool optimization, int priority)
@@ -118,7 +125,6 @@ public class BuildTransformations : BuildBaseTemplate
 		if (!Namespace.Contains("Framework"))
 		{
 			Lines.AppendLine($"using Mosa.Compiler.Framework;");
-			Lines.AppendLine($"using Mosa.Compiler.Framework.Transforms;");
 		}
 
 		Lines.AppendLine();
@@ -169,11 +175,15 @@ public class BuildTransformations : BuildBaseTemplate
 		Lines.AppendLine($"/// {name}{subName}");
 		Lines.AppendLine("/// </summary>");
 
+		var section = $"{Family}.{Section}.{type}";
+
+		Lines.AppendLine($"[Transform(\"{section}\")]");
+
 		Lines.AppendLine($"public sealed class {name}{subName} : BaseTransform");
 		Lines.AppendLine("{");
 
 		var typestring = "TransformType.Auto" +
-		                 (optimization ? " | TransformType.Optimization" : string.Empty);
+						 (optimization ? " | TransformType.Optimization" : string.Empty);
 
 		if (log)
 			Lines.AppendLine($"\tpublic {name}{subName}() : base({instructionName}, " + typestring + ", true)");

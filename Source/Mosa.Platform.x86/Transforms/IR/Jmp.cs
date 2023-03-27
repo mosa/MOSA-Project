@@ -7,6 +7,7 @@ namespace Mosa.Platform.x86.Transforms.IR;
 /// <summary>
 /// Jmp
 /// </summary>
+[Transform("x86.IR")]
 public sealed class Jmp : BaseIRTransform
 {
 	public Jmp() : base(IRInstruction.Jmp, TransformType.Manual | TransformType.Transform)

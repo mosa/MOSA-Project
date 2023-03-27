@@ -9,6 +9,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 /// <summary>
 /// GetHigh32To64
 /// </summary>
+[Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class GetHigh32To64 : BaseTransform
 {
 	public GetHigh32To64() : base(IRInstruction.GetHigh32, TransformType.Auto | TransformType.Optimization)

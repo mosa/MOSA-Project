@@ -9,6 +9,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 /// <summary>
 /// DivUnsigned64
 /// </summary>
+[Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class DivUnsigned64 : BaseTransform
 {
 	public DivUnsigned64() : base(IRInstruction.DivUnsigned64, TransformType.Auto | TransformType.Optimization)

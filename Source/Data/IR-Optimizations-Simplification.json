@@ -1,4 +1,6 @@
 ﻿{
+	"Family": "IR",
+	"Section": "Optimizations.Auto",
 	"Commutative": [
 		"IR.Add32",
 		"IR.Add64",
@@ -23,7 +25,6 @@
 	],
 	"Optimizations": [
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "Move##",
 			"SubName": "Coalescing",
@@ -32,7 +33,6 @@
 			"Result": "(IR.Move## a)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "MoveObject",
 			"SubName": "Coalescing",
@@ -41,7 +41,6 @@
 			"Result": "(IR.MoveObject a)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "Not##",
 			"SubName": "Twice",
@@ -50,7 +49,6 @@
 			"Result": "(IR.Move## x)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "GetLow32",
 			"SubName": "FromTo64",
@@ -59,7 +57,6 @@
 			"Result": "(IR.Move32 a)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "GetHigh32",
 			"SubName": "FromTo64",
@@ -68,7 +65,6 @@
 			"Result": "(IR.Move32 b)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "GetHigh32",
 			"SubName": "To64",
@@ -77,7 +73,6 @@
 			"Result": "(IR.Move32 b)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "GetLow32",
 			"SubName": "To64",
@@ -86,7 +81,6 @@
 			"Result": "(IR.Move32 a)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "GetLow32",
 			"SubName": "FromShiftedRight32",
@@ -95,7 +89,6 @@
 			"Result": "(IR.Truncate64x32 a)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "GetLow32",
 			"SubName": "FromRightShiftAndTo64",
@@ -104,7 +97,6 @@
 			"Result": "(IR.Move32 b)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "GetHigh32",
 			"SubName": "FromRightLeftAndTo64",
@@ -113,7 +105,6 @@
 			"Result": "(IR.Move32 a)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "GetHigh32",
 			"SubName": "FromShiftedMore32",
@@ -122,7 +113,6 @@
 			"Result": "(IR.Move32 0)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "GetLow32",
 			"SubName": "FromShiftedMore32",
@@ -131,7 +121,6 @@
 			"Result": "(IR.Move32 0)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "Truncate64x32Add64",
 			"SubName": "FromZeroExtended32x64",
@@ -140,7 +129,6 @@
 			"Result": "(IR.Add32 a b)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "Truncate64x32Sub64",
 			"SubName": "FromZeroExtended32x64",
@@ -149,7 +137,6 @@
 			"Result": "(IR.Sub32 a b)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "Truncate64x32MulUnsigned64",
 			"SubName": "FromZeroExtended32x64",
@@ -158,7 +145,6 @@
 			"Result": "(IR.MulUnsigned32 a b)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "Truncate64x32And64",
 			"SubName": "FromZeroExtended32x64",
@@ -167,7 +153,6 @@
 			"Result": "(IR.And32 a b)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "Truncate64x32Or64",
 			"SubName": "FromZeroExtended32x64",
@@ -176,7 +161,6 @@
 			"Result": "(IR.Or32 a b)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "Truncate64x32Xor64",
 			"SubName": "FromZeroExtended32x64",
@@ -185,7 +169,6 @@
 			"Result": "(IR.Xor32 a b)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "Add##",
 			"SubName": "MultipleWithCommon",
@@ -195,7 +178,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "Sub##",
 			"SubName": "MultipleWithCommon",
@@ -205,7 +187,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "And##",
 			"SubName": "Not##Not##",
@@ -214,7 +195,6 @@
 			"Result": "(IR.Not## (IR.Or## a b))"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "Or##",
 			"SubName": "Not##Not##",
@@ -223,7 +203,6 @@
 			"Result": "(IR.Not## (IR.And## a b))"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "MulSigned##",
 			"SubName": "ByNegative1",
@@ -233,7 +212,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "And##",
 			"SubName": "Same",
@@ -242,7 +220,6 @@
 			"Result": "(IR.Move## a)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "Or##",
 			"SubName": "Same",
@@ -252,7 +229,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "And##",
 			"SubName": "Double",
@@ -262,7 +238,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "Or##",
 			"SubName": "Double",
@@ -272,7 +247,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "Xor##",
 			"SubName": "Double",
@@ -282,7 +256,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "CompareObject",
 			"SubName": "SameAndEqual",
@@ -292,7 +265,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "CompareObject",
 			"SubName": "SameAndNotEqual",
@@ -302,7 +274,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "Compare32x##",
 			"SubName": "SameAndEqual",
@@ -312,7 +283,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "Compare64x##",
 			"SubName": "SameAndEqual",
@@ -322,7 +292,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "Compare32x##",
 			"SubName": "SameAndNotEqual",
@@ -332,7 +301,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "Compare64x##",
 			"SubName": "SameAndNotEqual",
@@ -342,7 +310,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "Add##",
 			"SubName": "v1",
@@ -352,7 +319,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "Sub##",
 			"SubName": "v1",
@@ -362,7 +328,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "Compare32x##",
 			"SubName": "SwapToZero",
@@ -372,7 +337,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "Compare64x##",
 			"SubName": "SwapToZero",
@@ -382,7 +346,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "Compare32x##",
 			"SubName": "PassThru",
@@ -392,7 +355,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "Compare64x##",
 			"SubName": "PassThru",
@@ -402,7 +364,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "Compare32x##",
 			"SubName": "NotPassThru",
@@ -412,7 +373,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "Compare64x##",
 			"SubName": "NotPassThru",
@@ -422,7 +382,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "Compare32x##",
 			"SubName": "PassThru2",
@@ -432,7 +391,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "Compare64x##",
 			"SubName": "PassThru2",
@@ -442,7 +400,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "Or##And##And##",
 			"SubName": "ByConstant",
@@ -452,7 +409,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "Or##SignExtend16x##SignExtend16x##",
 			"SubName": "",
@@ -462,7 +418,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "Or32Truncate64x32Truncate64x32",
 			"SubName": "",
@@ -472,7 +427,6 @@
 			"Variations": "No"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "SignExtend32x64Truncate64x32",
 			"SubName": "",

@@ -1,13 +1,13 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x86.Transforms.Tweak;
 
 /// <summary>
 /// Shl32
 /// </summary>
+[Transform("x86.Tweak")]
 public sealed class Shl32 : BaseTransform
 {
 	public Shl32() : base(X86.Shl32, TransformType.Manual | TransformType.Transform)

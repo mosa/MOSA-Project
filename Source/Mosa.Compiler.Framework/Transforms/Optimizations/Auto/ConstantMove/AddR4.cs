@@ -9,6 +9,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove;
 /// <summary>
 /// AddR4
 /// </summary>
+[Transform("IR.Optimizations.Auto.ConstantMove")]
 public sealed class AddR4 : BaseTransform
 {
 	public AddR4() : base(IRInstruction.AddR4, TransformType.Auto | TransformType.Optimization)

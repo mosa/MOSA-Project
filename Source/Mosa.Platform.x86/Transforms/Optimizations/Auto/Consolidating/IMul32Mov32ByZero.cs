@@ -4,13 +4,13 @@
 
 using Mosa.Platform.x86;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x86.Transforms.Optimizations.Auto.Consolidating;
 
 /// <summary>
 /// IMul32Mov32ByZero
 /// </summary>
+[Transform("x86.Optimizations.Auto.Consolidating")]
 public sealed class IMul32Mov32ByZero : BaseTransform
 {
 	public IMul32Mov32ByZero() : base(X86.IMul32, TransformType.Auto | TransformType.Optimization)
