@@ -8,6 +8,7 @@ namespace Mosa.Platform.ARMv8A32.Transforms.Tweak;
 /// <summary>
 /// Mvf
 /// </summary>
+[Transform("ARMv8A32.Tweak")]
 public sealed class Mvf : BaseTransform
 {
 	public Mvf() : base(ARMv8A32.Mvf, TransformType.Manual | TransformType.Transform)

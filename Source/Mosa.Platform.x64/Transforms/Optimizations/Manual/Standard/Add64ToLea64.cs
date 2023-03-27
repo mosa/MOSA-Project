@@ -10,6 +10,7 @@ namespace Mosa.Platform.x64.Transforms.Optimizations.Manual.Standard;
 // A search is required to determine if a status flag is used.
 // However, if the search is not conclusive, the transformation is not made.
 
+[Transform("x64.Optimizations.Manual.Standard")]
 public sealed class Add64ToLea64 : BaseTransform
 {
 	public Add64ToLea64() : base(X64.Add64, TransformType.Manual | TransformType.Optimization)

@@ -2,13 +2,13 @@
 
 using System.Diagnostics;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x64.Transforms.FixedRegisters;
 
 /// <summary>
 /// Mul64
 /// </summary>
+[Transform("x64.FixedRegisters")]
 public sealed class Mul64 : BaseTransform
 {
 	public Mul64() : base(X64.Mul64, TransformType.Manual | TransformType.Transform)

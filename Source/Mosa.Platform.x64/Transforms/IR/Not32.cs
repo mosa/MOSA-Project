@@ -7,6 +7,7 @@ namespace Mosa.Platform.x64.Transforms.IR;
 /// <summary>
 /// Not32
 /// </summary>
+[Transform("x64.IR")]
 public sealed class Not32 : BaseIRTransform
 {
 	public Not32() : base(IRInstruction.Not32, TransformType.Manual | TransformType.Transform)

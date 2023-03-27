@@ -1,13 +1,13 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x86.Transforms.FixedRegisters;
 
 /// <summary>
 /// WrMSR
 /// </summary>
+[Transform("x86.FixedRegisters")]
 public sealed class WrMSR : BaseTransform
 {
 	public WrMSR() : base(X86.WrMSR, TransformType.Manual | TransformType.Transform)

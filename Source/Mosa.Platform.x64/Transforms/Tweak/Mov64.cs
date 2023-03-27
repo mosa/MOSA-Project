@@ -9,6 +9,7 @@ namespace Mosa.Platform.x64.Transforms.Tweak;
 /// <summary>
 /// Mov64
 /// </summary>
+[Transform("x64.Tweak")]
 public sealed class Mov64 : BaseTransform
 {
 	public Mov64() : base(X64.Mov64, TransformType.Manual | TransformType.Transform)

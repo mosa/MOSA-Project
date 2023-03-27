@@ -5,6 +5,7 @@ using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x64.Transforms.Optimizations.Manual.Standard;
 
+[Transform("x64.Optimizations.Manual.Standard")]
 public sealed class Test32ToZero : BaseTransform
 {
 	public Test32ToZero() : base(X64.Test32, TransformType.Manual | TransformType.Optimization)

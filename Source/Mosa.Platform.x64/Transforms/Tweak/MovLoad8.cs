@@ -9,6 +9,7 @@ namespace Mosa.Platform.x64.Transforms.Tweak;
 /// <summary>
 /// MovLoad8
 /// </summary>
+[Transform("x64.Tweak")]
 public sealed class MovLoad8 : BaseTransform
 {
 	public MovLoad8() : base(X64.MovLoad8, TransformType.Manual | TransformType.Transform)

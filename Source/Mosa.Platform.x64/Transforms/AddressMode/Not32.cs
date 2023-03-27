@@ -7,6 +7,7 @@ namespace Mosa.Platform.x64.Transforms.AddressMode;
 /// <summary>
 /// Not32
 /// </summary>
+[Transform("x64.AddressMode")]
 public sealed class Not32 : BaseAddressModeTransform
 {
 	public Not32() : base(X64.Not32, TransformType.Manual | TransformType.Transform)

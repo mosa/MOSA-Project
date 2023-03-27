@@ -1,13 +1,13 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x64.Transforms.FixedRegisters;
 
 /// <summary>
 /// Sar32
 /// </summary>
+[Transform("x64.FixedRegisters")]
 public sealed class Sar32 : BaseTransform
 {
 	public Sar32() : base(X64.Sar32, TransformType.Manual | TransformType.Transform)

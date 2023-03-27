@@ -9,6 +9,7 @@ namespace Mosa.Platform.x64.Transforms.Tweak;
 /// <summary>
 /// Setcc
 /// </summary>
+[Transform("x64.Tweak")]
 public sealed class Setcc : BaseTransform
 {
 	public Setcc() : base(X64.Setcc, TransformType.Manual | TransformType.Transform)

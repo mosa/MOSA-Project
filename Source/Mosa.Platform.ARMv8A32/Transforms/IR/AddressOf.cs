@@ -2,13 +2,13 @@
 
 using System.Diagnostics;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.ARMv8A32.Transforms.IR;
 
 /// <summary>
 /// AddressOf
 /// </summary>
+[Transform("ARMv8A32.IR")]
 public sealed class AddressOf : BaseIRTransform
 {
 	public AddressOf() : base(IRInstruction.AddressOf, TransformType.Manual | TransformType.Transform)

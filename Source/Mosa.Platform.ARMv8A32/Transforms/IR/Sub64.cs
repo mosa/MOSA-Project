@@ -1,13 +1,13 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.ARMv8A32.Transforms.IR;
 
 /// <summary>
 /// Sub64
 /// </summary>
+[Transform("ARMv8A32.IR")]
 public sealed class Sub64 : BaseIRTransform
 {
 	public Sub64() : base(IRInstruction.Sub64, TransformType.Manual | TransformType.Transform)

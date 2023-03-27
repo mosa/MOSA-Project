@@ -7,6 +7,7 @@ using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x64.Transforms.Optimizations.Manual.Standard;
 
+[Transform("x64.Optimizations.Manual.Standard")]
 public sealed class Lea32ToDec32 : BaseTransform
 {
 	public Lea32ToDec32() : base(X64.Lea32, TransformType.Manual | TransformType.Optimization)

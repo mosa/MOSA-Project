@@ -7,6 +7,7 @@ namespace Mosa.Platform.x64.Transforms.AddressMode;
 /// <summary>
 /// Btr64
 /// </summary>
+[Transform("x64.AddressMode")]
 public sealed class Btr64 : BaseAddressModeTransform
 {
 	public Btr64() : base(X64.Btr64, TransformType.Manual | TransformType.Transform)

@@ -9,6 +9,7 @@ namespace Mosa.Platform.x64.Transforms.Tweak;
 /// <summary>
 /// Movsd
 /// </summary>
+[Transform("x64.Tweak")]
 public sealed class Movsd : BaseTransform
 {
 	public Movsd() : base(X64.Movsd, TransformType.Manual | TransformType.Transform)

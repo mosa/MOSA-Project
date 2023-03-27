@@ -5,6 +5,7 @@ using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x86.Transforms.Manual.Standard;
 
+[Transform("x86.Optimizations.Manual.Standard")]
 public sealed class Mov32ToXor32 : BaseTransform
 {
 	public Mov32ToXor32() : base(X86.Mov32, TransformType.Manual | TransformType.Optimization)

@@ -2,13 +2,13 @@
 
 using System.Diagnostics;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.ARMv8A32.Transforms.IR;
 
 /// <summary>
 /// Load32
 /// </summary>
+[Transform("ARMv8A32.IR")]
 public sealed class Load32 : BaseIRTransform
 {
 	public Load32() : base(IRInstruction.Load32, TransformType.Manual | TransformType.Transform)

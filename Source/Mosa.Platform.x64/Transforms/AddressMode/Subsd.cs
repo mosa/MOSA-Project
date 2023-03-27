@@ -7,6 +7,7 @@ namespace Mosa.Platform.x64.Transforms.AddressMode;
 /// <summary>
 /// Subsd
 /// </summary>
+[Transform("x64.AddressMode")]
 public sealed class Subsd : BaseAddressModeTransform
 {
 	public Subsd() : base(X64.Subsd, TransformType.Manual | TransformType.Transform)

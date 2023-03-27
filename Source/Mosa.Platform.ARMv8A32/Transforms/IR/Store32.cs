@@ -1,13 +1,13 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.ARMv8A32.Transforms.IR;
 
 /// <summary>
 /// Store32
 /// </summary>
+[Transform("ARMv8A32.IR")]
 public sealed class Store32 : BaseIRTransform
 {
 	public Store32() : base(IRInstruction.Store32, TransformType.Manual | TransformType.Transform)

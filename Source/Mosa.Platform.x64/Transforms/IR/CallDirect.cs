@@ -7,6 +7,7 @@ namespace Mosa.Platform.x64.Transforms.IR;
 /// <summary>
 /// CallDirect
 /// </summary>
+[Transform("x64.IR")]
 public sealed class CallDirect : BaseIRTransform
 {
 	public CallDirect() : base(IRInstruction.CallDirect, TransformType.Manual | TransformType.Transform)

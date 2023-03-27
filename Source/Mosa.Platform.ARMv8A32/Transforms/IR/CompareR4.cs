@@ -1,13 +1,13 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.ARMv8A32.Transforms.IR;
 
 /// <summary>
 /// CompareR4
 /// </summary>
+[Transform("ARMv8A32.IR")]
 public sealed class CompareR4 : BaseIRTransform
 {
 	public CompareR4() : base(IRInstruction.CompareR4, TransformType.Manual | TransformType.Transform)

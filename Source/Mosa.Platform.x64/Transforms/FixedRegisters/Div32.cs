@@ -1,13 +1,13 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x64.Transforms.FixedRegisters;
 
 /// <summary>
 /// Div32
 /// </summary>
+[Transform("x64.FixedRegisters")]
 public sealed class Div32 : BaseTransform
 {
 	public Div32() : base(X64.Div32, TransformType.Manual | TransformType.Transform)

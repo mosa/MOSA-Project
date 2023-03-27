@@ -1,13 +1,13 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x86.Transforms.FixedRegisters;
 
 /// <summary>
 /// Out8
 /// </summary>
+[Transform("x86.FixedRegisters")]
 public sealed class Out8 : BaseTransform
 {
 	public Out8() : base(X86.Out8, TransformType.Manual | TransformType.Transform)

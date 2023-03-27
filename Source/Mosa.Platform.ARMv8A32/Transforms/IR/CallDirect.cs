@@ -1,13 +1,13 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.ARMv8A32.Transforms.IR;
 
 /// <summary>
 /// CallDirect
 /// </summary>
+[Transform("ARMv8A32.IR")]
 public sealed class CallDirect : BaseIRTransform
 {
 	public CallDirect() : base(IRInstruction.CallDirect, TransformType.Manual | TransformType.Transform)
