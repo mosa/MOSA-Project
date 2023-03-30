@@ -158,9 +158,13 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 		MethodCompiler.ProtectedRegions = ProtectedRegion.CreateProtectedRegions(BasicBlocks, Method.ExceptionHandlers);
 
+		AdditionalExceptionBlocks();
+
 		InsertBlockProtectInstructions();
 
-		ProtectedRegion.FinalizeAll(BasicBlocks, MethodCompiler.ProtectedRegions);
+		InsertFlowOrJumpInstructions();
+
+		//ProtectedRegion.FinalizeAll(BasicBlocks, MethodCompiler.ProtectedRegions);
 	}
 
 	protected override void Setup()
@@ -315,6 +319,18 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		}
 	}
 
+	private void AdditionalExceptionBlocks()
+	{
+		foreach (var block in BasicBlocks)
+		{
+			if (!block.HasPreviousBlocks && !block.IsHeadBlock)
+			{
+				// block was targeted (probably by an leave instruction within a protected region)
+				BasicBlocks.AddHeadBlock(block);
+			}
+		}
+	}
+
 	private void InsertBlockProtectInstructions()
 	{
 		foreach (var handler in Method.ExceptionHandlers)
@@ -340,6 +356,86 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 				var finallyOperand = Is32BitPlatform ? AllocateVirtualRegister32() : AllocateVirtualRegister64();
 
 				context.AppendInstruction2(IRInstruction.FinallyStart, exceptionObject, finallyOperand);
+			}
+		}
+	}
+
+	private bool IsSourceAndTargetWithinSameTryOrException(InstructionNode node)
+	{
+		var leaveLabel = TraverseBackToNativeBlock(node.Block).Label;
+		var targetLabel = TraverseBackToNativeBlock(node.BranchTargets[0]).Label;
+
+		foreach (var handler in Method.ExceptionHandlers)
+		{
+			var one = handler.IsLabelWithinTry(leaveLabel);
+			var two = handler.IsLabelWithinTry(targetLabel);
+
+			if (one && !two)
+				return false;
+
+			if (!one && two)
+				return false;
+
+			if (one && two)
+				return true;
+
+			one = handler.IsLabelWithinHandler(leaveLabel);
+			two = handler.IsLabelWithinHandler(targetLabel);
+
+			if (one && !two)
+				return false;
+
+			if (!one && two)
+				return false;
+
+			if (one && two)
+				return true;
+		}
+
+		// very odd
+		return true;
+	}
+
+	private void InsertFlowOrJumpInstructions()
+	{
+		foreach (var block in BasicBlocks)
+		{
+			var label = TraverseBackToNativeBlock(block).Label;
+
+			for (var node = block.BeforeLast; !node.IsBlockStartInstruction; node = node.Previous)
+			{
+				if (node.IsEmptyOrNop)
+					continue;
+
+				if (!(node.Instruction == IRInstruction.TryEnd
+					|| node.Instruction == IRInstruction.ExceptionEnd))
+					continue;
+
+				var target = node.BranchTargets[0];
+
+				if (IsSourceAndTargetWithinSameTryOrException(node))
+				{
+					// Leave instruction can be converted into a simple jump instruction
+					node.SetInstruction(IRInstruction.Jmp, target);
+					BasicBlocks.RemoveHeaderBlock(target);
+					continue;
+				}
+
+				var entry = FindImmediateExceptionHandler(label);
+
+				if (!entry.IsLabelWithinTry(label))
+					break;
+
+				var flowNode = new InstructionNode(IRInstruction.Flow, target);
+
+				node.Insert(flowNode);
+
+				if (target.IsHeadBlock)
+				{
+					BasicBlocks.RemoveHeaderBlock(target);
+				}
+
+				break;
 			}
 		}
 	}
@@ -4312,7 +4408,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 			context.AppendInstruction(IRInstruction.CallStatic, null, symbol, operands);
 
 			//context.InvokeMethod = method;  // optional??
-			context.MosaType = classType;   // optional??
+			//context.MosaType = classType;   // optional??
 
 			PushStack(stack, new StackEntry(StackType.Object, result));
 

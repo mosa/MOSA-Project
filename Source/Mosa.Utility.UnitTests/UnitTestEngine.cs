@@ -319,7 +319,7 @@ public class UnitTestEngine : IDisposable
 		   )
 		{
 			message = string.IsNullOrWhiteSpace(message) ? string.Empty : $": {message}";
-			Console.WriteLine($"{(DateTime.Now - CompileStartTime).TotalSeconds:0.00} [{threadID.ToString()}] {compilerEvent.ToText()}{message}");
+			Console.WriteLine($"{(DateTime.Now - CompileStartTime).TotalSeconds:0.00} [{threadID}] {compilerEvent.ToText()}{message}");
 		}
 	}
 
@@ -530,6 +530,8 @@ public class UnitTestEngine : IDisposable
 				{
 					foreach (var failed in Pending)
 					{
+						// Console.WriteLine("Failed - Requeueing: " + (failed.Other as UnitTest).FullMethodName);
+
 						(failed.Other as UnitTest).Status = UnitTestStatus.FailedByCrash;
 					}
 					Pending.Clear();

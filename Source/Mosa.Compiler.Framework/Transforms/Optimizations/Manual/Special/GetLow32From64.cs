@@ -34,6 +34,10 @@ public sealed class GetLow32From64 : BaseTransform
 		if (context.Operand1.IsPointer || context.Operand1.IsManagedPointer)
 			return true;
 
+		// TEMP
+		if (context.Operand1.Type.IsValueType && MosaTypeLayout.IsPrimitive(context.Operand1.Type) && transform.TypeLayout.GetTypeSize(context.Operand1.Type) == 4)
+			return true;
+
 		return false;
 	}
 

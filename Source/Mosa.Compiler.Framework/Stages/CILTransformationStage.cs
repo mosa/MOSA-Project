@@ -1305,7 +1305,7 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 				var methodTable = GetMethodTablePointer(classType);
 				var size = CreateConstant32(TypeLayout.GetTypeSize(classType));
 				before.SetInstruction(IRInstruction.NewObject, result, methodTable, size);
-				before.MosaType = classType;
+				//before.MosaType = classType;
 
 				operands.Insert(0, result);
 			}
