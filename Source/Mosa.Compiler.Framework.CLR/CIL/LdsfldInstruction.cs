@@ -1,0 +1,48 @@
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using System.Diagnostics;
+using Mosa.Compiler.MosaTypeSystem;
+
+namespace Mosa.Compiler.Framework.CLR.CIL;
+
+/// <summary>
+/// Ldsfld Instruction
+/// </summary>
+/// <seealso cref="BaseCILInstruction" />
+internal sealed class LdsfldInstruction : BaseCILInstruction
+{
+	#region Construction
+
+	/// <summary>
+	/// Initializes a new instance of the <see cref="LdsfldInstruction"/> class.
+	/// </summary>
+	/// <param name="opcode">The opcode.</param>
+	public LdsfldInstruction(OpCode opcode)
+		: base(opcode, 0, 1)
+	{
+	}
+
+	#endregion Construction
+
+	#region Methods
+
+	/// <summary>
+	/// Decodes the specified instruction.
+	/// </summary>
+	/// <param name="node">The context.</param>
+	/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
+	public override void Decode(InstructionNode node, IInstructionDecoder decoder)
+	{
+		// Decode base classes first
+		base.Decode(node, decoder);
+
+		var field = (MosaField)decoder.Instruction.Operand;
+
+		Debug.Assert(field.IsStatic, "Static field access on non-static field.");
+
+		node.MosaField = field;
+		node.Result = decoder.MethodCompiler.AllocateVirtualRegisterOrStackSlot(field.FieldType);
+	}
+
+	#endregion Methods
+}
