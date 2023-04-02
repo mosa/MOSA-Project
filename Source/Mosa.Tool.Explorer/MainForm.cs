@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Configuration;
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.CLR;
 using Mosa.Compiler.Framework.CompilerStages;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
