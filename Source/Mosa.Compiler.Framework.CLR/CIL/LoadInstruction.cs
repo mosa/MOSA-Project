@@ -6,7 +6,7 @@ namespace Mosa.Compiler.Framework.CLR.CIL;
 /// Load Instruction
 /// </summary>
 /// <seealso cref="BaseCILInstruction" />
-public class LoadInstruction : BaseCILInstruction
+internal class LoadInstruction : BaseCILInstruction
 {
 	#region Construction
 

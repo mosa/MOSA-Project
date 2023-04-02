@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.CLR.CIL;
 /// the result on the stack.
 /// </summary>
 /// <seealso cref="UnaryInstruction" />
-public class UnaryArithmeticInstruction : UnaryInstruction
+internal class UnaryArithmeticInstruction : UnaryInstruction
 {
 	#region Construction
 

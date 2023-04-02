@@ -6,7 +6,7 @@ namespace Mosa.Compiler.Framework.CLR.CIL;
 /// Intermediate representation of an instruction, which takes two stack arguments.
 /// </summary>
 /// <seealso cref="BaseCILInstruction" />
-public class BinaryInstruction : BaseCILInstruction
+internal class BinaryInstruction : BaseCILInstruction
 {
 	#region Construction
 

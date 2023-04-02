@@ -6,7 +6,7 @@ namespace Mosa.Compiler.Framework.CLR.CIL;
 /// Implements the internal representation for unary CIL instructions.
 /// </summary>
 /// <seealso cref="BaseCILInstruction" />
-public class UnaryInstruction : BaseCILInstruction
+internal class UnaryInstruction : BaseCILInstruction
 {
 	#region Construction
 

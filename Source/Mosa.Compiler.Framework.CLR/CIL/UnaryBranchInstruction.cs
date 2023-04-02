@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.CLR.CIL;
 /// <remarks>
 /// This instruction is used to represent brfalse[.s] and brtrue[.s].
 /// </remarks>
-public class UnaryBranchInstruction : UnaryInstruction
+internal class UnaryBranchInstruction : UnaryInstruction
 {
 	#region Construction
 

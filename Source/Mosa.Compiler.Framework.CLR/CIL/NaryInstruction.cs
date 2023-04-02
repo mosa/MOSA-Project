@@ -6,7 +6,7 @@ namespace Mosa.Compiler.Framework.CLR.CIL;
 /// Nary Instruction
 /// </summary>
 /// <seealso cref="BaseCILInstruction" />
-public class NaryInstruction : BaseCILInstruction
+internal class NaryInstruction : BaseCILInstruction
 {
 	#region Construction
 

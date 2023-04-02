@@ -6,7 +6,7 @@ namespace Mosa.Compiler.Framework.CLR.CIL;
 /// Store Instruction
 /// </summary>
 /// <seealso cref="UnaryInstruction" />
-public class StoreInstruction : UnaryInstruction
+internal class StoreInstruction : UnaryInstruction
 {
 	#region Construction
 

@@ -9,7 +9,7 @@ namespace Mosa.Compiler.Framework.CLR.CIL;
 /// Arithmetic Instruction
 /// </summary>
 /// <seealso cref="BinaryInstruction" />
-public class ArithmeticInstruction : BinaryInstruction
+internal class ArithmeticInstruction : BinaryInstruction
 {
 	#region Static data members
 

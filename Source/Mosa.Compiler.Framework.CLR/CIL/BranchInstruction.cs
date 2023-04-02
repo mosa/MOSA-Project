@@ -6,7 +6,7 @@ namespace Mosa.Compiler.Framework.CLR.CIL;
 /// Branch Instruction
 /// </summary>
 /// <seealso cref="BaseCILInstruction" />
-public class BranchInstruction : BaseCILInstruction
+internal class BranchInstruction : BaseCILInstruction
 {
 	#region Construction
 

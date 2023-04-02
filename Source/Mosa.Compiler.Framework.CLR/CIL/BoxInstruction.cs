@@ -8,7 +8,7 @@ namespace Mosa.Compiler.Framework.CLR.CIL;
 /// Box Instruction
 /// </summary>
 /// <seealso cref="UnaryInstruction" />
-public class BoxInstruction : UnaryInstruction
+internal class BoxInstruction : UnaryInstruction
 {
 	#region Construction
 

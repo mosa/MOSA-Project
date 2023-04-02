@@ -6,7 +6,7 @@ namespace Mosa.Compiler.Framework.CLR.CIL;
 /// Prefix Instruction
 /// </summary>
 /// <seealso cref="BaseCILInstruction" />
-public class PrefixInstruction : BaseCILInstruction
+internal class PrefixInstruction : BaseCILInstruction
 {
 	#region Properties
 
