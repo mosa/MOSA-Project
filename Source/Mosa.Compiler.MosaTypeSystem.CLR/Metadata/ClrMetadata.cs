@@ -22,7 +22,7 @@ internal class ClrMetadata : IMetadata
 	public TypeSystem? TypeSystem { get; private set; }
 
 	[NotNull]
-	public ITypeSystemController? Controller { get; private set; }
+	public TypeSystemController? Controller { get; private set; }
 
 	public ClrMetadataCache Cache { get; }
 
@@ -30,7 +30,7 @@ internal class ClrMetadata : IMetadata
 
 	public ClrMetadataResolver Resolver { get; }
 
-	public void Initialize(TypeSystem system, ITypeSystemController controller)
+	public void Initialize(TypeSystem system, TypeSystemController controller)
 	{
 		TypeSystem = system;
 		Controller = controller;

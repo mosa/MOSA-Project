@@ -4,7 +4,7 @@ namespace Mosa.Compiler.MosaTypeSystem;
 
 public interface IMetadata
 {
-	void Initialize(TypeSystem system, ITypeSystemController controller);
+	void Initialize(TypeSystem system, TypeSystemController controller);
 
 	void LoadMetadata();
 

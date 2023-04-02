@@ -2,7 +2,6 @@
 
 using System.Diagnostics;
 using System.Reflection;
-using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.CLR.Stages;
 using Mosa.Compiler.Framework.CompilerStages;
 using Mosa.Compiler.Framework.Linker;
@@ -149,12 +148,12 @@ internal sealed class ClrCompiler : Compiler
 
 		MethodStagePipelines = new Pipeline<BaseMethodCompilerStage>[MaxThreads];
 
-		MethodScheduler = new MethodScheduler(this);
+		MethodScheduler = new PriorityMethodScheduler(this);
 		MethodScanner = new ClrMethodScanner(this);
 
-		CollectntrinsicAndStubMethods();
+		CollectIntrinsicAndStubMethods();
 
-		PlugSystem = new PlugSystem(TypeSystem);
+		PlugSystem = new ClrPlugSystem(TypeSystem);
 
 		PlatformInternalRuntimeType = GetPlatformInternalRuntimeType();
 		InternalRuntimeType = GeInternalRuntimeType();
@@ -170,7 +169,7 @@ internal sealed class ClrCompiler : Compiler
 		IsStopped = false;
 	}
 
-	private void CollectntrinsicAndStubMethods()
+	private void CollectIntrinsicAndStubMethods()
 	{
 		foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
 		{
@@ -216,7 +215,7 @@ internal sealed class ClrCompiler : Compiler
 
 		var pipeline = GetOrCreateMethodStagePipeline(threadID);
 
-		var methodCompiler = new MethodCompiler(this, method, basicBlocks, threadID)
+		var methodCompiler = new ClrMethodCompiler(this, method, basicBlocks, threadID)
 		{
 			Pipeline = pipeline
 		};
@@ -252,16 +251,6 @@ internal sealed class ClrCompiler : Compiler
 		}
 
 		return pipeline;
-	}
-
-	/// <summary>
-	/// Compiles the linker method.
-	/// </summary>
-	/// <param name="methodName">Name of the method.</param>
-	/// <returns></returns>
-	public override MosaMethod CreateLinkerMethod(string methodName)
-	{
-		return TypeSystem.CreateLinkerMethod(methodName, TypeSystem.BuiltIn.Void, false, null);
 	}
 
 	/// <summary>
@@ -319,10 +308,10 @@ internal sealed class ClrCompiler : Compiler
 
 		Debug.Assert(!method.HasOpenGenericParams);
 
-		CompileMethod(method, 0);
+		CompileMethod(method);
 	}
 
-	private MosaMethod CompileMethod(MosaMethod method, int threadID)
+	private MosaMethod CompileMethod(MosaMethod method, int threadID = 0)
 	{
 		if (method.IsCompilerGenerated)
 			return method;
@@ -455,204 +444,5 @@ internal sealed class ClrCompiler : Compiler
 		}
 	}
 
-	public string SearchPathsForFile(string filename)
-	{
-		foreach (var path in CompilerSettings.SearchPaths)
-		{
-			var file = Path.Combine(path, filename);
-
-			if (File.Exists(file))
-			{
-				return file;
-			}
-		}
-
-		return null;
-	}
-
-	public override byte[] SearchPathsForFileAndLoad(string filename)
-	{
-		var file = SearchPathsForFile(filename);
-
-		if (file == null)
-			return null;
-
-		return File.ReadAllBytes(file);
-	}
-
 	#endregion Methods
-
-	#region Helper Methods
-
-	public override bool IsTraceable(int traceLevel)
-	{
-		return TraceLevel >= traceLevel;
-	}
-
-	public override void PostTraceLog(TraceLog traceLog)
-	{
-		if (traceLog == null)
-			return;
-
-		CompilerHooks.NotifyTraceLog?.Invoke(traceLog);
-	}
-
-	/// <summary>
-	/// Traces the specified compiler event.
-	/// </summary>
-	/// <param name="compilerEvent">The compiler event.</param>
-	/// <param name="message">The message.</param>
-	/// <param name="threadID">The thread identifier.</param>
-	public override void PostEvent(CompilerEvent compilerEvent, string message = null, int threadID = 0)
-	{
-		CompilerHooks.NotifyEvent?.Invoke(compilerEvent, message ?? string.Empty, threadID);
-	}
-
-	private MosaType GetPlatformInternalRuntimeType()
-	{
-		return TypeSystem.GetTypeByName("Mosa.Runtime." + Architecture.PlatformName + ".Internal");
-	}
-
-	private MosaType GeInternalRuntimeType()
-	{
-		return TypeSystem.GetTypeByName("Mosa.Runtime.Internal");
-	}
-
-	public override MethodData GetMethodData(MosaMethod method)
-	{
-		return CompilerData.GetMethodData(method);
-	}
-
-	#endregion Helper Methods
-
-	#region Type Methods
-
-	public override MosaType GetTypeFromTypeCode(MosaTypeCode code)
-	{
-		return code switch
-		{
-			MosaTypeCode.Void => TypeSystem.BuiltIn.Void,
-			MosaTypeCode.Boolean => TypeSystem.BuiltIn.Boolean,
-			MosaTypeCode.Char => TypeSystem.BuiltIn.Char,
-			MosaTypeCode.I1 => TypeSystem.BuiltIn.I1,
-			MosaTypeCode.U1 => TypeSystem.BuiltIn.U1,
-			MosaTypeCode.I2 => TypeSystem.BuiltIn.I2,
-			MosaTypeCode.U2 => TypeSystem.BuiltIn.U2,
-			MosaTypeCode.I4 => TypeSystem.BuiltIn.I4,
-			MosaTypeCode.U4 => TypeSystem.BuiltIn.U4,
-			MosaTypeCode.I8 => TypeSystem.BuiltIn.I8,
-			MosaTypeCode.U8 => TypeSystem.BuiltIn.U8,
-			MosaTypeCode.R4 => TypeSystem.BuiltIn.R4,
-			MosaTypeCode.R8 => TypeSystem.BuiltIn.R8,
-			MosaTypeCode.I => TypeSystem.BuiltIn.I,
-			MosaTypeCode.U => TypeSystem.BuiltIn.U,
-			MosaTypeCode.String => TypeSystem.BuiltIn.String,
-			MosaTypeCode.TypedRef => TypeSystem.BuiltIn.TypedRef,
-			MosaTypeCode.Object => TypeSystem.BuiltIn.Object,
-			_ => throw new CompilerException("Can't convert type code {code} to type")
-		};
-	}
-
-	public override StackTypeCode GetStackTypeCode(MosaType type)
-	{
-		switch (type.IsEnum ? type.GetEnumUnderlyingType().TypeCode : type.TypeCode)
-		{
-			case MosaTypeCode.Boolean:
-			case MosaTypeCode.Char:
-			case MosaTypeCode.I1:
-			case MosaTypeCode.U1:
-			case MosaTypeCode.I2:
-			case MosaTypeCode.U2:
-			case MosaTypeCode.I4:
-			case MosaTypeCode.U4:
-				if (Architecture.Is32BitPlatform)
-					return StackTypeCode.Int32;
-				else
-					return StackTypeCode.Int64;
-
-			case MosaTypeCode.I8:
-			case MosaTypeCode.U8:
-				return StackTypeCode.Int64;
-
-			case MosaTypeCode.R4:
-			case MosaTypeCode.R8:
-				return StackTypeCode.F;
-
-			case MosaTypeCode.I:
-			case MosaTypeCode.U:
-				if (Architecture.Is32BitPlatform)
-					return StackTypeCode.Int32;
-				else
-					return StackTypeCode.Int64;
-
-			case MosaTypeCode.ManagedPointer:
-				return StackTypeCode.ManagedPointer;
-
-			case MosaTypeCode.UnmanagedPointer:
-			case MosaTypeCode.FunctionPointer:
-				return StackTypeCode.UnmanagedPointer;
-
-			case MosaTypeCode.String:
-			case MosaTypeCode.ValueType:
-			case MosaTypeCode.ReferenceType:
-			case MosaTypeCode.Array:
-			case MosaTypeCode.Object:
-			case MosaTypeCode.SZArray:
-			case MosaTypeCode.Var:
-			case MosaTypeCode.MVar:
-				return StackTypeCode.O;
-
-			case MosaTypeCode.Void:
-				return StackTypeCode.Unknown;
-		}
-
-		throw new CompilerException($"Can't transform Type {type} to StackTypeCode");
-	}
-
-	public override MosaType GetStackType(MosaType type)
-	{
-		switch (GetStackTypeCode(type))
-		{
-			case StackTypeCode.Int32:
-				return type.TypeSystem.BuiltIn.I4;
-
-			case StackTypeCode.Int64:
-				return type.TypeSystem.BuiltIn.I8;
-
-			case StackTypeCode.N:
-				return type.TypeSystem.BuiltIn.I;
-
-			case StackTypeCode.F:
-				if (type.IsR4)
-					return type.TypeSystem.BuiltIn.R4;
-				else
-					return type.TypeSystem.BuiltIn.R8;
-
-			case StackTypeCode.O:
-				return type;
-
-			case StackTypeCode.UnmanagedPointer:
-			case StackTypeCode.ManagedPointer:
-				return type;
-		}
-
-		throw new CompilerException($"Can't convert {type.FullName} to stack type");
-	}
-
-	public override MosaType GetStackTypeFromCode(StackTypeCode code)
-	{
-		return code switch
-		{
-			StackTypeCode.Int32 => TypeSystem.BuiltIn.I4,
-			StackTypeCode.Int64 => TypeSystem.BuiltIn.I8,
-			StackTypeCode.N => TypeSystem.BuiltIn.I,
-			StackTypeCode.F => TypeSystem.BuiltIn.R8,
-			StackTypeCode.O => TypeSystem.BuiltIn.Object,
-			StackTypeCode.UnmanagedPointer => TypeSystem.BuiltIn.Pointer,
-			StackTypeCode.ManagedPointer => TypeSystem.BuiltIn.Object.ToManagedPointer(),
-			_ => throw new CompilerException($"Can't convert stack type code {code} to type")
-		};
-	}
-
-	#endregion Type Methods
 }

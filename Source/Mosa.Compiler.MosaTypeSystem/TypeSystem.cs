@@ -66,7 +66,7 @@ public class TypeSystem
 	public MosaMethod? EntryPoint { get; internal set; }
 
 	[NotNull]
-	public ITypeSystemController? Controller { get; private set; }
+	public TypeSystemController? Controller { get; private set; }
 
 	public ITypeResolver TypeResolver { get; }
 

@@ -1,33 +1,18 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections.Generic;
-using System.Threading;
 using Mosa.Compiler.MosaTypeSystem;
-using Priority_Queue;
 
 namespace Mosa.Compiler.Framework;
 
 /// <summary>
 /// Schedules compilation of types/methods.
 /// </summary>
-public sealed class MethodScheduler
+public abstract class MethodScheduler
 {
-	#region Data Members
+	public Compiler Compiler { get; set; }
 
-	public Compiler Compiler;
-
-	private readonly HashSet<MethodData> workingSet = new HashSet<MethodData>();
-
-	private readonly SimplePriorityQueue<MethodData> queue = new SimplePriorityQueue<MethodData>();
-
-	private int totalMethods;
-	private int totalQueued;
-
-	#endregion Data Members
-
-	#region Properties
-
-	public int PassCount { get; }
+	public int PassCount { get; set; }
 
 	/// <summary>
 	/// Gets the total methods.
@@ -35,7 +20,7 @@ public sealed class MethodScheduler
 	/// <value>
 	/// The total methods.
 	/// </value>
-	public int TotalMethods => totalMethods;
+	public abstract int TotalMethods { get; }
 
 	/// <summary>
 	/// Gets the queued methods.
@@ -43,25 +28,9 @@ public sealed class MethodScheduler
 	/// <value>
 	/// The queued methods.
 	/// </value>
-	public int TotalQueuedMethods => totalQueued;
+	public abstract int TotalQueuedMethods { get; }
 
-	#endregion Properties
-
-	public MethodScheduler(Compiler compiler)
-	{
-		Compiler = compiler;
-		PassCount = 0;
-	}
-
-	public void ScheduleAll(TypeSystem typeSystem)
-	{
-		foreach (var type in typeSystem.AllTypes)
-		{
-			Schedule(type);
-		}
-	}
-
-	public bool IsCompilable(MosaType type)
+	public static bool IsCompilable(MosaType type)
 	{
 		if (type.IsModule)
 			return false;
@@ -75,7 +44,7 @@ public sealed class MethodScheduler
 		return true;
 	}
 
-	public bool IsCompilable(MosaMethod method)
+	public static bool IsCompilable(MosaMethod method)
 	{
 		if (method.IsAbstract && !method.HasImplementation)
 			return false;
@@ -87,6 +56,18 @@ public sealed class MethodScheduler
 			return false;
 
 		return true;
+	}
+
+	public abstract void AddToQueue(MethodData methodData);
+
+	public abstract MethodData GetMethodToCompile();
+
+	public void ScheduleAll(TypeSystem typeSystem)
+	{
+		foreach (var type in typeSystem.AllTypes)
+		{
+			Schedule(type);
+		}
 	}
 
 	public void Schedule(MosaType type)
@@ -112,55 +93,6 @@ public sealed class MethodScheduler
 	{
 		var methodData = Compiler.GetMethodData(method);
 		AddToQueue(methodData);
-	}
-
-	private void AddToQueue(MethodData methodData)
-	{
-		lock (workingSet)
-		{
-			if (!workingSet.Contains(methodData))
-			{
-				workingSet.Add(methodData);
-
-				Interlocked.Increment(ref totalMethods);
-			}
-		}
-
-		lock (queue)
-		{
-			if (queue.Contains(methodData))
-			{
-				//Debug.WriteLine($"Already in Queue: {method}");
-
-				return; // already queued
-			}
-
-			//Debug.WriteLine($"Queued: {method}");
-			var priority = GetCompilePriorityLevel(methodData);
-
-			queue.Enqueue(methodData, priority);
-
-			Interlocked.Increment(ref totalQueued);
-		}
-	}
-
-	public MethodData GetMethodToCompile()
-	{
-		lock (queue)
-		{
-			if (queue.TryDequeue(out var methodData))
-			{
-				Interlocked.Decrement(ref totalQueued);
-
-				//Debug.WriteLine($"Dequeued: {method}");
-
-				return methodData;
-			}
-			else
-			{
-				return null;
-			}
-		}
 	}
 
 	public void AddToRecompileQueue(HashSet<MosaMethod> methods)

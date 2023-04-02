@@ -4,7 +4,7 @@ using System;
 
 namespace Mosa.Compiler.MosaTypeSystem;
 
-internal class TypeSystemController : ITypeSystemController
+public sealed class TypeSystemController
 {
 	private readonly TypeSystem typeSystem;
 	private uint id = 1;

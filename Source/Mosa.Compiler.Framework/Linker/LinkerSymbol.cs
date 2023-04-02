@@ -26,7 +26,7 @@ public sealed class LinkerSymbol
 
 	public bool IsResolved => VirtualAddress != 0;
 
-	public string ExternalSymbolName { get; internal set; }
+	public string ExternalSymbolName { get; set; }
 
 	public bool IsExternalSymbol { get; set; }
 

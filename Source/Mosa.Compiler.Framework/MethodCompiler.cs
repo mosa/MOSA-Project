@@ -2,13 +2,11 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
-using static Mosa.Compiler.Framework.CompilerHooks;
 
 namespace Mosa.Compiler.Framework;
 
@@ -18,51 +16,36 @@ namespace Mosa.Compiler.Framework;
 /// <remarks>
 /// A method compiler is responsible for compiling a single method of an object.
 /// </remarks>
-public sealed class MethodCompiler
+public abstract class MethodCompiler
 {
-	#region Data Members
-
-	/// <summary>
-	/// The empty operand list
-	/// </summary>
-	private static readonly Operand[] emptyOperandList = System.Array.Empty<Operand>();
-
-	private readonly Stopwatch Stopwatch;
-
-	private readonly NotifyTraceLogHandler NotifyInstructionTraceHandler;
-
-	private readonly NotifyTraceLogHandler NotifyTranformTraceHandler;
-
-	#endregion Data Members
-
 	#region Properties
 
 	/// <summary>
 	/// Gets the Architecture to compile for.
 	/// </summary>
-	public BaseArchitecture Architecture { get; }
+	public BaseArchitecture Architecture { get; set; }
 
 	/// <summary>
 	/// Gets the linker used to resolve external symbols.
 	/// </summary>
-	public MosaLinker Linker { get; }
+	public MosaLinker Linker { get; set; }
 
 	/// <summary>
 	/// Gets the method implementation being compiled.
 	/// </summary>
-	public MosaMethod Method { get; }
+	public MosaMethod Method { get; set; }
 
 	/// <summary>
 	/// Gets the basic blocks.
 	/// </summary>
 	/// <value>The basic blocks.</value>
-	public BasicBlocks BasicBlocks { get; }
+	public BasicBlocks BasicBlocks { get; set; }
 
 	/// <summary>
 	/// Retrieves the compilation scheduler.
 	/// </summary>
 	/// <value>The compilation scheduler.</value>
-	public MethodScheduler MethodScheduler { get; }
+	public MethodScheduler MethodScheduler { get; set; }
 
 	/// <summary>
 	/// Provides access to the pipeline of this compiler.
@@ -73,13 +56,13 @@ public sealed class MethodCompiler
 	/// Gets the type system.
 	/// </summary>
 	/// <value>The type system.</value>
-	public TypeSystem TypeSystem { get; }
+	public TypeSystem TypeSystem { get; set; }
 
 	/// <summary>
 	/// Gets the type layout.
 	/// </summary>
 	/// <value>The type layout.</value>
-	public MosaTypeLayout TypeLayout { get; }
+	public MosaTypeLayout TypeLayout { get; set; }
 
 	/// <summary>
 	/// Gets the local variables.
@@ -89,12 +72,12 @@ public sealed class MethodCompiler
 	/// <summary>
 	/// Gets the assembly compiler.
 	/// </summary>
-	public Compiler Compiler { get; }
+	public Compiler Compiler { get; set; }
 
 	/// <summary>
 	/// Gets the stack.
 	/// </summary>
-	public List<Operand> LocalStack { get; }
+	public List<Operand> LocalStack { get; set; }
 
 	/// <summary>
 	/// Gets or sets the size of the stack.
@@ -107,19 +90,19 @@ public sealed class MethodCompiler
 	/// <summary>
 	/// Gets the virtual register layout.
 	/// </summary>
-	public VirtualRegisters VirtualRegisters { get; }
+	public VirtualRegisters VirtualRegisters { get; set; }
 
 	/// <summary>
 	/// Gets the parameters.
 	/// </summary>
-	public Operand[] Parameters { get; }
+	public Operand[] Parameters { get; set; }
 
 	/// <summary>
 	/// Gets the protected regions.
 	/// </summary>
 	public List<ProtectedRegion> ProtectedRegions { get; set; }
 
-	public bool HasProtectedRegions { get; private set; }
+	public bool HasProtectedRegions { get; set; }
 
 	/// <summary>
 	/// The labels
@@ -129,37 +112,37 @@ public sealed class MethodCompiler
 	/// <summary>
 	/// Gets the thread identifier.
 	/// </summary>
-	public int ThreadID { get; }
+	public int ThreadID { get; set; }
 
 	/// <summary>
 	/// Gets the compiler method data.
 	/// </summary>
-	public MethodData MethodData { get; }
+	public MethodData MethodData { get; set; }
 
 	/// <summary>
 	/// Gets the platform constant zero
 	/// </summary>
-	public Operand ConstantZero { get; }
+	public Operand ConstantZero { get; set; }
 
 	/// <summary>
 	/// Gets the 32-bit constant zero.
 	/// </summary>
-	public Operand Constant32_0 { get; }
+	public Operand Constant32_0 { get; set; }
 
 	/// <summary>
 	/// Gets the 64-bit constant zero.
 	/// </summary>
-	public Operand Constant64_0 { get; }
+	public Operand Constant64_0 { get; set; }
 
 	/// <summary>
 	/// Gets the R4 constant zero.
 	/// </summary>
-	public Operand ConstantR4_0 { get; }
+	public Operand ConstantR4_0 { get; set; }
 
 	/// <summary>
 	/// Gets the R4 constant zero.
 	/// </summary>
-	public Operand ConstantR8_0 { get; }
+	public Operand ConstantR8_0 { get; set; }
 
 	/// <summary>
 	/// Gets or sets a value indicating whether this instance is execute pipeline.
@@ -189,9 +172,9 @@ public sealed class MethodCompiler
 	/// <summary>
 	/// Holds flag that will stop method compiler
 	/// </summary>
-	public bool IsStopped { get; private set; }
+	public bool IsStopped { get; set; }
 
-	public bool Statistics { get; private set; }
+	public bool Statistics { get; set; }
 
 	/// <summary>
 	/// Gets the linker symbol.
@@ -202,9 +185,9 @@ public sealed class MethodCompiler
 	/// <summary>
 	/// Gets the method scanner.
 	/// </summary>
-	public MethodScanner MethodScanner { get; }
+	public MethodScanner MethodScanner { get; set; }
 
-	public CompilerHooks CompilerHooks { get; }
+	public CompilerHooks CompilerHooks { get; set; }
 
 	public bool IsInSSAForm { get; set; }
 
@@ -212,106 +195,13 @@ public sealed class MethodCompiler
 
 	public bool IsLocalStackFinalized { get; set; }
 
-	public bool Is32BitPlatform { get; }
+	public bool Is32BitPlatform { get; set; }
 
-	public bool Is64BitPlatform { get; }
+	public bool Is64BitPlatform { get; set; }
 
-	public int? MethodTraceLevel { get; }
+	public int? MethodTraceLevel { get; set; }
 
 	#endregion Properties
-
-	#region Construction
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="MethodCompiler" /> class.
-	/// </summary>
-	/// <param name="compiler">The assembly compiler.</param>
-	/// <param name="method">The method to compile by this instance.</param>
-	/// <param name="basicBlocks">The basic blocks.</param>
-	/// <param name="threadID">The thread identifier.</param>
-	public MethodCompiler(Compiler compiler, MosaMethod method, BasicBlocks basicBlocks, int threadID)
-	{
-		Stopwatch = Stopwatch.StartNew();
-
-		Compiler = compiler;
-		Method = method;
-		MethodScheduler = compiler.MethodScheduler;
-		Architecture = compiler.Architecture;
-		TypeSystem = compiler.TypeSystem;
-		TypeLayout = compiler.TypeLayout;
-		Linker = compiler.Linker;
-		MethodScanner = compiler.MethodScanner;
-		CompilerHooks = compiler.CompilerHooks;
-		Is32BitPlatform = Architecture.Is32BitPlatform;
-		Is64BitPlatform = Architecture.Is64BitPlatform;
-
-		NotifyInstructionTraceHandler = CompilerHooks.NotifyMethodInstructionTrace != null ? CompilerHooks.NotifyMethodInstructionTrace(Method) : null;
-		NotifyTranformTraceHandler = CompilerHooks.NotifyMethodTranformTrace != null ? CompilerHooks.NotifyMethodTranformTrace(Method) : null;
-
-		MethodTraceLevel = compiler.CompilerHooks.GetMethodTraceLevel != null ? compiler.CompilerHooks.GetMethodTraceLevel(method) : null;
-
-		Statistics = compiler.Statistics;
-		IsInSSAForm = false;
-		AreCPURegistersAllocated = false;
-		IsLocalStackFinalized = false;
-
-		BasicBlocks = basicBlocks ?? new BasicBlocks();
-		LocalStack = new List<Operand>();
-		VirtualRegisters = new VirtualRegisters();
-
-		Parameters = new Operand[method.Signature.Parameters.Count + (method.HasThis || method.HasExplicitThis ? 1 : 0)];
-
-		Constant32_0 = CreateConstant((uint)0);
-		Constant64_0 = CreateConstant((ulong)0);
-		ConstantR4_0 = CreateConstant(0.0f);
-		ConstantR8_0 = CreateConstant(0.0d);
-
-		ConstantZero = Is32BitPlatform ? Constant32_0 : Constant64_0;
-
-		LocalVariables = emptyOperandList;
-		ThreadID = threadID;
-
-		IsStopped = false;
-		IsExecutePipeline = true;
-		IsMethodInlined = false;
-		IsCILStream = !Method.IsCompilerGenerated;
-		HasProtectedRegions = Method.ExceptionHandlers.Count != 0;
-
-		MethodData = Compiler.GetMethodData(Method);
-
-		MethodData.Counters.Reset();
-		MethodData.HasCode = false;
-		MethodData.Version++;
-		MethodData.IsMethodImplementationReplaced = IsMethodPlugged;
-
-		IsStackFrameRequired = MethodData.StackFrameRequired;
-
-		if (Symbol == null)
-		{
-			Symbol = Linker.DefineSymbol(Method.FullName, SectionKind.Text, 0, 0);
-			Symbol.MethodData = MethodData; // for debugging
-			Symbol.MosaMethod = Method; // for debugging
-		}
-		else
-		{
-			Symbol.RemovePatches();
-		}
-
-		var methodInfo = TypeLayout.GetMethodInfo(Method);
-
-		MethodData.ParameterSizes = methodInfo.ParameterSizes;
-		MethodData.ParameterOffsets = methodInfo.ParameterOffsets;
-		MethodData.ParameterStackSize = methodInfo.ParameterStackSize;
-		MethodData.ReturnSize = methodInfo.ReturnSize;
-		MethodData.ReturnInRegister = methodInfo.ReturnInRegister;
-
-		EvaluateParameterOperands();
-
-		MethodData.Counters.NewCountSkipLock("ExecutionTime.Setup.Ticks", (int)Stopwatch.ElapsedTicks);
-		MethodData.Counters.NewCountSkipLock("ExecutionTime.Setup.MicroSeconds", Stopwatch.Elapsed.Microseconds);
-	}
-
-	#endregion Construction
 
 	#region Methods
 
@@ -336,97 +226,6 @@ public sealed class MethodCompiler
 		var local = Operand.CreateStackLocal(type, LocalStack.Count, pinned);
 		LocalStack.Add(local);
 		return local;
-	}
-
-	/// <summary>
-	/// Sets the stack parameter.
-	/// </summary>
-	/// <param name="index">The index.</param>
-	/// <param name="type">The type.</param>
-	/// <param name="name">The name.</param>
-	/// <param name="isThis">if set to <c>true</c> [is this].</param>
-	/// <param name="offset">The offset.</param>
-	/// <returns></returns>
-	private Operand SetStackParameter(int index, MosaType type, string name, int offset)
-	{
-		var param = Operand.CreateStackParameter(type, index, name, offset);
-		Parameters[index] = param;
-		return param;
-	}
-
-	/// <summary>
-	/// Evaluates the parameter operands.
-	/// </summary>
-	private void EvaluateParameterOperands()
-	{
-		var offset = Architecture.OffsetOfFirstParameter;
-
-		//offset += MethodData.ReturnInRegister ? MethodData.ReturnSize : 0;
-
-		if (!MosaTypeLayout.IsUnderlyingPrimitive(Method.Signature.ReturnType))
-		{
-			offset += (int)TypeLayout.GetTypeSize(Method.Signature.ReturnType);
-		}
-
-		//Debug.Assert((MethodData.ReturnInRegister ? MethodData.ReturnSize : 0) == TypeLayout.GetTypeSize(Method.Signature.ReturnType));
-
-		var index = 0;
-
-		if (Method.HasThis || Method.HasExplicitThis)
-		{
-			if (Method.DeclaringType.IsValueType)
-			{
-				var ptr = Method.DeclaringType.ToManagedPointer();
-				SetStackParameter(index++, ptr, "this", offset);
-
-				var size = GetReferenceOrTypeSize(ptr, true);
-				offset += (int)size;
-			}
-			else
-			{
-				SetStackParameter(index++, Method.DeclaringType, "this", offset);
-
-				var size = GetReferenceOrTypeSize(Method.DeclaringType, true);
-				offset += (int)size;
-			}
-		}
-
-		foreach (var parameter in Method.Signature.Parameters)
-		{
-			SetStackParameter(index++, parameter.ParameterType, parameter.Name, offset);
-
-			var size = GetReferenceOrTypeSize(parameter.ParameterType, true);
-			offset += (int)size;
-		}
-	}
-
-	/// <summary>
-	/// Compiles the method referenced by this method compiler.
-	/// </summary>
-	public void Compile2()
-	{
-		PlugMethod();
-
-		PatchDelegate();
-
-		ExternalMethod();
-
-		InternalMethod();
-
-		StubMethod();
-
-		ExecutePipeline();
-
-		Symbol.SetReplacementStatus(MethodData.Inlined);
-
-		if (Statistics)
-		{
-			var log = new TraceLog(TraceType.MethodCounters, Method, string.Empty, MethodData.Version);
-
-			log.Log(MethodData.Counters.Export());
-
-			Compiler.PostTraceLog(log);
-		}
 	}
 
 	/// <summary>
@@ -476,115 +275,11 @@ public sealed class MethodCompiler
 		}
 	}
 
-	private void ExecutePipeline()
-	{
-		if (!IsExecutePipeline)
-			return;
+	public abstract void ExecutePipeline();
 
-		var executionTimes = new long[Pipeline.Count];
+	public abstract void CreateTranformInstructionTrace(BaseMethodCompilerStage stage, int step);
 
-		var startTick = Stopwatch.ElapsedTicks;
-		var startMS = Stopwatch.ElapsedMilliseconds;
-
-		for (var i = 0; i < Pipeline.Count; i++)
-		{
-			var stage = Pipeline[i];
-
-			stage.Setup(this, i);
-			stage.Execute();
-
-			executionTimes[i] = Stopwatch.ElapsedTicks;
-
-			CreateInstructionTrace(stage);
-
-			if (IsStopped || IsMethodInlined)
-				break;
-		}
-
-		if (Statistics)
-		{
-			var lastTick = Stopwatch.ElapsedTicks;
-			var lastMS = Stopwatch.ElapsedMilliseconds;
-
-			MethodData.ElapsedTicks = lastTick;
-
-			MethodData.Counters.NewCountSkipLock("ExecutionTime.StageStart.Ticks", (int)startTick);
-			MethodData.Counters.NewCountSkipLock("ExecutionTime.StageStart.Milliseconds", (int)startMS);
-			MethodData.Counters.NewCountSkipLock("ExecutionTime.Total.Ticks", (int)lastTick);
-			MethodData.Counters.NewCountSkipLock("ExecutionTime.Total.Milliseconds", (int)lastMS);
-
-			var executionTimeLog = new TraceLog(TraceType.MethodDebug, Method, "Execution Time/Ticks", MethodData.Version);
-
-			var previousTick = startTick;
-			var totalTick = lastTick - startTick;
-
-			for (var i = 0; i < Pipeline.Count; i++)
-			{
-				var pipelineTick = executionTimes[i];
-				var ticks = pipelineTick == 0 ? 0 : pipelineTick - previousTick;
-				var percentage = totalTick == 0 ? 0 : ticks * 100 / (double)totalTick;
-				previousTick = pipelineTick;
-
-				var per = (int)percentage / 5;
-
-				var entry = $"[{i:00}] {Pipeline[i].Name.PadRight(45)} : {percentage:00.00} % [{string.Empty.PadRight(per, '#').PadRight(20, ' ')}] ({ticks})";
-
-				executionTimeLog.Log(entry);
-
-				MethodData.Counters.NewCountSkipLock($"ExecutionTime.{i:00}.{Pipeline[i].Name}.Ticks", (int)ticks);
-			}
-
-			executionTimeLog.Log($"{"****Total Time".PadRight(57)}({lastTick} Ticks)");
-			executionTimeLog.Log($"{"****Total Time".PadRight(57)}({lastMS} Milliseconds)");
-
-			PostTraceLog(executionTimeLog);
-		}
-	}
-
-	private void CreateInstructionTrace(BaseMethodCompilerStage stage)
-	{
-		if (NotifyInstructionTraceHandler == null)
-			return;
-
-		var trace = InstructionTrace.Run(stage.FormattedStageName, Method, BasicBlocks, MethodData.Version, null, 0);
-
-		NotifyInstructionTraceHandler(trace);
-	}
-
-	public void CreateTranformInstructionTrace(BaseMethodCompilerStage stage, int step)
-	{
-		if (NotifyTranformTraceHandler == null)
-			return;
-
-		var trace = InstructionTrace.Run(stage.FormattedStageName, Method, BasicBlocks, MethodData.Version, null, step);
-
-		NotifyTranformTraceHandler(trace);
-	}
-
-	private void PlugMethod()
-	{
-		var plugMethod = Compiler.PlugSystem.GetReplacement(Method);
-
-		if (plugMethod == null)
-			return;
-
-		MethodData.ReplacedBy = plugMethod;
-
-		Compiler.MethodScanner.MethodInvoked(plugMethod, Method);
-
-		IsMethodPlugged = true;
-		IsCILStream = false;
-		IsExecutePipeline = false;
-		IsStackFrameRequired = false;
-
-		if (NotifyInstructionTraceHandler != null)
-		{
-			var traceLog = new TraceLog(TraceType.MethodInstructions, Method, "XX-Plugged Method", MethodData.Version);
-			traceLog?.Log($"Plugged by {plugMethod.FullName}");
-
-			NotifyInstructionTraceHandler(traceLog);
-		}
-	}
+	public abstract void PlugMethod();
 
 	public bool IsTraceable(int tracelevel)
 	{
@@ -594,7 +289,7 @@ public sealed class MethodCompiler
 			return Compiler.IsTraceable(tracelevel);
 	}
 
-	private void PostTraceLog(TraceLog traceLog)
+	public void PostTraceLog(TraceLog traceLog)
 	{
 		Compiler.PostTraceLog(traceLog);
 	}
@@ -607,7 +302,7 @@ public sealed class MethodCompiler
 		if (!Method.DeclaringType.IsDelegate)
 			return;
 
-		if (!Framework.DelegatePatcher.Patch(this))
+		if (!DelegatePatcher.Patch(this))
 			return;
 
 		IsCILStream = false;
@@ -621,99 +316,11 @@ public sealed class MethodCompiler
 		}
 	}
 
-	private void ExternalMethod()
-	{
-		if (!Method.IsExternal)
-			return;
+	public abstract void ExternalMethod();
 
-		IsCILStream = false;
-		IsExecutePipeline = false;
-		IsStackFrameRequired = false;
-		MethodData.IsMethodImplementationReplaced = false;
+	public abstract void InternalMethod();
 
-		var intrinsic = Architecture.GetInstrinsicMethod(Method.ExternMethodModule);
-
-		if (intrinsic != null)
-			return;
-
-		Symbol.ExternalSymbolName = Method.ExternMethodName;
-		Symbol.IsExternalSymbol = true;
-
-		var filename = Method.ExternMethodModule;
-
-		if (filename != null)
-		{
-			var bytes = Compiler.SearchPathsForFileAndLoad(filename);
-
-			// TODO: Generate an error if the file is not found
-			// CompilerException.FileNotFound
-
-			Symbol.SetData(bytes);
-		}
-
-		if (NotifyInstructionTraceHandler != null)
-		{
-			var traceLog = new TraceLog(TraceType.MethodInstructions, Method, "XX-External Method", MethodData.Version);
-			traceLog?.Log($"This method is external linked: {Method.ExternMethodName}");
-			NotifyInstructionTraceHandler(traceLog);
-		}
-	}
-
-	private void InternalMethod()
-	{
-		if (!Method.IsInternal)
-			return;
-
-		IsCILStream = false;
-		IsExecutePipeline = false;
-		IsStackFrameRequired = false;
-
-		if (NotifyInstructionTraceHandler != null)
-		{
-			var traceLog = new TraceLog(TraceType.MethodInstructions, Method, "XX-Internal Method", MethodData.Version);
-			traceLog?.Log($"This method is an internal method");
-			NotifyInstructionTraceHandler(traceLog);
-		}
-	}
-
-	private void StubMethod()
-	{
-		var intrinsicAttribute = Method.FindCustomAttribute("System.Runtime.CompilerServices.IntrinsicAttribute");
-
-		if (intrinsicAttribute == null)
-			return;
-
-		var methodName = $"{Method.DeclaringType.Namespace}.{Method.DeclaringType.Name}::{Method.Name}";
-		var stub = Compiler.GetStubMethod(methodName);
-
-		if (stub == null)
-			return;
-
-		IsCILStream = false;
-		IsExecutePipeline = true;
-
-		var prologueBlock = BasicBlocks.CreatePrologueBlock();
-		var startBlock = BasicBlocks.CreateStartBlock();
-		var epilogueBlock = BasicBlocks.CreateEpilogueBlock();
-
-		var prologue = new Context(prologueBlock);
-		prologue.AppendInstruction(IRInstruction.Prologue);
-		prologue.AppendInstruction(IRInstruction.Jmp, startBlock);
-
-		var epilogue = new Context(epilogueBlock);
-		epilogue.AppendInstruction(IRInstruction.Epilogue);
-
-		var start = new Context(startBlock);
-
-		stub(start, this);
-
-		if (NotifyInstructionTraceHandler != null)
-		{
-			var traceLog = new TraceLog(TraceType.MethodInstructions, Method, "XX-Stubbed Method", MethodData.Version);
-			traceLog?.Log($"This method is stubbed");
-			NotifyInstructionTraceHandler(traceLog);
-		}
-	}
+	public abstract void StubMethod();
 
 	/// <summary>
 	/// Stops the method compiler.
