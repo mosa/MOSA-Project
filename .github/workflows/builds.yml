@@ -57,8 +57,6 @@ jobs:
 #        run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.Demo.HelloWorld.x86.dll -s Launcher.Test=true
 #      - name: Test Demo - Mosa.Demo.CoolWorld.x86 
 #        run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.Demo.CoolWorld.x86.dll -s Launcher.Test=true
-      - name: Create Installer
-        run: ISCC.exe /DMyAppVersion=${{ env.BUILD_VERSION }}.${{ github.run_number }} Source/Inno-Setup-Script/Mosa-Installer.iss
       - name: Build Project - Mosa.Templates
         run: dotnet build Source\Mosa.Templates\Mosa.Templates.csproj
       - name: Create Package - Mosa.Templates
@@ -79,11 +77,6 @@ jobs:
         run: nuget pack Source\Mosa.Packages\Mosa.Platform.x64.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ github.run_number }}
       - name: Create Package - Mosa.Kernel.x64
         run: nuget pack Source\Mosa.Packages\Mosa.Kernel.x64.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ github.run_number }}
-      - name: Create Installer Artifact
-        uses: actions/upload-artifact@master
-        with:
-          name: MOSA-Installer-${{ env.BUILD_VERSION }}.${{ github.run_number }}.exe
-          path: bin\MOSA-Installer-${{ env.BUILD_VERSION }}.${{ github.run_number }}.exe
       - name: Create Nuget Packages Artifact
         uses: actions/upload-artifact@master
         with:
