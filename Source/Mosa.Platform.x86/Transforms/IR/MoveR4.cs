@@ -7,6 +7,7 @@ namespace Mosa.Platform.x86.Transforms.IR;
 /// <summary>
 /// MoveR4
 /// </summary>
+[Transform("x86.IR")]
 public sealed class MoveR4 : BaseIRTransform
 {
 	public MoveR4() : base(IRInstruction.MoveR4, TransformType.Manual | TransformType.Transform)

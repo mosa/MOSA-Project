@@ -4,13 +4,13 @@
 
 using Mosa.Platform.x64;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x64.Transforms.Optimizations.Auto.Ordering;
 
 /// <summary>
 /// Or32
 /// </summary>
+[Transform("x64.Optimizations.Auto.Ordering")]
 public sealed class Or32 : BaseTransform
 {
 	public Or32() : base(X64.Or32, TransformType.Auto | TransformType.Optimization)

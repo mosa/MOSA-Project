@@ -1,13 +1,13 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.ARMv8A32.Transforms.RuntimeCall;
 
 /// <summary>
 /// BitCopy32ToR4
 /// </summary>
+[Transform("ARMv8A32.RuntimeCall")]
 public sealed class BitCopy32ToR4 : BaseTransform
 {
 	public BitCopy32ToR4() : base(IRInstruction.BitCopy32ToR4, TransformType.Manual | TransformType.Transform)

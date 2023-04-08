@@ -1,10 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x64.Transforms.Optimizations.Manual.Special;
 
+[Transform("x64.Optimizations.Manual.Special")]
 public sealed class Mov64ConstantReuse : BaseTransform
 {
 	public Mov64ConstantReuse() : base(X64.Mov64, TransformType.Manual | TransformType.Optimization)

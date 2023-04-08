@@ -4,13 +4,13 @@
 
 using Mosa.Platform.x64;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x64.Transforms.Optimizations.Auto.Ordering;
 
 /// <summary>
 /// Add64
 /// </summary>
+[Transform("x64.Optimizations.Auto.Ordering")]
 public sealed class Add64 : BaseTransform
 {
 	public Add64() : base(X64.Add64, TransformType.Auto | TransformType.Optimization)

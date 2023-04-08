@@ -7,6 +7,7 @@ namespace Mosa.Platform.x86.Transforms.AddressMode;
 /// <summary>
 /// Shrd32
 /// </summary>
+[Transform("x86.AddressMode")]
 public sealed class Shrd32 : BaseAddressModeTransform
 {
 	public Shrd32() : base(X86.Shrd32, TransformType.Manual | TransformType.Transform)

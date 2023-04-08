@@ -7,6 +7,7 @@ namespace Mosa.Platform.x64.Transforms.AddressMode;
 /// <summary>
 /// Divss
 /// </summary>
+[Transform("x64.AddressMode")]
 public sealed class Divss : BaseAddressModeTransform
 {
 	public Divss() : base(X64.Divss, TransformType.Manual | TransformType.Transform)

@@ -9,6 +9,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 /// <summary>
 /// Move32Coalescing
 /// </summary>
+[Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class Move32Coalescing : BaseTransform
 {
 	public Move32Coalescing() : base(IRInstruction.Move32, TransformType.Auto | TransformType.Optimization)

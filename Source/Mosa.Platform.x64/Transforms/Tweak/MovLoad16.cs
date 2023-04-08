@@ -2,13 +2,13 @@
 
 using System.Diagnostics;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x64.Transforms.Tweak;
 
 /// <summary>
 /// MovLoad16
 /// </summary>
+[Transform("x64.Tweak")]
 public sealed class MovLoad16 : BaseTransform
 {
 	public MovLoad16() : base(X64.MovLoad16, TransformType.Manual | TransformType.Transform)

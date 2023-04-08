@@ -9,6 +9,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 /// <summary>
 /// RemSigned32
 /// </summary>
+[Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class RemSigned32 : BaseTransform
 {
 	public RemSigned32() : base(IRInstruction.RemSigned32, TransformType.Auto | TransformType.Optimization)

@@ -1019,8 +1019,8 @@ public sealed class Operand
 
 	internal void RenameIndex(int index)
 	{
-		Debug.Assert(IsVirtualRegister);
-		Debug.Assert(!IsStackLocal);
+		Debug.Assert(IsVirtualRegister || IsStackLocal);
+		//Debug.Assert(!IsStackLocal);
 
 		Index = index;
 	}

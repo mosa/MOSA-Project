@@ -7,6 +7,7 @@ namespace Mosa.Platform.x86.Transforms.AddressMode;
 /// <summary>
 /// Addss
 /// </summary>
+[Transform("x86.AddressMode")]
 public sealed class Addss : BaseAddressModeTransform
 {
 	public Addss() : base(X86.Addss, TransformType.Manual | TransformType.Transform)

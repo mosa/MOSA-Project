@@ -7,6 +7,7 @@ namespace Mosa.Platform.x86.Transforms.AddressMode;
 /// <summary>
 /// Xorps
 /// </summary>
+[Transform("x86.AddressMode")]
 public sealed class Xorps : BaseAddressModeTransform
 {
 	public Xorps() : base(X86.Xorps, TransformType.Manual | TransformType.Transform)

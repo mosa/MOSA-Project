@@ -1,4 +1,6 @@
 ﻿{
+	"Family": "IR",
+	"Section": "Optimizations.Auto",
 	"Commutative": [
 		"IR.Add32",
 		"IR.Add64",
@@ -27,7 +29,6 @@
 	],
 	"Optimizations": [
 		{
-			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "Compare32x##",
 			"SubName": "RemUnsigned",
@@ -37,7 +38,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "Compare64x##",
 			"SubName": "RemUnsigned",
@@ -47,7 +47,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "Compare32x##",
 			"SubName": "DivUnsignedRange",
@@ -57,7 +56,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "Compare64x##",
 			"SubName": "DivUnsignedRange",
@@ -67,7 +65,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "UselessAnd##",
 			"SubName": "ShiftRight##",
@@ -77,7 +74,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "UselessOr##",
 			"SubName": "ShiftRight##",
@@ -87,7 +83,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "UselessXor##",
 			"SubName": "ShiftRight##",
@@ -97,7 +92,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "UselessAnd##",
 			"SubName": "ShiftLeft##",
@@ -107,7 +101,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "UselessOr##",
 			"SubName": "ShiftLeft##",
@@ -117,7 +110,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "UselessXor##",
 			"SubName": "ShiftLeft##",
@@ -127,7 +119,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "IsolateAndFlipLeastSignificantBit32",
 			"SubName": "",
@@ -137,7 +128,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "Or##Xor##",
 			"SubName": "",

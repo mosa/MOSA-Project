@@ -4,13 +4,13 @@
 
 using Mosa.Platform.x64;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x64.Transforms.Optimizations.Auto.StrengthReduction;
 
 /// <summary>
 /// Sub32ByZero
 /// </summary>
+[Transform("x64.Optimizations.Auto.StrengthReduction")]
 public sealed class Sub32ByZero : BaseTransform
 {
 	public Sub32ByZero() : base(X64.Sub32, TransformType.Auto | TransformType.Optimization)

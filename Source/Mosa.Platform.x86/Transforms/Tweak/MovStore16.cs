@@ -1,13 +1,13 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x86.Transforms.Tweak;
 
 /// <summary>
 /// MovStore16
 /// </summary>
+[Transform("x86.Tweak")]
 public sealed class MovStore16 : BaseTransform
 {
 	public MovStore16() : base(X86.MovStore16, TransformType.Manual | TransformType.Transform)

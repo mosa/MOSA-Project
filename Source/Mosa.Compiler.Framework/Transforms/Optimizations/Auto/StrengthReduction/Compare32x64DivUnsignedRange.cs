@@ -9,6 +9,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 /// <summary>
 /// Compare32x64DivUnsignedRange
 /// </summary>
+[Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class Compare32x64DivUnsignedRange : BaseTransform
 {
 	public Compare32x64DivUnsignedRange() : base(IRInstruction.Compare32x64, TransformType.Auto | TransformType.Optimization)
@@ -61,6 +62,7 @@ public sealed class Compare32x64DivUnsignedRange : BaseTransform
 /// <summary>
 /// Compare32x64DivUnsignedRange_v1
 /// </summary>
+[Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class Compare32x64DivUnsignedRange_v1 : BaseTransform
 {
 	public Compare32x64DivUnsignedRange_v1() : base(IRInstruction.Compare32x64, TransformType.Auto | TransformType.Optimization)

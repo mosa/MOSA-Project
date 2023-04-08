@@ -7,6 +7,7 @@ namespace Mosa.Platform.x64.Transforms.FixedRegisters;
 /// <summary>
 /// MovStoreSeg32
 /// </summary>
+[Transform("x64.FixedRegisters")]
 public sealed class MovStoreSeg32 : BaseTransform
 {
 	public MovStoreSeg32() : base(X64.MovStoreSeg32, TransformType.Manual | TransformType.Transform)

@@ -2,13 +2,13 @@
 
 using System.Diagnostics;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.ARMv8A32.Transforms.IR;
 
 /// <summary>
 /// LoadParamSignExtend16x32
 /// </summary>
+[Transform("ARMv8A32.IR")]
 public sealed class LoadParamSignExtend16x32 : BaseIRTransform
 {
 	public LoadParamSignExtend16x32() : base(IRInstruction.LoadParamSignExtend16x32, TransformType.Manual | TransformType.Transform)

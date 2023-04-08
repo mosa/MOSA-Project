@@ -1,13 +1,13 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.ARMv8A32.Transforms.IR;
 
 /// <summary>
 /// Jmp
 /// </summary>
+[Transform("ARMv8A32.IR")]
 public sealed class Jmp : BaseIRTransform
 {
 	public Jmp() : base(IRInstruction.Jmp, TransformType.Manual | TransformType.Transform)

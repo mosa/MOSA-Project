@@ -112,6 +112,7 @@ namespace Mosa.Compiler.Framework.Transforms.Call
 			if (result == null)
 				return;
 
+			// TODO Pointers
 			if (result.IsReferenceType)
 			{
 				var returnLow = Operand.CreateCPURegister(result.Type, transform.Architecture.ReturnRegister);
@@ -152,6 +153,12 @@ namespace Mosa.Compiler.Framework.Transforms.Call
 				if (underlyingType == null)
 				{
 					context.AppendInstruction(IRInstruction.LoadCompound, result, transform.StackPointer, transform.Constant32_0);
+				}
+				else if (underlyingType.IsReferenceType)
+				{
+					var returnLow = Operand.CreateCPURegister(transform.O, transform.Architecture.ReturnRegister);
+					context.AppendInstruction(IRInstruction.Gen, returnLow);
+					context.AppendInstruction(IRInstruction.MoveObject, result, returnLow);
 				}
 				else if (underlyingType.IsUI1 || underlyingType.IsUI2 || underlyingType.IsUI4 || (transform.Is32BitPlatform && (underlyingType.IsU || underlyingType.IsI || underlyingType.IsPointer)))
 				{
@@ -200,7 +207,7 @@ namespace Mosa.Compiler.Framework.Transforms.Call
 				}
 				else
 				{
-					Debug.Assert(false);
+					throw new CompilerException("Invalid type");
 				}
 			}
 			else
@@ -227,6 +234,7 @@ namespace Mosa.Compiler.Framework.Transforms.Call
 		{
 			var offsetOperand = transform.CreateConstant32(offset);
 
+			// TODO Pointers
 			if (operand.IsReferenceType)
 			{
 				context.AppendInstruction(IRInstruction.StoreObject, null, transform.StackPointer, offsetOperand, operand);
@@ -254,6 +262,10 @@ namespace Mosa.Compiler.Framework.Transforms.Call
 				if (underlyingType == null)
 				{
 					context.AppendInstruction(IRInstruction.StoreCompound, null, transform.StackPointer, offsetOperand, operand);
+				}
+				else if (underlyingType.IsReferenceType)
+				{
+					context.AppendInstruction(IRInstruction.StoreObject, null, transform.StackPointer, offsetOperand, operand);
 				}
 				else if (underlyingType.IsUI1 || underlyingType.IsUI2 || underlyingType.IsUI4 || (transform.Is32BitPlatform && (underlyingType.IsU || underlyingType.IsI)))
 				{

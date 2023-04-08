@@ -7,6 +7,7 @@ namespace Mosa.Platform.x64.Transforms.AddressMode;
 /// <summary>
 /// IMul64
 /// </summary>
+[Transform("x64.AddressMode")]
 public sealed class IMul64 : BaseAddressModeTransform
 {
 	public IMul64() : base(X64.IMul64, TransformType.Manual | TransformType.Transform)

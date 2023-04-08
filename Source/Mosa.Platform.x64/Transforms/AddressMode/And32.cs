@@ -7,6 +7,7 @@ namespace Mosa.Platform.x64.Transforms.AddressMode;
 /// <summary>
 /// And32
 /// </summary>
+[Transform("x64.AddressMode")]
 public sealed class And32 : BaseAddressModeTransform
 {
 	public And32() : base(X64.And32, TransformType.Manual | TransformType.Transform)

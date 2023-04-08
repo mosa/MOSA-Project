@@ -7,6 +7,7 @@ namespace Mosa.Platform.x86.Transforms.IR;
 /// <summary>
 /// AddCarryOut64
 /// </summary>
+[Transform("x86.IR")]
 public sealed class AddCarryOut64 : BaseIRTransform
 {
 	public AddCarryOut64() : base(IRInstruction.AddCarryOut64, TransformType.Manual | TransformType.Transform)

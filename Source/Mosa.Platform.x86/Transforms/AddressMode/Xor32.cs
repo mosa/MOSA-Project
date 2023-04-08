@@ -7,6 +7,7 @@ namespace Mosa.Platform.x86.Transforms.AddressMode;
 /// <summary>
 /// Xor32
 /// </summary>
+[Transform("x86.AddressMode")]
 public sealed class Xor32 : BaseAddressModeTransform
 {
 	public Xor32() : base(X86.Xor32, TransformType.Manual | TransformType.Transform)

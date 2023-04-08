@@ -1,4 +1,6 @@
 ﻿{
+	"Family": "x86",
+	"Section": "Optimizations.Auto",
 	"Commutative": [
 		"X86.Add32",
 		"X86.And32",
@@ -6,7 +8,6 @@
 	],
 	"Optimizations": [
 		{
-			"FamilyName": "x86",
 			"Type": "Standard",
 			"Name": "Mov32",
 			"SubName": "Coalescing",
@@ -16,7 +17,6 @@
 			"Variations": "No"
 		},
 		{
-			"FamilyName": "x86",
 			"Type": "StrengthReduction",
 			"Name": "Add32",
 			"SubName": "ByZero",
@@ -26,7 +26,6 @@
 			"Variations": "No"
 		},
 		{
-			"FamilyName": "x86",
 			"Type": "StrengthReduction",
 			"Name": "Sub32",
 			"SubName": "ByZero",
@@ -36,7 +35,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "x86",
 			"Type": "StrengthReduction",
 			"Name": "IMul32",
 			"SubName": "ByZero",
@@ -47,7 +45,6 @@
 			"Log": "No"
 		},
 		{
-			"FamilyName": "x86",
 			"Type": "StrengthReduction",
 			"Name": "IMul32",
 			"SubName": "ByOne",
@@ -58,7 +55,6 @@
 			"Log": "No"
 		},
 		{
-			"FamilyName": "x86",
 			"Type": "Consolidating",
 			"Name": "Add32Mov32",
 			"SubName": "ByZero",
@@ -69,7 +65,6 @@
 			"Log": "No"
 		},
 		{
-			"FamilyName": "x86",
 			"Type": "Consolidating",
 			"Name": "IMul32Mov32",
 			"SubName": "ByZero",
@@ -80,7 +75,6 @@
 			"Log": "No"
 		},
 		{
-			"FamilyName": "x86",
 			"Type": "Consolidating",
 			"Name": "IMul32Mov32",
 			"SubName": "ByOne",
@@ -91,7 +85,6 @@
 			"Log": "No"
 		},
 		{
-			"FamilyName": "x86",
 			"Type": "Shrink",
 			"Name": "And32",
 			"SubName": "ByFF",
@@ -102,7 +95,6 @@
 			"Log": "No"
 		},
 		{
-			"FamilyName": "x86",
 			"Type": "StrengthReduction",
 			"Name": "Add32By1Not32",
 			"SubName": "",
@@ -112,7 +104,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "x86",
 			"Type": "StrengthReduction",
 			"Name": "Inc32Not32",
 			"SubName": "",
@@ -122,7 +113,6 @@
 			"Variations": "No"
 		},
 		{
-			"FamilyName": "x86",
 			"Type": "Specific",
 			"Name": "And32Add32",
 			"SubName": "ToBlsr32",
@@ -132,7 +122,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "x86",
 			"Type": "Simplication",
 			"Name": "SubFromZero",
 			"SubName": "",

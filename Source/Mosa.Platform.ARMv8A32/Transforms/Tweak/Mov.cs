@@ -8,6 +8,7 @@ namespace Mosa.Platform.ARMv8A32.Transforms.Tweak;
 /// <summary>
 /// Mov
 /// </summary>
+[Transform("ARMv8A32.Tweak")]
 public sealed class Mov : BaseTransform
 {
 	public Mov() : base(ARMv8A32.Mov, TransformType.Manual | TransformType.Transform)

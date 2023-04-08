@@ -1305,7 +1305,7 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 				var methodTable = GetMethodTablePointer(classType);
 				var size = CreateConstant32(TypeLayout.GetTypeSize(classType));
 				before.SetInstruction(IRInstruction.NewObject, result, methodTable, size);
-				before.MosaType = classType;
+				//before.MosaType = classType;
 
 				operands.Insert(0, result);
 			}
@@ -1621,14 +1621,19 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 	{
 		var field = node.MosaField;
 
-		var fieldOperand = Operand.CreateStaticField(field, TypeSystem);
 		var fieldType = field.FieldType;
 		var operand1 = node.Operand1;
 
-		if (MosaTypeLayout.IsUnderlyingPrimitive(fieldType))
-		{
-			var storeInstruction = GetStoreInstruction(fieldType);
+		var underlyingType = MosaTypeLayout.GetUnderlyingType(fieldType);
 
+		if (underlyingType == null)
+		{
+			var fieldOperand = Operand.CreateStaticField(field, TypeSystem);
+			node.SetInstruction(IRInstruction.StoreCompound, null, fieldOperand, ConstantZero, node.Operand1);
+			node.MosaType = fieldType;
+		}
+		else
+		{
 			if (fieldType.IsReferenceType)
 			{
 				var symbol = GetStaticSymbol(field);
@@ -1638,14 +1643,12 @@ public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 			}
 			else
 			{
+				var fieldOperand = Operand.CreateStaticField(field, TypeSystem);
+				var storeInstruction = GetStoreInstruction(underlyingType);
+
 				node.SetInstruction(storeInstruction, null, fieldOperand, ConstantZero, operand1);
 				node.MosaType = fieldType;
 			}
-		}
-		else
-		{
-			node.SetInstruction(IRInstruction.StoreCompound, null, fieldOperand, ConstantZero, node.Operand1);
-			node.MosaType = fieldType;
 		}
 
 		MethodScanner.AccessedField(field);

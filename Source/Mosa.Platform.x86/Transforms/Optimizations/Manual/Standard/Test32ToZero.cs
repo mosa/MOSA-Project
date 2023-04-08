@@ -1,10 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x86.Transforms.Optimizations.Manual.Standard;
 
+[Transform("x86.Optimizations.Manual.Standard")]
 public sealed class Test32ToZero : BaseTransform
 {
 	public Test32ToZero() : base(X86.Test32, TransformType.Manual | TransformType.Optimization)

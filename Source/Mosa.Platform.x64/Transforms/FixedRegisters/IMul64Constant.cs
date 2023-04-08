@@ -1,13 +1,13 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x64.Transforms.FixedRegisters;
 
 /// <summary>
 /// IMul32Constant
 /// </summary>
+[Transform("x64.FixedRegisters")]
 public sealed class IMul64Constant : BaseTransform
 {
 	public IMul64Constant() : base(X64.IMul64, TransformType.Manual | TransformType.Transform)

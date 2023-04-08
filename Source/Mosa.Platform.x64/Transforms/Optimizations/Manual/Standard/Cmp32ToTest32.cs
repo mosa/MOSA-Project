@@ -1,10 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x64.Transforms.Optimizations.Manual.Standard;
 
+[Transform("x64.Optimizations.Manual.Standard")]
 public sealed class Cmp32ToTest32 : BaseTransform
 {
 	public Cmp32ToTest32() : base(X64.Cmp32, TransformType.Manual | TransformType.Optimization)

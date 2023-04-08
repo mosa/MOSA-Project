@@ -7,6 +7,7 @@ namespace Mosa.Platform.x86.Transforms.IR;
 /// <summary>
 /// ShiftLeft64
 /// </summary>
+[Transform("x86.IR")]
 public sealed class ShiftLeft64 : BaseIRTransform
 {
 	public ShiftLeft64() : base(IRInstruction.ShiftLeft64, TransformType.Manual | TransformType.Transform)

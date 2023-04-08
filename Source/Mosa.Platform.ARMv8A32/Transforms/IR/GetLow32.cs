@@ -1,13 +1,13 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.ARMv8A32.Transforms.IR;
 
 /// <summary>
 /// GetLow32
 /// </summary>
+[Transform("ARMv8A32.IR")]
 public sealed class GetLow32 : BaseIRTransform
 {
 	public GetLow32() : base(IRInstruction.GetLow32, TransformType.Manual | TransformType.Transform)

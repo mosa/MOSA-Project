@@ -82,12 +82,12 @@ public static class Boot
 
 		//UnitTest();
 
-		KernelTest.RunTests();
-		StackTrace();
+		//KernelTest.RunTests();
+		//StackTrace();
 
-		TestHash();
+		//TestHash();
 
-		Screen.Write("StringTest.SubStringTest4: ");
+		Screen.Write("ArrayTest.BoundsCheck: ");
 
 		var value1 = Test5();
 
@@ -314,6 +314,6 @@ public static class Boot
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool Test5()
 	{
-		return StringTest.SubStringTest4();
+		return Mosa.UnitTests.Basic.ArrayTest.BoundsCheck();
 	}
 }

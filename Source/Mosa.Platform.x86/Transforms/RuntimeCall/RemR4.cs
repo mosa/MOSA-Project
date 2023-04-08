@@ -2,13 +2,13 @@
 
 using System.Diagnostics;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x86.Transforms.RuntimeCall;
 
 /// <summary>
 /// RemR4
 /// </summary>
+[Transform("x86.RuntimeCall")]
 public sealed class RemR4 : BaseTransform
 {
 	public RemR4() : base(IRInstruction.RemR4, TransformType.Manual | TransformType.Transform)

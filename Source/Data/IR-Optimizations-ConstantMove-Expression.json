@@ -1,4 +1,6 @@
 ﻿{
+	"Family": "IR",
+	"Section": "Optimizations.Auto",
 	"Commutative": [
 		"IR.Add32",
 		"IR.Add64",
@@ -23,7 +25,6 @@
 	],
 	"Optimizations": [
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantMove",
 			"Name": "Add##",
 			"SubName": "Expression",
@@ -33,7 +34,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantMove",
 			"Name": "AddR#",
 			"SubName": "Expression",
@@ -43,7 +43,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantMove",
 			"Name": "And##",
 			"SubName": "Expression",
@@ -53,7 +52,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantMove",
 			"Name": "Or##",
 			"SubName": "Expression",
@@ -63,7 +61,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantMove",
 			"Name": "Xor##",
 			"SubName": "Expression",
@@ -73,7 +70,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantMove",
 			"Name": "MulUnsigned##",
 			"SubName": "Expression",
@@ -83,7 +79,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantMove",
 			"Name": "MulSigned##",
 			"SubName": "Expression",
@@ -93,7 +88,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantMove",
 			"Name": "MulR#",
 			"SubName": "Expression",
@@ -103,7 +97,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "MulSignedShiftLeft##",
 			"SubName": "",
@@ -113,7 +106,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "MulUnsignedShiftLeft##",
 			"SubName": "",
@@ -123,7 +115,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "AddCarryIn##",
 			"SubName": "Inside",
@@ -132,7 +123,6 @@
 			"Result": "(IR.Add## [Add##(To##(a),To##(b))] c)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "AddCarryIn##",
 			"SubName": "Outside1",
@@ -141,7 +131,6 @@
 			"Result": "(IR.Add## b [Add##(To##(a),BoolTo##(To##(c)))])])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "AddCarryIn##",
 			"SubName": "Outside2",
@@ -150,7 +139,6 @@
 			"Result": "(IR.Add## a [Add##(To##(b),BoolTo##(To##(c)))])])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "AddCarryIn##",
 			"SubName": "NoCarry",
@@ -159,7 +147,6 @@
 			"Result": "(IR.Add## a b)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "AddCarryIn##",
 			"SubName": "Zero1",
@@ -168,7 +155,6 @@
 			"Result": "(IR.Add## a c)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "AddCarryIn##",
 			"SubName": "Zero2",
@@ -177,7 +163,6 @@
 			"Result": "(IR.Add## a c)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "SubCarryIn##",
 			"SubName": "Inside",
@@ -186,7 +171,6 @@
 			"Result": "(IR.Sub## [Sub##(To##(a),To##(b))] c)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "SubCarryIn##",
 			"SubName": "Outside1",
@@ -195,7 +179,6 @@
 			"Result": "(IR.Sub## [Sub##(To##(a),BoolTo##(To##(c)))])] b)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "SubCarryIn##",
 			"SubName": "Outside2",
@@ -204,7 +187,6 @@
 			"Result": "(IR.Sub## a [Sub##(To##(b),BoolTo##(To##(c)))])])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "SubCarryIn##",
 			"SubName": "NoCarry",

@@ -1,13 +1,13 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x64.Transforms.FixedRegisters;
 
 /// <summary>
 /// RdMSR
 /// </summary>
+[Transform("x64.FixedRegisters")]
 public sealed class RdMSR : BaseTransform
 {
 	public RdMSR() : base(X64.RdMSR, TransformType.Manual | TransformType.Transform)

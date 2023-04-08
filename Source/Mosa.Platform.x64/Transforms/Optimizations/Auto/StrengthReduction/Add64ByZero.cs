@@ -4,13 +4,13 @@
 
 using Mosa.Platform.x64;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x64.Transforms.Optimizations.Auto.StrengthReduction;
 
 /// <summary>
 /// Add64ByZero
 /// </summary>
+[Transform("x64.Optimizations.Auto.StrengthReduction")]
 public sealed class Add64ByZero : BaseTransform
 {
 	public Add64ByZero() : base(X64.Add64, TransformType.Auto | TransformType.Optimization)

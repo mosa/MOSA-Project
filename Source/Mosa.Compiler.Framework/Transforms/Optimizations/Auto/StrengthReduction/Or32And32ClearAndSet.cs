@@ -9,6 +9,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 /// <summary>
 /// Or32And32ClearAndSet
 /// </summary>
+[Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class Or32And32ClearAndSet : BaseTransform
 {
 	public Or32And32ClearAndSet() : base(IRInstruction.Or32, TransformType.Auto | TransformType.Optimization)
@@ -54,6 +55,7 @@ public sealed class Or32And32ClearAndSet : BaseTransform
 /// <summary>
 /// Or32And32ClearAndSet_v1
 /// </summary>
+[Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class Or32And32ClearAndSet_v1 : BaseTransform
 {
 	public Or32And32ClearAndSet_v1() : base(IRInstruction.Or32, TransformType.Auto | TransformType.Optimization)
@@ -99,6 +101,7 @@ public sealed class Or32And32ClearAndSet_v1 : BaseTransform
 /// <summary>
 /// Or32And32ClearAndSet_v2
 /// </summary>
+[Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class Or32And32ClearAndSet_v2 : BaseTransform
 {
 	public Or32And32ClearAndSet_v2() : base(IRInstruction.Or32, TransformType.Auto | TransformType.Optimization)
@@ -144,6 +147,7 @@ public sealed class Or32And32ClearAndSet_v2 : BaseTransform
 /// <summary>
 /// Or32And32ClearAndSet_v3
 /// </summary>
+[Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class Or32And32ClearAndSet_v3 : BaseTransform
 {
 	public Or32And32ClearAndSet_v3() : base(IRInstruction.Or32, TransformType.Auto | TransformType.Optimization)

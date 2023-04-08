@@ -5,7 +5,7 @@ namespace Mosa.Platform.x64.Transforms.Tweak;
 /// <summary>
 /// Tzcnt32
 /// </summary>
-//public sealed class Tzcnt32 : BaseTransform
+//[Transform("x64.Tweak")] public sealed class Tzcnt32 : BaseTransform
 //{
 //	public Tzcnt32() : base(X64.Tzcnt32, TransformType.Manual | TransformType.Transform)
 //	{

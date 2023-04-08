@@ -22,7 +22,7 @@ public class ProtectedRegion
 		{
 			if (block.Label >= exceptionHandler.TryStart && block.Label < exceptionHandler.TryEnd)
 				included.Add(block);
-			else
+			else if (!block.IsCompilerBlock)
 				excluded.Add(block);
 		}
 	}

@@ -4,13 +4,13 @@
 
 using Mosa.Platform.x64;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x64.Transforms.Optimizations.Auto.Simplication;
 
 /// <summary>
 /// SubFromZero
 /// </summary>
+[Transform("x64.Optimizations.Auto.Simplication")]
 public sealed class SubFromZero : BaseTransform
 {
 	public SubFromZero() : base(X64.Sub64, TransformType.Auto | TransformType.Optimization)

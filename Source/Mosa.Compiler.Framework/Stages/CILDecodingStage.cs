@@ -74,6 +74,7 @@ public sealed class CILDecodingStage : BaseMethodCompilerStage, IInstructionDeco
 		InitializePromotedLocalVariablesToVirtualRegisters();
 
 		InsertExceptionStartInstructions();
+
 		InsertFlowOrJumpInstructions();
 
 		// This makes it easier to review --- it's not necessary
@@ -372,7 +373,7 @@ public sealed class CILDecodingStage : BaseMethodCompilerStage, IInstructionDeco
 				if (node.IsEmptyOrNop)
 					continue;
 
-				if (!(node.Instruction is CIL.LeaveInstruction))
+				if (!(node.Instruction is LeaveInstruction))
 					continue;   // FUTURE: Could this be a break instruction instead?
 
 				var target = node.BranchTargets[0];

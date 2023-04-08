@@ -1,13 +1,13 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x64.Transforms.FixedRegisters;
 
 /// <summary>
 /// Shrd32
 /// </summary>
+[Transform("x64.FixedRegisters")]
 public sealed class Shrd32 : BaseTransform
 {
 	public Shrd32() : base(X64.Shrd32, TransformType.Manual | TransformType.Transform)

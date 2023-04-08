@@ -1,13 +1,13 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x86.Transforms.RuntimeCall;
 
 /// <summary>
 /// ConvertR8ToU64
 /// </summary>
+[Transform("x86.RuntimeCall")]
 public sealed class ConvertR8ToU64 : BaseTransform
 {
 	public ConvertR8ToU64() : base(IRInstruction.ConvertR8ToU64, TransformType.Manual | TransformType.Transform)

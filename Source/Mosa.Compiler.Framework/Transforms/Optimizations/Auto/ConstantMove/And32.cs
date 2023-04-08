@@ -9,6 +9,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove;
 /// <summary>
 /// And32
 /// </summary>
+[Transform("IR.Optimizations.Auto.ConstantMove")]
 public sealed class And32 : BaseTransform
 {
 	public And32() : base(IRInstruction.And32, TransformType.Auto | TransformType.Optimization)

@@ -9,6 +9,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove;
 /// <summary>
 /// Or32
 /// </summary>
+[Transform("IR.Optimizations.Auto.ConstantMove")]
 public sealed class Or32 : BaseTransform
 {
 	public Or32() : base(IRInstruction.Or32, TransformType.Auto | TransformType.Optimization)

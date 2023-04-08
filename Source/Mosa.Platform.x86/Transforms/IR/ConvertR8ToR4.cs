@@ -7,6 +7,7 @@ namespace Mosa.Platform.x86.Transforms.IR;
 /// <summary>
 /// ConvertR8ToR4
 /// </summary>
+[Transform("x86.IR")]
 public sealed class ConvertR8ToR4 : BaseIRTransform
 {
 	public ConvertR8ToR4() : base(IRInstruction.ConvertR8ToR4, TransformType.Manual | TransformType.Transform)

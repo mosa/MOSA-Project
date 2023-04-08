@@ -4,13 +4,13 @@
 
 using Mosa.Platform.x64;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x64.Transforms.Optimizations.Auto.Standard;
 
 /// <summary>
 /// Mov64Coalescing
 /// </summary>
+[Transform("x64.Optimizations.Auto.Standard")]
 public sealed class Mov64Coalescing : BaseTransform
 {
 	public Mov64Coalescing() : base(X64.Mov64, TransformType.Auto | TransformType.Optimization)

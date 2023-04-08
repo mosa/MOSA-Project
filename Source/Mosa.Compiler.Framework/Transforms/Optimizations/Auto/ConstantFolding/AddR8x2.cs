@@ -9,6 +9,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 /// <summary>
 /// AddR8x2
 /// </summary>
+[Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class AddR8x2 : BaseTransform
 {
 	public AddR8x2() : base(IRInstruction.AddR8, TransformType.Auto | TransformType.Optimization)
@@ -54,6 +55,7 @@ public sealed class AddR8x2 : BaseTransform
 /// <summary>
 /// AddR8x2_v1
 /// </summary>
+[Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class AddR8x2_v1 : BaseTransform
 {
 	public AddR8x2_v1() : base(IRInstruction.AddR8, TransformType.Auto | TransformType.Optimization)
@@ -99,6 +101,7 @@ public sealed class AddR8x2_v1 : BaseTransform
 /// <summary>
 /// AddR8x2_v2
 /// </summary>
+[Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class AddR8x2_v2 : BaseTransform
 {
 	public AddR8x2_v2() : base(IRInstruction.AddR8, TransformType.Auto | TransformType.Optimization)
@@ -144,6 +147,7 @@ public sealed class AddR8x2_v2 : BaseTransform
 /// <summary>
 /// AddR8x2_v3
 /// </summary>
+[Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class AddR8x2_v3 : BaseTransform
 {
 	public AddR8x2_v3() : base(IRInstruction.AddR8, TransformType.Auto | TransformType.Optimization)

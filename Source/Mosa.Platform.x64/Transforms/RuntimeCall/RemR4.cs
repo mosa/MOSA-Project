@@ -8,6 +8,7 @@ namespace Mosa.Platform.x64.Transforms.RuntimeCall;
 /// <summary>
 /// RemR4
 /// </summary>
+[Transform("x64.RuntimeCall")]
 public sealed class RemR4 : BaseTransform
 {
 	public RemR4() : base(IRInstruction.RemR4, TransformType.Manual | TransformType.Transform)
