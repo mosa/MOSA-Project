@@ -85,6 +85,9 @@ public partial class MainWindow : Window
 		// Load the CLI arguments
 		settings.Merge(SettingsLoader.RecursiveReader(args));
 
+		// Update the GUI settings
+		UpdateGuiSettings();
+
 		var sb = new StringBuilder();
 
 		foreach (var arg in args)
@@ -105,7 +108,7 @@ public partial class MainWindow : Window
 			if (src != null)
 			{
 				OsNameTxt.Text = Path.GetFileNameWithoutExtension(src);
-				SrcLbl.Content = Path.GetFileName(src);
+				SrcLbl.Content = Path.GetFullPath(src);
 			}
 
 			foreach (var file in files)
@@ -177,6 +180,104 @@ public partial class MainWindow : Window
 
 		var workstation = settings.GetValue("AppLocation.VmwareWorkstation", string.Empty);
 		vmwarePathLbl.Content = string.IsNullOrEmpty(workstation) ? settings.GetValue("AppLocation.VmwarePlayer", "N/A") : workstation;
+	}
+
+	private void UpdateGuiSettings()
+	{
+		SsaOpts.IsChecked = settings.GetValue("Optimizations.SSA", SsaOpts.IsChecked!.Value);
+		BasicOpts.IsChecked = settings.GetValue("Optimizations.Basic", BasicOpts.IsChecked!.Value);
+		SccpOpts.IsChecked = settings.GetValue("Optimizations.SCCP", SccpOpts.IsChecked!.Value);
+		DevirtOpts.IsChecked = settings.GetValue("Optimizations.Devirtualization", DevirtOpts.IsChecked!.Value);
+		InlineOpts.IsChecked = settings.GetValue("Optimizations.Inline", InlineOpts.IsChecked!.Value);
+		InlineExplOpts.IsChecked = settings.GetValue("Optimizations.Inline.Explicit", InlineExplOpts.IsChecked!.Value);
+		LongExpOpts.IsChecked = settings.GetValue("Optimizations.LongExpansion", LongExpOpts.IsChecked!.Value);
+		TwoOptPass.IsChecked = settings.GetValue("Optimizations.TwoPass", TwoOptPass.IsChecked!.Value);
+		ValueNumOpts.IsChecked = settings.GetValue("Optimizations.ValueNumbering", ValueNumOpts.IsChecked!.Value);
+		BtOpts.IsChecked = settings.GetValue("Optimizations.BitTracker", BtOpts.IsChecked!.Value);
+		PlatOpts.IsChecked = settings.GetValue("Optimizations.Platform", PlatOpts.IsChecked!.Value);
+		LicmOpts.IsChecked = settings.GetValue("Optimizations.LoopInvariantCodeMotion", LicmOpts.IsChecked!.Value);
+
+		EmtSymbs.IsChecked = settings.GetValue("Linker.Symbols", EmtSymbs.IsChecked!.Value);
+		EmtRelocs.IsChecked = settings.GetValue("Linker.StaticRelocations", EmtRelocs.IsChecked!.Value);
+		EmtDwarf.IsChecked = settings.GetValue("Linker.Dwarf", EmtDwarf.IsChecked!.Value);
+		BaseAddrTxt.Text = settings.GetValue("Compiler.BaseAddress");
+
+		NasmFile.IsChecked = !string.IsNullOrEmpty(settings.GetValue("CompilerDebug.NasmFile"));
+		AsmFile.IsChecked = !string.IsNullOrEmpty(settings.GetValue("CompilerDebug.AsmFile"));
+		MapFile.IsChecked = !string.IsNullOrEmpty(settings.GetValue("CompilerDebug.MapFile"));
+		DbgFile.IsChecked = !string.IsNullOrEmpty(settings.GetValue("CompilerDebug.DebugFile"));
+		InlLstFile.IsChecked = !string.IsNullOrEmpty(settings.GetValue("CompilerDebug.InlinedFile"));
+		HashFiles.IsChecked = !string.IsNullOrEmpty(settings.GetValue("CompilerDebug.PreLinkHashFile"));
+		CompTimeFile.IsChecked = !string.IsNullOrEmpty(settings.GetValue("CompilerDebug.CompileTimeFile"));
+
+		ExitOnLaunch.IsChecked = settings.GetValue("Launcher.Exit", ExitOnLaunch.IsChecked!.Value);
+
+		QemuGdb.IsChecked = settings.GetValue("Emulator.GDB", QemuGdb.IsChecked!.Value);
+		LaunchGdb.IsChecked = settings.GetValue("Launcher.LaunchGDB", LaunchGdb.IsChecked!.Value);
+		MosaDbger.IsChecked = settings.GetValue("Launcher.LaunchDebugger", MosaDbger.IsChecked!.Value);
+
+		MultiThreading.IsChecked = settings.GetValue("Compiler.Multithreading", MultiThreading.IsChecked!.Value);
+		MethodScanner.IsChecked = settings.GetValue("Compiler.MethodScanner", MethodScanner.IsChecked!.Value);
+
+		MemVal.Value = settings.GetValue("Emulator.Memory", (int)MemVal.Value);
+		CpuVal.Value = settings.GetValue("Emulator.Cores", (int)CpuVal.Value);
+
+		EnableVbe.IsChecked = settings.GetValue("Multiboot.Video", EnableVbe.IsChecked!.Value);
+		VbeWidth.Value = settings.GetValue("Multiboot.Width", (int)VbeWidth.Value);
+		VbeHeight.Value = settings.GetValue("Multiboot.Height", (int)VbeHeight.Value);
+		VbeDepth.Value = settings.GetValue("Multiboot.Depth", (int)VbeDepth.Value);
+
+		PlugKorlib.IsChecked = settings.GetValue("Launcher.PlugKorlib", PlugKorlib.IsChecked!.Value);
+		OsNameTxt.Text = settings.GetValue("OS.Name");
+
+		ImgCmb.SelectedIndex = settings.GetValue("Image.Format") switch
+		{
+			"IMG" => 0,
+			"VHD" => 1,
+			"VDI" => 2,
+			"VMDK" => 3,
+			_ => ImgCmb.SelectedIndex
+		};
+
+		EmuCmb.SelectedIndex = settings.GetValue("Emulator") switch
+		{
+			"Qemu" => 0,
+			"Bochs" => 1,
+			"VMware" => 2,
+			"VirtualBox" => 3,
+			_ => EmuCmb.SelectedIndex
+		};
+
+		CntCmb.SelectedIndex = settings.GetValue("Emulator.Serial") switch
+		{
+			"None" => 0,
+			"Pipe" => 1,
+			"TCPServer" => 2,
+			"TCPClient" => 3,
+			_ => CntCmb.SelectedIndex
+		};
+
+		FsCmb.SelectedIndex = settings.GetValue("Image.FileSystem") switch
+		{
+			"FAT12" => 0,
+			"FAT16" => 1,
+			"FAT32" => 2,
+			_ => FsCmb.SelectedIndex
+		};
+
+		PltCmb.SelectedIndex = settings.GetValue("Compiler.Platform") switch
+		{
+			"x86" => 0,
+			"x64" => 1,
+			"ARMv8A32" => 2,
+			_ => 0
+		};
+
+		FrmCmb.SelectedIndex = settings.GetValue("Image.Firmware") switch
+		{
+			"bios" => 0,
+			_ => FrmCmb.SelectedIndex
+		};
 	}
 
 	private void UpdateSettings()
