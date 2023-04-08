@@ -3,6 +3,7 @@
 using System;
 using System.Globalization;
 using System.IO;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
@@ -84,6 +85,19 @@ public partial class MainWindow : Window
 		// Load the CLI arguments
 		settings.Merge(SettingsLoader.RecursiveReader(args));
 
+		var sb = new StringBuilder();
+
+		foreach (var arg in args)
+		{
+			sb.Append(arg);
+			sb.Append(' ');
+		}
+
+		AddOutput($"Arguments: {sb}");
+
+		// Output the current directory
+		AddOutput($"Current Directory: {Environment.CurrentDirectory}");
+
 		var files = settings.GetValueList("Compiler.SourceFiles");
 		if (files != null)
 		{
@@ -105,9 +119,6 @@ public partial class MainWindow : Window
 		else settings.SetValue("Launcher.Start", false);
 
 		IncDirTxt.Text = settings.GetValue("Image.FileSystem.RootInclude");
-
-		// Output the current directory
-		AddOutput($"Current Directory: {Environment.CurrentDirectory}");
 
 		// Set title label with the current compiler version
 		TitleLbl.Content += CompilerVersion.VersionString;
