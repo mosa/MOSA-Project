@@ -10,7 +10,6 @@ using System.Text;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.Analysis;
-using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
@@ -24,7 +23,7 @@ namespace Mosa.Compiler.Framework.Stages;
 /// The CIL decoding stage takes a stream of bytes and decodes the instructions represented into an MSIL based intermediate
 /// representation. The instructions are grouped into basic blocks.
 /// </remarks>
-public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
+public sealed class CILDecoderStage : BaseMethodCompilerStage
 {
 	private enum StackType
 	{ Int32, Int64, R4, R8, Object, ManagedPointer, ValueType };
@@ -186,9 +185,9 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		{
 			var instruction = code[index];
 
-			var opcode = (OpCode)instruction.OpCode;
+			var opcode = (CILOpCode)instruction.OpCode;
 
-			if (opcode == OpCode.Br || opcode == OpCode.Br_s)
+			if (opcode == CILOpCode.Br || opcode == CILOpCode.Br_s)
 			{
 				AddTarget((int)instruction.Operand);
 			}
@@ -197,7 +196,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 				AddTarget((int)instruction.Operand);
 				AddTarget(code[index + 1].Offset);
 			}
-			else if (opcode == OpCode.Switch)
+			else if (opcode == CILOpCode.Switch)
 			{
 				foreach (var target in (int[])instruction.Operand)
 				{
@@ -206,7 +205,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 				AddTarget(code[index + 1].Offset);
 			}
-			else if (opcode == OpCode.Leave || opcode == OpCode.Leave_s)
+			else if (opcode == CILOpCode.Leave || opcode == CILOpCode.Leave_s)
 			{
 				AddTarget((int)instruction.Operand);
 			}
@@ -457,7 +456,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		for (var index = 0; index < totalCode; index++)
 		{
 			var instruction = code[index];
-			var opcode = (OpCode)instruction.OpCode;
+			var opcode = (CILOpCode)instruction.OpCode;
 			var label = instruction.Offset;
 
 			if (block == null)
@@ -491,20 +490,20 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 			if (peekNextblock != null || index + 1 == totalCode)
 			{
-				if (opcode != OpCode.Leave
-					&& opcode != OpCode.Leave
-					&& opcode != OpCode.Leave_s
-					&& opcode != OpCode.Endfilter
-					&& opcode != OpCode.Endfinally
-					&& opcode != OpCode.Jmp
-					&& opcode != OpCode.Br
-					&& opcode != OpCode.Br_s
-					&& opcode != OpCode.Ret
-					&& opcode != OpCode.Throw
-					&& opcode != OpCode.Brfalse
-					&& opcode != OpCode.Brfalse_s
-					&& opcode != OpCode.Brtrue
-					&& opcode != OpCode.Brtrue_s
+				if (opcode != CILOpCode.Leave
+					&& opcode != CILOpCode.Leave
+					&& opcode != CILOpCode.Leave_s
+					&& opcode != CILOpCode.Endfilter
+					&& opcode != CILOpCode.Endfinally
+					&& opcode != CILOpCode.Jmp
+					&& opcode != CILOpCode.Br
+					&& opcode != CILOpCode.Br_s
+					&& opcode != CILOpCode.Ret
+					&& opcode != CILOpCode.Throw
+					&& opcode != CILOpCode.Brfalse
+					&& opcode != CILOpCode.Brfalse_s
+					&& opcode != CILOpCode.Brtrue
+					&& opcode != CILOpCode.Brtrue_s
 				   )
 				{
 					context.AppendInstruction(IRInstruction.Jmp, peekNextblock);
@@ -524,7 +523,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		}
 	}
 
-	private bool Translate(Stack<StackEntry> stack, Context context, MosaInstruction instruction, OpCode opcode, BasicBlock block, PrefixValues prefixValues, int label)
+	private bool Translate(Stack<StackEntry> stack, Context context, MosaInstruction instruction, CILOpCode opcode, BasicBlock block, PrefixValues prefixValues, int label)
 	{
 		prefixValues.Reset = true;
 
@@ -532,228 +531,226 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 		switch (opcode)
 		{
-			case OpCode.Add: return Add(context, stack);
-			case OpCode.Add_ovf: return AddSigned(context, stack);
-			case OpCode.Add_ovf_un: return AddUnsigned(context, stack);
-			case OpCode.And: return And(context, stack);
-			case OpCode.Arglist: return false;                                  // TODO: Not implemented in v1 either
-			case OpCode.Beq: return Branch(context, stack, ConditionCode.Equal, instruction);
-			case OpCode.Beq_s: return Branch(context, stack, ConditionCode.Equal, instruction);
-			case OpCode.Bge: return Branch(context, stack, ConditionCode.GreaterOrEqual, instruction);
-			case OpCode.Bge_s: return Branch(context, stack, ConditionCode.GreaterOrEqual, instruction);
-			case OpCode.Bge_un: return Branch(context, stack, ConditionCode.UnsignedGreaterOrEqual, instruction);
-			case OpCode.Bge_un_s: return Branch(context, stack, ConditionCode.UnsignedGreaterOrEqual, instruction);
-			case OpCode.Bgt: return Branch(context, stack, ConditionCode.Greater, instruction);
-			case OpCode.Bgt_s: return Branch(context, stack, ConditionCode.Greater, instruction);
-			case OpCode.Bgt_un: return Branch(context, stack, ConditionCode.UnsignedGreater, instruction);
-			case OpCode.Bgt_un_s: return Branch(context, stack, ConditionCode.UnsignedGreater, instruction);
-			case OpCode.Ble: return Branch(context, stack, ConditionCode.LessOrEqual, instruction);
-			case OpCode.Ble_s: return Branch(context, stack, ConditionCode.LessOrEqual, instruction);
-			case OpCode.Ble_un: return Branch(context, stack, ConditionCode.UnsignedLessOrEqual, instruction);
-			case OpCode.Ble_un_s: return Branch(context, stack, ConditionCode.UnsignedLessOrEqual, instruction);
-			case OpCode.Blt: return Branch(context, stack, ConditionCode.Less, instruction);
-			case OpCode.Blt_s: return Branch(context, stack, ConditionCode.Less, instruction);
-			case OpCode.Blt_un: return Branch(context, stack, ConditionCode.UnsignedLess, instruction);
-			case OpCode.Blt_un_s: return Branch(context, stack, ConditionCode.UnsignedLess, instruction);
-			case OpCode.Bne_un: return Branch(context, stack, ConditionCode.NotEqual, instruction);
-			case OpCode.Bne_un_s: return Branch(context, stack, ConditionCode.NotEqual, instruction);
-			case OpCode.Box: return Box(context, stack, instruction);
-			case OpCode.Br: return Branch(context, stack, instruction);
-			case OpCode.Br_s: return Branch(context, stack, instruction);
-			case OpCode.Break: return Break(context, stack);
-			case OpCode.Brfalse: return Branch1(context, stack, ConditionCode.Equal, instruction);
-			case OpCode.Brfalse_s: return Branch1(context, stack, ConditionCode.Equal, instruction);
-			case OpCode.Brtrue: return Branch1(context, stack, ConditionCode.NotEqual, instruction);
-			case OpCode.Brtrue_s: return Branch1(context, stack, ConditionCode.NotEqual, instruction);
-			case OpCode.Call: return Call(context, stack, instruction);
-			case OpCode.Calli: return false;                                    // TODO: Not implemented in v1 either
-			case OpCode.Callvirt: return Callvirt(context, stack, instruction, prefixValues);
-			case OpCode.Castclass: return Castclass(context, stack);
-			case OpCode.Ceq: return Compare(context, stack, ConditionCode.Equal);
-			case OpCode.Cgt: return Compare(context, stack, ConditionCode.Greater);
-			case OpCode.Cgt_un: return Compare(context, stack, ConditionCode.UnsignedGreater);
-			case OpCode.Ckfinite: return false;                                 // TODO: Not implemented in v1 either
-			case OpCode.Clt: return Compare(context, stack, ConditionCode.Less);
-			case OpCode.Clt_un: return Compare(context, stack, ConditionCode.UnsignedLess);
-			case OpCode.Conv_i: return ConvertI(context, stack);
-			case OpCode.Conv_i1: return ConvertI1(context, stack);
-			case OpCode.Conv_i2: return ConvertI2(context, stack);
-			case OpCode.Conv_i4: return ConvertI4(context, stack);
-			case OpCode.Conv_i8: return ConvertI8(context, stack);
-			case OpCode.Conv_ovf_i: return ConvertToIWithOverflow(context, stack);
-			case OpCode.Conv_ovf_i_un: return ConvertUToIWithOverflow(context, stack);
-
-			case OpCode.Conv_ovf_i1: return ConvertI1WithOverflow(context, stack);
-			case OpCode.Conv_ovf_i1_un: return ConvertUToI1WithOverflow(context, stack);
-			case OpCode.Conv_ovf_i2: return ConvertI2WithOverflow(context, stack);
-			case OpCode.Conv_ovf_i2_un: return ConvertUToI2WithOverflow(context, stack);
-			case OpCode.Conv_ovf_i4: return ConvertI4WithOverflow(context, stack);
-			case OpCode.Conv_ovf_i4_un: return ConvertUToI4WithOverflow(context, stack);
-			case OpCode.Conv_ovf_i8: return ConvertI8WithOverflow(context, stack);
-			case OpCode.Conv_ovf_i8_un: return ConvertUToI8WithOverflow(context, stack);
-			case OpCode.Conv_ovf_u: return ConvertToUWithOverflow(context, stack);
-			case OpCode.Conv_ovf_u_un: return ConvertUToUWithOverflow(context, stack);
-
-			case OpCode.Conv_ovf_u1: return ConvertU1WithOverflow(context, stack);
-			case OpCode.Conv_ovf_u1_un: return ConvertUToU1WithOverflow(context, stack);
-			case OpCode.Conv_ovf_u2: return ConvertU2WithOverflow(context, stack);
-			case OpCode.Conv_ovf_u2_un: return ConvertUToU2WithOverflow(context, stack);
-			case OpCode.Conv_ovf_u4: return ConvertU4WithOverflow(context, stack);
-			case OpCode.Conv_ovf_u4_un: return ConvertUToU4WithOverflow(context, stack);
-			case OpCode.Conv_ovf_u8: return ConvertU8WithOverflow(context, stack);
-			case OpCode.Conv_ovf_u8_un: return ConvertUToU8WithOverflow(context, stack);
-			case OpCode.Conv_r_un: return ConvertUToF(context, stack);
-			case OpCode.Conv_r4: return ConvertR4(context, stack);
-			case OpCode.Conv_r8: return ConvertR8(context, stack);
-			case OpCode.Conv_u: return ConvertU(context, stack);
-			case OpCode.Conv_u1: return ConvertU1(context, stack);
-			case OpCode.Conv_u2: return ConvertU2(context, stack);
-			case OpCode.Conv_u4: return ConvertU4(context, stack);
-			case OpCode.Conv_u8: return ConvertU8(context, stack);
-			case OpCode.Cpblk: return Cpblk(context, stack, instruction);
-			case OpCode.Cpobj: return Cpobj(context, stack, instruction);
-			case OpCode.Div: return Div(context, stack);
-			case OpCode.Div_un: return DivUnsigned(context, stack);
-			case OpCode.Dup: return Dup(context, stack);
-			case OpCode.Endfilter: return false;                                // TODO: Not implemented in v1 either
-			case OpCode.Endfinally: return Endfinally(context);
-			case OpCode.Extop: return false;                                    // TODO: Not implemented in v1 either
-			case OpCode.Initblk: return Initblk(context, stack);
-			case OpCode.InitObj: return InitObj(context, stack, instruction);
-			case OpCode.Isinst: return Isinst(context, stack, instruction);
-			case OpCode.Jmp: return false;                                      // TODO: Not implemented in v1 either
-			case OpCode.Ldarg: return Ldarg(context, stack, (int)instruction.Operand);
-			case OpCode.Ldarg_0: return Ldarg(context, stack, 0);
-			case OpCode.Ldarg_1: return Ldarg(context, stack, 1);
-			case OpCode.Ldarg_2: return Ldarg(context, stack, 2);
-			case OpCode.Ldarg_3: return Ldarg(context, stack, 3);
-			case OpCode.Ldarg_s: return Ldarg(context, stack, (int)instruction.Operand);
-			case OpCode.Ldarga: return Ldarga(context, stack, (int)instruction.Operand);
-			case OpCode.Ldarga_s: return Ldarga(context, stack, (int)instruction.Operand);
-			case OpCode.Ldc_i4: return Constant32(context, stack, (int)instruction.Operand);
-			case OpCode.Ldc_i4_0: return Constant32(context, stack, 0);
-			case OpCode.Ldc_i4_1: return Constant32(context, stack, 1);
-			case OpCode.Ldc_i4_2: return Constant32(context, stack, 2);
-			case OpCode.Ldc_i4_3: return Constant32(context, stack, 3);
-			case OpCode.Ldc_i4_4: return Constant32(context, stack, 4);
-			case OpCode.Ldc_i4_5: return Constant32(context, stack, 5);
-			case OpCode.Ldc_i4_6: return Constant32(context, stack, 6);
-			case OpCode.Ldc_i4_7: return Constant32(context, stack, 7);
-			case OpCode.Ldc_i4_8: return Constant32(context, stack, 8);
-			case OpCode.Ldc_i4_m1: return Constant32(context, stack, -1);
-			case OpCode.Ldc_i4_s: return Constant32(context, stack, (sbyte)instruction.Operand);
-			case OpCode.Ldc_i8: return Constant64(context, stack, (long)instruction.Operand);
-			case OpCode.Ldc_r4: return ConstantR4(context, stack, (float)instruction.Operand);
-			case OpCode.Ldc_r8: return ConstantR8(context, stack, (double)instruction.Operand);
-			case OpCode.Ldelem: return Ldelem(context, stack, instruction);
-			case OpCode.Ldelem_i: return Ldelem(context, stack, ElementType.I);
-			case OpCode.Ldelem_i1: return Ldelem(context, stack, ElementType.I1);
-			case OpCode.Ldelem_i2: return Ldelem(context, stack, ElementType.I2);
-			case OpCode.Ldelem_i4: return Ldelem(context, stack, ElementType.I4);
-			case OpCode.Ldelem_i8: return Ldelem(context, stack, ElementType.I8);
-			case OpCode.Ldelem_r4: return Ldelem(context, stack, ElementType.R4);
-			case OpCode.Ldelem_r8: return Ldelem(context, stack, ElementType.R8);
-			case OpCode.Ldelem_ref: return Ldelem(context, stack, ElementType.Object);
-			case OpCode.Ldelem_u1: return Ldelem(context, stack, ElementType.U1);
-			case OpCode.Ldelem_u2: return Ldelem(context, stack, ElementType.U2);
-			case OpCode.Ldelem_u4: return Ldelem(context, stack, ElementType.U4);
-			case OpCode.Ldelema: return Ldelema(context, stack, instruction);
-			case OpCode.Ldfld: return Ldfld(context, stack, instruction);
-			case OpCode.Ldflda: return Ldflda(context, stack, instruction);
-			case OpCode.Ldftn: return Ldftn(context, stack, instruction);
-			case OpCode.Ldind_i: return Ldind(context, stack, ElementType.I);
-			case OpCode.Ldind_i1: return Ldind(context, stack, ElementType.I1);
-			case OpCode.Ldind_i2: return Ldind(context, stack, ElementType.I2);
-			case OpCode.Ldind_i4: return Ldind(context, stack, ElementType.I4);
-			case OpCode.Ldind_i8: return Ldind(context, stack, ElementType.I8);
-			case OpCode.Ldind_r4: return Ldind(context, stack, ElementType.R4);
-			case OpCode.Ldind_r8: return Ldind(context, stack, ElementType.R8);
-			case OpCode.Ldind_ref: return Ldind(context, stack, ElementType.Object);
-			case OpCode.Ldind_u1: return Ldind(context, stack, ElementType.U1);
-			case OpCode.Ldind_u2: return Ldind(context, stack, ElementType.U2);
-			case OpCode.Ldind_u4: return Ldind(context, stack, ElementType.U4);
-			case OpCode.Ldlen: return Ldlen(context, stack);
-			case OpCode.Ldloc: return Ldloc(context, stack, (int)instruction.Operand);
-			case OpCode.Ldloc_0: return Ldloc(context, stack, 0);
-			case OpCode.Ldloc_1: return Ldloc(context, stack, 1);
-			case OpCode.Ldloc_2: return Ldloc(context, stack, 2);
-			case OpCode.Ldloc_3: return Ldloc(context, stack, 3);
-			case OpCode.Ldloc_s: return Ldloc(context, stack, (int)instruction.Operand);
-			case OpCode.Ldloca: return Ldloca(context, stack, instruction);
-			case OpCode.Ldloca_s: return Ldloca(context, stack, instruction);
-			case OpCode.Ldnull: return Ldnull(context, stack);
-			case OpCode.Ldobj: return Ldobj(context, stack, instruction);
-			case OpCode.Ldsfld: return Ldsfld(context, stack, instruction);
-			case OpCode.Ldsflda: return Ldsflda(context, stack, instruction);
-			case OpCode.Ldstr: return Ldstr(context, stack, instruction);
-			case OpCode.Ldtoken: return Ldtoken(context, stack, instruction);
-			case OpCode.Ldvirtftn: return false;                                // TODO: Not implemented in v1 either
-			case OpCode.Leave: return Leave(context, stack, instruction, block);
-			case OpCode.Leave_s: return Leave(context, stack, instruction, block);
-			case OpCode.Localalloc: return false;                               // TODO: Not implemented in v1 either
-			case OpCode.Mkrefany: return false;                                 // TODO: Not implemented in v1 either
-			case OpCode.Mul: return Mul(context, stack);
-			case OpCode.Mul_ovf: return MulSigned(context, stack);
-			case OpCode.Mul_ovf_un: return MulUnsigned(context, stack);
-			case OpCode.Neg: return Neg(context, stack);
-			case OpCode.Newarr: return Newarr(context, stack, instruction);
-			case OpCode.Newobj: return Newobj(context, stack, instruction);
-			case OpCode.Nop: return Nop(context);
-			case OpCode.Not: return Not(context, stack);
-			case OpCode.Or: return Or(context, stack);
-			case OpCode.Pop: return Pop(context, stack);
-			case OpCode.Constrained: return Constrained(prefixValues, instruction);
-			case OpCode.No: /* TODO */ prefixValues.Reset = false; return true;
-			case OpCode.ReadOnly: prefixValues.Readonly = true; prefixValues.Reset = false; return true;
-			case OpCode.Tailcall: prefixValues.Tailcall = true; prefixValues.Reset = false; return true;
-			case OpCode.Unaligned: prefixValues.Unaligned = true; prefixValues.Reset = false; return true;
-			case OpCode.Volatile: prefixValues.Volatile = true; prefixValues.Reset = false; return true;
-			case OpCode.Refanytype: return false;                               // TODO: Not implemented in v1 either
-			case OpCode.Refanyval: return false;                                // TODO: Not implemented in v1 either
-			case OpCode.Rem: return RemOperand(context, stack);
-			case OpCode.Rem_un: return RemUnsigned(context, stack);
-			case OpCode.Ret: return Ret(context, stack);
-			case OpCode.Rethrow: return Rethrow(context, stack);
-			case OpCode.Shl: return Shl(context, stack, instruction);
-			case OpCode.Shr: return Shr(context, stack, instruction);
-			case OpCode.Shr_un: return ShrU(context, stack, instruction);
-			case OpCode.Sizeof: return Sizeof(context, stack, instruction);
-			case OpCode.Starg: return StoreArgument(context, stack, (int)instruction.Operand);
-			case OpCode.Starg_s: return StoreArgument(context, stack, (int)instruction.Operand);
-			case OpCode.Stelem: return Stelem(context, stack, instruction);
-			case OpCode.Stelem_i: return Stelem(context, stack, ElementType.I);
-			case OpCode.Stelem_i1: return Stelem(context, stack, ElementType.I1);
-			case OpCode.Stelem_i2: return Stelem(context, stack, ElementType.I2);
-			case OpCode.Stelem_i4: return Stelem(context, stack, ElementType.I4);
-			case OpCode.Stelem_i8: return Stelem(context, stack, ElementType.I8);
-			case OpCode.Stelem_r4: return Stelem(context, stack, ElementType.R4);
-			case OpCode.Stelem_r8: return Stelem(context, stack, ElementType.R8);
-			case OpCode.Stelem_ref: return Stelem(context, stack, ElementType.Object);
-			case OpCode.Stfld: return Stfld(context, stack, instruction);
-			case OpCode.Stind_i: return Stind(context, stack, ElementType.I);
-			case OpCode.Stind_i1: return Stind(context, stack, ElementType.I1);
-			case OpCode.Stind_i2: return Stind(context, stack, ElementType.I2);
-			case OpCode.Stind_i4: return Stind(context, stack, ElementType.I4);
-			case OpCode.Stind_i8: return Stind(context, stack, ElementType.I8);
-			case OpCode.Stind_r4: return Stind(context, stack, ElementType.R4);
-			case OpCode.Stind_r8: return Stind(context, stack, ElementType.R8);
-			case OpCode.Stind_ref: return Stind(context, stack, ElementType.Object);
-			case OpCode.Stloc: return Stloc(context, stack, (int)instruction.Operand);
-			case OpCode.Stloc_0: return Stloc(context, stack, 0);
-			case OpCode.Stloc_1: return Stloc(context, stack, 1);
-			case OpCode.Stloc_2: return Stloc(context, stack, 2);
-			case OpCode.Stloc_3: return Stloc(context, stack, 3);
-			case OpCode.Stloc_s: return Stloc(context, stack, (int)instruction.Operand);
-			case OpCode.Stobj: return Stobj(context, stack, instruction);
-			case OpCode.Stsfld: return Stsfld(context, stack, instruction);
-			case OpCode.Sub: return Sub(context, stack);
-			case OpCode.Sub_ovf: return SubSigned(context, stack);
-			case OpCode.Sub_ovf_un: return SubUnsigned(context, stack);
-			case OpCode.Switch: return Switch(context, stack, instruction);
-			case OpCode.Throw: return Throw(context, stack);
-			case OpCode.Unbox: return Unbox(context, stack, instruction);
-			case OpCode.Unbox_any: return UnboxAny(context, stack, instruction);
-			case OpCode.Xor: return Xor(context, stack);
+			case CILOpCode.Add: return Add(context, stack);
+			case CILOpCode.Add_ovf: return AddSigned(context, stack);
+			case CILOpCode.Add_ovf_un: return AddUnsigned(context, stack);
+			case CILOpCode.And: return And(context, stack);
+			case CILOpCode.Arglist: return false;                                  // TODO: Not implemented in v1 either
+			case CILOpCode.Beq: return Branch(context, stack, ConditionCode.Equal, instruction);
+			case CILOpCode.Beq_s: return Branch(context, stack, ConditionCode.Equal, instruction);
+			case CILOpCode.Bge: return Branch(context, stack, ConditionCode.GreaterOrEqual, instruction);
+			case CILOpCode.Bge_s: return Branch(context, stack, ConditionCode.GreaterOrEqual, instruction);
+			case CILOpCode.Bge_un: return Branch(context, stack, ConditionCode.UnsignedGreaterOrEqual, instruction);
+			case CILOpCode.Bge_un_s: return Branch(context, stack, ConditionCode.UnsignedGreaterOrEqual, instruction);
+			case CILOpCode.Bgt: return Branch(context, stack, ConditionCode.Greater, instruction);
+			case CILOpCode.Bgt_s: return Branch(context, stack, ConditionCode.Greater, instruction);
+			case CILOpCode.Bgt_un: return Branch(context, stack, ConditionCode.UnsignedGreater, instruction);
+			case CILOpCode.Bgt_un_s: return Branch(context, stack, ConditionCode.UnsignedGreater, instruction);
+			case CILOpCode.Ble: return Branch(context, stack, ConditionCode.LessOrEqual, instruction);
+			case CILOpCode.Ble_s: return Branch(context, stack, ConditionCode.LessOrEqual, instruction);
+			case CILOpCode.Ble_un: return Branch(context, stack, ConditionCode.UnsignedLessOrEqual, instruction);
+			case CILOpCode.Ble_un_s: return Branch(context, stack, ConditionCode.UnsignedLessOrEqual, instruction);
+			case CILOpCode.Blt: return Branch(context, stack, ConditionCode.Less, instruction);
+			case CILOpCode.Blt_s: return Branch(context, stack, ConditionCode.Less, instruction);
+			case CILOpCode.Blt_un: return Branch(context, stack, ConditionCode.UnsignedLess, instruction);
+			case CILOpCode.Blt_un_s: return Branch(context, stack, ConditionCode.UnsignedLess, instruction);
+			case CILOpCode.Bne_un: return Branch(context, stack, ConditionCode.NotEqual, instruction);
+			case CILOpCode.Bne_un_s: return Branch(context, stack, ConditionCode.NotEqual, instruction);
+			case CILOpCode.Box: return Box(context, stack, instruction);
+			case CILOpCode.Br: return Branch(context, stack, instruction);
+			case CILOpCode.Br_s: return Branch(context, stack, instruction);
+			case CILOpCode.Break: return Break(context, stack);
+			case CILOpCode.Brfalse: return Branch1(context, stack, ConditionCode.Equal, instruction);
+			case CILOpCode.Brfalse_s: return Branch1(context, stack, ConditionCode.Equal, instruction);
+			case CILOpCode.Brtrue: return Branch1(context, stack, ConditionCode.NotEqual, instruction);
+			case CILOpCode.Brtrue_s: return Branch1(context, stack, ConditionCode.NotEqual, instruction);
+			case CILOpCode.Call: return Call(context, stack, instruction);
+			case CILOpCode.Calli: return false;                                    // TODO: Not implemented in v1 either
+			case CILOpCode.Callvirt: return Callvirt(context, stack, instruction, prefixValues);
+			case CILOpCode.Castclass: return Castclass(context, stack);
+			case CILOpCode.Ceq: return Compare(context, stack, ConditionCode.Equal);
+			case CILOpCode.Cgt: return Compare(context, stack, ConditionCode.Greater);
+			case CILOpCode.Cgt_un: return Compare(context, stack, ConditionCode.UnsignedGreater);
+			case CILOpCode.Ckfinite: return false;                                 // TODO: Not implemented in v1 either
+			case CILOpCode.Clt: return Compare(context, stack, ConditionCode.Less);
+			case CILOpCode.Clt_un: return Compare(context, stack, ConditionCode.UnsignedLess);
+			case CILOpCode.Conv_i: return ConvertI(context, stack);
+			case CILOpCode.Conv_i1: return ConvertI1(context, stack);
+			case CILOpCode.Conv_i2: return ConvertI2(context, stack);
+			case CILOpCode.Conv_i4: return ConvertI4(context, stack);
+			case CILOpCode.Conv_i8: return ConvertI8(context, stack);
+			case CILOpCode.Conv_ovf_i: return ConvertToIWithOverflow(context, stack);
+			case CILOpCode.Conv_ovf_i_un: return ConvertUToIWithOverflow(context, stack);
+			case CILOpCode.Conv_ovf_i1: return ConvertI1WithOverflow(context, stack);
+			case CILOpCode.Conv_ovf_i1_un: return ConvertUToI1WithOverflow(context, stack);
+			case CILOpCode.Conv_ovf_i2: return ConvertI2WithOverflow(context, stack);
+			case CILOpCode.Conv_ovf_i2_un: return ConvertUToI2WithOverflow(context, stack);
+			case CILOpCode.Conv_ovf_i4: return ConvertI4WithOverflow(context, stack);
+			case CILOpCode.Conv_ovf_i4_un: return ConvertUToI4WithOverflow(context, stack);
+			case CILOpCode.Conv_ovf_i8: return ConvertI8WithOverflow(context, stack);
+			case CILOpCode.Conv_ovf_i8_un: return ConvertUToI8WithOverflow(context, stack);
+			case CILOpCode.Conv_ovf_u: return ConvertToUWithOverflow(context, stack);
+			case CILOpCode.Conv_ovf_u_un: return ConvertUToUWithOverflow(context, stack);
+			case CILOpCode.Conv_ovf_u1: return ConvertU1WithOverflow(context, stack);
+			case CILOpCode.Conv_ovf_u1_un: return ConvertUToU1WithOverflow(context, stack);
+			case CILOpCode.Conv_ovf_u2: return ConvertU2WithOverflow(context, stack);
+			case CILOpCode.Conv_ovf_u2_un: return ConvertUToU2WithOverflow(context, stack);
+			case CILOpCode.Conv_ovf_u4: return ConvertU4WithOverflow(context, stack);
+			case CILOpCode.Conv_ovf_u4_un: return ConvertUToU4WithOverflow(context, stack);
+			case CILOpCode.Conv_ovf_u8: return ConvertU8WithOverflow(context, stack);
+			case CILOpCode.Conv_ovf_u8_un: return ConvertUToU8WithOverflow(context, stack);
+			case CILOpCode.Conv_r_un: return ConvertUToF(context, stack);
+			case CILOpCode.Conv_r4: return ConvertR4(context, stack);
+			case CILOpCode.Conv_r8: return ConvertR8(context, stack);
+			case CILOpCode.Conv_u: return ConvertU(context, stack);
+			case CILOpCode.Conv_u1: return ConvertU1(context, stack);
+			case CILOpCode.Conv_u2: return ConvertU2(context, stack);
+			case CILOpCode.Conv_u4: return ConvertU4(context, stack);
+			case CILOpCode.Conv_u8: return ConvertU8(context, stack);
+			case CILOpCode.Cpblk: return Cpblk(context, stack, instruction);
+			case CILOpCode.Cpobj: return Cpobj(context, stack, instruction);
+			case CILOpCode.Div: return Div(context, stack);
+			case CILOpCode.Div_un: return DivUnsigned(context, stack);
+			case CILOpCode.Dup: return Dup(context, stack);
+			case CILOpCode.Endfilter: return false;                                // TODO: Not implemented in v1 either
+			case CILOpCode.Endfinally: return Endfinally(context);
+			case CILOpCode.Extop: return false;                                    // TODO: Not implemented in v1 either
+			case CILOpCode.Initblk: return Initblk(context, stack);
+			case CILOpCode.InitObj: return InitObj(context, stack, instruction);
+			case CILOpCode.Isinst: return Isinst(context, stack, instruction);
+			case CILOpCode.Jmp: return false;                                      // TODO: Not implemented in v1 either
+			case CILOpCode.Ldarg: return Ldarg(context, stack, (int)instruction.Operand);
+			case CILOpCode.Ldarg_0: return Ldarg(context, stack, 0);
+			case CILOpCode.Ldarg_1: return Ldarg(context, stack, 1);
+			case CILOpCode.Ldarg_2: return Ldarg(context, stack, 2);
+			case CILOpCode.Ldarg_3: return Ldarg(context, stack, 3);
+			case CILOpCode.Ldarg_s: return Ldarg(context, stack, (int)instruction.Operand);
+			case CILOpCode.Ldarga: return Ldarga(context, stack, (int)instruction.Operand);
+			case CILOpCode.Ldarga_s: return Ldarga(context, stack, (int)instruction.Operand);
+			case CILOpCode.Ldc_i4: return Constant32(context, stack, (int)instruction.Operand);
+			case CILOpCode.Ldc_i4_0: return Constant32(context, stack, 0);
+			case CILOpCode.Ldc_i4_1: return Constant32(context, stack, 1);
+			case CILOpCode.Ldc_i4_2: return Constant32(context, stack, 2);
+			case CILOpCode.Ldc_i4_3: return Constant32(context, stack, 3);
+			case CILOpCode.Ldc_i4_4: return Constant32(context, stack, 4);
+			case CILOpCode.Ldc_i4_5: return Constant32(context, stack, 5);
+			case CILOpCode.Ldc_i4_6: return Constant32(context, stack, 6);
+			case CILOpCode.Ldc_i4_7: return Constant32(context, stack, 7);
+			case CILOpCode.Ldc_i4_8: return Constant32(context, stack, 8);
+			case CILOpCode.Ldc_i4_m1: return Constant32(context, stack, -1);
+			case CILOpCode.Ldc_i4_s: return Constant32(context, stack, (sbyte)instruction.Operand);
+			case CILOpCode.Ldc_i8: return Constant64(context, stack, (long)instruction.Operand);
+			case CILOpCode.Ldc_r4: return ConstantR4(context, stack, (float)instruction.Operand);
+			case CILOpCode.Ldc_r8: return ConstantR8(context, stack, (double)instruction.Operand);
+			case CILOpCode.Ldelem: return Ldelem(context, stack, instruction);
+			case CILOpCode.Ldelem_i: return Ldelem(context, stack, ElementType.I);
+			case CILOpCode.Ldelem_i1: return Ldelem(context, stack, ElementType.I1);
+			case CILOpCode.Ldelem_i2: return Ldelem(context, stack, ElementType.I2);
+			case CILOpCode.Ldelem_i4: return Ldelem(context, stack, ElementType.I4);
+			case CILOpCode.Ldelem_i8: return Ldelem(context, stack, ElementType.I8);
+			case CILOpCode.Ldelem_r4: return Ldelem(context, stack, ElementType.R4);
+			case CILOpCode.Ldelem_r8: return Ldelem(context, stack, ElementType.R8);
+			case CILOpCode.Ldelem_ref: return Ldelem(context, stack, ElementType.Object);
+			case CILOpCode.Ldelem_u1: return Ldelem(context, stack, ElementType.U1);
+			case CILOpCode.Ldelem_u2: return Ldelem(context, stack, ElementType.U2);
+			case CILOpCode.Ldelem_u4: return Ldelem(context, stack, ElementType.U4);
+			case CILOpCode.Ldelema: return Ldelema(context, stack, instruction);
+			case CILOpCode.Ldfld: return Ldfld(context, stack, instruction);
+			case CILOpCode.Ldflda: return Ldflda(context, stack, instruction);
+			case CILOpCode.Ldftn: return Ldftn(context, stack, instruction);
+			case CILOpCode.Ldind_i: return Ldind(context, stack, ElementType.I);
+			case CILOpCode.Ldind_i1: return Ldind(context, stack, ElementType.I1);
+			case CILOpCode.Ldind_i2: return Ldind(context, stack, ElementType.I2);
+			case CILOpCode.Ldind_i4: return Ldind(context, stack, ElementType.I4);
+			case CILOpCode.Ldind_i8: return Ldind(context, stack, ElementType.I8);
+			case CILOpCode.Ldind_r4: return Ldind(context, stack, ElementType.R4);
+			case CILOpCode.Ldind_r8: return Ldind(context, stack, ElementType.R8);
+			case CILOpCode.Ldind_ref: return Ldind(context, stack, ElementType.Object);
+			case CILOpCode.Ldind_u1: return Ldind(context, stack, ElementType.U1);
+			case CILOpCode.Ldind_u2: return Ldind(context, stack, ElementType.U2);
+			case CILOpCode.Ldind_u4: return Ldind(context, stack, ElementType.U4);
+			case CILOpCode.Ldlen: return Ldlen(context, stack);
+			case CILOpCode.Ldloc: return Ldloc(context, stack, (int)instruction.Operand);
+			case CILOpCode.Ldloc_0: return Ldloc(context, stack, 0);
+			case CILOpCode.Ldloc_1: return Ldloc(context, stack, 1);
+			case CILOpCode.Ldloc_2: return Ldloc(context, stack, 2);
+			case CILOpCode.Ldloc_3: return Ldloc(context, stack, 3);
+			case CILOpCode.Ldloc_s: return Ldloc(context, stack, (int)instruction.Operand);
+			case CILOpCode.Ldloca: return Ldloca(context, stack, instruction);
+			case CILOpCode.Ldloca_s: return Ldloca(context, stack, instruction);
+			case CILOpCode.Ldnull: return Ldnull(context, stack);
+			case CILOpCode.Ldobj: return Ldobj(context, stack, instruction);
+			case CILOpCode.Ldsfld: return Ldsfld(context, stack, instruction);
+			case CILOpCode.Ldsflda: return Ldsflda(context, stack, instruction);
+			case CILOpCode.Ldstr: return Ldstr(context, stack, instruction);
+			case CILOpCode.Ldtoken: return Ldtoken(context, stack, instruction);
+			case CILOpCode.Ldvirtftn: return false;                                // TODO: Not implemented in v1 either
+			case CILOpCode.Leave: return Leave(context, stack, instruction, block);
+			case CILOpCode.Leave_s: return Leave(context, stack, instruction, block);
+			case CILOpCode.Localalloc: return false;                               // TODO: Not implemented in v1 either
+			case CILOpCode.Mkrefany: return false;                                 // TODO: Not implemented in v1 either
+			case CILOpCode.Mul: return Mul(context, stack);
+			case CILOpCode.Mul_ovf: return MulSigned(context, stack);
+			case CILOpCode.Mul_ovf_un: return MulUnsigned(context, stack);
+			case CILOpCode.Neg: return Neg(context, stack);
+			case CILOpCode.Newarr: return Newarr(context, stack, instruction);
+			case CILOpCode.Newobj: return Newobj(context, stack, instruction);
+			case CILOpCode.Nop: return Nop(context);
+			case CILOpCode.Not: return Not(context, stack);
+			case CILOpCode.Or: return Or(context, stack);
+			case CILOpCode.Pop: return Pop(context, stack);
+			case CILOpCode.Constrained: return Constrained(prefixValues, instruction);
+			case CILOpCode.No: /* TODO */ prefixValues.Reset = false; return true;
+			case CILOpCode.ReadOnly: prefixValues.Readonly = true; prefixValues.Reset = false; return true;
+			case CILOpCode.Tailcall: prefixValues.Tailcall = true; prefixValues.Reset = false; return true;
+			case CILOpCode.Unaligned: prefixValues.Unaligned = true; prefixValues.Reset = false; return true;
+			case CILOpCode.Volatile: prefixValues.Volatile = true; prefixValues.Reset = false; return true;
+			case CILOpCode.Refanytype: return false;                               // TODO: Not implemented in v1 either
+			case CILOpCode.Refanyval: return false;                                // TODO: Not implemented in v1 either
+			case CILOpCode.Rem: return RemOperand(context, stack);
+			case CILOpCode.Rem_un: return RemUnsigned(context, stack);
+			case CILOpCode.Ret: return Ret(context, stack);
+			case CILOpCode.Rethrow: return Rethrow(context, stack);
+			case CILOpCode.Shl: return Shl(context, stack, instruction);
+			case CILOpCode.Shr: return Shr(context, stack, instruction);
+			case CILOpCode.Shr_un: return ShrU(context, stack, instruction);
+			case CILOpCode.Sizeof: return Sizeof(context, stack, instruction);
+			case CILOpCode.Starg: return StoreArgument(context, stack, (int)instruction.Operand);
+			case CILOpCode.Starg_s: return StoreArgument(context, stack, (int)instruction.Operand);
+			case CILOpCode.Stelem: return Stelem(context, stack, instruction);
+			case CILOpCode.Stelem_i: return Stelem(context, stack, ElementType.I);
+			case CILOpCode.Stelem_i1: return Stelem(context, stack, ElementType.I1);
+			case CILOpCode.Stelem_i2: return Stelem(context, stack, ElementType.I2);
+			case CILOpCode.Stelem_i4: return Stelem(context, stack, ElementType.I4);
+			case CILOpCode.Stelem_i8: return Stelem(context, stack, ElementType.I8);
+			case CILOpCode.Stelem_r4: return Stelem(context, stack, ElementType.R4);
+			case CILOpCode.Stelem_r8: return Stelem(context, stack, ElementType.R8);
+			case CILOpCode.Stelem_ref: return Stelem(context, stack, ElementType.Object);
+			case CILOpCode.Stfld: return Stfld(context, stack, instruction);
+			case CILOpCode.Stind_i: return Stind(context, stack, ElementType.I);
+			case CILOpCode.Stind_i1: return Stind(context, stack, ElementType.I1);
+			case CILOpCode.Stind_i2: return Stind(context, stack, ElementType.I2);
+			case CILOpCode.Stind_i4: return Stind(context, stack, ElementType.I4);
+			case CILOpCode.Stind_i8: return Stind(context, stack, ElementType.I8);
+			case CILOpCode.Stind_r4: return Stind(context, stack, ElementType.R4);
+			case CILOpCode.Stind_r8: return Stind(context, stack, ElementType.R8);
+			case CILOpCode.Stind_ref: return Stind(context, stack, ElementType.Object);
+			case CILOpCode.Stloc: return Stloc(context, stack, (int)instruction.Operand);
+			case CILOpCode.Stloc_0: return Stloc(context, stack, 0);
+			case CILOpCode.Stloc_1: return Stloc(context, stack, 1);
+			case CILOpCode.Stloc_2: return Stloc(context, stack, 2);
+			case CILOpCode.Stloc_3: return Stloc(context, stack, 3);
+			case CILOpCode.Stloc_s: return Stloc(context, stack, (int)instruction.Operand);
+			case CILOpCode.Stobj: return Stobj(context, stack, instruction);
+			case CILOpCode.Stsfld: return Stsfld(context, stack, instruction);
+			case CILOpCode.Sub: return Sub(context, stack);
+			case CILOpCode.Sub_ovf: return SubSigned(context, stack);
+			case CILOpCode.Sub_ovf_un: return SubUnsigned(context, stack);
+			case CILOpCode.Switch: return Switch(context, stack, instruction);
+			case CILOpCode.Throw: return Throw(context, stack);
+			case CILOpCode.Unbox: return Unbox(context, stack, instruction);
+			case CILOpCode.Unbox_any: return UnboxAny(context, stack, instruction);
+			case CILOpCode.Xor: return Xor(context, stack);
 
 			default: return false;
 		}
@@ -865,9 +862,9 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		{
 			var instruction = code[label];
 
-			var opcode = (OpCode)instruction.OpCode;
+			var opcode = (CILOpCode)instruction.OpCode;
 
-			if (opcode == OpCode.Ldloca || opcode == OpCode.Ldloca_s)
+			if (opcode == CILOpCode.Ldloca || opcode == CILOpCode.Ldloca_s)
 			{
 				var index = (int)instruction.Operand;
 
@@ -998,34 +995,34 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		return MosaTypeLayout.GetUnderlyingType(type);
 	}
 
-	private static bool IsBranch(OpCode opcode)
+	private static bool IsBranch(CILOpCode opcode)
 	{
 		return opcode switch
 		{
-			OpCode.Beq => true,
-			OpCode.Beq_s => true,
-			OpCode.Bge => true,
-			OpCode.Bge_s => true,
-			OpCode.Bge_un => true,
-			OpCode.Bge_un_s => true,
-			OpCode.Bgt => true,
-			OpCode.Bgt_s => true,
-			OpCode.Bgt_un => true,
-			OpCode.Bgt_un_s => true,
-			OpCode.Ble => true,
-			OpCode.Ble_s => true,
-			OpCode.Ble_un => true,
-			OpCode.Ble_un_s => true,
-			OpCode.Blt => true,
-			OpCode.Blt_s => true,
-			OpCode.Blt_un => true,
-			OpCode.Blt_un_s => true,
-			OpCode.Bne_un => true,
-			OpCode.Bne_un_s => true,
-			OpCode.Brfalse_s => true,
-			OpCode.Brtrue_s => true,
-			OpCode.Brfalse => true,
-			OpCode.Brtrue => true,
+			CILOpCode.Beq => true,
+			CILOpCode.Beq_s => true,
+			CILOpCode.Bge => true,
+			CILOpCode.Bge_s => true,
+			CILOpCode.Bge_un => true,
+			CILOpCode.Bge_un_s => true,
+			CILOpCode.Bgt => true,
+			CILOpCode.Bgt_s => true,
+			CILOpCode.Bgt_un => true,
+			CILOpCode.Bgt_un_s => true,
+			CILOpCode.Ble => true,
+			CILOpCode.Ble_s => true,
+			CILOpCode.Ble_un => true,
+			CILOpCode.Ble_un_s => true,
+			CILOpCode.Blt => true,
+			CILOpCode.Blt_s => true,
+			CILOpCode.Blt_un => true,
+			CILOpCode.Blt_un_s => true,
+			CILOpCode.Bne_un => true,
+			CILOpCode.Bne_un_s => true,
+			CILOpCode.Brfalse_s => true,
+			CILOpCode.Brtrue_s => true,
+			CILOpCode.Brfalse => true,
+			CILOpCode.Brtrue => true,
 			_ => false,
 		};
 	}
