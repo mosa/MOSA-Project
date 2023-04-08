@@ -13,7 +13,7 @@ jobs:
       NUGET_ENABLE_LEGACY_CSPROJ_PACK: true
     steps:
       - name: Set net7.0
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '7.0.x'
       - name: View Build Version
@@ -21,16 +21,15 @@ jobs:
       - name: View Github Info
         run: echo repository=${{ github.repository }} event_name=${{ github.event_name }} ref=${{ github.ref }} head_ref=${{ github.head_ref }} base_ref=${{ github.base_ref }}
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v3
         with:
           submodules: recursive
       - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v1
+        uses: microsoft/setup-msbuild@v1.1
       - name: Setup Nuget.exe
         uses: nuget/setup-nuget@v1
       - name: Restore nuget Packages
-        run: dotnet restore Mosa.sln
-        working-directory: Source
+        run: dotnet restore Source/Mosa.sln
       - name: Build
         run: dotnet build Source/Mosa.sln /p:Version=${{ env.BUILD_VERSION }}
       - name: Unit Tests - All Performance Optimizations
@@ -57,8 +56,6 @@ jobs:
 #        run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.Demo.HelloWorld.x86.dll -s Launcher.Test=true
 #      - name: Test Demo - Mosa.Demo.CoolWorld.x86 
 #        run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.Demo.CoolWorld.x86.dll -s Launcher.Test=true
-      - name: Create Installer
-        run: ISCC.exe /DMyAppVersion=${{ env.BUILD_VERSION }}.${{ github.run_number }} Source/Inno-Setup-Script/Mosa-Installer.iss
       - name: Build Project - Mosa.Templates
         run: dotnet build Source\Mosa.Templates\Mosa.Templates.csproj
       - name: Create Package - Mosa.Templates
@@ -79,11 +76,6 @@ jobs:
         run: nuget pack Source\Mosa.Packages\Mosa.Platform.x64.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ github.run_number }}
       - name: Create Package - Mosa.Kernel.x64
         run: nuget pack Source\Mosa.Packages\Mosa.Kernel.x64.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ github.run_number }}
-      - name: Create Installer Artifact
-        uses: actions/upload-artifact@master
-        with:
-          name: MOSA-Installer-${{ env.BUILD_VERSION }}.${{ github.run_number }}.exe
-          path: bin\MOSA-Installer-${{ env.BUILD_VERSION }}.${{ github.run_number }}.exe
       - name: Create Nuget Packages Artifact
         uses: actions/upload-artifact@master
         with:
@@ -122,11 +114,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set net7.0
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '7.0.x'
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v3
         with:
           submodules: recursive
       - name: Restore nuget Packages
@@ -157,3 +149,31 @@ jobs:
         run: dotnet bin/Mosa.Utility.UnitTests.dll -o7 -s Emulator.Display=false
       - name: Unit Tests - Optimization Level 8
         run: dotnet bin/Mosa.Utility.UnitTests.dll -o8 -s Emulator.Display=false
+
+  generate-docs:
+    name: Generate documentation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set python3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Update package respository
+        run: sudo apt-get -y -o Acquire::Check-Valid-Until=false update
+      - name: Install Graphviz
+        run: sudo apt-get install -y graphviz
+      - name: Install Sphinx dependencies
+        run: pip3 install sphinx sphinxcontrib.httpdomain sphinx-prompt sphinx_rtd_theme sphinx-tabs
+      - name: Generate HTML website
+        run: sphinx-build -b html Source/Docs sphinx-docs
+      - name: Create ZIP archive
+        run: zip -r docs-${{ env.BUILD_VERSION }}.${{ github.run_number }}.zip sphinx-docs
+      - name: Create artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: docs-${{ env.BUILD_VERSION }}.${{ github.run_number }}.zip
+          path: docs-${{ env.BUILD_VERSION }}.${{ github.run_number }}.zip
