@@ -1,11 +1,11 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Compiler.Framework.CIL;
+namespace Mosa.Compiler.Framework;
 
 /// <summary>
 ///  All CIL opcodes as defined in ISO/IEC 23271:2006 (E).
 /// </summary>
-public enum OpCode
+public enum CILOpCode
 {
 	Nop = 0x000,
 	Break = 0x001,

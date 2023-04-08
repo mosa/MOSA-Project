@@ -9,7 +9,7 @@ jobs:
     name: Windows Build
     runs-on: windows-latest
     env:
-      BUILD_VERSION: 2.3.0
+      BUILD_VERSION: 2.4.0
       NUGET_ENABLE_LEGACY_CSPROJ_PACK: true
     steps:
       - name: Set net7.0
