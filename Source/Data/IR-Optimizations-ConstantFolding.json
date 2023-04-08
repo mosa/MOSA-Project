@@ -1,8 +1,9 @@
 ﻿{
+	"Family": "IR",
+	"Section": "Optimizations.Auto",
 	"Optimizations": [
 
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Add##",
 			"SubName": "",
@@ -12,7 +13,6 @@
 			"Priority": "100"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "AddR#",
 			"SubName": "",
@@ -22,7 +22,6 @@
 			"Priority": "100"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "AddCarryIn##",
 			"SubName": "",
@@ -32,7 +31,6 @@
 			"Priority": "100"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "ShiftRight##",
 			"SubName": "",
@@ -42,7 +40,6 @@
 			"Priority": "100"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "ShiftLeft##",
 			"SubName": "",
@@ -52,7 +49,6 @@
 			"Priority": "100"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "DivUnsigned##",
 			"SubName": "",
@@ -62,7 +58,6 @@
 			"Priority": "100"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "DivSigned##",
 			"SubName": "",
@@ -72,7 +67,6 @@
 			"Priority": "100"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "DivR#",
 			"SubName": "",
@@ -82,7 +76,6 @@
 			"Priority": "100"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "And##",
 			"SubName": "",
@@ -92,7 +85,6 @@
 			"Priority": "100"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Or##",
 			"SubName": "",
@@ -102,7 +94,6 @@
 			"Priority": "100"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Xor##",
 			"SubName": "",
@@ -112,7 +103,6 @@
 			"Priority": "100"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Not##",
 			"SubName": "",
@@ -122,7 +112,6 @@
 			"Priority": "100"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "MulUnsigned##",
 			"SubName": "",
@@ -132,7 +121,6 @@
 			"Priority": "100"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "MulSigned##",
 			"SubName": "",
@@ -142,7 +130,6 @@
 			"Priority": "100"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "MulR#",
 			"SubName": "",
@@ -152,7 +139,6 @@
 			"Priority": "100"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "RemUnsigned##",
 			"SubName": "",
@@ -162,7 +148,6 @@
 			"Priority": "100"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "RemSigned##",
 			"SubName": "",
@@ -172,7 +157,6 @@
 			"Priority": "100"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "RemR#",
 			"SubName": "",
@@ -182,7 +166,6 @@
 			"Priority": "100"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Sub##",
 			"SubName": "",
@@ -192,7 +175,6 @@
 			"Priority": "100"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "SubR#",
 			"SubName": "",
@@ -202,7 +184,6 @@
 			"Priority": "100"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "SubCarryIn##",
 			"SubName": "",
@@ -212,7 +193,6 @@
 			"Priority": "100"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "IfThenElse##",
 			"SubName": "AlwaysTrue",
@@ -222,7 +202,6 @@
 			"Priority": "100"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "IfThenElse##",
 			"SubName": "AlwaysFalse",
@@ -232,7 +211,6 @@
 			"Priority": "100"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "SignExtend16x32",
 			"SubName": "",
@@ -242,7 +220,6 @@
 			"Priority": "100"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "SignExtend16x64",
 			"SubName": "",
@@ -252,7 +229,6 @@
 			"Priority": "100"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "SignExtend32x64",
 			"SubName": "",
@@ -262,7 +238,6 @@
 			"Priority": "100"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "SignExtend8x32",
 			"SubName": "",
@@ -272,7 +247,6 @@
 			"Priority": "100"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "SignExtend8x64",
 			"SubName": "",
@@ -282,7 +256,6 @@
 			"Priority": "100"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "ZeroExtend16x32",
 			"SubName": "",
@@ -292,7 +265,6 @@
 			"Priority": "100"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "ZeroExtend16x64",
 			"SubName": "",
@@ -302,7 +274,6 @@
 			"Priority": "100"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "ZeroExtend32x64",
 			"SubName": "",
@@ -312,7 +283,6 @@
 			"Priority": "100"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "ZeroExtend8x32",
 			"SubName": "",
@@ -322,7 +292,6 @@
 			"Priority": "100"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "ZeroExtend8x64",
 			"SubName": "",
@@ -332,7 +301,6 @@
 			"Priority": "100"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "ConvertI32ToR#",
 			"SubName": "",
@@ -342,7 +310,6 @@
 			"Priority": "100"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "ConvertI64ToR#",
 			"SubName": "",
@@ -352,7 +319,6 @@
 			"Priority": "100"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "ConvertU32ToR#",
 			"SubName": "",
@@ -362,7 +328,6 @@
 			"Priority": "100"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "ConvertU64ToR#",
 			"SubName": "",
@@ -372,7 +337,6 @@
 			"Priority": "100"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "GetHigh32",
 			"SubName": "",
@@ -382,7 +346,6 @@
 			"Priority": "100"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "GetLow32",
 			"SubName": "",
@@ -392,7 +355,6 @@
 			"Priority": "100"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "GetLow32",
 			"SubName": "FromTo64",
@@ -402,7 +364,6 @@
 			"Priority": "100"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "GetHigh32",
 			"SubName": "FromTo64",
@@ -412,7 +373,6 @@
 			"Priority": "100"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "ArithShiftRight##",
 			"SubName": "",
@@ -422,7 +382,6 @@
 			"Priority": "100"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Compare32x##",
 			"SubName": "GreaterOrEqualThanZero",
@@ -433,7 +392,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Compare64x##",
 			"SubName": "GreaterOrEqualThanZero",
@@ -444,7 +402,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Compare32x##",
 			"SubName": "LessThanZero",
@@ -455,7 +412,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Compare64x##",
 			"SubName": "LessThanZero",
@@ -466,7 +422,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Compare32x##",
 			"SubName": "LessThanZero",
@@ -477,7 +432,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Compare64x##",
 			"SubName": "LessThanZero",
@@ -488,7 +442,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Compare32x##",
 			"SubName": "LessOrEqualThanZero",
@@ -499,7 +452,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Compare64x##",
 			"SubName": "LessOrEqualThanZero",
@@ -510,7 +462,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Compare32x##",
 			"SubName": "GreaterOrEqualThanMax",
@@ -521,7 +472,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Compare64x##",
 			"SubName": "GreaterOrEqualThanMax",
@@ -532,7 +482,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Compare32x##",
 			"SubName": "LessThanMax",
@@ -543,7 +492,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Compare64x##",
 			"SubName": "LessThanMax",
@@ -554,7 +502,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Compare32x##",
 			"SubName": "LessThanMax",
@@ -565,7 +512,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Compare64x##",
 			"SubName": "LessThanMax",
@@ -576,7 +522,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Compare32x##",
 			"SubName": "LessThanMax",
@@ -587,7 +532,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Compare64x##",
 			"SubName": "LessThanMax",
@@ -598,7 +542,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Truncate64x32",
 			"SubName": "",

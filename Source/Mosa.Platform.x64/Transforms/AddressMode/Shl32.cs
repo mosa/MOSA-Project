@@ -7,6 +7,7 @@ namespace Mosa.Platform.x64.Transforms.AddressMode;
 /// <summary>
 /// Shl32
 /// </summary>
+[Transform("x64.AddressMode")]
 public sealed class Shl32 : BaseAddressModeTransform
 {
 	public Shl32() : base(X64.Shl32, TransformType.Manual | TransformType.Transform)

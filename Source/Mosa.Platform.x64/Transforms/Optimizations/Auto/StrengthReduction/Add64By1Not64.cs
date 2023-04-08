@@ -4,13 +4,13 @@
 
 using Mosa.Platform.x64;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x64.Transforms.Optimizations.Auto.StrengthReduction;
 
 /// <summary>
 /// Add64By1Not64
 /// </summary>
+[Transform("x64.Optimizations.Auto.StrengthReduction")]
 public sealed class Add64By1Not64 : BaseTransform
 {
 	public Add64By1Not64() : base(X64.Add64, TransformType.Auto | TransformType.Optimization)
@@ -56,6 +56,7 @@ public sealed class Add64By1Not64 : BaseTransform
 /// <summary>
 /// Add64By1Not64_v1
 /// </summary>
+[Transform("x64.Optimizations.Auto.StrengthReduction")]
 public sealed class Add64By1Not64_v1 : BaseTransform
 {
 	public Add64By1Not64_v1() : base(X64.Add64, TransformType.Auto | TransformType.Optimization)

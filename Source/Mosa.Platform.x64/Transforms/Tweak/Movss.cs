@@ -2,13 +2,13 @@
 
 using System.Diagnostics;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x64.Transforms.Tweak;
 
 /// <summary>
 /// Movss
 /// </summary>
+[Transform("x64.Tweak")]
 public sealed class Movss : BaseTransform
 {
 	public Movss() : base(X64.Movss, TransformType.Manual | TransformType.Transform)

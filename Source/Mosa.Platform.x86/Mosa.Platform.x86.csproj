@@ -34,6 +34,5 @@
     <Folder Include="Transforms\Optimizations\Auto\Ordering\" />
     <Folder Include="Transforms\Optimizations\Auto\Special\" />
     <Folder Include="Transforms\Optimizations\Manual\Simplification\" />
-    <Folder Include="Transforms\Special\" />
   </ItemGroup>
 </Project>

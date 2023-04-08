@@ -1,13 +1,13 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.ARMv8A32.Transforms.RuntimeCall;
 
 /// <summary>
 /// ConvertR4ToR8
 /// </summary>
+[Transform("ARMv8A32.RuntimeCall")]
 public sealed class ConvertR4ToR8 : BaseTransform
 {
 	public ConvertR4ToR8() : base(IRInstruction.ConvertR4ToR8, TransformType.Manual | TransformType.Transform)

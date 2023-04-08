@@ -9,6 +9,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 /// <summary>
 /// Sub32Same
 /// </summary>
+[Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class Sub32Same : BaseTransform
 {
 	public Sub32Same() : base(IRInstruction.Sub32, TransformType.Auto | TransformType.Optimization)

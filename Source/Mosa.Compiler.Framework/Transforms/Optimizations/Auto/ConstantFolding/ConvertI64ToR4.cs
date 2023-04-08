@@ -9,6 +9,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 /// <summary>
 /// ConvertI64ToR4
 /// </summary>
+[Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class ConvertI64ToR4 : BaseTransform
 {
 	public ConvertI64ToR4() : base(IRInstruction.ConvertI64ToR4, TransformType.Auto | TransformType.Optimization)

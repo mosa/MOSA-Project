@@ -1,4 +1,6 @@
 ﻿{
+	"Family": "x64",
+	"Section": "Optimizations.Auto",
 	"Commutative": [
 		"X64.Add32",
 		"X64.And32",
@@ -9,7 +11,6 @@
 	],
 	"Optimizations": [
 		{
-			"FamilyName": "X64",
 			"Type": "Standard",
 			"Name": "Mov##",
 			"SubName": "Coalescing",
@@ -19,7 +20,6 @@
 			"Variations": "No"
 		},
 		{
-			"FamilyName": "X64",
 			"Type": "StrengthReduction",
 			"Name": "Add##",
 			"SubName": "ByZero",
@@ -29,7 +29,6 @@
 			"Variations": "No"
 		},
 		{
-			"FamilyName": "X64",
 			"Type": "StrengthReduction",
 			"Name": "Sub##",
 			"SubName": "ByZero",
@@ -39,7 +38,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "X64",
 			"Type": "Shrink",
 			"Name": "And##",
 			"SubName": "ByFF",
@@ -50,7 +48,6 @@
 			"Log": "No"
 		},
 		{
-			"FamilyName": "X64",
 			"Type": "StrengthReduction",
 			"Name": "Add##By1Not##",
 			"SubName": "",
@@ -60,7 +57,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "X64",
 			"Type": "StrengthReduction",
 			"Name": "Inc##Not##",
 			"SubName": "",
@@ -70,7 +66,6 @@
 			"Variations": "No"
 		},
 		{
-			"FamilyName": "X64",
 			"Type": "Specific",
 			"Name": "And##Add##",
 			"SubName": "ToBlsr##",
@@ -80,7 +75,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "X64",
 			"Type": "Simplication",
 			"Name": "SubFromZero",
 			"SubName": "",

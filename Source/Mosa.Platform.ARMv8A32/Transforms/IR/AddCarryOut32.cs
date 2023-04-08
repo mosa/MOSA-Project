@@ -1,13 +1,13 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.ARMv8A32.Transforms.IR;
 
 /// <summary>
 /// AddCarryOut32
 /// </summary>
+[Transform("ARMv8A32.IR")]
 public sealed class AddCarryOut32 : BaseIRTransform
 {
 	public AddCarryOut32() : base(IRInstruction.AddCarryOut32, TransformType.Manual | TransformType.Transform)

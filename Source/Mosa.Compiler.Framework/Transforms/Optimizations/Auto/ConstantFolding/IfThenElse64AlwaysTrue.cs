@@ -9,6 +9,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 /// <summary>
 /// IfThenElse64AlwaysTrue
 /// </summary>
+[Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class IfThenElse64AlwaysTrue : BaseTransform
 {
 	public IfThenElse64AlwaysTrue() : base(IRInstruction.IfThenElse64, TransformType.Auto | TransformType.Optimization)

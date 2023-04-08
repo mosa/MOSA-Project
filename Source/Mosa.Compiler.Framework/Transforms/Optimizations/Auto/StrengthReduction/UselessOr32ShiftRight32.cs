@@ -9,6 +9,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 /// <summary>
 /// UselessOr32ShiftRight32
 /// </summary>
+[Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class UselessOr32ShiftRight32 : BaseTransform
 {
 	public UselessOr32ShiftRight32() : base(IRInstruction.ShiftRight32, TransformType.Auto | TransformType.Optimization)
@@ -55,6 +56,7 @@ public sealed class UselessOr32ShiftRight32 : BaseTransform
 /// <summary>
 /// UselessOr32ShiftRight32_v1
 /// </summary>
+[Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class UselessOr32ShiftRight32_v1 : BaseTransform
 {
 	public UselessOr32ShiftRight32_v1() : base(IRInstruction.ShiftRight32, TransformType.Auto | TransformType.Optimization)

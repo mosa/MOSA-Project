@@ -7,6 +7,7 @@ namespace Mosa.Platform.x86.Transforms.IR;
 /// <summary>
 /// DivSigned32
 /// </summary>
+[Transform("x86.IR")]
 public sealed class DivSigned32 : BaseIRTransform
 {
 	public DivSigned32() : base(IRInstruction.DivSigned32, TransformType.Manual | TransformType.Transform)

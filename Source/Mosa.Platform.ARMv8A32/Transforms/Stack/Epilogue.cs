@@ -8,6 +8,7 @@ namespace Mosa.Platform.ARMv8A32.Transforms.Stack;
 /// <summary>
 /// Epilogue
 /// </summary>
+[Transform("ARMv8A32.Stack")]
 public sealed class Epilogue : BaseTransform
 {
 	public Epilogue() : base(IRInstruction.Epilogue, TransformType.Manual | TransformType.Transform)

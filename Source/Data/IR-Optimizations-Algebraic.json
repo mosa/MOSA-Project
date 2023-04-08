@@ -1,4 +1,6 @@
 ﻿{
+	"Family": "IR",
+	"Section": "Optimizations.Auto",
 	"Commutative": [
 		"IR.Add32",
 		"IR.Add64",
@@ -23,7 +25,6 @@
 	],
 	"Optimizations": [
 		{
-			"FamilyName": "IR",
 			"Type": "Algebraic",
 			"Name": "Signed##",
 			"SubName": "AAPlusBBPlus2AB",
@@ -33,7 +34,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Algebraic",
 			"Name": "Unsigned##",
 			"SubName": "AAPlusBBPlus2AB",
@@ -43,7 +43,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Algebraic",
 			"Name": "Signed##",
 			"SubName": "AAPlusBBMinus2AB",
@@ -53,7 +52,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Algebraic",
 			"Name": "Unsigned##",
 			"SubName": "AAPlusBBMinus2AB",
@@ -63,7 +61,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Algebraic",
 			"Name": "Signed##",
 			"SubName": "AAMinusBB",
@@ -73,7 +70,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Algebraic",
 			"Name": "Unsigned##",
 			"SubName": "AAMinusBB",
@@ -83,7 +79,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Algebraic",
 			"Name": "Unsigned##",
 			"SubName": "PerfectSquareFormula",
@@ -93,7 +88,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Algebraic",
 			"Name": "Signed##",
 			"SubName": "PerfectSquareFormula",

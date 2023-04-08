@@ -1,13 +1,13 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.ARMv8A32.Transforms.RuntimeCall;
 
 /// <summary>
 /// RemSigned32
 /// </summary>
+[Transform("ARMv8A32.RuntimeCall")]
 public sealed class RemSigned32 : BaseTransform
 {
 	public RemSigned32() : base(IRInstruction.RemSigned32, TransformType.Manual | TransformType.Transform)

@@ -158,9 +158,13 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 		MethodCompiler.ProtectedRegions = ProtectedRegion.CreateProtectedRegions(BasicBlocks, Method.ExceptionHandlers);
 
+		AdditionalExceptionBlocks();
+
 		InsertBlockProtectInstructions();
 
-		ProtectedRegion.FinalizeAll(BasicBlocks, MethodCompiler.ProtectedRegions);
+		InsertFlowOrJumpInstructions();
+
+		//ProtectedRegion.FinalizeAll(BasicBlocks, MethodCompiler.ProtectedRegions);
 	}
 
 	protected override void Setup()
@@ -315,6 +319,18 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		}
 	}
 
+	private void AdditionalExceptionBlocks()
+	{
+		foreach (var block in BasicBlocks)
+		{
+			if (!block.HasPreviousBlocks && !block.IsHeadBlock)
+			{
+				// block was targeted (probably by an leave instruction within a protected region)
+				BasicBlocks.AddHeadBlock(block);
+			}
+		}
+	}
+
 	private void InsertBlockProtectInstructions()
 	{
 		foreach (var handler in Method.ExceptionHandlers)
@@ -340,6 +356,86 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 				var finallyOperand = Is32BitPlatform ? AllocateVirtualRegister32() : AllocateVirtualRegister64();
 
 				context.AppendInstruction2(IRInstruction.FinallyStart, exceptionObject, finallyOperand);
+			}
+		}
+	}
+
+	private bool IsSourceAndTargetWithinSameTryOrException(InstructionNode node)
+	{
+		var leaveLabel = TraverseBackToNativeBlock(node.Block).Label;
+		var targetLabel = TraverseBackToNativeBlock(node.BranchTargets[0]).Label;
+
+		foreach (var handler in Method.ExceptionHandlers)
+		{
+			var one = handler.IsLabelWithinTry(leaveLabel);
+			var two = handler.IsLabelWithinTry(targetLabel);
+
+			if (one && !two)
+				return false;
+
+			if (!one && two)
+				return false;
+
+			if (one && two)
+				return true;
+
+			one = handler.IsLabelWithinHandler(leaveLabel);
+			two = handler.IsLabelWithinHandler(targetLabel);
+
+			if (one && !two)
+				return false;
+
+			if (!one && two)
+				return false;
+
+			if (one && two)
+				return true;
+		}
+
+		// very odd
+		return true;
+	}
+
+	private void InsertFlowOrJumpInstructions()
+	{
+		foreach (var block in BasicBlocks)
+		{
+			var label = TraverseBackToNativeBlock(block).Label;
+
+			for (var node = block.BeforeLast; !node.IsBlockStartInstruction; node = node.Previous)
+			{
+				if (node.IsEmptyOrNop)
+					continue;
+
+				if (!(node.Instruction == IRInstruction.TryEnd
+					|| node.Instruction == IRInstruction.ExceptionEnd))
+					continue;
+
+				var target = node.BranchTargets[0];
+
+				if (IsSourceAndTargetWithinSameTryOrException(node))
+				{
+					// Leave instruction can be converted into a simple jump instruction
+					node.SetInstruction(IRInstruction.Jmp, target);
+					BasicBlocks.RemoveHeaderBlock(target);
+					continue;
+				}
+
+				var entry = FindImmediateExceptionHandler(label);
+
+				if (!entry.IsLabelWithinTry(label))
+					break;
+
+				var flowNode = new InstructionNode(IRInstruction.Flow, target);
+
+				node.Insert(flowNode);
+
+				if (target.IsHeadBlock)
+				{
+					BasicBlocks.RemoveHeaderBlock(target);
+				}
+
+				break;
 			}
 		}
 	}
@@ -484,8 +580,9 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 			case OpCode.Conv_i2: return ConvertI2(context, stack);
 			case OpCode.Conv_i4: return ConvertI4(context, stack);
 			case OpCode.Conv_i8: return ConvertI8(context, stack);
-			case OpCode.Conv_ovf_i: return ConvertIWithOverflow(context, stack);
-			case OpCode.Conv_ovf_i_un: return false;                            // TODO
+			case OpCode.Conv_ovf_i: return ConvertToIWithOverflow(context, stack);
+			case OpCode.Conv_ovf_i_un: return ConvertUToIWithOverflow(context, stack);
+
 			case OpCode.Conv_ovf_i1: return ConvertI1WithOverflow(context, stack);
 			case OpCode.Conv_ovf_i1_un: return ConvertUToI1WithOverflow(context, stack);
 			case OpCode.Conv_ovf_i2: return ConvertI2WithOverflow(context, stack);
@@ -494,8 +591,9 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 			case OpCode.Conv_ovf_i4_un: return ConvertUToI4WithOverflow(context, stack);
 			case OpCode.Conv_ovf_i8: return ConvertI8WithOverflow(context, stack);
 			case OpCode.Conv_ovf_i8_un: return ConvertUToI8WithOverflow(context, stack);
-			case OpCode.Conv_ovf_u: return ConvertUWithOverflow(context, stack);
-			case OpCode.Conv_ovf_u_un: return false;                            // TODO
+			case OpCode.Conv_ovf_u: return ConvertToUWithOverflow(context, stack);
+			case OpCode.Conv_ovf_u_un: return ConvertUToUWithOverflow(context, stack);
+
 			case OpCode.Conv_ovf_u1: return ConvertU1WithOverflow(context, stack);
 			case OpCode.Conv_ovf_u1_un: return ConvertUToU1WithOverflow(context, stack);
 			case OpCode.Conv_ovf_u2: return ConvertU2WithOverflow(context, stack);
@@ -1163,6 +1261,8 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 			ElementType.U2 => IRInstruction.Box32,
 			ElementType.I when Is32BitPlatform => IRInstruction.Box32,
 			ElementType.I when Is64BitPlatform => IRInstruction.Box64,
+			ElementType.ManagedPointer when Is32BitPlatform => IRInstruction.Box32,
+			ElementType.ManagedPointer when Is64BitPlatform => IRInstruction.Box64,
 			_ => throw new CompilerException($"Invalid ElementType = {elementType}"),
 		};
 	}
@@ -1696,11 +1796,13 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		}
 
 		var methodTable = GetMethodTablePointer(type);
-		var isPrimitive = IsPrimitive(type);
+
+		var underlyingType = GetUnderlyingType(type);
+		var isPrimitive = IsPrimitive(underlyingType);
 
 		if (isPrimitive)
 		{
-			var elementType = GetElementType(type);
+			var elementType = GetElementType(underlyingType);
 			var boxInstruction = GetBoxInstruction(elementType);
 
 			context.AppendInstruction(boxInstruction, result, methodTable, entry.Operand);
@@ -1709,11 +1811,19 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		{
 			var typeSize = Alignment.AlignUp(TypeLayout.GetTypeSize(type), TypeLayout.NativePointerAlignment);
 
-			//var address = AllocateVirtualRegisterManagedPointer();
-			//context.AppendInstruction(IRInstruction.AddressOf, address, entry.Operand);
+			if (typeSize == 8)
+			{
+				context.AppendInstruction(IRInstruction.Box64, result, methodTable, entry.Operand);
+			}
+			else
+			{
+				var address = AllocateVirtualRegister(type.ToManagedPointer());
 
-			context.AppendInstruction(IRInstruction.Box, result, methodTable, entry.Operand, CreateConstant32(typeSize));
+				context.AppendInstruction(IRInstruction.AddressOf, address, entry.Operand);
+				context.AppendInstruction(IRInstruction.Box, result, methodTable, address, CreateConstant32(typeSize));
+			}
 		}
+
 		return true;
 	}
 
@@ -2676,7 +2786,47 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		}
 	}
 
-	private bool ConvertIWithOverflow(Context context, Stack<StackEntry> stack)
+	private bool ConvertUToIWithOverflow(Context context, Stack<StackEntry> stack)
+	{
+		var entry = PopStack(stack);
+
+		if (Is32BitPlatform)
+		{
+			var result = AllocateVirtualRegister32();
+			PushStack(stack, new StackEntry(StackType.Int32, result));
+
+			switch (entry.StackType)
+			{
+				case StackType.Int32:
+					context.AppendInstruction(IRInstruction.CheckedConversionU32ToI32, result, entry.Operand);
+					return true;
+
+				case StackType.Int64:
+					context.AppendInstruction(IRInstruction.CheckedConversionU64ToI32, result, entry.Operand);
+					return true;
+			}
+		}
+		else
+		{
+			var result = AllocateVirtualRegister64();
+			PushStack(stack, new StackEntry(StackType.Int64, result));
+
+			switch (entry.StackType)
+			{
+				case StackType.Int32:
+					context.AppendInstruction(IRInstruction.ZeroExtend32x64, result, entry.Operand);
+					return true;
+
+				case StackType.Int64:
+					context.AppendInstruction(IRInstruction.CheckedConversionU64ToI64, result, entry.Operand);
+					return true;
+			}
+		}
+
+		return false;
+	}
+
+	private bool ConvertToIWithOverflow(Context context, Stack<StackEntry> stack)
 	{
 		var entry = PopStack(stack);
 
@@ -2732,7 +2882,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		return false;
 	}
 
-	private bool ConvertUWithOverflow(Context context, Stack<StackEntry> stack)
+	private bool ConvertToUWithOverflow(Context context, Stack<StackEntry> stack)
 	{
 		var entry = PopStack(stack);
 
@@ -2978,6 +3128,46 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 			default:
 				return false;
 		}
+	}
+
+	private bool ConvertUToUWithOverflow(Context context, Stack<StackEntry> stack)
+	{
+		var entry = PopStack(stack);
+
+		if (Is32BitPlatform)
+		{
+			var result = AllocateVirtualRegister32();
+			PushStack(stack, new StackEntry(StackType.Int32, result));
+
+			switch (entry.StackType)
+			{
+				case StackType.Int32:
+					context.AppendInstruction(IRInstruction.Move32, result, entry.Operand);
+					return true;
+
+				case StackType.Int64:
+					context.AppendInstruction(IRInstruction.CheckedConversionU64ToU32, result, entry.Operand);
+					return true;
+			}
+		}
+		else
+		{
+			var result = AllocateVirtualRegister64();
+			PushStack(stack, new StackEntry(StackType.Int64, result));
+
+			switch (entry.StackType)
+			{
+				case StackType.Int32:
+					context.AppendInstruction(IRInstruction.ZeroExtend32x64, result, entry.Operand);
+					return true;
+
+				case StackType.Int64:
+					context.AppendInstruction(IRInstruction.Move64, result, entry.Operand);
+					return true;
+			}
+		}
+
+		return false;
 	}
 
 	private bool ConvertU1WithOverflow(Context context, Stack<StackEntry> stack)
@@ -3565,7 +3755,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 		var result = Allocate(fieldStacktype, isFieldPrimitive ? fieldUnderlyingType : fieldType);
 
-		PushStack(stack, new StackEntry(fieldStacktype, result));
+		PushStack(stack, new StackEntry(fieldStacktype, result, result.Type));
 
 		var operand = entry.Operand;
 
@@ -3579,11 +3769,11 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		}
 
 		var classUnderlyingType = GetUnderlyingType(field.DeclaringType);
-		var classStacktype = GetStackTypeDefaultValueType(classUnderlyingType);
+		//var classStacktype = GetStackTypeDefaultValueType(classUnderlyingType);
 		var isClassPrimitive = IsPrimitive(classUnderlyingType);
 
 		var isPointer = operand.IsManagedPointer || operand.Type == TypeSystem.BuiltIn.I || operand.Type == TypeSystem.BuiltIn.U;
-		var isMove = MosaTypeLayout.IsUnderlyingPrimitive(operand.Type) && !result.IsOnStack && !operand.IsReferenceType && !isPointer;
+		//var isMove = MosaTypeLayout.IsUnderlyingPrimitive(operand.Type) && !result.IsOnStack && !operand.IsReferenceType && !isPointer;
 
 		if (isFieldPrimitive && isClassPrimitive && field.DeclaringType.IsValueType && !isPointer)
 		{
@@ -3789,7 +3979,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 			var result2 = AddStackLocal(local.Type);
 			context.AppendInstruction(IRInstruction.MoveCompound, result2, local);
 
-			PushStack(stack, new StackEntry(stacktype, result2, local.Type));
+			PushStack(stack, new StackEntry(StackType.ValueType, result2, local.Type));
 
 			return true;
 		}
@@ -3852,7 +4042,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 			var loadInstruction = GetLoadInstruction(elementType);
 			context.AppendInstruction(loadInstruction, result, address, ConstantZero);
 
-			return Ldind(context, stack, elementType);
+			return true; // Ldind(context, stack, elementType);
 		}
 		else
 		{
@@ -4218,7 +4408,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 			context.AppendInstruction(IRInstruction.CallStatic, null, symbol, operands);
 
 			//context.InvokeMethod = method;  // optional??
-			context.MosaType = classType;   // optional??
+			//context.MosaType = classType;   // optional??
 
 			PushStack(stack, new StackEntry(StackType.Object, result));
 
@@ -4830,10 +5020,10 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		var entry = PopStack(stack);
 		var source = entry.Operand;
 
-		var stacktype = LocalStackType[index];
+		var stackType = LocalStackType[index];
 		var local = LocalStack[index];
 
-		if (stacktype == StackType.ValueType)
+		if (stackType == StackType.ValueType)
 		{
 			context.AppendInstruction(IRInstruction.MoveCompound, local, source);
 			context.MosaType = local.Type;
@@ -4851,7 +5041,10 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		}
 		else
 		{
-			var storeInstruction = GetStoreInstruction(elementType);
+			//var stackType = GetStackType(underlyingType);
+			var stackElementType = GetElementType(stackType);
+
+			var storeInstruction = GetStoreInstruction(stackElementType);
 
 			context.AppendInstruction(storeInstruction, null, StackFrame, local, source);
 			return true;
@@ -5350,7 +5543,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		var entry = PopStack(stack);
 		var type = (MosaType)instruction.Operand;
 
-		var result = Allocate(StackType.ManagedPointer, type); 
+		var result = Allocate(StackType.ManagedPointer, type);
 		PushStack(stack, new StackEntry(StackType.ManagedPointer, result));
 
 		context.AppendInstruction(IRInstruction.Unbox, result, entry.Operand);
@@ -5361,7 +5554,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 	private bool UnboxAny(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
 	{
 		var type = (MosaType)instruction.Operand;
-		
+
 		if (type.IsReferenceType)
 		{
 			// treat as castclass, per spec
@@ -5387,7 +5580,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 			PushStack(stack, new StackEntry(stackType, result));
 
-			context.AppendInstruction(loadInstruction, result, entry.Operand, ConstantZero); 
+			context.AppendInstruction(loadInstruction, result, entry.Operand, ConstantZero);
 
 			return true;
 		}

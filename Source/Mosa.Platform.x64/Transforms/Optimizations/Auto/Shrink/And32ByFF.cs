@@ -4,13 +4,13 @@
 
 using Mosa.Platform.x64;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x64.Transforms.Optimizations.Auto.Shrink;
 
 /// <summary>
 /// And32ByFF
 /// </summary>
+[Transform("x64.Optimizations.Auto.Shrink")]
 public sealed class And32ByFF : BaseTransform
 {
 	public And32ByFF() : base(X64.And32, TransformType.Auto | TransformType.Optimization)
@@ -50,6 +50,7 @@ public sealed class And32ByFF : BaseTransform
 /// <summary>
 /// And32ByFF_v1
 /// </summary>
+[Transform("x64.Optimizations.Auto.Shrink")]
 public sealed class And32ByFF_v1 : BaseTransform
 {
 	public And32ByFF_v1() : base(X64.And32, TransformType.Auto | TransformType.Optimization)

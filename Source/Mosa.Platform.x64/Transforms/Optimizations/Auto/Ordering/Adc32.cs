@@ -4,13 +4,13 @@
 
 using Mosa.Platform.x64;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x64.Transforms.Optimizations.Auto.Ordering;
 
 /// <summary>
 /// Adc32
 /// </summary>
+[Transform("x64.Optimizations.Auto.Ordering")]
 public sealed class Adc32 : BaseTransform
 {
 	public Adc32() : base(X64.Adc32, TransformType.Auto | TransformType.Optimization)

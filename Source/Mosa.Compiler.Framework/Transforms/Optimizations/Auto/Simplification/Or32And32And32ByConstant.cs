@@ -9,6 +9,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 /// <summary>
 /// Or32And32And32ByConstant
 /// </summary>
+[Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class Or32And32And32ByConstant : BaseTransform
 {
 	public Or32And32And32ByConstant() : base(IRInstruction.Or32, TransformType.Auto | TransformType.Optimization)
@@ -59,6 +60,7 @@ public sealed class Or32And32And32ByConstant : BaseTransform
 /// <summary>
 /// Or32And32And32ByConstant_v1
 /// </summary>
+[Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class Or32And32And32ByConstant_v1 : BaseTransform
 {
 	public Or32And32And32ByConstant_v1() : base(IRInstruction.Or32, TransformType.Auto | TransformType.Optimization)
@@ -109,6 +111,7 @@ public sealed class Or32And32And32ByConstant_v1 : BaseTransform
 /// <summary>
 /// Or32And32And32ByConstant_v2
 /// </summary>
+[Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class Or32And32And32ByConstant_v2 : BaseTransform
 {
 	public Or32And32And32ByConstant_v2() : base(IRInstruction.Or32, TransformType.Auto | TransformType.Optimization)
@@ -159,6 +162,7 @@ public sealed class Or32And32And32ByConstant_v2 : BaseTransform
 /// <summary>
 /// Or32And32And32ByConstant_v3
 /// </summary>
+[Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class Or32And32And32ByConstant_v3 : BaseTransform
 {
 	public Or32And32And32ByConstant_v3() : base(IRInstruction.Or32, TransformType.Auto | TransformType.Optimization)
@@ -209,6 +213,7 @@ public sealed class Or32And32And32ByConstant_v3 : BaseTransform
 /// <summary>
 /// Or32And32And32ByConstant_v4
 /// </summary>
+[Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class Or32And32And32ByConstant_v4 : BaseTransform
 {
 	public Or32And32And32ByConstant_v4() : base(IRInstruction.Or32, TransformType.Auto | TransformType.Optimization)
@@ -259,6 +264,7 @@ public sealed class Or32And32And32ByConstant_v4 : BaseTransform
 /// <summary>
 /// Or32And32And32ByConstant_v5
 /// </summary>
+[Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class Or32And32And32ByConstant_v5 : BaseTransform
 {
 	public Or32And32And32ByConstant_v5() : base(IRInstruction.Or32, TransformType.Auto | TransformType.Optimization)
@@ -309,6 +315,7 @@ public sealed class Or32And32And32ByConstant_v5 : BaseTransform
 /// <summary>
 /// Or32And32And32ByConstant_v6
 /// </summary>
+[Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class Or32And32And32ByConstant_v6 : BaseTransform
 {
 	public Or32And32And32ByConstant_v6() : base(IRInstruction.Or32, TransformType.Auto | TransformType.Optimization)
@@ -359,6 +366,7 @@ public sealed class Or32And32And32ByConstant_v6 : BaseTransform
 /// <summary>
 /// Or32And32And32ByConstant_v7
 /// </summary>
+[Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class Or32And32And32ByConstant_v7 : BaseTransform
 {
 	public Or32And32And32ByConstant_v7() : base(IRInstruction.Or32, TransformType.Auto | TransformType.Optimization)

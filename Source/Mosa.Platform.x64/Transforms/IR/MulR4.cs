@@ -7,6 +7,7 @@ namespace Mosa.Platform.x64.Transforms.IR;
 /// <summary>
 /// MulR4
 /// </summary>
+[Transform("x64.IR")]
 public sealed class MulR4 : BaseIRTransform
 {
 	public MulR4() : base(IRInstruction.MulR4, TransformType.Manual | TransformType.Transform)

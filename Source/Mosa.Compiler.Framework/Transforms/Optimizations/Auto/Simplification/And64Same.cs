@@ -9,6 +9,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 /// <summary>
 /// And64Same
 /// </summary>
+[Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class And64Same : BaseTransform
 {
 	public And64Same() : base(IRInstruction.And64, TransformType.Auto | TransformType.Optimization)

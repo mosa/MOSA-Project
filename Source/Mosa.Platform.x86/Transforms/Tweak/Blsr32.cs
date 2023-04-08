@@ -1,13 +1,13 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x86.Transforms.Tweak;
 
 /// <summary>
 /// Blsr32
 /// </summary>
+[Transform("x86.Tweak")]
 public sealed class Blsr32 : BaseTransform
 {
 	public Blsr32() : base(X86.Blsr32, TransformType.Manual | TransformType.Transform)

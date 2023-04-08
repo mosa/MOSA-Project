@@ -7,6 +7,7 @@ namespace Mosa.Platform.x86.Transforms.AddressMode;
 /// <summary>
 /// Rcr32
 /// </summary>
+[Transform("x86.AddressMode")]
 public sealed class Rcr32 : BaseAddressModeTransform
 {
 	public Rcr32() : base(X86.Rcr32, TransformType.Manual | TransformType.Transform)

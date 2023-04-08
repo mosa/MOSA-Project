@@ -1,13 +1,13 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x86.Transforms.Tweak;
 
 /// <summary>
 /// CMov32
 /// </summary>
+[Transform("x86.Tweak")]
 public sealed class CMov32 : BaseTransform
 {
 	public CMov32() : base(X86.CMov32, TransformType.Manual | TransformType.Transform)

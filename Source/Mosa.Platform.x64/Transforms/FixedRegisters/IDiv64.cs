@@ -1,13 +1,13 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x64.Transforms.FixedRegisters;
 
 /// <summary>
 /// IDiv64
 /// </summary>
+[Transform("x64.FixedRegisters")]
 public sealed class IDiv64 : BaseTransform
 {
 	public IDiv64() : base(X64.IDiv64, TransformType.Manual | TransformType.Transform)

@@ -1,13 +1,13 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x64.Transforms.FixedRegisters;
 
 /// <summary>
 /// Out32
 /// </summary>
+[Transform("x64.FixedRegisters")]
 public sealed class Out32 : BaseTransform
 {
 	public Out32() : base(X64.Out32, TransformType.Manual | TransformType.Transform)

@@ -7,6 +7,7 @@ namespace Mosa.Platform.x86.Transforms.IR;
 /// <summary>
 /// AddOverflowOut32
 /// </summary>
+[Transform("x86.IR")]
 public sealed class AddOverflowOut32 : BaseIRTransform
 {
 	public AddOverflowOut32() : base(IRInstruction.AddOverflowOut32, TransformType.Manual | TransformType.Transform)

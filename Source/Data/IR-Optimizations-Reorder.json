@@ -1,4 +1,6 @@
 ﻿{
+	"Family": "IR",
+	"Section": "Optimizations.Auto",
 	"Commutative": [
 		"IR.Add32",
 		"IR.Add64",
@@ -23,7 +25,6 @@
 	],
 	"Optimizations": [
 		{
-			"FamilyName": "IR",
 			"Type": "Reorder",
 			"Name": "MulUnsigned##WithShiftLeft##",
 			"SubName": "",
@@ -33,7 +34,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Reorder",
 			"Name": "MulSigned##WithShiftLeft##",
 			"SubName": "",
@@ -43,7 +43,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Reorder",
 			"Name": "SubToAdd##",
 			"SubName": "",

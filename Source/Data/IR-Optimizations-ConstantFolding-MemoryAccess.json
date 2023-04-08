@@ -1,7 +1,8 @@
 ﻿{
+	"Family": "IR",
+	"Section": "Optimizations.Auto",
 	"Optimizations": [
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Load32",
 			"SubName": "FoldAdd32",
@@ -10,7 +11,6 @@
 			"Result": "(IR.Load32 a [Add32(To32(b),To32(c))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Load64",
 			"SubName": "FoldAdd32",
@@ -19,7 +19,6 @@
 			"Result": "(IR.Load64 a [Add32(To32(b),To32(c))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadR4",
 			"SubName": "FoldAdd32",
@@ -28,7 +27,6 @@
 			"Result": "(IR.LoadR4 a [Add32(To32(b),To32(c))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadR8",
 			"SubName": "FoldAdd32",
@@ -37,7 +35,6 @@
 			"Result": "(IR.LoadR8 a [Add32(To32(b),To32(c))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadSignExtend8x32",
 			"SubName": "FoldAdd32",
@@ -46,7 +43,6 @@
 			"Result": "(IR.LoadSignExtend8x32 a [Add32(To32(b),To32(c))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadSignExtend16x32",
 			"SubName": "FoldAdd32",
@@ -55,7 +51,6 @@
 			"Result": "(IR.LoadSignExtend16x32 a [Add32(To32(b),To32(c))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadSignExtend8x64",
 			"SubName": "FoldAdd32",
@@ -64,7 +59,6 @@
 			"Result": "(IR.LoadSignExtend8x64 a [Add32(To32(b),To32(c))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadSignExtend16x64",
 			"SubName": "FoldAdd32",
@@ -73,7 +67,6 @@
 			"Result": "(IR.LoadSignExtend16x64 a [Add32(To32(b),To32(c))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadSignExtend32x64",
 			"SubName": "FoldAdd32",
@@ -82,7 +75,6 @@
 			"Result": "(IR.LoadSignExtend32x64 a [Add32(To32(b),To32(c))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadZeroExtend8x32",
 			"SubName": "FoldAdd32",
@@ -91,7 +83,6 @@
 			"Result": "(IR.LoadZeroExtend8x32 a [Add32(To32(b),To32(c))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadZeroExtend16x32",
 			"SubName": "FoldAdd32",
@@ -100,7 +91,6 @@
 			"Result": "(IR.LoadZeroExtend16x32 a [Add32(To32(b),To32(c))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadZeroExtend8x64",
 			"SubName": "FoldAdd32",
@@ -109,7 +99,6 @@
 			"Result": "(IR.LoadZeroExtend8x64 a [Add32(To32(b),To32(c))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadZeroExtend16x64",
 			"SubName": "FoldAdd32",
@@ -118,7 +107,6 @@
 			"Result": "(IR.LoadZeroExtend16x64 a [Add32(To32(b),To32(c))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadZeroExtend32x64",
 			"SubName": "FoldAdd32",
@@ -127,7 +115,6 @@
 			"Result": "(IR.LoadZeroExtend32x64 a [Add32(To32(b),To32(c))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Load32",
 			"SubName": "FoldAdd64",
@@ -136,7 +123,6 @@
 			"Result": "(IR.Load32 a [Add64(To64(b),To64(c))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Load64",
 			"SubName": "FoldAdd64",
@@ -145,7 +131,6 @@
 			"Result": "(IR.Load64 a [Add64(To64(b),To64(c))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadR4",
 			"SubName": "FoldAdd64",
@@ -154,7 +139,6 @@
 			"Result": "(IR.LoadR4 a [Add64(To64(b),To64(c))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadR8",
 			"SubName": "FoldAdd64",
@@ -163,7 +147,6 @@
 			"Result": "(IR.LoadR8 a [Add64(To64(b),To64(c))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadSignExtend8x32",
 			"SubName": "FoldAdd64",
@@ -172,7 +155,6 @@
 			"Result": "(IR.LoadSignExtend8x32 a [Add64(To64(b),To64(c))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadSignExtend16x32",
 			"SubName": "FoldAdd64",
@@ -181,7 +163,6 @@
 			"Result": "(IR.LoadSignExtend16x32 a [Add64(To64(b),To64(c))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadSignExtend8x64",
 			"SubName": "FoldAdd64",
@@ -190,7 +171,6 @@
 			"Result": "(IR.LoadSignExtend8x64 a [Add64(To64(b),To64(c))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadSignExtend16x64",
 			"SubName": "FoldAdd64",
@@ -199,7 +179,6 @@
 			"Result": "(IR.LoadSignExtend16x64 a [Add64(To64(b),To64(c))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadSignExtend32x64",
 			"SubName": "FoldAdd64",
@@ -208,7 +187,6 @@
 			"Result": "(IR.LoadSignExtend32x64 a [Add64(To64(b),To64(c))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadZeroExtend8x32",
 			"SubName": "FoldAdd64",
@@ -217,7 +195,6 @@
 			"Result": "(IR.LoadZeroExtend8x32 a [Add64(To64(b),To64(c))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadZeroExtend16x32",
 			"SubName": "FoldAdd64",
@@ -226,7 +203,6 @@
 			"Result": "(IR.LoadZeroExtend16x32 a [Add64(To64(b),To64(c))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadZeroExtend8x64",
 			"SubName": "FoldAdd64",
@@ -235,7 +211,6 @@
 			"Result": "(IR.LoadZeroExtend8x64 a [Add64(To64(b),To64(c))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadZeroExtend16x64",
 			"SubName": "FoldAdd64",
@@ -244,7 +219,6 @@
 			"Result": "(IR.LoadZeroExtend16x64 a [Add64(To64(b),To64(c))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadZeroExtend32x64",
 			"SubName": "FoldAdd64",
@@ -253,7 +227,6 @@
 			"Result": "(IR.LoadZeroExtend32x64 a [Add64(To64(b),To64(c))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Load32",
 			"SubName": "FoldSub32",
@@ -262,7 +235,6 @@
 			"Result": "(IR.Load32 a [Sub32(To32(c),To32(b))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Load64",
 			"SubName": "FoldSub32",
@@ -271,7 +243,6 @@
 			"Result": "(IR.Load64 a [Sub32(To32(c),To32(b))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadR4",
 			"SubName": "FoldSub32",
@@ -280,7 +251,6 @@
 			"Result": "(IR.LoadR4 a [Sub32(To32(c),To32(b))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadR8",
 			"SubName": "FoldSub32",
@@ -289,7 +259,6 @@
 			"Result": "(IR.LoadR8 a [Sub32(To32(c),To32(b))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadSignExtend8x32",
 			"SubName": "FoldSub32",
@@ -298,7 +267,6 @@
 			"Result": "(IR.LoadSignExtend8x32 a [Sub32(To32(c),To32(b))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadSignExtend16x32",
 			"SubName": "FoldSub32",
@@ -307,7 +275,6 @@
 			"Result": "(IR.LoadSignExtend16x32 a [Sub32(To32(c),To32(b))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadSignExtend8x64",
 			"SubName": "FoldSub32",
@@ -316,7 +283,6 @@
 			"Result": "(IR.LoadSignExtend8x64 a [Sub32(To32(c),To32(b))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadSignExtend16x64",
 			"SubName": "FoldSub32",
@@ -325,7 +291,6 @@
 			"Result": "(IR.LoadSignExtend16x64 a [Sub32(To32(c),To32(b))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadSignExtend32x64",
 			"SubName": "FoldSub32",
@@ -334,7 +299,6 @@
 			"Result": "(IR.LoadSignExtend32x64 a [Sub32(To32(c),To32(b))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadZeroExtend8x32",
 			"SubName": "FoldSub32",
@@ -343,7 +307,6 @@
 			"Result": "(IR.LoadZeroExtend8x32 a [Sub32(To32(c),To32(b))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadZeroExtend16x32",
 			"SubName": "FoldSub32",
@@ -352,7 +315,6 @@
 			"Result": "(IR.LoadZeroExtend16x32 a [Sub32(To32(c),To32(b))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadZeroExtend8x64",
 			"SubName": "FoldSub32",
@@ -361,7 +323,6 @@
 			"Result": "(IR.LoadZeroExtend8x64 a [Sub32(To32(c),To32(b))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadZeroExtend16x64",
 			"SubName": "FoldSub32",
@@ -370,7 +331,6 @@
 			"Result": "(IR.LoadZeroExtend16x64 a [Sub32(To32(c),To32(b))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadZeroExtend32x64",
 			"SubName": "FoldSub32",
@@ -379,7 +339,6 @@
 			"Result": "(IR.LoadZeroExtend32x64 a [Sub32(To32(c),To32(b))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Load32",
 			"SubName": "FoldSub64",
@@ -388,7 +347,6 @@
 			"Result": "(IR.Load32 a [Sub64(To64(c),To64(b))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Load64",
 			"SubName": "FoldSub64",
@@ -397,7 +355,6 @@
 			"Result": "(IR.Load64 a [Sub64(To64(c),To64(b))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadR4",
 			"SubName": "FoldSub64",
@@ -406,7 +363,6 @@
 			"Result": "(IR.LoadR4 a [Sub64(To64(c),To64(b))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadR8",
 			"SubName": "FoldSub64",
@@ -415,7 +371,6 @@
 			"Result": "(IR.LoadR8 a [Sub64(To64(c),To64(b))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadSignExtend8x32",
 			"SubName": "FoldSub64",
@@ -424,7 +379,6 @@
 			"Result": "(IR.LoadSignExtend8x32 a [Sub64(To64(c),To64(b))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadSignExtend16x32",
 			"SubName": "FoldSub64",
@@ -433,7 +387,6 @@
 			"Result": "(IR.LoadSignExtend16x32 a [Sub64(To64(c),To64(b))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadSignExtend8x64",
 			"SubName": "FoldSub64",
@@ -442,7 +395,6 @@
 			"Result": "(IR.LoadSignExtend8x64 a [Sub64(To64(c),To64(b))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadSignExtend16x64",
 			"SubName": "FoldSub64",
@@ -451,7 +403,6 @@
 			"Result": "(IR.LoadSignExtend16x64 a [Sub64(To64(c),To64(b))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadSignExtend32x64",
 			"SubName": "FoldSub64",
@@ -460,7 +411,6 @@
 			"Result": "(IR.LoadSignExtend32x64 a [Sub64(To64(c),To64(b))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadZeroExtend8x32",
 			"SubName": "FoldSub64",
@@ -469,7 +419,6 @@
 			"Result": "(IR.LoadZeroExtend8x32 a [Sub64(To64(c),To64(b))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadZeroExtend16x32",
 			"SubName": "FoldSub64",
@@ -478,7 +427,6 @@
 			"Result": "(IR.LoadZeroExtend16x32 a [Sub64(To64(c),To64(b))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadZeroExtend8x64",
 			"SubName": "FoldSub64",
@@ -487,7 +435,6 @@
 			"Result": "(IR.LoadZeroExtend8x64 a [Sub64(To64(c),To64(b))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadZeroExtend16x64",
 			"SubName": "FoldSub64",
@@ -496,7 +443,6 @@
 			"Result": "(IR.LoadZeroExtend16x64 a [Sub64(To64(c),To64(b))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadZeroExtend32x64",
 			"SubName": "FoldSub64",
@@ -505,7 +451,6 @@
 			"Result": "(IR.LoadZeroExtend32x64 a [Sub64(To64(c),To64(b))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Store8",
 			"SubName": "FoldAdd32",
@@ -514,7 +459,6 @@
 			"Result": "(IR.Store8 a [Add32(To32(b),To32(c))] d)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Store8",
 			"SubName": "FoldAdd64",
@@ -523,7 +467,6 @@
 			"Result": "(IR.Store8 a [Add64(To64(b),To64(c))] d)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Store8",
 			"SubName": "FoldSub32",
@@ -532,7 +475,6 @@
 			"Result": "(IR.Store8 a [Sub32(To32(c),To32(b))] d)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Store8",
 			"SubName": "FoldSub64",
@@ -541,7 +483,6 @@
 			"Result": "(IR.Store8 a [Sub64(To64(c),To64(b))] d)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Store16",
 			"SubName": "FoldAdd32",
@@ -550,7 +491,6 @@
 			"Result": "(IR.Store16 a [Add32(To32(b),To32(c))] d)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Store16",
 			"SubName": "FoldAdd64",
@@ -559,7 +499,6 @@
 			"Result": "(IR.Store16 a [Add64(To64(b),To64(c))] d)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Store16",
 			"SubName": "FoldSub32",
@@ -568,7 +507,6 @@
 			"Result": "(IR.Store16 a [Sub32(To32(c),To32(b))] d)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Store16",
 			"SubName": "FoldSub64",
@@ -578,7 +516,6 @@
 		},
 
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Store32",
 			"SubName": "FoldAdd32",
@@ -587,7 +524,6 @@
 			"Result": "(IR.Store32 a [Add32(To32(b),To32(c))] d)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Store32",
 			"SubName": "FoldAdd64",
@@ -596,7 +532,6 @@
 			"Result": "(IR.Store32 a [Add64(To64(b),To64(c))] d)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Store32",
 			"SubName": "FoldSub32",
@@ -605,7 +540,6 @@
 			"Result": "(IR.Store32 a [Sub32(To32(c),To32(b))] d)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Store32",
 			"SubName": "FoldSub64",
@@ -614,7 +548,6 @@
 			"Result": "(IR.Store32 a [Sub64(To64(c),To64(b))] d)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Store64",
 			"SubName": "FoldAdd32",
@@ -623,7 +556,6 @@
 			"Result": "(IR.Store64 a [Add32(To32(b),To32(c))] d)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Store64",
 			"SubName": "FoldAdd64",
@@ -632,7 +564,6 @@
 			"Result": "(IR.Store64 a [Add64(To64(b),To64(c))] d)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Store64",
 			"SubName": "FoldSub32",
@@ -641,7 +572,6 @@
 			"Result": "(IR.Store64 a [Sub32(To32(c),To32(b))] d)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Store64",
 			"SubName": "FoldSub64",
@@ -650,7 +580,6 @@
 			"Result": "(IR.Store64 a [Sub64(To64(c),To64(b))] d)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "StoreR4",
 			"SubName": "FoldAdd32",
@@ -659,7 +588,6 @@
 			"Result": "(IR.StoreR4 a [Add32(To32(b),To32(c))] d)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "StoreR4",
 			"SubName": "FoldAdd64",
@@ -668,7 +596,6 @@
 			"Result": "(IR.StoreR4 a [Add64(To64(b),To64(c))] d)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "StoreR4",
 			"SubName": "FoldSub32",
@@ -677,7 +604,6 @@
 			"Result": "(IR.StoreR4 a [Sub32(To32(c),To32(b))] d)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "StoreR4",
 			"SubName": "FoldSub64",
@@ -687,7 +613,6 @@
 		},
 
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "StoreR8",
 			"SubName": "FoldAdd32",
@@ -696,7 +621,6 @@
 			"Result": "(IR.StoreR8 a [Add32(To32(b),To32(c))] d)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "StoreR8",
 			"SubName": "FoldAdd64",
@@ -705,7 +629,6 @@
 			"Result": "(IR.StoreR8 a [Add64(To64(b),To64(c))] d)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "StoreR8",
 			"SubName": "FoldSub32",
@@ -714,7 +637,6 @@
 			"Result": "(IR.StoreR8 a [Sub32(To32(c),To32(b))] d)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "StoreR8",
 			"SubName": "FoldSub64",
@@ -723,7 +645,6 @@
 			"Result": "(IR.StoreR8 a [Sub64(To64(c),To64(b))] d)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Load32",
 			"SubName": "AddressFold",
@@ -732,7 +653,6 @@
 			"Result": "(IR.LoadParam32 parameter)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Load64",
 			"SubName": "AddressFold",
@@ -741,7 +661,6 @@
 			"Result": "(IR.LoadParam64 parameter)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadR4",
 			"SubName": "AddressFold",
@@ -750,7 +669,6 @@
 			"Result": "(IR.LoadParamR4 parameter)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadR8",
 			"SubName": "AddressFold",
@@ -759,7 +677,6 @@
 			"Result": "(IR.LoadParamR8 parameter)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadSignExtend8x32",
 			"SubName": "AddressFold",
@@ -768,7 +685,6 @@
 			"Result": "(IR.LoadParamSignExtend8x32 parameter)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadSignExtend16x32",
 			"SubName": "AddressFold",
@@ -777,7 +693,6 @@
 			"Result": "(IR.LoadParamSignExtend16x32 parameter)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadSignExtend8x64",
 			"SubName": "AddressFold",
@@ -786,7 +701,6 @@
 			"Result": "(IR.LoadParamSignExtend8x64 parameter)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadSignExtend16x64",
 			"SubName": "AddressFold",
@@ -795,7 +709,6 @@
 			"Result": "(IR.LoadParamSignExtend16x64 parameter)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadSignExtend32x64",
 			"SubName": "AddressFold",
@@ -804,7 +717,6 @@
 			"Result": "(IR.LoadParamSignExtend32x64 parameter)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadZeroExtend8x32",
 			"SubName": "AddressFold",
@@ -813,7 +725,6 @@
 			"Result": "(IR.LoadParamZeroExtend8x32 parameter)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadZeroExtend16x32",
 			"SubName": "AddressFold",
@@ -822,7 +733,6 @@
 			"Result": "(IR.LoadParamZeroExtend16x32 parameter)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadZeroExtend8x64",
 			"SubName": "AddressFold",
@@ -831,7 +741,6 @@
 			"Result": "(IR.LoadParamZeroExtend8x64 parameter)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadZeroExtend16x64",
 			"SubName": "AddressFold",
@@ -840,7 +749,6 @@
 			"Result": "(IR.LoadParamZeroExtend16x64 parameter)"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "LoadZeroExtend32x64",
 			"SubName": "AddressFold",

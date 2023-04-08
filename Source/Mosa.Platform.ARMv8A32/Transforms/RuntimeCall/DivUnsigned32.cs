@@ -1,13 +1,13 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.ARMv8A32.Transforms.RuntimeCall;
 
 /// <summary>
 /// DivUnsigned32
 /// </summary>
+[Transform("ARMv8A32.RuntimeCall")]
 public sealed class DivUnsigned32 : BaseTransform
 {
 	public DivUnsigned32() : base(IRInstruction.DivUnsigned32, TransformType.Manual | TransformType.Transform)

@@ -9,6 +9,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 /// <summary>
 /// Compare64x32GreaterOrEqualThanMax
 /// </summary>
+[Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class Compare64x32GreaterOrEqualThanMax : BaseTransform
 {
 	public Compare64x32GreaterOrEqualThanMax() : base(IRInstruction.Compare64x32, TransformType.Auto | TransformType.Optimization)

@@ -2,13 +2,13 @@
 
 using System.Diagnostics;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x86.Transforms.Tweak;
 
 /// <summary>
 /// Movzx8To32
 /// </summary>
+[Transform("x86.Tweak")]
 public sealed class Movzx8To32 : BaseTransform
 {
 	public Movzx8To32() : base(X86.Movzx8To32, TransformType.Manual | TransformType.Transform)

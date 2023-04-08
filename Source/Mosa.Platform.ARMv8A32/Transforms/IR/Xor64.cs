@@ -1,13 +1,13 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.ARMv8A32.Transforms.IR;
 
 /// <summary>
 /// Xor64
 /// </summary>
+[Transform("ARMv8A32.IR")]
 public sealed class Xor64 : BaseIRTransform
 {
 	public Xor64() : base(IRInstruction.Xor64, TransformType.Manual | TransformType.Transform)

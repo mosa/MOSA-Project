@@ -1,4 +1,6 @@
 ﻿{
+	"Family": "IR",
+	"Section": "Optimizations.Auto",
 	"Commutative": [
 		"IR.Add32",
 		"IR.Add64",
@@ -23,7 +25,6 @@
 	],
 	"Optimizations": [
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Add##",
 			"SubName": "x2",
@@ -34,7 +35,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "AddR#",
 			"SubName": "x2",
@@ -45,7 +45,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Sub##",
 			"SubName": "x2",
@@ -56,7 +55,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "SubR#",
 			"SubName": "x2",
@@ -67,7 +65,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "MulSigned##",
 			"SubName": "x2",
@@ -78,7 +75,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "MulR#",
 			"SubName": "x2",
@@ -89,7 +85,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "MulUnsigned##",
 			"SubName": "x2",
@@ -100,7 +95,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Or##",
 			"SubName": "x2",
@@ -111,7 +105,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "And##",
 			"SubName": "x2",
@@ -122,7 +115,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "Xor##",
 			"SubName": "x2",
@@ -133,7 +125,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "AddSub##",
 			"SubName": "",
@@ -144,7 +135,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "AddSubR#",
 			"SubName": "",
@@ -155,7 +145,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "SubAdd##",
 			"SubName": "",
@@ -166,7 +155,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "SubAddR#",
 			"SubName": "",
@@ -177,7 +165,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "ShiftLeft##",
 			"SubName": "x2",
@@ -188,7 +175,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "ConstantFolding",
 			"Name": "ShiftRight##",
 			"SubName": "x2",

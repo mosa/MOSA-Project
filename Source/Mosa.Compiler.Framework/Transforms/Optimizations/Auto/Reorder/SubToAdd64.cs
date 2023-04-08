@@ -9,6 +9,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Reorder;
 /// <summary>
 /// SubToAdd64
 /// </summary>
+[Transform("IR.Optimizations.Auto.Reorder")]
 public sealed class SubToAdd64 : BaseTransform
 {
 	public SubToAdd64() : base(IRInstruction.Sub64, TransformType.Auto | TransformType.Optimization)

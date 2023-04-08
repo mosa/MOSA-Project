@@ -9,6 +9,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 /// <summary>
 /// SubCarryIn32Outside2
 /// </summary>
+[Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class SubCarryIn32Outside2 : BaseTransform
 {
 	public SubCarryIn32Outside2() : base(IRInstruction.SubCarryIn32, TransformType.Auto | TransformType.Optimization)

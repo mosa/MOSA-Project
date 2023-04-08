@@ -7,6 +7,7 @@ namespace Mosa.Platform.x86.Transforms.IR;
 /// <summary>
 /// CompareObject
 /// </summary>
+[Transform("x86.IR")]
 public sealed class CompareObject : BaseIRTransform
 {
 	public CompareObject() : base(IRInstruction.CompareObject, TransformType.Manual | TransformType.Transform)

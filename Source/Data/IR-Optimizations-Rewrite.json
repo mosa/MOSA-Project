@@ -1,4 +1,6 @@
 ﻿{
+	"Family": "IR",
+	"Section": "Optimizations.Auto",
 	"Commutative": [
 		"IR.Add32",
 		"IR.Add64",
@@ -28,7 +30,6 @@
 	],
 	"Optimizations": [
 		{
-			"FamilyName": "IR",
 			"Type": "Rewrite",
 			"Name": "CompareObject",
 			"SubName": "GreaterThanZero",
@@ -38,7 +39,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Rewrite",
 			"Name": "Compare32x##",
 			"SubName": "GreaterThanZero",
@@ -48,7 +48,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Rewrite",
 			"Name": "Compare64x##",
 			"SubName": "GreaterThanZero",
@@ -58,7 +57,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Rewrite",
 			"Name": "IfThenElse##",
 			"SubName": "Compare##v1",
@@ -68,7 +66,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Rewrite",
 			"Name": "IfThenElse##",
 			"SubName": "Compare##v2",
@@ -78,7 +75,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Rewrite",
 			"Name": "IfThenElse##",
 			"SubName": "Compare##v3",
@@ -88,7 +84,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Rewrite",
 			"Name": "IfThenElse##",
 			"SubName": "Compare##v4",
@@ -98,7 +93,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "Xor32",
 			"SubName": "Max",
@@ -108,7 +102,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "Xor64",
 			"SubName": "Max",

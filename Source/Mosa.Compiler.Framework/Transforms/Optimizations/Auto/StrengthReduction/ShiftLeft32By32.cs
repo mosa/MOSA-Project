@@ -9,6 +9,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 /// <summary>
 /// ShiftLeft32By32
 /// </summary>
+[Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class ShiftLeft32By32 : BaseTransform
 {
 	public ShiftLeft32By32() : base(IRInstruction.ShiftLeft32, TransformType.Auto | TransformType.Optimization)

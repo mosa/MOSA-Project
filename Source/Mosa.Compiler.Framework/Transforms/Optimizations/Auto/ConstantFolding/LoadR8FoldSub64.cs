@@ -9,6 +9,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 /// <summary>
 /// LoadR8FoldSub64
 /// </summary>
+[Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class LoadR8FoldSub64 : BaseTransform
 {
 	public LoadR8FoldSub64() : base(IRInstruction.LoadR8, TransformType.Auto | TransformType.Optimization)

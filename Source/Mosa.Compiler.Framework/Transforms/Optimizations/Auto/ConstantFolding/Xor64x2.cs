@@ -9,6 +9,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 /// <summary>
 /// Xor64x2
 /// </summary>
+[Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class Xor64x2 : BaseTransform
 {
 	public Xor64x2() : base(IRInstruction.Xor64, TransformType.Auto | TransformType.Optimization)
@@ -54,6 +55,7 @@ public sealed class Xor64x2 : BaseTransform
 /// <summary>
 /// Xor64x2_v1
 /// </summary>
+[Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class Xor64x2_v1 : BaseTransform
 {
 	public Xor64x2_v1() : base(IRInstruction.Xor64, TransformType.Auto | TransformType.Optimization)
@@ -99,6 +101,7 @@ public sealed class Xor64x2_v1 : BaseTransform
 /// <summary>
 /// Xor64x2_v2
 /// </summary>
+[Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class Xor64x2_v2 : BaseTransform
 {
 	public Xor64x2_v2() : base(IRInstruction.Xor64, TransformType.Auto | TransformType.Optimization)
@@ -144,6 +147,7 @@ public sealed class Xor64x2_v2 : BaseTransform
 /// <summary>
 /// Xor64x2_v3
 /// </summary>
+[Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class Xor64x2_v3 : BaseTransform
 {
 	public Xor64x2_v3() : base(IRInstruction.Xor64, TransformType.Auto | TransformType.Optimization)

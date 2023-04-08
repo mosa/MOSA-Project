@@ -1,13 +1,13 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x64.Transforms.Stack;
 
 /// <summary>
 /// Epilogue
 /// </summary>
+[Transform("x64.Stack")]
 public sealed class Epilogue : BaseTransform
 {
 	public Epilogue() : base(IRInstruction.Epilogue, TransformType.Manual | TransformType.Transform)

@@ -9,6 +9,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 /// <summary>
 /// Store8FoldSub32
 /// </summary>
+[Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class Store8FoldSub32 : BaseTransform
 {
 	public Store8FoldSub32() : base(IRInstruction.Store8, TransformType.Auto | TransformType.Optimization)

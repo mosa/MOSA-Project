@@ -4,13 +4,13 @@
 
 using Mosa.Platform.x86;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.x86.Transforms.Optimizations.Auto.Ordering;
 
 /// <summary>
 /// Mulss
 /// </summary>
+[Transform("x86.Optimizations.Auto.Ordering")]
 public sealed class Mulss : BaseTransform
 {
 	public Mulss() : base(X86.Mulss, TransformType.Auto | TransformType.Optimization)

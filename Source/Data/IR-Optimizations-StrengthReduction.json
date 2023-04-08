@@ -1,4 +1,6 @@
 ﻿{
+	"Family": "IR",
+	"Section": "Optimizations.Auto",
 	"Commutative": [
 		"IR.Add32",
 		"IR.Add64",
@@ -27,7 +29,6 @@
 	],
 	"Optimizations": [
 		{
-			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "Add##",
 			"SubName": "Zero",
@@ -38,7 +39,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "And##",
 			"SubName": "Zero",
@@ -49,7 +49,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "And32",
 			"SubName": "Max",
@@ -60,7 +59,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "And64",
 			"SubName": "Max",
@@ -71,7 +69,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "Or32",
 			"SubName": "Max",
@@ -82,7 +79,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "Or64",
 			"SubName": "Max",
@@ -93,7 +89,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "Or##",
 			"SubName": "Zero",
@@ -104,7 +99,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "Xor##",
 			"SubName": "Zero",
@@ -115,7 +109,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "Xor32",
 			"SubName": "Max",
@@ -126,7 +119,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "Xor64",
 			"SubName": "Max",
@@ -137,7 +129,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "ShiftRight##",
 			"SubName": "ZeroValue",
@@ -147,7 +138,6 @@
 			"Priority": "80"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "ShiftRight##",
 			"SubName": "ByZero",
@@ -157,7 +147,6 @@
 			"Priority": "80"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "ShiftLeft##",
 			"SubName": "ByZero",
@@ -167,7 +156,6 @@
 			"Priority": "80"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "Sub##",
 			"SubName": "ByZero",
@@ -177,7 +165,6 @@
 			"Priority": "80"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "Sub##",
 			"SubName": "Same",
@@ -187,7 +174,6 @@
 			"Priority": "80"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "Xor##",
 			"SubName": "Same",
@@ -197,7 +183,6 @@
 			"Priority": "80"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "MulSigned##",
 			"SubName": "ByZero",
@@ -208,7 +193,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "MulUnsigned##",
 			"SubName": "ByZero",
@@ -219,7 +203,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "MulSigned##",
 			"SubName": "ByOne",
@@ -230,7 +213,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "MulUnsigned##",
 			"SubName": "ByOne",
@@ -241,7 +223,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "MulUnsigned##",
 			"SubName": "ByPowerOfTwo",
@@ -251,7 +232,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "MulSigned##",
 			"SubName": "ByPowerOfTwo",
@@ -261,7 +241,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "DivSigned##",
 			"SubName": "ByZero",
@@ -271,7 +250,6 @@
 			"Priority": "80"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "DivSigned##",
 			"SubName": "ByOne",
@@ -281,7 +259,6 @@
 			"Priority": "80"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "DivUnsigned##",
 			"SubName": "ByOne",
@@ -291,7 +268,6 @@
 			"Priority": "80"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "DivUnsigned##",
 			"SubName": "ByPowerOfTwo",
@@ -300,7 +276,6 @@
 			"Result": "(IR.ShiftRight## x [GetPowerOfTwo(To32(c))])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "RemUnsigned##",
 			"SubName": "ByPowerOfTwo",
@@ -309,7 +284,6 @@
 			"Result": "(IR.And## x [Sub##(ShiftLeft##(1,And##(GetPowerOfTwo(To32(c)),Sub##(##,1))),1)])"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "Or##And##",
 			"SubName": "ClearAndSet",
@@ -320,7 +294,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "Xor##Xor##",
 			"SubName": "",
@@ -331,7 +304,6 @@
 			"Variations": "Yes"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "ShiftLeft32",
 			"SubName": "By32",
@@ -341,7 +313,6 @@
 			"Priority": "80"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "ShiftLeft64",
 			"SubName": "By64",
@@ -351,7 +322,6 @@
 			"Priority": "80"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "ShiftRight32",
 			"SubName": "By32",
@@ -361,7 +331,6 @@
 			"Priority": "80"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "ShiftLeft32",
 			"SubName": "By32",
@@ -372,7 +341,6 @@
 		},
 
 		{
-			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "ShiftRight64",
 			"SubName": "By64",
@@ -382,7 +350,6 @@
 			"Priority": "80"
 		},
 		{
-			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "ShiftLeft64",
 			"SubName": "By64",

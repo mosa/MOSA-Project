@@ -7,6 +7,7 @@ namespace Mosa.Platform.x86.Transforms.IR;
 /// <summary>
 /// StoreParamR4
 /// </summary>
+[Transform("x86.IR")]
 public sealed class StoreParamR4 : BaseIRTransform
 {
 	public StoreParamR4() : base(IRInstruction.StoreParamR4, TransformType.Manual | TransformType.Transform)

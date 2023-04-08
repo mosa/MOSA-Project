@@ -9,6 +9,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Rewrite;
 /// <summary>
 /// CompareObjectGreaterThanZero
 /// </summary>
+[Transform("IR.Optimizations.Auto.Rewrite")]
 public sealed class CompareObjectGreaterThanZero : BaseTransform
 {
 	public CompareObjectGreaterThanZero() : base(IRInstruction.CompareObject, TransformType.Auto | TransformType.Optimization)
@@ -40,6 +41,7 @@ public sealed class CompareObjectGreaterThanZero : BaseTransform
 /// <summary>
 /// CompareObjectGreaterThanZero_v1
 /// </summary>
+[Transform("IR.Optimizations.Auto.Rewrite")]
 public sealed class CompareObjectGreaterThanZero_v1 : BaseTransform
 {
 	public CompareObjectGreaterThanZero_v1() : base(IRInstruction.CompareObject, TransformType.Auto | TransformType.Optimization)
