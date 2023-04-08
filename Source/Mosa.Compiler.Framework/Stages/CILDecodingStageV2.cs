@@ -3755,7 +3755,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 
 		var result = Allocate(fieldStacktype, isFieldPrimitive ? fieldUnderlyingType : fieldType);
 
-		PushStack(stack, new StackEntry(fieldStacktype, result));
+		PushStack(stack, new StackEntry(fieldStacktype, result, result.Type));
 
 		var operand = entry.Operand;
 
@@ -3769,11 +3769,11 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 		}
 
 		var classUnderlyingType = GetUnderlyingType(field.DeclaringType);
-		var classStacktype = GetStackTypeDefaultValueType(classUnderlyingType);
+		//var classStacktype = GetStackTypeDefaultValueType(classUnderlyingType);
 		var isClassPrimitive = IsPrimitive(classUnderlyingType);
 
 		var isPointer = operand.IsManagedPointer || operand.Type == TypeSystem.BuiltIn.I || operand.Type == TypeSystem.BuiltIn.U;
-		var isMove = MosaTypeLayout.IsUnderlyingPrimitive(operand.Type) && !result.IsOnStack && !operand.IsReferenceType && !isPointer;
+		//var isMove = MosaTypeLayout.IsUnderlyingPrimitive(operand.Type) && !result.IsOnStack && !operand.IsReferenceType && !isPointer;
 
 		if (isFieldPrimitive && isClassPrimitive && field.DeclaringType.IsValueType && !isPointer)
 		{
@@ -3979,7 +3979,7 @@ public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 			var result2 = AddStackLocal(local.Type);
 			context.AppendInstruction(IRInstruction.MoveCompound, result2, local);
 
-			PushStack(stack, new StackEntry(stacktype, result2, local.Type));
+			PushStack(stack, new StackEntry(StackType.ValueType, result2, local.Type));
 
 			return true;
 		}
