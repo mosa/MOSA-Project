@@ -29,8 +29,7 @@ jobs:
       - name: Setup Nuget.exe
         uses: nuget/setup-nuget@v1
       - name: Restore nuget Packages
-        run: dotnet restore Mosa.sln
-        working-directory: Source
+        run: dotnet restore Source/Mosa.sln
       - name: Build
         run: dotnet build Source/Mosa.sln /p:Version=${{ env.BUILD_VERSION }}
       - name: Unit Tests - All Performance Optimizations
@@ -164,7 +163,7 @@ jobs:
         with:
           submodules: recursive
       - name: Install Sphinx dependencies
-        run: pip3 install sphinx sphinxcontrib.httpdomain sphinx-prompt sphinx_rtd_theme sphinx-tabs graphviz
+        run: pip3 install sphinx sphinxcontrib.httpdomain sphinx-prompt sphinx_rtd_theme sphinx-tabs graphviz pydot
       - name: Generate HTML website
         run: sphinx-build -b html Source/Docs sphinx-docs
       - name: Create ZIP archive
