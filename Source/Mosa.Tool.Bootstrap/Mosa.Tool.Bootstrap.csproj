@@ -5,7 +5,7 @@
 		<TargetFramework>net7.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<Company>MOSA Project</Company>
-		<copyright>Copyright © MOSA Project 2022</copyright>
+		<copyright>Copyright © MOSA Project 2023</copyright>
 		<LangVersion>11.0</LangVersion>
 		<DebugType>full</DebugType>
 		<OutputPath>..\..\bin\</OutputPath>

@@ -4,7 +4,7 @@
     <AssemblyTitle>Mosa.Utility.BootImage</AssemblyTitle>
     <Company>MOSA Project</Company>
     <Product>Mosa.Utility.BootImage</Product>
-    <copyright>Copyright © MOSA Project 2022</copyright>
+    <copyright>Copyright © MOSA Project 2023</copyright>
     <LangVersion>11.0</LangVersion>
     <DebugType>full</DebugType>
     <OutputPath>..\..\bin\</OutputPath>
