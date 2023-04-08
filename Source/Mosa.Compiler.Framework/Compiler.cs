@@ -175,7 +175,6 @@ public sealed class Compiler
 		{
 			new CILDecoderStage(),
 			new CheckedConversionStage(),
-			new VirtualRegisterRenameStage(),
 			new ExceptionStage(),
 			compilerSettings.Devirtualization ? new DevirtualizeCallStage() : null,
 			new PlugStage(),
