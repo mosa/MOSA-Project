@@ -162,8 +162,12 @@ jobs:
         uses: actions/checkout@v3
         with:
           submodules: recursive
+      - name: Update package respository
+        run: sudo apt-get -y -o Acquire::Check-Valid-Until=false update
+      - name: Install Graphviz
+        run: sudo apt-get install -y graphviz
       - name: Install Sphinx dependencies
-        run: pip3 install sphinx sphinxcontrib.httpdomain sphinx-prompt sphinx_rtd_theme sphinx-tabs graphviz pydot
+        run: pip3 install sphinx sphinxcontrib.httpdomain sphinx-prompt sphinx_rtd_theme sphinx-tabs
       - name: Generate HTML website
         run: sphinx-build -b html Source/Docs sphinx-docs
       - name: Create ZIP archive
