@@ -173,15 +173,9 @@ public sealed class Compiler
 	{
 		return new List<BaseMethodCompilerStage>
 		{
-			!compilerSettings.CILDecodingStageV2 ? new CILDecodingStage() : null,
-			compilerSettings.CILDecodingStageV2 ? new CILDecodingStageV2() : null,
-			!compilerSettings.CILDecodingStageV2 ? new CILOperandAssignmentStage(): null,
-			!compilerSettings.CILDecodingStageV2 ? new CILProtectedRegionStage(): null,
-			!compilerSettings.CILDecodingStageV2 ? new CILTransformationStage(): null,
-
+			new CILDecoderStage(),
 			new CheckedConversionStage(),
 			new VirtualRegisterRenameStage(),
-
 			new ExceptionStage(),
 			compilerSettings.Devirtualization ? new DevirtualizeCallStage() : null,
 			new PlugStage(),

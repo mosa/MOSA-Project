@@ -19,7 +19,7 @@ public static class CompilerVersion
 		if (version.Build == 0)
 		{
 			// Revision and build number are reversed by design
-			version = new Version(2, 3, 2, 0);
+			version = new Version(2, 4, 0, 0);
 		}
 
 		return version;
