@@ -66,7 +66,6 @@
 			CBEnableMultithreading = new System.Windows.Forms.ToolStripMenuItem();
 			cbEnableMethodScanner = new System.Windows.Forms.ToolStripMenuItem();
 			dumpAllMethodStagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			cbCILDecoderStageV2Testing = new System.Windows.Forms.ToolStripMenuItem();
 			openFileDialog = new System.Windows.Forms.OpenFileDialog();
 			treeView = new System.Windows.Forms.TreeView();
 			splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -408,7 +407,7 @@
 			// advanceToolStripMenuItem
 			// 
 			advanceToolStripMenuItem.CheckOnClick = true;
-			advanceToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { CBEnableMultithreading, cbEnableMethodScanner, dumpAllMethodStagesToolStripMenuItem, cbCILDecoderStageV2Testing });
+			advanceToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { CBEnableMultithreading, cbEnableMethodScanner, dumpAllMethodStagesToolStripMenuItem });
 			advanceToolStripMenuItem.Name = "advanceToolStripMenuItem";
 			advanceToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
 			advanceToolStripMenuItem.Text = "Advance";
@@ -419,29 +418,22 @@
 			CBEnableMultithreading.CheckOnClick = true;
 			CBEnableMultithreading.CheckState = System.Windows.Forms.CheckState.Checked;
 			CBEnableMultithreading.Name = "CBEnableMultithreading";
-			CBEnableMultithreading.Size = new System.Drawing.Size(234, 22);
+			CBEnableMultithreading.Size = new System.Drawing.Size(206, 22);
 			CBEnableMultithreading.Text = "Enable Multithreading";
 			// 
 			// cbEnableMethodScanner
 			// 
 			cbEnableMethodScanner.CheckOnClick = true;
 			cbEnableMethodScanner.Name = "cbEnableMethodScanner";
-			cbEnableMethodScanner.Size = new System.Drawing.Size(234, 22);
+			cbEnableMethodScanner.Size = new System.Drawing.Size(206, 22);
 			cbEnableMethodScanner.Text = "Enable Method Scanner";
 			// 
 			// dumpAllMethodStagesToolStripMenuItem
 			// 
 			dumpAllMethodStagesToolStripMenuItem.Name = "dumpAllMethodStagesToolStripMenuItem";
-			dumpAllMethodStagesToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
+			dumpAllMethodStagesToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
 			dumpAllMethodStagesToolStripMenuItem.Text = "Dump All Method Stages";
 			dumpAllMethodStagesToolStripMenuItem.Click += DumpAllMethodStagesToolStripMenuItem_Click;
-			// 
-			// cbCILDecoderStageV2Testing
-			// 
-			cbCILDecoderStageV2Testing.CheckOnClick = true;
-			cbCILDecoderStageV2Testing.Name = "cbCILDecoderStageV2Testing";
-			cbCILDecoderStageV2Testing.Size = new System.Drawing.Size(234, 22);
-			cbCILDecoderStageV2Testing.Text = "CIL Decoder Stage V2 (Testing)";
 			// 
 			// openFileDialog
 			// 
@@ -1213,7 +1205,6 @@
 		private System.Windows.Forms.ToolStripMenuItem cbDisableAllOptimizations;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
 		private System.Windows.Forms.ToolStripMenuItem cbEnableDevirtualization;
-		private System.Windows.Forms.ToolStripMenuItem cbCILDecoderStageV2Testing;
 		private System.Windows.Forms.TabControl tabControl;
 		private System.Windows.Forms.TabPage tabStages;
 		private System.Windows.Forms.Label label1;

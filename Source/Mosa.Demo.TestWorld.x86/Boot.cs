@@ -82,19 +82,19 @@ public static class Boot
 
 		//UnitTest();
 
-		//KernelTest.RunTests();
-		//StackTrace();
+		KernelTest.RunTests();
+		StackTrace();
 
 		//TestHash();
 
-		Screen.Write("ArrayTest.BoundsCheck: ");
+		//Screen.Write("ArrayTest.BoundsCheck: ");
 
-		var value1 = Test5();
+		//var value1 = Test5();
 
-		if (value1)
-			Screen.WriteLine("Ok");
-		else
-			Screen.WriteLine("Failed");
+		//if (value1)
+		//	Screen.WriteLine("Ok");
+		//else
+		//	Screen.WriteLine("Failed");
 
 		//int value2 = CallReturn10();
 

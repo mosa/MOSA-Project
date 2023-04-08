@@ -90,8 +90,6 @@ public class CompilerSettings
 
 	public bool FullCheckMode => Settings.GetValue("CompilerDebug.FullCheckMode", false);
 
-	public bool CILDecodingStageV2 => Settings.GetValue("CompilerDebug.CILDecodingStageV2", false);
-
 	#endregion Properties
 
 	public CompilerSettings(Settings settings)
