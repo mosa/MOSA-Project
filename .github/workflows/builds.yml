@@ -13,7 +13,7 @@ jobs:
       NUGET_ENABLE_LEGACY_CSPROJ_PACK: true
     steps:
       - name: Set net7.0
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '7.0.x'
       - name: View Build Version
@@ -21,11 +21,11 @@ jobs:
       - name: View Github Info
         run: echo repository=${{ github.repository }} event_name=${{ github.event_name }} ref=${{ github.ref }} head_ref=${{ github.head_ref }} base_ref=${{ github.base_ref }}
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v3
         with:
           submodules: recursive
       - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v1
+        uses: microsoft/setup-msbuild@v1.1
       - name: Setup Nuget.exe
         uses: nuget/setup-nuget@v1
       - name: Restore nuget Packages
@@ -115,11 +115,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set net7.0
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '7.0.x'
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v3
         with:
           submodules: recursive
       - name: Restore nuget Packages
@@ -150,3 +150,27 @@ jobs:
         run: dotnet bin/Mosa.Utility.UnitTests.dll -o7 -s Emulator.Display=false
       - name: Unit Tests - Optimization Level 8
         run: dotnet bin/Mosa.Utility.UnitTests.dll -o8 -s Emulator.Display=false
+
+  generate-docs:
+    name: Generate documentation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set python3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Install Sphinx dependencies
+        run: pip3 install sphinx sphinxcontrib.httpdomain sphinx-prompt sphinx_rtd_theme sphinx-tabs graphviz
+      - name: Generate HTML website
+        run: sphinx-build -b html Source/Docs sphinx-docs
+      - name: Create ZIP archive
+        run: zip -r docs-${{ env.BUILD_VERSION }}.${{ github.run_number }}.zip sphinx-docs
+      - name: Create artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: docs-${{ env.BUILD_VERSION }}.${{ github.run_number }}.zip
+          path: docs-${{ env.BUILD_VERSION }}.${{ github.run_number }}.zip
