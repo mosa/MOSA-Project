@@ -32,7 +32,7 @@ public sealed class MulOverflowOut64 : BaseTransform
 		var result = context.Result;
 		var result2 = context.Result2;
 
-		var v1 = transform.MethodCompiler.AddStackLocal(result2.Type); // Review
+		var v1 = transform.MethodCompiler.AddStackLocal(result2);
 		var v2 = transform.AllocateVirtualRegister32();
 
 		Debug.Assert(method != null, $"Cannot find method: {methodName}");

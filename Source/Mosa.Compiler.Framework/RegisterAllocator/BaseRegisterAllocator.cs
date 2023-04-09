@@ -20,7 +20,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator;
 /// </summary>
 public abstract class BaseRegisterAllocator
 {
-	public delegate Operand AddStackLocalDelegate(MosaType type);
+	public delegate Operand AddStackLocalDelegate(MosaType type, bool pinned);
 
 	protected readonly BasicBlocks BasicBlocks;
 	protected readonly BaseArchitecture Architecture;
@@ -1319,7 +1319,7 @@ public abstract class BaseRegisterAllocator
 				continue;
 
 			Debug.Assert(register.IsVirtualRegister);
-			register.SpillSlotOperand = AddStackLocal(register.VirtualRegisterOperand.Type);
+			register.SpillSlotOperand = AddStackLocal(register.VirtualRegisterOperand.Type, false);
 		}
 	}
 

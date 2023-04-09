@@ -13,13 +13,7 @@ namespace Mosa.Compiler.Framework;
 /// </summary>
 public sealed class Operand
 {
-	#region Future
-
-	// Primitive Type: Integer (32/64), Float (R4,R8), Object, Managed Pointer, ValueType
-	// Operand Type: Virtual Register, Physical Register, Local Stack, Paramater, Static Field, Label
-	// Attribute: Constant, Unresolved Constant
-
-	#endregion Future
+	#region Enums
 
 	public enum PrimitiveType
 	{ Int32, Int64, R4, R8, Object, ManagedPointer, ValueType };
@@ -29,6 +23,8 @@ public sealed class Operand
 
 	public enum ConstantType
 	{ Default, Label, StaticField };
+
+	#endregion Enums
 
 	#region Static Properties
 
@@ -514,11 +510,214 @@ public sealed class Operand
 		return NullObject;
 	}
 
+	public static Operand CreateStackParameter(Operand operand, int index, string name, int offset)
+	{
+		return new Operand
+		{
+			Primitive = operand.Primitive,
+			Location = LocationType.StackParameter,
+			Constant = ConstantType.Default,
+			Index = index,
+			Name = name,
+			ConstantSigned64 = offset,
+			Type = operand.IsValueType ? operand.Type : null,
+		};
+	}
+
+	public static Operand CreateStackParameter32(int index, string name, int offset)
+	{
+		return new Operand
+		{
+			Primitive = PrimitiveType.Int32,
+			Location = LocationType.StackParameter,
+			Constant = ConstantType.Default,
+			Index = index,
+			Name = name,
+			ConstantSigned64 = offset,
+		};
+	}
+
+	public static Operand CreateStackParameter64(int index, string name, int offset)
+	{
+		return new Operand
+		{
+			Primitive = PrimitiveType.Int64,
+			Location = LocationType.StackParameter,
+			Constant = ConstantType.Default,
+			Index = index,
+			Name = name,
+			ConstantSigned64 = offset,
+		};
+	}
+
+	public static Operand CreateStackParameterR4(int index, string name, int offset)
+	{
+		return new Operand
+		{
+			Primitive = PrimitiveType.R4,
+			Location = LocationType.StackParameter,
+			Constant = ConstantType.Default,
+			Index = index,
+			Name = name,
+			ConstantSigned64 = offset,
+		};
+	}
+
+	public static Operand CreateStackParameterR8(int index, string name, int offset)
+	{
+		return new Operand
+		{
+			Primitive = PrimitiveType.R8,
+			Location = LocationType.StackParameter,
+			Constant = ConstantType.Default,
+			Index = index,
+			Name = name,
+			ConstantSigned64 = offset,
+		};
+	}
+
+	public static Operand CreateStackParameterObject(int index, string name, int offset)
+	{
+		return new Operand
+		{
+			Primitive = PrimitiveType.Object,
+			Location = LocationType.StackParameter,
+			Constant = ConstantType.Default,
+			Index = index,
+			Name = name,
+			ConstantSigned64 = offset,
+		};
+	}
+
+	public static Operand CreateStackParameterManagedPointer(int index, string name, int offset)
+	{
+		return new Operand
+		{
+			Primitive = PrimitiveType.ManagedPointer,
+			Location = LocationType.StackParameter,
+			Constant = ConstantType.Default,
+			Index = index,
+			Name = name,
+			ConstantSigned64 = offset,
+		};
+	}
+
+	public static Operand CreateStackParameterValueType(MosaType type, int index, string name, int offset)
+	{
+		return new Operand
+		{
+			Primitive = PrimitiveType.ValueType,
+			Location = LocationType.StackParameter,
+			Constant = ConstantType.Default,
+			Index = index,
+			Name = name,
+			ConstantSigned64 = offset,
+			Type = type
+		};
+	}
+
+	public static Operand CreateStackLocal(Operand operand, int index, bool pinned)
+	{
+		return new Operand
+		{
+			Primitive = operand.Primitive,
+			Location = LocationType.StackFrame,
+			Constant = ConstantType.Default,
+			Index = index,
+			IsPinned = pinned
+		};
+	}
+
+	public static Operand CreateStackLocal32(int index, bool pinned)
+	{
+		return new Operand
+		{
+			Primitive = PrimitiveType.Int32,
+			Location = LocationType.StackFrame,
+			Constant = ConstantType.Default,
+			Index = index,
+			IsPinned = pinned
+		};
+	}
+
+	public static Operand CreateStackLocal64(int index, bool pinned)
+	{
+		return new Operand
+		{
+			Primitive = PrimitiveType.Int64,
+			Location = LocationType.StackFrame,
+			Constant = ConstantType.Default,
+			Index = index,
+			IsPinned = pinned
+		};
+	}
+
+	public static Operand CreateStackLocalR4(int index, bool pinned)
+	{
+		return new Operand
+		{
+			Primitive = PrimitiveType.R4,
+			Location = LocationType.StackFrame,
+			Constant = ConstantType.Default,
+			Index = index,
+			IsPinned = pinned
+		};
+	}
+
+	public static Operand CreateStackLocalR8(int index, bool pinned)
+	{
+		return new Operand
+		{
+			Primitive = PrimitiveType.R8,
+			Location = LocationType.StackFrame,
+			Constant = ConstantType.Default,
+			Index = index,
+			IsPinned = pinned
+		};
+	}
+
+	public static Operand CreateStackLocalObject(int index, bool pinned)
+	{
+		return new Operand
+		{
+			Primitive = PrimitiveType.Object,
+			Location = LocationType.StackFrame,
+			Constant = ConstantType.Default,
+			Index = index,
+			IsPinned = pinned
+		};
+	}
+
+	public static Operand CreateStackLocalManagedPointer(int index, bool pinned)
+	{
+		return new Operand
+		{
+			Primitive = PrimitiveType.ManagedPointer,
+			Location = LocationType.StackFrame,
+			Constant = ConstantType.Default,
+			Index = index,
+			IsPinned = pinned
+		};
+	}
+
+	public static Operand CreateStackLocalValueType(int index, bool pinned, MosaType type)
+	{
+		return new Operand
+		{
+			Primitive = PrimitiveType.ValueType,
+			Location = LocationType.StackFrame,
+			Constant = ConstantType.Default,
+			Index = index,
+			IsPinned = pinned,
+			Type = type
+		};
+	}
+
 	#endregion Static Factory Constructors
 
 	#region Static Factory Constructors
 
-	public static Operand CreateHighSplitForLong(Operand longOperand, int index, TypeSystem typeSystem)
+	public static Operand CreateHigh(Operand longOperand, int index)
 	{
 		Debug.Assert(longOperand.LongParent == null || longOperand.LongParent == longOperand);
 		Debug.Assert(longOperand.High == null);
@@ -527,7 +726,7 @@ public sealed class Operand
 
 		if (longOperand.IsParameter)
 		{
-			operand = CreateStackParameter(typeSystem.BuiltIn.U4, longOperand.Index, longOperand.Name + " (High)", (int)longOperand.Offset + 4);
+			operand = CreateStackParameter(longOperand, longOperand.Index, longOperand.Name + " (High)", (int)longOperand.Offset + 4);
 		}
 		else if (longOperand.IsResolvedConstant)
 		{
@@ -572,14 +771,7 @@ public sealed class Operand
 		return operand;
 	}
 
-	/// <summary>
-	/// Creates the low 32 bit portion of a 64-bit <see cref="Operand" />.
-	/// </summary>
-	/// <param name="longOperand">The long operand.</param>
-	/// <param name="index">The index.</param>
-	/// <param name="typeSystem">The type system.</param>
-	/// <returns></returns>
-	public static Operand CreateLowSplitForLong(Operand longOperand, int index, TypeSystem typeSystem)
+	public static Operand CreateLow(Operand longOperand, int index)
 	{
 		Debug.Assert(longOperand.LongParent == null);
 		Debug.Assert(longOperand.Low == null);
@@ -588,7 +780,7 @@ public sealed class Operand
 
 		if (longOperand.IsParameter)
 		{
-			operand = CreateStackParameter(typeSystem.BuiltIn.U4, longOperand.Index, longOperand.Name + " (Low)", (int)longOperand.Offset);
+			operand = CreateStackParameter(longOperand, longOperand.Index, longOperand.Name + " (Low)", (int)longOperand.Offset);
 		}
 		else if (longOperand.IsResolvedConstant)
 		{
@@ -611,7 +803,16 @@ public sealed class Operand
 		}
 		else if (longOperand.IsStackLocal)
 		{
-			operand = CreateStackLocal(typeSystem.BuiltIn.I4, 0, longOperand.IsPinned);
+			operand = new Operand
+			{
+				Location = LocationType.StackFrame,
+				Primitive = PrimitiveType.Int32,
+				Constant = ConstantType.Default,
+				IsResolved = false,
+				ConstantSigned64 = 4,
+				Index = 0,
+				IsPinned = longOperand.IsPinned
+			};
 		}
 		else if (longOperand.IsStaticField)
 		{

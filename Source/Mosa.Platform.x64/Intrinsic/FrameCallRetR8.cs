@@ -19,7 +19,7 @@ internal static partial class IntrinsicMethods
 		var edx = Operand.CreateCPURegister64(CPURegister.RDX);
 		var xmm0 = Operand.CreateCPURegister64(CPURegister.XMM0);
 
-		methodCompiler.SplitLongOperand(result, out Operand op0L, out Operand op0H);
+		methodCompiler.SplitOperand(result, out Operand op0L, out Operand op0H);
 
 		context.SetInstruction(X64.Call, null, methodAddress);
 		context.AppendInstruction(IRInstruction.Gen, xmm0);

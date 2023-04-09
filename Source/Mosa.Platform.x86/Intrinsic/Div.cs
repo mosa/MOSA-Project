@@ -17,7 +17,7 @@ internal static partial class IntrinsicMethods
 		Operand result = context.Result;
 		Operand result2 = methodCompiler.CreateVirtualRegister32();
 
-		methodCompiler.SplitLongOperand(n, out Operand op0L, out Operand op0H);
+		methodCompiler.SplitOperand(n, out Operand op0L, out Operand op0H);
 
 		context.SetInstruction2(X86.Div32, result2, result, op0H, op0L, d);
 	}

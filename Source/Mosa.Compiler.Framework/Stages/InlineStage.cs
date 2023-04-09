@@ -356,7 +356,7 @@ public class InlineStage : BaseMethodCompilerStage
 
 		if (operand.HasLongParent)
 		{
-			MethodCompiler.SplitLongOperand(mappedOperand);
+			MethodCompiler.SplitOperand(mappedOperand);
 
 			if (operand.IsLow)
 			{

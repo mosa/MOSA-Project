@@ -99,7 +99,7 @@ public static class DelegatePatcher
 
 			if (MosaTypeLayout.IsUnderlyingPrimitive(type))
 			{
-				vrs[i] = methodCompiler.VirtualRegisters.Allocate(methodCompiler.Parameters[i].Type);
+				vrs[i] = methodCompiler.VirtualRegisters.AllocateOperand(methodCompiler.Parameters[i]);
 
 				var paramLoadInstruction = BaseMethodCompilerStage.GetLoadParameterInstruction(vrs[i].Type, methodCompiler.Is32BitPlatform);
 

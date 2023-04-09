@@ -819,7 +819,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 			if (first.StackType == StackType.ValueType)
 			{
-				destination = AddStackLocal(first.Type);
+				destination = AddStackLocal(first.Operand);
 				instruction = IRInstruction.MoveCompound;
 			}
 			else
@@ -3977,7 +3977,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		if (stacktype == StackType.ValueType)
 		{
-			var result2 = AddStackLocal(local.Type);
+			var result2 = AddStackLocal(local);
 			context.AppendInstruction(IRInstruction.MoveCompound, result2, local);
 
 			PushStack(stack, new StackEntry(StackType.ValueType, result2, local.Type));

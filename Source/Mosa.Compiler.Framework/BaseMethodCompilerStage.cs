@@ -325,6 +325,11 @@ public abstract class BaseMethodCompilerStage
 		return MethodCompiler.AddStackLocal(type, pinned);
 	}
 
+	public Operand AddStackLocal(Operand operand, bool pinned = false)
+	{
+		return MethodCompiler.AddStackLocal(operand, pinned);
+	}
+
 	protected Operand AllocateVirtualRegister(Operand operand)
 	{
 		return MethodCompiler.VirtualRegisters.AllocateOperand(operand);

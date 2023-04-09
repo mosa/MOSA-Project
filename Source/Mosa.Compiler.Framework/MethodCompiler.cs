@@ -82,17 +82,12 @@ public sealed class MethodCompiler
 	public MosaTypeLayout TypeLayout { get; }
 
 	/// <summary>
-	/// Gets the local variables.
-	/// </summary>
-	public Operand[] LocalVariables { get; set; }
-
-	/// <summary>
 	/// Gets the assembly compiler.
 	/// </summary>
 	public Compiler Compiler { get; }
 
 	/// <summary>
-	/// Gets the stack.
+	/// Gets the local stack.
 	/// </summary>
 	public List<Operand> LocalStack { get; }
 
@@ -268,7 +263,6 @@ public sealed class MethodCompiler
 
 		ConstantZero = Is32BitPlatform ? Constant32_0 : Constant64_0;
 
-		LocalVariables = emptyOperandList;
 		ThreadID = threadID;
 
 		IsStopped = false;
@@ -319,21 +313,25 @@ public sealed class MethodCompiler
 	/// Adds the stack local.
 	/// </summary>
 	/// <param name="type">The type.</param>
-	/// <returns></returns>
-	public Operand AddStackLocal(MosaType type)
-	{
-		return AddStackLocal(type, false);
-	}
-
-	/// <summary>
-	/// Adds the stack local.
-	/// </summary>
-	/// <param name="type">The type.</param>
 	/// <param name="pinned">if set to <c>true</c> [pinned].</param>
 	/// <returns></returns>
-	public Operand AddStackLocal(MosaType type, bool pinned)
+	public Operand AddStackLocal(MosaType type, bool pinned = false)
 	{
 		var local = Operand.CreateStackLocal(type, LocalStack.Count, pinned);
+		LocalStack.Add(local);
+		return local;
+	}
+
+	public Operand AddStackLocal(Operand operand, bool pinned = false)
+	{
+		var local = Operand.CreateStackLocal(operand, LocalStack.Count, pinned);
+		LocalStack.Add(local);
+		return local;
+	}
+
+	public Operand AddStackLocalValueType(bool pinned = false, MosaType type)
+	{
+		var local = Operand.CreateStackLocalValueType(LocalStack.Count, pinned, type);
 		LocalStack.Add(local);
 		return local;
 	}
@@ -361,14 +359,10 @@ public sealed class MethodCompiler
 	{
 		var offset = Architecture.OffsetOfFirstParameter;
 
-		//offset += MethodData.ReturnInRegister ? MethodData.ReturnSize : 0;
-
 		if (!MosaTypeLayout.IsUnderlyingPrimitive(Method.Signature.ReturnType))
 		{
 			offset += (int)TypeLayout.GetTypeSize(Method.Signature.ReturnType);
 		}
-
-		//Debug.Assert((MethodData.ReturnInRegister ? MethodData.ReturnSize : 0) == TypeLayout.GetTypeSize(Method.Signature.ReturnType));
 
 		var index = 0;
 
@@ -769,10 +763,10 @@ public sealed class MethodCompiler
 	/// <summary>
 	/// Splits the long operand.
 	/// </summary>
-	/// <param name="longOperand">The long operand.</param>
-	public void SplitLongOperand(Operand longOperand)
+	/// <param name="operand">The long operand.</param>
+	public void SplitOperand(Operand operand)
 	{
-		VirtualRegisters.SplitLongOperand(TypeSystem, longOperand);
+		VirtualRegisters.SplitOperand(operand);
 	}
 
 	/// <summary>
@@ -781,7 +775,7 @@ public sealed class MethodCompiler
 	/// <param name="operand">The operand.</param>
 	/// <param name="operandLow">The operand low.</param>
 	/// <param name="operandHigh">The operand high.</param>
-	public void SplitLongOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
+	public void SplitOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
 	{
 		var is64Bit = operand.IsInteger64;
 
@@ -806,7 +800,7 @@ public sealed class MethodCompiler
 
 		if (is64Bit)
 		{
-			SplitLongOperand(operand);
+			SplitOperand(operand);
 			operandLow = operand.Low;
 			operandHigh = operand.High;
 		}
@@ -832,33 +826,6 @@ public sealed class MethodCompiler
 		else
 		{
 			return AddStackLocal(type);
-		}
-	}
-
-	/// <summary>
-	/// Allocates the local variable virtual registers.
-	/// </summary>
-	/// <param name="locals">The locals.</param>
-	public void SetLocalVariables(IList<MosaLocal> locals)
-	{
-		LocalVariables = new Operand[locals.Count];
-
-		var index = 0;
-		foreach (var local in locals)
-		{
-			var localtype = local.Type;
-			var underlyingType = localtype;
-			//var underlyingType = MosaTypeLayout.GetUnderlyingType(local.Type);
-
-			if (MosaTypeLayout.IsUnderlyingPrimitive(underlyingType) && !local.IsPinned)
-			{
-				var stacktype = Compiler.GetStackType(underlyingType);
-				LocalVariables[index++] = CreateVirtualRegister(stacktype);
-			}
-			else
-			{
-				LocalVariables[index++] = AddStackLocal(underlyingType, local.IsPinned);
-			}
 		}
 	}
 

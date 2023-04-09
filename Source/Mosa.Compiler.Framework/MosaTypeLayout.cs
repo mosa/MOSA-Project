@@ -657,9 +657,9 @@ public class MosaTypeLayout
 			if (field.Offset == null)
 				continue;
 
-			var offset = field.Offset.Value;
-			fieldOffsets.Add(field, offset);
-			size = Math.Max(size, offset + ComputeFieldSize(field));
+			var offset = field.Offset;
+			fieldOffsets.Add(field, offset.Value);
+			size = Math.Max(size, offset.Value + ComputeFieldSize(field));
 
 			// Explicit layout assigns a physical offset from the start of the structure
 			// to the field. We just assign this offset.

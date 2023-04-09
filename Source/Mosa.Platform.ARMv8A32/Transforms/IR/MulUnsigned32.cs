@@ -16,7 +16,7 @@ public sealed class MulUnsigned32 : BaseIRTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		transform.MoveConstantRight(context);
+		TransformContext.MoveConstantRight(context);
 
 		Translate(transform, context, ARMv8A32.Mul, false);
 	}

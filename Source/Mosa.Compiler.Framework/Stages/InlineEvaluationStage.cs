@@ -368,7 +368,7 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 		return newBasicBlocks;
 	}
 
-	private Operand Map(Operand operand, Dictionary<Operand, Operand> map)
+	private static Operand Map(Operand operand, Dictionary<Operand, Operand> map)
 	{
 		if (operand == null)
 			return null;
@@ -388,7 +388,7 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 		}
 		else if (operand.IsStackLocal)
 		{
-			mappedOperand = Operand.CreateStackLocal(operand.Type, operand.Index, operand.IsPinned);
+			mappedOperand = Operand.CreateStackLocal(operand, operand.Index, operand.IsPinned);
 		}
 		else if (operand.IsVirtualRegister)
 		{
@@ -399,8 +399,7 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 		}
 		else if (operand.IsStaticField)
 		{
-			// FUTURE: explore operand re-use
-			mappedOperand = Operand.CreateStaticField(operand.Field, TypeSystem);
+			mappedOperand = operand;
 		}
 		else if (operand.IsCPURegister)
 		{

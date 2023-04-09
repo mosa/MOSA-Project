@@ -15,7 +15,7 @@ internal static partial class IntrinsicMethods
 		var result = context.Result;
 		var operand1 = context.Operand1;
 
-		methodCompiler.SplitLongOperand(result, out Operand resultLow, out Operand resultHigh);
+		methodCompiler.SplitOperand(result, out Operand resultLow, out Operand resultHigh);
 
 		var EAX = Operand.CreateCPURegister64(CPURegister.RAX);
 		var EDX = Operand.CreateCPURegister64(CPURegister.RDX);

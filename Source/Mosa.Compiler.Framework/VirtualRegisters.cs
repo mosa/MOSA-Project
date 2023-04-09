@@ -133,16 +133,14 @@ public sealed class VirtualRegisters : IEnumerable<Operand>
 		return Is32Platform ? Allocate32() : Allocate64();
 	}
 
-	public void SplitLongOperand(TypeSystem typeSystem, Operand longOperand)
+	public void SplitOperand(Operand operand)
 	{
-		//Debug.Assert(longOperand.IsInteger64 || longOperand.IsParameter);
-
-		if (longOperand.Low == null && longOperand.High == null)
+		if (operand.Low == null && operand.High == null)
 		{
-			var low = Operand.CreateLowSplitForLong(longOperand, virtualRegisters.Count + 1, typeSystem);
-			var high = Operand.CreateHighSplitForLong(longOperand, virtualRegisters.Count + 2, typeSystem);
+			var low = Operand.CreateLow(operand, virtualRegisters.Count + 1);
+			var high = Operand.CreateHigh(operand, virtualRegisters.Count + 2);
 
-			if (longOperand.IsVirtualRegister)
+			if (operand.IsVirtualRegister)
 			{
 				virtualRegisters.Add(low);
 				virtualRegisters.Add(high);

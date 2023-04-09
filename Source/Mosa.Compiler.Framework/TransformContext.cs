@@ -635,7 +635,7 @@ public sealed class TransformContext
 
 	public void SplitLongOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
 	{
-		MethodCompiler.SplitLongOperand(operand, out operandLow, out operandHigh);
+		MethodCompiler.SplitOperand(operand, out operandLow, out operandHigh);
 	}
 
 	public MosaMethod GetMethod(string fullName, string methodName)
@@ -676,7 +676,7 @@ public sealed class TransformContext
 		MethodScanner.MethodInvoked(method, Method);
 	}
 
-	public void MoveConstantRight(Context context) // static
+	public static void MoveConstantRight(Context context) // static
 	{
 		var operand1 = context.Operand1;
 		var operand2 = context.Operand2;
