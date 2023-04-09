@@ -96,7 +96,7 @@ Those projects help in providing additional functions for using native instructi
 Mosa.Tool.*
 ***********
 
-Those projects are the tools provided by the MOSA project. You can learn more about them :doc:`here<tools>`.
+Those projects are the tools provided by the MOSA project. You can learn more about them in the Tools section.
 
 **************
 Mosa.Utility.*
