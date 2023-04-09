@@ -18,7 +18,7 @@ internal static partial class IntrinsicMethods
 		var result = context.Result;
 
 		var eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, CPURegister.EAX);
-		var v1 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.U4);
+		var v1 = methodCompiler.CreateVirtualRegister32();
 
 		context.SetInstruction(X86.Mov32, eax, comparand);
 		context.AppendInstruction(X86.Mov32, v1, value);

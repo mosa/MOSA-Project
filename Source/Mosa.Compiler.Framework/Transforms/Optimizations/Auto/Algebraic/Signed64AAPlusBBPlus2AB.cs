@@ -91,8 +91,8 @@ public sealed class Signed64AAPlusBBPlus2AB : BaseTransform
 		var t1 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I8);
-		var v2 = transform.AllocateVirtualRegister(transform.I8);
+		var v1 = transform.AllocateVirtualRegister64();
+		var v2 = transform.AllocateVirtualRegister64();
 
 		context.SetInstruction(IRInstruction.Add64, v1, t1, t2);
 		context.AppendInstruction(IRInstruction.Add64, v2, t1, t2);
@@ -185,8 +185,8 @@ public sealed class Signed64AAPlusBBPlus2AB_v1 : BaseTransform
 		var t1 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I8);
-		var v2 = transform.AllocateVirtualRegister(transform.I8);
+		var v1 = transform.AllocateVirtualRegister64();
+		var v2 = transform.AllocateVirtualRegister64();
 
 		context.SetInstruction(IRInstruction.Add64, v1, t1, t2);
 		context.AppendInstruction(IRInstruction.Add64, v2, t1, t2);
@@ -279,8 +279,8 @@ public sealed class Signed64AAPlusBBPlus2AB_v2 : BaseTransform
 		var t1 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I8);
-		var v2 = transform.AllocateVirtualRegister(transform.I8);
+		var v1 = transform.AllocateVirtualRegister64();
+		var v2 = transform.AllocateVirtualRegister64();
 
 		context.SetInstruction(IRInstruction.Add64, v1, t1, t2);
 		context.AppendInstruction(IRInstruction.Add64, v2, t1, t2);
@@ -373,8 +373,8 @@ public sealed class Signed64AAPlusBBPlus2AB_v3 : BaseTransform
 		var t1 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I8);
-		var v2 = transform.AllocateVirtualRegister(transform.I8);
+		var v1 = transform.AllocateVirtualRegister64();
+		var v2 = transform.AllocateVirtualRegister64();
 
 		context.SetInstruction(IRInstruction.Add64, v1, t2, t1);
 		context.AppendInstruction(IRInstruction.Add64, v2, t2, t1);
@@ -467,8 +467,8 @@ public sealed class Signed64AAPlusBBPlus2AB_v4 : BaseTransform
 		var t1 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I8);
-		var v2 = transform.AllocateVirtualRegister(transform.I8);
+		var v1 = transform.AllocateVirtualRegister64();
+		var v2 = transform.AllocateVirtualRegister64();
 
 		context.SetInstruction(IRInstruction.Add64, v1, t2, t1);
 		context.AppendInstruction(IRInstruction.Add64, v2, t2, t1);
@@ -561,8 +561,8 @@ public sealed class Signed64AAPlusBBPlus2AB_v5 : BaseTransform
 		var t1 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I8);
-		var v2 = transform.AllocateVirtualRegister(transform.I8);
+		var v1 = transform.AllocateVirtualRegister64();
+		var v2 = transform.AllocateVirtualRegister64();
 
 		context.SetInstruction(IRInstruction.Add64, v1, t1, t2);
 		context.AppendInstruction(IRInstruction.Add64, v2, t1, t2);
@@ -655,8 +655,8 @@ public sealed class Signed64AAPlusBBPlus2AB_v6 : BaseTransform
 		var t1 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I8);
-		var v2 = transform.AllocateVirtualRegister(transform.I8);
+		var v1 = transform.AllocateVirtualRegister64();
+		var v2 = transform.AllocateVirtualRegister64();
 
 		context.SetInstruction(IRInstruction.Add64, v1, t2, t1);
 		context.AppendInstruction(IRInstruction.Add64, v2, t2, t1);
@@ -749,8 +749,8 @@ public sealed class Signed64AAPlusBBPlus2AB_v7 : BaseTransform
 		var t1 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I8);
-		var v2 = transform.AllocateVirtualRegister(transform.I8);
+		var v1 = transform.AllocateVirtualRegister64();
+		var v2 = transform.AllocateVirtualRegister64();
 
 		context.SetInstruction(IRInstruction.Add64, v1, t2, t1);
 		context.AppendInstruction(IRInstruction.Add64, v2, t2, t1);

@@ -47,9 +47,9 @@ public static class DelegatePatcher
 
 		var context = new Context(CreateMethodStructure(methodCompiler));
 
-		var v1 = methodCompiler.CreateVirtualRegister(thisOperand.Type);
-		var v2 = methodCompiler.CreateVirtualRegister(methodPointerOperand.Type);
-		var v3 = methodCompiler.CreateVirtualRegister(instanceOperand.Type);
+		var v1 = methodCompiler.CreateVirtualRegister(thisOperand);
+		var v2 = methodCompiler.CreateVirtualRegister(methodPointerOperand);
+		var v3 = methodCompiler.CreateVirtualRegister(instanceOperand);
 
 		var loadParameterInstruction = methodCompiler.Is32BitPlatform ? (BaseInstruction)IRInstruction.LoadParam32 : IRInstruction.LoadParam64;
 

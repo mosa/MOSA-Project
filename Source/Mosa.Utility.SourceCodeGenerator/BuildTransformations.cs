@@ -270,7 +270,7 @@ public class BuildTransformations : BuildBaseTemplate
 
 			nodeNbrToVirtualRegisterNbr.Add(node.NodeNbr, virtualRegisterNbr);
 
-			Lines.AppendLine($"\t\tvar v{virtualRegisterNbr} = transform.AllocateVirtualRegister(transform.{resultType});");
+			Lines.AppendLine($"\t\tvar v{virtualRegisterNbr} = transform.AllocateVirtualRegister{resultType}();");
 		}
 		if (virtualRegisterNbr != 0)
 			Lines.AppendLine();
@@ -468,10 +468,10 @@ public class BuildTransformations : BuildBaseTemplate
 			return node.ResultType;
 
 		if (node.InstructionName.EndsWith("32"))
-			return "I4";
+			return "32";
 
 		if (node.InstructionName.EndsWith("64"))
-			return "I8";
+			return "64";
 
 		if (node.InstructionName.EndsWith("R4"))
 			return "R4";
@@ -480,11 +480,11 @@ public class BuildTransformations : BuildBaseTemplate
 			return "R8";
 
 		if (node.InstructionName.EndsWith("Object"))
-			return "O";
+			return "Object";
 
 		// TODO
 
-		return "I8";    // default
+		return "64";    // default
 	}
 
 	private void ProcessDuplicatesInExpression(Transformation transform)

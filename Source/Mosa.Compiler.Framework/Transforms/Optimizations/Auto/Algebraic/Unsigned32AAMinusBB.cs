@@ -52,8 +52,8 @@ public sealed class Unsigned32AAMinusBB : BaseTransform
 		var t1 = context.Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand2.Definitions[0].Operand1;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I4);
-		var v2 = transform.AllocateVirtualRegister(transform.I4);
+		var v1 = transform.AllocateVirtualRegister32();
+		var v2 = transform.AllocateVirtualRegister32();
 
 		context.SetInstruction(IRInstruction.Add32, v1, t1, t2);
 		context.AppendInstruction(IRInstruction.Sub32, v2, t1, t2);

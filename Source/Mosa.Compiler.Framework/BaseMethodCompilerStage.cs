@@ -337,37 +337,37 @@ public abstract class BaseMethodCompilerStage
 
 	protected Operand AllocateVirtualRegister32()
 	{
-		return MethodCompiler.VirtualRegisters.Allocate(TypeSystem.BuiltIn.I4);
+		return MethodCompiler.VirtualRegisters.Allocate32();
 	}
 
 	protected Operand AllocateVirtualRegister64()
 	{
-		return MethodCompiler.VirtualRegisters.Allocate(TypeSystem.BuiltIn.I8);
+		return MethodCompiler.VirtualRegisters.Allocate64();
 	}
 
 	protected Operand AllocateVirtualRegisterR4()
 	{
-		return MethodCompiler.VirtualRegisters.Allocate(TypeSystem.BuiltIn.R4);
+		return MethodCompiler.VirtualRegisters.AllocateR4();
 	}
 
 	protected Operand AllocateVirtualRegisterR8()
 	{
-		return MethodCompiler.VirtualRegisters.Allocate(TypeSystem.BuiltIn.R8);
+		return MethodCompiler.VirtualRegisters.AllocateR8();
 	}
 
 	protected Operand AllocateVirtualRegisterObject()
 	{
-		return MethodCompiler.VirtualRegisters.Allocate(TypeSystem.BuiltIn.Object);
+		return MethodCompiler.VirtualRegisters.AllocateObject();
 	}
 
 	protected Operand AllocateVirtualRegisterManagedPointer()
 	{
-		return MethodCompiler.VirtualRegisters.Allocate(TypeSystem.BuiltIn.ManagedPointer);
+		return MethodCompiler.VirtualRegisters.AllocateManagedPointer();
 	}
 
 	protected Operand AllocateVirtualRegisterNativeInteger()
 	{
-		return Is32BitPlatform ? MethodCompiler.VirtualRegisters.Allocate(TypeSystem.BuiltIn.I4) : MethodCompiler.VirtualRegisters.Allocate(TypeSystem.BuiltIn.I8);
+		return Is32BitPlatform ? MethodCompiler.VirtualRegisters.Allocate32() : MethodCompiler.VirtualRegisters.Allocate64();
 	}
 
 	/// <summary>

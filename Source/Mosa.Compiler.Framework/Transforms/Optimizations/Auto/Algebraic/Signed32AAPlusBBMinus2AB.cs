@@ -91,8 +91,8 @@ public sealed class Signed32AAPlusBBMinus2AB : BaseTransform
 		var t1 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I4);
-		var v2 = transform.AllocateVirtualRegister(transform.I4);
+		var v1 = transform.AllocateVirtualRegister32();
+		var v2 = transform.AllocateVirtualRegister32();
 
 		context.SetInstruction(IRInstruction.Sub32, v1, t1, t2);
 		context.AppendInstruction(IRInstruction.Sub32, v2, t1, t2);
@@ -185,8 +185,8 @@ public sealed class Signed32AAPlusBBMinus2AB_v1 : BaseTransform
 		var t1 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I4);
-		var v2 = transform.AllocateVirtualRegister(transform.I4);
+		var v1 = transform.AllocateVirtualRegister32();
+		var v2 = transform.AllocateVirtualRegister32();
 
 		context.SetInstruction(IRInstruction.Sub32, v1, t1, t2);
 		context.AppendInstruction(IRInstruction.Sub32, v2, t1, t2);
@@ -279,8 +279,8 @@ public sealed class Signed32AAPlusBBMinus2AB_v2 : BaseTransform
 		var t1 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I4);
-		var v2 = transform.AllocateVirtualRegister(transform.I4);
+		var v1 = transform.AllocateVirtualRegister32();
+		var v2 = transform.AllocateVirtualRegister32();
 
 		context.SetInstruction(IRInstruction.Sub32, v1, t2, t1);
 		context.AppendInstruction(IRInstruction.Sub32, v2, t2, t1);
@@ -373,8 +373,8 @@ public sealed class Signed32AAPlusBBMinus2AB_v3 : BaseTransform
 		var t1 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I4);
-		var v2 = transform.AllocateVirtualRegister(transform.I4);
+		var v1 = transform.AllocateVirtualRegister32();
+		var v2 = transform.AllocateVirtualRegister32();
 
 		context.SetInstruction(IRInstruction.Sub32, v1, t2, t1);
 		context.AppendInstruction(IRInstruction.Sub32, v2, t2, t1);

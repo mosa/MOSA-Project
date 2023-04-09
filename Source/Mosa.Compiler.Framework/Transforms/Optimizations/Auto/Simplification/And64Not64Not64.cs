@@ -46,7 +46,7 @@ public sealed class And64Not64Not64 : BaseTransform
 		var t1 = context.Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand2.Definitions[0].Operand1;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I8);
+		var v1 = transform.AllocateVirtualRegister64();
 
 		context.SetInstruction(IRInstruction.Or64, v1, t1, t2);
 		context.AppendInstruction(IRInstruction.Not64, result, v1);

@@ -50,7 +50,7 @@ public sealed class Compare64x32DivUnsignedRange : BaseTransform
 		var t2 = context.Operand1.Definitions[0].Operand2;
 		var t3 = context.Operand2;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I4);
+		var v1 = transform.AllocateVirtualRegister32();
 
 		var e1 = transform.CreateConstant(MulUnsigned32(To32(t2), To32(t3)));
 
@@ -103,7 +103,7 @@ public sealed class Compare64x32DivUnsignedRange_v1 : BaseTransform
 		var t2 = context.Operand2.Definitions[0].Operand1;
 		var t3 = context.Operand2.Definitions[0].Operand2;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I4);
+		var v1 = transform.AllocateVirtualRegister32();
 
 		var e1 = transform.CreateConstant(MulUnsigned32(To32(t3), To32(t1)));
 

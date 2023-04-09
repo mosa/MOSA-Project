@@ -18,9 +18,9 @@ internal static partial class IntrinsicMethods
 
 		if (result.IsR8)
 		{
-			var xmm1 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.R8);
-			var xmm2 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.R8);
-			var xmm3 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.R8);
+			var xmm1 = methodCompiler.CreateVirtualRegisterR8();
+			var xmm2 = methodCompiler.CreateVirtualRegisterR8();
+			var xmm3 = methodCompiler.CreateVirtualRegisterR8();
 
 			context.SetInstruction(X64.Divsd, xmm1, dividend, divisor);
 			context.AppendInstruction(X64.Roundsd, xmm2, xmm1, methodCompiler.CreateConstant((byte)0x3));
@@ -29,9 +29,9 @@ internal static partial class IntrinsicMethods
 		}
 		else
 		{
-			var xmm1 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.R4);
-			var xmm2 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.R4);
-			var xmm3 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.R4);
+			var xmm1 = methodCompiler.CreateVirtualRegisterR4();
+			var xmm2 = methodCompiler.CreateVirtualRegisterR4();
+			var xmm3 = methodCompiler.CreateVirtualRegisterR4();
 
 			context.SetInstruction(X64.Divss, xmm1, dividend, divisor);
 			context.AppendInstruction(X64.Roundss, xmm2, xmm1, methodCompiler.CreateConstant((byte)0x3));

@@ -15,8 +15,8 @@ internal static partial class IntrinsicMethods
 		var dest = context.Operand1;
 		var src = context.Operand2;
 
-		var v0 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.Void);
-		var v1 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.Void);
+		var v0 = methodCompiler.CreateVirtualRegister64();
+		var v1 = methodCompiler.CreateVirtualRegister64();
 		var offset16 = methodCompiler.CreateConstant(16);
 
 		context.SetInstruction(X64.MovupsLoad, v0, dest, methodCompiler.Constant64_0);

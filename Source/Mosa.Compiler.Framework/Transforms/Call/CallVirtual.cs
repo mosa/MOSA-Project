@@ -39,8 +39,8 @@ public sealed class CallVirtual : BasePlugTransform
 		// Offset to the method pointer on the MethodTable
 		var methodPointerOffset = transform.CreateConstant32(CalculateMethodTableOffset(transform, method));
 
-		var typeDef = transform.AllocateVirtualRegister(transform.Pointer);
-		var callTarget = transform.AllocateVirtualRegister(transform.Pointer);
+		var typeDef = transform.AllocateVirtualRegisterNativeInteger();
+		var callTarget = transform.AllocateVirtualRegisterNativeInteger();
 
 		// Get the Method Table pointer
 		context.SetInstruction(transform.LoadInstruction, typeDef, thisPtr, typeDefOffset);

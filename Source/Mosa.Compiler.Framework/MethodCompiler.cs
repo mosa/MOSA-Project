@@ -257,7 +257,7 @@ public sealed class MethodCompiler
 
 		BasicBlocks = basicBlocks ?? new BasicBlocks();
 		LocalStack = new List<Operand>();
-		VirtualRegisters = new VirtualRegisters();
+		VirtualRegisters = new VirtualRegisters(Is32BitPlatform);
 
 		Parameters = new Operand[method.Signature.Parameters.Count + (method.HasThis || method.HasExplicitThis ? 1 : 0)];
 
@@ -731,9 +731,46 @@ public sealed class MethodCompiler
 	/// <returns>
 	/// An operand, which represents the virtual register.
 	/// </returns>
-	public Operand CreateVirtualRegister(MosaType type)
+	private Operand CreateVirtualRegister(MosaType type)
 	{
 		return VirtualRegisters.Allocate(type);
+	}
+
+	public Operand CreateVirtualRegister32()
+	{
+		return VirtualRegisters.Allocate32();
+	}
+
+	public Operand CreateVirtualRegister64()
+	{
+		return VirtualRegisters.Allocate64();
+	}
+
+	public Operand CreateVirtualRegisterR4()
+	{
+		return VirtualRegisters.AllocateR4();
+	}
+
+	public Operand CreateVirtualRegisterR8()
+	{
+		return VirtualRegisters.AllocateR8();
+	}
+
+	public Operand CreateVirtualRegisterObject()
+	{
+		return VirtualRegisters.AllocateObject();
+	}
+
+	/// <summary>
+	/// Creates a new virtual register operand.
+	/// </summary>
+	/// <param name="type">The signature type of the virtual register.</param>
+	/// <returns>
+	/// An operand, which represents the virtual register.
+	/// </returns>
+	public Operand CreateVirtualRegister(Operand operand)
+	{
+		return VirtualRegisters.AllocateOperand(operand);
 	}
 
 	/// <summary>

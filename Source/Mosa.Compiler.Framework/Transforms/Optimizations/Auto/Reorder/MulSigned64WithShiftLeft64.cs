@@ -38,7 +38,7 @@ public sealed class MulSigned64WithShiftLeft64 : BaseTransform
 		var t2 = context.Operand2.Definitions[0].Operand1;
 		var t3 = context.Operand2.Definitions[0].Operand2;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I8);
+		var v1 = transform.AllocateVirtualRegister64();
 
 		context.SetInstruction(IRInstruction.MulSigned64, v1, t1, t2);
 		context.AppendInstruction(IRInstruction.ShiftLeft64, result, v1, t3);
@@ -77,7 +77,7 @@ public sealed class MulSigned64WithShiftLeft64_v1 : BaseTransform
 		var t2 = context.Operand1.Definitions[0].Operand2;
 		var t3 = context.Operand2;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I8);
+		var v1 = transform.AllocateVirtualRegister64();
 
 		context.SetInstruction(IRInstruction.MulSigned64, v1, t3, t1);
 		context.AppendInstruction(IRInstruction.ShiftLeft64, result, v1, t2);

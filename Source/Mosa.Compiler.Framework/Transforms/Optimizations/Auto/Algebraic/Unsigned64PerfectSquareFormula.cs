@@ -73,8 +73,8 @@ public sealed class Unsigned64PerfectSquareFormula : BaseTransform
 		var t1 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I8);
-		var v2 = transform.AllocateVirtualRegister(transform.I8);
+		var v1 = transform.AllocateVirtualRegister64();
+		var v2 = transform.AllocateVirtualRegister64();
 
 		var e1 = transform.CreateConstant(DivUnsigned64(To64(t2), 2));
 
@@ -151,8 +151,8 @@ public sealed class Unsigned64PerfectSquareFormula_v1 : BaseTransform
 		var t1 = context.Operand2.Definitions[0].Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand2.Definitions[0].Operand2.Definitions[0].Operand1;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I8);
-		var v2 = transform.AllocateVirtualRegister(transform.I8);
+		var v1 = transform.AllocateVirtualRegister64();
+		var v2 = transform.AllocateVirtualRegister64();
 
 		var e1 = transform.CreateConstant(DivUnsigned64(To64(t2), 2));
 
@@ -229,8 +229,8 @@ public sealed class Unsigned64PerfectSquareFormula_v2 : BaseTransform
 		var t1 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I8);
-		var v2 = transform.AllocateVirtualRegister(transform.I8);
+		var v1 = transform.AllocateVirtualRegister64();
+		var v2 = transform.AllocateVirtualRegister64();
 
 		var e1 = transform.CreateConstant(DivUnsigned64(To64(t1), 2));
 
@@ -307,8 +307,8 @@ public sealed class Unsigned64PerfectSquareFormula_v3 : BaseTransform
 		var t1 = context.Operand2.Definitions[0].Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand2.Definitions[0].Operand1.Definitions[0].Operand2;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I8);
-		var v2 = transform.AllocateVirtualRegister(transform.I8);
+		var v1 = transform.AllocateVirtualRegister64();
+		var v2 = transform.AllocateVirtualRegister64();
 
 		var e1 = transform.CreateConstant(DivUnsigned64(To64(t1), 2));
 
@@ -385,8 +385,8 @@ public sealed class Unsigned64PerfectSquareFormula_v4 : BaseTransform
 		var t1 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand1.Definitions[0].Operand2.Definitions[0].Operand2;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I8);
-		var v2 = transform.AllocateVirtualRegister(transform.I8);
+		var v1 = transform.AllocateVirtualRegister64();
+		var v2 = transform.AllocateVirtualRegister64();
 
 		var e1 = transform.CreateConstant(DivUnsigned64(To64(t2), 2));
 
@@ -463,8 +463,8 @@ public sealed class Unsigned64PerfectSquareFormula_v5 : BaseTransform
 		var t1 = context.Operand2.Definitions[0].Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand2.Definitions[0].Operand2.Definitions[0].Operand2;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I8);
-		var v2 = transform.AllocateVirtualRegister(transform.I8);
+		var v1 = transform.AllocateVirtualRegister64();
+		var v2 = transform.AllocateVirtualRegister64();
 
 		var e1 = transform.CreateConstant(DivUnsigned64(To64(t2), 2));
 
@@ -541,8 +541,8 @@ public sealed class Unsigned64PerfectSquareFormula_v6 : BaseTransform
 		var t1 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I8);
-		var v2 = transform.AllocateVirtualRegister(transform.I8);
+		var v1 = transform.AllocateVirtualRegister64();
+		var v2 = transform.AllocateVirtualRegister64();
 
 		var e1 = transform.CreateConstant(DivUnsigned64(To64(t2), 2));
 
@@ -619,8 +619,8 @@ public sealed class Unsigned64PerfectSquareFormula_v7 : BaseTransform
 		var t1 = context.Operand2.Definitions[0].Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand2.Definitions[0].Operand1.Definitions[0].Operand2;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I8);
-		var v2 = transform.AllocateVirtualRegister(transform.I8);
+		var v1 = transform.AllocateVirtualRegister64();
+		var v2 = transform.AllocateVirtualRegister64();
 
 		var e1 = transform.CreateConstant(DivUnsigned64(To64(t2), 2));
 

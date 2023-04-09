@@ -50,7 +50,7 @@ public sealed class Sub32MultipleWithCommon : BaseTransform
 		var t2 = context.Operand1.Definitions[0].Operand2;
 		var t3 = context.Operand2.Definitions[0].Operand2;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I4);
+		var v1 = transform.AllocateVirtualRegister32();
 
 		context.SetInstruction(IRInstruction.Sub32, v1, t2, t3);
 		context.AppendInstruction(IRInstruction.MulUnsigned32, result, t1, v1);
@@ -101,7 +101,7 @@ public sealed class Sub32MultipleWithCommon_v1 : BaseTransform
 		var t2 = context.Operand1.Definitions[0].Operand2;
 		var t3 = context.Operand2.Definitions[0].Operand1;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I4);
+		var v1 = transform.AllocateVirtualRegister32();
 
 		context.SetInstruction(IRInstruction.Sub32, v1, t2, t3);
 		context.AppendInstruction(IRInstruction.MulUnsigned32, result, t1, v1);
@@ -152,7 +152,7 @@ public sealed class Sub32MultipleWithCommon_v2 : BaseTransform
 		var t2 = context.Operand1.Definitions[0].Operand2;
 		var t3 = context.Operand2.Definitions[0].Operand2;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I4);
+		var v1 = transform.AllocateVirtualRegister32();
 
 		context.SetInstruction(IRInstruction.Sub32, v1, t1, t3);
 		context.AppendInstruction(IRInstruction.MulUnsigned32, result, t2, v1);
@@ -203,7 +203,7 @@ public sealed class Sub32MultipleWithCommon_v3 : BaseTransform
 		var t2 = context.Operand1.Definitions[0].Operand2;
 		var t3 = context.Operand2.Definitions[0].Operand1;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I4);
+		var v1 = transform.AllocateVirtualRegister32();
 
 		context.SetInstruction(IRInstruction.Sub32, v1, t1, t3);
 		context.AppendInstruction(IRInstruction.MulUnsigned32, result, t2, v1);

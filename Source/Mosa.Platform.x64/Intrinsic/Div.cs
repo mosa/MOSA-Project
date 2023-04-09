@@ -15,7 +15,7 @@ internal static partial class IntrinsicMethods
 		Operand n = context.Operand1;
 		Operand d = context.Operand2;
 		Operand result = context.Result;
-		Operand result2 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.U8);
+		Operand result2 = methodCompiler.CreateVirtualRegister64();
 
 		methodCompiler.SplitLongOperand(n, out Operand op0L, out Operand op0H);
 

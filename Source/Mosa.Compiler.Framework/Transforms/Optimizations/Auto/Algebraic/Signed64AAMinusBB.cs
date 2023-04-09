@@ -52,8 +52,8 @@ public sealed class Signed64AAMinusBB : BaseTransform
 		var t1 = context.Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand2.Definitions[0].Operand1;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I8);
-		var v2 = transform.AllocateVirtualRegister(transform.I8);
+		var v1 = transform.AllocateVirtualRegister64();
+		var v2 = transform.AllocateVirtualRegister64();
 
 		context.SetInstruction(IRInstruction.Add64, v1, t1, t2);
 		context.AppendInstruction(IRInstruction.Sub64, v2, t1, t2);

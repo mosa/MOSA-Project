@@ -18,7 +18,7 @@ internal static partial class IntrinsicMethods
 		var result = context.Result;
 
 		var rax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U8, CPURegister.RAX);
-		var v1 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.U8);
+		var v1 = methodCompiler.CreateVirtualRegister64();
 
 		context.SetInstruction(X64.Mov64, rax, comparand);
 		context.AppendInstruction(X64.Mov64, v1, value);

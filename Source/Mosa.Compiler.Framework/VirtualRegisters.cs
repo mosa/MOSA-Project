@@ -23,13 +23,16 @@ public sealed class VirtualRegisters : IEnumerable<Operand>
 
 	public Operand this[int index] => virtualRegisters[index];
 
+	public bool Is32Platform { get; private set; }
+
 	#endregion Properties
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="VirtualRegisters" /> class.
 	/// </summary>
-	public VirtualRegisters()
+	public VirtualRegisters(bool is32Platform)
 	{
+		Is32Platform = is32Platform;
 	}
 
 	/// <summary>
@@ -46,6 +49,88 @@ public sealed class VirtualRegisters : IEnumerable<Operand>
 		virtualRegisters.Add(virtualRegister);
 
 		return virtualRegister;
+	}
+
+	public Operand AllocateOperand(Operand operand)
+	{
+		var index = virtualRegisters.Count + 1;
+
+		var virtualRegister = Operand.CreateVirtualRegister(operand, index);
+
+		virtualRegisters.Add(virtualRegister);
+
+		return virtualRegister;
+	}
+
+	public Operand Allocate32()
+	{
+		var index = virtualRegisters.Count + 1;
+
+		var virtualRegister = Operand.CreateVirtual32(index);
+
+		virtualRegisters.Add(virtualRegister);
+
+		return virtualRegister;
+	}
+
+	public Operand Allocate64()
+	{
+		var index = virtualRegisters.Count + 1;
+
+		var virtualRegister = Operand.CreateVirtual64(index);
+
+		virtualRegisters.Add(virtualRegister);
+
+		return virtualRegister;
+	}
+
+	public Operand AllocateR4()
+	{
+		var index = virtualRegisters.Count + 1;
+
+		var virtualRegister = Operand.CreateVirtualR4(index);
+
+		virtualRegisters.Add(virtualRegister);
+
+		return virtualRegister;
+	}
+
+	public Operand AllocateR8()
+	{
+		var index = virtualRegisters.Count + 1;
+
+		var virtualRegister = Operand.CreateVirtualR8(index);
+
+		virtualRegisters.Add(virtualRegister);
+
+		return virtualRegister;
+	}
+
+	public Operand AllocateObject()
+	{
+		var index = virtualRegisters.Count + 1;
+
+		var virtualRegister = Operand.CreateVirtualObject(index);
+
+		virtualRegisters.Add(virtualRegister);
+
+		return virtualRegister;
+	}
+
+	public Operand AllocateManagedPointer()
+	{
+		var index = virtualRegisters.Count + 1;
+
+		var virtualRegister = Operand.CreateVirtualManagedPointer(index);
+
+		virtualRegisters.Add(virtualRegister);
+
+		return virtualRegister;
+	}
+
+	public Operand AllocateManagedNativeInteger()
+	{
+		return Is32Platform ? Allocate32() : Allocate64();
 	}
 
 	public void SplitLongOperand(TypeSystem typeSystem, Operand longOperand)

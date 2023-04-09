@@ -263,42 +263,42 @@ public sealed class TransformContext
 
 	public Operand AllocateVirtualRegister(Operand operand)
 	{
-		return VirtualRegisters.Allocate(operand.Type);
-	}
-
-	public Operand AllocateVirtualRegister(MosaType type)
-	{
-		return VirtualRegisters.Allocate(type);
+		return VirtualRegisters.AllocateOperand(operand);
 	}
 
 	public Operand AllocateVirtualRegister32()
 	{
-		return VirtualRegisters.Allocate(I4);
+		return VirtualRegisters.Allocate32();
 	}
 
 	public Operand AllocateVirtualRegister64()
 	{
-		return VirtualRegisters.Allocate(I8);
+		return VirtualRegisters.Allocate64();
 	}
 
 	public Operand AllocateVirtualRegisterR4()
 	{
-		return VirtualRegisters.Allocate(R4);
+		return VirtualRegisters.AllocateR4();
 	}
 
 	public Operand AllocateVirtualRegisterR8()
 	{
-		return VirtualRegisters.Allocate(R8);
+		return VirtualRegisters.AllocateR8();
 	}
 
 	public Operand AllocateVirtualRegisterObject()
 	{
-		return VirtualRegisters.Allocate(O);
+		return VirtualRegisters.AllocateObject();
+	}
+
+	public Operand AllocateVirtualRegisterManagedPointer()
+	{
+		return VirtualRegisters.AllocateManagedPointer();
 	}
 
 	public Operand AllocateVirtualRegisterNativeInteger()
 	{
-		return VirtualRegisters.Allocate(NativeInteger);
+		return Is32BitPlatform ? VirtualRegisters.Allocate32() : VirtualRegisters.Allocate64();
 	}
 
 	public bool ApplyTransform(Context context, BaseTransform transform, int count)

@@ -300,7 +300,9 @@ public sealed class Operand
 	: this()
 	{
 		ElementType = operand.ElementType;
-		Type = operand.Type;
+
+		if (ElementType == ElementTypeEnum.ValueType)
+			Type = operand.Type;
 	}
 
 	public static ElementTypeEnum GetElementType(MosaType type)
@@ -416,6 +418,16 @@ public sealed class Operand
 		};
 	}
 
+	public static Operand CreateVirtualManagedPointer(int index)
+	{
+		return new Operand
+		{
+			ElementType = ElementTypeEnum.ManagedPointer,
+			IsVirtualRegister = true,
+			Index = index,
+		};
+	}
+
 	public static Operand CreateVirtualObject(int index)
 	{
 		return new Operand
@@ -462,6 +474,19 @@ public sealed class Operand
 	}
 
 	#endregion Static Factory Constructors v2 [Experimental]
+
+	#region Constructions [Experimental]
+
+	public static Operand CreateVirtualRegister(Operand operand, int index)
+	{
+		return new Operand(operand)
+		{
+			IsVirtualRegister = true,
+			Index = index
+		};
+	}
+
+	#endregion Constructions [Experimental]
 
 	#region Static Factory Constructors
 
