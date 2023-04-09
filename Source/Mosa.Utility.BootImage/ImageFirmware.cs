@@ -4,5 +4,6 @@ namespace Mosa.Utility.BootImage;
 
 public enum ImageFirmware
 {
-	Bios
+	Bios,
+	Uefi
 }

@@ -167,7 +167,6 @@ public class Starter : BaseLauncher
 			case "vmware": arg.Append(" -vga vmware"); break;
 			case "cirrus": arg.Append(" -vga cirrus"); break;
 			case "std": arg.Append(" -vga std"); break;
-			default: break;
 		}
 
 		if (!LauncherSettings.EmulatorDisplay || LauncherSettings.LauncherTest)
@@ -191,7 +190,6 @@ public class Starter : BaseLauncher
 			case "pipe": arg.Append($" -serial pipe:{LauncherSettings.EmulatorSerialPipe}"); break;
 			case "tcpserver": arg.Append($" -serial tcp:{LauncherSettings.EmulatorSerialHost}:{LauncherSettings.EmulatorSerialPort},server,nowait"); break;
 			case "tcpclient": arg.Append($" -serial tcp:{LauncherSettings.EmulatorSerialHost}:{LauncherSettings.EmulatorSerialPort},client,nowait"); break;
-			default: break;
 		}
 
 		if (LauncherSettings.EmulatorGDB)
@@ -206,7 +204,10 @@ public class Starter : BaseLauncher
 		}
 
 		//arg.Append(" -no-reboot");
-		arg.Append(" -L " + Quote(LauncherSettings.QEMUBios));
+		if (LauncherSettings.ImageFirmware == "bios")
+			arg.Append(" -L " + Quote(LauncherSettings.QEMUBios));
+		else if (LauncherSettings.ImageFirmware == "uefi")
+			arg.Append(" -drive if=pflash,format=raw,readonly=on,file=/usr/share/qemu/edk2-i386-code.fd");
 
 		return LaunchApplication(LauncherSettings.QEMU, arg.ToString(), getOutput);
 	}
