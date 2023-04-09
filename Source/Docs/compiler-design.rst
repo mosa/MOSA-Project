@@ -7,7 +7,7 @@ The MOSA Compiler framework is designed around two pipelines each with multiple 
 Type System
 -----------
 
-The **Type System** is a fundamental part of the MOSA compiler. Essentially, all CIL types and methods are compiled into MOSA types and methods.
+The **Type System** is a fundamental part of the MOSA compiler. Essentially, all CIL types and methods are compiled into MOSA types and methods. This also allows for other potential frontends using the MOSA compiler to compile the chosen types and methods into MOSA ones.
 
 Compiler Pipeline
 -----------------
