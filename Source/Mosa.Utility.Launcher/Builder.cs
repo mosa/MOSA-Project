@@ -239,7 +239,7 @@ public class Builder : BaseLauncher
 
 	private byte[] GetLimineCFG()
 	{
-		return Encoding.ASCII.GetBytes($"TIMEOUT=0\nINTERFACE_RESOLUTION=640x480\nINTERFACE_BRANDING=Managed Operating System Alliance\n:{LauncherSettings.OSName}\nPROTOCOL=multiboot1\nKERNEL_PATH=boot:///kernel.bin");
+		return Encoding.ASCII.GetBytes($"TIMEOUT=0\nINTERFACE_RESOLUTION=640x480\nINTERFACE_BRANDING=Managed Operating System Alliance\n:{LauncherSettings.OSName}\nPROTOCOL={(LauncherSettings.MultibootVersion == "v2" ? "multiboot2" : "multiboot1")}\nKERNEL_PATH=boot:///kernel.bin");
 	}
 
 	private void CreateVMDK(string source)

@@ -1,11 +1,10 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Platform.x86.CompilerStages;
 
-public sealed class MultibootV1Stage : Mosa.Compiler.Framework.Platform.BaseMultibootV1Stage
+public sealed class MultibootStage : Mosa.Compiler.Framework.Platform.BaseMultibootStage
 {
 	protected override void Finalization()
 	{
