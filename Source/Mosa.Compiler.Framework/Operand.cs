@@ -310,18 +310,18 @@ public sealed class Operand
 
 		if (type.IsReferenceType)
 			return ElementTypeEnum.Object;
+		else if (type.IsI1 || type.IsI2 || type.IsI4 || type.IsU1 || type.IsU2 || type.IsU4)
+			return ElementTypeEnum.Int32;
+		else if (type.IsI8 || type.IsU8)
+			return ElementTypeEnum.Int64;
 		else if (type.IsR4)
 			return ElementTypeEnum.R4;
 		else if (type.IsR8)
 			return ElementTypeEnum.R8;
-		else if (type.IsValueType)
-			return ElementTypeEnum.ValueType;
-		else if (type.IsI1 || type.IsI2 || type.IsI4 || type.IsI8 || type.IsU1 || type.IsU2 || type.IsU4)
-			return ElementTypeEnum.Int32;
-		else if (type.IsI8)
-			return ElementTypeEnum.Int64;
 		else if (type.IsManagedPointer)
 			return ElementTypeEnum.ManagedPointer;
+		else if (type.IsValueType)
+			return ElementTypeEnum.ValueType;
 
 		return ElementTypeEnum.Int32; // FIXME
 	}
