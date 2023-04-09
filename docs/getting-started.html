@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Getting Started On Windows &mdash; MOSA Project  documentation</title>
+  <title>Getting Started &mdash; MOSA Project  documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -15,15 +15,12 @@
   <![endif]-->
   
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Getting Started On Linux" href="getting-started-linux.html" />
+    <link rel="next" title="Demos" href="demos.html" />
     <link rel="prev" title="Frequently Asked Questions (FAQs)" href="faq.html" /> 
 </head>
 
@@ -32,11 +29,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> MOSA Project
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            MOSA Project
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -49,15 +50,16 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started On Windows</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#windows">Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#linux">Linux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#all-platforms">All Platforms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#download">Download</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#build">Build</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#launch">Launch</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#starter-project">Starter Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#nuget">NuGet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#clone-and-build-manually">Clone and build manually</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="getting-started-linux.html">Getting Started On Linux</a></li>
 <li class="toctree-l1"><a class="reference internal" href="demos.html">Demos</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Structure</span></p>
@@ -78,7 +80,6 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Tools</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="tools.html">MOSA Tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tool-compiler.html">MOSA Compiler</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tool-launcher.html">MOSA Launcher</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tool-launcher-console.html">MOSA Launcher Console</a></li>
@@ -115,10 +116,10 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a></li>
-      <li class="breadcrumb-item active">Getting Started On Windows</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Getting Started</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/getting-started-windows.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/getting-started.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -126,36 +127,91 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="getting-started-on-windows">
-<h1>Getting Started On Windows<a class="headerlink" href="#getting-started-on-windows" title="Permalink to this heading"></a></h1>
+  <section id="getting-started">
+<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this heading"></a></h1>
 <section id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this heading"></a></h2>
-<p>Install any edition of <a class="reference external" href="https://visualstudio.microsoft.com/">Visual Studio</a> which supports the current .NET version MOSA is targeting. Currently, MOSA is targeting .NET 6, which requires Visual Studio 2022 or newer.</p>
-<p>Alternatively, you can install <a class="reference external" href="https://www.jetbrains.com/rider/">Rider</a>, which is paid, though it does offer a 30-day free trial.</p>
+</section>
+<section id="windows">
+<h2>Windows<a class="headerlink" href="#windows" title="Permalink to this heading"></a></h2>
+<p>On Windows, you can either install <a class="reference external" href="https://visualstudio.microsoft.com/">Visual Studio</a>, or use the command line. As MOSA currently targets .NET 7, you’ll need Visual Studio 2022 17.4 or newer.</p>
+</section>
+<section id="linux">
+<h2>Linux<a class="headerlink" href="#linux" title="Permalink to this heading"></a></h2>
+<p>On Linux, the following prerequisites are necessary:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://dotnet.microsoft.com/">.NET 7</a></p></li>
+<li><p><a class="reference external" href="https://git-scm.com/">Git</a> (only if you want to clone and build manually)</p></li>
+<li><p><a class="reference external" href="https://www.qemu.org/">QEMU</a></p></li>
+</ul>
+<p>If you’re using Ubuntu 22.04, you can use the following commands to quickly set everything up:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Register Microsoft package repository</span>
+wget<span class="w"> </span>-q<span class="w"> </span>https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb<span class="w"> </span>-O<span class="w"> </span>packages-microsoft-prod.deb
+sudo<span class="w"> </span>dpkg<span class="w"> </span>-i<span class="w"> </span>packages-microsoft-prod.deb
+
+<span class="c1"># Install the .NET Core SDK</span>
+sudo<span class="w"> </span>add-apt-repository<span class="w"> </span>universe
+sudo<span class="w"> </span>apt-get<span class="w"> </span>update
+sudo<span class="w"> </span>apt-get<span class="w"> </span>-y<span class="w"> </span>install<span class="w"> </span>dotnet-sdk-7.0
+
+<span class="c1"># Intall QEMU and GIT</span>
+sudo<span class="w"> </span>apt-get<span class="w"> </span>-y<span class="w"> </span>install<span class="w"> </span>qemu<span class="w"> </span>qemu-system<span class="w"> </span>qemu-system-x86<span class="w"> </span>git
+</pre></div>
+</div>
+</section>
+<section id="all-platforms">
+<h2>All Platforms<a class="headerlink" href="#all-platforms" title="Permalink to this heading"></a></h2>
+<p>Alternatively, you can install <a class="reference external" href="https://www.jetbrains.com/rider/">Rider</a>, which is paid, though it does offer a 30-day free trial. It is available for Windows, macOS and Linux.</p>
+<p>If you don’t want to use any IDE, you can simply use the command line.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>This page will assume you’re either using Visual Studio or are using the command line.</p>
+<p>This page will assume you’re using the command line.</p>
 </div>
-<p>Note: The MOSA source code repository bundles many tools, such as the <a class="reference external" href="http://wiki.qemu.org/Main_Page">QEMU</a> virtual emulator for Windows.</p>
 </section>
 <section id="download">
 <h2>Download<a class="headerlink" href="#download" title="Permalink to this heading"></a></h2>
-<p>The MOSA project is available on GitHub and can be cloned via Git:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/mosa/MOSA-Project
+</section>
+<section id="nuget">
+<h2>NuGet<a class="headerlink" href="#nuget" title="Permalink to this heading"></a></h2>
+<p>The easiest way to get started with MOSA is to install the NuGet templates:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>dotnet<span class="w"> </span>new<span class="w"> </span>install<span class="w"> </span>Mosa.Templates
+</pre></div>
+</div>
+<p>You can then create a new project based on one of the templates you’ve just installed:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>dotnet<span class="w"> </span>new<span class="w"> </span>mosastrx86<span class="w"> </span>-o<span class="w"> </span>MyMosaKernel
+<span class="nb">cd</span><span class="w"> </span>MyMosaKernel
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p><code class="docutils literal notranslate"><span class="pre">mosastrx86</span></code> is a template for a 32-bit x86 kernel. It is currently the only template, although more are to come in the future.</p>
+</div>
+<p>You may now want to build your newly created kernel using the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>dotnet<span class="w"> </span>build
+<span class="nb">cd</span><span class="w"> </span>bin
+</pre></div>
+</div>
+<p>Finally, you can build your kernel using the GUI launcher tool copied to the Tools directory!</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Tools/Mosa.Tool.Launcher<span class="w"> </span>MyMosaKernel.dll
 </pre></div>
 </div>
 </section>
-<section id="build">
-<h2>Build<a class="headerlink" href="#build" title="Permalink to this heading"></a></h2>
-<p>Execute the <code class="docutils literal notranslate"><span class="pre">Compiler.bat</span></code> script in the base directory in the root directory to build and compile all the MOSA tools, kernels and demos:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Compiler.bat
+<section id="clone-and-build-manually">
+<h2>Clone and build manually<a class="headerlink" href="#clone-and-build-manually" title="Permalink to this heading"></a></h2>
+<p>The MOSA project is available on GitHub and can be cloned via Git:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/mosa/MOSA-Project
+<span class="nb">cd</span><span class="w"> </span>MOSA-Project
 </pre></div>
 </div>
-<p>You can also compile from your IDE, or the command line:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>dotnet<span class="w"> </span>build<span class="w"> </span>Source<span class="se">\M</span>osa.sln
+<p>In order to build the solution, you can execute the following command:</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>On Linux, you’d build the <strong>Mosa.Linux.sln</strong> solution instead of <strong>Mosa.sln</strong>. This is because some Windows-only tools haven’t been yet ported to other platforms.</p>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>dotnet<span class="w"> </span>build<span class="w"> </span>Source/Mosa.sln
 </pre></div>
 </div>
-<p>If built via the command line, a successful build will display a <code class="docutils literal notranslate"><span class="pre">Build</span> <span class="pre">succeeded</span></code> message (like below). Any warnings may be ignored.</p>
+<p>If successful, it should show a message similar to the one below. Any warnings may be ignored.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">[</span>...compiler<span class="w"> </span>messages...<span class="o">]</span>
 
 Build<span class="w"> </span>succeeded.
@@ -165,32 +221,11 @@ Build<span class="w"> </span>succeeded.
 Time<span class="w"> </span>Elapsed<span class="w"> </span><span class="m">00</span>:00:01.48
 </pre></div>
 </div>
-</section>
-<section id="launch">
-<h2>Launch<a class="headerlink" href="#launch" title="Permalink to this heading"></a></h2>
-<p>To launch one of the demo applications, simply execute the <code class="docutils literal notranslate"><span class="pre">Launcher.bat</span></code> script to start the <a class="reference internal" href="tool-launcher.html"><span class="doc">MOSA Launcher Tool</span></a>. This tool:</p>
-<ul class="simple">
-<li><p>Compiles the operating system</p></li>
-<li><p>Creates a virtual disk image, with the compiled binary and boot loader</p></li>
-<li><p>Launches a virtual machine instance (using QEMU by default)</p></li>
-</ul>
-</section>
-<section id="starter-project">
-<h2>Starter Project<a class="headerlink" href="#starter-project" title="Permalink to this heading"></a></h2>
-<p>A pre-built starter C# project template is available for experimentation.</p>
-<p><strong>Option #1</strong> (Preferred - includes the entire MOSA project):</p>
-<p>Open the <code class="docutils literal notranslate"><span class="pre">Source\Mosa.sln</span></code> solution with Visual Studio and locate the <code class="docutils literal notranslate"><span class="pre">Mosa.Demo.MyWorld.x86</span></code> under <code class="docutils literal notranslate"><span class="pre">Demos</span></code>.</p>
-<p>Next, set the project as <code class="docutils literal notranslate"><span class="pre">Set</span> <span class="pre">as</span> <span class="pre">Startup</span> <span class="pre">Project</span></code>.</p>
-<p>To compile and launch the application within a virtual machine, select from the <code class="docutils literal notranslate"><span class="pre">Debug</span></code> menu the <code class="docutils literal notranslate"><span class="pre">Start</span> <span class="pre">Without</span> <span class="pre">Debugging</span></code> option, or press <code class="docutils literal notranslate"><span class="pre">CTRL+F5</span></code>.</p>
-<p><strong>Option #2</strong> (Only the starter project):</p>
-<p>Open the <code class="docutils literal notranslate"><span class="pre">Source\Mosa.Demo.MyWorld.x86\Mosa.Demo.MyWorld.x86.csproj</span></code> project with Visual Studio.</p>
-<p>To compile and launch the application within a virtual machine, select from the <code class="docutils literal notranslate"><span class="pre">Debug</span></code> menu the <code class="docutils literal notranslate"><span class="pre">Start</span> <span class="pre">Without</span> <span class="pre">Debugging</span></code> option, or press <code class="docutils literal notranslate"><span class="pre">CTRL+F5</span></code>.</p>
-<p><strong>Option #3</strong> (Via the command line):</p>
-<p>If you want to use the command line, you can do so with the commands below:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>MOSA-Project<span class="se">\S</span>ource<span class="se">\M</span>osa.Demo.MyWorld.x86
-dotnet<span class="w"> </span>run
+<p>Finally, to launch one of the demo applications, simply execute the GUI launcher tool in the bin directory:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bin/Mosa.Tool.Launcher
 </pre></div>
 </div>
+<p>You can then select the demo application of your choice as source, perhaps modify a few options, then build! You can learn more about this launcher tool <a class="reference internal" href="tool-launcher.html"><span class="doc">here</span></a>.</p>
 </section>
 </section>
 
@@ -199,7 +234,7 @@ dotnet<span class="w"> </span>run
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="faq.html" class="btn btn-neutral float-left" title="Frequently Asked Questions (FAQs)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="getting-started-linux.html" class="btn btn-neutral float-right" title="Getting Started On Linux" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="demos.html" class="btn btn-neutral float-right" title="Demos" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
