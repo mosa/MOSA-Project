@@ -4085,7 +4085,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		}
 		else
 		{
-			var result = AllocateVirtualRegister(type);
+			var result = AddStackLocal(type);
 			context.AppendInstruction(IRInstruction.LoadCompound, result, fieldOperand, ConstantZero);
 			PushStack(stack, new StackEntry(StackType.ValueType, result, type));
 		}
