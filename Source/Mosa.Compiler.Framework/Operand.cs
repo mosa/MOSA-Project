@@ -795,7 +795,7 @@ public sealed class Operand
 		};
 	}
 
-	public static Operand CreateSymbolFromMethod(MosaMethod method, bool is32Platform)
+	public static Operand CreateSymbol(MosaMethod method, bool is32Platform)
 	{
 		Debug.Assert(method != null);
 
@@ -805,22 +805,6 @@ public sealed class Operand
 			IsLabel = true,
 			Method = method,
 			Name = method.FullName,
-			IsConstant = true
-		};
-	}
-
-	/// <summary>
-	/// Creates the symbol.
-	/// </summary>
-	/// <param name="name">The name.</param>
-	/// <param name="typeSystem">The type system.</param>
-	/// <returns></returns>
-	public static Operand CreateUnmanagedSymbolPointer(string name, TypeSystem typeSystem)
-	{
-		return new Operand(typeSystem.BuiltIn.Pointer)
-		{
-			IsLabel = true,
-			Name = name,
 			IsConstant = true
 		};
 	}

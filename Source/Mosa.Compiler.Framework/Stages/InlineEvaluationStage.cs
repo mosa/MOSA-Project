@@ -277,7 +277,7 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 			{
 				var newOp = Map(operand, map);
 
-				var newOperand = Operand.CreateVirtualRegister(operand.Type, -operand.Index);
+				var newOperand = Operand.CreateVirtualRegister(operand, -operand.Index);
 
 				var moveInstruction = !MosaTypeLayout.IsUnderlyingPrimitive(newOperand.Type)
 					? IRInstruction.MoveCompound
@@ -388,7 +388,7 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 			else if (operand.Method != null)
 			{
 				// FUTURE: explore operand re-use
-				mappedOperand = Operand.CreateSymbolFromMethod(operand.Method, Is32BitPlatform);
+				mappedOperand = Operand.CreateSymbol(operand.Method, Is32BitPlatform);
 			}
 			else if (operand.Name != null)
 			{
@@ -407,7 +407,7 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 		{
 			if (operand.Uses.Count != 0 || operand.Definitions.Count != 0)
 			{
-				mappedOperand = Operand.CreateVirtualRegister(operand.Type, operand.Index);
+				mappedOperand = Operand.CreateVirtualRegister(operand, operand.Index);
 			}
 		}
 		else if (operand.IsStaticField)

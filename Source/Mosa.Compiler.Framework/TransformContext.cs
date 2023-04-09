@@ -658,7 +658,7 @@ public sealed class TransformContext
 
 		// FUTURE: throw compiler exception
 
-		var symbol = Operand.CreateSymbolFromMethod(method, Is32BitPlatform);
+		var symbol = Operand.CreateSymbol(method, Is32BitPlatform);
 
 		if (context.OperandCount == 1)
 		{

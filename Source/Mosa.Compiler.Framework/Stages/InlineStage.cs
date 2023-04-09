@@ -324,21 +324,7 @@ public class InlineStage : BaseMethodCompilerStage
 
 		if (operand.IsLabel)
 		{
-			if (operand.IsString)
-			{
-				// FUTURE: explore operand re-use
-				mappedOperand = Operand.CreateStringSymbol(operand.Name, ObjectHeaderSize, operand.StringData);
-			}
-			else if (operand.Method != null)
-			{
-				// FUTURE: explore operand re-use
-				mappedOperand = Operand.CreateSymbolFromMethod(operand.Method, Is32BitPlatform);
-			}
-			else if (operand.Name != null)
-			{
-				// FUTURE: explore operand re-use
-				mappedOperand = Operand.CreateLabel(operand.Name, Is32BitPlatform);
-			}
+			mappedOperand = operand;
 		}
 		else if (operand.IsParameter)
 		{

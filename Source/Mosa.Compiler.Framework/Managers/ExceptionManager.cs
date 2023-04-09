@@ -24,7 +24,7 @@ public class ExceptionManager : BaseTransformManager
 	public override void Initialize(Compiler compiler)
 	{
 		ExceptionHandler = compiler.PlatformInternalRuntimeType.FindMethodByName("ExceptionHandler");
-		ExceptionHandlerMethod = Operand.CreateSymbolFromMethod(ExceptionHandler, compiler.Architecture.Is32BitPlatform);
+		ExceptionHandlerMethod = Operand.CreateSymbol(ExceptionHandler, compiler.Architecture.Is32BitPlatform);
 	}
 
 	public override void Setup(MethodCompiler methodCompiler)

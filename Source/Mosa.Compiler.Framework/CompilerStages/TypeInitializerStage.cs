@@ -107,7 +107,7 @@ public sealed class TypeInitializerStage : BaseCompilerStage
 	/// <param name="method">The method.</param>
 	private void Schedule(MosaMethod method)
 	{
-		var symbol = Operand.CreateSymbolFromMethod(method, Architecture.Is32BitPlatform);
+		var symbol = Operand.CreateSymbol(method, Architecture.Is32BitPlatform);
 
 		body.AppendInstruction(IRInstruction.CallStatic, null, symbol);
 	}

@@ -13,7 +13,7 @@ internal static partial class IntrinsicMethods
 	[IntrinsicMethod("Mosa.Platform.x64.Intrinsic::GetMultibootRAX")]
 	private static void GetMultibootRAX(Context context, MethodCompiler methodCompiler)
 	{
-		var MultibootEAX = Operand.CreateUnmanagedSymbolPointer(MultibootV1Stage.MultibootEAX, methodCompiler.TypeSystem);
+		var MultibootEAX = Operand.CreateLabel(MultibootV1Stage.MultibootEAX, methodCompiler.Is32BitPlatform);
 
 		context.SetInstruction(IRInstruction.Load64, context.Result, MultibootEAX, methodCompiler.Constant32_0);
 	}

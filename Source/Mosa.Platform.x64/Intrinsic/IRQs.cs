@@ -40,7 +40,7 @@ internal static partial class IntrinsicMethods
 
 		methodCompiler.MethodScanner.MethodInvoked(method, methodCompiler.Method);
 
-		var interrupt = Operand.CreateSymbolFromMethod(method, methodCompiler.Is32BitPlatform);
+		var interrupt = Operand.CreateSymbol(method, methodCompiler.Is32BitPlatform);
 
 		var esp = Operand.CreateCPURegister32(CPURegister.RSP);
 

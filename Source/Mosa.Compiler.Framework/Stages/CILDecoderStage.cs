@@ -1939,7 +1939,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			PushStack(stack, resultStackType);
 		}
 
-		var symbol = Operand.CreateSymbolFromMethod(method, Is32BitPlatform);
+		var symbol = Operand.CreateSymbol(method, Is32BitPlatform);
 
 		context.AppendInstruction(IRInstruction.CallStatic, result, symbol, operands);
 		context.InvokeMethod = method;
@@ -1975,7 +1975,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			{
 				method = GetMethodOrOverride(type, method);
 
-				var symbol2 = Operand.CreateSymbolFromMethod(method, Is32BitPlatform);
+				var symbol2 = Operand.CreateSymbol(method, Is32BitPlatform);
 				context.AppendInstruction(IRInstruction.CallStatic, result, symbol2, operands);
 
 				// PocessExternalCall(context))
@@ -1984,7 +1984,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			}
 		}
 
-		var symbol = Operand.CreateSymbolFromMethod(method, Is32BitPlatform);
+		var symbol = Operand.CreateSymbol(method, Is32BitPlatform);
 
 		if (method.IsVirtual)
 		{
@@ -3829,17 +3829,17 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		if (instruction.Operand is MosaType)
 		{
 			var type = (MosaType)instruction.Operand;
-			source = Operand.CreateUnmanagedSymbolPointer(Metadata.TypeDefinition + type.FullName, TypeSystem);
+			source = Operand.CreateLabel(Metadata.TypeDefinition + type.FullName, Is32BitPlatform);
 		}
 		else if (instruction.Operand is MosaMethod)
 		{
 			var method = (MosaMethod)instruction.Operand;
-			source = Operand.CreateUnmanagedSymbolPointer(Metadata.MethodDefinition + method.FullName, TypeSystem);
+			source = Operand.CreateLabel(Metadata.MethodDefinition + method.FullName, Is32BitPlatform);
 		}
 		else if (instruction.Operand is MosaField)
 		{
 			var field = (MosaField)instruction.Operand;
-			source = Operand.CreateUnmanagedSymbolPointer(Metadata.FieldDefinition + field.FullName, TypeSystem);
+			source = Operand.CreateLabel(Metadata.FieldDefinition + field.FullName, Is32BitPlatform);
 			MethodScanner.AccessedField(context.MosaField);
 		}
 
@@ -3912,7 +3912,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		var move = GetMoveInstruction(ElementType.I);
 
-		context.AppendInstruction(move, result, Operand.CreateSymbolFromMethod(method, Is32BitPlatform));
+		context.AppendInstruction(move, result, Operand.CreateSymbol(method, Is32BitPlatform));
 
 		PushStack(stack, new StackEntry(stacktype, result));
 
@@ -4376,7 +4376,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var underlyingType = GetUnderlyingType(classType);
 		var stackType = GetStackTypeDefaultValueType(underlyingType);
 
-		var symbol = Operand.CreateSymbolFromMethod(method, Is32BitPlatform);
+		var symbol = Operand.CreateSymbol(method, Is32BitPlatform);
 
 		var operands = new List<Operand>();
 
@@ -5657,7 +5657,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var newmethod = method.DeclaringType.FindMethodByNameAndParameters("Ctor", method.Signature.Parameters);
 
 		var result = AllocateVirtualRegisterObject();
-		var symbol = Operand.CreateSymbolFromMethod(newmethod, Is32BitPlatform);
+		var symbol = Operand.CreateSymbol(newmethod, Is32BitPlatform);
 
 		context.AppendInstruction(IRInstruction.CallStatic, result, symbol);
 		context.AppendOperands(operands);
@@ -5724,7 +5724,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		if (method.IsExternal)
 		{
-			var operand1 = Operand.CreateSymbolFromMethod(context.InvokeMethod, Is32BitPlatform);
+			var operand1 = Operand.CreateSymbol(context.InvokeMethod, Is32BitPlatform);
 			context.AppendInstruction(IRInstruction.IntrinsicMethodCall, result, operand1);
 			context.AppendOperands(operands);
 		}
