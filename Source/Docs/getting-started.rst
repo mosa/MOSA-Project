@@ -38,8 +38,6 @@ If you're using Ubuntu 22.04, you can use the following commands to quickly set 
 All Platforms
 =============
 
-Alternatively, you can install `Rider <https://www.jetbrains.com/rider/>`__, which is paid, though it does offer a 30-day free trial. It is available for Windows, macOS and Linux.
-
 If you don't want to use any IDE, you can simply use the command line.
 
 .. tip:: This page will assume you're using the command line.
