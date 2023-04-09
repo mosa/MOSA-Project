@@ -46,7 +46,7 @@ public static class LSBEncoding
 			}
 			value >>= 7;
 			more = !((value == 0 && (bt & 0x40) == 0) ||
-			         (value == -1 && (bt & 0x40) != 0));
+					 (value == -1 && (bt & 0x40) != 0));
 			if (more)
 				bt |= 0x80; // Mark this byte to show that more bytes will follow.
 

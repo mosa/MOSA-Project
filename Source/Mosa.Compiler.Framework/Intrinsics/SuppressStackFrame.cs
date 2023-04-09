@@ -7,7 +7,7 @@ namespace Mosa.Platform.x86.Intrinsic;
 /// <summary>
 /// IntrinsicMethods
 /// </summary>
-static partial class IntrinsicMethods
+internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Runtime.Intrinsic::SuppressStackFrame")]
 	private static void SurpressStackFrame(Context context, MethodCompiler methodCompiler)

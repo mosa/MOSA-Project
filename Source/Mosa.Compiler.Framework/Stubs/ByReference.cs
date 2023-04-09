@@ -5,7 +5,7 @@ namespace Mosa.Compiler.Framework.Intrinsics;
 /// <summary>
 /// IntrinsicMethods
 /// </summary>
-static partial class StubMethods
+internal static partial class StubMethods
 {
 	[StubMethod("System.ByReference`1::.ctor")]
 	public static void ByReference__ctor(Context context, MethodCompiler methodCompiler)

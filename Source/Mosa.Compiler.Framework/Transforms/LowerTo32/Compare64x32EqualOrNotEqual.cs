@@ -1,7 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework.Transforms.Call;
-
 namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
 public sealed class Compare64x32EqualOrNotEqual : BaseLower32Transform

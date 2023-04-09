@@ -12,6 +12,7 @@ public class GCEnvironment : BaseLivenessAnalysisEnvironment
 {
 	protected Dictionary<Operand, int> stackLookup = new Dictionary<Operand, int>();
 	protected Dictionary<int, Operand> stackLookupReverse = new Dictionary<int, Operand>();
+
 	protected int PhysicalRegisterCount { get; }
 	protected bool[] StackLocalReference;
 

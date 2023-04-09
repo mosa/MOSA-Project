@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Intrinsics;
 /// <summary>
 /// IntrinsicMethods
 /// </summary>
-static partial class IntrinsicMethods
+internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Runtime.Intrinsic::Load8")]
 	private static void Load8(Context context, MethodCompiler methodCompiler)

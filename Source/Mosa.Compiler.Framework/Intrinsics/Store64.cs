@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Intrinsics;
 /// <summary>
 /// IntrinsicMethods
 /// </summary>
-static partial class IntrinsicMethods
+internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Runtime.Intrinsic::Store64")]
 	private static void Store64(Context context, MethodCompiler methodCompiler)

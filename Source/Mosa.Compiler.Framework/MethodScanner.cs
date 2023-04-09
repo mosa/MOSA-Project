@@ -16,7 +16,9 @@ public class MethodScanner
 	public bool IsEnabled { get; set; }
 
 	private Compiler Compiler { get; }
+
 	private MosaTypeLayout TypeLayout { get; }
+
 	private TypeSystem TypeSystem { get; }
 
 	private readonly HashSet<MosaType> allocatedTypes = new HashSet<MosaType>();

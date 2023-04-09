@@ -26,7 +26,9 @@ internal sealed class DwarfSections
 	}
 
 	private Compiler Compiler { get; }
+
 	private MosaLinker Linker { get; }
+
 	private TypeSystem TypeSystem { get; }
 
 	public DwarfSections(Compiler compiler, ElfLinker elfLinker)

@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.Transforms.Exception;

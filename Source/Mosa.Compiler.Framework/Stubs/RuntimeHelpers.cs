@@ -5,7 +5,7 @@ namespace Mosa.Compiler.Framework.Intrinsics;
 /// <summary>
 /// IntrinsicMethods
 /// </summary>
-static partial class StubMethods
+internal static partial class StubMethods
 {
 	[StubMethod("System.Runtime.CompilerServices.RuntimeHelpers::IsReferenceOrContainsReferences")]
 	public static void RuntimeHelpers_IsReferenceOrContainsReferences(Context context, MethodCompiler methodCompiler)

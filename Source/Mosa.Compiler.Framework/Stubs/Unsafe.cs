@@ -5,7 +5,7 @@ namespace Mosa.Compiler.Framework.Intrinsics;
 /// <summary>
 /// IntrinsicMethods
 /// </summary>
-static partial class StubMethods
+internal static partial class StubMethods
 {
 	[StubMethod("System.Runtime.CompilerServices.Unsafe::SizeOf")]
 	public static void Unsafe_SizeOf(Context context, MethodCompiler methodCompiler)
