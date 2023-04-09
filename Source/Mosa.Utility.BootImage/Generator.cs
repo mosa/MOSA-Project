@@ -186,18 +186,8 @@ public static class Generator
 				if (includeFile.Hidden) fileAttributes |= FatFileAttributes.Hidden;
 				if (includeFile.System) fileAttributes |= FatFileAttributes.System;
 
-				var newFileName = Path.GetFileNameWithoutExtension(includeFile.Filename);
-
-				if (string.IsNullOrEmpty(newFileName) || newFileName.Length > 8)
-					throw new ArgumentOutOfRangeException(nameof(newFileName), "File name was either empty or too long.");
-
-				var newFileExtension = Path.GetExtension(includeFile.Filename);
-
-				if (string.IsNullOrEmpty(newFileExtension) || newFileExtension.Length > 4)
-					throw new ArgumentOutOfRangeException(nameof(newFileName), "File extension was either empty or too long.");
-
-				var newName = (newFileName + newFileExtension[1..]).ToUpperInvariant();
-				var location = fat.CreateFile(newName, fileAttributes);
+				var newname = (Path.GetFileNameWithoutExtension(includeFile.Filename).PadRight(8).Substring(0, 8) + Path.GetExtension(includeFile.Filename).PadRight(4).Substring(1, 3)).ToUpperInvariant();
+				var location = fat.CreateFile(newname, fileAttributes);
 
 				if (!location.IsValid)
 					throw new Exception("Unable to write file");
