@@ -12,8 +12,7 @@
    :caption: Getting Started
    :maxdepth: 1
 
-   getting-started-windows
-   getting-started-linux
+   getting-started
    demos
 
 .. toctree::
@@ -46,7 +45,6 @@
    :hidden:
    :maxdepth: 2
 
-   tools
    tool-compiler
    tool-launcher
    tool-launcher-console
