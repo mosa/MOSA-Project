@@ -19,86 +19,66 @@ public sealed class Operand
 	// Operand Type: Virtual Register, Physical Register, Local Stack, Paramater, Static Field, Label
 	// Attribute: Constant, Unresolved Constant
 
-	public enum ElementTypeEnum
+	#endregion Future
+
+	public enum PrimitiveType
 	{ Int32, Int64, R4, R8, Object, ManagedPointer, ValueType };
 
-	#endregion Future
+	public enum LocationType
+	{ Constant, VirtualRegister, PhysicalRegister, StackFrame, StackParameter };
+
+	public enum ConstantType
+	{ Default, Label, StaticField };
+
+	#region Static Properties
+
+	public static readonly Operand NullObject = new Operand
+	{
+		Primitive = PrimitiveType.Object,
+		Location = LocationType.Constant,
+		Constant = ConstantType.Default,
+		IsResolved = true,
+		ConstantUnsigned64 = 0
+	};
+
+	#endregion Static Properties
 
 	#region Properties
 
-	public ElementTypeEnum ElementType { get; private set; }
+	public PrimitiveType Primitive { get; private set; }
 
-	/// <summary>
-	/// Gets the constant double float point.
-	/// </summary>
-	public double ConstantDouble { get; private set; }
+	public LocationType Location { get; private set; }
 
-	/// <summary>
-	/// Gets the single double float point.
-	/// </summary>
-	public float ConstantFloat { get; private set; }
+	public ConstantType Constant { get; private set; }
 
-	/// <summary>
-	/// Gets or sets the constant signed integer.
-	/// </summary>
-	public int ConstantSigned32 { get => (int)ConstantUnsigned64; private set => ConstantUnsigned64 = (ulong)value; }
-
-	/// <summary>
-	/// Gets or sets the constant signed long integer.
-	/// </summary>
-	public long ConstantSigned64 { get => (long)ConstantUnsigned64; private set => ConstantUnsigned64 = (ulong)value; }
-
-	/// <summary>
-	/// Gets the constant integer.
-	/// </summary>
-	public uint ConstantUnsigned32 { get => (uint)ConstantUnsigned64; private set => ConstantUnsigned64 = value; }
-
-	/// <summary>
-	/// Gets the constant long integer.
-	/// </summary>
 	public ulong ConstantUnsigned64 { get; private set; }
 
-	/// <summary>
-	/// Holds a list of instructions, which define this operand.
-	/// </summary>
+	public double ConstantDouble { get; private set; }
+
+	public float ConstantFloat { get; private set; }
+
+	public int ConstantSigned32 { get => (int)ConstantUnsigned64; private set => ConstantUnsigned64 = (ulong)value; }
+
+	public long ConstantSigned64 { get => (long)ConstantUnsigned64; private set => ConstantUnsigned64 = (ulong)value; }
+
+	public uint ConstantUnsigned32 { get => (uint)ConstantUnsigned64; private set => ConstantUnsigned64 = value; }
+
 	public List<InstructionNode> Definitions { get; }
 
-	/// <summary>
-	/// Retrieves the field.
-	/// </summary>
 	public MosaField Field { get; private set; }
 
-	/// <summary>
-	/// Gets a value indicating whether this instance has long parent.
-	/// </summary>
 	public bool HasLongParent => LongParent != null;
 
-	/// <summary>
-	/// Gets or sets the high operand.
-	/// </summary>
 	public Operand High { get; private set; }
 
-	/// <summary>
-	/// Gets the index.
-	/// </summary>
 	public int Index { get; private set; }
 
-	/// <summary>
-	/// Gets a value indicating whether [is 64 bit integer].
-	/// </summary>
-	public bool IsInteger64 => ElementType == ElementTypeEnum.Int64;
+	public bool IsInteger64 => Primitive == PrimitiveType.Int64;
 
-	public bool IsInteger32 => ElementType == ElementTypeEnum.Int32;
+	public bool IsInteger32 => Primitive == PrimitiveType.Int32;
 
-	/// <summary>
-	/// Determines if the operand is a constant variable.
-	/// </summary>
-	public bool IsConstant { get; private set; }
+	public bool IsConstant => Location == LocationType.Constant;
 
-	/// <summary>
-	/// Gets a value indicating whether [is constant one].
-	/// </summary>
-	/// <exception cref="CompilerException"></exception>
 	public bool IsConstantOne
 	{
 		get
@@ -118,10 +98,6 @@ public sealed class Operand
 		}
 	}
 
-	/// <summary>
-	/// Gets a value indicating whether [is constant zero].
-	/// </summary>
-	/// <exception cref="CompilerException"></exception>
 	public bool IsConstantZero
 	{
 		get
@@ -141,127 +117,68 @@ public sealed class Operand
 		}
 	}
 
-	/// <summary>
-	/// Determines if the operand is a cpu register operand.
-	/// </summary>
-	public bool IsCPURegister { get; private set; }
+	public bool IsCPURegister => Location == LocationType.PhysicalRegister;
 
 	public bool IsFloatingPoint => IsR4 | IsR8;
 
 	public bool IsHigh => LongParent.High == this;
 
-	public bool IsInteger => ElementType == ElementTypeEnum.Int32 || ElementType == ElementTypeEnum.Int64;
+	public bool IsInteger => Primitive == PrimitiveType.Int32 || Primitive == PrimitiveType.Int64;
 
-	/// <summary>
-	/// Determines if the operand is a label operand.
-	/// </summary>
-	public bool IsLabel { get; private set; }
+	public bool IsLabel => Constant == ConstantType.Label;
 
 	public bool IsLow => LongParent.Low == this;
 
-	public bool IsManagedPointer => ElementType == ElementTypeEnum.ManagedPointer;
+	public bool IsManagedPointer => Primitive == PrimitiveType.ManagedPointer;
 
-	/// <summary>
-	/// Gets a value indicating whether [is null].
-	/// </summary>
-	public bool IsNull { get; private set; }
+	public bool IsNull => Primitive == PrimitiveType.Object && IsConstant && IsResolved && ConstantUnsigned64 == 0;
 
-	/// <summary>
-	/// Gets a value indicating whether this instance is on stack.
-	/// </summary>
 	public bool IsOnStack => IsStackLocal || IsParameter;
 
-	/// <summary>
-	/// Determines if the operand is a local variable operand.
-	/// </summary>
-	public bool IsParameter { get; private set; }
+	public bool IsParameter => Location == LocationType.StackParameter;
 
 	public bool IsPinned { get; private set; }
 
-	public bool IsR4 => ElementType == ElementTypeEnum.R4;
+	public bool IsR4 => Primitive == PrimitiveType.R4;
 
-	public bool IsR8 => ElementType == ElementTypeEnum.R8;
+	public bool IsR8 => Primitive == PrimitiveType.R8;
 
-	public bool IsReferenceType => ElementType == ElementTypeEnum.Object;
+	public bool IsReferenceType => Primitive == PrimitiveType.Object;
 
 	public bool IsResolved { get; set; }    // FUTURE: make set private
 
-	/// <summary>
-	/// Gets a value indicating whether this instance is resolved constant.
-	/// </summary>
 	public bool IsResolvedConstant => IsConstant && IsResolved;
 
-	/// <summary>
-	/// Determines if the operand is a local stack operand.
-	/// </summary>
-	public bool IsStackLocal { get; private set; }
+	public bool IsStackLocal => Location == LocationType.StackFrame;
 
-	/// <summary>
-	/// Determines if the operand is a runtime member operand.
-	/// </summary>
-	public bool IsStaticField { get; private set; }
+	public bool IsStaticField => Constant == ConstantType.StaticField;
 
-	public bool IsString { get; private set; }
-
-	/// <summary>
-	/// Gets a value indicating whether this instance is unresolved constant.
-	/// </summary>
 	public bool IsUnresolvedConstant => IsConstant && !IsResolved;
 
-	public bool IsValueType => ElementType == ElementTypeEnum.ValueType;
+	public bool IsValueType => Primitive == PrimitiveType.ValueType;
 
-	/// <summary>
-	/// Determines if the operand is a virtual register operand.
-	/// </summary>
-	public bool IsVirtualRegister { get; private set; }
+	public bool IsVirtualRegister => Location == LocationType.VirtualRegister;
 
-	/// <summary>
-	/// Gets the split64 parent.
-	/// </summary>
 	public Operand LongParent { get; private set; }
 
-	/// <summary>
-	/// Gets or sets the low operand.
-	/// </summary>
 	public Operand Low { get; private set; }
 
-	/// <summary>
-	/// Retrieves the method.
-	/// </summary>
 	public MosaMethod Method { get; private set; }
 
-	/// <summary>
-	/// Gets the name.
-	/// </summary>
 	public string Name { get; private set; }
 
-	/// <summary>
-	/// Gets or sets the offset.
-	/// </summary>
 	public long Offset
 	{
 		get { Debug.Assert(IsResolved); return ConstantSigned64; }
 		set { Debug.Assert(!IsResolved); ConstantSigned64 = value; }
 	}
 
-	/// <summary>
-	/// Retrieves the register, where the operand is located.
-	/// </summary>
 	public PhysicalRegister Register { get; private set; }
 
-	/// <summary>
-	/// Gets the string data.
-	/// </summary>
 	public string StringData { get; private set; }
 
-	/// <summary>
-	/// Returns the type of the operand.
-	/// </summary>
 	public MosaType Type { get; private set; }
 
-	/// <summary>
-	/// Holds a list of instructions, which use this operand.
-	/// </summary>
 	public List<InstructionNode> Uses { get; }
 
 	#endregion Properties
@@ -272,16 +189,9 @@ public sealed class Operand
 	{
 		Definitions = new List<InstructionNode>();
 		Uses = new List<InstructionNode>();
-		IsParameter = false;
-		IsStackLocal = false;
-		IsConstant = false;
-		IsVirtualRegister = false;
-		IsLabel = false;
-		IsCPURegister = false;
-		IsStaticField = false;
-		IsParameter = false;
-		IsResolved = false;
-		IsString = false;
+		Constant = ConstantType.Default;
+
+		IsResolved = true;
 	}
 
 	/// <summary>
@@ -292,53 +202,42 @@ public sealed class Operand
 		: this()
 	{
 		Type = type;
-		ElementType = GetElementType(type);
+		Primitive = GetElementType(type);
 	}
 
-	private Operand(Operand operand)
-	: this()
-	{
-		ElementType = operand.ElementType;
-
-		if (ElementType == ElementTypeEnum.ValueType)
-			Type = operand.Type;
-	}
-
-	public static ElementTypeEnum GetElementType(MosaType type)
+	public static PrimitiveType GetElementType(MosaType type)
 	{
 		if (type.IsEnum)
 			type = type.GetEnumUnderlyingType();
 
 		if (type.IsReferenceType)
-			return ElementTypeEnum.Object;
+			return PrimitiveType.Object;
 		else if (type.IsI1 || type.IsI2 || type.IsI4 || type.IsU1 || type.IsU2 || type.IsU4)
-			return ElementTypeEnum.Int32;
+			return PrimitiveType.Int32;
 		else if (type.IsI8 || type.IsU8)
-			return ElementTypeEnum.Int64;
+			return PrimitiveType.Int64;
 		else if (type.IsR4)
-			return ElementTypeEnum.R4;
+			return PrimitiveType.R4;
 		else if (type.IsR8)
-			return ElementTypeEnum.R8;
+			return PrimitiveType.R8;
 		else if (type.IsManagedPointer)
-			return ElementTypeEnum.ManagedPointer;
+			return PrimitiveType.ManagedPointer;
 		else if (type.IsValueType)
-			return ElementTypeEnum.ValueType;
+			return PrimitiveType.ValueType;
 
-		return ElementTypeEnum.Int32; // FIXME
+		return PrimitiveType.Int32; // FIXME
 	}
 
 	#endregion Construction
 
-	#region Static Factory Constructors v2 [Experimental]
+	#region Static Factory Constructors
 
 	public static Operand CreateVirtual32(int index)
 	{
 		return new Operand
 		{
-			ElementType = ElementTypeEnum.Int32,
-			IsVirtualRegister = true,
-			IsConstant = false,
-			IsResolved = false,
+			Location = LocationType.VirtualRegister,
+			Primitive = PrimitiveType.Int32,
 			Index = index,
 		};
 	}
@@ -347,8 +246,8 @@ public sealed class Operand
 	{
 		return new Operand
 		{
-			ElementType = ElementTypeEnum.Int64,
-			IsVirtualRegister = true,
+			Location = LocationType.VirtualRegister,
+			Primitive = PrimitiveType.Int64,
 			Index = index,
 		};
 	}
@@ -357,8 +256,8 @@ public sealed class Operand
 	{
 		return new Operand
 		{
-			ElementType = ElementTypeEnum.R4,
-			IsVirtualRegister = true,
+			Location = LocationType.VirtualRegister,
+			Primitive = PrimitiveType.R4,
 			Index = index,
 		};
 	}
@@ -367,8 +266,8 @@ public sealed class Operand
 	{
 		return new Operand
 		{
-			ElementType = ElementTypeEnum.R8,
-			IsVirtualRegister = true,
+			Location = LocationType.VirtualRegister,
+			Primitive = PrimitiveType.R8,
 			Index = index,
 		};
 	}
@@ -377,10 +276,10 @@ public sealed class Operand
 	{
 		return new Operand
 		{
-			ElementType = ElementTypeEnum.Int32,
-			IsConstant = true,
+			Location = LocationType.Constant,
+			Primitive = PrimitiveType.Int32,
+			Constant = ConstantType.Default,
 			ConstantUnsigned32 = value,
-			IsResolved = true,
 		};
 	}
 
@@ -388,10 +287,10 @@ public sealed class Operand
 	{
 		return new Operand
 		{
-			ElementType = ElementTypeEnum.Int64,
-			IsConstant = true,
+			Location = LocationType.Constant,
+			Primitive = PrimitiveType.Int64,
+			Constant = ConstantType.Default,
 			ConstantUnsigned64 = value,
-			IsResolved = true,
 		};
 	}
 
@@ -399,10 +298,10 @@ public sealed class Operand
 	{
 		return new Operand
 		{
-			ElementType = ElementTypeEnum.R4,
-			IsConstant = true,
+			Location = LocationType.Constant,
+			Primitive = PrimitiveType.R4,
+			Constant = ConstantType.Default,
 			ConstantFloat = value,
-			IsResolved = true,
 		};
 	}
 
@@ -410,10 +309,10 @@ public sealed class Operand
 	{
 		return new Operand
 		{
-			ElementType = ElementTypeEnum.R8,
-			IsConstant = true,
+			Location = LocationType.Constant,
+			Primitive = PrimitiveType.R8,
+			Constant = ConstantType.Default,
 			ConstantDouble = value,
-			IsResolved = true,
 		};
 	}
 
@@ -421,8 +320,8 @@ public sealed class Operand
 	{
 		return new Operand
 		{
-			ElementType = ElementTypeEnum.ManagedPointer,
-			IsVirtualRegister = true,
+			Location = LocationType.VirtualRegister,
+			Primitive = PrimitiveType.ManagedPointer,
 			Index = index,
 		};
 	}
@@ -431,33 +330,9 @@ public sealed class Operand
 	{
 		return new Operand
 		{
-			ElementType = ElementTypeEnum.Object,
-			IsVirtualRegister = true,
+			Location = LocationType.VirtualRegister,
+			Primitive = PrimitiveType.Object,
 			Index = index,
-		};
-	}
-
-	public static Operand CreateObjectNull()
-	{
-		return new Operand
-		{
-			ElementType = ElementTypeEnum.Object,
-			IsConstant = true,
-			ConstantUnsigned64 = 0,
-			IsNull = true,
-			IsResolved = true,
-		};
-	}
-
-	public static Operand CreateManagedPointer()
-	{
-		return new Operand
-		{
-			ElementType = ElementTypeEnum.ManagedPointer,
-			IsConstant = false,
-			ConstantUnsigned64 = 0,
-			IsNull = false,
-			IsResolved = true,
 		};
 	}
 
@@ -465,11 +340,12 @@ public sealed class Operand
 	{
 		return new Operand
 		{
-			ElementType = Is32Platform ? ElementTypeEnum.Int32 : ElementTypeEnum.Int64,
-			IsLabel = true,
+			Location = LocationType.Constant,
+			Primitive = Is32Platform ? PrimitiveType.Int32 : PrimitiveType.Int64,
+			Constant = ConstantType.Label,
 			Name = label,
 			Offset = 0,
-			IsConstant = true
+			IsResolved = false
 		};
 	}
 
@@ -477,11 +353,12 @@ public sealed class Operand
 	{
 		return new Operand
 		{
-			ElementType = ElementTypeEnum.R4,
-			IsLabel = true,
+			Location = LocationType.Constant,
+			Primitive = PrimitiveType.R4,
+			Constant = ConstantType.Label,
 			Name = label,
 			Offset = 0,
-			IsConstant = true
+			IsResolved = false
 		};
 	}
 
@@ -489,11 +366,12 @@ public sealed class Operand
 	{
 		return new Operand
 		{
-			ElementType = ElementTypeEnum.R8,
-			IsLabel = true,
+			Location = LocationType.Constant,
+			Primitive = PrimitiveType.R8,
+			Constant = ConstantType.Label,
 			Name = label,
 			Offset = 0,
-			IsConstant = true
+			IsResolved = false
 		};
 	}
 
@@ -501,28 +379,34 @@ public sealed class Operand
 	{
 		return new Operand
 		{
-			ElementType = ElementTypeEnum.Object,
-			IsLabel = true,
+			Location = LocationType.Constant,
+			Primitive = PrimitiveType.Object,
+			Constant = ConstantType.Label,
 			Name = label,
 			Offset = 0,
-			IsConstant = true
 		};
 	}
 
 	public static Operand CreateVirtualRegister(Operand operand, int index)
 	{
-		return new Operand(operand)
+		Debug.Assert(operand.Type == null);
+
+		return new Operand()
 		{
-			IsVirtualRegister = true,
+			Location = LocationType.VirtualRegister,
+			Primitive = operand.Primitive,
 			Index = index
 		};
 	}
 
 	public static Operand CreateCPURegister(Operand operand, PhysicalRegister register)
 	{
-		return new Operand(operand)
+		Debug.Assert(operand.Type == null);
+
+		return new Operand()
 		{
-			IsCPURegister = true,
+			Location = LocationType.PhysicalRegister,
+			Primitive = operand.Primitive,
 			Register = register
 		};
 	}
@@ -531,8 +415,8 @@ public sealed class Operand
 	{
 		return new Operand()
 		{
-			ElementType = ElementTypeEnum.Int32,
-			IsCPURegister = true,
+			Location = LocationType.PhysicalRegister,
+			Primitive = PrimitiveType.Int32,
 			Register = register
 		};
 	}
@@ -541,8 +425,8 @@ public sealed class Operand
 	{
 		return new Operand()
 		{
-			ElementType = ElementTypeEnum.Int64,
-			IsCPURegister = true,
+			Location = LocationType.PhysicalRegister,
+			Primitive = PrimitiveType.Int64,
 			Register = register
 		};
 	}
@@ -551,8 +435,8 @@ public sealed class Operand
 	{
 		return new Operand()
 		{
-			ElementType = ElementTypeEnum.R4,
-			IsCPURegister = true,
+			Location = LocationType.PhysicalRegister,
+			Primitive = PrimitiveType.R4,
 			Register = register
 		};
 	}
@@ -561,8 +445,8 @@ public sealed class Operand
 	{
 		return new Operand()
 		{
-			ElementType = ElementTypeEnum.R8,
-			IsCPURegister = true,
+			Location = LocationType.PhysicalRegister,
+			Primitive = PrimitiveType.R8,
 			Register = register
 		};
 	}
@@ -571,8 +455,8 @@ public sealed class Operand
 	{
 		return new Operand()
 		{
-			ElementType = ElementTypeEnum.Object,
-			IsCPURegister = true,
+			Location = LocationType.PhysicalRegister,
+			Primitive = PrimitiveType.Object,
 			Register = register
 		};
 	}
@@ -581,8 +465,8 @@ public sealed class Operand
 	{
 		return new Operand()
 		{
-			ElementType = ElementTypeEnum.ManagedPointer,
-			IsCPURegister = true,
+			Location = LocationType.PhysicalRegister,
+			Primitive = PrimitiveType.ManagedPointer,
 			Register = register
 		};
 	}
@@ -591,23 +475,49 @@ public sealed class Operand
 	{
 		return new Operand
 		{
-			ElementType = is32Platform ? ElementTypeEnum.Int32 : ElementTypeEnum.Int64,
-			IsCPURegister = true,
+			Location = LocationType.PhysicalRegister,
+			Primitive = is32Platform ? PrimitiveType.Int32 : PrimitiveType.Int64,
 			Register = register
 		};
 	}
 
-	#endregion Static Factory Constructors v2 [Experimental]
+	public static Operand CreateStringLabel(string name, uint offset, string data)
+	{
+		return new Operand
+		{
+			Location = LocationType.Constant,
+			Primitive = PrimitiveType.Object,
+			Constant = ConstantType.Label,
+			Name = name,
+			Offset = offset,
+			StringData = data,
+			IsResolved = false
+		};
+	}
+
+	public static Operand CreateLabel(MosaMethod method, bool is32Platform)
+	{
+		Debug.Assert(method != null);
+
+		return new Operand
+		{
+			Location = LocationType.Constant,
+			Primitive = is32Platform ? PrimitiveType.Int32 : PrimitiveType.Int64,
+			Constant = ConstantType.Label,
+			Method = method,
+			Name = method.FullName,
+		};
+	}
+
+	public static Operand GetNullObject()
+	{
+		return NullObject;
+	}
+
+	#endregion Static Factory Constructors
 
 	#region Static Factory Constructors
 
-	/// <summary>
-	/// Creates the high 32 bit portion of a 64-bit <see cref="Operand" />.
-	/// </summary>
-	/// <param name="longOperand">The long operand.</param>
-	/// <param name="index">The index.</param>
-	/// <param name="typeSystem">The type system.</param>
-	/// <returns></returns>
 	public static Operand CreateHighSplitForLong(Operand longOperand, int index, TypeSystem typeSystem)
 	{
 		Debug.Assert(longOperand.LongParent == null || longOperand.LongParent == longOperand);
@@ -621,28 +531,31 @@ public sealed class Operand
 		}
 		else if (longOperand.IsResolvedConstant)
 		{
-			operand = new Operand(typeSystem.BuiltIn.U4)
+			operand = new Operand
 			{
-				IsConstant = true,
-				IsResolved = true,
+				Location = LocationType.Constant,
+				Primitive = PrimitiveType.Int32,
+				Constant = ConstantType.Default,
 				ConstantUnsigned64 = (uint)(longOperand.ConstantUnsigned64 >> 32) & uint.MaxValue
 			};
 		}
 		else if (longOperand.IsVirtualRegister)
 		{
-			operand = new Operand(typeSystem.BuiltIn.U4)
+			operand = new Operand
 			{
-				IsVirtualRegister = true,
+				Location = LocationType.VirtualRegister,
+				Primitive = PrimitiveType.Int32,
 				Index = index,
 			};
 		}
 		else if (longOperand.IsStackLocal)
 		{
-			operand = new Operand(typeSystem.BuiltIn.I4)
+			operand = new Operand
 			{
-				IsConstant = true,
+				Location = LocationType.StackFrame,
+				Primitive = PrimitiveType.Int32,
+				Constant = ConstantType.Default,
 				IsResolved = false,
-				IsStackLocal = true,
 				ConstantSigned64 = 4
 			};
 		}
@@ -679,18 +592,20 @@ public sealed class Operand
 		}
 		else if (longOperand.IsResolvedConstant)
 		{
-			operand = new Operand(typeSystem.BuiltIn.U4)
+			operand = new Operand
 			{
-				IsConstant = true,
-				IsResolved = true,
+				Location = LocationType.Constant,
+				Primitive = PrimitiveType.Int32,
+				Constant = ConstantType.Default,
 				ConstantUnsigned64 = longOperand.ConstantUnsigned64 & uint.MaxValue,
 			};
 		}
 		else if (longOperand.IsVirtualRegister)
 		{
-			operand = new Operand(typeSystem.BuiltIn.U4)
+			operand = new Operand
 			{
-				IsVirtualRegister = true,
+				Location = LocationType.VirtualRegister,
+				Primitive = PrimitiveType.Int32,
 				Index = index,
 			};
 		}
@@ -722,9 +637,10 @@ public sealed class Operand
 	{
 		return new Operand(type)
 		{
+			// TODO: Element
+			Location = LocationType.StackFrame,
+			Constant = ConstantType.Default,
 			Index = index,
-			IsStackLocal = true,
-			IsConstant = true,
 			IsPinned = pinned
 		};
 	}
@@ -742,10 +658,10 @@ public sealed class Operand
 	{
 		return new Operand(type)
 		{
-			IsParameter = true,
+			// TODO Type
+			Location = LocationType.StackParameter,
+			Constant = ConstantType.Default,
 			Index = index,
-			IsConstant = true,
-			IsResolved = true,
 			Name = name,
 			ConstantSigned64 = offset
 		};
@@ -765,46 +681,11 @@ public sealed class Operand
 
 		return new Operand(type)
 		{
-			IsStaticField = true, // field.IsStatic
+			// TODO Type
+			Location = LocationType.Constant,
+			Constant = ConstantType.StaticField,
 			Offset = 0,
 			Field = field,
-			IsConstant = true
-		};
-	}
-
-	/// <summary>
-	/// Creates the string symbol.
-	/// </summary>
-	/// <param name="type">The type.</param>
-	/// <param name="name">The name.</param>
-	/// <param name="offset">The offset.</param>
-	/// <param name="data">The data.</param>
-	/// <returns></returns>
-	public static Operand CreateStringSymbol(string name, uint offset, string data)
-	{
-		return new Operand
-		{
-			ElementType = ElementTypeEnum.Object,
-			IsLabel = true,
-			Name = name,
-			IsConstant = true,
-			Offset = offset,
-			StringData = data,
-			IsString = true,
-		};
-	}
-
-	public static Operand CreateSymbol(MosaMethod method, bool is32Platform)
-	{
-		Debug.Assert(method != null);
-
-		return new Operand
-		{
-			ElementType = is32Platform ? ElementTypeEnum.Int32 : ElementTypeEnum.Int64,
-			IsLabel = true,
-			Method = method,
-			Name = method.FullName,
-			IsConstant = true
 		};
 	}
 
@@ -818,23 +699,8 @@ public sealed class Operand
 	{
 		return new Operand(type)
 		{
-			IsVirtualRegister = true,
+			Location = LocationType.VirtualRegister,
 			Index = index
-		};
-	}
-
-	/// <summary>
-	/// Gets the null constant <see cref="Operand" />.
-	/// </summary>
-	/// <returns></returns>
-	public static Operand GetNull()
-	{
-		return new Operand
-		{
-			ElementType = ElementTypeEnum.Object,
-			IsNull = true,
-			IsConstant = true,
-			IsResolved = true
 		};
 	}
 
@@ -844,16 +710,16 @@ public sealed class Operand
 
 	public string GetElementString()
 	{
-		return ElementType switch
+		return Primitive switch
 		{
-			ElementTypeEnum.Int64 => "I8",
-			ElementTypeEnum.Int32 => "I4",
-			ElementTypeEnum.R4 => "R4",
-			ElementTypeEnum.R8 => "R8",
-			ElementTypeEnum.Object => "O",
-			ElementTypeEnum.ManagedPointer => "MP",
-			ElementTypeEnum.ValueType => "ValueType",
-			_ => throw new CompilerException($"Unknown Type {ElementType}"),
+			PrimitiveType.Int64 => "I8",
+			PrimitiveType.Int32 => "I4",
+			PrimitiveType.R4 => "R4",
+			PrimitiveType.R8 => "R8",
+			PrimitiveType.Object => "O",
+			PrimitiveType.ManagedPointer => "MP",
+			PrimitiveType.ValueType => "ValueType",
+			_ => throw new CompilerException($"Unknown Type {Primitive}"),
 		};
 	}
 
@@ -949,7 +815,7 @@ public sealed class Operand
 
 		sb.Append($" [{GetElementString()}]");
 
-		if (ElementType == ElementTypeEnum.ValueType)
+		if (Primitive == PrimitiveType.ValueType)
 		{
 			sb.Append($" ({Type.FullName})");
 		}

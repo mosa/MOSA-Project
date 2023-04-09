@@ -21,7 +21,7 @@ public sealed class NewArray : BaseRuntimeTransform
 	public override void Transform(Context context, TransformContext transform)
 	{
 		var method = GetVMCallMethod(transform, "AllocateArray");
-		var symbol = Operand.CreateSymbol(method, transform.Is32BitPlatform);
+		var symbol = Operand.CreateLabel(method, transform.Is32BitPlatform);
 		var arrayType = context.MosaType;
 
 		context.SetInstruction(IRInstruction.CallStatic, context.Result, symbol, context.GetOperands());

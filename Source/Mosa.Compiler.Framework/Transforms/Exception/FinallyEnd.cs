@@ -52,7 +52,7 @@ public sealed class FinallyEnd : BaseExceptionTransform
 		context.AppendInstruction(IRInstruction.Jmp, newBlocks[1].Block);
 
 		exceptionCallBlock.AppendInstruction(IRInstruction.MoveObject, transform.ExceptionRegister, exceptionVirtualRegister);
-		exceptionCallBlock.AppendInstruction(IRInstruction.CallStatic, null, Operand.CreateSymbol(exceptionManager.ExceptionHandler, transform.Is32BitPlatform));
+		exceptionCallBlock.AppendInstruction(IRInstruction.CallStatic, null, Operand.CreateLabel(exceptionManager.ExceptionHandler, transform.Is32BitPlatform));
 
 		transform.MethodScanner.MethodInvoked(exceptionManager.ExceptionHandler, transform.Method);
 

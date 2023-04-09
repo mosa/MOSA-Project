@@ -128,7 +128,7 @@ public sealed class VirtualRegisters : IEnumerable<Operand>
 		return virtualRegister;
 	}
 
-	public Operand AllocateManagedNativeInteger()
+	public Operand AllocateNativeInteger()
 	{
 		return Is32Platform ? Allocate32() : Allocate64();
 	}

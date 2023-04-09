@@ -20,7 +20,7 @@ public sealed class MultibootV1Stage : Mosa.Compiler.Framework.Platform.BaseMult
 
 		Compiler.GetMethodData(initializeMethod).DoNotInline = true;
 
-		var entryPoint = Operand.CreateSymbol(initializeMethod, Architecture.Is32BitPlatform);
+		var entryPoint = Operand.CreateLabel(initializeMethod, Architecture.Is32BitPlatform);
 
 		var rax = Operand.CreateCPURegister64(CPURegister.RAX);
 		var rbx = Operand.CreateCPURegister64(CPURegister.RBX);

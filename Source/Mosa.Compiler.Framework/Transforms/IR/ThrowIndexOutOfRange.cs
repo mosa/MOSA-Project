@@ -16,7 +16,7 @@ public sealed class ThrowIndexOutOfRange : BaseTransform
 	public override void Transform(Context context, TransformContext transform)
 	{
 		var method = transform.Compiler.InternalRuntimeType.FindMethodByName("ThrowIndexOutOfRangeException");
-		var symbolOperand = Operand.CreateSymbol(method, transform.Is32BitPlatform);
+		var symbolOperand = Operand.CreateLabel(method, transform.Is32BitPlatform);
 
 		context.SetInstruction(IRInstruction.CallStatic, null, symbolOperand);
 	}

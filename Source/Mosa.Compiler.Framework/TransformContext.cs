@@ -175,7 +175,7 @@ public sealed class TransformContext
 		Constant64_1 = CreateConstant64(1);
 		Constant64_32 = CreateConstant64(32);
 
-		NullOperand = Operand.GetNull();
+		NullOperand = Operand.GetNullObject();
 
 		LowerTo32 = Compiler.CompilerSettings.LongExpansion;
 		Devirtualization = Compiler.CompilerSettings.Devirtualization;
@@ -658,7 +658,7 @@ public sealed class TransformContext
 
 		// FUTURE: throw compiler exception
 
-		var symbol = Operand.CreateSymbol(method, Is32BitPlatform);
+		var symbol = Operand.CreateLabel(method, Is32BitPlatform);
 
 		if (context.OperandCount == 1)
 		{

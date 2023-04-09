@@ -919,7 +919,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			switch (localstacktype)
 			{
 				case StackType.Object:
-					prologue.AppendInstruction(IRInstruction.MoveObject, local, Operand.GetNull());
+					prologue.AppendInstruction(IRInstruction.MoveObject, local, Operand.GetNullObject());
 					break;
 
 				case StackType.Int32:
@@ -1425,7 +1425,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	private bool Ldnull(Context context, Stack<StackEntry> stack)
 	{
 		var result = AllocateVirtualRegisterObject();
-		context.AppendInstruction(IRInstruction.MoveObject, result, Operand.GetNull());
+		context.AppendInstruction(IRInstruction.MoveObject, result, Operand.GetNullObject());
 		PushStack(stack, new StackEntry(StackType.Object, result));
 		return true;
 	}
@@ -1939,7 +1939,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			PushStack(stack, resultStackType);
 		}
 
-		var symbol = Operand.CreateSymbol(method, Is32BitPlatform);
+		var symbol = Operand.CreateLabel(method, Is32BitPlatform);
 
 		context.AppendInstruction(IRInstruction.CallStatic, result, symbol, operands);
 		context.InvokeMethod = method;
@@ -1975,7 +1975,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			{
 				method = GetMethodOrOverride(type, method);
 
-				var symbol2 = Operand.CreateSymbol(method, Is32BitPlatform);
+				var symbol2 = Operand.CreateLabel(method, Is32BitPlatform);
 				context.AppendInstruction(IRInstruction.CallStatic, result, symbol2, operands);
 
 				// PocessExternalCall(context))
@@ -1984,7 +1984,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			}
 		}
 
-		var symbol = Operand.CreateSymbol(method, Is32BitPlatform);
+		var symbol = Operand.CreateLabel(method, Is32BitPlatform);
 
 		if (method.IsVirtual)
 		{
@@ -3571,7 +3571,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		if (type.IsReferenceType)
 		{
-			context.AppendInstruction(IRInstruction.StoreObject, null, entry.Operand, ConstantZero, Operand.GetNull());
+			context.AppendInstruction(IRInstruction.StoreObject, null, entry.Operand, ConstantZero, Operand.GetNullObject());
 			context.MosaType = type;
 		}
 		else
@@ -3912,7 +3912,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		var move = GetMoveInstruction(ElementType.I);
 
-		context.AppendInstruction(move, result, Operand.CreateSymbol(method, Is32BitPlatform));
+		context.AppendInstruction(move, result, Operand.CreateLabel(method, Is32BitPlatform));
 
 		PushStack(stack, new StackEntry(stacktype, result));
 
@@ -4121,7 +4121,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var stringdata = TypeSystem.LookupUserString(Method.Module, token);
 		var symbolName = EmitString(stringdata, token);
 
-		var symbol = Operand.CreateStringSymbol(symbolName, MethodCompiler.Compiler.ObjectHeaderSize, stringdata);
+		var symbol = Operand.CreateStringLabel(symbolName, MethodCompiler.Compiler.ObjectHeaderSize, stringdata);
 
 		context.AppendInstruction(IRInstruction.MoveObject, result, symbol);
 
@@ -4376,7 +4376,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var underlyingType = GetUnderlyingType(classType);
 		var stackType = GetStackTypeDefaultValueType(underlyingType);
 
-		var symbol = Operand.CreateSymbol(method, Is32BitPlatform);
+		var symbol = Operand.CreateLabel(method, Is32BitPlatform);
 
 		var operands = new List<Operand>();
 
@@ -5657,7 +5657,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var newmethod = method.DeclaringType.FindMethodByNameAndParameters("Ctor", method.Signature.Parameters);
 
 		var result = AllocateVirtualRegisterObject();
-		var symbol = Operand.CreateSymbol(newmethod, Is32BitPlatform);
+		var symbol = Operand.CreateLabel(newmethod, Is32BitPlatform);
 
 		context.AppendInstruction(IRInstruction.CallStatic, result, symbol);
 		context.AppendOperands(operands);
@@ -5724,7 +5724,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		if (method.IsExternal)
 		{
-			var operand1 = Operand.CreateSymbol(context.InvokeMethod, Is32BitPlatform);
+			var operand1 = Operand.CreateLabel(context.InvokeMethod, Is32BitPlatform);
 			context.AppendInstruction(IRInstruction.IntrinsicMethodCall, result, operand1);
 			context.AppendOperands(operands);
 		}

@@ -327,7 +327,7 @@ public abstract class BaseMethodCompilerStage
 
 	protected Operand AllocateVirtualRegister(Operand operand)
 	{
-		return MethodCompiler.VirtualRegisters.Allocate(operand.Type);
+		return MethodCompiler.VirtualRegisters.AllocateOperand(operand);
 	}
 
 	protected Operand AllocateVirtualRegister32()
@@ -1150,7 +1150,7 @@ public abstract class BaseMethodCompilerStage
 
 		// FUTURE: throw compiler exception
 
-		var symbol = Operand.CreateSymbol(method, Is32BitPlatform);
+		var symbol = Operand.CreateLabel(method, Is32BitPlatform);
 
 		if (context.OperandCount == 1)
 		{

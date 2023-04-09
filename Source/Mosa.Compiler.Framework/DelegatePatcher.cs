@@ -115,15 +115,15 @@ public static class DelegatePatcher
 
 		var thisOperand = vrs[0];
 
-		var opMethod = methodCompiler.VirtualRegisters.Allocate(nativeIntegerType);
-		var opInstance = methodCompiler.VirtualRegisters.Allocate(thisOperand.Type);
-		var opCompare = methodCompiler.VirtualRegisters.Allocate(nativeIntegerType);
+		var opMethod = methodCompiler.VirtualRegisters.AllocateNativeInteger();
+		var opInstance = methodCompiler.VirtualRegisters.AllocateObject();
+		var opCompare = methodCompiler.VirtualRegisters.AllocateNativeInteger();
 
 		var opReturn = withReturn ? methodCompiler.AllocateVirtualRegisterOrStackSlot(methodCompiler.Method.Signature.ReturnType) : null;
 
 		b0.AppendInstruction(loadInstruction, opMethod, thisOperand, methodPointerOffsetOperand);
 		b0.AppendInstruction(loadInstruction, opInstance, thisOperand, instanceOffsetOperand);
-		b0.AppendInstruction(compareInstruction, ConditionCode.Equal, opCompare, opInstance, methodCompiler.Constant64_0);
+		b0.AppendInstruction(IRInstruction.CompareObject, ConditionCode.Equal, opCompare, opInstance, Operand.NullObject);
 		b0.AppendInstruction(branchInstruction, ConditionCode.Equal, null, opCompare, methodCompiler.Constant64_0, b2.Block);
 		b0.AppendInstruction(IRInstruction.Jmp, b1.Block);
 
@@ -158,7 +158,7 @@ public static class DelegatePatcher
 
 	private static void PatchBeginInvoke(MethodCompiler methodCompiler)
 	{
-		var nullOperand = Operand.GetNull();
+		var nullOperand = Operand.GetNullObject();
 		var context = new Context(CreateMethodStructure(methodCompiler));
 
 		var setReturn = BaseMethodCompilerStage.GetSetReturnInstruction(nullOperand.Type, methodCompiler.Is32BitPlatform);

@@ -37,7 +37,7 @@ public sealed class MulOverflowOut64 : BaseTransform
 
 		Debug.Assert(method != null, $"Cannot find method: {methodName}");
 
-		var symbol = Operand.CreateSymbol(method, transform.Is32BitPlatform);
+		var symbol = Operand.CreateLabel(method, transform.Is32BitPlatform);
 
 		context.SetInstruction(IRInstruction.AddressOf, v2, v1);
 		context.AppendInstruction(IRInstruction.CallStatic, result, symbol, operand1, operand2, v2);

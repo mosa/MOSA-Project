@@ -29,7 +29,7 @@ namespace Mosa.Compiler.Framework.Transforms.Plug
 
 			if (context.Operand1 != null && context.Operand1.IsLabel && context.Operand1.Method != null)
 			{
-				context.Operand1 = Operand.CreateSymbol(newTarget, transform.Is32BitPlatform);
+				context.Operand1 = Operand.CreateLabel(newTarget, transform.Is32BitPlatform);
 			}
 		}
 

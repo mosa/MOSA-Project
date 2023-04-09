@@ -380,20 +380,7 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 
 		if (operand.IsLabel)
 		{
-			if (operand.IsString)
-			{
-				// FUTURE: explore operand re-use
-				mappedOperand = Operand.CreateStringSymbol(operand.Name, ObjectHeaderSize, operand.StringData);
-			}
-			else if (operand.Method != null)
-			{
-				// FUTURE: explore operand re-use
-				mappedOperand = Operand.CreateSymbol(operand.Method, Is32BitPlatform);
-			}
-			else if (operand.Name != null)
-			{
-				mappedOperand = operand;
-			}
+			mappedOperand = operand;
 		}
 		else if (operand.IsParameter)
 		{
