@@ -919,7 +919,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			switch (localstacktype)
 			{
 				case StackType.Object:
-					prologue.AppendInstruction(IRInstruction.MoveObject, local, Operand.GetNull(local.Type));
+					prologue.AppendInstruction(IRInstruction.MoveObject, local, Operand.GetNull());
 					break;
 
 				case StackType.Int32:
@@ -989,6 +989,11 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		return operands;
 	}
 
+	private static bool IsPrimitive(MosaType underlyingType)
+	{
+		return MosaTypeLayout.IsPrimitive(underlyingType);
+	}
+
 	private static MosaType GetUnderlyingType(MosaType type)
 	{
 		return MosaTypeLayout.GetUnderlyingType(type);
@@ -1024,11 +1029,6 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			CILOpCode.Brtrue => true,
 			_ => false,
 		};
-	}
-
-	private static bool IsPrimitive(MosaType underlyingType)
-	{
-		return MosaTypeLayout.IsPrimitive(underlyingType);
 	}
 
 	private Operand Allocate(StackType stackType, MosaType type = null)
@@ -1138,12 +1138,12 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 	private Operand GetMethodTablePointer(MosaType runtimeType)
 	{
-		return Operand.CreateLabel(TypeSystem.BuiltIn.Pointer, Metadata.TypeDefinition + runtimeType.FullName);
+		return Operand.CreateLabel(Metadata.TypeDefinition + runtimeType.FullName, Is32BitPlatform);
 	}
 
 	private Operand GetRuntimeTypeHandle(MosaType runtimeType)
 	{
-		return Operand.CreateLabel(TypeSystem.GetTypeByName("System.RuntimeTypeHandle"), Metadata.TypeDefinition + runtimeType.FullName);
+		return Operand.CreateLabel(Metadata.TypeDefinition + runtimeType.FullName, Is32BitPlatform);
 	}
 
 	private uint GetSize(ElementType elementType)
@@ -1215,40 +1215,18 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		};
 	}
 
-	private MosaType GetType(StackType stackType)
+	private Operand AllocateVirtualRegister(StackType stackType)
 	{
 		return stackType switch
 		{
-			StackType.Int32 => TypeSystem.BuiltIn.I4,
-			StackType.Int64 => TypeSystem.BuiltIn.I8,
-			StackType.R4 => TypeSystem.BuiltIn.R4,
-			StackType.R8 => TypeSystem.BuiltIn.R8,
-			StackType.Object => TypeSystem.BuiltIn.Object,
-			StackType.ManagedPointer => TypeSystem.BuiltIn.Pointer,
-			_ => null,
-		};
-	}
-
-	private MosaType GetType(StackEntry stackEntry)
-	{
-		if (stackEntry.StackType == StackType.ValueType)
-			return stackEntry.Type;
-
-		return GetType(stackEntry.StackType);
-	}
-
-	private Operand AllocateVirtualRegister(StackType stackType)
-	{
-		switch (stackType)
-		{
-			case StackType.Int32: return AllocateVirtualRegister32();
-			case StackType.Int64: return AllocateVirtualRegister64();
-			case StackType.R4: return AllocateVirtualRegisterR4();
-			case StackType.R8: return AllocateVirtualRegisterR8();
-			case StackType.Object: return AllocateVirtualRegisterObject();
-			case StackType.ManagedPointer: return AllocateVirtualRegisterManagedPointer();
-			case StackType.ValueType: throw new CompilerException($"Cannot allocate a virtual register to a ValueType");
-			default: throw new CompilerException($"Cannot allocate a virtual register of {stackType}");
+			StackType.Int32 => AllocateVirtualRegister32(),
+			StackType.Int64 => AllocateVirtualRegister64(),
+			StackType.R4 => AllocateVirtualRegisterR4(),
+			StackType.R8 => AllocateVirtualRegisterR8(),
+			StackType.Object => AllocateVirtualRegisterObject(),
+			StackType.ManagedPointer => AllocateVirtualRegisterManagedPointer(),
+			StackType.ValueType => throw new CompilerException($"Cannot allocate a virtual register to a ValueType"),
+			_ => throw new CompilerException($"Cannot allocate a virtual register of {stackType}"),
 		};
 	}
 
@@ -1447,7 +1425,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	private bool Ldnull(Context context, Stack<StackEntry> stack)
 	{
 		var result = AllocateVirtualRegisterObject();
-		context.AppendInstruction(IRInstruction.MoveObject, result, Operand.GetNullObject(TypeSystem));
+		context.AppendInstruction(IRInstruction.MoveObject, result, Operand.GetNull());
 		PushStack(stack, new StackEntry(StackType.Object, result));
 		return true;
 	}
@@ -1961,7 +1939,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			PushStack(stack, resultStackType);
 		}
 
-		var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
+		var symbol = Operand.CreateSymbolFromMethod(method, Is32BitPlatform);
 
 		context.AppendInstruction(IRInstruction.CallStatic, result, symbol, operands);
 		context.InvokeMethod = method;
@@ -1997,7 +1975,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			{
 				method = GetMethodOrOverride(type, method);
 
-				var symbol2 = Operand.CreateSymbolFromMethod(method, TypeSystem);
+				var symbol2 = Operand.CreateSymbolFromMethod(method, Is32BitPlatform);
 				context.AppendInstruction(IRInstruction.CallStatic, result, symbol2, operands);
 
 				// PocessExternalCall(context))
@@ -2006,7 +1984,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			}
 		}
 
-		var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
+		var symbol = Operand.CreateSymbolFromMethod(method, Is32BitPlatform);
 
 		if (method.IsVirtual)
 		{
@@ -3593,7 +3571,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		if (type.IsReferenceType)
 		{
-			context.AppendInstruction(IRInstruction.StoreObject, null, entry.Operand, ConstantZero, Operand.GetNullObject(TypeSystem));
+			context.AppendInstruction(IRInstruction.StoreObject, null, entry.Operand, ConstantZero, Operand.GetNull());
 			context.MosaType = type;
 		}
 		else
@@ -3934,7 +3912,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		var move = GetMoveInstruction(ElementType.I);
 
-		context.AppendInstruction(move, result, Operand.CreateSymbolFromMethod(method, TypeSystem));
+		context.AppendInstruction(move, result, Operand.CreateSymbolFromMethod(method, Is32BitPlatform));
 
 		PushStack(stack, new StackEntry(stacktype, result));
 
@@ -4097,7 +4075,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			if (type.IsReferenceType)
 			{
 				var symbol = GetStaticSymbol(field);
-				var staticReference = Operand.CreateLabel(TypeSystem.BuiltIn.Object, symbol.Name);
+				var staticReference = Operand.CreateLabel(symbol.Name, Is32BitPlatform);
 
 				context.AppendInstruction(IRInstruction.LoadObject, result, staticReference, ConstantZero);
 			}
@@ -4143,7 +4121,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var stringdata = TypeSystem.LookupUserString(Method.Module, token);
 		var symbolName = EmitString(stringdata, token);
 
-		var symbol = Operand.CreateStringSymbol(TypeSystem.BuiltIn.String, symbolName, MethodCompiler.Compiler.ObjectHeaderSize, stringdata);
+		var symbol = Operand.CreateStringSymbol(symbolName, MethodCompiler.Compiler.ObjectHeaderSize, stringdata);
 
 		context.AppendInstruction(IRInstruction.MoveObject, result, symbol);
 
@@ -4398,7 +4376,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var underlyingType = GetUnderlyingType(classType);
 		var stackType = GetStackTypeDefaultValueType(underlyingType);
 
-		var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
+		var symbol = Operand.CreateSymbolFromMethod(method, Is32BitPlatform);
 
 		var operands = new List<Operand>();
 
@@ -4429,9 +4407,6 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 			context.AppendInstruction(IRInstruction.CallStatic, null, symbol, operands);
 
-			//context.InvokeMethod = method;  // optional??
-			//context.MosaType = classType;   // optional??
-
 			PushStack(stack, new StackEntry(StackType.Object, result));
 
 			return true;
@@ -4446,8 +4421,6 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			operands.Insert(0, newThis);
 
 			context.AppendInstruction(IRInstruction.CallStatic, null, symbol, operands);
-
-			//context.InvokeMethod = method; // optional??
 
 			PushStack(stack, new StackEntry(StackType.ValueType, newThisLocal));
 
@@ -5122,7 +5095,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			if (type.IsReferenceType)
 			{
 				var symbol = GetStaticSymbol(field);
-				var staticReference = Operand.CreateLabel(TypeSystem.BuiltIn.Object, symbol.Name);
+				var staticReference = Operand.CreateLabel(symbol.Name, Is32BitPlatform);
 
 				context.AppendInstruction(IRInstruction.StoreObject, null, staticReference, ConstantZero, source);
 
@@ -5684,7 +5657,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var newmethod = method.DeclaringType.FindMethodByNameAndParameters("Ctor", method.Signature.Parameters);
 
 		var result = AllocateVirtualRegisterObject();
-		var symbol = Operand.CreateSymbolFromMethod(newmethod, TypeSystem);
+		var symbol = Operand.CreateSymbolFromMethod(newmethod, Is32BitPlatform);
 
 		context.AppendInstruction(IRInstruction.CallStatic, result, symbol);
 		context.AppendOperands(operands);
@@ -5751,7 +5724,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		if (method.IsExternal)
 		{
-			var operand1 = Operand.CreateSymbolFromMethod(context.InvokeMethod, TypeSystem);
+			var operand1 = Operand.CreateSymbolFromMethod(context.InvokeMethod, Is32BitPlatform);
 			context.AppendInstruction(IRInstruction.IntrinsicMethodCall, result, operand1);
 			context.AppendOperands(operands);
 		}
@@ -5855,39 +5828,4 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	}
 
 	#endregion Array Helpers
-
-	/// <summary>
-	/// Visitation function for Conversion instruction from unsigned source.
-	/// </summary>
-	/// <param name="context">The context.</param>
-	private void CheckedConversionUnsigned(Context context)
-	{
-		var result = context.Result;
-		var source = context.Operand1;
-		var type = context.MosaType;
-
-		// First check to see if we have a matching checked conversion function
-
-		var sourceTypeString = source.Type.IsI4 ? "U4" :
-			source.Type.IsI8 ? "U8" :
-			source.Type.IsR4 ? "R4" :
-			source.Type.IsR8 ? "R8" :
-			source.Type.IsI ? Is32BitPlatform ? "U4" : "U8" :
-			source.Type.IsPointer ? Is32BitPlatform ? "U4" : "U8" :
-			!source.Type.IsValueType ? Is32BitPlatform ? "U4" : "U8" :
-			throw new CompilerException();
-
-		var resultTypeString = type.IsU || type.IsI || type.IsPointer ? Is32BitPlatform ? "U4" : "U8" : type.TypeCode.ToString();
-
-		var methodName = $"{sourceTypeString}To{resultTypeString}";
-		var method = GetMethod("Mosa.Runtime.Math.CheckedConversion", methodName);
-
-		Debug.Assert(method != null);
-
-		var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
-
-		context.SetInstruction(IRInstruction.CallStatic, result, symbol, source);
-
-		MethodScanner.MethodInvoked(method, Method);
-	}
 }

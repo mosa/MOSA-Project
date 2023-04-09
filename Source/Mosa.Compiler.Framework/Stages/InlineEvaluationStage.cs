@@ -383,17 +383,16 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 			if (operand.IsString)
 			{
 				// FUTURE: explore operand re-use
-				mappedOperand = Operand.CreateStringSymbol(TypeSystem.BuiltIn.String, operand.Name, ObjectHeaderSize, operand.StringData);
+				mappedOperand = Operand.CreateStringSymbol(operand.Name, ObjectHeaderSize, operand.StringData);
 			}
 			else if (operand.Method != null)
 			{
 				// FUTURE: explore operand re-use
-				mappedOperand = Operand.CreateSymbolFromMethod(operand.Method, operand.Type.TypeSystem);
+				mappedOperand = Operand.CreateSymbolFromMethod(operand.Method, Is32BitPlatform);
 			}
 			else if (operand.Name != null)
 			{
-				// FUTURE: explore operand re-use
-				mappedOperand = Operand.CreateLabel(operand.Type, operand.Name);
+				mappedOperand = operand;
 			}
 		}
 		else if (operand.IsParameter)

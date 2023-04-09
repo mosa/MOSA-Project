@@ -147,7 +147,7 @@ public sealed class Compiler
 
 	#region Static Methods
 
-	private static List<BaseCompilerStage> GetDefaultCompilerPipeline(CompilerSettings compilerSettings, bool is64BitPlatform)
+	private static List<BaseCompilerStage> GetDefaultCompilerPipeline(CompilerSettings compilerSettings, bool is32BitPlatform)
 	{
 		return new List<BaseCompilerStage> {
 			new InlinedSetupStage(),
@@ -248,13 +248,13 @@ public sealed class Compiler
 
 		ObjectHeaderSize = Architecture.NativePointerSize + 4 + 4; // Hash Value (32-bit) + Lock & Status (32-bit) + Method Table
 
-		StackFrame = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackFrameRegister);
-		StackPointer = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackPointerRegister);
-		ExceptionRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.Object, Architecture.ExceptionRegister);
-		LeaveTargetRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.Object, Architecture.LeaveTargetRegister);
+		StackFrame = Operand.CreateCPURegisterNativeInteger(Architecture.StackFrameRegister, Architecture.Is32BitPlatform);
+		StackPointer = Operand.CreateCPURegisterNativeInteger(Architecture.StackPointerRegister, Architecture.Is32BitPlatform);
+		ExceptionRegister = Operand.CreateCPURegisterObject(Architecture.ExceptionRegister);
+		LeaveTargetRegister = Operand.CreateCPURegisterNativeInteger(Architecture.LeaveTargetRegister, Architecture.Is32BitPlatform);
 
-		LinkRegister = Architecture.LinkRegister == null ? null : Operand.CreateCPURegister(TypeSystem.BuiltIn.Object, Architecture.LinkRegister);
-		ProgramCounter = Architecture.ProgramCounter == null ? null : Operand.CreateCPURegister(TypeSystem.BuiltIn.Object, Architecture.ProgramCounter);
+		LinkRegister = Architecture.LinkRegister == null ? null : Operand.CreateCPURegisterNativeInteger(Architecture.LinkRegister, Architecture.Is32BitPlatform);
+		ProgramCounter = Architecture.ProgramCounter == null ? null : Operand.CreateCPURegisterNativeInteger(Architecture.ProgramCounter, Architecture.Is32BitPlatform);
 
 		MethodStagePipelines = new Pipeline<BaseMethodCompilerStage>[MaxThreads];
 
@@ -269,7 +269,7 @@ public sealed class Compiler
 		InternalRuntimeType = GeInternalRuntimeType();
 
 		// Build the default compiler pipeline
-		CompilerPipeline.Add(GetDefaultCompilerPipeline(CompilerSettings, Architecture.Is64BitPlatform));
+		CompilerPipeline.Add(GetDefaultCompilerPipeline(CompilerSettings, Architecture.Is32BitPlatform));
 
 		// Call hook to allow for the extension of the pipeline
 		CompilerHooks.ExtendCompilerPipeline?.Invoke(CompilerPipeline);

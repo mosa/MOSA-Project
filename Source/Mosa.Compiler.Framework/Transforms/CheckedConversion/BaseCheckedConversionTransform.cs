@@ -19,7 +19,7 @@ namespace Mosa.Compiler.Framework.Transforms.CheckedConversion
 
 			Debug.Assert(method != null);
 
-			var symbol = Operand.CreateSymbolFromMethod(method, transform.TypeSystem);
+			var symbol = Operand.CreateSymbolFromMethod(method, transform.Is32BitPlatform);
 
 			context.SetInstruction(IRInstruction.CallStatic, result, symbol, source);
 

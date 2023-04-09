@@ -15,8 +15,8 @@ internal static partial class IntrinsicMethods
 		var result = context.Result;
 		var methodAddress = context.Operand1;
 
-		var eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, CPURegister.RAX);
-		var edx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I8, CPURegister.RDX);
+		var eax = Operand.CreateCPURegister64(CPURegister.RAX);
+		var edx = Operand.CreateCPURegister64(CPURegister.RDX);
 
 		methodCompiler.SplitLongOperand(result, out Operand op0L, out Operand op0H);
 

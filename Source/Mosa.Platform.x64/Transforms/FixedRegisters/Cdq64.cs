@@ -30,8 +30,8 @@ public sealed class Cdq64 : BaseTransform
 		var operand1 = context.Operand1;
 		var result = context.Result;
 
-		var rax = Operand.CreateCPURegister(transform.I8, CPURegister.RAX);
-		var rdx = Operand.CreateCPURegister(transform.I8, CPURegister.RDX);
+		var rax = Operand.CreateCPURegister64( CPURegister.RAX);
+		var rdx = Operand.CreateCPURegister64( CPURegister.RDX);
 
 		context.SetInstruction(X64.Mov64, rax, operand1);
 		context.AppendInstruction(X64.Cdq64, rdx, rax);

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.Analysis;
+using Mosa.Compiler.Framework.RegisterAllocator;
 using Mosa.Compiler.Framework.Trace;
 
 namespace Mosa.Compiler.Framework.Stages;
@@ -91,7 +92,11 @@ public class SparseConditionalConstantPropagationStage : BaseMethodCompilerStage
 
 		if (target.Uses.Count != 0)
 		{
-			var constant = CreateConstant(target.Type, value);
+			Debug.Assert(!target.IsFloatingPoint);
+
+			var constant = target.IsInteger32
+				? CreateConstant32((uint)value)
+				: CreateConstant64(value);
 
 			// for each statement T that uses operand, substituted c in statement T
 			foreach (var node in target.Uses.ToArray())

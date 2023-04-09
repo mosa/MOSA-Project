@@ -14,8 +14,8 @@ internal static partial class IntrinsicMethods
 	{
 		Operand operand1 = context.Operand1;
 
-		Operand eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, CPURegister.RAX);
-		Operand cr = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, CPURegister.CR3);
+		Operand eax = Operand.CreateCPURegister32(CPURegister.RAX);
+		Operand cr = Operand.CreateCPURegister32(CPURegister.CR3);
 
 		context.SetInstruction(X64.Mov64, eax, operand1);
 		context.AppendInstruction(X64.MovCRStore64, null, cr, eax);

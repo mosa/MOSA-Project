@@ -1335,7 +1335,7 @@ public abstract class BaseRegisterAllocator
 				if (liveInterval.AssignedPhysicalRegister == null)
 					continue;
 
-				liveInterval.AssignedPhysicalOperand = Operand.CreateCPURegister(liveInterval.VirtualRegister.VirtualRegisterOperand.Type, liveInterval.AssignedPhysicalRegister);
+				liveInterval.AssignedPhysicalOperand = Operand.CreateCPURegister(liveInterval.VirtualRegister.VirtualRegisterOperand, liveInterval.AssignedPhysicalRegister);
 			}
 		}
 	}

@@ -39,7 +39,7 @@ internal static partial class IntrinsicMethods
 			throw new CompilerException();
 		}
 
-		context.SetInstruction(IRInstruction.Move64, context.Result, Operand.CreateSymbolFromMethod(method, methodCompiler.TypeSystem));
+		context.SetInstruction(IRInstruction.Move64, context.Result, Operand.CreateSymbolFromMethod(method, methodCompiler.Is32BitPlatform));
 
 		methodCompiler.MethodScanner.MethodInvoked(method, methodCompiler.Method);
 	}

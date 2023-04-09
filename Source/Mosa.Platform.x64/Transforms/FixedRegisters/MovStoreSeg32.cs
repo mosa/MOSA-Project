@@ -24,7 +24,7 @@ public sealed class MovStoreSeg32 : BaseTransform
 		var result = context.Result;
 		var operand1 = context.Operand1;
 
-		var v1 = transform.AllocateVirtualRegister(operand1);
+		var v1 = transform.AllocateVirtualRegister32();
 
 		context.SetInstruction(X64.Mov64, v1, operand1);
 		context.AppendInstruction(X64.MovStoreSeg32, result, v1);

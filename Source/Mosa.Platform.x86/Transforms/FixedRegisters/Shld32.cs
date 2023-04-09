@@ -32,7 +32,7 @@ public sealed class Shld32 : BaseTransform
 		var operand3 = context.Operand3;
 		var result = context.Result;
 
-		var ecx = Operand.CreateCPURegister(transform.I4, CPURegister.ECX);
+		var ecx = Operand.CreateCPURegister32( CPURegister.ECX);
 
 		context.SetInstruction(X86.Mov32, ecx, operand3);
 		context.AppendInstruction(X86.Shld32, result, operand1, operand2, ecx);

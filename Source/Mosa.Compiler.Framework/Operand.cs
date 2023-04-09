@@ -462,10 +462,11 @@ public sealed class Operand
 		};
 	}
 
-	public static Operand CreateLabel(string label)
+	public static Operand CreateLabel(string label, bool Is32Platform)
 	{
 		return new Operand
 		{
+			ElementType = Is32Platform ? ElementTypeEnum.Int32 : ElementTypeEnum.Int64,
 			IsLabel = true,
 			Name = label,
 			Offset = 0,
@@ -473,9 +474,41 @@ public sealed class Operand
 		};
 	}
 
-	#endregion Static Factory Constructors v2 [Experimental]
+	public static Operand CreateLabelR4(string label)
+	{
+		return new Operand
+		{
+			ElementType = ElementTypeEnum.R4,
+			IsLabel = true,
+			Name = label,
+			Offset = 0,
+			IsConstant = true
+		};
+	}
 
-	#region Constructions [Experimental]
+	public static Operand CreateLabelR8(string label)
+	{
+		return new Operand
+		{
+			ElementType = ElementTypeEnum.R8,
+			IsLabel = true,
+			Name = label,
+			Offset = 0,
+			IsConstant = true
+		};
+	}
+
+	public static Operand CreateLabelObject(string label)
+	{
+		return new Operand
+		{
+			ElementType = ElementTypeEnum.Object,
+			IsLabel = true,
+			Name = label,
+			Offset = 0,
+			IsConstant = true
+		};
+	}
 
 	public static Operand CreateVirtualRegister(Operand operand, int index)
 	{
@@ -486,92 +519,88 @@ public sealed class Operand
 		};
 	}
 
-	#endregion Constructions [Experimental]
-
-	#region Static Factory Constructors
-
-	/// <summary>
-	/// Creates a new constant <see cref="Operand" /> for the given integral value.
-	/// </summary>
-	/// <param name="type">The type.</param>
-	/// <param name="value">The value to create the constant operand for.</param>
-	/// <returns>
-	/// A new operand representing the value <paramref name="value" />.
-	/// </returns>
-	/// <exception cref="CompilerException"></exception>
-	public static Operand CreateConstant(MosaType type, ulong value)
+	public static Operand CreateCPURegister(Operand operand, PhysicalRegister register)
 	{
-		return new Operand(type)
-		{
-			IsConstant = true,
-			ConstantUnsigned64 = value,
-			IsNull = type.IsReferenceType && value == 0,
-			IsResolved = true
-		};
-	}
-
-	/// <summary>
-	/// Creates a new constant <see cref="Operand" /> for the given integral value.
-	/// </summary>
-	/// <param name="type">The type.</param>
-	/// <param name="value">The value to create the constant operand for.</param>
-	/// <returns>
-	/// A new operand representing the value <paramref name="value" />.
-	/// </returns>
-	public static Operand CreateConstant(MosaType type, long value)
-	{
-		return CreateConstant(type, (ulong)value);
-	}
-
-	public static Operand CreateConstant(MosaType type, float value)
-	{
-		return new Operand(type)
-		{
-			IsConstant = true,
-			ConstantFloat = value,
-			IsNull = false,
-			IsResolved = true
-		};
-	}
-
-	public static Operand CreateConstant(MosaType type, double value)
-	{
-		return new Operand(type)
-		{
-			IsConstant = true,
-			ConstantDouble = value,
-			IsNull = false,
-			IsResolved = true
-		};
-	}
-
-	/// <summary>
-	/// Creates a new constant <see cref="Operand" /> for the given integral value.
-	/// </summary>
-	/// <param name="type">The type.</param>
-	/// <param name="value">The value to create the constant operand for.</param>
-	/// <returns>
-	/// A new operand representing the value <paramref name="value" />.
-	/// </returns>
-	public static Operand CreateConstant(MosaType type, int value)
-	{
-		return CreateConstant(type, (long)value);
-	}
-
-	/// <summary>
-	/// Creates a new physical register <see cref="Operand" />.
-	/// </summary>
-	/// <param name="type">The type.</param>
-	/// <param name="register">The register.</param>
-	/// <returns></returns>
-	public static Operand CreateCPURegister(MosaType type, PhysicalRegister register)
-	{
-		return new Operand(type)
+		return new Operand(operand)
 		{
 			IsCPURegister = true,
 			Register = register
 		};
 	}
+
+	public static Operand CreateCPURegister32(PhysicalRegister register)
+	{
+		return new Operand()
+		{
+			ElementType = ElementTypeEnum.Int32,
+			IsCPURegister = true,
+			Register = register
+		};
+	}
+
+	public static Operand CreateCPURegister64(PhysicalRegister register)
+	{
+		return new Operand()
+		{
+			ElementType = ElementTypeEnum.Int64,
+			IsCPURegister = true,
+			Register = register
+		};
+	}
+
+	public static Operand CreateCPURegisterR4(PhysicalRegister register)
+	{
+		return new Operand()
+		{
+			ElementType = ElementTypeEnum.R4,
+			IsCPURegister = true,
+			Register = register
+		};
+	}
+
+	public static Operand CreateCPURegisterR8(PhysicalRegister register)
+	{
+		return new Operand()
+		{
+			ElementType = ElementTypeEnum.R8,
+			IsCPURegister = true,
+			Register = register
+		};
+	}
+
+	public static Operand CreateCPURegisterObject(PhysicalRegister register)
+	{
+		return new Operand()
+		{
+			ElementType = ElementTypeEnum.Object,
+			IsCPURegister = true,
+			Register = register
+		};
+	}
+
+	public static Operand CreateCPURegisterManagedPointer(PhysicalRegister register)
+	{
+		return new Operand()
+		{
+			ElementType = ElementTypeEnum.ManagedPointer,
+			IsCPURegister = true,
+			Register = register
+		};
+	}
+
+	public static Operand CreateCPURegisterNativeInteger(PhysicalRegister register, bool is32Platform)
+	{
+		return new Operand
+		{
+			ElementType = is32Platform ? ElementTypeEnum.Int32 : ElementTypeEnum.Int64,
+			IsCPURegister = true,
+			Register = register
+		};
+	}
+
+	#endregion Static Factory Constructors v2 [Experimental]
+
+	#region Static Factory Constructors
 
 	/// <summary>
 	/// Creates the high 32 bit portion of a 64-bit <see cref="Operand" />.
@@ -745,23 +774,6 @@ public sealed class Operand
 	}
 
 	/// <summary>
-	/// Creates a new symbol <see cref="Operand" /> for the given symbol name.
-	/// </summary>
-	/// <param name="type">The type.</param>
-	/// <param name="label">The label.</param>
-	/// <returns></returns>
-	public static Operand CreateLabel(MosaType type, string label)
-	{
-		return new Operand(type)
-		{
-			IsLabel = true,
-			Name = label,
-			Offset = 0,
-			IsConstant = true
-		};
-	}
-
-	/// <summary>
 	/// Creates the string symbol.
 	/// </summary>
 	/// <param name="type">The type.</param>
@@ -769,10 +781,11 @@ public sealed class Operand
 	/// <param name="offset">The offset.</param>
 	/// <param name="data">The data.</param>
 	/// <returns></returns>
-	public static Operand CreateStringSymbol(MosaType type, string name, uint offset, string data)
+	public static Operand CreateStringSymbol(string name, uint offset, string data)
 	{
-		return new Operand(type)
+		return new Operand
 		{
+			ElementType = ElementTypeEnum.Object,
 			IsLabel = true,
 			Name = name,
 			IsConstant = true,
@@ -782,18 +795,13 @@ public sealed class Operand
 		};
 	}
 
-	/// <summary>
-	/// Creates a new symbol <see cref="Operand" /> for the given symbol name.
-	/// </summary>
-	/// <param name="method">The method.</param>
-	/// <param name="typeSystem">The type system.</param>
-	/// <returns></returns>
-	public static Operand CreateSymbolFromMethod(MosaMethod method, TypeSystem typeSystem)
+	public static Operand CreateSymbolFromMethod(MosaMethod method, bool is32Platform)
 	{
 		Debug.Assert(method != null);
 
-		return new Operand(typeSystem.BuiltIn.Pointer)
+		return new Operand
 		{
+			ElementType = is32Platform ? ElementTypeEnum.Int32 : ElementTypeEnum.Int64,
 			IsLabel = true,
 			Method = method,
 			Name = method.FullName,
@@ -835,27 +843,12 @@ public sealed class Operand
 	/// <summary>
 	/// Gets the null constant <see cref="Operand" />.
 	/// </summary>
-	/// <param name="type">The type.</param>
 	/// <returns></returns>
-	public static Operand GetNull(MosaType type)
+	public static Operand GetNull()
 	{
-		return new Operand(type)
+		return new Operand
 		{
-			IsNull = true,
-			IsConstant = true,
-			IsResolved = true
-		};
-	}
-
-	/// <summary>
-	/// Gets the null constant <see cref="Operand" /> of the object.
-	/// </summary>
-	/// <param name="typeSystem">The type system.</param>
-	/// <returns></returns>
-	public static Operand GetNullObject(TypeSystem typeSystem)
-	{
-		return new Operand(typeSystem.BuiltIn.Object)
-		{
+			ElementType = ElementTypeEnum.Object,
 			IsNull = true,
 			IsConstant = true,
 			IsResolved = true

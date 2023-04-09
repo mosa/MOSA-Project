@@ -32,7 +32,7 @@ public sealed class Shrd64 : BaseTransform
 		var operand3 = context.Operand3;
 		var result = context.Result;
 
-		var rcx = Operand.CreateCPURegister(transform.I8, CPURegister.RCX);
+		var rcx = Operand.CreateCPURegister64( CPURegister.RCX);
 
 		context.SetInstruction(X64.Mov64, rcx, operand3);
 		context.AppendInstruction(X64.Shrd64, result, operand1, operand2, rcx);

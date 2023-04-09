@@ -21,12 +21,12 @@ public sealed class MultibootV1Stage : Mosa.Compiler.Framework.Platform.BaseMult
 
 		Compiler.GetMethodData(initializeMethod).DoNotInline = true;
 
-		var entryPoint = Operand.CreateSymbolFromMethod(initializeMethod, TypeSystem);
+		var entryPoint = Operand.CreateSymbolFromMethod(initializeMethod, Architecture.Is32BitPlatform);
 
-		var eax = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.EAX);
-		var ebx = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.EBX);
-		var ebp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.EBP);
-		var esp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, CPURegister.ESP);
+		var eax = Operand.CreateCPURegister32(CPURegister.EAX);
+		var ebx = Operand.CreateCPURegister32(CPURegister.EBX);
+		var ebp = Operand.CreateCPURegister32(CPURegister.EBP);
+		var esp = Operand.CreateCPURegister32(CPURegister.ESP);
 
 		var multibootEAX = Operand.CreateUnmanagedSymbolPointer(MultibootEAX, TypeSystem);
 		var multibootEBX = Operand.CreateUnmanagedSymbolPointer(MultibootEBX, TypeSystem);

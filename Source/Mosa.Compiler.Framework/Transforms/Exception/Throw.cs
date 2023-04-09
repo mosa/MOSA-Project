@@ -14,7 +14,7 @@ public sealed class Throw : BaseExceptionTransform
 		var method = transform.Compiler.PlatformInternalRuntimeType.FindMethodByName("ExceptionHandler");
 
 		context.SetInstruction(IRInstruction.MoveObject, transform.ExceptionRegister, context.Operand1);
-		context.AppendInstruction(IRInstruction.CallStatic, null, Operand.CreateSymbolFromMethod(method, transform.TypeSystem));
+		context.AppendInstruction(IRInstruction.CallStatic, null, Operand.CreateSymbolFromMethod(method, transform.Is32BitPlatform));
 
 		transform.MethodScanner.MethodInvoked(method, transform.Method);
 	}

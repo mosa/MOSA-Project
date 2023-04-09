@@ -47,9 +47,9 @@ public static class DelegatePatcher
 
 		var context = new Context(CreateMethodStructure(methodCompiler));
 
-		var v1 = methodCompiler.CreateVirtualRegister(thisOperand);
-		var v2 = methodCompiler.CreateVirtualRegister(methodPointerOperand);
-		var v3 = methodCompiler.CreateVirtualRegister(instanceOperand);
+		var v1 = methodCompiler.CreateVirtualRegisterObject();
+		var v2 = methodCompiler.CreateVirtualRegisterNativeInteger();
+		var v3 = methodCompiler.CreateVirtualRegisterObject();
 
 		var loadParameterInstruction = methodCompiler.Is32BitPlatform ? (BaseInstruction)IRInstruction.LoadParam32 : IRInstruction.LoadParam64;
 
@@ -158,7 +158,7 @@ public static class DelegatePatcher
 
 	private static void PatchBeginInvoke(MethodCompiler methodCompiler)
 	{
-		var nullOperand = Operand.GetNullObject(methodCompiler.TypeSystem);
+		var nullOperand = Operand.GetNull();
 		var context = new Context(CreateMethodStructure(methodCompiler));
 
 		var setReturn = BaseMethodCompilerStage.GetSetReturnInstruction(nullOperand.Type, methodCompiler.Is32BitPlatform);

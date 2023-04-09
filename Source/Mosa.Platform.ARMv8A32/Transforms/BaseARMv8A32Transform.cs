@@ -244,9 +244,17 @@ namespace Mosa.Platform.ARMv8A32.Transforms
 
 			// FUTURE: Load float bits (not double) into integer register, than fmov them into the floating point register (saves a memory load)
 
-			var v1 = operand.IsR4 ? transform.AllocateVirtualRegisterR4() : transform.AllocateVirtualRegisterR8();
-			var symbol = operand.IsR4 ? transform.Linker.GetConstantSymbol((float)operand.ConstantUnsigned64) : transform.Linker.GetConstantSymbol((double)operand.ConstantUnsigned64);
-			var label = Operand.CreateLabel(v1.Type, symbol.Name);
+			var v1 = operand.IsR4
+				? transform.AllocateVirtualRegisterR4()
+				: transform.AllocateVirtualRegisterR8();
+
+			var symbol = operand.IsR4
+				? transform.Linker.GetConstantSymbol((float)operand.ConstantUnsigned64)
+				: transform.Linker.GetConstantSymbol((double)operand.ConstantUnsigned64);
+
+			var label = operand.IsR4
+				? Operand.CreateLabelR4(symbol.Name)
+				: Operand.CreateLabelR8(symbol.Name);
 
 			context.InsertBefore().SetInstruction(ARMv8A32.Ldf, v1, label, transform.Constant32_0);
 

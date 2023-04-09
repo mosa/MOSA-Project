@@ -761,16 +761,9 @@ public sealed class MethodCompiler
 		return VirtualRegisters.AllocateObject();
 	}
 
-	/// <summary>
-	/// Creates a new virtual register operand.
-	/// </summary>
-	/// <param name="type">The signature type of the virtual register.</param>
-	/// <returns>
-	/// An operand, which represents the virtual register.
-	/// </returns>
-	public Operand CreateVirtualRegister(Operand operand)
+	public Operand CreateVirtualRegisterNativeInteger()
 	{
-		return VirtualRegisters.AllocateOperand(operand);
+		return Is32BitPlatform ? CreateVirtualRegister32() : CreateVirtualRegister64();
 	}
 
 	/// <summary>
@@ -917,37 +910,37 @@ public sealed class MethodCompiler
 
 	public Operand CreateConstant(byte value)
 	{
-		return Operand.CreateConstant(TypeSystem.BuiltIn.U1, value);
+		return Operand.CreateConstant32(value);
 	}
 
 	public Operand CreateConstant(int value)
 	{
-		return Operand.CreateConstant(TypeSystem.BuiltIn.I4, value);
+		return Operand.CreateConstant32((uint)value);
 	}
 
 	public Operand CreateConstant(uint value)
 	{
-		return Operand.CreateConstant(TypeSystem.BuiltIn.U4, value);
+		return Operand.CreateConstant32(value);
 	}
 
 	public Operand CreateConstant(long value)
 	{
-		return Operand.CreateConstant(TypeSystem.BuiltIn.I8, value);
+		return Operand.CreateConstant64((ulong)value);
 	}
 
 	public Operand CreateConstant(ulong value)
 	{
-		return Operand.CreateConstant(TypeSystem.BuiltIn.U8, value);
+		return Operand.CreateConstant64(value);
 	}
 
 	public Operand CreateConstant(float value)
 	{
-		return Operand.CreateConstant(TypeSystem.BuiltIn.R4, value);
+		return Operand.CreateConstantR4(value);
 	}
 
 	public Operand CreateConstant(double value)
 	{
-		return Operand.CreateConstant(TypeSystem.BuiltIn.R8, value);
+		return Operand.CreateConstantR8(value);
 	}
 
 	#endregion Constant Helper Methods

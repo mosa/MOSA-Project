@@ -325,11 +325,6 @@ public abstract class BaseMethodCompilerStage
 		return MethodCompiler.AddStackLocal(type, pinned);
 	}
 
-	protected Operand AllocateVirtualRegister(MosaType type)
-	{
-		return MethodCompiler.VirtualRegisters.Allocate(type);
-	}
-
 	protected Operand AllocateVirtualRegister(Operand operand)
 	{
 		return MethodCompiler.VirtualRegisters.Allocate(operand.Type);
@@ -1155,7 +1150,7 @@ public abstract class BaseMethodCompilerStage
 
 		// FUTURE: throw compiler exception
 
-		var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
+		var symbol = Operand.CreateSymbolFromMethod(method, Is32BitPlatform);
 
 		if (context.OperandCount == 1)
 		{
@@ -1179,42 +1174,32 @@ public abstract class BaseMethodCompilerStage
 
 	protected Operand CreateConstant32(int value)
 	{
-		return Operand.CreateConstant(TypeSystem.BuiltIn.I4, value);
+		return Operand.CreateConstant32((uint)value);
 	}
 
 	protected Operand CreateConstant32(uint value)
 	{
-		return Operand.CreateConstant(TypeSystem.BuiltIn.I4, value);
-	}
-
-	protected Operand CreateConstant32(long value)
-	{
-		return Operand.CreateConstant(TypeSystem.BuiltIn.I8, value);
+		return Operand.CreateConstant32(value);
 	}
 
 	protected Operand CreateConstant64(long value)
 	{
-		return Operand.CreateConstant(TypeSystem.BuiltIn.I8, value);
+		return Operand.CreateConstant64((ulong)value);
 	}
 
 	protected Operand CreateConstant64(ulong value)
 	{
-		return Operand.CreateConstant(TypeSystem.BuiltIn.I8, value);
+		return Operand.CreateConstant64(value);
 	}
 
 	protected Operand CreateConstantR4(float value)
 	{
-		return Operand.CreateConstant(TypeSystem.BuiltIn.R4, value);
+		return Operand.CreateConstantR4(value);
 	}
 
 	protected Operand CreateConstantR8(double value)
 	{
-		return Operand.CreateConstant(TypeSystem.BuiltIn.R8, value);
-	}
-
-	protected static Operand CreateConstant(MosaType type, ulong value)
-	{
-		return Operand.CreateConstant(type, value);
+		return Operand.CreateConstantR8(value);
 	}
 
 	#endregion Constant Helper Methods

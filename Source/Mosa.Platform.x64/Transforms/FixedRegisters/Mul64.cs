@@ -36,8 +36,8 @@ public sealed class Mul64 : BaseTransform
 		var result = context.Result;
 		var result2 = context.Result2;
 
-		var rax = Operand.CreateCPURegister(transform.I8, CPURegister.RAX);
-		var rdx = Operand.CreateCPURegister(transform.I8, CPURegister.RDX);
+		var rax = Operand.CreateCPURegister64( CPURegister.RAX);
+		var rdx = Operand.CreateCPURegister64( CPURegister.RDX);
 
 		context.SetInstruction(X64.Mov64, rax, operand1);
 

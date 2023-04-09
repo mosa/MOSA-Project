@@ -115,14 +115,14 @@ namespace Mosa.Compiler.Framework.Transforms.Call
 			// TODO Pointers
 			if (result.IsReferenceType)
 			{
-				var returnLow = Operand.CreateCPURegister(result.Type, transform.Architecture.ReturnRegister);
+				var returnLow = Operand.CreateCPURegister(result, transform.Architecture.ReturnRegister);
 				context.AppendInstruction(IRInstruction.Gen, returnLow);
 				context.AppendInstruction(IRInstruction.MoveObject, result, returnLow);
 			}
 			else if (result.IsInteger64 && transform.Is32BitPlatform)
 			{
-				var returnLow = Operand.CreateCPURegister(result.Type, transform.Architecture.ReturnRegister);
-				var returnHigh = Operand.CreateCPURegister(transform.I4, transform.Architecture.ReturnHighRegister);
+				var returnLow = Operand.CreateCPURegister(result, transform.Architecture.ReturnRegister);
+				var returnHigh = Operand.CreateCPURegister32(transform.Architecture.ReturnHighRegister);
 
 				context.AppendInstruction(IRInstruction.Gen, returnLow);
 				context.AppendInstruction(IRInstruction.Gen, returnHigh);
@@ -130,19 +130,19 @@ namespace Mosa.Compiler.Framework.Transforms.Call
 			}
 			else if (result.IsInteger)
 			{
-				var returnLow = Operand.CreateCPURegister(result.Type, transform.Architecture.ReturnRegister);
+				var returnLow = Operand.CreateCPURegister(result, transform.Architecture.ReturnRegister);
 				context.AppendInstruction(IRInstruction.Gen, returnLow);
 				context.AppendInstruction(transform.MoveInstruction, result, returnLow);
 			}
 			else if (result.IsR4)
 			{
-				var returnFP = Operand.CreateCPURegister(result.Type, transform.Architecture.ReturnFloatingPointRegister);
+				var returnFP = Operand.CreateCPURegister(result, transform.Architecture.ReturnFloatingPointRegister);
 				context.AppendInstruction(IRInstruction.Gen, returnFP);
 				context.AppendInstruction(IRInstruction.MoveR4, result, returnFP);
 			}
 			else if (result.IsR8)
 			{
-				var returnFP = Operand.CreateCPURegister(result.Type, transform.Architecture.ReturnFloatingPointRegister);
+				var returnFP = Operand.CreateCPURegister(result, transform.Architecture.ReturnFloatingPointRegister);
 				context.AppendInstruction(IRInstruction.Gen, returnFP);
 				context.AppendInstruction(IRInstruction.MoveR8, result, returnFP);
 			}
@@ -156,20 +156,20 @@ namespace Mosa.Compiler.Framework.Transforms.Call
 				}
 				else if (underlyingType.IsReferenceType)
 				{
-					var returnLow = Operand.CreateCPURegister(transform.O, transform.Architecture.ReturnRegister);
+					var returnLow = Operand.CreateCPURegisterObject(transform.Architecture.ReturnRegister);
 					context.AppendInstruction(IRInstruction.Gen, returnLow);
 					context.AppendInstruction(IRInstruction.MoveObject, result, returnLow);
 				}
 				else if (underlyingType.IsUI1 || underlyingType.IsUI2 || underlyingType.IsUI4 || (transform.Is32BitPlatform && (underlyingType.IsU || underlyingType.IsI || underlyingType.IsPointer)))
 				{
-					var returnLow = Operand.CreateCPURegister(underlyingType, transform.Architecture.ReturnRegister);
+					var returnLow = Operand.CreateCPURegister32(transform.Architecture.ReturnRegister);
 					context.AppendInstruction(IRInstruction.Gen, returnLow);
 					context.AppendInstruction(IRInstruction.Move32, result, returnLow);
 				}
 				else if (underlyingType.IsUI8 && transform.Is32BitPlatform)
 				{
-					var returnLow = Operand.CreateCPURegister(transform.I4, transform.Architecture.ReturnRegister);
-					var returnHigh = Operand.CreateCPURegister(transform.I4, transform.Architecture.ReturnHighRegister);
+					var returnLow = Operand.CreateCPURegister32(transform.Architecture.ReturnRegister);
+					var returnHigh = Operand.CreateCPURegister32(transform.Architecture.ReturnHighRegister);
 
 					context.AppendInstruction(IRInstruction.Gen, returnLow);
 					context.AppendInstruction(IRInstruction.Gen, returnHigh);
@@ -177,27 +177,27 @@ namespace Mosa.Compiler.Framework.Transforms.Call
 				}
 				else if (underlyingType.IsUI8 && !transform.Is32BitPlatform)
 				{
-					var returnLow = Operand.CreateCPURegister(transform.I8, transform.Architecture.ReturnRegister);
+					var returnLow = Operand.CreateCPURegister64(transform.Architecture.ReturnRegister);
 
 					context.AppendInstruction(IRInstruction.Gen, returnLow);
 					context.AppendInstruction(IRInstruction.Move64, result, returnLow);
 				}
 				else if (underlyingType.IsPointer && !transform.Is32BitPlatform)
 				{
-					var returnLow = Operand.CreateCPURegister(transform.I8, transform.Architecture.ReturnRegister);
+					var returnLow = Operand.CreateCPURegister64(transform.Architecture.ReturnRegister);
 
 					context.AppendInstruction(IRInstruction.Gen, returnLow);
 					context.AppendInstruction(IRInstruction.Move64, result, returnLow);
 				}
 				else if (underlyingType.IsR4)
 				{
-					var returnFP = Operand.CreateCPURegister(result.Type, transform.Architecture.ReturnFloatingPointRegister);
+					var returnFP = Operand.CreateCPURegister(result, transform.Architecture.ReturnFloatingPointRegister);
 					context.AppendInstruction(IRInstruction.Gen, returnFP);
 					context.AppendInstruction(IRInstruction.MoveR4, result, returnFP);
 				}
 				else if (underlyingType.IsR8)
 				{
-					var returnFP = Operand.CreateCPURegister(result.Type, transform.Architecture.ReturnFloatingPointRegister);
+					var returnFP = Operand.CreateCPURegister(result, transform.Architecture.ReturnFloatingPointRegister);
 					context.AppendInstruction(IRInstruction.Gen, returnFP);
 					context.AppendInstruction(IRInstruction.MoveR8, result, returnFP);
 				}
@@ -213,7 +213,7 @@ namespace Mosa.Compiler.Framework.Transforms.Call
 			else
 			{
 				// note: same for integer logic (above)
-				var returnLow = Operand.CreateCPURegister(result.Type, transform.Architecture.ReturnRegister);
+				var returnLow = Operand.CreateCPURegister(result, transform.Architecture.ReturnRegister);
 				context.AppendInstruction(IRInstruction.Gen, returnLow);
 				context.AppendInstruction(transform.MoveInstruction, result, returnLow);
 			}

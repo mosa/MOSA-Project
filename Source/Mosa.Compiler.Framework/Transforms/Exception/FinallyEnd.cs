@@ -48,11 +48,11 @@ public sealed class FinallyEnd : BaseExceptionTransform
 		var newBlocks = transform.CreateNewBlockContexts(targetcount, context.Label);
 		var exceptionCallBlock = newBlocks[0];
 
-		context.SetInstruction(transform.BranchInstruction, ConditionCode.NotEqual, null, exceptionVirtualRegister, transform.NullOperand, exceptionCallBlock.Block);
+		context.SetInstruction(IRInstruction.BranchObject, ConditionCode.NotEqual, null, exceptionVirtualRegister, transform.NullOperand, exceptionCallBlock.Block);
 		context.AppendInstruction(IRInstruction.Jmp, newBlocks[1].Block);
 
 		exceptionCallBlock.AppendInstruction(IRInstruction.MoveObject, transform.ExceptionRegister, exceptionVirtualRegister);
-		exceptionCallBlock.AppendInstruction(IRInstruction.CallStatic, null, Operand.CreateSymbolFromMethod(exceptionManager.ExceptionHandler, transform.TypeSystem));
+		exceptionCallBlock.AppendInstruction(IRInstruction.CallStatic, null, Operand.CreateSymbolFromMethod(exceptionManager.ExceptionHandler, transform.Is32BitPlatform));
 
 		transform.MethodScanner.MethodInvoked(exceptionManager.ExceptionHandler, transform.Method);
 

@@ -3,8 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Reflection;
-using System.Reflection.Emit;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Managers;
 using Mosa.Compiler.Framework.Trace;
@@ -27,20 +25,6 @@ public sealed class TransformContext
 	public TraceLog TraceLog { get; private set; }
 
 	public TraceLog SpecialTraceLog { get; private set; }
-
-	public MosaType I4 { get; private set; }
-
-	public MosaType I8 { get; private set; }
-
-	public MosaType R4 { get; private set; }
-
-	public MosaType R8 { get; private set; }
-
-	public MosaType Pointer { get; private set; }
-
-	public MosaType O { get; private set; }
-
-	public MosaType NativeInteger { get; private set; }
 
 	public VirtualRegisters VirtualRegisters { get; private set; }
 
@@ -173,19 +157,10 @@ public sealed class TransformContext
 		Is32BitPlatform = Compiler.Architecture.Is32BitPlatform;
 		TypeSystem = Compiler.TypeSystem;
 
-		I4 = TypeSystem.BuiltIn.I4;
-		I8 = TypeSystem.BuiltIn.I8;
-		R4 = TypeSystem.BuiltIn.R4;
-		R8 = TypeSystem.BuiltIn.R8;
-		O = TypeSystem.BuiltIn.Object;
-		Pointer = TypeSystem.BuiltIn.Pointer;
-
-		NativeInteger = Is32BitPlatform ? I4 : I8;
-
-		Constant32_0 = Operand.CreateConstant(I4, (uint)0);
-		Constant64_0 = Operand.CreateConstant(I4, (ulong)0);
-		ConstantR4_0 = Operand.CreateConstant(R4, 0.0f);
-		ConstantR8_0 = Operand.CreateConstant(R4, 0.0d);
+		Constant32_0 = Operand.CreateConstant32(0);
+		Constant64_0 = Operand.CreateConstant64(0);
+		ConstantR4_0 = Operand.CreateConstantR4(0.0f);
+		ConstantR8_0 = Operand.CreateConstantR8(0.0d);
 
 		Constant32_1 = CreateConstant32(1);
 		Constant32_2 = CreateConstant32(2);
@@ -200,7 +175,7 @@ public sealed class TransformContext
 		Constant64_1 = CreateConstant64(1);
 		Constant64_32 = CreateConstant64(32);
 
-		NullOperand = Operand.GetNullObject(Compiler.TypeSystem);
+		NullOperand = Operand.GetNull();
 
 		LowerTo32 = Compiler.CompilerSettings.LongExpansion;
 		Devirtualization = Compiler.CompilerSettings.Devirtualization;
@@ -339,57 +314,57 @@ public sealed class TransformContext
 
 	public Operand CreateConstant(int value)
 	{
-		return value == 0 ? Constant32_0 : Operand.CreateConstant(I4, value);
+		return value == 0 ? Constant32_0 : Operand.CreateConstant32((uint)value);
 	}
 
 	public Operand CreateConstant32(int value)
 	{
-		return value == 0 ? Constant32_0 : Operand.CreateConstant(I4, value);
+		return value == 0 ? Constant32_0 : Operand.CreateConstant32((uint)value);
 	}
 
 	public Operand CreateConstant32(long value)
 	{
-		return (int)value == 0 ? Constant32_0 : Operand.CreateConstant(I4, (int)value);
+		return (int)value == 0 ? Constant32_0 : Operand.CreateConstant32((uint)value);
 	}
 
 	public Operand CreateConstant(uint value)
 	{
-		return value == 0 ? Constant32_0 : Operand.CreateConstant(I4, value);
+		return value == 0 ? Constant32_0 : Operand.CreateConstant32(value);
 	}
 
 	public Operand CreateConstant32(uint value)
 	{
-		return value == 0 ? Constant32_0 : Operand.CreateConstant(I4, value);
+		return value == 0 ? Constant32_0 : Operand.CreateConstant32(value);
 	}
 
 	public Operand CreateConstant(long value)
 	{
-		return value == 0 ? Constant64_0 : Operand.CreateConstant(I8, value);
+		return value == 0 ? Constant64_0 : Operand.CreateConstant64((ulong)value);
 	}
 
 	public Operand CreateConstant64(long value)
 	{
-		return value == 0 ? Constant64_0 : Operand.CreateConstant(I8, value);
+		return value == 0 ? Constant64_0 : Operand.CreateConstant64((ulong)value);
 	}
 
 	public Operand CreateConstant(ulong value)
 	{
-		return value == 0 ? Constant64_0 : Operand.CreateConstant(I8, value);
+		return value == 0 ? Constant64_0 : Operand.CreateConstant64(value);
 	}
 
 	public Operand CreateConstant64(ulong value)
 	{
-		return value == 0 ? Constant64_0 : Operand.CreateConstant(I8, value);
+		return value == 0 ? Constant64_0 : Operand.CreateConstant64(value);
 	}
 
 	public Operand CreateConstant(float value)
 	{
-		return value == 0 ? ConstantR4_0 : Operand.CreateConstant(R4, value);
+		return value == 0 ? ConstantR4_0 : Operand.CreateConstantR4(value);
 	}
 
 	public Operand CreateConstant(double value)
 	{
-		return value == 0 ? ConstantR4_0 : Operand.CreateConstant(R8, value);
+		return value == 0 ? ConstantR4_0 : Operand.CreateConstantR8(value);
 	}
 
 	#endregion Constant Helper Methods
@@ -573,7 +548,7 @@ public sealed class TransformContext
 	{
 		var symbol = Linker.GetConstantSymbol(value);
 
-		var label = Operand.CreateLabel(R4, symbol.Name);
+		var label = Operand.CreateLabelR4(symbol.Name);
 
 		return label;
 	}
@@ -582,16 +557,20 @@ public sealed class TransformContext
 	{
 		var symbol = Linker.GetConstantSymbol(value);
 
-		var label = Operand.CreateLabel(R4, symbol.Name);
+		var label = Operand.CreateLabelR8(symbol.Name);
 
 		return label;
 	}
 
 	public Operand CreateFloatingPointLabel(Operand operand)
 	{
-		var symbol = operand.IsR4 ? Linker.GetConstantSymbol(operand.ConstantFloat) : Compiler.Linker.GetConstantSymbol(operand.ConstantDouble);
+		var symbol = operand.IsR4
+			? Linker.GetConstantSymbol(operand.ConstantFloat)
+			: Compiler.Linker.GetConstantSymbol(operand.ConstantDouble);
 
-		var label = Operand.CreateLabel(operand.IsR4 ? R4 : R8, symbol.Name);
+		var label = operand.IsR4
+			? Operand.CreateLabelR4(symbol.Name)
+			: Operand.CreateLabelR8(symbol.Name);
 
 		return label;
 	}
@@ -679,7 +658,7 @@ public sealed class TransformContext
 
 		// FUTURE: throw compiler exception
 
-		var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
+		var symbol = Operand.CreateSymbolFromMethod(method, Is32BitPlatform);
 
 		if (context.OperandCount == 1)
 		{

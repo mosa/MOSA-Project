@@ -386,7 +386,9 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			return;
 		}
 
-		var constantOperand = CreateConstant(virtualRegister.Type, replaceValue);
+		var constantOperand = virtualRegister.IsInteger32
+			? CreateConstant32((uint)replaceValue)
+			: CreateConstant64(replaceValue);
 
 		if (trace != null)
 		{

@@ -33,9 +33,9 @@ public sealed class RdMSR : BaseTransform
 		var result = context.Result;
 		var result2 = context.Result2;
 
-		var eax = Operand.CreateCPURegister(transform.I4, CPURegister.EAX);
-		var edx = Operand.CreateCPURegister(transform.I4, CPURegister.EDX);
-		var ecx = Operand.CreateCPURegister(transform.I4, CPURegister.ECX);
+		var eax = Operand.CreateCPURegister32( CPURegister.EAX);
+		var edx = Operand.CreateCPURegister32( CPURegister.EDX);
+		var ecx = Operand.CreateCPURegister32( CPURegister.ECX);
 
 		context.SetInstruction(X86.Mov32, ecx, operand1);
 		context.AppendInstruction2(X86.RdMSR, eax, edx, ecx);

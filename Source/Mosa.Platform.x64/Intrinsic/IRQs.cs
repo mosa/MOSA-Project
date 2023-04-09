@@ -40,9 +40,9 @@ internal static partial class IntrinsicMethods
 
 		methodCompiler.MethodScanner.MethodInvoked(method, methodCompiler.Method);
 
-		var interrupt = Operand.CreateSymbolFromMethod(method, methodCompiler.TypeSystem);
+		var interrupt = Operand.CreateSymbolFromMethod(method, methodCompiler.Is32BitPlatform);
 
-		var esp = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, CPURegister.RSP);
+		var esp = Operand.CreateCPURegister32(CPURegister.RSP);
 
 		context.SetInstruction(X64.Cli);
 		if (irq <= 7 || irq >= 16 | irq == 9) // For IRQ 8, 10, 11, 12, 13, 14 the cpu will automatically pushed the error code
