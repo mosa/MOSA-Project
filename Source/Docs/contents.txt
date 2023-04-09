@@ -45,7 +45,6 @@
    :hidden:
    :maxdepth: 2
 
-   tools
    tool-compiler
    tool-launcher
    tool-launcher-console
