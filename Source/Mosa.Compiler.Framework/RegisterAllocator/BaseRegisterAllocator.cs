@@ -84,9 +84,9 @@ public abstract class BaseRegisterAllocator
 		foreach (var physicalRegister in architecture.RegisterSet)
 		{
 			var reserved = physicalRegister == StackFrameRegister
-			               || physicalRegister == StackPointerRegister
-			               || (LinkRegister != null && physicalRegister == LinkRegister)
-			               || (ProgramCounter != null && physicalRegister == ProgramCounter);
+						   || physicalRegister == StackPointerRegister
+						   || (LinkRegister != null && physicalRegister == LinkRegister)
+						   || (ProgramCounter != null && physicalRegister == ProgramCounter);
 
 			VirtualRegisters.Add(new VirtualRegister(physicalRegister, reserved));
 			LiveIntervalTracks.Add(new LiveIntervalTrack(physicalRegister, reserved));
@@ -413,7 +413,7 @@ public abstract class BaseRegisterAllocator
 					sb.Append("DEF: ");
 					foreach (var op in def)
 					{
-						sb.Append(op.ToString(false));
+						sb.Append(op.ToString());
 						sb.Append(' ');
 					}
 				}
@@ -423,7 +423,7 @@ public abstract class BaseRegisterAllocator
 					sb.Append("USE: ");
 					foreach (var op in use)
 					{
-						sb.Append(op.ToString(false));
+						sb.Append(op.ToString());
 						sb.Append(' ');
 					}
 				}

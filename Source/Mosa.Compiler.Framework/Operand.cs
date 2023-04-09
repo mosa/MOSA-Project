@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Reflection.Emit;
 using System.Text;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.MosaTypeSystem;
@@ -15,14 +16,18 @@ public sealed class Operand
 {
 	#region Future
 
-	// Primitive Type: Integer, Float, ValueType
-	// Size: 32, 64
-	// Operand Type: Local Stack, Paramater, Static Field, Label, Virtual Register, Physical Register
-	// Attribute: Reference Type, Managed Pointer, Constant, Unresolved Constant
+	// Primitive Type: Integer (32/64), Float (R4,R8), Object, Managed Pointer, ValueType
+	// Operand Type: Virtual Register, Physical Register, Local Stack, Paramater, Static Field, Label
+	// Attribute: Constant, Unresolved Constant
+
+	public enum ElementTypeEnum
+	{ Int32, Int64, R4, R8, Object, ManagedPointer, ValueType };
 
 	#endregion Future
 
 	#region Properties
+
+	public ElementTypeEnum ElementType { get; private set; }
 
 	/// <summary>
 	/// Gets the constant double float point.
@@ -82,9 +87,9 @@ public sealed class Operand
 	/// <summary>
 	/// Gets a value indicating whether [is 64 bit integer].
 	/// </summary>
-	public bool IsInteger64 { get; private set; }
+	public bool IsInteger64 => ElementType == ElementTypeEnum.Int64;
 
-	public bool IsInteger32 { get; private set; }
+	public bool IsInteger32 => ElementType == ElementTypeEnum.Int32;
 
 	/// <summary>
 	/// Determines if the operand is a constant variable.
@@ -144,11 +149,9 @@ public sealed class Operand
 
 	public bool IsFloatingPoint => IsR4 | IsR8;
 
-	public bool IsFunctionPointer { get; private set; }
-
 	public bool IsHigh => LongParent.High == this;
 
-	public bool IsInteger { get; private set; }
+	public bool IsInteger => ElementType == ElementTypeEnum.Int32 || ElementType == ElementTypeEnum.Int64;
 
 	/// <summary>
 	/// Determines if the operand is a label operand.
@@ -157,7 +160,7 @@ public sealed class Operand
 
 	public bool IsLow => LongParent.Low == this;
 
-	public bool IsManagedPointer { get; private set; }
+	public bool IsManagedPointer => ElementType == ElementTypeEnum.ManagedPointer;
 
 	/// <summary>
 	/// Gets a value indicating whether [is null].
@@ -176,15 +179,11 @@ public sealed class Operand
 
 	public bool IsPinned { get; private set; }
 
-	public bool IsEnum { get; private set; }
+	public bool IsR4 => ElementType == ElementTypeEnum.R4;
 
-	public bool IsPointer => IsManagedPointer || IsUnmanagedPointer || IsFunctionPointer;
+	public bool IsR8 => ElementType == ElementTypeEnum.R8;
 
-	public bool IsR4 { get; private set; }
-
-	public bool IsR8 { get; private set; }
-
-	public bool IsReferenceType { get; private set; }
+	public bool IsReferenceType => ElementType == ElementTypeEnum.Object;
 
 	public bool IsResolved { get; set; }    // FUTURE: make set private
 
@@ -205,14 +204,12 @@ public sealed class Operand
 
 	public bool IsString { get; private set; }
 
-	public bool IsUnmanagedPointer { get; private set; }
-
 	/// <summary>
 	/// Gets a value indicating whether this instance is unresolved constant.
 	/// </summary>
 	public bool IsUnresolvedConstant => IsConstant && !IsResolved;
 
-	public bool IsValueType { get; private set; }
+	public bool IsValueType => ElementType == ElementTypeEnum.ValueType;
 
 	/// <summary>
 	/// Determines if the operand is a virtual register operand.
@@ -268,8 +265,6 @@ public sealed class Operand
 	/// </summary>
 	public List<InstructionNode> Uses { get; }
 
-	public int Size { get; private set; }
-
 	#endregion Properties
 
 	#region Construction
@@ -288,7 +283,6 @@ public sealed class Operand
 		IsParameter = false;
 		IsResolved = false;
 		IsString = false;
-		IsEnum = false;
 	}
 
 	/// <summary>
@@ -299,23 +293,37 @@ public sealed class Operand
 		: this()
 	{
 		Type = type;
+		ElementType = GetElementType(type);
+	}
 
-		IsR4 = type.IsR4;
-		IsR8 = type.IsR8;
+	private Operand(Operand operand)
+	: this()
+	{
+		ElementType = operand.ElementType;
+		Type = operand.Type;
+	}
 
-		IsReferenceType = type.IsReferenceType;
-		IsValueType = type.IsValueType;
+	public static ElementTypeEnum GetElementType(MosaType type)
+	{
+		if (type.IsEnum)
+			type = type.GetEnumUnderlyingType();
 
-		IsManagedPointer = type.IsManagedPointer;
-		IsUnmanagedPointer = type.IsUnmanagedPointer;
-		IsFunctionPointer = type.IsFunctionPointer;
+		if (type.IsReferenceType)
+			return ElementTypeEnum.Object;
+		else if (type.IsR4)
+			return ElementTypeEnum.R4;
+		else if (type.IsR8)
+			return ElementTypeEnum.R8;
+		else if (type.IsValueType)
+			return ElementTypeEnum.ValueType;
+		else if (type.IsI1 || type.IsI2 || type.IsI4 || type.IsI8 || type.IsU1 || type.IsU2 || type.IsU4)
+			return ElementTypeEnum.Int32;
+		else if (type.IsI8)
+			return ElementTypeEnum.Int64;
+		else if (type.IsManagedPointer)
+			return ElementTypeEnum.ManagedPointer;
 
-		IsInteger = type.IsI1 || type.IsI2 || type.IsI4 || type.IsI8 || type.IsU1 || type.IsU2 || type.IsU4 || type.IsU8;
-
-		IsInteger64 = type.IsUI8 || Type.GetEnumUnderlyingType().IsUI8;
-		IsInteger32 = type.IsUI4 || Type.GetEnumUnderlyingType().IsUI4;
-
-		IsEnum = type.IsEnum;
+		return ElementTypeEnum.Int32; // FIXME
 	}
 
 	#endregion Construction
@@ -326,12 +334,10 @@ public sealed class Operand
 	{
 		return new Operand
 		{
+			ElementType = ElementTypeEnum.Int32,
 			IsVirtualRegister = true,
 			IsConstant = false,
 			IsResolved = false,
-			IsInteger = true,
-			IsInteger32 = true,
-			Size = 4,
 			Index = index,
 		};
 	}
@@ -340,10 +346,8 @@ public sealed class Operand
 	{
 		return new Operand
 		{
+			ElementType = ElementTypeEnum.Int64,
 			IsVirtualRegister = true,
-			IsInteger = true,
-			IsInteger64 = true,
-			Size = 8,
 			Index = index,
 		};
 	}
@@ -352,9 +356,8 @@ public sealed class Operand
 	{
 		return new Operand
 		{
+			ElementType = ElementTypeEnum.R4,
 			IsVirtualRegister = true,
-			IsR4 = true,
-			Size = 4,
 			Index = index,
 		};
 	}
@@ -363,9 +366,8 @@ public sealed class Operand
 	{
 		return new Operand
 		{
+			ElementType = ElementTypeEnum.R8,
 			IsVirtualRegister = true,
-			IsR8 = true,
-			Size = 8,
 			Index = index,
 		};
 	}
@@ -374,12 +376,10 @@ public sealed class Operand
 	{
 		return new Operand
 		{
+			ElementType = ElementTypeEnum.Int32,
 			IsConstant = true,
 			ConstantUnsigned32 = value,
 			IsResolved = true,
-			IsInteger = true,
-			IsInteger32 = true,
-			Size = 4,
 		};
 	}
 
@@ -387,12 +387,10 @@ public sealed class Operand
 	{
 		return new Operand
 		{
+			ElementType = ElementTypeEnum.Int64,
 			IsConstant = true,
 			ConstantUnsigned64 = value,
 			IsResolved = true,
-			IsInteger = true,
-			IsInteger64 = true,
-			Size = 8,
 		};
 	}
 
@@ -400,11 +398,10 @@ public sealed class Operand
 	{
 		return new Operand
 		{
+			ElementType = ElementTypeEnum.R4,
 			IsConstant = true,
 			ConstantFloat = value,
 			IsResolved = true,
-			IsR8 = false,
-			Size = 4,
 		};
 	}
 
@@ -412,11 +409,10 @@ public sealed class Operand
 	{
 		return new Operand
 		{
+			ElementType = ElementTypeEnum.R8,
 			IsConstant = true,
 			ConstantDouble = value,
 			IsResolved = true,
-			IsR8 = false,
-			Size = 8,
 		};
 	}
 
@@ -424,9 +420,8 @@ public sealed class Operand
 	{
 		return new Operand
 		{
+			ElementType = ElementTypeEnum.Object,
 			IsVirtualRegister = true,
-			IsReferenceType = true,
-			Size = 0, // depends on platform
 			Index = index,
 		};
 	}
@@ -435,12 +430,11 @@ public sealed class Operand
 	{
 		return new Operand
 		{
+			ElementType = ElementTypeEnum.Object,
 			IsConstant = true,
 			ConstantUnsigned64 = 0,
 			IsNull = true,
 			IsResolved = true,
-			IsReferenceType = true,
-			Size = 0, // depends on platform
 		};
 	}
 
@@ -448,13 +442,11 @@ public sealed class Operand
 	{
 		return new Operand
 		{
+			ElementType = ElementTypeEnum.ManagedPointer,
 			IsConstant = false,
 			ConstantUnsigned64 = 0,
 			IsNull = false,
 			IsResolved = true,
-			IsReferenceType = false,
-			IsManagedPointer = true,
-			Size = 0, // depends on platform
 		};
 	}
 
@@ -565,7 +557,6 @@ public sealed class Operand
 	/// <returns></returns>
 	public static Operand CreateHighSplitForLong(Operand longOperand, int index, TypeSystem typeSystem)
 	{
-		//Debug.Assert(longOperand.IsInteger64);
 		Debug.Assert(longOperand.LongParent == null || longOperand.LongParent == longOperand);
 		Debug.Assert(longOperand.High == null);
 
@@ -624,7 +615,6 @@ public sealed class Operand
 	/// <returns></returns>
 	public static Operand CreateLowSplitForLong(Operand longOperand, int index, TypeSystem typeSystem)
 	{
-		//Debug.Assert(longOperand.IsInteger64);
 		Debug.Assert(longOperand.LongParent == null);
 		Debug.Assert(longOperand.Low == null);
 
@@ -851,14 +841,26 @@ public sealed class Operand
 
 	#region Name Output
 
-	/// <summary>
-	/// Returns a string representation of <see cref="Operand" />.
-	/// </summary>
-	/// <param name="full">if set to <c>true</c> [full].</param>
-	/// <returns>
-	/// A string representation of the operand.
-	/// </returns>
-	public string ToString(bool full)
+	public string GetElementString()
+	{
+		return ElementType switch
+		{
+			ElementTypeEnum.Int64 => "I8",
+			ElementTypeEnum.Int32 => "I4",
+			ElementTypeEnum.R4 => "R4",
+			ElementTypeEnum.R8 => "R8",
+			ElementTypeEnum.Object => "O",
+			ElementTypeEnum.ManagedPointer => "MP",
+			ElementTypeEnum.ValueType => "ValueType",
+			_ => throw new CompilerException($"Unknown Type {ElementType}"),
+		};
+	}
+
+	#endregion Name Output
+
+	#region Object Overrides
+
+	public override string ToString()
 	{
 		var sb = new StringBuilder();
 
@@ -944,78 +946,17 @@ public sealed class Operand
 			sb.Append($" ({Name}) ");
 		}
 
-		if (full)
+		sb.Append($" [{GetElementString()}]");
+
+		if (ElementType == ElementTypeEnum.ValueType)
 		{
-			sb.Append($" [{Type.FullName}]");
-		}
-		else
-		{
-			if (IsReferenceType)
-			{
-				sb.Append(" [O]");
-			}
-			else
-			{
-				sb.Append($" [{ShortenTypeName(Type.FullName)}]");
-			}
+			sb.Append($" ({Type.FullName})");
 		}
 
-		return sb.ToString().Replace("  ", " ").Trim();
+		return sb.ToString();
 	}
 
-	private static string ShortenTypeName(string value)
-	{
-		if (value.Length < 2)
-			return value;
-
-		var type = value;
-		var end = string.Empty;
-
-		if (value.EndsWith("*"))
-		{
-			type = value[0..^1];
-			end = "*";
-		}
-		if (value.EndsWith("&"))
-		{
-			type = value[0..^1];
-			end = "&";
-		}
-		if (value.EndsWith("[]"))
-		{
-			type = value[0..^2];
-			end = "[]";
-		}
-
-		return ShortenTypeName2(type) + end;
-	}
-
-	private static string ShortenTypeName2(string value)
-	{
-		return value switch
-		{
-			"System.Object" => "O",
-			"System.Char" => "C",
-			"System.Void" => "V",
-			"System.String" => "String",
-			"System.Byte" => "U1",
-			"System.SByte" => "I1",
-			"System.Boolean" => "B",
-			"System.Int8" => "I1",
-			"System.UInt8" => "U1",
-			"System.Int16" => "I2",
-			"System.UInt16" => "U2",
-			"System.Int32" => "I4",
-			"System.UInt32" => "U4",
-			"System.Int64" => "I8",
-			"System.UInt64" => "U8",
-			"System.Single" => "R4",
-			"System.Double" => "R8",
-			_ => value
-		};
-	}
-
-	#endregion Name Output
+	#endregion Object Overrides
 
 	internal void RenameIndex(int index)
 	{
@@ -1024,13 +965,4 @@ public sealed class Operand
 
 		Index = index;
 	}
-
-	#region Object Overrides
-
-	public override string ToString()
-	{
-		return ToString(false);
-	}
-
-	#endregion Object Overrides
 }
