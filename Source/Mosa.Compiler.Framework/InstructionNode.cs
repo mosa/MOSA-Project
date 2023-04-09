@@ -823,7 +823,7 @@ public sealed class InstructionNode
 		for (var i = 0; i < ResultCount; i++)
 		{
 			var op = GetResult(i);
-			sb.Append($" {(op == null ? "[NULL]" : op.ToString(false))},");
+			sb.Append($" {(op == null ? "[NULL]" : op.ToString())},");
 		}
 
 		if (ResultCount > 0)
@@ -839,7 +839,7 @@ public sealed class InstructionNode
 		for (var i = 0; i < OperandCount; i++)
 		{
 			var op = GetOperand(i);
-			sb.Append($" {(op == null ? "[NULL]" : op.ToString(false))},");
+			sb.Append($" {(op == null ? "[NULL]" : op.ToString())},");
 		}
 
 		if (OperandCount > 0)

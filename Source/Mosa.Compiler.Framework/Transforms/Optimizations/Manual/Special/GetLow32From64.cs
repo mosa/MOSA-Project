@@ -31,7 +31,7 @@ public sealed class GetLow32From64 : BaseTransform
 		if (context.Operand1.IsReferenceType)
 			return true;
 
-		if (context.Operand1.IsPointer || context.Operand1.IsManagedPointer)
+		if (context.Operand1.IsManagedPointer)
 			return true;
 
 		// TEMP

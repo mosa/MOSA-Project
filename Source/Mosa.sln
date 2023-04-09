@@ -99,7 +99,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Setup", "Setup", "{624E8284-4F0A-4C3F-B5F2-271105E48ECF}"
 	ProjectSection(SolutionItems) = preProject
 		..\.github\workflows\builds.yml = ..\.github\workflows\builds.yml
-		Inno-Setup-Script\Mosa-Installer.iss = Inno-Setup-Script\Mosa-Installer.iss
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{A406F567-5C89-45AB-88CE-E20616B28FFD}"
