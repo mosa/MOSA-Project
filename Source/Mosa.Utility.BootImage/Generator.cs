@@ -117,7 +117,7 @@ public static class Generator
 				};
 
 				mbr.Partitions[0].Bootable = false;
-				mbr.Partitions[0].StartLBA = 1; // TODO: Is this right?
+				mbr.Partitions[0].StartLBA = 1;
 				mbr.Partitions[0].TotalBlocks = blockCount - mbr.Partitions[0].StartLBA;
 				mbr.Partitions[0].PartitionType = 0xEE; // GPT protective MBR ID
 

@@ -17,4 +17,7 @@
     <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
     <ProjectReference Include="..\Mosa.Utility.FileSystem\Mosa.Utility.FileSystem.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.IO.Hashing" Version="7.0.0" />
+  </ItemGroup>
 </Project>
