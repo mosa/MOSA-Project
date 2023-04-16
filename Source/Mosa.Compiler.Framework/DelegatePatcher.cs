@@ -47,9 +47,9 @@ public static class DelegatePatcher
 
 		var context = new Context(CreateMethodStructure(methodCompiler));
 
-		var v1 = methodCompiler.CreateVirtualRegisterObject();
-		var v2 = methodCompiler.CreateVirtualRegisterNativeInteger();
-		var v3 = methodCompiler.CreateVirtualRegisterObject();
+		var v1 = methodCompiler.VirtualRegisters.AllocateObject();
+		var v2 = methodCompiler.VirtualRegisters.AllocateNativeInteger();
+		var v3 = methodCompiler.VirtualRegisters.AllocateObject();
 
 		var loadParameterInstruction = methodCompiler.Is32BitPlatform ? (BaseInstruction)IRInstruction.LoadParam32 : IRInstruction.LoadParam64;
 
@@ -71,9 +71,7 @@ public static class DelegatePatcher
 		// check if instance is null (if so, it's a static call to the methodPointer)
 
 		var loadInstruction = methodCompiler.Is32BitPlatform ? (BaseInstruction)IRInstruction.Load32 : IRInstruction.Load64;
-		var compareInstruction = methodCompiler.Is32BitPlatform ? (BaseInstruction)IRInstruction.Compare32x32 : IRInstruction.Compare64x64;
 		var branchInstruction = methodCompiler.Is32BitPlatform ? (BaseInstruction)IRInstruction.Branch32 : IRInstruction.Branch64;
-		var nativeIntegerType = methodCompiler.Is32BitPlatform ? methodCompiler.TypeSystem.BuiltIn.U4 : methodCompiler.TypeSystem.BuiltIn.U8;
 
 		var methodPointerField = GetField(methodCompiler.Method.DeclaringType, "methodPointer");
 		var methodPointerOffset = methodCompiler.TypeLayout.GetFieldOffset(methodPointerField);
@@ -82,9 +80,6 @@ public static class DelegatePatcher
 		var instanceField = GetField(methodCompiler.Method.DeclaringType, "instance");
 		var instanceOffset = methodCompiler.TypeLayout.GetFieldOffset(instanceField);
 		var instanceOffsetOperand = methodCompiler.CreateConstant(instanceOffset);
-
-		var size = methodCompiler.Architecture.NativeInstructionSize;
-		var withReturn = methodCompiler.Method.Signature.ReturnType == null ? false : !methodCompiler.Method.Signature.ReturnType.IsVoid;
 
 		var b0 = new Context(CreateMethodStructure(methodCompiler));
 		var b1 = new Context(methodCompiler.BasicBlocks.CreateBlock());
@@ -119,8 +114,6 @@ public static class DelegatePatcher
 		var opInstance = methodCompiler.VirtualRegisters.AllocateObject();
 		var opCompare = methodCompiler.VirtualRegisters.AllocateNativeInteger();
 
-		var opReturn = withReturn ? methodCompiler.AllocateVirtualRegisterOrStackSlot(methodCompiler.Method.Signature.ReturnType) : null;
-
 		b0.AppendInstruction(loadInstruction, opMethod, thisOperand, methodPointerOffsetOperand);
 		b0.AppendInstruction(loadInstruction, opInstance, thisOperand, instanceOffsetOperand);
 		b0.AppendInstruction(IRInstruction.CompareObject, ConditionCode.Equal, opCompare, opInstance, Operand.NullObject);
@@ -134,7 +127,9 @@ public static class DelegatePatcher
 			operands.Add(vrs[i]);
 		}
 
-		var result = withReturn ? opReturn : null;
+		var result = methodCompiler.Method.Signature.ReturnType != null
+			? methodCompiler.AllocateVirtualRegisterOrStackSlot(methodCompiler.Method.Signature.ReturnType)
+			: null;
 
 		// no instance
 		b1.AppendInstruction(IRInstruction.CallDynamic, result, opMethod, operands);
@@ -147,10 +142,10 @@ public static class DelegatePatcher
 		b2.AppendInstruction(IRInstruction.Jmp, b3.Block);
 
 		// return
-		if (opReturn != null)
+		if (result != null)
 		{
-			var setReturn = BaseMethodCompilerStage.GetSetReturnInstruction(opReturn.Type, methodCompiler.Is32BitPlatform);
-			b3.AppendInstruction(setReturn, null, opReturn);
+			var setReturn = BaseMethodCompilerStage.GetSetReturnInstruction(result.Type, methodCompiler.Is32BitPlatform);
+			b3.AppendInstruction(setReturn, null, result);
 		}
 
 		b3.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);

@@ -12,15 +12,13 @@ internal static partial class StubMethods
 	{
 		var type = methodCompiler.Method.GenericArguments[0];
 		var size = methodCompiler.TypeLayout.GetTypeSize(type);
-		var opReturn = methodCompiler.AllocateVirtualRegisterOrStackSlot(methodCompiler.Method.Signature.ReturnType);
+		var opReturn = methodCompiler.VirtualRegisters.Allocate32();
 
 		// Move constant into return operand
-		var move = methodCompiler.Is32BitPlatform ? (BaseInstruction)IRInstruction.Move32 : IRInstruction.Move64;
-		context.AppendInstruction(move, opReturn, methodCompiler.CreateConstant(size));
+		context.AppendInstruction(IRInstruction.Move32, opReturn, methodCompiler.CreateConstant(size));
 
 		// Set return
-		var setReturn = BaseMethodCompilerStage.GetSetReturnInstruction(opReturn.Type, methodCompiler.Is32BitPlatform);
-		context.AppendInstruction(setReturn, null, opReturn);
+		context.AppendInstruction(IRInstruction.SetReturn32, null, opReturn);
 
 		context.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);
 	}
@@ -30,14 +28,23 @@ internal static partial class StubMethods
 	public static void Unsafe_As(Context context, MethodCompiler methodCompiler)
 	{
 		var source = methodCompiler.Parameters[0];
-		var opReturn = methodCompiler.AllocateVirtualRegisterOrStackSlot(methodCompiler.Method.Signature.ReturnType);
+
+		var opReturn = source.IsReferenceType
+			? methodCompiler.VirtualRegisters.AllocateNativeInteger()
+			: methodCompiler.VirtualRegisters.AllocateManagedPointer();
+
+		var loadSource = source.IsReferenceType
+			? (BaseInstruction)IRInstruction.LoadParamObject
+			: methodCompiler.Is32BitPlatform ? IRInstruction.LoadParam32 : IRInstruction.LoadParam64;
+
+		var setReturn = source.IsReferenceType
+			? (BaseInstruction)IRInstruction.SetReturnObject
+			: methodCompiler.Is32BitPlatform ? IRInstruction.SetReturn32 : IRInstruction.SetReturn64;
 
 		// Load source into return operand
-		var loadSource = BaseMethodCompilerStage.GetLoadParameterInstruction(source.Type, methodCompiler.Is32BitPlatform);
 		context.AppendInstruction(loadSource, opReturn, source);
 
 		// Set return
-		var setReturn = BaseMethodCompilerStage.GetSetReturnInstruction(opReturn.Type, methodCompiler.Is32BitPlatform);
 		context.AppendInstruction(setReturn, null, opReturn);
 
 		context.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);
@@ -48,23 +55,21 @@ internal static partial class StubMethods
 	{
 		var left = methodCompiler.Parameters[0];
 		var right = methodCompiler.Parameters[1];
-		var opLeft = methodCompiler.AllocateVirtualRegisterOrStackSlot(left.Type);
-		var opRight = methodCompiler.AllocateVirtualRegisterOrStackSlot(right.Type);
-		var opReturn = methodCompiler.AllocateVirtualRegisterOrStackSlot(methodCompiler.Method.Signature.ReturnType);
+		var opLeft = methodCompiler.VirtualRegisters.AllocateObject();
+		var opRight = methodCompiler.VirtualRegisters.AllocateObject();
+		var opReturn = methodCompiler.VirtualRegisters.AllocateNativeInteger();
 
 		// Load left parameter
-		var loadLeft = BaseMethodCompilerStage.GetLoadParameterInstruction(left.Type, methodCompiler.Is32BitPlatform);
-		context.AppendInstruction(loadLeft, opLeft, left);
+		context.AppendInstruction(IRInstruction.LoadParamObject, opLeft, left);
 
 		// Load right parameter
-		var loadRight = BaseMethodCompilerStage.GetLoadParameterInstruction(right.Type, methodCompiler.Is32BitPlatform);
-		context.AppendInstruction(loadRight, opRight, right);
+		context.AppendInstruction(IRInstruction.LoadParamObject, opRight, right);
 
 		// Compare and store into result operand
 		context.AppendInstruction(IRInstruction.CompareObject, ConditionCode.Equal, opReturn, opLeft, opRight);
 
 		// Set return
-		var setReturn = BaseMethodCompilerStage.GetSetReturnInstruction(opReturn.Type, methodCompiler.Is32BitPlatform);
+		var setReturn = methodCompiler.Is32BitPlatform ? (BaseInstruction)IRInstruction.SetReturn32 : IRInstruction.SetReturn64;
 		context.AppendInstruction(setReturn, null, opReturn);
 
 		context.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);
@@ -75,16 +80,16 @@ internal static partial class StubMethods
 	{
 		var source = methodCompiler.Parameters[0];
 		var byteOffset = methodCompiler.Parameters[1];
-		var opSource = methodCompiler.AllocateVirtualRegisterOrStackSlot(source.Type);
-		var opByteOffset = methodCompiler.AllocateVirtualRegisterOrStackSlot(byteOffset.Type);
-		var opReturn = methodCompiler.AllocateVirtualRegisterOrStackSlot(methodCompiler.Method.Signature.ReturnType);
+		var opSource = methodCompiler.VirtualRegisters.AllocateManagedPointer();
+		var opByteOffset = methodCompiler.VirtualRegisters.AllocateNativeInteger();
+		var opReturn = methodCompiler.VirtualRegisters.AllocateNativeInteger();
 
 		// Load left parameter
-		var loadSource = BaseMethodCompilerStage.GetLoadParameterInstruction(source.Type, methodCompiler.Is32BitPlatform);
+		var loadSource = methodCompiler.Is32BitPlatform ? (BaseInstruction)IRInstruction.LoadParam32 : IRInstruction.LoadParam64;
 		context.AppendInstruction(loadSource, opSource, source);
 
 		// Load right parameter
-		var loadByteOffset = BaseMethodCompilerStage.GetLoadParameterInstruction(byteOffset.Type, methodCompiler.Is32BitPlatform);
+		var loadByteOffset = methodCompiler.Is32BitPlatform ? (BaseInstruction)IRInstruction.LoadParam32 : IRInstruction.LoadParam64;
 		context.AppendInstruction(loadByteOffset, opByteOffset, byteOffset);
 
 		// Compare and store into result operand
@@ -92,7 +97,7 @@ internal static partial class StubMethods
 		context.AppendInstruction(add, opReturn, opSource, opByteOffset);
 
 		// Return comparison result
-		var setReturn = BaseMethodCompilerStage.GetSetReturnInstruction(opReturn.Type, methodCompiler.Is32BitPlatform);
+		var setReturn = methodCompiler.Is32BitPlatform ? (BaseInstruction)IRInstruction.SetReturn32 : IRInstruction.SetReturn64;
 		context.AppendInstruction(setReturn, null, opReturn);
 
 		context.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);

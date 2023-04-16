@@ -16,7 +16,7 @@ internal static partial class IntrinsicMethods
 		var value = context.Operand2;
 		var result = context.Result;
 
-		var v1 = methodCompiler.CreateVirtualRegister32();
+		var v1 = methodCompiler.VirtualRegisters.Allocate32();
 
 		context.SetInstruction(X86.Mov32, v1, value);
 		context.AppendInstruction(X86.Lock);

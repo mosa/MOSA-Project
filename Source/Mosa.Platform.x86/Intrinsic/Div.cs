@@ -12,10 +12,10 @@ internal static partial class IntrinsicMethods
 	[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::Div")]
 	private static void Div(Context context, MethodCompiler methodCompiler)
 	{
-		Operand n = context.Operand1;
-		Operand d = context.Operand2;
-		Operand result = context.Result;
-		Operand result2 = methodCompiler.CreateVirtualRegister32();
+		var n = context.Operand1;
+		var d = context.Operand2;
+		var result = context.Result;
+		var result2 = methodCompiler.VirtualRegisters.Allocate32();
 
 		methodCompiler.SplitOperand(n, out Operand op0L, out Operand op0H);
 

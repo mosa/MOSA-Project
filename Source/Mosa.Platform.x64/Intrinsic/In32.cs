@@ -12,7 +12,7 @@ internal static partial class IntrinsicMethods
 	[IntrinsicMethod("Mosa.Platform.x64.Intrinsic::In32")]
 	private static void In32(Context context, MethodCompiler methodCompiler)
 	{
-		var v1 = methodCompiler.CreateVirtualRegister64();
+		var v1 = methodCompiler.VirtualRegisters.Allocate64();
 
 		var result = context.Result;
 

@@ -309,12 +309,6 @@ public sealed class MethodCompiler
 
 	#region Methods
 
-	/// <summary>
-	/// Adds the stack local.
-	/// </summary>
-	/// <param name="type">The type.</param>
-	/// <param name="pinned">if set to <c>true</c> [pinned].</param>
-	/// <returns></returns>
 	public Operand AddStackLocal(MosaType type, bool pinned = false)
 	{
 		var local = Operand.CreateStackLocal(type, LocalStack.Count, pinned);
@@ -322,14 +316,56 @@ public sealed class MethodCompiler
 		return local;
 	}
 
-	public Operand AddStackLocal(Operand operand, bool pinned = false)
+	public Operand AllocateStackLocal(Operand operand, bool pinned = false)
 	{
 		var local = Operand.CreateStackLocal(operand, LocalStack.Count, pinned);
 		LocalStack.Add(local);
 		return local;
 	}
 
-	public Operand AddStackLocalValueType(bool pinned = false, MosaType type)
+	public Operand AllocateStackLocal32(bool pinned = false)
+	{
+		var local = Operand.CreateStackLocal32(LocalStack.Count, pinned);
+		LocalStack.Add(local);
+		return local;
+	}
+
+	public Operand AllocateStackLocal64(bool pinned = false)
+	{
+		var local = Operand.CreateStackLocal64(LocalStack.Count, pinned);
+		LocalStack.Add(local);
+		return local;
+	}
+
+	public Operand AllocateStackLocalR4(bool pinned = false)
+	{
+		var local = Operand.CreateStackLocalR4(LocalStack.Count, pinned);
+		LocalStack.Add(local);
+		return local;
+	}
+
+	public Operand AllocateStackLocalR8(bool pinned = false)
+	{
+		var local = Operand.CreateStackLocalR8(LocalStack.Count, pinned);
+		LocalStack.Add(local);
+		return local;
+	}
+
+	public Operand AllocateStackLocalObject(bool pinned = false)
+	{
+		var local = Operand.CreateStackLocalObject(LocalStack.Count, pinned);
+		LocalStack.Add(local);
+		return local;
+	}
+
+	public Operand AllocateStackLocalManagedPointer(bool pinned = false)
+	{
+		var local = Operand.CreateStackLocalManagedPointer(LocalStack.Count, pinned);
+		LocalStack.Add(local);
+		return local;
+	}
+
+	public Operand AllocateStackLocalValueType(MosaType type, bool pinned = false)
 	{
 		var local = Operand.CreateStackLocalValueType(LocalStack.Count, pinned, type);
 		LocalStack.Add(local);
@@ -728,36 +764,6 @@ public sealed class MethodCompiler
 	private Operand CreateVirtualRegister(MosaType type)
 	{
 		return VirtualRegisters.Allocate(type);
-	}
-
-	public Operand CreateVirtualRegister32()
-	{
-		return VirtualRegisters.Allocate32();
-	}
-
-	public Operand CreateVirtualRegister64()
-	{
-		return VirtualRegisters.Allocate64();
-	}
-
-	public Operand CreateVirtualRegisterR4()
-	{
-		return VirtualRegisters.AllocateR4();
-	}
-
-	public Operand CreateVirtualRegisterR8()
-	{
-		return VirtualRegisters.AllocateR8();
-	}
-
-	public Operand CreateVirtualRegisterObject()
-	{
-		return VirtualRegisters.AllocateObject();
-	}
-
-	public Operand CreateVirtualRegisterNativeInteger()
-	{
-		return Is32BitPlatform ? CreateVirtualRegister32() : CreateVirtualRegister64();
 	}
 
 	/// <summary>

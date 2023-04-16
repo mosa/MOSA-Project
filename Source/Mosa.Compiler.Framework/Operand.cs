@@ -11,12 +11,9 @@ namespace Mosa.Compiler.Framework;
 /// <summary>
 /// Operand class
 /// </summary>
-public sealed class Operand
+public sealed partial class Operand
 {
 	#region Enums
-
-	public enum PrimitiveType
-	{ Int32, Int64, R4, R8, Object, ManagedPointer, ValueType };
 
 	public enum LocationType
 	{ Constant, VirtualRegister, PhysicalRegister, StackFrame, StackParameter };

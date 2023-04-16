@@ -12,8 +12,8 @@ internal static partial class StubMethods
 	{
 		var instance = methodCompiler.Parameters[0];
 		var value = methodCompiler.Parameters[1];
-		var opInstance = methodCompiler.AllocateVirtualRegisterOrStackSlot(instance.Type);
-		var opValue = methodCompiler.AllocateVirtualRegisterOrStackSlot(value.Type);
+		var opInstance = methodCompiler.VirtualRegisters.AllocateManagedPointer();
+		var opValue = methodCompiler.VirtualRegisters.AllocateManagedPointer();
 
 		// Load instance parameter
 		var loadInstance = BaseMethodCompilerStage.GetLoadParameterInstruction(instance.Type, methodCompiler.Is32BitPlatform);
@@ -35,8 +35,8 @@ internal static partial class StubMethods
 	public static void ByReference_get_Value(Context context, MethodCompiler methodCompiler)
 	{
 		var instance = methodCompiler.Parameters[0];
-		var opInstance = methodCompiler.AllocateVirtualRegisterOrStackSlot(instance.Type);
-		var opReturn = methodCompiler.AllocateVirtualRegisterOrStackSlot(methodCompiler.Method.Signature.ReturnType);
+		var opInstance = methodCompiler.VirtualRegisters.AllocateManagedPointer();
+		var opReturn = methodCompiler.VirtualRegisters.AllocateManagedPointer();
 
 		// Load instance parameter
 		var loadInstance = BaseMethodCompilerStage.GetLoadParameterInstruction(instance.Type, methodCompiler.Is32BitPlatform);

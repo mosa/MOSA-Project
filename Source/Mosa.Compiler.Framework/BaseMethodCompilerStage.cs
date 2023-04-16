@@ -320,14 +320,44 @@ public abstract class BaseMethodCompilerStage
 		traceLogs = null;
 	}
 
-	public Operand AddStackLocal(MosaType type, bool pinned = false)
+	public Operand AllocateStackLocal32(bool pinned = false)
 	{
-		return MethodCompiler.AddStackLocal(type, pinned);
+		return MethodCompiler.AllocateStackLocal32(pinned);
+	}
+
+	public Operand AllocateStackLocal64(bool pinned = false)
+	{
+		return MethodCompiler.AllocateStackLocal64(pinned);
+	}
+
+	public Operand AllocateStackLocalR4(bool pinned = false)
+	{
+		return MethodCompiler.AllocateStackLocalR4(pinned);
+	}
+
+	public Operand AllocateStackLocalR8(bool pinned = false)
+	{
+		return MethodCompiler.AllocateStackLocalR8(pinned);
+	}
+
+	public Operand AllocateStackLocalObject(bool pinned = false)
+	{
+		return MethodCompiler.AllocateStackLocalObject(pinned);
+	}
+
+	public Operand AllocateStackLocalManagedPointer(bool pinned = false)
+	{
+		return MethodCompiler.AllocateStackLocalManagedPointer(pinned);
+	}
+
+	public Operand AddStackLocalValueType(MosaType type, bool pinned = false)
+	{
+		return MethodCompiler.AllocateStackLocalValueType(type, pinned);
 	}
 
 	public Operand AddStackLocal(Operand operand, bool pinned = false)
 	{
-		return MethodCompiler.AddStackLocal(operand, pinned);
+		return MethodCompiler.AllocateStackLocal(operand, pinned);
 	}
 
 	protected Operand AllocateVirtualRegister(Operand operand)
@@ -368,16 +398,6 @@ public abstract class BaseMethodCompilerStage
 	protected Operand AllocateVirtualRegisterNativeInteger()
 	{
 		return Is32BitPlatform ? MethodCompiler.VirtualRegisters.Allocate32() : MethodCompiler.VirtualRegisters.Allocate64();
-	}
-
-	/// <summary>
-	/// Allocates the virtual register or stack slot.
-	/// </summary>
-	/// <param name="type">The type.</param>
-	/// <returns></returns>
-	public Operand AllocateVirtualRegisterOrStackSlot(MosaType type)
-	{
-		return MethodCompiler.AllocateVirtualRegisterOrStackSlot(type);
 	}
 
 	#endregion Methods
@@ -1006,40 +1026,7 @@ public abstract class BaseMethodCompilerStage
 		throw new InvalidOperationException();
 	}
 
-	protected BaseIRInstruction GetStoreParameterInstruction(MosaType type)
-	{
-		return GetStoreParameterInstruction(type, Is32BitPlatform);
-	}
-
-	public BaseIRInstruction GetLoadParameterInstruction(MosaType type)
-	{
-		return GetLoadParameterInstruction(type, Is32BitPlatform);
-	}
-
-	public static BaseIRInstruction GetStoreParameterInstruction(MosaType type, bool is32bitPlatform)
-	{
-		if (type.IsReferenceType)
-			return IRInstruction.StoreParamObject;
-		else if (type.IsR4)
-			return IRInstruction.StoreParamR4;
-		else if (type.IsR8)
-			return IRInstruction.StoreParamR8;
-		else if (type.IsUI1 || type.IsBoolean)
-			return IRInstruction.StoreParam8;
-		else if (type.IsUI2 || type.IsChar)
-			return IRInstruction.StoreParam16;
-		else if (type.IsUI4)
-			return IRInstruction.StoreParam32;
-		else if (type.IsUI8)
-			return IRInstruction.StoreParam64;
-		else if (is32bitPlatform)
-			return IRInstruction.StoreParam32;
-		else //if (!is32bitPlatform)
-			return IRInstruction.StoreParam64;
-
-		throw new NotSupportedException();
-	}
-
+	// TODO: Replace!
 	public static BaseIRInstruction GetLoadParameterInstruction(MosaType type, bool is32bitPlatform)
 	{
 		if (type.IsReferenceType)
@@ -1072,6 +1059,7 @@ public abstract class BaseMethodCompilerStage
 			return IRInstruction.LoadParam64;
 	}
 
+	// TODO: Replace!
 	public static BaseIRInstruction GetSetReturnInstruction(MosaType type, bool is32bitPlatform)
 	{
 		if (type == null)
@@ -1092,30 +1080,6 @@ public abstract class BaseMethodCompilerStage
 			return IRInstruction.SetReturn64;
 
 		return is32bitPlatform ? IRInstruction.SetReturn32 : IRInstruction.SetReturn64;
-	}
-
-	public BaseIRInstruction GetStoreInstruction(MosaType type)
-	{
-		if (type.IsReferenceType)
-			return IRInstruction.StoreObject;
-		else if (type.IsR4)
-			return IRInstruction.StoreR4;
-		else if (type.IsR8)
-			return IRInstruction.StoreR8;
-		else if (type.IsUI1 || type.IsBoolean)
-			return IRInstruction.Store8;
-		else if (type.IsUI2 || type.IsChar)
-			return IRInstruction.Store16;
-		else if (type.IsUI4)
-			return IRInstruction.Store32;
-		else if (type.IsUI8)
-			return IRInstruction.Store64;
-		else if (Is32BitPlatform)
-			return IRInstruction.Store32;
-		else if (Is64BitPlatform)
-			return IRInstruction.Store64;
-
-		throw new NotSupportedException();
 	}
 
 	private BaseInstruction Select(BaseInstruction instruction32, BaseInstruction instruction64)
