@@ -814,7 +814,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			}
 			else
 			{
-				destination = MethodCompiler.AllocateVirtualRegister(first.PrimitiveType);
+				destination = MethodCompiler.VirtualRegisters.Allocate(first.PrimitiveType);
 				instruction = GetMoveInstruction(first.PrimitiveType);
 			}
 
@@ -882,11 +882,11 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 			if (stackType == PrimitiveType.ValueType || arg[index] || type.IsPinned)
 			{
-				LocalStack[index] = MethodCompiler.AllocateLocalStack(stackType, type.IsPinned, type.Type);
+				LocalStack[index] = MethodCompiler.LocalStack.Allocate(stackType, type.IsPinned, type.Type);
 			}
 			else
 			{
-				LocalStack[index] = MethodCompiler.AllocateVirtualRegister(stackType, type.Type);
+				LocalStack[index] = MethodCompiler.AllocateVirtualRegisterOrLocalStack(stackType, type.Type);
 			}
 
 			LocalPrimitiveType[index] = stackType;
@@ -1019,7 +1019,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var underlyingType = MosaTypeLayout.GetUnderlyingType(type);
 		var primitiveType = MethodCompiler.GetStackTypeDefaultValueType(underlyingType);
 
-		var operand = MethodCompiler.AllocateVirtualRegister(primitiveType, type);
+		var operand = MethodCompiler.AllocateVirtualRegisterOrLocalStack(primitiveType, type);
 
 		return primitiveType == PrimitiveType.ValueType ? new StackEntry(primitiveType, operand, type) : new StackEntry(primitiveType, operand);
 	}
@@ -3444,8 +3444,8 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		if (isPrimitive)
 		{
 			var elementType = MethodCompiler.GetElementType(underlyingType);
-			var stacktype = MethodCompiler.GetStackType(elementType);
-			var result = MethodCompiler.AllocateVirtualRegister(stacktype);
+			var stacktype = MethodCompiler.GetPrimitiveType(elementType);
+			var result = MethodCompiler.VirtualRegisters.Allocate(stacktype);
 
 			var loadInstruction = GetLoadParamInstruction(elementType);
 			context.AppendInstruction(loadInstruction, result, parameter);
@@ -3455,7 +3455,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		else
 		{
 			var stacktype = MethodCompiler.GetStackType(type);
-			var result = MethodCompiler.AllocateVirtualRegister(stacktype, type);
+			var result = MethodCompiler.AllocateVirtualRegisterOrLocalStack(stacktype, type);
 
 			context.AppendInstruction(IRInstruction.LoadParamCompound, result, parameter);
 			context.MosaType = type;
@@ -3499,7 +3499,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		if (isPrimitive)
 		{
 			var stacktype = MethodCompiler.GetStackType(underlyingType);
-			var result = MethodCompiler.AllocateVirtualRegister(stacktype);
+			var result = MethodCompiler.VirtualRegisters.Allocate(stacktype);
 			var elementType = MethodCompiler.GetElementType(underlyingType);
 			var loadInstruction = GetLoadInstruction(elementType);
 
@@ -3509,7 +3509,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		}
 		else
 		{
-			var result = MethodCompiler.AllocateVirtualRegister(PrimitiveType.ValueType, type);
+			var result = MethodCompiler.AllocateVirtualRegisterOrLocalStack(PrimitiveType.ValueType, type);
 
 			context.AppendInstruction(IRInstruction.LoadCompound, result, array, totalElementOffset);
 
@@ -3534,8 +3534,8 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var elementOffset = CalculateArrayElementOffset(context, MethodCompiler.GetSize(elementType), index);
 		var totalElementOffset = CalculateTotalArrayOffset(context, elementOffset);
 
-		var stacktype = MethodCompiler.GetStackType(elementType);
-		var result = MethodCompiler.AllocateVirtualRegister(stacktype);
+		var stacktype = MethodCompiler.GetPrimitiveType(elementType);
+		var result = MethodCompiler.VirtualRegisters.Allocate(stacktype);
 		PushStack(stack, new StackEntry(stacktype, result));
 
 		var loadInstruction = GetLoadInstruction(elementType);
@@ -3557,7 +3557,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		//var underlyingType = MosaTypeLayout.GetUnderlyingType(type);
 
-		var result = MethodCompiler.AllocateVirtualRegister(PrimitiveType.ManagedPointer);
+		var result = MethodCompiler.VirtualRegisters.Allocate(PrimitiveType.ManagedPointer);
 
 		// Array bounds check
 		context.AppendInstruction(IRInstruction.CheckArrayBounds, null, array, index);
@@ -3584,7 +3584,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var fieldStacktype = MethodCompiler.GetStackTypeDefaultValueType(fieldUnderlyingType);
 		var isFieldPrimitive = MosaTypeLayout.IsPrimitive(fieldUnderlyingType);
 
-		var result = MethodCompiler.AllocateVirtualRegister(fieldStacktype, isFieldPrimitive ? fieldUnderlyingType : fieldType);
+		var result = MethodCompiler.AllocateVirtualRegisterOrLocalStack(fieldStacktype, isFieldPrimitive ? fieldUnderlyingType : fieldType);
 
 		PushStack(stack, new StackEntry(fieldStacktype, result, result.Type));
 
@@ -3705,9 +3705,9 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		MethodScanner.AccessedField(field);
 
 		var offset = TypeLayout.GetFieldOffset(field);
-		var fieldPtr = field.FieldType.ToManagedPointer(); // FUTURE: AllocateVirtualRegisterManagedPointer();
+		//var fieldPtr = field.FieldType.ToManagedPointer(); // FUTURE: AllocateVirtualRegisterManagedPointer();
 
-		var result = MethodCompiler.AllocateVirtualRegister(PrimitiveType.ManagedPointer, fieldPtr);
+		var result = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
 
 		if (offset == 0)
 		{
@@ -3735,7 +3735,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var functionPointer = TypeSystem.ToFnPtr(method.Signature);
 
 		var stacktype = MethodCompiler.GetStackType(functionPointer);
-		var result = MethodCompiler.AllocateVirtualRegister(stacktype);
+		var result = MethodCompiler.VirtualRegisters.Allocate(stacktype);
 
 		var move = GetMoveInstruction(ElementType.I);
 
@@ -3761,8 +3761,8 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	{
 		var entry = PopStack(stack);
 
-		var stacktype = MethodCompiler.GetStackType(elementType);
-		var result = MethodCompiler.AllocateVirtualRegister(stacktype);
+		var stacktype = MethodCompiler.GetPrimitiveType(elementType);
+		var result = MethodCompiler.VirtualRegisters.Allocate(stacktype);
 
 		PushStack(stack, new StackEntry(stacktype, result));
 
@@ -3812,7 +3812,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			return true;
 		}
 
-		var result = MethodCompiler.AllocateVirtualRegister(stacktype);
+		var result = MethodCompiler.VirtualRegisters.Allocate(stacktype);
 
 		PushStack(stack, new StackEntry(stacktype, result));
 
@@ -3861,8 +3861,8 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		if (isPrimitive)
 		{
 			var elementType = MethodCompiler.GetElementType(underlyingType);
-			var stacktype = MethodCompiler.GetStackType(elementType);
-			var result = MethodCompiler.AllocateVirtualRegister(stacktype);
+			var stacktype = MethodCompiler.GetPrimitiveType(elementType);
+			var result = MethodCompiler.VirtualRegisters.Allocate(stacktype);
 
 			PushStack(stack, new StackEntry(stacktype, result));
 
@@ -3873,7 +3873,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		}
 		else
 		{
-			var result = MethodCompiler.AllocateVirtualRegister(PrimitiveType.ValueType, type);
+			var result = MethodCompiler.AllocateVirtualRegisterOrLocalStack(PrimitiveType.ValueType, type);
 
 			context.AppendInstruction(IRInstruction.LoadCompound, result, address, ConstantZero);
 			PushStack(stack, new StackEntry(PrimitiveType.ValueType, result, type));
@@ -3894,8 +3894,8 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		if (isPrimitive)
 		{
 			var elementType = MethodCompiler.GetElementType(underlyingType);
-			var stacktype = MethodCompiler.GetStackType(elementType);
-			var result = MethodCompiler.AllocateVirtualRegister(stacktype);
+			var stacktype = MethodCompiler.GetPrimitiveType(elementType);
+			var result = MethodCompiler.VirtualRegisters.Allocate(stacktype);
 
 			PushStack(stack, new StackEntry(stacktype, result));
 
@@ -4255,7 +4255,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		}
 		else if (stackType == PrimitiveType.Int32 || stackType == PrimitiveType.Int64)
 		{
-			var result = MethodCompiler.AllocateVirtualRegister(stackType);
+			var result = MethodCompiler.VirtualRegisters.Allocate(stackType);
 
 			var newThisLocal = stackType == PrimitiveType.Int32 ? AllocateLocalStack32() : AllocateLocalStack64();
 
@@ -5365,7 +5365,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var entry = PopStack(stack);
 		var type = (MosaType)instruction.Operand;
 
-		var result = MethodCompiler.AllocateVirtualRegister(PrimitiveType.ManagedPointer, type);
+		var result = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
 		PushStack(stack, new StackEntry(PrimitiveType.ManagedPointer, result));
 
 		context.AppendInstruction(IRInstruction.Unbox, result, entry.Operand);
@@ -5397,8 +5397,8 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			var elementType = MethodCompiler.GetElementType(underlyingType);
 
 			var loadInstruction = GetLoadInstruction(elementType);
-			var stackType = MethodCompiler.GetStackType(elementType);
-			var result = MethodCompiler.AllocateVirtualRegister(stackType);
+			var stackType = MethodCompiler.GetPrimitiveType(elementType);
+			var result = MethodCompiler.VirtualRegisters.Allocate(stackType);
 
 			PushStack(stack, new StackEntry(stackType, result));
 
@@ -5408,8 +5408,8 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		}
 		else
 		{
-			var result = MethodCompiler.AllocateVirtualRegister(PrimitiveType.ValueType, type);
-			var address = MethodCompiler.AllocateVirtualRegister(PrimitiveType.ManagedPointer);
+			var result = MethodCompiler.AllocateVirtualRegisterOrLocalStack(PrimitiveType.ValueType, type);
+			var address = MethodCompiler.VirtualRegisters.Allocate(PrimitiveType.ManagedPointer);
 
 			context.AppendInstruction(MoveInstruction, address, entry.Operand);
 			// FUTURE: Add type check

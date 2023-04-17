@@ -36,7 +36,7 @@ public sealed class VirtualRegisters : IEnumerable<Operand>
 		Is32Platform = is32Platform;
 	}
 
-	public Operand AllocateVirtualRegister(PrimitiveType primitiveType)
+	public Operand Allocate(PrimitiveType primitiveType)
 	{
 		return primitiveType switch
 		{

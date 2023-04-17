@@ -860,9 +860,9 @@ public sealed class MethodCompiler
 
 	#region Type Conversion Helpers
 
-	public static ElementType GetElementType(PrimitiveType primativeType)
+	public static ElementType GetElementType(PrimitiveType primitiveType)
 	{
-		return primativeType switch
+		return primitiveType switch
 		{
 			PrimitiveType.Int32 => ElementType.I4,
 			PrimitiveType.Int64 => ElementType.I8,
@@ -870,7 +870,7 @@ public sealed class MethodCompiler
 			PrimitiveType.R4 => ElementType.R4,
 			PrimitiveType.R8 => ElementType.R8,
 			PrimitiveType.ManagedPointer => ElementType.ManagedPointer,
-			_ => throw new CompilerException($"Unable to convert stacktype ({primativeType}) to element type"),
+			_ => throw new CompilerException($"Cannot translate to ElementType from PrimitiveType: {primitiveType}")
 		};
 	}
 
@@ -909,7 +909,7 @@ public sealed class MethodCompiler
 		else if (type.IsPointer)
 			return Is32BitPlatform ? ElementType.I4 : ElementType.I8;
 
-		throw new CompilerException($"Cannot translate to Type {type} to ElementType");
+		throw new CompilerException($"Cannot translate to ElementType from Type: {type}");
 	}
 
 	public PrimitiveType GetStackType(MosaType type)
@@ -933,10 +933,10 @@ public sealed class MethodCompiler
 		else if (type.IsValueType)
 			return PrimitiveType.ValueType;
 
-		throw new CompilerException($"Cannot translate to stacktype {type}");
+		throw new CompilerException($"Cannot translate to PrimitiveType from Type: {type}");
 	}
 
-	public static PrimitiveType GetStackType(ElementType elementType)
+	public static PrimitiveType GetPrimitiveType(ElementType elementType)
 	{
 		return elementType switch
 		{
@@ -952,7 +952,7 @@ public sealed class MethodCompiler
 			ElementType.R8 => PrimitiveType.R8,
 			ElementType.Object => PrimitiveType.Object,
 			ElementType.ManagedPointer => PrimitiveType.ManagedPointer,
-			_ => throw new CompilerException($"Cannot translate to ElementType {elementType} to StackType"),
+			_ => throw new CompilerException($"Cannot translate to PrimitiveType from ElementType: {elementType}"),
 		};
 	}
 
@@ -985,22 +985,12 @@ public sealed class MethodCompiler
 
 	#region Allocator Helpers
 
-	public Operand AllocateVirtualRegister(PrimitiveType primitiveType, MosaType type)
+	public Operand AllocateVirtualRegisterOrLocalStack(PrimitiveType primitiveType, MosaType type)
 	{
 		if (primitiveType == PrimitiveType.ValueType)
 			return LocalStack.Allocate(type);
 		else
-			return VirtualRegisters.AllocateVirtualRegister(primitiveType);
-	}
-
-	public Operand AllocateVirtualRegister(PrimitiveType primitiveType)
-	{
-		return VirtualRegisters.AllocateVirtualRegister(primitiveType);
-	}
-
-	public Operand AllocateLocalStack(PrimitiveType primitiveType, bool isPinned = false, MosaType type = null)
-	{
-		return AllocateLocalStack(primitiveType, isPinned, type);
+			return VirtualRegisters.Allocate(primitiveType);
 	}
 
 	#endregion Allocator Helpers
