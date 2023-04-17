@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Mosa.Compiler.Common;
+using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
@@ -917,4 +918,124 @@ public sealed class MethodCompiler
 	}
 
 	#endregion Constant Helper Methods
+
+	#region Type Helpers
+
+	public static ElementType GetElementType(PrimitiveType primativeType)
+	{
+		return primativeType switch
+		{
+			PrimitiveType.Int32 => ElementType.I4,
+			PrimitiveType.Int64 => ElementType.I8,
+			PrimitiveType.Object => ElementType.Object,
+			PrimitiveType.R4 => ElementType.R4,
+			PrimitiveType.R8 => ElementType.R8,
+			PrimitiveType.ManagedPointer => ElementType.ManagedPointer,
+			_ => throw new CompilerException($"Unable to convert stacktype ({primativeType}) to element type"),
+		};
+	}
+
+	public ElementType GetElementType(MosaType type)
+	{
+		if (type.IsReferenceType)
+			return ElementType.Object;
+		else if (type.IsI1)
+			return ElementType.I1;
+		else if (type.IsI2)
+			return ElementType.I2;
+		else if (type.IsI4)
+			return ElementType.I4;
+		else if (type.IsI8)
+			return ElementType.I8;
+		else if (type.IsU1)
+			return ElementType.U1;
+		else if (type.IsU2)
+			return ElementType.U2;
+		else if (type.IsU4)
+			return ElementType.U4;
+		else if (type.IsU8)
+			return ElementType.U8;
+		else if (type.IsR8)
+			return ElementType.R8;
+		else if (type.IsR4)
+			return ElementType.R4;
+		else if (type.IsBoolean)
+			return ElementType.U1;
+		else if (type.IsChar)
+			return ElementType.U2;
+		else if (type.IsI)
+			return Is32BitPlatform ? ElementType.I4 : ElementType.I8;
+		else if (type.IsManagedPointer)
+			return ElementType.ManagedPointer;
+		else if (type.IsPointer)
+			return Is32BitPlatform ? ElementType.I4 : ElementType.I8;
+
+		throw new CompilerException($"Cannot translate to Type {type} to ElementType");
+	}
+
+	public PrimitiveType GetStackType(MosaType type)
+	{
+		if (type.IsReferenceType)
+			return PrimitiveType.Object;
+		else if (type.IsManagedPointer)
+			return PrimitiveType.ManagedPointer;
+		else if (type.IsI1 || type.IsI2 || type.IsI4 || type.IsU1 || type.IsU2 || type.IsU4 || type.IsChar || type.IsBoolean)
+			return PrimitiveType.Int32;
+		else if (type.IsI8 || type.IsU8)
+			return PrimitiveType.Int64;
+		else if (type.IsR8)
+			return PrimitiveType.R8;
+		else if (type.IsR4)
+			return PrimitiveType.R4;
+		else if (type.IsI)
+			return Is32BitPlatform ? PrimitiveType.Int32 : PrimitiveType.Int64;
+		else if (type.IsPointer)
+			return Is32BitPlatform ? PrimitiveType.Int32 : PrimitiveType.Int64;
+		else if (type.IsValueType)
+			return PrimitiveType.ValueType;
+
+		throw new CompilerException($"Cannot translate to stacktype {type}");
+	}
+
+	public static PrimitiveType GetStackType(ElementType elementType)
+	{
+		return elementType switch
+		{
+			ElementType.I1 => PrimitiveType.Int32,
+			ElementType.I2 => PrimitiveType.Int32,
+			ElementType.I4 => PrimitiveType.Int32,
+			ElementType.I8 => PrimitiveType.Int64,
+			ElementType.U1 => PrimitiveType.Int32,
+			ElementType.U2 => PrimitiveType.Int32,
+			ElementType.U4 => PrimitiveType.Int32,
+			ElementType.U8 => PrimitiveType.Int64,
+			ElementType.R4 => PrimitiveType.R4,
+			ElementType.R8 => PrimitiveType.R8,
+			ElementType.Object => PrimitiveType.Object,
+			ElementType.ManagedPointer => PrimitiveType.ManagedPointer,
+			_ => throw new CompilerException($"Cannot translate to ElementType {elementType} to StackType"),
+		};
+	}
+
+	public uint GetSize(ElementType elementType)
+	{
+		return elementType switch
+		{
+			ElementType.I1 => 1,
+			ElementType.I2 => 2,
+			ElementType.I4 => 4,
+			ElementType.I8 => 8,
+			ElementType.U1 => 1,
+			ElementType.U2 => 2,
+			ElementType.U4 => 4,
+			ElementType.U8 => 8,
+			ElementType.R4 => 4,
+			ElementType.R8 => 8,
+			ElementType.Object => Is32BitPlatform ? 4 : 8u,
+			ElementType.ManagedPointer => Is32BitPlatform ? 4 : 8u,
+			_ => throw new CompilerException($"Cannot get size of {elementType}"),
+		};
+	}
+
+	#endregion Type Helpers
 }
