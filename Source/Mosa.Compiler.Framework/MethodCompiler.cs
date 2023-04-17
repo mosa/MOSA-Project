@@ -7,6 +7,7 @@ using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.Linker;
+using Mosa.Compiler.Framework.RegisterAllocator;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 using static Mosa.Compiler.Framework.CompilerHooks;
@@ -919,7 +920,7 @@ public sealed class MethodCompiler
 
 	#endregion Constant Helper Methods
 
-	#region Type Helpers
+	#region Type Conversion Helpers
 
 	public static ElementType GetElementType(PrimitiveType primativeType)
 	{
@@ -1037,5 +1038,59 @@ public sealed class MethodCompiler
 		};
 	}
 
-	#endregion Type Helpers
+	#endregion Type Conversion Helpers
+
+	#region Allocator Helpers
+
+	public Operand AllocateVirtualRegister(PrimitiveType primitiveType, MosaType type)
+	{
+		return primitiveType switch
+		{
+			PrimitiveType.Int32 => VirtualRegisters.Allocate32(),
+			PrimitiveType.Int64 => VirtualRegisters.Allocate64(),
+			PrimitiveType.R4 => VirtualRegisters.AllocateR4(),
+			PrimitiveType.R8 => VirtualRegisters.AllocateR8(),
+			PrimitiveType.Object => VirtualRegisters.AllocateObject(),
+			PrimitiveType.ManagedPointer => VirtualRegisters.AllocateManagedPointer(),
+			PrimitiveType.ValueType => AddStackLocal(type),
+			_ => throw new CompilerException($"Cannot allocate a virtual register of {primitiveType}"),
+		};
+	}
+
+	public Operand AllocateVirtualRegister(PrimitiveType primitiveType)
+	{
+		return primitiveType switch
+		{
+			PrimitiveType.Int32 => VirtualRegisters.Allocate32(),
+			PrimitiveType.Int64 => VirtualRegisters.Allocate64(),
+			PrimitiveType.R4 => VirtualRegisters.AllocateR4(),
+			PrimitiveType.R8 => VirtualRegisters.AllocateR8(),
+			PrimitiveType.Object => VirtualRegisters.AllocateObject(),
+			PrimitiveType.ManagedPointer => VirtualRegisters.AllocateManagedPointer(),
+			PrimitiveType.ValueType => throw new CompilerException($"Cannot allocate a virtual register to a ValueType"),
+			_ => throw new CompilerException($"Cannot allocate a virtual register of {primitiveType}"),
+		};
+	}
+
+	public Operand AllocateLocalStack(PrimitiveType primitiveType, bool isPinned = false, MosaType type = null)
+	{
+		return primitiveType switch
+		{
+			PrimitiveType.Int32 => AllocateStackLocal32(isPinned),
+			PrimitiveType.Int64 => AllocateStackLocal64(isPinned),
+			PrimitiveType.R4 => AllocateStackLocalR4(isPinned),
+			PrimitiveType.R8 => AllocateStackLocalR8(isPinned),
+			PrimitiveType.Object => AllocateStackLocalObject(isPinned),
+			PrimitiveType.ManagedPointer => AllocateStackLocalManagedPointer(isPinned),
+			PrimitiveType.ValueType => AllocateStackLocalValueType(type, isPinned),
+			_ => throw new CompilerException("Not implemented yet"),
+		};
+	}
+
+	public PrimitiveType GetStackTypeDefaultValueType(MosaType type)
+	{
+		return type == null ? PrimitiveType.ValueType : GetStackType(type);
+	}
+
+	#endregion Allocator Helpers
 }
