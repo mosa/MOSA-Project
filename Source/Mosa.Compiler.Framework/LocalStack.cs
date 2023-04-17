@@ -29,7 +29,7 @@ public sealed class LocalStack : IEnumerable<Operand>
 	#endregion Properties
 
 	/// <summary>
-	/// Initializes a new instance of the <see cref="VirtualRegisters" /> class.
+	/// Initializes a new instance of the <see cref="LocalStack" /> class.
 	/// </summary>
 	public LocalStack(bool is32Platform)
 	{
@@ -147,7 +147,7 @@ public sealed class LocalStack : IEnumerable<Operand>
 		return GetEnumerator();
 	}
 
-	internal void ReOrdered(Operand virtualRegister, int index)
+	internal void Reorder(Operand virtualRegister, int index)
 	{
 		localStack[index - 1] = virtualRegister;
 		virtualRegister.RenameIndex(index);

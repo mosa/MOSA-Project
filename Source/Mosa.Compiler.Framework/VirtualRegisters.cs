@@ -46,7 +46,7 @@ public sealed class VirtualRegisters : IEnumerable<Operand>
 			PrimitiveType.R8 => AllocateR8(),
 			PrimitiveType.Object => AllocateObject(),
 			PrimitiveType.ManagedPointer => AllocateManagedPointer(),
-			PrimitiveType.ValueType => throw new CompilerException($"Cannot allocate a virtual register to a ValueType"),
+			PrimitiveType.ValueType => throw new CompilerException($"Cannot allocate a virtual register from a ValueType"),
 			_ => throw new CompilerException($"Cannot allocate a virtual register of {primitiveType}"),
 		};
 	}
@@ -140,7 +140,7 @@ public sealed class VirtualRegisters : IEnumerable<Operand>
 		return GetEnumerator();
 	}
 
-	internal void ReOrdered(Operand virtualRegister, int index)
+	internal void Reorder(Operand virtualRegister, int index)
 	{
 		virtualRegisters[index - 1] = virtualRegister;
 		virtualRegister.RenameIndex(index);

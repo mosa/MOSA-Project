@@ -697,15 +697,6 @@ public sealed class MethodCompiler
 	/// <summary>
 	/// Splits the long operand.
 	/// </summary>
-	/// <param name="operand">The long operand.</param>
-	public void SplitOperand(Operand operand)
-	{
-		VirtualRegisters.SplitOperand(operand);
-	}
-
-	/// <summary>
-	/// Splits the long operand.
-	/// </summary>
 	/// <param name="operand">The operand.</param>
 	/// <param name="operandLow">The operand low.</param>
 	/// <param name="operandHigh">The operand high.</param>
@@ -734,7 +725,7 @@ public sealed class MethodCompiler
 
 		if (is64Bit)
 		{
-			SplitOperand(operand);
+			VirtualRegisters.SplitOperand(operand);
 			operandLow = operand.Low;
 			operandHigh = operand.High;
 		}
