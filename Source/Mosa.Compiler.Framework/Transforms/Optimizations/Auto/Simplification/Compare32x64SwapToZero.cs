@@ -51,7 +51,7 @@ public sealed class Compare32x64SwapToZero : BaseTransform
 
 		var t1 = context.Operand1.Definitions[0].Operand1;
 
-		var v1 = transform.AllocateVirtualRegister64();
+		var v1 = transform.VirtualRegisters.Allocate64();
 
 		var c1 = transform.CreateConstant(0);
 		var c2 = transform.CreateConstant(1);
@@ -106,7 +106,7 @@ public sealed class Compare32x64SwapToZero_v1 : BaseTransform
 
 		var t1 = context.Operand1.Definitions[0].Operand2;
 
-		var v1 = transform.AllocateVirtualRegister64();
+		var v1 = transform.VirtualRegisters.Allocate64();
 
 		var c1 = transform.CreateConstant(0);
 		var c2 = transform.CreateConstant(1);

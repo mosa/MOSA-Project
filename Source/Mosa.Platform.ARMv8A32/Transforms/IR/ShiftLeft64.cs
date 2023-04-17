@@ -31,11 +31,11 @@ public sealed class ShiftLeft64 : BaseIRTransform
 		//lsl	resultLow, v1, operand2
 		//orr	resultHigh, v5, v1, lsr v3
 
-		var v1 = transform.AllocateVirtualRegister32();
-		var v2 = transform.AllocateVirtualRegister32();
-		var v3 = transform.AllocateVirtualRegister32();
-		var v4 = transform.AllocateVirtualRegister32();
-		var v5 = transform.AllocateVirtualRegister32();
+		var v1 = transform.VirtualRegisters.Allocate32();
+		var v2 = transform.VirtualRegisters.Allocate32();
+		var v3 = transform.VirtualRegisters.Allocate32();
+		var v4 = transform.VirtualRegisters.Allocate32();
+		var v5 = transform.VirtualRegisters.Allocate32();
 
 		var operand2 = MoveConstantToRegister(transform, context, context.Operand2);
 

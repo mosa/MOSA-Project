@@ -15,7 +15,7 @@ public sealed class LoadParamZeroExtend16x64 : BaseLower32Transform
 
 		transform.SplitLongOperand(operand1, out Operand op0Low, out Operand _);
 
-		var resultLow = transform.AllocateVirtualRegister32();
+		var resultLow = transform.VirtualRegisters.Allocate32();
 
 		context.SetInstruction(IRInstruction.LoadParamZeroExtend16x32, resultLow, op0Low);
 		context.AppendInstruction(IRInstruction.To64, result, resultLow, transform.Constant32_0);

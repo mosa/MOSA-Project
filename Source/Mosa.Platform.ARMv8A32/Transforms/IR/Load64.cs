@@ -24,8 +24,8 @@ public sealed class Load64 : BaseIRTransform
 		address = MoveConstantToRegister(transform, context, address);
 		offset = MoveConstantToRegisterOrImmediate(transform, context, offset);
 
-		var v1 = transform.AllocateVirtualRegister32();
-		var v2 = transform.AllocateVirtualRegister32();
+		var v1 = transform.VirtualRegisters.Allocate32();
+		var v2 = transform.VirtualRegisters.Allocate32();
 
 		context.SetInstruction(ARMv8A32.Add, v1, address, offset);
 		context.AppendInstruction(ARMv8A32.Ldr32, resultLow, v1, transform.Constant32_0);

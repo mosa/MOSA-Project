@@ -20,9 +20,9 @@ public sealed class DivSigned32 : BaseIRTransform
 		var operand2 = context.Operand2;
 		var result = context.Result;
 
-		var v1 = transform.AllocateVirtualRegister32();
-		var v2 = transform.AllocateVirtualRegister32();
-		var v3 = transform.AllocateVirtualRegister32();
+		var v1 = transform.VirtualRegisters.Allocate32();
+		var v2 = transform.VirtualRegisters.Allocate32();
+		var v3 = transform.VirtualRegisters.Allocate32();
 
 		context.SetInstruction2(X64.Cdq32, v1, v2, operand1);
 		context.AppendInstruction2(X64.IDiv32, v3, result, v1, v2, operand2);

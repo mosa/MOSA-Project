@@ -13,8 +13,8 @@ public sealed class ZeroExtend16x64 : BaseLower32Transform
 		var result = context.Result;
 		var operand1 = context.Operand1;
 
-		var resultLow = transform.AllocateVirtualRegister32();
-		var v1 = transform.AllocateVirtualRegister32();
+		var resultLow = transform.VirtualRegisters.Allocate32();
+		var v1 = transform.VirtualRegisters.Allocate32();
 
 		context.SetInstruction(IRInstruction.GetLow32, resultLow, operand1);
 		context.AppendInstruction(IRInstruction.ZeroExtend16x32, v1, resultLow);

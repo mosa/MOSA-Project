@@ -45,7 +45,7 @@ public sealed class IDiv32 : BaseTransform
 
 		if (operand3.IsConstant)
 		{
-			var v1 = transform.AllocateVirtualRegister32();
+			var v1 = transform.VirtualRegisters.Allocate32();
 			context.AppendInstruction(X64.Mov64, v1, operand3);
 			context.AppendInstruction2(X64.IDiv32, rdx, rax, rdx, rax, v1);
 		}

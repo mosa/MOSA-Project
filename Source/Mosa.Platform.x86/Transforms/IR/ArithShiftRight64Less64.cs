@@ -28,9 +28,9 @@ public sealed class ArithShiftRight64Less64 : BaseIRTransform
 
 		var count = context.Operand2;
 
-		var v1_count = transform.AllocateVirtualRegister32();
-		var v2 = transform.AllocateVirtualRegister32();
-		var v3 = transform.AllocateVirtualRegister32();
+		var v1_count = transform.VirtualRegisters.Allocate32();
+		var v2 = transform.VirtualRegisters.Allocate32();
+		var v3 = transform.VirtualRegisters.Allocate32();
 
 		context.SetInstruction(X86.Mov32, v1_count, count);
 		context.AppendInstruction(X86.Mov32, v2, op1H);

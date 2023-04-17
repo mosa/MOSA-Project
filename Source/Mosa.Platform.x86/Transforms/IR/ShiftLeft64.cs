@@ -21,8 +21,8 @@ public sealed class ShiftLeft64 : BaseIRTransform
 
 		var count = context.Operand2;
 
-		var v1 = transform.AllocateVirtualRegister32();
-		var v2 = transform.AllocateVirtualRegister32();
+		var v1 = transform.VirtualRegisters.Allocate32();
+		var v2 = transform.VirtualRegisters.Allocate32();
 
 		context.SetInstruction(X86.Shld32, resultHigh, op1H, op1L, count);
 		context.AppendInstruction(X86.Shl32, v1, op1L, count);

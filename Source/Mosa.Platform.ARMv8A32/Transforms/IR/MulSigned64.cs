@@ -20,8 +20,8 @@ public sealed class MulSigned64 : BaseIRTransform
 		transform.SplitLongOperand(context.Operand1, out var op1L, out var op1H);
 		transform.SplitLongOperand(context.Operand2, out var op2L, out var op2H);
 
-		var v1 = transform.AllocateVirtualRegister32();
-		var v2 = transform.AllocateVirtualRegister32();
+		var v1 = transform.VirtualRegisters.Allocate32();
+		var v2 = transform.VirtualRegisters.Allocate32();
 
 		op1L = MoveConstantToRegister(transform, context, op1L);
 		op1H = MoveConstantToRegister(transform, context, op1H);

@@ -38,7 +38,7 @@ public sealed class MulUnsigned32WithShiftLeft32 : BaseTransform
 		var t2 = context.Operand2.Definitions[0].Operand1;
 		var t3 = context.Operand2.Definitions[0].Operand2;
 
-		var v1 = transform.AllocateVirtualRegister32();
+		var v1 = transform.VirtualRegisters.Allocate32();
 
 		context.SetInstruction(IRInstruction.MulUnsigned32, v1, t1, t2);
 		context.AppendInstruction(IRInstruction.ShiftLeft32, result, v1, t3);
@@ -77,7 +77,7 @@ public sealed class MulUnsigned32WithShiftLeft32_v1 : BaseTransform
 		var t2 = context.Operand1.Definitions[0].Operand2;
 		var t3 = context.Operand2;
 
-		var v1 = transform.AllocateVirtualRegister32();
+		var v1 = transform.VirtualRegisters.Allocate32();
 
 		context.SetInstruction(IRInstruction.MulUnsigned32, v1, t3, t1);
 		context.AppendInstruction(IRInstruction.ShiftLeft32, result, v1, t2);

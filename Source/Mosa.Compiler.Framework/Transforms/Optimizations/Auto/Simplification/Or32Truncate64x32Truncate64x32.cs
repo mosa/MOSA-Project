@@ -46,7 +46,7 @@ public sealed class Or32Truncate64x32Truncate64x32 : BaseTransform
 		var t1 = context.Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand2.Definitions[0].Operand1;
 
-		var v1 = transform.AllocateVirtualRegister64();
+		var v1 = transform.VirtualRegisters.Allocate64();
 
 		context.SetInstruction(IRInstruction.Or64, v1, t1, t2);
 		context.AppendInstruction(IRInstruction.GetLow32, result, v1);

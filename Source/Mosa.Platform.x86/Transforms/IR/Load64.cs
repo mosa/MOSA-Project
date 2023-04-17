@@ -32,7 +32,7 @@ public sealed class Load64 : BaseIRTransform
 
 		transform.SplitLongOperand(offset, out var op2L, out _);
 
-		var v1 = transform.AllocateVirtualRegister32();
+		var v1 = transform.VirtualRegisters.Allocate32();
 
 		context.AppendInstruction(X86.Add32, v1, op2L, transform.Constant32_4);
 		context.AppendInstruction(X86.MovLoad32, resultHigh, address, v1);

@@ -21,7 +21,7 @@ public sealed class SubCarryIn32 : BaseIRTransform
 		var operand2 = context.Operand2;
 		var operand3 = context.Operand3;
 
-		var v1 = transform.AllocateVirtualRegister32();
+		var v1 = transform.VirtualRegisters.Allocate32();
 
 		context.SetInstruction(X86.Bt32, v1, operand3, transform.Constant32_0);
 		context.AppendInstruction(X86.Sbb32, result, operand1, operand2);

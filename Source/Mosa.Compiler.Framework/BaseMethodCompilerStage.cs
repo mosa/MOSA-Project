@@ -362,7 +362,7 @@ public abstract class BaseMethodCompilerStage
 
 	protected Operand AllocateVirtualRegister(Operand operand)
 	{
-		return MethodCompiler.VirtualRegisters.AllocateOperand(operand);
+		return MethodCompiler.VirtualRegisters.Allocate(operand);
 	}
 
 	protected Operand AllocateVirtualRegister32()

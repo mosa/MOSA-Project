@@ -43,7 +43,7 @@ public sealed class Mul64 : BaseTransform
 
 		if (operand2.IsConstant)
 		{
-			Operand v3 = transform.AllocateVirtualRegister64();
+			Operand v3 = transform.VirtualRegisters.Allocate64();
 			context.AppendInstruction(X64.Mov64, v3, operand2);
 			operand2 = v3;
 		}

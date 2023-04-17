@@ -46,7 +46,7 @@ public sealed class And32Not32Not32 : BaseTransform
 		var t1 = context.Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand2.Definitions[0].Operand1;
 
-		var v1 = transform.AllocateVirtualRegister32();
+		var v1 = transform.VirtualRegisters.Allocate32();
 
 		context.SetInstruction(IRInstruction.Or32, v1, t1, t2);
 		context.AppendInstruction(IRInstruction.Not32, result, v1);

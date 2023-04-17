@@ -25,7 +25,7 @@ public sealed class AddCarryIn32 : BaseIRTransform
 		operand2 = MoveConstantToRegisterOrImmediate(transform, context, operand2);
 		operand3 = MoveConstantToRegisterOrImmediate(transform, context, operand3);
 
-		var v1 = transform.AllocateVirtualRegister32();
+		var v1 = transform.VirtualRegisters.Allocate32();
 
 		context.SetInstruction(ARMv8A32.Add, v1, operand1, operand2);
 		context.AppendInstruction(ARMv8A32.Add, result, v1, operand3);

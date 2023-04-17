@@ -23,14 +23,14 @@ public sealed class Compare64x64EqualOrNotEqual : BaseLower32Transform
 		var operand2 = context.Operand2;
 		var condition = context.ConditionCode;
 
-		var op0Low = transform.AllocateVirtualRegister32();
-		var op0High = transform.AllocateVirtualRegister32();
-		var op1Low = transform.AllocateVirtualRegister32();
-		var op1High = transform.AllocateVirtualRegister32();
+		var op0Low = transform.VirtualRegisters.Allocate32();
+		var op0High = transform.VirtualRegisters.Allocate32();
+		var op1Low = transform.VirtualRegisters.Allocate32();
+		var op1High = transform.VirtualRegisters.Allocate32();
 
-		var v1 = transform.AllocateVirtualRegister32();
-		var v2 = transform.AllocateVirtualRegister32();
-		var v3 = transform.AllocateVirtualRegister32();
+		var v1 = transform.VirtualRegisters.Allocate32();
+		var v2 = transform.VirtualRegisters.Allocate32();
+		var v3 = transform.VirtualRegisters.Allocate32();
 
 		transform.SplitLongOperand(result, out Operand resultLow, out Operand resultHigh);
 

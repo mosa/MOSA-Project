@@ -23,16 +23,16 @@ public sealed class Compare64x32UnsignedGreater : BaseLower32Transform
 		var operand1 = context.Operand1;
 		var operand2 = context.Operand2;
 
-		var op0Low = transform.AllocateVirtualRegister32();
-		var op0High = transform.AllocateVirtualRegister32();
-		var op1Low = transform.AllocateVirtualRegister32();
-		var op1High = transform.AllocateVirtualRegister32();
+		var op0Low = transform.VirtualRegisters.Allocate32();
+		var op0High = transform.VirtualRegisters.Allocate32();
+		var op1Low = transform.VirtualRegisters.Allocate32();
+		var op1High = transform.VirtualRegisters.Allocate32();
 
-		var v1 = transform.AllocateVirtualRegister32();
-		var v2 = transform.AllocateVirtualRegister32();
-		var v3 = transform.AllocateVirtualRegister32();
-		var v4 = transform.AllocateVirtualRegister32();
-		var v5 = transform.AllocateVirtualRegister32();
+		var v1 = transform.VirtualRegisters.Allocate32();
+		var v2 = transform.VirtualRegisters.Allocate32();
+		var v3 = transform.VirtualRegisters.Allocate32();
+		var v4 = transform.VirtualRegisters.Allocate32();
+		var v5 = transform.VirtualRegisters.Allocate32();
 
 		context.SetInstruction(IRInstruction.GetLow32, op0Low, operand1);
 		context.AppendInstruction(IRInstruction.GetHigh32, op0High, operand1);

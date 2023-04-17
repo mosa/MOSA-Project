@@ -15,8 +15,8 @@ public sealed class LoadParamSignExtend8x64 : BaseLower32Transform
 
 		transform.SplitLongOperand(operand1, out Operand op0Low, out Operand _);
 
-		var resultLow = transform.AllocateVirtualRegister32();
-		var resultHigh = transform.AllocateVirtualRegister32();
+		var resultLow = transform.VirtualRegisters.Allocate32();
+		var resultHigh = transform.VirtualRegisters.Allocate32();
 
 		context.SetInstruction(IRInstruction.LoadParamSignExtend8x32, resultLow, op0Low);
 		context.AppendInstruction(IRInstruction.ArithShiftRight32, resultHigh, resultLow, transform.CreateConstant(31));

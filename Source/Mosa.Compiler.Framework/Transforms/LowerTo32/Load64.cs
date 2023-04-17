@@ -14,11 +14,11 @@ public sealed class Load64 : BaseLower32Transform
 		var address = context.Operand1;
 		var offset = context.Operand2;
 
-		var resultLow = transform.AllocateVirtualRegister32();
-		var resultHigh = transform.AllocateVirtualRegister32();
-		var offsetLow = transform.AllocateVirtualRegister32();
-		var addressLow = transform.AllocateVirtualRegister32();
-		var offset4 = transform.AllocateVirtualRegister32();
+		var resultLow = transform.VirtualRegisters.Allocate32();
+		var resultHigh = transform.VirtualRegisters.Allocate32();
+		var offsetLow = transform.VirtualRegisters.Allocate32();
+		var addressLow = transform.VirtualRegisters.Allocate32();
+		var offset4 = transform.VirtualRegisters.Allocate32();
 
 		context.SetInstruction(IRInstruction.GetLow32, addressLow, address);
 		context.AppendInstruction(IRInstruction.GetLow32, offsetLow, offset);

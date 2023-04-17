@@ -43,7 +43,7 @@ public sealed class Mul32 : BaseTransform
 
 		if (operand2.IsConstant)
 		{
-			var v1 = transform.AllocateVirtualRegister32();
+			var v1 = transform.VirtualRegisters.Allocate32();
 			context.AppendInstruction(X86.Mov32, v1, operand2);
 			operand2 = v1;
 		}

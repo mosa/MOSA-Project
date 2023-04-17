@@ -19,16 +19,16 @@ public abstract class BaseCompoundTransform : BaseTransform
 
 		Debug.Assert(size > 0);
 
-		var srcReg = transform.AllocateVirtualRegisterNativeInteger();
-		var dstReg = transform.AllocateVirtualRegisterNativeInteger();
+		var srcReg = transform.VirtualRegisters.AllocateNativeInteger();
+		var dstReg = transform.VirtualRegisters.AllocateNativeInteger();
 
 		context.SetInstruction(IRInstruction.UnstableObjectTracking);
 
 		context.AppendInstruction(transform.AddInstruction, srcReg, sourceBase, source);
 		context.AppendInstruction(transform.AddInstruction, dstReg, destinationBase, destination);
 
-		var tmp = transform.AllocateVirtualRegister32();
-		var tmpLarge = transform.Is32BitPlatform && size >= 8 ? null : transform.AllocateVirtualRegister64();
+		var tmp = transform.VirtualRegisters.Allocate32();
+		var tmpLarge = transform.Is32BitPlatform && size >= 8 ? null : transform.VirtualRegisters.Allocate64();
 
 		for (var i = 0; i < size;)
 		{

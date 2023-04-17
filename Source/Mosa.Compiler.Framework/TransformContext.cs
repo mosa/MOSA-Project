@@ -240,45 +240,45 @@ public sealed class TransformContext
 		SpecialTraceLog = specialTraceLog;
 	}
 
-	public Operand AllocateVirtualRegister(Operand operand)
-	{
-		return VirtualRegisters.AllocateOperand(operand);
-	}
+	//public Operand AllocateVirtualRegister(Operand operand)
+	//{
+	//	return VirtualRegisters.AllocateOperand(operand);
+	//}
 
-	public Operand AllocateVirtualRegister32()
-	{
-		return VirtualRegisters.Allocate32();
-	}
+	//public Operand AllocateVirtualRegister32()
+	//{
+	//	return VirtualRegisters.Allocate32();
+	//}
 
-	public Operand AllocateVirtualRegister64()
-	{
-		return VirtualRegisters.Allocate64();
-	}
+	//public Operand AllocateVirtualRegister64()
+	//{
+	//	return VirtualRegisters.Allocate64();
+	//}
 
-	public Operand AllocateVirtualRegisterR4()
-	{
-		return VirtualRegisters.AllocateR4();
-	}
+	//public Operand AllocateVirtualRegisterR4()
+	//{
+	//	return VirtualRegisters.AllocateR4();
+	//}
 
-	public Operand AllocateVirtualRegisterR8()
-	{
-		return VirtualRegisters.AllocateR8();
-	}
+	//public Operand AllocateVirtualRegisterR8()
+	//{
+	//	return VirtualRegisters.AllocateR8();
+	//}
 
-	public Operand AllocateVirtualRegisterObject()
-	{
-		return VirtualRegisters.AllocateObject();
-	}
+	//public Operand AllocateVirtualRegisterObject()
+	//{
+	//	return VirtualRegisters.AllocateObject();
+	//}
 
-	public Operand AllocateVirtualRegisterManagedPointer()
-	{
-		return VirtualRegisters.AllocateManagedPointer();
-	}
+	//public Operand AllocateVirtualRegisterManagedPointer()
+	//{
+	//	return VirtualRegisters.AllocateManagedPointer();
+	//}
 
-	public Operand AllocateVirtualRegisterNativeInteger()
-	{
-		return Is32BitPlatform ? VirtualRegisters.Allocate32() : VirtualRegisters.Allocate64();
-	}
+	//public Operand AllocateVirtualRegisterNativeInteger()
+	//{
+	//	return Is32BitPlatform ? VirtualRegisters.Allocate32() : VirtualRegisters.Allocate64();
+	//}
 
 	public bool ApplyTransform(Context context, BaseTransform transform, int count)
 	{
@@ -483,7 +483,7 @@ public sealed class TransformContext
 
 		var operand1 = context.Operand1;
 
-		var v1 = AllocateVirtualRegister(operand1);
+		var v1 = VirtualRegisters.Allocate(operand1);
 
 		context.InsertBefore().AppendInstruction(moveInstruction, v1, operand1);
 		context.Operand1 = v1;
@@ -495,7 +495,7 @@ public sealed class TransformContext
 
 		var operand2 = context.Operand2;
 
-		var v1 = AllocateVirtualRegister(operand2);
+		var v1 = VirtualRegisters.Allocate(operand2);
 
 		context.InsertBefore().AppendInstruction(moveInstruction, v1, operand2);
 		context.Operand2 = v1;
@@ -510,7 +510,7 @@ public sealed class TransformContext
 
 		if (operand1.IsConstant && operand2.IsConstant && operand1.ConstantUnsigned64 == operand2.ConstantUnsigned64)
 		{
-			var v1 = AllocateVirtualRegister(operand1);
+			var v1 = VirtualRegisters.Allocate(operand1);
 
 			context.InsertBefore().AppendInstruction(moveInstruction, v1, operand1);
 			context.Operand1 = v1;
@@ -519,8 +519,8 @@ public sealed class TransformContext
 		}
 		else if (operand1.IsConstant && operand2.IsConstant)
 		{
-			var v1 = AllocateVirtualRegister(operand1);
-			var v2 = AllocateVirtualRegister(operand2);
+			var v1 = VirtualRegisters.Allocate(operand1);
+			var v2 = VirtualRegisters.Allocate(operand2);
 
 			context.InsertBefore().AppendInstruction(moveInstruction, v1, operand1);
 			context.InsertBefore().AppendInstruction(moveInstruction, v2, operand2);
@@ -530,14 +530,14 @@ public sealed class TransformContext
 		}
 		else if (operand1.IsConstant)
 		{
-			var v1 = AllocateVirtualRegister(operand1);
+			var v1 = VirtualRegisters.Allocate(operand1);
 
 			context.InsertBefore().AppendInstruction(moveInstruction, v1, operand1);
 			context.Operand1 = v1;
 		}
 		else if (operand2.IsConstant)
 		{
-			var v1 = AllocateVirtualRegister(operand2);
+			var v1 = VirtualRegisters.Allocate(operand2);
 
 			context.InsertBefore().AppendInstruction(moveInstruction, v1, operand2);
 			context.Operand2 = v1;
@@ -601,7 +601,7 @@ public sealed class TransformContext
 	{
 		var label = CreateR4Label(value);
 
-		var v1 = AllocateVirtualRegisterR4();
+		var v1 = VirtualRegisters.AllocateR4();
 
 		context.InsertBefore().SetInstruction(loadInstruction, v1, label, Constant32_0);
 
@@ -612,7 +612,7 @@ public sealed class TransformContext
 	{
 		var label = CreateR8Label(value);
 
-		var v1 = AllocateVirtualRegisterR8();
+		var v1 = VirtualRegisters.AllocateR8();
 
 		context.InsertBefore().SetInstruction(loadInstruction, v1, label, Constant32_0);
 
@@ -626,7 +626,7 @@ public sealed class TransformContext
 
 		var label = CreateFloatingPointLabel(operand);
 
-		var v1 = operand.IsR4 ? AllocateVirtualRegisterR4() : AllocateVirtualRegisterR8();
+		var v1 = operand.IsR4 ? VirtualRegisters.AllocateR4() : VirtualRegisters.AllocateR8();
 
 		var instruction = operand.IsR4 ? instructionR4 : instructionR8;
 

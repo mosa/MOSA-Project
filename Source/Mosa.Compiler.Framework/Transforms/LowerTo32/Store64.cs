@@ -14,11 +14,11 @@ public sealed class Store64 : BaseLower32Transform
 		var offset = context.Operand2;
 		var value = context.Operand3;
 
-		var valueLow = transform.AllocateVirtualRegister32();
-		var valueHigh = transform.AllocateVirtualRegister32();
-		var offsetLow = transform.AllocateVirtualRegister32();
-		var addressLow = transform.AllocateVirtualRegister32();
-		var offset4 = transform.AllocateVirtualRegister32();
+		var valueLow = transform.VirtualRegisters.Allocate32();
+		var valueHigh = transform.VirtualRegisters.Allocate32();
+		var offsetLow = transform.VirtualRegisters.Allocate32();
+		var addressLow = transform.VirtualRegisters.Allocate32();
+		var offset4 = transform.VirtualRegisters.Allocate32();
 
 		context.SetInstruction(IRInstruction.GetLow32, valueLow, value);
 		context.AppendInstruction(IRInstruction.GetHigh32, valueHigh, value);

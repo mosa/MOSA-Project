@@ -22,10 +22,10 @@ public sealed class MulUnsigned64 : BaseIRTransform
 		transform.SplitLongOperand(context.Operand1, out var op1L, out var op1H);
 		transform.SplitLongOperand(context.Operand2, out var op2L, out var op2H);
 
-		var v1 = transform.AllocateVirtualRegister32();
-		var v2 = transform.AllocateVirtualRegister32();
-		var v3 = transform.AllocateVirtualRegister32();
-		var v4 = transform.AllocateVirtualRegister32();
+		var v1 = transform.VirtualRegisters.Allocate32();
+		var v2 = transform.VirtualRegisters.Allocate32();
+		var v3 = transform.VirtualRegisters.Allocate32();
+		var v4 = transform.VirtualRegisters.Allocate32();
 
 		context.SetInstruction(X86.Mov32, v1, op2L);
 		context.AppendInstruction2(X86.Mul32, v1, resultLow, op2L, op1L);

@@ -52,12 +52,12 @@ public sealed class CallInterface : BasePlugTransform
 		var methodPointerOffset = transform.CreateConstant32(transform.NativePointerSize * 4);
 
 		// Operands to hold pointers
-		var typeDef = transform.AllocateVirtualRegisterNativeInteger();
-		var callTarget = transform.AllocateVirtualRegisterNativeInteger();
+		var typeDef = transform.VirtualRegisters.AllocateNativeInteger();
+		var callTarget = transform.VirtualRegisters.AllocateNativeInteger();
 
-		var interfaceSlotPtr = transform.AllocateVirtualRegisterNativeInteger();
-		var interfaceMethodTablePtr = transform.AllocateVirtualRegisterNativeInteger();
-		var methodDefinition = transform.AllocateVirtualRegisterNativeInteger();
+		var interfaceSlotPtr = transform.VirtualRegisters.AllocateNativeInteger();
+		var interfaceMethodTablePtr = transform.VirtualRegisters.AllocateNativeInteger();
+		var methodDefinition = transform.VirtualRegisters.AllocateNativeInteger();
 
 		// Get the MethodTable pointer
 		context.SetInstruction(transform.LoadInstruction, typeDef, thisPtr, typeDefOffset);

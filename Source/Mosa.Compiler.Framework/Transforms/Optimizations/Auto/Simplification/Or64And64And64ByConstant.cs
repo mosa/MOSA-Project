@@ -50,7 +50,7 @@ public sealed class Or64And64And64ByConstant : BaseTransform
 		var t2 = context.Operand1.Definitions[0].Operand2;
 		var t3 = context.Operand2.Definitions[0].Operand1;
 
-		var v1 = transform.AllocateVirtualRegister64();
+		var v1 = transform.VirtualRegisters.Allocate64();
 
 		context.SetInstruction(IRInstruction.Or64, v1, t1, t3);
 		context.AppendInstruction(IRInstruction.And64, result, v1, t2);
@@ -101,7 +101,7 @@ public sealed class Or64And64And64ByConstant_v1 : BaseTransform
 		var t2 = context.Operand1.Definitions[0].Operand2;
 		var t3 = context.Operand2.Definitions[0].Operand1;
 
-		var v1 = transform.AllocateVirtualRegister64();
+		var v1 = transform.VirtualRegisters.Allocate64();
 
 		context.SetInstruction(IRInstruction.Or64, v1, t3, t1);
 		context.AppendInstruction(IRInstruction.And64, result, v1, t2);
@@ -152,7 +152,7 @@ public sealed class Or64And64And64ByConstant_v2 : BaseTransform
 		var t2 = context.Operand1.Definitions[0].Operand2;
 		var t3 = context.Operand2.Definitions[0].Operand2;
 
-		var v1 = transform.AllocateVirtualRegister64();
+		var v1 = transform.VirtualRegisters.Allocate64();
 
 		context.SetInstruction(IRInstruction.Or64, v1, t1, t3);
 		context.AppendInstruction(IRInstruction.And64, result, v1, t2);
@@ -203,7 +203,7 @@ public sealed class Or64And64And64ByConstant_v3 : BaseTransform
 		var t2 = context.Operand1.Definitions[0].Operand2;
 		var t3 = context.Operand2.Definitions[0].Operand1;
 
-		var v1 = transform.AllocateVirtualRegister64();
+		var v1 = transform.VirtualRegisters.Allocate64();
 
 		context.SetInstruction(IRInstruction.Or64, v1, t3, t2);
 		context.AppendInstruction(IRInstruction.And64, result, v1, t1);
@@ -254,7 +254,7 @@ public sealed class Or64And64And64ByConstant_v4 : BaseTransform
 		var t2 = context.Operand1.Definitions[0].Operand2;
 		var t3 = context.Operand2.Definitions[0].Operand1;
 
-		var v1 = transform.AllocateVirtualRegister64();
+		var v1 = transform.VirtualRegisters.Allocate64();
 
 		context.SetInstruction(IRInstruction.Or64, v1, t2, t3);
 		context.AppendInstruction(IRInstruction.And64, result, v1, t1);
@@ -305,7 +305,7 @@ public sealed class Or64And64And64ByConstant_v5 : BaseTransform
 		var t2 = context.Operand1.Definitions[0].Operand2;
 		var t3 = context.Operand2.Definitions[0].Operand2;
 
-		var v1 = transform.AllocateVirtualRegister64();
+		var v1 = transform.VirtualRegisters.Allocate64();
 
 		context.SetInstruction(IRInstruction.Or64, v1, t3, t1);
 		context.AppendInstruction(IRInstruction.And64, result, v1, t2);
@@ -356,7 +356,7 @@ public sealed class Or64And64And64ByConstant_v6 : BaseTransform
 		var t2 = context.Operand1.Definitions[0].Operand2;
 		var t3 = context.Operand2.Definitions[0].Operand2;
 
-		var v1 = transform.AllocateVirtualRegister64();
+		var v1 = transform.VirtualRegisters.Allocate64();
 
 		context.SetInstruction(IRInstruction.Or64, v1, t2, t3);
 		context.AppendInstruction(IRInstruction.And64, result, v1, t1);
@@ -407,7 +407,7 @@ public sealed class Or64And64And64ByConstant_v7 : BaseTransform
 		var t2 = context.Operand1.Definitions[0].Operand2;
 		var t3 = context.Operand2.Definitions[0].Operand2;
 
-		var v1 = transform.AllocateVirtualRegister64();
+		var v1 = transform.VirtualRegisters.Allocate64();
 
 		context.SetInstruction(IRInstruction.Or64, v1, t3, t2);
 		context.AppendInstruction(IRInstruction.And64, result, v1, t1);

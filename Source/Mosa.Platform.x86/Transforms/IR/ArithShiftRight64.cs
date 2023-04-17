@@ -21,9 +21,9 @@ public sealed class ArithShiftRight64 : BaseIRTransform
 
 		var count = context.Operand2;
 
-		var v1_count = transform.AllocateVirtualRegister32();
-		var v2 = transform.AllocateVirtualRegister32();
-		var v3 = transform.AllocateVirtualRegister32();
+		var v1_count = transform.VirtualRegisters.Allocate32();
+		var v2 = transform.VirtualRegisters.Allocate32();
+		var v3 = transform.VirtualRegisters.Allocate32();
 
 		var newBlocks = transform.CreateNewBlockContexts(4, context.Label);
 		var nextBlock = transform.Split(context);

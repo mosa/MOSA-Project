@@ -21,7 +21,7 @@ public sealed class AddOverflowOut64 : BaseIRTransform
 		transform.SplitLongOperand(context.Operand2, out var op2L, out var op2H);
 		var result2 = context.Result2;
 
-		var v1 = transform.AllocateVirtualRegister32();
+		var v1 = transform.VirtualRegisters.Allocate32();
 
 		context.SetInstruction(X86.Add32, resultLow, op1L, op2L);
 		context.AppendInstruction(X86.Adc32, resultHigh, op1H, op2H);

@@ -30,7 +30,7 @@ public sealed class Store64 : BaseIRTransform
 		}
 		else
 		{
-			var offset4 = transform.AllocateVirtualRegister32();
+			var offset4 = transform.VirtualRegisters.Allocate32();
 
 			context.AppendInstruction(X86.Add32, offset4, op2L, transform.Constant32_4);
 			context.AppendInstruction(X86.MovStore32, null, address, offset4, op3H);

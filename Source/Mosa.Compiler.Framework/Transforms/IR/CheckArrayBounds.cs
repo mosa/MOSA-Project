@@ -23,7 +23,7 @@ public sealed class CheckArrayBounds : BaseTransform
 		var nextBlock = transform.Split(context);
 
 		// Get array length
-		var v1_length = transform.AllocateVirtualRegister32();
+		var v1_length = transform.VirtualRegisters.Allocate32();
 
 		// Now compare length with index
 		// If index is greater than or equal to the length then jump to exception block, otherwise jump to next block

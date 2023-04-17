@@ -19,7 +19,7 @@ namespace Mosa.Platform.x64.Transforms
 
 			var label = transform.CreateFloatingPointLabel(operand);
 
-			var v1 = operand.IsR4 ? transform.AllocateVirtualRegisterR4() : transform.AllocateVirtualRegisterR8();
+			var v1 = operand.IsR4 ? transform.VirtualRegisters.AllocateR4() : transform.VirtualRegisters.AllocateR8();
 
 			var instruction = operand.IsR4 ? (BaseInstruction)X64.MovssLoad : X64.MovsdLoad;
 

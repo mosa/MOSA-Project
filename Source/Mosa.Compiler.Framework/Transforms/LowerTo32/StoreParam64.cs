@@ -13,8 +13,8 @@ public sealed class StoreParam64 : BaseLower32Transform
 		var offset = context.Operand1;
 		var value = context.Operand2;
 
-		var valueLow = transform.AllocateVirtualRegister32();
-		var valueHigh = transform.AllocateVirtualRegister32();
+		var valueLow = transform.VirtualRegisters.Allocate32();
+		var valueHigh = transform.VirtualRegisters.Allocate32();
 
 		transform.SplitLongOperand(offset, out Operand op1Low, out Operand op1High);
 

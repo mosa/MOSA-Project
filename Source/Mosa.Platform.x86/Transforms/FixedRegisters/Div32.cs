@@ -44,7 +44,7 @@ public sealed class Div32 : BaseTransform
 
 		if (operand3.IsConstant)
 		{
-			var v1 = transform.AllocateVirtualRegister32();
+			var v1 = transform.VirtualRegisters.Allocate32();
 			context.AppendInstruction(X86.Mov32, v1, operand3);
 			context.AppendInstruction2(X86.Div32, edx, eax, edx, eax, v1);
 		}

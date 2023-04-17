@@ -51,7 +51,7 @@ public sealed class Compare32x32NotPassThru : BaseTransform
 
 		var t1 = context.Operand1.Definitions[0].Operand1;
 
-		var v1 = transform.AllocateVirtualRegister32();
+		var v1 = transform.VirtualRegisters.Allocate32();
 
 		var c1 = transform.CreateConstant(1);
 
@@ -105,7 +105,7 @@ public sealed class Compare32x32NotPassThru_v1 : BaseTransform
 
 		var t1 = context.Operand1.Definitions[0].Operand2;
 
-		var v1 = transform.AllocateVirtualRegister32();
+		var v1 = transform.VirtualRegisters.Allocate32();
 
 		var c1 = transform.CreateConstant(1);
 

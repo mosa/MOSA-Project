@@ -20,8 +20,8 @@ namespace Mosa.Platform.ARMv8A32.Transforms
 			transform.SplitLongOperand(context.Operand1, out var op1L, out var op1H);
 			transform.SplitLongOperand(context.Operand2, out var op2L, out var op2H);
 
-			var v1 = transform.AllocateVirtualRegister32();
-			var v2 = transform.AllocateVirtualRegister32();
+			var v1 = transform.VirtualRegisters.Allocate32();
+			var v2 = transform.VirtualRegisters.Allocate32();
 
 			op1L = MoveConstantToRegister(transform, context, op1L);
 			op1H = MoveConstantToRegister(transform, context, op1H);
@@ -179,7 +179,7 @@ namespace Mosa.Platform.ARMv8A32.Transforms
 						return constant;
 
 					var before = context.InsertBefore();
-					var v1 = transform.AllocateVirtualRegister32();
+					var v1 = transform.VirtualRegisters.Allocate32();
 					before.SetInstruction(ARMv8A32.Mov, v1, constant);
 
 					return v1;
@@ -190,7 +190,7 @@ namespace Mosa.Platform.ARMv8A32.Transforms
 					var constant = transform.CreateConstant32(immediate);
 
 					var before = context.InsertBefore();
-					var v1 = transform.AllocateVirtualRegister32();
+					var v1 = transform.VirtualRegisters.Allocate32();
 					before.SetInstruction(ARMv8A32.Mov, v1, constant);
 
 					return v1;
@@ -199,7 +199,7 @@ namespace Mosa.Platform.ARMv8A32.Transforms
 				{
 					var before = context.InsertBefore();
 
-					var v1 = transform.AllocateVirtualRegister32();
+					var v1 = transform.VirtualRegisters.Allocate32();
 					before.SetInstruction(ARMv8A32.Movw, v1, transform.CreateConstant32(operand.ConstantUnsigned32 & 0xFFFF));
 					before.AppendInstruction(ARMv8A32.Movt, v1, v1, transform.CreateConstant32(operand.ConstantUnsigned32 >> 16));
 
@@ -209,7 +209,7 @@ namespace Mosa.Platform.ARMv8A32.Transforms
 			else if (operand.IsUnresolvedConstant)
 			{
 				var before = context.InsertBefore();
-				var v1 = transform.AllocateVirtualRegister32();
+				var v1 = transform.VirtualRegisters.Allocate32();
 				before.SetInstruction(ARMv8A32.Movw, v1, operand);
 				before.AppendInstruction(ARMv8A32.Movt, v1, v1, operand);
 
@@ -245,8 +245,8 @@ namespace Mosa.Platform.ARMv8A32.Transforms
 			// FUTURE: Load float bits (not double) into integer register, than fmov them into the floating point register (saves a memory load)
 
 			var v1 = operand.IsR4
-				? transform.AllocateVirtualRegisterR4()
-				: transform.AllocateVirtualRegisterR8();
+				? transform.VirtualRegisters.AllocateR4()
+				: transform.VirtualRegisters.AllocateR8();
 
 			var symbol = operand.IsR4
 				? transform.Linker.GetConstantSymbol((float)operand.ConstantUnsigned64)

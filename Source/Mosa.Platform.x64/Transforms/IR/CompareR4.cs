@@ -28,7 +28,7 @@ public sealed class CompareR4 : BaseIRTransform
 		operand1 = MoveConstantToFloatRegister(transform, context, operand1);
 		operand2 = MoveConstantToFloatRegister(transform, context, operand2);
 
-		var v1 = transform.AllocateVirtualRegister32();
+		var v1 = transform.VirtualRegisters.Allocate32();
 
 		if (condition == ConditionCode.Equal)
 		{

@@ -48,7 +48,7 @@ public sealed class Div64 : BaseTransform
 		}
 		else
 		{
-			var v3 = transform.AllocateVirtualRegister64();
+			var v3 = transform.VirtualRegisters.Allocate64();
 			context.AppendInstruction(X64.Mov64, v3, operand3);
 			context.AppendInstruction2(X64.Div64, rdx, rax, rdx, rax, v3);
 		}

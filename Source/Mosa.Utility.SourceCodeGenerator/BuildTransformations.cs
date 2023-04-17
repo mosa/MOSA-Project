@@ -270,7 +270,7 @@ public class BuildTransformations : BuildBaseTemplate
 
 			nodeNbrToVirtualRegisterNbr.Add(node.NodeNbr, virtualRegisterNbr);
 
-			Lines.AppendLine($"\t\tvar v{virtualRegisterNbr} = transform.AllocateVirtualRegister{resultType}();");
+			Lines.AppendLine($"\t\tvar v{virtualRegisterNbr} = transform.VirtualRegisters.Allocate{resultType}();");
 		}
 		if (virtualRegisterNbr != 0)
 			Lines.AppendLine();

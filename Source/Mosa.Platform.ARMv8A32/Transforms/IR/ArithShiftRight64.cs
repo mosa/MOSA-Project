@@ -24,8 +24,8 @@ public sealed class ArithShiftRight64 : BaseIRTransform
 		op1H = MoveConstantToRegister(transform, context, op1H);
 		op2L = MoveConstantToRegister(transform, context, op2L);
 
-		var v1 = transform.AllocateVirtualRegister32();
-		var v2 = transform.AllocateVirtualRegister32();
+		var v1 = transform.VirtualRegisters.Allocate32();
+		var v2 = transform.VirtualRegisters.Allocate32();
 
 		context.SetInstruction(ARMv8A32.Asr, resultHigh, op1H, op2L);
 		context.AppendInstruction(ARMv8A32.Sub, StatusRegister.Set, v1, op2L, transform.Constant32_0);

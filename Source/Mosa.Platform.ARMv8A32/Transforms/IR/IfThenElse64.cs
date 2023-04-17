@@ -21,7 +21,7 @@ public sealed class IfThenElse64 : BaseIRTransform
 		transform.SplitLongOperand(context.Operand2, out var op2L, out var op2H);
 		transform.SplitLongOperand(context.Operand3, out var op3L, out var op3H);
 
-		var v1 = transform.AllocateVirtualRegister32();
+		var v1 = transform.VirtualRegisters.Allocate32();
 
 		op1L = MoveConstantToRegister(transform, context, op1L);
 		op1H = MoveConstantToRegisterOrImmediate(transform, context, op1H);

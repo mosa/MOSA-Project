@@ -58,7 +58,7 @@ public sealed class VirtualRegisters : IEnumerable<Operand>
 		return register;
 	}
 
-	public Operand AllocateOperand(Operand operand)
+	public Operand Allocate(Operand operand)
 	{
 		var register = Operand.CreateVirtualRegister(operand, virtualRegisters.Count + 1);
 		virtualRegisters.Add(register);
