@@ -28,7 +28,7 @@ public class PromoteTemporaryVariables : BaseMethodCompilerStage
 	{
 		foreach (var operand in MethodCompiler.LocalStack)
 		{
-			Debug.Assert(operand.IsStackLocal);
+			Debug.Assert(operand.IsLocalStack);
 
 			if (CanPromote(operand))
 			{

@@ -330,7 +330,7 @@ public class InlineStage : BaseMethodCompilerStage
 		{
 			mappedOperand = callSiteNode.GetOperand(operand.Index + 1);
 		}
-		else if (operand.IsStackLocal)
+		else if (operand.IsLocalStack)
 		{
 			mappedOperand = MethodCompiler.LocalStack.Allocate(operand, operand.IsPinned);
 		}

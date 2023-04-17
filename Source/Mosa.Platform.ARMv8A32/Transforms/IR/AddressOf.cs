@@ -28,7 +28,7 @@ public sealed class AddressOf : BaseIRTransform
 		{
 			context.SetInstruction(ARMv8A32.Mov, result, operand1);
 		}
-		else if (operand1.IsStackLocal)
+		else if (operand1.IsLocalStack)
 		{
 			context.SetInstruction(ARMv8A32.Add, result, transform.StackFrame, operand1);
 		}

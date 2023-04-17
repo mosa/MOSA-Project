@@ -78,7 +78,7 @@ public sealed partial class Operand
 		{
 			if (!IsResolvedConstant)
 				return false;
-			else if (IsStackLocal || IsOnStack || IsParameter)
+			else if (IsLocalStack || IsOnStack || IsParameter)
 				return ConstantUnsigned64 == 1;
 			else if (IsNull)
 				return false;
@@ -97,7 +97,7 @@ public sealed partial class Operand
 		{
 			if (!IsResolvedConstant)
 				return false;
-			else if (IsStackLocal || IsOnStack || IsParameter)
+			else if (IsLocalStack || IsOnStack || IsParameter)
 				return ConstantUnsigned64 == 0;
 			else if (IsNull)
 				return true;
@@ -126,7 +126,7 @@ public sealed partial class Operand
 
 	public bool IsNull => Primitive == PrimitiveType.Object && IsConstant && IsResolved && ConstantUnsigned64 == 0;
 
-	public bool IsOnStack => IsStackLocal || IsParameter;
+	public bool IsOnStack => IsLocalStack || IsParameter;
 
 	public bool IsParameter => Location == LocationType.StackParameter;
 
@@ -142,7 +142,7 @@ public sealed partial class Operand
 
 	public bool IsResolvedConstant => IsConstant && IsResolved;
 
-	public bool IsStackLocal => Location == LocationType.StackFrame;
+	public bool IsLocalStack => Location == LocationType.StackFrame;
 
 	public bool IsStaticField => Constant == ConstantType.StaticField;
 
@@ -744,7 +744,7 @@ public sealed partial class Operand
 				Index = index,
 			};
 		}
-		else if (longOperand.IsStackLocal)
+		else if (longOperand.IsLocalStack)
 		{
 			operand = new Operand
 			{
@@ -798,7 +798,7 @@ public sealed partial class Operand
 				Index = index,
 			};
 		}
-		else if (longOperand.IsStackLocal)
+		else if (longOperand.IsLocalStack)
 		{
 			operand = new Operand
 			{
@@ -931,7 +931,7 @@ public sealed partial class Operand
 
 		if (IsConstant)
 		{
-			sb.Append(" const=");
+			sb.Append("const=");
 
 			if (!IsResolved)
 			{
@@ -966,7 +966,7 @@ public sealed partial class Operand
 		}
 		else if (IsCPURegister)
 		{
-			sb.Append($" {Register}");
+			sb.Append($"{Register}");
 		}
 
 		if (IsVirtualRegister)
@@ -991,7 +991,7 @@ public sealed partial class Operand
 				sb.Append($"(p{Index}<t{LongParent.Index}{(IsHigh ? "H" : "L")}>)");
 			}
 		}
-		else if (IsStackLocal && Name == null)
+		else if (IsLocalStack && Name == null)
 		{
 			if (!HasLongParent)
 			{
@@ -1018,15 +1018,14 @@ public sealed partial class Operand
 			sb.Append($" ({Type.FullName})");
 		}
 
-		return sb.ToString();
+		return sb.ToString().Trim();
 	}
 
 	#endregion Object Overrides
 
 	internal void RenameIndex(int index)
 	{
-		Debug.Assert(IsVirtualRegister || IsStackLocal);
-		//Debug.Assert(!IsStackLocal);
+		Debug.Assert(IsVirtualRegister || IsLocalStack);
 
 		Index = index;
 	}

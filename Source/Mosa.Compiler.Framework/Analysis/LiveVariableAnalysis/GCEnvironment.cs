@@ -39,7 +39,7 @@ public class GCEnvironment : BaseLivenessAnalysisEnvironment
 		{
 			return true;
 		}
-		else if (operand.IsStackLocal && StackLocalReference[operand.Index])
+		else if (operand.IsLocalStack && StackLocalReference[operand.Index])
 		{
 			return true;
 		}

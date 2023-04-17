@@ -43,7 +43,7 @@ public sealed class VirtualRegisterRenameStage : BaseCodeTransformationStage
 						vr.AddIfNew(op);
 					}
 
-					if (op.IsStackLocal)
+					if (op.IsLocalStack)
 					{
 						sl.AddIfNew(op);
 					}

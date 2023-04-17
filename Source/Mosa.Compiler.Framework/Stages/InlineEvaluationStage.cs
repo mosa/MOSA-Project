@@ -386,7 +386,7 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 		{
 			mappedOperand = operand;
 		}
-		else if (operand.IsStackLocal)
+		else if (operand.IsLocalStack)
 		{
 			mappedOperand = Operand.CreateStackLocal(operand, operand.Index, operand.IsPinned);
 		}

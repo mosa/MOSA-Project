@@ -23,7 +23,7 @@ public sealed class AddressOf : BaseIRTransform
 		{
 			context.SetInstruction(X64.Mov64, context.Result, context.Operand1);
 		}
-		else if (context.Operand1.IsStackLocal)
+		else if (context.Operand1.IsLocalStack)
 		{
 			context.SetInstruction(X64.Lea64, context.Result, transform.StackFrame, context.Operand1);
 		}
