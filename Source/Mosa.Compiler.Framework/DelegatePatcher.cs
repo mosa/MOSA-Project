@@ -128,7 +128,7 @@ public static class DelegatePatcher
 		}
 
 		var result = methodCompiler.Method.Signature.ReturnType != null
-			? methodCompiler.AllocateVirtualRegisterOrStackSlot(methodCompiler.Method.Signature.ReturnType)
+			? methodCompiler.AllocateVirtualRegisterOrLocalStack(methodCompiler.Method.Signature.ReturnType)
 			: null;
 
 		// no instance

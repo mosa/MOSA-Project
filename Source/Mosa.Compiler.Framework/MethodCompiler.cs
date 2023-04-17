@@ -695,18 +695,6 @@ public sealed class MethodCompiler
 	}
 
 	/// <summary>
-	/// Creates a new virtual register operand.
-	/// </summary>
-	/// <param name="type">The signature type of the virtual register.</param>
-	/// <returns>
-	/// An operand, which represents the virtual register.
-	/// </returns>
-	private Operand CreateVirtualRegister(MosaType type)
-	{
-		return VirtualRegisters.Allocate(type);
-	}
-
-	/// <summary>
 	/// Splits the long operand.
 	/// </summary>
 	/// <param name="operand">The long operand.</param>
@@ -754,24 +742,6 @@ public sealed class MethodCompiler
 		{
 			operandLow = operand;
 			operandHigh = Constant32_0;
-		}
-	}
-
-	/// <summary>
-	/// Allocates the virtual register or stack slot.
-	/// </summary>
-	/// <param name="type">The type.</param>
-	/// <returns></returns>
-	public Operand AllocateVirtualRegisterOrStackSlot(MosaType type)
-	{
-		if (MosaTypeLayout.IsUnderlyingPrimitive(type))
-		{
-			var resultType = Compiler.GetStackType(type);
-			return CreateVirtualRegister(resultType);
-		}
-		else
-		{
-			return LocalStack.Allocate(type);
 		}
 	}
 
@@ -986,6 +956,24 @@ public sealed class MethodCompiler
 			return LocalStack.Allocate(type);
 		else
 			return VirtualRegisters.Allocate(primitiveType);
+	}
+
+	/// <summary>
+	/// Allocates the virtual register or stack slot.
+	/// </summary>
+	/// <param name="type">The type.</param>
+	/// <returns></returns>
+	public Operand AllocateVirtualRegisterOrLocalStack(MosaType type)
+	{
+		if (MosaTypeLayout.IsUnderlyingPrimitive(type))
+		{
+			var resultType = Compiler.GetStackType(type);
+			return VirtualRegisters.Allocate(resultType);
+		}
+		else
+		{
+			return LocalStack.Allocate(type);
+		}
 	}
 
 	#endregion Allocator Helpers
