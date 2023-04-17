@@ -28,6 +28,8 @@ public sealed class TransformContext
 
 	public VirtualRegisters VirtualRegisters { get; private set; }
 
+	public LocalStack LocalStack { get; set; }
+
 	public BasicBlocks BasicBlocks { get; set; }
 
 	public bool LowerTo32 { get; private set; }
@@ -189,6 +191,8 @@ public sealed class TransformContext
 		MethodCompiler = methodCompiler;
 
 		VirtualRegisters = methodCompiler.VirtualRegisters;
+		LocalStack = methodCompiler.LocalStack;
+
 		BasicBlocks = methodCompiler.BasicBlocks;
 
 		AreCPURegistersAllocated = methodCompiler.AreCPURegistersAllocated;

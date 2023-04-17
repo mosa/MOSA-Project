@@ -16,7 +16,7 @@ public class GCEnvironment : BaseLivenessAnalysisEnvironment
 	protected int PhysicalRegisterCount { get; }
 	protected bool[] StackLocalReference;
 
-	public GCEnvironment(BasicBlocks basicBlocks, BaseArchitecture architecture, List<Operand> localStack)
+	public GCEnvironment(BasicBlocks basicBlocks, BaseArchitecture architecture, LocalStack localStack)
 	{
 		BasicBlocks = basicBlocks;
 		StackLocalReference = new bool[localStack.Count];
@@ -138,7 +138,7 @@ public class GCEnvironment : BaseLivenessAnalysisEnvironment
 		return false;
 	}
 
-	protected void CollectReferenceStackObjects(List<Operand> localStack)
+	protected void CollectReferenceStackObjects(LocalStack localStack)
 	{
 		foreach (var local in localStack)
 		{

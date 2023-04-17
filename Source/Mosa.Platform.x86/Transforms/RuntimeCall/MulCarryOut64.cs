@@ -32,7 +32,7 @@ public sealed class MulCarryOut64 : BaseTransform
 		var result = context.Result;
 		var result2 = context.Result2;
 
-		var v1 = transform.MethodCompiler.AllocateStackLocal(result2);   // REVIEW
+		var v1 = transform.LocalStack.Allocate(result2);   // REVIEW
 		var v2 = transform.AllocateVirtualRegister32();
 
 		Debug.Assert(method != null, $"Cannot find method: {methodName}");

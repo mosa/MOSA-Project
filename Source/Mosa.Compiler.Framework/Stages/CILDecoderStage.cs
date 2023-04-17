@@ -809,7 +809,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 			if (first.PrimitiveType == PrimitiveType.ValueType)
 			{
-				destination = AddStackLocalValueType(first.Operand.Type);
+				destination = AddLocalStackValueType(first.Operand.Type);
 				instruction = IRInstruction.MoveCompound;
 			}
 			else
@@ -3804,7 +3804,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		if (stacktype == PrimitiveType.ValueType)
 		{
-			var result2 = AddStackLocal(local);
+			var result2 = AddLocalStack(local);
 			context.AppendInstruction(IRInstruction.MoveCompound, result2, local);
 
 			PushStack(stack, new StackEntry(PrimitiveType.ValueType, result2, local.Type));
@@ -3915,7 +3915,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		}
 		else
 		{
-			var result = AddStackLocalValueType(type);
+			var result = AddLocalStackValueType(type);
 			context.AppendInstruction(IRInstruction.LoadCompound, result, fieldOperand, ConstantZero);
 			PushStack(stack, new StackEntry(PrimitiveType.ValueType, result, type));
 		}
@@ -4240,7 +4240,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		}
 		else if (stackType == PrimitiveType.ValueType)
 		{
-			var newThisLocal = AddStackLocalValueType(classType);
+			var newThisLocal = AddLocalStackValueType(classType);
 			var newThis = AllocateVirtualRegisterManagedPointer();
 
 			context.AppendInstruction(IRInstruction.AddressOf, newThis, newThisLocal);
@@ -4257,7 +4257,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		{
 			var result = MethodCompiler.AllocateVirtualRegister(stackType);
 
-			var newThisLocal = stackType == PrimitiveType.Int32 ? AllocateStackLocal32() : AllocateStackLocal64();
+			var newThisLocal = stackType == PrimitiveType.Int32 ? AllocateLocalStack32() : AllocateLocalStack64();
 
 			var newThis = AllocateVirtualRegisterManagedPointer();
 

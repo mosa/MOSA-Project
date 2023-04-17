@@ -91,7 +91,7 @@ public sealed class MethodCompiler
 	/// <summary>
 	/// Gets the local stack.
 	/// </summary>
-	public List<Operand> LocalStack { get; }
+	public LocalStack LocalStack { get; }
 
 	/// <summary>
 	/// Gets or sets the size of the stack.
@@ -253,7 +253,8 @@ public sealed class MethodCompiler
 		IsLocalStackFinalized = false;
 
 		BasicBlocks = basicBlocks ?? new BasicBlocks();
-		LocalStack = new List<Operand>();
+
+		LocalStack = new LocalStack(Is32BitPlatform);
 		VirtualRegisters = new VirtualRegisters(Is32BitPlatform);
 
 		Parameters = new Operand[method.Signature.Parameters.Count + (method.HasThis || method.HasExplicitThis ? 1 : 0)];
@@ -310,69 +311,6 @@ public sealed class MethodCompiler
 	#endregion Construction
 
 	#region Methods
-
-	public Operand AddStackLocal(MosaType type, bool pinned = false)
-	{
-		var local = Operand.CreateStackLocal(type, LocalStack.Count, pinned);
-		LocalStack.Add(local);
-		return local;
-	}
-
-	public Operand AllocateStackLocal(Operand operand, bool pinned = false)
-	{
-		var local = Operand.CreateStackLocal(operand, LocalStack.Count, pinned);
-		LocalStack.Add(local);
-		return local;
-	}
-
-	public Operand AllocateStackLocal32(bool pinned = false)
-	{
-		var local = Operand.CreateStackLocal32(LocalStack.Count, pinned);
-		LocalStack.Add(local);
-		return local;
-	}
-
-	public Operand AllocateStackLocal64(bool pinned = false)
-	{
-		var local = Operand.CreateStackLocal64(LocalStack.Count, pinned);
-		LocalStack.Add(local);
-		return local;
-	}
-
-	public Operand AllocateStackLocalR4(bool pinned = false)
-	{
-		var local = Operand.CreateStackLocalR4(LocalStack.Count, pinned);
-		LocalStack.Add(local);
-		return local;
-	}
-
-	public Operand AllocateStackLocalR8(bool pinned = false)
-	{
-		var local = Operand.CreateStackLocalR8(LocalStack.Count, pinned);
-		LocalStack.Add(local);
-		return local;
-	}
-
-	public Operand AllocateStackLocalObject(bool pinned = false)
-	{
-		var local = Operand.CreateStackLocalObject(LocalStack.Count, pinned);
-		LocalStack.Add(local);
-		return local;
-	}
-
-	public Operand AllocateStackLocalManagedPointer(bool pinned = false)
-	{
-		var local = Operand.CreateStackLocalManagedPointer(LocalStack.Count, pinned);
-		LocalStack.Add(local);
-		return local;
-	}
-
-	public Operand AllocateStackLocalValueType(MosaType type, bool pinned = false)
-	{
-		var local = Operand.CreateStackLocalValueType(LocalStack.Count, pinned, type);
-		LocalStack.Add(local);
-		return local;
-	}
 
 	/// <summary>
 	/// Sets the stack parameter.
@@ -833,7 +771,7 @@ public sealed class MethodCompiler
 		}
 		else
 		{
-			return AddStackLocal(type);
+			return LocalStack.Allocate(type);
 		}
 	}
 
@@ -1038,58 +976,31 @@ public sealed class MethodCompiler
 		};
 	}
 
+	public PrimitiveType GetStackTypeDefaultValueType(MosaType type)
+	{
+		return type == null ? PrimitiveType.ValueType : GetStackType(type);
+	}
+
 	#endregion Type Conversion Helpers
 
 	#region Allocator Helpers
 
 	public Operand AllocateVirtualRegister(PrimitiveType primitiveType, MosaType type)
 	{
-		return primitiveType switch
-		{
-			PrimitiveType.Int32 => VirtualRegisters.Allocate32(),
-			PrimitiveType.Int64 => VirtualRegisters.Allocate64(),
-			PrimitiveType.R4 => VirtualRegisters.AllocateR4(),
-			PrimitiveType.R8 => VirtualRegisters.AllocateR8(),
-			PrimitiveType.Object => VirtualRegisters.AllocateObject(),
-			PrimitiveType.ManagedPointer => VirtualRegisters.AllocateManagedPointer(),
-			PrimitiveType.ValueType => AddStackLocal(type),
-			_ => throw new CompilerException($"Cannot allocate a virtual register of {primitiveType}"),
-		};
+		if (primitiveType == PrimitiveType.ValueType)
+			return LocalStack.Allocate(type);
+		else
+			return VirtualRegisters.AllocateVirtualRegister(primitiveType);
 	}
 
 	public Operand AllocateVirtualRegister(PrimitiveType primitiveType)
 	{
-		return primitiveType switch
-		{
-			PrimitiveType.Int32 => VirtualRegisters.Allocate32(),
-			PrimitiveType.Int64 => VirtualRegisters.Allocate64(),
-			PrimitiveType.R4 => VirtualRegisters.AllocateR4(),
-			PrimitiveType.R8 => VirtualRegisters.AllocateR8(),
-			PrimitiveType.Object => VirtualRegisters.AllocateObject(),
-			PrimitiveType.ManagedPointer => VirtualRegisters.AllocateManagedPointer(),
-			PrimitiveType.ValueType => throw new CompilerException($"Cannot allocate a virtual register to a ValueType"),
-			_ => throw new CompilerException($"Cannot allocate a virtual register of {primitiveType}"),
-		};
+		return VirtualRegisters.AllocateVirtualRegister(primitiveType);
 	}
 
 	public Operand AllocateLocalStack(PrimitiveType primitiveType, bool isPinned = false, MosaType type = null)
 	{
-		return primitiveType switch
-		{
-			PrimitiveType.Int32 => AllocateStackLocal32(isPinned),
-			PrimitiveType.Int64 => AllocateStackLocal64(isPinned),
-			PrimitiveType.R4 => AllocateStackLocalR4(isPinned),
-			PrimitiveType.R8 => AllocateStackLocalR8(isPinned),
-			PrimitiveType.Object => AllocateStackLocalObject(isPinned),
-			PrimitiveType.ManagedPointer => AllocateStackLocalManagedPointer(isPinned),
-			PrimitiveType.ValueType => AllocateStackLocalValueType(type, isPinned),
-			_ => throw new CompilerException("Not implemented yet"),
-		};
-	}
-
-	public PrimitiveType GetStackTypeDefaultValueType(MosaType type)
-	{
-		return type == null ? PrimitiveType.ValueType : GetStackType(type);
+		return AllocateLocalStack(primitiveType, isPinned, type);
 	}
 
 	#endregion Allocator Helpers

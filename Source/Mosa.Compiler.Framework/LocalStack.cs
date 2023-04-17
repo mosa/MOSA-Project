@@ -2,6 +2,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework;
@@ -35,97 +36,82 @@ public sealed class LocalStack : IEnumerable<Operand>
 		Is32Platform = is32Platform;
 	}
 
-	/// <summary>
-	/// Allocates the virtual register.
-	/// </summary>
-	/// <param name="type">The type.</param>
-	/// <returns></returns>
-	public Operand Allocate(MosaType type)
+	public Operand Allocate(PrimitiveType primitiveType, bool isPinned = false, MosaType type = null)
 	{
-		var index = localStack.Count + 1;
-
-		var virtualRegister = Operand.CreateVirtualRegister(type, index);
-
-		localStack.Add(virtualRegister);
-
-		return virtualRegister;
+		return primitiveType switch
+		{
+			PrimitiveType.Int32 => Allocate32(isPinned),
+			PrimitiveType.Int64 => Allocate64(isPinned),
+			PrimitiveType.R4 => AllocateR4(isPinned),
+			PrimitiveType.R8 => AllocateR8(isPinned),
+			PrimitiveType.Object => AllocateObject(isPinned),
+			PrimitiveType.ManagedPointer => AllocateManagedPointer(isPinned),
+			PrimitiveType.ValueType => AllocateValueType(type, isPinned),
+			_ => throw new CompilerException($"Cannot allocate a local stack of {primitiveType}"),
+		};
 	}
 
-	public Operand AllocateOperand(Operand operand)
+	public Operand Allocate(MosaType type, bool pinned = false)
 	{
-		var index = localStack.Count + 1;
-
-		var virtualRegister = Operand.CreateVirtualRegister(operand, index);
-
-		localStack.Add(virtualRegister);
-
-		return virtualRegister;
+		var local = Operand.CreateStackLocal(type, Count, pinned);
+		localStack.Add(local);
+		return local;
 	}
 
-	public Operand Allocate32()
+	public Operand Allocate(Operand operand, bool pinned = false)
 	{
-		var index = localStack.Count + 1;
-
-		var virtualRegister = Operand.CreateVirtual32(index);
-
-		localStack.Add(virtualRegister);
-
-		return virtualRegister;
+		var local = Operand.CreateStackLocal(operand, Count, pinned);
+		localStack.Add(local);
+		return local;
 	}
 
-	public Operand Allocate64()
+	public Operand Allocate32(bool pinned = false)
 	{
-		var index = localStack.Count + 1;
-
-		var virtualRegister = Operand.CreateVirtual64(index);
-
-		localStack.Add(virtualRegister);
-
-		return virtualRegister;
+		var local = Operand.CreateStackLocal32(Count, pinned);
+		localStack.Add(local);
+		return local;
 	}
 
-	public Operand AllocateR4()
+	public Operand Allocate64(bool pinned = false)
 	{
-		var index = localStack.Count + 1;
-
-		var virtualRegister = Operand.CreateVirtualR4(index);
-
-		localStack.Add(virtualRegister);
-
-		return virtualRegister;
+		var local = Operand.CreateStackLocal64(Count, pinned);
+		localStack.Add(local);
+		return local;
 	}
 
-	public Operand AllocateR8()
+	public Operand AllocateR4(bool pinned = false)
 	{
-		var index = localStack.Count + 1;
-
-		var virtualRegister = Operand.CreateVirtualR8(index);
-
-		localStack.Add(virtualRegister);
-
-		return virtualRegister;
+		var local = Operand.CreateStackLocalR4(Count, pinned);
+		localStack.Add(local);
+		return local;
 	}
 
-	public Operand AllocateObject()
+	public Operand AllocateR8(bool pinned = false)
 	{
-		var index = localStack.Count + 1;
-
-		var virtualRegister = Operand.CreateVirtualObject(index);
-
-		localStack.Add(virtualRegister);
-
-		return virtualRegister;
+		var local = Operand.CreateStackLocalR8(Count, pinned);
+		localStack.Add(local);
+		return local;
 	}
 
-	public Operand AllocateManagedPointer()
+	public Operand AllocateObject(bool pinned = false)
 	{
-		var index = localStack.Count + 1;
+		var local = Operand.CreateStackLocalObject(Count, pinned);
+		localStack.Add(local);
+		return local;
+	}
 
-		var virtualRegister = Operand.CreateVirtualManagedPointer(index);
+	public Operand AllocateManagedPointer(bool pinned = false)
+	{
+		var local = Operand.CreateStackLocalManagedPointer(Count, pinned);
+		localStack.Add(local);
+		return local;
+	}
 
-		localStack.Add(virtualRegister);
-
-		return virtualRegister;
+	public Operand AllocateValueType(MosaType type, bool pinned = false)
+	{
+		var local = Operand.CreateStackLocalValueType(Count, pinned, type);
+		localStack.Add(local);
+		return local;
 	}
 
 	public Operand AllocateNativeInteger()

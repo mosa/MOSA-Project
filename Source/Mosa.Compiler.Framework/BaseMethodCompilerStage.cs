@@ -320,44 +320,44 @@ public abstract class BaseMethodCompilerStage
 		traceLogs = null;
 	}
 
-	public Operand AllocateStackLocal32(bool pinned = false)
+	public Operand AllocateLocalStack32(bool pinned = false)
 	{
-		return MethodCompiler.AllocateStackLocal32(pinned);
+		return MethodCompiler.LocalStack.Allocate32(pinned);
 	}
 
-	public Operand AllocateStackLocal64(bool pinned = false)
+	public Operand AllocateLocalStack64(bool pinned = false)
 	{
-		return MethodCompiler.AllocateStackLocal64(pinned);
+		return MethodCompiler.LocalStack.Allocate64(pinned);
 	}
 
-	public Operand AllocateStackLocalR4(bool pinned = false)
+	public Operand AllocateLocalStackR4(bool pinned = false)
 	{
-		return MethodCompiler.AllocateStackLocalR4(pinned);
+		return MethodCompiler.LocalStack.AllocateR4(pinned);
 	}
 
-	public Operand AllocateStackLocalR8(bool pinned = false)
+	public Operand AllocateLocalStackR8(bool pinned = false)
 	{
-		return MethodCompiler.AllocateStackLocalR8(pinned);
+		return MethodCompiler.LocalStack.AllocateR8(pinned);
 	}
 
-	public Operand AllocateStackLocalObject(bool pinned = false)
+	public Operand AllocateLocalStackObject(bool pinned = false)
 	{
-		return MethodCompiler.AllocateStackLocalObject(pinned);
+		return MethodCompiler.LocalStack.AllocateObject(pinned);
 	}
 
-	public Operand AllocateStackLocalManagedPointer(bool pinned = false)
+	public Operand AllocateLocalStackManagedPointer(bool pinned = false)
 	{
-		return MethodCompiler.AllocateStackLocalManagedPointer(pinned);
+		return MethodCompiler.LocalStack.AllocateManagedPointer(pinned);
 	}
 
-	public Operand AddStackLocalValueType(MosaType type, bool pinned = false)
+	public Operand AddLocalStackValueType(MosaType type, bool pinned = false)
 	{
-		return MethodCompiler.AllocateStackLocalValueType(type, pinned);
+		return MethodCompiler.LocalStack.AllocateValueType(type, pinned);
 	}
 
-	public Operand AddStackLocal(Operand operand, bool pinned = false)
+	public Operand AddLocalStack(Operand operand, bool pinned = false)
 	{
-		return MethodCompiler.AllocateStackLocal(operand, pinned);
+		return MethodCompiler.LocalStack.Allocate(operand, pinned);
 	}
 
 	protected Operand AllocateVirtualRegister(Operand operand)

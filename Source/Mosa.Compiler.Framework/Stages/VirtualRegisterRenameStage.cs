@@ -73,7 +73,7 @@ public sealed class VirtualRegisterRenameStage : BaseCodeTransformationStage
 		{
 			if (!s.HasLongParent)
 			{
-				MethodCompiler.LocalStack[index] = s;
+				MethodCompiler.LocalStack.ReOrdered(s, ++index);
 				s.RenameIndex(index);
 
 				if (s.Low != null)
