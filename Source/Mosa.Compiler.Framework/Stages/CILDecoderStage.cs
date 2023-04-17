@@ -833,6 +833,11 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		return incomingStack;
 	}
 
+	public PrimitiveType GetPrimitiveTypeDefaultValueType(MosaType type)
+	{
+		return type == null ? PrimitiveType.ValueType : MethodCompiler.GetPrimitiveType(type);
+	}
+
 	private void CreateLocalVariables()
 	{
 		var count = Method.LocalVariables.Count;
@@ -876,7 +881,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			var type = Method.LocalVariables[index];
 
 			var underlyingType = MosaTypeLayout.GetUnderlyingType(type.Type);
-			var stackType = MethodCompiler.GetStackTypeDefaultValueType(underlyingType);
+			var stackType = GetPrimitiveTypeDefaultValueType(underlyingType);
 
 			var isPrimitive = MosaTypeLayout.IsPrimitive(underlyingType);
 
@@ -1017,7 +1022,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			return null;
 
 		var underlyingType = MosaTypeLayout.GetUnderlyingType(type);
-		var primitiveType = MethodCompiler.GetStackTypeDefaultValueType(underlyingType);
+		var primitiveType = GetPrimitiveTypeDefaultValueType(underlyingType);
 
 		var operand = MethodCompiler.AllocateVirtualRegisterOrLocalStack(primitiveType, type);
 
@@ -3454,7 +3459,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		}
 		else
 		{
-			var stacktype = MethodCompiler.GetStackType(type);
+			var stacktype = MethodCompiler.GetPrimitiveType(type);
 			var result = MethodCompiler.AllocateVirtualRegisterOrLocalStack(stacktype, type);
 
 			context.AppendInstruction(IRInstruction.LoadParamCompound, result, parameter);
@@ -3498,7 +3503,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		if (isPrimitive)
 		{
-			var stacktype = MethodCompiler.GetStackType(underlyingType);
+			var stacktype = MethodCompiler.GetPrimitiveType(underlyingType);
 			var result = MethodCompiler.VirtualRegisters.Allocate(stacktype);
 			var elementType = MethodCompiler.GetElementType(underlyingType);
 			var loadInstruction = GetLoadInstruction(elementType);
@@ -3581,7 +3586,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var fieldType = field.FieldType;
 
 		var fieldUnderlyingType = MosaTypeLayout.GetUnderlyingType(fieldType);
-		var fieldStacktype = MethodCompiler.GetStackTypeDefaultValueType(fieldUnderlyingType);
+		var fieldStacktype = GetPrimitiveTypeDefaultValueType(fieldUnderlyingType);
 		var isFieldPrimitive = MosaTypeLayout.IsPrimitive(fieldUnderlyingType);
 
 		var result = MethodCompiler.AllocateVirtualRegisterOrLocalStack(fieldStacktype, isFieldPrimitive ? fieldUnderlyingType : fieldType);
@@ -3734,7 +3739,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		var functionPointer = TypeSystem.ToFnPtr(method.Signature);
 
-		var stacktype = MethodCompiler.GetStackType(functionPointer);
+		var stacktype = MethodCompiler.GetPrimitiveType(functionPointer);
 		var result = MethodCompiler.VirtualRegisters.Allocate(stacktype);
 
 		var move = GetMoveInstruction(ElementType.I);
@@ -4201,7 +4206,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var paramCount = method.Signature.Parameters.Count;
 
 		var underlyingType = MosaTypeLayout.GetUnderlyingType(classType);
-		var stackType = MethodCompiler.GetStackTypeDefaultValueType(underlyingType);
+		var stackType = GetPrimitiveTypeDefaultValueType(underlyingType);
 
 		var symbol = Operand.CreateLabel(method, Is32BitPlatform);
 
@@ -4887,7 +4892,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		if (isPrimitive)
 		{
-			var stackType = MethodCompiler.GetStackType(underlyingType);
+			var stackType = MethodCompiler.GetPrimitiveType(underlyingType);
 			var elementType = MethodCompiler.GetElementType(stackType);
 			var storeInstruction = GetStoreInstruction(elementType);
 

@@ -912,7 +912,7 @@ public sealed class MethodCompiler
 		throw new CompilerException($"Cannot translate to ElementType from Type: {type}");
 	}
 
-	public PrimitiveType GetStackType(MosaType type)
+	public PrimitiveType GetPrimitiveType(MosaType type)
 	{
 		if (type.IsReferenceType)
 			return PrimitiveType.Object;
@@ -974,11 +974,6 @@ public sealed class MethodCompiler
 			ElementType.ManagedPointer => Is32BitPlatform ? 4 : 8u,
 			_ => throw new CompilerException($"Cannot get size of {elementType}"),
 		};
-	}
-
-	public PrimitiveType GetStackTypeDefaultValueType(MosaType type)
-	{
-		return type == null ? PrimitiveType.ValueType : GetStackType(type);
 	}
 
 	#endregion Type Conversion Helpers
