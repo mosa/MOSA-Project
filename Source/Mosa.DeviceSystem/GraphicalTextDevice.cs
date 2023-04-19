@@ -15,26 +15,32 @@ public class GraphicalTextDevice : ITextDevice
 
 	public ISimpleFont Font { get; set; }
 
-	public FrameBuffer32 FrameBuffer { get; }
+	public IGraphicsDevice GraphicsDevice { get; }
 
 	#endregion
 
-	public GraphicalTextDevice(uint width, uint height, ISimpleFont font, FrameBuffer32 frameBuffer)
+	public GraphicalTextDevice(ISimpleFont font, IGraphicsDevice graphicsDevice)
 	{
-		Width = width;
-		Height = height;
+		Width = graphicsDevice.FrameBuffer.Width;
+		Height = graphicsDevice.FrameBuffer.Height;
 		Font = font;
-		FrameBuffer = frameBuffer;
+		GraphicsDevice = graphicsDevice;
 	}
 
 	public void ClearScreen(Color background)
 	{
-		FrameBuffer.ClearScreen((uint)background.ToArgb());
+		GraphicsDevice.FrameBuffer.ClearScreen((uint)background.ToArgb());
+		GraphicsDevice.Update(0, 0, Width, Height);
 	}
 
 	public void WriteChar(uint x, uint y, char c, Color foreground)
 	{
-		Font.DrawChar(FrameBuffer, (uint)foreground.ToArgb(), x * Font.CalculateWidth(c), y * Font.CalculateHeight(c), c);
+		var charWidth = Font.CalculateWidth(c);
+		var charHeight = Font.CalculateHeight(c);
+		var charX = x * charWidth;
+		var charY = y * charHeight;
+		Font.DrawChar(GraphicsDevice.FrameBuffer, (uint)foreground.ToArgb(), charX, charY, c);
+		GraphicsDevice.Update(charX, charY, charWidth, charHeight);
 	}
 
 	public void ScrollUp()
