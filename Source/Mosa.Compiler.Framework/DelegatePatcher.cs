@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
+using Microsoft.VisualBasic.FileIO;
 using Mosa.Compiler.MosaTypeSystem;
 
 // FIXME -- not 64bit compatible
@@ -127,9 +128,9 @@ public static class DelegatePatcher
 			operands.Add(vrs[i]);
 		}
 
-		var result = methodCompiler.Method.Signature.ReturnType != null
-			? methodCompiler.AllocateVirtualRegisterOrLocalStack(methodCompiler.Method.Signature.ReturnType)
-			: null;
+		var returnType = methodCompiler.Method.Signature.ReturnType;
+
+		var result = methodCompiler.AllocateVirtualRegisterOrStackLocal(returnType);
 
 		// no instance
 		b1.AppendInstruction(IRInstruction.CallDynamic, result, opMethod, operands);

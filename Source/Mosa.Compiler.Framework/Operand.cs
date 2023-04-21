@@ -337,8 +337,8 @@ public sealed partial class Operand
 			Primitive = Is32Platform ? PrimitiveType.Int32 : PrimitiveType.Int64,
 			Constant = ConstantType.Label,
 			Name = label,
+			IsResolved = false,
 			Offset = 0,
-			IsResolved = false
 		};
 	}
 
@@ -350,8 +350,8 @@ public sealed partial class Operand
 			Primitive = PrimitiveType.R4,
 			Constant = ConstantType.Label,
 			Name = label,
+			IsResolved = false,
 			Offset = 0,
-			IsResolved = false
 		};
 	}
 
@@ -363,8 +363,8 @@ public sealed partial class Operand
 			Primitive = PrimitiveType.R8,
 			Constant = ConstantType.Label,
 			Name = label,
+			IsResolved = false,
 			Offset = 0,
-			IsResolved = false
 		};
 	}
 
@@ -613,95 +613,22 @@ public sealed partial class Operand
 		};
 	}
 
-	public static Operand CreateStackLocal(Operand operand, int index, bool pinned)
+	public static Operand CreateVirtualRegister(PrimitiveType primitiveType, int index, MosaType type = null)
 	{
 		return new Operand
 		{
-			Primitive = operand.Primitive,
-			Location = LocationType.StackFrame,
-			Constant = ConstantType.Default,
+			Location = LocationType.VirtualRegister,
+			Primitive = primitiveType,
 			Index = index,
-			IsPinned = pinned
+			Type = type
 		};
 	}
 
-	public static Operand CreateStackLocal32(int index, bool pinned)
+	public static Operand CreateStackLocal(PrimitiveType primitiveType, int index, bool pinned, MosaType type = null)
 	{
 		return new Operand
 		{
-			Primitive = PrimitiveType.Int32,
-			Location = LocationType.StackFrame,
-			Constant = ConstantType.Default,
-			Index = index,
-			IsPinned = pinned
-		};
-	}
-
-	public static Operand CreateStackLocal64(int index, bool pinned)
-	{
-		return new Operand
-		{
-			Primitive = PrimitiveType.Int64,
-			Location = LocationType.StackFrame,
-			Constant = ConstantType.Default,
-			Index = index,
-			IsPinned = pinned
-		};
-	}
-
-	public static Operand CreateStackLocalR4(int index, bool pinned)
-	{
-		return new Operand
-		{
-			Primitive = PrimitiveType.R4,
-			Location = LocationType.StackFrame,
-			Constant = ConstantType.Default,
-			Index = index,
-			IsPinned = pinned
-		};
-	}
-
-	public static Operand CreateStackLocalR8(int index, bool pinned)
-	{
-		return new Operand
-		{
-			Primitive = PrimitiveType.R8,
-			Location = LocationType.StackFrame,
-			Constant = ConstantType.Default,
-			Index = index,
-			IsPinned = pinned
-		};
-	}
-
-	public static Operand CreateStackLocalObject(int index, bool pinned)
-	{
-		return new Operand
-		{
-			Primitive = PrimitiveType.Object,
-			Location = LocationType.StackFrame,
-			Constant = ConstantType.Default,
-			Index = index,
-			IsPinned = pinned
-		};
-	}
-
-	public static Operand CreateStackLocalManagedPointer(int index, bool pinned)
-	{
-		return new Operand
-		{
-			Primitive = PrimitiveType.ManagedPointer,
-			Location = LocationType.StackFrame,
-			Constant = ConstantType.Default,
-			Index = index,
-			IsPinned = pinned
-		};
-	}
-
-	public static Operand CreateStackLocalValueType(int index, bool pinned, MosaType type)
-	{
-		return new Operand
-		{
-			Primitive = PrimitiveType.ValueType,
+			Primitive = primitiveType,
 			Location = LocationType.StackFrame,
 			Constant = ConstantType.Default,
 			Index = index,
@@ -825,31 +752,11 @@ public sealed partial class Operand
 	}
 
 	/// <summary>
-	/// Creates the stack local.
-	/// </summary>
-	/// <param name="type">The type.</param>
-	/// <param name="index">The index.</param>
-	/// <param name="pinned">if set to <c>true</c> [pinned].</param>
-	/// <returns></returns>
-	public static Operand CreateStackLocal(MosaType type, int index, bool pinned)
-	{
-		return new Operand(type)
-		{
-			// TODO: Element
-			Location = LocationType.StackFrame,
-			Constant = ConstantType.Default,
-			Index = index,
-			IsPinned = pinned
-		};
-	}
-
-	/// <summary>
 	/// Creates the stack parameter.
 	/// </summary>
 	/// <param name="type">The type.</param>
 	/// <param name="index">The index.</param>
 	/// <param name="name">The name.</param>
-	/// <param name="isThis">if set to <c>true</c> [is this].</param>
 	/// <param name="offset">The offset.</param>
 	/// <returns></returns>
 	public static Operand CreateStackParameter(MosaType type, int index, string name, int offset)
@@ -884,21 +791,6 @@ public sealed partial class Operand
 			Constant = ConstantType.StaticField,
 			Offset = 0,
 			Field = field,
-		};
-	}
-
-	/// <summary>
-	/// Creates a new virtual register <see cref="Operand" />.
-	/// </summary>
-	/// <param name="type">The type.</param>
-	/// <param name="index">The index.</param>
-	/// <returns></returns>
-	public static Operand CreateVirtualRegister(MosaType type, int index)
-	{
-		return new Operand(type)
-		{
-			Location = LocationType.VirtualRegister,
-			Index = index
 		};
 	}
 

@@ -418,7 +418,7 @@ public class MosaTypeLayout
 				var nonStaticFields = type.Fields.Where(x => !x.IsStatic).ToList();
 
 				if (nonStaticFields.Count != 1)
-					return null;
+					return type;
 
 				var basetype = nonStaticFields[0].FieldType;
 

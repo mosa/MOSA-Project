@@ -336,7 +336,7 @@ public class InlineStage : BaseMethodCompilerStage
 		}
 		else if (operand.IsVirtualRegister)
 		{
-			mappedOperand = AllocateVirtualRegister(operand);
+			mappedOperand = MethodCompiler.VirtualRegisters.Allocate(operand);
 		}
 		else if (operand.IsStaticField)
 		{

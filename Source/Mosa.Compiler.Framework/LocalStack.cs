@@ -2,6 +2,8 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.MosaTypeSystem;
 
@@ -38,80 +40,54 @@ public sealed class LocalStack : IEnumerable<Operand>
 
 	public Operand Allocate(PrimitiveType primitiveType, bool isPinned = false, MosaType type = null)
 	{
-		return primitiveType switch
-		{
-			PrimitiveType.Int32 => Allocate32(isPinned),
-			PrimitiveType.Int64 => Allocate64(isPinned),
-			PrimitiveType.R4 => AllocateR4(isPinned),
-			PrimitiveType.R8 => AllocateR8(isPinned),
-			PrimitiveType.Object => AllocateObject(isPinned),
-			PrimitiveType.ManagedPointer => AllocateManagedPointer(isPinned),
-			PrimitiveType.ValueType => AllocateValueType(type, isPinned),
-			_ => throw new CompilerException($"Cannot allocate a local stack of {primitiveType}"),
-		};
+		Debug.Assert(type == null && primitiveType != PrimitiveType.ValueType);
+		Debug.Assert(type != null && primitiveType == PrimitiveType.ValueType);
+
+		var operand = Operand.CreateStackLocal(primitiveType, Count, isPinned, type);
+
+		localStack.Add(operand);
+
+		return operand;
 	}
 
-	public Operand Allocate(MosaType type, bool pinned = false)
+	public Operand Allocate(Operand operand, bool isPinned = false)
 	{
-		var local = Operand.CreateStackLocal(type, Count, pinned);
-		localStack.Add(local);
-		return local;
-	}
-
-	public Operand Allocate(Operand operand, bool pinned = false)
-	{
-		var local = Operand.CreateStackLocal(operand, Count, pinned);
-		localStack.Add(local);
-		return local;
+		return Allocate(operand.Primitive, isPinned, operand.Type);
 	}
 
 	public Operand Allocate32(bool pinned = false)
 	{
-		var local = Operand.CreateStackLocal32(Count, pinned);
-		localStack.Add(local);
-		return local;
+		return Allocate(PrimitiveType.Int32, pinned);
 	}
 
 	public Operand Allocate64(bool pinned = false)
 	{
-		var local = Operand.CreateStackLocal64(Count, pinned);
-		localStack.Add(local);
-		return local;
+		return Allocate(PrimitiveType.Int64, pinned);
 	}
 
 	public Operand AllocateR4(bool pinned = false)
 	{
-		var local = Operand.CreateStackLocalR4(Count, pinned);
-		localStack.Add(local);
-		return local;
+		return Allocate(PrimitiveType.R4, pinned);
 	}
 
 	public Operand AllocateR8(bool pinned = false)
 	{
-		var local = Operand.CreateStackLocalR8(Count, pinned);
-		localStack.Add(local);
-		return local;
+		return Allocate(PrimitiveType.R8, pinned);
 	}
 
 	public Operand AllocateObject(bool pinned = false)
 	{
-		var local = Operand.CreateStackLocalObject(Count, pinned);
-		localStack.Add(local);
-		return local;
+		return Allocate(PrimitiveType.Object, pinned);
 	}
 
 	public Operand AllocateManagedPointer(bool pinned = false)
 	{
-		var local = Operand.CreateStackLocalManagedPointer(Count, pinned);
-		localStack.Add(local);
-		return local;
+		return Allocate(PrimitiveType.ManagedPointer, pinned);
 	}
 
 	public Operand AllocateValueType(MosaType type, bool pinned = false)
 	{
-		var local = Operand.CreateStackLocalValueType(Count, pinned, type);
-		localStack.Add(local);
-		return local;
+		return Allocate(PrimitiveType.ValueType, pinned, type);
 	}
 
 	public Operand AllocateNativeInteger()

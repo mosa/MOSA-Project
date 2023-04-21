@@ -119,7 +119,7 @@ public sealed class EnterSSAStage : BaseMethodCompilerStage
 
 		if (ssaOperand == null)
 		{
-			ssaOperand = AllocateVirtualRegister(operand);
+			ssaOperand = MethodCompiler.VirtualRegisters.Allocate(operand);
 			ssaArray[version] = ssaOperand;
 
 			parentOperand.Add(ssaOperand, operand);

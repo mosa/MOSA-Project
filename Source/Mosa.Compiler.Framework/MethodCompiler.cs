@@ -706,7 +706,6 @@ public sealed class MethodCompiler
 
 		if (!operand.IsInteger64 && !operand.IsInteger32)
 		{
-			// figure it out
 			var underlyingType = MosaTypeLayout.GetUnderlyingType(operand.Type);
 
 			if (underlyingType.IsUI8)
@@ -937,35 +936,23 @@ public sealed class MethodCompiler
 		};
 	}
 
+	public static bool IsPrimitive(PrimitiveType primitiveType)
+	{
+		return primitiveType != PrimitiveType.ValueType;
+	}
+
+	public Operand AllocateVirtualRegisterOrStackLocal(MosaType returnType)
+	{
+		var underlyingType = MosaTypeLayout.GetUnderlyingType(returnType);
+		var primitiveType = GetPrimitiveType(underlyingType);
+		var isPrimitive = IsPrimitive(primitiveType);
+
+		var result = isPrimitive
+			? VirtualRegisters.Allocate(primitiveType)
+			: LocalStack.Allocate(primitiveType);
+
+		return result;
+	}
+
 	#endregion Type Conversion Helpers
-
-	#region Allocator Helpers
-
-	public Operand AllocateVirtualRegisterOrLocalStack(PrimitiveType primitiveType, MosaType type)
-	{
-		if (primitiveType == PrimitiveType.ValueType)
-			return LocalStack.Allocate(type);
-		else
-			return VirtualRegisters.Allocate(primitiveType);
-	}
-
-	/// <summary>
-	/// Allocates the virtual register or stack slot.
-	/// </summary>
-	/// <param name="type">The type.</param>
-	/// <returns></returns>
-	public Operand AllocateVirtualRegisterOrLocalStack(MosaType type)
-	{
-		if (MosaTypeLayout.IsUnderlyingPrimitive(type))
-		{
-			var resultType = Compiler.GetStackType(type);
-			return VirtualRegisters.Allocate(resultType);
-		}
-		else
-		{
-			return LocalStack.Allocate(type);
-		}
-	}
-
-	#endregion Allocator Helpers
 }

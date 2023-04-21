@@ -133,7 +133,7 @@ public class PromoteTemporaryVariables : BaseMethodCompilerStage
 
 	protected void Promote(Operand operand)
 	{
-		var virtualRegister = AllocateVirtualRegister(operand);
+		var virtualRegister = MethodCompiler.VirtualRegisters.Allocate(operand);
 		TemporariesPromoted.Increment();
 
 		trace?.Log($"VR: {virtualRegister}");

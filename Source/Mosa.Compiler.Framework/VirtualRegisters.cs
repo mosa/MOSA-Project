@@ -2,6 +2,8 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
+using Microsoft.Win32;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.MosaTypeSystem;
 
@@ -36,75 +38,56 @@ public sealed class VirtualRegisters : IEnumerable<Operand>
 		Is32Platform = is32Platform;
 	}
 
-	public Operand Allocate(PrimitiveType primitiveType)
+	public Operand Allocate(PrimitiveType primitiveType, MosaType type = null)
 	{
-		return primitiveType switch
-		{
-			PrimitiveType.Int32 => Allocate32(),
-			PrimitiveType.Int64 => Allocate64(),
-			PrimitiveType.R4 => AllocateR4(),
-			PrimitiveType.R8 => AllocateR8(),
-			PrimitiveType.Object => AllocateObject(),
-			PrimitiveType.ManagedPointer => AllocateManagedPointer(),
-			PrimitiveType.ValueType => throw new CompilerException($"Cannot allocate a virtual register from a ValueType"),
-			_ => throw new CompilerException($"Cannot allocate a virtual register of {primitiveType}"),
-		};
-	}
+		Debug.Assert(type == null && primitiveType != PrimitiveType.ValueType);
+		Debug.Assert(type != null && primitiveType == PrimitiveType.ValueType);
 
-	public Operand Allocate(MosaType type)
-	{
-		var register = Operand.CreateVirtualRegister(type, virtualRegisters.Count + 1);
-		virtualRegisters.Add(register);
-		return register;
+		var operand = Operand.CreateVirtualRegister(primitiveType, Count + 1, type);
+
+		virtualRegisters.Add(operand);
+
+		return operand;
 	}
 
 	public Operand Allocate(Operand operand)
 	{
-		var register = Operand.CreateVirtualRegister(operand, virtualRegisters.Count + 1);
-		virtualRegisters.Add(register);
-		return register;
+		return Allocate(operand.Primitive, operand.Type);
 	}
 
 	public Operand Allocate32()
 	{
-		var register = Operand.CreateVirtual32(virtualRegisters.Count + 1);
-		virtualRegisters.Add(register);
-		return register;
+		return Allocate(PrimitiveType.Int32);
 	}
 
 	public Operand Allocate64()
 	{
-		var register = Operand.CreateVirtual64(virtualRegisters.Count + 1);
-		virtualRegisters.Add(register);
-		return register;
+		return Allocate(PrimitiveType.Int64);
 	}
 
 	public Operand AllocateR4()
 	{
-		var register = Operand.CreateVirtualR4(virtualRegisters.Count + 1);
-		virtualRegisters.Add(register);
-		return register;
+		return Allocate(PrimitiveType.R4);
 	}
 
 	public Operand AllocateR8()
 	{
-		var register = Operand.CreateVirtualR8(virtualRegisters.Count + 1);
-		virtualRegisters.Add(register);
-		return register;
+		return Allocate(PrimitiveType.R8);
 	}
 
 	public Operand AllocateObject()
 	{
-		var register = Operand.CreateVirtualObject(virtualRegisters.Count + 1);
-		virtualRegisters.Add(register);
-		return register;
+		return Allocate(PrimitiveType.Object);
 	}
 
 	public Operand AllocateManagedPointer()
 	{
-		var register = Operand.CreateVirtualManagedPointer(virtualRegisters.Count + 1);
-		virtualRegisters.Add(register);
-		return register;
+		return Allocate(PrimitiveType.ManagedPointer);
+	}
+
+	public Operand AllocateValueType(MosaType type)
+	{
+		return Allocate(PrimitiveType.ValueType, type);
 	}
 
 	public Operand AllocateNativeInteger()

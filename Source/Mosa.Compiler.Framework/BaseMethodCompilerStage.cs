@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
@@ -318,86 +319,6 @@ public abstract class BaseMethodCompilerStage
 
 		MethodCompiler = null;
 		traceLogs = null;
-	}
-
-	public Operand AllocateLocalStack32(bool pinned = false)
-	{
-		return MethodCompiler.LocalStack.Allocate32(pinned);
-	}
-
-	public Operand AllocateLocalStack64(bool pinned = false)
-	{
-		return MethodCompiler.LocalStack.Allocate64(pinned);
-	}
-
-	public Operand AllocateLocalStackR4(bool pinned = false)
-	{
-		return MethodCompiler.LocalStack.AllocateR4(pinned);
-	}
-
-	public Operand AllocateLocalStackR8(bool pinned = false)
-	{
-		return MethodCompiler.LocalStack.AllocateR8(pinned);
-	}
-
-	public Operand AllocateLocalStackObject(bool pinned = false)
-	{
-		return MethodCompiler.LocalStack.AllocateObject(pinned);
-	}
-
-	public Operand AllocateLocalStackManagedPointer(bool pinned = false)
-	{
-		return MethodCompiler.LocalStack.AllocateManagedPointer(pinned);
-	}
-
-	public Operand AddLocalStackValueType(MosaType type, bool pinned = false)
-	{
-		return MethodCompiler.LocalStack.AllocateValueType(type, pinned);
-	}
-
-	public Operand AddLocalStack(Operand operand, bool pinned = false)
-	{
-		return MethodCompiler.LocalStack.Allocate(operand, pinned);
-	}
-
-	protected Operand AllocateVirtualRegister(Operand operand)
-	{
-		return MethodCompiler.VirtualRegisters.Allocate(operand);
-	}
-
-	protected Operand AllocateVirtualRegister32()
-	{
-		return MethodCompiler.VirtualRegisters.Allocate32();
-	}
-
-	protected Operand AllocateVirtualRegister64()
-	{
-		return MethodCompiler.VirtualRegisters.Allocate64();
-	}
-
-	protected Operand AllocateVirtualRegisterR4()
-	{
-		return MethodCompiler.VirtualRegisters.AllocateR4();
-	}
-
-	protected Operand AllocateVirtualRegisterR8()
-	{
-		return MethodCompiler.VirtualRegisters.AllocateR8();
-	}
-
-	protected Operand AllocateVirtualRegisterObject()
-	{
-		return MethodCompiler.VirtualRegisters.AllocateObject();
-	}
-
-	protected Operand AllocateVirtualRegisterManagedPointer()
-	{
-		return MethodCompiler.VirtualRegisters.AllocateManagedPointer();
-	}
-
-	protected Operand AllocateVirtualRegisterNativeInteger()
-	{
-		return Is32BitPlatform ? MethodCompiler.VirtualRegisters.Allocate32() : MethodCompiler.VirtualRegisters.Allocate64();
 	}
 
 	#endregion Methods
@@ -952,10 +873,9 @@ public abstract class BaseMethodCompilerStage
 	{
 		type = MosaTypeLayout.GetUnderlyingType(type);
 
-		if (type == null)
+		if (type.IsValueType)
 			return IRInstruction.LoadCompound;
-
-		if (type.IsReferenceType)
+		else if (type.IsReferenceType)
 			return IRInstruction.LoadObject;
 		else if (type.IsPointer)
 			return Select(IRInstruction.Load32, IRInstruction.Load64);
@@ -991,10 +911,9 @@ public abstract class BaseMethodCompilerStage
 	{
 		type = MosaTypeLayout.GetUnderlyingType(type);
 
-		if (type == null)
+		if (type.IsValueType)
 			return IRInstruction.MoveCompound;
-
-		if (type.IsReferenceType)
+		else if (type.IsReferenceType)
 			return IRInstruction.MoveObject;
 		else if (type.IsPointer)
 			return Select(IRInstruction.Move32, IRInstruction.Move64);
@@ -1067,10 +986,9 @@ public abstract class BaseMethodCompilerStage
 
 		type = MosaTypeLayout.GetUnderlyingType(type);
 
-		if (type == null)
+		if (type.IsValueType)
 			return IRInstruction.SetReturnCompound;
-
-		if (type.IsReferenceType)
+		else if (type.IsReferenceType)
 			return IRInstruction.SetReturnObject;
 		else if (type.IsR4)
 			return IRInstruction.SetReturnR4;
