@@ -1,4 +1,4 @@
-// Copyright (c) MOSA Project. Licensed under the New BSD License.
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections;
 using System.Collections.Generic;
@@ -8,30 +8,30 @@ using Mosa.Compiler.MosaTypeSystem;
 namespace Mosa.Compiler.Framework;
 
 /// <summary>
-/// Virtual Registers
+/// Parameters
 /// </summary>
-public sealed class VirtualRegisters : IEnumerable<Operand>
+public sealed class Parameters : IEnumerable<Operand>
 {
 	#region Data Members
 
-	private readonly List<Operand> virtualRegisters = new List<Operand>();
+	private readonly List<Operand> parameters = new List<Operand>();
 
 	#endregion Data Members
 
 	#region Properties
 
-	public int Count => virtualRegisters.Count;
+	public int Count => parameters.Count;
 
-	public Operand this[int index] => virtualRegisters[index];
+	public Operand this[int index] => parameters[index];
 
 	public bool Is32Platform { get; private set; }
 
 	#endregion Properties
 
 	/// <summary>
-	/// Initializes a new instance of the <see cref="VirtualRegisters" /> class.
+	/// Initializes a new instance of the <see cref="Parameters" /> class.
 	/// </summary>
-	public VirtualRegisters(bool is32Platform)
+	public Parameters(bool is32Platform)
 	{
 		Is32Platform = is32Platform;
 	}
@@ -41,9 +41,9 @@ public sealed class VirtualRegisters : IEnumerable<Operand>
 		Debug.Assert(type == null && primitiveType != PrimitiveType.ValueType);
 		Debug.Assert(type != null && primitiveType == PrimitiveType.ValueType);
 
-		var operand = Operand.CreateVirtualRegister(primitiveType, Count + 1, type);
+		var operand = Operand.CreateVirtualRegister(primitiveType, Count, type);
 
-		virtualRegisters.Add(operand);
+		parameters.Add(operand);
 
 		return operand;
 	}
@@ -97,20 +97,20 @@ public sealed class VirtualRegisters : IEnumerable<Operand>
 	{
 		if (operand.Low == null && operand.High == null)
 		{
-			var low = Operand.CreateLow(operand, virtualRegisters.Count + 1);
-			var high = Operand.CreateHigh(operand, virtualRegisters.Count + 2);
+			var low = Operand.CreateLow(operand, parameters.Count + 1);
+			var high = Operand.CreateHigh(operand, parameters.Count + 2);
 
 			if (operand.IsVirtualRegister)
 			{
-				virtualRegisters.Add(low);
-				virtualRegisters.Add(high);
+				parameters.Add(low);
+				parameters.Add(high);
 			}
 		}
 	}
 
 	public IEnumerator<Operand> GetEnumerator()
 	{
-		foreach (var virtualRegister in virtualRegisters)
+		foreach (var virtualRegister in parameters)
 		{
 			yield return virtualRegister;
 		}
@@ -123,7 +123,7 @@ public sealed class VirtualRegisters : IEnumerable<Operand>
 
 	internal void Reorder(Operand virtualRegister, int index)
 	{
-		virtualRegisters[index - 1] = virtualRegister;
+		parameters[index - 1] = virtualRegister;
 		virtualRegister.RenameIndex(index);
 	}
 }

@@ -50,9 +50,9 @@ public sealed class LocalStack : IEnumerable<Operand>
 		return operand;
 	}
 
-	public Operand Allocate(Operand operand, bool isPinned = false)
+	public Operand Allocate(Operand operand)
 	{
-		return Allocate(operand.Primitive, isPinned, operand.Type);
+		return Allocate(operand.Primitive, operand.IsPinned, operand.Type);
 	}
 
 	public Operand Allocate32(bool pinned = false)

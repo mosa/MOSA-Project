@@ -332,7 +332,7 @@ public class InlineStage : BaseMethodCompilerStage
 		}
 		else if (operand.IsLocalStack)
 		{
-			mappedOperand = MethodCompiler.LocalStack.Allocate(operand, operand.IsPinned);
+			mappedOperand = MethodCompiler.LocalStack.Allocate(operand);
 		}
 		else if (operand.IsVirtualRegister)
 		{

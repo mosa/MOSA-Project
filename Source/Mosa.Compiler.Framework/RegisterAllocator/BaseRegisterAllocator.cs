@@ -1319,7 +1319,7 @@ public abstract class BaseRegisterAllocator
 
 			Debug.Assert(register.IsVirtualRegister);
 
-			register.SpillSlotOperand = LocalStack.Allocate(register.VirtualRegisterOperand, false);
+			register.SpillSlotOperand = LocalStack.Allocate(register.VirtualRegisterOperand);
 		}
 	}
 
