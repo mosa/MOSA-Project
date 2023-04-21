@@ -58,7 +58,9 @@ public static class DelegatePatcher
 		context.AppendInstruction(loadParameterInstruction, v2, methodPointerOperand);
 		context.AppendInstruction(loadParameterInstruction, v3, instanceOperand);
 
-		var storeIntegerInstruction = methodCompiler.Is32BitPlatform ? (BaseInstruction)IRInstruction.Store32 : IRInstruction.Store64;
+		var storeIntegerInstruction = methodCompiler.Is32BitPlatform
+			? (BaseInstruction)IRInstruction.Store32
+			: IRInstruction.Store64;
 
 		context.AppendInstruction(storeIntegerInstruction, null, v1, methodPointerOffsetOperand, v2);
 		context.MosaType = methodPointerOperand.Type;
@@ -87,9 +89,9 @@ public static class DelegatePatcher
 		var b2 = new Context(methodCompiler.BasicBlocks.CreateBlock());
 		var b3 = new Context(methodCompiler.BasicBlocks.CreateBlock());
 
-		var vrs = new Operand[methodCompiler.Parameters.Length];
+		var vrs = new Operand[methodCompiler.Parameters.Count];
 
-		for (var i = 0; i < methodCompiler.Parameters.Length; i++)
+		for (var i = 0; i < methodCompiler.Parameters.Count; i++)
 		{
 			var type = methodCompiler.Parameters[i].Type;
 
@@ -121,9 +123,9 @@ public static class DelegatePatcher
 		b0.AppendInstruction(branchInstruction, ConditionCode.Equal, null, opCompare, methodCompiler.Constant64_0, b2.Block);
 		b0.AppendInstruction(IRInstruction.Jmp, b1.Block);
 
-		var operands = new List<Operand>(methodCompiler.Parameters.Length + 1);
+		var operands = new List<Operand>(methodCompiler.Parameters.Count + 1);
 
-		for (var i = 1; i < methodCompiler.Parameters.Length; i++)
+		for (var i = 1; i < methodCompiler.Parameters.Count; i++)
 		{
 			operands.Add(vrs[i]);
 		}

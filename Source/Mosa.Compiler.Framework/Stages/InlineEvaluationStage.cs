@@ -279,9 +279,9 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 
 				var newOperand = Operand.CreateVirtualRegister(operand, -operand.Index);
 
-				var moveInstruction = !MosaTypeLayout.IsUnderlyingPrimitive(newOperand.Type)
-					? IRInstruction.MoveCompound
-					: GetMoveInstruction(newOperand.Type);
+				var moveInstruction = MethodCompiler.IsPrimitive(operand)
+					? GetMoveInstruction(newOperand.Type)
+					: IRInstruction.MoveCompound;
 
 				var moveNode = new InstructionNode(moveInstruction, newOperand, newOp);
 

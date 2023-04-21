@@ -7,7 +7,6 @@ using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.Linker;
-using Mosa.Compiler.Framework.RegisterAllocator;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 using static Mosa.Compiler.Framework.CompilerHooks;
@@ -109,7 +108,7 @@ public sealed class MethodCompiler
 	/// <summary>
 	/// Gets the parameters.
 	/// </summary>
-	public Operand[] Parameters { get; }
+	public Parameters Parameters { get; }
 
 	/// <summary>
 	/// Gets the protected regions.
@@ -257,7 +256,7 @@ public sealed class MethodCompiler
 		LocalStack = new LocalStack(Is32BitPlatform);
 		VirtualRegisters = new VirtualRegisters(Is32BitPlatform);
 
-		Parameters = new Operand[method.Signature.Parameters.Count + (method.HasThis || method.HasExplicitThis ? 1 : 0)];
+		Parameters = new Parameters(Is32BitPlatform, method.Signature.Parameters.Count + (method.HasThis || method.HasExplicitThis ? 1 : 0));
 
 		Constant32_0 = CreateConstant((uint)0);
 		Constant64_0 = CreateConstant((ulong)0);
@@ -302,8 +301,6 @@ public sealed class MethodCompiler
 		MethodData.ReturnSize = methodInfo.ReturnSize;
 		MethodData.ReturnInRegister = methodInfo.ReturnInRegister;
 
-		EvaluateParameterOperands();
-
 		MethodData.Counters.NewCountSkipLock("ExecutionTime.Setup.Ticks", (int)Stopwatch.ElapsedTicks);
 		MethodData.Counters.NewCountSkipLock("ExecutionTime.Setup.MicroSeconds", Stopwatch.Elapsed.Microseconds);
 	}
@@ -311,64 +308,6 @@ public sealed class MethodCompiler
 	#endregion Construction
 
 	#region Methods
-
-	/// <summary>
-	/// Sets the stack parameter.
-	/// </summary>
-	/// <param name="index">The index.</param>
-	/// <param name="type">The type.</param>
-	/// <param name="name">The name.</param>
-	/// <param name="isThis">if set to <c>true</c> [is this].</param>
-	/// <param name="offset">The offset.</param>
-	/// <returns></returns>
-	private Operand SetStackParameter(int index, MosaType type, string name, int offset)
-	{
-		var param = Operand.CreateStackParameter(type, index, name, offset);
-		Parameters[index] = param;
-		return param;
-	}
-
-	/// <summary>
-	/// Evaluates the parameter operands.
-	/// </summary>
-	private void EvaluateParameterOperands()
-	{
-		var offset = Architecture.OffsetOfFirstParameter;
-
-		if (!MosaTypeLayout.IsUnderlyingPrimitive(Method.Signature.ReturnType))
-		{
-			offset += (int)TypeLayout.GetTypeSize(Method.Signature.ReturnType);
-		}
-
-		var index = 0;
-
-		if (Method.HasThis || Method.HasExplicitThis)
-		{
-			if (Method.DeclaringType.IsValueType)
-			{
-				var ptr = Method.DeclaringType.ToManagedPointer();
-				SetStackParameter(index++, ptr, "this", offset);
-
-				var size = GetReferenceOrTypeSize(ptr, true);
-				offset += (int)size;
-			}
-			else
-			{
-				SetStackParameter(index++, Method.DeclaringType, "this", offset);
-
-				var size = GetReferenceOrTypeSize(Method.DeclaringType, true);
-				offset += (int)size;
-			}
-		}
-
-		foreach (var parameter in Method.Signature.Parameters)
-		{
-			SetStackParameter(index++, parameter.ParameterType, parameter.Name, offset);
-
-			var size = GetReferenceOrTypeSize(parameter.ParameterType, true);
-			offset += (int)size;
-		}
-	}
 
 	/// <summary>
 	/// Compiles the method referenced by this method compiler.
@@ -745,10 +684,9 @@ public sealed class MethodCompiler
 	{
 		if (type.IsValueType)
 		{
-			if (aligned)
-				return Alignment.AlignUp(TypeLayout.GetTypeSize(type), Architecture.NativeAlignment);
-			else
-				return TypeLayout.GetTypeSize(type);
+			var size = TypeLayout.GetTypeSize(type);
+
+			return aligned ? Alignment.AlignUp(size, Architecture.NativeAlignment) : size;
 		}
 		else
 		{
@@ -939,6 +877,11 @@ public sealed class MethodCompiler
 	public static bool IsPrimitive(PrimitiveType primitiveType)
 	{
 		return primitiveType != PrimitiveType.ValueType;
+	}
+
+	public static bool IsPrimitive(Operand operand)
+	{
+		return operand.Primitive != PrimitiveType.ValueType;
 	}
 
 	public Operand AllocateVirtualRegisterOrStackLocal(MosaType returnType)

@@ -340,8 +340,7 @@ public class InlineStage : BaseMethodCompilerStage
 		}
 		else if (operand.IsStaticField)
 		{
-			// FUTURE: explore operand re-use
-			mappedOperand = Operand.CreateStaticField(operand.Field, TypeSystem);
+			mappedOperand = operand;
 		}
 		else if (operand.IsCPURegister)
 		{

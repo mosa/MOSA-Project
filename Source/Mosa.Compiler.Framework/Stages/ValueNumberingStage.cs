@@ -98,10 +98,10 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 
 	private void DetermineReadOnlyParameters()
 	{
-		if (MethodCompiler.Parameters.Length == 0)
+		if (MethodCompiler.Parameters.Count == 0)
 			return;
 
-		ParamReadOnly = new BitArray(MethodCompiler.Parameters.Length, false);
+		ParamReadOnly = new BitArray(MethodCompiler.Parameters.Count, false);
 
 		var traceParameters = CreateTraceLog("Parameters", 5);
 

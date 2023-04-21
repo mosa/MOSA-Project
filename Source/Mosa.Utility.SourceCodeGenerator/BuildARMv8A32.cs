@@ -11,6 +11,7 @@ public class BuildARMv8A32 : BuildBaseTemplate
 
 	protected override void Body()
 	{
+		Lines.AppendLine("using Mosa.Compiler.Framework;");
 		Lines.AppendLine("using Mosa.Platform.ARMv8A32.Instructions;");
 		Lines.AppendLine();
 		Lines.AppendLine("namespace Mosa.Platform.ARMv8A32;");
@@ -23,7 +24,7 @@ public class BuildARMv8A32 : BuildBaseTemplate
 
 		foreach (var entry in Entries.Instructions)
 		{
-			Lines.AppendLine("\tpublic static readonly " + entry.Name + " " + entry.Name + " = new " + entry.Name + "();");
+			Lines.AppendLine("\tpublic static readonly BaseInstruction " + entry.Name + " = new " + entry.Name + "();");
 		}
 
 		Lines.AppendLine("}");

@@ -44,6 +44,8 @@ public sealed partial class Operand
 
 	public ConstantType Constant { get; private set; }
 
+	public ElementType Element { get; private set; }
+
 	public ulong ConstantUnsigned64 { get; private set; }
 
 	public double ConstantDouble { get; private set; }
@@ -223,47 +225,7 @@ public sealed partial class Operand
 
 	#endregion Construction
 
-	#region Static Factory Constructors
-
-	public static Operand CreateVirtual32(int index)
-	{
-		return new Operand
-		{
-			Location = LocationType.VirtualRegister,
-			Primitive = PrimitiveType.Int32,
-			Index = index,
-		};
-	}
-
-	public static Operand CreateVirtual64(int index)
-	{
-		return new Operand
-		{
-			Location = LocationType.VirtualRegister,
-			Primitive = PrimitiveType.Int64,
-			Index = index,
-		};
-	}
-
-	public static Operand CreateVirtualR4(int index)
-	{
-		return new Operand
-		{
-			Location = LocationType.VirtualRegister,
-			Primitive = PrimitiveType.R4,
-			Index = index,
-		};
-	}
-
-	public static Operand CreateVirtualR8(int index)
-	{
-		return new Operand
-		{
-			Location = LocationType.VirtualRegister,
-			Primitive = PrimitiveType.R8,
-			Index = index,
-		};
-	}
+	#region Factory Methods - Constants
 
 	public static Operand CreateConstant32(uint value)
 	{
@@ -306,26 +268,6 @@ public sealed partial class Operand
 			Primitive = PrimitiveType.R8,
 			Constant = ConstantType.Default,
 			ConstantDouble = value,
-		};
-	}
-
-	public static Operand CreateVirtualManagedPointer(int index)
-	{
-		return new Operand
-		{
-			Location = LocationType.VirtualRegister,
-			Primitive = PrimitiveType.ManagedPointer,
-			Index = index,
-		};
-	}
-
-	public static Operand CreateVirtualObject(int index)
-	{
-		return new Operand
-		{
-			Location = LocationType.VirtualRegister,
-			Primitive = PrimitiveType.Object,
-			Index = index,
 		};
 	}
 
@@ -380,6 +322,10 @@ public sealed partial class Operand
 		};
 	}
 
+	#endregion Factory Methods - Constants
+
+	#region Factory Methods - Operands Copy
+
 	public static Operand CreateVirtualRegister(Operand operand, int index)
 	{
 		Debug.Assert(operand.Type == null);
@@ -403,6 +349,10 @@ public sealed partial class Operand
 			Register = register
 		};
 	}
+
+	#endregion Factory Methods - Operands Copy
+
+	#region Factory Methods - CPURegister
 
 	public static Operand CreateCPURegister32(PhysicalRegister register)
 	{
@@ -474,144 +424,9 @@ public sealed partial class Operand
 		};
 	}
 
-	public static Operand CreateStringLabel(string name, uint offset, string data)
-	{
-		return new Operand
-		{
-			Location = LocationType.Constant,
-			Primitive = PrimitiveType.Object,
-			Constant = ConstantType.Label,
-			Name = name,
-			Offset = offset,
-			StringData = data,
-			IsResolved = false
-		};
-	}
+	#endregion Factory Methods - CPURegister
 
-	public static Operand CreateLabel(MosaMethod method, bool is32Platform)
-	{
-		Debug.Assert(method != null);
-
-		return new Operand
-		{
-			Location = LocationType.Constant,
-			Primitive = is32Platform ? PrimitiveType.Int32 : PrimitiveType.Int64,
-			Constant = ConstantType.Label,
-			Method = method,
-			Name = method.FullName,
-		};
-	}
-
-	public static Operand GetNullObject()
-	{
-		return NullObject;
-	}
-
-	public static Operand CreateStackParameter(Operand operand, int index, string name, int offset)
-	{
-		return new Operand
-		{
-			Primitive = operand.Primitive,
-			Location = LocationType.StackParameter,
-			Constant = ConstantType.Default,
-			Index = index,
-			Name = name,
-			ConstantSigned64 = offset,
-			Type = operand.IsValueType ? operand.Type : null,
-		};
-	}
-
-	public static Operand CreateStackParameter32(int index, string name, int offset)
-	{
-		return new Operand
-		{
-			Primitive = PrimitiveType.Int32,
-			Location = LocationType.StackParameter,
-			Constant = ConstantType.Default,
-			Index = index,
-			Name = name,
-			ConstantSigned64 = offset,
-		};
-	}
-
-	public static Operand CreateStackParameter64(int index, string name, int offset)
-	{
-		return new Operand
-		{
-			Primitive = PrimitiveType.Int64,
-			Location = LocationType.StackParameter,
-			Constant = ConstantType.Default,
-			Index = index,
-			Name = name,
-			ConstantSigned64 = offset,
-		};
-	}
-
-	public static Operand CreateStackParameterR4(int index, string name, int offset)
-	{
-		return new Operand
-		{
-			Primitive = PrimitiveType.R4,
-			Location = LocationType.StackParameter,
-			Constant = ConstantType.Default,
-			Index = index,
-			Name = name,
-			ConstantSigned64 = offset,
-		};
-	}
-
-	public static Operand CreateStackParameterR8(int index, string name, int offset)
-	{
-		return new Operand
-		{
-			Primitive = PrimitiveType.R8,
-			Location = LocationType.StackParameter,
-			Constant = ConstantType.Default,
-			Index = index,
-			Name = name,
-			ConstantSigned64 = offset,
-		};
-	}
-
-	public static Operand CreateStackParameterObject(int index, string name, int offset)
-	{
-		return new Operand
-		{
-			Primitive = PrimitiveType.Object,
-			Location = LocationType.StackParameter,
-			Constant = ConstantType.Default,
-			Index = index,
-			Name = name,
-			ConstantSigned64 = offset,
-		};
-	}
-
-	public static Operand CreateStackParameterManagedPointer(int index, string name, int offset)
-	{
-		return new Operand
-		{
-			Primitive = PrimitiveType.ManagedPointer,
-			Location = LocationType.StackParameter,
-			Constant = ConstantType.Default,
-			Index = index,
-			Name = name,
-			ConstantSigned64 = offset,
-		};
-	}
-
-	public static Operand CreateStackParameterValueType(MosaType type, int index, string name, int offset)
-	{
-		return new Operand
-		{
-			Primitive = PrimitiveType.ValueType,
-			Location = LocationType.StackParameter,
-			Constant = ConstantType.Default,
-			Index = index,
-			Name = name,
-			ConstantSigned64 = offset,
-			Type = type
-		};
-	}
+	#region Factory Methods - Standard
 
 	public static Operand CreateVirtualRegister(PrimitiveType primitiveType, int index, MosaType type = null)
 	{
@@ -620,7 +435,7 @@ public sealed partial class Operand
 			Location = LocationType.VirtualRegister,
 			Primitive = primitiveType,
 			Index = index,
-			Type = type
+			Type = primitiveType == PrimitiveType.ValueType ? type : null,
 		};
 	}
 
@@ -633,13 +448,43 @@ public sealed partial class Operand
 			Constant = ConstantType.Default,
 			Index = index,
 			IsPinned = pinned,
+			Type = primitiveType == PrimitiveType.ValueType ? type : null,
+		};
+	}
+
+	public static Operand CreateStackParameter(PrimitiveType primitiveType, ElementType elementType, int index, string name, int offset, MosaType type = null)
+	{
+		return new Operand
+		{
+			Primitive = primitiveType,
+			Location = LocationType.StackParameter,
+			Constant = ConstantType.Default,
+			Element = elementType,
+			Index = index,
+			Name = name,
+			ConstantSigned64 = offset,
 			Type = type
 		};
 	}
 
-	#endregion Static Factory Constructors
+	public static Operand CreateCPURegister(PrimitiveType primitiveType, PhysicalRegister register)
+	{
+		return new Operand()
+		{
+			Location = LocationType.PhysicalRegister,
+			Primitive = primitiveType,
+			Register = register
+		};
+	}
 
-	#region Static Factory Constructors
+	public static Operand GetNullObject()
+	{
+		return NullObject;
+	}
+
+	#endregion Factory Methods - Standard
+
+	#region Factory Methods - Long Operand
 
 	public static Operand CreateHigh(Operand longOperand, int index)
 	{
@@ -650,7 +495,7 @@ public sealed partial class Operand
 
 		if (longOperand.IsParameter)
 		{
-			operand = CreateStackParameter(longOperand, longOperand.Index, longOperand.Name + " (High)", (int)longOperand.Offset + 4);
+			operand = CreateStackParameter(longOperand.Primitive, longOperand.Element, longOperand.Index, $"{longOperand.Name} (High)", (int)longOperand.Offset + 4);
 		}
 		else if (longOperand.IsResolvedConstant)
 		{
@@ -704,7 +549,7 @@ public sealed partial class Operand
 
 		if (longOperand.IsParameter)
 		{
-			operand = CreateStackParameter(longOperand, longOperand.Index, longOperand.Name + " (Low)", (int)longOperand.Offset);
+			operand = CreateStackParameter(longOperand.Primitive, longOperand.Element, longOperand.Index, $"{longOperand.Name} (Low)", (int)longOperand.Offset);
 		}
 		else if (longOperand.IsResolvedConstant)
 		{
@@ -751,50 +596,47 @@ public sealed partial class Operand
 		return operand;
 	}
 
-	/// <summary>
-	/// Creates the stack parameter.
-	/// </summary>
-	/// <param name="type">The type.</param>
-	/// <param name="index">The index.</param>
-	/// <param name="name">The name.</param>
-	/// <param name="offset">The offset.</param>
-	/// <returns></returns>
-	public static Operand CreateStackParameter(MosaType type, int index, string name, int offset)
+	#endregion Factory Methods - Long Operand
+
+	public static Operand CreateStringLabel(string name, uint offset, string data)
 	{
-		return new Operand(type)
+		return new Operand
 		{
-			// TODO Type
-			Location = LocationType.StackParameter,
-			Constant = ConstantType.Default,
-			Index = index,
+			Location = LocationType.Constant,
+			Primitive = PrimitiveType.Object,
+			Constant = ConstantType.Label,
 			Name = name,
-			ConstantSigned64 = offset
+			Offset = offset,
+			StringData = data,
+			IsResolved = false
 		};
 	}
 
-	/// <summary>
-	/// Creates a new runtime member <see cref="Operand" />.
-	/// </summary>
-	/// <param name="field">The field.</param>
-	/// <param name="typeSystem">The type system.</param>
-	/// <returns></returns>
-	public static Operand CreateStaticField(MosaField field, TypeSystem typeSystem)
+	public static Operand CreateLabel(MosaMethod method, bool is32Platform)
 	{
-		Debug.Assert(field.IsStatic);
+		Debug.Assert(method != null);
 
-		var type = field.FieldType.IsReferenceType ? typeSystem.BuiltIn.Object : field.FieldType.ToManagedPointer();
-
-		return new Operand(type)
+		return new Operand
 		{
-			// TODO Type
+			Location = LocationType.Constant,
+			Primitive = is32Platform ? PrimitiveType.Int32 : PrimitiveType.Int64,
+			Constant = ConstantType.Label,
+			Method = method,
+			Name = method.FullName,
+		};
+	}
+
+	public static Operand CreateStaticField(PrimitiveType primitiveType, MosaField field)
+	{
+		return new Operand()
+		{
+			Primitive = primitiveType,
 			Location = LocationType.Constant,
 			Constant = ConstantType.StaticField,
 			Offset = 0,
 			Field = field,
 		};
 	}
-
-	#endregion Static Factory Constructors
 
 	#region Name Output
 
@@ -815,7 +657,7 @@ public sealed partial class Operand
 
 	#endregion Name Output
 
-	#region Object Overrides
+	#region Override - ToString()
 
 	public override string ToString()
 	{
@@ -896,11 +738,11 @@ public sealed partial class Operand
 		}
 		else if (IsStaticField)
 		{
-			sb.Append($" ({Field.FullName}) ");
+			sb.Append($" ({Field.FullName})");
 		}
 		else if (Name != null)
 		{
-			sb.Append($" ({Name}) ");
+			sb.Append($" ({Name})");
 		}
 
 		sb.Append($" [{GetElementString()}]");
@@ -913,7 +755,7 @@ public sealed partial class Operand
 		return sb.ToString().Trim();
 	}
 
-	#endregion Object Overrides
+	#endregion Override - ToString()
 
 	internal void RenameIndex(int index)
 	{

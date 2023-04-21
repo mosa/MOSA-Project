@@ -38,9 +38,6 @@ public sealed class VirtualRegisters : IEnumerable<Operand>
 
 	public Operand Allocate(PrimitiveType primitiveType, MosaType type = null)
 	{
-		Debug.Assert(type == null && primitiveType != PrimitiveType.ValueType);
-		Debug.Assert(type != null && primitiveType == PrimitiveType.ValueType);
-
 		var operand = Operand.CreateVirtualRegister(primitiveType, Count + 1, type);
 
 		virtualRegisters.Add(operand);

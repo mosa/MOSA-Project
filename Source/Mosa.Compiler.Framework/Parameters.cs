@@ -14,7 +14,7 @@ public sealed class Parameters : IEnumerable<Operand>
 {
 	#region Data Members
 
-	private readonly List<Operand> parameters = new List<Operand>();
+	private readonly List<Operand> parameters;
 
 	#endregion Data Members
 
@@ -31,66 +31,19 @@ public sealed class Parameters : IEnumerable<Operand>
 	/// <summary>
 	/// Initializes a new instance of the <see cref="Parameters" /> class.
 	/// </summary>
-	public Parameters(bool is32Platform)
+	public Parameters(bool is32Platform, int count)
 	{
 		Is32Platform = is32Platform;
+		parameters = new List<Operand>(count);
 	}
 
-	public Operand Allocate(PrimitiveType primitiveType, MosaType type = null)
+	public Operand Allocate(PrimitiveType primitiveType, ElementType elementType, string name, int offset, MosaType type = null)
 	{
-		Debug.Assert(type == null && primitiveType != PrimitiveType.ValueType);
-		Debug.Assert(type != null && primitiveType == PrimitiveType.ValueType);
-
-		var operand = Operand.CreateVirtualRegister(primitiveType, Count, type);
+		var operand = Operand.CreateStackParameter(primitiveType, elementType, Count, name, offset, type);
 
 		parameters.Add(operand);
 
 		return operand;
-	}
-
-	public Operand Allocate(Operand operand)
-	{
-		return Allocate(operand.Primitive, operand.Type);
-	}
-
-	public Operand Allocate32()
-	{
-		return Allocate(PrimitiveType.Int32);
-	}
-
-	public Operand Allocate64()
-	{
-		return Allocate(PrimitiveType.Int64);
-	}
-
-	public Operand AllocateR4()
-	{
-		return Allocate(PrimitiveType.R4);
-	}
-
-	public Operand AllocateR8()
-	{
-		return Allocate(PrimitiveType.R8);
-	}
-
-	public Operand AllocateObject()
-	{
-		return Allocate(PrimitiveType.Object);
-	}
-
-	public Operand AllocateManagedPointer()
-	{
-		return Allocate(PrimitiveType.ManagedPointer);
-	}
-
-	public Operand AllocateValueType(MosaType type)
-	{
-		return Allocate(PrimitiveType.ValueType, type);
-	}
-
-	public Operand AllocateNativeInteger()
-	{
-		return Is32Platform ? Allocate32() : Allocate64();
 	}
 
 	public void SplitOperand(Operand operand)

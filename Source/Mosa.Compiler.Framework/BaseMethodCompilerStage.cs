@@ -829,17 +829,6 @@ public abstract class BaseMethodCompilerStage
 		return operand.Definitions.Count == 1;
 	}
 
-	/// <summary>
-	/// Gets the size of the type.
-	/// </summary>
-	/// <param name="type">The type.</param>
-	/// <param name="align">if set to <c>true</c> [align].</param>
-	/// <returns></returns>
-	public uint GetTypeSize(MosaType type, bool align)
-	{
-		return MethodCompiler.GetReferenceOrTypeSize(type, align);
-	}
-
 	public List<BasicBlock> AddMissingBlocksIfRequired(List<BasicBlock> blocks)
 	{
 		if (blocks.Count == BasicBlocks.Count)
@@ -946,7 +935,7 @@ public abstract class BaseMethodCompilerStage
 	}
 
 	// TODO: Replace!
-	public static BaseIRInstruction GetLoadParameterInstruction(MosaType type, bool is32bitPlatform)
+	public static BaseInstruction GetLoadParameterInstruction(MosaType type, bool is32bitPlatform)
 	{
 		if (type.IsReferenceType)
 			return IRInstruction.LoadParamObject;
@@ -979,11 +968,8 @@ public abstract class BaseMethodCompilerStage
 	}
 
 	// TODO: Replace!
-	public static BaseIRInstruction GetSetReturnInstruction(MosaType type, bool is32bitPlatform)
+	public static BaseInstruction GetSetReturnInstruction(MosaType type, bool is32bitPlatform)
 	{
-		if (type == null)
-			return null;
-
 		type = MosaTypeLayout.GetUnderlyingType(type);
 
 		if (type.IsValueType)
