@@ -319,7 +319,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 	private BitValue Any(Operand virtualRegister)
 	{
 		if (virtualRegister.IsInteger)
-			return virtualRegister.IsInteger32 ? BitValue.Any32 : BitValue.Any64;
+			return virtualRegister.IsInt32 ? BitValue.Any32 : BitValue.Any64;
 		else if (virtualRegister.IsObject || virtualRegister.IsManagedPointer)
 			return Is32BitPlatform ? BitValue.Any32 : BitValue.Any64;
 		else if (virtualRegister.IsR4)
@@ -340,7 +340,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 	private static BitValue Any(Operand virtualRegister, TransformContext transform)
 	{
 		if (virtualRegister.IsInteger)
-			return virtualRegister.IsInteger32 ? BitValue.Any32 : BitValue.Any64;
+			return virtualRegister.IsInt32 ? BitValue.Any32 : BitValue.Any64;
 		else if (virtualRegister.IsObject || virtualRegister.IsManagedPointer)
 			return transform.Is32BitPlatform ? BitValue.Any32 : BitValue.Any64;
 		else if (virtualRegister.IsR4)
@@ -377,7 +377,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		{
 			replaceValue = value.MaxValue;
 		}
-		else if (virtualRegister.IsInteger32 && value.AreLower32BitsKnown)
+		else if (virtualRegister.IsInt32 && value.AreLower32BitsKnown)
 		{
 			replaceValue = value.BitsSet32;
 		}
@@ -386,7 +386,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			return;
 		}
 
-		var constantOperand = virtualRegister.IsInteger32
+		var constantOperand = virtualRegister.IsInt32
 			? CreateConstant32((uint)replaceValue)
 			: CreateConstant64(replaceValue);
 

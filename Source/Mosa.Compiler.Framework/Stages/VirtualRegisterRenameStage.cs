@@ -81,7 +81,6 @@ public sealed class VirtualRegisterRenameStage : BaseCodeTransformationStage
 					s.Low.RenameIndex(index);
 					s.High.RenameIndex(index);
 				}
-				index++;
 			}
 		}
 	}

@@ -2,7 +2,6 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
-using Microsoft.VisualBasic.FileIO;
 using Mosa.Compiler.MosaTypeSystem;
 
 // FIXME -- not 64bit compatible
@@ -52,14 +51,16 @@ public static class DelegatePatcher
 		var v2 = methodCompiler.VirtualRegisters.AllocateNativeInteger();
 		var v3 = methodCompiler.VirtualRegisters.AllocateObject();
 
-		var loadParameterInstruction = methodCompiler.Is32BitPlatform ? (BaseInstruction)IRInstruction.LoadParam32 : IRInstruction.LoadParam64;
+		var loadParameterInstruction = methodCompiler.Is32BitPlatform
+			? IRInstruction.LoadParam32
+			: IRInstruction.LoadParam64;
 
 		context.AppendInstruction(loadParameterInstruction, v1, thisOperand);
 		context.AppendInstruction(loadParameterInstruction, v2, methodPointerOperand);
 		context.AppendInstruction(loadParameterInstruction, v3, instanceOperand);
 
 		var storeIntegerInstruction = methodCompiler.Is32BitPlatform
-			? (BaseInstruction)IRInstruction.Store32
+			? IRInstruction.Store32
 			: IRInstruction.Store64;
 
 		context.AppendInstruction(storeIntegerInstruction, null, v1, methodPointerOffsetOperand, v2);
@@ -73,8 +74,13 @@ public static class DelegatePatcher
 	{
 		// check if instance is null (if so, it's a static call to the methodPointer)
 
-		var loadInstruction = methodCompiler.Is32BitPlatform ? (BaseInstruction)IRInstruction.Load32 : IRInstruction.Load64;
-		var branchInstruction = methodCompiler.Is32BitPlatform ? (BaseInstruction)IRInstruction.Branch32 : IRInstruction.Branch64;
+		var loadInstruction = methodCompiler.Is32BitPlatform
+			? IRInstruction.Load32
+			: IRInstruction.Load64;
+
+		var branchInstruction = methodCompiler.Is32BitPlatform
+			? IRInstruction.Branch32
+			: IRInstruction.Branch64;
 
 		var methodPointerField = GetField(methodCompiler.Method.DeclaringType, "methodPointer");
 		var methodPointerOffset = methodCompiler.TypeLayout.GetFieldOffset(methodPointerField);
@@ -93,21 +99,20 @@ public static class DelegatePatcher
 
 		for (var i = 0; i < methodCompiler.Parameters.Count; i++)
 		{
-			var type = methodCompiler.Parameters[i].Type;
+			var parameter = methodCompiler.Parameters[i];
 
-			if (MosaTypeLayout.IsUnderlyingPrimitive(type))
+			if (parameter.IsPrimitive)
 			{
-				vrs[i] = methodCompiler.VirtualRegisters.Allocate(methodCompiler.Parameters[i]);
+				vrs[i] = methodCompiler.VirtualRegisters.Allocate(parameter);
 
 				var paramLoadInstruction = BaseMethodCompilerStage.GetLoadParameterInstruction(vrs[i].Type, methodCompiler.Is32BitPlatform);
 
-				b0.AppendInstruction(paramLoadInstruction, vrs[i], methodCompiler.Parameters[i]);
-				b0.MosaType = type;
+				b0.AppendInstruction(paramLoadInstruction, vrs[i], parameter);
 			}
 			else
 			{
-				b0.AppendInstruction(IRInstruction.LoadParamCompound, vrs[i], methodCompiler.Parameters[i]);
-				b0.MosaType = type;
+				b0.AppendInstruction(IRInstruction.LoadParamCompound, vrs[i], parameter);
+				b0.MosaType = parameter.Type;
 			}
 		}
 

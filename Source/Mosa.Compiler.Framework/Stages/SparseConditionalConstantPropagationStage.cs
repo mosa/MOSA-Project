@@ -93,7 +93,7 @@ public class SparseConditionalConstantPropagationStage : BaseMethodCompilerStage
 		{
 			Debug.Assert(!target.IsFloatingPoint);
 
-			var constant = target.IsInteger32
+			var constant = target.IsInt32
 				? CreateConstant32((uint)value)
 				: CreateConstant64(value);
 

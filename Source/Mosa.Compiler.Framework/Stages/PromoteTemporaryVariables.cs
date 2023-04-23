@@ -47,7 +47,7 @@ public class PromoteTemporaryVariables : BaseMethodCompilerStage
 			return false;
 		}
 
-		if (!MosaTypeLayout.IsUnderlyingPrimitive(operand.Type))
+		if (!operand.IsPrimitive)
 		{
 			trace?.Log($"incompatible type: {operand}");
 			return false;

@@ -858,44 +858,6 @@ public abstract class BaseMethodCompilerStage
 		return list;
 	}
 
-	protected BaseInstruction GetLoadInstruction(MosaType type)
-	{
-		type = MosaTypeLayout.GetUnderlyingType(type);
-
-		if (type.IsValueType)
-			return IRInstruction.LoadCompound;
-		else if (type.IsReferenceType)
-			return IRInstruction.LoadObject;
-		else if (type.IsPointer)
-			return Select(IRInstruction.Load32, IRInstruction.Load64);
-		else if (type.IsI1)
-			return Select(IRInstruction.LoadSignExtend8x32, IRInstruction.LoadSignExtend8x64);
-		else if (type.IsI2)
-			return Select(IRInstruction.LoadSignExtend16x32, IRInstruction.LoadSignExtend16x64);
-		else if (type.IsI4)
-			return Select(IRInstruction.Load32, IRInstruction.LoadSignExtend32x64);
-		else if (type.IsI8)
-			return IRInstruction.Load64;
-		else if (type.IsU1 || type.IsBoolean)
-			return Select(IRInstruction.LoadZeroExtend8x32, IRInstruction.LoadZeroExtend8x64);
-		else if (type.IsU2 || type.IsChar)
-			return Select(IRInstruction.LoadZeroExtend16x32, IRInstruction.LoadZeroExtend16x64);
-		else if (type.IsU4)
-			return Select(IRInstruction.Load32, IRInstruction.LoadZeroExtend32x64);
-		else if (type.IsU8)
-			return IRInstruction.Load64;
-		else if (type.IsR4)
-			return IRInstruction.LoadR4;
-		else if (type.IsR8)
-			return IRInstruction.LoadR8;
-		else if (Is32BitPlatform)   // review
-			return IRInstruction.Load32;
-		else if (Is64BitPlatform)
-			return IRInstruction.Load64;
-
-		throw new InvalidOperationException();
-	}
-
 	public BaseInstruction GetMoveInstruction(MosaType type)
 	{
 		type = MosaTypeLayout.GetUnderlyingType(type);
@@ -986,7 +948,7 @@ public abstract class BaseMethodCompilerStage
 		return is32bitPlatform ? IRInstruction.SetReturn32 : IRInstruction.SetReturn64;
 	}
 
-	private BaseInstruction Select(BaseInstruction instruction32, BaseInstruction instruction64)
+	protected BaseInstruction Select(BaseInstruction instruction32, BaseInstruction instruction64)
 	{
 		return Is32BitPlatform ? instruction32 : instruction64;
 	}

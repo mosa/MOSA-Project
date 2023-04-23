@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Diagnostics;
-using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.Transforms.Compound;
 
@@ -13,9 +12,9 @@ public abstract class BaseCompoundTransform : BaseTransform
 
 	#region Helpers
 
-	public static void CopyCompound(TransformContext transform, Context context, MosaType type, Operand destinationBase, Operand destination, Operand sourceBase, Operand source)
+	protected static void CopyCompound(TransformContext transform, Context context, Operand operand, Operand destinationBase, Operand destination, Operand sourceBase, Operand source)
 	{
-		var size = transform.TypeLayout.GetTypeSize(type);
+		var size = transform.MethodCompiler.GetSize(operand);
 
 		Debug.Assert(size > 0);
 

@@ -641,9 +641,9 @@ public sealed class MethodCompiler
 	/// <param name="operandHigh">The operand high.</param>
 	public void SplitOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
 	{
-		var is64Bit = operand.IsInteger64;
+		var is64Bit = operand.IsInt64;
 
-		if (!operand.IsInteger64 && !operand.IsInteger32)
+		if (!operand.IsInt64 && !operand.IsInt32)
 		{
 			var underlyingType = MosaTypeLayout.GetUnderlyingType(operand.Type);
 
@@ -671,40 +671,6 @@ public sealed class MethodCompiler
 		{
 			operandLow = operand;
 			operandHigh = Constant32_0;
-		}
-	}
-
-	/// <summary>
-	/// Gets the size of the reference or type.
-	/// </summary>
-	/// <param name="type">The type.</param>
-	/// <param name="aligned">if set to <c>true</c> [aligned].</param>
-	/// <returns></returns>
-	public uint GetReferenceOrTypeSize(MosaType type, bool aligned = false)
-	{
-		if (type.IsValueType)
-		{
-			var size = TypeLayout.GetTypeSize(type);
-
-			return aligned ? Alignment.AlignUp(size, Architecture.NativeAlignment) : size;
-		}
-		else
-		{
-			return Architecture.NativeAlignment;
-		}
-	}
-
-	public uint GetReferenceOrTypeSize(Operand operand, bool aligned)
-	{
-		if (operand.IsValueType)
-		{
-			var size = TypeLayout.GetTypeSize(operand.Type);
-
-			return aligned ? Alignment.AlignUp(size, Architecture.NativeAlignment) : size;
-		}
-		else
-		{
-			return Architecture.NativeAlignment;
 		}
 	}
 
@@ -786,6 +752,50 @@ public sealed class MethodCompiler
 		};
 	}
 
+	public static PrimitiveType GetPrimitiveType(ElementType elementType)
+	{
+		return elementType switch
+		{
+			ElementType.I1 => PrimitiveType.Int32,
+			ElementType.I2 => PrimitiveType.Int32,
+			ElementType.I4 => PrimitiveType.Int32,
+			ElementType.I8 => PrimitiveType.Int64,
+			ElementType.U1 => PrimitiveType.Int32,
+			ElementType.U2 => PrimitiveType.Int32,
+			ElementType.U4 => PrimitiveType.Int32,
+			ElementType.U8 => PrimitiveType.Int64,
+			ElementType.R4 => PrimitiveType.R4,
+			ElementType.R8 => PrimitiveType.R8,
+			ElementType.Object => PrimitiveType.Object,
+			ElementType.ManagedPointer => PrimitiveType.ManagedPointer,
+			_ => throw new CompilerException($"Cannot translate to PrimitiveType from ElementType: {elementType}"),
+		};
+	}
+
+	public PrimitiveType GetPrimitiveType(MosaType type)
+	{
+		if (type.IsReferenceType)
+			return PrimitiveType.Object;
+		else if (type.IsManagedPointer)
+			return PrimitiveType.ManagedPointer;
+		else if (type.IsI1 || type.IsI2 || type.IsI4 || type.IsU1 || type.IsU2 || type.IsU4 || type.IsChar || type.IsBoolean)
+			return PrimitiveType.Int32;
+		else if (type.IsI8 || type.IsU8)
+			return PrimitiveType.Int64;
+		else if (type.IsR8)
+			return PrimitiveType.R8;
+		else if (type.IsR4)
+			return PrimitiveType.R4;
+		else if (type.IsI)
+			return Is32BitPlatform ? PrimitiveType.Int32 : PrimitiveType.Int64;
+		else if (type.IsPointer)
+			return Is32BitPlatform ? PrimitiveType.Int32 : PrimitiveType.Int64;
+		else if (type.IsValueType)
+			return PrimitiveType.ValueType;
+
+		throw new CompilerException($"Cannot translate to PrimitiveType from Type: {type}");
+	}
+
 	public ElementType GetElementType(MosaType type)
 	{
 		if (type.IsReferenceType)
@@ -824,49 +834,9 @@ public sealed class MethodCompiler
 		throw new CompilerException($"Cannot translate to ElementType from Type: {type}");
 	}
 
-	public PrimitiveType GetPrimitiveType(MosaType type)
-	{
-		if (type.IsReferenceType)
-			return PrimitiveType.Object;
-		else if (type.IsManagedPointer)
-			return PrimitiveType.ManagedPointer;
-		else if (type.IsI1 || type.IsI2 || type.IsI4 || type.IsU1 || type.IsU2 || type.IsU4 || type.IsChar || type.IsBoolean)
-			return PrimitiveType.Int32;
-		else if (type.IsI8 || type.IsU8)
-			return PrimitiveType.Int64;
-		else if (type.IsR8)
-			return PrimitiveType.R8;
-		else if (type.IsR4)
-			return PrimitiveType.R4;
-		else if (type.IsI)
-			return Is32BitPlatform ? PrimitiveType.Int32 : PrimitiveType.Int64;
-		else if (type.IsPointer)
-			return Is32BitPlatform ? PrimitiveType.Int32 : PrimitiveType.Int64;
-		else if (type.IsValueType)
-			return PrimitiveType.ValueType;
+	#endregion Type Conversion Helpers
 
-		throw new CompilerException($"Cannot translate to PrimitiveType from Type: {type}");
-	}
-
-	public static PrimitiveType GetPrimitiveType(ElementType elementType)
-	{
-		return elementType switch
-		{
-			ElementType.I1 => PrimitiveType.Int32,
-			ElementType.I2 => PrimitiveType.Int32,
-			ElementType.I4 => PrimitiveType.Int32,
-			ElementType.I8 => PrimitiveType.Int64,
-			ElementType.U1 => PrimitiveType.Int32,
-			ElementType.U2 => PrimitiveType.Int32,
-			ElementType.U4 => PrimitiveType.Int32,
-			ElementType.U8 => PrimitiveType.Int64,
-			ElementType.R4 => PrimitiveType.R4,
-			ElementType.R8 => PrimitiveType.R8,
-			ElementType.Object => PrimitiveType.Object,
-			ElementType.ManagedPointer => PrimitiveType.ManagedPointer,
-			_ => throw new CompilerException($"Cannot translate to PrimitiveType from ElementType: {elementType}"),
-		};
-	}
+	#region Size Method
 
 	public uint GetSize(ElementType elementType)
 	{
@@ -888,14 +858,47 @@ public sealed class MethodCompiler
 		};
 	}
 
+	public uint GetSize(PrimitiveType primitiveType)
+	{
+		return primitiveType switch
+		{
+			PrimitiveType.Int32 => 4,
+			PrimitiveType.Int64 => 8,
+			PrimitiveType.R4 => 4,
+			PrimitiveType.R8 => 8,
+			PrimitiveType.Object => Is32BitPlatform ? 4 : 8u,
+			PrimitiveType.ManagedPointer => Is32BitPlatform ? 4 : 8u,
+			_ => throw new CompilerException($"Cannot get size of {primitiveType}"),
+		};
+	}
+
+	public uint GetSize(MosaType type)
+	{
+		return TypeLayout.GetTypeSize(type);
+	}
+
+	public uint GetSize(Operand operand)
+	{
+		return operand.IsValueType
+			? TypeLayout.GetTypeSize(operand.Type)
+			: GetSize(operand.Primitive);
+	}
+
+	public uint GetSize(Operand operand, bool aligned)
+	{
+		var size = GetSize(operand);
+
+		if (aligned)
+			size = Alignment.AlignUp(size, Architecture.NativeAlignment);
+
+		return size;
+	}
+
+	#endregion Size Method
+
 	public static bool IsPrimitive(PrimitiveType primitiveType)
 	{
 		return primitiveType != PrimitiveType.ValueType;
-	}
-
-	public static bool IsPrimitive(Operand operand)
-	{
-		return operand.Primitive != PrimitiveType.ValueType;
 	}
 
 	public Operand AllocateVirtualRegisterOrStackLocal(MosaType returnType)
@@ -910,6 +913,4 @@ public sealed class MethodCompiler
 
 		return result;
 	}
-
-	#endregion Type Conversion Helpers
 }

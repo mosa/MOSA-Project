@@ -304,7 +304,7 @@ public sealed class EnterSSAStage : BaseMethodCompilerStage
 			context.AppendInstruction(IRInstruction.PhiR4, variable);
 		else if (variable.IsR8)
 			context.AppendInstruction(IRInstruction.PhiR8, variable);
-		else if (variable.IsInteger64)
+		else if (variable.IsInt64)
 			context.AppendInstruction(IRInstruction.Phi64, variable);
 		else
 			context.AppendInstruction(IRInstruction.Phi32, variable);

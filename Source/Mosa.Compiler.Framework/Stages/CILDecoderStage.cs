@@ -176,7 +176,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		if (!MosaTypeLayout.IsUnderlyingPrimitive(Method.Signature.ReturnType))
 		{
-			offset += (int)TypeLayout.GetTypeSize(Method.Signature.ReturnType);
+			offset += (int)MethodCompiler.GetSize(Method.Signature.ReturnType);
 		}
 
 		if (Method.HasThis || Method.HasExplicitThis)
@@ -189,19 +189,65 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 				? ElementType.ManagedPointer
 				: ElementType.Object;
 
-			var operand = MethodCompiler.Parameters.Allocate(primativeType, elementType, "this", offset);
-			offset += (int)Architecture.NativePointerSize;
+			var operand = MethodCompiler.Parameters.Allocate(primativeType, elementType, "this", offset, Architecture.NativePointerSize);
+			offset += (int)operand.Size;
 		}
 
 		foreach (var parameter in Method.Signature.Parameters)
 		{
 			var underlyingType = MosaTypeLayout.GetUnderlyingType(parameter.ParameterType);
 			var primitiveType = MethodCompiler.GetPrimitiveType(underlyingType);
-			var elementType = MethodCompiler.GetElementType(underlyingType);
+			var elementType = MethodCompiler.IsPrimitive(primitiveType)
+				? MethodCompiler.GetElementType(underlyingType)
+				: ElementType.ValueType;
 
-			var operand = MethodCompiler.Parameters.Allocate(primitiveType, elementType, parameter.Name, offset, parameter.ParameterType);
-			var size = MethodCompiler.GetReferenceOrTypeSize(operand, true);
-			offset += (int)size;
+			var size = MethodCompiler.GetSize(underlyingType);
+
+			var operand = MethodCompiler.Parameters.Allocate(primitiveType, elementType, parameter.Name, offset, size, parameter.ParameterType);
+
+			offset += (int)Alignment.AlignUp(size, Architecture.NativePointerSize);
+		}
+	}
+
+	/// <summary>
+	/// Evaluates the parameter operands.
+	/// </summary>
+	private static void SetParameters(MethodCompiler methodCompiler)
+	{
+		var offset = methodCompiler.Architecture.OffsetOfFirstParameter;
+
+		if (!MosaTypeLayout.IsUnderlyingPrimitive(methodCompiler.Method.Signature.ReturnType))
+		{
+			offset += (int)methodCompiler.GetSize(methodCompiler.Method.Signature.ReturnType);
+		}
+
+		if (methodCompiler.Method.HasThis || methodCompiler.Method.HasExplicitThis)
+		{
+			var primativeType = methodCompiler.Method.DeclaringType.IsValueType
+				? PrimitiveType.ManagedPointer
+				: PrimitiveType.Object;
+
+			var elementType = methodCompiler.Method.DeclaringType.IsValueType
+				? ElementType.ManagedPointer
+				: ElementType.Object;
+
+			var operand = methodCompiler.Parameters.Allocate(primativeType, elementType, "this", offset, methodCompiler.Architecture.NativePointerSize);
+			offset += (int)operand.Size;
+		}
+
+		foreach (var parameter in methodCompiler.Method.Signature.Parameters)
+		{
+			var underlyingType = MosaTypeLayout.GetUnderlyingType(parameter.ParameterType);
+			var primitiveType = methodCompiler.GetPrimitiveType(underlyingType);
+			var elementType = MethodCompiler.IsPrimitive(primitiveType)
+				? methodCompiler.GetElementType(underlyingType)
+				: ElementType.ValueType;
+
+			var size = methodCompiler.GetSize(underlyingType);
+
+			var operand = methodCompiler.Parameters.Allocate(primitiveType, elementType, parameter.Name, offset, size, parameter.ParameterType);
+
+			offset += (int)Alignment.AlignUp(size, methodCompiler.Architecture.NativePointerSize);
 		}
 	}
 
@@ -1262,6 +1308,44 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			ElementType.ManagedPointer when Is64BitPlatform => IRInstruction.StoreParam64,
 			_ => throw new CompilerException($"Invalid ElementType = {elementType}"),
 		};
+	}
+
+	protected BaseInstruction GetLoadInstruction(MosaType type)
+	{
+		type = MosaTypeLayout.GetUnderlyingType(type);
+
+		if (type.IsValueType)
+			return IRInstruction.LoadCompound;
+		else if (type.IsReferenceType)
+			return IRInstruction.LoadObject;
+		else if (type.IsPointer)
+			return Select(IRInstruction.Load32, IRInstruction.Load64);
+		else if (type.IsI1)
+			return Select(IRInstruction.LoadSignExtend8x32, IRInstruction.LoadSignExtend8x64);
+		else if (type.IsI2)
+			return Select(IRInstruction.LoadSignExtend16x32, IRInstruction.LoadSignExtend16x64);
+		else if (type.IsI4)
+			return Select(IRInstruction.Load32, IRInstruction.LoadSignExtend32x64);
+		else if (type.IsI8)
+			return IRInstruction.Load64;
+		else if (type.IsU1 || type.IsBoolean)
+			return Select(IRInstruction.LoadZeroExtend8x32, IRInstruction.LoadZeroExtend8x64);
+		else if (type.IsU2 || type.IsChar)
+			return Select(IRInstruction.LoadZeroExtend16x32, IRInstruction.LoadZeroExtend16x64);
+		else if (type.IsU4)
+			return Select(IRInstruction.Load32, IRInstruction.LoadZeroExtend32x64);
+		else if (type.IsU8)
+			return IRInstruction.Load64;
+		else if (type.IsR4)
+			return IRInstruction.LoadR4;
+		else if (type.IsR8)
+			return IRInstruction.LoadR8;
+		else if (Is32BitPlatform)   // review
+			return IRInstruction.Load32;
+		else if (Is64BitPlatform)
+			return IRInstruction.Load64;
+
+		throw new InvalidOperationException();
 	}
 
 	#endregion Instruction Maps
@@ -3486,7 +3570,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	private bool Ldarg(Context context, Stack<StackEntry> stack, int index)
 	{
 		var parameter = MethodCompiler.Parameters[index];
-		var isPrimitive = MethodCompiler.IsPrimitive(parameter);
+		var isPrimitive = parameter.IsPrimitive;
 
 		if (isPrimitive)
 		{
@@ -3599,11 +3683,8 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		var type = (MosaType)instruction.Operand;
 
-		//var underlyingType = MosaTypeLayout.GetUnderlyingType(type);
-
 		var result = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
 
-		// Array bounds check
 		context.AppendInstruction(IRInstruction.CheckArrayBounds, null, array, index);
 
 		var elementOffset = CalculateArrayElementOffset(context, type, index);
@@ -4225,7 +4306,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		var arrayType = (MosaType)instruction.Operand;
 
-		var elementSize = MethodCompiler.GetReferenceOrTypeSize(arrayType, false);
+		var elementSize = MethodCompiler.GetSize(arrayType);
 		var methodTable = GetMethodTablePointer(arrayType);
 		var size = CreateConstant32(elementSize);
 		var result = MethodCompiler.VirtualRegisters.AllocateObject();
@@ -4245,7 +4326,8 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var paramCount = method.Signature.Parameters.Count;
 
 		var underlyingType = MosaTypeLayout.GetUnderlyingType(classType);
-		var stackType = MethodCompiler.GetPrimitiveType(underlyingType);
+		var elementType = MethodCompiler.GetElementType(underlyingType);
+		var primitiveType = MethodCompiler.GetPrimitiveType(elementType);
 
 		var symbol = Operand.CreateLabel(method, Is32BitPlatform);
 
@@ -4265,7 +4347,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		MethodScanner.TypeAllocated(classType, Method);
 
-		if (stackType == PrimitiveType.Object)
+		if (primitiveType == PrimitiveType.Object)
 		{
 			var result = MethodCompiler.VirtualRegisters.AllocateObject();
 
@@ -4273,7 +4355,6 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			var size = CreateConstant32(TypeLayout.GetTypeSize(classType));
 
 			context.AppendInstruction(IRInstruction.NewObject, result, methodTable, size);
-
 			operands.Insert(0, result);
 
 			context.AppendInstruction(IRInstruction.CallStatic, null, symbol, operands);
@@ -4282,13 +4363,12 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 			return true;
 		}
-		else if (stackType == PrimitiveType.ValueType)
+		else if (primitiveType == PrimitiveType.ValueType)
 		{
 			var newThisLocal = MethodCompiler.LocalStack.Allocate(PrimitiveType.ValueType, false, classType);
 			var newThis = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
 
 			context.AppendInstruction(IRInstruction.AddressOf, newThis, newThisLocal);
-
 			operands.Insert(0, newThis);
 
 			context.AppendInstruction(IRInstruction.CallStatic, null, symbol, operands);
@@ -4297,31 +4377,23 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 			return true;
 		}
-		else if (stackType == PrimitiveType.Int32 || stackType == PrimitiveType.Int64)
+		else if (primitiveType == PrimitiveType.Int32 || primitiveType == PrimitiveType.Int64)
 		{
-			var result = MethodCompiler.VirtualRegisters.Allocate(stackType);
-
-			var newThisLocal = MethodCompiler.LocalStack.Allocate(PrimitiveType.Int32);
-
+			var result = MethodCompiler.VirtualRegisters.Allocate(primitiveType);
+			var newThisLocal = MethodCompiler.LocalStack.Allocate(primitiveType);
 			var newThis = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
 
-			context.AppendInstruction(IRInstruction.AddressOf, newThis, newThisLocal);
+			var loadInstruction = GetLoadInstruction(elementType);
 
+			context.AppendInstruction(IRInstruction.AddressOf, newThis, newThisLocal);
 			operands.Insert(0, newThis);
 
 			context.AppendInstruction(IRInstruction.CallStatic, null, symbol, operands);
-
-			var loadInstruction = GetLoadInstruction(newThisLocal.Type); // TODO: replace with element
-
 			context.AppendInstruction(loadInstruction, result, StackFrame, newThisLocal);
 
 			PushStack(stack, new StackEntry(result));
 
 			return true;
-		}
-		else if (stackType != PrimitiveType.ValueType)
-		{
-			return false;
 		}
 
 		return false;
@@ -4999,7 +5071,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var value = entry.Operand;
 
 		var parameter = MethodCompiler.Parameters[index];
-		var isPrimitive = MethodCompiler.IsPrimitive(parameter);
+		var isPrimitive = parameter.IsPrimitive;
 
 		if (isPrimitive)
 		{
@@ -5650,7 +5722,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	/// <returns>Element offset operand.</returns>
 	private Operand CalculateArrayElementOffset(Context context, MosaType elementType, Operand index)
 	{
-		var size = MethodCompiler.GetReferenceOrTypeSize(elementType, false);
+		var size = MethodCompiler.GetSize(elementType);
 
 		return CalculateArrayElementOffset(context, size, index);
 	}

@@ -20,6 +20,6 @@ public sealed class LoadCompound : BaseCompoundTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		CopyCompound(transform, context, context.Result.Type, transform.StackFrame, context.Result, context.Operand1, context.Operand2);
+		CopyCompound(transform, context, context.Result, transform.StackFrame, context.Result, context.Operand1, context.Operand2);
 	}
 }

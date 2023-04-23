@@ -68,9 +68,9 @@ public sealed partial class Operand
 
 	public int Index { get; private set; }
 
-	public bool IsInteger64 => Primitive == PrimitiveType.Int64;
+	public bool IsInt64 => Primitive == PrimitiveType.Int64;
 
-	public bool IsInteger32 => Primitive == PrimitiveType.Int32;
+	public bool IsInt32 => Primitive == PrimitiveType.Int32;
 
 	public bool IsConstant => Location == LocationType.Constant || Location == LocationType.StackFrame || Location == LocationType.StackParameter;
 
@@ -171,6 +171,8 @@ public sealed partial class Operand
 	}
 
 	public PhysicalRegister Register { get; private set; }
+
+	public uint Size { get; private set; }
 
 	public string StringData { get; private set; }
 
@@ -421,7 +423,7 @@ public sealed partial class Operand
 		};
 	}
 
-	public static Operand CreateStackParameter(PrimitiveType primitiveType, ElementType elementType, int index, string name, int offset, MosaType type = null)
+	public static Operand CreateStackParameter(PrimitiveType primitiveType, ElementType elementType, int index, string name, int offset, uint size, MosaType type = null)
 	{
 		return new Operand
 		{
@@ -430,9 +432,10 @@ public sealed partial class Operand
 			Constant = ConstantType.Default,
 			Element = elementType,
 			Index = index,
+			Size = size,
 			Name = name,
 			ConstantSigned64 = offset,
-			Type = type
+			Type = type,
 		};
 	}
 
@@ -464,7 +467,7 @@ public sealed partial class Operand
 
 		if (longOperand.IsParameter)
 		{
-			operand = CreateStackParameter(longOperand.Primitive, longOperand.Element, longOperand.Index, $"{longOperand.Name} (High)", (int)longOperand.Offset + 4);
+			operand = CreateStackParameter(longOperand.Primitive, longOperand.Element, longOperand.Index, $"{longOperand.Name} (High)", (int)longOperand.Offset + 4, 0);
 		}
 		else if (longOperand.IsResolvedConstant)
 		{
@@ -518,7 +521,7 @@ public sealed partial class Operand
 
 		if (longOperand.IsParameter)
 		{
-			operand = CreateStackParameter(longOperand.Primitive, longOperand.Element, longOperand.Index, $"{longOperand.Name} (Low)", (int)longOperand.Offset);
+			operand = CreateStackParameter(longOperand.Primitive, longOperand.Element, longOperand.Index, $"{longOperand.Name} (Low)", (int)longOperand.Offset, 0);
 		}
 		else if (longOperand.IsResolvedConstant)
 		{

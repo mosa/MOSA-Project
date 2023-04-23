@@ -16,14 +16,14 @@ public sealed class Call : BaseIRTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		if (context.Result?.IsInteger64 == true)
+		if (context.Result?.IsInt64 == true)
 		{
 			transform.SplitLongOperand(context.Result, out _, out _);
 		}
 
 		foreach (var operand in context.Operands)
 		{
-			if (operand.IsInteger64)
+			if (operand.IsInt64)
 			{
 				transform.SplitLongOperand(operand, out _, out _);
 			}

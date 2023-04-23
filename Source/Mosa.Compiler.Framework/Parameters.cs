@@ -2,7 +2,6 @@
 
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework;
@@ -37,9 +36,9 @@ public sealed class Parameters : IEnumerable<Operand>
 		parameters = new List<Operand>(count);
 	}
 
-	public Operand Allocate(PrimitiveType primitiveType, ElementType elementType, string name, int offset, MosaType type = null)
+	public Operand Allocate(PrimitiveType primitiveType, ElementType elementType, string name, int offset, uint size, MosaType type = null)
 	{
-		var operand = Operand.CreateStackParameter(primitiveType, elementType, Count, name, offset, type);
+		var operand = Operand.CreateStackParameter(primitiveType, elementType, Count, name, offset, size, type);
 
 		parameters.Add(operand);
 
