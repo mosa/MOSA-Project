@@ -36,7 +36,7 @@ public sealed class GetLow32From64 : BaseTransform
 
 		// TEMP
 		if (context.Operand1.IsPrimitive
-			&& transform.TypeLayout.GetTypeSize(context.Operand1.Type) == 4)
+			&& transform.MethodCompiler.GetSize(context.Operand1) == 4)
 			return true;
 
 		return false;

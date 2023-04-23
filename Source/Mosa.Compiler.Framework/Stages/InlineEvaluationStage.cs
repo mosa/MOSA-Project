@@ -284,7 +284,7 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 				var newOperand = Operand.CreateVirtualRegister(operand, -operand.Index);
 
 				var moveInstruction = operand.IsPrimitive
-					? GetMoveInstruction(newOperand.Type)
+					? MethodCompiler.GetMoveInstruction(newOperand.Primitive)
 					: IRInstruction.MoveCompound;
 
 				var moveNode = new InstructionNode(moveInstruction, newOperand, newOp);

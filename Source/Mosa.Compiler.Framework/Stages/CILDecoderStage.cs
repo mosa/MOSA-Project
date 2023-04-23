@@ -875,7 +875,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			else
 			{
 				destination = MethodCompiler.VirtualRegisters.Allocate(first.PrimitiveType);
-				instruction = GetMoveInstruction(first.PrimitiveType);
+				instruction = MethodCompiler.GetMoveInstruction(first.PrimitiveType);
 			}
 
 			foreach (var previousBlock in block.PreviousBlocks)
@@ -1123,158 +1123,6 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	#endregion Helpers
 
 	#region Instruction Maps
-
-	private BaseInstruction GetBoxInstruction(ElementType elementType)
-	{
-		return elementType switch
-		{
-			ElementType.R4 => IRInstruction.BoxR4,
-			ElementType.R8 => IRInstruction.BoxR8,
-			ElementType.U4 => IRInstruction.Box32,
-			ElementType.I4 => IRInstruction.Box32,
-			ElementType.U8 => IRInstruction.Box64,
-			ElementType.I8 => IRInstruction.Box64,
-			ElementType.I1 => IRInstruction.Box32,
-			ElementType.U1 => IRInstruction.Box32,
-			ElementType.I2 => IRInstruction.Box32,
-			ElementType.U2 => IRInstruction.Box32,
-			ElementType.I when Is32BitPlatform => IRInstruction.Box32,
-			ElementType.I when Is64BitPlatform => IRInstruction.Box64,
-			ElementType.ManagedPointer when Is32BitPlatform => IRInstruction.Box32,
-			ElementType.ManagedPointer when Is64BitPlatform => IRInstruction.Box64,
-			_ => throw new CompilerException($"Invalid ElementType = {elementType}"),
-		};
-	}
-
-	private BaseInstruction GetLoadInstruction(ElementType elementType)
-	{
-		return elementType switch
-		{
-			ElementType.I1 => IRInstruction.LoadSignExtend8x32,
-			ElementType.U1 => IRInstruction.LoadZeroExtend8x32,
-			ElementType.I2 => IRInstruction.LoadSignExtend16x32,
-			ElementType.U2 => IRInstruction.LoadZeroExtend16x32,
-			ElementType.I4 => IRInstruction.Load32,
-			ElementType.U4 => IRInstruction.Load32,
-			ElementType.I8 => IRInstruction.Load64,
-			ElementType.U8 => IRInstruction.Load64,
-			ElementType.R4 => IRInstruction.LoadR4,
-			ElementType.R8 => IRInstruction.LoadR8,
-			ElementType.Object => IRInstruction.LoadObject,
-			ElementType.I when Is32BitPlatform => IRInstruction.Load32,
-			ElementType.I when Is64BitPlatform => IRInstruction.Load64,
-			ElementType.ManagedPointer when Is32BitPlatform => IRInstruction.Load32,
-			ElementType.ManagedPointer when Is64BitPlatform => IRInstruction.Load64,
-			_ => throw new CompilerException($"Invalid ElementType = {elementType}"),
-		};
-	}
-
-	private BaseInstruction GetLoadParamInstruction(ElementType elementType)
-	{
-		return elementType switch
-		{
-			ElementType.I1 => IRInstruction.LoadParamSignExtend8x32,
-			ElementType.U1 => IRInstruction.LoadParamZeroExtend8x32,
-			ElementType.I2 => IRInstruction.LoadParamSignExtend16x32,
-			ElementType.U2 => IRInstruction.LoadParamZeroExtend16x32,
-			ElementType.I4 => IRInstruction.LoadParam32,
-			ElementType.U4 => IRInstruction.LoadParam32,
-			ElementType.I8 => IRInstruction.LoadParam64,
-			ElementType.U8 => IRInstruction.LoadParam64,
-			ElementType.R4 => IRInstruction.LoadParamR4,
-			ElementType.R8 => IRInstruction.LoadParamR8,
-			ElementType.Object => IRInstruction.LoadParamObject,
-			ElementType.I when Is32BitPlatform => IRInstruction.LoadParam32,
-			ElementType.I when Is64BitPlatform => IRInstruction.LoadParam64,
-			ElementType.ManagedPointer when Is32BitPlatform => IRInstruction.LoadParam32,
-			ElementType.ManagedPointer when Is64BitPlatform => IRInstruction.LoadParam64,
-			_ => throw new CompilerException($"Invalid ElementType = {elementType}"),
-		};
-	}
-
-	private BaseInstruction GetMoveInstruction(ElementType elementType)
-	{
-		return elementType switch
-		{
-			ElementType.I1 => IRInstruction.Move32,
-			ElementType.U1 => IRInstruction.Move32,
-			ElementType.I2 => IRInstruction.Move32,
-			ElementType.U2 => IRInstruction.Move32,
-			ElementType.I4 => IRInstruction.Move32,
-			ElementType.U4 => IRInstruction.Move32,
-			ElementType.I8 => IRInstruction.Move64,
-			ElementType.U8 => IRInstruction.Move64,
-			ElementType.R4 => IRInstruction.MoveR4,
-			ElementType.R8 => IRInstruction.MoveR8,
-			ElementType.Object => IRInstruction.MoveObject,
-			ElementType.I when Is32BitPlatform => IRInstruction.Move32,
-			ElementType.I when Is64BitPlatform => IRInstruction.Move64,
-			ElementType.ManagedPointer when Is32BitPlatform => IRInstruction.Move32,
-			ElementType.ManagedPointer when Is64BitPlatform => IRInstruction.Move64,
-			_ => throw new CompilerException($"Invalid ElementType = {elementType}"),
-		};
-	}
-
-	private BaseInstruction GetMoveInstruction(PrimitiveType type)
-	{
-		return type switch
-		{
-			PrimitiveType.Object => IRInstruction.MoveObject,
-			PrimitiveType.Int32 => IRInstruction.Move32,
-			PrimitiveType.Int64 => IRInstruction.Move64,
-			PrimitiveType.R4 => IRInstruction.MoveR4,
-			PrimitiveType.R8 => IRInstruction.MoveR8,
-			PrimitiveType.ManagedPointer when Is32BitPlatform => IRInstruction.Move32,
-			PrimitiveType.ManagedPointer when Is64BitPlatform => IRInstruction.Move64,
-			_ => throw new CompilerException($"Invalid StackType = {type}"),
-		};
-	}
-
-	private BaseInstruction GetStoreInstruction(ElementType elementType)
-	{
-		return elementType switch
-		{
-			ElementType.I1 => IRInstruction.Store8,
-			ElementType.U1 => IRInstruction.Store8,
-			ElementType.I2 => IRInstruction.Store16,
-			ElementType.U2 => IRInstruction.Store16,
-			ElementType.I4 => IRInstruction.Store32,
-			ElementType.U4 => IRInstruction.Store32,
-			ElementType.I8 => IRInstruction.Store64,
-			ElementType.U8 => IRInstruction.Store64,
-			ElementType.R4 => IRInstruction.StoreR4,
-			ElementType.R8 => IRInstruction.StoreR8,
-			ElementType.Object => IRInstruction.StoreObject,
-			ElementType.I when Is32BitPlatform => IRInstruction.Store32,
-			ElementType.I when Is64BitPlatform => IRInstruction.Store64,
-			ElementType.ManagedPointer when Is32BitPlatform => IRInstruction.Store32,
-			ElementType.ManagedPointer when Is64BitPlatform => IRInstruction.Store64,
-			_ => throw new CompilerException($"Invalid ElementType = {elementType}"),
-		};
-	}
-
-	private BaseInstruction GetStoreParamInstruction(ElementType elementType)
-	{
-		return elementType switch
-		{
-			ElementType.I1 => IRInstruction.StoreParam8,
-			ElementType.U1 => IRInstruction.StoreParam8,
-			ElementType.I2 => IRInstruction.StoreParam16,
-			ElementType.U2 => IRInstruction.StoreParam16,
-			ElementType.I4 => IRInstruction.StoreParam32,
-			ElementType.U4 => IRInstruction.StoreParam32,
-			ElementType.I8 => IRInstruction.StoreParam64,
-			ElementType.U8 => IRInstruction.StoreParam64,
-			ElementType.R4 => IRInstruction.StoreParamR4,
-			ElementType.R8 => IRInstruction.StoreParamR8,
-			ElementType.Object => IRInstruction.StoreParamObject,
-			ElementType.I when Is32BitPlatform => IRInstruction.StoreParam32,
-			ElementType.I when Is64BitPlatform => IRInstruction.StoreParam64,
-			ElementType.ManagedPointer when Is32BitPlatform => IRInstruction.StoreParam32,
-			ElementType.ManagedPointer when Is64BitPlatform => IRInstruction.StoreParam64,
-			_ => throw new CompilerException($"Invalid ElementType = {elementType}"),
-		};
-	}
 
 	protected BaseInstruction GetLoadInstruction(MosaType type)
 	{
@@ -1733,7 +1581,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		if (isPrimitive)
 		{
 			var elementType = MethodCompiler.GetElementType(underlyingType);
-			var boxInstruction = GetBoxInstruction(elementType);
+			var boxInstruction = MethodCompiler.GetBoxInstruction(elementType);
 
 			context.AppendInstruction(boxInstruction, result, methodTable, entry.Operand);
 		}
@@ -3540,7 +3388,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		if (isPrimitive)
 		{
-			var loadInstruction = GetLoadParamInstruction(parameter.Element);
+			var loadInstruction = MethodCompiler.GetLoadParamInstruction(parameter.Element);
 			var result = MethodCompiler.VirtualRegisters.Allocate(parameter);
 
 			context.AppendInstruction(loadInstruction, result, parameter);
@@ -3595,7 +3443,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			var stacktype = MethodCompiler.GetPrimitiveType(underlyingType);
 			var result = MethodCompiler.VirtualRegisters.Allocate(stacktype);
 			var elementType = MethodCompiler.GetElementType(underlyingType);
-			var loadInstruction = GetLoadInstruction(elementType);
+			var loadInstruction = MethodCompiler.GetLoadInstruction(elementType);
 
 			context.AppendInstruction(loadInstruction, result, array, totalElementOffset);
 
@@ -3632,7 +3480,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var result = MethodCompiler.VirtualRegisters.Allocate(stacktype);
 		PushStack(stack, new StackEntry(result));
 
-		var loadInstruction = GetLoadInstruction(elementType);
+		var loadInstruction = MethodCompiler.GetLoadInstruction(elementType);
 
 		context.AppendInstruction(loadInstruction, result, array, totalElementOffset);
 
@@ -3703,7 +3551,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			Debug.Assert(offset == 0);
 
 			var elementType = MethodCompiler.GetElementType(fieldStacktype);
-			var moveInstruction = GetMoveInstruction(elementType);
+			var moveInstruction = MethodCompiler.GetMoveInstruction(elementType);
 
 			context.AppendInstruction(moveInstruction, result, entry.Operand);
 
@@ -3717,7 +3565,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			if (isFieldPrimitive)
 			{
 				var elementType = MethodCompiler.GetElementType(fieldStacktype);
-				var loadInstruction = GetLoadInstruction(elementType);
+				var loadInstruction = MethodCompiler.GetLoadInstruction(elementType);
 
 				context.AppendInstruction(loadInstruction, result, operand, fixedOffset);
 			}
@@ -3740,7 +3588,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 	private bool Ldtoken(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
 	{
-		var move = GetMoveInstruction(ElementType.I);
+		var move = MethodCompiler.GetMoveInstruction(ElementType.I);
 
 		Operand source = null;
 
@@ -3802,7 +3650,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		if (offset == 0)
 		{
-			var move = GetMoveInstruction(ElementType.I);
+			var move = MethodCompiler.GetMoveInstruction(ElementType.I);
 
 			context.AppendInstruction(move, result, entry.Operand);
 		}
@@ -3828,7 +3676,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var stacktype = MethodCompiler.GetPrimitiveType(functionPointer);
 		var result = MethodCompiler.VirtualRegisters.Allocate(stacktype);
 
-		var move = GetMoveInstruction(ElementType.I);
+		var move = MethodCompiler.GetMoveInstruction(ElementType.I);
 
 		context.AppendInstruction(move, result, Operand.CreateLabel(method, Is32BitPlatform));
 
@@ -3857,7 +3705,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		PushStack(stack, new StackEntry(result));
 
-		var loadInstruction = GetLoadInstruction(elementType);
+		var loadInstruction = MethodCompiler.GetLoadInstruction(elementType);
 		context.AppendInstruction(loadInstruction, result, entry.Operand, ConstantZero);
 
 		return true;
@@ -3909,13 +3757,13 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		if (local.IsVirtualRegister)
 		{
-			var move = GetMoveInstruction(elementType);
+			var move = MethodCompiler.GetMoveInstruction(elementType);
 			context.AppendInstruction(move, result, local);
 			return true;
 		}
 		else
 		{
-			var loadInstruction = GetLoadInstruction(elementType);
+			var loadInstruction = MethodCompiler.GetLoadInstruction(elementType);
 			context.AppendInstruction(loadInstruction, result, StackFrame, local);
 			return true;
 		}
@@ -3953,7 +3801,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 			PushStack(stack, new StackEntry(result));
 
-			var loadInstruction = GetLoadInstruction(elementType);
+			var loadInstruction = MethodCompiler.GetLoadInstruction(elementType);
 			context.AppendInstruction(loadInstruction, result, address, ConstantZero);
 
 			return true; // Ldind(context, stack, elementType);
@@ -3999,7 +3847,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			}
 			else
 			{
-				var loadInstruction = GetLoadInstruction(elementType);
+				var loadInstruction = MethodCompiler.GetLoadInstruction(elementType);
 
 				context.AppendInstruction(loadInstruction, result, fieldOperand, ConstantZero);
 			}
@@ -4350,7 +4198,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 			var elementType = MethodCompiler.GetElementType(underlyingType);
 
-			var loadInstruction = GetLoadInstruction(elementType);
+			var loadInstruction = MethodCompiler.GetLoadInstruction(elementType);
 
 			context.AppendInstruction(IRInstruction.AddressOf, newThis, newThisLocal);
 			operands.Insert(0, newThis);
@@ -4816,7 +4664,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		{
 			//var stacktype = GetStackType(underlyingType);
 			var elementType = MethodCompiler.GetElementType(underlyingType);
-			var storeInstruction = GetStoreInstruction(elementType);
+			var storeInstruction = MethodCompiler.GetStoreInstruction(elementType);
 
 			context.AppendInstruction(storeInstruction, null, array, totalElementOffset, value);
 
@@ -4846,7 +4694,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var elementOffset = CalculateArrayElementOffset(context, MethodCompiler.GetSize(elementType), index);
 		var totalElementOffset = CalculateTotalArrayOffset(context, elementOffset);
 
-		var storeInstruction = GetStoreInstruction(elementType);
+		var storeInstruction = MethodCompiler.GetStoreInstruction(elementType);
 
 		context.AppendInstruction(storeInstruction, null, array, totalElementOffset, value);
 
@@ -4879,7 +4727,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 					if (isPrimitive)
 					{
 						var elementType = MethodCompiler.GetElementType(underlyingType);
-						var storeInstruction = GetStoreInstruction(elementType);
+						var storeInstruction = MethodCompiler.GetStoreInstruction(elementType);
 
 						context.AppendInstruction(storeInstruction, null, entry2.Operand, offsetOperand, entry1.Operand);
 						//context.MosaType = type;
@@ -4914,7 +4762,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var address = entry2.Operand;
 		var value = entry1.Operand;
 
-		var storeInstruction = GetStoreInstruction(elementType);
+		var storeInstruction = MethodCompiler.GetStoreInstruction(elementType);
 		context.AppendInstruction(storeInstruction, null, address, ConstantZero, value);
 
 		return true;
@@ -4939,7 +4787,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		if (local.IsVirtualRegister)
 		{
-			var storeInstruction = GetMoveInstruction(elementType);
+			var storeInstruction = MethodCompiler.GetMoveInstruction(elementType);
 
 			context.AppendInstruction(storeInstruction, local, source);
 			return true;
@@ -4949,7 +4797,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			//var stackType = GetStackType(underlyingType);
 			var stackElementType = MethodCompiler.GetElementType(stackType);
 
-			var storeInstruction = GetStoreInstruction(stackElementType);
+			var storeInstruction = MethodCompiler.GetStoreInstruction(stackElementType);
 
 			context.AppendInstruction(storeInstruction, null, StackFrame, local, source);
 			return true;
@@ -4972,7 +4820,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		{
 			var stackType = MethodCompiler.GetPrimitiveType(underlyingType);
 			var elementType = MethodCompiler.GetElementType(stackType);
-			var storeInstruction = GetStoreInstruction(elementType);
+			var storeInstruction = MethodCompiler.GetStoreInstruction(elementType);
 
 			context.AppendInstruction(storeInstruction, null, address, ConstantZero, value);
 			return true;
@@ -5005,7 +4853,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		{
 			var elementType = MethodCompiler.GetElementType(underlyingType);
 
-			var storeInstruction = GetStoreInstruction(elementType);
+			var storeInstruction = MethodCompiler.GetStoreInstruction(elementType);
 
 			if (type.IsReferenceType)
 			{
@@ -5042,7 +4890,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		if (isPrimitive)
 		{
-			var storeInstruction = GetStoreParamInstruction(parameter.Element);
+			var storeInstruction = MethodCompiler.GetStoreParamInstruction(parameter.Element);
 			context.AppendInstruction(storeInstruction, null, parameter, value);
 			return true;
 		}
@@ -5479,7 +5327,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		{
 			var elementType = MethodCompiler.GetElementType(underlyingType);
 
-			var loadInstruction = GetLoadInstruction(elementType);
+			var loadInstruction = MethodCompiler.GetLoadInstruction(elementType);
 			var stackType = MethodCompiler.GetPrimitiveType(elementType);
 			var result = MethodCompiler.VirtualRegisters.Allocate(stackType);
 

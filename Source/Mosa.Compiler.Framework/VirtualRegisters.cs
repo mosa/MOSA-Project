@@ -36,9 +36,9 @@ public sealed class VirtualRegisters : IEnumerable<Operand>
 		Is32Platform = is32Platform;
 	}
 
-	public Operand Allocate(PrimitiveType primitiveType, MosaType type = null)
+	public Operand Allocate(PrimitiveType primitiveType)
 	{
-		var operand = Operand.CreateVirtualRegister(primitiveType, Count + 1, type);
+		var operand = Operand.CreateVirtualRegister(primitiveType, Count + 1, null);
 
 		virtualRegisters.Add(operand);
 
@@ -47,7 +47,7 @@ public sealed class VirtualRegisters : IEnumerable<Operand>
 
 	public Operand Allocate(Operand operand)
 	{
-		return Allocate(operand.Primitive, operand.Type);
+		return Allocate(operand.Primitive);
 	}
 
 	public Operand Allocate32()
@@ -78,11 +78,6 @@ public sealed class VirtualRegisters : IEnumerable<Operand>
 	public Operand AllocateManagedPointer()
 	{
 		return Allocate(PrimitiveType.ManagedPointer);
-	}
-
-	public Operand AllocateValueType(MosaType type)
-	{
-		return Allocate(PrimitiveType.ValueType, type);
 	}
 
 	public Operand AllocateNativeInteger()

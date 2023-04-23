@@ -20,11 +20,11 @@ internal static partial class StubMethods
 		var opValue = methodCompiler.VirtualRegisters.AllocateManagedPointer();
 
 		// Load instance parameter
-		var loadInstance = BaseMethodCompilerStage.GetLoadParameterInstruction(instance.Type, methodCompiler.Is32BitPlatform);
+		var loadInstance = methodCompiler.GetLoadParamInstruction(instance.Element);
 		context.AppendInstruction(loadInstance, opInstance, instance);
 
 		// Load value parameter
-		var loadValue = BaseMethodCompilerStage.GetLoadParameterInstruction(value.Type, methodCompiler.Is32BitPlatform);
+		var loadValue = methodCompiler.GetLoadParamInstruction(value.Element);
 		context.AppendInstruction(loadValue, opValue, value);
 
 		// Store value inside instance
@@ -45,7 +45,7 @@ internal static partial class StubMethods
 		var opReturn = methodCompiler.VirtualRegisters.AllocateManagedPointer();
 
 		// Load instance parameter
-		var loadInstance = BaseMethodCompilerStage.GetLoadParameterInstruction(instance.Type, methodCompiler.Is32BitPlatform);
+		var loadInstance = methodCompiler.GetLoadParamInstruction(instance.Element);
 		context.AppendInstruction(loadInstance, opInstance, instance);
 
 		// Load value from instance into return operand
@@ -54,7 +54,7 @@ internal static partial class StubMethods
 		context.MosaType = methodCompiler.TypeSystem.BuiltIn.I;
 
 		// Set return
-		var setReturn = BaseMethodCompilerStage.GetSetReturnInstruction(opReturn.Type, methodCompiler.Is32BitPlatform);
+		var setReturn = methodCompiler.GetReturnInstruction(opReturn.Primitive);
 		context.AppendInstruction(setReturn, null, opReturn);
 
 		context.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);

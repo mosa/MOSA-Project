@@ -93,15 +93,7 @@ public class ExitSSAStage : BaseMethodCompilerStage
 
 		var context = new Context(node);
 
-		if (!MosaTypeLayout.IsUnderlyingPrimitive(destination.Type))
-		{
-			context.AppendInstruction(IRInstruction.MoveCompound, destination, source);
-			context.MosaType = destination.Type;
-		}
-		else
-		{
-			var moveInstruction = GetMoveInstruction(destination.Type);
-			context.AppendInstruction(moveInstruction, destination, source);
-		}
+		var moveInstruction = MethodCompiler.GetMoveInstruction(destination.Primitive);
+		context.AppendInstruction(moveInstruction, destination, source);
 	}
 }

@@ -67,9 +67,7 @@ public static class DelegatePatcher
 			: IRInstruction.Store64;
 
 		context.AppendInstruction(storeIntegerInstruction, null, v1, methodPointerOffsetOperand, v2);
-		context.MosaType = methodPointerOperand.Type;
 		context.AppendInstruction(storeIntegerInstruction, null, v1, instanceOffsetOperand, v3);
-		context.MosaType = instanceOperand.Type;
 		context.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);
 	}
 
@@ -110,14 +108,13 @@ public static class DelegatePatcher
 			{
 				vrs[i] = methodCompiler.VirtualRegisters.Allocate(parameter);
 
-				var paramLoadInstruction = BaseMethodCompilerStage.GetLoadParameterInstruction(vrs[i].Type, methodCompiler.Is32BitPlatform);
+				var paramLoadInstruction = methodCompiler.GetLoadParamInstruction(vrs[i].Element);
 
 				b0.AppendInstruction(paramLoadInstruction, vrs[i], parameter);
 			}
 			else
 			{
 				b0.AppendInstruction(IRInstruction.LoadParamCompound, vrs[i], parameter);
-				b0.MosaType = parameter.Type;
 			}
 		}
 
@@ -157,7 +154,7 @@ public static class DelegatePatcher
 		// return
 		if (result != null)
 		{
-			var setReturn = BaseMethodCompilerStage.GetSetReturnInstruction(result.Type, methodCompiler.Is32BitPlatform);
+			var setReturn = methodCompiler.GetReturnInstruction(result.Primitive);
 			b3.AppendInstruction(setReturn, null, result);
 		}
 
@@ -169,7 +166,7 @@ public static class DelegatePatcher
 		var nullOperand = Operand.GetNullObject();
 		var context = new Context(CreateMethodStructure(methodCompiler));
 
-		var setReturn = BaseMethodCompilerStage.GetSetReturnInstruction(nullOperand.Type, methodCompiler.Is32BitPlatform);
+		var setReturn = methodCompiler.GetReturnInstruction(nullOperand.Primitive);
 
 		context.AppendInstruction(setReturn, null, nullOperand);
 		context.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);
