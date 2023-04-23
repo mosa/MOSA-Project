@@ -139,7 +139,7 @@ public static class DelegatePatcher
 
 		var returnType = methodCompiler.Method.Signature.ReturnType;
 
-		var result = methodCompiler.AllocateVirtualRegisterOrStackLocal(returnType);
+		var result = returnType.IsVoid ? null : methodCompiler.AllocateVirtualRegisterOrStackLocal(returnType);
 
 		// no instance
 		b1.AppendInstruction(IRInstruction.CallDynamic, result, opMethod, operands);
