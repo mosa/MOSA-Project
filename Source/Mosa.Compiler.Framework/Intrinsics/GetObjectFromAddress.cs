@@ -10,7 +10,7 @@ internal static partial class IntrinsicMethods
 	[IntrinsicMethod("Mosa.Runtime.Intrinsic::GetObjectFromAddress")]
 	private static void GetObjectFromAddress(Context context, MethodCompiler methodCompiler)
 	{
-		var move = methodCompiler.Is32BitPlatform ? (BaseInstruction)IRInstruction.Move32 : IRInstruction.Move64;
+		var move = methodCompiler.Is32BitPlatform ? IRInstruction.Move32 : IRInstruction.Move64;
 
 		context.SetInstruction(move, context.Result, context.Operand1);
 	}

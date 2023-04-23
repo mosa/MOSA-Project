@@ -12,7 +12,7 @@ internal static partial class IntrinsicMethods
 	[IntrinsicMethod("Mosa.Runtime.Intrinsic::LoadPointer")]
 	private static void LoadPointer(Context context, MethodCompiler methodCompiler)
 	{
-		var instruction = methodCompiler.Is32BitPlatform ? (BaseInstruction)IRInstruction.Load32 : IRInstruction.LoadZeroExtend32x64;
+		var instruction = methodCompiler.Is32BitPlatform ? IRInstruction.Load32 : IRInstruction.LoadZeroExtend32x64;
 
 		if (context.OperandCount == 1)
 		{

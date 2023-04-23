@@ -165,7 +165,7 @@ public sealed class MethodCompiler
 	/// <summary>
 	/// Gets or sets a value indicating whether this method requires CIL decoding .
 	/// </summary>
-	public bool IsCILStream { get; set; }
+	public bool HasCILStream { get; set; }
 
 	/// <summary>
 	/// Gets or sets a value indicating whether this method is plugged.
@@ -270,7 +270,7 @@ public sealed class MethodCompiler
 		IsStopped = false;
 		IsExecutePipeline = true;
 		IsMethodInlined = false;
-		IsCILStream = !Method.IsCompilerGenerated;
+		HasCILStream = !Method.IsCompilerGenerated;
 		HasProtectedRegions = Method.ExceptionHandlers.Count != 0;
 
 		MethodData = Compiler.GetMethodData(Method);
@@ -482,7 +482,7 @@ public sealed class MethodCompiler
 		Compiler.MethodScanner.MethodInvoked(plugMethod, Method);
 
 		IsMethodPlugged = true;
-		IsCILStream = false;
+		HasCILStream = false;
 		IsExecutePipeline = false;
 		IsStackFrameRequired = false;
 
@@ -516,10 +516,10 @@ public sealed class MethodCompiler
 		if (!Method.DeclaringType.IsDelegate)
 			return;
 
-		if (!Framework.DelegatePatcher.Patch(this))
+		if (!DelegatePatcher.Patch(this))
 			return;
 
-		IsCILStream = false;
+		HasCILStream = false;
 		IsExecutePipeline = true;
 
 		if (IsTraceable(5))
@@ -535,7 +535,7 @@ public sealed class MethodCompiler
 		if (!Method.IsExternal)
 			return;
 
-		IsCILStream = false;
+		HasCILStream = false;
 		IsExecutePipeline = false;
 		IsStackFrameRequired = false;
 		MethodData.IsMethodImplementationReplaced = false;
@@ -573,7 +573,7 @@ public sealed class MethodCompiler
 		if (!Method.IsInternal)
 			return;
 
-		IsCILStream = false;
+		HasCILStream = false;
 		IsExecutePipeline = false;
 		IsStackFrameRequired = false;
 
@@ -598,7 +598,7 @@ public sealed class MethodCompiler
 		if (stub == null)
 			return;
 
-		IsCILStream = false;
+		HasCILStream = false;
 		IsExecutePipeline = true;
 
 		var prologueBlock = BasicBlocks.CreatePrologueBlock();

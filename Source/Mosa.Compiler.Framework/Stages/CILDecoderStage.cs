@@ -115,7 +115,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 	protected override void Run()
 	{
-		if (!MethodCompiler.IsCILStream)
+		if (!MethodCompiler.HasCILStream)
 			return;
 
 		trace = CreateTraceLog();
@@ -127,7 +127,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		prologue.AppendInstruction(IRInstruction.Prologue);
 		prologue.AppendInstruction(IRInstruction.Jmp, startBlock);
 
-		SetParameters();
+		CreateParameters();
 
 		CollectTargets();
 
@@ -170,49 +170,15 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	/// <summary>
 	/// Evaluates the parameter operands.
 	/// </summary>
-	private void SetParameters()
+	private void CreateParameters()
 	{
-		var offset = Architecture.OffsetOfFirstParameter;
-
-		if (!MosaTypeLayout.IsUnderlyingPrimitive(Method.Signature.ReturnType))
-		{
-			offset += (int)MethodCompiler.GetSize(Method.Signature.ReturnType);
-		}
-
-		if (Method.HasThis || Method.HasExplicitThis)
-		{
-			var primativeType = Method.DeclaringType.IsValueType
-				? PrimitiveType.ManagedPointer
-				: PrimitiveType.Object;
-
-			var elementType = Method.DeclaringType.IsValueType
-				? ElementType.ManagedPointer
-				: ElementType.Object;
-
-			var operand = MethodCompiler.Parameters.Allocate(primativeType, elementType, "this", offset, Architecture.NativePointerSize);
-			offset += (int)operand.Size;
-		}
-
-		foreach (var parameter in Method.Signature.Parameters)
-		{
-			var underlyingType = MosaTypeLayout.GetUnderlyingType(parameter.ParameterType);
-			var primitiveType = MethodCompiler.GetPrimitiveType(underlyingType);
-			var elementType = MethodCompiler.IsPrimitive(primitiveType)
-				? MethodCompiler.GetElementType(underlyingType)
-				: ElementType.ValueType;
-
-			var size = MethodCompiler.GetSize(underlyingType);
-
-			var operand = MethodCompiler.Parameters.Allocate(primitiveType, elementType, parameter.Name, offset, size, parameter.ParameterType);
-
-			offset += (int)Alignment.AlignUp(size, Architecture.NativePointerSize);
-		}
+		CreateParameters(MethodCompiler);
 	}
 
 	/// <summary>
 	/// Evaluates the parameter operands.
 	/// </summary>
-	private static void SetParameters(MethodCompiler methodCompiler)
+	public static void CreateParameters(MethodCompiler methodCompiler)
 	{
 		var offset = methodCompiler.Architecture.OffsetOfFirstParameter;
 
@@ -3814,7 +3780,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var exceptionHandler = FindImmediateExceptionHandler(headerBlock.Label);
 		var inTry = exceptionHandler.IsLabelWithinTry(headerBlock.Label);
 
-		var endInstruction = inTry ? (BaseInstruction)IRInstruction.TryEnd : IRInstruction.ExceptionEnd;
+		var endInstruction = inTry ? IRInstruction.TryEnd : IRInstruction.ExceptionEnd;
 
 		context.AppendInstruction(endInstruction, leaveBlock);  // added header block
 
@@ -4326,8 +4292,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var paramCount = method.Signature.Parameters.Count;
 
 		var underlyingType = MosaTypeLayout.GetUnderlyingType(classType);
-		var elementType = MethodCompiler.GetElementType(underlyingType);
-		var primitiveType = MethodCompiler.GetPrimitiveType(elementType);
+		var primitiveType = MethodCompiler.GetPrimitiveType(underlyingType);
 
 		var symbol = Operand.CreateLabel(method, Is32BitPlatform);
 
@@ -4382,6 +4347,8 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			var result = MethodCompiler.VirtualRegisters.Allocate(primitiveType);
 			var newThisLocal = MethodCompiler.LocalStack.Allocate(primitiveType);
 			var newThis = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
+
+			var elementType = MethodCompiler.GetElementType(underlyingType);
 
 			var loadInstruction = GetLoadInstruction(elementType);
 

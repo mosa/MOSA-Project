@@ -21,7 +21,7 @@ namespace Mosa.Platform.x64.Transforms
 
 			var v1 = operand.IsR4 ? transform.VirtualRegisters.AllocateR4() : transform.VirtualRegisters.AllocateR8();
 
-			var instruction = operand.IsR4 ? (BaseInstruction)X64.MovssLoad : X64.MovsdLoad;
+			var instruction = operand.IsR4 ? X64.MovssLoad : X64.MovsdLoad;
 
 			context.InsertBefore().SetInstruction(instruction, v1, label, transform.Constant32_0);
 

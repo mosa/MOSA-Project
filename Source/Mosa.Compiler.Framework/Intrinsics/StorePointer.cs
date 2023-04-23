@@ -12,7 +12,7 @@ internal static partial class IntrinsicMethods
 	[IntrinsicMethod("Mosa.Runtime.Intrinsic::StorePointer")]
 	private static void StorePointer(Context context, MethodCompiler methodCompiler)
 	{
-		var instruction = methodCompiler.Is32BitPlatform ? (BaseInstruction)IRInstruction.Store32 : IRInstruction.Store64;
+		var instruction = methodCompiler.Is32BitPlatform ? IRInstruction.Store32 : IRInstruction.Store64;
 
 		if (context.OperandCount == 2)
 		{

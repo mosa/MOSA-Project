@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
+using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.MosaTypeSystem;
 
 // FIXME -- not 64bit compatible
@@ -33,6 +34,8 @@ public static class DelegatePatcher
 
 	private static void PatchConstructor(MethodCompiler methodCompiler)
 	{
+		CILDecoderStage.CreateParameters(methodCompiler);
+
 		var thisOperand = methodCompiler.Parameters[0];
 		var instanceOperand = methodCompiler.Parameters[1];
 		var methodPointerOperand = methodCompiler.Parameters[2];
@@ -72,6 +75,8 @@ public static class DelegatePatcher
 
 	private static void PatchInvoke(MethodCompiler methodCompiler)
 	{
+		CILDecoderStage.CreateParameters(methodCompiler);
+
 		// check if instance is null (if so, it's a static call to the methodPointer)
 
 		var loadInstruction = methodCompiler.Is32BitPlatform

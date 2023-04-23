@@ -28,7 +28,7 @@ public sealed class ProtectedRegionLayoutStage : BaseMethodCompilerStage
 
 	protected override void Run()
 	{
-		if (!MethodCompiler.IsCILStream)
+		if (!MethodCompiler.HasCILStream)
 			return;
 
 		if (MethodCompiler.IsMethodPlugged)

@@ -54,7 +54,7 @@ public sealed class Phi32Conditional : BaseTransform
 		var branch = ctx.BranchTargets[0];
 
 		var resultCondition = transform.VirtualRegisters.Allocate(result);
-		var conditionInstruction = instruction == IRInstruction.Branch32 ? (BaseInstruction)IRInstruction.Compare32x32 : IRInstruction.Compare64x64;
+		var conditionInstruction = instruction == IRInstruction.Branch32 ? IRInstruction.Compare32x32 : IRInstruction.Compare64x64;
 		var swap = block1 == branch;
 
 		ctx.GotoPrevious();

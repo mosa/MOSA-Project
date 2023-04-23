@@ -17,7 +17,7 @@ internal static partial class StubMethods
 		var result = methodCompiler.VirtualRegisters.AllocateNativeInteger();
 
 		// Move constant into return operand
-		var move = methodCompiler.Is32BitPlatform ? (BaseInstruction)IRInstruction.Move32 : IRInstruction.Move64;
+		var move = methodCompiler.Is32BitPlatform ? IRInstruction.Move32 : IRInstruction.Move64;
 		context.AppendInstruction(move, result, methodCompiler.CreateConstant(isReferenceOrContainsReferences ? 1 : 0));
 
 		// Set return

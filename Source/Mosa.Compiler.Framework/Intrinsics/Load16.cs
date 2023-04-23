@@ -12,7 +12,7 @@ internal static partial class IntrinsicMethods
 	[IntrinsicMethod("Mosa.Runtime.Intrinsic::Load16")]
 	private static void Load16(Context context, MethodCompiler methodCompiler)
 	{
-		var instruction = methodCompiler.Is32BitPlatform ? (BaseInstruction)IRInstruction.LoadZeroExtend16x32 : IRInstruction.LoadZeroExtend16x64;
+		var instruction = methodCompiler.Is32BitPlatform ? IRInstruction.LoadZeroExtend16x32 : IRInstruction.LoadZeroExtend16x64;
 
 		if (context.OperandCount == 1)
 		{

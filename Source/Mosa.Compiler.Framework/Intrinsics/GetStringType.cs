@@ -14,7 +14,7 @@ internal static partial class IntrinsicMethods
 
 		var typeDef = Operand.CreateLabel(Metadata.TypeDefinition + "System.String", methodCompiler.Is32BitPlatform);
 
-		var move = methodCompiler.Is32BitPlatform ? (BaseInstruction)IRInstruction.Move32 : IRInstruction.Move64;
+		var move = methodCompiler.Is32BitPlatform ? IRInstruction.Move32 : IRInstruction.Move64;
 
 		context.SetInstruction(move, result, typeDef);
 	}

@@ -1,5 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Framework.Stages;
+
 namespace Mosa.Compiler.Framework.Intrinsics;
 
 /// <summary>
@@ -23,6 +25,8 @@ internal static partial class StubMethods
 	[StubMethod("System.Runtime.CompilerServices.Unsafe::As")]
 	public static void Unsafe_As(Context context, MethodCompiler methodCompiler)
 	{
+		CILDecoderStage.CreateParameters(methodCompiler);
+
 		var source = methodCompiler.Parameters[0];
 
 		var opReturn = source.IsObject
@@ -30,11 +34,11 @@ internal static partial class StubMethods
 			: methodCompiler.VirtualRegisters.AllocateManagedPointer();
 
 		var loadSource = source.IsObject
-			? (BaseInstruction)IRInstruction.LoadParamObject
+			? IRInstruction.LoadParamObject
 			: methodCompiler.Is32BitPlatform ? IRInstruction.LoadParam32 : IRInstruction.LoadParam64;
 
 		var setReturn = source.IsObject
-			? (BaseInstruction)IRInstruction.SetReturnObject
+			? IRInstruction.SetReturnObject
 			: methodCompiler.Is32BitPlatform ? IRInstruction.SetReturn32 : IRInstruction.SetReturn64;
 
 		// Load source into return operand
@@ -49,6 +53,8 @@ internal static partial class StubMethods
 	[StubMethod("System.Runtime.CompilerServices.Unsafe::AreSame")]
 	public static void Unsafe_AreSame(Context context, MethodCompiler methodCompiler)
 	{
+		CILDecoderStage.CreateParameters(methodCompiler);
+
 		var left = methodCompiler.Parameters[0];
 		var right = methodCompiler.Parameters[1];
 		var opLeft = methodCompiler.VirtualRegisters.AllocateObject();
@@ -65,7 +71,7 @@ internal static partial class StubMethods
 		context.AppendInstruction(IRInstruction.CompareObject, ConditionCode.Equal, opReturn, opLeft, opRight);
 
 		// Set return
-		var setReturn = methodCompiler.Is32BitPlatform ? (BaseInstruction)IRInstruction.SetReturn32 : IRInstruction.SetReturn64;
+		var setReturn = methodCompiler.Is32BitPlatform ? IRInstruction.SetReturn32 : IRInstruction.SetReturn64;
 		context.AppendInstruction(setReturn, null, opReturn);
 
 		context.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);
@@ -74,6 +80,8 @@ internal static partial class StubMethods
 	[StubMethod("System.Runtime.CompilerServices.Unsafe::AddByteOffset")]
 	public static void Unsafe_AddByteOffset(Context context, MethodCompiler methodCompiler)
 	{
+		CILDecoderStage.CreateParameters(methodCompiler);
+
 		var source = methodCompiler.Parameters[0];
 		var byteOffset = methodCompiler.Parameters[1];
 		var opSource = methodCompiler.VirtualRegisters.AllocateManagedPointer();
@@ -81,19 +89,19 @@ internal static partial class StubMethods
 		var opReturn = methodCompiler.VirtualRegisters.AllocateNativeInteger();
 
 		// Load left parameter
-		var loadSource = methodCompiler.Is32BitPlatform ? (BaseInstruction)IRInstruction.LoadParam32 : IRInstruction.LoadParam64;
+		var loadSource = methodCompiler.Is32BitPlatform ? IRInstruction.LoadParam32 : IRInstruction.LoadParam64;
 		context.AppendInstruction(loadSource, opSource, source);
 
 		// Load right parameter
-		var loadByteOffset = methodCompiler.Is32BitPlatform ? (BaseInstruction)IRInstruction.LoadParam32 : IRInstruction.LoadParam64;
+		var loadByteOffset = methodCompiler.Is32BitPlatform ? IRInstruction.LoadParam32 : IRInstruction.LoadParam64;
 		context.AppendInstruction(loadByteOffset, opByteOffset, byteOffset);
 
 		// Compare and store into result operand
-		var add = methodCompiler.Is32BitPlatform ? (BaseInstruction)IRInstruction.Add32 : IRInstruction.Add64;
+		var add = methodCompiler.Is32BitPlatform ? IRInstruction.Add32 : IRInstruction.Add64;
 		context.AppendInstruction(add, opReturn, opSource, opByteOffset);
 
 		// Return comparison result
-		var setReturn = methodCompiler.Is32BitPlatform ? (BaseInstruction)IRInstruction.SetReturn32 : IRInstruction.SetReturn64;
+		var setReturn = methodCompiler.Is32BitPlatform ? IRInstruction.SetReturn32 : IRInstruction.SetReturn64;
 		context.AppendInstruction(setReturn, null, opReturn);
 
 		context.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);
