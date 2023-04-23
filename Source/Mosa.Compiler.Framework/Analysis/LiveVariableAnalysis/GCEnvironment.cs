@@ -120,7 +120,7 @@ public class GCEnvironment : BaseLivenessAnalysisEnvironment
 
 	public bool ContainsReference(Operand operand)
 	{
-		if (operand.IsReferenceType || operand.IsManagedPointer)
+		if (operand.IsObject || operand.IsManagedPointer)
 			return true;
 
 		if (!operand.IsValueType)

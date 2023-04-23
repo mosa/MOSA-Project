@@ -40,9 +40,6 @@ public sealed class LocalStack : IEnumerable<Operand>
 
 	public Operand Allocate(PrimitiveType primitiveType, bool isPinned = false, MosaType type = null)
 	{
-		Debug.Assert(type == null && primitiveType != PrimitiveType.ValueType);
-		Debug.Assert(type != null && primitiveType == PrimitiveType.ValueType);
-
 		var operand = Operand.CreateStackLocal(primitiveType, Count, isPinned, type);
 
 		localStack.Add(operand);

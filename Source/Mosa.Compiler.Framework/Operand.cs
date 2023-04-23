@@ -72,7 +72,7 @@ public sealed partial class Operand
 
 	public bool IsInteger32 => Primitive == PrimitiveType.Int32;
 
-	public bool IsConstant => Location == LocationType.Constant;
+	public bool IsConstant => Location == LocationType.Constant || Location == LocationType.StackFrame || Location == LocationType.StackParameter;
 
 	public bool IsConstantOne
 	{
@@ -134,13 +134,15 @@ public sealed partial class Operand
 
 	public bool IsPinned { get; private set; }
 
+	public bool IsPrimitive => Primitive != PrimitiveType.ValueType;
+
 	public bool IsR4 => Primitive == PrimitiveType.R4;
 
 	public bool IsR8 => Primitive == PrimitiveType.R8;
 
-	public bool IsReferenceType => Primitive == PrimitiveType.Object;
+	public bool IsObject => Primitive == PrimitiveType.Object;
 
-	public bool IsResolved { get; set; }    // FUTURE: make set private
+	public bool IsResolved { get; internal set; }    // FUTURE: make set private
 
 	public bool IsResolvedConstant => IsConstant && IsResolved;
 
@@ -187,40 +189,6 @@ public sealed partial class Operand
 		Constant = ConstantType.Default;
 
 		IsResolved = true;
-	}
-
-	/// <summary>
-	/// Initializes a new instance of <see cref="Operand"/>.
-	/// </summary>
-	/// <param name="type">The type of the operand.</param>
-	private Operand(MosaType type)
-		: this()
-	{
-		Type = type;
-		Primitive = GetElementType(type);
-	}
-
-	public static PrimitiveType GetElementType(MosaType type)
-	{
-		if (type.IsEnum)
-			type = type.GetEnumUnderlyingType();
-
-		if (type.IsReferenceType)
-			return PrimitiveType.Object;
-		else if (type.IsI1 || type.IsI2 || type.IsI4 || type.IsU1 || type.IsU2 || type.IsU4)
-			return PrimitiveType.Int32;
-		else if (type.IsI8 || type.IsU8)
-			return PrimitiveType.Int64;
-		else if (type.IsR4)
-			return PrimitiveType.R4;
-		else if (type.IsR8)
-			return PrimitiveType.R8;
-		else if (type.IsManagedPointer)
-			return PrimitiveType.ManagedPointer;
-		else if (type.IsValueType)
-			return PrimitiveType.ValueType;
-
-		return PrimitiveType.Int32; // FIXME
 	}
 
 	#endregion Construction
@@ -324,7 +292,7 @@ public sealed partial class Operand
 
 	#endregion Factory Methods - Constants
 
-	#region Factory Methods - Operands Copy
+	#region Factory Methods - Operands
 
 	public static Operand CreateVirtualRegister(Operand operand, int index)
 	{
@@ -350,7 +318,7 @@ public sealed partial class Operand
 		};
 	}
 
-	#endregion Factory Methods - Operands Copy
+	#endregion Factory Methods - Operands
 
 	#region Factory Methods - CPURegister
 
@@ -448,6 +416,7 @@ public sealed partial class Operand
 			Constant = ConstantType.Default,
 			Index = index,
 			IsPinned = pinned,
+			IsResolved = false,
 			Type = primitiveType == PrimitiveType.ValueType ? type : null,
 		};
 	}
@@ -598,6 +567,8 @@ public sealed partial class Operand
 
 	#endregion Factory Methods - Long Operand
 
+	#region Factory Methods - Labels
+
 	public static Operand CreateStringLabel(string name, uint offset, string data)
 	{
 		return new Operand
@@ -606,9 +577,9 @@ public sealed partial class Operand
 			Primitive = PrimitiveType.Object,
 			Constant = ConstantType.Label,
 			Name = name,
+			IsResolved = false,
 			Offset = offset,
 			StringData = data,
-			IsResolved = false
 		};
 	}
 
@@ -633,10 +604,13 @@ public sealed partial class Operand
 			Primitive = primitiveType,
 			Location = LocationType.Constant,
 			Constant = ConstantType.StaticField,
+			IsResolved = false,
 			Offset = 0,
 			Field = field,
 		};
 	}
+
+	#endregion Factory Methods - Labels
 
 	#region Name Output
 
@@ -665,45 +639,68 @@ public sealed partial class Operand
 
 		if (IsConstant)
 		{
-			sb.Append("const=");
-
-			if (!IsResolved)
+			if (IsLabel)
 			{
-				sb.Append("unresolved");
-
-				if (ConstantSigned64 != 0)
-
-					sb.Append($" offset={ConstantSigned64}");
-			}
-			else if (IsNull)
-			{
-				sb.Append("null");
-			}
-			else if (IsOnStack)
-			{
-				sb.Append(ConstantSigned64);
-			}
-			else if (IsR8)
-			{
-				sb.Append(ConstantDouble);
-			}
-			else if (IsR4)
-			{
-				sb.Append(ConstantFloat);
+				sb.Append($"label={Name}");
 			}
 			else
 			{
-				sb.Append(ConstantSigned64);
-			}
+				sb.Append("const=");
 
-			sb.Append(' ');
+				if (!IsResolved)
+				{
+					sb.Append("unresolved");
+
+					if (ConstantSigned64 != 0)
+
+						sb.Append($" offset={ConstantSigned64}");
+				}
+				else if (IsNull)
+				{
+					sb.Append("null");
+				}
+				else if (IsR8)
+				{
+					sb.Append(ConstantDouble);
+				}
+				else if (IsR4)
+				{
+					sb.Append(ConstantFloat);
+				}
+				else
+				{
+					sb.Append(ConstantSigned64);
+				}
+
+				if (IsParameter)
+				{
+					if (!HasLongParent)
+					{
+						sb.Append($" (p{Index})");
+					}
+					else
+					{
+						sb.Append($" (p{Index}<t{LongParent.Index}{(IsHigh ? "H" : "L")}>)");
+					}
+				}
+				else if (IsLocalStack)
+				{
+					if (!HasLongParent)
+					{
+						sb.Append($" (t{Index})");
+					}
+					else
+					{
+						sb.Append($" (t{Index}<t{LongParent.Index}{(IsHigh ? "H" : "L")}>)");
+					}
+				}
+			}
 		}
 		else if (IsCPURegister)
 		{
 			sb.Append($"{Register}");
 		}
-
-		if (IsVirtualRegister)
+		else if (IsVirtualRegister)
 		{
 			if (!HasLongParent)
 			{
@@ -714,35 +711,9 @@ public sealed partial class Operand
 				sb.Append($"(v{Index}<v{LongParent.Index}{(IsHigh ? "H" : "L")}>)");
 			}
 		}
-		else if (IsParameter)
-		{
-			if (!HasLongParent)
-			{
-				sb.Append($"(p{Index})");
-			}
-			else
-			{
-				sb.Append($"(p{Index}<t{LongParent.Index}{(IsHigh ? "H" : "L")}>)");
-			}
-		}
-		else if (IsLocalStack && Name == null)
-		{
-			if (!HasLongParent)
-			{
-				sb.Append($"(t{Index})");
-			}
-			else
-			{
-				sb.Append($"(t{Index}<t{LongParent.Index}{(IsHigh ? "H" : "L")}>)");
-			}
-		}
 		else if (IsStaticField)
 		{
 			sb.Append($" ({Field.FullName})");
-		}
-		else if (Name != null)
-		{
-			sb.Append($" ({Name})");
 		}
 
 		sb.Append($" [{GetElementString()}]");

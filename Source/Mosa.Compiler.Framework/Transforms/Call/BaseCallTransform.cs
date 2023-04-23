@@ -49,10 +49,7 @@ namespace Mosa.Compiler.Framework.Transforms.Call
 
 			for (var index = operands.Count - 1; index >= 0; index--)
 			{
-				var operand = operands[index];
-
-				var size = GetTypeSize(transform, operand.Type, true);
-				stackSize += size;
+				stackSize += transform.MethodCompiler.GetReferenceOrTypeSize(operands[index], true);
 			}
 
 			return stackSize;
@@ -89,14 +86,10 @@ namespace Mosa.Compiler.Framework.Transforms.Call
 			if (result == null)
 				return 0;
 
-			var returnType = result.Type;
+			if (result.IsPrimitive)
+				return 0;
 
-			if (!MosaTypeLayout.IsUnderlyingPrimitive(returnType))
-			{
-				return Alignment.AlignUp(transform.TypeLayout.GetTypeSize(returnType), transform.Architecture.NativeAlignment);
-			}
-
-			return 0;
+			return transform.MethodCompiler.GetReferenceOrTypeSize(result, true);
 		}
 
 		private static void FreeStackAfterCall(TransformContext transform, Context context, uint stackSize)
@@ -113,7 +106,7 @@ namespace Mosa.Compiler.Framework.Transforms.Call
 				return;
 
 			// TODO Pointers
-			if (result.IsReferenceType)
+			if (result.IsObject)
 			{
 				var returnLow = Operand.CreateCPURegister(result, transform.Architecture.ReturnRegister);
 				context.AppendInstruction(IRInstruction.Gen, returnLow);
@@ -219,23 +212,12 @@ namespace Mosa.Compiler.Framework.Transforms.Call
 			}
 		}
 
-		/// <summary>
-		/// Gets the size of the type.
-		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <param name="align">if set to <c>true</c> [align].</param>
-		/// <returns></returns>
-		private static uint GetTypeSize(TransformContext transform, MosaType type, bool align)
-		{
-			return transform.MethodCompiler.GetReferenceOrTypeSize(type, align);
-		}
-
 		private static void Push(TransformContext transform, Context context, Operand operand, uint offset)
 		{
 			var offsetOperand = transform.CreateConstant32(offset);
 
 			// TODO Pointers
-			if (operand.IsReferenceType)
+			if (operand.IsObject)
 			{
 				context.AppendInstruction(IRInstruction.StoreObject, null, transform.StackPointer, offsetOperand, operand);
 			}
@@ -304,8 +286,7 @@ namespace Mosa.Compiler.Framework.Transforms.Call
 			{
 				var operand = operands[index];
 
-				var size = GetTypeSize(transform, operand.Type, true);
-				space -= size;
+				space -= transform.MethodCompiler.GetReferenceOrTypeSize(operand, true);
 
 				Push(transform, context, operand, space);
 			}

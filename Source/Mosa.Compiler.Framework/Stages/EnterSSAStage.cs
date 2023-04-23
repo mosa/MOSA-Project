@@ -298,7 +298,7 @@ public sealed class EnterSSAStage : BaseMethodCompilerStage
 
 		var context = new Context(block);
 
-		if (variable.IsReferenceType)
+		if (variable.IsObject)
 			context.AppendInstruction(IRInstruction.PhiObject, variable);
 		else if (variable.IsR4)
 			context.AppendInstruction(IRInstruction.PhiR4, variable);

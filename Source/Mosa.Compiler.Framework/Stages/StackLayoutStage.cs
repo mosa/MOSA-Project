@@ -55,7 +55,7 @@ public sealed class StackLayoutStage : BaseMethodCompilerStage
 			if (local.Uses.Count == 0)
 				continue;
 
-			var size = MethodCompiler.GetReferenceOrTypeSize(local.Type, true);
+			var size = MethodCompiler.GetReferenceOrTypeSize(local, true);
 
 			offset -= (int)size;
 

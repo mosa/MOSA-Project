@@ -307,7 +307,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		if (virtualRegister.IsFloatingPoint)
 			return false;
 
-		if (virtualRegister.IsInteger || virtualRegister.IsReferenceType || virtualRegister.IsManagedPointer)
+		if (virtualRegister.IsInteger || virtualRegister.IsObject || virtualRegister.IsManagedPointer)
 			return true;
 
 		//if (virtualRegister.IsValueType && virtualRegister.FitsIntegerRegister)
@@ -320,7 +320,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 	{
 		if (virtualRegister.IsInteger)
 			return virtualRegister.IsInteger32 ? BitValue.Any32 : BitValue.Any64;
-		else if (virtualRegister.IsReferenceType || virtualRegister.IsManagedPointer)
+		else if (virtualRegister.IsObject || virtualRegister.IsManagedPointer)
 			return Is32BitPlatform ? BitValue.Any32 : BitValue.Any64;
 		else if (virtualRegister.IsR4)
 			return BitValue.Any32;
@@ -341,7 +341,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 	{
 		if (virtualRegister.IsInteger)
 			return virtualRegister.IsInteger32 ? BitValue.Any32 : BitValue.Any64;
-		else if (virtualRegister.IsReferenceType || virtualRegister.IsManagedPointer)
+		else if (virtualRegister.IsObject || virtualRegister.IsManagedPointer)
 			return transform.Is32BitPlatform ? BitValue.Any32 : BitValue.Any64;
 		else if (virtualRegister.IsR4)
 			return BitValue.Any32;

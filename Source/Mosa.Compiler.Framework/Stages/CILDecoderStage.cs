@@ -189,7 +189,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 				? ElementType.ManagedPointer
 				: ElementType.Object;
 
-			MethodCompiler.Parameters.Allocate(primativeType, elementType, "this", offset);
+			var operand = MethodCompiler.Parameters.Allocate(primativeType, elementType, "this", offset);
 			offset += (int)Architecture.NativePointerSize;
 		}
 
@@ -199,9 +199,8 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			var primitiveType = MethodCompiler.GetPrimitiveType(underlyingType);
 			var elementType = MethodCompiler.GetElementType(underlyingType);
 
-			MethodCompiler.Parameters.Allocate(primitiveType, elementType, parameter.Name, offset, parameter.ParameterType);
-
-			var size = MethodCompiler.GetReferenceOrTypeSize(parameter.ParameterType, true);
+			var operand = MethodCompiler.Parameters.Allocate(primitiveType, elementType, parameter.Name, offset, parameter.ParameterType);
+			var size = MethodCompiler.GetReferenceOrTypeSize(operand, true);
 			offset += (int)size;
 		}
 	}
@@ -4226,7 +4225,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		var arrayType = (MosaType)instruction.Operand;
 
-		var elementSize = MethodCompiler.GetReferenceOrTypeSize(arrayType.ElementType, false);
+		var elementSize = MethodCompiler.GetReferenceOrTypeSize(arrayType, false);
 		var methodTable = GetMethodTablePointer(arrayType);
 		var size = CreateConstant32(elementSize);
 		var result = MethodCompiler.VirtualRegisters.AllocateObject();

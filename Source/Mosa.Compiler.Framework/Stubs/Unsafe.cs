@@ -29,15 +29,15 @@ internal static partial class StubMethods
 	{
 		var source = methodCompiler.Parameters[0];
 
-		var opReturn = source.IsReferenceType
+		var opReturn = source.IsObject
 			? methodCompiler.VirtualRegisters.AllocateNativeInteger()
 			: methodCompiler.VirtualRegisters.AllocateManagedPointer();
 
-		var loadSource = source.IsReferenceType
+		var loadSource = source.IsObject
 			? (BaseInstruction)IRInstruction.LoadParamObject
 			: methodCompiler.Is32BitPlatform ? IRInstruction.LoadParam32 : IRInstruction.LoadParam64;
 
-		var setReturn = source.IsReferenceType
+		var setReturn = source.IsObject
 			? (BaseInstruction)IRInstruction.SetReturnObject
 			: methodCompiler.Is32BitPlatform ? IRInstruction.SetReturn32 : IRInstruction.SetReturn64;
 

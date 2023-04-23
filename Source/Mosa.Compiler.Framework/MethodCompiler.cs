@@ -680,11 +680,25 @@ public sealed class MethodCompiler
 	/// <param name="type">The type.</param>
 	/// <param name="aligned">if set to <c>true</c> [aligned].</param>
 	/// <returns></returns>
-	public uint GetReferenceOrTypeSize(MosaType type, bool aligned)
+	public uint GetReferenceOrTypeSize(MosaType type, bool aligned = false)
 	{
 		if (type.IsValueType)
 		{
 			var size = TypeLayout.GetTypeSize(type);
+
+			return aligned ? Alignment.AlignUp(size, Architecture.NativeAlignment) : size;
+		}
+		else
+		{
+			return Architecture.NativeAlignment;
+		}
+	}
+
+	public uint GetReferenceOrTypeSize(Operand operand, bool aligned)
+	{
+		if (operand.IsValueType)
+		{
+			var size = TypeLayout.GetTypeSize(operand.Type);
 
 			return aligned ? Alignment.AlignUp(size, Architecture.NativeAlignment) : size;
 		}

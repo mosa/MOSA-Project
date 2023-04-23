@@ -36,7 +36,7 @@ public class BitValueManager : BaseTransformManager
 		{
 			return Any;
 		}
-		else if (operand.IsNull && operand.IsReferenceType)
+		else if (operand.IsNull && operand.IsObject)
 		{
 			return Zero;
 		}

@@ -28,7 +28,7 @@ public sealed class GetLow32From64 : BaseTransform
 		if (context.Operand1.IsInteger32)
 			return true;
 
-		if (context.Operand1.IsReferenceType)
+		if (context.Operand1.IsObject)
 			return true;
 
 		if (context.Operand1.IsManagedPointer)
