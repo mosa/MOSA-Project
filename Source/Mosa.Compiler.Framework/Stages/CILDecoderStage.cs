@@ -969,7 +969,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			switch (localstacktype)
 			{
 				case PrimitiveType.Object:
-					prologue.AppendInstruction(IRInstruction.MoveObject, local, Operand.GetNullObject());
+					prologue.AppendInstruction(IRInstruction.MoveObject, local, Operand.NullObject);
 					break;
 
 				case PrimitiveType.Int32:
@@ -1201,7 +1201,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	private bool Ldnull(Context context, Stack<StackEntry> stack)
 	{
 		var result = MethodCompiler.VirtualRegisters.AllocateObject();
-		context.AppendInstruction(IRInstruction.MoveObject, result, Operand.GetNullObject());
+		context.AppendInstruction(IRInstruction.MoveObject, result, Operand.NullObject);
 		PushStack(stack, new StackEntry(result));
 		return true;
 	}
@@ -3345,7 +3345,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		if (type.IsReferenceType)
 		{
-			context.AppendInstruction(IRInstruction.StoreObject, null, entry.Operand, ConstantZero, Operand.GetNullObject());
+			context.AppendInstruction(IRInstruction.StoreObject, null, entry.Operand, ConstantZero, Operand.NullObject);
 			context.MosaType = type;
 		}
 		else

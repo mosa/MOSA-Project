@@ -18,9 +18,9 @@ public sealed class BitCopy64ToR8 : BaseIRTransform
 	{
 		var result = context.Result;
 
-		transform.SplitLongOperand(context.Operand1, out var op1L, out var op1H);
+		transform.SplitOperand(context.Operand1, out var op1L, out var op1H);
 
 		context.SetInstruction(X86.Movdssi32, result, op1L);    // FIXME
-		context.AppendInstruction(X86.Pextrd32, result, op1H, transform.Constant32_1);
+		context.AppendInstruction(X86.Pextrd32, result, op1H, Operand.Constant32_1);
 	}
 }

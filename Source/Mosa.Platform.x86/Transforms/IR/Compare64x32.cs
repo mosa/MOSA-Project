@@ -22,8 +22,8 @@ public sealed class Compare64x32 : BaseIRTransform
 		Debug.Assert(context.Operand1 != null && context.Operand2 != null);
 		Debug.Assert(context.Result.IsVirtualRegister);
 
-		transform.SplitLongOperand(context.Operand1, out var op1L, out var op1H);
-		transform.SplitLongOperand(context.Operand2, out var op2L, out var op2H);
+		transform.SplitOperand(context.Operand1, out var op1L, out var op1H);
+		transform.SplitOperand(context.Operand2, out var op2L, out var op2H);
 
 		var result = context.Result;
 		var condition = context.ConditionCode;
@@ -62,11 +62,11 @@ public sealed class Compare64x32 : BaseIRTransform
 		newBlocks[1].AppendInstruction(X86.Jmp, newBlocks[3].Block);
 
 		// Success
-		newBlocks[2].AppendInstruction(X86.Mov32, result, transform.Constant32_1);
+		newBlocks[2].AppendInstruction(X86.Mov32, result, Operand.Constant32_1);
 		newBlocks[2].AppendInstruction(X86.Jmp, nextBlock.Block);
 
 		// Failed
-		newBlocks[3].AppendInstruction(X86.Mov32, result, transform.Constant32_0);
+		newBlocks[3].AppendInstruction(X86.Mov32, result, Operand.Constant32_0);
 		newBlocks[3].AppendInstruction(X86.Jmp, nextBlock.Block);
 	}
 }

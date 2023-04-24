@@ -16,7 +16,7 @@ public sealed class ConvertI64ToR4 : BaseIRTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		transform.SplitLongOperand(context.Result, out var op1Low, out _);
+		transform.SplitOperand(context.Result, out var op1Low, out _);
 
 		context.SetInstruction(X86.Cvtsi2ss32, context.Result, op1Low);
 	}

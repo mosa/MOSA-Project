@@ -23,7 +23,7 @@ public sealed class SubCarryIn32 : BaseIRTransform
 
 		var v1 = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction(X64.Bt32, v1, operand3, transform.Constant64_0);
+		context.SetInstruction(X64.Bt32, v1, operand3, Operand.Constant64_0);
 		context.AppendInstruction(X64.Sbb32, result, operand1, operand2);
 	}
 }

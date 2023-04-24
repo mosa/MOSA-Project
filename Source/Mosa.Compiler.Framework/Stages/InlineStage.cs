@@ -353,7 +353,7 @@ public class InlineStage : BaseMethodCompilerStage
 
 		Debug.Assert(mappedOperand != null);
 
-		if (operand.HasLongParent)
+		if (operand.HasParent)
 		{
 			MethodCompiler.VirtualRegisters.SplitOperand(mappedOperand);
 

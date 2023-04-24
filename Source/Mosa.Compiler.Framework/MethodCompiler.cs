@@ -255,8 +255,7 @@ public sealed class MethodCompiler
 
 		LocalStack = new LocalStack(Is32BitPlatform);
 		VirtualRegisters = new VirtualRegisters(Is32BitPlatform);
-
-		Parameters = new Parameters(Is32BitPlatform, method.Signature.Parameters.Count + (method.HasThis || method.HasExplicitThis ? 1 : 0));
+		Parameters = new Parameters(Is32BitPlatform);
 
 		Constant32_0 = CreateConstant((uint)0);
 		Constant64_0 = CreateConstant((ulong)0);
@@ -641,37 +640,83 @@ public sealed class MethodCompiler
 	/// <param name="operandHigh">The operand high.</param>
 	public void SplitOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
 	{
-		var is64Bit = operand.IsInt64;
+		Debug.Assert(Is32BitPlatform);
 
-		if (!operand.IsInt64 && !operand.IsInt32)
+		if (operand.Low != null)
 		{
-			var underlyingType = MosaTypeLayout.GetUnderlyingType(operand.Type);
-
-			if (underlyingType.IsUI8)
-				is64Bit = true;
-
-			if (Is64BitPlatform)
-			{
-				if (underlyingType.IsPointer
-					|| underlyingType.IsFunctionPointer
-					|| underlyingType.IsN
-					|| underlyingType.IsManagedPointer
-					|| underlyingType.IsReferenceType)
-					is64Bit = true;
-			}
-		}
-
-		if (is64Bit)
-		{
-			VirtualRegisters.SplitOperand(operand);
 			operandLow = operand.Low;
 			operandHigh = operand.High;
+			return;
 		}
-		else
+
+		if (operand.IsVirtualRegister)
+		{
+			if (operand.IsInt64)
+			{
+				VirtualRegisters.SplitOperand(operand);
+				operandLow = operand.Low;
+				operandHigh = operand.High;
+				return;
+			}
+			else
+			{
+				operandLow = operand;
+				operandHigh = Constant32_0;
+				return;
+			}
+		}
+		else if (operand.IsLocalStack)
+		{
+			LocalStack.SplitOperand(operand);
+			operandLow = operand.Low;
+			operandHigh = operand.High;
+			return;
+		}
+		else if (operand.IsParameter)
+		{
+			Parameters.SplitOperand(operand);
+			operandLow = operand.Low;
+			operandHigh = operand.High;
+			return;
+		}
+		else if (operand.IsResolvedConstant)
+		{
+			if (operand.IsInt32)
+			{
+				operandLow = operand;
+				operandHigh = Constant32_0;
+				return;
+			}
+			else if (operand.IsInt64)
+			{
+				operandLow = Operand.CreateLow(operand);
+				operandHigh = Operand.CreateHigh(operand);
+				return;
+			}
+		}
+		else if (operand.IsCPURegister)
+		{
+			if (operand.IsInt32)
+			{
+				operandLow = operand;
+				operandHigh = Constant32_0;
+				return;
+			}
+			else if (operand.IsInt64)
+			{
+				operandLow = Operand.CreateLow(operand);
+				operandHigh = Operand.CreateHigh(operand);
+				return;
+			}
+		}
+		else if (operand.IsManagedPointer)
 		{
 			operandLow = operand;
 			operandHigh = Constant32_0;
+			return;
 		}
+
+		throw new InvalidOperationException();
 	}
 
 	/// <summary>
@@ -1073,15 +1118,15 @@ public sealed class MethodCompiler
 		return primitiveType != PrimitiveType.ValueType;
 	}
 
-	public Operand AllocateVirtualRegisterOrStackLocal(MosaType returnType)
+	public Operand AllocateVirtualRegisterOrStackLocal(MosaType type)
 	{
-		var underlyingType = MosaTypeLayout.GetUnderlyingType(returnType);
+		var underlyingType = MosaTypeLayout.GetUnderlyingType(type);
 		var primitiveType = GetPrimitiveType(underlyingType);
 		var isPrimitive = IsPrimitive(primitiveType);
 
 		var result = isPrimitive
 			? VirtualRegisters.Allocate(primitiveType)
-			: LocalStack.Allocate(primitiveType);
+			: LocalStack.Allocate(primitiveType, false, type);
 
 		return result;
 	}

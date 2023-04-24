@@ -23,7 +23,7 @@ public sealed class RemUnsigned32 : BaseIRTransform
 		var v1 = transform.VirtualRegisters.Allocate32();
 		var v2 = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction(X64.Mov32, v1, transform.Constant32_0);
+		context.SetInstruction(X64.Mov32, v1, Operand.Constant32_0);
 		context.AppendInstruction2(X64.Div32, result, v2, v1, operand1, operand2);
 	}
 }

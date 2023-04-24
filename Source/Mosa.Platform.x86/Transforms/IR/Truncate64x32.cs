@@ -19,7 +19,7 @@ public sealed class Truncate64x32 : BaseIRTransform
 	{
 		Debug.Assert(context.Operand1.IsInt64);
 		Debug.Assert(!context.Result.IsInt64);
-		transform.SplitLongOperand(context.Operand1, out var op1L, out _);
+		transform.SplitOperand(context.Operand1, out var op1L, out _);
 
 		context.SetInstruction(X86.Mov32, context.Result, op1L);
 	}

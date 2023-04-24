@@ -16,7 +16,7 @@ public sealed class LoadParam64 : BaseLower32Transform
 		var resultLow = transform.VirtualRegisters.Allocate32();
 		var resultHigh = transform.VirtualRegisters.Allocate32();
 
-		transform.SplitLongOperand(operand1, out Operand op1Low, out Operand op1High);
+		transform.SplitOperand(operand1, out Operand op1Low, out Operand op1High);
 
 		context.SetInstruction(IRInstruction.LoadParam32, resultLow, op1Low);
 		context.AppendInstruction(IRInstruction.LoadParam32, resultHigh, op1High);

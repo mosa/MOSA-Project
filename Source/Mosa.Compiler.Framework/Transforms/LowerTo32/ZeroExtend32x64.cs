@@ -13,6 +13,6 @@ public sealed class ZeroExtend32x64 : BaseLower32Transform
 		var result = context.Result;
 		var operand1 = context.Operand1;
 
-		context.SetInstruction(IRInstruction.To64, result, operand1, transform.Constant32_0);
+		context.SetInstruction(IRInstruction.To64, result, operand1, Operand.Constant32_0);
 	}
 }

@@ -58,7 +58,7 @@ public sealed class VirtualRegisterRenameStage : BaseCodeTransformationStage
 
 		foreach (var s in MethodCompiler.LocalStack)
 		{
-			sl.AddIfNew(s.HasLongParent ? s.LongParent : s);
+			sl.AddIfNew(s.HasParent ? s.Parent : s);
 		}
 
 		var index = 0;
@@ -71,7 +71,7 @@ public sealed class VirtualRegisterRenameStage : BaseCodeTransformationStage
 		index = 0;
 		foreach (var s in sl)
 		{
-			if (!s.HasLongParent)
+			if (!s.HasParent)
 			{
 				MethodCompiler.LocalStack.Reorder(s, ++index);
 				s.RenameIndex(index);

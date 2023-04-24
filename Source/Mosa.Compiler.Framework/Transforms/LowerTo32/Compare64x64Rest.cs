@@ -29,7 +29,7 @@ public sealed class Compare64x64Rest : BaseLower32Transform
 		var operand1 = context.Operand1;
 		var operand2 = context.Operand2;
 
-		transform.SplitLongOperand(result, out Operand resultLow, out Operand resultHigh);
+		transform.SplitOperand(result, out Operand resultLow, out Operand resultHigh);
 
 		var branch = context.ConditionCode;
 		var branchUnsigned = context.ConditionCode.GetUnsigned();
@@ -66,12 +66,12 @@ public sealed class Compare64x64Rest : BaseLower32Transform
 		newBlocks[2].AppendInstruction(IRInstruction.Jmp, newBlocks[4].Block);
 
 		// Failed
-		newBlocks[3].AppendInstruction(IRInstruction.Move32, tempLow, transform.Constant32_0);
+		newBlocks[3].AppendInstruction(IRInstruction.Move32, tempLow, Operand.Constant32_0);
 		newBlocks[3].AppendInstruction(IRInstruction.Jmp, newBlocks[4].Block);
 
 		// Exit
 		newBlocks[4].AppendInstruction(IRInstruction.Move32, resultLow, tempLow);
-		newBlocks[4].AppendInstruction(IRInstruction.Move32, resultHigh, transform.Constant32_0);
+		newBlocks[4].AppendInstruction(IRInstruction.Move32, resultHigh, Operand.Constant32_0);
 		newBlocks[4].AppendInstruction(IRInstruction.Jmp, nextBlock.Block);
 	}
 }

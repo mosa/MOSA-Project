@@ -143,7 +143,7 @@ namespace Mosa.Compiler.Framework.Transforms.Call
 			}
 			else if (result.IsValueType)
 			{
-				context.AppendInstruction(IRInstruction.LoadCompound, result, transform.StackPointer, transform.Constant32_0);
+				context.AppendInstruction(IRInstruction.LoadCompound, result, transform.StackPointer, Operand.Constant32_0);
 			}
 			else
 			{

@@ -1,1 +1,1 @@
-..\bin\Mosa.Utility.UnitTests.exe -display-off -oMax -!threading-off -output-hash -cilv2
+..\bin\Mosa.Utility.UnitTests.exe -display-off -oMax -!threading-off -output-hash

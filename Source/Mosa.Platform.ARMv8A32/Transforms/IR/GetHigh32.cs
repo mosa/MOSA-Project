@@ -16,8 +16,8 @@ public sealed class GetHigh32 : BaseIRTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		transform.SplitLongOperand(context.Result, out var resultLow, out _);
-		transform.SplitLongOperand(context.Operand1, out _, out var op1H);
+		transform.SplitOperand(context.Result, out var resultLow, out _);
+		transform.SplitOperand(context.Operand1, out _, out var op1H);
 
 		op1H = MoveConstantToRegisterOrImmediate(transform, context, op1H);
 

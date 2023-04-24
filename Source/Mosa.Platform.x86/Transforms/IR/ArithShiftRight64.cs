@@ -16,8 +16,8 @@ public sealed class ArithShiftRight64 : BaseIRTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		transform.SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
-		transform.SplitLongOperand(context.Operand1, out var op1L, out var op1H);
+		transform.SplitOperand(context.Result, out var resultLow, out var resultHigh);
+		transform.SplitOperand(context.Operand1, out var op1L, out var op1H);
 
 		var count = context.Operand2;
 
@@ -29,11 +29,11 @@ public sealed class ArithShiftRight64 : BaseIRTransform
 		var nextBlock = transform.Split(context);
 
 		context.SetInstruction(X86.Mov32, v1_count, count);
-		context.AppendInstruction(X86.Cmp32, null, v1_count, transform.Constant32_64);
+		context.AppendInstruction(X86.Cmp32, null, v1_count, Operand.Constant32_64);
 		context.AppendInstruction(X86.Branch, ConditionCode.GreaterOrEqual, newBlocks[3].Block);
 		context.AppendInstruction(X86.Jmp, newBlocks[0].Block);
 
-		newBlocks[0].AppendInstruction(X86.Cmp32, null, v1_count, transform.Constant32_32);
+		newBlocks[0].AppendInstruction(X86.Cmp32, null, v1_count, Operand.Constant32_32);
 		newBlocks[0].AppendInstruction(X86.Branch, ConditionCode.GreaterOrEqual, newBlocks[2].Block);
 		newBlocks[0].AppendInstruction(X86.Jmp, newBlocks[1].Block);
 
@@ -42,12 +42,12 @@ public sealed class ArithShiftRight64 : BaseIRTransform
 		newBlocks[1].AppendInstruction(X86.Jmp, nextBlock.Block);
 
 		newBlocks[2].AppendInstruction(X86.Mov32, v2, op1H);
-		newBlocks[2].AppendInstruction(X86.Sar32, resultHigh, op1H, transform.Constant32_31);
-		newBlocks[2].AppendInstruction(X86.And32, v3, v1_count, transform.Constant32_31);
+		newBlocks[2].AppendInstruction(X86.Sar32, resultHigh, op1H, Operand.Constant32_31);
+		newBlocks[2].AppendInstruction(X86.And32, v3, v1_count, Operand.Constant32_31);
 		newBlocks[2].AppendInstruction(X86.Sar32, resultLow, v2, v3);
 		newBlocks[2].AppendInstruction(X86.Jmp, nextBlock.Block);
 
-		newBlocks[3].AppendInstruction(X86.Sar32, resultHigh, op1H, transform.Constant32_31);
+		newBlocks[3].AppendInstruction(X86.Sar32, resultHigh, op1H, Operand.Constant32_31);
 		newBlocks[3].AppendInstruction(X86.Mov32, resultLow, resultHigh);
 		newBlocks[3].AppendInstruction(X86.Jmp, nextBlock.Block);
 	}

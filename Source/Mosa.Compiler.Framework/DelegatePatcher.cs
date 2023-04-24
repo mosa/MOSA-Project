@@ -163,12 +163,11 @@ public static class DelegatePatcher
 
 	private static void PatchBeginInvoke(MethodCompiler methodCompiler)
 	{
-		var nullOperand = Operand.GetNullObject();
 		var context = new Context(CreateMethodStructure(methodCompiler));
 
-		var setReturn = methodCompiler.GetReturnInstruction(nullOperand.Primitive);
+		var setReturn = methodCompiler.GetReturnInstruction(PrimitiveType.Object);
 
-		context.AppendInstruction(setReturn, null, nullOperand);
+		context.AppendInstruction(setReturn, null, Operand.NullObject);
 		context.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);
 	}
 

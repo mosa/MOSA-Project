@@ -27,7 +27,7 @@ public sealed class CheckArrayBounds : BaseTransform
 
 		// Now compare length with index
 		// If index is greater than or equal to the length then jump to exception block, otherwise jump to next block
-		context.SetInstruction(transform.LoadInstruction, v1_length, array, transform.Constant32_0);
+		context.SetInstruction(transform.LoadInstruction, v1_length, array, Operand.Constant32_0);
 		context.AppendInstruction(transform.BranchInstruction, ConditionCode.UnsignedGreaterOrEqual, null, index, v1_length, newBlock.Block);
 		context.AppendInstruction(IRInstruction.Jmp, nextBlock.Block);
 

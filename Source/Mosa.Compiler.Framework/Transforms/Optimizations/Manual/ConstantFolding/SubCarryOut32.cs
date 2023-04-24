@@ -38,6 +38,6 @@ public sealed class SubCarryOut32 : BaseTransform
 		var carry = IntegerTwiddling.IsSubUnsignedCarry(t1, t2);
 
 		context.SetInstruction(IRInstruction.Move32, result, e1);
-		context.AppendInstruction(IRInstruction.Move32, result2, carry ? transform.Constant32_1 : transform.Constant32_0);
+		context.AppendInstruction(IRInstruction.Move32, result2, carry ? Operand.Constant32_1 : Operand.Constant32_0);
 	}
 }

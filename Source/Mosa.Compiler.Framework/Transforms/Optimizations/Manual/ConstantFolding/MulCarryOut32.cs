@@ -40,6 +40,6 @@ public sealed class MulCarryOut32 : BaseTransform
 		var e1 = transform.CreateConstant(MulUnsigned32(To32(t1), To32(t2)));
 
 		context.SetInstruction(IRInstruction.Move32, result, e1);
-		context.AppendInstruction(IRInstruction.Move32, result2, transform.Constant32_1);
+		context.AppendInstruction(IRInstruction.Move32, result2, Operand.Constant32_1);
 	}
 }

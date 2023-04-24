@@ -25,7 +25,7 @@ public sealed class SubCarryOut32 : BaseIRTransform
 		operand2 = MoveConstantToRegisterOrImmediate(transform, context, operand2);
 
 		context.SetInstruction(ARMv8A32.Sub, StatusRegister.Set, result, operand1, operand2);
-		context.AppendInstruction(ARMv8A32.Mov, ConditionCode.Carry, result2, transform.Constant32_1);
-		context.AppendInstruction(ARMv8A32.Mov, ConditionCode.NoCarry, result2, transform.Constant32_0);
+		context.AppendInstruction(ARMv8A32.Mov, ConditionCode.Carry, result2, Operand.Constant32_1);
+		context.AppendInstruction(ARMv8A32.Mov, ConditionCode.NoCarry, result2, Operand.Constant32_0);
 	}
 }

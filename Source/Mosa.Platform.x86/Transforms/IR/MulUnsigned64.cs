@@ -18,9 +18,9 @@ public sealed class MulUnsigned64 : BaseIRTransform
 	{
 		//ExpandMul(context);
 
-		transform.SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
-		transform.SplitLongOperand(context.Operand1, out var op1L, out var op1H);
-		transform.SplitLongOperand(context.Operand2, out var op2L, out var op2H);
+		transform.SplitOperand(context.Result, out var resultLow, out var resultHigh);
+		transform.SplitOperand(context.Operand1, out var op1L, out var op1H);
+		transform.SplitOperand(context.Operand2, out var op2L, out var op2H);
 
 		var v1 = transform.VirtualRegisters.Allocate32();
 		var v2 = transform.VirtualRegisters.Allocate32();

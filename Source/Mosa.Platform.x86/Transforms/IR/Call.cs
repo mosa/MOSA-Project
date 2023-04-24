@@ -18,14 +18,14 @@ public sealed class Call : BaseIRTransform
 	{
 		if (context.Result?.IsInt64 == true)
 		{
-			transform.SplitLongOperand(context.Result, out _, out _);
+			transform.SplitOperand(context.Result, out _, out _);
 		}
 
 		foreach (var operand in context.Operands)
 		{
 			if (operand.IsInt64)
 			{
-				transform.SplitLongOperand(operand, out _, out _);
+				transform.SplitOperand(operand, out _, out _);
 			}
 		}
 	}

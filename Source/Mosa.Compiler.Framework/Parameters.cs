@@ -30,10 +30,10 @@ public sealed class Parameters : IEnumerable<Operand>
 	/// <summary>
 	/// Initializes a new instance of the <see cref="Parameters" /> class.
 	/// </summary>
-	public Parameters(bool is32Platform, int count)
+	public Parameters(bool is32Platform)
 	{
 		Is32Platform = is32Platform;
-		parameters = new List<Operand>(count);
+		parameters = new List<Operand>();
 	}
 
 	public Operand Allocate(PrimitiveType primitiveType, ElementType elementType, string name, int offset, uint size, MosaType type = null)
@@ -49,14 +49,8 @@ public sealed class Parameters : IEnumerable<Operand>
 	{
 		if (operand.Low == null && operand.High == null)
 		{
-			var low = Operand.CreateLow(operand, parameters.Count + 1);
-			var high = Operand.CreateHigh(operand, parameters.Count + 2);
-
-			if (operand.IsVirtualRegister)
-			{
-				parameters.Add(low);
-				parameters.Add(high);
-			}
+			Operand.CreateLow(operand, parameters.Count + 1);
+			Operand.CreateHigh(operand, parameters.Count + 2);
 		}
 	}
 

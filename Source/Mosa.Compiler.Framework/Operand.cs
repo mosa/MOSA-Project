@@ -62,7 +62,7 @@ public sealed partial class Operand
 
 	public MosaField Field { get; private set; }
 
-	public bool HasLongParent => LongParent != null;
+	public bool HasParent => Parent != null;
 
 	public Operand High { get; private set; }
 
@@ -116,13 +116,13 @@ public sealed partial class Operand
 
 	public bool IsFloatingPoint => IsR4 | IsR8;
 
-	public bool IsHigh => LongParent.High == this;
+	public bool IsHigh => Parent.High == this;
 
 	public bool IsInteger => Primitive == PrimitiveType.Int32 || Primitive == PrimitiveType.Int64;
 
 	public bool IsLabel => Constant == ConstantType.Label;
 
-	public bool IsLow => LongParent.Low == this;
+	public bool IsLow => Parent.Low == this;
 
 	public bool IsManagedPointer => Primitive == PrimitiveType.ManagedPointer;
 
@@ -156,7 +156,7 @@ public sealed partial class Operand
 
 	public bool IsVirtualRegister => Location == LocationType.VirtualRegister;
 
-	public Operand LongParent { get; private set; }
+	public Operand Parent { get; private set; }
 
 	public Operand Low { get; private set; }
 
@@ -182,6 +182,55 @@ public sealed partial class Operand
 
 	#endregion Properties
 
+	#region Static Constants
+
+	public static readonly Operand Constant32_0 = _CreateConstant32(0);
+	public static readonly Operand Constant32_1 = _CreateConstant32(1);
+	public static readonly Operand Constant32_2 = _CreateConstant32(2);
+	public static readonly Operand Constant32_3 = _CreateConstant32(3);
+	public static readonly Operand Constant32_4 = _CreateConstant32(4);
+	public static readonly Operand Constant32_8 = _CreateConstant32(8);
+	public static readonly Operand Constant32_15 = _CreateConstant32(15);
+	public static readonly Operand Constant32_16 = _CreateConstant32(16);
+	public static readonly Operand Constant32_24 = _CreateConstant32(24);
+	public static readonly Operand Constant32_31 = _CreateConstant32(31);
+	public static readonly Operand Constant32_32 = _CreateConstant32(32);
+	public static readonly Operand Constant32_64 = _CreateConstant32(64);
+	public static readonly Operand Constant32_FF = _CreateConstant32(0xFF);
+	public static readonly Operand Constant32_FFFF = _CreateConstant32(0xFFFF);
+	public static readonly Operand Constant32_FFFFFFFF = _CreateConstant32(0xFFFFFFFF);
+
+	public static readonly Operand Constant32_0b1001 = _CreateConstant32(0b1001);
+	public static readonly Operand Constant32_0b1010 = _CreateConstant32(0b1010);
+	public static readonly Operand Constant32_0b1011 = _CreateConstant32(0b1011);
+	public static readonly Operand Constant32_0b1100 = _CreateConstant32(0b1100);
+	public static readonly Operand Constant32_0b1101 = _CreateConstant32(0b1101);
+	public static readonly Operand Constant32_0b1110 = _CreateConstant32(0b1110);
+
+	public static readonly Operand Constant64_0 = _CreateConstant64(0);
+	public static readonly Operand Constant64_1 = _CreateConstant64(1);
+	public static readonly Operand Constant64_2 = _CreateConstant64(2);
+	public static readonly Operand Constant64_3 = _CreateConstant64(3);
+	public static readonly Operand Constant64_4 = _CreateConstant64(4);
+	public static readonly Operand Constant64_8 = _CreateConstant64(8);
+	public static readonly Operand Constant64_15 = _CreateConstant64(15);
+	public static readonly Operand Constant64_16 = _CreateConstant64(16);
+	public static readonly Operand Constant64_24 = _CreateConstant64(24);
+	public static readonly Operand Constant64_31 = _CreateConstant64(31);
+	public static readonly Operand Constant64_32 = _CreateConstant64(32);
+	public static readonly Operand Constant64_64 = _CreateConstant64(64);
+	public static readonly Operand Constant64_FF = _CreateConstant64(0xFF);
+	public static readonly Operand Constant64_FFFF = _CreateConstant64(0xFFFF);
+	public static readonly Operand Constant64_FFFFFFFF = _CreateConstant64(0xFFFFFFFF);
+
+	public static readonly Operand ConstantR4_0 = _CreateConstantR4(0f);
+	public static readonly Operand ConstantR4_1 = _CreateConstantR4(1f);
+
+	public static readonly Operand ConstantR8_0 = _CreateConstantR8(0d);
+	public static readonly Operand ConstantR8_1 = _CreateConstantR8(1d);
+
+	#endregion Static Constants
+
 	#region Construction
 
 	private Operand()
@@ -197,7 +246,7 @@ public sealed partial class Operand
 
 	#region Factory Methods - Constants
 
-	public static Operand CreateConstant32(uint value)
+	private static Operand _CreateConstant32(uint value)
 	{
 		return new Operand
 		{
@@ -208,7 +257,42 @@ public sealed partial class Operand
 		};
 	}
 
-	public static Operand CreateConstant64(ulong value)
+	public static Operand CreateConstant32(uint value)
+	{
+		switch (value)
+		{
+			case 0: return Constant32_0;
+			case 1: return Constant32_1;
+			case 2: return Constant32_2;
+			case 4: return Constant32_4;
+			case 8: return Constant32_8;
+			case 15: return Constant32_15;
+			case 16: return Constant32_16;
+			case 24: return Constant32_24;
+			case 31: return Constant32_31;
+			case 32: return Constant32_32;
+			case 64: return Constant32_64;
+			case 0xFF: return Constant32_FF;
+			case 0xFFFF: return Constant32_FFFF;
+			case 0xFFFFFFFF: return Constant32_FFFFFFFF;
+			case 0b1001: return Constant32_0b1001;
+			case 0b1010: return Constant32_0b1010;
+			case 0b1011: return Constant32_0b1011;
+			case 0b1100: return Constant32_0b1100;
+			case 0b1101: return Constant32_0b1101;
+			case 0b1110: return Constant32_0b1110;
+			default: break;
+		}
+
+		return _CreateConstant32(value);
+	}
+
+	public static Operand CreateConstant32(int value)
+	{
+		return CreateConstant32((uint)value);
+	}
+
+	private static Operand _CreateConstant64(ulong value)
 	{
 		return new Operand
 		{
@@ -219,7 +303,36 @@ public sealed partial class Operand
 		};
 	}
 
-	public static Operand CreateConstantR4(float value)
+	public static Operand CreateConstant64(ulong value)
+	{
+		switch (value)
+		{
+			case 0: return Constant64_0;
+			case 1: return Constant64_1;
+			case 2: return Constant64_2;
+			case 4: return Constant64_4;
+			case 8: return Constant64_8;
+			case 15: return Constant64_15;
+			case 16: return Constant64_16;
+			case 24: return Constant64_24;
+			case 31: return Constant64_31;
+			case 32: return Constant64_32;
+			case 64: return Constant64_64;
+			case 0xFF: return Constant64_FF;
+			case 0xFFFF: return Constant64_FFFF;
+			case 0xFFFFFFFF: return Constant64_FFFFFFFF;
+			default: break;
+		}
+
+		return _CreateConstant64(value);
+	}
+
+	public static Operand CreateConstant64(int value)
+	{
+		return CreateConstant64((uint)value);
+	}
+
+	private static Operand _CreateConstantR4(float value)
 	{
 		return new Operand
 		{
@@ -230,7 +343,19 @@ public sealed partial class Operand
 		};
 	}
 
-	public static Operand CreateConstantR8(double value)
+	public static Operand CreateConstantR4(float value)
+	{
+		switch (value)
+		{
+			case 0: return ConstantR4_0;
+			case 1: return ConstantR4_1;
+			default: break;
+		}
+
+		return _CreateConstantR4(value);
+	}
+
+	private static Operand _CreateConstantR8(double value)
 	{
 		return new Operand
 		{
@@ -239,6 +364,28 @@ public sealed partial class Operand
 			Constant = ConstantType.Default,
 			ConstantDouble = value,
 		};
+	}
+
+	public static Operand CreateConstantR8(double value)
+	{
+		switch (value)
+		{
+			case 0: return ConstantR8_0;
+			case 1: return ConstantR8_1;
+			default: break;
+		}
+
+		return _CreateConstantR8(value);
+	}
+
+	public static Operand CreateConstant(float value)
+	{
+		return CreateConstantR4(value);
+	}
+
+	public static Operand CreateConstant(double value)
+	{
+		return CreateConstantR8(value);
 	}
 
 	public static Operand CreateLabel(string label, bool Is32Platform)
@@ -449,34 +596,31 @@ public sealed partial class Operand
 		};
 	}
 
-	public static Operand GetNullObject()
-	{
-		return NullObject;
-	}
-
 	#endregion Factory Methods - Standard
 
 	#region Factory Methods - Long Operand
 
-	public static Operand CreateHigh(Operand longOperand, int index)
+	public static Operand CreateHigh(Operand longOperand, int index = 0)
 	{
-		Debug.Assert(longOperand.LongParent == null || longOperand.LongParent == longOperand);
+		Debug.Assert(longOperand.Parent == null || longOperand.Parent == longOperand);
 		Debug.Assert(longOperand.High == null);
 
 		Operand operand = null;
 
 		if (longOperand.IsParameter)
 		{
-			operand = CreateStackParameter(longOperand.Primitive, longOperand.Element, longOperand.Index, $"{longOperand.Name} (High)", (int)longOperand.Offset + 4, 0);
-		}
-		else if (longOperand.IsResolvedConstant)
-		{
 			operand = new Operand
 			{
-				Location = LocationType.Constant,
-				Primitive = PrimitiveType.Int32,
+				Primitive = longOperand.Primitive,
+				Location = LocationType.StackParameter,
 				Constant = ConstantType.Default,
-				ConstantUnsigned64 = (uint)(longOperand.ConstantUnsigned64 >> 32) & uint.MaxValue
+				Element = longOperand.Element,
+				Index = longOperand.Index,
+				Size = 0,
+				Name = $"{longOperand.Name} (High)",
+				ConstantSigned64 = longOperand.Offset + 4,
+				Type = longOperand.Type,
+				Parent = longOperand
 			};
 		}
 		else if (longOperand.IsVirtualRegister)
@@ -486,6 +630,7 @@ public sealed partial class Operand
 				Location = LocationType.VirtualRegister,
 				Primitive = PrimitiveType.Int32,
 				Index = index,
+				Parent = longOperand
 			};
 		}
 		else if (longOperand.IsLocalStack)
@@ -496,41 +641,44 @@ public sealed partial class Operand
 				Primitive = PrimitiveType.Int32,
 				Constant = ConstantType.Default,
 				IsResolved = false,
-				ConstantSigned64 = 4
+				ConstantSigned64 = 4,
+				Parent = longOperand
 			};
 		}
-		else if (longOperand.IsStaticField)
+		else if (longOperand.IsResolvedConstant)
 		{
-			//future
+			operand = CreateConstant32((uint)(longOperand.ConstantUnsigned64 >> 32) & uint.MaxValue);
+			operand.Parent = longOperand;
 		}
 
 		Debug.Assert(operand != null);
 
-		operand.LongParent = longOperand;
 		longOperand.High = operand;
 
 		return operand;
 	}
 
-	public static Operand CreateLow(Operand longOperand, int index)
+	public static Operand CreateLow(Operand longOperand, int index = 0)
 	{
-		Debug.Assert(longOperand.LongParent == null);
+		Debug.Assert(longOperand.Parent == null);
 		Debug.Assert(longOperand.Low == null);
 
 		Operand operand = null;
 
 		if (longOperand.IsParameter)
 		{
-			operand = CreateStackParameter(longOperand.Primitive, longOperand.Element, longOperand.Index, $"{longOperand.Name} (Low)", (int)longOperand.Offset, 0);
-		}
-		else if (longOperand.IsResolvedConstant)
-		{
 			operand = new Operand
 			{
-				Location = LocationType.Constant,
-				Primitive = PrimitiveType.Int32,
+				Primitive = longOperand.Primitive,
+				Location = LocationType.StackParameter,
 				Constant = ConstantType.Default,
-				ConstantUnsigned64 = longOperand.ConstantUnsigned64 & uint.MaxValue,
+				Element = longOperand.Element,
+				Index = longOperand.Index,
+				Size = 0,
+				Name = $"{longOperand.Name} (Low)",
+				ConstantSigned64 = longOperand.Offset,
+				Type = longOperand.Type,
+				Parent = longOperand
 			};
 		}
 		else if (longOperand.IsVirtualRegister)
@@ -540,6 +688,7 @@ public sealed partial class Operand
 				Location = LocationType.VirtualRegister,
 				Primitive = PrimitiveType.Int32,
 				Index = index,
+				Parent = longOperand
 			};
 		}
 		else if (longOperand.IsLocalStack)
@@ -552,17 +701,18 @@ public sealed partial class Operand
 				IsResolved = false,
 				ConstantSigned64 = 4,
 				Index = 0,
-				IsPinned = longOperand.IsPinned
+				IsPinned = longOperand.IsPinned,
+				Parent = longOperand
 			};
 		}
-		else if (longOperand.IsStaticField)
+		else if (longOperand.IsResolvedConstant)
 		{
-			//future
+			operand = CreateConstant32((uint)longOperand.ConstantUnsigned64);
+			operand.Parent = longOperand;
 		}
 
 		Debug.Assert(operand != null);
 
-		operand.LongParent = longOperand;
 		longOperand.Low = operand;
 
 		return operand;
@@ -677,24 +827,24 @@ public sealed partial class Operand
 
 				if (IsParameter)
 				{
-					if (!HasLongParent)
+					if (!HasParent)
 					{
 						sb.Append($" (p{Index})");
 					}
 					else
 					{
-						sb.Append($" (p{Index}<t{LongParent.Index}{(IsHigh ? "H" : "L")}>)");
+						sb.Append($" (p{Index}<t{Parent.Index}{(IsHigh ? "H" : "L")}>)");
 					}
 				}
 				else if (IsLocalStack)
 				{
-					if (!HasLongParent)
+					if (!HasParent)
 					{
 						sb.Append($" (t{Index})");
 					}
 					else
 					{
-						sb.Append($" (t{Index}<t{LongParent.Index}{(IsHigh ? "H" : "L")}>)");
+						sb.Append($" (t{Index}<t{Parent.Index}{(IsHigh ? "H" : "L")}>)");
 					}
 				}
 			}
@@ -705,13 +855,13 @@ public sealed partial class Operand
 		}
 		else if (IsVirtualRegister)
 		{
-			if (!HasLongParent)
+			if (!HasParent)
 			{
 				sb.Append($"v{Index}");
 			}
 			else
 			{
-				sb.Append($"(v{Index}<v{LongParent.Index}{(IsHigh ? "H" : "L")}>)");
+				sb.Append($"(v{Index}<v{Parent.Index}{(IsHigh ? "H" : "L")}>)");
 			}
 		}
 		else if (IsStaticField)
@@ -721,7 +871,7 @@ public sealed partial class Operand
 
 		sb.Append($" [{GetElementString()}]");
 
-		if (Primitive == PrimitiveType.ValueType)
+		if (Primitive == PrimitiveType.ValueType && Type != null)
 		{
 			sb.Append($" ({Type.FullName})");
 		}

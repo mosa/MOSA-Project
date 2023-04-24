@@ -48,7 +48,7 @@ public sealed class FinallyEnd : BaseExceptionTransform
 		var newBlocks = transform.CreateNewBlockContexts(targetcount, context.Label);
 		var exceptionCallBlock = newBlocks[0];
 
-		context.SetInstruction(IRInstruction.BranchObject, ConditionCode.NotEqual, null, exceptionVirtualRegister, transform.NullOperand, exceptionCallBlock.Block);
+		context.SetInstruction(IRInstruction.BranchObject, ConditionCode.NotEqual, null, exceptionVirtualRegister, Operand.NullObject, exceptionCallBlock.Block);
 		context.AppendInstruction(IRInstruction.Jmp, newBlocks[1].Block);
 
 		exceptionCallBlock.AppendInstruction(IRInstruction.MoveObject, transform.ExceptionRegister, exceptionVirtualRegister);
@@ -63,7 +63,7 @@ public sealed class FinallyEnd : BaseExceptionTransform
 				var target = targets[i];
 				var conditionBlock = newBlocks[i + 1];
 
-				conditionBlock.AppendInstruction(transform.BranchInstruction, ConditionCode.Equal, null, leaveTargetRegister, transform.CreateConstant32(target.Label), target);
+				conditionBlock.AppendInstruction(transform.BranchInstruction, ConditionCode.Equal, null, leaveTargetRegister, Operand.CreateConstant32(target.Label), target);
 				conditionBlock.AppendInstruction(IRInstruction.Jmp, newBlocks[i + 2].Block);
 			}
 		}
@@ -72,7 +72,7 @@ public sealed class FinallyEnd : BaseExceptionTransform
 
 		if (next != null)
 		{
-			finallyCallBlock.AppendInstruction(IRInstruction.MoveObject, transform.ExceptionRegister, transform.NullOperand);
+			finallyCallBlock.AppendInstruction(IRInstruction.MoveObject, transform.ExceptionRegister, Operand.NullObject);
 			finallyCallBlock.AppendInstruction(IRInstruction.MoveObject, transform.LeaveTargetRegister, leaveTargetRegister);
 			finallyCallBlock.AppendInstruction(IRInstruction.Jmp, transform.BasicBlocks.GetByLabel(next.HandlerStart));
 		}

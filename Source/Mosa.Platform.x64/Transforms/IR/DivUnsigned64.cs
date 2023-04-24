@@ -23,7 +23,7 @@ public sealed class DivUnsigned64 : BaseIRTransform
 		var v1 = transform.VirtualRegisters.Allocate64();
 		var v2 = transform.VirtualRegisters.Allocate64();
 
-		context.SetInstruction(X64.Mov64, v1, transform.Constant64_0);
+		context.SetInstruction(X64.Mov64, v1, Operand.Constant64_0);
 		context.AppendInstruction2(X64.Div64, result, v2, v1, operand1, operand2);
 	}
 }

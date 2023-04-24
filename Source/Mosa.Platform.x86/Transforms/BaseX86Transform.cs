@@ -23,7 +23,7 @@ namespace Mosa.Platform.x86.Transforms
 
 			var instruction = operand.IsR4 ? X86.MovssLoad : X86.MovsdLoad;
 
-			context.InsertBefore().SetInstruction(instruction, v1, label, transform.Constant32_0);
+			context.InsertBefore().SetInstruction(instruction, v1, label, Operand.Constant32_0);
 
 			return v1;
 		}
@@ -34,7 +34,7 @@ namespace Mosa.Platform.x86.Transforms
 
 			var v1 = transform.VirtualRegisters.AllocateR4();
 
-			context.InsertBefore().SetInstruction(X86.MovssLoad, v1, label, transform.Constant32_0);
+			context.InsertBefore().SetInstruction(X86.MovssLoad, v1, label, Operand.Constant32_0);
 
 			return v1;
 		}
@@ -45,7 +45,7 @@ namespace Mosa.Platform.x86.Transforms
 
 			var v1 = transform.VirtualRegisters.AllocateR8();
 
-			context.InsertBefore().SetInstruction(X86.MovsdLoad, v1, label, transform.Constant32_0);
+			context.InsertBefore().SetInstruction(X86.MovsdLoad, v1, label, Operand.Constant32_0);
 
 			return v1;
 		}

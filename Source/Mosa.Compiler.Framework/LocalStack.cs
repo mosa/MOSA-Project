@@ -96,14 +96,8 @@ public sealed class LocalStack : IEnumerable<Operand>
 	{
 		if (operand.Low == null && operand.High == null)
 		{
-			var low = Operand.CreateLow(operand, localStack.Count + 1);
-			var high = Operand.CreateHigh(operand, localStack.Count + 2);
-
-			if (operand.IsVirtualRegister)
-			{
-				localStack.Add(low);
-				localStack.Add(high);
-			}
+			Operand.CreateLow(operand, localStack.Count + 1);
+			Operand.CreateHigh(operand, localStack.Count + 2);
 		}
 	}
 

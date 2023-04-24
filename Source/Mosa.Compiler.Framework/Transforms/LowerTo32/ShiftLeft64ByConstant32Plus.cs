@@ -24,6 +24,6 @@ public sealed class ShiftLeft64ByConstant32Plus : BaseLower32Transform
 
 		context.SetInstruction(IRInstruction.GetLow32, v1, operand1);
 		context.AppendInstruction(IRInstruction.ShiftLeft32, v2, v1, transform.CreateConstant(shift - 32));
-		context.AppendInstruction(IRInstruction.To64, result, transform.Constant32_0, v2);
+		context.AppendInstruction(IRInstruction.To64, result, Operand.Constant32_0, v2);
 	}
 }

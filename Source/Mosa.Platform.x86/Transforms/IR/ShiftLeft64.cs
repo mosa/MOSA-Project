@@ -16,8 +16,8 @@ public sealed class ShiftLeft64 : BaseIRTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		transform.SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
-		transform.SplitLongOperand(context.Operand1, out var op1L, out var op1H);
+		transform.SplitOperand(context.Result, out var resultLow, out var resultHigh);
+		transform.SplitOperand(context.Operand1, out var op1L, out var op1H);
 
 		var count = context.Operand2;
 
@@ -32,16 +32,16 @@ public sealed class ShiftLeft64 : BaseIRTransform
 			// FUTURE: Optimization - Test32 and conditional moves are not necessary if the count is a resolved constant
 
 			context.AppendInstruction(X86.Mov32, v2, count);
-			context.AppendInstruction(X86.Test32, null, v2, transform.Constant32_32);
+			context.AppendInstruction(X86.Test32, null, v2, Operand.Constant32_32);
 			context.AppendInstruction(X86.CMov32, ConditionCode.NotEqual, resultHigh, resultHigh, v1);
-			context.AppendInstruction(X86.Mov32, resultLow, transform.Constant32_0);
+			context.AppendInstruction(X86.Mov32, resultLow, Operand.Constant32_0);
 			context.AppendInstruction(X86.CMov32, ConditionCode.Equal, resultLow, resultLow, v1);
 		}
 		else
 		{
-			context.AppendInstruction(X86.Test32, null, count, transform.Constant32_32);
+			context.AppendInstruction(X86.Test32, null, count, Operand.Constant32_32);
 			context.AppendInstruction(X86.CMov32, ConditionCode.NotEqual, resultHigh, resultHigh, v1);
-			context.AppendInstruction(X86.Mov32, resultLow, transform.Constant32_0);
+			context.AppendInstruction(X86.Mov32, resultLow, Operand.Constant32_0);
 			context.AppendInstruction(X86.CMov32, ConditionCode.Equal, resultLow, resultLow, v1);
 		}
 	}

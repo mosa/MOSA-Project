@@ -54,7 +54,7 @@ public abstract class BaseCompoundTransform : BaseTransform
 			else if (left >= 2)
 			{
 				// 16bit move
-				context.AppendInstruction(IRInstruction.LoadParamZeroExtend16x32, tmp, srcReg, index);
+				context.AppendInstruction(IRInstruction.LoadZeroExtend16x32, tmp, srcReg, index);
 				context.AppendInstruction(IRInstruction.Store16, null, dstReg, index, tmp);
 				i += 2;
 				continue;
@@ -62,7 +62,7 @@ public abstract class BaseCompoundTransform : BaseTransform
 			else
 			{
 				// 8bit move
-				context.AppendInstruction(IRInstruction.LoadParamZeroExtend8x32, tmp, srcReg, index);
+				context.AppendInstruction(IRInstruction.LoadZeroExtend8x32, tmp, srcReg, index);
 				context.AppendInstruction(IRInstruction.Store8, null, dstReg, index, tmp);
 				i += 1;
 				continue;

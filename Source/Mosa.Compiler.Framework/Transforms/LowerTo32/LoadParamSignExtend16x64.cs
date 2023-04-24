@@ -13,7 +13,7 @@ public sealed class LoadParamSignExtend16x64 : BaseLower32Transform
 		var result = context.Result;
 		var operand1 = context.Operand1;
 
-		transform.SplitLongOperand(operand1, out Operand op0Low, out _);
+		transform.SplitOperand(operand1, out Operand op0Low, out _);
 
 		var resultLow = transform.VirtualRegisters.Allocate32();
 		var resultHigh = transform.VirtualRegisters.Allocate32();

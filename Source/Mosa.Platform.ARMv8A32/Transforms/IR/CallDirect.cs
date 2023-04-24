@@ -22,7 +22,7 @@ public sealed class CallDirect : BaseIRTransform
 		{
 			operand1 = MoveConstantToRegister(transform, context, operand1);
 
-			context.SetInstruction(ARMv8A32.Add, transform.LinkRegister, transform.ProgramCounter, transform.Constant32_4);
+			context.SetInstruction(ARMv8A32.Add, transform.LinkRegister, transform.ProgramCounter, Operand.Constant32_4);
 			context.AppendInstruction(ARMv8A32.Mov, transform.ProgramCounter, operand1);
 		}
 		else
