@@ -9,7 +9,6 @@ using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.Common;
 using Mosa.Compiler.Framework.Trace;
-using Mosa.Compiler.MosaTypeSystem;
 using Priority_Queue;
 using static Mosa.Compiler.Framework.BaseMethodCompilerStage;
 

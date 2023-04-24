@@ -1,9 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;

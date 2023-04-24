@@ -184,55 +184,55 @@ public sealed partial class Operand
 
 	#region Static Constants
 
-	public static readonly Operand Constant32_0 = _CreateConstant32(0);
-	public static readonly Operand Constant32_1 = _CreateConstant32(1);
-	public static readonly Operand Constant32_2 = _CreateConstant32(2);
-	public static readonly Operand Constant32_3 = _CreateConstant32(3);
-	public static readonly Operand Constant32_4 = _CreateConstant32(4);
-	public static readonly Operand Constant32_8 = _CreateConstant32(8);
-	public static readonly Operand Constant32_15 = _CreateConstant32(15);
-	public static readonly Operand Constant32_16 = _CreateConstant32(16);
-	public static readonly Operand Constant32_24 = _CreateConstant32(24);
-	public static readonly Operand Constant32_31 = _CreateConstant32(31);
-	public static readonly Operand Constant32_32 = _CreateConstant32(32);
-	public static readonly Operand Constant32_64 = _CreateConstant32(64);
-	public static readonly Operand Constant32_FF = _CreateConstant32(0xFF);
-	public static readonly Operand Constant32_FFFF = _CreateConstant32(0xFFFF);
-	public static readonly Operand Constant32_FFFFFFFF = _CreateConstant32(0xFFFFFFFF);
+	public static readonly Operand Constant32_0 = CreateConstant32Internal(0);
+	public static readonly Operand Constant32_1 = CreateConstant32Internal(1);
+	public static readonly Operand Constant32_2 = CreateConstant32Internal(2);
+	public static readonly Operand Constant32_3 = CreateConstant32Internal(3);
+	public static readonly Operand Constant32_4 = CreateConstant32Internal(4);
+	public static readonly Operand Constant32_8 = CreateConstant32Internal(8);
+	public static readonly Operand Constant32_15 = CreateConstant32Internal(15);
+	public static readonly Operand Constant32_16 = CreateConstant32Internal(16);
+	public static readonly Operand Constant32_24 = CreateConstant32Internal(24);
+	public static readonly Operand Constant32_31 = CreateConstant32Internal(31);
+	public static readonly Operand Constant32_32 = CreateConstant32Internal(32);
+	public static readonly Operand Constant32_64 = CreateConstant32Internal(64);
+	public static readonly Operand Constant32_FF = CreateConstant32Internal(0xFF);
+	public static readonly Operand Constant32_FFFF = CreateConstant32Internal(0xFFFF);
+	public static readonly Operand Constant32_FFFFFFFF = CreateConstant32Internal(0xFFFFFFFF);
 
 	public static readonly Operand Constant32_0b1000 = Constant32_8;
-	public static readonly Operand Constant32_0b1001 = _CreateConstant32(0b1001);
-	public static readonly Operand Constant32_0b1010 = _CreateConstant32(0b1010);
-	public static readonly Operand Constant32_0b1011 = _CreateConstant32(0b1011);
-	public static readonly Operand Constant32_0b1100 = _CreateConstant32(0b1100);
-	public static readonly Operand Constant32_0b1101 = _CreateConstant32(0b1101);
-	public static readonly Operand Constant32_0b1110 = _CreateConstant32(0b1110);
+	public static readonly Operand Constant32_0b1001 = CreateConstant32Internal(0b1001);
+	public static readonly Operand Constant32_0b1010 = CreateConstant32Internal(0b1010);
+	public static readonly Operand Constant32_0b1011 = CreateConstant32Internal(0b1011);
+	public static readonly Operand Constant32_0b1100 = CreateConstant32Internal(0b1100);
+	public static readonly Operand Constant32_0b1101 = CreateConstant32Internal(0b1101);
+	public static readonly Operand Constant32_0b1110 = CreateConstant32Internal(0b1110);
 	public static readonly Operand Constant32_0b1111 = Constant32_15;
 
-	public static readonly Operand Constant32_TILDE_FF = _CreateConstant32(~(uint)0xFF);
-	public static readonly Operand Constant32_TILDE_FFFF = _CreateConstant32(~(uint)0xFFFF);
+	public static readonly Operand Constant32_TILDE_FF = CreateConstant32Internal(~(uint)0xFF);
+	public static readonly Operand Constant32_TILDE_FFFF = CreateConstant32Internal(~(uint)0xFFFF);
 
-	public static readonly Operand Constant64_0 = _CreateConstant64(0);
-	public static readonly Operand Constant64_1 = _CreateConstant64(1);
-	public static readonly Operand Constant64_2 = _CreateConstant64(2);
-	public static readonly Operand Constant64_3 = _CreateConstant64(3);
-	public static readonly Operand Constant64_4 = _CreateConstant64(4);
-	public static readonly Operand Constant64_8 = _CreateConstant64(8);
-	public static readonly Operand Constant64_15 = _CreateConstant64(15);
-	public static readonly Operand Constant64_16 = _CreateConstant64(16);
-	public static readonly Operand Constant64_24 = _CreateConstant64(24);
-	public static readonly Operand Constant64_31 = _CreateConstant64(31);
-	public static readonly Operand Constant64_32 = _CreateConstant64(32);
-	public static readonly Operand Constant64_64 = _CreateConstant64(64);
-	public static readonly Operand Constant64_FF = _CreateConstant64(0xFF);
-	public static readonly Operand Constant64_FFFF = _CreateConstant64(0xFFFF);
-	public static readonly Operand Constant64_FFFFFFFF = _CreateConstant64(0xFFFFFFFF);
+	public static readonly Operand Constant64_0 = CreateConstant64Internal(0);
+	public static readonly Operand Constant64_1 = CreateConstant64Internal(1);
+	public static readonly Operand Constant64_2 = CreateConstant64Internal(2);
+	public static readonly Operand Constant64_3 = CreateConstant64Internal(3);
+	public static readonly Operand Constant64_4 = CreateConstant64Internal(4);
+	public static readonly Operand Constant64_8 = CreateConstant64Internal(8);
+	public static readonly Operand Constant64_15 = CreateConstant64Internal(15);
+	public static readonly Operand Constant64_16 = CreateConstant64Internal(16);
+	public static readonly Operand Constant64_24 = CreateConstant64Internal(24);
+	public static readonly Operand Constant64_31 = CreateConstant64Internal(31);
+	public static readonly Operand Constant64_32 = CreateConstant64Internal(32);
+	public static readonly Operand Constant64_64 = CreateConstant64Internal(64);
+	public static readonly Operand Constant64_FF = CreateConstant64Internal(0xFF);
+	public static readonly Operand Constant64_FFFF = CreateConstant64Internal(0xFFFF);
+	public static readonly Operand Constant64_FFFFFFFF = CreateConstant64Internal(0xFFFFFFFF);
 
-	public static readonly Operand ConstantR4_0 = _CreateConstantR4(0f);
-	public static readonly Operand ConstantR4_1 = _CreateConstantR4(1f);
+	public static readonly Operand ConstantR4_0 = CreateConstantR4Internal(0f);
+	public static readonly Operand ConstantR4_1 = CreateConstantR4Internal(1f);
 
-	public static readonly Operand ConstantR8_0 = _CreateConstantR8(0d);
-	public static readonly Operand ConstantR8_1 = _CreateConstantR8(1d);
+	public static readonly Operand ConstantR8_0 = CreateConstantR8Internal(0d);
+	public static readonly Operand ConstantR8_1 = CreateConstantR8Internal(1d);
 
 	#endregion Static Constants
 
@@ -251,7 +251,7 @@ public sealed partial class Operand
 
 	#region Factory Methods - Constants
 
-	private static Operand _CreateConstant32(uint value)
+	private static Operand CreateConstant32Internal(uint value)
 	{
 		return new Operand
 		{
@@ -289,7 +289,7 @@ public sealed partial class Operand
 			default: break;
 		}
 
-		return _CreateConstant32(value);
+		return CreateConstant32Internal(value);
 	}
 
 	public static Operand CreateConstant32(int value)
@@ -297,7 +297,7 @@ public sealed partial class Operand
 		return CreateConstant32((uint)value);
 	}
 
-	private static Operand _CreateConstant64(ulong value)
+	private static Operand CreateConstant64Internal(ulong value)
 	{
 		return new Operand
 		{
@@ -329,7 +329,7 @@ public sealed partial class Operand
 			default: break;
 		}
 
-		return _CreateConstant64(value);
+		return CreateConstant64Internal(value);
 	}
 
 	public static Operand CreateConstant64(long value)
@@ -337,7 +337,7 @@ public sealed partial class Operand
 		return CreateConstant64((ulong)value);
 	}
 
-	private static Operand _CreateConstantR4(float value)
+	private static Operand CreateConstantR4Internal(float value)
 	{
 		return new Operand
 		{
@@ -357,10 +357,10 @@ public sealed partial class Operand
 			default: break;
 		}
 
-		return _CreateConstantR4(value);
+		return CreateConstantR4Internal(value);
 	}
 
-	private static Operand _CreateConstantR8(double value)
+	private static Operand CreateConstantR8Internal(double value)
 	{
 		return new Operand
 		{
@@ -380,7 +380,7 @@ public sealed partial class Operand
 			default: break;
 		}
 
-		return _CreateConstantR8(value);
+		return CreateConstantR8Internal(value);
 	}
 
 	public static Operand CreateConstant(float value)

@@ -3,7 +3,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Mosa.Compiler.Common;
-using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.Transforms.Call
