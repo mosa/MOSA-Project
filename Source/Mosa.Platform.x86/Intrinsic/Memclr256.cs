@@ -18,7 +18,7 @@ internal static partial class IntrinsicMethods
 		var offset16 = methodCompiler.CreateConstant(16);
 
 		context.SetInstruction(X86.PXor, v0, v0, v0);
-		context.AppendInstruction(X86.MovupsStore, dest, methodCompiler.Constant32_0, v0);
+		context.AppendInstruction(X86.MovupsStore, dest, Operand.Constant32_0, v0);
 		context.AppendInstruction(X86.MovupsStore, dest, offset16, v0);
 	}
 }

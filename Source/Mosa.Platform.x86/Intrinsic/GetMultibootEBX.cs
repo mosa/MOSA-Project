@@ -15,6 +15,6 @@ internal static partial class IntrinsicMethods
 	{
 		var MultibootEBX = Operand.CreateLabel(MultibootV1Stage.MultibootEBX, methodCompiler.Is32BitPlatform);
 
-		context.SetInstruction(IRInstruction.Load32, context.Result, MultibootEBX, methodCompiler.Constant32_0);
+		context.SetInstruction(IRInstruction.Load32, context.Result, MultibootEBX, Operand.Constant32_0);
 	}
 }

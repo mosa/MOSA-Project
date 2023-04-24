@@ -12,6 +12,6 @@ internal static partial class IntrinsicMethods
 	[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::Get16")]
 	private static void Get16(Context context, MethodCompiler methodCompiler)
 	{
-		context.SetInstruction(X86.MovzxLoad16, context.Result, context.Operand1, methodCompiler.Constant32_0);
+		context.SetInstruction(X86.MovzxLoad16, context.Result, context.Operand1, Operand.Constant32_0);
 	}
 }
