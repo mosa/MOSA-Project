@@ -42,11 +42,11 @@ public static class DelegatePatcher
 
 		var methodPointerField = GetField(methodCompiler.Method.DeclaringType, "methodPointer");
 		var methodPointerOffset = methodCompiler.TypeLayout.GetFieldOffset(methodPointerField);
-		var methodPointerOffsetOperand = methodCompiler.CreateConstant(methodPointerOffset);
+		var methodPointerOffsetOperand = Operand.CreateConstant(methodPointerOffset);
 
 		var instanceField = GetField(methodCompiler.Method.DeclaringType, "instance");
 		var instanceOffset = methodCompiler.TypeLayout.GetFieldOffset(instanceField);
-		var instanceOffsetOperand = methodCompiler.CreateConstant(instanceOffset);
+		var instanceOffsetOperand = Operand.CreateConstant(instanceOffset);
 
 		var context = new Context(CreateMethodStructure(methodCompiler));
 
@@ -87,11 +87,11 @@ public static class DelegatePatcher
 
 		var methodPointerField = GetField(methodCompiler.Method.DeclaringType, "methodPointer");
 		var methodPointerOffset = methodCompiler.TypeLayout.GetFieldOffset(methodPointerField);
-		var methodPointerOffsetOperand = methodCompiler.CreateConstant(methodPointerOffset);
+		var methodPointerOffsetOperand = Operand.CreateConstant(methodPointerOffset);
 
 		var instanceField = GetField(methodCompiler.Method.DeclaringType, "instance");
 		var instanceOffset = methodCompiler.TypeLayout.GetFieldOffset(instanceField);
-		var instanceOffsetOperand = methodCompiler.CreateConstant(instanceOffset);
+		var instanceOffsetOperand = Operand.CreateConstant(instanceOffset);
 
 		var b0 = new Context(CreateMethodStructure(methodCompiler));
 		var b1 = new Context(methodCompiler.BasicBlocks.CreateBlock());

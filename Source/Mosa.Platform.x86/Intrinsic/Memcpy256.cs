@@ -17,7 +17,7 @@ internal static partial class IntrinsicMethods
 
 		var v0 = methodCompiler.VirtualRegisters.Allocate32();
 		var v1 = methodCompiler.VirtualRegisters.Allocate32();
-		var offset16 = methodCompiler.CreateConstant(16);
+		var offset16 = Operand.Constant32_16;
 
 		context.SetInstruction(X86.MovupsLoad, v0, dest, Operand.Constant32_0);
 		context.AppendInstruction(X86.MovupsLoad, v1, dest, offset16);

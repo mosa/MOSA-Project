@@ -94,8 +94,8 @@ public class SparseConditionalConstantPropagationStage : BaseMethodCompilerStage
 			Debug.Assert(!target.IsFloatingPoint);
 
 			var constant = target.IsInt32
-				? CreateConstant32((uint)value)
-				: CreateConstant64(value);
+				? Operand.CreateConstant32((uint)value)
+				: Operand.CreateConstant64(value);
 
 			// for each statement T that uses operand, substituted c in statement T
 			foreach (var node in target.Uses.ToArray())

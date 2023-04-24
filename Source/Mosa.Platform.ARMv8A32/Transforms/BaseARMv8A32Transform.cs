@@ -272,14 +272,14 @@ namespace Mosa.Platform.ARMv8A32.Transforms
 
 				switch (value)
 				{
-					case 0.0f: return Operand.CreateConstant32(0b1000);
-					case 1.0f: return Operand.CreateConstant32(0b1001);
-					case 2.0f: return Operand.CreateConstant32(0b1010);
-					case 3.0f: return Operand.CreateConstant32(0b1011);
-					case 4.0f: return Operand.CreateConstant32(0b1100);
-					case 5.0f: return Operand.CreateConstant32(0b1101);
-					case 0.5f: return Operand.CreateConstant32(0b1110);
-					case 10.0f: return Operand.CreateConstant32(0b1111);
+					case 0.0f: return Operand.Constant32_0b1000;
+					case 1.0f: return Operand.Constant32_0b1001;
+					case 2.0f: return Operand.Constant32_0b1010;
+					case 3.0f: return Operand.Constant32_0b1011;
+					case 4.0f: return Operand.Constant32_0b1100;
+					case 5.0f: return Operand.Constant32_0b1101;
+					case 0.5f: return Operand.Constant32_0b1110;
+					case 10.0f: return Operand.Constant32_0b1111;
 				}
 			}
 			else if (operand.IsR4)
@@ -288,14 +288,14 @@ namespace Mosa.Platform.ARMv8A32.Transforms
 
 				switch (value)
 				{
-					case 0.0d: return Operand.CreateConstant32(0b1000);
-					case 1.0d: return Operand.CreateConstant32(0b1001);
-					case 2.0d: return Operand.CreateConstant32(0b1010);
-					case 3.0d: return Operand.CreateConstant32(0b1011);
-					case 4.0d: return Operand.CreateConstant32(0b1100);
-					case 5.0d: return Operand.CreateConstant32(0b1101);
-					case 0.5d: return Operand.CreateConstant32(0b1110);
-					case 10.0d: return Operand.CreateConstant32(0b1111);
+					case 0.0d: return Operand.Constant32_0b1000;
+					case 1.0d: return Operand.Constant32_0b1001;
+					case 2.0d: return Operand.Constant32_0b1010;
+					case 3.0d: return Operand.Constant32_0b1011;
+					case 4.0d: return Operand.Constant32_0b1100;
+					case 5.0d: return Operand.Constant32_0b1101;
+					case 0.5d: return Operand.Constant32_0b1110;
+					case 10.0d: return Operand.Constant32_0b1111;
 				}
 			}
 

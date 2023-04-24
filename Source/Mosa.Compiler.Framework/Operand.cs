@@ -200,12 +200,17 @@ public sealed partial class Operand
 	public static readonly Operand Constant32_FFFF = _CreateConstant32(0xFFFF);
 	public static readonly Operand Constant32_FFFFFFFF = _CreateConstant32(0xFFFFFFFF);
 
+	public static readonly Operand Constant32_0b1000 = Constant32_8;
 	public static readonly Operand Constant32_0b1001 = _CreateConstant32(0b1001);
 	public static readonly Operand Constant32_0b1010 = _CreateConstant32(0b1010);
 	public static readonly Operand Constant32_0b1011 = _CreateConstant32(0b1011);
 	public static readonly Operand Constant32_0b1100 = _CreateConstant32(0b1100);
 	public static readonly Operand Constant32_0b1101 = _CreateConstant32(0b1101);
 	public static readonly Operand Constant32_0b1110 = _CreateConstant32(0b1110);
+	public static readonly Operand Constant32_0b1111 = Constant32_15;
+
+	public static readonly Operand Constant32_TILDE_FF = _CreateConstant32(~(uint)0xFF);
+	public static readonly Operand Constant32_TILDE_FFFF = _CreateConstant32(~(uint)0xFFFF);
 
 	public static readonly Operand Constant64_0 = _CreateConstant64(0);
 	public static readonly Operand Constant64_1 = _CreateConstant64(1);
@@ -327,9 +332,9 @@ public sealed partial class Operand
 		return _CreateConstant64(value);
 	}
 
-	public static Operand CreateConstant64(int value)
+	public static Operand CreateConstant64(long value)
 	{
-		return CreateConstant64((uint)value);
+		return CreateConstant64((ulong)value);
 	}
 
 	private static Operand _CreateConstantR4(float value)

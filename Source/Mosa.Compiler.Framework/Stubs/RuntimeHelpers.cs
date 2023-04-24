@@ -18,10 +18,10 @@ internal static partial class StubMethods
 
 		// Move constant into return operand
 		var move = methodCompiler.Is32BitPlatform ? IRInstruction.Move32 : IRInstruction.Move64;
-		context.AppendInstruction(move, result, methodCompiler.CreateConstant(isReferenceOrContainsReferences ? 1 : 0));
+		context.AppendInstruction(move, result, isReferenceOrContainsReferences ? Operand.Constant32_1 : Operand.Constant32_0);
 
 		// Set return
-		var setReturn = methodCompiler.Is32BitPlatform ? (BaseIRInstruction)IRInstruction.SetReturn32 : IRInstruction.SetReturn64;
+		var setReturn = methodCompiler.Is32BitPlatform ? IRInstruction.SetReturn32 : IRInstruction.SetReturn64;
 		context.AppendInstruction(setReturn, null, result);
 
 		context.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);

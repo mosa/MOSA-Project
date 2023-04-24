@@ -12,6 +12,6 @@ internal static partial class IntrinsicMethods
 	{
 		var load = methodCompiler.Is32BitPlatform ? IRInstruction.Load32 : IRInstruction.Load64;
 
-		context.SetInstruction(load, context.Result, context.Operand1, methodCompiler.CreateConstant(methodCompiler.Architecture.NativePointerSize));
+		context.SetInstruction(load, context.Result, context.Operand1, Operand.CreateConstant32(methodCompiler.Architecture.NativePointerSize));
 	}
 }

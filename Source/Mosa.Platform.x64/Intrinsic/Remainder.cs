@@ -23,7 +23,7 @@ internal static partial class IntrinsicMethods
 			var xmm3 = methodCompiler.VirtualRegisters.AllocateR8();
 
 			context.SetInstruction(X64.Divsd, xmm1, dividend, divisor);
-			context.AppendInstruction(X64.Roundsd, xmm2, xmm1, methodCompiler.CreateConstant((byte)0x3));
+			context.AppendInstruction(X64.Roundsd, xmm2, xmm1, Operand.Constant64_3);
 			context.AppendInstruction(X64.Mulsd, xmm3, divisor, xmm2);
 			context.AppendInstruction(X64.Subsd, result, dividend, xmm3);
 		}
@@ -34,7 +34,7 @@ internal static partial class IntrinsicMethods
 			var xmm3 = methodCompiler.VirtualRegisters.AllocateR4();
 
 			context.SetInstruction(X64.Divss, xmm1, dividend, divisor);
-			context.AppendInstruction(X64.Roundss, xmm2, xmm1, methodCompiler.CreateConstant((byte)0x3));
+			context.AppendInstruction(X64.Roundss, xmm2, xmm1, Operand.Constant64_3);
 			context.AppendInstruction(X64.Mulss, xmm3, divisor, xmm2);
 			context.AppendInstruction(X64.Subss, result, dividend, xmm3);
 		}

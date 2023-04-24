@@ -1169,7 +1169,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	private bool Constant32(Context context, Stack<StackEntry> stack, int value)
 	{
 		var result = MethodCompiler.VirtualRegisters.Allocate32();
-		context.AppendInstruction(IRInstruction.Move32, result, CreateConstant32(value));
+		context.AppendInstruction(IRInstruction.Move32, result, Operand.CreateConstant32(value));
 		PushStack(stack, new StackEntry(result));
 		return true;
 	}
@@ -1177,7 +1177,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	private bool Constant64(Context context, Stack<StackEntry> stack, long value)
 	{
 		var result = MethodCompiler.VirtualRegisters.Allocate64();
-		context.AppendInstruction(IRInstruction.Move64, result, CreateConstant64(value));
+		context.AppendInstruction(IRInstruction.Move64, result, Operand.CreateConstant64(value));
 		PushStack(stack, new StackEntry(result));
 		return true;
 	}
@@ -1185,7 +1185,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	private bool ConstantR4(Context context, Stack<StackEntry> stack, float value)
 	{
 		var result = MethodCompiler.VirtualRegisters.AllocateR4();
-		context.AppendInstruction(IRInstruction.MoveR4, result, CreateConstantR4(value));
+		context.AppendInstruction(IRInstruction.MoveR4, result, Operand.CreateConstantR4(value));
 		PushStack(stack, new StackEntry(result));
 		return true;
 	}
@@ -1193,7 +1193,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	private bool ConstantR8(Context context, Stack<StackEntry> stack, double value)
 	{
 		var result = MethodCompiler.VirtualRegisters.AllocateR8();
-		context.AppendInstruction(IRInstruction.MoveR8, result, CreateConstantR8(value));
+		context.AppendInstruction(IRInstruction.MoveR8, result, Operand.CreateConstantR8(value));
 		PushStack(stack, new StackEntry(result));
 		return true;
 	}
@@ -1598,7 +1598,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 				var address = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
 
 				context.AppendInstruction(IRInstruction.AddressOf, address, entry.Operand);
-				context.AppendInstruction(IRInstruction.Box, result, methodTable, address, CreateConstant32(typeSize));
+				context.AppendInstruction(IRInstruction.Box, result, methodTable, address, Operand.CreateConstant32(typeSize));
 			}
 		}
 
@@ -1933,7 +1933,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 				{
 					var v1 = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.ConvertR4ToI32, v1, entry.Operand);
-					context.AppendInstruction(IRInstruction.And32, result, v1, CreateConstant32(0xFF));
+					context.AppendInstruction(IRInstruction.And32, result, v1, Operand.Constant32_FF);
 					return true;
 				}
 
@@ -1941,7 +1941,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 				{
 					var v1 = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.ConvertR8ToI32, v1, entry.Operand);
-					context.AppendInstruction(IRInstruction.And32, result, v1, CreateConstant32(0xFF));
+					context.AppendInstruction(IRInstruction.And32, result, v1, Operand.Constant32_FF);
 					return true;
 				}
 
@@ -1977,7 +1977,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 				{
 					var v1 = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.ConvertR4ToI32, v1, entry.Operand);
-					context.AppendInstruction(IRInstruction.And32, result, v1, CreateConstant32(0xFFFF));
+					context.AppendInstruction(IRInstruction.And32, result, v1, Operand.Constant32_FFFF);
 					return true;
 				}
 
@@ -1985,7 +1985,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 				{
 					var v1 = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.ConvertR8ToI32, v1, entry.Operand);
-					context.AppendInstruction(IRInstruction.And32, result, v1, CreateConstant32(0xFFFF));
+					context.AppendInstruction(IRInstruction.And32, result, v1, Operand.Constant32_FFFF);
 					return true;
 				}
 
@@ -2192,14 +2192,14 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		switch (entry.PrimitiveType)
 		{
 			case PrimitiveType.Int32:
-				context.AppendInstruction(IRInstruction.And32, result, entry.Operand, CreateConstant32(0xFF));
+				context.AppendInstruction(IRInstruction.And32, result, entry.Operand, Operand.Constant32_FF);
 				return true;
 
 			case PrimitiveType.Int64:
 				{
 					var v1 = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.Truncate64x32, v1, entry.Operand);
-					context.AppendInstruction(IRInstruction.And32, result, v1, CreateConstant32(0xFF));
+					context.AppendInstruction(IRInstruction.And32, result, v1, Operand.Constant32_FF);
 					return true;
 				}
 
@@ -2207,7 +2207,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 				{
 					var v1 = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.ConvertR4ToU32, v1, entry.Operand);
-					context.AppendInstruction(IRInstruction.And32, result, v1, CreateConstant32(0xFF));
+					context.AppendInstruction(IRInstruction.And32, result, v1, Operand.Constant32_FF);
 					return true;
 				}
 
@@ -2215,7 +2215,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 				{
 					var v1 = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.ConvertR8ToU32, v1, entry.Operand);
-					context.AppendInstruction(IRInstruction.And32, result, v1, CreateConstant32(0xFF));
+					context.AppendInstruction(IRInstruction.And32, result, v1, Operand.Constant32_FF);
 					return true;
 				}
 
@@ -2234,14 +2234,14 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		switch (entry.PrimitiveType)
 		{
 			case PrimitiveType.Int32:
-				context.AppendInstruction(IRInstruction.And32, result, entry.Operand, CreateConstant32(0xFFFF));
+				context.AppendInstruction(IRInstruction.And32, result, entry.Operand, Operand.Constant32_FFFF);
 				return true;
 
 			case PrimitiveType.Int64:
 				{
 					var v1 = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.Truncate64x32, v1, entry.Operand);
-					context.AppendInstruction(IRInstruction.And32, result, v1, CreateConstant32(0xFFFF));
+					context.AppendInstruction(IRInstruction.And32, result, v1, Operand.Constant32_FFFF);
 					return true;
 				}
 
@@ -2249,7 +2249,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 				{
 					var v1 = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.ConvertR4ToU32, v1, entry.Operand);
-					context.AppendInstruction(IRInstruction.And32, result, v1, CreateConstant32(0xFFFF));
+					context.AppendInstruction(IRInstruction.And32, result, v1, Operand.Constant32_FFFF);
 
 					return true;
 				}
@@ -2258,7 +2258,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 				{
 					var v1 = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.ConvertR8ToI32, v1, entry.Operand);
-					context.AppendInstruction(IRInstruction.And32, result, v1, CreateConstant32(0xFFFF));
+					context.AppendInstruction(IRInstruction.And32, result, v1, Operand.Constant32_FFFF);
 
 					return true;
 				}
@@ -2362,8 +2362,8 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			case PrimitiveType.Int32:
 				{
 					var v1 = MethodCompiler.VirtualRegisters.Allocate32();
-					context.AppendInstruction(IRInstruction.And32, v1, entry.Operand, CreateConstant32(0xFF));
-					context.AppendInstruction(IRInstruction.Or32, result, v1, CreateConstant32(~0xFF));
+					context.AppendInstruction(IRInstruction.And32, v1, entry.Operand, Operand.Constant32_FF);
+					context.AppendInstruction(IRInstruction.Or32, result, v1, Operand.CreateConstant32(~0xFF));
 					return true;
 				}
 
@@ -2372,8 +2372,8 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 					var v1 = MethodCompiler.VirtualRegisters.Allocate32();
 					var v2 = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.Truncate64x32, v1, entry.Operand);
-					context.AppendInstruction(IRInstruction.And32, v2, v1, CreateConstant32(0xFF));
-					context.AppendInstruction(IRInstruction.Or32, result, v2, CreateConstant32(~0xFF));
+					context.AppendInstruction(IRInstruction.And32, v2, v1, Operand.Constant32_FF);
+					context.AppendInstruction(IRInstruction.Or32, result, v2, Operand.CreateConstant32(~0xFF));
 					return true;
 				}
 
@@ -2396,8 +2396,8 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			case PrimitiveType.Int32:
 				{
 					var v1 = MethodCompiler.VirtualRegisters.Allocate32();
-					context.AppendInstruction(IRInstruction.And32, v1, entry.Operand, CreateConstant32(0xFFFF));
-					context.AppendInstruction(IRInstruction.Or32, result, v1, CreateConstant32(~0xFFFF));
+					context.AppendInstruction(IRInstruction.And32, v1, entry.Operand, Operand.Constant32_FFFF);
+					context.AppendInstruction(IRInstruction.Or32, result, v1, Operand.CreateConstant32(~0xFFFF));
 					return true;
 				}
 
@@ -2406,8 +2406,8 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 					var v1 = MethodCompiler.VirtualRegisters.Allocate32();
 					var v2 = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.Truncate64x32, v1, entry.Operand);
-					context.AppendInstruction(IRInstruction.And32, v2, v1, CreateConstant32(0xFFFF));
-					context.AppendInstruction(IRInstruction.Or32, result, v2, CreateConstant32(~0xFFFF));
+					context.AppendInstruction(IRInstruction.And32, v2, v1, Operand.Constant32_FFFF);
+					context.AppendInstruction(IRInstruction.Or32, result, v2, Operand.CreateConstant32(~0xFFFF));
 					return true;
 				}
 
@@ -2476,13 +2476,13 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		switch (entry.PrimitiveType)
 		{
 			case PrimitiveType.Int32:
-				context.AppendInstruction(IRInstruction.And32, result, entry.Operand, CreateConstant32(0xFF));
+				context.AppendInstruction(IRInstruction.And32, result, entry.Operand, Operand.Constant32_FF);
 				return true;
 
 			case PrimitiveType.Int64:
 				var v1 = MethodCompiler.VirtualRegisters.Allocate32();
 				context.AppendInstruction(IRInstruction.Truncate64x32, v1, entry.Operand);
-				context.AppendInstruction(IRInstruction.And32, result, v1, CreateConstant32(0xFF));
+				context.AppendInstruction(IRInstruction.And32, result, v1, Operand.Constant32_FF);
 				return true;
 
 			default:
@@ -2502,13 +2502,13 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		switch (entry.PrimitiveType)
 		{
 			case PrimitiveType.Int32:
-				context.AppendInstruction(IRInstruction.And32, result, entry.Operand, CreateConstant32(0xFFFF));
+				context.AppendInstruction(IRInstruction.And32, result, entry.Operand, Operand.Constant32_FFFF);
 				return true;
 
 			case PrimitiveType.Int64:
 				var v1 = MethodCompiler.VirtualRegisters.Allocate32();
 				context.AppendInstruction(IRInstruction.Truncate64x32, v1, entry.Operand);
-				context.AppendInstruction(IRInstruction.And32, result, v1, CreateConstant32(0xFFFF));
+				context.AppendInstruction(IRInstruction.And32, result, v1, Operand.Constant32_FFFF);
 				return true;
 
 			default:
@@ -3350,7 +3350,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		}
 		else
 		{
-			var size = CreateConstant32(TypeLayout.GetTypeSize(type));
+			var size = Operand.CreateConstant32(TypeLayout.GetTypeSize(type));
 			context.AppendInstruction(IRInstruction.MemorySet, null, entry.Operand, ConstantZero, size);
 		}
 
@@ -3373,7 +3373,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		else
 		{
 			var slot = TypeLayout.GetInterfaceSlot(type);
-			context.AppendInstruction(IRInstruction.IsInstanceOfInterfaceType, result, CreateConstant32(slot), entry.Operand);
+			context.AppendInstruction(IRInstruction.IsInstanceOfInterfaceType, result, Operand.CreateConstant32(slot), entry.Operand);
 		}
 
 		PushStack(stack, new StackEntry(result));
@@ -3504,7 +3504,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var elementOffset = CalculateArrayElementOffset(context, type, index);
 		var totalElementOffset = CalculateTotalArrayOffset(context, elementOffset);
 
-		context.AppendInstruction(Is32BitPlatform ? (BaseIRInstruction)IRInstruction.Add32 : IRInstruction.Add64, result, array, totalElementOffset);
+		context.AppendInstruction(Is32BitPlatform ? IRInstruction.Add32 : IRInstruction.Add64, result, array, totalElementOffset);
 
 		PushStack(stack, new StackEntry(result));
 
@@ -3558,7 +3558,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			return true;
 		}
 
-		var fixedOffset = CreateConstant32(offset);
+		var fixedOffset = Operand.CreateConstant32(offset);
 
 		if (fieldStacktype == PrimitiveType.ValueType)
 		{
@@ -3657,9 +3657,9 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		else
 		{
 			if (Is32BitPlatform)
-				context.AppendInstruction(IRInstruction.Add32, result, entry.Operand, CreateConstant32(offset));
+				context.AppendInstruction(IRInstruction.Add32, result, entry.Operand, Operand.CreateConstant32(offset));
 			else
-				context.AppendInstruction(IRInstruction.Add64, result, entry.Operand, CreateConstant64(offset));
+				context.AppendInstruction(IRInstruction.Add64, result, entry.Operand, Operand.CreateConstant64(offset));
 		}
 
 		PushStack(stack, new StackEntry(result));
@@ -4078,7 +4078,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			case PrimitiveType.R4:
 				{
 					var result = MethodCompiler.VirtualRegisters.AllocateR4();
-					var zero = CreateConstantR4(0);
+					var zero = Operand.CreateConstantR4(0);
 					context.AppendInstruction(IRInstruction.SubR4, result, zero, entry.Operand);
 					PushStack(stack, new StackEntry(result));
 					return true;
@@ -4087,7 +4087,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			case PrimitiveType.R8:
 				{
 					var result = MethodCompiler.VirtualRegisters.AllocateR8();
-					var zero = CreateConstantR8(0);
+					var zero = Operand.CreateConstantR8(0);
 					context.AppendInstruction(IRInstruction.SubR8, result, zero, entry.Operand);
 					PushStack(stack, new StackEntry(result));
 					return true;
@@ -4122,7 +4122,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		var elementSize = MethodCompiler.GetSize(arrayType);
 		var methodTable = GetMethodTablePointer(arrayType);
-		var size = CreateConstant32(elementSize);
+		var size = Operand.CreateConstant32(elementSize);
 		var result = MethodCompiler.VirtualRegisters.AllocateObject();
 
 		context.AppendInstruction(IRInstruction.NewArray, result, methodTable, size, elements.Operand);
@@ -4165,7 +4165,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			var result = MethodCompiler.VirtualRegisters.AllocateObject();
 
 			var methodTable = GetMethodTablePointer(classType);
-			var size = CreateConstant32(TypeLayout.GetTypeSize(classType));
+			var size = Operand.CreateConstant32(TypeLayout.GetTypeSize(classType));
 
 			context.AppendInstruction(IRInstruction.NewObject, result, methodTable, size);
 			operands.Insert(0, result);
@@ -4633,7 +4633,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		var size = type.IsPointer ? NativePointerSize : MethodCompiler.TypeLayout.GetTypeSize(type);
 
-		context.AppendInstruction(IRInstruction.Move32, result, CreateConstant32(size));
+		context.AppendInstruction(IRInstruction.Move32, result, Operand.CreateConstant32(size));
 
 		PushStack(stack, new StackEntry(result));
 
@@ -4710,7 +4710,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var offset = TypeLayout.GetFieldOffset(field);
 		var type = field.FieldType;
 
-		var offsetOperand = CreateConstant32(offset);
+		var offsetOperand = Operand.CreateConstant32(offset);
 
 		switch (entry1.PrimitiveType)
 		{
@@ -5552,7 +5552,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		if (Is32BitPlatform)
 		{
 			var elementOffset = MethodCompiler.VirtualRegisters.Allocate32();
-			var elementSize = CreateConstant32(size);
+			var elementSize = Operand.CreateConstant32(size);
 
 			context.AppendInstruction(IRInstruction.MulUnsigned32, elementOffset, index, elementSize);
 
@@ -5561,7 +5561,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		else
 		{
 			var elementOffset = MethodCompiler.VirtualRegisters.Allocate64();
-			var elementSize = CreateConstant64(size);
+			var elementSize = Operand.CreateConstant64(size);
 
 			context.AppendInstruction(IRInstruction.MulUnsigned64, elementOffset, index, elementSize);
 
@@ -5575,7 +5575,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	/// <returns>Base address for array elements.</returns>
 	private Operand CalculateTotalArrayOffset(Context context, Operand elementOffset)
 	{
-		var fixedOffset = CreateConstant32(NativePointerSize);
+		var fixedOffset = Operand.CreateConstant32(NativePointerSize);
 		var arrayElement = Is32BitPlatform ?
 			MethodCompiler.VirtualRegisters.Allocate32()
 			: MethodCompiler.VirtualRegisters.Allocate64();

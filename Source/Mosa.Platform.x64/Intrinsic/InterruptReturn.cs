@@ -18,7 +18,7 @@ internal static partial class IntrinsicMethods
 
 		context.SetInstruction(X64.Mov64, esp, v0);
 		context.AppendInstruction(X64.Popad);
-		context.AppendInstruction(X64.Add64, esp, esp, methodCompiler.CreateConstant(8));
+		context.AppendInstruction(X64.Add64, esp, esp, Operand.Constant64_8);
 		context.AppendInstruction(X64.Sti);
 		context.AppendInstruction(X64.IRetd);
 

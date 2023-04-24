@@ -47,15 +47,15 @@ internal static partial class IntrinsicMethods
 		context.SetInstruction(X86.Cli);
 		if (irq <= 7 || irq >= 16 | irq == 9) // For IRQ 8, 10, 11, 12, 13, 14 the cpu will automatically pushed the error code
 		{
-			context.AppendInstruction(X86.Push32, null, methodCompiler.CreateConstant(0));
+			context.AppendInstruction(X86.Push32, null, Operand.Constant32_0);
 		}
-		context.AppendInstruction(X86.Push32, null, methodCompiler.CreateConstant(irq));
+		context.AppendInstruction(X86.Push32, null, Operand.CreateConstant32(irq));
 		context.AppendInstruction(X86.Pushad);
 		context.AppendInstruction(X86.Push32, null, esp);
 		context.AppendInstruction(X86.Call, null, interrupt);
 		context.AppendInstruction(X86.Pop32, esp);
 		context.AppendInstruction(X86.Popad);
-		context.AppendInstruction(X86.Add32, esp, esp, methodCompiler.CreateConstant(8));
+		context.AppendInstruction(X86.Add32, esp, esp, Operand.Constant32_8);
 		context.AppendInstruction(X86.Sti);
 		context.AppendInstruction(X86.IRetd);
 	}

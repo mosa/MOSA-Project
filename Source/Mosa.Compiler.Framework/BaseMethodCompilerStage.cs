@@ -804,11 +804,6 @@ public abstract class BaseMethodCompilerStage
 			|| instruction == IRInstruction.PhiR8;
 	}
 
-	public static bool IsSSAForm(Operand operand)
-	{
-		return operand.Definitions.Count == 1;
-	}
-
 	public List<BasicBlock> AddMissingBlocksIfRequired(List<BasicBlock> blocks)
 	{
 		if (blocks.Count == BasicBlocks.Count)
@@ -894,40 +889,6 @@ public abstract class BaseMethodCompilerStage
 	}
 
 	#endregion Helper Methods
-
-	#region Constant Helper Methods
-
-	protected Operand CreateConstant32(int value)
-	{
-		return Operand.CreateConstant32((uint)value);
-	}
-
-	protected Operand CreateConstant32(uint value)
-	{
-		return Operand.CreateConstant32(value);
-	}
-
-	protected Operand CreateConstant64(long value)
-	{
-		return Operand.CreateConstant64((ulong)value);
-	}
-
-	protected Operand CreateConstant64(ulong value)
-	{
-		return Operand.CreateConstant64(value);
-	}
-
-	protected Operand CreateConstantR4(float value)
-	{
-		return Operand.CreateConstantR4(value);
-	}
-
-	protected Operand CreateConstantR8(double value)
-	{
-		return Operand.CreateConstantR8(value);
-	}
-
-	#endregion Constant Helper Methods
 
 	public void AllStopWithException(string exception)
 	{

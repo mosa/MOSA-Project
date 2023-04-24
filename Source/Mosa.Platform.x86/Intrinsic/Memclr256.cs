@@ -15,7 +15,7 @@ internal static partial class IntrinsicMethods
 		var dest = context.Operand1;
 
 		var v0 = Operand.CreateCPURegisterNativeInteger(CPURegister.XMM0, methodCompiler.Is32BitPlatform);
-		var offset16 = methodCompiler.CreateConstant(16);
+		var offset16 = Operand.Constant32_16;
 
 		context.SetInstruction(X86.PXor, v0, v0, v0);
 		context.AppendInstruction(X86.MovupsStore, dest, Operand.Constant32_0, v0);

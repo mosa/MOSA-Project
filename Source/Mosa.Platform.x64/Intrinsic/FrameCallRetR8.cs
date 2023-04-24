@@ -25,7 +25,7 @@ internal static partial class IntrinsicMethods
 		context.AppendInstruction(IRInstruction.Gen, xmm0);
 
 		//context.AppendInstruction(X64.Movdi64ss, eax, xmm0);        // FIXME: X64
-		context.AppendInstruction(X64.Pextrd64, edx, xmm0, methodCompiler.CreateConstant((byte)1));
+		context.AppendInstruction(X64.Pextrd64, edx, xmm0, Operand.Constant64_1);
 
 		context.AppendInstruction(X64.Mov64, op0L, eax);
 		context.AppendInstruction(X64.Mov64, op0H, edx);
