@@ -33,9 +33,9 @@ public sealed class WrMSR : BaseTransform
 		var operand2 = context.Operand2;
 		var operand3 = context.Operand3;
 
-		var eax = Operand.CreateCPURegister32( CPURegister.EAX);
-		var edx = Operand.CreateCPURegister32( CPURegister.EDX);
-		var ecx = Operand.CreateCPURegister32( CPURegister.ECX);
+		var eax = Operand.CreateCPURegister32(CPURegister.EAX);
+		var edx = Operand.CreateCPURegister32(CPURegister.EDX);
+		var ecx = Operand.CreateCPURegister32(CPURegister.ECX);
 
 		context.SetInstruction(X86.Mov32, ecx, operand1);
 		context.AppendInstruction(X86.Mov32, eax, operand2);

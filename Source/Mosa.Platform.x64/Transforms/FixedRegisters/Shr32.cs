@@ -25,7 +25,7 @@ public sealed class Shr32 : BaseTransform
 		var operand2 = context.Operand2;
 		var result = context.Result;
 
-		var rcx = Operand.CreateCPURegister32( CPURegister.RCX);
+		var rcx = Operand.CreateCPURegister32(CPURegister.RCX);
 
 		context.SetInstruction(X64.Mov64, rcx, operand2);
 		context.AppendInstruction(X64.Shr32, result, operand1, rcx);

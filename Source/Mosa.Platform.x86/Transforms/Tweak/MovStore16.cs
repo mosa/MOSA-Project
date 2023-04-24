@@ -29,19 +29,19 @@ public sealed class MovStore16 : BaseTransform
 
 		if (dest.Register != CPURegister.EAX && offset.Register != CPURegister.EAX)
 		{
-			temporaryRegister = Operand.CreateCPURegister32( CPURegister.EAX);
+			temporaryRegister = Operand.CreateCPURegister32(CPURegister.EAX);
 		}
 		else if (dest.Register != CPURegister.EBX && offset.Register != CPURegister.EBX)
 		{
-			temporaryRegister = Operand.CreateCPURegister32( CPURegister.EBX);
+			temporaryRegister = Operand.CreateCPURegister32(CPURegister.EBX);
 		}
 		else if (dest.Register != CPURegister.ECX && offset.Register != CPURegister.ECX)
 		{
-			temporaryRegister = Operand.CreateCPURegister32( CPURegister.ECX);
+			temporaryRegister = Operand.CreateCPURegister32(CPURegister.ECX);
 		}
 		else
 		{
-			temporaryRegister = Operand.CreateCPURegister32( CPURegister.EDX);
+			temporaryRegister = Operand.CreateCPURegister32(CPURegister.EDX);
 		}
 
 		context.SetInstruction2(X86.XChg32, temporaryRegister, value, value, temporaryRegister);

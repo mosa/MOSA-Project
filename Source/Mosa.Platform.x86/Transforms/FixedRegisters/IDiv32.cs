@@ -37,8 +37,8 @@ public sealed class IDiv32 : BaseTransform
 		var result = context.Result;
 		var result2 = context.Result2;
 
-		var eax = Operand.CreateCPURegister32( CPURegister.EAX);
-		var edx = Operand.CreateCPURegister32( CPURegister.EDX);
+		var eax = Operand.CreateCPURegister32(CPURegister.EAX);
+		var edx = Operand.CreateCPURegister32(CPURegister.EDX);
 
 		context.SetInstruction(X86.Mov32, edx, operand1);
 		context.AppendInstruction(X86.Mov32, eax, operand2);

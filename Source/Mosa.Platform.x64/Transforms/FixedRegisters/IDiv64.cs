@@ -37,8 +37,8 @@ public sealed class IDiv64 : BaseTransform
 		var result = context.Result;
 		var result2 = context.Result2;
 
-		var rax = Operand.CreateCPURegister64( CPURegister.RAX);
-		var rdx = Operand.CreateCPURegister64( CPURegister.RDX);
+		var rax = Operand.CreateCPURegister64(CPURegister.RAX);
+		var rdx = Operand.CreateCPURegister64(CPURegister.RDX);
 
 		context.SetInstruction(X64.Mov64, rdx, operand1);
 		context.AppendInstruction(X64.Mov64, rax, operand2);
