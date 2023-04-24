@@ -23,7 +23,7 @@ internal static partial class IntrinsicMethods
 		context.SetInstruction(X86.Mov32, eax, comparand);
 		context.AppendInstruction(X86.Mov32, v1, value);
 		context.AppendInstruction(X86.Lock);
-		context.AppendInstruction(X86.CmpXChgLoad32, eax, eax, location, methodCompiler.Constant32_0, v1);
+		context.AppendInstruction(X86.CmpXChgLoad32, eax, eax, location, Operand.Constant32_0, v1);
 		context.AppendInstruction(X86.Mov32, result, eax);
 	}
 }

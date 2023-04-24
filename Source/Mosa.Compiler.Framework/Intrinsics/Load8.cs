@@ -16,7 +16,7 @@ internal static partial class IntrinsicMethods
 
 		if (context.OperandCount == 1)
 		{
-			context.SetInstruction(instruction, context.Result, context.Operand1, methodCompiler.Constant64_0);
+			context.SetInstruction(instruction, context.Result, context.Operand1, Operand.Constant64_0);
 		}
 		else if (context.OperandCount == 2)
 		{

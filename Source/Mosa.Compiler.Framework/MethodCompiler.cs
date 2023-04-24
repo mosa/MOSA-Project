@@ -138,26 +138,6 @@ public sealed class MethodCompiler
 	public Operand ConstantZero { get; }
 
 	/// <summary>
-	/// Gets the 32-bit constant zero.
-	/// </summary>
-	public Operand Constant32_0 { get; }
-
-	/// <summary>
-	/// Gets the 64-bit constant zero.
-	/// </summary>
-	public Operand Constant64_0 { get; }
-
-	/// <summary>
-	/// Gets the R4 constant zero.
-	/// </summary>
-	public Operand ConstantR4_0 { get; }
-
-	/// <summary>
-	/// Gets the R4 constant zero.
-	/// </summary>
-	public Operand ConstantR8_0 { get; }
-
-	/// <summary>
 	/// Gets or sets a value indicating whether this instance is execute pipeline.
 	/// </summary>
 	public bool IsExecutePipeline { get; set; }
@@ -257,12 +237,7 @@ public sealed class MethodCompiler
 		VirtualRegisters = new VirtualRegisters(Is32BitPlatform);
 		Parameters = new Parameters(Is32BitPlatform);
 
-		Constant32_0 = CreateConstant((uint)0);
-		Constant64_0 = CreateConstant((ulong)0);
-		ConstantR4_0 = CreateConstant(0.0f);
-		ConstantR8_0 = CreateConstant(0.0d);
-
-		ConstantZero = Is32BitPlatform ? Constant32_0 : Constant64_0;
+		ConstantZero = Is32BitPlatform ? Operand.Constant32_0 : Operand.Constant64_0;
 
 		ThreadID = threadID;
 
@@ -661,7 +636,7 @@ public sealed class MethodCompiler
 			else
 			{
 				operandLow = operand;
-				operandHigh = Constant32_0;
+				operandHigh = Operand.Constant32_0;
 				return;
 			}
 		}
@@ -684,7 +659,7 @@ public sealed class MethodCompiler
 			if (operand.IsInt32)
 			{
 				operandLow = operand;
-				operandHigh = Constant32_0;
+				operandHigh = Operand.Constant32_0;
 				return;
 			}
 			else if (operand.IsInt64)
@@ -699,7 +674,7 @@ public sealed class MethodCompiler
 			if (operand.IsInt32)
 			{
 				operandLow = operand;
-				operandHigh = Constant32_0;
+				operandHigh = Operand.Constant32_0;
 				return;
 			}
 			else if (operand.IsInt64)
@@ -712,7 +687,7 @@ public sealed class MethodCompiler
 		else if (operand.IsManagedPointer)
 		{
 			operandLow = operand;
-			operandHigh = Constant32_0;
+			operandHigh = Operand.Constant32_0;
 			return;
 		}
 

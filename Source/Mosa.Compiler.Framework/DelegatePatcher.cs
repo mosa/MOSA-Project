@@ -127,7 +127,7 @@ public static class DelegatePatcher
 		b0.AppendInstruction(loadInstruction, opMethod, thisOperand, methodPointerOffsetOperand);
 		b0.AppendInstruction(loadInstruction, opInstance, thisOperand, instanceOffsetOperand);
 		b0.AppendInstruction(IRInstruction.CompareObject, ConditionCode.Equal, opCompare, opInstance, Operand.NullObject);
-		b0.AppendInstruction(branchInstruction, ConditionCode.Equal, null, opCompare, methodCompiler.Constant64_0, b2.Block);
+		b0.AppendInstruction(branchInstruction, ConditionCode.Equal, null, opCompare, Operand.Constant64_0, b2.Block);
 		b0.AppendInstruction(IRInstruction.Jmp, b1.Block);
 
 		var operands = new List<Operand>(methodCompiler.Parameters.Count + 1);

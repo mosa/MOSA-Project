@@ -169,26 +169,6 @@ public abstract class BaseMethodCompilerStage
 	protected Operand ConstantZero => MethodCompiler.ConstantZero;
 
 	/// <summary>
-	/// Gets the 32-bit constant zero.
-	/// </summary>
-	protected Operand Constant32_0 => MethodCompiler.Constant32_0;
-
-	/// <summary>
-	/// Gets the 64-bit constant zero.
-	/// </summary>
-	protected Operand Constant64_0 => MethodCompiler.Constant64_0;
-
-	/// <summary>
-	/// Gets the floating point R4 constant zero.
-	/// </summary>
-	protected Operand ConstantR4_0 => MethodCompiler.ConstantR4_0;
-
-	/// <summary>
-	/// Gets the floating point R8 constant zero.
-	/// </summary>
-	protected Operand ConstantR8_0 => MethodCompiler.ConstantR8_0;
-
-	/// <summary>
 	/// Gets the stack frame.
 	/// </summary>
 	protected Operand StackFrame => MethodCompiler.Compiler.StackFrame;

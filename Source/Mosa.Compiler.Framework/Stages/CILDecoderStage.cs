@@ -973,23 +973,23 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 					break;
 
 				case PrimitiveType.Int32:
-					prologue.AppendInstruction(IRInstruction.Move32, local, Constant32_0);
+					prologue.AppendInstruction(IRInstruction.Move32, local, Operand.Constant32_0);
 					break;
 
 				case PrimitiveType.Int64:
-					prologue.AppendInstruction(IRInstruction.Move64, local, Constant64_0);
+					prologue.AppendInstruction(IRInstruction.Move64, local, Operand.Constant64_0);
 					break;
 
 				case PrimitiveType.R4:
-					prologue.AppendInstruction(IRInstruction.MoveR4, local, ConstantR4_0);
+					prologue.AppendInstruction(IRInstruction.MoveR4, local, Operand.ConstantR4_0);
 					break;
 
 				case PrimitiveType.R8:
-					prologue.AppendInstruction(IRInstruction.MoveR8, local, ConstantR8_0);
+					prologue.AppendInstruction(IRInstruction.MoveR8, local, Operand.ConstantR8_0);
 					break;
 
 				default:
-					prologue.AppendInstruction(IRInstruction.Move32, local, Constant32_0);
+					prologue.AppendInstruction(IRInstruction.Move32, local, Operand.Constant32_0);
 					break;
 			}
 		}
@@ -1634,7 +1634,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 				{
 					var result = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.CompareR4, conditionCode, result, entry1.Operand, entry2.Operand);
-					context.AppendInstruction(IRInstruction.Branch32, ConditionCode.NotEqual, null, result, Constant32_0, block);
+					context.AppendInstruction(IRInstruction.Branch32, ConditionCode.NotEqual, null, result, Operand.Constant32_0, block);
 					return true;
 				}
 
@@ -1642,7 +1642,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 				{
 					var result = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.CompareR8, conditionCode, result, entry1.Operand, entry2.Operand);
-					context.AppendInstruction(IRInstruction.Branch32, ConditionCode.NotEqual, null, result, Constant32_0, block);
+					context.AppendInstruction(IRInstruction.Branch32, ConditionCode.NotEqual, null, result, Operand.Constant32_0, block);
 					return true;
 				}
 
@@ -1677,12 +1677,12 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		switch (entry.PrimitiveType)
 		{
 			case PrimitiveType.Int32:
-				context.AppendInstruction(IRInstruction.Branch32, conditionCode, null, entry.Operand, Constant32_0, block);
+				context.AppendInstruction(IRInstruction.Branch32, conditionCode, null, entry.Operand, Operand.Constant32_0, block);
 				context.AppendInstruction(IRInstruction.Jmp, nextblock);
 				return true;
 
 			case PrimitiveType.Int64:
-				context.AppendInstruction(IRInstruction.Branch64, conditionCode, null, entry.Operand, Constant64_0, block);
+				context.AppendInstruction(IRInstruction.Branch64, conditionCode, null, entry.Operand, Operand.Constant64_0, block);
 				context.AppendInstruction(IRInstruction.Jmp, nextblock);
 				return true;
 
@@ -3720,14 +3720,14 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			if (Is32BitPlatform)
 			{
 				var result = MethodCompiler.VirtualRegisters.Allocate32();
-				context.AppendInstruction(IRInstruction.Load32, result, entry.Operand, ConstantZero);
+				context.AppendInstruction(IRInstruction.Load32, result, entry.Operand, Operand.Constant32_0);
 				PushStack(stack, new StackEntry(result));
 				return true;
 			}
 			else
 			{
 				var result = MethodCompiler.VirtualRegisters.Allocate64();
-				context.AppendInstruction(IRInstruction.Load64, result, entry.Operand, ConstantZero);
+				context.AppendInstruction(IRInstruction.Load64, result, entry.Operand, Operand.Constant64_0);
 				PushStack(stack, new StackEntry(result));
 				return true;
 			}
@@ -4096,7 +4096,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			case PrimitiveType.Int32:
 				{
 					var result = MethodCompiler.VirtualRegisters.Allocate32();
-					context.AppendInstruction(IRInstruction.Sub32, result, Constant32_0, entry.Operand);
+					context.AppendInstruction(IRInstruction.Sub32, result, Operand.Constant32_0, entry.Operand);
 					PushStack(stack, new StackEntry(result));
 					return true;
 				}
@@ -4104,7 +4104,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			case PrimitiveType.Int64:
 				{
 					var result = MethodCompiler.VirtualRegisters.Allocate64();
-					context.AppendInstruction(IRInstruction.Sub64, result, Constant64_0, entry.Operand);
+					context.AppendInstruction(IRInstruction.Sub64, result, Operand.Constant64_0, entry.Operand);
 					PushStack(stack, new StackEntry(result));
 					return true;
 				}
