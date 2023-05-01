@@ -173,7 +173,14 @@ public sealed class MetadataStage : BaseCompilerStage
 		writer.Write(((uint)type.TypeCode << 24) + (uint)type.TypeAttributes, NativePointerSize);
 
 		// 4. Size
-		writer.Write(TypeLayout.GetTypeSize(type), NativePointerSize);
+		var size =
+			type.HasOpenGenericParams
+			|| type.IsInterface
+			|| type.IsVoid
+			|| (!type.IsReferenceType && !type.IsValueType)
+			? 0 : TypeLayout.GetTypeLayoutSize(type);
+
+		writer.Write(size, NativePointerSize);
 
 		// 5. Pointer to Assembly Definition
 		Linker.Link(LinkType.AbsoluteAddress, NativePatchType, typeDefinitionSymbol, writer.GetPosition(), assemblyTableSymbol, 0);
@@ -465,7 +472,8 @@ public sealed class MetadataStage : BaseCompilerStage
 			else
 			{
 				writer2.WriteZeroBytes(NativePointerSize);
-				writer2.Write(TypeLayout.GetFieldOffset(field), NativePointerSize);
+				var offset = field.HasOpenGenericParams || field.IsStatic ? 0 : TypeLayout.GetFieldOffset(field);
+				writer2.Write(offset, NativePointerSize);
 			}
 
 			// Add pointer to field list

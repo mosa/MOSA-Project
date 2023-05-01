@@ -792,31 +792,7 @@ public sealed class MethodCompiler
 		};
 	}
 
-	public PrimitiveType GetPrimitiveType(MosaType type)
-	{
-		if (type.IsReferenceType)
-			return PrimitiveType.Object;
-		else if (type.IsManagedPointer)
-			return PrimitiveType.ManagedPointer;
-		else if (type.IsI1 || type.IsI2 || type.IsI4 || type.IsU1 || type.IsU2 || type.IsU4 || type.IsChar || type.IsBoolean)
-			return PrimitiveType.Int32;
-		else if (type.IsI8 || type.IsU8)
-			return PrimitiveType.Int64;
-		else if (type.IsR8)
-			return PrimitiveType.R8;
-		else if (type.IsR4)
-			return PrimitiveType.R4;
-		else if (type.IsI)
-			return Is32BitPlatform ? PrimitiveType.Int32 : PrimitiveType.Int64;
-		else if (type.IsPointer)
-			return Is32BitPlatform ? PrimitiveType.Int32 : PrimitiveType.Int64;
-		else if (type.IsValueType)
-			return PrimitiveType.ValueType;
-
-		throw new CompilerException($"Cannot translate to PrimitiveType from Type: {type}");
-	}
-
-	public ElementType GetElementType(MosaType type)
+	public static ElementType GetElementType(MosaType type, bool is32BitPlatform)
 	{
 		if (type.IsReferenceType)
 			return ElementType.Object;
@@ -845,20 +821,58 @@ public sealed class MethodCompiler
 		else if (type.IsChar)
 			return ElementType.U2;
 		else if (type.IsI)
-			return Is32BitPlatform ? ElementType.I4 : ElementType.I8;
+			return is32BitPlatform ? ElementType.I4 : ElementType.I8;
 		else if (type.IsManagedPointer)
 			return ElementType.ManagedPointer;
 		else if (type.IsPointer)
-			return Is32BitPlatform ? ElementType.I4 : ElementType.I8;
+			return is32BitPlatform ? ElementType.I4 : ElementType.I8;
+		else if (type.IsTypedRef)
+			return is32BitPlatform ? ElementType.I4 : ElementType.I8;
+		else if (type.IsValueType)
+			return ElementType.ValueType;
 
 		throw new CompilerException($"Cannot translate to ElementType from Type: {type}");
+	}
+
+	public static PrimitiveType GetPrimitiveType(MosaType type, bool is32BitPlatform)
+	{
+		if (type.IsReferenceType)
+			return PrimitiveType.Object;
+		else if (type.IsManagedPointer)
+			return PrimitiveType.ManagedPointer;
+		else if (type.IsI1 || type.IsI2 || type.IsI4 || type.IsU1 || type.IsU2 || type.IsU4 || type.IsChar || type.IsBoolean)
+			return PrimitiveType.Int32;
+		else if (type.IsI8 || type.IsU8)
+			return PrimitiveType.Int64;
+		else if (type.IsR8)
+			return PrimitiveType.R8;
+		else if (type.IsR4)
+			return PrimitiveType.R4;
+		else if (type.IsI)
+			return is32BitPlatform ? PrimitiveType.Int32 : PrimitiveType.Int64;
+		else if (type.IsPointer)
+			return is32BitPlatform ? PrimitiveType.Int32 : PrimitiveType.Int64;
+		else if (type.IsValueType)
+			return PrimitiveType.ValueType;
+
+		throw new CompilerException($"Cannot translate to PrimitiveType from Type: {type}");
+	}
+
+	public PrimitiveType GetPrimitiveType(MosaType type)
+	{
+		return GetPrimitiveType(type, Is32BitPlatform);
+	}
+
+	public ElementType GetElementType(MosaType type)
+	{
+		return GetElementType(type, Is32BitPlatform);
 	}
 
 	#endregion Type Conversion Methods
 
 	#region Size Size Methods
 
-	public uint GetSize(ElementType elementType)
+	public static uint GetSize(ElementType elementType, bool is32BitPlatform)
 	{
 		return elementType switch
 		{
@@ -872,13 +886,18 @@ public sealed class MethodCompiler
 			ElementType.U8 => 8,
 			ElementType.R4 => 4,
 			ElementType.R8 => 8,
-			ElementType.Object => Is32BitPlatform ? 4 : 8u,
-			ElementType.ManagedPointer => Is32BitPlatform ? 4 : 8u,
+			ElementType.Object => is32BitPlatform ? 4 : 8u,
+			ElementType.ManagedPointer => is32BitPlatform ? 4 : 8u,
 			_ => throw new CompilerException($"Cannot get size of {elementType}"),
 		};
 	}
 
-	public uint GetSize(PrimitiveType primitiveType)
+	public uint GetSize(ElementType elementType)
+	{
+		return GetSize(elementType, Is32BitPlatform);
+	}
+
+	public static uint GetSize(PrimitiveType primitiveType, bool is32BitPlatform)
 	{
 		return primitiveType switch
 		{
@@ -886,21 +905,21 @@ public sealed class MethodCompiler
 			PrimitiveType.Int64 => 8,
 			PrimitiveType.R4 => 4,
 			PrimitiveType.R8 => 8,
-			PrimitiveType.Object => Is32BitPlatform ? 4 : 8u,
-			PrimitiveType.ManagedPointer => Is32BitPlatform ? 4 : 8u,
+			PrimitiveType.Object => is32BitPlatform ? 4 : 8u,
+			PrimitiveType.ManagedPointer => is32BitPlatform ? 4 : 8u,
 			_ => throw new CompilerException($"Cannot get size of {primitiveType}"),
 		};
 	}
 
-	public uint GetSize(MosaType type)
+	public uint GetSize(PrimitiveType primitiveType)
 	{
-		return TypeLayout.GetTypeSize(type);
+		return GetSize(primitiveType, Is32BitPlatform);
 	}
 
 	public uint GetSize(Operand operand)
 	{
 		return operand.IsValueType
-			? TypeLayout.GetTypeSize(operand.Type)
+			? TypeLayout.GetTypeLayoutSize(operand.Type)
 			: GetSize(operand.Primitive);
 	}
 

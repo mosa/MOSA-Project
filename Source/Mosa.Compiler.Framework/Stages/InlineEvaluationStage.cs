@@ -226,7 +226,7 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 			|| returnType.IsUI8
 			|| returnType.IsR8
 			|| MosaTypeLayout.IsUnderlyingPrimitive(returnType)
-			|| TypeLayout.GetTypeSize(returnType) <= 8))
+			|| TypeLayout.GetTypeLayoutSize(returnType) <= 8))
 			return true;
 
 		// FUTURE: Don't hardcode namepsace

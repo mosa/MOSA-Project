@@ -198,7 +198,7 @@ public class TypeSystemTree
 		{
 			var fieldsNode = new TreeNode("Fields");
 			if (ShowSizes)
-				fieldsNode.Text = fieldsNode.Text + " (Count: " + type.Fields.Count + " - Size: " + TypeLayout.GetTypeSize(type) + ")";
+				fieldsNode.Text = fieldsNode.Text + " (Count: " + type.Fields.Count + " - Size: " + TypeLayout.GetTypeLayoutSize(type) + ")";
 
 			typeNode.Nodes.Add(fieldsNode);
 

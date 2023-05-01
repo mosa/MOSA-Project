@@ -13,10 +13,10 @@ internal static partial class StubMethods
 	public static void Unsafe_SizeOf(Context context, MethodCompiler methodCompiler)
 	{
 		var type = methodCompiler.Method.GenericArguments[0];
-		var size = methodCompiler.GetSize(type);
+		var size = methodCompiler.TypeLayout.GetTypeLayoutSize(type);
 		var opReturn = methodCompiler.VirtualRegisters.Allocate32();
 
-		context.AppendInstruction(IRInstruction.Move32, opReturn, Operand.CreateConstant(size));
+		context.AppendInstruction(IRInstruction.Move32, opReturn, Operand.CreateConstant32(size));
 		context.AppendInstruction(IRInstruction.SetReturn32, null, opReturn);
 		context.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);
 	}

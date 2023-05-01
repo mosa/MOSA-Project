@@ -383,16 +383,6 @@ public sealed partial class Operand
 		return CreateConstantR8Internal(value);
 	}
 
-	public static Operand CreateConstant(float value)
-	{
-		return CreateConstantR4(value);
-	}
-
-	public static Operand CreateConstant(double value)
-	{
-		return CreateConstantR8(value);
-	}
-
 	public static Operand CreateLabel(string label, bool Is32Platform)
 	{
 		return new Operand

@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.MosaTypeSystem;
@@ -39,7 +40,7 @@ public class MosaTypeLayout
 	/// <summary>
 	/// Holds the size of each type
 	/// </summary>
-	private readonly Dictionary<MosaType, uint> typeSizes = new Dictionary<MosaType, uint>();
+	private readonly Dictionary<MosaType, uint> typeLayoutSize = new Dictionary<MosaType, uint>();
 
 	/// <summary>
 	/// Holds the size of each field
@@ -55,31 +56,6 @@ public class MosaTypeLayout
 	/// Holds a list of methods for each type
 	/// </summary>
 	private readonly Dictionary<MosaType, List<MosaMethod>> typeMethodTables = new Dictionary<MosaType, List<MosaMethod>>();
-
-	/// <summary>
-	/// The method stack sizes
-	/// </summary>
-	//private readonly Dictionary<MosaMethod, int> methodStackSizes = new Dictionary<MosaMethod, int>(new MosaMethodFullNameComparer());
-
-	/// <summary>
-	/// The parameter offsets
-	/// </summary>
-	//private readonly Dictionary<MosaMethod, List<int>> parameterOffsets = new Dictionary<MosaMethod, List<int>>(new MosaMethodFullNameComparer());
-
-	/// <summary>
-	/// The parameter sizes
-	/// </summary>
-	//private readonly Dictionary<MosaMethod, List<int>> parameterSizes = new Dictionary<MosaMethod, List<int>>();
-
-	/// <summary>
-	/// The parameter stack size
-	/// </summary>
-	//private readonly Dictionary<MosaMethod, int> parameterStackSize = new Dictionary<MosaMethod, int>();
-
-	/// <summary>
-	/// The parameter stack size
-	/// </summary>
-	//private readonly Dictionary<MosaMethod, int> methodReturnSize = new Dictionary<MosaMethod, int>();
 
 	/// <summary>
 	/// The parameter stack size
@@ -129,6 +105,8 @@ public class MosaTypeLayout
 	/// <value>The type system.</value>
 	public TypeSystem TypeSystem { get; }
 
+	public bool Is32BitPlatform { get; }
+
 	/// <summary>
 	/// Gets the size of the native pointer.
 	/// </summary>
@@ -166,13 +144,15 @@ public class MosaTypeLayout
 	/// <param name="typeSystem">The type system.</param>
 	/// <param name="nativePointerSize">Size of the native pointer.</param>
 	/// <param name="nativePointerAlignment">The native pointer alignment.</param>
-	public MosaTypeLayout(TypeSystem typeSystem, uint nativePointerSize, uint nativePointerAlignment)
+	public MosaTypeLayout(TypeSystem typeSystem, bool is32BitPlatform, uint nativePointerSize, uint nativePointerAlignment)
 	{
 		Debug.Assert(nativePointerSize is 4 or 8);
 
+		TypeSystem = typeSystem;
+		Is32BitPlatform = is32BitPlatform;
+
 		NativePointerAlignment = nativePointerAlignment;
 		NativePointerSize = nativePointerSize;
-		TypeSystem = typeSystem;
 
 		ResolveLayouts();
 	}
@@ -224,15 +204,15 @@ public class MosaTypeLayout
 	/// </summary>
 	/// <param name="type">The type.</param>
 	/// <returns></returns>
-	public uint GetTypeSize(MosaType type)
+	public uint GetTypeLayoutSize(MosaType type)
 	{
 		lock (_lock)
 		{
 			ResolveType(type);
 
-			typeSizes.TryGetValue(type, out var size);
+			Debug.Assert(typeLayoutSize.ContainsKey(type));
 
-			return size;
+			return typeLayoutSize[type];
 		}
 	}
 
@@ -260,9 +240,9 @@ public class MosaTypeLayout
 		{
 			ResolveType(field.DeclaringType);
 
-			fieldOffsets.TryGetValue(field, out var offset);
+			Debug.Assert(fieldOffsets.ContainsKey(field));
 
-			return offset;
+			return fieldOffsets[field];
 		}
 	}
 
@@ -273,10 +253,7 @@ public class MosaTypeLayout
 	/// <returns></returns>
 	public List<MosaMethod> GetMethodTable(MosaType type)
 	{
-		if (type.IsModule)
-			return null;
-
-		if (type.BaseType == null && !type.IsInterface && type.FullName != "System.Object")   // ghost types like generic params, function ptr, etc.
+		if (type.IsModule || type.HasOpenGenericParams)
 			return null;
 
 		if (type.Modifier != null)   // For types having modifiers, use the method table of element type instead.
@@ -285,7 +262,10 @@ public class MosaTypeLayout
 		lock (_lock)
 		{
 			ResolveType(type);
-			return typeMethodTables[type];
+
+			typeMethodTables.TryGetValue(type, out var table);
+
+			return table;
 		}
 	}
 
@@ -372,7 +352,7 @@ public class MosaTypeLayout
 				return value;
 			}
 
-			return __ResolveMethodParameters(method);
+			return ResolveMethodParameters(method);
 		}
 	}
 
@@ -409,26 +389,28 @@ public class MosaTypeLayout
 		return true;
 	}
 
+	public static List<MosaField> GetImmediateNonStaticFields(MosaType type)
+	{
+		return type.Fields.Where(x => !x.IsStatic).ToList();
+	}
+
 	public static MosaType GetUnderlyingType(MosaType type)
 	{
-		if (type.IsValueType)
+		if (type.IsValueType && type.Fields != null)
 		{
-			if (type.Fields != null)
-			{
-				var nonStaticFields = type.Fields.Where(x => !x.IsStatic).ToList();
+			var nonStaticFields = GetImmediateNonStaticFields(type);
 
-				if (nonStaticFields.Count != 1)
-					return type;
+			if (nonStaticFields.Count != 1)
+				return type;
 
-				var basetype = nonStaticFields[0].FieldType;
+			var basetype = nonStaticFields[0].FieldType;
 
-				if (!basetype.IsUserValueType)
-					return basetype;
+			if (!basetype.IsUserValueType)
+				return basetype;
 
-				var result = GetUnderlyingType(basetype);
+			var result = GetUnderlyingType(basetype);
 
-				return result;
-			}
+			return result;
 		}
 
 		return type;
@@ -437,6 +419,41 @@ public class MosaTypeLayout
 	#endregion Public Methods
 
 	#region Internal - Layout
+
+	private static bool HasNonStaticField(MosaType type)
+	{
+		foreach (var field in type.Fields)
+		{
+			if (!field.IsStatic)
+				return true;
+		}
+
+		if (type.BaseType == null)
+			return false;
+
+		return HasNonStaticField(type.BaseType);
+	}
+
+	private static List<MosaField> GetAllNonStaticFields(MosaType type)
+	{
+		var fields = new List<MosaField>();
+		var at = type;
+
+		while (at != null)
+		{
+			foreach (var field in at.Fields)
+			{
+				if (field.IsStatic)
+					continue;
+
+				fields.Add(field);
+			}
+
+			at = at.BaseType;
+		}
+
+		return fields;
+	}
 
 	/// <summary>
 	/// Resolves the layouts.
@@ -448,14 +465,6 @@ public class MosaTypeLayout
 		{
 			ResolveType(type);
 		}
-
-		//foreach (var type in TypeSystem.AllTypes)
-		//{
-		//	foreach (var method in type.Methods)
-		//	{
-		//		__ResolveMethodParameters(method);
-		//	}
-		//}
 	}
 
 	/// <summary>
@@ -464,10 +473,7 @@ public class MosaTypeLayout
 	/// <param name="type">The type.</param>
 	private void ResolveType(MosaType type)
 	{
-		if (type.IsModule)
-			return;
-
-		if (type.BaseType == null && !type.IsInterface && type.FullName != "System.Object")   // ghost types like generic params, function ptr, etc.
+		if (type.IsModule || type.HasOpenGenericParams)
 			return;
 
 		if (type.Modifier != null)   // For types having modifiers, resolve the element type instead.
@@ -500,27 +506,105 @@ public class MosaTypeLayout
 			ResolveInterfaceType(interfaceType);
 		}
 
-		if (type.GetPrimitiveSize(NativePointerSize) != null)
+		CreateMethodTable(type);
+
+		if (type.IsVoid)
+			return;
+
+		var layoutSize = type.IsExplicitLayout
+			? ComputeExplicitLayout(type)
+			: ComputeSequentialLayout(type);
+
+		typeLayoutSize.Add(type, layoutSize);
+	}
+
+	private uint ComputeSequentialLayout(MosaType type)
+	{
+		var typeSize = 0u;
+
+		if (type.BaseType != null && !type.IsValueType)
 		{
-			typeSizes[type] = type.GetPrimitiveSize(NativePointerSize).Value;
+			typeSize = GetTypeLayoutSize(type.BaseType);
 		}
-		else if (type.IsExplicitLayout)
+
+		var nonStaticFields = GetImmediateNonStaticFields(type);
+		var packingSize = (uint?)type.PackingSize ?? NativePointerAlignment;
+
+		foreach (var field in nonStaticFields)
 		{
-			ComputeExplicitLayout(type);
+			// Set the field address
+			fieldOffsets.Add(field, typeSize);
+
+			var fieldSize = ComputeFieldSize(field);
+			typeSize += fieldSize;
+
+			// Pad the field in the type
+			if (packingSize != 0)
+			{
+				var padding = (packingSize - typeSize % packingSize) % packingSize;
+				typeSize += padding;
+			}
+		}
+
+		return type.ClassSize is null or -1 ? typeSize : (uint)type.ClassSize;
+	}
+
+	private uint ComputeExplicitLayout(MosaType type)
+	{
+		var nonStaticFields = GetImmediateNonStaticFields(type);
+		var size = 0u;
+
+		foreach (var field in nonStaticFields)
+		{
+			var offset = field.Offset;
+
+			if (offset == null)
+				continue;
+
+			fieldOffsets.Add(field, offset.Value);
+
+			var fieldSize = ComputeFieldSize(field);
+
+			size = Math.Max(size, fieldSize + offset.Value);
+		}
+
+		return type.ClassSize is null or -1 ? size : (uint)type.ClassSize;
+	}
+
+	private uint ComputeFieldSize(MosaField field)
+	{
+		if (fieldSizes.TryGetValue(field, out var size))
+			return size;
+
+		ResolveType(field.DeclaringType);
+		ResolveType(field.FieldType);
+
+		size = GetSize(field.FieldType);
+
+		fieldSizes.Add(field, size);
+
+		return size;
+	}
+
+	private uint GetSize(MosaType type)
+	{
+		var elementType = MethodCompiler.GetElementType(type, Is32BitPlatform);
+
+		if (elementType == ElementType.ValueType)
+		{
+			return typeLayoutSize[type];
 		}
 		else
 		{
-			ComputeSequentialLayout(type);
+			return MethodCompiler.GetSize(elementType, Is32BitPlatform);
 		}
-
-		CreateMethodTable(type);
 	}
 
 	/// <summary>
 	/// Resolves the method parameters.
 	/// </summary>
 	/// <param name="method">The method.</param>
-	private MethodInfo __ResolveMethodParameters(MosaMethod method)
+	private MethodInfo ResolveMethodParameters(MosaMethod method)
 	{
 		if (method.HasOpenGenericParams)
 			return null;
@@ -529,7 +613,7 @@ public class MosaTypeLayout
 			return null;
 
 		var parameters = method.Signature.Parameters;
-		uint stacksize = 0;
+		var stacksize = 0u;
 
 		var offsets = new List<uint>(parameters.Count + (method.HasThis ? 1 : 0));
 		var sizes = new List<uint>(parameters.Count + (method.HasThis ? 1 : 0));
@@ -544,7 +628,7 @@ public class MosaTypeLayout
 
 		foreach (var parameter in parameters)
 		{
-			var size = parameter.ParameterType.IsValueType ? GetTypeSize(parameter.ParameterType) : NativePointerAlignment;
+			var size = parameter.ParameterType.IsValueType ? GetTypeLayoutSize(parameter.ParameterType) : NativePointerAlignment;
 
 			offsets.Add(stacksize);
 			sizes.Add(size);
@@ -553,13 +637,13 @@ public class MosaTypeLayout
 		}
 
 		var returnType = method.Signature.ReturnType;
-		uint returnSize = 0;
+		var returnSize = 0u;
 
 		if (!returnType.IsVoid)
 		{
 			ResolveType(returnType);
 
-			typeSizes.TryGetValue(returnType, out returnSize);
+			typeLayoutSize.TryGetValue(returnType, out returnSize);
 		}
 
 		var methodInfo = new MethodInfo
@@ -596,103 +680,6 @@ public class MosaTypeLayout
 
 		interfaces.Add(type);
 		interfaceSlots.Add(type, (uint)interfaceSlots.Count);
-	}
-
-	private void ComputeSequentialLayout(MosaType type)
-	{
-		Debug.Assert(type != null, "No type given.");
-
-		if (typeSizes.ContainsKey(type))
-			return;
-
-		// Instance size
-		uint typeSize = 0;
-
-		// Receives the size/alignment
-		var packingSize = (uint?)type.PackingSize ?? NativePointerAlignment;
-
-		if (type.BaseType != null)
-		{
-			if (!type.IsValueType)
-			{
-				typeSize = GetTypeSize(type.BaseType);
-			}
-		}
-
-		foreach (var field in type.Fields)
-		{
-			if (!field.IsStatic)
-			{
-				// Set the field address
-				fieldOffsets.Add(field, typeSize);
-
-				var fieldSize = GetFieldSize(field);
-				typeSize += fieldSize;
-
-				// Pad the field in the type
-				if (packingSize != 0)
-				{
-					var padding = (packingSize - typeSize % packingSize) % packingSize;
-					typeSize += padding;
-				}
-			}
-		}
-
-		typeSizes.Add(type, type.ClassSize is null or -1 ? typeSize : (uint)type.ClassSize);
-	}
-
-	/// <summary>
-	/// Applies the explicit layout to the given type.
-	/// </summary>
-	/// <param name="type">The type.</param>
-	private void ComputeExplicitLayout(MosaType type)
-	{
-		Debug.Assert(type != null, "No type given.");
-
-		//Debug.Assert(type.BaseType.LayoutSize != 0, @"Type size not set for explicit layout.");
-
-		uint size = 0;
-		foreach (var field in type.Fields)
-		{
-			if (field.Offset == null)
-				continue;
-
-			var offset = field.Offset;
-			fieldOffsets.Add(field, offset.Value);
-			size = Math.Max(size, offset.Value + ComputeFieldSize(field));
-
-			// Explicit layout assigns a physical offset from the start of the structure
-			// to the field. We just assign this offset.
-			Debug.Assert(fieldSizes[field] != 0, "Non-static field doesn't have layout!");
-		}
-
-		typeSizes.Add(type, type.ClassSize is null or -1 ? size : (uint)type.ClassSize);
-	}
-
-	private uint ComputeFieldSize(MosaField field)
-	{
-		if (fieldSizes.TryGetValue(field, out var size))
-		{
-			return size;
-		}
-		else
-		{
-			ResolveType(field.DeclaringType);
-		}
-
-		// If the field is another struct, we have to dig down and compute its size too.
-		if (field.FieldType.IsValueType)
-		{
-			size = GetTypeSize(field.FieldType);
-		}
-		else
-		{
-			size = NativePointerSize;
-		}
-
-		fieldSizes.Add(field, size);
-
-		return size;
 	}
 
 	#endregion Internal - Layout

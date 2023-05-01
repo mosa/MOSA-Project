@@ -102,11 +102,18 @@ public sealed class DebugFileStage : BaseCompilerStage
 			//if (!Linker.IsSymbolDefined(type.FullName))
 			//	continue;
 
+			var size =
+				type.HasOpenGenericParams
+				|| type.IsInterface
+				|| type.IsVoid
+				|| (!type.IsReferenceType && !type.IsValueType)
+				? 0 : TypeLayout.GetTypeLayoutSize(type);
+
 			writer.WriteLine(
 				"{0}\t{1:x8}\t{2}\t{3}\t{4}\t{5}\t{6}",
 				type.ID,
 				Linker.GetSymbol(type.FullName).VirtualAddress,
-				TypeLayout.GetTypeSize(type),
+				size,
 				type.FullName,
 				type.BaseType != null ? type.BaseType.ID : 0,
 				type.DeclaringType != null ? type.DeclaringType.ID : 0,
@@ -208,6 +215,7 @@ public sealed class DebugFileStage : BaseCompilerStage
 				var symbol = Linker.GetSymbol(symbolName);
 
 				//var datasection = (field.Data != null) ? SectionKind.ROData : SectionKind.BSS; // not used yet
+				var offset = field.HasOpenGenericParams || field.IsStatic ? 0 : TypeLayout.GetFieldOffset(field);
 
 				writer.WriteLine(
 					"{0}\t{1}\t{2}\t{3}\t{4}\t{5:x8}\t{6}\t{7}\t{8}\t{9:x8}",
@@ -218,7 +226,7 @@ public sealed class DebugFileStage : BaseCompilerStage
 					field.FieldType.ID,
 					symbol?.VirtualAddress ?? 0,
 					(int)field.FieldAttributes,
-					field.IsStatic && !field.IsLiteral ? 0 : TypeLayout.GetFieldOffset(field),  // todo: missing first offset
+					field.IsStatic && !field.IsLiteral ? 0 : offset,  // todo: missing first offset
 					field.Data?.Length ?? 0,
 					0 // todo: DataAddress
 				);

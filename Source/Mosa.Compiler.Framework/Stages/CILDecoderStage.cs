@@ -184,7 +184,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		if (!MosaTypeLayout.IsUnderlyingPrimitive(methodCompiler.Method.Signature.ReturnType))
 		{
-			offset += (int)methodCompiler.GetSize(methodCompiler.Method.Signature.ReturnType);
+			offset += (int)methodCompiler.TypeLayout.GetTypeLayoutSize(methodCompiler.Method.Signature.ReturnType);
 		}
 
 		if (methodCompiler.Method.HasThis || methodCompiler.Method.HasExplicitThis)
@@ -209,7 +209,9 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 				? methodCompiler.GetElementType(underlyingType)
 				: ElementType.ValueType;
 
-			var size = methodCompiler.GetSize(underlyingType);
+			var size = primitiveType == PrimitiveType.ValueType
+				? methodCompiler.TypeLayout.GetTypeLayoutSize(underlyingType)
+				: methodCompiler.GetSize(primitiveType);
 
 			var operand = methodCompiler.Parameters.Allocate(primitiveType, elementType, parameter.Name, offset, size, parameter.ParameterType);
 
@@ -1587,7 +1589,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		}
 		else
 		{
-			var typeSize = Alignment.AlignUp(TypeLayout.GetTypeSize(type), TypeLayout.NativePointerAlignment);
+			var typeSize = Alignment.AlignUp(TypeLayout.GetTypeLayoutSize(type), TypeLayout.NativePointerAlignment);
 
 			if (typeSize == 8)
 			{
@@ -3346,11 +3348,10 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		if (type.IsReferenceType)
 		{
 			context.AppendInstruction(IRInstruction.StoreObject, null, entry.Operand, ConstantZero, Operand.NullObject);
-			context.MosaType = type;
 		}
 		else
 		{
-			var size = Operand.CreateConstant32(TypeLayout.GetTypeSize(type));
+			var size = Operand.CreateConstant32(TypeLayout.GetTypeLayoutSize(type));
 			context.AppendInstruction(IRInstruction.MemorySet, null, entry.Operand, ConstantZero, size);
 		}
 
@@ -4120,7 +4121,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		var arrayType = (MosaType)instruction.Operand;
 
-		var elementSize = MethodCompiler.GetSize(arrayType);
+		var elementSize = MethodCompiler.TypeLayout.GetTypeLayoutSize(arrayType);
 		var methodTable = GetMethodTablePointer(arrayType);
 		var size = Operand.CreateConstant32(elementSize);
 		var result = MethodCompiler.VirtualRegisters.AllocateObject();
@@ -4165,7 +4166,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			var result = MethodCompiler.VirtualRegisters.AllocateObject();
 
 			var methodTable = GetMethodTablePointer(classType);
-			var size = Operand.CreateConstant32(TypeLayout.GetTypeSize(classType));
+			var size = Operand.CreateConstant32(TypeLayout.GetTypeLayoutSize(classType));
 
 			context.AppendInstruction(IRInstruction.NewObject, result, methodTable, size);
 			operands.Insert(0, result);
@@ -4631,7 +4632,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var type = (MosaType)instruction.Operand;
 		var result = MethodCompiler.VirtualRegisters.Allocate32();
 
-		var size = type.IsPointer ? NativePointerSize : MethodCompiler.TypeLayout.GetTypeSize(type);
+		var size = type.IsPointer ? NativePointerSize : MethodCompiler.TypeLayout.GetTypeLayoutSize(type);
 
 		context.AppendInstruction(IRInstruction.Move32, result, Operand.CreateConstant32(size));
 
@@ -4730,7 +4731,6 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 						var storeInstruction = MethodCompiler.GetStoreInstruction(elementType);
 
 						context.AppendInstruction(storeInstruction, null, entry2.Operand, offsetOperand, entry1.Operand);
-						//context.MosaType = type;
 
 						return true;
 					}
@@ -4861,13 +4861,10 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 				var staticReference = Operand.CreateLabel(symbol.Name, Is32BitPlatform);
 
 				context.AppendInstruction(IRInstruction.StoreObject, null, staticReference, ConstantZero, source);
-
-				//context.MosaType = type;
 			}
 			else
 			{
 				context.AppendInstruction(storeInstruction, null, fieldOperand, ConstantZero, source);
-				context.MosaType = type;
 			}
 		}
 		else
@@ -5537,7 +5534,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	/// <returns>Element offset operand.</returns>
 	private Operand CalculateArrayElementOffset(Context context, MosaType elementType, Operand index)
 	{
-		var size = MethodCompiler.GetSize(elementType);
+		var size = MethodCompiler.TypeLayout.GetTypeLayoutSize(elementType);
 
 		return CalculateArrayElementOffset(context, size, index);
 	}

@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Analysis.LiveVariableAnalysis;
 /// <summary>
 /// Register Allocator Environment
 /// </summary>
-/// <seealso cref="Mosa.Compiler.Framework.Analysis.LiveVariableAnalysis .BaseLivenessAnalysisEnvironment" />
+/// <seealso cref="Mosa.Compiler.Framework.Analysis.LiveVariableAnalysis.BaseLivenessAnalysisEnvironment" />
 public class GCEnvironment : BaseLivenessAnalysisEnvironment
 {
 	protected Dictionary<Operand, int> stackLookup = new Dictionary<Operand, int>();

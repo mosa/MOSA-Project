@@ -42,11 +42,11 @@ public static class DelegatePatcher
 
 		var methodPointerField = GetField(methodCompiler.Method.DeclaringType, "methodPointer");
 		var methodPointerOffset = methodCompiler.TypeLayout.GetFieldOffset(methodPointerField);
-		var methodPointerOffsetOperand = Operand.CreateConstant(methodPointerOffset);
+		var methodPointerOffsetOperand = Operand.CreateConstant32(methodPointerOffset);
 
 		var instanceField = GetField(methodCompiler.Method.DeclaringType, "instance");
 		var instanceOffset = methodCompiler.TypeLayout.GetFieldOffset(instanceField);
-		var instanceOffsetOperand = Operand.CreateConstant(instanceOffset);
+		var instanceOffsetOperand = Operand.CreateConstant32(instanceOffset);
 
 		var context = new Context(CreateMethodStructure(methodCompiler));
 
@@ -87,11 +87,11 @@ public static class DelegatePatcher
 
 		var methodPointerField = GetField(methodCompiler.Method.DeclaringType, "methodPointer");
 		var methodPointerOffset = methodCompiler.TypeLayout.GetFieldOffset(methodPointerField);
-		var methodPointerOffsetOperand = Operand.CreateConstant(methodPointerOffset);
+		var methodPointerOffsetOperand = Operand.CreateConstant32(methodPointerOffset);
 
 		var instanceField = GetField(methodCompiler.Method.DeclaringType, "instance");
 		var instanceOffset = methodCompiler.TypeLayout.GetFieldOffset(instanceField);
-		var instanceOffsetOperand = Operand.CreateConstant(instanceOffset);
+		var instanceOffsetOperand = Operand.CreateConstant32(instanceOffset);
 
 		var b0 = new Context(CreateMethodStructure(methodCompiler));
 		var b1 = new Context(methodCompiler.BasicBlocks.CreateBlock());
@@ -108,12 +108,14 @@ public static class DelegatePatcher
 			{
 				vrs[i] = methodCompiler.VirtualRegisters.Allocate(parameter);
 
-				var paramLoadInstruction = methodCompiler.GetLoadParamInstruction(vrs[i].Element);
+				var paramLoadInstruction = methodCompiler.GetLoadParamInstruction(parameter.Element);
 
 				b0.AppendInstruction(paramLoadInstruction, vrs[i], parameter);
 			}
 			else
 			{
+				vrs[i] = methodCompiler.LocalStack.Allocate(parameter);
+
 				b0.AppendInstruction(IRInstruction.LoadParamCompound, vrs[i], parameter);
 			}
 		}
