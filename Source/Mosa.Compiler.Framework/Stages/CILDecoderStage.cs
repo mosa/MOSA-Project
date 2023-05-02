@@ -1130,9 +1130,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	{
 		type = MosaTypeLayout.GetUnderlyingType(type);
 
-		if (type.IsValueType)
-			return IRInstruction.LoadCompound;
-		else if (type.IsReferenceType)
+		if (type.IsReferenceType)
 			return IRInstruction.LoadObject;
 		else if (type.IsPointer)
 			return Select(IRInstruction.Load32, IRInstruction.Load64);
@@ -1156,9 +1154,11 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			return IRInstruction.LoadR4;
 		else if (type.IsR8)
 			return IRInstruction.LoadR8;
-		else if (Is32BitPlatform)   // review
+		else if (type.IsValueType)
+			return IRInstruction.LoadCompound;
+		else if ((type.IsI || type.IsN) && Is32BitPlatform)
 			return IRInstruction.Load32;
-		else if (Is64BitPlatform)
+		else if ((type.IsI || type.IsN) && Is64BitPlatform)
 			return IRInstruction.Load64;
 
 		throw new InvalidOperationException();
@@ -3432,18 +3432,22 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var type = (MosaType)instruction.Operand;
 
 		var underlyingType = MosaTypeLayout.GetUnderlyingType(type);
-		var isPrimitive = MosaTypeLayout.IsPrimitive(underlyingType);
+		var elementType = MethodCompiler.GetElementType(underlyingType);
+		var isPrimitive = MethodCompiler.IsPrimitive(elementType);
+
+		var size = isPrimitive
+			? MethodCompiler.GetSize(elementType)
+			: TypeLayout.GetTypeLayoutSize(underlyingType);
 
 		context.AppendInstruction(IRInstruction.CheckArrayBounds, null, array, index);
 
-		var elementOffset = CalculateArrayElementOffset(context, type, index);
+		var elementOffset = CalculateArrayElementOffset(context, size, index);
 		var totalElementOffset = CalculateTotalArrayOffset(context, elementOffset);
 
 		if (isPrimitive)
 		{
 			var stacktype = MethodCompiler.GetPrimitiveType(underlyingType);
 			var result = MethodCompiler.VirtualRegisters.Allocate(stacktype);
-			var elementType = MethodCompiler.GetElementType(underlyingType);
 			var loadInstruction = MethodCompiler.GetLoadInstruction(elementType);
 
 			context.AppendInstruction(loadInstruction, result, array, totalElementOffset);
@@ -3469,8 +3473,6 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		var array = entry2.Operand;
 		var index = entry1.Operand;
-
-		//var underlyingType = MosaTypeLayout.GetUnderlyingType(type.ElementType);
 
 		context.AppendInstruction(IRInstruction.CheckArrayBounds, null, array, index);
 
@@ -3502,7 +3504,15 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		context.AppendInstruction(IRInstruction.CheckArrayBounds, null, array, index);
 
-		var elementOffset = CalculateArrayElementOffset(context, type, index);
+		var underlyingType = MosaTypeLayout.GetUnderlyingType(type);
+		var elementType = MethodCompiler.GetElementType(underlyingType);
+		var isPrimitive = MethodCompiler.IsPrimitive(elementType);
+
+		var size = isPrimitive
+			? MethodCompiler.GetSize(elementType)
+			: TypeLayout.GetTypeLayoutSize(underlyingType);
+
+		var elementOffset = CalculateArrayElementOffset(context, size, index);
 		var totalElementOffset = CalculateTotalArrayOffset(context, elementOffset);
 
 		context.AppendInstruction(Is32BitPlatform ? IRInstruction.Add32 : IRInstruction.Add64, result, array, totalElementOffset);
@@ -4121,7 +4131,13 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		var arrayType = (MosaType)instruction.Operand;
 
-		var elementSize = MethodCompiler.TypeLayout.GetTypeLayoutSize(arrayType);
+		var underlyingType = MosaTypeLayout.GetUnderlyingType(arrayType.ElementType);
+		var elementType = MethodCompiler.GetElementType(underlyingType);
+
+		var elementSize = elementType == ElementType.ValueType
+			? TypeLayout.GetTypeLayoutSize(underlyingType)
+			: MethodCompiler.GetSize(elementType);
+
 		var methodTable = GetMethodTablePointer(arrayType);
 		var size = Operand.CreateConstant32(elementSize);
 		var result = MethodCompiler.VirtualRegisters.AllocateObject();
@@ -4654,17 +4670,20 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var type = (MosaType)instruction.Operand;
 
 		var underlyingType = MosaTypeLayout.GetUnderlyingType(type);
-		var isPrimitive = MosaTypeLayout.IsPrimitive(underlyingType);
+		var elementType = MethodCompiler.GetElementType(underlyingType);
+		var isPrimitive = MethodCompiler.IsPrimitive(elementType);
+
+		var size = isPrimitive
+			? MethodCompiler.GetSize(elementType)
+			: TypeLayout.GetTypeLayoutSize(underlyingType);
 
 		context.AppendInstruction(IRInstruction.CheckArrayBounds, null, array, index);
 
-		var elementOffset = CalculateArrayElementOffset(context, type, index);
+		var elementOffset = CalculateArrayElementOffset(context, size, index);
 		var totalElementOffset = CalculateTotalArrayOffset(context, elementOffset);
 
 		if (isPrimitive)
 		{
-			//var stacktype = GetStackType(underlyingType);
-			var elementType = MethodCompiler.GetElementType(underlyingType);
 			var storeInstruction = MethodCompiler.GetStoreInstruction(elementType);
 
 			context.AppendInstruction(storeInstruction, null, array, totalElementOffset, value);
@@ -5526,18 +5545,6 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	}
 
 	#region Array Helpers
-
-	/// <summary>Calculates the element offset for the specified index.</summary>
-	/// <param name="context">The node.</param>
-	/// <param name="elementType">The array type.</param>
-	/// <param name="index">The index operand.</param>
-	/// <returns>Element offset operand.</returns>
-	private Operand CalculateArrayElementOffset(Context context, MosaType elementType, Operand index)
-	{
-		var size = MethodCompiler.TypeLayout.GetTypeLayoutSize(elementType);
-
-		return CalculateArrayElementOffset(context, size, index);
-	}
 
 	/// <summary>Calculates the element offset for the specified index.</summary>
 	/// <param name="context">The node.</param>

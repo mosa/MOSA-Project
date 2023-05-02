@@ -1107,6 +1107,11 @@ public sealed class MethodCompiler
 
 	#endregion Instruction Maps Methods
 
+	public static bool IsPrimitive(ElementType elementType)
+	{
+		return elementType != ElementType.ValueType;
+	}
+
 	public static bool IsPrimitive(PrimitiveType primitiveType)
 	{
 		return primitiveType != PrimitiveType.ValueType;

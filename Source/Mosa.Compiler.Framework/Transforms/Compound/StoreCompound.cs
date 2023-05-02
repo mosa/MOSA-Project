@@ -20,6 +20,6 @@ public sealed class StoreCompound : BaseCompoundTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		CopyCompound(transform, context, context.Operand1, context.Operand2, transform.StackFrame, context.Operand3);
+		CopyCompound(transform, context, context.Operand1, context.Operand2, transform.StackFrame, context.Operand3, context.Operand3);
 	}
 }
