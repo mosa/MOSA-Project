@@ -933,6 +933,19 @@ public sealed class MethodCompiler
 		return size;
 	}
 
+	public uint GetElementSize(MosaType type)
+	{
+		var underlyingType = MosaTypeLayout.GetUnderlyingType(type);
+		var elementType = GetElementType(underlyingType);
+		var isPrimitive = IsPrimitive(elementType);
+
+		var size = isPrimitive
+			? GetSize(elementType)
+			: TypeLayout.GetTypeLayoutSize(underlyingType);
+
+		return size;
+	}
+
 	#endregion Size Size Methods
 
 	#region Instruction Maps Methods

@@ -189,15 +189,40 @@ public sealed partial class Operand
 	public static readonly Operand Constant32_2 = CreateConstant32Internal(2);
 	public static readonly Operand Constant32_3 = CreateConstant32Internal(3);
 	public static readonly Operand Constant32_4 = CreateConstant32Internal(4);
+	public static readonly Operand Constant32_5 = CreateConstant32Internal(5);
+	public static readonly Operand Constant32_6 = CreateConstant32Internal(6);
+	public static readonly Operand Constant32_7 = CreateConstant32Internal(7);
 	public static readonly Operand Constant32_8 = CreateConstant32Internal(8);
 	public static readonly Operand Constant32_15 = CreateConstant32Internal(15);
 	public static readonly Operand Constant32_16 = CreateConstant32Internal(16);
+	public static readonly Operand Constant32_20 = CreateConstant32Internal(20);
 	public static readonly Operand Constant32_24 = CreateConstant32Internal(24);
+	public static readonly Operand Constant32_28 = CreateConstant32Internal(28);
 	public static readonly Operand Constant32_31 = CreateConstant32Internal(31);
 	public static readonly Operand Constant32_32 = CreateConstant32Internal(32);
+	public static readonly Operand Constant32_36 = CreateConstant32Internal(36);
+	public static readonly Operand Constant32_40 = CreateConstant32Internal(40);
+	public static readonly Operand Constant32_44 = CreateConstant32Internal(44);
+	public static readonly Operand Constant32_48 = CreateConstant32Internal(48);
+	public static readonly Operand Constant32_49 = CreateConstant32Internal(49);
+	public static readonly Operand Constant32_50 = CreateConstant32Internal(50);
+	public static readonly Operand Constant32_51 = CreateConstant32Internal(51);
+	public static readonly Operand Constant32_52 = CreateConstant32Internal(52);
+	public static readonly Operand Constant32_56 = CreateConstant32Internal(56);
+	public static readonly Operand Constant32_60 = CreateConstant32Internal(60);
+	public static readonly Operand Constant32_63 = CreateConstant32Internal(63);
 	public static readonly Operand Constant32_64 = CreateConstant32Internal(64);
+	public static readonly Operand Constant32_84 = CreateConstant32Internal(84);
+	public static readonly Operand Constant32_100 = CreateConstant32Internal(100);
+	public static readonly Operand Constant32_108 = CreateConstant32Internal(108);
+	public static readonly Operand Constant32_116 = CreateConstant32Internal(116);
+	public static readonly Operand Constant32_124 = CreateConstant32Internal(124);
+	public static readonly Operand Constant32_128 = CreateConstant32Internal(128);
+	public static readonly Operand Constant32_168 = CreateConstant32Internal(168);
 	public static readonly Operand Constant32_FF = CreateConstant32Internal(0xFF);
 	public static readonly Operand Constant32_FFFF = CreateConstant32Internal(0xFFFF);
+	public static readonly Operand Constant32_FFFFFFCE = CreateConstant32Internal(0xFFFFFFCE);
+	public static readonly Operand Constant32_FFFFFFFC = CreateConstant32Internal(0xFFFFFFFC);
 	public static readonly Operand Constant32_FFFFFFFF = CreateConstant32Internal(0xFFFFFFFF);
 
 	public static readonly Operand Constant32_0b1000 = Constant32_8;
@@ -227,6 +252,7 @@ public sealed partial class Operand
 	public static readonly Operand Constant64_FF = CreateConstant64Internal(0xFF);
 	public static readonly Operand Constant64_FFFF = CreateConstant64Internal(0xFFFF);
 	public static readonly Operand Constant64_FFFFFFFF = CreateConstant64Internal(0xFFFFFFFF);
+	public static readonly Operand Constant64_8000000000000000 = CreateConstant64Internal(0x8000000000000000);
 
 	public static readonly Operand ConstantR4_0 = CreateConstantR4Internal(0f);
 	public static readonly Operand ConstantR4_1 = CreateConstantR4Internal(1f);
@@ -269,16 +295,42 @@ public sealed partial class Operand
 			case 0: return Constant32_0;
 			case 1: return Constant32_1;
 			case 2: return Constant32_2;
+			case 3: return Constant32_3;
 			case 4: return Constant32_4;
+			case 5: return Constant32_5;
+			case 6: return Constant32_6;
+			case 7: return Constant32_7;
 			case 8: return Constant32_8;
 			case 15: return Constant32_15;
 			case 16: return Constant32_16;
+			case 20: return Constant32_20;
 			case 24: return Constant32_24;
+			case 28: return Constant32_28;
 			case 31: return Constant32_31;
 			case 32: return Constant32_32;
+			case 36: return Constant32_36;
+			case 40: return Constant32_40;
+			case 44: return Constant32_44;
+			case 48: return Constant32_48;
+			case 49: return Constant32_49;
+			case 50: return Constant32_50;
+			case 51: return Constant32_51;
+			case 52: return Constant32_52;
+			case 56: return Constant32_56;
+			case 60: return Constant32_60;
+			case 63: return Constant32_63;
 			case 64: return Constant32_64;
+			case 84: return Constant32_84;
+			case 100: return Constant32_100;
+			case 108: return Constant32_108;
+			case 116: return Constant32_116;
+			case 124: return Constant32_124;
+			case 128: return Constant32_128;
+			case 168: return Constant32_168;
 			case 0xFF: return Constant32_FF;
 			case 0xFFFF: return Constant32_FFFF;
+			case 0xFFFFFFCE: return Constant32_FFFFFFCE;
+			case 0xFFFFFFFC: return Constant32_FFFFFFFC;
 			case 0xFFFFFFFF: return Constant32_FFFFFFFF;
 			case 0b1001: return Constant32_0b1001;
 			case 0b1010: return Constant32_0b1010;
@@ -326,7 +378,8 @@ public sealed partial class Operand
 			case 0xFF: return Constant64_FF;
 			case 0xFFFF: return Constant64_FFFF;
 			case 0xFFFFFFFF: return Constant64_FFFFFFFF;
-			default: break;
+			case 0x8000000000000000: return Constant64_8000000000000000;
+			default:  break;
 		}
 
 		return CreateConstant64Internal(value);
@@ -789,6 +842,14 @@ public sealed partial class Operand
 		{
 			if (IsLabel)
 			{
+				if (ConstantSigned64 != 0)
+				{
+					if (IsInt32)
+						sb.Append($"offset={ConstantSigned32} ");
+					else
+						sb.Append($"offset={ConstantSigned64} ");
+				}
+
 				sb.Append($"label={Name}");
 			}
 			else
@@ -800,8 +861,12 @@ public sealed partial class Operand
 					sb.Append("unresolved");
 
 					if (ConstantSigned64 != 0)
-
-						sb.Append($" offset={ConstantSigned64}");
+					{
+						if (IsInt32)
+							sb.Append($" offset={ConstantSigned32} ");
+						else
+							sb.Append($" offset={ConstantSigned64} ");
+					}
 				}
 				else if (IsNull)
 				{
@@ -814,6 +879,10 @@ public sealed partial class Operand
 				else if (IsR4)
 				{
 					sb.Append(ConstantFloat);
+				}
+				else if (IsInt32)
+				{
+					sb.Append(ConstantSigned32);
 				}
 				else
 				{
