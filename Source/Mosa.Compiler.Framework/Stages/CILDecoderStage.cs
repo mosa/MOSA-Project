@@ -3617,7 +3617,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		{
 			var field = (MosaField)instruction.Operand;
 			source = Operand.CreateLabel(Metadata.FieldDefinition + field.FullName, Is32BitPlatform);
-			MethodScanner.AccessedField(context.MosaField);
+			MethodScanner.AccessedField(field);
 		}
 
 		var result = MethodCompiler.VirtualRegisters.AllocateManagedPointer();

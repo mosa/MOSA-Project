@@ -177,6 +177,8 @@ public class InlineStage : BaseMethodCompilerStage
 				{
 					ConditionCode = node.ConditionCode,
 					InvokeMethod = node.InvokeMethod,
+					MosaField = node.MosaField,
+					MosaType = node.MosaType,
 					Label = callSiteNode.Label,
 				};
 
@@ -208,6 +210,12 @@ public class InlineStage : BaseMethodCompilerStage
 
 					newNode.SetOperand(i, newOp);
 				}
+
+				// copy other
+				if (node.MosaType != null)
+					newNode.MosaType = node.MosaType;
+				if (node.MosaField != null)
+					newNode.MosaField = node.MosaField;
 
 				UpdateParameterInstructions(newNode);
 
