@@ -24,7 +24,5 @@ public sealed class NewObject : BaseRuntimeTransform
 		var symbol = Operand.CreateLabel(method, transform.Is32BitPlatform);
 
 		context.SetInstruction(IRInstruction.CallStatic, context.Result, symbol, context.GetOperands());
-
-		//transform.MethodScanner.TypeAllocated(classType, transform.Method);
 	}
 }

@@ -24,7 +24,5 @@ public sealed class NewArray : BaseRuntimeTransform
 		var symbol = Operand.CreateLabel(method, transform.Is32BitPlatform);
 
 		context.SetInstruction(IRInstruction.CallStatic, context.Result, symbol, context.GetOperands());
-
-		//transform.MethodScanner.TypeAllocated(arrayType, method);
 	}
 }

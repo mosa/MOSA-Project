@@ -4145,6 +4145,8 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		PushStack(stack, new StackEntry(result));
 
+		MethodScanner.TypeAllocated(arrayType, Method);
+
 		return true;
 	}
 
