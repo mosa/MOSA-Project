@@ -4475,7 +4475,6 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 				case PrimitiveType.ValueType:
 					context.AppendInstruction(IRInstruction.SetReturnCompound, null, entry.Operand);
-					//context.MosaType = entry.Type;
 					break;
 
 				case PrimitiveType.ManagedPointer when Is32BitPlatform:
@@ -5459,7 +5458,6 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			var operands = context.GetOperands();
 			var result = context.Result;
 
-			//operands.Insert(0, Operand.CreateSymbolFromMethod(method, TypeSystem));
 			context.SetInstruction(IRInstruction.IntrinsicMethodCall, result, operands);
 
 			return true;

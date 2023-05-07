@@ -57,10 +57,8 @@ namespace Mosa.Compiler.Framework.Transforms.Call
 			return stackSize;
 		}
 
-		public static void MakeCall(TransformContext transform, Context context, Operand target, Operand result, List<Operand> operands, MosaMethod method)
+		public static void MakeCall(TransformContext transform, Context context, Operand target, Operand result, List<Operand> operands)
 		{
-			Debug.Assert(method != null);
-
 			//var data = TypeLayout.__GetMethodInfo(method);
 
 			var stackSize = CalculateParameterStackSize(transform, operands);

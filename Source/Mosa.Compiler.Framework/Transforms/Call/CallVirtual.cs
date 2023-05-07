@@ -48,7 +48,7 @@ public sealed class CallVirtual : BasePlugTransform
 		// Get the address of the method
 		context.AppendInstruction(transform.LoadInstruction, callTarget, typeDef, methodPointerOffset);
 
-		MakeCall(transform, context, callTarget, result, operands, method);
+		MakeCall(transform, context, callTarget, result, operands);
 
 		transform.MethodScanner.MethodInvoked(method, transform.Method);
 	}

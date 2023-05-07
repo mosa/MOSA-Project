@@ -32,7 +32,7 @@ public sealed class CallStatic : BasePlugTransform
 		operands.RemoveAt(0);
 		context.Empty();
 
-		MakeCall(transform, context, call, result, operands, method);
+		MakeCall(transform, context, call, result, operands);
 
 		transform.MethodScanner.MethodDirectInvoked(call.Method, transform.Method);
 	}

@@ -74,7 +74,7 @@ public sealed class CallInterface : BasePlugTransform
 		// Get the address of the method
 		context.AppendInstruction(transform.LoadInstruction, callTarget, methodDefinition, methodPointerOffset);
 
-		MakeCall(transform, context, callTarget, result, operands, method);
+		MakeCall(transform, context, callTarget, result, operands);
 
 		transform.MethodScanner.InterfaceMethodInvoked(method, transform.Method);
 	}
