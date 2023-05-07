@@ -13,7 +13,7 @@
 		<summary>MOSA Platform Libraries x86</summary>
 		<description>MOSA platform libraries for x86</description>
 		<releaseNotes></releaseNotes>
-		<copyright>Copyright © MOSA Project 2023</copyright>
+		<Copyright>Copyright © MOSA Project 2023</Copyright>
 		<tags>MOSA Compiler</tags>
 		<dependencies>
 			<dependency id="Mosa.Korlib" version="$version$" />

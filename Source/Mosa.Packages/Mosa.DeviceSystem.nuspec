@@ -13,7 +13,7 @@
 		<summary>MOSA Device And File System</summary>
 		<description>MOSA Device And File System</description>
 		<releaseNotes></releaseNotes>
-		<copyright>Copyright © MOSA Project 2023</copyright>
+		<Copyright>Copyright © MOSA Project 2023</Copyright>
 		<tags>MOSA Compiler</tags>
 		<dependencies>
 			<dependency id="Mosa.Korlib" version="$version$" />

@@ -4,7 +4,7 @@
 		<OutputType>Exe</OutputType>
 		<Title>Mosa.Tool.Compiler</Title>
 		<Company>MOSA Project</Company>
-		<copyright>Copyright © MOSA Project 2023</copyright>
+		<Copyright>Copyright © MOSA Project 2023</Copyright>
 		<LangVersion>11.0</LangVersion>
 		<DebugType>full</DebugType>
 		<OutputPath>..\..\bin\</OutputPath>
