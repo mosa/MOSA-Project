@@ -1718,7 +1718,6 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var symbol = Operand.CreateLabel(method, Is32BitPlatform);
 
 		context.AppendInstruction(IRInstruction.CallStatic, result, symbol, operands);
-		context.InvokeMethod = method;
 
 		if (ProcessExternalCall(context))
 			return true;
@@ -5470,37 +5469,6 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 			return true;
 		}
-	}
-
-	/// <summary>Processes external method calls.</summary>
-	/// <param name="method"></param>
-	/// <param name="context">The transformation context.</param>
-	/// <param name="result"></param>
-	/// <param name="operands"></param>
-	/// <returns>
-	///   <c>true</c> if the method was replaced by an intrinsic; <c>false</c> otherwise.</returns>
-	/// <remarks>This method checks if the call target has an Intrinsic-Attribute applied with
-	/// the current architecture. If it has, the method call is replaced by the specified
-	/// native instruction.</remarks>
-	private bool ProcessExternalCall(MosaMethod method, Context context, Operand result, List<Operand> operands)
-	{
-		var intrinsic = ResolveIntrinsicDelegateMethod(method);
-
-		if (intrinsic == null)
-			return false;
-
-		if (method.IsExternal)
-		{
-			var operand1 = Operand.CreateLabel(context.InvokeMethod, Is32BitPlatform);
-			context.AppendInstruction(IRInstruction.IntrinsicMethodCall, result, operand1);
-			context.AppendOperands(operands);
-		}
-		else
-		{
-			//intrinsic(context, result, operands, MethodCompiler); // future
-		}
-
-		return true;
 	}
 
 	private IntrinsicMethodDelegate ResolveIntrinsicDelegateMethod(MosaMethod method)

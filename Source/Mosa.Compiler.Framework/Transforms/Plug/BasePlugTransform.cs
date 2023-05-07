@@ -22,10 +22,10 @@ namespace Mosa.Compiler.Framework.Transforms.Plug
 		{
 			var newTarget = transform.Compiler.PlugSystem.GetReplacement(context.Operand1.Method);
 
-			if (context.InvokeMethod != null)
-			{
-				context.InvokeMethod = newTarget;
-			}
+			//if (context.InvokeMethod != null)
+			//{
+			//	context.InvokeMethod = newTarget;
+			//}
 
 			if (context.Operand1 != null && context.Operand1.IsLabel && context.Operand1.Method != null)
 			{
