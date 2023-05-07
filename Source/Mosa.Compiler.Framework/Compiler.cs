@@ -7,7 +7,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
-using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.CompilerStages;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Stages;
@@ -649,5 +648,4 @@ public sealed class Compiler
 	}
 
 	#endregion Helper Methods
-
 }

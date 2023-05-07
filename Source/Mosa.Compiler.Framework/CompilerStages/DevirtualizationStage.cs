@@ -28,7 +28,7 @@ public sealed class DevirtualizationStage : BaseCompilerStage
 				if (method.IsStatic || !method.IsVirtual || method.HasOpenGenericParams)
 					continue;
 
-				if (!method.HasImplementation && method.IsAbstract )
+				if (!method.HasImplementation && method.IsAbstract)
 					continue;
 
 				if (TypeLayout.IsMethodOverridden(method))

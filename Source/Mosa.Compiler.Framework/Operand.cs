@@ -379,7 +379,7 @@ public sealed partial class Operand
 			case 0xFFFF: return Constant64_FFFF;
 			case 0xFFFFFFFF: return Constant64_FFFFFFFF;
 			case 0x8000000000000000: return Constant64_8000000000000000;
-			default:  break;
+			default: break;
 		}
 
 		return CreateConstant64Internal(value);
