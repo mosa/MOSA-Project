@@ -176,8 +176,6 @@ public class InlineStage : BaseMethodCompilerStage
 				var newNode = new InstructionNode(node.Instruction, node.OperandCount, node.ResultCount)
 				{
 					ConditionCode = node.ConditionCode,
-					InvokeMethod = node.InvokeMethod,
-					MosaType = node.MosaType,
 					Label = callSiteNode.Label,
 				};
 
@@ -209,10 +207,6 @@ public class InlineStage : BaseMethodCompilerStage
 
 					newNode.SetOperand(i, newOp);
 				}
-
-				// copy other
-				if (node.MosaType != null)
-					newNode.MosaType = node.MosaType;
 
 				UpdateParameterInstructions(newNode);
 

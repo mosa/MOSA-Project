@@ -145,12 +145,10 @@ public static class DelegatePatcher
 
 		// no instance
 		b1.AppendInstruction(IRInstruction.CallDynamic, result, opMethod, operands);
-		b1.InvokeMethod = methodCompiler.Method;
 		b1.AppendInstruction(IRInstruction.Jmp, b3.Block);
 
 		// instance
 		b2.AppendInstruction(IRInstruction.CallDynamic, result, opMethod, opInstance, operands);
-		b2.InvokeMethod = methodCompiler.Method;
 		b2.AppendInstruction(IRInstruction.Jmp, b3.Block);
 
 		// return

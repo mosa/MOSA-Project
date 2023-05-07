@@ -13,30 +13,6 @@ public sealed class InstructionNodeAddition
 	#region Properties
 
 	/// <summary>
-	/// Gets or sets the mosa method.
-	/// </summary>
-	/// <value>
-	/// The mosa method.
-	/// </value>
-	public MosaMethod MosaMethod { get; set; }
-
-	/// <summary>
-	/// Gets or sets the mosa type.
-	/// </summary>
-	/// <value>
-	/// The type.
-	/// </value>
-	public MosaType MosaType { get; set; }
-
-	/// <summary>
-	/// Gets or sets the invoke method.
-	/// </summary>
-	/// <value>
-	/// The invoke method.
-	/// </value>
-	public MosaMethod InvokeMethod { get; set; }
-
-	/// <summary>
 	/// Gets or sets the phi blocks.
 	/// </summary>
 	/// <value>

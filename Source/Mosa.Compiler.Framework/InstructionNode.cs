@@ -334,28 +334,6 @@ public sealed class InstructionNode
 	}
 
 	/// <summary>
-	/// Gets or sets the invoke method.
-	/// </summary>
-	/// <value>
-	/// The invoke method.
-	/// </value>
-	public MosaMethod InvokeMethod
-	{
-		get => addition?.InvokeMethod;
-		set { CheckAddition(); addition.InvokeMethod = value; }
-	}
-
-	/// <summary>
-	/// Gets or sets the runtime field.
-	/// </summary>
-	/// <value>The runtime field.</value>
-	public MosaType MosaType
-	{
-		get => addition?.MosaType;
-		set { CheckAddition(); addition.MosaType = value; }
-	}
-
-	/// <summary>
 	/// Gets or sets the phi blocks.
 	/// </summary>
 	/// <value>
@@ -866,16 +844,6 @@ public sealed class InstructionNode
 			{
 				sb.Append(", [more]");
 			}
-		}
-
-		if (InvokeMethod != null)
-		{
-			sb.Append($" {{m={InvokeMethod.DeclaringType.Name}.{InvokeMethod.Name}}}");
-		}
-
-		if (MosaType != null)
-		{
-			sb.Append($" {{t={MosaType.Name}}}");
 		}
 
 		return sb.ToString();

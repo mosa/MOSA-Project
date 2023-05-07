@@ -149,12 +149,6 @@ public sealed class Context
 	public bool IsEmptyOrNop => Node.IsEmptyOrNop;
 
 	/// <summary>
-	/// Gets or sets the runtime method.
-	/// </summary>
-	public MosaMethod InvokeMethod
-	{ get => Node.InvokeMethod; set => Node.InvokeMethod = value; }
-
-	/// <summary>
 	/// Gets or sets the condition code.
 	/// </summary>
 	/// <value>The condition code.</value>

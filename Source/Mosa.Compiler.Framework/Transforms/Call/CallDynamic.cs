@@ -23,7 +23,6 @@ public sealed class CallDynamic : BasePlugTransform
 	{
 		var call = context.Operand1;
 		var result = context.Result;
-		var method = context.InvokeMethod;
 		var operands = context.GetOperands();
 
 		operands.RemoveAt(0);
@@ -31,6 +30,6 @@ public sealed class CallDynamic : BasePlugTransform
 
 		MakeCall(transform, context, call, result, operands);
 
-		transform.MethodScanner.MethodInvoked(call.Method, method);
+		//transform.MethodScanner.MethodInvoked(call.Method, method);
 	}
 }
