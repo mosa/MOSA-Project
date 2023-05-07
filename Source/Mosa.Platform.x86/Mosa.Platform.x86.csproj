@@ -4,7 +4,7 @@
     <AssemblyTitle>Mosa.Platform.x86</AssemblyTitle>
     <Company>MOSA Project</Company>
     <Product>Mosa.Platform.x86</Product>
-    <Copyright>Copyright ©  2014</Copyright>
+    <Copyright>Copyright © 2023</Copyright>
     <FileAlignment>4096</FileAlignment>
     <DebugType>full</DebugType>
     <RemoveIntegerChecks>False</RemoveIntegerChecks>
