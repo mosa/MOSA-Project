@@ -265,7 +265,6 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 		var newBasicBlocks = new BasicBlocks();
 		var mapBlocks = new Dictionary<BasicBlock, BasicBlock>(BasicBlocks.Count);
 		var map = new Dictionary<Operand, Operand>();
-		var staticCalls = new List<MosaMethod>();
 
 		foreach (var block in BasicBlocks)
 		{
@@ -281,12 +280,11 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 			{
 				var newOp = Map(operand, map);
 
-				var newOperand = Operand.CreateVirtualRegister(operand, -operand.Index);
+				var newOperand = operand.IsPrimitive
+					? Operand.CreateVirtualRegister(operand, -operand.Index)
+					: MethodCompiler.LocalStack.Allocate(operand);
 
-				var moveInstruction = operand.IsPrimitive
-					? MethodCompiler.GetMoveInstruction(newOperand.Primitive)
-					: IRInstruction.MoveCompound;
-
+				var moveInstruction = MethodCompiler.GetMoveInstruction(newOperand.Primitive);
 				var moveNode = new InstructionNode(moveInstruction, newOperand, newOp);
 
 				newPrologueBlock.BeforeLast.Insert(moveNode);
@@ -306,15 +304,9 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 				if (node.IsEmptyOrNop)
 					continue;
 
-				if (node.Instruction == IRInstruction.CallStatic)
-				{
-					staticCalls.AddIfNew(node.Operand1.Method);
-				}
-
 				var newNode = new InstructionNode(node.Instruction, node.OperandCount, node.ResultCount)
 				{
 					ConditionCode = node.ConditionCode,
-
 					//Label = callSiteNode.Label,
 				};
 

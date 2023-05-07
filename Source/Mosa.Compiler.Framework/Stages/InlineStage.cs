@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
+using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.Stages;
@@ -147,23 +148,7 @@ public class InlineStage : BaseMethodCompilerStage
 					if (callSiteNode.Result != null)
 					{
 						var newOperand = Map(node.Operand1, map, callSiteNode);
-
-						BaseInstruction moveInstruction = null;
-
-						if (node.Instruction == IRInstruction.SetReturn32)
-							moveInstruction = IRInstruction.Move32;
-						else if (node.Instruction == IRInstruction.SetReturn64)
-							moveInstruction = IRInstruction.Move64;
-						else if (node.Instruction == IRInstruction.SetReturnObject)
-							moveInstruction = IRInstruction.MoveObject;
-						else if (node.Instruction == IRInstruction.SetReturnR4)
-							moveInstruction = IRInstruction.MoveR4;
-						else if (node.Instruction == IRInstruction.SetReturnR8)
-							moveInstruction = IRInstruction.MoveR8;
-						else if (node.Instruction == IRInstruction.SetReturnCompound)
-							moveInstruction = IRInstruction.MoveCompound;
-
-						Debug.Assert(moveInstruction != null);
+						var moveInstruction = GetMoveInstruction(node);
 
 						var moveNode = new InstructionNode(moveInstruction, callSiteNode.Result, newOperand);
 
@@ -191,24 +176,20 @@ public class InlineStage : BaseMethodCompilerStage
 				// copy results
 				for (var i = 0; i < node.ResultCount; i++)
 				{
-					var op = node.GetResult(i);
-
-					var newOp = Map(op, map, callSiteNode);
-
-					newNode.SetResult(i, newOp);
+					var operand = node.GetResult(i);
+					var newOperand = Map(operand, map, callSiteNode);
+					newNode.SetResult(i, newOperand);
 				}
 
 				// copy operands
 				for (var i = 0; i < node.OperandCount; i++)
 				{
-					var op = node.GetOperand(i);
-
-					var newOp = Map(op, map, callSiteNode);
-
-					newNode.SetOperand(i, newOp);
+					var operand = node.GetOperand(i);
+					var newOperand = Map(operand, map, callSiteNode);
+					newNode.SetOperand(i, newOperand);
 				}
 
-				UpdateParameterInstructions(newNode);
+				UpdateParameterInstruction(newNode);
 
 				newBlock.BeforeLast.Insert(newNode);
 			}
@@ -237,7 +218,27 @@ public class InlineStage : BaseMethodCompilerStage
 		callSiteNode.SetInstruction(IRInstruction.Jmp, prologue);
 	}
 
-	private static void UpdateParameterInstructions(InstructionNode newNode)
+	private static BaseInstruction GetMoveInstruction(InstructionNode node)
+	{
+		var instruction = node.Instruction;
+
+		if (instruction == IRInstruction.SetReturn32)
+			return IRInstruction.Move32;
+		else if (instruction == IRInstruction.SetReturn64)
+			return IRInstruction.Move64;
+		else if (instruction == IRInstruction.SetReturnObject)
+			return IRInstruction.MoveObject;
+		else if (instruction == IRInstruction.SetReturnR4)
+			return IRInstruction.MoveR4;
+		else if (instruction == IRInstruction.SetReturnR8)
+			return IRInstruction.MoveR8;
+		else if (instruction == IRInstruction.SetReturnCompound)
+			return IRInstruction.MoveCompound;
+
+		throw new CompilerException();
+	}
+
+	private static void UpdateParameterInstruction(InstructionNode newNode)
 	{
 		var instruction = newNode.Instruction;
 
@@ -344,7 +345,7 @@ public class InlineStage : BaseMethodCompilerStage
 
 		Debug.Assert(mappedOperand != null);
 
-		if (operand.HasParent)
+		if (operand.HasParent && !mappedOperand.HasParent)
 		{
 			MethodCompiler.VirtualRegisters.SplitOperand(mappedOperand);
 

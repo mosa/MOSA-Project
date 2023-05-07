@@ -1068,6 +1068,7 @@ public sealed class MethodCompiler
 			PrimitiveType.R8 => IRInstruction.MoveR8,
 			PrimitiveType.ManagedPointer when Is32BitPlatform => IRInstruction.Move32,
 			PrimitiveType.ManagedPointer when Is64BitPlatform => IRInstruction.Move64,
+			PrimitiveType.ValueType => IRInstruction.MoveCompound,
 			_ => throw new CompilerException($"Invalid StackType = {type}"),
 		};
 	}
