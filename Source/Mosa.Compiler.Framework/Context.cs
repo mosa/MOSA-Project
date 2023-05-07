@@ -155,13 +155,6 @@ public sealed class Context
 	{ get => Node.InvokeMethod; set => Node.InvokeMethod = value; }
 
 	/// <summary>
-	/// Gets or sets the runtime field.
-	/// </summary>
-	/// <value>The runtime field.</value>
-	public MosaType MosaType
-	{ get => Node.MosaType; set => Node.MosaType = value; }
-
-	/// <summary>
 	/// Gets or sets the condition code.
 	/// </summary>
 	/// <value>The condition code.</value>

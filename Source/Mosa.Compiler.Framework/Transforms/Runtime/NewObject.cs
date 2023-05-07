@@ -22,10 +22,9 @@ public sealed class NewObject : BaseRuntimeTransform
 	{
 		var method = GetVMCallMethod(transform, "AllocateObject");
 		var symbol = Operand.CreateLabel(method, transform.Is32BitPlatform);
-		var classType = context.MosaType;
 
 		context.SetInstruction(IRInstruction.CallStatic, context.Result, symbol, context.GetOperands());
 
-		transform.MethodScanner.TypeAllocated(classType, transform.Method);
+		//transform.MethodScanner.TypeAllocated(classType, transform.Method);
 	}
 }

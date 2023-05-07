@@ -22,10 +22,9 @@ public sealed class NewArray : BaseRuntimeTransform
 	{
 		var method = GetVMCallMethod(transform, "AllocateArray");
 		var symbol = Operand.CreateLabel(method, transform.Is32BitPlatform);
-		var arrayType = context.MosaType;
 
 		context.SetInstruction(IRInstruction.CallStatic, context.Result, symbol, context.GetOperands());
 
-		transform.MethodScanner.TypeAllocated(arrayType, method);
+		//transform.MethodScanner.TypeAllocated(arrayType, method);
 	}
 }

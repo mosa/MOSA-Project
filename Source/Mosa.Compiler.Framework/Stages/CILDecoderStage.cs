@@ -3401,7 +3401,6 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			var result = MethodCompiler.LocalStack.Allocate(parameter);
 
 			context.AppendInstruction(IRInstruction.LoadParamCompound, result, parameter);
-			context.MosaType = parameter.Type;
 
 			PushStack(stack, new StackEntry(result));
 		}
@@ -4143,7 +4142,6 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var result = MethodCompiler.VirtualRegisters.AllocateObject();
 
 		context.AppendInstruction(IRInstruction.NewArray, result, methodTable, size, elements.Operand);
-		context.MosaType = arrayType;
 
 		PushStack(stack, new StackEntry(result));
 
@@ -4693,7 +4691,6 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		else
 		{
 			context.AppendInstruction(IRInstruction.StoreCompound, null, array, totalElementOffset, value);
-			context.MosaType = type;
 
 			return true;
 		}
@@ -4756,7 +4753,6 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 					else
 					{
 						context.AppendInstruction(IRInstruction.StoreCompound, null, entry2.Operand, offsetOperand, entry1.Operand);
-						context.MosaType = type;
 
 						return true;
 					}
@@ -4764,7 +4760,6 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			case PrimitiveType.ValueType:
 				{
 					context.AppendInstruction(IRInstruction.StoreCompound, null, entry2.Operand, offsetOperand, entry1.Operand);
-					context.MosaType = type;
 
 					return true;
 				}
@@ -4798,7 +4793,6 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		if (stackType == PrimitiveType.ValueType)
 		{
 			context.AppendInstruction(IRInstruction.MoveCompound, local, source);
-			context.MosaType = local.Type;
 			return true;
 		}
 
@@ -4889,7 +4883,6 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		else
 		{
 			context.AppendInstruction(IRInstruction.StoreCompound, null, fieldOperand, ConstantZero, source);
-			context.MosaType = type;
 		}
 
 		return true;
@@ -4913,7 +4906,6 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		else
 		{
 			context.AppendInstruction(IRInstruction.StoreParamCompound, null, parameter, value);
-			context.MosaType = parameter.Type;
 			return true;
 		}
 	}
