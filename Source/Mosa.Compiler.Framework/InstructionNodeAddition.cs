@@ -21,14 +21,6 @@ public sealed class InstructionNodeAddition
 	public MosaMethod MosaMethod { get; set; }
 
 	/// <summary>
-	/// Gets or sets the mosa field.
-	/// </summary>
-	/// <value>
-	/// The mosa field.
-	/// </value>
-	public MosaField MosaField { get; set; }
-
-	/// <summary>
 	/// Gets or sets the mosa type.
 	/// </summary>
 	/// <value>

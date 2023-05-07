@@ -265,7 +265,6 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 		var newBasicBlocks = new BasicBlocks();
 		var mapBlocks = new Dictionary<BasicBlock, BasicBlock>(BasicBlocks.Count);
 		var map = new Dictionary<Operand, Operand>();
-		var staticCalls = new List<MosaMethod>();
 
 		foreach (var block in BasicBlocks)
 		{
@@ -277,24 +276,23 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 
 		foreach (var operand in MethodCompiler.Parameters)
 		{
-			if (operand.Definitions.Count > 0)
-			{
-				var newOp = Map(operand, map);
+			if (operand.Definitions.Count <= 0)
+				continue;
 
-				var newOperand = Operand.CreateVirtualRegister(operand, -operand.Index);
+			var newOp = Map(operand, map);
+			var newOperand = Operand.CreateVirtualRegister(operand, -operand.Index);
 
-				var moveInstruction = operand.IsPrimitive
-					? MethodCompiler.GetMoveInstruction(newOperand.Primitive)
-					: IRInstruction.MoveCompound;
+			var moveInstruction = operand.IsPrimitive
+				? MethodCompiler.GetMoveInstruction(newOperand.Primitive)
+				: IRInstruction.MoveCompound;
 
-				var moveNode = new InstructionNode(moveInstruction, newOperand, newOp);
+			var moveNode = new InstructionNode(moveInstruction, newOperand, newOp);
 
-				newPrologueBlock.BeforeLast.Insert(moveNode);
+			newPrologueBlock.BeforeLast.Insert(moveNode);
 
-				// redirect map from parameter to virtual register going forward
-				map.Remove(operand);
-				map.Add(operand, newOperand);
-			}
+			// redirect map from parameter to virtual register going forward
+			map.Remove(operand);
+			map.Add(operand, newOperand);
 		}
 
 		foreach (var block in BasicBlocks)
@@ -306,19 +304,10 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 				if (node.IsEmptyOrNop)
 					continue;
 
-				if (node.Instruction == IRInstruction.CallStatic)
-				{
-					staticCalls.AddIfNew(node.Operand1.Method);
-				}
-
 				var newNode = new InstructionNode(node.Instruction, node.OperandCount, node.ResultCount)
 				{
 					ConditionCode = node.ConditionCode,
 					InvokeMethod = node.InvokeMethod,
-					MosaField = node.MosaField,
-					MosaType = node.MosaType,
-
-					//Label = callSiteNode.Label,
 				};
 
 				if (node.BranchTargets != null)
@@ -347,13 +336,6 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 
 					newNode.SetOperand(i, newOp);
 				}
-
-				// copy other
-				if (node.MosaType != null)
-					newNode.MosaType = node.MosaType;
-
-				if (node.MosaField != null)
-					newNode.MosaField = node.MosaField;
 
 				newBlock.BeforeLast.Insert(newNode);
 			}

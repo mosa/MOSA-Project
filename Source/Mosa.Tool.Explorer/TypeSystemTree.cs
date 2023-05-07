@@ -21,7 +21,8 @@ public class TypeSystemTree
 
 	private readonly HashSet<MosaUnit> Include;
 
-	public bool HasFilter { get { return Include != null && Include.Count != 0; } }
+	public bool HasFilter
+	{ get { return Include != null && Include.Count != 0; } }
 
 	public TypeSystemTree(TreeView treeView, TypeSystem typeSystem, MosaTypeLayout typeLayout, bool showSizes = true, HashSet<MosaUnit> include = null)
 	{
@@ -197,7 +198,8 @@ public class TypeSystemTree
 		if (type.Fields.Count != 0)
 		{
 			var fieldsNode = new TreeNode("Fields");
-			if (ShowSizes)
+
+			if (ShowSizes && !type.HasOpenGenericParams)
 				fieldsNode.Text = fieldsNode.Text + " (Count: " + type.Fields.Count + " - Size: " + TypeLayout.GetTypeLayoutSize(type) + ")";
 
 			typeNode.Nodes.Add(fieldsNode);
@@ -210,7 +212,7 @@ public class TypeSystemTree
 				if (field.IsStatic)
 					fieldNode.Text += " [Static]";
 
-				if (ShowSizes)
+				if (ShowSizes && !field.HasOpenGenericParams)
 				{
 					fieldNode.Text = fieldNode.Text + " (Size: " + TypeLayout.GetFieldSize(field);
 
