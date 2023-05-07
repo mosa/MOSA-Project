@@ -251,10 +251,10 @@ public class InlineStage : BaseMethodCompilerStage
 			newNode.Instruction = IRInstruction.MoveR8;
 		}
 		else if (instruction == IRInstruction.LoadParam32
-				 || instruction == IRInstruction.LoadParamSignExtend8x32
-				 || instruction == IRInstruction.LoadParamSignExtend16x32
-				 || instruction == IRInstruction.LoadParamZeroExtend8x32
-				 || instruction == IRInstruction.LoadParamZeroExtend16x32)
+			|| instruction == IRInstruction.LoadParamSignExtend8x32
+			|| instruction == IRInstruction.LoadParamSignExtend16x32
+			|| instruction == IRInstruction.LoadParamZeroExtend8x32
+			|| instruction == IRInstruction.LoadParamZeroExtend16x32)
 		{
 			newNode.Instruction = IRInstruction.Move32;
 		}
@@ -263,18 +263,18 @@ public class InlineStage : BaseMethodCompilerStage
 			newNode.Instruction = IRInstruction.MoveObject;
 		}
 		else if (instruction == IRInstruction.LoadParam64
-				 || instruction == IRInstruction.LoadParamSignExtend8x64
-				 || instruction == IRInstruction.LoadParamSignExtend16x64
-				 || instruction == IRInstruction.LoadParamSignExtend32x64
-				 || instruction == IRInstruction.LoadParamZeroExtend8x64
-				 || instruction == IRInstruction.LoadParamZeroExtend16x64
-				 || instruction == IRInstruction.LoadParamZeroExtend32x64)
+			|| instruction == IRInstruction.LoadParamSignExtend8x64
+			|| instruction == IRInstruction.LoadParamSignExtend16x64
+			|| instruction == IRInstruction.LoadParamSignExtend32x64
+			|| instruction == IRInstruction.LoadParamZeroExtend8x64
+			|| instruction == IRInstruction.LoadParamZeroExtend16x64
+			|| instruction == IRInstruction.LoadParamZeroExtend32x64)
 		{
 			newNode.Instruction = IRInstruction.Move64;
 		}
 		else if (instruction == IRInstruction.StoreParam8
-				 || instruction == IRInstruction.StoreParam16
-				 || instruction == IRInstruction.StoreParam32)
+			|| instruction == IRInstruction.StoreParam16
+			|| instruction == IRInstruction.StoreParam32)
 		{
 			newNode.SetInstruction(IRInstruction.Move32, newNode.Operand1, newNode.Operand2);
 		}
