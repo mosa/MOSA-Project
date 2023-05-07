@@ -795,6 +795,7 @@ public sealed partial class Operand
 			Constant = ConstantType.Label,
 			Method = method,
 			Name = method.FullName,
+			IsResolved = false,
 		};
 	}
 
