@@ -13,7 +13,7 @@
 		<summary>MOSA Kernel for x86</summary>
 		<description>MOSA Kernel for x86</description>
 		<releaseNotes></releaseNotes>
-		<Copyright>Copyright © MOSA Project 2023</Copyright>
+		<copyright>Copyright © MOSA Project 2023</copyright>
 		<tags>MOSA Compiler</tags>
 		<dependencies>
 			<dependency id="Mosa.Korlib" version="$version$" />

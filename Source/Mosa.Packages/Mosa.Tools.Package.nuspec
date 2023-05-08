@@ -13,10 +13,8 @@
 		<summary>MOSA Tools Package</summary>
 		<description>MOSA Tools Package</description>
 		<releaseNotes></releaseNotes>
-		<Copyright>Copyright © MOSA Project 2023</Copyright>
+		<copyright>Copyright © MOSA Project 2023</copyright>
 		<tags>MOSA Compiler</tags>
-		<dependencies>
-		</dependencies>
 		<contentFiles>
 			<files include="**/*.*" buildAction="None" copyToOutput="true" />
 		</contentFiles>
