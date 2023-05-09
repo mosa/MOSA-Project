@@ -1571,7 +1571,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		if (type.IsReferenceType)
 		{
-			context.AppendInstruction(MoveInstruction, result, entry.Operand);
+			context.AppendInstruction(Is32BitPlatform ? IRInstruction.Move32 : IRInstruction.Move64, result, entry.Operand);
 			return true;
 		}
 
@@ -5350,7 +5350,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			var result = MethodCompiler.LocalStack.Allocate(PrimitiveType.ValueType, false, type);
 			var address = MethodCompiler.VirtualRegisters.Allocate(PrimitiveType.ManagedPointer);
 
-			context.AppendInstruction(MoveInstruction, address, entry.Operand);
+			context.AppendInstruction(Is32BitPlatform ? IRInstruction.Move32 : IRInstruction.Move64, address, entry.Operand);
 			// FUTURE: Add type check
 			context.AppendInstruction(IRInstruction.LoadCompound, result, address, ConstantZero);
 

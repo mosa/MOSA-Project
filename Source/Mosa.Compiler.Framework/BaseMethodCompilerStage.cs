@@ -37,22 +37,6 @@ public abstract class BaseMethodCompilerStage
 
 	#endregion Stage Properties
 
-	#region Instructions Properties
-
-	protected BaseInstruction MoveInstruction { get; private set; }
-
-	//protected BaseInstruction LoadInstruction { get; private set; }
-
-	//protected BaseInstruction StoreInstruction { get; private set; }
-
-	//protected BaseInstruction SubInstruction { get; private set; }
-
-	//protected BaseInstruction AddInstruction { get; private set; }
-
-	//protected BaseInstruction BranchInstruction { get; private set; }
-
-	#endregion Instructions Properties
-
 	#region Compiler Properties
 
 	protected Compiler Compiler { get; private set; }
@@ -227,27 +211,7 @@ public abstract class BaseMethodCompilerStage
 		NativeAlignment = Architecture.NativeAlignment;
 		Is32BitPlatform = Architecture.Is32BitPlatform;
 		Is64BitPlatform = Architecture.Is64BitPlatform;
-
 		ObjectHeaderSize = compiler.ObjectHeaderSize;
-
-		if (Is32BitPlatform)
-		{
-			MoveInstruction = IRInstruction.Move32;
-			//LoadInstruction = IRInstruction.Load32;
-			//StoreInstruction = IRInstruction.Store32;
-			//AddInstruction = IRInstruction.Add32;
-			//SubInstruction = IRInstruction.Sub32;
-			//BranchInstruction = IRInstruction.Branch32;
-		}
-		else
-		{
-			MoveInstruction = IRInstruction.Move64;
-			//LoadInstruction = IRInstruction.Load64;
-			//StoreInstruction = IRInstruction.Store64;
-			//AddInstruction = IRInstruction.Add64;
-			//SubInstruction = IRInstruction.Sub64;
-			//BranchInstruction = IRInstruction.Branch64;
-		}
 
 		Initialize();
 	}
