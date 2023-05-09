@@ -93,14 +93,6 @@ public abstract class BaseMethodCompilerStage
 	protected uint NativeAlignment { get; private set; }
 
 	/// <summary>
-	/// Gets the size of the native instruction.
-	/// </summary>
-	/// <value>
-	/// The size of the native instruction.
-	/// </value>
-	protected InstructionSize NativeInstructionSize { get; private set; }
-
-	/// <summary>
 	/// Gets a value indicating whether [is32 bit platform].
 	/// </summary>
 	/// <value>
@@ -233,7 +225,6 @@ public abstract class BaseMethodCompilerStage
 
 		NativePointerSize = Architecture.NativePointerSize;
 		NativeAlignment = Architecture.NativeAlignment;
-		NativeInstructionSize = Architecture.NativeInstructionSize;
 		Is32BitPlatform = Architecture.Is32BitPlatform;
 		Is64BitPlatform = Architecture.Is64BitPlatform;
 
