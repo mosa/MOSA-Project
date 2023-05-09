@@ -84,20 +84,20 @@ public static class Boot
 
 		KernelTest.RunTests();
 
-		TestDump1();
+		//TestDump1();
 
-		//StackTrace();
+		StackTrace();
 
 		//TestHash();
 
 		//Screen.Write("ArrayTest.BoundsCheck: ");
 
-		var value1 = Test5();
+		//var value1 = Test5();
 
-		if (value1)
-			Screen.WriteLine("Ok");
-		else
-			Screen.WriteLine("Failed");
+		//if (value1)
+		//	Screen.WriteLine("Ok");
+		//else
+		//	Screen.WriteLine("Failed");
 
 		//int value2 = CallReturn10();
 
