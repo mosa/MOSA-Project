@@ -1092,13 +1092,13 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	private string EmitString(string data, uint token)
 	{
 		var symbolName = $"$ldstr${Method.Module.Name}${token}";
-		var linkerSymbol = Linker.DefineSymbol(symbolName, SectionKind.ROData, NativeAlignment, (uint)(ObjectHeaderSize + NativePointerSize + data.Length * 2));
+		var linkerSymbol = Linker.DefineSymbol(symbolName, SectionKind.ROData, Architecture.NativeAlignment, (uint)(ObjectHeaderSize + Architecture.NativePointerSize + data.Length * 2));
 		var writer = new BinaryWriter(linkerSymbol.Stream);
 
-		Linker.Link(LinkType.AbsoluteAddress, PatchType.I32, linkerSymbol, ObjectHeaderSize - NativePointerSize, Metadata.TypeDefinition + "System.String", 0);
+		Linker.Link(LinkType.AbsoluteAddress, PatchType.I32, linkerSymbol, Compiler.ObjectHeaderSize - Architecture.NativePointerSize, Metadata.TypeDefinition + "System.String", 0);
 
-		writer.WriteZeroBytes(ObjectHeaderSize);
-		writer.Write(data.Length, NativePointerSize);
+		writer.WriteZeroBytes(Compiler.ObjectHeaderSize);
+		writer.Write(data.Length, Architecture.NativePointerSize);
 		writer.Write(Encoding.Unicode.GetBytes(data));
 		return symbolName;
 	}
@@ -4646,7 +4646,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var type = (MosaType)instruction.Operand;
 		var result = MethodCompiler.VirtualRegisters.Allocate32();
 
-		var size = type.IsPointer ? NativePointerSize : MethodCompiler.TypeLayout.GetTypeLayoutSize(type);
+		var size = type.IsPointer ? Architecture.NativePointerSize : MethodCompiler.TypeLayout.GetTypeLayoutSize(type);
 
 		context.AppendInstruction(IRInstruction.Move32, result, Operand.CreateConstant32(size));
 
@@ -5410,7 +5410,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 	public LinkerSymbol GetStaticSymbol(MosaField field)
 	{
-		return Linker.DefineSymbol($"{Metadata.StaticSymbolPrefix}{field.DeclaringType}+{field.Name}", SectionKind.BSS, Architecture.NativeAlignment, NativePointerSize);
+		return Linker.DefineSymbol($"{Metadata.StaticSymbolPrefix}{field.DeclaringType}+{field.Name}", SectionKind.BSS, Architecture.NativeAlignment, Architecture.NativePointerSize);
 	}
 
 	private bool ProcessInternalCall(MosaMethod method, Context context, List<Operand> operands, Stack<StackEntry> stack)
@@ -5539,7 +5539,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	/// <returns>Base address for array elements.</returns>
 	private Operand CalculateTotalArrayOffset(Context context, Operand elementOffset)
 	{
-		var fixedOffset = Operand.CreateConstant32(NativePointerSize);
+		var fixedOffset = Operand.CreateConstant32(Architecture.NativePointerSize);
 		var arrayElement = Is32BitPlatform ?
 			MethodCompiler.VirtualRegisters.Allocate32()
 			: MethodCompiler.VirtualRegisters.Allocate64();

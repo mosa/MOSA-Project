@@ -67,16 +67,6 @@ public abstract class BaseMethodCompilerStage
 	protected CompilerSettings CompilerSettings { get; private set; }
 
 	/// <summary>
-	/// Holds the native pointer size
-	/// </summary>
-	protected uint NativePointerSize { get; private set; }
-
-	/// <summary>
-	/// Holds the native alignment
-	/// </summary>
-	protected uint NativeAlignment { get; private set; }
-
-	/// <summary>
 	/// Gets a value indicating whether [is32 bit platform].
 	/// </summary>
 	/// <value>
@@ -207,11 +197,8 @@ public abstract class BaseMethodCompilerStage
 		CompilerSettings = compiler.CompilerSettings;
 		MethodScanner = compiler.MethodScanner;
 
-		NativePointerSize = Architecture.NativePointerSize;
-		NativeAlignment = Architecture.NativeAlignment;
 		Is32BitPlatform = Architecture.Is32BitPlatform;
 		Is64BitPlatform = Architecture.Is64BitPlatform;
-		ObjectHeaderSize = compiler.ObjectHeaderSize;
 
 		Initialize();
 	}
