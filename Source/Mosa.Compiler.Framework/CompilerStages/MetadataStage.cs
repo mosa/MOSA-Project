@@ -459,13 +459,20 @@ public sealed class MetadataStage : BaseCompilerStage
 			Linker.Link(LinkType.AbsoluteAddress, NativePatchType, fieldDefSymbol, writer2.GetPosition(), Metadata.TypeDefinition + field.FieldType.FullName, 0);
 			writer2.WriteZeroBytes(NativePointerSize);
 
-			// 5 & 6. Offset / Address + Size
-			if (field.IsStatic && !field.IsLiteral && !type.HasOpenGenericParams)
+			// 5. Static Address
+			// 6. Offset or Data Length
+			if (type.HasOpenGenericParams || field.HasOpenGenericParams)
+			{
+				writer2.WriteZeroBytes(NativePointerSize);
+				writer2.WriteZeroBytes(NativePointerSize);
+			}
+			else if (field.IsStatic && !field.IsLiteral)
 			{
 				if (Compiler.MethodScanner.IsFieldAccessed(field))
 				{
 					Linker.Link(LinkType.AbsoluteAddress, NativePatchType, fieldDefSymbol, writer2.GetPosition(), field.FullName, 0);
 				}
+
 				writer2.WriteZeroBytes(NativePointerSize);
 				writer2.Write(field.Data?.Length ?? 0, NativePointerSize);
 			}
@@ -476,7 +483,7 @@ public sealed class MetadataStage : BaseCompilerStage
 				writer2.Write(offset, NativePointerSize);
 			}
 
-			// Add pointer to field list
+			// 7. Add pointer to field list
 			Linker.Link(LinkType.AbsoluteAddress, NativePatchType, fieldsTableSymbol, writer1.GetPosition(), fieldDefSymbol, 0);
 			writer1.WriteZeroBytes(NativePointerSize);
 		}

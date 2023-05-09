@@ -34,5 +34,7 @@ public struct FieldDefinition
 
 	public Pointer FieldData => Ptr.LoadPointer(Pointer.Size * 4);
 
-	public uint OffsetOrSize => Ptr.Load32(Pointer.Size * 5);
+	public uint Offset => Ptr.Load32(Pointer.Size * 5);
+
+	public uint Size => Ptr.Load32(Pointer.Size * 5);
 }

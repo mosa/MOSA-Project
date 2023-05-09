@@ -83,18 +83,21 @@ public static class Boot
 		//UnitTest();
 
 		KernelTest.RunTests();
-		StackTrace();
+
+		TestDump1();
+
+		//StackTrace();
 
 		//TestHash();
 
 		//Screen.Write("ArrayTest.BoundsCheck: ");
 
-		//var value1 = Test5();
+		var value1 = Test5();
 
-		//if (value1)
-		//	Screen.WriteLine("Ok");
-		//else
-		//	Screen.WriteLine("Failed");
+		if (value1)
+			Screen.WriteLine("Ok");
+		else
+			Screen.WriteLine("Failed");
 
 		//int value2 = CallReturn10();
 
@@ -113,6 +116,22 @@ public static class Boot
 		{
 			Native.Hlt();
 		}
+	}
+
+	private static int TestDump1()
+	{
+		var value = new byte[] { 5, 6, 8, 9, 7, 10, 5 };
+		var total = 0;
+
+		for (var i = 0; i < value.Length; i++)
+		{
+			var v = value[i];
+			total += v;
+		}
+
+		Screen.WriteLine(total.ToString());
+
+		return total;
 	}
 
 	private static void TestHash()
@@ -314,6 +333,6 @@ public static class Boot
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool Test5()
 	{
-		return Mosa.UnitTests.Basic.ArrayTest.BoundsCheck();
+		return Mosa.UnitTests.Basic.ArrayLayoutTests.I8a();
 	}
 }

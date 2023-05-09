@@ -376,6 +376,9 @@ public partial class MainForm : Form
 			nbr = nbr.Substring(0, nbr.Length - 1);
 		}
 
+		if (nbr.Length == 0)
+			return 0;
+
 		if (!IsHexDigitsOnly(nbr))
 			return 0;
 

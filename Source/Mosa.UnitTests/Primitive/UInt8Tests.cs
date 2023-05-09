@@ -148,4 +148,12 @@ public static class UInt8Tests
 	{
 		destination = value;
 	}
+
+	[MosaUnitTest("I4UpTo8")]
+	public static byte ArrayAccess(int index)
+	{
+		var array = new byte[] { 1, 2, 3, 4, 5, 6, 7, 8 };
+
+		return array[index];
+	}
 }
