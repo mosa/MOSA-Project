@@ -120,16 +120,18 @@ public static class Boot
 
 	private static int TestDump1()
 	{
-		var value = new byte[] { 5, 6, 8, 9, 7, 10, 5 };
+		var value = new byte[] { 1, 2, 3, 4, 5, 6, 7 };
 		var total = 0;
 
 		for (var i = 0; i < value.Length; i++)
 		{
 			var v = value[i];
 			total += v;
+
+			Screen.Write(v.ToString() + ", ");
 		}
 
-		Screen.WriteLine(total.ToString());
+		Screen.WriteLine();
 
 		return total;
 	}
