@@ -23,7 +23,7 @@ public sealed class Switch : BaseIRTransform
 
 		for (int i = 0; i < targets.Count - 1; ++i)
 		{
-			context.AppendInstruction(X64.Cmp32, null, operand, transform.CreateConstant32(i));
+			context.AppendInstruction(X64.Cmp32, null, operand, Operand.CreateConstant32(i));
 			context.AppendInstruction(X64.Branch, ConditionCode.Equal, targets[i]);
 		}
 	}

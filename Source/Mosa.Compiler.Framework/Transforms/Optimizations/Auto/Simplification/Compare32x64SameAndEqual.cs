@@ -33,7 +33,7 @@ public sealed class Compare32x64SameAndEqual : BaseTransform
 	{
 		var result = context.Result;
 
-		var e1 = transform.CreateConstant(To64(1));
+		var e1 = Operand.CreateConstant(To64(1));
 
 		context.SetInstruction(IRInstruction.Move64, result, e1);
 	}

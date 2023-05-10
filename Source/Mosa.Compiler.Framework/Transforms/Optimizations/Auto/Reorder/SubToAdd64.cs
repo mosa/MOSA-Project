@@ -31,7 +31,7 @@ public sealed class SubToAdd64 : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2;
 
-		var e1 = transform.CreateConstant(Neg64(ToSigned64(t2)));
+		var e1 = Operand.CreateConstant(Neg64(ToSigned64(t2)));
 
 		context.SetInstruction(IRInstruction.Add64, result, t1, e1);
 	}

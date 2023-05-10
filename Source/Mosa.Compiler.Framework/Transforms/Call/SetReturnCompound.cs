@@ -20,7 +20,7 @@ public sealed class SetReturnCompound : BaseTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		var offset = transform.CreateConstant32(transform.Architecture.OffsetOfFirstParameter);
+		var offset = Operand.CreateConstant32(transform.Architecture.OffsetOfFirstParameter);
 		context.SetInstruction(IRInstruction.StoreCompound, null, transform.StackFrame, offset, context.Operand1);
 	}
 }

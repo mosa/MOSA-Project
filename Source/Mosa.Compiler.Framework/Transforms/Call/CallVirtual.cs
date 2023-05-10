@@ -34,10 +34,10 @@ public sealed class CallVirtual : BasePlugTransform
 		operands.RemoveAt(0);
 
 		// Offset to TypeDef/MethodTable from thisPtr
-		var typeDefOffset = transform.CreateConstant32(-transform.NativePointerSize);
+		var typeDefOffset = Operand.CreateConstant32(-(int)transform.NativePointerSize);
 
 		// Offset to the method pointer on the MethodTable
-		var methodPointerOffset = transform.CreateConstant32(CalculateMethodTableOffset(transform, method));
+		var methodPointerOffset = Operand.CreateConstant32(CalculateMethodTableOffset(transform, method));
 
 		var typeDef = transform.VirtualRegisters.AllocateNativeInteger();
 		var callTarget = transform.VirtualRegisters.AllocateNativeInteger();

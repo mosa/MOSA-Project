@@ -51,7 +51,7 @@ public sealed class Compare64x64PassThru : BaseTransform
 
 		var t1 = context.Operand1.Definitions[0].Operand1;
 
-		var c1 = transform.CreateConstant(1);
+		var c1 = Operand.CreateConstant(1);
 
 		context.SetInstruction(IRInstruction.And64, result, t1, c1);
 	}
@@ -102,7 +102,7 @@ public sealed class Compare64x64PassThru_v1 : BaseTransform
 
 		var t1 = context.Operand1.Definitions[0].Operand2;
 
-		var c1 = transform.CreateConstant(1);
+		var c1 = Operand.CreateConstant(1);
 
 		context.SetInstruction(IRInstruction.And64, result, t1, c1);
 	}

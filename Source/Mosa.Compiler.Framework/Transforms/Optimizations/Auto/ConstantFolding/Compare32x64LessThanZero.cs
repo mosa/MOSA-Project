@@ -36,7 +36,7 @@ public sealed class Compare32x64LessThanZero : BaseTransform
 	{
 		var result = context.Result;
 
-		var c1 = transform.CreateConstant(0);
+		var c1 = Operand.CreateConstant(0);
 
 		context.SetInstruction(IRInstruction.Move64, result, c1);
 	}

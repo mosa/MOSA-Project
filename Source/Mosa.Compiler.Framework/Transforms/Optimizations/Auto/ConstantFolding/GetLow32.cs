@@ -32,7 +32,7 @@ public sealed class GetLow32 : BaseTransform
 
 		var t1 = context.Operand1;
 
-		var e1 = transform.CreateConstant(To32(t1));
+		var e1 = Operand.CreateConstant(To32(t1));
 
 		context.SetInstruction(IRInstruction.Move32, result, e1);
 	}

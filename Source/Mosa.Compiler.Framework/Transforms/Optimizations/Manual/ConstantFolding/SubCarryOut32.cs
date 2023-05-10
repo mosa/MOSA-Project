@@ -34,7 +34,7 @@ public sealed class SubCarryOut32 : BaseTransform
 		var t1 = context.Operand1.ConstantUnsigned32;
 		var t2 = context.Operand2.ConstantUnsigned32;
 
-		var e1 = transform.CreateConstant(t1 - t2);
+		var e1 = Operand.CreateConstant(t1 - t2);
 		var carry = IntegerTwiddling.IsSubUnsignedCarry(t1, t2);
 
 		context.SetInstruction(IRInstruction.Move32, result, e1);

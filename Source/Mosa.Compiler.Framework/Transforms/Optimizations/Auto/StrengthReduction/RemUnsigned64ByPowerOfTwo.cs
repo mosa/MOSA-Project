@@ -37,7 +37,7 @@ public sealed class RemUnsigned64ByPowerOfTwo : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2;
 
-		var e1 = transform.CreateConstant(Sub64(ShiftLeft64(1, And64(GetPowerOfTwo(To32(t2)), Sub64(64, 1))), 1));
+		var e1 = Operand.CreateConstant(Sub64(ShiftLeft64(1, And64(GetPowerOfTwo(To32(t2)), Sub64(64, 1))), 1));
 
 		context.SetInstruction(IRInstruction.And64, result, t1, e1);
 	}

@@ -62,7 +62,7 @@ public sealed class Compare64x64Rest : BaseLower32Transform
 		newBlocks[1].AppendInstruction(IRInstruction.Jmp, newBlocks[3].Block);
 
 		// Success
-		newBlocks[2].AppendInstruction(IRInstruction.Move32, tempLow, transform.CreateConstant((uint)1));
+		newBlocks[2].AppendInstruction(IRInstruction.Move32, tempLow, Operand.CreateConstant((uint)1));
 		newBlocks[2].AppendInstruction(IRInstruction.Jmp, newBlocks[4].Block);
 
 		// Failed

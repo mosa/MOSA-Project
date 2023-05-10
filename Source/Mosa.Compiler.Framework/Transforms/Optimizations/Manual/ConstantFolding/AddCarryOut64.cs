@@ -34,7 +34,7 @@ public sealed class AddCarryOut64 : BaseTransform
 		var t1 = context.Operand1.ConstantUnsigned64;
 		var t2 = context.Operand2.ConstantUnsigned64;
 
-		var e1 = transform.CreateConstant(t1 + t2);
+		var e1 = Operand.CreateConstant(t1 + t2);
 		var carry = IntegerTwiddling.IsAddUnsignedCarry(t1, t2);
 
 		context.SetInstruction(IRInstruction.Move64, result, e1);

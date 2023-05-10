@@ -29,6 +29,6 @@ public sealed class MovLoad8 : BaseTransform
 		var result = context.Result;
 
 		context.SetInstruction(X64.MovLoad32, result, source, offset);
-		context.AppendInstruction(X64.And32, result, result, transform.CreateConstant32(0x000000FF));
+		context.AppendInstruction(X64.And32, result, result, Operand.CreateConstant32(0x000000FF));
 	}
 }

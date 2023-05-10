@@ -290,7 +290,7 @@ public class BuildTransformations : BuildBaseTemplate
 			if (constantTextToConstantNbr.TryGetValue(name, out var found))
 			{
 				constantToConstantNbr.Add(operand, found);
-				Lines.AppendLine($"\t\tvar c{operand} = transform.CreateConstant({name});");
+				Lines.AppendLine($"\t\tvar c{operand} = Operand.CreateConstant({name});");
 				continue;
 			}
 
@@ -298,7 +298,7 @@ public class BuildTransformations : BuildBaseTemplate
 			constantTextToConstantNbr.Add(name, constantNbr);
 			constantToConstantNbr.Add(operand, constantNbr);
 
-			Lines.AppendLine($"\t\tvar c{constantNbr} = transform.CreateConstant({name});");
+			Lines.AppendLine($"\t\tvar c{constantNbr} = Operand.CreateConstant({name});");
 		}
 		if (constantNbr != 0)
 			Lines.AppendLine("");
@@ -321,7 +321,7 @@ public class BuildTransformations : BuildBaseTemplate
 					methodToMethodNbr.Add(operand.Method, found);
 					continue;
 
-					//Lines.AppendLine($"\t\tvar e{found} = transform.CreateConstant({name});");
+					//Lines.AppendLine($"\t\tvar e{found} = Operand.CreateConstant({name});");
 					//continue;
 				}
 
@@ -330,7 +330,7 @@ public class BuildTransformations : BuildBaseTemplate
 				methodToMethodNbr.Add(operand.Method, methodNbr);
 				methodToExpressionText.Add(name, methodNbr);
 
-				Lines.AppendLine($"\t\tvar e{methodNbr} = transform.CreateConstant({name});");
+				Lines.AppendLine($"\t\tvar e{methodNbr} = Operand.CreateConstant({name});");
 			}
 		}
 		if (methodNbr != 0)

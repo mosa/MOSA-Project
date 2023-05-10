@@ -76,7 +76,7 @@ public sealed class Unsigned64PerfectSquareFormula : BaseTransform
 		var v1 = transform.VirtualRegisters.Allocate64();
 		var v2 = transform.VirtualRegisters.Allocate64();
 
-		var e1 = transform.CreateConstant(DivUnsigned64(To64(t2), 2));
+		var e1 = Operand.CreateConstant(DivUnsigned64(To64(t2), 2));
 
 		context.SetInstruction(IRInstruction.Add64, v1, t1, e1);
 		context.AppendInstruction(IRInstruction.Add64, v2, t1, e1);
@@ -154,7 +154,7 @@ public sealed class Unsigned64PerfectSquareFormula_v1 : BaseTransform
 		var v1 = transform.VirtualRegisters.Allocate64();
 		var v2 = transform.VirtualRegisters.Allocate64();
 
-		var e1 = transform.CreateConstant(DivUnsigned64(To64(t2), 2));
+		var e1 = Operand.CreateConstant(DivUnsigned64(To64(t2), 2));
 
 		context.SetInstruction(IRInstruction.Add64, v1, t1, e1);
 		context.AppendInstruction(IRInstruction.Add64, v2, t1, e1);
@@ -232,7 +232,7 @@ public sealed class Unsigned64PerfectSquareFormula_v2 : BaseTransform
 		var v1 = transform.VirtualRegisters.Allocate64();
 		var v2 = transform.VirtualRegisters.Allocate64();
 
-		var e1 = transform.CreateConstant(DivUnsigned64(To64(t1), 2));
+		var e1 = Operand.CreateConstant(DivUnsigned64(To64(t1), 2));
 
 		context.SetInstruction(IRInstruction.Add64, v1, t2, e1);
 		context.AppendInstruction(IRInstruction.Add64, v2, t2, e1);
@@ -310,7 +310,7 @@ public sealed class Unsigned64PerfectSquareFormula_v3 : BaseTransform
 		var v1 = transform.VirtualRegisters.Allocate64();
 		var v2 = transform.VirtualRegisters.Allocate64();
 
-		var e1 = transform.CreateConstant(DivUnsigned64(To64(t1), 2));
+		var e1 = Operand.CreateConstant(DivUnsigned64(To64(t1), 2));
 
 		context.SetInstruction(IRInstruction.Add64, v1, t2, e1);
 		context.AppendInstruction(IRInstruction.Add64, v2, t2, e1);
@@ -388,7 +388,7 @@ public sealed class Unsigned64PerfectSquareFormula_v4 : BaseTransform
 		var v1 = transform.VirtualRegisters.Allocate64();
 		var v2 = transform.VirtualRegisters.Allocate64();
 
-		var e1 = transform.CreateConstant(DivUnsigned64(To64(t2), 2));
+		var e1 = Operand.CreateConstant(DivUnsigned64(To64(t2), 2));
 
 		context.SetInstruction(IRInstruction.Add64, v1, t1, e1);
 		context.AppendInstruction(IRInstruction.Add64, v2, t1, e1);
@@ -466,7 +466,7 @@ public sealed class Unsigned64PerfectSquareFormula_v5 : BaseTransform
 		var v1 = transform.VirtualRegisters.Allocate64();
 		var v2 = transform.VirtualRegisters.Allocate64();
 
-		var e1 = transform.CreateConstant(DivUnsigned64(To64(t2), 2));
+		var e1 = Operand.CreateConstant(DivUnsigned64(To64(t2), 2));
 
 		context.SetInstruction(IRInstruction.Add64, v1, t1, e1);
 		context.AppendInstruction(IRInstruction.Add64, v2, t1, e1);
@@ -544,7 +544,7 @@ public sealed class Unsigned64PerfectSquareFormula_v6 : BaseTransform
 		var v1 = transform.VirtualRegisters.Allocate64();
 		var v2 = transform.VirtualRegisters.Allocate64();
 
-		var e1 = transform.CreateConstant(DivUnsigned64(To64(t2), 2));
+		var e1 = Operand.CreateConstant(DivUnsigned64(To64(t2), 2));
 
 		context.SetInstruction(IRInstruction.Add64, v1, t1, e1);
 		context.AppendInstruction(IRInstruction.Add64, v2, t1, e1);
@@ -622,7 +622,7 @@ public sealed class Unsigned64PerfectSquareFormula_v7 : BaseTransform
 		var v1 = transform.VirtualRegisters.Allocate64();
 		var v2 = transform.VirtualRegisters.Allocate64();
 
-		var e1 = transform.CreateConstant(DivUnsigned64(To64(t2), 2));
+		var e1 = Operand.CreateConstant(DivUnsigned64(To64(t2), 2));
 
 		context.SetInstruction(IRInstruction.Add64, v1, t1, e1);
 		context.AppendInstruction(IRInstruction.Add64, v2, t1, e1);

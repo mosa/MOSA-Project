@@ -36,7 +36,7 @@ public sealed class RemR8 : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2;
 
-		var e1 = transform.CreateConstant(RemR8(ToR8(t1), ToR8(t2)));
+		var e1 = Operand.CreateConstant(RemR8(ToR8(t1), ToR8(t2)));
 
 		context.SetInstruction(IRInstruction.MoveR8, result, e1);
 	}

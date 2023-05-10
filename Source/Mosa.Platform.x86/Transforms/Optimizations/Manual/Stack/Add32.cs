@@ -61,11 +61,11 @@ public sealed class Add32 : BaseTransform
 
 		if (value > 0)
 		{
-			context.SetInstruction(X86.Add32, context.Result, context.Operand1, transform.CreateConstant(value));
+			context.SetInstruction(X86.Add32, context.Result, context.Operand1, Operand.CreateConstant(value));
 		}
 		else if (value < 0)
 		{
-			context.SetInstruction(X86.Sub32, context.Result, context.Operand1, transform.CreateConstant(-value));
+			context.SetInstruction(X86.Sub32, context.Result, context.Operand1, Operand.CreateConstant(-value));
 		}
 		else // if (value == 0)
 		{

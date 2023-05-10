@@ -31,7 +31,7 @@ public sealed class SubToAdd32 : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2;
 
-		var e1 = transform.CreateConstant(Neg32(ToSigned32(t2)));
+		var e1 = Operand.CreateConstant(Neg32(ToSigned32(t2)));
 
 		context.SetInstruction(IRInstruction.Add32, result, t1, e1);
 	}

@@ -43,7 +43,7 @@ public sealed class ShiftRight64 : BaseIRTransform
 			else if (shift > 32)
 			{
 				// shift is greater than 32 bits
-				var newshift = transform.CreateConstant32(shift - 32);
+				var newshift = Operand.CreateConstant32(shift - 32);
 				context.SetInstruction(X86.Shr32, resultLow, op1H, newshift);
 				context.AppendInstruction(X86.Mov32, resultHigh, Operand.Constant32_0);
 				return;

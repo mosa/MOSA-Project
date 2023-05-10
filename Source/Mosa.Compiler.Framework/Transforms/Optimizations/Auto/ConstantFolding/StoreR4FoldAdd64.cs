@@ -45,7 +45,7 @@ public sealed class StoreR4FoldAdd64 : BaseTransform
 		var t3 = context.Operand2;
 		var t4 = context.Operand3;
 
-		var e1 = transform.CreateConstant(Add64(To64(t2), To64(t3)));
+		var e1 = Operand.CreateConstant(Add64(To64(t2), To64(t3)));
 
 		context.SetInstruction(IRInstruction.StoreR4, result, t1, e1, t4);
 	}

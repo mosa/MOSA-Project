@@ -35,7 +35,7 @@ public sealed class SubCarryIn32Inside : BaseTransform
 		var t2 = context.Operand2;
 		var t3 = context.Operand3;
 
-		var e1 = transform.CreateConstant(Sub32(To32(t1), To32(t2)));
+		var e1 = Operand.CreateConstant(Sub32(To32(t1), To32(t2)));
 
 		context.SetInstruction(IRInstruction.Sub32, result, e1, t3);
 	}

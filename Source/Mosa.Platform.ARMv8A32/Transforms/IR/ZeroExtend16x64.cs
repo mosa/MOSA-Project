@@ -21,7 +21,7 @@ public sealed class ZeroExtend16x64 : BaseIRTransform
 
 		op1L = MoveConstantToRegisterOrImmediate(transform, context, op1L);
 
-		var operand1 = MoveConstantToRegister(transform, context, transform.CreateConstant32((uint)0xFFFF));
+		var operand1 = MoveConstantToRegister(transform, context, Operand.CreateConstant32((uint)0xFFFF));
 
 		context.SetInstruction(ARMv8A32.Mov, resultLow, op1L);
 		context.AppendInstruction(ARMv8A32.And, resultLow, resultLow, operand1);

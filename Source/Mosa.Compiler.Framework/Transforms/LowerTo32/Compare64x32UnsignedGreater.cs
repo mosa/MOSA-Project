@@ -46,7 +46,7 @@ public sealed class Compare64x32UnsignedGreater : BaseLower32Transform
 		context.AppendInstruction(IRInstruction.And32, v4, v2, v3);
 		context.AppendInstruction(IRInstruction.Or32, v5, v1, v4);
 
-		//context.AppendInstruction(IRInstruction.And32, result, v5, transform.CreateConstant((uint)1));
-		context.AppendInstruction(IRInstruction.IfThenElse32, result, v5, transform.CreateConstant((uint)1), Operand.Constant32_0);
+		//context.AppendInstruction(IRInstruction.And32, result, v5, Operand.CreateConstant((uint)1));
+		context.AppendInstruction(IRInstruction.IfThenElse32, result, v5, Operand.CreateConstant((uint)1), Operand.Constant32_0);
 	}
 }

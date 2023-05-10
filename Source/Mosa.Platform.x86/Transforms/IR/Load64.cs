@@ -25,7 +25,7 @@ public sealed class Load64 : BaseIRTransform
 
 		if (offset.IsResolvedConstant)
 		{
-			var offset2 = offset.IsConstantZero ? Operand.Constant32_4 : transform.CreateConstant32(offset.Offset + transform.NativePointerSize);
+			var offset2 = offset.IsConstantZero ? Operand.Constant32_4 : Operand.CreateConstant32(offset.Offset + transform.NativePointerSize);
 			context.AppendInstruction(X86.MovLoad32, resultHigh, address, offset2);
 			return;
 		}

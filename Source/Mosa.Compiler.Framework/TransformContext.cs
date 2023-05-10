@@ -218,65 +218,6 @@ public sealed class TransformContext
 
 	#endregion Trace
 
-	#region Constant Helper Methods
-
-	public Operand CreateConstant(int value)
-	{
-		return Operand.CreateConstant32((uint)value);
-	}
-
-	public Operand CreateConstant32(int value)
-	{
-		return Operand.CreateConstant32((uint)value);
-	}
-
-	public Operand CreateConstant32(long value)
-	{
-		return Operand.CreateConstant32((uint)value);
-	}
-
-	public Operand CreateConstant(uint value)
-	{
-		return Operand.CreateConstant32(value);
-	}
-
-	public Operand CreateConstant32(uint value)
-	{
-		return Operand.CreateConstant32(value);
-	}
-
-	public Operand CreateConstant(long value)
-	{
-		return Operand.CreateConstant64((ulong)value);
-	}
-
-	public Operand CreateConstant64(long value)
-	{
-		return Operand.CreateConstant64((ulong)value);
-	}
-
-	public Operand CreateConstant(ulong value)
-	{
-		return Operand.CreateConstant64(value);
-	}
-
-	public Operand CreateConstant64(ulong value)
-	{
-		return Operand.CreateConstant64(value);
-	}
-
-	public Operand CreateConstant(float value)
-	{
-		return Operand.CreateConstantR4(value);
-	}
-
-	public Operand CreateConstant(double value)
-	{
-		return Operand.CreateConstantR8(value);
-	}
-
-	#endregion Constant Helper Methods
-
 	#region Basic Block Helpers
 
 	/// <summary>
@@ -609,7 +550,7 @@ public sealed class TransformContext
 	{
 		if (context.Operand1.IsResolvedConstant && context.Operand2.IsResolvedConstant)
 		{
-			context.Operand1 = CreateConstant(context.Operand1.ConstantUnsigned64 + context.Operand2.ConstantUnsigned64);
+			context.Operand1 = Operand.CreateConstant(context.Operand1.ConstantUnsigned64 + context.Operand2.ConstantUnsigned64);
 			context.Operand2 = Operand.Constant32_0;
 		}
 

@@ -26,7 +26,7 @@ public sealed class Store64 : BaseIRTransform
 
 		if (offset.IsResolvedConstant)
 		{
-			context.AppendInstruction(X86.MovStore32, null, address, transform.CreateConstant32(offset.Offset + transform.NativePointerSize), op3H);
+			context.AppendInstruction(X86.MovStore32, null, address, Operand.CreateConstant32(offset.Offset + transform.NativePointerSize), op3H);
 		}
 		else
 		{

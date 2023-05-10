@@ -40,7 +40,7 @@ public sealed class AddressOf : BaseIRTransform
 		}
 		else
 		{
-			var offset = transform.CreateConstant32(context.Operand1.Offset);
+			var offset = Operand.CreateConstant32(context.Operand1.Offset);
 
 			offset = MoveConstantToRegisterOrImmediate(transform, context, offset);
 

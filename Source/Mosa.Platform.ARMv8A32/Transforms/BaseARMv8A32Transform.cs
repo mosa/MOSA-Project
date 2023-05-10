@@ -108,7 +108,7 @@ namespace Mosa.Platform.ARMv8A32.Transforms
 				else if (offsetOperand.ConstantUnsigned64 < 0 && -offsetOperand.ConstantSigned32 <= 0xFFF)
 				{
 					upDirection = false;
-					offsetOperand = transform.CreateConstant32(-offsetOperand.ConstantSigned32);
+					offsetOperand = Operand.CreateConstant32(-offsetOperand.ConstantSigned32);
 				}
 				else
 				{
@@ -138,7 +138,7 @@ namespace Mosa.Platform.ARMv8A32.Transforms
 				}
 				else if (offsetOperand.ConstantUnsigned64 < 0 && -offsetOperand.ConstantSigned32 <= 0xFFF)
 				{
-					offsetOperand = transform.CreateConstant32(-offsetOperand.ConstantSigned32);
+					offsetOperand = Operand.CreateConstant32(-offsetOperand.ConstantSigned32);
 				}
 				else
 				{
@@ -173,7 +173,7 @@ namespace Mosa.Platform.ARMv8A32.Transforms
 			{
 				if (ARMHelper.CalculateRotatedImmediateValue(operand.ConstantUnsigned32, out uint immediate, out byte _, out byte _))
 				{
-					var constant = transform.CreateConstant32(immediate);
+					var constant = Operand.CreateConstant32(immediate);
 
 					if (allowImmediate)
 						return constant;
@@ -187,7 +187,7 @@ namespace Mosa.Platform.ARMv8A32.Transforms
 
 				if (ARMHelper.CalculateRotatedImmediateValue(~operand.ConstantUnsigned32, out uint immediate2, out byte _, out byte _))
 				{
-					var constant = transform.CreateConstant32(immediate);
+					var constant = Operand.CreateConstant32(immediate);
 
 					var before = context.InsertBefore();
 					var v1 = transform.VirtualRegisters.Allocate32();
@@ -200,8 +200,8 @@ namespace Mosa.Platform.ARMv8A32.Transforms
 					var before = context.InsertBefore();
 
 					var v1 = transform.VirtualRegisters.Allocate32();
-					before.SetInstruction(ARMv8A32.Movw, v1, transform.CreateConstant32(operand.ConstantUnsigned32 & 0xFFFF));
-					before.AppendInstruction(ARMv8A32.Movt, v1, v1, transform.CreateConstant32(operand.ConstantUnsigned32 >> 16));
+					before.SetInstruction(ARMv8A32.Movw, v1, Operand.CreateConstant32(operand.ConstantUnsigned32 & 0xFFFF));
+					before.AppendInstruction(ARMv8A32.Movt, v1, v1, Operand.CreateConstant32(operand.ConstantUnsigned32 >> 16));
 
 					return v1;
 				}

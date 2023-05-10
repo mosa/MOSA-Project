@@ -33,7 +33,7 @@ public abstract class BaseCompoundTransform : BaseTransform
 		{
 			var left = size - i;
 
-			var index = transform.CreateConstant32(i);
+			var index = Operand.CreateConstant32(i);
 
 			if (left >= 8 & !transform.Is32BitPlatform)
 			{

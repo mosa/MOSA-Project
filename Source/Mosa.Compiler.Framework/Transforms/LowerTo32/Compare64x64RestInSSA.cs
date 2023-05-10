@@ -73,7 +73,7 @@ public sealed class Compare64x64RestInSSA : BaseLower32Transform
 		newBlocks[3].AppendInstruction(IRInstruction.Jmp, newBlocks[4].Block);
 
 		// Exit
-		newBlocks[4].AppendInstruction(IRInstruction.Phi64, resultLow, transform.CreateConstant((uint)1), Operand.Constant64_0);
+		newBlocks[4].AppendInstruction(IRInstruction.Phi64, resultLow, Operand.CreateConstant((uint)1), Operand.Constant64_0);
 		newBlocks[4].PhiBlocks = new List<BasicBlock>(2) { newBlocks[2].Block, newBlocks[3].Block };
 		newBlocks[4].AppendInstruction(IRInstruction.Jmp, nextBlock.Block);
 	}

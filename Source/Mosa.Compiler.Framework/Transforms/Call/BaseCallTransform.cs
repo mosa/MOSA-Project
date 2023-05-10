@@ -96,7 +96,7 @@ namespace Mosa.Compiler.Framework.Transforms.Call
 			if (stackSize == 0)
 				return;
 
-			context.AppendInstruction(transform.AddInstruction, transform.StackPointer, transform.StackPointer, transform.CreateConstant32(stackSize));
+			context.AppendInstruction(transform.AddInstruction, transform.StackPointer, transform.StackPointer, Operand.CreateConstant32(stackSize));
 		}
 
 		private static void GetReturnValue(TransformContext transform, Context context, Operand result)
@@ -151,7 +151,7 @@ namespace Mosa.Compiler.Framework.Transforms.Call
 
 		private static void Push(TransformContext transform, Context context, Operand operand, uint offset)
 		{
-			var offsetOperand = transform.CreateConstant32(offset);
+			var offsetOperand = Operand.CreateConstant32(offset);
 
 			if (operand.IsObject)
 			{
@@ -201,7 +201,7 @@ namespace Mosa.Compiler.Framework.Transforms.Call
 			if (stackSize == 0)
 				return;
 
-			context.AppendInstruction(transform.SubInstruction, transform.StackPointer, transform.StackPointer, transform.CreateConstant32(stackSize));
+			context.AppendInstruction(transform.SubInstruction, transform.StackPointer, transform.StackPointer, Operand.CreateConstant32(stackSize));
 		}
 
 		#endregion Helpers

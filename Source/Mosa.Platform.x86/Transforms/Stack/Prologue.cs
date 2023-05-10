@@ -32,7 +32,7 @@ public sealed class Prologue : BaseTransform
 
 		if (transform.MethodCompiler.StackSize != 0)
 		{
-			context.AppendInstruction(X86.Sub32, transform.StackPointer, transform.StackPointer, transform.CreateConstant32(-transform.MethodCompiler.StackSize));
+			context.AppendInstruction(X86.Sub32, transform.StackPointer, transform.StackPointer, Operand.CreateConstant32(-transform.MethodCompiler.StackSize));
 		}
 	}
 }

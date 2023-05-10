@@ -37,7 +37,7 @@ public sealed class MulCarryOut64 : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2;
 
-		var e1 = transform.CreateConstant(MulUnsigned64(To64(t1), To64(t2)));
+		var e1 = Operand.CreateConstant(MulUnsigned64(To64(t1), To64(t2)));
 
 		context.SetInstruction(IRInstruction.Move64, result, e1);
 		context.AppendInstruction(IRInstruction.Move64, result2, Operand.Constant64_1);

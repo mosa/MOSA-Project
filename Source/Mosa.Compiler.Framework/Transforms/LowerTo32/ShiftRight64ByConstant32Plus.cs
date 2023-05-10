@@ -23,7 +23,7 @@ public sealed class ShiftRight64ByConstant32Plus : BaseLower32Transform
 		var v2 = transform.VirtualRegisters.Allocate32();
 
 		context.SetInstruction(IRInstruction.GetHigh32, v1, operand1);
-		context.AppendInstruction(IRInstruction.ShiftRight32, v2, v1, transform.CreateConstant(shift - 32));
+		context.AppendInstruction(IRInstruction.ShiftRight32, v2, v1, Operand.CreateConstant(shift - 32));
 		context.AppendInstruction(IRInstruction.To64, result, v2, Operand.Constant32_0);
 	}
 }

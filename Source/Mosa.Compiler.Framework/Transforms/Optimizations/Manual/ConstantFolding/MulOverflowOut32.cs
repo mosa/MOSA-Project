@@ -37,7 +37,7 @@ public sealed class MulOverflowOut32 : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2;
 
-		var e1 = transform.CreateConstant(MulSigned32(ToSigned32(t1), ToSigned32(t2)));
+		var e1 = Operand.CreateConstant(MulSigned32(ToSigned32(t1), ToSigned32(t2)));
 
 		context.SetInstruction(IRInstruction.Move32, result, e1);
 		context.AppendInstruction(IRInstruction.Move32, result2, Operand.Constant32_1);

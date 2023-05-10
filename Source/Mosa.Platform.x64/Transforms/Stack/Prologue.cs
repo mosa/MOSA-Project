@@ -29,7 +29,7 @@ public sealed class Prologue : BaseTransform
 
 		if (transform.MethodCompiler.StackSize != 0)
 		{
-			context.AppendInstruction(X64.Sub64, transform.StackPointer, transform.StackPointer, transform.CreateConstant64(-transform.MethodCompiler.StackSize));
+			context.AppendInstruction(X64.Sub64, transform.StackPointer, transform.StackPointer, Operand.CreateConstant64(-transform.MethodCompiler.StackSize));
 		}
 	}
 }

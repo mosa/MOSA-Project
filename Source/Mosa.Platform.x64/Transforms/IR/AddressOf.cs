@@ -29,7 +29,7 @@ public sealed class AddressOf : BaseIRTransform
 		}
 		else
 		{
-			var offset = transform.CreateConstant32(context.Operand1.Offset);
+			var offset = Operand.CreateConstant32(context.Operand1.Offset);
 
 			context.SetInstruction(X64.Lea64, context.Result, transform.StackFrame, offset);
 		}

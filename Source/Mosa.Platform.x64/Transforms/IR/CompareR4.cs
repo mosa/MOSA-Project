@@ -43,7 +43,7 @@ public sealed class CompareR4 : BaseIRTransform
 		{
 			context.SetInstruction(instruction, null, operand1, operand2);
 			context.AppendInstruction(X64.Setcc, ConditionCode.Parity, result);
-			context.AppendInstruction(X64.Mov32, v1, transform.CreateConstant32(1));
+			context.AppendInstruction(X64.Mov32, v1, Operand.CreateConstant32(1));
 			context.AppendInstruction(X64.CMov32, ConditionCode.NotEqual, result, result, v1);
 			context.AppendInstruction(X64.Movzx8To32, result, result);
 			return;

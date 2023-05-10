@@ -53,7 +53,7 @@ public sealed class Compare64x64NotPassThru : BaseTransform
 
 		var v1 = transform.VirtualRegisters.Allocate64();
 
-		var c1 = transform.CreateConstant(1);
+		var c1 = Operand.CreateConstant(1);
 
 		context.SetInstruction(IRInstruction.Not64, v1, t1);
 		context.AppendInstruction(IRInstruction.And64, result, v1, c1);
@@ -107,7 +107,7 @@ public sealed class Compare64x64NotPassThru_v1 : BaseTransform
 
 		var v1 = transform.VirtualRegisters.Allocate64();
 
-		var c1 = transform.CreateConstant(1);
+		var c1 = Operand.CreateConstant(1);
 
 		context.SetInstruction(IRInstruction.Not64, v1, t1);
 		context.AppendInstruction(IRInstruction.And64, result, v1, c1);

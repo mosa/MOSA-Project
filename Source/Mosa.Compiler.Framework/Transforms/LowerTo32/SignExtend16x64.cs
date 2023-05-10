@@ -24,7 +24,7 @@ public sealed class SignExtend16x64 : BaseLower32Transform
 
 		context.SetInstruction(IRInstruction.GetLow32, v1, operand1);
 		context.AppendInstruction(IRInstruction.SignExtend16x32, resultLow, v1);
-		context.AppendInstruction(IRInstruction.ArithShiftRight32, resultHigh, resultLow, transform.CreateConstant(31));
+		context.AppendInstruction(IRInstruction.ArithShiftRight32, resultHigh, resultLow, Operand.CreateConstant(31));
 		context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 	}
 }

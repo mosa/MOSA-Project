@@ -76,7 +76,7 @@ public sealed class Signed32PerfectSquareFormula : BaseTransform
 		var v1 = transform.VirtualRegisters.Allocate32();
 		var v2 = transform.VirtualRegisters.Allocate32();
 
-		var e1 = transform.CreateConstant(DivSigned32(ToSigned32(t2), 2));
+		var e1 = Operand.CreateConstant(DivSigned32(ToSigned32(t2), 2));
 
 		context.SetInstruction(IRInstruction.Add32, v1, t1, e1);
 		context.AppendInstruction(IRInstruction.Add32, v2, t1, e1);
@@ -154,7 +154,7 @@ public sealed class Signed32PerfectSquareFormula_v1 : BaseTransform
 		var v1 = transform.VirtualRegisters.Allocate32();
 		var v2 = transform.VirtualRegisters.Allocate32();
 
-		var e1 = transform.CreateConstant(DivSigned32(ToSigned32(t2), 2));
+		var e1 = Operand.CreateConstant(DivSigned32(ToSigned32(t2), 2));
 
 		context.SetInstruction(IRInstruction.Add32, v1, t1, e1);
 		context.AppendInstruction(IRInstruction.Add32, v2, t1, e1);
@@ -232,7 +232,7 @@ public sealed class Signed32PerfectSquareFormula_v2 : BaseTransform
 		var v1 = transform.VirtualRegisters.Allocate32();
 		var v2 = transform.VirtualRegisters.Allocate32();
 
-		var e1 = transform.CreateConstant(DivSigned32(ToSigned32(t1), 2));
+		var e1 = Operand.CreateConstant(DivSigned32(ToSigned32(t1), 2));
 
 		context.SetInstruction(IRInstruction.Add32, v1, t2, e1);
 		context.AppendInstruction(IRInstruction.Add32, v2, t2, e1);
@@ -310,7 +310,7 @@ public sealed class Signed32PerfectSquareFormula_v3 : BaseTransform
 		var v1 = transform.VirtualRegisters.Allocate32();
 		var v2 = transform.VirtualRegisters.Allocate32();
 
-		var e1 = transform.CreateConstant(DivSigned32(ToSigned32(t1), 2));
+		var e1 = Operand.CreateConstant(DivSigned32(ToSigned32(t1), 2));
 
 		context.SetInstruction(IRInstruction.Add32, v1, t2, e1);
 		context.AppendInstruction(IRInstruction.Add32, v2, t2, e1);
@@ -388,7 +388,7 @@ public sealed class Signed32PerfectSquareFormula_v4 : BaseTransform
 		var v1 = transform.VirtualRegisters.Allocate32();
 		var v2 = transform.VirtualRegisters.Allocate32();
 
-		var e1 = transform.CreateConstant(DivSigned32(ToSigned32(t2), 2));
+		var e1 = Operand.CreateConstant(DivSigned32(ToSigned32(t2), 2));
 
 		context.SetInstruction(IRInstruction.Add32, v1, t1, e1);
 		context.AppendInstruction(IRInstruction.Add32, v2, t1, e1);
@@ -466,7 +466,7 @@ public sealed class Signed32PerfectSquareFormula_v5 : BaseTransform
 		var v1 = transform.VirtualRegisters.Allocate32();
 		var v2 = transform.VirtualRegisters.Allocate32();
 
-		var e1 = transform.CreateConstant(DivSigned32(ToSigned32(t2), 2));
+		var e1 = Operand.CreateConstant(DivSigned32(ToSigned32(t2), 2));
 
 		context.SetInstruction(IRInstruction.Add32, v1, t1, e1);
 		context.AppendInstruction(IRInstruction.Add32, v2, t1, e1);
@@ -544,7 +544,7 @@ public sealed class Signed32PerfectSquareFormula_v6 : BaseTransform
 		var v1 = transform.VirtualRegisters.Allocate32();
 		var v2 = transform.VirtualRegisters.Allocate32();
 
-		var e1 = transform.CreateConstant(DivSigned32(ToSigned32(t2), 2));
+		var e1 = Operand.CreateConstant(DivSigned32(ToSigned32(t2), 2));
 
 		context.SetInstruction(IRInstruction.Add32, v1, t1, e1);
 		context.AppendInstruction(IRInstruction.Add32, v2, t1, e1);
@@ -622,7 +622,7 @@ public sealed class Signed32PerfectSquareFormula_v7 : BaseTransform
 		var v1 = transform.VirtualRegisters.Allocate32();
 		var v2 = transform.VirtualRegisters.Allocate32();
 
-		var e1 = transform.CreateConstant(DivSigned32(ToSigned32(t2), 2));
+		var e1 = Operand.CreateConstant(DivSigned32(ToSigned32(t2), 2));
 
 		context.SetInstruction(IRInstruction.Add32, v1, t1, e1);
 		context.AppendInstruction(IRInstruction.Add32, v2, t1, e1);

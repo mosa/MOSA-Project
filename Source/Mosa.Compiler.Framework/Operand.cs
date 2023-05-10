@@ -349,6 +349,26 @@ public sealed partial class Operand
 		return CreateConstant32((uint)value);
 	}
 
+	public static Operand CreateConstant32(ulong value)
+	{
+		return CreateConstant32((uint)value);
+	}
+
+	public static Operand CreateConstant32(long value)
+	{
+		return CreateConstant32((uint)value);
+	}
+
+	public static Operand CreateConstant(int value)
+	{
+		return CreateConstant32(value);
+	}
+
+	public static Operand CreateConstant(uint value)
+	{
+		return CreateConstant32(value);
+	}
+
 	private static Operand CreateConstant64Internal(ulong value)
 	{
 		return new Operand
@@ -390,6 +410,16 @@ public sealed partial class Operand
 		return CreateConstant64((ulong)value);
 	}
 
+	public static Operand CreateConstant(long value)
+	{
+		return CreateConstant64(value);
+	}
+
+	public static Operand CreateConstant(ulong value)
+	{
+		return CreateConstant64(value);
+	}
+
 	private static Operand CreateConstantR4Internal(float value)
 	{
 		return new Operand
@@ -413,6 +443,11 @@ public sealed partial class Operand
 		return CreateConstantR4Internal(value);
 	}
 
+	public static Operand CreateConstant(float value)
+	{
+		return CreateConstantR4(value);
+	}
+
 	private static Operand CreateConstantR8Internal(double value)
 	{
 		return new Operand
@@ -434,6 +469,11 @@ public sealed partial class Operand
 		}
 
 		return CreateConstantR8Internal(value);
+	}
+
+	public static Operand CreateConstant(double value)
+	{
+		return CreateConstantR8(value);
 	}
 
 	public static Operand CreateLabel(string label, bool Is32Platform)
