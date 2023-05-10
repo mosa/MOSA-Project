@@ -54,7 +54,7 @@ public class CompilerSettings
 
 	public int OptimizationWindow => Settings.GetValue("Optimizations.Basic.Window", 5);
 
-	public int InlineMaximum => Settings.GetValue(" ", 12);
+	public int InlineMaximum => Settings.GetValue("Optimizations.Inline.Maximum", 12);
 
 	public int InlineAggressiveMaximum => Settings.GetValue("Optimizations.Inline.AggressiveMaximum", 24);
 

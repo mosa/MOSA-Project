@@ -8,7 +8,7 @@ namespace Mosa.DeviceSystem;
 /// <summary>
 /// Data Block (Little Endian)
 /// </summary>
-public struct DataBlock
+public class DataBlock
 {
 	/// <summary>
 	/// Gets the data.
