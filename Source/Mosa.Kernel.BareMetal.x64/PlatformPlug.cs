@@ -28,16 +28,6 @@ public static class PlatformPlug
 		//SSE.Setup();
 	}
 
-	[Plug("Mosa.Kernel.BareMetal.Platform::GetPlatformReservedMemory")]
-	public static AddressRange GetPlatformReservedMemory(int slot)
-	{
-		return slot switch
-		{
-			0 => new AddressRange(new Pointer(0), 1024 * 1024),
-			_ => new AddressRange(new Pointer(0), 0)
-		};
-	}
-
 	[Plug("Mosa.Kernel.BareMetal.Platform::GetBootReservedRegion")]
 	public static AddressRange GetBootReservedRegion()
 	{

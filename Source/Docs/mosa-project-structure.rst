@@ -26,7 +26,7 @@ This project hosts all the drivers MOSA offers. They're not required to run a de
 Mosa.DeviceSystem
 *****************
 
-This project contains all kinds of miscelleanous classes and utilities, useful to device drivers and other stuff. It can fully be used outside MOSA and can serve as a great utilities project. For example, it contains classes for generating a VDI header or VHD footer, MBR generation and some PCI utilities. But it contains much more!
+This project contains all kinds of miscelleanous classes and utilities, useful to device drivers and other stuff. It can almost be fully used outside MOSA (it does contain a few classes related to MOSA, like ``ConstrainedPointer``) and can serve as a great utilities project. For example, it contains classes for generating a VDI header or VHD footer, MBR generation and some PCI utilities. But it contains much more!
 
 It's also not required to run a demo, however it is a dependecy of **Mosa.DeviceDriver**.
 
@@ -96,7 +96,7 @@ Those projects help in providing additional functions for using native instructi
 Mosa.Tool.*
 ***********
 
-Those projects are the tools provided by the MOSA project. You can learn more about them :doc:`here<tools>`.
+Those projects are the tools provided by the MOSA project. You can learn more about them in the Tools section.
 
 **************
 Mosa.Utility.*
