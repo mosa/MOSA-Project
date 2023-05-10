@@ -5494,7 +5494,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		return intrinsic;
 	}
 
-	private MosaMethod GetMethodOrOverride(MosaType type, MosaMethod method)
+	private static MosaMethod GetMethodOrOverride(MosaType type, MosaMethod method)
 	{
 		var implMethod = type.FindMethodBySignature(method.Name, method.Signature);
 
