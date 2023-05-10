@@ -5513,24 +5513,22 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	/// <returns>Element offset operand.</returns>
 	private Operand CalculateArrayElementOffset(Context context, uint size, Operand index)
 	{
+		var elementOffset = MethodCompiler.VirtualRegisters.AllocateNativeInteger();
+
 		if (Is32BitPlatform)
 		{
-			var elementOffset = MethodCompiler.VirtualRegisters.Allocate32();
 			var elementSize = Operand.CreateConstant32(size);
 
 			context.AppendInstruction(IRInstruction.MulUnsigned32, elementOffset, index, elementSize);
-
-			return elementOffset;
 		}
 		else
 		{
-			var elementOffset = MethodCompiler.VirtualRegisters.Allocate64();
 			var elementSize = Operand.CreateConstant64(size);
 
 			context.AppendInstruction(IRInstruction.MulUnsigned64, elementOffset, index, elementSize);
-
-			return elementOffset;
 		}
+
+		return elementOffset;
 	}
 
 	/// <summary>Calculates the base of the array elements.</summary>
@@ -5540,14 +5538,9 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	private Operand CalculateTotalArrayOffset(Context context, Operand elementOffset)
 	{
 		var fixedOffset = Operand.CreateConstant32(Architecture.NativePointerSize);
-		var arrayElement = Is32BitPlatform ?
-			MethodCompiler.VirtualRegisters.Allocate32()
-			: MethodCompiler.VirtualRegisters.Allocate64();
+		var arrayElement = MethodCompiler.VirtualRegisters.AllocateNativeInteger();
 
-		if (Is32BitPlatform)
-			context.AppendInstruction(IRInstruction.Add32, arrayElement, elementOffset, fixedOffset);
-		else
-			context.AppendInstruction(IRInstruction.Add64, arrayElement, elementOffset, fixedOffset);
+		context.AppendInstruction(Is32BitPlatform ? IRInstruction.Add32 : IRInstruction.Add64, arrayElement, elementOffset, fixedOffset);
 
 		return arrayElement;
 	}
