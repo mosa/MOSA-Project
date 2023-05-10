@@ -48,16 +48,6 @@ public static class BootMemoryMap
 	{
 		SetMemoryMap(Platform.GetBootReservedRegion(), BootMemoryType.Kernel);
 		SetMemoryMap(Platform.GetInitialGCMemoryPool(), BootMemoryType.Kernel);
-
-		for (int slot = 0; ; slot++)
-		{
-			var region = Platform.GetPlatformReservedMemory(slot);
-
-			if (region.Size == 0)
-				break;
-
-			SetMemoryMap(region, BootMemoryType.Kernel);
-		}
 	}
 
 	public static BootMemoryMapEntry SetMemoryMap(AddressRange range, BootMemoryType type)
