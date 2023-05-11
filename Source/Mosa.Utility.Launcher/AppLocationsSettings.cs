@@ -42,12 +42,17 @@ public static class AppLocationsSettings
 			new string[] {
 				@"%CURRENT%\qemu\Windows",
 				"%CURRENT%/qemu/Linux",
+				@"%APPDIR%\qemu\Windows",
+				"%APPDIR%/qemu/Linux",
 				@"%MOSA%\Tools\QEMU\Windows",
 				@"%CURRENT%\..\Tools\QEMU\Windows",
 				@"%CURRENT%\Tools\QEMU\Windows",
 				@"%APPDIR%\Tools\QEMU\Windows",
 				@"%APPDIR%\..\Tools\QEMU\Windows",
+				"%CURRENT%/Tools/qemu/Linux",
 				"%CURRENT%/../Tools/qemu/Linux",
+				"%APPDIR%/Tools/qemu/Linux",
+				"%APPDIR%/../Tools/qemu/Linux",
 				@"%ProgramFiles%\qemu",
 				@"%ProgramFiles(x86)%\qemu",
 				@"%MOSATOOLS%\QEMU\Windows",
@@ -188,8 +193,7 @@ public static class AppLocationsSettings
 			new string[] { "qemu-img.exe", "qemu-img" },
 			new string[]
 			{
-				@"%CURRENT%\qemu\share",
-				"%CURRENT%/qemu/share",
+				@"%CURRENT%\qemu\Windows",
 
 				@"%MOSA%\Tools\QEMU\Windows",
 				@"%CURRENT%\..\Tools\QEMU\Windows",
@@ -202,7 +206,12 @@ public static class AppLocationsSettings
 				@"%ProgramFiles(x86)%\qemu",
 				@"%ProgramFiles(x86)%\Mosa-Project\Tools\qemu\Windows",
 
-				"%CURRENT%/../Tools/qemu/share",
+				"%CURRENT%/qemu/Linux",
+				"%APPDIR%/qemu/Linux",
+				"%CURRENT%/../Tools/qemu/Linux",
+				"%CURRENT%/Tools/qemu/Linux",
+				"%APPDIR%/Tools/qemu/Linux",
+				"%APPDIR%/../Tools/qemu/Linux",
 				"/bin"
 			}
 		);
@@ -215,7 +224,6 @@ public static class AppLocationsSettings
 				new string[] { "bios.bin" },
 				new string[] {
 					@"%CURRENT%\qemu\share",
-					"%CURRENT%/qemu/share",
 
 					@"%CURRENT%\..\Tools\qemu\share",
 					@"%MOSATOOLS%\qemu\Windows",
@@ -225,7 +233,12 @@ public static class AppLocationsSettings
 					@"%ProgramFiles(x86)%\qemu",
 					@"%ProgramFiles(x86)%\qemu\bios",
 
+					"%CURRENT%/qemu/share",
+					"%APPDIR%/qemu/share",
 					"%CURRENT%/../Tools/qemu/share",
+					"%CURRENT%/Tools/qemu/share",
+					"%APPDIR%/Tools/qemu/share",
+					"%APPDIR%/../Tools/qemu/share",
 					"/usr/share/qemu",
 					"/usr/share/seabios"
 				}
