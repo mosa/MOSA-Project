@@ -83,6 +83,9 @@ public static class Boot
 		//UnitTest();
 
 		KernelTest.RunTests();
+
+		//TestDump1();
+
 		StackTrace();
 
 		//TestHash();
@@ -113,6 +116,24 @@ public static class Boot
 		{
 			Native.Hlt();
 		}
+	}
+
+	private static int TestDump1()
+	{
+		var value = new byte[] { 1, 2, 3, 4, 5, 6, 7 };
+		var total = 0;
+
+		for (var i = 0; i < value.Length; i++)
+		{
+			var v = value[i];
+			total += v;
+
+			Screen.Write(v.ToString() + ", ");
+		}
+
+		Screen.WriteLine();
+
+		return total;
 	}
 
 	private static void TestHash()
@@ -314,6 +335,6 @@ public static class Boot
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool Test5()
 	{
-		return Mosa.UnitTests.Basic.ArrayTest.BoundsCheck();
+		return Mosa.UnitTests.Basic.ArrayLayoutTests.I8a();
 	}
 }

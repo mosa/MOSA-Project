@@ -40,7 +40,7 @@ public sealed class MulUnsigned32ByPowerOfTwo : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2;
 
-		var e1 = transform.CreateConstant(GetPowerOfTwo(To32(t2)));
+		var e1 = Operand.CreateConstant(GetPowerOfTwo(To32(t2)));
 
 		context.SetInstruction(IRInstruction.ShiftLeft32, result, t1, e1);
 	}
@@ -80,7 +80,7 @@ public sealed class MulUnsigned32ByPowerOfTwo_v1 : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2;
 
-		var e1 = transform.CreateConstant(GetPowerOfTwo(To32(t1)));
+		var e1 = Operand.CreateConstant(GetPowerOfTwo(To32(t1)));
 
 		context.SetInstruction(IRInstruction.ShiftLeft32, result, t2, e1);
 	}

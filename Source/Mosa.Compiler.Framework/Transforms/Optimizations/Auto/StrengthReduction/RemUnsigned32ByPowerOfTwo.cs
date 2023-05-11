@@ -37,7 +37,7 @@ public sealed class RemUnsigned32ByPowerOfTwo : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2;
 
-		var e1 = transform.CreateConstant(Sub32(ShiftLeft32(1, And32(GetPowerOfTwo(To32(t2)), Sub32(32, 1))), 1));
+		var e1 = Operand.CreateConstant(Sub32(ShiftLeft32(1, And32(GetPowerOfTwo(To32(t2)), Sub32(32, 1))), 1));
 
 		context.SetInstruction(IRInstruction.And32, result, t1, e1);
 	}

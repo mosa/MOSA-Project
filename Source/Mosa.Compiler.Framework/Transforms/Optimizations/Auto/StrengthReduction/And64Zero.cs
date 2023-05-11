@@ -33,7 +33,7 @@ public sealed class And64Zero : BaseTransform
 	{
 		var result = context.Result;
 
-		var e1 = transform.CreateConstant(To64(0));
+		var e1 = Operand.CreateConstant(To64(0));
 
 		context.SetInstruction(IRInstruction.Move64, result, e1);
 	}
@@ -66,7 +66,7 @@ public sealed class And64Zero_v1 : BaseTransform
 	{
 		var result = context.Result;
 
-		var e1 = transform.CreateConstant(To64(0));
+		var e1 = Operand.CreateConstant(To64(0));
 
 		context.SetInstruction(IRInstruction.Move64, result, e1);
 	}

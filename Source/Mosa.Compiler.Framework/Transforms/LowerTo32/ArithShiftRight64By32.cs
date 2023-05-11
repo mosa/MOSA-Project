@@ -18,11 +18,11 @@ public sealed class ArithShiftRight64By32 : BaseLower32Transform
 		var result = context.Result;
 		var operand1 = context.Operand1;
 
-		var v1 = transform.AllocateVirtualRegister32();
-		var v2 = transform.AllocateVirtualRegister32();
+		var v1 = transform.VirtualRegisters.Allocate32();
+		var v2 = transform.VirtualRegisters.Allocate32();
 
 		context.SetInstruction(IRInstruction.GetHigh32, v1, operand1);
-		context.AppendInstruction(IRInstruction.ArithShiftRight32, v2, v1, transform.Constant32_31);
+		context.AppendInstruction(IRInstruction.ArithShiftRight32, v2, v1, Operand.Constant32_31);
 		context.AppendInstruction(IRInstruction.To64, result, v1, v2);
 	}
 }

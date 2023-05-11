@@ -73,10 +73,10 @@ public sealed class Unsigned32PerfectSquareFormula : BaseTransform
 		var t1 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I4);
-		var v2 = transform.AllocateVirtualRegister(transform.I4);
+		var v1 = transform.VirtualRegisters.Allocate32();
+		var v2 = transform.VirtualRegisters.Allocate32();
 
-		var e1 = transform.CreateConstant(DivUnsigned32(To32(t2), 2));
+		var e1 = Operand.CreateConstant(DivUnsigned32(To32(t2), 2));
 
 		context.SetInstruction(IRInstruction.Add32, v1, t1, e1);
 		context.AppendInstruction(IRInstruction.Add32, v2, t1, e1);
@@ -151,10 +151,10 @@ public sealed class Unsigned32PerfectSquareFormula_v1 : BaseTransform
 		var t1 = context.Operand2.Definitions[0].Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand2.Definitions[0].Operand2.Definitions[0].Operand1;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I4);
-		var v2 = transform.AllocateVirtualRegister(transform.I4);
+		var v1 = transform.VirtualRegisters.Allocate32();
+		var v2 = transform.VirtualRegisters.Allocate32();
 
-		var e1 = transform.CreateConstant(DivUnsigned32(To32(t2), 2));
+		var e1 = Operand.CreateConstant(DivUnsigned32(To32(t2), 2));
 
 		context.SetInstruction(IRInstruction.Add32, v1, t1, e1);
 		context.AppendInstruction(IRInstruction.Add32, v2, t1, e1);
@@ -229,10 +229,10 @@ public sealed class Unsigned32PerfectSquareFormula_v2 : BaseTransform
 		var t1 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I4);
-		var v2 = transform.AllocateVirtualRegister(transform.I4);
+		var v1 = transform.VirtualRegisters.Allocate32();
+		var v2 = transform.VirtualRegisters.Allocate32();
 
-		var e1 = transform.CreateConstant(DivUnsigned32(To32(t1), 2));
+		var e1 = Operand.CreateConstant(DivUnsigned32(To32(t1), 2));
 
 		context.SetInstruction(IRInstruction.Add32, v1, t2, e1);
 		context.AppendInstruction(IRInstruction.Add32, v2, t2, e1);
@@ -307,10 +307,10 @@ public sealed class Unsigned32PerfectSquareFormula_v3 : BaseTransform
 		var t1 = context.Operand2.Definitions[0].Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand2.Definitions[0].Operand1.Definitions[0].Operand2;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I4);
-		var v2 = transform.AllocateVirtualRegister(transform.I4);
+		var v1 = transform.VirtualRegisters.Allocate32();
+		var v2 = transform.VirtualRegisters.Allocate32();
 
-		var e1 = transform.CreateConstant(DivUnsigned32(To32(t1), 2));
+		var e1 = Operand.CreateConstant(DivUnsigned32(To32(t1), 2));
 
 		context.SetInstruction(IRInstruction.Add32, v1, t2, e1);
 		context.AppendInstruction(IRInstruction.Add32, v2, t2, e1);
@@ -385,10 +385,10 @@ public sealed class Unsigned32PerfectSquareFormula_v4 : BaseTransform
 		var t1 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand1.Definitions[0].Operand2.Definitions[0].Operand2;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I4);
-		var v2 = transform.AllocateVirtualRegister(transform.I4);
+		var v1 = transform.VirtualRegisters.Allocate32();
+		var v2 = transform.VirtualRegisters.Allocate32();
 
-		var e1 = transform.CreateConstant(DivUnsigned32(To32(t2), 2));
+		var e1 = Operand.CreateConstant(DivUnsigned32(To32(t2), 2));
 
 		context.SetInstruction(IRInstruction.Add32, v1, t1, e1);
 		context.AppendInstruction(IRInstruction.Add32, v2, t1, e1);
@@ -463,10 +463,10 @@ public sealed class Unsigned32PerfectSquareFormula_v5 : BaseTransform
 		var t1 = context.Operand2.Definitions[0].Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand2.Definitions[0].Operand2.Definitions[0].Operand2;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I4);
-		var v2 = transform.AllocateVirtualRegister(transform.I4);
+		var v1 = transform.VirtualRegisters.Allocate32();
+		var v2 = transform.VirtualRegisters.Allocate32();
 
-		var e1 = transform.CreateConstant(DivUnsigned32(To32(t2), 2));
+		var e1 = Operand.CreateConstant(DivUnsigned32(To32(t2), 2));
 
 		context.SetInstruction(IRInstruction.Add32, v1, t1, e1);
 		context.AppendInstruction(IRInstruction.Add32, v2, t1, e1);
@@ -541,10 +541,10 @@ public sealed class Unsigned32PerfectSquareFormula_v6 : BaseTransform
 		var t1 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I4);
-		var v2 = transform.AllocateVirtualRegister(transform.I4);
+		var v1 = transform.VirtualRegisters.Allocate32();
+		var v2 = transform.VirtualRegisters.Allocate32();
 
-		var e1 = transform.CreateConstant(DivUnsigned32(To32(t2), 2));
+		var e1 = Operand.CreateConstant(DivUnsigned32(To32(t2), 2));
 
 		context.SetInstruction(IRInstruction.Add32, v1, t1, e1);
 		context.AppendInstruction(IRInstruction.Add32, v2, t1, e1);
@@ -619,10 +619,10 @@ public sealed class Unsigned32PerfectSquareFormula_v7 : BaseTransform
 		var t1 = context.Operand2.Definitions[0].Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand2.Definitions[0].Operand1.Definitions[0].Operand2;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I4);
-		var v2 = transform.AllocateVirtualRegister(transform.I4);
+		var v1 = transform.VirtualRegisters.Allocate32();
+		var v2 = transform.VirtualRegisters.Allocate32();
 
-		var e1 = transform.CreateConstant(DivUnsigned32(To32(t2), 2));
+		var e1 = Operand.CreateConstant(DivUnsigned32(To32(t2), 2));
 
 		context.SetInstruction(IRInstruction.Add32, v1, t1, e1);
 		context.AppendInstruction(IRInstruction.Add32, v2, t1, e1);

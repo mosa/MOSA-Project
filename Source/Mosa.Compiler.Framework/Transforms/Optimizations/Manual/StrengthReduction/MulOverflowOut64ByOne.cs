@@ -32,6 +32,6 @@ public sealed class MulOverflowOut64ByOne : BaseTransform
 		var t1 = context.Operand1;
 
 		context.SetInstruction(IRInstruction.Move64, result, t1);
-		context.AppendInstruction(IRInstruction.Move64, result2, transform.Constant64_1);
+		context.AppendInstruction(IRInstruction.Move64, result2, Operand.Constant64_1);
 	}
 }

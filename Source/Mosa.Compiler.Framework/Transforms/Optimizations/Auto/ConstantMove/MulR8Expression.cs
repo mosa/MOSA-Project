@@ -47,7 +47,7 @@ public sealed class MulR8Expression : BaseTransform
 		var t2 = context.Operand2.Definitions[0].Operand1;
 		var t3 = context.Operand2.Definitions[0].Operand2;
 
-		var v1 = transform.AllocateVirtualRegister(transform.R8);
+		var v1 = transform.VirtualRegisters.AllocateR8();
 
 		context.SetInstruction(IRInstruction.MulR8, v1, t1, t2);
 		context.AppendInstruction(IRInstruction.MulR8, result, v1, t3);
@@ -95,7 +95,7 @@ public sealed class MulR8Expression_v1 : BaseTransform
 		var t2 = context.Operand1.Definitions[0].Operand2;
 		var t3 = context.Operand2;
 
-		var v1 = transform.AllocateVirtualRegister(transform.R8);
+		var v1 = transform.VirtualRegisters.AllocateR8();
 
 		context.SetInstruction(IRInstruction.MulR8, v1, t3, t1);
 		context.AppendInstruction(IRInstruction.MulR8, result, v1, t2);
@@ -143,7 +143,7 @@ public sealed class MulR8Expression_v2 : BaseTransform
 		var t2 = context.Operand2.Definitions[0].Operand1;
 		var t3 = context.Operand2.Definitions[0].Operand2;
 
-		var v1 = transform.AllocateVirtualRegister(transform.R8);
+		var v1 = transform.VirtualRegisters.AllocateR8();
 
 		context.SetInstruction(IRInstruction.MulR8, v1, t1, t3);
 		context.AppendInstruction(IRInstruction.MulR8, result, v1, t2);
@@ -191,7 +191,7 @@ public sealed class MulR8Expression_v3 : BaseTransform
 		var t2 = context.Operand1.Definitions[0].Operand2;
 		var t3 = context.Operand2;
 
-		var v1 = transform.AllocateVirtualRegister(transform.R8);
+		var v1 = transform.VirtualRegisters.AllocateR8();
 
 		context.SetInstruction(IRInstruction.MulR8, v1, t3, t2);
 		context.AppendInstruction(IRInstruction.MulR8, result, v1, t1);

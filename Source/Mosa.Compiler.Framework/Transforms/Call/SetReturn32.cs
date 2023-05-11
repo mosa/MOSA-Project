@@ -1,7 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.Framework.Call;
 
@@ -21,6 +20,6 @@ public sealed class SetReturn32 : BaseTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		context.SetInstruction(IRInstruction.Move32, Operand.CreateCPURegister(context.Operand1.Type, transform.Architecture.ReturnRegister), context.Operand1);
+		context.SetInstruction(IRInstruction.Move32, Operand.CreateCPURegister32(transform.Architecture.ReturnRegister), context.Operand1);
 	}
 }

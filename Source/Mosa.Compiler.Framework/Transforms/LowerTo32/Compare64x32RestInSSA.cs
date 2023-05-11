@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections.Generic;
-using Mosa.Compiler.Framework.Transforms.Call;
 
 namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
@@ -36,10 +35,10 @@ public sealed class Compare64x32RestInSSA : BaseLower32Transform
 
 		TransformContext.UpdatePhiTargets(nextBlock.Block.NextBlocks, context.Block, nextBlock.Block);
 
-		var op0Low = transform.AllocateVirtualRegister32();
-		var op0High = transform.AllocateVirtualRegister32();
-		var op1Low = transform.AllocateVirtualRegister32();
-		var op1High = transform.AllocateVirtualRegister32();
+		var op0Low = transform.VirtualRegisters.Allocate32();
+		var op0High = transform.VirtualRegisters.Allocate32();
+		var op1Low = transform.VirtualRegisters.Allocate32();
+		var op1High = transform.VirtualRegisters.Allocate32();
 
 		context.SetInstruction(IRInstruction.GetLow32, op0Low, operand1);
 		context.AppendInstruction(IRInstruction.GetHigh32, op0High, operand1);
@@ -72,7 +71,7 @@ public sealed class Compare64x32RestInSSA : BaseLower32Transform
 		newBlocks[3].AppendInstruction(IRInstruction.Jmp, newBlocks[4].Block);
 
 		// Exit
-		newBlocks[4].AppendInstruction(IRInstruction.Phi32, result, transform.CreateConstant((uint)1), transform.Constant32_0);
+		newBlocks[4].AppendInstruction(IRInstruction.Phi32, result, Operand.CreateConstant((uint)1), Operand.Constant32_0);
 		newBlocks[4].PhiBlocks = new List<BasicBlock>(2) { newBlocks[2].Block, newBlocks[3].Block };
 		newBlocks[4].AppendInstruction(IRInstruction.Jmp, nextBlock.Block);
 	}

@@ -2,7 +2,6 @@
 
 using System.Collections;
 using System.Collections.Generic;
-using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework;
 
@@ -23,41 +22,75 @@ public sealed class VirtualRegisters : IEnumerable<Operand>
 
 	public Operand this[int index] => virtualRegisters[index];
 
+	public bool Is32Platform { get; private set; }
+
 	#endregion Properties
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="VirtualRegisters" /> class.
 	/// </summary>
-	public VirtualRegisters()
+	public VirtualRegisters(bool is32Platform)
 	{
+		Is32Platform = is32Platform;
 	}
 
-	/// <summary>
-	/// Allocates the virtual register.
-	/// </summary>
-	/// <param name="type">The type.</param>
-	/// <returns></returns>
-	public Operand Allocate(MosaType type)
+	public Operand Allocate(PrimitiveType primitiveType)
 	{
-		var index = virtualRegisters.Count + 1;
+		var operand = Operand.CreateVirtualRegister(primitiveType, Count + 1, null);
 
-		var virtualRegister = Operand.CreateVirtualRegister(type, index);
+		virtualRegisters.Add(operand);
 
-		virtualRegisters.Add(virtualRegister);
-
-		return virtualRegister;
+		return operand;
 	}
 
-	public void SplitLongOperand(TypeSystem typeSystem, Operand longOperand)
+	public Operand Allocate(Operand operand)
 	{
-		//Debug.Assert(longOperand.IsInteger64 || longOperand.IsParameter);
+		return Allocate(operand.Primitive);
+	}
 
-		if (longOperand.Low == null && longOperand.High == null)
+	public Operand Allocate32()
+	{
+		return Allocate(PrimitiveType.Int32);
+	}
+
+	public Operand Allocate64()
+	{
+		return Allocate(PrimitiveType.Int64);
+	}
+
+	public Operand AllocateR4()
+	{
+		return Allocate(PrimitiveType.R4);
+	}
+
+	public Operand AllocateR8()
+	{
+		return Allocate(PrimitiveType.R8);
+	}
+
+	public Operand AllocateObject()
+	{
+		return Allocate(PrimitiveType.Object);
+	}
+
+	public Operand AllocateManagedPointer()
+	{
+		return Allocate(PrimitiveType.ManagedPointer);
+	}
+
+	public Operand AllocateNativeInteger()
+	{
+		return Is32Platform ? Allocate32() : Allocate64();
+	}
+
+	public void SplitOperand(Operand operand)
+	{
+		if (operand.Low == null && operand.High == null)
 		{
-			var low = Operand.CreateLowSplitForLong(longOperand, virtualRegisters.Count + 1, typeSystem);
-			var high = Operand.CreateHighSplitForLong(longOperand, virtualRegisters.Count + 2, typeSystem);
+			var low = Operand.CreateLow(operand, virtualRegisters.Count + 1);
+			var high = Operand.CreateHigh(operand, virtualRegisters.Count + 2);
 
-			if (longOperand.IsVirtualRegister)
+			if (operand.IsVirtualRegister)
 			{
 				virtualRegisters.Add(low);
 				virtualRegisters.Add(high);
@@ -78,7 +111,7 @@ public sealed class VirtualRegisters : IEnumerable<Operand>
 		return GetEnumerator();
 	}
 
-	internal void ReOrdered(Operand virtualRegister, int index)
+	internal void Reorder(Operand virtualRegister, int index)
 	{
 		virtualRegisters[index - 1] = virtualRegister;
 		virtualRegister.RenameIndex(index);

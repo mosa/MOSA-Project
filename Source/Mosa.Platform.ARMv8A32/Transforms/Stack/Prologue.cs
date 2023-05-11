@@ -1,7 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.ARMv8A32.Transforms.Stack;
 
@@ -25,14 +24,14 @@ public sealed class Prologue : BaseTransform
 		if (!transform.MethodCompiler.IsStackFrameRequired)
 			return;
 
-		var registerList = transform.CreateConstant32((1 << (17 - transform.StackFrame.Register.Index)) | (1 << (17 - transform.Architecture.LinkRegister.Index)));
+		var registerList = Operand.CreateConstant32((1 << (17 - transform.StackFrame.Register.Index)) | (1 << (17 - transform.Architecture.LinkRegister.Index)));
 
 		context.SetInstruction(ARMv8A32.Push, null, registerList);
 		context.AppendInstruction(ARMv8A32.Mov, transform.StackFrame, transform.StackPointer);
 
 		if (transform.MethodCompiler.StackSize != 0)
 		{
-			context.AppendInstruction(ARMv8A32.Sub, transform.StackPointer, transform.StackPointer, transform.CreateConstant32(-transform.MethodCompiler.StackSize));
+			context.AppendInstruction(ARMv8A32.Sub, transform.StackPointer, transform.StackPointer, Operand.CreateConstant32(-transform.MethodCompiler.StackSize));
 		}
 	}
 }

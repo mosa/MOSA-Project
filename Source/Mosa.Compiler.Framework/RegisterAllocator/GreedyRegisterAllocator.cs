@@ -14,8 +14,8 @@ public sealed class GreedyRegisterAllocator : BasicRegisterAllocator
 {
 	private Dictionary<SlotIndex, MoveHint> moveHints;
 
-	public GreedyRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters virtualRegisters, BaseArchitecture architecture, AddStackLocalDelegate addStackLocal, Operand stackFrame, CreateTraceHandler createTrace)
-		: base(basicBlocks, virtualRegisters, architecture, addStackLocal, stackFrame, createTrace)
+	public GreedyRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters virtualRegisters, BaseArchitecture architecture, LocalStack localStack, Operand stackFrame, CreateTraceHandler createTrace)
+		: base(basicBlocks, virtualRegisters, architecture, localStack, stackFrame, createTrace)
 	{
 	}
 

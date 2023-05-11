@@ -1,7 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Collections.Generic;
-
 namespace Mosa.Compiler.Framework.Stages;
 
 /// <summary>
@@ -42,20 +40,20 @@ public sealed class StackLayoutStage : BaseMethodCompilerStage
 	/// <summary>
 	/// Performs a stack layout of all local variables in the list.
 	/// </summary>
-	/// <param name="locals">The enumerable holding all locals.</param>
+	/// <param name="localStack">The enumerable holding all locals.</param>
 	/// <param name="offsetOfFirst">The offset of first.</param>
 	///
 	/// <returns></returns>
-	private int LayoutVariables(List<Operand> locals, int offsetOfFirst)
+	private int LayoutVariables(LocalStack localStack, int offsetOfFirst)
 	{
 		var offset = offsetOfFirst;
 
-		foreach (var local in locals)
+		foreach (var local in localStack)
 		{
 			if (local.Uses.Count == 0)
 				continue;
 
-			var size = GetTypeSize(local.Type, true);
+			var size = MethodCompiler.GetSize(local, true);
 
 			offset -= (int)size;
 

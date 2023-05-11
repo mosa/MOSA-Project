@@ -44,7 +44,7 @@ public sealed class LoadZeroExtend8x32FoldSub64 : BaseTransform
 		var t2 = context.Operand1.Definitions[0].Operand2;
 		var t3 = context.Operand2;
 
-		var e1 = transform.CreateConstant(Sub64(To64(t3), To64(t2)));
+		var e1 = Operand.CreateConstant(Sub64(To64(t3), To64(t2)));
 
 		context.SetInstruction(IRInstruction.LoadZeroExtend8x32, result, t1, e1);
 	}

@@ -23,7 +23,7 @@ public sealed class IMul32Constant : BaseTransform
 	{
 		var operand2 = context.Operand2;
 
-		var v1 = transform.AllocateVirtualRegister32();
+		var v1 = transform.VirtualRegisters.Allocate32();
 
 		context.InsertBefore().AppendInstruction(X64.Mov32, v1, operand2);
 		context.Operand2 = v1;

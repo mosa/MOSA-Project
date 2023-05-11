@@ -25,7 +25,7 @@ public sealed class Compare32x64 : BaseTransform
 	{
 		var compare = Compare32(context.ConditionCode, context.Operand1, context.Operand2);
 
-		var e1 = transform.CreateConstant(BoolTo64(compare));
+		var e1 = Operand.CreateConstant(BoolTo64(compare));
 
 		context.SetInstruction(IRInstruction.Move64, context.Result, e1);
 	}

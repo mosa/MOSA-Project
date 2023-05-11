@@ -25,17 +25,18 @@ public sealed class GetLow32From64 : BaseTransform
 		//if (context.Operand1.Definitions.Count != 1)
 		//	return false;
 
-		if (context.Operand1.IsInteger32)
+		if (context.Operand1.IsInt32)
 			return true;
 
-		if (context.Operand1.IsReferenceType)
+		if (context.Operand1.IsObject)
 			return true;
 
 		if (context.Operand1.IsManagedPointer)
 			return true;
 
 		// TEMP
-		if (context.Operand1.Type.IsValueType && MosaTypeLayout.IsPrimitive(context.Operand1.Type) && transform.TypeLayout.GetTypeSize(context.Operand1.Type) == 4)
+		if (context.Operand1.IsPrimitive
+			&& transform.MethodCompiler.GetSize(context.Operand1) == 4)
 			return true;
 
 		return false;

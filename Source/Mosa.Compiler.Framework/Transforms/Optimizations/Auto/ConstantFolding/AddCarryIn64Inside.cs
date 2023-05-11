@@ -35,7 +35,7 @@ public sealed class AddCarryIn64Inside : BaseTransform
 		var t2 = context.Operand2;
 		var t3 = context.Operand3;
 
-		var e1 = transform.CreateConstant(Add64(To64(t1), To64(t2)));
+		var e1 = Operand.CreateConstant(Add64(To64(t1), To64(t2)));
 
 		context.SetInstruction(IRInstruction.Add64, result, e1, t3);
 	}

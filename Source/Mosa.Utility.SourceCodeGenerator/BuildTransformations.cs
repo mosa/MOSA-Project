@@ -270,7 +270,7 @@ public class BuildTransformations : BuildBaseTemplate
 
 			nodeNbrToVirtualRegisterNbr.Add(node.NodeNbr, virtualRegisterNbr);
 
-			Lines.AppendLine($"\t\tvar v{virtualRegisterNbr} = transform.AllocateVirtualRegister(transform.{resultType});");
+			Lines.AppendLine($"\t\tvar v{virtualRegisterNbr} = transform.VirtualRegisters.Allocate{resultType}();");
 		}
 		if (virtualRegisterNbr != 0)
 			Lines.AppendLine();
@@ -290,7 +290,7 @@ public class BuildTransformations : BuildBaseTemplate
 			if (constantTextToConstantNbr.TryGetValue(name, out var found))
 			{
 				constantToConstantNbr.Add(operand, found);
-				Lines.AppendLine($"\t\tvar c{operand} = transform.CreateConstant({name});");
+				Lines.AppendLine($"\t\tvar c{operand} = Operand.CreateConstant({name});");
 				continue;
 			}
 
@@ -298,7 +298,7 @@ public class BuildTransformations : BuildBaseTemplate
 			constantTextToConstantNbr.Add(name, constantNbr);
 			constantToConstantNbr.Add(operand, constantNbr);
 
-			Lines.AppendLine($"\t\tvar c{constantNbr} = transform.CreateConstant({name});");
+			Lines.AppendLine($"\t\tvar c{constantNbr} = Operand.CreateConstant({name});");
 		}
 		if (constantNbr != 0)
 			Lines.AppendLine("");
@@ -321,7 +321,7 @@ public class BuildTransformations : BuildBaseTemplate
 					methodToMethodNbr.Add(operand.Method, found);
 					continue;
 
-					//Lines.AppendLine($"\t\tvar e{found} = transform.CreateConstant({name});");
+					//Lines.AppendLine($"\t\tvar e{found} = Operand.CreateConstant({name});");
 					//continue;
 				}
 
@@ -330,7 +330,7 @@ public class BuildTransformations : BuildBaseTemplate
 				methodToMethodNbr.Add(operand.Method, methodNbr);
 				methodToExpressionText.Add(name, methodNbr);
 
-				Lines.AppendLine($"\t\tvar e{methodNbr} = transform.CreateConstant({name});");
+				Lines.AppendLine($"\t\tvar e{methodNbr} = Operand.CreateConstant({name});");
 			}
 		}
 		if (methodNbr != 0)
@@ -468,10 +468,10 @@ public class BuildTransformations : BuildBaseTemplate
 			return node.ResultType;
 
 		if (node.InstructionName.EndsWith("32"))
-			return "I4";
+			return "32";
 
 		if (node.InstructionName.EndsWith("64"))
-			return "I8";
+			return "64";
 
 		if (node.InstructionName.EndsWith("R4"))
 			return "R4";
@@ -480,11 +480,11 @@ public class BuildTransformations : BuildBaseTemplate
 			return "R8";
 
 		if (node.InstructionName.EndsWith("Object"))
-			return "O";
+			return "Object";
 
 		// TODO
 
-		return "I8";    // default
+		return "64";    // default
 	}
 
 	private void ProcessDuplicatesInExpression(Transformation transform)

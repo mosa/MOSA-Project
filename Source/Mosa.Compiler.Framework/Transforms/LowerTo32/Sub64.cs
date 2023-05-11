@@ -14,13 +14,13 @@ public sealed class Sub64 : BaseLower32Transform
 		var operand1 = context.Operand1;
 		var operand2 = context.Operand2;
 
-		var op0Low = transform.AllocateVirtualRegister32();
-		var op0High = transform.AllocateVirtualRegister32();
-		var op1Low = transform.AllocateVirtualRegister32();
-		var op1High = transform.AllocateVirtualRegister32();
-		var resultLow = transform.AllocateVirtualRegister32();
-		var resultHigh = transform.AllocateVirtualRegister32();
-		var resultCarry = transform.AllocateVirtualRegister32();
+		var op0Low = transform.VirtualRegisters.Allocate32();
+		var op0High = transform.VirtualRegisters.Allocate32();
+		var op1Low = transform.VirtualRegisters.Allocate32();
+		var op1High = transform.VirtualRegisters.Allocate32();
+		var resultLow = transform.VirtualRegisters.Allocate32();
+		var resultHigh = transform.VirtualRegisters.Allocate32();
+		var resultCarry = transform.VirtualRegisters.Allocate32();
 
 		context.SetInstruction(IRInstruction.GetLow32, op0Low, operand1);
 		context.AppendInstruction(IRInstruction.GetHigh32, op0High, operand1);

@@ -40,22 +40,22 @@ internal static partial class IntrinsicMethods
 
 		methodCompiler.MethodScanner.MethodInvoked(method, methodCompiler.Method);
 
-		var interrupt = Operand.CreateSymbolFromMethod(method, methodCompiler.TypeSystem);
+		var interrupt = Operand.CreateLabel(method, methodCompiler.Is32BitPlatform);
 
-		var esp = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, CPURegister.RSP);
+		var esp = Operand.CreateCPURegister32(CPURegister.RSP);
 
 		context.SetInstruction(X64.Cli);
 		if (irq <= 7 || irq >= 16 | irq == 9) // For IRQ 8, 10, 11, 12, 13, 14 the cpu will automatically pushed the error code
 		{
-			context.AppendInstruction(X64.Push64, null, methodCompiler.CreateConstant(0));
+			context.AppendInstruction(X64.Push64, null, Operand.Constant64_0);
 		}
-		context.AppendInstruction(X64.Push64, null, methodCompiler.CreateConstant(irq));
+		context.AppendInstruction(X64.Push64, null, Operand.CreateConstant64(irq));
 		context.AppendInstruction(X64.Pushad);
 		context.AppendInstruction(X64.Push64, null, esp);
 		context.AppendInstruction(X64.Call, null, interrupt);
 		context.AppendInstruction(X64.Pop64, esp);
 		context.AppendInstruction(X64.Popad);
-		context.AppendInstruction(X64.Add64, esp, esp, methodCompiler.CreateConstant(8));
+		context.AppendInstruction(X64.Add64, esp, esp, Operand.Constant64_8);
 		context.AppendInstruction(X64.Sti);
 		context.AppendInstruction(X64.IRetd);
 	}

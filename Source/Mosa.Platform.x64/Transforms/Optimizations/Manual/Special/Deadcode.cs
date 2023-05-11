@@ -36,7 +36,7 @@ public sealed class Deadcode : BaseTransform
 			return false;
 
 		// Check is split child, if so check is parent in use (Manual.Return for example)
-		if (context.Result.HasLongParent && context.Result.LongParent.Uses.Count != 0)
+		if (context.Result.HasParent && context.Result.Parent.Uses.Count != 0)
 			return false;
 
 		var instruction = context.Instruction;

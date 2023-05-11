@@ -10,8 +10,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator;
 /// <seealso cref="Mosa.Compiler.Framework.RegisterAllocator.BaseRegisterAllocator" />
 public class BasicRegisterAllocator : BaseRegisterAllocator
 {
-	public BasicRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters virtualRegisters, BaseArchitecture architecture, AddStackLocalDelegate addStackLocal, Operand stackFrame, CreateTraceHandler createTrace)
-		: base(basicBlocks, virtualRegisters, architecture, addStackLocal, stackFrame, createTrace)
+	public BasicRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters virtualRegisters, BaseArchitecture architecture, LocalStack localStack, Operand stackFrame, CreateTraceHandler createTrace)
+		: base(basicBlocks, virtualRegisters, architecture, localStack, stackFrame, createTrace)
 	{
 	}
 

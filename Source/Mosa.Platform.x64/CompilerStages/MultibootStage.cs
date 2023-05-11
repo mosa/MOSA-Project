@@ -20,15 +20,15 @@ public sealed class MultibootStage : Mosa.Compiler.Framework.Platform.BaseMultib
 
 		Compiler.GetMethodData(initializeMethod).DoNotInline = true;
 
-		var entryPoint = Operand.CreateSymbolFromMethod(initializeMethod, TypeSystem);
+		var entryPoint = Operand.CreateLabel(initializeMethod, Architecture.Is32BitPlatform);
 
-		var rax = Operand.CreateCPURegister(TypeSystem.BuiltIn.I8, CPURegister.RAX);
-		var rbx = Operand.CreateCPURegister(TypeSystem.BuiltIn.I8, CPURegister.RBX);
-		var rbp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I8, CPURegister.RBP);
-		var rsp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I8, CPURegister.RSP);
+		var rax = Operand.CreateCPURegister64(CPURegister.RAX);
+		var rbx = Operand.CreateCPURegister64(CPURegister.RBX);
+		var rbp = Operand.CreateCPURegister64(CPURegister.RBP);
+		var rsp = Operand.CreateCPURegister64(CPURegister.RSP);
 
-		var multibootEAX = Operand.CreateUnmanagedSymbolPointer(MultibootEAX, TypeSystem);
-		var multibootEBX = Operand.CreateUnmanagedSymbolPointer(MultibootEBX, TypeSystem);
+		var multibootEAX = Operand.CreateLabel(MultibootEAX, Architecture.Is32BitPlatform);
+		var multibootEBX = Operand.CreateLabel(MultibootEBX, Architecture.Is32BitPlatform);
 
 		var stackTop = CreateConstant(InitialStackAddress);
 		var zero = CreateConstant(0);

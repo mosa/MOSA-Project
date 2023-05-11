@@ -20,7 +20,7 @@ public static class EnvironmentPlug
 		Console.BackgroundColor = ConsoleColor.Black;
 		Console.ForegroundColor = ConsoleColor.Red;
 		Console.WriteLine("***FAIL FAST*** " + message);
-		for (;;) ;
+		for (; ; );
 	}
 
 	[Plug("System.Environment::GetProcessorCount")]

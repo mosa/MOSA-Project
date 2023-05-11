@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections.Generic;
-using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework;
 
@@ -11,38 +10,6 @@ namespace Mosa.Compiler.Framework;
 public sealed class InstructionNodeAddition
 {
 	#region Properties
-
-	/// <summary>
-	/// Gets or sets the mosa method.
-	/// </summary>
-	/// <value>
-	/// The mosa method.
-	/// </value>
-	public MosaMethod MosaMethod { get; set; }
-
-	/// <summary>
-	/// Gets or sets the mosa field.
-	/// </summary>
-	/// <value>
-	/// The mosa field.
-	/// </value>
-	public MosaField MosaField { get; set; }
-
-	/// <summary>
-	/// Gets or sets the mosa type.
-	/// </summary>
-	/// <value>
-	/// The type.
-	/// </value>
-	public MosaType MosaType { get; set; }
-
-	/// <summary>
-	/// Gets or sets the invoke method.
-	/// </summary>
-	/// <value>
-	/// The invoke method.
-	/// </value>
-	public MosaMethod InvokeMethod { get; set; }
 
 	/// <summary>
 	/// Gets or sets the phi blocks.

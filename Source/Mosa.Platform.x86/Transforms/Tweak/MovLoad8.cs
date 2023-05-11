@@ -33,6 +33,6 @@ public sealed class MovLoad8 : BaseTransform
 		var offset = context.Operand2;
 
 		context.SetInstruction(X86.MovLoad32, result, source, offset);
-		context.AppendInstruction(X86.And32, result, result, transform.CreateConstant32(0x000000FF));
+		context.AppendInstruction(X86.And32, result, result, Operand.CreateConstant32(0x000000FF));
 	}
 }

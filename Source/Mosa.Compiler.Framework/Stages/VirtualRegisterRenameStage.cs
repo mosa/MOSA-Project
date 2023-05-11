@@ -1,7 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.Framework.Stages;
@@ -44,7 +43,7 @@ public sealed class VirtualRegisterRenameStage : BaseCodeTransformationStage
 						vr.AddIfNew(op);
 					}
 
-					if (op.IsStackLocal)
+					if (op.IsLocalStack)
 					{
 						sl.AddIfNew(op);
 					}
@@ -59,22 +58,22 @@ public sealed class VirtualRegisterRenameStage : BaseCodeTransformationStage
 
 		foreach (var s in MethodCompiler.LocalStack)
 		{
-			sl.AddIfNew(s.HasLongParent ? s.LongParent : s);
+			sl.AddIfNew(s.HasParent ? s.Parent : s);
 		}
 
 		var index = 0;
 
 		foreach (var v in vr)
 		{
-			MethodCompiler.VirtualRegisters.ReOrdered(v, ++index);
+			MethodCompiler.VirtualRegisters.Reorder(v, ++index);
 		}
 
 		index = 0;
 		foreach (var s in sl)
 		{
-			if (!s.HasLongParent)
+			if (!s.HasParent)
 			{
-				MethodCompiler.LocalStack[index] = s;
+				MethodCompiler.LocalStack.Reorder(s, ++index);
 				s.RenameIndex(index);
 
 				if (s.Low != null)
@@ -82,7 +81,6 @@ public sealed class VirtualRegisterRenameStage : BaseCodeTransformationStage
 					s.Low.RenameIndex(index);
 					s.High.RenameIndex(index);
 				}
-				index++;
 			}
 		}
 	}

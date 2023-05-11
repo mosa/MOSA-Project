@@ -12,6 +12,6 @@ internal static partial class IntrinsicMethods
 	[IntrinsicMethod("Mosa.Platform.x64.Intrinsic::Roundss2Negative")]
 	private static void Roundss2Negative(Context context, MethodCompiler methodCompiler)
 	{
-		context.SetInstruction(X64.Roundss, context.Result, context.Operand1, methodCompiler.CreateConstant((byte)1));
+		context.SetInstruction(X64.Roundss, context.Result, context.Operand1, Operand.Constant64_1);
 	}
 }

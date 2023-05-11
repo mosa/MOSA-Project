@@ -31,6 +31,6 @@ public sealed class SubCarryOut64ByZero : BaseTransform
 		var operand1 = context.Operand1;
 
 		context.SetInstruction(IRInstruction.Move64, result, operand1);
-		context.AppendInstruction(IRInstruction.Move64, result2, transform.Constant64_0);
+		context.AppendInstruction(IRInstruction.Move64, result2, Operand.Constant64_0);
 	}
 }

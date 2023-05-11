@@ -1,9 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections.Generic;
-using System.Diagnostics;
 using Mosa.Compiler.Common;
-using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.Transforms.Call
@@ -50,18 +48,16 @@ namespace Mosa.Compiler.Framework.Transforms.Call
 			for (var index = operands.Count - 1; index >= 0; index--)
 			{
 				var operand = operands[index];
+				var size = transform.MethodCompiler.GetSize(operand);
 
-				var size = GetTypeSize(transform, operand.Type, true);
-				stackSize += size;
+				stackSize += Alignment.AlignUp(size, transform.NativePointerSize);
 			}
 
 			return stackSize;
 		}
 
-		public static void MakeCall(TransformContext transform, Context context, Operand target, Operand result, List<Operand> operands, MosaMethod method)
+		public static void MakeCall(TransformContext transform, Context context, Operand target, Operand result, List<Operand> operands)
 		{
-			Debug.Assert(method != null);
-
 			//var data = TypeLayout.__GetMethodInfo(method);
 
 			var stackSize = CalculateParameterStackSize(transform, operands);
@@ -89,14 +85,10 @@ namespace Mosa.Compiler.Framework.Transforms.Call
 			if (result == null)
 				return 0;
 
-			var returnType = result.Type;
+			if (result.IsPrimitive)
+				return 0;
 
-			if (!MosaTypeLayout.IsUnderlyingPrimitive(returnType))
-			{
-				return Alignment.AlignUp(transform.TypeLayout.GetTypeSize(returnType), transform.Architecture.NativeAlignment);
-			}
-
-			return 0;
+			return transform.MethodCompiler.GetSize(result, true);
 		}
 
 		private static void FreeStackAfterCall(TransformContext transform, Context context, uint stackSize)
@@ -104,7 +96,7 @@ namespace Mosa.Compiler.Framework.Transforms.Call
 			if (stackSize == 0)
 				return;
 
-			context.AppendInstruction(transform.AddInstruction, transform.StackPointer, transform.StackPointer, transform.CreateConstant32(stackSize));
+			context.AppendInstruction(transform.AddInstruction, transform.StackPointer, transform.StackPointer, Operand.CreateConstant32(stackSize));
 		}
 
 		private static void GetReturnValue(TransformContext transform, Context context, Operand result)
@@ -112,17 +104,16 @@ namespace Mosa.Compiler.Framework.Transforms.Call
 			if (result == null)
 				return;
 
-			// TODO Pointers
-			if (result.IsReferenceType)
+			if (result.IsObject)
 			{
-				var returnLow = Operand.CreateCPURegister(result.Type, transform.Architecture.ReturnRegister);
+				var returnLow = Operand.CreateCPURegister(result, transform.Architecture.ReturnRegister);
 				context.AppendInstruction(IRInstruction.Gen, returnLow);
 				context.AppendInstruction(IRInstruction.MoveObject, result, returnLow);
 			}
-			else if (result.IsInteger64 && transform.Is32BitPlatform)
+			else if (result.IsInt64 && transform.Is32BitPlatform)
 			{
-				var returnLow = Operand.CreateCPURegister(result.Type, transform.Architecture.ReturnRegister);
-				var returnHigh = Operand.CreateCPURegister(transform.I4, transform.Architecture.ReturnHighRegister);
+				var returnLow = Operand.CreateCPURegister(result, transform.Architecture.ReturnRegister);
+				var returnHigh = Operand.CreateCPURegister32(transform.Architecture.ReturnHighRegister);
 
 				context.AppendInstruction(IRInstruction.Gen, returnLow);
 				context.AppendInstruction(IRInstruction.Gen, returnHigh);
@@ -130,120 +121,47 @@ namespace Mosa.Compiler.Framework.Transforms.Call
 			}
 			else if (result.IsInteger)
 			{
-				var returnLow = Operand.CreateCPURegister(result.Type, transform.Architecture.ReturnRegister);
+				var returnLow = Operand.CreateCPURegister(result, transform.Architecture.ReturnRegister);
 				context.AppendInstruction(IRInstruction.Gen, returnLow);
 				context.AppendInstruction(transform.MoveInstruction, result, returnLow);
 			}
 			else if (result.IsR4)
 			{
-				var returnFP = Operand.CreateCPURegister(result.Type, transform.Architecture.ReturnFloatingPointRegister);
+				var returnFP = Operand.CreateCPURegister(result, transform.Architecture.ReturnFloatingPointRegister);
 				context.AppendInstruction(IRInstruction.Gen, returnFP);
 				context.AppendInstruction(IRInstruction.MoveR4, result, returnFP);
 			}
 			else if (result.IsR8)
 			{
-				var returnFP = Operand.CreateCPURegister(result.Type, transform.Architecture.ReturnFloatingPointRegister);
+				var returnFP = Operand.CreateCPURegister(result, transform.Architecture.ReturnFloatingPointRegister);
 				context.AppendInstruction(IRInstruction.Gen, returnFP);
 				context.AppendInstruction(IRInstruction.MoveR8, result, returnFP);
 			}
 			else if (result.IsValueType)
 			{
-				var underlyingType = MosaTypeLayout.GetUnderlyingType(result.Type);
-
-				if (underlyingType == null)
-				{
-					context.AppendInstruction(IRInstruction.LoadCompound, result, transform.StackPointer, transform.Constant32_0);
-				}
-				else if (underlyingType.IsReferenceType)
-				{
-					var returnLow = Operand.CreateCPURegister(transform.O, transform.Architecture.ReturnRegister);
-					context.AppendInstruction(IRInstruction.Gen, returnLow);
-					context.AppendInstruction(IRInstruction.MoveObject, result, returnLow);
-				}
-				else if (underlyingType.IsUI1 || underlyingType.IsUI2 || underlyingType.IsUI4 || (transform.Is32BitPlatform && (underlyingType.IsU || underlyingType.IsI || underlyingType.IsPointer)))
-				{
-					var returnLow = Operand.CreateCPURegister(underlyingType, transform.Architecture.ReturnRegister);
-					context.AppendInstruction(IRInstruction.Gen, returnLow);
-					context.AppendInstruction(IRInstruction.Move32, result, returnLow);
-				}
-				else if (underlyingType.IsUI8 && transform.Is32BitPlatform)
-				{
-					var returnLow = Operand.CreateCPURegister(transform.I4, transform.Architecture.ReturnRegister);
-					var returnHigh = Operand.CreateCPURegister(transform.I4, transform.Architecture.ReturnHighRegister);
-
-					context.AppendInstruction(IRInstruction.Gen, returnLow);
-					context.AppendInstruction(IRInstruction.Gen, returnHigh);
-					context.AppendInstruction(IRInstruction.To64, result, returnLow, returnHigh);
-				}
-				else if (underlyingType.IsUI8 && !transform.Is32BitPlatform)
-				{
-					var returnLow = Operand.CreateCPURegister(transform.I8, transform.Architecture.ReturnRegister);
-
-					context.AppendInstruction(IRInstruction.Gen, returnLow);
-					context.AppendInstruction(IRInstruction.Move64, result, returnLow);
-				}
-				else if (underlyingType.IsPointer && !transform.Is32BitPlatform)
-				{
-					var returnLow = Operand.CreateCPURegister(transform.I8, transform.Architecture.ReturnRegister);
-
-					context.AppendInstruction(IRInstruction.Gen, returnLow);
-					context.AppendInstruction(IRInstruction.Move64, result, returnLow);
-				}
-				else if (underlyingType.IsR4)
-				{
-					var returnFP = Operand.CreateCPURegister(result.Type, transform.Architecture.ReturnFloatingPointRegister);
-					context.AppendInstruction(IRInstruction.Gen, returnFP);
-					context.AppendInstruction(IRInstruction.MoveR4, result, returnFP);
-				}
-				else if (underlyingType.IsR8)
-				{
-					var returnFP = Operand.CreateCPURegister(result.Type, transform.Architecture.ReturnFloatingPointRegister);
-					context.AppendInstruction(IRInstruction.Gen, returnFP);
-					context.AppendInstruction(IRInstruction.MoveR8, result, returnFP);
-				}
-				else if (underlyingType.IsValueType)
-				{
-					context.AppendInstruction(IRInstruction.LoadCompound, result, transform.StackPointer, transform.Constant32_0);
-				}
-				else
-				{
-					throw new CompilerException("Invalid type");
-				}
+				context.AppendInstruction(IRInstruction.LoadCompound, result, transform.StackPointer, Operand.Constant32_0);
 			}
 			else
 			{
-				// note: same for integer logic (above)
-				var returnLow = Operand.CreateCPURegister(result.Type, transform.Architecture.ReturnRegister);
+				var returnLow = Operand.CreateCPURegister(result, transform.Architecture.ReturnRegister);
 				context.AppendInstruction(IRInstruction.Gen, returnLow);
 				context.AppendInstruction(transform.MoveInstruction, result, returnLow);
 			}
 		}
 
-		/// <summary>
-		/// Gets the size of the type.
-		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <param name="align">if set to <c>true</c> [align].</param>
-		/// <returns></returns>
-		private static uint GetTypeSize(TransformContext transform, MosaType type, bool align)
-		{
-			return transform.MethodCompiler.GetReferenceOrTypeSize(type, align);
-		}
-
 		private static void Push(TransformContext transform, Context context, Operand operand, uint offset)
 		{
-			var offsetOperand = transform.CreateConstant32(offset);
+			var offsetOperand = Operand.CreateConstant32(offset);
 
-			// TODO Pointers
-			if (operand.IsReferenceType)
+			if (operand.IsObject)
 			{
 				context.AppendInstruction(IRInstruction.StoreObject, null, transform.StackPointer, offsetOperand, operand);
 			}
-			else if (operand.IsInteger32)
+			else if (operand.IsInt32)
 			{
 				context.AppendInstruction(IRInstruction.Store32, null, transform.StackPointer, offsetOperand, operand);
 			}
-			else if (operand.IsInteger64)
+			else if (operand.IsInt64)
 			{
 				context.AppendInstruction(IRInstruction.Store64, null, transform.StackPointer, offsetOperand, operand);
 			}
@@ -257,40 +175,7 @@ namespace Mosa.Compiler.Framework.Transforms.Call
 			}
 			else if (operand.IsValueType)
 			{
-				var underlyingType = MosaTypeLayout.GetUnderlyingType(operand.Type);
-
-				if (underlyingType == null)
-				{
-					context.AppendInstruction(IRInstruction.StoreCompound, null, transform.StackPointer, offsetOperand, operand);
-				}
-				else if (underlyingType.IsReferenceType)
-				{
-					context.AppendInstruction(IRInstruction.StoreObject, null, transform.StackPointer, offsetOperand, operand);
-				}
-				else if (underlyingType.IsUI1 || underlyingType.IsUI2 || underlyingType.IsUI4 || (transform.Is32BitPlatform && (underlyingType.IsU || underlyingType.IsI)))
-				{
-					context.AppendInstruction(IRInstruction.Store32, null, transform.StackPointer, offsetOperand, operand);
-				}
-				else if (underlyingType.IsUI8 || (!transform.Is32BitPlatform && (underlyingType.IsU || underlyingType.IsI)))
-				{
-					context.AppendInstruction(IRInstruction.Store64, null, transform.StackPointer, offsetOperand, operand);
-				}
-				else if (underlyingType.IsR4)
-				{
-					context.AppendInstruction(IRInstruction.StoreR4, null, transform.StackPointer, offsetOperand, operand);
-				}
-				else if (underlyingType.IsR8)
-				{
-					context.AppendInstruction(IRInstruction.StoreR8, null, transform.StackPointer, offsetOperand, operand);
-				}
-				else if (underlyingType.IsValueType)
-				{
-					context.AppendInstruction(IRInstruction.StoreCompound, null, transform.StackPointer, offsetOperand, operand);
-				}
-				else
-				{
-					context.AppendInstruction(transform.StoreInstruction, null, transform.StackPointer, offsetOperand, operand);
-				}
+				context.AppendInstruction(IRInstruction.StoreCompound, null, transform.StackPointer, offsetOperand, operand);
 			}
 			else
 			{
@@ -298,16 +183,16 @@ namespace Mosa.Compiler.Framework.Transforms.Call
 			}
 		}
 
-		private static void PushOperands(TransformContext transform, Context context, List<Operand> operands, uint space)
+		private static void PushOperands(TransformContext transform, Context context, List<Operand> operands, uint offset)
 		{
 			for (var index = operands.Count - 1; index >= 0; index--)
 			{
 				var operand = operands[index];
+				var size = transform.MethodCompiler.GetSize(operand);
 
-				var size = GetTypeSize(transform, operand.Type, true);
-				space -= size;
+				offset -= Alignment.AlignUp(size, transform.NativePointerSize);
 
-				Push(transform, context, operand, space);
+				Push(transform, context, operand, offset);
 			}
 		}
 
@@ -316,7 +201,7 @@ namespace Mosa.Compiler.Framework.Transforms.Call
 			if (stackSize == 0)
 				return;
 
-			context.AppendInstruction(transform.SubInstruction, transform.StackPointer, transform.StackPointer, transform.CreateConstant32(stackSize));
+			context.AppendInstruction(transform.SubInstruction, transform.StackPointer, transform.StackPointer, Operand.CreateConstant32(stackSize));
 		}
 
 		#endregion Helpers

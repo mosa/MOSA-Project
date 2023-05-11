@@ -4,7 +4,7 @@
     <AssemblyTitle>Mosa.Platform.x64</AssemblyTitle>
     <Company>MOSA Project</Company>
     <Product>Mosa.Platform.x64</Product>
-    <Copyright>Copyright ©  2014</Copyright>
+    <Copyright>Copyright © MOSA Project 2023</Copyright>
     <BaseAddress>285212672</BaseAddress>
     <FileAlignment>4096</FileAlignment>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>

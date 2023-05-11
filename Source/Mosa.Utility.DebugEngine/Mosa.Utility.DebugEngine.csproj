@@ -4,7 +4,7 @@
     <AssemblyTitle>Mosa.Utility.DebugEngine</AssemblyTitle>
     <Company>MOSA Project</Company>
     <Product>Mosa.Utility.DebugEngine</Product>
-    <copyright>Copyright © MOSA Project 2023</copyright>
+    <Copyright>Copyright © MOSA Project 2023</Copyright>
     <DebugType>full</DebugType>
     <LangVersion>11.0</LangVersion>
     <OutputPath>..\..\bin\</OutputPath>

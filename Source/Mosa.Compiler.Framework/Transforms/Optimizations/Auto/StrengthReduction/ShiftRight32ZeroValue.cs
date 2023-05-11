@@ -33,7 +33,7 @@ public sealed class ShiftRight32ZeroValue : BaseTransform
 	{
 		var result = context.Result;
 
-		var e1 = transform.CreateConstant(To32(0));
+		var e1 = Operand.CreateConstant(To32(0));
 
 		context.SetInstruction(IRInstruction.Move32, result, e1);
 	}

@@ -129,7 +129,7 @@ public static class AppLocationsSettings
 	private static string FindVmwareWorkstation()
 	{
 		return TryFind(
-			new string[] { "vmware.exe", "vmworkstation", "vmware" },
+			new string[] { "vmware.exe", "vmware" },
 			new string[] {
 				@"%ProgramFiles%\VMware\VMware Workstation",
 				@"%ProgramFiles(x86)%\VMware\VMware Workstation",
@@ -141,7 +141,7 @@ public static class AppLocationsSettings
 	private static string FindVirtualBox()
 	{
 		return TryFind(
-			new string[] { "VBoxManage.exe", "vboxmanage" },
+			new string[] { "VBoxManage.exe", "VBoxManage" },
 			new string[] {
 				@"%ProgramFiles%\Oracle",
 				@"%ProgramFiles(x86)%\Oracle",

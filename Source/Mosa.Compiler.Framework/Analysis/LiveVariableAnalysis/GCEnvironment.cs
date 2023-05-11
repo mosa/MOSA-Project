@@ -7,15 +7,16 @@ namespace Mosa.Compiler.Framework.Analysis.LiveVariableAnalysis;
 /// <summary>
 /// Register Allocator Environment
 /// </summary>
-/// <seealso cref="Mosa.Compiler.Framework.Analysis.LiveVariableAnalysis .BaseLivenessAnalysisEnvironment" />
+/// <seealso cref="Mosa.Compiler.Framework.Analysis.LiveVariableAnalysis.BaseLivenessAnalysisEnvironment" />
 public class GCEnvironment : BaseLivenessAnalysisEnvironment
 {
 	protected Dictionary<Operand, int> stackLookup = new Dictionary<Operand, int>();
 	protected Dictionary<int, Operand> stackLookupReverse = new Dictionary<int, Operand>();
+
 	protected int PhysicalRegisterCount { get; }
 	protected bool[] StackLocalReference;
 
-	public GCEnvironment(BasicBlocks basicBlocks, BaseArchitecture architecture, List<Operand> localStack)
+	public GCEnvironment(BasicBlocks basicBlocks, BaseArchitecture architecture, LocalStack localStack)
 	{
 		BasicBlocks = basicBlocks;
 		StackLocalReference = new bool[localStack.Count];
@@ -38,7 +39,7 @@ public class GCEnvironment : BaseLivenessAnalysisEnvironment
 		{
 			return true;
 		}
-		else if (operand.IsStackLocal && StackLocalReference[operand.Index])
+		else if (operand.IsLocalStack && StackLocalReference[operand.Index])
 		{
 			return true;
 		}
@@ -119,7 +120,7 @@ public class GCEnvironment : BaseLivenessAnalysisEnvironment
 
 	public bool ContainsReference(Operand operand)
 	{
-		if (operand.IsReferenceType || operand.IsManagedPointer)
+		if (operand.IsObject || operand.IsManagedPointer)
 			return true;
 
 		if (!operand.IsValueType)
@@ -137,7 +138,7 @@ public class GCEnvironment : BaseLivenessAnalysisEnvironment
 		return false;
 	}
 
-	protected void CollectReferenceStackObjects(List<Operand> localStack)
+	protected void CollectReferenceStackObjects(LocalStack localStack)
 	{
 		foreach (var local in localStack)
 		{

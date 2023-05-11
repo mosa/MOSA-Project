@@ -100,6 +100,48 @@ public static class ArrayLayoutTests
 	}
 
 	[MosaUnitTest]
+	public static bool I8a()
+	{
+		var arr = new long[] { 0x5555555555555555, 0x0080808080808080, 0x0aaaaaaaaaaaaaaa, 0x0fffffffffffffff };
+		return arr[0] == 0x5555555555555555;
+	}
+
+	[MosaUnitTest]
+	public static bool I8b()
+	{
+		var arr = new long[] { 0x5555555555555555, 0x0080808080808080, 0x0aaaaaaaaaaaaaaa, 0x0fffffffffffffff };
+		return arr[1] == 0x0080808080808080;
+	}
+
+	[MosaUnitTest]
+	public static bool I8c()
+	{
+		var arr = new long[] { 0x5555555555555555, 0x0080808080808080, 0x0aaaaaaaaaaaaaaa, 0x0fffffffffffffff };
+		return arr[2] == 0x0aaaaaaaaaaaaaaa;
+	}
+
+	[MosaUnitTest]
+	public static bool I8d()
+	{
+		var arr = new long[] { 0x5555555555555555, 0x0080808080808080, 0x0aaaaaaaaaaaaaaa, 0x0fffffffffffffff };
+		return arr[3] == 0x0fffffffffffffff;
+	}
+
+	[MosaUnitTest]
+	public static bool I8x0()
+	{
+		var arr = new long[] { 0x5555555555555555, 0x0080808080808080, 0x0aaaaaaaaaaaaaaa };
+		return arr[0] == 0x5555555555555555;
+	}
+
+	[MosaUnitTest]
+	public static bool I8x1()
+	{
+		var arr = new long[] { 0x5555555555555555, 0x0080808080808080, 0x0aaaaaaaaaaaaaaa };
+		return arr[2] == 0x0aaaaaaaaaaaaaaa;
+	}
+
+	[MosaUnitTest]
 	public static bool R4()
 	{
 		var arr = new float[] { 1.234f, 5.678f, 9.012f, 3.456f };

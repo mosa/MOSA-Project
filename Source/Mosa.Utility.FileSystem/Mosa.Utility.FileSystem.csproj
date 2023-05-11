@@ -3,7 +3,8 @@
     <TargetFramework>net7.0</TargetFramework>
     <LangVersion>11.0</LangVersion>
     <OutputPath>..\..\bin\</OutputPath>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+	<Copyright>Copyright © MOSA Project 2023</Copyright>
+	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\Mosa.DeviceSystem\BaseDeviceConfiguration.cs">

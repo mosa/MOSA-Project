@@ -17,13 +17,13 @@ internal static partial class IntrinsicMethods
 		var comparand = context.Operand3;
 		var result = context.Result;
 
-		var eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, CPURegister.EAX);
-		var v1 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.U4);
+		var eax = Operand.CreateCPURegister32(CPURegister.EAX);
+		var v1 = methodCompiler.VirtualRegisters.Allocate32();
 
 		context.SetInstruction(X86.Mov32, eax, comparand);
 		context.AppendInstruction(X86.Mov32, v1, value);
 		context.AppendInstruction(X86.Lock);
-		context.AppendInstruction(X86.CmpXChgLoad32, eax, eax, location, methodCompiler.Constant32_0, v1);
+		context.AppendInstruction(X86.CmpXChgLoad32, eax, eax, location, Operand.Constant32_0, v1);
 		context.AppendInstruction(X86.Mov32, result, eax);
 	}
 }

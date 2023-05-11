@@ -28,7 +28,7 @@ public sealed class ProtectedRegionLayoutStage : BaseMethodCompilerStage
 
 	protected override void Run()
 	{
-		if (!MethodCompiler.IsCILStream)
+		if (!MethodCompiler.HasCILStream)
 			return;
 
 		if (MethodCompiler.IsMethodPlugged)
@@ -46,7 +46,7 @@ public sealed class ProtectedRegionLayoutStage : BaseMethodCompilerStage
 	{
 		var trace = CreateTraceLog("Regions");
 
-		var protectedRegionTableSymbol = Linker.DefineSymbol(Metadata.ProtectedRegionTable + Method.FullName, SectionKind.ROData, NativeAlignment, 0);
+		var protectedRegionTableSymbol = Linker.DefineSymbol(Metadata.ProtectedRegionTable + Method.FullName, SectionKind.ROData, Architecture.NativeAlignment, 0);
 		var writer = new BinaryWriter(protectedRegionTableSymbol.Stream);
 
 		var sectioncount = 0;

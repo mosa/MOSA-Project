@@ -23,7 +23,7 @@ public sealed class IMul64Constant : BaseTransform
 	{
 		var operand2 = context.Operand2;
 
-		var v1 = transform.AllocateVirtualRegister64();
+		var v1 = transform.VirtualRegisters.Allocate64();
 
 		context.InsertBefore().AppendInstruction(X64.Mov64, v1, operand2);
 		context.Operand2 = v1;

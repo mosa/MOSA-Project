@@ -50,8 +50,8 @@ public sealed class Phi32Add32 : BaseTransform
 
 		ctx.SetNop();
 
-		context.Operand1 = transform.CreateConstant(context.Operand1.ConstantUnsigned32 + value);
-		context.Operand2 = transform.CreateConstant(context.Operand2.ConstantUnsigned32 + value);
+		context.Operand1 = Operand.CreateConstant(context.Operand1.ConstantUnsigned32 + value);
+		context.Operand2 = Operand.CreateConstant(context.Operand2.ConstantUnsigned32 + value);
 		context.Result = result;
 	}
 }

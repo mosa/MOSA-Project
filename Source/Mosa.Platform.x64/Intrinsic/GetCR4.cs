@@ -12,6 +12,6 @@ internal static partial class IntrinsicMethods
 	[IntrinsicMethod("Mosa.Platform.x64.Intrinsic::GetCR4")]
 	private static void GetCR4(Context context, MethodCompiler methodCompiler)
 	{
-		context.SetInstruction(X64.MovCRLoad64, context.Result, Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U8, CPURegister.CR4));
+		context.SetInstruction(X64.MovCRLoad64, context.Result, Operand.CreateCPURegister64(CPURegister.CR4));
 	}
 }

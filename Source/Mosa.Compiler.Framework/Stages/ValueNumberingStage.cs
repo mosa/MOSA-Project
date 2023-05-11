@@ -98,10 +98,10 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 
 	private void DetermineReadOnlyParameters()
 	{
-		if (MethodCompiler.Parameters.Length == 0)
+		if (MethodCompiler.Parameters.Count == 0)
 			return;
 
-		ParamReadOnly = new BitArray(MethodCompiler.Parameters.Length, false);
+		ParamReadOnly = new BitArray(MethodCompiler.Parameters.Count, false);
 
 		var traceParameters = CreateTraceLog("Parameters", 5);
 
@@ -289,7 +289,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 					continue;
 				}
 
-				if (node.Operand1.IsStackLocal || node.Operand1.IsOnStack || node.Operand1.IsLabel)
+				if (node.Operand1.IsLocalStack || node.Operand1.IsOnStack || node.Operand1.IsLabel)
 				{
 					SetValueNumber(node.Result, node.Result);
 					continue;
@@ -452,7 +452,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 		}
 
 		if (node.Instruction == IRInstruction.AddressOf
-			&& (node.Operand1.IsStackLocal || node.Operand1.IsStaticField))
+			&& (node.Operand1.IsLocalStack || node.Operand1.IsStaticField))
 		{
 			return true;
 		}
@@ -486,13 +486,13 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 
 		if (node.Operand1.IsConstant)
 			hash = UpdateHash(hash, (int)node.Operand1.ConstantUnsigned64);
-		else if (node.Operand1.IsVirtualRegister || node.Operand1.IsStackLocal)
+		else if (node.Operand1.IsVirtualRegister || node.Operand1.IsLocalStack)
 			hash = UpdateHash(hash, node.Operand1.Index);
 
 		if (node.OperandCount >= 2)
 			if (node.Operand2.IsConstant)
 				hash = UpdateHash(hash, (int)node.Operand2.ConstantUnsigned64);
-			else if (node.Operand2.IsVirtualRegister || node.Operand2.IsStackLocal)
+			else if (node.Operand2.IsVirtualRegister || node.Operand2.IsLocalStack)
 				hash = UpdateHash(hash, node.Operand2.Index);
 
 		return hash;
@@ -532,8 +532,8 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 
 		if (instruction != null
 			&& instruction == IRInstruction.AddressOf
-			&& operand1.IsStackLocal
-			&& operand2.IsStackLocal
+			&& operand1.IsLocalStack
+			&& operand2.IsLocalStack
 			&& operand1.Index == operand2.Index)
 			return true;
 

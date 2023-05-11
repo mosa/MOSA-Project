@@ -13,13 +13,13 @@ public sealed class LoadParamSignExtend16x64 : BaseLower32Transform
 		var result = context.Result;
 		var operand1 = context.Operand1;
 
-		transform.SplitLongOperand(operand1, out Operand op0Low, out _);
+		transform.SplitOperand(operand1, out Operand op0Low, out _);
 
-		var resultLow = transform.AllocateVirtualRegister32();
-		var resultHigh = transform.AllocateVirtualRegister32();
+		var resultLow = transform.VirtualRegisters.Allocate32();
+		var resultHigh = transform.VirtualRegisters.Allocate32();
 
 		context.SetInstruction(IRInstruction.LoadParamSignExtend16x32, resultLow, op0Low);
-		context.AppendInstruction(IRInstruction.ArithShiftRight32, resultHigh, resultLow, transform.CreateConstant(31));
+		context.AppendInstruction(IRInstruction.ArithShiftRight32, resultHigh, resultLow, Operand.CreateConstant(31));
 		context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 	}
 }

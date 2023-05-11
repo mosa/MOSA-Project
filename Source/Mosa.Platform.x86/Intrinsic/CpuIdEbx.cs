@@ -16,13 +16,13 @@ internal static partial class IntrinsicMethods
 		var operand1 = context.Operand1;
 		var operand2 = context.Operand2;
 
-		var eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, CPURegister.EAX);
-		var ebx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, CPURegister.EBX);
-		var ecx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, CPURegister.ECX);
-		var edx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, CPURegister.EDX);
+		var eax = Operand.CreateCPURegister32(CPURegister.EAX);
+		var ebx = Operand.CreateCPURegister32(CPURegister.EBX);
+		var ecx = Operand.CreateCPURegister32(CPURegister.ECX);
+		var edx = Operand.CreateCPURegister32(CPURegister.EDX);
 
 		context.SetInstruction(X86.Mov32, eax, operand1);
-		context.AppendInstruction(X86.Mov32, ecx, operand2); context.AppendInstruction(X86.Mov32, ecx, methodCompiler.Constant32_0);
+		context.AppendInstruction(X86.Mov32, ecx, operand2); context.AppendInstruction(X86.Mov32, ecx, Operand.Constant32_0);
 		context.AppendInstruction(X86.CpuId, eax, eax, ecx);
 		context.AppendInstruction(IRInstruction.Gen, eax, ebx, ecx, edx);
 		context.AppendInstruction(X86.Mov32, result, ebx);
