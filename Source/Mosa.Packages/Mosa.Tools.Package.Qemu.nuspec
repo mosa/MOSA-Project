@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<package>
+	<metadata>
+		<id>Mosa.Tools.Package.Qemu</id>
+		<version>$version$</version>
+		<title>Mosa.Tools.Package.Qemu</title>
+		<authors>MOSA Project</authors>
+		<owners>MOSA Project</owners>
+		<license type="expression">BSD-3-Clause-Clear</license>
+		<projectUrl>https://www.mosa-project.org</projectUrl>
+		<icon>images/Mosa Icon.png</icon>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<summary>MOSA tools with QEMU (Windows/Linux)</summary>
+		<description>This package contains all the tools for MOSA along with QEMU binaries for Windows and Linux.</description>
+		<copyright>Copyright © MOSA Project 2023</copyright>
+		<tags>MOSA Compiler</tags>
+		<contentFiles>
+			<files include="**/*.*" buildAction="None" copyToOutput="true" />
+		</contentFiles>
+	</metadata>
+	<files>
+		<file src="..\Art\Mosa Icon.png" target="images" />
+		<file src="..\..\Tools\qemu\**\*.*" target="contentFiles/any/net7.0/Tools/qemu" />
+		<file src="..\..\bin\runtimes\**\*.*" target="contentFiles/any/net7.0/Tools/runtimes" />
+		<file src="..\..\bin\Avalonia*.dll" target="contentFiles/any/net7.0/Tools" />
+		<file src="..\..\bin\Mosa.Compiler.Common.dll" target="contentFiles/any/net7.0/Tools" />
+		<file src="..\..\bin\Mosa.Compiler.Framework.dll" target="contentFiles/any/net7.0/Tools" />
+		<file src="..\..\bin\Mosa.Compiler.MosaTypeSystem.dll" target="contentFiles/any/net7.0/Tools" />
+		<file src="..\..\bin\Mosa.Compiler.MosaTypeSystem.CLR.dll" target="contentFiles/any/net7.0/Tools" />
+		<file src="..\..\bin\Mosa.Platform.ARMv8A32.dll" target="contentFiles/any/net7.0/Tools" />
+		<file src="..\..\bin\Mosa.Platform.x86.dll" target="contentFiles/any/net7.0/Tools" />
+		<file src="..\..\bin\Mosa.Platform.x64.dll" target="contentFiles/any/net7.0/Tools" />
+		<file src="..\..\bin\Mosa.Tool.Explorer.*" target="contentFiles/any/net7.0/Tools" />
+		<file src="..\..\bin\Mosa.Tool.Debugger.*" target="contentFiles/any/net7.0/Tools" />
+		<file src="..\..\bin\Mosa.Tool.Launcher.*" target="contentFiles/any/net7.0/Tools" />
+		<file src="..\..\bin\Mosa.Tool.Compiler.*" target="contentFiles/any/net7.0/Tools" />
+		<file src="..\..\bin\Mosa.Utility.BootImage.dll" target="contentFiles/any/net7.0/Tools" />
+		<file src="..\..\bin\Mosa.Utility.Configuration.dll" target="contentFiles/any/net7.0/Tools" />
+		<file src="..\..\bin\Mosa.Utility.DebugEngine.dll" target="contentFiles/any/net7.0/Tools" />
+		<file src="..\..\bin\Mosa.Utility.FileSystem.dll" target="contentFiles/any/net7.0/Tools" />
+		<file src="..\..\bin\Mosa.Utility.Launcher.dll" target="contentFiles/any/net7.0/Tools" />
+		<file src="..\..\bin\Mosa.Utility.RSP.dll" target="contentFiles/any/net7.0/Tools" />
+		<file src="..\..\bin\Mosa.Utility.Disassembler.dll" target="contentFiles/any/net7.0/Tools" />
+		<file src="..\..\bin\dnlib.dll" target="contentFiles/any/net7.0/Tools" />
+		<file src="..\..\bin\Reko.Arch.Arm.dll" target="contentFiles/any/net7.0/Tools" />
+		<file src="..\..\bin\Reko.Arch.X86.dll" target="contentFiles/any/net7.0/Tools" />
+		<file src="..\..\bin\Reko.Core.dll" target="contentFiles/any/net7.0/Tools" />
+		<file src="..\..\bin\Reko.dll" target="contentFiles/any/net7.0/Tools" />
+		<file src="..\..\bin\PriorityQueue.dll" target="contentFiles/any/net7.0/Tools" />
+		<file src="..\..\bin\WinFormsUI.dll" target="contentFiles/any/net7.0/Tools" />
+		<file src="..\..\bin\WeifenLuo.WinFormsUI.Docking.ThemeVS2015.dll" target="contentFiles/any/net7.0/Tools" />
+		<file src="..\..\bin\System.Reactive.dll" target="contentFiles/any/net7.0/Tools" />
+		<file src="..\..\bin\SkiaSharp.dll" target="contentFiles/any/net7.0/Tools" />
+		<file src="..\..\bin\HarfBuzzSharp.dll" target="contentFiles/any/net7.0/Tools" />
+		<file src="..\..\bin\Tmds.DBus.dll" target="contentFiles/any/net7.0/Tools" />
+	</files>
+</package>

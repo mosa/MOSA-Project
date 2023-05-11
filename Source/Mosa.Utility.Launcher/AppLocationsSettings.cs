@@ -40,6 +40,8 @@ public static class AppLocationsSettings
 		return TryFind(
 			new string[] { /*"qemu-system-x86_64", "qemu-system-x86_64.exe", */"qemu-system-i386.exe", "qemu-system-i386" },
 			new string[] {
+				"qemu\\Windows",
+				"qemu/Linux",
 				@"%MOSA%\Tools\QEMU",
 				@"%CURRENT%\..\Tools\QEMU",
 				@"%CURRENT%\Tools\QEMU",
@@ -211,6 +213,9 @@ public static class AppLocationsSettings
 				new string[] {
 					Path.GetDirectoryName(qemu),
 					Path.Combine(Path.GetDirectoryName(qemu), "bios"),
+
+					"qemu\\share",
+					"qemu/share",
 
 					@"%MOSATOOLS%\qemu",
 					@"%MOSATOOLS%\qemu\bios",

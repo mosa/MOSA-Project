@@ -7,12 +7,11 @@
 		<authors>MOSA Project</authors>
 		<owners>MOSA Project</owners>
 		<license type="expression">BSD-3-Clause-Clear</license>
-		<projectUrl>http://www.mosa-project.org</projectUrl>
+		<projectUrl>https://www.mosa-project.org</projectUrl>
 		<icon>images/Mosa Icon.png</icon>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
-		<summary>MOSA Tools Package</summary>
-		<description>MOSA Tools Package</description>
-		<releaseNotes></releaseNotes>
+		<summary>MOSA tools</summary>
+		<description>This package contains all the tools for MOSA.</description>
 		<copyright>Copyright © MOSA Project 2023</copyright>
 		<tags>MOSA Compiler</tags>
 		<contentFiles>

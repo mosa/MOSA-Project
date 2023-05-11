@@ -83,6 +83,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Packages", "Packages", "{52
 		Mosa.Packages\Mosa.Platform.x86.nuspec = Mosa.Packages\Mosa.Platform.x86.nuspec
 		Mosa.Packages\Mosa.Runtime.nuspec = Mosa.Packages\Mosa.Runtime.nuspec
 		Mosa.Packages\Mosa.Tools.Package.nuspec = Mosa.Packages\Mosa.Tools.Package.nuspec
+		Mosa.Packages\Mosa.Tools.Package.Qemu.nuspec = Mosa.Packages\Mosa.Tools.Package.Qemu.nuspec
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Setup", "Setup", "{624E8284-4F0A-4C3F-B5F2-271105E48ECF}"
