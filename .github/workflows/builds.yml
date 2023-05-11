@@ -127,8 +127,8 @@ jobs:
         run: dotnet build Source/Mosa.Linux.sln
       - name: Update Package Respository
         run: sudo apt-get -y -o Acquire::Check-Valid-Until=false update
-      - name: Install Qemu
-        run: sudo apt-get install -y libsdl2-image-2.0-0 virglrenderer1
+      - name: Install Qemu Dependencies
+        run: sudo apt-get install -y libsdl2-image-2.0-0 libvirglrenderer1
       - name: Unit Tests - All Performance Optimizations
         run: dotnet bin/Mosa.Utility.UnitTests.dll -oMax -s Emulator.Display=false
       - name: Unit Tests - No Optimizations
