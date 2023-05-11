@@ -40,13 +40,14 @@ public static class AppLocationsSettings
 		return TryFind(
 			new string[] { /*"qemu-system-x86_64", "qemu-system-x86_64.exe", */"qemu-system-i386.exe", "qemu-system-i386" },
 			new string[] {
-				"qemu\\Windows",
-				"qemu/Linux",
+				@"%CURRENT%\qemu\Windows",
+				"%CURRENT%/qemu/Linux",
 				@"%MOSA%\Tools\QEMU\Windows",
 				@"%CURRENT%\..\Tools\QEMU\Windows",
 				@"%CURRENT%\Tools\QEMU\Windows",
 				@"%APPDIR%\Tools\QEMU\Windows",
 				@"%APPDIR%\..\Tools\QEMU\Windows",
+				"%CURRENT%/../Tools/qemu/Linux",
 				@"%ProgramFiles%\qemu",
 				@"%ProgramFiles(x86)%\qemu",
 				@"%MOSATOOLS%\QEMU\Windows",
@@ -187,8 +188,8 @@ public static class AppLocationsSettings
 			new string[] { "qemu-img.exe", "qemu-img" },
 			new string[]
 			{
-				"qemu\\share",
-				"qemu/share",
+				@"%CURRENT%\qemu\share",
+				"%CURRENT%/qemu/share",
 
 				@"%MOSA%\Tools\QEMU\Windows",
 				@"%CURRENT%\..\Tools\QEMU\Windows",
@@ -200,6 +201,8 @@ public static class AppLocationsSettings
 				@"%ProgramFiles%\qemu",
 				@"%ProgramFiles(x86)%\qemu",
 				@"%ProgramFiles(x86)%\Mosa-Project\Tools\qemu\Windows",
+
+				"%CURRENT%/../Tools/qemu/share",
 				"/bin"
 			}
 		);
@@ -217,12 +220,14 @@ public static class AppLocationsSettings
 					Path.GetDirectoryName(qemu),
 					Path.Combine(Path.GetDirectoryName(qemu), "bios"),
 
-					"qemu\\share",
-					"qemu/share",
+					@"%CURRENT%\qemu\share",
+					"%CURRENT%/qemu/share",
 
+					@"%CURRENT%\..\Tools\qemu\share",
 					@"%MOSATOOLS%\qemu\Windows",
 					@"%MOSATOOLS%\qemu\Windows\bios",
 
+					"%CURRENT%/../Tools/qemu/share",
 					"/usr/share/qemu",
 					"/usr/share/seabios"
 				}
