@@ -140,32 +140,32 @@ public abstract class BaseCompilerStage
 
 	protected Operand CreateConstant(int value)
 	{
-		return Operand.CreateConstant(TypeSystem.BuiltIn.I4, value);
+		return Operand.CreateConstant32((uint)value);
 	}
 
 	protected Operand CreateConstant(uint value)
 	{
-		return Operand.CreateConstant(TypeSystem.BuiltIn.I4, value);
+		return Operand.CreateConstant32(value);
 	}
 
 	protected Operand CreateConstant(long value)
 	{
-		return Operand.CreateConstant(TypeSystem.BuiltIn.I8, value);
+		return Operand.CreateConstant64((ulong)value);
 	}
 
 	protected Operand CreateConstant(ulong value)
 	{
-		return Operand.CreateConstant(TypeSystem.BuiltIn.I8, value);
+		return Operand.CreateConstant64(value);
 	}
 
-	protected Operand CreateConstant(float value)
+	protected Operand CreateConstantR4(float value)
 	{
-		return Operand.CreateConstant(TypeSystem.BuiltIn.R4, value);
+		return Operand.CreateConstantR4(value);
 	}
 
-	protected Operand CreateConstant(double value)
+	protected Operand CreateConstantR8(double value)
 	{
-		return Operand.CreateConstant(TypeSystem.BuiltIn.R8, value);
+		return Operand.CreateConstantR8(value);
 	}
 
 	#endregion Constant Helper Methods

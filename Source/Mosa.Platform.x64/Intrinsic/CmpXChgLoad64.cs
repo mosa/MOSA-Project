@@ -17,13 +17,13 @@ internal static partial class IntrinsicMethods
 		var comparand = context.Operand3;
 		var result = context.Result;
 
-		var rax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U8, CPURegister.RAX);
-		var v1 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.U8);
+		var rax = Operand.CreateCPURegister64(CPURegister.RAX);
+		var v1 = methodCompiler.VirtualRegisters.Allocate64();
 
 		context.SetInstruction(X64.Mov64, rax, comparand);
 		context.AppendInstruction(X64.Mov64, v1, value);
 		context.AppendInstruction(X64.Lock);
-		context.AppendInstruction(X64.CmpXChgLoad64, rax, rax, location, methodCompiler.Constant32_0, v1);
+		context.AppendInstruction(X64.CmpXChgLoad64, rax, rax, location, Operand.Constant32_0, v1);
 		context.AppendInstruction(X64.Mov64, result, rax);
 	}
 }

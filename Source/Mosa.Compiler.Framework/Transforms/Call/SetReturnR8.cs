@@ -1,7 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.Framework.Call;
 
@@ -21,6 +20,6 @@ public sealed class SetReturnR8 : BaseTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		context.SetInstruction(IRInstruction.MoveR8, Operand.CreateCPURegister(context.Operand1.Type, transform.Architecture.ReturnFloatingPointRegister), context.Operand1);
+		context.SetInstruction(IRInstruction.MoveR8, Operand.CreateCPURegisterR8(transform.Architecture.ReturnFloatingPointRegister), context.Operand1);
 	}
 }

@@ -33,7 +33,7 @@ public sealed class Or32Max : BaseTransform
 	{
 		var result = context.Result;
 
-		var e1 = transform.CreateConstant(To32(0xFFFFFFFF));
+		var e1 = Operand.CreateConstant(To32(0xFFFFFFFF));
 
 		context.SetInstruction(IRInstruction.Move32, result, e1);
 	}
@@ -66,7 +66,7 @@ public sealed class Or32Max_v1 : BaseTransform
 	{
 		var result = context.Result;
 
-		var e1 = transform.CreateConstant(To32(0xFFFFFFFF));
+		var e1 = Operand.CreateConstant(To32(0xFFFFFFFF));
 
 		context.SetInstruction(IRInstruction.Move32, result, e1);
 	}

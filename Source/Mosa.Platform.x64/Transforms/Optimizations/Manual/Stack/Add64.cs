@@ -58,11 +58,11 @@ public sealed class Add64 : BaseTransform
 
 		if (value > 0)
 		{
-			context.SetInstruction(X64.Add64, context.Result, context.Operand1, transform.CreateConstant(value));
+			context.SetInstruction(X64.Add64, context.Result, context.Operand1, Operand.CreateConstant(value));
 		}
 		else if (value < 0)
 		{
-			context.SetInstruction(X64.Sub64, context.Result, context.Operand1, transform.CreateConstant(-value));
+			context.SetInstruction(X64.Sub64, context.Result, context.Operand1, Operand.CreateConstant(-value));
 		}
 		else // if (value == 0)
 		{

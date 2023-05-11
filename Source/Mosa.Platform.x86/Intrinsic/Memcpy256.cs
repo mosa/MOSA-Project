@@ -15,13 +15,13 @@ internal static partial class IntrinsicMethods
 		var dest = context.Operand1;
 		var src = context.Operand2;
 
-		var v0 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.Void);
-		var v1 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.Void);
-		var offset16 = methodCompiler.CreateConstant(16);
+		var v0 = methodCompiler.VirtualRegisters.Allocate32();
+		var v1 = methodCompiler.VirtualRegisters.Allocate32();
+		var offset16 = Operand.Constant32_16;
 
-		context.SetInstruction(X86.MovupsLoad, v0, dest, methodCompiler.Constant32_0);
+		context.SetInstruction(X86.MovupsLoad, v0, dest, Operand.Constant32_0);
 		context.AppendInstruction(X86.MovupsLoad, v1, dest, offset16);
-		context.AppendInstruction(X86.MovupsStore, null, dest, methodCompiler.Constant32_0, v0);
+		context.AppendInstruction(X86.MovupsStore, null, dest, Operand.Constant32_0, v0);
 		context.AppendInstruction(X86.MovupsStore, null, dest, offset16, v1);
 	}
 }

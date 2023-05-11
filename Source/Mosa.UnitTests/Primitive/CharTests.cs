@@ -155,4 +155,12 @@ public static class CharTests
 	{
 		destination = value;
 	}
+
+	[MosaUnitTest("I4UpTo8")]
+	public static char ArrayAccess(int index)
+	{
+		var array = new char[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' };
+
+		return array[index];
+	}
 }

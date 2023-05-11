@@ -84,11 +84,6 @@ public abstract class BaseArchitecture
 	public abstract uint NativePointerSize { get; }
 
 	/// <summary>
-	/// Gets the size of the native instruction.
-	/// </summary>
-	public virtual InstructionSize NativeInstructionSize => NativePointerSize == 4 ? InstructionSize.Size32 : InstructionSize.Size64;
-
-	/// <summary>
 	/// Is the platform is 32 bit
 	/// </summary>
 	/// <value>

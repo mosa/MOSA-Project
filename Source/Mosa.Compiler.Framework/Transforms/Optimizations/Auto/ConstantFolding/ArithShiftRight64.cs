@@ -36,7 +36,7 @@ public sealed class ArithShiftRight64 : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2;
 
-		var e1 = transform.CreateConstant(ArithmeticShiftRight64(To64(t1), ToSigned64(t2)));
+		var e1 = Operand.CreateConstant(ArithmeticShiftRight64(To64(t1), ToSigned64(t2)));
 
 		context.SetInstruction(IRInstruction.Move64, result, e1);
 	}

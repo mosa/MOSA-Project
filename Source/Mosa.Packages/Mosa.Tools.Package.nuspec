@@ -15,8 +15,6 @@
 		<releaseNotes></releaseNotes>
 		<copyright>Copyright © MOSA Project 2023</copyright>
 		<tags>MOSA Compiler</tags>
-		<dependencies>
-		</dependencies>
 		<contentFiles>
 			<files include="**/*.*" buildAction="None" copyToOutput="true" />
 		</contentFiles>

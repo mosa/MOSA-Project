@@ -173,7 +173,14 @@ public sealed class MetadataStage : BaseCompilerStage
 		writer.Write(((uint)type.TypeCode << 24) + (uint)type.TypeAttributes, NativePointerSize);
 
 		// 4. Size
-		writer.Write(TypeLayout.GetTypeSize(type), NativePointerSize);
+		var size =
+			type.HasOpenGenericParams
+			|| type.IsInterface
+			|| type.IsVoid
+			|| (!type.IsReferenceType && !type.IsValueType)
+			? 0 : TypeLayout.GetTypeLayoutSize(type);
+
+		writer.Write(size, NativePointerSize);
 
 		// 5. Pointer to Assembly Definition
 		Linker.Link(LinkType.AbsoluteAddress, NativePatchType, typeDefinitionSymbol, writer.GetPosition(), assemblyTableSymbol, 0);
@@ -452,23 +459,31 @@ public sealed class MetadataStage : BaseCompilerStage
 			Linker.Link(LinkType.AbsoluteAddress, NativePatchType, fieldDefSymbol, writer2.GetPosition(), Metadata.TypeDefinition + field.FieldType.FullName, 0);
 			writer2.WriteZeroBytes(NativePointerSize);
 
-			// 5 & 6. Offset / Address + Size
-			if (field.IsStatic && !field.IsLiteral && !type.HasOpenGenericParams)
+			// 5. Static Address
+			// 6. Offset or Data Length
+			if (type.HasOpenGenericParams || field.HasOpenGenericParams)
+			{
+				writer2.WriteZeroBytes(NativePointerSize);
+				writer2.WriteZeroBytes(NativePointerSize);
+			}
+			else if (field.IsStatic && !field.IsLiteral)
 			{
 				if (Compiler.MethodScanner.IsFieldAccessed(field))
 				{
 					Linker.Link(LinkType.AbsoluteAddress, NativePatchType, fieldDefSymbol, writer2.GetPosition(), field.FullName, 0);
 				}
+
 				writer2.WriteZeroBytes(NativePointerSize);
 				writer2.Write(field.Data?.Length ?? 0, NativePointerSize);
 			}
 			else
 			{
 				writer2.WriteZeroBytes(NativePointerSize);
-				writer2.Write(TypeLayout.GetFieldOffset(field), NativePointerSize);
+				var offset = field.HasOpenGenericParams || field.IsStatic ? 0 : TypeLayout.GetFieldOffset(field);
+				writer2.Write(offset, NativePointerSize);
 			}
 
-			// Add pointer to field list
+			// 7. Add pointer to field list
 			Linker.Link(LinkType.AbsoluteAddress, NativePatchType, fieldsTableSymbol, writer1.GetPosition(), fieldDefSymbol, 0);
 			writer1.WriteZeroBytes(NativePointerSize);
 		}

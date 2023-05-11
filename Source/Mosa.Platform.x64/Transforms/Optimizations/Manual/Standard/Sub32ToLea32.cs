@@ -38,7 +38,7 @@ public sealed class Sub32ToLea32 : BaseTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		var constant = transform.CreateConstant(-context.Operand2.ConstantSigned32);
+		var constant = Operand.CreateConstant(-context.Operand2.ConstantSigned32);
 
 		context.SetInstruction(X64.Lea32, context.Result, context.Operand1, constant);
 	}

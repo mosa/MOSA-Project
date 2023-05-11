@@ -11,8 +11,8 @@ public class BuildX86Instructions : BuildBaseTemplate
 
 	protected override void Body()
 	{
-		Lines.AppendLine("using Mosa.Compiler.Framework;");
 		Lines.AppendLine("using System.Collections.Generic;");
+		Lines.AppendLine("using Mosa.Compiler.Framework;");
 		Lines.AppendLine();
 		Lines.AppendLine("namespace Mosa.Platform.x86;");
 		Lines.AppendLine();

@@ -21,7 +21,7 @@ public sealed class Compare32x32 : BaseIRTransform
 		var operand1 = context.Operand1;
 		var operand2 = context.Operand2;
 
-		var v1 = transform.AllocateVirtualRegister32();
+		var v1 = transform.VirtualRegisters.Allocate32();
 		context.SetInstruction(X64.Cmp32, null, operand1, operand2);
 		context.AppendInstruction(X64.Setcc, condition, v1);
 		context.AppendInstruction(X64.Movzx8To32, resultOperand, v1);

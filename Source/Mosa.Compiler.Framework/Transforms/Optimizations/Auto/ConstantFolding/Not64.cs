@@ -32,7 +32,7 @@ public sealed class Not64 : BaseTransform
 
 		var t1 = context.Operand1;
 
-		var e1 = transform.CreateConstant(Not64(To64(t1)));
+		var e1 = Operand.CreateConstant(Not64(To64(t1)));
 
 		context.SetInstruction(IRInstruction.Move64, result, e1);
 	}

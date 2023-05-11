@@ -32,7 +32,7 @@ public sealed class ConvertU32ToR4 : BaseTransform
 
 		var t1 = context.Operand1;
 
-		var e1 = transform.CreateConstant(ToR4(To32(t1)));
+		var e1 = Operand.CreateConstant(ToR4(To32(t1)));
 
 		context.SetInstruction(IRInstruction.MoveR4, result, e1);
 	}

@@ -44,7 +44,7 @@ public sealed class LoadZeroExtend32x64FoldAdd32 : BaseTransform
 		var t2 = context.Operand1.Definitions[0].Operand2;
 		var t3 = context.Operand2;
 
-		var e1 = transform.CreateConstant(Add32(To32(t2), To32(t3)));
+		var e1 = Operand.CreateConstant(Add32(To32(t2), To32(t3)));
 
 		context.SetInstruction(IRInstruction.LoadZeroExtend32x64, result, t1, e1);
 	}

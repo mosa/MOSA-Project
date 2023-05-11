@@ -30,6 +30,6 @@ public sealed class Load32 : BaseTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		context.SetInstruction(IRInstruction.Move32, context.Result, transform.Constant32_0);
+		context.SetInstruction(IRInstruction.Move32, context.Result, Operand.Constant32_0);
 	}
 }

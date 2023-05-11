@@ -44,7 +44,7 @@ public sealed class LoadSignExtend16x32FoldSub32 : BaseTransform
 		var t2 = context.Operand1.Definitions[0].Operand2;
 		var t3 = context.Operand2;
 
-		var e1 = transform.CreateConstant(Sub32(To32(t3), To32(t2)));
+		var e1 = Operand.CreateConstant(Sub32(To32(t3), To32(t2)));
 
 		context.SetInstruction(IRInstruction.LoadSignExtend16x32, result, t1, e1);
 	}

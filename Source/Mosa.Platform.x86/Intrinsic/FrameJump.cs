@@ -17,12 +17,12 @@ internal static partial class IntrinsicMethods
 		var v2 = context.Operand3;
 		var v3 = context.GetOperand(3);
 
-		var esp = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, CPURegister.ESP);
-		var ebp = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, CPURegister.EBP);
+		var esp = Operand.CreateCPURegister32(CPURegister.ESP);
+		var ebp = Operand.CreateCPURegister32(CPURegister.EBP);
 
-		var eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, CPURegister.EAX);
-		var ebx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, CPURegister.EBX);
-		var ecx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, CPURegister.ECX);
+		var eax = Operand.CreateCPURegister32(CPURegister.EAX);
+		var ebx = Operand.CreateCPURegister32(CPURegister.EBX);
+		var ecx = Operand.CreateCPURegister32(CPURegister.ECX);
 
 		// Move all virtual registers into physical registers - necessary since stack frame pointer will change
 		context.SetInstruction(X86.Mov32, eax, v0);

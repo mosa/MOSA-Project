@@ -14,7 +14,9 @@ public class DwarfDebugInformationEntry
 public class DwarfCompilationUnit : DwarfDebugInformationEntry
 {
 	public string Producer { get; set; }
+
 	public uint ProgramCounterLow { get; set; }
+
 	public uint ProgramCounterHigh { get; set; }
 
 	public override void Emit(DwarfWriteContext ctx)

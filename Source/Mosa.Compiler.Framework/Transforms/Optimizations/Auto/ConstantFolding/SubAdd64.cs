@@ -46,7 +46,7 @@ public sealed class SubAdd64 : BaseTransform
 		var t2 = context.Operand1.Definitions[0].Operand2;
 		var t3 = context.Operand2;
 
-		var e1 = transform.CreateConstant(Sub64(To64(t2), To64(t3)));
+		var e1 = Operand.CreateConstant(Sub64(To64(t2), To64(t3)));
 
 		context.SetInstruction(IRInstruction.Add64, result, t1, e1);
 	}
@@ -92,7 +92,7 @@ public sealed class SubAdd64_v1 : BaseTransform
 		var t2 = context.Operand1.Definitions[0].Operand2;
 		var t3 = context.Operand2;
 
-		var e1 = transform.CreateConstant(Sub64(To64(t1), To64(t3)));
+		var e1 = Operand.CreateConstant(Sub64(To64(t1), To64(t3)));
 
 		context.SetInstruction(IRInstruction.Add64, result, t2, e1);
 	}

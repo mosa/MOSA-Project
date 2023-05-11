@@ -32,7 +32,7 @@ public sealed class SignExtend16x32 : BaseTransform
 
 		var t1 = context.Operand1;
 
-		var e1 = transform.CreateConstant(SignExtend16x32(ToShort(t1)));
+		var e1 = Operand.CreateConstant(SignExtend16x32(ToShort(t1)));
 
 		context.SetInstruction(IRInstruction.Move32, result, e1);
 	}

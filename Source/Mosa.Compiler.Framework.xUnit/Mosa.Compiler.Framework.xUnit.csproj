@@ -5,7 +5,7 @@
 		<AssemblyTitle>Mosa.Compiler.Framework.xUnit</AssemblyTitle>
 		<Company>MOSA Project</Company>
 		<Product>Mosa.Compiler.Framework.xUnit</Product>
-		<copyright>Copyright © MOSA Project 2023</copyright>
+		<Copyright>Copyright © MOSA Project 2023</Copyright>
 		<BaseAddress>285212672</BaseAddress>
 		<RegisterForComInterop>False</RegisterForComInterop>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>

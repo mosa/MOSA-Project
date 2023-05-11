@@ -90,7 +90,7 @@ public sealed class SparseConditionalConstantPropagation
 			Operand = operand;
 
 			IsVirtualRegister = operand.IsVirtualRegister;
-			IsReferenceType = operand.IsReferenceType;
+			IsReferenceType = operand.IsObject;
 			ConstantsContainZero = false;
 
 			if (IsVirtualRegister)

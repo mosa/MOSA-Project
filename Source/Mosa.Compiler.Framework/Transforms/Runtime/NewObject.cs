@@ -21,11 +21,8 @@ public sealed class NewObject : BaseRuntimeTransform
 	public override void Transform(Context context, TransformContext transform)
 	{
 		var method = GetVMCallMethod(transform, "AllocateObject");
-		var symbol = Operand.CreateSymbolFromMethod(method, transform.TypeSystem);
-		var classType = context.MosaType;
+		var symbol = Operand.CreateLabel(method, transform.Is32BitPlatform);
 
 		context.SetInstruction(IRInstruction.CallStatic, context.Result, symbol, context.GetOperands());
-
-		transform.MethodScanner.TypeAllocated(classType, transform.Method);
 	}
 }

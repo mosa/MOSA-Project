@@ -15,9 +15,12 @@ public sealed class StaticFieldStage : BaseCompilerStage
 	{
 		foreach (var type in TypeSystem.AllTypes)
 		{
+			if (type.HasOpenGenericParams)
+				continue;
+
 			foreach (var field in type.Fields)
 			{
-				if (!field.IsStatic)
+				if (!field.IsStatic || field.HasOpenGenericParams)
 					continue;
 
 				if (!Compiler.MethodScanner.IsFieldAccessed(field))

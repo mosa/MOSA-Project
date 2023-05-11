@@ -32,7 +32,7 @@ public sealed class GetHigh32 : BaseTransform
 
 		var t1 = context.Operand1;
 
-		var e1 = transform.CreateConstant(GetHigh32(To64(t1)));
+		var e1 = Operand.CreateConstant(GetHigh32(To64(t1)));
 
 		context.SetInstruction(IRInstruction.Move32, result, e1);
 	}

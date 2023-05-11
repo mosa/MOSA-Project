@@ -7,7 +7,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator;
 
 public sealed class MoveResolver
 {
-	public enum ResolvedMoveType { Move, Exchange, Load }
+	public enum ResolvedMoveType
+	{ Move, Exchange, Load }
 
 	public sealed class ResolvedMoveList : List<MoveExtended<ResolvedMoveType>>
 	{

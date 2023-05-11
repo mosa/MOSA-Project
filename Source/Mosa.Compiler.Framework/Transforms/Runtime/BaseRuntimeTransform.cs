@@ -29,7 +29,7 @@ namespace Mosa.Compiler.Framework.Transforms.Runtime
 		public static void SetVMCall(TransformContext transform, Context context, string vmcall, Operand result, List<Operand> operands)
 		{
 			var method = GetVMCallMethod(transform, vmcall);
-			var symbol = Operand.CreateSymbolFromMethod(method, transform.TypeSystem);
+			var symbol = Operand.CreateLabel(method, transform.Is32BitPlatform);
 
 			context.SetInstruction(IRInstruction.CallStatic, result, symbol, operands);
 		}

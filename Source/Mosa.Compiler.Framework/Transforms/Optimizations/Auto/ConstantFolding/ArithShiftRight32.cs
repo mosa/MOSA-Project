@@ -36,7 +36,7 @@ public sealed class ArithShiftRight32 : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2;
 
-		var e1 = transform.CreateConstant(ArithmeticShiftRight32(To32(t1), ToSigned32(t2)));
+		var e1 = Operand.CreateConstant(ArithmeticShiftRight32(To32(t1), ToSigned32(t2)));
 
 		context.SetInstruction(IRInstruction.Move32, result, e1);
 	}

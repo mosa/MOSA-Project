@@ -1,3 +1,5 @@
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
 using System.Diagnostics;
 using Mosa.Compiler.MosaTypeSystem;
 
@@ -22,8 +24,8 @@ public sealed class TryEnd : BaseExceptionTransform
 
 		if (immediate.ExceptionHandlerType == ExceptionHandlerType.Finally)
 		{
-			context.SetInstruction(IRInstruction.MoveObject, transform.LeaveTargetRegister, transform.CreateConstant32(target.Label));
-			context.AppendInstruction(IRInstruction.MoveObject, transform.ExceptionRegister, transform.NullOperand);
+			context.SetInstruction(IRInstruction.MoveObject, transform.LeaveTargetRegister, Operand.CreateConstant32(target.Label));
+			context.AppendInstruction(IRInstruction.MoveObject, transform.ExceptionRegister, Operand.NullObject);
 			context.AppendInstruction(IRInstruction.Jmp, transform.BasicBlocks.GetByLabel(immediate.HandlerStart));
 			return;
 		}
@@ -34,8 +36,8 @@ public sealed class TryEnd : BaseExceptionTransform
 
 		if (next != null && next.FilterStart < immediate.HandlerEnd)
 		{
-			context.SetInstruction(IRInstruction.MoveObject, transform.LeaveTargetRegister, transform.CreateConstant32(target.Label));
-			context.AppendInstruction(IRInstruction.MoveObject, transform.ExceptionRegister, transform.NullOperand);
+			context.SetInstruction(IRInstruction.MoveObject, transform.LeaveTargetRegister, Operand.CreateConstant32(target.Label));
+			context.AppendInstruction(IRInstruction.MoveObject, transform.ExceptionRegister, Operand.NullObject);
 			context.AppendInstruction(IRInstruction.Jmp, transform.BasicBlocks.GetByLabel(next.HandlerStart));
 			return;
 		}

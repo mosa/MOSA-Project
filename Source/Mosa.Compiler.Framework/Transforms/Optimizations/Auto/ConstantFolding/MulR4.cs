@@ -36,7 +36,7 @@ public sealed class MulR4 : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2;
 
-		var e1 = transform.CreateConstant(MulR4(ToR4(t1), ToR4(t2)));
+		var e1 = Operand.CreateConstant(MulR4(ToR4(t1), ToR4(t2)));
 
 		context.SetInstruction(IRInstruction.MoveR4, result, e1);
 	}

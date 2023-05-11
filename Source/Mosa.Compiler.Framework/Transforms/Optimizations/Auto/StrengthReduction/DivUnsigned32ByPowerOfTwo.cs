@@ -40,7 +40,7 @@ public sealed class DivUnsigned32ByPowerOfTwo : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2;
 
-		var e1 = transform.CreateConstant(GetPowerOfTwo(To32(t2)));
+		var e1 = Operand.CreateConstant(GetPowerOfTwo(To32(t2)));
 
 		context.SetInstruction(IRInstruction.ShiftRight32, result, t1, e1);
 	}

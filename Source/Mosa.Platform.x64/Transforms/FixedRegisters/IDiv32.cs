@@ -37,15 +37,15 @@ public sealed class IDiv32 : BaseTransform
 		var result = context.Result;
 		var result2 = context.Result2;
 
-		var rax = Operand.CreateCPURegister(transform.I4, CPURegister.RAX);
-		var rdx = Operand.CreateCPURegister(transform.I4, CPURegister.RDX);
+		var rax = Operand.CreateCPURegister32(CPURegister.RAX);
+		var rdx = Operand.CreateCPURegister32(CPURegister.RDX);
 
 		context.SetInstruction(X64.Mov64, rdx, operand1);
 		context.AppendInstruction(X64.Mov64, rax, operand2);
 
 		if (operand3.IsConstant)
 		{
-			var v1 = transform.AllocateVirtualRegister32();
+			var v1 = transform.VirtualRegisters.Allocate32();
 			context.AppendInstruction(X64.Mov64, v1, operand3);
 			context.AppendInstruction2(X64.IDiv32, rdx, rax, rdx, rax, v1);
 		}

@@ -2,7 +2,6 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
-using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework;
 
@@ -147,26 +146,6 @@ public sealed class Context
 	public bool IsEmpty => Node.IsEmpty;
 
 	public bool IsEmptyOrNop => Node.IsEmptyOrNop;
-
-	/// <summary>
-	/// Gets or sets the runtime method.
-	/// </summary>
-	public MosaMethod InvokeMethod
-	{ get => Node.InvokeMethod; set => Node.InvokeMethod = value; }
-
-	/// <summary>
-	/// Gets or sets the runtime field.
-	/// </summary>
-	/// <value>The runtime field.</value>
-	public MosaField MosaField
-	{ get => Node.MosaField; set => Node.MosaField = value; }
-
-	/// <summary>
-	/// Gets or sets the runtime field.
-	/// </summary>
-	/// <value>The runtime field.</value>
-	public MosaType MosaType
-	{ get => Node.MosaType; set => Node.MosaType = value; }
 
 	/// <summary>
 	/// Gets or sets the condition code.

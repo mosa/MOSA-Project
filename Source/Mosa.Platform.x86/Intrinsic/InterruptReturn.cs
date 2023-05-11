@@ -14,11 +14,11 @@ internal static partial class IntrinsicMethods
 	{
 		Operand v0 = context.Operand1;
 
-		Operand esp = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, CPURegister.ESP);
+		Operand esp = Operand.CreateCPURegister32(CPURegister.ESP);
 
 		context.SetInstruction(X86.Mov32, esp, v0);
 		context.AppendInstruction(X86.Popad);
-		context.AppendInstruction(X86.Add32, esp, esp, methodCompiler.CreateConstant(8));
+		context.AppendInstruction(X86.Add32, esp, esp, Operand.Constant32_8);
 		context.AppendInstruction(X86.Sti);
 		context.AppendInstruction(X86.IRetd);
 

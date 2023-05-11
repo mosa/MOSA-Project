@@ -45,7 +45,7 @@ public sealed class Store32FoldSub64 : BaseTransform
 		var t3 = context.Operand2;
 		var t4 = context.Operand3;
 
-		var e1 = transform.CreateConstant(Sub64(To64(t3), To64(t2)));
+		var e1 = Operand.CreateConstant(Sub64(To64(t3), To64(t2)));
 
 		context.SetInstruction(IRInstruction.Store32, result, t1, e1, t4);
 	}

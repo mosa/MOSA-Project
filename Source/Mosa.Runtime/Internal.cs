@@ -188,82 +188,49 @@ public static class Internal
 
 	#region Memory Manipulation
 
-	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static void MemoryCopy(Pointer dest, Pointer src, uint count)
 	{
-		var count32 = count >> 2;
-		for (var i = 0; i < count32; i++)
+		// FUTURE: Improve
+		for (var i = 0; i < count; i++)
 		{
-			var value = src.Load32(i << 2);
-			dest.Store32(i << 2, value);
-		}
-
-		var count8 = count & 0x03;
-		for (uint i = 0; i < count8; i++)
-		{
-			var value = src.Load8(count32 + i);
-			dest.Store8(count32 + i, value);
+			byte value = src.Load8(i);
+			dest.Store8(i, value);
 		}
 	}
 
-	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static void MemorySet(Pointer dest, byte value, uint count)
 	{
-		var value32 = (uint)(value << 24 | value << 16 | value << 8 | value);
-
-		var count32 = count >> 2;
-		for (var i = 0; i < count32; i++)
+		// FUTURE: Improve
+		for (var i = 0; i < count; i++)
 		{
-			dest.Store32(i << 2, value32);
-		}
-
-		var count8 = count & 0x03;
-		for (uint i = 0; i < count8; i++)
-		{
-			dest.Store8(count32 + i, value);
+			dest.Store8(i, value);
 		}
 	}
 
-	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static void MemorySet(Pointer dest, ushort value, uint count)
 	{
-		var value32 = (uint)(value << 16 | value);
-
-		var count32 = count >> 1;
-		for (var i = 0; i < count32; i++)
+		// FUTURE: Improve
+		for (var i = 0; i < count; i += 2)
 		{
-			dest.Store32(i << 1, value32);
-		}
-
-		var count16 = count & 0x01;
-		for (uint i = 0; i < count16; i += 2)
-		{
-			dest.Store16(count32 + i, value);
+			dest.Store16(i, value);
 		}
 	}
 
-	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static void MemorySet(Pointer dest, uint value, uint count)
 	{
-		var count32 = count >> 2;
-		for (var i = 0; i < count32; i++)
-		{
-			dest.Store32(i << 2, value);
-		}
-
-		var count8 = count & 0x03;
-		for (uint i = 0; i < count8; i += 4)
-		{
-			dest.Store32(count32 + i, value);
-		}
-	}
-
-	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static void MemoryClear(Pointer dest, uint count, uint value = 0)
-	{
+		// FUTURE: Improve
 		for (var i = 0; i < count; i += 4)
 		{
 			dest.Store32(i, value);
+		}
+	}
+
+	public static void MemoryClear(Pointer dest, uint count)
+	{
+		// FUTURE: Improve
+		for (int i = 0; i < count; i++)
+		{
+			dest.Store8(i, 0);
 		}
 	}
 

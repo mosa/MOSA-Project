@@ -36,14 +36,14 @@ public sealed class Mul32 : BaseTransform
 		var result = context.Result;
 		var result2 = context.Result2;
 
-		var eax = Operand.CreateCPURegister(transform.I4, CPURegister.EAX);
-		var edx = Operand.CreateCPURegister(transform.I4, CPURegister.EDX);
+		var eax = Operand.CreateCPURegister32(CPURegister.EAX);
+		var edx = Operand.CreateCPURegister32(CPURegister.EDX);
 
 		context.SetInstruction(X86.Mov32, eax, operand1);
 
 		if (operand2.IsConstant)
 		{
-			var v1 = transform.AllocateVirtualRegister32();
+			var v1 = transform.VirtualRegisters.Allocate32();
 			context.AppendInstruction(X86.Mov32, v1, operand2);
 			operand2 = v1;
 		}

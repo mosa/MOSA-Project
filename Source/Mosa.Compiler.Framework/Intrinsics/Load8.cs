@@ -7,16 +7,16 @@ namespace Mosa.Compiler.Framework.Intrinsics;
 /// <summary>
 /// IntrinsicMethods
 /// </summary>
-static partial class IntrinsicMethods
+internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Runtime.Intrinsic::Load8")]
 	private static void Load8(Context context, MethodCompiler methodCompiler)
 	{
-		var instruction = methodCompiler.Is32BitPlatform ? (BaseInstruction)IRInstruction.LoadZeroExtend8x32 : IRInstruction.LoadZeroExtend8x64;
+		var instruction = methodCompiler.Is32BitPlatform ? IRInstruction.LoadZeroExtend8x32 : IRInstruction.LoadZeroExtend8x64;
 
 		if (context.OperandCount == 1)
 		{
-			context.SetInstruction(instruction, context.Result, context.Operand1, methodCompiler.Constant64_0);
+			context.SetInstruction(instruction, context.Result, context.Operand1, Operand.Constant64_0);
 		}
 		else if (context.OperandCount == 2)
 		{

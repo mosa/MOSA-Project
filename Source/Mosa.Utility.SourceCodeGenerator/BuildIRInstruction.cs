@@ -11,6 +11,7 @@ public class BuildIRInstruction : BuildBaseTemplate
 
 	protected override void Body()
 	{
+		Lines.AppendLine("using Mosa.Compiler.Framework;");
 		Lines.AppendLine("using Mosa.Compiler.Framework.IR;");
 		Lines.AppendLine();
 		Lines.AppendLine("namespace Mosa.Compiler.Framework;");
@@ -25,7 +26,7 @@ public class BuildIRInstruction : BuildBaseTemplate
 
 		foreach (var entry in instructions)
 		{
-			Lines.AppendLine("\tpublic static readonly " + entry.Name + " " + entry.Name + " = new " + entry.Name + "();");
+			Lines.AppendLine("\tpublic static readonly BaseInstruction " + entry.Name + " = new " + entry.Name + "();");
 		}
 
 		Lines.AppendLine("}");

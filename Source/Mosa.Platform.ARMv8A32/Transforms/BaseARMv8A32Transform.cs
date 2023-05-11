@@ -16,12 +16,12 @@ namespace Mosa.Platform.ARMv8A32.Transforms
 
 		public static void ExpandMul(TransformContext transform, Context context)
 		{
-			transform.SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
-			transform.SplitLongOperand(context.Operand1, out var op1L, out var op1H);
-			transform.SplitLongOperand(context.Operand2, out var op2L, out var op2H);
+			transform.SplitOperand(context.Result, out var resultLow, out var resultHigh);
+			transform.SplitOperand(context.Operand1, out var op1L, out var op1H);
+			transform.SplitOperand(context.Operand2, out var op2L, out var op2H);
 
-			var v1 = transform.AllocateVirtualRegister32();
-			var v2 = transform.AllocateVirtualRegister32();
+			var v1 = transform.VirtualRegisters.Allocate32();
+			var v2 = transform.VirtualRegisters.Allocate32();
 
 			op1L = MoveConstantToRegister(transform, context, op1L);
 			op1H = MoveConstantToRegister(transform, context, op1H);
@@ -108,7 +108,7 @@ namespace Mosa.Platform.ARMv8A32.Transforms
 				else if (offsetOperand.ConstantUnsigned64 < 0 && -offsetOperand.ConstantSigned32 <= 0xFFF)
 				{
 					upDirection = false;
-					offsetOperand = transform.CreateConstant32(-offsetOperand.ConstantSigned32);
+					offsetOperand = Operand.CreateConstant32(-offsetOperand.ConstantSigned32);
 				}
 				else
 				{
@@ -138,7 +138,7 @@ namespace Mosa.Platform.ARMv8A32.Transforms
 				}
 				else if (offsetOperand.ConstantUnsigned64 < 0 && -offsetOperand.ConstantSigned32 <= 0xFFF)
 				{
-					offsetOperand = transform.CreateConstant32(-offsetOperand.ConstantSigned32);
+					offsetOperand = Operand.CreateConstant32(-offsetOperand.ConstantSigned32);
 				}
 				else
 				{
@@ -173,13 +173,13 @@ namespace Mosa.Platform.ARMv8A32.Transforms
 			{
 				if (ARMHelper.CalculateRotatedImmediateValue(operand.ConstantUnsigned32, out uint immediate, out byte _, out byte _))
 				{
-					var constant = transform.CreateConstant32(immediate);
+					var constant = Operand.CreateConstant32(immediate);
 
 					if (allowImmediate)
 						return constant;
 
 					var before = context.InsertBefore();
-					var v1 = transform.AllocateVirtualRegister32();
+					var v1 = transform.VirtualRegisters.Allocate32();
 					before.SetInstruction(ARMv8A32.Mov, v1, constant);
 
 					return v1;
@@ -187,10 +187,10 @@ namespace Mosa.Platform.ARMv8A32.Transforms
 
 				if (ARMHelper.CalculateRotatedImmediateValue(~operand.ConstantUnsigned32, out uint immediate2, out byte _, out byte _))
 				{
-					var constant = transform.CreateConstant32(immediate);
+					var constant = Operand.CreateConstant32(immediate);
 
 					var before = context.InsertBefore();
-					var v1 = transform.AllocateVirtualRegister32();
+					var v1 = transform.VirtualRegisters.Allocate32();
 					before.SetInstruction(ARMv8A32.Mov, v1, constant);
 
 					return v1;
@@ -199,9 +199,9 @@ namespace Mosa.Platform.ARMv8A32.Transforms
 				{
 					var before = context.InsertBefore();
 
-					var v1 = transform.AllocateVirtualRegister32();
-					before.SetInstruction(ARMv8A32.Movw, v1, transform.CreateConstant32(operand.ConstantUnsigned32 & 0xFFFF));
-					before.AppendInstruction(ARMv8A32.Movt, v1, v1, transform.CreateConstant32(operand.ConstantUnsigned32 >> 16));
+					var v1 = transform.VirtualRegisters.Allocate32();
+					before.SetInstruction(ARMv8A32.Movw, v1, Operand.CreateConstant32(operand.ConstantUnsigned32 & 0xFFFF));
+					before.AppendInstruction(ARMv8A32.Movt, v1, v1, Operand.CreateConstant32(operand.ConstantUnsigned32 >> 16));
 
 					return v1;
 				}
@@ -209,7 +209,7 @@ namespace Mosa.Platform.ARMv8A32.Transforms
 			else if (operand.IsUnresolvedConstant)
 			{
 				var before = context.InsertBefore();
-				var v1 = transform.AllocateVirtualRegister32();
+				var v1 = transform.VirtualRegisters.Allocate32();
 				before.SetInstruction(ARMv8A32.Movw, v1, operand);
 				before.AppendInstruction(ARMv8A32.Movt, v1, v1, operand);
 
@@ -244,11 +244,19 @@ namespace Mosa.Platform.ARMv8A32.Transforms
 
 			// FUTURE: Load float bits (not double) into integer register, than fmov them into the floating point register (saves a memory load)
 
-			var v1 = operand.IsR4 ? transform.AllocateVirtualRegisterR4() : transform.AllocateVirtualRegisterR8();
-			var symbol = operand.IsR4 ? transform.Linker.GetConstantSymbol((float)operand.ConstantUnsigned64) : transform.Linker.GetConstantSymbol((double)operand.ConstantUnsigned64);
-			var label = Operand.CreateLabel(v1.Type, symbol.Name);
+			var v1 = operand.IsR4
+				? transform.VirtualRegisters.AllocateR4()
+				: transform.VirtualRegisters.AllocateR8();
 
-			context.InsertBefore().SetInstruction(ARMv8A32.Ldf, v1, label, transform.Constant32_0);
+			var symbol = operand.IsR4
+				? transform.Linker.GetConstantSymbol((float)operand.ConstantUnsigned64)
+				: transform.Linker.GetConstantSymbol((double)operand.ConstantUnsigned64);
+
+			var label = operand.IsR4
+				? Operand.CreateLabelR4(symbol.Name)
+				: Operand.CreateLabelR8(symbol.Name);
+
+			context.InsertBefore().SetInstruction(ARMv8A32.Ldf, v1, label, Operand.Constant32_0);
 
 			return v1;
 		}
@@ -264,14 +272,14 @@ namespace Mosa.Platform.ARMv8A32.Transforms
 
 				switch (value)
 				{
-					case 0.0f: return transform.CreateConstant32(0b1000);
-					case 1.0f: return transform.CreateConstant32(0b1001);
-					case 2.0f: return transform.CreateConstant32(0b1010);
-					case 3.0f: return transform.CreateConstant32(0b1011);
-					case 4.0f: return transform.CreateConstant32(0b1100);
-					case 5.0f: return transform.CreateConstant32(0b1101);
-					case 0.5f: return transform.CreateConstant32(0b1110);
-					case 10.0f: return transform.CreateConstant32(0b1111);
+					case 0.0f: return Operand.Constant32_0b1000;
+					case 1.0f: return Operand.Constant32_0b1001;
+					case 2.0f: return Operand.Constant32_0b1010;
+					case 3.0f: return Operand.Constant32_0b1011;
+					case 4.0f: return Operand.Constant32_0b1100;
+					case 5.0f: return Operand.Constant32_0b1101;
+					case 0.5f: return Operand.Constant32_0b1110;
+					case 10.0f: return Operand.Constant32_0b1111;
 				}
 			}
 			else if (operand.IsR4)
@@ -280,14 +288,14 @@ namespace Mosa.Platform.ARMv8A32.Transforms
 
 				switch (value)
 				{
-					case 0.0d: return transform.CreateConstant32(0b1000);
-					case 1.0d: return transform.CreateConstant32(0b1001);
-					case 2.0d: return transform.CreateConstant32(0b1010);
-					case 3.0d: return transform.CreateConstant32(0b1011);
-					case 4.0d: return transform.CreateConstant32(0b1100);
-					case 5.0d: return transform.CreateConstant32(0b1101);
-					case 0.5d: return transform.CreateConstant32(0b1110);
-					case 10.0d: return transform.CreateConstant32(0b1111);
+					case 0.0d: return Operand.Constant32_0b1000;
+					case 1.0d: return Operand.Constant32_0b1001;
+					case 2.0d: return Operand.Constant32_0b1010;
+					case 3.0d: return Operand.Constant32_0b1011;
+					case 4.0d: return Operand.Constant32_0b1100;
+					case 5.0d: return Operand.Constant32_0b1101;
+					case 0.5d: return Operand.Constant32_0b1110;
+					case 10.0d: return Operand.Constant32_0b1111;
 				}
 			}
 

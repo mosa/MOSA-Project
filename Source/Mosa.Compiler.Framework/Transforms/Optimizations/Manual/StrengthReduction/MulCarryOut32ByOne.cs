@@ -32,6 +32,6 @@ public sealed class MulCarryOut32ByOne : BaseTransform
 		var t1 = context.Operand1;
 
 		context.SetInstruction(IRInstruction.Move32, result, t1);
-		context.AppendInstruction(IRInstruction.Move32, result2, transform.Constant32_1);
+		context.AppendInstruction(IRInstruction.Move32, result2, Operand.Constant32_1);
 	}
 }

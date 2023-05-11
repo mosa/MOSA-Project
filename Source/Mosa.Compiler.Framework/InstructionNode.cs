@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
-using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework;
 
@@ -331,38 +330,6 @@ public sealed class InstructionNode
 		{
 			addition = new InstructionNodeAddition();
 		}
-	}
-
-	/// <summary>
-	/// Gets or sets the invoke method.
-	/// </summary>
-	/// <value>
-	/// The invoke method.
-	/// </value>
-	public MosaMethod InvokeMethod
-	{
-		get => addition?.InvokeMethod;
-		set { CheckAddition(); addition.InvokeMethod = value; }
-	}
-
-	/// <summary>
-	/// Gets or sets the runtime field.
-	/// </summary>
-	/// <value>The runtime field.</value>
-	public MosaField MosaField
-	{
-		get => addition?.MosaField;
-		set { CheckAddition(); addition.MosaField = value; }
-	}
-
-	/// <summary>
-	/// Gets or sets the runtime field.
-	/// </summary>
-	/// <value>The runtime field.</value>
-	public MosaType MosaType
-	{
-		get => addition?.MosaType;
-		set { CheckAddition(); addition.MosaType = value; }
 	}
 
 	/// <summary>
@@ -876,21 +843,6 @@ public sealed class InstructionNode
 			{
 				sb.Append(", [more]");
 			}
-		}
-
-		if (InvokeMethod != null)
-		{
-			sb.Append($" {{m={InvokeMethod.DeclaringType.Name}.{InvokeMethod.Name}}}");
-		}
-
-		if (MosaType != null)
-		{
-			sb.Append($" {{t={MosaType.Name}}}");
-		}
-
-		if (MosaField != null)
-		{
-			sb.Append($" {{f={MosaField.DeclaringType.Name}.{MosaField.Name}}}");
 		}
 
 		return sb.ToString();

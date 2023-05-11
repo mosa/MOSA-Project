@@ -50,7 +50,7 @@ public sealed class Sub64MultipleWithCommon : BaseTransform
 		var t2 = context.Operand1.Definitions[0].Operand2;
 		var t3 = context.Operand2.Definitions[0].Operand2;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I8);
+		var v1 = transform.VirtualRegisters.Allocate64();
 
 		context.SetInstruction(IRInstruction.Sub64, v1, t2, t3);
 		context.AppendInstruction(IRInstruction.MulUnsigned64, result, t1, v1);
@@ -101,7 +101,7 @@ public sealed class Sub64MultipleWithCommon_v1 : BaseTransform
 		var t2 = context.Operand1.Definitions[0].Operand2;
 		var t3 = context.Operand2.Definitions[0].Operand1;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I8);
+		var v1 = transform.VirtualRegisters.Allocate64();
 
 		context.SetInstruction(IRInstruction.Sub64, v1, t2, t3);
 		context.AppendInstruction(IRInstruction.MulUnsigned64, result, t1, v1);
@@ -152,7 +152,7 @@ public sealed class Sub64MultipleWithCommon_v2 : BaseTransform
 		var t2 = context.Operand1.Definitions[0].Operand2;
 		var t3 = context.Operand2.Definitions[0].Operand2;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I8);
+		var v1 = transform.VirtualRegisters.Allocate64();
 
 		context.SetInstruction(IRInstruction.Sub64, v1, t1, t3);
 		context.AppendInstruction(IRInstruction.MulUnsigned64, result, t2, v1);
@@ -203,7 +203,7 @@ public sealed class Sub64MultipleWithCommon_v3 : BaseTransform
 		var t2 = context.Operand1.Definitions[0].Operand2;
 		var t3 = context.Operand2.Definitions[0].Operand1;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I8);
+		var v1 = transform.VirtualRegisters.Allocate64();
 
 		context.SetInstruction(IRInstruction.Sub64, v1, t1, t3);
 		context.AppendInstruction(IRInstruction.MulUnsigned64, result, t2, v1);

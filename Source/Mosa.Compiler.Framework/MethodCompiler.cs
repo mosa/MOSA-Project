@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Mosa.Compiler.Common;
+using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
@@ -82,19 +83,14 @@ public sealed class MethodCompiler
 	public MosaTypeLayout TypeLayout { get; }
 
 	/// <summary>
-	/// Gets the local variables.
-	/// </summary>
-	public Operand[] LocalVariables { get; set; }
-
-	/// <summary>
 	/// Gets the assembly compiler.
 	/// </summary>
 	public Compiler Compiler { get; }
 
 	/// <summary>
-	/// Gets the stack.
+	/// Gets the local stack.
 	/// </summary>
-	public List<Operand> LocalStack { get; }
+	public LocalStack LocalStack { get; }
 
 	/// <summary>
 	/// Gets or sets the size of the stack.
@@ -112,7 +108,7 @@ public sealed class MethodCompiler
 	/// <summary>
 	/// Gets the parameters.
 	/// </summary>
-	public Operand[] Parameters { get; }
+	public Parameters Parameters { get; }
 
 	/// <summary>
 	/// Gets the protected regions.
@@ -142,26 +138,6 @@ public sealed class MethodCompiler
 	public Operand ConstantZero { get; }
 
 	/// <summary>
-	/// Gets the 32-bit constant zero.
-	/// </summary>
-	public Operand Constant32_0 { get; }
-
-	/// <summary>
-	/// Gets the 64-bit constant zero.
-	/// </summary>
-	public Operand Constant64_0 { get; }
-
-	/// <summary>
-	/// Gets the R4 constant zero.
-	/// </summary>
-	public Operand ConstantR4_0 { get; }
-
-	/// <summary>
-	/// Gets the R4 constant zero.
-	/// </summary>
-	public Operand ConstantR8_0 { get; }
-
-	/// <summary>
 	/// Gets or sets a value indicating whether this instance is execute pipeline.
 	/// </summary>
 	public bool IsExecutePipeline { get; set; }
@@ -169,7 +145,7 @@ public sealed class MethodCompiler
 	/// <summary>
 	/// Gets or sets a value indicating whether this method requires CIL decoding .
 	/// </summary>
-	public bool IsCILStream { get; set; }
+	public bool HasCILStream { get; set; }
 
 	/// <summary>
 	/// Gets or sets a value indicating whether this method is plugged.
@@ -256,25 +232,19 @@ public sealed class MethodCompiler
 		IsLocalStackFinalized = false;
 
 		BasicBlocks = basicBlocks ?? new BasicBlocks();
-		LocalStack = new List<Operand>();
-		VirtualRegisters = new VirtualRegisters();
 
-		Parameters = new Operand[method.Signature.Parameters.Count + (method.HasThis || method.HasExplicitThis ? 1 : 0)];
+		LocalStack = new LocalStack(Is32BitPlatform);
+		VirtualRegisters = new VirtualRegisters(Is32BitPlatform);
+		Parameters = new Parameters(Is32BitPlatform);
 
-		Constant32_0 = CreateConstant((uint)0);
-		Constant64_0 = CreateConstant((ulong)0);
-		ConstantR4_0 = CreateConstant(0.0f);
-		ConstantR8_0 = CreateConstant(0.0d);
+		ConstantZero = Is32BitPlatform ? Operand.Constant32_0 : Operand.Constant64_0;
 
-		ConstantZero = Is32BitPlatform ? Constant32_0 : Constant64_0;
-
-		LocalVariables = emptyOperandList;
 		ThreadID = threadID;
 
 		IsStopped = false;
 		IsExecutePipeline = true;
 		IsMethodInlined = false;
-		IsCILStream = !Method.IsCompilerGenerated;
+		HasCILStream = !Method.IsCompilerGenerated;
 		HasProtectedRegions = Method.ExceptionHandlers.Count != 0;
 
 		MethodData = Compiler.GetMethodData(Method);
@@ -305,8 +275,6 @@ public sealed class MethodCompiler
 		MethodData.ReturnSize = methodInfo.ReturnSize;
 		MethodData.ReturnInRegister = methodInfo.ReturnInRegister;
 
-		EvaluateParameterOperands();
-
 		MethodData.Counters.NewCountSkipLock("ExecutionTime.Setup.Ticks", (int)Stopwatch.ElapsedTicks);
 		MethodData.Counters.NewCountSkipLock("ExecutionTime.Setup.MicroSeconds", Stopwatch.Elapsed.Microseconds);
 	}
@@ -314,91 +282,6 @@ public sealed class MethodCompiler
 	#endregion Construction
 
 	#region Methods
-
-	/// <summary>
-	/// Adds the stack local.
-	/// </summary>
-	/// <param name="type">The type.</param>
-	/// <returns></returns>
-	public Operand AddStackLocal(MosaType type)
-	{
-		return AddStackLocal(type, false);
-	}
-
-	/// <summary>
-	/// Adds the stack local.
-	/// </summary>
-	/// <param name="type">The type.</param>
-	/// <param name="pinned">if set to <c>true</c> [pinned].</param>
-	/// <returns></returns>
-	public Operand AddStackLocal(MosaType type, bool pinned)
-	{
-		var local = Operand.CreateStackLocal(type, LocalStack.Count, pinned);
-		LocalStack.Add(local);
-		return local;
-	}
-
-	/// <summary>
-	/// Sets the stack parameter.
-	/// </summary>
-	/// <param name="index">The index.</param>
-	/// <param name="type">The type.</param>
-	/// <param name="name">The name.</param>
-	/// <param name="isThis">if set to <c>true</c> [is this].</param>
-	/// <param name="offset">The offset.</param>
-	/// <returns></returns>
-	private Operand SetStackParameter(int index, MosaType type, string name, int offset)
-	{
-		var param = Operand.CreateStackParameter(type, index, name, offset);
-		Parameters[index] = param;
-		return param;
-	}
-
-	/// <summary>
-	/// Evaluates the parameter operands.
-	/// </summary>
-	private void EvaluateParameterOperands()
-	{
-		var offset = Architecture.OffsetOfFirstParameter;
-
-		//offset += MethodData.ReturnInRegister ? MethodData.ReturnSize : 0;
-
-		if (!MosaTypeLayout.IsUnderlyingPrimitive(Method.Signature.ReturnType))
-		{
-			offset += (int)TypeLayout.GetTypeSize(Method.Signature.ReturnType);
-		}
-
-		//Debug.Assert((MethodData.ReturnInRegister ? MethodData.ReturnSize : 0) == TypeLayout.GetTypeSize(Method.Signature.ReturnType));
-
-		var index = 0;
-
-		if (Method.HasThis || Method.HasExplicitThis)
-		{
-			if (Method.DeclaringType.IsValueType)
-			{
-				var ptr = Method.DeclaringType.ToManagedPointer();
-				SetStackParameter(index++, ptr, "this", offset);
-
-				var size = GetReferenceOrTypeSize(ptr, true);
-				offset += (int)size;
-			}
-			else
-			{
-				SetStackParameter(index++, Method.DeclaringType, "this", offset);
-
-				var size = GetReferenceOrTypeSize(Method.DeclaringType, true);
-				offset += (int)size;
-			}
-		}
-
-		foreach (var parameter in Method.Signature.Parameters)
-		{
-			SetStackParameter(index++, parameter.ParameterType, parameter.Name, offset);
-
-			var size = GetReferenceOrTypeSize(parameter.ParameterType, true);
-			offset += (int)size;
-		}
-	}
 
 	/// <summary>
 	/// Compiles the method referenced by this method compiler.
@@ -573,7 +456,7 @@ public sealed class MethodCompiler
 		Compiler.MethodScanner.MethodInvoked(plugMethod, Method);
 
 		IsMethodPlugged = true;
-		IsCILStream = false;
+		HasCILStream = false;
 		IsExecutePipeline = false;
 		IsStackFrameRequired = false;
 
@@ -607,10 +490,10 @@ public sealed class MethodCompiler
 		if (!Method.DeclaringType.IsDelegate)
 			return;
 
-		if (!Framework.DelegatePatcher.Patch(this))
+		if (!DelegatePatcher.Patch(this))
 			return;
 
-		IsCILStream = false;
+		HasCILStream = false;
 		IsExecutePipeline = true;
 
 		if (IsTraceable(5))
@@ -626,7 +509,7 @@ public sealed class MethodCompiler
 		if (!Method.IsExternal)
 			return;
 
-		IsCILStream = false;
+		HasCILStream = false;
 		IsExecutePipeline = false;
 		IsStackFrameRequired = false;
 		MethodData.IsMethodImplementationReplaced = false;
@@ -664,7 +547,7 @@ public sealed class MethodCompiler
 		if (!Method.IsInternal)
 			return;
 
-		IsCILStream = false;
+		HasCILStream = false;
 		IsExecutePipeline = false;
 		IsStackFrameRequired = false;
 
@@ -689,7 +572,7 @@ public sealed class MethodCompiler
 		if (stub == null)
 			return;
 
-		IsCILStream = false;
+		HasCILStream = false;
 		IsExecutePipeline = true;
 
 		var prologueBlock = BasicBlocks.CreatePrologueBlock();
@@ -725,132 +608,90 @@ public sealed class MethodCompiler
 	}
 
 	/// <summary>
-	/// Creates a new virtual register operand.
-	/// </summary>
-	/// <param name="type">The signature type of the virtual register.</param>
-	/// <returns>
-	/// An operand, which represents the virtual register.
-	/// </returns>
-	public Operand CreateVirtualRegister(MosaType type)
-	{
-		return VirtualRegisters.Allocate(type);
-	}
-
-	/// <summary>
-	/// Splits the long operand.
-	/// </summary>
-	/// <param name="longOperand">The long operand.</param>
-	public void SplitLongOperand(Operand longOperand)
-	{
-		VirtualRegisters.SplitLongOperand(TypeSystem, longOperand);
-	}
-
-	/// <summary>
 	/// Splits the long operand.
 	/// </summary>
 	/// <param name="operand">The operand.</param>
 	/// <param name="operandLow">The operand low.</param>
 	/// <param name="operandHigh">The operand high.</param>
-	public void SplitLongOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
+	public void SplitOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
 	{
-		var is64Bit = operand.IsInteger64;
+		Debug.Assert(Is32BitPlatform);
 
-		if (!operand.IsInteger64 && !operand.IsInteger32)
+		if (operand.Low != null)
 		{
-			// figure it out
-			var underlyingType = MosaTypeLayout.GetUnderlyingType(operand.Type);
-
-			if (underlyingType.IsUI8)
-				is64Bit = true;
-
-			if (Is64BitPlatform)
-			{
-				if (underlyingType.IsPointer
-					|| underlyingType.IsFunctionPointer
-					|| underlyingType.IsN
-					|| underlyingType.IsManagedPointer
-					|| underlyingType.IsReferenceType)
-					is64Bit = true;
-			}
-		}
-
-		if (is64Bit)
-		{
-			SplitLongOperand(operand);
 			operandLow = operand.Low;
 			operandHigh = operand.High;
+			return;
 		}
-		else
+
+		if (operand.IsVirtualRegister)
+		{
+			if (operand.IsInt64)
+			{
+				VirtualRegisters.SplitOperand(operand);
+				operandLow = operand.Low;
+				operandHigh = operand.High;
+				return;
+			}
+			else
+			{
+				operandLow = operand;
+				operandHigh = Operand.Constant32_0;
+				return;
+			}
+		}
+		else if (operand.IsLocalStack)
+		{
+			LocalStack.SplitOperand(operand);
+			operandLow = operand.Low;
+			operandHigh = operand.High;
+			return;
+		}
+		else if (operand.IsParameter)
+		{
+			Parameters.SplitOperand(operand);
+			operandLow = operand.Low;
+			operandHigh = operand.High;
+			return;
+		}
+		else if (operand.IsResolvedConstant)
+		{
+			if (operand.IsInt32)
+			{
+				operandLow = operand;
+				operandHigh = Operand.Constant32_0;
+				return;
+			}
+			else if (operand.IsInt64)
+			{
+				operandLow = Operand.CreateLow(operand);
+				operandHigh = Operand.CreateHigh(operand);
+				return;
+			}
+		}
+		else if (operand.IsCPURegister)
+		{
+			if (operand.IsInt32)
+			{
+				operandLow = operand;
+				operandHigh = Operand.Constant32_0;
+				return;
+			}
+			else if (operand.IsInt64)
+			{
+				operandLow = Operand.CreateLow(operand);
+				operandHigh = Operand.CreateHigh(operand);
+				return;
+			}
+		}
+		else if (operand.IsManagedPointer)
 		{
 			operandLow = operand;
-			operandHigh = Constant32_0;
+			operandHigh = Operand.Constant32_0;
+			return;
 		}
-	}
 
-	/// <summary>
-	/// Allocates the virtual register or stack slot.
-	/// </summary>
-	/// <param name="type">The type.</param>
-	/// <returns></returns>
-	public Operand AllocateVirtualRegisterOrStackSlot(MosaType type)
-	{
-		if (MosaTypeLayout.IsUnderlyingPrimitive(type))
-		{
-			var resultType = Compiler.GetStackType(type);
-			return CreateVirtualRegister(resultType);
-		}
-		else
-		{
-			return AddStackLocal(type);
-		}
-	}
-
-	/// <summary>
-	/// Allocates the local variable virtual registers.
-	/// </summary>
-	/// <param name="locals">The locals.</param>
-	public void SetLocalVariables(IList<MosaLocal> locals)
-	{
-		LocalVariables = new Operand[locals.Count];
-
-		var index = 0;
-		foreach (var local in locals)
-		{
-			var localtype = local.Type;
-			var underlyingType = localtype;
-			//var underlyingType = MosaTypeLayout.GetUnderlyingType(local.Type);
-
-			if (MosaTypeLayout.IsUnderlyingPrimitive(underlyingType) && !local.IsPinned)
-			{
-				var stacktype = Compiler.GetStackType(underlyingType);
-				LocalVariables[index++] = CreateVirtualRegister(stacktype);
-			}
-			else
-			{
-				LocalVariables[index++] = AddStackLocal(underlyingType, local.IsPinned);
-			}
-		}
-	}
-
-	/// <summary>
-	/// Gets the size of the reference or type.
-	/// </summary>
-	/// <param name="type">The type.</param>
-	/// <param name="aligned">if set to <c>true</c> [aligned].</param>
-	/// <returns></returns>
-	public uint GetReferenceOrTypeSize(MosaType type, bool aligned)
-	{
-		if (type.IsValueType)
-		{
-			if (aligned)
-				return Alignment.AlignUp(TypeLayout.GetTypeSize(type), Architecture.NativeAlignment);
-			else
-				return TypeLayout.GetTypeSize(type);
-		}
-		else
-		{
-			return Architecture.NativeAlignment;
-		}
+		throw new InvalidOperationException();
 	}
 
 	/// <summary>
@@ -880,38 +721,426 @@ public sealed class MethodCompiler
 
 	public Operand CreateConstant(byte value)
 	{
-		return Operand.CreateConstant(TypeSystem.BuiltIn.U1, value);
+		return Operand.CreateConstant32(value);
 	}
 
 	public Operand CreateConstant(int value)
 	{
-		return Operand.CreateConstant(TypeSystem.BuiltIn.I4, value);
+		return Operand.CreateConstant32((uint)value);
 	}
 
 	public Operand CreateConstant(uint value)
 	{
-		return Operand.CreateConstant(TypeSystem.BuiltIn.U4, value);
+		return Operand.CreateConstant32(value);
 	}
 
 	public Operand CreateConstant(long value)
 	{
-		return Operand.CreateConstant(TypeSystem.BuiltIn.I8, value);
+		return Operand.CreateConstant64((ulong)value);
 	}
 
 	public Operand CreateConstant(ulong value)
 	{
-		return Operand.CreateConstant(TypeSystem.BuiltIn.U8, value);
+		return Operand.CreateConstant64(value);
 	}
 
 	public Operand CreateConstant(float value)
 	{
-		return Operand.CreateConstant(TypeSystem.BuiltIn.R4, value);
+		return Operand.CreateConstantR4(value);
 	}
 
 	public Operand CreateConstant(double value)
 	{
-		return Operand.CreateConstant(TypeSystem.BuiltIn.R8, value);
+		return Operand.CreateConstantR8(value);
 	}
 
 	#endregion Constant Helper Methods
+
+	#region Type Conversion Methods
+
+	public static ElementType GetElementType(PrimitiveType primitiveType)
+	{
+		return primitiveType switch
+		{
+			PrimitiveType.Int32 => ElementType.I4,
+			PrimitiveType.Int64 => ElementType.I8,
+			PrimitiveType.Object => ElementType.Object,
+			PrimitiveType.R4 => ElementType.R4,
+			PrimitiveType.R8 => ElementType.R8,
+			PrimitiveType.ManagedPointer => ElementType.ManagedPointer,
+			_ => throw new CompilerException($"Cannot translate to ElementType from PrimitiveType: {primitiveType}")
+		};
+	}
+
+	public static PrimitiveType GetPrimitiveType(ElementType elementType)
+	{
+		return elementType switch
+		{
+			ElementType.I1 => PrimitiveType.Int32,
+			ElementType.I2 => PrimitiveType.Int32,
+			ElementType.I4 => PrimitiveType.Int32,
+			ElementType.I8 => PrimitiveType.Int64,
+			ElementType.U1 => PrimitiveType.Int32,
+			ElementType.U2 => PrimitiveType.Int32,
+			ElementType.U4 => PrimitiveType.Int32,
+			ElementType.U8 => PrimitiveType.Int64,
+			ElementType.R4 => PrimitiveType.R4,
+			ElementType.R8 => PrimitiveType.R8,
+			ElementType.Object => PrimitiveType.Object,
+			ElementType.ManagedPointer => PrimitiveType.ManagedPointer,
+			_ => throw new CompilerException($"Cannot translate to PrimitiveType from ElementType: {elementType}"),
+		};
+	}
+
+	public static ElementType GetElementType(MosaType type, bool is32BitPlatform)
+	{
+		if (type.IsReferenceType)
+			return ElementType.Object;
+		else if (type.IsI1)
+			return ElementType.I1;
+		else if (type.IsI2)
+			return ElementType.I2;
+		else if (type.IsI4)
+			return ElementType.I4;
+		else if (type.IsI8)
+			return ElementType.I8;
+		else if (type.IsU1)
+			return ElementType.U1;
+		else if (type.IsU2)
+			return ElementType.U2;
+		else if (type.IsU4)
+			return ElementType.U4;
+		else if (type.IsU8)
+			return ElementType.U8;
+		else if (type.IsR8)
+			return ElementType.R8;
+		else if (type.IsR4)
+			return ElementType.R4;
+		else if (type.IsBoolean)
+			return ElementType.U1;
+		else if (type.IsChar)
+			return ElementType.U2;
+		else if (type.IsI)
+			return is32BitPlatform ? ElementType.I4 : ElementType.I8;
+		else if (type.IsManagedPointer)
+			return ElementType.ManagedPointer;
+		else if (type.IsPointer)
+			return is32BitPlatform ? ElementType.I4 : ElementType.I8;
+		else if (type.IsTypedRef)
+			return is32BitPlatform ? ElementType.I4 : ElementType.I8;
+		else if (type.IsValueType)
+			return ElementType.ValueType;
+
+		throw new CompilerException($"Cannot translate to ElementType from Type: {type}");
+	}
+
+	public static PrimitiveType GetPrimitiveType(MosaType type, bool is32BitPlatform)
+	{
+		if (type.IsReferenceType)
+			return PrimitiveType.Object;
+		else if (type.IsManagedPointer)
+			return PrimitiveType.ManagedPointer;
+		else if (type.IsI1 || type.IsI2 || type.IsI4 || type.IsU1 || type.IsU2 || type.IsU4 || type.IsChar || type.IsBoolean)
+			return PrimitiveType.Int32;
+		else if (type.IsI8 || type.IsU8)
+			return PrimitiveType.Int64;
+		else if (type.IsR8)
+			return PrimitiveType.R8;
+		else if (type.IsR4)
+			return PrimitiveType.R4;
+		else if (type.IsI)
+			return is32BitPlatform ? PrimitiveType.Int32 : PrimitiveType.Int64;
+		else if (type.IsPointer)
+			return is32BitPlatform ? PrimitiveType.Int32 : PrimitiveType.Int64;
+		else if (type.IsValueType)
+			return PrimitiveType.ValueType;
+
+		throw new CompilerException($"Cannot translate to PrimitiveType from Type: {type}");
+	}
+
+	public PrimitiveType GetPrimitiveType(MosaType type)
+	{
+		return GetPrimitiveType(type, Is32BitPlatform);
+	}
+
+	public ElementType GetElementType(MosaType type)
+	{
+		return GetElementType(type, Is32BitPlatform);
+	}
+
+	#endregion Type Conversion Methods
+
+	#region Size Size Methods
+
+	public static uint GetSize(ElementType elementType, bool is32BitPlatform)
+	{
+		return elementType switch
+		{
+			ElementType.I1 => 1,
+			ElementType.I2 => 2,
+			ElementType.I4 => 4,
+			ElementType.I8 => 8,
+			ElementType.U1 => 1,
+			ElementType.U2 => 2,
+			ElementType.U4 => 4,
+			ElementType.U8 => 8,
+			ElementType.R4 => 4,
+			ElementType.R8 => 8,
+			ElementType.Object => is32BitPlatform ? 4 : 8u,
+			ElementType.ManagedPointer => is32BitPlatform ? 4 : 8u,
+			_ => throw new CompilerException($"Cannot get size of {elementType}"),
+		};
+	}
+
+	public uint GetSize(ElementType elementType)
+	{
+		return GetSize(elementType, Is32BitPlatform);
+	}
+
+	public static uint GetSize(PrimitiveType primitiveType, bool is32BitPlatform)
+	{
+		return primitiveType switch
+		{
+			PrimitiveType.Int32 => 4,
+			PrimitiveType.Int64 => 8,
+			PrimitiveType.R4 => 4,
+			PrimitiveType.R8 => 8,
+			PrimitiveType.Object => is32BitPlatform ? 4 : 8u,
+			PrimitiveType.ManagedPointer => is32BitPlatform ? 4 : 8u,
+			_ => throw new CompilerException($"Cannot get size of {primitiveType}"),
+		};
+	}
+
+	public uint GetSize(PrimitiveType primitiveType)
+	{
+		return GetSize(primitiveType, Is32BitPlatform);
+	}
+
+	public uint GetSize(Operand operand)
+	{
+		return operand.IsValueType
+			? TypeLayout.GetTypeLayoutSize(operand.Type)
+			: GetSize(operand.Primitive);
+	}
+
+	public uint GetSize(Operand operand, bool aligned)
+	{
+		var size = GetSize(operand);
+
+		if (aligned)
+			size = Alignment.AlignUp(size, Architecture.NativeAlignment);
+
+		return size;
+	}
+
+	public uint GetElementSize(MosaType type)
+	{
+		var underlyingType = MosaTypeLayout.GetUnderlyingType(type);
+		var elementType = GetElementType(underlyingType);
+		var isPrimitive = IsPrimitive(elementType);
+
+		var size = isPrimitive
+			? GetSize(elementType)
+			: TypeLayout.GetTypeLayoutSize(underlyingType);
+
+		return size;
+	}
+
+	#endregion Size Size Methods
+
+	#region Instruction Maps Methods
+
+	public BaseInstruction GetLoadParamInstruction(ElementType elementType)
+	{
+		return elementType switch
+		{
+			ElementType.I1 => IRInstruction.LoadParamSignExtend8x32,
+			ElementType.U1 => IRInstruction.LoadParamZeroExtend8x32,
+			ElementType.I2 => IRInstruction.LoadParamSignExtend16x32,
+			ElementType.U2 => IRInstruction.LoadParamZeroExtend16x32,
+			ElementType.I4 => IRInstruction.LoadParam32,
+			ElementType.U4 => IRInstruction.LoadParam32,
+			ElementType.I8 => IRInstruction.LoadParam64,
+			ElementType.U8 => IRInstruction.LoadParam64,
+			ElementType.R4 => IRInstruction.LoadParamR4,
+			ElementType.R8 => IRInstruction.LoadParamR8,
+			ElementType.Object => IRInstruction.LoadParamObject,
+			ElementType.I when Is32BitPlatform => IRInstruction.LoadParam32,
+			ElementType.I when Is64BitPlatform => IRInstruction.LoadParam64,
+			ElementType.ManagedPointer when Is32BitPlatform => IRInstruction.LoadParam32,
+			ElementType.ManagedPointer when Is64BitPlatform => IRInstruction.LoadParam64,
+			_ => throw new InvalidOperationException(),
+		};
+	}
+
+	public BaseInstruction GetReturnInstruction(PrimitiveType primitiveType)
+	{
+		return primitiveType switch
+		{
+			PrimitiveType.Int32 => IRInstruction.SetReturn32,
+			PrimitiveType.Int64 => IRInstruction.SetReturn64,
+			PrimitiveType.R4 => IRInstruction.SetReturnR4,
+			PrimitiveType.R8 => IRInstruction.SetReturnR8,
+			PrimitiveType.Object => IRInstruction.SetReturnObject,
+			PrimitiveType.ValueType => IRInstruction.SetReturnCompound,
+			PrimitiveType.ManagedPointer when Is32BitPlatform => IRInstruction.SetReturn32,
+			PrimitiveType.ManagedPointer when Is64BitPlatform => IRInstruction.SetReturn64,
+			_ => throw new InvalidOperationException(),
+		};
+	}
+
+	public BaseInstruction GetBoxInstruction(ElementType elementType)
+	{
+		return elementType switch
+		{
+			ElementType.R4 => IRInstruction.BoxR4,
+			ElementType.R8 => IRInstruction.BoxR8,
+			ElementType.U4 => IRInstruction.Box32,
+			ElementType.I4 => IRInstruction.Box32,
+			ElementType.U8 => IRInstruction.Box64,
+			ElementType.I8 => IRInstruction.Box64,
+			ElementType.I1 => IRInstruction.Box32,
+			ElementType.U1 => IRInstruction.Box32,
+			ElementType.I2 => IRInstruction.Box32,
+			ElementType.U2 => IRInstruction.Box32,
+			ElementType.I when Is32BitPlatform => IRInstruction.Box32,
+			ElementType.I when Is64BitPlatform => IRInstruction.Box64,
+			ElementType.ManagedPointer when Is32BitPlatform => IRInstruction.Box32,
+			ElementType.ManagedPointer when Is64BitPlatform => IRInstruction.Box64,
+			_ => throw new CompilerException($"Invalid ElementType = {elementType}"),
+		};
+	}
+
+	public BaseInstruction GetLoadInstruction(ElementType elementType)
+	{
+		return elementType switch
+		{
+			ElementType.I1 => IRInstruction.LoadSignExtend8x32,
+			ElementType.U1 => IRInstruction.LoadZeroExtend8x32,
+			ElementType.I2 => IRInstruction.LoadSignExtend16x32,
+			ElementType.U2 => IRInstruction.LoadZeroExtend16x32,
+			ElementType.I4 => IRInstruction.Load32,
+			ElementType.U4 => IRInstruction.Load32,
+			ElementType.I8 => IRInstruction.Load64,
+			ElementType.U8 => IRInstruction.Load64,
+			ElementType.R4 => IRInstruction.LoadR4,
+			ElementType.R8 => IRInstruction.LoadR8,
+			ElementType.Object => IRInstruction.LoadObject,
+			ElementType.I when Is32BitPlatform => IRInstruction.Load32,
+			ElementType.I when Is64BitPlatform => IRInstruction.Load64,
+			ElementType.ManagedPointer when Is32BitPlatform => IRInstruction.Load32,
+			ElementType.ManagedPointer when Is64BitPlatform => IRInstruction.Load64,
+			_ => throw new CompilerException($"Invalid ElementType = {elementType}"),
+		};
+	}
+
+	public BaseInstruction GetMoveInstruction(ElementType elementType)
+	{
+		return elementType switch
+		{
+			ElementType.I1 => IRInstruction.Move32,
+			ElementType.U1 => IRInstruction.Move32,
+			ElementType.I2 => IRInstruction.Move32,
+			ElementType.U2 => IRInstruction.Move32,
+			ElementType.I4 => IRInstruction.Move32,
+			ElementType.U4 => IRInstruction.Move32,
+			ElementType.I8 => IRInstruction.Move64,
+			ElementType.U8 => IRInstruction.Move64,
+			ElementType.R4 => IRInstruction.MoveR4,
+			ElementType.R8 => IRInstruction.MoveR8,
+			ElementType.Object => IRInstruction.MoveObject,
+			ElementType.I when Is32BitPlatform => IRInstruction.Move32,
+			ElementType.I when Is64BitPlatform => IRInstruction.Move64,
+			ElementType.ManagedPointer when Is32BitPlatform => IRInstruction.Move32,
+			ElementType.ManagedPointer when Is64BitPlatform => IRInstruction.Move64,
+			_ => throw new CompilerException($"Invalid ElementType = {elementType}"),
+		};
+	}
+
+	public BaseInstruction GetMoveInstruction(PrimitiveType type)
+	{
+		return type switch
+		{
+			PrimitiveType.Object => IRInstruction.MoveObject,
+			PrimitiveType.Int32 => IRInstruction.Move32,
+			PrimitiveType.Int64 => IRInstruction.Move64,
+			PrimitiveType.R4 => IRInstruction.MoveR4,
+			PrimitiveType.R8 => IRInstruction.MoveR8,
+			PrimitiveType.ManagedPointer when Is32BitPlatform => IRInstruction.Move32,
+			PrimitiveType.ManagedPointer when Is64BitPlatform => IRInstruction.Move64,
+			PrimitiveType.ValueType => IRInstruction.MoveCompound,
+			_ => throw new CompilerException($"Invalid StackType = {type}"),
+		};
+	}
+
+	public BaseInstruction GetStoreInstruction(ElementType elementType)
+	{
+		return elementType switch
+		{
+			ElementType.I1 => IRInstruction.Store8,
+			ElementType.U1 => IRInstruction.Store8,
+			ElementType.I2 => IRInstruction.Store16,
+			ElementType.U2 => IRInstruction.Store16,
+			ElementType.I4 => IRInstruction.Store32,
+			ElementType.U4 => IRInstruction.Store32,
+			ElementType.I8 => IRInstruction.Store64,
+			ElementType.U8 => IRInstruction.Store64,
+			ElementType.R4 => IRInstruction.StoreR4,
+			ElementType.R8 => IRInstruction.StoreR8,
+			ElementType.Object => IRInstruction.StoreObject,
+			ElementType.I when Is32BitPlatform => IRInstruction.Store32,
+			ElementType.I when Is64BitPlatform => IRInstruction.Store64,
+			ElementType.ManagedPointer when Is32BitPlatform => IRInstruction.Store32,
+			ElementType.ManagedPointer when Is64BitPlatform => IRInstruction.Store64,
+			_ => throw new CompilerException($"Invalid ElementType = {elementType}"),
+		};
+	}
+
+	public BaseInstruction GetStoreParamInstruction(ElementType elementType)
+	{
+		return elementType switch
+		{
+			ElementType.I1 => IRInstruction.StoreParam8,
+			ElementType.U1 => IRInstruction.StoreParam8,
+			ElementType.I2 => IRInstruction.StoreParam16,
+			ElementType.U2 => IRInstruction.StoreParam16,
+			ElementType.I4 => IRInstruction.StoreParam32,
+			ElementType.U4 => IRInstruction.StoreParam32,
+			ElementType.I8 => IRInstruction.StoreParam64,
+			ElementType.U8 => IRInstruction.StoreParam64,
+			ElementType.R4 => IRInstruction.StoreParamR4,
+			ElementType.R8 => IRInstruction.StoreParamR8,
+			ElementType.Object => IRInstruction.StoreParamObject,
+			ElementType.I when Is32BitPlatform => IRInstruction.StoreParam32,
+			ElementType.I when Is64BitPlatform => IRInstruction.StoreParam64,
+			ElementType.ManagedPointer when Is32BitPlatform => IRInstruction.StoreParam32,
+			ElementType.ManagedPointer when Is64BitPlatform => IRInstruction.StoreParam64,
+			_ => throw new CompilerException($"Invalid ElementType = {elementType}"),
+		};
+	}
+
+	#endregion Instruction Maps Methods
+
+	public static bool IsPrimitive(ElementType elementType)
+	{
+		return elementType != ElementType.ValueType;
+	}
+
+	public static bool IsPrimitive(PrimitiveType primitiveType)
+	{
+		return primitiveType != PrimitiveType.ValueType;
+	}
+
+	public Operand AllocateVirtualRegisterOrStackLocal(MosaType type)
+	{
+		var underlyingType = MosaTypeLayout.GetUnderlyingType(type);
+		var primitiveType = GetPrimitiveType(underlyingType);
+		var isPrimitive = IsPrimitive(primitiveType);
+
+		var result = isPrimitive
+			? VirtualRegisters.Allocate(primitiveType)
+			: LocalStack.Allocate(primitiveType, false, type);
+
+		return result;
+	}
 }

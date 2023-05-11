@@ -27,8 +27,8 @@ public sealed class In32 : BaseTransform
 		var result = context.Result;
 		var operand1 = context.Operand1;
 
-		var rax = Operand.CreateCPURegister(transform.I8, CPURegister.RAX);
-		var rdx = Operand.CreateCPURegister(operand1.Type, CPURegister.RDX);
+		var rax = Operand.CreateCPURegister64(CPURegister.RAX);
+		var rdx = Operand.CreateCPURegister(operand1, CPURegister.RDX);
 
 		context.SetInstruction(X64.Mov64, rdx, operand1);
 		context.AppendInstruction(X64.In32, rax, rdx);

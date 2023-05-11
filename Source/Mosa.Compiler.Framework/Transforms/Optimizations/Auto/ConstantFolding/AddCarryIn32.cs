@@ -40,7 +40,7 @@ public sealed class AddCarryIn32 : BaseTransform
 		var t2 = context.Operand2;
 		var t3 = context.Operand3;
 
-		var e1 = transform.CreateConstant(Add32(Add32(To32(t1), To32(t2)), BoolTo32(To32(t3))));
+		var e1 = Operand.CreateConstant(Add32(Add32(To32(t1), To32(t2)), BoolTo32(To32(t3))));
 
 		context.SetInstruction(IRInstruction.Move32, result, e1);
 	}

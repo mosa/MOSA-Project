@@ -7,7 +7,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
-using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.CompilerStages;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Stages;
@@ -147,7 +146,7 @@ public sealed class Compiler
 
 	#region Static Methods
 
-	private static List<BaseCompilerStage> GetDefaultCompilerPipeline(CompilerSettings compilerSettings, bool is64BitPlatform)
+	private static List<BaseCompilerStage> GetDefaultCompilerPipeline(CompilerSettings compilerSettings, bool is32BitPlatform)
 	{
 		return new List<BaseCompilerStage> {
 			new InlinedSetupStage(),
@@ -248,13 +247,13 @@ public sealed class Compiler
 
 		ObjectHeaderSize = Architecture.NativePointerSize + 4 + 4; // Hash Value (32-bit) + Lock & Status (32-bit) + Method Table
 
-		StackFrame = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackFrameRegister);
-		StackPointer = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackPointerRegister);
-		ExceptionRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.Object, Architecture.ExceptionRegister);
-		LeaveTargetRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.Object, Architecture.LeaveTargetRegister);
+		StackFrame = Operand.CreateCPURegisterNativeInteger(Architecture.StackFrameRegister, Architecture.Is32BitPlatform);
+		StackPointer = Operand.CreateCPURegisterNativeInteger(Architecture.StackPointerRegister, Architecture.Is32BitPlatform);
+		ExceptionRegister = Operand.CreateCPURegisterObject(Architecture.ExceptionRegister);
+		LeaveTargetRegister = Operand.CreateCPURegisterNativeInteger(Architecture.LeaveTargetRegister, Architecture.Is32BitPlatform);
 
-		LinkRegister = Architecture.LinkRegister == null ? null : Operand.CreateCPURegister(TypeSystem.BuiltIn.Object, Architecture.LinkRegister);
-		ProgramCounter = Architecture.ProgramCounter == null ? null : Operand.CreateCPURegister(TypeSystem.BuiltIn.Object, Architecture.ProgramCounter);
+		LinkRegister = Architecture.LinkRegister == null ? null : Operand.CreateCPURegisterNativeInteger(Architecture.LinkRegister, Architecture.Is32BitPlatform);
+		ProgramCounter = Architecture.ProgramCounter == null ? null : Operand.CreateCPURegisterNativeInteger(Architecture.ProgramCounter, Architecture.Is32BitPlatform);
 
 		MethodStagePipelines = new Pipeline<BaseMethodCompilerStage>[MaxThreads];
 
@@ -269,7 +268,7 @@ public sealed class Compiler
 		InternalRuntimeType = GeInternalRuntimeType();
 
 		// Build the default compiler pipeline
-		CompilerPipeline.Add(GetDefaultCompilerPipeline(CompilerSettings, Architecture.Is64BitPlatform));
+		CompilerPipeline.Add(GetDefaultCompilerPipeline(CompilerSettings, Architecture.Is32BitPlatform));
 
 		// Call hook to allow for the extension of the pipeline
 		CompilerHooks.ExtendCompilerPipeline?.Invoke(CompilerPipeline);
@@ -649,135 +648,4 @@ public sealed class Compiler
 	}
 
 	#endregion Helper Methods
-
-	#region Type Methods
-
-	public MosaType GetTypeFromTypeCode(MosaTypeCode code)
-	{
-		return code switch
-		{
-			MosaTypeCode.Void => TypeSystem.BuiltIn.Void,
-			MosaTypeCode.Boolean => TypeSystem.BuiltIn.Boolean,
-			MosaTypeCode.Char => TypeSystem.BuiltIn.Char,
-			MosaTypeCode.I1 => TypeSystem.BuiltIn.I1,
-			MosaTypeCode.U1 => TypeSystem.BuiltIn.U1,
-			MosaTypeCode.I2 => TypeSystem.BuiltIn.I2,
-			MosaTypeCode.U2 => TypeSystem.BuiltIn.U2,
-			MosaTypeCode.I4 => TypeSystem.BuiltIn.I4,
-			MosaTypeCode.U4 => TypeSystem.BuiltIn.U4,
-			MosaTypeCode.I8 => TypeSystem.BuiltIn.I8,
-			MosaTypeCode.U8 => TypeSystem.BuiltIn.U8,
-			MosaTypeCode.R4 => TypeSystem.BuiltIn.R4,
-			MosaTypeCode.R8 => TypeSystem.BuiltIn.R8,
-			MosaTypeCode.I => TypeSystem.BuiltIn.I,
-			MosaTypeCode.U => TypeSystem.BuiltIn.U,
-			MosaTypeCode.String => TypeSystem.BuiltIn.String,
-			MosaTypeCode.TypedRef => TypeSystem.BuiltIn.TypedRef,
-			MosaTypeCode.Object => TypeSystem.BuiltIn.Object,
-			_ => throw new CompilerException("Can't convert type code {code} to type")
-		};
-	}
-
-	public StackTypeCode GetStackTypeCode(MosaType type)
-	{
-		switch (type.IsEnum ? type.GetEnumUnderlyingType().TypeCode : type.TypeCode)
-		{
-			case MosaTypeCode.Boolean:
-			case MosaTypeCode.Char:
-			case MosaTypeCode.I1:
-			case MosaTypeCode.U1:
-			case MosaTypeCode.I2:
-			case MosaTypeCode.U2:
-			case MosaTypeCode.I4:
-			case MosaTypeCode.U4:
-				if (Architecture.Is32BitPlatform)
-					return StackTypeCode.Int32;
-				else
-					return StackTypeCode.Int64;
-
-			case MosaTypeCode.I8:
-			case MosaTypeCode.U8:
-				return StackTypeCode.Int64;
-
-			case MosaTypeCode.R4:
-			case MosaTypeCode.R8:
-				return StackTypeCode.F;
-
-			case MosaTypeCode.I:
-			case MosaTypeCode.U:
-				if (Architecture.Is32BitPlatform)
-					return StackTypeCode.Int32;
-				else
-					return StackTypeCode.Int64;
-
-			case MosaTypeCode.ManagedPointer:
-				return StackTypeCode.ManagedPointer;
-
-			case MosaTypeCode.UnmanagedPointer:
-			case MosaTypeCode.FunctionPointer:
-				return StackTypeCode.UnmanagedPointer;
-
-			case MosaTypeCode.String:
-			case MosaTypeCode.ValueType:
-			case MosaTypeCode.ReferenceType:
-			case MosaTypeCode.Array:
-			case MosaTypeCode.Object:
-			case MosaTypeCode.SZArray:
-			case MosaTypeCode.Var:
-			case MosaTypeCode.MVar:
-				return StackTypeCode.O;
-
-			case MosaTypeCode.Void:
-				return StackTypeCode.Unknown;
-		}
-
-		throw new CompilerException($"Can't transform Type {type} to StackTypeCode");
-	}
-
-	public MosaType GetStackType(MosaType type)
-	{
-		switch (GetStackTypeCode(type))
-		{
-			case StackTypeCode.Int32:
-				return type.TypeSystem.BuiltIn.I4;
-
-			case StackTypeCode.Int64:
-				return type.TypeSystem.BuiltIn.I8;
-
-			case StackTypeCode.N:
-				return type.TypeSystem.BuiltIn.I;
-
-			case StackTypeCode.F:
-				if (type.IsR4)
-					return type.TypeSystem.BuiltIn.R4;
-				else
-					return type.TypeSystem.BuiltIn.R8;
-
-			case StackTypeCode.O:
-				return type;
-
-			case StackTypeCode.UnmanagedPointer:
-			case StackTypeCode.ManagedPointer:
-				return type;
-		}
-
-		throw new CompilerException($"Can't convert {type.FullName} to stack type");
-	}
-
-	public MosaType GetStackTypeFromCode(StackTypeCode code)
-	{
-		return code switch
-		{
-			StackTypeCode.Int32 => TypeSystem.BuiltIn.I4,
-			StackTypeCode.Int64 => TypeSystem.BuiltIn.I8,
-			StackTypeCode.N => TypeSystem.BuiltIn.I,
-			StackTypeCode.F => TypeSystem.BuiltIn.R8,
-			StackTypeCode.O => TypeSystem.BuiltIn.Object,
-			StackTypeCode.UnmanagedPointer => TypeSystem.BuiltIn.Pointer,
-			StackTypeCode.ManagedPointer => TypeSystem.BuiltIn.Object.ToManagedPointer(),
-			_ => throw new CompilerException($"Can't convert stack type code {code} to type")
-		};
-	}
-
-	#endregion Type Methods
 }

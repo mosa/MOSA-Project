@@ -16,8 +16,8 @@ public sealed class StoreParam64 : BaseIRTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		transform.SplitLongOperand(context.Operand1, out var op0L, out var op0H);
-		transform.SplitLongOperand(context.Operand2, out var op1L, out var op1H);
+		transform.SplitOperand(context.Operand1, out var op0L, out var op0H);
+		transform.SplitOperand(context.Operand2, out var op1L, out var op1H);
 
 		context.SetInstruction(X86.MovStore32, null, transform.StackFrame, op0L, op1L);
 		context.AppendInstruction(X86.MovStore32, null, transform.StackFrame, op0H, op1H);

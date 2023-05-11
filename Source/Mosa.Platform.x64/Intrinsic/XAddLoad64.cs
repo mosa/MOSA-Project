@@ -16,11 +16,11 @@ internal static partial class IntrinsicMethods
 		var value = context.Operand2;
 		var result = context.Result;
 
-		var v1 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.U8);
+		var v1 = methodCompiler.VirtualRegisters.Allocate64();
 
 		context.SetInstruction(X64.Mov64, v1, value);
 		context.AppendInstruction(X64.Lock);
-		context.AppendInstruction(X64.XAddLoad32, v1, location, methodCompiler.Constant32_0, v1);
+		context.AppendInstruction(X64.XAddLoad32, v1, location, Operand.Constant32_0, v1);
 		context.AppendInstruction(X64.Mov64, result, v1);
 	}
 }

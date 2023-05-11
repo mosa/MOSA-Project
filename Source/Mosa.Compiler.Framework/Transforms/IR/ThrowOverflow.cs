@@ -16,7 +16,7 @@ public sealed class ThrowOverflow : BaseTransform
 	public override void Transform(Context context, TransformContext transform)
 	{
 		var method = transform.Compiler.InternalRuntimeType.FindMethodByName("ThrowOverflowException");
-		var symbolOperand = Operand.CreateSymbolFromMethod(method, transform.TypeSystem);
+		var symbolOperand = Operand.CreateLabel(method, transform.Is32BitPlatform);
 
 		context.SetInstruction(IRInstruction.CallStatic, null, symbolOperand);
 	}

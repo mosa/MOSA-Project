@@ -12,7 +12,7 @@ public sealed class GreedyRegisterAllocatorStage : BaseMethodCompilerStage
 {
 	protected override void Run()
 	{
-		var allocator = new GreedyRegisterAllocator(BasicBlocks, MethodCompiler.VirtualRegisters, Architecture, MethodCompiler.AddStackLocal, StackFrame, CreateTraceLog);
+		var allocator = new GreedyRegisterAllocator(BasicBlocks, MethodCompiler.VirtualRegisters, Architecture, MethodCompiler.LocalStack, StackFrame, CreateTraceLog);
 
 		allocator.Start();
 

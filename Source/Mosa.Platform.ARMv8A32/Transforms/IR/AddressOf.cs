@@ -28,7 +28,7 @@ public sealed class AddressOf : BaseIRTransform
 		{
 			context.SetInstruction(ARMv8A32.Mov, result, operand1);
 		}
-		else if (operand1.IsStackLocal)
+		else if (operand1.IsLocalStack)
 		{
 			context.SetInstruction(ARMv8A32.Add, result, transform.StackFrame, operand1);
 		}
@@ -40,7 +40,7 @@ public sealed class AddressOf : BaseIRTransform
 		}
 		else
 		{
-			var offset = transform.CreateConstant32(context.Operand1.Offset);
+			var offset = Operand.CreateConstant32(context.Operand1.Offset);
 
 			offset = MoveConstantToRegisterOrImmediate(transform, context, offset);
 

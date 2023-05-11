@@ -7,14 +7,14 @@ namespace Mosa.Compiler.Framework.Intrinsics;
 /// <summary>
 /// IntrinsicMethods
 /// </summary>
-static partial class IntrinsicMethods
+internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Runtime.Intrinsic::StoreR8")]
 	private static void StoreR8(Context context, MethodCompiler methodCompiler)
 	{
 		if (context.OperandCount == 2)
 		{
-			context.SetInstruction(IRInstruction.StoreR8, null, context.Operand1, methodCompiler.Constant64_0, context.Operand2);
+			context.SetInstruction(IRInstruction.StoreR8, null, context.Operand1, Operand.Constant64_0, context.Operand2);
 		}
 		else if (context.OperandCount == 3)
 		{

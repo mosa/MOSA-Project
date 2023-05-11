@@ -40,7 +40,7 @@ public sealed class SubCarryIn64 : BaseTransform
 		var t2 = context.Operand2;
 		var t3 = context.Operand3;
 
-		var e1 = transform.CreateConstant(Sub64(Sub64(To64(t1), To64(t2)), BoolTo64(To64(t3))));
+		var e1 = Operand.CreateConstant(Sub64(Sub64(To64(t1), To64(t2)), BoolTo64(To64(t3))));
 
 		context.SetInstruction(IRInstruction.Move64, result, e1);
 	}

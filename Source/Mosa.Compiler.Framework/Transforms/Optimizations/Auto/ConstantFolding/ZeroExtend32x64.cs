@@ -32,7 +32,7 @@ public sealed class ZeroExtend32x64 : BaseTransform
 
 		var t1 = context.Operand1;
 
-		var e1 = transform.CreateConstant(To64(To32(t1)));
+		var e1 = Operand.CreateConstant(To64(To32(t1)));
 
 		context.SetInstruction(IRInstruction.Move64, result, e1);
 	}

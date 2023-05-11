@@ -77,7 +77,9 @@ public class MasterBootBlock
 	/// Gets the disk signature.
 	/// </summary>
 	/// <value>The disk signature.</value>
-	public uint DiskSignature { get => diskSignature;
+	public uint DiskSignature
+	{
+		get => diskSignature;
 		set => diskSignature = value;
 	}
 

@@ -46,7 +46,7 @@ public sealed class AddSubR4 : BaseTransform
 		var t2 = context.Operand1.Definitions[0].Operand2;
 		var t3 = context.Operand2;
 
-		var e1 = transform.CreateConstant(AddR4(ToR4(t2), ToR4(t3)));
+		var e1 = Operand.CreateConstant(AddR4(ToR4(t2), ToR4(t3)));
 
 		context.SetInstruction(IRInstruction.SubR4, result, t1, e1);
 	}
@@ -92,7 +92,7 @@ public sealed class AddSubR4_v1 : BaseTransform
 		var t2 = context.Operand2.Definitions[0].Operand1;
 		var t3 = context.Operand2.Definitions[0].Operand2;
 
-		var e1 = transform.CreateConstant(AddR4(ToR4(t3), ToR4(t1)));
+		var e1 = Operand.CreateConstant(AddR4(ToR4(t3), ToR4(t1)));
 
 		context.SetInstruction(IRInstruction.SubR4, result, t2, e1);
 	}

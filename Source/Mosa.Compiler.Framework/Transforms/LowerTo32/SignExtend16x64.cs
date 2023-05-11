@@ -18,13 +18,13 @@ public sealed class SignExtend16x64 : BaseLower32Transform
 		var result = context.Result;
 		var operand1 = context.Operand1;
 
-		var resultLow = transform.AllocateVirtualRegister32();
-		var resultHigh = transform.AllocateVirtualRegister32();
-		var v1 = transform.AllocateVirtualRegister32();
+		var resultLow = transform.VirtualRegisters.Allocate32();
+		var resultHigh = transform.VirtualRegisters.Allocate32();
+		var v1 = transform.VirtualRegisters.Allocate32();
 
 		context.SetInstruction(IRInstruction.GetLow32, v1, operand1);
 		context.AppendInstruction(IRInstruction.SignExtend16x32, resultLow, v1);
-		context.AppendInstruction(IRInstruction.ArithShiftRight32, resultHigh, resultLow, transform.CreateConstant(31));
+		context.AppendInstruction(IRInstruction.ArithShiftRight32, resultHigh, resultLow, Operand.CreateConstant(31));
 		context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 	}
 }

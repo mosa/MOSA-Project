@@ -31,13 +31,13 @@ public sealed class CompareR8 : BaseIRTransform
 		operand1 = MoveConstantToFloatRegister(transform, context, operand1);
 		operand2 = MoveConstantToFloatRegister(transform, context, operand2);
 
-		var v1 = transform.AllocateVirtualRegister32();
+		var v1 = transform.VirtualRegisters.Allocate32();
 
 		if (condition == ConditionCode.Equal)
 		{
 			context.SetInstruction(instruction, null, operand1, operand2);
 			context.AppendInstruction(X86.Setcc, ConditionCode.NoParity, result);
-			context.AppendInstruction(X86.Mov32, v1, transform.Constant32_0);
+			context.AppendInstruction(X86.Mov32, v1, Operand.Constant32_0);
 			context.AppendInstruction(X86.CMov32, ConditionCode.NotEqual, result, result, v1);
 			context.AppendInstruction(X86.Movzx8To32, result, result);
 			return;
@@ -46,7 +46,7 @@ public sealed class CompareR8 : BaseIRTransform
 		{
 			context.SetInstruction(instruction, null, operand1, operand2);
 			context.AppendInstruction(X86.Setcc, ConditionCode.Parity, result);
-			context.AppendInstruction(X86.Mov32, v1, transform.Constant32_1);
+			context.AppendInstruction(X86.Mov32, v1, Operand.Constant32_1);
 			context.AppendInstruction(X86.CMov32, ConditionCode.NotEqual, result, result, v1);
 			context.AppendInstruction(X86.Movzx8To32, result, result);
 			return;

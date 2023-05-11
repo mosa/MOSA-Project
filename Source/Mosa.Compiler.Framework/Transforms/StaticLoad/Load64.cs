@@ -30,6 +30,6 @@ public sealed class Load64 : BaseTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		context.SetInstruction(IRInstruction.Move64, context.Result, transform.Constant64_0);
+		context.SetInstruction(IRInstruction.Move64, context.Result, Operand.Constant64_0);
 	}
 }

@@ -33,7 +33,7 @@ public sealed class Compare32x32SameAndNotEqual : BaseTransform
 	{
 		var result = context.Result;
 
-		var e1 = transform.CreateConstant(To32(0));
+		var e1 = Operand.CreateConstant(To32(0));
 
 		context.SetInstruction(IRInstruction.Move32, result, e1);
 	}

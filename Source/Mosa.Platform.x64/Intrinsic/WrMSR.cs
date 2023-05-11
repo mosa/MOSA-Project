@@ -12,7 +12,7 @@ internal static partial class IntrinsicMethods
 	[IntrinsicMethod("Mosa.Platform.x64.Intrinsic::WrMSR")]
 	private static void WrMSR(Context context, MethodCompiler methodCompiler)
 	{
-		methodCompiler.SplitLongOperand(context.Operand2, out Operand resultLow, out Operand resultHigh);
+		methodCompiler.SplitOperand(context.Operand2, out Operand resultLow, out Operand resultHigh);
 
 		context.SetInstruction(X64.WrMSR, null, context.Operand1, resultLow, resultHigh);
 	}

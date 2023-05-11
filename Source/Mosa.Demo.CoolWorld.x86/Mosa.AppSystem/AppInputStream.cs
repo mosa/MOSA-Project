@@ -37,8 +37,11 @@ public class AppInputStream : Stream
 
 	public override long Length => length;
 
-	public override long Position { get => 0;
-		set { return; } }
+	public override long Position
+	{
+		get => 0;
+		set { return; }
+	}
 
 	public override void Flush()
 	{ }

@@ -26,7 +26,7 @@ public class BitValueManager : BaseTransformManager
 
 		if (operand.IsResolvedConstant && operand.IsInteger)
 		{
-			value = BitValue.CreateValue(operand.ConstantUnsigned64, operand.IsInteger32);
+			value = BitValue.CreateValue(operand.ConstantUnsigned64, operand.IsInt32);
 
 			Values.Add(operand, value);
 
@@ -36,7 +36,7 @@ public class BitValueManager : BaseTransformManager
 		{
 			return Any;
 		}
-		else if (operand.IsNull && operand.IsReferenceType)
+		else if (operand.IsNull && operand.IsObject)
 		{
 			return Zero;
 		}

@@ -13,10 +13,6 @@ bochs
 - LGPL License
 - http://7-zip.org/
 
-wget
-- GNU License
-- http://www.gnu.org/software/wget
-
 nasm & ndisasm
 - Simplified BSD License
 - http://www.nasm.us/

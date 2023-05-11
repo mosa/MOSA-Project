@@ -1200,9 +1200,8 @@ public partial class MainForm : Form
 		Settings.SetValue("Optimizations.Platform", cbPlatformOptimizations.Checked);
 		Settings.SetValue("Optimizations.Inline", cbEnableInline.Checked);
 		Settings.SetValue("Optimizations.Inline.Explicit", cbInlineExplicit.Checked);
-
-		//Settings.SetValue("Optimizations.Inline.Maximum", 12);
-		//Settings.SetValue("Optimizations.Inline.AggressiveMaximum", 24);
+		Settings.SetValue("Optimizations.Inline.Maximum", 12);
+		Settings.SetValue("Optimizations.Inline.AggressiveMaximum", 24);
 		Settings.SetValue("Multiboot.Version", "v1");
 	}
 

@@ -16,8 +16,8 @@ public sealed class Store64 : BaseIRTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		transform.SplitLongOperand(context.Operand2, out var op2L, out _);
-		transform.SplitLongOperand(context.Operand3, out var op3L, out var op3H);
+		transform.SplitOperand(context.Operand2, out var op2L, out _);
+		transform.SplitOperand(context.Operand3, out var op3L, out var op3H);
 
 		var address = context.Operand1;
 		var offset = context.Operand2;
@@ -26,13 +26,13 @@ public sealed class Store64 : BaseIRTransform
 
 		if (offset.IsResolvedConstant)
 		{
-			context.AppendInstruction(X86.MovStore32, null, address, transform.CreateConstant32(offset.Offset + transform.NativePointerSize), op3H);
+			context.AppendInstruction(X86.MovStore32, null, address, Operand.CreateConstant32(offset.Offset + transform.NativePointerSize), op3H);
 		}
 		else
 		{
-			var offset4 = transform.AllocateVirtualRegister32();
+			var offset4 = transform.VirtualRegisters.Allocate32();
 
-			context.AppendInstruction(X86.Add32, offset4, op2L, transform.Constant32_4);
+			context.AppendInstruction(X86.Add32, offset4, op2L, Operand.Constant32_4);
 			context.AppendInstruction(X86.MovStore32, null, address, offset4, op3H);
 		}
 	}

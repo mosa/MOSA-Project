@@ -40,11 +40,11 @@ public class BuiltInTypes
 
 	public MosaType U { get; }
 
-	public MosaType TypedRef { get; }
+	//public MosaType TypedRef { get; }
 
-	public MosaType Pointer { get; }
+	//public MosaType Pointer { get; }
 
-	public MosaType ManagedPointer { get; }
+	//public MosaType ManagedPointer { get; }
 
 	public BuiltInTypes(ITypeResolver typeResolver, MosaModule corlib)
 	{
@@ -65,10 +65,10 @@ public class BuiltInTypes
 		Object = typeResolver.ResolveType(corlib, BuiltInType.Object);
 		I = typeResolver.ResolveType(corlib, BuiltInType.IntPtr);
 		U = typeResolver.ResolveType(corlib, BuiltInType.UIntPtr);
-		TypedRef = typeResolver.ResolveType(corlib, BuiltInType.TypedReference);
 
-		Pointer = Void.ToUnmanagedPointer();
-		ManagedPointer = Void.ToManagedPointer();
+		//TypedRef = typeResolver.ResolveType(corlib, BuiltInType.TypedReference);
+		//Pointer = Void.ToUnmanagedPointer();
+		//ManagedPointer = Void.ToManagedPointer();
 	}
 
 	public MosaType GetType(BuiltInType builtInType)
@@ -92,7 +92,7 @@ public class BuiltInTypes
 			BuiltInType.Object => Object,
 			BuiltInType.IntPtr => I,
 			BuiltInType.UIntPtr => U,
-			BuiltInType.TypedReference => TypedRef,
+			//BuiltInType.TypedReference => TypedRef,
 			_ => throw new CompilerException("Invalid BuildInType")
 		};
 	}
