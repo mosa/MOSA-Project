@@ -155,8 +155,6 @@ public class Starter : BaseLauncher
 		arg.Append($" -m {LauncherSettings.EmulatorMemory.ToString()}M");
 		arg.Append($" -smp cores={LauncherSettings.EmulatorCores.ToString()}");
 
-		//arg.Append(" -usb");
-
 		if (LauncherSettings.Platform == "x86")
 		{
 			arg.Append(" -cpu qemu32,+sse4.1,abm,bmi1,bmi2,popcnt");
@@ -164,15 +162,19 @@ public class Starter : BaseLauncher
 
 		switch (LauncherSettings.EmulatorSVGA)
 		{
+			case "virtio": arg.Append(" -device virtio-vga"); break;
 			case "vmware": arg.Append(" -vga vmware"); break;
 			case "cirrus": arg.Append(" -vga cirrus"); break;
 			case "std": arg.Append(" -vga std"); break;
-			default: break;
 		}
 
 		if (!LauncherSettings.EmulatorDisplay || LauncherSettings.LauncherTest)
 		{
 			arg.Append(" -display none");
+		}
+		else
+		{
+			arg.Append(" -display sdl");
 		}
 
 		// COM1 = Kernel Log
@@ -191,7 +193,6 @@ public class Starter : BaseLauncher
 			case "pipe": arg.Append($" -serial pipe:{LauncherSettings.EmulatorSerialPipe}"); break;
 			case "tcpserver": arg.Append($" -serial tcp:{LauncherSettings.EmulatorSerialHost}:{LauncherSettings.EmulatorSerialPort},server,nowait"); break;
 			case "tcpclient": arg.Append($" -serial tcp:{LauncherSettings.EmulatorSerialHost}:{LauncherSettings.EmulatorSerialPort},client,nowait"); break;
-			default: break;
 		}
 
 		if (LauncherSettings.EmulatorGDB)

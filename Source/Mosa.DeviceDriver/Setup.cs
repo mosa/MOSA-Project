@@ -1,10 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections.Generic;
-using Mosa.DeviceDriver.PCI.Intel;
-using Mosa.DeviceDriver.PCI.Intel.QuarkSoC;
 using Mosa.DeviceSystem;
-using Mosa.DeviceSystem.PCI;
 
 namespace Mosa.DeviceDriver;
 
@@ -19,7 +16,7 @@ public static class Setup
 				Name = "ACPI",
 				Platforms = PlatformArchitecture.X86,
 				AutoLoad = true,
-				Factory = delegate { return new ISA.ACPI(); }
+				Factory = () => new ISA.ACPI()
 			},
 
 			new ISADeviceDriverRegistryEntry
@@ -32,7 +29,7 @@ public static class Setup
 				AltBasePort = 0x64,
 				AltPortRange = 1,
 				IRQ = 1,
-				Factory = delegate { return new ISA.StandardKeyboard(); }
+				Factory = () => new ISA.StandardKeyboard()
 			},
 
 			new ISADeviceDriverRegistryEntry
@@ -45,7 +42,7 @@ public static class Setup
 				AltBasePort = 0x64,
 				AltPortRange = 1,
 				IRQ = 12,
-				Factory = delegate { return new ISA.StandardMouse(); }
+				Factory = () => new ISA.StandardMouse()
 			},
 
 			new ISADeviceDriverRegistryEntry
@@ -55,7 +52,18 @@ public static class Setup
 				AutoLoad = true,
 				BasePort = 0x0CF8,
 				PortRange = 8,
-				Factory = delegate { return new ISA.PCIController(); }
+				Factory = () => new ISA.PCIController()
+			},
+
+			new PCIDeviceDriverRegistryEntry
+			{
+				Name = "PCIGenericHostBridge",
+				Platforms = PlatformArchitecture.X86AndX64,
+				BusType = DeviceBusType.PCI,
+				ClassCode = 0x06,
+				SubClassCode = 0x00,
+				PCIFields =  PCIField.ClassCode | PCIField.SubClassCode,
+				Factory = () => new PCI.GenericHostBridgeController()
 			},
 
 			new ISADeviceDriverRegistryEntry
@@ -67,7 +75,7 @@ public static class Setup
 				PortRange = 8,
 				AltBasePort = 0x3F6,
 				AltPortRange = 8,
-				Factory = delegate { return new ISA.IDEController(); }
+				Factory = () => new ISA.IDEController()
 			},
 
 			new ISADeviceDriverRegistryEntry
@@ -80,7 +88,7 @@ public static class Setup
 				AltBasePort = 0x376,
 				AltPortRange = 8,
 				ForceOption = "ide2",
-				Factory = delegate { return new ISA.IDEController(); }
+				Factory = () => new ISA.IDEController()
 			},
 
 			//new ISADeviceDriverRegistryEntry()
@@ -95,16 +103,16 @@ public static class Setup
 			//	Factory = delegate { return new VGAText(); }
 			//},
 
-			/*new PCIDeviceDriverRegistryEntry()
+			new PCIDeviceDriverRegistryEntry
 			{
-				Name = "NVMe",
-				Platforms = PlatformArchitecture.X86AndX64,
+				Name = "VirtIOGPU",
+				Platforms = PlatformArchitecture.X86AndX64 | PlatformArchitecture.ARMv8A32,
 				BusType = DeviceBusType.PCI,
-				ClassCode = 0x01,
-				SubClassCode = 0x08,
-				PCIFields = PCIField.ClassCode | PCIField.SubClassCode,
-				Factory = delegate { return new PCI.NVMe(); }
-			},*/
+				VendorID = 0x1AF4,
+				DeviceID = 0x1050,
+				PCIFields = PCIField.VendorID | PCIField.DeviceID,
+				Factory = () => new PCI.VirtIO.VirtIoGpu()
+			},
 
 			new PCIDeviceDriverRegistryEntry
 			{
@@ -114,163 +122,7 @@ public static class Setup
 				VendorID = 0x15AD,
 				DeviceID = 0x0405,
 				PCIFields = PCIField.VendorID | PCIField.DeviceID,
-				Factory = delegate { return new PCI.VMware.VMwareSVGA2(); }
-			},
-
-			new PCIDeviceDriverRegistryEntry
-			{
-				Name = "Intel4SeriesChipsetDRAMController",
-				Platforms = PlatformArchitecture.X86AndX64,
-				BusType = DeviceBusType.PCI,
-				VendorID = 0x8086,
-				DeviceID = 0x2E10,
-				PCIFields = PCIField.VendorID | PCIField.DeviceID,
-				Factory = delegate { return new Intel4SeriesChipsetDRAMController(); }
-			},
-
-			new PCIDeviceDriverRegistryEntry
-			{
-				Name = "Intel4SeriesChipsetIntegratedGraphicsController",
-				Platforms = PlatformArchitecture.X86AndX64,
-				BusType = DeviceBusType.PCI,
-				VendorID = 0x8086,
-				DeviceID = 0x2E10,
-				PCIFields = PCIField.VendorID | PCIField.DeviceID,
-				Factory = delegate { return new Intel4SeriesChipsetIntegratedGraphicsController(); }
-			},
-
-			new PCIDeviceDriverRegistryEntry
-			{
-				Name = "Intel4SeriesChipsetIntegratedGraphicsController2E13",
-				Platforms = PlatformArchitecture.X86AndX64,
-				BusType = DeviceBusType.PCI,
-				VendorID = 0x8086,
-				DeviceID = 0x2E10,
-				PCIFields = PCIField.VendorID | PCIField.DeviceID,
-				Factory = delegate { return new Intel4SeriesChipsetIntegratedGraphicsController2E13(); }
-			},
-
-			new PCIDeviceDriverRegistryEntry
-			{
-				Name = "Intel4SeriesChipsetPCIExpressRootPort",
-				Platforms = PlatformArchitecture.X86AndX64,
-				BusType = DeviceBusType.PCI,
-				VendorID = 0x8086,
-				DeviceID = 0x2E10,
-				PCIFields = PCIField.VendorID | PCIField.DeviceID,
-				Factory = delegate { return new Intel4SeriesChipsetPCIExpressRootPort(); }
-			},
-
-			new PCIDeviceDriverRegistryEntry
-			{
-				Name = "Intel4SeriesChipsetPCIExpressRootPort",
-				Platforms = PlatformArchitecture.X86AndX64,
-				BusType = DeviceBusType.PCI,
-				VendorID = 0x8086,
-				DeviceID = 0x2E10,
-				PCIFields = PCIField.VendorID | PCIField.DeviceID,
-				Factory = delegate { return new Intel4SeriesChipsetPCIExpressRootPort(); }
-			},
-
-			new PCIDeviceDriverRegistryEntry
-			{
-				Name = "Intel440FX",
-				Platforms = PlatformArchitecture.X86AndX64,
-				BusType = DeviceBusType.PCI,
-				VendorID = 0x8086,
-				DeviceID = 0x1237,
-				ClassCode = 0x06,
-				SubClassCode = 0x00,
-				PCIFields = PCIField.VendorID | PCIField.DeviceID | PCIField.ClassCode | PCIField.SubClassCode,
-				Factory = delegate { return new Intel440FX(); }
-			},
-
-			new PCIDeviceDriverRegistryEntry
-			{
-				Name = "PCIGenericHostBridge",
-				Platforms = PlatformArchitecture.X86AndX64,
-				BusType = DeviceBusType.PCI,
-				ClassCode = 0x06,
-				SubClassCode = 0x00,
-				PCIFields =  PCIField.ClassCode | PCIField.SubClassCode,
-				Factory = delegate { return new PCIGenericHostBridgeController(); }
-			},
-
-			/*new PCIDeviceDriverRegistryEntry()
-			{
-				Name = "Intel82540EM",
-				Platforms = PlatformArchitecture.X86AndX64,
-				BusType = DeviceBusType.PCI,
-				VendorID = 0x8086,
-				DeviceID = 0x100E,
-				PCIFields = PCIField.VendorID | PCIField.DeviceID,
-				Factory = delegate { return new Intel82540EM(); }
-			},*/
-
-			new PCIDeviceDriverRegistryEntry
-			{
-				Name = "IntelPIIX3",
-				Platforms = PlatformArchitecture.X86AndX64,
-				BusType = DeviceBusType.PCI,
-				VendorID = 0x8086,
-				DeviceID = 0x7000,
-				PCIFields = PCIField.VendorID | PCIField.DeviceID,
-				Factory = delegate { return new IntelPIIX3(); }
-			},
-
-			new PCIDeviceDriverRegistryEntry
-			{
-				Name = "IntelPIIX4",
-				Platforms = PlatformArchitecture.X86AndX64,
-				BusType = DeviceBusType.PCI,
-				VendorID = 0x8086,
-				DeviceID = 0x7113,
-				PCIFields = PCIField.VendorID | PCIField.DeviceID,
-				Factory = delegate { return new IntelPIIX4(); }
-			},
-
-			new PCIDeviceDriverRegistryEntry
-			{
-				Name = "IntelGPIOController",
-				Platforms = PlatformArchitecture.X86AndX64,
-				BusType = DeviceBusType.PCI,
-				VendorID = 0x8086,
-				DeviceID = 0x0934,
-				ClassCode = 0X0C,
-				SubClassCode = 0x80,
-				ProgIF = 0x00,
-				RevisionID = 0x10,
-				PCIFields = PCIField.VendorID | PCIField.DeviceID | PCIField.ClassCode | PCIField.SubClassCode | PCIField.ProgIF | PCIField.RevisionID,
-				Factory = delegate { return new IntelGPIOController(); }
-			},
-
-			new PCIDeviceDriverRegistryEntry
-			{
-				Name = "IntelHSUART",
-				Platforms = PlatformArchitecture.X86AndX64,
-				BusType = DeviceBusType.PCI,
-				VendorID = 0x8086,
-				DeviceID = 0x0936,
-				ClassCode = 0X07,
-				SubClassCode = 0x80,
-				ProgIF = 0x02,
-				RevisionID = 0x10,
-				PCIFields = PCIField.VendorID | PCIField.DeviceID | PCIField.ClassCode | PCIField.SubClassCode | PCIField.ProgIF | PCIField.RevisionID,
-				Factory = delegate { return new IntelHSUART(); }
-			},
-
-			new PCIDeviceDriverRegistryEntry
-			{
-				Name = "PCIIDEInterface",
-				Platforms = PlatformArchitecture.X86AndX64,
-				BusType = DeviceBusType.PCI,
-				VendorID = 0x8086,
-				DeviceID = 0x7010,
-				ClassCode = 0X01,
-				SubClassCode = 0x01,
-				ProgIF = 0x80,
-				PCIFields = PCIField.VendorID | PCIField.DeviceID | PCIField.ClassCode | PCIField.SubClassCode | PCIField.ProgIF,
-				Factory = delegate { return new PCIIDEInterface(); }
+				Factory = () => new PCI.VMware.VMwareSVGA2()
 			},
 		};
 	}
