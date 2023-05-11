@@ -16,7 +16,9 @@ namespace Mosa.Compiler.Framework.Analysis.LiveVariableAnalysis;
 public class LivenessAnalysis
 {
 	protected BaseLivenessAnalysisEnvironment Environment;
+
 	protected BasicBlocks BasicBlocks => Environment.BasicBlocks;
+
 	protected int IndexCount => Environment.IndexCount;
 
 	protected List<ExtendedBlock2> ExtendedBlocks;

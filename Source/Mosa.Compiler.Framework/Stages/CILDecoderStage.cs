@@ -25,36 +25,24 @@ namespace Mosa.Compiler.Framework.Stages;
 /// </remarks>
 public sealed class CILDecoderStage : BaseMethodCompilerStage
 {
-	private enum StackType
-	{ Int32, Int64, R4, R8, Object, ManagedPointer, ValueType };
-
-	private enum ElementType
-	{ I1, I2, I4, I8, U1, U2, U4, U8, R4, R8, I, Object, ManagedPointer };
-
 	#region StackEntry Class
 
 	private class StackEntry
 	{
 		public readonly Operand Operand;
-		public readonly StackType StackType;
-		public readonly MosaType Type;   // for ValueTypes
 
-		public StackEntry(StackType stackType, Operand operand)
-		{
-			StackType = stackType;
-			Operand = operand;
-		}
+		public PrimitiveType PrimitiveType => Operand.Primitive;
 
-		public StackEntry(StackType stackType, Operand operand, MosaType type)
+		public MosaType Type => Operand.Type;
+
+		public StackEntry(Operand operand)
 		{
-			StackType = stackType;
 			Operand = operand;
-			Type = type;
 		}
 
 		public override string ToString()
 		{
-			return $"{StackType} {Operand}";
+			return $"{PrimitiveType} {Operand}";
 		}
 	}
 
@@ -99,12 +87,14 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 	#endregion PrefixValues Class
 
+	#region Data Members
+
 	private readonly Dictionary<BasicBlock, StackEntry> ExceptionStackEntries = new Dictionary<BasicBlock, StackEntry>();
 
 	private readonly Dictionary<BasicBlock, StackEntry[]> OutgoingStacks = new Dictionary<BasicBlock, StackEntry[]>();
 
 	private Operand[] LocalStack;
-	private StackType[] LocalStackType;
+	private PrimitiveType[] LocalPrimitiveType;
 	private ElementType[] LocalElementType;
 
 	private SortedList<int, int> Targets;
@@ -113,17 +103,19 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 	private TraceLog trace;
 
+	#endregion Data Members
+
+	#region Overrides Methods
+
 	protected override void Finish()
 	{
 		Targets = null;
 		trace = null;
-
-		//MethodCompiler.Stop();
 	}
 
 	protected override void Run()
 	{
-		if (!MethodCompiler.IsCILStream)
+		if (!MethodCompiler.HasCILStream)
 			return;
 
 		trace = CreateTraceLog();
@@ -134,6 +126,8 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var prologue = new Context(prologueBlock.First);
 		prologue.AppendInstruction(IRInstruction.Prologue);
 		prologue.AppendInstruction(IRInstruction.Jmp, startBlock);
+
+		CreateParameters();
 
 		CollectTargets();
 
@@ -162,13 +156,67 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		InsertBlockProtectInstructions();
 
 		InsertFlowOrJumpInstructions();
-
-		//ProtectedRegion.FinalizeAll(BasicBlocks, MethodCompiler.ProtectedRegions);
 	}
 
 	protected override void Setup()
 	{
 		Targets = new SortedList<int, int>();
+	}
+
+	#endregion Overrides Methods
+
+	#region Initialize Methods
+
+	/// <summary>
+	/// Evaluates the parameter operands.
+	/// </summary>
+	private void CreateParameters()
+	{
+		CreateParameters(MethodCompiler);
+	}
+
+	/// <summary>
+	/// Evaluates the parameter operands.
+	/// </summary>
+	public static void CreateParameters(MethodCompiler methodCompiler)
+	{
+		var offset = methodCompiler.Architecture.OffsetOfFirstParameter;
+
+		if (!MosaTypeLayout.IsUnderlyingPrimitive(methodCompiler.Method.Signature.ReturnType))
+		{
+			offset += (int)methodCompiler.TypeLayout.GetTypeLayoutSize(methodCompiler.Method.Signature.ReturnType);
+		}
+
+		if (methodCompiler.Method.HasThis || methodCompiler.Method.HasExplicitThis)
+		{
+			var primativeType = methodCompiler.Method.DeclaringType.IsValueType
+				? PrimitiveType.ManagedPointer
+				: PrimitiveType.Object;
+
+			var elementType = methodCompiler.Method.DeclaringType.IsValueType
+				? ElementType.ManagedPointer
+				: ElementType.Object;
+
+			var operand = methodCompiler.Parameters.Allocate(primativeType, elementType, "this", offset, methodCompiler.Architecture.NativePointerSize);
+			offset += (int)operand.Size;
+		}
+
+		foreach (var parameter in methodCompiler.Method.Signature.Parameters)
+		{
+			var underlyingType = MosaTypeLayout.GetUnderlyingType(parameter.ParameterType);
+			var primitiveType = methodCompiler.GetPrimitiveType(underlyingType);
+			var elementType = MethodCompiler.IsPrimitive(primitiveType)
+				? methodCompiler.GetElementType(underlyingType)
+				: ElementType.ValueType;
+
+			var size = primitiveType == PrimitiveType.ValueType
+				? methodCompiler.TypeLayout.GetTypeLayoutSize(underlyingType)
+				: methodCompiler.GetSize(primitiveType);
+
+			var operand = methodCompiler.Parameters.Allocate(primitiveType, elementType, parameter.Name, offset, size, parameter.ParameterType);
+
+			offset += (int)Alignment.AlignUp(size, methodCompiler.Architecture.NativePointerSize);
+		}
 	}
 
 	private void AddTarget(int target)
@@ -286,11 +334,11 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			{
 				var handler = GetOrCreateBlock(clause.HandlerStart);
 				var context = new Context(handler);
-				var exceptionObject = AllocateVirtualRegister(clause.Type);
+				var exceptionObject = MethodCompiler.VirtualRegisters.AllocateObject();
 
 				context.AppendInstruction(IRInstruction.ExceptionStart, exceptionObject);
 
-				ExceptionStackEntries.Add(handler, new StackEntry(StackType.Object, exceptionObject));
+				ExceptionStackEntries.Add(handler, new StackEntry(exceptionObject));
 			}
 
 			if (clause.ExceptionHandlerType == ExceptionHandlerType.Filter)
@@ -298,21 +346,21 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 				{
 					var handler = GetOrCreateBlock(clause.HandlerStart);
 					var context = new Context(handler);
-					var exceptionObject = AllocateVirtualRegister(TypeSystem.BuiltIn.Object);
+					var exceptionObject = MethodCompiler.VirtualRegisters.AllocateObject();
 
 					context.AppendInstruction(IRInstruction.ExceptionStart, exceptionObject);
 
-					ExceptionStackEntries.Add(handler, new StackEntry(StackType.Object, exceptionObject));
+					ExceptionStackEntries.Add(handler, new StackEntry(exceptionObject));
 				}
 
 				{
 					var handler = GetOrCreateBlock(clause.FilterStart.Value);
 					var context = new Context(handler);
-					var exceptionObject = AllocateVirtualRegister(TypeSystem.BuiltIn.Object);
+					var exceptionObject = MethodCompiler.VirtualRegisters.AllocateObject();
 
 					context.AppendInstruction(IRInstruction.FilterStart, exceptionObject);
 
-					ExceptionStackEntries.Add(handler, new StackEntry(StackType.Object, exceptionObject));
+					ExceptionStackEntries.Add(handler, new StackEntry(exceptionObject));
 				}
 			}
 		}
@@ -351,8 +399,10 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 			if (handler.ExceptionHandlerType == ExceptionHandlerType.Finally)
 			{
-				var exceptionObject = AllocateVirtualRegister(TypeSystem.BuiltIn.Object);
-				var finallyOperand = Is32BitPlatform ? AllocateVirtualRegister32() : AllocateVirtualRegister64();
+				var exceptionObject = MethodCompiler.VirtualRegisters.AllocateObject();
+				var finallyOperand = Is32BitPlatform
+					? MethodCompiler.VirtualRegisters.Allocate32()
+					: MethodCompiler.VirtualRegisters.Allocate64();
 
 				context.AppendInstruction2(IRInstruction.FinallyStart, exceptionObject, finallyOperand);
 			}
@@ -523,6 +573,8 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		}
 	}
 
+	#endregion Initialize Methods
+
 	private bool Translate(Stack<StackEntry> stack, Context context, MosaInstruction instruction, CILOpCode opcode, BasicBlock block, PrefixValues prefixValues, int label)
 	{
 		prefixValues.Reset = true;
@@ -535,7 +587,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			case CILOpCode.Add_ovf: return AddSigned(context, stack);
 			case CILOpCode.Add_ovf_un: return AddUnsigned(context, stack);
 			case CILOpCode.And: return And(context, stack);
-			case CILOpCode.Arglist: return false;                                  // TODO: Not implemented in v1 either
+			case CILOpCode.Arglist: return false;   // TODO: Not implemented in v1 either
 			case CILOpCode.Beq: return Branch(context, stack, ConditionCode.Equal, instruction);
 			case CILOpCode.Beq_s: return Branch(context, stack, ConditionCode.Equal, instruction);
 			case CILOpCode.Bge: return Branch(context, stack, ConditionCode.GreaterOrEqual, instruction);
@@ -565,13 +617,13 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			case CILOpCode.Brtrue: return Branch1(context, stack, ConditionCode.NotEqual, instruction);
 			case CILOpCode.Brtrue_s: return Branch1(context, stack, ConditionCode.NotEqual, instruction);
 			case CILOpCode.Call: return Call(context, stack, instruction);
-			case CILOpCode.Calli: return false;                                    // TODO: Not implemented in v1 either
+			case CILOpCode.Calli: return false; // TODO: Not implemented in v1 either
 			case CILOpCode.Callvirt: return Callvirt(context, stack, instruction, prefixValues);
 			case CILOpCode.Castclass: return Castclass(context, stack);
 			case CILOpCode.Ceq: return Compare(context, stack, ConditionCode.Equal);
 			case CILOpCode.Cgt: return Compare(context, stack, ConditionCode.Greater);
 			case CILOpCode.Cgt_un: return Compare(context, stack, ConditionCode.UnsignedGreater);
-			case CILOpCode.Ckfinite: return false;                                 // TODO: Not implemented in v1 either
+			case CILOpCode.Ckfinite: return false;  // TODO: Not implemented in v1 either
 			case CILOpCode.Clt: return Compare(context, stack, ConditionCode.Less);
 			case CILOpCode.Clt_un: return Compare(context, stack, ConditionCode.UnsignedLess);
 			case CILOpCode.Conv_i: return ConvertI(context, stack);
@@ -612,13 +664,13 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			case CILOpCode.Div: return Div(context, stack);
 			case CILOpCode.Div_un: return DivUnsigned(context, stack);
 			case CILOpCode.Dup: return Dup(context, stack);
-			case CILOpCode.Endfilter: return false;                                // TODO: Not implemented in v1 either
+			case CILOpCode.Endfilter: return false; // TODO: Not implemented in v1 either
 			case CILOpCode.Endfinally: return Endfinally(context);
-			case CILOpCode.Extop: return false;                                    // TODO: Not implemented in v1 either
+			case CILOpCode.Extop: return false; // TODO: Not implemented in v1 either
 			case CILOpCode.Initblk: return Initblk(context, stack);
 			case CILOpCode.InitObj: return InitObj(context, stack, instruction);
 			case CILOpCode.Isinst: return Isinst(context, stack, instruction);
-			case CILOpCode.Jmp: return false;                                      // TODO: Not implemented in v1 either
+			case CILOpCode.Jmp: return false;   // TODO: Not implemented in v1 either
 			case CILOpCode.Ldarg: return Ldarg(context, stack, (int)instruction.Operand);
 			case CILOpCode.Ldarg_0: return Ldarg(context, stack, 0);
 			case CILOpCode.Ldarg_1: return Ldarg(context, stack, 1);
@@ -684,11 +736,11 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			case CILOpCode.Ldsflda: return Ldsflda(context, stack, instruction);
 			case CILOpCode.Ldstr: return Ldstr(context, stack, instruction);
 			case CILOpCode.Ldtoken: return Ldtoken(context, stack, instruction);
-			case CILOpCode.Ldvirtftn: return false;                                // TODO: Not implemented in v1 either
+			case CILOpCode.Ldvirtftn: return false; // TODO: Not implemented in v1 either
 			case CILOpCode.Leave: return Leave(context, stack, instruction, block);
 			case CILOpCode.Leave_s: return Leave(context, stack, instruction, block);
-			case CILOpCode.Localalloc: return false;                               // TODO: Not implemented in v1 either
-			case CILOpCode.Mkrefany: return false;                                 // TODO: Not implemented in v1 either
+			case CILOpCode.Localalloc: return false;    // TODO: Not implemented in v1 either
+			case CILOpCode.Mkrefany: return false;  // TODO: Not implemented in v1 either
 			case CILOpCode.Mul: return Mul(context, stack);
 			case CILOpCode.Mul_ovf: return MulSigned(context, stack);
 			case CILOpCode.Mul_ovf_un: return MulUnsigned(context, stack);
@@ -705,8 +757,8 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			case CILOpCode.Tailcall: prefixValues.Tailcall = true; prefixValues.Reset = false; return true;
 			case CILOpCode.Unaligned: prefixValues.Unaligned = true; prefixValues.Reset = false; return true;
 			case CILOpCode.Volatile: prefixValues.Volatile = true; prefixValues.Reset = false; return true;
-			case CILOpCode.Refanytype: return false;                               // TODO: Not implemented in v1 either
-			case CILOpCode.Refanyval: return false;                                // TODO: Not implemented in v1 either
+			case CILOpCode.Refanytype: return false;    // TODO: Not implemented in v1 either
+			case CILOpCode.Refanyval: return false; // TODO: Not implemented in v1 either
 			case CILOpCode.Rem: return RemOperand(context, stack);
 			case CILOpCode.Rem_un: return RemUnsigned(context, stack);
 			case CILOpCode.Ret: return Ret(context, stack);
@@ -817,16 +869,15 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			Operand destination;
 			BaseInstruction instruction;
 
-			if (first.StackType == StackType.ValueType)
+			if (first.PrimitiveType == PrimitiveType.ValueType)
 			{
-				destination = AddStackLocal(first.Type);
+				destination = MethodCompiler.LocalStack.Allocate(first.Operand);
 				instruction = IRInstruction.MoveCompound;
 			}
 			else
 			{
-				var firstType = GetType(first);
-				destination = AllocateVirtualRegister(firstType);
-				instruction = GetMoveInstruction(firstType);
+				destination = MethodCompiler.VirtualRegisters.Allocate(first.PrimitiveType);
+				instruction = MethodCompiler.GetMoveInstruction(first.PrimitiveType);
 			}
 
 			foreach (var previousBlock in block.PreviousBlocks)
@@ -836,7 +887,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 				previousBlock.ContextBeforeBranch.AppendInstruction(instruction, destination, source);
 			}
 
-			var entry = new StackEntry(first.StackType, destination, first.Type);
+			var entry = new StackEntry(destination);
 
 			incomingStack.Push(entry);
 		}
@@ -879,29 +930,29 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			}
 		}
 
-		LocalStackType = new StackType[count];
+		LocalPrimitiveType = new PrimitiveType[count];
 		LocalElementType = new ElementType[count];
 
 		for (var index = 0; index < count; index++)
 		{
 			var type = Method.LocalVariables[index];
 
-			var underlyingType = GetUnderlyingType(type.Type);
-			var stackType = GetStackTypeDefaultValueType(underlyingType);
+			var underlyingType = MosaTypeLayout.GetUnderlyingType(type.Type);
+			var primitiveType = MethodCompiler.GetPrimitiveType(underlyingType);
 
-			var isPrimitive = IsPrimitive(underlyingType);
+			var isPrimitive = MosaTypeLayout.IsPrimitive(underlyingType);
 
-			if (stackType == StackType.ValueType || arg[index] || type.IsPinned)
+			if (primitiveType == PrimitiveType.ValueType || arg[index] || type.IsPinned)
 			{
-				LocalStack[index] = MethodCompiler.AddStackLocal(type.Type, type.IsPinned);
+				LocalStack[index] = MethodCompiler.LocalStack.Allocate(primitiveType, type.IsPinned, type.Type);
 			}
 			else
 			{
-				LocalStack[index] = Allocate(stackType, type.Type);
+				LocalStack[index] = MethodCompiler.VirtualRegisters.Allocate(primitiveType);
 			}
 
-			LocalStackType[index] = stackType;
-			LocalElementType[index] = isPrimitive ? GetElementType(underlyingType) : Is32BitPlatform ? ElementType.I4 : ElementType.I8;
+			LocalPrimitiveType[index] = primitiveType;
+			LocalElementType[index] = isPrimitive ? MethodCompiler.GetElementType(underlyingType) : Is32BitPlatform ? ElementType.I4 : ElementType.I8;
 		}
 	}
 
@@ -912,35 +963,35 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		for (var index = 0; index < LocalStack.Length; index++)
 		{
 			var local = LocalStack[index];
-			var localstacktype = LocalStackType[index];
+			var localstacktype = LocalPrimitiveType[index];
 
 			if (!local.IsVirtualRegister)
 				continue;
 
 			switch (localstacktype)
 			{
-				case StackType.Object:
-					prologue.AppendInstruction(IRInstruction.MoveObject, local, Operand.GetNull(local.Type));
+				case PrimitiveType.Object:
+					prologue.AppendInstruction(IRInstruction.MoveObject, local, Operand.NullObject);
 					break;
 
-				case StackType.Int32:
-					prologue.AppendInstruction(IRInstruction.Move32, local, Constant32_0);
+				case PrimitiveType.Int32:
+					prologue.AppendInstruction(IRInstruction.Move32, local, Operand.Constant32_0);
 					break;
 
-				case StackType.Int64:
-					prologue.AppendInstruction(IRInstruction.Move64, local, Constant64_0);
+				case PrimitiveType.Int64:
+					prologue.AppendInstruction(IRInstruction.Move64, local, Operand.Constant64_0);
 					break;
 
-				case StackType.R4:
-					prologue.AppendInstruction(IRInstruction.MoveR4, local, ConstantR4_0);
+				case PrimitiveType.R4:
+					prologue.AppendInstruction(IRInstruction.MoveR4, local, Operand.ConstantR4_0);
 					break;
 
-				case StackType.R8:
-					prologue.AppendInstruction(IRInstruction.MoveR8, local, ConstantR8_0);
+				case PrimitiveType.R8:
+					prologue.AppendInstruction(IRInstruction.MoveR8, local, Operand.ConstantR8_0);
 					break;
 
 				default:
-					prologue.AppendInstruction(IRInstruction.Move32, local, Constant32_0);
+					prologue.AppendInstruction(IRInstruction.Move32, local, Operand.Constant32_0);
 					break;
 			}
 		}
@@ -990,11 +1041,6 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		return operands;
 	}
 
-	private static MosaType GetUnderlyingType(MosaType type)
-	{
-		return MosaTypeLayout.GetUnderlyingType(type);
-	}
-
 	private static bool IsBranch(CILOpCode opcode)
 	{
 		return opcode switch
@@ -1027,105 +1073,34 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		};
 	}
 
-	private static bool IsPrimitive(MosaType underlyingType)
-	{
-		return MosaTypeLayout.IsPrimitive(underlyingType);
-	}
-
-	private Operand Allocate(StackType stackType, MosaType type = null)
-	{
-		return stackType switch
-		{
-			StackType.Int32 => AllocateVirtualRegister32(),
-			StackType.Int64 => AllocateVirtualRegister64(),
-			StackType.R4 => AllocateVirtualRegisterR4(),
-			StackType.R8 => AllocateVirtualRegisterR8(),
-			StackType.Object => AllocateVirtualRegisterObject(),
-			StackType.ManagedPointer => AllocateVirtualRegisterManagedPointer(),
-			StackType.ValueType => MethodCompiler.AddStackLocal(type),
-			_ => throw new CompilerException("Not implemented yet"),
-		};
-	}
-
-	private StackEntry CreateStateEntry(MosaType type)
+	private StackEntry CreateStackEntry(MosaType type)
 	{
 		if (type == null)
 			return null;
 
-		var underlyingType = GetUnderlyingType(type);
-		var stackType = GetStackTypeDefaultValueType(underlyingType);
+		var underlyingType = MosaTypeLayout.GetUnderlyingType(type);
+		var primitiveType = MethodCompiler.GetPrimitiveType(underlyingType);
+		var isPrimitive = MethodCompiler.IsPrimitive(primitiveType);
 
-		var operand = Allocate(stackType, type);
+		var operand = isPrimitive
+			? MethodCompiler.VirtualRegisters.Allocate(primitiveType)
+			: MethodCompiler.LocalStack.Allocate(primitiveType, false, type);
 
-		return stackType == StackType.ValueType ? new StackEntry(stackType, operand, type) : new StackEntry(stackType, operand);
+		return new StackEntry(operand);
 	}
 
 	private string EmitString(string data, uint token)
 	{
 		var symbolName = $"$ldstr${Method.Module.Name}${token}";
-		var linkerSymbol = Linker.DefineSymbol(symbolName, SectionKind.ROData, NativeAlignment, (uint)(ObjectHeaderSize + NativePointerSize + data.Length * 2));
+		var linkerSymbol = Linker.DefineSymbol(symbolName, SectionKind.ROData, Architecture.NativeAlignment, (uint)(ObjectHeaderSize + Architecture.NativePointerSize + data.Length * 2));
 		var writer = new BinaryWriter(linkerSymbol.Stream);
 
-		Linker.Link(LinkType.AbsoluteAddress, PatchType.I32, linkerSymbol, ObjectHeaderSize - NativePointerSize, Metadata.TypeDefinition + "System.String", 0);
+		Linker.Link(LinkType.AbsoluteAddress, PatchType.I32, linkerSymbol, Compiler.ObjectHeaderSize - Architecture.NativePointerSize, Metadata.TypeDefinition + "System.String", 0);
 
-		writer.WriteZeroBytes(ObjectHeaderSize);
-		writer.Write(data.Length, NativePointerSize);
+		writer.WriteZeroBytes(Compiler.ObjectHeaderSize);
+		writer.Write(data.Length, Architecture.NativePointerSize);
 		writer.Write(Encoding.Unicode.GetBytes(data));
 		return symbolName;
-	}
-
-	private ElementType GetElementType(StackType stackType)
-	{
-		return stackType switch
-		{
-			StackType.Int32 => ElementType.I4,
-			StackType.Int64 => ElementType.I8,
-			StackType.Object => ElementType.Object,
-			StackType.R4 => ElementType.R4,
-			StackType.R8 => ElementType.R8,
-			StackType.ManagedPointer => ElementType.ManagedPointer,
-			_ => throw new CompilerException($"Unable to convert stacktype ({stackType}) to element type"),
-		};
-	}
-
-	private ElementType GetElementType(MosaType type)
-	{
-		if (type.IsReferenceType)
-			return ElementType.Object;
-		else if (type.IsI1)
-			return ElementType.I1;
-		else if (type.IsI2)
-			return ElementType.I2;
-		else if (type.IsI4)
-			return ElementType.I4;
-		else if (type.IsI8)
-			return ElementType.I8;
-		else if (type.IsU1)
-			return ElementType.U1;
-		else if (type.IsU2)
-			return ElementType.U2;
-		else if (type.IsU4)
-			return ElementType.U4;
-		else if (type.IsU8)
-			return ElementType.U8;
-		else if (type.IsR8)
-			return ElementType.R8;
-		else if (type.IsR4)
-			return ElementType.R4;
-		else if (type.IsBoolean)
-			return ElementType.U1;
-		else if (type.IsChar)
-			return ElementType.U2;
-		else if (type.IsI)
-			return Is32BitPlatform ? ElementType.I4 : ElementType.I8;
-		else if (type.IsManagedPointer)
-			return ElementType.ManagedPointer;
-		else if (type.IsPointer)
-			return Is32BitPlatform ? ElementType.I4 : ElementType.I8;
-
-		// TODO --- enums?
-
-		throw new CompilerException($"Cannot translate to Type {type} to ElementType");
 	}
 
 	private BasicBlock GetOrCreateBlock(int label)
@@ -1139,291 +1114,101 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 	private Operand GetMethodTablePointer(MosaType runtimeType)
 	{
-		return Operand.CreateLabel(TypeSystem.BuiltIn.Pointer, Metadata.TypeDefinition + runtimeType.FullName);
+		return Operand.CreateLabel(Metadata.TypeDefinition + runtimeType.FullName, Is32BitPlatform);
 	}
 
 	private Operand GetRuntimeTypeHandle(MosaType runtimeType)
 	{
-		return Operand.CreateLabel(TypeSystem.GetTypeByName("System.RuntimeTypeHandle"), Metadata.TypeDefinition + runtimeType.FullName);
-	}
-
-	private uint GetSize(ElementType elementType)
-	{
-		return elementType switch
-		{
-			ElementType.I1 => 1,
-			ElementType.I2 => 2,
-			ElementType.I4 => 4,
-			ElementType.I8 => 8,
-			ElementType.U1 => 1,
-			ElementType.U2 => 2,
-			ElementType.U4 => 4,
-			ElementType.U8 => 8,
-			ElementType.R4 => 4,
-			ElementType.R8 => 8,
-			ElementType.Object => Is32BitPlatform ? 4 : 8u,
-			ElementType.ManagedPointer => Is32BitPlatform ? 4 : 8u,
-			_ => throw new CompilerException($"Cannot get size of {elementType}"),
-		};
-	}
-
-	private StackType GetStackType(MosaType type)
-	{
-		if (type.IsReferenceType)
-			return StackType.Object;
-		else if (type.IsManagedPointer)
-			return StackType.ManagedPointer;
-		else if (type.IsI1 || type.IsI2 || type.IsI4 || type.IsU1 || type.IsU2 || type.IsU4 || type.IsChar || type.IsBoolean)
-			return StackType.Int32;
-		else if (type.IsI8 || type.IsU8)
-			return StackType.Int64;
-		else if (type.IsR8)
-			return StackType.R8;
-		else if (type.IsR4)
-			return StackType.R4;
-		else if (type.IsI)
-			return Is32BitPlatform ? StackType.Int32 : StackType.Int64;
-		else if (type.IsPointer)
-			return Is32BitPlatform ? StackType.Int32 : StackType.Int64;
-		else if (type.IsValueType)
-			return StackType.ValueType;
-
-		throw new CompilerException($"Cannot translate to stacktype {type}");
-	}
-
-	private StackType GetStackTypeDefaultValueType(MosaType type)
-	{
-		return type == null ? StackType.ValueType : GetStackType(type);
-	}
-
-	private StackType GetStackType(ElementType elementType)
-	{
-		return elementType switch
-		{
-			ElementType.I1 => StackType.Int32,
-			ElementType.I2 => StackType.Int32,
-			ElementType.I4 => StackType.Int32,
-			ElementType.I8 => StackType.Int64,
-			ElementType.U1 => StackType.Int32,
-			ElementType.U2 => StackType.Int32,
-			ElementType.U4 => StackType.Int32,
-			ElementType.U8 => StackType.Int64,
-			ElementType.R4 => StackType.R4,
-			ElementType.R8 => StackType.R8,
-			ElementType.Object => StackType.Object,
-			ElementType.ManagedPointer => StackType.ManagedPointer,
-			_ => throw new CompilerException($"Cannot translate to ElementType {elementType} to StackType"),
-		};
-	}
-
-	private MosaType GetType(StackType stackType)
-	{
-		return stackType switch
-		{
-			StackType.Int32 => TypeSystem.BuiltIn.I4,
-			StackType.Int64 => TypeSystem.BuiltIn.I8,
-			StackType.R4 => TypeSystem.BuiltIn.R4,
-			StackType.R8 => TypeSystem.BuiltIn.R8,
-			StackType.Object => TypeSystem.BuiltIn.Object,
-			StackType.ManagedPointer => TypeSystem.BuiltIn.Pointer,
-			_ => null,
-		};
-	}
-
-	private MosaType GetType(StackEntry stackEntry)
-	{
-		if (stackEntry.StackType == StackType.ValueType)
-			return stackEntry.Type;
-
-		return GetType(stackEntry.StackType);
+		return Operand.CreateLabel(Metadata.TypeDefinition + runtimeType.FullName, Is32BitPlatform);
 	}
 
 	#endregion Helpers
 
 	#region Instruction Maps
 
-	private BaseIRInstruction GetBoxInstruction(ElementType elementType)
+	protected BaseInstruction GetLoadInstruction(MosaType type)
 	{
-		return elementType switch
-		{
-			ElementType.R4 => IRInstruction.BoxR4,
-			ElementType.R8 => IRInstruction.BoxR8,
-			ElementType.U4 => IRInstruction.Box32,
-			ElementType.I4 => IRInstruction.Box32,
-			ElementType.U8 => IRInstruction.Box64,
-			ElementType.I8 => IRInstruction.Box64,
-			ElementType.I1 => IRInstruction.Box32,
-			ElementType.U1 => IRInstruction.Box32,
-			ElementType.I2 => IRInstruction.Box32,
-			ElementType.U2 => IRInstruction.Box32,
-			ElementType.I when Is32BitPlatform => IRInstruction.Box32,
-			ElementType.I when Is64BitPlatform => IRInstruction.Box64,
-			ElementType.ManagedPointer when Is32BitPlatform => IRInstruction.Box32,
-			ElementType.ManagedPointer when Is64BitPlatform => IRInstruction.Box64,
-			_ => throw new CompilerException($"Invalid ElementType = {elementType}"),
-		};
-	}
+		type = MosaTypeLayout.GetUnderlyingType(type);
 
-	private BaseInstruction GetLoadInstruction(ElementType elementType)
-	{
-		return elementType switch
-		{
-			ElementType.I1 => IRInstruction.LoadSignExtend8x32,
-			ElementType.U1 => IRInstruction.LoadZeroExtend8x32,
-			ElementType.I2 => IRInstruction.LoadSignExtend16x32,
-			ElementType.U2 => IRInstruction.LoadZeroExtend16x32,
-			ElementType.I4 => IRInstruction.Load32,
-			ElementType.U4 => IRInstruction.Load32,
-			ElementType.I8 => IRInstruction.Load64,
-			ElementType.U8 => IRInstruction.Load64,
-			ElementType.R4 => IRInstruction.LoadR4,
-			ElementType.R8 => IRInstruction.LoadR8,
-			ElementType.Object => IRInstruction.LoadObject,
-			ElementType.I when Is32BitPlatform => IRInstruction.Load32,
-			ElementType.I when Is64BitPlatform => IRInstruction.Load64,
-			ElementType.ManagedPointer when Is32BitPlatform => IRInstruction.Load32,
-			ElementType.ManagedPointer when Is64BitPlatform => IRInstruction.Load64,
-			_ => throw new CompilerException($"Invalid ElementType = {elementType}"),
-		};
-	}
+		if (type.IsReferenceType)
+			return IRInstruction.LoadObject;
+		else if (type.IsPointer)
+			return Select(IRInstruction.Load32, IRInstruction.Load64);
+		else if (type.IsI1)
+			return Select(IRInstruction.LoadSignExtend8x32, IRInstruction.LoadSignExtend8x64);
+		else if (type.IsI2)
+			return Select(IRInstruction.LoadSignExtend16x32, IRInstruction.LoadSignExtend16x64);
+		else if (type.IsI4)
+			return Select(IRInstruction.Load32, IRInstruction.LoadSignExtend32x64);
+		else if (type.IsI8)
+			return IRInstruction.Load64;
+		else if (type.IsU1 || type.IsBoolean)
+			return Select(IRInstruction.LoadZeroExtend8x32, IRInstruction.LoadZeroExtend8x64);
+		else if (type.IsU2 || type.IsChar)
+			return Select(IRInstruction.LoadZeroExtend16x32, IRInstruction.LoadZeroExtend16x64);
+		else if (type.IsU4)
+			return Select(IRInstruction.Load32, IRInstruction.LoadZeroExtend32x64);
+		else if (type.IsU8)
+			return IRInstruction.Load64;
+		else if (type.IsR4)
+			return IRInstruction.LoadR4;
+		else if (type.IsR8)
+			return IRInstruction.LoadR8;
+		else if (type.IsValueType)
+			return IRInstruction.LoadCompound;
+		else if ((type.IsI || type.IsN) && Is32BitPlatform)
+			return IRInstruction.Load32;
+		else if ((type.IsI || type.IsN) && Is64BitPlatform)
+			return IRInstruction.Load64;
 
-	private BaseInstruction GetLoadParamInstruction(ElementType elementType)
-	{
-		return elementType switch
-		{
-			ElementType.I1 => IRInstruction.LoadParamSignExtend8x32,
-			ElementType.U1 => IRInstruction.LoadParamZeroExtend8x32,
-			ElementType.I2 => IRInstruction.LoadParamSignExtend16x32,
-			ElementType.U2 => IRInstruction.LoadParamZeroExtend16x32,
-			ElementType.I4 => IRInstruction.LoadParam32,
-			ElementType.U4 => IRInstruction.LoadParam32,
-			ElementType.I8 => IRInstruction.LoadParam64,
-			ElementType.U8 => IRInstruction.LoadParam64,
-			ElementType.R4 => IRInstruction.LoadParamR4,
-			ElementType.R8 => IRInstruction.LoadParamR8,
-			ElementType.Object => IRInstruction.LoadParamObject,
-			ElementType.I when Is32BitPlatform => IRInstruction.LoadParam32,
-			ElementType.I when Is64BitPlatform => IRInstruction.LoadParam64,
-			ElementType.ManagedPointer when Is32BitPlatform => IRInstruction.LoadParam32,
-			ElementType.ManagedPointer when Is64BitPlatform => IRInstruction.LoadParam64,
-			_ => throw new CompilerException($"Invalid ElementType = {elementType}"),
-		};
-	}
-
-	private BaseInstruction GetMoveInstruction(ElementType elementType)
-	{
-		return elementType switch
-		{
-			ElementType.I1 => IRInstruction.Move32,
-			ElementType.U1 => IRInstruction.Move32,
-			ElementType.I2 => IRInstruction.Move32,
-			ElementType.U2 => IRInstruction.Move32,
-			ElementType.I4 => IRInstruction.Move32,
-			ElementType.U4 => IRInstruction.Move32,
-			ElementType.I8 => IRInstruction.Move64,
-			ElementType.U8 => IRInstruction.Move64,
-			ElementType.R4 => IRInstruction.MoveR4,
-			ElementType.R8 => IRInstruction.MoveR8,
-			ElementType.Object => IRInstruction.MoveObject,
-			ElementType.I when Is32BitPlatform => IRInstruction.Move32,
-			ElementType.I when Is64BitPlatform => IRInstruction.Move64,
-			ElementType.ManagedPointer when Is32BitPlatform => IRInstruction.Move32,
-			ElementType.ManagedPointer when Is64BitPlatform => IRInstruction.Move64,
-			_ => throw new CompilerException($"Invalid ElementType = {elementType}"),
-		};
-	}
-
-	private BaseInstruction GetStoreInstruction(ElementType elementType)
-	{
-		return elementType switch
-		{
-			ElementType.I1 => IRInstruction.Store8,
-			ElementType.U1 => IRInstruction.Store8,
-			ElementType.I2 => IRInstruction.Store16,
-			ElementType.U2 => IRInstruction.Store16,
-			ElementType.I4 => IRInstruction.Store32,
-			ElementType.U4 => IRInstruction.Store32,
-			ElementType.I8 => IRInstruction.Store64,
-			ElementType.U8 => IRInstruction.Store64,
-			ElementType.R4 => IRInstruction.StoreR4,
-			ElementType.R8 => IRInstruction.StoreR8,
-			ElementType.Object => IRInstruction.StoreObject,
-			ElementType.I when Is32BitPlatform => IRInstruction.Store32,
-			ElementType.I when Is64BitPlatform => IRInstruction.Store64,
-			ElementType.ManagedPointer when Is32BitPlatform => IRInstruction.Store32,
-			ElementType.ManagedPointer when Is64BitPlatform => IRInstruction.Store64,
-			_ => throw new CompilerException($"Invalid ElementType = {elementType}"),
-		};
-	}
-
-	private BaseInstruction GetStoreParamInstruction(ElementType elementType)
-	{
-		return elementType switch
-		{
-			ElementType.I1 => IRInstruction.StoreParam8,
-			ElementType.U1 => IRInstruction.StoreParam8,
-			ElementType.I2 => IRInstruction.StoreParam16,
-			ElementType.U2 => IRInstruction.StoreParam16,
-			ElementType.I4 => IRInstruction.StoreParam32,
-			ElementType.U4 => IRInstruction.StoreParam32,
-			ElementType.I8 => IRInstruction.StoreParam64,
-			ElementType.U8 => IRInstruction.StoreParam64,
-			ElementType.R4 => IRInstruction.StoreParamR4,
-			ElementType.R8 => IRInstruction.StoreParamR8,
-			ElementType.Object => IRInstruction.StoreParamObject,
-			ElementType.I when Is32BitPlatform => IRInstruction.StoreParam32,
-			ElementType.I when Is64BitPlatform => IRInstruction.StoreParam64,
-			ElementType.ManagedPointer when Is32BitPlatform => IRInstruction.StoreParam32,
-			ElementType.ManagedPointer when Is64BitPlatform => IRInstruction.StoreParam64,
-			_ => throw new CompilerException($"Invalid ElementType = {elementType}"),
-		};
+		throw new InvalidOperationException();
 	}
 
 	#endregion Instruction Maps
 
-	#region CIL Shortcuts
+	#region Constant Helpers
 
 	private bool Constant32(Context context, Stack<StackEntry> stack, int value)
 	{
-		var result = AllocateVirtualRegister32();
-		context.AppendInstruction(IRInstruction.Move32, result, CreateConstant32(value));
-		PushStack(stack, new StackEntry(StackType.Int32, result));
+		var result = MethodCompiler.VirtualRegisters.Allocate32();
+		context.AppendInstruction(IRInstruction.Move32, result, Operand.CreateConstant32(value));
+		PushStack(stack, new StackEntry(result));
 		return true;
 	}
 
 	private bool Constant64(Context context, Stack<StackEntry> stack, long value)
 	{
-		var result = AllocateVirtualRegister64();
-		context.AppendInstruction(IRInstruction.Move64, result, CreateConstant64(value));
-		PushStack(stack, new StackEntry(StackType.Int64, result));
+		var result = MethodCompiler.VirtualRegisters.Allocate64();
+		context.AppendInstruction(IRInstruction.Move64, result, Operand.CreateConstant64(value));
+		PushStack(stack, new StackEntry(result));
 		return true;
 	}
 
 	private bool ConstantR4(Context context, Stack<StackEntry> stack, float value)
 	{
-		var result = AllocateVirtualRegister(TypeSystem.BuiltIn.R4);
-		context.AppendInstruction(IRInstruction.MoveR4, result, CreateConstantR4(value));
-		PushStack(stack, new StackEntry(StackType.R4, result));
+		var result = MethodCompiler.VirtualRegisters.AllocateR4();
+		context.AppendInstruction(IRInstruction.MoveR4, result, Operand.CreateConstantR4(value));
+		PushStack(stack, new StackEntry(result));
 		return true;
 	}
 
 	private bool ConstantR8(Context context, Stack<StackEntry> stack, double value)
 	{
-		var result = AllocateVirtualRegisterR8();
-		context.AppendInstruction(IRInstruction.MoveR8, result, CreateConstantR8(value));
-		PushStack(stack, new StackEntry(StackType.R8, result));
+		var result = MethodCompiler.VirtualRegisters.AllocateR8();
+		context.AppendInstruction(IRInstruction.MoveR8, result, Operand.CreateConstantR8(value));
+		PushStack(stack, new StackEntry(result));
 		return true;
 	}
 
 	private bool Ldnull(Context context, Stack<StackEntry> stack)
 	{
-		var result = AllocateVirtualRegister(TypeSystem.BuiltIn.Object);
-		context.AppendInstruction(IRInstruction.MoveObject, result, Operand.GetNullObject(TypeSystem));
-		PushStack(stack, new StackEntry(StackType.Object, result));
+		var result = MethodCompiler.VirtualRegisters.AllocateObject();
+		context.AppendInstruction(IRInstruction.MoveObject, result, Operand.NullObject);
+		PushStack(stack, new StackEntry(result));
 		return true;
 	}
 
-	#endregion CIL Shortcuts
+	#endregion Constant Helpers
 
 	#region CIL
 
@@ -1432,95 +1217,94 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var entry1 = PopStack(stack);
 		var entry2 = PopStack(stack);
 
-		switch (entry1.StackType)
+		switch (entry1.PrimitiveType)
 		{
-			case StackType.R4 when entry2.StackType == StackType.R4 && entry1.Operand.IsR4:
+			case PrimitiveType.R4 when entry2.PrimitiveType == PrimitiveType.R4 && entry1.Operand.IsR4:
 				{
-					var result = AllocateVirtualRegisterR4();
+					var result = MethodCompiler.VirtualRegisters.AllocateR4();
 					context.AppendInstruction(IRInstruction.AddR4, result, entry2.Operand, entry1.Operand);
-					PushStack(stack, new StackEntry(StackType.R4, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.R8 when entry2.StackType == StackType.R8 && entry1.Operand.IsR8:
+			case PrimitiveType.R8 when entry2.PrimitiveType == PrimitiveType.R8 && entry1.Operand.IsR8:
 				{
-					var result = AllocateVirtualRegisterR8();
+					var result = MethodCompiler.VirtualRegisters.AllocateR8();
 					context.AppendInstruction(IRInstruction.AddR8, result, entry2.Operand, entry1.Operand);
-					PushStack(stack, new StackEntry(StackType.R8, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int32 when entry2.StackType == StackType.Int32:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.Int32:
 				{
-					var result = AllocateVirtualRegister32();
+					var result = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.Add32, result, entry2.Operand, entry1.Operand);
-					PushStack(stack, new StackEntry(StackType.Int32, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int64 when entry2.StackType == StackType.Int64:
+			case PrimitiveType.Int64 when entry2.PrimitiveType == PrimitiveType.Int64:
 				{
-					var result = AllocateVirtualRegister64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.Add64, result, entry2.Operand, entry1.Operand);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int32 when entry2.StackType == StackType.Int64:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.Int64:
 				{
-					var v1 = AllocateVirtualRegister64();
-					var result = AllocateVirtualRegister64();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.SignExtend32x64, v1, entry1.Operand);
 					context.AppendInstruction(IRInstruction.Add64, result, v1, entry2.Operand);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int64 when entry2.StackType == StackType.Int32:
+			case PrimitiveType.Int64 when entry2.PrimitiveType == PrimitiveType.Int32:
 				{
-					var v1 = AllocateVirtualRegister64();
-					var result = AllocateVirtualRegister64();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.SignExtend32x64, v1, entry2.Operand);
 					context.AppendInstruction(IRInstruction.Add64, result, entry1.Operand, v1);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int32 when entry2.StackType == StackType.ManagedPointer && Is32BitPlatform:
-			case StackType.ManagedPointer when entry2.StackType == StackType.Int32 && Is32BitPlatform:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.ManagedPointer && Is32BitPlatform:
+			case PrimitiveType.ManagedPointer when entry2.PrimitiveType == PrimitiveType.Int32 && Is32BitPlatform:
 				{
-					var result = AllocateVirtualRegister32();
+					var result = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
 					context.AppendInstruction(IRInstruction.Add32, result, entry2.Operand, entry1.Operand);
-					PushStack(stack, new StackEntry(StackType.ManagedPointer, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int64 when entry2.StackType == StackType.ManagedPointer && Is64BitPlatform:
-			case StackType.Int64 when entry2.StackType == StackType.ManagedPointer && Is64BitPlatform:
+			case PrimitiveType.Int64 when entry2.PrimitiveType == PrimitiveType.ManagedPointer && Is64BitPlatform:
 				{
-					var result = AllocateVirtualRegister64();
+					var result = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
 					context.AppendInstruction(IRInstruction.Add64, result, entry2.Operand, entry1.Operand);
-					PushStack(stack, new StackEntry(StackType.ManagedPointer, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int32 when entry2.StackType == StackType.ManagedPointer && Is64BitPlatform:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.ManagedPointer && Is64BitPlatform:
 				{
-					var result = AllocateVirtualRegister64();
-					var v1 = AllocateVirtualRegister64();
+					var result = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.SignExtend32x64, v1, entry1.Operand);
 					context.AppendInstruction(IRInstruction.Add64, result, v1, entry2.Operand);
-					PushStack(stack, new StackEntry(StackType.ManagedPointer, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.ManagedPointer when entry2.StackType == StackType.Int32 && Is64BitPlatform:
+			case PrimitiveType.ManagedPointer when entry2.PrimitiveType == PrimitiveType.Int32 && Is64BitPlatform:
 				{
-					var result = AllocateVirtualRegister64();
-					var v1 = AllocateVirtualRegister64();
+					var result = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.SignExtend32x64, v1, entry2.Operand);
 					context.AppendInstruction(IRInstruction.Add64, result, entry1.Operand, v1);
-					PushStack(stack, new StackEntry(StackType.ManagedPointer, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
@@ -1533,95 +1317,95 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var entry1 = PopStack(stack);
 		var entry2 = PopStack(stack);
 
-		switch (entry1.StackType)
+		switch (entry1.PrimitiveType)
 		{
-			case StackType.Int32 when entry2.StackType == StackType.Int32:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.Int32:
 				{
-					var result = AllocateVirtualRegister32();
-					var result2 = AllocateVirtualRegister32();
+					var result = MethodCompiler.VirtualRegisters.Allocate32();
+					var result2 = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction2(IRInstruction.AddCarryOut32, result, result2, entry2.Operand, entry1.Operand);
 					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
-					PushStack(stack, new StackEntry(StackType.Int32, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int64 when entry2.StackType == StackType.Int64:
+			case PrimitiveType.Int64 when entry2.PrimitiveType == PrimitiveType.Int64:
 				{
-					var result = AllocateVirtualRegister64();
-					var result2 = AllocateVirtualRegister64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
+					var result2 = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction2(IRInstruction.AddCarryOut64, result, result2, entry2.Operand, entry1.Operand);
 					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int32 when entry2.StackType == StackType.Int64:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.Int64:
 				{
-					var v1 = AllocateVirtualRegister64();
-					var result = AllocateVirtualRegister64();
-					var result2 = AllocateVirtualRegister64();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
+					var result2 = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.ZeroExtend32x64, v1, entry1.Operand);
 					context.AppendInstruction2(IRInstruction.AddCarryOut64, result, result2, v1, entry2.Operand);
 					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int64 when entry2.StackType == StackType.Int32:
+			case PrimitiveType.Int64 when entry2.PrimitiveType == PrimitiveType.Int32:
 				{
-					var v1 = AllocateVirtualRegister64();
-					var result = AllocateVirtualRegister64();
-					var result2 = AllocateVirtualRegister64();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
+					var result2 = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.ZeroExtend32x64, v1, entry2.Operand);
 					context.AppendInstruction2(IRInstruction.AddCarryOut64, result, result2, entry1.Operand, v1);
 					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int32 when entry2.StackType == StackType.ManagedPointer && Is32BitPlatform:
-			case StackType.ManagedPointer when entry2.StackType == StackType.Int32 && Is32BitPlatform:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.ManagedPointer && Is32BitPlatform:
+			case PrimitiveType.ManagedPointer when entry2.PrimitiveType == PrimitiveType.Int32 && Is32BitPlatform:
 				{
-					var result = AllocateVirtualRegister32();
-					var result2 = AllocateVirtualRegister32();
+					var result = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
+					var result2 = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction2(IRInstruction.AddCarryOut32, result, result2, entry2.Operand, entry1.Operand);
 					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
-					PushStack(stack, new StackEntry(StackType.ManagedPointer, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int64 when entry2.StackType == StackType.ManagedPointer && Is64BitPlatform:
-			case StackType.Int64 when entry2.StackType == StackType.ManagedPointer && Is64BitPlatform:
+			case PrimitiveType.Int64 when entry2.PrimitiveType == PrimitiveType.ManagedPointer && Is64BitPlatform:
+			case PrimitiveType.Int64 when entry2.PrimitiveType == PrimitiveType.ManagedPointer && Is64BitPlatform:
 				{
-					var result = AllocateVirtualRegister64();
-					var result2 = AllocateVirtualRegister64();
+					var result = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
+					var result2 = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction2(IRInstruction.AddCarryOut64, result, result2, entry2.Operand, entry1.Operand);
 					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
-					PushStack(stack, new StackEntry(StackType.ManagedPointer, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int32 when entry2.StackType == StackType.ManagedPointer && Is64BitPlatform:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.ManagedPointer && Is64BitPlatform:
 				{
-					var result = AllocateVirtualRegister64();
-					var result2 = AllocateVirtualRegister64();
-					var v1 = AllocateVirtualRegister64();
+					var result = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
+					var result2 = MethodCompiler.VirtualRegisters.Allocate64();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.ZeroExtend32x64, v1, entry1.Operand);
 					context.AppendInstruction2(IRInstruction.AddCarryOut64, result, result2, v1, entry2.Operand);
 					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
-					PushStack(stack, new StackEntry(StackType.ManagedPointer, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.ManagedPointer when entry2.StackType == StackType.Int32 && Is64BitPlatform:
+			case PrimitiveType.ManagedPointer when entry2.PrimitiveType == PrimitiveType.Int32 && Is64BitPlatform:
 				{
-					var result = AllocateVirtualRegister64();
-					var result2 = AllocateVirtualRegister64();
-					var v1 = AllocateVirtualRegister64();
+					var result = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
+					var result2 = MethodCompiler.VirtualRegisters.Allocate64();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.ZeroExtend32x64, v1, entry2.Operand);
 					context.AppendInstruction2(IRInstruction.AddCarryOut64, result, result2, entry1.Operand, v1);
 					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
-					PushStack(stack, new StackEntry(StackType.ManagedPointer, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
@@ -1634,95 +1418,94 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var entry1 = PopStack(stack);
 		var entry2 = PopStack(stack);
 
-		switch (entry1.StackType)
+		switch (entry1.PrimitiveType)
 		{
-			case StackType.Int32 when entry2.StackType == StackType.Int32:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.Int32:
 				{
-					var result = AllocateVirtualRegister32();
-					var result2 = AllocateVirtualRegister32();
+					var result = MethodCompiler.VirtualRegisters.Allocate32();
+					var result2 = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction2(IRInstruction.AddOverflowOut32, result, result2, entry2.Operand, entry1.Operand);
 					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
-					PushStack(stack, new StackEntry(StackType.Int32, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int64 when entry2.StackType == StackType.Int64:
+			case PrimitiveType.Int64 when entry2.PrimitiveType == PrimitiveType.Int64:
 				{
-					var result = AllocateVirtualRegister64();
-					var result2 = AllocateVirtualRegister64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
+					var result2 = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction2(IRInstruction.AddOverflowOut64, result, result2, entry2.Operand, entry1.Operand);
 					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int32 when entry2.StackType == StackType.Int64:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.Int64:
 				{
-					var v1 = AllocateVirtualRegister64();
-					var result = AllocateVirtualRegister64();
-					var result2 = AllocateVirtualRegister64();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
+					var result2 = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.SignExtend32x64, v1, entry1.Operand);
 					context.AppendInstruction2(IRInstruction.AddOverflowOut64, result, result2, v1, entry2.Operand);
 					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int64 when entry2.StackType == StackType.Int32:
+			case PrimitiveType.Int64 when entry2.PrimitiveType == PrimitiveType.Int32:
 				{
-					var v1 = AllocateVirtualRegister64();
-					var result = AllocateVirtualRegister64();
-					var result2 = AllocateVirtualRegister64();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
+					var result2 = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.SignExtend32x64, v1, entry2.Operand);
 					context.AppendInstruction2(IRInstruction.AddOverflowOut64, result, result2, entry1.Operand, v1);
 					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int32 when entry2.StackType == StackType.ManagedPointer && Is32BitPlatform:
-			case StackType.ManagedPointer when entry2.StackType == StackType.Int32 && Is32BitPlatform:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.ManagedPointer && Is32BitPlatform:
+			case PrimitiveType.ManagedPointer when entry2.PrimitiveType == PrimitiveType.Int32 && Is32BitPlatform:
 				{
-					var result = AllocateVirtualRegister32();
-					var result2 = AllocateVirtualRegister32();
+					var result = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
+					var result2 = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction2(IRInstruction.AddOverflowOut32, result, result2, entry2.Operand, entry1.Operand);
 					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
-					PushStack(stack, new StackEntry(StackType.ManagedPointer, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int64 when entry2.StackType == StackType.ManagedPointer && Is64BitPlatform:
-			case StackType.Int64 when entry2.StackType == StackType.ManagedPointer && Is64BitPlatform:
+			case PrimitiveType.Int64 when entry2.PrimitiveType == PrimitiveType.ManagedPointer && Is64BitPlatform:
 				{
-					var result = AllocateVirtualRegister64();
-					var result2 = AllocateVirtualRegister64();
+					var result = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
+					var result2 = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction2(IRInstruction.AddOverflowOut64, result, result2, entry2.Operand, entry1.Operand);
 					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
-					PushStack(stack, new StackEntry(StackType.ManagedPointer, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int32 when entry2.StackType == StackType.ManagedPointer && Is64BitPlatform:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.ManagedPointer && Is64BitPlatform:
 				{
-					var result = AllocateVirtualRegister64();
-					var result2 = AllocateVirtualRegister64();
-					var v1 = AllocateVirtualRegister64();
+					var result = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
+					var result2 = MethodCompiler.VirtualRegisters.Allocate64();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.SignExtend32x64, v1, entry1.Operand);
 					context.AppendInstruction2(IRInstruction.AddOverflowOut64, result, result2, v1, entry2.Operand);
 					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
-					PushStack(stack, new StackEntry(StackType.ManagedPointer, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.ManagedPointer when entry2.StackType == StackType.Int32 && Is64BitPlatform:
+			case PrimitiveType.ManagedPointer when entry2.PrimitiveType == PrimitiveType.Int32 && Is64BitPlatform:
 				{
-					var result = AllocateVirtualRegister64();
-					var result2 = AllocateVirtualRegister64();
-					var v1 = AllocateVirtualRegister64();
+					var result = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
+					var result2 = MethodCompiler.VirtualRegisters.Allocate64();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.SignExtend32x64, v1, entry2.Operand);
 					context.AppendInstruction2(IRInstruction.AddOverflowOut64, result, result2, entry1.Operand, v1);
 					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
-					PushStack(stack, new StackEntry(StackType.ManagedPointer, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
@@ -1735,41 +1518,41 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var entry1 = PopStack(stack);
 		var entry2 = PopStack(stack);
 
-		switch (entry1.StackType)
+		switch (entry1.PrimitiveType)
 		{
-			case StackType.Int32 when entry2.StackType == StackType.Int32:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.Int32:
 				{
-					var result = AllocateVirtualRegister32();
+					var result = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.And32, result, entry2.Operand, entry1.Operand);
-					PushStack(stack, new StackEntry(StackType.Int32, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int64 when entry2.StackType == StackType.Int64:
+			case PrimitiveType.Int64 when entry2.PrimitiveType == PrimitiveType.Int64:
 				{
-					var result = AllocateVirtualRegister64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.And64, result, entry2.Operand, entry1.Operand);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int32 when entry2.StackType == StackType.Int64:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.Int64:
 				{
-					var v1 = AllocateVirtualRegister64();
-					var result = AllocateVirtualRegister64();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.ZeroExtend32x64, v1, entry1.Operand);
 					context.AppendInstruction(IRInstruction.And64, result, v1, entry2.Operand);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int64 when entry2.StackType == StackType.Int32:
+			case PrimitiveType.Int64 when entry2.PrimitiveType == PrimitiveType.Int32:
 				{
-					var v1 = AllocateVirtualRegister64();
-					var result = AllocateVirtualRegister64();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.ZeroExtend32x64, v1, entry2.Operand);
 					context.AppendInstruction(IRInstruction.And64, result, entry1.Operand, v1);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
@@ -1783,30 +1566,30 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var entry = PopStack(stack);
 		var type = (MosaType)instruction.Operand;
 
-		var result = AllocateVirtualRegisterObject();
-		PushStack(stack, new StackEntry(StackType.Object, result));
+		var result = MethodCompiler.VirtualRegisters.AllocateObject();
+		PushStack(stack, new StackEntry(result));
 
 		if (type.IsReferenceType)
 		{
-			context.AppendInstruction(MoveInstruction, result, entry.Operand);
+			context.AppendInstruction(Is32BitPlatform ? IRInstruction.Move32 : IRInstruction.Move64, result, entry.Operand);
 			return true;
 		}
 
 		var methodTable = GetMethodTablePointer(type);
 
-		var underlyingType = GetUnderlyingType(type);
-		var isPrimitive = IsPrimitive(underlyingType);
+		var underlyingType = MosaTypeLayout.GetUnderlyingType(type);
+		var isPrimitive = MosaTypeLayout.IsPrimitive(underlyingType);
 
 		if (isPrimitive)
 		{
-			var elementType = GetElementType(underlyingType);
-			var boxInstruction = GetBoxInstruction(elementType);
+			var elementType = MethodCompiler.GetElementType(underlyingType);
+			var boxInstruction = MethodCompiler.GetBoxInstruction(elementType);
 
 			context.AppendInstruction(boxInstruction, result, methodTable, entry.Operand);
 		}
 		else
 		{
-			var typeSize = Alignment.AlignUp(TypeLayout.GetTypeSize(type), TypeLayout.NativePointerAlignment);
+			var typeSize = Alignment.AlignUp(TypeLayout.GetTypeLayoutSize(type), TypeLayout.NativePointerAlignment);
 
 			if (typeSize == 8)
 			{
@@ -1814,10 +1597,10 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			}
 			else
 			{
-				var address = AllocateVirtualRegister(type.ToManagedPointer());
+				var address = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
 
 				context.AppendInstruction(IRInstruction.AddressOf, address, entry.Operand);
-				context.AppendInstruction(IRInstruction.Box, result, methodTable, address, CreateConstant32(typeSize));
+				context.AppendInstruction(IRInstruction.Box, result, methodTable, address, Operand.CreateConstant32(typeSize));
 			}
 		}
 
@@ -1847,33 +1630,33 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var target = (int)instruction.Operand;
 		var block = BasicBlocks.GetByLabel(target);
 
-		switch (entry1.StackType)
+		switch (entry1.PrimitiveType)
 		{
-			case StackType.R4 when entry2.StackType == StackType.R4 && entry1.Operand.IsR4:
+			case PrimitiveType.R4 when entry2.PrimitiveType == PrimitiveType.R4 && entry1.Operand.IsR4:
 				{
-					var result = AllocateVirtualRegister32();
+					var result = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.CompareR4, conditionCode, result, entry1.Operand, entry2.Operand);
-					context.AppendInstruction(IRInstruction.Branch32, ConditionCode.NotEqual, null, result, Constant32_0, block);
+					context.AppendInstruction(IRInstruction.Branch32, ConditionCode.NotEqual, null, result, Operand.Constant32_0, block);
 					return true;
 				}
 
-			case StackType.R8 when entry2.StackType == StackType.R8 && entry1.Operand.IsR8:
+			case PrimitiveType.R8 when entry2.PrimitiveType == PrimitiveType.R8 && entry1.Operand.IsR8:
 				{
-					var result = AllocateVirtualRegister32();
+					var result = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.CompareR8, conditionCode, result, entry1.Operand, entry2.Operand);
-					context.AppendInstruction(IRInstruction.Branch32, ConditionCode.NotEqual, null, result, Constant32_0, block);
+					context.AppendInstruction(IRInstruction.Branch32, ConditionCode.NotEqual, null, result, Operand.Constant32_0, block);
 					return true;
 				}
 
-			case StackType.Object when entry2.StackType == StackType.Object:
+			case PrimitiveType.Object when entry2.PrimitiveType == PrimitiveType.Object:
 				context.AppendInstruction(IRInstruction.BranchObject, conditionCode, null, entry1.Operand, entry2.Operand, block);
 				return true;
 
-			case StackType.Int32 when entry2.StackType == StackType.Int32:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.Int32:
 				context.AppendInstruction(IRInstruction.Branch32, conditionCode, null, entry1.Operand, entry2.Operand, block);
 				return true;
 
-			case StackType.Int64 when entry2.StackType == StackType.Int64:
+			case PrimitiveType.Int64 when entry2.PrimitiveType == PrimitiveType.Int64:
 				context.AppendInstruction(IRInstruction.Branch64, conditionCode, null, entry1.Operand, entry2.Operand, block);
 				return true;
 
@@ -1893,19 +1676,19 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var block = BasicBlocks.GetByLabel(target);
 		var nextblock = BasicBlocks.GetByLabel(instruction.Next.Value);
 
-		switch (entry.StackType)
+		switch (entry.PrimitiveType)
 		{
-			case StackType.Int32:
-				context.AppendInstruction(IRInstruction.Branch32, conditionCode, null, entry.Operand, Constant32_0, block);
+			case PrimitiveType.Int32:
+				context.AppendInstruction(IRInstruction.Branch32, conditionCode, null, entry.Operand, Operand.Constant32_0, block);
 				context.AppendInstruction(IRInstruction.Jmp, nextblock);
 				return true;
 
-			case StackType.Int64:
-				context.AppendInstruction(IRInstruction.Branch64, conditionCode, null, entry.Operand, Constant64_0, block);
+			case PrimitiveType.Int64:
+				context.AppendInstruction(IRInstruction.Branch64, conditionCode, null, entry.Operand, Operand.Constant64_0, block);
 				context.AppendInstruction(IRInstruction.Jmp, nextblock);
 				return true;
 
-			case StackType.Object:
+			case PrimitiveType.Object:
 				context.AppendInstruction(IRInstruction.BranchObject, conditionCode, null, entry.Operand, ConstantZero, block);
 				context.AppendInstruction(IRInstruction.Jmp, nextblock);
 				return true;
@@ -1925,17 +1708,16 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		if (!method.Signature.ReturnType.IsVoid)
 		{
-			var resultStackType = CreateStateEntry(method.Signature.ReturnType);
+			var resultStackType = CreateStackEntry(method.Signature.ReturnType);
 
 			result = resultStackType.Operand;
 
 			PushStack(stack, resultStackType);
 		}
 
-		var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
+		var symbol = Operand.CreateLabel(method, Is32BitPlatform);
 
 		context.AppendInstruction(IRInstruction.CallStatic, result, symbol, operands);
-		context.InvokeMethod = method;
 
 		if (ProcessExternalCall(context))
 			return true;
@@ -1953,7 +1735,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		if (!method.Signature.ReturnType.IsVoid)
 		{
-			var resultStackType = CreateStateEntry(method.Signature.ReturnType);
+			var resultStackType = CreateStackEntry(method.Signature.ReturnType);
 
 			result = resultStackType.Operand;
 
@@ -1968,7 +1750,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			{
 				method = GetMethodOrOverride(type, method);
 
-				var symbol2 = Operand.CreateSymbolFromMethod(method, TypeSystem);
+				var symbol2 = Operand.CreateLabel(method, Is32BitPlatform);
 				context.AppendInstruction(IRInstruction.CallStatic, result, symbol2, operands);
 
 				// PocessExternalCall(context))
@@ -1977,7 +1759,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			}
 		}
 
-		var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
+		var symbol = Operand.CreateLabel(method, Is32BitPlatform);
 
 		if (method.IsVirtual)
 		{
@@ -2005,13 +1787,13 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	{
 		var entry = PopStack(stack);
 
-		var result = AllocateVirtualRegister(TypeSystem.BuiltIn.Object);
-		PushStack(stack, new StackEntry(StackType.Object, result));
+		var result = MethodCompiler.VirtualRegisters.AllocateObject();
+		PushStack(stack, new StackEntry(result));
 
 		// FUTURE: Check for valid cast
 		//var methodTable = GetMethodTablePointer(type);
 
-		if (entry.StackType == StackType.Object)
+		if (entry.PrimitiveType == PrimitiveType.Object)
 		{
 			// TODO: Do this right
 			context.AppendInstruction(IRInstruction.MoveObject, result, entry.Operand);
@@ -2026,28 +1808,28 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var entry2 = PopStack(stack);
 		var entry1 = PopStack(stack);
 
-		var result = AllocateVirtualRegister32();
-		PushStack(stack, new StackEntry(StackType.Int32, result));
+		var result = MethodCompiler.VirtualRegisters.Allocate32();
+		PushStack(stack, new StackEntry(result));
 
-		switch (entry1.StackType)
+		switch (entry1.PrimitiveType)
 		{
-			case StackType.R4 when entry2.StackType == StackType.R4 && entry1.Operand.IsR4:
+			case PrimitiveType.R4 when entry2.PrimitiveType == PrimitiveType.R4 && entry1.Operand.IsR4:
 				context.AppendInstruction(IRInstruction.CompareR4, conditionCode, result, entry1.Operand, entry2.Operand);
 				return true;
 
-			case StackType.R8 when entry2.StackType == StackType.R8 && entry1.Operand.IsR8:
+			case PrimitiveType.R8 when entry2.PrimitiveType == PrimitiveType.R8 && entry1.Operand.IsR8:
 				context.AppendInstruction(IRInstruction.CompareR8, conditionCode, result, entry1.Operand, entry2.Operand);
 				return true;
 
-			case StackType.Object when entry2.StackType == StackType.Object:
+			case PrimitiveType.Object when entry2.PrimitiveType == PrimitiveType.Object:
 				context.AppendInstruction(IRInstruction.CompareObject, conditionCode, result, entry1.Operand, entry2.Operand);
 				return true;
 
-			case StackType.Int32 when entry2.StackType == StackType.Int32:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.Int32:
 				context.AppendInstruction(IRInstruction.Compare32x32, conditionCode, result, entry1.Operand, entry2.Operand);
 				return true;
 
-			case StackType.Int64 when entry2.StackType == StackType.Int64:
+			case PrimitiveType.Int64 when entry2.PrimitiveType == PrimitiveType.Int64:
 				context.AppendInstruction(IRInstruction.Compare64x32, conditionCode, result, entry1.Operand, entry2.Operand);
 				return true;
 
@@ -2075,48 +1857,48 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		if (Is32BitPlatform)
 		{
-			var result = AllocateVirtualRegister32();
-			PushStack(stack, new StackEntry(StackType.Int32, result));
+			var result = MethodCompiler.VirtualRegisters.Allocate32();
+			PushStack(stack, new StackEntry(result));
 
-			switch (entry.StackType)
+			switch (entry.PrimitiveType)
 			{
-				case StackType.Int32:
+				case PrimitiveType.Int32:
 					context.AppendInstruction(IRInstruction.Move32, result, entry.Operand);
 					return true;
 
-				case StackType.Int64:
+				case PrimitiveType.Int64:
 					context.AppendInstruction(IRInstruction.Truncate64x32, result, entry.Operand);
 					return true;
 
-				case StackType.R4:
+				case PrimitiveType.R4:
 					context.AppendInstruction(IRInstruction.ConvertR4ToI32, result, entry.Operand);
 					return true;
 
-				case StackType.R8:
+				case PrimitiveType.R8:
 					context.AppendInstruction(IRInstruction.ConvertR8ToI32, result, entry.Operand);
 					return true;
 			}
 		}
 		else
 		{
-			var result = AllocateVirtualRegister64();
-			PushStack(stack, new StackEntry(StackType.Int64, result));
+			var result = MethodCompiler.VirtualRegisters.Allocate64();
+			PushStack(stack, new StackEntry(result));
 
-			switch (entry.StackType)
+			switch (entry.PrimitiveType)
 			{
-				case StackType.Int32:
+				case PrimitiveType.Int32:
 					context.AppendInstruction(IRInstruction.ZeroExtend32x64, result, entry.Operand);
 					return true;
 
-				case StackType.Int64:
+				case PrimitiveType.Int64:
 					context.AppendInstruction(IRInstruction.Move64, result, entry.Operand);
 					return true;
 
-				case StackType.R4:
+				case PrimitiveType.R4:
 					context.AppendInstruction(IRInstruction.ConvertR4ToI64, result, entry.Operand);
 					return true;
 
-				case StackType.R8:
+				case PrimitiveType.R8:
 					context.AppendInstruction(IRInstruction.ConvertR8ToI64, result, entry.Operand);
 					return true;
 			}
@@ -2128,39 +1910,39 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	private bool ConvertI1(Context context, Stack<StackEntry> stack)
 	{
 		var entry = PopStack(stack);
-		var result = AllocateVirtualRegister32();
+		var result = MethodCompiler.VirtualRegisters.Allocate32();
 
-		PushStack(stack, new StackEntry(StackType.Int32, result));
+		PushStack(stack, new StackEntry(result));
 
-		switch (entry.StackType)
+		switch (entry.PrimitiveType)
 		{
-			case StackType.Int32:
+			case PrimitiveType.Int32:
 				{
 					context.AppendInstruction(IRInstruction.SignExtend8x32, result, entry.Operand);
 					return true;
 				}
 
-			case StackType.Int64:
+			case PrimitiveType.Int64:
 				{
-					var v1 = AllocateVirtualRegister32();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.Truncate64x32, v1, entry.Operand);
 					context.AppendInstruction(IRInstruction.SignExtend8x32, result, v1);
 					return true;
 				}
 
-			case StackType.R4:
+			case PrimitiveType.R4:
 				{
-					var v1 = AllocateVirtualRegister32();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.ConvertR4ToI32, v1, entry.Operand);
-					context.AppendInstruction(IRInstruction.And32, result, v1, CreateConstant32(0xFF));
+					context.AppendInstruction(IRInstruction.And32, result, v1, Operand.Constant32_FF);
 					return true;
 				}
 
-			case StackType.R8:
+			case PrimitiveType.R8:
 				{
-					var v1 = AllocateVirtualRegister32();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.ConvertR8ToI32, v1, entry.Operand);
-					context.AppendInstruction(IRInstruction.And32, result, v1, CreateConstant32(0xFF));
+					context.AppendInstruction(IRInstruction.And32, result, v1, Operand.Constant32_FF);
 					return true;
 				}
 
@@ -2172,39 +1954,39 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	private bool ConvertI2(Context context, Stack<StackEntry> stack)
 	{
 		var entry = PopStack(stack);
-		var result = AllocateVirtualRegister32();
+		var result = MethodCompiler.VirtualRegisters.Allocate32();
 
-		PushStack(stack, new StackEntry(StackType.Int32, result));
+		PushStack(stack, new StackEntry(result));
 
-		switch (entry.StackType)
+		switch (entry.PrimitiveType)
 		{
-			case StackType.Int32:
+			case PrimitiveType.Int32:
 				{
 					context.AppendInstruction(IRInstruction.SignExtend16x32, result, entry.Operand);
 					return true;
 				}
 
-			case StackType.Int64:
+			case PrimitiveType.Int64:
 				{
-					var v1 = AllocateVirtualRegister32();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.Truncate64x32, v1, entry.Operand);
 					context.AppendInstruction(IRInstruction.SignExtend16x32, result, v1);
 					return true;
 				}
 
-			case StackType.R4:
+			case PrimitiveType.R4:
 				{
-					var v1 = AllocateVirtualRegister32();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.ConvertR4ToI32, v1, entry.Operand);
-					context.AppendInstruction(IRInstruction.And32, result, v1, CreateConstant32(0xFFFF));
+					context.AppendInstruction(IRInstruction.And32, result, v1, Operand.Constant32_FFFF);
 					return true;
 				}
 
-			case StackType.R8:
+			case PrimitiveType.R8:
 				{
-					var v1 = AllocateVirtualRegister32();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.ConvertR8ToI32, v1, entry.Operand);
-					context.AppendInstruction(IRInstruction.And32, result, v1, CreateConstant32(0xFFFF));
+					context.AppendInstruction(IRInstruction.And32, result, v1, Operand.Constant32_FFFF);
 					return true;
 				}
 
@@ -2216,25 +1998,25 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	private bool ConvertI4(Context context, Stack<StackEntry> stack)
 	{
 		var entry = PopStack(stack);
-		var result = AllocateVirtualRegister32();
+		var result = MethodCompiler.VirtualRegisters.Allocate32();
 
-		PushStack(stack, new StackEntry(StackType.Int32, result));
+		PushStack(stack, new StackEntry(result));
 
-		switch (entry.StackType)
+		switch (entry.PrimitiveType)
 		{
-			case StackType.Int32:
+			case PrimitiveType.Int32:
 				context.AppendInstruction(IRInstruction.Move32, result, entry.Operand);
 				return true;
 
-			case StackType.Int64:
+			case PrimitiveType.Int64:
 				context.AppendInstruction(IRInstruction.Truncate64x32, result, entry.Operand);
 				return true;
 
-			case StackType.R4:
+			case PrimitiveType.R4:
 				context.AppendInstruction(IRInstruction.ConvertR4ToI32, result, entry.Operand);
 				return true;
 
-			case StackType.R8:
+			case PrimitiveType.R8:
 				context.AppendInstruction(IRInstruction.ConvertR8ToI32, result, entry.Operand);
 				return true;
 
@@ -2246,25 +2028,25 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	private bool ConvertI8(Context context, Stack<StackEntry> stack)
 	{
 		var entry = PopStack(stack);
-		var result = AllocateVirtualRegister64();
+		var result = MethodCompiler.VirtualRegisters.Allocate64();
 
-		PushStack(stack, new StackEntry(StackType.Int64, result));
+		PushStack(stack, new StackEntry(result));
 
-		switch (entry.StackType)
+		switch (entry.PrimitiveType)
 		{
-			case StackType.Int32:
+			case PrimitiveType.Int32:
 				context.AppendInstruction(IRInstruction.SignExtend32x64, result, entry.Operand);
 				return true;
 
-			case StackType.Int64:
+			case PrimitiveType.Int64:
 				context.AppendInstruction(IRInstruction.Move64, result, entry.Operand);
 				return true;
 
-			case StackType.R4:
+			case PrimitiveType.R4:
 				context.AppendInstruction(IRInstruction.ConvertR4ToI64, result, entry.Operand);
 				return true;
 
-			case StackType.R8:
+			case PrimitiveType.R8:
 				context.AppendInstruction(IRInstruction.ConvertR8ToI64, result, entry.Operand);
 				return true;
 
@@ -2276,25 +2058,25 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	private bool ConvertR4(Context context, Stack<StackEntry> stack)
 	{
 		var entry = PopStack(stack);
-		var result = AllocateVirtualRegister(TypeSystem.BuiltIn.R4);
+		var result = MethodCompiler.VirtualRegisters.AllocateR4();
 
-		PushStack(stack, new StackEntry(StackType.R4, result));
+		PushStack(stack, new StackEntry(result));
 
-		switch (entry.StackType)
+		switch (entry.PrimitiveType)
 		{
-			case StackType.Int32:
+			case PrimitiveType.Int32:
 				context.AppendInstruction(IRInstruction.ConvertI32ToR4, result, entry.Operand);
 				return true;
 
-			case StackType.Int64:
+			case PrimitiveType.Int64:
 				context.AppendInstruction(IRInstruction.ConvertI64ToR4, result, entry.Operand);
 				return true;
 
-			case StackType.R4:
+			case PrimitiveType.R4:
 				context.AppendInstruction(IRInstruction.MoveR4, result, entry.Operand);
 				return true;
 
-			case StackType.R8:
+			case PrimitiveType.R8:
 				context.AppendInstruction(IRInstruction.ConvertR8ToR4, result, entry.Operand);
 				return true;
 
@@ -2306,25 +2088,25 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	private bool ConvertR8(Context context, Stack<StackEntry> stack)
 	{
 		var entry = PopStack(stack);
-		var result = AllocateVirtualRegisterR8();
+		var result = MethodCompiler.VirtualRegisters.AllocateR8();
 
-		PushStack(stack, new StackEntry(StackType.R8, result));
+		PushStack(stack, new StackEntry(result));
 
-		switch (entry.StackType)
+		switch (entry.PrimitiveType)
 		{
-			case StackType.Int32:
+			case PrimitiveType.Int32:
 				context.AppendInstruction(IRInstruction.ConvertI32ToR8, result, entry.Operand);
 				return true;
 
-			case StackType.Int64:
+			case PrimitiveType.Int64:
 				context.AppendInstruction(IRInstruction.ConvertI64ToR8, result, entry.Operand);
 				return true;
 
-			case StackType.R4:
+			case PrimitiveType.R4:
 				context.AppendInstruction(IRInstruction.ConvertR4ToR8, result, entry.Operand);
 				return true;
 
-			case StackType.R8:
+			case PrimitiveType.R8:
 				context.AppendInstruction(IRInstruction.MoveR8, result, entry.Operand);
 				return true;
 
@@ -2339,28 +2121,28 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		if (Is32BitPlatform)
 		{
-			var result = AllocateVirtualRegister32();
-			PushStack(stack, new StackEntry(StackType.Int32, result));
+			var result = MethodCompiler.VirtualRegisters.Allocate32();
+			PushStack(stack, new StackEntry(result));
 
-			switch (entry1.StackType)
+			switch (entry1.PrimitiveType)
 			{
-				case StackType.Int32:
+				case PrimitiveType.Int32:
 					context.AppendInstruction(IRInstruction.Move32, result, entry1.Operand);
 					return true;
 
-				case StackType.Int64:
+				case PrimitiveType.Int64:
 					context.AppendInstruction(IRInstruction.Truncate64x32, result, entry1.Operand);
 					return true;
 
-				case StackType.R4:
+				case PrimitiveType.R4:
 					context.AppendInstruction(IRInstruction.ConvertR4ToU32, result, entry1.Operand);
 					return true;
 
-				case StackType.R8:
+				case PrimitiveType.R8:
 					context.AppendInstruction(IRInstruction.ConvertR8ToU32, result, entry1.Operand);
 					return true;
 
-				case StackType.ManagedPointer:
+				case PrimitiveType.ManagedPointer:
 					context.AppendInstruction(IRInstruction.Move32, result, entry1.Operand);
 					return true;
 			}
@@ -2369,28 +2151,28 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		}
 		else
 		{
-			var result = AllocateVirtualRegister64();
-			PushStack(stack, new StackEntry(StackType.Int64, result));
+			var result = MethodCompiler.VirtualRegisters.Allocate64();
+			PushStack(stack, new StackEntry(result));
 
-			switch (entry1.StackType)
+			switch (entry1.PrimitiveType)
 			{
-				case StackType.Int32:
+				case PrimitiveType.Int32:
 					context.AppendInstruction(IRInstruction.ZeroExtend32x64, result, entry1.Operand);
 					return true;
 
-				case StackType.Int64:
+				case PrimitiveType.Int64:
 					context.AppendInstruction(IRInstruction.Move64, result, entry1.Operand);
 					return true;
 
-				case StackType.R4:
+				case PrimitiveType.R4:
 					context.AppendInstruction(IRInstruction.ConvertR4ToU64, result, entry1.Operand);
 					return true;
 
-				case StackType.R8:
+				case PrimitiveType.R8:
 					context.AppendInstruction(IRInstruction.ConvertR8ToU64, result, entry1.Operand);
 					return true;
 
-				case StackType.ManagedPointer:
+				case PrimitiveType.ManagedPointer:
 					context.AppendInstruction(IRInstruction.Move64, result, entry1.Operand);
 					return true;
 			}
@@ -2404,37 +2186,37 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	private bool ConvertU1(Context context, Stack<StackEntry> stack)
 	{
 		var entry = PopStack(stack);
-		var result = AllocateVirtualRegister32();
+		var result = MethodCompiler.VirtualRegisters.Allocate32();
 
-		PushStack(stack, new StackEntry(StackType.Int32, result));
+		PushStack(stack, new StackEntry(result));
 
-		switch (entry.StackType)
+		switch (entry.PrimitiveType)
 		{
-			case StackType.Int32:
-				context.AppendInstruction(IRInstruction.And32, result, entry.Operand, CreateConstant32(0xFF));
+			case PrimitiveType.Int32:
+				context.AppendInstruction(IRInstruction.And32, result, entry.Operand, Operand.Constant32_FF);
 				return true;
 
-			case StackType.Int64:
+			case PrimitiveType.Int64:
 				{
-					var v1 = AllocateVirtualRegister32();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.Truncate64x32, v1, entry.Operand);
-					context.AppendInstruction(IRInstruction.And32, result, v1, CreateConstant32(0xFF));
+					context.AppendInstruction(IRInstruction.And32, result, v1, Operand.Constant32_FF);
 					return true;
 				}
 
-			case StackType.R4:
+			case PrimitiveType.R4:
 				{
-					var v1 = AllocateVirtualRegister32();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.ConvertR4ToU32, v1, entry.Operand);
-					context.AppendInstruction(IRInstruction.And32, result, v1, CreateConstant32(0xFF));
+					context.AppendInstruction(IRInstruction.And32, result, v1, Operand.Constant32_FF);
 					return true;
 				}
 
-			case StackType.R8:
+			case PrimitiveType.R8:
 				{
-					var v1 = AllocateVirtualRegister32();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.ConvertR8ToU32, v1, entry.Operand);
-					context.AppendInstruction(IRInstruction.And32, result, v1, CreateConstant32(0xFF));
+					context.AppendInstruction(IRInstruction.And32, result, v1, Operand.Constant32_FF);
 					return true;
 				}
 
@@ -2446,38 +2228,38 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	private bool ConvertU2(Context context, Stack<StackEntry> stack)
 	{
 		var entry = PopStack(stack);
-		var result = AllocateVirtualRegister32();
+		var result = MethodCompiler.VirtualRegisters.Allocate32();
 
-		PushStack(stack, new StackEntry(StackType.Int32, result));
+		PushStack(stack, new StackEntry(result));
 
-		switch (entry.StackType)
+		switch (entry.PrimitiveType)
 		{
-			case StackType.Int32:
-				context.AppendInstruction(IRInstruction.And32, result, entry.Operand, CreateConstant32(0xFFFF));
+			case PrimitiveType.Int32:
+				context.AppendInstruction(IRInstruction.And32, result, entry.Operand, Operand.Constant32_FFFF);
 				return true;
 
-			case StackType.Int64:
+			case PrimitiveType.Int64:
 				{
-					var v1 = AllocateVirtualRegister32();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.Truncate64x32, v1, entry.Operand);
-					context.AppendInstruction(IRInstruction.And32, result, v1, CreateConstant32(0xFFFF));
+					context.AppendInstruction(IRInstruction.And32, result, v1, Operand.Constant32_FFFF);
 					return true;
 				}
 
-			case StackType.R4:
+			case PrimitiveType.R4:
 				{
-					var v1 = AllocateVirtualRegister32();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.ConvertR4ToU32, v1, entry.Operand);
-					context.AppendInstruction(IRInstruction.And32, result, v1, CreateConstant32(0xFFFF));
+					context.AppendInstruction(IRInstruction.And32, result, v1, Operand.Constant32_FFFF);
 
 					return true;
 				}
 
-			case StackType.R8:
+			case PrimitiveType.R8:
 				{
-					var v1 = AllocateVirtualRegister32();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.ConvertR8ToI32, v1, entry.Operand);
-					context.AppendInstruction(IRInstruction.And32, result, v1, CreateConstant32(0xFFFF));
+					context.AppendInstruction(IRInstruction.And32, result, v1, Operand.Constant32_FFFF);
 
 					return true;
 				}
@@ -2490,25 +2272,25 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	private bool ConvertU4(Context context, Stack<StackEntry> stack)
 	{
 		var entry = PopStack(stack);
-		var result = AllocateVirtualRegister32();
+		var result = MethodCompiler.VirtualRegisters.Allocate32();
 
-		PushStack(stack, new StackEntry(StackType.Int32, result));
+		PushStack(stack, new StackEntry(result));
 
-		switch (entry.StackType)
+		switch (entry.PrimitiveType)
 		{
-			case StackType.Int32:
+			case PrimitiveType.Int32:
 				context.AppendInstruction(IRInstruction.Move32, result, entry.Operand);
 				return true;
 
-			case StackType.Int64:
+			case PrimitiveType.Int64:
 				context.AppendInstruction(IRInstruction.Truncate64x32, result, entry.Operand);
 				return true;
 
-			case StackType.R4:
+			case PrimitiveType.R4:
 				context.AppendInstruction(IRInstruction.ConvertR4ToU32, result, entry.Operand);
 				return true;
 
-			case StackType.R8:
+			case PrimitiveType.R8:
 				context.AppendInstruction(IRInstruction.ConvertR8ToU32, result, entry.Operand);
 				return true;
 
@@ -2520,24 +2302,24 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	private bool ConvertU8(Context context, Stack<StackEntry> stack)
 	{
 		var entry = PopStack(stack);
-		var result = AllocateVirtualRegister64();
-		PushStack(stack, new StackEntry(StackType.Int64, result));
+		var result = MethodCompiler.VirtualRegisters.Allocate64();
+		PushStack(stack, new StackEntry(result));
 
-		switch (entry.StackType)
+		switch (entry.PrimitiveType)
 		{
-			case StackType.Int32:
+			case PrimitiveType.Int32:
 				context.AppendInstruction(IRInstruction.ZeroExtend32x64, result, entry.Operand);
 				return true;
 
-			case StackType.Int64:
+			case PrimitiveType.Int64:
 				context.AppendInstruction(IRInstruction.Move64, result, entry.Operand);
 				return true;
 
-			case StackType.R4:
+			case PrimitiveType.R4:
 				context.AppendInstruction(IRInstruction.ConvertR4ToU64, result, entry.Operand);
 				return true;
 
-			case StackType.R8:
+			case PrimitiveType.R8:
 				context.AppendInstruction(IRInstruction.ConvertR8ToU64, result, entry.Operand);
 				return true;
 
@@ -2549,16 +2331,16 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	private bool ConvertUToF(Context context, Stack<StackEntry> stack)
 	{
 		var entry = PopStack(stack);
-		var result = AllocateVirtualRegisterR8();
-		PushStack(stack, new StackEntry(StackType.R8, result));
+		var result = MethodCompiler.VirtualRegisters.AllocateR8();
+		PushStack(stack, new StackEntry(result));
 
-		switch (entry.StackType)
+		switch (entry.PrimitiveType)
 		{
-			case StackType.Int32:
+			case PrimitiveType.Int32:
 				context.AppendInstruction(IRInstruction.ConvertU32ToR8, result, entry.Operand);
 				return true;
 
-			case StackType.Int64:
+			case PrimitiveType.Int64:
 				context.AppendInstruction(IRInstruction.ConvertU64ToR8, result, entry.Operand);
 				return true;
 
@@ -2572,27 +2354,27 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		// convert unsigned to an int8 (on the stack as int32)
 
 		var entry = PopStack(stack);
-		var result = AllocateVirtualRegister32();
+		var result = MethodCompiler.VirtualRegisters.Allocate32();
 
-		PushStack(stack, new StackEntry(StackType.Int32, result));
+		PushStack(stack, new StackEntry(result));
 
-		switch (entry.StackType)
+		switch (entry.PrimitiveType)
 		{
-			case StackType.Int32:
+			case PrimitiveType.Int32:
 				{
-					var v1 = AllocateVirtualRegister32();
-					context.AppendInstruction(IRInstruction.And32, v1, entry.Operand, CreateConstant32(0xFF));
-					context.AppendInstruction(IRInstruction.Or32, result, v1, CreateConstant32(~0xFF));
+					var v1 = MethodCompiler.VirtualRegisters.Allocate32();
+					context.AppendInstruction(IRInstruction.And32, v1, entry.Operand, Operand.Constant32_FF);
+					context.AppendInstruction(IRInstruction.Or32, result, v1, Operand.CreateConstant32(~0xFF));
 					return true;
 				}
 
-			case StackType.Int64:
+			case PrimitiveType.Int64:
 				{
-					var v1 = AllocateVirtualRegister32();
-					var v2 = AllocateVirtualRegister32();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate32();
+					var v2 = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.Truncate64x32, v1, entry.Operand);
-					context.AppendInstruction(IRInstruction.And32, v2, v1, CreateConstant32(0xFF));
-					context.AppendInstruction(IRInstruction.Or32, result, v2, CreateConstant32(~0xFF));
+					context.AppendInstruction(IRInstruction.And32, v2, v1, Operand.Constant32_FF);
+					context.AppendInstruction(IRInstruction.Or32, result, v2, Operand.CreateConstant32(~0xFF));
 					return true;
 				}
 
@@ -2606,27 +2388,27 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		// convert unsigned to an int8 (on the stack as int32)
 
 		var entry = PopStack(stack);
-		var result = AllocateVirtualRegister32();
+		var result = MethodCompiler.VirtualRegisters.Allocate32();
 
-		PushStack(stack, new StackEntry(StackType.Int32, result));
+		PushStack(stack, new StackEntry(result));
 
-		switch (entry.StackType)
+		switch (entry.PrimitiveType)
 		{
-			case StackType.Int32:
+			case PrimitiveType.Int32:
 				{
-					var v1 = AllocateVirtualRegister32();
-					context.AppendInstruction(IRInstruction.And32, v1, entry.Operand, CreateConstant32(0xFFFF));
-					context.AppendInstruction(IRInstruction.Or32, result, v1, CreateConstant32(~0xFFFF));
+					var v1 = MethodCompiler.VirtualRegisters.Allocate32();
+					context.AppendInstruction(IRInstruction.And32, v1, entry.Operand, Operand.Constant32_FFFF);
+					context.AppendInstruction(IRInstruction.Or32, result, v1, Operand.CreateConstant32(~0xFFFF));
 					return true;
 				}
 
-			case StackType.Int64:
+			case PrimitiveType.Int64:
 				{
-					var v1 = AllocateVirtualRegister32();
-					var v2 = AllocateVirtualRegister32();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate32();
+					var v2 = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.Truncate64x32, v1, entry.Operand);
-					context.AppendInstruction(IRInstruction.And32, v2, v1, CreateConstant32(0xFFFF));
-					context.AppendInstruction(IRInstruction.Or32, result, v2, CreateConstant32(~0xFFFF));
+					context.AppendInstruction(IRInstruction.And32, v2, v1, Operand.Constant32_FFFF);
+					context.AppendInstruction(IRInstruction.Or32, result, v2, Operand.CreateConstant32(~0xFFFF));
 					return true;
 				}
 
@@ -2640,17 +2422,17 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		// convert unsigned to an int4 (on the stack as int32)
 
 		var entry = PopStack(stack);
-		var result = AllocateVirtualRegister32();
+		var result = MethodCompiler.VirtualRegisters.Allocate32();
 
-		PushStack(stack, new StackEntry(StackType.Int32, result));
+		PushStack(stack, new StackEntry(result));
 
-		switch (entry.StackType)
+		switch (entry.PrimitiveType)
 		{
-			case StackType.Int32:
+			case PrimitiveType.Int32:
 				context.AppendInstruction(IRInstruction.Move32, result, entry.Operand);
 				return true;
 
-			case StackType.Int64:
+			case PrimitiveType.Int64:
 				context.AppendInstruction(IRInstruction.Truncate64x32, result, entry.Operand);
 				return true;
 
@@ -2664,17 +2446,17 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		// convert unsigned to an int64 (on the stack as int32)
 
 		var entry = PopStack(stack);
-		var result = AllocateVirtualRegister64();
+		var result = MethodCompiler.VirtualRegisters.Allocate64();
 
-		PushStack(stack, new StackEntry(StackType.Int64, result));
+		PushStack(stack, new StackEntry(result));
 
-		switch (entry.StackType)
+		switch (entry.PrimitiveType)
 		{
-			case StackType.Int32:
+			case PrimitiveType.Int32:
 				context.AppendInstruction(IRInstruction.SignExtend32x64, result, entry.Operand);
 				return true;
 
-			case StackType.Int64:
+			case PrimitiveType.Int64:
 				context.AppendInstruction(IRInstruction.Move64, result, entry.Operand);
 				return true;
 
@@ -2688,20 +2470,20 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		// convert unsigned to an unsigned int8 (on the stack as int32)
 
 		var entry = PopStack(stack);
-		var result = AllocateVirtualRegister32();
+		var result = MethodCompiler.VirtualRegisters.Allocate32();
 
-		PushStack(stack, new StackEntry(StackType.Int32, result));
+		PushStack(stack, new StackEntry(result));
 
-		switch (entry.StackType)
+		switch (entry.PrimitiveType)
 		{
-			case StackType.Int32:
-				context.AppendInstruction(IRInstruction.And32, result, entry.Operand, CreateConstant32(0xFF));
+			case PrimitiveType.Int32:
+				context.AppendInstruction(IRInstruction.And32, result, entry.Operand, Operand.Constant32_FF);
 				return true;
 
-			case StackType.Int64:
-				var v1 = AllocateVirtualRegister32();
+			case PrimitiveType.Int64:
+				var v1 = MethodCompiler.VirtualRegisters.Allocate32();
 				context.AppendInstruction(IRInstruction.Truncate64x32, v1, entry.Operand);
-				context.AppendInstruction(IRInstruction.And32, result, v1, CreateConstant32(0xFF));
+				context.AppendInstruction(IRInstruction.And32, result, v1, Operand.Constant32_FF);
 				return true;
 
 			default:
@@ -2714,20 +2496,20 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		// convert unsigned to an unsigned int8 (on the stack as int32)
 
 		var entry = PopStack(stack);
-		var result = AllocateVirtualRegister32();
+		var result = MethodCompiler.VirtualRegisters.Allocate32();
 
-		PushStack(stack, new StackEntry(StackType.Int32, result));
+		PushStack(stack, new StackEntry(result));
 
-		switch (entry.StackType)
+		switch (entry.PrimitiveType)
 		{
-			case StackType.Int32:
-				context.AppendInstruction(IRInstruction.And32, result, entry.Operand, CreateConstant32(0xFFFF));
+			case PrimitiveType.Int32:
+				context.AppendInstruction(IRInstruction.And32, result, entry.Operand, Operand.Constant32_FFFF);
 				return true;
 
-			case StackType.Int64:
-				var v1 = AllocateVirtualRegister32();
+			case PrimitiveType.Int64:
+				var v1 = MethodCompiler.VirtualRegisters.Allocate32();
 				context.AppendInstruction(IRInstruction.Truncate64x32, v1, entry.Operand);
-				context.AppendInstruction(IRInstruction.And32, result, v1, CreateConstant32(0xFFFF));
+				context.AppendInstruction(IRInstruction.And32, result, v1, Operand.Constant32_FFFF);
 				return true;
 
 			default:
@@ -2740,17 +2522,17 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		// convert unsigned to an unsigned int4 (on the stack as int32)
 
 		var entry = PopStack(stack);
-		var result = AllocateVirtualRegister32();
+		var result = MethodCompiler.VirtualRegisters.Allocate32();
 
-		PushStack(stack, new StackEntry(StackType.Int32, result));
+		PushStack(stack, new StackEntry(result));
 
-		switch (entry.StackType)
+		switch (entry.PrimitiveType)
 		{
-			case StackType.Int32:
+			case PrimitiveType.Int32:
 				context.AppendInstruction(IRInstruction.Move32, result, entry.Operand);
 				return true;
 
-			case StackType.Int64:
+			case PrimitiveType.Int64:
 				context.AppendInstruction(IRInstruction.Truncate64x32, result, entry.Operand);
 				return true;
 
@@ -2764,17 +2546,17 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		// convert unsigned to an unsigned int64 (on the stack as int32)
 
 		var entry = PopStack(stack);
-		var result = AllocateVirtualRegister64();
+		var result = MethodCompiler.VirtualRegisters.Allocate64();
 
-		PushStack(stack, new StackEntry(StackType.Int64, result));
+		PushStack(stack, new StackEntry(result));
 
-		switch (entry.StackType)
+		switch (entry.PrimitiveType)
 		{
-			case StackType.Int32:
+			case PrimitiveType.Int32:
 				context.AppendInstruction(IRInstruction.ZeroExtend32x64, result, entry.Operand);
 				return true;
 
-			case StackType.Int64:
+			case PrimitiveType.Int64:
 				context.AppendInstruction(IRInstruction.Move64, result, entry.Operand);
 				return true;
 
@@ -2789,32 +2571,32 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		if (Is32BitPlatform)
 		{
-			var result = AllocateVirtualRegister32();
-			PushStack(stack, new StackEntry(StackType.Int32, result));
+			var result = MethodCompiler.VirtualRegisters.Allocate32();
+			PushStack(stack, new StackEntry(result));
 
-			switch (entry.StackType)
+			switch (entry.PrimitiveType)
 			{
-				case StackType.Int32:
+				case PrimitiveType.Int32:
 					context.AppendInstruction(IRInstruction.CheckedConversionU32ToI32, result, entry.Operand);
 					return true;
 
-				case StackType.Int64:
+				case PrimitiveType.Int64:
 					context.AppendInstruction(IRInstruction.CheckedConversionU64ToI32, result, entry.Operand);
 					return true;
 			}
 		}
 		else
 		{
-			var result = AllocateVirtualRegister64();
-			PushStack(stack, new StackEntry(StackType.Int64, result));
+			var result = MethodCompiler.VirtualRegisters.Allocate64();
+			PushStack(stack, new StackEntry(result));
 
-			switch (entry.StackType)
+			switch (entry.PrimitiveType)
 			{
-				case StackType.Int32:
+				case PrimitiveType.Int32:
 					context.AppendInstruction(IRInstruction.ZeroExtend32x64, result, entry.Operand);
 					return true;
 
-				case StackType.Int64:
+				case PrimitiveType.Int64:
 					context.AppendInstruction(IRInstruction.CheckedConversionU64ToI64, result, entry.Operand);
 					return true;
 			}
@@ -2829,48 +2611,48 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		if (Is32BitPlatform)
 		{
-			var result = AllocateVirtualRegister32();
-			PushStack(stack, new StackEntry(StackType.Int32, result));
+			var result = MethodCompiler.VirtualRegisters.Allocate32();
+			PushStack(stack, new StackEntry(result));
 
-			switch (entry.StackType)
+			switch (entry.PrimitiveType)
 			{
-				case StackType.Int32:
+				case PrimitiveType.Int32:
 					context.AppendInstruction(IRInstruction.Move32, result, entry.Operand);
 					return true;
 
-				case StackType.Int64:
+				case PrimitiveType.Int64:
 					context.AppendInstruction(IRInstruction.CheckedConversionI64ToI32, result, entry.Operand);
 					return true;
 
-				case StackType.R4:
+				case PrimitiveType.R4:
 					context.AppendInstruction(IRInstruction.CheckedConversionR4ToI32, result, entry.Operand);
 					return true;
 
-				case StackType.R8:
+				case PrimitiveType.R8:
 					context.AppendInstruction(IRInstruction.CheckedConversionR8ToI32, result, entry.Operand);
 					return true;
 			}
 		}
 		else
 		{
-			var result = AllocateVirtualRegister64();
-			PushStack(stack, new StackEntry(StackType.Int64, result));
+			var result = MethodCompiler.VirtualRegisters.Allocate64();
+			PushStack(stack, new StackEntry(result));
 
-			switch (entry.StackType)
+			switch (entry.PrimitiveType)
 			{
-				case StackType.Int32:
+				case PrimitiveType.Int32:
 					context.AppendInstruction(IRInstruction.SignExtend32x64, result, entry.Operand);
 					return true;
 
-				case StackType.Int64:
+				case PrimitiveType.Int64:
 					context.AppendInstruction(IRInstruction.Move64, result, entry.Operand);
 					return true;
 
-				case StackType.R4:
+				case PrimitiveType.R4:
 					context.AppendInstruction(IRInstruction.CheckedConversionR4ToI64, result, entry.Operand);
 					return true;
 
-				case StackType.R8:
+				case PrimitiveType.R8:
 					context.AppendInstruction(IRInstruction.CheckedConversionR8ToI64, result, entry.Operand);
 					return true;
 			}
@@ -2885,32 +2667,32 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		if (Is32BitPlatform)
 		{
-			var result = AllocateVirtualRegister32();
-			PushStack(stack, new StackEntry(StackType.Int32, result));
+			var result = MethodCompiler.VirtualRegisters.Allocate32();
+			PushStack(stack, new StackEntry(result));
 
-			switch (entry.StackType)
+			switch (entry.PrimitiveType)
 			{
-				case StackType.Int32:
+				case PrimitiveType.Int32:
 					context.AppendInstruction(IRInstruction.CheckedConversionU32ToI32, result, entry.Operand);
 					return true;
 
-				case StackType.Int64:
+				case PrimitiveType.Int64:
 					context.AppendInstruction(IRInstruction.CheckedConversionU64ToI32, result, entry.Operand);
 					return true;
 			}
 		}
 		else
 		{
-			var result = AllocateVirtualRegister64();
-			PushStack(stack, new StackEntry(StackType.Int64, result));
+			var result = MethodCompiler.VirtualRegisters.Allocate64();
+			PushStack(stack, new StackEntry(result));
 
-			switch (entry.StackType)
+			switch (entry.PrimitiveType)
 			{
-				case StackType.Int32:
+				case PrimitiveType.Int32:
 					context.AppendInstruction(IRInstruction.ZeroExtend32x64, result, entry.Operand);
 					return true;
 
-				case StackType.Int64:
+				case PrimitiveType.Int64:
 					context.AppendInstruction(IRInstruction.CheckedConversionU64ToI64, result, entry.Operand);
 					return true;
 			}
@@ -2922,25 +2704,25 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	private bool ConvertI1WithOverflow(Context context, Stack<StackEntry> stack)
 	{
 		var entry = PopStack(stack);
-		var result = AllocateVirtualRegister32();
+		var result = MethodCompiler.VirtualRegisters.Allocate32();
 
-		PushStack(stack, new StackEntry(StackType.Int32, result));
+		PushStack(stack, new StackEntry(result));
 
-		switch (entry.StackType)
+		switch (entry.PrimitiveType)
 		{
-			case StackType.Int32:
+			case PrimitiveType.Int32:
 				context.AppendInstruction(IRInstruction.CheckedConversionI32ToI8, result, entry.Operand);
 				return true;
 
-			case StackType.Int64:
+			case PrimitiveType.Int64:
 				context.AppendInstruction(IRInstruction.CheckedConversionI64ToI8, result, entry.Operand);
 				return true;
 
-			case StackType.R4:
+			case PrimitiveType.R4:
 				context.AppendInstruction(IRInstruction.CheckedConversionR4ToI8, result, entry.Operand);
 				return true;
 
-			case StackType.R8:
+			case PrimitiveType.R8:
 				context.AppendInstruction(IRInstruction.CheckedConversionR8ToI8, result, entry.Operand);
 				return true;
 
@@ -2952,17 +2734,17 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	private bool ConvertUToI1WithOverflow(Context context, Stack<StackEntry> stack)
 	{
 		var entry = PopStack(stack);
-		var result = AllocateVirtualRegister32();
+		var result = MethodCompiler.VirtualRegisters.Allocate32();
 
-		PushStack(stack, new StackEntry(StackType.Int32, result));
+		PushStack(stack, new StackEntry(result));
 
-		switch (entry.StackType)
+		switch (entry.PrimitiveType)
 		{
-			case StackType.Int32:
+			case PrimitiveType.Int32:
 				context.AppendInstruction(IRInstruction.CheckedConversionU32ToI8, result, entry.Operand);
 				return true;
 
-			case StackType.Int64:
+			case PrimitiveType.Int64:
 				context.AppendInstruction(IRInstruction.CheckedConversionU64ToI8, result, entry.Operand);
 				return true;
 
@@ -2974,25 +2756,25 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	private bool ConvertI2WithOverflow(Context context, Stack<StackEntry> stack)
 	{
 		var entry = PopStack(stack);
-		var result = AllocateVirtualRegister32();
+		var result = MethodCompiler.VirtualRegisters.Allocate32();
 
-		PushStack(stack, new StackEntry(StackType.Int32, result));
+		PushStack(stack, new StackEntry(result));
 
-		switch (entry.StackType)
+		switch (entry.PrimitiveType)
 		{
-			case StackType.Int32:
+			case PrimitiveType.Int32:
 				context.AppendInstruction(IRInstruction.CheckedConversionI32ToI16, result, entry.Operand);
 				return true;
 
-			case StackType.Int64:
+			case PrimitiveType.Int64:
 				context.AppendInstruction(IRInstruction.CheckedConversionI64ToI16, result, entry.Operand);
 				return true;
 
-			case StackType.R4:
+			case PrimitiveType.R4:
 				context.AppendInstruction(IRInstruction.CheckedConversionR4ToI16, result, entry.Operand);
 				return true;
 
-			case StackType.R8:
+			case PrimitiveType.R8:
 				context.AppendInstruction(IRInstruction.CheckedConversionR8ToI16, result, entry.Operand);
 				return true;
 
@@ -3004,17 +2786,17 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	private bool ConvertUToI2WithOverflow(Context context, Stack<StackEntry> stack)
 	{
 		var entry = PopStack(stack);
-		var result = AllocateVirtualRegister32();
+		var result = MethodCompiler.VirtualRegisters.Allocate32();
 
-		PushStack(stack, new StackEntry(StackType.Int32, result));
+		PushStack(stack, new StackEntry(result));
 
-		switch (entry.StackType)
+		switch (entry.PrimitiveType)
 		{
-			case StackType.Int32:
+			case PrimitiveType.Int32:
 				context.AppendInstruction(IRInstruction.CheckedConversionU32ToI16, result, entry.Operand);
 				return true;
 
-			case StackType.Int64:
+			case PrimitiveType.Int64:
 				context.AppendInstruction(IRInstruction.CheckedConversionU64ToI16, result, entry.Operand);
 				return true;
 
@@ -3026,25 +2808,25 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	private bool ConvertI4WithOverflow(Context context, Stack<StackEntry> stack)
 	{
 		var entry = PopStack(stack);
-		var result = AllocateVirtualRegister32();
+		var result = MethodCompiler.VirtualRegisters.Allocate32();
 
-		PushStack(stack, new StackEntry(StackType.Int32, result));
+		PushStack(stack, new StackEntry(result));
 
-		switch (entry.StackType)
+		switch (entry.PrimitiveType)
 		{
-			case StackType.Int32:
+			case PrimitiveType.Int32:
 				context.AppendInstruction(IRInstruction.Move32, result, entry.Operand);
 				return true;
 
-			case StackType.Int64:
+			case PrimitiveType.Int64:
 				context.AppendInstruction(IRInstruction.CheckedConversionI64ToI32, result, entry.Operand);
 				return true;
 
-			case StackType.R4:
+			case PrimitiveType.R4:
 				context.AppendInstruction(IRInstruction.CheckedConversionR4ToI32, result, entry.Operand);
 				return true;
 
-			case StackType.R8:
+			case PrimitiveType.R8:
 				context.AppendInstruction(IRInstruction.CheckedConversionR8ToI32, result, entry.Operand);
 				return true;
 
@@ -3056,17 +2838,17 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	private bool ConvertUToI4WithOverflow(Context context, Stack<StackEntry> stack)
 	{
 		var entry = PopStack(stack);
-		var result = AllocateVirtualRegister32();
+		var result = MethodCompiler.VirtualRegisters.Allocate32();
 
-		PushStack(stack, new StackEntry(StackType.Int64, result));
+		PushStack(stack, new StackEntry(result));
 
-		switch (entry.StackType)
+		switch (entry.PrimitiveType)
 		{
-			case StackType.Int32:
+			case PrimitiveType.Int32:
 				context.AppendInstruction(IRInstruction.CheckedConversionU32ToI32, result, entry.Operand);
 				return true;
 
-			case StackType.Int64:
+			case PrimitiveType.Int64:
 				context.AppendInstruction(IRInstruction.CheckedConversionU64ToI32, result, entry.Operand);
 				return true;
 
@@ -3078,25 +2860,25 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	private bool ConvertI8WithOverflow(Context context, Stack<StackEntry> stack)
 	{
 		var entry = PopStack(stack);
-		var result = AllocateVirtualRegister64();
+		var result = MethodCompiler.VirtualRegisters.Allocate64();
 
-		PushStack(stack, new StackEntry(StackType.Int64, result));
+		PushStack(stack, new StackEntry(result));
 
-		switch (entry.StackType)
+		switch (entry.PrimitiveType)
 		{
-			case StackType.Int32:
+			case PrimitiveType.Int32:
 				context.AppendInstruction(IRInstruction.SignExtend32x64, result, entry.Operand);
 				return true;
 
-			case StackType.Int64:
+			case PrimitiveType.Int64:
 				context.AppendInstruction(IRInstruction.Move64, result, entry.Operand);
 				return true;
 
-			case StackType.R4:
+			case PrimitiveType.R4:
 				context.AppendInstruction(IRInstruction.CheckedConversionR4ToI64, result, entry.Operand);
 				return true;
 
-			case StackType.R8:
+			case PrimitiveType.R8:
 				context.AppendInstruction(IRInstruction.CheckedConversionR8ToI64, result, entry.Operand);
 				return true;
 
@@ -3108,17 +2890,17 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	private bool ConvertUToI8WithOverflow(Context context, Stack<StackEntry> stack)
 	{
 		var entry = PopStack(stack);
-		var result = AllocateVirtualRegister64();
+		var result = MethodCompiler.VirtualRegisters.Allocate64();
 
-		PushStack(stack, new StackEntry(StackType.Int64, result));
+		PushStack(stack, new StackEntry(result));
 
-		switch (entry.StackType)
+		switch (entry.PrimitiveType)
 		{
-			case StackType.Int32:
+			case PrimitiveType.Int32:
 				context.AppendInstruction(IRInstruction.ZeroExtend32x64, result, entry.Operand);
 				return true;
 
-			case StackType.Int64:
+			case PrimitiveType.Int64:
 				context.AppendInstruction(IRInstruction.CheckedConversionU64ToI64, result, entry.Operand);
 				return true;
 
@@ -3133,32 +2915,32 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		if (Is32BitPlatform)
 		{
-			var result = AllocateVirtualRegister32();
-			PushStack(stack, new StackEntry(StackType.Int32, result));
+			var result = MethodCompiler.VirtualRegisters.Allocate32();
+			PushStack(stack, new StackEntry(result));
 
-			switch (entry.StackType)
+			switch (entry.PrimitiveType)
 			{
-				case StackType.Int32:
+				case PrimitiveType.Int32:
 					context.AppendInstruction(IRInstruction.Move32, result, entry.Operand);
 					return true;
 
-				case StackType.Int64:
+				case PrimitiveType.Int64:
 					context.AppendInstruction(IRInstruction.CheckedConversionU64ToU32, result, entry.Operand);
 					return true;
 			}
 		}
 		else
 		{
-			var result = AllocateVirtualRegister64();
-			PushStack(stack, new StackEntry(StackType.Int64, result));
+			var result = MethodCompiler.VirtualRegisters.Allocate64();
+			PushStack(stack, new StackEntry(result));
 
-			switch (entry.StackType)
+			switch (entry.PrimitiveType)
 			{
-				case StackType.Int32:
+				case PrimitiveType.Int32:
 					context.AppendInstruction(IRInstruction.ZeroExtend32x64, result, entry.Operand);
 					return true;
 
-				case StackType.Int64:
+				case PrimitiveType.Int64:
 					context.AppendInstruction(IRInstruction.Move64, result, entry.Operand);
 					return true;
 			}
@@ -3170,25 +2952,25 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	private bool ConvertU1WithOverflow(Context context, Stack<StackEntry> stack)
 	{
 		var entry = PopStack(stack);
-		var result = AllocateVirtualRegister32();
+		var result = MethodCompiler.VirtualRegisters.Allocate32();
 
-		PushStack(stack, new StackEntry(StackType.Int32, result));
+		PushStack(stack, new StackEntry(result));
 
-		switch (entry.StackType)
+		switch (entry.PrimitiveType)
 		{
-			case StackType.Int32:
+			case PrimitiveType.Int32:
 				context.AppendInstruction(IRInstruction.CheckedConversionI32ToU8, result, entry.Operand);
 				return true;
 
-			case StackType.Int64:
+			case PrimitiveType.Int64:
 				context.AppendInstruction(IRInstruction.CheckedConversionI64ToU8, result, entry.Operand);
 				return true;
 
-			case StackType.R4:
+			case PrimitiveType.R4:
 				context.AppendInstruction(IRInstruction.CheckedConversionR4ToU8, result, entry.Operand);
 				return true;
 
-			case StackType.R8:
+			case PrimitiveType.R8:
 				context.AppendInstruction(IRInstruction.CheckedConversionR8ToU8, result, entry.Operand);
 				return true;
 
@@ -3200,17 +2982,17 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	private bool ConvertUToU1WithOverflow(Context context, Stack<StackEntry> stack)
 	{
 		var entry = PopStack(stack);
-		var result = AllocateVirtualRegister32();
+		var result = MethodCompiler.VirtualRegisters.Allocate32();
 
-		PushStack(stack, new StackEntry(StackType.Int32, result));
+		PushStack(stack, new StackEntry(result));
 
-		switch (entry.StackType)
+		switch (entry.PrimitiveType)
 		{
-			case StackType.Int32:
+			case PrimitiveType.Int32:
 				context.AppendInstruction(IRInstruction.CheckedConversionU32ToU8, result, entry.Operand);
 				return true;
 
-			case StackType.Int64:
+			case PrimitiveType.Int64:
 				context.AppendInstruction(IRInstruction.CheckedConversionU64ToU8, result, entry.Operand);
 				return true;
 
@@ -3222,25 +3004,25 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	private bool ConvertU2WithOverflow(Context context, Stack<StackEntry> stack)
 	{
 		var entry = PopStack(stack);
-		var result = AllocateVirtualRegister32();
+		var result = MethodCompiler.VirtualRegisters.Allocate32();
 
-		PushStack(stack, new StackEntry(StackType.Int32, result));
+		PushStack(stack, new StackEntry(result));
 
-		switch (entry.StackType)
+		switch (entry.PrimitiveType)
 		{
-			case StackType.Int32:
+			case PrimitiveType.Int32:
 				context.AppendInstruction(IRInstruction.CheckedConversionI32ToU16, result, entry.Operand);
 				return true;
 
-			case StackType.Int64:
+			case PrimitiveType.Int64:
 				context.AppendInstruction(IRInstruction.CheckedConversionI64ToU16, result, entry.Operand);
 				return true;
 
-			case StackType.R4:
+			case PrimitiveType.R4:
 				context.AppendInstruction(IRInstruction.CheckedConversionR4ToU16, result, entry.Operand);
 				return true;
 
-			case StackType.R8:
+			case PrimitiveType.R8:
 				context.AppendInstruction(IRInstruction.CheckedConversionR8ToU16, result, entry.Operand);
 				return true;
 
@@ -3252,17 +3034,17 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	private bool ConvertUToU2WithOverflow(Context context, Stack<StackEntry> stack)
 	{
 		var entry = PopStack(stack);
-		var result = AllocateVirtualRegister32();
+		var result = MethodCompiler.VirtualRegisters.Allocate32();
 
-		PushStack(stack, new StackEntry(StackType.Int32, result));
+		PushStack(stack, new StackEntry(result));
 
-		switch (entry.StackType)
+		switch (entry.PrimitiveType)
 		{
-			case StackType.Int32:
+			case PrimitiveType.Int32:
 				context.AppendInstruction(IRInstruction.CheckedConversionU32ToU16, result, entry.Operand);
 				return true;
 
-			case StackType.Int64:
+			case PrimitiveType.Int64:
 				context.AppendInstruction(IRInstruction.CheckedConversionU64ToU16, result, entry.Operand);
 				return true;
 
@@ -3274,25 +3056,25 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	private bool ConvertU4WithOverflow(Context context, Stack<StackEntry> stack)
 	{
 		var entry = PopStack(stack);
-		var result = AllocateVirtualRegister32();
+		var result = MethodCompiler.VirtualRegisters.Allocate32();
 
-		PushStack(stack, new StackEntry(StackType.Int32, result));
+		PushStack(stack, new StackEntry(result));
 
-		switch (entry.StackType)
+		switch (entry.PrimitiveType)
 		{
-			case StackType.Int32:
+			case PrimitiveType.Int32:
 				context.AppendInstruction(IRInstruction.CheckedConversionI32ToU32, result, entry.Operand);
 				return true;
 
-			case StackType.Int64:
+			case PrimitiveType.Int64:
 				context.AppendInstruction(IRInstruction.CheckedConversionI64ToU32, result, entry.Operand);
 				return true;
 
-			case StackType.R4:
+			case PrimitiveType.R4:
 				context.AppendInstruction(IRInstruction.CheckedConversionR4ToU32, result, entry.Operand);
 				return true;
 
-			case StackType.R8:
+			case PrimitiveType.R8:
 				context.AppendInstruction(IRInstruction.CheckedConversionR8ToU32, result, entry.Operand);
 				return true;
 
@@ -3304,17 +3086,17 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	private bool ConvertUToU4WithOverflow(Context context, Stack<StackEntry> stack)
 	{
 		var entry = PopStack(stack);
-		var result = AllocateVirtualRegister32();
+		var result = MethodCompiler.VirtualRegisters.Allocate32();
 
-		PushStack(stack, new StackEntry(StackType.Int64, result));
+		PushStack(stack, new StackEntry(result));
 
-		switch (entry.StackType)
+		switch (entry.PrimitiveType)
 		{
-			case StackType.Int32:
+			case PrimitiveType.Int32:
 				context.AppendInstruction(IRInstruction.Move32, result, entry.Operand);
 				return true;
 
-			case StackType.Int64:
+			case PrimitiveType.Int64:
 				context.AppendInstruction(IRInstruction.CheckedConversionU64ToU32, result, entry.Operand);
 				return true;
 
@@ -3326,25 +3108,25 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	private bool ConvertU8WithOverflow(Context context, Stack<StackEntry> stack)
 	{
 		var entry = PopStack(stack);
-		var result = AllocateVirtualRegister64();
+		var result = MethodCompiler.VirtualRegisters.Allocate64();
 
-		PushStack(stack, new StackEntry(StackType.Int64, result));
+		PushStack(stack, new StackEntry(result));
 
-		switch (entry.StackType)
+		switch (entry.PrimitiveType)
 		{
-			case StackType.Int32:
+			case PrimitiveType.Int32:
 				context.AppendInstruction(IRInstruction.CheckedConversionI32ToU64, result, entry.Operand);
 				return true;
 
-			case StackType.Int64:
+			case PrimitiveType.Int64:
 				context.AppendInstruction(IRInstruction.CheckedConversionI64ToU64, result, entry.Operand);
 				return true;
 
-			case StackType.R4:
+			case PrimitiveType.R4:
 				context.AppendInstruction(IRInstruction.CheckedConversionR4ToU64, result, entry.Operand);
 				return true;
 
-			case StackType.R8:
+			case PrimitiveType.R8:
 				context.AppendInstruction(IRInstruction.CheckedConversionR8ToU64, result, entry.Operand);
 				return true;
 
@@ -3356,17 +3138,17 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	private bool ConvertUToU8WithOverflow(Context context, Stack<StackEntry> stack)
 	{
 		var entry = PopStack(stack);
-		var result = AllocateVirtualRegister32();
+		var result = MethodCompiler.VirtualRegisters.Allocate32();
 
-		PushStack(stack, new StackEntry(StackType.Int32, result));
+		PushStack(stack, new StackEntry(result));
 
-		switch (entry.StackType)
+		switch (entry.PrimitiveType)
 		{
-			case StackType.Int32:
+			case PrimitiveType.Int32:
 				context.AppendInstruction(IRInstruction.ZeroExtend32x64, result, entry.Operand);
 				return true;
 
-			case StackType.Int64:
+			case PrimitiveType.Int64:
 				context.AppendInstruction(IRInstruction.Move64, result, entry.Operand);
 				return true;
 
@@ -3380,7 +3162,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var source = PopStack(stack);
 		var destination = PopStack(stack);
 
-		if ((source.StackType == StackType.Int32 || source.StackType == StackType.Int64) && (destination.StackType == StackType.Int32 || destination.StackType == StackType.Int64))
+		if ((source.PrimitiveType == PrimitiveType.Int32 || source.PrimitiveType == PrimitiveType.Int64) && (destination.PrimitiveType == PrimitiveType.Int32 || destination.PrimitiveType == PrimitiveType.Int64))
 		{
 			context.AppendInstruction(IRInstruction.MemoryCopy, null, source.Operand, destination.Operand);
 			return true;
@@ -3404,57 +3186,57 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var entry1 = PopStack(stack);
 		var entry2 = PopStack(stack);
 
-		switch (entry1.StackType)
+		switch (entry1.PrimitiveType)
 		{
-			case StackType.R4 when entry2.StackType == StackType.R4 && entry1.Operand.IsR4:
+			case PrimitiveType.R4 when entry2.PrimitiveType == PrimitiveType.R4 && entry1.Operand.IsR4:
 				{
-					var result = AllocateVirtualRegister(TypeSystem.BuiltIn.R4);
+					var result = MethodCompiler.VirtualRegisters.AllocateR4();
 					context.AppendInstruction(IRInstruction.DivR4, result, entry2.Operand, entry1.Operand);
-					PushStack(stack, new StackEntry(StackType.R4, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.R8 when entry2.StackType == StackType.R8 && entry1.Operand.IsR8:
+			case PrimitiveType.R8 when entry2.PrimitiveType == PrimitiveType.R8 && entry1.Operand.IsR8:
 				{
-					var result = AllocateVirtualRegisterR8();
+					var result = MethodCompiler.VirtualRegisters.AllocateR8();
 					context.AppendInstruction(IRInstruction.DivR8, result, entry2.Operand, entry1.Operand);
-					PushStack(stack, new StackEntry(StackType.R8, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int32 when entry2.StackType == StackType.Int32:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.Int32:
 				{
-					var result = AllocateVirtualRegister32();
+					var result = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.DivSigned32, result, entry2.Operand, entry1.Operand);
-					PushStack(stack, new StackEntry(StackType.Int32, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int64 when entry2.StackType == StackType.Int64:
+			case PrimitiveType.Int64 when entry2.PrimitiveType == PrimitiveType.Int64:
 				{
-					var result = AllocateVirtualRegister64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.DivSigned64, result, entry2.Operand, entry1.Operand);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int32 when entry2.StackType == StackType.Int64:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.Int64:
 				{
-					var v1 = AllocateVirtualRegister64();
-					var result = AllocateVirtualRegister64();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.SignExtend32x64, v1, entry1.Operand);
 					context.AppendInstruction(IRInstruction.DivSigned64, result, v1, entry2.Operand);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int64 when entry2.StackType == StackType.Int32:
+			case PrimitiveType.Int64 when entry2.PrimitiveType == PrimitiveType.Int32:
 				{
-					var v1 = AllocateVirtualRegister64();
-					var result = AllocateVirtualRegister64();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.SignExtend32x64, v1, entry2.Operand);
 					context.AppendInstruction(IRInstruction.DivSigned64, result, entry1.Operand, v1);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
@@ -3468,57 +3250,57 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var entry1 = PopStack(stack);
 		var entry2 = PopStack(stack);
 
-		switch (entry1.StackType)
+		switch (entry1.PrimitiveType)
 		{
-			case StackType.R4 when entry2.StackType == StackType.R4 && entry1.Operand.IsR4:
+			case PrimitiveType.R4 when entry2.PrimitiveType == PrimitiveType.R4 && entry1.Operand.IsR4:
 				{
-					var result = AllocateVirtualRegister(TypeSystem.BuiltIn.R4);
+					var result = MethodCompiler.VirtualRegisters.AllocateR4();
 					context.AppendInstruction(IRInstruction.DivR4, result, entry2.Operand, entry1.Operand);
-					PushStack(stack, new StackEntry(StackType.R4, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.R8 when entry2.StackType == StackType.R8 && entry1.Operand.IsR8:
+			case PrimitiveType.R8 when entry2.PrimitiveType == PrimitiveType.R8 && entry1.Operand.IsR8:
 				{
-					var result = AllocateVirtualRegisterR8();
+					var result = MethodCompiler.VirtualRegisters.AllocateR8();
 					context.AppendInstruction(IRInstruction.DivR8, result, entry2.Operand, entry1.Operand);
-					PushStack(stack, new StackEntry(StackType.R8, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int32 when entry2.StackType == StackType.Int32:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.Int32:
 				{
-					var result = AllocateVirtualRegister32();
+					var result = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.DivUnsigned32, result, entry2.Operand, entry1.Operand);
-					PushStack(stack, new StackEntry(StackType.Int32, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int64 when entry2.StackType == StackType.Int64:
+			case PrimitiveType.Int64 when entry2.PrimitiveType == PrimitiveType.Int64:
 				{
-					var result = AllocateVirtualRegister64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.DivUnsigned64, result, entry2.Operand, entry1.Operand);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int32 when entry2.StackType == StackType.Int64:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.Int64:
 				{
-					var v1 = AllocateVirtualRegister64();
-					var result = AllocateVirtualRegister64();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.SignExtend32x64, v1, entry1.Operand);
 					context.AppendInstruction(IRInstruction.DivUnsigned64, result, v1, entry2.Operand);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int64 when entry2.StackType == StackType.Int32:
+			case PrimitiveType.Int64 when entry2.PrimitiveType == PrimitiveType.Int32:
 				{
-					var v1 = AllocateVirtualRegister64();
-					var result = AllocateVirtualRegister64();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.SignExtend32x64, v1, entry2.Operand);
 					context.AppendInstruction(IRInstruction.DivUnsigned64, result, entry1.Operand, v1);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
@@ -3564,12 +3346,11 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		if (type.IsReferenceType)
 		{
-			context.AppendInstruction(IRInstruction.StoreObject, null, entry.Operand, ConstantZero, Operand.GetNullObject(TypeSystem));
-			context.MosaType = type;
+			context.AppendInstruction(IRInstruction.StoreObject, null, entry.Operand, ConstantZero, Operand.NullObject);
 		}
 		else
 		{
-			var size = CreateConstant32(TypeLayout.GetTypeSize(type));
+			var size = Operand.CreateConstant32(TypeLayout.GetTypeLayoutSize(type));
 			context.AppendInstruction(IRInstruction.MemorySet, null, entry.Operand, ConstantZero, size);
 		}
 
@@ -3581,7 +3362,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var entry = PopStack(stack);
 		var type = (MosaType)instruction.Operand;
 
-		var result = AllocateVirtualRegisterObject();
+		var result = MethodCompiler.VirtualRegisters.AllocateObject();
 
 		// TODO: non-nullable ValueTypes
 
@@ -3592,10 +3373,10 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		else
 		{
 			var slot = TypeLayout.GetInterfaceSlot(type);
-			context.AppendInstruction(IRInstruction.IsInstanceOfInterfaceType, result, CreateConstant32(slot), entry.Operand);
+			context.AppendInstruction(IRInstruction.IsInstanceOfInterfaceType, result, Operand.CreateConstant32(slot), entry.Operand);
 		}
 
-		PushStack(stack, new StackEntry(StackType.Object, result));
+		PushStack(stack, new StackEntry(result));
 
 		return true;
 	}
@@ -3603,30 +3384,24 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	private bool Ldarg(Context context, Stack<StackEntry> stack, int index)
 	{
 		var parameter = MethodCompiler.Parameters[index];
-		var type = parameter.Type;
-		var underlyingType = GetUnderlyingType(type);
-		var isPrimitive = IsPrimitive(underlyingType);
+		var isPrimitive = parameter.IsPrimitive;
 
 		if (isPrimitive)
 		{
-			var elementType = GetElementType(underlyingType);
-			var stacktype = GetStackType(elementType);
-			var result = Allocate(stacktype);
+			var loadInstruction = MethodCompiler.GetLoadParamInstruction(parameter.Element);
+			var result = MethodCompiler.VirtualRegisters.Allocate(parameter);
 
-			var loadInstruction = GetLoadParamInstruction(elementType);
 			context.AppendInstruction(loadInstruction, result, parameter);
 
-			PushStack(stack, new StackEntry(stacktype, result));
+			PushStack(stack, new StackEntry(result));
 		}
 		else
 		{
-			var stacktype = GetStackType(type);
-			var result = Allocate(stacktype, type);
+			var result = MethodCompiler.LocalStack.Allocate(parameter);
 
 			context.AppendInstruction(IRInstruction.LoadParamCompound, result, parameter);
-			context.MosaType = type;
 
-			PushStack(stack, new StackEntry(StackType.ValueType, result, type));
+			PushStack(stack, new StackEntry(result));
 		}
 
 		return true;
@@ -3635,11 +3410,11 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	private bool Ldarga(Context context, Stack<StackEntry> stack, int index)
 	{
 		var parameter = MethodCompiler.Parameters[index];
-		var result = AllocateVirtualRegisterManagedPointer();
+		var result = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
 
 		context.AppendInstruction(IRInstruction.AddressOf, result, parameter);
 
-		PushStack(stack, new StackEntry(StackType.ManagedPointer, result));
+		PushStack(stack, new StackEntry(result));
 
 		return true;
 	}
@@ -3654,32 +3429,36 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		var type = (MosaType)instruction.Operand;
 
-		var underlyingType = GetUnderlyingType(type);
-		var isPrimitive = IsPrimitive(underlyingType);
+		var underlyingType = MosaTypeLayout.GetUnderlyingType(type);
+		var elementType = MethodCompiler.GetElementType(underlyingType);
+		var isPrimitive = MethodCompiler.IsPrimitive(elementType);
+
+		var size = isPrimitive
+			? MethodCompiler.GetSize(elementType)
+			: TypeLayout.GetTypeLayoutSize(underlyingType);
 
 		context.AppendInstruction(IRInstruction.CheckArrayBounds, null, array, index);
 
-		var elementOffset = CalculateArrayElementOffset(context, type, index);
+		var elementOffset = CalculateArrayElementOffset(context, size, index);
 		var totalElementOffset = CalculateTotalArrayOffset(context, elementOffset);
 
 		if (isPrimitive)
 		{
-			var stacktype = GetStackType(underlyingType);
-			var result = Allocate(stacktype);
-			var elementType = GetElementType(underlyingType);
-			var loadInstruction = GetLoadInstruction(elementType);
+			var stacktype = MethodCompiler.GetPrimitiveType(underlyingType);
+			var result = MethodCompiler.VirtualRegisters.Allocate(stacktype);
+			var loadInstruction = MethodCompiler.GetLoadInstruction(elementType);
 
 			context.AppendInstruction(loadInstruction, result, array, totalElementOffset);
 
-			PushStack(stack, new StackEntry(stacktype, result));
+			PushStack(stack, new StackEntry(result));
 		}
 		else
 		{
-			var result = Allocate(StackType.ValueType, type);
+			var result = MethodCompiler.LocalStack.Allocate(PrimitiveType.ValueType, false, type);
 
 			context.AppendInstruction(IRInstruction.LoadCompound, result, array, totalElementOffset);
 
-			PushStack(stack, new StackEntry(StackType.ValueType, result, type));
+			PushStack(stack, new StackEntry(result));
 		}
 
 		return true;
@@ -3693,18 +3472,16 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var array = entry2.Operand;
 		var index = entry1.Operand;
 
-		//var underlyingType = GetUnderlyingType(type.ElementType);
-
 		context.AppendInstruction(IRInstruction.CheckArrayBounds, null, array, index);
 
-		var elementOffset = CalculateArrayElementOffset(context, GetSize(elementType), index);
+		var elementOffset = CalculateArrayElementOffset(context, MethodCompiler.GetSize(elementType), index);
 		var totalElementOffset = CalculateTotalArrayOffset(context, elementOffset);
 
-		var stacktype = GetStackType(elementType);
-		var result = Allocate(stacktype);
-		PushStack(stack, new StackEntry(stacktype, result));
+		var stacktype = MethodCompiler.GetPrimitiveType(elementType);
+		var result = MethodCompiler.VirtualRegisters.Allocate(stacktype);
+		PushStack(stack, new StackEntry(result));
 
-		var loadInstruction = GetLoadInstruction(elementType);
+		var loadInstruction = MethodCompiler.GetLoadInstruction(elementType);
 
 		context.AppendInstruction(loadInstruction, result, array, totalElementOffset);
 
@@ -3721,19 +3498,24 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		var type = (MosaType)instruction.Operand;
 
-		//var underlyingType = GetUnderlyingType(type);
+		var result = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
 
-		var result = Allocate(StackType.ManagedPointer);
-
-		// Array bounds check
 		context.AppendInstruction(IRInstruction.CheckArrayBounds, null, array, index);
 
-		var elementOffset = CalculateArrayElementOffset(context, type, index);
+		var underlyingType = MosaTypeLayout.GetUnderlyingType(type);
+		var elementType = MethodCompiler.GetElementType(underlyingType);
+		var isPrimitive = MethodCompiler.IsPrimitive(elementType);
+
+		var size = isPrimitive
+			? MethodCompiler.GetSize(elementType)
+			: TypeLayout.GetTypeLayoutSize(underlyingType);
+
+		var elementOffset = CalculateArrayElementOffset(context, size, index);
 		var totalElementOffset = CalculateTotalArrayOffset(context, elementOffset);
 
-		context.AppendInstruction(Is32BitPlatform ? (BaseIRInstruction)IRInstruction.Add32 : IRInstruction.Add64, result, array, totalElementOffset);
+		context.AppendInstruction(Is32BitPlatform ? IRInstruction.Add32 : IRInstruction.Add64, result, array, totalElementOffset);
 
-		PushStack(stack, new StackEntry(StackType.ManagedPointer, result));
+		PushStack(stack, new StackEntry(result));
 
 		return true;
 	}
@@ -3746,53 +3528,53 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var offset = TypeLayout.GetFieldOffset(field);
 		var fieldType = field.FieldType;
 
-		var fieldUnderlyingType = GetUnderlyingType(fieldType);
-		var fieldStacktype = GetStackTypeDefaultValueType(fieldUnderlyingType);
-		var isFieldPrimitive = IsPrimitive(fieldUnderlyingType);
+		var fieldUnderlyingType = MosaTypeLayout.GetUnderlyingType(fieldType);
+		var fieldStacktype = MethodCompiler.GetPrimitiveType(fieldUnderlyingType);
+		var isFieldPrimitive = MosaTypeLayout.IsPrimitive(fieldUnderlyingType);
 
-		var result = Allocate(fieldStacktype, isFieldPrimitive ? fieldUnderlyingType : fieldType);
+		//var result = MethodCompiler.AllocateVirtualRegisterOrLocalStack(fieldStacktype, isFieldPrimitive ? fieldUnderlyingType : fieldType);
 
-		PushStack(stack, new StackEntry(fieldStacktype, result, result.Type));
+		var stackEntry = CreateStackEntry(fieldType); // new StackEntry(fieldStacktype, result, result.Type);
+		var result = stackEntry.Operand;
+
+		PushStack(stack, stackEntry);
 
 		var operand = entry.Operand;
 
-		if (entry.StackType == StackType.ValueType)
+		if (entry.PrimitiveType == PrimitiveType.ValueType)
 		{
-			var address = AllocateVirtualRegisterManagedPointer();
+			var address = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
 
 			context.AppendInstruction(IRInstruction.AddressOf, address, operand);
 
 			operand = address;
 		}
 
-		var classUnderlyingType = GetUnderlyingType(field.DeclaringType);
-		//var classStacktype = GetStackTypeDefaultValueType(classUnderlyingType);
-		var isClassPrimitive = IsPrimitive(classUnderlyingType);
+		var classUnderlyingType = MosaTypeLayout.GetUnderlyingType(field.DeclaringType);
+		var isClassPrimitive = MosaTypeLayout.IsPrimitive(classUnderlyingType);
 
 		var isPointer = operand.IsManagedPointer || operand.Type == TypeSystem.BuiltIn.I || operand.Type == TypeSystem.BuiltIn.U;
-		//var isMove = MosaTypeLayout.IsUnderlyingPrimitive(operand.Type) && !result.IsOnStack && !operand.IsReferenceType && !isPointer;
 
 		if (isFieldPrimitive && isClassPrimitive && field.DeclaringType.IsValueType && !isPointer)
 		{
-			//&& (entry.StackType is StackType.ManagedPointer or StackType.Int32 or StackType.Int64)
 			Debug.Assert(offset == 0);
 
-			var elementType = GetElementType(fieldStacktype);
-			var moveInstruction = GetMoveInstruction(elementType);
+			var elementType = MethodCompiler.GetElementType(fieldStacktype);
+			var moveInstruction = MethodCompiler.GetMoveInstruction(elementType);
 
 			context.AppendInstruction(moveInstruction, result, entry.Operand);
 
 			return true;
 		}
 
-		var fixedOffset = CreateConstant32(offset);
+		var fixedOffset = Operand.CreateConstant32(offset);
 
-		if (fieldStacktype == StackType.ValueType)
+		if (fieldStacktype == PrimitiveType.ValueType)
 		{
 			if (isFieldPrimitive)
 			{
-				var elementType = GetElementType(fieldStacktype);
-				var loadInstruction = GetLoadInstruction(elementType);
+				var elementType = MethodCompiler.GetElementType(fieldStacktype);
+				var loadInstruction = MethodCompiler.GetLoadInstruction(elementType);
 
 				context.AppendInstruction(loadInstruction, result, operand, fixedOffset);
 			}
@@ -3815,34 +3597,31 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 	private bool Ldtoken(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
 	{
-		var move = GetMoveInstruction(ElementType.I);
+		var move = MethodCompiler.GetMoveInstruction(ElementType.I);
 
 		Operand source = null;
 
 		if (instruction.Operand is MosaType)
 		{
 			var type = (MosaType)instruction.Operand;
-			source = Operand.CreateUnmanagedSymbolPointer(Metadata.TypeDefinition + type.FullName, TypeSystem);
+			source = Operand.CreateLabel(Metadata.TypeDefinition + type.FullName, Is32BitPlatform);
 		}
 		else if (instruction.Operand is MosaMethod)
 		{
 			var method = (MosaMethod)instruction.Operand;
-			source = Operand.CreateUnmanagedSymbolPointer(Metadata.MethodDefinition + method.FullName, TypeSystem);
+			source = Operand.CreateLabel(Metadata.MethodDefinition + method.FullName, Is32BitPlatform);
 		}
 		else if (instruction.Operand is MosaField)
 		{
 			var field = (MosaField)instruction.Operand;
-			source = Operand.CreateUnmanagedSymbolPointer(Metadata.FieldDefinition + field.FullName, TypeSystem);
-			MethodScanner.AccessedField(context.MosaField);
+			source = Operand.CreateLabel(Metadata.FieldDefinition + field.FullName, Is32BitPlatform);
+			MethodScanner.AccessedField(field);
 		}
 
-		var runtimeFieldHandle = TypeSystem.GetTypeByName("System.RuntimeFieldHandle"); // FUTURE: cache this
-
-		var result = AllocateVirtualRegister(runtimeFieldHandle);
+		var result = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
 		context.AppendInstruction(move, result, source);
 
-		//PushStack(stack, new StackEntry(Is32BitPlatform ? StackType.Int32 : StackType.Int64, result));
-		PushStack(stack, new StackEntry(StackType.ValueType, result));
+		PushStack(stack, new StackEntry(result));
 
 		return true;
 	}
@@ -3858,7 +3637,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var exceptionHandler = FindImmediateExceptionHandler(headerBlock.Label);
 		var inTry = exceptionHandler.IsLabelWithinTry(headerBlock.Label);
 
-		var endInstruction = inTry ? (BaseInstruction)IRInstruction.TryEnd : IRInstruction.ExceptionEnd;
+		var endInstruction = inTry ? IRInstruction.TryEnd : IRInstruction.ExceptionEnd;
 
 		context.AppendInstruction(endInstruction, leaveBlock);  // added header block
 
@@ -3874,25 +3653,25 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		MethodScanner.AccessedField(field);
 
 		var offset = TypeLayout.GetFieldOffset(field);
-		var fieldPtr = field.FieldType.ToManagedPointer(); // FUTURE: AllocateVirtualRegisterManagedPointer();
+		//var fieldPtr = field.FieldType.ToManagedPointer(); // FUTURE: MethodCompiler.VirtualRegisters.AllocateManagedPointer();
 
-		var result = Allocate(StackType.ManagedPointer, fieldPtr);
+		var result = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
 
 		if (offset == 0)
 		{
-			var move = GetMoveInstruction(ElementType.I);
+			var move = MethodCompiler.GetMoveInstruction(ElementType.I);
 
 			context.AppendInstruction(move, result, entry.Operand);
 		}
 		else
 		{
 			if (Is32BitPlatform)
-				context.AppendInstruction(IRInstruction.Add32, result, entry.Operand, CreateConstant32(offset));
+				context.AppendInstruction(IRInstruction.Add32, result, entry.Operand, Operand.CreateConstant32(offset));
 			else
-				context.AppendInstruction(IRInstruction.Add64, result, entry.Operand, CreateConstant64(offset));
+				context.AppendInstruction(IRInstruction.Add64, result, entry.Operand, Operand.CreateConstant64(offset));
 		}
 
-		PushStack(stack, new StackEntry(StackType.ManagedPointer, result));
+		PushStack(stack, new StackEntry(result));
 
 		return true;
 	}
@@ -3903,14 +3682,14 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		var functionPointer = TypeSystem.ToFnPtr(method.Signature);
 
-		var stacktype = GetStackType(functionPointer);
-		var result = Allocate(stacktype);
+		var stacktype = MethodCompiler.GetPrimitiveType(functionPointer);
+		var result = MethodCompiler.VirtualRegisters.Allocate(stacktype);
 
-		var move = GetMoveInstruction(ElementType.I);
+		var move = MethodCompiler.GetMoveInstruction(ElementType.I);
 
-		context.AppendInstruction(move, result, Operand.CreateSymbolFromMethod(method, TypeSystem));
+		context.AppendInstruction(move, result, Operand.CreateLabel(method, Is32BitPlatform));
 
-		PushStack(stack, new StackEntry(stacktype, result));
+		PushStack(stack, new StackEntry(result));
 
 		MethodScanner.MethodInvoked(method, Method);
 
@@ -3930,12 +3709,12 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	{
 		var entry = PopStack(stack);
 
-		var stacktype = GetStackType(elementType);
-		var result = Allocate(stacktype);
+		var stacktype = MethodCompiler.GetPrimitiveType(elementType);
+		var result = MethodCompiler.VirtualRegisters.Allocate(stacktype);
 
-		PushStack(stack, new StackEntry(stacktype, result));
+		PushStack(stack, new StackEntry(result));
 
-		var loadInstruction = GetLoadInstruction(elementType);
+		var loadInstruction = MethodCompiler.GetLoadInstruction(elementType);
 		context.AppendInstruction(loadInstruction, result, entry.Operand, ConstantZero);
 
 		return true;
@@ -3945,20 +3724,20 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	{
 		var entry = PopStack(stack);
 
-		if (entry.StackType == StackType.Object)
+		if (entry.PrimitiveType == PrimitiveType.Object)
 		{
 			if (Is32BitPlatform)
 			{
-				var result = AllocateVirtualRegister32();
-				context.AppendInstruction(IRInstruction.Load32, result, entry.Operand, ConstantZero);
-				PushStack(stack, new StackEntry(StackType.Int32, result));
+				var result = MethodCompiler.VirtualRegisters.Allocate32();
+				context.AppendInstruction(IRInstruction.Load32, result, entry.Operand, Operand.Constant32_0);
+				PushStack(stack, new StackEntry(result));
 				return true;
 			}
 			else
 			{
-				var result = AllocateVirtualRegister64();
-				context.AppendInstruction(IRInstruction.Load64, result, entry.Operand, ConstantZero);
-				PushStack(stack, new StackEntry(StackType.Int64, result));
+				var result = MethodCompiler.VirtualRegisters.Allocate64();
+				context.AppendInstruction(IRInstruction.Load64, result, entry.Operand, Operand.Constant64_0);
+				PushStack(stack, new StackEntry(result));
 				return true;
 			}
 		}
@@ -3968,37 +3747,32 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 	private bool Ldloc(Context context, Stack<StackEntry> stack, int index)
 	{
-		var stacktype = LocalStackType[index];
 		var local = LocalStack[index];
 
-		if (stacktype == StackType.ValueType)
+		if (local.Primitive == PrimitiveType.ValueType)
 		{
-			var result2 = AddStackLocal(local.Type);
+			var result2 = MethodCompiler.LocalStack.Allocate(local);
 			context.AppendInstruction(IRInstruction.MoveCompound, result2, local);
-
-			PushStack(stack, new StackEntry(StackType.ValueType, result2, local.Type));
-
+			PushStack(stack, new StackEntry(result2));
 			return true;
 		}
 
-		var resultType = GetType(stacktype);
-		var result = AllocateVirtualRegister(resultType);
+		var stacktype = LocalPrimitiveType[index];
+		var result = MethodCompiler.VirtualRegisters.Allocate(stacktype);
 
-		PushStack(stack, new StackEntry(stacktype, result));
+		PushStack(stack, new StackEntry(result));
 
 		var elementType = LocalElementType[index];
 
 		if (local.IsVirtualRegister)
 		{
-			var move = GetMoveInstruction(elementType);
-
+			var move = MethodCompiler.GetMoveInstruction(elementType);
 			context.AppendInstruction(move, result, local);
 			return true;
 		}
 		else
 		{
-			var loadInstruction = GetLoadInstruction(elementType);
-
+			var loadInstruction = MethodCompiler.GetLoadInstruction(elementType);
 			context.AppendInstruction(loadInstruction, result, StackFrame, local);
 			return true;
 		}
@@ -4010,9 +3784,9 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		var local = LocalStack[index];
 
-		var result = AllocateVirtualRegisterManagedPointer();
+		var result = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
 
-		PushStack(stack, new StackEntry(StackType.ManagedPointer, result));
+		PushStack(stack, new StackEntry(result));
 
 		context.AppendInstruction(IRInstruction.AddressOf, result, local);
 
@@ -4025,28 +3799,28 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var address = entry.Operand;
 		var type = (MosaType)instruction.Operand;
 
-		var underlyingType = GetUnderlyingType(type);
-		var isPrimitive = IsPrimitive(underlyingType);
+		var underlyingType = MosaTypeLayout.GetUnderlyingType(type);
+		var isPrimitive = MosaTypeLayout.IsPrimitive(underlyingType);
 
 		if (isPrimitive)
 		{
-			var elementType = GetElementType(underlyingType);
-			var stacktype = GetStackType(elementType);
-			var result = Allocate(stacktype);
+			var elementType = MethodCompiler.GetElementType(underlyingType);
+			var stacktype = MethodCompiler.GetPrimitiveType(elementType);
+			var result = MethodCompiler.VirtualRegisters.Allocate(stacktype);
 
-			PushStack(stack, new StackEntry(stacktype, result));
+			PushStack(stack, new StackEntry(result));
 
-			var loadInstruction = GetLoadInstruction(elementType);
+			var loadInstruction = MethodCompiler.GetLoadInstruction(elementType);
 			context.AppendInstruction(loadInstruction, result, address, ConstantZero);
 
 			return true; // Ldind(context, stack, elementType);
 		}
 		else
 		{
-			var result = Allocate(StackType.ValueType, type);
+			var result = MethodCompiler.LocalStack.Allocate(PrimitiveType.ValueType, false, type);
 
 			context.AppendInstruction(IRInstruction.LoadCompound, result, address, ConstantZero);
-			PushStack(stack, new StackEntry(StackType.ValueType, result, type));
+			PushStack(stack, new StackEntry(result));
 			return true;
 		}
 	}
@@ -4056,38 +3830,42 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var field = (MosaField)instruction.Operand;
 		var type = field.FieldType;
 
-		var underlyingType = GetUnderlyingType(type);
-		var isPrimitive = IsPrimitive(underlyingType);
+		var underlyingType = MosaTypeLayout.GetUnderlyingType(type);
+		var isPrimitive = MosaTypeLayout.IsPrimitive(underlyingType);
 
-		var fieldOperand = Operand.CreateStaticField(field, TypeSystem);
+		var fieldOperand = Operand.CreateStaticField(
+			underlyingType.IsReferenceType
+				? PrimitiveType.Object
+				: PrimitiveType.ManagedPointer,
+			field);
 
 		if (isPrimitive)
 		{
-			var elementType = GetElementType(underlyingType);
-			var stacktype = GetStackType(elementType);
-			var result = Allocate(stacktype);
+			var elementType = MethodCompiler.GetElementType(underlyingType);
+			var stacktype = MethodCompiler.GetPrimitiveType(elementType);
+			var result = MethodCompiler.VirtualRegisters.Allocate(stacktype);
 
-			PushStack(stack, new StackEntry(stacktype, result));
+			PushStack(stack, new StackEntry(result));
 
 			if (type.IsReferenceType)
 			{
 				var symbol = GetStaticSymbol(field);
-				var staticReference = Operand.CreateLabel(TypeSystem.BuiltIn.Object, symbol.Name);
+				var staticReference = Operand.CreateLabel(symbol.Name, Is32BitPlatform);
 
 				context.AppendInstruction(IRInstruction.LoadObject, result, staticReference, ConstantZero);
 			}
 			else
 			{
-				var loadInstruction = GetLoadInstruction(elementType);
+				var loadInstruction = MethodCompiler.GetLoadInstruction(elementType);
 
 				context.AppendInstruction(loadInstruction, result, fieldOperand, ConstantZero);
 			}
 		}
 		else
 		{
-			var result = AllocateVirtualRegister(type);
+			var result = MethodCompiler.LocalStack.Allocate(PrimitiveType.ValueType, false, type);
 			context.AppendInstruction(IRInstruction.LoadCompound, result, fieldOperand, ConstantZero);
-			PushStack(stack, new StackEntry(StackType.ValueType, result, type));
+			PushStack(stack, new StackEntry(result));
 		}
 
 		return true;
@@ -4097,12 +3875,12 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	{
 		var field = (MosaField)instruction.Operand;
 
-		var result = AllocateVirtualRegisterManagedPointer();
-		var fieldOperand = Operand.CreateStaticField(field, TypeSystem);
+		var result = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
+		var fieldOperand = Operand.CreateStaticField(PrimitiveType.ManagedPointer, field);
 
 		context.AppendInstruction(IRInstruction.AddressOf, result, fieldOperand);
 
-		PushStack(stack, new StackEntry(StackType.ManagedPointer, result));   // FIXME: transient pointer or unmanaged pointer
+		PushStack(stack, new StackEntry(result));   // FIXME: transient pointer or unmanaged pointer
 
 		MethodScanner.AccessedField(field);
 
@@ -4111,18 +3889,18 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 	private bool Ldstr(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
 	{
-		var result = AllocateVirtualRegister(TypeSystem.BuiltIn.String);
+		var result = MethodCompiler.VirtualRegisters.AllocateObject();
 
 		var token = (uint)instruction.Operand;
 
 		var stringdata = TypeSystem.LookupUserString(Method.Module, token);
 		var symbolName = EmitString(stringdata, token);
 
-		var symbol = Operand.CreateStringSymbol(TypeSystem.BuiltIn.String, symbolName, MethodCompiler.Compiler.ObjectHeaderSize, stringdata);
+		var symbol = Operand.CreateStringLabel(symbolName, MethodCompiler.Compiler.ObjectHeaderSize, stringdata);
 
 		context.AppendInstruction(IRInstruction.MoveObject, result, symbol);
 
-		PushStack(stack, new StackEntry(StackType.Object, result));
+		PushStack(stack, new StackEntry(result));
 
 		return true;
 	}
@@ -4132,57 +3910,57 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var entry1 = PopStack(stack);
 		var entry2 = PopStack(stack);
 
-		switch (entry1.StackType)
+		switch (entry1.PrimitiveType)
 		{
-			case StackType.R4 when entry2.StackType == StackType.R4 && entry1.Operand.IsR4:
+			case PrimitiveType.R4 when entry2.PrimitiveType == PrimitiveType.R4 && entry1.Operand.IsR4:
 				{
-					var result = AllocateVirtualRegister(TypeSystem.BuiltIn.R4);
+					var result = MethodCompiler.VirtualRegisters.AllocateR4();
 					context.AppendInstruction(IRInstruction.MulR4, result, entry2.Operand, entry1.Operand);
-					PushStack(stack, new StackEntry(StackType.R4, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.R8 when entry2.StackType == StackType.R8 && entry1.Operand.IsR8:
+			case PrimitiveType.R8 when entry2.PrimitiveType == PrimitiveType.R8 && entry1.Operand.IsR8:
 				{
-					var result = AllocateVirtualRegisterR8();
+					var result = MethodCompiler.VirtualRegisters.AllocateR8();
 					context.AppendInstruction(IRInstruction.MulR8, result, entry2.Operand, entry1.Operand);
-					PushStack(stack, new StackEntry(StackType.R8, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int32 when entry2.StackType == StackType.Int32:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.Int32:
 				{
-					var result = AllocateVirtualRegister32();
+					var result = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.MulSigned32, result, entry2.Operand, entry1.Operand);
-					PushStack(stack, new StackEntry(StackType.Int32, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int64 when entry2.StackType == StackType.Int64:
+			case PrimitiveType.Int64 when entry2.PrimitiveType == PrimitiveType.Int64:
 				{
-					var result = AllocateVirtualRegister64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.MulSigned64, result, entry2.Operand, entry1.Operand);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int32 when entry2.StackType == StackType.Int64:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.Int64:
 				{
-					var v1 = AllocateVirtualRegister64();
-					var result = AllocateVirtualRegister64();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.SignExtend32x64, v1, entry1.Operand);
 					context.AppendInstruction(IRInstruction.MulSigned64, result, entry2.Operand, v1);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int64 when entry2.StackType == StackType.Int32:
+			case PrimitiveType.Int64 when entry2.PrimitiveType == PrimitiveType.Int32:
 				{
-					var v1 = AllocateVirtualRegister64();
-					var result = AllocateVirtualRegister64();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.SignExtend32x64, v1, entry2.Operand);
 					context.AppendInstruction(IRInstruction.MulSigned64, result, entry1.Operand, v1);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
@@ -4195,49 +3973,49 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var entry1 = PopStack(stack);
 		var entry2 = PopStack(stack);
 
-		switch (entry1.StackType)
+		switch (entry1.PrimitiveType)
 		{
-			case StackType.Int32 when entry2.StackType == StackType.Int32:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.Int32:
 				{
-					var result = AllocateVirtualRegister32();
-					var result2 = AllocateVirtualRegister32();
+					var result = MethodCompiler.VirtualRegisters.Allocate32();
+					var result2 = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction2(IRInstruction.MulOverflowOut32, result, result2, entry2.Operand, entry1.Operand);
 					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
-					PushStack(stack, new StackEntry(StackType.Int32, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int64 when entry2.StackType == StackType.Int64:
+			case PrimitiveType.Int64 when entry2.PrimitiveType == PrimitiveType.Int64:
 				{
-					var result = AllocateVirtualRegister64();
-					var result2 = AllocateVirtualRegister32();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
+					var result2 = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction2(IRInstruction.MulOverflowOut64, result, result2, entry2.Operand, entry1.Operand);
 					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int32 when entry2.StackType == StackType.Int64:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.Int64:
 				{
-					var v1 = AllocateVirtualRegister64();
-					var result = AllocateVirtualRegister64();
-					var result2 = AllocateVirtualRegister32();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
+					var result2 = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.SignExtend32x64, v1, entry1.Operand);
 					context.AppendInstruction2(IRInstruction.MulOverflowOut64, result, result2, entry2.Operand, v1);
 					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int64 when entry2.StackType == StackType.Int32:
+			case PrimitiveType.Int64 when entry2.PrimitiveType == PrimitiveType.Int32:
 				{
-					var v1 = AllocateVirtualRegister64();
-					var result = AllocateVirtualRegister64();
-					var result2 = AllocateVirtualRegister32();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
+					var result2 = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.SignExtend32x64, v1, entry2.Operand);
 					context.AppendInstruction2(IRInstruction.MulOverflowOut64, result, result2, entry1.Operand, v1);
 					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
@@ -4250,49 +4028,49 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var entry1 = PopStack(stack);
 		var entry2 = PopStack(stack);
 
-		switch (entry1.StackType)
+		switch (entry1.PrimitiveType)
 		{
-			case StackType.Int32 when entry2.StackType == StackType.Int32:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.Int32:
 				{
-					var result = AllocateVirtualRegister32();
-					var result2 = AllocateVirtualRegister32();
+					var result = MethodCompiler.VirtualRegisters.Allocate32();
+					var result2 = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction2(IRInstruction.MulCarryOut32, result, result2, entry2.Operand, entry1.Operand);
 					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
-					PushStack(stack, new StackEntry(StackType.Int32, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int64 when entry2.StackType == StackType.Int64:
+			case PrimitiveType.Int64 when entry2.PrimitiveType == PrimitiveType.Int64:
 				{
-					var result = AllocateVirtualRegister64();
-					var result2 = AllocateVirtualRegister32();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
+					var result2 = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction2(IRInstruction.MulCarryOut64, result, result2, entry2.Operand, entry1.Operand);
 					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int32 when entry2.StackType == StackType.Int64:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.Int64:
 				{
-					var v1 = AllocateVirtualRegister64();
-					var result = AllocateVirtualRegister64();
-					var result2 = AllocateVirtualRegister32();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
+					var result2 = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.ZeroExtend32x64, v1, entry1.Operand);
 					context.AppendInstruction2(IRInstruction.MulCarryOut64, result, result2, entry2.Operand, v1);
 					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int64 when entry2.StackType == StackType.Int32:
+			case PrimitiveType.Int64 when entry2.PrimitiveType == PrimitiveType.Int32:
 				{
-					var v1 = AllocateVirtualRegister64();
-					var result = AllocateVirtualRegister64();
-					var result2 = AllocateVirtualRegister32();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
+					var result2 = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.ZeroExtend32x64, v1, entry2.Operand);
 					context.AppendInstruction2(IRInstruction.MulCarryOut64, result, result2, entry1.Operand, v1);
 					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
@@ -4304,39 +4082,39 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	{
 		var entry = PopStack(stack);
 
-		switch (entry.StackType)
+		switch (entry.PrimitiveType)
 		{
-			case StackType.R4:
+			case PrimitiveType.R4:
 				{
-					var result = AllocateVirtualRegister(TypeSystem.BuiltIn.R4);
-					var zero = CreateConstantR4(0);
+					var result = MethodCompiler.VirtualRegisters.AllocateR4();
+					var zero = Operand.CreateConstantR4(0);
 					context.AppendInstruction(IRInstruction.SubR4, result, zero, entry.Operand);
-					PushStack(stack, new StackEntry(StackType.R4, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.R8:
+			case PrimitiveType.R8:
 				{
-					var result = AllocateVirtualRegisterR8();
-					var zero = CreateConstantR8(0);
+					var result = MethodCompiler.VirtualRegisters.AllocateR8();
+					var zero = Operand.CreateConstantR8(0);
 					context.AppendInstruction(IRInstruction.SubR8, result, zero, entry.Operand);
-					PushStack(stack, new StackEntry(StackType.R8, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int32:
+			case PrimitiveType.Int32:
 				{
-					var result = AllocateVirtualRegister32();
-					context.AppendInstruction(IRInstruction.Sub32, result, Constant32_0, entry.Operand);
-					PushStack(stack, new StackEntry(StackType.Int32, result));
+					var result = MethodCompiler.VirtualRegisters.Allocate32();
+					context.AppendInstruction(IRInstruction.Sub32, result, Operand.Constant32_0, entry.Operand);
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int64:
+			case PrimitiveType.Int64:
 				{
-					var result = AllocateVirtualRegister64();
-					context.AppendInstruction(IRInstruction.Sub64, result, Constant64_0, entry.Operand);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
+					context.AppendInstruction(IRInstruction.Sub64, result, Operand.Constant64_0, entry.Operand);
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
@@ -4351,15 +4129,22 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		var arrayType = (MosaType)instruction.Operand;
 
-		var elementSize = GetTypeSize(arrayType.ElementType, false);
+		var underlyingType = MosaTypeLayout.GetUnderlyingType(arrayType.ElementType);
+		var elementType = MethodCompiler.GetElementType(underlyingType);
+
+		var elementSize = elementType == ElementType.ValueType
+			? TypeLayout.GetTypeLayoutSize(underlyingType)
+			: MethodCompiler.GetSize(elementType);
+
 		var methodTable = GetMethodTablePointer(arrayType);
-		var size = CreateConstant32(elementSize);
-		var result = AllocateVirtualRegisterObject();
+		var size = Operand.CreateConstant32(elementSize);
+		var result = MethodCompiler.VirtualRegisters.AllocateObject();
 
 		context.AppendInstruction(IRInstruction.NewArray, result, methodTable, size, elements.Operand);
-		context.MosaType = arrayType;
 
-		PushStack(stack, new StackEntry(StackType.Object, result));
+		PushStack(stack, new StackEntry(result));
+
+		MethodScanner.TypeAllocated(arrayType, Method);
 
 		return true;
 	}
@@ -4370,10 +4155,10 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var classType = method.DeclaringType;
 		var paramCount = method.Signature.Parameters.Count;
 
-		var underlyingType = GetUnderlyingType(classType);
-		var stackType = GetStackTypeDefaultValueType(underlyingType);
+		var underlyingType = MosaTypeLayout.GetUnderlyingType(classType);
+		var primitiveType = MethodCompiler.GetPrimitiveType(underlyingType);
 
-		var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
+		var symbol = Operand.CreateLabel(method, Is32BitPlatform);
 
 		var operands = new List<Operand>();
 
@@ -4391,68 +4176,55 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		MethodScanner.TypeAllocated(classType, Method);
 
-		if (stackType == StackType.Object)
+		if (primitiveType == PrimitiveType.Object)
 		{
-			var result = AllocateVirtualRegisterObject();
+			var result = MethodCompiler.VirtualRegisters.AllocateObject();
 
 			var methodTable = GetMethodTablePointer(classType);
-			var size = CreateConstant32(TypeLayout.GetTypeSize(classType));
+			var size = Operand.CreateConstant32(TypeLayout.GetTypeLayoutSize(classType));
 
 			context.AppendInstruction(IRInstruction.NewObject, result, methodTable, size);
-
 			operands.Insert(0, result);
 
 			context.AppendInstruction(IRInstruction.CallStatic, null, symbol, operands);
 
-			//context.InvokeMethod = method;  // optional??
-			//context.MosaType = classType;   // optional??
-
-			PushStack(stack, new StackEntry(StackType.Object, result));
+			PushStack(stack, new StackEntry(result));
 
 			return true;
 		}
-		else if (stackType == StackType.ValueType)
+		else if (primitiveType == PrimitiveType.ValueType)
 		{
-			var newThisLocal = AddStackLocal(classType);
-			var newThis = AllocateVirtualRegisterManagedPointer();
+			var newThisLocal = MethodCompiler.LocalStack.Allocate(PrimitiveType.ValueType, false, classType);
+			var newThis = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
 
 			context.AppendInstruction(IRInstruction.AddressOf, newThis, newThisLocal);
-
 			operands.Insert(0, newThis);
 
 			context.AppendInstruction(IRInstruction.CallStatic, null, symbol, operands);
 
-			//context.InvokeMethod = method; // optional??
-
-			PushStack(stack, new StackEntry(StackType.ValueType, newThisLocal));
+			PushStack(stack, new StackEntry(newThisLocal));
 
 			return true;
 		}
-		else if (stackType == StackType.Int32 || stackType == StackType.Int64)
+		else if (primitiveType == PrimitiveType.Int32 || primitiveType == PrimitiveType.Int64)
 		{
-			//var result = stackType == StackType.Int32 ? AllocateVirtualRegister32() : AllocateVirtualRegister64();
-			var result = AllocateVirtualRegister(GetType(stackType));
+			var result = MethodCompiler.VirtualRegisters.Allocate(primitiveType);
+			var newThisLocal = MethodCompiler.LocalStack.Allocate(primitiveType);
+			var newThis = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
 
-			var newThisLocal = AddStackLocal(classType);
-			var newThis = AllocateVirtualRegisterManagedPointer();
+			var elementType = MethodCompiler.GetElementType(underlyingType);
+
+			var loadInstruction = MethodCompiler.GetLoadInstruction(elementType);
 
 			context.AppendInstruction(IRInstruction.AddressOf, newThis, newThisLocal);
-
 			operands.Insert(0, newThis);
 
 			context.AppendInstruction(IRInstruction.CallStatic, null, symbol, operands);
-
-			var loadInstruction = GetLoadInstruction(newThisLocal.Type); // TODO: replace with element
-
 			context.AppendInstruction(loadInstruction, result, StackFrame, newThisLocal);
 
-			PushStack(stack, new StackEntry(stackType, result));
+			PushStack(stack, new StackEntry(result));
 
 			return true;
-		}
-		else if (stackType != StackType.ValueType)
-		{
-			return false;
 		}
 
 		return false;
@@ -4468,21 +4240,21 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	{
 		var entry = PopStack(stack);
 
-		switch (entry.StackType)
+		switch (entry.PrimitiveType)
 		{
-			case StackType.Int32:
+			case PrimitiveType.Int32:
 				{
-					var result = AllocateVirtualRegister32();
+					var result = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.Not32, result, entry.Operand);
-					PushStack(stack, new StackEntry(StackType.Int32, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int64:
+			case PrimitiveType.Int64:
 				{
-					var result = AllocateVirtualRegister64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.Not64, result, entry.Operand);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
@@ -4496,41 +4268,41 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var entry1 = PopStack(stack);
 		var entry2 = PopStack(stack);
 
-		switch (entry1.StackType)
+		switch (entry1.PrimitiveType)
 		{
-			case StackType.Int32 when entry2.StackType == StackType.Int32:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.Int32:
 				{
-					var result = AllocateVirtualRegister32();
+					var result = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.Or32, result, entry2.Operand, entry1.Operand);
-					PushStack(stack, new StackEntry(StackType.Int32, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int64 when entry2.StackType == StackType.Int64:
+			case PrimitiveType.Int64 when entry2.PrimitiveType == PrimitiveType.Int64:
 				{
-					var result = AllocateVirtualRegister64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.Or64, result, entry2.Operand, entry1.Operand);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int32 when entry2.StackType == StackType.Int64:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.Int64:
 				{
-					var v1 = AllocateVirtualRegister64();
-					var result = AllocateVirtualRegister64();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.ZeroExtend32x64, v1, entry1.Operand);
 					context.AppendInstruction(IRInstruction.Or64, result, v1, entry2.Operand);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int64 when entry2.StackType == StackType.Int32:
+			case PrimitiveType.Int64 when entry2.PrimitiveType == PrimitiveType.Int32:
 				{
-					var v1 = AllocateVirtualRegister64();
-					var result = AllocateVirtualRegister64();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.ZeroExtend32x64, v1, entry2.Operand);
 					context.AppendInstruction(IRInstruction.Or64, result, entry1.Operand, v1);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
@@ -4550,57 +4322,57 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var entry1 = PopStack(stack);
 		var entry2 = PopStack(stack);
 
-		switch (entry1.StackType)
+		switch (entry1.PrimitiveType)
 		{
-			case StackType.R4 when entry2.StackType == StackType.R4 && entry1.Operand.IsR4:
+			case PrimitiveType.R4 when entry2.PrimitiveType == PrimitiveType.R4 && entry1.Operand.IsR4:
 				{
-					var result = AllocateVirtualRegister(TypeSystem.BuiltIn.R4);
+					var result = MethodCompiler.VirtualRegisters.AllocateR4();
 					context.AppendInstruction(IRInstruction.RemR4, result, entry2.Operand, entry1.Operand);
-					PushStack(stack, new StackEntry(StackType.R4, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.R8 when entry2.StackType == StackType.R8 && entry1.Operand.IsR8:
+			case PrimitiveType.R8 when entry2.PrimitiveType == PrimitiveType.R8 && entry1.Operand.IsR8:
 				{
-					var result = AllocateVirtualRegisterR8();
+					var result = MethodCompiler.VirtualRegisters.AllocateR8();
 					context.AppendInstruction(IRInstruction.RemR8, result, entry2.Operand, entry1.Operand);
-					PushStack(stack, new StackEntry(StackType.R8, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int32 when entry2.StackType == StackType.Int32:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.Int32:
 				{
-					var result = AllocateVirtualRegister32();
+					var result = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.RemSigned32, result, entry2.Operand, entry1.Operand);
-					PushStack(stack, new StackEntry(StackType.Int32, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int64 when entry2.StackType == StackType.Int64:
+			case PrimitiveType.Int64 when entry2.PrimitiveType == PrimitiveType.Int64:
 				{
-					var result = AllocateVirtualRegister64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.RemSigned64, result, entry2.Operand, entry1.Operand);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int32 when entry2.StackType == StackType.Int64:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.Int64:
 				{
-					var v1 = AllocateVirtualRegister64();
-					var result = AllocateVirtualRegister64();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.SignExtend32x64, v1, entry1.Operand);
 					context.AppendInstruction(IRInstruction.RemSigned64, result, v1, entry2.Operand);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int64 when entry2.StackType == StackType.Int32:
+			case PrimitiveType.Int64 when entry2.PrimitiveType == PrimitiveType.Int32:
 				{
-					var v1 = AllocateVirtualRegister64();
-					var result = AllocateVirtualRegister64();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.SignExtend32x64, v1, entry2.Operand);
 					context.AppendInstruction(IRInstruction.RemSigned64, result, entry1.Operand, v1);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
@@ -4614,57 +4386,57 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var entry1 = PopStack(stack);
 		var entry2 = PopStack(stack);
 
-		switch (entry1.StackType)
+		switch (entry1.PrimitiveType)
 		{
-			case StackType.R4 when entry2.StackType == StackType.R4:
+			case PrimitiveType.R4 when entry2.PrimitiveType == PrimitiveType.R4:
 				{
-					var result = AllocateVirtualRegister(TypeSystem.BuiltIn.R4);
+					var result = MethodCompiler.VirtualRegisters.AllocateR4();
 					context.AppendInstruction(IRInstruction.RemR4, result, entry2.Operand, entry1.Operand);
-					PushStack(stack, new StackEntry(StackType.R4, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.R8 when entry2.StackType == StackType.R8:
+			case PrimitiveType.R8 when entry2.PrimitiveType == PrimitiveType.R8:
 				{
-					var result = AllocateVirtualRegisterR8();
+					var result = MethodCompiler.VirtualRegisters.AllocateR8();
 					context.AppendInstruction(IRInstruction.RemR8, result, entry2.Operand, entry1.Operand);
-					PushStack(stack, new StackEntry(StackType.R8, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int32 when entry2.StackType == StackType.Int32:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.Int32:
 				{
-					var result = AllocateVirtualRegister32();
+					var result = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.RemUnsigned32, result, entry2.Operand, entry1.Operand);
-					PushStack(stack, new StackEntry(StackType.Int32, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int64 when entry2.StackType == StackType.Int64:
+			case PrimitiveType.Int64 when entry2.PrimitiveType == PrimitiveType.Int64:
 				{
-					var result = AllocateVirtualRegister64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.RemUnsigned64, result, entry2.Operand, entry1.Operand);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int32 when entry2.StackType == StackType.Int64:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.Int64:
 				{
-					var v1 = AllocateVirtualRegister64();
-					var result = AllocateVirtualRegister64();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.SignExtend32x64, v1, entry1.Operand);
 					context.AppendInstruction(IRInstruction.RemUnsigned64, result, v1, entry2.Operand);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int64 when entry2.StackType == StackType.Int32:
+			case PrimitiveType.Int64 when entry2.PrimitiveType == PrimitiveType.Int32:
 				{
-					var v1 = AllocateVirtualRegister64();
-					var result = AllocateVirtualRegister64();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.SignExtend32x64, v1, entry2.Operand);
 					context.AppendInstruction(IRInstruction.RemUnsigned64, result, entry1.Operand, v1);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
@@ -4678,38 +4450,37 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		{
 			var entry = PopStack(stack);
 
-			switch (entry.StackType)
+			switch (entry.PrimitiveType)
 			{
-				case StackType.Int32:
+				case PrimitiveType.Int32:
 					context.AppendInstruction(IRInstruction.SetReturn32, null, entry.Operand);
 					break;
 
-				case StackType.Int64:
+				case PrimitiveType.Int64:
 					context.AppendInstruction(IRInstruction.SetReturn64, null, entry.Operand);
 					break;
 
-				case StackType.R4:
+				case PrimitiveType.R4:
 					context.AppendInstruction(IRInstruction.SetReturnR4, null, entry.Operand);
 					break;
 
-				case StackType.R8:
+				case PrimitiveType.R8:
 					context.AppendInstruction(IRInstruction.SetReturnR8, null, entry.Operand);
 					break;
 
-				case StackType.Object:
+				case PrimitiveType.Object:
 					context.AppendInstruction(IRInstruction.SetReturnObject, null, entry.Operand);
 					break;
 
-				case StackType.ValueType:
+				case PrimitiveType.ValueType:
 					context.AppendInstruction(IRInstruction.SetReturnCompound, null, entry.Operand);
-					//context.MosaType = entry.Type;
 					break;
 
-				case StackType.ManagedPointer when Is32BitPlatform:
+				case PrimitiveType.ManagedPointer when Is32BitPlatform:
 					context.AppendInstruction(IRInstruction.SetReturn32, null, entry.Operand);
 					break;
 
-				case StackType.ManagedPointer when Is64BitPlatform:
+				case PrimitiveType.ManagedPointer when Is64BitPlatform:
 					context.AppendInstruction(IRInstruction.SetReturn64, null, entry.Operand);
 					break;
 
@@ -4740,37 +4511,37 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var shift = entry1.Operand;
 		var value = entry2.Operand;
 
-		switch (entry1.StackType)
+		switch (entry1.PrimitiveType)
 		{
-			case StackType.Int32 when entry2.StackType == StackType.Int32:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.Int32:
 				{
-					var result = AllocateVirtualRegister32();
+					var result = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.ShiftLeft32, result, value, shift);
-					PushStack(stack, new StackEntry(StackType.Int32, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int64 when entry2.StackType == StackType.Int64:
+			case PrimitiveType.Int64 when entry2.PrimitiveType == PrimitiveType.Int64:
 				{
-					var result = AllocateVirtualRegister64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.ShiftLeft64, result, value, shift);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int32 when entry2.StackType == StackType.Int64:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.Int64:
 				{
-					var result = AllocateVirtualRegister64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.ShiftLeft64, result, value, shift);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int64 when entry2.StackType == StackType.Int32:
+			case PrimitiveType.Int64 when entry2.PrimitiveType == PrimitiveType.Int32:
 				{
-					var result = AllocateVirtualRegister64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.ShiftLeft64, result, value, shift);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
@@ -4786,37 +4557,37 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var shiftAmount = entry1.Operand;
 		var value = entry2.Operand;
 
-		switch (entry2.StackType)
+		switch (entry2.PrimitiveType)
 		{
-			case StackType.Int32 when entry1.StackType == StackType.Int32:
+			case PrimitiveType.Int32 when entry1.PrimitiveType == PrimitiveType.Int32:
 				{
-					var result = AllocateVirtualRegister32();
+					var result = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.ArithShiftRight32, result, value, shiftAmount);
-					PushStack(stack, new StackEntry(StackType.Int32, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int64 when entry1.StackType == StackType.Int64:
+			case PrimitiveType.Int64 when entry1.PrimitiveType == PrimitiveType.Int64:
 				{
-					var result = AllocateVirtualRegister64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.ArithShiftRight64, result, value, shiftAmount);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int32 when entry1.StackType == StackType.Int64:
+			case PrimitiveType.Int32 when entry1.PrimitiveType == PrimitiveType.Int64:
 				{
-					var result = AllocateVirtualRegister64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.ArithShiftRight64, result, value, shiftAmount);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int64 when entry1.StackType == StackType.Int32:
+			case PrimitiveType.Int64 when entry1.PrimitiveType == PrimitiveType.Int32:
 				{
-					var result = AllocateVirtualRegister64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.ArithShiftRight64, result, value, shiftAmount);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
@@ -4832,37 +4603,37 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var shiftAmount = entry1.Operand;
 		var value = entry2.Operand;
 
-		switch (entry2.StackType)
+		switch (entry2.PrimitiveType)
 		{
-			case StackType.Int32 when entry1.StackType == StackType.Int32:
+			case PrimitiveType.Int32 when entry1.PrimitiveType == PrimitiveType.Int32:
 				{
-					var result = AllocateVirtualRegister32();
+					var result = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.ShiftRight32, result, value, shiftAmount);
-					PushStack(stack, new StackEntry(StackType.Int32, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int64 when entry1.StackType == StackType.Int64:
+			case PrimitiveType.Int64 when entry1.PrimitiveType == PrimitiveType.Int64:
 				{
-					var result = AllocateVirtualRegister64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.ShiftRight32, result, value, shiftAmount);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int32 when entry1.StackType == StackType.Int64:
+			case PrimitiveType.Int32 when entry1.PrimitiveType == PrimitiveType.Int64:
 				{
-					var result = AllocateVirtualRegister32();
+					var result = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.ShiftRight64, result, value, shiftAmount);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int64 when entry1.StackType == StackType.Int32:
+			case PrimitiveType.Int64 when entry1.PrimitiveType == PrimitiveType.Int32:
 				{
-					var result = AllocateVirtualRegister64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.ShiftRight64, result, value, shiftAmount);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
@@ -4873,13 +4644,13 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	private bool Sizeof(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
 	{
 		var type = (MosaType)instruction.Operand;
-		var result = AllocateVirtualRegister32();
+		var result = MethodCompiler.VirtualRegisters.Allocate32();
 
-		var size = type.IsPointer ? NativePointerSize : MethodCompiler.TypeLayout.GetTypeSize(type);
+		var size = type.IsPointer ? Architecture.NativePointerSize : MethodCompiler.TypeLayout.GetTypeLayoutSize(type);
 
-		context.AppendInstruction(IRInstruction.Move32, result, CreateConstant32(size));
+		context.AppendInstruction(IRInstruction.Move32, result, Operand.CreateConstant32(size));
 
-		PushStack(stack, new StackEntry(StackType.Int32, result));
+		PushStack(stack, new StackEntry(result));
 
 		return true;
 	}
@@ -4896,19 +4667,22 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		var type = (MosaType)instruction.Operand;
 
-		var underlyingType = GetUnderlyingType(type);
-		var isPrimitive = IsPrimitive(underlyingType);
+		var underlyingType = MosaTypeLayout.GetUnderlyingType(type);
+		var elementType = MethodCompiler.GetElementType(underlyingType);
+		var isPrimitive = MethodCompiler.IsPrimitive(elementType);
+
+		var size = isPrimitive
+			? MethodCompiler.GetSize(elementType)
+			: TypeLayout.GetTypeLayoutSize(underlyingType);
 
 		context.AppendInstruction(IRInstruction.CheckArrayBounds, null, array, index);
 
-		var elementOffset = CalculateArrayElementOffset(context, type, index);
+		var elementOffset = CalculateArrayElementOffset(context, size, index);
 		var totalElementOffset = CalculateTotalArrayOffset(context, elementOffset);
 
 		if (isPrimitive)
 		{
-			//var stacktype = GetStackType(underlyingType);
-			var elementType = GetElementType(underlyingType);
-			var storeInstruction = GetStoreInstruction(elementType);
+			var storeInstruction = MethodCompiler.GetStoreInstruction(elementType);
 
 			context.AppendInstruction(storeInstruction, null, array, totalElementOffset, value);
 
@@ -4917,7 +4691,6 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		else
 		{
 			context.AppendInstruction(IRInstruction.StoreCompound, null, array, totalElementOffset, value);
-			context.MosaType = type;
 
 			return true;
 		}
@@ -4935,10 +4708,10 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		context.AppendInstruction(IRInstruction.CheckArrayBounds, null, array, index);
 
-		var elementOffset = CalculateArrayElementOffset(context, GetSize(elementType), index);
+		var elementOffset = CalculateArrayElementOffset(context, MethodCompiler.GetSize(elementType), index);
 		var totalElementOffset = CalculateTotalArrayOffset(context, elementOffset);
 
-		var storeInstruction = GetStoreInstruction(elementType);
+		var storeInstruction = MethodCompiler.GetStoreInstruction(elementType);
 
 		context.AppendInstruction(storeInstruction, null, array, totalElementOffset, value);
 
@@ -4954,42 +4727,39 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var offset = TypeLayout.GetFieldOffset(field);
 		var type = field.FieldType;
 
-		var offsetOperand = CreateConstant32(offset);
+		var offsetOperand = Operand.CreateConstant32(offset);
 
-		switch (entry1.StackType)
+		switch (entry1.PrimitiveType)
 		{
-			case StackType.Int32:
-			case StackType.Int64:
-			case StackType.R4:
-			case StackType.R8:
-			case StackType.ManagedPointer:
-			case StackType.Object:
+			case PrimitiveType.Int32:
+			case PrimitiveType.Int64:
+			case PrimitiveType.R4:
+			case PrimitiveType.R8:
+			case PrimitiveType.ManagedPointer:
+			case PrimitiveType.Object:
 				{
-					var underlyingType = GetUnderlyingType(type);
-					var isPrimitive = IsPrimitive(underlyingType);
+					var underlyingType = MosaTypeLayout.GetUnderlyingType(type);
+					var isPrimitive = MosaTypeLayout.IsPrimitive(underlyingType);
 
 					if (isPrimitive)
 					{
-						var elementType = GetElementType(underlyingType);
-						var storeInstruction = GetStoreInstruction(elementType);
+						var elementType = MethodCompiler.GetElementType(underlyingType);
+						var storeInstruction = MethodCompiler.GetStoreInstruction(elementType);
 
 						context.AppendInstruction(storeInstruction, null, entry2.Operand, offsetOperand, entry1.Operand);
-						//context.MosaType = type;
 
 						return true;
 					}
 					else
 					{
 						context.AppendInstruction(IRInstruction.StoreCompound, null, entry2.Operand, offsetOperand, entry1.Operand);
-						context.MosaType = type;
 
 						return true;
 					}
 				}
-			case StackType.ValueType:
+			case PrimitiveType.ValueType:
 				{
 					context.AppendInstruction(IRInstruction.StoreCompound, null, entry2.Operand, offsetOperand, entry1.Operand);
-					context.MosaType = type;
 
 					return true;
 				}
@@ -5006,7 +4776,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var address = entry2.Operand;
 		var value = entry1.Operand;
 
-		var storeInstruction = GetStoreInstruction(elementType);
+		var storeInstruction = MethodCompiler.GetStoreInstruction(elementType);
 		context.AppendInstruction(storeInstruction, null, address, ConstantZero, value);
 
 		return true;
@@ -5017,13 +4787,12 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var entry = PopStack(stack);
 		var source = entry.Operand;
 
-		var stackType = LocalStackType[index];
+		var stackType = LocalPrimitiveType[index];
 		var local = LocalStack[index];
 
-		if (stackType == StackType.ValueType)
+		if (stackType == PrimitiveType.ValueType)
 		{
 			context.AppendInstruction(IRInstruction.MoveCompound, local, source);
-			context.MosaType = local.Type;
 			return true;
 		}
 
@@ -5031,7 +4800,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		if (local.IsVirtualRegister)
 		{
-			var storeInstruction = GetMoveInstruction(elementType);
+			var storeInstruction = MethodCompiler.GetMoveInstruction(elementType);
 
 			context.AppendInstruction(storeInstruction, local, source);
 			return true;
@@ -5039,9 +4808,9 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		else
 		{
 			//var stackType = GetStackType(underlyingType);
-			var stackElementType = GetElementType(stackType);
+			var stackElementType = MethodCompiler.GetElementType(stackType);
 
-			var storeInstruction = GetStoreInstruction(stackElementType);
+			var storeInstruction = MethodCompiler.GetStoreInstruction(stackElementType);
 
 			context.AppendInstruction(storeInstruction, null, StackFrame, local, source);
 			return true;
@@ -5057,14 +4826,14 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var value = entry1.Operand;
 
 		var type = (MosaType)instruction.Operand;
-		var underlyingType = GetUnderlyingType(type);
-		var isPrimitive = IsPrimitive(underlyingType);
+		var underlyingType = MosaTypeLayout.GetUnderlyingType(type);
+		var isPrimitive = MosaTypeLayout.IsPrimitive(underlyingType);
 
 		if (isPrimitive)
 		{
-			var stackType = GetStackType(underlyingType);
-			var elementType = GetElementType(stackType);
-			var storeInstruction = GetStoreInstruction(elementType);
+			var stackType = MethodCompiler.GetPrimitiveType(underlyingType);
+			var elementType = MethodCompiler.GetElementType(stackType);
+			var storeInstruction = MethodCompiler.GetStoreInstruction(elementType);
 
 			context.AppendInstruction(storeInstruction, null, address, ConstantZero, value);
 			return true;
@@ -5084,36 +4853,36 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var field = (MosaField)instruction.Operand;
 		var type = field.FieldType;
 
-		var underlyingType = GetUnderlyingType(type);
-		var isPrimitive = IsPrimitive(underlyingType);
+		var underlyingType = MosaTypeLayout.GetUnderlyingType(type);
+		var isPrimitive = MosaTypeLayout.IsPrimitive(underlyingType);
 
-		var fieldOperand = Operand.CreateStaticField(field, TypeSystem);
+		var fieldOperand = Operand.CreateStaticField(
+			type.IsReferenceType
+				? PrimitiveType.Object
+				: PrimitiveType.ManagedPointer,
+			field);
 
 		if (isPrimitive)
 		{
-			var elementType = GetElementType(underlyingType);
+			var elementType = MethodCompiler.GetElementType(underlyingType);
 
-			var storeInstruction = GetStoreInstruction(elementType);
+			var storeInstruction = MethodCompiler.GetStoreInstruction(elementType);
 
 			if (type.IsReferenceType)
 			{
 				var symbol = GetStaticSymbol(field);
-				var staticReference = Operand.CreateLabel(TypeSystem.BuiltIn.Object, symbol.Name);
+				var staticReference = Operand.CreateLabel(symbol.Name, Is32BitPlatform);
 
 				context.AppendInstruction(IRInstruction.StoreObject, null, staticReference, ConstantZero, source);
-
-				//context.MosaType = type;
 			}
 			else
 			{
 				context.AppendInstruction(storeInstruction, null, fieldOperand, ConstantZero, source);
-				context.MosaType = type;
 			}
 		}
 		else
 		{
 			context.AppendInstruction(IRInstruction.StoreCompound, null, fieldOperand, ConstantZero, source);
-			context.MosaType = type;
 		}
 
 		return true;
@@ -5126,22 +4895,17 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var value = entry.Operand;
 
 		var parameter = MethodCompiler.Parameters[index];
-		var type = parameter.Type;
-		var underlyingType = GetUnderlyingType(type);
-		var isPrimitive = IsPrimitive(underlyingType);
+		var isPrimitive = parameter.IsPrimitive;
 
 		if (isPrimitive)
 		{
-			var elementType = GetElementType(underlyingType);
-			var storeInstruction = GetStoreParamInstruction(elementType);
-
+			var storeInstruction = MethodCompiler.GetStoreParamInstruction(parameter.Element);
 			context.AppendInstruction(storeInstruction, null, parameter, value);
 			return true;
 		}
 		else
 		{
 			context.AppendInstruction(IRInstruction.StoreParamCompound, null, parameter, value);
-			context.MosaType = type;
 			return true;
 		}
 	}
@@ -5151,110 +4915,110 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var entry1 = PopStack(stack);
 		var entry2 = PopStack(stack);
 
-		switch (entry1.StackType)
+		switch (entry1.PrimitiveType)
 		{
-			case StackType.R4 when entry2.StackType == StackType.R4:
+			case PrimitiveType.R4 when entry2.PrimitiveType == PrimitiveType.R4:
 				{
-					var result = AllocateVirtualRegister(TypeSystem.BuiltIn.R4);
+					var result = MethodCompiler.VirtualRegisters.AllocateR4();
 					context.AppendInstruction(IRInstruction.SubR4, result, entry2.Operand, entry1.Operand);
-					PushStack(stack, new StackEntry(StackType.R4, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.R8 when entry2.StackType == StackType.R8:
+			case PrimitiveType.R8 when entry2.PrimitiveType == PrimitiveType.R8:
 				{
-					var result = AllocateVirtualRegisterR8();
+					var result = MethodCompiler.VirtualRegisters.AllocateR8();
 					context.AppendInstruction(IRInstruction.SubR8, result, entry2.Operand, entry1.Operand);
-					PushStack(stack, new StackEntry(StackType.R8, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int32 when entry2.StackType == StackType.Int32:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.Int32:
 				{
-					var result = AllocateVirtualRegister32();
+					var result = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.Sub32, result, entry2.Operand, entry1.Operand);
-					PushStack(stack, new StackEntry(StackType.Int32, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int64 when entry2.StackType == StackType.Int64:
+			case PrimitiveType.Int64 when entry2.PrimitiveType == PrimitiveType.Int64:
 				{
-					var result = AllocateVirtualRegister64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.Sub64, result, entry2.Operand, entry1.Operand);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int32 when entry2.StackType == StackType.Int64:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.Int64:
 				{
-					var v1 = AllocateVirtualRegister64();
-					var result = AllocateVirtualRegister64();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.SignExtend32x64, v1, entry1.Operand);
 					context.AppendInstruction(IRInstruction.Sub64, result, v1, entry2.Operand);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int64 when entry2.StackType == StackType.Int32:
+			case PrimitiveType.Int64 when entry2.PrimitiveType == PrimitiveType.Int32:
 				{
-					var v1 = AllocateVirtualRegister64();
-					var result = AllocateVirtualRegister64();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.SignExtend32x64, v1, entry2.Operand);
 					context.AppendInstruction(IRInstruction.Sub64, result, entry1.Operand, v1);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.ManagedPointer when entry2.StackType == StackType.ManagedPointer && Is32BitPlatform:
+			case PrimitiveType.ManagedPointer when entry2.PrimitiveType == PrimitiveType.ManagedPointer && Is32BitPlatform:
 				{
-					var result = AllocateVirtualRegister32();
+					var result = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.Sub32, result, entry2.Operand, entry1.Operand);
-					PushStack(stack, new StackEntry(StackType.Int32, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.ManagedPointer when entry2.StackType == StackType.ManagedPointer && Is64BitPlatform:
+			case PrimitiveType.ManagedPointer when entry2.PrimitiveType == PrimitiveType.ManagedPointer && Is64BitPlatform:
 				{
-					var result = AllocateVirtualRegister64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.Sub64, result, entry2.Operand, entry1.Operand);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int32 when entry2.StackType == StackType.ManagedPointer && Is32BitPlatform:
-			case StackType.ManagedPointer when entry2.StackType == StackType.Int32 && Is32BitPlatform:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.ManagedPointer && Is32BitPlatform:
+			case PrimitiveType.ManagedPointer when entry2.PrimitiveType == PrimitiveType.Int32 && Is32BitPlatform:
 				{
-					var result = AllocateVirtualRegister32();
+					var result = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
 					context.AppendInstruction(IRInstruction.Sub32, result, entry2.Operand, entry1.Operand);
-					PushStack(stack, new StackEntry(StackType.ManagedPointer, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int64 when entry2.StackType == StackType.ManagedPointer && Is64BitPlatform:
+			case PrimitiveType.Int64 when entry2.PrimitiveType == PrimitiveType.ManagedPointer && Is64BitPlatform:
 				{
-					var result = AllocateVirtualRegister64();
+					var result = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
 					context.AppendInstruction(IRInstruction.Sub64, result, entry2.Operand, entry1.Operand);
-					PushStack(stack, new StackEntry(StackType.ManagedPointer, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int32 when entry2.StackType == StackType.ManagedPointer && Is64BitPlatform:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.ManagedPointer && Is64BitPlatform:
 				{
-					var result = AllocateVirtualRegister64();
-					var v1 = AllocateVirtualRegister64();
+					var result = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.SignExtend32x64, v1, entry1.Operand);
 					context.AppendInstruction(IRInstruction.Sub64, result, v1, entry2.Operand);
-					PushStack(stack, new StackEntry(StackType.ManagedPointer, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.ManagedPointer when entry2.StackType == StackType.Int32 && Is64BitPlatform:
+			case PrimitiveType.ManagedPointer when entry2.PrimitiveType == PrimitiveType.Int32 && Is64BitPlatform:
 				{
-					var result = AllocateVirtualRegister64();
-					var v1 = AllocateVirtualRegister64();
+					var result = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.SignExtend32x64, v1, entry2.Operand);
 					context.AppendInstruction(IRInstruction.Sub64, result, entry1.Operand, v1);
-					PushStack(stack, new StackEntry(StackType.ManagedPointer, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
@@ -5267,114 +5031,114 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var entry1 = PopStack(stack);
 		var entry2 = PopStack(stack);
 
-		switch (entry1.StackType)
+		switch (entry1.PrimitiveType)
 		{
-			case StackType.Int32 when entry2.StackType == StackType.Int32:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.Int32:
 				{
-					var result = AllocateVirtualRegister32();
-					var result2 = AllocateVirtualRegister32();
+					var result = MethodCompiler.VirtualRegisters.Allocate32();
+					var result2 = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction2(IRInstruction.SubOverflowOut32, result, result2, entry2.Operand, entry1.Operand);
 					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
-					PushStack(stack, new StackEntry(StackType.Int32, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int64 when entry2.StackType == StackType.Int64:
+			case PrimitiveType.Int64 when entry2.PrimitiveType == PrimitiveType.Int64:
 				{
-					var result = AllocateVirtualRegister64();
-					var result2 = AllocateVirtualRegister64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
+					var result2 = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction2(IRInstruction.SubOverflowOut64, result, result2, entry2.Operand, entry1.Operand);
 					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int32 when entry2.StackType == StackType.Int64:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.Int64:
 				{
-					var v1 = AllocateVirtualRegister64();
-					var result = AllocateVirtualRegister64();
-					var result2 = AllocateVirtualRegister64();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
+					var result2 = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.SignExtend32x64, v1, entry1.Operand);
 					context.AppendInstruction2(IRInstruction.SubOverflowOut64, result, result2, v1, entry2.Operand);
 					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int64 when entry2.StackType == StackType.Int32:
+			case PrimitiveType.Int64 when entry2.PrimitiveType == PrimitiveType.Int32:
 				{
-					var v1 = AllocateVirtualRegister64();
-					var result = AllocateVirtualRegister64();
-					var result2 = AllocateVirtualRegister64();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
+					var result2 = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.SignExtend32x64, v1, entry2.Operand);
 					context.AppendInstruction2(IRInstruction.SubOverflowOut64, result, result2, entry1.Operand, v1);
 					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.ManagedPointer when entry2.StackType == StackType.ManagedPointer && Is32BitPlatform:
+			case PrimitiveType.ManagedPointer when entry2.PrimitiveType == PrimitiveType.ManagedPointer && Is32BitPlatform:
 				{
-					var result = AllocateVirtualRegister32();
-					var result2 = AllocateVirtualRegister32();
+					var result = MethodCompiler.VirtualRegisters.Allocate32();
+					var result2 = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction2(IRInstruction.SubOverflowOut32, result, result2, entry2.Operand, entry1.Operand);
 					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
-					PushStack(stack, new StackEntry(StackType.Int32, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.ManagedPointer when entry2.StackType == StackType.ManagedPointer && Is64BitPlatform:
+			case PrimitiveType.ManagedPointer when entry2.PrimitiveType == PrimitiveType.ManagedPointer && Is64BitPlatform:
 				{
-					var result = AllocateVirtualRegister64();
-					var result2 = AllocateVirtualRegister64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
+					var result2 = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction2(IRInstruction.SubOverflowOut64, result, result2, entry2.Operand, entry1.Operand);
 					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int32 when entry2.StackType == StackType.ManagedPointer && Is32BitPlatform:
-			case StackType.ManagedPointer when entry2.StackType == StackType.Int32 && Is32BitPlatform:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.ManagedPointer && Is32BitPlatform:
+			case PrimitiveType.ManagedPointer when entry2.PrimitiveType == PrimitiveType.Int32 && Is32BitPlatform:
 				{
-					var result = AllocateVirtualRegister32();
-					var result2 = AllocateVirtualRegister32();
+					var result = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
+					var result2 = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction2(IRInstruction.SubOverflowOut32, result, result2, entry2.Operand, entry1.Operand);
 					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
-					PushStack(stack, new StackEntry(StackType.ManagedPointer, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int64 when entry2.StackType == StackType.ManagedPointer && Is64BitPlatform:
+			case PrimitiveType.Int64 when entry2.PrimitiveType == PrimitiveType.ManagedPointer && Is64BitPlatform:
 				{
-					var result = AllocateVirtualRegister64();
-					var result2 = AllocateVirtualRegister64();
+					var result = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
+					var result2 = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction2(IRInstruction.SubOverflowOut64, result, result2, entry2.Operand, entry1.Operand);
 					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
-					PushStack(stack, new StackEntry(StackType.ManagedPointer, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int32 when entry2.StackType == StackType.ManagedPointer && Is64BitPlatform:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.ManagedPointer && Is64BitPlatform:
 				{
-					var result = AllocateVirtualRegister64();
-					var result2 = AllocateVirtualRegister64();
-					var v1 = AllocateVirtualRegister64();
+					var result = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
+					var result2 = MethodCompiler.VirtualRegisters.Allocate64();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.SignExtend32x64, v1, entry1.Operand);
 					context.AppendInstruction2(IRInstruction.SubOverflowOut64, result, result2, v1, entry2.Operand);
 					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
-					PushStack(stack, new StackEntry(StackType.ManagedPointer, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.ManagedPointer when entry2.StackType == StackType.Int32 && Is64BitPlatform:
+			case PrimitiveType.ManagedPointer when entry2.PrimitiveType == PrimitiveType.Int32 && Is64BitPlatform:
 				{
-					var result = AllocateVirtualRegister64();
-					var result2 = AllocateVirtualRegister64();
-					var v1 = AllocateVirtualRegister64();
+					var result = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
+					var result2 = MethodCompiler.VirtualRegisters.Allocate64();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.SignExtend32x64, v1, entry2.Operand);
 					context.AppendInstruction2(IRInstruction.SubOverflowOut64, result, result2, entry1.Operand, v1);
 					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
-					PushStack(stack, new StackEntry(StackType.ManagedPointer, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
@@ -5387,114 +5151,114 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var entry1 = PopStack(stack);
 		var entry2 = PopStack(stack);
 
-		switch (entry1.StackType)
+		switch (entry1.PrimitiveType)
 		{
-			case StackType.Int32 when entry2.StackType == StackType.Int32:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.Int32:
 				{
-					var result = AllocateVirtualRegister32();
-					var result2 = AllocateVirtualRegister32();
+					var result = MethodCompiler.VirtualRegisters.Allocate32();
+					var result2 = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction2(IRInstruction.SubCarryOut32, result, result2, entry2.Operand, entry1.Operand);
 					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
-					PushStack(stack, new StackEntry(StackType.Int32, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int64 when entry2.StackType == StackType.Int64:
+			case PrimitiveType.Int64 when entry2.PrimitiveType == PrimitiveType.Int64:
 				{
-					var result = AllocateVirtualRegister64();
-					var result2 = AllocateVirtualRegister64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
+					var result2 = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction2(IRInstruction.SubCarryOut64, result, result2, entry2.Operand, entry1.Operand);
 					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int32 when entry2.StackType == StackType.Int64:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.Int64:
 				{
-					var v1 = AllocateVirtualRegister64();
-					var result = AllocateVirtualRegister64();
-					var result2 = AllocateVirtualRegister64();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
+					var result2 = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.ZeroExtend32x64, v1, entry1.Operand);
 					context.AppendInstruction2(IRInstruction.SubCarryOut64, result, result2, v1, entry2.Operand);
 					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int64 when entry2.StackType == StackType.Int32:
+			case PrimitiveType.Int64 when entry2.PrimitiveType == PrimitiveType.Int32:
 				{
-					var v1 = AllocateVirtualRegister64();
-					var result = AllocateVirtualRegister64();
-					var result2 = AllocateVirtualRegister64();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
+					var result2 = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.ZeroExtend32x64, v1, entry2.Operand);
 					context.AppendInstruction2(IRInstruction.SubCarryOut64, result, result2, entry1.Operand, v1);
 					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.ManagedPointer when entry2.StackType == StackType.ManagedPointer && Is32BitPlatform:
+			case PrimitiveType.ManagedPointer when entry2.PrimitiveType == PrimitiveType.ManagedPointer && Is32BitPlatform:
 				{
-					var result = AllocateVirtualRegister32();
-					var result2 = AllocateVirtualRegister32();
+					var result = MethodCompiler.VirtualRegisters.Allocate32();
+					var result2 = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction2(IRInstruction.SubCarryOut32, result, result2, entry2.Operand, entry1.Operand);
 					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
-					PushStack(stack, new StackEntry(StackType.Int32, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.ManagedPointer when entry2.StackType == StackType.ManagedPointer && Is64BitPlatform:
+			case PrimitiveType.ManagedPointer when entry2.PrimitiveType == PrimitiveType.ManagedPointer && Is64BitPlatform:
 				{
-					var result = AllocateVirtualRegister64();
-					var result2 = AllocateVirtualRegister64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
+					var result2 = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction2(IRInstruction.SubCarryOut64, result, result2, entry2.Operand, entry1.Operand);
 					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int32 when entry2.StackType == StackType.ManagedPointer && Is32BitPlatform:
-			case StackType.ManagedPointer when entry2.StackType == StackType.Int32 && Is32BitPlatform:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.ManagedPointer && Is32BitPlatform:
+			case PrimitiveType.ManagedPointer when entry2.PrimitiveType == PrimitiveType.Int32 && Is32BitPlatform:
 				{
-					var result = AllocateVirtualRegister32();
-					var result2 = AllocateVirtualRegister32();
+					var result = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
+					var result2 = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction2(IRInstruction.SubCarryOut32, result, result2, entry2.Operand, entry1.Operand);
 					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
-					PushStack(stack, new StackEntry(StackType.ManagedPointer, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int64 when entry2.StackType == StackType.ManagedPointer && Is64BitPlatform:
+			case PrimitiveType.Int64 when entry2.PrimitiveType == PrimitiveType.ManagedPointer && Is64BitPlatform:
 				{
-					var result = AllocateVirtualRegister64();
-					var result2 = AllocateVirtualRegister64();
+					var result = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
+					var result2 = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction2(IRInstruction.SubCarryOut64, result, result2, entry2.Operand, entry1.Operand);
 					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
-					PushStack(stack, new StackEntry(StackType.ManagedPointer, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int32 when entry2.StackType == StackType.ManagedPointer && Is64BitPlatform:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.ManagedPointer && Is64BitPlatform:
 				{
-					var result = AllocateVirtualRegister64();
-					var result2 = AllocateVirtualRegister64();
-					var v1 = AllocateVirtualRegister64();
+					var result = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
+					var result2 = MethodCompiler.VirtualRegisters.Allocate64();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.ZeroExtend32x64, v1, entry1.Operand);
 					context.AppendInstruction2(IRInstruction.SubCarryOut64, result, result2, v1, entry2.Operand);
 					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
-					PushStack(stack, new StackEntry(StackType.ManagedPointer, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.ManagedPointer when entry2.StackType == StackType.Int32 && Is64BitPlatform:
+			case PrimitiveType.ManagedPointer when entry2.PrimitiveType == PrimitiveType.Int32 && Is64BitPlatform:
 				{
-					var result = AllocateVirtualRegister64();
-					var result2 = AllocateVirtualRegister64();
-					var v1 = AllocateVirtualRegister64();
+					var result = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
+					var result2 = MethodCompiler.VirtualRegisters.Allocate64();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.ZeroExtend32x64, v1, entry2.Operand);
 					context.AppendInstruction2(IRInstruction.SubCarryOut64, result, result2, entry1.Operand, v1);
 					context.AppendInstruction(IRInstruction.CheckThrowOverflow, null, result2);
-					PushStack(stack, new StackEntry(StackType.ManagedPointer, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
@@ -5506,7 +5270,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	{
 		var entry = PopStack(stack);
 
-		if (entry.StackType == StackType.Object)
+		if (entry.PrimitiveType == PrimitiveType.Object)
 		{
 			context.AppendInstruction(IRInstruction.Throw, null, entry.Operand);
 			stack.Clear();
@@ -5540,8 +5304,8 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var entry = PopStack(stack);
 		var type = (MosaType)instruction.Operand;
 
-		var result = Allocate(StackType.ManagedPointer, type);
-		PushStack(stack, new StackEntry(StackType.ManagedPointer, result));
+		var result = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
+		PushStack(stack, new StackEntry(result));
 
 		context.AppendInstruction(IRInstruction.Unbox, result, entry.Operand);
 
@@ -5564,18 +5328,18 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		//equivalent to unbox followed by ldobj
 
-		var underlyingType = GetUnderlyingType(type);
-		var isPrimitive = IsPrimitive(underlyingType);
+		var underlyingType = MosaTypeLayout.GetUnderlyingType(type);
+		var isPrimitive = MosaTypeLayout.IsPrimitive(underlyingType);
 
 		if (isPrimitive)
 		{
-			var elementType = GetElementType(underlyingType);
+			var elementType = MethodCompiler.GetElementType(underlyingType);
 
-			var loadInstruction = GetLoadInstruction(elementType);
-			var stackType = GetStackType(elementType);
-			var result = Allocate(stackType);
+			var loadInstruction = MethodCompiler.GetLoadInstruction(elementType);
+			var stackType = MethodCompiler.GetPrimitiveType(elementType);
+			var result = MethodCompiler.VirtualRegisters.Allocate(stackType);
 
-			PushStack(stack, new StackEntry(stackType, result));
+			PushStack(stack, new StackEntry(result));
 
 			context.AppendInstruction(loadInstruction, result, entry.Operand, ConstantZero);
 
@@ -5583,14 +5347,14 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		}
 		else
 		{
-			var result = Allocate(StackType.ValueType, type);
-			var address = Allocate(StackType.ManagedPointer);
+			var result = MethodCompiler.LocalStack.Allocate(PrimitiveType.ValueType, false, type);
+			var address = MethodCompiler.VirtualRegisters.Allocate(PrimitiveType.ManagedPointer);
 
-			context.AppendInstruction(MoveInstruction, address, entry.Operand);
+			context.AppendInstruction(Is32BitPlatform ? IRInstruction.Move32 : IRInstruction.Move64, address, entry.Operand);
 			// FUTURE: Add type check
 			context.AppendInstruction(IRInstruction.LoadCompound, result, address, ConstantZero);
 
-			PushStack(stack, new StackEntry(StackType.ValueType, result, type));
+			PushStack(stack, new StackEntry(result));
 			return true;
 		}
 	}
@@ -5600,41 +5364,41 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var entry1 = PopStack(stack);
 		var entry2 = PopStack(stack);
 
-		switch (entry1.StackType)
+		switch (entry1.PrimitiveType)
 		{
-			case StackType.Int32 when entry2.StackType == StackType.Int32:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.Int32:
 				{
-					var result = AllocateVirtualRegister32();
+					var result = MethodCompiler.VirtualRegisters.Allocate32();
 					context.AppendInstruction(IRInstruction.Xor32, result, entry2.Operand, entry1.Operand);
-					PushStack(stack, new StackEntry(StackType.Int32, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int64 when entry2.StackType == StackType.Int64:
+			case PrimitiveType.Int64 when entry2.PrimitiveType == PrimitiveType.Int64:
 				{
-					var result = AllocateVirtualRegister64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.Xor64, result, entry2.Operand, entry1.Operand);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int32 when entry2.StackType == StackType.Int64:
+			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.Int64:
 				{
-					var v1 = AllocateVirtualRegister64();
-					var result = AllocateVirtualRegister64();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.ZeroExtend32x64, v1, entry1.Operand);
 					context.AppendInstruction(IRInstruction.Xor64, result, v1, entry2.Operand);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
-			case StackType.Int64 when entry2.StackType == StackType.Int32:
+			case PrimitiveType.Int64 when entry2.PrimitiveType == PrimitiveType.Int32:
 				{
-					var v1 = AllocateVirtualRegister64();
-					var result = AllocateVirtualRegister64();
+					var v1 = MethodCompiler.VirtualRegisters.Allocate64();
+					var result = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.ZeroExtend32x64, v1, entry2.Operand);
 					context.AppendInstruction(IRInstruction.Xor64, result, entry1.Operand, v1);
-					PushStack(stack, new StackEntry(StackType.Int64, result));
+					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
@@ -5646,7 +5410,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 	public LinkerSymbol GetStaticSymbol(MosaField field)
 	{
-		return Linker.DefineSymbol($"{Metadata.StaticSymbolPrefix}{field.DeclaringType}+{field.Name}", SectionKind.BSS, Architecture.NativeAlignment, NativePointerSize);
+		return Linker.DefineSymbol($"{Metadata.StaticSymbolPrefix}{field.DeclaringType}+{field.Name}", SectionKind.BSS, Architecture.NativeAlignment, Architecture.NativePointerSize);
 	}
 
 	private bool ProcessInternalCall(MosaMethod method, Context context, List<Operand> operands, Stack<StackEntry> stack)
@@ -5659,13 +5423,13 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		var newmethod = method.DeclaringType.FindMethodByNameAndParameters("Ctor", method.Signature.Parameters);
 
-		var result = AllocateVirtualRegisterObject();
-		var symbol = Operand.CreateSymbolFromMethod(newmethod, TypeSystem);
+		var result = MethodCompiler.VirtualRegisters.AllocateObject();
+		var symbol = Operand.CreateLabel(newmethod, Is32BitPlatform);
 
 		context.AppendInstruction(IRInstruction.CallStatic, result, symbol);
 		context.AppendOperands(operands);
 
-		PushStack(stack, new StackEntry(StackType.Object, result));
+		PushStack(stack, new StackEntry(result));
 
 		MethodScanner.TypeAllocated(newmethod.DeclaringType, newmethod);
 
@@ -5693,7 +5457,6 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			var operands = context.GetOperands();
 			var result = context.Result;
 
-			//operands.Insert(0, Operand.CreateSymbolFromMethod(method, TypeSystem));
 			context.SetInstruction(IRInstruction.IntrinsicMethodCall, result, operands);
 
 			return true;
@@ -5706,37 +5469,6 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 			return true;
 		}
-	}
-
-	/// <summary>Processes external method calls.</summary>
-	/// <param name="method"></param>
-	/// <param name="context">The transformation context.</param>
-	/// <param name="result"></param>
-	/// <param name="operands"></param>
-	/// <returns>
-	///   <c>true</c> if the method was replaced by an intrinsic; <c>false</c> otherwise.</returns>
-	/// <remarks>This method checks if the call target has an Intrinsic-Attribute applied with
-	/// the current architecture. If it has, the method call is replaced by the specified
-	/// native instruction.</remarks>
-	private bool ProcessExternalCall(MosaMethod method, Context context, Operand result, List<Operand> operands)
-	{
-		var intrinsic = ResolveIntrinsicDelegateMethod(method);
-
-		if (intrinsic == null)
-			return false;
-
-		if (method.IsExternal)
-		{
-			var operand1 = Operand.CreateSymbolFromMethod(context.InvokeMethod, TypeSystem);
-			context.AppendInstruction(IRInstruction.IntrinsicMethodCall, result, operand1);
-			context.AppendOperands(operands);
-		}
-		else
-		{
-			//intrinsic(context, result, operands, MethodCompiler); // future
-		}
-
-		return true;
 	}
 
 	private IntrinsicMethodDelegate ResolveIntrinsicDelegateMethod(MosaMethod method)
@@ -5762,7 +5494,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		return intrinsic;
 	}
 
-	private MosaMethod GetMethodOrOverride(MosaType type, MosaMethod method)
+	private static MosaMethod GetMethodOrOverride(MosaType type, MosaMethod method)
 	{
 		var implMethod = type.FindMethodBySignature(method.Name, method.Signature);
 
@@ -5776,41 +5508,27 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 	/// <summary>Calculates the element offset for the specified index.</summary>
 	/// <param name="context">The node.</param>
-	/// <param name="elementType">The array type.</param>
-	/// <param name="index">The index operand.</param>
-	/// <returns>Element offset operand.</returns>
-	private Operand CalculateArrayElementOffset(Context context, MosaType elementType, Operand index)
-	{
-		var size = GetTypeSize(elementType, false);
-
-		return CalculateArrayElementOffset(context, size, index);
-	}
-
-	/// <summary>Calculates the element offset for the specified index.</summary>
-	/// <param name="context">The node.</param>
 	/// <param name="size">The element size.</param>
 	/// <param name="index">The index operand.</param>
 	/// <returns>Element offset operand.</returns>
 	private Operand CalculateArrayElementOffset(Context context, uint size, Operand index)
 	{
+		var elementOffset = MethodCompiler.VirtualRegisters.AllocateNativeInteger();
+
 		if (Is32BitPlatform)
 		{
-			var elementOffset = AllocateVirtualRegister32();
-			var elementSize = CreateConstant32(size);
+			var elementSize = Operand.CreateConstant32(size);
 
 			context.AppendInstruction(IRInstruction.MulUnsigned32, elementOffset, index, elementSize);
-
-			return elementOffset;
 		}
 		else
 		{
-			var elementOffset = AllocateVirtualRegister64();
-			var elementSize = CreateConstant64(size);
+			var elementSize = Operand.CreateConstant64(size);
 
 			context.AppendInstruction(IRInstruction.MulUnsigned64, elementOffset, index, elementSize);
-
-			return elementOffset;
 		}
+
+		return elementOffset;
 	}
 
 	/// <summary>Calculates the base of the array elements.</summary>
@@ -5819,51 +5537,13 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	/// <returns>Base address for array elements.</returns>
 	private Operand CalculateTotalArrayOffset(Context context, Operand elementOffset)
 	{
-		var fixedOffset = CreateConstant32(NativePointerSize);
-		var arrayElement = Is32BitPlatform ? AllocateVirtualRegister32() : AllocateVirtualRegister64();
+		var fixedOffset = Operand.CreateConstant32(Architecture.NativePointerSize);
+		var arrayElement = MethodCompiler.VirtualRegisters.AllocateNativeInteger();
 
-		if (Is32BitPlatform)
-			context.AppendInstruction(IRInstruction.Add32, arrayElement, elementOffset, fixedOffset);
-		else
-			context.AppendInstruction(IRInstruction.Add64, arrayElement, elementOffset, fixedOffset);
+		context.AppendInstruction(Is32BitPlatform ? IRInstruction.Add32 : IRInstruction.Add64, arrayElement, elementOffset, fixedOffset);
 
 		return arrayElement;
 	}
 
 	#endregion Array Helpers
-
-	/// <summary>
-	/// Visitation function for Conversion instruction from unsigned source.
-	/// </summary>
-	/// <param name="context">The context.</param>
-	private void CheckedConversionUnsigned(Context context)
-	{
-		var result = context.Result;
-		var source = context.Operand1;
-		var type = context.MosaType;
-
-		// First check to see if we have a matching checked conversion function
-
-		var sourceTypeString = source.Type.IsI4 ? "U4" :
-			source.Type.IsI8 ? "U8" :
-			source.Type.IsR4 ? "R4" :
-			source.Type.IsR8 ? "R8" :
-			source.Type.IsI ? Is32BitPlatform ? "U4" : "U8" :
-			source.Type.IsPointer ? Is32BitPlatform ? "U4" : "U8" :
-			!source.Type.IsValueType ? Is32BitPlatform ? "U4" : "U8" :
-			throw new CompilerException();
-
-		var resultTypeString = type.IsU || type.IsI || type.IsPointer ? Is32BitPlatform ? "U4" : "U8" : type.TypeCode.ToString();
-
-		var methodName = $"{sourceTypeString}To{resultTypeString}";
-		var method = GetMethod("Mosa.Runtime.Math.CheckedConversion", methodName);
-
-		Debug.Assert(method != null);
-
-		var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
-
-		context.SetInstruction(IRInstruction.CallStatic, result, symbol, source);
-
-		MethodScanner.MethodInvoked(method, Method);
-	}
 }

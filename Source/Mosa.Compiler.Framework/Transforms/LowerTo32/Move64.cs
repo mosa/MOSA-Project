@@ -13,8 +13,8 @@ public sealed class Move64 : BaseLower32Transform
 		var result = context.Result;
 		var operand1 = context.Operand1;
 
-		var resultLow = transform.AllocateVirtualRegister32();
-		var resultHigh = transform.AllocateVirtualRegister32();
+		var resultLow = transform.VirtualRegisters.Allocate32();
+		var resultHigh = transform.VirtualRegisters.Allocate32();
 
 		context.SetInstruction(IRInstruction.GetLow32, resultLow, operand1);
 		context.AppendInstruction(IRInstruction.GetHigh32, resultHigh, operand1);

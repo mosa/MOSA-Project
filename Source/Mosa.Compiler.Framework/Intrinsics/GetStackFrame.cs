@@ -5,12 +5,12 @@ namespace Mosa.Compiler.Framework.Intrinsics;
 /// <summary>
 /// IntrinsicMethods
 /// </summary>
-static partial class IntrinsicMethods
+internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Runtime.Intrinsic::GetStackFrame")]
 	private static void GetStackFrame(Context context, MethodCompiler methodCompiler)
 	{
-		var instruction = methodCompiler.Is32BitPlatform ? (BaseInstruction)IRInstruction.Move32 : IRInstruction.Move64;
+		var instruction = methodCompiler.Is32BitPlatform ? IRInstruction.Move32 : IRInstruction.Move64;
 
 		context.SetInstruction(instruction, context.Result, methodCompiler.Compiler.StackFrame);
 	}

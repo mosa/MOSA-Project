@@ -16,12 +16,12 @@ public sealed class SignExtend16x64 : BaseIRTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		transform.SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
+		transform.SplitOperand(context.Result, out var resultLow, out var resultHigh);
 
 		var op1 = MoveConstantToRegister(transform, context, context.Operand1);
 
-		context.SetInstruction(ARMv8A32.Lsl, resultLow, op1, transform.Constant32_16);
-		context.AppendInstruction(ARMv8A32.Asr, resultLow, resultLow, transform.Constant32_16);
-		context.AppendInstruction(ARMv8A32.Asr, resultHigh, resultLow, transform.Constant32_31);
+		context.SetInstruction(ARMv8A32.Lsl, resultLow, op1, Operand.Constant32_16);
+		context.AppendInstruction(ARMv8A32.Asr, resultLow, resultLow, Operand.Constant32_16);
+		context.AppendInstruction(ARMv8A32.Asr, resultHigh, resultLow, Operand.Constant32_31);
 	}
 }

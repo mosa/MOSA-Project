@@ -33,12 +33,12 @@ public sealed class Movzx8To32 : BaseTransform
 		// Movzx8To32 can not use with ESI or EDI registers as source registers
 		if (source.Register == result.Register)
 		{
-			context.SetInstruction(X86.And32, result, result, transform.CreateConstant32(0xFF));
+			context.SetInstruction(X86.And32, result, result, Operand.CreateConstant32(0xFF));
 		}
 		else
 		{
 			context.SetInstruction(X86.Mov32, result, source);
-			context.AppendInstruction(X86.And32, result, result, transform.CreateConstant32(0xFF));
+			context.AppendInstruction(X86.And32, result, result, Operand.CreateConstant32(0xFF));
 		}
 	}
 }

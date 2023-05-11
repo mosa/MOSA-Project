@@ -14,18 +14,18 @@ internal static partial class IntrinsicMethods
 	{
 		if (context.OperandCount == 2)
 		{
-			var instruction = !context.Operand2.IsInteger64 ? (BaseInstruction)IRInstruction.Store32 : IRInstruction.Store64;
+			var instruction = !context.Operand2.IsInt64 ? IRInstruction.Store32 : IRInstruction.Store64;
 
 			if (context.Operand2.IsR4)
 				instruction = IRInstruction.StoreR4;
 			else if (context.Operand2.IsR8)
 				instruction = IRInstruction.StoreR8;
 
-			context.SetInstruction(instruction, null, context.Operand1, methodCompiler.Constant64_0, context.Operand2);
+			context.SetInstruction(instruction, null, context.Operand1, Operand.Constant64_0, context.Operand2);
 		}
 		else if (context.OperandCount == 3)
 		{
-			var instruction = !context.Operand3.IsInteger64 ? (BaseInstruction)IRInstruction.Store32 : IRInstruction.Store64;
+			var instruction = !context.Operand3.IsInt64 ? IRInstruction.Store32 : IRInstruction.Store64;
 
 			if (context.Operand3.IsR4)
 				instruction = IRInstruction.StoreR4;

@@ -51,7 +51,7 @@ public struct GDTTable
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	private void SetLgdt(Pointer address)
 	{
-		Native.Lgdt((uint)address.ToInt32());
+		Native.Lgdt(address.ToUInt32());
 		Native.SetSegments(0x10, 0x10, 0x10, 0x10, 0x10);
 		Native.FarJump();
 	}

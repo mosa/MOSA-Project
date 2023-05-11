@@ -25,7 +25,7 @@ public sealed class DevirtualizationStage : BaseCompilerStage
 
 			foreach (var method in type.Methods)
 			{
-				if (method.IsStatic || !method.IsVirtual)
+				if (method.IsStatic || !method.IsVirtual || method.HasOpenGenericParams)
 					continue;
 
 				if (!method.HasImplementation && method.IsAbstract)

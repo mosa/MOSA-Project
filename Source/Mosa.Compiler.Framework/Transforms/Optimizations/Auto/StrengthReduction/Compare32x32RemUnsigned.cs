@@ -51,7 +51,7 @@ public sealed class Compare32x32RemUnsigned : BaseTransform
 
 		var t1 = context.Operand1.Definitions[0].Operand1;
 
-		var c1 = transform.CreateConstant(1);
+		var c1 = Operand.CreateConstant(1);
 
 		context.SetInstruction(IRInstruction.And32, result, t1, c1);
 	}
@@ -102,7 +102,7 @@ public sealed class Compare32x32RemUnsigned_v1 : BaseTransform
 
 		var t1 = context.Operand2.Definitions[0].Operand1;
 
-		var c1 = transform.CreateConstant(1);
+		var c1 = Operand.CreateConstant(1);
 
 		context.SetInstruction(IRInstruction.And32, result, t1, c1);
 	}

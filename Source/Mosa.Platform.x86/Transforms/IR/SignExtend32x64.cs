@@ -16,7 +16,7 @@ public sealed class SignExtend32x64 : BaseIRTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		transform.SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
+		transform.SplitOperand(context.Result, out var resultLow, out var resultHigh);
 
 		context.SetInstruction(X86.Mov32, resultLow, context.Operand1);
 		context.AppendInstruction(X86.Cdq32, resultHigh, context.Operand1);

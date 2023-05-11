@@ -27,7 +27,7 @@ public sealed class Compare64x64RestInSSA : BaseLower32Transform
 		var operand1 = context.Operand1;
 		var operand2 = context.Operand2;
 
-		transform.SplitLongOperand(result, out Operand resultLow, out Operand resultHigh);
+		transform.SplitOperand(result, out Operand resultLow, out Operand resultHigh);
 
 		var branch = context.ConditionCode;
 		var branchUnsigned = context.ConditionCode.GetUnsigned();
@@ -37,10 +37,10 @@ public sealed class Compare64x64RestInSSA : BaseLower32Transform
 
 		TransformContext.UpdatePhiTargets(nextBlock.Block.NextBlocks, context.Block, nextBlock.Block);
 
-		var op0Low = transform.AllocateVirtualRegister32();
-		var op0High = transform.AllocateVirtualRegister32();
-		var op1Low = transform.AllocateVirtualRegister32();
-		var op1High = transform.AllocateVirtualRegister32();
+		var op0Low = transform.VirtualRegisters.Allocate32();
+		var op0High = transform.VirtualRegisters.Allocate32();
+		var op1Low = transform.VirtualRegisters.Allocate32();
+		var op1High = transform.VirtualRegisters.Allocate32();
 
 		context.SetInstruction(IRInstruction.GetLow32, op0Low, operand1);
 		context.AppendInstruction(IRInstruction.GetHigh32, op0High, operand1);
@@ -73,7 +73,7 @@ public sealed class Compare64x64RestInSSA : BaseLower32Transform
 		newBlocks[3].AppendInstruction(IRInstruction.Jmp, newBlocks[4].Block);
 
 		// Exit
-		newBlocks[4].AppendInstruction(IRInstruction.Phi64, resultLow, transform.CreateConstant((uint)1), transform.Constant64_0);
+		newBlocks[4].AppendInstruction(IRInstruction.Phi64, resultLow, Operand.CreateConstant((uint)1), Operand.Constant64_0);
 		newBlocks[4].PhiBlocks = new List<BasicBlock>(2) { newBlocks[2].Block, newBlocks[3].Block };
 		newBlocks[4].AppendInstruction(IRInstruction.Jmp, nextBlock.Block);
 	}

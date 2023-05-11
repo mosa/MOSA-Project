@@ -2,8 +2,6 @@
 
 using System;
 using Mosa.Compiler.Common;
-using Mosa.Compiler.Framework.Managers;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Compiler.Framework;
 

@@ -16,7 +16,7 @@ public sealed class To64 : BaseIRTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		transform.SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
+		transform.SplitOperand(context.Result, out var resultLow, out var resultHigh);
 
 		var operand1 = context.Operand1;
 		var operand2 = context.Operand2;

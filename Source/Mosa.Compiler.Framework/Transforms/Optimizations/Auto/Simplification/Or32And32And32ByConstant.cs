@@ -50,7 +50,7 @@ public sealed class Or32And32And32ByConstant : BaseTransform
 		var t2 = context.Operand1.Definitions[0].Operand2;
 		var t3 = context.Operand2.Definitions[0].Operand1;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I4);
+		var v1 = transform.VirtualRegisters.Allocate32();
 
 		context.SetInstruction(IRInstruction.Or32, v1, t1, t3);
 		context.AppendInstruction(IRInstruction.And32, result, v1, t2);
@@ -101,7 +101,7 @@ public sealed class Or32And32And32ByConstant_v1 : BaseTransform
 		var t2 = context.Operand1.Definitions[0].Operand2;
 		var t3 = context.Operand2.Definitions[0].Operand1;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I4);
+		var v1 = transform.VirtualRegisters.Allocate32();
 
 		context.SetInstruction(IRInstruction.Or32, v1, t3, t1);
 		context.AppendInstruction(IRInstruction.And32, result, v1, t2);
@@ -152,7 +152,7 @@ public sealed class Or32And32And32ByConstant_v2 : BaseTransform
 		var t2 = context.Operand1.Definitions[0].Operand2;
 		var t3 = context.Operand2.Definitions[0].Operand2;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I4);
+		var v1 = transform.VirtualRegisters.Allocate32();
 
 		context.SetInstruction(IRInstruction.Or32, v1, t1, t3);
 		context.AppendInstruction(IRInstruction.And32, result, v1, t2);
@@ -203,7 +203,7 @@ public sealed class Or32And32And32ByConstant_v3 : BaseTransform
 		var t2 = context.Operand1.Definitions[0].Operand2;
 		var t3 = context.Operand2.Definitions[0].Operand1;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I4);
+		var v1 = transform.VirtualRegisters.Allocate32();
 
 		context.SetInstruction(IRInstruction.Or32, v1, t3, t2);
 		context.AppendInstruction(IRInstruction.And32, result, v1, t1);
@@ -254,7 +254,7 @@ public sealed class Or32And32And32ByConstant_v4 : BaseTransform
 		var t2 = context.Operand1.Definitions[0].Operand2;
 		var t3 = context.Operand2.Definitions[0].Operand1;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I4);
+		var v1 = transform.VirtualRegisters.Allocate32();
 
 		context.SetInstruction(IRInstruction.Or32, v1, t2, t3);
 		context.AppendInstruction(IRInstruction.And32, result, v1, t1);
@@ -305,7 +305,7 @@ public sealed class Or32And32And32ByConstant_v5 : BaseTransform
 		var t2 = context.Operand1.Definitions[0].Operand2;
 		var t3 = context.Operand2.Definitions[0].Operand2;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I4);
+		var v1 = transform.VirtualRegisters.Allocate32();
 
 		context.SetInstruction(IRInstruction.Or32, v1, t3, t1);
 		context.AppendInstruction(IRInstruction.And32, result, v1, t2);
@@ -356,7 +356,7 @@ public sealed class Or32And32And32ByConstant_v6 : BaseTransform
 		var t2 = context.Operand1.Definitions[0].Operand2;
 		var t3 = context.Operand2.Definitions[0].Operand2;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I4);
+		var v1 = transform.VirtualRegisters.Allocate32();
 
 		context.SetInstruction(IRInstruction.Or32, v1, t2, t3);
 		context.AppendInstruction(IRInstruction.And32, result, v1, t1);
@@ -407,7 +407,7 @@ public sealed class Or32And32And32ByConstant_v7 : BaseTransform
 		var t2 = context.Operand1.Definitions[0].Operand2;
 		var t3 = context.Operand2.Definitions[0].Operand2;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I4);
+		var v1 = transform.VirtualRegisters.Allocate32();
 
 		context.SetInstruction(IRInstruction.Or32, v1, t3, t2);
 		context.AppendInstruction(IRInstruction.And32, result, v1, t1);

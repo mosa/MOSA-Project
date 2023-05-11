@@ -32,16 +32,16 @@ public sealed class MulCarryOut64 : BaseTransform
 		var result = context.Result;
 		var result2 = context.Result2;
 
-		var v1 = transform.MethodCompiler.AddStackLocal(result2.Type);   // REVIEW
-		var v2 = transform.AllocateVirtualRegister32();
+		var v1 = transform.LocalStack.Allocate(result2);   // REVIEW
+		var v2 = transform.VirtualRegisters.Allocate32();
 
 		Debug.Assert(method != null, $"Cannot find method: {methodName}");
 
-		var symbol = Operand.CreateSymbolFromMethod(method, transform.TypeSystem);
+		var symbol = Operand.CreateLabel(method, transform.Is32BitPlatform);
 
 		context.SetInstruction(IRInstruction.AddressOf, v2, v1);
 		context.AppendInstruction(IRInstruction.CallStatic, result, symbol, operand1, operand2, v2);
-		context.AppendInstruction(IRInstruction.LoadZeroExtend8x32, result2, v2, transform.Constant32_0);
+		context.AppendInstruction(IRInstruction.LoadZeroExtend8x32, result2, v2, Operand.Constant32_0);
 
 		transform.MethodScanner.MethodInvoked(method, transform.Method);
 	}

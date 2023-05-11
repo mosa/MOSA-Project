@@ -139,14 +139,19 @@ public enum DwarfExtendedOpcode : byte
 public class DwarfAbbrev
 {
 	public uint Number { get; set; }
+
 	public DwarfTag Tag { get; set; }
+
 	public ICollection<DwarfAbbrevAttribute> Attributes { get; set; }
+
 	public ICollection<DwarfAbbrev> Children { get; set; }
+
 	public bool HasChildren => Children != null && Children.Count > 0;
 }
 
 public class DwarfAbbrevAttribute
 {
 	public DwarfAttribute Attribute { get; set; }
+
 	public DwarfForm Form { get; set; }
 }

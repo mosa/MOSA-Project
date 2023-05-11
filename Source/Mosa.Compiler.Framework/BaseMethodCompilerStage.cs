@@ -1,6 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Mosa.Compiler.Common.Exceptions;
@@ -38,22 +37,6 @@ public abstract class BaseMethodCompilerStage
 
 	#endregion Stage Properties
 
-	#region Instructions Properties
-
-	protected BaseInstruction MoveInstruction { get; private set; }
-
-	//protected BaseInstruction LoadInstruction { get; private set; }
-
-	//protected BaseInstruction StoreInstruction { get; private set; }
-
-	//protected BaseInstruction SubInstruction { get; private set; }
-
-	//protected BaseInstruction AddInstruction { get; private set; }
-
-	//protected BaseInstruction BranchInstruction { get; private set; }
-
-	#endregion Instructions Properties
-
 	#region Compiler Properties
 
 	protected Compiler Compiler { get; private set; }
@@ -82,24 +65,6 @@ public abstract class BaseMethodCompilerStage
 	/// Gets the compiler options.
 	/// </summary>
 	protected CompilerSettings CompilerSettings { get; private set; }
-
-	/// <summary>
-	/// Holds the native pointer size
-	/// </summary>
-	protected uint NativePointerSize { get; private set; }
-
-	/// <summary>
-	/// Holds the native alignment
-	/// </summary>
-	protected uint NativeAlignment { get; private set; }
-
-	/// <summary>
-	/// Gets the size of the native instruction.
-	/// </summary>
-	/// <value>
-	/// The size of the native instruction.
-	/// </value>
-	protected InstructionSize NativeInstructionSize { get; private set; }
 
 	/// <summary>
 	/// Gets a value indicating whether [is32 bit platform].
@@ -168,26 +133,6 @@ public abstract class BaseMethodCompilerStage
 	protected Operand ConstantZero => MethodCompiler.ConstantZero;
 
 	/// <summary>
-	/// Gets the 32-bit constant zero.
-	/// </summary>
-	protected Operand Constant32_0 => MethodCompiler.Constant32_0;
-
-	/// <summary>
-	/// Gets the 64-bit constant zero.
-	/// </summary>
-	protected Operand Constant64_0 => MethodCompiler.Constant64_0;
-
-	/// <summary>
-	/// Gets the floating point R4 constant zero.
-	/// </summary>
-	protected Operand ConstantR4_0 => MethodCompiler.ConstantR4_0;
-
-	/// <summary>
-	/// Gets the floating point R8 constant zero.
-	/// </summary>
-	protected Operand ConstantR8_0 => MethodCompiler.ConstantR8_0;
-
-	/// <summary>
 	/// Gets the stack frame.
 	/// </summary>
 	protected Operand StackFrame => MethodCompiler.Compiler.StackFrame;
@@ -252,32 +197,8 @@ public abstract class BaseMethodCompilerStage
 		CompilerSettings = compiler.CompilerSettings;
 		MethodScanner = compiler.MethodScanner;
 
-		NativePointerSize = Architecture.NativePointerSize;
-		NativeAlignment = Architecture.NativeAlignment;
-		NativeInstructionSize = Architecture.NativeInstructionSize;
 		Is32BitPlatform = Architecture.Is32BitPlatform;
 		Is64BitPlatform = Architecture.Is64BitPlatform;
-
-		ObjectHeaderSize = compiler.ObjectHeaderSize;
-
-		if (Is32BitPlatform)
-		{
-			MoveInstruction = IRInstruction.Move32;
-			//LoadInstruction = IRInstruction.Load32;
-			//StoreInstruction = IRInstruction.Store32;
-			//AddInstruction = IRInstruction.Add32;
-			//SubInstruction = IRInstruction.Sub32;
-			//BranchInstruction = IRInstruction.Branch32;
-		}
-		else
-		{
-			MoveInstruction = IRInstruction.Move64;
-			//LoadInstruction = IRInstruction.Load64;
-			//StoreInstruction = IRInstruction.Store64;
-			//AddInstruction = IRInstruction.Add64;
-			//SubInstruction = IRInstruction.Sub64;
-			//BranchInstruction = IRInstruction.Branch64;
-		}
 
 		Initialize();
 	}
@@ -318,66 +239,6 @@ public abstract class BaseMethodCompilerStage
 
 		MethodCompiler = null;
 		traceLogs = null;
-	}
-
-	public Operand AddStackLocal(MosaType type, bool pinned = false)
-	{
-		return MethodCompiler.AddStackLocal(type, pinned);
-	}
-
-	protected Operand AllocateVirtualRegister(MosaType type)
-	{
-		return MethodCompiler.VirtualRegisters.Allocate(type);
-	}
-
-	protected Operand AllocateVirtualRegister(Operand operand)
-	{
-		return MethodCompiler.VirtualRegisters.Allocate(operand.Type);
-	}
-
-	protected Operand AllocateVirtualRegister32()
-	{
-		return MethodCompiler.VirtualRegisters.Allocate(TypeSystem.BuiltIn.I4);
-	}
-
-	protected Operand AllocateVirtualRegister64()
-	{
-		return MethodCompiler.VirtualRegisters.Allocate(TypeSystem.BuiltIn.I8);
-	}
-
-	protected Operand AllocateVirtualRegisterR4()
-	{
-		return MethodCompiler.VirtualRegisters.Allocate(TypeSystem.BuiltIn.R4);
-	}
-
-	protected Operand AllocateVirtualRegisterR8()
-	{
-		return MethodCompiler.VirtualRegisters.Allocate(TypeSystem.BuiltIn.R8);
-	}
-
-	protected Operand AllocateVirtualRegisterObject()
-	{
-		return MethodCompiler.VirtualRegisters.Allocate(TypeSystem.BuiltIn.Object);
-	}
-
-	protected Operand AllocateVirtualRegisterManagedPointer()
-	{
-		return MethodCompiler.VirtualRegisters.Allocate(TypeSystem.BuiltIn.ManagedPointer);
-	}
-
-	protected Operand AllocateVirtualRegisterNativeInteger()
-	{
-		return Is32BitPlatform ? MethodCompiler.VirtualRegisters.Allocate(TypeSystem.BuiltIn.I4) : MethodCompiler.VirtualRegisters.Allocate(TypeSystem.BuiltIn.I8);
-	}
-
-	/// <summary>
-	/// Allocates the virtual register or stack slot.
-	/// </summary>
-	/// <param name="type">The type.</param>
-	/// <returns></returns>
-	public Operand AllocateVirtualRegisterOrStackSlot(MosaType type)
-	{
-		return MethodCompiler.AllocateVirtualRegisterOrStackSlot(type);
 	}
 
 	#endregion Methods
@@ -857,46 +718,30 @@ public abstract class BaseMethodCompilerStage
 	public static bool IsMoveInstruction(BaseInstruction instruction)
 	{
 		return instruction == IRInstruction.Move32
-			   || instruction == IRInstruction.Move64
-			   || instruction == IRInstruction.MoveObject
-			   || instruction == IRInstruction.MoveR8
-			   || instruction == IRInstruction.MoveR4;
+			|| instruction == IRInstruction.Move64
+			|| instruction == IRInstruction.MoveObject
+			|| instruction == IRInstruction.MoveR8
+			|| instruction == IRInstruction.MoveR4;
 	}
 
 	public static bool IsCompareInstruction(BaseInstruction instruction)
 	{
 		return instruction == IRInstruction.Compare32x32
-			   || instruction == IRInstruction.Compare32x64
-			   || instruction == IRInstruction.Compare64x32
-			   || instruction == IRInstruction.Compare64x64
-			   || instruction == IRInstruction.CompareObject
-			   || instruction == IRInstruction.CompareR4
-			   || instruction == IRInstruction.CompareR8;
+			|| instruction == IRInstruction.Compare32x64
+			|| instruction == IRInstruction.Compare64x32
+			|| instruction == IRInstruction.Compare64x64
+			|| instruction == IRInstruction.CompareObject
+			|| instruction == IRInstruction.CompareR4
+			|| instruction == IRInstruction.CompareR8;
 	}
 
 	public static bool IsPhiInstruction(BaseInstruction instruction)
 	{
 		return instruction == IRInstruction.Phi32
-			   || instruction == IRInstruction.Phi64
-			   || instruction == IRInstruction.PhiObject
-			   || instruction == IRInstruction.PhiR4
-			   || instruction == IRInstruction.PhiR8;
-	}
-
-	public static bool IsSSAForm(Operand operand)
-	{
-		return operand.Definitions.Count == 1;
-	}
-
-	/// <summary>
-	/// Gets the size of the type.
-	/// </summary>
-	/// <param name="type">The type.</param>
-	/// <param name="align">if set to <c>true</c> [align].</param>
-	/// <returns></returns>
-	public uint GetTypeSize(MosaType type, bool align)
-	{
-		return MethodCompiler.GetReferenceOrTypeSize(type, align);
+			|| instruction == IRInstruction.Phi64
+			|| instruction == IRInstruction.PhiObject
+			|| instruction == IRInstruction.PhiR4
+			|| instruction == IRInstruction.PhiR8;
 	}
 
 	public List<BasicBlock> AddMissingBlocksIfRequired(List<BasicBlock> blocks)
@@ -928,197 +773,7 @@ public abstract class BaseMethodCompilerStage
 		return list;
 	}
 
-	protected BaseInstruction GetLoadInstruction(MosaType type)
-	{
-		type = MosaTypeLayout.GetUnderlyingType(type);
-
-		if (type == null)
-			return IRInstruction.LoadCompound;
-
-		if (type.IsReferenceType)
-			return IRInstruction.LoadObject;
-		else if (type.IsPointer)
-			return Select(IRInstruction.Load32, IRInstruction.Load64);
-		else if (type.IsI1)
-			return Select(IRInstruction.LoadSignExtend8x32, IRInstruction.LoadSignExtend8x64);
-		else if (type.IsI2)
-			return Select(IRInstruction.LoadSignExtend16x32, IRInstruction.LoadSignExtend16x64);
-		else if (type.IsI4)
-			return Select(IRInstruction.Load32, IRInstruction.LoadSignExtend32x64);
-		else if (type.IsI8)
-			return IRInstruction.Load64;
-		else if (type.IsU1 || type.IsBoolean)
-			return Select(IRInstruction.LoadZeroExtend8x32, IRInstruction.LoadZeroExtend8x64);
-		else if (type.IsU2 || type.IsChar)
-			return Select(IRInstruction.LoadZeroExtend16x32, IRInstruction.LoadZeroExtend16x64);
-		else if (type.IsU4)
-			return Select(IRInstruction.Load32, IRInstruction.LoadZeroExtend32x64);
-		else if (type.IsU8)
-			return IRInstruction.Load64;
-		else if (type.IsR4)
-			return IRInstruction.LoadR4;
-		else if (type.IsR8)
-			return IRInstruction.LoadR8;
-		else if (Is32BitPlatform)   // review
-			return IRInstruction.Load32;
-		else if (Is64BitPlatform)
-			return IRInstruction.Load64;
-
-		throw new InvalidOperationException();
-	}
-
-	public BaseInstruction GetMoveInstruction(MosaType type)
-	{
-		type = MosaTypeLayout.GetUnderlyingType(type);
-
-		if (type == null)
-			return IRInstruction.MoveCompound;
-
-		if (type.IsReferenceType)
-			return IRInstruction.MoveObject;
-		else if (type.IsPointer)
-			return Select(IRInstruction.Move32, IRInstruction.Move64);
-		else if (type.IsI1)
-			return Select(IRInstruction.SignExtend8x32, IRInstruction.SignExtend8x64);
-		else if (type.IsI2)
-			return Select(IRInstruction.SignExtend16x32, IRInstruction.SignExtend16x64);
-		else if (type.IsI4)
-			return Select(IRInstruction.Move32, IRInstruction.Move32);
-		else if (type.IsI8)
-			return IRInstruction.Move64;
-		else if (type.IsU1 || type.IsBoolean)
-			return Select(IRInstruction.ZeroExtend8x32, IRInstruction.ZeroExtend8x64);
-		else if (type.IsU2 || type.IsChar)
-			return Select(IRInstruction.ZeroExtend16x32, IRInstruction.ZeroExtend16x64);
-		else if (type.IsU4)
-			return Select(IRInstruction.Move32, IRInstruction.ZeroExtend32x64);
-		else if (type.IsU8)
-			return IRInstruction.Move64;
-		else if (type.IsR4)
-			return IRInstruction.MoveR4;
-		else if (type.IsR8)
-			return IRInstruction.MoveR8;
-		else if (Is32BitPlatform)   // review
-			return IRInstruction.Move32;
-		else if (Is64BitPlatform)
-			return IRInstruction.Move64;
-
-		throw new InvalidOperationException();
-	}
-
-	protected BaseIRInstruction GetStoreParameterInstruction(MosaType type)
-	{
-		return GetStoreParameterInstruction(type, Is32BitPlatform);
-	}
-
-	public BaseIRInstruction GetLoadParameterInstruction(MosaType type)
-	{
-		return GetLoadParameterInstruction(type, Is32BitPlatform);
-	}
-
-	public static BaseIRInstruction GetStoreParameterInstruction(MosaType type, bool is32bitPlatform)
-	{
-		if (type.IsReferenceType)
-			return IRInstruction.StoreParamObject;
-		else if (type.IsR4)
-			return IRInstruction.StoreParamR4;
-		else if (type.IsR8)
-			return IRInstruction.StoreParamR8;
-		else if (type.IsUI1 || type.IsBoolean)
-			return IRInstruction.StoreParam8;
-		else if (type.IsUI2 || type.IsChar)
-			return IRInstruction.StoreParam16;
-		else if (type.IsUI4)
-			return IRInstruction.StoreParam32;
-		else if (type.IsUI8)
-			return IRInstruction.StoreParam64;
-		else if (is32bitPlatform)
-			return IRInstruction.StoreParam32;
-		else //if (!is32bitPlatform)
-			return IRInstruction.StoreParam64;
-
-		throw new NotSupportedException();
-	}
-
-	public static BaseIRInstruction GetLoadParameterInstruction(MosaType type, bool is32bitPlatform)
-	{
-		if (type.IsReferenceType)
-			return IRInstruction.LoadParamObject;
-		else if (type.IsR4)
-			return IRInstruction.LoadParamR4;
-		else if (type.IsR8)
-			return IRInstruction.LoadParamR8;
-		else if (type.IsU1 || type.IsBoolean)
-			return IRInstruction.LoadParamZeroExtend8x32;
-		else if (type.IsI1)
-			return IRInstruction.LoadParamSignExtend8x32;
-		else if (type.IsU2 || type.IsChar)
-			return IRInstruction.LoadParamZeroExtend16x32;
-		else if (type.IsI2)
-			return IRInstruction.LoadParamSignExtend16x32;
-		else if (type.IsUI4)
-			return IRInstruction.LoadParam32;
-		else if (type.IsUI8)
-			return IRInstruction.LoadParam64;
-		else if (type.IsEnum && type.ElementType.IsI4)
-			return IRInstruction.LoadParam32;
-		else if (type.IsEnum && type.ElementType.IsU4)
-			return IRInstruction.LoadParam32;
-		else if (type.IsEnum && type.ElementType.IsUI8)
-			return IRInstruction.LoadParam64;
-		else if (is32bitPlatform)
-			return IRInstruction.LoadParam32;
-		else
-			return IRInstruction.LoadParam64;
-	}
-
-	public static BaseIRInstruction GetSetReturnInstruction(MosaType type, bool is32bitPlatform)
-	{
-		if (type == null)
-			return null;
-
-		type = MosaTypeLayout.GetUnderlyingType(type);
-
-		if (type == null)
-			return IRInstruction.SetReturnCompound;
-
-		if (type.IsReferenceType)
-			return IRInstruction.SetReturnObject;
-		else if (type.IsR4)
-			return IRInstruction.SetReturnR4;
-		else if (type.IsR8)
-			return IRInstruction.SetReturnR8;
-		else if (type.IsUI8 || (type.IsEnum && type.ElementType.IsUI8))
-			return IRInstruction.SetReturn64;
-
-		return is32bitPlatform ? IRInstruction.SetReturn32 : IRInstruction.SetReturn64;
-	}
-
-	public BaseIRInstruction GetStoreInstruction(MosaType type)
-	{
-		if (type.IsReferenceType)
-			return IRInstruction.StoreObject;
-		else if (type.IsR4)
-			return IRInstruction.StoreR4;
-		else if (type.IsR8)
-			return IRInstruction.StoreR8;
-		else if (type.IsUI1 || type.IsBoolean)
-			return IRInstruction.Store8;
-		else if (type.IsUI2 || type.IsChar)
-			return IRInstruction.Store16;
-		else if (type.IsUI4)
-			return IRInstruction.Store32;
-		else if (type.IsUI8)
-			return IRInstruction.Store64;
-		else if (Is32BitPlatform)
-			return IRInstruction.Store32;
-		else if (Is64BitPlatform)
-			return IRInstruction.Store64;
-
-		throw new NotSupportedException();
-	}
-
-	private BaseInstruction Select(BaseInstruction instruction32, BaseInstruction instruction64)
+	protected BaseInstruction Select(BaseInstruction instruction32, BaseInstruction instruction64)
 	{
 		return Is32BitPlatform ? instruction32 : instruction64;
 	}
@@ -1155,7 +810,7 @@ public abstract class BaseMethodCompilerStage
 
 		// FUTURE: throw compiler exception
 
-		var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
+		var symbol = Operand.CreateLabel(method, Is32BitPlatform);
 
 		if (context.OperandCount == 1)
 		{
@@ -1174,50 +829,6 @@ public abstract class BaseMethodCompilerStage
 	}
 
 	#endregion Helper Methods
-
-	#region Constant Helper Methods
-
-	protected Operand CreateConstant32(int value)
-	{
-		return Operand.CreateConstant(TypeSystem.BuiltIn.I4, value);
-	}
-
-	protected Operand CreateConstant32(uint value)
-	{
-		return Operand.CreateConstant(TypeSystem.BuiltIn.I4, value);
-	}
-
-	protected Operand CreateConstant32(long value)
-	{
-		return Operand.CreateConstant(TypeSystem.BuiltIn.I8, value);
-	}
-
-	protected Operand CreateConstant64(long value)
-	{
-		return Operand.CreateConstant(TypeSystem.BuiltIn.I8, value);
-	}
-
-	protected Operand CreateConstant64(ulong value)
-	{
-		return Operand.CreateConstant(TypeSystem.BuiltIn.I8, value);
-	}
-
-	protected Operand CreateConstantR4(float value)
-	{
-		return Operand.CreateConstant(TypeSystem.BuiltIn.R4, value);
-	}
-
-	protected Operand CreateConstantR8(double value)
-	{
-		return Operand.CreateConstant(TypeSystem.BuiltIn.R8, value);
-	}
-
-	protected static Operand CreateConstant(MosaType type, ulong value)
-	{
-		return Operand.CreateConstant(type, value);
-	}
-
-	#endregion Constant Helper Methods
 
 	public void AllStopWithException(string exception)
 	{

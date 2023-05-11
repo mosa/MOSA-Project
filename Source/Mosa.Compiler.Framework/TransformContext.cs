@@ -3,8 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Reflection;
-using System.Reflection.Emit;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Managers;
 using Mosa.Compiler.Framework.Trace;
@@ -28,21 +26,9 @@ public sealed class TransformContext
 
 	public TraceLog SpecialTraceLog { get; private set; }
 
-	public MosaType I4 { get; private set; }
-
-	public MosaType I8 { get; private set; }
-
-	public MosaType R4 { get; private set; }
-
-	public MosaType R8 { get; private set; }
-
-	public MosaType Pointer { get; private set; }
-
-	public MosaType O { get; private set; }
-
-	public MosaType NativeInteger { get; private set; }
-
 	public VirtualRegisters VirtualRegisters { get; private set; }
+
+	public LocalStack LocalStack { get; set; }
 
 	public BasicBlocks BasicBlocks { get; set; }
 
@@ -124,42 +110,6 @@ public sealed class TransformContext
 
 	#endregion Properties - Instructions
 
-	#region Constants
-
-	public Operand Constant32_0 { get; private set; }
-
-	public Operand Constant64_0 { get; private set; }
-
-	public Operand Constant64_1 { get; private set; }
-
-	public Operand ConstantR4_0 { get; private set; }
-
-	public Operand ConstantR8_0 { get; private set; }
-
-	public Operand Constant32_1 { get; private set; }
-
-	public Operand Constant32_2 { get; private set; }
-
-	public Operand Constant32_3 { get; private set; }
-
-	public Operand Constant32_4 { get; private set; }
-
-	public Operand Constant32_16 { get; private set; }
-
-	public Operand Constant32_24 { get; private set; }
-
-	public Operand Constant32_31 { get; private set; }
-
-	public Operand Constant32_32 { get; private set; }
-
-	public Operand Constant32_64 { get; private set; }
-
-	public Operand Constant64_32 { get; private set; }
-
-	public Operand NullOperand { get; private set; }
-
-	#endregion Constants
-
 	#region Data
 
 	private readonly Dictionary<Type, BaseTransformManager> Managers = new Dictionary<Type, BaseTransformManager>();
@@ -173,35 +123,6 @@ public sealed class TransformContext
 		Is32BitPlatform = Compiler.Architecture.Is32BitPlatform;
 		TypeSystem = Compiler.TypeSystem;
 
-		I4 = TypeSystem.BuiltIn.I4;
-		I8 = TypeSystem.BuiltIn.I8;
-		R4 = TypeSystem.BuiltIn.R4;
-		R8 = TypeSystem.BuiltIn.R8;
-		O = TypeSystem.BuiltIn.Object;
-		Pointer = TypeSystem.BuiltIn.Pointer;
-
-		NativeInteger = Is32BitPlatform ? I4 : I8;
-
-		Constant32_0 = Operand.CreateConstant(I4, (uint)0);
-		Constant64_0 = Operand.CreateConstant(I4, (ulong)0);
-		ConstantR4_0 = Operand.CreateConstant(R4, 0.0f);
-		ConstantR8_0 = Operand.CreateConstant(R4, 0.0d);
-
-		Constant32_1 = CreateConstant32(1);
-		Constant32_2 = CreateConstant32(2);
-		Constant32_3 = CreateConstant32(3);
-		Constant32_4 = CreateConstant32(4);
-		Constant32_16 = CreateConstant32(16);
-		Constant32_31 = CreateConstant32(31);
-		Constant32_32 = CreateConstant32(32);
-		Constant32_64 = CreateConstant32(64);
-		Constant32_24 = CreateConstant32(24);
-
-		Constant64_1 = CreateConstant64(1);
-		Constant64_32 = CreateConstant64(32);
-
-		NullOperand = Operand.GetNullObject(Compiler.TypeSystem);
-
 		LowerTo32 = Compiler.CompilerSettings.LongExpansion;
 		Devirtualization = Compiler.CompilerSettings.Devirtualization;
 		Window = Math.Max(Compiler.CompilerSettings.OptimizationWindow, 1);
@@ -214,6 +135,8 @@ public sealed class TransformContext
 		MethodCompiler = methodCompiler;
 
 		VirtualRegisters = methodCompiler.VirtualRegisters;
+		LocalStack = methodCompiler.LocalStack;
+
 		BasicBlocks = methodCompiler.BasicBlocks;
 
 		AreCPURegistersAllocated = methodCompiler.AreCPURegistersAllocated;
@@ -261,46 +184,6 @@ public sealed class TransformContext
 		SpecialTraceLog = specialTraceLog;
 	}
 
-	public Operand AllocateVirtualRegister(Operand operand)
-	{
-		return VirtualRegisters.Allocate(operand.Type);
-	}
-
-	public Operand AllocateVirtualRegister(MosaType type)
-	{
-		return VirtualRegisters.Allocate(type);
-	}
-
-	public Operand AllocateVirtualRegister32()
-	{
-		return VirtualRegisters.Allocate(I4);
-	}
-
-	public Operand AllocateVirtualRegister64()
-	{
-		return VirtualRegisters.Allocate(I8);
-	}
-
-	public Operand AllocateVirtualRegisterR4()
-	{
-		return VirtualRegisters.Allocate(R4);
-	}
-
-	public Operand AllocateVirtualRegisterR8()
-	{
-		return VirtualRegisters.Allocate(R8);
-	}
-
-	public Operand AllocateVirtualRegisterObject()
-	{
-		return VirtualRegisters.Allocate(O);
-	}
-
-	public Operand AllocateVirtualRegisterNativeInteger()
-	{
-		return VirtualRegisters.Allocate(NativeInteger);
-	}
-
 	public bool ApplyTransform(Context context, BaseTransform transform, int count)
 	{
 		if (!transform.Match(context, this))
@@ -334,65 +217,6 @@ public sealed class TransformContext
 	}
 
 	#endregion Trace
-
-	#region Constant Helper Methods
-
-	public Operand CreateConstant(int value)
-	{
-		return value == 0 ? Constant32_0 : Operand.CreateConstant(I4, value);
-	}
-
-	public Operand CreateConstant32(int value)
-	{
-		return value == 0 ? Constant32_0 : Operand.CreateConstant(I4, value);
-	}
-
-	public Operand CreateConstant32(long value)
-	{
-		return (int)value == 0 ? Constant32_0 : Operand.CreateConstant(I4, (int)value);
-	}
-
-	public Operand CreateConstant(uint value)
-	{
-		return value == 0 ? Constant32_0 : Operand.CreateConstant(I4, value);
-	}
-
-	public Operand CreateConstant32(uint value)
-	{
-		return value == 0 ? Constant32_0 : Operand.CreateConstant(I4, value);
-	}
-
-	public Operand CreateConstant(long value)
-	{
-		return value == 0 ? Constant64_0 : Operand.CreateConstant(I8, value);
-	}
-
-	public Operand CreateConstant64(long value)
-	{
-		return value == 0 ? Constant64_0 : Operand.CreateConstant(I8, value);
-	}
-
-	public Operand CreateConstant(ulong value)
-	{
-		return value == 0 ? Constant64_0 : Operand.CreateConstant(I8, value);
-	}
-
-	public Operand CreateConstant64(ulong value)
-	{
-		return value == 0 ? Constant64_0 : Operand.CreateConstant(I8, value);
-	}
-
-	public Operand CreateConstant(float value)
-	{
-		return value == 0 ? ConstantR4_0 : Operand.CreateConstant(R4, value);
-	}
-
-	public Operand CreateConstant(double value)
-	{
-		return value == 0 ? ConstantR4_0 : Operand.CreateConstant(R8, value);
-	}
-
-	#endregion Constant Helper Methods
 
 	#region Basic Block Helpers
 
@@ -504,7 +328,7 @@ public sealed class TransformContext
 
 		var operand1 = context.Operand1;
 
-		var v1 = AllocateVirtualRegister(operand1);
+		var v1 = VirtualRegisters.Allocate(operand1);
 
 		context.InsertBefore().AppendInstruction(moveInstruction, v1, operand1);
 		context.Operand1 = v1;
@@ -516,7 +340,7 @@ public sealed class TransformContext
 
 		var operand2 = context.Operand2;
 
-		var v1 = AllocateVirtualRegister(operand2);
+		var v1 = VirtualRegisters.Allocate(operand2);
 
 		context.InsertBefore().AppendInstruction(moveInstruction, v1, operand2);
 		context.Operand2 = v1;
@@ -531,7 +355,7 @@ public sealed class TransformContext
 
 		if (operand1.IsConstant && operand2.IsConstant && operand1.ConstantUnsigned64 == operand2.ConstantUnsigned64)
 		{
-			var v1 = AllocateVirtualRegister(operand1);
+			var v1 = VirtualRegisters.Allocate(operand1);
 
 			context.InsertBefore().AppendInstruction(moveInstruction, v1, operand1);
 			context.Operand1 = v1;
@@ -540,8 +364,8 @@ public sealed class TransformContext
 		}
 		else if (operand1.IsConstant && operand2.IsConstant)
 		{
-			var v1 = AllocateVirtualRegister(operand1);
-			var v2 = AllocateVirtualRegister(operand2);
+			var v1 = VirtualRegisters.Allocate(operand1);
+			var v2 = VirtualRegisters.Allocate(operand2);
 
 			context.InsertBefore().AppendInstruction(moveInstruction, v1, operand1);
 			context.InsertBefore().AppendInstruction(moveInstruction, v2, operand2);
@@ -551,14 +375,14 @@ public sealed class TransformContext
 		}
 		else if (operand1.IsConstant)
 		{
-			var v1 = AllocateVirtualRegister(operand1);
+			var v1 = VirtualRegisters.Allocate(operand1);
 
 			context.InsertBefore().AppendInstruction(moveInstruction, v1, operand1);
 			context.Operand1 = v1;
 		}
 		else if (operand2.IsConstant)
 		{
-			var v1 = AllocateVirtualRegister(operand2);
+			var v1 = VirtualRegisters.Allocate(operand2);
 
 			context.InsertBefore().AppendInstruction(moveInstruction, v1, operand2);
 			context.Operand2 = v1;
@@ -573,7 +397,7 @@ public sealed class TransformContext
 	{
 		var symbol = Linker.GetConstantSymbol(value);
 
-		var label = Operand.CreateLabel(R4, symbol.Name);
+		var label = Operand.CreateLabelR4(symbol.Name);
 
 		return label;
 	}
@@ -582,16 +406,20 @@ public sealed class TransformContext
 	{
 		var symbol = Linker.GetConstantSymbol(value);
 
-		var label = Operand.CreateLabel(R4, symbol.Name);
+		var label = Operand.CreateLabelR8(symbol.Name);
 
 		return label;
 	}
 
 	public Operand CreateFloatingPointLabel(Operand operand)
 	{
-		var symbol = operand.IsR4 ? Linker.GetConstantSymbol(operand.ConstantFloat) : Compiler.Linker.GetConstantSymbol(operand.ConstantDouble);
+		var symbol = operand.IsR4
+			? Linker.GetConstantSymbol(operand.ConstantFloat)
+			: Compiler.Linker.GetConstantSymbol(operand.ConstantDouble);
 
-		var label = Operand.CreateLabel(operand.IsR4 ? R4 : R8, symbol.Name);
+		var label = operand.IsR4
+			? Operand.CreateLabelR4(symbol.Name)
+			: Operand.CreateLabelR8(symbol.Name);
 
 		return label;
 	}
@@ -618,9 +446,9 @@ public sealed class TransformContext
 	{
 		var label = CreateR4Label(value);
 
-		var v1 = AllocateVirtualRegisterR4();
+		var v1 = VirtualRegisters.AllocateR4();
 
-		context.InsertBefore().SetInstruction(loadInstruction, v1, label, Constant32_0);
+		context.InsertBefore().SetInstruction(loadInstruction, v1, label, Operand.Constant32_0);
 
 		return v1;
 	}
@@ -629,9 +457,9 @@ public sealed class TransformContext
 	{
 		var label = CreateR8Label(value);
 
-		var v1 = AllocateVirtualRegisterR8();
+		var v1 = VirtualRegisters.AllocateR8();
 
-		context.InsertBefore().SetInstruction(loadInstruction, v1, label, Constant32_0);
+		context.InsertBefore().SetInstruction(loadInstruction, v1, label, Operand.Constant32_0);
 
 		return v1;
 	}
@@ -643,20 +471,27 @@ public sealed class TransformContext
 
 		var label = CreateFloatingPointLabel(operand);
 
-		var v1 = operand.IsR4 ? AllocateVirtualRegisterR4() : AllocateVirtualRegisterR8();
+		var v1 = operand.IsR4 ? VirtualRegisters.AllocateR4() : VirtualRegisters.AllocateR8();
 
 		var instruction = operand.IsR4 ? instructionR4 : instructionR8;
 
-		context.InsertBefore().SetInstruction(instruction, v1, label, Constant32_0);
+		context.InsertBefore().SetInstruction(instruction, v1, label, Operand.Constant32_0);
 
 		return v1;
 	}
 
 	#endregion Floating Point Helpers
 
-	public void SplitLongOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
+	public void SplitOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
 	{
-		MethodCompiler.SplitLongOperand(operand, out operandLow, out operandHigh);
+		MethodCompiler.SplitOperand(operand, out operandLow, out operandHigh);
+	}
+
+	public (Operand Low, Operand High) SplitOperand(Operand operand)
+	{
+		MethodCompiler.SplitOperand(operand, out var low, out var high);
+
+		return (low, high);
 	}
 
 	public MosaMethod GetMethod(string fullName, string methodName)
@@ -679,7 +514,7 @@ public sealed class TransformContext
 
 		// FUTURE: throw compiler exception
 
-		var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
+		var symbol = Operand.CreateLabel(method, Is32BitPlatform);
 
 		if (context.OperandCount == 1)
 		{
@@ -697,7 +532,7 @@ public sealed class TransformContext
 		MethodScanner.MethodInvoked(method, Method);
 	}
 
-	public void MoveConstantRight(Context context) // static
+	public static void MoveConstantRight(Context context) // static
 	{
 		var operand1 = context.Operand1;
 		var operand2 = context.Operand2;
@@ -715,8 +550,8 @@ public sealed class TransformContext
 	{
 		if (context.Operand1.IsResolvedConstant && context.Operand2.IsResolvedConstant)
 		{
-			context.Operand1 = CreateConstant(context.Operand1.ConstantUnsigned64 + context.Operand2.ConstantUnsigned64);
-			context.Operand2 = Constant32_0;
+			context.Operand1 = Operand.CreateConstant(context.Operand1.ConstantUnsigned64 + context.Operand2.ConstantUnsigned64);
+			context.Operand2 = Operand.Constant32_0;
 		}
 
 		if (context.Operand1.IsConstant && !context.Operand2.IsConstant)

@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
+using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.Stages;
@@ -147,23 +148,7 @@ public class InlineStage : BaseMethodCompilerStage
 					if (callSiteNode.Result != null)
 					{
 						var newOperand = Map(node.Operand1, map, callSiteNode);
-
-						BaseInstruction moveInstruction = null;
-
-						if (node.Instruction == IRInstruction.SetReturn32)
-							moveInstruction = IRInstruction.Move32;
-						else if (node.Instruction == IRInstruction.SetReturn64)
-							moveInstruction = IRInstruction.Move64;
-						else if (node.Instruction == IRInstruction.SetReturnObject)
-							moveInstruction = IRInstruction.MoveObject;
-						else if (node.Instruction == IRInstruction.SetReturnR4)
-							moveInstruction = IRInstruction.MoveR4;
-						else if (node.Instruction == IRInstruction.SetReturnR8)
-							moveInstruction = IRInstruction.MoveR8;
-						else if (node.Instruction == IRInstruction.SetReturnCompound)
-							moveInstruction = IRInstruction.MoveCompound;
-
-						Debug.Assert(moveInstruction != null);
+						var moveInstruction = GetMoveInstruction(node);
 
 						var moveNode = new InstructionNode(moveInstruction, callSiteNode.Result, newOperand);
 
@@ -176,9 +161,6 @@ public class InlineStage : BaseMethodCompilerStage
 				var newNode = new InstructionNode(node.Instruction, node.OperandCount, node.ResultCount)
 				{
 					ConditionCode = node.ConditionCode,
-					InvokeMethod = node.InvokeMethod,
-					MosaField = node.MosaField,
-					MosaType = node.MosaType,
 					Label = callSiteNode.Label,
 				};
 
@@ -194,30 +176,20 @@ public class InlineStage : BaseMethodCompilerStage
 				// copy results
 				for (var i = 0; i < node.ResultCount; i++)
 				{
-					var op = node.GetResult(i);
-
-					var newOp = Map(op, map, callSiteNode);
-
-					newNode.SetResult(i, newOp);
+					var operand = node.GetResult(i);
+					var newOperand = Map(operand, map, callSiteNode);
+					newNode.SetResult(i, newOperand);
 				}
 
 				// copy operands
 				for (var i = 0; i < node.OperandCount; i++)
 				{
-					var op = node.GetOperand(i);
-
-					var newOp = Map(op, map, callSiteNode);
-
-					newNode.SetOperand(i, newOp);
+					var operand = node.GetOperand(i);
+					var newOperand = Map(operand, map, callSiteNode);
+					newNode.SetOperand(i, newOperand);
 				}
 
-				// copy other
-				if (node.MosaType != null)
-					newNode.MosaType = node.MosaType;
-				if (node.MosaField != null)
-					newNode.MosaField = node.MosaField;
-
-				UpdateParameterInstructions(newNode);
+				UpdateParameterInstruction(newNode);
 
 				newBlock.BeforeLast.Insert(newNode);
 			}
@@ -246,7 +218,27 @@ public class InlineStage : BaseMethodCompilerStage
 		callSiteNode.SetInstruction(IRInstruction.Jmp, prologue);
 	}
 
-	private static void UpdateParameterInstructions(InstructionNode newNode)
+	private static BaseInstruction GetMoveInstruction(InstructionNode node)
+	{
+		var instruction = node.Instruction;
+
+		if (instruction == IRInstruction.SetReturn32)
+			return IRInstruction.Move32;
+		else if (instruction == IRInstruction.SetReturn64)
+			return IRInstruction.Move64;
+		else if (instruction == IRInstruction.SetReturnObject)
+			return IRInstruction.MoveObject;
+		else if (instruction == IRInstruction.SetReturnR4)
+			return IRInstruction.MoveR4;
+		else if (instruction == IRInstruction.SetReturnR8)
+			return IRInstruction.MoveR8;
+		else if (instruction == IRInstruction.SetReturnCompound)
+			return IRInstruction.MoveCompound;
+
+		throw new CompilerException();
+	}
+
+	private static void UpdateParameterInstruction(InstructionNode newNode)
 	{
 		var instruction = newNode.Instruction;
 
@@ -259,10 +251,10 @@ public class InlineStage : BaseMethodCompilerStage
 			newNode.Instruction = IRInstruction.MoveR8;
 		}
 		else if (instruction == IRInstruction.LoadParam32
-				 || instruction == IRInstruction.LoadParamSignExtend8x32
-				 || instruction == IRInstruction.LoadParamSignExtend16x32
-				 || instruction == IRInstruction.LoadParamZeroExtend8x32
-				 || instruction == IRInstruction.LoadParamZeroExtend16x32)
+			|| instruction == IRInstruction.LoadParamSignExtend8x32
+			|| instruction == IRInstruction.LoadParamSignExtend16x32
+			|| instruction == IRInstruction.LoadParamZeroExtend8x32
+			|| instruction == IRInstruction.LoadParamZeroExtend16x32)
 		{
 			newNode.Instruction = IRInstruction.Move32;
 		}
@@ -271,18 +263,18 @@ public class InlineStage : BaseMethodCompilerStage
 			newNode.Instruction = IRInstruction.MoveObject;
 		}
 		else if (instruction == IRInstruction.LoadParam64
-				 || instruction == IRInstruction.LoadParamSignExtend8x64
-				 || instruction == IRInstruction.LoadParamSignExtend16x64
-				 || instruction == IRInstruction.LoadParamSignExtend32x64
-				 || instruction == IRInstruction.LoadParamZeroExtend8x64
-				 || instruction == IRInstruction.LoadParamZeroExtend16x64
-				 || instruction == IRInstruction.LoadParamZeroExtend32x64)
+			|| instruction == IRInstruction.LoadParamSignExtend8x64
+			|| instruction == IRInstruction.LoadParamSignExtend16x64
+			|| instruction == IRInstruction.LoadParamSignExtend32x64
+			|| instruction == IRInstruction.LoadParamZeroExtend8x64
+			|| instruction == IRInstruction.LoadParamZeroExtend16x64
+			|| instruction == IRInstruction.LoadParamZeroExtend32x64)
 		{
 			newNode.Instruction = IRInstruction.Move64;
 		}
 		else if (instruction == IRInstruction.StoreParam8
-				 || instruction == IRInstruction.StoreParam16
-				 || instruction == IRInstruction.StoreParam32)
+			|| instruction == IRInstruction.StoreParam16
+			|| instruction == IRInstruction.StoreParam32)
 		{
 			newNode.SetInstruction(IRInstruction.Move32, newNode.Operand1, newNode.Operand2);
 		}
@@ -324,38 +316,23 @@ public class InlineStage : BaseMethodCompilerStage
 
 		if (operand.IsLabel)
 		{
-			if (operand.IsString)
-			{
-				// FUTURE: explore operand re-use
-				mappedOperand = Operand.CreateStringSymbol(TypeSystem.BuiltIn.String, operand.Name, ObjectHeaderSize, operand.StringData);
-			}
-			else if (operand.Method != null)
-			{
-				// FUTURE: explore operand re-use
-				mappedOperand = Operand.CreateSymbolFromMethod(operand.Method, operand.Type.TypeSystem);
-			}
-			else if (operand.Name != null)
-			{
-				// FUTURE: explore operand re-use
-				mappedOperand = Operand.CreateLabel(operand.Type, operand.Name);
-			}
+			mappedOperand = operand;
 		}
 		else if (operand.IsParameter)
 		{
 			mappedOperand = callSiteNode.GetOperand(operand.Index + 1);
 		}
-		else if (operand.IsStackLocal)
+		else if (operand.IsLocalStack)
 		{
-			mappedOperand = MethodCompiler.AddStackLocal(operand.Type, operand.IsPinned);
+			mappedOperand = MethodCompiler.LocalStack.Allocate(operand);
 		}
 		else if (operand.IsVirtualRegister)
 		{
-			mappedOperand = AllocateVirtualRegister(operand);
+			mappedOperand = MethodCompiler.VirtualRegisters.Allocate(operand);
 		}
 		else if (operand.IsStaticField)
 		{
-			// FUTURE: explore operand re-use
-			mappedOperand = Operand.CreateStaticField(operand.Field, TypeSystem);
+			mappedOperand = operand;
 		}
 		else if (operand.IsCPURegister)
 		{
@@ -368,9 +345,9 @@ public class InlineStage : BaseMethodCompilerStage
 
 		Debug.Assert(mappedOperand != null);
 
-		if (operand.HasLongParent)
+		if (operand.HasParent && !mappedOperand.HasParent)
 		{
-			MethodCompiler.SplitLongOperand(mappedOperand);
+			MethodCompiler.VirtualRegisters.SplitOperand(mappedOperand);
 
 			if (operand.IsLow)
 			{

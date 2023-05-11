@@ -36,7 +36,7 @@ public sealed class Compare32x32LessThanMax : BaseTransform
 	{
 		var result = context.Result;
 
-		var c1 = transform.CreateConstant(1);
+		var c1 = Operand.CreateConstant(1);
 
 		context.SetInstruction(IRInstruction.Move32, result, c1);
 	}

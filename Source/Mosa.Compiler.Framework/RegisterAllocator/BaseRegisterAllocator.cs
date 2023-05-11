@@ -9,7 +9,6 @@ using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.Common;
 using Mosa.Compiler.Framework.Trace;
-using Mosa.Compiler.MosaTypeSystem;
 using Priority_Queue;
 using static Mosa.Compiler.Framework.BaseMethodCompilerStage;
 
@@ -20,11 +19,10 @@ namespace Mosa.Compiler.Framework.RegisterAllocator;
 /// </summary>
 public abstract class BaseRegisterAllocator
 {
-	public delegate Operand AddStackLocalDelegate(MosaType type);
-
 	protected readonly BasicBlocks BasicBlocks;
 	protected readonly BaseArchitecture Architecture;
-	protected readonly AddStackLocalDelegate AddStackLocal;
+	protected readonly LocalStack LocalStack;
+
 	protected readonly Operand StackFrame;
 
 	private readonly int VirtualRegisterCount;
@@ -56,13 +54,13 @@ public abstract class BaseRegisterAllocator
 	public int DataFlowMoves = 0;
 	public int ResolvingMoves = 0;
 
-	protected BaseRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters virtualRegisters, BaseArchitecture architecture, AddStackLocalDelegate addStackLocal, Operand stackFrame, CreateTraceHandler createTrace)
+	protected BaseRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters virtualRegisters, BaseArchitecture architecture, LocalStack localStack, Operand stackFrame, CreateTraceHandler createTrace)
 	{
 		CreateTrace = createTrace;
 
 		BasicBlocks = basicBlocks;
 		Architecture = architecture;
-		AddStackLocal = addStackLocal;
+		LocalStack = localStack;
 		StackFrame = stackFrame;
 
 		VirtualRegisterCount = virtualRegisters.Count;
@@ -1319,7 +1317,8 @@ public abstract class BaseRegisterAllocator
 				continue;
 
 			Debug.Assert(register.IsVirtualRegister);
-			register.SpillSlotOperand = AddStackLocal(register.VirtualRegisterOperand.Type);
+
+			register.SpillSlotOperand = LocalStack.Allocate(register.VirtualRegisterOperand);
 		}
 	}
 
@@ -1335,7 +1334,7 @@ public abstract class BaseRegisterAllocator
 				if (liveInterval.AssignedPhysicalRegister == null)
 					continue;
 
-				liveInterval.AssignedPhysicalOperand = Operand.CreateCPURegister(liveInterval.VirtualRegister.VirtualRegisterOperand.Type, liveInterval.AssignedPhysicalRegister);
+				liveInterval.AssignedPhysicalOperand = Operand.CreateCPURegister(liveInterval.VirtualRegister.VirtualRegisterOperand, liveInterval.AssignedPhysicalRegister);
 			}
 		}
 	}

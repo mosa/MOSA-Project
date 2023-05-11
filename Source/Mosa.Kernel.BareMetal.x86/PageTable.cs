@@ -19,7 +19,7 @@ internal static class PageTable
 		//Console.WriteLine("Mosa.Kernel.BareMetal.x86.PageTable.Setup:Enter");
 		GDTTable = new GDTTable(PhysicalPageAllocator.ReservePage());
 
-		PageDirectory = PhysicalPageAllocator.ReservePage();
+		PageDirectory = PhysicalPageAllocator.ReservePages(1024);
 		PageTables = PhysicalPageAllocator.ReservePages(1024);
 
 		//Console.WriteLine("Mosa.Kernel.BareMetal.x86.PageTable.Setup:Exit");
@@ -36,7 +36,7 @@ internal static class PageTable
 		// Setup Page Directory
 		for (uint index = 0; index < 1024; index++)
 		{
-			PageDirectory.Store32(index << 2, (uint)(PageTables.ToInt32() + index * 4096 | 0x04 | 0x02 | 0x01));
+			PageDirectory.Store32(index << 2, (PageTables.ToUInt32() + index * Page.Size) | 0x04 | 0x02 | 0x01);
 		}
 
 		Console.WriteLine("Mosa.Kernel.BareMetal.x86.PageTable.Initialize:2");
@@ -46,7 +46,7 @@ internal static class PageTable
 		{
 			Console.WriteValue(index);
 
-			Page.ClearPage(PageTables + index * Page.Size);
+			PageTables.Store32(index << 2, (index * Page.Size) | 0x04 | 0x02 | 0x01);
 
 			Console.Write(' ');
 		}
@@ -60,7 +60,7 @@ internal static class PageTable
 		GDTTable.Enable();
 
 		// Set CR3 register on processor - sets page directory
-		Native.SetCR3((uint)PageDirectory.ToInt32());
+		Native.SetCR3(PageDirectory.ToUInt32());
 
 		// Set CR0 register on processor - turns on virtual memory
 		Native.SetCR0(Native.GetCR0() | 0x80000000);
@@ -77,7 +77,7 @@ internal static class PageTable
 	{
 		//FUTURE: traverse page directory from CR3 --- do not assume page table is linearly allocated
 
-		var address = (uint)virtualAddress.ToInt32();
+		var address = virtualAddress.ToUInt32();
 		var offset = ((address & 0xFFFFF000u) >> 10) + (address & 0xFFFu);
 
 		return PageTables.LoadPointer(offset);

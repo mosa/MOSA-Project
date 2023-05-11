@@ -2,7 +2,6 @@
 
 using System.Diagnostics;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 using Mosa.Compiler.Framework.Transforms.Call;
 
 namespace Mosa.Platform.Framework.Call;
@@ -33,7 +32,7 @@ public sealed class CallStatic : BasePlugTransform
 		operands.RemoveAt(0);
 		context.Empty();
 
-		MakeCall(transform, context, call, result, operands, method);
+		MakeCall(transform, context, call, result, operands);
 
 		transform.MethodScanner.MethodDirectInvoked(call.Method, transform.Method);
 	}

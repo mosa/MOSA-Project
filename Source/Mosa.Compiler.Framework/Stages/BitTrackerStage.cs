@@ -307,7 +307,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		if (virtualRegister.IsFloatingPoint)
 			return false;
 
-		if (virtualRegister.IsInteger || virtualRegister.IsReferenceType || virtualRegister.IsManagedPointer)
+		if (virtualRegister.IsInteger || virtualRegister.IsObject || virtualRegister.IsManagedPointer)
 			return true;
 
 		//if (virtualRegister.IsValueType && virtualRegister.FitsIntegerRegister)
@@ -319,8 +319,8 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 	private BitValue Any(Operand virtualRegister)
 	{
 		if (virtualRegister.IsInteger)
-			return virtualRegister.IsInteger32 ? BitValue.Any32 : BitValue.Any64;
-		else if (virtualRegister.IsReferenceType || virtualRegister.IsManagedPointer)
+			return virtualRegister.IsInt32 ? BitValue.Any32 : BitValue.Any64;
+		else if (virtualRegister.IsObject || virtualRegister.IsManagedPointer)
 			return Is32BitPlatform ? BitValue.Any32 : BitValue.Any64;
 		else if (virtualRegister.IsR4)
 			return BitValue.Any32;
@@ -340,8 +340,8 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 	private static BitValue Any(Operand virtualRegister, TransformContext transform)
 	{
 		if (virtualRegister.IsInteger)
-			return virtualRegister.IsInteger32 ? BitValue.Any32 : BitValue.Any64;
-		else if (virtualRegister.IsReferenceType || virtualRegister.IsManagedPointer)
+			return virtualRegister.IsInt32 ? BitValue.Any32 : BitValue.Any64;
+		else if (virtualRegister.IsObject || virtualRegister.IsManagedPointer)
 			return transform.Is32BitPlatform ? BitValue.Any32 : BitValue.Any64;
 		else if (virtualRegister.IsR4)
 			return BitValue.Any32;
@@ -377,7 +377,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		{
 			replaceValue = value.MaxValue;
 		}
-		else if (virtualRegister.IsInteger32 && value.AreLower32BitsKnown)
+		else if (virtualRegister.IsInt32 && value.AreLower32BitsKnown)
 		{
 			replaceValue = value.BitsSet32;
 		}
@@ -386,7 +386,9 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			return;
 		}
 
-		var constantOperand = CreateConstant(virtualRegister.Type, replaceValue);
+		var constantOperand = virtualRegister.IsInt32
+			? Operand.CreateConstant32((uint)replaceValue)
+			: Operand.CreateConstant64(replaceValue);
 
 		if (trace != null)
 		{

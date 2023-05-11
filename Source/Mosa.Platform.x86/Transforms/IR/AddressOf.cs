@@ -23,13 +23,13 @@ public sealed class AddressOf : BaseIRTransform
 		{
 			context.SetInstruction(X86.Mov32, context.Result, context.Operand1);
 		}
-		else if (context.Operand1.IsStackLocal)
+		else if (context.Operand1.IsLocalStack)
 		{
 			context.SetInstruction(X86.Lea32, context.Result, transform.StackFrame, context.Operand1);
 		}
 		else
 		{
-			var offset = transform.CreateConstant32(context.Operand1.Offset);
+			var offset = Operand.CreateConstant32(context.Operand1.Offset);
 
 			context.SetInstruction(X86.Lea32, context.Result, transform.StackFrame, offset);
 		}

@@ -17,11 +17,6 @@ public static class Platform
 	{
 	}
 
-	public static AddressRange GetPlatformReservedMemory(int slot)
-	{
-		return new AddressRange(0, 0);
-	}
-
 	public static AddressRange GetBootReservedRegion()
 	{
 		return new AddressRange(0, 0);

@@ -2,7 +2,6 @@
 
 using System.Diagnostics;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 using Mosa.Compiler.Framework.Transforms.Call;
 
 namespace Mosa.Platform.Framework.Call;
@@ -38,27 +37,27 @@ public sealed class CallInterface : BasePlugTransform
 		// FUTURE: This can be optimized to skip Method Definition lookup.
 
 		// Offset to MethodTable from thisPtr
-		var typeDefOffset = transform.CreateConstant32(-transform.NativePointerSize);
+		var typeDefOffset = Operand.CreateConstant32(-(int)transform.NativePointerSize);
 
 		// Offset for InterfaceSlotTable in TypeDef/MethodTable
-		var interfaceSlotTableOffset = transform.CreateConstant32(transform.NativePointerSize * 11);
+		var interfaceSlotTableOffset = Operand.CreateConstant32(transform.NativePointerSize * 11);
 
 		// Offset for InterfaceMethodTable in InterfaceSlotTable
-		var interfaceMethodTableOffset = transform.CreateConstant32(CalculateInterfaceSlotOffset(transform, method));
+		var interfaceMethodTableOffset = Operand.CreateConstant32(CalculateInterfaceSlotOffset(transform, method));
 
 		// Offset for Method Def in InterfaceMethodTable
-		var methodDefinitionOffset = transform.CreateConstant32(CalculateInterfaceMethodTableOffset(transform, method));
+		var methodDefinitionOffset = Operand.CreateConstant32(CalculateInterfaceMethodTableOffset(transform, method));
 
 		// Offset for Method pointer in MethodDef
-		var methodPointerOffset = transform.CreateConstant32(transform.NativePointerSize * 4);
+		var methodPointerOffset = Operand.CreateConstant32(transform.NativePointerSize * 4);
 
 		// Operands to hold pointers
-		var typeDef = transform.AllocateVirtualRegisterNativeInteger();
-		var callTarget = transform.AllocateVirtualRegisterNativeInteger();
+		var typeDef = transform.VirtualRegisters.AllocateNativeInteger();
+		var callTarget = transform.VirtualRegisters.AllocateNativeInteger();
 
-		var interfaceSlotPtr = transform.AllocateVirtualRegisterNativeInteger();
-		var interfaceMethodTablePtr = transform.AllocateVirtualRegisterNativeInteger();
-		var methodDefinition = transform.AllocateVirtualRegisterNativeInteger();
+		var interfaceSlotPtr = transform.VirtualRegisters.AllocateNativeInteger();
+		var interfaceMethodTablePtr = transform.VirtualRegisters.AllocateNativeInteger();
+		var methodDefinition = transform.VirtualRegisters.AllocateNativeInteger();
 
 		// Get the MethodTable pointer
 		context.SetInstruction(transform.LoadInstruction, typeDef, thisPtr, typeDefOffset);
@@ -75,7 +74,7 @@ public sealed class CallInterface : BasePlugTransform
 		// Get the address of the method
 		context.AppendInstruction(transform.LoadInstruction, callTarget, methodDefinition, methodPointerOffset);
 
-		MakeCall(transform, context, callTarget, result, operands, method);
+		MakeCall(transform, context, callTarget, result, operands);
 
 		transform.MethodScanner.InterfaceMethodInvoked(method, transform.Method);
 	}

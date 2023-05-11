@@ -62,7 +62,7 @@ public sealed class MosaCompiler
 			TypeSystem = typeSystem;
 
 			Platform = PlatformRegistry.GetPlatform(CompilerSettings.Platform);
-			TypeLayout = new MosaTypeLayout(typeSystem, Platform.NativePointerSize, Platform.NativeAlignment);
+			TypeLayout = new MosaTypeLayout(typeSystem, Platform.Is32BitPlatform, Platform.NativePointerSize, Platform.NativeAlignment);
 
 			Compiler = null;
 

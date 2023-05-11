@@ -27,6 +27,7 @@ public sealed class LiveInterval
 	public readonly LiveRange LiveRange;
 
 	public int StartValue => LiveRange.Start.Value;
+
 	public int EndValue => LiveRange.End.Value;
 
 	public int SpillValue;

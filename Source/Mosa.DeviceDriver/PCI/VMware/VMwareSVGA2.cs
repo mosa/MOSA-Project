@@ -244,9 +244,6 @@ public class VMwareSVGA2 : BaseDeviceDriver, IGraphicsDevice
 		if (HasFifoCapability(SvgaCapability.ExtendedFifo) && ReadRegister(FifoRegister.Min) > FifoRegister.GuestHw3DVersion << 2)
 			WriteFifoRegister(FifoRegister.GuestHw3DVersion, (2 << 16) | (1 & 0xFF));
 
-		Enable();
-		WriteRegister(SvgaRegister.ConfigDone, 1);
-
 		Device.Status = DeviceStatus.Online;
 	}
 

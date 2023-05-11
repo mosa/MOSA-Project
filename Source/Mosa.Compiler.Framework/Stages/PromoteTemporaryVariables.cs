@@ -28,7 +28,7 @@ public class PromoteTemporaryVariables : BaseMethodCompilerStage
 	{
 		foreach (var operand in MethodCompiler.LocalStack)
 		{
-			Debug.Assert(operand.IsStackLocal);
+			Debug.Assert(operand.IsLocalStack);
 
 			if (CanPromote(operand))
 			{
@@ -47,7 +47,7 @@ public class PromoteTemporaryVariables : BaseMethodCompilerStage
 			return false;
 		}
 
-		if (!MosaTypeLayout.IsUnderlyingPrimitive(operand.Type))
+		if (!operand.IsPrimitive)
 		{
 			trace?.Log($"incompatible type: {operand}");
 			return false;
@@ -133,7 +133,7 @@ public class PromoteTemporaryVariables : BaseMethodCompilerStage
 
 	protected void Promote(Operand operand)
 	{
-		var virtualRegister = AllocateVirtualRegister(operand);
+		var virtualRegister = MethodCompiler.VirtualRegisters.Allocate(operand);
 		TemporariesPromoted.Increment();
 
 		trace?.Log($"VR: {virtualRegister}");

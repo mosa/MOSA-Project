@@ -20,10 +20,10 @@ public sealed class DivUnsigned32 : BaseIRTransform
 		var operand2 = context.Operand2;
 		var result = context.Result;
 
-		var v1 = transform.AllocateVirtualRegister32();
-		var v2 = transform.AllocateVirtualRegister32();
+		var v1 = transform.VirtualRegisters.Allocate32();
+		var v2 = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction(X86.Mov32, v1, transform.Constant32_0);
+		context.SetInstruction(X86.Mov32, v1, Operand.Constant32_0);
 		context.AppendInstruction2(X86.Div32, v1, v2, v1, operand1, operand2);
 		context.AppendInstruction(X86.Mov32, result, v2);
 	}

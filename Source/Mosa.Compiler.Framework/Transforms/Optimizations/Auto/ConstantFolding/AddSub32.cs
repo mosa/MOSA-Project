@@ -46,7 +46,7 @@ public sealed class AddSub32 : BaseTransform
 		var t2 = context.Operand1.Definitions[0].Operand2;
 		var t3 = context.Operand2;
 
-		var e1 = transform.CreateConstant(Add32(To32(t2), To32(t3)));
+		var e1 = Operand.CreateConstant(Add32(To32(t2), To32(t3)));
 
 		context.SetInstruction(IRInstruction.Sub32, result, t1, e1);
 	}
@@ -92,7 +92,7 @@ public sealed class AddSub32_v1 : BaseTransform
 		var t2 = context.Operand2.Definitions[0].Operand1;
 		var t3 = context.Operand2.Definitions[0].Operand2;
 
-		var e1 = transform.CreateConstant(Add32(To32(t3), To32(t1)));
+		var e1 = Operand.CreateConstant(Add32(To32(t3), To32(t1)));
 
 		context.SetInstruction(IRInstruction.Sub32, result, t2, e1);
 	}

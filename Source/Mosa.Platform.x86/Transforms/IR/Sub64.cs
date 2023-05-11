@@ -16,9 +16,9 @@ public sealed class Sub64 : BaseIRTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		transform.SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
-		transform.SplitLongOperand(context.Operand1, out var op1L, out var op1H);
-		transform.SplitLongOperand(context.Operand2, out var op2L, out var op2H);
+		transform.SplitOperand(context.Result, out var resultLow, out var resultHigh);
+		transform.SplitOperand(context.Operand1, out var op1L, out var op1H);
+		transform.SplitOperand(context.Operand2, out var op2L, out var op2H);
 
 		context.SetInstruction(X86.Sub32, resultLow, op1L, op2L);
 		context.AppendInstruction(X86.Sbb32, resultHigh, op1H, op2H);

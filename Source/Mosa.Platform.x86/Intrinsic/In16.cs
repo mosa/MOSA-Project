@@ -12,7 +12,7 @@ internal static partial class IntrinsicMethods
 	[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::In16")]
 	private static void In16(Context context, MethodCompiler methodCompiler)
 	{
-		Operand v1 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.U4);
+		var v1 = methodCompiler.VirtualRegisters.Allocate32();
 
 		var result = context.Result;
 

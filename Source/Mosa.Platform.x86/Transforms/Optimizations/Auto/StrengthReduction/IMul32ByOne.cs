@@ -35,7 +35,7 @@ public sealed class IMul32ByOne : BaseTransform
 	{
 		var result = context.Result;
 
-		var c1 = transform.CreateConstant(1);
+		var c1 = Operand.CreateConstant(1);
 
 		context.SetInstruction(X86.Mov32, result, c1);
 	}

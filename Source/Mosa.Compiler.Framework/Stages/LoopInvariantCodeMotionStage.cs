@@ -308,7 +308,7 @@ public sealed class LoopInvariantCodeMotionStage : BaseMethodCompilerStage
 			var headerSourceBlocks = new List<BasicBlock>(node.OperandCount);
 			var headerSourceOperands = new List<Operand>(node.OperandCount);
 
-			var transitionOperand = AllocateVirtualRegister(node.Result);
+			var transitionOperand = MethodCompiler.VirtualRegisters.Allocate(node.Result);
 
 			headerSourceBlocks.Add(landingpadBlock);
 			headerSourceOperands.Add(transitionOperand);

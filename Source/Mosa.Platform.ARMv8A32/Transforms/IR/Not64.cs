@@ -16,8 +16,8 @@ public sealed class Not64 : BaseIRTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		transform.SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
-		transform.SplitLongOperand(context.Operand1, out var op1L, out var op1H);
+		transform.SplitOperand(context.Result, out var resultLow, out var resultHigh);
+		transform.SplitOperand(context.Operand1, out var op1L, out var op1H);
 
 		op1L = MoveConstantToRegisterOrImmediate(transform, context, op1L);
 		op1H = MoveConstantToRegisterOrImmediate(transform, context, op1H);

@@ -1,7 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms;
 
 namespace Mosa.Platform.Framework.Call;
 
@@ -21,7 +20,7 @@ public sealed class SetReturnCompound : BaseTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		var OffsetOfFirstParameterOperand = transform.CreateConstant32(transform.Architecture.OffsetOfFirstParameter);
-		context.SetInstruction(IRInstruction.StoreCompound, null, transform.StackFrame, OffsetOfFirstParameterOperand, context.Operand1);
+		var offset = Operand.CreateConstant32(transform.Architecture.OffsetOfFirstParameter);
+		context.SetInstruction(IRInstruction.StoreCompound, null, transform.StackFrame, offset, context.Operand1);
 	}
 }

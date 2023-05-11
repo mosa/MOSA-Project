@@ -31,11 +31,11 @@ public sealed class Movzx16To32 : BaseTransform
 		if (source.Register != result.Register)
 		{
 			context.SetInstruction(X64.Mov32, result, source);
-			context.AppendInstruction(X64.And32, result, result, transform.CreateConstant32(0xFFFF));
+			context.AppendInstruction(X64.And32, result, result, Operand.CreateConstant32(0xFFFF));
 		}
 		else
 		{
-			context.SetInstruction(X64.And32, result, result, transform.CreateConstant32(0xFFFF));
+			context.SetInstruction(X64.And32, result, result, Operand.CreateConstant32(0xFFFF));
 		}
 	}
 }

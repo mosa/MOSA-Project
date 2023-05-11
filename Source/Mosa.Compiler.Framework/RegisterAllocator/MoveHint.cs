@@ -93,7 +93,6 @@ public sealed class MoveHint
 			if (FromRegister != null)
 			{
 				sb.Append($" [{FromRegister.ToString()}]");
-
 			}
 		}
 

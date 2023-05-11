@@ -51,10 +51,10 @@ public sealed class Compare32x32SwapToZero : BaseTransform
 
 		var t1 = context.Operand1.Definitions[0].Operand1;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I4);
+		var v1 = transform.VirtualRegisters.Allocate32();
 
-		var c1 = transform.CreateConstant(0);
-		var c2 = transform.CreateConstant(1);
+		var c1 = Operand.CreateConstant(0);
+		var c2 = Operand.CreateConstant(1);
 
 		context.SetInstruction(IRInstruction.And32, v1, t1, c2);
 		context.AppendInstruction(IRInstruction.Compare32x32, ConditionCode.Equal, result, v1, c1);
@@ -106,10 +106,10 @@ public sealed class Compare32x32SwapToZero_v1 : BaseTransform
 
 		var t1 = context.Operand1.Definitions[0].Operand2;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I4);
+		var v1 = transform.VirtualRegisters.Allocate32();
 
-		var c1 = transform.CreateConstant(0);
-		var c2 = transform.CreateConstant(1);
+		var c1 = Operand.CreateConstant(0);
+		var c2 = Operand.CreateConstant(1);
 
 		context.SetInstruction(IRInstruction.And32, v1, t1, c2);
 		context.AppendInstruction(IRInstruction.Compare32x32, ConditionCode.Equal, result, v1, c1);

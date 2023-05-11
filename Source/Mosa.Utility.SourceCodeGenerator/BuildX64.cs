@@ -11,6 +11,7 @@ public class BuildX64 : BuildBaseTemplate
 
 	protected override void Body()
 	{
+		Lines.AppendLine("using Mosa.Compiler.Framework;");
 		Lines.AppendLine("using Mosa.Platform.x64.Instructions;");
 		Lines.AppendLine();
 		Lines.AppendLine("namespace Mosa.Platform.x64;");
@@ -23,7 +24,7 @@ public class BuildX64 : BuildBaseTemplate
 
 		foreach (var entry in Entries.Instructions)
 		{
-			Lines.AppendLine("\tpublic static readonly " + entry.Name + " " + entry.Name + " = new " + entry.Name + "();");
+			Lines.AppendLine("\tpublic static readonly BaseInstruction " + entry.Name + " = new " + entry.Name + "();");
 		}
 
 		Lines.AppendLine("}");

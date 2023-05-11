@@ -27,7 +27,7 @@ public sealed class Compare32x32 : BaseIRTransform
 		operand2 = MoveConstantToRegisterOrImmediate(transform, context, operand2);
 
 		context.SetInstruction(ARMv8A32.Cmp, condition, null, operand1, operand2);
-		context.AppendInstruction(ARMv8A32.Mov, condition, result, transform.Constant32_1);
-		context.AppendInstruction(ARMv8A32.Mov, condition.GetOpposite(), result, transform.Constant32_0);
+		context.AppendInstruction(ARMv8A32.Mov, condition, result, Operand.Constant32_1);
+		context.AppendInstruction(ARMv8A32.Mov, condition.GetOpposite(), result, Operand.Constant32_0);
 	}
 }

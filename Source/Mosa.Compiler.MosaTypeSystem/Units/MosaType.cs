@@ -274,13 +274,13 @@ public class MosaType : MosaUnit, IEquatable<MosaType>
 				if (!string.IsNullOrEmpty(type.Namespace))
 				{
 					fName.Append(type.Namespace);
-					fName.Append(".");
+					fName.Append('.');
 				}
 
 				fName.Append(type.DeclaringType.ShortName);
-				fName.Append("+");
+				fName.Append('+');
 				sName.Append(type.DeclaringType.ShortName);
-				sName.Append("+");
+				sName.Append('+');
 
 				fName.Append(type.Name);
 				fName.Append(type.Signature);
@@ -305,7 +305,7 @@ public class MosaType : MosaUnit, IEquatable<MosaType>
 				if (!string.IsNullOrEmpty(type.Namespace))
 				{
 					fName.Append(type.Namespace);
-					fName.Append(".");
+					fName.Append('.');
 				}
 
 				fName.Append(type.Name);

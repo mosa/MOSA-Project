@@ -257,7 +257,7 @@ public static class MosaTypeExtension
 		if (type.IsEnum)
 			return type.GetEnumUnderlyingType()?.GetPrimitiveSize(nativeSize);
 
-		if (type.IsPointer || type.IsN)
+		if (type.IsPointer || type.IsN || type.IsI)
 			return nativeSize;
 		else if (type.IsUI1 || type.IsBoolean)
 			return 1;

@@ -32,7 +32,7 @@ public sealed class ConvertU64ToR8 : BaseTransform
 
 		var t1 = context.Operand1;
 
-		var e1 = transform.CreateConstant(ToR8(To64(t1)));
+		var e1 = Operand.CreateConstant(ToR8(To64(t1)));
 
 		context.SetInstruction(IRInstruction.MoveR8, result, e1);
 	}

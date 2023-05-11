@@ -21,7 +21,7 @@ public sealed class MulOverflowOut32 : BaseIRTransform
 		var operand1 = context.Operand1;
 		var operand2 = context.Operand2;
 
-		var v1 = transform.AllocateVirtualRegister32();
+		var v1 = transform.VirtualRegisters.Allocate32();
 
 		context.SetInstruction(X86.IMul32, result, operand1, operand2);
 		context.AppendInstruction(X86.Setcc, ConditionCode.Overflow, v1);

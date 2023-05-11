@@ -36,15 +36,15 @@ public sealed class Div32 : BaseTransform
 		var result = context.Result;
 		var result2 = context.Result2;
 
-		var eax = Operand.CreateCPURegister(transform.I4, CPURegister.EAX);
-		var edx = Operand.CreateCPURegister(transform.I4, CPURegister.EDX);
+		var eax = Operand.CreateCPURegister32(CPURegister.EAX);
+		var edx = Operand.CreateCPURegister32(CPURegister.EDX);
 
 		context.SetInstruction(X86.Mov32, edx, operand1);
 		context.AppendInstruction(X86.Mov32, eax, operand2);
 
 		if (operand3.IsConstant)
 		{
-			var v1 = transform.AllocateVirtualRegister32();
+			var v1 = transform.VirtualRegisters.Allocate32();
 			context.AppendInstruction(X86.Mov32, v1, operand3);
 			context.AppendInstruction2(X86.Div32, edx, eax, edx, eax, v1);
 		}

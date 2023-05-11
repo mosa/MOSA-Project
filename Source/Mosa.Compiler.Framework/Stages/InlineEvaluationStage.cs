@@ -2,7 +2,6 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
-using Mosa.Compiler.Common;
 using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.Stages;
@@ -129,15 +128,7 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 
 		var inline = CanInline(MethodData);
 
-		if (inline)
-		{
-			var inlineBlocks = CopyInstructions();
-			SetInlinedBasicBlocks(inlineBlocks);
-		}
-		else
-		{
-			SetInlinedBasicBlocks(null);
-		}
+		SetInlinedBasicBlocks(inline ? BasicBlocks : null);
 
 		trace?.Log($"IRInstructionCount: {MethodData.IRInstructionCount}");
 		trace?.Log($"IRStackParameterInstructionCount: {MethodData.IRStackParameterInstructionCount}");
@@ -222,7 +213,11 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 		var returnType = methodData.Method.Signature.ReturnType;
 
 		// FIXME: Add rational
-		if (!(returnType.IsVoid || returnType.IsUI8 || returnType.IsR8 || MosaTypeLayout.IsUnderlyingPrimitive(returnType) || TypeLayout.GetTypeSize(returnType) <= 8))
+		if (!(returnType.IsVoid
+			|| returnType.IsUI8
+			|| returnType.IsR8
+			|| MosaTypeLayout.IsUnderlyingPrimitive(returnType)
+			|| TypeLayout.GetTypeLayoutSize(returnType) <= 8))
 			return true;
 
 		// FUTURE: Don't hardcode namepsace
@@ -256,179 +251,4 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 		return true;
 	}
 
-	protected BasicBlocks CopyInstructions()
-	{
-		var newBasicBlocks = new BasicBlocks();
-		var mapBlocks = new Dictionary<BasicBlock, BasicBlock>(BasicBlocks.Count);
-		var map = new Dictionary<Operand, Operand>();
-		var staticCalls = new List<MosaMethod>();
-
-		foreach (var block in BasicBlocks)
-		{
-			var newBlock = newBasicBlocks.CreateBlock(block.Label);
-			mapBlocks.Add(block, newBlock);
-		}
-
-		var newPrologueBlock = newBasicBlocks.PrologueBlock;
-
-		foreach (var operand in MethodCompiler.Parameters)
-		{
-			if (operand.Definitions.Count > 0)
-			{
-				var newOp = Map(operand, map);
-
-				var newOperand = Operand.CreateVirtualRegister(operand.Type, -operand.Index);
-
-				var moveInstruction = !MosaTypeLayout.IsUnderlyingPrimitive(newOperand.Type)
-					? IRInstruction.MoveCompound
-					: GetMoveInstruction(newOperand.Type);
-
-				var moveNode = new InstructionNode(moveInstruction, newOperand, newOp);
-
-				newPrologueBlock.BeforeLast.Insert(moveNode);
-
-				// redirect map from parameter to virtual register going forward
-				map.Remove(operand);
-				map.Add(operand, newOperand);
-			}
-		}
-
-		foreach (var block in BasicBlocks)
-		{
-			var newBlock = newBasicBlocks.GetByLabel(block.Label);
-
-			for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
-			{
-				if (node.IsEmptyOrNop)
-					continue;
-
-				if (node.Instruction == IRInstruction.CallStatic)
-				{
-					staticCalls.AddIfNew(node.Operand1.Method);
-				}
-
-				var newNode = new InstructionNode(node.Instruction, node.OperandCount, node.ResultCount)
-				{
-					ConditionCode = node.ConditionCode,
-					InvokeMethod = node.InvokeMethod,
-					MosaField = node.MosaField,
-					MosaType = node.MosaType,
-
-					//Label = callSiteNode.Label,
-				};
-
-				if (node.BranchTargets != null)
-				{
-					// copy targets
-					foreach (var target in node.BranchTargets)
-					{
-						newNode.AddBranchTarget(mapBlocks[target]);
-					}
-				}
-
-				// copy results
-				for (var i = 0; i < node.ResultCount; i++)
-				{
-					var op = node.GetResult(i);
-					var newOp = Map(op, map);
-
-					newNode.SetResult(i, newOp);
-				}
-
-				// copy operands
-				for (var i = 0; i < node.OperandCount; i++)
-				{
-					var op = node.GetOperand(i);
-					var newOp = Map(op, map);
-
-					newNode.SetOperand(i, newOp);
-				}
-
-				// copy other
-				if (node.MosaType != null)
-					newNode.MosaType = node.MosaType;
-
-				if (node.MosaField != null)
-					newNode.MosaField = node.MosaField;
-
-				newBlock.BeforeLast.Insert(newNode);
-			}
-		}
-
-		var trace = CreateTraceLog("InlineMap", 9);
-
-		if (trace != null)
-		{
-			foreach (var entry in map)
-			{
-				trace.Log($"{entry.Value} from: {entry.Key}");
-			}
-		}
-
-		return newBasicBlocks;
-	}
-
-	private Operand Map(Operand operand, Dictionary<Operand, Operand> map)
-	{
-		if (operand == null)
-			return null;
-
-		if (map.TryGetValue(operand, out Operand mappedOperand))
-		{
-			return mappedOperand;
-		}
-
-		if (operand.IsLabel)
-		{
-			if (operand.IsString)
-			{
-				// FUTURE: explore operand re-use
-				mappedOperand = Operand.CreateStringSymbol(TypeSystem.BuiltIn.String, operand.Name, ObjectHeaderSize, operand.StringData);
-			}
-			else if (operand.Method != null)
-			{
-				// FUTURE: explore operand re-use
-				mappedOperand = Operand.CreateSymbolFromMethod(operand.Method, operand.Type.TypeSystem);
-			}
-			else if (operand.Name != null)
-			{
-				// FUTURE: explore operand re-use
-				mappedOperand = Operand.CreateLabel(operand.Type, operand.Name);
-			}
-		}
-		else if (operand.IsParameter)
-		{
-			mappedOperand = operand;
-		}
-		else if (operand.IsStackLocal)
-		{
-			mappedOperand = Operand.CreateStackLocal(operand.Type, operand.Index, operand.IsPinned);
-		}
-		else if (operand.IsVirtualRegister)
-		{
-			if (operand.Uses.Count != 0 || operand.Definitions.Count != 0)
-			{
-				mappedOperand = Operand.CreateVirtualRegister(operand.Type, operand.Index);
-			}
-		}
-		else if (operand.IsStaticField)
-		{
-			// FUTURE: explore operand re-use
-			mappedOperand = Operand.CreateStaticField(operand.Field, TypeSystem);
-		}
-		else if (operand.IsCPURegister)
-		{
-			mappedOperand = operand;
-		}
-		else if (operand.IsConstant)
-		{
-			mappedOperand = operand;
-		}
-
-		Debug.Assert(mappedOperand != null);
-
-		map.Add(operand, mappedOperand);
-
-		return mappedOperand;
-	}
 }

@@ -31,7 +31,7 @@ public sealed class AddOverflowOut32ByZero : BaseTransform
 		var operand1 = context.Operand1;
 
 		context.SetInstruction(IRInstruction.Move32, result, operand1);
-		context.AppendInstruction(IRInstruction.Move32, result2, transform.Constant32_0);
+		context.AppendInstruction(IRInstruction.Move32, result2, Operand.Constant32_0);
 	}
 }
 
@@ -64,6 +64,6 @@ public sealed class AddOverflowOut32ByZero2 : BaseTransform
 		var operand2 = context.Operand2;
 
 		context.SetInstruction(IRInstruction.Move32, result, operand2);
-		context.AppendInstruction(IRInstruction.Move32, result2, transform.Constant32_0);
+		context.AppendInstruction(IRInstruction.Move32, result2, Operand.Constant32_0);
 	}
 }

@@ -16,8 +16,8 @@ public sealed class Branch64 : BaseIRTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		transform.SplitLongOperand(context.Operand1, out var op1L, out var op1H);
-		transform.SplitLongOperand(context.Operand2, out var op2L, out var op2H);
+		transform.SplitOperand(context.Operand1, out var op1L, out var op1H);
+		transform.SplitOperand(context.Operand2, out var op2L, out var op2H);
 
 		var target = context.BranchTargets[0];
 		var condition = context.ConditionCode;

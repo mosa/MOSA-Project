@@ -1,10 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <AssemblyTitle>Mosa.Utility.BootImage</AssemblyTitle>
     <Company>MOSA Project</Company>
     <Product>Mosa.Utility.BootImage</Product>
-    <copyright>Copyright © MOSA Project 2023</copyright>
+    <Copyright>Copyright © MOSA Project 2023</Copyright>
     <LangVersion>11.0</LangVersion>
     <DebugType>full</DebugType>
     <OutputPath>..\..\bin\</OutputPath>

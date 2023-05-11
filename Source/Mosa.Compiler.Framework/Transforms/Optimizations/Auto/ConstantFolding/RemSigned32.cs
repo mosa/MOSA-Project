@@ -36,7 +36,7 @@ public sealed class RemSigned32 : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2;
 
-		var e1 = transform.CreateConstant(RemSigned32(ToSigned32(t1), ToSigned32(t2)));
+		var e1 = Operand.CreateConstant(RemSigned32(ToSigned32(t1), ToSigned32(t2)));
 
 		context.SetInstruction(IRInstruction.Move32, result, e1);
 	}

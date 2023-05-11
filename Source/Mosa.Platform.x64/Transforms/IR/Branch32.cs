@@ -16,7 +16,7 @@ public sealed class Branch32 : BaseIRTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		transform.MoveConstantRight(context);
+		TransformContext.MoveConstantRight(context);
 
 		var target = context.BranchTargets[0];
 		var condition = context.ConditionCode;

@@ -46,7 +46,7 @@ public sealed class Or32SignExtend16x32SignExtend16x32 : BaseTransform
 		var t1 = context.Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand2.Definitions[0].Operand1;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I4);
+		var v1 = transform.VirtualRegisters.Allocate32();
 
 		context.SetInstruction(IRInstruction.Or32, v1, t1, t2);
 		context.AppendInstruction(IRInstruction.SignExtend16x32, result, v1);
@@ -93,7 +93,7 @@ public sealed class Or32SignExtend16x32SignExtend16x32_v1 : BaseTransform
 		var t1 = context.Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand2.Definitions[0].Operand1;
 
-		var v1 = transform.AllocateVirtualRegister(transform.I4);
+		var v1 = transform.VirtualRegisters.Allocate32();
 
 		context.SetInstruction(IRInstruction.Or32, v1, t2, t1);
 		context.AppendInstruction(IRInstruction.SignExtend16x32, result, v1);

@@ -32,7 +32,7 @@ public sealed class ConvertI32ToR8 : BaseTransform
 
 		var t1 = context.Operand1;
 
-		var e1 = transform.CreateConstant(ToR8(ToSigned32(t1)));
+		var e1 = Operand.CreateConstant(ToR8(ToSigned32(t1)));
 
 		context.SetInstruction(IRInstruction.MoveR8, result, e1);
 	}

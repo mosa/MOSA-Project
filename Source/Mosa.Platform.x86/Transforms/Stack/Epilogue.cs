@@ -28,7 +28,7 @@ public sealed class Epilogue : BaseTransform
 
 		if (transform.MethodCompiler.StackSize != 0)
 		{
-			context.AppendInstruction(X86.Add32, transform.StackPointer, transform.StackPointer, transform.CreateConstant32(-transform.MethodCompiler.StackSize));
+			context.AppendInstruction(X86.Add32, transform.StackPointer, transform.StackPointer, Operand.CreateConstant32(-transform.MethodCompiler.StackSize));
 		}
 
 		context.AppendInstruction(X86.Pop32, transform.StackFrame);

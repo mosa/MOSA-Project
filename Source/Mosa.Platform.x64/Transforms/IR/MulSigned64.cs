@@ -16,7 +16,7 @@ public sealed class MulSigned64 : BaseIRTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		var v1 = transform.AllocateVirtualRegister32();
+		var v1 = transform.VirtualRegisters.Allocate32();
 		context.SetInstruction2(X64.Mul64, v1, context.Result, context.Operand1, context.Operand2);
 	}
 }
