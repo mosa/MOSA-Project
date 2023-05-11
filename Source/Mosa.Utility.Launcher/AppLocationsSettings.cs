@@ -22,7 +22,7 @@ public static class AppLocationsSettings
 		var settings = new Settings();
 
 		Set(settings, "AppLocation.Qemu", FindQemu());
-		Set(settings, "AppLocation.QemuBIOS", FindQemuBIOS(settings.GetValue("AppLocation.Qemu")));
+		Set(settings, "AppLocation.QemuBIOS", FindQemuBIOS());
 		Set(settings, "AppLocation.QemuImg", FindQemuImg());
 		Set(settings, "AppLocation.Bochs", FindBochs());
 		Set(settings, "AppLocation.VmwarePlayer", FindVmwarePlayer());
@@ -208,24 +208,22 @@ public static class AppLocationsSettings
 		);
 	}
 
-	private static string FindQemuBIOS(string qemu)
+	private static string FindQemuBIOS()
 	{
-		if (qemu == null)
-			return null;
-
 		return Path.GetDirectoryName(
 			TryFind(
 				new string[] { "bios.bin" },
 				new string[] {
-					Path.GetDirectoryName(qemu),
-					Path.Combine(Path.GetDirectoryName(qemu), "bios"),
-
 					@"%CURRENT%\qemu\share",
 					"%CURRENT%/qemu/share",
 
 					@"%CURRENT%\..\Tools\qemu\share",
 					@"%MOSATOOLS%\qemu\Windows",
 					@"%MOSATOOLS%\qemu\Windows\bios",
+					@"%ProgramFiles%\qemu",
+					@"%ProgramFiles%\qemu\bios",
+					@"%ProgramFiles(x86)%\qemu",
+					@"%ProgramFiles(x86)%\qemu\bios",
 
 					"%CURRENT%/../Tools/qemu/share",
 					"/usr/share/qemu",
