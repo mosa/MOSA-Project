@@ -140,7 +140,7 @@ public class Starter : BaseLauncher
 	{
 		return LauncherSettings.Emulator switch
 		{
-			"qemu" => LaunchQemu(false),
+			"qemu" => LaunchQemu(true),
 			"bochs" => LaunchBochs(false),
 			"vmware" => LaunchVMware(false),
 			"virtualbox" => LaunchVirtualBox(false),
