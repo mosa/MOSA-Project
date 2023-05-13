@@ -49,9 +49,7 @@ public class VirtIoDevice
 
 			var configType = pciController.ReadConfig8(pciDevice, (byte)(capability.Offset + 3));
 			var bar = pciController.ReadConfig8(pciDevice, (byte)(capability.Offset + 4));
-			var id = pciController.ReadConfig8(pciDevice, (byte)(capability.Offset + 5));
 			var offset = pciController.ReadConfig32(pciDevice, (byte)(capability.Offset + 8));
-			var length = pciController.ReadConfig32(pciDevice, (byte)(capability.Offset + 12));
 
 			switch (configType)
 			{
