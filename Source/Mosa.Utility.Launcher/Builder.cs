@@ -216,7 +216,7 @@ public class Builder : BaseLauncher
 		bootImageOptions.ImageFirmware = LauncherSettings.ImageFirmware switch
 		{
 			"bios" => ImageFirmware.Bios,
-			"uefi" => ImageFirmware.Uefi,
+			//"uefi" => ImageFirmware.Uefi,
 			_ => throw new NotImplementCompilerException($"Unknown image firmware: {LauncherSettings.ImageFirmware}")
 		};
 		bootImageOptions.ImageFormat = LauncherSettings.ImageFormat switch
