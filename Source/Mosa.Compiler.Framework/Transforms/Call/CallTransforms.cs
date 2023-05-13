@@ -13,6 +13,7 @@ public static class CallTransforms
 	public static readonly List<BaseTransform> List = new List<BaseTransform>
 	{
 		new SetReturnObject(),
+		new SetReturnManagedPointer(),
 		new SetReturn32(),
 		new SetReturn64(),
 		new SetReturnR4(),

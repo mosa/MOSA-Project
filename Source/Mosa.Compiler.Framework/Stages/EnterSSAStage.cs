@@ -300,6 +300,8 @@ public sealed class EnterSSAStage : BaseMethodCompilerStage
 
 		if (variable.IsObject)
 			context.AppendInstruction(IRInstruction.PhiObject, variable);
+		else if (variable.IsManagedPointer)
+			context.AppendInstruction(IRInstruction.PhiManagedPointer, variable);
 		else if (variable.IsR4)
 			context.AppendInstruction(IRInstruction.PhiR4, variable);
 		else if (variable.IsR8)
@@ -351,42 +353,6 @@ public sealed class EnterSSAStage : BaseMethodCompilerStage
 			{
 				InsertPhiInstruction(block, operand);
 			}
-
-			//trace?.Log($"Operand {operand} defined in {ToString(blocks)}");
-			//trace?.Log("");
-
-			//var workList = new Stack<BasicBlock>(blocks);
-			//var everOnWorkList = new HashSet<BasicBlock>(blocks);
-			//var alreadyHasPhiFunction = new HashSet<BasicBlock>();
-
-			//while (workList.Count != 0)
-			//{
-			//	var node = workList.Pop();
-
-			//	var df = analysis.GetDominanceFrontier(node);
-
-			//	if (df != null)
-			//	{
-			//		//trace?.Log($" DF ( {node} ) -> {ToString(df)}");
-
-			//		foreach (var d in df)
-			//		{
-			//			if (!alreadyHasPhiFunction.Contains(d))
-			//			{
-			//				InsertPhiInstruction(d, operand);
-			//				alreadyHasPhiFunction.Add(d);
-
-			//				if (!everOnWorkList.Contains(d))
-			//				{
-			//					workList.Push(d);
-			//					everOnWorkList.Add(d);
-			//				}
-			//			}
-			//		}
-			//	}
-			//}
-
-			//trace?.Log("");
 		}
 	}
 

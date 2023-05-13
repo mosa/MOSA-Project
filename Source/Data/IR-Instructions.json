@@ -35,6 +35,13 @@
 			"Commutative": "true"
 		},
 		{
+			"Name": "AddManagedPointer",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
 			"Name": "AddCarryOut32",
 			"FamilyName": "IR",
 			"ResultCount": 2,
@@ -173,6 +180,13 @@
 			"ResultType": "Boolean"
 		},
 		{
+			"Name": "CompareManagedPointer",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"ResultType": "Boolean"
+		},
+		{
 			"Name": "Compare32x32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
@@ -216,6 +230,13 @@
 		},
 		{
 			"Name": "BranchObject",
+			"FamilyName": "IR",
+			"ResultCount": 2,
+			"OperandCount": 0,
+			"FlowControl": "ConditionalBranch"
+		},
+		{
+			"Name": "BranchManagedPointer",
 			"FamilyName": "IR",
 			"ResultCount": 2,
 			"OperandCount": 0,
@@ -523,6 +544,13 @@
 			"MemoryRead": "true"
 		},
 		{
+			"Name": "LoadManagedPointer",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true"
+		},
+		{
 			"Name": "LoadSignExtend8x32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
@@ -602,6 +630,14 @@
 		},
 		{
 			"Name": "LoadParamObject",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"MemoryRead": "true",
+			"ParameterLoad": "true"
+		},
+		{
+			"Name": "LoadParamManagedPointer",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1,
@@ -877,6 +913,12 @@
 			"OperandCount": 1
 		},
 		{
+			"Name": "MoveManagedPointer",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
 			"Name": "MulCarryOut32",
 			"FamilyName": "IR",
 			"ResultCount": 2,
@@ -975,6 +1017,13 @@
 		},
 		{
 			"Name": "PhiObject",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"VariableOperands": "true"
+		},
+		{
+			"Name": "PhiManagedPointer",
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 0,
@@ -1086,6 +1135,13 @@
 			"FlowControl": "Return"
 		},
 		{
+			"Name": "SetReturnManagedPointer",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 1,
+			"FlowControl": "Return"
+		},
+		{
 			"Name": "SetReturnCompound",
 			"FamilyName": "IR",
 			"ResultCount": 0,
@@ -1181,6 +1237,13 @@
 			"MemoryWrite": "true"
 		},
 		{
+			"Name": "StoreManagedPointer",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 3,
+			"MemoryWrite": "true"
+		},
+		{
 			"Name": "StoreParamCompound",
 			"FamilyName": "IR",
 			"ResultCount": 0,
@@ -1206,6 +1269,14 @@
 		},
 		{
 			"Name": "StoreParamObject",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 2,
+			"MemoryWrite": "true",
+			"ParameterStore": "true"
+		},
+		{
+			"Name": "StoreParamManagedPointer",
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 2,
@@ -1264,6 +1335,12 @@
 		},
 		{
 			"Name": "Sub64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "SubManagedPointer",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2
@@ -1465,6 +1542,12 @@
 		},
 		{
 			"Name": "IfThenElseObject",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 3
+		},
+		{
+			"Name": "IfThenElseManagedPointer",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 3

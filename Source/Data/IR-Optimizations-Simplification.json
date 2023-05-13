@@ -42,6 +42,14 @@
 		},
 		{
 			"Type": "Simplification",
+			"Name": "MoveManagedPointer",
+			"SubName": "Coalescing",
+			"Expression": "IR.MoveManagedPointer (IR.MoveManagedPointer a)",
+			"Filter": "",
+			"Result": "(IR.MoveManagedPointer a)"
+		},
+		{
+			"Type": "Simplification",
 			"Name": "Not##",
 			"SubName": "Twice",
 			"Expression": "IR.Not## (IR.Not## x)",
@@ -266,9 +274,27 @@
 		},
 		{
 			"Type": "Simplification",
+			"Name": "CompareManagedPointer",
+			"SubName": "SameAndEqual",
+			"Expression": "IR.CompareManagedPointer {==, >=, <=, >= u, <= u} a a",
+			"Filter": "",
+			"Result": "(IR.Move32 [To32(1)])",
+			"Variations": "Yes"
+		},
+		{
+			"Type": "Simplification",
 			"Name": "CompareObject",
 			"SubName": "SameAndNotEqual",
 			"Expression": "IR.CompareObject {!=, >, <, > u, < u} a a",
+			"Filter": "",
+			"Result": "(IR.Move32 [To32(0)])",
+			"Variations": "Yes"
+		},
+		{
+			"Type": "Simplification",
+			"Name": "CompareManagedPointer",
+			"SubName": "SameAndNotEqual",
+			"Expression": "IR.CompareManagedPointer {!=, >, <, > u, < u} a a",
 			"Filter": "",
 			"Result": "(IR.Move32 [To32(0)])",
 			"Variations": "Yes"
