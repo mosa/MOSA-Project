@@ -165,6 +165,12 @@
 					<Label FontSize="14" Name="qemuPathLbl" Margin="165, -23, 0, 0">No path specified</Label>
 					<Label FontSize="14">QEMU BIOS Directory:</Label>
 					<Label FontSize="14" Name="qemuBiosPathLbl" Margin="165, -23, 0, 0">No path specified</Label>
+					<Label FontSize="14">QEMU EDK2 x86:</Label>
+					<Label FontSize="14" Name="qemuEdk2X86PathLbl" Margin="165, -23, 0, 0">No path specified</Label>
+					<Label FontSize="14">QEMU EDK2 x64:</Label>
+					<Label FontSize="14" Name="qemuEdk2X64PathLbl" Margin="165, -23, 0, 0">No path specified</Label>
+					<Label FontSize="14">QEMU EDK2 ARM:</Label>
+					<Label FontSize="14" Name="qemuEdk2ARMPathLbl" Margin="165, -23, 0, 0">No path specified</Label>
 					<Label FontSize="14">QEMU Image:</Label>
 					<Label FontSize="14" Name="qemuImgPathLbl" Margin="165, -23, 0, 0">No path specified</Label>
 					<Label FontSize="14">Bochs:</Label>
