@@ -83,7 +83,7 @@ public class VirtIoDevice
 					}
 					else
 					{
-						HAL.DebugWriteLine("[" + devName + "] common configuration bar is io; abort");
+						HAL.DebugWriteLine("[" + devName + "] notify configuration bar is io; abort");
 						return;
 					}
 
@@ -102,7 +102,7 @@ public class VirtIoDevice
 					}
 					else
 					{
-						HAL.DebugWriteLine("[" + devName + "] common configuration bar is io; abort");
+						HAL.DebugWriteLine("[" + devName + "] device configuration bar is io; abort");
 						return;
 					}
 
@@ -213,17 +213,17 @@ public class VirtIoDevice
 		var virtQueue = VirtQueues[queue];
 
 		var descriptor = virtQueue.NextDescriptor();
-		virtQueue.DescriptorWrite32(descriptor, VirtIoQueueDescriptor.Phys, header.ToUInt32());
+		virtQueue.DescriptorWrite64(descriptor, VirtIoQueueDescriptor.Phys, header.ToUInt64());
 		virtQueue.DescriptorWrite32(descriptor, VirtIoQueueDescriptor.Len, headerLength);
 		virtQueue.DescriptorWrite16(descriptor, VirtIoQueueDescriptor.Flags, VirtIoQueueDescriptorFlags.HasNext);
 
 		var descriptor2 = virtQueue.NextDescriptor();
-		virtQueue.DescriptorWrite32(descriptor2, VirtIoQueueDescriptor.Phys, buffer.ToUInt32());
+		virtQueue.DescriptorWrite64(descriptor2, VirtIoQueueDescriptor.Phys, buffer.ToUInt64());
 		virtQueue.DescriptorWrite32(descriptor2, VirtIoQueueDescriptor.Len, 512);
 		virtQueue.DescriptorWrite16(descriptor2, VirtIoQueueDescriptor.Flags, VirtIoQueueDescriptorFlags.HasNext | VirtIoQueueDescriptorFlags.Write);
 
 		var descriptor3 = virtQueue.NextDescriptor();
-		virtQueue.DescriptorWrite32(descriptor3, VirtIoQueueDescriptor.Phys, status.ToUInt32());
+		virtQueue.DescriptorWrite64(descriptor3, VirtIoQueueDescriptor.Phys, status.ToUInt64());
 		virtQueue.DescriptorWrite32(descriptor3, VirtIoQueueDescriptor.Len, 1);
 		virtQueue.DescriptorWrite16(descriptor3, VirtIoQueueDescriptor.Flags, VirtIoQueueDescriptorFlags.Write);
 

@@ -59,7 +59,7 @@ public class VirtIoGpu : BaseDeviceDriver, IGraphicsDevice
 		virtIoDevice = new VirtIoDevice(Device);
 		virtIoDevice.StartInitialize();
 
-		var deviceFeatures = VirtIoFeatures.Version1;
+		var deviceFeatures = (uint)VirtIoFeatures.Version1;
 
 		if ((virtIoDevice.DeviceFeatures & VirtIoFeatures.InOrder) != 0) deviceFeatures |= VirtIoFeatures.InOrder;
 

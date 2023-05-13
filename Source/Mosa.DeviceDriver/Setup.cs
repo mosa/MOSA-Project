@@ -91,18 +91,6 @@ public static class Setup
 				Factory = () => new ISA.IDEController()
 			},
 
-			//new ISADeviceDriverRegistryEntry()
-			//{
-			//	Name = "VGAText",
-			//	Platforms = PlatformArchitecture.X86AndX64,
-			//	AutoLoad = true,
-			//	BasePort = 0x03B0,
-			//	PortRange = 0x1F,
-			//	BaseAddress = 0xB0000,
-			//	AddressRange = 0x10000,
-			//	Factory = delegate { return new VGAText(); }
-			//},
-
 			new PCIDeviceDriverRegistryEntry
 			{
 				Name = "VirtIOGPU",

@@ -43,6 +43,21 @@ public class VirtIoQueue
 		return index++;
 	}
 
+	public void SetHead(ushort head)
+	{
+		var availableIndex = AvailableRingRead16(VirtIoQueueAvailableRing.Index);
+
+		if (availableIndex == ushort.MaxValue)
+			availableIndex = 0;
+
+		AvailableRingWrite16((uint)(VirtIoQueueAvailableRing.Rings + availableIndex % Size), head);
+		AvailableRingWrite16(VirtIoQueueAvailableRing.Index, (ushort)(availableIndex + 1));
+
+		index = 0;
+
+		Internal.MemorySet(Buffer + AvailableSize, 0, UsedSize);
+	}
+
 	public void DescriptorWrite16(uint descriptor, uint offset, ushort value)
 	{
 		Buffer.Store16(descriptor * 16 + offset, value);
@@ -51,6 +66,11 @@ public class VirtIoQueue
 	public void DescriptorWrite32(uint descriptor, uint offset, uint value)
 	{
 		Buffer.Store32(descriptor * 16 + offset, value);
+	}
+
+	public void DescriptorWrite64(uint descriptor, uint offset, ulong value)
+	{
+		Buffer.Store64(descriptor * 16 + offset, value);
 	}
 
 	public ushort AvailableRingRead16(uint offset)
@@ -63,17 +83,8 @@ public class VirtIoQueue
 		Buffer.Store16(DescriptorSize + offset, value);
 	}
 
-	public uint UsedRingRead16(uint offset)
+	public ushort UsedRingRead16(uint offset)
 	{
 		return Buffer.Load16(AvailableSize + offset);
-	}
-
-	public void SetHead(ushort head)
-	{
-		var availableIndex = AvailableRingRead16(VirtIoQueueAvailableRing.Index);
-		AvailableRingWrite16((uint)(VirtIoQueueAvailableRing.Rings + availableIndex % Size), head);
-		AvailableRingWrite16(VirtIoQueueAvailableRing.Index, (ushort)(availableIndex + 1));
-		index = 0;
-		Internal.MemorySet(Buffer + AvailableSize, 0, UsedSize);
 	}
 }

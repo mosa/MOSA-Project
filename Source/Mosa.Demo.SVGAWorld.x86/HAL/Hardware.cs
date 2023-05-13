@@ -138,7 +138,8 @@ public sealed class Hardware : BaseHardwareAbstraction
 	/// <param name="message">The message.</param>
 	public override void DebugWriteLine(string message)
 	{
-		Console.WriteLine(message);
+		Serial.Write(Serial.COM1, message);
+		Serial.Write(Serial.COM1, (byte)'\n');
 	}
 
 	/// <summary>
