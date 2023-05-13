@@ -144,10 +144,10 @@ public sealed class Architecture : BaseArchitecture
 	/// <param name="pipeline">The pipeline to extend.</param>
 	public override void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> pipeline, CompilerSettings compilerSettings)
 	{
-		if (compilerSettings.Settings.GetValue("Multiboot.Version", string.Empty).ToLowerInvariant() == "v1")
+		if (!string.IsNullOrEmpty(compilerSettings.Settings.GetValue("Multiboot.Version", string.Empty)))
 		{
 			pipeline.InsertAfterFirst<TypeInitializerStage>(
-				new MultibootV1Stage()
+				new MultibootStage()
 			);
 		}
 

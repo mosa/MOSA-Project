@@ -46,6 +46,12 @@ public class LauncherSettings
 
 	public bool EmitDwarf => Settings.GetValue("Linker.Dwarf", false);
 
+	public string MultibootVersion
+	{
+		get => Settings.GetValue("Multiboot.Version", "v1");
+		set => Settings.SetValue("Multiboot.Version", value);
+	}
+
 	public string Emulator
 	{
 		get => Settings.GetValue("Emulator", null);
