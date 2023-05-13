@@ -25,4 +25,7 @@
     <ProjectReference Include="..\Mosa.Korlib\Mosa.Korlib.csproj" />
     <ProjectReference Include="..\Mosa.Runtime\Mosa.Runtime.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="PCI\AMD\AMDPCNetII.cs" />
+  </ItemGroup>
 </Project>

@@ -93,6 +93,140 @@ public static class Setup
 
 			new PCIDeviceDriverRegistryEntry
 			{
+				Name = "Intel4SeriesChipsetDRAMController",
+				Platforms = PlatformArchitecture.X86AndX64,
+				BusType = DeviceBusType.PCI,
+				VendorID = 0x8086,
+				DeviceID = 0x2E10,
+				PCIFields = PCIField.VendorID | PCIField.DeviceID,
+				Factory = () => new PCI.Intel.Intel4SeriesChipsetDRAMController()
+			},
+
+			new PCIDeviceDriverRegistryEntry
+			{
+				Name = "Intel4SeriesChipsetIntegratedGraphicsController",
+				Platforms = PlatformArchitecture.X86AndX64,
+				BusType = DeviceBusType.PCI,
+				VendorID = 0x8086,
+				DeviceID = 0x2E10,
+				PCIFields = PCIField.VendorID | PCIField.DeviceID,
+				Factory = () => new PCI.Intel.Intel4SeriesChipsetIntegratedGraphicsController()
+			},
+
+			new PCIDeviceDriverRegistryEntry
+			{
+				Name = "Intel4SeriesChipsetIntegratedGraphicsController2E13",
+				Platforms = PlatformArchitecture.X86AndX64,
+				BusType = DeviceBusType.PCI,
+				VendorID = 0x8086,
+				DeviceID = 0x2E10,
+				PCIFields = PCIField.VendorID | PCIField.DeviceID,
+				Factory = () => new PCI.Intel.Intel4SeriesChipsetIntegratedGraphicsController2E13()
+			},
+
+			new PCIDeviceDriverRegistryEntry
+			{
+				Name = "Intel4SeriesChipsetPCIExpressRootPort",
+				Platforms = PlatformArchitecture.X86AndX64,
+				BusType = DeviceBusType.PCI,
+				VendorID = 0x8086,
+				DeviceID = 0x2E10,
+				PCIFields = PCIField.VendorID | PCIField.DeviceID,
+				Factory = () => new PCI.Intel.Intel4SeriesChipsetPCIExpressRootPort()
+			},
+
+			new PCIDeviceDriverRegistryEntry
+			{
+				Name = "Intel4SeriesChipsetPCIExpressRootPort",
+				Platforms = PlatformArchitecture.X86AndX64,
+				BusType = DeviceBusType.PCI,
+				VendorID = 0x8086,
+				DeviceID = 0x2E10,
+				PCIFields = PCIField.VendorID | PCIField.DeviceID,
+				Factory = () => new PCI.Intel.Intel4SeriesChipsetPCIExpressRootPort()
+			},
+
+			new PCIDeviceDriverRegistryEntry
+			{
+				Name = "Intel440FX",
+				Platforms = PlatformArchitecture.X86AndX64,
+				BusType = DeviceBusType.PCI,
+				VendorID = 0x8086,
+				DeviceID = 0x1237,
+				ClassCode = 0x06,
+				SubClassCode = 0x00,
+				PCIFields = PCIField.VendorID | PCIField.DeviceID | PCIField.ClassCode | PCIField.SubClassCode,
+				Factory = () => new PCI.Intel.Intel440FX()
+			},
+
+			new PCIDeviceDriverRegistryEntry
+			{
+				Name = "IntelPIIX3",
+				Platforms = PlatformArchitecture.X86AndX64,
+				BusType = DeviceBusType.PCI,
+				VendorID = 0x8086,
+				DeviceID = 0x7000,
+				PCIFields = PCIField.VendorID | PCIField.DeviceID,
+				Factory = () => new PCI.Intel.IntelPIIX3()
+			},
+
+			new PCIDeviceDriverRegistryEntry
+			{
+				Name = "IntelPIIX4",
+				Platforms = PlatformArchitecture.X86AndX64,
+				BusType = DeviceBusType.PCI,
+				VendorID = 0x8086,
+				DeviceID = 0x7113,
+				PCIFields = PCIField.VendorID | PCIField.DeviceID,
+				Factory = () => new PCI.Intel.IntelPIIX4()
+			},
+
+			new PCIDeviceDriverRegistryEntry
+			{
+				Name = "IntelGPIOController",
+				Platforms = PlatformArchitecture.X86AndX64,
+				BusType = DeviceBusType.PCI,
+				VendorID = 0x8086,
+				DeviceID = 0x0934,
+				ClassCode = 0X0C,
+				SubClassCode = 0x80,
+				ProgIF = 0x00,
+				RevisionID = 0x10,
+				PCIFields = PCIField.VendorID | PCIField.DeviceID | PCIField.ClassCode | PCIField.SubClassCode | PCIField.ProgIF | PCIField.RevisionID,
+				Factory = () => new PCI.Intel.QuarkSoC.IntelGPIOController()
+			},
+
+			new PCIDeviceDriverRegistryEntry
+			{
+				Name = "IntelHSUART",
+				Platforms = PlatformArchitecture.X86AndX64,
+				BusType = DeviceBusType.PCI,
+				VendorID = 0x8086,
+				DeviceID = 0x0936,
+				ClassCode = 0X07,
+				SubClassCode = 0x80,
+				ProgIF = 0x02,
+				RevisionID = 0x10,
+				PCIFields = PCIField.VendorID | PCIField.DeviceID | PCIField.ClassCode | PCIField.SubClassCode | PCIField.ProgIF | PCIField.RevisionID,
+				Factory = () => new PCI.Intel.QuarkSoC.IntelHSUART()
+			},
+
+			new PCIDeviceDriverRegistryEntry
+			{
+				Name = "PCIIDEInterface",
+				Platforms = PlatformArchitecture.X86AndX64,
+				BusType = DeviceBusType.PCI,
+				VendorID = 0x8086,
+				DeviceID = 0x7010,
+				ClassCode = 0X01,
+				SubClassCode = 0x01,
+				ProgIF = 0x80,
+				PCIFields = PCIField.VendorID | PCIField.DeviceID | PCIField.ClassCode | PCIField.SubClassCode | PCIField.ProgIF,
+				Factory = () => new PCI.Intel.PCIIDEInterface()
+			},
+
+			new PCIDeviceDriverRegistryEntry
+			{
 				Name = "VirtIOGPU",
 				Platforms = PlatformArchitecture.X86AndX64 | PlatformArchitecture.ARMv8A32,
 				BusType = DeviceBusType.PCI,
