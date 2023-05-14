@@ -190,17 +190,32 @@ public static class Internal
 
 	public static void MemoryCopy(Pointer dest, Pointer src, uint count)
 	{
-		// FUTURE: Improve
+		if (count % 4 == 0)
+			MemoryCopy4(dest, src, count);
+		else
+			MemoryCopy1(dest, src, count);
+	}
+
+	private static void MemoryCopy1(Pointer dest, Pointer src, uint count)
+	{
 		for (var i = 0; i < count; i++)
 		{
-			byte value = src.Load8(i);
+			var value = src.Load8(i);
 			dest.Store8(i, value);
+		}
+	}
+
+	private static void MemoryCopy4(Pointer dest, Pointer src, uint count)
+	{
+		for (var i = 0; i < count; i = i + 4)
+		{
+			var value = src.Load32(i);
+			dest.Store32(i, value);
 		}
 	}
 
 	public static void MemorySet(Pointer dest, byte value, uint count)
 	{
-		// FUTURE: Improve
 		for (var i = 0; i < count; i++)
 		{
 			dest.Store8(i, value);
@@ -209,7 +224,6 @@ public static class Internal
 
 	public static void MemorySet(Pointer dest, ushort value, uint count)
 	{
-		// FUTURE: Improve
 		for (var i = 0; i < count; i += 2)
 		{
 			dest.Store16(i, value);
@@ -218,7 +232,6 @@ public static class Internal
 
 	public static void MemorySet(Pointer dest, uint value, uint count)
 	{
-		// FUTURE: Improve
 		for (var i = 0; i < count; i += 4)
 		{
 			dest.Store32(i, value);
@@ -227,10 +240,25 @@ public static class Internal
 
 	public static void MemoryClear(Pointer dest, uint count)
 	{
-		// FUTURE: Improve
-		for (int i = 0; i < count; i++)
+		if (count % 4 == 0)
+			MemoryClear4(dest, count);
+		else
+			MemoryClear1(dest, count);
+	}
+
+	private static void MemoryClear1(Pointer dest, uint count)
+	{
+		for (var i = 0; i < count; i++)
 		{
 			dest.Store8(i, 0);
+		}
+	}
+
+	private static void MemoryClear4(Pointer dest, uint count)
+	{
+		for (var i = 0; i < count; i = i + 4)
+		{
+			dest.Store32(i, 0);
 		}
 	}
 
