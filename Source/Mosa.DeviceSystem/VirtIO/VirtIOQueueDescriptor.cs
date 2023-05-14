@@ -2,7 +2,7 @@
 
 namespace Mosa.DeviceSystem.VirtIO;
 
-public static class VirtIoQueueDescriptor
+public static class VirtIOQueueDescriptor
 {
 	public const byte Phys = 0;
 	public const byte Len = 8;

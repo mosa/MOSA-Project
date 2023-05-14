@@ -2,7 +2,7 @@
 
 namespace Mosa.DeviceSystem.VirtIO;
 
-public static class VirtIoPciCommonConfiguration
+public static class VirtIOPCICommonConfiguration
 {
 	public const byte DeviceFeatureSelect = 0;
 	public const byte DeviceFeature = 4;

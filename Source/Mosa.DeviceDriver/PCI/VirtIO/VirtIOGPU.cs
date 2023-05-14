@@ -7,13 +7,13 @@ using Mosa.Runtime;
 
 namespace Mosa.DeviceDriver.PCI.VirtIO;
 
-public class VirtIoGpu : BaseDeviceDriver, IGraphicsDevice
+public class VirtIOGPU : BaseDeviceDriver, IGraphicsDevice
 {
 	private static class Features
 	{
-		public const byte VirGl = 0;
-		public const byte Edid = 1;
-		public const byte ResourceUuid = 2;
+		public const byte VirGL = 0;
+		public const byte EDID = 1;
+		public const byte ResourceUUID = 2;
 		public const byte ResourceBlob = 3;
 		public const byte ContextInit = 4;
 	}
@@ -43,7 +43,7 @@ public class VirtIoGpu : BaseDeviceDriver, IGraphicsDevice
 		public const byte Size = 24;
 	}
 
-	private VirtIoDevice virtIoDevice;
+	private VirtIODevice virtIoDevice;
 	private Pointer resourceHeader;
 	private Pointer backingHeader;
 	private Pointer linkHeader;
@@ -56,12 +56,12 @@ public class VirtIoGpu : BaseDeviceDriver, IGraphicsDevice
 	{
 		Device.Name = "VIRTIO_GPU";
 
-		virtIoDevice = new VirtIoDevice(Device);
+		virtIoDevice = new VirtIODevice(Device);
 		virtIoDevice.StartInitialize();
 
-		var deviceFeatures = (uint)VirtIoFeatures.Version1;
+		var deviceFeatures = (uint)VirtIOFeatures.Version1;
 
-		if ((virtIoDevice.DeviceFeatures & VirtIoFeatures.InOrder) != 0) deviceFeatures |= VirtIoFeatures.InOrder;
+		if ((virtIoDevice.DeviceFeatures & VirtIOFeatures.InOrder) != 0) deviceFeatures |= VirtIOFeatures.InOrder;
 
 		virtIoDevice.SelectFeatures(deviceFeatures);
 		virtIoDevice.EndInitialize();

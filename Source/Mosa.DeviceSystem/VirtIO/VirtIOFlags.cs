@@ -2,7 +2,7 @@
 
 namespace Mosa.DeviceSystem.VirtIO;
 
-public static class VirtIoFlags
+public static class VirtIOFlags
 {
 	public const byte Reset = 0;
 	public const byte Acknowledge = 1;

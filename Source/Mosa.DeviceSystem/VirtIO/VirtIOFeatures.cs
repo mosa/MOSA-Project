@@ -2,7 +2,7 @@
 
 namespace Mosa.DeviceSystem.VirtIO;
 
-public static class VirtIoFeatures
+public static class VirtIOFeatures
 {
 	public const byte IndirectDescriptor = 28;
 	public const byte EventIndex = 29;

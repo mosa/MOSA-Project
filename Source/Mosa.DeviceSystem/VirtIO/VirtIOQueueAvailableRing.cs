@@ -2,7 +2,7 @@
 
 namespace Mosa.DeviceSystem.VirtIO;
 
-public static class VirtIoQueueAvailableRing
+public static class VirtIOQueueAvailableRing
 {
 	public const byte Flags = 0;
 	public const byte Index = 2;

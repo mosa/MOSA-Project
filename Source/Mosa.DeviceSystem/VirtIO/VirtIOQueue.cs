@@ -4,7 +4,7 @@ using Mosa.Runtime;
 
 namespace Mosa.DeviceSystem.VirtIO;
 
-public class VirtIoQueue
+public class VirtIOQueue
 {
 	public ushort Size { get; }
 
@@ -17,7 +17,7 @@ public class VirtIoQueue
 
 	private ushort index;
 
-	public VirtIoQueue(ushort size)
+	public VirtIOQueue(ushort size)
 	{
 		Size = size;
 
@@ -32,8 +32,8 @@ public class VirtIoQueue
 		Internal.MemorySet(Buffer, 0, BufferSize);
 
 		for (uint i = 0; i < size - 1; i++)
-			DescriptorWrite16(i, VirtIoQueueDescriptor.NextDescIdx, (ushort)(i + 1));
-		DescriptorWrite16((uint)(size - 1), VirtIoQueueDescriptor.NextDescIdx, 0xFFFF); // Last entry in the list, point it to an invalid value
+			DescriptorWrite16(i, VirtIOQueueDescriptor.NextDescIdx, (ushort)(i + 1));
+		DescriptorWrite16((uint)(size - 1), VirtIOQueueDescriptor.NextDescIdx, 0xFFFF); // Last entry in the list, point it to an invalid value
 
 		index = 0;
 	}
@@ -45,13 +45,13 @@ public class VirtIoQueue
 
 	public void SetHead(ushort head)
 	{
-		var availableIndex = AvailableRingRead16(VirtIoQueueAvailableRing.Index);
+		var availableIndex = AvailableRingRead16(VirtIOQueueAvailableRing.Index);
 
 		if (availableIndex == ushort.MaxValue)
 			availableIndex = 0;
 
-		AvailableRingWrite16((uint)(VirtIoQueueAvailableRing.Rings + availableIndex % Size), head);
-		AvailableRingWrite16(VirtIoQueueAvailableRing.Index, (ushort)(availableIndex + 1));
+		AvailableRingWrite16((uint)(VirtIOQueueAvailableRing.Rings + availableIndex % Size), head);
+		AvailableRingWrite16(VirtIOQueueAvailableRing.Index, (ushort)(availableIndex + 1));
 
 		index = 0;
 

@@ -5,7 +5,7 @@ using Mosa.Runtime;
 
 namespace Mosa.DeviceSystem.VirtIO;
 
-public class VirtIoDevice
+public class VirtIODevice
 {
 	private readonly string devName;
 	private readonly PCIDevice pciDevice;
@@ -23,13 +23,13 @@ public class VirtIoDevice
 
 	public uint DeviceFeatures { get; private set; }
 
-	public VirtIoQueue[] VirtQueues { get; private set; }
+	public VirtIOQueue[] VirtQueues { get; private set; }
 
 	public ConstrainedPointer DeviceConfigurationPointer { get; private set; }
 
 	public uint DeviceConfigurationOffset { get; private set; }
 
-	public VirtIoDevice(Device device)
+	public VirtIODevice(Device device)
 	{
 		devName = device.Name;
 		pciDevice = (PCIDevice)device.Parent.DeviceDriver;
@@ -53,7 +53,7 @@ public class VirtIoDevice
 
 			switch (configType)
 			{
-				case VirtIoConfigurationCapabilities.Common:
+				case VirtIOConfigurationCapabilities.Common:
 				{
 					var pciBar = pciDevice.BaseAddresses[bar];
 
@@ -70,7 +70,7 @@ public class VirtIoDevice
 
 					break;
 				}
-				case VirtIoConfigurationCapabilities.Notify:
+				case VirtIOConfigurationCapabilities.Notify:
 				{
 					var pciBar = pciDevice.BaseAddresses[bar];
 
@@ -88,8 +88,8 @@ public class VirtIoDevice
 					notifyOffMultiplier = pciController.ReadConfig32(pciDevice, (byte)(capability.Offset + 16));
 					break;
 				}
-				case VirtIoConfigurationCapabilities.Isr: break;
-				case VirtIoConfigurationCapabilities.Device:
+				case VirtIOConfigurationCapabilities.ISR: break;
+				case VirtIOConfigurationCapabilities.Device:
 				{
 					var pciBar = pciDevice.BaseAddresses[bar];
 
@@ -106,9 +106,9 @@ public class VirtIoDevice
 
 					break;
 				}
-				case VirtIoConfigurationCapabilities.Pci: break;
-				case VirtIoConfigurationCapabilities.SharedMemory: break;
-				case VirtIoConfigurationCapabilities.Vendor: break;
+				case VirtIOConfigurationCapabilities.PCI: break;
+				case VirtIOConfigurationCapabilities.SharedMemory: break;
+				case VirtIOConfigurationCapabilities.Vendor: break;
 			}
 		}
 
@@ -125,14 +125,14 @@ public class VirtIoDevice
 		if (Initialized)
 			return;
 
-		devBar.Write8(devOff + VirtIoPciCommonConfiguration.DeviceStatus, VirtIoFlags.Reset);
+		devBar.Write8(devOff + VirtIOPCICommonConfiguration.DeviceStatus, VirtIOFlags.Reset);
 
-		while (devBar.Read8(devOff + VirtIoPciCommonConfiguration.DeviceStatus) != VirtIoFlags.Reset) {}
+		while (devBar.Read8(devOff + VirtIOPCICommonConfiguration.DeviceStatus) != VirtIOFlags.Reset) {}
 
-		devBar.Write8(devOff + VirtIoPciCommonConfiguration.DeviceStatus, (byte)(devBar.Read8(devOff + VirtIoPciCommonConfiguration.DeviceStatus) | VirtIoFlags.Acknowledge));
-		devBar.Write8(devOff + VirtIoPciCommonConfiguration.DeviceStatus, (byte)(devBar.Read8(devOff + VirtIoPciCommonConfiguration.DeviceStatus) | VirtIoFlags.Driver));
+		devBar.Write8(devOff + VirtIOPCICommonConfiguration.DeviceStatus, (byte)(devBar.Read8(devOff + VirtIOPCICommonConfiguration.DeviceStatus) | VirtIOFlags.Acknowledge));
+		devBar.Write8(devOff + VirtIOPCICommonConfiguration.DeviceStatus, (byte)(devBar.Read8(devOff + VirtIOPCICommonConfiguration.DeviceStatus) | VirtIOFlags.Driver));
 
-		DeviceFeatures = devBar.Read32(devOff + VirtIoPciCommonConfiguration.DeviceFeature);
+		DeviceFeatures = devBar.Read32(devOff + VirtIOPCICommonConfiguration.DeviceFeature);
 	}
 
 	public void SelectFeatures(uint features)
@@ -140,7 +140,7 @@ public class VirtIoDevice
 		if (Initialized)
 			return;
 
-		devBar.Write32(devOff + VirtIoPciCommonConfiguration.DeviceFeatureSelect, features);
+		devBar.Write32(devOff + VirtIOPCICommonConfiguration.DeviceFeatureSelect, features);
 	}
 
 	public void EndInitialize()
@@ -148,25 +148,25 @@ public class VirtIoDevice
 		if (Initialized)
 			return;
 
-		var featuresOk = (byte)(devBar.Read8(devOff + 20) | VirtIoFlags.FeaturesOk);
+		var featuresOk = (byte)(devBar.Read8(devOff + 20) | VirtIOFlags.FeaturesOk);
 
-		devBar.Write8(devOff + VirtIoPciCommonConfiguration.DeviceStatus, featuresOk);
+		devBar.Write8(devOff + VirtIOPCICommonConfiguration.DeviceStatus, featuresOk);
 
-		if (devBar.Read8(devOff + VirtIoPciCommonConfiguration.DeviceStatus) != featuresOk)
+		if (devBar.Read8(devOff + VirtIOPCICommonConfiguration.DeviceStatus) != featuresOk)
 		{
 			HAL.DebugWriteLine("[" + devName + "] device does not support accepted features; abort");
 			return;
 		}
 
-		var queues = devBar.Read16(devOff + VirtIoPciCommonConfiguration.NumQueues);
+		var queues = devBar.Read16(devOff + VirtIOPCICommonConfiguration.NumQueues);
 
-		VirtQueues = new VirtIoQueue[queues];
+		VirtQueues = new VirtIOQueue[queues];
 
 		for (ushort i = 0; i < queues; i++)
 		{
-			devBar.Write16(devOff + VirtIoPciCommonConfiguration.QueueSelect, i);
+			devBar.Write16(devOff + VirtIOPCICommonConfiguration.QueueSelect, i);
 
-			var size = devBar.Read16(devOff + VirtIoPciCommonConfiguration.QueueSize);
+			var size = devBar.Read16(devOff + VirtIOPCICommonConfiguration.QueueSize);
 
 			if (size == 0)
 			{
@@ -174,13 +174,13 @@ public class VirtIoDevice
 				continue;
 			}
 
-			var queue = new VirtIoQueue(size);
+			var queue = new VirtIOQueue(size);
 			var queueBufferAddress = queue.Buffer.ToUInt64();
 
-			devBar.Write64(devOff + VirtIoPciCommonConfiguration.QueueDesc, queueBufferAddress);
-			devBar.Write64(devOff + VirtIoPciCommonConfiguration.QueueDriver, queueBufferAddress + queue.DescriptorSize);
-			devBar.Write64(devOff + VirtIoPciCommonConfiguration.QueueDevice, queueBufferAddress + queue.AvailableSize);
-			devBar.Write16(devOff + VirtIoPciCommonConfiguration.QueueEnable, 1);
+			devBar.Write64(devOff + VirtIOPCICommonConfiguration.QueueDesc, queueBufferAddress);
+			devBar.Write64(devOff + VirtIOPCICommonConfiguration.QueueDriver, queueBufferAddress + queue.DescriptorSize);
+			devBar.Write64(devOff + VirtIOPCICommonConfiguration.QueueDevice, queueBufferAddress + queue.AvailableSize);
+			devBar.Write16(devOff + VirtIOPCICommonConfiguration.QueueEnable, 1);
 
 			VirtQueues[i] = queue;
 		}
@@ -191,16 +191,16 @@ public class VirtIoDevice
 		if (Initialized)
 			return;
 
-		devBar.Write8(devOff + VirtIoPciCommonConfiguration.DeviceStatus, (byte)(devBar.Read8(devOff + VirtIoPciCommonConfiguration.DeviceStatus) | VirtIoFlags.DriverOk));
+		devBar.Write8(devOff + VirtIOPCICommonConfiguration.DeviceStatus, (byte)(devBar.Read8(devOff + VirtIOPCICommonConfiguration.DeviceStatus) | VirtIOFlags.DriverOk));
 
 		Initialized = true;
 	}
 
 	public void NotifyQueue(ushort queue)
 	{
-		devBar.Write16(devOff + VirtIoPciCommonConfiguration.QueueSelect, queue);
+		devBar.Write16(devOff + VirtIOPCICommonConfiguration.QueueSelect, queue);
 
-		var queueNotifyOff = devBar.Read16(devOff + VirtIoPciCommonConfiguration.QueueNotifyOff);
+		var queueNotifyOff = devBar.Read16(devOff + VirtIOPCICommonConfiguration.QueueNotifyOff);
 		var offset = (byte)(notifyCapabilityOffset + queueNotifyOff * notifyOffMultiplier);
 
 		notifyCapabilityBar.Write16(notifyCapabilityOffset + offset, queue);
@@ -211,24 +211,24 @@ public class VirtIoDevice
 		var virtQueue = VirtQueues[queue];
 
 		var descriptor = virtQueue.NextDescriptor();
-		virtQueue.DescriptorWrite64(descriptor, VirtIoQueueDescriptor.Phys, header.ToUInt64());
-		virtQueue.DescriptorWrite32(descriptor, VirtIoQueueDescriptor.Len, headerLength);
-		virtQueue.DescriptorWrite16(descriptor, VirtIoQueueDescriptor.Flags, VirtIoQueueDescriptorFlags.HasNext);
+		virtQueue.DescriptorWrite64(descriptor, VirtIOQueueDescriptor.Phys, header.ToUInt64());
+		virtQueue.DescriptorWrite32(descriptor, VirtIOQueueDescriptor.Len, headerLength);
+		virtQueue.DescriptorWrite16(descriptor, VirtIOQueueDescriptor.Flags, VirtIOQueueDescriptorFlags.HasNext);
 
 		var descriptor2 = virtQueue.NextDescriptor();
-		virtQueue.DescriptorWrite64(descriptor2, VirtIoQueueDescriptor.Phys, buffer.ToUInt64());
-		virtQueue.DescriptorWrite32(descriptor2, VirtIoQueueDescriptor.Len, 512);
-		virtQueue.DescriptorWrite16(descriptor2, VirtIoQueueDescriptor.Flags, VirtIoQueueDescriptorFlags.HasNext | VirtIoQueueDescriptorFlags.Write);
+		virtQueue.DescriptorWrite64(descriptor2, VirtIOQueueDescriptor.Phys, buffer.ToUInt64());
+		virtQueue.DescriptorWrite32(descriptor2, VirtIOQueueDescriptor.Len, 512);
+		virtQueue.DescriptorWrite16(descriptor2, VirtIOQueueDescriptor.Flags, VirtIOQueueDescriptorFlags.HasNext | VirtIOQueueDescriptorFlags.Write);
 
 		var descriptor3 = virtQueue.NextDescriptor();
-		virtQueue.DescriptorWrite64(descriptor3, VirtIoQueueDescriptor.Phys, status.ToUInt64());
-		virtQueue.DescriptorWrite32(descriptor3, VirtIoQueueDescriptor.Len, 1);
-		virtQueue.DescriptorWrite16(descriptor3, VirtIoQueueDescriptor.Flags, VirtIoQueueDescriptorFlags.Write);
+		virtQueue.DescriptorWrite64(descriptor3, VirtIOQueueDescriptor.Phys, status.ToUInt64());
+		virtQueue.DescriptorWrite32(descriptor3, VirtIOQueueDescriptor.Len, 1);
+		virtQueue.DescriptorWrite16(descriptor3, VirtIOQueueDescriptor.Flags, VirtIOQueueDescriptorFlags.Write);
 
 		virtQueue.SetHead(descriptor);
 
 		NotifyQueue(queue);
 
-		while (virtQueue.UsedRingRead16(VirtIoQueueUsedRing.Index) == 0) {}
+		while (virtQueue.UsedRingRead16(VirtIOQueueUsedRing.Index) == 0) {}
 	}
 }

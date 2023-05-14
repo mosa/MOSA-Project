@@ -233,7 +233,7 @@ public static class Setup
 				VendorID = 0x1AF4,
 				DeviceID = 0x1050,
 				PCIFields = PCIField.VendorID | PCIField.DeviceID,
-				Factory = () => new PCI.VirtIO.VirtIoGpu()
+				Factory = () => new PCI.VirtIO.VirtIOGPU()
 			},
 
 			new PCIDeviceDriverRegistryEntry
