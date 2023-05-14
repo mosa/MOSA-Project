@@ -6,6 +6,7 @@
 		"IR.Add64",
 		"IR.AddR4",
 		"IR.AddR8",
+		"IR.AddManagedPointer",
 		"IR.And32",
 		"IR.And64",
 		"IR.Or32",
@@ -45,6 +46,16 @@
 			"Expression": "IR.And## a 0",
 			"Filter": "",
 			"Result": "(IR.Move## [To##(0)])",
+			"Priority": "80",
+			"Variations": "Yes"
+		},
+		{
+			"Type": "StrengthReduction",
+			"Name": "AddManagedPointer",
+			"SubName": "Zero",
+			"Expression": "IR.AddManagedPointer a 0",
+			"Filter": "",
+			"Result": "(IR.MoveManagedPointer [To32(0)])",
 			"Priority": "80",
 			"Variations": "Yes"
 		},
@@ -171,6 +182,24 @@
 			"Expression": "IR.Sub## a a",
 			"Filter": "",
 			"Result": "(IR.Move## [To##(0)])",
+			"Priority": "80"
+		},
+		{
+			"Type": "StrengthReduction",
+			"Name": "SubManagedPointer",
+			"SubName": "ByZero",
+			"Expression": "IR.SubManagedPointer a 0",
+			"Filter": "",
+			"Result": "(IR.MoveManagedPointer a)",
+			"Priority": "80"
+		},
+		{
+			"Type": "StrengthReduction",
+			"Name": "SubManagedPointer",
+			"SubName": "Same",
+			"Expression": "IR.SubManagedPointer a a",
+			"Filter": "",
+			"Result": "(IR.MoveManagedPointer [To32(0)])",
 			"Priority": "80"
 		},
 		{

@@ -106,6 +106,7 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 						|| node.Instruction == IRInstruction.SetReturnR4
 						|| node.Instruction == IRInstruction.SetReturnR8
 						|| node.Instruction == IRInstruction.SetReturnObject
+						|| node.Instruction == IRInstruction.SetReturnManagedPointer
 						|| node.Block.IsEpilogue
 						|| node.Block.IsPrologue
 						|| node.Instruction.IsParameterLoad
@@ -250,5 +251,4 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 
 		return true;
 	}
-
 }

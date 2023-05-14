@@ -174,6 +174,9 @@ public partial class MainWindow : Window
 		ndiasmPathLbl.Content = settings.GetValue("AppLocation.Ndisasm", "N/A");
 		qemuPathLbl.Content = settings.GetValue("AppLocation.Qemu", "N/A");
 		qemuBiosPathLbl.Content = settings.GetValue("AppLocation.QemuBIOS", "N/A");
+		qemuEdk2X86PathLbl.Content = settings.GetValue("AppLocation.QemuEDK2X86", "N/A");
+		qemuEdk2X64PathLbl.Content = settings.GetValue("AppLocation.QemuEDK2X64", "N/A");
+		qemuEdk2ARMPathLbl.Content = settings.GetValue("AppLocation.QemuEDK2ARM", "N/A");
 		qemuImgPathLbl.Content = settings.GetValue("AppLocation.QemuImg", "N/A");
 		vboxPathLbl.Content = settings.GetValue("AppLocation.VirtualBox", "N/A");
 		mkisofsPathLbl.Content = settings.GetValue("AppLocation.Mkisofs", "N/A");

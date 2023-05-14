@@ -35,11 +35,12 @@ public sealed class Deadcode : BaseTransform
 			|| context.Instruction == IRInstruction.CallVirtual
 			|| context.Instruction == IRInstruction.NewObject
 			|| context.Instruction == IRInstruction.SetReturnObject     // should not be necessary
-			|| context.Instruction == IRInstruction.SetReturn32         // should not be necessary
-			|| context.Instruction == IRInstruction.SetReturn64         // should not be necessary
-			|| context.Instruction == IRInstruction.SetReturnR4         // should not be necessary
-			|| context.Instruction == IRInstruction.SetReturnR8         // should not be necessary
-			|| context.Instruction == IRInstruction.SetReturnCompound   // should not be necessary
+			|| context.Instruction == IRInstruction.SetReturnManagedPointer
+			|| context.Instruction == IRInstruction.SetReturn32
+			|| context.Instruction == IRInstruction.SetReturn64
+			|| context.Instruction == IRInstruction.SetReturnR4
+			|| context.Instruction == IRInstruction.SetReturnR8
+			|| context.Instruction == IRInstruction.SetReturnCompound
 			|| context.Instruction == IRInstruction.IntrinsicMethodCall)
 			return false;
 

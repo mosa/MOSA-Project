@@ -4,7 +4,7 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Platform.x64.CompilerStages;
 
-public sealed class MultibootV1Stage : Mosa.Compiler.Framework.Platform.BaseMultibootV1Stage
+public sealed class MultibootStage : Mosa.Compiler.Framework.Platform.BaseMultibootStage
 {
 	protected override void Finalization()
 	{
