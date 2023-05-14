@@ -23,6 +23,9 @@ public static class AppLocationsSettings
 
 		Set(settings, "AppLocation.Qemu", FindQemu());
 		Set(settings, "AppLocation.QemuBIOS", FindQemuBIOS());
+		Set(settings, "AppLocation.QemuEDK2X86", FindQemuEDK2X86());
+		Set(settings, "AppLocation.QemuEDK2X64", FindQemuEDK2X64());
+		Set(settings, "AppLocation.QemuEDK2ARM", FindQemuEDK2ARM());
 		Set(settings, "AppLocation.QemuImg", FindQemuImg());
 		Set(settings, "AppLocation.Bochs", FindBochs());
 		Set(settings, "AppLocation.VmwarePlayer", FindVmwarePlayer());
@@ -243,6 +246,90 @@ public static class AppLocationsSettings
 					"/usr/share/seabios"
 				}
 			)
+		);
+	}
+
+	private static string FindQemuEDK2X86()
+	{
+		return TryFind(
+			new string[] { "edk2-i386-code.fd" },
+			new string[] {
+				@"%CURRENT%\qemu\share",
+
+				@"%CURRENT%\..\Tools\qemu\share",
+				@"%MOSATOOLS%\qemu\Windows",
+				@"%MOSATOOLS%\qemu\Windows\bios",
+				@"%ProgramFiles%\qemu",
+				@"%ProgramFiles%\qemu\bios",
+				@"%ProgramFiles(x86)%\qemu",
+				@"%ProgramFiles(x86)%\qemu\bios",
+
+				"%CURRENT%/qemu/share",
+				"%APPDIR%/qemu/share",
+				"%CURRENT%/../Tools/qemu/share",
+				"%CURRENT%/Tools/qemu/share",
+				"%APPDIR%/Tools/qemu/share",
+				"%APPDIR%/../Tools/qemu/share",
+				"/usr/share/qemu",
+				"/usr/share/ovmf",
+				"/usr/share/OVMF"
+			}
+		);
+	}
+
+	private static string FindQemuEDK2X64()
+	{
+		return TryFind(
+			new string[] { "edk2-x86_64-code.fd" },
+			new string[] {
+				@"%CURRENT%\qemu\share",
+
+				@"%CURRENT%\..\Tools\qemu\share",
+				@"%MOSATOOLS%\qemu\Windows",
+				@"%MOSATOOLS%\qemu\Windows\bios",
+				@"%ProgramFiles%\qemu",
+				@"%ProgramFiles%\qemu\bios",
+				@"%ProgramFiles(x86)%\qemu",
+				@"%ProgramFiles(x86)%\qemu\bios",
+
+				"%CURRENT%/qemu/share",
+				"%APPDIR%/qemu/share",
+				"%CURRENT%/../Tools/qemu/share",
+				"%CURRENT%/Tools/qemu/share",
+				"%APPDIR%/Tools/qemu/share",
+				"%APPDIR%/../Tools/qemu/share",
+				"/usr/share/qemu",
+				"/usr/share/ovmf",
+				"/usr/share/OVMF"
+			}
+		);
+	}
+
+	private static string FindQemuEDK2ARM()
+	{
+		return TryFind(
+			new string[] { "edk2-arm-code.fd" },
+			new string[] {
+				@"%CURRENT%\qemu\share",
+
+				@"%CURRENT%\..\Tools\qemu\share",
+				@"%MOSATOOLS%\qemu\Windows",
+				@"%MOSATOOLS%\qemu\Windows\bios",
+				@"%ProgramFiles%\qemu",
+				@"%ProgramFiles%\qemu\bios",
+				@"%ProgramFiles(x86)%\qemu",
+				@"%ProgramFiles(x86)%\qemu\bios",
+
+				"%CURRENT%/qemu/share",
+				"%APPDIR%/qemu/share",
+				"%CURRENT%/../Tools/qemu/share",
+				"%CURRENT%/Tools/qemu/share",
+				"%APPDIR%/Tools/qemu/share",
+				"%APPDIR%/../Tools/qemu/share",
+				"/usr/share/qemu",
+				"/usr/share/ovmf",
+				"/usr/share/OVMF"
+			}
 		);
 	}
 
