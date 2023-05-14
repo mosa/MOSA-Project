@@ -161,6 +161,7 @@ public static class CommandLineArguments
 			new Argument { Name = "-include", Setting = "Image.FileSystem.RootInclude" },
 
 			new Argument { Name = "-bios", Setting = "Image.Firmware", Value="bios"},
+			new Argument { Name = "-uefi", Setting = "Image.Firmware", Value="uefi"},
 			new Argument { Name = "-firmware", Setting = "Image.Firmware"},
 
 			// Advance:

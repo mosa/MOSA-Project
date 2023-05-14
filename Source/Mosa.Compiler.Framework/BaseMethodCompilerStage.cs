@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Mosa.Compiler.Common.Exceptions;
+using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
@@ -720,6 +721,7 @@ public abstract class BaseMethodCompilerStage
 		return instruction == IRInstruction.Move32
 			|| instruction == IRInstruction.Move64
 			|| instruction == IRInstruction.MoveObject
+			|| instruction == IRInstruction.MoveManagedPointer
 			|| instruction == IRInstruction.MoveR8
 			|| instruction == IRInstruction.MoveR4;
 	}
@@ -731,6 +733,7 @@ public abstract class BaseMethodCompilerStage
 			|| instruction == IRInstruction.Compare64x32
 			|| instruction == IRInstruction.Compare64x64
 			|| instruction == IRInstruction.CompareObject
+			|| instruction == IRInstruction.CompareManagedPointer
 			|| instruction == IRInstruction.CompareR4
 			|| instruction == IRInstruction.CompareR8;
 	}
@@ -740,6 +743,7 @@ public abstract class BaseMethodCompilerStage
 		return instruction == IRInstruction.Phi32
 			|| instruction == IRInstruction.Phi64
 			|| instruction == IRInstruction.PhiObject
+			|| instruction == IRInstruction.PhiManagedPointer
 			|| instruction == IRInstruction.PhiR4
 			|| instruction == IRInstruction.PhiR8;
 	}
@@ -771,11 +775,6 @@ public abstract class BaseMethodCompilerStage
 		}
 
 		return list;
-	}
-
-	protected BaseInstruction Select(BaseInstruction instruction32, BaseInstruction instruction64)
-	{
-		return Is32BitPlatform ? instruction32 : instruction64;
 	}
 
 	public static void ReplaceOperand(Operand target, Operand replacement)

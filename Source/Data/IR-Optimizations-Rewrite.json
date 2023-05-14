@@ -26,7 +26,8 @@
 		"IR.Compare32x64",
 		"IR.Compare64x32",
 		"IR.Compare64x64",
-		"IR.CompareObject"
+		"IR.CompareObject",
+		"IR.CompareManagedPointer"
 	],
 	"Optimizations": [
 		{
@@ -36,6 +37,15 @@
 			"Expression": "IR.CompareObject {> u} a b",
 			"Filter": "IsZero(b)",
 			"Result": "(IR.CompareObject {!= u} a b)",
+			"Variations": "Yes"
+		},
+		{
+			"Type": "Rewrite",
+			"Name": "CompareManagedPointer",
+			"SubName": "GreaterThanZero",
+			"Expression": "IR.CompareManagedPointer {> u} a b",
+			"Filter": "IsZero(b)",
+			"Result": "(IR.CompareManagedPointer {!= u} a b)",
 			"Variations": "Yes"
 		},
 		{

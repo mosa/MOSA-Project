@@ -46,6 +46,12 @@ public class LauncherSettings
 
 	public bool EmitDwarf => Settings.GetValue("Linker.Dwarf", false);
 
+	public string MultibootVersion
+	{
+		get => Settings.GetValue("Multiboot.Version", "v1");
+		set => Settings.SetValue("Multiboot.Version", value);
+	}
+
 	public string Emulator
 	{
 		get => Settings.GetValue("Emulator", null);
@@ -279,6 +285,24 @@ public class LauncherSettings
 	{
 		get => Settings.GetValue("AppLocation.QemuBIOS", null);
 		set => Settings.SetValue("AppLocation.QemuBIOS", value);
+	}
+
+	public string QEMUEdk2X86
+	{
+		get => Settings.GetValue("AppLocation.QemuEDK2X86", null);
+		set => Settings.SetValue("AppLocation.QemuEDK2X86", value);
+	}
+
+	public string QEMUEdk2X64
+	{
+		get => Settings.GetValue("AppLocation.QemuEDK2X64", null);
+		set => Settings.SetValue("AppLocation.QemuEDK2X64", value);
+	}
+
+	public string QEMUEdk2ARM
+	{
+		get => Settings.GetValue("AppLocation.QemuEDK2ARM", null);
+		set => Settings.SetValue("AppLocation.QemuEDK2ARM", value);
 	}
 
 	public string QemuImg

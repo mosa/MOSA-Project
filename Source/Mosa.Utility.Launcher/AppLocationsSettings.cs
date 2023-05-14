@@ -23,6 +23,9 @@ public static class AppLocationsSettings
 
 		Set(settings, "AppLocation.Qemu", FindQemu());
 		Set(settings, "AppLocation.QemuBIOS", FindQemuBIOS(settings.GetValue("AppLocation.Qemu")));
+		Set(settings, "AppLocation.QemuEDK2X86", FindQemuEDK2X86(settings.GetValue("AppLocation.Qemu")));
+		Set(settings, "AppLocation.QemuEDK2X64", FindQemuEDK2X64(settings.GetValue("AppLocation.Qemu")));
+		Set(settings, "AppLocation.QemuEDK2ARM", FindQemuEDK2ARM(settings.GetValue("AppLocation.Qemu")));
 		Set(settings, "AppLocation.QemuImg", FindQemuImg());
 		Set(settings, "AppLocation.Bochs", FindBochs());
 		Set(settings, "AppLocation.VmwarePlayer", FindVmwarePlayer());
@@ -219,6 +222,63 @@ public static class AppLocationsSettings
 					"/usr/share/seabios"
 				}
 			)
+		);
+	}
+
+	private static string FindQemuEDK2X86(string qemu)
+	{
+		if (qemu == null)
+			return null;
+
+		return TryFind(
+			new string[] { "edk2-i386-code.fd" },
+			new string[] {
+				Path.GetDirectoryName(qemu),
+
+				@"%MOSATOOLS%\qemu",
+
+				"/usr/share/qemu",
+				"/usr/share/ovmf",
+				"/usr/share/OVMF"
+			}
+		);
+	}
+
+	private static string FindQemuEDK2X64(string qemu)
+	{
+		if (qemu == null)
+			return null;
+
+		return TryFind(
+			new string[] { "edk2-x86_64-code.fd" },
+			new string[] {
+				Path.GetDirectoryName(qemu),
+
+				@"%MOSATOOLS%\qemu",
+
+				"/usr/share/qemu",
+				"/usr/share/ovmf",
+				"/usr/share/OVMF"
+			}
+		);
+	}
+
+	private static string FindQemuEDK2ARM(string qemu)
+	{
+		if (qemu == null)
+			return null;
+
+		return TryFind(
+			new string[] { "edk2-arm-code.fd" },
+			new string[] {
+				Path.GetDirectoryName(qemu),
+
+				@"%MOSATOOLS%\qemu",
+
+				"/usr/share/qemu",
+				"/usr/share/ovmf",
+				"/usr/share/OVMF"
+			}
 		);
 	}
 

@@ -159,6 +159,12 @@ public class PromoteTemporaryVariables : BaseMethodCompilerStage
 				node.SetInstruction(IRInstruction.Move64, node.Result, virtualRegister);
 				trace?.Log($"AFTER: \t{node}");
 			}
+			else if (node.Instruction == IRInstruction.LoadManagedPointer)
+			{
+				trace?.Log($"BEFORE:\t{node}");
+				node.SetInstruction(IRInstruction.MoveManagedPointer, node.Result, virtualRegister);
+				trace?.Log($"AFTER: \t{node}");
+			}
 			else if (node.Instruction == IRInstruction.Store32)
 			{
 				trace?.Log($"BEFORE:\t{node}");
@@ -169,6 +175,12 @@ public class PromoteTemporaryVariables : BaseMethodCompilerStage
 			{
 				trace?.Log($"BEFORE:\t{node}");
 				node.SetInstruction(IRInstruction.Move64, virtualRegister, node.Operand3);
+				trace?.Log($"AFTER: \t{node}");
+			}
+			else if (node.Instruction == IRInstruction.StoreManagedPointer)
+			{
+				trace?.Log($"BEFORE:\t{node}");
+				node.SetInstruction(IRInstruction.MoveManagedPointer, virtualRegister, node.Operand3);
 				trace?.Log($"AFTER: \t{node}");
 			}
 		}

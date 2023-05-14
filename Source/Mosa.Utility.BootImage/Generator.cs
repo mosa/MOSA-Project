@@ -75,52 +75,74 @@ public static class Generator
 			var partitionDevice = new PartitionDeviceDriver();
 
 			// Setup partition configuration
-			var configuraiton = new DiskPartitionConfiguration
+			var configuration = new DiskPartitionConfiguration
 			{
 				Index = 0,
 				ReadOnly = false,
 			};
 
-			if (options.MBROption)
+			if (options.ImageFirmware == ImageFirmware.Bios)
 			{
 				// Create master boot block record
 				var mbr = new MasterBootBlock(diskDeviceDriver)
 				{
 					// Setup partition entry
-					DiskSignature = 0x12345678
+					DiskSignature = 0x12345678,
+					Code = null
 				};
 
 				mbr.Partitions[0].Bootable = true;
-				mbr.Partitions[0].StartLBA = 2048;    // minimum for grub legacy = 64, grub2 = 2048 (1Mb)
+				mbr.Partitions[0].StartLBA = 2048;
 				mbr.Partitions[0].TotalBlocks = blockCount - mbr.Partitions[0].StartLBA;
-
-				switch (options.FileSystem)
+				mbr.Partitions[0].PartitionType = options.FileSystem switch
 				{
-					case FileSystem.FAT12: mbr.Partitions[0].PartitionType = PartitionType.FAT12; break;
-					case FileSystem.FAT16: mbr.Partitions[0].PartitionType = PartitionType.FAT16; break;
-					case FileSystem.FAT32: mbr.Partitions[0].PartitionType = PartitionType.FAT32; break;
-					default: break;
-				}
-
-				mbr.Code = options.MBRCode;
+					FileSystem.FAT12 => PartitionType.FAT12,
+					FileSystem.FAT16 => PartitionType.FAT16,
+					FileSystem.FAT32 => PartitionType.FAT32
+				};
 
 				mbr.Write();
 
-				configuraiton.StartLBA = mbr.Partitions[0].StartLBA;
-				configuraiton.TotalBlocks = mbr.Partitions[0].TotalBlocks;
+				configuration.StartLBA = mbr.Partitions[0].StartLBA;
+				configuration.TotalBlocks = mbr.Partitions[0].TotalBlocks;
+			}
+			else if (options.ImageFirmware == ImageFirmware.Uefi)
+			{
+				// Create protective MBR
+				var mbr = new MasterBootBlock(diskDeviceDriver)
+				{
+					// Setup partition entry
+					DiskSignature = 0x12345678,
+					Code = null
+				};
+
+				mbr.Partitions[0].Bootable = false;
+				mbr.Partitions[0].StartLBA = 1;
+				mbr.Partitions[0].TotalBlocks = blockCount - mbr.Partitions[0].StartLBA;
+				mbr.Partitions[0].PartitionType = 0xEE; // GPT protective MBR ID
+
+				mbr.Write();
+
+				// Create GUID partition table
+				var gpt = new GuidPartitionTable(diskDeviceDriver);
+
+				gpt.Write();
+
+				configuration.StartLBA = 3;
+				configuration.TotalBlocks = blockCount - configuration.StartLBA;
 			}
 			else
 			{
-				configuraiton.StartLBA = 0;
-				configuraiton.TotalBlocks = diskDeviceDriver.TotalBlocks;
+				configuration.StartLBA = 0;
+				configuration.TotalBlocks = diskDeviceDriver.TotalBlocks;
 			}
 
 			// Setup device -- required as part of framework in operating system
 			var device = new Device
 			{
-				Configuration = configuraiton,
+				Configuration = configuration,
 				DeviceDriver = partitionDevice,
-				Parent = diskDevice,
+				Parent = diskDevice
 			};
 
 			// Setup and initialize
@@ -129,22 +151,22 @@ public static class Generator
 			partitionDevice.Start();
 
 			// Set FAT settings
-			var fatSettings = new FatSettings();
-
-			fatSettings.FATType = options.FileSystem switch
+			var fatSettings = new FatSettings
 			{
-				FileSystem.FAT12 => FatType.FAT12,
-				FileSystem.FAT16 => FatType.FAT16,
-				FileSystem.FAT32 => FatType.FAT32,
-				_ => fatSettings.FATType
+				FATType = options.FileSystem switch
+				{
+					FileSystem.FAT12 => FatType.FAT12,
+					FileSystem.FAT16 => FatType.FAT16,
+					FileSystem.FAT32 => FatType.FAT32
+				},
+				FloppyMedia = false,
+				VolumeLabel = options.VolumeLabel,
+				SerialID = new byte[] { 0x01, 0x02, 0x03, 0x04 },
+				SectorsPerTrack = diskGeometry.SectorsPerTrack,
+				NumberOfHeads = diskGeometry.Heads,
+				HiddenSectors = diskGeometry.SectorsPerTrack,
+				OSBootCode = null
 			};
-			fatSettings.FloppyMedia = false;
-			fatSettings.VolumeLabel = options.VolumeLabel;
-			fatSettings.SerialID = new byte[] { 0x01, 0x02, 0x03, 0x04 };
-			fatSettings.SectorsPerTrack = diskGeometry.SectorsPerTrack;
-			fatSettings.NumberOfHeads = diskGeometry.Heads;
-			fatSettings.HiddenSectors = diskGeometry.SectorsPerTrack;
-			fatSettings.OSBootCode = options.FatBootCode;
 
 			// Create FAT file system
 			var fat = new FatFileSystem(partitionDevice);

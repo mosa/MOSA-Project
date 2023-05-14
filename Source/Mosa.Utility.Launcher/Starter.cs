@@ -207,7 +207,25 @@ public class Starter : BaseLauncher
 		}
 
 		//arg.Append(" -no-reboot");
-		arg.Append(" -L " + Quote(LauncherSettings.QEMUBios));
+		if (LauncherSettings.ImageFirmware == "bios")
+		{
+			arg.Append(" -L " + Quote(LauncherSettings.QEMUBios));
+		}
+		else if (LauncherSettings.ImageFirmware == "uefi")
+		{
+			if (LauncherSettings.Platform == "x86")
+			{
+				arg.Append($" -drive if=pflash,format=raw,readonly=on,file={Quote(LauncherSettings.QEMUEdk2X86)}");
+			}
+			else if (LauncherSettings.Platform == "x64")
+			{
+				arg.Append($" -drive if=pflash,format=raw,readonly=on,file={Quote(LauncherSettings.QEMUEdk2X64)}");
+			}
+			else if (LauncherSettings.Platform == "ARMv8A32")
+			{
+				arg.Append($" -drive if=pflash,format=raw,readonly=on,file={Quote(LauncherSettings.QEMUEdk2ARM)}");
+			}
+		}
 
 		return LaunchApplication(LauncherSettings.QEMU, arg.ToString(), getOutput);
 	}
