@@ -11,22 +11,20 @@ public static class PageTable
 {
 	public static void Setup()
 	{
-		Console.WriteLine("Mosa.Kernel.BareMetal.PageTable.Setup:Enter");
 		Platform.PageTableSetup();
 
-		Console.WriteLine("Mosa.Kernel.BareMetal.PageTable.Setup:1");
 		Platform.PageTableInitialize();
-
-		Console.WriteLine("Mosa.Kernel.BareMetal.PageTable.Setup:2");
-
-		while (true) { }
 
 		// Unmap the first page for null pointer exceptions
 		MapVirtualAddressToPhysical(0x0, 0x0, false);
-		Console.Write("d");
+
+		Console.WriteLine("Mosa.Kernel.BareMetal.PageTable.Setup:1");
+
+		while (true) { } // Platform.PageTableEnable() crashes
 
 		Platform.PageTableEnable();
-		Console.Write("e");
+
+		Console.WriteLine("Mosa.Kernel.BareMetal.PageTable.Setup:2");
 	}
 
 	/// <summary>

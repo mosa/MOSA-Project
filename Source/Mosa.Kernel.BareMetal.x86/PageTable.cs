@@ -16,22 +16,15 @@ internal static class PageTable
 
 	public static void Setup()
 	{
-		//Console.WriteLine("Mosa.Kernel.BareMetal.x86.PageTable.Setup:Enter");
 		GDTTable = new GDTTable(PhysicalPageAllocator.ReservePage());
 
 		PageDirectory = PhysicalPageAllocator.ReservePages(1024);
 		PageTables = PhysicalPageAllocator.ReservePages(1024);
-
-		//Console.WriteLine("Mosa.Kernel.BareMetal.x86.PageTable.Setup:Exit");
 	}
 
 	public static void Initialize()
 	{
-		Console.WriteLine("Mosa.Kernel.BareMetal.x86.PageTable.Initialize:Enter");
-
 		GDTTable.Setup();
-
-		Console.WriteLine("Mosa.Kernel.BareMetal.x86.PageTable.Initialize:1");
 
 		// Setup Page Directory
 		for (uint index = 0; index < 1024; index++)
@@ -39,20 +32,11 @@ internal static class PageTable
 			PageDirectory.Store32(index << 2, (PageTables.ToUInt32() + index * Page.Size) | 0x04 | 0x02 | 0x01);
 		}
 
-		Console.WriteLine("Mosa.Kernel.BareMetal.x86.PageTable.Initialize:2");
-
 		// Clear the Page Tables
 		for (uint index = 0; index < 1024; index++)
 		{
-			Console.WriteValue(index);
-
 			PageTables.Store32(index << 2, (index * Page.Size) | 0x04 | 0x02 | 0x01);
-
-			Console.Write(' ');
 		}
-
-		Console.WriteLine("Mosa.Kernel.BareMetal.x86.PageTable.Initialize:Exit");
-		while (true) { }
 	}
 
 	public static void Enable()
