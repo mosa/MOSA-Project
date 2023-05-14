@@ -17,6 +17,7 @@ public static class IRInstruction
 	public static readonly BaseInstruction AddressOf = new AddressOf();
 	public static readonly BaseInstruction Add32 = new Add32();
 	public static readonly BaseInstruction Add64 = new Add64();
+	public static readonly BaseInstruction AddManagedPointer = new AddManagedPointer();
 	public static readonly BaseInstruction AddCarryOut32 = new AddCarryOut32();
 	public static readonly BaseInstruction AddCarryOut64 = new AddCarryOut64();
 	public static readonly BaseInstruction AddCarryIn32 = new AddCarryIn32();
@@ -36,6 +37,7 @@ public static class IRInstruction
 	public static readonly BaseInstruction CompareR4 = new CompareR4();
 	public static readonly BaseInstruction CompareR8 = new CompareR8();
 	public static readonly BaseInstruction CompareObject = new CompareObject();
+	public static readonly BaseInstruction CompareManagedPointer = new CompareManagedPointer();
 	public static readonly BaseInstruction Compare32x32 = new Compare32x32();
 	public static readonly BaseInstruction Compare32x64 = new Compare32x64();
 	public static readonly BaseInstruction Compare64x32 = new Compare64x32();
@@ -43,6 +45,7 @@ public static class IRInstruction
 	public static readonly BaseInstruction Branch32 = new Branch32();
 	public static readonly BaseInstruction Branch64 = new Branch64();
 	public static readonly BaseInstruction BranchObject = new BranchObject();
+	public static readonly BaseInstruction BranchManagedPointer = new BranchManagedPointer();
 	public static readonly BaseInstruction ConvertR4ToR8 = new ConvertR4ToR8();
 	public static readonly BaseInstruction ConvertR4ToI32 = new ConvertR4ToI32();
 	public static readonly BaseInstruction ConvertR4ToI64 = new ConvertR4ToI64();
@@ -89,6 +92,7 @@ public static class IRInstruction
 	public static readonly BaseInstruction Load32 = new Load32();
 	public static readonly BaseInstruction Load64 = new Load64();
 	public static readonly BaseInstruction LoadObject = new LoadObject();
+	public static readonly BaseInstruction LoadManagedPointer = new LoadManagedPointer();
 	public static readonly BaseInstruction LoadSignExtend8x32 = new LoadSignExtend8x32();
 	public static readonly BaseInstruction LoadSignExtend16x32 = new LoadSignExtend16x32();
 	public static readonly BaseInstruction LoadSignExtend8x64 = new LoadSignExtend8x64();
@@ -101,6 +105,7 @@ public static class IRInstruction
 	public static readonly BaseInstruction LoadZeroExtend32x64 = new LoadZeroExtend32x64();
 	public static readonly BaseInstruction LoadParamCompound = new LoadParamCompound();
 	public static readonly BaseInstruction LoadParamObject = new LoadParamObject();
+	public static readonly BaseInstruction LoadParamManagedPointer = new LoadParamManagedPointer();
 	public static readonly BaseInstruction LoadParamR4 = new LoadParamR4();
 	public static readonly BaseInstruction LoadParamR8 = new LoadParamR8();
 	public static readonly BaseInstruction LoadParam32 = new LoadParam32();
@@ -140,6 +145,7 @@ public static class IRInstruction
 	public static readonly BaseInstruction Move32 = new Move32();
 	public static readonly BaseInstruction Move64 = new Move64();
 	public static readonly BaseInstruction MoveObject = new MoveObject();
+	public static readonly BaseInstruction MoveManagedPointer = new MoveManagedPointer();
 	public static readonly BaseInstruction MulCarryOut32 = new MulCarryOut32();
 	public static readonly BaseInstruction MulCarryOut64 = new MulCarryOut64();
 	public static readonly BaseInstruction MulOverflowOut32 = new MulOverflowOut32();
@@ -155,6 +161,7 @@ public static class IRInstruction
 	public static readonly BaseInstruction NewString = new NewString();
 	public static readonly BaseInstruction Nop = new Nop();
 	public static readonly BaseInstruction PhiObject = new PhiObject();
+	public static readonly BaseInstruction PhiManagedPointer = new PhiManagedPointer();
 	public static readonly BaseInstruction Phi32 = new Phi32();
 	public static readonly BaseInstruction Phi64 = new Phi64();
 	public static readonly BaseInstruction PhiR4 = new PhiR4();
@@ -171,6 +178,7 @@ public static class IRInstruction
 	public static readonly BaseInstruction SetReturn32 = new SetReturn32();
 	public static readonly BaseInstruction SetReturn64 = new SetReturn64();
 	public static readonly BaseInstruction SetReturnObject = new SetReturnObject();
+	public static readonly BaseInstruction SetReturnManagedPointer = new SetReturnManagedPointer();
 	public static readonly BaseInstruction SetReturnCompound = new SetReturnCompound();
 	public static readonly BaseInstruction ShiftLeft32 = new ShiftLeft32();
 	public static readonly BaseInstruction ShiftLeft64 = new ShiftLeft64();
@@ -185,10 +193,12 @@ public static class IRInstruction
 	public static readonly BaseInstruction Store32 = new Store32();
 	public static readonly BaseInstruction Store64 = new Store64();
 	public static readonly BaseInstruction StoreObject = new StoreObject();
+	public static readonly BaseInstruction StoreManagedPointer = new StoreManagedPointer();
 	public static readonly BaseInstruction StoreParamCompound = new StoreParamCompound();
 	public static readonly BaseInstruction StoreParamR4 = new StoreParamR4();
 	public static readonly BaseInstruction StoreParamR8 = new StoreParamR8();
 	public static readonly BaseInstruction StoreParamObject = new StoreParamObject();
+	public static readonly BaseInstruction StoreParamManagedPointer = new StoreParamManagedPointer();
 	public static readonly BaseInstruction StoreParam8 = new StoreParam8();
 	public static readonly BaseInstruction StoreParam16 = new StoreParam16();
 	public static readonly BaseInstruction StoreParam32 = new StoreParam32();
@@ -197,6 +207,7 @@ public static class IRInstruction
 	public static readonly BaseInstruction SubR8 = new SubR8();
 	public static readonly BaseInstruction Sub32 = new Sub32();
 	public static readonly BaseInstruction Sub64 = new Sub64();
+	public static readonly BaseInstruction SubManagedPointer = new SubManagedPointer();
 	public static readonly BaseInstruction SubCarryOut32 = new SubCarryOut32();
 	public static readonly BaseInstruction SubCarryOut64 = new SubCarryOut64();
 	public static readonly BaseInstruction SubCarryIn32 = new SubCarryIn32();
@@ -225,6 +236,7 @@ public static class IRInstruction
 	public static readonly BaseInstruction IfThenElse32 = new IfThenElse32();
 	public static readonly BaseInstruction IfThenElse64 = new IfThenElse64();
 	public static readonly BaseInstruction IfThenElseObject = new IfThenElseObject();
+	public static readonly BaseInstruction IfThenElseManagedPointer = new IfThenElseManagedPointer();
 	public static readonly BaseInstruction BitCopyR4To32 = new BitCopyR4To32();
 	public static readonly BaseInstruction BitCopyR8To64 = new BitCopyR8To64();
 	public static readonly BaseInstruction BitCopy32ToR4 = new BitCopy32ToR4();

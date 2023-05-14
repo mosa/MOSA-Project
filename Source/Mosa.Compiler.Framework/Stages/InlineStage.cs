@@ -141,6 +141,7 @@ public class InlineStage : BaseMethodCompilerStage
 				if (node.Instruction == IRInstruction.SetReturn32
 					|| node.Instruction == IRInstruction.SetReturn64
 					|| node.Instruction == IRInstruction.SetReturnObject
+					|| node.Instruction == IRInstruction.SetReturnManagedPointer
 					|| node.Instruction == IRInstruction.SetReturnR4
 					|| node.Instruction == IRInstruction.SetReturnR8
 					|| node.Instruction == IRInstruction.SetReturnCompound)
@@ -228,6 +229,8 @@ public class InlineStage : BaseMethodCompilerStage
 			return IRInstruction.Move64;
 		else if (instruction == IRInstruction.SetReturnObject)
 			return IRInstruction.MoveObject;
+		else if (instruction == IRInstruction.SetReturnManagedPointer)
+			return IRInstruction.MoveManagedPointer;
 		else if (instruction == IRInstruction.SetReturnR4)
 			return IRInstruction.MoveR4;
 		else if (instruction == IRInstruction.SetReturnR8)
@@ -262,6 +265,10 @@ public class InlineStage : BaseMethodCompilerStage
 		{
 			newNode.Instruction = IRInstruction.MoveObject;
 		}
+		else if (instruction == IRInstruction.LoadParamManagedPointer)
+		{
+			newNode.Instruction = IRInstruction.MoveManagedPointer;
+		}
 		else if (instruction == IRInstruction.LoadParam64
 			|| instruction == IRInstruction.LoadParamSignExtend8x64
 			|| instruction == IRInstruction.LoadParamSignExtend16x64
@@ -281,6 +288,10 @@ public class InlineStage : BaseMethodCompilerStage
 		else if (instruction == IRInstruction.StoreParamObject)
 		{
 			newNode.SetInstruction(IRInstruction.MoveObject, newNode.Operand1, newNode.Operand2);
+		}
+		else if (instruction == IRInstruction.StoreParamManagedPointer)
+		{
+			newNode.SetInstruction(IRInstruction.MoveManagedPointer, newNode.Operand1, newNode.Operand2);
 		}
 		else if (instruction == IRInstruction.StoreParam64)
 		{

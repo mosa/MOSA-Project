@@ -20,6 +20,14 @@
 		},
 		{
 			"Type": "ConstantMove",
+			"Name": "AddManagedPointer",
+			"SubName": "",
+			"Expression": "IR.AddManagedPointer a b",
+			"Filter": "IsResolvedConstant(a) & !IsResolvedConstant(b)",
+			"Result": "(IR.AddManagedPointer b a)"
+		},
+		{
+			"Type": "ConstantMove",
 			"Name": "MulSigned##",
 			"SubName": "",
 			"Expression": "IR.MulSigned## a b",
