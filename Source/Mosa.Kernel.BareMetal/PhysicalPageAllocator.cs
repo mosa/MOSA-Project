@@ -148,25 +148,18 @@ public static class PhysicalPageAllocator
 				// not aligned
 				// todo - skip to next aligned address rather then just increment
 				restartAt = at + 1;
-
-				//Console.Write('.');
 			}
 			else if (CheckFreePage32(at, count, out restartAt))
 			{
 				// found space!
-				//Console.Write('X');
 				SetPageBitMapEntry(at, count, true);
 
-				//Console.Write('o');
 				SearchNextStartPage = restartAt;
-
-				//Console.WriteLine();
 
 				return new Pointer(at * Page.Size);
 			}
 			else
 			{
-				//Console.Write('-');
 				at = restartAt;
 			}
 
@@ -178,8 +171,6 @@ public static class PhysicalPageAllocator
 
 			if (at < start && restartAt > start)
 			{
-				//Console.WriteLine("NONE");
-
 				// looped around in the search
 				// quit, as there are no free pages
 				return Pointer.Zero;
