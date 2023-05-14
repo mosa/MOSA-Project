@@ -188,6 +188,7 @@ public static class Internal
 
 	#region Memory Manipulation
 
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static void MemoryCopy(Pointer dest, Pointer src, uint count)
 	{
 		if (count % 4 == 0)
@@ -207,7 +208,7 @@ public static class Internal
 
 	private static void MemoryCopy4(Pointer dest, Pointer src, uint count)
 	{
-		for (var i = 0; i < count; i = i + 4)
+		for (var i = 0; i < count; i += 4)
 		{
 			var value = src.Load32(i);
 			dest.Store32(i, value);
@@ -256,7 +257,7 @@ public static class Internal
 
 	private static void MemoryClear4(Pointer dest, uint count)
 	{
-		for (var i = 0; i < count; i = i + 4)
+		for (var i = 0; i < count; i += 4)
 		{
 			dest.Store32(i, 0);
 		}
