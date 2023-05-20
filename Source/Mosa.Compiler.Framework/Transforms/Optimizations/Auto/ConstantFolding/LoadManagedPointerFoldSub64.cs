@@ -7,12 +7,12 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 /// <summary>
-/// Load64FoldSub64
+/// LoadManagedPointerFoldSub64
 /// </summary>
 [Transform("IR.Optimizations.Auto.ConstantFolding")]
-public sealed class Load64FoldSub64 : BaseTransform
+public sealed class LoadManagedPointerFoldSub64 : BaseTransform
 {
-	public Load64FoldSub64() : base(IRInstruction.Load64, TransformType.Auto | TransformType.Optimization)
+	public LoadManagedPointerFoldSub64() : base(IRInstruction.LoadManagedPointer, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -46,6 +46,6 @@ public sealed class Load64FoldSub64 : BaseTransform
 
 		var e1 = Operand.CreateConstant(Sub64(To64(t3), To64(t2)));
 
-		context.SetInstruction(IRInstruction.Load64, result, t1, e1);
+		context.SetInstruction(IRInstruction.LoadManagedPointer, result, t1, e1);
 	}
 }

@@ -78,6 +78,9 @@ public static class ManualTransforms
 
 		new Special.Deadcode(),
 		new Special.GetLow32From64(),
+		new Special.PromoteAddressOf32(),
+		new Special.PromoteAddressOf64(),
+		new Special.GetLow32CPURegister(),
 
 		new Simplification.AddCarryOut32CarryNotUsed(),
 		new Simplification.AddCarryOut64CarryNotUsed(),

@@ -969,7 +969,8 @@ public sealed partial class Operand
 				sb.Append($"(v{Index}<v{Parent.Index}{(IsHigh ? "H" : "L")}>)");
 			}
 		}
-		else if (IsStaticField)
+
+		if (IsStaticField)
 		{
 			sb.Append($" ({Field.FullName})");
 		}
