@@ -224,6 +224,12 @@ public struct Pointer
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static unsafe Pointer operator +(Pointer pointer, uint offset)
+	{
+		return new Pointer(pointer.ToInt64() + offset);
+	}
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static unsafe Pointer operator +(Pointer pointer, long offset)
 	{
 		return new Pointer(pointer.ToInt64() + offset);
@@ -468,6 +474,12 @@ public struct Pointer
 	public void Store32(int value)
 	{
 		Intrinsic.Store32(this, value);
+	}
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public void Store64(ulong value)
+	{
+		Intrinsic.Store64(this, value);
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]

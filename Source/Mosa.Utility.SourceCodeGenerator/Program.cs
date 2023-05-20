@@ -67,6 +67,12 @@ public static class Program
 			"Mosa.Compiler.Framework").Execute();
 
 		new BuildTransformations(
+			Path.Combine(dataPath, @"IR-Optimizations-ConstantFolding-MemoryAccess2.json"),
+			Path.Combine(targetPath, @"Mosa.Compiler.Framework\Transforms\Optimizations\Auto"),
+			"Mosa.Compiler.Framework",
+			"Mosa.Compiler.Framework").Execute();
+
+		new BuildTransformations(
 			Path.Combine(dataPath, @"IR-Optimizations-Rewrite.json"),
 			Path.Combine(targetPath, @"Mosa.Compiler.Framework\Transforms\Optimizations\Auto"),
 			"Mosa.Compiler.Framework",

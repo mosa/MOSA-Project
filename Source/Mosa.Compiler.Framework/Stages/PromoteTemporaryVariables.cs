@@ -68,12 +68,12 @@ public class PromoteTemporaryVariables : BaseMethodCompilerStage
 				}
 				continue;
 			}
-			else if (node.Instruction == IRInstruction.Load32 || node.Instruction == IRInstruction.Load64)
+			else if (node.Instruction == IRInstruction.Load32 || node.Instruction == IRInstruction.Load64 || node.Instruction == IRInstruction.LoadManagedPointer)
 			{
 				Debug.Assert(node.Operand2 == operand);
 				continue;
 			}
-			else if (node.Instruction == IRInstruction.Store32 || node.Instruction == IRInstruction.Store64)
+			else if (node.Instruction == IRInstruction.Store32 || node.Instruction == IRInstruction.Store64 || node.Instruction == IRInstruction.StoreManagedPointer)
 			{
 				Debug.Assert(node.Operand2 == operand);
 				continue;
@@ -88,7 +88,7 @@ public class PromoteTemporaryVariables : BaseMethodCompilerStage
 
 	private bool Check(InstructionNode node)
 	{
-		if (node.Instruction == IRInstruction.Store32 || node.Instruction == IRInstruction.Store64)
+		if (node.Instruction == IRInstruction.Store32 || node.Instruction == IRInstruction.Store64 || node.Instruction == IRInstruction.StoreManagedPointer)
 		{
 			// check offset
 			return true;
@@ -107,7 +107,7 @@ public class PromoteTemporaryVariables : BaseMethodCompilerStage
 			trace?.Log($"B-No: {node}");
 			return false;
 		}
-		else if (node.Instruction == IRInstruction.Move32 || node.Instruction == IRInstruction.Move64)
+		else if (node.Instruction == IRInstruction.Move32 || node.Instruction == IRInstruction.Move64 || node.Instruction == IRInstruction.MoveManagedPointer)
 		{
 			foreach (var node2 in node.Result.Uses)
 			{
@@ -121,7 +121,7 @@ public class PromoteTemporaryVariables : BaseMethodCompilerStage
 
 			return true;
 		}
-		else if (node.Instruction == IRInstruction.Load32 || node.Instruction == IRInstruction.Load64)
+		else if (node.Instruction == IRInstruction.Load32 || node.Instruction == IRInstruction.Load64 || node.Instruction == IRInstruction.LoadManagedPointer)
 		{
 			// check offset
 			return true;
@@ -207,6 +207,12 @@ public class PromoteTemporaryVariables : BaseMethodCompilerStage
 			node.SetInstruction(IRInstruction.Move64, virtualRegister, node.Operand3);
 			trace?.Log($"AFTER: \t{node}");
 		}
+		else if (node.Instruction == IRInstruction.StoreManagedPointer)
+		{
+			trace?.Log($"BEFORE:\t{node}");
+			node.SetInstruction(IRInstruction.MoveManagedPointer, virtualRegister, node.Operand3);
+			trace?.Log($"AFTER: \t{node}");
+		}
 		else if (node.Instruction == IRInstruction.MemorySet)
 		{
 			if (node.Operand3.ConstantUnsigned64 == 4)
@@ -232,6 +238,12 @@ public class PromoteTemporaryVariables : BaseMethodCompilerStage
 		{
 			trace?.Log($"BEFORE:\t{node}");
 			node.SetInstruction(IRInstruction.Move64, node.Result, virtualRegister);
+			trace?.Log($"AFTER: \t{node}");
+		}
+		else if (node.Instruction == IRInstruction.LoadManagedPointer)
+		{
+			trace?.Log($"BEFORE:\t{node}");
+			node.SetInstruction(IRInstruction.MoveManagedPointer, node.Result, virtualRegister);
 			trace?.Log($"AFTER: \t{node}");
 		}
 	}

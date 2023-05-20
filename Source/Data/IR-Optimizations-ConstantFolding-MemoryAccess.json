@@ -5,645 +5,396 @@
 		{
 			"Type": "ConstantFolding",
 			"Name": "Load32",
-			"SubName": "FoldAdd32",
-			"Expression": "IR.Load32 (IR.Add32 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.Load32 a [Add32(To32(b),To32(c))])"
+			"SubName": "FoldAdd##",
+			"Expression": "IR.Load32 (IR.Add## a b) c",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.Load32 a [Add##(To##(b),To##(c))])"
 		},
 		{
 			"Type": "ConstantFolding",
 			"Name": "Load64",
-			"SubName": "FoldAdd32",
-			"Expression": "IR.Load64 (IR.Add32 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.Load64 a [Add32(To32(b),To32(c))])"
+			"SubName": "FoldAdd##",
+			"Expression": "IR.Load64 (IR.Add## a b) c",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.Load64 a [Add##(To##(b),To##(c))])"
+		},
+		{
+			"Type": "ConstantFolding",
+			"Name": "LoadManagedPointer",
+			"SubName": "FoldAdd##",
+			"Expression": "IR.LoadManagedPointer (IR.Add## a b) c",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.LoadManagedPointer a [Add##(To##(b),To##(c))])"
 		},
 		{
 			"Type": "ConstantFolding",
 			"Name": "LoadR4",
-			"SubName": "FoldAdd32",
-			"Expression": "IR.LoadR4 (IR.Add32 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadR4 a [Add32(To32(b),To32(c))])"
+			"SubName": "FoldAdd##",
+			"Expression": "IR.LoadR4 (IR.Add## a b) c",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.LoadR4 a [Add##(To##(b),To##(c))])"
 		},
 		{
 			"Type": "ConstantFolding",
 			"Name": "LoadR8",
-			"SubName": "FoldAdd32",
-			"Expression": "IR.LoadR8 (IR.Add32 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadR8 a [Add32(To32(b),To32(c))])"
+			"SubName": "FoldAdd##",
+			"Expression": "IR.LoadR8 (IR.Add## a b) c",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.LoadR8 a [Add##(To##(b),To##(c))])"
 		},
 		{
 			"Type": "ConstantFolding",
 			"Name": "LoadSignExtend8x32",
-			"SubName": "FoldAdd32",
-			"Expression": "IR.LoadSignExtend8x32 (IR.Add32 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadSignExtend8x32 a [Add32(To32(b),To32(c))])"
+			"SubName": "FoldAdd##",
+			"Expression": "IR.LoadSignExtend8x32 (IR.Add## a b) c",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.LoadSignExtend8x32 a [Add##(To##(b),To##(c))])"
 		},
 		{
 			"Type": "ConstantFolding",
 			"Name": "LoadSignExtend16x32",
-			"SubName": "FoldAdd32",
-			"Expression": "IR.LoadSignExtend16x32 (IR.Add32 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadSignExtend16x32 a [Add32(To32(b),To32(c))])"
+			"SubName": "FoldAdd##",
+			"Expression": "IR.LoadSignExtend16x32 (IR.Add## a b) c",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.LoadSignExtend16x32 a [Add##(To##(b),To##(c))])"
 		},
 		{
 			"Type": "ConstantFolding",
 			"Name": "LoadSignExtend8x64",
-			"SubName": "FoldAdd32",
-			"Expression": "IR.LoadSignExtend8x64 (IR.Add32 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadSignExtend8x64 a [Add32(To32(b),To32(c))])"
+			"SubName": "FoldAdd##",
+			"Expression": "IR.LoadSignExtend8x64 (IR.Add## a b) c",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.LoadSignExtend8x64 a [Add##(To##(b),To##(c))])"
 		},
 		{
 			"Type": "ConstantFolding",
 			"Name": "LoadSignExtend16x64",
-			"SubName": "FoldAdd32",
-			"Expression": "IR.LoadSignExtend16x64 (IR.Add32 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadSignExtend16x64 a [Add32(To32(b),To32(c))])"
+			"SubName": "FoldAdd##",
+			"Expression": "IR.LoadSignExtend16x64 (IR.Add## a b) c",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.LoadSignExtend16x64 a [Add##(To##(b),To##(c))])"
 		},
 		{
 			"Type": "ConstantFolding",
 			"Name": "LoadSignExtend32x64",
-			"SubName": "FoldAdd32",
-			"Expression": "IR.LoadSignExtend32x64 (IR.Add32 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadSignExtend32x64 a [Add32(To32(b),To32(c))])"
+			"SubName": "FoldAdd##",
+			"Expression": "IR.LoadSignExtend32x64 (IR.Add## a b) c",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.LoadSignExtend32x64 a [Add##(To##(b),To##(c))])"
 		},
 		{
 			"Type": "ConstantFolding",
 			"Name": "LoadZeroExtend8x32",
-			"SubName": "FoldAdd32",
-			"Expression": "IR.LoadZeroExtend8x32 (IR.Add32 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadZeroExtend8x32 a [Add32(To32(b),To32(c))])"
+			"SubName": "FoldAdd##",
+			"Expression": "IR.LoadZeroExtend8x32 (IR.Add## a b) c",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.LoadZeroExtend8x32 a [Add##(To##(b),To##(c))])"
 		},
 		{
 			"Type": "ConstantFolding",
 			"Name": "LoadZeroExtend16x32",
-			"SubName": "FoldAdd32",
-			"Expression": "IR.LoadZeroExtend16x32 (IR.Add32 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadZeroExtend16x32 a [Add32(To32(b),To32(c))])"
+			"SubName": "FoldAdd##",
+			"Expression": "IR.LoadZeroExtend16x32 (IR.Add## a b) c",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.LoadZeroExtend16x32 a [Add##(To##(b),To##(c))])"
 		},
 		{
 			"Type": "ConstantFolding",
 			"Name": "LoadZeroExtend8x64",
-			"SubName": "FoldAdd32",
-			"Expression": "IR.LoadZeroExtend8x64 (IR.Add32 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadZeroExtend8x64 a [Add32(To32(b),To32(c))])"
+			"SubName": "FoldAdd##",
+			"Expression": "IR.LoadZeroExtend8x64 (IR.Add## a b) c",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.LoadZeroExtend8x64 a [Add##(To##(b),To##(c))])"
 		},
 		{
 			"Type": "ConstantFolding",
 			"Name": "LoadZeroExtend16x64",
-			"SubName": "FoldAdd32",
-			"Expression": "IR.LoadZeroExtend16x64 (IR.Add32 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadZeroExtend16x64 a [Add32(To32(b),To32(c))])"
+			"SubName": "FoldAdd##",
+			"Expression": "IR.LoadZeroExtend16x64 (IR.Add## a b) c",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.LoadZeroExtend16x64 a [Add##(To##(b),To##(c))])"
 		},
 		{
 			"Type": "ConstantFolding",
 			"Name": "LoadZeroExtend32x64",
-			"SubName": "FoldAdd32",
-			"Expression": "IR.LoadZeroExtend32x64 (IR.Add32 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadZeroExtend32x64 a [Add32(To32(b),To32(c))])"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "Load32",
-			"SubName": "FoldAdd64",
-			"Expression": "IR.Load32 (IR.Add64 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.Load32 a [Add64(To64(b),To64(c))])"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "Load64",
-			"SubName": "FoldAdd64",
-			"Expression": "IR.Load32 (IR.Add64 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.Load64 a [Add64(To64(b),To64(c))])"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "LoadR4",
-			"SubName": "FoldAdd64",
-			"Expression": "IR.LoadR4 (IR.Add64 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadR4 a [Add64(To64(b),To64(c))])"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "LoadR8",
-			"SubName": "FoldAdd64",
-			"Expression": "IR.LoadR8 (IR.Add64 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadR8 a [Add64(To64(b),To64(c))])"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "LoadSignExtend8x32",
-			"SubName": "FoldAdd64",
-			"Expression": "IR.LoadSignExtend8x32 (IR.Add64 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadSignExtend8x32 a [Add64(To64(b),To64(c))])"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "LoadSignExtend16x32",
-			"SubName": "FoldAdd64",
-			"Expression": "IR.LoadSignExtend16x32 (IR.Add64 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadSignExtend16x32 a [Add64(To64(b),To64(c))])"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "LoadSignExtend8x64",
-			"SubName": "FoldAdd64",
-			"Expression": "IR.LoadSignExtend8x64 (IR.Add64 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadSignExtend8x64 a [Add64(To64(b),To64(c))])"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "LoadSignExtend16x64",
-			"SubName": "FoldAdd64",
-			"Expression": "IR.LoadSignExtend16x64 (IR.Add64 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadSignExtend16x64 a [Add64(To64(b),To64(c))])"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "LoadSignExtend32x64",
-			"SubName": "FoldAdd64",
-			"Expression": "IR.LoadSignExtend32x64 (IR.Add64 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadSignExtend32x64 a [Add64(To64(b),To64(c))])"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "LoadZeroExtend8x32",
-			"SubName": "FoldAdd64",
-			"Expression": "IR.LoadZeroExtend8x32 (IR.Add64 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadZeroExtend8x32 a [Add64(To64(b),To64(c))])"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "LoadZeroExtend16x32",
-			"SubName": "FoldAdd64",
-			"Expression": "IR.LoadZeroExtend16x32 (IR.Add64 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadZeroExtend16x32 a [Add64(To64(b),To64(c))])"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "LoadZeroExtend8x64",
-			"SubName": "FoldAdd64",
-			"Expression": "IR.LoadZeroExtend8x64 (IR.Add64 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadZeroExtend8x64 a [Add64(To64(b),To64(c))])"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "LoadZeroExtend16x64",
-			"SubName": "FoldAdd64",
-			"Expression": "IR.LoadZeroExtend16x64 (IR.Add64 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadZeroExtend16x64 a [Add64(To64(b),To64(c))])"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "LoadZeroExtend32x64",
-			"SubName": "FoldAdd64",
-			"Expression": "IR.LoadZeroExtend32x64 (IR.Add64 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadZeroExtend32x64 a [Add64(To64(b),To64(c))])"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "Load32",
-			"SubName": "FoldSub32",
-			"Expression": "IR.Load32 (IR.Sub32 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.Load32 a [Sub32(To32(c),To32(b))])"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "Load64",
-			"SubName": "FoldSub32",
-			"Expression": "IR.Load32 (IR.Sub32 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.Load64 a [Sub32(To32(c),To32(b))])"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "LoadR4",
-			"SubName": "FoldSub32",
-			"Expression": "IR.LoadR4 (IR.Sub32 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadR4 a [Sub32(To32(c),To32(b))])"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "LoadR8",
-			"SubName": "FoldSub32",
-			"Expression": "IR.LoadR8 (IR.Sub32 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadR8 a [Sub32(To32(c),To32(b))])"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "LoadSignExtend8x32",
-			"SubName": "FoldSub32",
-			"Expression": "IR.LoadSignExtend8x32 (IR.Sub32 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadSignExtend8x32 a [Sub32(To32(c),To32(b))])"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "LoadSignExtend16x32",
-			"SubName": "FoldSub32",
-			"Expression": "IR.LoadSignExtend16x32 (IR.Sub32 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadSignExtend16x32 a [Sub32(To32(c),To32(b))])"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "LoadSignExtend8x64",
-			"SubName": "FoldSub32",
-			"Expression": "IR.LoadSignExtend8x64 (IR.Sub32 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadSignExtend8x64 a [Sub32(To32(c),To32(b))])"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "LoadSignExtend16x64",
-			"SubName": "FoldSub32",
-			"Expression": "IR.LoadSignExtend16x64 (IR.Sub32 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadSignExtend16x64 a [Sub32(To32(c),To32(b))])"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "LoadSignExtend32x64",
-			"SubName": "FoldSub32",
-			"Expression": "IR.LoadSignExtend32x64 (IR.Sub32 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadSignExtend32x64 a [Sub32(To32(c),To32(b))])"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "LoadZeroExtend8x32",
-			"SubName": "FoldSub32",
-			"Expression": "IR.LoadZeroExtend8x32 (IR.Sub32 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadZeroExtend8x32 a [Sub32(To32(c),To32(b))])"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "LoadZeroExtend16x32",
-			"SubName": "FoldSub32",
-			"Expression": "IR.LoadZeroExtend16x32 (IR.Sub32 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadZeroExtend16x32 a [Sub32(To32(c),To32(b))])"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "LoadZeroExtend8x64",
-			"SubName": "FoldSub32",
-			"Expression": "IR.LoadZeroExtend8x64 (IR.Sub32 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadZeroExtend8x64 a [Sub32(To32(c),To32(b))])"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "LoadZeroExtend16x64",
-			"SubName": "FoldSub32",
-			"Expression": "IR.LoadZeroExtend16x64 (IR.Sub32 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadZeroExtend16x64 a [Sub32(To32(c),To32(b))])"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "LoadZeroExtend32x64",
-			"SubName": "FoldSub32",
-			"Expression": "IR.LoadZeroExtend32x64 (IR.Sub32 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadZeroExtend32x64 a [Sub32(To32(c),To32(b))])"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "Load32",
-			"SubName": "FoldSub64",
-			"Expression": "IR.Load32 (IR.Sub64 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.Load32 a [Sub64(To64(c),To64(b))])"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "Load64",
-			"SubName": "FoldSub64",
-			"Expression": "IR.Load32 (IR.Sub64 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.Load64 a [Sub64(To64(c),To64(b))])"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "LoadR4",
-			"SubName": "FoldSub64",
-			"Expression": "IR.LoadR4 (IR.Sub64 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadR4 a [Sub64(To64(c),To64(b))])"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "LoadR8",
-			"SubName": "FoldSub64",
-			"Expression": "IR.LoadR8 (IR.Sub64 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadR8 a [Sub64(To64(c),To64(b))])"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "LoadSignExtend8x32",
-			"SubName": "FoldSub64",
-			"Expression": "IR.LoadSignExtend8x32 (IR.Sub64 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadSignExtend8x32 a [Sub64(To64(c),To64(b))])"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "LoadSignExtend16x32",
-			"SubName": "FoldSub64",
-			"Expression": "IR.LoadSignExtend16x32 (IR.Sub64 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadSignExtend16x32 a [Sub64(To64(c),To64(b))])"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "LoadSignExtend8x64",
-			"SubName": "FoldSub64",
-			"Expression": "IR.LoadSignExtend8x64 (IR.Sub64 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadSignExtend8x64 a [Sub64(To64(c),To64(b))])"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "LoadSignExtend16x64",
-			"SubName": "FoldSub64",
-			"Expression": "IR.LoadSignExtend16x64 (IR.Sub64 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadSignExtend16x64 a [Sub64(To64(c),To64(b))])"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "LoadSignExtend32x64",
-			"SubName": "FoldSub64",
-			"Expression": "IR.LoadSignExtend32x64 (IR.Sub64 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadSignExtend32x64 a [Sub64(To64(c),To64(b))])"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "LoadZeroExtend8x32",
-			"SubName": "FoldSub64",
-			"Expression": "IR.LoadZeroExtend8x32 (IR.Sub64 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadZeroExtend8x32 a [Sub64(To64(c),To64(b))])"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "LoadZeroExtend16x32",
-			"SubName": "FoldSub64",
-			"Expression": "IR.LoadZeroExtend16x32 (IR.Sub64 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadZeroExtend16x32 a [Sub64(To64(c),To64(b))])"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "LoadZeroExtend8x64",
-			"SubName": "FoldSub64",
-			"Expression": "IR.LoadZeroExtend8x64 (IR.Sub64 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadZeroExtend8x64 a [Sub64(To64(c),To64(b))])"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "LoadZeroExtend16x64",
-			"SubName": "FoldSub64",
-			"Expression": "IR.LoadZeroExtend16x64 (IR.Sub64 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadZeroExtend16x64 a [Sub64(To64(c),To64(b))])"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "LoadZeroExtend32x64",
-			"SubName": "FoldSub64",
-			"Expression": "IR.LoadZeroExtend32x64 (IR.Sub64 a b) c",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.LoadZeroExtend32x64 a [Sub64(To64(c),To64(b))])"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "Store8",
-			"SubName": "FoldAdd32",
-			"Expression": "IR.Store8 (IR.Add32 a b) c d",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.Store8 a [Add32(To32(b),To32(c))] d)"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "Store8",
-			"SubName": "FoldAdd64",
-			"Expression": "IR.Store8 (IR.Add64 a b) c d",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.Store8 a [Add64(To64(b),To64(c))] d)"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "Store8",
-			"SubName": "FoldSub32",
-			"Expression": "IR.Store8 (IR.Sub32 a b) c d",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.Store8 a [Sub32(To32(c),To32(b))] d)"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "Store8",
-			"SubName": "FoldSub64",
-			"Expression": "IR.Store8 (IR.Sub64 a b) c d",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.Store8 a [Sub64(To64(c),To64(b))] d)"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "Store16",
-			"SubName": "FoldAdd32",
-			"Expression": "IR.Store16 (IR.Add32 a b) c d",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.Store16 a [Add32(To32(b),To32(c))] d)"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "Store16",
-			"SubName": "FoldAdd64",
-			"Expression": "IR.Store16 (IR.Add64 a b) c d",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.Store16 a [Add64(To64(b),To64(c))] d)"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "Store16",
-			"SubName": "FoldSub32",
-			"Expression": "IR.Store16 (IR.Sub32 a b) c d",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.Store16 a [Sub32(To32(c),To32(b))] d)"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "Store16",
-			"SubName": "FoldSub64",
-			"Expression": "IR.Store16 (IR.Sub64 a b) c d",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.Store16 a [Sub64(To64(c),To64(b))] d)"
+			"SubName": "FoldAdd##",
+			"Expression": "IR.LoadZeroExtend32x64 (IR.Add## a b) c",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.LoadZeroExtend32x64 a [Add##(To##(b),To##(c))])"
 		},
 
 		{
 			"Type": "ConstantFolding",
-			"Name": "Store32",
-			"SubName": "FoldAdd32",
-			"Expression": "IR.Store32 (IR.Add32 a b) c d",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.Store32 a [Add32(To32(b),To32(c))] d)"
+			"Name": "Load32",
+			"SubName": "FoldSub##",
+			"Expression": "IR.Load32 (IR.Sub## a b) c",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.Load32 a [Sub##(To##(c),To##(b))])"
 		},
 		{
 			"Type": "ConstantFolding",
-			"Name": "Store32",
-			"SubName": "FoldAdd64",
-			"Expression": "IR.Store32 (IR.Add64 a b) c d",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.Store32 a [Add64(To64(b),To64(c))] d)"
+			"Name": "Load64",
+			"SubName": "FoldSub##",
+			"Expression": "IR.Load64 (IR.Sub## a b) c",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.Load64 a [Sub##(To##(c),To##(b))])"
 		},
 		{
 			"Type": "ConstantFolding",
-			"Name": "Store32",
-			"SubName": "FoldSub32",
-			"Expression": "IR.Store32 (IR.Sub32 a b) c d",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.Store32 a [Sub32(To32(c),To32(b))] d)"
+			"Name": "LoadManagedPointer",
+			"SubName": "FoldSub##",
+			"Expression": "IR.LoadManagedPointer (IR.Sub## a b) c",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.LoadManagedPointer a [Sub##(To##(c),To##(b))])"
 		},
 		{
 			"Type": "ConstantFolding",
-			"Name": "Store32",
-			"SubName": "FoldSub64",
-			"Expression": "IR.Store32 (IR.Sub64 a b) c d",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.Store32 a [Sub64(To64(c),To64(b))] d)"
+			"Name": "LoadR4",
+			"SubName": "FoldSub##",
+			"Expression": "IR.LoadR4 (IR.Sub## a b) c",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.LoadR4 a [Sub##(To##(c),To##(b))])"
 		},
 		{
 			"Type": "ConstantFolding",
-			"Name": "Store64",
-			"SubName": "FoldAdd32",
-			"Expression": "IR.Store64 (IR.Add32 a b) c d",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.Store64 a [Add32(To32(b),To32(c))] d)"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "Store64",
-			"SubName": "FoldAdd64",
-			"Expression": "IR.Store64 (IR.Add64 a b) c d",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.Store64 a [Add64(To64(b),To64(c))] d)"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "Store64",
-			"SubName": "FoldSub32",
-			"Expression": "IR.Store64 (IR.Sub32 a b) c d",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.Store64 a [Sub32(To32(c),To32(b))] d)"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "Store64",
-			"SubName": "FoldSub64",
-			"Expression": "IR.Store64 (IR.Sub64 a b) c d",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.Store64 a [Sub64(To64(c),To64(b))] d)"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "StoreR4",
-			"SubName": "FoldAdd32",
-			"Expression": "IR.StoreR4 (IR.Add32 a b) c d",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.StoreR4 a [Add32(To32(b),To32(c))] d)"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "StoreR4",
-			"SubName": "FoldAdd64",
-			"Expression": "IR.StoreR4 (IR.Add64 a b) c d",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.StoreR4 a [Add64(To64(b),To64(c))] d)"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "StoreR4",
-			"SubName": "FoldSub32",
-			"Expression": "IR.StoreR4 (IR.Sub32 a b) c d",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.StoreR4 a [Sub32(To32(c),To32(b))] d)"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "StoreR4",
-			"SubName": "FoldSub64",
-			"Expression": "IR.StoreR4 (IR.Sub64 a b) c d",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.StoreR4 a [Sub64(To64(c),To64(b))] d)"
+			"Name": "LoadR8",
+			"SubName": "FoldSub##",
+			"Expression": "IR.LoadR8 (IR.Sub## a b) c",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.LoadR8 a [Sub##(To##(c),To##(b))])"
 		},
 
 		{
 			"Type": "ConstantFolding",
-			"Name": "StoreR8",
-			"SubName": "FoldAdd32",
-			"Expression": "IR.StoreR8 (IR.Add32 a b) c d",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.StoreR8 a [Add32(To32(b),To32(c))] d)"
+			"Name": "LoadSignExtend8x32",
+			"SubName": "FoldSub##",
+			"Expression": "IR.LoadSignExtend8x32 (IR.Sub## a b) c",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.LoadSignExtend8x32 a [Sub##(To##(c),To##(b))])"
+		},
+		{
+			"Type": "ConstantFolding",
+			"Name": "LoadSignExtend16x32",
+			"SubName": "FoldSub##",
+			"Expression": "IR.LoadSignExtend16x32 (IR.Sub## a b) c",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.LoadSignExtend16x32 a [Sub##(To##(c),To##(b))])"
+		},
+
+		{
+			"Type": "ConstantFolding",
+			"Name": "LoadZeroExtend16x32",
+			"SubName": "FoldSub##",
+			"Expression": "IR.LoadZeroExtend16x32 (IR.Sub## a b) c",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.LoadZeroExtend16x32 a [Sub##(To##(c),To##(b))])"
+		},
+		{
+			"Type": "ConstantFolding",
+			"Name": "LoadZeroExtend8x32",
+			"SubName": "FoldSub##",
+			"Expression": "IR.LoadZeroExtend8x32 (IR.Sub## a b) c",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.LoadZeroExtend8x32 a [Sub##(To##(c),To##(b))])"
+		},
+
+		{
+			"Type": "ConstantFolding",
+			"Name": "LoadSignExtend8x64",
+			"SubName": "FoldSub##",
+			"Expression": "IR.LoadSignExtend8x64 (IR.Sub## a b) c",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.LoadSignExtend8x64 a [Sub##(To##(c),To##(b))])"
+		},
+		{
+			"Type": "ConstantFolding",
+			"Name": "LoadSignExtend16x64",
+			"SubName": "FoldSub##",
+			"Expression": "IR.LoadSignExtend16x64 (IR.Sub## a b) c",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.LoadSignExtend16x64 a [Sub##(To##(c),To##(b))])"
+		},
+		{
+			"Type": "ConstantFolding",
+			"Name": "LoadSignExtend32x64",
+			"SubName": "FoldSub##",
+			"Expression": "IR.LoadSignExtend32x64 (IR.Sub## a b) c",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.LoadSignExtend32x64 a [Sub##(To##(c),To##(b))])"
+		},
+
+		{
+			"Type": "ConstantFolding",
+			"Name": "LoadZeroExtend8x64",
+			"SubName": "FoldSub##",
+			"Expression": "IR.LoadZeroExtend8x64 (IR.Sub## a b) c",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.LoadZeroExtend8x64 a [Sub##(To##(c),To##(b))])"
+		},
+		{
+			"Type": "ConstantFolding",
+			"Name": "LoadZeroExtend16x64",
+			"SubName": "FoldSub##",
+			"Expression": "IR.LoadZeroExtend16x64 (IR.Sub## a b) c",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.LoadZeroExtend16x64 a [Sub##(To##(c),To##(b))])"
+		},
+		{
+			"Type": "ConstantFolding",
+			"Name": "LoadZeroExtend32x64",
+			"SubName": "FoldSub##",
+			"Expression": "IR.LoadZeroExtend32x64 (IR.Sub## a b) c",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.LoadZeroExtend32x64 a [Sub##(To##(c),To##(b))])"
+		},
+
+		{
+			"Type": "ConstantFolding",
+			"Name": "Store8",
+			"SubName": "FoldAdd##",
+			"Expression": "IR.Store8 (IR.Add## a b) c d",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.Store8 a [Add##(To##(b),To##(c))] d)"
+		},
+		{
+			"Type": "ConstantFolding",
+			"Name": "Store16",
+			"SubName": "FoldAdd##",
+			"Expression": "IR.Store16 (IR.Add## a b) c d",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.Store16 a [Add##(To##(b),To##(c))] d)"
+		},
+		{
+			"Type": "ConstantFolding",
+			"Name": "Store32",
+			"SubName": "FoldAdd##",
+			"Expression": "IR.Store32 (IR.Add## a b) c d",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.Store32 a [Add##(To##(b),To##(c))] d)"
+		},
+		{
+			"Type": "ConstantFolding",
+			"Name": "Store64",
+			"SubName": "FoldAdd##",
+			"Expression": "IR.Store64 (IR.Add## a b) c d",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.Store64 a [Add##(To##(b),To##(c))] d)"
+		},
+		{
+			"Type": "ConstantFolding",
+			"Name": "StoreManagedPointer",
+			"SubName": "FoldAdd##",
+			"Expression": "IR.StoreManagedPointer (IR.Add## a b) c d",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.StoreManagedPointer a [Add##(To##(b),To##(c))] d)"
+		},
+		{
+			"Type": "ConstantFolding",
+			"Name": "StoreR4",
+			"SubName": "FoldAdd##",
+			"Expression": "IR.StoreR4 (IR.Add## a b) c d",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.StoreR4 a [Add##(To##(b),To##(c))] d)"
 		},
 		{
 			"Type": "ConstantFolding",
 			"Name": "StoreR8",
-			"SubName": "FoldAdd64",
-			"Expression": "IR.StoreR8 (IR.Add64 a b) c d",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.StoreR8 a [Add64(To64(b),To64(c))] d)"
+			"SubName": "FoldAdd##",
+			"Expression": "IR.StoreR8 (IR.Add## a b) c d",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.StoreR8 a [Add##(To##(b),To##(c))] d)"
+		},
+
+		{
+			"Type": "ConstantFolding",
+			"Name": "Store8",
+			"SubName": "FoldAdd##",
+			"Expression": "IR.Store8 (IR.Add## a b) c d",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.Store8 a [Add##(To##(b),To##(c))] d)"
+		},
+		{
+			"Type": "ConstantFolding",
+			"Name": "Store8",
+			"SubName": "FoldAdd##",
+			"Expression": "IR.Store8 (IR.Add## a b) c d",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.Store8 a [Add##(To##(b),To##(c))] d)"
+		},
+		{
+			"Type": "ConstantFolding",
+			"Name": "Store8",
+			"SubName": "FoldAdd##",
+			"Expression": "IR.Store8 (IR.Add## a b) c d",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.Store8 a [Add##(To##(b),To##(c))] d)"
+		},
+		{
+			"Type": "ConstantFolding",
+			"Name": "Store8",
+			"SubName": "FoldAdd##",
+			"Expression": "IR.Store8 (IR.Add## a b) c d",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.Store8 a [Add##(To##(b),To##(c))] d)"
+		},
+
+		{
+			"Type": "ConstantFolding",
+			"Name": "Store8",
+			"SubName": "FoldSub##",
+			"Expression": "IR.Store8 (IR.Sub## a b) c d",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.Store8 a [Sub##(To##(c),To##(b))] d)"
+		},
+		{
+			"Type": "ConstantFolding",
+			"Name": "Store16",
+			"SubName": "FoldSub##",
+			"Expression": "IR.Store16 (IR.Sub## a b) c d",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.Store16 a [Sub##(To##(c),To##(b))] d)"
+		},
+		{
+			"Type": "ConstantFolding",
+			"Name": "Store32",
+			"SubName": "FoldSub##",
+			"Expression": "IR.Store32 (IR.Sub## a b) c d",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.Store32 a [Sub##(To##(c),To##(b))] d)"
+		},
+		{
+			"Type": "ConstantFolding",
+			"Name": "Store64",
+			"SubName": "FoldSub##",
+			"Expression": "IR.Store64 (IR.Sub## a b) c d",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.Store64 a [Sub##(To##(c),To##(b))] d)"
+		},
+		{
+			"Type": "ConstantFolding",
+			"Name": "StoreManagedPointer",
+			"SubName": "FoldSub##",
+			"Expression": "IR.StoreManagedPointer (IR.Sub## a b) c d",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.StoreManagedPointer a [Sub##(To##(c),To##(b))] d)"
+		},
+		{
+			"Type": "ConstantFolding",
+			"Name": "StoreR4",
+			"SubName": "FoldSub##",
+			"Expression": "IR.StoreR4 (IR.Sub## a b) c d",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.StoreR4 a [Sub##(To##(c),To##(b))] d)"
 		},
 		{
 			"Type": "ConstantFolding",
 			"Name": "StoreR8",
-			"SubName": "FoldSub32",
-			"Expression": "IR.StoreR8 (IR.Sub32 a b) c d",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.StoreR8 a [Sub32(To32(c),To32(b))] d)"
+			"SubName": "FoldSub##",
+			"Expression": "IR.StoreR8 (IR.Sub## a b) c d",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
+			"Result": "(IR.StoreR8 a [Sub##(To##(c),To##(b))] d)"
 		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "StoreR8",
-			"SubName": "FoldSub64",
-			"Expression": "IR.StoreR8 (IR.Sub64 a b) c d",
-			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.StoreR8 a [Sub64(To64(c),To64(b))] d)"
-		},
+
 		{
 			"Type": "ConstantFolding",
 			"Name": "Load32",
@@ -659,6 +410,14 @@
 			"Expression": "(IR.Load64 (IR.AddressOf parameter) 0)",
 			"Filter": "IsParameter(parameter) & !IsFloatingPoint(parameter)",
 			"Result": "(IR.LoadParam64 parameter)"
+		},
+		{
+			"Type": "ConstantFolding",
+			"Name": "LoadParamManagedPointer",
+			"SubName": "AddressFold",
+			"Expression": "(IR.LoadParamManagedPointer (IR.AddressOf parameter) 0)",
+			"Filter": "IsParameter(parameter) & !IsFloatingPoint(parameter)",
+			"Result": "(IR.LoadParamManagedPointer parameter)"
 		},
 		{
 			"Type": "ConstantFolding",

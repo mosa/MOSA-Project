@@ -3537,12 +3537,12 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var fieldStacktype = MethodCompiler.GetPrimitiveType(fieldUnderlyingType);
 		var isFieldPrimitive = MosaTypeLayout.IsPrimitive(fieldUnderlyingType);
 
-		//var result = MethodCompiler.AllocateVirtualRegisterOrLocalStack(fieldStacktype, isFieldPrimitive ? fieldUnderlyingType : fieldType);
-
-		var stackEntry = CreateStackEntry(fieldType); // new StackEntry(fieldStacktype, result, result.Type);
+		var stackEntry = CreateStackEntry(fieldType);
 		var result = stackEntry.Operand;
 
 		PushStack(stack, stackEntry);
+
+		MethodScanner.AccessedField(field);
 
 		var operand = entry.Operand;
 
@@ -3658,8 +3658,6 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		MethodScanner.AccessedField(field);
 
 		var offset = TypeLayout.GetFieldOffset(field);
-		//var fieldPtr = field.FieldType.ToManagedPointer(); // FUTURE: MethodCompiler.VirtualRegisters.AllocateManagedPointer();
-
 		var result = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
 
 		if (offset == 0)
@@ -3843,6 +3841,8 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 				? PrimitiveType.Object
 				: PrimitiveType.ManagedPointer,
 			field);
+
+		MethodScanner.AccessedField(field);
 
 		if (isPrimitive)
 		{
@@ -4866,6 +4866,8 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 				? PrimitiveType.Object
 				: PrimitiveType.ManagedPointer,
 			field);
+
+		MethodScanner.AccessedField(field);
 
 		if (isPrimitive)
 		{

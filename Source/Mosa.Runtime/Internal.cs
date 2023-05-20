@@ -169,11 +169,6 @@ public static class Internal
 		return memory;
 	}
 
-	//public static Pointer Unbox(Pointer box)
-	//{
-	//	return box;
-	//}
-
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static Pointer UnboxAny(Pointer src, Pointer dest, uint size)
 	{
@@ -191,12 +186,21 @@ public static class Internal
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static void MemoryCopy(Pointer dest, Pointer src, uint count)
 	{
-		if (count % 4 == 0)
-			MemoryCopy4(dest, src, count);
-		else
-			MemoryCopy1(dest, src, count);
+		MemoryCopy1(dest, src, count);
+		//if (count < 4)
+		//{
+		//	MemoryCopy1(dest, src, count);
+		//}
+		//else
+		//{
+		//	var mod = count % 4;
+
+		//	MemoryCopy4(dest, src, count - mod);
+		//	MemoryCopy1(dest + mod, src + mod, mod);
+		//}
 	}
 
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	private static void MemoryCopy1(Pointer dest, Pointer src, uint count)
 	{
 		for (var i = 0; i < count; i++)
@@ -206,6 +210,7 @@ public static class Internal
 		}
 	}
 
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	private static void MemoryCopy4(Pointer dest, Pointer src, uint count)
 	{
 		for (var i = 0; i < count; i += 4)
@@ -239,14 +244,24 @@ public static class Internal
 		}
 	}
 
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static void MemoryClear(Pointer dest, uint count)
 	{
-		if (count % 4 == 0)
-			MemoryClear4(dest, count);
-		else
-			MemoryClear1(dest, count);
+		MemoryClear1(dest, count);
+		//if (count < 4)
+		//{
+		//	MemoryClear1(dest, count);
+		//}
+		//else
+		//{
+		//	var mod = count % 4;
+
+		//	MemoryClear4(dest, count - mod);
+		//	MemoryClear1(dest + mod, mod);
+		//}
 	}
 
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	private static void MemoryClear1(Pointer dest, uint count)
 	{
 		for (var i = 0; i < count; i++)
@@ -255,6 +270,7 @@ public static class Internal
 		}
 	}
 
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	private static void MemoryClear4(Pointer dest, uint count)
 	{
 		for (var i = 0; i < count; i += 4)

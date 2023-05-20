@@ -162,6 +162,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Transforms", "Transforms", 
 		Data\IR-Optimizations-Algebraic.json = Data\IR-Optimizations-Algebraic.json
 		Data\IR-Optimizations-ConstantFolding-Expression.json = Data\IR-Optimizations-ConstantFolding-Expression.json
 		Data\IR-Optimizations-ConstantFolding-MemoryAccess.json = Data\IR-Optimizations-ConstantFolding-MemoryAccess.json
+		Data\IR-Optimizations-ConstantFolding-MemoryAccess2.json = Data\IR-Optimizations-ConstantFolding-MemoryAccess2.json
 		Data\IR-Optimizations-ConstantFolding.json = Data\IR-Optimizations-ConstantFolding.json
 		Data\IR-Optimizations-ConstantMove-Expression.json = Data\IR-Optimizations-ConstantMove-Expression.json
 		Data\IR-Optimizations-ConstantMove.json = Data\IR-Optimizations-ConstantMove.json
