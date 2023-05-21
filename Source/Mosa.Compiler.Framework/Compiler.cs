@@ -181,7 +181,7 @@ public sealed class Compiler
 			new IRTransformsStage(),
 
 			compilerSettings.InlineMethods || compilerSettings.InlineExplicit ? new InlineStage() : null,
-			new PromoteTemporaryVariables(),
+			//new PromoteTemporaryVariables(),
 			new StaticLoadOptimizationStage(),
 
 			compilerSettings.BasicOptimizations ? new OptimizationStage(false) : null,

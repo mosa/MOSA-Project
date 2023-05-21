@@ -1276,19 +1276,28 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 					return true;
 				}
 
+			case PrimitiveType.ManagedPointer when entry2.PrimitiveType == PrimitiveType.ManagedPointer:
+				{
+					var result = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
+					context.AppendInstruction(IRInstruction.AddManagedPointer, result, entry1.Operand, entry2.Operand);
+					PushStack(stack, new StackEntry(result));
+					return true;
+				}
+
 			case PrimitiveType.Int32 when entry2.PrimitiveType == PrimitiveType.ManagedPointer && Is32BitPlatform:
 			case PrimitiveType.ManagedPointer when entry2.PrimitiveType == PrimitiveType.Int32 && Is32BitPlatform:
 				{
 					var result = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
-					context.AppendInstruction(IRInstruction.Add32, result, entry2.Operand, entry1.Operand);
+					context.AppendInstruction(IRInstruction.AddManagedPointer, result, entry2.Operand, entry1.Operand);
 					PushStack(stack, new StackEntry(result));
 					return true;
 				}
 
 			case PrimitiveType.Int64 when entry2.PrimitiveType == PrimitiveType.ManagedPointer && Is64BitPlatform:
+			case PrimitiveType.ManagedPointer when entry2.PrimitiveType == PrimitiveType.Int64 && Is64BitPlatform:
 				{
 					var result = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
-					context.AppendInstruction(IRInstruction.Add64, result, entry2.Operand, entry1.Operand);
+					context.AppendInstruction(IRInstruction.AddManagedPointer, result, entry2.Operand, entry1.Operand);
 					PushStack(stack, new StackEntry(result));
 					return true;
 				}
@@ -1298,7 +1307,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 					var result = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
 					var v1 = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.SignExtend32x64, v1, entry1.Operand);
-					context.AppendInstruction(IRInstruction.Add64, result, v1, entry2.Operand);
+					context.AppendInstruction(IRInstruction.AddManagedPointer, result, v1, entry2.Operand);
 					PushStack(stack, new StackEntry(result));
 					return true;
 				}
@@ -1308,7 +1317,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 					var result = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
 					var v1 = MethodCompiler.VirtualRegisters.Allocate64();
 					context.AppendInstruction(IRInstruction.SignExtend32x64, v1, entry2.Operand);
-					context.AppendInstruction(IRInstruction.Add64, result, entry1.Operand, v1);
+					context.AppendInstruction(IRInstruction.AddManagedPointer, result, entry1.Operand, v1);
 					PushStack(stack, new StackEntry(result));
 					return true;
 				}
@@ -3353,6 +3362,10 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		{
 			context.AppendInstruction(IRInstruction.StoreObject, null, entry.Operand, ConstantZero, Operand.NullObject);
 		}
+		else if (type.IsManagedPointer)
+		{
+			context.AppendInstruction(IRInstruction.StoreManagedPointer, null, entry.Operand, ConstantZero, Operand.NullObject);
+		}
 		else
 		{
 			var size = Operand.CreateConstant32(TypeLayout.GetTypeLayoutSize(type));
@@ -4881,6 +4894,13 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 				var staticReference = Operand.CreateLabel(symbol.Name, Is32BitPlatform);
 
 				context.AppendInstruction(IRInstruction.StoreObject, null, staticReference, ConstantZero, source);
+			}
+			else if (type.IsManagedPointer)
+			{
+				var symbol = GetStaticSymbol(field);
+				var staticReference = Operand.CreateLabel(symbol.Name, Is32BitPlatform);
+
+				context.AppendInstruction(IRInstruction.StoreManagedPointer, null, staticReference, ConstantZero, source);
 			}
 			else
 			{

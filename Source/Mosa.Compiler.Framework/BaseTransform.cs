@@ -75,6 +75,11 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 		return operand.Definitions.Count == 1;
 	}
 
+	protected static bool IsSSAFormOrConstant(Operand operand)
+	{
+		return operand.IsConstant || operand.Definitions.Count == 1;
+	}
+
 	protected static bool AreSame(Operand operand1, Operand operand2)
 	{
 		if (operand1 == operand2)
