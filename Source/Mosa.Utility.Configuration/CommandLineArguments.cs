@@ -73,6 +73,8 @@ public static class CommandLineArguments
 
 			new Argument { Name = "-interrupt-method", Setting = "X86.InterruptMethodName"},
 
+			new Argument { Name = "-inline-exclude", Setting = "Optimizations.Inline.Exclude", IsList = true},
+
 			// Linker:
 			new Argument { Name = "-emit-all-symbols", Setting = "Linker.Symbols", Value = "true"},
 			new Argument { Name = "-emit-all-symbols-off", Setting = "Linker.Symbols", Value = "false"},

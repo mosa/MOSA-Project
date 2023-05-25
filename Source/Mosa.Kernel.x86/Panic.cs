@@ -36,6 +36,19 @@ public static class Panic
 	{
 		IDT.SetInterruptHandler(null);
 
+		if (!firstError)
+		{
+			Screen.Goto(0, 0);
+			Screen.Write("(multiple)");
+
+			while (true)
+			{
+				Native.Hlt();
+			}
+		}
+
+		firstError = false;
+
 		Screen.BackgroundColor = ScreenColor.Blue;
 
 		Screen.Clear();

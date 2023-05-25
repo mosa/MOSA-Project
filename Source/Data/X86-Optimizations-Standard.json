@@ -92,7 +92,8 @@
 			"Filter": "!IsCPURegister(a,%ESI) && !IsCPURegister(a,%EDI) && !AreStatusFlagUsed(@)",
 			"Result": "(X86.Movzx8To32 a)",
 			"Variations": "Yes",
-			"Log": "No"
+			"Log": "Yes",
+			"Ignore": "Yes"
 		},
 		{
 			"Type": "StrengthReduction",

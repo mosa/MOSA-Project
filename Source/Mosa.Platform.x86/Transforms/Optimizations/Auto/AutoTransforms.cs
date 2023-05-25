@@ -21,8 +21,6 @@ public static class AutoTransforms
 		new Consolidating.Add32Mov32ByZero(),
 		new Consolidating.IMul32Mov32ByZero(),
 		new Consolidating.IMul32Mov32ByOne(),
-		new Shrink.And32ByFF(),
-		new Shrink.And32ByFF_v1(),
 		new StrengthReduction.Add32By1Not32(),
 		new StrengthReduction.Add32By1Not32_v1(),
 		new StrengthReduction.Inc32Not32(),

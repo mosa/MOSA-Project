@@ -65,6 +65,10 @@ public class BuildTransformations : BuildBaseTemplate
 
 		bool optimization = node.Optimization != null && node.Optimization == "Yes";
 		bool transformation = node.Transformation != null && node.Transformation == "Yes";
+		bool ignore = node.Ignore != null && node.Ignore == "Yes";
+
+		if (ignore)
+			return;
 
 		int priority = node.Priority == null ? 0 : int.Parse(node.Priority);
 
