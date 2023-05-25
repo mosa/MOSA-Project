@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Collections.Generic;
 using Mosa.Runtime;
 
 namespace Mosa.DeviceSystem.PCI;
@@ -108,6 +109,11 @@ public class PCIDevice : BaseDeviceDriver, IPCIDevice, IPCIDeviceResource
 	/// </summary>
 	/// <value>The function.</value>
 	public byte Function { get; protected set; }
+
+	/// <summary>
+	/// Gets the capabilities.
+	/// </summary>
+	public PCICapability[] Capabilities { get; protected set; }
 
 	/// <summary>
 	/// Gets the vendor ID.
@@ -249,6 +255,23 @@ public class PCIDevice : BaseDeviceDriver, IPCIDevice, IPCIDeviceResource
 				case AddressType.IO: ioPortRegionCount++; break;
 				case AddressType.Memory: memoryRegionCount++; break;
 			}
+		}
+
+		if ((StatusRegister & (byte)PCIStatus.Capability) != 0)
+		{
+			var capabilities = new List<PCICapability>();
+			var ptr = pciController.ReadConfig8(this, PCIConfigurationHeader.CapabilitiesPointer);
+
+			while (ptr != 0)
+			{
+				var capability = pciController.ReadConfig8(this, ptr);
+
+				capabilities.Add(new PCICapability(capability, ptr));
+
+				ptr = pciController.ReadConfig8(this, (byte)(ptr + 1));
+			}
+
+			Capabilities = capabilities.ToArray();
 		}
 
 		EnableDevice();

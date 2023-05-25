@@ -149,6 +149,7 @@ public static class CommandLineArguments
 			new Argument { Name = "-video-depth", Setting = "Multiboot.Video.Depth"},
 
 			new Argument { Name = "-vmware-svga", Setting = "Emulator.SVGA", Value="vmware"},
+			new Argument { Name = "-virtio-vga", Setting = "Emulator.SVGA", Value="virtio"},
 
 			new Argument { Name = "-gdb", Setting = "Launcher.LaunchDebugger", Value="true"},
 			new Argument { Name = "-gdb-port", Setting = "GDB.Port"},

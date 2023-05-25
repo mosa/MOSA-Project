@@ -1,4 +1,4 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 // Port from Cosmos (http://www.codeplex.com/Cosmos) under New BSD License.
 

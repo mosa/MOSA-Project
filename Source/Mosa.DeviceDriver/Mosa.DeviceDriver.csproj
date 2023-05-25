@@ -26,9 +26,6 @@
     <ProjectReference Include="..\Mosa.Runtime\Mosa.Runtime.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="ISA\Serial.cs" />
-    <Compile Remove="PCI\Intel4SeriesChipsetDRAMController.cs" />
     <Compile Remove="PCI\AMD\AMDPCNetII.cs" />
-    <Compile Remove="PCI\S3\S3Trio64V2.cs" />
   </ItemGroup>
 </Project>
