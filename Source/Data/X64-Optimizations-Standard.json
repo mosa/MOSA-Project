@@ -45,7 +45,8 @@
 			"Filter": "!IsCPURegister(a,%RSI) && !IsCPURegister(a,%RDI) && !AreStatusFlagUsed(@)",
 			"Result": "(X64.Movzx8To## a)",
 			"Variations": "Yes",
-			"Log": "No"
+			"Log": "Yes",
+			"Ignore": "Yes"
 		},
 		{
 			"Type": "StrengthReduction",

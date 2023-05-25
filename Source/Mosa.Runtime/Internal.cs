@@ -552,7 +552,7 @@ public static class Internal
 
 		var address = GetReturnAddressFromStackFrame(stackFrame);
 
-		return Runtime.Internal.GetMethodDefinition(address);
+		return GetMethodDefinition(address);
 	}
 
 	public static SimpleStackTraceEntry GetStackTraceEntry(uint depth, Pointer stackFrame, Pointer eip)
@@ -582,7 +582,7 @@ public static class Internal
 			address = GetReturnAddressFromStackFrame(stackFrame);
 		}
 
-		var methodDef = Runtime.Internal.GetMethodDefinition(address);
+		var methodDef = GetMethodDefinition(address);
 
 		if (methodDef.IsNull)
 			return entry;

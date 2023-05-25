@@ -78,9 +78,15 @@ public static class ManualTransforms
 
 		new Special.Deadcode(),
 		new Special.GetLow32From64(),
-		new Special.PromoteAddressOf32(),
-		new Special.PromoteAddressOf64(),
 		new Special.GetLow32CPURegister(),
+		new Special.Store32AddressOf(),
+		new Special.Store64AddressOf(),
+		new Special.Load32AddressOf(),
+		new Special.Load64AddressOf(),
+		new Special.StoreLoadManagedPointer(),
+		new Special.StoreLoad32(),
+		new Special.StoreLoad64(),
+		new Special.CombineAddressOfStore32(),
 
 		new Simplification.AddCarryOut32CarryNotUsed(),
 		new Simplification.AddCarryOut64CarryNotUsed(),

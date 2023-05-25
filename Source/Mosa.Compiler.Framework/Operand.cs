@@ -966,13 +966,8 @@ public sealed partial class Operand
 			}
 			else
 			{
-				sb.Append($"(v{Index}<v{Parent.Index}{(IsHigh ? "H" : "L")}>)");
+				sb.Append($"v{Index}<v{Parent.Index}{(IsHigh ? "H" : "L")}>");
 			}
-		}
-
-		if (IsStaticField)
-		{
-			sb.Append($" ({Field.FullName})");
 		}
 
 		sb.Append($" [{GetElementString()}]");
@@ -980,6 +975,11 @@ public sealed partial class Operand
 		if (Primitive == PrimitiveType.ValueType && Type != null)
 		{
 			sb.Append($" ({Type.FullName})");
+		}
+
+		if (IsStaticField)
+		{
+			sb.Append($" ({Field.FullName})");
 		}
 
 		return sb.ToString().Trim();

@@ -25,7 +25,7 @@ public class InlinedFileStage : BaseCompilerStage
 
 			foreach (var data in methods)
 			{
-				writer.WriteLine($"{InlinedSetupStage.RemoveReturnValue(data.Method.FullName)}\t{data.Version}");
+				writer.WriteLine($"{InlinedSetupStage.RemoveReturnValue(data.Method.FullName)}");
 			}
 		}
 	}

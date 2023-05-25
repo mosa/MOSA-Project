@@ -12,7 +12,7 @@ using Mosa.Compiler.Framework.Trace;
 namespace Mosa.Compiler.Framework.Stages;
 
 /// <summary>
-/// Value Numbering Stage
+/// Loop Invariant Code Motion Stage
 /// </summary>
 public sealed class LoopInvariantCodeMotionStage : BaseMethodCompilerStage
 {

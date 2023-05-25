@@ -399,7 +399,7 @@
 			"Type": "ConstantFolding",
 			"Name": "Load32",
 			"SubName": "AddressFold",
-			"Expression": "(IR.Load32 (IR.AddressOf parameter) 0)",
+			"Expression": "IR.Load32 (IR.AddressOf parameter) 0",
 			"Filter": "IsParameter(parameter) & !IsFloatingPoint(parameter)",
 			"Result": "(IR.LoadParam32 parameter)"
 		},
@@ -407,7 +407,7 @@
 			"Type": "ConstantFolding",
 			"Name": "Load64",
 			"SubName": "AddressFold",
-			"Expression": "(IR.Load64 (IR.AddressOf parameter) 0)",
+			"Expression": "IR.Load64 (IR.AddressOf parameter) 0",
 			"Filter": "IsParameter(parameter) & !IsFloatingPoint(parameter)",
 			"Result": "(IR.LoadParam64 parameter)"
 		},
@@ -415,7 +415,7 @@
 			"Type": "ConstantFolding",
 			"Name": "LoadParamManagedPointer",
 			"SubName": "AddressFold",
-			"Expression": "(IR.LoadParamManagedPointer (IR.AddressOf parameter) 0)",
+			"Expression": "IR.LoadParamManagedPointer (IR.AddressOf parameter) 0",
 			"Filter": "IsParameter(parameter) & !IsFloatingPoint(parameter)",
 			"Result": "(IR.LoadParamManagedPointer parameter)"
 		},
@@ -423,7 +423,7 @@
 			"Type": "ConstantFolding",
 			"Name": "LoadR4",
 			"SubName": "AddressFold",
-			"Expression": "(IR.LoadR4 (IR.AddressOf parameter) 0)",
+			"Expression": "IR.LoadR4 (IR.AddressOf parameter) 0",
 			"Filter": "IsParameter(parameter) & !IsInteger(parameter)",
 			"Result": "(IR.LoadParamR4 parameter)"
 		},
@@ -431,7 +431,7 @@
 			"Type": "ConstantFolding",
 			"Name": "LoadR8",
 			"SubName": "AddressFold",
-			"Expression": "(IR.LoadR8 (IR.AddressOf parameter) 0)",
+			"Expression": "IR.LoadR8 (IR.AddressOf parameter) 0",
 			"Filter": "IsParameter(parameter) & !IsInteger(parameter)",
 			"Result": "(IR.LoadParamR8 parameter)"
 		},
@@ -439,7 +439,7 @@
 			"Type": "ConstantFolding",
 			"Name": "LoadSignExtend8x32",
 			"SubName": "AddressFold",
-			"Expression": "(IR.LoadSignExtend8x32 (IR.AddressOf parameter) 0)",
+			"Expression": "IR.LoadSignExtend8x32 (IR.AddressOf parameter) 0",
 			"Filter": "IsParameter(parameter)",
 			"Result": "(IR.LoadParamSignExtend8x32 parameter)"
 		},
@@ -447,7 +447,7 @@
 			"Type": "ConstantFolding",
 			"Name": "LoadSignExtend16x32",
 			"SubName": "AddressFold",
-			"Expression": "(IR.LoadSignExtend16x32 (IR.AddressOf parameter) 0)",
+			"Expression": "IR.LoadSignExtend16x32 (IR.AddressOf parameter) 0",
 			"Filter": "IsParameter(parameter)",
 			"Result": "(IR.LoadParamSignExtend16x32 parameter)"
 		},
@@ -455,7 +455,7 @@
 			"Type": "ConstantFolding",
 			"Name": "LoadSignExtend8x64",
 			"SubName": "AddressFold",
-			"Expression": "(IR.LoadSignExtend8x64 (IR.AddressOf parameter) 0)",
+			"Expression": "IR.LoadSignExtend8x64 (IR.AddressOf parameter) 0",
 			"Filter": "IsParameter(parameter)",
 			"Result": "(IR.LoadParamSignExtend8x64 parameter)"
 		},
@@ -463,7 +463,7 @@
 			"Type": "ConstantFolding",
 			"Name": "LoadSignExtend16x64",
 			"SubName": "AddressFold",
-			"Expression": "(IR.LoadSignExtend16x64 (IR.AddressOf parameter) 0)",
+			"Expression": "IR.LoadSignExtend16x64 (IR.AddressOf parameter) 0",
 			"Filter": "IsParameter(parameter)",
 			"Result": "(IR.LoadParamSignExtend16x64 parameter)"
 		},
@@ -471,7 +471,7 @@
 			"Type": "ConstantFolding",
 			"Name": "LoadSignExtend32x64",
 			"SubName": "AddressFold",
-			"Expression": "(IR.LoadSignExtend32x64 (IR.AddressOf parameter) 0)",
+			"Expression": "IR.LoadSignExtend32x64 (IR.AddressOf parameter) 0",
 			"Filter": "IsParameter(parameter)",
 			"Result": "(IR.LoadParamSignExtend32x64 parameter)"
 		},
@@ -479,7 +479,7 @@
 			"Type": "ConstantFolding",
 			"Name": "LoadZeroExtend8x32",
 			"SubName": "AddressFold",
-			"Expression": "(IR.LoadZeroExtend8x32 (IR.AddressOf parameter) 0)",
+			"Expression": "IR.LoadZeroExtend8x32 (IR.AddressOf parameter) 0",
 			"Filter": "IsParameter(parameter)",
 			"Result": "(IR.LoadParamZeroExtend8x32 parameter)"
 		},
@@ -487,7 +487,7 @@
 			"Type": "ConstantFolding",
 			"Name": "LoadZeroExtend16x32",
 			"SubName": "AddressFold",
-			"Expression": "(IR.LoadZeroExtend16x32 (IR.AddressOf parameter) 0)",
+			"Expression": "IR.LoadZeroExtend16x32 (IR.AddressOf parameter) 0",
 			"Filter": "IsParameter(parameter)",
 			"Result": "(IR.LoadParamZeroExtend16x32 parameter)"
 		},
@@ -495,7 +495,7 @@
 			"Type": "ConstantFolding",
 			"Name": "LoadZeroExtend8x64",
 			"SubName": "AddressFold",
-			"Expression": "(IR.LoadZeroExtend8x64 (IR.AddressOf parameter) 0)",
+			"Expression": "IR.LoadZeroExtend8x64 (IR.AddressOf parameter) 0",
 			"Filter": "IsParameter(parameter)",
 			"Result": "(IR.LoadParamZeroExtend8x64 parameter)"
 		},
@@ -503,7 +503,7 @@
 			"Type": "ConstantFolding",
 			"Name": "LoadZeroExtend16x64",
 			"SubName": "AddressFold",
-			"Expression": "(IR.LoadZeroExtend16x64 (IR.AddressOf parameter) 0)",
+			"Expression": "IR.LoadZeroExtend16x64 (IR.AddressOf parameter) 0",
 			"Filter": "IsParameter(parameter)",
 			"Result": "(IR.LoadParamZeroExtend16x64 parameter)"
 		},
@@ -511,7 +511,7 @@
 			"Type": "ConstantFolding",
 			"Name": "LoadZeroExtend32x64",
 			"SubName": "AddressFold",
-			"Expression": "(IR.LoadZeroExtend32x64 (IR.AddressOf parameter) 0)",
+			"Expression": "IR.LoadZeroExtend32x64 (IR.AddressOf parameter) 0",
 			"Filter": "IsParameter(parameter)",
 			"Result": "(IR.LoadParamZeroExtend32x64 parameter)"
 		}

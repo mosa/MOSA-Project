@@ -967,8 +967,7 @@ public sealed class MethodCompiler
 			ElementType.Object => IRInstruction.LoadParamObject,
 			ElementType.I when Is32BitPlatform => IRInstruction.LoadParam32,
 			ElementType.I when Is64BitPlatform => IRInstruction.LoadParam64,
-			ElementType.ManagedPointer when Is32BitPlatform => IRInstruction.LoadParam32,
-			ElementType.ManagedPointer when Is64BitPlatform => IRInstruction.LoadParam64,
+			ElementType.ManagedPointer => IRInstruction.LoadParamManagedPointer,
 			_ => throw new InvalidOperationException(),
 		};
 	}
@@ -983,8 +982,7 @@ public sealed class MethodCompiler
 			PrimitiveType.R8 => IRInstruction.SetReturnR8,
 			PrimitiveType.Object => IRInstruction.SetReturnObject,
 			PrimitiveType.ValueType => IRInstruction.SetReturnCompound,
-			PrimitiveType.ManagedPointer when Is32BitPlatform => IRInstruction.SetReturn32,
-			PrimitiveType.ManagedPointer when Is64BitPlatform => IRInstruction.SetReturn64,
+			PrimitiveType.ManagedPointer => IRInstruction.SetReturnManagedPointer,
 			_ => throw new InvalidOperationException(),
 		};
 	}
@@ -1028,8 +1026,7 @@ public sealed class MethodCompiler
 			ElementType.Object => IRInstruction.LoadObject,
 			ElementType.I when Is32BitPlatform => IRInstruction.Load32,
 			ElementType.I when Is64BitPlatform => IRInstruction.Load64,
-			ElementType.ManagedPointer when Is32BitPlatform => IRInstruction.Load32,
-			ElementType.ManagedPointer when Is64BitPlatform => IRInstruction.Load64,
+			ElementType.ManagedPointer => IRInstruction.LoadManagedPointer,
 			_ => throw new CompilerException($"Invalid ElementType = {elementType}"),
 		};
 	}
@@ -1051,8 +1048,7 @@ public sealed class MethodCompiler
 			ElementType.Object => IRInstruction.MoveObject,
 			ElementType.I when Is32BitPlatform => IRInstruction.Move32,
 			ElementType.I when Is64BitPlatform => IRInstruction.Move64,
-			ElementType.ManagedPointer when Is32BitPlatform => IRInstruction.Move32,
-			ElementType.ManagedPointer when Is64BitPlatform => IRInstruction.Move64,
+			ElementType.ManagedPointer => IRInstruction.MoveManagedPointer,
 			_ => throw new CompilerException($"Invalid ElementType = {elementType}"),
 		};
 	}
@@ -1066,8 +1062,7 @@ public sealed class MethodCompiler
 			PrimitiveType.Int64 => IRInstruction.Move64,
 			PrimitiveType.R4 => IRInstruction.MoveR4,
 			PrimitiveType.R8 => IRInstruction.MoveR8,
-			PrimitiveType.ManagedPointer when Is32BitPlatform => IRInstruction.Move32,
-			PrimitiveType.ManagedPointer when Is64BitPlatform => IRInstruction.Move64,
+			PrimitiveType.ManagedPointer => IRInstruction.MoveManagedPointer,
 			PrimitiveType.ValueType => IRInstruction.MoveCompound,
 			_ => throw new CompilerException($"Invalid StackType = {type}"),
 		};
@@ -1090,8 +1085,7 @@ public sealed class MethodCompiler
 			ElementType.Object => IRInstruction.StoreObject,
 			ElementType.I when Is32BitPlatform => IRInstruction.Store32,
 			ElementType.I when Is64BitPlatform => IRInstruction.Store64,
-			ElementType.ManagedPointer when Is32BitPlatform => IRInstruction.Store32,
-			ElementType.ManagedPointer when Is64BitPlatform => IRInstruction.Store64,
+			ElementType.ManagedPointer => IRInstruction.StoreManagedPointer,
 			_ => throw new CompilerException($"Invalid ElementType = {elementType}"),
 		};
 	}
@@ -1113,8 +1107,7 @@ public sealed class MethodCompiler
 			ElementType.Object => IRInstruction.StoreParamObject,
 			ElementType.I when Is32BitPlatform => IRInstruction.StoreParam32,
 			ElementType.I when Is64BitPlatform => IRInstruction.StoreParam64,
-			ElementType.ManagedPointer when Is32BitPlatform => IRInstruction.StoreParam32,
-			ElementType.ManagedPointer when Is64BitPlatform => IRInstruction.StoreParam64,
+			ElementType.ManagedPointer => IRInstruction.StoreParamManagedPointer,
 			_ => throw new CompilerException($"Invalid ElementType = {elementType}"),
 		};
 	}
