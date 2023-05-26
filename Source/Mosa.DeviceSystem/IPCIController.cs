@@ -33,12 +33,8 @@ public interface IPCIController
 	/// <returns></returns>
 	byte ReadConfig8(PCIDevice pciDevice, byte register);
 
-	/// <summary>
-	/// Writes to configuration space
-	/// </summary>
-	/// <param name="bus">The bus.</param>
-	/// <param name="slot">The slot.</param>
-	/// <param name="function">The function.</param>
+	/// <summary>Writes to configuration space</summary>
+	/// <param name="pciDevice"></param>
 	/// <param name="register">The register.</param>
 	/// <param name="value">The value.</param>
 	void WriteConfig32(PCIDevice pciDevice, byte register, uint value);

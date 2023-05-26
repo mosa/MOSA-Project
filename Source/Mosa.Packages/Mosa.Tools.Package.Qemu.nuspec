@@ -1,17 +1,17 @@
-﻿<?xml version="1.0"?>
+<?xml version="1.0"?>
 <package>
 	<metadata>
-		<id>Mosa.Tools.Package</id>
+		<id>Mosa.Tools.Package.Qemu</id>
 		<version>$version$</version>
-		<title>Mosa.Tools.Package</title>
+		<title>Mosa.Tools.Package.Qemu</title>
 		<authors>MOSA Project</authors>
 		<owners>MOSA Project</owners>
 		<license type="expression">BSD-3-Clause-Clear</license>
 		<projectUrl>https://www.mosa-project.org</projectUrl>
 		<icon>images/Mosa Icon.png</icon>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
-		<summary>MOSA Tools</summary>
-		<description>This package contains all the tools for MOSA.</description>
+		<summary>MOSA tools with QEMU (Windows/Linux)</summary>
+		<description>This package contains all the tools for MOSA along with QEMU binaries for Windows.</description>
 		<copyright>Copyright © MOSA Project 2023</copyright>
 		<tags>MOSA Compiler</tags>
 		<contentFiles>
@@ -20,6 +20,7 @@
 	</metadata>
 	<files>
 		<file src="..\Art\Mosa Icon.png" target="images" />
+		<file src="..\..\Tools\qemu\**\*.*" target="contentFiles/any/net7.0/Tools/qemu" />
 		<file src="..\..\bin\runtimes\**\*.*" target="contentFiles/any/net7.0/Tools/runtimes" />
 		<file src="..\..\bin\Avalonia*.dll" target="contentFiles/any/net7.0/Tools" />
 		<file src="..\..\bin\Mosa.Compiler.Common.dll" target="contentFiles/any/net7.0/Tools" />

@@ -10,7 +10,7 @@ public interface IAudioDevice
 	/// <summary>
 	/// Plays a sound from a constrained pointer.
 	/// </summary>
-	/// <param name="Data"></param>
+	/// <param name="data"></param>
 	void Play(ConstrainedPointer data);
 
 	/// <summary>

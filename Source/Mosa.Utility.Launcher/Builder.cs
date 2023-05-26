@@ -106,16 +106,6 @@ public class Builder : BaseLauncher
 	{
 		var fileHunter = new FileHunter(Path.GetDirectoryName(LauncherSettings.SourceFiles[0]));
 
-		if (LauncherSettings.HuntForCorLib)
-		{
-			// var fileCorlib = fileHunter.HuntFile("mscorlib.dll");
-
-			// if (fileCorlib != null)
-			// {
-			// 	Settings.AddPropertyListValue("Compiler.SourceFiles", fileCorlib.FullName);
-			// }
-		}
-
 		if (LauncherSettings.PlugKorlib)
 		{
 			var fileKorlib = fileHunter.HuntFile("Mosa.Plug.Korlib.dll");
@@ -139,6 +129,8 @@ public class Builder : BaseLauncher
 				Settings.AddPropertyListValue("Compiler.SourceFiles", fileKorlibPlatform.FullName);
 			}
 		}
+
+		Output($"Compling: {LauncherSettings.SourceFiles[0]}");
 
 		var compiler = new MosaCompiler(Settings, CompilerHooks, new ClrModuleLoader(), new ClrTypeResolver());
 
@@ -178,8 +170,6 @@ public class Builder : BaseLauncher
 		{
 			CreateDiskImage(LauncherSettings.ImageFile);
 		}
-
-		//Output($"Image Generated");
 	}
 
 	private void AddCounters(string data)
@@ -276,8 +266,6 @@ public class Builder : BaseLauncher
 
 	private void GenerateASMFile()
 	{
-		//Output($"Creating ASM File");
-
 		var map = new Dictionary<ulong, List<string>>();
 
 		foreach (var symbol in Linker.Symbols)
@@ -324,8 +312,6 @@ public class Builder : BaseLauncher
 					break;
 			}
 		}
-
-		//Output($"ASM File Created");
 	}
 
 	private void NotifyEvent(CompilerEvent compilerEvent, string message, int threadID)

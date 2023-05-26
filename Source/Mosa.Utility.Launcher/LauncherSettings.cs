@@ -136,12 +136,6 @@ public class LauncherSettings
 		set => Settings.SetValue("GDB.Port", value);
 	}
 
-	public bool HuntForCorLib
-	{
-		get => Settings.GetValue("Launcher.HuntForCorLib", false);
-		set => Settings.SetValue("Launcher.HuntForCorLib", value);
-	}
-
 	public string ImageFirmware
 	{
 		get => Settings.GetValue("Image.Firmware", null);

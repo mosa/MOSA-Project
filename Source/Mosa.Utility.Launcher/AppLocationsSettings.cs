@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 using Mosa.Compiler.Common.Configuration;
 
 namespace Mosa.Utility.Launcher;
@@ -17,15 +18,18 @@ public static class AppLocationsSettings
 	private static readonly string AppDirectory = AppDomain.CurrentDomain.BaseDirectory;
 	private static readonly string MosaTools = @"%ProgramFiles(x86)%\MOSA-Project\Tools";
 
+	private static bool IsWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+	private static string[] LinuxDirectories = new string[] { "/bin", "/usr/bin" };
+
 	public static Settings GetAppLocations()
 	{
 		var settings = new Settings();
 
 		Set(settings, "AppLocation.Qemu", FindQemu());
-		Set(settings, "AppLocation.QemuBIOS", FindQemuBIOS(settings.GetValue("AppLocation.Qemu")));
-		Set(settings, "AppLocation.QemuEDK2X86", FindQemuEDK2X86(settings.GetValue("AppLocation.Qemu")));
-		Set(settings, "AppLocation.QemuEDK2X64", FindQemuEDK2X64(settings.GetValue("AppLocation.Qemu")));
-		Set(settings, "AppLocation.QemuEDK2ARM", FindQemuEDK2ARM(settings.GetValue("AppLocation.Qemu")));
+		Set(settings, "AppLocation.QemuBIOS", FindQemuBIOS());
+		Set(settings, "AppLocation.QemuEDK2X86", FindQemuEDK2X86());
+		Set(settings, "AppLocation.QemuEDK2X64", FindQemuEDK2X64());
+		Set(settings, "AppLocation.QemuEDK2ARM", FindQemuEDK2ARM());
 		Set(settings, "AppLocation.QemuImg", FindQemuImg());
 		Set(settings, "AppLocation.Bochs", FindBochs());
 		Set(settings, "AppLocation.VmwarePlayer", FindVmwarePlayer());
@@ -40,246 +44,289 @@ public static class AppLocationsSettings
 
 	private static string FindQemu()
 	{
-		return TryFind(
-			new string[] { /*"qemu-system-x86_64", "qemu-system-x86_64.exe", */"qemu-system-i386.exe", "qemu-system-i386" },
-			new string[] {
-				@"%MOSA%\Tools\QEMU",
-				@"%CURRENT%\..\Tools\QEMU",
-				@"%CURRENT%\Tools\QEMU",
-				@"%APPDIR%\Tools\QEMU",
-				@"%APPDIR%\..\Tools\QEMU",
-				@"%ProgramFiles%\qemu",
-				@"%ProgramFiles(x86)%\qemu",
-				@"%MOSATOOLS%\QEMU",
-				"/bin",
-				"/usr/bin"
-			}
-		);
+		return IsWindows
+			? TryFind("qemu-system-i386.exe",
+				new string[] {
+					@"%CURRENT%\qemu",
+					@"%CURRENT%\..\Tools\qemu",
+					@"%CURRENT%\Tools\qemu",
+
+					@"%APPDIR%\qemu",
+					@"%APPDIR%\Tools\qemu",
+					@"%APPDIR%\..\Tools\qemu",
+
+					@"%MOSA%\Tools\qemu",
+					@"%MOSATOOLS%\qemu",
+
+					@"%ProgramFiles%\qemu",
+					@"%ProgramFiles(x86)%\qemu",
+				})
+			: TryFind("qemu-system-i386", LinuxDirectories);
 	}
 
 	private static string FindGDB()
 	{
-		return TryFind(
-			new string[] { "gdb.exe" },
-			new string[] {
-				@"%MOSA%\Tools\gdb",
-				@"%CURRENT%\..\Tools\gdb",
-				@"%CURRENT%\Tools\gdb",
-				@"%APPDIR%\Tools\gdb",
-				@"%APPDIR%\..\Tools\gdb",
-				@"%MOSATOOLS%\gdb",
+		return IsWindows
+			? TryFind("gdb.exe",
+				new string[] {
+					@"%CURRENT%\..\Tools\gdb",
+					@"%CURRENT%\Tools\gdb",
 
-				@"C:\cygwin64\bin",
-				@"C:\mingw64\bin",
-				@"C:\cygwin\bin",
-				@"C:\mingw\bin",
-				@"C:\mingw32\bin",
+					@"%APPDIR%\Tools\gdb",
+					@"%APPDIR%\..\Tools\gdb",
 
-				"/bin"
-			}
-		);
+					@"%MOSA%\Tools\gdb",
+					@"%MOSATOOLS%\gdb",
+
+					@"C:\cygwin64\bin",
+					@"C:\mingw64\bin",
+					@"C:\cygwin\bin",
+					@"C:\mingw\bin",
+					@"C:\mingw32\bin",
+				})
+			: TryFind("gdb", LinuxDirectories);
 	}
 
 	private static string FindMkisofs()
 	{
-		return TryFind(
-			new string[] { "mkisofs.exe", "mkisofs" },
-			new string[] {
-				@"%MOSA%\Tools\mkisofs",
-				@"%CURRENT%\..\Tools\mkisofs",
-				@"%CURRENT%\Tools\mkisofs",
-				@"%APPDIR%\Tools\mkisofs",
-				@"%APPDIR%\..\Tools\mkisofs",
-				@"%MOSATOOLS%\mkisofs",
+		return IsWindows
+			? TryFind("mkisofs.exe",
+				new string[] {
+					@"%CURRENT%\..\Tools\mkisofs",
+					@"%CURRENT%\Tools\mkisofs",
 
-				@"%ProgramFiles%\VMware\VMware Player",
-				@"%ProgramFiles(x86)%\VMware\VMware Player",
-				@"%ProgramFiles%\cdrtools",
-				@"%ProgramFiles(x86)%\cdrtools",
-				"/bin"
-			}
-		);
+					@"%APPDIR%\Tools\mkisofs",
+					@"%APPDIR%\..\Tools\mkisofs",
+
+					@"%MOSA%\Tools\mkisofs",
+					@"%MOSATOOLS%\mkisofs",
+
+					@"%ProgramFiles%\VMware\VMware Player",
+					@"%ProgramFiles(x86)%\VMware\VMware Player",
+					@"%ProgramFiles%\cdrtools",
+					@"%ProgramFiles(x86)%\cdrtools",
+				})
+			: TryFind("mkisofs", LinuxDirectories);
 	}
 
 	private static string FindNdisasm()
 	{
-		return TryFind(
-			new string[] { "ndisasm.exe", "ndisasm" },
-			new string[] {
-				@"%MOSA%\Tools\ndisasm",
-				@"%CURRENT%\..\Tools\ndisasm",
-				@"%CURRENT%\Tools\ndisasm",
-				@"%APPDIR%\Tools\ndisasm",
-				@"%APPDIR%\..\Tools\ndisasm",
-				@"%MOSATOOLS%\ndisasm",
-				"/bin"
-			}
-		);
+		return IsWindows
+			? TryFind("ndisasm.exe",
+				new string[] {
+					@"%CURRENT%\..\Tools\ndisasm",
+					@"%CURRENT%\Tools\ndisasm",
+
+					@"%APPDIR%\Tools\ndisasm",
+					@"%APPDIR%\..\Tools\ndisasm",
+
+					@"%MOSA%\Tools\ndisasm",
+					@"%MOSATOOLS%\ndisasm",
+				})
+			: TryFind("ndisasm", LinuxDirectories);
 	}
 
 	private static string FindVmwarePlayer()
 	{
-		return TryFind(
-			new string[] { "vmplayer.exe", "vmplayer" },
-			new string[] {
-				@"%ProgramFiles%\VMware\VMware Player",
-				@"%ProgramFiles(x86)%\VMware\VMware Player",
-				"/bin"
-			}
-		);
+		return IsWindows
+			? TryFind("vmplayer.exe",
+				new string[] {
+					@"%ProgramFiles%\VMware\VMware Player",
+					@"%ProgramFiles(x86)%\VMware\VMware Player",
+				})
+			: TryFind("vmplayer", LinuxDirectories);
 	}
 
 	private static string FindVmwareWorkstation()
 	{
-		return TryFind(
-			new string[] { "vmware.exe", "vmware" },
-			new string[] {
-				@"%ProgramFiles%\VMware\VMware Workstation",
-				@"%ProgramFiles(x86)%\VMware\VMware Workstation",
-				"/bin"
-			}
-		);
+		return IsWindows
+			? TryFind("vmware.exe",
+				new string[] {
+					@"%ProgramFiles%\VMware\VMware Workstation",
+					@"%ProgramFiles(x86)%\VMware\VMware Workstation",
+				})
+			: TryFind("vmware", LinuxDirectories);
 	}
 
 	private static string FindVirtualBox()
 	{
-		return TryFind(
-			new string[] { "VBoxManage.exe", "VBoxManage" },
-			new string[] {
-				@"%ProgramFiles%\Oracle",
-				@"%ProgramFiles(x86)%\Oracle",
-				"/bin"
-			}
-		);
+		return IsWindows
+			? TryFind("VBoxManage.exe",
+				new string[] {
+					@"%ProgramFiles%\Oracle",
+					@"%ProgramFiles(x86)%\Oracle",
+				})
+			: TryFind("VBoxManage", LinuxDirectories);
 	}
 
 	private static string FindBochs()
 	{
-		return TryFind(
-			new string[] { "bochs.exe", "bochs" },
-			new string[] {
-				@"%ProgramFiles%\Bochs-2.6.9",
-				@"%ProgramFiles(x86)%\Bochs-2.6.9",
-				@"%ProgramFiles%\Bochs-2.6.8",
-				@"%ProgramFiles(x86)%\Bochs-2.6.8",
-				@"%ProgramFiles%\Bochs-2.6.5",
-				@"%ProgramFiles(x86)%\Bochs-2.6.5",
-				@"%ProgramFiles%\Bochs-2.6.2",
-				@"%ProgramFiles(x86)%\Bochs-2.6.2",
-				@"%ProgramFiles%\Bochs-2.7",
-				@"%ProgramFiles(x86)%\Bochs-2.7",
+		return IsWindows
+			? TryFind("bochs.exe",
+				new string[] {
+					@"%ProgramFiles%\Bochs-2.6.9",
+					@"%ProgramFiles(x86)%\Bochs-2.6.9",
+					@"%ProgramFiles%\Bochs-2.6.8",
+					@"%ProgramFiles(x86)%\Bochs-2.6.8",
+					@"%ProgramFiles%\Bochs-2.6.5",
+					@"%ProgramFiles(x86)%\Bochs-2.6.5",
+					@"%ProgramFiles%\Bochs-2.6.2",
+					@"%ProgramFiles(x86)%\Bochs-2.6.2",
+					@"%ProgramFiles%\Bochs-2.7",
+					@"%ProgramFiles(x86)%\Bochs-2.7",
 
-				@"%MOSA%\Tools\Bochs",
-				@"%CURRENT%\..\Tools\Bochs",
-				@"%CURRENT%\Tools\Bochs",
-				@"%APPDIR%\Tools\Bochs",
-				@"%APPDIR%\..\Tools\Bochs",
-				@"%MOSATOOLS%\Bochs",
+					@"%CURRENT%\..\Tools\Bochs",
+					@"%CURRENT%\Tools\Bochs",
 
-				"/bin",
-				"/usr/bin"
-			}
-		);
+					@"%APPDIR%\Tools\Bochs",
+					@"%APPDIR%\..\Tools\Bochs",
+
+					@"%MOSA%\Tools\Bochs",
+					@"%MOSATOOLS%\Bochs",
+				 })
+			: TryFind("bochs", LinuxDirectories);
 	}
 
 	private static string FindQemuImg()
 	{
-		return TryFind(
-			new string[] { "qemu-img.exe", "qemu-img" },
-			new string[]
-			{
-				@"%MOSA%\Tools\QEMU",
-				@"%CURRENT%\..\Tools\QEMU",
-				@"%CURRENT%\Tools\QEMU",
-				@"%APPDIR%\Tools\QEMU",
-				@"%APPDIR%\..\Tools\QEMU",
-				@"%MOSATOOLS%\QEMU",
+		return IsWindows
+			? TryFind("qemu-img.exe",
+				new string[]
+				{
+					@"%CURRENT%\..\Tools\qemu",
+					@"%CURRENT%\Tools\qemu",
 
-				@"%ProgramFiles%\qemu",
-				@"%ProgramFiles(x86)%\qemu",
-				@"%ProgramFiles(x86)%\Mosa-Project\Tools\qemu",
-				"/bin"
-			}
+					@"%APPDIR%\Tools\qemu",
+					@"%APPDIR%\..\Tools\qemu",
+
+					@"%MOSA%\Tools\qemu",
+					@"%MOSATOOLS%\qemu",
+
+					@"%ProgramFiles%\qemu",
+					@"%ProgramFiles(x86)%\qemu",
+					@"%ProgramFiles(x86)%\Mosa-Project\Tools\qemu",
+				})
+			: TryFind("qemu-img", LinuxDirectories);
+	}
+
+	private static string FindQemuBIOS()
+	{
+		return Path.GetDirectoryName(
+			IsWindows
+				? TryFind("bios.bin",
+					new string[] {
+						@"%CURRENT%\..\Tools\qemu\share",
+						@"%CURRENT%\Tools\qemu\share",
+
+						@"%APPDIR%\Tools\qemu\share",
+						@"%APPDIR%\..\Tools\qemu\share",
+
+						@"%MOSA%\qemu",
+						@"%MOSA%\qemu\share",
+						@"%MOSATOOLS%\qemu",
+						@"%MOSATOOLS%\qemu\share",
+
+						@"%ProgramFiles%\qemu",
+						@"%ProgramFiles%\qemu\share",
+						@"%ProgramFiles(x86)%\qemu",
+						@"%ProgramFiles(x86)%\qemu\share",
+					})
+				: TryFind("bios.bin",
+					new string[] {
+						"/usr/share/qemu",
+						"/usr/share/seabios"
+					})
 		);
 	}
 
-	private static string FindQemuBIOS(string qemu)
+	private static string FindQemuEDK2X86()
 	{
-		if (qemu == null)
-			return null;
-
-		return Path.GetDirectoryName(
-			TryFind(
-				new string[] { "bios.bin" },
+		return IsWindows
+			? TryFind("edk2-i386-code.fd",
 				new string[] {
-					Path.GetDirectoryName(qemu),
-					Path.Combine(Path.GetDirectoryName(qemu), "bios"),
+					@"%CURRENT%\..\Tools\qemu\share",
+					@"%CURRENT%\Tools\qemu\share",
+
+					@"%APPDIR%\Tools\qemu\share",
+					@"%APPDIR%\..\Tools\qemu\share",
+
+					@"%MOSA%\qemu",
+					@"%MOSA%\qemu\share",
 
 					@"%MOSATOOLS%\qemu",
-					@"%MOSATOOLS%\qemu\bios",
+					@"%MOSATOOLS%\qemu\share",
 
+					@"%ProgramFiles%\qemu",
+					@"%ProgramFiles%\qemu\share",
+					@"%ProgramFiles(x86)%\qemu",
+					@"%ProgramFiles(x86)%\qemu\share",
+				})
+			: TryFind("edk2-i386-code.fd",
+				new string[] {
 					"/usr/share/qemu",
-					"/usr/share/seabios"
-				}
-			)
-		);
+					"/usr/share/ovmf",
+					"/usr/share/OVMF"
+				});
 	}
 
-	private static string FindQemuEDK2X86(string qemu)
+	private static string FindQemuEDK2X64()
 	{
-		if (qemu == null)
-			return null;
+		return IsWindows
+			? TryFind("edk2-x86_64-code.fd",
+				new string[] {
+					@"%CURRENT%\..\Tools\qemu\share",
+					@"%CURRENT%\Tools\qemu\share",
 
-		return TryFind(
-			new string[] { "edk2-i386-code.fd" },
-			new string[] {
-				Path.GetDirectoryName(qemu),
+					@"%APPDIR%\Tools\qemu\share",
+					@"%APPDIR%\..\Tools\qemu\share",
 
-				@"%MOSATOOLS%\qemu",
+					@"%MOSA%\qemu",
+					@"%MOSA%\qemu\share",
 
-				"/usr/share/qemu",
-				"/usr/share/ovmf",
-				"/usr/share/OVMF"
-			}
-		);
+					@"%MOSATOOLS%\qemu",
+					@"%MOSATOOLS%\qemu\share",
+
+					@"%ProgramFiles%\qemu",
+					@"%ProgramFiles%\qemu\share",
+					@"%ProgramFiles(x86)%\qemu",
+					@"%ProgramFiles(x86)%\qemu\share",
+				})
+			: TryFind("edk2-x86_64-code.fd",
+				new string[] {
+					"/usr/share/qemu",
+					"/usr/share/ovmf",
+					"/usr/share/OVMF"
+				});
 	}
 
-	private static string FindQemuEDK2X64(string qemu)
+	private static string FindQemuEDK2ARM()
 	{
-		if (qemu == null)
-			return null;
+		return IsWindows
+			? TryFind("edk2-arm-code.fd",
+				new string[] {
+					@"%CURRENT%\..\Tools\qemu\share",
+					@"%CURRENT%\Tools\qemu\share",
 
-		return TryFind(
-			new string[] { "edk2-x86_64-code.fd" },
-			new string[] {
-				Path.GetDirectoryName(qemu),
+					@"%APPDIR%\Tools\qemu\share",
+					@"%APPDIR%\..\Tools\qemu\share",
 
-				@"%MOSATOOLS%\qemu",
+					@"%MOSA%\qemu",
+					@"%MOSA%\qemu\share",
 
-				"/usr/share/qemu",
-				"/usr/share/ovmf",
-				"/usr/share/OVMF"
-			}
-		);
-	}
+					@"%MOSATOOLS%\qemu",
+					@"%MOSATOOLS%\qemu\share",
 
-	private static string FindQemuEDK2ARM(string qemu)
-	{
-		if (qemu == null)
-			return null;
-
-		return TryFind(
-			new string[] { "edk2-arm-code.fd" },
-			new string[] {
-				Path.GetDirectoryName(qemu),
-
-				@"%MOSATOOLS%\qemu",
-
-				"/usr/share/qemu",
-				"/usr/share/ovmf",
-				"/usr/share/OVMF"
-			}
-		);
+					@"%ProgramFiles%\qemu",
+					@"%ProgramFiles%\qemu\share",
+					@"%ProgramFiles(x86)%\qemu",
+					@"%ProgramFiles(x86)%\qemu\share"
+				})
+			: TryFind("edk2-x86_64-code.fd",
+				new string[] {
+					"/usr/share/qemu",
+					"/usr/share/ovmf",
+					"/usr/share/OVMF"
+				});
 	}
 
 	private static void Set(Settings settings, string name, string value)
@@ -320,13 +367,13 @@ public static class AppLocationsSettings
 		if (!string.IsNullOrWhiteSpace(AppDirectory))
 			directory = directory.Replace("%APPDIR%", AppDirectory);
 
-		if (directory.Contains("%"))
+		if (directory.Contains('%'))
 			return null;
 
 		return directory;
 	}
 
-	private static string TryFind(IList<string> files, IList<string> searchdirectories = null)
+	private static string TryFind(string file, IList<string> searchdirectories = null)
 	{
 		if (searchdirectories != null)
 		{
@@ -337,14 +384,11 @@ public static class AppLocationsSettings
 				if (dir == null)
 					continue;
 
-				foreach (var file in files)
-				{
-					var location = SearchSubdirectories(dir, file);
+				var location = SearchSubdirectories(dir, file);
 
-					if (location != null)
-					{
-						return location;
-					}
+				if (location != null)
+				{
+					return location;
 				}
 			}
 		}
