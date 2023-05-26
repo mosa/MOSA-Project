@@ -140,6 +140,8 @@ public class Builder : BaseLauncher
 			}
 		}
 
+		Output($"Compling: {LauncherSettings.SourceFiles[0]}");
+
 		var compiler = new MosaCompiler(Settings, CompilerHooks, new ClrModuleLoader(), new ClrTypeResolver());
 
 		compiler.Load();
