@@ -367,36 +367,10 @@ public static class AppLocationsSettings
 		if (!string.IsNullOrWhiteSpace(AppDirectory))
 			directory = directory.Replace("%APPDIR%", AppDirectory);
 
-		if (directory.Contains("%"))
+		if (directory.Contains('%'))
 			return null;
 
 		return directory;
-	}
-
-	private static string TryFind(IList<string> files, IList<string> searchdirectories = null)
-	{
-		if (searchdirectories != null)
-		{
-			foreach (var directory in searchdirectories)
-			{
-				var dir = ReplaceWithParameters(directory);
-
-				if (dir == null)
-					continue;
-
-				foreach (var file in files)
-				{
-					var location = SearchSubdirectories(dir, file);
-
-					if (location != null)
-					{
-						return location;
-					}
-				}
-			}
-		}
-
-		return null;
 	}
 
 	private static string TryFind(string file, IList<string> searchdirectories = null)
