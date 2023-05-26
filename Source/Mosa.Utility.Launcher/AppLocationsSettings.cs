@@ -22,10 +22,10 @@ public static class AppLocationsSettings
 		var settings = new Settings();
 
 		Set(settings, "AppLocation.Qemu", FindQemu());
-		Set(settings, "AppLocation.QemuBIOS", FindQemuBIOS(settings.GetValue("AppLocation.Qemu")));
-		Set(settings, "AppLocation.QemuEDK2X86", FindQemuEDK2X86(settings.GetValue("AppLocation.Qemu")));
-		Set(settings, "AppLocation.QemuEDK2X64", FindQemuEDK2X64(settings.GetValue("AppLocation.Qemu")));
-		Set(settings, "AppLocation.QemuEDK2ARM", FindQemuEDK2ARM(settings.GetValue("AppLocation.Qemu")));
+		Set(settings, "AppLocation.QemuBIOS", FindQemuBIOS());
+		Set(settings, "AppLocation.QemuEDK2X86", FindQemuEDK2X86());
+		Set(settings, "AppLocation.QemuEDK2X64", FindQemuEDK2X64());
+		Set(settings, "AppLocation.QemuEDK2ARM", FindQemuEDK2ARM());
 		Set(settings, "AppLocation.QemuImg", FindQemuImg());
 		Set(settings, "AppLocation.Bochs", FindBochs());
 		Set(settings, "AppLocation.VmwarePlayer", FindVmwarePlayer());
@@ -41,16 +41,22 @@ public static class AppLocationsSettings
 	private static string FindQemu()
 	{
 		return TryFind(
-			new string[] { /*"qemu-system-x86_64", "qemu-system-x86_64.exe", */"qemu-system-i386.exe", "qemu-system-i386" },
+			new string[] { "qemu-system-i386.exe", "qemu-system-i386" },
 			new string[] {
-				@"%MOSA%\Tools\QEMU",
-				@"%CURRENT%\..\Tools\QEMU",
-				@"%CURRENT%\Tools\QEMU",
-				@"%APPDIR%\Tools\QEMU",
-				@"%APPDIR%\..\Tools\QEMU",
+				@"%CURRENT%\qemu",
+				@"%CURRENT%\..\Tools\qemu",
+				@"%CURRENT%\Tools\qemu",
+
+				@"%APPDIR%\qemu",
+				@"%APPDIR%\Tools\qemu",
+				@"%APPDIR%\..\Tools\qemu",
+
+				@"%MOSA%\Tools\qemu",
+				@"%MOSATOOLS%\qemu",
+
 				@"%ProgramFiles%\qemu",
 				@"%ProgramFiles(x86)%\qemu",
-				@"%MOSATOOLS%\QEMU",
+
 				"/bin",
 				"/usr/bin"
 			}
@@ -62,11 +68,13 @@ public static class AppLocationsSettings
 		return TryFind(
 			new string[] { "gdb.exe" },
 			new string[] {
-				@"%MOSA%\Tools\gdb",
 				@"%CURRENT%\..\Tools\gdb",
 				@"%CURRENT%\Tools\gdb",
+
 				@"%APPDIR%\Tools\gdb",
 				@"%APPDIR%\..\Tools\gdb",
+
+				@"%MOSA%\Tools\gdb",
 				@"%MOSATOOLS%\gdb",
 
 				@"C:\cygwin64\bin",
@@ -85,17 +93,20 @@ public static class AppLocationsSettings
 		return TryFind(
 			new string[] { "mkisofs.exe", "mkisofs" },
 			new string[] {
-				@"%MOSA%\Tools\mkisofs",
 				@"%CURRENT%\..\Tools\mkisofs",
 				@"%CURRENT%\Tools\mkisofs",
+
 				@"%APPDIR%\Tools\mkisofs",
 				@"%APPDIR%\..\Tools\mkisofs",
+
+				@"%MOSA%\Tools\mkisofs",
 				@"%MOSATOOLS%\mkisofs",
 
 				@"%ProgramFiles%\VMware\VMware Player",
 				@"%ProgramFiles(x86)%\VMware\VMware Player",
 				@"%ProgramFiles%\cdrtools",
 				@"%ProgramFiles(x86)%\cdrtools",
+
 				"/bin"
 			}
 		);
@@ -106,12 +117,15 @@ public static class AppLocationsSettings
 		return TryFind(
 			new string[] { "ndisasm.exe", "ndisasm" },
 			new string[] {
-				@"%MOSA%\Tools\ndisasm",
 				@"%CURRENT%\..\Tools\ndisasm",
 				@"%CURRENT%\Tools\ndisasm",
+
 				@"%APPDIR%\Tools\ndisasm",
 				@"%APPDIR%\..\Tools\ndisasm",
+
+				@"%MOSA%\Tools\ndisasm",
 				@"%MOSATOOLS%\ndisasm",
+
 				"/bin"
 			}
 		);
@@ -169,11 +183,13 @@ public static class AppLocationsSettings
 				@"%ProgramFiles%\Bochs-2.7",
 				@"%ProgramFiles(x86)%\Bochs-2.7",
 
-				@"%MOSA%\Tools\Bochs",
 				@"%CURRENT%\..\Tools\Bochs",
 				@"%CURRENT%\Tools\Bochs",
+
 				@"%APPDIR%\Tools\Bochs",
 				@"%APPDIR%\..\Tools\Bochs",
+
+				@"%MOSA%\Tools\Bochs",
 				@"%MOSATOOLS%\Bochs",
 
 				"/bin",
@@ -188,35 +204,45 @@ public static class AppLocationsSettings
 			new string[] { "qemu-img.exe", "qemu-img" },
 			new string[]
 			{
-				@"%MOSA%\Tools\QEMU",
-				@"%CURRENT%\..\Tools\QEMU",
-				@"%CURRENT%\Tools\QEMU",
-				@"%APPDIR%\Tools\QEMU",
-				@"%APPDIR%\..\Tools\QEMU",
-				@"%MOSATOOLS%\QEMU",
+				@"%CURRENT%\..\Tools\qemu",
+				@"%CURRENT%\Tools\qemu",
+
+				@"%APPDIR%\Tools\qemu",
+				@"%APPDIR%\..\Tools\qemu",
+
+				@"%MOSA%\Tools\qemu",
+				@"%MOSATOOLS%\qemu",
 
 				@"%ProgramFiles%\qemu",
 				@"%ProgramFiles(x86)%\qemu",
 				@"%ProgramFiles(x86)%\Mosa-Project\Tools\qemu",
+
 				"/bin"
 			}
 		);
 	}
 
-	private static string FindQemuBIOS(string qemu)
+	private static string FindQemuBIOS()
 	{
-		if (qemu == null)
-			return null;
-
 		return Path.GetDirectoryName(
 			TryFind(
 				new string[] { "bios.bin" },
 				new string[] {
-					Path.GetDirectoryName(qemu),
-					Path.Combine(Path.GetDirectoryName(qemu), "bios"),
+					@"%CURRENT%\..\Tools\qemu\share",
+					@"%CURRENT%\Tools\qemu\share",
 
+					@"%APPDIR%\Tools\qemu\share",
+					@"%APPDIR%\..\Tools\qemu\share",
+
+					@"%MOSA%\qemu",
+					@"%MOSA%\qemu\share",
 					@"%MOSATOOLS%\qemu",
-					@"%MOSATOOLS%\qemu\bios",
+					@"%MOSATOOLS%\qemu\share",
+
+					@"%ProgramFiles%\qemu",
+					@"%ProgramFiles%\qemu\share",
+					@"%ProgramFiles(x86)%\qemu",
+					@"%ProgramFiles(x86)%\qemu\share",
 
 					"/usr/share/qemu",
 					"/usr/share/seabios"
@@ -225,17 +251,27 @@ public static class AppLocationsSettings
 		);
 	}
 
-	private static string FindQemuEDK2X86(string qemu)
+	private static string FindQemuEDK2X86()
 	{
-		if (qemu == null)
-			return null;
-
 		return TryFind(
 			new string[] { "edk2-i386-code.fd" },
 			new string[] {
-				Path.GetDirectoryName(qemu),
+				@"%CURRENT%\..\Tools\qemu\share",
+				@"%CURRENT%\Tools\qemu\share",
+
+				@"%APPDIR%\Tools\qemu\share",
+				@"%APPDIR%\..\Tools\qemu\share",
+
+				@"%MOSA%\qemu",
+				@"%MOSA%\qemu\share",
 
 				@"%MOSATOOLS%\qemu",
+				@"%MOSATOOLS%\qemu\share",
+
+				@"%ProgramFiles%\qemu",
+				@"%ProgramFiles%\qemu\share",
+				@"%ProgramFiles(x86)%\qemu",
+				@"%ProgramFiles(x86)%\qemu\share",
 
 				"/usr/share/qemu",
 				"/usr/share/ovmf",
@@ -244,17 +280,27 @@ public static class AppLocationsSettings
 		);
 	}
 
-	private static string FindQemuEDK2X64(string qemu)
+	private static string FindQemuEDK2X64()
 	{
-		if (qemu == null)
-			return null;
-
 		return TryFind(
 			new string[] { "edk2-x86_64-code.fd" },
 			new string[] {
-				Path.GetDirectoryName(qemu),
+				@"%CURRENT%\..\Tools\qemu\share",
+				@"%CURRENT%\Tools\qemu\share",
+
+				@"%APPDIR%\Tools\qemu\share",
+				@"%APPDIR%\..\Tools\qemu\share",
+
+				@"%MOSA%\qemu",
+				@"%MOSA%\qemu\share",
 
 				@"%MOSATOOLS%\qemu",
+				@"%MOSATOOLS%\qemu\share",
+
+				@"%ProgramFiles%\qemu",
+				@"%ProgramFiles%\qemu\share",
+				@"%ProgramFiles(x86)%\qemu",
+				@"%ProgramFiles(x86)%\qemu\share",
 
 				"/usr/share/qemu",
 				"/usr/share/ovmf",
@@ -263,17 +309,27 @@ public static class AppLocationsSettings
 		);
 	}
 
-	private static string FindQemuEDK2ARM(string qemu)
+	private static string FindQemuEDK2ARM()
 	{
-		if (qemu == null)
-			return null;
-
 		return TryFind(
 			new string[] { "edk2-arm-code.fd" },
 			new string[] {
-				Path.GetDirectoryName(qemu),
+				@"%CURRENT%\..\Tools\qemu\share",
+				@"%CURRENT%\Tools\qemu\share",
+
+				@"%APPDIR%\Tools\qemu\share",
+				@"%APPDIR%\..\Tools\qemu\share",
+
+				@"%MOSA%\qemu",
+				@"%MOSA%\qemu\share",
 
 				@"%MOSATOOLS%\qemu",
+				@"%MOSATOOLS%\qemu\share",
+
+				@"%ProgramFiles%\qemu",
+				@"%ProgramFiles%\qemu\share",
+				@"%ProgramFiles(x86)%\qemu",
+				@"%ProgramFiles(x86)%\qemu\share",
 
 				"/usr/share/qemu",
 				"/usr/share/ovmf",

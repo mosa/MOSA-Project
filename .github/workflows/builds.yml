@@ -127,8 +127,8 @@ jobs:
         run: dotnet build Source/Mosa.Linux.sln
       - name: Update Package Respository
         run: sudo apt-get -y -o Acquire::Check-Valid-Until=false update
-      - name: Install Qemu
-        run: sudo apt-get install -y wget qemu qemu-system qemu-system-x86
+      - name: Install Qemu Dependencies
+        run: sudo apt-get install -y libsdl2-image-2.0-0 libvirglrenderer1 libpixman-1-0 libepoxy0 libdw1 libpng16-16 zlib1g libjpeg8 libudev1 libusb-1.0-0 liblzo2-2 libgio-cil libglib2.0-0 libzstd1 libncursesw6 libgbm1 libgtk-3-0 libgdk3.0-cil libcairo2 libgdk-pixbuf-2.0-0 libx11-6 libasound2 libpulse0 libsndio7.0 libbz2-1.0 libc6 libgcc-s1 
       - name: Unit Tests - All Performance Optimizations
         run: dotnet bin/Mosa.Utility.UnitTests.dll -oMax -s Emulator.Display=false
       - name: Unit Tests - No Optimizations
