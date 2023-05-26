@@ -25,7 +25,7 @@ public static class CompilerBugTests
 	}
 
 	[MosaUnitTest]
-	public static unsafe bool TestMethodGeneric()
+	public static bool TestMethodGeneric()
 	{
 		_ = new Span<byte>();
 		return true;

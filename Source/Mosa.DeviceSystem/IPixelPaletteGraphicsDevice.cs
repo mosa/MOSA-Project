@@ -9,10 +9,8 @@ namespace Mosa.DeviceSystem;
 /// </summary>
 public interface IPixelPaletteGraphicsDevice
 {
-	/// <summary>
-	/// Writes the pixel.
-	/// </summary>
-	/// <param name="colorIndex">Index of the color.</param>
+	/// <summary>Writes the pixel.</summary>
+	/// <param name="color"></param>
 	/// <param name="x">The x.</param>
 	/// <param name="y">The y.</param>
 	void WritePixel(Color color, uint x, uint y);
@@ -25,10 +23,8 @@ public interface IPixelPaletteGraphicsDevice
 	/// <returns></returns>
 	Color ReadPixel(uint x, uint y);
 
-	/// <summary>
-	/// Clears device with the specified color index.
-	/// </summary>
-	/// <param name="colorIndex">Index of the color.</param>
+	/// <summary>Clears device with the specified color index.</summary>
+	/// <param name="color"></param>
 	void Clear(Color color);
 
 	/// <summary>
