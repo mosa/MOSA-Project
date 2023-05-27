@@ -17,7 +17,7 @@ public sealed class Compare32x64 : BaseIRInstruction
 	{
 	}
 
-	public override bool IsCompareInstruction => true;
+	public override bool IsIRCompareInstruction => true;
 
 	public override BuiltInType ResultType => BuiltInType.Boolean;
 }

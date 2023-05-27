@@ -59,7 +59,7 @@ public class BuildIRInstructionFiles : BuildBaseTemplate
 		if (node.Branch != null && node.Branch == "true")
 		{
 			Lines.AppendLine();
-			Lines.AppendLine("\tpublic override bool IsBranchInstruction => true;");
+			Lines.AppendLine("\tpublic override bool IsIRBranchInstruction => true;");
 		}
 
 		if (node.Phi != null && node.Phi == "true")
@@ -71,13 +71,13 @@ public class BuildIRInstructionFiles : BuildBaseTemplate
 		if (node.Move != null && node.Move == "true")
 		{
 			Lines.AppendLine();
-			Lines.AppendLine("\tpublic override bool IsMoveInstruction => true;");
+			Lines.AppendLine("\tpublic override bool IsIRMoveInstruction => true;");
 		}
 
 		if (node.Compare != null && node.Compare == "true")
 		{
 			Lines.AppendLine();
-			Lines.AppendLine("\tpublic override bool IsCompareInstruction => true;");
+			Lines.AppendLine("\tpublic override bool IsIRCompareInstruction => true;");
 		}
 
 		if (node.ResultType != null && node.ResultType != "")

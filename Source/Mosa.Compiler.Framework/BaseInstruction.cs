@@ -91,13 +91,13 @@ public abstract class BaseInstruction
 
 	public virtual bool IsIRInstruction => false;
 
-	public virtual bool IsBranchInstruction => false;
-
 	public virtual bool IsPhiInstruction => false;
 
-	public virtual bool IsMoveInstruction => false;
+	public virtual bool IsIRBranchInstruction => false;
 
-	public virtual bool IsCompareInstruction => false;
+	public virtual bool IsIRMoveInstruction => false;
+
+	public virtual bool IsIRCompareInstruction => false;
 
 	#endregion Is/Has Properties
 

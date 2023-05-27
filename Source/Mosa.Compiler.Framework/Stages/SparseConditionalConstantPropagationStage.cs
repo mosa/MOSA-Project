@@ -168,7 +168,7 @@ public class SparseConditionalConstantPropagationStage : BaseMethodCompilerStage
 				if (node.BranchTargetsCount == 0)
 					continue;
 
-				if (node.Instruction.IsBranchInstruction)
+				if (node.Instruction.IsIRBranchInstruction)
 				{
 					trace?.Log("*** RemoveBranchesToDeadBlocks");
 					trace?.Log($"REMOVED:\t{node}");
