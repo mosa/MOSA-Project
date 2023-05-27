@@ -135,6 +135,8 @@ public class SparseConditionalConstantPropagationStage : BaseMethodCompilerStage
 		trace?.Log($"REMOVED:\t{defNode}");
 		defNode.SetNop();
 		InstructionsRemovedCount.Increment();
+
+		MethodCompiler.CreateTranformInstructionTrace(this, Steps++);
 	}
 
 	protected void RemoveDeadBlocks(List<BasicBlock> deadBlocks)
