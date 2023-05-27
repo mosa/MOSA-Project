@@ -15,6 +15,6 @@ public sealed class Phi32Update : BaseTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		TransformContext.UpdatePhi(context);
+		TransformContext.UpdatePhi(context.Node);
 	}
 }

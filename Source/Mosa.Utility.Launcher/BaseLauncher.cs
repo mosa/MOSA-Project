@@ -44,7 +44,6 @@ public class BaseLauncher
 		settings.SetValue("Emulator.Serial.Port", 9999);
 		settings.SetValue("Emulator.Serial.Pipe", "MOSA");
 		settings.SetValue("Launcher.PlugKorlib", true);
-		settings.SetValue("Launcher.HuntForCorLib", true);
 	}
 
 	protected void NormalizeSettings()

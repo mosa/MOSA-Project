@@ -216,8 +216,8 @@ public partial class MainWindow : Window
 		ExitOnLaunch.IsChecked = settings.GetValue("Launcher.Exit", ExitOnLaunch.IsChecked!.Value);
 
 		QemuGdb.IsChecked = settings.GetValue("Emulator.GDB", QemuGdb.IsChecked!.Value);
-		LaunchGdb.IsChecked = settings.GetValue("Launcher.LaunchGDB", LaunchGdb.IsChecked!.Value);
-		MosaDbger.IsChecked = settings.GetValue("Launcher.LaunchDebugger", MosaDbger.IsChecked!.Value);
+		LaunchGdb.IsChecked = settings.GetValue("Launcher.GDB", LaunchGdb.IsChecked!.Value);
+		MosaDbger.IsChecked = settings.GetValue("Launcher.Debugger", MosaDbger.IsChecked!.Value);
 
 		MultiThreading.IsChecked = settings.GetValue("Compiler.Multithreading", MultiThreading.IsChecked!.Value);
 		MethodScanner.IsChecked = settings.GetValue("Compiler.MethodScanner", MethodScanner.IsChecked!.Value);
@@ -315,8 +315,8 @@ public partial class MainWindow : Window
 		settings.SetValue("Launcher.Exit", ExitOnLaunch.IsChecked!.Value);
 
 		settings.SetValue("Emulator.GDB", QemuGdb.IsChecked!.Value);
-		settings.SetValue("Launcher.LaunchGDB", LaunchGdb.IsChecked!.Value);
-		settings.SetValue("Launcher.LaunchDebugger", MosaDbger.IsChecked!.Value);
+		settings.SetValue("Launcher.GDB", LaunchGdb.IsChecked!.Value);
+		settings.SetValue("Launcher.Debugger", MosaDbger.IsChecked!.Value);
 
 		settings.SetValue("Compiler.Multithreading", MultiThreading.IsChecked!.Value);
 		settings.SetValue("Compiler.Multithreading.MaxThreads", 0);
@@ -449,7 +449,6 @@ public partial class MainWindow : Window
 		settings.SetValue("Launcher.Launch", true);
 		settings.SetValue("Launcher.Exit", true);
 		settings.SetValue("Launcher.PlugKorlib", true);
-		settings.SetValue("Launcher.HuntForCorLib", true);
 		settings.SetValue("Linker.Dwarf", false);
 		settings.SetValue("OS.Name", OsNameTxt.Text);
 	}

@@ -56,7 +56,6 @@ internal static class Program
 		settings.SetValue("Launcher.Start", false);
 		settings.SetValue("Launcher.Launch", false);
 		settings.SetValue("Launcher.Exit", true);
-		settings.SetValue("Launcher.HuntForCorLib", true);
 		settings.SetValue("Image.Folder", Path.Combine(Path.GetTempPath(), "MOSA-UnitTest"));
 		settings.SetValue("Image.Format", "IMG");
 		settings.SetValue("Image.FileSystem", "FAT16");

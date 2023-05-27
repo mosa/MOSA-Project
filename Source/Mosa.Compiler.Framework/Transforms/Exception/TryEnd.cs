@@ -34,7 +34,7 @@ public sealed class TryEnd : BaseExceptionTransform
 
 		var next = FindNextEnclosingFinallyHandler(transform, immediate);
 
-		if (next != null && next.FilterStart < immediate.HandlerEnd)
+		if (next != null && next.HandlerEnd > immediate.HandlerEnd)
 		{
 			context.SetInstruction(IRInstruction.MoveObject, transform.LeaveTargetRegister, Operand.CreateConstant32(target.Label));
 			context.AppendInstruction(IRInstruction.MoveObject, transform.ExceptionRegister, Operand.NullObject);

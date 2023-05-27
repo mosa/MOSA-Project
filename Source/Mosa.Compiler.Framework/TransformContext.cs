@@ -313,10 +313,6 @@ public sealed class TransformContext
 		BaseMethodCompilerStage.UpdatePhi(node);
 	}
 
-	public static void UpdatePhi(Context context)
-	{
-		BaseMethodCompilerStage.UpdatePhi(context);
-	}
 
 	#endregion Phi Helpers
 
