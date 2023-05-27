@@ -113,7 +113,6 @@ public static class CommandLineArguments
 			new Argument { Name = "-memory", Setting = "Emulator.Memory"},
 			new Argument { Name = "-cores", Setting = "Emulator.Cores"},
 			new Argument { Name = "-gdb", Setting = "Emulator.GDB", Value="false"},
-			new Argument { Name = "-qemu-gdb", Setting = "Emulator.GDB", Value="false"},
 
 			// Launcher - Image:
 			new Argument { Name = "-vhd", Setting = "Image.Format", Value="vhd"},
@@ -307,7 +306,7 @@ public static class CommandLineArguments
 			new Argument { Name = "-o8", Setting = "Optimizations.Inline.Explicit", Value = "true"},
 			new Argument { Name = "-o8", Setting = "Optimizations.LoopInvariantCodeMotion", Value = "true"},
 			new Argument { Name = "-o8", Setting = "Optimizations.BitTracker", Value = "true"},
-			new Argument { Name = "-o8", Setting = "Optimizations.TwoPass", Value = "true"},
+			new Argument { Name = "-o8", Setting = "Optimizations.TwoPass", Value = "false"},
 			new Argument { Name = "-o8", Setting = "Optimizations.Inline.Maximum", Value = "10"},
 			new Argument { Name = "-o8", Setting = "Optimizations.Basic.Window", Value = "5"},
 
