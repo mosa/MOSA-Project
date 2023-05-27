@@ -1012,11 +1012,6 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 		};
 	}
 
-	public static bool IsPhiInstruction(BaseInstruction instruction)
-	{
-		return BaseCodeTransformationStage.IsPhiInstruction(instruction);
-	}
-
 	#endregion Helpers
 
 	#region Block Helpers

@@ -17,5 +17,7 @@ public sealed class CompareR4 : BaseIRInstruction
 	{
 	}
 
+	public override bool IsCompareInstruction => true;
+
 	public override BuiltInType ResultType => BuiltInType.Boolean;
 }

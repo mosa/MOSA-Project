@@ -481,7 +481,7 @@ public abstract class BaseMethodCompilerStage
 			if (node.IsEmptyOrNop)
 				continue;
 
-			if (!BaseMethodCompilerStage.IsPhiInstruction(node.Instruction))
+			if (!node.Instruction.IsPhiInstruction)
 				break;
 
 			UpdatePhi(node);
@@ -527,7 +527,7 @@ public abstract class BaseMethodCompilerStage
 			if (node.IsEmptyOrNop)
 				continue;
 
-			if (!IsPhiInstruction(node.Instruction))
+			if (!node.Instruction.IsPhiInstruction)
 				break;
 
 			var sourceBlocks = node.PhiBlocks;
@@ -566,7 +566,7 @@ public abstract class BaseMethodCompilerStage
 			if (node.IsEmptyOrNop)
 				continue;
 
-			if (!IsPhiInstruction(node.Instruction))
+			if (!node.Instruction.IsPhiInstruction)
 				break;
 
 			var index = node.PhiBlocks.IndexOf(source);
@@ -584,7 +584,7 @@ public abstract class BaseMethodCompilerStage
 			if (node.IsEmptyOrNop)
 				continue;
 
-			if (IsPhiInstruction(node.Instruction))
+			if (node.Instruction.IsPhiInstruction)
 				return true;
 
 			return false;
@@ -710,46 +710,6 @@ public abstract class BaseMethodCompilerStage
 
 	#region Helper Methods
 
-	public static bool IsMoveInstruction(BaseInstruction instruction)
-	{
-		return instruction == IRInstruction.Move32
-			|| instruction == IRInstruction.Move64
-			|| instruction == IRInstruction.MoveObject
-			|| instruction == IRInstruction.MoveManagedPointer
-			|| instruction == IRInstruction.MoveR8
-			|| instruction == IRInstruction.MoveR4;
-	}
-
-	public static bool IsCompareInstruction(BaseInstruction instruction)
-	{
-		return instruction == IRInstruction.Compare32x32
-			|| instruction == IRInstruction.Compare32x64
-			|| instruction == IRInstruction.Compare64x32
-			|| instruction == IRInstruction.Compare64x64
-			|| instruction == IRInstruction.CompareObject
-			|| instruction == IRInstruction.CompareManagedPointer
-			|| instruction == IRInstruction.CompareR4
-			|| instruction == IRInstruction.CompareR8;
-	}
-
-	public static bool IsPhiInstruction(BaseInstruction instruction)
-	{
-		return instruction == IRInstruction.Phi32
-			|| instruction == IRInstruction.Phi64
-			|| instruction == IRInstruction.PhiObject
-			|| instruction == IRInstruction.PhiManagedPointer
-			|| instruction == IRInstruction.PhiR4
-			|| instruction == IRInstruction.PhiR8;
-	}
-
-	public static bool IsBranchInstruction(BaseInstruction instruction)
-	{
-		return instruction == IRInstruction.Branch32
-			|| instruction == IRInstruction.Branch64
-			|| instruction == IRInstruction.BranchObject
-			|| instruction == IRInstruction.BranchManagedPointer;
-	}
-
 	public List<BasicBlock> AddMissingBlocksIfRequired(List<BasicBlock> blocks)
 	{
 		if (blocks.Count == BasicBlocks.Count)
@@ -847,7 +807,7 @@ public abstract class BaseMethodCompilerStage
 				if (node.IsEmptyOrNop)
 					continue;
 
-				if (!IsPhiInstruction(node.Instruction))
+				if (!node.Instruction.IsPhiInstruction)
 					break;
 
 				foreach (var phiblock in node.PhiBlocks)

@@ -163,84 +163,96 @@
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2,
-			"ResultType": "Boolean"
+			"ResultType": "Boolean",
+			"Compare": "true"
 		},
 		{
 			"Name": "CompareR8",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2,
-			"ResultType": "Boolean"
+			"ResultType": "Boolean",
+			"Compare": "true"
 		},
 		{
 			"Name": "CompareObject",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2,
-			"ResultType": "Boolean"
+			"ResultType": "Boolean",
+			"Compare": "true"
 		},
 		{
 			"Name": "CompareManagedPointer",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2,
-			"ResultType": "Boolean"
+			"ResultType": "Boolean",
+			"Compare": "true"
 		},
 		{
 			"Name": "Compare32x32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2,
-			"ResultType": "Boolean"
+			"ResultType": "Boolean",
+			"Compare": "true"
 		},
 		{
 			"Name": "Compare32x64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2,
-			"ResultType": "Boolean"
+			"ResultType": "Boolean",
+			"Compare": "true"
 		},
 		{
 			"Name": "Compare64x32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2,
-			"ResultType": "Boolean"
+			"ResultType": "Boolean",
+			"Compare": "true"
 		},
 		{
 			"Name": "Compare64x64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2,
-			"ResultType": "Boolean"
+			"ResultType": "Boolean",
+			"Compare": "true"
 		},
 		{
 			"Name": "Branch32",
 			"FamilyName": "IR",
 			"ResultCount": 2,
 			"OperandCount": 0,
-			"FlowControl": "ConditionalBranch"
+			"FlowControl": "ConditionalBranch",
+			"Branch": "true"
 		},
 		{
 			"Name": "Branch64",
 			"FamilyName": "IR",
 			"ResultCount": 2,
 			"OperandCount": 0,
-			"FlowControl": "ConditionalBranch"
+			"FlowControl": "ConditionalBranch",
+			"Branch": "true"
 		},
 		{
 			"Name": "BranchObject",
 			"FamilyName": "IR",
 			"ResultCount": 2,
 			"OperandCount": 0,
-			"FlowControl": "ConditionalBranch"
+			"FlowControl": "ConditionalBranch",
+			"Branch": "true"
 		},
 		{
 			"Name": "BranchManagedPointer",
 			"FamilyName": "IR",
 			"ResultCount": 2,
 			"OperandCount": 0,
-			"FlowControl": "ConditionalBranch"
+			"FlowControl": "ConditionalBranch",
+			"Branch": "true"
 		},
 		{
 			"Name": "ConvertR4ToR8",
@@ -820,19 +832,22 @@
 			"Name": "MoveCompound",
 			"FamilyName": "IR",
 			"ResultCount": 1,
-			"OperandCount": 1
+			"OperandCount": 1,
+			"Move": "true"
 		},
 		{
 			"Name": "MoveR4",
 			"FamilyName": "IR",
 			"ResultCount": 1,
-			"OperandCount": 1
+			"OperandCount": 1,
+			"Move": "true"
 		},
 		{
 			"Name": "MoveR8",
 			"FamilyName": "IR",
 			"ResultCount": 1,
-			"OperandCount": 1
+			"OperandCount": 1,
+			"Move": "true"
 		},
 		{
 			"Name": "SignExtend8x32",
@@ -898,25 +913,29 @@
 			"Name": "Move32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
-			"OperandCount": 1
+			"OperandCount": 1,
+			"Move": "true"
 		},
 		{
 			"Name": "Move64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
-			"OperandCount": 1
+			"OperandCount": 1,
+			"Move": "true"
 		},
 		{
 			"Name": "MoveObject",
 			"FamilyName": "IR",
 			"ResultCount": 1,
-			"OperandCount": 1
+			"OperandCount": 1,
+			"Move": "true"
 		},
 		{
 			"Name": "MoveManagedPointer",
 			"FamilyName": "IR",
 			"ResultCount": 1,
-			"OperandCount": 1
+			"OperandCount": 1,
+			"Move": "true"
 		},
 		{
 			"Name": "MulCarryOut32",
@@ -1020,42 +1039,48 @@
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"VariableOperands": "true"
+			"VariableOperands": "true",
+			"Phi": "true"
 		},
 		{
 			"Name": "PhiManagedPointer",
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"VariableOperands": "true"
+			"VariableOperands": "true",
+			"Phi": "true"
 		},
 		{
 			"Name": "Phi32",
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"VariableOperands": "true"
+			"VariableOperands": "true",
+			"Phi": "true"
 		},
 		{
 			"Name": "Phi64",
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"VariableOperands": "true"
+			"VariableOperands": "true",
+			"Phi": "true"
 		},
 		{
 			"Name": "PhiR4",
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"VariableOperands": "true"
+			"VariableOperands": "true",
+			"Phi": "true"
 		},
 		{
 			"Name": "PhiR8",
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"VariableOperands": "true"
+			"VariableOperands": "true",
+			"Phi": "true"
 		},
 		{
 			"Name": "Prologue",

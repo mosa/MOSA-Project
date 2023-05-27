@@ -15,5 +15,7 @@ public sealed class PhiR4 : BaseIRInstruction
 	{
 	}
 
+	public override bool IsPhiInstruction => true;
+
 	public override bool VariableOperands => true;
 }
