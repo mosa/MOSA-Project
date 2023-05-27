@@ -14,6 +14,8 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
@@ -177,7 +179,7 @@
 <span class="w">                </span><span class="kt">var</span><span class="w"> </span><span class="n">t1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">context</span><span class="p">.</span><span class="n">Operand1</span><span class="p">;</span>
 <span class="w">                </span><span class="kt">var</span><span class="w"> </span><span class="n">t2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">context</span><span class="p">.</span><span class="n">Operand2</span><span class="p">;</span>
 
-<span class="w">                </span><span class="kt">var</span><span class="w"> </span><span class="n">e1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">transform</span><span class="p">.</span><span class="n">CreateConstant</span><span class="p">(</span><span class="n">Add32</span><span class="p">(</span><span class="n">To32</span><span class="p">(</span><span class="n">t1</span><span class="p">),</span><span class="w"> </span><span class="n">To32</span><span class="p">(</span><span class="n">t2</span><span class="p">)));</span>
+<span class="w">                </span><span class="kt">var</span><span class="w"> </span><span class="n">e1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Operand</span><span class="p">.</span><span class="n">CreateConstant</span><span class="p">(</span><span class="n">Add32</span><span class="p">(</span><span class="n">To32</span><span class="p">(</span><span class="n">t1</span><span class="p">),</span><span class="w"> </span><span class="n">To32</span><span class="p">(</span><span class="n">t2</span><span class="p">)));</span>
 
 <span class="w">                </span><span class="n">context</span><span class="p">.</span><span class="n">SetInstruction</span><span class="p">(</span><span class="n">IRInstruction</span><span class="p">.</span><span class="n">Move32</span><span class="p">,</span><span class="w"> </span><span class="n">result</span><span class="p">,</span><span class="w"> </span><span class="n">e1</span><span class="p">);</span>
 <span class="w">        </span><span class="p">}</span>

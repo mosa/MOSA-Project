@@ -14,6 +14,8 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
@@ -492,7 +494,7 @@
 <td><p>Emulator.Memory</p></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>-qemu-gdb</p></td>
+<tr class="row-even"><td><p>-gdb</p></td>
 <td><p>Emulator.GDB</p></td>
 <td><p>false</p></td>
 </tr>
@@ -500,7 +502,7 @@
 <td></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>Launcher - Emulator - VMWare:</p></td>
+<tr class="row-even"><td><p>Launcher - Emulator - Qemu &amp; VMWare:</p></td>
 <td></td>
 <td></td>
 </tr>
@@ -508,149 +510,173 @@
 <td><p>Emulator.SVGA</p></td>
 <td><p>vmware</p></td>
 </tr>
+<tr class="row-even"><td><p>-virtio-vga</p></td>
+<td><p>Emulator.SVGA</p></td>
+<td><p>virtio</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Launcher - Image:</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>-image</p></td>
+<td><p>Image.ImageFile</p></td>
+<td><p>{value}</p></td>
+</tr>
+<tr class="row-even"><td><p>-destination</p></td>
+<td><p>Image.Folder</p></td>
+<td><p>{value}</p></td>
+</tr>
+<tr class="row-odd"><td><p>-dest</p></td>
+<td><p>Image.Folder</p></td>
+<td><p>{value}</p></td>
+</tr>
+<tr class="row-even"><td><p>-vhd</p></td>
+<td><p>Image.Format</p></td>
+<td><p>vhd</p></td>
+</tr>
+<tr class="row-odd"><td><p>-img</p></td>
+<td><p>Image.Format</p></td>
+<td><p>img</p></td>
+</tr>
+<tr class="row-even"><td><p>-vdi</p></td>
+<td><p>Image.Format</p></td>
+<td><p>vdi</p></td>
+</tr>
+<tr class="row-odd"><td><p>-vmdk</p></td>
+<td><p>Image.Format</p></td>
+<td><p>vmdk</p></td>
+</tr>
+<tr class="row-even"><td><p>-blocks</p></td>
+<td><p>Image.DiskBlocks</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>-volume-label</p></td>
+<td><p>Image.VolumeLabel</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>-mbr</p></td>
+<td><p>Image.MasterBootRecordFile</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>-boot</p></td>
+<td><p>Image.BootBlockFile</p></td>
+<td></td>
+</tr>
 <tr class="row-even"><td></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p>Launcher - Image:</p></td>
+<tr class="row-odd"><td><p>Launcher - Boot:</p></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>-image</p></td>
-<td><p>Image.ImageFile</p></td>
-<td><p>{value}</p></td>
-</tr>
-<tr class="row-odd"><td><p>-destination</p></td>
-<td><p>Image.Folder</p></td>
-<td><p>{value}</p></td>
-</tr>
-<tr class="row-even"><td><p>-dest</p></td>
-<td><p>Image.Folder</p></td>
-<td><p>{value}</p></td>
-</tr>
-<tr class="row-odd"><td><p>-vhd</p></td>
-<td><p>Image.Format</p></td>
-<td><p>vhd</p></td>
-</tr>
-<tr class="row-even"><td><p>-img</p></td>
-<td><p>Image.Format</p></td>
-<td><p>img</p></td>
-</tr>
-<tr class="row-odd"><td><p>-vdi</p></td>
-<td><p>Image.Format</p></td>
-<td><p>vdi</p></td>
-</tr>
-<tr class="row-even"><td><p>-vmdk</p></td>
-<td><p>Image.Format</p></td>
-<td><p>vmdk</p></td>
-</tr>
-<tr class="row-odd"><td><p>-blocks</p></td>
-<td><p>Image.DiskBlocks</p></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p>-volume-label</p></td>
-<td><p>Image.VolumeLabel</p></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p>-mbr</p></td>
-<td><p>Image.MasterBootRecordFile</p></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p>-boot</p></td>
-<td><p>Image.BootBlockFile</p></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p>Launcher - Boot:</p></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p>-multiboot-v1</p></td>
+<tr class="row-even"><td><p>-multiboot-v1</p></td>
 <td><p>Multiboot.Version</p></td>
 <td><p>v1</p></td>
 </tr>
-<tr class="row-even"><td><p>-multiboot-v2</p></td>
+<tr class="row-odd"><td><p>-multiboot-v2</p></td>
 <td><p>Multiboot.Version</p></td>
 <td><p>v2</p></td>
 </tr>
-<tr class="row-odd"><td><p>-multiboot-none</p></td>
+<tr class="row-even"><td><p>-multiboot-none</p></td>
 <td><p>Multiboot.Version</p></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>-multiboot</p></td>
+<tr class="row-odd"><td><p>-multiboot</p></td>
 <td><p>Multiboot.Version</p></td>
 <td><p>{value}</p></td>
 </tr>
-<tr class="row-odd"><td></td>
+<tr class="row-even"><td></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>Launcher - Serial:</p></td>
+<tr class="row-odd"><td><p>Launcher - Serial:</p></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p>-serial-connection</p></td>
+<tr class="row-even"><td><p>-serial-connection</p></td>
 <td><p>Emulator.Serial</p></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>-serial-pipe</p></td>
+<tr class="row-odd"><td><p>-serial-pipe</p></td>
 <td><p>Emulator.Serial</p></td>
 <td><p>pipe</p></td>
 </tr>
-<tr class="row-odd"><td><p>-serial-tcpclient</p></td>
+<tr class="row-even"><td><p>-serial-tcpclient</p></td>
 <td><p>Emulator.Serial</p></td>
 <td><p>tcpclient</p></td>
 </tr>
-<tr class="row-even"><td><p>-serial-tcpserver</p></td>
+<tr class="row-odd"><td><p>-serial-tcpserver</p></td>
 <td><p>Emulator.Serial</p></td>
 <td><p>tcpserver</p></td>
 </tr>
-<tr class="row-odd"><td><p>-serial-connection-port</p></td>
+<tr class="row-even"><td><p>-serial-connection-port</p></td>
 <td><p>Emulator.Serial.Port</p></td>
 <td><p>{value}</p></td>
 </tr>
-<tr class="row-even"><td><p>-serial-connection-host</p></td>
+<tr class="row-odd"><td><p>-serial-connection-host</p></td>
 <td><p>Emulator.Serial.Host</p></td>
 <td><p>{value}</p></td>
 </tr>
-<tr class="row-odd"><td></td>
+<tr class="row-even"><td></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>Launcher - Video BIOS Extension (VBE):</p></td>
+<tr class="row-odd"><td><p>Launcher - Video BIOS Extension (VBE):</p></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p>-video</p></td>
+<tr class="row-even"><td><p>-video</p></td>
 <td><p>Multiboot.Video</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-video-width</p></td>
+<tr class="row-odd"><td><p>-video-width</p></td>
 <td><p>Multiboot.Video.Width</p></td>
 <td><p>{value}</p></td>
 </tr>
-<tr class="row-odd"><td><p>-video-height</p></td>
+<tr class="row-even"><td><p>-video-height</p></td>
 <td><p>Multiboot.Video.Height</p></td>
 <td><p>{value}</p></td>
 </tr>
-<tr class="row-even"><td><p>-video-depth</p></td>
+<tr class="row-odd"><td><p>-video-depth</p></td>
 <td><p>Multiboot.Video.Depth</p></td>
 <td><p>{value}</p></td>
 </tr>
-<tr class="row-odd"><td></td>
+<tr class="row-even"><td></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>Launcher - GDB:</p></td>
+<tr class="row-odd"><td><p>Launcher - GDB:</p></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p>-launch-gdb-debugger</p></td>
-<td><p>Launcher.LaunchDebugger</p></td>
+<tr class="row-even"><td><p>-launch-debugger</p></td>
+<td><p>Launcher.GDB</p></td>
 <td><p>true</p></td>
+</tr>
+<tr class="row-odd"><td><p>-launch-gdb</p></td>
+<td><p>Launcher.Debugger</p></td>
+<td><p>true</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Launcher &amp; Debugger - GDB</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>-gdb-port</p></td>
+<td><p>GDB.Port</p></td>
+<td><p>{value}</p></td>
+</tr>
+<tr class="row-odd"><td><p>-gdb-host</p></td>
+<td><p>GDB.Host</p></td>
+<td><p>{value}</p></td>
 </tr>
 <tr class="row-even"><td></td>
 <td></td>
@@ -660,41 +686,9 @@
 <td></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>-hunt-corlib</p></td>
-<td><p>Launcher.HuntForCorLib</p></td>
-<td><p>true</p></td>
-</tr>
-<tr class="row-odd"><td><p>-plug-korlib</p></td>
+<tr class="row-even"><td><p>-plug-korlib</p></td>
 <td><p>Launcher.PlugKorlib</p></td>
 <td><p>true</p></td>
-</tr>
-<tr class="row-even"><td></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p>Launcher - GDB</p></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p>-gdb</p></td>
-<td><p>Launcher.LaunchDebugger</p></td>
-<td><p>true</p></td>
-</tr>
-<tr class="row-odd"><td></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p>Launcher &amp; Debugger - GDB</p></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p>-gdb-port</p></td>
-<td><p>GDB.Port</p></td>
-<td><p>{value}</p></td>
-</tr>
-<tr class="row-even"><td><p>-gdb-host</p></td>
-<td><p>GDB.Host</p></td>
-<td><p>{value}</p></td>
 </tr>
 <tr class="row-odd"><td></td>
 <td></td>
