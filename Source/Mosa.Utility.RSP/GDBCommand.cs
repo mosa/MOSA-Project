@@ -11,7 +11,7 @@ public abstract class GDBCommand
 
 	public string CommandName { get; protected set; }
 
-	public string Pack => CommandName + PackArguments;
+	public string Pack => $"{CommandName}{PackArguments}";
 
 	protected virtual string PackArguments => string.Empty;
 

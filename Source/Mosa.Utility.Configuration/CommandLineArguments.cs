@@ -112,7 +112,7 @@ public static class CommandLineArguments
 			new Argument { Name = "-display-off", Setting = "Emulator.Display", Value = "off"},
 			new Argument { Name = "-memory", Setting = "Emulator.Memory"},
 			new Argument { Name = "-cores", Setting = "Emulator.Cores"},
-			new Argument { Name = "-gdb", Setting = "Emulator.GDB", Value="false"},
+			new Argument { Name = "-gdb", Setting = "Emulator.GDB", Value="true"},
 
 			// Launcher - Image:
 			new Argument { Name = "-vhd", Setting = "Image.Format", Value="vhd"},

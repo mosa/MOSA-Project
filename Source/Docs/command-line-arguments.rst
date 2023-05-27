@@ -100,7 +100,7 @@ Below are the command line arguments available:
     -display,Emulator.Display,on
     -display-off,Emulator.Display,off
     -memory,Emulator.Memory,
-    -gdb,Emulator.GDB,false
+    -gdb,Emulator.GDB,true
     
     Launcher - Emulator - Qemu & VMWare:
     -vmware-svga,Emulator.SVGA,vmware

@@ -152,7 +152,7 @@ public class Starter : BaseLauncher
 	{
 		var arg = new StringBuilder();
 
-		arg.Append($" -m {LauncherSettings.EmulatorMemory.ToString()}M");
+		arg.Append($"-m {LauncherSettings.EmulatorMemory.ToString()}M");
 		arg.Append($" -smp cores={LauncherSettings.EmulatorCores.ToString()}");
 
 		if (LauncherSettings.Platform == "x86")
@@ -421,12 +421,13 @@ public class Starter : BaseLauncher
 	{
 		var gdbscript = Path.Combine(LauncherSettings.TemporaryFolder, Path.GetFileNameWithoutExtension(LauncherSettings.ImageFile) + ".gdb");
 
-		var arg = $" -d {Quote(LauncherSettings.TemporaryFolder)}";
+		var arg = $"-d {Quote(LauncherSettings.TemporaryFolder)}";
 		arg = $"{arg} -s {Quote(Path.Combine(LauncherSettings.TemporaryFolder, Path.GetFileNameWithoutExtension(LauncherSettings.ImageFile) + ".bin"))}";
 		arg = $"{arg} -x {Quote(gdbscript)}";
 
 		// FIXME!
-		var startingAddress = Linker.Sections[(int)SectionKind.Text].VirtualAddress + Builder.MultibootHeaderLength;
+		var symbol = Linker.GetSymbol("Default::MultibootInit():System.Void");
+		var breakAddress = symbol.VirtualAddress;
 
 		var sb = new StringBuilder();
 
@@ -435,7 +436,7 @@ public class Starter : BaseLauncher
 		sb.AppendLine($"set disassemble-next-line on");
 		sb.AppendLine($"set disassembly-flavor intel");
 		sb.AppendLine($"set pagination off");
-		sb.AppendLine($"break *0x{startingAddress.ToString("x")}");
+		sb.AppendLine($"break *0x{breakAddress.ToString("x")}");
 		sb.AppendLine($"c");
 
 		File.WriteAllText(gdbscript, sb.ToString());

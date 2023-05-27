@@ -5,9 +5,10 @@ namespace Mosa.Utility.RSP.Command;
 public class ReadMemory : GDBCommand
 {
 	public ulong Address { get; }
+
 	public uint SentBytes { get; }
 
-	protected override string PackArguments => Address.ToString("x") + "," + SentBytes.ToString("x");
+	protected override string PackArguments => $"{Address:x},{SentBytes:x}";
 
 	public ReadMemory(ulong address, uint bytes, CallBack callBack = null) : base("m", callBack)
 	{
