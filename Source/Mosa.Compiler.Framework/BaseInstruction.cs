@@ -32,16 +32,6 @@ public abstract class BaseInstruction
 	public byte DefaultResultCount { get; protected set; }
 
 	/// <summary>
-	/// The type of the result type
-	/// </summary>
-	public virtual BuiltInType ResultType { get; protected set; } = BuiltInType.None;
-
-	/// <summary>
-	/// The type of the secondary result type
-	/// </summary>
-	public virtual BuiltInType ResultType2 { get; protected set; } = BuiltInType.None;
-
-	/// <summary>
 	/// Determines flow behavior of this instruction.
 	/// </summary>
 	/// <remarks>

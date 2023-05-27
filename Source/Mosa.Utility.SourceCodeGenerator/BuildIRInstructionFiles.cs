@@ -80,18 +80,6 @@ public class BuildIRInstructionFiles : BuildBaseTemplate
 			Lines.AppendLine("\tpublic override bool IsIRCompareInstruction => true;");
 		}
 
-		if (node.ResultType != null && node.ResultType != "")
-		{
-			Lines.AppendLine();
-			Lines.AppendLine("\tpublic override BuiltInType ResultType => BuiltInType." + node.ResultType + ";");
-		}
-
-		if (node.ResultType2 != null && node.ResultType2 != "")
-		{
-			Lines.AppendLine();
-			Lines.AppendLine("\tpublic override BuiltInType ResultType2 => BuiltInType." + node.ResultType2 + ";");
-		}
-
 		if (node.IgnoreDuringCodeGeneration != null && node.IgnoreDuringCodeGeneration == "true")
 		{
 			Lines.AppendLine();
