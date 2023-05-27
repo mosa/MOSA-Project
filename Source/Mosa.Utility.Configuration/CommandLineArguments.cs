@@ -64,6 +64,8 @@ public static class CommandLineArguments
 			new Argument { Name = "-output-hash", Setting = "CompilerDebug.PreLinkHashFile", Value = "%DEFAULT%"},
 			new Argument { Name = "-output-hash", Setting = "CompilerDebug.PostLinkHashFile", Value = "%DEFAULT%"},
 
+			new Argument { Name = "-output-debug-file", Setting = "CompilerDebug.DebugFile"},
+
 			new Argument { Name = "-check", Setting = "CompilerDebug.FullCheckMode", Value = "true"},
 
 			new Argument { Name = "-platform", Setting = "Compiler.Platform"},

@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework;
 
 [Flags]
 public enum TransformType
-{ Transform, Auto, Manual, Optimization }
+{ Transform, Auto, Manual, Optimization, Window, Search }
 
 public abstract class BaseTransform : IComparable<BaseTransform>
 {

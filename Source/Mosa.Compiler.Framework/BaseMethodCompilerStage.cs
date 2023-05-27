@@ -3,7 +3,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Mosa.Compiler.Common.Exceptions;
-using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
@@ -743,6 +742,14 @@ public abstract class BaseMethodCompilerStage
 			|| instruction == IRInstruction.PhiR8;
 	}
 
+	public static bool IsBranchInstruction(BaseInstruction instruction)
+	{
+		return instruction == IRInstruction.Branch32
+			|| instruction == IRInstruction.Branch64
+			|| instruction == IRInstruction.BranchObject
+			|| instruction == IRInstruction.BranchManagedPointer;
+	}
+
 	public List<BasicBlock> AddMissingBlocksIfRequired(List<BasicBlock> blocks)
 	{
 		if (blocks.Count == BasicBlocks.Count)
@@ -847,7 +854,7 @@ public abstract class BaseMethodCompilerStage
 				{
 					if (!block.PreviousBlocks.Contains(phiblock))
 					{
-						throw new CompilerException("CheckAllPhiInstructions() failed in block: {block} at {node}!");
+						throw new CompilerException($"{FormattedStageName}:CheckAllPhiInstructions() failed in block: {block} at {node}!");
 					}
 				}
 			}

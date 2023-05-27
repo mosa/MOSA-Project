@@ -21,6 +21,8 @@ public class SparseConditionalConstantPropagationStage : BaseMethodCompilerStage
 	private readonly Counter DeadBlockCount = new Counter("SparseConditionalConstantPropagationStage.DeadBlocks");
 	private readonly Counter InstructionsRemovedCount = new Counter("SparseConditionalConstantPropagationStage.IRInstructionRemoved");
 
+	protected int Steps;
+
 	protected bool changed;
 
 	protected override void Initialize()
@@ -48,6 +50,9 @@ public class SparseConditionalConstantPropagationStage : BaseMethodCompilerStage
 
 		if (HasProtectedRegions)
 			return;
+
+		Steps = 0;
+		MethodCompiler.CreateTranformInstructionTrace(this, Steps++);
 
 		var analysis = new SparseConditionalConstantPropagation(BasicBlocks, CreateTraceLog, Is32BitPlatform);
 
@@ -137,6 +142,8 @@ public class SparseConditionalConstantPropagationStage : BaseMethodCompilerStage
 		foreach (var block in deadBlocks)
 		{
 			RemoveBranchesToDeadBlocks(block);
+
+			MethodCompiler.CreateTranformInstructionTrace(this, Steps++);
 		}
 	}
 
@@ -159,7 +166,7 @@ public class SparseConditionalConstantPropagationStage : BaseMethodCompilerStage
 				if (node.BranchTargetsCount == 0)
 					continue;
 
-				if (node.Instruction == IRInstruction.Branch32 || node.Instruction == IRInstruction.Branch64 || node.Instruction == IRInstruction.BranchObject)
+				if (IsBranchInstruction(node.Instruction))
 				{
 					trace?.Log("*** RemoveBranchesToDeadBlocks");
 					trace?.Log($"REMOVED:\t{node}");
@@ -195,7 +202,7 @@ public class SparseConditionalConstantPropagationStage : BaseMethodCompilerStage
 
 		EmptyBlockOfAllInstructions(block, true);
 
-		//UpdatePhiBlocks(nextBlocks);
+		UpdatePhiBlocks(nextBlocks);
 
 		foreach (var next in nextBlocks)
 		{
