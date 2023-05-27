@@ -191,7 +191,6 @@ Example: Mosa.Tool.Compiler.exe -o Mosa.HelloWorld.x86.bin -platform x86 Mosa.He
 		Settings.SetValue("Launcher.Start", false);
 		Settings.SetValue("Launcher.Launch", false);
 		Settings.SetValue("Launcher.Exit", false);
-		Settings.SetValue("Launcher.HuntForCorLib", true);
 		Settings.SetValue("OS.Name", "MOSA");
 	}
 

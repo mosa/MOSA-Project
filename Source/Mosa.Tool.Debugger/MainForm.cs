@@ -189,7 +189,7 @@ public partial class MainForm : Form
 		Settings.SetValue("Emulator.GDB", true);
 		Settings.SetValue("Emulator.Serial", "TCPServer");
 		Settings.SetValue("Emulator.Serial.Port", 1250);
-		Settings.SetValue("Emulator.Display", false);
+		Settings.SetValue("Emulator.Display", true);
 
 		GDBPort = 1234;
 

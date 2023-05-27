@@ -100,10 +100,11 @@ Below are the command line arguments available:
     -display,Emulator.Display,on
     -display-off,Emulator.Display,off
     -memory,Emulator.Memory,
-    -qemu-gdb,Emulator.GDB,false
+    -gdb,Emulator.GDB,true
     
-    Launcher - Emulator - VMWare:
+    Launcher - Emulator - Qemu & VMWare:
     -vmware-svga,Emulator.SVGA,vmware
+	-virtio-vga,Emulator.SVGA,virtio
 
     Launcher - Image:
     -image,Image.ImageFile,{value}
@@ -139,18 +140,15 @@ Below are the command line arguments available:
     -video-depth,Multiboot.Video.Depth,{value}
 
     Launcher - GDB:
-    -launch-gdb-debugger,Launcher.LaunchDebugger,true
-
-    Launcher - Advance:
-    -hunt-corlib,Launcher.HuntForCorLib,true
-    -plug-korlib,Launcher.PlugKorlib,true
-
-    Launcher - GDB
-    -gdb,Launcher.LaunchDebugger,true
+    -launch-debugger,Launcher.GDB,true
+	-launch-gdb,Launcher.Debugger,true
 
     Launcher & Debugger - GDB
     -gdb-port,GDB.Port,{value}
     -gdb-host,GDB.Host,{value}
+
+    Launcher - Advance:
+    -plug-korlib,Launcher.PlugKorlib,true
 
     Operating System:
     -osname,OS.Name,{value}

@@ -521,11 +521,6 @@ public abstract class BaseMethodCompilerStage
 		Debug.Assert(node.OperandCount == node.Block.PreviousBlocks.Count);
 	}
 
-	public static void UpdatePhi(Context context)
-	{
-		UpdatePhi(context.Node);
-	}
-
 	public static void RemoveBlockFromPhi(BasicBlock removedBlock, BasicBlock phiBlock)
 	{
 		for (var node = phiBlock.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)

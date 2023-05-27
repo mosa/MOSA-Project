@@ -40,7 +40,11 @@ public class UnitTestEngine : IDisposable
 
 	private const int MaxSentQueue = 10000;
 	private const int MinSend = 2000;
-	private const int MaxErrors = 30;
+
+	private const int MaxErrors = 1000;
+	private const int ReadyTimeOut = 2000; // in milliseconds
+	private const int MaxConnectionAttempts = 100;
+	private const int ConnectionAttemptDelay = 250; // in milliseconds
 
 	private readonly Queue<DebugMessage> Queue = new Queue<DebugMessage>();
 	private readonly HashSet<DebugMessage> Pending = new HashSet<DebugMessage>();
@@ -112,7 +116,6 @@ public class UnitTestEngine : IDisposable
 		Settings.SetValue("Launcher.Start", false);
 		Settings.SetValue("Launcher.Launch", false);
 		Settings.SetValue("Launcher.Exit", true);
-		Settings.SetValue("Launcher.HuntForCorLib", true);
 		Settings.SetValue("Image.Firmware", "bios");
 		Settings.SetValue("Image.Folder", Path.Combine(Path.GetTempPath(), "MOSA-UnitTest"));
 		Settings.SetValue("Image.Format", "IMG");
@@ -368,11 +371,11 @@ public class UnitTestEngine : IDisposable
 			DebugServerEngine.SetGlobalDispatch(GlobalDispatch);
 		}
 
-		for (var attempt = 0; attempt < 100; attempt++)
+		for (var attempt = 0; attempt < MaxConnectionAttempts; attempt++)
 		{
 			try
 			{
-				Thread.Sleep(250);
+				Thread.Sleep(ConnectionAttemptDelay);
 
 				Connect();
 
@@ -518,7 +521,7 @@ public class UnitTestEngine : IDisposable
 			}
 
 			// Has process stop responding (more than 2 seconds)? If yes, restart
-			else if (LastResponse > 0 && StopWatch.ElapsedMilliseconds - LastResponse > 2000)
+			else if (LastResponse > 0 && StopWatch.ElapsedMilliseconds - LastResponse > ReadyTimeOut)
 			{
 				KillVirtualMachine();
 				restart = true;

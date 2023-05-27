@@ -5,7 +5,6 @@ using System;
 namespace Mosa.UnitTests.Primitive;
 
 public static class DoubleTests
-
 {
 	[MosaUnitTest(Series = "R8R8")]
 	public static double AddR8R8(double first, double second)

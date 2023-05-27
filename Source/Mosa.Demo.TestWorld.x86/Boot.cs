@@ -8,6 +8,7 @@ using Mosa.Runtime;
 using Mosa.Runtime.Plug;
 using Mosa.Runtime.x86;
 using Mosa.UnitTests.Other;
+using Mosa.UnitTests.Primitive;
 
 namespace Mosa.Demo.TestWorld.x86;
 
@@ -73,12 +74,12 @@ public static class Boot
 
 		//Screen.Write("FindTypeOfTest: ");
 
-		//Test1();
+		var r = Test1();
 
-		//if (value3)
-		//	Screen.WriteLine("Ok");
-		//else
-		//	Screen.WriteLine("Failed");
+		if (r)
+			Screen.WriteLine("Ok");
+		else
+			Screen.WriteLine("Failed");
 
 		//UnitTest();
 
@@ -311,13 +312,13 @@ public static class Boot
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool Test1()
 	{
-		return UnitTests.Primitive.CheckedTests.MulI8I8(0, 0) == 0;
+		return !DoubleTests.CeqR8R8(0, 1);
 	}
 
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool Test2()
 	{
-		return UnitTests.Primitive.CheckedTests.MulI8I8(-2147483646, -2) == 4294967292;
+		return CheckedTests.MulI8I8(-2147483646, -2) == 4294967292;
 	}
 
 	[MethodImpl(MethodImplOptions.NoInlining)]

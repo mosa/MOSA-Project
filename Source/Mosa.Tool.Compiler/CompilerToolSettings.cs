@@ -124,12 +124,6 @@ public class CompilerToolSettings
 		set => Settings.SetValue("GDB.Port", value);
 	}
 
-	public bool HuntForCorLib
-	{
-		get => Settings.GetValue("Launcher.HuntForCorLib", false);
-		set => Settings.SetValue("Launcher.HuntForCorLib", value);
-	}
-
 	public string DefaultFolder
 	{
 		get => Settings.GetValue("DefaultFolder", null);
@@ -180,14 +174,14 @@ public class CompilerToolSettings
 
 	public bool LaunchGDB
 	{
-		get => Settings.GetValue("Launcher.LaunchGDB", false);
-		set => Settings.SetValue("Launcher.LaunchGDB", value);
+		get => Settings.GetValue("Launcher.GDB", false);
+		set => Settings.SetValue("Launcher.GDB", value);
 	}
 
 	public bool LaunchDebugger
 	{
-		get => Settings.GetValue("Launcher.LaunchDebugger", false);
-		set => Settings.SetValue("Launcher.LaunchDebugger", value);
+		get => Settings.GetValue("Launcher.Debugger", false);
+		set => Settings.SetValue("Launcher.Debugger", value);
 	}
 
 	public string LinkerFormat => Settings.GetValue("Linker.Format", "elf32");

@@ -885,7 +885,6 @@ public partial class MainForm : Form
 		Settings.SetValue("Launcher.Start", false);
 		Settings.SetValue("Launcher.Launch", false);
 		Settings.SetValue("Launcher.Exit", false);
-		Settings.SetValue("Launcher.HuntForCorLib", true);
 		Settings.SetValue("OS.Name", "MOSA");
 	}
 

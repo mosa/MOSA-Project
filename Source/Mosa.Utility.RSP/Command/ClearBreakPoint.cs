@@ -7,9 +7,10 @@ public class ClearBreakPoint : GDBCommand
 	protected byte Type;
 
 	public ulong Address { get; }
+
 	public ulong Size { get; }
 
-	protected override string PackArguments => Type + "," + Address.ToString("x") + "," + Size.ToString("x");
+	protected override string PackArguments => $"{Type},{Address:x},{Size:x}";
 
 	public ClearBreakPoint(ulong address, byte size, byte type, CallBack callBack = null) : base("z", callBack)
 	{

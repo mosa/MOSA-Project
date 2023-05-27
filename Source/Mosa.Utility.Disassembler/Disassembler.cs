@@ -166,7 +166,7 @@ public partial class Disassembler
 				var value = uint.Parse(hex, System.Globalization.NumberStyles.HexNumber);
 				var hex2 = Convert.ToString(value, 16);
 
-				sb.Append("0x");
+				sb.Append("x");
 				sb.Append(hex2);
 
 				i += 8;

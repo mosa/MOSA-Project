@@ -112,7 +112,7 @@ public static class CommandLineArguments
 			new Argument { Name = "-display-off", Setting = "Emulator.Display", Value = "off"},
 			new Argument { Name = "-memory", Setting = "Emulator.Memory"},
 			new Argument { Name = "-cores", Setting = "Emulator.Cores"},
-			new Argument { Name = "-qemu-gdb", Setting = "Emulator.GDB", Value="false"},
+			new Argument { Name = "-gdb", Setting = "Emulator.GDB", Value="true"},
 
 			// Launcher - Image:
 			new Argument { Name = "-vhd", Setting = "Image.Format", Value="vhd"},
@@ -151,13 +151,13 @@ public static class CommandLineArguments
 			new Argument { Name = "-vmware-svga", Setting = "Emulator.SVGA", Value="vmware"},
 			new Argument { Name = "-virtio-vga", Setting = "Emulator.SVGA", Value="virtio"},
 
-			new Argument { Name = "-gdb", Setting = "Launcher.LaunchDebugger", Value="true"},
 			new Argument { Name = "-gdb-port", Setting = "GDB.Port"},
 			new Argument { Name = "-gdb-host", Setting = "GDB.Host"},
 
 			new Argument { Name = "-osname", Setting = "OS.Name"},
 
-			new Argument { Name = "-launch-gdb-debugger", Setting = "Launcher.LaunchDebugger", Value="true"},
+			new Argument { Name = "-launch-gdb", Setting = "Launcher.GDB", Value="true"},
+			new Argument { Name = "-launch-debugger", Setting = "Launcher.Debugger", Value="true"},
 
 			// Base directory is the output directory
 			new Argument { Name = "-include", Setting = "Image.FileSystem.RootInclude" },
@@ -167,7 +167,6 @@ public static class CommandLineArguments
 			new Argument { Name = "-firmware", Setting = "Image.Firmware"},
 
 			// Advance:
-			new Argument { Name = "-hunt-corlib", Setting = "Launcher.HuntForCorLib", Value = "true"},
 			new Argument { Name = "-plug-korlib", Setting = "Launcher.PlugKorlib", Value = "true"},
 			new Argument { Name = "-test", Setting = "Launcher.Test", Value = "true"},
 
@@ -307,7 +306,7 @@ public static class CommandLineArguments
 			new Argument { Name = "-o8", Setting = "Optimizations.Inline.Explicit", Value = "true"},
 			new Argument { Name = "-o8", Setting = "Optimizations.LoopInvariantCodeMotion", Value = "true"},
 			new Argument { Name = "-o8", Setting = "Optimizations.BitTracker", Value = "true"},
-			new Argument { Name = "-o8", Setting = "Optimizations.TwoPass", Value = "true"},
+			new Argument { Name = "-o8", Setting = "Optimizations.TwoPass", Value = "false"},
 			new Argument { Name = "-o8", Setting = "Optimizations.Inline.Maximum", Value = "10"},
 			new Argument { Name = "-o8", Setting = "Optimizations.Basic.Window", Value = "5"},
 

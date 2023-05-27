@@ -14,6 +14,8 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
@@ -427,16 +429,13 @@
 <tr class="row-odd"><td><p>Launcher.PlugKorlib</p></td>
 <td><p>If true, automatically include the plugs for CoreLib</p></td>
 </tr>
-<tr class="row-even"><td><p>Launcher.HuntForCorLib</p></td>
-<td><p>If true, search for CoreLib in various directories</p></td>
-</tr>
-<tr class="row-odd"><td><p>Launcher.LaunchGDB</p></td>
+<tr class="row-even"><td><p>Launcher.GDB</p></td>
 <td><p>If true, launch the GNU GDB application after VM launch</p></td>
 </tr>
-<tr class="row-even"><td><p>Launcher.LaunchDebugger</p></td>
+<tr class="row-odd"><td><p>Launcher.Debugger</p></td>
 <td><p>If true, launch the MOSA debugger application after VM launch</p></td>
 </tr>
-<tr class="row-odd"><td><p>Launcher.Test</p></td>
+<tr class="row-even"><td><p>Launcher.Test</p></td>
 <td><p>If true, monitors VM serial for success or failure messages</p></td>
 </tr>
 </tbody>
@@ -493,7 +492,7 @@
 <td><p>If true, show the video display</p></td>
 </tr>
 <tr class="row-odd"><td><p>Emulator.SVGA</p></td>
-<td><p>SVGA mode: std, cirrus, vbe or vmware</p></td>
+<td><p>SVGA mode: std, cirrus, vbe, virtio or vmware</p></td>
 </tr>
 <tr class="row-even"><td><p>Emulator.GDB</p></td>
 <td><p>If true, enables GDB within emulator</p></td>
@@ -629,7 +628,7 @@
 <td><p>Location of the Mkisofs application</p></td>
 </tr>
 <tr class="row-even"><td><p>AppLocation.GDB</p></td>
-<td><p>Location of the QEMU application</p></td>
+<td><p>Location of the GDB application</p></td>
 </tr>
 </tbody>
 </table>
