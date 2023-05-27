@@ -16,8 +16,4 @@ public sealed class GetHigh32 : BaseIRInstruction
 		: base(1, 1)
 	{
 	}
-
-	public override BuiltInType ResultType => BuiltInType.UInt32;
-
-	public override BuiltInType ResultType2 => BuiltInType.UInt32;
 }

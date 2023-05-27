@@ -56,16 +56,28 @@ public class BuildIRInstructionFiles : BuildBaseTemplate
 			Lines.AppendLine("\tpublic override FlowControl FlowControl => FlowControl." + node.FlowControl + ";");
 		}
 
-		if (node.ResultType != null && node.ResultType != "")
+		if (node.Branch != null && node.Branch == "true")
 		{
 			Lines.AppendLine();
-			Lines.AppendLine("\tpublic override BuiltInType ResultType => BuiltInType." + node.ResultType + ";");
+			Lines.AppendLine("\tpublic override bool IsIRBranchInstruction => true;");
 		}
 
-		if (node.ResultType2 != null && node.ResultType2 != "")
+		if (node.Phi != null && node.Phi == "true")
 		{
 			Lines.AppendLine();
-			Lines.AppendLine("\tpublic override BuiltInType ResultType2 => BuiltInType." + node.ResultType2 + ";");
+			Lines.AppendLine("\tpublic override bool IsPhiInstruction => true;");
+		}
+
+		if (node.Move != null && node.Move == "true")
+		{
+			Lines.AppendLine();
+			Lines.AppendLine("\tpublic override bool IsIRMoveInstruction => true;");
+		}
+
+		if (node.Compare != null && node.Compare == "true")
+		{
+			Lines.AppendLine();
+			Lines.AppendLine("\tpublic override bool IsIRCompareInstruction => true;");
 		}
 
 		if (node.IgnoreDuringCodeGeneration != null && node.IgnoreDuringCodeGeneration == "true")

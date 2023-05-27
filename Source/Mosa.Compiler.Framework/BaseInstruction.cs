@@ -32,16 +32,6 @@ public abstract class BaseInstruction
 	public byte DefaultResultCount { get; protected set; }
 
 	/// <summary>
-	/// The type of the result type
-	/// </summary>
-	public virtual BuiltInType ResultType { get; protected set; } = BuiltInType.None;
-
-	/// <summary>
-	/// The type of the secondary result type
-	/// </summary>
-	public virtual BuiltInType ResultType2 { get; protected set; } = BuiltInType.None;
-
-	/// <summary>
 	/// Determines flow behavior of this instruction.
 	/// </summary>
 	/// <remarks>
@@ -51,89 +41,7 @@ public abstract class BaseInstruction
 	/// </remarks>
 	public virtual FlowControl FlowControl => FlowControl.Next;
 
-	/// <summary>
-	/// Gets a value indicating whether to [ignore during code generation].
-	/// </summary>
-	/// <value>
-	/// <c>true</c> if [ignore during code generation]; otherwise, <c>false</c>.
-	/// </value>
-	public virtual bool IgnoreDuringCodeGeneration => false;
-
-	/// <summary>
-	/// Gets a value indicating whether to [ignore instruction's basic block].
-	/// </summary>
-	/// <value>
-	/// <c>true</c> if [ignore instruction basic block]; otherwise, <c>false</c>.
-	/// </value>
-	public virtual bool IgnoreInstructionBasicBlockTargets => false;
-
-	/// <summary>
-	/// Gets a value indicating whether this instance has an unspecified side effect.
-	/// </summary>
-	/// <value>
-	///   <c>true</c> if this instance has side effect; otherwise, <c>false</c>.
-	/// </value>
-	public virtual bool HasUnspecifiedSideEffect => false;
-
-	/// <summary>
-	/// Gets a value indicating whether this instance has memory write side effect.
-	/// </summary>
-	/// <value>
-	///   <c>true</c> if this instance has side effect; otherwise, <c>false</c>.
-	/// </value>
-	public virtual bool IsMemoryWrite => false;
-
-	/// <summary>
-	/// Gets a value indicating whether this instance has memory write side effect.
-	/// </summary>
-	/// <value>
-	///   <c>true</c> if this instance has side effect; otherwise, <c>false</c>.
-	/// </value>
-	public virtual bool IsMemoryRead => false;
-
-	/// <summary>
-	/// Gets a value indicating whether this instance has IO operation side effect.
-	/// </summary>
-	/// <value>
-	///   <c>true</c> if this instance has side effect; otherwise, <c>false</c>.
-	/// </value>
-	public virtual bool IsIOOperation => false;
-
-	/// <summary>
-	/// Gets a value indicating whether [variable operand count].
-	/// </summary>
-	/// <value>
-	///   <c>true</c> if [variable operand count]; otherwise, <c>false</c>.
-	/// </value>
 	public virtual bool VariableOperands => false;
-
-	/// <summary>
-	/// Gets a value indicating whether this <see cref="BaseInstruction"/> is commutative.
-	/// </summary>
-	/// <value>
-	///   <c>true</c> if commutative; otherwise, <c>false</c>.
-	/// </value>
-	public virtual bool IsCommutative => false;
-
-	/// <summary>
-	/// Gets a value indicating whether this instance is parameter load.
-	/// </summary>
-	/// <value>
-	///   <c>true</c> if this instance is parameter load; otherwise, <c>false</c>.
-	/// </value>
-	public virtual bool IsParameterLoad => false;
-
-	/// <summary>
-	/// Gets a value indicating whether this instance is parameter store.
-	/// </summary>
-	/// <value>
-	///   <c>true</c> if this instance is parameter store; otherwise, <c>false</c>.
-	/// </value>
-	public virtual bool IsParameterStore => false;
-
-	public virtual bool IsPlatformInstruction => false;
-
-	public virtual bool IsIRInstruction => false;
 
 	public virtual string Name { get; private set; }
 
@@ -148,6 +56,40 @@ public abstract class BaseInstruction
 	public virtual string OpcodeName { get; private set; }
 
 	#endregion Properties
+
+	#region Is/Has Properties
+
+	public virtual bool IgnoreDuringCodeGeneration => false;
+
+	public virtual bool IgnoreInstructionBasicBlockTargets => false;
+
+	public virtual bool HasUnspecifiedSideEffect => false;
+
+	public virtual bool IsMemoryWrite => false;
+
+	public virtual bool IsMemoryRead => false;
+
+	public virtual bool IsIOOperation => false;
+
+	public virtual bool IsCommutative => false;
+
+	public virtual bool IsParameterLoad => false;
+
+	public virtual bool IsParameterStore => false;
+
+	public virtual bool IsPlatformInstruction => false;
+
+	public virtual bool IsIRInstruction => false;
+
+	public virtual bool IsPhiInstruction => false;
+
+	public virtual bool IsIRBranchInstruction => false;
+
+	public virtual bool IsIRMoveInstruction => false;
+
+	public virtual bool IsIRCompareInstruction => false;
+
+	#endregion Is/Has Properties
 
 	#region Platform Properties
 

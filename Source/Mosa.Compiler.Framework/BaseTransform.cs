@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework;
 
 [Flags]
 public enum TransformType
-{ Transform, Auto, Manual, Optimization }
+{ Transform, Auto, Manual, Optimization, Window, Search }
 
 public abstract class BaseTransform : IComparable<BaseTransform>
 {
@@ -1010,11 +1010,6 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 			ConditionCode.UnsignedLessOrEqual => true,
 			_ => false
 		};
-	}
-
-	public static bool IsPhiInstruction(BaseInstruction instruction)
-	{
-		return BaseCodeTransformationStage.IsPhiInstruction(instruction);
 	}
 
 	#endregion Helpers

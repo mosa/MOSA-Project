@@ -15,5 +15,7 @@ public sealed class PhiManagedPointer : BaseIRInstruction
 	{
 	}
 
+	public override bool IsPhiInstruction => true;
+
 	public override bool VariableOperands => true;
 }

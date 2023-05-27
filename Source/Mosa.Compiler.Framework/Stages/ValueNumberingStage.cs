@@ -215,7 +215,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 			if (node.IsEmptyOrNop)
 				continue;
 
-			if (IsPhiInstruction(node.Instruction))
+			if (node.Instruction.IsPhiInstruction)
 			{
 				// Validate all successor are already processed
 				// and if not, just set the value number
@@ -281,7 +281,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 				node.Operand2 = operand1;
 			}
 
-			if (IsMoveInstruction(node.Instruction))
+			if (node.Instruction.IsIRMoveInstruction)
 			{
 				if (node.Result.IsCPURegister || node.Operand1.IsCPURegister)
 				{
@@ -372,7 +372,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 				AddExpressionToHashTable(newExpression2);
 				newExpressions.Add(newExpression2);
 			}
-			else if (IsCompareInstruction(node.Instruction) && node.Operand1 != node.Operand2 && node.ConditionCode != ConditionCode.Equal && node.ConditionCode != ConditionCode.NotEqual)
+			else if (node.Instruction.IsIRCompareInstruction && node.Operand1 != node.Operand2 && node.ConditionCode != ConditionCode.Equal && node.ConditionCode != ConditionCode.NotEqual)
 			{
 				var newExpression2 = new Expression
 				{
@@ -576,7 +576,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 
 	private bool IsPhiUseless(InstructionNode node)
 	{
-		Debug.Assert(IsPhiInstruction(node.Instruction));
+		Debug.Assert(node.Instruction.IsPhiInstruction);
 
 		var operand = node.Operand1;
 		var operandVN = GetValueNumber(operand);
@@ -592,8 +592,8 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 
 	private bool ArePhisRedundant(InstructionNode a, InstructionNode b)
 	{
-		Debug.Assert(IsPhiInstruction(a.Instruction));
-		Debug.Assert(IsPhiInstruction(b.Instruction));
+		Debug.Assert(a.Instruction.IsPhiInstruction);
+		Debug.Assert(b.Instruction.IsPhiInstruction);
 
 		if (a.OperandCount != b.OperandCount)
 			return false;
@@ -657,10 +657,10 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 				else
 				{
 					// value has not been encountered yet --- skip it for now
-					if (IsPhiInstruction(node.Instruction))
+					if (node.Instruction.IsPhiInstruction)
 						continue;
 
-					//Debug.Assert(IsPhiInstruction(node.Instruction));
+					//Debug.Assert(node.Instruction.IsPhiInstruction);
 
 					//MethodCompiler.Compiler.Stop();
 					//return;
@@ -681,7 +681,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 				if (node.IsEmptyOrNop)
 					continue;
 
-				if (!IsPhiInstruction(node.Instruction))
+				if (!node.Instruction.IsPhiInstruction)
 					break;
 
 				// update operands with their value number
@@ -699,7 +699,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 			if (previousPhi.IsEmptyOrNop)
 				continue;
 
-			Debug.Assert(IsPhiInstruction(previousPhi.Instruction));
+			Debug.Assert(previousPhi.Instruction.IsPhiInstruction);
 
 			if (ArePhisRedundant(node, previousPhi))
 			{

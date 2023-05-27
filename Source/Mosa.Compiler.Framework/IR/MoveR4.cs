@@ -14,4 +14,6 @@ public sealed class MoveR4 : BaseIRInstruction
 		: base(1, 1)
 	{
 	}
+
+	public override bool IsIRMoveInstruction => true;
 }

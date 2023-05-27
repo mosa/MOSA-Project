@@ -16,6 +16,4 @@ public sealed class To64 : BaseIRInstruction
 		: base(2, 1)
 	{
 	}
-
-	public override BuiltInType ResultType => BuiltInType.UInt64;
 }

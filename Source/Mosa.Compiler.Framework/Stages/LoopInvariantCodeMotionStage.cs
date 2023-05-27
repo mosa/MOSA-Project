@@ -300,7 +300,7 @@ public sealed class LoopInvariantCodeMotionStage : BaseMethodCompilerStage
 			if (node.IsEmptyOrNop)
 				continue;
 
-			if (!IsPhiInstruction(node.Instruction))
+			if (!node.Instruction.IsPhiInstruction)
 				break;
 
 			var landingpadSourceBlocks = new List<BasicBlock>(node.OperandCount);

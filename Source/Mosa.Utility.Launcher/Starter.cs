@@ -409,10 +409,10 @@ public class Starter : BaseLauncher
 		// FIXME!!!
 		var argMap = CommandLineArguments.Map;
 
-		var arg = $" {argMap.Find((x) => x.Setting == "CompilerDebug.DebugFile").Name} {Path.Combine(LauncherSettings.TemporaryFolder, Path.GetFileNameWithoutExtension(LauncherSettings.ImageFile) + ".debug")}";
-		arg += $" {argMap.Find((x) => x.Setting == "GDB.Host").Name} {LauncherSettings.GDBHost}";
-		arg += $" {argMap.Find((x) => x.Setting == "GDB.Port").Name} {LauncherSettings.GDBPort}";
-		arg += $" {argMap.Find((x) => x.Setting == "Image.ImageFile").Name} {Quote(LauncherSettings.ImageFile)}";
+		var arg = $" -output-debug-file {Path.Combine(LauncherSettings.TemporaryFolder, Path.GetFileNameWithoutExtension(LauncherSettings.ImageFile) + ".debug")}";
+		arg += $" -gdb-host {LauncherSettings.GDBHost}";
+		arg += $" -gdb-port {LauncherSettings.GDBPort}";
+		arg += $" -image {Quote(LauncherSettings.ImageFile)}";
 
 		LaunchApplication("Mosa.Tool.Debugger.exe", arg);
 	}
@@ -425,8 +425,7 @@ public class Starter : BaseLauncher
 		arg = $"{arg} -s {Quote(Path.Combine(LauncherSettings.TemporaryFolder, Path.GetFileNameWithoutExtension(LauncherSettings.ImageFile) + ".bin"))}";
 		arg = $"{arg} -x {Quote(gdbscript)}";
 
-		// FIXME!
-		var symbol = Linker.GetSymbol("Default::MultibootInit():System.Void");
+		var symbol = Linker.EntryPoint;
 		var breakAddress = symbol.VirtualAddress;
 
 		var sb = new StringBuilder();

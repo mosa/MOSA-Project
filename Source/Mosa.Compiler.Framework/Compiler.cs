@@ -240,7 +240,7 @@ public sealed class Compiler
 		TraceLevel = CompilerSettings.TraceLevel;
 		Statistics = CompilerSettings.Statistics;
 
-		PostEvent(CompilerEvent.CompileStart);
+		PostEvent(CompilerEvent.CompilerStart);
 
 		Linker = new MosaLinker(this);
 
@@ -402,7 +402,7 @@ public sealed class Compiler
 
 	public void ExecuteCompile()
 	{
-		PostEvent(CompilerEvent.CompilingMethods);
+		PostEvent(CompilerEvent.CompilingMethodsStart);
 
 		while (true)
 		{
@@ -464,7 +464,7 @@ public sealed class Compiler
 
 	public void ExecuteCompile(int maxThreads)
 	{
-		PostEvent(CompilerEvent.CompilingMethods);
+		PostEvent(CompilerEvent.CompilingMethodsStart);
 
 		if (maxThreads > 0)
 		{
@@ -547,7 +547,7 @@ public sealed class Compiler
 		EmitCounters();
 
 		PostEvent(CompilerEvent.FinalizationEnd);
-		PostEvent(CompilerEvent.CompileEnd);
+		PostEvent(CompilerEvent.CompilerEnd);
 	}
 
 	public void Stop()
