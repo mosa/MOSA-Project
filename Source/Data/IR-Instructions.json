@@ -164,7 +164,7 @@
 			"ResultCount": 1,
 			"OperandCount": 2,
 			"ResultType": "Boolean",
-			"IRCompare": "true"
+			"Compare": "true"
 		},
 		{
 			"Name": "CompareR8",
@@ -172,7 +172,7 @@
 			"ResultCount": 1,
 			"OperandCount": 2,
 			"ResultType": "Boolean",
-			"IRCompare": "true"
+			"Compare": "true"
 		},
 		{
 			"Name": "CompareObject",
@@ -180,7 +180,7 @@
 			"ResultCount": 1,
 			"OperandCount": 2,
 			"ResultType": "Boolean",
-			"IRCompare": "true"
+			"Compare": "true"
 		},
 		{
 			"Name": "CompareManagedPointer",
@@ -188,7 +188,7 @@
 			"ResultCount": 1,
 			"OperandCount": 2,
 			"ResultType": "Boolean",
-			"IRCompare": "true"
+			"Compare": "true"
 		},
 		{
 			"Name": "Compare32x32",
@@ -196,7 +196,7 @@
 			"ResultCount": 1,
 			"OperandCount": 2,
 			"ResultType": "Boolean",
-			"IRCompare": "true"
+			"Compare": "true"
 		},
 		{
 			"Name": "Compare32x64",
@@ -204,7 +204,7 @@
 			"ResultCount": 1,
 			"OperandCount": 2,
 			"ResultType": "Boolean",
-			"IRCompare": "true"
+			"Compare": "true"
 		},
 		{
 			"Name": "Compare64x32",
@@ -212,7 +212,7 @@
 			"ResultCount": 1,
 			"OperandCount": 2,
 			"ResultType": "Boolean",
-			"IRCompare": "true"
+			"Compare": "true"
 		},
 		{
 			"Name": "Compare64x64",
@@ -220,7 +220,7 @@
 			"ResultCount": 1,
 			"OperandCount": 2,
 			"ResultType": "Boolean",
-			"IRCompare": "true"
+			"Compare": "true"
 		},
 		{
 			"Name": "Branch32",
@@ -228,7 +228,7 @@
 			"ResultCount": 2,
 			"OperandCount": 0,
 			"FlowControl": "ConditionalBranch",
-			"IRBranch": "true"
+			"Branch": "true"
 		},
 		{
 			"Name": "Branch64",
@@ -236,7 +236,7 @@
 			"ResultCount": 2,
 			"OperandCount": 0,
 			"FlowControl": "ConditionalBranch",
-			"IRBranch": "true"
+			"Branch": "true"
 		},
 		{
 			"Name": "BranchObject",
@@ -244,7 +244,7 @@
 			"ResultCount": 2,
 			"OperandCount": 0,
 			"FlowControl": "ConditionalBranch",
-			"IRBranch": "true"
+			"Branch": "true"
 		},
 		{
 			"Name": "BranchManagedPointer",
@@ -252,7 +252,7 @@
 			"ResultCount": 2,
 			"OperandCount": 0,
 			"FlowControl": "ConditionalBranch",
-			"IRBranch": "true"
+			"Branch": "true"
 		},
 		{
 			"Name": "ConvertR4ToR8",
@@ -833,21 +833,21 @@
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1,
-			"IRMove": "true"
+			"Move": "true"
 		},
 		{
 			"Name": "MoveR4",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1,
-			"IRMove": "true"
+			"Move": "true"
 		},
 		{
 			"Name": "MoveR8",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1,
-			"IRMove": "true"
+			"Move": "true"
 		},
 		{
 			"Name": "SignExtend8x32",
@@ -914,28 +914,28 @@
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1,
-			"IRMove": "true"
+			"Move": "true"
 		},
 		{
 			"Name": "Move64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1,
-			"IRMove": "true"
+			"Move": "true"
 		},
 		{
 			"Name": "MoveObject",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1,
-			"IRMove": "true"
+			"Move": "true"
 		},
 		{
 			"Name": "MoveManagedPointer",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1,
-			"IRMove": "true"
+			"Move": "true"
 		},
 		{
 			"Name": "MulCarryOut32",

@@ -15,5 +15,5 @@ public sealed class MoveCompound : BaseIRInstruction
 	{
 	}
 
-	public override bool IsIRMove => true;
+	public override bool IsMove => true;
 }

@@ -17,5 +17,5 @@ public sealed class CompareR8 : BaseIRInstruction
 	{
 	}
 
-	public override bool IsIRCompare => true;
+	public override bool IsCompare => true;
 }

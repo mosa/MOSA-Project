@@ -19,5 +19,5 @@ public sealed class Branch32 : BaseIRInstruction
 
 	public override bool IsConditionalBranch => true;
 
-	public override bool IsIRBranch => true;
+	public override bool IsBranch => true;
 }

@@ -281,7 +281,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 				node.Operand2 = operand1;
 			}
 
-			if (node.Instruction.IsIRMove)
+			if (node.Instruction.IsMove && node.Instruction.IsIRInstruction)
 			{
 				if (node.Result.IsCPURegister || node.Operand1.IsCPURegister)
 				{
@@ -372,7 +372,11 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 				AddExpressionToHashTable(newExpression2);
 				newExpressions.Add(newExpression2);
 			}
-			else if (node.Instruction.IsIRCompare && node.Operand1 != node.Operand2 && node.ConditionCode != ConditionCode.Equal && node.ConditionCode != ConditionCode.NotEqual)
+			else if (node.Instruction.IsCompare
+				&& node.Instruction.IsIRInstruction
+				&& node.Operand1 != node.Operand2
+				&& node.ConditionCode != ConditionCode.Equal
+				&& node.ConditionCode != ConditionCode.NotEqual)
 			{
 				var newExpression2 = new Expression
 				{

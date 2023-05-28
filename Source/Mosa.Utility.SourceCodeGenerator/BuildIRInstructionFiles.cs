@@ -92,22 +92,22 @@ public class BuildIRInstructionFiles : BuildBaseTemplate
 			Lines.AppendLine("\tpublic override bool IsUnconditionalBranch => true;");
 		}
 
-		if (node.IRBranch != null && node.IRBranch == "true")
+		if (node.Branch != null && node.Branch == "true")
 		{
 			Lines.AppendLine();
-			Lines.AppendLine("\tpublic override bool IsIRBranch => true;");
+			Lines.AppendLine("\tpublic override bool IsBranch => true;");
 		}
 
-		if (node.IRMove != null && node.IRMove == "true")
+		if (node.Move != null && node.Move == "true")
 		{
 			Lines.AppendLine();
-			Lines.AppendLine("\tpublic override bool IsIRMove => true;");
+			Lines.AppendLine("\tpublic override bool IsMove => true;");
 		}
 
-		if (node.IRCompare != null && node.IRCompare == "true")
+		if (node.Compare != null && node.Compare == "true")
 		{
 			Lines.AppendLine();
-			Lines.AppendLine("\tpublic override bool IsIRCompare => true;");
+			Lines.AppendLine("\tpublic override bool IsCompare => true;");
 		}
 
 		if (node.IgnoreDuringCodeGeneration != null && node.IgnoreDuringCodeGeneration == "true")

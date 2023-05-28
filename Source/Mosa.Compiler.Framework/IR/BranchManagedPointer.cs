@@ -19,5 +19,5 @@ public sealed class BranchManagedPointer : BaseIRInstruction
 
 	public override bool IsConditionalBranch => true;
 
-	public override bool IsIRBranch => true;
+	public override bool IsBranch => true;
 }

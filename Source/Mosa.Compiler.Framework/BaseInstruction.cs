@@ -67,11 +67,11 @@ public abstract class BaseInstruction
 
 	public virtual bool IsIRInstruction => false;
 
-	public virtual bool IsIRBranch => false;
+	public virtual bool IsBranch => false;
 
-	public virtual bool IsIRMove => false;
+	public virtual bool IsMove => false;
 
-	public virtual bool IsIRCompare => false;
+	public virtual bool IsCompare => false;
 
 	public virtual bool HasUnspecifiedSideEffect => false;
 
