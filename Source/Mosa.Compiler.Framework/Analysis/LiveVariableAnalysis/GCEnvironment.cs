@@ -77,7 +77,7 @@ public class GCEnvironment : BaseLivenessAnalysisEnvironment
 
 	public override IEnumerable<int> GetKills(InstructionNode node)
 	{
-		if (node.Instruction.FlowControl == FlowControl.Call || node.Instruction == IRInstruction.KillAll)
+		if (node.Instruction.IsCall || node.Instruction == IRInstruction.KillAll)
 		{
 			for (var reg = 0; reg < IndexCount; reg++)
 			{

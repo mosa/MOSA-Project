@@ -372,7 +372,7 @@ public abstract class BaseMethodCompilerStage
 			if (node.IsEmptyOrNop)
 				continue;
 
-			if (node.Instruction.FlowControl != FlowControl.UnconditionalBranch)
+			if (!node.Instruction.IsUnconditionalBranch)
 				return false;
 		}
 
@@ -481,7 +481,7 @@ public abstract class BaseMethodCompilerStage
 			if (node.IsEmptyOrNop)
 				continue;
 
-			if (!node.Instruction.IsPhiInstruction)
+			if (!node.Instruction.IsPhi)
 				break;
 
 			UpdatePhi(node);
@@ -527,7 +527,7 @@ public abstract class BaseMethodCompilerStage
 			if (node.IsEmptyOrNop)
 				continue;
 
-			if (!node.Instruction.IsPhiInstruction)
+			if (!node.Instruction.IsPhi)
 				break;
 
 			var sourceBlocks = node.PhiBlocks;
@@ -566,7 +566,7 @@ public abstract class BaseMethodCompilerStage
 			if (node.IsEmptyOrNop)
 				continue;
 
-			if (!node.Instruction.IsPhiInstruction)
+			if (!node.Instruction.IsPhi)
 				break;
 
 			var index = node.PhiBlocks.IndexOf(source);
@@ -584,7 +584,7 @@ public abstract class BaseMethodCompilerStage
 			if (node.IsEmptyOrNop)
 				continue;
 
-			if (node.Instruction.IsPhiInstruction)
+			if (node.Instruction.IsPhi)
 				return true;
 
 			return false;
@@ -807,7 +807,7 @@ public abstract class BaseMethodCompilerStage
 				if (node.IsEmptyOrNop)
 					continue;
 
-				if (!node.Instruction.IsPhiInstruction)
+				if (!node.Instruction.IsPhi)
 					break;
 
 				foreach (var phiblock in node.PhiBlocks)

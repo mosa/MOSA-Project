@@ -99,22 +99,40 @@ public class BuildCommonInstructionFiles : BuildBaseTemplate
 			Lines.AppendLine("\tpublic override string AlternativeName => \"" + node.AlternativeName + "\";");
 		}
 
+		//if (node.FlowControl != null && node.FlowControl != "Next")
+		//{
+		//	Lines.AppendLine();
+		//	Lines.AppendLine("\tpublic override FlowControl FlowControl => FlowControl." + node.FlowControl + ";");
+		//}
+
 		if (node.FlowControl != null && node.FlowControl != "Next")
 		{
 			Lines.AppendLine();
-			Lines.AppendLine("\tpublic override FlowControl FlowControl => FlowControl." + node.FlowControl + ";");
+			Lines.AppendLine("\tpublic override bool IsFlowNext => false;");
 		}
 
-		if (node.ResultType != null && node.ResultType != "")
+		if (node.FlowControl != null && node.FlowControl == "Call")
 		{
 			Lines.AppendLine();
-			Lines.AppendLine("\tpublic override BuiltInType ResultType => BuiltInType." + node.ResultType + ";");
+			Lines.AppendLine("\tpublic override bool IsCall => true;");
 		}
 
-		if (node.ResultType2 != null && node.ResultType2 != "")
+		if (node.FlowControl != null && node.FlowControl == "Return")
 		{
 			Lines.AppendLine();
-			Lines.AppendLine("\tpublic override BuiltInType ResultType2 => BuiltInType." + node.ResultType2 + ";");
+			Lines.AppendLine("\tpublic override bool IsReturn => true;");
+		}
+
+		if (node.FlowControl != null && node.FlowControl == "ConditionalBranch")
+		{
+			Lines.AppendLine();
+			Lines.AppendLine("\tpublic override bool IsConditionalBranch => true;");
+		}
+
+		if (node.FlowControl != null && node.FlowControl == "UnconditionalBranch")
+		{
+			Lines.AppendLine();
+			Lines.AppendLine("\tpublic override bool IsUnconditionalBranch => true;");
 		}
 
 		if (node.IgnoreDuringCodeGeneration != null && node.IgnoreDuringCodeGeneration == "true")
@@ -132,7 +150,7 @@ public class BuildCommonInstructionFiles : BuildBaseTemplate
 		if (node.VariableOperands != null && node.VariableOperands == "true")
 		{
 			Lines.AppendLine();
-			Lines.AppendLine("\tpublic override bool VariableOperands => true;");
+			Lines.AppendLine("\tpublic override bool HasVariableOperands => true;");
 		}
 
 		if (node.Commutative != null && node.Commutative == "true")

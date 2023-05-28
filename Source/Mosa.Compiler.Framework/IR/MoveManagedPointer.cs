@@ -15,5 +15,5 @@ public sealed class MoveManagedPointer : BaseIRInstruction
 	{
 	}
 
-	public override bool IsIRMoveInstruction => true;
+	public override bool IsIRMove => true;
 }

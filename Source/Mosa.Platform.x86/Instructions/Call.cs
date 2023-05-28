@@ -17,7 +17,9 @@ public sealed class Call : X86Instruction
 	{
 	}
 
-	public override FlowControl FlowControl => FlowControl.Call;
+	public override bool IsFlowNext => false;
+
+	public override bool IsCall => true;
 
 	public override bool IsZeroFlagUnchanged => true;
 

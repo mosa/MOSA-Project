@@ -532,7 +532,7 @@ public sealed class SparseConditionalConstantPropagation
 		{
 			CompareOperation(node);
 		}
-		else if (instruction.IsPhiInstruction)
+		else if (instruction.IsPhi)
 		{
 			Phi(node);
 		}

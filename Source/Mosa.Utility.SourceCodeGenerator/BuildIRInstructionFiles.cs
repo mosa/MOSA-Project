@@ -50,34 +50,64 @@ public class BuildIRInstructionFiles : BuildBaseTemplate
 		Lines.AppendLine("\t{");
 		Lines.AppendLine("\t}");
 
+		//if (node.FlowControl != null && node.FlowControl != "Next")
+		//{
+		//	Lines.AppendLine();
+		//	Lines.AppendLine("\tpublic override FlowControl FlowControl => FlowControl." + node.FlowControl + ";");
+		//}
+
 		if (node.FlowControl != null && node.FlowControl != "Next")
 		{
 			Lines.AppendLine();
-			Lines.AppendLine("\tpublic override FlowControl FlowControl => FlowControl." + node.FlowControl + ";");
-		}
-
-		if (node.Branch != null && node.Branch == "true")
-		{
-			Lines.AppendLine();
-			Lines.AppendLine("\tpublic override bool IsIRBranchInstruction => true;");
+			Lines.AppendLine("\tpublic override bool IsFlowNext => false;");
 		}
 
 		if (node.Phi != null && node.Phi == "true")
 		{
 			Lines.AppendLine();
-			Lines.AppendLine("\tpublic override bool IsPhiInstruction => true;");
+			Lines.AppendLine("\tpublic override bool IsPhi => true;");
 		}
 
-		if (node.Move != null && node.Move == "true")
+		if (node.FlowControl != null && node.FlowControl == "Call")
 		{
 			Lines.AppendLine();
-			Lines.AppendLine("\tpublic override bool IsIRMoveInstruction => true;");
+			Lines.AppendLine("\tpublic override bool IsCall => true;");
 		}
 
-		if (node.Compare != null && node.Compare == "true")
+		if (node.FlowControl != null && node.FlowControl == "Return")
 		{
 			Lines.AppendLine();
-			Lines.AppendLine("\tpublic override bool IsIRCompareInstruction => true;");
+			Lines.AppendLine("\tpublic override bool IsReturn => true;");
+		}
+
+		if (node.FlowControl != null && node.FlowControl == "ConditionalBranch")
+		{
+			Lines.AppendLine();
+			Lines.AppendLine("\tpublic override bool IsConditionalBranch => true;");
+		}
+
+		if (node.FlowControl != null && node.FlowControl == "UnconditionalBranch")
+		{
+			Lines.AppendLine();
+			Lines.AppendLine("\tpublic override bool IsUnconditionalBranch => true;");
+		}
+
+		if (node.IRBranch != null && node.IRBranch == "true")
+		{
+			Lines.AppendLine();
+			Lines.AppendLine("\tpublic override bool IsIRBranch => true;");
+		}
+
+		if (node.IRMove != null && node.IRMove == "true")
+		{
+			Lines.AppendLine();
+			Lines.AppendLine("\tpublic override bool IsIRMove => true;");
+		}
+
+		if (node.IRCompare != null && node.IRCompare == "true")
+		{
+			Lines.AppendLine();
+			Lines.AppendLine("\tpublic override bool IsIRCompare => true;");
 		}
 
 		if (node.IgnoreDuringCodeGeneration != null && node.IgnoreDuringCodeGeneration == "true")
@@ -95,7 +125,7 @@ public class BuildIRInstructionFiles : BuildBaseTemplate
 		if (node.VariableOperands != null && node.VariableOperands == "true")
 		{
 			Lines.AppendLine();
-			Lines.AppendLine("\tpublic override bool VariableOperands => true;");
+			Lines.AppendLine("\tpublic override bool HasVariableOperands => true;");
 		}
 
 		if (node.Commutative != null && node.Commutative == "true")

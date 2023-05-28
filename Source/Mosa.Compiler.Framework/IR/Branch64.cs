@@ -15,7 +15,9 @@ public sealed class Branch64 : BaseIRInstruction
 	{
 	}
 
-	public override FlowControl FlowControl => FlowControl.ConditionalBranch;
+	public override bool IsFlowNext => false;
 
-	public override bool IsIRBranchInstruction => true;
+	public override bool IsConditionalBranch => true;
+
+	public override bool IsIRBranch => true;
 }

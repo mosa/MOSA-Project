@@ -17,7 +17,9 @@ public sealed class B : ARMv8A32Instruction
 	{
 	}
 
-	public override FlowControl FlowControl => FlowControl.ConditionalBranch;
+	public override bool IsFlowNext => false;
+
+	public override bool IsConditionalBranch => true;
 
 	public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 	{

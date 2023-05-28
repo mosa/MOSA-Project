@@ -17,5 +17,5 @@ public sealed class Compare32x64 : BaseIRInstruction
 	{
 	}
 
-	public override bool IsIRCompareInstruction => true;
+	public override bool IsIRCompare => true;
 }

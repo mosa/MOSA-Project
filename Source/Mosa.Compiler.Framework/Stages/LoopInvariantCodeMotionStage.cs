@@ -222,8 +222,8 @@ public sealed class LoopInvariantCodeMotionStage : BaseMethodCompilerStage
 						|| node.Instruction.IsMemoryWrite
 						|| node.Instruction.IsIOOperation
 						|| node.Instruction.HasUnspecifiedSideEffect
-						|| node.Instruction.VariableOperands
-						|| node.Instruction.FlowControl != FlowControl.Next
+						|| node.Instruction.HasVariableOperands
+						|| node.Instruction.IsFlowNext
 						|| node.Instruction.IgnoreDuringCodeGeneration
 						|| node.Operand1.IsUnresolvedConstant
 						|| (node.OperandCount == 2 && node.Operand2.IsUnresolvedConstant)
@@ -300,7 +300,7 @@ public sealed class LoopInvariantCodeMotionStage : BaseMethodCompilerStage
 			if (node.IsEmptyOrNop)
 				continue;
 
-			if (!node.Instruction.IsPhiInstruction)
+			if (!node.Instruction.IsPhi)
 				break;
 
 			var landingpadSourceBlocks = new List<BasicBlock>(node.OperandCount);

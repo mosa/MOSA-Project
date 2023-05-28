@@ -215,7 +215,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 			if (node.IsEmptyOrNop)
 				continue;
 
-			if (node.Instruction.IsPhiInstruction)
+			if (node.Instruction.IsPhi)
 			{
 				// Validate all successor are already processed
 				// and if not, just set the value number
@@ -281,7 +281,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 				node.Operand2 = operand1;
 			}
 
-			if (node.Instruction.IsIRMoveInstruction)
+			if (node.Instruction.IsIRMove)
 			{
 				if (node.Result.IsCPURegister || node.Operand1.IsCPURegister)
 				{
@@ -372,7 +372,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 				AddExpressionToHashTable(newExpression2);
 				newExpressions.Add(newExpression2);
 			}
-			else if (node.Instruction.IsIRCompareInstruction && node.Operand1 != node.Operand2 && node.ConditionCode != ConditionCode.Equal && node.ConditionCode != ConditionCode.NotEqual)
+			else if (node.Instruction.IsIRCompare && node.Operand1 != node.Operand2 && node.ConditionCode != ConditionCode.Equal && node.ConditionCode != ConditionCode.NotEqual)
 			{
 				var newExpression2 = new Expression
 				{
@@ -463,8 +463,8 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 			|| node.Instruction.IsMemoryRead
 			|| node.Instruction.IsIOOperation
 			|| node.Instruction.HasUnspecifiedSideEffect
-			|| node.Instruction.VariableOperands
-			|| node.Instruction.FlowControl != FlowControl.Next
+			|| node.Instruction.HasVariableOperands
+			|| node.Instruction.IsFlowNext
 			|| node.Instruction.IgnoreDuringCodeGeneration
 			|| node.Operand1.IsUnresolvedConstant
 			|| (node.OperandCount == 2 && node.Operand2.IsUnresolvedConstant))
@@ -576,7 +576,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 
 	private bool IsPhiUseless(InstructionNode node)
 	{
-		Debug.Assert(node.Instruction.IsPhiInstruction);
+		Debug.Assert(node.Instruction.IsPhi);
 
 		var operand = node.Operand1;
 		var operandVN = GetValueNumber(operand);
@@ -592,8 +592,8 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 
 	private bool ArePhisRedundant(InstructionNode a, InstructionNode b)
 	{
-		Debug.Assert(a.Instruction.IsPhiInstruction);
-		Debug.Assert(b.Instruction.IsPhiInstruction);
+		Debug.Assert(a.Instruction.IsPhi);
+		Debug.Assert(b.Instruction.IsPhi);
 
 		if (a.OperandCount != b.OperandCount)
 			return false;
@@ -657,7 +657,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 				else
 				{
 					// value has not been encountered yet --- skip it for now
-					if (node.Instruction.IsPhiInstruction)
+					if (node.Instruction.IsPhi)
 						continue;
 
 					//Debug.Assert(node.Instruction.IsPhiInstruction);
@@ -681,7 +681,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 				if (node.IsEmptyOrNop)
 					continue;
 
-				if (!node.Instruction.IsPhiInstruction)
+				if (!node.Instruction.IsPhi)
 					break;
 
 				// update operands with their value number
@@ -699,7 +699,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 			if (previousPhi.IsEmptyOrNop)
 				continue;
 
-			Debug.Assert(previousPhi.Instruction.IsPhiInstruction);
+			Debug.Assert(previousPhi.Instruction.IsPhi);
 
 			if (ArePhisRedundant(node, previousPhi))
 			{

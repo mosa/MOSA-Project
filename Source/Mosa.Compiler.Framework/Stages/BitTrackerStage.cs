@@ -289,7 +289,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		if (!IsBitTrackable(node.Result))
 			return Any(virtualRegister);
 
-		if (node.Instruction.FlowControl == FlowControl.Call)
+		if (node.Instruction.IsCall)
 			return Any(virtualRegister);
 
 		var method = visitation[node.Instruction.ID];
