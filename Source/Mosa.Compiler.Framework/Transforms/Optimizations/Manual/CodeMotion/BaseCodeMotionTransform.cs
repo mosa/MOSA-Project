@@ -82,7 +82,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.CodeMotion
 
 				if (next.IsBlockEndInstruction
 					|| next.Instruction.IsMemoryWrite
-					|| next.Instruction.FlowControl != FlowControl.Next
+					|| next.Instruction.IsFlowNext
 					|| next.Instruction.HasUnspecifiedSideEffect)
 					return next;
 

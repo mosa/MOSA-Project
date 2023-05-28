@@ -15,5 +15,7 @@ public sealed class SetReturnObject : BaseIRInstruction
 	{
 	}
 
-	public override FlowControl FlowControl => FlowControl.Return;
+	public override bool IsFlowNext => false;
+
+	public override bool IsReturn => true;
 }

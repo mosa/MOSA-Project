@@ -179,7 +179,7 @@ public sealed class EnterSSAStage : BaseMethodCompilerStage
 			if (node.IsEmptyOrNop)
 				continue;
 
-			if (!node.Instruction.IsPhiInstruction)
+			if (!node.Instruction.IsPhi)
 			{
 				for (var i = 0; i < node.OperandCount; ++i)
 				{
@@ -225,7 +225,7 @@ public sealed class EnterSSAStage : BaseMethodCompilerStage
 				if (node.IsEmptyOrNop)
 					continue;
 
-				if (!node.Instruction.IsPhiInstruction)
+				if (!node.Instruction.IsPhi)
 					break;
 
 				var op = node.GetOperand(index);

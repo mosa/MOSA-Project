@@ -31,18 +31,6 @@ public abstract class BaseInstruction
 	/// <value>The operand result count.</value>
 	public byte DefaultResultCount { get; protected set; }
 
-	/// <summary>
-	/// Determines flow behavior of this instruction.
-	/// </summary>
-	/// <remarks>
-	/// Knowledge of control flow is required for correct basic block
-	/// building. Any instruction that alters the control flow must override
-	/// this property and correctly identify its control flow modifications.
-	/// </remarks>
-	public virtual FlowControl FlowControl => FlowControl.Next;
-
-	public virtual bool VariableOperands => false;
-
 	public virtual string Name { get; private set; }
 
 	public virtual string AlternativeName => null;
@@ -55,13 +43,35 @@ public abstract class BaseInstruction
 
 	public virtual string OpcodeName { get; private set; }
 
+	public virtual bool IgnoreDuringCodeGeneration => false;
+
+	public virtual bool IgnoreInstructionBasicBlockTargets => false;
+
 	#endregion Properties
 
 	#region Is/Has Properties
 
-	public virtual bool IgnoreDuringCodeGeneration => false;
+	public virtual bool IsFlowNext => true;
 
-	public virtual bool IgnoreInstructionBasicBlockTargets => false;
+	public virtual bool IsPlatformInstruction => false;
+
+	public virtual bool IsPhi => false;
+
+	public virtual bool IsConditionalBranch => false;
+
+	public virtual bool IsUnconditionalBranch => false;
+
+	public virtual bool IsCall => false;
+
+	public virtual bool IsReturn => false;
+
+	public virtual bool IsIRInstruction => false;
+
+	public virtual bool IsBranch => false;
+
+	public virtual bool IsMove => false;
+
+	public virtual bool IsCompare => false;
 
 	public virtual bool HasUnspecifiedSideEffect => false;
 
@@ -77,17 +87,7 @@ public abstract class BaseInstruction
 
 	public virtual bool IsParameterStore => false;
 
-	public virtual bool IsPlatformInstruction => false;
-
-	public virtual bool IsIRInstruction => false;
-
-	public virtual bool IsPhiInstruction => false;
-
-	public virtual bool IsIRBranchInstruction => false;
-
-	public virtual bool IsIRMoveInstruction => false;
-
-	public virtual bool IsIRCompareInstruction => false;
+	public virtual bool HasVariableOperands => false;
 
 	#endregion Is/Has Properties
 

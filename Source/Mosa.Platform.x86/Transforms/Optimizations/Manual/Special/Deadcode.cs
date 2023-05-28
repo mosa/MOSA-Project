@@ -21,7 +21,7 @@ public sealed class Deadcode : BaseTransform
 		if (context.Result.IsCPURegister)
 			return false;
 
-		if (context.Instruction.FlowControl == FlowControl.Call)
+		if (context.Instruction.IsCall)
 			return false;
 
 		if (context.StatusRegister == StatusRegister.Set)

@@ -799,19 +799,19 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 				|| at.Instruction == IRInstruction.Gen)
 				continue;
 
-			if (at.Instruction.FlowControl == FlowControl.Return)
+			if (at.Instruction.IsReturn)
 				return TriState.No;
 
 			if (at.Instruction == IRInstruction.Epilogue)
 				return TriState.No;
 
-			if (at.Instruction.FlowControl == FlowControl.UnconditionalBranch && at.Block.NextBlocks.Count == 1)
+			if (at.Instruction.IsUnconditionalBranch && at.Block.NextBlocks.Count == 1)
 			{
 				at = at.BranchTargets[0].First;
 				continue;
 			}
 
-			if (at.Instruction.FlowControl != FlowControl.Next)
+			if (!at.Instruction.IsFlowNext)
 				return TriState.Unknown; // Flow direction changed
 
 			var instruction = at.Instruction;
@@ -880,7 +880,7 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 				|| previous.Instruction.IsMemoryWrite
 				|| previous.Instruction.IsIOOperation
 				|| previous.Instruction.HasUnspecifiedSideEffect
-				|| previous.Instruction.FlowControl != FlowControl.Next)
+				|| !previous.Instruction.IsFlowNext)
 				return null;
 
 			if (operand1 != null)
@@ -936,7 +936,7 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 				|| next.Instruction.IsMemoryWrite
 				|| next.Instruction.IsIOOperation
 				|| next.Instruction.HasUnspecifiedSideEffect
-				|| next.Instruction.FlowControl != FlowControl.Next)
+				|| !next.Instruction.IsFlowNext)
 				return null;
 
 			if (operand != null)

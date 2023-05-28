@@ -15,5 +15,5 @@ public sealed class IntrinsicMethodCall : BaseIRInstruction
 	{
 	}
 
-	public override bool VariableOperands => true;
+	public override bool HasVariableOperands => true;
 }

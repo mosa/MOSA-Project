@@ -35,7 +35,7 @@ public class ExitSSAStage : BaseMethodCompilerStage
 
 				InstructionCount.Increment();
 
-				if (!node.Instruction.IsPhiInstruction)
+				if (!node.Instruction.IsPhi)
 					break;
 
 				if (node.OperandCount != node.Block.PreviousBlocks.Count)

@@ -19,7 +19,9 @@ public sealed class Branch : X64Instruction
 
 	public override string AlternativeName => "Jxx";
 
-	public override FlowControl FlowControl => FlowControl.ConditionalBranch;
+	public override bool IsFlowNext => false;
+
+	public override bool IsConditionalBranch => true;
 
 	public override bool IsZeroFlagUsed => true;
 

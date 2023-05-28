@@ -121,7 +121,9 @@ public sealed class BasicBlock : IComparable<BasicBlock>
 			var node = BeforeLast;
 
 			while (node.IsEmpty
-				   || node.Instruction.FlowControl is FlowControl.UnconditionalBranch or FlowControl.ConditionalBranch or FlowControl.Return)
+				|| node.Instruction.IsUnconditionalBranch
+				|| node.Instruction.IsConditionalBranch
+				|| node.Instruction.IsReturn)
 			{
 				node = node.Previous;
 			}

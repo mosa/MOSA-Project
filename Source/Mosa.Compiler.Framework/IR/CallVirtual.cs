@@ -15,7 +15,9 @@ public sealed class CallVirtual : BaseIRInstruction
 	{
 	}
 
-	public override FlowControl FlowControl => FlowControl.Call;
+	public override bool IsFlowNext => false;
 
-	public override bool VariableOperands => true;
+	public override bool IsCall => true;
+
+	public override bool HasVariableOperands => true;
 }

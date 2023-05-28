@@ -82,9 +82,9 @@ public abstract class BaseRegisterAllocator
 		foreach (var physicalRegister in architecture.RegisterSet)
 		{
 			var reserved = physicalRegister == StackFrameRegister
-						   || physicalRegister == StackPointerRegister
-						   || (LinkRegister != null && physicalRegister == LinkRegister)
-						   || (ProgramCounter != null && physicalRegister == ProgramCounter);
+				|| physicalRegister == StackPointerRegister
+				|| (LinkRegister != null && physicalRegister == LinkRegister)
+				|| (ProgramCounter != null && physicalRegister == ProgramCounter);
 
 			VirtualRegisters.Add(new VirtualRegister(physicalRegister, reserved));
 			LiveIntervalTracks.Add(new LiveIntervalTrack(physicalRegister, reserved));
@@ -650,7 +650,7 @@ public abstract class BaseRegisterAllocator
 					}
 				}
 
-				if (node.Instruction.FlowControl == FlowControl.Call || node.Instruction == IRInstruction.KillAll)
+				if (node.Instruction.IsCall || node.Instruction == IRInstruction.KillAll)
 				{
 					for (var reg = 0; reg < PhysicalRegisterCount; reg++)
 					{
@@ -782,7 +782,7 @@ public abstract class BaseRegisterAllocator
 				var slot = new SlotIndex(node);
 				var slotAfter = slot.After;
 
-				if (node.Instruction.FlowControl == FlowControl.Call || node.Instruction == IRInstruction.KillAll)
+				if (node.Instruction.IsCall || node.Instruction == IRInstruction.KillAll)
 				{
 					for (var s = 0; s < PhysicalRegisterCount; s++)
 					{

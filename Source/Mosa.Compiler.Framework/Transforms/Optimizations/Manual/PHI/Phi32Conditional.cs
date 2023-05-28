@@ -42,7 +42,7 @@ public sealed class Phi32Conditional : BaseTransform
 
 		var ctx = new Context(parent.BeforeLast);
 
-		while (ctx.IsEmptyOrNop || ctx.Instruction.FlowControl != FlowControl.ConditionalBranch)
+		while (ctx.IsEmptyOrNop || !ctx.Instruction.IsConditionalBranch)
 		{
 			ctx.GotoPrevious();
 		}

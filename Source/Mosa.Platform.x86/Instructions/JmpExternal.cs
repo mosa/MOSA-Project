@@ -17,7 +17,9 @@ public sealed class JmpExternal : X86Instruction
 	{
 	}
 
-	public override FlowControl FlowControl => FlowControl.UnconditionalBranch;
+	public override bool IsFlowNext => false;
+
+	public override bool IsUnconditionalBranch => true;
 
 	public override bool IsZeroFlagUnchanged => true;
 
