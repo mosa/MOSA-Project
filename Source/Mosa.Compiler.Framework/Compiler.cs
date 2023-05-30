@@ -168,63 +168,57 @@ public sealed class Compiler
 		};
 	}
 
-	private static List<BaseMethodCompilerStage> GetDefaultMethodPipeline(CompilerSettings compilerSettings, bool is64BitPlatform)
+	private static List<BaseMethodCompilerStage> GetDefaultMethodPipeline(CompilerSettings compilerSettings, bool is64BitPlatform) => new List<BaseMethodCompilerStage>
 	{
-		return new List<BaseMethodCompilerStage>
-		{
-			new CILDecoderStage(),
-			new CheckedConversionStage(),
-			new ExceptionStage(),
-			compilerSettings.Devirtualization ? new DevirtualizeCallStage() : null,
-			new PlugStage(),
-			new RuntimeStage(),
-			new IRTransformsStage(),
+		new CILDecoderStage(),
+		new ExceptionStage(),
+		new IRTransformsStage(),
+		compilerSettings.Devirtualization ? new DevirtualizeCallStage() : null,
+		new PlugStage(),
+		new RuntimeStage(),
 
-			compilerSettings.InlineMethods || compilerSettings.InlineExplicit ? new InlineStage() : null,
-			new StaticLoadOptimizationStage(),
+		compilerSettings.InlineMethods || compilerSettings.InlineExplicit ? new InlineStage() : null,
 
-			compilerSettings.BasicOptimizations ? new OptimizationStage(false) : null,
-			compilerSettings.SSA ? new EdgeSplitStage() : null,
-			compilerSettings.SSA ? new EnterSSAStage() : null,
-			compilerSettings.BasicOptimizations && compilerSettings.SSA ? new OptimizationStage(false) : null,
-			compilerSettings.ValueNumbering && compilerSettings.SSA ? new ValueNumberingStage() : null,
-			compilerSettings.LoopInvariantCodeMotion && compilerSettings.SSA ? new LoopInvariantCodeMotionStage() : null,
-			compilerSettings.SparseConditionalConstantPropagation && compilerSettings.SSA ? new SparseConditionalConstantPropagationStage() : null,
-			compilerSettings.BasicOptimizations && compilerSettings.SSA && (compilerSettings.ValueNumbering || compilerSettings.LoopInvariantCodeMotion || compilerSettings.SparseConditionalConstantPropagation) ? new OptimizationStage(false) : null,
-			compilerSettings.BitTracker ? new BitTrackerStage() : null,
-			compilerSettings.BasicOptimizations && compilerSettings.BitTracker ? new OptimizationStage(false) : null,
-			compilerSettings.BasicOptimizations && compilerSettings.LongExpansion ? new OptimizationStage(compilerSettings.LongExpansion) : null,
+		compilerSettings.BasicOptimizations ? new OptimizationStage(false) : null,
+		compilerSettings.SSA ? new EdgeSplitStage() : null,
+		compilerSettings.SSA ? new EnterSSAStage() : null,
+		compilerSettings.BasicOptimizations && compilerSettings.SSA ? new OptimizationStage(false) : null,
+		compilerSettings.ValueNumbering && compilerSettings.SSA ? new ValueNumberingStage() : null,
+		compilerSettings.LoopInvariantCodeMotion && compilerSettings.SSA ? new LoopInvariantCodeMotionStage() : null,
+		compilerSettings.SparseConditionalConstantPropagation && compilerSettings.SSA ? new SparseConditionalConstantPropagationStage() : null,
+		compilerSettings.BasicOptimizations && compilerSettings.SSA && (compilerSettings.ValueNumbering || compilerSettings.LoopInvariantCodeMotion || compilerSettings.SparseConditionalConstantPropagation) ? new OptimizationStage(false) : null,
+		compilerSettings.BitTracker ? new BitTrackerStage() : null,
+		compilerSettings.BasicOptimizations && compilerSettings.BitTracker ? new OptimizationStage(false) : null,
+		compilerSettings.BasicOptimizations && compilerSettings.LongExpansion ? new OptimizationStage(compilerSettings.LongExpansion) : null,
 
-			compilerSettings.TwoPass && compilerSettings.ValueNumbering && compilerSettings.SSA ? new ValueNumberingStage() : null,
-			compilerSettings.TwoPass && compilerSettings.LoopInvariantCodeMotion && compilerSettings.SSA ? new LoopInvariantCodeMotionStage() : null,
-			compilerSettings.TwoPass && compilerSettings.SparseConditionalConstantPropagation && compilerSettings.SSA ? new SparseConditionalConstantPropagationStage() : null,
-			compilerSettings.TwoPass && compilerSettings.BitTracker ? new BitTrackerStage() : null,
-			compilerSettings.TwoPass && compilerSettings.BasicOptimizations && compilerSettings.SSA ? new OptimizationStage(compilerSettings.LongExpansion) : null,
+		compilerSettings.TwoPass && compilerSettings.ValueNumbering && compilerSettings.SSA ? new ValueNumberingStage() : null,
+		compilerSettings.TwoPass && compilerSettings.LoopInvariantCodeMotion && compilerSettings.SSA ? new LoopInvariantCodeMotionStage() : null,
+		compilerSettings.TwoPass && compilerSettings.SparseConditionalConstantPropagation && compilerSettings.SSA ? new SparseConditionalConstantPropagationStage() : null,
+		compilerSettings.TwoPass && compilerSettings.BitTracker ? new BitTrackerStage() : null,
+		compilerSettings.TwoPass && compilerSettings.BasicOptimizations && compilerSettings.SSA ? new OptimizationStage(compilerSettings.LongExpansion) : null,
 
-			compilerSettings.SSA ? new ExitSSAStage() : null,
-			new IRCleanupStage(),
-			compilerSettings.InlineMethods || compilerSettings.InlineExplicit ? new InlineEvaluationStage() : null,
+		compilerSettings.SSA ? new ExitSSAStage() : null,
 
-			//new StopStage(),
+		new IRCleanupStage(),
 
-			new NewObjectStage(),
-			new CallStage(),
-			new CompoundStage(),
-			new PlatformIntrinsicStage(),
+		compilerSettings.InlineMethods || compilerSettings.InlineExplicit ? new InlineEvaluationStage() : null,
+		new NewObjectStage(),
+		new CallStage(),
+		new CompoundStage(),
+		new PlatformIntrinsicStage(),
 
-			new PlatformEdgeSplitStage(),
-			new VirtualRegisterRenameStage(),
-			new GreedyRegisterAllocatorStage(),
-			new StackLayoutStage(),
-			new DeadBlockStage(),
-			new BlockOrderingStage(),
+		new PlatformEdgeSplitStage(),
+		new VirtualRegisterRenameStage(),
+		new GreedyRegisterAllocatorStage(),
+		new StackLayoutStage(),
+		new DeadBlockStage(),
+		new BlockOrderingStage(),
 
-			//new PreciseGCStage(),
+		//new PreciseGCStage(),
 
-			new CodeGenerationStage(),
-			compilerSettings.EmitBinary ? new ProtectedRegionLayoutStage() : null,
-		};
-	}
+		new CodeGenerationStage(),
+		compilerSettings.EmitBinary ? new ProtectedRegionLayoutStage() : null,
+	};
 
 	#endregion Static Methods
 

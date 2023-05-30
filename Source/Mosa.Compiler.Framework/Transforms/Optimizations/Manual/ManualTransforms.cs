@@ -277,5 +277,8 @@ public static class ManualTransforms
 
 		new Overwrite.Move32Overwrite(),
 		new Overwrite.Move64Overwrite(),
+
+		new StaticLoad.Load32(),
+		new StaticLoad.Load64(),
 	};
 }

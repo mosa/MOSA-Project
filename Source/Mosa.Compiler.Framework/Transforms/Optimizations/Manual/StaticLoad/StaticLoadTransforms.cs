@@ -2,7 +2,7 @@
 
 using System.Collections.Generic;
 
-namespace Mosa.Compiler.Framework.Transforms.StaticLoad;
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.StaticLoad;
 
 /// <summary>
 /// Transformations
