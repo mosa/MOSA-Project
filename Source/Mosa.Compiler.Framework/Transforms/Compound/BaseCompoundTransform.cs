@@ -26,8 +26,7 @@ public abstract class BaseCompoundTransform : BaseTransform
 		context.AppendInstruction(transform.AddInstruction, srcReg, sourceBase, source);
 		context.AppendInstruction(transform.AddInstruction, dstReg, destinationBase, destination);
 
-		var tmp = transform.VirtualRegisters.Allocate32();
-		var tmpLarge = transform.Is32BitPlatform && size >= 8 ? null : transform.VirtualRegisters.Allocate64();
+		var tmp = transform.VirtualRegisters.AllocateNativeInteger();
 
 		for (var i = 0; i < size;)
 		{
@@ -38,8 +37,8 @@ public abstract class BaseCompoundTransform : BaseTransform
 			if (left >= 8 & !transform.Is32BitPlatform)
 			{
 				// 64bit move
-				context.AppendInstruction(IRInstruction.Load64, tmpLarge, srcReg, index);
-				context.AppendInstruction(IRInstruction.Store64, null, dstReg, index, tmpLarge);
+				context.AppendInstruction(IRInstruction.Load64, tmp, srcReg, index);
+				context.AppendInstruction(IRInstruction.Store64, null, dstReg, index, tmp);
 				i += 8;
 				continue;
 			}

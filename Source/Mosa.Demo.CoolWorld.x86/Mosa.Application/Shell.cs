@@ -72,6 +72,8 @@ public class Shell : BaseApplication, IConsoleApp
 			"shutdown" => new Shutdown(),
 			"reboot" => new Reboot(),
 			"test" => new Test(),
+			"test2" => new Test(),
+			"test3" => new Test(),
 			_ => null
 		};
 	}
