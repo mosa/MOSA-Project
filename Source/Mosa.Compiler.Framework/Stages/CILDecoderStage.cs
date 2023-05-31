@@ -5321,7 +5321,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		}
 
 		// REFERENCE: The last value is the fall thru - this is not implemented correctly in later stages (fixme)
-		context.AddBranchTarget(BasicBlocks.GetByLabel(instruction.Next.Value));
+		//context.AddBranchTarget(BasicBlocks.GetByLabel(instruction.Next.Value));
 
 		return true;
 	}

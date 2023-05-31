@@ -109,7 +109,6 @@ public static class IRTransforms
 		new SubOverflowOut32(),
 		new SubR4(),
 		new SubR8(),
-		new Switch(),
 		new ZeroExtend16x32(),
 		new ZeroExtend8x32(),
 		new Add64(),

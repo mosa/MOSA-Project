@@ -20,5 +20,7 @@ public static class IRTransforms
 		new CheckThrowIndexOutOfRange(),
 		new CheckThrowOverflow(),
 		new CheckThrowDivideByZero(),
+
+		new Switch(),
 	};
 }

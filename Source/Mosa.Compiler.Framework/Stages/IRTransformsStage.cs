@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Framework.Transforms.CheckedConversion;
 using Mosa.Compiler.Framework.Transforms.IR;
 
 namespace Mosa.Compiler.Framework.Stages;
@@ -13,5 +14,6 @@ public class IRTransformsStage : BaseTransformStage
 		: base(true, false)
 	{
 		AddTranforms(IRTransforms.List);
+		AddTranforms(CheckedConversionTransforms.List);
 	}
 }

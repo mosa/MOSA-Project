@@ -450,7 +450,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			if (node.Instruction == IRInstruction.Switch)
 				continue;
 
-			Debug.Assert(node.Instruction == IRInstruction.Branch32 || node.Instruction == IRInstruction.Branch64 || node.Instruction == IRInstruction.BranchObject);
+			Debug.Assert(node.Instruction.IsBranch);
 
 			var value1 = TransformContext.GetBitValue(node.Operand1);
 			var value2 = TransformContext.GetBitValue(node.Operand2);
