@@ -63,8 +63,8 @@ public partial class ControlView : DebugDockContent
 		if (memory.Length < 8)
 			return; // something went wrong!
 
-		ulong ebp = MainForm.ToLong(memory, 0, 4);
-		ulong ip = MainForm.ToLong(memory, 4, 4);
+		var ebp = MainForm.ToLong(memory, 0, 4);
+		var ip = MainForm.ToLong(memory, 4, 4);
 
 		if (ip == 0)
 			return;
@@ -80,7 +80,7 @@ public partial class ControlView : DebugDockContent
 			return; // something went wrong!
 
 		// FIXME: x86 specific implementation
-		ulong ip = MainForm.ToLong(memory, 0, 4);
+		var ip = MainForm.ToLong(memory, 0, 4);
 
 		if (ip == 0)
 			return;

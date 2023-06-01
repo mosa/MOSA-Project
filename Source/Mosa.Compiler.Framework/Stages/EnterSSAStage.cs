@@ -366,20 +366,4 @@ public sealed class EnterSSAStage : BaseMethodCompilerStage
 			}
 		}
 	}
-
-	private static string ToString(List<BasicBlock> blocks)
-	{
-		var sb = new StringBuilder();
-
-		foreach (var block in blocks)
-		{
-			sb.Append(block);
-			sb.Append(" ");
-		}
-
-		if (blocks.Count != 0)
-			sb.Length -= 1;
-
-		return sb.ToString();
-	}
 }

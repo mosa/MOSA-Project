@@ -76,18 +76,18 @@ public partial class DisplayView : DebugDockContent
 		//if (memory.Length < width * height)
 		//	return;
 
-		uint offset = (uint)(address - StandardAddressBase);
+		var offset = (uint)(address - StandardAddressBase);
 
 		lock (bitmap)
 		{
-			for (int index = 0; index < memory.Length; index += 2)
+			for (var index = 0; index < memory.Length; index += 2)
 			{
-				int text = memory[index];
-				int color = memory[index + 1];
+				var text = memory[index];
+				var color = memory[index + 1];
 
-				ushort y = (ushort)((index + offset) / ((uint)width * 2));
-				ushort x2 = (ushort)((index + offset) - (y * (uint)width * 2));
-				ushort x = (ushort)(x2 >> 1);
+				var y = (ushort)((index + offset) / ((uint)width * 2));
+				var x2 = (ushort)((index + offset) - (y * (uint)width * 2));
+				var x = (ushort)(x2 >> 1);
 
 				PutChar(x, y, (char)text, (byte)(color & 0x0F), (byte)(color >> 4));
 			}

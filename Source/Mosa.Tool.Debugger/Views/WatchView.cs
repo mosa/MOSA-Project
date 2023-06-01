@@ -15,15 +15,15 @@ public partial class WatchView : DebugDockContent
 
 	private class WatchEntry
 	{
-		public string Address { get { return DebugDockContent.ToHex(Watch.Address); } }
+		public string Address => DebugDockContent.ToHex(Watch.Address);
 
-		public string Name { get { return Watch.Name; } }
+		public string Name => Watch.Name;
 
 		public string HexValue { get; set; }
 
 		public ulong Value { get; set; }
 
-		public uint Size { get { return Watch.Size; } }
+		public uint Size => Watch.Size;
 
 		public string Info { get; set; }
 
@@ -150,16 +150,14 @@ public partial class WatchView : DebugDockContent
 	{
 		var address = MainForm.ParseHexAddress(tbAddress.Text);
 
-		uint size = 0;
-
-		switch (cbLength.SelectedIndex)
+		var size = cbLength.SelectedIndex switch
 		{
-			case 0: size = 1; break;
-			case 1: size = 2; break;
-			case 2: size = 4; break;
-			case 3: size = 8; break;
-			default: size = 4; break;
-		}
+			0 => (uint)1,
+			1 => (uint)2,
+			2 => (uint)4,
+			3 => (uint)8,
+			_ => (uint)4,
+		};
 
 		MainForm.AddWatch(null, address, size);
 	}

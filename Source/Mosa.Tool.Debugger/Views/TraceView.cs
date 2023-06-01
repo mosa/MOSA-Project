@@ -109,18 +109,19 @@ public partial class TraceView : DebugDockContent
 			if (File.Exists(filename))
 				File.Delete(filename);
 
-			int columnCount = dataGridView1.Columns.Count;
-			string columnNames = "";
-			string[] outputCsv = new string[dataGridView1.Rows.Count + 1];
+			var columnCount = dataGridView1.Columns.Count;
+			var columnNames = string.Empty;
+			var outputCsv = new string[dataGridView1.Rows.Count + 1];
+
 			for (int i = 0; i < columnCount; i++)
 			{
 				columnNames += dataGridView1.Columns[i].HeaderText.ToString() + "\t";
 			}
 			outputCsv[0] += columnNames;
 
-			for (int i = 1; (i - 1) < dataGridView1.Rows.Count; i++)
+			for (var i = 1; (i - 1) < dataGridView1.Rows.Count; i++)
 			{
-				for (int j = 0; j < columnCount; j++)
+				for (var j = 0; j < columnCount; j++)
 				{
 					outputCsv[i] += dataGridView1.Rows[i - 1].Cells[j].Value.ToString() + "\t";
 				}

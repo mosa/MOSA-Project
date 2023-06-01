@@ -22,7 +22,9 @@ public class MemoryCache
 	private class Request
 	{
 		public ulong Address { get; }
+
 		public uint Size { get; }
+
 		public OnMemoryRead OnMemoryRead { get; }
 
 		public List<ulong> Blocks { get; } = new List<ulong>();

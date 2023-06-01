@@ -21,7 +21,7 @@ public partial class MethodView : DebugDockContent
 		[Browsable(false)]
 		public ulong IP { get; set; }
 
-		public string Address { get { return DebugDockContent.ToHex(IP); } }
+		public string Address => DebugDockContent.ToHex(IP);
 
 		public string Instruction { get; set; }
 

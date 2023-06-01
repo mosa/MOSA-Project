@@ -64,20 +64,15 @@ public partial class MainForm : Form
 
 	public List<Watch> Watchs { get; } = new List<Watch>();
 
-	public BasePlatform Platform
-	{ get { return GDBConnector?.Platform; } }
+	public BasePlatform Platform => GDBConnector?.Platform;
 
-	public ulong InstructionPointer
-	{ get { return Platform == null ? 0 : Platform.InstructionPointer.Value; } }
+	public ulong InstructionPointer => Platform == null ? 0 : Platform.InstructionPointer.Value;
 
-	public ulong StackFrame
-	{ get { return Platform == null ? 0 : Platform.StackFrame.Value; } }
+	public ulong StackFrame => Platform == null ? 0 : Platform.StackFrame.Value;
 
-	public ulong StackPointer
-	{ get { return Platform == null ? 0 : Platform.StackPointer.Value; } }
+	public ulong StackPointer => Platform == null ? 0 : Platform.StackPointer.Value;
 
-	public ulong StatusFlag
-	{ get { return Platform == null ? 0 : Platform.StatusFlag.Value; } }
+	public ulong StatusFlag => Platform == null ? 0 : Platform.StatusFlag.Value;
 
 	private Process VMProcess;
 
@@ -331,7 +326,7 @@ public partial class MainForm : Form
 
 	private static bool IsHexDigitsOnly(string str)
 	{
-		foreach (char c in str)
+		foreach (var c in str)
 		{
 			if (!((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f')))
 				return false;
@@ -362,9 +357,9 @@ public partial class MainForm : Form
 
 	public static ulong ParseHexAddress(string input)
 	{
-		string nbr = input.ToLowerInvariant().Trim().Trim(',').Trim('[').Trim('[');
+		var nbr = input.ToLowerInvariant().Trim().Trim(',').Trim('[').Trim('[');
 
-		int where = nbr.IndexOf('x');
+		var where = nbr.IndexOf('x');
 
 		if (where >= 0)
 		{
@@ -649,13 +644,13 @@ public partial class MainForm : Form
 
 	private static string GetFormat(string fileName)
 	{
-		switch (Path.GetExtension(fileName).ToLowerInvariant())
+		return Path.GetExtension(fileName).ToLowerInvariant() switch
 		{
-			case ".bin": return "BIN";
-			case ".img": return "IMG";
-			case ".iso": return "ISO";
-			default: return string.Empty;
-		}
+			".bin" => "BIN",
+			".img" => "IMG",
+			".iso" => "ISO",
+			_ => string.Empty,
+		};
 	}
 
 	public void LaunchImage(string imageFile, string debugFile, string breakpointFile, string watchFile)
@@ -741,7 +736,7 @@ public partial class MainForm : Form
 		if (BreakpointFile == null || !File.Exists(BreakpointFile))
 			return;
 
-		bool remap = false;
+		var remap = false;
 
 		foreach (var line in File.ReadAllLines(BreakpointFile))
 		{
@@ -790,7 +785,7 @@ public partial class MainForm : Form
 		if (WatchFile == null || !File.Exists(WatchFile))
 			return;
 
-		bool remap = false;
+		var remap = false;
 
 		foreach (var line in File.ReadAllLines(WatchFile))
 		{
@@ -847,11 +842,11 @@ public partial class MainForm : Form
 
 	public static ulong ToLong(byte[] bytes, uint start, uint size)
 	{
-		ulong value = 0;
+		var value = 0ul;
 
-		for (int i = 0; i < size; i++)
+		for (var i = 0; i < size; i++)
 		{
-			ulong shifted = (ulong)(bytes[start + i] << (i * 8));
+			var shifted = (ulong)(bytes[start + i] << (i * 8));
 			value |= shifted;
 		}
 

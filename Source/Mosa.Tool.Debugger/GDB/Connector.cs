@@ -17,17 +17,25 @@ public delegate void OnMemoryRead(ulong address, byte[] bytes);
 public class Connector
 {
 	public TcpClient TcpClient { get; set; }
+
 	public GDBClient GDBClient { get; set; }
 
 	public OnStatusChange OnPause { get; set; }
+
 	public OnStatusChange OnRunning { get; set; }
 
-	public bool IsConnected { get { return GDBClient == null ? false : GDBClient.IsConnected; } }
-	public bool IsRunning { get { return !IsPaused; } }
+	public bool IsConnected
+	{ get { return GDBClient == null ? false : GDBClient.IsConnected; } }
+
+	public bool IsRunning
+	{ get { return !IsPaused; } }
+
 	public bool IsPaused { get; set; } = true;
 
 	public string ConnectionHost { get; set; }
+
 	public int ConnectionPort { get; set; }
+
 	public BasePlatform Platform { get; set; }
 
 	protected Dictionary<GDBCommand, OnMemoryRead> OnMemoryReadMap = new Dictionary<GDBCommand, GDB.OnMemoryRead>();

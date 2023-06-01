@@ -5,9 +5,13 @@ namespace Mosa.Tool.Debugger.DebugData;
 public class SymbolInfo
 {
 	public ulong Address { get; set; }
+
 	public uint Offset { get; set; }
+
 	public uint Length { get; set; }
+
 	public string Kind { get; set; }
+
 	public string Name { get; set; }
 
 	public string CommonName

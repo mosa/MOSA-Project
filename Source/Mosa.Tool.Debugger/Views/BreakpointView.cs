@@ -14,9 +14,10 @@ public partial class BreakpointView : DebugDockContent
 
 	private class BreakPointEntry
 	{
-		public string Address { get { return DebugDockContent.ToHex(BreakPoint.Address); } }
+		public string Address => DebugDockContent.ToHex(BreakPoint.Address);
 
-		public string Name { get { return BreakPoint.Name; } }
+		public string Name
+		{ get { return BreakPoint.Name; } }
 
 		[Browsable(false)]
 		public BreakPoint BreakPoint { get; }

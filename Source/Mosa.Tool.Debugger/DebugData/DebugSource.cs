@@ -15,15 +15,21 @@ public class DebugSource
 	protected KeyedList<int, SourceInfo> SourceLookup = new KeyedList<int, SourceInfo>();
 
 	public List<SymbolInfo> Symbols { get; } = new List<SymbolInfo>();
+
 	public List<SectionInfo> Sections { get; } = new List<SectionInfo>();
 
 	public List<TypeInfo> Types { get; } = new List<TypeInfo>();
+
 	public List<MethodInfo> Methods { get; } = new List<MethodInfo>();
+
 	public List<ParameterInfo> Parameters { get; } = new List<ParameterInfo>();
+
 	public List<FieldInfo> Fields { get; } = new List<FieldInfo>();
 
 	public List<SourceLabelInfo> SourceLabels { get; } = new List<SourceLabelInfo>();
+
 	public List<SourceFileInfo> SourceFileInfos { get; } = new List<SourceFileInfo>();
+
 	public List<SourceInfo> SourceInfos { get; } = new List<SourceInfo>();
 
 	public Dictionary<ulong, TypeInfo> TypeDefLookup = new Dictionary<ulong, TypeInfo>();
