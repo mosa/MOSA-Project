@@ -34,8 +34,6 @@ public sealed class MosaCompiler
 
 	private readonly object _lock = new object();
 
-	public bool HasError => Compiler.HasError || Stage == CompileStage.Error;
-
 	public bool IsSuccess => !Compiler.HasError && Stage != CompileStage.Error;
 
 	public MosaCompiler(Settings settings, CompilerHooks compilerHook, IModuleLoader moduleLoader, ITypeResolver typeResolver)

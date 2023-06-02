@@ -428,8 +428,10 @@ public sealed class Compiler
 
 			return methodData.Method;
 		}
-		catch (Exception e)
+		catch (Exception exception)
 		{
+			LogException(exception, exception.Message, "ProcessQueue");
+			Stop();
 			return null;
 		}
 	}
@@ -481,7 +483,7 @@ public sealed class Compiler
 		PostEvent(CompilerEvent.CompilingMethodsCompleted);
 	}
 
-	private void CompilePass() //TODO: Add IProgress<> to report progress
+	private void CompilePass()
 	{
 		var threadID = Thread.CurrentThread.ManagedThreadId;
 		var success = 0;

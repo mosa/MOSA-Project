@@ -1,9 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-//using DiscUtils.Fat;
-//using DiscUtils.Partitions;
-//using DiscUtils.Raw;
-//using DiscUtils.Streams;
 using System;
 using System.Collections.Generic;
 using System.IO;
