@@ -313,7 +313,6 @@ public sealed class TransformContext
 		BaseMethodCompilerStage.UpdatePhi(node);
 	}
 
-
 	#endregion Phi Helpers
 
 	#region Move Helpers

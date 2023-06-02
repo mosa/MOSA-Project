@@ -236,7 +236,10 @@ public abstract class BaseMethodCompilerStage
 		Finish();
 
 		UpdateRegisterCounters();
+	}
 
+	public void CleanUp()
+	{
 		MethodCompiler = null;
 		traceLogs = null;
 	}
@@ -798,6 +801,24 @@ public abstract class BaseMethodCompilerStage
 		throw new CompilerException(exception);
 	}
 
+	public bool FullCheck()
+	{
+		return CheckVirtualRegisters() || CheckAllPhiInstructions();
+	}
+
+	protected bool CheckVirtualRegisters()
+	{
+		foreach (var operand in MethodCompiler.VirtualRegisters)
+		{
+			if (operand.Uses.Count > 0 && operand.Definitions.Count == 0)
+			{
+				throw new CompilerException(FormattedStageName, Method.FullName, $"CHECK-FAILED: Virtual register used by not defined: {operand}");
+			}
+		}
+
+		return true;
+	}
+
 	protected bool CheckAllPhiInstructions()
 	{
 		foreach (var block in BasicBlocks)
@@ -814,7 +835,7 @@ public abstract class BaseMethodCompilerStage
 				{
 					if (!block.PreviousBlocks.Contains(phiblock))
 					{
-						throw new CompilerException($"{FormattedStageName}:CheckAllPhiInstructions() failed in block: {block} at {node}!");
+						throw new CompilerException(FormattedStageName, Method.FullName, $"CHECK-FAILED: PHI consistency: {block} at {node}");
 					}
 				}
 			}

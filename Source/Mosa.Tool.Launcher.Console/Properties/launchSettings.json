@@ -2,8 +2,8 @@
   "profiles": {
     "Mosa.Tool.Launcher.Console": {
       "commandName": "Project",
-      "commandLineArgs": "-autostart -output-map -output-asm -inline-off -output-debug -output-hash Mosa.Demo.TestWorld.x86.dll",
-      "workingDirectory": "X:\\MOSA-Project-tgiphil\\bin"
+      "commandLineArgs": "x:\\temp\\bin\\Mosa.Demo.CoolWorld.x86.dll -check -threading-off -filter IsNegative(System.Double)",
+      "workingDirectory": "x:\\temp\\bin"
     }
   }
 }

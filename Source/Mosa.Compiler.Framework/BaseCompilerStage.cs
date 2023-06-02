@@ -77,9 +77,7 @@ public abstract class BaseCompilerStage
 	public void ExecuteSetup()
 	{
 		if (Compiler.IsStopped)
-		{
 			return;
-		}
 
 		Setup();
 	}

@@ -26,13 +26,17 @@ public sealed class MosaCompiler
 	public ITypeResolver TypeResolver { get; }
 
 	private enum CompileStage
-	{ Initial, Loaded, Initialized, Ready, Executing, Completed }
+	{ Initial, Loaded, Initialized, Ready, Executing, Completed, Error }
 
 	private CompileStage Stage = CompileStage.Initial;
 
 	private Compiler Compiler;
 
 	private readonly object _lock = new object();
+
+	public bool HasError => Compiler.HasError || Stage == CompileStage.Error;
+
+	public bool IsSuccess => !Compiler.HasError && Stage != CompileStage.Error;
 
 	public MosaCompiler(Settings settings, CompilerHooks compilerHook, IModuleLoader moduleLoader, ITypeResolver typeResolver)
 	{

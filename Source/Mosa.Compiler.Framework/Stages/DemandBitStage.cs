@@ -78,9 +78,6 @@ public sealed class DemandBitStage : BaseMethodCompilerStage
 		TransformContext.SetLog(trace);
 
 		// TODO
-
-		if (CompilerSettings.FullCheckMode)
-			CheckAllPhiInstructions();
 	}
 
 	#region IR Instructions

@@ -64,9 +64,6 @@ public class SparseConditionalConstantPropagationStage : BaseMethodCompilerStage
 
 		ConstantCount.Set(constants.Count);
 		DeadBlockCount.Set(deadBlocks.Count);
-
-		if (CompilerSettings.FullCheckMode)
-			CheckAllPhiInstructions();
 	}
 
 	protected override void Finish()

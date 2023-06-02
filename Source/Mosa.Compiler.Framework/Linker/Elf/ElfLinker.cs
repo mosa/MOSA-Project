@@ -124,8 +124,6 @@ public sealed class ElfLinker
 
 		RegisterSettingsSections();
 
-		RegisterHookSections();
-
 		RegisterSymbolSection();
 
 		RegisterStringSection();
@@ -240,30 +238,6 @@ public sealed class ElfLinker
 
 		stringSection.AddDependency(symbolSection);
 		sectionHeaderStringSection.AddDependency(symbolSection);
-	}
-
-	private void RegisterHookSections()
-	{
-		var CustomElfSections = Linker.Compiler.CompilerHooks.CustomElfSections;
-
-		if (CustomElfSections == null)
-			return;
-
-		var sections = CustomElfSections();
-
-		foreach (var section in sections)
-		{
-			var newsection = new Section
-			{
-				Name = section.Name,
-				Address = section.VirtualAddress,
-				Stream = section.Stream,
-				Type = SectionType.ProgBits,
-				Flags = SectionAttribute.Alloc
-			};
-
-			RegisterSection(newsection);
-		}
 	}
 
 	private void RegisterSettingsSections()

@@ -342,21 +342,34 @@ public sealed class MethodCompiler
 				Compiler.PostTraceLog(log);
 			}
 		}
+		catch (CompilerException exception)
+		{
+			exception.Method ??= Method.FullName;
+
+			LogException(exception, exception.Message);
+		}
 		catch (Exception exception)
 		{
-			Compiler.PostEvent(CompilerEvent.Exception, $"Method: {Method} -> {exception.Message}");
+			var message = $"Method: {Method} -> {exception.Message}";
 
-			var exceptionLog = new TraceLog(TraceType.MethodDebug, Method, "Exception", MethodData.Version);
-
-			exceptionLog.Log(exception.Message);
-			exceptionLog.Log("");
-			exceptionLog.Log(exception.ToString());
-
-			Compiler.PostTraceLog(exceptionLog);
-
-			Stop();
-			Compiler.Stop();
+			LogException(exception, message);
 		}
+	}
+
+	private void LogException(Exception exception, string title)
+	{
+		Compiler.PostEvent(CompilerEvent.Exception, title);
+
+		var exceptionLog = new TraceLog(TraceType.MethodDebug, Method, "Exception", MethodData.Version);
+
+		exceptionLog.Log(title);
+		exceptionLog.Log(string.Empty);
+		exceptionLog.Log(exception.ToString());
+
+		Compiler.PostTraceLog(exceptionLog);
+
+		Stop();
+		Compiler.Stop();
 	}
 
 	private void ExecutePipeline()
@@ -379,6 +392,13 @@ public sealed class MethodCompiler
 			executionTimes[i] = Stopwatch.ElapsedTicks;
 
 			CreateInstructionTrace(stage);
+
+			if (Compiler.FullCheckMode)
+			{
+				stage.FullCheck();
+			}
+
+			stage.CleanUp();
 
 			if (IsStopped || IsMethodInlined)
 				break;

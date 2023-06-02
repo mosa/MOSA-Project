@@ -75,7 +75,11 @@ public class Builder : BaseLauncher
 				return;
 			}
 
-			Compile();
+			if (!Compile())
+			{
+				IsSucccessful = false;
+				return;
+			}
 
 			BuildImage();
 
@@ -102,7 +106,7 @@ public class Builder : BaseLauncher
 		}
 	}
 
-	private void Compile()
+	private bool Compile()
 	{
 		var fileHunter = new FileHunter(Path.GetDirectoryName(LauncherSettings.SourceFiles[0]));
 
@@ -141,6 +145,8 @@ public class Builder : BaseLauncher
 
 		Linker = compiler.Linker;
 		TypeSystem = compiler.TypeSystem;
+
+		return compiler.IsSuccess;
 	}
 
 	private void BuildImage()
@@ -316,12 +322,18 @@ public class Builder : BaseLauncher
 
 	private void NotifyEvent(CompilerEvent compilerEvent, string message, int threadID)
 	{
-		if (compilerEvent is CompilerEvent.CompilerStart or CompilerEvent.CompilerEnd or CompilerEvent.CompilingMethodsStart or CompilerEvent.CompilingMethodsCompleted or CompilerEvent.InlineMethodsScheduled or CompilerEvent.LinkingStart or CompilerEvent.LinkingEnd or CompilerEvent.Warning or CompilerEvent.Error or CompilerEvent.Exception)
+		if (compilerEvent is CompilerEvent.Exception)
+		{
+			var status = $"[Exception] {message}";
+
+			Output(status);
+		}
+		else if (compilerEvent is CompilerEvent.CompilerStart or CompilerEvent.CompilerEnd or CompilerEvent.CompilingMethodsStart or CompilerEvent.CompilingMethodsCompleted or CompilerEvent.InlineMethodsScheduled or CompilerEvent.LinkingStart or CompilerEvent.LinkingEnd or CompilerEvent.Warning or CompilerEvent.Error)
 		{
 			var status = $"Compiling: {$"{(DateTime.Now - CompileStartTime).TotalSeconds:0.00}"} secs: {compilerEvent.ToText()}";
 
 			if (!string.IsNullOrEmpty(message))
-				status += $"- {message}";
+				status += $" => {message}";
 
 			Output(status);
 		}

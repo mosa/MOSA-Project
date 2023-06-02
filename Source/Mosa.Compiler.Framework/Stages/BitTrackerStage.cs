@@ -196,9 +196,6 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		UpdateBranchInstructions();
 
 		DumpValues();
-
-		if (CompilerSettings.FullCheckMode)
-			CheckAllPhiInstructions();
 	}
 
 	private void DumpValues()

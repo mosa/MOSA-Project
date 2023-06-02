@@ -118,9 +118,6 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 		CustomizeTransform(TransformContext);
 
 		ExecutePasses();
-
-		if (CompilerSettings.FullCheckMode)
-			CheckAllPhiInstructions();
 	}
 
 	protected void AddTranforms(List<BaseTransform> list)
@@ -263,7 +260,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 				MethodCompiler.CreateTranformInstructionTrace(this, Steps++);
 
 				if (CompilerSettings.FullCheckMode)
-					CheckAllPhiInstructions();
+					FullCheck();
 
 				return true;
 			}
