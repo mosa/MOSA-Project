@@ -214,7 +214,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 			valueTrace?.Log($"Virtual Register: {virtualRegister}");
 
-			if (virtualRegister.Definitions.Count == 1)
+			if (virtualRegister.IsDefinedOnce)
 			{
 				valueTrace?.Log($"Definition: {virtualRegister.Definitions[0]}");
 			}
@@ -276,7 +276,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		if (!IsBitTrackable(virtualRegister))
 			return null;
 
-		if (virtualRegister.Definitions.Count != 1)
+		if (!virtualRegister.IsDefinedOnce)
 			return Any(virtualRegister);
 
 		var node = virtualRegister.Definitions[0];
@@ -361,7 +361,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 		//Debug.Assert(virtualRegister.Definitions.Count == 1);
 
-		if (virtualRegister.Definitions.Count != 1)
+		if (!virtualRegister.IsDefinedOnce)
 			return;
 
 		ulong replaceValue;

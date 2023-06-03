@@ -21,7 +21,7 @@ public sealed class IfThenElse64Compare64v4 : BaseTransform
 		if (!context.Operand1.IsVirtualRegister)
 			return false;
 
-		if (context.Operand1.Definitions.Count != 1)
+		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
 		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Compare64x64)
@@ -66,7 +66,7 @@ public sealed class IfThenElse64Compare64v4_v1 : BaseTransform
 		if (!context.Operand1.IsVirtualRegister)
 			return false;
 
-		if (context.Operand1.Definitions.Count != 1)
+		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
 		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Compare64x64)

@@ -260,7 +260,7 @@ public sealed class LoopInvariantCodeMotionStage : BaseMethodCompilerStage
 		if (operand.IsResolvedConstant)
 			return true;
 
-		if (operand.IsVirtualRegister && operand.Definitions.Count == 1)
+		if (operand.IsVirtualRegister && operand.IsDefinedOnce)
 		{
 			var def = operand.Definitions[0];
 

@@ -24,13 +24,13 @@ public sealed class Sub32MultipleWithCommon : BaseTransform
 		if (!context.Operand2.IsVirtualRegister)
 			return false;
 
-		if (context.Operand1.Definitions.Count != 1)
+		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
 		if (context.Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
 			return false;
 
-		if (context.Operand2.Definitions.Count != 1)
+		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
 		if (context.Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
@@ -75,13 +75,13 @@ public sealed class Sub32MultipleWithCommon_v1 : BaseTransform
 		if (!context.Operand2.IsVirtualRegister)
 			return false;
 
-		if (context.Operand1.Definitions.Count != 1)
+		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
 		if (context.Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
 			return false;
 
-		if (context.Operand2.Definitions.Count != 1)
+		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
 		if (context.Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
@@ -126,13 +126,13 @@ public sealed class Sub32MultipleWithCommon_v2 : BaseTransform
 		if (!context.Operand2.IsVirtualRegister)
 			return false;
 
-		if (context.Operand1.Definitions.Count != 1)
+		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
 		if (context.Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
 			return false;
 
-		if (context.Operand2.Definitions.Count != 1)
+		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
 		if (context.Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
@@ -177,13 +177,13 @@ public sealed class Sub32MultipleWithCommon_v3 : BaseTransform
 		if (!context.Operand2.IsVirtualRegister)
 			return false;
 
-		if (context.Operand1.Definitions.Count != 1)
+		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
 		if (context.Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
 			return false;
 
-		if (context.Operand2.Definitions.Count != 1)
+		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
 		if (context.Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)

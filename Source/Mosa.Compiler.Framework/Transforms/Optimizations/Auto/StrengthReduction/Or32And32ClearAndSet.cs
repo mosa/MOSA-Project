@@ -23,7 +23,7 @@ public sealed class Or32And32ClearAndSet : BaseTransform
 		if (!context.Operand1.IsVirtualRegister)
 			return false;
 
-		if (context.Operand1.Definitions.Count != 1)
+		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
 		if (context.Operand1.Definitions[0].Instruction != IRInstruction.And32)
@@ -69,7 +69,7 @@ public sealed class Or32And32ClearAndSet_v1 : BaseTransform
 		if (!context.Operand2.IsVirtualRegister)
 			return false;
 
-		if (context.Operand2.Definitions.Count != 1)
+		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
 		if (context.Operand2.Definitions[0].Instruction != IRInstruction.And32)
@@ -115,7 +115,7 @@ public sealed class Or32And32ClearAndSet_v2 : BaseTransform
 		if (!context.Operand1.IsVirtualRegister)
 			return false;
 
-		if (context.Operand1.Definitions.Count != 1)
+		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
 		if (context.Operand1.Definitions[0].Instruction != IRInstruction.And32)
@@ -161,7 +161,7 @@ public sealed class Or32And32ClearAndSet_v3 : BaseTransform
 		if (!context.Operand2.IsVirtualRegister)
 			return false;
 
-		if (context.Operand2.Definitions.Count != 1)
+		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
 		if (context.Operand2.Definitions[0].Instruction != IRInstruction.And32)

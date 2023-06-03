@@ -15,7 +15,7 @@ public sealed class LoadStoreParamObject : BaseTransform
 		if (previous == null)
 			return false;
 
-		if (!immediate && !IsSSAForm(previous.Operand2))
+		if (!immediate && !previous.Operand2.IsDefinedOnce)
 			return false;
 
 		if (previous.Operand1 != context.Operand1)

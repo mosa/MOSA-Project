@@ -186,9 +186,15 @@ public sealed partial class Operand
 
 	public bool IsDefined => Definitions.Count != 0;
 
+	public bool IsUndefined => Definitions.Count == 0;
+
+	public bool IsDefinedOnce => Definitions.Count == 1;
+
 	public bool IsOverDefined => Definitions.Count > 1;
 
-	public bool IsUsed => Uses.Count > 0;
+	public bool IsUsed => Uses.Count != 0;
+
+	public bool IsUsedOnce => Uses.Count == 1;
 
 	#endregion Properties
 

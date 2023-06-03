@@ -10,7 +10,7 @@ public sealed class AddCarryOut32CarryNotUsed : BaseTransform
 
 	public override bool Match(Context context, TransformContext transform)
 	{
-		return context.Result2.Uses.Count == 0;
+		return !context.Result2.IsUsed;
 	}
 
 	public override void Transform(Context context, TransformContext transform)

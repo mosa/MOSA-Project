@@ -13,16 +13,16 @@ public sealed class Deadcode : BaseTransform
 		if (context.ResultCount is 0 or > 2)
 			return false;
 
-		if (!IsSSAForm(context.Result))
+		if (!context.Result.IsDefinedOnce)
 			return false;
 
-		if (context.Result.Uses.Count != 0)
+		if (context.Result.IsUsed)
 			return false;
 
-		if (context.ResultCount == 2 && !IsSSAForm(context.Result2))
+		if (context.ResultCount == 2 && !context.Result2.IsDefinedOnce)
 			return false;
 
-		if (context.ResultCount == 2 && context.Result2.Uses.Count != 0)
+		if (context.ResultCount == 2 && context.Result2.IsUsed)
 			return false;
 
 		if (!context.Instruction.IsIRInstruction)

@@ -22,7 +22,7 @@ public sealed class Branch64Object : BaseTransform
 		if (context.Operand2.ConstantUnsigned32 != 0)
 			return false;
 
-		if (context.Operand1.Definitions.Count != 1)
+		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
 		if (context.Operand1.Definitions[0].Instruction != IRInstruction.CompareObject)

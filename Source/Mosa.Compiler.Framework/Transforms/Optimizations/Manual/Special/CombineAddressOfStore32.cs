@@ -19,10 +19,10 @@ public sealed class CombineAddressOfStore32 : BaseTransform
 		if (!context.Operand3.HasParent)
 			return false;
 
-		if (context.Operand1.Definitions.Count != 1)
+		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand3.Definitions.Count != 1)
+		if (!context.Operand3.IsDefinedOnce)
 			return false;
 
 		var addressof = context.Operand1.Definitions[0];
@@ -44,7 +44,7 @@ public sealed class CombineAddressOfStore32 : BaseTransform
 		if (store2.Operand1 != transform.StackFrame)
 			return false;
 
-		if (store2.Operand3.Definitions.Count != 1)
+		if (!store2.Operand3.IsDefinedOnce)
 			return false;
 
 		if (store2.Operand3.Parent != context.Operand3.Parent)

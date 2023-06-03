@@ -19,10 +19,10 @@ public sealed class Mov32Coalescing : BaseTransform
 		if (!context.Result.IsVirtualRegister)
 			return false;
 
-		if (!IsSSAForm(context.Result))
+		if (!context.Result.IsDefinedOnce)
 			return false;
 
-		if (!IsSSAForm(context.Operand1))
+		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
 		return true;

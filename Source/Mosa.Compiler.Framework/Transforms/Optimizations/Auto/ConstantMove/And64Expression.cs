@@ -21,7 +21,7 @@ public sealed class And64Expression : BaseTransform
 		if (!context.Operand2.IsVirtualRegister)
 			return false;
 
-		if (context.Operand2.Definitions.Count != 1)
+		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
 		if (context.Operand2.Definitions[0].Instruction != IRInstruction.And64)
@@ -69,7 +69,7 @@ public sealed class And64Expression_v1 : BaseTransform
 		if (!context.Operand1.IsVirtualRegister)
 			return false;
 
-		if (context.Operand1.Definitions.Count != 1)
+		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
 		if (context.Operand1.Definitions[0].Instruction != IRInstruction.And64)
@@ -117,7 +117,7 @@ public sealed class And64Expression_v2 : BaseTransform
 		if (!context.Operand2.IsVirtualRegister)
 			return false;
 
-		if (context.Operand2.Definitions.Count != 1)
+		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
 		if (context.Operand2.Definitions[0].Instruction != IRInstruction.And64)
@@ -165,7 +165,7 @@ public sealed class And64Expression_v3 : BaseTransform
 		if (!context.Operand1.IsVirtualRegister)
 			return false;
 
-		if (context.Operand1.Definitions.Count != 1)
+		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
 		if (context.Operand1.Definitions[0].Instruction != IRInstruction.And64)

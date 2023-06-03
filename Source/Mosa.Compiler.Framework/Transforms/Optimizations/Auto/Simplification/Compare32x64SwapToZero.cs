@@ -30,7 +30,7 @@ public sealed class Compare32x64SwapToZero : BaseTransform
 		if (context.Operand2.ConstantUnsigned64 != 1)
 			return false;
 
-		if (context.Operand1.Definitions.Count != 1)
+		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
 		if (context.Operand1.Definitions[0].Instruction != IRInstruction.And64)
@@ -85,7 +85,7 @@ public sealed class Compare32x64SwapToZero_v1 : BaseTransform
 		if (context.Operand2.ConstantUnsigned64 != 1)
 			return false;
 
-		if (context.Operand1.Definitions.Count != 1)
+		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
 		if (context.Operand1.Definitions[0].Instruction != IRInstruction.And64)

@@ -22,7 +22,7 @@ public sealed class StoreLoad32 : BaseTransform
 		if (context.Operand2.Uses.Count != 2)
 			return false;
 
-		if (!IsSSAFormOrConstant(context.Operand3))
+		if (!(context.Operand3.IsConstant || context.Operand3.IsDefinedOnce))
 			return false;
 
 		var load = context.Operand2.Uses[0] != context.Node
@@ -32,7 +32,7 @@ public sealed class StoreLoad32 : BaseTransform
 		if (load.Instruction != IRInstruction.Load32)
 			return false;
 
-		if (!IsSSAFormOrConstant(context.Operand3))
+		if (!(context.Operand3.IsConstant || context.Operand3.IsDefinedOnce))
 			return false;
 
 		if (load.Operand1 != transform.StackFrame)

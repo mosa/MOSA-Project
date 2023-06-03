@@ -24,13 +24,13 @@ public sealed class Or32And32And32ByConstant : BaseTransform
 		if (!context.Operand2.IsVirtualRegister)
 			return false;
 
-		if (context.Operand1.Definitions.Count != 1)
+		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
 		if (context.Operand1.Definitions[0].Instruction != IRInstruction.And32)
 			return false;
 
-		if (context.Operand2.Definitions.Count != 1)
+		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
 		if (context.Operand2.Definitions[0].Instruction != IRInstruction.And32)
@@ -75,13 +75,13 @@ public sealed class Or32And32And32ByConstant_v1 : BaseTransform
 		if (!context.Operand2.IsVirtualRegister)
 			return false;
 
-		if (context.Operand1.Definitions.Count != 1)
+		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
 		if (context.Operand1.Definitions[0].Instruction != IRInstruction.And32)
 			return false;
 
-		if (context.Operand2.Definitions.Count != 1)
+		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
 		if (context.Operand2.Definitions[0].Instruction != IRInstruction.And32)
@@ -126,13 +126,13 @@ public sealed class Or32And32And32ByConstant_v2 : BaseTransform
 		if (!context.Operand2.IsVirtualRegister)
 			return false;
 
-		if (context.Operand1.Definitions.Count != 1)
+		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
 		if (context.Operand1.Definitions[0].Instruction != IRInstruction.And32)
 			return false;
 
-		if (context.Operand2.Definitions.Count != 1)
+		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
 		if (context.Operand2.Definitions[0].Instruction != IRInstruction.And32)
@@ -177,13 +177,13 @@ public sealed class Or32And32And32ByConstant_v3 : BaseTransform
 		if (!context.Operand2.IsVirtualRegister)
 			return false;
 
-		if (context.Operand1.Definitions.Count != 1)
+		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
 		if (context.Operand1.Definitions[0].Instruction != IRInstruction.And32)
 			return false;
 
-		if (context.Operand2.Definitions.Count != 1)
+		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
 		if (context.Operand2.Definitions[0].Instruction != IRInstruction.And32)
@@ -228,13 +228,13 @@ public sealed class Or32And32And32ByConstant_v4 : BaseTransform
 		if (!context.Operand2.IsVirtualRegister)
 			return false;
 
-		if (context.Operand1.Definitions.Count != 1)
+		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
 		if (context.Operand1.Definitions[0].Instruction != IRInstruction.And32)
 			return false;
 
-		if (context.Operand2.Definitions.Count != 1)
+		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
 		if (context.Operand2.Definitions[0].Instruction != IRInstruction.And32)
@@ -279,13 +279,13 @@ public sealed class Or32And32And32ByConstant_v5 : BaseTransform
 		if (!context.Operand2.IsVirtualRegister)
 			return false;
 
-		if (context.Operand1.Definitions.Count != 1)
+		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
 		if (context.Operand1.Definitions[0].Instruction != IRInstruction.And32)
 			return false;
 
-		if (context.Operand2.Definitions.Count != 1)
+		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
 		if (context.Operand2.Definitions[0].Instruction != IRInstruction.And32)
@@ -330,13 +330,13 @@ public sealed class Or32And32And32ByConstant_v6 : BaseTransform
 		if (!context.Operand2.IsVirtualRegister)
 			return false;
 
-		if (context.Operand1.Definitions.Count != 1)
+		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
 		if (context.Operand1.Definitions[0].Instruction != IRInstruction.And32)
 			return false;
 
-		if (context.Operand2.Definitions.Count != 1)
+		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
 		if (context.Operand2.Definitions[0].Instruction != IRInstruction.And32)
@@ -381,13 +381,13 @@ public sealed class Or32And32And32ByConstant_v7 : BaseTransform
 		if (!context.Operand2.IsVirtualRegister)
 			return false;
 
-		if (context.Operand1.Definitions.Count != 1)
+		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
 		if (context.Operand1.Definitions[0].Instruction != IRInstruction.And32)
 			return false;
 
-		if (context.Operand2.Definitions.Count != 1)
+		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
 		if (context.Operand2.Definitions[0].Instruction != IRInstruction.And32)

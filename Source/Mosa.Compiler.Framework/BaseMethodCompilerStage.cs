@@ -803,8 +803,8 @@ public abstract class BaseMethodCompilerStage
 	{
 		foreach (var operand in MethodCompiler.VirtualRegisters)
 		{
-			if ((full && operand.Uses.Count > 0 && operand.Definitions.Count == 0)
-			|| (!full && operand.Uses.Count > 0 && operand.Definitions.Count == 0 && !operand.HasParent && !operand.IsParent))
+			if ((full && operand.IsUsed && !operand.IsDefined)
+			|| (!full && operand.IsUsed && !operand.IsDefined && !operand.HasParent && !operand.IsParent))
 			{
 				throw new CompilerException($"CHECK-FAILED: Virtual register used by not defined: {operand}");
 			}

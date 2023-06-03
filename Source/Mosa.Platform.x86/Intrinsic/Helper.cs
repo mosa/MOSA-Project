@@ -25,7 +25,7 @@ internal static class Helper
 
 		while (!operand1.IsConstant)
 		{
-			if (operand1.Definitions.Count != 1)
+			if (!operand1.IsDefinedOnce)
 				break;
 
 			var node = operand1.Definitions[0];

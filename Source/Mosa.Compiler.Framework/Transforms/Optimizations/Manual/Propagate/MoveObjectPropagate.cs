@@ -10,10 +10,10 @@ public sealed class MoveObjectPropagate : BaseTransform
 
 	public override bool Match(Context context, TransformContext transform)
 	{
-		if (!IsSSAForm(context.Result))
+		if (!context.Result.IsDefinedOnce)
 			return false;
 
-		if (!IsSSAForm(context.Operand1))
+		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
 		return true;

@@ -24,13 +24,13 @@ public sealed class Signed32AAMinusBB : BaseTransform
 		if (!context.Operand2.IsVirtualRegister)
 			return false;
 
-		if (context.Operand1.Definitions.Count != 1)
+		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
 		if (context.Operand1.Definitions[0].Instruction != IRInstruction.MulSigned32)
 			return false;
 
-		if (context.Operand2.Definitions.Count != 1)
+		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
 		if (context.Operand2.Definitions[0].Instruction != IRInstruction.MulSigned32)

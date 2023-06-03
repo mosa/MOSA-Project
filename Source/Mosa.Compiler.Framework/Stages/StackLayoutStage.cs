@@ -30,7 +30,7 @@ public sealed class StackLayoutStage : BaseMethodCompilerStage
 
 		foreach (var local in MethodCompiler.LocalStack)
 		{
-			if (local.Uses.Count == 0)
+			if (!local.IsUsed)
 				continue;
 
 			trace.Log($"{local}: offset = {local.Offset}");
@@ -50,7 +50,7 @@ public sealed class StackLayoutStage : BaseMethodCompilerStage
 
 		foreach (var local in localStack)
 		{
-			if (local.Uses.Count == 0)
+			if (!local.IsUsed)
 				continue;
 
 			var size = MethodCompiler.GetSize(local, true);

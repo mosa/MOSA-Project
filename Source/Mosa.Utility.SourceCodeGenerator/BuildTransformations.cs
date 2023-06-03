@@ -742,7 +742,7 @@ public class BuildTransformations : BuildBaseTemplate
 		var parent = $"{NodeNbrToNode[node.NodeNbr]}";
 		var operandName = GetOperandName(operand.Index);
 
-		EmitCondition($"context.{parent}{operandName}.Definitions.Count != 1");
+		EmitCondition($"!context.{parent}{operandName}.IsDefinedOnce");
 
 		var instructionName = operand.InstructionNode.InstructionName.Replace("IR.", "IRInstruction.");
 

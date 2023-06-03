@@ -25,7 +25,7 @@ public sealed class Deadcode : BaseTransform
 		if (context.StatusRegister == StatusRegister.Set)
 			return false;
 
-		if (context.Result.Uses.Count != 0)
+		if (context.Result.IsUsed)
 			return false;
 
 		if (context.Instruction.IsIOOperation
@@ -36,7 +36,7 @@ public sealed class Deadcode : BaseTransform
 			return false;
 
 		// Check is split child, if so check is parent in use (Manual.Return for example)
-		if (context.Result.HasParent && context.Result.Parent.Uses.Count != 0)
+		if (context.Result.HasParent && context.Result.Parent.IsUsed)
 			return false;
 
 		var instruction = context.Instruction;

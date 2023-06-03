@@ -28,7 +28,7 @@ public sealed class Add32By1Not32 : BaseTransform
 		if (context.Operand2.ConstantUnsigned64 != 1)
 			return false;
 
-		if (context.Operand1.Definitions.Count != 1)
+		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
 		if (context.Operand1.Definitions[0].Instruction != X86.Not32)
@@ -74,7 +74,7 @@ public sealed class Add32By1Not32_v1 : BaseTransform
 		if (!context.Operand2.IsVirtualRegister)
 			return false;
 
-		if (context.Operand2.Definitions.Count != 1)
+		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
 		if (context.Operand2.Definitions[0].Instruction != X86.Not32)
