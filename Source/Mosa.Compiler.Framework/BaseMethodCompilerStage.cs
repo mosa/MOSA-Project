@@ -796,7 +796,7 @@ public abstract class BaseMethodCompilerStage
 
 	public bool FullCheck(bool full = true)
 	{
-		return CheckVirtualRegisters(full) || CheckAllPhiInstructions();
+		return CheckVirtualRegisters(full) || CheckAllPhiInstructions() || CheckAllInstructions();
 	}
 
 	protected bool CheckVirtualRegisters(bool full)
@@ -807,6 +807,33 @@ public abstract class BaseMethodCompilerStage
 			|| (!full && operand.IsUsed && !operand.IsDefined && !operand.HasParent && !operand.IsParent))
 			{
 				throw new CompilerException($"CHECK-FAILED: Virtual register used by not defined: {operand}");
+			}
+		}
+
+		return true;
+	}
+
+	protected bool CheckAllInstructions()
+	{
+		foreach (var block in BasicBlocks)
+		{
+			for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
+			{
+				if (node.IsEmptyOrNop)
+					continue;
+
+				if (node.Instruction.HasVariableOperands)
+					continue;
+
+				if (node.Instruction.DefaultResultCount != node.ResultCount)
+				{
+					throw new CompilerException($"CHECK-FAILED: Too many results: {block} at {node}");
+				}
+
+				if (node.Instruction.DefaultOperandCount != node.OperandCount)
+				{
+					throw new CompilerException($"CHECK-FAILED: Too many operands: {block} at {node}");
+				}
 			}
 		}
 
