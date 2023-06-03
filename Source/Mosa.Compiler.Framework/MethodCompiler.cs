@@ -386,22 +386,39 @@ public sealed class MethodCompiler
 		{
 			var stage = Pipeline[i];
 
-			stage.Setup(this, i);
-			stage.Execute();
-
-			executionTimes[i] = Stopwatch.ElapsedTicks;
-
-			CreateInstructionTrace(stage);
-
-			if (Compiler.FullCheckMode)
-			{
-				stage.FullCheck();
-			}
-
-			stage.CleanUp();
-
-			if (IsStopped || IsMethodInlined)
+			if (IsStopped)
 				break;
+
+			try
+			{
+				stage.Setup(this, i);
+				stage.Execute();
+
+				executionTimes[i] = Stopwatch.ElapsedTicks;
+
+				CreateInstructionTrace(stage);
+
+				if (Compiler.FullCheckMode)
+					stage.FullCheck(true);
+
+				stage.CleanUp();
+
+				if (IsMethodInlined)
+					break;
+			}
+			catch (CompilerException exception)
+			{
+				exception.Method ??= Method.FullName;
+				exception.Stage ??= stage.FormattedStageName;
+
+				LogException(exception, exception.Message);
+			}
+			catch (Exception exception)
+			{
+				var message = $"Method: {Method} -> {exception.Message}";
+
+				LogException(exception, message);
+			}
 		}
 
 		if (Statistics)

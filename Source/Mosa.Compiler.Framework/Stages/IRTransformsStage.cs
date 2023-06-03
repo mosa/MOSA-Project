@@ -2,6 +2,7 @@
 
 using Mosa.Compiler.Framework.Transforms.CheckedConversion;
 using Mosa.Compiler.Framework.Transforms.IR;
+using Mosa.Compiler.Framework.Transforms.TruncateTo32;
 
 namespace Mosa.Compiler.Framework.Stages;
 
@@ -15,5 +16,6 @@ public class IRTransformsStage : BaseTransformStage
 	{
 		AddTranforms(IRTransforms.List);
 		AddTranforms(CheckedConversionTransforms.List);
+		AddTranforms(TruncateTo32Transforms.List);
 	}
 }

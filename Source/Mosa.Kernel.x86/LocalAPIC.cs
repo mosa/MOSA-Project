@@ -43,7 +43,7 @@ public static class LocalAPIC
 		/*if (PAE)
 			edx = (apic >> 32) & 0x0f;*/
 
-		MSR.SetMSR(IA32_APIC_BASE_MSR, (ulong)(edx << 32) | eax);
+		MSR.SetMSR(IA32_APIC_BASE_MSR, eax, edx);
 	}
 
 	public static Pointer GetAPICBase()

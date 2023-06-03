@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.MosaTypeSystem;
 
@@ -320,6 +321,12 @@ public class InlineStage : BaseMethodCompilerStage
 		if (operand == null)
 			return null;
 
+		// Create parent first
+		if (operand.HasParent)
+		{
+			var parent = Map(operand.Parent, map, callSiteNode);
+		}
+
 		if (map.TryGetValue(operand, out Operand mappedOperand))
 		{
 			return mappedOperand;
@@ -354,23 +361,15 @@ public class InlineStage : BaseMethodCompilerStage
 			mappedOperand = operand;
 		}
 
-		Debug.Assert(mappedOperand != null);
+		map.Add(operand, mappedOperand);
 
-		if (operand.HasParent && !mappedOperand.HasParent)
+		if (operand.IsParent)
 		{
 			MethodCompiler.VirtualRegisters.SplitOperand(mappedOperand);
 
-			if (operand.IsLow)
-			{
-				mappedOperand = mappedOperand.Low;
-			}
-			else if (operand.IsHigh)
-			{
-				mappedOperand = mappedOperand.High;
-			}
+			map.AddIfNew(operand.Low, mappedOperand.Low);
+			map.AddIfNew(operand.High, mappedOperand.High);
 		}
-
-		map.Add(operand, mappedOperand);
 
 		return mappedOperand;
 	}

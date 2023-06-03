@@ -9,7 +9,7 @@ namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 /// <summary>
 /// Lower32 Transforms
 /// </summary>
-public static class Lower32Transforms
+public static class LowerTo32Transforms
 {
 	public static readonly List<BaseTransform> List = new List<BaseTransform>
 	{

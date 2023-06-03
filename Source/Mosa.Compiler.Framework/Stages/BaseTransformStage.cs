@@ -260,7 +260,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 				MethodCompiler.CreateTranformInstructionTrace(this, Steps++);
 
 				if (CompilerSettings.FullCheckMode)
-					FullCheck();
+					FullCheck(false);
 
 				return true;
 			}

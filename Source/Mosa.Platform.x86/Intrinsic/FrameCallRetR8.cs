@@ -19,15 +19,10 @@ internal static partial class IntrinsicMethods
 		var edx = Operand.CreateCPURegister32(CPURegister.EDX);
 		var xmm0 = Operand.CreateCPURegister32(CPURegister.XMM0);
 
-		methodCompiler.SplitOperand(result, out Operand op0L, out Operand op0H);
-
 		context.SetInstruction(X86.Call, null, methodAddress);
 		context.AppendInstruction(IRInstruction.Gen, xmm0);
-
 		context.AppendInstruction(X86.Movdi32ss, eax, xmm0);    // CHECK
 		context.AppendInstruction(X86.Pextrd32, edx, xmm0, Operand.Constant32_1);
-
-		context.AppendInstruction(X86.Mov32, op0L, eax);
-		context.AppendInstruction(X86.Mov32, op0H, edx);
+		context.AppendInstruction(IRInstruction.To64, result, eax, edx);
 	}
 }

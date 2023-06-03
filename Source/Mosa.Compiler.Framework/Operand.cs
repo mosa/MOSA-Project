@@ -62,10 +62,6 @@ public sealed partial class Operand
 
 	public MosaField Field { get; private set; }
 
-	public bool HasParent => Parent != null;
-
-	public Operand High { get; private set; }
-
 	public int Index { get; private set; }
 
 	public bool IsInt64 => Primitive == PrimitiveType.Int64;
@@ -116,13 +112,9 @@ public sealed partial class Operand
 
 	public bool IsFloatingPoint => IsR4 | IsR8;
 
-	public bool IsHigh => Parent.High == this;
-
 	public bool IsInteger => Primitive == PrimitiveType.Int32 || Primitive == PrimitiveType.Int64;
 
 	public bool IsLabel => Constant == ConstantType.Label;
-
-	public bool IsLow => Parent.Low == this;
 
 	public bool IsManagedPointer => Primitive == PrimitiveType.ManagedPointer;
 
@@ -156,9 +148,21 @@ public sealed partial class Operand
 
 	public bool IsVirtualRegister => Location == LocationType.VirtualRegister;
 
+	public bool HasParent => Parent != null;
+
+	public bool IsChild => HasParent;
+
+	public bool IsParent => Low != null || High != null;
+
+	public bool IsLow => HasParent && Parent.Low == this;
+
+	public bool IsHigh => HasParent && Parent.High == this;
+
 	public Operand Parent { get; private set; }
 
 	public Operand Low { get; private set; }
+
+	public Operand High { get; private set; }
 
 	public MosaMethod Method { get; private set; }
 
@@ -179,6 +183,12 @@ public sealed partial class Operand
 	public MosaType Type { get; private set; }
 
 	public List<InstructionNode> Uses { get; }
+
+	public bool IsDefined => Definitions.Count != 0;
+
+	public bool IsOverDefined => Definitions.Count > 1;
+
+	public bool IsUsed => Uses.Count > 0;
 
 	#endregion Properties
 
@@ -708,7 +718,7 @@ public sealed partial class Operand
 				Name = $"{longOperand.Name} (High)",
 				ConstantSigned64 = longOperand.Offset + 4,
 				Type = longOperand.Type,
-				Parent = longOperand
+				Parent = longOperand,
 			};
 		}
 		else if (longOperand.IsVirtualRegister)
@@ -718,7 +728,7 @@ public sealed partial class Operand
 				Location = LocationType.VirtualRegister,
 				Primitive = PrimitiveType.Int32,
 				Index = index,
-				Parent = longOperand
+				Parent = longOperand,
 			};
 		}
 		else if (longOperand.IsLocalStack)
@@ -730,7 +740,7 @@ public sealed partial class Operand
 				Constant = ConstantType.Default,
 				IsResolved = false,
 				ConstantSigned64 = 4,
-				Parent = longOperand
+				Parent = longOperand,
 			};
 		}
 		else if (longOperand.IsResolvedConstant)
@@ -766,7 +776,7 @@ public sealed partial class Operand
 				Name = $"{longOperand.Name} (Low)",
 				ConstantSigned64 = longOperand.Offset,
 				Type = longOperand.Type,
-				Parent = longOperand
+				Parent = longOperand,
 			};
 		}
 		else if (longOperand.IsVirtualRegister)
@@ -776,7 +786,7 @@ public sealed partial class Operand
 				Location = LocationType.VirtualRegister,
 				Primitive = PrimitiveType.Int32,
 				Index = index,
-				Parent = longOperand
+				Parent = longOperand,
 			};
 		}
 		else if (longOperand.IsLocalStack)
@@ -790,7 +800,7 @@ public sealed partial class Operand
 				ConstantSigned64 = 4,
 				Index = 0,
 				IsPinned = longOperand.IsPinned,
-				Parent = longOperand
+				Parent = longOperand,
 			};
 		}
 		else if (longOperand.IsResolvedConstant)

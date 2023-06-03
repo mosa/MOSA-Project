@@ -794,25 +794,19 @@ public abstract class BaseMethodCompilerStage
 
 	#endregion Helper Methods
 
-	public void AllStopWithException(string exception)
+	public bool FullCheck(bool full = true)
 	{
-		MethodCompiler.Stop();
-		MethodCompiler.Compiler.Stop();
-		throw new CompilerException(exception);
+		return CheckVirtualRegisters(full) || CheckAllPhiInstructions();
 	}
 
-	public bool FullCheck()
-	{
-		return CheckVirtualRegisters() || CheckAllPhiInstructions();
-	}
-
-	protected bool CheckVirtualRegisters()
+	protected bool CheckVirtualRegisters(bool full)
 	{
 		foreach (var operand in MethodCompiler.VirtualRegisters)
 		{
-			if (operand.Uses.Count > 0 && operand.Definitions.Count == 0)
+			if ((full && operand.Uses.Count > 0 && operand.Definitions.Count == 0)
+			|| (!full && operand.Uses.Count > 0 && operand.Definitions.Count == 0 && !operand.HasParent && !operand.IsParent))
 			{
-				throw new CompilerException(FormattedStageName, Method.FullName, $"CHECK-FAILED: Virtual register used by not defined: {operand}");
+				throw new CompilerException($"CHECK-FAILED: Virtual register used by not defined: {operand}");
 			}
 		}
 
@@ -835,7 +829,7 @@ public abstract class BaseMethodCompilerStage
 				{
 					if (!block.PreviousBlocks.Contains(phiblock))
 					{
-						throw new CompilerException(FormattedStageName, Method.FullName, $"CHECK-FAILED: PHI consistency: {block} at {node}");
+						throw new CompilerException($"CHECK-FAILED: PHI consistency: {block} at {node}");
 					}
 				}
 			}
