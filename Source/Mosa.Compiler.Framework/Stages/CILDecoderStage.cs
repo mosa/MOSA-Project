@@ -4826,16 +4826,9 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		if (local.IsVirtualRegister)
 		{
-			var storeInstruction = MethodCompiler.GetMoveInstruction(elementType);
+			var moveInstruction = MethodCompiler.GetMoveInstruction(elementType);
 
-			if (local.IsInt64 && Is32BitPlatform) // Truncation to low
-			{
-				var low = MethodCompiler.VirtualRegisters.Allocate32();
-				context.AppendInstruction(IRInstruction.GetLow32, low, local);
-				local = low;
-			}
-
-			context.AppendInstruction(storeInstruction, local, source);
+			context.AppendInstruction(moveInstruction, local, source);
 			return true;
 		}
 		else
