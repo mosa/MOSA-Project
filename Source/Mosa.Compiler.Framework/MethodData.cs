@@ -37,6 +37,8 @@ public sealed class MethodData
 
 	public bool IsSelfReferenced { get; set; }
 
+	public bool HasEpilogue { get; set; }
+
 	public bool HasAddressOfInstruction { get; set; }
 
 	public int IRInstructionCount { get; set; }

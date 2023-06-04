@@ -42,8 +42,7 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 		MethodData.HasAddressOfInstruction = false;
 		MethodData.HasLoops = false;
 		MethodData.IsSelfReferenced = false;
-
-		//MethodData.IsDevirtualized = Method.IsVirtual && !TypeLayout.IsMethodOverridden(Method);
+		MethodData.HasEpilogue = false;
 
 		trace?.Log($"DoNotInline: {MethodData.DoNotInline}");
 		trace?.Log($"IsVirtual: {Method.IsVirtual}");
@@ -78,7 +77,7 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 			{
 				for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 				{
-					if (node.IsEmpty)
+					if (node.IsEmptyOrNop)
 						continue;
 
 					if (node.Instruction.IsIRInstruction)
@@ -94,23 +93,15 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 					{
 						MethodData.HasAddressOfInstruction = true;
 					}
-
-					if (node.Instruction == IRInstruction.CallStatic && node.Operand1.Method == Method)
+					else if (node.Instruction == IRInstruction.CallStatic && node.Operand1.Method == Method)
 					{
 						MethodData.IsSelfReferenced = true;
 					}
-
-					if (node.Instruction == IRInstruction.SetReturn32
-
-						|| node.Instruction == IRInstruction.SetReturn64
-						|| node.Instruction == IRInstruction.SetReturnR4
-						|| node.Instruction == IRInstruction.SetReturnR8
-						|| node.Instruction == IRInstruction.SetReturnObject
-						|| node.Instruction == IRInstruction.SetReturnManagedPointer
-						|| node.Block.IsEpilogue
-						|| node.Block.IsPrologue
-						|| node.Instruction.IsParameterLoad
-					   )
+					else if (node.Instruction == IRInstruction.Epilogue)
+					{
+						MethodData.HasEpilogue = true;
+					}
+					else if (node.Instruction.IsReturn || node.Instruction.IsParameterLoad)
 					{
 						totalStackParameterInstruction++;
 					}
@@ -139,6 +130,7 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 		trace?.Log($"NonIRInstructionCount: {MethodData.NonIRInstructionCount}");
 		trace?.Log($"HasAddressOfInstruction: {MethodData.HasAddressOfInstruction}");
 		trace?.Log($"HasLoops: {MethodData.HasLoops}");
+		trace?.Log($"HasEpilogue: {MethodData.HasEpilogue}");
 		trace?.Log($"IsSelfReferenced: {MethodData.IsSelfReferenced}");
 		trace?.Log($"** Dynamically Evaluated");
 		trace?.Log($"Inlined: {MethodData.Inlined}");
@@ -235,6 +227,9 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 
 		// current implementation limitation - can't include methods with AddressOf instruction
 		if (methodData.HasAddressOfInstruction)
+			return false;
+
+		if (!MethodData.HasEpilogue)
 			return false;
 
 		if (methodData.NonIRInstructionCount > 0)

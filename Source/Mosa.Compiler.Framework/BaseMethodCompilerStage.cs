@@ -819,10 +819,7 @@ public abstract class BaseMethodCompilerStage
 		{
 			for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 			{
-				if (node.IsEmptyOrNop)
-					continue;
-
-				if (node.Instruction.HasVariableOperands)
+				if (node.IsEmptyOrNop || node.Instruction.HasVariableOperands)
 					continue;
 
 				if (node.Instruction.DefaultResultCount != node.ResultCount)
@@ -846,10 +843,7 @@ public abstract class BaseMethodCompilerStage
 		{
 			for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 			{
-				if (node.IsEmptyOrNop)
-					continue;
-
-				if (!node.Instruction.IsPhi)
+				if (node.IsEmptyOrNop || !node.Instruction.IsPhi)
 					break;
 
 				foreach (var phiblock in node.PhiBlocks)

@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.TruncateTo32;
 
 public sealed class Store32 : BaseTruncateTo32Transform
 {
-	public Store32() : base(IRInstruction.Store32, TransformType.Manual | TransformType.Optimization)
+	public Store32() : base(IRInstruction.Store32, TransformType.Manual | TransformType.Transform, true)
 	{
 	}
 
