@@ -33,7 +33,7 @@ internal static class PageTable
 		}
 
 		// Clear the Page Tables
-		for (uint index = 0; index < 1024; index++)
+		for (uint index = 0; index < PhysicalPageAllocator.TotalPages; index++)
 		{
 			PageTables.Store32(index << 2, (index * Page.Size) | 0x04 | 0x02 | 0x01);
 		}

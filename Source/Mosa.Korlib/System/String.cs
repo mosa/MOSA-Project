@@ -469,6 +469,9 @@ public sealed class String : IEnumerable, IEnumerable<char>, IEquatable<String>,
 	// TODO: Seems some compiler bugs prevent the original algorithms from working...
 	public unsafe static string Concat(string a, string b)
 	{
+		a ??= Empty;
+		b ??= Empty;
+
 		string result = InternalAllocateString(a.length + b.length);
 		char* chars = result.first_char;
 
@@ -490,6 +493,10 @@ public sealed class String : IEnumerable, IEnumerable<char>, IEquatable<String>,
 
 	public unsafe static string Concat(string a, string b, string c)
 	{
+		a ??= Empty;
+		b ??= Empty;
+		c ??= Empty;
+
 		string result = InternalAllocateString(a.length + b.length + c.length);
 		char* chars = result.first_char;
 
@@ -517,6 +524,11 @@ public sealed class String : IEnumerable, IEnumerable<char>, IEquatable<String>,
 
 	public unsafe static string Concat(string a, string b, string c, string d)
 	{
+		a ??= Empty;
+		b ??= Empty;
+		c ??= Empty;
+		d ??= Empty;
+
 		string result = InternalAllocateString(a.length + b.length + c.length + d.length);
 		char* chars = result.first_char;
 

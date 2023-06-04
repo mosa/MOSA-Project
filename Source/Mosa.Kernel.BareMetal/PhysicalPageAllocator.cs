@@ -8,11 +8,11 @@ namespace Mosa.Kernel.BareMetal;
 
 public static class PhysicalPageAllocator
 {
+	public static uint TotalPages { get; private set; }
+
 	private static BitMapIndexTable BitMapIndexTable;
 
 	private static Pointer AvailableMemory;
-
-	private static uint TotalPages;
 
 	private static uint MinimumAvailablePage;
 	private static uint MaximumAvailablePage;
@@ -27,7 +27,7 @@ public static class PhysicalPageAllocator
 
 		AvailableMemory = BootMemoryMap.GetAvailableMemory();
 
-		TotalPages = (uint)(AvailableMemory.ToInt64() / Page.Size);
+		TotalPages = (uint)(AvailableMemory.ToUInt64() / Page.Size);
 		var bitMapCount = TotalPages / (Page.Size * 8);
 
 		for (uint i = 0; i < bitMapCount; i++)

@@ -12,19 +12,12 @@ public static class PageTable
 	public static void Setup()
 	{
 		Platform.PageTableSetup();
-
 		Platform.PageTableInitialize();
 
 		// Unmap the first page for null pointer exceptions
 		MapVirtualAddressToPhysical(0x0, 0x0, false);
 
-		Console.WriteLine("Mosa.Kernel.BareMetal.PageTable.Setup:1");
-
-		while (true) { } // Platform.PageTableEnable() crashes
-
 		Platform.PageTableEnable();
-
-		Console.WriteLine("Mosa.Kernel.BareMetal.PageTable.Setup:2");
 	}
 
 	/// <summary>
