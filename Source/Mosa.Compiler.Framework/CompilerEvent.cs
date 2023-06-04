@@ -49,7 +49,7 @@ public static class CompilerEventExtension
 		return stage switch
 		{
 			CompilerEvent.CompilerStart => "Compiling",
-			CompilerEvent.CompilerEnd => "Compling [Completed]",
+			CompilerEvent.CompilerEnd => "Compiling [Completed]",
 			CompilerEvent.CompilingMethodsStart => "Compiling Methods",
 			CompilerEvent.CompilingMethodsCompleted => "Compiling Methods [Completed]",
 			CompilerEvent.MethodCompileStart => "Compiling Method",
