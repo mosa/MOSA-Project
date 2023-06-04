@@ -32,14 +32,14 @@ public static class LoadStore
 			{
 				var low = transformContext.VirtualRegisters.Allocate32();
 				context.InsertBefore().SetInstruction(IRInstruction.GetLow32, low, operand1);
-				context.Operand1 = low;
+				operand1 = low;
 			}
 
 			if (operand2.IsInt64)
 			{
 				var low = transformContext.VirtualRegisters.Allocate32();
 				context.InsertBefore().SetInstruction(IRInstruction.GetLow32, low, operand2);
-				context.Operand2 = low;
+				operand2 = low;
 			}
 		}
 
