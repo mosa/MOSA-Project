@@ -5,6 +5,7 @@ using Mosa.DeviceSystem;
 using Mosa.Runtime;
 
 namespace Mosa.DeviceDriver.ISA;
+
 // Portions of this code are from Cosmos
 
 //https://wiki.osdev.org/ACPI
@@ -116,7 +117,7 @@ public unsafe struct FADT
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public unsafe struct GenericAddressStructure
+public struct GenericAddressStructure
 {
 	public byte AddressSpace;
 	public byte BitWidth;
@@ -140,7 +141,7 @@ public unsafe struct XSDT
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public unsafe struct MADT
+public struct MADT
 {
 	public ACPISDTHeader h;
 
@@ -149,14 +150,14 @@ public unsafe struct MADT
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public unsafe struct MADTEntry
+public struct MADTEntry
 {
 	public byte Type;
 	public byte Length;
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public unsafe struct ProcessorLocalAPICEntry
+public struct ProcessorLocalAPICEntry
 {
 	public MADTEntry Entry;
 
@@ -167,7 +168,7 @@ public unsafe struct ProcessorLocalAPICEntry
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public unsafe struct IOAPICEntry
+public struct IOAPICEntry
 {
 	public MADTEntry Entry;
 
@@ -179,7 +180,7 @@ public unsafe struct IOAPICEntry
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public unsafe struct LongLocalAPICEntry
+public struct LongLocalAPICEntry
 {
 	public MADTEntry Entry;
 

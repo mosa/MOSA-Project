@@ -10,16 +10,14 @@ namespace Mosa.Utility.Launcher;
 
 public static class AppLocationsSettings
 {
-	private static readonly string MosaEnvironmentalVariable = Environment.GetEnvironmentVariable("MOSA");
 	private static readonly string ProgramFiles86 = Environment.GetEnvironmentVariable("ProgramFiles(x86)");
 	private static readonly string ProgramFiles = Environment.GetEnvironmentVariable("ProgramFiles");
 	private static readonly string UserProfile = Environment.GetEnvironmentVariable("UserProfile");
 	private static readonly string CurrentDirectory = Directory.GetCurrentDirectory();
 	private static readonly string AppDirectory = AppDomain.CurrentDomain.BaseDirectory;
-	private static readonly string MosaTools = @"%ProgramFiles(x86)%\MOSA-Project\Tools";
 
-	private static bool IsWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
-	private static string[] LinuxDirectories = new string[] { "/bin", "/usr/bin" };
+	private static readonly bool IsWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+	private static readonly string[] LinuxDirectories = new string[] { "/bin", "/usr/bin" };
 
 	public static Settings GetAppLocations()
 	{
@@ -55,9 +53,6 @@ public static class AppLocationsSettings
 					@"%APPDIR%\Tools\qemu",
 					@"%APPDIR%\..\Tools\qemu",
 
-					@"%MOSA%\Tools\qemu",
-					@"%MOSATOOLS%\qemu",
-
 					@"%ProgramFiles%\qemu",
 					@"%ProgramFiles(x86)%\qemu",
 				})
@@ -74,9 +69,6 @@ public static class AppLocationsSettings
 
 					@"%APPDIR%\Tools\gdb",
 					@"%APPDIR%\..\Tools\gdb",
-
-					@"%MOSA%\Tools\gdb",
-					@"%MOSATOOLS%\gdb",
 
 					@"C:\cygwin64\bin",
 					@"C:\mingw64\bin",
@@ -98,9 +90,6 @@ public static class AppLocationsSettings
 					@"%APPDIR%\Tools\mkisofs",
 					@"%APPDIR%\..\Tools\mkisofs",
 
-					@"%MOSA%\Tools\mkisofs",
-					@"%MOSATOOLS%\mkisofs",
-
 					@"%ProgramFiles%\VMware\VMware Player",
 					@"%ProgramFiles(x86)%\VMware\VMware Player",
 					@"%ProgramFiles%\cdrtools",
@@ -118,10 +107,7 @@ public static class AppLocationsSettings
 					@"%CURRENT%\Tools\ndisasm",
 
 					@"%APPDIR%\Tools\ndisasm",
-					@"%APPDIR%\..\Tools\ndisasm",
-
-					@"%MOSA%\Tools\ndisasm",
-					@"%MOSATOOLS%\ndisasm",
+					@"%APPDIR%\..\Tools\ndisasm"
 				})
 			: TryFind("ndisasm", LinuxDirectories);
 	}
@@ -179,10 +165,7 @@ public static class AppLocationsSettings
 					@"%CURRENT%\Tools\Bochs",
 
 					@"%APPDIR%\Tools\Bochs",
-					@"%APPDIR%\..\Tools\Bochs",
-
-					@"%MOSA%\Tools\Bochs",
-					@"%MOSATOOLS%\Bochs",
+					@"%APPDIR%\..\Tools\Bochs"
 				 })
 			: TryFind("bochs", LinuxDirectories);
 	}
@@ -198,9 +181,6 @@ public static class AppLocationsSettings
 
 					@"%APPDIR%\Tools\qemu",
 					@"%APPDIR%\..\Tools\qemu",
-
-					@"%MOSA%\Tools\qemu",
-					@"%MOSATOOLS%\qemu",
 
 					@"%ProgramFiles%\qemu",
 					@"%ProgramFiles(x86)%\qemu",
@@ -220,11 +200,6 @@ public static class AppLocationsSettings
 
 						@"%APPDIR%\Tools\qemu\share",
 						@"%APPDIR%\..\Tools\qemu\share",
-
-						@"%MOSA%\qemu",
-						@"%MOSA%\qemu\share",
-						@"%MOSATOOLS%\qemu",
-						@"%MOSATOOLS%\qemu\share",
 
 						@"%ProgramFiles%\qemu",
 						@"%ProgramFiles%\qemu\share",
@@ -250,12 +225,6 @@ public static class AppLocationsSettings
 					@"%APPDIR%\Tools\qemu\share",
 					@"%APPDIR%\..\Tools\qemu\share",
 
-					@"%MOSA%\qemu",
-					@"%MOSA%\qemu\share",
-
-					@"%MOSATOOLS%\qemu",
-					@"%MOSATOOLS%\qemu\share",
-
 					@"%ProgramFiles%\qemu",
 					@"%ProgramFiles%\qemu\share",
 					@"%ProgramFiles(x86)%\qemu",
@@ -280,16 +249,10 @@ public static class AppLocationsSettings
 					@"%APPDIR%\Tools\qemu\share",
 					@"%APPDIR%\..\Tools\qemu\share",
 
-					@"%MOSA%\qemu",
-					@"%MOSA%\qemu\share",
-
-					@"%MOSATOOLS%\qemu",
-					@"%MOSATOOLS%\qemu\share",
-
 					@"%ProgramFiles%\qemu",
 					@"%ProgramFiles%\qemu\share",
 					@"%ProgramFiles(x86)%\qemu",
-					@"%ProgramFiles(x86)%\qemu\share",
+					@"%ProgramFiles(x86)%\qemu\share"
 				})
 			: TryFind("edk2-x86_64-code.fd",
 				new string[] {
@@ -309,12 +272,6 @@ public static class AppLocationsSettings
 
 					@"%APPDIR%\Tools\qemu\share",
 					@"%APPDIR%\..\Tools\qemu\share",
-
-					@"%MOSA%\qemu",
-					@"%MOSA%\qemu\share",
-
-					@"%MOSATOOLS%\qemu",
-					@"%MOSATOOLS%\qemu\share",
 
 					@"%ProgramFiles%\qemu",
 					@"%ProgramFiles%\qemu\share",
@@ -340,12 +297,6 @@ public static class AppLocationsSettings
 
 	public static string ReplaceWithParameters(string directory)
 	{
-		if (!string.IsNullOrWhiteSpace(MosaEnvironmentalVariable))
-			directory = directory.Replace("%MOSA%", MosaEnvironmentalVariable);
-
-		if (!string.IsNullOrWhiteSpace(MosaTools))
-			directory = directory.Replace("%MOSATOOLS%", MosaTools);
-
 		if (!string.IsNullOrWhiteSpace(ProgramFiles))
 			directory = directory.Replace("%PROGRAMFILES%", ProgramFiles);
 

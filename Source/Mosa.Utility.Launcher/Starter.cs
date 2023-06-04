@@ -152,8 +152,12 @@ public class Starter : BaseLauncher
 	{
 		var arg = new StringBuilder();
 
-		arg.Append($"-m {LauncherSettings.EmulatorMemory.ToString()}M");
-		arg.Append($" -smp cores={LauncherSettings.EmulatorCores.ToString()}");
+		arg.Append("-m ");
+		arg.Append(LauncherSettings.EmulatorMemory);
+		arg.Append('M');
+
+		arg.Append(" -smp cores=");
+		arg.Append(LauncherSettings.EmulatorCores);
 
 		if (LauncherSettings.Platform == "x86")
 		{
@@ -190,40 +194,75 @@ public class Starter : BaseLauncher
 		// COM2 = Mosa Internal Debugger
 		switch (LauncherSettings.EmulatorSerial)
 		{
-			case "pipe": arg.Append($" -serial pipe:{LauncherSettings.EmulatorSerialPipe}"); break;
-			case "tcpserver": arg.Append($" -serial tcp:{LauncherSettings.EmulatorSerialHost}:{LauncherSettings.EmulatorSerialPort},server,nowait"); break;
-			case "tcpclient": arg.Append($" -serial tcp:{LauncherSettings.EmulatorSerialHost}:{LauncherSettings.EmulatorSerialPort},client,nowait"); break;
+			case "pipe":
+			{
+				arg.Append(" -serial pipe:");
+				arg.Append(LauncherSettings.EmulatorSerialPipe);
+				break;
+			}
+			case "tcpserver":
+			{
+				arg.Append(" -serial tcp:");
+				arg.Append(LauncherSettings.EmulatorSerialHost);
+				arg.Append(':');
+				arg.Append(LauncherSettings.EmulatorSerialPort);
+				arg.Append(",server,nowait");
+				break;
+			}
+			case "tcpclient":
+			{
+				arg.Append(" -serial tcp:");
+				arg.Append(LauncherSettings.EmulatorSerialHost);
+				arg.Append(':');
+				arg.Append(LauncherSettings.EmulatorSerialPort);
+				arg.Append(",client,nowait");
+				break;
+			}
 		}
 
 		if (LauncherSettings.EmulatorGDB)
 		{
-			arg.Append($" -S -gdb tcp::{LauncherSettings.GDBPort}");
+			arg.Append(" -S -gdb tcp::");
+			arg.Append(LauncherSettings.GDBPort);
 		}
 
 		switch (LauncherSettings.ImageFormat)
 		{
-			case "bin": arg.Append($" -kernel {Quote(LauncherSettings.ImageFile)}"); break;
-			default: arg.Append($" -hda {Quote(LauncherSettings.ImageFile)}"); break;
+			case "bin":
+			{
+				arg.Append(" -kernel ");
+				arg.Append(Quote(LauncherSettings.ImageFile));
+				break;
+			}
+			default:
+			{
+				arg.Append(" -hda ");
+				arg.Append(Quote(LauncherSettings.ImageFile));
+				break;
+			}
 		}
 
-		//arg.Append(" -no-reboot");
 		if (LauncherSettings.ImageFirmware == "bios")
 		{
-			arg.Append(" -L " + Quote(LauncherSettings.QEMUBios));
+			arg.Append(" -L ");
+			arg.Append(Quote(LauncherSettings.QEMUBios));
 		}
 		else if (LauncherSettings.ImageFirmware == "uefi")
 		{
 			if (LauncherSettings.Platform == "x86")
 			{
-				arg.Append($" -drive if=pflash,format=raw,readonly=on,file={Quote(LauncherSettings.QEMUEdk2X86)}");
+				arg.Append(" -drive if=pflash,format=raw,readonly=on,file=");
+				arg.Append(Quote(LauncherSettings.QEMUEdk2X86));
 			}
 			else if (LauncherSettings.Platform == "x64")
 			{
-				arg.Append($" -drive if=pflash,format=raw,readonly=on,file={Quote(LauncherSettings.QEMUEdk2X64)}");
+				arg.Append(" -drive if=pflash,format=raw,readonly=on,file=");
+				arg.Append(Quote(LauncherSettings.QEMUEdk2X64));
 			}
 			else if (LauncherSettings.Platform == "ARMv8A32")
 			{
-				arg.Append($" -drive if=pflash,format=raw,readonly=on,file={Quote(LauncherSettings.QEMUEdk2ARM)}");
+				arg.Append(" -drive if=pflash,format=raw,readonly=on,file=");
+				arg.Append(Quote(LauncherSettings.QEMUEdk2ARM));
 			}
 		}
 
@@ -239,28 +278,36 @@ public class Starter : BaseLauncher
 
 		var sb = new StringBuilder();
 
-		sb.AppendLine($"megs: {LauncherSettings.EmulatorMemory}");
-		sb.AppendLine($"ata0: enabled=1,ioaddr1=0x1f0,ioaddr2=0x3f0,irq=14");
-		sb.AppendLine($"cpuid: mmx=1,sep=1,simd=sse4_2,apic=xapic,aes=1,movbe=1,xsave=1");
-		sb.AppendLine($"boot: cdrom,disk");
-		sb.AppendLine($"log: {Quote(logfile)}");
-		sb.AppendLine($"romimage: file={Quote(Path.Combine(bochsdirectory, "BIOS-bochs-latest"))}");
-		sb.AppendLine($"vgaromimage: file={Quote(Path.Combine(bochsdirectory, "VGABIOS-lgpl-latest"))}");
+		sb.Append("megs: ");
+		sb.Append(LauncherSettings.EmulatorMemory);
+		sb.AppendLine();
 
-		//sb.AppendLine($"vgaromimage: file={Quote(Path.Combine(bochsdirectory, "VGABIOS-lgpl-latest-cirrus"))}");
+		sb.AppendLine("ata0: enabled=1,ioaddr1=0x1f0,ioaddr2=0x3f0,irq=14");
+		sb.AppendLine("cpuid: mmx=1,sep=1,simd=sse4_2,apic=xapic,aes=1,movbe=1,xsave=1");
+		sb.AppendLine("boot: cdrom,disk");
+
+		sb.Append("log: ");
+		sb.AppendLine(Quote(logfile));
+
+		sb.Append("romimage: file=");
+		sb.AppendLine(Quote(Path.Combine(bochsdirectory, "BIOS-bochs-latest")));
+
+		sb.Append("vgaromimage: file=");
+		sb.AppendLine(Quote(Path.Combine(bochsdirectory, "VGABIOS-lgpl-latest")));
 
 		if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
 		{
-			sb.AppendLine($"display_library: x, options={Quote("gui_debug")}");
+			sb.AppendLine("display_library: x, options=gui_debug");
 		}
 
-		sb.AppendLine($"ata0-master: type=disk,path={Quote(LauncherSettings.ImageFile)},biosdetect=none,cylinders=0,heads=0,spt=0");
+		sb.Append("ata0-master: type=disk,path=");
+		sb.Append(Quote(LauncherSettings.ImageFile));
+		sb.AppendLine(",biosdetect=none,cylinders=0,heads=0,spt=0");
 
 		switch (LauncherSettings.EmulatorSVGA)
 		{
-			case "vbe": sb.Append("vga: extension=vbe"); break;
-			case "cirrus": sb.Append("vga: extension=cirrus"); break;
-			default: break;
+			case "vbe": sb.AppendLine("vga: extension=vbe"); break;
+			case "cirrus": sb.AppendLine("vga: extension=cirrus"); break;
 		}
 
 		// COM1 = Kernel Log
@@ -277,62 +324,75 @@ public class Starter : BaseLauncher
 		// COM2 = Mosa Internal Debugger
 		switch (LauncherSettings.EmulatorSerial)
 		{
-			case "pipe": sb.Append($"com2: enabled=1, mode=pipe-server, dev=\\\\.\\pipe\\{LauncherSettings.EmulatorSerialPipe}"); break;
-			case "tcpserver": sb.Append($"com2: enabled=1, mode=socket-server, dev={LauncherSettings.EmulatorSerialHost}:{LauncherSettings.EmulatorSerialPort}"); break;
-			case "tcpclient": sb.Append($"com2: enabled=1, mode=socket-client, dev={LauncherSettings.EmulatorSerialHost}:{LauncherSettings.EmulatorSerialPort}"); break;
-			default: break;
+			case "pipe":
+			{
+				sb.Append("com2: enabled=1, mode=pipe-server, dev=\\\\.\\pipe\\");
+				sb.AppendLine(LauncherSettings.EmulatorSerialPipe);
+				break;
+			}
+			case "tcpserver":
+			{
+				sb.Append("com2: enabled=1, mode=socket-server, dev=");
+				sb.Append(LauncherSettings.EmulatorSerialHost);
+				sb.Append(':');
+				sb.Append(LauncherSettings.EmulatorSerialPort);
+				sb.AppendLine();
+				break;
+			}
+			case "tcpclient":
+			{
+				sb.Append("com2: enabled=1, mode=socket-client, dev=");
+				sb.Append(LauncherSettings.EmulatorSerialHost);
+				sb.Append(':');
+				sb.Append(LauncherSettings.EmulatorSerialPort);
+				sb.AppendLine();
+				break;
+			}
 		}
 
 		if (LauncherSettings.EmulatorGDB)
 		{
 			// Untested
-			sb.Append($"gdbstub: enabled=1, port={LauncherSettings.GDBPort}, text_base=0, data_base=0, bss_base=0");
+			sb.Append("gdbstub: enabled=1, port=");
+			sb.Append(LauncherSettings.GDBPort);
+			sb.AppendLine(", text_base=0, data_base=0, bss_base=0");
 		}
 
 		File.WriteAllText(configfile, sb.ToString());
 
-		var arg = $"-q -f {Quote(configfile)}";
-
-		return LaunchApplication(LauncherSettings.Bochs, arg, getOutput);
+		return LaunchApplication(LauncherSettings.Bochs, $"-q -f {Quote(configfile)}", getOutput);
 	}
 
 	private Process LaunchVMware(bool getOutput)
 	{
-		var logfile = Path.Combine(LauncherSettings.TemporaryFolder, Path.GetFileNameWithoutExtension(LauncherSettings.ImageFile) + "-vmx.log");
-		var configfile = Path.Combine(LauncherSettings.TemporaryFolder, Path.GetFileNameWithoutExtension(LauncherSettings.ImageFile) + ".vmx");
-
+		var configFile = Path.Combine(LauncherSettings.TemporaryFolder, Path.ChangeExtension(LauncherSettings.ImageFile, ".vmx")!);
 		var sb = new StringBuilder();
 
 		sb.AppendLine(".encoding = \"windows-1252\"");
 		sb.AppendLine("config.version = \"8\"");
 		sb.AppendLine("virtualHW.version = \"14\"");
-		sb.AppendLine($"memsize = {Quote(LauncherSettings.EmulatorMemory.ToString())}");
-		sb.AppendLine($"displayName = \"MOSA - {Path.GetFileNameWithoutExtension(LauncherSettings.SourceFiles[0])}\"");
+
+		sb.Append("memsize = ");
+		sb.AppendLine(Quote(LauncherSettings.EmulatorMemory.ToString()));
+
+		sb.Append("displayName = \"MOSA - ");
+		sb.Append(Path.GetFileNameWithoutExtension(LauncherSettings.SourceFiles[0]));
+		sb.AppendLine("\"");
+
 		sb.AppendLine("guestOS = \"other\"");
 		sb.AppendLine("priority.grabbed = \"normal\"");
 		sb.AppendLine("priority.ungrabbed = \"normal\"");
 		sb.AppendLine("virtualHW.productCompatibility = \"hosted\"");
 		sb.AppendLine("numvcpus = \"1\"");
-		sb.AppendLine($"cpuid.coresPerSocket = {Quote(LauncherSettings.EmulatorCores.ToString())}");
 
-		/*sb.AppendLine("nvme0.present = \"TRUE\"");
-		sb.AppendLine("nvme0:0.present = \"TRUE\"");
-		sb.AppendLine($"nvme0:0.fileName = {Quote(LauncherSettings.ImageFile)}");
-		sb.AppendLine("pciBridge0.present = \"TRUE\"");
-		sb.AppendLine("pciBridge4.present = \"TRUE\"");
-		sb.AppendLine("pciBridge4.virtualDev = \"pcieRootPort\"");
-		sb.AppendLine("pciBridge4.functions = \"8\"");
-		sb.AppendLine("pciBridge5.present = \"TRUE\"");
-		sb.AppendLine("pciBridge5.virtualDev = \"pcieRootPort\"");
-		sb.AppendLine("pciBridge5.functions = \"8\"");
-		sb.AppendLine("pciBridge6.present = \"TRUE\"");
-		sb.AppendLine("pciBridge6.virtualDev = \"pcieRootPort\"");
-		sb.AppendLine("pciBridge6.functions = \"8\"");
-		sb.AppendLine("pciBridge7.present = \"TRUE\"");
-		sb.AppendLine("pciBridge7.virtualDev = \"pcieRootPort\"");
-		sb.AppendLine("pciBridge7.functions = \"8\"");*/
+		sb.Append("cpuid.coresPerSocket = ");
+		sb.AppendLine(Quote(LauncherSettings.EmulatorCores.ToString()));
+
 		sb.AppendLine("ide0:0.present = \"TRUE\"");
-		sb.AppendLine($"ide0:0.fileName = {Quote(LauncherSettings.ImageFile)}");
+
+		sb.Append("ide0:0.fileName = ");
+		sb.AppendLine(Quote(LauncherSettings.ImageFile));
+
 		sb.AppendLine("sound.present = \"TRUE\"");
 		sb.AppendLine("sound.opl3.enabled = \"TRUE\"");
 		sb.AppendLine("sound.virtualDev = \"sb16\"");
@@ -353,7 +413,11 @@ public class Starter : BaseLauncher
 			sb.AppendLine("serial1.present = \"TRUE\"");
 			sb.AppendLine("serial1.yieldOnMsrRead = \"FALSE\"");
 			sb.AppendLine("serial1.fileType = \"pipe\"");
-			sb.AppendLine($"serial1.fileName = \"\\\\.\\pipe\\{LauncherSettings.EmulatorSerialPipe}\"");
+
+			sb.Append("serial1.fileName = \"\\\\.\\pipe\\");
+			sb.AppendLine(LauncherSettings.EmulatorSerialPipe);
+			sb.AppendLine("\"");
+
 			sb.AppendLine("serial1.pipe.endPoint = \"server\"");
 			sb.AppendLine("serial1.tryNoRxLoss = \"FALSE\"");
 
@@ -364,15 +428,16 @@ public class Starter : BaseLauncher
 			//serial0.fileName = "telnet://192.168.1.2:2001"
 		}
 
-		File.WriteAllText(configfile, sb.ToString());
+		File.WriteAllText(configFile, sb.ToString());
 
-		var arg = Quote(configfile);
+		var arg = Quote(configFile);
 
-		if (!String.IsNullOrWhiteSpace(LauncherSettings.VmwareWorkstation))
+		if (!string.IsNullOrWhiteSpace(LauncherSettings.VmwareWorkstation))
 		{
 			return LaunchApplication(LauncherSettings.VmwareWorkstation, arg, getOutput);
 		}
-		else if (!String.IsNullOrWhiteSpace(LauncherSettings.VmwarePlayer))
+
+		if (!string.IsNullOrWhiteSpace(LauncherSettings.VmwarePlayer))
 		{
 			return LaunchApplication(LauncherSettings.VmwarePlayer, arg, getOutput);
 		}
@@ -407,44 +472,63 @@ public class Starter : BaseLauncher
 	private void LaunchDebugger()
 	{
 		// FIXME!!!
-		var argMap = CommandLineArguments.Map;
+		var sb = new StringBuilder();
 
-		var arg = $" -output-debug-file {Path.Combine(LauncherSettings.TemporaryFolder, Path.GetFileNameWithoutExtension(LauncherSettings.ImageFile) + ".debug")}";
-		arg += $" -gdb-host {LauncherSettings.GDBHost}";
-		arg += $" -gdb-port {LauncherSettings.GDBPort}";
-		arg += $" -image {Quote(LauncherSettings.ImageFile)}";
+		sb.Append("-output-debug-file ");
+		sb.Append(Path.Combine(LauncherSettings.TemporaryFolder, Path.ChangeExtension(LauncherSettings.ImageFile, ".debug")!));
+		sb.Append(' ');
+		sb.Append("-gdb-host ");
+		sb.Append(LauncherSettings.GDBHost);
+		sb.Append(' ');
+		sb.Append("-gdb-port ");
+		sb.Append(LauncherSettings.GDBPort);
+		sb.Append(' ');
+		sb.Append("-image ");
+		sb.Append(Quote(LauncherSettings.ImageFile));
 
-		LaunchApplication("Mosa.Tool.Debugger.exe", arg);
+		LaunchApplication("Mosa.Tool.Debugger.exe", sb.ToString());
 	}
 
 	private void LaunchGDB()
 	{
-		var gdbscript = Path.Combine(LauncherSettings.TemporaryFolder, Path.GetFileNameWithoutExtension(LauncherSettings.ImageFile) + ".gdb");
-
-		var arg = $"-d {Quote(LauncherSettings.TemporaryFolder)}";
-		arg = $"{arg} -s {Quote(Path.Combine(LauncherSettings.TemporaryFolder, Path.GetFileNameWithoutExtension(LauncherSettings.ImageFile) + ".bin"))}";
-		arg = $"{arg} -x {Quote(gdbscript)}";
+		var gdbScript = Path.Combine(LauncherSettings.TemporaryFolder, Path.GetFileNameWithoutExtension(LauncherSettings.ImageFile) + ".gdb");
 
 		var symbol = Linker.EntryPoint;
 		var breakAddress = symbol.VirtualAddress;
 
 		var sb = new StringBuilder();
 
-		sb.AppendLine($"target remote localhost:{LauncherSettings.GDBPort}");
-		sb.AppendLine($"set confirm off ");
-		sb.AppendLine($"set disassemble-next-line on");
-		sb.AppendLine($"set disassembly-flavor intel");
-		sb.AppendLine($"set pagination off");
-		sb.AppendLine($"break *0x{breakAddress.ToString("x")}");
-		sb.AppendLine($"c");
+		sb.Append("target remote localhost:");
+		sb.Append(LauncherSettings.GDBPort);
+		sb.AppendLine();
 
-		File.WriteAllText(gdbscript, sb.ToString());
+		sb.AppendLine("set confirm off ");
+		sb.AppendLine("set disassemble-next-line on");
+		sb.AppendLine("set disassembly-flavor intel");
+		sb.AppendLine("set pagination off");
 
-		Output($"Created configuration file: {gdbscript}");
+		sb.Append("break *0x");
+		sb.AppendLine(breakAddress.ToString("x"));
+
+		sb.AppendLine("c");
+
+		var script = sb.ToString();
+
+		File.WriteAllText(gdbScript, script);
+
+		Output($"Created configuration file: {gdbScript}");
 		Output("==================");
-		Output(sb.ToString());
+		Output(script);
 		Output("==================");
 
-		LaunchConsoleApplication(LauncherSettings.GDB, arg);
+		sb.Clear();
+		sb.Append("-d ");
+		sb.Append(Quote(LauncherSettings.TemporaryFolder));
+		sb.Append(" -s ");
+		sb.Append(Quote(Path.Combine(LauncherSettings.TemporaryFolder, Path.ChangeExtension(LauncherSettings.ImageFile, ".bin")!)));
+		sb.Append(" -x ");
+		sb.Append(Quote(gdbScript));
+
+		LaunchConsoleApplication(LauncherSettings.GDB, sb.ToString());
 	}
 }

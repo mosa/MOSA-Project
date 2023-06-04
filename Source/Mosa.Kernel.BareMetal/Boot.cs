@@ -21,30 +21,21 @@ public static class Boot
 		Console.SetBackground(ConsoleColor.Blue);
 		Console.SetForground(ConsoleColor.White);
 		Console.ClearScreen();
-		Console.Write("Booting...");
 
+		Console.WriteLine("Initializing boot page allocator...");
 		BootPageAllocator.Setup();
 
-		Console.Write("1...");
+		Console.WriteLine("Initializing memory map...");
 		BootMemoryMap.Initialize();
-
-		Console.Write("3...");
 		BootMemoryMap.ImportPlatformMemoryMap();
-
-		Console.Write("2...");
 		BootMemoryMap.ImportMultibootV1MemoryMap();
+		BootMemoryMap.Dump();
 
-		//BootMemoryMap.Dump();
-
-		Console.Write("4...");
+		Console.WriteLine("Initializing physical page allocator...");
 		PhysicalPageAllocator.Setup();
 
-		Console.WriteLine("5...");
+		Console.WriteLine("Initializing page table...");
 		PageTable.Setup();
-
-		Console.WriteLine("6...");
-
-		while (true) { }
 	}
 
 	[Plug("Mosa.Runtime.StartUp::GarbageCollectionInitialization")]
