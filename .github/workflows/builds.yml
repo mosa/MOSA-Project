@@ -33,25 +33,25 @@ jobs:
       - name: Build
         run: dotnet build Source/Mosa.sln /p:Version=${{ env.BUILD_VERSION }}
       - name: Unit Tests - All Performance Optimizations
-        run: bin\Mosa.Utility.UnitTests.exe -oMax -s -display-off
+        run: bin\Mosa.Utility.UnitTests.exe -oMax -display-off
       - name: Unit Tests - No Optimizations
-        run: bin\Mosa.Utility.UnitTests.exe -oNone -s -display-off
+        run: bin\Mosa.Utility.UnitTests.exe -oNone -display-off
       - name: Unit Tests - Optimization Level 1
-        run: bin\Mosa.Utility.UnitTests.exe -o1 -s -display-off
+        run: bin\Mosa.Utility.UnitTests.exe -o1 -display-off
       - name: Unit Tests - Optimization Level 2
-        run: bin\Mosa.Utility.UnitTests.exe -o2 -s -display-off
+        run: bin\Mosa.Utility.UnitTests.exe -o2 -display-off
       - name: Unit Tests - Optimization Level 3
-        run: bin\Mosa.Utility.UnitTests.exe -o3 -s -display-off
+        run: bin\Mosa.Utility.UnitTests.exe -o3 -display-off
       - name: Unit Tests - Optimization Level 4
-        run: bin\Mosa.Utility.UnitTests.exe -o4 -s -display-off
+        run: bin\Mosa.Utility.UnitTests.exe -o4 -display-off
       - name: Unit Tests - Optimization Level 5
-        run: bin\Mosa.Utility.UnitTests.exe -o5 -s -display-off
+        run: bin\Mosa.Utility.UnitTests.exe -o5 -display-off
       - name: Unit Tests - Optimization Level 6
-        run: bin\Mosa.Utility.UnitTests.exe -o6 -s -display-off
+        run: bin\Mosa.Utility.UnitTests.exe -o6 -display-off
       - name: Unit Tests - Optimization Level 7
-        run: bin\Mosa.Utility.UnitTests.exe -o7 -s -display-off
+        run: bin\Mosa.Utility.UnitTests.exe -o7 -display-off
       - name: Unit Tests - Optimization Level 8
-        run: bin\Mosa.Utility.UnitTests.exe -o8 -s -display-off
+        run: bin\Mosa.Utility.UnitTests.exe -o8 -display-off
 #      - name: Test Demo - Mosa.Demo.HelloWorld.x86 
 #        run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.Demo.HelloWorld.x86.dll -s Launcher.Test=true
 #      - name: Test Demo - Mosa.Demo.CoolWorld.x86 
@@ -130,25 +130,25 @@ jobs:
       - name: Install Qemu and Dependencies
         run: sudo apt-get install -y qemu qemu-system qemu-system-x86 libsdl2-image-2.0-0 libvirglrenderer1 libpixman-1-0 libepoxy0 libdw1 libpng16-16 zlib1g libjpeg8 libudev1 libusb-1.0-0 liblzo2-2 libgio-cil libglib2.0-0 libzstd1 libncursesw6 libgbm1 libgtk-3-0 libgdk3.0-cil libcairo2 libgdk-pixbuf-2.0-0 libx11-6 libasound2 libpulse0 libsndio7.0 libbz2-1.0 libc6 libgcc-s1 
       - name: Unit Tests - All Performance Optimizations
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -oMax -s -display-off
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -oMax -display-off
       - name: Unit Tests - No Optimizations
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -oNone -s -display-off
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -oNone -display-off
       - name: Unit Tests - Optimization Level 1
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -o1 -s -display-off
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -o1 -display-off
       - name: Unit Tests - Optimization Level 2
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -o2 -s -display-off
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -o2 -display-off
       - name: Unit Tests - Optimization Level 3
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -o3 -s -display-off
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -o3 -display-off
       - name: Unit Tests - Optimization Level 4
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -o4 -s -display-off
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -o4 -display-off
       - name: Unit Tests - Optimization Level 5
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -o5 -s -display-off
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -o5 -display-off
       - name: Unit Tests - Optimization Level 6
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -o6 -s -display-off
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -o6 -display-off
       - name: Unit Tests - Optimization Level 7
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -o7 -s -display-off
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -o7 -display-off
       - name: Unit Tests - Optimization Level 8
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -o8 -s -display-off
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -o8 -display-off
 
   generate-docs:
     name: Generate documentation
