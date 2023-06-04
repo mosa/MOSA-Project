@@ -10,37 +10,37 @@ namespace Mosa.Compiler.Framework.Intrinsics;
 internal static partial class StubMethods
 {
 	[StubMethod("System.Runtime.CompilerServices.Unsafe::SizeOf")]
-	public static void Unsafe_SizeOf(Context context, MethodCompiler methodCompiler)
+	public static void Unsafe_SizeOf(Context context, TransformContext transformContext)
 	{
-		var type = methodCompiler.Method.GenericArguments[0];
-		var opReturn = methodCompiler.VirtualRegisters.Allocate32();
+		var type = transformContext.Method.GenericArguments[0];
+		var opReturn = transformContext.VirtualRegisters.Allocate32();
 
-		var size = methodCompiler.GetElementSize(type);
+		var size = transformContext.MethodCompiler.GetElementSize(type);
 
 		context.AppendInstruction(IRInstruction.Move32, opReturn, Operand.CreateConstant32(size));
 		context.AppendInstruction(IRInstruction.SetReturn32, null, opReturn);
-		context.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);
+		context.AppendInstruction(IRInstruction.Jmp, transformContext.BasicBlocks.EpilogueBlock);
 	}
 
 	[StubMethod("System.Runtime.CompilerServices.Unsafe::AsPointer")]
 	[StubMethod("System.Runtime.CompilerServices.Unsafe::As")]
-	public static void Unsafe_As(Context context, MethodCompiler methodCompiler)
+	public static void Unsafe_As(Context context, TransformContext transformContext)
 	{
-		CILDecoderStage.CreateParameters(methodCompiler);
+		CILDecoderStage.CreateParameters(transformContext.MethodCompiler);
 
-		var source = methodCompiler.Parameters[0];
+		var source = transformContext.MethodCompiler.Parameters[0];
 
 		var opReturn = source.IsObject
-			? methodCompiler.VirtualRegisters.AllocateNativeInteger()
-			: methodCompiler.VirtualRegisters.AllocateManagedPointer();
+			? transformContext.VirtualRegisters.AllocateNativeInteger()
+			: transformContext.VirtualRegisters.AllocateManagedPointer();
 
 		var loadSource = source.IsObject
 			? IRInstruction.LoadParamObject
-			: methodCompiler.Is32BitPlatform ? IRInstruction.LoadParam32 : IRInstruction.LoadParam64;
+			: transformContext.Is32BitPlatform ? IRInstruction.LoadParam32 : IRInstruction.LoadParam64;
 
 		var setReturn = source.IsObject
 			? IRInstruction.SetReturnObject
-			: methodCompiler.Is32BitPlatform ? IRInstruction.SetReturn32 : IRInstruction.SetReturn64;
+			: transformContext.Is32BitPlatform ? IRInstruction.SetReturn32 : IRInstruction.SetReturn64;
 
 		// Load source into return operand
 		context.AppendInstruction(loadSource, opReturn, source);
@@ -48,19 +48,19 @@ internal static partial class StubMethods
 		// Set return
 		context.AppendInstruction(setReturn, null, opReturn);
 
-		context.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);
+		context.AppendInstruction(IRInstruction.Jmp, transformContext.BasicBlocks.EpilogueBlock);
 	}
 
 	[StubMethod("System.Runtime.CompilerServices.Unsafe::AreSame")]
-	public static void Unsafe_AreSame(Context context, MethodCompiler methodCompiler)
+	public static void Unsafe_AreSame(Context context, TransformContext transformContext)
 	{
-		CILDecoderStage.CreateParameters(methodCompiler);
+		CILDecoderStage.CreateParameters(transformContext.MethodCompiler);
 
-		var left = methodCompiler.Parameters[0];
-		var right = methodCompiler.Parameters[1];
-		var opLeft = methodCompiler.VirtualRegisters.AllocateObject();
-		var opRight = methodCompiler.VirtualRegisters.AllocateObject();
-		var opReturn = methodCompiler.VirtualRegisters.AllocateNativeInteger();
+		var left = transformContext.MethodCompiler.Parameters[0];
+		var right = transformContext.MethodCompiler.Parameters[1];
+		var opLeft = transformContext.VirtualRegisters.AllocateObject();
+		var opRight = transformContext.VirtualRegisters.AllocateObject();
+		var opReturn = transformContext.VirtualRegisters.AllocateNativeInteger();
 
 		// Load left parameter
 		context.AppendInstruction(IRInstruction.LoadParamObject, opLeft, left);
@@ -72,39 +72,39 @@ internal static partial class StubMethods
 		context.AppendInstruction(IRInstruction.CompareObject, ConditionCode.Equal, opReturn, opLeft, opRight);
 
 		// Set return
-		var setReturn = methodCompiler.Is32BitPlatform ? IRInstruction.SetReturn32 : IRInstruction.SetReturn64;
+		var setReturn = transformContext.Is32BitPlatform ? IRInstruction.SetReturn32 : IRInstruction.SetReturn64;
 		context.AppendInstruction(setReturn, null, opReturn);
 
-		context.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);
+		context.AppendInstruction(IRInstruction.Jmp, transformContext.BasicBlocks.EpilogueBlock);
 	}
 
 	[StubMethod("System.Runtime.CompilerServices.Unsafe::AddByteOffset")]
-	public static void Unsafe_AddByteOffset(Context context, MethodCompiler methodCompiler)
+	public static void Unsafe_AddByteOffset(Context context, TransformContext transformContext)
 	{
-		CILDecoderStage.CreateParameters(methodCompiler);
+		CILDecoderStage.CreateParameters(transformContext.MethodCompiler);
 
-		var source = methodCompiler.Parameters[0];
-		var byteOffset = methodCompiler.Parameters[1];
-		var opSource = methodCompiler.VirtualRegisters.AllocateManagedPointer();
-		var opByteOffset = methodCompiler.VirtualRegisters.AllocateNativeInteger();
-		var opReturn = methodCompiler.VirtualRegisters.AllocateNativeInteger();
+		var source = transformContext.MethodCompiler.Parameters[0];
+		var byteOffset = transformContext.MethodCompiler.Parameters[1];
+		var opSource = transformContext.VirtualRegisters.AllocateManagedPointer();
+		var opByteOffset = transformContext.VirtualRegisters.AllocateNativeInteger();
+		var opReturn = transformContext.VirtualRegisters.AllocateNativeInteger();
 
 		// Load left parameter
-		var loadSource = methodCompiler.Is32BitPlatform ? IRInstruction.LoadParam32 : IRInstruction.LoadParam64;
+		var loadSource = transformContext.Is32BitPlatform ? IRInstruction.LoadParam32 : IRInstruction.LoadParam64;
 		context.AppendInstruction(loadSource, opSource, source);
 
 		// Load right parameter
-		var loadByteOffset = methodCompiler.Is32BitPlatform ? IRInstruction.LoadParam32 : IRInstruction.LoadParam64;
+		var loadByteOffset = transformContext.Is32BitPlatform ? IRInstruction.LoadParam32 : IRInstruction.LoadParam64;
 		context.AppendInstruction(loadByteOffset, opByteOffset, byteOffset);
 
 		// Compare and store into result operand
-		var add = methodCompiler.Is32BitPlatform ? IRInstruction.Add32 : IRInstruction.Add64;
+		var add = transformContext.Is32BitPlatform ? IRInstruction.Add32 : IRInstruction.Add64;
 		context.AppendInstruction(add, opReturn, opSource, opByteOffset);
 
 		// Return comparison result
-		var setReturn = methodCompiler.Is32BitPlatform ? IRInstruction.SetReturn32 : IRInstruction.SetReturn64;
+		var setReturn = transformContext.Is32BitPlatform ? IRInstruction.SetReturn32 : IRInstruction.SetReturn64;
 		context.AppendInstruction(setReturn, null, opReturn);
 
-		context.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);
+		context.AppendInstruction(IRInstruction.Jmp, transformContext.BasicBlocks.EpilogueBlock);
 	}
 }

@@ -10,7 +10,7 @@ namespace Mosa.Platform.x86.Intrinsic;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::FrameJump")]
-	private static void FrameJump(Context context, MethodCompiler methodCompiler)
+	private static void FrameJump(Context context, TransformContext transformContext)
 	{
 		var v0 = context.Operand1;
 		var v1 = context.Operand2;
@@ -28,7 +28,7 @@ internal static partial class IntrinsicMethods
 		context.SetInstruction(X86.Mov32, eax, v0);
 		context.AppendInstruction(X86.Mov32, ebx, v1);
 		context.AppendInstruction(X86.Mov32, ecx, v2);
-		context.AppendInstruction(X86.Mov32, methodCompiler.Compiler.ExceptionRegister, v3);
+		context.AppendInstruction(X86.Mov32, transformContext.Compiler.ExceptionRegister, v3);
 
 		// Update the frame and stack registers
 		context.AppendInstruction(X86.Mov32, ebp, ecx);

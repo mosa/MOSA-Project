@@ -10,7 +10,7 @@ namespace Mosa.Platform.x64.Intrinsic;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Platform.x64.Intrinsic::Jmp")]
-	private static void Jmp(Context context, MethodCompiler methodCompiler)
+	private static void Jmp(Context context, TransformContext transformContext)
 	{
 		context.SetInstruction(X64.JmpExternal, null, context.Operand1);
 	}

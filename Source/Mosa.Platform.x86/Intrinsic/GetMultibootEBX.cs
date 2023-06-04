@@ -11,9 +11,9 @@ namespace Mosa.Platform.x86.Intrinsic;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::GetMultibootEBX")]
-	private static void GetMultibootEBX(Context context, MethodCompiler methodCompiler)
+	private static void GetMultibootEBX(Context context, TransformContext transformContext)
 	{
-		var MultibootEBX = Operand.CreateLabel(BaseMultibootStage.MultibootEBX, methodCompiler.Is32BitPlatform);
+		var MultibootEBX = Operand.CreateLabel(BaseMultibootStage.MultibootEBX, transformContext.Is32BitPlatform);
 
 		context.SetInstruction(IRInstruction.Load32, context.Result, MultibootEBX, Operand.Constant32_0);
 	}

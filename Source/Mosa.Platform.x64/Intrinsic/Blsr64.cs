@@ -10,7 +10,7 @@ namespace Mosa.Platform.x64.Intrinsic;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Platform.x64.Intrinsic::Blsr64")]
-	private static void Blsr64(Context context, MethodCompiler methodCompiler)
+	private static void Blsr64(Context context, TransformContext transformContext)
 	{
 		context.SetInstruction(X64.Blsr64, context.Result, context.Operand1);
 	}

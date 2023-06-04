@@ -34,6 +34,8 @@ public sealed class MethodCompiler
 
 	private readonly NotifyTraceLogHandler NotifyTranformTraceHandler;
 
+	public readonly TransformContext TransformContext = new TransformContext();
+
 	#endregion Data Members
 
 	#region Properties
@@ -277,40 +279,14 @@ public sealed class MethodCompiler
 
 		MethodData.Counters.NewCountSkipLock("ExecutionTime.Setup.Ticks", (int)Stopwatch.ElapsedTicks);
 		MethodData.Counters.NewCountSkipLock("ExecutionTime.Setup.MicroSeconds", Stopwatch.Elapsed.Microseconds);
+
+		TransformContext.SetCompiler(compiler);
+		TransformContext.SetMethodCompiler(this);
 	}
 
 	#endregion Construction
 
 	#region Methods
-
-	/// <summary>
-	/// Compiles the method referenced by this method compiler.
-	/// </summary>
-	public void Compile2()
-	{
-		PlugMethod();
-
-		PatchDelegate();
-
-		ExternalMethod();
-
-		InternalMethod();
-
-		StubMethod();
-
-		ExecutePipeline();
-
-		Symbol.SetReplacementStatus(MethodData.Inlined);
-
-		if (Statistics)
-		{
-			var log = new TraceLog(TraceType.MethodCounters, Method, string.Empty, MethodData.Version);
-
-			log.Log(MethodData.Counters.Export());
-
-			Compiler.PostTraceLog(log);
-		}
-	}
 
 	/// <summary>
 	/// Compiles the method referenced by this method compiler.
@@ -625,7 +601,7 @@ public sealed class MethodCompiler
 
 		var start = new Context(startBlock);
 
-		stub(start, this);
+		stub(start, TransformContext);
 
 		if (NotifyInstructionTraceHandler != null)
 		{

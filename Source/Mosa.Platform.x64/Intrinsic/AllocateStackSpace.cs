@@ -10,7 +10,7 @@ namespace Mosa.Platform.x64.Intrinsic;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Platform.x64.Intrinsic::AllocateStackSpace")]
-	private static void AllocateStackSpace(Context context, MethodCompiler methodCompiler)
+	private static void AllocateStackSpace(Context context, TransformContext transformContext)
 	{
 		Operand result = context.Result;
 		Operand size = context.Operand1;

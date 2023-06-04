@@ -10,7 +10,7 @@ namespace Mosa.Platform.x86.Intrinsic;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::Sqrtss")]
-	private static void Sqrtss(Context context, MethodCompiler methodCompiler)
+	private static void Sqrtss(Context context, TransformContext transformContext)
 	{
 		context.SetInstruction(X86.Sqrtss, context.Result, context.Operand1);
 	}

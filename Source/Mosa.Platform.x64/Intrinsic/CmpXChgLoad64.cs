@@ -10,7 +10,7 @@ namespace Mosa.Platform.x64.Intrinsic;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Platform.x64.Intrinsic::CmpXChgLoad64")]
-	private static void CmpXChgLoad64(Context context, MethodCompiler methodCompiler)
+	private static void CmpXChgLoad64(Context context, TransformContext transformContext)
 	{
 		var location = context.Operand1;
 		var value = context.Operand2;
@@ -18,7 +18,7 @@ internal static partial class IntrinsicMethods
 		var result = context.Result;
 
 		var rax = Operand.CreateCPURegister64(CPURegister.RAX);
-		var v1 = methodCompiler.VirtualRegisters.Allocate64();
+		var v1 = transformContext.VirtualRegisters.Allocate64();
 
 		context.SetInstruction(X64.Mov64, rax, comparand);
 		context.AppendInstruction(X64.Mov64, v1, value);

@@ -8,7 +8,7 @@ namespace Mosa.Compiler.Framework.Intrinsics;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Runtime.Intrinsic::GetObjectFromAddress")]
-	private static void GetObjectFromAddress(Context context, MethodCompiler methodCompiler)
+	private static void GetObjectFromAddress(Context context, TransformContext transformContext)
 	{
 		context.SetInstruction(IRInstruction.MoveObject, context.Result, context.Operand1);
 	}

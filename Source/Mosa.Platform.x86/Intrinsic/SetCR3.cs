@@ -10,7 +10,7 @@ namespace Mosa.Platform.x86.Intrinsic;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::SetCR3")]
-	private static void SetCR3(Context context, MethodCompiler methodCompiler)
+	private static void SetCR3(Context context, TransformContext transformContext)
 	{
 		Operand operand1 = context.Operand1;
 

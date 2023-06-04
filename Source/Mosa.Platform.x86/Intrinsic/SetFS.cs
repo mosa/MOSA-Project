@@ -10,7 +10,7 @@ namespace Mosa.Platform.x86.Intrinsic;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::SetFS")]
-	private static void SetFS(Context context, MethodCompiler methodCompiler)
+	private static void SetFS(Context context, TransformContext transformContext)
 	{
 		context.SetInstruction(X86.MovStoreSeg32, Operand.CreateCPURegister32(CPURegister.FS), context.Operand1);
 	}
