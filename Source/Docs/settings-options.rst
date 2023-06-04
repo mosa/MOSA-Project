@@ -136,7 +136,7 @@ Image Settings
     Image.FileSystem,"File system of the primary partition in the image file FAT12, FAT16, FAT32"
     Image.Destination,Destination directory of the image file
     Image.ImageFile,Filename of the image file
-
+	Image.FileSystem.RootInclude,Include files in specified directory
 
 Emulator Settings
 -----------------

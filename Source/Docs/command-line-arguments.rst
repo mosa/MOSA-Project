@@ -118,6 +118,7 @@ Below are the command line arguments available:
     -volume-label,Image.VolumeLabel,
     -mbr,Image.MasterBootRecordFile,
     -boot,Image.BootBlockFile,
+	-include,Image.FileSystem.RootInclude,{value}
 
     Launcher - Boot:
     -multiboot-v1,Multiboot.Version,v1
