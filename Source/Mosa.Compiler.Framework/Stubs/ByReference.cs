@@ -29,7 +29,7 @@ internal static partial class StubMethods
 
 		// Store value inside instance
 		var store = methodCompiler.Is32BitPlatform ? IRInstruction.Store32 : IRInstruction.Store64;
-		context.AppendInstruction(store, null, opInstance, Operand.Constant64_0, opValue);
+		context.AppendInstruction(store, null, opInstance, methodCompiler.ConstantZero, opValue);
 
 		context.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);
 	}
@@ -49,7 +49,7 @@ internal static partial class StubMethods
 
 		// Load value from instance into return operand
 		var loadValue = methodCompiler.Is32BitPlatform ? IRInstruction.Load32 : IRInstruction.Load64;
-		context.AppendInstruction(loadValue, opReturn, opInstance, Operand.Constant64_0);
+		context.AppendInstruction(loadValue, opReturn, opInstance, methodCompiler.ConstantZero);
 
 		// Set return
 		var setReturn = methodCompiler.GetReturnInstruction(opReturn.Primitive);

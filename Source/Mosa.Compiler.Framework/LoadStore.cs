@@ -7,29 +7,47 @@ namespace Mosa.Compiler.Framework;
 /// </summary>
 public static class LoadStore
 {
-	public static void OrderOperands(Context context, MethodCompiler methodCompiler)
+	public static void Set(Context context, MethodCompiler methodCompiler, BaseInstruction instruction, Operand result, Operand operand1, Operand operand2, Operand operand3 = null)
 	{
-		if (context.Operand1.IsResolvedConstant && context.Operand2.IsResolvedConstant)
+		if (operand1.IsResolvedConstant && operand2.IsResolvedConstant)
 		{
-			if (context.Operand1.IsInt32)
+			operand1 = methodCompiler.Is32BitPlatform
+				? Operand.CreateConstant32(operand1.ConstantUnsigned32 + operand2.ConstantUnsigned32)
+				: Operand.CreateConstant64(operand1.ConstantUnsigned64 + operand2.ConstantUnsigned64);
+
+			operand2 = methodCompiler.ConstantZero;
+		}
+		else if (operand1.IsConstant && !operand2.IsConstant)
+		{
+			var swap = operand1;
+			operand1 = operand2;
+			operand2 = swap;
+		}
+
+		if (methodCompiler.Is32BitPlatform)
+		{
+			if (operand1.IsInt64)
 			{
-				context.Operand1 = Operand.CreateConstant32((uint)(context.Operand1.ConstantUnsigned64 + context.Operand2.ConstantUnsigned64));
-				context.Operand2 = Operand.Constant32_0;
+				var low = methodCompiler.VirtualRegisters.Allocate32();
+				context.InsertBefore().SetInstruction(IRInstruction.GetLow32, low, operand1);
+				context.Operand1 = low;
 			}
-			else
+
+			if (operand2.IsInt64)
 			{
-				context.Operand1 = Operand.CreateConstant64(context.Operand1.ConstantUnsigned64 + context.Operand2.ConstantUnsigned64);
-				context.Operand2 = Operand.Constant64_0;
+				var low = methodCompiler.VirtualRegisters.Allocate32();
+				context.InsertBefore().SetInstruction(IRInstruction.GetLow32, low, operand2);
+				context.Operand2 = low;
 			}
 		}
 
-		if (context.Operand1.IsConstant && !context.Operand2.IsConstant)
+		if (operand3 == null)
 		{
-			var operand1 = context.Operand1;
-			var operand2 = context.Operand2;
-
-			context.Operand2 = operand1;
-			context.Operand1 = operand2;
+			context.SetInstruction(instruction, result, operand1, operand2);
+		}
+		else
+		{
+			context.SetInstruction(instruction, result, operand1, operand2, operand3);
 		}
 	}
 }

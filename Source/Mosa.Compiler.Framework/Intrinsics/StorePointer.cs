@@ -1,7 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common.Exceptions;
-
 namespace Mosa.Compiler.Framework.Intrinsics;
 
 /// <summary>
@@ -14,19 +12,10 @@ internal static partial class IntrinsicMethods
 	{
 		var instruction = methodCompiler.Is32BitPlatform ? IRInstruction.Store32 : IRInstruction.Store64;
 
-		if (context.OperandCount == 2)
-		{
-			context.SetInstruction(instruction, null, context.Operand1, Operand.Constant64_0, context.Operand2);
-		}
-		else if (context.OperandCount == 3)
-		{
-			context.SetInstruction(instruction, null, context.Operand1, context.Operand2, context.Operand3);
-		}
-		else
-		{
-			throw new CompilerException();
-		}
+		var operand1 = context.Operand1;
+		var operand2 = context.OperandCount == 3 ? context.Operand2 : methodCompiler.ConstantZero;
+		var operand3 = context.OperandCount == 3 ? context.Operand3 : context.Operand2;
 
-		LoadStore.OrderOperands(context, methodCompiler);
+		LoadStore.Set(context, methodCompiler, instruction, null, operand1, operand2, operand3);
 	}
 }
