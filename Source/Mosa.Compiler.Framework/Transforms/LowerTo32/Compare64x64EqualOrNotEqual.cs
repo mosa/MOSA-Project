@@ -43,6 +43,6 @@ public sealed class Compare64x64EqualOrNotEqual : BaseLower32Transform
 		context.AppendInstruction(IRInstruction.Xor32, v2, op0High, op1High);
 		context.AppendInstruction(IRInstruction.Or32, v3, v1, v2);
 		context.AppendInstruction(IRInstruction.Compare32x32, condition, resultLow, v3, Operand.Constant32_0);
-		context.AppendInstruction(IRInstruction.Move32, condition, resultHigh, Operand.Constant64_0);
+		context.AppendInstruction(IRInstruction.Move32, condition, resultHigh, Operand.Constant32_0);
 	}
 }
