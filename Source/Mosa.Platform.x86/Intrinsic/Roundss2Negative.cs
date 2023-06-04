@@ -10,7 +10,7 @@ namespace Mosa.Platform.x86.Intrinsic;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::Roundss2Negative")]
-	private static void Roundss2Negative(Context context, MethodCompiler methodCompiler)
+	private static void Roundss2Negative(Context context, TransformContext transformContext)
 	{
 		context.SetInstruction(X86.Roundss, context.Result, context.Operand1, Operand.Constant32_1);
 	}

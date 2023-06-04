@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Intrinsic;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::GetIDTJumpLocation")]
-	private static void GetIDTJumpLocation(Context context, MethodCompiler methodCompiler)
+	private static void GetIDTJumpLocation(Context context, TransformContext transformContext)
 	{
 		var operand = context.Operand1;
 
@@ -32,15 +32,15 @@ internal static partial class IntrinsicMethods
 		int irq = (int)operand.ConstantSigned64;
 
 		// Find the method
-		var method = methodCompiler.TypeSystem.DefaultLinkerType.FindMethodByName("InterruptISR" + irq);
+		var method = transformContext.TypeSystem.DefaultLinkerType.FindMethodByName("InterruptISR" + irq);
 
 		if (method == null)
 		{
 			throw new CompilerException();
 		}
 
-		context.SetInstruction(IRInstruction.Move32, context.Result, Operand.CreateLabel(method, methodCompiler.Is32BitPlatform));
+		context.SetInstruction(IRInstruction.Move32, context.Result, Operand.CreateLabel(method, transformContext.Is32BitPlatform));
 
-		methodCompiler.MethodScanner.MethodInvoked(method, methodCompiler.Method);
+		transformContext.MethodScanner.MethodInvoked(method, transformContext.Method);
 	}
 }

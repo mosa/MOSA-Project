@@ -808,7 +808,7 @@ public sealed partial class IntervalTree<T> where T : class
 
 		foreach (var node in InOrderWalk(Root))
 		{
-			sb.Append("[").Append(node.Interval.Start).Append("-").Append(node.Interval.End).Append("],");
+			sb.Append('[').Append(node.Interval.Start).Append('-').Append(node.Interval.End).Append("],");
 		}
 
 		sb.Length--;

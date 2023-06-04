@@ -23,7 +23,7 @@ public sealed class Move64Overwrite : BaseTransform
 		if (context.Result.Uses.Count <= 1)
 			return false;
 
-		if (context.Result.Definitions.Count == 1)
+		if (context.Result.IsDefinedOnce)
 			return false;
 
 		var targets = context.Result.Definitions;

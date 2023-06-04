@@ -25,10 +25,10 @@ public sealed class Phi32Add32 : BaseTransform
 		if (!context.Operand2.IsResolvedConstant)
 			return false;
 
-		if (!IsSSAForm(context.Result))
+		if (!context.Result.IsDefinedOnce)
 			return false;
 
-		if (context.Result.Uses.Count != 1)
+		if (!context.Result.IsUsedOnce)
 			return false;
 
 		var ctx = context.Result.Uses[0];

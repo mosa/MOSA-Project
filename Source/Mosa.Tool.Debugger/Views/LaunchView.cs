@@ -19,9 +19,9 @@ public partial class LaunchView : DebugDockContent
 		[Browsable(false)]
 		public string ImageFile { get; set; }
 
-		public string Image { get { return Path.GetFileName(ImageFile); } }
+		public string Image => Path.GetFileName(ImageFile);
 
-		public string Directory { get { return Path.GetDirectoryName(ImageFile); } }
+		public string Directory => Path.GetDirectoryName(ImageFile);
 
 		public string DebugFile { get; set; }
 

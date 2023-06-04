@@ -21,8 +21,8 @@ public static class MSR
 		return Native.RdMSR(msr);
 	}
 
-	public static void SetMSR(uint msr, ulong value)
+	public static void SetMSR(uint msr, uint eax, uint edx)
 	{
-		Native.WrMSR(msr, value);
+		Native.WrMSR(msr, eax, edx);
 	}
 }

@@ -57,7 +57,7 @@ public abstract class GDBCommand
 	public ulong GetInteger(int index, uint size)
 	{
 		index *= 2;
-		ulong value = 0;
+		var value = 0ul;
 
 		for (var i = index + (int)size * 2 - 2; i >= index; i -= 2)
 		{

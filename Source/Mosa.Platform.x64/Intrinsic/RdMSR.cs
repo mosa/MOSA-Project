@@ -10,12 +10,12 @@ namespace Mosa.Platform.x64.Intrinsic;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Platform.x64.Intrinsic::RdMSR")]
-	private static void RdMSR(Context context, MethodCompiler methodCompiler)
+	private static void RdMSR(Context context, TransformContext transformContext)
 	{
 		var result = context.Result;
 		var operand1 = context.Operand1;
 
-		methodCompiler.SplitOperand(result, out Operand resultLow, out Operand resultHigh);
+		transformContext.SplitOperand(result, out Operand resultLow, out Operand resultHigh);
 
 		var EAX = Operand.CreateCPURegister64(CPURegister.RAX);
 		var EDX = Operand.CreateCPURegister64(CPURegister.RDX);

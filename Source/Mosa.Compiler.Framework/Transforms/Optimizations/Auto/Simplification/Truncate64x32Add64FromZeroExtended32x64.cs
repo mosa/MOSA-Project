@@ -21,7 +21,7 @@ public sealed class Truncate64x32Add64FromZeroExtended32x64 : BaseTransform
 		if (!context.Operand1.IsVirtualRegister)
 			return false;
 
-		if (context.Operand1.Definitions.Count != 1)
+		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
 		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Add64)
@@ -33,13 +33,13 @@ public sealed class Truncate64x32Add64FromZeroExtended32x64 : BaseTransform
 		if (!context.Operand1.Definitions[0].Operand2.IsVirtualRegister)
 			return false;
 
-		if (context.Operand1.Definitions[0].Operand1.Definitions.Count != 1)
+		if (!context.Operand1.Definitions[0].Operand1.IsDefinedOnce)
 			return false;
 
 		if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.ZeroExtend32x64)
 			return false;
 
-		if (context.Operand1.Definitions[0].Operand2.Definitions.Count != 1)
+		if (!context.Operand1.Definitions[0].Operand2.IsDefinedOnce)
 			return false;
 
 		if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.ZeroExtend32x64)

@@ -10,7 +10,7 @@ namespace Mosa.Platform.x86.Intrinsic;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::Out16")]
-	private static void Out16(Context context, MethodCompiler methodCompiler)
+	private static void Out16(Context context, TransformContext transformContext)
 	{
 		context.SetInstruction(X86.Out16, null, context.Operand1, context.Operand2);
 	}

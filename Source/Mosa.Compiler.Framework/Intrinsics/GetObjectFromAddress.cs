@@ -8,10 +8,8 @@ namespace Mosa.Compiler.Framework.Intrinsics;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Runtime.Intrinsic::GetObjectFromAddress")]
-	private static void GetObjectFromAddress(Context context, MethodCompiler methodCompiler)
+	private static void GetObjectFromAddress(Context context, TransformContext transformContext)
 	{
-		var move = methodCompiler.Is32BitPlatform ? IRInstruction.Move32 : IRInstruction.Move64;
-
-		context.SetInstruction(move, context.Result, context.Operand1);
+		context.SetInstruction(IRInstruction.MoveObject, context.Result, context.Operand1);
 	}
 }

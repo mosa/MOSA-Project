@@ -24,7 +24,7 @@ public class OptimizationStage : BaseTransformStage
 		AddTranforms(AutoTransforms.List);
 
 		if (LowerTo32)
-			AddTranforms(Lower32Transforms.List);
+			AddTranforms(LowerTo32Transforms.List);
 	}
 
 	protected override void CustomizeTransform(TransformContext transformContext)

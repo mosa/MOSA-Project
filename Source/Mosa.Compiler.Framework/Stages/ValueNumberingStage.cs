@@ -78,9 +78,6 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 		DetermineReadOnlyParameters();
 
 		ValueNumber();
-
-		if (CompilerSettings.FullCheckMode)
-			CheckAllPhiInstructions();
 	}
 
 	protected override void Finish()

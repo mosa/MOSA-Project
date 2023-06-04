@@ -37,6 +37,10 @@ public sealed class MethodData
 
 	public bool IsSelfReferenced { get; set; }
 
+	public bool HasEpilogue { get; set; }
+
+	public bool HasReturnValue { get; set; }
+
 	public bool HasAddressOfInstruction { get; set; }
 
 	public int IRInstructionCount { get; set; }
@@ -80,6 +84,8 @@ public sealed class MethodData
 
 	public bool IsInvoked { get; set; }
 
+	public bool IsUnitTest { get; set; }
+
 	#endregion Properties
 
 	#region Data Members
@@ -106,6 +112,7 @@ public sealed class MethodData
 		AggressiveInlineRequested = false;
 		StackFrameRequired = true;
 		IsSelfReferenced = false;
+		IsUnitTest = false;
 	}
 
 	public override string ToString()

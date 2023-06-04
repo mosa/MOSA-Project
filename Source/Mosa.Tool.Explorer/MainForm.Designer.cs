@@ -62,6 +62,7 @@
 			showOperandTypes = new System.Windows.Forms.ToolStripMenuItem();
 			padInstructions = new System.Windows.Forms.ToolStripMenuItem();
 			showSizes = new System.Windows.Forms.ToolStripMenuItem();
+			removeIRNop = new System.Windows.Forms.ToolStripMenuItem();
 			advanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			CBEnableMultithreading = new System.Windows.Forms.ToolStripMenuItem();
 			cbEnableMethodScanner = new System.Windows.Forms.ToolStripMenuItem();
@@ -371,7 +372,7 @@
 			// 
 			// displayOptionsToolStripMenuItem
 			// 
-			displayOptionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { showOperandTypes, padInstructions, showSizes });
+			displayOptionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { showOperandTypes, padInstructions, showSizes, removeIRNop });
 			displayOptionsToolStripMenuItem.Name = "displayOptionsToolStripMenuItem";
 			displayOptionsToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
 			displayOptionsToolStripMenuItem.Text = "Display";
@@ -382,7 +383,7 @@
 			showOperandTypes.Name = "showOperandTypes";
 			showOperandTypes.Size = new System.Drawing.Size(184, 22);
 			showOperandTypes.Text = "Show Operand Types";
-			showOperandTypes.CheckStateChanged += showOperandTypes_CheckStateChanged;
+			showOperandTypes.CheckStateChanged += DisplayCheckStateChanged;
 			// 
 			// padInstructions
 			// 
@@ -392,7 +393,7 @@
 			padInstructions.Name = "padInstructions";
 			padInstructions.Size = new System.Drawing.Size(184, 22);
 			padInstructions.Text = "Pad Instructions";
-			padInstructions.CheckStateChanged += padInstructions_CheckStateChanged;
+			padInstructions.CheckStateChanged += DisplayCheckStateChanged;
 			// 
 			// showSizes
 			// 
@@ -402,7 +403,16 @@
 			showSizes.Name = "showSizes";
 			showSizes.Size = new System.Drawing.Size(184, 22);
 			showSizes.Text = "Show Sizes";
+			showSizes.CheckStateChanged += DisplayCheckStateChanged;
 			showSizes.Click += showSizesToolStripMenuItem_Click;
+			// 
+			// removeIRNop
+			// 
+			removeIRNop.CheckOnClick = true;
+			removeIRNop.Name = "removeIRNop";
+			removeIRNop.Size = new System.Drawing.Size(184, 22);
+			removeIRNop.Text = "Remove IR.Nop";
+			removeIRNop.CheckStateChanged += DisplayCheckStateChanged;
 			// 
 			// advanceToolStripMenuItem
 			// 
@@ -1250,5 +1260,6 @@
 		private System.Windows.Forms.Button btnSaveB;
 		private System.Windows.Forms.Button btnSaveA;
 		private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+		private System.Windows.Forms.ToolStripMenuItem removeIRNop;
 	}
 }

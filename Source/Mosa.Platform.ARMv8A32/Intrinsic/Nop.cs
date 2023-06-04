@@ -10,7 +10,7 @@ namespace Mosa.Platform.ARMv8A32.Intrinsic;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Platform.ARMv8A32.Intrinsic::Nop")]
-	private static void Nop(Context context, MethodCompiler methodCompiler)
+	private static void Nop(Context context, TransformContext transformContext)
 	{
 		context.SetInstruction(ARMv8A32.Nop);
 	}

@@ -103,14 +103,15 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 	private TraceLog trace;
 
+	//private readonly TransformContext TransformContext = new TransformContext();
+
 	#endregion Data Members
 
 	#region Overrides Methods
 
-	protected override void Finish()
+	protected override void Setup()
 	{
-		Targets = null;
-		trace = null;
+		Targets = new SortedList<int, int>();
 	}
 
 	protected override void Run()
@@ -158,9 +159,10 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		InsertFlowOrJumpInstructions();
 	}
 
-	protected override void Setup()
+	protected override void Finish()
 	{
-		Targets = new SortedList<int, int>();
+		Targets = null;
+		trace = null;
 	}
 
 	#endregion Overrides Methods
@@ -3531,7 +3533,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var elementOffset = CalculateArrayElementOffset(context, size, index);
 		var totalElementOffset = CalculateTotalArrayOffset(context, elementOffset);
 
-		context.AppendInstruction(Is32BitPlatform ? IRInstruction.Add32 : IRInstruction.Add64, result, array, totalElementOffset);
+		context.AppendInstruction(MethodCompiler.TransformContext.AddInstruction, result, array, totalElementOffset);
 
 		PushStack(stack, new StackEntry(result));
 
@@ -4795,6 +4797,14 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var value = entry1.Operand;
 
 		var storeInstruction = MethodCompiler.GetStoreInstruction(elementType);
+
+		if (address.IsInt64 && Is32BitPlatform) // Truncation to low
+		{
+			var low = MethodCompiler.VirtualRegisters.Allocate32();
+			context.AppendInstruction(IRInstruction.GetLow32, low, address);
+			address = low;
+		}
+
 		context.AppendInstruction(storeInstruction, null, address, ConstantZero, value);
 
 		return true;
@@ -4818,9 +4828,9 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		if (local.IsVirtualRegister)
 		{
-			var storeInstruction = MethodCompiler.GetMoveInstruction(elementType);
+			var moveInstruction = MethodCompiler.GetMoveInstruction(elementType);
 
-			context.AppendInstruction(storeInstruction, local, source);
+			context.AppendInstruction(moveInstruction, local, source);
 			return true;
 		}
 		else
@@ -5492,7 +5502,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		{
 			context.RemoveOperand(0);
 
-			intrinsic(context, MethodCompiler);
+			intrinsic(context, MethodCompiler.TransformContext);
 
 			return true;
 		}
@@ -5567,7 +5577,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var fixedOffset = Operand.CreateConstant32(Architecture.NativePointerSize);
 		var arrayElement = MethodCompiler.VirtualRegisters.AllocateNativeInteger();
 
-		context.AppendInstruction(Is32BitPlatform ? IRInstruction.Add32 : IRInstruction.Add64, arrayElement, elementOffset, fixedOffset);
+		context.AppendInstruction(MethodCompiler.TransformContext.AddInstruction, arrayElement, elementOffset, fixedOffset);
 
 		return arrayElement;
 	}

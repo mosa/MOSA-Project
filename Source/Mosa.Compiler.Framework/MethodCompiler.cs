@@ -34,6 +34,8 @@ public sealed class MethodCompiler
 
 	private readonly NotifyTraceLogHandler NotifyTranformTraceHandler;
 
+	public readonly TransformContext TransformContext = new TransformContext();
+
 	#endregion Data Members
 
 	#region Properties
@@ -277,40 +279,14 @@ public sealed class MethodCompiler
 
 		MethodData.Counters.NewCountSkipLock("ExecutionTime.Setup.Ticks", (int)Stopwatch.ElapsedTicks);
 		MethodData.Counters.NewCountSkipLock("ExecutionTime.Setup.MicroSeconds", Stopwatch.Elapsed.Microseconds);
+
+		TransformContext.SetCompiler(compiler);
+		TransformContext.SetMethodCompiler(this);
 	}
 
 	#endregion Construction
 
 	#region Methods
-
-	/// <summary>
-	/// Compiles the method referenced by this method compiler.
-	/// </summary>
-	public void Compile2()
-	{
-		PlugMethod();
-
-		PatchDelegate();
-
-		ExternalMethod();
-
-		InternalMethod();
-
-		StubMethod();
-
-		ExecutePipeline();
-
-		Symbol.SetReplacementStatus(MethodData.Inlined);
-
-		if (Statistics)
-		{
-			var log = new TraceLog(TraceType.MethodCounters, Method, string.Empty, MethodData.Version);
-
-			log.Log(MethodData.Counters.Export());
-
-			Compiler.PostTraceLog(log);
-		}
-	}
 
 	/// <summary>
 	/// Compiles the method referenced by this method compiler.
@@ -342,21 +318,34 @@ public sealed class MethodCompiler
 				Compiler.PostTraceLog(log);
 			}
 		}
+		catch (CompilerException exception)
+		{
+			exception.Method ??= Method.FullName;
+
+			LogException(exception, exception.Message);
+		}
 		catch (Exception exception)
 		{
-			Compiler.PostEvent(CompilerEvent.Exception, $"Method: {Method} -> {exception.Message}");
+			var message = $"Method: {Method} -> {exception.Message}";
 
-			var exceptionLog = new TraceLog(TraceType.MethodDebug, Method, "Exception", MethodData.Version);
-
-			exceptionLog.Log(exception.Message);
-			exceptionLog.Log("");
-			exceptionLog.Log(exception.ToString());
-
-			Compiler.PostTraceLog(exceptionLog);
-
-			Stop();
-			Compiler.Stop();
+			LogException(exception, message);
 		}
+	}
+
+	private void LogException(Exception exception, string title)
+	{
+		Compiler.PostEvent(CompilerEvent.Exception, title);
+
+		var exceptionLog = new TraceLog(TraceType.MethodDebug, Method, "Exception", MethodData.Version);
+
+		exceptionLog.Log(title);
+		exceptionLog.Log(string.Empty);
+		exceptionLog.Log(exception.ToString());
+
+		Compiler.PostTraceLog(exceptionLog);
+
+		Stop();
+		Compiler.Stop();
 	}
 
 	private void ExecutePipeline()
@@ -373,15 +362,39 @@ public sealed class MethodCompiler
 		{
 			var stage = Pipeline[i];
 
-			stage.Setup(this, i);
-			stage.Execute();
-
-			executionTimes[i] = Stopwatch.ElapsedTicks;
-
-			CreateInstructionTrace(stage);
-
-			if (IsStopped || IsMethodInlined)
+			if (IsStopped)
 				break;
+
+			try
+			{
+				stage.Setup(this, i);
+				stage.Execute();
+
+				executionTimes[i] = Stopwatch.ElapsedTicks;
+
+				CreateInstructionTrace(stage);
+
+				if (Compiler.FullCheckMode)
+					stage.FullCheck(true);
+
+				stage.CleanUp();
+
+				if (IsMethodInlined)
+					break;
+			}
+			catch (CompilerException exception)
+			{
+				exception.Method ??= Method.FullName;
+				exception.Stage ??= stage.FormattedStageName;
+
+				LogException(exception, exception.Message);
+			}
+			catch (Exception exception)
+			{
+				var message = $"Method: {Method} -> {exception.Message}";
+
+				LogException(exception, message);
+			}
 		}
 
 		if (Statistics)
@@ -588,7 +601,7 @@ public sealed class MethodCompiler
 
 		var start = new Context(startBlock);
 
-		stub(start, this);
+		stub(start, TransformContext);
 
 		if (NotifyInstructionTraceHandler != null)
 		{

@@ -13,7 +13,7 @@ public sealed class Store32AddressOf : BaseTransform
 		if (!context.Operand2.IsConstantZero)
 			return false;
 
-		if (!IsSSAForm(context.Operand1))
+		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
 		if (context.Operand1.Definitions[0].Instruction != IRInstruction.AddressOf)

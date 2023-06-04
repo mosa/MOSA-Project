@@ -21,7 +21,7 @@ public sealed class Unsigned64PerfectSquareFormula : BaseTransform
 		if (!context.Operand1.IsVirtualRegister)
 			return false;
 
-		if (context.Operand1.Definitions.Count != 1)
+		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
 		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Add64)
@@ -33,13 +33,13 @@ public sealed class Unsigned64PerfectSquareFormula : BaseTransform
 		if (!context.Operand1.Definitions[0].Operand2.IsVirtualRegister)
 			return false;
 
-		if (context.Operand1.Definitions[0].Operand1.Definitions.Count != 1)
+		if (!context.Operand1.Definitions[0].Operand1.IsDefinedOnce)
 			return false;
 
 		if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned64)
 			return false;
 
-		if (context.Operand1.Definitions[0].Operand2.Definitions.Count != 1)
+		if (!context.Operand1.Definitions[0].Operand2.IsDefinedOnce)
 			return false;
 
 		if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned64)
@@ -99,7 +99,7 @@ public sealed class Unsigned64PerfectSquareFormula_v1 : BaseTransform
 		if (!context.Operand2.IsVirtualRegister)
 			return false;
 
-		if (context.Operand2.Definitions.Count != 1)
+		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
 		if (context.Operand2.Definitions[0].Instruction != IRInstruction.Add64)
@@ -111,13 +111,13 @@ public sealed class Unsigned64PerfectSquareFormula_v1 : BaseTransform
 		if (!context.Operand2.Definitions[0].Operand2.IsVirtualRegister)
 			return false;
 
-		if (context.Operand2.Definitions[0].Operand1.Definitions.Count != 1)
+		if (!context.Operand2.Definitions[0].Operand1.IsDefinedOnce)
 			return false;
 
 		if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned64)
 			return false;
 
-		if (context.Operand2.Definitions[0].Operand2.Definitions.Count != 1)
+		if (!context.Operand2.Definitions[0].Operand2.IsDefinedOnce)
 			return false;
 
 		if (context.Operand2.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned64)
@@ -177,7 +177,7 @@ public sealed class Unsigned64PerfectSquareFormula_v2 : BaseTransform
 		if (!context.Operand1.IsVirtualRegister)
 			return false;
 
-		if (context.Operand1.Definitions.Count != 1)
+		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
 		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Add64)
@@ -189,13 +189,13 @@ public sealed class Unsigned64PerfectSquareFormula_v2 : BaseTransform
 		if (!context.Operand1.Definitions[0].Operand2.IsVirtualRegister)
 			return false;
 
-		if (context.Operand1.Definitions[0].Operand1.Definitions.Count != 1)
+		if (!context.Operand1.Definitions[0].Operand1.IsDefinedOnce)
 			return false;
 
 		if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned64)
 			return false;
 
-		if (context.Operand1.Definitions[0].Operand2.Definitions.Count != 1)
+		if (!context.Operand1.Definitions[0].Operand2.IsDefinedOnce)
 			return false;
 
 		if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned64)
@@ -255,7 +255,7 @@ public sealed class Unsigned64PerfectSquareFormula_v3 : BaseTransform
 		if (!context.Operand2.IsVirtualRegister)
 			return false;
 
-		if (context.Operand2.Definitions.Count != 1)
+		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
 		if (context.Operand2.Definitions[0].Instruction != IRInstruction.Add64)
@@ -267,13 +267,13 @@ public sealed class Unsigned64PerfectSquareFormula_v3 : BaseTransform
 		if (!context.Operand2.Definitions[0].Operand2.IsVirtualRegister)
 			return false;
 
-		if (context.Operand2.Definitions[0].Operand1.Definitions.Count != 1)
+		if (!context.Operand2.Definitions[0].Operand1.IsDefinedOnce)
 			return false;
 
 		if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned64)
 			return false;
 
-		if (context.Operand2.Definitions[0].Operand2.Definitions.Count != 1)
+		if (!context.Operand2.Definitions[0].Operand2.IsDefinedOnce)
 			return false;
 
 		if (context.Operand2.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned64)
@@ -333,7 +333,7 @@ public sealed class Unsigned64PerfectSquareFormula_v4 : BaseTransform
 		if (!context.Operand1.IsVirtualRegister)
 			return false;
 
-		if (context.Operand1.Definitions.Count != 1)
+		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
 		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Add64)
@@ -345,13 +345,13 @@ public sealed class Unsigned64PerfectSquareFormula_v4 : BaseTransform
 		if (!context.Operand1.Definitions[0].Operand2.IsVirtualRegister)
 			return false;
 
-		if (context.Operand1.Definitions[0].Operand1.Definitions.Count != 1)
+		if (!context.Operand1.Definitions[0].Operand1.IsDefinedOnce)
 			return false;
 
 		if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned64)
 			return false;
 
-		if (context.Operand1.Definitions[0].Operand2.Definitions.Count != 1)
+		if (!context.Operand1.Definitions[0].Operand2.IsDefinedOnce)
 			return false;
 
 		if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned64)
@@ -411,7 +411,7 @@ public sealed class Unsigned64PerfectSquareFormula_v5 : BaseTransform
 		if (!context.Operand2.IsVirtualRegister)
 			return false;
 
-		if (context.Operand2.Definitions.Count != 1)
+		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
 		if (context.Operand2.Definitions[0].Instruction != IRInstruction.Add64)
@@ -423,13 +423,13 @@ public sealed class Unsigned64PerfectSquareFormula_v5 : BaseTransform
 		if (!context.Operand2.Definitions[0].Operand2.IsVirtualRegister)
 			return false;
 
-		if (context.Operand2.Definitions[0].Operand1.Definitions.Count != 1)
+		if (!context.Operand2.Definitions[0].Operand1.IsDefinedOnce)
 			return false;
 
 		if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned64)
 			return false;
 
-		if (context.Operand2.Definitions[0].Operand2.Definitions.Count != 1)
+		if (!context.Operand2.Definitions[0].Operand2.IsDefinedOnce)
 			return false;
 
 		if (context.Operand2.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned64)
@@ -489,7 +489,7 @@ public sealed class Unsigned64PerfectSquareFormula_v6 : BaseTransform
 		if (!context.Operand1.IsVirtualRegister)
 			return false;
 
-		if (context.Operand1.Definitions.Count != 1)
+		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
 		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Add64)
@@ -501,13 +501,13 @@ public sealed class Unsigned64PerfectSquareFormula_v6 : BaseTransform
 		if (!context.Operand1.Definitions[0].Operand2.IsVirtualRegister)
 			return false;
 
-		if (context.Operand1.Definitions[0].Operand1.Definitions.Count != 1)
+		if (!context.Operand1.Definitions[0].Operand1.IsDefinedOnce)
 			return false;
 
 		if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned64)
 			return false;
 
-		if (context.Operand1.Definitions[0].Operand2.Definitions.Count != 1)
+		if (!context.Operand1.Definitions[0].Operand2.IsDefinedOnce)
 			return false;
 
 		if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned64)
@@ -567,7 +567,7 @@ public sealed class Unsigned64PerfectSquareFormula_v7 : BaseTransform
 		if (!context.Operand2.IsVirtualRegister)
 			return false;
 
-		if (context.Operand2.Definitions.Count != 1)
+		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
 		if (context.Operand2.Definitions[0].Instruction != IRInstruction.Add64)
@@ -579,13 +579,13 @@ public sealed class Unsigned64PerfectSquareFormula_v7 : BaseTransform
 		if (!context.Operand2.Definitions[0].Operand2.IsVirtualRegister)
 			return false;
 
-		if (context.Operand2.Definitions[0].Operand1.Definitions.Count != 1)
+		if (!context.Operand2.Definitions[0].Operand1.IsDefinedOnce)
 			return false;
 
 		if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned64)
 			return false;
 
-		if (context.Operand2.Definitions[0].Operand2.Definitions.Count != 1)
+		if (!context.Operand2.Definitions[0].Operand2.IsDefinedOnce)
 			return false;
 
 		if (context.Operand2.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned64)

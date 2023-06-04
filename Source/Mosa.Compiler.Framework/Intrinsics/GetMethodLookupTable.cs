@@ -8,10 +8,8 @@ namespace Mosa.Compiler.Framework.Intrinsics;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Runtime.Intrinsic::GetMethodLookupTable")]
-	private static void GetMethodLookupTable(Context context, MethodCompiler methodCompiler)
+	private static void GetMethodLookupTable(Context context, TransformContext transformContext)
 	{
-		var move = methodCompiler.Is32BitPlatform ? IRInstruction.Move32 : IRInstruction.Move64;
-
-		context.SetInstruction(move, context.Result, Operand.CreateLabel(Metadata.MethodLookupTable, methodCompiler.Is32BitPlatform));
+		context.SetInstruction(transformContext.MoveInstruction, context.Result, Operand.CreateLabel(Metadata.MethodLookupTable, transformContext.Is32BitPlatform));
 	}
 }

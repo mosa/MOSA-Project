@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
+using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.CompilerStages;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Stages;
@@ -140,33 +141,35 @@ public sealed class Compiler
 
 	public bool Statistics { get; }
 
+	public bool FullCheckMode { get; set; }
+
 	public uint ObjectHeaderSize { get; }
+
+	public bool HasError { get; private set; }
 
 	#endregion Properties
 
 	#region Static Methods
 
-	private static List<BaseCompilerStage> GetDefaultCompilerPipeline(CompilerSettings compilerSettings, bool is32BitPlatform)
+	private static List<BaseCompilerStage> GetDefaultCompilerPipeline(CompilerSettings compilerSettings, bool is32BitPlatform) => new List<BaseCompilerStage>
 	{
-		return new List<BaseCompilerStage> {
-			new InlinedSetupStage(),
-			new UnitTestStage(),
-			new TypeInitializerStage(),
-			compilerSettings.Devirtualization ? new DevirtualizationStage() : null,
-			new StaticFieldStage(),
-			new MethodTableStage(),
-			new ExceptionTableStage(),
-			new MetadataStage(),
-			!string.IsNullOrEmpty(compilerSettings.PreLinkHashFile) ? new PreLinkHashFileStage() : null,
-			new LinkerLayoutStage(),
-			!string.IsNullOrEmpty(compilerSettings.PostLinkHashFile) ? new PostLinkHashFileStage() : null,
-			!string.IsNullOrEmpty(compilerSettings.CompileTimeFile) ? new MethodCompileTimeStage() : null,
-			!string.IsNullOrEmpty(compilerSettings.OutputFile) && compilerSettings.EmitBinary ? new LinkerEmitStage() : null,
-			!string.IsNullOrEmpty(compilerSettings.MapFile) ? new MapFileStage() : null,
-			!string.IsNullOrEmpty(compilerSettings.DebugFile) ? new DebugFileStage() : null,
-			!string.IsNullOrEmpty(compilerSettings.InlinedFile) ? new InlinedFileStage() : null,
-		};
-	}
+		new InlinedSetupStage(),
+		new UnitTestStage(),
+		new TypeInitializerStage(),
+		compilerSettings.Devirtualization ? new DevirtualizationStage() : null,
+		new StaticFieldStage(),
+		new MethodTableStage(),
+		new ExceptionTableStage(),
+		new MetadataStage(),
+		!string.IsNullOrEmpty(compilerSettings.PreLinkHashFile) ? new PreLinkHashFileStage() : null,
+		new LinkerLayoutStage(),
+		!string.IsNullOrEmpty(compilerSettings.PostLinkHashFile) ? new PostLinkHashFileStage() : null,
+		!string.IsNullOrEmpty(compilerSettings.CompileTimeFile) ? new MethodCompileTimeStage() : null,
+		!string.IsNullOrEmpty(compilerSettings.OutputFile) && compilerSettings.EmitBinary ? new LinkerEmitStage() : null,
+		!string.IsNullOrEmpty(compilerSettings.MapFile) ? new MapFileStage() : null,
+		!string.IsNullOrEmpty(compilerSettings.DebugFile) ? new DebugFileStage() : null,
+		!string.IsNullOrEmpty(compilerSettings.InlinedFile) ? new InlinedFileStage() : null,
+	};
 
 	private static List<BaseMethodCompilerStage> GetDefaultMethodPipeline(CompilerSettings compilerSettings, bool is64BitPlatform) => new List<BaseMethodCompilerStage>
 	{
@@ -233,6 +236,7 @@ public sealed class Compiler
 		CompilerHooks = mosaCompiler.CompilerHooks;
 		TraceLevel = CompilerSettings.TraceLevel;
 		Statistics = CompilerSettings.Statistics;
+		FullCheckMode = CompilerSettings.FullCheckMode;
 
 		PostEvent(CompilerEvent.CompilerStart);
 
@@ -269,6 +273,7 @@ public sealed class Compiler
 		Architecture.ExtendCompilerPipeline(CompilerPipeline, CompilerSettings);
 
 		IsStopped = false;
+		HasError = false;
 	}
 
 	private void CollectntrinsicAndStubMethods()
@@ -423,8 +428,10 @@ public sealed class Compiler
 
 			return methodData.Method;
 		}
-		catch (Exception e)
+		catch (Exception exception)
 		{
+			LogException(exception, exception.Message, "ProcessQueue");
+			Stop();
 			return null;
 		}
 	}
@@ -476,7 +483,7 @@ public sealed class Compiler
 		PostEvent(CompilerEvent.CompilingMethodsCompleted);
 	}
 
-	private void CompilePass() //TODO: Add IProgress<> to report progress
+	private void CompilePass()
 	{
 		var threadID = Thread.CurrentThread.ManagedThreadId;
 		var success = 0;
@@ -509,22 +516,17 @@ public sealed class Compiler
 
 			try
 			{
-				// Execute stage
 				stage.ExecuteFinalization();
+			}
+			catch (CompilerException exception)
+			{
+				exception.Stage ??= stage.Name;
+
+				LogException(exception, exception.Message, stage.Name);
 			}
 			catch (Exception exception)
 			{
-				PostEvent(CompilerEvent.Exception, $"Stage: {stage.Name} -> {exception.Message}");
-
-				var exceptionLog = new TraceLog(TraceType.GlobalDebug, null, stage.Name, "Exception");
-
-				exceptionLog.Log(exception.Message);
-				exceptionLog.Log("");
-				exceptionLog.Log(exception.ToString());
-
-				PostTraceLog(exceptionLog);
-
-				//Stop();
+				LogException(exception, $"Stage: {stage} -> {exception.Message}", stage.Name);
 			}
 
 			PostEvent(CompilerEvent.FinalizationStageEnd, stage.Name);
@@ -544,9 +546,26 @@ public sealed class Compiler
 		PostEvent(CompilerEvent.CompilerEnd);
 	}
 
+	private void LogException(Exception exception, string title, string stage)
+	{
+		PostEvent(CompilerEvent.Exception, exception.Message);
+
+		var exceptionLog = new TraceLog(TraceType.GlobalDebug, null, stage, "Exception");
+
+		exceptionLog.Log(exception.Message);
+		exceptionLog.Log(string.Empty);
+		exceptionLog.Log(exception.ToString());
+
+		PostTraceLog(exceptionLog);
+
+		HasError = true;
+		//Stop();
+	}
+
 	public void Stop()
 	{
 		IsStopped = true;
+		HasError = true;
 		PostEvent(CompilerEvent.Stopped);
 	}
 

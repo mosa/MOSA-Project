@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Mosa.Compiler.Common.Exceptions;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator;
 
@@ -297,8 +298,10 @@ public sealed class LiveRange
 
 	public List<LiveRange> SplitAt(SlotIndex at)
 	{
-		//			if (!CanSplitAt(at))
-		//				throw new CompilerException($"Can not split at {at}");
+#if (DEBUG)
+		if (!CanSplitAt(at))
+			throw new CompilerException($"Can not split at {at}");
+#endif
 
 		Debug.Assert(CanSplitAt(at));
 

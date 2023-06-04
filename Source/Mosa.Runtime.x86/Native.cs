@@ -64,7 +64,7 @@ public static unsafe class Native
 	public static extern uint CpuIdEDX(uint eax, uint ecx);
 
 	[DllImport("Mosa.Platform.x86.Intrinsic::WrMSR")]
-	public static extern void WrMSR(uint mrs, ulong value);
+	public static extern void WrMSR(uint mrs, uint eax, uint edx);
 
 	[DllImport("Mosa.Platform.x86.Intrinsic::RdMSR")]
 	public static extern ulong RdMSR(uint mrs);

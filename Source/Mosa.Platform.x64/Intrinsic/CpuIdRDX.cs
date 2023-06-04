@@ -10,7 +10,7 @@ namespace Mosa.Platform.x64.Intrinsic;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Platform.x64.Intrinsic::CpuIdRDX")]
-	private static void CpuIdRDX(Context context, MethodCompiler methodCompiler)
+	private static void CpuIdRDX(Context context, TransformContext transformContext)
 	{
 		var result = context.Result;
 		var operand1 = context.Operand1;

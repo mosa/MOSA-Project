@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections.Generic;
-using System.Text;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.Trace;
@@ -54,8 +53,6 @@ public sealed class EnterSSAStage : BaseMethodCompilerStage
 		PlacePhiFunctionsMinimal();
 
 		EnterSSA();
-
-		RemoveUselessPhiInstructions();
 
 		MethodCompiler.IsInSSAForm = true;
 	}
@@ -279,8 +276,8 @@ public sealed class EnterSSAStage : BaseMethodCompilerStage
 	{
 		foreach (var operand in MethodCompiler.VirtualRegisters)
 		{
-			//if (operand.Definitions.Count <= 1)
-			//continue;
+			if (!operand.IsDefined)
+				continue;
 
 			var blocks = new List<BasicBlock>(operand.Definitions.Count);
 			assignments.Add(operand, blocks);
@@ -356,30 +353,4 @@ public sealed class EnterSSAStage : BaseMethodCompilerStage
 		}
 	}
 
-	private void RemoveUselessPhiInstructions()
-	{
-		foreach (var context in phiInstructions)
-		{
-			if (context.Result == context.Operand1)
-			{
-				context.Empty();
-			}
-		}
-	}
-
-	private static string ToString(List<BasicBlock> blocks)
-	{
-		var sb = new StringBuilder();
-
-		foreach (var block in blocks)
-		{
-			sb.Append(block);
-			sb.Append(" ");
-		}
-
-		if (blocks.Count != 0)
-			sb.Length -= 1;
-
-		return sb.ToString();
-	}
 }

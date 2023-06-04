@@ -93,7 +93,7 @@ Below are the command line arguments available:
     -launch-off,Launcher.Launch,false
 
     Launcher - Emulator:
-    -emulator,Emulator,
+    -emulator,Emulator,qemu|vmware|bochs
     -qemu,Emulator,qemu
     -vmware,Emulator,vmware
     -bochs,Emulator,bochs

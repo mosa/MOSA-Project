@@ -80,7 +80,7 @@ public partial class MethodParametersView : DebugDockContent
 
 		var symbol = DebugSource.GetFirstSymbolsStartingAt(InstructionPointer);
 
-		ulong paramStart = StackFrame + (NativeIntegerSize * 2);
+		var paramStart = StackFrame + (NativeIntegerSize * 2);
 
 		if (symbol != null)
 		{
@@ -110,7 +110,7 @@ public partial class MethodParametersView : DebugDockContent
 		if (parameters == null || parameters.Count == 0)
 			return;
 
-		long offset = (long)(address - StackFrame);
+		var offset = (long)(address - StackFrame);
 
 		foreach (var parameter in parameters)
 		{
@@ -123,7 +123,7 @@ public partial class MethodParametersView : DebugDockContent
 				size = NativeIntegerSize;
 			}
 
-			ulong value = (size != 0) ? MainForm.ToLong(memory, parameter.Offset, size) : 0;
+			var value = (size != 0) ? MainForm.ToLong(memory, parameter.Offset, size) : 0;
 
 			var entry = new StackEntry()
 			{

@@ -10,7 +10,7 @@ namespace Mosa.Platform.x86.Intrinsic;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::Roundsd2Positive")]
-	private static void Roundsd2Positive(Context context, MethodCompiler methodCompiler)
+	private static void Roundsd2Positive(Context context, TransformContext transformContext)
 	{
 		context.SetInstruction(X86.Roundsd, context.Result, context.Operand1, Operand.Constant32_2);
 	}

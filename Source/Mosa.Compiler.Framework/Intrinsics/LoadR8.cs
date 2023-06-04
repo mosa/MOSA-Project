@@ -1,7 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common.Exceptions;
-
 namespace Mosa.Compiler.Framework.Intrinsics;
 
 /// <summary>
@@ -10,21 +8,14 @@ namespace Mosa.Compiler.Framework.Intrinsics;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Runtime.Intrinsic::LoadR8")]
-	private static void LoadR8(Context context, MethodCompiler methodCompiler)
+	private static void LoadR8(Context context, TransformContext transformContext)
 	{
-		if (context.OperandCount == 1)
-		{
-			context.SetInstruction(IRInstruction.LoadR8, context.Result, context.Operand1, Operand.Constant64_0);
-		}
-		else if (context.OperandCount == 2)
-		{
-			context.SetInstruction(IRInstruction.LoadR8, context.Result, context.Operand1, context.Operand2);
-		}
-		else
-		{
-			throw new CompilerException();
-		}
+		var instruction = IRInstruction.LoadR8;
 
-		LoadStore.OrderOperands(context, methodCompiler);
+		var result = context.Result;
+		var operand1 = context.Operand1;
+		var operand2 = context.OperandCount == 2 ? context.Operand2 : transformContext.ConstantZero;
+
+		LoadStore.Set(context, transformContext, instruction, result, operand1, operand2);
 	}
 }

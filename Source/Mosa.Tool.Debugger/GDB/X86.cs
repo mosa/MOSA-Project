@@ -7,57 +7,61 @@ namespace Mosa.Tool.Debugger.GDB;
 
 public class X86
 {
-	public static List<RegisterDefinition> Registers = new List<RegisterDefinition>()
+	public static List<RegisterDefinition> Registers = new()
 	{
-		new RegisterDefinition(1,"eax",4,0),
-		new RegisterDefinition(2,"ecx",4,4),
-		new RegisterDefinition(3,"edx",4,8),
-		new RegisterDefinition(4,"ebx",4,12),
-		new RegisterDefinition(5,"esp",4,16),
-		new RegisterDefinition(6,"ebp",4,20),
-		new RegisterDefinition(7,"esi",4,24),
-		new RegisterDefinition(8,"edi",4,28),
-		new RegisterDefinition(9,"eip",4,32),
-		new RegisterDefinition(10,"eflags",4,36),
-		new RegisterDefinition(11,"cs",4,40),
-		new RegisterDefinition(12,"ss",4,44),
-		new RegisterDefinition(13,"ds",4,48),
-		new RegisterDefinition(14,"es",4,52),
-		new RegisterDefinition(15,"fs",4,56),
-		new RegisterDefinition(16,"gs",4,60),
-		new RegisterDefinition(17,"st0",20,80),
-		new RegisterDefinition(18,"st1",20,100),
-		new RegisterDefinition(19,"st2",20,120),
-		new RegisterDefinition(20,"st3",20,140),
-		new RegisterDefinition(21,"st4",20,160),
-		new RegisterDefinition(22,"st5",20,180),
-		new RegisterDefinition(23,"st6",20,200),
-		new RegisterDefinition(24,"st7",20,220),
-		new RegisterDefinition(25,"fctrl",4,224),
-		new RegisterDefinition(26,"fstat",4,228),
-		new RegisterDefinition(27,"ftag",4,232),
-		new RegisterDefinition(28,"fiseg",4,236),
-		new RegisterDefinition(29,"fioff",4,240),
-		new RegisterDefinition(30,"foseg",4,244),
-		new RegisterDefinition(31,"fooff",4,248),
-		new RegisterDefinition(32,"fop",4,252),
-		new RegisterDefinition(33,"xmm0",16,268),
-		new RegisterDefinition(34,"xmm1",16,284),
-		new RegisterDefinition(35,"xmm2",16,300),
-		new RegisterDefinition(36,"xmm3",16,316),
-		new RegisterDefinition(37,"xmm4",16,332),
-		new RegisterDefinition(38,"xmm5",16,348),
-		new RegisterDefinition(39,"xmm6",16,364),
-		new RegisterDefinition(40,"xmm7",16,380),
-		new RegisterDefinition(41,"mxcsr",8,388),
-		new RegisterDefinition(42,"mm0",8,396),
-		new RegisterDefinition(43,"mm1",8,404),
-		new RegisterDefinition(44,"mm2",8,412),
-		new RegisterDefinition(45,"mm3",8,420),
-		new RegisterDefinition(46,"mm4",8,428),
-		new RegisterDefinition(47,"mm5",8,436),
-		new RegisterDefinition(48,"mm6",8,444),
-		new RegisterDefinition(49,"mm7",8,452),
+		new RegisterDefinition(0,"eax",4,0, true, RegisterType.Int),
+		new RegisterDefinition(1,"ecx",4,4, true, RegisterType.Int),
+		new RegisterDefinition(2,"edx",4,8, true, RegisterType.Int),
+		new RegisterDefinition(3,"ebx",4,12, true, RegisterType.Int),
+		new RegisterDefinition(4,"esp",4,16, true, RegisterType.Int),
+		new RegisterDefinition(5,"ebp",4,20, true, RegisterType.Int),
+		new RegisterDefinition(6,"esi",4,24, true, RegisterType.Int),
+		new RegisterDefinition(7,"edi",4,28, true, RegisterType.Int),
+		new RegisterDefinition(8,"eip",4,32, true, RegisterType.Int),
+		new RegisterDefinition(9,"eflags",4,36, true, RegisterType.Int),
+		new RegisterDefinition(10,"cs",4,40, false, RegisterType.Int),
+		new RegisterDefinition(11,"ss",4,44, false, RegisterType.Int),
+		new RegisterDefinition(12,"ds",4,48, false, RegisterType.Int),
+		new RegisterDefinition(13,"es",4,52, false, RegisterType.Int),
+		new RegisterDefinition(14,"fs",4,56, false, RegisterType.Int),
+		new RegisterDefinition(15,"gs",4,60, false, RegisterType.Int),
+		new RegisterDefinition(16,"ss_base",4,64, false, RegisterType.Int),
+		new RegisterDefinition(17,"ds_base",4,68, false, RegisterType.Int),
+		new RegisterDefinition(18,"es_base",4,72, false, RegisterType.Int),
+		new RegisterDefinition(19,"fs_base",4,76, false, RegisterType.Int),
+		new RegisterDefinition(20,"gs_base",4,80, false, RegisterType.Int),
+		new RegisterDefinition(21,"k_gs_base",4,84, false, RegisterType.Int),
+		new RegisterDefinition(22,"cr0",4,88, true, RegisterType.Int),
+		new RegisterDefinition(23,"cr2",4,92, true, RegisterType.Int),
+		new RegisterDefinition(24,"cr3",4,96, true, RegisterType.Int),
+		new RegisterDefinition(25,"cr4",4,100, true, RegisterType.Int),
+		new RegisterDefinition(26,"cr8",4,104, true, RegisterType.Int),
+		//new RegisterDefinition(27,"efer",4,108, false, RegisterType.Int),
+		//new RegisterDefinition(28,"st0",10,118, false, RegisterType.Float),
+		//new RegisterDefinition(29,"st1",10,128, false, RegisterType.Float),
+		//new RegisterDefinition(30,"st2",10,138, false, RegisterType.Float),
+		//new RegisterDefinition(31,"st3",10,148, false, RegisterType.Float),
+		//new RegisterDefinition(32,"st4",10,158, false, RegisterType.Float),
+		//new RegisterDefinition(33,"st5",10,168, false, RegisterType.Float),
+		//new RegisterDefinition(34,"st6",10,178, false, RegisterType.Float),
+		//new RegisterDefinition(35,"st7",10,188, false, RegisterType.Float),
+		//new RegisterDefinition(36,"fctrl",4,192, true, RegisterType.Int),
+		//new RegisterDefinition(37,"fstat",4,196, true, RegisterType.Int),
+		//new RegisterDefinition(38,"ftag",4,200, true, RegisterType.Int),
+		//new RegisterDefinition(39,"fiseg",4,204, true, RegisterType.Int),
+		//new RegisterDefinition(40,"fioff",4,208, true, RegisterType.Int),
+		//new RegisterDefinition(41,"foseg",4,212, true, RegisterType.Int),
+		//new RegisterDefinition(42,"fooff",4,216, true, RegisterType.Int),
+		//new RegisterDefinition(43,"fop",4,220, true, RegisterType.Int),
+		new RegisterDefinition(44,"xmm0",16,236-20, true, RegisterType.Float),
+		new RegisterDefinition(45,"xmm1",16,252-20, true, RegisterType.Float),
+		new RegisterDefinition(46,"xmm2",16,268-20, true, RegisterType.Float),
+		new RegisterDefinition(47,"xmm3",16,284-20, true, RegisterType.Float),
+		new RegisterDefinition(48,"xmm4",16,300-20, true, RegisterType.Float),
+		new RegisterDefinition(49,"xmm5",16,316-20, true, RegisterType.Float),
+		new RegisterDefinition(50,"xmm6",16,332-20, true, RegisterType.Float),
+		new RegisterDefinition(51,"xmm7",16,348-20, true, RegisterType.Float),
+		//new RegisterDefinition(52,"mxcsr",4,352)
 	};
 
 	public const int StackPointerIndex = 4;
@@ -71,10 +75,10 @@ public class X86
 
 		foreach (var definition in Registers)
 		{
-			if (definition.Name == "st0") // future: parse remainder
-				break;
+			if (!definition.Display)
+				continue;
 
-			ulong value = command.GetInteger(definition.Offset, definition.Size);
+			var value = command.GetInteger(definition.Offset, definition.Size);
 
 			var register = new Register(definition, value);
 

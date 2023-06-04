@@ -10,7 +10,7 @@ namespace Mosa.Platform.x64.Intrinsic;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Platform.x64.Intrinsic::Call")]
-	private static void Call(Context context, MethodCompiler methodCompiler)
+	private static void Call(Context context, TransformContext transformContext)
 	{
 		context.SetInstruction(X64.Call, null, context.Operand1);
 	}

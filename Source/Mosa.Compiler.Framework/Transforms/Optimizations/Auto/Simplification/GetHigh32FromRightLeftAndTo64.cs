@@ -21,7 +21,7 @@ public sealed class GetHigh32FromRightLeftAndTo64 : BaseTransform
 		if (!context.Operand1.IsVirtualRegister)
 			return false;
 
-		if (context.Operand1.Definitions.Count != 1)
+		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
 		if (context.Operand1.Definitions[0].Instruction != IRInstruction.ShiftLeft64)
@@ -36,7 +36,7 @@ public sealed class GetHigh32FromRightLeftAndTo64 : BaseTransform
 		if (context.Operand1.Definitions[0].Operand2.ConstantUnsigned64 != 32)
 			return false;
 
-		if (context.Operand1.Definitions[0].Operand1.Definitions.Count != 1)
+		if (!context.Operand1.Definitions[0].Operand1.IsDefinedOnce)
 			return false;
 
 		if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.To64)

@@ -27,7 +27,7 @@ public sealed class IsolateAndFlipLeastSignificantBit32 : BaseTransform
 		if (context.Operand2.ConstantUnsigned64 != 1)
 			return false;
 
-		if (context.Operand1.Definitions.Count != 1)
+		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
 		if (context.Operand1.Definitions[0].Instruction != IRInstruction.ShiftRight32)
@@ -42,7 +42,7 @@ public sealed class IsolateAndFlipLeastSignificantBit32 : BaseTransform
 		if (context.Operand1.Definitions[0].Operand2.ConstantUnsigned64 != 31)
 			return false;
 
-		if (context.Operand1.Definitions[0].Operand1.Definitions.Count != 1)
+		if (!context.Operand1.Definitions[0].Operand1.IsDefinedOnce)
 			return false;
 
 		if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.ShiftLeft32)
@@ -93,7 +93,7 @@ public sealed class IsolateAndFlipLeastSignificantBit32_v1 : BaseTransform
 		if (!context.Operand2.IsVirtualRegister)
 			return false;
 
-		if (context.Operand2.Definitions.Count != 1)
+		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
 		if (context.Operand2.Definitions[0].Instruction != IRInstruction.ShiftRight32)
@@ -108,7 +108,7 @@ public sealed class IsolateAndFlipLeastSignificantBit32_v1 : BaseTransform
 		if (context.Operand2.Definitions[0].Operand2.ConstantUnsigned64 != 31)
 			return false;
 
-		if (context.Operand2.Definitions[0].Operand1.Definitions.Count != 1)
+		if (!context.Operand2.Definitions[0].Operand1.IsDefinedOnce)
 			return false;
 
 		if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.ShiftLeft32)

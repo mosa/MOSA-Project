@@ -1,7 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common.Exceptions;
-
 namespace Mosa.Compiler.Framework.Intrinsics;
 
 /// <summary>
@@ -10,21 +8,14 @@ namespace Mosa.Compiler.Framework.Intrinsics;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Runtime.Intrinsic::StoreR4")]
-	private static void StoreR4(Context context, MethodCompiler methodCompiler)
+	private static void StoreR4(Context context, TransformContext transformContext)
 	{
-		if (context.OperandCount == 2)
-		{
-			context.SetInstruction(IRInstruction.StoreR4, null, context.Operand1, Operand.Constant64_0, context.Operand2);
-		}
-		else if (context.OperandCount == 3)
-		{
-			context.SetInstruction(IRInstruction.StoreR4, null, context.Operand1, context.Operand2, context.Operand3);
-		}
-		else
-		{
-			throw new CompilerException();
-		}
+		var instruction = IRInstruction.StoreR4;
 
-		LoadStore.OrderOperands(context, methodCompiler);
+		var operand1 = context.Operand1;
+		var operand2 = context.OperandCount == 3 ? context.Operand2 : transformContext.ConstantZero;
+		var operand3 = context.OperandCount == 3 ? context.Operand3 : context.Operand2;
+
+		LoadStore.Set(context, transformContext, instruction, null, operand1, operand2, operand3);
 	}
 }

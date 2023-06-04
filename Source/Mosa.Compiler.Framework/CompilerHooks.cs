@@ -44,8 +44,6 @@ public class CompilerHooks
 
 	public NotifyMethodCompiledHandler NotifyMethodCompiled;
 
-	public CustomElfSectionsHandler CustomElfSections;
-
 	public NotifyMethodInstructionTraceHandler NotifyMethodInstructionTrace;
 
 	public NotifyMethodTranformTraceHandler NotifyMethodTranformTrace;

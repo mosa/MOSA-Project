@@ -42,8 +42,9 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 		MethodData.HasAddressOfInstruction = false;
 		MethodData.HasLoops = false;
 		MethodData.IsSelfReferenced = false;
-
-		//MethodData.IsDevirtualized = Method.IsVirtual && !TypeLayout.IsMethodOverridden(Method);
+		MethodData.HasEpilogue = false;
+		MethodData.HasReturnValue = false;
+		MethodData.IsUnitTest = IsUnitTest(Method);
 
 		trace?.Log($"DoNotInline: {MethodData.DoNotInline}");
 		trace?.Log($"IsVirtual: {Method.IsVirtual}");
@@ -54,6 +55,7 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 		trace?.Log($"AggressiveInlineRequested: {MethodData.AggressiveInlineRequested}");
 		trace?.Log($"IsMethodImplementationReplaced (Plugged): {MethodData.IsMethodImplementationReplaced}");
 		trace?.Log($"IsReferenced: {MethodData.IsReferenced}");
+		trace?.Log($"IsUnitTest: {MethodData.IsUnitTest}");
 		trace?.Log($"CompileCount: {MethodData.Version}");
 
 		if (StaticCanNotInline(MethodData))
@@ -78,7 +80,7 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 			{
 				for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 				{
-					if (node.IsEmpty)
+					if (node.IsEmptyOrNop)
 						continue;
 
 					if (node.Instruction.IsIRInstruction)
@@ -94,23 +96,20 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 					{
 						MethodData.HasAddressOfInstruction = true;
 					}
-
-					if (node.Instruction == IRInstruction.CallStatic && node.Operand1.Method == Method)
+					else if (node.Instruction == IRInstruction.CallStatic && node.Operand1.Method == Method)
 					{
 						MethodData.IsSelfReferenced = true;
 					}
-
-					if (node.Instruction == IRInstruction.SetReturn32
-
-						|| node.Instruction == IRInstruction.SetReturn64
-						|| node.Instruction == IRInstruction.SetReturnR4
-						|| node.Instruction == IRInstruction.SetReturnR8
-						|| node.Instruction == IRInstruction.SetReturnObject
-						|| node.Instruction == IRInstruction.SetReturnManagedPointer
-						|| node.Block.IsEpilogue
-						|| node.Block.IsPrologue
-						|| node.Instruction.IsParameterLoad
-					   )
+					else if (node.Instruction == IRInstruction.Epilogue)
+					{
+						MethodData.HasEpilogue = true;
+					}
+					else if (node.Instruction.IsReturn)
+					{
+						MethodData.HasReturnValue = true;
+						totalStackParameterInstruction++;
+					}
+					else if (node.Instruction.IsParameterLoad)
 					{
 						totalStackParameterInstruction++;
 					}
@@ -139,6 +138,8 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 		trace?.Log($"NonIRInstructionCount: {MethodData.NonIRInstructionCount}");
 		trace?.Log($"HasAddressOfInstruction: {MethodData.HasAddressOfInstruction}");
 		trace?.Log($"HasLoops: {MethodData.HasLoops}");
+		trace?.Log($"HasEpilogue: {MethodData.HasEpilogue}");
+		trace?.Log($"HasReturnValue: {MethodData.HasReturnValue}");
 		trace?.Log($"IsSelfReferenced: {MethodData.IsSelfReferenced}");
 		trace?.Log($"** Dynamically Evaluated");
 		trace?.Log($"Inlined: {MethodData.Inlined}");
@@ -211,21 +212,17 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 			&& !method.IsStatic)
 			return true;
 
-		var returnType = methodData.Method.Signature.ReturnType;
-
-		// FIXME: Add rational
-		if (!(returnType.IsVoid
-			|| returnType.IsUI8
-			|| returnType.IsR8
-			|| MosaTypeLayout.IsUnderlyingPrimitive(returnType)
-			|| TypeLayout.GetTypeLayoutSize(returnType) <= 8))
-			return true;
-
-		// FUTURE: Don't hardcode namepsace
-		if ((method.MethodAttributes & MosaMethodAttributes.Public) == MosaMethodAttributes.Public && method.DeclaringType.BaseType != null && method.DeclaringType.BaseType.Namespace == "Mosa.UnitTests")
-			return true;
+		if (methodData.IsUnitTest)
+			return false;
 
 		return false;
+	}
+
+	public static bool IsUnitTest(MosaMethod method)
+	{
+		return (method.MethodAttributes & MosaMethodAttributes.Public) == MosaMethodAttributes.Public
+			&& method.DeclaringType.BaseType != null
+			&& method.DeclaringType.BaseType.Namespace == "Mosa.UnitTests";
 	}
 
 	private bool CanInline(MethodData methodData)
@@ -235,6 +232,9 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 
 		// current implementation limitation - can't include methods with AddressOf instruction
 		if (methodData.HasAddressOfInstruction)
+			return false;
+
+		if (!MethodData.HasEpilogue && !methodData.Method.Signature.ReturnType.IsVoid)
 			return false;
 
 		if (methodData.NonIRInstructionCount > 0)

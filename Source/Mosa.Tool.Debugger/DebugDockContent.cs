@@ -20,26 +20,38 @@ public partial class DebugDockContent : DockContent
 		MainForm = mainForm;
 	}
 
-	public string Status { set { MainForm.Status = value; } }
+	public string Status
+	{ set => MainForm.Status = value; }
 
-	public DebugSource DebugSource { get { return MainForm.DebugSource; } }
+	public DebugDockContent(string status)
+	{
+		Status = status;
+	}
 
-	public Connector GDBConnector { get { return MainForm.GDBConnector; } }
-	public BasePlatform Platform { get { return MainForm.Platform; } }
+	public DebugSource DebugSource => MainForm.DebugSource;
 
-	public uint NativeIntegerSize { get { return Platform.NativeIntegerSize; } }
+	public Connector GDBConnector => MainForm.GDBConnector;
 
-	public MemoryCache MemoryCache { get { return MainForm.MemoryCache; } }
+	public BasePlatform Platform => MainForm.Platform;
 
-	public bool IsConnected { get { return GDBConnector?.IsConnected ?? false; } }
-	public bool IsRunning { get { return GDBConnector.IsRunning; } }
-	public bool IsPaused { get { return GDBConnector.IsPaused; } }
+	public uint NativeIntegerSize => Platform.NativeIntegerSize;
+
+	public MemoryCache MemoryCache => MainForm.MemoryCache;
+
+	public bool IsConnected => GDBConnector?.IsConnected ?? false;
+
+	public bool IsRunning => GDBConnector.IsRunning;
+
+	public bool IsPaused => GDBConnector.IsPaused;
 
 	public bool IsDockUpdatable { get; set; } = true;
 
 	public ulong InstructionPointer { get; set; }
+
 	public ulong StackFrame { get; set; }
+
 	public ulong StackPointer { get; set; }
+
 	public ulong StatusFlag { get; set; }
 
 	protected bool IsReady

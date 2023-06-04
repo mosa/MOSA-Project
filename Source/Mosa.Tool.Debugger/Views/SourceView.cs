@@ -14,7 +14,9 @@ public partial class SourceView : DebugDockContent
 	private struct LineInfo
 	{
 		public string Line { get; set; }
+
 		public int LineNbr { get; set; }
+
 		public int Index { get; set; }
 	}
 

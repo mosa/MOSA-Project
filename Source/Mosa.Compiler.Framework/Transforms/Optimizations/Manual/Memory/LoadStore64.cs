@@ -21,7 +21,7 @@ public sealed class LoadStore64 : BaseTransform
 		if (previous == null)
 			return false;
 
-		if (!immediate && !IsSSAForm(previous.Operand3))
+		if (!immediate && !previous.Operand3.IsDefinedOnce)
 			return false;
 
 		if (!previous.Operand2.IsResolvedConstant)

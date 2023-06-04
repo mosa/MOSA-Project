@@ -60,6 +60,8 @@ public sealed class TransformContext
 
 	public MethodScanner MethodScanner => MethodCompiler.MethodScanner;
 
+	public Operand ConstantZero => MethodCompiler.ConstantZero;
+
 	#endregion Properties - Indirect
 
 	#region Properties - Registers
@@ -92,21 +94,21 @@ public sealed class TransformContext
 
 	#region Properties - Instructions
 
-	public BaseInstruction LoadInstruction => Is32BitPlatform ? IRInstruction.Load32 : IRInstruction.Load64;
+	public BaseInstruction LoadInstruction { get; private set; }
 
-	public BaseInstruction StoreInstruction => Is32BitPlatform ? IRInstruction.Store32 : IRInstruction.Store64;
+	public BaseInstruction StoreInstruction { get; private set; }
 
-	public BaseInstruction MoveInstruction => Is32BitPlatform ? IRInstruction.Move32 : IRInstruction.Move64;
+	public BaseInstruction MoveInstruction { get; private set; }
 
-	public BaseInstruction AddInstruction => Is32BitPlatform ? IRInstruction.Add32 : IRInstruction.Add64;
+	public BaseInstruction AddInstruction { get; private set; }
 
-	public BaseInstruction SubInstruction => Is32BitPlatform ? IRInstruction.Sub32 : IRInstruction.Sub64;
+	public BaseInstruction SubInstruction { get; private set; }
 
-	public BaseInstruction MulSignedInstruction => Is32BitPlatform ? IRInstruction.MulSigned32 : IRInstruction.MulSigned64;
+	public BaseInstruction MulSignedInstruction { get; private set; }
 
-	public BaseInstruction MulUnsignedInstruction => Is32BitPlatform ? IRInstruction.MulUnsigned32 : IRInstruction.MulUnsigned64;
+	public BaseInstruction MulUnsignedInstruction { get; private set; }
 
-	public BaseInstruction BranchInstruction => Is32BitPlatform ? IRInstruction.Branch32 : IRInstruction.Branch64;
+	public BaseInstruction BranchInstruction { get; private set; }
 
 	#endregion Properties - Instructions
 
@@ -128,6 +130,15 @@ public sealed class TransformContext
 		Window = Math.Max(Compiler.CompilerSettings.OptimizationWindow, 1);
 
 		LowerTo32 = Compiler.CompilerSettings.LongExpansion;
+
+		LoadInstruction = Is32BitPlatform ? IRInstruction.Load32 : IRInstruction.Load64;
+		StoreInstruction = Is32BitPlatform ? IRInstruction.Store32 : IRInstruction.Store64;
+		MoveInstruction = Is32BitPlatform ? IRInstruction.Move32 : IRInstruction.Move64;
+		AddInstruction = Is32BitPlatform ? IRInstruction.Add32 : IRInstruction.Add64;
+		SubInstruction = Is32BitPlatform ? IRInstruction.Sub32 : IRInstruction.Sub64;
+		MulSignedInstruction = Is32BitPlatform ? IRInstruction.MulSigned32 : IRInstruction.MulSigned64;
+		MulUnsignedInstruction = Is32BitPlatform ? IRInstruction.MulUnsigned32 : IRInstruction.MulUnsigned64;
+		BranchInstruction = Is32BitPlatform ? IRInstruction.Branch32 : IRInstruction.Branch64;
 	}
 
 	public void SetMethodCompiler(MethodCompiler methodCompiler)
@@ -151,7 +162,7 @@ public sealed class TransformContext
 
 	public void SetStageOptions(bool lowerTo32)
 	{
-		LowerTo32 = Compiler.CompilerSettings.LongExpansion && lowerTo32;
+		LowerTo32 = Compiler.CompilerSettings.LongExpansion && lowerTo32 && Is32BitPlatform;
 	}
 
 	#region Manager
@@ -172,6 +183,12 @@ public sealed class TransformContext
 	}
 
 	#endregion Manager
+
+	public void ClearLogs()
+	{
+		TraceLog = null;
+		SpecialTraceLog = null;
+	}
 
 	public void SetLog(TraceLog traceLog)
 	{
@@ -312,7 +329,6 @@ public sealed class TransformContext
 	{
 		BaseMethodCompilerStage.UpdatePhi(node);
 	}
-
 
 	#endregion Phi Helpers
 

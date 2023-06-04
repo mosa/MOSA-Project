@@ -13,7 +13,7 @@ public sealed class Load32AddressOf : BaseTransform
 		if (!context.Operand2.IsConstantZero)
 			return false;
 
-		if (context.Operand1.Definitions.Count != 1)
+		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
 		if (context.Operand1.Definitions[0].Instruction != IRInstruction.AddressOf)

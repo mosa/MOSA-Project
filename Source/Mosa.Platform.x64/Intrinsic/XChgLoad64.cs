@@ -10,13 +10,13 @@ namespace Mosa.Platform.x64.Intrinsic;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Platform.x64.Intrinsic::XChgLoad64")]
-	private static void XChgLoad64(Context context, MethodCompiler methodCompiler)
+	private static void XChgLoad64(Context context, TransformContext transformContext)
 	{
 		var location = context.Operand1;
 		var value = context.Operand2;
 		var result = context.Result;
 
-		var v1 = methodCompiler.VirtualRegisters.Allocate64();
+		var v1 = transformContext.VirtualRegisters.Allocate64();
 
 		context.SetInstruction(X64.Mov64, v1, value);
 		context.AppendInstruction(X64.Lock);

@@ -781,12 +781,6 @@ public partial class MainForm : Form
 		OpenFile();
 	}
 
-	private void padInstructions_CheckStateChanged(object sender, EventArgs e)
-	{
-		UpdateInstructions();
-		UpdateTransforms();
-	}
-
 	private void QuitToolStripMenuItem_Click(object sender, EventArgs e)
 	{
 		Application.Exit();
@@ -907,12 +901,6 @@ public partial class MainForm : Form
 
 		lbSteps.Text = $"{TransformStep} / {max - 1}";
 
-		UpdateTransforms();
-	}
-
-	private void showOperandTypes_CheckStateChanged(object sender, EventArgs e)
-	{
-		UpdateInstructions();
 		UpdateTransforms();
 	}
 
@@ -1124,7 +1112,7 @@ public partial class MainForm : Form
 		if (string.IsNullOrWhiteSpace(label) || label == "All")
 			label = string.Empty;
 
-		tbInstructions.Text = MethodStore.GetStageInstructions(lines, label, !showOperandTypes.Checked, padInstructions.Checked);
+		tbInstructions.Text = MethodStore.GetStageInstructions(lines, label, !showOperandTypes.Checked, padInstructions.Checked, removeIRNop.Checked);
 	}
 
 	private void UpdateInstructionStages()
@@ -1254,7 +1242,7 @@ public partial class MainForm : Form
 		if (string.IsNullOrWhiteSpace(label) || label == "All")
 			label = string.Empty;
 
-		tbTransforms.Text = MethodStore.GetStageInstructions(lines, label, !showOperandTypes.Checked, padInstructions.Checked);
+		tbTransforms.Text = MethodStore.GetStageInstructions(lines, label, !showOperandTypes.Checked, padInstructions.Checked, removeIRNop.Checked);
 	}
 
 	private void UpdateTransformStages()
@@ -1283,5 +1271,11 @@ public partial class MainForm : Form
 	private void btnSaveB_Click(object sender, EventArgs e)
 	{
 		File.WriteAllText(Path.Combine(Path.GetTempPath(), "MOSA", "B.txt"), tbInstructions.Text);
+	}
+
+	private void DisplayCheckStateChanged(object sender, EventArgs e)
+	{
+		UpdateInstructions();
+		UpdateTransforms();
 	}
 }

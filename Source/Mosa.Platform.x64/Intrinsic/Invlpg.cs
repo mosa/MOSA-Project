@@ -10,7 +10,7 @@ namespace Mosa.Platform.x64.Intrinsic;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Platform.x64.Intrinsic::Invlpg")]
-	private static void Invlpg(Context context, MethodCompiler methodCompiler)
+	private static void Invlpg(Context context, TransformContext transformContext)
 	{
 		//Debug.Assert(context.Operand1.IsConstant);
 		context.SetInstruction(X64.Invlpg, null, context.Operand1);

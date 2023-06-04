@@ -10,7 +10,7 @@ namespace Mosa.Platform.x64.Intrinsic;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Platform.x64.Intrinsic::Cli")]
-	private static void Cli(Context context, MethodCompiler methodCompiler)
+	private static void Cli(Context context, TransformContext transformContext)
 	{
 		context.SetInstruction(X64.Cli);
 	}

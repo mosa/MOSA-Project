@@ -19,7 +19,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.CodeMotion
 			if (!context.Result.IsVirtualRegister)
 				return false;
 
-			if (context.Result.Uses.Count != 1)
+			if (!context.Result.IsUsedOnce)
 				return false;
 
 			if (context.Result.Uses[0].Block != context.Block)

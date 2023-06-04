@@ -22,7 +22,7 @@ public sealed class GetLow32From64 : BaseTransform
 		if (!context.Operand1.IsVirtualRegister)
 			return false;
 
-		//if (context.Operand1.Definitions.Count != 1)
+		//if (!context.Operand1.IsDefinedOnce)
 		//	return false;
 
 		if (context.Operand1.IsInt32)

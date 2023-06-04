@@ -8,10 +8,8 @@ namespace Mosa.Compiler.Framework.Intrinsics;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Runtime.Intrinsic::GetStackPointer")]
-	private static void GetStackPointer(Context context, MethodCompiler methodCompiler)
+	private static void GetStackPointer(Context context, TransformContext transformContext)
 	{
-		var instruction = methodCompiler.Is32BitPlatform ? IRInstruction.Move32 : IRInstruction.Move64;
-
-		context.SetInstruction(instruction, context.Result, methodCompiler.Compiler.StackPointer);
+		context.SetInstruction(transformContext.MoveInstruction, context.Result, transformContext.Compiler.StackPointer);
 	}
 }

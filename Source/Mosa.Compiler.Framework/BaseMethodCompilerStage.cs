@@ -236,7 +236,10 @@ public abstract class BaseMethodCompilerStage
 		Finish();
 
 		UpdateRegisterCounters();
+	}
 
+	public void CleanUp()
+	{
 		MethodCompiler = null;
 		traceLogs = null;
 	}
@@ -791,11 +794,47 @@ public abstract class BaseMethodCompilerStage
 
 	#endregion Helper Methods
 
-	public void AllStopWithException(string exception)
+	public bool FullCheck(bool full = true)
 	{
-		MethodCompiler.Stop();
-		MethodCompiler.Compiler.Stop();
-		throw new CompilerException(exception);
+		return CheckVirtualRegisters(full) || CheckAllPhiInstructions() || CheckAllInstructions();
+	}
+
+	protected bool CheckVirtualRegisters(bool full)
+	{
+		foreach (var operand in MethodCompiler.VirtualRegisters)
+		{
+			if ((full && operand.IsUsed && !operand.IsDefined)
+			|| (!full && operand.IsUsed && !operand.IsDefined && !operand.HasParent && !operand.IsParent))
+			{
+				throw new CompilerException($"CHECK-FAILED: Virtual register used by not defined: {operand}");
+			}
+		}
+
+		return true;
+	}
+
+	protected bool CheckAllInstructions()
+	{
+		foreach (var block in BasicBlocks)
+		{
+			for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
+			{
+				if (node.IsEmptyOrNop || node.Instruction.HasVariableOperands)
+					continue;
+
+				if (node.Instruction.DefaultResultCount != node.ResultCount)
+				{
+					throw new CompilerException($"CHECK-FAILED: Too many results: {block} at {node}");
+				}
+
+				if (node.Instruction.DefaultOperandCount != node.OperandCount)
+				{
+					throw new CompilerException($"CHECK-FAILED: Too many operands: {block} at {node}");
+				}
+			}
+		}
+
+		return true;
 	}
 
 	protected bool CheckAllPhiInstructions()
@@ -804,17 +843,14 @@ public abstract class BaseMethodCompilerStage
 		{
 			for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 			{
-				if (node.IsEmptyOrNop)
-					continue;
-
-				if (!node.Instruction.IsPhi)
+				if (node.IsEmptyOrNop || !node.Instruction.IsPhi)
 					break;
 
 				foreach (var phiblock in node.PhiBlocks)
 				{
 					if (!block.PreviousBlocks.Contains(phiblock))
 					{
-						throw new CompilerException($"{FormattedStageName}:CheckAllPhiInstructions() failed in block: {block} at {node}!");
+						throw new CompilerException($"CHECK-FAILED: PHI consistency: {block} at {node}");
 					}
 				}
 			}

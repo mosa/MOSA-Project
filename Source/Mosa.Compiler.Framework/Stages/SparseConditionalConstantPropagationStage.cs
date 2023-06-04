@@ -64,9 +64,6 @@ public class SparseConditionalConstantPropagationStage : BaseMethodCompilerStage
 
 		ConstantCount.Set(constants.Count);
 		DeadBlockCount.Set(deadBlocks.Count);
-
-		if (CompilerSettings.FullCheckMode)
-			CheckAllPhiInstructions();
 	}
 
 	protected override void Finish()
@@ -86,10 +83,10 @@ public class SparseConditionalConstantPropagationStage : BaseMethodCompilerStage
 	{
 		trace?.Log($"{target} = {value} Uses: {target.Uses.Count}");
 
-		if (target.Definitions.Count == 0)
+		if (target.IsUndefined)
 			return;
 
-		if (target.Definitions.Count != 1)
+		if (target.IsOverDefined)
 			throw new CompilerException($"SCCP: {target} definition has move than one value");
 
 		//Debug.Assert(target.Definitions.Count == 1);
@@ -125,9 +122,9 @@ public class SparseConditionalConstantPropagationStage : BaseMethodCompilerStage
 			}
 		}
 
-		Debug.Assert(target.Uses.Count == 0);
+		Debug.Assert(!target.IsUsed);
 
-		if (target.Definitions.Count == 0)
+		if (target.IsUndefined)
 			return;
 
 		var defNode = target.Definitions[0];

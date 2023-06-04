@@ -23,6 +23,7 @@ public class MethodStore
 			methodData.InstructionLogs.Clear();
 			methodData.OrderedDebugStageNames.Clear();
 			methodData.OrderedStageNames.Clear();
+			methodData.OrderedTransformStageNames.Clear();
 			methodData.MethodCounters.Clear();
 			methodData.DebugLogs.Clear();
 			methodData.TransformLogs.Clear();
@@ -106,7 +107,7 @@ public class MethodStore
 		}
 	}
 
-	public string GetStageInstructions(List<string> lines, string blockLabel, bool strip, bool pad)
+	public string GetStageInstructions(List<string> lines, string blockLabel, bool strip, bool pad, bool removeNop)
 	{
 		var result = new StringBuilder();
 
@@ -117,9 +118,12 @@ public class MethodStore
 		{
 			foreach (var l in lines)
 			{
-				string line = l;
+				var line = l;
 
 				if (line.Contains("IR.BlockStart") || line.Contains("IR.BlockEnd"))
+					continue;
+
+				if (removeNop && line.Contains("IR.Nop"))
 					continue;
 
 				if (strip)

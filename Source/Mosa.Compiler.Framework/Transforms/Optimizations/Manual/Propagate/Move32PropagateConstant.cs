@@ -10,7 +10,7 @@ public sealed class Move32PropagateConstant : BaseTransform
 
 	public override bool Match(Context context, TransformContext transform)
 	{
-		if (!IsSSAForm(context.Result))
+		if (!context.Result.IsDefinedOnce)
 			return false;
 
 		if (!context.Operand1.IsResolvedConstant)

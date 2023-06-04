@@ -10,7 +10,7 @@ public partial class CallStackView : DebugDockContent
 {
 	private class CallStackEntry : TreeNode
 	{
-		public string MethodName { get { return (Symbol == null) ? "Unknown" : Symbol.Name; } }
+		public string MethodName => (Symbol == null) ? "Unknown" : Symbol.Name;
 
 		public ulong InstructionPointer { get; private set; }
 

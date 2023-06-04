@@ -13,13 +13,13 @@ public partial class SymbolView : DebugDockContent
 
 	private class SymbolEntry
 	{
-		public string Address { get { return DebugDockContent.ToHex(Symbol.Address); } }
+		public string Address => DebugDockContent.ToHex(Symbol.Address);
 
-		public string Name { get { return Symbol.CommonName; } }
+		public string Name => Symbol.CommonName;
 
-		public string Kind { get { return Symbol.Kind; } }
+		public string Kind => Symbol.Kind;
 
-		public uint Length { get { return Symbol.Length; } }
+		public uint Length => Symbol.Length;
 
 		//public string FullName { get { return Symbol.Name; } }
 

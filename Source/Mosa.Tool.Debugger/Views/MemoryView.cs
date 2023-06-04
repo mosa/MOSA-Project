@@ -33,7 +33,7 @@ public partial class MemoryView : DebugDockContent
 		Rows = lbMemory.Height / (lbMemory.Font.Height + 2);
 
 		var address = MainForm.ParseHexAddress(tbAddress.Text);
-		uint bytes = (uint)(Rows * Columns);
+		var bytes = (uint)(Rows * Columns);
 
 		MemoryCache.ReadMemory(address, bytes, OnMemoryRead);
 	}
@@ -42,23 +42,23 @@ public partial class MemoryView : DebugDockContent
 
 	private void UpdateDisplay(ulong address, byte[] memory)
 	{
-		ulong at = address;
+		var at = address;
 
 		var newlines = new string[Rows];
 
-		for (int line = 0; line < Rows; line++)
+		for (var line = 0; line < Rows; line++)
 		{
-			string l = at.ToString("X").PadLeft(8, '0') + ':';
-			string d = string.Empty;
+			var l = at.ToString("X").PadLeft(8, '0') + ':';
+			var d = string.Empty;
 
-			for (int x = 0; x < Columns; x++)
+			for (var x = 0; x < Columns; x++)
 			{
-				int index = (line * Columns) + x;
+				var index = (line * Columns) + x;
 
 				if (index >= memory.Length)
 					break;
 
-				byte mem = memory[index];
+				var mem = memory[index];
 
 				if (x % 4 == 0)
 					l += ' ';
