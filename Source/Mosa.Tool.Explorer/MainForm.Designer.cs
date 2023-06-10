@@ -64,9 +64,10 @@
 			showSizes = new System.Windows.Forms.ToolStripMenuItem();
 			removeIRNop = new System.Windows.Forms.ToolStripMenuItem();
 			advanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			CBEnableMultithreading = new System.Windows.Forms.ToolStripMenuItem();
+			cbEnableMultithreading = new System.Windows.Forms.ToolStripMenuItem();
 			cbEnableMethodScanner = new System.Windows.Forms.ToolStripMenuItem();
-			dumpAllMethodStagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			EnableDebugDiagnostic = new System.Windows.Forms.ToolStripMenuItem();
+			cbDumpAllMethodStages = new System.Windows.Forms.ToolStripMenuItem();
 			openFileDialog = new System.Windows.Forms.OpenFileDialog();
 			treeView = new System.Windows.Forms.TreeView();
 			splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -119,10 +120,11 @@
 			toolStrip1 = new System.Windows.Forms.ToolStrip();
 			cbPlatform = new System.Windows.Forms.ToolStripComboBox();
 			toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-			toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+			tsbOpen = new System.Windows.Forms.ToolStripButton();
 			toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-			toolStripButton4 = new System.Windows.Forms.ToolStripButton();
+			tsbRefresh = new System.Windows.Forms.ToolStripButton();
 			toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+			tsbCompile = new System.Windows.Forms.ToolStripButton();
 			folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
 			timer1 = new System.Windows.Forms.Timer(components);
 			saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
@@ -417,19 +419,19 @@
 			// advanceToolStripMenuItem
 			// 
 			advanceToolStripMenuItem.CheckOnClick = true;
-			advanceToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { CBEnableMultithreading, cbEnableMethodScanner, dumpAllMethodStagesToolStripMenuItem });
+			advanceToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { cbEnableMultithreading, cbEnableMethodScanner, EnableDebugDiagnostic, cbDumpAllMethodStages });
 			advanceToolStripMenuItem.Name = "advanceToolStripMenuItem";
 			advanceToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
 			advanceToolStripMenuItem.Text = "Advance";
 			// 
-			// CBEnableMultithreading
+			// cbEnableMultithreading
 			// 
-			CBEnableMultithreading.Checked = true;
-			CBEnableMultithreading.CheckOnClick = true;
-			CBEnableMultithreading.CheckState = System.Windows.Forms.CheckState.Checked;
-			CBEnableMultithreading.Name = "CBEnableMultithreading";
-			CBEnableMultithreading.Size = new System.Drawing.Size(206, 22);
-			CBEnableMultithreading.Text = "Enable Multithreading";
+			cbEnableMultithreading.Checked = true;
+			cbEnableMultithreading.CheckOnClick = true;
+			cbEnableMultithreading.CheckState = System.Windows.Forms.CheckState.Checked;
+			cbEnableMultithreading.Name = "cbEnableMultithreading";
+			cbEnableMultithreading.Size = new System.Drawing.Size(206, 22);
+			cbEnableMultithreading.Text = "Enable Multithreading";
 			// 
 			// cbEnableMethodScanner
 			// 
@@ -438,12 +440,19 @@
 			cbEnableMethodScanner.Size = new System.Drawing.Size(206, 22);
 			cbEnableMethodScanner.Text = "Enable Method Scanner";
 			// 
-			// dumpAllMethodStagesToolStripMenuItem
+			// EnableDebugDiagnostic
 			// 
-			dumpAllMethodStagesToolStripMenuItem.Name = "dumpAllMethodStagesToolStripMenuItem";
-			dumpAllMethodStagesToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
-			dumpAllMethodStagesToolStripMenuItem.Text = "Dump All Method Stages";
-			dumpAllMethodStagesToolStripMenuItem.Click += DumpAllMethodStagesToolStripMenuItem_Click;
+			EnableDebugDiagnostic.CheckOnClick = true;
+			EnableDebugDiagnostic.Name = "EnableDebugDiagnostic";
+			EnableDebugDiagnostic.Size = new System.Drawing.Size(206, 22);
+			EnableDebugDiagnostic.Text = "Enable Debug Diagnostic";
+			// 
+			// cbDumpAllMethodStages
+			// 
+			cbDumpAllMethodStages.Name = "cbDumpAllMethodStages";
+			cbDumpAllMethodStages.Size = new System.Drawing.Size(206, 22);
+			cbDumpAllMethodStages.Text = "Dump All Method Stages";
+			cbDumpAllMethodStages.Click += DumpAllMethodStagesToolStripMenuItem_Click;
 			// 
 			// openFileDialog
 			// 
@@ -1056,7 +1065,7 @@
 			// toolStrip1
 			// 
 			toolStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
-			toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { cbPlatform, toolStripSeparator3, toolStripButton1, toolStripSeparator2, toolStripButton4, toolStripSeparator1 });
+			toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { cbPlatform, toolStripSeparator3, tsbOpen, toolStripSeparator2, tsbRefresh, toolStripSeparator1, tsbCompile });
 			toolStrip1.Location = new System.Drawing.Point(0, 24);
 			toolStrip1.Name = "toolStrip1";
 			toolStrip1.Size = new System.Drawing.Size(940, 27);
@@ -1078,33 +1087,42 @@
 			toolStripSeparator3.Name = "toolStripSeparator3";
 			toolStripSeparator3.Size = new System.Drawing.Size(6, 27);
 			// 
-			// toolStripButton1
+			// tsbOpen
 			// 
-			toolStripButton1.Image = (System.Drawing.Image)resources.GetObject("toolStripButton1.Image");
-			toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-			toolStripButton1.Name = "toolStripButton1";
-			toolStripButton1.Size = new System.Drawing.Size(60, 24);
-			toolStripButton1.Text = "Open";
-			toolStripButton1.Click += ToolStripButton1_Click;
+			tsbOpen.Image = (System.Drawing.Image)resources.GetObject("tsbOpen.Image");
+			tsbOpen.ImageTransparentColor = System.Drawing.Color.Magenta;
+			tsbOpen.Name = "tsbOpen";
+			tsbOpen.Size = new System.Drawing.Size(60, 24);
+			tsbOpen.Text = "Open";
+			tsbOpen.Click += ToolStripButton1_Click;
 			// 
 			// toolStripSeparator2
 			// 
 			toolStripSeparator2.Name = "toolStripSeparator2";
 			toolStripSeparator2.Size = new System.Drawing.Size(6, 27);
 			// 
-			// toolStripButton4
+			// tsbRefresh
 			// 
-			toolStripButton4.Image = (System.Drawing.Image)resources.GetObject("toolStripButton4.Image");
-			toolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
-			toolStripButton4.Name = "toolStripButton4";
-			toolStripButton4.Size = new System.Drawing.Size(76, 24);
-			toolStripButton4.Text = "Compile";
-			toolStripButton4.Click += ToolStripButton4_Click;
+			tsbRefresh.Image = (System.Drawing.Image)resources.GetObject("tsbRefresh.Image");
+			tsbRefresh.ImageTransparentColor = System.Drawing.Color.Magenta;
+			tsbRefresh.Name = "tsbRefresh";
+			tsbRefresh.Size = new System.Drawing.Size(70, 24);
+			tsbRefresh.Text = "Refresh";
+			tsbRefresh.Click += tsbRefresh_Click;
 			// 
 			// toolStripSeparator1
 			// 
 			toolStripSeparator1.Name = "toolStripSeparator1";
 			toolStripSeparator1.Size = new System.Drawing.Size(6, 27);
+			// 
+			// tsbCompile
+			// 
+			tsbCompile.Image = (System.Drawing.Image)resources.GetObject("tsbCompile.Image");
+			tsbCompile.ImageTransparentColor = System.Drawing.Color.Magenta;
+			tsbCompile.Name = "tsbCompile";
+			tsbCompile.Size = new System.Drawing.Size(76, 24);
+			tsbCompile.Text = "Compile";
+			tsbCompile.Click += ToolStripButton4_Click;
 			// 
 			// folderBrowserDialog1
 			// 
@@ -1179,9 +1197,9 @@
 		private System.Windows.Forms.ToolStripMenuItem nowToolStripMenuItem;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
 		private System.Windows.Forms.ToolStrip toolStrip1;
-		private System.Windows.Forms.ToolStripButton toolStripButton1;
+		private System.Windows.Forms.ToolStripButton tsbOpen;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-		private System.Windows.Forms.ToolStripButton toolStripButton4;
+		private System.Windows.Forms.ToolStripButton tsbCompile;
 		private System.Windows.Forms.ToolStripMenuItem cbEnableSSA;
 		private System.Windows.Forms.ToolStripMenuItem cbEnableBinaryCodeGeneration;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
@@ -1192,7 +1210,7 @@
 		private System.Windows.Forms.ToolStripMenuItem cbEnableInline;
 		private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
 		private System.Windows.Forms.ToolStripMenuItem advanceToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem dumpAllMethodStagesToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem cbDumpAllMethodStages;
 		private System.Windows.Forms.ToolStripMenuItem cbEnableLongExpansion;
 		private System.Windows.Forms.ToolStripMenuItem cbEnableTwoPassOptimizations;
 		private System.Windows.Forms.ToolStripMenuItem displayOptionsToolStripMenuItem;
@@ -1207,7 +1225,7 @@
 		private System.Windows.Forms.ToolStripComboBox cbPlatform;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
 		private System.Windows.Forms.ToolStripMenuItem cbEnableBitTracker;
-		private System.Windows.Forms.ToolStripMenuItem CBEnableMultithreading;
+		private System.Windows.Forms.ToolStripMenuItem cbEnableMultithreading;
 		private System.Windows.Forms.ToolStripMenuItem cbLoopInvariantCodeMotion;
 		private System.Windows.Forms.ToolStripMenuItem cbPlatformOptimizations;
 		private System.Windows.Forms.ToolStripMenuItem cbInlineExplicit;
@@ -1261,5 +1279,7 @@
 		private System.Windows.Forms.Button btnSaveA;
 		private System.Windows.Forms.SaveFileDialog saveFileDialog1;
 		private System.Windows.Forms.ToolStripMenuItem removeIRNop;
+		private System.Windows.Forms.ToolStripMenuItem EnableDebugDiagnostic;
+		private System.Windows.Forms.ToolStripButton tsbRefresh;
 	}
 }

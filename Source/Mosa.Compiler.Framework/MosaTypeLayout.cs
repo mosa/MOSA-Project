@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Mosa.Compiler.Common;
+using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework;
@@ -749,7 +750,7 @@ public class MosaTypeLayout
 		if (methodFound != null)
 			return methodFound;
 
-		throw new InvalidOperationException($"Failed to find implicit interface implementation for type {type} and interface method {interfaceMethod}");
+		throw new InvalidCompilerOperationException($"Failed to find implicit interface implementation for type {type} and interface method {interfaceMethod}");
 	}
 
 	private MosaMethod FindImplicitInterfaceMethod(MosaType type, MosaMethod interfaceMethod)

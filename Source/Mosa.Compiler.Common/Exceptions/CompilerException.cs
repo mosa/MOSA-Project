@@ -11,7 +11,7 @@ public class CompilerException : Exception
 
 	public string Method { get; set; }
 
-	public string BaseMessage { get; private set; }
+	public string BaseMessage { get; protected set; }
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="CompilerException" /> class.

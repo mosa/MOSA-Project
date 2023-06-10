@@ -302,7 +302,7 @@ internal class ClrMetadataLoader
 			case ElementType.Ptr:
 				result = elementType?.ToUnmanagedPointer();
 				if (result == null)
-					throw new InvalidOperationException("Unmanaged pointer of element type is null!");
+					throw new InvalidCompilerOperationException("Unmanaged pointer of element type is null!");
 
 				using (var ptrType = metadata.Controller.MutateType(result))
 					ptrType.UnderlyingObject = elementType?.GetUnderlyingObject<UnitDesc<TypeDef, TypeSig>>()?.Clone(typeSig);
@@ -311,7 +311,7 @@ internal class ClrMetadataLoader
 			case ElementType.ByRef:
 				result = elementType?.ToManagedPointer();
 				if (result == null)
-					throw new InvalidOperationException("Unmanaged pointer of element type is null!");
+					throw new InvalidCompilerOperationException("Unmanaged pointer of element type is null!");
 
 				using (var ptrType = metadata.Controller.MutateType(result))
 					ptrType.UnderlyingObject = elementType?.GetUnderlyingObject<UnitDesc<TypeDef, TypeSig>>()?.Clone(typeSig);
@@ -335,7 +335,7 @@ internal class ClrMetadataLoader
 			case ElementType.SZArray:
 				result = elementType?.ToSZArray();
 				if (result == null)
-					throw new InvalidOperationException("SZ array of element type is null!");
+					throw new InvalidCompilerOperationException("SZ array of element type is null!");
 
 				using (var arrayType = metadata.Controller.MutateType(result))
 				{
@@ -348,7 +348,7 @@ internal class ClrMetadataLoader
 						GetType(new GenericInstSig(iListSig, typeSig.Next));
 
 						if (szHelperMethods == null)
-							throw new InvalidOperationException("szHelperMethods array is null!");
+							throw new InvalidCompilerOperationException("szHelperMethods array is null!");
 
 						foreach (var method in szHelperMethods)
 						{
@@ -367,7 +367,7 @@ internal class ClrMetadataLoader
 				var arrayInfo = new MosaArrayInfo(array.LowerBounds, array.Rank, array.Sizes);
 				result = elementType?.ToArray(arrayInfo);
 				if (result == null)
-					throw new InvalidOperationException("Array of element type is null!");
+					throw new InvalidCompilerOperationException("Array of element type is null!");
 
 				using (var arrayType = metadata.Controller.MutateType(result))
 					arrayType.UnderlyingObject = elementType?.GetUnderlyingObject<UnitDesc<TypeDef, TypeSig>>()?.Clone(typeSig);
@@ -463,7 +463,7 @@ internal class ClrMetadataLoader
 				var propertySig = property.GetPropertySig();
 
 				if (propertySig == null)
-					throw new InvalidOperationException("Property signature is null!");
+					throw new InvalidCompilerOperationException("Property signature is null!");
 
 				var newSig = propertySig.Clone();
 				newSig.RetType = resolver.Resolve(newSig.RetType);
@@ -494,7 +494,7 @@ internal class ClrMetadataLoader
 	{
 		var resolvedType = resolver.Resolve(method.DeclaringType.ToTypeSig());
 		if (resolvedType == null)
-			throw new InvalidOperationException("Resolved type of method's declaring type signature is null!");
+			throw new InvalidCompilerOperationException("Resolved type of method's declaring type signature is null!");
 
 		var declType = GetType(resolvedType);
 
@@ -525,7 +525,7 @@ internal class ClrMetadataLoader
 		{
 			var resolvedGenericArg = resolver.Resolve(genericArg);
 			if (resolvedGenericArg == null)
-				throw new InvalidOperationException("Resolved generic argument is null!");
+				throw new InvalidCompilerOperationException("Resolved generic argument is null!");
 
 			resolvedGenericArguments.Add(resolvedGenericArg);
 		}

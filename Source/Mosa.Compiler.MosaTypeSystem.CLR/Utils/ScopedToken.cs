@@ -2,6 +2,7 @@
 
 using System.Diagnostics;
 using dnlib.DotNet;
+using Mosa.Compiler.Common.Exceptions;
 
 namespace Mosa.Compiler.MosaTypeSystem.CLR.Utils;
 
@@ -31,7 +32,7 @@ public readonly struct ScopedToken : IEquatable<ScopedToken>
 	public override int GetHashCode()
 	{
 		if (Module == null)
-			throw new InvalidOperationException("Module is null!");
+			throw new InvalidCompilerOperationException("Module is null!");
 
 		return Module.GetHashCode() * 7 + (int)Token.Raw;
 	}

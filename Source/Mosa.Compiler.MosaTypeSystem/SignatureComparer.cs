@@ -1,8 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
 using System.Collections.Generic;
 using Mosa.Compiler.Common;
+using Mosa.Compiler.Common.Exceptions;
 
 namespace Mosa.Compiler.MosaTypeSystem;
 
@@ -64,14 +64,14 @@ public class SignatureComparer : IEqualityComparer<MosaType>, IEqualityComparer<
 			// Hash code DOES not need to be unique, so to save time ArrayInfo is not hashed
 			case MosaTypeCode.Array:
 				if (type.ElementType == null)
-					throw new InvalidOperationException("Element type of type is null!");
+					throw new InvalidCompilerOperationException("Element type of type is null");
 
 				result += result * 7 + GetHashCode(type.ElementType);
 				break;
 
 			case MosaTypeCode.FunctionPointer:
 				if (type.FunctionPtrSig == null)
-					throw new InvalidOperationException("Function pointer signature of type is null!");
+					throw new InvalidCompilerOperationException("Function pointer signature of type is null");
 
 				result += GetHashCode(type.FunctionPtrSig);
 				break;
@@ -102,14 +102,14 @@ public class SignatureComparer : IEqualityComparer<MosaType>, IEqualityComparer<
 	public static int GetHashCode(MosaMethodSignature method)
 	{
 		if (method.ReturnType == null)
-			throw new InvalidOperationException("Return type of method is null!");
+			throw new InvalidCompilerOperationException("Return type of method is null");
 
 		var result = GetHashCode(method.ReturnType);
 
 		foreach (var param in method.Parameters)
 		{
 			if (param.ParameterType == null)
-				throw new InvalidOperationException("Type of parameter is null!");
+				throw new InvalidCompilerOperationException("Type of parameter is null");
 
 			result += result * 7 + GetHashCode(param.ParameterType);
 		}

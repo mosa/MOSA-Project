@@ -1,6 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
+using Mosa.Compiler.Common.Exceptions;
 
 namespace Mosa.Compiler.MosaTypeSystem;
 
@@ -151,7 +152,7 @@ internal class TypeSystemController : ITypeSystemController
 	public void AddType(MosaType type)
 	{
 		if (type.Module == null || type.FullName == null)
-			throw new InvalidOperationException("Type's module or full name is null!");
+			throw new InvalidCompilerOperationException("Type's module or full name is null!");
 
 		if (!type.Module.Types.ContainsKey(type.ID))
 			type.Module.Types.Add(type.ID, type);

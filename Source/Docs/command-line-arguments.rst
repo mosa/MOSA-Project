@@ -19,6 +19,7 @@ Below are the command line arguments available:
     -o,Compiler.OutputFile,{value}
     -threading,Compiler.Multithreading,true
     -threading-off,Compiler.Multithreading,false
+	-threads,Compiler.Multithreading.MaxThreads,{value}
     -base,Compiler.BaseAddress,{value}
     -scanner,Compiler.MethodScanner,true
     -no-code,Compiler.Binary,false
@@ -81,6 +82,8 @@ Below are the command line arguments available:
 
     Explorer:
     -filter,Explorer.Filter,{value}
+	-explorer-debug,Explorer.DebugDiagnostic,true
+	-autostart,Explorer.Start,true
 
     Launcher:
     -autoexit,Launcher.Exit,true

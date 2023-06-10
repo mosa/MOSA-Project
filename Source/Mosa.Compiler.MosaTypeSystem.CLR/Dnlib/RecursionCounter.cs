@@ -4,6 +4,8 @@
 // "I don't plan on making that type public ever again. If you need to use it,
 // you can just copy the source code to your project, it's not a lot of code."
 
+using Mosa.Compiler.Common.Exceptions;
+
 namespace dnlib.DotNet;
 
 /// <summary>
@@ -44,7 +46,7 @@ internal struct RecursionCounter
 	{
 #if DEBUG
 		if (Counter <= 0)
-			throw new InvalidOperationException("recursionCounter <= 0");
+			throw new InvalidCompilerOperationException("recursionCounter <= 0");
 #endif
 		Counter--;
 	}
