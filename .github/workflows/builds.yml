@@ -177,3 +177,68 @@ jobs:
         with:
           name: docs-${{ env.BUILD_VERSION }}.${{ github.run_number }}.zip
           path: docs-${{ env.BUILD_VERSION }}.${{ github.run_number }}.zip
+
+  windows-build:
+    name: Windows Build
+    runs-on: windows-latest
+    env:
+      BUILD_VERSION: 2.4.0
+      NUGET_ENABLE_LEGACY_CSPROJ_PACK: true
+    steps:
+      - name: Set net7.0
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'
+      - name: View Build Version
+        run: echo ${{ env.BUILD_VERSION }}.${{ github.run_number }}
+      - name: View Github Info
+        run: echo repository=${{ github.repository }} event_name=${{ github.event_name }} ref=${{ github.ref }} head_ref=${{ github.head_ref }} base_ref=${{ github.base_ref }}
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1.1
+      - name: Setup Nuget.exe
+        uses: nuget/setup-nuget@v1
+      - name: Restore nuget Packages
+        run: dotnet restore Source/Mosa.sln
+      - name: Build
+        run: dotnet build Source/Mosa.sln /p:Version=${{ env.BUILD_VERSION }}
+      - name: Store Build Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: windows-build-artifact
+          path: bin
+
+  unit-test-optimizations-all:
+    name: Windows Unit Test - All Optimizations
+    runs-on: windows-latest
+    needs: windows-build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: windows-build-artifact
+      - name: Unit Tests - All Performance Optimizations
+        run: bin\Mosa.Utility.UnitTests.exe -oMax -display-off
+
+  unit-test-optimizations-none:
+    name: Windows Unit Test - No Optimizations
+    runs-on: windows-latest
+    needs: windows-build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: windows-build-artifact
+      - name: Unit Tests - All Performance Optimizations
+        run: bin\Mosa.Utility.UnitTests.exe -oNone -display-off
