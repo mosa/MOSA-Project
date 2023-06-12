@@ -109,6 +109,8 @@ Explorer Settings
    :widths: 50, 200
 
     Explorer.Filter,Specifies the default method filter name when Explorer is launched
+	Explorer.Start,"If true, immediately compile all methods upon launch"
+	Explorer.DebugDiagnostic,"If true, debug diagnostics is captured"
 
 Launcher Settings
 -----------------
@@ -123,7 +125,7 @@ Launcher Settings
     Launcher.PlugKorlib,"If true, automatically include the plugs for CoreLib"
     Launcher.GDB,"If true, launch the GNU GDB application after VM launch"
     Launcher.Debugger,"If true, launch the MOSA debugger application after VM launch"
-    Launcher.Test,"If true, monitors VM serial for success or failure messages"
+    Launcher.Test,"If true, monitors VM serial for success or failure messages"	
 
 Image Settings
 --------------
@@ -136,7 +138,7 @@ Image Settings
     Image.FileSystem,"File system of the primary partition in the image file FAT12, FAT16, FAT32"
     Image.Destination,Destination directory of the image file
     Image.ImageFile,Filename of the image file
-
+	Image.FileSystem.RootInclude,Include files in specified directory
 
 Emulator Settings
 -----------------

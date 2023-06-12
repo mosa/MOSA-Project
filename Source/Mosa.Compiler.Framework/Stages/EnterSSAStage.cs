@@ -1,7 +1,9 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
 using System.Collections.Generic;
 using Mosa.Compiler.Common;
+using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.Trace;
 
@@ -19,7 +21,7 @@ public sealed class EnterSSAStage : BaseMethodCompilerStage
 	private Dictionary<BasicBlock, SimpleFastDominance> blockAnalysis;
 	private Dictionary<Operand, List<BasicBlock>> assignments;
 	private Dictionary<Operand, Operand> parentOperand;
-	private List<Context> phiInstructions;
+	//private List<Context> phiInstructions;
 
 	private TraceLog trace;
 
@@ -29,7 +31,7 @@ public sealed class EnterSSAStage : BaseMethodCompilerStage
 		blockAnalysis = new Dictionary<BasicBlock, SimpleFastDominance>();
 		assignments = new Dictionary<Operand, List<BasicBlock>>();
 		parentOperand = new Dictionary<Operand, Operand>();
-		phiInstructions = new List<Context>();
+		//phiInstructions = new List<Context>();
 	}
 
 	protected override void Run()
@@ -48,7 +50,7 @@ public sealed class EnterSSAStage : BaseMethodCompilerStage
 			blockAnalysis.Add(headBlock, analysis);
 		}
 
-		CollectAssignments2();
+		CollectAssignments();
 
 		PlacePhiFunctionsMinimal();
 
@@ -60,7 +62,7 @@ public sealed class EnterSSAStage : BaseMethodCompilerStage
 	protected override void Finish()
 	{
 		// Clean up
-		phiInstructions.Clear();
+		//phiInstructions.Clear();
 		trace = null;
 		stack = null;
 		counters = null;
@@ -213,11 +215,11 @@ public sealed class EnterSSAStage : BaseMethodCompilerStage
 	private void UpdatePHIs(BasicBlock block)
 	{
 		// Update PHIs in successor blocks
-		foreach (var s in block.NextBlocks)
+		foreach (var next in block.NextBlocks)
 		{
-			var index = WhichPredecessor(s, block);
+			var index = WhichPredecessor(next, block);
 
-			for (var node = s.First.Next; !node.IsBlockEndInstruction; node = node.Next)
+			for (var node = next.First.Next; !node.IsBlockEndInstruction; node = node.Next)
 			{
 				if (node.IsEmptyOrNop)
 					continue;
@@ -239,19 +241,18 @@ public sealed class EnterSSAStage : BaseMethodCompilerStage
 
 	private void UpdateResultOperands(BasicBlock block)
 	{
-		// Update Result Operands in current block
 		for (var node = block.First.Next; !node.IsBlockEndInstruction; node = node.Next)
 		{
 			if (node.IsEmptyOrNop || node.ResultCount == 0)
 				continue;
 
-			if (node.Result.IsVirtualRegister == true)
+			if (node.Result.IsVirtualRegister)
 			{
 				var op = parentOperand[node.Result];
 				stack[op].Pop();
 			}
 
-			if (node.Result2?.IsVirtualRegister == true)
+			if (node.ResultCount == 2 && node.Result2.IsVirtualRegister)
 			{
 				var op = parentOperand[node.Result2];
 				stack[op].Pop();
@@ -269,10 +270,10 @@ public sealed class EnterSSAStage : BaseMethodCompilerStage
 			}
 		}
 
-		return -1;
+		throw new InvalidCompilerOperationException();
 	}
 
-	private void CollectAssignments2()
+	private void CollectAssignments()
 	{
 		foreach (var operand in MethodCompiler.VirtualRegisters)
 		{
@@ -291,22 +292,12 @@ public sealed class EnterSSAStage : BaseMethodCompilerStage
 
 	private Context InsertPhiInstruction(BasicBlock block, Operand variable)
 	{
-		//trace?.Log($"     Phi: {variable} into {block}");
+		trace?.Log($"     Phi: {variable} into {block}");
+
+		var instruction = GetPhiInstruction(variable.Primitive);
 
 		var context = new Context(block);
-
-		if (variable.IsObject)
-			context.AppendInstruction(IRInstruction.PhiObject, variable);
-		else if (variable.IsManagedPointer)
-			context.AppendInstruction(IRInstruction.PhiManagedPointer, variable);
-		else if (variable.IsR4)
-			context.AppendInstruction(IRInstruction.PhiR4, variable);
-		else if (variable.IsR8)
-			context.AppendInstruction(IRInstruction.PhiR8, variable);
-		else if (variable.IsInt64)
-			context.AppendInstruction(IRInstruction.Phi64, variable);
-		else
-			context.AppendInstruction(IRInstruction.Phi32, variable);
+		context.AppendInstruction(instruction, variable);
 
 		var sourceBlocks = new List<BasicBlock>(block.PreviousBlocks.Count);
 		context.PhiBlocks = sourceBlocks;
@@ -319,9 +310,23 @@ public sealed class EnterSSAStage : BaseMethodCompilerStage
 
 		context.OperandCount = block.PreviousBlocks.Count;
 
-		phiInstructions.Add(context);
+		//phiInstructions.Add(context);
 
 		return context;
+	}
+
+	public static BaseInstruction GetPhiInstruction(PrimitiveType primitiveType)
+	{
+		return primitiveType switch
+		{
+			PrimitiveType.Int32 => IRInstruction.Phi32,
+			PrimitiveType.Int64 => IRInstruction.Phi64,
+			PrimitiveType.R4 => IRInstruction.PhiR4,
+			PrimitiveType.R8 => IRInstruction.PhiR8,
+			PrimitiveType.Object => IRInstruction.PhiObject,
+			PrimitiveType.ManagedPointer => IRInstruction.PhiManagedPointer,
+			_ => throw new InvalidCompilerOperationException(),
+		};
 	}
 
 	private void PlacePhiFunctionsMinimal()
@@ -341,7 +346,7 @@ public sealed class EnterSSAStage : BaseMethodCompilerStage
 			var operand = t.Key;
 			var blocks = t.Value;
 
-			//trace?.Log($"Operand {operand}");
+			trace?.Log($"Operand {operand}");
 
 			if (blocks.Count < 2)
 				continue;
@@ -352,5 +357,4 @@ public sealed class EnterSSAStage : BaseMethodCompilerStage
 			}
 		}
 	}
-
 }

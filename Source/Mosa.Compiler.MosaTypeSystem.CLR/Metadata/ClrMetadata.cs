@@ -52,7 +52,7 @@ internal class ClrMetadata : IMetadata
 
 		var modules = Cache?.Modules.Values;
 		if (modules == null)
-			throw new InvalidOperationException("Modules list is empty!");
+			throw new InvalidCompilerOperationException("Modules list is empty!");
 
 		foreach (var module in modules)
 		{

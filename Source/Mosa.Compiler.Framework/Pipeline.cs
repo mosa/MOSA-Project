@@ -60,7 +60,7 @@ public sealed class Pipeline<T> : IEnumerable<T> where T : class
 		pipeline.Add(stage);
 	}
 
-	public void AddAt(int at, IEnumerable<T> stages)
+	public void Insert(int at, IEnumerable<T> stages)
 	{
 		foreach (var stage in stages)
 		{
@@ -69,6 +69,11 @@ public sealed class Pipeline<T> : IEnumerable<T> where T : class
 
 			pipeline.Insert(at++, stage);
 		}
+	}
+
+	public void Insert(int at, T stage)
+	{
+		pipeline.Insert(at++, stage);
 	}
 
 	/// <summary>
@@ -84,7 +89,7 @@ public sealed class Pipeline<T> : IEnumerable<T> where T : class
 
 		for (var i = 0; i < pipeline.Count; i++)
 		{
-			if (pipeline[i] is StageType result)
+			if (pipeline[i] is StageType)
 			{
 				pipeline.Insert(i + 1, stage);
 				return;
@@ -128,7 +133,7 @@ public sealed class Pipeline<T> : IEnumerable<T> where T : class
 		{
 			if (pipeline[i] is StageType result)
 			{
-				AddAt(i + 1, stages);
+				Insert(i + 1, stages);
 				return;
 			}
 		}
@@ -169,7 +174,7 @@ public sealed class Pipeline<T> : IEnumerable<T> where T : class
 		{
 			if (pipeline[i] is StageType result)
 			{
-				AddAt(i, stages);
+				Insert(i, stages);
 				return;
 			}
 		}

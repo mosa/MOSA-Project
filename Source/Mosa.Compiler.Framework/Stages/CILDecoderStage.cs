@@ -1133,7 +1133,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 	#region Instruction Maps
 
-	protected BaseInstruction GetLoadInstruction(MosaType type)
+	private BaseInstruction GetLoadInstruction(MosaType type)
 	{
 		type = MosaTypeLayout.GetUnderlyingType(type);
 
@@ -1168,7 +1168,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		else if ((type.IsI || type.IsN) && Is64BitPlatform)
 			return IRInstruction.Load64;
 
-		throw new InvalidOperationException();
+		throw new InvalidCompilerOperationException();
 	}
 
 	#endregion Instruction Maps

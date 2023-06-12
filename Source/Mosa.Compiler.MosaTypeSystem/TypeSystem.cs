@@ -45,7 +45,7 @@ public class TypeSystem
 			{
 				var types = module?.Types.Values;
 				if (types == null)
-					throw new InvalidOperationException("Types list is null!");
+					throw new InvalidCompilerOperationException("Types list is null");
 
 				foreach (var type in types)
 				{

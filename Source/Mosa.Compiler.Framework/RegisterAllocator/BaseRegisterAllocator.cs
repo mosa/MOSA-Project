@@ -582,12 +582,12 @@ public abstract class BaseRegisterAllocator
 				var value = row[index];
 
 				if (blockStarts.Contains(s))
-					sb.Append("|");
+					sb.Append('|');
 
 				sb.Append(value);
 
 				if (blockEnds.Contains(s))
-					sb.Append("!");
+					sb.Append('!');
 
 				sb.Append('\t');
 			}

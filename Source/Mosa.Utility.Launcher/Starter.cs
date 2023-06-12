@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using Mosa.Compiler.Common.Configuration;
+using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Utility.Configuration;
@@ -144,7 +145,7 @@ public class Starter : BaseLauncher
 			"bochs" => LaunchBochs(false),
 			"vmware" => LaunchVMware(false),
 			"virtualbox" => LaunchVirtualBox(false),
-			_ => throw new InvalidOperationException()
+			_ => throw new InvalidCompilerOperationException()
 		};
 	}
 
@@ -195,29 +196,29 @@ public class Starter : BaseLauncher
 		switch (LauncherSettings.EmulatorSerial)
 		{
 			case "pipe":
-			{
-				arg.Append(" -serial pipe:");
-				arg.Append(LauncherSettings.EmulatorSerialPipe);
-				break;
-			}
+				{
+					arg.Append(" -serial pipe:");
+					arg.Append(LauncherSettings.EmulatorSerialPipe);
+					break;
+				}
 			case "tcpserver":
-			{
-				arg.Append(" -serial tcp:");
-				arg.Append(LauncherSettings.EmulatorSerialHost);
-				arg.Append(':');
-				arg.Append(LauncherSettings.EmulatorSerialPort);
-				arg.Append(",server,nowait");
-				break;
-			}
+				{
+					arg.Append(" -serial tcp:");
+					arg.Append(LauncherSettings.EmulatorSerialHost);
+					arg.Append(':');
+					arg.Append(LauncherSettings.EmulatorSerialPort);
+					arg.Append(",server,nowait");
+					break;
+				}
 			case "tcpclient":
-			{
-				arg.Append(" -serial tcp:");
-				arg.Append(LauncherSettings.EmulatorSerialHost);
-				arg.Append(':');
-				arg.Append(LauncherSettings.EmulatorSerialPort);
-				arg.Append(",client,nowait");
-				break;
-			}
+				{
+					arg.Append(" -serial tcp:");
+					arg.Append(LauncherSettings.EmulatorSerialHost);
+					arg.Append(':');
+					arg.Append(LauncherSettings.EmulatorSerialPort);
+					arg.Append(",client,nowait");
+					break;
+				}
 		}
 
 		if (LauncherSettings.EmulatorGDB)
@@ -229,17 +230,17 @@ public class Starter : BaseLauncher
 		switch (LauncherSettings.ImageFormat)
 		{
 			case "bin":
-			{
-				arg.Append(" -kernel ");
-				arg.Append(Quote(LauncherSettings.ImageFile));
-				break;
-			}
+				{
+					arg.Append(" -kernel ");
+					arg.Append(Quote(LauncherSettings.ImageFile));
+					break;
+				}
 			default:
-			{
-				arg.Append(" -hda ");
-				arg.Append(Quote(LauncherSettings.ImageFile));
-				break;
-			}
+				{
+					arg.Append(" -hda ");
+					arg.Append(Quote(LauncherSettings.ImageFile));
+					break;
+				}
 		}
 
 		if (LauncherSettings.ImageFirmware == "bios")
@@ -325,29 +326,29 @@ public class Starter : BaseLauncher
 		switch (LauncherSettings.EmulatorSerial)
 		{
 			case "pipe":
-			{
-				sb.Append("com2: enabled=1, mode=pipe-server, dev=\\\\.\\pipe\\");
-				sb.AppendLine(LauncherSettings.EmulatorSerialPipe);
-				break;
-			}
+				{
+					sb.Append("com2: enabled=1, mode=pipe-server, dev=\\\\.\\pipe\\");
+					sb.AppendLine(LauncherSettings.EmulatorSerialPipe);
+					break;
+				}
 			case "tcpserver":
-			{
-				sb.Append("com2: enabled=1, mode=socket-server, dev=");
-				sb.Append(LauncherSettings.EmulatorSerialHost);
-				sb.Append(':');
-				sb.Append(LauncherSettings.EmulatorSerialPort);
-				sb.AppendLine();
-				break;
-			}
+				{
+					sb.Append("com2: enabled=1, mode=socket-server, dev=");
+					sb.Append(LauncherSettings.EmulatorSerialHost);
+					sb.Append(':');
+					sb.Append(LauncherSettings.EmulatorSerialPort);
+					sb.AppendLine();
+					break;
+				}
 			case "tcpclient":
-			{
-				sb.Append("com2: enabled=1, mode=socket-client, dev=");
-				sb.Append(LauncherSettings.EmulatorSerialHost);
-				sb.Append(':');
-				sb.Append(LauncherSettings.EmulatorSerialPort);
-				sb.AppendLine();
-				break;
-			}
+				{
+					sb.Append("com2: enabled=1, mode=socket-client, dev=");
+					sb.Append(LauncherSettings.EmulatorSerialHost);
+					sb.Append(':');
+					sb.Append(LauncherSettings.EmulatorSerialPort);
+					sb.AppendLine();
+					break;
+				}
 		}
 
 		if (LauncherSettings.EmulatorGDB)

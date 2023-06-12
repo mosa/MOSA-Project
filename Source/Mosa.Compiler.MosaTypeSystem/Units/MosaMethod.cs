@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Mosa.Compiler.Common.Exceptions;
 
 namespace Mosa.Compiler.MosaTypeSystem;
 
@@ -207,7 +208,7 @@ public class MosaMethodFullNameComparer : IEqualityComparer<MosaMethod>
 	public int GetHashCode(MosaMethod obj)
 	{
 		if (obj.FullName == null)
-			throw new InvalidOperationException("Full name of method is null!");
+			throw new InvalidCompilerOperationException("Full name of method is null");
 
 		return obj.FullName.GetHashCode();
 	}

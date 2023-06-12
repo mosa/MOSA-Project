@@ -17,6 +17,7 @@ public static class CommandLineArguments
 
 			new Argument { Name = "-threading", Setting = "Compiler.Multithreading", Value = "true"},
 			new Argument { Name = "-threading-off", Setting = "Compiler.Multithreading", Value = "false"},
+			new Argument { Name = "-threads", Setting = "Compiler.Multithreading.MaxThreads" },
 			new Argument { Name = "-settings", Setting = "Settings", Value = null, IsList = true},
 
 			new Argument { Name = "-o", Setting = "Compiler.OutputFile"},
@@ -89,6 +90,8 @@ public static class CommandLineArguments
 
 			// Explorer:
 			new Argument { Name = "-filter", Setting = "Explorer.Filter", Value = null},
+			new Argument { Name = "-explorer-debug", Setting = "Explorer.DebugDiagnostic", Value = "true"},
+			new Argument { Name = "-autostart", Setting = "Explorer.Start", Value = "true"},
 
 			// Launcher:
 			new Argument { Name = "-autoexit", Setting = "Launcher.Exit", Value = "true"},

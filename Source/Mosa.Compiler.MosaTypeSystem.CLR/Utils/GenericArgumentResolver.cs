@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using dnlib.DotNet;
+using Mosa.Compiler.Common.Exceptions;
 
 namespace Mosa.Compiler.MosaTypeSystem.CLR.Utils;
 
@@ -123,7 +124,7 @@ internal class GenericArgumentResolver
 	private TypeSig ResolveGenericArgs(TypeSig typeSig)
 	{
 		if (!recursionCounter.Increment())
-			throw new InvalidOperationException("Could not increment recursion counter!");
+			throw new InvalidCompilerOperationException("Could not increment recursion counter!");
 
 		if (ReplaceGenericArg(ref typeSig))
 		{
@@ -148,7 +149,7 @@ internal class GenericArgumentResolver
 				var fnPtrSig = typeSig as FnPtrSig;
 
 				if (fnPtrSig?.Signature is null)
-					throw new InvalidOperationException("Function pointer signature is n*ull!");
+					throw new InvalidCompilerOperationException("Function pointer signature is null");
 
 				result = new FnPtrSig(fnPtrSig.Signature);
 				break;

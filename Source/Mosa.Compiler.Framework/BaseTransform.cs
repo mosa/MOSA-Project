@@ -2,6 +2,7 @@
 
 using System;
 using Mosa.Compiler.Common;
+using Mosa.Compiler.Common.Exceptions;
 
 namespace Mosa.Compiler.Framework;
 
@@ -962,7 +963,7 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 			ConditionCode.UnsignedGreaterOrEqual => a.ConstantUnsigned32 >= b.ConstantUnsigned32,
 			ConditionCode.UnsignedLess => a.ConstantUnsigned32 < b.ConstantUnsigned32,
 			ConditionCode.UnsignedLessOrEqual => a.ConstantUnsigned32 <= b.ConstantUnsigned32,
-			_ => throw new InvalidOperationException()
+			_ => throw new InvalidCompilerOperationException()
 		};
 	}
 
@@ -980,7 +981,7 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 			ConditionCode.UnsignedGreaterOrEqual => a.ConstantUnsigned64 >= b.ConstantUnsigned64,
 			ConditionCode.UnsignedLess => a.ConstantUnsigned64 < b.ConstantUnsigned64,
 			ConditionCode.UnsignedLessOrEqual => a.ConstantUnsigned64 <= b.ConstantUnsigned64,
-			_ => throw new InvalidOperationException()
+			_ => throw new InvalidCompilerOperationException()
 		};
 	}
 

@@ -546,10 +546,21 @@ public partial class MainForm : Form
 		//pipeline.InsertBefore<GreedyRegisterAllocatorStage>(new StopStage());
 		//pipeline.InsertBefore<EnterSSAStage>(new DominanceOutputStage());
 		//pipeline.InsertBefore<EnterSSAStage>(new GraphVizStage());
-
-		pipeline.Add(new GraphVizStage());
+		//pipeline.InsertAfterLast<IRTransformsStage>(new GraphVizStage());
 
 		//pipeline.InsertAfterFirst<ExceptionStage>(new StopStage());
+
+		if (EnableDebugDiagnostic.Checked)
+		{
+			for (int i = 1; i < pipeline.Count; i += 2)
+			{
+				pipeline.Insert(i, new GraphVizStage());
+			}
+		}
+		else
+		{
+			pipeline.Add(new GraphVizStage());
+		}
 	}
 
 	private List<string> GetCurrentDebugLines()
@@ -659,6 +670,11 @@ public partial class MainForm : Form
 			UpdateSettings(filename);
 
 			LoadAssembly();
+
+			if (Settings.GetValue("Explorer.Start", false))
+			{
+				CompileAll();
+			}
 		}
 	}
 
@@ -764,21 +780,26 @@ public partial class MainForm : Form
 
 	private void OnCompileCompleted() => Invoke((MethodInvoker)(() => CompileCompleted()));
 
-	private void OpenFile()
+	private void OpenFileWithDialog()
 	{
 		if (openFileDialog.ShowDialog() == DialogResult.OK)
 		{
-			UpdateSettings();
-
-			UpdateSettings(openFileDialog.FileName);
-
-			LoadAssembly();
+			OpenFile();
 		}
+	}
+
+	private void OpenFile()
+	{
+		UpdateSettings();
+
+		UpdateSettings(openFileDialog.FileName);
+
+		LoadAssembly();
 	}
 
 	private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
 	{
-		OpenFile();
+		OpenFileWithDialog();
 	}
 
 	private void QuitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -968,7 +989,7 @@ public partial class MainForm : Form
 
 	private void ToolStripButton1_Click(object sender, EventArgs e)
 	{
-		OpenFile();
+		OpenFileWithDialog();
 	}
 
 	private void ToolStripButton4_Click(object sender, EventArgs e)
@@ -1064,9 +1085,10 @@ public partial class MainForm : Form
 		cbEnableBitTracker.Checked = Settings.GetValue("Optimizations.BitTracker", cbEnableBitTracker.Checked);
 		cbEnableBinaryCodeGeneration.Checked = Settings.GetValue("Compiler.Binary", cbEnableBinaryCodeGeneration.Checked);
 		cbEnableMethodScanner.Checked = Settings.GetValue("Compiler.MethodScanner", cbEnableMethodScanner.Checked);
-		CBEnableMultithreading.Checked = Settings.GetValue("Compiler.Multithreading", CBEnableMultithreading.Checked);
+		cbEnableMultithreading.Checked = Settings.GetValue("Compiler.Multithreading", cbEnableMultithreading.Checked);
 
 		tbFilter.Text = Settings.GetValue("Explorer.Filter", tbFilter.Text);
+		EnableDebugDiagnostic.Checked = Settings.GetValue("Explorer.DebugDiagnostic", false);
 
 		var platform = Settings.GetValue("Compiler.Platform") ?? "x86";
 
@@ -1174,7 +1196,7 @@ public partial class MainForm : Form
 		Settings.SetValue("Compiler.Binary", cbEnableBinaryCodeGeneration.Checked);
 		Settings.SetValue("Compiler.TraceLevel", 10);
 		Settings.SetValue("Compiler.Platform", cbPlatform.Text);
-		Settings.SetValue("Compiler.Multithreading", CBEnableMultithreading.Checked);
+		Settings.SetValue("Compiler.Multithreading", cbEnableMultithreading.Checked);
 		Settings.SetValue("Optimizations.SSA", cbEnableSSA.Checked);
 		Settings.SetValue("Optimizations.Basic", cbEnableBasicOptimizations.Checked);
 		Settings.SetValue("Optimizations.ValueNumbering", cbEnableValueNumbering.Checked);
@@ -1277,5 +1299,13 @@ public partial class MainForm : Form
 	{
 		UpdateInstructions();
 		UpdateTransforms();
+	}
+
+	private void tsbRefresh_Click(object sender, EventArgs e)
+	{
+		if (File.Exists(openFileDialog.FileName))
+		{
+			OpenFile();
+		}
 	}
 }

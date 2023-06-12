@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using dnlib.DotNet;
+using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.MosaTypeSystem.CLR.Utils;
 
 namespace Mosa.Compiler.MosaTypeSystem.CLR.Dnlib;
@@ -95,22 +96,22 @@ internal static class DnlibExtension
 
 	public static TypeSig GetTypeSig(this MosaType type)
 	{
-		return type.GetUnderlyingObject<UnitDesc<TypeDef, TypeSig>>()?.Signature ?? throw new InvalidOperationException("Type signature is null!");
+		return type.GetUnderlyingObject<UnitDesc<TypeDef, TypeSig>>()?.Signature ?? throw new InvalidCompilerOperationException("Type signature is null!");
 	}
 
 	public static MethodSig GetMethodSig(this MosaMethod method)
 	{
-		return method.GetUnderlyingObject<UnitDesc<MethodDef, MethodSig>>()?.Signature ?? throw new InvalidOperationException("Method signature is null!");
+		return method.GetUnderlyingObject<UnitDesc<MethodDef, MethodSig>>()?.Signature ?? throw new InvalidCompilerOperationException("Method signature is null!");
 	}
 
 	public static FieldSig GetFieldSig(this MosaField field)
 	{
-		return field.GetUnderlyingObject<UnitDesc<FieldDef, FieldSig>>()?.Signature ?? throw new InvalidOperationException("Field signature is null!");
+		return field.GetUnderlyingObject<UnitDesc<FieldDef, FieldSig>>()?.Signature ?? throw new InvalidCompilerOperationException("Field signature is null!");
 	}
 
 	public static PropertySig GetPropertySig(this MosaProperty property)
 	{
-		return property.GetUnderlyingObject<UnitDesc<PropertyDef, PropertySig>>()?.Signature ?? throw new InvalidOperationException("Property signature is null!");
+		return property.GetUnderlyingObject<UnitDesc<PropertyDef, PropertySig>>()?.Signature ?? throw new InvalidCompilerOperationException("Property signature is null!");
 	}
 
 	public static IList<TypeSig> GetGenericArguments(this IReadOnlyList<MosaType> types)
@@ -121,7 +122,7 @@ internal static class DnlibExtension
 		{
 			var typeSig = type.GetTypeSig();
 			if (typeSig == null)
-				throw new InvalidOperationException("Type signature of type is null!");
+				throw new InvalidCompilerOperationException("Type signature of type is null!");
 
 			result.Add(typeSig);
 		}
@@ -137,7 +138,7 @@ internal static class DnlibExtension
 		{
 			var typeSig = type.GetTypeSig();
 			if (typeSig == null)
-				throw new InvalidOperationException("Type signature of type is null!");
+				throw new InvalidCompilerOperationException("Type signature of type is null!");
 
 			result.Add(typeSig);
 		}
