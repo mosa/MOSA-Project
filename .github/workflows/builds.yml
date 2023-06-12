@@ -289,6 +289,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: linux-build
     steps:
+      - name: Set net7.0
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'
       - name: Checkout
         uses: actions/checkout@v3
         with:
@@ -306,6 +310,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: linux-build
     steps:
+      - name: Set net7.0
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'
       - name: Checkout
         uses: actions/checkout@v3
         with:
@@ -323,6 +331,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: linux-build
     steps:
+      - name: Set net7.0
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'
       - name: Checkout
         uses: actions/checkout@v3
         with:
@@ -340,6 +352,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: linux-build
     steps:
+      - name: Set net7.0
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'
       - name: Checkout
         uses: actions/checkout@v3
         with:
@@ -357,6 +373,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: linux-build
     steps:
+      - name: Set net7.0
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'
       - name: Checkout
         uses: actions/checkout@v3
         with:
@@ -374,6 +394,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: linux-build
     steps:
+      - name: Set net7.0
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'
       - name: Checkout
         uses: actions/checkout@v3
         with:
@@ -391,6 +415,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: linux-build
     steps:
+      - name: Set net7.0
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'
       - name: Checkout
         uses: actions/checkout@v3
         with:
@@ -408,6 +436,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: linux-build
     steps:
+      - name: Set net7.0
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'
       - name: Checkout
         uses: actions/checkout@v3
         with:
@@ -425,6 +457,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: linux-build
     steps:
+      - name: Set net7.0
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'
       - name: Checkout
         uses: actions/checkout@v3
         with:
@@ -442,6 +478,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: linux-build
     steps:
+      - name: Set net7.0
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'
       - name: Checkout
         uses: actions/checkout@v3
         with:
