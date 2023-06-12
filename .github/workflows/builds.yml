@@ -302,6 +302,10 @@ jobs:
         with:
           name: linux-build-artifact
           path: bin
+      - name: Update Package Respository
+        run: sudo apt-get -y -o Acquire::Check-Valid-Until=false update
+      - name: Install Qemu and Dependencies
+        run: sudo apt-get install -y qemu qemu-system qemu-system-x86 libsdl2-image-2.0-0 libvirglrenderer1 libpixman-1-0 libepoxy0 libdw1 libpng16-16 zlib1g libjpeg8 libudev1 libusb-1.0-0 liblzo2-2 libgio-cil libglib2.0-0 libzstd1 libncursesw6 libgbm1 libgtk-3-0 libgdk3.0-cil libcairo2 libgdk-pixbuf-2.0-0 libx11-6 libasound2 libpulse0 libsndio7.0 libbz2-1.0 libc6 libgcc-s1 
       - name: Unit Testing  
         run: dotnet bin/Mosa.Utility.UnitTests.dll -oMax -display-off
 
@@ -323,6 +327,10 @@ jobs:
         with:
           name: linux-build-artifact
           path: bin
+      - name: Update Package Respository
+        run: sudo apt-get -y -o Acquire::Check-Valid-Until=false update
+      - name: Install Qemu and Dependencies
+        run: sudo apt-get install -y qemu qemu-system qemu-system-x86 libsdl2-image-2.0-0 libvirglrenderer1 libpixman-1-0 libepoxy0 libdw1 libpng16-16 zlib1g libjpeg8 libudev1 libusb-1.0-0 liblzo2-2 libgio-cil libglib2.0-0 libzstd1 libncursesw6 libgbm1 libgtk-3-0 libgdk3.0-cil libcairo2 libgdk-pixbuf-2.0-0 libx11-6 libasound2 libpulse0 libsndio7.0 libbz2-1.0 libc6 libgcc-s1 
       - name: Unit Testing
         run: dotnet bin/Mosa.Utility.UnitTests.dll -oNone -display-off
         
@@ -344,6 +352,10 @@ jobs:
         with:
           name: linux-build-artifact
           path: bin
+      - name: Update Package Respository
+        run: sudo apt-get -y -o Acquire::Check-Valid-Until=false update
+      - name: Install Qemu and Dependencies
+        run: sudo apt-get install -y qemu qemu-system qemu-system-x86 libsdl2-image-2.0-0 libvirglrenderer1 libpixman-1-0 libepoxy0 libdw1 libpng16-16 zlib1g libjpeg8 libudev1 libusb-1.0-0 liblzo2-2 libgio-cil libglib2.0-0 libzstd1 libncursesw6 libgbm1 libgtk-3-0 libgdk3.0-cil libcairo2 libgdk-pixbuf-2.0-0 libx11-6 libasound2 libpulse0 libsndio7.0 libbz2-1.0 libc6 libgcc-s1 
       - name: Unit Testing
         run: dotnet bin/Mosa.Utility.UnitTests.dll -o1 -display-off
 
@@ -365,6 +377,10 @@ jobs:
         with:
           name: linux-build-artifact
           path: bin
+      - name: Update Package Respository
+        run: sudo apt-get -y -o Acquire::Check-Valid-Until=false update
+      - name: Install Qemu and Dependencies
+        run: sudo apt-get install -y qemu qemu-system qemu-system-x86 libsdl2-image-2.0-0 libvirglrenderer1 libpixman-1-0 libepoxy0 libdw1 libpng16-16 zlib1g libjpeg8 libudev1 libusb-1.0-0 liblzo2-2 libgio-cil libglib2.0-0 libzstd1 libncursesw6 libgbm1 libgtk-3-0 libgdk3.0-cil libcairo2 libgdk-pixbuf-2.0-0 libx11-6 libasound2 libpulse0 libsndio7.0 libbz2-1.0 libc6 libgcc-s1 
       - name: Unit Testing
         run: dotnet bin/Mosa.Utility.UnitTests.dll -o2 -display-off
 
@@ -386,6 +402,10 @@ jobs:
         with:
           name: linux-build-artifact
           path: bin
+      - name: Update Package Respository
+        run: sudo apt-get -y -o Acquire::Check-Valid-Until=false update
+      - name: Install Qemu and Dependencies
+        run: sudo apt-get install -y qemu qemu-system qemu-system-x86 libsdl2-image-2.0-0 libvirglrenderer1 libpixman-1-0 libepoxy0 libdw1 libpng16-16 zlib1g libjpeg8 libudev1 libusb-1.0-0 liblzo2-2 libgio-cil libglib2.0-0 libzstd1 libncursesw6 libgbm1 libgtk-3-0 libgdk3.0-cil libcairo2 libgdk-pixbuf-2.0-0 libx11-6 libasound2 libpulse0 libsndio7.0 libbz2-1.0 libc6 libgcc-s1 
       - name: Unit Testing
         run: dotnet bin/Mosa.Utility.UnitTests.dll -o3 -display-off
 
@@ -407,6 +427,10 @@ jobs:
         with:
           name: linux-build-artifact
           path: bin
+      - name: Update Package Respository
+        run: sudo apt-get -y -o Acquire::Check-Valid-Until=false update
+      - name: Install Qemu and Dependencies
+        run: sudo apt-get install -y qemu qemu-system qemu-system-x86 libsdl2-image-2.0-0 libvirglrenderer1 libpixman-1-0 libepoxy0 libdw1 libpng16-16 zlib1g libjpeg8 libudev1 libusb-1.0-0 liblzo2-2 libgio-cil libglib2.0-0 libzstd1 libncursesw6 libgbm1 libgtk-3-0 libgdk3.0-cil libcairo2 libgdk-pixbuf-2.0-0 libx11-6 libasound2 libpulse0 libsndio7.0 libbz2-1.0 libc6 libgcc-s1 
       - name: Unit Testing
         run: dotnet bin/Mosa.Utility.UnitTests.dll -o4 -display-off
 
@@ -428,6 +452,10 @@ jobs:
         with:
           name: linux-build-artifact
           path: bin
+      - name: Update Package Respository
+        run: sudo apt-get -y -o Acquire::Check-Valid-Until=false update
+      - name: Install Qemu and Dependencies
+        run: sudo apt-get install -y qemu qemu-system qemu-system-x86 libsdl2-image-2.0-0 libvirglrenderer1 libpixman-1-0 libepoxy0 libdw1 libpng16-16 zlib1g libjpeg8 libudev1 libusb-1.0-0 liblzo2-2 libgio-cil libglib2.0-0 libzstd1 libncursesw6 libgbm1 libgtk-3-0 libgdk3.0-cil libcairo2 libgdk-pixbuf-2.0-0 libx11-6 libasound2 libpulse0 libsndio7.0 libbz2-1.0 libc6 libgcc-s1 
       - name: Unit Testing
         run: dotnet bin/Mosa.Utility.UnitTests.dll -o5 -display-off
 
@@ -449,6 +477,10 @@ jobs:
         with:
           name: linux-build-artifact
           path: bin
+      - name: Update Package Respository
+        run: sudo apt-get -y -o Acquire::Check-Valid-Until=false update
+      - name: Install Qemu and Dependencies
+        run: sudo apt-get install -y qemu qemu-system qemu-system-x86 libsdl2-image-2.0-0 libvirglrenderer1 libpixman-1-0 libepoxy0 libdw1 libpng16-16 zlib1g libjpeg8 libudev1 libusb-1.0-0 liblzo2-2 libgio-cil libglib2.0-0 libzstd1 libncursesw6 libgbm1 libgtk-3-0 libgdk3.0-cil libcairo2 libgdk-pixbuf-2.0-0 libx11-6 libasound2 libpulse0 libsndio7.0 libbz2-1.0 libc6 libgcc-s1 
       - name: Unit Testing
         run: dotnet bin/Mosa.Utility.UnitTests.dll -o6 -display-off
 
@@ -470,6 +502,10 @@ jobs:
         with:
           name: linux-build-artifact
           path: bin
+      - name: Update Package Respository
+        run: sudo apt-get -y -o Acquire::Check-Valid-Until=false update
+      - name: Install Qemu and Dependencies
+        run: sudo apt-get install -y qemu qemu-system qemu-system-x86 libsdl2-image-2.0-0 libvirglrenderer1 libpixman-1-0 libepoxy0 libdw1 libpng16-16 zlib1g libjpeg8 libudev1 libusb-1.0-0 liblzo2-2 libgio-cil libglib2.0-0 libzstd1 libncursesw6 libgbm1 libgtk-3-0 libgdk3.0-cil libcairo2 libgdk-pixbuf-2.0-0 libx11-6 libasound2 libpulse0 libsndio7.0 libbz2-1.0 libc6 libgcc-s1 
       - name: Unit Testing
         run: dotnet bin/Mosa.Utility.UnitTests.dll -o7 -display-off
 
@@ -491,5 +527,9 @@ jobs:
         with:
           name: linux-build-artifact
           path: bin
+      - name: Update Package Respository
+        run: sudo apt-get -y -o Acquire::Check-Valid-Until=false update
+      - name: Install Qemu and Dependencies
+        run: sudo apt-get install -y qemu qemu-system qemu-system-x86 libsdl2-image-2.0-0 libvirglrenderer1 libpixman-1-0 libepoxy0 libdw1 libpng16-16 zlib1g libjpeg8 libudev1 libusb-1.0-0 liblzo2-2 libgio-cil libglib2.0-0 libzstd1 libncursesw6 libgbm1 libgtk-3-0 libgdk3.0-cil libcairo2 libgdk-pixbuf-2.0-0 libx11-6 libasound2 libpulse0 libsndio7.0 libbz2-1.0 libc6 libgcc-s1 
       - name: Unit Testing
         run: dotnet bin/Mosa.Utility.UnitTests.dll -o8 -display-off
