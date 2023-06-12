@@ -5,8 +5,7 @@ on:
   pull_request:
 
 env:
-  VERSION: 2.4.0
-  BUILD_VERSION: ${{ env.VERSION }}.${{ github.run_number }}
+  BUILD_VERSION: 2.4.0.${{ github.run_number }}
 
 jobs:
 
