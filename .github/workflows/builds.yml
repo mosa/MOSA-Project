@@ -58,38 +58,17 @@ jobs:
         run: nuget pack Source\Mosa.Packages\Mosa.Platform.x64.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ github.run_number }}
       - name: Create Package - Mosa.Kernel.x64
         run: nuget pack Source\Mosa.Packages\Mosa.Kernel.x64.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ github.run_number }}
-      - name: Create Nuget Packages Artifact
-        uses: actions/upload-artifact@master
+      - name: Store Nuget Packages Artifact
+        uses: actions/upload-artifact@v3
         with:
           name: Nuget Packages
           path: bin\nupkg
-
-  linux-build:
-    name: Linux Build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Set net7.0
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '7.0.x'
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          submodules: recursive
-      - name: Restore nuget Packages
-        run: dotnet restore Source/Mosa.Linux.sln
-      - name: Build
-        run: dotnet build Source/Mosa.Linux.sln
-      - name: Store Build Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: linux-build-artifact
-          path: bin
-
-  windows-build-final:
-    name: Windows Build
+          
+  windows-build-packaging:
+    name: Windows Build Packaging
     needs: [windows-build, linux-build, generate-docs, windows-unit-testing-o0, windows-unit-testing-o1, windows-unit-testing-o2, windows-unit-testing-o3, windows-unit-testing-o4, windows-unit-testing-o5, windows-unit-testing-o6, windows-unit-testing-o7, windows-unit-testing-o8, windows-unit-testing-o9, linux-unit-testing-o0, linux-unit-testing-o1, linux-unit-testing-o2, linux-unit-testing-o3, linux-unit-testing-o4, linux-unit-testing-o5, linux-unit-testing-o6, linux-unit-testing-o7, linux-unit-testing-o8, linux-unit-testing-o9 ]
     runs-on: windows-latest
+    if: github.event_name == 'push' && github.repository == 'mosa/MOSA-Project' && github.ref == 'refs/heads/master'
     env:
       BUILD_VERSION: 2.4.0
       NUGET_ENABLE_LEGACY_CSPROJ_PACK: true
@@ -106,12 +85,56 @@ jobs:
         uses: actions/checkout@v3
         with:
           submodules: recursive
-      - name: Download Build Artifact
+      - name: Download Nuget Packages Artifact
         uses: actions/download-artifact@v3
         with:
-          name: windows-build-artifact
+          name: Nuget Packages
+          path: bin\nupkg
+      - name: Publish Package - Mosa.Templates
+        run: dotnet nuget push bin\nupkg\Mosa.Templates.${{ env.BUILD_VERSION }}.${{ github.run_number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
+      - name: Publish Package - Mosa.Tools.Package
+        run: dotnet nuget push bin\nupkg\Mosa.Tools.Package.${{ env.BUILD_VERSION }}.${{ github.run_number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
+      - name: Publish Package - Mosa.Korlib
+        run: dotnet nuget push bin\nupkg\Mosa.Korlib.${{ env.BUILD_VERSION }}.${{ github.run_number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
+      - name: Publish Package - Mosa.DeviceSystem
+        run: dotnet nuget push bin\nupkg\Mosa.DeviceSystem.${{ env.BUILD_VERSION }}.${{ github.run_number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
+      - name: Publish Package - Mosa.Runtime
+        run: dotnet nuget push bin\nupkg\Mosa.Runtime.${{ env.BUILD_VERSION }}.${{ github.run_number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
+      - name: Publish Package - Mosa.Platform.x86
+        run: dotnet nuget push bin\nupkg\Mosa.Platform.x86.${{ env.BUILD_VERSION }}.${{ github.run_number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
+      - name: Publish Package - Mosa.Kernel.x86
+        run: dotnet nuget push bin\nupkg\Mosa.Kernel.x86.${{ env.BUILD_VERSION }}.${{ github.run_number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
+      - name: Publish Package - Mosa.Platform.x64
+        run: dotnet nuget push bin\nupkg\Mosa.Platform.x64.${{ env.BUILD_VERSION }}.${{ github.run_number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
+      - name: Publish Package - Mosa.Kernel.x64
+        run: dotnet nuget push bin\nupkg\Mosa.Kernel.x64.${{ env.BUILD_VERSION }}.${{ github.run_number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
+
+  linux-build:
+    name: Linux Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set net7.0
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'
+      - name: View Build Version
+        run: echo ${{ env.BUILD_VERSION }}.${{ github.run_number }}
+      - name: View Github Info
+        run: echo repository=${{ github.repository }} event_name=${{ github.event_name }} ref=${{ github.ref }} head_ref=${{ github.head_ref }} base_ref=${{ github.base_ref }}
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Restore nuget Packages
+        run: dotnet restore Source/Mosa.Linux.sln
+      - name: Build
+        run: dotnet build Source/Mosa.Linux.sln
+      - name: Store Build Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: linux-build-artifact
           path: bin
-          
+         
   generate-docs:
     name: Generate documentation
     runs-on: ubuntu-latest
