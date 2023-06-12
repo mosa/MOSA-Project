@@ -302,8 +302,8 @@ jobs:
         with:
           name: linux-build-artifact
           path: bin
-      - name: Unit Testing
-        run: dotnet bin/Mosa.Utility.UnitTests.exe -oMax -display-off
+      - name: Unit Testing  
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -oMax -display-off
 
   linux-unit-testing-oNone:
     name: Linux - Unit Testing -oNone
@@ -324,8 +324,8 @@ jobs:
           name: linux-build-artifact
           path: bin
       - name: Unit Testing
-        run: dotnet bin/Mosa.Utility.UnitTests.exe -oNone -display-off
-
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -oNone -display-off
+        
   linux-unit-testing-o1:
     name: Linux - Unit Testing -o1
     runs-on: ubuntu-latest
@@ -345,7 +345,7 @@ jobs:
           name: linux-build-artifact
           path: bin
       - name: Unit Testing
-        run: dotnet bin/Mosa.Utility.UnitTests.exe -o1 -display-off
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -o1 -display-off
 
   linux-unit-testing-o2:
     name: Linux - Unit Testing -o2
@@ -366,7 +366,7 @@ jobs:
           name: linux-build-artifact
           path: bin
       - name: Unit Testing
-        run: dotnet bin/Mosa.Utility.UnitTests.exe -o2 -display-off
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -o2 -display-off
 
   linux-unit-testing-o3:
     name: Linux - Unit Testing -o3
@@ -387,7 +387,7 @@ jobs:
           name: linux-build-artifact
           path: bin
       - name: Unit Testing
-        run: dotnet bin/Mosa.Utility.UnitTests.exe -o3 -display-off
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -o3 -display-off
 
   linux-unit-testing-o4:
     name: Linux - Unit Testing -o4
@@ -408,7 +408,7 @@ jobs:
           name: linux-build-artifact
           path: bin
       - name: Unit Testing
-        run: dotnet bin/Mosa.Utility.UnitTests.exe -o4 -display-off
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -o4 -display-off
 
   linux-unit-testing-o5:
     name: Linux - Unit Testing -o5
@@ -429,7 +429,7 @@ jobs:
           name: linux-build-artifact
           path: bin
       - name: Unit Testing
-        run: dotnet bin/Mosa.Utility.UnitTests.exe -o5 -display-off
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -o5 -display-off
 
   linux-unit-testing-o6:
     name: Linux - Unit Testing -o6
@@ -450,7 +450,7 @@ jobs:
           name: linux-build-artifact
           path: bin
       - name: Unit Testing
-        run: dotnet bin/Mosa.Utility.UnitTests.exe -o6 -display-off
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -o6 -display-off
 
   linux-unit-testing-o7:
     name: Linux - Unit Testing -o7
@@ -471,7 +471,7 @@ jobs:
           name: linux-build-artifact
           path: bin
       - name: Unit Testing
-        run: dotnet bin/Mosa.Utility.UnitTests.exe -o7 -display-off
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -o7 -display-off
 
   linux-unit-testing-o8:
     name: Linux - Unit Testing -o8
@@ -492,4 +492,4 @@ jobs:
           name: linux-build-artifact
           path: bin
       - name: Unit Testing
-        run: dotnet bin/Mosa.Utility.UnitTests.exe -o8 -display-off
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -o8 -display-off
