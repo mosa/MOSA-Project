@@ -115,7 +115,7 @@ jobs:
           path: docs-${{ env.BUILD_VERSION }}.${{ github.run_number }}.zip
 
   windows-unit-testing-oMax:
-    name: Windows Testing -oMax
+    name: Windows - Unit Testing -oMax
     runs-on: windows-latest
     needs: windows-build
     steps:
@@ -132,7 +132,7 @@ jobs:
         run: bin\Mosa.Utility.UnitTests.exe -oMax -display-off
 
   windows-unit-testing-oNone:
-    name: Win Testing -oNone
+    name: Windows - Unit Testing -oNone
     runs-on: windows-latest
     needs: windows-build
     steps:
@@ -149,7 +149,7 @@ jobs:
         run: bin\Mosa.Utility.UnitTests.exe -oNone -display-off
 
   windows-unit-testing-o1:
-    name: Win Testing -o1
+    name: Windows - Unit Testing -o1
     runs-on: windows-latest
     needs: windows-build
     steps:
@@ -166,7 +166,7 @@ jobs:
         run: bin\Mosa.Utility.UnitTests.exe -o1 -display-off
 
   windows-unit-testing-o2:
-    name: Win Testing -o2
+    name: Windows - Unit Testing -o2
     runs-on: windows-latest
     needs: windows-build
     steps:
@@ -183,7 +183,7 @@ jobs:
         run: bin\Mosa.Utility.UnitTests.exe -o2 -display-off
 
   windows-unit-testing-o3:
-    name: Win Testing -o3
+    name: Windows - Unit Testing -o3
     runs-on: windows-latest
     needs: windows-build
     steps:
@@ -200,7 +200,7 @@ jobs:
         run: bin\Mosa.Utility.UnitTests.exe -o3 -display-off
 
   windows-unit-testing-o4:
-    name: Win Testing -o4
+    name: Windows - Unit Testing -o4
     runs-on: windows-latest
     needs: windows-build
     steps:
@@ -217,7 +217,7 @@ jobs:
         run: bin\Mosa.Utility.UnitTests.exe -o4 -display-off
 
   windows-unit-testing-o5:
-    name: Win Testing -o5
+    name: Windows - Unit Testing -o5
     runs-on: windows-latest
     needs: windows-build
     steps:
@@ -234,7 +234,7 @@ jobs:
         run: bin\Mosa.Utility.UnitTests.exe -o5 -display-off
 
   windows-unit-testing-o6:
-    name: Win Testing -o6
+    name: Windows - Unit Testing -o6
     runs-on: windows-latest
     needs: windows-build
     steps:
@@ -251,7 +251,7 @@ jobs:
         run: bin\Mosa.Utility.UnitTests.exe -o6 -display-off
 
   windows-unit-testing-o7:
-    name: Win Testing -o7
+    name: Windows - Unit Testing -o7
     runs-on: windows-latest
     needs: windows-build
     steps:
@@ -268,7 +268,7 @@ jobs:
         run: bin\Mosa.Utility.UnitTests.exe -o7 -display-off
 
   windows-unit-testing-o8:
-    name: Win Testing -o8
+    name: Windows - Unit Testing -o8
     runs-on: windows-latest
     needs: windows-build
     steps:
@@ -285,7 +285,7 @@ jobs:
         run: bin\Mosa.Utility.UnitTests.exe -o8 -display-off
 
   linux-unit-testing-oMax:
-    name: Linux Testing -oMax
+    name: Linux - Unit Testing -oMax
     runs-on: ubuntu-latest
     needs: linux-build
     steps:
@@ -299,10 +299,10 @@ jobs:
           name: linux-build-artifact
           path: bin
       - name: Unit Testing
-        run: bin/Mosa.Utility.UnitTests.exe -oMax -display-off
+        run: dotnet bin/Mosa.Utility.UnitTests.exe -oMax -display-off
 
   linux-unit-testing-oNone:
-    name: Linux Testing -oNone
+    name: Linux - Unit Testing -oNone
     runs-on: ubuntu-latest
     needs: linux-build
     steps:
@@ -316,10 +316,10 @@ jobs:
           name: linux-build-artifact
           path: bin
       - name: Unit Testing
-        run: bin/Mosa.Utility.UnitTests.exe -oNone -display-off
+        run: dotnet bin/Mosa.Utility.UnitTests.exe -oNone -display-off
 
   linux-unit-testing-o1:
-    name: Linux Testing -o1
+    name: Linux - Unit Testing -o1
     runs-on: ubuntu-latest
     needs: linux-build
     steps:
@@ -333,10 +333,10 @@ jobs:
           name: linux-build-artifact
           path: bin
       - name: Unit Testing
-        run: bin/Mosa.Utility.UnitTests.exe -o1 -display-off
+        run: dotnet bin/Mosa.Utility.UnitTests.exe -o1 -display-off
 
   linux-unit-testing-o2:
-    name: Linux Testing -o2
+    name: Linux - Unit Testing -o2
     runs-on: ubuntu-latest
     needs: linux-build
     steps:
@@ -350,10 +350,10 @@ jobs:
           name: linux-build-artifact
           path: bin
       - name: Unit Testing
-        run: bin/Mosa.Utility.UnitTests.exe -o2 -display-off
+        run: dotnet bin/Mosa.Utility.UnitTests.exe -o2 -display-off
 
   linux-unit-testing-o3:
-    name: Linux Testing -o3
+    name: Linux - Unit Testing -o3
     runs-on: ubuntu-latest
     needs: linux-build
     steps:
@@ -367,10 +367,10 @@ jobs:
           name: linux-build-artifact
           path: bin
       - name: Unit Testing
-        run: bin/Mosa.Utility.UnitTests.exe -o3 -display-off
+        run: dotnet bin/Mosa.Utility.UnitTests.exe -o3 -display-off
 
   linux-unit-testing-o4:
-    name: Linux Testing -o4
+    name: Linux - Unit Testing -o4
     runs-on: ubuntu-latest
     needs: linux-build
     steps:
@@ -384,10 +384,10 @@ jobs:
           name: linux-build-artifact
           path: bin
       - name: Unit Testing
-        run: bin/Mosa.Utility.UnitTests.exe -o4 -display-off
+        run: dotnet bin/Mosa.Utility.UnitTests.exe -o4 -display-off
 
   linux-unit-testing-o5:
-    name: Linux Testing -o5
+    name: Linux - Unit Testing -o5
     runs-on: ubuntu-latest
     needs: linux-build
     steps:
@@ -401,10 +401,10 @@ jobs:
           name: linux-build-artifact
           path: bin
       - name: Unit Testing
-        run: bin/Mosa.Utility.UnitTests.exe -o5 -display-off
+        run: dotnet bin/Mosa.Utility.UnitTests.exe -o5 -display-off
 
   linux-unit-testing-o6:
-    name: Linux Testing -o6
+    name: Linux - Unit Testing -o6
     runs-on: ubuntu-latest
     needs: linux-build
     steps:
@@ -418,10 +418,10 @@ jobs:
           name: linux-build-artifact
           path: bin
       - name: Unit Testing
-        run: bin/Mosa.Utility.UnitTests.exe -o6 -display-off
+        run: dotnet bin/Mosa.Utility.UnitTests.exe -o6 -display-off
 
   linux-unit-testing-o7:
-    name: Linux Testing -o7
+    name: Linux - Unit Testing -o7
     runs-on: ubuntu-latest
     needs: linux-build
     steps:
@@ -435,10 +435,10 @@ jobs:
           name: linux-build-artifact
           path: bin
       - name: Unit Testing
-        run: bin/Mosa.Utility.UnitTests.exe -o7 -display-off
+        run: dotnet bin/Mosa.Utility.UnitTests.exe -o7 -display-off
 
   linux-unit-testing-o8:
-    name: Linux Testing -o8
+    name: Linux - Unit Testing -o8
     runs-on: ubuntu-latest
     needs: linux-build
     steps:
@@ -452,4 +452,4 @@ jobs:
           name: linux-build-artifact
           path: bin
       - name: Unit Testing
-        run: bin/Mosa.Utility.UnitTests.exe -o8 -display-off
+        run: dotnet bin/Mosa.Utility.UnitTests.exe -o8 -display-off
