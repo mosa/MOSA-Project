@@ -4,13 +4,15 @@ on:
   push:
   pull_request:
 
+env:
+  BUILD_VERSION: 2.4.0
+
 jobs:
 
   windows-build:
     name: Windows Build
     runs-on: windows-latest
     env:
-      BUILD_VERSION: 2.4.0
       NUGET_ENABLE_LEGACY_CSPROJ_PACK: true
     steps:
       - name: Set net7.0
@@ -70,7 +72,6 @@ jobs:
     runs-on: windows-latest
     if: github.event_name == 'push' && github.repository == 'mosa/MOSA-Project' && github.ref == 'refs/heads/master'
     env:
-      BUILD_VERSION: 2.4.0
       NUGET_ENABLE_LEGACY_CSPROJ_PACK: true
     steps:
       - name: Set net7.0
