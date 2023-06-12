@@ -85,6 +85,32 @@ jobs:
         with:
           name: linux-build-artifact
           path: bin
+
+  windows-build-final:
+    name: Windows Build
+    needs: [windows-build, linux-build, generate-docs, windows-unit-testing-o0, windows-unit-testing-o1, windows-unit-testing-o2, windows-unit-testing-o3, windows-unit-testing-o4, windows-unit-testing-o5, windows-unit-testing-o6, windows-unit-testing-o7, windows-unit-testing-o8, windows-unit-testing-o9, linux-unit-testing-o0, linux-unit-testing-o1, linux-unit-testing-o2, linux-unit-testing-o3, linux-unit-testing-o4, linux-unit-testing-o5, linux-unit-testing-o6, linux-unit-testing-o7, linux-unit-testing-o8, linux-unit-testing-o9 ]
+    runs-on: windows-latest
+    env:
+      BUILD_VERSION: 2.4.0
+      NUGET_ENABLE_LEGACY_CSPROJ_PACK: true
+    steps:
+      - name: Set net7.0
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'
+      - name: View Build Version
+        run: echo ${{ env.BUILD_VERSION }}.${{ github.run_number }}
+      - name: View Github Info
+        run: echo repository=${{ github.repository }} event_name=${{ github.event_name }} ref=${{ github.ref }} head_ref=${{ github.head_ref }} base_ref=${{ github.base_ref }}
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: windows-build-artifact
+          path: bin
           
   generate-docs:
     name: Generate documentation
@@ -114,8 +140,8 @@ jobs:
           name: docs-${{ env.BUILD_VERSION }}.${{ github.run_number }}.zip
           path: docs-${{ env.BUILD_VERSION }}.${{ github.run_number }}.zip
 
-  windows-unit-testing-oMax:
-    name: Windows - Unit Testing -oMax
+  windows-unit-testing-o0:
+    name: Windows - Unit Testing -o0
     runs-on: windows-latest
     needs: windows-build
     steps:
@@ -129,24 +155,7 @@ jobs:
           name: windows-build-artifact
           path: bin
       - name: Unit Testing
-        run: bin\Mosa.Utility.UnitTests.exe -oMax -display-off
-
-  windows-unit-testing-oNone:
-    name: Windows - Unit Testing -oNone
-    runs-on: windows-latest
-    needs: windows-build
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          submodules: recursive
-      - name: Download Build Artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: windows-build-artifact
-          path: bin
-      - name: Unit Testing
-        run: bin\Mosa.Utility.UnitTests.exe -oNone -display-off
+        run: bin\Mosa.Utility.UnitTests.exe -o0 -display-off
 
   windows-unit-testing-o1:
     name: Windows - Unit Testing -o1
@@ -283,16 +292,12 @@ jobs:
           path: bin
       - name: Unit Testing
         run: bin\Mosa.Utility.UnitTests.exe -o8 -display-off
-
-  linux-unit-testing-oMax:
-    name: Linux - Unit Testing -oMax
-    runs-on: ubuntu-latest
-    needs: linux-build
+        
+  windows-unit-testing-o9:
+    name: Windows - Unit Testing -o9
+    runs-on: windows-latest
+    needs: windows-build
     steps:
-      - name: Set net7.0
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '7.0.x'
       - name: Checkout
         uses: actions/checkout@v3
         with:
@@ -300,17 +305,13 @@ jobs:
       - name: Download Build Artifact
         uses: actions/download-artifact@v3
         with:
-          name: linux-build-artifact
+          name: windows-build-artifact
           path: bin
-      - name: Update Package Respository
-        run: sudo apt-get -y -o Acquire::Check-Valid-Until=false update
-      - name: Install Qemu and Dependencies
-        run: sudo apt-get install -y qemu qemu-system qemu-system-x86
-      - name: Unit Testing  
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -oMax -display-off
+      - name: Unit Testing
+        run: bin\Mosa.Utility.UnitTests.exe -o9 -display-off
 
-  linux-unit-testing-oNone:
-    name: Linux - Unit Testing -oNone
+  linux-unit-testing-o0:
+    name: Linux - Unit Testing -o0
     runs-on: ubuntu-latest
     needs: linux-build
     steps:
@@ -332,7 +333,7 @@ jobs:
       - name: Install Qemu and Dependencies
         run: sudo apt-get install -y qemu qemu-system qemu-system-x86
       - name: Unit Testing
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -oNone -display-off
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -o0 -display-off
         
   linux-unit-testing-o1:
     name: Linux - Unit Testing -o1
@@ -533,3 +534,28 @@ jobs:
         run: sudo apt-get install -y qemu qemu-system qemu-system-x86
       - name: Unit Testing
         run: dotnet bin/Mosa.Utility.UnitTests.dll -o8 -display-off
+          
+  linux-unit-testing-o9:
+    name: Linux - Unit Testing -o9
+    runs-on: ubuntu-latest
+    needs: linux-build
+    steps:
+      - name: Set net7.0
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: linux-build-artifact
+          path: bin
+      - name: Update Package Respository
+        run: sudo apt-get -y -o Acquire::Check-Valid-Until=false update
+      - name: Install Qemu and Dependencies
+        run: sudo apt-get install -y qemu qemu-system qemu-system-x86
+      - name: Unit Testing  
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -o9 -display-off
