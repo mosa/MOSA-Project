@@ -224,6 +224,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: windows-build-artifact
+          path: bin
       - name: Unit Tests - All Performance Optimizations
         run: bin\Mosa.Utility.UnitTests.exe -oMax -display-off
 
@@ -240,5 +241,23 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: windows-build-artifact
+          path: bin
       - name: Unit Tests - All Performance Optimizations
         run: bin\Mosa.Utility.UnitTests.exe -oNone -display-off
+
+  unit-test-optimizations-1:
+    name: Windows Unit Test - Level 1 Optimizations
+    runs-on: windows-latest
+    needs: windows-build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: windows-build-artifact
+          path: bin
+      - name: Unit Tests - All Performance Optimizations
+        run: bin\Mosa.Utility.UnitTests.exe -o1 -display-off
