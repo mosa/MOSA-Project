@@ -5,178 +5,6 @@ on:
   pull_request:
 
 jobs:
-  build-mswin:
-    name: Windows Build
-    runs-on: windows-latest
-    env:
-      BUILD_VERSION: 2.4.0
-      NUGET_ENABLE_LEGACY_CSPROJ_PACK: true
-    steps:
-      - name: Set net7.0
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '7.0.x'
-      - name: View Build Version
-        run: echo ${{ env.BUILD_VERSION }}.${{ github.run_number }}
-      - name: View Github Info
-        run: echo repository=${{ github.repository }} event_name=${{ github.event_name }} ref=${{ github.ref }} head_ref=${{ github.head_ref }} base_ref=${{ github.base_ref }}
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          submodules: recursive
-      - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v1.1
-      - name: Setup Nuget.exe
-        uses: nuget/setup-nuget@v1
-      - name: Restore nuget Packages
-        run: dotnet restore Source/Mosa.sln
-      - name: Build
-        run: dotnet build Source/Mosa.sln /p:Version=${{ env.BUILD_VERSION }}
-      - name: Unit Tests - All Performance Optimizations
-        run: bin\Mosa.Utility.UnitTests.exe -oMax -display-off
-      - name: Unit Tests - No Optimizations
-        run: bin\Mosa.Utility.UnitTests.exe -oNone -display-off
-      - name: Unit Tests - Optimization Level 1
-        run: bin\Mosa.Utility.UnitTests.exe -o1 -display-off
-      - name: Unit Tests - Optimization Level 2
-        run: bin\Mosa.Utility.UnitTests.exe -o2 -display-off
-      - name: Unit Tests - Optimization Level 3
-        run: bin\Mosa.Utility.UnitTests.exe -o3 -display-off
-      - name: Unit Tests - Optimization Level 4
-        run: bin\Mosa.Utility.UnitTests.exe -o4 -display-off
-      - name: Unit Tests - Optimization Level 5
-        run: bin\Mosa.Utility.UnitTests.exe -o5 -display-off
-      - name: Unit Tests - Optimization Level 6
-        run: bin\Mosa.Utility.UnitTests.exe -o6 -display-off
-      - name: Unit Tests - Optimization Level 7
-        run: bin\Mosa.Utility.UnitTests.exe -o7 -display-off
-      - name: Unit Tests - Optimization Level 8
-        run: bin\Mosa.Utility.UnitTests.exe -o8 -display-off
-#      - name: Test Demo - Mosa.Demo.HelloWorld.x86 
-#        run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.Demo.HelloWorld.x86.dll -s Launcher.Test=true
-#      - name: Test Demo - Mosa.Demo.CoolWorld.x86 
-#        run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.Demo.CoolWorld.x86.dll -s Launcher.Test=true
-      - name: Build Project - Mosa.Templates
-        run: dotnet build Source\Mosa.Templates\Mosa.Templates.csproj
-      - name: Create Package - Mosa.Templates
-        run: nuget pack Source\Mosa.Templates\Mosa.Templates.csproj -Tool -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ github.run_number }}
-      - name: Create Package - Mosa.Tools.Package
-        run: nuget pack Source\Mosa.Packages\Mosa.Tools.Package.nuspec -Tool -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ github.run_number }}
-      - name: Create Package - Mosa.Korlib
-        run: nuget pack Source\Mosa.Packages\Mosa.Korlib.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ github.run_number }}
-      - name: Create Package - Mosa.DeviceSystem
-        run: nuget pack Source\Mosa.Packages\Mosa.DeviceSystem.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ github.run_number }}
-      - name: Create Package - Mosa.Runtime
-        run: nuget pack Source\Mosa.Packages\Mosa.Runtime.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ github.run_number }}
-      - name: Create Package - Mosa.Platform.x86
-        run: nuget pack Source\Mosa.Packages\Mosa.Platform.x86.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ github.run_number }}
-      - name: Create Package - Mosa.Kernel.x86
-        run: nuget pack Source\Mosa.Packages\Mosa.Kernel.x86.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ github.run_number }}
-      - name: Create Package - Mosa.Platform.x64
-        run: nuget pack Source\Mosa.Packages\Mosa.Platform.x64.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ github.run_number }}
-      - name: Create Package - Mosa.Kernel.x64
-        run: nuget pack Source\Mosa.Packages\Mosa.Kernel.x64.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ github.run_number }}
-      - name: Create Nuget Packages Artifact
-        uses: actions/upload-artifact@master
-        with:
-          name: Nuget Packages
-          path: bin\nupkg
-      - name: Publish Package - Mosa.Templates
-        run: dotnet nuget push bin\nupkg\Mosa.Templates.${{ env.BUILD_VERSION }}.${{ github.run_number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
-        if: github.event_name == 'push' && github.repository == 'mosa/MOSA-Project' && github.ref == 'refs/heads/master'
-      - name: Publish Package - Mosa.Tools.Package
-        run: dotnet nuget push bin\nupkg\Mosa.Tools.Package.${{ env.BUILD_VERSION }}.${{ github.run_number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
-        if: github.event_name == 'push' && github.repository == 'mosa/MOSA-Project' && github.ref == 'refs/heads/master'
-      - name: Publish Package - Mosa.Korlib
-        run: dotnet nuget push bin\nupkg\Mosa.Korlib.${{ env.BUILD_VERSION }}.${{ github.run_number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
-        if: github.event_name == 'push' && github.repository == 'mosa/MOSA-Project' && github.ref == 'refs/heads/master'
-      - name: Publish Package - Mosa.DeviceSystem
-        run: dotnet nuget push bin\nupkg\Mosa.DeviceSystem.${{ env.BUILD_VERSION }}.${{ github.run_number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
-        if: github.event_name == 'push' && github.repository == 'mosa/MOSA-Project' && github.ref == 'refs/heads/master'
-      - name: Publish Package - Mosa.Runtime
-        run: dotnet nuget push bin\nupkg\Mosa.Runtime.${{ env.BUILD_VERSION }}.${{ github.run_number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
-        if: github.event_name == 'push' && github.repository == 'mosa/MOSA-Project' && github.ref == 'refs/heads/master'
-      - name: Publish Package - Mosa.Platform.x86
-        run: dotnet nuget push bin\nupkg\Mosa.Platform.x86.${{ env.BUILD_VERSION }}.${{ github.run_number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
-        if: github.event_name == 'push' && github.repository == 'mosa/MOSA-Project' && github.ref == 'refs/heads/master'
-      - name: Publish Package - Mosa.Kernel.x86
-        run: dotnet nuget push bin\nupkg\Mosa.Kernel.x86.${{ env.BUILD_VERSION }}.${{ github.run_number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
-        if: github.event_name == 'push' && github.repository == 'mosa/MOSA-Project' && github.ref == 'refs/heads/master'
-      - name: Publish Package - Mosa.Platform.x64
-        run: dotnet nuget push bin\nupkg\Mosa.Platform.x64.${{ env.BUILD_VERSION }}.${{ github.run_number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
-        if: github.event_name == 'push' && github.repository == 'mosa/MOSA-Project' && github.ref == 'refs/heads/master'
-      - name: Publish Package - Mosa.Kernel.x64
-        run: dotnet nuget push bin\nupkg\Mosa.Kernel.x64.${{ env.BUILD_VERSION }}.${{ github.run_number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
-        if: github.event_name == 'push' && github.repository == 'mosa/MOSA-Project' && github.ref == 'refs/heads/master'
-
-  build-unix:
-    name: Linux Build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Set net7.0
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '7.0.x'
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          submodules: recursive
-      - name: Restore nuget Packages
-        run: dotnet restore Source/Mosa.Linux.sln
-      - name: Build
-        run: dotnet build Source/Mosa.Linux.sln
-      - name: Update Package Respository
-        run: sudo apt-get -y -o Acquire::Check-Valid-Until=false update
-      - name: Install Qemu and Dependencies
-        run: sudo apt-get install -y qemu qemu-system qemu-system-x86 libsdl2-image-2.0-0 libvirglrenderer1 libpixman-1-0 libepoxy0 libdw1 libpng16-16 zlib1g libjpeg8 libudev1 libusb-1.0-0 liblzo2-2 libgio-cil libglib2.0-0 libzstd1 libncursesw6 libgbm1 libgtk-3-0 libgdk3.0-cil libcairo2 libgdk-pixbuf-2.0-0 libx11-6 libasound2 libpulse0 libsndio7.0 libbz2-1.0 libc6 libgcc-s1 
-      - name: Unit Tests - All Performance Optimizations
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -oMax -display-off
-      - name: Unit Tests - No Optimizations
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -oNone -display-off
-      - name: Unit Tests - Optimization Level 1
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -o1 -display-off
-      - name: Unit Tests - Optimization Level 2
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -o2 -display-off
-      - name: Unit Tests - Optimization Level 3
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -o3 -display-off
-      - name: Unit Tests - Optimization Level 4
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -o4 -display-off
-      - name: Unit Tests - Optimization Level 5
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -o5 -display-off
-      - name: Unit Tests - Optimization Level 6
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -o6 -display-off
-      - name: Unit Tests - Optimization Level 7
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -o7 -display-off
-      - name: Unit Tests - Optimization Level 8
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -o8 -display-off
-
-  generate-docs:
-    name: Generate documentation
-    runs-on: ubuntu-latest
-    steps:
-      - name: Set python3.11
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          submodules: recursive
-      - name: Update package respository
-        run: sudo apt-get -y -o Acquire::Check-Valid-Until=false update
-      - name: Install Graphviz
-        run: sudo apt-get install -y graphviz
-      - name: Install Sphinx dependencies
-        run: pip3 install sphinx sphinxcontrib.httpdomain sphinx-prompt sphinx_rtd_theme sphinx-tabs
-      - name: Generate HTML website
-        run: sphinx-build -b html Source/Docs sphinx-docs
-      - name: Create ZIP archive
-        run: zip -r docs-${{ env.BUILD_VERSION }}.${{ github.run_number }}.zip sphinx-docs
-      - name: Create artifact
-        uses: actions/upload-artifact@master
-        with:
-          name: docs-${{ env.BUILD_VERSION }}.${{ github.run_number }}.zip
-          path: docs-${{ env.BUILD_VERSION }}.${{ github.run_number }}.zip
 
   windows-build:
     name: Windows Build
@@ -210,9 +38,84 @@ jobs:
         with:
           name: windows-build-artifact
           path: bin
+      - name: Build Project - Mosa.Templates
+        run: dotnet build Source\Mosa.Templates\Mosa.Templates.csproj
+      - name: Create Package - Mosa.Templates
+        run: nuget pack Source\Mosa.Templates\Mosa.Templates.csproj -Tool -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ github.run_number }}
+      - name: Create Package - Mosa.Tools.Package
+        run: nuget pack Source\Mosa.Packages\Mosa.Tools.Package.nuspec -Tool -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ github.run_number }}
+      - name: Create Package - Mosa.Korlib
+        run: nuget pack Source\Mosa.Packages\Mosa.Korlib.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ github.run_number }}
+      - name: Create Package - Mosa.DeviceSystem
+        run: nuget pack Source\Mosa.Packages\Mosa.DeviceSystem.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ github.run_number }}
+      - name: Create Package - Mosa.Runtime
+        run: nuget pack Source\Mosa.Packages\Mosa.Runtime.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ github.run_number }}
+      - name: Create Package - Mosa.Platform.x86
+        run: nuget pack Source\Mosa.Packages\Mosa.Platform.x86.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ github.run_number }}
+      - name: Create Package - Mosa.Kernel.x86
+        run: nuget pack Source\Mosa.Packages\Mosa.Kernel.x86.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ github.run_number }}
+      - name: Create Package - Mosa.Platform.x64
+        run: nuget pack Source\Mosa.Packages\Mosa.Platform.x64.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ github.run_number }}
+      - name: Create Package - Mosa.Kernel.x64
+        run: nuget pack Source\Mosa.Packages\Mosa.Kernel.x64.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ github.run_number }}
+      - name: Create Nuget Packages Artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: Nuget Packages
+          path: bin\nupkg
 
-  unit-test-optimizations-all:
-    name: Windows Unit Test - All Optimizations
+  linux-build:
+    name: Linux Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set net7.0
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Restore nuget Packages
+        run: dotnet restore Source/Mosa.Linux.sln
+      - name: Build
+        run: dotnet build Source/Mosa.Linux.sln
+      - name: Store Build Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: linux-build-artifact
+          path: bin
+          
+  generate-docs:
+    name: Generate documentation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set python3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Update package respository
+        run: sudo apt-get -y -o Acquire::Check-Valid-Until=false update
+      - name: Install Graphviz
+        run: sudo apt-get install -y graphviz
+      - name: Install Sphinx dependencies
+        run: pip3 install sphinx sphinxcontrib.httpdomain sphinx-prompt sphinx_rtd_theme sphinx-tabs
+      - name: Generate HTML website
+        run: sphinx-build -b html Source/Docs sphinx-docs
+      - name: Create ZIP archive
+        run: zip -r docs-${{ env.BUILD_VERSION }}.${{ github.run_number }}.zip sphinx-docs
+      - name: Create artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: docs-${{ env.BUILD_VERSION }}.${{ github.run_number }}.zip
+          path: docs-${{ env.BUILD_VERSION }}.${{ github.run_number }}.zip
+
+  windows-unit-testing-oMax:
+    name: Windows Testing -oMax
     runs-on: windows-latest
     needs: windows-build
     steps:
@@ -225,11 +128,11 @@ jobs:
         with:
           name: windows-build-artifact
           path: bin
-      - name: Unit Tests - All Performance Optimizations
+      - name: Unit Testing
         run: bin\Mosa.Utility.UnitTests.exe -oMax -display-off
 
-  unit-test-optimizations-none:
-    name: Windows Unit Test - No Optimizations
+  windows-unit-testing-oNone:
+    name: Win Testing -oNone
     runs-on: windows-latest
     needs: windows-build
     steps:
@@ -242,11 +145,11 @@ jobs:
         with:
           name: windows-build-artifact
           path: bin
-      - name: Unit Tests - All Performance Optimizations
+      - name: Unit Testing
         run: bin\Mosa.Utility.UnitTests.exe -oNone -display-off
 
-  unit-test-optimizations-1:
-    name: Windows Unit Test - Level 1 Optimizations
+  windows-unit-testing-o1:
+    name: Win Testing -o1
     runs-on: windows-latest
     needs: windows-build
     steps:
@@ -259,5 +162,294 @@ jobs:
         with:
           name: windows-build-artifact
           path: bin
-      - name: Unit Tests - All Performance Optimizations
+      - name: Unit Testing
         run: bin\Mosa.Utility.UnitTests.exe -o1 -display-off
+
+  windows-unit-testing-o2:
+    name: Win Testing -o2
+    runs-on: windows-latest
+    needs: windows-build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: windows-build-artifact
+          path: bin
+      - name: Unit Testing
+        run: bin\Mosa.Utility.UnitTests.exe -o2 -display-off
+
+  windows-unit-testing-o3:
+    name: Win Testing -o3
+    runs-on: windows-latest
+    needs: windows-build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: windows-build-artifact
+          path: bin
+      - name: Unit Testing
+        run: bin\Mosa.Utility.UnitTests.exe -o3 -display-off
+
+  windows-unit-testing-o4:
+    name: Win Testing -o4
+    runs-on: windows-latest
+    needs: windows-build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: windows-build-artifact
+          path: bin
+      - name: Unit Testing
+        run: bin\Mosa.Utility.UnitTests.exe -o4 -display-off
+
+  windows-unit-testing-o5:
+    name: Win Testing -o5
+    runs-on: windows-latest
+    needs: windows-build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: windows-build-artifact
+          path: bin
+      - name: Unit Testing
+        run: bin\Mosa.Utility.UnitTests.exe -o5 -display-off
+
+  windows-unit-testing-o6:
+    name: Win Testing -o6
+    runs-on: windows-latest
+    needs: windows-build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: windows-build-artifact
+          path: bin
+      - name: Unit Testing
+        run: bin\Mosa.Utility.UnitTests.exe -o6 -display-off
+
+  windows-unit-testing-o7:
+    name: Win Testing -o7
+    runs-on: windows-latest
+    needs: windows-build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: windows-build-artifact
+          path: bin
+      - name: Unit Testing
+        run: bin\Mosa.Utility.UnitTests.exe -o7 -display-off
+
+  windows-unit-testing-o8:
+    name: Win Testing -o8
+    runs-on: windows-latest
+    needs: windows-build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: windows-build-artifact
+          path: bin
+      - name: Unit Testing
+        run: bin\Mosa.Utility.UnitTests.exe -o8 -display-off
+
+  linux-unit-testing-oMax:
+    name: Linux Testing -oMax
+    runs-on: ubuntu-latest
+    needs: linux-build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: linux-build-artifact
+          path: bin
+      - name: Unit Testing
+        run: bin\Mosa.Utility.UnitTests.exe -oMax -display-off
+
+  linux-unit-testing-oNone:
+    name: Linux Testing -oNone
+    runs-on: ubuntu-latest
+    needs: linux-build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: linux-build-artifact
+          path: bin
+      - name: Unit Testing
+        run: bin\Mosa.Utility.UnitTests.exe -oNone -display-off
+
+  linux-unit-testing-o1:
+    name: Linux Testing -o1
+    runs-on: ubuntu-latest
+    needs: linux-build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: linux-build-artifact
+          path: bin
+      - name: Unit Testing
+        run: bin\Mosa.Utility.UnitTests.exe -o1 -display-off
+
+  linux-unit-testing-o2:
+    name: Linux Testing -o2
+    runs-on: ubuntu-latest
+    needs: linux-build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: linux-build-artifact
+          path: bin
+      - name: Unit Testing
+        run: bin\Mosa.Utility.UnitTests.exe -o2 -display-off
+
+  linux-unit-testing-o3:
+    name: Linux Testing -o3
+    runs-on: ubuntu-latest
+    needs: linux-build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: linux-build-artifact
+          path: bin
+      - name: Unit Testing
+        run: bin\Mosa.Utility.UnitTests.exe -o3 -display-off
+
+  linux-unit-testing-o4:
+    name: Linux Testing -o4
+    runs-on: ubuntu-latest
+    needs: linux-build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: linux-build-artifact
+          path: bin
+      - name: Unit Testing
+        run: bin\Mosa.Utility.UnitTests.exe -o4 -display-off
+
+  linux-unit-testing-o5:
+    name: Linux Testing -o5
+    runs-on: ubuntu-latest
+    needs: linux-build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: linux-build-artifact
+          path: bin
+      - name: Unit Testing
+        run: bin\Mosa.Utility.UnitTests.exe -o5 -display-off
+
+  linux-unit-testing-o6:
+    name: Linux Testing -o6
+    runs-on: ubuntu-latest
+    needs: linux-build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: linux-build-artifact
+          path: bin
+      - name: Unit Testing
+        run: bin\Mosa.Utility.UnitTests.exe -o6 -display-off
+
+  linux-unit-testing-o7:
+    name: Linux Testing -o7
+    runs-on: ubuntu-latest
+    needs: linux-build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: linux-build-artifact
+          path: bin
+      - name: Unit Testing
+        run: bin\Mosa.Utility.UnitTests.exe -o7 -display-off
+
+  linux-unit-testing-o8:
+    name: Linux Testing -o8
+    runs-on: ubuntu-latest
+    needs: linux-build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: linux-build-artifact
+          path: bin
+      - name: Unit Testing
+        run: bin\Mosa.Utility.UnitTests.exe -o8 -display-off
