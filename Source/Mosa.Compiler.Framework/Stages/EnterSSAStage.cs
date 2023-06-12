@@ -241,19 +241,18 @@ public sealed class EnterSSAStage : BaseMethodCompilerStage
 
 	private void UpdateResultOperands(BasicBlock block)
 	{
-		// Update Result Operands in current block
 		for (var node = block.First.Next; !node.IsBlockEndInstruction; node = node.Next)
 		{
 			if (node.IsEmptyOrNop || node.ResultCount == 0)
 				continue;
 
-			if (node.Result.IsVirtualRegister == true)
+			if (node.Result.IsVirtualRegister)
 			{
 				var op = parentOperand[node.Result];
 				stack[op].Pop();
 			}
 
-			if (node.Result2?.IsVirtualRegister == true)
+			if (node.ResultCount == 2 && node.Result2.IsVirtualRegister)
 			{
 				var op = parentOperand[node.Result2];
 				stack[op].Pop();

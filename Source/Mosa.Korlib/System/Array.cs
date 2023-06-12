@@ -310,7 +310,7 @@ public abstract class Array : ICloneable, IList, ICollection, IEnumerable, IStru
 	{
 		private SZArrayHelper()
 		{
-			throw new InvalidOperationException("Cannot instantiate this class!!!");
+			throw new InvalidOperationException("Cannot instantiate this class");
 		}
 
 		// -----------------------------------------------------------

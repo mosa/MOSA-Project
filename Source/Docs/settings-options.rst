@@ -109,7 +109,7 @@ Explorer Settings
    :widths: 50, 200
 
     Explorer.Filter,Specifies the default method filter name when Explorer is launched
-	Explorer.Start,"If true, immediately compiler all methods upon launch"
+	Explorer.Start,"If true, immediately compile all methods upon launch"
 	Explorer.DebugDiagnostic,"If true, debug diagnostics is captured"
 
 Launcher Settings
