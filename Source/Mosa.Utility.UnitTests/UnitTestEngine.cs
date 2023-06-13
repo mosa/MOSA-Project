@@ -7,6 +7,7 @@ using System.IO;
 using System.IO.Pipes;
 using System.Net.Sockets;
 using System.Threading;
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Configuration;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Linker;
@@ -14,11 +15,16 @@ using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Utility.DebugEngine;
 using Mosa.Utility.Launcher;
+using Reko.Structure;
 
 namespace Mosa.Utility.UnitTests;
 
 public class UnitTestEngine : IDisposable
 {
+	#region Public Methods
+
+	public bool IsAborted => Aborted;
+
 	public string TestAssemblyPath { get; set; }
 
 	public string TestSuiteFile { get; set; }
@@ -26,6 +32,19 @@ public class UnitTestEngine : IDisposable
 	public TypeSystem TypeSystem { get; internal set; }
 
 	public MosaLinker Linker { get; internal set; }
+
+	#endregion Public Methods
+
+	#region Constants
+
+	private const int MaxSentQueue = 10000;
+	private const int MinSend = 2000;
+
+	private const int ConnectionDelay = 150;
+
+	#endregion Constants
+
+	#region Private Data Members
 
 	protected DebugServerEngine DebugServerEngine;
 	protected Starter Starter;
@@ -38,13 +57,8 @@ public class UnitTestEngine : IDisposable
 	private volatile bool Aborted;
 	private volatile bool Ready;
 
-	private const int MaxSentQueue = 10000;
-	private const int MinSend = 2000;
-
-	private const int MaxErrors = 1000;
-	private const int ReadyTimeOut = 2000; // in milliseconds
-	private const int MaxConnectionAttempts = 100;
-	private const int ConnectionAttemptDelay = 250; // in milliseconds
+	private int MaxErrors = 1000;
+	private int ConnectionTimeOut = 5000; // in milliseconds
 
 	private readonly Queue<DebugMessage> Queue = new Queue<DebugMessage>();
 	private readonly HashSet<DebugMessage> Pending = new HashSet<DebugMessage>();
@@ -61,7 +75,7 @@ public class UnitTestEngine : IDisposable
 
 	private DateTime CompileStartTime;
 
-	public bool IsAborted => Aborted;
+	#endregion Private Data Members
 
 	public UnitTestEngine(Settings settings)
 	{
@@ -96,8 +110,13 @@ public class UnitTestEngine : IDisposable
 		Settings.SetValue("Multiboot.Video.Width", 640);
 		Settings.SetValue("Multiboot.Video.Height", 480);
 		Settings.SetValue("Multiboot.Video.Depth", 32);
-		Settings.SetValue("Emulator.Display", true);
+		Settings.SetValue("Emulator.Display", false);
 		Settings.SetValue("OS.Name", "MOSA");
+
+		Settings.SetValue("UnitTest.MaxErrors", 1000);
+		Settings.SetValue("UnitTest.Connection.TimeOut", 5000);
+		Settings.SetValue("UnitTest.Connection.MaxAttempts", 20);
+		Settings.SetValue("UnitTest.Connection.Delay", 100);
 
 		Settings.Merge(settings);
 
@@ -127,13 +146,12 @@ public class UnitTestEngine : IDisposable
 
 	private void Initialize()
 	{
+		MaxErrors = Settings.GetValue("UnitTest.MaxErrors", 1000);
+		ConnectionTimeOut = Settings.GetValue("UnitTest.Connection.TimeOut", 5000);
+
 		if (TestAssemblyPath == null)
 		{
-#if __MonoCS__
-				TestAssemblyPath = AppDomain.CurrentDomain.BaseDirectory;
-#else
 			TestAssemblyPath = AppContext.BaseDirectory;
-#endif
 		}
 
 		if (TestSuiteFile == null)
@@ -347,6 +365,7 @@ public class UnitTestEngine : IDisposable
 			Settings = Starter.Settings;
 		}
 
+		// Increment serial port number for next attempt
 		Settings.SetValue("Emulator.Serial.Port", Settings.GetValue("Emulator.Serial.Port", 11110) + 1);
 
 		if (!Starter.Launch())
@@ -371,23 +390,30 @@ public class UnitTestEngine : IDisposable
 			DebugServerEngine.SetGlobalDispatch(GlobalDispatch);
 		}
 
-		for (var attempt = 0; attempt < MaxConnectionAttempts; attempt++)
+		Thread.Sleep(50); // small delay to let emulator launch
+
+		var attempts = 0;
+
+		var watchdog = new WatchDog(ConnectionTimeOut);
+
+		while (!watchdog.IsTimedOut)
 		{
 			try
 			{
-				Thread.Sleep(ConnectionAttemptDelay);
-
 				Connect();
 
 				if (DebugServerEngine.IsConnected)
 				{
-					Console.WriteLine("> Connected!");
+					Console.WriteLine($"> Connected! [{attempts} attempts]");
 					return true;
 				}
 			}
 			catch
 			{
 			}
+
+			attempts++;
+			Thread.Sleep(ConnectionDelay);
 		}
 
 		Console.Write("> Unable to connect");
@@ -428,7 +454,7 @@ public class UnitTestEngine : IDisposable
 		if (!Process.HasExited)
 		{
 			Process.Kill();
-			Process.WaitForExit(5000); // wait for up to 5000 milliseconds
+			Process.WaitForExit(10000); // wait for up to 10 seconds
 		}
 
 		Process = null;
@@ -436,16 +462,18 @@ public class UnitTestEngine : IDisposable
 
 	private bool WaitForReady()
 	{
-		for (var attempt = 0; attempt < 100; attempt++)
+		var watchdog = new WatchDog(ConnectionTimeOut);
+
+		while (!watchdog.IsTimedOut)
 		{
 			if (Ready)
 			{
-				Console.WriteLine("> Ready!");
+				Console.WriteLine($"> Ready!");
 				LastResponse = (int)StopWatch.ElapsedMilliseconds;
 				return true;
 			}
 
-			Thread.Sleep(100);
+			Thread.Sleep(ConnectionDelay);
 		}
 
 		return false;
@@ -455,12 +483,17 @@ public class UnitTestEngine : IDisposable
 	{
 		lock (_lock)
 		{
-			for (var attempt = 0; attempt < 5; attempt++)
+			var attempts = 0;
+
+			var watchdog = new WatchDog(ConnectionTimeOut);
+
+			while (!watchdog.IsTimedOut)
 			{
 				Console.WriteLine("Starting Engine...");
 
 				if (StartEngineEx())
 				{
+					Console.WriteLine($"> Started! [{attempts} attempts]");
 					return true;
 				}
 				else
@@ -469,7 +502,8 @@ public class UnitTestEngine : IDisposable
 					KillVirtualMachine();
 				}
 
-				Thread.Sleep(250);
+				attempts++;
+				Thread.Sleep(ConnectionDelay);
 			}
 
 			return false;
@@ -520,8 +554,8 @@ public class UnitTestEngine : IDisposable
 				restart = true;
 			}
 
-			// Has process stop responding (more than 2 seconds)? If yes, restart
-			else if (LastResponse > 0 && StopWatch.ElapsedMilliseconds - LastResponse > ReadyTimeOut)
+			// Has process stop responding more than X milliseconds; if yes, restart
+			else if (LastResponse > 0 && StopWatch.ElapsedMilliseconds - LastResponse > ConnectionTimeOut)
 			{
 				KillVirtualMachine();
 				restart = true;
@@ -607,7 +641,7 @@ public class UnitTestEngine : IDisposable
 
 				Console.WriteLine("ERROR: " + UnitTestSystem.OutputUnitTestResult(unitTest));
 
-				if (Errors == MaxErrors)
+				if (Errors >= MaxErrors)
 				{
 					Aborted = true;
 				}

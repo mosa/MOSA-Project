@@ -179,7 +179,7 @@ jobs:
           name: windows-build-artifact
           path: bin
       - name: Unit Testing
-        run: bin\Mosa.Utility.UnitTests.exe -o0 -display-off
+        run: bin\Mosa.Utility.UnitTests.exe -o0
 
   windows-unit-testing-o1:
     name: Windows - Unit Testing -o1
@@ -196,7 +196,7 @@ jobs:
           name: windows-build-artifact
           path: bin
       - name: Unit Testing
-        run: bin\Mosa.Utility.UnitTests.exe -o1 -display-off
+        run: bin\Mosa.Utility.UnitTests.exe -o1
 
   windows-unit-testing-o2:
     name: Windows - Unit Testing -o2
@@ -213,7 +213,7 @@ jobs:
           name: windows-build-artifact
           path: bin
       - name: Unit Testing
-        run: bin\Mosa.Utility.UnitTests.exe -o2 -display-off
+        run: bin\Mosa.Utility.UnitTests.exe -o2
 
   windows-unit-testing-o3:
     name: Windows - Unit Testing -o3
@@ -230,7 +230,7 @@ jobs:
           name: windows-build-artifact
           path: bin
       - name: Unit Testing
-        run: bin\Mosa.Utility.UnitTests.exe -o3 -display-off
+        run: bin\Mosa.Utility.UnitTests.exe -o3
 
   windows-unit-testing-o4:
     name: Windows - Unit Testing -o4
@@ -247,7 +247,7 @@ jobs:
           name: windows-build-artifact
           path: bin
       - name: Unit Testing
-        run: bin\Mosa.Utility.UnitTests.exe -o4 -display-off
+        run: bin\Mosa.Utility.UnitTests.exe -o4
 
   windows-unit-testing-o5:
     name: Windows - Unit Testing -o5
@@ -264,7 +264,7 @@ jobs:
           name: windows-build-artifact
           path: bin
       - name: Unit Testing
-        run: bin\Mosa.Utility.UnitTests.exe -o5 -display-off
+        run: bin\Mosa.Utility.UnitTests.exe -o5
 
   windows-unit-testing-o6:
     name: Windows - Unit Testing -o6
@@ -281,7 +281,7 @@ jobs:
           name: windows-build-artifact
           path: bin
       - name: Unit Testing
-        run: bin\Mosa.Utility.UnitTests.exe -o6 -display-off
+        run: bin\Mosa.Utility.UnitTests.exe -o6
 
   windows-unit-testing-o7:
     name: Windows - Unit Testing -o7
@@ -298,7 +298,7 @@ jobs:
           name: windows-build-artifact
           path: bin
       - name: Unit Testing
-        run: bin\Mosa.Utility.UnitTests.exe -o7 -display-off
+        run: bin\Mosa.Utility.UnitTests.exe -o7
 
   windows-unit-testing-o8:
     name: Windows - Unit Testing -o8
@@ -315,7 +315,7 @@ jobs:
           name: windows-build-artifact
           path: bin
       - name: Unit Testing
-        run: bin\Mosa.Utility.UnitTests.exe -o8 -display-off
+        run: bin\Mosa.Utility.UnitTests.exe -o8
         
   windows-unit-testing-o9:
     name: Windows - Unit Testing -o9
@@ -332,7 +332,7 @@ jobs:
           name: windows-build-artifact
           path: bin
       - name: Unit Testing
-        run: bin\Mosa.Utility.UnitTests.exe -o9 -display-off
+        run: bin\Mosa.Utility.UnitTests.exe -o9
 
   linux-unit-testing-o0:
     name: Linux - Unit Testing -o0
@@ -357,7 +357,7 @@ jobs:
       - name: Install Qemu and Dependencies
         run: sudo apt-get -y -o Acquire::Retries=5 install qemu qemu-system qemu-system-x86
       - name: Unit Testing
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -o0 -display-off
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -o0
         
   linux-unit-testing-o1:
     name: Linux - Unit Testing -o1
@@ -382,7 +382,7 @@ jobs:
       - name: Install Qemu and Dependencies
         run: sudo apt-get -y -o Acquire::Retries=5 install qemu qemu-system qemu-system-x86
       - name: Unit Testing
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -o1 -display-off
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -o1
 
   linux-unit-testing-o2:
     name: Linux - Unit Testing -o2
@@ -407,7 +407,7 @@ jobs:
       - name: Install Qemu and Dependencies
         run: sudo apt-get -y -o Acquire::Retries=5 install qemu qemu-system qemu-system-x86
       - name: Unit Testing
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -o2 -display-off
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -o2
 
   linux-unit-testing-o3:
     name: Linux - Unit Testing -o3
@@ -432,7 +432,7 @@ jobs:
       - name: Install Qemu and Dependencies
         run: sudo apt-get -y -o Acquire::Retries=5 install qemu qemu-system qemu-system-x86
       - name: Unit Testing
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -o3 -display-off
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -o3
 
   linux-unit-testing-o4:
     name: Linux - Unit Testing -o4
@@ -457,7 +457,7 @@ jobs:
       - name: Install Qemu and Dependencies
         run: sudo apt-get -y -o Acquire::Retries=5 install qemu qemu-system qemu-system-x86
       - name: Unit Testing
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -o4 -display-off
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -o4
 
   linux-unit-testing-o5:
     name: Linux - Unit Testing -o5
@@ -482,7 +482,7 @@ jobs:
       - name: Install Qemu and Dependencies
         run: sudo apt-get -y -o Acquire::Retries=5 install qemu qemu-system qemu-system-x86
       - name: Unit Testing
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -o5 -display-off
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -o5
 
   linux-unit-testing-o6:
     name: Linux - Unit Testing -o6
@@ -507,7 +507,7 @@ jobs:
       - name: Install Qemu and Dependencies
         run: sudo apt-get -y -o Acquire::Retries=5 install qemu qemu-system qemu-system-x86
       - name: Unit Testing
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -o6 -display-off
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -o6
 
   linux-unit-testing-o7:
     name: Linux - Unit Testing -o7
@@ -532,7 +532,7 @@ jobs:
       - name: Install Qemu and Dependencies
         run: sudo apt-get -y -o Acquire::Retries=5 install qemu qemu-system qemu-system-x86
       - name: Unit Testing
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -o7 -display-off
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -o7
 
   linux-unit-testing-o8:
     name: Linux - Unit Testing -o8
@@ -557,7 +557,7 @@ jobs:
       - name: Install Qemu and Dependencies
         run: sudo apt-get -y -o Acquire::Retries=5 install qemu qemu-system qemu-system-x86
       - name: Unit Testing
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -o8 -display-off
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -o8
           
   linux-unit-testing-o9:
     name: Linux - Unit Testing -o9
@@ -582,4 +582,4 @@ jobs:
       - name: Install Qemu and Dependencies
         run: sudo apt-get -y -o Acquire::Retries=5 install qemu qemu-system qemu-system-x86
       - name: Unit Testing  
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -o9 -display-off
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -o9
