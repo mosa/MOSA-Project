@@ -479,17 +479,13 @@ public class UnitTestEngine : IDisposable
 	{
 		lock (_lock)
 		{
-			var attempts = 0;
-
-			var watchdog = new WatchDog(ConnectionTimeOut);
-
-			while (!watchdog.IsTimedOut)
+			for (var attempt = 0; attempt < 10; attempt++)
 			{
 				Console.WriteLine("Starting Engine...");
 
 				if (StartEngineEx())
 				{
-					Console.WriteLine($"> Started! [{attempts} attempts]");
+					Console.WriteLine($"> Started!");
 					return true;
 				}
 				else
@@ -498,7 +494,6 @@ public class UnitTestEngine : IDisposable
 					KillVirtualMachine();
 				}
 
-				attempts++;
 				Thread.Sleep(ConnectionDelay);
 			}
 
