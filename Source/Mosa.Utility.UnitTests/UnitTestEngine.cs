@@ -563,12 +563,14 @@ public class UnitTestEngine : IDisposable
 			// Has VM exited? If yes, restart
 			else if (Process.HasExited)
 			{
+				OutputStatus("Virtual Machine Exited");
 				restart = true;
 			}
 
 			// Have communications been terminated? If yes, restart
 			else if (!DebugServerEngine.IsConnected)
 			{
+				OutputStatus("Lost Connection");
 				KillVirtualMachine();
 				restart = true;
 			}
@@ -576,6 +578,7 @@ public class UnitTestEngine : IDisposable
 			// Has process stop responding more than X milliseconds; if yes, restart
 			else if (WatchDog.IsTimedOut)
 			{
+				OutputStatus("Timed Out");
 				KillVirtualMachine();
 				restart = true;
 			}
@@ -602,6 +605,8 @@ public class UnitTestEngine : IDisposable
 				SendOneCount = 10;
 
 				OutputStatus("Re-starting Engine...");
+
+				Thread.Sleep(100);
 
 				if (!StartEngine())
 				{
