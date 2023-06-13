@@ -404,7 +404,6 @@ public class UnitTestEngine : IDisposable
 
 				if (DebugServerEngine.IsConnected)
 				{
-					Console.WriteLine($"> Connected! [{attempts} attempts]");
 					return true;
 				}
 			}
@@ -415,8 +414,6 @@ public class UnitTestEngine : IDisposable
 			attempts++;
 			Thread.Sleep(ConnectionDelay);
 		}
-
-		Console.Write("> Unable to connect");
 
 		return false;
 	}
@@ -468,7 +465,6 @@ public class UnitTestEngine : IDisposable
 		{
 			if (Ready)
 			{
-				Console.WriteLine($"> Ready!");
 				LastResponse = (int)StopWatch.ElapsedMilliseconds;
 				return true;
 			}
@@ -498,7 +494,7 @@ public class UnitTestEngine : IDisposable
 				}
 				else
 				{
-					Console.WriteLine("> Failed");
+					Console.WriteLine("ERROR: Failed");
 					KillVirtualMachine();
 				}
 
@@ -514,14 +510,35 @@ public class UnitTestEngine : IDisposable
 	{
 		Ready = false;
 
-		if (!LaunchVirtualMachine())
+		if (LaunchVirtualMachine())
+		{
+			Console.WriteLine("> Virtual Machine Launched");
+		}
+		else
+		{
+			Console.WriteLine("ERROR: Unable to launch Virtual Machine");
 			return false;
+		}
 
-		if (!ConnectToDebugEngine())
+		if (ConnectToDebugEngine())
+		{
+			Console.WriteLine($"> Connected!");
+		}
+		else
+		{
+			Console.WriteLine("ERROR: Unable to connect");
 			return false;
+		}
 
-		if (!WaitForReady())
+		if (WaitForReady())
+		{
+			Console.WriteLine($"> Ready!");
+		}
+		else
+		{
+			Console.WriteLine("ERROR: No ready status received");
 			return false;
+		}
 
 		return true;
 	}

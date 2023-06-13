@@ -39,7 +39,7 @@ public static class UnitTestSystem
 
 		if (unitTestEngine.IsAborted)
 		{
-			Console.WriteLine("Compilation aborted!");
+			Console.WriteLine("ERROR: Compilation aborted!");
 			return 1;
 		}
 
@@ -61,55 +61,53 @@ public static class UnitTestSystem
 
 		unitTestEngine.Terminate();
 
+		Console.WriteLine();
+
 		var failures = 0;
 		var passed = 0;
 		var skipped = 0;
+		var incomplete = 0;
 
-		if (!unitTestEngine.IsAborted)
+		foreach (var unitTest in unitTests)
 		{
-			foreach (var unitTest in unitTests)
+			switch (unitTest.Status)
 			{
-				if (unitTest.Status == UnitTestStatus.Passed)
-				{
-					passed++;
-					continue;
-				}
-
-				if (unitTest.Status == UnitTestStatus.Skipped)
-				{
-					skipped++;
-					continue;
-				}
-
-				failures++;
-				Console.WriteLine(OutputUnitTestResult(unitTest));
+				case UnitTestStatus.Passed: passed++; break;
+				case UnitTestStatus.Skipped: skipped++; break;
+				case UnitTestStatus.Pending: incomplete++; break;
+				case UnitTestStatus.FailedByCrash:
+				case UnitTestStatus.Failed:
+					failures++;
+					Console.WriteLine(OutputUnitTestResult(unitTest));
+					break;
 			}
 		}
 
 		Console.WriteLine();
 		Console.WriteLine("Unit Test Results:");
-		Console.WriteLine($"   Passed:   {passed}");
-		Console.WriteLine($"   Skipped:  {skipped}");
-		Console.WriteLine($"   Failures: {failures}");
-		Console.WriteLine($"   Total:    {passed + skipped + failures}");
+		Console.WriteLine($"  Passed:     {passed}");
+		Console.WriteLine($"  Skipped:    {skipped}");
+		Console.WriteLine($"  Incomplete: {incomplete}");
+		Console.WriteLine($"  Failures:   {failures}");
+		Console.WriteLine($"  Total:      {passed + skipped + failures + incomplete}");
 		Console.WriteLine();
 
 		if (unitTestEngine.IsAborted)
 		{
-			Console.WriteLine("Unit tests aborted due to failures!");
+			Console.WriteLine("ERROR: Unit tests aborted due to failures!");
 			return 1;
 		}
 
-		if (failures == 0)
+		if (failures + incomplete == 0)
 		{
 			Console.WriteLine("All unit tests passed successfully!");
+			return 0;
 		}
 		else
 		{
-			Console.WriteLine("Failures occurred in the unit tests!");
+			Console.WriteLine("ERROR: Failures occurred in the unit tests!");
+			return failures + incomplete;
 		}
-
-		return failures;
 	}
 
 	private static List<UnitTest> PrepareUnitTest(List<UnitTestInfo> discoveredUnitTests, TypeSystem typeSystem, MosaLinker linker)
@@ -128,7 +126,7 @@ public static class UnitTestSystem
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine($"Error while resolving method '{unitTestInfo.FullMethodName}'");
+				Console.WriteLine($"ERROR: Unable to resolve method: {unitTestInfo.FullMethodName}");
 
 				throw;
 			}
@@ -383,12 +381,12 @@ public static class UnitTestSystem
 
 		sb.Append($"{unitTest.MethodTypeName}::{unitTest.MethodName}");
 
-		sb.Append("(");
+		sb.Append('(');
 
 		foreach (var param in unitTest.Values)
 		{
 			sb.Append(param);
-			sb.Append(",");
+			sb.Append(',');
 		}
 
 		if (unitTest.Values.Length > 0)
@@ -396,7 +394,7 @@ public static class UnitTestSystem
 			sb.Length--;
 		}
 
-		sb.Append(")");
+		sb.Append(')');
 
 		sb.Append($" Expected: {ObjectToString(unitTest.Expected)}");
 		sb.Append($" Result: {ObjectToString(unitTest.Result)}");
@@ -420,12 +418,12 @@ public static class UnitTestSystem
 		{
 			sb.Append($"{unitTest.MethodTypeName}.{unitTest.MethodName}");
 
-			sb.Append("(");
+			sb.Append('(');
 
 			foreach (var param in unitTest.Values)
 			{
 				sb.Append(ParamToString(param));
-				sb.Append(",");
+				sb.Append(',');
 			}
 
 			if (unitTest.Values.Length > 0)
