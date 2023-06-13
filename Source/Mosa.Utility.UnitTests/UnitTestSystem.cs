@@ -47,7 +47,7 @@ public static class UnitTestSystem
 		Execute(unitTests, unitTestEngine);
 		stopwatch.Stop();
 
-		Console.WriteLine("Unit Testing: " + (stopwatch.ElapsedMilliseconds - executeStart / 1000.0).ToString("F2") + " secs");
+		Console.WriteLine("Unit Testing: " + ((stopwatch.ElapsedMilliseconds - executeStart) / 1000.0).ToString("F2") + " secs");
 		Console.WriteLine("Total: " + stopwatch.ElapsedMilliseconds / 1000.0 + " secs");
 
 		unitTestEngine.Terminate();
