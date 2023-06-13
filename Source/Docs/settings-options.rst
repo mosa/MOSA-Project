@@ -236,3 +236,4 @@ Unit Test Settings
 
     UnitTest.MaxErrors,Maximum number of errors before aborting the unit testing
 	UnitTest.Connection.TimeOut,Maximum connection timeout in milliseconds before retrying
+	UnitTest.Connection.MaxAttempts,Maximun number of restart attempts before aborting the unit tests

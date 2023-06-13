@@ -20,6 +20,19 @@ namespace Mosa.Utility.UnitTests;
 
 public class UnitTestEngine : IDisposable
 {
+	#region Constants
+
+	protected static class Constant
+	{
+		public const int MaxErrors = 1000;
+		public const int ConnectionTimeOut = 8000; // in milliseconds
+		public const int TimeOut = 750; // in milliseconds
+		public const int MaxAttempts = 20;
+		public const int Port = 11110;
+	}
+
+	#endregion Constants
+
 	#region Public Methods
 
 	public bool IsAborted => Aborted;
@@ -56,9 +69,10 @@ public class UnitTestEngine : IDisposable
 	private volatile bool Aborted;
 	private volatile bool Ready;
 
-	private int MaxErrors = 1000;
-	private int ConnectionTimeOut = 8000; // in milliseconds
-	private int TimeOut = 500; // in milliseconds
+	private int MaxErrors = Constant.MaxErrors;
+	private int ConnectionTimeOut = Constant.ConnectionTimeOut; // in milliseconds
+	private int MaxAttempts;
+	private int TimeOut = Constant.TimeOut; // in milliseconds
 
 	private readonly Queue<DebugMessage> Queue = new Queue<DebugMessage>();
 	private readonly HashSet<DebugMessage> Pending = new HashSet<DebugMessage>();
@@ -72,8 +86,6 @@ public class UnitTestEngine : IDisposable
 
 	private int SendOneCount = -1;
 	private int Errors;
-
-	private int Port;
 
 	private DateTime CompileStartTime;
 
@@ -115,7 +127,7 @@ public class UnitTestEngine : IDisposable
 		Settings.SetValue("Emulator.Display", false);
 		Settings.SetValue("Emulator.Serial", "TCPServer");
 		Settings.SetValue("Emulator.Serial.Host", "127.0.0.1");
-		Settings.SetValue("Emulator.Serial.Port", "11110");
+		Settings.SetValue("Emulator.Serial.Port", Constant.Port);
 		Settings.SetValue("Emulator.Serial.Pipe", "MOSA");
 		Settings.SetValue("Multiboot.Version", "v1");
 		Settings.SetValue("Image.Firmware", "bios");
@@ -123,10 +135,10 @@ public class UnitTestEngine : IDisposable
 		Settings.SetValue("Image.Format", "IMG");
 		Settings.SetValue("Image.FileSystem", "FAT16");
 		Settings.SetValue("Image.ImageFile", "%DEFAULT%");
-		Settings.SetValue("UnitTest.MaxErrors", 1000);
-		Settings.SetValue("UnitTest.TimeOut", 500);
-		Settings.SetValue("UnitTest.Connection.TimeOut", 20000);
-		Settings.SetValue("UnitTest.Connection.MaxAttempts", 20);
+		Settings.SetValue("UnitTest.MaxErrors", Constant.MaxErrors);
+		Settings.SetValue("UnitTest.TimeOut", Constant.TimeOut);
+		Settings.SetValue("UnitTest.Connection.TimeOut", Constant.ConnectionTimeOut);
+		Settings.SetValue("UnitTest.Connection.MaxAttempts", Constant.MaxAttempts);
 		Settings.SetValue("OS.Name", "MOSA");
 
 		Settings.Merge(settings);
@@ -147,10 +159,10 @@ public class UnitTestEngine : IDisposable
 
 	private void Initialize()
 	{
-		MaxErrors = Settings.GetValue("UnitTest.MaxErrors", 1000);
-		TimeOut = Settings.GetValue("UnitTest.TimeOut", 500);
-		ConnectionTimeOut = Settings.GetValue("UnitTest.Connection.TimeOut", 20000);
-		Port = Settings.GetValue("Emulator.Serial.Port", 11110);
+		MaxErrors = Settings.GetValue("UnitTest.MaxErrors", Constant.MaxErrors);
+		TimeOut = Settings.GetValue("UnitTest.TimeOut", Constant.TimeOut);
+		ConnectionTimeOut = Settings.GetValue("UnitTest.Connection.TimeOut", Constant.ConnectionTimeOut);
+		MaxAttempts = Settings.GetValue("nitTest.Connection.MaxAttempts", Constant.MaxAttempts);
 
 		if (TestAssemblyPath == null)
 		{
@@ -434,7 +446,7 @@ public class UnitTestEngine : IDisposable
 		{
 			case "tcpserver":
 				{
-					var client = new TcpClient(Settings.GetValue("Emulator.Serial.Host", "localhost"), Port);
+					var client = new TcpClient(Settings.GetValue("Emulator.Serial.Host", "localhost"), Settings.GetValue("Emulator.Serial.Port", 11110));
 					DebugServerEngine.Stream = new DebugNetworkStream(client.Client, true);
 					break;
 				}
@@ -485,18 +497,18 @@ public class UnitTestEngine : IDisposable
 	{
 		lock (_lock)
 		{
-			for (var attempt = 0; attempt < 10; attempt++)
+			for (var attempt = 0; attempt < MaxAttempts; attempt++)
 			{
 				OutputStatus("Starting Engine...");
 
 				if (StartEngineEx())
 				{
-					OutputStatus($"Engine Started!");
+					OutputStatus($"Engine started!");
 					return true;
 				}
 				else
 				{
-					OutputStatus("ERROR: Failed");
+					OutputStatus("ERROR: Engine start failed!");
 					KillVirtualMachine();
 				}
 
@@ -523,7 +535,7 @@ public class UnitTestEngine : IDisposable
 
 		if (ConnectToDebugEngine())
 		{
-			OutputStatus($"Connected!");
+			OutputStatus($"Engine Connected!");
 		}
 		else
 		{
@@ -533,7 +545,7 @@ public class UnitTestEngine : IDisposable
 
 		if (WaitForReady())
 		{
-			OutputStatus($"Ready!");
+			OutputStatus($"Engine Ready!");
 			WatchDog.Restart();
 		}
 		else
@@ -645,7 +657,7 @@ public class UnitTestEngine : IDisposable
 
 			if (CompletedUnitTestCount % 1000 == 0 && StopWatch.Elapsed.Seconds != 0)
 			{
-				OutputStatus("Unit Tests - Count: " + CompletedUnitTestCount + " Elapsed: " + (int)StopWatch.Elapsed.TotalSeconds + " (" + (CompletedUnitTestCount / StopWatch.Elapsed.TotalSeconds).ToString("F2") + " per second)");
+				OutputStatus($"Unit Tests - Count: {CompletedUnitTestCount} Elapsed: {(int)StopWatch.Elapsed.TotalSeconds} ({(CompletedUnitTestCount / StopWatch.Elapsed.TotalSeconds).ToString("F2")} per second)");
 			}
 		}
 
@@ -663,7 +675,7 @@ public class UnitTestEngine : IDisposable
 				var value = Equals(unitTest.Expected, unitTest.Result);
 				Errors++;
 
-				OutputStatus("ERROR: " + UnitTestSystem.OutputUnitTestResult(unitTest));
+				OutputStatus($"ERROR: {UnitTestSystem.OutputUnitTestResult(unitTest)}");
 
 				if (Errors >= MaxErrors)
 				{
