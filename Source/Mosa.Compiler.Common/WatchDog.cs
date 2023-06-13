@@ -15,6 +15,7 @@ namespace Mosa.Compiler.Common
 		public WatchDog(long timeOutMilliseconds)
 		{
 			TimeOutMilliseconds = timeOutMilliseconds;
+			watch.Start();
 		}
 
 		public void Restart()
