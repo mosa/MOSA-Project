@@ -186,7 +186,7 @@ public class UnitTestEngine : IDisposable
 		}
 		catch (Exception e)
 		{
-			Console.WriteLine(e.ToString());
+			OutputStatus(e.ToString());
 		}
 	}
 
@@ -241,7 +241,7 @@ public class UnitTestEngine : IDisposable
 
 					messages.Add(message);
 
-					//Console.WriteLine("Sent: " + (message.Other as UnitTest).FullMethodName);
+					//OutputStatus("Sent: " + (message.Other as UnitTest).FullMethodName);
 
 					if (SendOneCount >= 0)
 					{
@@ -251,7 +251,7 @@ public class UnitTestEngine : IDisposable
 
 				if (messages.Count > 0)
 				{
-					//Console.WriteLine("Batch Sent: " + messages.Count.ToString());
+					//OutputStatus("Batch Sent: " + messages.Count.ToString());
 					DebugServerEngine.SendCommand2(messages);
 					messages.Clear();
 				}
@@ -339,8 +339,10 @@ public class UnitTestEngine : IDisposable
 			&& compilerEvent != CompilerEvent.FinalizationStageEnd
 		   )
 		{
-			message = string.IsNullOrWhiteSpace(message) ? string.Empty : $": {message}";
-			Console.WriteLine($"{(DateTime.Now - CompileStartTime).TotalSeconds:0.00} [{threadID}] {compilerEvent.ToText()}{message}");
+			var eventname = compilerEvent.ToText();
+			message = string.IsNullOrWhiteSpace(message) ? eventname : $"{eventname}: {message}";
+
+			OutputStatus(message);
 		}
 	}
 
@@ -350,7 +352,12 @@ public class UnitTestEngine : IDisposable
 
 	private void NotifyStatus(string status)
 	{
-		Console.WriteLine($"{(DateTime.Now - CompileStartTime).TotalSeconds:0.00} [{status}]");
+		OutputStatus($"[{status}]");
+	}
+
+	private void OutputStatus(string status)
+	{
+		Console.WriteLine($"{(DateTime.Now - CompileStartTime).TotalSeconds:0.00} | {status}");
 	}
 
 	public bool LaunchVirtualMachine()
@@ -481,16 +488,16 @@ public class UnitTestEngine : IDisposable
 		{
 			for (var attempt = 0; attempt < 10; attempt++)
 			{
-				Console.WriteLine("Starting Engine...");
+				OutputStatus("Starting Engine...");
 
 				if (StartEngineEx())
 				{
-					Console.WriteLine($"> Started!");
+					OutputStatus($"Started!");
 					return true;
 				}
 				else
 				{
-					Console.WriteLine("ERROR: Failed");
+					OutputStatus("ERROR: Failed");
 					KillVirtualMachine();
 				}
 
@@ -507,31 +514,31 @@ public class UnitTestEngine : IDisposable
 
 		if (LaunchVirtualMachine())
 		{
-			Console.WriteLine("> Virtual Machine Launched");
+			OutputStatus("Virtual Machine Launched");
 		}
 		else
 		{
-			Console.WriteLine("ERROR: Unable to launch Virtual Machine");
+			OutputStatus("ERROR: Unable to launch Virtual Machine");
 			return false;
 		}
 
 		if (ConnectToDebugEngine())
 		{
-			Console.WriteLine($"> Connected!");
+			OutputStatus($"Connected!");
 		}
 		else
 		{
-			Console.WriteLine("ERROR: Unable to connect");
+			OutputStatus("ERROR: Unable to connect");
 			return false;
 		}
 
 		if (WaitForReady())
 		{
-			Console.WriteLine($"> Ready!");
+			OutputStatus($"Ready!");
 		}
 		else
 		{
-			Console.WriteLine("ERROR: No ready status received");
+			OutputStatus("ERROR: No ready status received");
 			return false;
 		}
 
@@ -579,7 +586,7 @@ public class UnitTestEngine : IDisposable
 				{
 					foreach (var failed in Pending)
 					{
-						// Console.WriteLine("Failed - Requeueing: " + (failed.Other as UnitTest).FullMethodName);
+						// OutputStatus("Failed - Requeueing: " + (failed.Other as UnitTest).FullMethodName);
 
 						(failed.Other as UnitTest).Status = UnitTestStatus.FailedByCrash;
 					}
@@ -594,7 +601,7 @@ public class UnitTestEngine : IDisposable
 				Pending.Clear();
 				SendOneCount = 10;
 
-				Console.WriteLine("Re-starting Engine...");
+				OutputStatus("Re-starting Engine...");
 
 				if (!StartEngine())
 				{
@@ -628,12 +635,12 @@ public class UnitTestEngine : IDisposable
 			CompletedUnitTestCount++;
 			Pending.Remove(response);
 
-			//Console.WriteLine("Received: " + (response.Other as UnitTest).FullMethodName);
-			//Console.WriteLine(response.ToString());
+			//OutputStatus("Received: " + (response.Other as UnitTest).FullMethodName);
+			//OutputStatus(response.ToString());
 
 			if (CompletedUnitTestCount % 1000 == 0 && StopWatch.Elapsed.Seconds != 0)
 			{
-				Console.WriteLine("Unit Tests - Count: " + CompletedUnitTestCount + " Elapsed: " + (int)StopWatch.Elapsed.TotalSeconds + " (" + (CompletedUnitTestCount / StopWatch.Elapsed.TotalSeconds).ToString("F2") + " per second)");
+				OutputStatus("Unit Tests - Count: " + CompletedUnitTestCount + " Elapsed: " + (int)StopWatch.Elapsed.TotalSeconds + " (" + (CompletedUnitTestCount / StopWatch.Elapsed.TotalSeconds).ToString("F2") + " per second)");
 			}
 		}
 
@@ -651,7 +658,7 @@ public class UnitTestEngine : IDisposable
 				var value = Equals(unitTest.Expected, unitTest.Result);
 				Errors++;
 
-				Console.WriteLine("ERROR: " + UnitTestSystem.OutputUnitTestResult(unitTest));
+				OutputStatus("ERROR: " + UnitTestSystem.OutputUnitTestResult(unitTest));
 
 				if (Errors >= MaxErrors)
 				{
@@ -659,7 +666,7 @@ public class UnitTestEngine : IDisposable
 				}
 			}
 
-			//Console.WriteLine("RECD: " + unitTest.MethodTypeName + "." + unitTest.MethodName);
+			//OutputStatus("RECD: " + unitTest.MethodTypeName + "." + unitTest.MethodName);
 		}
 	}
 

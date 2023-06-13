@@ -25,17 +25,14 @@ public static class UnitTestSystem
 		stopwatch.Start();
 
 		Console.WriteLine("Discovering Unit Tests...");
-		var discoveredUnitTests = Discovery.DiscoverUnitTests();
-		Console.WriteLine("Found Tests: " + discoveredUnitTests.Count);
-		var elapsedDiscovery = stopwatch.ElapsedMilliseconds;
-		Console.WriteLine("Elapsed: " + (elapsedDiscovery / 1000.0).ToString("F2") + " secs");
-		Console.WriteLine();
 
-		Console.WriteLine("Starting Unit Test Engine...");
-		var unitTestEngine = new UnitTestEngine(settings);
-		var elapsedCompile = stopwatch.ElapsedMilliseconds - elapsedDiscovery;
-		Console.WriteLine("Elapsed: " + (elapsedCompile / 1000.0).ToString("F2") + " secs");
+		var discoveredUnitTests = Discovery.DiscoverUnitTests();
+
+		Console.WriteLine($"Found Tests: {discoveredUnitTests.Count} in {(stopwatch.ElapsedMilliseconds / 1000.0).ToString("F2")} secs");
 		Console.WriteLine();
+		Console.WriteLine("Starting Unit Test Engine...");
+
+		var unitTestEngine = new UnitTestEngine(settings);
 
 		if (unitTestEngine.IsAborted)
 		{
@@ -43,21 +40,15 @@ public static class UnitTestSystem
 			return 1;
 		}
 
-		Console.WriteLine("Preparing Unit Tests...");
 		var unitTests = PrepareUnitTest(discoveredUnitTests, unitTestEngine.TypeSystem, unitTestEngine.Linker);
-		var elapsedPreparing = stopwatch.ElapsedMilliseconds - elapsedDiscovery - elapsedCompile;
-		Console.WriteLine("Elapsed: " + (elapsedPreparing / 1000.0).ToString("F2") + " secs");
-		Console.WriteLine();
 
-		Console.WriteLine("Executing Unit Tests...");
+		var executeStart = stopwatch.ElapsedMilliseconds;
+
 		Execute(unitTests, unitTestEngine);
-		var elapsedExecuting = stopwatch.ElapsedMilliseconds - elapsedDiscovery - elapsedCompile - elapsedPreparing;
-		Console.WriteLine("Elapsed: " + (elapsedExecuting / 1000.0).ToString("F2") + " secs");
-		Console.WriteLine();
-
 		stopwatch.Stop();
 
-		Console.WriteLine("Total Elapsed: " + stopwatch.ElapsedMilliseconds / 1000.0 + " secs");
+		Console.WriteLine("Unit Testing: " + (stopwatch.ElapsedMilliseconds - executeStart / 1000.0).ToString("F2") + " secs");
+		Console.WriteLine("Total: " + stopwatch.ElapsedMilliseconds / 1000.0 + " secs");
 
 		unitTestEngine.Terminate();
 
@@ -83,7 +74,9 @@ public static class UnitTestSystem
 			}
 		}
 
-		Console.WriteLine();
+		if (failures != 0)
+			Console.WriteLine();
+
 		Console.WriteLine("Unit Test Results:");
 		Console.WriteLine($"  Passed:     {passed}");
 		Console.WriteLine($"  Skipped:    {skipped}");
