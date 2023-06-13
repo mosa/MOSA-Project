@@ -66,9 +66,9 @@ public class UnitTestEngine : IDisposable
 	private Thread ProcessThread;
 
 	private readonly Stopwatch StopWatch = new Stopwatch();
+	private WatchDog WatchDog;
 
 	private int CompletedUnitTestCount;
-	private volatile int LastResponse;
 
 	private int SendOneCount = -1;
 	private int Errors;
@@ -179,6 +179,8 @@ public class UnitTestEngine : IDisposable
 
 	private void ProcessQueueLaunch()
 	{
+		WatchDog = new WatchDog(TimeOut);
+
 		try
 		{
 			ProcessQueue();
@@ -214,7 +216,7 @@ public class UnitTestEngine : IDisposable
 			{
 				if (Queue.Count == 0 && Pending.Count == 0)
 				{
-					LastResponse = (int)StopWatch.ElapsedMilliseconds;
+					WatchDog.Restart();
 				}
 
 				if (Queue.Count > 0 || Pending.Count > 0)
@@ -469,7 +471,7 @@ public class UnitTestEngine : IDisposable
 		{
 			if (Ready)
 			{
-				LastResponse = (int)StopWatch.ElapsedMilliseconds;
+				WatchDog.Restart();
 				return true;
 			}
 
@@ -532,6 +534,7 @@ public class UnitTestEngine : IDisposable
 		if (WaitForReady())
 		{
 			OutputStatus($"Ready!");
+			WatchDog.Restart();
 		}
 		else
 		{
@@ -571,7 +574,7 @@ public class UnitTestEngine : IDisposable
 			}
 
 			// Has process stop responding more than X milliseconds; if yes, restart
-			else if (LastResponse > 0 && StopWatch.ElapsedMilliseconds - LastResponse > TimeOut)
+			else if (WatchDog.IsTimedOut)
 			{
 				KillVirtualMachine();
 				restart = true;
@@ -627,7 +630,7 @@ public class UnitTestEngine : IDisposable
 
 		lock (Queue)
 		{
-			LastResponse = (int)StopWatch.ElapsedMilliseconds;
+			WatchDog.Restart();
 
 			CompletedUnitTestCount++;
 			Pending.Remove(response);
