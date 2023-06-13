@@ -15,7 +15,6 @@ using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Utility.DebugEngine;
 using Mosa.Utility.Launcher;
-using Reko.Structure;
 
 namespace Mosa.Utility.UnitTests;
 
@@ -58,20 +57,23 @@ public class UnitTestEngine : IDisposable
 	private volatile bool Ready;
 
 	private int MaxErrors = 1000;
-	private int ConnectionTimeOut = 5000; // in milliseconds
+	private int ConnectionTimeOut = 8000; // in milliseconds
+	private int TimeOut = 500; // in milliseconds
 
 	private readonly Queue<DebugMessage> Queue = new Queue<DebugMessage>();
 	private readonly HashSet<DebugMessage> Pending = new HashSet<DebugMessage>();
 
 	private Thread ProcessThread;
 
-	private int CompletedUnitTestCount;
 	private readonly Stopwatch StopWatch = new Stopwatch();
 
+	private int CompletedUnitTestCount;
 	private volatile int LastResponse;
 
 	private int SendOneCount = -1;
 	private int Errors;
+
+	private int Port;
 
 	private DateTime CompileStartTime;
 
@@ -111,12 +113,21 @@ public class UnitTestEngine : IDisposable
 		Settings.SetValue("Multiboot.Video.Height", 480);
 		Settings.SetValue("Multiboot.Video.Depth", 32);
 		Settings.SetValue("Emulator.Display", false);
-		Settings.SetValue("OS.Name", "MOSA");
-
+		Settings.SetValue("Emulator.Serial", "TCPServer");
+		Settings.SetValue("Emulator.Serial.Host", "127.0.0.1");
+		Settings.SetValue("Emulator.Serial.Port", "11110");
+		Settings.SetValue("Emulator.Serial.Pipe", "MOSA");
+		Settings.SetValue("Multiboot.Version", "v1");
+		Settings.SetValue("Image.Firmware", "bios");
+		Settings.SetValue("Image.Folder", Path.Combine(Path.GetTempPath(), "MOSA-UnitTest"));
+		Settings.SetValue("Image.Format", "IMG");
+		Settings.SetValue("Image.FileSystem", "FAT16");
+		Settings.SetValue("Image.ImageFile", "%DEFAULT%");
 		Settings.SetValue("UnitTest.MaxErrors", 1000);
-		Settings.SetValue("UnitTest.Connection.TimeOut", 5000);
+		Settings.SetValue("UnitTest.TimeOut", 500);
+		Settings.SetValue("UnitTest.Connection.TimeOut", 20000);
 		Settings.SetValue("UnitTest.Connection.MaxAttempts", 20);
-		Settings.SetValue("UnitTest.Connection.Delay", 100);
+		Settings.SetValue("OS.Name", "MOSA");
 
 		Settings.Merge(settings);
 
@@ -124,22 +135,12 @@ public class UnitTestEngine : IDisposable
 		Settings.SetValue("Compiler.Binary", true);
 		Settings.SetValue("Compiler.TraceLevel", 0);
 		Settings.SetValue("Launcher.PlugKorlib", true);
-		Settings.SetValue("Multiboot.Version", "v1");
 		Settings.SetValue("Emulator", "Qemu");
 		Settings.SetValue("Emulator.Memory", 128);
 		Settings.SetValue("Emulator.Cores", 1);
-		Settings.SetValue("Emulator.Serial", "TCPServer");
-		Settings.SetValue("Emulator.Serial.Host", "127.0.0.1");
-		Settings.SetValue("Emulator.Serial.Port", "11110");
-		Settings.SetValue("Emulator.Serial.Pipe", "MOSA");
 		Settings.SetValue("Launcher.Start", false);
 		Settings.SetValue("Launcher.Launch", false);
 		Settings.SetValue("Launcher.Exit", true);
-		Settings.SetValue("Image.Firmware", "bios");
-		Settings.SetValue("Image.Folder", Path.Combine(Path.GetTempPath(), "MOSA-UnitTest"));
-		Settings.SetValue("Image.Format", "IMG");
-		Settings.SetValue("Image.FileSystem", "FAT16");
-		Settings.SetValue("Image.ImageFile", "%DEFAULT%");
 
 		Initialize();
 	}
@@ -147,7 +148,9 @@ public class UnitTestEngine : IDisposable
 	private void Initialize()
 	{
 		MaxErrors = Settings.GetValue("UnitTest.MaxErrors", 1000);
-		ConnectionTimeOut = Settings.GetValue("UnitTest.Connection.TimeOut", 5000);
+		TimeOut = Settings.GetValue("UnitTest.TimeOut", 500);
+		ConnectionTimeOut = Settings.GetValue("UnitTest.Connection.TimeOut", 20000);
+		Port = Settings.GetValue("Emulator.Serial.Port", 11110);
 
 		if (TestAssemblyPath == null)
 		{
@@ -372,9 +375,6 @@ public class UnitTestEngine : IDisposable
 			Settings = Starter.Settings;
 		}
 
-		// Increment serial port number for next attempt
-		Settings.SetValue("Emulator.Serial.Port", Settings.GetValue("Emulator.Serial.Port", 11110) + 1);
-
 		if (!Starter.Launch())
 			return false;
 
@@ -399,8 +399,6 @@ public class UnitTestEngine : IDisposable
 
 		Thread.Sleep(50); // small delay to let emulator launch
 
-		var attempts = 0;
-
 		var watchdog = new WatchDog(ConnectionTimeOut);
 
 		while (!watchdog.IsTimedOut)
@@ -418,7 +416,6 @@ public class UnitTestEngine : IDisposable
 			{
 			}
 
-			attempts++;
 			Thread.Sleep(ConnectionDelay);
 		}
 
@@ -435,7 +432,7 @@ public class UnitTestEngine : IDisposable
 		{
 			case "tcpserver":
 				{
-					var client = new TcpClient(Settings.GetValue("Emulator.Serial.Host", "localhost"), Settings.GetValue("Emulator.Serial.Port", 11110));
+					var client = new TcpClient(Settings.GetValue("Emulator.Serial.Host", "localhost"), Port);
 					DebugServerEngine.Stream = new DebugNetworkStream(client.Client, true);
 					break;
 				}
@@ -492,7 +489,7 @@ public class UnitTestEngine : IDisposable
 
 				if (StartEngineEx())
 				{
-					OutputStatus($"Started!");
+					OutputStatus($"Engine Started!");
 					return true;
 				}
 				else
@@ -574,7 +571,7 @@ public class UnitTestEngine : IDisposable
 			}
 
 			// Has process stop responding more than X milliseconds; if yes, restart
-			else if (LastResponse > 0 && StopWatch.ElapsedMilliseconds - LastResponse > ConnectionTimeOut)
+			else if (LastResponse > 0 && StopWatch.ElapsedMilliseconds - LastResponse > TimeOut)
 			{
 				KillVirtualMachine();
 				restart = true;
