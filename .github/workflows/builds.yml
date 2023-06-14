@@ -168,7 +168,7 @@ jobs:
     strategy:
       matrix:
         optimization: [0,1,2,3,4,5,6,7,8,9]
-    name: Windows - Unit Testing -${{ matrix.optimization }}
+    name: Windows - Unit Testing -o${{ matrix.optimization }}
     runs-on: windows-latest
     needs: windows-build
     steps:
@@ -182,13 +182,13 @@ jobs:
           name: windows-build-artifact
           path: bin
       - name: Unit Testing
-        run: bin\Mosa.Utility.UnitTests.exe -o{{ matrix.optimization }}
+        run: bin\Mosa.Utility.UnitTests.exe -o${{ matrix.optimization }}
 
   linux-unit-testing:
     strategy:
       matrix:
         optimization: [0,1,2,3,4,5,6,7,8,9]
-    name: Linux - Unit Testing -o{{ matrix.optimization }}
+    name: Linux - Unit Testing -o${{ matrix.optimization }}
     runs-on: ubuntu-latest
     needs: linux-build
     steps:
@@ -210,4 +210,4 @@ jobs:
       - name: Install Qemu and Dependencies
         run: sudo apt-get -y -o Acquire::Retries=5 install qemu-system-x86
       - name: Unit Testing  
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -o{{ matrix.optimization }}
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -o${{ matrix.optimization }}
