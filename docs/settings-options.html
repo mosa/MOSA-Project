@@ -86,6 +86,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#application-location-settings">Application Location Settings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#os-settings">OS Settings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#import-settings">Import Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#unit-test-settings">Unit Test Settings</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="command-line-arguments.html">Command Line Arguments</a></li>
@@ -401,6 +402,12 @@
 <tr class="row-even"><td><p>Explorer.Filter</p></td>
 <td><p>Specifies the default method filter name when Explorer is launched</p></td>
 </tr>
+<tr class="row-odd"><td><p>Explorer.Start</p></td>
+<td><p>If true, immediately compile all methods upon launch</p></td>
+</tr>
+<tr class="row-even"><td><p>Explorer.DebugDiagnostic</p></td>
+<td><p>If true, debug diagnostics is captured</p></td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -465,6 +472,9 @@
 </tr>
 <tr class="row-odd"><td><p>Image.ImageFile</p></td>
 <td><p>Filename of the image file</p></td>
+</tr>
+<tr class="row-even"><td><p>Image.FileSystem.RootInclude</p></td>
+<td><p>Include files in specified directory</p></td>
 </tr>
 </tbody>
 </table>
@@ -667,6 +677,31 @@
 <tbody>
 <tr class="row-even"><td><p>Import</p></td>
 <td><p>Filename of another settings file to import</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="unit-test-settings">
+<h2>Unit Test Settings<a class="headerlink" href="#unit-test-settings" title="Permalink to this heading"></a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Settings</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>UnitTest.MaxErrors</p></td>
+<td><p>Maximum number of errors before aborting the unit testing</p></td>
+</tr>
+<tr class="row-odd"><td><p>UnitTest.Connection.TimeOut</p></td>
+<td><p>Maximum connection timeout in milliseconds before retrying</p></td>
+</tr>
+<tr class="row-even"><td><p>UnitTest.Connection.MaxAttempts</p></td>
+<td><p>Maximun number of restart attempts before aborting the unit tests</p></td>
 </tr>
 </tbody>
 </table>

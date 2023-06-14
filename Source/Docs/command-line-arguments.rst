@@ -161,6 +161,9 @@ Below are the command line arguments available:
     -breakpoints,Debugger.BreakpointFile,{value}
     -watch,Debugger.WatchFile,{value}
 
+	Unit Testings:
+	-unittest-maxerrors,UnitTest.MaxErrors,{value}
+
     Optimization Levels:
     -o0,Optimizations.Basic,false
     -o0,Optimizations.SSA,false

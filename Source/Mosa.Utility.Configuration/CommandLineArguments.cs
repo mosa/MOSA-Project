@@ -179,6 +179,9 @@ public static class CommandLineArguments
 			new Argument { Name = "-breakpoints", Setting = "Debugger.BreakpointFile"},
 			new Argument { Name = "-watch", Setting = "Debugger.WatchFile"},
 
+			// Unit Test:
+			new Argument { Name = "-unittest-maxerrors", Setting = "UnitTest.MaxErrors"},
+
 			// Optimization Levels:
 			new Argument { Name = "-o0", Setting = "Optimizations.Basic", Value = "false"},
 			new Argument { Name = "-o0", Setting = "Optimizations.SSA", Value = "false"},

@@ -7,6 +7,7 @@ using System.IO;
 using System.IO.Pipes;
 using System.Net.Sockets;
 using System.Threading;
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Configuration;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Linker;
@@ -19,6 +20,23 @@ namespace Mosa.Utility.UnitTests;
 
 public class UnitTestEngine : IDisposable
 {
+	#region Constants
+
+	protected static class Constant
+	{
+		public const int MaxErrors = 1000;
+		public const int ConnectionTimeOut = 8000; // in milliseconds
+		public const int TimeOut = 750; // in milliseconds
+		public const int MaxAttempts = 20;
+		public const int Port = 11110;
+	}
+
+	#endregion Constants
+
+	#region Public Methods
+
+	public bool IsAborted => Aborted;
+
 	public string TestAssemblyPath { get; set; }
 
 	public string TestSuiteFile { get; set; }
@@ -26,6 +44,19 @@ public class UnitTestEngine : IDisposable
 	public TypeSystem TypeSystem { get; internal set; }
 
 	public MosaLinker Linker { get; internal set; }
+
+	#endregion Public Methods
+
+	#region Constants
+
+	private const int MaxSentQueue = 10000;
+	private const int MinSend = 2000;
+
+	private const int ConnectionDelay = 150;
+
+	#endregion Constants
+
+	#region Private Data Members
 
 	protected DebugServerEngine DebugServerEngine;
 	protected Starter Starter;
@@ -38,30 +69,27 @@ public class UnitTestEngine : IDisposable
 	private volatile bool Aborted;
 	private volatile bool Ready;
 
-	private const int MaxSentQueue = 10000;
-	private const int MinSend = 2000;
-
-	private const int MaxErrors = 1000;
-	private const int ReadyTimeOut = 2000; // in milliseconds
-	private const int MaxConnectionAttempts = 100;
-	private const int ConnectionAttemptDelay = 250; // in milliseconds
+	private int MaxErrors = Constant.MaxErrors;
+	private int ConnectionTimeOut = Constant.ConnectionTimeOut; // in milliseconds
+	private int MaxAttempts;
+	private int TimeOut = Constant.TimeOut; // in milliseconds
 
 	private readonly Queue<DebugMessage> Queue = new Queue<DebugMessage>();
 	private readonly HashSet<DebugMessage> Pending = new HashSet<DebugMessage>();
 
 	private Thread ProcessThread;
 
-	private int CompletedUnitTestCount;
 	private readonly Stopwatch StopWatch = new Stopwatch();
+	private WatchDog WatchDog;
 
-	private volatile int LastResponse;
+	private int CompletedUnitTestCount;
 
 	private int SendOneCount = -1;
 	private int Errors;
 
 	private DateTime CompileStartTime;
 
-	public bool IsAborted => Aborted;
+	#endregion Private Data Members
 
 	public UnitTestEngine(Settings settings)
 	{
@@ -96,7 +124,21 @@ public class UnitTestEngine : IDisposable
 		Settings.SetValue("Multiboot.Video.Width", 640);
 		Settings.SetValue("Multiboot.Video.Height", 480);
 		Settings.SetValue("Multiboot.Video.Depth", 32);
-		Settings.SetValue("Emulator.Display", true);
+		Settings.SetValue("Emulator.Display", false);
+		Settings.SetValue("Emulator.Serial", "TCPServer");
+		Settings.SetValue("Emulator.Serial.Host", "127.0.0.1");
+		Settings.SetValue("Emulator.Serial.Port", Constant.Port);
+		Settings.SetValue("Emulator.Serial.Pipe", "MOSA");
+		Settings.SetValue("Multiboot.Version", "v1");
+		Settings.SetValue("Image.Firmware", "bios");
+		Settings.SetValue("Image.Folder", Path.Combine(Path.GetTempPath(), "MOSA-UnitTest"));
+		Settings.SetValue("Image.Format", "IMG");
+		Settings.SetValue("Image.FileSystem", "FAT16");
+		Settings.SetValue("Image.ImageFile", "%DEFAULT%");
+		Settings.SetValue("UnitTest.MaxErrors", Constant.MaxErrors);
+		Settings.SetValue("UnitTest.TimeOut", Constant.TimeOut);
+		Settings.SetValue("UnitTest.Connection.TimeOut", Constant.ConnectionTimeOut);
+		Settings.SetValue("UnitTest.Connection.MaxAttempts", Constant.MaxAttempts);
 		Settings.SetValue("OS.Name", "MOSA");
 
 		Settings.Merge(settings);
@@ -105,35 +147,26 @@ public class UnitTestEngine : IDisposable
 		Settings.SetValue("Compiler.Binary", true);
 		Settings.SetValue("Compiler.TraceLevel", 0);
 		Settings.SetValue("Launcher.PlugKorlib", true);
-		Settings.SetValue("Multiboot.Version", "v1");
 		Settings.SetValue("Emulator", "Qemu");
 		Settings.SetValue("Emulator.Memory", 128);
 		Settings.SetValue("Emulator.Cores", 1);
-		Settings.SetValue("Emulator.Serial", "TCPServer");
-		Settings.SetValue("Emulator.Serial.Host", "127.0.0.1");
-		Settings.SetValue("Emulator.Serial.Port", "11110");
-		Settings.SetValue("Emulator.Serial.Pipe", "MOSA");
 		Settings.SetValue("Launcher.Start", false);
 		Settings.SetValue("Launcher.Launch", false);
 		Settings.SetValue("Launcher.Exit", true);
-		Settings.SetValue("Image.Firmware", "bios");
-		Settings.SetValue("Image.Folder", Path.Combine(Path.GetTempPath(), "MOSA-UnitTest"));
-		Settings.SetValue("Image.Format", "IMG");
-		Settings.SetValue("Image.FileSystem", "FAT16");
-		Settings.SetValue("Image.ImageFile", "%DEFAULT%");
 
 		Initialize();
 	}
 
 	private void Initialize()
 	{
+		MaxErrors = Settings.GetValue("UnitTest.MaxErrors", Constant.MaxErrors);
+		TimeOut = Settings.GetValue("UnitTest.TimeOut", Constant.TimeOut);
+		ConnectionTimeOut = Settings.GetValue("UnitTest.Connection.TimeOut", Constant.ConnectionTimeOut);
+		MaxAttempts = Settings.GetValue("nitTest.Connection.MaxAttempts", Constant.MaxAttempts);
+
 		if (TestAssemblyPath == null)
 		{
-#if __MonoCS__
-				TestAssemblyPath = AppDomain.CurrentDomain.BaseDirectory;
-#else
 			TestAssemblyPath = AppContext.BaseDirectory;
-#endif
 		}
 
 		if (TestSuiteFile == null)
@@ -158,6 +191,8 @@ public class UnitTestEngine : IDisposable
 
 	private void ProcessQueueLaunch()
 	{
+		WatchDog = new WatchDog(TimeOut);
+
 		try
 		{
 			ProcessQueue();
@@ -168,7 +203,7 @@ public class UnitTestEngine : IDisposable
 		}
 		catch (Exception e)
 		{
-			Console.WriteLine(e.ToString());
+			OutputStatus(e.ToString());
 		}
 	}
 
@@ -193,7 +228,7 @@ public class UnitTestEngine : IDisposable
 			{
 				if (Queue.Count == 0 && Pending.Count == 0)
 				{
-					LastResponse = (int)StopWatch.ElapsedMilliseconds;
+					WatchDog.Restart();
 				}
 
 				if (Queue.Count > 0 || Pending.Count > 0)
@@ -223,7 +258,7 @@ public class UnitTestEngine : IDisposable
 
 					messages.Add(message);
 
-					//Console.WriteLine("Sent: " + (message.Other as UnitTest).FullMethodName);
+					//OutputStatus("Sent: " + (message.Other as UnitTest).FullMethodName);
 
 					if (SendOneCount >= 0)
 					{
@@ -233,7 +268,7 @@ public class UnitTestEngine : IDisposable
 
 				if (messages.Count > 0)
 				{
-					//Console.WriteLine("Batch Sent: " + messages.Count.ToString());
+					//OutputStatus("Batch Sent: " + messages.Count.ToString());
 					DebugServerEngine.SendCommand2(messages);
 					messages.Clear();
 				}
@@ -321,8 +356,10 @@ public class UnitTestEngine : IDisposable
 			&& compilerEvent != CompilerEvent.FinalizationStageEnd
 		   )
 		{
-			message = string.IsNullOrWhiteSpace(message) ? string.Empty : $": {message}";
-			Console.WriteLine($"{(DateTime.Now - CompileStartTime).TotalSeconds:0.00} [{threadID}] {compilerEvent.ToText()}{message}");
+			var eventname = compilerEvent.ToText();
+			message = string.IsNullOrWhiteSpace(message) ? eventname : $"{eventname}: {message}";
+
+			OutputStatus(message);
 		}
 	}
 
@@ -332,7 +369,12 @@ public class UnitTestEngine : IDisposable
 
 	private void NotifyStatus(string status)
 	{
-		Console.WriteLine($"{(DateTime.Now - CompileStartTime).TotalSeconds:0.00} [{status}]");
+		OutputStatus($"[{status}]");
+	}
+
+	private void OutputStatus(string status)
+	{
+		Console.WriteLine($"{(DateTime.Now - CompileStartTime).TotalSeconds:0.00} | {status}");
 	}
 
 	public bool LaunchVirtualMachine()
@@ -346,8 +388,6 @@ public class UnitTestEngine : IDisposable
 			Starter = new Starter(Settings, compilerHook);
 			Settings = Starter.Settings;
 		}
-
-		Settings.SetValue("Emulator.Serial.Port", Settings.GetValue("Emulator.Serial.Port", 11110) + 1);
 
 		if (!Starter.Launch())
 			return false;
@@ -371,26 +411,27 @@ public class UnitTestEngine : IDisposable
 			DebugServerEngine.SetGlobalDispatch(GlobalDispatch);
 		}
 
-		for (var attempt = 0; attempt < MaxConnectionAttempts; attempt++)
+		Thread.Sleep(50); // small delay to let emulator launch
+
+		var watchdog = new WatchDog(ConnectionTimeOut);
+
+		while (!watchdog.IsTimedOut)
 		{
 			try
 			{
-				Thread.Sleep(ConnectionAttemptDelay);
-
 				Connect();
 
 				if (DebugServerEngine.IsConnected)
 				{
-					Console.WriteLine("> Connected!");
 					return true;
 				}
 			}
 			catch
 			{
 			}
-		}
 
-		Console.Write("> Unable to connect");
+			Thread.Sleep(ConnectionDelay);
+		}
 
 		return false;
 	}
@@ -428,7 +469,7 @@ public class UnitTestEngine : IDisposable
 		if (!Process.HasExited)
 		{
 			Process.Kill();
-			Process.WaitForExit(5000); // wait for up to 5000 milliseconds
+			Process.WaitForExit(10000); // wait for up to 10 seconds
 		}
 
 		Process = null;
@@ -436,16 +477,17 @@ public class UnitTestEngine : IDisposable
 
 	private bool WaitForReady()
 	{
-		for (var attempt = 0; attempt < 100; attempt++)
+		var watchdog = new WatchDog(ConnectionTimeOut);
+
+		while (!watchdog.IsTimedOut)
 		{
 			if (Ready)
 			{
-				Console.WriteLine("> Ready!");
-				LastResponse = (int)StopWatch.ElapsedMilliseconds;
+				WatchDog.Restart();
 				return true;
 			}
 
-			Thread.Sleep(100);
+			Thread.Sleep(ConnectionDelay);
 		}
 
 		return false;
@@ -455,21 +497,22 @@ public class UnitTestEngine : IDisposable
 	{
 		lock (_lock)
 		{
-			for (var attempt = 0; attempt < 5; attempt++)
+			for (var attempt = 0; attempt < MaxAttempts; attempt++)
 			{
-				Console.WriteLine("Starting Engine...");
+				OutputStatus("Starting Engine...");
 
 				if (StartEngineEx())
 				{
+					OutputStatus($"Engine started!");
 					return true;
 				}
 				else
 				{
-					Console.WriteLine("> Failed");
+					OutputStatus("ERROR: Engine start failed!");
 					KillVirtualMachine();
 				}
 
-				Thread.Sleep(250);
+				Thread.Sleep(ConnectionDelay);
 			}
 
 			return false;
@@ -480,14 +523,36 @@ public class UnitTestEngine : IDisposable
 	{
 		Ready = false;
 
-		if (!LaunchVirtualMachine())
+		if (LaunchVirtualMachine())
+		{
+			OutputStatus("Virtual Machine Launched");
+		}
+		else
+		{
+			OutputStatus("ERROR: Unable to launch Virtual Machine");
 			return false;
+		}
 
-		if (!ConnectToDebugEngine())
+		if (ConnectToDebugEngine())
+		{
+			OutputStatus($"Engine Connected!");
+		}
+		else
+		{
+			OutputStatus("ERROR: Unable to connect");
 			return false;
+		}
 
-		if (!WaitForReady())
+		if (WaitForReady())
+		{
+			OutputStatus($"Engine Ready!");
+			WatchDog.Restart();
+		}
+		else
+		{
+			OutputStatus("ERROR: No ready status received");
 			return false;
+		}
 
 		return true;
 	}
@@ -510,19 +575,22 @@ public class UnitTestEngine : IDisposable
 			// Has VM exited? If yes, restart
 			else if (Process.HasExited)
 			{
+				OutputStatus("Virtual Machine Exited");
 				restart = true;
 			}
 
 			// Have communications been terminated? If yes, restart
 			else if (!DebugServerEngine.IsConnected)
 			{
+				OutputStatus("Lost Connection");
 				KillVirtualMachine();
 				restart = true;
 			}
 
-			// Has process stop responding (more than 2 seconds)? If yes, restart
-			else if (LastResponse > 0 && StopWatch.ElapsedMilliseconds - LastResponse > ReadyTimeOut)
+			// Has process stop responding more than X milliseconds; if yes, restart
+			else if (WatchDog.IsTimedOut)
 			{
+				OutputStatus("Timed Out");
 				KillVirtualMachine();
 				restart = true;
 			}
@@ -533,7 +601,7 @@ public class UnitTestEngine : IDisposable
 				{
 					foreach (var failed in Pending)
 					{
-						// Console.WriteLine("Failed - Requeueing: " + (failed.Other as UnitTest).FullMethodName);
+						// OutputStatus("Failed - Requeueing: " + (failed.Other as UnitTest).FullMethodName);
 
 						(failed.Other as UnitTest).Status = UnitTestStatus.FailedByCrash;
 					}
@@ -548,7 +616,9 @@ public class UnitTestEngine : IDisposable
 				Pending.Clear();
 				SendOneCount = 10;
 
-				Console.WriteLine("Re-starting Engine...");
+				OutputStatus("Re-starting Engine...");
+
+				Thread.Sleep(100);
 
 				if (!StartEngine())
 				{
@@ -577,17 +647,17 @@ public class UnitTestEngine : IDisposable
 
 		lock (Queue)
 		{
-			LastResponse = (int)StopWatch.ElapsedMilliseconds;
+			WatchDog.Restart();
 
 			CompletedUnitTestCount++;
 			Pending.Remove(response);
 
-			//Console.WriteLine("Received: " + (response.Other as UnitTest).FullMethodName);
-			//Console.WriteLine(response.ToString());
+			//OutputStatus("Received: " + (response.Other as UnitTest).FullMethodName);
+			//OutputStatus(response.ToString());
 
 			if (CompletedUnitTestCount % 1000 == 0 && StopWatch.Elapsed.Seconds != 0)
 			{
-				Console.WriteLine("Unit Tests - Count: " + CompletedUnitTestCount + " Elapsed: " + (int)StopWatch.Elapsed.TotalSeconds + " (" + (CompletedUnitTestCount / StopWatch.Elapsed.TotalSeconds).ToString("F2") + " per second)");
+				OutputStatus($"Unit Tests - Count: {CompletedUnitTestCount} Elapsed: {(int)StopWatch.Elapsed.TotalSeconds} ({(CompletedUnitTestCount / StopWatch.Elapsed.TotalSeconds).ToString("F2")} per second)");
 			}
 		}
 
@@ -605,15 +675,15 @@ public class UnitTestEngine : IDisposable
 				var value = Equals(unitTest.Expected, unitTest.Result);
 				Errors++;
 
-				Console.WriteLine("ERROR: " + UnitTestSystem.OutputUnitTestResult(unitTest));
+				OutputStatus($"ERROR: {UnitTestSystem.OutputUnitTestResult(unitTest)}");
 
-				if (Errors == MaxErrors)
+				if (Errors >= MaxErrors)
 				{
 					Aborted = true;
 				}
 			}
 
-			//Console.WriteLine("RECD: " + unitTest.MethodTypeName + "." + unitTest.MethodName);
+			//OutputStatus("RECD: " + unitTest.MethodTypeName + "." + unitTest.MethodName);
 		}
 	}
 

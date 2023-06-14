@@ -25,91 +25,82 @@ public static class UnitTestSystem
 		stopwatch.Start();
 
 		Console.WriteLine("Discovering Unit Tests...");
-		var discoveredUnitTests = Discovery.DiscoverUnitTests();
-		Console.WriteLine("Found Tests: " + discoveredUnitTests.Count);
-		var elapsedDiscovery = stopwatch.ElapsedMilliseconds;
-		Console.WriteLine("Elapsed: " + (elapsedDiscovery / 1000.0).ToString("F2") + " secs");
-		Console.WriteLine();
 
-		Console.WriteLine("Starting Unit Test Engine...");
-		var unitTestEngine = new UnitTestEngine(settings);
-		var elapsedCompile = stopwatch.ElapsedMilliseconds - elapsedDiscovery;
-		Console.WriteLine("Elapsed: " + (elapsedCompile / 1000.0).ToString("F2") + " secs");
+		var discoveredUnitTests = Discovery.DiscoverUnitTests();
+
+		Console.WriteLine($"Found Tests: {discoveredUnitTests.Count} in {(stopwatch.ElapsedMilliseconds / 1000.0).ToString("F2")} secs");
 		Console.WriteLine();
+		Console.WriteLine("Starting Unit Test Engine...");
+
+		var unitTestEngine = new UnitTestEngine(settings);
 
 		if (unitTestEngine.IsAborted)
 		{
-			Console.WriteLine("Compilation aborted!");
+			Console.WriteLine("ERROR: Compilation aborted!");
 			return 1;
 		}
 
-		Console.WriteLine("Preparing Unit Tests...");
 		var unitTests = PrepareUnitTest(discoveredUnitTests, unitTestEngine.TypeSystem, unitTestEngine.Linker);
-		var elapsedPreparing = stopwatch.ElapsedMilliseconds - elapsedDiscovery - elapsedCompile;
-		Console.WriteLine("Elapsed: " + (elapsedPreparing / 1000.0).ToString("F2") + " secs");
-		Console.WriteLine();
 
-		Console.WriteLine("Executing Unit Tests...");
+		var executeStart = stopwatch.ElapsedMilliseconds;
+
 		Execute(unitTests, unitTestEngine);
-		var elapsedExecuting = stopwatch.ElapsedMilliseconds - elapsedDiscovery - elapsedCompile - elapsedPreparing;
-		Console.WriteLine("Elapsed: " + (elapsedExecuting / 1000.0).ToString("F2") + " secs");
-		Console.WriteLine();
-
 		stopwatch.Stop();
 
-		Console.WriteLine("Total Elapsed: " + stopwatch.ElapsedMilliseconds / 1000.0 + " secs");
+		Console.WriteLine("Unit Testing: " + ((stopwatch.ElapsedMilliseconds - executeStart) / 1000.0).ToString("F2") + " secs");
+		Console.WriteLine("Total: " + stopwatch.ElapsedMilliseconds / 1000.0 + " secs");
 
 		unitTestEngine.Terminate();
+
+		Console.WriteLine();
 
 		var failures = 0;
 		var passed = 0;
 		var skipped = 0;
+		var incomplete = 0;
 
-		if (!unitTestEngine.IsAborted)
+		foreach (var unitTest in unitTests)
 		{
-			foreach (var unitTest in unitTests)
+			switch (unitTest.Status)
 			{
-				if (unitTest.Status == UnitTestStatus.Passed)
-				{
-					passed++;
-					continue;
-				}
-
-				if (unitTest.Status == UnitTestStatus.Skipped)
-				{
-					skipped++;
-					continue;
-				}
-
-				failures++;
-				Console.WriteLine(OutputUnitTestResult(unitTest));
+				case UnitTestStatus.Passed: passed++; break;
+				case UnitTestStatus.Skipped: skipped++; break;
+				case UnitTestStatus.Pending: incomplete++; break;
+				case UnitTestStatus.FailedByCrash:
+				case UnitTestStatus.Failed:
+					failures++;
+					Console.WriteLine(OutputUnitTestResult(unitTest));
+					break;
 			}
 		}
 
-		Console.WriteLine();
+		if (failures != 0)
+			Console.WriteLine();
+
 		Console.WriteLine("Unit Test Results:");
-		Console.WriteLine($"   Passed:   {passed}");
-		Console.WriteLine($"   Skipped:  {skipped}");
-		Console.WriteLine($"   Failures: {failures}");
-		Console.WriteLine($"   Total:    {passed + skipped + failures}");
+		Console.WriteLine($"  Passed:     {passed}");
+		Console.WriteLine($"  Skipped:    {skipped}");
+		Console.WriteLine($"  Incomplete: {incomplete}");
+		Console.WriteLine($"  Failures:   {failures}");
+		Console.WriteLine($"  Total:      {passed + skipped + failures + incomplete}");
 		Console.WriteLine();
 
 		if (unitTestEngine.IsAborted)
 		{
-			Console.WriteLine("Unit tests aborted due to failures!");
+			Console.WriteLine("ERROR: Unit tests aborted due to failures!");
 			return 1;
 		}
 
-		if (failures == 0)
+		if (failures + incomplete == 0)
 		{
 			Console.WriteLine("All unit tests passed successfully!");
+			return 0;
 		}
 		else
 		{
-			Console.WriteLine("Failures occurred in the unit tests!");
+			Console.WriteLine("ERROR: Failures occurred in the unit tests!");
+			return failures + incomplete;
 		}
-
-		return failures;
 	}
 
 	private static List<UnitTest> PrepareUnitTest(List<UnitTestInfo> discoveredUnitTests, TypeSystem typeSystem, MosaLinker linker)
@@ -128,7 +119,7 @@ public static class UnitTestSystem
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine($"Error while resolving method '{unitTestInfo.FullMethodName}'");
+				Console.WriteLine($"ERROR: Unable to resolve method: {unitTestInfo.FullMethodName}");
 
 				throw;
 			}
@@ -383,12 +374,12 @@ public static class UnitTestSystem
 
 		sb.Append($"{unitTest.MethodTypeName}::{unitTest.MethodName}");
 
-		sb.Append("(");
+		sb.Append('(');
 
 		foreach (var param in unitTest.Values)
 		{
 			sb.Append(param);
-			sb.Append(",");
+			sb.Append(',');
 		}
 
 		if (unitTest.Values.Length > 0)
@@ -396,7 +387,7 @@ public static class UnitTestSystem
 			sb.Length--;
 		}
 
-		sb.Append(")");
+		sb.Append(')');
 
 		sb.Append($" Expected: {ObjectToString(unitTest.Expected)}");
 		sb.Append($" Result: {ObjectToString(unitTest.Result)}");
@@ -420,12 +411,12 @@ public static class UnitTestSystem
 		{
 			sb.Append($"{unitTest.MethodTypeName}.{unitTest.MethodName}");
 
-			sb.Append("(");
+			sb.Append('(');
 
 			foreach (var param in unitTest.Values)
 			{
 				sb.Append(ParamToString(param));
-				sb.Append(",");
+				sb.Append(',');
 			}
 
 			if (unitTest.Values.Length > 0)
