@@ -68,7 +68,7 @@ jobs:
           
   windows-build-packaging:
     name: Windows Build Packaging
-    needs: [windows-build, linux-build, generate-docs, windows-unit-testing-o0, windows-unit-testing-o1, windows-unit-testing-o2, windows-unit-testing-o3, windows-unit-testing-o4, windows-unit-testing-o5, windows-unit-testing-o6, windows-unit-testing-o7, windows-unit-testing-o8, windows-unit-testing-o9, linux-unit-testing-o0, linux-unit-testing-o1, linux-unit-testing-o2, linux-unit-testing-o3, linux-unit-testing-o4, linux-unit-testing-o5, linux-unit-testing-o6, linux-unit-testing-o7, linux-unit-testing-o8, linux-unit-testing-o9 ]
+    needs: [windows-build, linux-build, generate-docs, windows-unit-testing, linux-unit-testing]
     runs-on: windows-latest
     if: github.event_name == 'push' && github.repository == 'mosa/MOSA-Project' && github.ref == 'refs/heads/master'
     env:
