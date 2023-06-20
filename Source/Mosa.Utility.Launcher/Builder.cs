@@ -239,14 +239,14 @@ public class Builder : BaseLauncher
 	{
 		var arg = $"convert -f raw -O vmdk {Quote(source)} {Quote(LauncherSettings.ImageFile)}";
 
-		LaunchApplication(LauncherSettings.QemuImg, arg, true);
+		LaunchApplicationWithOutput(LauncherSettings.QemuImg, arg);
 	}
 
 	private void CreateVDI(string source)
 	{
 		var arg = $"convert -f raw -O vdi {Quote(source)} {Quote(LauncherSettings.ImageFile)}";
 
-		LaunchApplication(LauncherSettings.QemuImg, arg, true);
+		LaunchApplicationWithOutput(LauncherSettings.QemuImg, arg);
 	}
 
 	private void LaunchNDISASM()
@@ -261,9 +261,9 @@ public class Builder : BaseLauncher
 
 		var process = LaunchApplication(LauncherSettings.Ndisasm, arg);
 
-		var processoutput = GetOutput(process);
+		var output = GetOutput(process);
 
-		File.WriteAllText(LauncherSettings.NasmFile, processoutput);
+		File.WriteAllText(LauncherSettings.NasmFile, output);
 	}
 
 	private void GenerateASMFile()

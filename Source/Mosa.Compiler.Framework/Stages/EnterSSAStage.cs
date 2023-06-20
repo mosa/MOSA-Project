@@ -21,9 +21,11 @@ public sealed class EnterSSAStage : BaseMethodCompilerStage
 	private Dictionary<BasicBlock, SimpleFastDominance> blockAnalysis;
 	private Dictionary<Operand, List<BasicBlock>> assignments;
 	private Dictionary<Operand, Operand> parentOperand;
-	//private List<Context> phiInstructions;
+	private List<Context> phiInstructions;
 
 	private TraceLog trace;
+
+	#region Overrides
 
 	protected override void Setup()
 	{
@@ -31,7 +33,7 @@ public sealed class EnterSSAStage : BaseMethodCompilerStage
 		blockAnalysis = new Dictionary<BasicBlock, SimpleFastDominance>();
 		assignments = new Dictionary<Operand, List<BasicBlock>>();
 		parentOperand = new Dictionary<Operand, Operand>();
-		//phiInstructions = new List<Context>();
+		phiInstructions = new List<Context>();
 	}
 
 	protected override void Run()
@@ -56,13 +58,15 @@ public sealed class EnterSSAStage : BaseMethodCompilerStage
 
 		EnterSSA();
 
+		RemoveUselessPhiInstructions();
+
 		MethodCompiler.IsInSSAForm = true;
 	}
 
 	protected override void Finish()
 	{
 		// Clean up
-		//phiInstructions.Clear();
+		phiInstructions.Clear();
 		trace = null;
 		stack = null;
 		counters = null;
@@ -71,6 +75,64 @@ public sealed class EnterSSAStage : BaseMethodCompilerStage
 		blockAnalysis = null;
 		parentOperand = null;
 	}
+
+	#endregion Overrides
+
+	#region Helpers Methods
+
+	private Operand GetSSAOperand(Operand operand, int version)
+	{
+		var ssaArray = ssaOperands[operand];
+		var ssaOperand = ssaArray[version];
+
+		if (ssaOperand == null)
+		{
+			ssaOperand = MethodCompiler.VirtualRegisters.Allocate(operand);
+			ssaArray[version] = ssaOperand;
+
+			parentOperand.Add(ssaOperand, operand);
+		}
+
+		return ssaOperand;
+	}
+
+	private int WhichPredecessor(BasicBlock y, BasicBlock x)
+	{
+		for (var i = 0; i < y.PreviousBlocks.Count; ++i)
+		{
+			if (y.PreviousBlocks[i] == x)
+			{
+				return i;
+			}
+		}
+
+		throw new InvalidCompilerOperationException();
+	}
+
+	#endregion Helpers Methods
+
+	#region Collect Assignments Methods
+
+	private void CollectAssignments()
+	{
+		foreach (var operand in MethodCompiler.VirtualRegisters)
+		{
+			if (!operand.IsDefined)
+				continue;
+
+			var blocks = new List<BasicBlock>(operand.Definitions.Count);
+			assignments.Add(operand, blocks);
+
+			foreach (var def in operand.Definitions)
+			{
+				blocks.AddIfNew(def.Block);
+			}
+		}
+	}
+
+	#endregion Collect Assignments Methods
+
+	#region Enter SSA Methods
 
 	private void EnterSSA()
 	{
@@ -98,33 +160,18 @@ public sealed class EnterSSAStage : BaseMethodCompilerStage
 
 	private void AddToAssignments(Operand operand)
 	{
-		if (!stack.ContainsKey(operand))
-		{
-			stack[operand] = new Stack<int>();
-			counters.Add(operand, 0);
-			stack[operand].Push(0);
+		if (stack.ContainsKey(operand))
+			return;
 
-			if (!ssaOperands.ContainsKey(operand))
-			{
-				ssaOperands.Add(operand, new Operand[operand.Definitions.Count + 1]);
-			}
-		}
-	}
+		stack[operand] = new Stack<int>();
 
-	private Operand GetSSAOperand(Operand operand, int version)
-	{
-		var ssaArray = ssaOperands[operand];
-		var ssaOperand = ssaArray[version];
+		counters.Add(operand, 0);
+		stack[operand].Push(0);
 
-		if (ssaOperand == null)
-		{
-			ssaOperand = MethodCompiler.VirtualRegisters.Allocate(operand);
-			ssaArray[version] = ssaOperand;
+		if (ssaOperands.ContainsKey(operand))
+			return;
 
-			parentOperand.Add(ssaOperand, operand);
-		}
-
-		return ssaOperand;
+		ssaOperands.Add(operand, new Operand[operand.Definitions.Count + 1]);
 	}
 
 	private void RenameVariables(BasicBlock headBlock, SimpleFastDominance dominanceAnalysis)
@@ -142,7 +189,7 @@ public sealed class EnterSSAStage : BaseMethodCompilerStage
 				trace?.Log($"Processing: {block}");
 
 				UpdateOperands(block);
-				UpdatePHIs(block);
+				UpdatePHIsOnNextBlocks(block);
 
 				worklist.Push(block);
 				worklist.Push(null);
@@ -151,14 +198,14 @@ public sealed class EnterSSAStage : BaseMethodCompilerStage
 
 				// Repeat for all children of the dominance block, if any
 				var children = dominanceAnalysis.GetChildren(block);
-				if (children != null && children.Count > 0)
-				{
-					foreach (var s in children)
-					{
-						worklist.Push(s);
 
-						trace?.Log($"  >Pushed: {s}");
-					}
+				if (children == null || children.Count == 0)
+					continue;
+
+				foreach (var s in children)
+				{
+					worklist.Push(s);
+					trace?.Log($"  >Pushed: {s}");
 				}
 			}
 			else
@@ -166,7 +213,7 @@ public sealed class EnterSSAStage : BaseMethodCompilerStage
 				block = worklist.Pop();
 
 				trace?.Log($"Processing: {block} (Back)");
-				UpdateResultOperands(block);
+				CaptureResultOperands(block);
 			}
 		}
 	}
@@ -192,7 +239,7 @@ public sealed class EnterSSAStage : BaseMethodCompilerStage
 				}
 			}
 
-			if (node.Result?.IsVirtualRegister == true)
+			if (node.ResultCount >= 1 && node.Result.IsVirtualRegister)
 			{
 				var op = node.Result;
 				var index = counters[op];
@@ -201,7 +248,7 @@ public sealed class EnterSSAStage : BaseMethodCompilerStage
 				counters[op] = index + 1;
 			}
 
-			if (node.Result2?.IsVirtualRegister == true)
+			if (node.ResultCount == 2 && node.Result2.IsVirtualRegister)
 			{
 				var op = node.Result2;
 				var index = counters[op];
@@ -212,9 +259,8 @@ public sealed class EnterSSAStage : BaseMethodCompilerStage
 		}
 	}
 
-	private void UpdatePHIs(BasicBlock block)
+	private void UpdatePHIsOnNextBlocks(BasicBlock block)
 	{
-		// Update PHIs in successor blocks
 		foreach (var next in block.NextBlocks)
 		{
 			var index = WhichPredecessor(next, block);
@@ -239,7 +285,7 @@ public sealed class EnterSSAStage : BaseMethodCompilerStage
 		}
 	}
 
-	private void UpdateResultOperands(BasicBlock block)
+	private void CaptureResultOperands(BasicBlock block)
 	{
 		for (var node = block.First.Next; !node.IsBlockEndInstruction; node = node.Next)
 		{
@@ -260,74 +306,9 @@ public sealed class EnterSSAStage : BaseMethodCompilerStage
 		}
 	}
 
-	private int WhichPredecessor(BasicBlock y, BasicBlock x)
-	{
-		for (var i = 0; i < y.PreviousBlocks.Count; ++i)
-		{
-			if (y.PreviousBlocks[i] == x)
-			{
-				return i;
-			}
-		}
+	#endregion Enter SSA Methods
 
-		throw new InvalidCompilerOperationException();
-	}
-
-	private void CollectAssignments()
-	{
-		foreach (var operand in MethodCompiler.VirtualRegisters)
-		{
-			if (!operand.IsDefined)
-				continue;
-
-			var blocks = new List<BasicBlock>(operand.Definitions.Count);
-			assignments.Add(operand, blocks);
-
-			foreach (var def in operand.Definitions)
-			{
-				blocks.AddIfNew(def.Block);
-			}
-		}
-	}
-
-	private Context InsertPhiInstruction(BasicBlock block, Operand variable)
-	{
-		trace?.Log($"     Phi: {variable} into {block}");
-
-		var instruction = GetPhiInstruction(variable.Primitive);
-
-		var context = new Context(block);
-		context.AppendInstruction(instruction, variable);
-
-		var sourceBlocks = new List<BasicBlock>(block.PreviousBlocks.Count);
-		context.PhiBlocks = sourceBlocks;
-
-		for (var i = 0; i < block.PreviousBlocks.Count; i++)
-		{
-			context.SetOperand(i, variable);
-			sourceBlocks.Add(block.PreviousBlocks[i]);
-		}
-
-		context.OperandCount = block.PreviousBlocks.Count;
-
-		//phiInstructions.Add(context);
-
-		return context;
-	}
-
-	public static BaseInstruction GetPhiInstruction(PrimitiveType primitiveType)
-	{
-		return primitiveType switch
-		{
-			PrimitiveType.Int32 => IRInstruction.Phi32,
-			PrimitiveType.Int64 => IRInstruction.Phi64,
-			PrimitiveType.R4 => IRInstruction.PhiR4,
-			PrimitiveType.R8 => IRInstruction.PhiR8,
-			PrimitiveType.Object => IRInstruction.PhiObject,
-			PrimitiveType.ManagedPointer => IRInstruction.PhiManagedPointer,
-			_ => throw new InvalidCompilerOperationException(),
-		};
-	}
+	#region Place Phi Instructions
 
 	private void PlacePhiFunctionsMinimal()
 	{
@@ -355,6 +336,58 @@ public sealed class EnterSSAStage : BaseMethodCompilerStage
 			{
 				InsertPhiInstruction(block, operand);
 			}
+		}
+	}
+
+	private Context InsertPhiInstruction(BasicBlock block, Operand variable)
+	{
+		trace?.Log($"     Phi: {variable} into {block}");
+
+		var instruction = GetPhiInstruction(variable.Primitive);
+
+		var context = new Context(block);
+		context.AppendInstruction(instruction, variable);
+
+		var sourceBlocks = new List<BasicBlock>(block.PreviousBlocks.Count);
+		context.PhiBlocks = sourceBlocks;
+
+		for (var i = 0; i < block.PreviousBlocks.Count; i++)
+		{
+			context.SetOperand(i, variable);
+			sourceBlocks.Add(block.PreviousBlocks[i]);
+		}
+
+		context.OperandCount = block.PreviousBlocks.Count;
+
+		phiInstructions.Add(context);
+
+		return context;
+	}
+
+	public static BaseInstruction GetPhiInstruction(PrimitiveType primitiveType)
+	{
+		return primitiveType switch
+		{
+			PrimitiveType.Int32 => IRInstruction.Phi32,
+			PrimitiveType.Int64 => IRInstruction.Phi64,
+			PrimitiveType.R4 => IRInstruction.PhiR4,
+			PrimitiveType.R8 => IRInstruction.PhiR8,
+			PrimitiveType.Object => IRInstruction.PhiObject,
+			PrimitiveType.ManagedPointer => IRInstruction.PhiManagedPointer,
+			_ => throw new InvalidCompilerOperationException(),
+		};
+	}
+
+	#endregion Place Phi Instructions
+
+	private void RemoveUselessPhiInstructions()
+	{
+		foreach (var context in phiInstructions)
+		{
+			if (context.Result.IsUsed)
+				continue;
+
+			context.SetNop();
 		}
 	}
 }

@@ -181,7 +181,8 @@ public class BaseLauncher
 
 	protected static string Quote(string location)
 	{
-		return '"' + location + '"';
+		return $""{ location}
+		"";
 	}
 
 	protected Process LaunchApplication(string app, string args)
@@ -231,15 +232,12 @@ public class BaseLauncher
 		return output + error;
 	}
 
-	protected Process LaunchApplication(string app, string arg, bool getOutput)
+	protected Process LaunchApplicationWithOutput(string app, string arg)
 	{
 		var process = LaunchApplication(app, arg);
 
-		if (getOutput)
-		{
-			var output = GetOutput(process);
-			Output(output);
-		}
+		var output = GetOutput(process);
+		Output(output);
 
 		return process;
 	}

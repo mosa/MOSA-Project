@@ -168,6 +168,7 @@ jobs:
     strategy:
       matrix:
         optimization: [0,1,2,3,4,5,6,7,8,9]
+      fail-fast: false
     name: Windows - Unit Testing -o${{ matrix.optimization }}
     runs-on: windows-latest
     needs: windows-build
@@ -188,9 +189,11 @@ jobs:
     strategy:
       matrix:
         optimization: [0,1,2,3,4,5,6,7,8,9]
+      fail-fast: false
     name: Linux - Unit Testing -o${{ matrix.optimization }}
     runs-on: ubuntu-latest
     needs: linux-build
+
     steps:
       - name: Set net7.0
         uses: actions/setup-dotnet@v3
