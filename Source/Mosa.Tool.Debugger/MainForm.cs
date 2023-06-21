@@ -721,7 +721,9 @@ public partial class MainForm : Form
 
 		var starter = new Starter(Settings, compilerHook);
 
-		VMProcess = starter.LaunchVM();
+		var processEx = starter.LaunchVM(); ;
+
+		VMProcess = processEx.Process;
 	}
 
 	private void MainForm_FormClosed(object sender, FormClosedEventArgs e)

@@ -181,8 +181,19 @@ public class BaseLauncher
 
 	protected static string Quote(string location)
 	{
-		return $""{ location}
-		"";
+		return '"' + location + '"';
+	}
+
+	protected ExternalProcess LaunchApplicationEx(string app, string args)
+	{
+		Output($"Launching Application: {app}");
+		Output($"Arguments: {args}");
+
+		var externalProcess = new ExternalProcess(app, args, true);
+
+		externalProcess.Start();
+
+		return externalProcess;
 	}
 
 	protected Process LaunchApplication(string app, string args)

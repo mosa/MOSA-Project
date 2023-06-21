@@ -10,7 +10,6 @@ using Mosa.Compiler.Common.Configuration;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Linker;
-using static Reko.ImageLoaders.OdbgScript.OllyScript;
 
 namespace Mosa.Utility.Launcher;
 
@@ -40,11 +39,11 @@ public class Starter : BaseLauncher
 
 		try
 		{
-			Process = LaunchVM();
+			var ProcessEx = LaunchVM();
 
 			if (LauncherSettings.LauncherTest)
 			{
-				IsSucccessful = MonitorTest(Process, 10000, "<SELFTEST:PASSED>");
+				IsSucccessful = MonitorTest(ProcessEx, 10000, "<SELFTEST:PASSED>");
 				return IsSucccessful;
 			}
 
@@ -80,7 +79,7 @@ public class Starter : BaseLauncher
 		return IsSucccessful;
 	}
 
-	private bool MonitorTest(Process process, int timeoutMS, string successText)
+	private bool MonitorTest(ExternalProcess process, int timeoutMS, string successText)
 	{
 		var success = false;
 
@@ -90,18 +89,6 @@ public class Starter : BaseLauncher
 			return false;
 		}
 
-		var sb = new StringBuilder();
-
-		process.BeginOutputReadLine();
-
-		process.OutputDataReceived += new DataReceivedEventHandler((sender, e) =>
-		{
-			lock (sb)
-			{
-				sb.Append(e.Data);
-			}
-		});
-
 		var readerThread = new Thread(() =>
 		{
 			while (true)
@@ -109,13 +96,10 @@ public class Starter : BaseLauncher
 				if (process.HasExited)
 					break;
 
-				lock (sb)
+				if (process.Output.Contains(successText))
 				{
-					if (sb.Length == successText.Length && sb.ToString() == successText)
-					{
-						success = true;
-						break;
-					}
+					success = true;
+					break;
 				}
 
 				Thread.Sleep(10);
@@ -132,21 +116,22 @@ public class Starter : BaseLauncher
 
 			if (!process.HasExited)
 			{
-				Output("Test Timeout");
+				Output("ERROR: Test Timeout");
 				process.Kill();
 			}
 		});
+
 		timeoutThread.Start();
 
 		process.WaitForExit();
 
-		Output($"VM Output: {sb}");
+		Output($"VM Output: {process.Output}");
 		Output($"VM Exit Code: {process.ExitCode}");
 
 		if (success)
-			Output("Test PASSED");
+			Output("Result: Test PASSED");
 		else
-			Output("Test FAILED");
+			Output("Result: Test FAILED");
 
 		if (LauncherSettings.LauncherExit)
 		{
@@ -156,7 +141,7 @@ public class Starter : BaseLauncher
 		return success;
 	}
 
-	public Process LaunchVM()
+	public ExternalProcess LaunchVM()
 	{
 		return LauncherSettings.Emulator switch
 		{
@@ -168,7 +153,7 @@ public class Starter : BaseLauncher
 		};
 	}
 
-	private Process LaunchQemu()
+	private ExternalProcess LaunchQemu()
 	{
 		var arg = new StringBuilder();
 
@@ -286,10 +271,10 @@ public class Starter : BaseLauncher
 			}
 		}
 
-		return LaunchApplication(LauncherSettings.QEMU, arg.ToString());
+		return LaunchApplicationEx(LauncherSettings.QEMU, arg.ToString());
 	}
 
-	private Process LaunchBochs()
+	private ExternalProcess LaunchBochs()
 	{
 		var bochsdirectory = Path.GetDirectoryName(LauncherSettings.Bochs);
 
@@ -380,10 +365,10 @@ public class Starter : BaseLauncher
 
 		File.WriteAllText(configfile, sb.ToString());
 
-		return LaunchApplication(LauncherSettings.Bochs, $"-q -f {Quote(configfile)}");
+		return LaunchApplicationEx(LauncherSettings.Bochs, $"-q -f {Quote(configfile)}");
 	}
 
-	private Process LaunchVMware()
+	private ExternalProcess LaunchVMware()
 	{
 		var configFile = Path.Combine(LauncherSettings.TemporaryFolder, Path.ChangeExtension(LauncherSettings.ImageFile, ".vmx")!);
 		var sb = new StringBuilder();
@@ -454,18 +439,18 @@ public class Starter : BaseLauncher
 
 		if (!string.IsNullOrWhiteSpace(LauncherSettings.VmwareWorkstation))
 		{
-			return LaunchApplication(LauncherSettings.VmwareWorkstation, arg);
+			return LaunchApplicationEx(LauncherSettings.VmwareWorkstation, arg);
 		}
 
 		if (!string.IsNullOrWhiteSpace(LauncherSettings.VmwarePlayer))
 		{
-			return LaunchApplication(LauncherSettings.VmwarePlayer, arg);
+			return LaunchApplicationEx(LauncherSettings.VmwarePlayer, arg);
 		}
 
 		return null;
 	}
 
-	private Process LaunchVirtualBox()
+	private ExternalProcess LaunchVirtualBox()
 	{
 		if (GetOutput(LaunchApplication(LauncherSettings.VirtualBox, "list vms")).Contains(LauncherSettings.OSName))
 		{
@@ -486,7 +471,7 @@ public class Starter : BaseLauncher
 		LaunchApplication(LauncherSettings.VirtualBox, $"storagectl {LauncherSettings.OSName} --name Controller --add ide --controller PIIX4").WaitForExit();
 		LaunchApplication(LauncherSettings.VirtualBox, $"storageattach {LauncherSettings.OSName} --storagectl Controller --port 0 --device 0 --type hdd --medium {Quote(LauncherSettings.ImageFile)}").WaitForExit();
 
-		return LaunchApplication(LauncherSettings.VirtualBox, $"startvm {LauncherSettings.OSName}");
+		return LaunchApplicationEx(LauncherSettings.VirtualBox, $"startvm {LauncherSettings.OSName}");
 	}
 
 	private void LaunchDebugger()
