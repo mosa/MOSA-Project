@@ -137,7 +137,7 @@ jobs:
           path: bin
          
   generate-docs:
-    name: Generate documentation
+    name: Generate Documentation
     runs-on: ubuntu-latest
     steps:
       - name: Set python3.11
