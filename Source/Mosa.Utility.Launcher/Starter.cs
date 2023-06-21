@@ -129,9 +129,9 @@ public class Starter : BaseLauncher
 		Output($"VM Exit Code: {process.ExitCode}");
 
 		if (success)
-			Output("Result: Test PASSED");
+			Output("Test Ressult: PASSED");
 		else
-			Output("Result: Test FAILED");
+			Output("Test Ressult: FAILED");
 
 		if (LauncherSettings.LauncherExit)
 		{
