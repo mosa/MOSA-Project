@@ -187,13 +187,13 @@
 			</TabItem>
 
 			<TabItem Header="Counters" FontSize="14">
-				<TextBox Name="CountersTxt" IsReadOnly="True" AcceptsReturn="True" TextWrapping="Wrap" Width="777" Height="475"></TextBox>
+				<TextBox Name="CountersTxt" FontFamily="Consolas" IsReadOnly="True" AcceptsReturn="True" TextWrapping="Wrap" Width="777" Height="475"></TextBox>
 			</TabItem>
 
 			<TabItem Header="Output" FontSize="14">
 				<StackPanel>
 					<ProgressBar Name="OutputProgress" Width="777" Height="20"></ProgressBar>
-					<TextBox Name="OutputTxt" IsReadOnly="True" AcceptsReturn="True" TextWrapping="Wrap" Margin="0, 10, 0, 0" Width="777" Height="445"></TextBox>
+					<TextBox Name="OutputTxt" FontFamily="Consolas" IsReadOnly="True" AcceptsReturn="True" TextWrapping="Wrap" Margin="0, 10, 0, 0" Width="777" Height="445"></TextBox>
 				</StackPanel>
 			</TabItem>
 		</TabControl>

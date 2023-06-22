@@ -1,6 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
+using System.Diagnostics;
 using System.IO;
 using Mosa.Compiler.Common.Configuration;
 using Mosa.Compiler.Framework;
@@ -15,8 +16,12 @@ internal static class Program
 
 	private static Builder Builder;
 
+	private static Stopwatch Stopwatch = new Stopwatch();
+
 	internal static int Main(string[] args)
 	{
+		Stopwatch.StartNew();
+
 		Settings = AppLocationsSettings.GetAppLocations();
 
 		NotifyStatus($"Current Directory: {Environment.CurrentDirectory}");
@@ -139,7 +144,7 @@ internal static class Program
 
 	private static void NotifyStatus(string status)
 	{
-		System.Console.WriteLine(status);
+		System.Console.WriteLine($"{Stopwatch.Elapsed.TotalSeconds:0.00} | {status}");
 	}
 
 	private static CompilerHooks CreateCompilerHooks()

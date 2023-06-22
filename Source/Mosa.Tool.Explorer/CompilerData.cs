@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Mosa.Compiler.Framework.Trace;
 
 namespace Mosa.Tool.Explorer;
@@ -11,7 +12,7 @@ public class CompilerData
 	public readonly Dictionary<string, List<string>> Logs = new Dictionary<string, List<string>>();
 	public readonly List<string> LogSections = new List<string>();
 
-	public DateTime CompileStartTime;
+	public Stopwatch Stopwatch = new Stopwatch();
 
 	public bool DirtyLog = true;
 	public bool DirtyLogSections = true;
@@ -91,7 +92,7 @@ public class CompilerData
 		var part = string.IsNullOrWhiteSpace(message) ? string.Empty : ": " + message;
 		var msg = $"{compilerEvent.ToText()}{part}";
 
-		var timelog = $"{(DateTime.Now - CompileStartTime).TotalSeconds:0.00} [{threadID}] {msg}";
+		var timelog = $"{Stopwatch.Elapsed.TotalSeconds:0.00} | [{threadID}] {msg}";
 
 		if (compilerEvent == CompilerEvent.Error)
 		{

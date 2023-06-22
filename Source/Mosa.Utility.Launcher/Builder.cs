@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using Mosa.Compiler.Common;
@@ -20,7 +21,7 @@ public class Builder : BaseLauncher
 {
 	public List<string> Counters { get; }
 
-	public DateTime CompileStartTime { get; private set; }
+	public Stopwatch Stopwatch { get; } = new Stopwatch();
 
 	public bool IsSucccessful { get; private set; }
 
@@ -46,7 +47,7 @@ public class Builder : BaseLauncher
 		Counters.Clear();
 		IsSucccessful = false;
 
-		CompileStartTime = DateTime.Now;
+		Stopwatch.StartNew();
 
 		try
 		{
@@ -99,6 +100,8 @@ public class Builder : BaseLauncher
 		finally
 		{
 			//compiler = null;
+
+			Stopwatch.Stop();
 		}
 	}
 
@@ -326,7 +329,7 @@ public class Builder : BaseLauncher
 		}
 		else if (compilerEvent is CompilerEvent.CompilerStart or CompilerEvent.CompilerEnd or CompilerEvent.CompilingMethodsStart or CompilerEvent.CompilingMethodsCompleted or CompilerEvent.InlineMethodsScheduled or CompilerEvent.LinkingStart or CompilerEvent.LinkingEnd or CompilerEvent.Warning or CompilerEvent.Error)
 		{
-			var status = $"Compiling: {$"{(DateTime.Now - CompileStartTime).TotalSeconds:0.00}"} secs: {compilerEvent.ToText()}";
+			var status = $"{compilerEvent.ToText()}";
 
 			if (!string.IsNullOrEmpty(message))
 				status += $" => {message}";
