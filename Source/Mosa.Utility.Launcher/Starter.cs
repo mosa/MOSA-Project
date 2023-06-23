@@ -39,11 +39,13 @@ public class Starter : BaseLauncher
 
 		try
 		{
-			var ProcessEx = LaunchVM();
+			var process = LaunchVM();
+
+			Process = process.Process;
 
 			if (LauncherSettings.LauncherTest)
 			{
-				IsSucccessful = MonitorTest(ProcessEx, 10000, "<SELFTEST:PASSED>");
+				IsSucccessful = MonitorTest(process, 10000, "<SELFTEST:PASSED>");
 				return IsSucccessful;
 			}
 
@@ -59,8 +61,8 @@ public class Starter : BaseLauncher
 
 			if (!LauncherSettings.LauncherExit)
 			{
-				var output = GetOutput(Process);
-				Output(output);
+				//var output = GetOutput(Process);
+				Output(process.Output);
 			}
 
 			IsSucccessful = true;
