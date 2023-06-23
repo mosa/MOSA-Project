@@ -183,7 +183,7 @@ jobs:
           name: windows-build-artifact
           path: bin
       - name: Unit Test
-        run: bin\Mosa.Utility.UnitTests.exe -o${{ matrix.optimization }}
+        run: bin\Mosa.Utility.UnitTests.exe -check -o${{ matrix.optimization }}
 
   linux-unit-testing:
     strategy:
@@ -213,7 +213,7 @@ jobs:
       - name: Install Qemu and Dependencies
         run: sudo apt-get -y -o Acquire::Retries=5 install qemu-system-x86
       - name: Unit Test  
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -o${{ matrix.optimization }}
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -check -o${{ matrix.optimization }}
 
   windows-demo-testing:
     strategy:
