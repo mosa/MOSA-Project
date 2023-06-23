@@ -22,7 +22,7 @@ public sealed class DebugServerEngine
 
 	private const int MaxBufferSize = 64 * 1024 + 64;
 
-	private static int packetCnt;
+	private static int packetCnt = 0;
 
 	public Stream Stream
 	{
@@ -41,6 +41,21 @@ public sealed class DebugServerEngine
 	public DebugServerEngine()
 	{
 		stream = null;
+	}
+
+	public void Disconnect()
+	{
+		if (stream == null)
+		{
+			try
+			{
+				stream.Close();
+			}
+			finally
+			{
+				stream = null;
+			}
+		}
 	}
 
 	public void SetGlobalDispatch(CallBack dispatch)

@@ -79,7 +79,7 @@ public class UnitTestEngine : IDisposable
 
 	private Thread ProcessThread;
 
-	private readonly Stopwatch StopWatch = new Stopwatch();
+	private readonly Stopwatch Stopwatch = new Stopwatch();
 	private WatchDog WatchDog;
 
 	private int CompletedUnitTestCount;
@@ -217,7 +217,7 @@ public class UnitTestEngine : IDisposable
 
 		var messages = new List<DebugMessage>();
 
-		StopWatch.Start();
+		Stopwatch.Start();
 		Aborted = !StartEngine();
 
 		while (!Aborted)
@@ -311,7 +311,7 @@ public class UnitTestEngine : IDisposable
 
 	public bool Compile()
 	{
-		StopWatch.Restart();
+		Stopwatch.Restart();
 
 		Settings.AddPropertyListValue("SearchPaths", TestAssemblyPath);
 
@@ -372,7 +372,7 @@ public class UnitTestEngine : IDisposable
 
 	private void OutputStatus(string status)
 	{
-		Console.WriteLine($"{StopWatch.Elapsed.TotalSeconds:0.00} | {status}");
+		Console.WriteLine($"{Stopwatch.Elapsed.TotalSeconds:0.00} | {status}");
 	}
 
 	public bool LaunchVirtualMachine()
@@ -464,10 +464,13 @@ public class UnitTestEngine : IDisposable
 		if (Process == null)
 			return;
 
+		DebugServerEngine.Disconnect();
+
 		if (!Process.HasExited)
 		{
 			Process.Kill();
 			Process.WaitForExit(10000); // wait for up to 10 seconds
+			Thread.Sleep(250);
 		}
 
 		Process = null;
@@ -616,8 +619,6 @@ public class UnitTestEngine : IDisposable
 
 				OutputStatus("Re-starting Engine...");
 
-				Thread.Sleep(100);
-
 				if (!StartEngine())
 				{
 					KillVirtualMachine();
@@ -653,9 +654,9 @@ public class UnitTestEngine : IDisposable
 			//OutputStatus("Received: " + (response.Other as UnitTest).FullMethodName);
 			//OutputStatus(response.ToString());
 
-			if (CompletedUnitTestCount % 1000 == 0 && StopWatch.Elapsed.Seconds != 0)
+			if (CompletedUnitTestCount % 1000 == 0 && Stopwatch.Elapsed.Seconds != 0)
 			{
-				OutputStatus($"Unit Tests - Count: {CompletedUnitTestCount} Elapsed: {(int)StopWatch.Elapsed.TotalSeconds} ({(CompletedUnitTestCount / StopWatch.Elapsed.TotalSeconds).ToString("F2")} per second)");
+				OutputStatus($"Unit Tests - Count: {CompletedUnitTestCount} Elapsed: {(int)Stopwatch.Elapsed.TotalSeconds} ({(CompletedUnitTestCount / Stopwatch.Elapsed.TotalSeconds).ToString("F2")} per second)");
 			}
 		}
 
