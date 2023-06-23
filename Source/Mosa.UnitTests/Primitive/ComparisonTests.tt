@@ -1,20 +1,16 @@
 ﻿<#@ include file="../../TemplateLibrary.txt" #>
-using System;
+namespace Mosa.UnitTests.Primitive;
 
-namespace Mosa.UnitTests.Primitive
+public static class ComparisonTests 
 {
+<# foreach (KeyValuePair<string, string> number in IntegersWithChar) 
+	foreach (KeyValuePair<string, string> compare in Comparisons) 
+{ #>
 
-	public static class ComparisonTests 
+	[MosaUnitTest(Series = "<#= number.Value #><#= number.Value #>")]
+	public static bool Compare<#= compare.Value #><#= number.Value #>(<#= number.Key #> a, <#= number.Key #> b)
 	{
-	<# foreach (KeyValuePair<string, string> number in IntegersWithChar) 
-		foreach (KeyValuePair<string, string> compare in Comparisons) 
-	{ #>
-
-		[MosaUnitTest(Series = "<#= number.Value #><#= number.Value #>")]
-		public static bool Compare<#= compare.Value #><#= number.Value #>(<#= number.Key #> a, <#= number.Key #> b)
-		{
-			return (a <#= compare.Key #> b);
-		}
-	<# } #>
+		return a <#= compare.Key #> b;
 	}
+<# } #>
 }

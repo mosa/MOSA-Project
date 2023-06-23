@@ -2,28 +2,26 @@
 <#@ include file="../../TemplateLibrary.txt" #>
 using System;
 
-namespace Mosa.UnitTests.Basic
+namespace Mosa.UnitTests.Basic;
+
+public static class ForeachTests 
 {
+<# foreach (KeyValuePair<string, string> number in Integers) { #>
 
-	public static class ForeachTests 
+	[MosaUnitTest]
+	public static <#= number.Key #> Foreach<#= number.Value #>()
 	{
-	<# foreach (KeyValuePair<string, string> number in Integers) { #>
+		var a = new <#= number.Key #>[5];
+		for (var i = 0; i < 5; i++)
+			a[i] = (<#= number.Key #>)i;
 
-		[MosaUnitTest]
-		public static <#= number.Key #> Foreach<#= number.Value #>()
-		{
-			<#= number.Key #>[] a = new <#= number.Key #>[5];
-			for (int i = 0; i < 5; i++)
-				a[i] = (<#= number.Key #>)i;
+		<#= number.Key #> total = 0;
 
-			<#= number.Key #> total = 0;
+		foreach (var v in a)
+			total += v;
 
-			foreach (<#= number.Key #> v in a)
-				total += v;
-
-			return total;
-		}
-	<# } #>
+		return total;
 	}
+<# } #>
 }
 

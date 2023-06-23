@@ -1,60 +1,41 @@
 ﻿<#@ include file="../../TemplateLibrary.txt" #>
-using System;
+namespace Mosa.UnitTests.FlowControl;
 
-namespace Mosa.UnitTests.FlowControl
+public static class SwitchTests
 {
+<# foreach (KeyValuePair<string, string> number in NegativeIntegers) { #>
 
-	public static class SwitchTests
+	[MosaUnitTest(Series = "<#= number.Value #>")]
+	public static <#= number.Key #> Switch<#= number.Value #>(<#= number.Key #> a)
 	{
-	<# foreach (KeyValuePair<string, string> number in NegativeIntegers) { #>
-
-		[MosaUnitTest(Series = "<#= number.Value #>")]
-		public static <#= number.Key #> Switch<#= number.Value #>(<#= number.Key #> a)
+		return a switch
 		{
-			switch (a)
-			{
-				case 0:
-					return 0;
-				case 1:
-					return 1;
-				case -1:
-					return -1;
-				case 2:
-					return 2;
-				case -2:
-					return -2;
-				case 23:
-					return 23;
-				case <#= number.Key #>.MinValue:
-					return <#= number.Key #>.MinValue;
-				case <#= number.Key #>.MaxValue:
-					return <#= number.Key #>.MaxValue;
-				default:
-					return 42;
-			}
-		}
-	<# } #>
-	<# foreach (KeyValuePair<string, string> number in PositiveIntegers) { #>
-
-		[MosaUnitTest(Series = "<#= number.Value #>")]
-		public static <#= number.Key #> Switch<#= number.Value #>(<#= number.Key #> a)
-		{
-			switch (a)
-			{
-				case 0:
-					return 0;
-				case 1:
-					return 1;
-				case 2:
-					return 2;
-				case 23:
-					return 23;
-				case <#= number.Key #>.MaxValue:
-					return <#= number.Key #>.MaxValue;
-				default:
-					return 42;
-			}
-		}
-	<# } #>
+			0 => 0,
+			1 => 1,
+			-1 => -1,
+			2 => 2,
+			-2 => -2,
+			23 => 23,
+			<#= number.Key #>.MinValue => <#= number.Key #>.MinValue,
+			<#= number.Key #>.MaxValue => <#= number.Key #>.MaxValue,
+			_ => 42
+		};
 	}
+<# } #>
+<# foreach (KeyValuePair<string, string> number in PositiveIntegers) { #>
+
+	[MosaUnitTest(Series = "<#= number.Value #>")]
+	public static <#= number.Key #> Switch<#= number.Value #>(<#= number.Key #> a)
+	{
+		return a switch
+		{
+			0 => 0,
+			1 => 1,
+			2 => 2,
+			23 => 23,
+			<#= number.Key #>.MaxValue => <#= number.Key #>.MaxValue,
+			_ => 42
+		};
+	}
+<# } #>
 }

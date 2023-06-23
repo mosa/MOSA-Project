@@ -20,9 +20,9 @@ internal static class Program
 
 	internal static int Main(string[] args)
 	{
-		Stopwatch.StartNew();
-
 		Settings = AppLocationsSettings.GetAppLocations();
+
+		Stopwatch.Start();
 
 		NotifyStatus($"Current Directory: {Environment.CurrentDirectory}");
 
