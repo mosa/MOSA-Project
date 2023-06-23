@@ -184,12 +184,12 @@ public class BaseLauncher
 		return '"' + location + '"';
 	}
 
-	protected ExternalProcess LaunchApplicationEx(string app, string args)
+	protected ExternalProcess LaunchApplicationEx(string app, string args, bool captureOutput = false)
 	{
 		Output($"Launching Application: {app}");
 		Output($"Arguments: {args}");
 
-		var externalProcess = new ExternalProcess(app, args, true);
+		var externalProcess = new ExternalProcess(app, args, captureOutput);
 
 		externalProcess.Start();
 

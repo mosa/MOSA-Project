@@ -39,7 +39,7 @@ namespace Mosa.Utility.Launcher
 			ProcessStartInfo.RedirectStandardOutput = captureOutput;
 			ProcessStartInfo.RedirectStandardError = captureOutput;
 			ProcessStartInfo.UseShellExecute = false;
-			ProcessStartInfo.CreateNoWindow = false;
+			ProcessStartInfo.CreateNoWindow = !captureOutput;
 
 			if (captureOutput)
 			{
@@ -65,7 +65,11 @@ namespace Mosa.Utility.Launcher
 		{
 			Process.Start();
 
-			Process.BeginOutputReadLine();
+			if (ProcessStartInfo.RedirectStandardOutput)
+			{
+				Process.BeginOutputReadLine();
+				Process.BeginErrorReadLine();
+			}
 		}
 
 		public void Kill()

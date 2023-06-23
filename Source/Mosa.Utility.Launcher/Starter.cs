@@ -271,7 +271,7 @@ public class Starter : BaseLauncher
 			}
 		}
 
-		return LaunchApplicationEx(LauncherSettings.QEMU, arg.ToString());
+		return LaunchApplicationEx(LauncherSettings.QEMU, arg.ToString(), LauncherSettings.LauncherTest);
 	}
 
 	private ExternalProcess LaunchBochs()
