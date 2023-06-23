@@ -1,8 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-
-// No run-time tests
-
 namespace Mosa.UnitTests.ValueType;
 
 internal struct InitStruct
@@ -108,3 +105,4 @@ public static class InitStructTests
 	}
 
 }
+

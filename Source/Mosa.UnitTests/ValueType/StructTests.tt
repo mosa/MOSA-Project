@@ -1,66 +1,62 @@
 ﻿<#@ include file="../../TemplateLibrary.txt" #>
-using System;
+namespace Mosa.UnitTests.ValueType;
 
-namespace Mosa.UnitTests.ValueType
+public class StructTests
 {
+<# foreach (KeyValuePair<string, string> number in NumbersWithChar) { #>
 
-	public class StructTests
+	[MosaUnitTest(Series = "<#= number.Value #>")]
+	public static bool StructTestSet1<#= number.Value #>(<#= number.Key #> one)
 	{
-	<# foreach (KeyValuePair<string, string> number in NumbersWithChar) { #>
-
-		[MosaUnitTest(Series = "<#= number.Value #>")]
-		public static bool StructTestSet1<#= number.Value #>(<#= number.Key #> one)
-		{
-			Struct1<#= number.Value #> structure;
+		Struct1<#= number.Value #> structure;
 			
-			structure.One = one;
+		structure.One = one;
 	
-			return (structure.One.Equals(one));
-		}
-
-		//[MosaUnitTest(Series = "<#= number.Value #>Mini<#= number.Value #>Mini")]
-		public static bool StructTestSet2<#= number.Value #>(<#= number.Key #> one, <#= number.Key #> two)
-		{
-			Struct3<#= number.Value #> structure;
-			
-			structure.One = one;
-			structure.Two = two;
-			
-			return (structure.One.Equals(one) && structure.Two.Equals(two));
-		}
-
-		//[MosaUnitTest(Series = "<#= number.Value #>Mini<#= number.Value #>Mini<#= number.Value #>Mini")]
-		public static bool StructTestSet3<#= number.Value #>(<#= number.Key #> one, <#= number.Key #> two, <#= number.Key #> three)
-		{
-			Struct3<#= number.Value #> structure;
-			
-			structure.One = one;
-			structure.Two = two;
-			structure.Three = three;
-			
-			return (structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three));
-		}
-		<# } #>
-
+		return structure.One.Equals(one);
 	}
 
-	<# foreach (KeyValuePair<string, string> number in NumbersWithChar) { #>
-	internal struct Struct1<#= number.Value #>
+	//[MosaUnitTest(Series = "<#= number.Value #>Mini<#= number.Value #>Mini")]
+	public static bool StructTestSet2<#= number.Value #>(<#= number.Key #> one, <#= number.Key #> two)
 	{
-		public <#= number.Key #> One;
+		Struct3<#= number.Value #> structure;
+			
+		structure.One = one;
+		structure.Two = two;
+			
+		return structure.One.Equals(one) && structure.Two.Equals(two);
 	}
-	
-	internal struct Struct2<#= number.Value #>
+
+	//[MosaUnitTest(Series = "<#= number.Value #>Mini<#= number.Value #>Mini<#= number.Value #>Mini")]
+	public static bool StructTestSet3<#= number.Value #>(<#= number.Key #> one, <#= number.Key #> two, <#= number.Key #> three)
 	{
-		public <#= number.Key #> One;
-		public <#= number.Key #> Two;
+		Struct3<#= number.Value #> structure;
+			
+		structure.One = one;
+		structure.Two = two;
+		structure.Three = three;
+			
+		return structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three);
 	}
-	
-	internal struct Struct3<#= number.Value #>
-	{
-		public <#= number.Key #> One;
-		public <#= number.Key #> Two;
-		public <#= number.Key #> Three;
-	}
-<# } #>
+	<# } #>
+
 }
+
+<# foreach (KeyValuePair<string, string> number in NumbersWithChar) { #>
+internal struct Struct1<#= number.Value #>
+{
+	public <#= number.Key #> One;
+}
+	
+internal struct Struct2<#= number.Value #>
+{
+	public <#= number.Key #> One;
+	public <#= number.Key #> Two;
+}
+	
+internal struct Struct3<#= number.Value #>
+{
+	public <#= number.Key #> One;
+	public <#= number.Key #> Two;
+	public <#= number.Key #> Three;
+}
+<# } #>

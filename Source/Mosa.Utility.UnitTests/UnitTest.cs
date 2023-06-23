@@ -14,15 +14,23 @@ public class UnitTest
 	private readonly LinkerMethodInfo LinkerMethodInfo;
 
 	public string FullMethodName => UnitTestInfo.FullMethodName;
+
 	public MethodInfo MethodInfo => UnitTestInfo.MethodInfo;
+
 	public MosaUnitTestAttribute UnitTestAttribute => UnitTestInfo.UnitTestAttribute;
+
 	public object[] Values => UnitTestInfo.Values;
+
 	public object Expected => UnitTestInfo.Expected;
 
 	public MosaMethod MosaMethod => LinkerMethodInfo.MosaMethod;
+
 	public IntPtr MosaMethodAddress => LinkerMethodInfo.MosaMethodAddress;
+
 	public string MethodNamespaceName => LinkerMethodInfo.MethodNamespaceName;
+
 	public string MethodTypeName => LinkerMethodInfo.MethodTypeName;
+
 	public string MethodName => LinkerMethodInfo.MethodName;
 
 	public object Result { get; set; }
@@ -30,7 +38,9 @@ public class UnitTest
 	public UnitTestStatus Status { get; set; }
 
 	public int UnitTestID { get; set; }
+
 	public IList<int> SerializedUnitTest { get; set; }
+
 	public List<byte> SerializedResult { get; set; }
 
 	public UnitTest(UnitTestInfo unitTestInfo, LinkerMethodInfo linkerMethodInfo)

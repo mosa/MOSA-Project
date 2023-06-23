@@ -1,6 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -28,6 +29,7 @@ public partial class MainWindow : Window
 	private readonly OpenFileDialog source;
 	private readonly OpenFolderDialog destination;
 	private readonly OpenFolderDialog include;
+	private Stopwatch Stopwatch = new Stopwatch();
 
 	public MainWindow()
 	{
@@ -58,6 +60,8 @@ public partial class MainWindow : Window
 		};
 
 		DstLbl.Content = Path.Combine(Path.GetTempPath(), "MOSA");
+
+		Stopwatch.Reset();
 	}
 
 	private void NotifyProgress(int total, int at)
@@ -66,12 +70,14 @@ public partial class MainWindow : Window
 		completedMethods = at;
 	}
 
-	private void AddOutput(string data)
+	private void AddOutput(string status)
 	{
-		if (string.IsNullOrEmpty(data))
+		if (string.IsNullOrEmpty(status))
 			return;
 
-		OutputTxt.Text += data + Environment.NewLine;
+		OutputTxt.Text += $"{Stopwatch.Elapsed.TotalSeconds:0.00} | {status}{Environment.NewLine}";
+
+		//<Setter Property="FontFamily" Value="Consolas"/>
 	}
 
 	public void Initialize(string[] args)
@@ -458,6 +464,8 @@ public partial class MainWindow : Window
 		OutputTxt.Clear();
 		CountersTxt.Clear();
 
+		Stopwatch.Start();
+
 		ThreadPool.QueueUserWorkItem(_ =>
 		{
 			try
@@ -491,6 +499,8 @@ public partial class MainWindow : Window
 
 		if (settings.GetValue("Launcher.Exit", false))
 			Close();
+
+		Stopwatch.Stop();
 	}
 
 	private async void CenterWindow()

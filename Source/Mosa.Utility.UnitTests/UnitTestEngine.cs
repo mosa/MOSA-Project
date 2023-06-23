@@ -87,8 +87,6 @@ public class UnitTestEngine : IDisposable
 	private int SendOneCount = -1;
 	private int Errors;
 
-	private DateTime CompileStartTime;
-
 	#endregion Private Data Members
 
 	public UnitTestEngine(Settings settings)
@@ -313,7 +311,7 @@ public class UnitTestEngine : IDisposable
 
 	public bool Compile()
 	{
-		CompileStartTime = DateTime.Now;
+		StopWatch.Restart();
 
 		Settings.AddPropertyListValue("SearchPaths", TestAssemblyPath);
 
@@ -374,7 +372,7 @@ public class UnitTestEngine : IDisposable
 
 	private void OutputStatus(string status)
 	{
-		Console.WriteLine($"{(DateTime.Now - CompileStartTime).TotalSeconds:0.00} | {status}");
+		Console.WriteLine($"{StopWatch.Elapsed.TotalSeconds:0.00} | {status}");
 	}
 
 	public bool LaunchVirtualMachine()
@@ -395,10 +393,10 @@ public class UnitTestEngine : IDisposable
 		if (Starter.Process == null)
 			return false;
 
+		Process = Starter.Process;
+
 		if (Starter.Process.HasExited)
 			return false;
-
-		Process = Starter.Process;
 
 		return true;
 	}

@@ -1,24 +1,20 @@
 ﻿<#@ include file="../../TemplateLibrary.txt" #>
-using System;
+namespace Mosa.UnitTests.Basic;
 
-namespace Mosa.UnitTests.Basic
+public static class LdlocaTests 
 {
+<# foreach (KeyValuePair<string, string> number in NumbersWithChar) { #>
 
-	public static class LdlocaTests 
+	[MosaUnitTest(Series = "<#= number.Value #>")]
+	public static bool LdlocaCheckValue<#= number.Value #>(<#= number.Key #> expect)
 	{
-	<# foreach (KeyValuePair<string, string> number in NumbersWithChar) { #>
-
-		[MosaUnitTest(Series = "<#= number.Value #>")]
-		public static bool LdlocaCheckValue<#= number.Value #>(<#= number.Key #> expect)
-		{
-			<#= number.Key #> a = expect;
-			return LdlocaCheckValueRef<#= number.Value #>(expect, ref a);
-		}
-
-		private static bool LdlocaCheckValueRef<#= number.Value #>(<#= number.Key #> expect, ref <#= number.Key #> a)
-		{
-			return (expect.Equals(a));
-		}
-	<# } #>
+		var a = expect;
+		return LdlocaCheckValueRef<#= number.Value #>(expect, ref a);
 	}
+
+	private static bool LdlocaCheckValueRef<#= number.Value #>(<#= number.Key #> expect, ref <#= number.Key #> a)
+	{
+		return expect.Equals(a);
+	}
+<# } #>
 }

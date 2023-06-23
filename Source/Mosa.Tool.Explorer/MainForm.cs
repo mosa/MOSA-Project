@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading;
@@ -60,6 +61,8 @@ public partial class MainForm : Form
 	private int TransformStep = 0;
 	private TypeSystemTree TypeSystemTree;
 
+	private Stopwatch Stopwatch = new Stopwatch();
+
 	public MainForm()
 	{
 		InitializeComponent();
@@ -79,6 +82,8 @@ public partial class MainForm : Form
 		ClearAll();
 
 		RegisterPlatforms();
+
+		Stopwatch.Restart();
 	}
 
 	public void ClearAllLogs()
@@ -435,7 +440,7 @@ public partial class MainForm : Form
 		if (Compiler == null)
 			return;
 
-		CompilerData.CompileStartTime = DateTime.Now;
+		CompilerData.Stopwatch.Restart();
 
 		Compiler.ScheduleAll();
 
@@ -690,7 +695,7 @@ public partial class MainForm : Form
 		if (method == null)
 			return;
 
-		CompilerData.CompileStartTime = DateTime.Now;
+		CompilerData.Stopwatch.Reset();
 
 		Compiler.CompileSingleMethod(method);
 	}
@@ -905,7 +910,7 @@ public partial class MainForm : Form
 
 	private void SetStatus(string status)
 	{
-		toolStripStatusLabel.Text = status;
+		toolStripStatusLabel.Text = $"{CompilerData.Stopwatch.Elapsed.TotalSeconds:0.00} | {status}"; ;
 	}
 
 	private void SetTranformationStep(int step)

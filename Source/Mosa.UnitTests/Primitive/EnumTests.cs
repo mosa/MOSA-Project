@@ -56,7 +56,7 @@ public static class EnumU1
 	[MosaUnitTest]
 	public static byte PositiveMul2()
 	{
-		return (byte)EnumU1Type.Positive50 * 2;
+		return  (byte)EnumU1Type.Positive50 * 2;
 	}
 
 	[MosaUnitTest]
@@ -159,7 +159,6 @@ public static class EnumU1
 	{
 		return InternalPositiveEqual(EnumU1Type.Positive50, 49);
 	}
-
 	private static bool InternalPositiveNotEqual(EnumU1Type e, byte v)
 	{
 		return (byte)e != v;
@@ -182,7 +181,6 @@ public static class EnumU1
 	{
 		return InternalPositiveNotEqual(EnumU1Type.Positive50, 49);
 	}
-
 	private static bool InternalPositiveGreaterThan(EnumU1Type e, byte v)
 	{
 		return (byte)e > v;
@@ -205,7 +203,6 @@ public static class EnumU1
 	{
 		return InternalPositiveGreaterThan(EnumU1Type.Positive50, 49);
 	}
-
 	private static bool InternalPositiveLessThan(EnumU1Type e, byte v)
 	{
 		return (byte)e < v;
@@ -228,7 +225,6 @@ public static class EnumU1
 	{
 		return InternalPositiveLessThan(EnumU1Type.Positive50, 49);
 	}
-
 	private static bool InternalPositiveGreaterThanOrEqual(EnumU1Type e, byte v)
 	{
 		return (byte)e >= v;
@@ -251,7 +247,6 @@ public static class EnumU1
 	{
 		return InternalPositiveGreaterThanOrEqual(EnumU1Type.Positive50, 49);
 	}
-
 	private static bool InternalPositiveLessThanOrEqual(EnumU1Type e, byte v)
 	{
 		return (byte)e <= v;
@@ -274,7 +269,6 @@ public static class EnumU1
 	{
 		return InternalPositiveLessThanOrEqual(EnumU1Type.Positive50, 49);
 	}
-
 }
 
 enum EnumU2Type : ushort
@@ -331,7 +325,7 @@ public static class EnumU2
 	[MosaUnitTest]
 	public static ushort PositiveMul2()
 	{
-		return (ushort)EnumU2Type.Positive50 * 2;
+		return  (ushort)EnumU2Type.Positive50 * 2;
 	}
 
 	[MosaUnitTest]
@@ -434,7 +428,6 @@ public static class EnumU2
 	{
 		return InternalPositiveEqual(EnumU2Type.Positive50, 49);
 	}
-
 	private static bool InternalPositiveNotEqual(EnumU2Type e, ushort v)
 	{
 		return (ushort)e != v;
@@ -457,7 +450,6 @@ public static class EnumU2
 	{
 		return InternalPositiveNotEqual(EnumU2Type.Positive50, 49);
 	}
-
 	private static bool InternalPositiveGreaterThan(EnumU2Type e, ushort v)
 	{
 		return (ushort)e > v;
@@ -480,7 +472,6 @@ public static class EnumU2
 	{
 		return InternalPositiveGreaterThan(EnumU2Type.Positive50, 49);
 	}
-
 	private static bool InternalPositiveLessThan(EnumU2Type e, ushort v)
 	{
 		return (ushort)e < v;
@@ -503,7 +494,6 @@ public static class EnumU2
 	{
 		return InternalPositiveLessThan(EnumU2Type.Positive50, 49);
 	}
-
 	private static bool InternalPositiveGreaterThanOrEqual(EnumU2Type e, ushort v)
 	{
 		return (ushort)e >= v;
@@ -526,7 +516,6 @@ public static class EnumU2
 	{
 		return InternalPositiveGreaterThanOrEqual(EnumU2Type.Positive50, 49);
 	}
-
 	private static bool InternalPositiveLessThanOrEqual(EnumU2Type e, ushort v)
 	{
 		return (ushort)e <= v;
@@ -549,7 +538,6 @@ public static class EnumU2
 	{
 		return InternalPositiveLessThanOrEqual(EnumU2Type.Positive50, 49);
 	}
-
 }
 
 enum EnumU4Type : uint
@@ -606,7 +594,7 @@ public static class EnumU4
 	[MosaUnitTest]
 	public static uint PositiveMul2()
 	{
-		return (uint)EnumU4Type.Positive50 * 2;
+		return  (uint)EnumU4Type.Positive50 * 2;
 	}
 
 	[MosaUnitTest]
@@ -709,7 +697,6 @@ public static class EnumU4
 	{
 		return InternalPositiveEqual(EnumU4Type.Positive50, 49);
 	}
-
 	private static bool InternalPositiveNotEqual(EnumU4Type e, uint v)
 	{
 		return (uint)e != v;
@@ -732,7 +719,6 @@ public static class EnumU4
 	{
 		return InternalPositiveNotEqual(EnumU4Type.Positive50, 49);
 	}
-
 	private static bool InternalPositiveGreaterThan(EnumU4Type e, uint v)
 	{
 		return (uint)e > v;
@@ -755,7 +741,6 @@ public static class EnumU4
 	{
 		return InternalPositiveGreaterThan(EnumU4Type.Positive50, 49);
 	}
-
 	private static bool InternalPositiveLessThan(EnumU4Type e, uint v)
 	{
 		return (uint)e < v;
@@ -778,7 +763,6 @@ public static class EnumU4
 	{
 		return InternalPositiveLessThan(EnumU4Type.Positive50, 49);
 	}
-
 	private static bool InternalPositiveGreaterThanOrEqual(EnumU4Type e, uint v)
 	{
 		return (uint)e >= v;
@@ -801,7 +785,6 @@ public static class EnumU4
 	{
 		return InternalPositiveGreaterThanOrEqual(EnumU4Type.Positive50, 49);
 	}
-
 	private static bool InternalPositiveLessThanOrEqual(EnumU4Type e, uint v)
 	{
 		return (uint)e <= v;
@@ -824,7 +807,6 @@ public static class EnumU4
 	{
 		return InternalPositiveLessThanOrEqual(EnumU4Type.Positive50, 49);
 	}
-
 }
 
 enum EnumU8Type : ulong
@@ -881,7 +863,7 @@ public static class EnumU8
 	[MosaUnitTest]
 	public static ulong PositiveMul2()
 	{
-		return (ulong)EnumU8Type.Positive50 * 2;
+		return  (ulong)EnumU8Type.Positive50 * 2;
 	}
 
 	[MosaUnitTest]
@@ -984,7 +966,6 @@ public static class EnumU8
 	{
 		return InternalPositiveEqual(EnumU8Type.Positive50, 49);
 	}
-
 	private static bool InternalPositiveNotEqual(EnumU8Type e, ulong v)
 	{
 		return (ulong)e != v;
@@ -1007,7 +988,6 @@ public static class EnumU8
 	{
 		return InternalPositiveNotEqual(EnumU8Type.Positive50, 49);
 	}
-
 	private static bool InternalPositiveGreaterThan(EnumU8Type e, ulong v)
 	{
 		return (ulong)e > v;
@@ -1030,7 +1010,6 @@ public static class EnumU8
 	{
 		return InternalPositiveGreaterThan(EnumU8Type.Positive50, 49);
 	}
-
 	private static bool InternalPositiveLessThan(EnumU8Type e, ulong v)
 	{
 		return (ulong)e < v;
@@ -1053,7 +1032,6 @@ public static class EnumU8
 	{
 		return InternalPositiveLessThan(EnumU8Type.Positive50, 49);
 	}
-
 	private static bool InternalPositiveGreaterThanOrEqual(EnumU8Type e, ulong v)
 	{
 		return (ulong)e >= v;
@@ -1076,7 +1054,6 @@ public static class EnumU8
 	{
 		return InternalPositiveGreaterThanOrEqual(EnumU8Type.Positive50, 49);
 	}
-
 	private static bool InternalPositiveLessThanOrEqual(EnumU8Type e, ulong v)
 	{
 		return (ulong)e <= v;
@@ -1099,7 +1076,6 @@ public static class EnumU8
 	{
 		return InternalPositiveLessThanOrEqual(EnumU8Type.Positive50, 49);
 	}
-
 }
 
 enum EnumI1Type : sbyte
@@ -1159,7 +1135,7 @@ public static class EnumI1
 	[MosaUnitTest]
 	public static sbyte PositiveMul2()
 	{
-		return (sbyte)EnumI1Type.Positive50 * 2;
+		return  (sbyte)EnumI1Type.Positive50 * 2;
 	}
 
 	[MosaUnitTest]
@@ -1262,7 +1238,6 @@ public static class EnumI1
 	{
 		return InternalPositiveEqual(EnumI1Type.Positive50, 49);
 	}
-
 	private static bool InternalPositiveNotEqual(EnumI1Type e, sbyte v)
 	{
 		return (sbyte)e != v;
@@ -1285,7 +1260,6 @@ public static class EnumI1
 	{
 		return InternalPositiveNotEqual(EnumI1Type.Positive50, 49);
 	}
-
 	private static bool InternalPositiveGreaterThan(EnumI1Type e, sbyte v)
 	{
 		return (sbyte)e > v;
@@ -1308,7 +1282,6 @@ public static class EnumI1
 	{
 		return InternalPositiveGreaterThan(EnumI1Type.Positive50, 49);
 	}
-
 	private static bool InternalPositiveLessThan(EnumI1Type e, sbyte v)
 	{
 		return (sbyte)e < v;
@@ -1331,7 +1304,6 @@ public static class EnumI1
 	{
 		return InternalPositiveLessThan(EnumI1Type.Positive50, 49);
 	}
-
 	private static bool InternalPositiveGreaterThanOrEqual(EnumI1Type e, sbyte v)
 	{
 		return (sbyte)e >= v;
@@ -1354,7 +1326,6 @@ public static class EnumI1
 	{
 		return InternalPositiveGreaterThanOrEqual(EnumI1Type.Positive50, 49);
 	}
-
 	private static bool InternalPositiveLessThanOrEqual(EnumI1Type e, sbyte v)
 	{
 		return (sbyte)e <= v;
@@ -1377,7 +1348,6 @@ public static class EnumI1
 	{
 		return InternalPositiveLessThanOrEqual(EnumI1Type.Positive50, 49);
 	}
-
 	[MosaUnitTest]
 	public static sbyte NegativeConversion()
 	{
@@ -1423,7 +1393,7 @@ public static class EnumI1
 	[MosaUnitTest]
 	public static sbyte NegativeMul2()
 	{
-		return (sbyte)EnumI1Type.Negative50 * 2;
+		return  (sbyte)EnumI1Type.Negative50 * 2;
 	}
 
 	[MosaUnitTest]
@@ -1526,7 +1496,6 @@ public static class EnumI1
 	{
 		return InternalNegativeEqual(EnumI1Type.Negative50, -51);
 	}
-
 	private static bool InternalNegativeNotEqual(EnumI1Type e, sbyte v)
 	{
 		return (sbyte)e != v;
@@ -1549,7 +1518,6 @@ public static class EnumI1
 	{
 		return InternalNegativeNotEqual(EnumI1Type.Negative50, -51);
 	}
-
 	private static bool InternalNegativeGreaterThan(EnumI1Type e, sbyte v)
 	{
 		return (sbyte)e > v;
@@ -1572,7 +1540,6 @@ public static class EnumI1
 	{
 		return InternalNegativeGreaterThan(EnumI1Type.Negative50, -51);
 	}
-
 	private static bool InternalNegativeLessThan(EnumI1Type e, sbyte v)
 	{
 		return (sbyte)e < v;
@@ -1595,7 +1562,6 @@ public static class EnumI1
 	{
 		return InternalNegativeLessThan(EnumI1Type.Negative50, -51);
 	}
-
 	private static bool InternalNegativeGreaterThanOrEqual(EnumI1Type e, sbyte v)
 	{
 		return (sbyte)e >= v;
@@ -1618,7 +1584,6 @@ public static class EnumI1
 	{
 		return InternalNegativeGreaterThanOrEqual(EnumI1Type.Negative50, -51);
 	}
-
 	private static bool InternalNegativeLessThanOrEqual(EnumI1Type e, sbyte v)
 	{
 		return (sbyte)e <= v;
@@ -1641,7 +1606,6 @@ public static class EnumI1
 	{
 		return InternalNegativeLessThanOrEqual(EnumI1Type.Negative50, -51);
 	}
-
 }
 
 enum EnumI2Type : short
@@ -1701,7 +1665,7 @@ public static class EnumI2
 	[MosaUnitTest]
 	public static short PositiveMul2()
 	{
-		return (short)EnumI2Type.Positive50 * 2;
+		return  (short)EnumI2Type.Positive50 * 2;
 	}
 
 	[MosaUnitTest]
@@ -1804,7 +1768,6 @@ public static class EnumI2
 	{
 		return InternalPositiveEqual(EnumI2Type.Positive50, 49);
 	}
-
 	private static bool InternalPositiveNotEqual(EnumI2Type e, short v)
 	{
 		return (short)e != v;
@@ -1827,7 +1790,6 @@ public static class EnumI2
 	{
 		return InternalPositiveNotEqual(EnumI2Type.Positive50, 49);
 	}
-
 	private static bool InternalPositiveGreaterThan(EnumI2Type e, short v)
 	{
 		return (short)e > v;
@@ -1850,7 +1812,6 @@ public static class EnumI2
 	{
 		return InternalPositiveGreaterThan(EnumI2Type.Positive50, 49);
 	}
-
 	private static bool InternalPositiveLessThan(EnumI2Type e, short v)
 	{
 		return (short)e < v;
@@ -1873,7 +1834,6 @@ public static class EnumI2
 	{
 		return InternalPositiveLessThan(EnumI2Type.Positive50, 49);
 	}
-
 	private static bool InternalPositiveGreaterThanOrEqual(EnumI2Type e, short v)
 	{
 		return (short)e >= v;
@@ -1896,7 +1856,6 @@ public static class EnumI2
 	{
 		return InternalPositiveGreaterThanOrEqual(EnumI2Type.Positive50, 49);
 	}
-
 	private static bool InternalPositiveLessThanOrEqual(EnumI2Type e, short v)
 	{
 		return (short)e <= v;
@@ -1919,7 +1878,6 @@ public static class EnumI2
 	{
 		return InternalPositiveLessThanOrEqual(EnumI2Type.Positive50, 49);
 	}
-
 	[MosaUnitTest]
 	public static short NegativeConversion()
 	{
@@ -1965,7 +1923,7 @@ public static class EnumI2
 	[MosaUnitTest]
 	public static short NegativeMul2()
 	{
-		return (short)EnumI2Type.Negative50 * 2;
+		return  (short)EnumI2Type.Negative50 * 2;
 	}
 
 	[MosaUnitTest]
@@ -2068,7 +2026,6 @@ public static class EnumI2
 	{
 		return InternalNegativeEqual(EnumI2Type.Negative50, -51);
 	}
-
 	private static bool InternalNegativeNotEqual(EnumI2Type e, short v)
 	{
 		return (short)e != v;
@@ -2091,7 +2048,6 @@ public static class EnumI2
 	{
 		return InternalNegativeNotEqual(EnumI2Type.Negative50, -51);
 	}
-
 	private static bool InternalNegativeGreaterThan(EnumI2Type e, short v)
 	{
 		return (short)e > v;
@@ -2114,7 +2070,6 @@ public static class EnumI2
 	{
 		return InternalNegativeGreaterThan(EnumI2Type.Negative50, -51);
 	}
-
 	private static bool InternalNegativeLessThan(EnumI2Type e, short v)
 	{
 		return (short)e < v;
@@ -2137,7 +2092,6 @@ public static class EnumI2
 	{
 		return InternalNegativeLessThan(EnumI2Type.Negative50, -51);
 	}
-
 	private static bool InternalNegativeGreaterThanOrEqual(EnumI2Type e, short v)
 	{
 		return (short)e >= v;
@@ -2160,7 +2114,6 @@ public static class EnumI2
 	{
 		return InternalNegativeGreaterThanOrEqual(EnumI2Type.Negative50, -51);
 	}
-
 	private static bool InternalNegativeLessThanOrEqual(EnumI2Type e, short v)
 	{
 		return (short)e <= v;
@@ -2183,7 +2136,6 @@ public static class EnumI2
 	{
 		return InternalNegativeLessThanOrEqual(EnumI2Type.Negative50, -51);
 	}
-
 }
 
 enum EnumI4Type : int
@@ -2243,7 +2195,7 @@ public static class EnumI4
 	[MosaUnitTest]
 	public static int PositiveMul2()
 	{
-		return (int)EnumI4Type.Positive50 * 2;
+		return  (int)EnumI4Type.Positive50 * 2;
 	}
 
 	[MosaUnitTest]
@@ -2346,7 +2298,6 @@ public static class EnumI4
 	{
 		return InternalPositiveEqual(EnumI4Type.Positive50, 49);
 	}
-
 	private static bool InternalPositiveNotEqual(EnumI4Type e, int v)
 	{
 		return (int)e != v;
@@ -2369,7 +2320,6 @@ public static class EnumI4
 	{
 		return InternalPositiveNotEqual(EnumI4Type.Positive50, 49);
 	}
-
 	private static bool InternalPositiveGreaterThan(EnumI4Type e, int v)
 	{
 		return (int)e > v;
@@ -2392,7 +2342,6 @@ public static class EnumI4
 	{
 		return InternalPositiveGreaterThan(EnumI4Type.Positive50, 49);
 	}
-
 	private static bool InternalPositiveLessThan(EnumI4Type e, int v)
 	{
 		return (int)e < v;
@@ -2415,7 +2364,6 @@ public static class EnumI4
 	{
 		return InternalPositiveLessThan(EnumI4Type.Positive50, 49);
 	}
-
 	private static bool InternalPositiveGreaterThanOrEqual(EnumI4Type e, int v)
 	{
 		return (int)e >= v;
@@ -2438,7 +2386,6 @@ public static class EnumI4
 	{
 		return InternalPositiveGreaterThanOrEqual(EnumI4Type.Positive50, 49);
 	}
-
 	private static bool InternalPositiveLessThanOrEqual(EnumI4Type e, int v)
 	{
 		return (int)e <= v;
@@ -2461,7 +2408,6 @@ public static class EnumI4
 	{
 		return InternalPositiveLessThanOrEqual(EnumI4Type.Positive50, 49);
 	}
-
 	[MosaUnitTest]
 	public static int NegativeConversion()
 	{
@@ -2507,7 +2453,7 @@ public static class EnumI4
 	[MosaUnitTest]
 	public static int NegativeMul2()
 	{
-		return (int)EnumI4Type.Negative50 * 2;
+		return  (int)EnumI4Type.Negative50 * 2;
 	}
 
 	[MosaUnitTest]
@@ -2610,7 +2556,6 @@ public static class EnumI4
 	{
 		return InternalNegativeEqual(EnumI4Type.Negative50, -51);
 	}
-
 	private static bool InternalNegativeNotEqual(EnumI4Type e, int v)
 	{
 		return (int)e != v;
@@ -2633,7 +2578,6 @@ public static class EnumI4
 	{
 		return InternalNegativeNotEqual(EnumI4Type.Negative50, -51);
 	}
-
 	private static bool InternalNegativeGreaterThan(EnumI4Type e, int v)
 	{
 		return (int)e > v;
@@ -2656,7 +2600,6 @@ public static class EnumI4
 	{
 		return InternalNegativeGreaterThan(EnumI4Type.Negative50, -51);
 	}
-
 	private static bool InternalNegativeLessThan(EnumI4Type e, int v)
 	{
 		return (int)e < v;
@@ -2679,7 +2622,6 @@ public static class EnumI4
 	{
 		return InternalNegativeLessThan(EnumI4Type.Negative50, -51);
 	}
-
 	private static bool InternalNegativeGreaterThanOrEqual(EnumI4Type e, int v)
 	{
 		return (int)e >= v;
@@ -2702,7 +2644,6 @@ public static class EnumI4
 	{
 		return InternalNegativeGreaterThanOrEqual(EnumI4Type.Negative50, -51);
 	}
-
 	private static bool InternalNegativeLessThanOrEqual(EnumI4Type e, int v)
 	{
 		return (int)e <= v;
@@ -2725,7 +2666,6 @@ public static class EnumI4
 	{
 		return InternalNegativeLessThanOrEqual(EnumI4Type.Negative50, -51);
 	}
-
 }
 
 enum EnumI8Type : long
@@ -2785,7 +2725,7 @@ public static class EnumI8
 	[MosaUnitTest]
 	public static long PositiveMul2()
 	{
-		return (long)EnumI8Type.Positive50 * 2;
+		return  (long)EnumI8Type.Positive50 * 2;
 	}
 
 	[MosaUnitTest]
@@ -2888,7 +2828,6 @@ public static class EnumI8
 	{
 		return InternalPositiveEqual(EnumI8Type.Positive50, 49);
 	}
-
 	private static bool InternalPositiveNotEqual(EnumI8Type e, long v)
 	{
 		return (long)e != v;
@@ -2911,7 +2850,6 @@ public static class EnumI8
 	{
 		return InternalPositiveNotEqual(EnumI8Type.Positive50, 49);
 	}
-
 	private static bool InternalPositiveGreaterThan(EnumI8Type e, long v)
 	{
 		return (long)e > v;
@@ -2934,7 +2872,6 @@ public static class EnumI8
 	{
 		return InternalPositiveGreaterThan(EnumI8Type.Positive50, 49);
 	}
-
 	private static bool InternalPositiveLessThan(EnumI8Type e, long v)
 	{
 		return (long)e < v;
@@ -2957,7 +2894,6 @@ public static class EnumI8
 	{
 		return InternalPositiveLessThan(EnumI8Type.Positive50, 49);
 	}
-
 	private static bool InternalPositiveGreaterThanOrEqual(EnumI8Type e, long v)
 	{
 		return (long)e >= v;
@@ -2980,7 +2916,6 @@ public static class EnumI8
 	{
 		return InternalPositiveGreaterThanOrEqual(EnumI8Type.Positive50, 49);
 	}
-
 	private static bool InternalPositiveLessThanOrEqual(EnumI8Type e, long v)
 	{
 		return (long)e <= v;
@@ -3003,7 +2938,6 @@ public static class EnumI8
 	{
 		return InternalPositiveLessThanOrEqual(EnumI8Type.Positive50, 49);
 	}
-
 	[MosaUnitTest]
 	public static long NegativeConversion()
 	{
@@ -3049,7 +2983,7 @@ public static class EnumI8
 	[MosaUnitTest]
 	public static long NegativeMul2()
 	{
-		return (long)EnumI8Type.Negative50 * 2;
+		return  (long)EnumI8Type.Negative50 * 2;
 	}
 
 	[MosaUnitTest]
@@ -3152,7 +3086,6 @@ public static class EnumI8
 	{
 		return InternalNegativeEqual(EnumI8Type.Negative50, -51);
 	}
-
 	private static bool InternalNegativeNotEqual(EnumI8Type e, long v)
 	{
 		return (long)e != v;
@@ -3175,7 +3108,6 @@ public static class EnumI8
 	{
 		return InternalNegativeNotEqual(EnumI8Type.Negative50, -51);
 	}
-
 	private static bool InternalNegativeGreaterThan(EnumI8Type e, long v)
 	{
 		return (long)e > v;
@@ -3198,7 +3130,6 @@ public static class EnumI8
 	{
 		return InternalNegativeGreaterThan(EnumI8Type.Negative50, -51);
 	}
-
 	private static bool InternalNegativeLessThan(EnumI8Type e, long v)
 	{
 		return (long)e < v;
@@ -3221,7 +3152,6 @@ public static class EnumI8
 	{
 		return InternalNegativeLessThan(EnumI8Type.Negative50, -51);
 	}
-
 	private static bool InternalNegativeGreaterThanOrEqual(EnumI8Type e, long v)
 	{
 		return (long)e >= v;
@@ -3244,7 +3174,6 @@ public static class EnumI8
 	{
 		return InternalNegativeGreaterThanOrEqual(EnumI8Type.Negative50, -51);
 	}
-
 	private static bool InternalNegativeLessThanOrEqual(EnumI8Type e, long v)
 	{
 		return (long)e <= v;
@@ -3267,5 +3196,5 @@ public static class EnumI8
 	{
 		return InternalNegativeLessThanOrEqual(EnumI8Type.Negative50, -51);
 	}
-
 }
+
