@@ -272,7 +272,7 @@ public class UnitTestEngine : IDisposable
 				}
 			}
 
-			Thread.Sleep(10);
+			Thread.Yield();
 		}
 	}
 
@@ -305,7 +305,7 @@ public class UnitTestEngine : IDisposable
 					return;
 			}
 
-			Thread.Sleep(10);
+			Thread.Yield();
 		}
 	}
 
@@ -428,7 +428,7 @@ public class UnitTestEngine : IDisposable
 			{
 			}
 
-			Thread.Sleep(10);
+			Thread.Yield();
 		}
 
 		return false;
@@ -488,7 +488,7 @@ public class UnitTestEngine : IDisposable
 				return true;
 			}
 
-			Thread.Sleep(10);
+			Thread.Yield();
 		}
 
 		return false;

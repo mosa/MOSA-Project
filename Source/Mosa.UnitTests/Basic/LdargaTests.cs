@@ -2,7 +2,7 @@
 
 namespace Mosa.UnitTests.Basic;
 
-public static class LdargaTests 
+public static class LdargaTests
 {
 
 	[MosaUnitTest(Series = "U1")]

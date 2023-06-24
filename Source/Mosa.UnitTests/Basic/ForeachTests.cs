@@ -5,7 +5,7 @@ using System;
 
 namespace Mosa.UnitTests.Basic;
 
-public static class ForeachTests 
+public static class ForeachTests
 {
 
 	[MosaUnitTest]

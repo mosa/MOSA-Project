@@ -104,7 +104,7 @@ public class Starter : BaseLauncher
 					break;
 				}
 
-				Thread.Sleep(10);
+				Thread.Yield();
 			}
 
 			process.Kill();
