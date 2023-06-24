@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
+using Stack = System.Collections.Stack;
 
 namespace System;
 
@@ -338,6 +339,17 @@ public sealed class String : IEnumerable, IEnumerable<char>, IEquatable<String>,
 	public static bool operator !=(string a, string b)
 	{
 		return !Equals(a, b);
+	}
+
+	public static unsafe implicit operator ReadOnlySpan<char>(string s)
+	{
+		if (s == null) return ReadOnlySpan<char>.Empty;
+		return new ReadOnlySpan<char>(s.first_char, s.length);
+	}
+
+	public static implicit operator string(Span<char> span)
+	{
+		return span.ToString();
 	}
 
 	public static unsafe bool Equals(string a, string b)
