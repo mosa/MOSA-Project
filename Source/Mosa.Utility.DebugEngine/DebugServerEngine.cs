@@ -45,7 +45,7 @@ public sealed class DebugServerEngine
 
 	public void Disconnect()
 	{
-		if (stream == null)
+		if (stream != null)
 		{
 			try
 			{
