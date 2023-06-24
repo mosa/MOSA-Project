@@ -317,6 +317,16 @@ public sealed class String : IEnumerable, IEnumerable<char>, IEquatable<String>,
 		return str;
 	}
 
+	public string Insert(int startIndex, string str)
+	{
+		return this.Substring(0, startIndex) + str + this.Substring(startIndex);
+	}
+
+	public string Remove(int startIndex, int count)
+	{
+		return this.Substring(0, startIndex) + this.Substring(startIndex + count);
+	}
+
 	public bool Equals(string s)
 	{
 		return Equals(this, s);
