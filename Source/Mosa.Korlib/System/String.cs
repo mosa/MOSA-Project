@@ -720,6 +720,19 @@ public sealed class String : IEnumerable, IEnumerable<char>, IEquatable<String>,
 		return (value == null) || (value.Length == 0);
 	}
 
+	public static bool IsNullOrWhiteSpace(string value)
+	{
+		if (value == null) return true;
+
+		for (var i = 0; i < value.Length; i++)
+		{
+			if (!char.IsWhiteSpace(value[i]))
+				return false;
+		}
+
+		return true;
+	}
+
 	public bool Contains(string value)
 	{
 		return IndexOf(value) > -1;
