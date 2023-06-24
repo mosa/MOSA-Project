@@ -327,6 +327,11 @@ public sealed class String : IEnumerable, IEnumerable<char>, IEquatable<String>,
 		return this.Substring(0, startIndex) + this.Substring(startIndex + count);
 	}
 
+	public static string Format(string format, params object[] args)
+	{
+		return format;
+	}
+
 	public bool Equals(string s)
 	{
 		return Equals(this, s);
