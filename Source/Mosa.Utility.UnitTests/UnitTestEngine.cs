@@ -428,7 +428,7 @@ public class UnitTestEngine : IDisposable
 			{
 			}
 
-			Thread.Sleep(ConnectionDelay);
+			Thread.Sleep(10);
 		}
 
 		return false;
@@ -488,7 +488,7 @@ public class UnitTestEngine : IDisposable
 				return true;
 			}
 
-			Thread.Sleep(ConnectionDelay);
+			Thread.Sleep(10);
 		}
 
 		return false;
@@ -504,7 +504,7 @@ public class UnitTestEngine : IDisposable
 
 				if (StartEngineEx())
 				{
-					OutputStatus($"Engine started!");
+					//OutputStatus($"Engine started!");
 					return true;
 				}
 				else
@@ -526,17 +526,17 @@ public class UnitTestEngine : IDisposable
 
 		if (LaunchVirtualMachine())
 		{
-			OutputStatus("Virtual Machine Launched");
+			OutputStatus("Virtual machine launched");
 		}
 		else
 		{
-			OutputStatus("ERROR: Unable to launch Virtual Machine");
+			OutputStatus("ERROR: Unable to launch virtual machine");
 			return false;
 		}
 
 		if (ConnectToDebugEngine())
 		{
-			OutputStatus($"Engine Connected!");
+			OutputStatus($"Engine connected!");
 		}
 		else
 		{
@@ -546,12 +546,12 @@ public class UnitTestEngine : IDisposable
 
 		if (WaitForReady())
 		{
-			OutputStatus($"Engine Ready!");
+			OutputStatus($"Engine ready!");
 			WatchDog.Restart();
 		}
 		else
 		{
-			OutputStatus("ERROR: No ready status received");
+			OutputStatus("ERROR: No ready signal received");
 			return false;
 		}
 
@@ -576,28 +576,28 @@ public class UnitTestEngine : IDisposable
 			// Has VM exited? If yes, restart
 			else if (Process.HasExited)
 			{
-				OutputStatus("Virtual Machine Exited");
+				OutputStatus("ERROR: Virtual machine process terminated");
 				restart = true;
 			}
 
 			// Have communications been terminated? If yes, restart
 			else if (!DebugServerEngine.IsConnected)
 			{
-				OutputStatus("Lost Connection");
-				KillVirtualMachine();
+				OutputStatus("ERROR: Connection lost");
 				restart = true;
 			}
 
 			// Has process stop responding more than X milliseconds; if yes, restart
 			else if (WatchDog.IsTimedOut)
 			{
-				OutputStatus("Timed Out");
-				KillVirtualMachine();
+				OutputStatus("ERROR: Timed out");
 				restart = true;
 			}
 
 			if (restart)
 			{
+				KillVirtualMachine();
+
 				if (Pending.Count == 1)
 				{
 					foreach (var failed in Pending)
@@ -617,7 +617,7 @@ public class UnitTestEngine : IDisposable
 				Pending.Clear();
 				SendOneCount = 10;
 
-				OutputStatus("Re-starting Engine...");
+				OutputStatus("Re-starting engine...");
 
 				if (!StartEngine())
 				{
