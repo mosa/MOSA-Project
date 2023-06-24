@@ -61,4 +61,22 @@ public struct UInt16: IComparable, IComparable<ushort>, IEquatable<ushort>
 	{
 		return (int)m_value;
 	}
+
+	public static ushort Parse(string s)
+	{
+		const string digits = "0123456789";
+		ushort result = 0;
+
+		for (int i = 0; i < s.Length; i++)
+		{
+			int ind = digits.IndexOf(s[i]);
+			if (ind == -1)
+			{
+				throw new Exception("Format is incorrect");
+			}
+			result = (ushort)(result * 10 + ind);
+		}
+
+		return result;
+	}
 }
