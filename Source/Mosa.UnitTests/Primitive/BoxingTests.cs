@@ -2,7 +2,7 @@
 
 namespace Mosa.UnitTests;
 
-public static class BoxingTests
+public static class BoxingTests 
 {
 
 	[MosaUnitTest(Series = "U1")]

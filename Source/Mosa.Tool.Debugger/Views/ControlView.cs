@@ -127,7 +127,7 @@ public partial class ControlView : DebugDockContent
 
 			while (GDBConnector.IsRunning)
 			{
-				Thread.Sleep(10);
+				Thread.Yield();
 			}
 
 			MainForm.ResendBreakPoints();
@@ -168,7 +168,7 @@ public partial class ControlView : DebugDockContent
 
 			while (GDBConnector.IsRunning)
 			{
-				Thread.Sleep(10);
+				Thread.Yield();
 			}
 
 			MainForm.ResendBreakPoints();

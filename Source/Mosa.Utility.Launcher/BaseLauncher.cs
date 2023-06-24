@@ -184,6 +184,18 @@ public class BaseLauncher
 		return '"' + location + '"';
 	}
 
+	protected ExternalProcess LaunchApplicationEx(string app, string args, bool captureOutput = false)
+	{
+		Output($"Launching Application: {app}");
+		Output($"Arguments: {args}");
+
+		var externalProcess = new ExternalProcess(app, args, captureOutput);
+
+		externalProcess.Start();
+
+		return externalProcess;
+	}
+
 	protected Process LaunchApplication(string app, string args)
 	{
 		Output($"Launching Application: {app}");
@@ -231,15 +243,12 @@ public class BaseLauncher
 		return output + error;
 	}
 
-	protected Process LaunchApplication(string app, string arg, bool getOutput)
+	protected Process LaunchApplicationWithOutput(string app, string arg)
 	{
 		var process = LaunchApplication(app, arg);
 
-		if (getOutput)
-		{
-			var output = GetOutput(process);
-			Output(output);
-		}
+		var output = GetOutput(process);
+		Output(output);
 
 		return process;
 	}

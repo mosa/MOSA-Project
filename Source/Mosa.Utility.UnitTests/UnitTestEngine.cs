@@ -79,15 +79,13 @@ public class UnitTestEngine : IDisposable
 
 	private Thread ProcessThread;
 
-	private readonly Stopwatch StopWatch = new Stopwatch();
+	private readonly Stopwatch Stopwatch = new Stopwatch();
 	private WatchDog WatchDog;
 
 	private int CompletedUnitTestCount;
 
 	private int SendOneCount = -1;
 	private int Errors;
-
-	private DateTime CompileStartTime;
 
 	#endregion Private Data Members
 
@@ -219,7 +217,7 @@ public class UnitTestEngine : IDisposable
 
 		var messages = new List<DebugMessage>();
 
-		StopWatch.Start();
+		Stopwatch.Start();
 		Aborted = !StartEngine();
 
 		while (!Aborted)
@@ -274,7 +272,7 @@ public class UnitTestEngine : IDisposable
 				}
 			}
 
-			Thread.Sleep(10);
+			Thread.Yield();
 		}
 	}
 
@@ -307,13 +305,13 @@ public class UnitTestEngine : IDisposable
 					return;
 			}
 
-			Thread.Sleep(10);
+			Thread.Yield();
 		}
 	}
 
 	public bool Compile()
 	{
-		CompileStartTime = DateTime.Now;
+		Stopwatch.Restart();
 
 		Settings.AddPropertyListValue("SearchPaths", TestAssemblyPath);
 
@@ -374,7 +372,7 @@ public class UnitTestEngine : IDisposable
 
 	private void OutputStatus(string status)
 	{
-		Console.WriteLine($"{(DateTime.Now - CompileStartTime).TotalSeconds:0.00} | {status}");
+		Console.WriteLine($"{Stopwatch.Elapsed.TotalSeconds:0.00} | {status}");
 	}
 
 	public bool LaunchVirtualMachine()
@@ -395,10 +393,10 @@ public class UnitTestEngine : IDisposable
 		if (Starter.Process == null)
 			return false;
 
+		Process = Starter.Process;
+
 		if (Starter.Process.HasExited)
 			return false;
-
-		Process = Starter.Process;
 
 		return true;
 	}
@@ -430,7 +428,7 @@ public class UnitTestEngine : IDisposable
 			{
 			}
 
-			Thread.Sleep(ConnectionDelay);
+			Thread.Yield();
 		}
 
 		return false;
@@ -466,10 +464,13 @@ public class UnitTestEngine : IDisposable
 		if (Process == null)
 			return;
 
+		DebugServerEngine.Disconnect();
+
 		if (!Process.HasExited)
 		{
 			Process.Kill();
 			Process.WaitForExit(10000); // wait for up to 10 seconds
+			Thread.Sleep(250);
 		}
 
 		Process = null;
@@ -487,7 +488,7 @@ public class UnitTestEngine : IDisposable
 				return true;
 			}
 
-			Thread.Sleep(ConnectionDelay);
+			Thread.Yield();
 		}
 
 		return false;
@@ -503,7 +504,7 @@ public class UnitTestEngine : IDisposable
 
 				if (StartEngineEx())
 				{
-					OutputStatus($"Engine started!");
+					//OutputStatus($"Engine started!");
 					return true;
 				}
 				else
@@ -525,17 +526,17 @@ public class UnitTestEngine : IDisposable
 
 		if (LaunchVirtualMachine())
 		{
-			OutputStatus("Virtual Machine Launched");
+			OutputStatus("Virtual machine launched");
 		}
 		else
 		{
-			OutputStatus("ERROR: Unable to launch Virtual Machine");
+			OutputStatus("ERROR: Unable to launch virtual machine");
 			return false;
 		}
 
 		if (ConnectToDebugEngine())
 		{
-			OutputStatus($"Engine Connected!");
+			OutputStatus($"Engine connected!");
 		}
 		else
 		{
@@ -545,12 +546,12 @@ public class UnitTestEngine : IDisposable
 
 		if (WaitForReady())
 		{
-			OutputStatus($"Engine Ready!");
+			OutputStatus($"Engine ready!");
 			WatchDog.Restart();
 		}
 		else
 		{
-			OutputStatus("ERROR: No ready status received");
+			OutputStatus("ERROR: No ready signal received");
 			return false;
 		}
 
@@ -575,28 +576,28 @@ public class UnitTestEngine : IDisposable
 			// Has VM exited? If yes, restart
 			else if (Process.HasExited)
 			{
-				OutputStatus("Virtual Machine Exited");
+				OutputStatus("ERROR: Virtual machine process terminated");
 				restart = true;
 			}
 
 			// Have communications been terminated? If yes, restart
 			else if (!DebugServerEngine.IsConnected)
 			{
-				OutputStatus("Lost Connection");
-				KillVirtualMachine();
+				OutputStatus("ERROR: Connection lost");
 				restart = true;
 			}
 
 			// Has process stop responding more than X milliseconds; if yes, restart
 			else if (WatchDog.IsTimedOut)
 			{
-				OutputStatus("Timed Out");
-				KillVirtualMachine();
+				OutputStatus("ERROR: Timed out");
 				restart = true;
 			}
 
 			if (restart)
 			{
+				KillVirtualMachine();
+
 				if (Pending.Count == 1)
 				{
 					foreach (var failed in Pending)
@@ -616,9 +617,7 @@ public class UnitTestEngine : IDisposable
 				Pending.Clear();
 				SendOneCount = 10;
 
-				OutputStatus("Re-starting Engine...");
-
-				Thread.Sleep(100);
+				OutputStatus("Re-starting engine...");
 
 				if (!StartEngine())
 				{
@@ -655,9 +654,9 @@ public class UnitTestEngine : IDisposable
 			//OutputStatus("Received: " + (response.Other as UnitTest).FullMethodName);
 			//OutputStatus(response.ToString());
 
-			if (CompletedUnitTestCount % 1000 == 0 && StopWatch.Elapsed.Seconds != 0)
+			if (CompletedUnitTestCount % 1000 == 0 && Stopwatch.Elapsed.Seconds != 0)
 			{
-				OutputStatus($"Unit Tests - Count: {CompletedUnitTestCount} Elapsed: {(int)StopWatch.Elapsed.TotalSeconds} ({(CompletedUnitTestCount / StopWatch.Elapsed.TotalSeconds).ToString("F2")} per second)");
+				OutputStatus($"Unit Tests - Count: {CompletedUnitTestCount} Elapsed: {(int)Stopwatch.Elapsed.TotalSeconds} ({(CompletedUnitTestCount / Stopwatch.Elapsed.TotalSeconds).ToString("F2")} per second)");
 			}
 		}
 

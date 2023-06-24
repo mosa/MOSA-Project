@@ -229,3 +229,4 @@ public static class StaticFieldTestC
 		return field;
 	}
 }
+

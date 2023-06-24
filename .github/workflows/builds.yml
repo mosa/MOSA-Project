@@ -68,7 +68,7 @@ jobs:
           
   windows-build-packaging:
     name: Windows Build Packaging
-    needs: [windows-build, linux-build, generate-docs, windows-unit-testing, linux-unit-testing]
+    needs: [windows-build, linux-build, generate-docs, windows-unit-testing, linux-unit-testing, windows-demo-testing, linux-demo-testing]
     runs-on: windows-latest
     if: github.event_name == 'push' && github.repository == 'mosa/MOSA-Project' && github.ref == 'refs/heads/master'
     env:
@@ -137,7 +137,7 @@ jobs:
           path: bin
          
   generate-docs:
-    name: Generate documentation
+    name: Generate Documentation
     runs-on: ubuntu-latest
     steps:
       - name: Set python3.11
@@ -168,7 +168,8 @@ jobs:
     strategy:
       matrix:
         optimization: [0,1,2,3,4,5,6,7,8,9]
-    name: Windows - Unit Testing -o${{ matrix.optimization }}
+      fail-fast: false
+    name: Windows - Unit Test -o${{ matrix.optimization }}
     runs-on: windows-latest
     needs: windows-build
     steps:
@@ -181,14 +182,70 @@ jobs:
         with:
           name: windows-build-artifact
           path: bin
-      - name: Unit Testing
-        run: bin\Mosa.Utility.UnitTests.exe -o${{ matrix.optimization }}
+      - name: Unit Test
+        run: bin\Mosa.Utility.UnitTests.exe -check -o${{ matrix.optimization }}
 
   linux-unit-testing:
     strategy:
       matrix:
         optimization: [0,1,2,3,4,5,6,7,8,9]
-    name: Linux - Unit Testing -o${{ matrix.optimization }}
+      fail-fast: false
+    name: Linux - Unit Test -o${{ matrix.optimization }}
+    runs-on: ubuntu-latest
+    needs: linux-build
+
+    steps:
+      - name: Set net7.0
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: linux-build-artifact
+          path: bin
+      - name: Update Package Respository
+        run: sudo apt-get -y -o Acquire::Check-Valid-Until=false update
+      - name: Install Qemu and Dependencies
+        run: sudo apt-get -y -o Acquire::Retries=5 install qemu-system-x86
+      - name: Unit Test  
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -check -o${{ matrix.optimization }}
+
+  windows-demo-testing:
+    strategy:
+      matrix:
+        optimization: [0,1,2,3,4,5,6,7,8,9]
+      fail-fast: false
+    name: Windows - Demo Test -o${{ matrix.optimization }}
+    runs-on: windows-latest
+    needs: windows-build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: windows-build-artifact
+          path: bin
+      - name: Demo Test - HelloWorld
+        run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.Demo.HelloWorld.x86.dll -o${{ matrix.optimization }} -check -test
+      - name: Demo Test - CoolWorld
+        run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.Demo.CoolWorld.x86.dll -o${{ matrix.optimization }} -check -test
+      - name: Demo Test - SVGAWorld
+        run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.Demo.SVGAWorld.x86.dll -o${{ matrix.optimization }} -check -test
+
+  linux-demo-testing:
+    strategy:
+      matrix:
+        optimization: [0,1,2,3,4,5,6,7,8,9]
+      fail-fast: false
+    name: Linux - Demo Test -o${{ matrix.optimization }}
     runs-on: ubuntu-latest
     needs: linux-build
     steps:
@@ -209,5 +266,9 @@ jobs:
         run: sudo apt-get -y -o Acquire::Check-Valid-Until=false update
       - name: Install Qemu and Dependencies
         run: sudo apt-get -y -o Acquire::Retries=5 install qemu-system-x86
-      - name: Unit Testing  
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -o${{ matrix.optimization }}
+      - name: Demo Test - HelloWorld
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.Demo.HelloWorld.x86.dll -o${{ matrix.optimization }} -check -test
+      - name: Demo Test - CoolWorld
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.Demo.CoolWorld.x86.dll -o${{ matrix.optimization }} -check -test
+      - name: Demo Test - SVGAWorld
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.Demo.SVGAWorld.x86.dll -o${{ matrix.optimization }} -check -test

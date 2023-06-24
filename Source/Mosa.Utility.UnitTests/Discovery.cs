@@ -14,7 +14,7 @@ public class Discovery
 	public static Type CombinationType = Assembly.Load("Mosa.Utility.UnitTests").GetTypes().First(t => t.Name == "Combinations");
 	public static Type SeriesType = Assembly.Load("Mosa.Utility.UnitTests").GetTypes().First(t => t.Name == "Series2");
 
-	public static List<UnitTestInfo> DiscoverUnitTests()
+	public static List<UnitTestInfo> DiscoverUnitTests(string filter = null)
 	{
 		var unitTests = new List<UnitTestInfo>();
 
@@ -28,6 +28,9 @@ public class Discovery
 		foreach (var method in methods)
 		{
 			var fullMethodName = method.DeclaringType.FullName + "." + method.Name;
+
+			if (filter != null && !fullMethodName.Contains(filter))
+				continue;
 
 			foreach (var attribute in method.GetCustomAttributes<MosaUnitTestAttribute>())
 			{

@@ -1,4 +1,7 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+﻿
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using System;
 
 namespace Mosa.UnitTests.Basic;
 
@@ -100,9 +103,9 @@ public static class ForeachTests
 	{
 		var a = new int[5];
 		for (var i = 0; i < 5; i++)
-			a[i] = i;
+			a[i] = (int)i;
 
-		var total = 0;
+		int total = 0;
 
 		foreach (var v in a)
 			total += v;
@@ -115,7 +118,7 @@ public static class ForeachTests
 	{
 		var a = new long[5];
 		for (var i = 0; i < 5; i++)
-			a[i] = i;
+			a[i] = (long)i;
 
 		long total = 0;
 
@@ -125,3 +128,4 @@ public static class ForeachTests
 		return total;
 	}
 }
+

@@ -180,6 +180,7 @@ public static class CommandLineArguments
 			new Argument { Name = "-watch", Setting = "Debugger.WatchFile"},
 
 			// Unit Test:
+			new Argument { Name = "-filter", Setting = "UnitTest.Filter", Value = null},
 			new Argument { Name = "-unittest-maxerrors", Setting = "UnitTest.MaxErrors"},
 
 			// Optimization Levels:

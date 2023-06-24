@@ -1,21 +1,18 @@
 ﻿<#@ include file="../../TemplateLibrary.txt" #>
-using System;
+namespace Mosa.UnitTests.Generics;
 
-namespace Mosa.UnitTests.Generics
+public static class GenericCallTests
 {
-	public static class GenericCallTests
+	private static T GenericCallTarget<T>(T value)
 	{
-		private static T GenericCallTarget<T>(T value)
-		{
-			return value;
-		}
+		return value;
+	}
 <# foreach (KeyValuePair<string, string> number in IntegersWithChar) { #>
 
-		[MosaUnitTest(Series = "<#= number.Value #>")]
-		public static bool GenericCall<#= number.Value #>(<#= number.Key #> value)
-		{
-			return value == GenericCallTarget<<#= number.Key #>>(value);
-		}
-<# } #>
+	[MosaUnitTest(Series = "<#= number.Value #>")]
+	public static bool GenericCall<#= number.Value #>(<#= number.Key #> value)
+	{
+		return value == GenericCallTarget<<#= number.Key #>>(value);
 	}
+<# } #>
 }

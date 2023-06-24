@@ -794,6 +794,8 @@ public abstract class BaseMethodCompilerStage
 
 	#endregion Helper Methods
 
+	#region Check Methods
+
 	public bool FullCheck(bool full = true)
 	{
 		return CheckVirtualRegisters(full) || CheckAllPhiInstructions() || CheckAllInstructions();
@@ -858,4 +860,6 @@ public abstract class BaseMethodCompilerStage
 
 		return true;
 	}
+
+	#endregion Check Methods
 }
