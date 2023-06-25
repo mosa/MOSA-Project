@@ -42,6 +42,8 @@ public static class Boot
 		Console.Write(ConsoleColor.BrightGreen, "> Page table...");
 		PageTable.Setup();
 		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
+
+		Console.WriteLine();
 	}
 
 	[Plug("Mosa.Runtime.StartUp::GarbageCollectionInitialization")]
