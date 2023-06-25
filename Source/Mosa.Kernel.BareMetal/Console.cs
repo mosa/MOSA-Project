@@ -1,5 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Drawing;
+
 namespace Mosa.Kernel.BareMetal;
 
 public static class Console
@@ -33,6 +35,18 @@ public static class Console
 		Write(Newline);
 	}
 
+	public static void WriteLine(ConsoleColor color, string s)
+	{
+		SetForground(color);
+		WriteLine(s);
+	}
+
+	public static void Write(ConsoleColor color, string s)
+	{
+		SetForground(color);
+		Write(s);
+	}
+
 	public static void WriteLine()
 	{
 		Write(Newline);
@@ -46,17 +60,23 @@ public static class Console
 
 	public static void SetForground(ConsoleColor color)
 	{
+		var c = (byte)color;
+
 		Write(Escape);
-		Write("[3");
-		Write((byte)((byte)'0' + (byte)color % 10));
+		Write("[");
+		Write((byte)((byte)'0' + c / 10 % 10));
+		Write((byte)((byte)'0' + c % 10));
 		Write("m");
 	}
 
 	public static void SetBackground(ConsoleColor color)
 	{
+		var c = (byte)color + 10;
+
 		Write(Escape);
-		Write("[4");
-		Write((byte)((byte)'0' + (byte)color % 10));
+		Write("[");
+		Write((byte)((byte)'0' + c / 10 % 10));
+		Write((byte)((byte)'0' + c % 10));
 		Write("m");
 	}
 

@@ -14,7 +14,7 @@ public static class Boot
 	/// </summary>
 	public static void Main()
 	{
-		VGAText.Clear();
+		VGAText.Write((byte)'+');
 
 		while (true)
 		{ }
