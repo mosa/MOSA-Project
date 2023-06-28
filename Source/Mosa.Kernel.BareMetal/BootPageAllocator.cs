@@ -6,9 +6,15 @@ namespace Mosa.Kernel.BareMetal;
 
 public class BootPageAllocator
 {
+	#region Private Members
+
 	private static Pointer BootReserveStartPage;
 	private static uint BootReserveSize;
 	private static uint UsedPages;
+
+	#endregion Private Members
+
+	#region Public API
 
 	internal static void Setup()
 	{
@@ -37,4 +43,6 @@ public class BootPageAllocator
 
 		return result;
 	}
+
+	#endregion Public API
 }

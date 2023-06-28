@@ -7,7 +7,8 @@ namespace Mosa.Kernel.BareMetal.x86;
 /// </summary>
 public static class VGAConsole
 {
-	private enum ControlState { Normal, Escape };
+	private enum ControlState
+	{ Normal, Escape };
 
 	private static ControlState State = ControlState.Normal;
 
@@ -138,7 +139,16 @@ public static class VGAConsole
 						case 34: VGAText.SetColor(VGAColor.Blue); break;
 						case 35: VGAText.SetColor(VGAColor.Magenta); break;
 						case 36: VGAText.SetColor(VGAColor.Cyan); break;
-						case 37: VGAText.SetColor(VGAColor.White); break;
+						case 37: VGAText.SetColor(VGAColor.LightGray); break;
+
+						case 90: VGAText.SetColor(VGAColor.DarkGray); break;
+						case 91: VGAText.SetColor(VGAColor.LightRed); break;
+						case 92: VGAText.SetColor(VGAColor.LightGreen); break;
+						case 93: VGAText.SetColor(VGAColor.Yellow); break;
+						case 94: VGAText.SetColor(VGAColor.LightBlue); break;
+						case 95: VGAText.SetColor(VGAColor.LightMagenta); break;
+						case 96: VGAText.SetColor(VGAColor.LightCyan); break;
+						case 97: VGAText.SetColor(VGAColor.White); break;
 
 						case 40: VGAText.SetBackground(VGAColor.Black); break;
 						case 41: VGAText.SetBackground(VGAColor.Red); break;
@@ -148,6 +158,15 @@ public static class VGAConsole
 						case 45: VGAText.SetBackground(VGAColor.Magenta); break;
 						case 46: VGAText.SetBackground(VGAColor.Cyan); break;
 						case 47: VGAText.SetBackground(VGAColor.White); break;
+
+						case 100: VGAText.SetBackground(VGAColor.DarkGray); break;
+						case 101: VGAText.SetBackground(VGAColor.LightRed); break;
+						case 102: VGAText.SetBackground(VGAColor.LightGreen); break;
+						case 103: VGAText.SetBackground(VGAColor.Yellow); break;
+						case 104: VGAText.SetBackground(VGAColor.LightBlue); break;
+						case 105: VGAText.SetBackground(VGAColor.LightMagenta); break;
+						case 106: VGAText.SetBackground(VGAColor.LightCyan); break;
+						case 107: VGAText.SetBackground(VGAColor.White); break;
 
 						// FUTURE:
 						//0   Reset all attributes
@@ -186,7 +205,7 @@ public static class VGAConsole
 	private static bool IsCharacter(byte b)
 	{
 		return (b >= (byte)'a' && b <= (byte)'z')
-		       || (b >= (byte)'A' && b <= (byte)'Z');
+			   || (b >= (byte)'A' && b <= (byte)'Z');
 	}
 
 	private static void ConvertBufferToParameter()

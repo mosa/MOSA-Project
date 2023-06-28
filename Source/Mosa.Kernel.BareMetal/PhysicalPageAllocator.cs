@@ -8,7 +8,13 @@ namespace Mosa.Kernel.BareMetal;
 
 public static class PhysicalPageAllocator
 {
+	#region Public Members
+
 	public static uint TotalPages { get; private set; }
+
+	#endregion Public Members
+
+	#region Private Members
 
 	private static BitMapIndexTable BitMapIndexTable;
 
@@ -20,6 +26,10 @@ public static class PhysicalPageAllocator
 	private static uint MaximumReservedPage;
 
 	private static uint SearchNextStartPage;
+
+	#endregion Private Members
+
+	#region Public API
 
 	public static void Setup()
 	{
@@ -112,17 +122,17 @@ public static class PhysicalPageAllocator
 		SearchNextStartPage = MinimumAvailablePage;
 	}
 
-	public static void ReleasePages(Pointer page, uint count)
+	public static void Release(Pointer page, uint count)
 	{
 		SetPageBitMapEntry((uint)page.ToInt64() / Page.Size, count, true);
 	}
 
-	public static Pointer ReservePage()
+	public static Pointer Reserve()
 	{
-		return ReservePages(1, 1);
+		return Reserve(1, 1);
 	}
 
-	public static Pointer ReservePages(uint count, uint alignment = 1)
+	public static Pointer Reserve(uint count, uint alignment = 1)
 	{
 		if (count == 0)
 			return Pointer.Zero;
@@ -179,6 +189,10 @@ public static class PhysicalPageAllocator
 			at = restartAt;
 		}
 	}
+
+	#endregion Public API
+
+	#region Private API
 
 	private static void SetPageBitMapEntry(uint start, uint count, bool set)
 	{
@@ -386,4 +400,6 @@ public static class PhysicalPageAllocator
 
 		return ~(uint.MaxValue << size) << start;
 	}
+
+	#endregion Private API
 }

@@ -16,10 +16,10 @@ internal static class PageTable
 
 	public static void Setup()
 	{
-		GDTTable = new GDTTable(PhysicalPageAllocator.ReservePage());
+		GDTTable = new GDTTable(PhysicalPageAllocator.Reserve());
 
-		PageDirectory = PhysicalPageAllocator.ReservePages(1024);
-		PageTables = PhysicalPageAllocator.ReservePages(1024);
+		PageDirectory = PhysicalPageAllocator.Reserve(1024);
+		PageTables = PhysicalPageAllocator.Reserve(1024);
 	}
 
 	public static void Initialize()

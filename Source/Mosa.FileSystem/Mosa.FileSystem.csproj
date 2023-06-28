@@ -1,25 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <DebugType>full</DebugType>
-    <LangVersion>11.0</LangVersion>
-    <OutputPath>..\..\bin\</OutputPath>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <DisableStandardFrameworkResolution>true</DisableStandardFrameworkResolution>
-    <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <NuspecFile>Mosa.DeviceSystem.nuspec</NuspecFile>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DocumentationFile />
-    <NoWarn>0219,0414</NoWarn>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugSymbols>True</DebugSymbols>
-    <DocumentationFile>..\..\bin\Mosa.FileSystem.xml</DocumentationFile>
-    <WarningLevel>2</WarningLevel>
-  </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Mosa.DeviceSystem\Mosa.DeviceSystem.csproj" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<DebugType>full</DebugType>
+		<LangVersion>11.0</LangVersion>
+		<OutputPath>..\..\bin\</OutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<DisableStandardFrameworkResolution>true</DisableStandardFrameworkResolution>
+		<DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<NuspecFile>Mosa.DeviceSystem.nuspec</NuspecFile>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+		<DocumentationFile />
+		<NoWarn>0219,0414</NoWarn>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+		<DebugSymbols>True</DebugSymbols>
+		<DocumentationFile>..\..\bin\Mosa.FileSystem.xml</DocumentationFile>
+		<WarningLevel>2</WarningLevel>
+	</PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Mosa.DeviceSystem\Mosa.DeviceSystem.csproj" />
+	</ItemGroup>
 </Project>
