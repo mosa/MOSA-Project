@@ -122,17 +122,17 @@ public static class PhysicalPageAllocator
 		SearchNextStartPage = MinimumAvailablePage;
 	}
 
-	public static void ReleasePages(Pointer page, uint count)
+	public static void Release(Pointer page, uint count)
 	{
 		SetPageBitMapEntry((uint)page.ToInt64() / Page.Size, count, true);
 	}
 
-	public static Pointer ReservePage()
+	public static Pointer Reserve()
 	{
-		return ReservePages(1, 1);
+		return Reserve(1, 1);
 	}
 
-	public static Pointer ReservePages(uint count, uint alignment = 1)
+	public static Pointer Reserve(uint count, uint alignment = 1)
 	{
 		if (count == 0)
 			return Pointer.Zero;
