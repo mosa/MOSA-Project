@@ -11,6 +11,8 @@ public static class Console
 	public const byte Formfeed = 0x0C;
 	public const byte Backspace = 0x08;
 
+	#region Public API
+
 	public static void Write(byte c)
 	{
 		Platform.ConsoleWrite(c);
@@ -80,41 +82,29 @@ public static class Console
 		Write("m");
 	}
 
-	/// <summary>
-	/// Writes the specified value.
-	/// </summary>
-	/// <param name="val">The value.</param>
 	public static void WriteValue(ulong value)
 	{
 		WriteValue(value, 10, -1);
 	}
 
-	/// <summary>
-	/// Writes the specified value.
-	/// </summary>
-	/// <param name="val">The value.</param>
 	public static void WriteValueAsHex(ulong value)
 	{
 		WriteValue(value, 16, -1);
 	}
 
-	/// <summary>
-	/// Writes the specified value.
-	/// </summary>
-	/// <param name="val">The value.</param>
 	public static void WriteValue(ulong value, int length)
 	{
 		WriteValue(value, 10, length);
 	}
 
-	/// <summary>
-	/// Writes the specified value.
-	/// </summary>
-	/// <param name="val">The value.</param>
 	public static void WriteValueAsHex(ulong value, int length)
 	{
 		WriteValue(value, 16, length);
 	}
+
+	#endregion Public API
+
+	#region Private API
 
 	private static void WriteValue(ulong value, byte @base, int length)
 	{
@@ -157,4 +147,6 @@ public static class Console
 		else
 			Write((char)('A' + digit - 10));
 	}
+
+	#endregion Private API
 }

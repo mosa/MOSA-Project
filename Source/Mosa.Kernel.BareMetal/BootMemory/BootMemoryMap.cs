@@ -7,11 +7,17 @@ namespace Mosa.Kernel.BareMetal.BootMemory;
 
 public static class BootMemoryMap
 {
+	#region Private Members
+
 	private static BootMemoryList List;
 
 	private static Pointer AvailableMemory;
 
-	public static void Initialize()
+	#endregion Private Members
+
+	#region Public API
+
+	public static void Setup()
 	{
 		var entry = BootPageAllocator.AllocatePage();
 		Page.ClearPage(entry);
@@ -20,34 +26,9 @@ public static class BootMemoryMap
 		{
 			Count = 0
 		};
-	}
 
-	public static void ImportMultibootV1MemoryMap()
-	{
-		if (!Multiboot.IsAvailable)
-			return;
-
-		if (Multiboot.MultibootV1.MemoryMapStart.IsNull)
-			return;
-
-		AvailableMemory = new Pointer(Multiboot.MultibootV1.MemoryUpper * 1024);
-
-		var memoryMapEnd = Multiboot.MultibootV1.MemoryMapStart + Multiboot.MultibootV1.MemoryMapLength;
-
-		var entry = new MultibootV1MemoryMapEntry(Multiboot.MultibootV1.MemoryMapStart);
-
-		while (entry.Entry < memoryMapEnd)
-		{
-			SetMemoryMap(entry.BaseAddr, entry.Length, entry.Type == 1 ? BootMemoryType.Available : BootMemoryType.Reserved);
-
-			entry = entry.GetNext();
-		}
-	}
-
-	public static void ImportPlatformMemoryMap()
-	{
-		SetMemoryMap(Platform.GetBootReservedRegion(), BootMemoryType.Kernel);
-		SetMemoryMap(Platform.GetInitialGCMemoryPool(), BootMemoryType.Kernel);
+		ImportPlatformMemoryMap();
+		ImportMultibootV1MemoryMap();
 	}
 
 	public static BootMemoryMapEntry SetMemoryMap(AddressRange range, BootMemoryType type)
@@ -83,6 +64,42 @@ public static class BootMemoryMap
 		return AvailableMemory;
 	}
 
+	#endregion Public API
+
+	#region Private API
+
+	private static void ImportMultibootV1MemoryMap()
+	{
+		if (!Multiboot.IsAvailable)
+			return;
+
+		if (Multiboot.MultibootV1.MemoryMapStart.IsNull)
+			return;
+
+		AvailableMemory = new Pointer(Multiboot.MultibootV1.MemoryUpper * 1024);
+
+		var memoryMapEnd = Multiboot.MultibootV1.MemoryMapStart + Multiboot.MultibootV1.MemoryMapLength;
+
+		var entry = new MultibootV1MemoryMapEntry(Multiboot.MultibootV1.MemoryMapStart);
+
+		while (entry.Entry < memoryMapEnd)
+		{
+			SetMemoryMap(entry.BaseAddr, entry.Length, entry.Type == 1 ? BootMemoryType.Available : BootMemoryType.Reserved);
+
+			entry = entry.GetNext();
+		}
+	}
+
+	private static void ImportPlatformMemoryMap()
+	{
+		SetMemoryMap(Platform.GetBootReservedRegion(), BootMemoryType.Kernel);
+		SetMemoryMap(Platform.GetInitialGCMemoryPool(), BootMemoryType.Kernel);
+	}
+
+	#endregion Private API
+
+	#region Diagnostic
+
 	public static void Dump()
 	{
 		Console.WriteLine();
@@ -104,5 +121,7 @@ public static class BootMemoryMap
 			Console.WriteValue((byte)entry.Type);
 			Console.WriteLine();
 		}
+
+		#endregion Diagnostic
 	}
 }

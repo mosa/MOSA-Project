@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
+using Mosa.DeviceSystem;
+using Mosa.DeviceSystem.Service;
 using Mosa.Kernel.BareMetal.BootMemory;
 using Mosa.Kernel.BareMetal.GC;
 using Mosa.Runtime;
@@ -29,9 +31,8 @@ public static class Boot
 		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 
 		Console.Write(ConsoleColor.BrightGreen, "> Memory map...");
-		BootMemoryMap.Initialize();
-		BootMemoryMap.ImportPlatformMemoryMap();
-		BootMemoryMap.ImportMultibootV1MemoryMap();
+		BootMemoryMap.Setup();
+
 		//BootMemoryMap.Dump();
 		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 
@@ -44,6 +45,24 @@ public static class Boot
 		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 
 		Console.WriteLine();
+
+		//VirtualPageAllocator.Setup();
+		//GC.Setup();
+		//Scheduler.Setup();
+		//IDT.SetInterruptHandler(ProcessInterrupt);
+
+		Console.WriteLine(ConsoleColor.BrightYellow, "Initializing services...");
+
+		// Create Service manager and basic services
+		//var serviceManager = new ServiceManager();
+
+		//	var DeviceService = new DeviceService();
+
+		//	var diskDeviceService = new DiskDeviceService();
+		//	var partitionService = new PartitionService();
+		//	var pciControllerService = new PCIControllerService();
+		//	var pciDeviceService = new PCIDeviceService();
+		//	var pcService = new PCService();
 	}
 
 	[Plug("Mosa.Runtime.StartUp::GarbageCollectionInitialization")]

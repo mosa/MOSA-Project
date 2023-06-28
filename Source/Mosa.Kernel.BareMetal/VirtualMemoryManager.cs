@@ -7,9 +7,16 @@ namespace Mosa.Kernel.BareMetal;
 public static class VirtualMemoryManager
 {
 	// TODO - implementation:
+
+	#region Private Members
+
 	// list of page pools (representing physical pages)
 	// page pool consist of bitmap + # of entries + # of free entries
 	//
+
+	#endregion Private Members
+
+	#region Public API
 
 	public static void Start()
 	{
@@ -29,4 +36,6 @@ public static class VirtualMemoryManager
 	{
 		return;
 	}
+
+	#endregion Public API
 }

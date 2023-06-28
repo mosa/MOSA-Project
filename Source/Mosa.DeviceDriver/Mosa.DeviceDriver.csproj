@@ -1,31 +1,28 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <DebugType>full</DebugType>
-    <LangVersion>11.0</LangVersion>
-    <OutputPath>..\..\bin\</OutputPath>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <DisableStandardFrameworkResolution>true</DisableStandardFrameworkResolution>
-    <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <NuspecFile>Mosa.DeviceSystem.nuspec</NuspecFile>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DocumentationFile />
-    <CodeAnalysisRuleSet>..\Common.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugSymbols>True</DebugSymbols>
-    <DocumentationFile>..\..\bin\Mosa.DeviceDriver.xml</DocumentationFile>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <WarningLevel>2</WarningLevel>
-  </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Mosa.DeviceSystem\Mosa.DeviceSystem.csproj" />
-    <ProjectReference Include="..\Mosa.Korlib\Mosa.Korlib.csproj" />
-    <ProjectReference Include="..\Mosa.Runtime\Mosa.Runtime.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="PCI\AMD\AMDPCNetII.cs" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<DebugType>full</DebugType>
+		<LangVersion>11.0</LangVersion>
+		<OutputPath>..\..\bin\</OutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<DisableStandardFrameworkResolution>true</DisableStandardFrameworkResolution>
+		<DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<NuspecFile>Mosa.DeviceSystem.nuspec</NuspecFile>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+		<DocumentationFile />
+		<CodeAnalysisRuleSet>..\Common.ruleset</CodeAnalysisRuleSet>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+		<DebugSymbols>True</DebugSymbols>
+		<DocumentationFile>..\..\bin\Mosa.DeviceDriver.xml</DocumentationFile>
+		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+		<WarningLevel>2</WarningLevel>
+	</PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Mosa.DeviceSystem\Mosa.DeviceSystem.csproj" />
+		<ProjectReference Include="..\Mosa.Korlib\Mosa.Korlib.csproj" />
+		<ProjectReference Include="..\Mosa.Runtime\Mosa.Runtime.csproj" />
+	</ItemGroup>
 </Project>

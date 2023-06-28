@@ -14,6 +14,9 @@
     <NoWarn>MSB3245</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Mosa.DeviceDriver\Mosa.DeviceDriver.csproj" />
+    <ProjectReference Include="..\Mosa.DeviceSystem\Mosa.DeviceSystem.csproj" />
+    <ProjectReference Include="..\Mosa.FileSystem\Mosa.FileSystem.csproj" />
     <ProjectReference Include="..\Mosa.Kernel.BareMetal.x86\Mosa.Kernel.BareMetal.x86.csproj" />
     <ProjectReference Include="..\Mosa.Kernel.BareMetal\Mosa.Kernel.BareMetal.csproj" />
     <ProjectReference Include="..\Mosa.Korlib\Mosa.Korlib.csproj" />
