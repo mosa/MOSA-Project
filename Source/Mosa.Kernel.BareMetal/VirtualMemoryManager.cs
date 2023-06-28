@@ -22,13 +22,13 @@ public static class VirtualMemoryManager
 		// Identity Map first x MB of memory
 	}
 
-	public static Pointer Reserve(uint count)
+	public static Pointer Reserve()
 	{
 		// TODO - Reserve a single page of virtual memory
 		return Pointer.Zero;
 	}
 
-	public static Pointer Reserve(uint count, uint count)
+	public static Pointer Reserve(uint count)
 	{
 		// TODO -  Reserve pages of virtual memory
 		return Pointer.Zero;
