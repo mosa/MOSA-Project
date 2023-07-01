@@ -1,8 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-using Mosa.DeviceSystem;
-using Mosa.DeviceSystem.Service;
 using Mosa.Kernel.BareMetal.BootMemory;
 using Mosa.Kernel.BareMetal.GC;
 using Mosa.Runtime;
@@ -26,13 +23,17 @@ public static class Boot
 
 		Console.WriteLine(ConsoleColor.BrightYellow, "Initializing kernel...");
 
+		Console.Write(ConsoleColor.BrightGreen, "> Enabling debug logging...");
+		Debug.Setup(true);
+		Debug.WriteLine("Booting...");
+		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
+
 		Console.Write(ConsoleColor.BrightGreen, "> Boot page allocator...");
 		BootPageAllocator.Setup();
 		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 
 		Console.Write(ConsoleColor.BrightGreen, "> Memory map...");
 		BootMemoryMap.Setup();
-
 		//BootMemoryMap.Dump();
 		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 

@@ -33,14 +33,15 @@ public static class PhysicalPageAllocator
 
 	public static void Setup()
 	{
-		BitMapIndexTable = new BitMapIndexTable(BootPageAllocator.AllocatePage());
+		var bitMapIndexPage = BootPageAllocator.AllocatePage();
+		BitMapIndexTable = new BitMapIndexTable(bitMapIndexPage);
 
 		AvailableMemory = BootMemoryMap.GetAvailableMemory();
 
 		TotalPages = (uint)(AvailableMemory.ToUInt64() / Page.Size);
 		var bitMapCount = TotalPages / (Page.Size * 8);
 
-		for (uint i = 0; i < bitMapCount; i++)
+		for (var i = 0u; i < bitMapCount; i++)
 		{
 			var bitmap = BootPageAllocator.AllocatePage();
 			Page.ClearPage(bitmap);
@@ -56,7 +57,7 @@ public static class PhysicalPageAllocator
 		var entries = BootMemoryMap.GetBootMemoryMapEntryCount();
 
 		// pass 0 - mark available pages
-		for (uint i = 0; i < entries; i++)
+		for (var i = 0u; i < entries; i++)
 		{
 			var entry = BootMemoryMap.GetBootMemoryMapEntry(i);
 
@@ -71,7 +72,7 @@ public static class PhysicalPageAllocator
 			if (pages <= 0)
 				continue;
 
-			var startPage = (uint)(start / Page.Shift);
+			var startPage = (uint)(start / Page.Size);
 			var endPage = startPage + pages - 1;
 
 			MinimumAvailablePage = Math.Min(MinimumAvailablePage, startPage);
@@ -81,7 +82,7 @@ public static class PhysicalPageAllocator
 		}
 
 		// pass 1 - unmark reserved pages
-		for (uint i = 0; i < entries; i++)
+		for (var i = 0u; i < entries; i++)
 		{
 			var entry = BootMemoryMap.GetBootMemoryMapEntry(i);
 
@@ -96,7 +97,7 @@ public static class PhysicalPageAllocator
 			if (pages <= 0)
 				continue;
 
-			var startPage = (uint)(start / Page.Shift);
+			var startPage = (uint)(start / Page.Size);
 			var endPage = startPage + pages - 1;
 
 			MinimumReservedPage = Math.Min(MinimumReservedPage, startPage);

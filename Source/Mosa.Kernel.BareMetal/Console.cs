@@ -49,6 +49,17 @@ public static class Console
 		Write(s);
 	}
 
+	public static void WriteLine(ConsoleColor color)
+	{
+		SetForground(color);
+		Write(Newline);
+	}
+
+	public static void Write(ConsoleColor color)
+	{
+		SetForground(color);
+	}
+
 	public static void WriteLine()
 	{
 		Write(Newline);

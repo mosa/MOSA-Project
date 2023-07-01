@@ -16,10 +16,15 @@ internal static class PageTable
 
 	public static void Setup()
 	{
+		Console.Write(ConsoleColor.BrightMagenta, "a");
+
 		GDTTable = new GDTTable(PhysicalPageAllocator.Reserve());
+		Console.Write(ConsoleColor.BrightMagenta, "b");
 
 		PageDirectory = PhysicalPageAllocator.Reserve(1024);
+		Console.Write(ConsoleColor.BrightMagenta, "c");
 		PageTables = PhysicalPageAllocator.Reserve(1024);
+		Console.Write(ConsoleColor.BrightMagenta, "d");
 	}
 
 	public static void Initialize()
