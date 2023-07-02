@@ -32,8 +32,7 @@ public static class SerialDebug
 
 		IsIntialize = true;
 
-		Write("[Debug Mode]");
-		Write(NewLine);
+		WriteLine("[Debug Mode]");
 	}
 
 	public static void Write(byte c)
@@ -52,5 +51,11 @@ public static class SerialDebug
 		{
 			Write((byte)c);
 		}
+	}
+
+	private static void WriteLine(string s)
+	{
+		Write(s);
+		Write(NewLine);
 	}
 }

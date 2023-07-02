@@ -41,6 +41,8 @@ public static class Boot
 		PhysicalPageAllocator.Setup();
 		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 
+		Debug.Kill();
+
 		Console.Write(ConsoleColor.BrightGreen, "> Page table...");
 		PageTable.Setup();
 		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");

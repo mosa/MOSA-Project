@@ -264,7 +264,7 @@ public static class Boot
 
 		IDT.SetInterruptHandler(manager.ProcessInterrupt);
 
-		Logger.Log("<SELFTEST:PASSED>");
+		Logger.Log("##PASS##");
 
 		manager.Start();
 	}

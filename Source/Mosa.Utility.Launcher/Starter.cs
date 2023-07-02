@@ -36,6 +36,7 @@ public class Starter : BaseLauncher
 	public bool Launch(bool waitForExit = false)
 	{
 		IsSucccessful = false;
+		Process = null;
 
 		try
 		{
@@ -43,7 +44,7 @@ public class Starter : BaseLauncher
 
 			if (Settings.LauncherTest)
 			{
-				IsSucccessful = StartTest(Process, "<SELFTEST:PASSED>");
+				IsSucccessful = StartTest(Process, "##PASS##");
 				return IsSucccessful;
 			}
 
@@ -167,6 +168,7 @@ public class Starter : BaseLauncher
 	{
 		var output = new StringBuilder();
 		var success = false;
+		var kill = false;
 
 		var client = new SimpleTCP();
 
@@ -182,6 +184,9 @@ public class Starter : BaseLauncher
 				{
 					Output(line);
 				}
+
+				if (line == "##KILL##")
+					kill = true;
 			}
 		};
 
@@ -199,7 +204,7 @@ public class Starter : BaseLauncher
 
 			var watchDog = new WatchDog(Settings.EmulatorRuntimeMaximum * 1000);
 
-			while (!(success || watchDog.IsTimedOut))
+			while (!(success || watchDog.IsTimedOut || kill))
 			{
 				if (!client.IsConnected)
 					return false;
@@ -215,6 +220,10 @@ public class Starter : BaseLauncher
 		}
 
 		Output("========================");
+
+		if (kill)
+			Output("Kill command received");
+
 		Output($"VM Exit Code: {process.ExitCode}");
 
 		if (Settings.LauncherExit)

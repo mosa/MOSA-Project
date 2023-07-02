@@ -24,6 +24,11 @@ public static class Debug
 
 	public static void Disable() => IsEnabled = true;
 
+	public static void Kill()
+	{
+		WriteLine("##KILL##");
+	}
+
 	public static void WriteLine(string message)
 	{
 		if (!IsEnabled)
