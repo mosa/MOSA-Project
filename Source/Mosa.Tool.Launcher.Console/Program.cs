@@ -144,7 +144,7 @@ internal static class Program
 
 	private static void NotifyStatus(string status)
 	{
-		System.Console.WriteLine($"{Stopwatch.Elapsed.TotalSeconds:0.00} | {status}");
+		System.Console.WriteLine($"{Stopwatch.Elapsed.TotalSeconds:00.00} | {status}");
 	}
 
 	private static CompilerHooks CreateCompilerHooks()

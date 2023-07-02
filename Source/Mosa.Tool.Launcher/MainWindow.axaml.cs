@@ -75,7 +75,7 @@ public partial class MainWindow : Window
 		if (string.IsNullOrEmpty(status))
 			return;
 
-		OutputTxt.Text += $"{Stopwatch.Elapsed.TotalSeconds:0.00} | {status}{Environment.NewLine}";
+		OutputTxt.Text += $"{Stopwatch.Elapsed.TotalSeconds:00.00} | {status}{Environment.NewLine}";
 
 		//<Setter Property="FontFamily" Value="Consolas"/>
 	}
