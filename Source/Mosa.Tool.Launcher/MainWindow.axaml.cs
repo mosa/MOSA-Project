@@ -493,7 +493,7 @@ public partial class MainWindow : Window
 		foreach (var line in builder.Counters)
 			AddCounters(line);
 
-		var starter = new Starter(builder.Settings, CreateCompilerHook(), builder.Linker);
+		var starter = new Starter(builder.ConfigurationSettings, CreateCompilerHook(), builder.Linker);
 		if (!starter.Launch(true))
 			return;
 

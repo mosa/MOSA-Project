@@ -46,7 +46,7 @@ internal static class Program
 
 			if (Settings.GetValue("Launcher.Launch", false))
 			{
-				var starter = new Starter(Builder.Settings, compilerHooks, Builder.Linker);
+				var starter = new Starter(Builder.ConfigurationSettings, compilerHooks, Builder.Linker);
 
 				if (!starter.Launch())
 				{

@@ -326,7 +326,7 @@ public class UnitTestEngine : IDisposable
 
 		Linker = builder.Linker;
 		TypeSystem = builder.TypeSystem;
-		Settings = builder.Settings;
+		Settings = builder.ConfigurationSettings;
 
 		return builder.IsSucccessful;
 	}
@@ -384,7 +384,7 @@ public class UnitTestEngine : IDisposable
 			var compilerHook = CreateCompilerHook();
 
 			Starter = new Starter(Settings, compilerHook);
-			Settings = Starter.Settings;
+			Settings = Starter.ConfigurationSettings;
 		}
 
 		if (!Starter.Launch())
