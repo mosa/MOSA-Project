@@ -16,7 +16,7 @@ public class SimpleTCP
 
 	#region Private Members
 
-	private const byte NewLine = 13;
+	private const byte NewLine = (byte)'\n';
 
 	private TcpListener tcpListener;
 	private TcpClient tcpClient;
@@ -177,7 +177,7 @@ public class SimpleTCP
 			tcpClient = null;
 		}
 
-		if (tcpListener == null)
+		if (tcpListener != null)
 		{
 			tcpListener.Stop();
 			tcpListener = null;
@@ -316,16 +316,15 @@ public class SimpleTCP
 		}
 		catch (Exception e)
 		{
-			Output($"Exception: {e}");
-
+			//Output($"Exception: {e}");
 			Disconnect();
 		}
 		finally
 		{
 			if (IsConnected)
 			{
-				SetReadCallBack();
 				TriggerOnData();
+				SetReadCallBack();
 			}
 		}
 	}

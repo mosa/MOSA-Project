@@ -43,13 +43,13 @@ public class Starter : BaseLauncher
 
 			if (LauncherSettings.LauncherTest)
 			{
-				IsSucccessful = StartTestMonitor(Process, 10000, "<SELFTEST:PASSED>");
+				IsSucccessful = StartTest(Process, 10000, "<SELFTEST:PASSED>");
 				return IsSucccessful;
 			}
 
 			if (LauncherSettings.LauncherDebugLog)
 			{
-				IsSucccessful = StartDebug(Process);
+				IsSucccessful = StartDebug(Process, 10000);
 				return IsSucccessful;
 			}
 
@@ -87,7 +87,7 @@ public class Starter : BaseLauncher
 		return IsSucccessful;
 	}
 
-	private bool StartTestMonitor(Process process, int timeoutMS, string successText)
+	private bool StartTest(Process process, int timeoutMS, string successText)
 	{
 		var output = new StringBuilder();
 		var lastLength = 0;
@@ -163,52 +163,66 @@ public class Starter : BaseLauncher
 		return success;
 	}
 
-	private void StartWithOutput(Process process)
+	private bool StartDebug(Process process, int timeoutMS)
 	{
-		process.StartInfo.RedirectStandardOutput = true;
-		process.StartInfo.CreateNoWindow = false;
+		var output = new StringBuilder();
+		var success = false;
 
-		process.OutputDataReceived += new DataReceivedEventHandler((sender, e) =>
+		var client = new SimpleTCP();
+
+		client.OnStatusUpdate = Output;
+
+		client.OnDataAvailable = () =>
 		{
-			Console.Write(e.Data);
+			while (client.HasLine)
+			{
+				var line = client.GetLine();
 
-			//var line = new StringBuilder();
+				lock (this)
+				{
+					Output(line);
+				}
+			}
+		};
 
-			//foreach (var c in e.Data)
-			//{
-			//	if (c == '\n')
-			//	{
-			//		lock (process)
-			//		{
-			//			Output(line.ToString());
-			//		}
+		try
+		{
+			process.Start();
 
-			//		line.Length = 0;
-			//		continue;
-			//	}
+			Thread.Sleep(50); // wait a bit for the process to start
 
-			//	line.Append(c);
-			//}
-		});
+			if (!client.Connect(LauncherSettings.EmulatorSerialHost, (ushort)LauncherSettings.EmulatorSerialPort, 10000))
+				return false;
 
-		process.Start();
-		process.BeginOutputReadLine();
-	}
+			Output("VM Output");
+			Output("========================");
 
-	private bool StartDebug(Process process)
-	{
-		if (process == null)
-			return false;
+			var watchDog = new WatchDog(timeoutMS);
 
-		Output($"VM Output:");
+			while (!(success || watchDog.IsTimedOut))
+			{
+				if (!client.IsConnected)
+					return false;
 
-		StartWithOutput(process);
+				Thread.Yield();
+			}
+		}
+		finally
+		{
+			client.Disconnect();
+			process.Kill(true);
+			process.WaitForExit();
+		}
 
-		process.WaitForExit();
-
+		Output("========================");
 		Output($"VM Exit Code: {process.ExitCode}");
 
-		return true;
+		if (LauncherSettings.LauncherExit)
+		{
+			Environment.Exit(0);
+		}
+
+		return success;
 	}
 
 	public Process LaunchVM()

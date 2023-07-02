@@ -10,6 +10,8 @@ public static class SerialDebug
 	#region Private Members
 
 	private static ushort SerialPort = Serial.COM2;
+	private static byte NewLine = (byte)'\n';
+
 	private static bool IsIntialize = false;
 
 	#endregion Private Members
@@ -31,7 +33,7 @@ public static class SerialDebug
 		IsIntialize = true;
 
 		Write("[Debug Mode]");
-		Write(13);
+		Write(NewLine);
 	}
 
 	public static void Write(byte c)
