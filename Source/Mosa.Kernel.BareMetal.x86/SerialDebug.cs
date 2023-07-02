@@ -3,13 +3,13 @@
 namespace Mosa.Kernel.BareMetal.x86;
 
 /// <summary>
-/// Debug
+/// SerialDebug
 /// </summary>
-public static class Debug
+public static class SerialDebug
 {
 	#region Private Members
 
-	private static ushort SerialPort = Serial.COM1;
+	private static ushort SerialPort = Serial.COM2;
 	private static bool IsIntialize = false;
 
 	#endregion Private Members
@@ -27,7 +27,11 @@ public static class Debug
 			return;
 
 		Serial.SetupPort(SerialPort);
+
 		IsIntialize = true;
+
+		Write("[Debug Mode]");
+		Write(13);
 	}
 
 	public static void Write(byte c)
@@ -39,4 +43,12 @@ public static class Debug
 	}
 
 	#endregion Public API
+
+	private static void Write(string s)
+	{
+		foreach (var c in s)
+		{
+			Write((byte)c);
+		}
+	}
 }

@@ -52,6 +52,31 @@ public static class Debug
 		Platform.Debug((byte)c);
 	}
 
+	// Helpers
+
+	public static void WriteLine(ConsoleColor color, string s)
+	{
+		//SetForground(color);
+		WriteLine(s);
+	}
+
+	public static void Write(ConsoleColor color, string s)
+	{
+		//SetForground(color);
+		Write(s);
+	}
+
+	public static void WriteLine(ConsoleColor color)
+	{
+		//SetForground(color);
+		Write('\n');
+	}
+
+	public static void Write(ConsoleColor color)
+	{
+		//SetForground(color);
+	}
+
 	// Following 4 methods copied from Console.cs
 
 	public static void WriteValue(ulong value)

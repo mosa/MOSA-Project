@@ -184,16 +184,21 @@ public class BaseLauncher
 		return '"' + location + '"';
 	}
 
-	protected ExternalProcess LaunchApplicationEx(string app, string args, bool captureOutput = false)
+	protected Process CreateApplicationProcess(string app, string args)
 	{
-		Output($"Launching Application: {app}");
+		Output($"Starting Application: {app}");
 		Output($"Arguments: {args}");
 
-		var externalProcess = new ExternalProcess(app, args, captureOutput);
+		var process = new Process();
 
-		externalProcess.Start();
+		process.StartInfo.FileName = app;
+		process.StartInfo.Arguments = args;
+		process.StartInfo.UseShellExecute = false;
+		process.StartInfo.RedirectStandardOutput = false;
+		process.StartInfo.RedirectStandardError = false;
+		process.StartInfo.CreateNoWindow = true;
 
-		return externalProcess;
+		return process;
 	}
 
 	protected Process LaunchApplication(string app, string args)

@@ -27,7 +27,7 @@ public static class PlatformPlug
 		Multiboot.Setup(new Pointer(ebx), eax);
 
 		SSE.Setup();
-		x86.Debug.Setup();
+		SerialDebug.Setup();
 	}
 
 	[Plug("Mosa.Kernel.BareMetal.Platform::GetBootReservedRegion")]
@@ -81,6 +81,6 @@ public static class PlatformPlug
 	[Plug("Mosa.Kernel.BareMetal.Platform::Debug")]
 	public static void Debug(byte c)
 	{
-		x86.Debug.Write(c);
+		SerialDebug.Write(c);
 	}
 }

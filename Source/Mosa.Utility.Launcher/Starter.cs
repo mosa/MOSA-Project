@@ -6,6 +6,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Configuration;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
@@ -35,34 +36,37 @@ public class Starter : BaseLauncher
 	public bool Launch(bool waitForExit = false)
 	{
 		IsSucccessful = false;
-		Process = null;
 
 		try
 		{
-			var process = LaunchVM();
-
-			Process = process.Process;
+			Process = LaunchVM();
 
 			if (LauncherSettings.LauncherTest)
 			{
-				IsSucccessful = MonitorTest(process, 10000, "<SELFTEST:PASSED>");
+				IsSucccessful = StartTestMonitor(Process, 10000, "<SELFTEST:PASSED>");
 				return IsSucccessful;
 			}
+
+			if (LauncherSettings.LauncherDebugLog)
+			{
+				IsSucccessful = StartDebug(Process);
+				return IsSucccessful;
+			}
+
+			Process.Start();
 
 			if (LauncherSettings.LaunchDebugger)
 			{
 				LaunchDebugger();
 			}
-
-			if (LauncherSettings.LaunchGDB)
+			else if (LauncherSettings.LaunchGDB)
 			{
 				LaunchGDB();
 			}
 
 			if (!LauncherSettings.LauncherExit)
 			{
-				//var output = GetOutput(Process);
-				Output(process.Output);
+				//Output(process.Output);
 			}
 
 			IsSucccessful = true;
@@ -73,61 +77,77 @@ public class Starter : BaseLauncher
 			Process = null;
 			Output($"Exception: {e}");
 		}
-
-		// Fix for Linux
-		if (waitForExit && Process != null)
-			Process.WaitForExit();
+		finally
+		{
+			// Fix for Linux
+			if (waitForExit && Process != null)
+				Process.WaitForExit();
+		}
 
 		return IsSucccessful;
 	}
 
-	private bool MonitorTest(ExternalProcess process, int timeoutMS, string successText)
+	private bool StartTestMonitor(Process process, int timeoutMS, string successText)
 	{
+		var output = new StringBuilder();
+		var lastLength = 0;
 		var success = false;
 
-		if (process == null)
-		{
-			Output("Test FAILED - not process");
-			return false;
-		}
+		var client = new SimpleTCP();
 
-		var readerThread = new Thread(() =>
+		client.OnStatusUpdate = Output;
+
+		client.OnDataAvailable = () =>
 		{
-			while (true)
+			lock (output)
 			{
-				if (process.HasExited)
-					break;
+				var line = client.GetFullLine();
+				output.Append(line);
+			}
+		};
 
-				if (process.Output.Contains(successText))
+		try
+		{
+			process.Start();
+
+			Thread.Sleep(50); // wait a bit for the process to start
+
+			if (!client.Connect(LauncherSettings.EmulatorSerialHost, (ushort)LauncherSettings.EmulatorSerialPort, 10000))
+				return false;
+
+			var watchDog = new WatchDog(timeoutMS);
+
+			while (!(success || watchDog.IsTimedOut))
+			{
+				lock (output)
 				{
-					success = true;
-					break;
+					var length = output.Length;
+
+					if (length >= successText.Length && lastLength != length)
+					{
+						if (output.ToString().Contains(successText))
+						{
+							success = true;
+							break;
+						}
+					}
+
+					lastLength = length;
 				}
+
+				if (!client.IsConnected)
+					return false;
 
 				Thread.Yield();
 			}
-
-			process.Kill();
-		});
-
-		readerThread.Start();
-
-		var timeoutThread = new Thread(() =>
+		}
+		finally
 		{
-			Thread.Sleep(timeoutMS);
+			process.Kill(true);
+			process.WaitForExit();
+		}
 
-			if (!process.HasExited)
-			{
-				Output("ERROR: Test Timeout");
-				process.Kill();
-			}
-		});
-
-		timeoutThread.Start();
-
-		process.WaitForExit();
-
-		Output($"VM Output: {process.Output}");
+		Output($"VM Output: {output.Replace('\n', '|')}");
 		Output($"VM Exit Code: {process.ExitCode}");
 
 		if (success)
@@ -143,7 +163,55 @@ public class Starter : BaseLauncher
 		return success;
 	}
 
-	public ExternalProcess LaunchVM()
+	private void StartWithOutput(Process process)
+	{
+		process.StartInfo.RedirectStandardOutput = true;
+		process.StartInfo.CreateNoWindow = false;
+
+		process.OutputDataReceived += new DataReceivedEventHandler((sender, e) =>
+		{
+			Console.Write(e.Data);
+
+			//var line = new StringBuilder();
+
+			//foreach (var c in e.Data)
+			//{
+			//	if (c == '\n')
+			//	{
+			//		lock (process)
+			//		{
+			//			Output(line.ToString());
+			//		}
+
+			//		line.Length = 0;
+			//		continue;
+			//	}
+
+			//	line.Append(c);
+			//}
+		});
+
+		process.Start();
+		process.BeginOutputReadLine();
+	}
+
+	private bool StartDebug(Process process)
+	{
+		if (process == null)
+			return false;
+
+		Output($"VM Output:");
+
+		StartWithOutput(process);
+
+		process.WaitForExit();
+
+		Output($"VM Exit Code: {process.ExitCode}");
+
+		return true;
+	}
+
+	public Process LaunchVM()
 	{
 		return LauncherSettings.Emulator switch
 		{
@@ -155,7 +223,7 @@ public class Starter : BaseLauncher
 		};
 	}
 
-	private ExternalProcess LaunchQemu()
+	private Process LaunchQemu()
 	{
 		var arg = new StringBuilder();
 
@@ -188,18 +256,14 @@ public class Starter : BaseLauncher
 			arg.Append(" -display sdl");
 		}
 
-		// COM1 = Kernel Log
-		if (LauncherSettings.LauncherTest)
+		var serial = LauncherSettings.EmulatorSerial;
+
+		if (LauncherSettings.LauncherDebugLog || LauncherSettings.LauncherTest)
 		{
-			arg.Append(" -serial stdio");
-		}
-		else
-		{
-			arg.Append(" -serial null");
+			serial = "tcpserver";
 		}
 
-		// COM2 = Mosa Internal Debugger
-		switch (LauncherSettings.EmulatorSerial)
+		switch (serial)
 		{
 			case "pipe":
 				{
@@ -223,6 +287,11 @@ public class Starter : BaseLauncher
 					arg.Append(':');
 					arg.Append(LauncherSettings.EmulatorSerialPort);
 					arg.Append(",client,nowait");
+					break;
+				}
+			default:
+				{
+					arg.Append(" -serial null");
 					break;
 				}
 		}
@@ -273,10 +342,10 @@ public class Starter : BaseLauncher
 			}
 		}
 
-		return LaunchApplicationEx(LauncherSettings.QEMU, arg.ToString(), LauncherSettings.LauncherTest);
+		return CreateApplicationProcess(LauncherSettings.QEMU, arg.ToString());
 	}
 
-	private ExternalProcess LaunchBochs()
+	private Process LaunchBochs()
 	{
 		var bochsdirectory = Path.GetDirectoryName(LauncherSettings.Bochs);
 
@@ -317,29 +386,17 @@ public class Starter : BaseLauncher
 			case "cirrus": sb.AppendLine("vga: extension=cirrus"); break;
 		}
 
-		// COM1 = Kernel Log
-		if (LauncherSettings.LauncherTest)
-		{
-			// Not supported
-			sb.AppendLine("com1: enabled=1, mode=null");
-		}
-		else
-		{
-			sb.AppendLine("com1: enabled=1, mode=null");
-		}
-
-		// COM2 = Mosa Internal Debugger
 		switch (LauncherSettings.EmulatorSerial)
 		{
 			case "pipe":
 				{
-					sb.Append("com2: enabled=1, mode=pipe-server, dev=\\\\.\\pipe\\");
+					sb.Append("com1: enabled=1, mode=pipe-server, dev=\\\\.\\pipe\\");
 					sb.AppendLine(LauncherSettings.EmulatorSerialPipe);
 					break;
 				}
 			case "tcpserver":
 				{
-					sb.Append("com2: enabled=1, mode=socket-server, dev=");
+					sb.Append("com1: enabled=1, mode=socket-server, dev=");
 					sb.Append(LauncherSettings.EmulatorSerialHost);
 					sb.Append(':');
 					sb.Append(LauncherSettings.EmulatorSerialPort);
@@ -348,7 +405,7 @@ public class Starter : BaseLauncher
 				}
 			case "tcpclient":
 				{
-					sb.Append("com2: enabled=1, mode=socket-client, dev=");
+					sb.Append("com1: enabled=1, mode=socket-client, dev=");
 					sb.Append(LauncherSettings.EmulatorSerialHost);
 					sb.Append(':');
 					sb.Append(LauncherSettings.EmulatorSerialPort);
@@ -367,10 +424,10 @@ public class Starter : BaseLauncher
 
 		File.WriteAllText(configfile, sb.ToString());
 
-		return LaunchApplicationEx(LauncherSettings.Bochs, $"-q -f {Quote(configfile)}");
+		return CreateApplicationProcess(LauncherSettings.Bochs, $"-q -f {Quote(configfile)}");
 	}
 
-	private ExternalProcess LaunchVMware()
+	private Process LaunchVMware()
 	{
 		var configFile = Path.Combine(LauncherSettings.TemporaryFolder, Path.ChangeExtension(LauncherSettings.ImageFile, ".vmx")!);
 		var sb = new StringBuilder();
@@ -406,15 +463,7 @@ public class Starter : BaseLauncher
 
 		sb.AppendLine("floppy0.present = \"FALSE\"");
 
-		// COM1 = Kernel Log
-		sb.AppendLine("serial0.present = \"TRUE\"");
-		sb.AppendLine("serial0.yieldOnMsrRead = \"FALSE\"");
-		sb.AppendLine("serial0.fileType = \"pipe\"");
-		sb.AppendLine("serial0.fileName = \"\\\\.\\pipe\\MOSA1\"");
-		sb.AppendLine("serial0.pipe.endPoint = \"server\"");
-		sb.AppendLine("serial0.tryNoRxLoss = \"FALSE\"");
-
-		// COM2 = Mosa Internal Debugger
+		// COM1
 		if (NullToEmpty(LauncherSettings.EmulatorSerial) == "pipe")
 		{
 			sb.AppendLine("serial1.present = \"TRUE\"");
@@ -441,18 +490,18 @@ public class Starter : BaseLauncher
 
 		if (!string.IsNullOrWhiteSpace(LauncherSettings.VmwareWorkstation))
 		{
-			return LaunchApplicationEx(LauncherSettings.VmwareWorkstation, arg);
+			return CreateApplicationProcess(LauncherSettings.VmwareWorkstation, arg);
 		}
 
 		if (!string.IsNullOrWhiteSpace(LauncherSettings.VmwarePlayer))
 		{
-			return LaunchApplicationEx(LauncherSettings.VmwarePlayer, arg);
+			return CreateApplicationProcess(LauncherSettings.VmwarePlayer, arg);
 		}
 
 		return null;
 	}
 
-	private ExternalProcess LaunchVirtualBox()
+	private Process LaunchVirtualBox()
 	{
 		if (GetOutput(LaunchApplication(LauncherSettings.VirtualBox, "list vms")).Contains(LauncherSettings.OSName))
 		{
@@ -473,7 +522,7 @@ public class Starter : BaseLauncher
 		LaunchApplication(LauncherSettings.VirtualBox, $"storagectl {LauncherSettings.OSName} --name Controller --add ide --controller PIIX4").WaitForExit();
 		LaunchApplication(LauncherSettings.VirtualBox, $"storageattach {LauncherSettings.OSName} --storagectl Controller --port 0 --device 0 --type hdd --medium {Quote(LauncherSettings.ImageFile)}").WaitForExit();
 
-		return LaunchApplicationEx(LauncherSettings.VirtualBox, $"startvm {LauncherSettings.OSName}");
+		return CreateApplicationProcess(LauncherSettings.VirtualBox, $"startvm {LauncherSettings.OSName}");
 	}
 
 	private void LaunchDebugger()

@@ -311,6 +311,12 @@ public class LauncherSettings
 		set => Settings.SetValue("Launcher.Test", value);
 	}
 
+	public bool LauncherDebugLog
+	{
+		get => Settings.GetValue("Launcher.DebugLog", false);
+		set => Settings.SetValue("Launcher.DebugLog", value);
+	}
+
 	public List<string> SearchPaths => Settings.GetValueList("SearchPaths");
 
 	public Settings Settings { get; } = new Settings();
