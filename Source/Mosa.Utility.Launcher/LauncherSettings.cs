@@ -106,9 +106,9 @@ public class LauncherSettings
 		set => Settings.SetValue("Emulator.Serial.Pipe", value);
 	}
 
-	public int EmulatorSerialPort
+	public ushort EmulatorSerialPort
 	{
-		get => Settings.GetValue("Emulator.Serial.Port", 0);
+		get => (ushort)Settings.GetValue("Emulator.Serial.Port", 0);
 		set => Settings.SetValue("Emulator.Serial.Port", value);
 	}
 
@@ -311,10 +311,22 @@ public class LauncherSettings
 		set => Settings.SetValue("Launcher.Test", value);
 	}
 
-	public bool LauncherDebugLog
+	public bool LauncherSerialConsole
 	{
-		get => Settings.GetValue("Launcher.DebugLog", false);
-		set => Settings.SetValue("Launcher.DebugLog", value);
+		get => Settings.GetValue("Launcher.Serial.Console", false);
+		set => Settings.SetValue("Launcher.Serial.Console", value);
+	}
+
+	public bool LauncherSerialFile
+	{
+		get => Settings.GetValue("Launcher.Serial.File", false);
+		set => Settings.SetValue("Launcher.Serial.File", value);
+	}
+
+	public int EmulatorRuntimeMaximum
+	{
+		get => Settings.GetValue("Emulator.Runtime.Maximum", 10);
+		set => Settings.SetValue("Emulator.Runtime.Maximum", 10);
 	}
 
 	public List<string> SearchPaths => Settings.GetValueList("SearchPaths");

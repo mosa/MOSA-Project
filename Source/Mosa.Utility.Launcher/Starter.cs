@@ -43,11 +43,11 @@ public class Starter : BaseLauncher
 
 			if (LauncherSettings.LauncherTest)
 			{
-				IsSucccessful = StartTest(Process, 10000, "<SELFTEST:PASSED>");
+				IsSucccessful = StartTest(Process, "<SELFTEST:PASSED>");
 				return IsSucccessful;
 			}
 
-			if (LauncherSettings.LauncherDebugLog)
+			if (LauncherSettings.LauncherSerialConsole)
 			{
 				IsSucccessful = StartDebug(Process, 10000);
 				return IsSucccessful;
@@ -87,7 +87,7 @@ public class Starter : BaseLauncher
 		return IsSucccessful;
 	}
 
-	private bool StartTest(Process process, int timeoutMS, string successText)
+	private bool StartTest(Process process, string successText)
 	{
 		var output = new StringBuilder();
 		var lastLength = 0;
@@ -112,10 +112,10 @@ public class Starter : BaseLauncher
 
 			Thread.Sleep(50); // wait a bit for the process to start
 
-			if (!client.Connect(LauncherSettings.EmulatorSerialHost, (ushort)LauncherSettings.EmulatorSerialPort, 10000))
+			if (!client.Connect(LauncherSettings.EmulatorSerialHost, LauncherSettings.EmulatorSerialPort, 10000))
 				return false;
 
-			var watchDog = new WatchDog(timeoutMS);
+			var watchDog = new WatchDog(LauncherSettings.EmulatorRuntimeMaximum);
 
 			while (!(success || watchDog.IsTimedOut))
 			{
@@ -272,7 +272,7 @@ public class Starter : BaseLauncher
 
 		var serial = LauncherSettings.EmulatorSerial;
 
-		if (LauncherSettings.LauncherDebugLog || LauncherSettings.LauncherTest)
+		if (LauncherSettings.LauncherSerialConsole || LauncherSettings.LauncherTest)
 		{
 			serial = "tcpserver";
 		}
