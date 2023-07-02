@@ -164,6 +164,9 @@ public static class CommandLineArguments
 			new Argument { Name = "-launch-gdb", Setting = "Launcher.GDB", Value="true"},
 			new Argument { Name = "-launch-debugger", Setting = "Launcher.Debugger", Value="true"},
 
+			new Argument { Name = "-launch-debug", Setting = "Launcher.DebugLog", Value="true"},
+			new Argument { Name = "-debug", Setting = "Launcher.DebugLog", Value="true"},
+
 			// Base directory is the output directory
 			new Argument { Name = "-include", Setting = "Image.FileSystem.RootInclude" },
 

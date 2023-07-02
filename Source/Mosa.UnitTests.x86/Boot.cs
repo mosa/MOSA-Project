@@ -33,7 +33,7 @@ public static class Boot
 
 		IDT.SetInterruptHandler(null);
 		Panic.Setup();
-		Debugger.Setup(Serial.COM2);
+		Debugger.Setup(Serial.COM1);
 
 		// Initialize interrupts
 		PIC.Setup();

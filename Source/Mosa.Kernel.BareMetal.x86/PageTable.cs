@@ -2,6 +2,7 @@
 
 using Mosa.Runtime;
 using Mosa.Runtime.x86;
+using Mosa.Kernel.BareMetal;
 
 namespace Mosa.Kernel.BareMetal.x86;
 
@@ -16,10 +17,15 @@ internal static class PageTable
 
 	public static void Setup()
 	{
+		Debug.Write(ConsoleColor.BrightMagenta, "a");
+
 		GDTTable = new GDTTable(PhysicalPageAllocator.Reserve());
+		Debug.Write(ConsoleColor.BrightMagenta, "b");
 
 		PageDirectory = PhysicalPageAllocator.Reserve(1024);
+		Debug.Write(ConsoleColor.BrightMagenta, "c");
 		PageTables = PhysicalPageAllocator.Reserve(1024);
+		Debug.Write(ConsoleColor.BrightMagenta, "d");
 	}
 
 	public static void Initialize()

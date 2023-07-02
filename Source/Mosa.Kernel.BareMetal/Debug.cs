@@ -1,97 +1,83 @@
-// Copyright (c) MOSA Project. Licensed under the New BSD License.
-
-using System.Drawing;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Kernel.BareMetal;
 
-public static class Console
+/// <summary>
+/// Log
+/// </summary>
+public static class Debug
 {
-	public const byte Escape = 0x1b;
-	public const byte Newline = 0x0A;
-	public const byte Formfeed = 0x0C;
-	public const byte Backspace = 0x08;
+	public static bool IsEnabled { get; set; } = false;
 
 	#region Public API
 
-	public static void Write(byte c)
+	public static void Setup(bool enable = false)
 	{
-		Platform.ConsoleWrite(c);
+		IsEnabled = enable;
+	}
+
+	public static void Initialize()
+	{
+	}
+
+	public static void Enable() => IsEnabled = true;
+
+	public static void Disable() => IsEnabled = true;
+
+	public static void WriteLine(string message)
+	{
+		if (!IsEnabled)
+			return;
+
+		Write(message);
+		Write('\n');
+	}
+
+	public static void Write(string message)
+	{
+		if (!IsEnabled)
+			return;
+
+		foreach (var c in message)
+		{
+			Write(c);
+		}
 	}
 
 	public static void Write(char c)
 	{
-		Write((byte)c);
+		if (!IsEnabled)
+			return;
+
+		Platform.Debug((byte)c);
 	}
 
-	public static void Write(string s)
-	{
-		foreach (var c in s)
-		{
-			Write((byte)c);
-		}
-	}
-
-	public static void WriteLine(string s)
-	{
-		Write(s);
-		Write(Newline);
-	}
+	// Helpers
 
 	public static void WriteLine(ConsoleColor color, string s)
 	{
-		SetForground(color);
+		//SetForground(color);
 		WriteLine(s);
 	}
 
 	public static void Write(ConsoleColor color, string s)
 	{
-		SetForground(color);
+		//SetForground(color);
 		Write(s);
 	}
 
 	public static void WriteLine(ConsoleColor color)
 	{
-		SetForground(color);
-		Write(Newline);
+		//SetForground(color);
+		Write('\n');
 	}
 
 	public static void Write(ConsoleColor color)
 	{
-		SetForground(color);
+		//SetForground(color);
 	}
 
-	public static void WriteLine()
-	{
-		Write(Newline);
-	}
-
-	public static void ClearScreen()
-	{
-		Write(Escape);
-		Write("[2J");
-	}
-
-	public static void SetForground(ConsoleColor color)
-	{
-		var c = (byte)color;
-
-		Write(Escape);
-		Write("[");
-		Write((byte)((byte)'0' + c / 10 % 10));
-		Write((byte)((byte)'0' + c % 10));
-		Write("m");
-	}
-
-	public static void SetBackground(ConsoleColor color)
-	{
-		var c = (byte)color + 10;
-
-		Write(Escape);
-		Write("[");
-		Write((byte)((byte)'0' + c / 10 % 10));
-		Write((byte)((byte)'0' + c % 10));
-		Write("m");
-	}
+	// Following 4 methods copied from Console.cs
 
 	public static void WriteValue(ulong value)
 	{
@@ -116,6 +102,8 @@ public static class Console
 	#endregion Public API
 
 	#region Private API
+
+	// Copied from Console.cs
 
 	private static void WriteValue(ulong value, byte @base, int length)
 	{
