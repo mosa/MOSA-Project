@@ -102,8 +102,10 @@ Below are the command line arguments available:
     -bochs,Emulator,bochs
     -display,Emulator.Display,on
     -display-off,Emulator.Display,off
-    -memory,Emulator.Memory,
+    -memory,Emulator.Memory
     -gdb,Emulator.GDB,true
+	-term,Emulator.Runtime.Maximum,{value}
+	-debug,Launcher.Serial.Console,true
     
     Launcher - Emulator - Qemu & VMWare:
     -vmware-svga,Emulator.SVGA,vmware

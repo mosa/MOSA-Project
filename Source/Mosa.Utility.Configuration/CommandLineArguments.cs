@@ -64,7 +64,6 @@ public static class CommandLineArguments
 			new Argument { Name = "-output-inlined", Setting = "CompilerDebug.InlinedFile", Value = "%DEFAULT%"},
 			new Argument { Name = "-output-hash", Setting = "CompilerDebug.PreLinkHashFile", Value = "%DEFAULT%"},
 			new Argument { Name = "-output-hash", Setting = "CompilerDebug.PostLinkHashFile", Value = "%DEFAULT%"},
-
 			new Argument { Name = "-output-debug-file", Setting = "CompilerDebug.DebugFile"},
 
 			new Argument { Name = "-check", Setting = "CompilerDebug.FullCheckMode", Value = "true"},
@@ -163,6 +162,12 @@ public static class CommandLineArguments
 
 			new Argument { Name = "-launch-gdb", Setting = "Launcher.GDB", Value="true"},
 			new Argument { Name = "-launch-debugger", Setting = "Launcher.Debugger", Value="true"},
+
+			new Argument { Name = "-output-serial-console", Setting = "Launcher.Serial.Console"},
+			new Argument { Name = "-output-serial-file", Setting = "Launcher.Serial.File"},
+			new Argument { Name = "-debug", Setting = "Launcher.Serial.Console", Value="true"},
+
+			new Argument { Name = "-term", Setting = "Emulator.Runtime.Maximum"},
 
 			// Base directory is the output directory
 			new Argument { Name = "-include", Setting = "Image.FileSystem.RootInclude" },

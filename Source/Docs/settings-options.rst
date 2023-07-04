@@ -124,8 +124,10 @@ Launcher Settings
     Launcher.Exit,"If true, exit immediately after launch"
     Launcher.PlugKorlib,"If true, automatically include the plugs for CoreLib"
     Launcher.GDB,"If true, launch the GNU GDB application after VM launch"
+	Launcher.Serial.Console,"If true, outout the serial to console"
+	Launcher.Serial.File,Filename to emit serial output (future)
     Launcher.Debugger,"If true, launch the MOSA debugger application after VM launch"
-    Launcher.Test,"If true, monitors VM serial for success or failure messages"	
+    Launcher.Test,"If true, monitors VM serial for success or failure messages"
 
 Image Settings
 --------------
@@ -151,6 +153,7 @@ Emulator Settings
     Emulator.Memory,Amount of memory for the virtual machine in MB
     Emulator.Display,"If true, show the video display"
 	Emulator.SVGA,"SVGA mode: std, cirrus, vbe, virtio or vmware"
+	Emulator.Runtime.Maximum,Maximum runtime of virtual machine in seconds (future)
     Emulator.GDB,"If true, enables GDB within emulator"
     Emulator.Serial,"Serial Emulation type None, Pipe, TCPServer, TCPClient"
     Emulator.Serial.Host,Serial Host Name or IP address

@@ -439,6 +439,12 @@
 <tr class="row-even"><td><p>Launcher.GDB</p></td>
 <td><p>If true, launch the GNU GDB application after VM launch</p></td>
 </tr>
+<tr class="row-odd"><td><p>Launcher.Serial.Console</p></td>
+<td><p>If true, outout the serial to console</p></td>
+</tr>
+<tr class="row-even"><td><p>Launcher.Serial.File</p></td>
+<td><p>Filename to emit serial output (future)</p></td>
+</tr>
 <tr class="row-odd"><td><p>Launcher.Debugger</p></td>
 <td><p>If true, launch the MOSA debugger application after VM launch</p></td>
 </tr>
@@ -504,19 +510,22 @@
 <tr class="row-odd"><td><p>Emulator.SVGA</p></td>
 <td><p>SVGA mode: std, cirrus, vbe, virtio or vmware</p></td>
 </tr>
-<tr class="row-even"><td><p>Emulator.GDB</p></td>
+<tr class="row-even"><td><p>Emulator.Runtime.Maximum</p></td>
+<td><p>Maximum runtime of virtual machine in seconds (future)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Emulator.GDB</p></td>
 <td><p>If true, enables GDB within emulator</p></td>
 </tr>
-<tr class="row-odd"><td><p>Emulator.Serial</p></td>
+<tr class="row-even"><td><p>Emulator.Serial</p></td>
 <td><p>Serial Emulation type None, Pipe, TCPServer, TCPClient</p></td>
 </tr>
-<tr class="row-even"><td><p>Emulator.Serial.Host</p></td>
+<tr class="row-odd"><td><p>Emulator.Serial.Host</p></td>
 <td><p>Serial Host Name or IP address</p></td>
 </tr>
-<tr class="row-odd"><td><p>Emulator.Serial.Port</p></td>
+<tr class="row-even"><td><p>Emulator.Serial.Port</p></td>
 <td><p>Serial Port</p></td>
 </tr>
-<tr class="row-even"><td><p>Emulator.Serial.Pipe</p></td>
+<tr class="row-odd"><td><p>Emulator.Serial.Pipe</p></td>
 <td><p>Serial Pipename</p></td>
 </tr>
 </tbody>
@@ -702,6 +711,9 @@
 </tr>
 <tr class="row-even"><td><p>UnitTest.Connection.MaxAttempts</p></td>
 <td><p>Maximun number of restart attempts before aborting the unit tests</p></td>
+</tr>
+<tr class="row-odd"><td><p>UnitTest.Filter</p></td>
+<td><p>Specifies the default method filter name when Explorer is launched</p></td>
 </tr>
 </tbody>
 </table>

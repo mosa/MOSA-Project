@@ -75,7 +75,7 @@ public partial class MainWindow : Window
 		if (string.IsNullOrEmpty(status))
 			return;
 
-		OutputTxt.Text += $"{Stopwatch.Elapsed.TotalSeconds:0.00} | {status}{Environment.NewLine}";
+		OutputTxt.Text += $"{Stopwatch.Elapsed.TotalSeconds:00.00} | {status}{Environment.NewLine}";
 
 		//<Setter Property="FontFamily" Value="Consolas"/>
 	}
@@ -493,7 +493,7 @@ public partial class MainWindow : Window
 		foreach (var line in builder.Counters)
 			AddCounters(line);
 
-		var starter = new Starter(builder.Settings, CreateCompilerHook(), builder.Linker);
+		var starter = new Starter(builder.ConfigurationSettings, CreateCompilerHook(), builder.Linker);
 		if (!starter.Launch(true))
 			return;
 

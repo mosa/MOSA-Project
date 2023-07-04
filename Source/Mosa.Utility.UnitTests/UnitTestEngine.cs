@@ -326,7 +326,7 @@ public class UnitTestEngine : IDisposable
 
 		Linker = builder.Linker;
 		TypeSystem = builder.TypeSystem;
-		Settings = builder.Settings;
+		Settings = builder.ConfigurationSettings;
 
 		return builder.IsSucccessful;
 	}
@@ -372,7 +372,7 @@ public class UnitTestEngine : IDisposable
 
 	private void OutputStatus(string status)
 	{
-		Console.WriteLine($"{Stopwatch.Elapsed.TotalSeconds:0.00} | {status}");
+		Console.WriteLine($"{Stopwatch.Elapsed.TotalSeconds:00.00} | {status}");
 	}
 
 	public bool LaunchVirtualMachine()
@@ -384,7 +384,7 @@ public class UnitTestEngine : IDisposable
 			var compilerHook = CreateCompilerHook();
 
 			Starter = new Starter(Settings, compilerHook);
-			Settings = Starter.Settings;
+			Settings = Starter.ConfigurationSettings;
 		}
 
 		if (!Starter.Launch())

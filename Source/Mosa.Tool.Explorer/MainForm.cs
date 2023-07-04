@@ -910,7 +910,7 @@ public partial class MainForm : Form
 
 	private void SetStatus(string status)
 	{
-		toolStripStatusLabel.Text = $"{CompilerData.Stopwatch.Elapsed.TotalSeconds:0.00} | {status}"; ;
+		toolStripStatusLabel.Text = $"{CompilerData.Stopwatch.Elapsed.TotalSeconds:00.00} | {status}"; ;
 	}
 
 	private void SetTranformationStep(int step)

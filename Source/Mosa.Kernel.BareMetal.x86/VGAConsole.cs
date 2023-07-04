@@ -7,6 +7,9 @@ namespace Mosa.Kernel.BareMetal.x86;
 /// </summary>
 public static class VGAConsole
 {
+	// VT100 Info:
+	// https://learn.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences
+
 	private enum ControlState
 	{ Normal, Escape };
 

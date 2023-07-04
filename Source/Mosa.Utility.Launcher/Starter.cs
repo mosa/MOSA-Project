@@ -6,6 +6,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Configuration;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
@@ -39,30 +40,34 @@ public class Starter : BaseLauncher
 
 		try
 		{
-			var process = LaunchVM();
+			Process = LaunchVM();
 
-			Process = process.Process;
-
-			if (LauncherSettings.LauncherTest)
+			if (Settings.LauncherTest)
 			{
-				IsSucccessful = MonitorTest(process, 10000, "<SELFTEST:PASSED>");
+				IsSucccessful = StartTest(Process, "##PASS##");
 				return IsSucccessful;
 			}
 
-			if (LauncherSettings.LaunchDebugger)
+			if (Settings.LauncherSerialConsole)
+			{
+				IsSucccessful = StartDebug(Process);
+				return IsSucccessful;
+			}
+
+			Process.Start();
+
+			if (Settings.LaunchDebugger)
 			{
 				LaunchDebugger();
 			}
-
-			if (LauncherSettings.LaunchGDB)
+			else if (Settings.LaunchGDB)
 			{
 				LaunchGDB();
 			}
 
-			if (!LauncherSettings.LauncherExit)
+			if (!Settings.LauncherExit)
 			{
-				//var output = GetOutput(Process);
-				Output(process.Output);
+				//Output(process.Output);
 			}
 
 			IsSucccessful = true;
@@ -73,61 +78,77 @@ public class Starter : BaseLauncher
 			Process = null;
 			Output($"Exception: {e}");
 		}
-
-		// Fix for Linux
-		if (waitForExit && Process != null)
-			Process.WaitForExit();
+		finally
+		{
+			// Fix for Linux
+			if (waitForExit && Process != null)
+				Process.WaitForExit();
+		}
 
 		return IsSucccessful;
 	}
 
-	private bool MonitorTest(ExternalProcess process, int timeoutMS, string successText)
+	private bool StartTest(Process process, string successText)
 	{
+		var output = new StringBuilder();
+		var lastLength = 0;
 		var success = false;
 
-		if (process == null)
-		{
-			Output("Test FAILED - not process");
-			return false;
-		}
+		var client = new SimpleTCP();
 
-		var readerThread = new Thread(() =>
+		client.OnStatusUpdate = Output;
+
+		client.OnDataAvailable = () =>
 		{
-			while (true)
+			lock (output)
 			{
-				if (process.HasExited)
-					break;
+				var line = client.GetFullLine();
+				output.Append(line);
+			}
+		};
 
-				if (process.Output.Contains(successText))
+		try
+		{
+			process.Start();
+
+			Thread.Sleep(50); // wait a bit for the process to start
+
+			if (!client.Connect(Settings.EmulatorSerialHost, Settings.EmulatorSerialPort, 10000))
+				return false;
+
+			var watchDog = new WatchDog(Settings.EmulatorRuntimeMaximum * 1000);
+
+			while (!(success || watchDog.IsTimedOut))
+			{
+				lock (output)
 				{
-					success = true;
-					break;
+					var length = output.Length;
+
+					if (length >= successText.Length && lastLength != length)
+					{
+						if (output.ToString().Contains(successText))
+						{
+							success = true;
+							break;
+						}
+					}
+
+					lastLength = length;
 				}
+
+				if (!client.IsConnected)
+					return false;
 
 				Thread.Yield();
 			}
-
-			process.Kill();
-		});
-
-		readerThread.Start();
-
-		var timeoutThread = new Thread(() =>
+		}
+		finally
 		{
-			Thread.Sleep(timeoutMS);
+			process.Kill(true);
+			process.WaitForExit();
+		}
 
-			if (!process.HasExited)
-			{
-				Output("ERROR: Test Timeout");
-				process.Kill();
-			}
-		});
-
-		timeoutThread.Start();
-
-		process.WaitForExit();
-
-		Output($"VM Output: {process.Output}");
+		Output($"VM Output: {output.Replace('\n', '|')}");
 		Output($"VM Exit Code: {process.ExitCode}");
 
 		if (success)
@@ -135,7 +156,7 @@ public class Starter : BaseLauncher
 		else
 			Output("Test Ressult: FAILED");
 
-		if (LauncherSettings.LauncherExit)
+		if (Settings.LauncherExit)
 		{
 			Environment.Exit(success ? 0 : 1);
 		}
@@ -143,9 +164,79 @@ public class Starter : BaseLauncher
 		return success;
 	}
 
-	public ExternalProcess LaunchVM()
+	private bool StartDebug(Process process)
 	{
-		return LauncherSettings.Emulator switch
+		var output = new StringBuilder();
+		var success = false;
+		var kill = false;
+
+		var client = new SimpleTCP();
+
+		client.OnStatusUpdate = Output;
+
+		client.OnDataAvailable = () =>
+		{
+			while (client.HasLine)
+			{
+				var line = client.GetLine();
+
+				lock (this)
+				{
+					Output(line);
+				}
+
+				if (line == "##KILL##")
+					kill = true;
+			}
+		};
+
+		try
+		{
+			process.Start();
+
+			Thread.Sleep(50); // wait a bit for the process to start
+
+			if (!client.Connect(Settings.EmulatorSerialHost, Settings.EmulatorSerialPort, 10000))
+				return false;
+
+			Output("VM Output");
+			Output("========================");
+
+			var watchDog = new WatchDog(Settings.EmulatorRuntimeMaximum * 1000);
+
+			while (!(success || watchDog.IsTimedOut || kill))
+			{
+				if (!client.IsConnected)
+					return false;
+
+				Thread.Yield();
+			}
+		}
+		finally
+		{
+			client.Disconnect();
+			process.Kill(true);
+			process.WaitForExit();
+		}
+
+		Output("========================");
+
+		if (kill)
+			Output("Kill command received");
+
+		Output($"VM Exit Code: {process.ExitCode}");
+
+		if (Settings.LauncherExit)
+		{
+			Environment.Exit(0);
+		}
+
+		return success;
+	}
+
+	public Process LaunchVM()
+	{
+		return Settings.Emulator switch
 		{
 			"qemu" => LaunchQemu(),
 			"bochs" => LaunchBochs(),
@@ -155,23 +246,23 @@ public class Starter : BaseLauncher
 		};
 	}
 
-	private ExternalProcess LaunchQemu()
+	private Process LaunchQemu()
 	{
 		var arg = new StringBuilder();
 
 		arg.Append("-m ");
-		arg.Append(LauncherSettings.EmulatorMemory);
+		arg.Append(Settings.EmulatorMemory);
 		arg.Append('M');
 
 		arg.Append(" -smp cores=");
-		arg.Append(LauncherSettings.EmulatorCores);
+		arg.Append(Settings.EmulatorCores);
 
-		if (LauncherSettings.Platform == "x86")
+		if (Settings.Platform == "x86")
 		{
 			arg.Append(" -cpu qemu32,+sse4.1,abm,bmi1,bmi2,popcnt");
 		}
 
-		switch (LauncherSettings.EmulatorSVGA)
+		switch (Settings.EmulatorSVGA)
 		{
 			case "virtio": arg.Append(" -device virtio-vga"); break;
 			case "vmware": arg.Append(" -vga vmware"); break;
@@ -179,7 +270,7 @@ public class Starter : BaseLauncher
 			case "std": arg.Append(" -vga std"); break;
 		}
 
-		if (!LauncherSettings.EmulatorDisplay || LauncherSettings.LauncherTest)
+		if (!Settings.EmulatorDisplay || Settings.LauncherTest)
 		{
 			arg.Append(" -display none");
 		}
@@ -188,105 +279,106 @@ public class Starter : BaseLauncher
 			arg.Append(" -display sdl");
 		}
 
-		// COM1 = Kernel Log
-		if (LauncherSettings.LauncherTest)
+		var serial = Settings.EmulatorSerial;
+
+		if (Settings.LauncherSerialConsole || Settings.LauncherTest)
 		{
-			arg.Append(" -serial stdio");
-		}
-		else
-		{
-			arg.Append(" -serial null");
+			serial = "tcpserver";
 		}
 
-		// COM2 = Mosa Internal Debugger
-		switch (LauncherSettings.EmulatorSerial)
+		switch (serial)
 		{
 			case "pipe":
 				{
 					arg.Append(" -serial pipe:");
-					arg.Append(LauncherSettings.EmulatorSerialPipe);
+					arg.Append(Settings.EmulatorSerialPipe);
 					break;
 				}
 			case "tcpserver":
 				{
 					arg.Append(" -serial tcp:");
-					arg.Append(LauncherSettings.EmulatorSerialHost);
+					arg.Append(Settings.EmulatorSerialHost);
 					arg.Append(':');
-					arg.Append(LauncherSettings.EmulatorSerialPort);
+					arg.Append(Settings.EmulatorSerialPort);
 					arg.Append(",server,nowait");
 					break;
 				}
 			case "tcpclient":
 				{
 					arg.Append(" -serial tcp:");
-					arg.Append(LauncherSettings.EmulatorSerialHost);
+					arg.Append(Settings.EmulatorSerialHost);
 					arg.Append(':');
-					arg.Append(LauncherSettings.EmulatorSerialPort);
+					arg.Append(Settings.EmulatorSerialPort);
 					arg.Append(",client,nowait");
+					break;
+				}
+			default:
+				{
+					arg.Append(" -serial null");
 					break;
 				}
 		}
 
-		if (LauncherSettings.EmulatorGDB)
+		if (Settings.EmulatorGDB)
 		{
 			arg.Append(" -S -gdb tcp::");
-			arg.Append(LauncherSettings.GDBPort);
+			arg.Append(Settings.GDBPort);
 		}
 
-		switch (LauncherSettings.ImageFormat)
+		switch (Settings.ImageFormat)
 		{
 			case "bin":
 				{
 					arg.Append(" -kernel ");
-					arg.Append(Quote(LauncherSettings.ImageFile));
+					arg.Append(Quote(Settings.ImageFile));
 					break;
 				}
 			default:
 				{
 					arg.Append(" -drive format=raw,file=");
-					arg.Append(Quote(LauncherSettings.ImageFile));
+					arg.Append(Quote(Settings.ImageFile));
 					break;
 				}
 		}
 
-		if (LauncherSettings.ImageFirmware == "bios")
+		if (Settings.ImageFirmware == "bios")
 		{
 			arg.Append(" -L ");
-			arg.Append(Quote(LauncherSettings.QEMUBios));
+			arg.Append(Quote(Settings.QEMUBios));
 		}
-		else if (LauncherSettings.ImageFirmware == "uefi")
+		else if (Settings.ImageFirmware == "uefi")
 		{
-			if (LauncherSettings.Platform == "x86")
+			if (Settings.Platform == "x86")
 			{
 				arg.Append(" -drive if=pflash,format=raw,readonly=on,file=");
-				arg.Append(Quote(LauncherSettings.QEMUEdk2X86));
+				arg.Append(Quote(Settings.QEMUEdk2X86));
 			}
-			else if (LauncherSettings.Platform == "x64")
+			else if (Settings.Platform == "x64")
 			{
 				arg.Append(" -drive if=pflash,format=raw,readonly=on,file=");
-				arg.Append(Quote(LauncherSettings.QEMUEdk2X64));
+				arg.Append(Quote(Settings.QEMUEdk2X64));
 			}
-			else if (LauncherSettings.Platform == "ARMv8A32")
+			else if (Settings.Platform == "ARMv8A32")
 			{
 				arg.Append(" -drive if=pflash,format=raw,readonly=on,file=");
-				arg.Append(Quote(LauncherSettings.QEMUEdk2ARM));
+				arg.Append(Quote(Settings.QEMUEdk2ARM));
 			}
 		}
 
-		return LaunchApplicationEx(LauncherSettings.QEMU, arg.ToString(), LauncherSettings.LauncherTest);
+		return CreateApplicationProcess(Settings.QEMU, arg.ToString());
 	}
 
-	private ExternalProcess LaunchBochs()
+	private Process LaunchBochs()
 	{
-		var bochsdirectory = Path.GetDirectoryName(LauncherSettings.Bochs);
+		var bochsdirectory = Path.GetDirectoryName(Settings.Bochs);
 
-		var logfile = Path.Combine(LauncherSettings.TemporaryFolder, Path.GetFileNameWithoutExtension(LauncherSettings.ImageFile) + "-bochs.log");
-		var configfile = Path.Combine(LauncherSettings.TemporaryFolder, Path.GetFileNameWithoutExtension(LauncherSettings.ImageFile) + ".bxrc");
+		var logfile = Path.Combine(Settings.TemporaryFolder, Path.GetFileNameWithoutExtension(Settings.ImageFile) + "-bochs.log");
+		var configfile = Path.Combine(Settings.TemporaryFolder, Path.GetFileNameWithoutExtension(Settings.ImageFile) + ".bxrc");
 
 		var sb = new StringBuilder();
 
 		sb.Append("megs: ");
-		sb.Append(LauncherSettings.EmulatorMemory);
+		sb.Append(Settings.EmulatorMemory);
 		sb.AppendLine();
 
 		sb.AppendLine("ata0: enabled=1,ioaddr1=0x1f0,ioaddr2=0x3f0,irq=14");
@@ -308,71 +400,59 @@ public class Starter : BaseLauncher
 		}
 
 		sb.Append("ata0-master: type=disk,path=");
-		sb.Append(Quote(LauncherSettings.ImageFile));
+		sb.Append(Quote(Settings.ImageFile));
 		sb.AppendLine(",biosdetect=none,cylinders=0,heads=0,spt=0");
 
-		switch (LauncherSettings.EmulatorSVGA)
+		switch (Settings.EmulatorSVGA)
 		{
 			case "vbe": sb.AppendLine("vga: extension=vbe"); break;
 			case "cirrus": sb.AppendLine("vga: extension=cirrus"); break;
 		}
 
-		// COM1 = Kernel Log
-		if (LauncherSettings.LauncherTest)
-		{
-			// Not supported
-			sb.AppendLine("com1: enabled=1, mode=null");
-		}
-		else
-		{
-			sb.AppendLine("com1: enabled=1, mode=null");
-		}
-
-		// COM2 = Mosa Internal Debugger
-		switch (LauncherSettings.EmulatorSerial)
+		switch (Settings.EmulatorSerial)
 		{
 			case "pipe":
 				{
-					sb.Append("com2: enabled=1, mode=pipe-server, dev=\\\\.\\pipe\\");
-					sb.AppendLine(LauncherSettings.EmulatorSerialPipe);
+					sb.Append("com1: enabled=1, mode=pipe-server, dev=\\\\.\\pipe\\");
+					sb.AppendLine(Settings.EmulatorSerialPipe);
 					break;
 				}
 			case "tcpserver":
 				{
-					sb.Append("com2: enabled=1, mode=socket-server, dev=");
-					sb.Append(LauncherSettings.EmulatorSerialHost);
+					sb.Append("com1: enabled=1, mode=socket-server, dev=");
+					sb.Append(Settings.EmulatorSerialHost);
 					sb.Append(':');
-					sb.Append(LauncherSettings.EmulatorSerialPort);
+					sb.Append(Settings.EmulatorSerialPort);
 					sb.AppendLine();
 					break;
 				}
 			case "tcpclient":
 				{
-					sb.Append("com2: enabled=1, mode=socket-client, dev=");
-					sb.Append(LauncherSettings.EmulatorSerialHost);
+					sb.Append("com1: enabled=1, mode=socket-client, dev=");
+					sb.Append(Settings.EmulatorSerialHost);
 					sb.Append(':');
-					sb.Append(LauncherSettings.EmulatorSerialPort);
+					sb.Append(Settings.EmulatorSerialPort);
 					sb.AppendLine();
 					break;
 				}
 		}
 
-		if (LauncherSettings.EmulatorGDB)
+		if (Settings.EmulatorGDB)
 		{
 			// Untested
 			sb.Append("gdbstub: enabled=1, port=");
-			sb.Append(LauncherSettings.GDBPort);
+			sb.Append(Settings.GDBPort);
 			sb.AppendLine(", text_base=0, data_base=0, bss_base=0");
 		}
 
 		File.WriteAllText(configfile, sb.ToString());
 
-		return LaunchApplicationEx(LauncherSettings.Bochs, $"-q -f {Quote(configfile)}");
+		return CreateApplicationProcess(Settings.Bochs, $"-q -f {Quote(configfile)}");
 	}
 
-	private ExternalProcess LaunchVMware()
+	private Process LaunchVMware()
 	{
-		var configFile = Path.Combine(LauncherSettings.TemporaryFolder, Path.ChangeExtension(LauncherSettings.ImageFile, ".vmx")!);
+		var configFile = Path.Combine(Settings.TemporaryFolder, Path.ChangeExtension(Settings.ImageFile, ".vmx")!);
 		var sb = new StringBuilder();
 
 		sb.AppendLine(".encoding = \"windows-1252\"");
@@ -380,10 +460,10 @@ public class Starter : BaseLauncher
 		sb.AppendLine("virtualHW.version = \"14\"");
 
 		sb.Append("memsize = ");
-		sb.AppendLine(Quote(LauncherSettings.EmulatorMemory.ToString()));
+		sb.AppendLine(Quote(Settings.EmulatorMemory.ToString()));
 
 		sb.Append("displayName = \"MOSA - ");
-		sb.Append(Path.GetFileNameWithoutExtension(LauncherSettings.SourceFiles[0]));
+		sb.Append(Path.GetFileNameWithoutExtension(Settings.SourceFiles[0]));
 		sb.AppendLine("\"");
 
 		sb.AppendLine("guestOS = \"other\"");
@@ -393,12 +473,12 @@ public class Starter : BaseLauncher
 		sb.AppendLine("numvcpus = \"1\"");
 
 		sb.Append("cpuid.coresPerSocket = ");
-		sb.AppendLine(Quote(LauncherSettings.EmulatorCores.ToString()));
+		sb.AppendLine(Quote(Settings.EmulatorCores.ToString()));
 
 		sb.AppendLine("ide0:0.present = \"TRUE\"");
 
 		sb.Append("ide0:0.fileName = ");
-		sb.AppendLine(Quote(LauncherSettings.ImageFile));
+		sb.AppendLine(Quote(Settings.ImageFile));
 
 		sb.AppendLine("sound.present = \"TRUE\"");
 		sb.AppendLine("sound.opl3.enabled = \"TRUE\"");
@@ -406,23 +486,15 @@ public class Starter : BaseLauncher
 
 		sb.AppendLine("floppy0.present = \"FALSE\"");
 
-		// COM1 = Kernel Log
-		sb.AppendLine("serial0.present = \"TRUE\"");
-		sb.AppendLine("serial0.yieldOnMsrRead = \"FALSE\"");
-		sb.AppendLine("serial0.fileType = \"pipe\"");
-		sb.AppendLine("serial0.fileName = \"\\\\.\\pipe\\MOSA1\"");
-		sb.AppendLine("serial0.pipe.endPoint = \"server\"");
-		sb.AppendLine("serial0.tryNoRxLoss = \"FALSE\"");
-
-		// COM2 = Mosa Internal Debugger
-		if (NullToEmpty(LauncherSettings.EmulatorSerial) == "pipe")
+		// COM1
+		if (NullToEmpty(Settings.EmulatorSerial) == "pipe")
 		{
 			sb.AppendLine("serial1.present = \"TRUE\"");
 			sb.AppendLine("serial1.yieldOnMsrRead = \"FALSE\"");
 			sb.AppendLine("serial1.fileType = \"pipe\"");
 
 			sb.Append("serial1.fileName = \"\\\\.\\pipe\\");
-			sb.AppendLine(LauncherSettings.EmulatorSerialPipe);
+			sb.AppendLine(Settings.EmulatorSerialPipe);
 			sb.AppendLine("\"");
 
 			sb.AppendLine("serial1.pipe.endPoint = \"server\"");
@@ -439,41 +511,41 @@ public class Starter : BaseLauncher
 
 		var arg = Quote(configFile);
 
-		if (!string.IsNullOrWhiteSpace(LauncherSettings.VmwareWorkstation))
+		if (!string.IsNullOrWhiteSpace(Settings.VmwareWorkstation))
 		{
-			return LaunchApplicationEx(LauncherSettings.VmwareWorkstation, arg);
+			return CreateApplicationProcess(Settings.VmwareWorkstation, arg);
 		}
 
-		if (!string.IsNullOrWhiteSpace(LauncherSettings.VmwarePlayer))
+		if (!string.IsNullOrWhiteSpace(Settings.VmwarePlayer))
 		{
-			return LaunchApplicationEx(LauncherSettings.VmwarePlayer, arg);
+			return CreateApplicationProcess(Settings.VmwarePlayer, arg);
 		}
 
 		return null;
 	}
 
-	private ExternalProcess LaunchVirtualBox()
+	private Process LaunchVirtualBox()
 	{
-		if (GetOutput(LaunchApplication(LauncherSettings.VirtualBox, "list vms")).Contains(LauncherSettings.OSName))
+		if (GetOutput(LaunchApplication(Settings.VirtualBox, "list vms")).Contains(Settings.OSName))
 		{
-			var newFile = Path.ChangeExtension(LauncherSettings.ImageFile, "bak");
+			var newFile = Path.ChangeExtension(Settings.ImageFile, "bak");
 
 			// Janky method to keep the image file
-			File.Move(LauncherSettings.ImageFile, newFile);
+			File.Move(Settings.ImageFile, newFile);
 
 			// Delete the VM first
-			LaunchApplication(LauncherSettings.VirtualBox, $"unregistervm {LauncherSettings.OSName} --delete").WaitForExit();
+			LaunchApplication(Settings.VirtualBox, $"unregistervm {Settings.OSName} --delete").WaitForExit();
 
 			// Restore the image file
-			File.Move(newFile, LauncherSettings.ImageFile);
+			File.Move(newFile, Settings.ImageFile);
 		}
 
-		LaunchApplication(LauncherSettings.VirtualBox, $"createvm --name {LauncherSettings.OSName} --ostype Other --register").WaitForExit();
-		LaunchApplication(LauncherSettings.VirtualBox, $"modifyvm {LauncherSettings.OSName} --memory {LauncherSettings.EmulatorMemory.ToString()} --cpus {LauncherSettings.EmulatorCores} --graphicscontroller vmsvga").WaitForExit();
-		LaunchApplication(LauncherSettings.VirtualBox, $"storagectl {LauncherSettings.OSName} --name Controller --add ide --controller PIIX4").WaitForExit();
-		LaunchApplication(LauncherSettings.VirtualBox, $"storageattach {LauncherSettings.OSName} --storagectl Controller --port 0 --device 0 --type hdd --medium {Quote(LauncherSettings.ImageFile)}").WaitForExit();
+		LaunchApplication(Settings.VirtualBox, $"createvm --name {Settings.OSName} --ostype Other --register").WaitForExit();
+		LaunchApplication(Settings.VirtualBox, $"modifyvm {Settings.OSName} --memory {Settings.EmulatorMemory.ToString()} --cpus {Settings.EmulatorCores} --graphicscontroller vmsvga").WaitForExit();
+		LaunchApplication(Settings.VirtualBox, $"storagectl {Settings.OSName} --name Controller --add ide --controller PIIX4").WaitForExit();
+		LaunchApplication(Settings.VirtualBox, $"storageattach {Settings.OSName} --storagectl Controller --port 0 --device 0 --type hdd --medium {Quote(Settings.ImageFile)}").WaitForExit();
 
-		return LaunchApplicationEx(LauncherSettings.VirtualBox, $"startvm {LauncherSettings.OSName}");
+		return CreateApplicationProcess(Settings.VirtualBox, $"startvm {Settings.OSName}");
 	}
 
 	private void LaunchDebugger()
@@ -482,23 +554,23 @@ public class Starter : BaseLauncher
 		var sb = new StringBuilder();
 
 		sb.Append("-output-debug-file ");
-		sb.Append(Path.Combine(LauncherSettings.TemporaryFolder, Path.ChangeExtension(LauncherSettings.ImageFile, ".debug")!));
+		sb.Append(Path.Combine(Settings.TemporaryFolder, Path.ChangeExtension(Settings.ImageFile, ".debug")!));
 		sb.Append(' ');
 		sb.Append("-gdb-host ");
-		sb.Append(LauncherSettings.GDBHost);
+		sb.Append(Settings.GDBHost);
 		sb.Append(' ');
 		sb.Append("-gdb-port ");
-		sb.Append(LauncherSettings.GDBPort);
+		sb.Append(Settings.GDBPort);
 		sb.Append(' ');
 		sb.Append("-image ");
-		sb.Append(Quote(LauncherSettings.ImageFile));
+		sb.Append(Quote(Settings.ImageFile));
 
 		LaunchApplication("Mosa.Tool.Debugger.exe", sb.ToString());
 	}
 
 	private void LaunchGDB()
 	{
-		var gdbScript = Path.Combine(LauncherSettings.TemporaryFolder, Path.GetFileNameWithoutExtension(LauncherSettings.ImageFile) + ".gdb");
+		var gdbScript = Path.Combine(Settings.TemporaryFolder, Path.GetFileNameWithoutExtension(Settings.ImageFile) + ".gdb");
 
 		var symbol = Linker.EntryPoint;
 		var breakAddress = symbol.VirtualAddress;
@@ -506,7 +578,7 @@ public class Starter : BaseLauncher
 		var sb = new StringBuilder();
 
 		sb.Append("target remote localhost:");
-		sb.Append(LauncherSettings.GDBPort);
+		sb.Append(Settings.GDBPort);
 		sb.AppendLine();
 
 		sb.AppendLine("set confirm off ");
@@ -530,12 +602,12 @@ public class Starter : BaseLauncher
 
 		sb.Clear();
 		sb.Append("-d ");
-		sb.Append(Quote(LauncherSettings.TemporaryFolder));
+		sb.Append(Quote(Settings.TemporaryFolder));
 		sb.Append(" -s ");
-		sb.Append(Quote(Path.Combine(LauncherSettings.TemporaryFolder, Path.ChangeExtension(LauncherSettings.ImageFile, ".bin")!)));
+		sb.Append(Quote(Path.Combine(Settings.TemporaryFolder, Path.ChangeExtension(Settings.ImageFile, ".bin")!)));
 		sb.Append(" -x ");
 		sb.Append(Quote(gdbScript));
 
-		LaunchConsoleApplication(LauncherSettings.GDB, sb.ToString());
+		LaunchConsoleApplication(Settings.GDB, sb.ToString());
 	}
 }

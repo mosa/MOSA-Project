@@ -12,9 +12,9 @@ public class BaseLauncher
 {
 	public CompilerHooks CompilerHooks { get; }
 
-	public LauncherSettings LauncherSettings { get; }
+	public LauncherSettings Settings { get; }
 
-	public Settings Settings => LauncherSettings.Settings;
+	public Settings ConfigurationSettings => Settings.Settings;
 
 	public BaseLauncher(Settings settings, CompilerHooks compilerHook)
 	{
@@ -26,7 +26,7 @@ public class BaseLauncher
 
 		startSettings.Merge(settings);
 
-		LauncherSettings = new LauncherSettings(startSettings);
+		Settings = new LauncherSettings(startSettings);
 
 		NormalizeSettings();
 
@@ -49,106 +49,106 @@ public class BaseLauncher
 	protected void NormalizeSettings()
 	{
 		// Normalize inputs
-		LauncherSettings.ImageFormat = LauncherSettings.ImageFormat == null ? string.Empty : LauncherSettings.ImageFormat.ToLowerInvariant().Trim();
-		LauncherSettings.FileSystem = LauncherSettings.FileSystem == null ? string.Empty : LauncherSettings.FileSystem.ToLowerInvariant().Trim();
-		LauncherSettings.EmulatorSerial = LauncherSettings.EmulatorSerial == null ? string.Empty : LauncherSettings.EmulatorSerial.ToLowerInvariant().Trim();
-		LauncherSettings.Emulator = LauncherSettings.Emulator == null ? string.Empty : LauncherSettings.Emulator.ToLowerInvariant().Trim();
-		LauncherSettings.Platform = LauncherSettings.Platform.ToLowerInvariant().Trim();
+		Settings.ImageFormat = Settings.ImageFormat == null ? string.Empty : Settings.ImageFormat.ToLowerInvariant().Trim();
+		Settings.FileSystem = Settings.FileSystem == null ? string.Empty : Settings.FileSystem.ToLowerInvariant().Trim();
+		Settings.EmulatorSerial = Settings.EmulatorSerial == null ? string.Empty : Settings.EmulatorSerial.ToLowerInvariant().Trim();
+		Settings.Emulator = Settings.Emulator == null ? string.Empty : Settings.Emulator.ToLowerInvariant().Trim();
+		Settings.Platform = Settings.Platform.ToLowerInvariant().Trim();
 	}
 
 	private void SetDefaults()
 	{
-		if (string.IsNullOrWhiteSpace(LauncherSettings.TemporaryFolder) || LauncherSettings.TemporaryFolder != "%DEFAULT%")
+		if (string.IsNullOrWhiteSpace(Settings.TemporaryFolder) || Settings.TemporaryFolder != "%DEFAULT%")
 		{
-			LauncherSettings.TemporaryFolder = Path.Combine(Path.GetTempPath(), "MOSA");
+			Settings.TemporaryFolder = Path.Combine(Path.GetTempPath(), "MOSA");
 		}
 
-		if (string.IsNullOrWhiteSpace(LauncherSettings.DefaultFolder) || LauncherSettings.DefaultFolder != "%DEFAULT%")
+		if (string.IsNullOrWhiteSpace(Settings.DefaultFolder) || Settings.DefaultFolder != "%DEFAULT%")
 		{
-			if (LauncherSettings.OutputFile != null && LauncherSettings.OutputFile != "%DEFAULT%")
+			if (Settings.OutputFile != null && Settings.OutputFile != "%DEFAULT%")
 			{
-				LauncherSettings.DefaultFolder = Path.GetDirectoryName(Path.GetFullPath(LauncherSettings.OutputFile));
+				Settings.DefaultFolder = Path.GetDirectoryName(Path.GetFullPath(Settings.OutputFile));
 			}
 			else
 			{
-				LauncherSettings.DefaultFolder = LauncherSettings.TemporaryFolder;
+				Settings.DefaultFolder = Settings.TemporaryFolder;
 			}
 		}
 
-		if (LauncherSettings.ImageFolder != null && LauncherSettings.ImageFolder != "%DEFAULT%")
+		if (Settings.ImageFolder != null && Settings.ImageFolder != "%DEFAULT%")
 		{
-			LauncherSettings.ImageFolder = LauncherSettings.DefaultFolder;
+			Settings.ImageFolder = Settings.DefaultFolder;
 		}
 
 		string baseFilename;
 
-		if (LauncherSettings.OutputFile != null && LauncherSettings.OutputFile != "%DEFAULT%")
+		if (Settings.OutputFile != null && Settings.OutputFile != "%DEFAULT%")
 		{
-			baseFilename = Path.GetFileNameWithoutExtension(LauncherSettings.OutputFile);
+			baseFilename = Path.GetFileNameWithoutExtension(Settings.OutputFile);
 		}
-		else if (LauncherSettings.SourceFiles != null && LauncherSettings.SourceFiles.Count != 0)
+		else if (Settings.SourceFiles != null && Settings.SourceFiles.Count != 0)
 		{
-			baseFilename = Path.GetFileNameWithoutExtension(LauncherSettings.SourceFiles[0]);
+			baseFilename = Path.GetFileNameWithoutExtension(Settings.SourceFiles[0]);
 		}
-		else if (LauncherSettings.ImageFile != null && LauncherSettings.ImageFile != "%DEFAULT%")
+		else if (Settings.ImageFile != null && Settings.ImageFile != "%DEFAULT%")
 		{
-			baseFilename = Path.GetFileNameWithoutExtension(LauncherSettings.ImageFile);
+			baseFilename = Path.GetFileNameWithoutExtension(Settings.ImageFile);
 		}
 		else
 		{
 			baseFilename = "_mosa_";
 		}
 
-		var defaultFolder = LauncherSettings.DefaultFolder;
+		var defaultFolder = Settings.DefaultFolder;
 
-		if (LauncherSettings.OutputFile is null or "%DEFAULT%")
+		if (Settings.OutputFile is null or "%DEFAULT%")
 		{
-			LauncherSettings.OutputFile = Path.Combine(defaultFolder, $"{baseFilename}.bin");
+			Settings.OutputFile = Path.Combine(defaultFolder, $"{baseFilename}.bin");
 		}
 
-		if (LauncherSettings.ImageFile == "%DEFAULT%")
+		if (Settings.ImageFile == "%DEFAULT%")
 		{
-			LauncherSettings.ImageFile = Path.Combine(LauncherSettings.ImageFolder, $"{baseFilename}.{LauncherSettings.ImageFormat}");
+			Settings.ImageFile = Path.Combine(Settings.ImageFolder, $"{baseFilename}.{Settings.ImageFormat}");
 		}
 
-		if (LauncherSettings.MapFile == "%DEFAULT%")
+		if (Settings.MapFile == "%DEFAULT%")
 		{
-			LauncherSettings.MapFile = Path.Combine(defaultFolder, $"{baseFilename}-map.txt");
+			Settings.MapFile = Path.Combine(defaultFolder, $"{baseFilename}-map.txt");
 		}
 
-		if (LauncherSettings.CompileTimeFile == "%DEFAULT%")
+		if (Settings.CompileTimeFile == "%DEFAULT%")
 		{
-			LauncherSettings.CompileTimeFile = Path.Combine(defaultFolder, $"{baseFilename}-time.txt");
+			Settings.CompileTimeFile = Path.Combine(defaultFolder, $"{baseFilename}-time.txt");
 		}
 
-		if (LauncherSettings.DebugFile == "%DEFAULT%")
+		if (Settings.DebugFile == "%DEFAULT%")
 		{
-			LauncherSettings.DebugFile = Path.Combine(defaultFolder, $"{baseFilename}.debug");
+			Settings.DebugFile = Path.Combine(defaultFolder, $"{baseFilename}.debug");
 		}
 
-		if (LauncherSettings.InlinedFile == "%DEFAULT%")
+		if (Settings.InlinedFile == "%DEFAULT%")
 		{
-			LauncherSettings.InlinedFile = Path.Combine(defaultFolder, $"{baseFilename}-inlined.txt");
+			Settings.InlinedFile = Path.Combine(defaultFolder, $"{baseFilename}-inlined.txt");
 		}
 
-		if (LauncherSettings.PreLinkHashFile == "%DEFAULT%")
+		if (Settings.PreLinkHashFile == "%DEFAULT%")
 		{
-			LauncherSettings.PreLinkHashFile = Path.Combine(defaultFolder, $"{baseFilename}-prelink-hash.txt");
+			Settings.PreLinkHashFile = Path.Combine(defaultFolder, $"{baseFilename}-prelink-hash.txt");
 		}
 
-		if (LauncherSettings.PostLinkHashFile == "%DEFAULT%")
+		if (Settings.PostLinkHashFile == "%DEFAULT%")
 		{
-			LauncherSettings.PostLinkHashFile = Path.Combine(defaultFolder, $"{baseFilename}-postlink-hash.txt");
+			Settings.PostLinkHashFile = Path.Combine(defaultFolder, $"{baseFilename}-postlink-hash.txt");
 		}
 
-		if (LauncherSettings.AsmFile == "%DEFAULT%")
+		if (Settings.AsmFile == "%DEFAULT%")
 		{
-			LauncherSettings.AsmFile = Path.Combine(defaultFolder, $"{baseFilename}.asm");
+			Settings.AsmFile = Path.Combine(defaultFolder, $"{baseFilename}.asm");
 		}
 
-		if (LauncherSettings.NasmFile == "%DEFAULT%")
+		if (Settings.NasmFile == "%DEFAULT%")
 		{
-			LauncherSettings.NasmFile = Path.Combine(defaultFolder, $"{baseFilename}.nasm");
+			Settings.NasmFile = Path.Combine(defaultFolder, $"{baseFilename}.nasm");
 		}
 	}
 
@@ -184,16 +184,21 @@ public class BaseLauncher
 		return '"' + location + '"';
 	}
 
-	protected ExternalProcess LaunchApplicationEx(string app, string args, bool captureOutput = false)
+	protected Process CreateApplicationProcess(string app, string args)
 	{
-		Output($"Launching Application: {app}");
+		Output($"Starting Application: {app}");
 		Output($"Arguments: {args}");
 
-		var externalProcess = new ExternalProcess(app, args, captureOutput);
+		var process = new Process();
 
-		externalProcess.Start();
+		process.StartInfo.FileName = app;
+		process.StartInfo.Arguments = args;
+		process.StartInfo.UseShellExecute = false;
+		process.StartInfo.RedirectStandardOutput = false;
+		process.StartInfo.RedirectStandardError = false;
+		process.StartInfo.CreateNoWindow = true;
 
-		return externalProcess;
+		return process;
 	}
 
 	protected Process LaunchApplication(string app, string args)

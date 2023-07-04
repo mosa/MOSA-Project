@@ -225,7 +225,7 @@ public static class Boot
 
 		Console.Goto(12, 0);
 
-		Logger.Log("<SELFTEST:PASSED>");
+		Logger.Log("##PASS##");
 
 		while (true)
 		{

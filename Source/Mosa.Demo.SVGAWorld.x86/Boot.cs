@@ -40,7 +40,7 @@ public static class Boot
 		Kernel.x86.Kernel.Setup();
 		IDT.SetInterruptHandler(ProcessInterrupt);
 
-		Console.WriteLine("<SELFTEST:PASSED>");
+		Console.WriteLine("##PASS##");
 
 		HAL = new Hardware();
 		Random = new Random();

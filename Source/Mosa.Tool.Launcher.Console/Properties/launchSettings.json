@@ -2,8 +2,8 @@
   "profiles": {
     "Mosa.Tool.Launcher.Console": {
       "commandName": "Project",
-      "commandLineArgs": "x:\\temp\\bin\\Mosa.Demo.CoolWorld.x86.dll -check -threading-off -filter IsNegative(System.Double)",
-      "workingDirectory": "x:\\temp\\bin"
+      "commandLineArgs": "Mosa.BareMetal.HelloWorld.x86.dll -test",
+      "workingDirectory": "..\\..\\bin"
     }
   }
 }

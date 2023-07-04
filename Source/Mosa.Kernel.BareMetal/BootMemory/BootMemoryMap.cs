@@ -102,7 +102,7 @@ public static class BootMemoryMap
 
 	public static void Dump()
 	{
-		Console.WriteLine();
+		Console.WriteLine(ConsoleColor.Magenta);
 		Console.WriteLine("BootMemoryMap - Dump:");
 		Console.WriteLine("=====================");
 		Console.Write("Entries: ");

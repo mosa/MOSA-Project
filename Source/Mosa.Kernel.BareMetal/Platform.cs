@@ -46,4 +46,7 @@ public static class Platform
 
 	public static void ConsoleWrite(byte c)
 	{ }
+
+	public static void Debug(byte c)
+	{ }
 }
