@@ -78,8 +78,8 @@ public static class PlatformPlug
 		VGAConsole.Write(c);
 	}
 
-	[Plug("Mosa.Kernel.BareMetal.Platform::Debug")]
-	public static void Debug(byte c)
+	[Plug("Mosa.Kernel.BareMetal.Platform::DebugWrite")]
+	public static void DebugWrite(byte c)
 	{
 		SerialDebug.Write(c);
 	}

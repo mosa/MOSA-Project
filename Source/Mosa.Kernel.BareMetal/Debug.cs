@@ -16,6 +16,8 @@ public static class Debug
 	public static void Setup(bool enable = false)
 	{
 		IsEnabled = enable;
+
+		WriteLine("[Debug Mode]");
 	}
 
 	public static void Initialize()
@@ -91,7 +93,7 @@ public static class Debug
 		if (!IsEnabled)
 			return;
 
-		Platform.Debug(b);
+		Platform.DebugWrite(b);
 	}
 
 	// Helpers
@@ -148,31 +150,6 @@ public static class Debug
 		Write(message2);
 		WriteValueAsHex(value2);
 		Write(NewLine);
-	}
-
-	// Helpers with Color
-
-	public static void WriteLine(ConsoleColor color, string s)
-	{
-		//SetForground(color);
-		WriteLine(s);
-	}
-
-	public static void Write(ConsoleColor color, string s)
-	{
-		//SetForground(color);
-		Write(s);
-	}
-
-	public static void WriteLine(ConsoleColor color)
-	{
-		//SetForground(color);
-		Write('\n');
-	}
-
-	public static void Write(ConsoleColor color)
-	{
-		//SetForground(color);
 	}
 
 	// Following 4 methods copied from Console.cs

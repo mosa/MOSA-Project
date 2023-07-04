@@ -6,11 +6,11 @@ namespace Mosa.Kernel.BareMetal;
 
 public static class VirtualMemoryManager
 {
+	#region Private Members
+
 	// FUTURE:
 	// List of page pools (representing physical pages)
 	// Page pool consist of bitmap + # of entries + # of free entries
-
-	#region Private Members
 
 	private static ulong NextAvailablePage;
 
@@ -53,7 +53,7 @@ public static class VirtualMemoryManager
 
 	public static void Map(Pointer virtualPage, Pointer physicalPage)
 	{
-		PageTable.MapVirtualAddressToPhysical(virtualPage, physicalPage);
+		PageTable.MapVirtualAddressToPhysical(virtualPage, physicalPage, true);
 	}
 
 	public static Pointer GetPhysicalAddress(Pointer virtualPage)

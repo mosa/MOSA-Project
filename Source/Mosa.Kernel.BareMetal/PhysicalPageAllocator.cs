@@ -33,7 +33,7 @@ public static class PhysicalPageAllocator
 
 	public static void Setup()
 	{
-		Debug.WriteLine(ConsoleColor.BrightMagenta, "PhysicalPageAllocator:Setup()");
+		Debug.WriteLine("PhysicalPageAllocator:Setup()");
 
 		var bitMapIndexPage = BootPageAllocator.AllocatePage();
 		BitMapIndexTable = new BitMapIndexTable(bitMapIndexPage);
@@ -133,7 +133,7 @@ public static class PhysicalPageAllocator
 
 			//Debug.WriteLine(" > pages2: ", pages);
 
-			Debug.WriteLine(" > reserved: ", startPage, " - ", endPage);
+			//Debug.WriteLine(" > reserved: ", startPage, " - ", endPage);
 
 			SetPageBitMapEntry(startPage, pages, false);
 		}

@@ -31,8 +31,6 @@ public static class SerialDebug
 		Serial.SetupPort(SerialPort);
 
 		IsIntialize = true;
-
-		WriteLine("[Debug Mode]");
 	}
 
 	public static void Write(byte c)
@@ -44,6 +42,8 @@ public static class SerialDebug
 	}
 
 	#endregion Public API
+
+	#region Private Methods
 
 	private static void Write(string s)
 	{
@@ -58,4 +58,6 @@ public static class SerialDebug
 		Write(s);
 		Write(NewLine);
 	}
+
+	#endregion Private Methods
 }

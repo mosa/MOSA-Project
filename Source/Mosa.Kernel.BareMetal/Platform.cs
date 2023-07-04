@@ -36,7 +36,7 @@ public static class Platform
 	public static void PageTableEnable()
 	{ }
 
-	public static void PageTableMapVirtualAddressToPhysical(uint virtualAddress, uint physicalAddress, bool present = true)
+	public static void PageTableMapVirtualAddressToPhysical(Pointer virtualAddress, Pointer physicalAddress, bool present = true)
 	{ }
 
 	public static Pointer PageTableGetPhysicalAddressFromVirtual(Pointer virtualAddress)
@@ -47,6 +47,6 @@ public static class Platform
 	public static void ConsoleWrite(byte c)
 	{ }
 
-	public static void Debug(byte c)
+	public static void DebugWrite(byte c)
 	{ }
 }
