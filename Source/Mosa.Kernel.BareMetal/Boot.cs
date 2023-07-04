@@ -19,6 +19,7 @@ public static class Boot
 		Console.ClearScreen();
 
 		Console.WriteLine(ConsoleColor.BrightYellow, "Initializing kernel...");
+		Debug.Setup(true);
 
 		Console.Write(ConsoleColor.BrightGreen, "> Initial garbage collection...");
 		InitialGCMemory.Initialize();
@@ -73,9 +74,9 @@ public static class Boot
 		Console.WriteLine(ConsoleColor.BrightYellow, "Initializing services...");
 
 		// Create Service manager and basic services
-		//Console.Write(ConsoleColor.BrightGreen, "> Service Manager...");
-		//var serviceManager = new ServiceManager();
-		//Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
+		Console.Write(ConsoleColor.BrightGreen, "> Service Manager...");
+		var serviceManager = new ServiceManager();
+		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 
 		//	var DeviceService = new DeviceService();
 
@@ -96,8 +97,6 @@ public static class Boot
 	[Plug("Mosa.Runtime.GC::AllocateMemory")]
 	private static Pointer AllocateMemory(uint size)
 	{
-		Debug.WriteLineHex("+ [GC] Allocating Memory: ", size);
-
 		if (BootStatus.IsGCEnabled)
 			return GCMemory.AllocateMemory(size);
 		else

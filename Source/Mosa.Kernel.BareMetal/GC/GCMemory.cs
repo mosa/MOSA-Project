@@ -44,10 +44,12 @@ public static class GCMemory
 
 		if (heapStart.IsNull || heapSize - heapUsed < size)
 		{
-			Debug.WriteLineHex("+ Allocated Memory: ", size);
+			//Debug.WriteLineHex("+ Allocated Memory: ", size);
 
 			// TODO - allocate memory for new heap
 		}
+
+		Debug.Kill();
 
 		var at = heapStart + heapUsed;
 		CurrentHeap.Used = heapUsed + size;

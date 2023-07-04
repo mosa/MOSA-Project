@@ -21,6 +21,8 @@ public static class InitialGCMemory
 
 	public static Pointer AllocateMemory(uint size)
 	{
+		//Debug.WriteLine("\n+ GC Allcation:", size);
+
 		var available = Available;
 
 		Available += size;
