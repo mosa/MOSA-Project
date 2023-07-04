@@ -6,7 +6,7 @@ using Mosa.Runtime;
 
 namespace Mosa.Kernel.BareMetal;
 
-public static class PhysicalPageAllocator
+public static class PageFrameAllocator
 {
 	#region Public Members
 
@@ -33,7 +33,7 @@ public static class PhysicalPageAllocator
 
 	public static void Setup()
 	{
-		Debug.WriteLine("PhysicalPageAllocator:Setup()");
+		Debug.WriteLine("PageFrameAllocator:Setup()");
 
 		var bitMapIndexPage = BootPageAllocator.AllocatePage();
 		BitMapIndexTable = new BitMapIndexTable(bitMapIndexPage);
@@ -133,7 +133,7 @@ public static class PhysicalPageAllocator
 
 			//Debug.WriteLine(" > pages2: ", pages);
 
-			//Debug.WriteLine(" > reserved: ", startPage, " - ", endPage);
+			Debug.WriteLine(" > reserved: ", startPage, " - ", endPage);
 
 			SetPageBitMapEntry(startPage, pages, false);
 		}
@@ -160,7 +160,7 @@ public static class PhysicalPageAllocator
 
 	public static Pointer Allocate(uint count, uint alignment = 1)
 	{
-		Debug.WriteLine("PhysicalPageAllocator::Reserve()");
+		Debug.WriteLine("PageFrameAllocator::Reserve()");
 
 		if (count == 0)
 			return Pointer.Zero;

@@ -4,7 +4,7 @@ using Mosa.Runtime;
 
 namespace Mosa.Kernel.BareMetal;
 
-public static class VirtualMemoryManager
+public static class VirtualPageAllocator
 {
 	#region Private Members
 
@@ -47,7 +47,7 @@ public static class VirtualMemoryManager
 
 	public static Pointer Allocate(Pointer virtualPage)
 	{
-		var physicalPage = PhysicalPageAllocator.Allocate();
+		var physicalPage = PageFrameAllocator.Allocate();
 		Map(virtualPage, physicalPage);
 
 		return physicalPage;

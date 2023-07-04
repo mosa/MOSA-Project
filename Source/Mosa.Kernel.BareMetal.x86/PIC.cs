@@ -38,6 +38,8 @@ public static class PIC
 
 	public static void Setup()
 	{
+		//Debug.WriteLine("PIC::Setup()");
+
 		byte masterMask = Native.In8(PICConstants.PIC1_Data);
 		byte slaveMask = Native.In8(PICConstants.PIC2_Data);
 
@@ -70,6 +72,8 @@ public static class PIC
 
 		// OCW1
 		Native.Out8(PICConstants.PIC2_Data, slaveMask);
+
+		//Debug.WriteLine("PIC::Complete()");
 	}
 
 	/// <summary>

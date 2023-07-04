@@ -39,19 +39,28 @@ public static class IDT
 
 	public static void Setup()
 	{
+		Debug.WriteLine("IDT:Setup()");
+
 		Interrupt = null;
 
 		// Setup IDT table
-		IDTTable = BootPageAllocator.AllocatePages(2);
+		IDTTable = BootPageAllocator.AllocatePage();
 		Page.ClearPage(IDTTable);
-		Page.ClearPage(IDTTable + Page.Size);
+
+		Debug.WriteLineHex(" > Address: ", IDTTable.ToUInt64());
 
 		IDTTable.Store16(IDTEntryOffset.TotalSize * 256 - 1);
 		IDTTable.Store32(2, IDTTable.ToUInt32() + 6);
 
+		Debug.WriteLine(" > Set Table Entries");
+
 		SetTableEntries();
 
+		Debug.WriteLine(" > Set LIDT");
+
 		SetLidt(IDTTable);
+
+		Debug.WriteLine("IDT:Setup() [Exit]");
 	}
 
 	public static void SetInterruptHandler(InterruptHandler handler)
@@ -79,7 +88,7 @@ public static class IDT
 	/// <param name="flags">The flags.</param>
 	private static void Set(uint index, uint address, ushort select, byte flags)
 	{
-		var entry = IDTTable + 6 + index * IDTEntryOffset.TotalSize;
+		var entry = IDTTable + 6 + (index * IDTEntryOffset.TotalSize);
 
 		entry.Store16(IDTEntryOffset.BaseLow, (ushort)(address & 0xFFFF));
 		entry.Store16(IDTEntryOffset.BaseHigh, (ushort)((address >> 16) & 0xFFFF));
@@ -101,9 +110,6 @@ public static class IDT
 	/// </summary>
 	private static void SetTableEntries()
 	{
-		// Clear out idt table
-		Runtime.Internal.MemoryClear(IDTTable + 6, IDTEntryOffset.TotalSize * 256);
-
 		Set(0, new Action(IRQ0));
 		Set(1, new Action(IRQ1));
 		Set(2, new Action(IRQ2));
@@ -2166,6 +2172,8 @@ public static class IDT
 	{
 		var stack = (IDTStack*)stackStatePointer;
 
+		Debug.WriteLine(" > IDQ: ", stack->Interrupt);
+
 		//Debugger.Process(stack);
 
 		switch (stack->Interrupt)
@@ -2234,7 +2242,7 @@ public static class IDT
 					break;
 				}
 
-				var physicalpage = VirtualMemoryManager.Allocate(new Pointer(cr2));
+				var physicalpage = VirtualPageAllocator.Allocate(new Pointer(cr2));
 
 				if (physicalpage.IsNull)
 				{

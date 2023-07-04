@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Threading;
 using Mosa.DeviceSystem;
 using Mosa.Kernel.BareMetal.BootMemory;
 using Mosa.Kernel.BareMetal.GC;
@@ -30,11 +31,6 @@ public static class Boot
 		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 	}
 
-	[Plug("Mosa.Runtime.StartUp::GarbageCollectionInitialization")]
-	public static void GarbageCollectionInitialization()
-	{
-	}
-
 	[Plug("Mosa.Runtime.StartUp::KernelEntryPoint")]
 	public static void EntryPoint()
 	{
@@ -52,7 +48,7 @@ public static class Boot
 		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 
 		Console.Write(ConsoleColor.BrightGreen, "> Physical page allocator...");
-		PhysicalPageAllocator.Setup();
+		PageFrameAllocator.Setup();
 		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 
 		Console.Write(ConsoleColor.BrightGreen, "> Page table...");
@@ -60,16 +56,16 @@ public static class Boot
 		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 
 		Console.Write(ConsoleColor.BrightGreen, "> Virtual memory allocator...");
-		VirtualMemoryManager.Setup();
+		VirtualPageAllocator.Setup();
+		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
+
+		Console.Write(ConsoleColor.BrightGreen, "> Interrupt Manager...");
+		InterreuptManager.Setup();
 		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 
 		Console.Write(ConsoleColor.BrightGreen, "> Garbage collection...");
 		GCMemory.Setup();
 		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
-
-		//Console.Write(ConsoleColor.BrightGreen, "> Interrupt Manager...");
-		//InterreuptManager.Setup();
-		//Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 
 		//Console.Write(ConsoleColor.BrightGreen, "> Interrupt Handler...");
 		//InterreuptManager.SetHandler(null);

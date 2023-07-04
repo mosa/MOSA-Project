@@ -13,26 +13,21 @@ internal static class PageTable
 {
 	public static Pointer PageDirectory;
 	public static Pointer PageTables;
-	public static GDTTable GDTTable;
+	public static GDT GDTTable;
 
 	public static void Setup()
 	{
-		//Debug.WriteLine("PageTable:Setup()");
+		Debug.WriteLine("x86.PageTable:Setup()");
 
-		GDTTable = new GDTTable(PhysicalPageAllocator.Allocate());
-		//Debug.WriteLine(" > GDTTable");
+		GDTTable.Setup();
+		PageDirectory = PageFrameAllocator.Allocate(1024);
+		PageTables = PageFrameAllocator.Allocate(1024);
 
-		PageDirectory = PhysicalPageAllocator.Allocate(1024);
-		//Debug.WriteLine(" > PageDirectory");
-
-		PageTables = PhysicalPageAllocator.Allocate(1024);
-		//Debug.WriteLine(" > PageTables");
+		Debug.WriteLine("x86.PageTable:Setup() [Exit]");
 	}
 
 	public static void Initialize()
 	{
-		GDTTable.Setup();
-
 		// Setup Page Directory
 		for (uint index = 0; index < 1024; index++)
 		{
@@ -40,7 +35,7 @@ internal static class PageTable
 		}
 
 		// Clear the Page Tables
-		for (uint index = 0; index < PhysicalPageAllocator.TotalPages; index++)
+		for (uint index = 0; index < PageFrameAllocator.TotalPages; index++)
 		{
 			PageTables.Store32(index << 2, (index * Page.Size) | 0x04 | 0x02 | 0x01);
 		}
@@ -48,8 +43,6 @@ internal static class PageTable
 
 	public static void Enable()
 	{
-		GDTTable.Enable();
-
 		// Set CR3 register on processor - sets page directory
 		Native.SetCR3(PageDirectory.ToUInt32());
 

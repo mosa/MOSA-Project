@@ -11,6 +11,8 @@ public static class PageTable
 {
 	public static void Setup()
 	{
+		Debug.WriteLine("PageTable:Setup()");
+
 		Platform.PageTableSetup();
 		Platform.PageTableInitialize();
 
@@ -18,6 +20,8 @@ public static class PageTable
 		MapVirtualAddressToPhysical(Pointer.Zero, Pointer.Zero, false);
 
 		Platform.PageTableEnable();
+
+		Debug.WriteLine("PageTable:Setup() [Exit]");
 	}
 
 	/// <summary>

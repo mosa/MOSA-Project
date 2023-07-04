@@ -28,6 +28,7 @@ public static class PlatformPlug
 
 		SSE.Setup();
 		SerialDebug.Setup();
+		PIC.Setup();
 	}
 
 	[Plug("Mosa.Kernel.BareMetal.Platform::GetBootReservedRegion")]
