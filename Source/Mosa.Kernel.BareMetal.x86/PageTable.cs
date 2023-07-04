@@ -19,13 +19,13 @@ internal static class PageTable
 	{
 		Debug.WriteLine(ConsoleColor.BrightMagenta, "PageTable:Setup()");
 
-		GDTTable = new GDTTable(PhysicalPageAllocator.Reserve());
+		GDTTable = new GDTTable(PhysicalPageAllocator.Allocate());
 		Debug.WriteLine(ConsoleColor.BrightMagenta, " > GDTTable");
 
-		PageDirectory = PhysicalPageAllocator.Reserve(1024);
+		PageDirectory = PhysicalPageAllocator.Allocate(1024);
 		Debug.WriteLine(ConsoleColor.BrightMagenta, " > PageDirectory");
 
-		PageTables = PhysicalPageAllocator.Reserve(1024);
+		PageTables = PhysicalPageAllocator.Allocate(1024);
 		Debug.WriteLine(ConsoleColor.BrightMagenta, " > PageTables");
 	}
 
@@ -57,11 +57,11 @@ internal static class PageTable
 		Native.SetCR0(Native.GetCR0() | 0x80000000);
 	}
 
-	public static void MapVirtualAddressToPhysical(uint virtualAddress, uint physicalAddress, bool present = true)
+	public static void MapVirtualAddressToPhysical(Pointer virtualAddress, Pointer physicalAddress, bool present = true)
 	{
 		//FUTURE: traverse page directory from CR3 --- do not assume page table is linearly allocated
 
-		PageTables.Store32((virtualAddress & 0xFFFFF000u) >> 10, physicalAddress & 0xFFFFF000u | 0x04u | 0x02u | (present ? 0x1u : 0x0u));
+		PageTables.Store32((virtualAddress.ToUInt32() & 0xFFFFF000u) >> 10, physicalAddress.ToUInt32() & 0xFFFFF000u | 0x04u | 0x02u | (present ? 0x1u : 0x0u));
 	}
 
 	public static Pointer GetPhysicalAddressFromVirtual(Pointer virtualAddress)

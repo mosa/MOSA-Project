@@ -61,7 +61,7 @@ public static class PlatformPlug
 	}
 
 	[Plug("Mosa.Kernel.BareMetal.Platform::PageTableMapVirtualAddressToPhysical")]
-	public static void PageTableMapVirtualAddressToPhysical(uint virtualAddress, uint physicalAddress, bool present = true)
+	public static void PageTableMapVirtualAddressToPhysical(Pointer virtualAddress, Pointer physicalAddress, bool present = true)
 	{
 		PageTable.MapVirtualAddressToPhysical(virtualAddress, physicalAddress, present);
 	}

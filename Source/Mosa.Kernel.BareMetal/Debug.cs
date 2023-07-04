@@ -31,6 +31,28 @@ public static class Debug
 		WriteLine("##KILL##");
 	}
 
+	public static void Assert(bool condition, string message = null)
+	{
+		if (condition)
+			return;
+
+		Write("Assert failed: ");
+		WriteLine(message);
+		Kill();
+	}
+
+	public static void Assert(bool condition, string message, ulong value)
+	{
+		if (condition)
+			return;
+
+		Write("Assert failed: ");
+		Write(message);
+		WriteValue(value);
+		WriteLine();
+		Kill();
+	}
+
 	public static void WriteLine()
 	{
 		if (!IsEnabled)

@@ -44,12 +44,15 @@ public static class Boot
 		PageTable.Setup();
 		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 
-		Console.WriteLine();
+		Console.Write(ConsoleColor.BrightGreen, "> Virtual memory allocator...");
+		VirtualMemoryManager.Setup();
+		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 
-		//VirtualPageAllocator.Setup();
 		//GC.Setup();
 		//Scheduler.Setup();
 		//IDT.SetInterruptHandler(ProcessInterrupt);
+
+		Console.WriteLine();
 
 		Console.WriteLine(ConsoleColor.BrightYellow, "Initializing services...");
 
