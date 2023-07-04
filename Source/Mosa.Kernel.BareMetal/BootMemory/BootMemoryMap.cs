@@ -27,8 +27,8 @@ public static class BootMemoryMap
 			Count = 0
 		};
 
-		ImportPlatformMemoryMap();
 		ImportMultibootV1MemoryMap();
+		ImportPlatformMemoryMap();
 	}
 
 	public static BootMemoryMapEntry SetMemoryMap(AddressRange range, BootMemoryType type)
@@ -70,6 +70,8 @@ public static class BootMemoryMap
 
 	private static void ImportMultibootV1MemoryMap()
 	{
+		Debug.WriteLine("BootMemoryMap::ImportMultibootV1MemoryMap()");
+
 		if (!Multiboot.IsAvailable)
 			return;
 
@@ -77,6 +79,8 @@ public static class BootMemoryMap
 			return;
 
 		AvailableMemory = new Pointer(Multiboot.MultibootV1.MemoryUpper * 1024);
+
+		Debug.WriteLineHex(" > Available Memory: ", AvailableMemory.ToInt64());
 
 		var memoryMapEnd = Multiboot.MultibootV1.MemoryMapStart + Multiboot.MultibootV1.MemoryMapLength;
 
@@ -102,25 +106,27 @@ public static class BootMemoryMap
 
 	public static void Dump()
 	{
-		Console.WriteLine(ConsoleColor.Magenta);
-		Console.WriteLine("BootMemoryMap - Dump:");
-		Console.WriteLine("=====================");
-		Console.Write("Entries: ");
-		Console.WriteValue(List.Count);
-		Console.WriteLine();
+		Debug.WriteLine(ConsoleColor.Magenta);
+		Debug.WriteLine("BootMemoryMap - Dump:");
+		Debug.WriteLine("=====================");
+		Debug.Write("Entries: ");
+		Debug.WriteValue(List.Count);
+		Debug.WriteLine();
 
-		for (uint slot = 0; slot < List.Count; slot++)
+		for (var slot = 0u; slot < List.Count; slot++)
 		{
 			var entry = GetBootMemoryMapEntry(slot);
 
-			Console.Write("Start: 0x");
-			Console.WriteValueAsHex(entry.StartAddress.ToUInt64(), 8);
-			Console.Write(" Size: 0x");
-			Console.WriteValueAsHex(entry.Size, 8);
-			Console.Write(" Type: ");
-			Console.WriteValue((byte)entry.Type);
-			Console.WriteLine();
+			Debug.Write("Start: 0x");
+			Debug.WriteValueAsHex(entry.StartAddress.ToUInt64(), 8);
+			Debug.Write(" Size: 0x");
+			Debug.WriteValueAsHex(entry.Size, 8);
+			Debug.Write(" Type: ");
+			Debug.WriteValue((byte)entry.Type);
+			Debug.WriteLine();
 		}
+
+		Debug.WriteLine();
 
 		#endregion Diagnostic
 	}

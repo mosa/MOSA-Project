@@ -21,16 +21,16 @@ public static class Alignment
 
 	public static uint AlignDown(uint position, uint alignment)
 	{
-		return position - (alignment - position % alignment) % alignment;
+		return position - (position % alignment);
 	}
 
 	public static int AlignDown(int position, int alignment)
 	{
-		return position - (alignment - position % alignment) % alignment;
+		return position - (position % alignment);
 	}
 
 	public static ulong AlignDown(ulong position, uint alignment)
 	{
-		return position - (alignment - position % alignment) % alignment;
+		return position - (position % alignment);
 	}
 }

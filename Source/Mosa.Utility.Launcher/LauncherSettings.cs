@@ -323,10 +323,10 @@ public class LauncherSettings
 		set => Settings.SetValue("Launcher.Serial.File", value);
 	}
 
-	public int EmulatorRuntimeMaximum
+	public int EmulatorMaxRuntime
 	{
-		get => Settings.GetValue("Emulator.Runtime.Maximum", 10);
-		set => Settings.SetValue("Emulator.Runtime.Maximum", 10);
+		get => Settings.GetValue("Emulator.MaxRuntime", 10);
+		set => Settings.SetValue("Emulator.MaxRuntime", 10);
 	}
 
 	public List<string> SearchPaths => Settings.GetValueList("SearchPaths");

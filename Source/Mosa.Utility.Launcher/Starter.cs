@@ -116,7 +116,7 @@ public class Starter : BaseLauncher
 			if (!client.Connect(Settings.EmulatorSerialHost, Settings.EmulatorSerialPort, 10000))
 				return false;
 
-			var watchDog = new WatchDog(Settings.EmulatorRuntimeMaximum * 1000);
+			var watchDog = new WatchDog(Settings.EmulatorMaxRuntime * 1000);
 
 			while (!(success || watchDog.IsTimedOut))
 			{
@@ -202,7 +202,7 @@ public class Starter : BaseLauncher
 			Output("VM Output");
 			Output("========================");
 
-			var watchDog = new WatchDog(Settings.EmulatorRuntimeMaximum * 1000);
+			var watchDog = new WatchDog(Settings.EmulatorMaxRuntime * 1000);
 
 			while (!(success || watchDog.IsTimedOut || kill))
 			{

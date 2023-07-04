@@ -7,6 +7,8 @@ namespace Mosa.Kernel.BareMetal;
 /// </summary>
 public static class Debug
 {
+	private static byte NewLine = (byte)'\n';
+
 	public static bool IsEnabled { get; set; } = false;
 
 	#region Public API
@@ -29,13 +31,21 @@ public static class Debug
 		WriteLine("##KILL##");
 	}
 
+	public static void WriteLine()
+	{
+		if (!IsEnabled)
+			return;
+
+		Write(NewLine);
+	}
+
 	public static void WriteLine(string message)
 	{
 		if (!IsEnabled)
 			return;
 
 		Write(message);
-		Write('\n');
+		Write(NewLine);
 	}
 
 	public static void Write(string message)
@@ -51,13 +61,74 @@ public static class Debug
 
 	public static void Write(char c)
 	{
+		Write((byte)c);
+	}
+
+	public static void Write(byte b)
+	{
 		if (!IsEnabled)
 			return;
 
-		Platform.Debug((byte)c);
+		Platform.Debug(b);
 	}
 
 	// Helpers
+
+	public static void WriteLine(string message, ulong value)
+	{
+		if (!IsEnabled)
+			return;
+
+		Write(message);
+		WriteValue(value);
+		Write(NewLine);
+	}
+
+	public static void WriteLine(string message, long value)
+	{
+		WriteLine(message, (ulong)value);
+	}
+
+	public static void WriteLine(string message1, ulong value1, string message2, ulong value2)
+	{
+		if (!IsEnabled)
+			return;
+
+		Write(message1);
+		WriteValue(value1);
+		Write(message2);
+		WriteValue(value2);
+		Write(NewLine);
+	}
+
+	public static void WriteLineHex(string message, ulong value)
+	{
+		if (!IsEnabled)
+			return;
+
+		Write(message);
+		WriteValueAsHex(value);
+		Write(NewLine);
+	}
+
+	public static void WriteLineHex(string message, long value)
+	{
+		WriteLineHex(message, (ulong)value);
+	}
+
+	public static void WriteLineHex(string message1, ulong value1, string message2, ulong value2)
+	{
+		if (!IsEnabled)
+			return;
+
+		Write(message1);
+		WriteValueAsHex(value1);
+		Write(message2);
+		WriteValueAsHex(value2);
+		Write(NewLine);
+	}
+
+	// Helpers with Color
 
 	public static void WriteLine(ConsoleColor color, string s)
 	{

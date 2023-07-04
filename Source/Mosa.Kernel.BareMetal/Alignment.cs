@@ -31,7 +31,7 @@ public static class Alignment
 
 	public static uint AlignDown(uint position, uint alignment)
 	{
-		return position - (alignment - position % alignment) % alignment;
+		return position - (position % alignment);
 	}
 
 	public static int AlignDown(int position, int alignment)
@@ -41,7 +41,7 @@ public static class Alignment
 
 	public static ulong AlignDown(ulong position, uint alignment)
 	{
-		return position - (alignment - position % alignment) % alignment;
+		return position - (position % alignment);
 	}
 
 	public static ulong AlignDown(ulong position, int alignment)
@@ -61,6 +61,6 @@ public static class Alignment
 
 	public static ulong AlignDown(ulong position, ulong alignment)
 	{
-		return position - (alignment - position % alignment) % alignment;
+		return position - (position % alignment);
 	}
 }

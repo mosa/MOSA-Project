@@ -33,6 +33,8 @@ public static class PhysicalPageAllocator
 
 	public static void Setup()
 	{
+		Debug.WriteLine(ConsoleColor.BrightMagenta, "PhysicalPageAllocator:Setup()");
+
 		var bitMapIndexPage = BootPageAllocator.AllocatePage();
 		BitMapIndexTable = new BitMapIndexTable(bitMapIndexPage);
 
@@ -65,7 +67,7 @@ public static class PhysicalPageAllocator
 				continue;
 
 			var start = Alignment.AlignUp(entry.StartAddress.ToInt64(), Page.Size);
-			var end = Alignment.AlignDown(entry.EndAddress.ToInt64() + 1, Page.Size);
+			var end = Alignment.AlignDown(entry.EndAddress.ToInt64(), Page.Size);
 
 			var pages = (uint)(end - start) / Page.Size;
 
@@ -78,7 +80,9 @@ public static class PhysicalPageAllocator
 			MinimumAvailablePage = Math.Min(MinimumAvailablePage, startPage);
 			MaximumAvailablePage = Math.Max(MaximumAvailablePage, endPage);
 
-			SetPageBitMapEntry(startPage, pages, entry.IsAvailable);
+			Debug.WriteLine(" > available: ", startPage, " - ", endPage);
+
+			SetPageBitMapEntry(startPage, pages, true);
 		}
 
 		// pass 1 - unmark reserved pages
@@ -89,8 +93,16 @@ public static class PhysicalPageAllocator
 			if (entry.IsAvailable)
 				continue;
 
-			var start = Alignment.AlignUp(entry.StartAddress.ToInt64(), Page.Size);
-			var end = Alignment.AlignDown(entry.EndAddress.ToInt64() + 1, Page.Size);
+			var start = Alignment.AlignDown(entry.StartAddress.ToInt64(), Page.Size);
+			var end = Alignment.AlignUp(entry.EndAddress.ToInt64(), Page.Size);
+
+			//Debug.WriteLine(" > reserve");
+			//Debug.WriteLineHex(" > start:         ", entry.StartAddress.ToInt64());
+			//Debug.WriteLineHex(" > end:           ", entry.EndAddress.ToInt64());
+			//Debug.WriteLine(" > len:           ", entry.Size);
+
+			//Debug.WriteLineHex(" > start-aligned: ", start);
+			//Debug.WriteLineHex(" > end-aligned:   ", end);
 
 			var pages = (uint)(end - start) / Page.Size;
 
@@ -99,6 +111,10 @@ public static class PhysicalPageAllocator
 
 			var startPage = (uint)(start / Page.Size);
 			var endPage = startPage + pages - 1;
+
+			//Debug.WriteLine(" > pages: ", pages);
+			//Debug.WriteLine(" > startPage: ", startPage);
+			//Debug.WriteLine(" > endPage: ", endPage);
 
 			MinimumReservedPage = Math.Min(MinimumReservedPage, startPage);
 			MaximumReservedPage = Math.Max(MaximumReservedPage, endPage);
@@ -115,12 +131,18 @@ public static class PhysicalPageAllocator
 			if (endPage > TotalPages)
 				pages = TotalPages - startPage;
 
-			SetPageBitMapEntry(startPage, pages, entry.IsAvailable);
+			//Debug.WriteLine(" > pages2: ", pages);
+
+			Debug.WriteLine(" > reserved: ", startPage, " - ", endPage);
+
+			SetPageBitMapEntry(startPage, pages, false);
 		}
 
 		// TODO - reserve kernel code + memory
 
 		SearchNextStartPage = MinimumAvailablePage;
+
+		//Debug.Kill();
 	}
 
 	public static void Release(Pointer page, uint count)
@@ -135,24 +157,26 @@ public static class PhysicalPageAllocator
 
 	public static Pointer Reserve(uint count, uint alignment = 1)
 	{
+		Debug.WriteLine("PhysicalPageAllocator::Reserve()");
+
 		if (count == 0)
 			return Pointer.Zero;
 
 		if (alignment == 0)
 			alignment = 1;
 
-		//Console.Write("Count: ");
-		//Console.WriteValue(count);
-		//Console.Write(' ');
-
+		Debug.WriteLine(" > Reserve Pages: ", count);
 		// TODO: Acquire lock
 
-		uint start = SearchNextStartPage;
-		uint at = start;
+		var start = SearchNextStartPage;
+		var at = start;
+		var wrap = false;
 
 		while (true)
 		{
 			uint restartAt;
+
+			//Debug.WriteLine(" > @ ", at);
 
 			if (at % alignment != 0)
 			{
@@ -167,6 +191,8 @@ public static class PhysicalPageAllocator
 
 				SearchNextStartPage = restartAt;
 
+				Debug.WriteLine(" > return: ", at);
+
 				return new Pointer(at * Page.Size);
 			}
 			else
@@ -178,12 +204,20 @@ public static class PhysicalPageAllocator
 			{
 				// warp around to the start of the bitmap
 				restartAt = MinimumAvailablePage;
+
+				if (wrap)
+					Debug.Kill();
+
+				wrap = true;
 			}
 
 			if (at < start && restartAt > start)
 			{
 				// looped around in the search
 				// quit, as there are no free pages
+
+				Debug.WriteLine(" > return: Zero");
+
 				return Pointer.Zero;
 			}
 
@@ -197,44 +231,37 @@ public static class PhysicalPageAllocator
 
 	private static void SetPageBitMapEntry(uint start, uint count, bool set)
 	{
-		var indexShift = Pointer.Size == 4 ? 10 : 9;
-		var maskOffIndex = (uint)((1 << (indexShift + 1)) - 1);
-
 		var at = start;
 
 		// TODO: Acquire lock
 
 		while (count > 0)
 		{
-			var index = (int)(at >> indexShift);
+			var index = at >> 15;            // upper 15+ bits
+			var bitoffset = at & 0x7FFF;     // lower 15 bits
+			var offset = bitoffset >> 3;     // byte offset
 
-			var bitmap = BitMapIndexTable.GetBitMapEntry((uint)index);
+			var bitmap = BitMapIndexTable.GetBitMapEntry(index);
 
-			if (at % 64 == 0 && count >= 64)
+			if (at % 64 == 0 && count >= 64 && bitoffset < (4096 - 64))
 			{
 				// 64 bit update
-				var offset = (uint)((index & maskOffIndex) >> 6);
-
 				bitmap.Store64(offset, set ? ulong.MaxValue : 0);
 
 				at += 64;
 				count -= 64;
 			}
-			else if (at % 32 == 0 && count >= 32)
+			else if (at % 32 == 0 && count >= 32 && bitoffset < (4096 - 32))
 			{
 				// 32 bit update
-				var offset = (uint)((index & maskOffIndex) >> 5);
-
 				bitmap.Store32(offset, set ? uint.MaxValue : 0);
 
 				at += 32;
 				count -= 32;
 			}
-			else if (at % 8 == 0 && count >= 8)
+			else if (at % 8 == 0 && count >= 8 && bitoffset < (4096 - 8))
 			{
 				// 8 bit update
-				var offset = (uint)((index & maskOffIndex) >> 5);
-
 				bitmap.Store8(offset, set ? byte.MaxValue : (byte)0);
 
 				at += 8;
@@ -242,12 +269,13 @@ public static class PhysicalPageAllocator
 			}
 			else
 			{
-				// one bit update
-				var offset = (uint)((index & maskOffIndex) >> 3);
+				// one bit at a time
 				var value = bitmap.Load8(offset);
 
-				var bit = (byte)(1 << index & 0b111);
-				value = (byte)(set ? value | bit : value & bit);
+				var shift = at & 0b111;
+				var bit = (byte)(1 << ((int)shift));
+
+				value = (byte)(set ? (value | bit) : (value & ~bit));
 
 				bitmap.Store8(offset, value);
 
@@ -261,145 +289,59 @@ public static class PhysicalPageAllocator
 	{
 		nextAt = at;
 
+		//Debug.WriteLine("CheckFreePage32:PhysicalPageAllocator()");
+		//Debug.WriteLine(" > count = ", count);
+
 		while (count > 0)
 		{
-			uint index = at >> 17;
-			uint slot = index * 4;
+			var index = at >> 15;              // upper 15+ bits -> index to bitmap
+			var bitoffset = at & 0x7FFF;       // lower 15 bits -> bit in bitmap
+			var offset = (bitoffset >> 5) * 4; // offset to 32bit value
 
-			var bitmap = BitMapIndexTable.GetBitMapEntry(slot);
+			var startbit = at & 0b11111;       // 0x1F = 5 bits on
 
-			byte start = (byte)(at & 0b11111);
-			uint diff = start + count - 1;
-			byte end = (byte)(diff <= 31 ? diff : 31);
-			byte size = (byte)(end - start + 1);
+			var bitlen = Math.Min(32 - startbit, count);    // NOTE: 32bit specific
+			var mask = bitlen == 32 ? uint.MaxValue : (~(uint.MaxValue << (int)bitlen)) << (int)startbit; // NOTE: 32bit specific
 
-			uint mask = BitSet32(start, size);
+			var bitmap = BitMapIndexTable.GetBitMapEntry(index); // NOTE: 32bit specific
+			var value = bitmap.Load32(offset);
 
-			uint offset32 = (at >> 10) & 0b11111;
+			var maskvalue = (~value) & mask;
 
-			var value = bitmap.Load32(offset32);
+			//Debug.WriteLine(" > at @ ", at);
+			//Debug.WriteLine("  > bitoffset = ", bitoffset);
+			//Debug.WriteLine("  > startbit = ", startbit);
+			//Debug.WriteLine("  > bitlen = ", bitlen);
+			//Debug.WriteLine("  > offset = ", offset);
+			//Debug.WriteLineHex("  > mask = ", mask);
+			//Debug.WriteLineHex("  > value = ", value);
+			//Debug.WriteLineHex("  > maskvalue = ", maskvalue);
 
-			if ((value & mask) == 0)
+			if (bitlen == 0)
+				Debug.Kill();
+
+			if (maskvalue == 0)
 			{
-				nextAt = at + size;
-				count -= size;
-				at += size;
+				nextAt = at + bitlen;
+				count -= bitlen;
+				at += bitlen;
 			}
 			else
 			{
-				nextAt = at + 1; // + GetLowestSetBit(value)
+				// Future optimization: return nextAt page of the first available bit after the first unavailble bit, and if not, then start at next 32-bit aligned page number
+				nextAt = at + 1;
+
+				//Debug.WriteLine(" > returns false, restart at: ", nextAt);
+
 				return false;
 			}
 		}
 
-		return true;
-	}
+		//Debug.WriteLine(" > returns true");
 
-	private static bool CheckFreePage(uint start, uint count, out uint restartAt)
-	{
-		//if (start < MinimumAvailablePage)
-		//{
-		//	// should never happen
-		//	restartAt = MinimumAvailablePage;
-		//	return false;
-		//}
-
-		var end = start + count;
-
-		if (end > MaximumAvailablePage || end > TotalPages)
-		{
-			restartAt = MinimumAvailablePage;
-			return false;
-		}
-
-		var indexShift = Pointer.Size == 4 ? 10 : 9;
-		var maskOffIndex = (uint)((1 << (indexShift + 1)) - 1);
-
-		var at = start;
-
-		while (count > 0)
-		{
-			var index = (int)(at >> indexShift);
-
-			var bitmap = BitMapIndexTable.GetBitMapEntry((uint)index);
-
-			if (at % 64 == 0 && count >= 64)
-			{
-				// 64 bit check
-				var offset = (uint)((index & maskOffIndex) >> 6);
-
-				var value = bitmap.Load64(offset);
-
-				if (value != ulong.MaxValue)
-				{
-					restartAt = at + 64;
-					return false;
-				}
-
-				at += 64;
-				count -= 64;
-			}
-			else if (at % 32 == 0 && count >= 32)
-			{
-				// 32 bit check
-				var offset = (uint)((index & maskOffIndex) >> 5);
-
-				var value = bitmap.Load32(offset);
-
-				if (value != uint.MaxValue)
-				{
-					restartAt = at + 32;
-					return false;
-				}
-
-				at += 32;
-				count -= 32;
-			}
-			else if (at % 8 == 0 && count >= 8)
-			{
-				// 8 bit check
-				var offset = (uint)((index & maskOffIndex) >> 5);
-
-				var value = bitmap.Load8(offset);
-
-				if (value != byte.MaxValue)
-				{
-					restartAt = at + 8;
-					return false;
-				}
-				at += 8;
-				count -= 8;
-			}
-			else
-			{
-				// one bit check
-				var offset = (uint)((index & maskOffIndex) >> 3);
-				var value = bitmap.Load8(offset);
-
-				var bit = (byte)(1 << index & 0b111) & value;
-
-				if (bit != 0)
-				{
-					restartAt = at + 1;
-					return false;
-				}
-
-				at += 1;
-				count -= 1;
-			}
-		}
-
-		restartAt = start + count + 1;
+		//Debug.Kill();
 
 		return true;
-	}
-
-	private static uint BitSet32(byte start, byte size)
-	{
-		if (size == 32)
-			return uint.MaxValue;
-
-		return ~(uint.MaxValue << size) << start;
 	}
 
 	#endregion Private API
