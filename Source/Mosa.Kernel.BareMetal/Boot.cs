@@ -25,7 +25,6 @@ public static class Boot
 
 		Console.Write(ConsoleColor.BrightGreen, "> Enabling debug logging...");
 		Debug.Setup(true);
-		Debug.WriteLine("Booting...");
 		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 
 		Console.Write(ConsoleColor.BrightGreen, "> Boot page allocator...");
@@ -34,14 +33,12 @@ public static class Boot
 
 		Console.Write(ConsoleColor.BrightGreen, "> Memory map...");
 		BootMemoryMap.Setup();
-		//BootMemoryMap.Dump();
+		BootMemoryMap.Dump();
 		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 
 		Console.Write(ConsoleColor.BrightGreen, "> Physical page allocator...");
 		PhysicalPageAllocator.Setup();
 		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
-
-		Debug.Kill();
 
 		Console.Write(ConsoleColor.BrightGreen, "> Page table...");
 		PageTable.Setup();
