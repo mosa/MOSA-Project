@@ -33,13 +33,30 @@ public static class Debug
 		WriteLine("##KILL##");
 	}
 
+	public static void Fatal(string message = null)
+	{
+		Write("Fatal: ");
+		Write(message);
+		WriteLine();
+		Kill();
+	}
+
+	public static void Fatal(string message, ulong value)
+	{
+		Write("Fatal: ");
+		Write(message);
+		WriteValue(value);
+		WriteLine();
+		Kill();
+	}
+
 	public static void Assert(bool condition, string message = null)
 	{
 		if (condition)
 			return;
 
-		Write("Assert failed: ");
-		WriteLine(message);
+		Write(message);
+		WriteLine();
 		Kill();
 	}
 
@@ -75,6 +92,9 @@ public static class Debug
 	public static void Write(string message)
 	{
 		if (!IsEnabled)
+			return;
+
+		if (message == null)
 			return;
 
 		foreach (var c in message)

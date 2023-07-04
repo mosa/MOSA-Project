@@ -10,7 +10,7 @@ public static class GCMemory
 	private static GCHeapList HeapList;
 	private static GCHeap CurrentHeap;
 
-	public static void Initialize()
+	public static void Setup()
 	{
 		//Debug.WriteLine("GCMemory:Setup()");
 
@@ -40,7 +40,7 @@ public static class GCMemory
 		var heapSize = CurrentHeap.Size;
 		var heapUsed = CurrentHeap.Used;
 
-		Debug.WriteLineHex("+ Allocating Memory: ", size);
+		Debug.WriteLine("+ Allocating Memory: ", size);
 
 		if (heapStart.IsNull || heapSize - heapUsed < size)
 		{
@@ -48,8 +48,6 @@ public static class GCMemory
 
 			// TODO - allocate memory for new heap
 		}
-
-		Debug.Kill();
 
 		var at = heapStart + heapUsed;
 		CurrentHeap.Used = heapUsed + size;

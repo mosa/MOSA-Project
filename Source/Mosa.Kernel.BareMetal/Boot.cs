@@ -64,19 +64,34 @@ public static class Boot
 		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 
 		Console.Write(ConsoleColor.BrightGreen, "> Garbage collection...");
-		GCMemory.Initialize();
+		GCMemory.Setup();
 		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 
+		//Console.Write(ConsoleColor.BrightGreen, "> Interrupt Manager...");
+		//InterreuptManager.Setup();
+		//Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
+
+		//Console.Write(ConsoleColor.BrightGreen, "> Interrupt Handler...");
+		//InterreuptManager.SetHandler(null);
+		//Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
+
+		//Console.Write(ConsoleColor.BrightGreen, "> Scheduler...");
 		//Scheduler.Setup();
-		//IDT.SetInterruptHandler(ProcessInterrupt);
+		//Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
+
+		int i = 10;
+
+		while (i != 20)
+		{
+		}
 
 		Console.WriteLine();
 		Console.WriteLine(ConsoleColor.BrightYellow, "Initializing services...");
 
 		// Create Service manager and basic services
-		Console.Write(ConsoleColor.BrightGreen, "> Service Manager...");
-		var serviceManager = new ServiceManager();
-		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
+		//Console.Write(ConsoleColor.BrightGreen, "> Service Manager...");
+		//var serviceManager = new ServiceManager();
+		//Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 
 		//	var DeviceService = new DeviceService();
 

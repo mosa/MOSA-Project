@@ -83,4 +83,16 @@ public static class PlatformPlug
 	{
 		SerialDebug.Write(c);
 	}
+
+	[Plug("Mosa.Kernel.BareMetal.Platform::InterruptHandlerSetup")]
+	public static void InterruptHandlerSetup()
+	{
+		IDT.Setup();
+	}
+
+	[Plug("Mosa.Kernel.BareMetal.Platform::InterruptHandlerSet")]
+	public static void InterruptHandlerSet(InterruptHandler handler)
+	{
+		IDT.SetInterruptHandler(handler);
+	}
 }

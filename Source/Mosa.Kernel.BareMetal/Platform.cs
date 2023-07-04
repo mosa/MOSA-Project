@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.DeviceSystem;
 using Mosa.Runtime;
 
 namespace Mosa.Kernel.BareMetal;
@@ -48,5 +49,11 @@ public static class Platform
 	{ }
 
 	public static void DebugWrite(byte c)
+	{ }
+
+	public static void InterruptHandlerSetup()
+	{ }
+
+	public static void InterruptHandlerSet(InterruptHandler handler)
 	{ }
 }

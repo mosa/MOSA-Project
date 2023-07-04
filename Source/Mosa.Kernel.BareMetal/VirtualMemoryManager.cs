@@ -45,10 +45,12 @@ public static class VirtualMemoryManager
 		// TODO - Release pages of virtual memory
 	}
 
-	public static void Allocate(Pointer virtualPage)
+	public static Pointer Allocate(Pointer virtualPage)
 	{
 		var physicalPage = PhysicalPageAllocator.Allocate();
 		Map(virtualPage, physicalPage);
+
+		return physicalPage;
 	}
 
 	public static void Map(Pointer virtualPage, Pointer physicalPage)
