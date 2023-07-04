@@ -35,8 +35,6 @@ jobs:
         run: dotnet restore Source/Mosa.sln
       - name: Build
         run: dotnet build Source/Mosa.sln /p:Version=${{ env.BUILD_VERSION }}
-      - name: Unit Test
-        run: dotnet test Source/Mosa.sln
       - name: Store Build Artifact
         uses: actions/upload-artifact@v3
         with:
@@ -67,7 +65,9 @@ jobs:
         with:
           name: Nuget Packages
           path: bin\nupkg
-          
+      - name: Unit Test
+        run: dotnet test Source/Mosa.sln
+
   windows-build-packaging:
     name: Windows Build Packaging
     needs: [windows-build, linux-build, generate-docs, windows-unit-testing, linux-unit-testing, windows-demo-testing, linux-demo-testing]
