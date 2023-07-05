@@ -20,7 +20,8 @@ public static class Boot
 		Console.SetBackground(ConsoleColor.Black);
 		Console.ClearScreen();
 
-		Console.WriteLine(ConsoleColor.Green, "MOSA BareMetal v0.1");
+		Console.WriteLine(ConsoleColor.BrightYellow, "MOSA BareMetal v0.1");
+
 		Console.WriteLine();
 
 		Console.WriteLine(ConsoleColor.BrightYellow, "Initializing kernel...");
