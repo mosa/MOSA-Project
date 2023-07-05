@@ -65,7 +65,9 @@ jobs:
         with:
           name: Nuget Packages
           path: bin\nupkg
-          
+      - name: Unit Test
+        run: dotnet test Source/Mosa.sln
+
   windows-build-packaging:
     name: Windows Build Packaging
     needs: [windows-build, linux-build, generate-docs, windows-unit-testing, linux-unit-testing, windows-demo-testing, linux-demo-testing]
@@ -130,6 +132,8 @@ jobs:
         run: dotnet restore Source/Mosa.Linux.sln
       - name: Build
         run: dotnet build Source/Mosa.Linux.sln
+      #- name: Unit Test
+      #  run: dotnet test Source/Mosa.Linux.sln
       - name: Store Build Artifact
         uses: actions/upload-artifact@v3
         with:

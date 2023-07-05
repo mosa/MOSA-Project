@@ -28,6 +28,7 @@ public static class PlatformPlug
 
 		SSE.Setup();
 		SerialDebug.Setup();
+		PIC.Setup();
 	}
 
 	[Plug("Mosa.Kernel.BareMetal.Platform::GetBootReservedRegion")]
@@ -61,7 +62,7 @@ public static class PlatformPlug
 	}
 
 	[Plug("Mosa.Kernel.BareMetal.Platform::PageTableMapVirtualAddressToPhysical")]
-	public static void PageTableMapVirtualAddressToPhysical(uint virtualAddress, uint physicalAddress, bool present = true)
+	public static void PageTableMapVirtualAddressToPhysical(Pointer virtualAddress, Pointer physicalAddress, bool present = true)
 	{
 		PageTable.MapVirtualAddressToPhysical(virtualAddress, physicalAddress, present);
 	}
@@ -78,9 +79,21 @@ public static class PlatformPlug
 		VGAConsole.Write(c);
 	}
 
-	[Plug("Mosa.Kernel.BareMetal.Platform::Debug")]
-	public static void Debug(byte c)
+	[Plug("Mosa.Kernel.BareMetal.Platform::DebugWrite")]
+	public static void DebugWrite(byte c)
 	{
 		SerialDebug.Write(c);
+	}
+
+	[Plug("Mosa.Kernel.BareMetal.Platform::InterruptHandlerSetup")]
+	public static void InterruptHandlerSetup()
+	{
+		IDT.Setup();
+	}
+
+	[Plug("Mosa.Kernel.BareMetal.Platform::InterruptHandlerSet")]
+	public static void InterruptHandlerSet(InterruptHandler handler)
+	{
+		IDT.SetInterruptHandler(handler);
 	}
 }

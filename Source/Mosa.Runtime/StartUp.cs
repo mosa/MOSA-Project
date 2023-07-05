@@ -6,12 +6,12 @@ public static class StartUp
 {
 	public static void Initialize()
 	{
-		SetInitialMemory();             // Legacy
+		SetInitialMemory();                 // Legacy
 
 		PlatformInitialization();
-		GarbageCollectionInitialization();
+		GarbageCollectionInitialization();  // Legacy
 
-		KernelInitialization();         // Legacy
+		KernelInitialization();             // Legacy
 
 		InitializeAssembly();
 		InitializeRuntimeMetadata();

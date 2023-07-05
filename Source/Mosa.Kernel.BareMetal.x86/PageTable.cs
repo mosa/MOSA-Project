@@ -13,26 +13,21 @@ internal static class PageTable
 {
 	public static Pointer PageDirectory;
 	public static Pointer PageTables;
-	public static GDTTable GDTTable;
+	public static GDT GDTTable;
 
 	public static void Setup()
 	{
-		Debug.WriteLine(ConsoleColor.BrightMagenta, "PageTable:Setup()");
+		Debug.WriteLine("x86.PageTable:Setup()");
 
-		GDTTable = new GDTTable(PhysicalPageAllocator.Reserve());
-		Debug.WriteLine(ConsoleColor.BrightMagenta, " > GDTTable");
+		GDTTable.Setup();
+		PageDirectory = PageFrameAllocator.Allocate(1024);
+		PageTables = PageFrameAllocator.Allocate(1024);
 
-		PageDirectory = PhysicalPageAllocator.Reserve(1024);
-		Debug.WriteLine(ConsoleColor.BrightMagenta, " > PageDirectory");
-
-		PageTables = PhysicalPageAllocator.Reserve(1024);
-		Debug.WriteLine(ConsoleColor.BrightMagenta, " > PageTables");
+		Debug.WriteLine("x86.PageTable:Setup() [Exit]");
 	}
 
 	public static void Initialize()
 	{
-		GDTTable.Setup();
-
 		// Setup Page Directory
 		for (uint index = 0; index < 1024; index++)
 		{
@@ -40,16 +35,24 @@ internal static class PageTable
 		}
 
 		// Clear the Page Tables
-		for (uint index = 0; index < PhysicalPageAllocator.TotalPages; index++)
+		for (uint index = 0; index < PageFrameAllocator.TotalPages; index++)
 		{
 			PageTables.Store32(index << 2, (index * Page.Size) | 0x04 | 0x02 | 0x01);
+		}
+
+		// Setup Identity Pages
+
+		// Map the first 128MB of memory
+		var endPage = new Pointer(128 * 1024 * 1024);
+
+		for (var page = Pointer.Zero; page < endPage; page += Page.Size)
+		{
+			MapVirtualAddressToPhysical(page, page, true);
 		}
 	}
 
 	public static void Enable()
 	{
-		GDTTable.Enable();
-
 		// Set CR3 register on processor - sets page directory
 		Native.SetCR3(PageDirectory.ToUInt32());
 
@@ -57,11 +60,11 @@ internal static class PageTable
 		Native.SetCR0(Native.GetCR0() | 0x80000000);
 	}
 
-	public static void MapVirtualAddressToPhysical(uint virtualAddress, uint physicalAddress, bool present = true)
+	public static void MapVirtualAddressToPhysical(Pointer virtualAddress, Pointer physicalAddress, bool present = true)
 	{
 		//FUTURE: traverse page directory from CR3 --- do not assume page table is linearly allocated
 
-		PageTables.Store32((virtualAddress & 0xFFFFF000u) >> 10, physicalAddress & 0xFFFFF000u | 0x04u | 0x02u | (present ? 0x1u : 0x0u));
+		PageTables.Store32((virtualAddress.ToUInt32() & 0xFFFFF000u) >> 10, physicalAddress.ToUInt32() & 0xFFFFF000u | 0x04u | 0x02u | (present ? 0x1u : 0x0u));
 	}
 
 	public static Pointer GetPhysicalAddressFromVirtual(Pointer virtualAddress)

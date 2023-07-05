@@ -9,9 +9,9 @@ namespace Mosa.Kernel.BareMetal.x86;
 /// <summary>
 /// GDT
 /// </summary>
-public struct GDTTable
+public struct GDT
 {
-	private Pointer Entry;
+	private Pointer GDTTable;
 
 	#region GDT Entry Offsets
 
@@ -28,24 +28,18 @@ public struct GDTTable
 
 	#endregion GDT Entry Offsets
 
-	public GDTTable(Pointer entry)
-	{
-		Entry = entry;
-	}
-
 	public void Setup()
 	{
-		Entry.Store16(0, GDTEntryOffset.TotalSize * 3 - 1);
-		Entry.StorePointer(2, Entry + 6);
+		GDTTable = BootPageAllocator.AllocatePage();   // PhysicalPageAllocator is okay too
+
+		GDTTable.Store16(0, GDTEntryOffset.TotalSize * 3 - 1);
+		GDTTable.StorePointer(2, GDTTable + 6);
 
 		Set(0, 0, 0, 0, 0);                // Null segment
 		Set(1, 0, 0xFFFFFFFF, 0x9A, 0xCF); // Code segment
 		Set(2, 0, 0xFFFFFFFF, 0x92, 0xCF); // Data segment
-	}
 
-	public void Enable()
-	{
-		SetLgdt(Entry);
+		SetLgdt(GDTTable);
 	}
 
 	[MethodImpl(MethodImplOptions.NoInlining)]
@@ -58,7 +52,7 @@ public struct GDTTable
 
 	private void Set(uint index, uint address, uint limit, byte access, byte granularity)
 	{
-		var entry = Entry + (6 + index * GDTEntryOffset.TotalSize);
+		var entry = GDTTable + (6 + index * GDTEntryOffset.TotalSize);
 
 		entry.Store16(GDTEntryOffset.BaseLow, (ushort)(address & 0xFFFF));
 		entry.Store8(GDTEntryOffset.BaseMiddle, (byte)((address >> 16) & 0xFF));

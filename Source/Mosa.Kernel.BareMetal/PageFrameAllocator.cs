@@ -6,7 +6,7 @@ using Mosa.Runtime;
 
 namespace Mosa.Kernel.BareMetal;
 
-public static class PhysicalPageAllocator
+public static class PageFrameAllocator
 {
 	#region Public Members
 
@@ -33,7 +33,7 @@ public static class PhysicalPageAllocator
 
 	public static void Setup()
 	{
-		Debug.WriteLine(ConsoleColor.BrightMagenta, "PhysicalPageAllocator:Setup()");
+		Debug.WriteLine("PageFrameAllocator:Setup()");
 
 		var bitMapIndexPage = BootPageAllocator.AllocatePage();
 		BitMapIndexTable = new BitMapIndexTable(bitMapIndexPage);
@@ -138,6 +138,9 @@ public static class PhysicalPageAllocator
 			SetPageBitMapEntry(startPage, pages, false);
 		}
 
+		// Reserve the first page
+		SetPageBitMapEntry(1, 1, false);
+
 		// TODO - reserve kernel code + memory
 
 		SearchNextStartPage = MinimumAvailablePage;
@@ -150,14 +153,14 @@ public static class PhysicalPageAllocator
 		SetPageBitMapEntry((uint)page.ToInt64() / Page.Size, count, true);
 	}
 
-	public static Pointer Reserve()
+	public static Pointer Allocate()
 	{
-		return Reserve(1, 1);
+		return Allocate(1, 1);
 	}
 
-	public static Pointer Reserve(uint count, uint alignment = 1)
+	public static Pointer Allocate(uint count, uint alignment = 1)
 	{
-		Debug.WriteLine("PhysicalPageAllocator::Reserve()");
+		Debug.WriteLine("PageFrameAllocator::Reserve()");
 
 		if (count == 0)
 			return Pointer.Zero;
@@ -191,7 +194,7 @@ public static class PhysicalPageAllocator
 
 				SearchNextStartPage = restartAt;
 
-				Debug.WriteLine(" > return: ", at);
+				//Debug.WriteLine(" > return: ", at);
 
 				return new Pointer(at * Page.Size);
 			}
@@ -205,8 +208,8 @@ public static class PhysicalPageAllocator
 				// warp around to the start of the bitmap
 				restartAt = MinimumAvailablePage;
 
-				if (wrap)
-					Debug.Kill();
+				//if (wrap)
+				//	Debug.Kill();
 
 				wrap = true;
 			}
@@ -317,8 +320,7 @@ public static class PhysicalPageAllocator
 			//Debug.WriteLineHex("  > value = ", value);
 			//Debug.WriteLineHex("  > maskvalue = ", maskvalue);
 
-			if (bitlen == 0)
-				Debug.Kill();
+			Debug.Assert(bitlen != 0, "PhysicalPageAllocator::CheckFreePage32() -> bitlen != 0");
 
 			if (maskvalue == 0)
 			{

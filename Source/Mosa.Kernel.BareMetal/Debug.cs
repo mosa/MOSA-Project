@@ -16,6 +16,8 @@ public static class Debug
 	public static void Setup(bool enable = false)
 	{
 		IsEnabled = enable;
+
+		WriteLine("[Debug Mode]");
 	}
 
 	public static void Initialize()
@@ -29,6 +31,45 @@ public static class Debug
 	public static void Kill()
 	{
 		WriteLine("##KILL##");
+	}
+
+	public static void Fatal(string message = null)
+	{
+		Write("Fatal: ");
+		Write(message);
+		WriteLine();
+		Kill();
+	}
+
+	public static void Fatal(string message, ulong value)
+	{
+		Write("Fatal: ");
+		Write(message);
+		WriteValue(value);
+		WriteLine();
+		Kill();
+	}
+
+	public static void Assert(bool condition, string message = null)
+	{
+		if (condition)
+			return;
+
+		Write(message);
+		WriteLine();
+		Kill();
+	}
+
+	public static void Assert(bool condition, string message, ulong value)
+	{
+		if (condition)
+			return;
+
+		Write("Assert failed: ");
+		Write(message);
+		WriteValue(value);
+		WriteLine();
+		Kill();
 	}
 
 	public static void WriteLine()
@@ -53,6 +94,9 @@ public static class Debug
 		if (!IsEnabled)
 			return;
 
+		if (message == null)
+			return;
+
 		foreach (var c in message)
 		{
 			Write(c);
@@ -69,7 +113,7 @@ public static class Debug
 		if (!IsEnabled)
 			return;
 
-		Platform.Debug(b);
+		Platform.DebugWrite(b);
 	}
 
 	// Helpers
@@ -126,31 +170,6 @@ public static class Debug
 		Write(message2);
 		WriteValueAsHex(value2);
 		Write(NewLine);
-	}
-
-	// Helpers with Color
-
-	public static void WriteLine(ConsoleColor color, string s)
-	{
-		//SetForground(color);
-		WriteLine(s);
-	}
-
-	public static void Write(ConsoleColor color, string s)
-	{
-		//SetForground(color);
-		Write(s);
-	}
-
-	public static void WriteLine(ConsoleColor color)
-	{
-		//SetForground(color);
-		Write('\n');
-	}
-
-	public static void Write(ConsoleColor color)
-	{
-		//SetForground(color);
 	}
 
 	// Following 4 methods copied from Console.cs
