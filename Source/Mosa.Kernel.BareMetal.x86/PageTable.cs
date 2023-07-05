@@ -39,6 +39,16 @@ internal static class PageTable
 		{
 			PageTables.Store32(index << 2, (index * Page.Size) | 0x04 | 0x02 | 0x01);
 		}
+
+		// Setup Identity Pages
+
+		// Map the first 128MB of memory
+		var endPage = new Pointer(128 * 1024 * 1024);
+
+		for (var page = Pointer.Zero; page < endPage; page += Page.Size)
+		{
+			MapVirtualAddressToPhysical(page, page, true);
+		}
 	}
 
 	public static void Enable()

@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using Mosa.Runtime;
 using Mosa.Runtime.x86;
 using Mosa.Kernel.BareMetal;
+using Mosa.Kernel.BareMetal.BootMemory;
 
 namespace Mosa.Kernel.BareMetal.x86;
 
@@ -2170,13 +2171,11 @@ public static class IDT
 	/// <param name="stackStatePointer">The stack state pointer.</param>
 	private static unsafe void ProcessInterrupt(uint stackStatePointer)
 	{
-		var stack = (IDTStack*)stackStatePointer;
+		var stack = new IDTStackEntry(new Pointer(stackStatePointer));
 
-		Debug.WriteLine(" > IDQ: ", stack->Interrupt);
+		//Debug.WriteLine(" > IDQ: ", stack.Interrupt);
 
-		//Debugger.Process(stack);
-
-		switch (stack->Interrupt)
+		switch (stack.Interrupt)
 		{
 			case 0:
 				Error(stack, "Divide Error");
@@ -2261,7 +2260,7 @@ public static class IDT
 				break;
 
 			//case Scheduler.ClockIRQ:
-			//Interrupt?.Invoke(stack->Interrupt, stack->ErrorCode);
+			//Interrupt?.Invoke(stack.Interrupt, stack.ErrorCode);
 			//Scheduler.ClockInterrupt(new Pointer(stackStatePointer));
 			//break;
 
@@ -2270,30 +2269,15 @@ public static class IDT
 			//break;
 
 			default:
-				Interrupt?.Invoke(stack->Interrupt, stack->ErrorCode);
+				Interrupt?.Invoke(stack.Interrupt, stack.ErrorCode);
 				break;
 		}
 
-		LocalAPIC.SendEndOfInterrupt(stack->Interrupt);
+		LocalAPIC.SendEndOfInterrupt(stack.Interrupt);
 	}
 
-	private static unsafe void Error(IDTStack* stack, string message)
+	private static unsafe void Error(IDTStackEntry stack, string message)
 	{
-		//Panic.ESP = stack->ESP;
-		//Panic.EBP = stack->EBP;
-		//Panic.EIP = stack->EIP;
-		//Panic.EAX = stack->EAX;
-		//Panic.EBX = stack->EBX;
-		//Panic.ECX = stack->ECX;
-		//Panic.EDX = stack->EDX;
-		//Panic.EDI = stack->EDI;
-		//Panic.ESI = stack->ESI;
-		//Panic.CS = stack->CS;
-		//Panic.ErrorCode = stack->ErrorCode;
-		//Panic.EFLAGS = stack->EFLAGS;
-		//Panic.Interrupt = stack->Interrupt;
-		//Panic.CR2 = Native.GetCR2();
-		//Panic.FS = Native.GetFS();
 		Debug.Fatal(message);
 	}
 
