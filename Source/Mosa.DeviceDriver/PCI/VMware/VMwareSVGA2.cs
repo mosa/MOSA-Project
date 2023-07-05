@@ -378,7 +378,7 @@ public class VMwareSVGA2 : BaseDeviceDriver, IGraphicsDevice
 		WriteRegister(SvgaRegister.Sync, 1);
 
 		while (ReadRegister(SvgaRegister.Busy) != 0)
-			HAL.Pause();
+			HAL.Yield();
 	}
 
 	private void WriteToFifo(uint value)

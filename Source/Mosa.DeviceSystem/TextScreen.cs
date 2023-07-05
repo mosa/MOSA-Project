@@ -75,7 +75,7 @@ public class TextScreen : ITextScreen
 
 		for (; ; )
 		{
-			HAL.Pause();
+			HAL.Yield();
 
 			var key = keyboard.GetKeyPressed();
 			if (key == null)

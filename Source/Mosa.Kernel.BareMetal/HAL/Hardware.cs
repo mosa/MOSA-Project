@@ -1,35 +1,26 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
 using Mosa.DeviceSystem;
-using Mosa.Kernel.x86;
 using Mosa.Runtime;
-using Mosa.Runtime.x86;
 
-namespace Mosa.Demo.SVGAWorld.x86.HAL;
+namespace Mosa.Kernel.BareMetal.HAL;
 
 /// <summary>
 /// Hardware
 /// </summary>
 public sealed class Hardware : BaseHardwareAbstraction
 {
-	/// <summary>
-	/// Gets the size of the page.
-	/// </summary>
-	public override uint PageSize => PageFrameAllocator.PageSize;
+	public override uint PageSize => Page.Size;
 
-	/// <summary>
-	/// Gets a block of memory from the kernel
-	/// </summary>
-	/// <param name="address">The address.</param>
-	/// <param name="size">The size.</param>
-	/// <returns></returns>
+	public override void DisableAllInterrupts()
+	{
+		//Native.Cli();
+	}
+
 	public override ConstrainedPointer GetPhysicalMemory(Pointer address, uint size)
 	{
-		var start = (uint)address.ToInt32();
-
 		// Map physical memory space to virtual memory space
-		for (var at = start; at < start + size; at += PageSize)
+		for (var at = address; at < address + size; at += PageSize)
 		{
 			PageTable.MapVirtualAddressToPhysical(at, at);
 		}
@@ -37,57 +28,28 @@ public sealed class Hardware : BaseHardwareAbstraction
 		return new ConstrainedPointer(address, size);
 	}
 
-	/// <summary>
-	/// Disables all interrupts.
-	/// </summary>
-	public override void DisableAllInterrupts()
-	{
-		Native.Cli();
-	}
-
-	/// <summary>
-	/// Enables all interrupts.
-	/// </summary>
 	public override void EnableAllInterrupts()
 	{
-		Native.Sti();
+		//Native.Sti();
 	}
 
-	/// <summary>
-	/// Processes the interrupt.
-	/// </summary>
-	/// <param name="irq">The irq.</param>
 	public override void ProcessInterrupt(byte irq)
 	{
 		DeviceSystem.HAL.ProcessInterrupt(irq);
 	}
 
-	/// <summary>
-	/// Sleeps the specified milliseconds.
-	/// </summary>
-	/// <param name="milliseconds">The milliseconds.</param>
 	public override void Sleep(uint milliseconds)
 	{
 	}
 
-	/// <summary>
-	/// Allocates the virtual memory.
-	/// </summary>
-	/// <param name="size">The size.</param>
-	/// <param name="alignment">The alignment.</param>
-	/// <returns></returns>
 	public override ConstrainedPointer AllocateVirtualMemory(uint size, uint alignment)
 	{
-		var address = KernelMemory.AllocateVirtualMemory(size);
+		//var address = KernelMemory.AllocateVirtualMemory(size);
 
-		return new ConstrainedPointer(address, size);
+		//return new ConstrainedPointer(address, size);
+		return new ConstrainedPointer(Pointer.Zero, 0);
 	}
 
-	/// <summary>
-	/// Gets the physical address.
-	/// </summary>
-	/// <param name="memory">The memory.</param>
-	/// <returns></returns>
 	public override Pointer TranslateVirtualToPhysicalAddress(Pointer virtualAddress)
 	{
 		return PageTable.GetPhysicalAddressFromVirtual(virtualAddress);
@@ -100,7 +62,8 @@ public sealed class Hardware : BaseHardwareAbstraction
 	/// <returns></returns>
 	public override BaseIOPortReadWrite GetReadWriteIOPort(ushort port)
 	{
-		return new X86IOPortReadWrite(port);
+		//return new X86IOPortReadWrite(port);
+		return null;
 	}
 
 	/// <summary>
@@ -110,7 +73,8 @@ public sealed class Hardware : BaseHardwareAbstraction
 	/// <returns></returns>
 	public override BaseIOPortRead GetReadIOPort(ushort port)
 	{
-		return new X86IOPortReadWrite(port);
+		//return new X86IOPortReadWrite(port);
+		return null;
 	}
 
 	/// <summary>
@@ -120,7 +84,8 @@ public sealed class Hardware : BaseHardwareAbstraction
 	/// <returns></returns>
 	public override BaseIOPortWrite GetWriteIOPort(ushort port)
 	{
-		return new X86IOPortWrite(port);
+		//return new X86IOPortWrite(port);
+		return null;
 	}
 
 	/// <summary>
@@ -138,8 +103,7 @@ public sealed class Hardware : BaseHardwareAbstraction
 	/// <param name="message">The message.</param>
 	public override void DebugWriteLine(string message)
 	{
-		Serial.Write(Serial.COM1, message);
-		Serial.Write(Serial.COM1, (byte)'\n');
+		Console.WriteLine(message);
 	}
 
 	/// <summary>
@@ -148,7 +112,7 @@ public sealed class Hardware : BaseHardwareAbstraction
 	/// <param name="message">The message.</param>
 	public override void Abort(string message)
 	{
-		Environment.FailFast(message);
+		Debug.Fatal(message);
 	}
 
 	/// <summary>
@@ -156,39 +120,39 @@ public sealed class Hardware : BaseHardwareAbstraction
 	/// </summary>
 	public override void Yield()
 	{
-		Native.Hlt();
+		//Native.Hlt();
 	}
 
 	#region IO Port Operations
 
 	public override byte In8(ushort address)
 	{
-		return Native.In8(address);
+		return Platform.In8(address);
 	}
 
 	public override ushort In16(ushort address)
 	{
-		return Native.In16(address);
+		return Platform.In16(address);
 	}
 
 	public override uint In32(ushort address)
 	{
-		return Native.In32(address);
+		return Platform.In32(address);
 	}
 
 	public override void Out8(ushort address, byte data)
 	{
-		Native.Out8(address, data);
+		Platform.Out8(address, data);
 	}
 
 	public override void Out16(ushort address, ushort data)
 	{
-		Native.Out16(address, data);
+		Platform.Out16(address, data);
 	}
 
 	public override void Out32(ushort address, uint data)
 	{
-		Native.Out32(address, data);
+		Platform.Out32(address, data);
 	}
 
 	#endregion IO Port Operations

@@ -109,16 +109,6 @@ public static class Boot
 		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 	}
 
-	[Plug("Mosa.Runtime.StartUp::StartApplication")]
-	public static void StartApplication()
-	{
-		Console.WriteLine();
-		Console.WriteLine(ConsoleColor.BrightYellow, "Executing Application...");
-
-		while (true)
-		{ }
-	}
-
 	[Plug("Mosa.Runtime.GC::AllocateMemory")]
 	private static Pointer AllocateMemory(uint size)
 	{

@@ -9,10 +9,13 @@ public class VirtIOQueue
 	public ushort Size { get; }
 
 	public uint DescriptorSize { get; }
+
 	public uint AvailableSize { get; }
+
 	public uint UsedSize { get; }
 
 	public Pointer Buffer { get; }
+
 	public uint BufferSize { get; }
 
 	private ushort index;
@@ -27,7 +30,7 @@ public class VirtIOQueue
 
 		// We need to allocate physical memory!
 		BufferSize = DescriptorSize + AvailableSize + UsedSize;
-		Buffer = GC.AllocateObject(BufferSize);
+		Buffer = GC.AllocateObject(BufferSize); // -Not a GC object
 
 		Internal.MemorySet(Buffer, 0, BufferSize);
 

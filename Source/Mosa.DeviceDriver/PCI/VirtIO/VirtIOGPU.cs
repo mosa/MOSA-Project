@@ -76,11 +76,11 @@ public class VirtIOGPU : BaseDeviceDriver, IGraphicsDevice
 
 		virtIoDevice.Start();
 
-		resourceHeader = GC.AllocateObject(40);
-		backingHeader = GC.AllocateObject(48);
-		linkHeader = GC.AllocateObject(48);
-		transferHeader = GC.AllocateObject(56);
-		flushHeader = GC.AllocateObject(48);
+		resourceHeader = GC.AllocateObject(40); // FIXME - Not a GC object
+		backingHeader = GC.AllocateObject(48); // FIXME
+		linkHeader = GC.AllocateObject(48); // FIXME
+		transferHeader = GC.AllocateObject(56); // FIXME
+		flushHeader = GC.AllocateObject(48); // FIXME
 
 		Internal.MemorySet(resourceHeader, 0, 40);
 		Internal.MemorySet(backingHeader, 0, 48);
@@ -104,7 +104,7 @@ public class VirtIOGPU : BaseDeviceDriver, IGraphicsDevice
 
 		// Allocate framebuffer
 		var frameBufferSize = width * height * 4;
-		var frameBuffer = GC.AllocateObject(frameBufferSize);
+		var frameBuffer = GC.AllocateObject(frameBufferSize); // -Not a GC object
 		FrameBuffer = new FrameBuffer32(new ConstrainedPointer(frameBuffer, frameBufferSize), width, height, (xx, yy) => (yy * width + xx) * 4);
 
 		// Attach it as backing storage to the resource

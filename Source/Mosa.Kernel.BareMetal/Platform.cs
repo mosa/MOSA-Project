@@ -56,4 +56,32 @@ public static class Platform
 
 	public static void InterruptHandlerSet(InterruptHandler handler)
 	{ }
+
+	#region IO Port Operations
+
+	public static byte In8(ushort address)
+	{
+		return 0;
+	}
+
+	public static ushort In16(ushort address)
+	{
+		return 0;
+	}
+
+	public static uint In32(ushort address)
+	{
+		return 0;
+	}
+
+	public static void Out8(ushort address, byte data)
+	{ }
+
+	public static void Out16(ushort address, ushort data)
+	{ }
+
+	public static void Out32(ushort address, uint data)
+	{ }
+
+	#endregion IO Port Operations
 }

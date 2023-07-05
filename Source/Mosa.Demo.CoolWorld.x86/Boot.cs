@@ -271,7 +271,7 @@ public static class Boot
 
 	public static void Pause()
 	{
-		DeviceSystem.HAL.Pause();
+		DeviceSystem.HAL.Yield();
 	}
 
 	public static void ForeverLoop()

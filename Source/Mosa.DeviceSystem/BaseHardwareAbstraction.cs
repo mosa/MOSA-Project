@@ -101,5 +101,21 @@ public abstract class BaseHardwareAbstraction
 	/// <summary>
 	/// Pause
 	/// </summary>
-	public abstract void Pause();
+	public abstract void Yield();
+
+	#region IO Port Operations
+
+	public abstract byte In8(ushort address);
+
+	public abstract ushort In16(ushort address);
+
+	public abstract uint In32(ushort address);
+
+	public abstract void Out8(ushort address, byte data);
+
+	public abstract void Out16(ushort address, ushort data);
+
+	public abstract void Out32(ushort address, uint data);
+
+	#endregion IO Port Operations
 }

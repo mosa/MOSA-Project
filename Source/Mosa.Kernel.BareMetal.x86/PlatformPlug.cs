@@ -96,4 +96,44 @@ public static class PlatformPlug
 	{
 		IDT.SetInterruptHandler(handler);
 	}
+
+	#region IO Port Operations
+
+	[Plug("Mosa.Kernel.BareMetal.Platform::In8")]
+	public static byte In8(ushort address)
+	{
+		return Native.In8(address);
+	}
+
+	[Plug("Mosa.Kernel.BareMetal.Platform::In16")]
+	public static ushort In16(ushort address)
+	{
+		return Native.In16(address);
+	}
+
+	[Plug("Mosa.Kernel.BareMetal.Platform::In32")]
+	public static uint In32(ushort address)
+	{
+		return Native.In32(address);
+	}
+
+	[Plug("Mosa.Kernel.BareMetal.Platform::Out8")]
+	public static void Out8(ushort address, byte data)
+	{
+		Native.Out8(address, data);
+	}
+
+	[Plug("Mosa.Kernel.BareMetal.Platform::Out16")]
+	public static void Out16(ushort address, ushort data)
+	{
+		Native.Out16(address, data);
+	}
+
+	[Plug("Mosa.Kernel.BareMetal.Platform::Out32")]
+	public static void Out32(ushort address, uint data)
+	{
+		Native.Out32(address, data);
+	}
+
+	#endregion IO Port Operations
 }

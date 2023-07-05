@@ -166,8 +166,8 @@ public static class HAL
 	/// <summary>
 	/// Pause
 	/// </summary>
-	public static void Pause()
+	public static void Yield()
 	{
-		hardwareAbstraction.Pause();
+		hardwareAbstraction.Yield();
 	}
 }
