@@ -4,7 +4,7 @@ using Mosa.Runtime;
 
 namespace Mosa.Kernel.BareMetal.BootMemory;
 
-public /*readonly*/ struct BootMemoryMapEntry
+public struct BootMemoryMapEntry
 {
 	private readonly Pointer Entry;
 
