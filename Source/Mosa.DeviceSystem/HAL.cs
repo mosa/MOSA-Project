@@ -15,21 +15,21 @@ public static class HAL
 	private static BaseHardwareAbstraction hardwareAbstraction;
 
 	/// <summary>
+	/// Sets the hardware abstraction.
+	/// </summary>
+	/// <param name="hardwareAbstraction">The hardware abstraction.</param>
+	public static void Set(BaseHardwareAbstraction hardwareAbstraction)
+	{
+		HAL.hardwareAbstraction = hardwareAbstraction;
+	}
+
+	/// <summary>
 	/// Interrupt Delegate
 	/// </summary>
 	/// <param name="irq">The irq.</param>
 	public delegate void HandleInterrupt(byte irq);
 
 	private static HandleInterrupt handleInterrupt;
-
-	/// <summary>
-	/// Sets the hardware abstraction.
-	/// </summary>
-	/// <param name="hardwareAbstraction">The hardware abstraction.</param>
-	public static void SetHardwareAbstraction(BaseHardwareAbstraction hardwareAbstraction)
-	{
-		HAL.hardwareAbstraction = hardwareAbstraction;
-	}
 
 	/// <summary>
 	/// Sets the interrupt handler.
@@ -170,4 +170,38 @@ public static class HAL
 	{
 		hardwareAbstraction.Yield();
 	}
+
+	#region IO Port Operations
+
+	public static byte In8(ushort address)
+	{
+		return hardwareAbstraction.In8(address);
+	}
+
+	public static ushort In16(ushort address)
+	{
+		return hardwareAbstraction.In16(address);
+	}
+
+	public static uint In32(ushort address)
+	{
+		return hardwareAbstraction.In32(address);
+	}
+
+	public static void Out8(ushort address, byte data)
+	{
+		hardwareAbstraction.Out8(address, data);
+	}
+
+	public static void Out16(ushort address, ushort data)
+	{
+		hardwareAbstraction.Out16(address, data);
+	}
+
+	public static void Out32(ushort address, uint data)
+	{
+		hardwareAbstraction.Out32(address, data);
+	}
+
+	#endregion IO Port Operations
 }

@@ -62,8 +62,7 @@ public sealed class Hardware : BaseHardwareAbstraction
 	/// <returns></returns>
 	public override BaseIOPortReadWrite GetReadWriteIOPort(ushort port)
 	{
-		//return new X86IOPortReadWrite(port);
-		return null;
+		return new IOPortReadWrite(port);
 	}
 
 	/// <summary>
@@ -73,8 +72,7 @@ public sealed class Hardware : BaseHardwareAbstraction
 	/// <returns></returns>
 	public override BaseIOPortRead GetReadIOPort(ushort port)
 	{
-		//return new X86IOPortReadWrite(port);
-		return null;
+		return new IOPortRead(port);
 	}
 
 	/// <summary>
@@ -84,8 +82,7 @@ public sealed class Hardware : BaseHardwareAbstraction
 	/// <returns></returns>
 	public override BaseIOPortWrite GetWriteIOPort(ushort port)
 	{
-		//return new X86IOPortWrite(port);
-		return null;
+		return new IOPortWrite(port);
 	}
 
 	/// <summary>

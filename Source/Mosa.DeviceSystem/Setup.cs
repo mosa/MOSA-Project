@@ -7,7 +7,7 @@ public static class Setup
 	public static void Initialize(BaseHardwareAbstraction hardware, HAL.HandleInterrupt handleInterrupt)
 	{
 		// Set device driver system to the hardware HAL
-		HAL.SetHardwareAbstraction(hardware);
+		HAL.Set(hardware);
 
 		// Set the interrupt handler
 		HAL.SetInterruptHandler(handleInterrupt);
