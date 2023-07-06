@@ -10,7 +10,7 @@ namespace Mosa.DeviceDriver.ISA;
 
 public class StandardMouse : BaseDeviceDriver, IMouseDevice
 {
-	private BaseIOPortReadWrite command, data;
+	private IOPortReadWrite command, data;
 
 	private const byte SetDefaults = 0xF6, EnableDataReporting = 0xF4, SetSampleRate = 0xF3;
 

@@ -50,34 +50,6 @@ public static class HAL
 	}
 
 	/// <summary>
-	/// Requests an IO read/write port object from the kernel
-	/// </summary>
-	/// <param name="port">The port number.</param>
-	/// <returns></returns>
-	public static BaseIOPortReadWrite GetReadWriteIOPort(ushort port)
-	{
-		return hardwareAbstraction.GetReadWriteIOPort(port);
-	}
-
-	/// <summary>
-	/// Requests an IO read port object from the kernel
-	/// </summary>
-	/// <param name="port">The port number.</param>
-	/// <returns></returns>
-	public static BaseIOPortRead GetReadIOPort(ushort port)
-	{
-		return hardwareAbstraction.GetReadIOPort(port);
-	}
-
-	/// <summary>
-	/// Requests an IO read/write port object from the kernel
-	/// </summary>
-	/// <param name="port">The port number.</param>
-	/// <returns></returns>
-	public static BaseIOPortWrite GetWriteIOPort(ushort port)
-	{
-		return hardwareAbstraction.GetWriteIOPort(port);
-	}
 
 	/// <summary>
 	/// Requests a block of memory from the kernel
@@ -90,12 +62,11 @@ public static class HAL
 		return hardwareAbstraction.GetPhysicalMemory(address, size);
 	}
 
-	/// <summary>
 	/// Disables all interrupts.
 	/// </summary>
 	internal static void DisableAllInterrupts()
 	{
-		hardwareAbstraction.DisableAllInterrupts();
+		hardwareAbstraction.DisableInterrupts();
 	}
 
 	/// <summary>
@@ -103,7 +74,7 @@ public static class HAL
 	/// </summary>
 	internal static void EnableAllInterrupts()
 	{
-		hardwareAbstraction.EnableAllInterrupts();
+		hardwareAbstraction.EnableInterrupts();
 	}
 
 	/// <summary>
@@ -124,16 +95,6 @@ public static class HAL
 	public static ConstrainedPointer AllocateMemory(uint size, uint alignment)
 	{
 		return hardwareAbstraction.AllocateVirtualMemory(size, alignment);
-	}
-
-	/// <summary>
-	/// Gets the physical address.
-	/// </summary>
-	/// <param name="memory">The memory.</param>
-	/// <returns></returns>
-	public static Pointer TranslateVirtualToPhysicalAddress(Pointer memory)
-	{
-		return hardwareAbstraction.TranslateVirtualToPhysicalAddress(memory);
 	}
 
 	/// <summary>

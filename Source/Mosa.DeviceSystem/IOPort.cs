@@ -2,86 +2,50 @@
 
 namespace Mosa.DeviceSystem;
 
-public sealed class IOPortRead : BaseIOPortRead
+public struct IOPortRead
 {
-	public IOPortRead(ushort address)
-	{
-		Address = address;
-	}
+	public ushort Address { get; private set; }
 
-	public override byte Read8()
-	{
-		return HAL.In8(Address);
-	}
+	public IOPortRead(ushort address) => Address = address;
 
-	public override ushort Read16()
-	{
-		return HAL.In16(Address);
-	}
+	public byte Read8() => HAL.In8(Address);
 
-	public override uint Read32()
-	{
-		return HAL.In32(Address);
-	}
+	public ushort Read16() => HAL.In16(Address);
+
+	public uint Read32() => HAL.In32(Address);
 }
 
-public sealed class IOPortWrite : BaseIOPortWrite
+public struct IOPortWrite
 {
-	public IOPortWrite(ushort address)
-	{
-		Address = address;
-	}
+	public ushort Address { get; private set; }
 
-	public override void Write8(byte data)
-	{
-		HAL.Out8(Address, data);
-	}
+	public IOPortWrite(ushort address) => Address = address;
 
-	public override void Write16(ushort data)
-	{
-		HAL.Out16(Address, data);
-	}
+	public void Write8(byte data) => HAL.Out8(Address, data);
 
-	public override void Write32(uint data)
-	{
-		HAL.Out32(Address, data);
-	}
+	public void Write16(ushort data) => HAL.Out16(Address, data);
+
+	public void Write32(uint data) => HAL.Out32(Address, data);
 }
 
-public sealed class IOPortReadWrite : BaseIOPortReadWrite
+public struct IOPortReadWrite
 {
+	public ushort Address { get; private set; }
+
 	public IOPortReadWrite(ushort address)
 	{
 		Address = address;
 	}
 
-	public override byte Read8()
-	{
-		return HAL.In8(Address);
-	}
+	public byte Read8() => HAL.In8(Address);
 
-	public override ushort Read16()
-	{
-		return HAL.In16(Address);
-	}
+	public ushort Read16() => HAL.In16(Address);
 
-	public override uint Read32()
-	{
-		return HAL.In32(Address);
-	}
+	public uint Read32() => HAL.In32(Address);
 
-	public override void Write8(byte data)
-	{
-		HAL.Out8(Address, data);
-	}
+	public void Write8(byte data) => HAL.Out8(Address, data);
 
-	public override void Write16(ushort data)
-	{
-		HAL.Out16(Address, data);
-	}
+	public void Write16(ushort data) => HAL.Out16(Address, data);
 
-	public override void Write32(uint data)
-	{
-		HAL.Out32(Address, data);
-	}
+	public void Write32(uint data) => HAL.Out32(Address, data);
 }

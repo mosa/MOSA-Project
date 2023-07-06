@@ -70,69 +70,70 @@ public class IDEController : BaseDeviceDriver, IDiskControllerDevice
 	/// <summary>
 	/// The data port
 	/// </summary>
-	protected BaseIOPortReadWrite DataPort;
+	protected IOPortReadWrite DataPort;
 
 	/// <summary>
 	/// The feature port
 	/// </summary>
-	protected BaseIOPortReadWrite FeaturePort;
+	protected IOPortReadWrite FeaturePort;
 
 	/// <summary>
 	/// The error port
 	/// </summary>
-	protected BaseIOPortRead ErrorPort;
+	protected IOPortRead ErrorPort;
 
 	/// <summary>
 	/// The sector count port
 	/// </summary>
-	protected BaseIOPortReadWrite SectorCountPort;
+	protected IOPortReadWrite SectorCountPort;
 
 	/// <summary>
 	/// The lba low port
 	/// </summary>
-	protected BaseIOPortReadWrite LBALowPort;
+	protected IOPortReadWrite LBALowPort;
 
 	/// <summary>
 	/// The lba mid port
 	/// </summary>
-	protected BaseIOPortReadWrite LBAMidPort;
+	protected IOPortReadWrite LBAMidPort;
 
 	/// <summary>
 	/// The lba high port
 	/// </summary>
-	protected BaseIOPortReadWrite LBAHighPort;
+	protected IOPortReadWrite LBAHighPort;
 
 	/// <summary>
 	/// The device head port
 	/// </summary>
-	protected BaseIOPortReadWrite DeviceHeadPort;
+	protected IOPortReadWrite DeviceHeadPort;
 
 	/// <summary>
 	/// The status port
 	/// </summary>
-	protected BaseIOPortRead StatusPort;
+	protected IOPortRead StatusPort;
 
 	/// <summary>
 	/// The command port
 	/// </summary>
-	protected BaseIOPortWrite CommandPort;
+	protected IOPortWrite CommandPort;
 
 	/// <summary>
 	/// The bus control register port
 	/// </summary>
-	protected BaseIOPortWrite ControlPort;
+	protected IOPortWrite ControlPort;
 
 	/// <summary>
 	/// The status port
 	/// </summary>
-	protected BaseIOPortRead AltStatusPort;
+	protected IOPortRead AltStatusPort;
 
 	/// <summary>
 	/// The maximum number of drives
 	/// </summary>
 	public uint MaximumDriveCount { get; private set; }
 
-	public enum AddressingMode { NotSupported, LBA28, LBA48 }
+	public enum AddressingMode
+	{ NotSupported, LBA28, LBA48 }
 
 	/// <summary>
 	/// Drive Info
@@ -166,7 +167,7 @@ public class IDEController : BaseDeviceDriver, IDiskControllerDevice
 		Device.ComponentID = Device.Resources.GetIOPortRegion(0).BaseIOPort;
 
 		DataPort = Device.Resources.GetIOPortReadWrite(0, 0);
-		ErrorPort = Device.Resources.GetIOPortReadWrite(0, 1);
+		ErrorPort = Device.Resources.GetIOPortRead(0, 1);
 		FeaturePort = Device.Resources.GetIOPortReadWrite(0, 1);
 		SectorCountPort = Device.Resources.GetIOPortReadWrite(0, 2);
 		LBALowPort = Device.Resources.GetIOPortReadWrite(0, 3);
@@ -174,9 +175,9 @@ public class IDEController : BaseDeviceDriver, IDiskControllerDevice
 		LBAHighPort = Device.Resources.GetIOPortReadWrite(0, 5);
 		DeviceHeadPort = Device.Resources.GetIOPortReadWrite(0, 6);
 		CommandPort = Device.Resources.GetIOPortWrite(0, 7);
-		StatusPort = Device.Resources.GetIOPortReadWrite(0, 7);
+		StatusPort = Device.Resources.GetIOPortRead(0, 7);
 		ControlPort = Device.Resources.GetIOPortWrite(1, 0);
-		AltStatusPort = Device.Resources.GetIOPortReadWrite(1, 6);
+		AltStatusPort = Device.Resources.GetIOPortRead(1, 6);
 
 		MaximumDriveCount = 2;
 
@@ -342,7 +343,8 @@ public class IDEController : BaseDeviceDriver, IDiskControllerDevice
 		return true;
 	}
 
-	protected enum SectorOperation { Read, Write }
+	protected enum SectorOperation
+	{ Read, Write }
 
 	/// <summary>
 	/// Performs the LBA28.

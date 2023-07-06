@@ -199,22 +199,28 @@ public unsafe class ACPI : BaseDeviceDriver, IACPI
 	private XSDT* XSDT;
 	private MADT* MADT;
 
-	private BaseIOPortWrite SMI_CommandPort;
+	private IOPortWrite SMI_CommandPort;
 
 	public short SLP_TYPa { get; set; }
+
 	public short SLP_TYPb { get; set; }
+
 	public short SLP_EN { get; set; }
 
-	public BaseIOPortWrite ResetAddress { get; set; }
-	public BaseIOPortWrite PM1aControlBlock { get; set; }
-	public BaseIOPortWrite PM1bControlBlock { get; set; }
+	public IOPortWrite ResetAddress { get; set; }
+
+	public IOPortWrite PM1aControlBlock { get; set; }
+
+	public IOPortWrite PM1bControlBlock { get; set; }
 
 	public byte ResetValue { get; set; }
 
 	public byte[] ProcessorIDs { get; set; }
+
 	public int ProcessorCount { get; set; }
 
 	public uint IOApicAddress { get; set; }
+
 	public uint LocalApicAddress { get; set; }
 
 	public override void Initialize()
@@ -310,30 +316,30 @@ public unsafe class ACPI : BaseDeviceDriver, IACPI
 					SLP_TYPb = (short)(S5Addr.Load16() << 10);
 					SLP_EN = 1 << 13;
 
-					SMI_CommandPort = HAL.GetWriteIOPort((ushort)FADT->SMI_CommandPort);
+					SMI_CommandPort = new IOPortWrite((ushort)FADT->SMI_CommandPort);
 
 					var has64BitPtr = false;
 
 					if (Descriptor->Revision == 2)
 					{
-						ResetAddress = HAL.GetWriteIOPort((ushort)FADT->ResetReg.Address);
+						ResetAddress = new IOPortWrite((ushort)FADT->ResetReg.Address);
 						ResetValue = FADT->ResetValue;
 
 						if (Pointer.Size == 8) // 64-bit
 						{
 							has64BitPtr = true;
 
-							PM1aControlBlock = HAL.GetWriteIOPort((ushort)FADT->X_PM1aControlBlock.Address);
+							PM1aControlBlock = new IOPortWrite((ushort)FADT->X_PM1aControlBlock.Address);
 							if (FADT->X_PM1bControlBlock.Address != 0)
-								PM1bControlBlock = HAL.GetWriteIOPort((ushort)FADT->X_PM1bControlBlock.Address);
+								PM1bControlBlock = new IOPortWrite((ushort)FADT->X_PM1bControlBlock.Address);
 						}
 					}
 
 					if (!has64BitPtr)
 					{
-						PM1aControlBlock = HAL.GetWriteIOPort((ushort)FADT->PM1aControlBlock);
+						PM1aControlBlock = new IOPortWrite((ushort)FADT->PM1aControlBlock);
 						if (FADT->PM1bControlBlock != 0)
-							PM1bControlBlock = HAL.GetWriteIOPort((ushort)FADT->PM1bControlBlock);
+							PM1bControlBlock = new IOPortWrite((ushort)FADT->PM1bControlBlock);
 					}
 				}
 		}

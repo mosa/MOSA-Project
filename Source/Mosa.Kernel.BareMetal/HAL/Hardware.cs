@@ -12,7 +12,7 @@ public sealed class Hardware : BaseHardwareAbstraction
 {
 	public override uint PageSize => Page.Size;
 
-	public override void DisableAllInterrupts()
+	public override void DisableInterrupts()
 	{
 		//Native.Cli();
 	}
@@ -28,7 +28,7 @@ public sealed class Hardware : BaseHardwareAbstraction
 		return new ConstrainedPointer(address, size);
 	}
 
-	public override void EnableAllInterrupts()
+	public override void EnableInterrupts()
 	{
 		//Native.Sti();
 	}
@@ -48,41 +48,6 @@ public sealed class Hardware : BaseHardwareAbstraction
 
 		//return new ConstrainedPointer(address, size);
 		return new ConstrainedPointer(Pointer.Zero, 0);
-	}
-
-	public override Pointer TranslateVirtualToPhysicalAddress(Pointer virtualAddress)
-	{
-		return PageTable.GetPhysicalAddressFromVirtual(virtualAddress);
-	}
-
-	/// <summary>
-	/// Requests an IO read/write port interface from the kernel
-	/// </summary>
-	/// <param name="port">The port number.</param>
-	/// <returns></returns>
-	public override BaseIOPortReadWrite GetReadWriteIOPort(ushort port)
-	{
-		return new IOPortReadWrite(port);
-	}
-
-	/// <summary>
-	/// Requests an IO read/write port interface from the kernel
-	/// </summary>
-	/// <param name="port">The port number.</param>
-	/// <returns></returns>
-	public override BaseIOPortRead GetReadIOPort(ushort port)
-	{
-		return new IOPortRead(port);
-	}
-
-	/// <summary>
-	/// Requests an IO write port interface from the kernel
-	/// </summary>
-	/// <param name="port">The port number.</param>
-	/// <returns></returns>
-	public override BaseIOPortWrite GetWriteIOPort(ushort port)
-	{
-		return new IOPortWrite(port);
 	}
 
 	/// <summary>

@@ -20,12 +20,12 @@ public sealed class PCIController : BaseDeviceDriver, IPCIControllerLegacy, IPCI
 	/// <summary>
 	/// The configuration address
 	/// </summary>
-	private BaseIOPortReadWrite configAddress;
+	private IOPortReadWrite configAddress;
 
 	/// <summary>
 	/// The configuration data
 	/// </summary>
-	private BaseIOPortReadWrite configData;
+	private IOPortReadWrite configData;
 
 	public override void Initialize()
 	{

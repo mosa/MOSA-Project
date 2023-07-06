@@ -15,25 +15,6 @@ public abstract class BaseHardwareAbstraction
 	public abstract uint PageSize { get; }
 
 	/// <summary>
-	/// Gets an IO read/write port object from the kernel
-	/// </summary>
-	/// <param name="port">The port number.</param>
-	/// <returns></returns>
-	public abstract BaseIOPortReadWrite GetReadWriteIOPort(ushort port);
-
-	/// <summary>
-	/// Gets an IO read port object from the kernel
-	/// </summary>
-	/// <param name="port">The port number.</param>
-	/// <returns></returns>
-	public abstract BaseIOPortRead GetReadIOPort(ushort port);
-
-	/// <summary>
-	/// Gets an IO write port object from the kernel
-	/// </summary>
-	/// <param name="port">The port number.</param>
-	/// <returns></returns>
-	public abstract BaseIOPortWrite GetWriteIOPort(ushort port);
 
 	/// <summary>
 	/// Gets a block of memory from the kernel
@@ -42,16 +23,14 @@ public abstract class BaseHardwareAbstraction
 	/// <param name="size">The size.</param>
 	/// <returns></returns>
 	public abstract ConstrainedPointer GetPhysicalMemory(Pointer address, uint size);
-
-	/// <summary>
 	/// Disables all interrupts.
 	/// </summary>
-	public abstract void DisableAllInterrupts();
+	public abstract void DisableInterrupts();
 
 	/// <summary>
 	/// Enables all interrupts.
 	/// </summary>
-	public abstract void EnableAllInterrupts();
+	public abstract void EnableInterrupts();
 
 	/// <summary>
 	/// Sleeps the specified milliseconds.
@@ -72,13 +51,6 @@ public abstract class BaseHardwareAbstraction
 	/// <param name="alignment">The alignment.</param>
 	/// <returns></returns>
 	public abstract ConstrainedPointer AllocateVirtualMemory(uint size, uint alignment);
-
-	/// <summary>
-	/// Gets the physical address.
-	/// </summary>
-	/// <param name="virtualAddress"></param>
-	/// <returns></returns>
-	public abstract Pointer TranslateVirtualToPhysicalAddress(Pointer virtualAddress);
 
 	/// <summary>
 	/// Debugs the write.

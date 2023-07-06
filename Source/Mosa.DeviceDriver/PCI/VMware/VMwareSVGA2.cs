@@ -195,7 +195,7 @@ public class VMwareSVGA2 : BaseDeviceDriver, IGraphicsDevice
 
 	#endregion Definitions
 
-	private BaseIOPortReadWrite indexPort, valuePort;
+	private IOPortReadWrite indexPort, valuePort;
 
 	private uint vramSize, bufferSize, fifoSize, capabilities;
 
@@ -266,7 +266,9 @@ public class VMwareSVGA2 : BaseDeviceDriver, IGraphicsDevice
 		WriteRegister(SvgaRegister.ConfigDone, 1);
 
 		bufferSize = ReadRegister(SvgaRegister.FrameBufferSize);
-		buffer = HAL.GetPhysicalMemory(new Pointer(ReadRegister(SvgaRegister.FrameBufferStart)), bufferSize);
+		var frame = new Pointer(ReadRegister(SvgaRegister.FrameBufferStart));
+
+		buffer = HAL.GetPhysicalMemory(frame, bufferSize);
 
 		var offset = ReadRegister(SvgaRegister.FrameBufferOffset);
 		var bytesPerLine = ReadRegister(SvgaRegister.BytesPerLine);
