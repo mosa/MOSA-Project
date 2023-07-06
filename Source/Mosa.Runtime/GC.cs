@@ -7,7 +7,7 @@ namespace Mosa.Runtime;
 public static class GC
 {
 	// This method will be plugged by the platform specific implementation;
-	// On x86, it is be Mosa.Kernel.x86.KernelMemory._AllocateMemory
+	// On x86, it is be Mosa.Kernel.x86.KernelMemory._AllocateMemory by the classic Kernel (not BareMetal)
 	private static Pointer AllocateMemory(uint size)
 	{
 		return Pointer.Zero;

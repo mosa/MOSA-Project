@@ -22,14 +22,7 @@ public static class GCMemory
 			Count = 0
 		};
 
-		var region = Platform.GetInitialGCMemoryPool();
-
-		CurrentHeap = HeapList.GetGCHeapEntry(HeapList.Count);
-
-		CurrentHeap.Address = region.Address;
-		CurrentHeap.Size = (uint)region.Size;
-
-		//Debug.WriteLineHex("  > Initial Size: ", region.Size);
+		CurrentHeap = AllocateHeap();
 
 		BootStatus.IsGCEnabled = true;
 	}
@@ -44,13 +37,26 @@ public static class GCMemory
 
 		if (heapStart.IsNull || heapSize - heapUsed < size)
 		{
-			//Debug.WriteLineHex("+ Allocated Memory: ", size);
-
-			// TODO - allocate memory for new heap
+			CurrentHeap = AllocateHeap();
+			CurrentHeap.Used = size;
+			return CurrentHeap.Address;
 		}
 
 		var at = heapStart + heapUsed;
 		CurrentHeap.Used = heapUsed + size;
 		return at;
+	}
+
+	private static GCHeap AllocateHeap()
+	{
+		var heap = HeapList.GetGCHeapEntry(HeapList.Count);
+
+		var size = 0x1000000u; // 16MB
+
+		heap.Address = VirtualPageAllocator.ReservePages(size / Page.Size);
+		heap.Size = size;
+		heap.Used = 0;
+
+		return heap;
 	}
 }

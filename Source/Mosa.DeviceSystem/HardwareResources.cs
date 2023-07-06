@@ -74,9 +74,9 @@ public sealed class HardwareResources
 	/// <param name="index">The region.</param>
 	/// <param name="offset">The index.</param>
 	/// <returns></returns>
-	public BaseIOPortReadWrite GetIOPortReadWrite(byte index, ushort offset)
+	public IOPortReadWrite GetIOPortReadWrite(byte index, ushort offset)
 	{
-		return HAL.GetReadWriteIOPort((ushort)(ioPortRegions[index].BaseIOPort + offset));
+		return new IOPortReadWrite((ushort)(ioPortRegions[index].BaseIOPort + offset));
 	}
 
 	/// <summary>
@@ -85,9 +85,9 @@ public sealed class HardwareResources
 	/// <param name="index">The region.</param>
 	/// <param name="offset">The index.</param>
 	/// <returns></returns>
-	public BaseIOPortRead GetIOPortRead(byte index, ushort offset)
+	public IOPortRead GetIOPortRead(byte index, ushort offset)
 	{
-		return HAL.GetReadIOPort((ushort)(ioPortRegions[index].BaseIOPort + offset));
+		return new IOPortRead((ushort)(ioPortRegions[index].BaseIOPort + offset));
 	}
 
 	/// <summary>
@@ -96,9 +96,9 @@ public sealed class HardwareResources
 	/// <param name="index">The region.</param>
 	/// <param name="offset">The index.</param>
 	/// <returns></returns>
-	public BaseIOPortWrite GetIOPortWrite(byte index, ushort offset)
+	public IOPortWrite GetIOPortWrite(byte index, ushort offset)
 	{
-		return HAL.GetWriteIOPort((ushort)(ioPortRegions[index].BaseIOPort + offset));
+		return new IOPortWrite((ushort)(ioPortRegions[index].BaseIOPort + offset));
 	}
 
 	/// <summary>

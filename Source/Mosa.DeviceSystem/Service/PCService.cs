@@ -39,16 +39,13 @@ public class PCService : BaseService
 		var address = ACPI.ResetAddress;
 		var value = ACPI.ResetValue;
 
-		if (address == null)
+		if (address.Address == 0)
 			return false;
 
+		// 1st method
 		address.Write8(value);
 
-		// Map memory
-		var ptr = HAL.GetPhysicalMemory((Pointer)(uint)address.Address, 1).Address;
-		var mappedResetReg = HAL.GetWriteIOPort((ushort)ptr);
-
-		mappedResetReg.Write8(value);
+		// 2nd method
 
 		// Write to PCI Configuration Space (we're actually writing on the host bridge controller)
 		// TODO: Fix
@@ -74,7 +71,7 @@ public class PCService : BaseService
 		}
 
 		ACPI.PM1aControlBlock.Write16((ushort)(ACPI.SLP_TYPa | ACPI.SLP_EN));
-		if (ACPI.PM1bControlBlock != null)
+		if (ACPI.PM1bControlBlock.Address != 0)
 			ACPI.PM1bControlBlock.Write16((ushort)(ACPI.SLP_TYPb | ACPI.SLP_EN));
 
 		return true;
