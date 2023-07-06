@@ -54,66 +54,66 @@ public class VirtIODevice
 			switch (configType)
 			{
 				case VirtIOConfigurationCapabilities.Common:
-				{
-					var pciBar = pciDevice.BaseAddresses[bar];
-
-					if (pciBar.Region == AddressType.Memory)
 					{
-						devBar = HAL.GetPhysicalMemory(pciBar.Address, pciBar.Size);
-						devOff = offset;
-					}
-					else
-					{
-						HAL.DebugWriteLine("[" + devName + "] common configuration bar is io; abort");
-						return;
-					}
+						var pciBar = pciDevice.BaseAddresses[bar];
 
-					break;
-				}
+						if (pciBar.Region == AddressType.Memory)
+						{
+							devBar = HAL.GetPhysicalMemory(pciBar.Address, pciBar.Size);
+							devOff = offset;
+						}
+						else
+						{
+							HAL.DebugWriteLine("[" + devName + "] common configuration bar is io; abort");
+							return;
+						}
+
+						break;
+					}
 				case VirtIOConfigurationCapabilities.Notify:
-				{
-					var pciBar = pciDevice.BaseAddresses[bar];
-
-					if (pciBar.Region == AddressType.Memory)
 					{
-						notifyCapabilityBar = HAL.GetPhysicalMemory(pciBar.Address, pciBar.Size);
-						notifyCapabilityOffset = offset;
-					}
-					else
-					{
-						HAL.DebugWriteLine("[" + devName + "] notify configuration bar is io; abort");
-						return;
-					}
+						var pciBar = pciDevice.BaseAddresses[bar];
 
-					notifyOffMultiplier = pciController.ReadConfig32(pciDevice, (byte)(capability.Offset + 16));
-					break;
-				}
+						if (pciBar.Region == AddressType.Memory)
+						{
+							notifyCapabilityBar = HAL.GetPhysicalMemory(pciBar.Address, pciBar.Size);
+							notifyCapabilityOffset = offset;
+						}
+						else
+						{
+							HAL.DebugWriteLine("[" + devName + "] notify configuration bar is io; abort");
+							return;
+						}
+
+						notifyOffMultiplier = pciController.ReadConfig32(pciDevice, (byte)(capability.Offset + 16));
+						break;
+					}
 				case VirtIOConfigurationCapabilities.ISR: break;
 				case VirtIOConfigurationCapabilities.Device:
-				{
-					var pciBar = pciDevice.BaseAddresses[bar];
-
-					if (pciBar.Region == AddressType.Memory)
 					{
-						DeviceConfigurationPointer = HAL.GetPhysicalMemory(pciBar.Address, pciBar.Size);
-						DeviceConfigurationOffset = offset;
-					}
-					else
-					{
-						HAL.DebugWriteLine("[" + devName + "] device configuration bar is io; abort");
-						return;
-					}
+						var pciBar = pciDevice.BaseAddresses[bar];
 
-					break;
-				}
+						if (pciBar.Region == AddressType.Memory)
+						{
+							DeviceConfigurationPointer = HAL.GetPhysicalMemory(pciBar.Address, pciBar.Size);
+							DeviceConfigurationOffset = offset;
+						}
+						else
+						{
+							HAL.DebugWriteLine("[" + devName + "] device configuration bar is io; abort");
+							return;
+						}
+
+						break;
+					}
 				case VirtIOConfigurationCapabilities.PCI: break;
 				case VirtIOConfigurationCapabilities.SharedMemory: break;
 				case VirtIOConfigurationCapabilities.Vendor: break;
 			}
 		}
 
-		buffer = GC.AllocateObject(512);
-		status = GC.AllocateObject(1);
+		buffer = GC.AllocateObject(512); // FIXME - Not a GC object
+		status = GC.AllocateObject(1); // FIXME
 
 		Internal.MemorySet(buffer, 0, 512);
 
@@ -127,7 +127,7 @@ public class VirtIODevice
 
 		devBar.Write8(devOff + VirtIOPCICommonConfiguration.DeviceStatus, VirtIOFlags.Reset);
 
-		while (devBar.Read8(devOff + VirtIOPCICommonConfiguration.DeviceStatus) != VirtIOFlags.Reset) {}
+		while (devBar.Read8(devOff + VirtIOPCICommonConfiguration.DeviceStatus) != VirtIOFlags.Reset) { }
 
 		devBar.Write8(devOff + VirtIOPCICommonConfiguration.DeviceStatus, (byte)(devBar.Read8(devOff + VirtIOPCICommonConfiguration.DeviceStatus) | VirtIOFlags.Acknowledge));
 		devBar.Write8(devOff + VirtIOPCICommonConfiguration.DeviceStatus, (byte)(devBar.Read8(devOff + VirtIOPCICommonConfiguration.DeviceStatus) | VirtIOFlags.Driver));
@@ -229,6 +229,6 @@ public class VirtIODevice
 
 		NotifyQueue(queue);
 
-		while (virtQueue.UsedRingRead16(VirtIOQueueUsedRing.Index) == 0) {}
+		while (virtQueue.UsedRingRead16(VirtIOQueueUsedRing.Index) == 0) { }
 	}
 }

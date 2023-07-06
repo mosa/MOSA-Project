@@ -14,12 +14,12 @@ public class CMOS : BaseDeviceDriver, IDateTime
 	/// <summary>
 	/// The command port
 	/// </summary>
-	protected BaseIOPortReadWrite commandPort;
+	protected IOPortReadWrite commandPort;
 
 	/// <summary>
 	/// The data port
 	/// </summary>
-	protected BaseIOPortReadWrite dataPort;
+	protected IOPortReadWrite dataPort;
 
 	public override void Initialize()
 	{

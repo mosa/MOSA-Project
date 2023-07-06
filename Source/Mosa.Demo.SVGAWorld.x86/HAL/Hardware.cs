@@ -40,7 +40,7 @@ public sealed class Hardware : BaseHardwareAbstraction
 	/// <summary>
 	/// Disables all interrupts.
 	/// </summary>
-	public override void DisableAllInterrupts()
+	public override void DisableInterrupts()
 	{
 		Native.Cli();
 	}
@@ -48,7 +48,7 @@ public sealed class Hardware : BaseHardwareAbstraction
 	/// <summary>
 	/// Enables all interrupts.
 	/// </summary>
-	public override void EnableAllInterrupts()
+	public override void EnableInterrupts()
 	{
 		Native.Sti();
 	}
@@ -84,46 +84,6 @@ public sealed class Hardware : BaseHardwareAbstraction
 	}
 
 	/// <summary>
-	/// Gets the physical address.
-	/// </summary>
-	/// <param name="memory">The memory.</param>
-	/// <returns></returns>
-	public override Pointer TranslateVirtualToPhysicalAddress(Pointer virtualAddress)
-	{
-		return PageTable.GetPhysicalAddressFromVirtual(virtualAddress);
-	}
-
-	/// <summary>
-	/// Requests an IO read/write port interface from the kernel
-	/// </summary>
-	/// <param name="port">The port number.</param>
-	/// <returns></returns>
-	public override BaseIOPortReadWrite GetReadWriteIOPort(ushort port)
-	{
-		return new X86IOPortReadWrite(port);
-	}
-
-	/// <summary>
-	/// Requests an IO read/write port interface from the kernel
-	/// </summary>
-	/// <param name="port">The port number.</param>
-	/// <returns></returns>
-	public override BaseIOPortRead GetReadIOPort(ushort port)
-	{
-		return new X86IOPortReadWrite(port);
-	}
-
-	/// <summary>
-	/// Requests an IO write port interface from the kernel
-	/// </summary>
-	/// <param name="port">The port number.</param>
-	/// <returns></returns>
-	public override BaseIOPortWrite GetWriteIOPort(ushort port)
-	{
-		return new X86IOPortWrite(port);
-	}
-
-	/// <summary>
 	/// Debugs the write.
 	/// </summary>
 	/// <param name="message">The message.</param>
@@ -154,8 +114,42 @@ public sealed class Hardware : BaseHardwareAbstraction
 	/// <summary>
 	/// Pause
 	/// </summary>
-	public override void Pause()
+	public override void Yield()
 	{
 		Native.Hlt();
 	}
+
+	#region IO Port Operations
+
+	public override byte In8(ushort address)
+	{
+		return Native.In8(address);
+	}
+
+	public override ushort In16(ushort address)
+	{
+		return Native.In16(address);
+	}
+
+	public override uint In32(ushort address)
+	{
+		return Native.In32(address);
+	}
+
+	public override void Out8(ushort address, byte data)
+	{
+		Native.Out8(address, data);
+	}
+
+	public override void Out16(ushort address, ushort data)
+	{
+		Native.Out16(address, data);
+	}
+
+	public override void Out32(ushort address, uint data)
+	{
+		Native.Out32(address, data);
+	}
+
+	#endregion IO Port Operations
 }

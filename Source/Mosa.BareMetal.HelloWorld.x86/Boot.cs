@@ -14,6 +14,7 @@ public static class Boot
 	/// </summary>
 	public static void Main()
 	{
+		VGAText.SetColor(VGAColor.Brown);
 		VGAText.Write((byte)'+');
 
 		while (true)

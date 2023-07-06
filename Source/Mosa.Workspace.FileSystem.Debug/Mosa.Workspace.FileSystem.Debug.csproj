@@ -20,8 +20,4 @@
 		<ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
 		<ProjectReference Include="..\Mosa.Utility.FileSystem\Mosa.Utility.FileSystem.csproj" />
 	</ItemGroup>
-	<ItemGroup>
-		<EmbeddedResource Include="..\..\Credits.txt" />
-		<EmbeddedResource Include="..\..\LICENSE.txt" />
-	</ItemGroup>
 </Project>

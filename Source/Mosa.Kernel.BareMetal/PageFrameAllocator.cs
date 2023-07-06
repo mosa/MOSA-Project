@@ -228,6 +228,21 @@ public static class PageFrameAllocator
 		}
 	}
 
+	public static void ReservePage(uint page)
+	{
+		SetPageBitMapEntry(page, 1, false);
+	}
+
+	public static void ReservePages(uint pages, uint count)
+	{
+		SetPageBitMapEntry(pages, count, false);
+	}
+
+	public static uint ConvertToPageNumber(Pointer page)
+	{
+		return (uint)page.ToUInt64() % Page.Size;
+	}
+
 	#endregion Public API
 
 	#region Private API

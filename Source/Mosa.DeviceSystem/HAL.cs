@@ -15,21 +15,21 @@ public static class HAL
 	private static BaseHardwareAbstraction hardwareAbstraction;
 
 	/// <summary>
+	/// Sets the hardware abstraction.
+	/// </summary>
+	/// <param name="hardwareAbstraction">The hardware abstraction.</param>
+	public static void Set(BaseHardwareAbstraction hardwareAbstraction)
+	{
+		HAL.hardwareAbstraction = hardwareAbstraction;
+	}
+
+	/// <summary>
 	/// Interrupt Delegate
 	/// </summary>
 	/// <param name="irq">The irq.</param>
 	public delegate void HandleInterrupt(byte irq);
 
 	private static HandleInterrupt handleInterrupt;
-
-	/// <summary>
-	/// Sets the hardware abstraction.
-	/// </summary>
-	/// <param name="hardwareAbstraction">The hardware abstraction.</param>
-	public static void SetHardwareAbstraction(BaseHardwareAbstraction hardwareAbstraction)
-	{
-		HAL.hardwareAbstraction = hardwareAbstraction;
-	}
 
 	/// <summary>
 	/// Sets the interrupt handler.
@@ -50,34 +50,6 @@ public static class HAL
 	}
 
 	/// <summary>
-	/// Requests an IO read/write port object from the kernel
-	/// </summary>
-	/// <param name="port">The port number.</param>
-	/// <returns></returns>
-	public static BaseIOPortReadWrite GetReadWriteIOPort(ushort port)
-	{
-		return hardwareAbstraction.GetReadWriteIOPort(port);
-	}
-
-	/// <summary>
-	/// Requests an IO read port object from the kernel
-	/// </summary>
-	/// <param name="port">The port number.</param>
-	/// <returns></returns>
-	public static BaseIOPortRead GetReadIOPort(ushort port)
-	{
-		return hardwareAbstraction.GetReadIOPort(port);
-	}
-
-	/// <summary>
-	/// Requests an IO read/write port object from the kernel
-	/// </summary>
-	/// <param name="port">The port number.</param>
-	/// <returns></returns>
-	public static BaseIOPortWrite GetWriteIOPort(ushort port)
-	{
-		return hardwareAbstraction.GetWriteIOPort(port);
-	}
 
 	/// <summary>
 	/// Requests a block of memory from the kernel
@@ -90,12 +62,11 @@ public static class HAL
 		return hardwareAbstraction.GetPhysicalMemory(address, size);
 	}
 
-	/// <summary>
 	/// Disables all interrupts.
 	/// </summary>
 	internal static void DisableAllInterrupts()
 	{
-		hardwareAbstraction.DisableAllInterrupts();
+		hardwareAbstraction.DisableInterrupts();
 	}
 
 	/// <summary>
@@ -103,7 +74,7 @@ public static class HAL
 	/// </summary>
 	internal static void EnableAllInterrupts()
 	{
-		hardwareAbstraction.EnableAllInterrupts();
+		hardwareAbstraction.EnableInterrupts();
 	}
 
 	/// <summary>
@@ -124,16 +95,6 @@ public static class HAL
 	public static ConstrainedPointer AllocateMemory(uint size, uint alignment)
 	{
 		return hardwareAbstraction.AllocateVirtualMemory(size, alignment);
-	}
-
-	/// <summary>
-	/// Gets the physical address.
-	/// </summary>
-	/// <param name="memory">The memory.</param>
-	/// <returns></returns>
-	public static Pointer TranslateVirtualToPhysicalAddress(Pointer memory)
-	{
-		return hardwareAbstraction.TranslateVirtualToPhysicalAddress(memory);
 	}
 
 	/// <summary>
@@ -166,8 +127,42 @@ public static class HAL
 	/// <summary>
 	/// Pause
 	/// </summary>
-	public static void Pause()
+	public static void Yield()
 	{
-		hardwareAbstraction.Pause();
+		hardwareAbstraction.Yield();
 	}
+
+	#region IO Port Operations
+
+	public static byte In8(ushort address)
+	{
+		return hardwareAbstraction.In8(address);
+	}
+
+	public static ushort In16(ushort address)
+	{
+		return hardwareAbstraction.In16(address);
+	}
+
+	public static uint In32(ushort address)
+	{
+		return hardwareAbstraction.In32(address);
+	}
+
+	public static void Out8(ushort address, byte data)
+	{
+		hardwareAbstraction.Out8(address, data);
+	}
+
+	public static void Out16(ushort address, ushort data)
+	{
+		hardwareAbstraction.Out16(address, data);
+	}
+
+	public static void Out32(ushort address, uint data)
+	{
+		hardwareAbstraction.Out32(address, data);
+	}
+
+	#endregion IO Port Operations
 }

@@ -15,25 +15,6 @@ public abstract class BaseHardwareAbstraction
 	public abstract uint PageSize { get; }
 
 	/// <summary>
-	/// Gets an IO read/write port object from the kernel
-	/// </summary>
-	/// <param name="port">The port number.</param>
-	/// <returns></returns>
-	public abstract BaseIOPortReadWrite GetReadWriteIOPort(ushort port);
-
-	/// <summary>
-	/// Gets an IO read port object from the kernel
-	/// </summary>
-	/// <param name="port">The port number.</param>
-	/// <returns></returns>
-	public abstract BaseIOPortRead GetReadIOPort(ushort port);
-
-	/// <summary>
-	/// Gets an IO write port object from the kernel
-	/// </summary>
-	/// <param name="port">The port number.</param>
-	/// <returns></returns>
-	public abstract BaseIOPortWrite GetWriteIOPort(ushort port);
 
 	/// <summary>
 	/// Gets a block of memory from the kernel
@@ -43,15 +24,14 @@ public abstract class BaseHardwareAbstraction
 	/// <returns></returns>
 	public abstract ConstrainedPointer GetPhysicalMemory(Pointer address, uint size);
 
-	/// <summary>
 	/// Disables all interrupts.
 	/// </summary>
-	public abstract void DisableAllInterrupts();
+	public abstract void DisableInterrupts();
 
 	/// <summary>
 	/// Enables all interrupts.
 	/// </summary>
-	public abstract void EnableAllInterrupts();
+	public abstract void EnableInterrupts();
 
 	/// <summary>
 	/// Sleeps the specified milliseconds.
@@ -74,13 +54,6 @@ public abstract class BaseHardwareAbstraction
 	public abstract ConstrainedPointer AllocateVirtualMemory(uint size, uint alignment);
 
 	/// <summary>
-	/// Gets the physical address.
-	/// </summary>
-	/// <param name="virtualAddress"></param>
-	/// <returns></returns>
-	public abstract Pointer TranslateVirtualToPhysicalAddress(Pointer virtualAddress);
-
-	/// <summary>
 	/// Debugs the write.
 	/// </summary>
 	/// <param name="message">The message.</param>
@@ -101,5 +74,21 @@ public abstract class BaseHardwareAbstraction
 	/// <summary>
 	/// Pause
 	/// </summary>
-	public abstract void Pause();
+	public abstract void Yield();
+
+	#region IO Port Operations
+
+	public abstract byte In8(ushort address);
+
+	public abstract ushort In16(ushort address);
+
+	public abstract uint In32(ushort address);
+
+	public abstract void Out8(ushort address, byte data);
+
+	public abstract void Out16(ushort address, ushort data);
+
+	public abstract void Out32(ushort address, uint data);
+
+	#endregion IO Port Operations
 }

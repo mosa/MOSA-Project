@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.DeviceSystem;
 using Mosa.Runtime;
 
 namespace Mosa.Kernel.BareMetal;
@@ -61,6 +62,39 @@ public static class VirtualPageAllocator
 	public static Pointer GetPhysicalAddress(Pointer virtualPage)
 	{
 		return PageTable.GetPhysicalAddressFromVirtual(virtualPage);
+	}
+
+	public static Pointer MapPhysical(Pointer physicalStart, uint size, bool virtualMap = false)
+	{
+		// Must be page aligned
+		if (physicalStart.ToUInt64() % Page.Size != 0 || size % Page.Size != 0)
+			return Pointer.Zero;
+
+		var start = PageFrameAllocator.ConvertToPageNumber(physicalStart);
+		var pages = size % Page.Size;
+
+		PageFrameAllocator.ReservePages(start, pages);
+
+		if (virtualMap)
+		{
+			var virtualStart = VirtualPageAllocator.ReservePages(pages);
+
+			for (var offset = 0u; offset < size; offset += Page.Size)
+			{
+				PageTable.MapVirtualAddressToPhysical(physicalStart + offset, virtualStart + offset, true);
+			}
+
+			return virtualStart;
+		}
+		else
+		{
+			for (var offset = 0u; offset < size; offset += Page.Size)
+			{
+				PageTable.MapVirtualAddressToPhysical(physicalStart + offset, physicalStart + offset, true);
+			}
+
+			return physicalStart;
+		}
 	}
 
 	#endregion Public API

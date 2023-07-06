@@ -31,7 +31,7 @@ public static class PageTable
 	/// <param name="physicalAddress">The physical address.</param>
 	public static void MapVirtualAddressToPhysical(Pointer virtualAddress, Pointer physicalAddress, bool present = true)
 	{
-		Platform.PageTableMapVirtualAddressToPhysical(virtualAddress, physicalAddress, present);
+		Platform.MapVirtualAddressToPhysical(virtualAddress, physicalAddress, present);
 	}
 
 	/// <summary>
