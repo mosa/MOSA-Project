@@ -12,25 +12,21 @@ public sealed class Hardware : BaseHardwareAbstraction
 {
 	public override uint PageSize => Page.Size;
 
-	public override void DisableInterrupts()
-	{
-		//Native.Cli();
-	}
-
 	public override ConstrainedPointer GetPhysicalMemory(Pointer address, uint size)
 	{
-		// Map physical memory space to virtual memory space
-		for (var at = address; at < address + size; at += PageSize)
-		{
-			PageTable.MapVirtualAddressToPhysical(at, at);
-		}
+		var pointer = VirtualPageAllocator.MapPhysical(address, size, false);
 
-		return new ConstrainedPointer(address, size);
+		return new ConstrainedPointer(pointer, size);
 	}
 
 	public override void EnableInterrupts()
 	{
-		//Native.Sti();
+		Platform.EnableInterrupts();
+	}
+
+	public override void DisableInterrupts()
+	{
+		Platform.DisableInterrupts();
 	}
 
 	public override void ProcessInterrupt(byte irq)

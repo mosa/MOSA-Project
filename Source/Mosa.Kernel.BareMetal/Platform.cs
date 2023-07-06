@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.DeviceSystem;
 using Mosa.Runtime;
 
 namespace Mosa.Kernel.BareMetal;
@@ -37,10 +36,10 @@ public static class Platform
 	public static void PageTableEnable()
 	{ }
 
-	public static void PageTableMapVirtualAddressToPhysical(Pointer virtualAddress, Pointer physicalAddress, bool present = true)
+	public static void MapVirtualAddressToPhysical(Pointer virtualAddress, Pointer physicalAddress, bool present = true)
 	{ }
 
-	public static Pointer PageTableGetPhysicalAddressFromVirtual(Pointer virtualAddress)
+	public static Pointer GetPhysicalAddressFromVirtual(Pointer virtualAddress)
 	{
 		return Pointer.Zero;
 	}
@@ -84,4 +83,10 @@ public static class Platform
 	{ }
 
 	#endregion IO Port Operations
+
+	public static void EnableInterrupts()
+	{ }
+
+	public static void DisableInterrupts()
+	{ }
 }

@@ -23,6 +23,7 @@ public abstract class BaseHardwareAbstraction
 	/// <param name="size">The size.</param>
 	/// <returns></returns>
 	public abstract ConstrainedPointer GetPhysicalMemory(Pointer address, uint size);
+
 	/// Disables all interrupts.
 	/// </summary>
 	public abstract void DisableInterrupts();
