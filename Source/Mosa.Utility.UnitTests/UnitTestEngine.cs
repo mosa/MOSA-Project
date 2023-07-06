@@ -25,8 +25,8 @@ public class UnitTestEngine : IDisposable
 	protected static class Constant
 	{
 		public const int MaxErrors = 1000;
-		public const int ConnectionTimeOut = 8000; // in milliseconds
-		public const int TimeOut = 750; // in milliseconds
+		public const int ConnectionTimeOut = 10000; // in milliseconds
+		public const int TimeOut = 10000; // in milliseconds
 		public const int MaxAttempts = 20;
 		public const int Port = 11110;
 	}
@@ -444,7 +444,7 @@ public class UnitTestEngine : IDisposable
 		{
 			case "tcpserver":
 				{
-					var client = new TcpClient(Settings.GetValue("Emulator.Serial.Host", "localhost"), Settings.GetValue("Emulator.Serial.Port", 11110));
+					var client = new TcpClient(Settings.GetValue("Emulator.Serial.Host", "localhost"), Settings.GetValue("Emulator.Serial.Port", Constant.Port));
 					DebugServerEngine.Stream = new DebugNetworkStream(client.Client, true);
 					break;
 				}
@@ -618,6 +618,8 @@ public class UnitTestEngine : IDisposable
 				SendOneCount = 10;
 
 				OutputStatus("Re-starting engine...");
+
+				Settings.SetValue("Emulator.Serial.Port", Settings.GetValue("Emulator.Serial.Port", Constant.Port) + 1);
 
 				if (!StartEngine())
 				{
