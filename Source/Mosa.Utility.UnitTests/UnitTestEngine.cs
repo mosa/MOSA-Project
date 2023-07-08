@@ -16,24 +16,12 @@ using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Utility.Configuration;
 using Mosa.Utility.DebugEngine;
 using Mosa.Utility.Launcher;
-using Reko.Core.Loading;
 
 namespace Mosa.Utility.UnitTests;
 
 public class UnitTestEngine : IDisposable
 {
-	#region Constants
-
-	protected static class Constant
-	{
-		public const int MaxErrors = 1000;
-		public const int ConnectionTimeOut = 10000; // in milliseconds
-		public const int TimeOut = 10000; // in milliseconds
-		public const int MaxAttempts = 20;
-		public const int Port = 11110;
-	}
-
-	#endregion Constants
+	
 
 	#region Public Methods
 
@@ -53,7 +41,6 @@ public class UnitTestEngine : IDisposable
 
 	private const int MaxSentQueue = 10000;
 	private const int MinSend = 2000;
-
 	private const int ConnectionDelay = 150;
 
 	#endregion Constants
@@ -64,19 +51,12 @@ public class UnitTestEngine : IDisposable
 	protected Starter Starter;
 	protected Process Process;
 
-	private MosaSettings MosaSettings = new Configuration.MosaSettings();
-
-	//private Settings Settings => MosaSettings.Settings;
+	private MosaSettings MosaSettings = new MosaSettings();
 
 	private readonly object _lock = new object();
 
 	private volatile bool Aborted;
 	private volatile bool Ready;
-
-	private int MaxErrors = Constant.MaxErrors;
-	private int ConnectionTimeOut = Constant.ConnectionTimeOut; // in milliseconds
-	private int MaxAttempts;
-	private int TimeOut = Constant.TimeOut; // in milliseconds
 
 	private readonly Queue<DebugMessage> Queue = new Queue<DebugMessage>();
 	private readonly HashSet<DebugMessage> Pending = new HashSet<DebugMessage>();
@@ -114,17 +94,12 @@ public class UnitTestEngine : IDisposable
 		MosaSettings.EmulatorCores = 1;
 		MosaSettings.Launcher = true;
 		MosaSettings.LauncherStart = false;
-		MosaSettings.LauncherExit = true; // REVIEW: really?
+		MosaSettings.LauncherExit = true;
 		MosaSettings.TraceLevel = 0;
 	}
 
 	private void Initialize()
 	{
-		MaxErrors = MosaSettings.MaxErrors;
-		TimeOut = MosaSettings.TimeOut;
-		ConnectionTimeOut = MosaSettings.ConnectionTimeOut;
-		MaxAttempts = MosaSettings.MaxAttempts;
-
 		if (TestAssemblyPath == null)
 		{
 			TestAssemblyPath = AppContext.BaseDirectory;
@@ -150,7 +125,7 @@ public class UnitTestEngine : IDisposable
 
 	private void ProcessQueueLaunch()
 	{
-		WatchDog = new WatchDog(TimeOut);
+		WatchDog = new WatchDog(MosaSettings.TimeOut);
 
 		try
 		{
@@ -373,7 +348,7 @@ public class UnitTestEngine : IDisposable
 
 		Thread.Sleep(50); // small delay to let emulator launch
 
-		var watchdog = new WatchDog(ConnectionTimeOut);
+		var watchdog = new WatchDog(MosaSettings.ConnectionTimeOut);
 
 		while (!watchdog.IsTimedOut)
 		{
@@ -438,7 +413,7 @@ public class UnitTestEngine : IDisposable
 
 	private bool WaitForReady()
 	{
-		var watchdog = new WatchDog(ConnectionTimeOut);
+		var watchdog = new WatchDog(MosaSettings.ConnectionTimeOut);
 
 		while (!watchdog.IsTimedOut)
 		{
@@ -458,7 +433,7 @@ public class UnitTestEngine : IDisposable
 	{
 		lock (_lock)
 		{
-			for (var attempt = 0; attempt < MaxAttempts; attempt++)
+			for (var attempt = 0; attempt < MosaSettings.MaxAttempts; attempt++)
 			{
 				OutputStatus("Starting Engine...");
 
@@ -638,7 +613,7 @@ public class UnitTestEngine : IDisposable
 
 				OutputStatus($"ERROR: {UnitTestSystem.OutputUnitTestResult(unitTest)}");
 
-				if (Errors >= MaxErrors)
+				if (Errors >= MosaSettings.MaxErrors)
 				{
 					Aborted = true;
 				}

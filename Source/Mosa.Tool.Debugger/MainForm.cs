@@ -114,6 +114,7 @@ public partial class MainForm : Form
 		MosaSettings.LoadAppLocations();
 		MosaSettings.SetDetfaultSettings();
 
+		MosaSettings.ImageFile = null;
 		MosaSettings.EmulatorGDB = true;
 		MosaSettings.EmulatorSerial = "TCPServer";
 		MosaSettings.EmulatorSerialPort = 1250;
@@ -170,7 +171,7 @@ public partial class MainForm : Form
 
 		dockPanel.ResumeLayout(true, true);
 
-		if (MosaSettings.ImageFile != null)
+		if (!string.IsNullOrEmpty(MosaSettings.ImageFile))
 		{
 			LaunchImage();
 		}
