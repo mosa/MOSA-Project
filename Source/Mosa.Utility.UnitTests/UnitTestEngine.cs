@@ -93,11 +93,11 @@ public class UnitTestEngine : IDisposable
 
 	#endregion Private Data Members
 
-	public UnitTestEngine(Settings settings)
+	public UnitTestEngine(MosaSettings mosaSettings)
 	{
 		MosaSettings.LoadAppLocations();
 		MosaSettings.SetDetfaultSettings();
-		MosaSettings.Merge(settings);
+		MosaSettings.Merge(mosaSettings);
 		SetRequiredSettings();
 		MosaSettings.NormalizeSettings();
 
@@ -116,7 +116,6 @@ public class UnitTestEngine : IDisposable
 		MosaSettings.LauncherStart = false;
 		MosaSettings.LauncherExit = true; // REVIEW: really?
 		MosaSettings.TraceLevel = 0;
-		//MosaSettings.ImageFolder = Path.Combine(Path.GetTempPath(), "MOSA-Test");
 	}
 
 	private void Initialize()

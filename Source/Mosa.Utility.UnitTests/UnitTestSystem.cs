@@ -34,7 +34,7 @@ public static class UnitTestSystem
 		Console.WriteLine();
 		Console.WriteLine("Starting Unit Test Engine...");
 
-		var unitTestEngine = new UnitTestEngine(mosaSettings.Settings);
+		var unitTestEngine = new UnitTestEngine(mosaSettings);
 
 		if (unitTestEngine.IsAborted)
 		{

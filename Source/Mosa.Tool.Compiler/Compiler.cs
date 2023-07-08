@@ -49,11 +49,12 @@ Example: Mosa.Tool.Compiler.exe -o Mosa.HelloWorld.x86.bin -platform x86 Mosa.He
 		{
 			var mosaSettings = new MosaSettings();
 
-			mosaSettings.SetDetfaultSettings();
 			mosaSettings.LoadAppLocations();
+			mosaSettings.SetDetfaultSettings();
 			mosaSettings.LoadArguments(args);
 			SetRequiredSettings(mosaSettings);
 			mosaSettings.ExpandSearchPaths();
+			mosaSettings.NormalizeSettings();
 			mosaSettings.UpdateFileAndPathSettings();
 
 			if (mosaSettings.SourceFiles == null && mosaSettings.SourceFiles.Count == 0)

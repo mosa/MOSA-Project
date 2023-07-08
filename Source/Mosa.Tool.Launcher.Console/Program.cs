@@ -2,7 +2,6 @@
 
 using System;
 using System.Diagnostics;
-using Mosa.Compiler.Common.Configuration;
 using Mosa.Compiler.Framework;
 using Mosa.Utility.Configuration;
 using Mosa.Utility.Launcher;
@@ -11,8 +10,6 @@ namespace Mosa.Tool.Launcher.Console;
 
 internal static class Program
 {
-	private static Settings Settings;
-
 	private static Builder Builder;
 
 	private static Stopwatch Stopwatch = new Stopwatch();
@@ -32,13 +29,13 @@ internal static class Program
 		{
 			var mosaSettings = new MosaSettings();
 
-			mosaSettings.SetDetfaultSettings();
 			mosaSettings.LoadAppLocations();
+			mosaSettings.SetDetfaultSettings();
 			mosaSettings.LoadArguments(args);
 			SetRequiredSettings(mosaSettings);
 			mosaSettings.ExpandSearchPaths();
-			mosaSettings.UpdateFileAndPathSettings();
 			mosaSettings.NormalizeSettings();
+			mosaSettings.UpdateFileAndPathSettings();
 
 			var compilerHooks = CreateCompilerHooks();
 

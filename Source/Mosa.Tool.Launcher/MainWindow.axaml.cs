@@ -86,11 +86,12 @@ public partial class MainWindow : Window
 
 	public void Initialize(string[] args)
 	{
-		MosaSettings.SetDetfaultSettings();
 		MosaSettings.LoadAppLocations();
+		MosaSettings.SetDetfaultSettings();
 		MosaSettings.LoadArguments(args);
 		SetRequiredSettings();
 		MosaSettings.ExpandSearchPaths();
+		MosaSettings.NormalizeSettings();
 		MosaSettings.UpdateFileAndPathSettings();
 
 		// Update the GUI settings

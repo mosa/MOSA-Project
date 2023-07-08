@@ -20,6 +20,7 @@ public class BaseLauncher
 		CompilerHooks = compilerHook;
 
 		MosaSettings = new MosaSettings();
+		MosaSettings.LoadAppLocations();
 		MosaSettings.SetDetfaultSettings();
 		MosaSettings.Merge(mosaSettings);
 		MosaSettings.NormalizeSettings();

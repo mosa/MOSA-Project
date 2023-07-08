@@ -282,15 +282,6 @@ public static class AppLocationsSettings
 				});
 	}
 
-	private static void Set(Settings settings, string name, string value)
-	{
-		if (value == null)
-			return;
-
-		var property = settings.CreateProperty(name);
-		property.Value = value;
-	}
-
 	public static string ReplaceWithParameters(string directory)
 	{
 		if (!string.IsNullOrWhiteSpace(ProgramFiles))
