@@ -10,7 +10,7 @@ public class DisassemblyStage : BaseMethodCompilerStage
 {
 	protected override void Run()
 	{
-		if (!CompilerSettings.EmitBinary)
+		if (!MosaSettings.EmitBinary)
 			return;
 
 		TraceDisassembly();

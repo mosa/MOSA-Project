@@ -17,6 +17,7 @@
     <WarningLevel>2</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Mosa.DeviceDriver\Mosa.DeviceDriver.csproj" />
     <ProjectReference Include="..\Mosa.DeviceSystem\Mosa.DeviceSystem.csproj" />
     <ProjectReference Include="..\Mosa.Runtime\Mosa.Runtime.csproj" />
   </ItemGroup>

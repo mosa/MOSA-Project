@@ -7,7 +7,6 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Windows.Forms;
-using Mosa.Compiler.Common.Configuration;
 using Mosa.Compiler.Framework;
 using Mosa.Tool.Debugger.DebugData;
 using Mosa.Tool.Debugger.GDB;
@@ -50,13 +49,15 @@ public partial class MainForm : Form
 	//private ScriptView scriptView;
 
 	public string Status
-	{ set { toolStripStatusLabel1.Text = value; toolStrip1.Refresh(); } }
+	{
+		set { toolStripStatusLabel1.Text = value; toolStrip1.Refresh(); }
+	}
 
 	public Connector GDBConnector { get; private set; }
 
 	public MemoryCache MemoryCache { get; private set; }
 
-	public Settings Settings { get; }
+	public MosaSettings MosaSettings { get; private set; }
 
 	public DebugSource DebugSource { get; set; } = new DebugSource();
 
@@ -77,76 +78,6 @@ public partial class MainForm : Form
 	private Process VMProcess;
 
 	public string VMHash;
-
-	#region Settings
-
-	public string BreakpointFile
-	{
-		get { return Settings.GetValue("Debugger.BreakpointFile", null); }
-		set { Settings.SetValue("Debugger.BreakpointFile", value); }
-	}
-
-	public string WatchFile
-	{
-		get { return Settings.GetValue("Debugger.WatchFile", null); }
-		set { Settings.SetValue("Debugger.WatchFile", value); }
-	}
-
-	public string DebugFile
-	{
-		get { return Settings.GetValue("CompilerDebug.DebugFile", "%DEFAULT%"); }
-		set { Settings.SetValue("CompilerDebug.DebugFile", value); }
-	}
-
-	public string ImageFile
-	{
-		get { return Settings.GetValue("Image.ImageFile", null); }
-		set { Settings.SetValue("Image.ImageFile", value); }
-	}
-
-	public int GDBPort
-	{
-		get { return Settings.GetValue("GDB.Port", 0); }
-		set { Settings.SetValue("GDB.Port", value); }
-	}
-
-	public string GDBHost
-	{
-		get { return Settings.GetValue("GDB.Host", "localhost"); }
-		set { Settings.SetValue("GDB.Host", value); }
-	}
-
-	public string ImageFormat
-	{
-		get { return Settings.GetValue("Image.Format", null); }
-		set { Settings.SetValue("Image.Format", value); }
-	}
-
-	public bool LauncherStart
-	{
-		get { return Settings.GetValue("Launcher.Start", false); }
-		set { Settings.SetValue("Launcher.Start", value); }
-	}
-
-	public bool EmulatorDisplay
-	{
-		get { return Settings.GetValue("Emulator.Display", false); }
-		set { Settings.SetValue("Emulator.Display", value); }
-	}
-
-	public string QEMU
-	{
-		get { return Settings.GetValue("AppLocation.Qemu", null); }
-		set { Settings.SetValue("AppLocation.Qemu", value); }
-	}
-
-	public string QEMUBios
-	{
-		get { return Settings.GetValue("AppLocation.QemuBIOS", null); }
-		set { Settings.SetValue("AppLocation.QemuBIOS", value); }
-	}
-
-	#endregion Settings
 
 	public MainForm()
 	{
@@ -179,14 +110,17 @@ public partial class MainForm : Form
 
 		launchView = new LaunchView(this);
 
-		Settings = AppLocationsSettings.GetAppLocations();
+		MosaSettings = new MosaSettings();
+		MosaSettings.LoadAppLocations();
+		MosaSettings.SetDetfaultSettings();
 
-		Settings.SetValue("Emulator.GDB", true);
-		Settings.SetValue("Emulator.Serial", "TCPServer");
-		Settings.SetValue("Emulator.Serial.Port", 1250);
-		Settings.SetValue("Emulator.Display", true);
+		MosaSettings.ImageFile = null;
+		MosaSettings.EmulatorGDB = true;
+		MosaSettings.EmulatorSerial = "TCPServer";
+		MosaSettings.EmulatorSerialPort = 1250;
+		MosaSettings.EmulatorDisplay = true;
 
-		GDBPort = 1234;
+		MosaSettings.GDBPort = 1234;
 
 		AppDomain.CurrentDomain.DomainUnload += (s, e) => { KillVMProcess(); };
 		AppDomain.CurrentDomain.ProcessExit += (s, e) => { KillVMProcess(); };
@@ -237,7 +171,7 @@ public partial class MainForm : Form
 
 		dockPanel.ResumeLayout(true, true);
 
-		if (ImageFile != null)
+		if (!string.IsNullOrEmpty(MosaSettings.ImageFile))
 		{
 			LaunchImage();
 		}
@@ -255,10 +189,10 @@ public partial class MainForm : Form
 
 	private void LoadDebugFile()
 	{
-		if (DebugFile != null && File.Exists(DebugFile))
+		if (MosaSettings.DebugFile != null && File.Exists(MosaSettings.DebugFile))
 		{
 			DebugSource = new DebugSource();
-			LoadDebugData.LoadDebugInfo(DebugFile, DebugSource);
+			LoadDebugData.LoadDebugInfo(MosaSettings.DebugFile, DebugSource);
 		}
 	}
 
@@ -382,7 +316,7 @@ public partial class MainForm : Form
 
 	private void btnConnect_Click(object sender, EventArgs e)
 	{
-		using (var connect = new ConnectWindow(Settings))
+		using (var connect = new ConnectWindow(MosaSettings))
 		{
 			if (connect.ShowDialog(this) == DialogResult.OK)
 			{
@@ -395,12 +329,12 @@ public partial class MainForm : Form
 	{
 		Disconnect();
 
-		if (GDBPort == 0)
+		if (MosaSettings.GDBPort == 0)
 		{
-			GDBPort = 1234;
+			MosaSettings.GDBPort = 1234;
 		}
 
-		GDBConnector = new Connector(new X86Platform(), GDBHost, GDBPort);
+		GDBConnector = new Connector(new X86Platform(), MosaSettings.GDBHost, MosaSettings.GDBPort);
 
 		GDBConnector.Connect();
 		GDBConnector.OnPause = OnPause;
@@ -625,11 +559,7 @@ public partial class MainForm : Form
 
 	public void LoadArguments(string[] args)
 	{
-		var arguments = Reader.ParseArguments(args, CommandLineArguments.Map);
-
-		Settings.Merge(arguments);
-
-		//UpdateDisplay(Settings);
+		MosaSettings.LoadArguments(args);
 	}
 
 	private void toolStripButton2_Click(object sender, EventArgs e)
@@ -655,12 +585,12 @@ public partial class MainForm : Form
 
 	public void LaunchImage(string imageFile, string debugFile, string breakpointFile, string watchFile)
 	{
-		ImageFile = imageFile;
-		ImageFormat = GetFormat(imageFile);
+		MosaSettings.ImageFile = imageFile;
+		MosaSettings.ImageFormat = GetFormat(imageFile);
 
-		DebugFile = debugFile;
-		BreakpointFile = breakpointFile;
-		WatchFile = watchFile;
+		MosaSettings.DebugFile = debugFile;
+		MosaSettings.BreakpointFile = breakpointFile;
+		MosaSettings.WatchFile = watchFile;
 
 		LaunchImage();
 	}
@@ -693,7 +623,7 @@ public partial class MainForm : Form
 
 		if (!VMProcess.HasExited)
 		{
-			VMProcess.Kill();
+			VMProcess.Kill(true);
 			VMProcess.WaitForExit();
 		}
 
@@ -719,7 +649,7 @@ public partial class MainForm : Form
 	{
 		var compilerHook = CreateCompilerHooks();
 
-		var starter = new Starter(Settings, compilerHook);
+		var starter = new Starter(MosaSettings, compilerHook);
 
 		VMProcess = starter.LaunchVM();
 
@@ -738,19 +668,19 @@ public partial class MainForm : Form
 
 	public void LoadBreakPoints()
 	{
-		if (BreakpointFile == null || !File.Exists(BreakpointFile))
+		if (MosaSettings.BreakpointFile == null || !File.Exists(MosaSettings.BreakpointFile))
 			return;
 
 		var remap = false;
 
-		foreach (var line in File.ReadAllLines(BreakpointFile))
+		foreach (var line in File.ReadAllLines(MosaSettings.BreakpointFile))
 		{
 			if (string.IsNullOrEmpty(line))
 				continue;
 
 			if (line.StartsWith("#HASH: "))
 			{
-				if (ImageFile != null && File.Exists(ImageFile))
+				if (MosaSettings.ImageFile != null && File.Exists(MosaSettings.ImageFile))
 				{
 					var hash = line.Substring(7).Trim();
 
@@ -787,19 +717,19 @@ public partial class MainForm : Form
 
 	public void LoadWatches()
 	{
-		if (WatchFile == null || !File.Exists(WatchFile))
+		if (MosaSettings.WatchFile == null || !File.Exists(MosaSettings.WatchFile))
 			return;
 
 		var remap = false;
 
-		foreach (var line in File.ReadAllLines(WatchFile))
+		foreach (var line in File.ReadAllLines(MosaSettings.WatchFile))
 		{
 			if (string.IsNullOrEmpty(line))
 				continue;
 
 			if (line.StartsWith("#HASH: "))
 			{
-				if (ImageFile != null && File.Exists(ImageFile))
+				if (MosaSettings.ImageFile != null && File.Exists(MosaSettings.ImageFile))
 				{
 					var hash = line.Substring(7).Trim();
 
@@ -862,9 +792,9 @@ public partial class MainForm : Form
 	{
 		VMHash = null;
 
-		if (ImageFile != null && File.Exists(ImageFile))
+		if (MosaSettings.ImageFile != null && File.Exists(MosaSettings.ImageFile))
 		{
-			VMHash = CalculateFileHash(ImageFile);
+			VMHash = CalculateFileHash(MosaSettings.ImageFile);
 		}
 	}
 

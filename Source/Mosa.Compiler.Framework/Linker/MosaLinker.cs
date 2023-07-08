@@ -7,6 +7,7 @@ using System.IO;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.Linker.Elf;
+using Mosa.Utility.Configuration;
 
 namespace Mosa.Compiler.Framework.Linker;
 
@@ -15,7 +16,7 @@ namespace Mosa.Compiler.Framework.Linker;
 /// </summary>
 public sealed class MosaLinker
 {
-	public LinkerSettings LinkerSettings;
+	public MosaSettings MosaSettings;
 
 	public List<LinkerSymbol> Symbols { get; } = new List<LinkerSymbol>();
 
@@ -46,9 +47,9 @@ public sealed class MosaLinker
 	{
 		Compiler = compiler;
 
-		LinkerSettings = new LinkerSettings(compiler.CompilerSettings.Settings);
+		MosaSettings = compiler.MosaSettings;
 
-		LinkerFormatType = LinkerSettings.LinkerFormat.ToLowerInvariant() == "elf64" ? LinkerFormatType.Elf64 : LinkerFormatType.Elf32;
+		LinkerFormatType = MosaSettings.LinkerFormat == "elf64" ? LinkerFormatType.Elf64 : LinkerFormatType.Elf32;
 
 		ElfLinker = new ElfLinker(this, LinkerFormatType, compiler.Architecture.ElfMachineType);
 
@@ -160,7 +161,7 @@ public sealed class MosaLinker
 
 	private void LayoutObjectsAndSections()
 	{
-		var virtualAddress = LinkerSettings.BaseAddress;
+		var virtualAddress = MosaSettings.BaseAddress;
 
 		// Sort the list --- helpful for debugging
 		Symbols.Sort((y, x) => x.Name.CompareTo(y.Name));

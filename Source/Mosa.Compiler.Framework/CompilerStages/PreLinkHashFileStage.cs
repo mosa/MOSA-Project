@@ -34,7 +34,7 @@ public class PreLinkHashFileStage : BaseCompilerStage
 
 	protected override void Finalization()
 	{
-		Generate(CompilerSettings.PreLinkHashFile);
+		Generate(MosaSettings.PreLinkHashFile);
 	}
 
 	protected void Generate(string filename)

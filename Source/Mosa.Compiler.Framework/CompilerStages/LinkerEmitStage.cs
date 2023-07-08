@@ -13,17 +13,17 @@ public sealed class LinkerEmitStage : BaseCompilerStage
 {
 	protected override void Finalization()
 	{
-		if (!CompilerSettings.EmitBinary)
+		if (!MosaSettings.EmitBinary)
 			return;
 
-		if (string.IsNullOrEmpty(CompilerSettings.OutputFile))
+		if (string.IsNullOrEmpty(MosaSettings.OutputFile))
 			return;
 
 		Compiler.PostEvent(CompilerEvent.LinkingStart);
 
-		File.Delete(CompilerSettings.OutputFile);
+		File.Delete(MosaSettings.OutputFile);
 
-		using (var file = new FileStream(CompilerSettings.OutputFile, FileMode.Create))
+		using (var file = new FileStream(MosaSettings.OutputFile, FileMode.Create))
 		{
 			Linker.Emit(file);
 		}

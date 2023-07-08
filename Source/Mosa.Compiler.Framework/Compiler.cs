@@ -13,6 +13,7 @@ using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
+using Mosa.Utility.Configuration;
 
 namespace Mosa.Compiler.Framework;
 
@@ -58,7 +59,7 @@ public sealed class Compiler
 	/// <summary>
 	/// Gets the compiler options.
 	/// </summary>
-	public CompilerSettings CompilerSettings { get; }
+	public MosaSettings MosaSettings { get; }
 
 	/// <summary>
 	/// Gets the method scanner.
@@ -151,60 +152,60 @@ public sealed class Compiler
 
 	#region Static Methods
 
-	private static List<BaseCompilerStage> GetDefaultCompilerPipeline(CompilerSettings compilerSettings, bool is32BitPlatform) => new List<BaseCompilerStage>
+	private static List<BaseCompilerStage> GetDefaultCompilerPipeline(MosaSettings mosaSettings, bool is32BitPlatform) => new List<BaseCompilerStage>
 	{
 		new InlinedSetupStage(),
 		new UnitTestStage(),
 		new TypeInitializerStage(),
-		compilerSettings.Devirtualization ? new DevirtualizationStage() : null,
+		mosaSettings.Devirtualization ? new DevirtualizationStage() : null,
 		new StaticFieldStage(),
 		new MethodTableStage(),
 		new ExceptionTableStage(),
 		new MetadataStage(),
-		!string.IsNullOrEmpty(compilerSettings.PreLinkHashFile) ? new PreLinkHashFileStage() : null,
+		!string.IsNullOrEmpty(mosaSettings.PreLinkHashFile) ? new PreLinkHashFileStage() : null,
 		new LinkerLayoutStage(),
-		!string.IsNullOrEmpty(compilerSettings.PostLinkHashFile) ? new PostLinkHashFileStage() : null,
-		!string.IsNullOrEmpty(compilerSettings.CompileTimeFile) ? new MethodCompileTimeStage() : null,
-		!string.IsNullOrEmpty(compilerSettings.OutputFile) && compilerSettings.EmitBinary ? new LinkerEmitStage() : null,
-		!string.IsNullOrEmpty(compilerSettings.MapFile) ? new MapFileStage() : null,
-		!string.IsNullOrEmpty(compilerSettings.DebugFile) ? new DebugFileStage() : null,
-		!string.IsNullOrEmpty(compilerSettings.InlinedFile) ? new InlinedFileStage() : null,
+		!string.IsNullOrEmpty(mosaSettings.PostLinkHashFile) ? new PostLinkHashFileStage() : null,
+		!string.IsNullOrEmpty(mosaSettings.CompileTimeFile) ? new MethodCompileTimeStage() : null,
+		!string.IsNullOrEmpty(mosaSettings.OutputFile) && mosaSettings.EmitBinary ? new LinkerEmitStage() : null,
+		!string.IsNullOrEmpty(mosaSettings.MapFile) ? new MapFileStage() : null,
+		!string.IsNullOrEmpty(mosaSettings.DebugFile) ? new DebugFileStage() : null,
+		!string.IsNullOrEmpty(mosaSettings.InlinedFile) ? new InlinedFileStage() : null,
 	};
 
-	private static List<BaseMethodCompilerStage> GetDefaultMethodPipeline(CompilerSettings compilerSettings, bool is64BitPlatform) => new List<BaseMethodCompilerStage>
+	private static List<BaseMethodCompilerStage> GetDefaultMethodPipeline(MosaSettings mosaSettings, bool is64BitPlatform) => new List<BaseMethodCompilerStage>
 	{
 		new CILDecoderStage(),
 		new ExceptionStage(),
 		new IRTransformsStage(),
-		compilerSettings.Devirtualization ? new DevirtualizeCallStage() : null,
+		mosaSettings.Devirtualization ? new DevirtualizeCallStage() : null,
 		new PlugStage(),
 		new RuntimeStage(),
 
-		compilerSettings.InlineMethods || compilerSettings.InlineExplicit ? new InlineStage() : null,
+		mosaSettings.InlineMethods || mosaSettings.InlineExplicit ? new InlineStage() : null,
 
-		compilerSettings.BasicOptimizations ? new OptimizationStage(false) : null,
-		compilerSettings.SSA ? new EdgeSplitStage() : null,
-		compilerSettings.SSA ? new EnterSSAStage() : null,
-		compilerSettings.BasicOptimizations && compilerSettings.SSA ? new OptimizationStage(false) : null,
-		compilerSettings.ValueNumbering && compilerSettings.SSA ? new ValueNumberingStage() : null,
-		compilerSettings.LoopInvariantCodeMotion && compilerSettings.SSA ? new LoopInvariantCodeMotionStage() : null,
-		compilerSettings.SparseConditionalConstantPropagation && compilerSettings.SSA ? new SparseConditionalConstantPropagationStage() : null,
-		compilerSettings.BasicOptimizations && compilerSettings.SSA && (compilerSettings.ValueNumbering || compilerSettings.LoopInvariantCodeMotion || compilerSettings.SparseConditionalConstantPropagation) ? new OptimizationStage(false) : null,
-		compilerSettings.BitTracker ? new BitTrackerStage() : null,
-		compilerSettings.BasicOptimizations && compilerSettings.BitTracker ? new OptimizationStage(false) : null,
-		compilerSettings.BasicOptimizations && compilerSettings.LongExpansion ? new OptimizationStage(compilerSettings.LongExpansion) : null,
+		mosaSettings.BasicOptimizations ? new OptimizationStage(false) : null,
+		mosaSettings.SSA ? new EdgeSplitStage() : null,
+		mosaSettings.SSA ? new EnterSSAStage() : null,
+		mosaSettings.BasicOptimizations && mosaSettings.SSA ? new OptimizationStage(false) : null,
+		mosaSettings.ValueNumbering && mosaSettings.SSA ? new ValueNumberingStage() : null,
+		mosaSettings.LoopInvariantCodeMotion && mosaSettings.SSA ? new LoopInvariantCodeMotionStage() : null,
+		mosaSettings.SparseConditionalConstantPropagation && mosaSettings.SSA ? new SparseConditionalConstantPropagationStage() : null,
+		mosaSettings.BasicOptimizations && mosaSettings.SSA && (mosaSettings.ValueNumbering || mosaSettings.LoopInvariantCodeMotion || mosaSettings.SparseConditionalConstantPropagation) ? new OptimizationStage(false) : null,
+		mosaSettings.BitTracker ? new BitTrackerStage() : null,
+		mosaSettings.BasicOptimizations && mosaSettings.BitTracker ? new OptimizationStage(false) : null,
+		mosaSettings.BasicOptimizations && mosaSettings.LongExpansion ? new OptimizationStage(mosaSettings.LongExpansion) : null,
 
-		compilerSettings.TwoPass && compilerSettings.ValueNumbering && compilerSettings.SSA ? new ValueNumberingStage() : null,
-		compilerSettings.TwoPass && compilerSettings.LoopInvariantCodeMotion && compilerSettings.SSA ? new LoopInvariantCodeMotionStage() : null,
-		compilerSettings.TwoPass && compilerSettings.SparseConditionalConstantPropagation && compilerSettings.SSA ? new SparseConditionalConstantPropagationStage() : null,
-		compilerSettings.TwoPass && compilerSettings.BitTracker ? new BitTrackerStage() : null,
-		compilerSettings.TwoPass && compilerSettings.BasicOptimizations && compilerSettings.SSA ? new OptimizationStage(compilerSettings.LongExpansion) : null,
+		mosaSettings.TwoPassOptimization && mosaSettings.ValueNumbering && mosaSettings.SSA ? new ValueNumberingStage() : null,
+		mosaSettings.TwoPassOptimization && mosaSettings.LoopInvariantCodeMotion && mosaSettings.SSA ? new LoopInvariantCodeMotionStage() : null,
+		mosaSettings.TwoPassOptimization && mosaSettings.SparseConditionalConstantPropagation && mosaSettings.SSA ? new SparseConditionalConstantPropagationStage() : null,
+		mosaSettings.TwoPassOptimization && mosaSettings.BitTracker ? new BitTrackerStage() : null,
+		mosaSettings.TwoPassOptimization && mosaSettings.BasicOptimizations && mosaSettings.SSA ? new OptimizationStage(mosaSettings.LongExpansion) : null,
 
-		compilerSettings.SSA ? new ExitSSAStage() : null,
+		mosaSettings.SSA ? new ExitSSAStage() : null,
 
 		new IRCleanupStage(),
 
-		compilerSettings.InlineMethods || compilerSettings.InlineExplicit ? new InlineEvaluationStage() : null,
+		mosaSettings.InlineMethods || mosaSettings.InlineExplicit ? new InlineEvaluationStage() : null,
 		new NewObjectStage(),
 		new CallStage(),
 		new CompoundStage(),
@@ -220,7 +221,7 @@ public sealed class Compiler
 		//new PreciseGCStage(),
 
 		new CodeGenerationStage(),
-		compilerSettings.EmitBinary ? new ProtectedRegionLayoutStage() : null,
+		mosaSettings.EmitBinary ? new ProtectedRegionLayoutStage() : null,
 	};
 
 	#endregion Static Methods
@@ -231,12 +232,12 @@ public sealed class Compiler
 	{
 		TypeSystem = mosaCompiler.TypeSystem;
 		TypeLayout = mosaCompiler.TypeLayout;
-		CompilerSettings = mosaCompiler.CompilerSettings;
+		MosaSettings = mosaCompiler.MosaSettings;
 		Architecture = mosaCompiler.Platform;
 		CompilerHooks = mosaCompiler.CompilerHooks;
-		TraceLevel = CompilerSettings.TraceLevel;
-		Statistics = CompilerSettings.Statistics;
-		FullCheckMode = CompilerSettings.FullCheckMode;
+		TraceLevel = MosaSettings.TraceLevel;
+		Statistics = MosaSettings.EmitStatistics;
+		FullCheckMode = MosaSettings.FullCheckMode;
 
 		PostEvent(CompilerEvent.CompilerStart);
 
@@ -265,12 +266,12 @@ public sealed class Compiler
 		InternalRuntimeType = GeInternalRuntimeType();
 
 		// Build the default compiler pipeline
-		CompilerPipeline.Add(GetDefaultCompilerPipeline(CompilerSettings, Architecture.Is32BitPlatform));
+		CompilerPipeline.Add(GetDefaultCompilerPipeline(MosaSettings, Architecture.Is32BitPlatform));
 
 		// Call hook to allow for the extension of the pipeline
 		CompilerHooks.ExtendCompilerPipeline?.Invoke(CompilerPipeline);
 
-		Architecture.ExtendCompilerPipeline(CompilerPipeline, CompilerSettings);
+		Architecture.ExtendCompilerPipeline(CompilerPipeline, MosaSettings);
 
 		IsStopped = false;
 		HasError = false;
@@ -344,12 +345,12 @@ public sealed class Compiler
 
 			MethodStagePipelines[threadID] = pipeline;
 
-			pipeline.Add(GetDefaultMethodPipeline(CompilerSettings, Architecture.Is64BitPlatform));
+			pipeline.Add(GetDefaultMethodPipeline(MosaSettings, Architecture.Is64BitPlatform));
 
 			// Call hook to allow for the extension of the pipeline
 			CompilerHooks.ExtendMethodCompilerPipeline?.Invoke(pipeline);
 
-			Architecture.ExtendMethodCompilerPipeline(pipeline, CompilerSettings);
+			Architecture.ExtendMethodCompilerPipeline(pipeline, MosaSettings);
 
 			foreach (var stage in pipeline)
 			{
@@ -593,7 +594,7 @@ public sealed class Compiler
 
 	public string SearchPathsForFile(string filename)
 	{
-		foreach (var path in CompilerSettings.SearchPaths)
+		foreach (var path in MosaSettings.SearchPaths)
 		{
 			var file = Path.Combine(path, filename);
 

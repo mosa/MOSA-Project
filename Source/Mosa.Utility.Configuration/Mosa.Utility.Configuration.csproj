@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-    <AssemblyTitle>Mosa.Utility.Compiler</AssemblyTitle>
+    <AssemblyTitle>Mosa.Utility.Configuration</AssemblyTitle>
     <Company>MOSA Project</Company>
-    <Product>Mosa.Utility.Compiler</Product>
+    <Product>Mosa.Utility.Configuration</Product>
     <Copyright>Copyright © MOSA Project 2023</Copyright>
     <LangVersion>11.0</LangVersion>
     <BaseAddress>285212672</BaseAddress>
@@ -23,9 +23,5 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
-    <ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj" />
-    <ProjectReference Include="..\Mosa.Platform.ARMv8A32\Mosa.Platform.ARMv8A32.csproj" />
-    <ProjectReference Include="..\Mosa.Platform.x64\Mosa.Platform.x64.csproj" />
-    <ProjectReference Include="..\Mosa.Platform.x86\Mosa.Platform.x86.csproj" />
   </ItemGroup>
 </Project>

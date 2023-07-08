@@ -1,14 +1,14 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common.Configuration;
+using System.Collections.Generic;
 
-namespace Mosa.Utility.Configuration;
+namespace Mosa.Compiler.Common.Configuration;
 
-public static class SettingsLoader
+public static class Import
 {
-	public static Settings RecursiveReader(string[] args)
+	public static Settings RecursiveReader(List<Argument> map, string[] args)
 	{
-		var commandLineSettings = Reader.ParseArguments(args, CommandLineArguments.Map);
+		var commandLineSettings = Reader.ParseArguments(args, map);
 
 		var final = RecursiveReader(commandLineSettings);
 

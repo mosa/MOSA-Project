@@ -73,7 +73,7 @@ public sealed class LoopInvariantCodeMotionStage : BaseMethodCompilerStage
 			Methods.Increment();
 		}
 
-		if (CompilerSettings.FullCheckMode)
+		if (MosaSettings.FullCheckMode)
 			CheckAllPhiInstructions();
 	}
 

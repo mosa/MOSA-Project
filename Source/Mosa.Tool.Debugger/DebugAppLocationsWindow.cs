@@ -18,14 +18,14 @@ public partial class DebugAppLocationsWindow : Form
 
 	private void DebugQemuWindow_Load(object sender, EventArgs e)
 	{
-		tbQEMU.Text = MainForm.QEMU;
-		tbBIOSDirectory.Text = MainForm.QEMUBios;
+		tbQEMU.Text = MainForm.MosaSettings.QEMUApp;
+		tbBIOSDirectory.Text = MainForm.MosaSettings.QEMUBios;
 	}
 
 	private void btnDebug_Click(object sender, EventArgs e)
 	{
-		MainForm.QEMU = tbQEMU.Text;
-		MainForm.QEMUBios = tbBIOSDirectory.Text;
+		MainForm.MosaSettings.QEMUApp = tbQEMU.Text;
+		MainForm.MosaSettings.QEMUBios = tbBIOSDirectory.Text;
 
 		Close();
 	}

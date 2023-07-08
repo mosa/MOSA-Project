@@ -14,12 +14,12 @@ public class InlinedFileStage : BaseCompilerStage
 {
 	protected override void Finalization()
 	{
-		if (string.IsNullOrEmpty(CompilerSettings.InlinedFile))
+		if (string.IsNullOrEmpty(MosaSettings.InlinedFile))
 			return;
 
 		var methods = GetAndSortMethodData();
 
-		using (var writer = new StreamWriter(CompilerSettings.InlinedFile))
+		using (var writer = new StreamWriter(MosaSettings.InlinedFile))
 		{
 			writer.WriteLine("Method\tCompilations");
 

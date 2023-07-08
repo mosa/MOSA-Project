@@ -16,8 +16,8 @@ public static class PageTable
 		Platform.PageTableSetup();
 		Platform.PageTableInitialize();
 
-		// Unmap the first page for null pointer exceptions
-		MapVirtualAddressToPhysical(Pointer.Zero, Pointer.Zero, false);
+		//// Unmap the first page for null pointer exceptions
+		//MapVirtualAddressToPhysical(Pointer.Zero, Pointer.Zero, false);
 
 		Platform.PageTableEnable();
 

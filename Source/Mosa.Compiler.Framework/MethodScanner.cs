@@ -40,7 +40,7 @@ public class MethodScanner
 		Compiler = compiler;
 		TypeSystem = compiler.TypeSystem;
 		TypeLayout = compiler.TypeLayout;
-		IsEnabled = compiler.CompilerSettings.MethodScanner;
+		IsEnabled = compiler.MosaSettings.MethodScanner;
 
 		if (Compiler.IsTraceable(TraceLevel))
 		{

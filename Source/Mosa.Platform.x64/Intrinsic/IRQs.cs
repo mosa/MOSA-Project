@@ -13,7 +13,7 @@ internal static partial class IntrinsicMethods
 
 	private static void InsertIRQ(int irq, Context context, TransformContext transformContext)
 	{
-		var interruptMethodName = transformContext.Compiler.CompilerSettings.Settings.GetValue("X64.InterruptMethodName", DefaultInterruptMethodName);
+		var interruptMethodName = transformContext.Compiler.MosaSettings.Settings.GetValue("X64.InterruptMethodName", DefaultInterruptMethodName);
 
 		if (string.IsNullOrEmpty(interruptMethodName))
 		{

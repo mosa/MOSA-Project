@@ -259,7 +259,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 				MethodCompiler.CreateTranformInstructionTrace(this, Steps++);
 
-				if (CompilerSettings.FullCheckMode)
+				if (MosaSettings.FullCheckMode)
 					FullCheck(false);
 
 				return true;
@@ -398,7 +398,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 			emptied++;
 
-			//if (CompilerSettings.FullValidationMode)
+			//if (mosaSettings.FullValidationMode)
 			//	CheckAllPhiInstructions();
 		}
 

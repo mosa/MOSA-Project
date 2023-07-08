@@ -24,10 +24,10 @@ public sealed class DebugFileStage : BaseCompilerStage
 
 	protected override void Finalization()
 	{
-		if (string.IsNullOrEmpty(CompilerSettings.DebugFile))
+		if (string.IsNullOrEmpty(MosaSettings.DebugFile))
 			return;
 
-		using (writer = new StreamWriter(CompilerSettings.DebugFile))
+		using (writer = new StreamWriter(MosaSettings.DebugFile))
 		{
 			EmitSections();
 			EmitSymbols();

@@ -6,7 +6,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using Mosa.Compiler.Common.Configuration;
 
-namespace Mosa.Utility.Launcher;
+namespace Mosa.Utility.Configuration;
 
 public static class AppLocationsSettings
 {
@@ -19,25 +19,21 @@ public static class AppLocationsSettings
 	private static readonly bool IsWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
 	private static readonly string[] LinuxDirectories = new string[] { "/bin", "/usr/bin" };
 
-	public static Settings GetAppLocations()
+	public static void GetAppLocations(MosaSettings mosaSettings)
 	{
-		var settings = new Settings();
-
-		Set(settings, "AppLocation.Qemu", FindQemu());
-		Set(settings, "AppLocation.QemuBIOS", FindQemuBIOS());
-		Set(settings, "AppLocation.QemuEDK2X86", FindQemuEDK2X86());
-		Set(settings, "AppLocation.QemuEDK2X64", FindQemuEDK2X64());
-		Set(settings, "AppLocation.QemuEDK2ARM", FindQemuEDK2ARM());
-		Set(settings, "AppLocation.QemuImg", FindQemuImg());
-		Set(settings, "AppLocation.Bochs", FindBochs());
-		Set(settings, "AppLocation.VmwarePlayer", FindVmwarePlayer());
-		Set(settings, "AppLocation.VmwareWorkstation", FindVmwareWorkstation());
-		Set(settings, "AppLocation.VirtualBox", FindVirtualBox());
-		Set(settings, "AppLocation.Ndisasm", FindNdisasm());
-		Set(settings, "AppLocation.Mkisofs", FindMkisofs());
-		Set(settings, "AppLocation.GDB", FindGDB());
-
-		return settings;
+		mosaSettings.QEMUApp = FindQemu();
+		mosaSettings.QEMUBios = FindQemuBIOS();
+		mosaSettings.QEMUEdk2X86 = FindQemuEDK2X86();
+		mosaSettings.QEMUEdk2X64 = FindQemuEDK2X64();
+		mosaSettings.QEMUEdk2ARM = FindQemuEDK2ARM();
+		mosaSettings.QemuImgApp = FindQemuImg();
+		mosaSettings.BochsApp = FindBochs();
+		mosaSettings.VmwarePlayerApp = FindVmwarePlayer();
+		mosaSettings.VmwareWorkstationApp = FindVmwareWorkstation();
+		mosaSettings.VirtualBoxApp = FindVirtualBox();
+		mosaSettings.NdisasmApp = FindNdisasm();
+		mosaSettings.MkisofsApp = FindMkisofs();
+		mosaSettings.GDBApp = FindGDB();
 	}
 
 	private static string FindQemu()
@@ -284,15 +280,6 @@ public static class AppLocationsSettings
 					"/usr/share/ovmf",
 					"/usr/share/OVMF"
 				});
-	}
-
-	private static void Set(Settings settings, string name, string value)
-	{
-		if (value == null)
-			return;
-
-		var property = settings.CreateProperty(name);
-		property.Value = value;
 	}
 
 	public static string ReplaceWithParameters(string directory)

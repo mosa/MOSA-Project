@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Threading;
+using Mosa.DeviceDriver;
 using Mosa.DeviceSystem;
 using Mosa.DeviceSystem.Service;
 using Mosa.Kernel.BareMetal.BootMemory;
@@ -83,7 +83,6 @@ public static class Boot
 		Console.WriteLine();
 		Console.WriteLine(ConsoleColor.BrightYellow, "Initializing services...");
 
-		// Create Service manager and basic services
 		Console.Write(ConsoleColor.BrightGreen, "> Service Manager...");
 		var serviceManager = new ServiceManager();
 		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
@@ -107,6 +106,26 @@ public static class Boot
 		Console.Write(ConsoleColor.BrightGreen, "> PC Service...");
 		var pcService = new PCService();
 		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
+
+		Console.Write(ConsoleColor.BrightGreen, "> Device Manager...");
+		var deviceService = new DeviceService();
+		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
+
+		Console.Write(ConsoleColor.BrightGreen, "> Initializing hardware abstraction layer...");
+		var hardware = new HAL.Hardware();
+		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
+
+		Console.Write(ConsoleColor.BrightGreen, "> Intalizing device system...");
+		DeviceSystem.Setup.Initialize(hardware, deviceService.ProcessInterrupt);
+		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
+
+		//Console.Write(ConsoleColor.BrightGreen, "> Registering device drivers...");
+		//deviceService.RegisterDeviceDriver(DeviceDriver.Setup.GetDeviceDriverRegistryEntries());
+		//Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
+
+		//Console.Write(ConsoleColor.BrightGreen, "> X86System...");
+		//deviceService.Initialize(new X86System(), null);
+		//Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 	}
 
 	[Plug("Mosa.Runtime.GC::AllocateMemory")]

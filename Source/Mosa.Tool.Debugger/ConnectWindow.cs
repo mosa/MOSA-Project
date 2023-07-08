@@ -3,17 +3,18 @@
 using System;
 using System.Windows.Forms;
 using Mosa.Compiler.Common.Configuration;
+using Mosa.Utility.Configuration;
 
 namespace Mosa.Tool.Debugger;
 
 public partial class ConnectWindow : Form
 {
-	private readonly Settings Settings;
+	private readonly MosaSettings MosaSettings;
 
-	public ConnectWindow(Settings settings)
+	public ConnectWindow(MosaSettings settings)
 	{
 		InitializeComponent();
-		Settings = settings;
+		MosaSettings = settings;
 	}
 
 	private void btnCancel_Click(object sender, EventArgs e)
@@ -23,8 +24,8 @@ public partial class ConnectWindow : Form
 
 	private void btnConnect_Click(object sender, EventArgs e)
 	{
-		Settings.SetValue("GDB.Host", tbHost.Text);
-		Settings.SetValue("GDB.Port", (int)numPort.Value);
+		MosaSettings.GDBHost = tbHost.Text;
+		MosaSettings.GDBPort = (int)numPort.Value;
 
 		DialogResult = DialogResult.OK;
 	}

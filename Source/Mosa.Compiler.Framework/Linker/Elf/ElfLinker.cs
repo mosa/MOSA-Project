@@ -64,7 +64,7 @@ public sealed class ElfLinker
 		SectionAlignment = 0x1000; // default 1K
 
 		// Cache for faster performance
-		EmitShortSymbolName = linker.LinkerSettings.ShortSymbolNames;
+		EmitShortSymbolName = linker.MosaSettings.EmitShortSymbolNames;
 	}
 
 	#region Helpers
@@ -122,8 +122,6 @@ public sealed class ElfLinker
 
 		RegisterStandardSections();
 
-		RegisterSettingsSections();
-
 		RegisterSymbolSection();
 
 		RegisterStringSection();
@@ -137,7 +135,7 @@ public sealed class ElfLinker
 
 	private void RegisterDwarfSections()
 	{
-		if (Linker.LinkerSettings.Dwarf)
+		if (Linker.MosaSettings.EmitDwarf)
 		{
 			var dwarf = new DwarfSections(Linker.Compiler, this);
 		}
@@ -240,45 +238,9 @@ public sealed class ElfLinker
 		sectionHeaderStringSection.AddDependency(symbolSection);
 	}
 
-	private void RegisterSettingsSections()
-	{
-		var settings = Linker.LinkerSettings.Settings;
-		var settingSections = settings.GetChildNames("Linker.CustomSections");
-
-		foreach (var name in settingSections)
-		{
-			var sectionName = settings.GetValue($"Linker.CustomSections." + name + ".SectionName");
-			var sectionSource = settings.GetValue($"Linker.CustomSections." + name + ".SourceFile");
-			var sectionAddress = settings.GetValue($"Linker.CustomSections." + name + ".Address", 0);
-
-			if (sectionName == null) sectionName = name;
-			if (sectionName == null && sectionSource != null) sectionName = Path.GetFileName(sectionSource);
-
-			var bytes = Linker.Compiler.SearchPathsForFileAndLoad(sectionSource);
-
-			if (bytes == null)
-			{
-				// TODO: Generate an error if the file is not found
-				// CompilerException.FileNotFound
-				continue;
-			}
-
-			var section = new Section
-			{
-				Name = sectionName,
-				Address = (ulong)sectionAddress,
-				Stream = new MemoryStream(bytes),
-				Type = SectionType.ProgBits,
-				Flags = SectionAttribute.Alloc
-			};
-
-			RegisterSection(section);
-		}
-	}
-
 	private void RegisterRelocationSections()
 	{
-		if (!Linker.LinkerSettings.StaticRelocations)
+		if (!Linker.MosaSettings.EmitStaticRelocations)
 			return;
 
 		foreach (var kind in MosaLinker.SectionKinds)
@@ -488,7 +450,7 @@ public sealed class ElfLinker
 		var stream = new MemoryStream();
 		var writer = new BinaryWriter(stream);
 
-		var emitSymbols = Linker.LinkerSettings.Symbols;
+		var emitSymbols = Linker.MosaSettings.EmitSumbols;
 
 		// first entry is completely filled with zeros
 		writer.WriteZeroBytes(SymbolEntry.GetEntrySize(LinkerFormatType));
