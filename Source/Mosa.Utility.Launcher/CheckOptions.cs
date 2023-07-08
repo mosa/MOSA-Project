@@ -15,27 +15,14 @@ public static class CheckOptions
 			return $"Platform not supported: {settings.Platform}";
 		}
 
-		switch (settings.Emulator)
+		return settings.Emulator switch
 		{
-			case "qemu" when settings.ImageFolder == "vdi":
-				return "QEMU does not support the VDI image format";
-
-			case "bochs" when settings.ImageFolder == "vdi":
-				return "Bochs does not support the VDI image format";
-
-			case "bochs" when settings.ImageFolder == "vmdk":
-				return "Bochs does not support the VMDK image format";
-
-			case "vmware" when settings.ImageFolder == "img":
-				return "VMware does not support the IMG image format";
-
-			case "vmware" when settings.ImageFolder == "vdi":
-				return "VMware does not support the VHD image format";
-
-			case "virtualbox" when settings.ImageFolder == "img":
-				return "VirtualBox does not support the IMG file format";
-		}
-
-		return null;
+			"bochs" when settings.ImageFolder == "vdi" => "Bochs does not support the VDI image format",
+			"bochs" when settings.ImageFolder == "vmdk" => "Bochs does not support the VMDK image format",
+			"vmware" when settings.ImageFolder == "img" => "VMware does not support the IMG image format",
+			"vmware" when settings.ImageFolder == "vdi" => "VMware does not support the VHD image format",
+			"virtualbox" when settings.ImageFolder == "img" => "VirtualBox does not support the IMG file format",
+			_ => null,
+		};
 	}
 }

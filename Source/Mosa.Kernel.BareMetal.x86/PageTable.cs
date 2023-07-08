@@ -2,7 +2,6 @@
 
 using Mosa.Runtime;
 using Mosa.Runtime.x86;
-using Mosa.Kernel.BareMetal;
 
 namespace Mosa.Kernel.BareMetal.x86;
 
@@ -53,11 +52,15 @@ internal static class PageTable
 
 	public static void Enable()
 	{
+		Debug.WriteLine("x86.PageTable:Enable()");
+
 		// Set CR3 register on processor - sets page directory
 		Native.SetCR3(PageDirectory.ToUInt32());
 
 		// Set CR0 register on processor - turns on virtual memory
 		Native.SetCR0(Native.GetCR0() | 0x80000000);
+
+		Debug.WriteLine("x86.PageTable:Enable() [Exit]");
 	}
 
 	public static void MapVirtualAddressToPhysical(Pointer virtualAddress, Pointer physicalAddress, bool present = true)

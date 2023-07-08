@@ -30,6 +30,8 @@ public struct GDT
 
 	public void Setup()
 	{
+		Debug.WriteLine("GDTTable.Setup()");
+
 		GDTTable = BootPageAllocator.AllocatePage();   // PhysicalPageAllocator is okay too
 
 		GDTTable.Store16(0, GDTEntryOffset.TotalSize * 3 - 1);
@@ -40,6 +42,8 @@ public struct GDT
 		Set(2, 0, 0xFFFFFFFF, 0x92, 0xCF); // Data segment
 
 		SetLgdt(GDTTable);
+
+		Debug.WriteLine("GDTTable.Setup() [Exit]");
 	}
 
 	[MethodImpl(MethodImplOptions.NoInlining)]

@@ -18,7 +18,7 @@ internal static class Program
 	{
 		RegisterPlatforms();
 
-		System.Console.WriteLine("MOSA Luancher, Version {0}.", CompilerVersion.VersionString);
+		System.Console.WriteLine("MOSA Launcher, Version {0}.", CompilerVersion.VersionString);
 		System.Console.WriteLine("Copyright 2023 by the MOSA Project. Licensed under the New BSD License.");
 
 		Stopwatch.Start();
