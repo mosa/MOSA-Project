@@ -105,17 +105,17 @@ public partial class BreakpointView : DebugDockContent
 
 	private void toolStripButton1_Click(object sender, EventArgs e)
 	{
-		if (MainForm.BreakpointFile == null)
+		if (MainForm.MosaSettings.BreakpointFile == null)
 		{
-			if (MainForm.ImageFile != null)
+			if (MainForm.MosaSettings.ImageFile != null)
 			{
-				MainForm.BreakpointFile = Path.Combine(
-					Path.GetDirectoryName(MainForm.ImageFile),
-					Path.GetFileNameWithoutExtension(MainForm.ImageFile)) + ".breakpoints";
+				MainForm.MosaSettings.BreakpointFile = Path.Combine(
+					Path.GetDirectoryName(MainForm.MosaSettings.ImageFile),
+					Path.GetFileNameWithoutExtension(MainForm.MosaSettings.ImageFile)) + ".breakpoints";
 			}
 			else
 			{
-				MainForm.BreakpointFile = Path.Combine(Path.GetTempPath(), "default.breakpoints");
+				MainForm.MosaSettings.BreakpointFile = Path.Combine(Path.GetTempPath(), "default.breakpoints");
 			}
 		}
 
@@ -126,7 +126,7 @@ public partial class BreakpointView : DebugDockContent
 	{
 		var lines = new List<string>();
 
-		if (MainForm.ImageFile != null)
+		if (MainForm.MosaSettings.ImageFile != null)
 		{
 			lines.Add("#HASH: " + MainForm.VMHash);
 		}
@@ -136,14 +136,14 @@ public partial class BreakpointView : DebugDockContent
 			lines.Add(entry.Address + '\t' + entry.Name);
 		}
 
-		File.WriteAllLines(MainForm.BreakpointFile, lines);
+		File.WriteAllLines(MainForm.MosaSettings.BreakpointFile, lines);
 	}
 
 	private void toolStripButton2_Click(object sender, EventArgs e)
 	{
 		if (openFileDialog1.ShowDialog() == DialogResult.OK)
 		{
-			MainForm.BreakpointFile = openFileDialog1.FileName;
+			MainForm.MosaSettings.BreakpointFile = openFileDialog1.FileName;
 			MainForm.LoadBreakPoints();
 		}
 	}

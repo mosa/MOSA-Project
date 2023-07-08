@@ -14,8 +14,8 @@ public sealed class InlinedSetupStage : BaseCompilerStage
 
 	protected override void Setup()
 	{
-		var excludeList = Compiler.CompilerSettings.InlineExcludeList;
-		var aggressiveList = Compiler.CompilerSettings.InlineAggressiveList;
+		var excludeList = Compiler.MosaSettings.InlineExclude;
+		var aggressiveList = Compiler.MosaSettings.InlineAggressive;
 
 		if ((excludeList == null || excludeList.Count == 0) && (aggressiveList == null || aggressiveList.Count == 0))
 			return;

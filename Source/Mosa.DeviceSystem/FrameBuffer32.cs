@@ -93,7 +93,7 @@ public sealed class FrameBuffer32
 	/// <param name="w">Width of the rectangle.</param>
 	/// <param name="h">Width of the rectangle.</param>
 	/// <param name="r">Radius of the corners.</param>
-	public void DrawFilledRoundedRectangle(uint color, uint x, uint y, uint w, uint h, uint r)
+	public void DwarfilledRoundedRectangle(uint color, uint x, uint y, uint w, uint h, uint r)
 	{
 		FillRectangle(color, x + r, y, w - r * 2, h);
 		FillRectangle(color, x, y + r, w, h - r * 2);

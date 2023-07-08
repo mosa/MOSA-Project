@@ -47,7 +47,8 @@ public partial class MainForm : Form
 	private readonly CompilerData CompilerData = new CompilerData();
 	private readonly BindingList<CounterEntry> MethodCounters = new BindingList<CounterEntry>();
 	private readonly MethodStore MethodStore = new MethodStore();
-	private readonly Settings Settings = new Settings();
+
+	private MosaSettings MosaSettings = new MosaSettings();
 
 	private MosaCompiler Compiler = null;
 	private int CompletedMethods = 0;
@@ -102,11 +103,9 @@ public partial class MainForm : Form
 
 	public void LoadArguments(string[] args)
 	{
-		SetDefaultSettings();
-
-		var arguments = SettingsLoader.RecursiveReader(args);
-
-		Settings.Merge(arguments);
+		MosaSettings.SetDetfaultSettings();
+		MosaSettings.LoadArguments(args);
+		SetRequiredSettings();
 
 		UpdateDisplay();
 	}
@@ -119,7 +118,7 @@ public partial class MainForm : Form
 
 		var compilerHooks = CreateCompilerHook();
 
-		Compiler = new MosaCompiler(Settings, compilerHooks, new ClrModuleLoader(), new ClrTypeResolver());
+		Compiler = new MosaCompiler(MosaSettings, compilerHooks, new ClrModuleLoader(), new ClrTypeResolver());
 
 		Compiler.Load();
 
@@ -555,7 +554,7 @@ public partial class MainForm : Form
 
 		//pipeline.InsertAfterFirst<ExceptionStage>(new StopStage());
 
-		if (EnableDebugDiagnostic.Checked)
+		if (cbEnableDebugDiagnostic.Checked)
 		{
 			for (int i = 1; i < pipeline.Count; i += 2)
 			{
@@ -664,11 +663,9 @@ public partial class MainForm : Form
 
 		SetStatus("Ready!");
 
-		var sourcefiles = Settings.GetValueList("Compiler.SourceFiles");
-
-		if (sourcefiles != null && sourcefiles.Count >= 1)
+		if (MosaSettings.SourceFiles != null && MosaSettings.SourceFiles.Count >= 1)
 		{
-			var filename = Path.GetFullPath(sourcefiles[0]);
+			var filename = Path.GetFullPath(MosaSettings.SourceFiles[0]);
 
 			openFileDialog.FileName = filename;
 
@@ -676,7 +673,7 @@ public partial class MainForm : Form
 
 			LoadAssembly();
 
-			if (Settings.GetValue("Explorer.Start", false))
+			if (MosaSettings.ExplorerStart)
 			{
 				CompileAll();
 			}
@@ -860,52 +857,11 @@ public partial class MainForm : Form
 		}
 	}
 
-	private void SetDefaultSettings()
+	private void SetRequiredSettings()
 	{
-		Settings.SetValue("Compiler.BaseAddress", 0x00400000);
-		Settings.SetValue("Compiler.Binary", true);
-		Settings.SetValue("Compiler.MethodScanner", false);
-		Settings.SetValue("Compiler.Multithreading", true);
-		Settings.SetValue("Compiler.Platform", "x86");
-		Settings.SetValue("Compiler.TraceLevel", 10);
-		Settings.SetValue("Launcher.PlugKorlib", true);
-		Settings.SetValue("CompilerDebug.DebugFile", string.Empty);
-		Settings.SetValue("CompilerDebug.AsmFile", string.Empty);
-		Settings.SetValue("CompilerDebug.MapFile", string.Empty);
-		Settings.SetValue("CompilerDebug.NasmFile", string.Empty);
-		Settings.SetValue("Optimizations.Basic", true);
-		Settings.SetValue("Optimizations.BitTracker", true);
-		Settings.SetValue("Optimizations.Inline", true);
-		Settings.SetValue("Optimizations.Inline.AggressiveMaximum", 24);
-		Settings.SetValue("Optimizations.Inline.Explicit", true);
-		Settings.SetValue("Optimizations.Inline.Maximum", 12);
-		Settings.SetValue("Optimizations.Basic.Window", 5);
-		Settings.SetValue("Optimizations.LongExpansion", true);
-		Settings.SetValue("Optimizations.LoopInvariantCodeMotion", true);
-		Settings.SetValue("Optimizations.Platform", true);
-		Settings.SetValue("Optimizations.SCCP", true);
-		Settings.SetValue("Optimizations.Devirtualization", true);
-		Settings.SetValue("Optimizations.SSA", true);
-		Settings.SetValue("Optimizations.TwoPass", true);
-		Settings.SetValue("Optimizations.ValueNumbering", true);
-		Settings.SetValue("Image.Folder", Path.Combine(Path.GetTempPath(), "MOSA"));
-		Settings.SetValue("Image.Format", "IMG");
-		Settings.SetValue("Image.FileSystem", "FAT16");
-		Settings.SetValue("Multiboot.Version", "v1");
-		Settings.SetValue("Multiboot.Video", false);
-		Settings.SetValue("Multiboot.Video.Width", 640);
-		Settings.SetValue("Multiboot.Video.Height", 480);
-		Settings.SetValue("Multiboot.Video.Depth", 32);
-		Settings.SetValue("Emulator", "Qemu");
-		Settings.SetValue("Emulator.Memory", 128);
-		Settings.SetValue("Emulator.Serial", "none");
-		Settings.SetValue("Emulator.Serial.Host", "127.0.0.1");
-		Settings.SetValue("Emulator.Serial.Port", 9999);
-		Settings.SetValue("Emulator.Serial.Pipe", "MOSA");
-		Settings.SetValue("Launcher.Start", false);
-		Settings.SetValue("Launcher.Launch", false);
-		Settings.SetValue("Launcher.Exit", false);
-		Settings.SetValue("OS.Name", "MOSA");
+		MosaSettings.TraceLevel = 10;
+		MosaSettings.EmulatorSerial = "none";
+		MosaSettings.LauncherExit = false;
 	}
 
 	private void SetStatus(string status)
@@ -1076,28 +1032,25 @@ public partial class MainForm : Form
 
 	private void UpdateDisplay()
 	{
-		cbEnableInline.Checked = Settings.GetValue("Optimizations.Inline", cbEnableInline.Checked);
-		cbEnableSSA.Checked = Settings.GetValue("Optimizations.SSA", cbEnableSSA.Checked);
-		cbEnableBasicOptimizations.Checked = Settings.GetValue("Optimizations.Basic", cbEnableBasicOptimizations.Checked);
-		cbEnableSparseConditionalConstantPropagation.Checked = Settings.GetValue("Optimizations.SCCP", cbEnableSparseConditionalConstantPropagation.Checked);
-		cbEnableDevirtualization.Checked = Settings.GetValue("Optimizations.Devirtualization", cbEnableDevirtualization.Checked);
-		cbInlineExplicit.Checked = Settings.GetValue("Optimizations.Inline.Explicit", cbInlineExplicit.Checked);
-		cbPlatformOptimizations.Checked = Settings.GetValue("Optimizations.Platform", cbPlatformOptimizations.Checked);
-		cbEnableLongExpansion.Checked = Settings.GetValue("Optimizations.LongExpansion", cbEnableLongExpansion.Checked);
-		cbEnableTwoPassOptimizations.Checked = Settings.GetValue("Optimizations.TwoPass", cbEnableTwoPassOptimizations.Checked);
-		cbLoopInvariantCodeMotion.Checked = Settings.GetValue("Optimizations.LoopInvariantCodeMotion", cbLoopInvariantCodeMotion.Checked);
-		cbEnableValueNumbering.Checked = Settings.GetValue("Optimizations.ValueNumbering", cbEnableValueNumbering.Checked);
-		cbEnableBitTracker.Checked = Settings.GetValue("Optimizations.BitTracker", cbEnableBitTracker.Checked);
-		cbEnableBinaryCodeGeneration.Checked = Settings.GetValue("Compiler.Binary", cbEnableBinaryCodeGeneration.Checked);
-		cbEnableMethodScanner.Checked = Settings.GetValue("Compiler.MethodScanner", cbEnableMethodScanner.Checked);
-		cbEnableMultithreading.Checked = Settings.GetValue("Compiler.Multithreading", cbEnableMultithreading.Checked);
+		cbEnableInline.Checked = MosaSettings.InlineMethods;
+		cbEnableSSA.Checked = MosaSettings.SSA;
+		cbEnableBasicOptimizations.Checked = MosaSettings.BasicOptimizations;
+		cbEnableSparseConditionalConstantPropagation.Checked = MosaSettings.SparseConditionalConstantPropagation;
+		cbEnableDevirtualization.Checked = MosaSettings.Devirtualization;
+		cbInlineExplicit.Checked = MosaSettings.InlineExplicit;
+		cbPlatformOptimizations.Checked = MosaSettings.PlatformOptimizations;
+		cbEnableLongExpansion.Checked = MosaSettings.LongExpansion;
+		cbEnableTwoPassOptimizations.Checked = MosaSettings.TwoPassOptimization;
+		cbLoopInvariantCodeMotion.Checked = MosaSettings.LoopInvariantCodeMotion;
+		cbEnableValueNumbering.Checked = MosaSettings.ValueNumbering;
+		cbEnableBitTracker.Checked = MosaSettings.BitTracker;
+		cbEnableBinaryCodeGeneration.Checked = MosaSettings.EmitBinary;
+		cbEnableMethodScanner.Checked = MosaSettings.MethodScanner;
+		cbEnableMultithreading.Checked = MosaSettings.Multithreading;
+		tbFilter.Text = MosaSettings.ExplorerFilter; ;
+		cbEnableDebugDiagnostic.Checked = MosaSettings.DebugDiagnostic;
 
-		tbFilter.Text = Settings.GetValue("Explorer.Filter", tbFilter.Text);
-		EnableDebugDiagnostic.Checked = Settings.GetValue("Explorer.DebugDiagnostic", false);
-
-		var platform = Settings.GetValue("Compiler.Platform") ?? "x86";
-
-		cbPlatform.SelectedIndex = platform.ToLowerInvariant() switch
+		cbPlatform.SelectedIndex = MosaSettings.Platform.ToLowerInvariant() switch
 		{
 			"x86" => 0,
 			"x64" => 1,
@@ -1197,26 +1150,27 @@ public partial class MainForm : Form
 
 	private void UpdateSettings()
 	{
-		Settings.SetValue("Compiler.MethodScanner", cbEnableMethodScanner.Checked);
-		Settings.SetValue("Compiler.Binary", cbEnableBinaryCodeGeneration.Checked);
-		Settings.SetValue("Compiler.TraceLevel", 10);
-		Settings.SetValue("Compiler.Platform", cbPlatform.Text);
-		Settings.SetValue("Compiler.Multithreading", cbEnableMultithreading.Checked);
-		Settings.SetValue("Optimizations.SSA", cbEnableSSA.Checked);
-		Settings.SetValue("Optimizations.Basic", cbEnableBasicOptimizations.Checked);
-		Settings.SetValue("Optimizations.ValueNumbering", cbEnableValueNumbering.Checked);
-		Settings.SetValue("Optimizations.SCCP", cbEnableSparseConditionalConstantPropagation.Checked);
-		Settings.SetValue("Optimizations.Devirtualization", cbEnableDevirtualization.Checked);
-		Settings.SetValue("Optimizations.BitTracker", cbEnableBitTracker.Checked);
-		Settings.SetValue("Optimizations.LoopInvariantCodeMotion", cbLoopInvariantCodeMotion.Checked);
-		Settings.SetValue("Optimizations.LongExpansion", cbEnableLongExpansion.Checked);
-		Settings.SetValue("Optimizations.TwoPass", cbEnableTwoPassOptimizations.Checked);
-		Settings.SetValue("Optimizations.Platform", cbPlatformOptimizations.Checked);
-		Settings.SetValue("Optimizations.Inline", cbEnableInline.Checked);
-		Settings.SetValue("Optimizations.Inline.Explicit", cbInlineExplicit.Checked);
-		Settings.SetValue("Optimizations.Inline.Maximum", 12);
-		Settings.SetValue("Optimizations.Inline.AggressiveMaximum", 24);
-		Settings.SetValue("Multiboot.Version", "v1");
+		MosaSettings.MethodScanner = cbEnableMethodScanner.Checked;
+		MosaSettings.EmitBinary = cbEnableBinaryCodeGeneration.Checked;
+		MosaSettings.Platform = cbPlatform.Text;
+		MosaSettings.Multithreading = cbEnableMultithreading.Checked;
+		MosaSettings.SSA = cbEnableSSA.Checked;
+		MosaSettings.BasicOptimizations = cbEnableBasicOptimizations.Checked;
+		MosaSettings.ValueNumbering = cbEnableValueNumbering.Checked;
+		MosaSettings.SparseConditionalConstantPropagation = cbEnableSparseConditionalConstantPropagation.Checked;
+		MosaSettings.Devirtualization = cbEnableDevirtualization.Checked;
+		MosaSettings.BitTracker = cbEnableBitTracker.Checked;
+		MosaSettings.LoopInvariantCodeMotion = cbLoopInvariantCodeMotion.Checked;
+		MosaSettings.LongExpansion = cbEnableLongExpansion.Checked;
+		MosaSettings.TwoPassOptimization = cbEnableTwoPassOptimizations.Checked;
+		MosaSettings.PlatformOptimizations = cbPlatformOptimizations.Checked;
+		MosaSettings.InlineMethods = cbEnableInline.Checked;
+		MosaSettings.InlineExplicit = cbInlineExplicit.Checked;
+
+		MosaSettings.TraceLevel = 10;
+		MosaSettings.InlineMaximum = 12;
+		MosaSettings.InlineAggressiveMaximum = 24;
+		MosaSettings.MultibootVersion = "v1";
 	}
 
 	private void UpdateSettings(string filename)
@@ -1224,18 +1178,16 @@ public partial class MainForm : Form
 		var sourceDirectory = Path.GetDirectoryName(filename);
 		var fileHunter = new FileHunter(sourceDirectory);
 
-		var platform = Settings.GetValue("Compiler.Platform");
-
 		// Source Files
-		Settings.ClearProperty("Compiler.SourceFiles");
-		Settings.AddPropertyListValue("Compiler.SourceFiles", filename);
-		Settings.AddPropertyListValue("Compiler.SourceFiles", fileHunter.HuntFile("Mosa.Plug.Korlib.dll")?.FullName);
-		Settings.AddPropertyListValue("Compiler.SourceFiles", fileHunter.HuntFile("Mosa.Plug.Korlib." + platform + ".dll")?.FullName);
-		Settings.AddPropertyListValue("Compiler.SourceFiles", fileHunter.HuntFile("Mosa.Runtime." + platform + ".dll")?.FullName);
+		MosaSettings.ClearSourceFiles();
+		MosaSettings.AddSourceFile(filename);
+		MosaSettings.AddSourceFile(fileHunter.HuntFile("Mosa.Plug.Korlib.dll")?.FullName);
+		MosaSettings.AddSourceFile(fileHunter.HuntFile($"Mosa.Plug.Korlib.{MosaSettings.Platform}.dll")?.FullName);
+		MosaSettings.AddSourceFile(fileHunter.HuntFile(filename: "Mosa.Runtime." + MosaSettings.Platform + ".dll")?.FullName);
 
 		// Search Paths
-		Settings.ClearProperty("SearchPaths");
-		Settings.AddPropertyListValue("SearchPaths", Path.GetDirectoryName(filename));
+		MosaSettings.ClearSearchPaths();
+		MosaSettings.AddSearchPath(Path.GetDirectoryName(filename));
 	}
 
 	private void UpdateTransformLabels()

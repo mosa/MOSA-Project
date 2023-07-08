@@ -18,17 +18,17 @@ public sealed class MapFileStage : BaseCompilerStage
 
 	protected override void Finalization()
 	{
-		if (string.IsNullOrEmpty(CompilerSettings.MapFile))
+		if (string.IsNullOrEmpty(MosaSettings.MapFile))
 			return;
 
-		using (var writer = new StreamWriter(CompilerSettings.MapFile))
+		using (var writer = new StreamWriter(MosaSettings.MapFile))
 		{
 			// Emit map file header
-			writer.WriteLine(CompilerSettings.OutputFile);
+			writer.WriteLine(MosaSettings.OutputFile);
 			writer.WriteLine();
-			writer.WriteLine("Timestamp is {0}", DateTime.Now);
+			writer.WriteLine($"Timestamp is {DateTime.Now}");
 			writer.WriteLine();
-			writer.WriteLine("Preferred load address is {0:x16}", Linker.LinkerSettings.BaseAddress);
+			writer.WriteLine($"Preferred load address is {Linker.MosaSettings.BaseAddress:x16}");
 			writer.WriteLine();
 
 			// Emit the sections

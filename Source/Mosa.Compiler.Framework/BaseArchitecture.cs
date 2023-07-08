@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Mosa.Compiler.Framework.Linker.Elf;
+using Mosa.Utility.Configuration;
 
 namespace Mosa.Compiler.Framework;
 
@@ -136,14 +137,14 @@ public abstract class BaseArchitecture
 	/// Extends the compiler pipeline with architecture specific compiler stages.
 	/// </summary>
 	/// <param name="pipeline">The pipeline to extend.</param>
-	public abstract void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> pipeline, CompilerSettings compilerSettings);
+	public abstract void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> pipeline, MosaSettings mosaSettings);
 
 	/// <summary>
 	///	Requests the architecture to add architecture specific compilation stages to the pipeline. These
 	/// may depend upon the current state of the pipeline.</summary>
 	/// <param name="pipeline">The pipeline of the method compiler to add architecture specific compilation stages to.</param>
-	/// <param name="compilerSettings">The compiler options.</param>
-	public abstract void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> pipeline, CompilerSettings compilerSettings);
+	/// <param name="mosaSettings">The compiler options.</param>
+	public abstract void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> pipeline, MosaSettings mosaSettings);
 
 	/// <summary>
 	/// Create platform move.

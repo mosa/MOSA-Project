@@ -4,12 +4,13 @@ using System;
 using Mosa.Compiler.Common.Configuration;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.MosaTypeSystem;
+using Mosa.Utility.Configuration;
 
 namespace Mosa.Compiler.Framework;
 
 public sealed class MosaCompiler
 {
-	public CompilerSettings CompilerSettings { get; }
+	public MosaSettings MosaSettings { get; }
 
 	public TypeSystem TypeSystem { get; private set; }
 
@@ -36,9 +37,12 @@ public sealed class MosaCompiler
 
 	public bool IsSuccess => !Compiler.HasError && Stage != CompileStage.Error;
 
-	public MosaCompiler(Settings settings, CompilerHooks compilerHook, IModuleLoader moduleLoader, ITypeResolver typeResolver)
+	public MosaCompiler(MosaSettings mosaSettings, CompilerHooks compilerHook, IModuleLoader moduleLoader, ITypeResolver typeResolver)
 	{
-		CompilerSettings = new CompilerSettings(settings.Clone());
+		MosaSettings = new MosaSettings();
+		MosaSettings.SetDetfaultSettings();
+		MosaSettings.Merge(mosaSettings);
+
 		CompilerHooks = compilerHook;
 		ModuleLoader = moduleLoader;
 		TypeResolver = typeResolver;
@@ -48,8 +52,8 @@ public sealed class MosaCompiler
 	{
 		lock (_lock)
 		{
-			ModuleLoader.AddSearchPaths(CompilerSettings.SearchPaths);
-			ModuleLoader.LoadModuleFromFiles(CompilerSettings.SourceFiles);
+			ModuleLoader.AddSearchPaths(MosaSettings.SearchPaths);
+			ModuleLoader.LoadModuleFromFiles(MosaSettings.SourceFiles);
 
 			var typeSystem = TypeSystem.Load(ModuleLoader.CreateMetadata(), TypeResolver);
 
@@ -63,7 +67,7 @@ public sealed class MosaCompiler
 		{
 			TypeSystem = typeSystem;
 
-			Platform = PlatformRegistry.GetPlatform(CompilerSettings.Platform);
+			Platform = PlatformRegistry.GetPlatform(MosaSettings.Platform);
 			TypeLayout = new MosaTypeLayout(typeSystem, Platform.Is32BitPlatform, Platform.NativePointerSize, Platform.NativeAlignment);
 
 			Compiler = null;
@@ -135,7 +139,7 @@ public sealed class MosaCompiler
 	{
 		Setup();
 
-		if (!CompilerSettings.MethodScanner)
+		if (!MosaSettings.MethodScanner)
 		{
 			ScheduleAll();
 		}
@@ -148,7 +152,7 @@ public sealed class MosaCompiler
 			Stage = CompileStage.Executing;
 		}
 
-		var maxThreads = CompilerSettings.Multithreading ? CompilerSettings.MaxThreads > 0 ? CompilerSettings.MaxThreads : (int)(Environment.ProcessorCount * 1.2) : 0;
+		var maxThreads = MosaSettings.Multithreading ? MosaSettings.MaxThreads > 0 ? MosaSettings.MaxThreads : (int)(Environment.ProcessorCount * 1.2) : 0;
 
 		Compiler.ExecuteCompile(maxThreads);
 

@@ -12,6 +12,7 @@ namespace Mosa.Utility.Launcher;
 public class SimpleTCP
 {
 	public delegate void OnDataAvailableHandler();
+
 	public delegate void OnStatusUpdateHandler(string status);
 
 	#region Private Members

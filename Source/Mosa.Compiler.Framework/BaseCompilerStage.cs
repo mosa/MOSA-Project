@@ -4,6 +4,7 @@ using System.Diagnostics;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
+using Mosa.Utility.Configuration;
 
 namespace Mosa.Compiler.Framework;
 
@@ -42,7 +43,7 @@ public abstract class BaseCompilerStage
 	/// <summary>
 	/// Holds the compiler options
 	/// </summary>
-	protected CompilerSettings CompilerSettings => Compiler.CompilerSettings;
+	protected MosaSettings MosaSettings => Compiler.MosaSettings;
 
 	/// <summary>
 	/// Holds the compiler scheduler

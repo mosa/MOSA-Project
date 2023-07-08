@@ -9,6 +9,6 @@ public sealed class PostLinkHashFileStage : PreLinkHashFileStage
 {
 	protected override void Finalization()
 	{
-		Generate(CompilerSettings.PostLinkHashFile);
+		Generate(MosaSettings.PostLinkHashFile);
 	}
 }

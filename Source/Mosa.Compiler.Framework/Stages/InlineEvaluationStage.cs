@@ -29,10 +29,10 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 		Register(ReversedInlineCount);
 
 		// cache for performance
-		InlineMethods = CompilerSettings.InlineMethods;
-		InlineExplicit = CompilerSettings.InlineExplicit;
-		InlineAggressiveMaximum = CompilerSettings.InlineAggressiveMaximum;
-		InlineMaximum = CompilerSettings.InlineMaximum;
+		InlineMethods = MosaSettings.InlineMethods;
+		InlineExplicit = MosaSettings.InlineExplicit;
+		InlineAggressiveMaximum = MosaSettings.InlineAggressiveMaximum;
+		InlineMaximum = MosaSettings.InlineMaximum;
 	}
 
 	protected override void Run()

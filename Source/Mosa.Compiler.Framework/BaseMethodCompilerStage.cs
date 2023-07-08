@@ -6,6 +6,7 @@ using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
+using Mosa.Utility.Configuration;
 
 namespace Mosa.Compiler.Framework;
 
@@ -64,7 +65,7 @@ public abstract class BaseMethodCompilerStage
 	/// <summary>
 	/// Gets the compiler options.
 	/// </summary>
-	protected CompilerSettings CompilerSettings { get; private set; }
+	protected MosaSettings MosaSettings { get; private set; }
 
 	/// <summary>
 	/// Gets a value indicating whether [is32 bit platform].
@@ -194,7 +195,7 @@ public abstract class BaseMethodCompilerStage
 		TypeSystem = compiler.TypeSystem;
 		TypeLayout = compiler.TypeLayout;
 		MethodScheduler = compiler.MethodScheduler;
-		CompilerSettings = compiler.CompilerSettings;
+		MosaSettings = compiler.MosaSettings;
 		MethodScanner = compiler.MethodScanner;
 
 		Is32BitPlatform = Architecture.Is32BitPlatform;

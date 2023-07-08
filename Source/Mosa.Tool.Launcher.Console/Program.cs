@@ -2,7 +2,6 @@
 
 using System;
 using System.Diagnostics;
-using System.IO;
 using Mosa.Compiler.Common.Configuration;
 using Mosa.Compiler.Framework;
 using Mosa.Utility.Configuration;
@@ -20,21 +19,30 @@ internal static class Program
 
 	internal static int Main(string[] args)
 	{
-		Settings = AppLocationsSettings.GetAppLocations();
+		RegisterPlatforms();
+
+		System.Console.WriteLine("MOSA Luancher, Version {0}.", CompilerVersion.VersionString);
+		System.Console.WriteLine("Copyright 2023 by the MOSA Project. Licensed under the New BSD License.");
 
 		Stopwatch.Start();
 
 		NotifyStatus($"Current Directory: {Environment.CurrentDirectory}");
 
-		RegisterPlatforms();
-
-		LoadArguments(args);
-
 		try
 		{
+			var mosaSettings = new MosaSettings();
+
+			mosaSettings.SetDetfaultSettings();
+			mosaSettings.LoadAppLocations();
+			mosaSettings.LoadArguments(args);
+			SetRequiredSettings(mosaSettings);
+			mosaSettings.ExpandSearchPaths();
+			mosaSettings.UpdateFileAndPathSettings();
+			mosaSettings.NormalizeSettings();
+
 			var compilerHooks = CreateCompilerHooks();
 
-			Builder = new Builder(Settings, compilerHooks);
+			Builder = new Builder(mosaSettings, compilerHooks);
 
 			Builder.Build();
 
@@ -44,9 +52,9 @@ internal static class Program
 				return 1;
 			}
 
-			if (Settings.GetValue("Launcher.Launch", false))
+			if (mosaSettings.Launcher)
 			{
-				var starter = new Starter(Builder.ConfigurationSettings, compilerHooks, Builder.Linker);
+				var starter = new Starter(Builder.MosaSettings, compilerHooks, Builder.Linker);
 
 				if (!starter.Launch())
 				{
@@ -64,82 +72,12 @@ internal static class Program
 		return 0;
 	}
 
-	private static void SetDefaultSettings()
+	private static void SetRequiredSettings(MosaSettings mosaSettings)
 	{
-		Settings.SetValue("Compiler.BaseAddress", 0x00400000);
-		Settings.SetValue("Compiler.Binary", true);
-		Settings.SetValue("Compiler.MethodScanner", false);
-		Settings.SetValue("Compiler.Multithreading", true);
-		Settings.SetValue("Compiler.Platform", "x86");
-		Settings.SetValue("Compiler.TraceLevel", 0);
-		Settings.SetValue("CompilerDebug.DebugFile", string.Empty);
-		Settings.SetValue("CompilerDebug.AsmFile", string.Empty);
-		Settings.SetValue("CompilerDebug.MapFile", string.Empty);
-		Settings.SetValue("CompilerDebug.NasmFile", string.Empty);
-		Settings.SetValue("CompilerDebug.InlineFile", string.Empty);
-		Settings.SetValue("Optimizations.Basic", true);
-		Settings.SetValue("Optimizations.BitTracker", true);
-		Settings.SetValue("Optimizations.Inline", true);
-		Settings.SetValue("Optimizations.Inline.AggressiveMaximum", 24);
-		Settings.SetValue("Optimizations.Inline.Explicit", true);
-		Settings.SetValue("Optimizations.Inline.Maximum", 12);
-		Settings.SetValue("Optimizations.Basic.Window", 5);
-		Settings.SetValue("Optimizations.LongExpansion", true);
-		Settings.SetValue("Optimizations.LoopInvariantCodeMotion", true);
-		Settings.SetValue("Optimizations.Platform", true);
-		Settings.SetValue("Optimizations.SCCP", true);
-		Settings.SetValue("Optimizations.Devirtualization", true);
-		Settings.SetValue("Optimizations.SSA", true);
-		Settings.SetValue("Optimizations.TwoPass", true);
-		Settings.SetValue("Optimizations.ValueNumbering", true);
-		Settings.SetValue("Image.Folder", Path.Combine(Path.GetTempPath(), "MOSA"));
-		Settings.SetValue("Image.Format", "IMG");
-		Settings.SetValue("Image.FileSystem", "FAT16");
-		Settings.SetValue("Image.ImageFile", "%DEFAULT%");
-		Settings.SetValue("Image.Firmware", "bios");
-		Settings.SetValue("Multiboot.Version", "v1");
-		Settings.SetValue("Multiboot.Video", false);
-		Settings.SetValue("Multiboot.Video.Width", 640);
-		Settings.SetValue("Multiboot.Video.Height", 480);
-		Settings.SetValue("Multiboot.Video.Depth", 32);
-		Settings.SetValue("Emulator", "Qemu");
-		Settings.SetValue("Emulator.Memory", 128);
-		Settings.SetValue("Emulator.Cores", 1);
-		Settings.SetValue("Emulator.Serial", "none");
-		Settings.SetValue("Emulator.Serial.Host", "127.0.0.1");
-		Settings.SetValue("Emulator.Serial.Port", new Random().Next(11111, 22222));
-		Settings.SetValue("Emulator.Serial.Pipe", "MOSA");
-		Settings.SetValue("Emulator.Display", true);
-		Settings.SetValue("Launcher.Start", true);
-		Settings.SetValue("Launcher.Launch", true);
-		Settings.SetValue("Launcher.Exit", true);
-		Settings.SetValue("Launcher.PlugKorlib", true);
-		Settings.SetValue("Linker.Dwarf", false);
-	}
-
-	private static void LoadArguments(string[] args)
-	{
-		SetDefaultSettings();
-
-		var arguments = SettingsLoader.RecursiveReader(args);
-
-		Settings.Merge(arguments);
-
-		var files = Settings.GetValueList("Compiler.SourceFiles");
-		if (files != null)
-		{
-			var src = files[0];
-			Settings.SetValue("OS.Name", src != null ? Path.GetFileNameWithoutExtension(src) : "MOSA");
-
-			foreach (var file in files)
-			{
-				var path = Path.GetDirectoryName(Path.GetFullPath(file));
-				if (!string.IsNullOrWhiteSpace(path))
-				{
-					Settings.AddPropertyListValue("SearchPaths", path);
-				}
-			}
-		}
+		mosaSettings.LauncherExit = true;
+		mosaSettings.Launcher = true;
+		mosaSettings.LauncherStart = true;
+		mosaSettings.EmulatorDisplay = true;
 	}
 
 	private static void NotifyStatus(string status)

@@ -12,7 +12,7 @@ public sealed class LinkerLayoutStage : BaseCompilerStage
 {
 	protected override void Finalization()
 	{
-		if (string.IsNullOrEmpty(CompilerSettings.OutputFile))
+		if (string.IsNullOrEmpty(MosaSettings.OutputFile))
 			return;
 
 		Linker.FinalizeLayout();

@@ -166,24 +166,24 @@ public partial class WatchView : DebugDockContent
 	{
 		if (openFileDialog1.ShowDialog() == DialogResult.OK)
 		{
-			MainForm.WatchFile = openFileDialog1.FileName;
+			MainForm.MosaSettings.WatchFile = openFileDialog1.FileName;
 			MainForm.LoadWatches();
 		}
 	}
 
 	private void toolStripButton1_Click(object sender, EventArgs e)
 	{
-		if (MainForm.WatchFile == null)
+		if (MainForm.MosaSettings.WatchFile == null)
 		{
-			if (MainForm.ImageFile != null)
+			if (MainForm.MosaSettings.ImageFile != null)
 			{
-				MainForm.WatchFile = Path.Combine(
-					Path.GetDirectoryName(MainForm.ImageFile),
-					Path.GetFileNameWithoutExtension(MainForm.ImageFile)) + ".watches";
+				MainForm.MosaSettings.WatchFile = Path.Combine(
+					Path.GetDirectoryName(MainForm.MosaSettings.ImageFile),
+					Path.GetFileNameWithoutExtension(MainForm.MosaSettings.ImageFile)) + ".watches";
 			}
 			else
 			{
-				MainForm.WatchFile = Path.Combine(Path.GetTempPath(), "default.watches");
+				MainForm.MosaSettings.WatchFile = Path.Combine(Path.GetTempPath(), "default.watches");
 			}
 		}
 
@@ -194,7 +194,7 @@ public partial class WatchView : DebugDockContent
 	{
 		var lines = new List<string>();
 
-		if (MainForm.ImageFile != null)
+		if (MainForm.MosaSettings.ImageFile != null)
 		{
 			lines.Add("#HASH: " + MainForm.VMHash);
 		}
@@ -204,6 +204,6 @@ public partial class WatchView : DebugDockContent
 			lines.Add(entry.Address + '\t' + entry.Size + '\t' + entry.Name);
 		}
 
-		File.WriteAllLines(MainForm.WatchFile, lines);
+		File.WriteAllLines(MainForm.MosaSettings.WatchFile, lines);
 	}
 }

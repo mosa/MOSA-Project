@@ -8,6 +8,7 @@ using Mosa.Compiler.Framework.Linker.Elf;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Platform.x64.CompilerStages;
 using Mosa.Platform.x64.Stages;
+using Mosa.Utility.Configuration;
 
 namespace Mosa.Platform.x64;
 
@@ -142,9 +143,9 @@ public sealed class Architecture : BaseArchitecture
 	/// Extends the compiler pipeline with x64 specific stages.
 	/// </summary>
 	/// <param name="pipeline">The pipeline to extend.</param>
-	public override void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> pipeline, CompilerSettings compilerSettings)
+	public override void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> pipeline, MosaSettings mosaSettings)
 	{
-		if (!string.IsNullOrEmpty(compilerSettings.Settings.GetValue("Multiboot.Version", string.Empty)))
+		if (!string.IsNullOrEmpty(mosaSettings.MultibootVersion))
 		{
 			pipeline.InsertAfterFirst<TypeInitializerStage>(
 				new MultibootStage()
@@ -159,8 +160,8 @@ public sealed class Architecture : BaseArchitecture
 	/// <summary>
 	/// Extends the method compiler pipeline with x64 specific stages.</summary>
 	/// <param name="pipeline">The method compiler pipeline to extend.</param>
-	/// <param name="compilerSettings"></param>
-	public override void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> pipeline, CompilerSettings compilerSettings)
+	/// <param name="mosaSettings"></param>
+	public override void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> pipeline, MosaSettings mosaSettings)
 	{
 		pipeline.InsertBefore<CallStage>(
 			new Stages.RuntimeCallStage()
@@ -170,7 +171,7 @@ public sealed class Architecture : BaseArchitecture
 			new BaseMethodCompilerStage[]
 			{
 				new IRTransformationStage(),
-				compilerSettings.PlatformOptimizations ? new Stages.OptimizationStage() : null,
+				mosaSettings.PlatformOptimizations ? new Stages.OptimizationStage() : null,
 				new PlatformTransformationStage(),
 			});
 
@@ -178,7 +179,7 @@ public sealed class Architecture : BaseArchitecture
 			new BaseMethodCompilerStage[]
 			{
 				new PlatformTransformationStage(),
-				compilerSettings.PlatformOptimizations ? new Stages.OptimizationStage() : null,
+				mosaSettings.PlatformOptimizations ? new Stages.OptimizationStage() : null,
 			});
 
 		pipeline.InsertBefore<CodeGenerationStage>(

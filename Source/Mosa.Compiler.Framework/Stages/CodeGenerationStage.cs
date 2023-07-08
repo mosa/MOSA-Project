@@ -54,7 +54,7 @@ public sealed class CodeGenerationStage : BaseMethodCompilerStage
 
 	protected override void Setup()
 	{
-		EmitBinary = CompilerSettings.EmitBinary;
+		EmitBinary = MosaSettings.EmitBinary;
 	}
 
 	protected override void Run()

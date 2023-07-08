@@ -14,12 +14,12 @@ public class MethodCompileTimeStage : BaseCompilerStage
 {
 	protected override void Finalization()
 	{
-		if (string.IsNullOrEmpty(CompilerSettings.CompileTimeFile))
+		if (string.IsNullOrEmpty(MosaSettings.CompileTimeFile))
 			return;
 
 		var methods = GetAndSortMethodData();
 
-		using (var writer = new StreamWriter(CompilerSettings.CompileTimeFile))
+		using (var writer = new StreamWriter(MosaSettings.CompileTimeFile))
 		{
 			writer.WriteLine("Ticks\tMilliseconds\tCompiler Count\tMethod");
 

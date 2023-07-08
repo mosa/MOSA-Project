@@ -29,7 +29,7 @@ public class OptimizationStage : BaseTransformStage
 
 	protected override void CustomizeTransform(TransformContext transformContext)
 	{
-		transformContext.SetStageOptions(LowerTo32 && CompilerSettings.LongExpansion && Is32BitPlatform);
+		transformContext.SetStageOptions(LowerTo32 && MosaSettings.LongExpansion && Is32BitPlatform);
 		transformContext.AddManager(CodeMotion);
 	}
 }

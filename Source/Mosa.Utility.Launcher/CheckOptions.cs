@@ -1,50 +1,39 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common.Configuration;
+using Mosa.Utility.Configuration;
 
 namespace Mosa.Utility.Launcher;
 
 public static class CheckOptions
 {
-	public static string Verify(Settings settings)
+	public static string Verify(MosaSettings settings)
 	{
-		var emulator = settings.GetValue("Emulator", string.Empty).ToLowerInvariant();
-		var imageformat = settings.GetValue("Image.Format", string.Empty).ToUpperInvariant();
-		var platform = settings.GetValue("Compiler.Platform", string.Empty);
+		settings.NormalizeSettings();
 
-		if (emulator == "qemu" && imageformat == "VDI")
+		if (settings.Platform != "x86" && settings.Platform != "x64")
 		{
-			return "QEMU does not support the VDI image format";
+			return $"Platform not supported: {settings.Platform}";
 		}
 
-		if (emulator == "bochs" && imageformat == "VDI")
+		switch (settings.Emulator)
 		{
-			return "Bochs does not support the VDI image format";
-		}
+			case "qemu" when settings.ImageFolder == "vdi":
+				return "QEMU does not support the VDI image format";
 
-		if (emulator == "bochs" && imageformat == "VMDK")
-		{
-			return "Bochs does not support the VMDK image format";
-		}
+			case "bochs" when settings.ImageFolder == "vdi":
+				return "Bochs does not support the VDI image format";
 
-		if (emulator == "vmware" && imageformat == "IMG")
-		{
-			return "VMware does not support the IMG image format";
-		}
+			case "bochs" when settings.ImageFolder == "vmdk":
+				return "Bochs does not support the VMDK image format";
 
-		if (emulator == "vmware" && imageformat == "VDI")
-		{
-			return "VMware does not support the VHD image format";
-		}
+			case "vmware" when settings.ImageFolder == "img":
+				return "VMware does not support the IMG image format";
 
-		if (emulator == "virtualbox" && imageformat == "IMG")
-		{
-			return "VirtualBox does not support the IMG file format";
-		}
+			case "vmware" when settings.ImageFolder == "vdi":
+				return "VMware does not support the VHD image format";
 
-		if (platform != "x86" && platform != "x64")
-		{
-			return "Platform not supported";
+			case "virtualbox" when settings.ImageFolder == "img":
+				return "VirtualBox does not support the IMG file format";
 		}
 
 		return null;

@@ -198,6 +198,21 @@ public sealed class Settings
 		return defaultValue;
 	}
 
+	public ulong GetValue(string fullname, ulong defaultValue)
+	{
+		var property = GetProperty(fullname);
+
+		if (property == null)
+			return defaultValue;
+
+		if (UInt64.TryParse(property.Value, out ulong result))
+		{
+			return result;
+		}
+
+		return defaultValue;
+	}
+
 	public List<string> GetList(string fullname)
 	{
 		var property = GetProperty(fullname);
@@ -227,6 +242,12 @@ public sealed class Settings
 	}
 
 	public void SetValue(string fullname, long value)
+	{
+		var property = CreateProperty(fullname);
+		property.Value = value.ToString();
+	}
+
+	public void SetValue(string fullname, ulong value)
 	{
 		var property = CreateProperty(fullname);
 		property.Value = value.ToString();

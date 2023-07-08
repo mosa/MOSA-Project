@@ -66,7 +66,7 @@
 			advanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			cbEnableMultithreading = new System.Windows.Forms.ToolStripMenuItem();
 			cbEnableMethodScanner = new System.Windows.Forms.ToolStripMenuItem();
-			EnableDebugDiagnostic = new System.Windows.Forms.ToolStripMenuItem();
+			cbEnableDebugDiagnostic = new System.Windows.Forms.ToolStripMenuItem();
 			cbDumpAllMethodStages = new System.Windows.Forms.ToolStripMenuItem();
 			openFileDialog = new System.Windows.Forms.OpenFileDialog();
 			treeView = new System.Windows.Forms.TreeView();
@@ -419,7 +419,7 @@
 			// advanceToolStripMenuItem
 			// 
 			advanceToolStripMenuItem.CheckOnClick = true;
-			advanceToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { cbEnableMultithreading, cbEnableMethodScanner, EnableDebugDiagnostic, cbDumpAllMethodStages });
+			advanceToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { cbEnableMultithreading, cbEnableMethodScanner, cbEnableDebugDiagnostic, cbDumpAllMethodStages });
 			advanceToolStripMenuItem.Name = "advanceToolStripMenuItem";
 			advanceToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
 			advanceToolStripMenuItem.Text = "Advance";
@@ -442,10 +442,10 @@
 			// 
 			// EnableDebugDiagnostic
 			// 
-			EnableDebugDiagnostic.CheckOnClick = true;
-			EnableDebugDiagnostic.Name = "EnableDebugDiagnostic";
-			EnableDebugDiagnostic.Size = new System.Drawing.Size(206, 22);
-			EnableDebugDiagnostic.Text = "Enable Debug Diagnostic";
+			cbEnableDebugDiagnostic.CheckOnClick = true;
+			cbEnableDebugDiagnostic.Name = "EnableDebugDiagnostic";
+			cbEnableDebugDiagnostic.Size = new System.Drawing.Size(206, 22);
+			cbEnableDebugDiagnostic.Text = "Enable Debug Diagnostic";
 			// 
 			// cbDumpAllMethodStages
 			// 
@@ -1279,7 +1279,7 @@
 		private System.Windows.Forms.Button btnSaveA;
 		private System.Windows.Forms.SaveFileDialog saveFileDialog1;
 		private System.Windows.Forms.ToolStripMenuItem removeIRNop;
-		private System.Windows.Forms.ToolStripMenuItem EnableDebugDiagnostic;
+		private System.Windows.Forms.ToolStripMenuItem cbEnableDebugDiagnostic;
 		private System.Windows.Forms.ToolStripButton tsbRefresh;
 	}
 }

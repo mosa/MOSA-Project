@@ -57,7 +57,7 @@ Linker Settings
     Linker.Format,Type of ELF object file elf32 or elf64
     Linker.Symbols,"If true, emits the symbols into the object  file"
     Linker.StaticRelocations,"If true, emits static relocation information into the object file"
-    Linker.Drawf,"If true, emits DWARF debug information into the object file"
+    Linker.Dwarf,"If true, emits DWARF debug information into the object file"
     Linker.ShortSymbolNames,"If true, emits short symbol names into the object file"
     Linker.CustomSections.{Name}.SectionName,Emits a custom linker section with this section name
     Linker.CustomSections.{Name}.SourceFile,Emits a custom linker section using the specific file
