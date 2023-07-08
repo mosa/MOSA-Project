@@ -27,19 +27,24 @@ internal static class PageTable
 
 	public static void Initialize()
 	{
+		Debug.WriteLine("x86.PageTable:Initialize()");
+
 		// Setup Page Directory
+		Debug.WriteLine(" > Setup Page Directory");
 		for (uint index = 0; index < 1024; index++)
 		{
 			PageDirectory.Store32(index << 2, (PageTables.ToUInt32() + index * Page.Size) | 0x04 | 0x02 | 0x01);
 		}
 
 		// Clear the Page Tables
+		Debug.WriteLine(" > Clear the Page Tables");
 		for (uint index = 0; index < PageFrameAllocator.TotalPages; index++)
 		{
 			PageTables.Store32(index << 2, (index * Page.Size) | 0x04 | 0x02 | 0x01);
 		}
 
 		// Setup Identity Pages
+		Debug.WriteLine(" > Setup Identity Pages");
 
 		// Map the first 128MB of memory
 		var endPage = new Pointer(128 * 1024 * 1024);
@@ -48,6 +53,8 @@ internal static class PageTable
 		{
 			MapVirtualAddressToPhysical(page, page, true);
 		}
+
+		Debug.WriteLine("x86.PageTable:Initialize() [Exit]");
 	}
 
 	public static void Enable()

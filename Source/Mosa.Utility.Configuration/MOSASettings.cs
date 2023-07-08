@@ -677,7 +677,7 @@ public class MosaSettings
 		Multithreading = true;
 		Platform = "x86";
 		Multithreading = true;
-		BaseAddress = 0x00500000;
+		BaseAddress = 0x00400000;
 		EmitBinary = true;
 		TraceLevel = 0;
 
