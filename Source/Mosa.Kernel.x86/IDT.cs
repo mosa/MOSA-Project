@@ -2150,7 +2150,7 @@ public static class IDT
 	[Plug("Mosa.Runtime.Interrupt::Process")]
 	private static unsafe void ProcessInterrupt(Pointer stackStatePointer)
 	{
-		var stack = (IDTStack*)stackStatePointer.ToInt32();
+		var stack = (IDTStack*)stackStatePointer.ToUInt32();
 
 		Debugger.Process(stack);
 
