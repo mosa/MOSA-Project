@@ -4,7 +4,7 @@ namespace Mosa.Runtime;
 
 internal static class Interrupt
 {
-	private static unsafe void Process(Pointer stackStatePointer)
+	private static void Process(Pointer stackStatePointer)
 	{
 		// Will be plugged
 	}
