@@ -80,7 +80,7 @@ public static class BootMemoryMap
 
 		AvailableMemory = new Pointer(Multiboot.MultibootV1.MemoryUpper * 1024);
 
-		Debug.WriteLineHex(" > Available Memory: ", AvailableMemory.ToInt64());
+		Debug.WriteLine(" > Available Memory: ", AvailableMemory.ToInt64());
 
 		var memoryMapEnd = Multiboot.MultibootV1.MemoryMapStart + Multiboot.MultibootV1.MemoryMapLength;
 
@@ -118,9 +118,9 @@ public static class BootMemoryMap
 			var entry = GetBootMemoryMapEntry(slot);
 
 			Debug.Write("Start: 0x");
-			Debug.WriteValueAsHex(entry.StartAddress.ToUInt64(), 8);
+			Debug.WriteValue(new Hex8(entry.StartAddress));
 			Debug.Write(" Size: 0x");
-			Debug.WriteValueAsHex(entry.Size, 8);
+			Debug.WriteValue(new Hex8(entry.Size));
 			Debug.Write(" Type: ");
 			Debug.WriteValue((byte)entry.Type);
 			Debug.WriteLine();

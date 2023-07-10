@@ -53,4 +53,7 @@ public static unsafe class Internal
 			stackFrame = Mosa.Runtime.Internal.GetPreviousStackFrame(stackFrame);
 		}
 	}
+
+	public static void Anchor()
+	{ }
 }

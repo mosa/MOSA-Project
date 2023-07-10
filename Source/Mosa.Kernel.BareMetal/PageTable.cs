@@ -13,13 +13,13 @@ public static class PageTable
 	{
 		Debug.WriteLine("PageTable:Setup()");
 
-		Platform.PageTableSetup();
-		Platform.PageTableInitialize();
+		Platform.PageTable.Setup();
+		Platform.PageTable.Initialize();
 
 		//// Unmap the first page for null pointer exceptions
 		//MapVirtualAddressToPhysical(Pointer.Zero, Pointer.Zero, false);
 
-		Platform.PageTableEnable();
+		Platform.PageTable.Enable();
 
 		Debug.WriteLine("PageTable:Setup() [Exit]");
 	}
@@ -31,7 +31,7 @@ public static class PageTable
 	/// <param name="physicalAddress">The physical address.</param>
 	public static void MapVirtualAddressToPhysical(Pointer virtualAddress, Pointer physicalAddress, bool present = true)
 	{
-		Platform.MapVirtualAddressToPhysical(virtualAddress, physicalAddress, present);
+		Platform.PageTable.MapVirtualAddressToPhysical(virtualAddress, physicalAddress, present);
 	}
 
 	/// <summary>

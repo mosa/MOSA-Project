@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections.Generic;
+using System.Diagnostics;
 using Mosa.DeviceSystem;
 using Mosa.Runtime;
 
@@ -29,6 +30,8 @@ public class ISABus : BaseDeviceDriver
 
 	protected void StartISADevices()
 	{
+		Debug.WriteLine("ISABus:StartISADevices()");
+
 		// Start ISA Drivers
 		var drivers = DeviceService.GetDeviceDrivers(DeviceBusType.ISA);
 
@@ -36,6 +39,8 @@ public class ISABus : BaseDeviceDriver
 		{
 			if (driver is ISADeviceDriverRegistryEntry)
 			{
+				Debug.WriteLine("ISA: ", driver.Name);
+
 				StartISADevice(driver as ISADeviceDriverRegistryEntry);
 			}
 		}

@@ -208,8 +208,8 @@ public static class PageFrameAllocator
 				// warp around to the start of the bitmap
 				restartAt = MinimumAvailablePage;
 
-				//if (wrap)
-				//	Debug.Kill();
+				if (wrap)
+					Debug.Kill();
 
 				wrap = true;
 			}
@@ -219,7 +219,7 @@ public static class PageFrameAllocator
 				// looped around in the search
 				// quit, as there are no free pages
 
-				Debug.WriteLine(" > return: Zero");
+				//Debug.WriteLine(" > return: Zero");
 
 				return Pointer.Zero;
 			}
@@ -326,15 +326,6 @@ public static class PageFrameAllocator
 
 			var maskvalue = (~value) & mask;
 
-			//Debug.WriteLine(" > at @ ", at);
-			//Debug.WriteLine("  > bitoffset = ", bitoffset);
-			//Debug.WriteLine("  > startbit = ", startbit);
-			//Debug.WriteLine("  > bitlen = ", bitlen);
-			//Debug.WriteLine("  > offset = ", offset);
-			//Debug.WriteLineHex("  > mask = ", mask);
-			//Debug.WriteLineHex("  > value = ", value);
-			//Debug.WriteLineHex("  > maskvalue = ", maskvalue);
-
 			Debug.Assert(bitlen != 0, "PhysicalPageAllocator::CheckFreePage32() -> bitlen != 0");
 
 			if (maskvalue == 0)
@@ -348,15 +339,9 @@ public static class PageFrameAllocator
 				// Future optimization: return nextAt page of the first available bit after the first unavailble bit, and if not, then start at next 32-bit aligned page number
 				nextAt = at + 1;
 
-				//Debug.WriteLine(" > returns false, restart at: ", nextAt);
-
 				return false;
 			}
 		}
-
-		//Debug.WriteLine(" > returns true");
-
-		//Debug.Kill();
 
 		return true;
 	}

@@ -4,6 +4,7 @@ using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Mosa.Runtime;
+using Mosa.Runtime.Plug;
 using Mosa.Runtime.x86;
 
 namespace Mosa.Kernel.x86;
@@ -2146,9 +2147,10 @@ public static class IDT
 	/// Interrupts the handler.
 	/// </summary>
 	/// <param name="stackStatePointer">The stack state pointer.</param>
-	private static unsafe void ProcessInterrupt(uint stackStatePointer)
+	[Plug("Mosa.Runtime.Interrupt::Process")]
+	private static unsafe void ProcessInterrupt(Pointer stackStatePointer)
 	{
-		var stack = (IDTStack*)stackStatePointer;
+		var stack = (IDTStack*)stackStatePointer.ToInt32();
 
 		Debugger.Process(stack);
 
@@ -2240,7 +2242,7 @@ public static class IDT
 
 			case Scheduler.ClockIRQ:
 				Interrupt?.Invoke(stack->Interrupt, stack->ErrorCode);
-				Scheduler.ClockInterrupt(new Pointer(stackStatePointer));
+				Scheduler.ClockInterrupt(stackStatePointer);
 				break;
 
 			case Scheduler.ThreadTerminationSignalIRQ:
