@@ -21,12 +21,12 @@ public sealed class Hardware : BaseHardwareAbstraction
 
 	public override void EnableInterrupts()
 	{
-		Platform.EnableInterrupts();
+		Platform.Interrupt.Enable();
 	}
 
 	public override void DisableInterrupts()
 	{
-		Platform.DisableInterrupts();
+		Platform.Interrupt.Disable();
 	}
 
 	public override void ProcessInterrupt(byte irq)
@@ -52,7 +52,7 @@ public sealed class Hardware : BaseHardwareAbstraction
 	/// <param name="message">The message.</param>
 	public override void DebugWrite(string message)
 	{
-		Console.Write(message);
+		Debug.Write(message);
 	}
 
 	/// <summary>
@@ -61,7 +61,7 @@ public sealed class Hardware : BaseHardwareAbstraction
 	/// <param name="message">The message.</param>
 	public override void DebugWriteLine(string message)
 	{
-		Console.WriteLine(message);
+		Debug.WriteLine(message);
 	}
 
 	/// <summary>
@@ -70,7 +70,7 @@ public sealed class Hardware : BaseHardwareAbstraction
 	/// <param name="message">The message.</param>
 	public override void Abort(string message)
 	{
-		Debug.Fatal(message);
+		Debug.Fatal(message ?? "Abort");
 	}
 
 	/// <summary>
@@ -85,32 +85,32 @@ public sealed class Hardware : BaseHardwareAbstraction
 
 	public override byte In8(ushort address)
 	{
-		return Platform.In8(address);
+		return Platform.IO.In8(address);
 	}
 
 	public override ushort In16(ushort address)
 	{
-		return Platform.In16(address);
+		return Platform.IO.In16(address);
 	}
 
 	public override uint In32(ushort address)
 	{
-		return Platform.In32(address);
+		return Platform.IO.In32(address);
 	}
 
 	public override void Out8(ushort address, byte data)
 	{
-		Platform.Out8(address, data);
+		Platform.IO.Out8(address, data);
 	}
 
 	public override void Out16(ushort address, ushort data)
 	{
-		Platform.Out16(address, data);
+		Platform.IO.Out16(address, data);
 	}
 
 	public override void Out32(ushort address, uint data)
 	{
-		Platform.Out32(address, data);
+		Platform.IO.Out32(address, data);
 	}
 
 	#endregion IO Port Operations

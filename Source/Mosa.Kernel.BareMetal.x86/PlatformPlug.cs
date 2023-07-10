@@ -34,56 +34,81 @@ public static class PlatformPlug
 	[Plug("Mosa.Kernel.BareMetal.Platform::GetInitialGCMemoryPool")]
 	public static AddressRange GetInitialGCMemoryPool() => new AddressRange(InitialGCMemoryPoolAddress, InitialGCMemoryPoolSize);
 
-	[Plug("Mosa.Kernel.BareMetal.Platform::PageTableSetup")]
-	public static void PageTableSetup() => PageTable.Setup();
-
-	[Plug("Mosa.Kernel.BareMetal.Platform::PageTableInitialize")]
-	public static void PageTableInitialize() => PageTable.Initialize();
-
-	[Plug("Mosa.Kernel.BareMetal.Platform::PageTableEnable")]
-	public static void PageTableEnable() => PageTable.Enable();
-
-	[Plug("Mosa.Kernel.BareMetal.Platform::MapVirtualAddressToPhysical")]
-	public static void MapVirtualAddressToPhysical(Pointer virtualAddress, Pointer physicalAddress, bool present = true) => PageTable.MapVirtualAddressToPhysical(virtualAddress, physicalAddress, present);
-
-	[Plug("Mosa.Kernel.BareMetal.Platform::GetPhysicalAddressFromVirtual")]
-	public static Pointer GetPhysicalAddressFromVirtual(Pointer virtualAddress) => PageTable.GetPhysicalAddressFromVirtual(virtualAddress);
-
 	[Plug("Mosa.Kernel.BareMetal.Platform::ConsoleWrite")]
 	public static void ConsoleWrite(byte c) => VGAConsole.Write(c);
 
 	[Plug("Mosa.Kernel.BareMetal.Platform::DebugWrite")]
 	public static void DebugWrite(byte c) => SerialDebug.Write(c);
 
-	[Plug("Mosa.Kernel.BareMetal.Platform::InterruptHandlerSetup")]
-	public static void InterruptHandlerSetup() => IDT.Setup();
+	public static class PageTablePlug
+	{
+		[Plug("Mosa.Kernel.BareMetal.Platform+PageTable::Setup")]
+		public static void Setup() => PageTable.Setup();
 
-	[Plug("Mosa.Kernel.BareMetal.Platform::InterruptHandlerSet")]
-	public static void InterruptHandlerSet(InterruptHandler handler) => IDT.SetInterruptHandler(handler);
+		[Plug("Mosa.Kernel.BareMetal.Platform+PageTable::Initialize")]
+		public static void Initialize() => PageTable.Initialize();
 
-	#region IO Port Operations
+		[Plug("Mosa.Kernel.BareMetal.Platform+PageTable::Enable")]
+		public static void Enable() => PageTable.Enable();
 
-	[Plug("Mosa.Kernel.BareMetal.Platform::In8")]
-	public static byte In8(ushort address) => Native.In8(address);
+		[Plug("Mosa.Kernel.BareMetal.Platform+PageTable::MapVirtualAddressToPhysical")]
+		public static void MapVirtualAddressToPhysical(Pointer virtualAddress, Pointer physicalAddress, bool present = true) => PageTable.MapVirtualAddressToPhysical(virtualAddress, physicalAddress, present);
 
-	[Plug("Mosa.Kernel.BareMetal.Platform::In16")]
-	public static ushort In16(ushort address) => Native.In16(address);
+		[Plug("Mosa.Kernel.BareMetal.Platform+PageTable::GetPhysicalAddressFromVirtual")]
+		public static Pointer GetPhysicalAddressFromVirtual(Pointer virtualAddress) => PageTable.GetPhysicalAddressFromVirtual(virtualAddress);
+	}
 
-	[Plug("Mosa.Kernel.BareMetal.Platform::In32")]
-	public static uint In32(ushort address) => Native.In32(address);
+	public static class InterruptPlug
+	{
+		[Plug("Mosa.Kernel.BareMetal.Platform+Interrupt::Setup")]
+		public static void HandlerSetup() => IDT.Setup();
 
-	[Plug("Mosa.Kernel.BareMetal.Platform::Out8")]
-	public static void Out8(ushort address, byte data) => Native.Out8(address, data);
+		[Plug("Mosa.Kernel.BareMetal.Platform+Interrupt::SetHandler")]
+		public static void SetHandler(InterruptHandler handler) => IDT.SetInterruptHandler(handler);
 
-	[Plug("Mosa.Kernel.BareMetal.Platform::Out16")]
-	public static void Out16(ushort address, ushort data) => Native.Out16(address, data);
+		[Plug("Mosa.Kernel.BareMetal.Platform+Interrupt::Enable")]
+		public static void Enable() => Native.Sti();
 
-	[Plug("Mosa.Kernel.BareMetal.Platform::Out32")]
-	public static void Out32(ushort address, uint data) => Native.Out32(address, data);
+		[Plug("Mosa.Kernel.BareMetal.Platform+Interrupt::Disable")]
+		public static void Disable() => Native.Cli();
+	}
 
-	#endregion IO Port Operations
+	public static class IOPlug
+	{
+		[Plug("Mosa.Kernel.BareMetal.Platform+IO::In8")]
+		public static byte In8(ushort address) => Native.In8(address);
 
-	public static void EnableInterrupts() => Native.Sti();
+		[Plug("Mosa.Kernel.BareMetal.Platform+IO::In16")]
+		public static ushort In16(ushort address) => Native.In16(address);
 
-	public static void DisableInterrupts() => Native.Cli();
+		[Plug("Mosa.Kernel.BareMetal.Platform+IO::In32")]
+		public static uint In32(ushort address) => Native.In32(address);
+
+		[Plug("Mosa.Kernel.BareMetal.Platform+IO::Out8")]
+		public static void Out8(ushort address, byte data) => Native.Out8(address, data);
+
+		[Plug("Mosa.Kernel.BareMetal.Platform+IO::Out16")]
+		public static void Out16(ushort address, ushort data) => Native.Out16(address, data);
+
+		[Plug("Mosa.Kernel.BareMetal.Platform+IO::Out32")]
+		public static void Out32(ushort address, uint data) => Native.Out32(address, data);
+	}
+
+	public static class Scheduler
+	{
+		[Plug("Mosa.Kernel.BareMetal.Platform+Scheduler::ThreadStart")]
+		public static void ThreadStart() => ThreadStart();
+
+		[Plug("Mosa.Kernel.BareMetal.Platform+Scheduler::ThreadYield")]
+		public static void ThreadYield() => Scheduler.ThreadYield();
+
+		[Plug("Mosa.Kernel.BareMetal.Platform+Scheduler::SignalTermination")]
+		public static void SignalTermination() => Scheduler.SignalTermination();
+
+		[Plug("Mosa.Kernel.BareMetal.Platform+Scheduler::SwitchToThread")]
+		public static void SwitchToThread(Thread thread) => Scheduler.SwitchToThread(thread);
+
+		[Plug("Mosa.Kernel.BareMetal.Platform+Scheduler::SetupThreadStack")]
+		public static Pointer SetupThreadStack(Pointer stackTop, Pointer methodAddress, Pointer termAddress) => Scheduler.SetupThreadStack(stackTop, methodAddress, termAddress);
+	}
 }

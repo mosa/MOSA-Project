@@ -8,11 +8,11 @@ public static class InterreuptManager
 {
 	public static void Setup()
 	{
-		Platform.InterruptHandlerSetup();
+		Platform.Interrupt.Setup();
 	}
 
 	public static void SetHandler(InterruptHandler handler)
 	{
-		Platform.InterruptHandlerSet(handler);
+		Platform.Interrupt.SetHandler(handler);
 	}
 }

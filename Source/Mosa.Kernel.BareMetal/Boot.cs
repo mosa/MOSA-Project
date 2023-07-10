@@ -119,13 +119,18 @@ public static class Boot
 		DeviceSystem.Setup.Initialize(hardware, deviceService.ProcessInterrupt);
 		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 
-		//Console.Write(ConsoleColor.BrightGreen, "> Registering device drivers...");
-		//deviceService.RegisterDeviceDriver(DeviceDriver.Setup.GetDeviceDriverRegistryEntries());
-		//Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
+		Console.Write(ConsoleColor.BrightGreen, "> Registering device drivers...");
+		deviceService.RegisterDeviceDriver(DeviceDriver.Setup.GetDeviceDriverRegistryEntries());
+		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 
-		//Console.Write(ConsoleColor.BrightGreen, "> X86System...");
+		Debug.WriteLine("[X86System]");
+
+		Console.Write(ConsoleColor.BrightGreen, "> X86System...");
 		//deviceService.Initialize(new X86System(), null);
-		//Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
+		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
+
+		//Debug.WriteLine("Done");
+		//Debug.Kill();
 	}
 
 	[Plug("Mosa.Runtime.GC::AllocateMemory")]

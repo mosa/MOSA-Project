@@ -1,5 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Runtime;
+
 namespace Mosa.Kernel.BareMetal;
 
 /// <summary>
@@ -145,30 +147,47 @@ public static class Debug
 		Write(NewLine);
 	}
 
-	public static void WriteLineHex(string message, ulong value)
+	public static void WriteValue(Hex value)
+	{
+		WriteValue(value.Value, 16, -1);
+	}
+
+	public static void WriteValue(Hex8 value)
+	{
+		WriteValue(value.Value, 16, 8);
+	}
+
+	public static void WriteLine(string message, Hex value)
 	{
 		if (!IsEnabled)
 			return;
 
 		Write(message);
-		WriteValueAsHex(value);
+		WriteValue(value);
 		Write(NewLine);
 	}
 
-	public static void WriteLineHex(string message, long value)
-	{
-		WriteLineHex(message, (ulong)value);
-	}
-
-	public static void WriteLineHex(string message1, ulong value1, string message2, ulong value2)
+	public static void WriteLine(string message1, Hex value1, string message2, Hex value2)
 	{
 		if (!IsEnabled)
 			return;
 
 		Write(message1);
-		WriteValueAsHex(value1);
+		WriteValue(value1);
 		Write(message2);
-		WriteValueAsHex(value2);
+		WriteValue(value2);
+		Write(NewLine);
+	}
+
+	public static void WriteLine(string message1, ulong value1, string message2, Hex value2)
+	{
+		if (!IsEnabled)
+			return;
+
+		Write(message1);
+		WriteValue(value1);
+		Write(message2);
+		WriteValue(value2);
 		Write(NewLine);
 	}
 
@@ -179,19 +198,9 @@ public static class Debug
 		WriteValue(value, 10, -1);
 	}
 
-	public static void WriteValueAsHex(ulong value)
-	{
-		WriteValue(value, 16, -1);
-	}
-
 	public static void WriteValue(ulong value, int length)
 	{
 		WriteValue(value, 10, length);
-	}
-
-	public static void WriteValueAsHex(ulong value, int length)
-	{
-		WriteValue(value, 16, length);
 	}
 
 	#endregion Public API
@@ -243,4 +252,22 @@ public static class Debug
 	}
 
 	#endregion Private API
+}
+
+public struct Hex
+{
+	public ulong Value;
+
+	public Hex(ulong value) => Value = value;
+
+	public Hex(Pointer value) => Value = value.ToUInt64();
+}
+
+public struct Hex8
+{
+	public ulong Value;
+
+	public Hex8(ulong value) => Value = value;
+
+	public Hex8(Pointer value) => Value = value.ToUInt64();
 }

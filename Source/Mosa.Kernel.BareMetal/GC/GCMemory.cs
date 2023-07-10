@@ -33,16 +33,20 @@ public static class GCMemory
 		var heapSize = CurrentHeap.Size;
 		var heapUsed = CurrentHeap.Used;
 
-		Debug.WriteLine("+ Allocating Memory: ", size);
-
 		if (heapStart.IsNull || heapSize - heapUsed < size)
 		{
 			CurrentHeap = AllocateHeap();
 			CurrentHeap.Used = size;
+
+			Debug.WriteLine("+ Allocating Object: size = ", size, " @ ", new Hex(CurrentHeap.Address));
+
 			return CurrentHeap.Address;
 		}
 
 		var at = heapStart + heapUsed;
+
+		Debug.WriteLine("+ Allocating Object: size = ", size, " @ ", new Hex(at));
+
 		CurrentHeap.Used = heapUsed + size;
 		return at;
 	}
@@ -56,6 +60,8 @@ public static class GCMemory
 		heap.Address = VirtualPageAllocator.ReservePages(size / Page.Size);
 		heap.Size = size;
 		heap.Used = 0;
+
+		Debug.WriteLine("+ Allocated New Heap: size = ", new Hex(size), " @ ", new Hex(heap.Address));
 
 		return heap;
 	}

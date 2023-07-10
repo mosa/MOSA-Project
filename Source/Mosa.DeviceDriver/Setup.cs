@@ -13,14 +13,6 @@ public static class Setup
 		{
 			new ISADeviceDriverRegistryEntry
 			{
-				Name = "ACPI",
-				Platforms = PlatformArchitecture.X86,
-				AutoLoad = true,
-				Factory = () => new ISA.ACPI()
-			},
-
-			new ISADeviceDriverRegistryEntry
-			{
 				Name = "StandardKeyboard",
 				Platforms = PlatformArchitecture.X86AndX64,
 				AutoLoad = true,
@@ -245,6 +237,14 @@ public static class Setup
 				DeviceID = 0x0405,
 				PCIFields = PCIField.VendorID | PCIField.DeviceID,
 				Factory = () => new PCI.VMware.VMwareSVGA2()
+			},
+
+			new ISADeviceDriverRegistryEntry
+			{
+				Name = "ACPI",
+				Platforms = PlatformArchitecture.X86,
+				AutoLoad = true,
+				Factory = () => new ISA.ACPI()
 			},
 		};
 	}

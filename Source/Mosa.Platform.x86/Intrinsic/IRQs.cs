@@ -9,7 +9,10 @@ namespace Mosa.Platform.x86.Intrinsic;
 /// </summary>
 internal static partial class IntrinsicMethods
 {
-	private static readonly string DefaultInterruptMethodName = "Mosa.Kernel.x86.IDT::ProcessInterrupt";
+	//private static readonly string DefaultInterruptMethodName = "Mosa.Kernel.x86.IDT::ProcessInterrupt";
+	private static readonly string DefaultInterruptMethodName = "Mosa.Runtime.Interrupt::Process";
+
+	private static readonly string[] seperator = new string[] { "::" };
 
 	private static void InsertIRQ(int irq, Context context, TransformContext transformContext)
 	{
@@ -20,7 +23,7 @@ internal static partial class IntrinsicMethods
 			interruptMethodName = DefaultInterruptMethodName;
 		}
 
-		var ar = interruptMethodName.Split(new string[] { "::" }, System.StringSplitOptions.None);
+		var ar = interruptMethodName.Split(seperator, System.StringSplitOptions.None);
 
 		if (ar.Length != 2)
 			return;
@@ -37,6 +40,13 @@ internal static partial class IntrinsicMethods
 
 		if (method == null)
 			return;
+
+		var plugMethod = transformContext.Compiler.PlugSystem.GetReplacement(method);
+
+		if (plugMethod != null)
+		{
+			method = plugMethod;
+		}
 
 		transformContext.MethodScanner.MethodInvoked(method, transformContext.Method);
 

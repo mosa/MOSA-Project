@@ -8,10 +8,7 @@ public static class Platform
 {
 	// These methods will be plugged and implemented elsewhere in the platform specific implementation
 
-	public static uint GetPageShift()
-	{
-		return 0;
-	}
+	public static uint GetPageShift() => 0;
 
 	public static void EntryPoint()
 	{
@@ -27,66 +24,76 @@ public static class Platform
 		return new AddressRange(0, 0);
 	}
 
-	public static void PageTableSetup()
-	{ }
-
-	public static void PageTableInitialize()
-	{ }
-
-	public static void PageTableEnable()
-	{ }
-
-	public static void MapVirtualAddressToPhysical(Pointer virtualAddress, Pointer physicalAddress, bool present = true)
-	{ }
-
-	public static Pointer GetPhysicalAddressFromVirtual(Pointer virtualAddress)
-	{
-		return Pointer.Zero;
-	}
-
 	public static void ConsoleWrite(byte c)
 	{ }
 
 	public static void DebugWrite(byte c)
 	{ }
 
-	public static void InterruptHandlerSetup()
-	{ }
-
-	public static void InterruptHandlerSet(InterruptHandler handler)
-	{ }
-
-	#region IO Port Operations
-
-	public static byte In8(ushort address)
+	public static class PageTable
 	{
-		return 0;
+		public static void Setup()
+		{ }
+
+		public static void Initialize()
+		{ }
+
+		public static void Enable()
+		{ }
+
+		public static void MapVirtualAddressToPhysical(Pointer virtualAddress, Pointer physicalAddress, bool present = true)
+		{ }
+
+		public static Pointer GetPhysicalAddressFromVirtual(Pointer virtualAddress) => Pointer.Zero;
 	}
 
-	public static ushort In16(ushort address)
+	public static class Interrupt
 	{
-		return 0;
+		public static void Setup()
+		{ }
+
+		public static void SetHandler(InterruptHandler handler)
+		{ }
+
+		public static void Enable()
+		{ }
+
+		public static void Disable()
+		{ }
 	}
 
-	public static uint In32(ushort address)
+	public static class IO
 	{
-		return 0;
+		public static byte In8(ushort address) => 0;
+
+		public static ushort In16(ushort address) => 0;
+
+		public static uint In32(ushort address) => 0;
+
+		public static void Out8(ushort address, byte data)
+		{ }
+
+		public static void Out16(ushort address, ushort data)
+		{ }
+
+		public static void Out32(ushort address, uint data)
+		{ }
 	}
 
-	public static void Out8(ushort address, byte data)
-	{ }
+	public static class Scheduler
+	{
+		public static void ThreadStart()
+		{ }
 
-	public static void Out16(ushort address, ushort data)
-	{ }
+		public static void ThreadYield()
+		{ }
 
-	public static void Out32(ushort address, uint data)
-	{ }
+		public static void SignalTermination()
+		{ }
 
-	#endregion IO Port Operations
+		public static void SwitchToThread(Thread thread)
+		{ }
 
-	public static void EnableInterrupts()
-	{ }
-
-	public static void DisableInterrupts()
-	{ }
+		public static Pointer SetupThreadStack(Pointer stackTop, Pointer methodAddress, Pointer termAddress) => Pointer.Zero;
+	}
 }
