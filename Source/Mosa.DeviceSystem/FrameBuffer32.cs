@@ -14,7 +14,7 @@ public sealed class FrameBuffer32
 	private const uint BytesPerPixel = 4;
 
 	/// <summary>The memory</summary>
-	public ConstrainedPointer Buffer { get; }
+	private ConstrainedPointer Buffer { get; }
 
 	/// <summary>Gets the width in pixels</summary>
 	/// <value>The width.</value>
@@ -118,8 +118,8 @@ public sealed class FrameBuffer32
 		if (x >= Width || y >= Height)
 			return;
 
-		for (uint h = 0; h < he; h++)
-			for (uint w = 0; w < wi; w++)
+		for (var h = 0u; h < he; h++)
+			for (var w = 0u; w < wi; w++)
 			{
 				var color = buffer.GetPixel(w, h);
 
@@ -145,8 +145,8 @@ public sealed class FrameBuffer32
 			if (x >= Width || y >= Height)
 				return;
 
-			for (uint h = 0; h < he; h++)
-				for (uint w = 0; w < wi; w++)
+			for (var h = 0u; h < he; h++)
+				for (var w = 0u; w < wi; w++)
 				{
 					var xx = x + w;
 					var yy = y + h;
@@ -270,13 +270,13 @@ public sealed class FrameBuffer32
 
 	private void DrawHorizontalLine(uint color, uint dx, uint x, uint y)
 	{
-		for (uint i = 0; i < dx; i++)
+		for (var i = 0u; i < dx; i++)
 			SetPixel(x + i, y, color);
 	}
 
 	private void DrawVerticalLine(uint color, uint dy, uint x, uint y)
 	{
-		for (uint i = 0; i < dy; i++)
+		for (var i = 0u; i < dy; i++)
 			SetPixel(color, x, y + i);
 	}
 

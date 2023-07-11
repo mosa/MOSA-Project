@@ -2,13 +2,13 @@
 
 using Mosa.Runtime;
 
-namespace Mosa.Kernel.BareMetal.GC;
+namespace Mosa.Kernel.BareMetal.VirtualMemory;
 
-public struct GCHeapList
+public struct MemoryHeapList
 {
 	private readonly Pointer Entry;
 
-	public GCHeapList(Pointer entry)
+	public MemoryHeapList(Pointer entry)
 	{
 		Entry = entry;
 	}
@@ -19,8 +19,8 @@ public struct GCHeapList
 		set => Entry.Store32(value);
 	}
 
-	public GCHeap GetHeapEntry(uint index)
+	public MemoryHeap GetHeapEntry(uint index)
 	{
-		return new GCHeap(Entry + sizeof(uint) + Pointer.Size * 2 * index);
+		return new MemoryHeap(Entry + sizeof(uint) + Pointer.Size * 2 * index);
 	}
 }

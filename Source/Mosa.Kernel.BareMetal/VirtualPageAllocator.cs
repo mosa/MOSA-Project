@@ -48,7 +48,10 @@ public static class VirtualPageAllocator
 	public static Pointer Allocate(Pointer virtualPage)
 	{
 		var physicalPage = PageFrameAllocator.Allocate();
+
 		Map(virtualPage, physicalPage);
+
+		Page.ClearPage(virtualPage);
 
 		return physicalPage;
 	}

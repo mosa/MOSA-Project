@@ -17,6 +17,8 @@ public sealed class Hardware : BaseHardwareAbstraction
 	/// </summary>
 	public override uint PageSize => PageFrameAllocator.PageSize;
 
+	public override PlatformArchitecture PlatformArchitecture => PlatformArchitecture.X86;
+
 	/// <summary>
 	/// Gets a block of memory from the kernel
 	/// </summary>
@@ -33,6 +35,7 @@ public sealed class Hardware : BaseHardwareAbstraction
 
 		return new ConstrainedPointer(address, size);
 	}
+
 	/// Disables all interrupts.
 	/// </summary>
 	public override void DisableInterrupts()

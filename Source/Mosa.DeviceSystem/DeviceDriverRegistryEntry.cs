@@ -6,7 +6,7 @@ public delegate BaseDeviceDriver InstantiateDeviceDriver();
 
 public abstract class DeviceDriverRegistryEntry
 {
-	public virtual PlatformArchitecture Platforms { get; set; }
+	public virtual PlatformArchitecture Platform { get; set; }
 
 	public virtual DeviceBusType BusType { get; set; }
 

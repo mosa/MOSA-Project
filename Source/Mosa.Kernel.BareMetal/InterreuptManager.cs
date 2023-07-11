@@ -8,7 +8,11 @@ public static class InterreuptManager
 {
 	public static void Setup()
 	{
+		Debug.WriteLine("InterreuptManager:Setup()");
+
 		Platform.Interrupt.Setup();
+
+		Debug.WriteLine("InterreuptManager:Setup() [Exit]");
 	}
 
 	public static void SetHandler(InterruptHandler handler)

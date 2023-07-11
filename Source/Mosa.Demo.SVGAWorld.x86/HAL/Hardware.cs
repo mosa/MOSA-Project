@@ -18,6 +18,8 @@ public sealed class Hardware : BaseHardwareAbstraction
 	/// </summary>
 	public override uint PageSize => PageFrameAllocator.PageSize;
 
+	public override PlatformArchitecture PlatformArchitecture => PlatformArchitecture.X86;
+
 	/// <summary>
 	/// Gets a block of memory from the kernel
 	/// </summary>

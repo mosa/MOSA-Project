@@ -14,7 +14,7 @@ public abstract class BaseHardwareAbstraction
 	/// </summary>
 	public abstract uint PageSize { get; }
 
-	/// <summary>
+	public abstract PlatformArchitecture PlatformArchitecture { get; }
 
 	/// <summary>
 	/// Gets a block of memory from the kernel
@@ -76,8 +76,6 @@ public abstract class BaseHardwareAbstraction
 	/// </summary>
 	public abstract void Yield();
 
-	#region IO Port Operations
-
 	public abstract byte In8(ushort address);
 
 	public abstract ushort In16(ushort address);
@@ -89,6 +87,4 @@ public abstract class BaseHardwareAbstraction
 	public abstract void Out16(ushort address, ushort data);
 
 	public abstract void Out32(ushort address, uint data);
-
-	#endregion IO Port Operations
 }
