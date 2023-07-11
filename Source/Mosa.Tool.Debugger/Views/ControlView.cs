@@ -92,6 +92,12 @@ public partial class ControlView : DebugDockContent
 
 	private void btnStep_Click(object sender, EventArgs e)
 	{
+		if (GDBConnector == null)
+			return;
+
+		if (GDBConnector.IsRunning)
+			return;
+
 		MemoryCache.Clear();
 		GDBConnector.ClearAllBreakPoints();
 		GDBConnector.Step();
@@ -100,6 +106,9 @@ public partial class ControlView : DebugDockContent
 
 	private void btnStepN_Click(object sender, EventArgs e)
 	{
+		if (GDBConnector == null)
+			return;
+
 		if (GDBConnector.IsRunning)
 			return;
 
@@ -179,6 +188,9 @@ public partial class ControlView : DebugDockContent
 
 	private void btnStop_Click(object sender, EventArgs e)
 	{
+		if (GDBConnector == null)
+			return;
+
 		GDBConnector.Break();
 		GDBConnector.GetRegisters();
 	}
