@@ -79,7 +79,7 @@ public static class Platform
 
 	public static class Scheduler
 	{
-		public static void ThreadStart()
+		public static void Start()
 		{ }
 
 		public static void Yield()

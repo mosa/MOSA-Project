@@ -17,7 +17,7 @@ public static class Scheduler
 	}
 
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	private static void Yield()
+	public static void Yield()
 	{
 		Native.Hlt();
 	}
@@ -28,7 +28,7 @@ public static class Scheduler
 		Native.Int(ThreadTerminationSignalIRQ);
 	}
 
-	private static Pointer SetupThreadStack(Pointer stackTop, Pointer methodAddress, Pointer termAddress)
+	public static Pointer SetupThreadStack(Pointer stackTop, Pointer methodAddress, Pointer termAddress)
 	{
 		// Setup stack state
 		stackTop.Store32(-4, 0);          // Zero Sentinel
@@ -53,7 +53,7 @@ public static class Scheduler
 		return stackTop - 60;
 	}
 
-	private static void SwitchToThread(Thread thread)
+	public static void SwitchToThread(Thread thread)
 	{
 		PIC.SendEndOfInterrupt(ClockIRQ);
 

@@ -43,22 +43,22 @@ public static class PlatformPlug
 	public static class PageTablePlug
 	{
 		[Plug("Mosa.Kernel.BareMetal.Platform+PageTable::Setup")]
-		public static void Setup() => PageTable.Setup();
+		public static void Setup() => x86.PageTable.Setup();
 
 		[Plug("Mosa.Kernel.BareMetal.Platform+PageTable::GetPageShift")]
 		public static uint GetPageShift() => 12;
 
 		[Plug("Mosa.Kernel.BareMetal.Platform+PageTable::Initialize")]
-		public static void Initialize() => PageTable.Initialize();
+		public static void Initialize() => x86.PageTable.Initialize();
 
 		[Plug("Mosa.Kernel.BareMetal.Platform+PageTable::Enable")]
-		public static void Enable() => PageTable.Enable();
+		public static void Enable() => x86.PageTable.Enable();
 
 		[Plug("Mosa.Kernel.BareMetal.Platform+PageTable::MapVirtualAddressToPhysical")]
-		public static void MapVirtualAddressToPhysical(Pointer virtualAddress, Pointer physicalAddress, bool present = true) => PageTable.MapVirtualAddressToPhysical(virtualAddress, physicalAddress, present);
+		public static void MapVirtualAddressToPhysical(Pointer virtualAddress, Pointer physicalAddress, bool present = true) => x86.PageTable.MapVirtualAddressToPhysical(virtualAddress, physicalAddress, present);
 
 		[Plug("Mosa.Kernel.BareMetal.Platform+PageTable::GetPhysicalAddressFromVirtual")]
-		public static Pointer GetPhysicalAddressFromVirtual(Pointer virtualAddress) => PageTable.GetPhysicalAddressFromVirtual(virtualAddress);
+		public static Pointer GetPhysicalAddressFromVirtual(Pointer virtualAddress) => x86.PageTable.GetPhysicalAddressFromVirtual(virtualAddress);
 	}
 
 	public static class InterruptPlug
@@ -99,19 +99,19 @@ public static class PlatformPlug
 
 	public static class Scheduler
 	{
-		[Plug("Mosa.Kernel.BareMetal.Platform+Scheduler::ThreadStart")]
-		public static void ThreadStart() => ThreadStart();
+		[Plug("Mosa.Kernel.BareMetal.Platform+Scheduler::Start")]
+		public static void Start() => x86.Scheduler.Start();
 
-		[Plug("Mosa.Kernel.BareMetal.Platform+Scheduler::ThreadYield")]
-		public static void ThreadYield() => Scheduler.ThreadYield();
+		[Plug("Mosa.Kernel.BareMetal.Platform+Scheduler::Yield")]
+		public static void Yield() => x86.Scheduler.Yield();
 
 		[Plug("Mosa.Kernel.BareMetal.Platform+Scheduler::SignalTermination")]
-		public static void SignalTermination() => Scheduler.SignalTermination();
+		public static void SignalTermination() => x86.Scheduler.SignalTermination();
 
 		[Plug("Mosa.Kernel.BareMetal.Platform+Scheduler::SwitchToThread")]
-		public static void SwitchToThread(Thread thread) => Scheduler.SwitchToThread(thread);
+		public static void SwitchToThread(Thread thread) => x86.Scheduler.SwitchToThread(thread);
 
 		[Plug("Mosa.Kernel.BareMetal.Platform+Scheduler::SetupThreadStack")]
-		public static Pointer SetupThreadStack(Pointer stackTop, Pointer methodAddress, Pointer termAddress) => Scheduler.SetupThreadStack(stackTop, methodAddress, termAddress);
+		public static Pointer SetupThreadStack(Pointer stackTop, Pointer methodAddress, Pointer termAddress) => x86.Scheduler.SetupThreadStack(stackTop, methodAddress, termAddress);
 	}
 }
