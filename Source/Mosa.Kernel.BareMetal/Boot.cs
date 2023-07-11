@@ -137,8 +137,8 @@ public static class Boot
 		//deviceService.Initialize(system, null);
 		//Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 
-		//Debug.WriteLine("Done");
-		//Debug.Kill();
+		Debug.WriteLine("Done");
+		Debug.Kill();
 	}
 
 	[Plug("Mosa.Runtime.GC::AllocateMemory")]

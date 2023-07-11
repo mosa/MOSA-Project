@@ -12,6 +12,7 @@ using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Utility.Configuration;
+using static Mosa.Utility.Launcher.SimpleTCP;
 
 namespace Mosa.Utility.Launcher;
 
@@ -49,7 +50,7 @@ public class Starter : BaseLauncher
 				return IsSucccessful;
 			}
 
-			if (MosaSettings.LauncherSerialConsole)
+			if (MosaSettings.LauncherSerialConnection)
 			{
 				IsSucccessful = StartDebug(Process);
 				return IsSucccessful;
@@ -282,7 +283,7 @@ public class Starter : BaseLauncher
 
 		var serial = MosaSettings.EmulatorSerial;
 
-		if (MosaSettings.LauncherSerialConsole || MosaSettings.LauncherTest)
+		if (MosaSettings.LauncherSerialConnection || MosaSettings.LauncherTest)
 		{
 			serial = "tcpserver";
 		}

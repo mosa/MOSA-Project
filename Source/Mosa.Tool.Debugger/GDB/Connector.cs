@@ -24,11 +24,9 @@ public class Connector
 
 	public OnStatusChange OnRunning { get; set; }
 
-	public bool IsConnected
-	{ get { return GDBClient == null ? false : GDBClient.IsConnected; } }
+	public bool IsConnected => GDBClient == null ? false : GDBClient.IsConnected;
 
-	public bool IsRunning
-	{ get { return !IsPaused; } }
+	public bool IsRunning => !IsPaused;
 
 	public bool IsPaused { get; set; } = true;
 

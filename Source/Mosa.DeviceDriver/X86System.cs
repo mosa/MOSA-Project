@@ -24,6 +24,7 @@ public class X86System : BaseDeviceDriver
 	public override void Start()
 	{
 		Debug.WriteLine("X86System:Start()");
+
 		CreateISABusDevices();
 
 		Device.Status = DeviceStatus.Online;

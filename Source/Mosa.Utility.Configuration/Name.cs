@@ -71,7 +71,7 @@ public static class Name
 	public const string Launcher_GDB = "Launcher.GDB";
 	public const string Launcher_Launch = "Launcher.Launch";
 	public const string Launcher_PlugKorlib = "Launcher.PlugKorlib";
-	public const string Launcher_Serial_Console = "Launcher.Serial.Console";
+	public const string Launcher_Serial_Connection = "Launcher.Serial.Connection";
 	public const string Launcher_Serial_File = "Launcher.Serial.File";
 	public const string Launcher_Start = "Launcher.Start";
 	public const string Launcher_Test = "Launcher.Test";
