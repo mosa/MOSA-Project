@@ -3,10 +3,10 @@
 using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using Mosa.Runtime;
-using Mosa.Runtime.x86;
 using Mosa.Kernel.BareMetal.BootMemory;
+using Mosa.Runtime;
 using Mosa.Runtime.Plug;
+using Mosa.Runtime.x86;
 
 namespace Mosa.Kernel.BareMetal.x86;
 
@@ -40,7 +40,7 @@ public static class IDT
 
 	public static void Setup()
 	{
-		Debug.WriteLine("IDT:Setup()");
+		Debug.WriteLine("x86.IDT:Setup()");
 
 		Interrupt = null;
 
@@ -61,7 +61,7 @@ public static class IDT
 
 		SetLidt(IDTTable);
 
-		Debug.WriteLine("IDT:Setup() [Exit]");
+		Debug.WriteLine("x86.IDT:Setup() [Exit]");
 	}
 
 	public static void SetInterruptHandler(InterruptHandler handler)
@@ -2199,8 +2199,6 @@ public static class IDT
 				break;
 
 			case 8:
-
-				//TODO: Analyze the double fault
 				Error(stack, "Double Fault");
 				break;
 
@@ -2274,12 +2272,14 @@ public static class IDT
 				break;
 		}
 
-		LocalAPIC.SendEndOfInterrupt(stack.Interrupt);
+		PIC.SendEndOfInterrupt(stack.Interrupt);    // LocalAPIC.
 	}
 
 	private static unsafe void Error(IDTStackEntry stack, string message)
 	{
-		Debug.Fatal(message);
+		Debug.Write("***IDT Error***");
+		Debug.WriteLine(message);
+		Debug.Fatal();
 	}
 
 	#endregion Private Methods

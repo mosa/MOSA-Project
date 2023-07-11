@@ -2,13 +2,13 @@
 
 using Mosa.Runtime;
 
-namespace Mosa.Kernel.BareMetal.GC;
+namespace Mosa.Kernel.BareMetal.VirtualMemory;
 
-public struct GCHeap
+public struct MemoryHeap
 {
 	private readonly Pointer Entry;
 
-	public GCHeap(Pointer entry)
+	public MemoryHeap(Pointer entry)
 	{
 		Entry = entry;
 	}

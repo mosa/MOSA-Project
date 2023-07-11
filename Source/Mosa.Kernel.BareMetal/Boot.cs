@@ -4,7 +4,6 @@ using Mosa.DeviceDriver;
 using Mosa.DeviceSystem;
 using Mosa.DeviceSystem.Service;
 using Mosa.Kernel.BareMetal.BootMemory;
-using Mosa.Kernel.BareMetal.GC;
 using Mosa.Runtime;
 using Mosa.Runtime.Plug;
 
@@ -15,6 +14,8 @@ public static class Boot
 	[Plug("Mosa.Runtime.StartUp::PlatformInitialization")]
 	public static void PlatformInitialization()
 	{
+		Debug.WriteLine("[Platform Initialization]");
+
 		BootStatus.Initalize();
 
 		Console.SetBackground(ConsoleColor.Black);
@@ -39,6 +40,8 @@ public static class Boot
 	[Plug("Mosa.Runtime.StartUp::KernelEntryPoint")]
 	public static void EntryPoint()
 	{
+		Debug.WriteLine("[Entry Point]");
+
 		Console.Write(ConsoleColor.BrightGreen, "> Enabling debug logging...");
 		Debug.Setup(true);
 		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
@@ -60,7 +63,7 @@ public static class Boot
 		PageTable.Setup();
 		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 
-		Console.Write(ConsoleColor.BrightGreen, "> Virtual memory allocator...");
+		Console.Write(ConsoleColor.BrightGreen, "> Virtual page allocator...");
 		VirtualPageAllocator.Setup();
 		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 
@@ -71,9 +74,12 @@ public static class Boot
 		Console.Write(ConsoleColor.BrightGreen, "> Garbage collection...");
 		GCMemory.Setup();
 		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
-
 		Console.Write(ConsoleColor.BrightGreen, "> Interrupt Handler...");
 		InterreuptManager.SetHandler(null);
+		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
+
+		Console.Write(ConsoleColor.BrightGreen, "> Virtual memory allocator...");
+		VirtualMemoryAllocator.Setup();
 		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 
 		//Console.Write(ConsoleColor.BrightGreen, "> Scheduler...");
@@ -123,14 +129,16 @@ public static class Boot
 		deviceService.RegisterDeviceDriver(DeviceDriver.Setup.GetDeviceDriverRegistryEntries());
 		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 
-		Debug.WriteLine("[X86System]");
+		Debug.WriteLine("[System]");
 
-		Console.Write(ConsoleColor.BrightGreen, "> X86System...");
-		//deviceService.Initialize(new X86System(), null);
-		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
+		var system = new X86System();
 
-		//Debug.WriteLine("Done");
-		//Debug.Kill();
+		//Console.Write(ConsoleColor.BrightGreen, "> X86System...");
+		//deviceService.Initialize(system, null);
+		//Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
+
+		Debug.WriteLine("Done");
+		Debug.Kill();
 	}
 
 	[Plug("Mosa.Runtime.GC::AllocateMemory")]

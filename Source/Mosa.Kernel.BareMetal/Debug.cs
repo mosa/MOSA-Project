@@ -9,7 +9,7 @@ namespace Mosa.Kernel.BareMetal;
 /// </summary>
 public static class Debug
 {
-	private static byte NewLine = (byte)'\n';
+	private const byte NewLine = (byte)'\n';
 
 	public static bool IsEnabled { get; set; } = false;
 
@@ -35,20 +35,9 @@ public static class Debug
 		WriteLine("##KILL##");
 	}
 
-	public static void Fatal(string message = null)
+	public static void Fatal()
 	{
-		Write("Fatal: ");
-		Write(message);
-		WriteLine();
-		Kill();
-	}
-
-	public static void Fatal(string message, ulong value)
-	{
-		Write("Fatal: ");
-		Write(message);
-		WriteValue(value);
-		WriteLine();
+		WriteLine("***Fatal***");
 		Kill();
 	}
 

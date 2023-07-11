@@ -1,18 +1,20 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Runtime.CompilerServices;
+using Mosa.Kernel.BareMetal.GC;
 using Mosa.Runtime;
 
-namespace Mosa.Kernel.BareMetal.GC;
+namespace Mosa.Kernel.BareMetal;
 
 public static class GCMemory
 {
+	private static uint DefaultHeapSize = 0x1000000u; // 16MB
+
 	private static GCHeapList HeapList;
 	private static GCHeap CurrentHeap;
 
 	public static void Setup()
 	{
-		//Debug.WriteLine("GCMemory:Setup()");
+		Debug.WriteLine("GCMemory:Setup()");
 
 		var entry = BootPageAllocator.AllocatePage();
 		Page.ClearPage(entry);
@@ -25,6 +27,8 @@ public static class GCMemory
 		CurrentHeap = AllocateHeap();
 
 		BootStatus.IsGCEnabled = true;
+
+		Debug.WriteLine("GCMemory:Setup() [Exit]");
 	}
 
 	public static Pointer AllocateMemory(uint size)
@@ -45,7 +49,7 @@ public static class GCMemory
 
 		var at = heapStart + heapUsed;
 
-		Debug.WriteLine("+ Allocating Object: size = ", size, " @ ", new Hex(at));
+		//Debug.WriteLine("+ Allocating Object: size = ", size, " @ ", new Hex(at));
 
 		CurrentHeap.Used = heapUsed + size;
 		return at;
@@ -53,9 +57,9 @@ public static class GCMemory
 
 	private static GCHeap AllocateHeap()
 	{
-		var heap = HeapList.GetGCHeapEntry(HeapList.Count);
+		var heap = HeapList.GetHeapEntry(HeapList.Count);
 
-		var size = 0x1000000u; // 16MB
+		var size = DefaultHeapSize;
 
 		heap.Address = VirtualPageAllocator.ReservePages(size / Page.Size);
 		heap.Size = size;

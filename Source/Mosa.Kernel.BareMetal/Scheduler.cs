@@ -46,7 +46,7 @@ public static class Scheduler
 		SetThreadID(0);
 		Enabled = true;
 
-		Platform.Scheduler.ThreadStart();
+		Platform.Scheduler.Start();
 	}
 
 	[MethodImpl(MethodImplOptions.NoInlining)]
@@ -54,7 +54,7 @@ public static class Scheduler
 	{
 		while (true)
 		{
-			Platform.Scheduler.ThreadYield();
+			Platform.Scheduler.Yield();
 		}
 	}
 

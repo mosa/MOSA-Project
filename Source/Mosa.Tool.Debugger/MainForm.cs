@@ -6,7 +6,10 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Text;
+using System.Threading;
 using System.Windows.Forms;
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Tool.Debugger.DebugData;
 using Mosa.Tool.Debugger.GDB;
@@ -14,6 +17,7 @@ using Mosa.Tool.Debugger.Views;
 using Mosa.Utility.Configuration;
 using Mosa.Utility.Launcher;
 using WeifenLuo.WinFormsUI.Docking;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Mosa.Tool.Debugger;
 
@@ -48,16 +52,11 @@ public partial class MainForm : Form
 
 	//private ScriptView scriptView;
 
-	public string Status
-	{
-		set { toolStripStatusLabel1.Text = value; toolStrip1.Refresh(); }
-	}
-
 	public Connector GDBConnector { get; private set; }
 
 	public MemoryCache MemoryCache { get; private set; }
 
-	public MosaSettings MosaSettings { get; private set; }
+	public MosaSettings MosaSettings { get; private set; } = new MosaSettings();
 
 	public DebugSource DebugSource { get; set; } = new DebugSource();
 
@@ -79,21 +78,26 @@ public partial class MainForm : Form
 
 	public string VMHash;
 
+	private SimpleTCP SimpleTCP;
+
+	private Stopwatch Stopwatch = new Stopwatch();
+
+	public string Status
+	{
+		set { toolStripStatusLabel1.Text = value; toolStrip1.Refresh(); }
+	}
+
 	public MainForm()
 	{
 		InitializeComponent();
 
 		outputView = new OutputView(this);
-
 		registersView = new RegisterView(this);
-
 		displayView = new DisplayView(this);
 		controlView = new ControlView(this);
 		traceView = new TraceView(this);
-
 		callStackView = new CallStackView(this);
 		stackFrameView = new StackFrameView(this);
-
 		statusView = new StatusView(this);
 		symbolView = new SymbolView(this);
 		watchView = new WatchView(this);
@@ -101,30 +105,42 @@ public partial class MainForm : Form
 		instructionView = new InstructionView(this);
 		methodView = new MethodView(this);
 		methodParametersView = new MethodParametersView(this);
-
 		//scriptView = new ScriptView(this);
-
 		sourceView = new SourceView(this);
-
 		sourceDataView = new SourceDataView(this);  // only useful when debugging this tool
-
 		launchView = new LaunchView(this);
 
-		MosaSettings = new MosaSettings();
 		MosaSettings.LoadAppLocations();
 		MosaSettings.SetDetfaultSettings();
 
+		SetDefaultSettings();
+
+		AppDomain.CurrentDomain.DomainUnload += (s, e) => { TerminateAll(); };
+		AppDomain.CurrentDomain.ProcessExit += (s, e) => { TerminateAll(); };
+		AppDomain.CurrentDomain.UnhandledException += (s, e) => { TerminateAll(); };
+	}
+
+	private void SetDefaultSettings()
+	{
 		MosaSettings.ImageFile = null;
 		MosaSettings.EmulatorGDB = true;
 		MosaSettings.EmulatorSerial = "TCPServer";
 		MosaSettings.EmulatorSerialPort = 1250;
 		MosaSettings.EmulatorDisplay = true;
-
 		MosaSettings.GDBPort = 1234;
+	}
 
-		AppDomain.CurrentDomain.DomainUnload += (s, e) => { KillVMProcess(); };
-		AppDomain.CurrentDomain.ProcessExit += (s, e) => { KillVMProcess(); };
-		AppDomain.CurrentDomain.UnhandledException += (s, e) => { KillVMProcess(); };
+	private void SetRequiredSettings()
+	{
+		MosaSettings.EmulatorGDB = true;
+		MosaSettings.LauncherSerialConnection = true;
+		MosaSettings.LauncherExit = false;
+	}
+
+	public void LoadArguments(string[] args)
+	{
+		MosaSettings.LoadArguments(args);
+		SetRequiredSettings();
 	}
 
 	private void MainForm_Load(object sender, EventArgs e)
@@ -177,14 +193,14 @@ public partial class MainForm : Form
 		}
 	}
 
-	private void LogEvent(string status)
+	private void InvokeNotifyStatus(string status)
 	{
-		Invoke((MethodInvoker)(() => OutputLogEvent(status)));
+		Invoke((MethodInvoker)(() => NotifyStatus(status)));
 	}
 
-	private void OutputLogEvent(string info)
+	private void NotifyStatus(string status)
 	{
-		outputView.LogEvent(info);
+		outputView.LogEvent($"{Stopwatch.Elapsed.TotalSeconds:00.00} | {status}");
 	}
 
 	private void LoadDebugFile()
@@ -245,17 +261,6 @@ public partial class MainForm : Form
 				debugdock.OnWatchChange();
 			}
 		}
-	}
-
-	private static bool IsDigitsOnly(string str)
-	{
-		foreach (char c in str)
-		{
-			if (c < '0' || c > '9')
-				return false;
-		}
-
-		return true;
 	}
 
 	private static bool IsHexDigitsOnly(string str)
@@ -320,14 +325,14 @@ public partial class MainForm : Form
 		{
 			if (connect.ShowDialog(this) == DialogResult.OK)
 			{
-				Connect();
+				ConnectGDB();
 			}
 		}
 	}
 
-	private void Connect()
+	private void ConnectGDB()
 	{
-		Disconnect();
+		DisconnectGDB();
 
 		if (MosaSettings.GDBPort == 0)
 		{
@@ -363,7 +368,7 @@ public partial class MainForm : Form
 		//Debug.WriteLine($"GDB >> {info}");
 	}
 
-	private void Disconnect()
+	private void DisconnectGDB()
 	{
 		if (GDBConnector != null)
 		{
@@ -557,11 +562,6 @@ public partial class MainForm : Form
 		RemoveWatch(watch);
 	}
 
-	public void LoadArguments(string[] args)
-	{
-		MosaSettings.LoadArguments(args);
-	}
-
 	private void toolStripButton2_Click(object sender, EventArgs e)
 	{
 		using (var debug = new DebugAppLocationsWindow(this))
@@ -597,14 +597,16 @@ public partial class MainForm : Form
 
 	public void LaunchImage(bool skipImports = false)
 	{
-		Disconnect();
-		KillVMProcess();
+		Stopwatch.Start();
+
+		DisconnectGDB();
+		TerminateAll();
 
 		CalculateVMHash();
 
-		StartQEMU();
+		StartVM();
 
-		Connect();
+		ConnectGDB();
 
 		if (!skipImports)
 		{
@@ -616,54 +618,92 @@ public partial class MainForm : Form
 		displayView.Show();
 	}
 
-	private void KillVMProcess()
+	private void TerminateAll()
 	{
-		if (VMProcess == null)
-			return;
+		DisconnectGDB();
 
-		if (!VMProcess.HasExited)
+		if (SimpleTCP != null)
 		{
-			VMProcess.Kill(true);
-			VMProcess.WaitForExit();
+			SimpleTCP.Disconnect();
+			SimpleTCP = null;
 		}
-
-		VMProcess = null;
-	}
-
-	private CompilerHooks CreateCompilerHooks()
-	{
-		var compilerHooks = new CompilerHooks
-		{
-			NotifyStatus = LogCompilerEvent
-		};
-
-		return compilerHooks;
-	}
-
-	private void LogCompilerEvent(string info)
-	{
-		LogEvent($"Compiler >> {info}");
-	}
-
-	private void StartQEMU()
-	{
-		var compilerHook = CreateCompilerHooks();
-
-		var starter = new Starter(MosaSettings, compilerHook);
-
-		VMProcess = starter.LaunchVM();
 
 		if (VMProcess != null)
 		{
+			if (!VMProcess.HasExited)
+			{
+				VMProcess.Kill(true);
+				VMProcess.WaitForExit();
+			}
+
+			VMProcess = null;
+		}
+	}
+
+	private void StartVM()
+	{
+		TerminateAll();
+
+		SetRequiredSettings();
+
+		var compilerHooks = new CompilerHooks
+		{
+			NotifyStatus = InvokeNotifyStatus
+		};
+
+		var starter = new Starter(MosaSettings, compilerHooks);
+
+		VMProcess = starter.LaunchVM();
+
+		if (VMProcess == null)
+			return;
+
+		SimpleTCP = new SimpleTCP();
+
+		SimpleTCP.OnStatusUpdate = InvokeNotifyStatus;
+
+		SimpleTCP.OnDataAvailable = () =>
+		{
+			while (SimpleTCP != null && SimpleTCP.HasLine)
+			{
+				var line = SimpleTCP.GetLine();
+
+				lock (this)
+				{
+					InvokeNotifyStatus(line);
+				}
+
+				if (line == "##KILL##")
+				{
+					TerminateAll();
+				}
+			}
+		};
+
+		try
+		{
 			VMProcess.Start();
+
+			Thread.Sleep(50); // wait a bit for the process to start
+
+			if (!SimpleTCP.Connect(MosaSettings.EmulatorSerialHost, MosaSettings.EmulatorSerialPort, 10000))
+			{
+				NotifyStatus("Error: Unable to connect to serial port");
+				return;
+			}
+
+			NotifyStatus("VM Output");
+			NotifyStatus("========================");
+		}
+		catch (Exception ex)
+		{
+			NotifyStatus($"Exception: {ex}");
 		}
 	}
 
 	private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
 	{
-		Disconnect();
-
-		KillVMProcess();
+		TerminateAll();
 	}
 
 	public void LoadBreakPoints()

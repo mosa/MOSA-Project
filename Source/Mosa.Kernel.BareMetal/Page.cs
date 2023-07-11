@@ -6,7 +6,7 @@ namespace Mosa.Kernel.BareMetal;
 
 public static class Page
 {
-	public static uint Shift => Platform.GetPageShift();
+	public static uint Shift => Platform.PageTable.GetPageShift();
 
 	public static uint Size => (uint)(1 << (int)Shift);
 

@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.DeviceSystem;
 using Mosa.Runtime;
 
 namespace Mosa.Kernel.BareMetal;
@@ -8,21 +9,15 @@ public static class Platform
 {
 	// These methods will be plugged and implemented elsewhere in the platform specific implementation
 
-	public static uint GetPageShift() => 0;
-
 	public static void EntryPoint()
 	{
 	}
 
-	public static AddressRange GetBootReservedRegion()
-	{
-		return new AddressRange(0, 0);
-	}
+	public static AddressRange GetBootReservedRegion() => new AddressRange(0, 0);
 
-	public static AddressRange GetInitialGCMemoryPool()
-	{
-		return new AddressRange(0, 0);
-	}
+	public static AddressRange GetInitialGCMemoryPool() => new AddressRange(0, 0);
+
+	public static PlatformArchitecture GetPlatformArchitecture() => PlatformArchitecture.None;
 
 	public static void ConsoleWrite(byte c)
 	{ }
@@ -32,6 +27,8 @@ public static class Platform
 
 	public static class PageTable
 	{
+		public static uint GetPageShift() => 0;
+
 		public static void Setup()
 		{ }
 
@@ -82,10 +79,10 @@ public static class Platform
 
 	public static class Scheduler
 	{
-		public static void ThreadStart()
+		public static void Start()
 		{ }
 
-		public static void ThreadYield()
+		public static void Yield()
 		{ }
 
 		public static void SignalTermination()

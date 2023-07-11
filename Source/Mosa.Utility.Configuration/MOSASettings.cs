@@ -352,10 +352,10 @@ public class MosaSettings
 		set => Settings.SetValue(Name.Launcher_Test, value);
 	}
 
-	public bool LauncherSerialConsole
+	public bool LauncherSerialConnection
 	{
-		get => Settings.GetValue(Name.Launcher_Serial_Console, false);
-		set => Settings.SetValue(Name.Launcher_Serial_Console, value);
+		get => Settings.GetValue(Name.Launcher_Serial_Connection, false);
+		set => Settings.SetValue(Name.Launcher_Serial_Connection, value);
 	}
 
 	public bool LauncherSerialFile
