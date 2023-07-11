@@ -1,7 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Drawing;
-
 namespace Mosa.Kernel.BareMetal;
 
 public static class Console

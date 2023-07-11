@@ -7,6 +7,7 @@ namespace Mosa.Kernel.BareMetal;
 public struct AddressRange
 {
 	public Pointer Address { get; }
+
 	public ulong Size { get; }
 
 	public AddressRange(Pointer address, uint size)

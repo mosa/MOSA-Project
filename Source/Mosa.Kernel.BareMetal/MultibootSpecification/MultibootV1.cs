@@ -4,7 +4,7 @@ using Mosa.Runtime;
 
 namespace Mosa.Kernel.BareMetal.MultibootSpecification;
 
-public /*readonly*/ struct MultibootV1
+public struct MultibootV1
 {
 	private static Pointer Entry;
 

@@ -160,7 +160,8 @@ public static class PageFrameAllocator
 
 	public static Pointer Allocate(uint count, uint alignment = 1)
 	{
-		Debug.WriteLine("PageFrameAllocator::Reserve()");
+		Debug.WriteLine("PageFrameAllocator::Allocate()");
+		Debug.WriteLine(" > Reserve Pages: ", count);
 
 		if (count == 0)
 			return Pointer.Zero;
@@ -168,7 +169,6 @@ public static class PageFrameAllocator
 		if (alignment == 0)
 			alignment = 1;
 
-		Debug.WriteLine(" > Reserve Pages: ", count);
 		// TODO: Acquire lock
 
 		var start = SearchNextStartPage;

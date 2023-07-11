@@ -54,7 +54,7 @@ public static class Scheduler
 	{
 		while (true)
 		{
-			Platform.Scheduler.ThreadYield();
+			Platform.Scheduler.Yield();
 		}
 	}
 

@@ -9,8 +9,9 @@ public static class SerialDebug
 {
 	#region Private Members
 
+	private const byte NewLine = (byte)'\n';
+
 	private static ushort SerialPort = Serial.COM2;
-	private static byte NewLine = (byte)'\n';
 
 	private static bool IsIntialize = false;
 
