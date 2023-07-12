@@ -270,6 +270,17 @@ public static class SpecificTests
 		}
 		return result;
 	}
+
+	public static string str = null!;
+
+#nullable enable
+
+	public static bool TestNullable()
+	{
+		str = "Hello!";
+
+		return string.IsNullOrEmpty(str);
+	}
 }
 
 public static class Extension
