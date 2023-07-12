@@ -275,6 +275,7 @@ public static class SpecificTests
 
 #nullable enable
 
+	[MosaUnitTest]
 	public static bool TestNullable()
 	{
 		str = "Hello!";
