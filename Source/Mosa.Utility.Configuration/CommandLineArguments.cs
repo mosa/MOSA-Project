@@ -163,7 +163,7 @@ public static class CommandLineArguments
 			new Argument { Name = "-launch-gdb", Setting = "Launcher.GDB", Value="true"},
 			new Argument { Name = "-launch-debugger", Setting = "Launcher.Debugger", Value="true"},
 
-			new Argument { Name = "-output-serial-console", Setting = "Launcher.Serial.Connection"},
+			new Argument { Name = "-output-serial-connection", Setting = "Launcher.Serial.Connection"},
 			new Argument { Name = "-output-serial-file", Setting = "Launcher.Serial.File"},
 			new Argument { Name = "-debug", Setting = "Launcher.Serial.Connection", Value="true"},
 

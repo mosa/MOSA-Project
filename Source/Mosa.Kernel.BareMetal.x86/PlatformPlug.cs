@@ -35,10 +35,10 @@ public static class PlatformPlug
 	public static PlatformArchitecture GetPlatformArchitecture() => PlatformArchitecture.X86;
 
 	[Plug("Mosa.Kernel.BareMetal.Platform::ConsoleWrite")]
-	public static void ConsoleWrite(byte c) => VGAConsole.Write(c);
+	public static void ConsoleWrite(byte c) => x86.VGAConsole.Write(c);
 
 	[Plug("Mosa.Kernel.BareMetal.Platform::DebugWrite")]
-	public static void DebugWrite(byte c) => SerialDebug.Write(c);
+	public static void DebugWrite(byte c) => x86.SerialDebug.Write(c);
 
 	public static class PageTablePlug
 	{

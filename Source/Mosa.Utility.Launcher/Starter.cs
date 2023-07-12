@@ -50,7 +50,7 @@ public class Starter : BaseLauncher
 				return IsSucccessful;
 			}
 
-			if (MosaSettings.LauncherSerialConnection)
+			if (MosaSettings.LauncherSerial)
 			{
 				IsSucccessful = StartDebug(Process);
 				return IsSucccessful;
@@ -283,7 +283,7 @@ public class Starter : BaseLauncher
 
 		var serial = MosaSettings.EmulatorSerial;
 
-		if (MosaSettings.LauncherSerialConnection || MosaSettings.LauncherTest)
+		if (MosaSettings.LauncherSerial || MosaSettings.LauncherTest)
 		{
 			serial = "tcpserver";
 		}
