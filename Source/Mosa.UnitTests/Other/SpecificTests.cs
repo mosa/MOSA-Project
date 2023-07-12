@@ -282,6 +282,8 @@ public static class SpecificTests
 
 		return string.IsNullOrEmpty(str);
 	}
+
+#nullable disable
 }
 
 public static class Extension
