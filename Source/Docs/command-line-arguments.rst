@@ -105,7 +105,7 @@ Below are the command line arguments available:
     -memory,Emulator.Memory
     -gdb,Emulator.GDB,true
 	-term,Emulator.MaxRuntime,{value}
-	-debug,Launcher.Serial.Connection,true
+	-debug,Launcher.Serial,true
     
     Launcher - Emulator - Qemu & VMWare:
     -vmware-svga,Emulator.SVGA,vmware

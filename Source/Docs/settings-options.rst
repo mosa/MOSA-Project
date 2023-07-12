@@ -124,8 +124,7 @@ Launcher Settings
     Launcher.Exit,"If true, exit immediately after launch"
     Launcher.PlugKorlib,"If true, automatically include the plugs for CoreLib"
     Launcher.GDB,"If true, launch the GNU GDB application after VM launch"
-	Launcher.Serial.Connection,"If true, outout the serial to console"
-	Launcher.Serial.File,Filename to emit serial output (future)
+	Launcher.Serial,"If true, outputs the serial data"
     Launcher.Debugger,"If true, launch the MOSA debugger application after VM launch"
     Launcher.Test,"If true, monitors VM serial for success or failure messages"
 

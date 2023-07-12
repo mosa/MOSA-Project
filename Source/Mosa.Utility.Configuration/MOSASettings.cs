@@ -352,16 +352,10 @@ public class MosaSettings
 		set => Settings.SetValue(Name.Launcher_Test, value);
 	}
 
-	public bool LauncherSerialConnection
+	public bool LauncherSerial
 	{
-		get => Settings.GetValue(Name.Launcher_Serial_Connection, false);
-		set => Settings.SetValue(Name.Launcher_Serial_Connection, value);
-	}
-
-	public bool LauncherSerialFile
-	{
-		get => Settings.GetValue(Name.Launcher_Serial_File, false);
-		set => Settings.SetValue(Name.Launcher_Serial_File, value);
+		get => Settings.GetValue(Name.Launcher_Serial, false);
+		set => Settings.SetValue(Name.Launcher_Serial, value);
 	}
 
 	public int EmulatorMaxRuntime

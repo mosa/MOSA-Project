@@ -338,4 +338,14 @@ public static class Boot
 	{
 		return Mosa.UnitTests.Basic.ArrayLayoutTests.I8a();
 	}
+
+	public static string str = null!;
+
+#nullable enable
+
+	public static void TestNullable()
+	{
+		str = "Hello!";
+		Screen.WriteLine(str);
+	}
 }

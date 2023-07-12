@@ -133,7 +133,7 @@ public partial class MainForm : Form
 	private void SetRequiredSettings()
 	{
 		MosaSettings.EmulatorGDB = true;
-		MosaSettings.LauncherSerialConnection = true;
+		MosaSettings.LauncherSerial = true;
 		MosaSettings.LauncherExit = false;
 	}
 
