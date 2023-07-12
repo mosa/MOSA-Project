@@ -19,6 +19,7 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '7.0.x'
+          cache: true
       - name: View Build Version
         run: echo ${{ env.BUILD_VERSION }}
       - name: View Github Info
@@ -122,6 +123,7 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '7.0.x'
+          cache: true
       - name: View Build Version
         run: echo ${{ env.BUILD_VERSION }}
       - name: View Github Info
