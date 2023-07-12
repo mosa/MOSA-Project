@@ -270,6 +270,20 @@ public static class SpecificTests
 		}
 		return result;
 	}
+
+	public static string str = null!;
+
+#nullable enable
+
+	[MosaUnitTest]
+	public static bool TestNullable()
+	{
+		str = "Hello!";
+
+		return string.IsNullOrEmpty(str);
+	}
+
+#nullable disable
 }
 
 public static class Extension
