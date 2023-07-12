@@ -26,6 +26,8 @@ public static class LockTests
 			return false;
 		}
 
+#pragma warning disable CS0162 // Unreachable code detected
 		return true;
+#pragma warning restore CS0162 // Unreachable code detected
 	}
 }

@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
@@ -118,7 +119,9 @@ public class SimpleTCP
 		{
 			Output("Listening...");
 
-			tcpListener = new TcpListener(port);
+			var ipAddress = Dns.GetHostEntry("localhost").AddressList[0];
+
+			tcpListener = new TcpListener(ipAddress, port);
 			tcpListener.Start();
 		}
 		catch (SocketException)

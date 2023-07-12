@@ -4,7 +4,7 @@ namespace Mosa.UnitTests.ValueType;
 
 public static class ValueTypeTests
 {
-	private struct valuetype
+	private struct ValueTypeTest
 	{
 		public byte a;
 		public short b;
@@ -22,20 +22,20 @@ public static class ValueTypeTests
 		}
 	}
 
-	private class wrapper
+	private class Wrapper
 	{
-		public valuetype content;
+		public ValueTypeTest content;
 	}
 
-	private struct valuewrapper
+	private struct ValueWrapper
 	{
-		public valuetype content;
+		public ValueTypeTest content;
 	}
 
 	[MosaUnitTest]
 	public static bool TestValueTypeVariable()
 	{
-		valuetype p = new valuetype();
+		var p = new ValueTypeTest();
 		p.a = 1;
 		p.b = 7;
 		p.c = 21;
@@ -43,12 +43,12 @@ public static class ValueTypeTests
 		return p.a == 1 && p.b == 7 & p.c == 21 && p.d == 171;
 	}
 
-	private static valuetype staticField;
+	private static ValueTypeTest staticField;
 
 	[MosaUnitTest]
 	public static bool TestValueTypeStaticField()
 	{
-		valuetype p = new valuetype();
+		var p = new ValueTypeTest();
 		p.a = 1;
 		p.b = 7;
 		p.c = 21;
@@ -61,13 +61,13 @@ public static class ValueTypeTests
 	[MosaUnitTest]
 	public static bool TestValueTypeInstanceField()
 	{
-		valuetype p = new valuetype();
+		var p = new ValueTypeTest();
 		p.a = 1;
 		p.b = 7;
 		p.c = 21;
 		p.d = 171;
 
-		wrapper obj = new wrapper();
+		Wrapper obj = new Wrapper();
 		obj.content = p;
 		return obj.content.a == 1 && obj.content.b == 7 & obj.content.c == 21 && obj.content.d == 171;
 	}
@@ -75,20 +75,20 @@ public static class ValueTypeTests
 	[MosaUnitTest]
 	public static bool TestNestedValueTypeField()
 	{
-		valuetype p = new valuetype();
+		var p = new ValueTypeTest();
 		p.a = 1;
 		p.b = 7;
 		p.c = 21;
 		p.d = 171;
 
-		valuewrapper val = new valuewrapper();
+		ValueWrapper val = new ValueWrapper();
 		val.content = p;
 
-		valuetype r = val.content;
+		var r = val.content;
 		return r.a == 1 && r.b == 7 & r.c == 21 && r.d == 171;
 	}
 
-	private static bool ParameterOk(valuetype p)
+	private static bool ParameterOk(ValueTypeTest p)
 	{
 		return p.a == 1 && p.b == 7 & p.c == 21 && p.d == 171;
 	}
@@ -96,7 +96,7 @@ public static class ValueTypeTests
 	[MosaUnitTest]
 	public static bool TestValueTypeParameter()
 	{
-		valuetype p = new valuetype();
+		var p = new ValueTypeTest();
 		p.a = 1;
 		p.b = 7;
 		p.c = 21;
@@ -105,9 +105,9 @@ public static class ValueTypeTests
 		return ParameterOk(p);
 	}
 
-	private static valuetype GetValue()
+	private static ValueTypeTest GetValue()
 	{
-		valuetype p = new valuetype();
+		var p = new ValueTypeTest();
 		p.a = 1;
 		p.b = 7;
 		p.c = 21;
@@ -118,26 +118,26 @@ public static class ValueTypeTests
 	[MosaUnitTest]
 	public static bool TestValueTypeReturnValue()
 	{
-		valuetype p = GetValue();
+		var p = GetValue();
 		return p.a == 1 && p.b == 7 & p.c == 21 && p.d == 171;
 	}
 
 	private static bool BoxOk(object box)
 	{
-		valuetype p = (valuetype)box;
+		var p = (ValueTypeTest)box;
 		return p.a == 1 && p.b == 7 & p.c == 21 && p.d == 171;
 	}
 
 	[MosaUnitTest]
 	public static bool TestValueTypeBox()
 	{
-		valuetype p = new valuetype();
+		var p = new ValueTypeTest();
 		p.a = 1;
 		p.b = 7;
 		p.c = 21;
 		p.d = 171;
 
-		wrapper obj = new wrapper();
+		Wrapper obj = new Wrapper();
 		obj.content = p;
 		return obj.content.a == 1 && obj.content.b == 7 & obj.content.c == 21 && obj.content.d == 171;
 	}
@@ -145,7 +145,7 @@ public static class ValueTypeTests
 	[MosaUnitTest]
 	public static bool TestValueTypeInstanceMethod()
 	{
-		valuetype p = new valuetype();
+		var p = new ValueTypeTest();
 		p.a = 1;
 		p.b = 7;
 		p.c = 21;
@@ -157,7 +157,7 @@ public static class ValueTypeTests
 	[MosaUnitTest]
 	public static bool TestValueTypeVirtualMethod()
 	{
-		valuetype p = new valuetype();
+		var p = new ValueTypeTest();
 		p.a = 1;
 		p.b = 7;
 		p.c = 21;
@@ -166,7 +166,7 @@ public static class ValueTypeTests
 		return p.ToString() == "202";
 	}
 
-	private static bool ByRefModify(ref valuetype p)
+	private static bool ByRefModify(ref ValueTypeTest p)
 	{
 		var result = p.Check(3, 11, 41, 83);
 		p.a = 1;
@@ -175,7 +175,7 @@ public static class ValueTypeTests
 		p.d = 171;
 		result &= p.Check(1, 7, 21, 171);
 
-		valuetype d = p;
+		var d = p;
 		d.a = 0;
 		d.b = 0;
 		d.c = 0;
@@ -184,7 +184,7 @@ public static class ValueTypeTests
 		return result;
 	}
 
-	private static bool ByRefOk(ref valuetype p)
+	private static bool ByRefOk(ref ValueTypeTest p)
 	{
 		return p.a == 1 && p.b == 7 & p.c == 21 && p.d == 171;
 	}
@@ -192,7 +192,7 @@ public static class ValueTypeTests
 	[MosaUnitTest]
 	public static bool TestValueTypePassByRef()
 	{
-		valuetype p = new valuetype();
+		var p = new ValueTypeTest();
 		p.a = 1;
 		p.b = 7;
 		p.c = 21;
@@ -204,7 +204,7 @@ public static class ValueTypeTests
 	[MosaUnitTest]
 	public static bool TestValueTypePassByRefModify()
 	{
-		valuetype p = new valuetype();
+		var p = new ValueTypeTest();
 		p.a = 3;
 		p.b = 11;
 		p.c = 41;
@@ -216,8 +216,8 @@ public static class ValueTypeTests
 	[MosaUnitTest]
 	public static bool TestValueTypeArray()
 	{
-		valuetype[] l = new valuetype[2];
-		valuetype p = new valuetype();
+		var l = new ValueTypeTest[2];
+		var p = new ValueTypeTest();
 		p.a = 3;
 		p.b = 11;
 		p.c = 41;
@@ -230,8 +230,8 @@ public static class ValueTypeTests
 	[MosaUnitTest]
 	public static bool TestValueTypeArrayByRef()
 	{
-		valuetype[] l = new valuetype[2];
-		valuetype p = new valuetype();
+		var l = new ValueTypeTest[2];
+		var p = new ValueTypeTest();
 		p.a = 3;
 		p.b = 11;
 		p.c = 41;

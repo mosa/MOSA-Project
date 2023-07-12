@@ -43,7 +43,9 @@ public static class WhileTests
 
 		while (false)
 		{
+#pragma warning disable CS0162 // Unreachable code detected
 			called = true;
+#pragma warning restore CS0162 // Unreachable code detected
 		}
 
 		return called;

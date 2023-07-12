@@ -2,6 +2,8 @@
 
 namespace Mosa.UnitTests.ValueType;
 
+#pragma warning disable CS0649 // Fields are never assigned to, and will always have its default value
+
 public class StructTests
 {
 
@@ -557,3 +559,5 @@ internal struct Struct3C
 	public char Two;
 	public char Three;
 }
+
+#pragma warning restore CS0649 // Fields are never assigned to, and will always have its default value
