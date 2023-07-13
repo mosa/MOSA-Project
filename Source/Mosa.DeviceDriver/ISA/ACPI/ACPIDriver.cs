@@ -121,51 +121,56 @@ public unsafe class ACPIDriver : BaseDeviceDriver, IACPI
 			{
 				if (S5Addr.Load32() == 0x5f35535f) //_S5_
 					break;
+
 				S5Addr++;
 			}
 
-			if (dsdtLength > 0)
-				if (((S5Addr - 1).Load8() == 0x08 || (S5Addr - 2).Load8() == 0x08 && (S5Addr - 1).Load8() == '\\') && (S5Addr + 4).Load8() == 0x12)
-				{
-					S5Addr += 5;
-					S5Addr += ((S5Addr.Load32() & 0xC0) >> 6) + 2;
-					if (S5Addr.Load8() == 0x0A)
-						S5Addr++;
-					SLP_TYPa = (short)(S5Addr.Load16() << 10);
+			if ((dsdtLength > 0)
+				&& (((S5Addr - 1).Load8() == 0x08 || (S5Addr - 2).Load8() == 0x08 && (S5Addr - 1).Load8() == '\\') && (S5Addr + 4).Load8() == 0x12))
+			{
+				S5Addr += 5;
+				S5Addr += ((S5Addr.Load32() & 0xC0) >> 6) + 2;
+
+				if (S5Addr.Load8() == 0x0A)
 					S5Addr++;
-					if (S5Addr.Load8() == 0x0A)
-						S5Addr++;
-					SLP_TYPb = (short)(S5Addr.Load16() << 10);
-					SLP_EN = 1 << 13;
 
-					SMI_CommandPort = new IOPortWrite((ushort)FADT.SMI_CommandPort);
+				SLP_TYPa = (short)(S5Addr.Load16() << 10);
+				S5Addr++;
 
-					var has64BitPtr = false;
+				if (S5Addr.Load8() == 0x0A)
+					S5Addr++;
 
-					if (Descriptor.Revision == 2)
+				SLP_TYPb = (short)(S5Addr.Load16() << 10);
+				SLP_EN = 1 << 13;
+
+				SMI_CommandPort = new IOPortWrite((ushort)FADT.SMI_CommandPort);
+
+				var has64BitPtr = false;
+
+				if (Descriptor.Revision == 2)
+				{
+					ResetAddress = new IOPortWrite((ushort)FADT.ResetReg.Address);
+					ResetValue = FADT.ResetValue;
+
+					if (Pointer.Size == 8) // 64-bit
 					{
-						ResetAddress = new IOPortWrite((ushort)FADT.ResetReg.Address);
-						ResetValue = FADT.ResetValue;
+						has64BitPtr = true;
 
-						if (Pointer.Size == 8) // 64-bit
+						PM1aControlBlock = new IOPortWrite((ushort)FADT.X_PM1aControlBlock.Address);
+						if (FADT.X_PM1bControlBlock.Address != 0)
 						{
-							has64BitPtr = true;
-
-							PM1aControlBlock = new IOPortWrite((ushort)FADT.X_PM1aControlBlock.Address);
-							if (FADT.X_PM1bControlBlock.Address != 0)
-							{
-								PM1bControlBlock = new IOPortWrite((ushort)FADT.X_PM1bControlBlock.Address);
-							}
+							PM1bControlBlock = new IOPortWrite((ushort)FADT.X_PM1bControlBlock.Address);
 						}
 					}
-
-					if (!has64BitPtr)
-					{
-						PM1aControlBlock = new IOPortWrite((ushort)FADT.PM1aControlBlock);
-						if (FADT.PM1bControlBlock != 0)
-							PM1bControlBlock = new IOPortWrite((ushort)FADT.PM1bControlBlock);
-					}
 				}
+
+				if (!has64BitPtr)
+				{
+					PM1aControlBlock = new IOPortWrite((ushort)FADT.PM1aControlBlock);
+					if (FADT.PM1bControlBlock != 0)
+						PM1bControlBlock = new IOPortWrite((ushort)FADT.PM1bControlBlock);
+				}
+			}
 		}
 	}
 
@@ -201,7 +206,7 @@ public unsafe class ACPIDriver : BaseDeviceDriver, IACPI
 	{
 		var xsdt = !XSDT.Pointer.IsNull;
 
-		var sig = ((byte)signature[0] & 0xff) | ((byte)signature[1] >> 8 & 0xff) | ((byte)signature[2] >> 8 & 0xff) | ((byte)signature[3] >> 8 & 0xff);
+		var value = CalculateSignatureVaule(signature);
 
 		for (var i = 0u; i < (xsdt ? 16 : 8); i++)
 		{
@@ -209,11 +214,16 @@ public unsafe class ACPIDriver : BaseDeviceDriver, IACPI
 			// See: https://github.com/msareedjr/MOSA-MikeOS/commit/6867064fedae707280083ba4d9ff12d468a6dce0
 			var h = new ACPISDTHeader(HAL.GetPhysicalMemory(new Pointer(xsdt ? XSDT.GetPointerToOtherSDT(i) : RSDT.GetPointerToOtherSDT(i)), 0xfff).Address);
 
-			if (!h.Pointer.IsNull && h.Signature == sig)
+			if (!h.Pointer.IsNull && h.Signature == value)
 				return h.Pointer;
 		}
 
 		// No SDT found (by signature)
 		return Pointer.Zero;
+	}
+
+	private static int CalculateSignatureVaule(string signature)
+	{
+		return ((byte)signature[0] & 0xff) | (((byte)signature[1] & 0xff) << 8) | (((byte)signature[2] & 0xff) << 16) | (((byte)signature[3] & 0xff) << 24);
 	}
 }
