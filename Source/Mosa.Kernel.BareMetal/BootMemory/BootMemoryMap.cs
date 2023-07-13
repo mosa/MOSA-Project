@@ -49,10 +49,7 @@ public static class BootMemoryMap
 		return entry;
 	}
 
-	public static uint GetBootMemoryMapEntryCount()
-	{
-		return List.Count;
-	}
+	public static uint GetBootMemoryMapEntryCount() => List.Count;
 
 	public static BootMemoryMapEntry GetBootMemoryMapEntry(uint index)
 	{

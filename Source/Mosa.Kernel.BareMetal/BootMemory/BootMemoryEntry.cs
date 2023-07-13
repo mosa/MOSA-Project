@@ -8,10 +8,7 @@ public struct BootMemoryMapEntry
 {
 	private readonly Pointer Entry;
 
-	public BootMemoryMapEntry(Pointer entry)
-	{
-		Entry = entry;
-	}
+	public BootMemoryMapEntry(Pointer entry) => Entry = entry;
 
 	public Pointer StartAddress
 	{

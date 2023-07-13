@@ -8,10 +8,7 @@ public struct GCHeap
 {
 	private readonly Pointer Entry;
 
-	public GCHeap(Pointer entry)
-	{
-		Entry = entry;
-	}
+	public GCHeap(Pointer entry) => Entry = entry;
 
 	public Pointer Address
 	{

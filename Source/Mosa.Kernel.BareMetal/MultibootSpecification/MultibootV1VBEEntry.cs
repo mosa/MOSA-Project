@@ -55,15 +55,12 @@ public struct MultibootV1VBEEntry
 	/// <summary>
 	/// Gets a value indicating whether VBE is available.
 	/// </summary>
-	public bool IsAvailable => !Entry.IsNull;
+	public readonly bool IsAvailable => !Entry.IsNull;
 
 	/// <summary>
 	/// Setup Multiboot V1 VBE Entry.
 	/// </summary>
-	public MultibootV1VBEEntry(Pointer entry)
-	{
-		Entry = entry;
-	}
+	public MultibootV1VBEEntry(Pointer entry) => Entry = entry;
 
 	public ushort Attributes => Entry.Load16(VBEModeInfoOffset.Attributes);
 

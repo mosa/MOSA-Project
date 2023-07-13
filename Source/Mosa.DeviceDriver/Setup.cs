@@ -244,7 +244,7 @@ public static class Setup
 				Name = "ACPI",
 				Platform = PlatformArchitecture.X86,
 				AutoLoad = true,
-				Factory = () => new ISA.ACPI()
+				Factory = () => new ISA.ACPI.ACPIDriver()
 			},
 		};
 	}

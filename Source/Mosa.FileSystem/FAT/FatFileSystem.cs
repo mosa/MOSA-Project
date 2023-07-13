@@ -112,7 +112,6 @@ internal struct FileNameAttribute
 /// </summary>
 public class FatFileSystem : GenericFileSystem
 {
-
 	/// <summary>
 	/// The end of cluster mark
 	/// </summary>
@@ -946,10 +945,11 @@ public class FatFileSystem : GenericFileSystem
 	/// </returns>
 	protected static bool IsValidFatCharacter(char c)
 	{
-		if (c is >= 'A' or <= 'Z' or >= '0' or <= '9')
+		if ((c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9'))
 			return true;
-		if (c >= 128 || c <= 255)
-			return true;
+
+		//if (c >= 128 || c >= 255)
+		//return false;
 
 		const string valid = " !#$%&'()-@^_`{}~";
 

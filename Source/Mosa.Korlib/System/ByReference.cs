@@ -4,9 +4,11 @@ using System.Runtime.CompilerServices;
 
 namespace System;
 
-internal readonly ref struct ByReference<T>
+internal readonly struct ByReference<T>
 {
+#pragma warning disable CS0169 // The field is never used
 	private readonly IntPtr _value;
+#pragma warning restore CS0169 // The field is never used
 
 	[Intrinsic]
 	public ByReference(ref T value)

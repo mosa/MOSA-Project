@@ -98,7 +98,8 @@ public static class Generator
 				{
 					FileSystem.FAT12 => PartitionType.FAT12,
 					FileSystem.FAT16 => PartitionType.FAT16,
-					FileSystem.FAT32 => PartitionType.FAT32
+					FileSystem.FAT32 => PartitionType.FAT32,
+					_ => throw new NotImplementedException()
 				};
 
 				mbr.Write();
@@ -157,7 +158,8 @@ public static class Generator
 				{
 					FileSystem.FAT12 => FatType.FAT12,
 					FileSystem.FAT16 => FatType.FAT16,
-					FileSystem.FAT32 => FatType.FAT32
+					FileSystem.FAT32 => FatType.FAT32,
+					_ => throw new NotImplementedException()
 				},
 				FloppyMedia = false,
 				VolumeLabel = options.VolumeLabel,
