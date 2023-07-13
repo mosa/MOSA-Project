@@ -8,10 +8,7 @@ public struct GCHeapList
 {
 	private readonly Pointer Entry;
 
-	public GCHeapList(Pointer entry)
-	{
-		Entry = entry;
-	}
+	public GCHeapList(Pointer entry) => Entry = entry;
 
 	public uint Count
 	{

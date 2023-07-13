@@ -45,10 +45,7 @@ public struct MultibootV1
 
 	#endregion Multiboot Info Offsets
 
-	public MultibootV1(Pointer entry)
-	{
-		Entry = entry;
-	}
+	public MultibootV1(Pointer entry) => Entry = entry;
 
 	/// <summary>
 	/// Gets a value indicating whether multiboot v1 is available.

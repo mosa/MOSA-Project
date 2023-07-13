@@ -57,9 +57,14 @@ public sealed class DeviceService : BaseService
 
 	public void RegisterDeviceDriver(List<DeviceDriverRegistryEntry> deviceDrivers)
 	{
+		var platformArchitecture = HAL.PlatformArchitecture;
+
 		foreach (var deviceDriver in deviceDrivers)
 		{
-			RegisterDeviceDriver(deviceDriver);
+			if ((deviceDriver.Platform & platformArchitecture) == platformArchitecture)
+			{
+				RegisterDeviceDriver(deviceDriver);
+			}
 		}
 	}
 

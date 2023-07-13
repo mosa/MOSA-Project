@@ -8,10 +8,7 @@ public struct BootMemoryList
 {
 	private readonly Pointer Entry;
 
-	public BootMemoryList(Pointer entry)
-	{
-		Entry = entry;
-	}
+	public BootMemoryList(Pointer entry) => Entry = entry;
 
 	public uint Count
 	{

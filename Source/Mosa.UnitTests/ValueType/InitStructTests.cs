@@ -2,6 +2,8 @@
 
 namespace Mosa.UnitTests.ValueType;
 
+#pragma warning disable CS0649 // Field 'InitStruct.ValueB' is never assigned to, and will always have its default value false
+
 internal struct InitStruct
 {
 	public byte ValueU1;
@@ -17,6 +19,8 @@ internal struct InitStruct
 	public bool ValueB;
 	public char ValueC;
 }
+
+#pragma warning restore CS0649 // Field 'InitStruct.ValueB' is never assigned to, and will always have its default value false
 
 public static class InitStructTests
 {
@@ -103,6 +107,4 @@ public static class InitStructTests
 		InitStruct d = new InitStruct();
 		return d.ValueC;
 	}
-
 }
-

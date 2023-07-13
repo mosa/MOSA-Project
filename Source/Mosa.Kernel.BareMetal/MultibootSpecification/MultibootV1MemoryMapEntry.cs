@@ -26,10 +26,7 @@ public struct MultibootV1MemoryMapEntry
 	/// <summary>
 	/// Setup Multiboot V1 Memory Map Entry.
 	/// </summary>
-	public MultibootV1MemoryMapEntry(Pointer entry)
-	{
-		Entry = entry;
-	}
+	public MultibootV1MemoryMapEntry(Pointer entry) => Entry = entry;
 
 	public uint Size => Entry.Load32(MultiBootMemoryMapOffset.Size);
 

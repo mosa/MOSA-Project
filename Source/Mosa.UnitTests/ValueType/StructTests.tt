@@ -1,6 +1,8 @@
 ﻿<#@ include file="../../TemplateLibrary.txt" #>
 namespace Mosa.UnitTests.ValueType;
 
+#pragma warning disable CS0649 // Fields are never assigned to, and will always have its default value
+
 public class StructTests
 {
 <# foreach (KeyValuePair<string, string> number in NumbersWithChar) { #>
@@ -60,3 +62,5 @@ internal struct Struct3<#= number.Value #>
 	public <#= number.Key #> Three;
 }
 <# } #>
+
+#pragma warning enabled CS0649 // Fields are never assigned to, and will always have its default value

@@ -457,7 +457,9 @@ public static class _ExceptionHandlingTests
 			a = a + 25;
 		}
 
+#pragma warning disable CS0162 // Unreachable code detected
 		a = a + 7;
+#pragma warning restore CS0162 // Unreachable code detected
 
 		return a;
 	}
