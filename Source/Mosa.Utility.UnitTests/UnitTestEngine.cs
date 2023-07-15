@@ -8,21 +8,18 @@ using System.IO.Pipes;
 using System.Net.Sockets;
 using System.Threading;
 using Mosa.Compiler.Common;
-using Mosa.Compiler.Common.Configuration;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Utility.Configuration;
-using Mosa.Utility.DebugEngine;
 using Mosa.Utility.Launcher;
+using Mosa.Utility.UnitTests.DebugEngine;
 
 namespace Mosa.Utility.UnitTests;
 
 public class UnitTestEngine : IDisposable
 {
-	
-
 	#region Public Methods
 
 	public bool IsAborted => Aborted;
@@ -200,12 +197,9 @@ public class UnitTestEngine : IDisposable
 					}
 				}
 
-				if (messages.Count > 0)
-				{
-					//OutputStatus("Batch Sent: " + messages.Count.ToString());
-					DebugServerEngine.SendCommand2(messages);
-					messages.Clear();
-				}
+				//OutputStatus("Batch Sent: " + messages.Count.ToString());
+				DebugServerEngine.Send(messages);
+				messages.Clear();
 			}
 
 			Thread.Yield();
@@ -221,7 +215,7 @@ public class UnitTestEngine : IDisposable
 				if (unitTest.Status == UnitTestStatus.Skipped)
 					continue;
 
-				var message = new DebugMessage(DebugCode.ExecuteUnitTest, unitTest.SerializedUnitTest, unitTest);
+				var message = new DebugMessage(unitTest.SerializedUnitTest, unitTest);
 
 				Queue.Enqueue(message);
 			}
@@ -570,7 +564,7 @@ public class UnitTestEngine : IDisposable
 		if (response == null)
 			return;
 
-		if (response.Code == DebugCode.Ready)
+		if (response.ID == 0)
 		{
 			Ready = true;
 		}
@@ -608,7 +602,7 @@ public class UnitTestEngine : IDisposable
 			else
 			{
 				unitTest.Status = UnitTestStatus.Failed;
-				var value = Equals(unitTest.Expected, unitTest.Result);
+
 				Errors++;
 
 				OutputStatus($"ERROR: {UnitTestSystem.OutputUnitTestResult(unitTest)}");

@@ -104,7 +104,7 @@ Below are the command line arguments available:
     -display-off,Emulator.Display,off
     -memory,Emulator.Memory
     -gdb,Emulator.GDB,true
-	-term,Emulator.MaxRuntime,{value}
+	-timeout,Emulator.MaxRuntime,{value}
 	-debug,Launcher.Serial,true
     
     Launcher - Emulator - Qemu & VMWare:

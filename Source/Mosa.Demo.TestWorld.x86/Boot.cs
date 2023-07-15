@@ -46,7 +46,7 @@ public static class Boot
 
 		IDT.SetInterruptHandler(null);
 		Screen.Write('2');
-		Debugger.Setup(Serial.COM1);
+		UnitTestEngine.Setup(Serial.COM1);
 
 		Screen.Write('3');
 		PIC.Setup();

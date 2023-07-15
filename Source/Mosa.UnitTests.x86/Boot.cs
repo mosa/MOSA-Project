@@ -29,18 +29,14 @@ public static class Boot
 
 	private static void Setup()
 	{
-		Logger.Log("Initialize Kernel");
-
 		IDT.SetInterruptHandler(null);
 		Panic.Setup();
-		Debugger.Setup(Serial.COM1);
+		UnitTestEngine.Setup(Serial.COM1);
 
 		// Initialize interrupts
 		PIC.Setup();
 		IDT.Setup();
 		GDT.Setup();
-
-		Logger.Log("Kernel initialized");
 	}
 
 	public static void EnterTestReadyLoop()

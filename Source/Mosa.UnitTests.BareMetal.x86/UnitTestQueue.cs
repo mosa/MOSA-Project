@@ -2,7 +2,7 @@
 
 using Mosa.Runtime;
 
-namespace Mosa.Kernel.x86;
+namespace Mosa.UnitTests.Framework;
 
 /// <summary>
 /// Unit Test Runner

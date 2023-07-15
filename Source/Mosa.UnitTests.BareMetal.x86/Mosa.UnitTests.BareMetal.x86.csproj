@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<OutputType>Exe</OutputType>
+		<StartupObject>Mosa.UnitTests.BareMetal.x86.Boot</StartupObject>
+		<DebugType>full</DebugType>
+		<LangVersion>11.0</LangVersion>
+		<OutputPath>..\..\bin\</OutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<DisableStandardFrameworkResolution>true</DisableStandardFrameworkResolution>
+		<DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
+		<UseAppHost>false</UseAppHost>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<NoWarn>MSB3245</NoWarn>
+	</PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Mosa.DeviceDriver\Mosa.DeviceDriver.csproj" />
+		<ProjectReference Include="..\Mosa.DeviceSystem\Mosa.DeviceSystem.csproj" />
+		<ProjectReference Include="..\Mosa.FileSystem\Mosa.FileSystem.csproj" />
+		<ProjectReference Include="..\Mosa.Kernel.BareMetal.x86\Mosa.Kernel.BareMetal.x86.csproj" />
+		<ProjectReference Include="..\Mosa.Kernel.BareMetal\Mosa.Kernel.BareMetal.csproj" />
+		<ProjectReference Include="..\Mosa.Korlib\Mosa.Korlib.csproj" />
+		<ProjectReference Include="..\Mosa.UnitTests\Mosa.UnitTests.csproj" />
+	</ItemGroup>
+</Project>

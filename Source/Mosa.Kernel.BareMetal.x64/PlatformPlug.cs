@@ -16,10 +16,10 @@ public static class PlatformPlug
 	[Plug("Mosa.Kernel.BareMetal.Platform::EntryPoint")]
 	public static void EntryPoint()
 	{
-		var eax = Native.GetMultibootRAX();
-		var ebx = Native.GetMultibootRBX();
+		//var eax = Native.GetMultibootEAX();
+		//var ebx = Native.GetMultibootEBX();
 
-		Multiboot.Setup(new Pointer(ebx), (uint)eax);
+		//Multiboot.Setup(new Pointer(ebx), eax);
 
 		//SSE.Setup();
 		//SerialDebug.Setup();
@@ -32,51 +32,42 @@ public static class PlatformPlug
 	[Plug("Mosa.Kernel.BareMetal.Platform::GetInitialGCMemoryPool")]
 	public static AddressRange GetInitialGCMemoryPool() => new AddressRange(InitialGCMemoryPoolAddress, InitialGCMemoryPoolSize);
 
-	public static PlatformArchitecture GetPlatformArchitecture() => PlatformArchitecture.X86;
+	public static PlatformArchitecture GetPlatformArchitecture() => PlatformArchitecture.X64;
 
-	[Plug("Mosa.Kernel.BareMetal.Platform::ConsoleWrite")]
-	public static void ConsoleWrite(byte c)
-	{ }
+	//[Plug("Mosa.Kernel.BareMetal.Platform::ConsoleWrite")]
+	//public static void ConsoleWrite(byte c) => x64.VGAConsole.Write(c);
 
-	[Plug("Mosa.Kernel.BareMetal.Platform::DebugWrite")]
-	public static void DebugWrite(byte c)
-	{ }
+	//[Plug("Mosa.Kernel.BareMetal.Platform::DebugWrite")]
+	//public static void DebugWrite(byte c) => x64.SerialDebug.Write(c);
 
 	public static class PageTablePlug
 	{
-		[Plug("Mosa.Kernel.BareMetal.Platform+PageTable::Setup")]
-		public static void Setup()
-		{ /* TODO */ }
+		//[Plug("Mosa.Kernel.BareMetal.Platform+PageTable::Setup")]
+		//public static void Setup() => x64.PageTable.Setup();
 
-		[Plug("Mosa.Kernel.BareMetal.Platform+PageTable::GetPageShift")]
-		public static uint GetPageShift() => 12;
+		//[Plug("Mosa.Kernel.BareMetal.Platform+PageTable::GetPageShift")]
+		//public static uint GetPageShift() => 12;
 
-		[Plug("Mosa.Kernel.BareMetal.Platform+PageTable::Initialize")]
-		public static void Initialize()
-		{ /* TODO */ }
+		//[Plug("Mosa.Kernel.BareMetal.Platform+PageTable::Initialize")]
+		//public static void Initialize() => x64.PageTable.Initialize();
 
-		[Plug("Mosa.Kernel.BareMetal.Platform+PageTable::Enable")]
-		public static void Enable()
-		{ /* TODO */ }
+		//[Plug("Mosa.Kernel.BareMetal.Platform+PageTable::Enable")]
+		//public static void Enable() => x64.PageTable.Enable();
 
-		[Plug("Mosa.Kernel.BareMetal.Platform+PageTable::MapVirtualAddressToPhysical")]
-		public static void MapVirtualAddressToPhysical(Pointer virtualAddress, Pointer physicalAddress, bool present = true)
-		{ /* TODO */ }
+		//[Plug("Mosa.Kernel.BareMetal.Platform+PageTable::MapVirtualAddressToPhysical")]
+		//public static void MapVirtualAddressToPhysical(Pointer virtualAddress, Pointer physicalAddress, bool present = true) => x64.PageTable.MapVirtualAddressToPhysical(virtualAddress, physicalAddress, present);
 
-		[Plug("Mosa.Kernel.BareMetal.Platform+PageTable::GetPhysicalAddressFromVirtual")]
-		public static Pointer GetPhysicalAddressFromVirtual(Pointer virtualAddress)
-		{ return Pointer.Zero; /* TODO */}
+		//[Plug("Mosa.Kernel.BareMetal.Platform+PageTable::GetPhysicalAddressFromVirtual")]
+		//public static Pointer GetPhysicalAddressFromVirtual(Pointer virtualAddress) => x64.PageTable.GetPhysicalAddressFromVirtual(virtualAddress);
 	}
 
 	public static class InterruptPlug
 	{
-		[Plug("Mosa.Kernel.BareMetal.Platform+Interrupt::Setup")]
-		public static void Setup()
-		{ /* TODO */ }
+		//[Plug("Mosa.Kernel.BareMetal.Platform+Interrupt::Setup")]
+		//public static void Setup() => IDT.Setup();
 
-		[Plug("Mosa.Kernel.BareMetal.Platform+Interrupt::SetHandler")]
-		public static void SetHandler(InterruptHandler handler)
-		{ /* TODO */ }
+		//[Plug("Mosa.Kernel.BareMetal.Platform+Interrupt::SetHandler")]
+		//public static void SetHandler(InterruptHandler handler) => IDT.SetInterruptHandler(handler);
 
 		[Plug("Mosa.Kernel.BareMetal.Platform+Interrupt::Enable")]
 		public static void Enable() => Native.Sti();
@@ -85,7 +76,7 @@ public static class PlatformPlug
 		public static void Disable() => Native.Cli();
 	}
 
-	public static class IOPlug
+	public static class IOPlugPlug
 	{
 		[Plug("Mosa.Kernel.BareMetal.Platform+IO::In8")]
 		public static byte In8(ushort address) => Native.In8(address);
@@ -106,26 +97,32 @@ public static class PlatformPlug
 		public static void Out32(ushort address, uint data) => Native.Out32(address, data);
 	}
 
-	public static class Scheduler
+	public static class SchedulerPlug
 	{
-		[Plug("Mosa.Kernel.BareMetal.Platform+Scheduler::ThreadStart")]
-		public static void ThreadStart()
-		{ /* TODO */ }
+		//[Plug("Mosa.Kernel.BareMetal.Platform+Scheduler::Start")]
+		//public static void Start() => x64.Scheduler.Start();
 
-		[Plug("Mosa.Kernel.BareMetal.Platform+Scheduler::ThreadYield")]
-		public static void ThreadYield()
-		{ /* TODO */ }
+		//[Plug("Mosa.Kernel.BareMetal.Platform+Scheduler::Yield")]
+		//public static void Yield() => x64.Scheduler.Yield();
 
-		[Plug("Mosa.Kernel.BareMetal.Platform+Scheduler::SignalTermination")]
-		public static void SignalTermination()
-		{ /* TODO */ }
+		//[Plug("Mosa.Kernel.BareMetal.Platform+Scheduler::SignalTermination")]
+		//public static void SignalTermination() => x64.Scheduler.SignalTermination();
 
-		[Plug("Mosa.Kernel.BareMetal.Platform+Scheduler::SwitchToThread")]
-		public static void SwitchToThread(Thread thread)
-		{ /* TODO */ }
+		//[Plug("Mosa.Kernel.BareMetal.Platform+Scheduler::SwitchToThread")]
+		//public static void SwitchToThread(Thread thread) => x64.Scheduler.SwitchToThread(thread);
 
-		[Plug("Mosa.Kernel.BareMetal.Platform+Scheduler::SetupThreadStack")]
-		public static Pointer SetupThreadStack(Pointer stackTop, Pointer methodAddress, Pointer termAddress)
-		{ return Pointer.Zero; /* TODO */ }
+		//[Plug("Mosa.Kernel.BareMetal.Platform+Scheduler::SetupThreadStack")]
+		//public static Pointer SetupThreadStack(Pointer stackTop, Pointer methodAddress, Pointer termAddress) => x64.Scheduler.SetupThreadStack(stackTop, methodAddress, termAddress);
+	}
+
+	public static class SerialPlug
+	{
+		//public static void Setup(int serial) => x64.Serial.Setup((ushort)serial);
+
+		//public static void Write(int serial, byte data) => x64.Serial.Write((ushort)serial, data);
+
+		//public static byte Read(int serial) => x64.Serial.Read((ushort)serial);
+
+		//public static bool IsDataReady(int serial) => x64.Serial.IsDataReady((ushort)serial);
 	}
 }

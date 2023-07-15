@@ -39,7 +39,5 @@ public static class Kernel
 
 		// Setup the Encoding objects
 		Encoding.Setup();
-
-		Logger.Log("Kernel initialized");
 	}
 }
