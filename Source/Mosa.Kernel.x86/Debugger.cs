@@ -30,7 +30,6 @@ public static class Debugger
 
 	private static uint index;
 
-	private static bool ready;
 	private static bool readysent;
 
 	private static unsafe IDTStack* idt_stack;
@@ -42,14 +41,8 @@ public static class Debugger
 
 		Buffer = new Pointer(Address.DebuggerBuffer);
 
-		ready = false;
 		readysent = false;
 		enabled = true;
-	}
-
-	public static void Ready()
-	{
-		ready = true;
 	}
 
 	private static void SendRawByte(byte b)
@@ -148,13 +141,10 @@ public static class Debugger
 		if (!enabled)
 			return;
 
-		if (ready)
-		{
-			SendTestUnitResponse();
-			ProcessTestUnitQueue();
-		}
+		SendTestUnitResponse();
+		ProcessTestUnitQueue();
 
-		if (ready & !readysent)
+		if (!readysent)
 		{
 			readysent = true;
 			SendReady();
@@ -167,11 +157,8 @@ public static class Debugger
 				while (ProcessSerial()) ;
 			}
 
-			if (ready)
-			{
-				SendTestUnitResponse();
-				ProcessTestUnitQueue();
-			}
+			SendTestUnitResponse();
+			ProcessTestUnitQueue();
 		}
 	}
 

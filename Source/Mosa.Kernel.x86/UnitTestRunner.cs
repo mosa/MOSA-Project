@@ -38,8 +38,6 @@ public static class UnitTestRunner
 	{
 		var testCount = 0u;
 
-		Debugger.Ready();
-
 		Screen.Write("Waiting for unit tests...");
 		Screen.NextLine();
 		Screen.NextLine();
