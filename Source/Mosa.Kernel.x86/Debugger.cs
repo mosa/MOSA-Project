@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Runtime;
-using Mosa.Runtime.x86;
 
 namespace Mosa.Kernel.x86;
 
@@ -81,7 +80,7 @@ public static class Debugger
 
 	// MAGIC-ID-CODE-LEN-DATA
 
-	private const int HeaderSize = 1 + 1 + 4 + 4;
+	private const int HeaderSize = 4 + 4;
 
 	private static void SendResponseStart(uint id, byte code, uint len)
 	{
@@ -121,12 +120,12 @@ public static class Debugger
 
 	private static uint GetID()
 	{
-		return GetUInt32(1);
+		return GetUInt32(0);
 	}
 
 	private static uint GetLength()
 	{
-		return GetUInt32(6);
+		return GetUInt32(4);
 	}
 
 	internal static unsafe void Process(IDTStack* stack)
@@ -167,10 +166,7 @@ public static class Debugger
 		if (!Serial.IsDataReady(com))
 			return false;
 
-		byte b = Serial.Read(com);
-
-		if (index == 0 && b != (byte)'!')
-			return true;
+		var b = Serial.Read(com);
 
 		if (index + 1 > MaxBuffer)
 		{

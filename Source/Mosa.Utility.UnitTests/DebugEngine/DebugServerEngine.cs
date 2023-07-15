@@ -22,8 +22,6 @@ public sealed class DebugServerEngine
 
 	private const int MaxBufferSize = 64 * 1024 + 64;
 
-	private static int packetCnt = 0;
-
 	public Stream Stream
 	{
 		get => stream;
@@ -114,7 +112,6 @@ public sealed class DebugServerEngine
 			}
 
 			SendPacket(packets);
-			packetCnt += messages.Count;
 
 			return true;
 		}
@@ -148,9 +145,7 @@ public sealed class DebugServerEngine
 	{
 		var packet = new Packet();
 
-		packet.Add((byte)'!');
 		packet.Add(message.ID);
-		packet.Add(message.Code);
 
 		if (message.CommandData == null)
 		{

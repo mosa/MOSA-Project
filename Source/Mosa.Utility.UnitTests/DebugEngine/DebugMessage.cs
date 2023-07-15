@@ -95,11 +95,4 @@ public class DebugMessage
 	{
 		return (uint)GetInt32(index);
 	}
-
-	private static byte[] CreateByteArray(List<byte> data)
-	{
-		var array = new byte[data.Count];
-		data.CopyTo(array);
-		return array;
-	}
 }
