@@ -9,16 +9,6 @@ namespace Mosa.Kernel.x86;
 /// </summary>
 public static class Debugger
 {
-	#region Codes
-
-	public static class DebugCode
-	{
-		public const byte Ready = 101;
-		public const byte ExecuteUnitTest = 200;
-	}
-
-	#endregion Codes
-
 	private static Pointer Buffer; // Pointer(Address.DebuggerBuffer)
 
 	private const int MaxBuffer = 1024 * 64 + 64;
@@ -27,7 +17,7 @@ public static class Debugger
 
 	private static ushort com = Serial.COM1;
 
-	private static uint index;
+	private static uint UsedBuffer;
 
 	private static bool readysent;
 
@@ -78,44 +68,28 @@ public static class Debugger
 		SendInteger((uint)((i >> 32) & 0xFFFFFFFF));
 	}
 
-	// MAGIC-ID-CODE-LEN-DATA
-
 	private const int HeaderSize = 4 + 4;
 
-	private static void SendResponseStart(uint id, byte code, uint len)
+	private static void SendResponseStart(uint id, uint len)
 	{
-		// Magic
-		SendByte('!');
-
-		// ID
 		SendInteger(id);
-
-		// Code
-		SendByte(code);
-
-		// Length
 		SendInteger(len);
 	}
 
-	private static void SendResponse(uint id, byte code)
+	private static void SendResponse(uint id)
 	{
-		SendResponseStart(id, code, 0);
+		SendResponseStart(id, 0);
 	}
 
-	private static void SendResponse(uint id, byte code, ulong data)
+	private static void SendResponse(uint id, ulong data)
 	{
-		SendResponseStart(id, code, 8);
+		SendResponseStart(id, 8);
 		SendInteger(data);
 	}
 
 	private static void SendReady()
 	{
-		SendResponse(0, DebugCode.Ready);
-	}
-
-	private static uint GetUInt32(uint offset)
-	{
-		return Buffer.Load32(offset);
+		SendResponse(0);
 	}
 
 	private static uint GetID()
@@ -126,6 +100,11 @@ public static class Debugger
 	private static uint GetLength()
 	{
 		return GetUInt32(4);
+	}
+
+	private static uint GetUInt32(uint offset)
+	{
+		return Buffer.Load32(offset);
 	}
 
 	internal static unsafe void Process(IDTStack* stack)
@@ -168,28 +147,28 @@ public static class Debugger
 
 		var b = Serial.Read(com);
 
-		if (index + 1 > MaxBuffer)
+		if (UsedBuffer + 1 > MaxBuffer)
 		{
-			index = 0;
+			UsedBuffer = 0;
 			return true;
 		}
 
-		Buffer.Store8(index++, b);
+		Buffer.Store8(UsedBuffer++, b);
 
-		if (index >= HeaderSize)
+		if (UsedBuffer >= HeaderSize)
 		{
 			var length = GetLength();
 
 			if (length > MaxBuffer)
 			{
-				index = 0;
+				UsedBuffer = 0;
 				return true;
 			}
 
-			if (index == length + HeaderSize)
+			if (UsedBuffer == length + HeaderSize)
 			{
 				ProcessCommand();
-				index = 0;
+				UsedBuffer = 0;
 			}
 		}
 
@@ -198,8 +177,6 @@ public static class Debugger
 
 	private static void ProcessCommand()
 	{
-		// [0]![1]ID[5]CODE[6]LEN[10]DATA[LEN]
-
 		var id = GetID();
 
 		Screen.Goto(13, 0);
@@ -228,7 +205,7 @@ public static class Debugger
 	{
 		if (UnitTestRunner.GetResult(out ulong result, out uint id))
 		{
-			SendResponse(id, DebugCode.ExecuteUnitTest, result);
+			SendResponse(id, result);
 		}
 	}
 

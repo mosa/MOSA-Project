@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Pipes;
+using Mosa.Compiler.Framework.IR;
+using Reko.Core.Hll.Pascal;
 
 namespace Mosa.Utility.UnitTests.DebugEngine;
 
@@ -19,8 +21,6 @@ public sealed class DebugServerEngine
 
 	private CallBack globalDispatch;
 	private readonly byte[] receivedData = new byte[2000];
-
-	private const int MaxBufferSize = 64 * 1024 + 64;
 
 	public Stream Stream
 	{
@@ -47,6 +47,7 @@ public sealed class DebugServerEngine
 		{
 			try
 			{
+				buffer.Clear();
 				stream.Close();
 			}
 			finally
@@ -164,7 +165,7 @@ public sealed class DebugServerEngine
 		return packet;
 	}
 
-	private void PostResponse(int id, byte code, List<byte> data)
+	private void PostResponse(int id, List<byte> data)
 	{
 		DebugMessage message = null;
 
@@ -173,7 +174,7 @@ public sealed class DebugServerEngine
 			if (id == 0 || !pending.TryGetValue(id, out message))
 			{
 				// message without command
-				message = new DebugMessage(code, data)
+				message = new DebugMessage(data)
 				{
 					ID = id
 				};
@@ -196,11 +197,6 @@ public sealed class DebugServerEngine
 		}
 	}
 
-	private byte GetByte(int index)
-	{
-		return buffer[index];
-	}
-
 	private int GetInteger(int index)
 	{
 		return (buffer[index + 3] << 24) | (buffer[index + 2] << 16) | (buffer[index + 1] << 8) | buffer[index];
@@ -208,50 +204,33 @@ public sealed class DebugServerEngine
 
 	private bool ParseResponse()
 	{
-		var id = GetInteger(1);
-		var code = GetByte(5);
-		var len = GetInteger(6);
+		var id = GetInteger(0);
+		var len = GetInteger(4);
 
 		var data = new List<byte>();
 
 		for (var i = 0; i < len; i++)
 		{
-			data.Add(buffer[i + 10]);
+			data.Add(buffer[i + 8]);
 		}
 
-		//Console.WriteLine("ID: " + id + " CODE: " + code + " LEN: " + len);
-
-		PostResponse(id, code, data);
+		PostResponse(id, data);
 
 		return true;
 	}
 
-	// Message format:	// [0]MAGIC[1]ID[5]CODE[6]LEN[10]DATA[LEN]
-
 	private void Push(byte b)
 	{
-		if (buffer.Count == 0 && b != (byte)'!')
-			return;
-
-		if (buffer.Count > MaxBufferSize)
-		{
-			buffer.Clear();
-			return;
-		}
-
 		buffer.Add(b);
 
-		if (buffer.Count >= 10)
+		if (buffer.Count >= 8)
 		{
-			var length = GetInteger(6);
+			var id = GetInteger(0);
+			var length = GetInteger(4);
 
-			if (length > MaxBufferSize)
-			{
-				buffer.Clear();
-				return;
-			}
+			//Console.WriteLine($"Buffer: {buffer.Count} - Len: {length} - Byte: {b}");
 
-			if (buffer.Count == length + 10)
+			if (buffer.Count == length + 8)
 			{
 				ParseResponse();
 				buffer.Clear();

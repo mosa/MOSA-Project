@@ -167,7 +167,7 @@ public static class CommandLineArguments
 			new Argument { Name = "-output-serial-file", Setting = "Launcher.Serial.File"},
 			new Argument { Name = "-debug", Setting = "Launcher.Serial.Connection", Value="true"},
 
-			new Argument { Name = "-term", Setting = "Emulator.MaxRuntime"},
+			new Argument { Name = "-timeout", Setting = "Emulator.MaxRuntime"},
 
 			// Base directory is the output directory
 			new Argument { Name = "-include", Setting = "Image.FileSystem.RootInclude" },

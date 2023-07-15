@@ -215,7 +215,7 @@ public class UnitTestEngine : IDisposable
 				if (unitTest.Status == UnitTestStatus.Skipped)
 					continue;
 
-				var message = new DebugMessage(DebugCode.ExecuteUnitTest, unitTest.SerializedUnitTest, unitTest);
+				var message = new DebugMessage(unitTest.SerializedUnitTest, unitTest);
 
 				Queue.Enqueue(message);
 			}
@@ -564,7 +564,7 @@ public class UnitTestEngine : IDisposable
 		if (response == null)
 			return;
 
-		if (response.Code == DebugCode.Ready)
+		if (response.ID == 0)
 		{
 			Ready = true;
 		}

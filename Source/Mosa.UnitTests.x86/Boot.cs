@@ -29,8 +29,6 @@ public static class Boot
 
 	private static void Setup()
 	{
-		Logger.Log("Initialize Kernel");
-
 		IDT.SetInterruptHandler(null);
 		Panic.Setup();
 		Debugger.Setup(Serial.COM1);
@@ -39,8 +37,6 @@ public static class Boot
 		PIC.Setup();
 		IDT.Setup();
 		GDT.Setup();
-
-		Logger.Log("Kernel initialized");
 	}
 
 	public static void EnterTestReadyLoop()

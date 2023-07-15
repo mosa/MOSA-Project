@@ -10,8 +10,6 @@ public class DebugMessage
 {
 	public int ID { get; internal set; }
 
-	public byte Code { get; }
-
 	public IList<byte> CommandData { get; }
 
 	public List<byte> ResponseData { get; internal set; }
@@ -20,15 +18,13 @@ public class DebugMessage
 
 	public object Other { get; set; }
 
-	public DebugMessage(byte code, IList<byte> data)
+	public DebugMessage(IList<byte> data)
 	{
-		Code = code;
 		CommandData = data;
 	}
 
-	public DebugMessage(byte code, byte[] data)
+	public DebugMessage(byte[] data)
 	{
-		Code = code;
 		CommandData = new List<byte>(data.Length);
 
 		foreach (var b in data)
@@ -37,9 +33,8 @@ public class DebugMessage
 		}
 	}
 
-	public DebugMessage(byte code, byte[] data, int length)
+	public DebugMessage(byte[] data, int length)
 	{
-		Code = code;
 		CommandData = new List<byte>(data.Length);
 
 		for (var i = 0; i < length; i++)
@@ -48,9 +43,8 @@ public class DebugMessage
 		}
 	}
 
-	public DebugMessage(byte code, IList<int> data)
+	public DebugMessage(IList<int> data)
 	{
-		Code = code;
 		CommandData = new List<byte>(data.Count * 4);
 
 		foreach (var i in data)
@@ -62,26 +56,26 @@ public class DebugMessage
 		}
 	}
 
-	public DebugMessage(byte code, IList<int> data, object other)
-		: this(code, data)
+	public DebugMessage(IList<int> data, object other)
+		: this(data)
 	{
 		Other = other;
 	}
 
-	public DebugMessage(byte code, IList<int> data, CallBack callback)
-		: this(code, data)
+	public DebugMessage(IList<int> data, CallBack callback)
+		: this(data)
 	{
 		CallBack = callback;
 	}
 
-	public DebugMessage(byte code, IList<byte> data, CallBack callback)
-		: this(code, data)
+	public DebugMessage(IList<byte> data, CallBack callback)
+		: this(data)
 	{
 		CallBack = callback;
 	}
 
-	public DebugMessage(byte code, int[] data, CallBack callback)
-		: this(code, data)
+	public DebugMessage(int[] data, CallBack callback)
+		: this(data)
 	{
 		CallBack = callback;
 	}
