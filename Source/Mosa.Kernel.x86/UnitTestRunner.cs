@@ -10,28 +10,32 @@ namespace Mosa.Kernel.x86;
 /// </summary>
 public static class UnitTestRunner
 {
+	private static Pointer Stack;
+
 	private const uint MaxParameters = 8; // max 32-bit parameters
 
-	private static int testReady;
-	private static int testResultReady;
-	private static int testResultReported;
+	private static int Ready;
+	private static int ResultReady;
+	private static int ResultReported;
 
-	private static uint testID;
-	private static uint testParameters;
-	private static uint testMethodAddress;
-	private static uint testResultType;
+	private static uint TestID;
+	private static uint TestParameters;
+	private static uint TestMethodAddress;
+	private static uint TestResultType;
 
-	private static ulong testResult;
+	private static ulong TestResult;
 
 	public static void Setup()
 	{
-		testReady = 0;
-		testResult = 0;
-		testResultReported = 1;
+		Stack = new Pointer(Address.UnitTestStack);
 
-		testID = 0;
-		testParameters = 0;
-		testMethodAddress = 0;
+		Ready = 0;
+		TestResult = 0;
+		ResultReported = 1;
+
+		TestID = 0;
+		TestParameters = 0;
+		TestMethodAddress = 0;
 	}
 
 	public static void EnterTestReadyLoop()
@@ -55,7 +59,7 @@ public static class UnitTestRunner
 
 		while (true)
 		{
-			if (testReady == 1)
+			if (Ready == 1)
 			{
 				Screen.Goto(row, 0);
 				Screen.ClearRow();
@@ -63,29 +67,29 @@ public static class UnitTestRunner
 				Screen.Write("Test #: ");
 				Screen.Write(++testCount, 10, 7);
 
-				testResult = 0;
-				testResultReady = 0;
-				testResultReported = 0;
-				testReady = 0;
+				TestResult = 0;
+				ResultReady = 0;
+				ResultReported = 0;
+				Ready = 0;
 
 				// copy parameters into stack
-				for (var index = 0; index < testParameters; index++)
+				for (var index = 0; index < TestParameters; index++)
 				{
-					var value = new Pointer(Address.UnitTestStack).Load32(index * 4);
+					var value = Stack.Load32(index * 4);
 
 					new Pointer(esp).Store32(index * 4, value);
 				}
 
-				switch (testResultType)
+				switch (TestResultType)
 				{
-					case 0: Native.FrameCall(testMethodAddress); break;
-					case 1: testResult = Native.FrameCallRetU4(testMethodAddress); break;
-					case 2: testResult = Native.FrameCallRetU8(testMethodAddress); break;
-					case 3: testResult = Native.FrameCallRetR8(testMethodAddress); break;
+					case 0: Native.FrameCall(TestMethodAddress); break;
+					case 1: TestResult = Native.FrameCallRetU4(TestMethodAddress); break;
+					case 2: TestResult = Native.FrameCallRetU8(TestMethodAddress); break;
+					case 3: TestResult = Native.FrameCallRetR8(TestMethodAddress); break;
 					default: break;
 				}
 
-				testResultReady = 1;
+				ResultReady = 1;
 
 				Native.Int(255);
 			}
@@ -94,44 +98,44 @@ public static class UnitTestRunner
 
 	public static void SetUnitTestMethodParameter(uint index, uint value)
 	{
-		new Pointer(Address.UnitTestStack).Store32(index * 4, value);
+		Stack.Store32(index * 4, value);
 	}
 
 	public static void SetUnitTestMethodParameterCount(uint number)
 	{
-		testParameters = number;
+		TestParameters = number;
 	}
 
 	public static void SetUnitTestMethodAddress(uint address)
 	{
-		testMethodAddress = address;
+		TestMethodAddress = address;
 	}
 
 	public static void SetUnitTestResultType(uint type)
 	{
-		testResultType = type;
+		TestResultType = type;
 	}
 
 	public static void StartTest(uint id)
 	{
-		testID = id;
-		testResultReady = 0;
-		testReady = 1;
+		TestID = id;
+		ResultReady = 0;
+		Ready = 1;
 	}
 
 	public static bool IsReady()
 	{
-		return testResultReported == 1 && testReady == 0;
+		return ResultReported == 1 && Ready == 0;
 	}
 
 	public static bool GetResult(out ulong result, out uint id)
 	{
-		result = testResult;
-		id = testID;
+		result = TestResult;
+		id = TestID;
 
-		if (testReady == 0 && testResultReady == 1 && testResultReported == 0)
+		if (Ready == 0 && ResultReady == 1 && ResultReported == 0)
 		{
-			testResultReported = 1;
+			ResultReported = 1;
 			return true;
 		}
 

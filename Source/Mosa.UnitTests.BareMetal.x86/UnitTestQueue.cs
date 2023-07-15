@@ -9,77 +9,78 @@ namespace Mosa.UnitTests.Framework;
 /// </summary>
 public static class UnitTestQueue
 {
-	private static Pointer queueNext;
-	private static Pointer queueCurrent;
-	private static uint count;
+	private static Pointer Queue;
+	private static Pointer QueueNext;
+	private static Pointer QueueCurrent;
+	private static uint Count;
 
-	private static readonly uint TestQueueSize = 0x00100000;
+	private static readonly uint QueueSize = 0x00100000;
 
 	public static void Setup()
 	{
-		queueNext = new Pointer(Address.UnitTestQueue);
-		queueCurrent = new Pointer(Address.UnitTestQueue);
-		count = 0;
+		Queue = new Pointer(Address.UnitTestQueue);
+		QueueNext = Queue;
+		QueueCurrent = Queue;
 
-		queueNext.Store32(0);
+		Count = 0;
+
+		QueueNext.Store32(0);
 	}
 
 	public static bool QueueUnitTest(uint id, Pointer start, Pointer end)
 	{
 		var len = (uint)start.GetOffset(end);
 
-		if (queueNext + len + 32 > new Pointer(Address.UnitTestQueue) + TestQueueSize)
+		if (QueueNext + len + 32 > Queue + QueueSize)
 		{
-			if (new Pointer(Address.UnitTestQueue + len + 32) >= queueCurrent)
+			if (Queue + len + 32 >= QueueCurrent)
 				return false; // no space
 
-			queueNext.Store32(uint.MaxValue); // mark jump to front
+			QueueNext.Store32(uint.MaxValue); // mark jump to front
 
 			// cycle to front
-			queueNext = new Pointer(Address.UnitTestQueue);
+			QueueNext = Queue;
 		}
 
-		queueNext.Store32(len + 4);
-		queueNext += 4;
+		QueueNext.Store32(len + 4);
+		QueueNext += 4;
 
-		queueNext.Store32(id);
-		queueNext += 4;
+		QueueNext.Store32(id);
+		QueueNext += 4;
 
 		for (var i = start; i < end; i += 4)
 		{
 			uint value = i.Load32();
-			queueNext.Store32(value);
-			queueNext += 4;
+			QueueNext.Store32(value);
+			QueueNext += 4;
 		}
 
-		queueNext.Store32(0); // mark end
-		++count;
+		QueueNext.Store32(0); // mark end
+		++Count;
 
 		return true;
 	}
 
 	public static void ProcessQueue()
 	{
-		if (queueNext == queueCurrent)
+		if (QueueNext == QueueCurrent)
 			return;
 
 		if (!UnitTestRunner.IsReady())
-		{
 			return;
-		}
 
-		var marker = queueCurrent.Load32();
+		var marker = QueueCurrent.Load32();
 
 		if (marker == uint.MaxValue)
 		{
-			queueCurrent = new Pointer(Address.UnitTestQueue);
+			QueueCurrent = Queue;
 		}
 
-		var len = queueCurrent.Load32();
-		var id = queueCurrent.Load32(4);
-		var address = queueCurrent.Load32(8);
-		var type = queueCurrent.Load32(12);
-		var paramcnt = queueCurrent.Load32(16);
+		var len = QueueCurrent.Load32();
+		var id = QueueCurrent.Load32(4);
+		var address = QueueCurrent.Load32(8);
+		var type = QueueCurrent.Load32(12);
+		var paramcnt = QueueCurrent.Load32(16);
 
 		UnitTestRunner.SetUnitTestMethodAddress(address);
 		UnitTestRunner.SetUnitTestResultType(type);
@@ -87,12 +88,12 @@ public static class UnitTestQueue
 
 		for (var index = 0u; index < paramcnt; index++)
 		{
-			var value = queueCurrent.Load32(20 + index * 4);
+			var value = QueueCurrent.Load32(20 + index * 4);
 			UnitTestRunner.SetUnitTestMethodParameter(index, value);
 		}
 
-		queueCurrent = queueCurrent + len + 4;
-		--count;
+		QueueCurrent = QueueCurrent + len + 4;
+		--Count;
 
 		Screen.Goto(17, 0);
 		Screen.ClearRow();
@@ -105,10 +106,8 @@ public static class UnitTestQueue
 		Screen.Write(address, 16, 8);
 		Screen.Write(" Param: ");
 		Screen.Write(paramcnt, 10, 2);
-		Screen.Write(" Len: ");
-		Screen.Write(len, 10, 4);
 		Screen.Write(" - Cnt: ");
-		Screen.Write(count, 10, 4);
+		Screen.Write(Count, 10, 4);
 
 		UnitTestRunner.StartTest(id);
 	}

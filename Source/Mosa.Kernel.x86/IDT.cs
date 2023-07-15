@@ -2152,7 +2152,7 @@ public static class IDT
 	{
 		var stack = (IDTStack*)stackStatePointer.ToUInt32();
 
-		Debugger.Process(stack);
+		UnitTestEngine.Process(stack);
 
 		switch (stack->Interrupt)
 		{

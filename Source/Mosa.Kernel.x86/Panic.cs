@@ -81,7 +81,7 @@ public static class Panic
 			// keep debugger running
 			unsafe
 			{
-				Debugger.Process(null);
+				UnitTestEngine.Process(null);
 			}
 
 			Native.Hlt();

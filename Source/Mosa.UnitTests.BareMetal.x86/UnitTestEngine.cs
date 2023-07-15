@@ -1,32 +1,34 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Kernel.BareMetal;
 using Mosa.Runtime;
 
-namespace Mosa.Kernel.x86;
+namespace Mosa.UnitTests.Framework;
 
 /// <summary>
-/// Client Side Debugger
+/// Unit Test Engine
 /// </summary>
-public static class Debugger
+public static class UnitTestEngine
 {
-	private static Pointer Buffer; // Pointer(Address.DebuggerBuffer)
+	private static Pointer Buffer;
 
 	private const int MaxBuffer = 1024 * 64 + 64;
 
 	private static bool enabled;
 
-	private static ushort com = Serial.COM1;
+	private static ushort com; // = Serial.COM1;
 
 	private static uint UsedBuffer;
 
 	private static bool readysent;
 
-	private static unsafe IDTStack* idt_stack;
+	//private static unsafe IDTStack* idt_stack;
 
 	public static void Setup(ushort com)
 	{
-		Serial.SetupPort(com);
-		Debugger.com = com;
+		//Serial.SetupPort(com);
+
+		UnitTestEngine.com = com;
 
 		Buffer = new Pointer(Address.DebuggerBuffer);
 
@@ -92,27 +94,17 @@ public static class Debugger
 		SendResponse(0);
 	}
 
-	private static uint GetID()
-	{
-		return GetUInt32(0);
-	}
-
-	private static uint GetLength()
-	{
-		return GetUInt32(4);
-	}
-
 	private static uint GetUInt32(uint offset)
 	{
 		return Buffer.Load32(offset);
 	}
 
-	internal static unsafe void Process(IDTStack* stack)
-	{
-		idt_stack = stack;
+	//internal static unsafe void Process(IDTStack* stack)
+	//{
+	//	idt_stack = stack;
 
-		Process();
-	}
+	//	Process();
+	//}
 
 	internal static void Process()
 	{
@@ -145,7 +137,12 @@ public static class Debugger
 		if (!Serial.IsDataReady(com))
 			return false;
 
-		var b = Serial.Read(com);
+		var d = Serial.Read(com);
+
+		if (d < 0)
+			return false;
+
+		var b = (byte)d;
 
 		if (UsedBuffer + 1 > MaxBuffer)
 		{
@@ -157,7 +154,7 @@ public static class Debugger
 
 		if (UsedBuffer >= HeaderSize)
 		{
-			var length = GetLength();
+			var length = GetUInt32(4);
 
 			if (length > MaxBuffer)
 			{
@@ -177,7 +174,7 @@ public static class Debugger
 
 	private static void ProcessCommand()
 	{
-		var id = GetID();
+		var id = GetUInt32(0);
 
 		Screen.Goto(13, 0);
 		Screen.ClearRow();
@@ -192,8 +189,8 @@ public static class Debugger
 
 	private static void QueueUnitTest()
 	{
-		var id = GetID();
-		var length = GetLength();
+		var id = GetUInt32(0);
+		var length = GetUInt32(4);
 
 		var start = Buffer + HeaderSize;
 		var end = start + (int)length;

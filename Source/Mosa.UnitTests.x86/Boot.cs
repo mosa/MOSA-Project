@@ -31,7 +31,7 @@ public static class Boot
 	{
 		IDT.SetInterruptHandler(null);
 		Panic.Setup();
-		Debugger.Setup(Serial.COM1);
+		UnitTestEngine.Setup(Serial.COM1);
 
 		// Initialize interrupts
 		PIC.Setup();
