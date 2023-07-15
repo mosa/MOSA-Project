@@ -4,23 +4,22 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Pipes;
-using Mosa.Compiler.Framework.IR;
-using Reko.Core.Hll.Pascal;
 
 namespace Mosa.Utility.UnitTests.DebugEngine;
 
 public sealed class DebugServerEngine
 {
-	private readonly object sync = new object();
 	private Stream stream;
 
 	private readonly Dictionary<int, DebugMessage> pending = new Dictionary<int, DebugMessage>();
 	private int nextID;
 
-	private readonly List<byte> buffer = new List<byte>();
+	private readonly List<byte> ReceiveBuffer = new List<byte>();
+	private readonly List<byte> SendBuffer = new List<byte>(2048);
+
+	private readonly byte[] ReceivedData = new byte[2000];
 
 	private CallBack globalDispatch;
-	private readonly byte[] receivedData = new byte[2000];
 
 	public Stream Stream
 	{
@@ -31,7 +30,7 @@ public sealed class DebugServerEngine
 
 			if (IsConnected)
 			{
-				stream.BeginRead(receivedData, 0, receivedData.Length, ReadAsyncCallback, null);
+				stream.BeginRead(ReceivedData, 0, ReceivedData.Length, ReadAsyncCallback, null);
 			}
 		}
 	}
@@ -47,7 +46,7 @@ public sealed class DebugServerEngine
 		{
 			try
 			{
-				buffer.Clear();
+				ReceiveBuffer.Clear();
 				stream.Close();
 			}
 			finally
@@ -62,60 +61,48 @@ public sealed class DebugServerEngine
 		globalDispatch = dispatch;
 	}
 
-	public bool SendCommand(DebugMessage message)
-	{
-		lock (sync)
-		{
-			if (!IsConnected)
-				return false;
-
-			message.ID = ++nextID;
-			pending.Add(message.ID, message);
-
-			var packet = CreatePacket(message);
-			SendPacket(packet);
-
-			return true;
-		}
-	}
-
-	public bool SendCommand(List<DebugMessage> messages)
-	{
-		foreach (var message in messages)
-		{
-			if (!SendCommand(message))
-				return false;
-		}
-
-		return true;
-	}
-
-	public bool SendCommand2(List<DebugMessage> messages)
+	public void Send(List<DebugMessage> messages)
 	{
 		if (messages.Count == 0)
-			return true;
+			return;
 
-		lock (sync)
+		lock (this)
 		{
 			if (!IsConnected)
-				return false;
+				return;
 
-			var packets = new Packet();
+			SendBuffer.Clear();
 
 			foreach (var message in messages)
 			{
 				message.ID = ++nextID;
+
+				Send(message.ID);
+				Send(message.CommandData.Count);
+
+				foreach (var b in message.CommandData)
+				{
+					Send(b);
+				}
+
 				pending.Add(message.ID, message);
-
-				var packet = CreatePacket(message);
-
-				packets.AppendPacket(packet);
 			}
 
-			SendPacket(packets);
-
-			return true;
+			stream.Write(SendBuffer.ToArray());
 		}
+	}
+
+	private void Send(byte b)
+	{
+		SendBuffer.Add(b);
+	}
+
+	private void Send(int i)
+	{
+		Send((byte)(i & 0xFF));
+		Send((byte)(i >> 8 & 0xFF));
+		Send((byte)(i >> 16 & 0xFF));
+		Send((byte)(i >> 24 & 0xFF));
 	}
 
 	public bool IsConnected
@@ -135,41 +122,11 @@ public sealed class DebugServerEngine
 		}
 	}
 
-	private void SendPacket(Packet packet)
-	{
-		var send = packet.Data.ToArray();
-
-		stream.Write(send, 0, send.Length);
-	}
-
-	private Packet CreatePacket(DebugMessage message)
-	{
-		var packet = new Packet();
-
-		packet.Add(message.ID);
-
-		if (message.CommandData == null)
-		{
-			packet.Add(0);  // length
-		}
-		else
-		{
-			packet.Add(message.CommandData.Count); // length
-
-			foreach (var b in message.CommandData)
-			{
-				packet.Add(b);
-			}
-		}
-
-		return packet;
-	}
-
 	private void PostResponse(int id, List<byte> data)
 	{
 		DebugMessage message = null;
 
-		lock (sync)
+		lock (this)
 		{
 			if (id == 0 || !pending.TryGetValue(id, out message))
 			{
@@ -199,7 +156,7 @@ public sealed class DebugServerEngine
 
 	private int GetInteger(int index)
 	{
-		return (buffer[index + 3] << 24) | (buffer[index + 2] << 16) | (buffer[index + 1] << 8) | buffer[index];
+		return (ReceiveBuffer[index + 3] << 24) | (ReceiveBuffer[index + 2] << 16) | (ReceiveBuffer[index + 1] << 8) | ReceiveBuffer[index];
 	}
 
 	private bool ParseResponse()
@@ -211,7 +168,7 @@ public sealed class DebugServerEngine
 
 		for (var i = 0; i < len; i++)
 		{
-			data.Add(buffer[i + 8]);
+			data.Add(ReceiveBuffer[i + 8]);
 		}
 
 		PostResponse(id, data);
@@ -221,19 +178,16 @@ public sealed class DebugServerEngine
 
 	private void Push(byte b)
 	{
-		buffer.Add(b);
+		ReceiveBuffer.Add(b);
 
-		if (buffer.Count >= 8)
+		if (ReceiveBuffer.Count >= 8)
 		{
-			var id = GetInteger(0);
 			var length = GetInteger(4);
 
-			//Console.WriteLine($"Buffer: {buffer.Count} - Len: {length} - Byte: {b}");
-
-			if (buffer.Count == length + 8)
+			if (ReceiveBuffer.Count == length + 8)
 			{
 				ParseResponse();
-				buffer.Clear();
+				ReceiveBuffer.Clear();
 			}
 		}
 	}
@@ -255,10 +209,10 @@ public sealed class DebugServerEngine
 
 			for (var i = 0; i < bytes; i++)
 			{
-				Push(receivedData[i]);
+				Push(ReceivedData[i]);
 			}
 
-			stream.BeginRead(receivedData, 0, receivedData.Length, ReadAsyncCallback, null);
+			stream.BeginRead(ReceivedData, 0, ReceivedData.Length, ReadAsyncCallback, null);
 		}
 		catch (IOException)
 		{

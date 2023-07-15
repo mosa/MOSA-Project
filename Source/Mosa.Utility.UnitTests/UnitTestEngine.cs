@@ -198,7 +198,7 @@ public class UnitTestEngine : IDisposable
 				}
 
 				//OutputStatus("Batch Sent: " + messages.Count.ToString());
-				DebugServerEngine.SendCommand2(messages);
+				DebugServerEngine.Send(messages);
 				messages.Clear();
 			}
 
