@@ -12,8 +12,6 @@ public static class UnitTestRunner
 {
 	private const uint MaxParameters = 8; // max 32-bit parameters
 
-	private static readonly uint counter = 0;
-
 	private static int testReady;
 	private static int testResultReady;
 	private static int testResultReported;
@@ -38,7 +36,7 @@ public static class UnitTestRunner
 
 	public static void EnterTestReadyLoop()
 	{
-		uint testCount = 0;
+		var testCount = 0u;
 
 		Debugger.Ready();
 
@@ -47,7 +45,7 @@ public static class UnitTestRunner
 		Screen.NextLine();
 
 		// allocate space on stack for parameters
-		uint esp = Native.AllocateStackSpace(MaxParameters * 4);
+		var esp = Native.AllocateStackSpace(MaxParameters * 4);
 
 		Screen.Write("Stack @ ");
 		Screen.Write(esp, 16, 8);
@@ -55,7 +53,7 @@ public static class UnitTestRunner
 		Screen.NextLine();
 		Screen.NextLine();
 
-		uint row = Screen.Row;
+		var row = Screen.Row;
 
 		while (true)
 		{
@@ -73,9 +71,9 @@ public static class UnitTestRunner
 				testReady = 0;
 
 				// copy parameters into stack
-				for (uint index = 0; index < testParameters; index++)
+				for (var index = 0; index < testParameters; index++)
 				{
-					uint value = new Pointer(Address.UnitTestStack).Load32(index * 4);
+					var value = new Pointer(Address.UnitTestStack).Load32(index * 4);
 
 					new Pointer(esp).Store32(index * 4, value);
 				}

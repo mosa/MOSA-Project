@@ -26,7 +26,7 @@ public static class UnitTestQueue
 
 	public static bool QueueUnitTest(uint id, Pointer start, Pointer end)
 	{
-		uint len = (uint)start.GetOffset(end);
+		var len = (uint)start.GetOffset(end);
 
 		if (queueNext + len + 32 > new Pointer(Address.UnitTestQueue) + TestQueueSize)
 		{
@@ -68,26 +68,26 @@ public static class UnitTestQueue
 			return;
 		}
 
-		uint marker = queueCurrent.Load32();
+		var marker = queueCurrent.Load32();
 
 		if (marker == uint.MaxValue)
 		{
 			queueCurrent = new Pointer(Address.UnitTestQueue);
 		}
 
-		uint len = queueCurrent.Load32();
-		uint id = queueCurrent.Load32(4);
-		uint address = queueCurrent.Load32(8);
-		uint type = queueCurrent.Load32(12);
-		uint paramcnt = queueCurrent.Load32(16);
+		var len = queueCurrent.Load32();
+		var id = queueCurrent.Load32(4);
+		var address = queueCurrent.Load32(8);
+		var type = queueCurrent.Load32(12);
+		var paramcnt = queueCurrent.Load32(16);
 
 		UnitTestRunner.SetUnitTestMethodAddress(address);
 		UnitTestRunner.SetUnitTestResultType(type);
 		UnitTestRunner.SetUnitTestMethodParameterCount(paramcnt);
 
-		for (uint index = 0; index < paramcnt; index++)
+		for (var index = 0u; index < paramcnt; index++)
 		{
-			uint value = queueCurrent.Load32(20 + index * 4);
+			var value = queueCurrent.Load32(20 + index * 4);
 			UnitTestRunner.SetUnitTestMethodParameter(index, value);
 		}
 

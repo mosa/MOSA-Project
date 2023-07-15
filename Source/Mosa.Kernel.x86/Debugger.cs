@@ -28,8 +28,6 @@ public static class Debugger
 
 	private static uint index;
 
-	private static uint last;
-
 	private static bool ready;
 	private static bool readysent;
 
@@ -77,11 +75,6 @@ public static class Debugger
 		SendInteger((int)i);
 	}
 
-	private static void SendPointer32(Pointer pointer)
-	{
-		SendInteger(pointer.ToInt32());
-	}
-
 	private static void SendInteger(ulong i)
 	{
 		SendInteger((uint)(i & 0xFFFFFFFF));
@@ -112,12 +105,6 @@ public static class Debugger
 		SendResponseStart(id, code, 0);
 	}
 
-	private static void SendResponse(uint id, byte code, int data)
-	{
-		SendResponseStart(id, code, 4);
-		SendInteger(data);
-	}
-
 	private static void SendResponse(uint id, byte code, ulong data)
 	{
 		SendResponseStart(id, code, 8);
@@ -129,39 +116,14 @@ public static class Debugger
 		SendResponse(0, DebugCode.Ready);
 	}
 
-	private static byte GetByte(uint offset)
-	{
-		return new Pointer(Address.DebuggerBuffer).Load8(offset);
-	}
-
 	private static uint GetUInt32(uint offset)
 	{
 		return new Pointer(Address.DebuggerBuffer).Load32(offset);
 	}
 
-	private static byte GetDataByte(uint offset)
-	{
-		return new Pointer(Address.DebuggerBuffer).Load8(HeaderSize + offset);
-	}
-
-	private static uint GetDataUInt32(uint offset)
-	{
-		return new Pointer(Address.DebuggerBuffer).Load32(HeaderSize + offset);
-	}
-
-	private static Pointer GetDataPointer(uint offset)
-	{
-		return new Pointer(Address.DebuggerBuffer).LoadPointer(HeaderSize + offset);
-	}
-
 	private static uint GetID()
 	{
 		return GetUInt32(1);
-	}
-
-	private static byte GetCode()
-	{
-		return GetByte(5);
 	}
 
 	private static uint GetLength()
@@ -250,9 +212,7 @@ public static class Debugger
 	{
 		// [0]![1]ID[5]CODE[6]LEN[10]DATA[LEN]
 
-		int code = GetCode();
-		uint id = GetID();
-		uint len = GetLength();
+		var id = GetID();
 
 		Screen.Goto(13, 0);
 		Screen.ClearRow();
@@ -261,10 +221,6 @@ public static class Debugger
 		Screen.ClearRow();
 		Screen.Write("ID: ");
 		Screen.Write(id, 10, 5);
-		Screen.Write(" Code: ");
-		Screen.Write((uint)code, 10, 4);
-		Screen.Write(" Len: ");
-		Screen.Write(len, 10, 5);
 
 		QueueUnitTest();
 	}
