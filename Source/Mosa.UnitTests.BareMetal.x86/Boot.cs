@@ -24,7 +24,7 @@ public static class Boot
 		Screen.Clear();
 		Screen.GotoTop();
 		Screen.Color = 0x0E; // ScreenColor.Yellow;
-		Screen.Write("MOSA OS Version 1.6 - UnitTest");
+		Screen.Write("MOSA OS Version 2.0 - UnitTest");
 		Screen.NextLine();
 		Screen.NextLine();
 
