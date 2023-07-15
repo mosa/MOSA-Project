@@ -76,7 +76,7 @@ public static class PlatformPlug
 		public static void Disable() => Native.Cli();
 	}
 
-	public static class IOPlug
+	public static class IOPlugPlug
 	{
 		[Plug("Mosa.Kernel.BareMetal.Platform+IO::In8")]
 		public static byte In8(ushort address) => Native.In8(address);
@@ -97,7 +97,7 @@ public static class PlatformPlug
 		public static void Out32(ushort address, uint data) => Native.Out32(address, data);
 	}
 
-	public static class Scheduler
+	public static class SchedulerPlug
 	{
 		[Plug("Mosa.Kernel.BareMetal.Platform+Scheduler::Start")]
 		public static void Start() => x86.Scheduler.Start();
@@ -113,5 +113,16 @@ public static class PlatformPlug
 
 		[Plug("Mosa.Kernel.BareMetal.Platform+Scheduler::SetupThreadStack")]
 		public static Pointer SetupThreadStack(Pointer stackTop, Pointer methodAddress, Pointer termAddress) => x86.Scheduler.SetupThreadStack(stackTop, methodAddress, termAddress);
+	}
+
+	public static class SerialPlug
+	{
+		public static void Setup(int serial) => x86.Serial.Setup((ushort)serial);
+
+		public static void Write(int serial, byte data) => x86.Serial.Write((ushort)serial, data);
+
+		public static byte Read(int serial) => x86.Serial.Read((ushort)serial);
+
+		public static bool IsDataReady(int serial) => x86.Serial.IsDataReady((ushort)serial);
 	}
 }

@@ -20,5 +20,6 @@
 		<ProjectReference Include="..\Mosa.Kernel.BareMetal.x86\Mosa.Kernel.BareMetal.x86.csproj" />
 		<ProjectReference Include="..\Mosa.Kernel.BareMetal\Mosa.Kernel.BareMetal.csproj" />
 		<ProjectReference Include="..\Mosa.Korlib\Mosa.Korlib.csproj" />
+		<ProjectReference Include="..\Mosa.UnitTests\Mosa.UnitTests.csproj" />
 	</ItemGroup>
 </Project>

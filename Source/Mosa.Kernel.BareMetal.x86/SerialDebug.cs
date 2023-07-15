@@ -29,7 +29,7 @@ public static class SerialDebug
 		if (IsIntialize)
 			return;
 
-		Serial.SetupPort(SerialPort);
+		Serial.Setup(SerialPort);
 
 		IsIntialize = true;
 	}
