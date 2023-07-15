@@ -36,7 +36,6 @@
 		<file src="..\..\bin\Mosa.Tool.Compiler.*" target="contentFiles/any/net7.0/Tools" />
 		<file src="..\..\bin\Mosa.Utility.BootImage.dll" target="contentFiles/any/net7.0/Tools" />
 		<file src="..\..\bin\Mosa.Utility.Configuration.dll" target="contentFiles/any/net7.0/Tools" />
-		<file src="..\..\bin\Mosa.Utility.DebugEngine.dll" target="contentFiles/any/net7.0/Tools" />
 		<file src="..\..\bin\Mosa.Utility.FileSystem.dll" target="contentFiles/any/net7.0/Tools" />
 		<file src="..\..\bin\Mosa.Utility.Launcher.dll" target="contentFiles/any/net7.0/Tools" />
 		<file src="..\..\bin\Mosa.Utility.RSP.dll" target="contentFiles/any/net7.0/Tools" />
