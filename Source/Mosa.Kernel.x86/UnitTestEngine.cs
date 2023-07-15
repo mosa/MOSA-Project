@@ -9,45 +9,32 @@ namespace Mosa.Kernel.x86;
 /// </summary>
 public static class UnitTestEngine
 {
-	private static Pointer Buffer;
-
 	private const int MaxBuffer = 1024 * 64 + 64;
 
-	private static bool enabled;
+	private static Pointer Buffer;
 
-	private static ushort com = Serial.COM1;
+	private static bool Enabled;
+	private static bool ReadySent;
 
 	private static uint UsedBuffer;
 
-	private static bool readysent;
-
-	private static unsafe IDTStack* idt_stack;
+	private static ushort ComPort = Serial.COM1;
 
 	public static void Setup(ushort com)
 	{
 		Serial.SetupPort(com);
-		//UnitTestEngine.com = com;		// <==========
 
 		Buffer = new Pointer(Address.DebuggerBuffer);
 
-		readysent = false;
-		enabled = true;
+		ReadySent = false;
+		Enabled = true;
 	}
 
-	private static void SendRawByte(byte b)
-	{
-		Serial.Write(com, b);
-	}
+	private static void SendRawByte(byte b) => Serial.Write(ComPort, b);
 
-	private static void SendByte(byte b)
-	{
-		SendRawByte(b);
-	}
+	private static void SendByte(byte b) => SendRawByte(b);
 
-	private static void SendByte(int i)
-	{
-		SendByte((byte)i);
-	}
+	private static void SendByte(int i) => SendByte((byte)i);
 
 	private static void SendInteger(int i)
 	{
@@ -57,10 +44,7 @@ public static class UnitTestEngine
 		SendByte(i >> 24 & 0xFF);
 	}
 
-	private static void SendInteger(uint i)
-	{
-		SendInteger((int)i);
-	}
+	private static void SendInteger(uint i) => SendInteger((int)i);
 
 	private static void SendInteger(ulong i)
 	{
@@ -76,10 +60,7 @@ public static class UnitTestEngine
 		SendInteger(len);
 	}
 
-	private static void SendResponse(uint id)
-	{
-		SendResponseStart(id, 0);
-	}
+	private static void SendResponse(uint id) => SendResponseStart(id, 0);
 
 	private static void SendResponse(uint id, ulong data)
 	{
@@ -87,35 +68,20 @@ public static class UnitTestEngine
 		SendInteger(data);
 	}
 
-	private static void SendReady()
-	{
-		SendResponse(0);
-	}
+	private static uint GetUInt32(uint offset) => Buffer.Load32(offset);
 
-	private static uint GetUInt32(uint offset)
+	public static void Process()
 	{
-		return Buffer.Load32(offset);
-	}
-
-	internal static unsafe void Process(IDTStack* stack)
-	{
-		idt_stack = stack;
-
-		Process();
-	}
-
-	internal static void Process()
-	{
-		if (!enabled)
+		if (!Enabled)
 			return;
 
 		SendTestUnitResponse();
 		ProcessTestUnitQueue();
 
-		if (!readysent)
+		if (!ReadySent)
 		{
-			readysent = true;
-			SendReady();
+			ReadySent = true;
+			SendResponse(0); // Send Ready
 		}
 
 		for (var x = 0; x < 5; x++)
@@ -132,10 +98,10 @@ public static class UnitTestEngine
 
 	private static bool ProcessSerial()
 	{
-		if (!Serial.IsDataReady(com))
+		if (!Serial.IsDataReady(ComPort))
 			return false;
 
-		var b = Serial.Read(com);
+		var b = Serial.Read(ComPort);
 
 		if (UsedBuffer + 1 > MaxBuffer)
 		{
@@ -199,8 +165,5 @@ public static class UnitTestEngine
 		}
 	}
 
-	private static void ProcessTestUnitQueue()
-	{
-		UnitTestQueue.ProcessQueue();
-	}
+	private static void ProcessTestUnitQueue() => UnitTestQueue.ProcessQueue();
 }

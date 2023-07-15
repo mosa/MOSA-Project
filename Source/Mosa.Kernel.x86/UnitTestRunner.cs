@@ -14,9 +14,9 @@ public static class UnitTestRunner
 
 	private const uint MaxParameters = 8; // max 32-bit parameters
 
-	private static int Ready;
-	private static int ResultReady;
-	private static int ResultReported;
+	private static bool Ready;
+	private static bool ResultReady;
+	private static bool ResultReported;
 
 	private static uint TestID;
 	private static uint TestParameters;
@@ -29,13 +29,13 @@ public static class UnitTestRunner
 	{
 		Stack = new Pointer(Address.UnitTestStack);
 
-		Ready = 0;
-		TestResult = 0;
-		ResultReported = 1;
+		Ready = false;
+		ResultReported = true;
 
 		TestID = 0;
 		TestParameters = 0;
 		TestMethodAddress = 0;
+		TestResult = 0;
 	}
 
 	public static void EnterTestReadyLoop()
@@ -59,7 +59,7 @@ public static class UnitTestRunner
 
 		while (true)
 		{
-			if (Ready == 1)
+			if (Ready)
 			{
 				Screen.Goto(row, 0);
 				Screen.ClearRow();
@@ -68,9 +68,9 @@ public static class UnitTestRunner
 				Screen.Write(++testCount, 10, 7);
 
 				TestResult = 0;
-				ResultReady = 0;
-				ResultReported = 0;
-				Ready = 0;
+				ResultReady = false;
+				ResultReported = false;
+				Ready = false;
 
 				// copy parameters into stack
 				for (var index = 0; index < TestParameters; index++)
@@ -89,53 +89,38 @@ public static class UnitTestRunner
 					default: break;
 				}
 
-				ResultReady = 1;
+				ResultReady = true;
 
 				Native.Int(255);
 			}
 		}
 	}
 
-	public static void SetUnitTestMethodParameter(uint index, uint value)
-	{
-		Stack.Store32(index * 4, value);
-	}
+	public static void SetUnitTestMethodParameter(uint index, uint value) => Stack.Store32(index * 4, value);
 
-	public static void SetUnitTestMethodParameterCount(uint number)
-	{
-		TestParameters = number;
-	}
+	public static void SetUnitTestMethodParameterCount(uint number) => TestParameters = number;
 
-	public static void SetUnitTestMethodAddress(uint address)
-	{
-		TestMethodAddress = address;
-	}
+	public static void SetUnitTestMethodAddress(uint address) => TestMethodAddress = address;
 
-	public static void SetUnitTestResultType(uint type)
-	{
-		TestResultType = type;
-	}
+	public static void SetUnitTestResultType(uint type) => TestResultType = type;
 
 	public static void StartTest(uint id)
 	{
 		TestID = id;
-		ResultReady = 0;
-		Ready = 1;
+		ResultReady = false;
+		Ready = true;
 	}
 
-	public static bool IsReady()
-	{
-		return ResultReported == 1 && Ready == 0;
-	}
+	public static bool IsReady() => ResultReported && !Ready;
 
 	public static bool GetResult(out ulong result, out uint id)
 	{
 		result = TestResult;
 		id = TestID;
 
-		if (Ready == 0 && ResultReady == 1 && ResultReported == 0)
+		if (!Ready && ResultReady && !ResultReported)
 		{
-			ResultReported = 1;
+			ResultReported = true;
 			return true;
 		}
 
