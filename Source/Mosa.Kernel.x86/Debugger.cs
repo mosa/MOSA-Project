@@ -20,6 +20,8 @@ public static class Debugger
 
 	#endregion Codes
 
+	private static Pointer Buffer; // Pointer(Address.DebuggerBuffer)
+
 	private const int MaxBuffer = 1024 * 64 + 64;
 
 	private static bool enabled;
@@ -37,6 +39,9 @@ public static class Debugger
 	{
 		Serial.SetupPort(com);
 		Debugger.com = com;
+
+		Buffer = new Pointer(Address.DebuggerBuffer);
+
 		ready = false;
 		readysent = false;
 		enabled = true;
@@ -118,7 +123,7 @@ public static class Debugger
 
 	private static uint GetUInt32(uint offset)
 	{
-		return new Pointer(Address.DebuggerBuffer).Load32(offset);
+		return Buffer.Load32(offset);
 	}
 
 	private static uint GetID()
@@ -186,11 +191,11 @@ public static class Debugger
 			return true;
 		}
 
-		Intrinsic.Store8(new Pointer(Address.DebuggerBuffer), index++, b);
+		Buffer.Store8(index++, b);
 
 		if (index >= HeaderSize)
 		{
-			uint length = GetLength();
+			var length = GetLength();
 
 			if (length > MaxBuffer)
 			{
@@ -227,10 +232,10 @@ public static class Debugger
 
 	private static void QueueUnitTest()
 	{
-		uint id = GetID();
-		uint length = GetLength();
+		var id = GetID();
+		var length = GetLength();
 
-		var start = new Pointer(Address.DebuggerBuffer) + HeaderSize;
+		var start = Buffer + HeaderSize;
 		var end = start + (int)length;
 
 		UnitTestQueue.QueueUnitTest(id, start, end);
