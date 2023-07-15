@@ -103,7 +103,7 @@ public static class Platform
 		public static void Write(int serial, byte data)
 		{ }
 
-		public static int Read(int serial) => -1;
+		public static byte Read(int serial) => 0;
 
 		public static bool IsDataReady(int serial) => false;
 	}

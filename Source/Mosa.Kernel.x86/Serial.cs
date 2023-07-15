@@ -22,7 +22,7 @@ public static class Serial
 	private const byte COM_ModemStatus = 0x05;
 	private const byte COM_Scratch = 0x06;
 
-	public static void SetupPort(ushort com)
+	public static void Setup(ushort com)
 	{
 		// Disable all interrupts
 		Native.Out8((ushort)(com + COM_Interrupt), 0x00);

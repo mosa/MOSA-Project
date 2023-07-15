@@ -12,7 +12,7 @@ public static class Logger
 	public static void Log(string message)
 	{
 		if (!initialized)
-			Serial.SetupPort(Serial.COM1);
+			Serial.Setup(Serial.COM1);
 
 		Serial.Write(Serial.COM1, message);
 		Serial.Write(Serial.COM1, "\n");

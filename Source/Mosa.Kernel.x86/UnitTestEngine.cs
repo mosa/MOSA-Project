@@ -18,16 +18,18 @@ public static class UnitTestEngine
 
 	private static uint UsedBuffer;
 
-	private static ushort ComPort = Serial.COM1;
+	private static ushort ComPort;
 
-	public static void Setup(ushort com)
+	public static void Setup(ushort comPort)
 	{
-		Serial.SetupPort(com);
+		Serial.Setup(comPort);
+
+		ComPort = comPort;
 
 		Buffer = new Pointer(Address.DebuggerBuffer);
 
-		ReadySent = false;
 		Enabled = true;
+		ReadySent = false;
 	}
 
 	private static void SendRawByte(byte b) => Serial.Write(ComPort, b);

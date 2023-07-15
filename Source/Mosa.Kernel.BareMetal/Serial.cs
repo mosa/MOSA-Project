@@ -4,12 +4,16 @@ namespace Mosa.Kernel.BareMetal
 {
 	public class Serial
 	{
+		public static void Setup(ushort comPort)
+		{
+		}
+
 		public static void Write(int serial, byte b)
 		{
 			Platform.Serial.Write(serial, b);
 		}
 
-		public static int Read(int serial)
+		public static byte Read(int serial)
 		{
 			return Platform.Serial.Read(serial);
 		}
