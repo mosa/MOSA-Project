@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Pipes;
 
-namespace Mosa.Utility.DebugEngine;
+namespace Mosa.Utility.UnitTests.DebugEngine;
 
 public sealed class DebugServerEngine
 {
@@ -93,6 +93,9 @@ public sealed class DebugServerEngine
 
 	public bool SendCommand2(List<DebugMessage> messages)
 	{
+		if (messages.Count == 0)
+			return true;
+
 		lock (sync)
 		{
 			if (!IsConnected)

@@ -2,7 +2,7 @@
 
 using System.Net.Sockets;
 
-namespace Mosa.Utility.DebugEngine;
+namespace Mosa.Utility.UnitTests.DebugEngine;
 
 public class DebugNetworkStream : NetworkStream
 {

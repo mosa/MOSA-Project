@@ -112,7 +112,6 @@
 		<ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj" />
 		<ProjectReference Include="..\Mosa.Utility.BootImage\Mosa.Utility.BootImage.csproj" />
 		<ProjectReference Include="..\Mosa.Utility.Configuration\Mosa.Utility.Configuration.csproj" />
-		<ProjectReference Include="..\Mosa.Utility.DebugEngine\Mosa.Utility.DebugEngine.csproj" />
 		<ProjectReference Include="..\Mosa.Utility.Disassembler\Mosa.Utility.Disassembler.csproj" />
 		<ProjectReference Include="..\Mosa.Utility.Launcher\Mosa.Utility.Launcher.csproj" />
 		<ProjectReference Include="..\Mosa.Utility.RSP\Mosa.Utility.RSP.csproj" />

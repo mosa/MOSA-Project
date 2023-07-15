@@ -2,7 +2,7 @@
 
 using System.Collections.Generic;
 
-namespace Mosa.Utility.DebugEngine;
+namespace Mosa.Utility.UnitTests.DebugEngine;
 
 public delegate void CallBack(DebugMessage response);
 
@@ -94,35 +94,6 @@ public class DebugMessage
 	public uint GetUInt32(int index)
 	{
 		return (uint)GetInt32(index);
-	}
-
-	public override string ToString()
-	{
-		return Code switch
-		{
-			DebugCode.Connected => "Connected",
-			DebugCode.Connecting => "Connecting",
-			DebugCode.Disconnected => "Disconnected",
-			DebugCode.UnknownData => "Unknown Data: " +
-			                         System.Text.Encoding.UTF8.GetString(CreateByteArray(ResponseData)),
-			DebugCode.InformationalMessage => "Informational Message: " +
-			                                  System.Text.Encoding.UTF8.GetString(CreateByteArray(ResponseData)),
-			DebugCode.ErrorMessage => "Error Message: " +
-			                          System.Text.Encoding.UTF8.GetString(CreateByteArray(ResponseData)),
-			DebugCode.WarningMessage => "Warning Message: " +
-			                            System.Text.Encoding.UTF8.GetString(CreateByteArray(ResponseData)),
-			DebugCode.Ping => "Ping ACK",
-			DebugCode.Alive => "Alive",
-			DebugCode.ReadCR3 => "ReadCR3",
-			DebugCode.ReadMemory => "ReadMemory",
-			DebugCode.Scattered32BitReadMemory => "Scattered32BitReadMemory",
-			DebugCode.WriteMemory => "WriteMemory",
-			DebugCode.CompressedWriteMemory => "CompressedWriteMemory",
-			DebugCode.SendNumber => "#: " +
-			                        ((ResponseData[0] << 24) | (ResponseData[1] << 16) | (ResponseData[2] << 8) |
-			                         ResponseData[3]),
-			_ => "Code: " + Code
-		};
 	}
 
 	private static byte[] CreateByteArray(List<byte> data)

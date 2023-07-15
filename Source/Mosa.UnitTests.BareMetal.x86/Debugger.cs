@@ -1,9 +1,9 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Kernel.BareMetal;
 using Mosa.Runtime;
-using Mosa.Runtime.x86;
 
-namespace Mosa.Kernel.x86;
+namespace Mosa.UnitTests.Framework;
 
 /// <summary>
 /// Client Side Debugger
@@ -24,7 +24,7 @@ public static class Debugger
 
 	private static bool enabled;
 
-	private static ushort com = Serial.COM1;
+	private static ushort com = 0;
 
 	private static uint index;
 
@@ -33,11 +33,10 @@ public static class Debugger
 	private static bool ready;
 	private static bool readysent;
 
-	private static unsafe IDTStack* idt_stack;
-
 	public static void Setup(ushort com)
 	{
-		Serial.SetupPort(com);
+		Platform.Serial.Setup(com);
+
 		Debugger.com = com;
 		ready = false;
 		readysent = false;
@@ -169,12 +168,12 @@ public static class Debugger
 		return GetUInt32(6);
 	}
 
-	internal static unsafe void Process(IDTStack* stack)
-	{
-		idt_stack = stack;
+	//internal static unsafe void Process(IDTStack* stack)
+	//{
+	//	idt_stack = stack;
 
-		Process();
-	}
+	//	Process();
+	//}
 
 	internal static void Process()
 	{
@@ -213,7 +212,12 @@ public static class Debugger
 		if (!Serial.IsDataReady(com))
 			return false;
 
-		byte b = Serial.Read(com);
+		var d = Serial.Read(com);
+
+		if (d < 0)
+			return false;
+
+		var b = (byte)d;
 
 		if (index == 0 && b != (byte)'!')
 			return true;
@@ -250,9 +254,9 @@ public static class Debugger
 	{
 		// [0]![1]ID[5]CODE[6]LEN[10]DATA[LEN]
 
-		int code = GetCode();
+		//int code = GetCode();
 		uint id = GetID();
-		uint len = GetLength();
+		//uint len = GetLength();
 
 		Screen.Goto(13, 0);
 		Screen.ClearRow();
@@ -261,10 +265,6 @@ public static class Debugger
 		Screen.ClearRow();
 		Screen.Write("ID: ");
 		Screen.Write(id, 10, 5);
-		Screen.Write(" Code: ");
-		Screen.Write((uint)code, 10, 4);
-		Screen.Write(" Len: ");
-		Screen.Write(len, 10, 5);
 
 		QueueUnitTest();
 	}

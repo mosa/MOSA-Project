@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.DeviceSystem;
+using Mosa.DeviceSystem.VirtIO;
 using Mosa.Runtime;
 
 namespace Mosa.Kernel.BareMetal;
@@ -92,5 +93,18 @@ public static class Platform
 		{ }
 
 		public static Pointer SetupThreadStack(Pointer stackTop, Pointer methodAddress, Pointer termAddress) => Pointer.Zero;
+	}
+
+	public static class Serial
+	{
+		public static void Setup(int serial)
+		{ }
+
+		public static void Write(int serial, byte data)
+		{ }
+
+		public static int Read(int serial) => -1;
+
+		public static bool IsDataReady(int serial) => false;
 	}
 }

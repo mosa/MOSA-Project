@@ -2,7 +2,7 @@
 
 using System.Collections.Generic;
 
-namespace Mosa.Utility.DebugEngine;
+namespace Mosa.Utility.UnitTests.DebugEngine;
 
 internal sealed class Packet
 {

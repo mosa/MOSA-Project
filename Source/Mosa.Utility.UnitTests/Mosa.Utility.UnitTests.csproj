@@ -106,7 +106,6 @@
 		<ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj" />
 		<ProjectReference Include="..\Mosa.Utility.BootImage\Mosa.Utility.BootImage.csproj" />
 		<ProjectReference Include="..\Mosa.Utility.Configuration\Mosa.Utility.Configuration.csproj" />
-		<ProjectReference Include="..\Mosa.Utility.DebugEngine\Mosa.Utility.DebugEngine.csproj" />
 		<ProjectReference Include="..\Mosa.Utility.Launcher\Mosa.Utility.Launcher.csproj" />
 	</ItemGroup>
 	<ItemGroup>
