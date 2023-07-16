@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Mosa.Utility.UnitTests.DebugEngine;
 
-public delegate void CallBack(DebugMessage message);
+public delegate void CallBack(int id, ulong value);
 
 public class DebugMessage
 {
@@ -12,37 +12,13 @@ public class DebugMessage
 
 	public IList<byte> CommandData { get; }
 
-	public List<byte> ResponseData { get; internal set; }
+	public ulong ResponseData { get; internal set; }
 
 	public object Other { get; set; }
 
-	public DebugMessage(IList<byte> data)
+	public DebugMessage(int id, IList<int> data)
 	{
-		CommandData = data;
-	}
-
-	public DebugMessage(byte[] data)
-	{
-		CommandData = new List<byte>(data.Length);
-
-		foreach (var b in data)
-		{
-			CommandData.Add(b);
-		}
-	}
-
-	public DebugMessage(byte[] data, int length)
-	{
-		CommandData = new List<byte>(data.Length);
-
-		for (var i = 0; i < length; i++)
-		{
-			CommandData.Add(data[i]);
-		}
-	}
-
-	public DebugMessage(IList<int> data)
-	{
+		ID = id;
 		CommandData = new List<byte>(data.Count * 4);
 
 		foreach (var i in data)
@@ -54,14 +30,9 @@ public class DebugMessage
 		}
 	}
 
-	public DebugMessage(IList<int> data, object other)
-		: this(data)
+	public DebugMessage(int id, IList<int> data, object other)
+		: this(id, data)
 	{
 		Other = other;
-	}
-
-	public int GetInt32(int index)
-	{
-		return (ResponseData[index + 3] << 24) | (ResponseData[index + 2] << 16) | (ResponseData[index + 1] << 8) | ResponseData[index];
 	}
 }

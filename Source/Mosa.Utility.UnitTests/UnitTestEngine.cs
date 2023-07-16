@@ -56,7 +56,7 @@ public class UnitTestEngine : IDisposable
 	private volatile bool Ready;
 
 	private readonly Queue<DebugMessage> Queue = new Queue<DebugMessage>();
-	private readonly HashSet<DebugMessage> Pending = new HashSet<DebugMessage>();
+	private readonly Dictionary<int, DebugMessage> Active = new Dictionary<int, DebugMessage>();
 
 	private Thread ProcessThread;
 
@@ -157,12 +157,12 @@ public class UnitTestEngine : IDisposable
 		{
 			lock (Queue)
 			{
-				if (Queue.Count == 0 && Pending.Count == 0)
+				if (Queue.Count == 0 && Active.Count == 0)
 				{
 					WatchDog.Restart();
 				}
 
-				if (Queue.Count > 0 || Pending.Count > 0)
+				if (Queue.Count > 0 || Active.Count > 0)
 				{
 					CheckEngine();
 				}
@@ -170,24 +170,22 @@ public class UnitTestEngine : IDisposable
 				if (Aborted)
 					return;
 
-				var sendFlag = Queue.Count > 0 && Pending.Count < MaxSentQueue;
+				var sendFlag = Queue.Count > 0 && Active.Count < MaxSentQueue;
 
-				if (MaxSentQueue - Pending.Count < MinSend && Queue.Count > MinSend)
+				if (MaxSentQueue - Active.Count < MinSend && Queue.Count > MinSend)
 				{
 					sendFlag = false;
 				}
 
 				// check if queue has requests or too many have already been sent
-				while ((SendOneCount < 0 && sendFlag && Pending.Count < MaxSentQueue && Queue.Count > 0)
-					   || (SendOneCount >= 0 && Queue.Count > 0 && Pending.Count == 0))
+				while ((SendOneCount < 0 && sendFlag && Active.Count < MaxSentQueue && Queue.Count > 0)
+					   || (SendOneCount >= 0 && Queue.Count > 0 && Active.Count == 0))
 				{
 					var message = Queue.Dequeue();
 
-					Pending.Add(message);
+					Active.Add(message.ID, message);
 
 					messages.Add(message);
-
-					//OutputStatus("Sent: " + (message.Other as UnitTest).FullMethodName);
 
 					if (SendOneCount >= 0)
 					{
@@ -195,7 +193,6 @@ public class UnitTestEngine : IDisposable
 					}
 				}
 
-				//OutputStatus("Batch Sent: " + messages.Count.ToString());
 				DebugServerEngine.Send(messages);
 				messages.Clear();
 			}
@@ -213,7 +210,7 @@ public class UnitTestEngine : IDisposable
 				if (unitTest.Status == UnitTestStatus.Skipped)
 					continue;
 
-				var message = new DebugMessage(unitTest.SerializedUnitTest, unitTest);
+				var message = new DebugMessage(unitTest.UnitTestID, unitTest.SerializedUnitTest, unitTest);
 
 				Queue.Enqueue(message);
 			}
@@ -229,7 +226,7 @@ public class UnitTestEngine : IDisposable
 
 			lock (Queue)
 			{
-				if (Queue.Count == 0 && Pending.Count == 0)
+				if (Queue.Count == 0 && Active.Count == 0)
 					return;
 			}
 
@@ -335,7 +332,7 @@ public class UnitTestEngine : IDisposable
 		if (DebugServerEngine == null)
 		{
 			DebugServerEngine = new DebugServerEngine();
-			DebugServerEngine.SetGlobalDispatch(MessageCallBack);
+			DebugServerEngine.SetDispatch(MessageCallBack);
 		}
 
 		Thread.Sleep(50); // small delay to let emulator launch
@@ -525,23 +522,25 @@ public class UnitTestEngine : IDisposable
 			{
 				KillVirtualMachine();
 
-				if (Pending.Count == 1)
+				if (Active.Count == 1)
 				{
-					foreach (var failed in Pending)
+					foreach (var entry in Active)
 					{
+						var failed = entry.Value;
+
 						// OutputStatus("Failed - Requeueing: " + (failed.Other as UnitTest).FullMethodName);
 
 						(failed.Other as UnitTest).Status = UnitTestStatus.FailedByCrash;
 					}
-					Pending.Clear();
+					Active.Clear();
 				}
 
-				foreach (var test in Pending)
+				foreach (var test in Active)
 				{
-					Queue.Enqueue(test);
+					Queue.Enqueue(test.Value);
 				}
 
-				Pending.Clear();
+				Active.Clear();
 				SendOneCount = 10;
 
 				OutputStatus("Re-starting engine...");
@@ -557,20 +556,26 @@ public class UnitTestEngine : IDisposable
 		}
 	}
 
-	private void MessageCallBack(DebugMessage message)
+	private void MessageCallBack(int id, ulong value)
 	{
-		if (message == null)
+		if (id == 0)
 		{
 			Ready = true;
 			return;
 		}
 
+		DebugMessage message = null;
+
 		lock (Queue)
 		{
 			WatchDog.Restart();
 
+			message = Active[id];
+			message.ResponseData = value;
+
+			Active.Remove(id);
+
 			CompletedUnitTestCount++;
-			Pending.Remove(message);
 
 			//OutputStatus("Received: " + (response.Other as UnitTest).FullMethodName);
 			//OutputStatus(response.ToString());

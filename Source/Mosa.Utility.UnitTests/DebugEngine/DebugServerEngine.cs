@@ -11,15 +11,14 @@ public sealed class DebugServerEngine
 {
 	private Stream stream;
 
-	private readonly Dictionary<int, DebugMessage> pending = new Dictionary<int, DebugMessage>();
-	private int nextID;
-
-	private readonly List<byte> ReceiveBuffer = new List<byte>();
 	private readonly List<byte> SendBuffer = new List<byte>(2048);
 
 	private readonly byte[] ReceivedData = new byte[2000];
 
-	private CallBack globalDispatch;
+	private readonly byte[] Received = new byte[12];
+	private int ReceivedLen = 0;
+
+	private CallBack Dispatch;
 
 	public Stream Stream
 	{
@@ -38,6 +37,7 @@ public sealed class DebugServerEngine
 	public DebugServerEngine()
 	{
 		stream = null;
+		ReceivedLen = 0;
 	}
 
 	public void Disconnect()
@@ -46,7 +46,6 @@ public sealed class DebugServerEngine
 		{
 			try
 			{
-				ReceiveBuffer.Clear();
 				stream.Close();
 			}
 			finally
@@ -56,9 +55,9 @@ public sealed class DebugServerEngine
 		}
 	}
 
-	public void SetGlobalDispatch(CallBack dispatch)
+	public void SetDispatch(CallBack dispatch)
 	{
-		globalDispatch = dispatch;
+		Dispatch = dispatch;
 	}
 
 	public void Send(List<DebugMessage> messages)
@@ -75,8 +74,6 @@ public sealed class DebugServerEngine
 
 			foreach (var message in messages)
 			{
-				message.ID = ++nextID;
-
 				Send(message.ID);
 				Send(message.CommandData.Count);
 
@@ -84,8 +81,6 @@ public sealed class DebugServerEngine
 				{
 					Send(b);
 				}
-
-				pending.Add(message.ID, message);
 			}
 
 			stream.Write(SendBuffer.ToArray());
@@ -122,51 +117,23 @@ public sealed class DebugServerEngine
 		}
 	}
 
-	private void PostResponse(int id, List<byte> data)
-	{
-		if (id == 0)
-		{
-			globalDispatch.Invoke(null);
-			return;
-		}
-
-		DebugMessage message = null;
-
-		lock (this)
-		{
-			if (!pending.TryGetValue(id, out message))
-				return;
-
-			pending.Remove(message.ID);
-			message.ResponseData = data;
-		}
-
-		globalDispatch.Invoke(message);
-	}
-
-	private int GetInteger(int index)
-	{
-		return (ReceiveBuffer[index + 3] << 24) | (ReceiveBuffer[index + 2] << 16) | (ReceiveBuffer[index + 1] << 8) | ReceiveBuffer[index];
-	}
-
 	private void Push(byte b)
 	{
-		ReceiveBuffer.Add(b);
+		Received[ReceivedLen++] = b;
 
-		if (ReceiveBuffer.Count == 12)
+		if (ReceivedLen == 12)
 		{
-			var id = GetInteger(0);
-			var data = new List<byte>(8);
+			var id = (Received[3] << 24) | (Received[2] << 16) | (Received[1] << 8) | Received[0];
+			var data = 0lu;
 
-			//Console.WriteLine($"ID: {id}");
-
-			for (var i = 0; i < 8; i++)
+			for (var i = 7; i >= 0; i--)
 			{
-				data.Add(ReceiveBuffer[i + 4]);
+				data = (data << 8) | Received[i + 4];
 			}
 
-			PostResponse(id, data);
-			ReceiveBuffer.Clear();
+			ReceivedLen = 0;
+
+			Dispatch.Invoke(id, data);
 		}
 	}
 

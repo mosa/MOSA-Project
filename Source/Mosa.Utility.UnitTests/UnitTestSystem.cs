@@ -129,7 +129,7 @@ public static class UnitTestSystem
 			var unitTest = new UnitTest(unitTestInfo, linkerMethodInfo);
 
 			unitTest.SerializedUnitTest = SerializeUnitTestMessage(unitTest);
-			unitTest.UnitTestID = id++;
+			unitTest.UnitTestID = ++id;
 
 			unitTests.Add(unitTest);
 		}
@@ -280,12 +280,14 @@ public static class UnitTestSystem
 		}
 	}
 
-	public static void ParseResultData(UnitTest unitTest, List<byte> data)
+	public static void ParseResultData(UnitTest unitTest, ulong data)
 	{
-		unitTest.Result = GetResult(unitTest.MosaMethod.Signature.ReturnType, data);
+		var arr = BitConverter.GetBytes(data);
+
+		unitTest.Result = GetResult(unitTest.MosaMethod.Signature.ReturnType, arr);
 	}
 
-	public static object GetResult(MosaType type, List<byte> data)
+	public static object GetResult(MosaType type, byte[] data)
 	{
 		if (type.IsI1)
 		{
