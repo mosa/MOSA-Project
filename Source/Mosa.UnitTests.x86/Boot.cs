@@ -49,7 +49,7 @@ public static class Boot
 		Screen.NextLine();
 		Screen.NextLine();
 
-		UnitTestQueue.Setup();
+		Setup();
 
 		UnitTestEngine.EnterTestReadyLoop();
 	}
