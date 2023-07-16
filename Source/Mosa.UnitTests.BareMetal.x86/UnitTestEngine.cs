@@ -28,16 +28,17 @@ public static class UnitTestEngine
 	private static bool ResultReported;
 
 	private static uint TestID;
-	private static uint TestParameterCount;
-	private static uint TestMethodAddress;
-	private static uint TestResultType;
-
+	private static byte TestParameterCount;
+	private static byte TestResultType;
+	private static Pointer TestMethodAddress;
 	private static ulong TestResult;
 
 	private static Pointer Queue;
 	private static Pointer QueueNext;
 	private static Pointer QueueCurrent;
-	private static uint Count;
+
+	private static uint PendingCount;
+	private static uint TestCount;
 
 	public static void Setup(ushort comPort)
 	{
@@ -57,13 +58,14 @@ public static class UnitTestEngine
 
 		TestID = 0;
 		TestParameterCount = 0;
-		TestMethodAddress = 0;
+		TestMethodAddress = Pointer.Zero;
 		TestResult = 0;
 
 		QueueNext = Queue;
 		QueueCurrent = Queue;
 
-		Count = 0;
+		PendingCount = 0;
+		TestCount = 0;
 
 		QueueNext.Store32(0);
 	}
@@ -103,7 +105,7 @@ public static class UnitTestEngine
 
 		if (!ReadySent)
 		{
-			SendResponse(0, 0l);
+			SendResponse(0, 0ul);
 			ReadySent = true;
 		}
 
@@ -147,27 +149,12 @@ public static class UnitTestEngine
 
 			if (UsedBuffer == length + HeaderSize)
 			{
-				ProcessCommand();
+				QueueUnitTest();
 				UsedBuffer = 0;
 			}
 		}
 
 		return true;
-	}
-
-	private static void ProcessCommand()
-	{
-		var id = Buffer.Load32(0);
-
-		Screen.Goto(13, 0);
-		Screen.ClearRow();
-		Screen.Write("[Data]");
-		Screen.NextLine();
-		Screen.ClearRow();
-		Screen.Write("ID: ");
-		Screen.Write(id, 10, 5);
-
-		QueueUnitTest();
 	}
 
 	private static void QueueUnitTest()
@@ -183,16 +170,7 @@ public static class UnitTestEngine
 
 	public static void EnterTestReadyLoop()
 	{
-		var testCount = 0u;
-
-		Screen.Write("Waiting for unit tests...");
-		Screen.NextLine();
-		Screen.NextLine();
-
-		// allocate space on stack for parameters
-		var esp = Native.AllocateStackSpace(MaxParameters * 4);
-
-		var row = Screen.Row;
+		var stackPointer = new Pointer(Native.AllocateStackSpace(MaxParameters * 4));
 
 		while (true)
 		{
@@ -201,26 +179,22 @@ public static class UnitTestEngine
 				TestResult = 0;
 				ResultReported = false;
 				Ready = false;
+				TestCount++;
 
-				Screen.Goto(row, 0);
-				Screen.ClearRow();
-
-				Screen.Write("Test #: ");
-				Screen.Write(++testCount, 10, 7);
+				DisplayUpdate(true);
 
 				for (var index = 0; index < TestParameterCount; index++)
 				{
 					var value = Stack.Load32(index * 4);
-
-					new Pointer(esp).Store32(index * 4, value);
+					stackPointer.Store32(index * 4, value);
 				}
 
 				switch (TestResultType)
 				{
-					case 0: Native.FrameCall(TestMethodAddress); break;
-					case 1: TestResult = Native.FrameCallRetU4(TestMethodAddress); break;
-					case 2: TestResult = Native.FrameCallRetU8(TestMethodAddress); break;
-					case 3: TestResult = Native.FrameCallRetR8(TestMethodAddress); break;
+					case 0: Native.FrameCall(TestMethodAddress.ToUInt32()); break;
+					case 1: TestResult = Native.FrameCallRetU4(TestMethodAddress.ToUInt32()); break;
+					case 2: TestResult = Native.FrameCallRetU8(TestMethodAddress.ToUInt32()); break;
+					case 3: TestResult = Native.FrameCallRetR8(TestMethodAddress.ToUInt32()); break;
 					default: break;
 				}
 
@@ -262,7 +236,7 @@ public static class UnitTestEngine
 		}
 
 		QueueNext.Store32(0); // mark end
-		++Count;
+		++PendingCount;
 
 		return true;
 	}
@@ -283,9 +257,9 @@ public static class UnitTestEngine
 		}
 
 		TestID = QueueCurrent.Load32(4);
-		TestMethodAddress = QueueCurrent.Load32(8);
-		TestResultType = QueueCurrent.Load32(12);
-		TestParameterCount = QueueCurrent.Load32(16);
+		TestMethodAddress = QueueCurrent.LoadPointer(8);    // fix for 64bit
+		TestResultType = QueueCurrent.Load8(12);
+		TestParameterCount = QueueCurrent.Load8(16);
 
 		for (var index = 0u; index < TestParameterCount; index++)
 		{
@@ -297,22 +271,32 @@ public static class UnitTestEngine
 		var len = QueueCurrent.Load32();
 
 		QueueCurrent = QueueCurrent + len + 4;
-		--Count;
+		--PendingCount;
 
-		Screen.Goto(17, 0);
-		Screen.ClearRow();
-		Screen.Write("[Unit Test]");
-		Screen.NextLine();
-		Screen.ClearRow();
-		Screen.Write("ID: ");
-		Screen.Write(TestID, 10, 5);
-		Screen.Write(" Address: ");
-		Screen.Write(TestMethodAddress, 16, 8);
-		Screen.Write(" Param: ");
-		Screen.Write(TestParameterCount, 10, 2);
-		Screen.Write(" - Cnt: ");
-		Screen.Write(Count, 10, 4);
+		DisplayUpdate();
 
 		Ready = true;
+	}
+
+	public static void DisplayUpdate(bool test = false)
+	{
+		if (!test)
+		{
+			Screen.Goto(4, 0);
+			Screen.Write("Total  : ");
+			Screen.Write(TestCount, 10, 7);
+
+			Screen.Goto(5, 0);
+			Screen.Write("Pending: ");
+			Screen.Write(PendingCount, 10, 7);
+		}
+		else
+		{
+			Screen.Goto(6, 0);
+			Screen.Write("Active : ");
+			Screen.Write(TestID, 10, 7);
+			Screen.Write(" @ ");
+			Screen.Write(TestMethodAddress.ToUInt32(), 16, 8);
+		}
 	}
 }
