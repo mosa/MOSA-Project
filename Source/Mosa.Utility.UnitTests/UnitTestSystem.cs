@@ -158,9 +158,12 @@ public static class UnitTestSystem
 
 	public static List<int> SerializeUnitTestMessage(UnitTest unitTest)
 	{
-		var cmd = new List<int>(4 + 4 + 4 + unitTest.MosaMethod.Signature.Parameters.Count)
+		var address = unitTest.MosaMethodAddress.ToInt64();
+
+		var cmd = new List<int>(4 + 4 + 4 + 4 + unitTest.MosaMethod.Signature.Parameters.Count)
 		{
-			(int)unitTest.MosaMethodAddress,
+			(int)address,
+			//(int)(address>>32),
 			GetReturnResultType(unitTest.MosaMethod.Signature.ReturnType),
 			0
 		};
