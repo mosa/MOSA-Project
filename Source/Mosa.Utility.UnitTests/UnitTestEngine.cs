@@ -55,8 +55,8 @@ public class UnitTestEngine : IDisposable
 	private volatile bool Aborted;
 	private volatile bool Ready;
 
-	private readonly Queue<DebugMessage> Queue = new Queue<DebugMessage>();
-	private readonly HashSet<DebugMessage> Pending = new HashSet<DebugMessage>();
+	private readonly Queue<UnitTest> Queue = new Queue<UnitTest>();
+	private readonly Dictionary<int, UnitTest> Active = new Dictionary<int, UnitTest>();
 
 	private Thread ProcessThread;
 
@@ -148,7 +148,7 @@ public class UnitTestEngine : IDisposable
 		if (Aborted)
 			return;
 
-		var messages = new List<DebugMessage>();
+		var messages = new List<UnitTest>();
 
 		Stopwatch.Start();
 		Aborted = !StartEngine();
@@ -157,12 +157,12 @@ public class UnitTestEngine : IDisposable
 		{
 			lock (Queue)
 			{
-				if (Queue.Count == 0 && Pending.Count == 0)
+				if (Queue.Count == 0 && Active.Count == 0)
 				{
 					WatchDog.Restart();
 				}
 
-				if (Queue.Count > 0 || Pending.Count > 0)
+				if (Queue.Count > 0 || Active.Count > 0)
 				{
 					CheckEngine();
 				}
@@ -170,26 +170,22 @@ public class UnitTestEngine : IDisposable
 				if (Aborted)
 					return;
 
-				var sendFlag = Queue.Count > 0 && Pending.Count < MaxSentQueue;
+				var sendFlag = Queue.Count > 0 && Active.Count < MaxSentQueue;
 
-				if (MaxSentQueue - Pending.Count < MinSend && Queue.Count > MinSend)
+				if (MaxSentQueue - Active.Count < MinSend && Queue.Count > MinSend)
 				{
 					sendFlag = false;
 				}
 
 				// check if queue has requests or too many have already been sent
-				while ((SendOneCount < 0 && sendFlag && Pending.Count < MaxSentQueue && Queue.Count > 0)
-					   || (SendOneCount >= 0 && Queue.Count > 0 && Pending.Count == 0))
+				while ((SendOneCount < 0 && sendFlag && Active.Count < MaxSentQueue && Queue.Count > 0)
+					   || (SendOneCount >= 0 && Queue.Count > 0 && Active.Count == 0))
 				{
 					var message = Queue.Dequeue();
 
-					message.CallBack = MessageCallBack;
-
-					Pending.Add(message);
+					Active.Add(message.UnitTestID, message);
 
 					messages.Add(message);
-
-					//OutputStatus("Sent: " + (message.Other as UnitTest).FullMethodName);
 
 					if (SendOneCount >= 0)
 					{
@@ -197,7 +193,6 @@ public class UnitTestEngine : IDisposable
 					}
 				}
 
-				//OutputStatus("Batch Sent: " + messages.Count.ToString());
 				DebugServerEngine.Send(messages);
 				messages.Clear();
 			}
@@ -215,9 +210,7 @@ public class UnitTestEngine : IDisposable
 				if (unitTest.Status == UnitTestStatus.Skipped)
 					continue;
 
-				var message = new DebugMessage(unitTest.SerializedUnitTest, unitTest);
-
-				Queue.Enqueue(message);
+				Queue.Enqueue(unitTest);
 			}
 		}
 	}
@@ -231,7 +224,7 @@ public class UnitTestEngine : IDisposable
 
 			lock (Queue)
 			{
-				if (Queue.Count == 0 && Pending.Count == 0)
+				if (Queue.Count == 0 && Active.Count == 0)
 					return;
 			}
 
@@ -337,7 +330,7 @@ public class UnitTestEngine : IDisposable
 		if (DebugServerEngine == null)
 		{
 			DebugServerEngine = new DebugServerEngine();
-			DebugServerEngine.SetGlobalDispatch(GlobalDispatch);
+			DebugServerEngine.SetDispatch(MessageCallBack);
 		}
 
 		Thread.Sleep(50); // small delay to let emulator launch
@@ -527,23 +520,22 @@ public class UnitTestEngine : IDisposable
 			{
 				KillVirtualMachine();
 
-				if (Pending.Count == 1)
+				if (Active.Count == 1)
 				{
-					foreach (var failed in Pending)
+					foreach (var entry in Active)
 					{
-						// OutputStatus("Failed - Requeueing: " + (failed.Other as UnitTest).FullMethodName);
-
-						(failed.Other as UnitTest).Status = UnitTestStatus.FailedByCrash;
+						entry.Value.Status = UnitTestStatus.FailedByCrash;
 					}
-					Pending.Clear();
+
+					Active.Clear();
 				}
 
-				foreach (var test in Pending)
+				foreach (var test in Active)
 				{
-					Queue.Enqueue(test);
+					Queue.Enqueue(test.Value);
 				}
 
-				Pending.Clear();
+				Active.Clear();
 				SendOneCount = 10;
 
 				OutputStatus("Re-starting engine...");
@@ -559,61 +551,49 @@ public class UnitTestEngine : IDisposable
 		}
 	}
 
-	private void GlobalDispatch(DebugMessage response)
+	private void MessageCallBack(int id, ulong data)
 	{
-		if (response == null)
-			return;
-
-		if (response.ID == 0)
+		if (id == 0)
 		{
 			Ready = true;
-		}
-	}
-
-	private void MessageCallBack(DebugMessage response)
-	{
-		if (response == null)
 			return;
+		}
 
 		lock (Queue)
 		{
 			WatchDog.Restart();
 
-			CompletedUnitTestCount++;
-			Pending.Remove(response);
+			var unittest = Active[id];
+			unittest.SerializedResult = data;
 
-			//OutputStatus("Received: " + (response.Other as UnitTest).FullMethodName);
-			//OutputStatus(response.ToString());
+			Active.Remove(id);
+
+			CompletedUnitTestCount++;
 
 			if (CompletedUnitTestCount % 1000 == 0 && Stopwatch.Elapsed.Seconds != 0)
 			{
 				OutputStatus($"Unit Tests - Count: {CompletedUnitTestCount} Elapsed: {(int)Stopwatch.Elapsed.TotalSeconds} ({(CompletedUnitTestCount / Stopwatch.Elapsed.TotalSeconds).ToString("F2")} per second)");
 			}
-		}
 
-		if (response.Other is UnitTest unitTest)
-		{
-			UnitTestSystem.ParseResultData(unitTest, response.ResponseData);
+			UnitTestSystem.ParseResultData(unittest, data);
 
-			if (Equals(unitTest.Expected, unitTest.Result))
+			if (Equals(unittest.Expected, unittest.Result))
 			{
-				unitTest.Status = UnitTestStatus.Passed;
+				unittest.Status = UnitTestStatus.Passed;
 			}
 			else
 			{
-				unitTest.Status = UnitTestStatus.Failed;
+				unittest.Status = UnitTestStatus.Failed;
 
 				Errors++;
 
-				OutputStatus($"ERROR: {UnitTestSystem.OutputUnitTestResult(unitTest)}");
+				OutputStatus($"ERROR: {UnitTestSystem.OutputUnitTestResult(unittest)}");
 
 				if (Errors >= MosaSettings.MaxErrors)
 				{
 					Aborted = true;
 				}
 			}
-
-			//OutputStatus("RECD: " + unitTest.MethodTypeName + "." + unitTest.MethodName);
 		}
 	}
 

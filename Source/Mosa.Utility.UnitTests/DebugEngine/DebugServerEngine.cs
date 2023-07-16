@@ -7,19 +7,20 @@ using System.IO.Pipes;
 
 namespace Mosa.Utility.UnitTests.DebugEngine;
 
+public delegate void CallBack(int id, ulong value);
+
 public sealed class DebugServerEngine
 {
 	private Stream stream;
 
-	private readonly Dictionary<int, DebugMessage> pending = new Dictionary<int, DebugMessage>();
-	private int nextID;
-
-	private readonly List<byte> ReceiveBuffer = new List<byte>();
 	private readonly List<byte> SendBuffer = new List<byte>(2048);
 
 	private readonly byte[] ReceivedData = new byte[2000];
 
-	private CallBack globalDispatch;
+	private readonly byte[] Received = new byte[12];
+	private int ReceivedLen = 0;
+
+	private CallBack Dispatch;
 
 	public Stream Stream
 	{
@@ -38,6 +39,7 @@ public sealed class DebugServerEngine
 	public DebugServerEngine()
 	{
 		stream = null;
+		ReceivedLen = 0;
 	}
 
 	public void Disconnect()
@@ -46,7 +48,6 @@ public sealed class DebugServerEngine
 		{
 			try
 			{
-				ReceiveBuffer.Clear();
 				stream.Close();
 			}
 			finally
@@ -56,14 +57,14 @@ public sealed class DebugServerEngine
 		}
 	}
 
-	public void SetGlobalDispatch(CallBack dispatch)
+	public void SetDispatch(CallBack dispatch)
 	{
-		globalDispatch = dispatch;
+		Dispatch = dispatch;
 	}
 
-	public void Send(List<DebugMessage> messages)
+	public void Send(List<UnitTest> unittests)
 	{
-		if (messages.Count == 0)
+		if (unittests.Count == 0)
 			return;
 
 		lock (this)
@@ -73,19 +74,15 @@ public sealed class DebugServerEngine
 
 			SendBuffer.Clear();
 
-			foreach (var message in messages)
+			foreach (var unittest in unittests)
 			{
-				message.ID = ++nextID;
+				Send(unittest.UnitTestID);
+				Send((byte)(unittest.SerializedUnitTest.Count * 4));
 
-				Send(message.ID);
-				Send(message.CommandData.Count);
-
-				foreach (var b in message.CommandData)
+				foreach (var b in unittest.SerializedUnitTest)
 				{
 					Send(b);
 				}
-
-				pending.Add(message.ID, message);
 			}
 
 			stream.Write(SendBuffer.ToArray());
@@ -122,73 +119,23 @@ public sealed class DebugServerEngine
 		}
 	}
 
-	private void PostResponse(int id, List<byte> data)
-	{
-		DebugMessage message = null;
-
-		lock (this)
-		{
-			if (id == 0 || !pending.TryGetValue(id, out message))
-			{
-				// message without command
-				message = new DebugMessage(data)
-				{
-					ID = id
-				};
-
-				// need to set a default notifier for this
-			}
-			else
-			{
-				pending.Remove(message.ID);
-			}
-
-			message.ResponseData = data;
-		}
-
-		if (message != null)
-		{
-			globalDispatch?.Invoke(message);
-
-			message.CallBack?.Invoke(message);
-		}
-	}
-
-	private int GetInteger(int index)
-	{
-		return (ReceiveBuffer[index + 3] << 24) | (ReceiveBuffer[index + 2] << 16) | (ReceiveBuffer[index + 1] << 8) | ReceiveBuffer[index];
-	}
-
-	private bool ParseResponse()
-	{
-		var id = GetInteger(0);
-		var len = GetInteger(4);
-
-		var data = new List<byte>();
-
-		for (var i = 0; i < len; i++)
-		{
-			data.Add(ReceiveBuffer[i + 8]);
-		}
-
-		PostResponse(id, data);
-
-		return true;
-	}
-
 	private void Push(byte b)
 	{
-		ReceiveBuffer.Add(b);
+		Received[ReceivedLen++] = b;
 
-		if (ReceiveBuffer.Count >= 8)
+		if (ReceivedLen == 12)
 		{
-			var length = GetInteger(4);
+			var id = (Received[3] << 24) | (Received[2] << 16) | (Received[1] << 8) | Received[0];
+			var data = 0ul;
 
-			if (ReceiveBuffer.Count == length + 8)
+			for (var i = 7; i >= 0; i--)
 			{
-				ParseResponse();
-				ReceiveBuffer.Clear();
+				data = (data << 8) | Received[i + 4];
 			}
+
+			ReceivedLen = 0;
+
+			Dispatch.Invoke(id, data);
 		}
 	}
 
