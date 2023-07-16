@@ -7,6 +7,8 @@ using System.IO.Pipes;
 
 namespace Mosa.Utility.UnitTests.DebugEngine;
 
+public delegate void CallBack(int id, ulong value);
+
 public sealed class DebugServerEngine
 {
 	private Stream stream;
@@ -60,7 +62,7 @@ public sealed class DebugServerEngine
 		Dispatch = dispatch;
 	}
 
-	public void Send(List<DebugMessage> unittests)
+	public void Send(List<UnitTest> unittests)
 	{
 		if (unittests.Count == 0)
 			return;
@@ -74,10 +76,10 @@ public sealed class DebugServerEngine
 
 			foreach (var unittest in unittests)
 			{
-				Send(unittest.ID);
-				Send(unittest.UnitTest.SerializedUnitTest.Count * 4);
+				Send(unittest.UnitTestID);
+				Send(unittest.SerializedUnitTest.Count * 4);
 
-				foreach (var b in unittest.UnitTest.SerializedUnitTest)
+				foreach (var b in unittest.SerializedUnitTest)
 				{
 					Send(b);
 				}

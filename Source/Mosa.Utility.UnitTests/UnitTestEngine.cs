@@ -55,8 +55,8 @@ public class UnitTestEngine : IDisposable
 	private volatile bool Aborted;
 	private volatile bool Ready;
 
-	private readonly Queue<DebugMessage> Queue = new Queue<DebugMessage>();
-	private readonly Dictionary<int, DebugMessage> Active = new Dictionary<int, DebugMessage>();
+	private readonly Queue<UnitTest> Queue = new Queue<UnitTest>();
+	private readonly Dictionary<int, UnitTest> Active = new Dictionary<int, UnitTest>();
 
 	private Thread ProcessThread;
 
@@ -148,7 +148,7 @@ public class UnitTestEngine : IDisposable
 		if (Aborted)
 			return;
 
-		var messages = new List<DebugMessage>();
+		var messages = new List<UnitTest>();
 
 		Stopwatch.Start();
 		Aborted = !StartEngine();
@@ -183,7 +183,7 @@ public class UnitTestEngine : IDisposable
 				{
 					var message = Queue.Dequeue();
 
-					Active.Add(message.ID, message);
+					Active.Add(message.UnitTestID, message);
 
 					messages.Add(message);
 
@@ -210,9 +210,7 @@ public class UnitTestEngine : IDisposable
 				if (unitTest.Status == UnitTestStatus.Skipped)
 					continue;
 
-				var message = new DebugMessage(unitTest);
-
-				Queue.Enqueue(message);
+				Queue.Enqueue(unitTest);
 			}
 		}
 	}
@@ -526,7 +524,7 @@ public class UnitTestEngine : IDisposable
 				{
 					foreach (var entry in Active)
 					{
-						entry.Value.UnitTest.Status = UnitTestStatus.FailedByCrash;
+						entry.Value.Status = UnitTestStatus.FailedByCrash;
 					}
 
 					Active.Clear();
@@ -561,49 +559,42 @@ public class UnitTestEngine : IDisposable
 			return;
 		}
 
-		UnitTest unittest = null;
-
 		lock (Queue)
 		{
 			WatchDog.Restart();
 
-			unittest = Active[id].UnitTest;
+			var unittest = Active[id];
 			unittest.SerializedResult = data;
 
 			Active.Remove(id);
 
 			CompletedUnitTestCount++;
 
-			//OutputStatus("Received: " + (response.Other as UnitTest).FullMethodName);
-			//OutputStatus(response.ToString());
-
 			if (CompletedUnitTestCount % 1000 == 0 && Stopwatch.Elapsed.Seconds != 0)
 			{
 				OutputStatus($"Unit Tests - Count: {CompletedUnitTestCount} Elapsed: {(int)Stopwatch.Elapsed.TotalSeconds} ({(CompletedUnitTestCount / Stopwatch.Elapsed.TotalSeconds).ToString("F2")} per second)");
 			}
-		}
 
-		UnitTestSystem.ParseResultData(unittest, data);
+			UnitTestSystem.ParseResultData(unittest, data);
 
-		if (Equals(unittest.Expected, unittest.Result))
-		{
-			unittest.Status = UnitTestStatus.Passed;
-		}
-		else
-		{
-			unittest.Status = UnitTestStatus.Failed;
-
-			Errors++;
-
-			OutputStatus($"ERROR: {UnitTestSystem.OutputUnitTestResult(unittest)}");
-
-			if (Errors >= MosaSettings.MaxErrors)
+			if (Equals(unittest.Expected, unittest.Result))
 			{
-				Aborted = true;
+				unittest.Status = UnitTestStatus.Passed;
+			}
+			else
+			{
+				unittest.Status = UnitTestStatus.Failed;
+
+				Errors++;
+
+				OutputStatus($"ERROR: {UnitTestSystem.OutputUnitTestResult(unittest)}");
+
+				if (Errors >= MosaSettings.MaxErrors)
+				{
+					Aborted = true;
+				}
 			}
 		}
-
-		//OutputStatus("RECD: " + unitTest.MethodTypeName + "." + unitTest.MethodName);
 	}
 
 	void IDisposable.Dispose()
