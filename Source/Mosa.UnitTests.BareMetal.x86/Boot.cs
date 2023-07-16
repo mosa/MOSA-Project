@@ -28,7 +28,7 @@ public static class Boot
 		Screen.NextLine();
 		Screen.NextLine();
 
-		UnitTestEngine.Setup();
+		UnitTestEngine.Setup(1);
 
 		UnitTestEngine.EnterTestReadyLoop();
 	}
