@@ -45,9 +45,10 @@ public static class Boot
 		Screen.Clear();
 		Screen.GotoTop();
 		Screen.Color = ScreenColor.Yellow;
-		Screen.Write("MOSA OS Version 1.6 - UnitTest");
+		Screen.WriteLine("MOSA OS Version 2.4");
 		Screen.NextLine();
-		Screen.NextLine();
+
+		Screen.WriteLine("[UnitTest]");
 
 		Setup();
 
