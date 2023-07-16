@@ -60,9 +60,9 @@ public sealed class DebugServerEngine
 		Dispatch = dispatch;
 	}
 
-	public void Send(List<DebugMessage> messages)
+	public void Send(List<DebugMessage> unittests)
 	{
-		if (messages.Count == 0)
+		if (unittests.Count == 0)
 			return;
 
 		lock (this)
@@ -72,12 +72,12 @@ public sealed class DebugServerEngine
 
 			SendBuffer.Clear();
 
-			foreach (var message in messages)
+			foreach (var unittest in unittests)
 			{
-				Send(message.ID);
-				Send(message.CommandData.Count);
+				Send(unittest.ID);
+				Send(unittest.UnitTest.SerializedUnitTest.Count * 4);
 
-				foreach (var b in message.CommandData)
+				foreach (var b in unittest.UnitTest.SerializedUnitTest)
 				{
 					Send(b);
 				}

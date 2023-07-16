@@ -8,9 +8,7 @@ public delegate void CallBack(int id, ulong value);
 
 public class DebugMessage
 {
-	public int ID { get; internal set; }
-
-	public List<byte> CommandData { get; }
+	public int ID => UnitTest.UnitTestID;
 
 	public ulong ResponseData { get; internal set; }
 
@@ -19,16 +17,15 @@ public class DebugMessage
 	public DebugMessage(UnitTest unittest)
 	{
 		UnitTest = unittest;
-		ID = unittest.UnitTestID;
 
-		CommandData = new List<byte>(unittest.SerializedUnitTest.Count * 4);
+		//CommandData = new List<byte>(unittest.SerializedUnitTest.Count * 4);
 
-		foreach (var i in unittest.SerializedUnitTest)
-		{
-			CommandData.Add((byte)(i & 0xFF));
-			CommandData.Add((byte)((i >> 8) & 0xFF));
-			CommandData.Add((byte)((i >> 16) & 0xFF));
-			CommandData.Add((byte)((i >> 24) & 0xFF));
-		}
+		//foreach (var i in unittest.SerializedUnitTest)
+		//{
+		//	CommandData.Add((byte)(i & 0xFF));
+		//	CommandData.Add((byte)((i >> 8) & 0xFF));
+		//	CommandData.Add((byte)((i >> 16) & 0xFF));
+		//	CommandData.Add((byte)((i >> 24) & 0xFF));
+		//}
 	}
 }
