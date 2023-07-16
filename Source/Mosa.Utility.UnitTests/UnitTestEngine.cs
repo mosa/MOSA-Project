@@ -553,7 +553,7 @@ public class UnitTestEngine : IDisposable
 		}
 	}
 
-	private void MessageCallBack(int id, ulong value)
+	private void MessageCallBack(int id, ulong data)
 	{
 		if (id == 0)
 		{
@@ -561,14 +561,14 @@ public class UnitTestEngine : IDisposable
 			return;
 		}
 
-		DebugMessage message = null;
+		UnitTest unittest = null;
 
 		lock (Queue)
 		{
 			WatchDog.Restart();
 
-			message = Active[id];
-			message.ResponseData = value;
+			unittest = Active[id].UnitTest;
+			unittest.SerializedResult = data;
 
 			Active.Remove(id);
 
@@ -583,9 +583,7 @@ public class UnitTestEngine : IDisposable
 			}
 		}
 
-		var unittest = message.UnitTest;
-
-		UnitTestSystem.ParseResultData(unittest, message.ResponseData);
+		UnitTestSystem.ParseResultData(unittest, data);
 
 		if (Equals(unittest.Expected, unittest.Result))
 		{
