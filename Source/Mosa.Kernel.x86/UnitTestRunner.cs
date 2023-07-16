@@ -89,7 +89,10 @@ public static class UnitTestRunner
 					default: break;
 				}
 
+				UnitTestEngine.SendResponse(TestID, TestResult);
+
 				ResultReady = true;
+				ResultReported = true;
 
 				Native.Int(255);
 			}
@@ -112,18 +115,4 @@ public static class UnitTestRunner
 	}
 
 	public static bool IsReady() => ResultReported && !Ready;
-
-	public static bool GetResult(out ulong result, out uint id)
-	{
-		result = TestResult;
-		id = TestID;
-
-		if (!Ready && ResultReady && !ResultReported)
-		{
-			ResultReported = true;
-			return true;
-		}
-
-		return false;
-	}
 }

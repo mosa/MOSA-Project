@@ -22,9 +22,9 @@ public static class UnitTestEngine
 
 	public static void Setup(ushort comPort)
 	{
-		Serial.Setup(comPort);
-
 		ComPort = comPort;
+
+		Serial.Setup(ComPort);
 
 		Buffer = new Pointer(Address.DebuggerBuffer);
 
@@ -32,9 +32,7 @@ public static class UnitTestEngine
 		ReadySent = false;
 	}
 
-	private static void SendRawByte(byte b) => Serial.Write(ComPort, b);
-
-	private static void SendByte(byte b) => SendRawByte(b);
+	private static void SendByte(byte b) => Serial.Write(ComPort, b);
 
 	private static void SendByte(int i) => SendByte((byte)i);
 
@@ -56,17 +54,9 @@ public static class UnitTestEngine
 
 	private const int HeaderSize = 4 + 4;
 
-	private static void SendResponseStart(uint id, uint len)
+	public static void SendResponse(uint id, ulong data)
 	{
 		SendInteger(id);
-		SendInteger(len);
-	}
-
-	private static void SendResponse(uint id) => SendResponseStart(id, 0);
-
-	private static void SendResponse(uint id, ulong data)
-	{
-		SendResponseStart(id, 8);
 		SendInteger(data);
 	}
 
@@ -77,14 +67,13 @@ public static class UnitTestEngine
 		if (!Enabled)
 			return;
 
-		SendTestUnitResponse();
-		ProcessTestUnitQueue();
-
 		if (!ReadySent)
 		{
+			SendResponse(0, 0l);
 			ReadySent = true;
-			SendResponse(0); // Send Ready
 		}
+
+		UnitTestQueue.Process();
 
 		for (var x = 0; x < 5; x++)
 		{
@@ -93,8 +82,7 @@ public static class UnitTestEngine
 				while (ProcessSerial()) ;
 			}
 
-			SendTestUnitResponse();
-			ProcessTestUnitQueue();
+			UnitTestQueue.Process();
 		}
 	}
 
@@ -158,14 +146,4 @@ public static class UnitTestEngine
 
 		UnitTestQueue.QueueUnitTest(id, start, end);
 	}
-
-	private static void SendTestUnitResponse()
-	{
-		if (UnitTestRunner.GetResult(out ulong result, out uint id))
-		{
-			SendResponse(id, result);
-		}
-	}
-
-	private static void ProcessTestUnitQueue() => UnitTestQueue.ProcessQueue();
 }

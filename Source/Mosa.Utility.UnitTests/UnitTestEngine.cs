@@ -183,8 +183,6 @@ public class UnitTestEngine : IDisposable
 				{
 					var message = Queue.Dequeue();
 
-					message.CallBack = MessageCallBack;
-
 					Pending.Add(message);
 
 					messages.Add(message);
@@ -337,7 +335,7 @@ public class UnitTestEngine : IDisposable
 		if (DebugServerEngine == null)
 		{
 			DebugServerEngine = new DebugServerEngine();
-			DebugServerEngine.SetGlobalDispatch(GlobalDispatch);
+			DebugServerEngine.SetGlobalDispatch(MessageCallBack);
 		}
 
 		Thread.Sleep(50); // small delay to let emulator launch
@@ -559,28 +557,20 @@ public class UnitTestEngine : IDisposable
 		}
 	}
 
-	private void GlobalDispatch(DebugMessage response)
+	private void MessageCallBack(DebugMessage message)
 	{
-		if (response == null)
-			return;
-
-		if (response.ID == 0)
+		if (message == null)
 		{
 			Ready = true;
-		}
-	}
-
-	private void MessageCallBack(DebugMessage response)
-	{
-		if (response == null)
 			return;
+		}
 
 		lock (Queue)
 		{
 			WatchDog.Restart();
 
 			CompletedUnitTestCount++;
-			Pending.Remove(response);
+			Pending.Remove(message);
 
 			//OutputStatus("Received: " + (response.Other as UnitTest).FullMethodName);
 			//OutputStatus(response.ToString());
@@ -591,9 +581,9 @@ public class UnitTestEngine : IDisposable
 			}
 		}
 
-		if (response.Other is UnitTest unitTest)
+		if (message.Other is UnitTest unitTest)
 		{
-			UnitTestSystem.ParseResultData(unitTest, response.ResponseData);
+			UnitTestSystem.ParseResultData(unitTest, message.ResponseData);
 
 			if (Equals(unitTest.Expected, unitTest.Result))
 			{

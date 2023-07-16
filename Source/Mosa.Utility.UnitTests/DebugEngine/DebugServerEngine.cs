@@ -124,34 +124,24 @@ public sealed class DebugServerEngine
 
 	private void PostResponse(int id, List<byte> data)
 	{
+		if (id == 0)
+		{
+			globalDispatch.Invoke(null);
+			return;
+		}
+
 		DebugMessage message = null;
 
 		lock (this)
 		{
-			if (id == 0 || !pending.TryGetValue(id, out message))
-			{
-				// message without command
-				message = new DebugMessage(data)
-				{
-					ID = id
-				};
+			if (!pending.TryGetValue(id, out message))
+				return;
 
-				// need to set a default notifier for this
-			}
-			else
-			{
-				pending.Remove(message.ID);
-			}
-
+			pending.Remove(message.ID);
 			message.ResponseData = data;
 		}
 
-		if (message != null)
-		{
-			globalDispatch?.Invoke(message);
-
-			message.CallBack?.Invoke(message);
-		}
+		globalDispatch.Invoke(message);
 	}
 
 	private int GetInteger(int index)
@@ -159,36 +149,24 @@ public sealed class DebugServerEngine
 		return (ReceiveBuffer[index + 3] << 24) | (ReceiveBuffer[index + 2] << 16) | (ReceiveBuffer[index + 1] << 8) | ReceiveBuffer[index];
 	}
 
-	private bool ParseResponse()
-	{
-		var id = GetInteger(0);
-		var len = GetInteger(4);
-
-		var data = new List<byte>();
-
-		for (var i = 0; i < len; i++)
-		{
-			data.Add(ReceiveBuffer[i + 8]);
-		}
-
-		PostResponse(id, data);
-
-		return true;
-	}
-
 	private void Push(byte b)
 	{
 		ReceiveBuffer.Add(b);
 
-		if (ReceiveBuffer.Count >= 8)
+		if (ReceiveBuffer.Count == 12)
 		{
-			var length = GetInteger(4);
+			var id = GetInteger(0);
+			var data = new List<byte>(8);
 
-			if (ReceiveBuffer.Count == length + 8)
+			//Console.WriteLine($"ID: {id}");
+
+			for (var i = 0; i < 8; i++)
 			{
-				ParseResponse();
-				ReceiveBuffer.Clear();
+				data.Add(ReceiveBuffer[i + 4]);
 			}
+
+			PostResponse(id, data);
+			ReceiveBuffer.Clear();
 		}
 	}
 

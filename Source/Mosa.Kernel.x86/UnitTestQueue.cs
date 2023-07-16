@@ -61,7 +61,7 @@ public static class UnitTestQueue
 		return true;
 	}
 
-	public static void ProcessQueue()
+	public static void Process()
 	{
 		if (QueueNext == QueueCurrent)
 			return;
