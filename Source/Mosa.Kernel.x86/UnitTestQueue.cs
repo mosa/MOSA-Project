@@ -66,7 +66,7 @@ public static class UnitTestQueue
 		if (QueueNext == QueueCurrent)
 			return;
 
-		if (!UnitTestRunner.IsReady())
+		if (!UnitTestEngine.IsReady())
 			return;
 
 		var marker = QueueCurrent.Load32();
@@ -82,14 +82,14 @@ public static class UnitTestQueue
 		var type = QueueCurrent.Load32(12);
 		var paramcnt = QueueCurrent.Load32(16);
 
-		UnitTestRunner.SetUnitTestMethodAddress(address);
-		UnitTestRunner.SetUnitTestResultType(type);
-		UnitTestRunner.SetUnitTestMethodParameterCount(paramcnt);
+		UnitTestEngine.SetUnitTestMethodAddress(address);
+		UnitTestEngine.SetUnitTestResultType(type);
+		UnitTestEngine.SetUnitTestMethodParameterCount(paramcnt);
 
 		for (var index = 0u; index < paramcnt; index++)
 		{
 			var value = QueueCurrent.Load32(20 + index * 4);
-			UnitTestRunner.SetUnitTestMethodParameter(index, value);
+			UnitTestEngine.SetUnitTestMethodParameter(index, value);
 		}
 
 		QueueCurrent = QueueCurrent + len + 4;
@@ -109,6 +109,6 @@ public static class UnitTestQueue
 		Screen.Write(" - Cnt: ");
 		Screen.Write(Count, 10, 4);
 
-		UnitTestRunner.StartTest(id);
+		UnitTestEngine.StartTest(id);
 	}
 }

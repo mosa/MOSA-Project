@@ -50,9 +50,8 @@ public static class Boot
 		Screen.NextLine();
 
 		UnitTestQueue.Setup();
-		UnitTestRunner.Setup();
 
-		UnitTestRunner.EnterTestReadyLoop();
+		UnitTestEngine.EnterTestReadyLoop();
 	}
 
 	private static void ForceTestCollection()
