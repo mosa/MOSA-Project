@@ -28,10 +28,9 @@ public static class Boot
 		Screen.NextLine();
 		Screen.NextLine();
 
-		UnitTestQueue.Setup();
-		UnitTestRunner.Setup();
+		UnitTestEngine.Setup();
 
-		UnitTestRunner.EnterTestReadyLoop();
+		UnitTestEngine.EnterTestReadyLoop();
 	}
 
 	public static void ProcessInterrupt(uint interrupt, uint errorCode)
