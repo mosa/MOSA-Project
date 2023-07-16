@@ -9,7 +9,7 @@ namespace Mosa.Kernel.x86;
 /// </summary>
 public static class UnitTestEngine
 {
-	private const int MaxBuffer = 1024 * 64 + 64;
+	private const byte MaxBuffer = 255;
 
 	private static Pointer Buffer;
 
@@ -52,7 +52,7 @@ public static class UnitTestEngine
 		SendInteger((uint)((i >> 32) & 0xFFFFFFFF));
 	}
 
-	private const int HeaderSize = 4 + 4;
+	private const int HeaderSize = 4 + 1;
 
 	public static void SendResponse(uint id, ulong data)
 	{
@@ -61,6 +61,8 @@ public static class UnitTestEngine
 	}
 
 	private static uint GetUInt32(uint offset) => Buffer.Load32(offset);
+
+	private static byte GetUInt8(uint offset) => Buffer.Load8(offset);
 
 	public static void Process()
 	{
@@ -103,7 +105,7 @@ public static class UnitTestEngine
 
 		if (UsedBuffer >= HeaderSize)
 		{
-			var length = GetUInt32(4);
+			var length = GetUInt8(4);
 
 			if (length > MaxBuffer)
 			{
@@ -139,10 +141,10 @@ public static class UnitTestEngine
 	private static void QueueUnitTest()
 	{
 		var id = GetUInt32(0);
-		var length = GetUInt32(4);
+		var length = GetUInt8(4);
 
 		var start = Buffer + HeaderSize;
-		var end = start + (int)length;
+		var end = start + length;
 
 		UnitTestQueue.QueueUnitTest(id, start, end);
 	}

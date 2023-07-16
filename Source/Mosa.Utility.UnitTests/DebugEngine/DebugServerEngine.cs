@@ -77,7 +77,7 @@ public sealed class DebugServerEngine
 			foreach (var unittest in unittests)
 			{
 				Send(unittest.UnitTestID);
-				Send(unittest.SerializedUnitTest.Count * 4);
+				Send((byte)(unittest.SerializedUnitTest.Count * 4));
 
 				foreach (var b in unittest.SerializedUnitTest)
 				{
