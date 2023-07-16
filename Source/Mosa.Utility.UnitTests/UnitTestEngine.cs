@@ -210,7 +210,7 @@ public class UnitTestEngine : IDisposable
 				if (unitTest.Status == UnitTestStatus.Skipped)
 					continue;
 
-				var message = new DebugMessage(unitTest.UnitTestID, unitTest.SerializedUnitTest, unitTest);
+				var message = new DebugMessage(unitTest);
 
 				Queue.Enqueue(message);
 			}
@@ -526,12 +526,9 @@ public class UnitTestEngine : IDisposable
 				{
 					foreach (var entry in Active)
 					{
-						var failed = entry.Value;
-
-						// OutputStatus("Failed - Requeueing: " + (failed.Other as UnitTest).FullMethodName);
-
-						(failed.Other as UnitTest).Status = UnitTestStatus.FailedByCrash;
+						entry.Value.UnitTest.Status = UnitTestStatus.FailedByCrash;
 					}
+
 					Active.Clear();
 				}
 
@@ -586,30 +583,29 @@ public class UnitTestEngine : IDisposable
 			}
 		}
 
-		if (message.Other is UnitTest unitTest)
+		var unittest = message.UnitTest;
+
+		UnitTestSystem.ParseResultData(unittest, message.ResponseData);
+
+		if (Equals(unittest.Expected, unittest.Result))
 		{
-			UnitTestSystem.ParseResultData(unitTest, message.ResponseData);
-
-			if (Equals(unitTest.Expected, unitTest.Result))
-			{
-				unitTest.Status = UnitTestStatus.Passed;
-			}
-			else
-			{
-				unitTest.Status = UnitTestStatus.Failed;
-
-				Errors++;
-
-				OutputStatus($"ERROR: {UnitTestSystem.OutputUnitTestResult(unitTest)}");
-
-				if (Errors >= MosaSettings.MaxErrors)
-				{
-					Aborted = true;
-				}
-			}
-
-			//OutputStatus("RECD: " + unitTest.MethodTypeName + "." + unitTest.MethodName);
+			unittest.Status = UnitTestStatus.Passed;
 		}
+		else
+		{
+			unittest.Status = UnitTestStatus.Failed;
+
+			Errors++;
+
+			OutputStatus($"ERROR: {UnitTestSystem.OutputUnitTestResult(unittest)}");
+
+			if (Errors >= MosaSettings.MaxErrors)
+			{
+				Aborted = true;
+			}
+		}
+
+		//OutputStatus("RECD: " + unitTest.MethodTypeName + "." + unitTest.MethodName);
 	}
 
 	void IDisposable.Dispose()
