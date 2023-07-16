@@ -27,7 +27,7 @@ public static class UnitTestEngine
 	private static bool ResultReported;
 
 	private static uint TestID;
-	private static uint TestParameters;
+	private static uint TestParameterCount;
 	private static uint TestMethodAddress;
 	private static uint TestResultType;
 
@@ -45,21 +45,20 @@ public static class UnitTestEngine
 		Serial.Setup(ComPort);
 
 		Buffer = new Pointer(Address.DebuggerBuffer);
+		Stack = new Pointer(Address.UnitTestStack);
+		Queue = new Pointer(Address.UnitTestQueue);
 
 		Enabled = true;
 		ReadySent = false;
-
-		Stack = new Pointer(Address.UnitTestStack);
 
 		Ready = false;
 		ResultReported = true;
 
 		TestID = 0;
-		TestParameters = 0;
+		TestParameterCount = 0;
 		TestMethodAddress = 0;
 		TestResult = 0;
 
-		Queue = new Pointer(Address.UnitTestQueue);
 		QueueNext = Queue;
 		QueueCurrent = Queue;
 
@@ -95,10 +94,6 @@ public static class UnitTestEngine
 		SendInteger(id);
 		SendInteger(data);
 	}
-
-	private static uint GetUInt32(uint offset) => Buffer.Load32(offset);
-
-	private static byte GetUInt8(uint offset) => Buffer.Load8(offset);
 
 	public static void Process()
 	{
@@ -141,7 +136,7 @@ public static class UnitTestEngine
 
 		if (UsedBuffer >= HeaderSize)
 		{
-			var length = GetUInt8(4);
+			var length = Buffer.Load8(4);
 
 			if (length > MaxBuffer)
 			{
@@ -161,7 +156,7 @@ public static class UnitTestEngine
 
 	private static void ProcessCommand()
 	{
-		var id = GetUInt32(0);
+		var id = Buffer.Load32(0);
 
 		Screen.Goto(13, 0);
 		Screen.ClearRow();
@@ -176,8 +171,8 @@ public static class UnitTestEngine
 
 	private static void QueueUnitTest()
 	{
-		var id = GetUInt32(0);
-		var length = GetUInt8(4);
+		var id = Buffer.Load32(0);
+		var length = Buffer.Load8(4);
 
 		var start = Buffer + HeaderSize;
 		var end = start + length;
@@ -196,30 +191,23 @@ public static class UnitTestEngine
 		// allocate space on stack for parameters
 		var esp = Native.AllocateStackSpace(MaxParameters * 4);
 
-		Screen.Write("Stack @ ");
-		Screen.Write(esp, 16, 8);
-
-		Screen.NextLine();
-		Screen.NextLine();
-
 		var row = Screen.Row;
 
 		while (true)
 		{
 			if (Ready)
 			{
+				TestResult = 0;
+				ResultReported = false;
+				Ready = false;
+
 				Screen.Goto(row, 0);
 				Screen.ClearRow();
 
 				Screen.Write("Test #: ");
 				Screen.Write(++testCount, 10, 7);
 
-				TestResult = 0;
-				ResultReported = false;
-				Ready = false;
-
-				// copy parameters into stack
-				for (var index = 0; index < TestParameters; index++)
+				for (var index = 0; index < TestParameterCount; index++)
 				{
 					var value = Stack.Load32(index * 4);
 
@@ -243,22 +231,6 @@ public static class UnitTestEngine
 			}
 		}
 	}
-
-	public static void SetUnitTestMethodParameter(uint index, uint value) => Stack.Store32(index * 4, value);
-
-	public static void SetUnitTestMethodParameterCount(uint number) => TestParameters = number;
-
-	public static void SetUnitTestMethodAddress(uint address) => TestMethodAddress = address;
-
-	public static void SetUnitTestResultType(uint type) => TestResultType = type;
-
-	public static void StartTest(uint id)
-	{
-		TestID = id;
-		Ready = true;
-	}
-
-	public static bool IsReady() => ResultReported && !Ready;
 
 	public static bool QueueUnitTest(uint id, Pointer start, Pointer end)
 	{
@@ -299,7 +271,7 @@ public static class UnitTestEngine
 		if (QueueNext == QueueCurrent)
 			return;
 
-		if (!UnitTestEngine.IsReady())
+		if (!(ResultReported && !Ready))
 			return;
 
 		var marker = QueueCurrent.Load32();
@@ -309,21 +281,19 @@ public static class UnitTestEngine
 			QueueCurrent = Queue;
 		}
 
-		var len = QueueCurrent.Load32();
-		var id = QueueCurrent.Load32(4);
-		var address = QueueCurrent.Load32(8);
-		var type = QueueCurrent.Load32(12);
-		var paramcnt = QueueCurrent.Load32(16);
+		TestID = QueueCurrent.Load32(4);
+		TestMethodAddress = QueueCurrent.Load32(8);
+		TestResultType = QueueCurrent.Load32(12);
+		TestParameterCount = QueueCurrent.Load32(16);
 
-		UnitTestEngine.SetUnitTestMethodAddress(address);
-		UnitTestEngine.SetUnitTestResultType(type);
-		UnitTestEngine.SetUnitTestMethodParameterCount(paramcnt);
-
-		for (var index = 0u; index < paramcnt; index++)
+		for (var index = 0u; index < TestParameterCount; index++)
 		{
 			var value = QueueCurrent.Load32(20 + index * 4);
-			UnitTestEngine.SetUnitTestMethodParameter(index, value);
+
+			Stack.Store32(index * 4, value);
 		}
+
+		var len = QueueCurrent.Load32();
 
 		QueueCurrent = QueueCurrent + len + 4;
 		--Count;
@@ -334,14 +304,14 @@ public static class UnitTestEngine
 		Screen.NextLine();
 		Screen.ClearRow();
 		Screen.Write("ID: ");
-		Screen.Write(id, 10, 5);
+		Screen.Write(TestID, 10, 5);
 		Screen.Write(" Address: ");
-		Screen.Write(address, 16, 8);
+		Screen.Write(TestMethodAddress, 16, 8);
 		Screen.Write(" Param: ");
-		Screen.Write(paramcnt, 10, 2);
+		Screen.Write(TestParameterCount, 10, 2);
 		Screen.Write(" - Cnt: ");
 		Screen.Write(Count, 10, 4);
 
-		UnitTestEngine.StartTest(id);
+		Ready = true;
 	}
 }
