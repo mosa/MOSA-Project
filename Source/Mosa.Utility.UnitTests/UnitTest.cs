@@ -39,9 +39,9 @@ public class UnitTest
 
 	public int UnitTestID { get; set; }
 
-	public IList<int> SerializedUnitTest { get; set; }
+	public List<int> SerializedUnitTest { get; set; }
 
-	public List<byte> SerializedResult { get; set; }
+	public ulong SerializedResult { get; set; }
 
 	public UnitTest(UnitTestInfo unitTestInfo, LinkerMethodInfo linkerMethodInfo)
 	{

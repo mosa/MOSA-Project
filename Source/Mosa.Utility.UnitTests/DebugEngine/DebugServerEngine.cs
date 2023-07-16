@@ -124,7 +124,7 @@ public sealed class DebugServerEngine
 		if (ReceivedLen == 12)
 		{
 			var id = (Received[3] << 24) | (Received[2] << 16) | (Received[1] << 8) | Received[0];
-			var data = 0lu;
+			var data = 0ul;
 
 			for (var i = 7; i >= 0; i--)
 			{

@@ -156,12 +156,7 @@ public static class UnitTestSystem
 		return new IntPtr((long)symbol.VirtualAddress);
 	}
 
-	public static void SerializeUnitTest(UnitTest unitTest)
-	{
-		unitTest.SerializedUnitTest = SerializeUnitTestMessage(unitTest);
-	}
-
-	public static IList<int> SerializeUnitTestMessage(UnitTest unitTest)
+	public static List<int> SerializeUnitTestMessage(UnitTest unitTest)
 	{
 		var cmd = new List<int>(4 + 4 + 4 + unitTest.MosaMethod.Signature.Parameters.Count)
 		{
