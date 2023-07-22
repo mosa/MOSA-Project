@@ -111,15 +111,12 @@ public static class UnitTestEngine
 
 		ProcessQueue();
 
-		for (var x = 0; x < 5; x++)
+		for (var i = 0; i < 75; i++)
 		{
-			for (var i = 0; i < 75; i++)
-			{
-				while (ProcessSerial()) ;
-			}
-
-			ProcessQueue();
+			while (ProcessSerial()) ;
 		}
+
+		ProcessQueue();
 	}
 
 	private static bool ProcessSerial()
@@ -282,21 +279,21 @@ public static class UnitTestEngine
 	{
 		if (!test)
 		{
-			Screen.Goto(4, 0);
-			Screen.Write("Total  : ");
-			Screen.Write(TestCount, 10, 7);
+			Console.Goto(4, 0);
+			Console.Write("Total  : ");
+			Console.WriteValue(TestCount, 7);
 
-			Screen.Goto(5, 0);
-			Screen.Write("Pending: ");
-			Screen.Write(PendingCount, 10, 7);
+			Console.Goto(5, 0);
+			Console.Write("Pending: ");
+			Console.WriteValue(PendingCount, 7);
 		}
 		else
 		{
-			Screen.Goto(6, 0);
-			Screen.Write("Active : ");
-			Screen.Write(TestID, 10, 7);
-			Screen.Write(" @ ");
-			Screen.Write(TestMethodAddress.ToUInt32(), 16, 8);
+			Console.Goto(6, 0);
+			Console.Write("Active : ");
+			Console.WriteValue(TestID, 7);
+			Console.Write(" @ ");
+			Console.WriteValueAsHex(TestMethodAddress.ToUInt32(), 8);
 		}
 	}
 }

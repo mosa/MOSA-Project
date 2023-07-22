@@ -6,6 +6,8 @@ public static class StartUp
 {
 	public static void Initialize()
 	{
+		BootOptions();
+
 		SetInitialMemory();                 // Legacy
 
 		PlatformInitialization();
@@ -19,6 +21,10 @@ public static class StartUp
 		KernelEntryPoint();
 
 		StartApplication();
+	}
+
+	public static void BootOptions()
+	{
 	}
 
 	public static void PlatformInitialization()

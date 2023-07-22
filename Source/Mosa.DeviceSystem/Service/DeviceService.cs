@@ -148,7 +148,10 @@ public sealed class DeviceService : BaseService
 
 		if (device.Name != null)
 		{
+			HAL.DebugWriteLine("#Device Name Length: " + device.Name.Length.ToString());
+
 			HAL.DebugWrite($" > Device: ");
+
 			HAL.DebugWriteLine(device.Name);
 		}
 

@@ -6,9 +6,8 @@ namespace Mosa.DeviceDriver.ISA.ACPI;
 
 public struct RSDPDescriptor
 {
-	private readonly Pointer Entry;
+	public readonly Pointer Pointer;
 
-	public readonly Pointer Pointer => Entry;
 	public readonly uint Size = Offset.Size;
 
 	internal static class Offset
@@ -21,15 +20,15 @@ public struct RSDPDescriptor
 		public const int Size = RsdtAddress + 8;
 	}
 
-	public RSDPDescriptor(Pointer entry) => Entry = entry;
+	public RSDPDescriptor(Pointer entry) => Pointer = entry;
 
-	public readonly ulong Signature => Entry.Load64(Offset.Signature);
+	public readonly ulong Signature => Pointer.Load64(Offset.Signature);
 
-	public readonly byte Checksum => Entry.Load8(Offset.Checksum);
+	public readonly byte Checksum => Pointer.Load8(Offset.Checksum);
 
-	public readonly byte Revision => Entry.Load8(Offset.Revision);
+	public readonly byte Revision => Pointer.Load8(Offset.Revision);
 
-	public readonly Pointer RsdtAddress => new Pointer(Entry.Load32(Offset.RsdtAddress));
+	public readonly Pointer RsdtAddress => new Pointer(Pointer.Load32(Offset.RsdtAddress));
 
-	public byte GetSignature(int index) => Entry.Load8(Offset.Signature + index);
+	public byte GetSignature(int index) => Pointer.Load8(Offset.Signature + index);
 }

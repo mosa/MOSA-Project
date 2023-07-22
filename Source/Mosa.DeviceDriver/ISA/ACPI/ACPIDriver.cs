@@ -102,7 +102,7 @@ public unsafe class ACPIDriver : BaseDeviceDriver, IACPI
 
 					case 5: // 64-bit LAPIC
 						var llpe = (LongLocalAPICEntry*)ptr;
-						LocalApicAddress = (uint)llpe->ApicAddress;
+						LocalApicAddress = llpe->ApicAddress;
 						break;
 				}
 

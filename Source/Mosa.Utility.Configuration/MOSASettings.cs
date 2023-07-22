@@ -624,6 +624,12 @@ public class MosaSettings
 		set => Settings.SetValue(Name.Multiboot_Video_Depth, value);
 	}
 
+	//public bool UnitTestBareMetal
+	//{
+	//	get => Settings.GetValue(Name.UnitTest_BareMetal, false);
+	//	set => Settings.SetValue(Name.UnitTest_BareMetal, value);
+	//}
+
 	#endregion Properties
 
 	public MosaSettings()

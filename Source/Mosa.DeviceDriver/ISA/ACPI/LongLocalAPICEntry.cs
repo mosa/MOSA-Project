@@ -6,9 +6,7 @@ namespace Mosa.DeviceDriver.ISA.ACPI;
 
 public struct LongLocalAPICEntry
 {
-	private readonly Pointer Entry;
-
-	public readonly Pointer Pointer => Entry;
+	public readonly Pointer Pointer;
 
 	public readonly uint Size = Offset.Size;
 
@@ -20,11 +18,11 @@ public struct LongLocalAPICEntry
 		public const int Size = ApicAddress + 8;
 	}
 
-	public LongLocalAPICEntry(Pointer entry) => Entry = entry;
+	public LongLocalAPICEntry(Pointer entry) => Pointer = entry;
 
 	public readonly MADTEntry MADTEntry { get { return new MADTEntry(Pointer + Offset.Entry); } }
 
-	public readonly byte Reserved => Entry.Load8(Offset.Reserved);
+	public readonly byte Reserved => Pointer.Load8(Offset.Reserved);
 
-	public readonly uint ApicAddress => Entry.Load8(Offset.ApicAddress);
+	public readonly uint ApicAddress => Pointer.Load8(Offset.ApicAddress);
 }

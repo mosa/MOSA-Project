@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Runtime.InteropServices;
 using Mosa.Runtime;
 
 // Portions of this code are from Cosmos
@@ -12,9 +11,7 @@ namespace Mosa.DeviceDriver.ISA.ACPI;
 
 public struct RSDPDescriptor20
 {
-	private readonly Pointer Entry;
-
-	public readonly Pointer Pointer => Entry;
+	public readonly Pointer Pointer;
 
 	public readonly uint Size = Offset.Size;
 
@@ -33,17 +30,17 @@ public struct RSDPDescriptor20
 		public const int Size = Reserved + 3;
 	}
 
-	public RSDPDescriptor20(Pointer entry) => Entry = entry;
+	public RSDPDescriptor20(Pointer entry) => Pointer = entry;
 
-	public readonly byte Checksum => Entry.Load8(Offset.Checksum);
+	public readonly byte Checksum => Pointer.Load8(Offset.Checksum);
 
-	public readonly byte Revision => Entry.Load8(Offset.Revision);
+	public readonly byte Revision => Pointer.Load8(Offset.Revision);
 
-	public readonly Pointer RsdtAddress => new Pointer(Entry.Load32(Offset.RsdtAddress));
+	public readonly Pointer RsdtAddress => new Pointer(Pointer.Load32(Offset.RsdtAddress));
 
-	public readonly uint Length => Entry.Load32(Offset.Length);
+	public readonly uint Length => Pointer.Load32(Offset.Length);
 
-	public readonly ulong XsdtAddress => Entry.Load32(Offset.XsdtAddress);
+	public readonly ulong XsdtAddress => Pointer.Load32(Offset.XsdtAddress);
 
-	public readonly byte ExtendedChecksum => Entry.Load8(Offset.ExtendedChecksum);
+	public readonly byte ExtendedChecksum => Pointer.Load8(Offset.ExtendedChecksum);
 }

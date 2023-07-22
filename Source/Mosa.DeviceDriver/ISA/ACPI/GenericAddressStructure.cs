@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Runtime.InteropServices;
 using Mosa.Runtime;
 
 // Portions of this code are from Cosmos
@@ -12,9 +11,7 @@ namespace Mosa.DeviceDriver.ISA.ACPI;
 
 public struct GenericAddressStructure
 {
-	private readonly Pointer Entry;
-
-	public readonly Pointer Pointer => Entry;
+	public readonly Pointer Pointer;
 
 	public readonly uint Size = Offset.Size;
 
@@ -28,15 +25,15 @@ public struct GenericAddressStructure
 		public const int Size = Address + 8;
 	}
 
-	public GenericAddressStructure(Pointer entry) => Entry = entry;
+	public GenericAddressStructure(Pointer entry) => Pointer = entry;
 
-	public readonly byte AddressSpace => Entry.Load8(Offset.AddressSpace);
+	public readonly byte AddressSpace => Pointer.Load8(Offset.AddressSpace);
 
-	public readonly byte BitWidth => Entry.Load8(Offset.BitWidth);
+	public readonly byte BitWidth => Pointer.Load8(Offset.BitWidth);
 
-	public readonly byte BitOffset => Entry.Load8(Offset.BitOffset);
+	public readonly byte BitOffset => Pointer.Load8(Offset.BitOffset);
 
-	public readonly byte AccessSize => Entry.Load8(Offset.AccessSize);
+	public readonly byte AccessSize => Pointer.Load8(Offset.AccessSize);
 
-	public readonly ulong Address => Entry.Load32(Offset.Address);
+	public readonly ulong Address => Pointer.Load32(Offset.Address);
 }

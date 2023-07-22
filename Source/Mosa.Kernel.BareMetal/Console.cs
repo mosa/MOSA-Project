@@ -11,6 +11,22 @@ public static class Console
 
 	#region Public API
 
+	public static void GotoTop()
+	{
+		Write(Escape);
+		Write("[0;0H");
+	}
+
+	public static void Goto(uint row, uint col)
+	{
+		Write(Escape);
+		Write("[");
+		WriteValue(col);
+		Write(";");
+		WriteValue(row);
+		Write("H");
+	}
+
 	public static void Write(byte c)
 	{
 		Platform.ConsoleWrite(c);

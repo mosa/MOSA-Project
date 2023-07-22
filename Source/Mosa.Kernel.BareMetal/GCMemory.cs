@@ -49,7 +49,7 @@ public static class GCMemory
 
 		var at = heapStart + heapUsed;
 
-		//Debug.WriteLine("+ Allocating Object: size = ", size, " @ ", new Hex(at));
+		Debug.WriteLine("+ Allocating Object: size = ", size, " @ ", new Hex(at));
 
 		CurrentHeap.Used = heapUsed + size;
 		return at;

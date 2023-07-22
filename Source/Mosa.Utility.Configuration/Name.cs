@@ -14,10 +14,10 @@ public static class Name
 	public const string AppLocation_VmwarePlayer = "AppLocation.VmwarePlayer";
 	public const string AppLocation_VmwareWorkstation = "AppLocation.VmwareWorkstation";
 
-	public const string AppLocation_QemuEDK2X86 = "AppLocation.QemuEDK2X86"; //
-	public const string AppLocation_QemuEDK2X64 = "AppLocation.QemuEDK2X64"; //
-	public const string AppLocation_QemuEDK2ARM = "AppLocation.QemuEDK2ARM"; //
-	public const string AppLocation_VirtualBox = "AppLocation.VirtualBox"; //
+	public const string AppLocation_QemuEDK2X86 = "AppLocation.QemuEDK2X86";
+	public const string AppLocation_QemuEDK2X64 = "AppLocation.QemuEDK2X64";
+	public const string AppLocation_QemuEDK2ARM = "AppLocation.QemuEDK2ARM";
+	public const string AppLocation_VirtualBox = "AppLocation.VirtualBox";
 
 	public const string Compiler_BaseAddress = "Compiler.BaseAddress";
 	public const string Compiler_Binary = "Compiler.Binary";
@@ -43,7 +43,7 @@ public static class Name
 	public const string Debugger_WatchFile = "Debugger.WatchFile";
 	public const string DefaultFolder = "DefaultFolder";
 	public const string Emulator = "Emulator";
-	public const string Emulator_Cores = "Emulator.Cores";  //
+	public const string Emulator_Cores = "Emulator.Cores";
 	public const string Emulator_Display = "Emulator.Display";
 	public const string Emulator_GDB = "Emulator.GDB";
 	public const string Emulator_MaxRuntime = "Emulator.MaxRuntime";
@@ -52,6 +52,7 @@ public static class Name
 	public const string Emulator_Serial_Host = "Emulator.Serial.Host";
 	public const string Emulator_Serial_Pipe = "Emulator.Serial.Pipe";
 	public const string Emulator_Serial_Port = "Emulator.Serial.Port";
+
 	public const string Emulator_SVGA = "Emulator.SVGA";
 	public const string Explorer_DebugDiagnostic = "Explorer.DebugDiagnostic";
 	public const string Explorer_Filter = "Explorer.Filter";
@@ -109,6 +110,12 @@ public static class Name
 	public const string UnitTest_Connection_TimeOut = "UnitTest.Connection.TimeOut";
 	public const string UnitTest_Filter = "UnitTest.Filter";
 	public const string UnitTest_MaxErrors = "UnitTest.MaxErrors";
+
+	public const string Image_DiskBlocks = "Image.DiskBlocks";
+	public const string Image_VolumeLabel = "Image.VolumeLabel";
+	public const string Image_MasterBootRecordFile = "Image.MasterBootRecordFile";
+	public const string Image_BootBlockFile = "Image.BootBlockFile";
+	public const string Launcher_Serial_File = "Launcher.Serial_File";
 
 	public const string X86_InterruptMethodName = "X86.InterruptMethodName";
 }
