@@ -26,7 +26,7 @@ public class GenericHostBridgeController : BaseDeviceDriver, IHostBridgeControll
 	public override void Stop() => Device.Status = DeviceStatus.Offline;
 
 	// TODO: Fix
-	bool IHostBridgeController.CPUReset()
+	public bool CPUReset()
 	{
 		var pciDevice = (PCIDevice)Device.Parent.DeviceDriver;
 		var pciController = (IPCIControllerLegacy)Device.Parent.Parent.DeviceDriver;
@@ -40,7 +40,7 @@ public class GenericHostBridgeController : BaseDeviceDriver, IHostBridgeControll
 		return false;
 	}
 
-	void IHostBridgeController.SetCPUResetInformation(byte address, byte value)
+	public void SetCPUResetInformation(byte address, byte value)
 	{
 		resetAddress = address;
 		resetValue = value;

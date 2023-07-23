@@ -6,28 +6,28 @@ namespace Mosa.Kernel.BareMetal.BootMemory;
 
 public struct BootMemoryMapEntry
 {
-	private readonly Pointer Entry;
+	private readonly Pointer Pointer;
 
-	public BootMemoryMapEntry(Pointer entry) => Entry = entry;
+	public BootMemoryMapEntry(Pointer entry) => Pointer = entry;
 
 	public Pointer StartAddress
 	{
-		get => Entry.LoadPointer();
-		set => Entry.StorePointer(value);
+		get => Pointer.LoadPointer();
+		set => Pointer.StorePointer(value);
 	}
 
 	public ulong Size
 	{
-		get => Entry.Load64(Pointer.Size);
-		set => Entry.Store64(Pointer.Size, value);
+		get => Pointer.Load64(Pointer.Size);
+		set => Pointer.Store64(Pointer.Size, value);
 	}
 
 	public Pointer EndAddress => StartAddress + Size;
 
 	public BootMemoryType Type
 	{
-		get => (BootMemoryType)Entry.Load8(Pointer.Size + sizeof(ulong));
-		set => Entry.Store8(Pointer.Size + sizeof(ulong), (byte)value);
+		get => (BootMemoryType)Pointer.Load8(Pointer.Size + sizeof(ulong));
+		set => Pointer.Store8(Pointer.Size + sizeof(ulong), (byte)value);
 	}
 
 	public bool IsAvailable => Type == BootMemoryType.Available;

@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Kernel.BareMetal;
 using Mosa.Kernel.BareMetal.x86;
+using Mosa.Runtime.Plug;
 
 namespace Mosa.BareMetal.HelloWorld.x86;
 
@@ -19,5 +21,11 @@ public static class Boot
 
 		while (true)
 		{ }
+	}
+
+	//[Plug("Mosa.Runtime.StartUp::BootOptions")]
+	public static void SetBootOptions()
+	{
+		BootOptions.EnableDebugOutput = true;
 	}
 }

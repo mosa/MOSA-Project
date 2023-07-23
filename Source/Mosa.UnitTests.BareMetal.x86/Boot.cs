@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Kernel.BareMetal;
 using Mosa.Kernel.BareMetal.x86;
+using Mosa.Runtime.Plug;
 using Mosa.UnitTests.Framework;
 using Mosa.UnitTests.Optimization;
 
@@ -20,13 +22,15 @@ public static class Boot
 
 		UnitTestEngine.Setup(0x3F8); // Serial.COM1
 
-		Screen.Color = 0x0;
-		Screen.Clear();
-		Screen.GotoTop();
-		Screen.Color = 0x0E; // ScreenColor.Yellow;
-		Screen.Write("MOSA OS Version 2.0 - UnitTest");
-		Screen.NextLine();
-		Screen.NextLine();
+		Console.SetBackground(ConsoleColor.Blue);
+		Console.ClearScreen();
+		Console.GotoTop();
+		Console.SetForground(ConsoleColor.Yellow);
+		Console.Write("MOSA OS Version 2.0 - UnitTest");
+		Console.WriteLine();
+		Console.WriteLine();
+
+		UnitTestEngine.DisplayUpdate();
 
 		UnitTestEngine.Setup(1);
 
@@ -42,5 +46,11 @@ public static class Boot
 	{
 		// required to force assembly to be referenced and loaded
 		CommonTests.OptimizationTest1();
+	}
+
+	[Plug("Mosa.Runtime.StartUp::BootOptions")]
+	public static void SetBootOptions()
+	{
+		BootOptions.EnableDebugOutput = false;
 	}
 }

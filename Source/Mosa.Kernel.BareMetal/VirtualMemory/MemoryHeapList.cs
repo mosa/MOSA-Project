@@ -6,21 +6,21 @@ namespace Mosa.Kernel.BareMetal.VirtualMemory;
 
 public struct MemoryHeapList
 {
-	private readonly Pointer Entry;
+	private readonly Pointer Pointer;
 
 	public MemoryHeapList(Pointer entry)
 	{
-		Entry = entry;
+		Pointer = entry;
 	}
 
 	public uint Count
 	{
-		get => Entry.Load32();
-		set => Entry.Store32(value);
+		get => Pointer.Load32();
+		set => Pointer.Store32(value);
 	}
 
 	public MemoryHeap GetHeapEntry(uint index)
 	{
-		return new MemoryHeap(Entry + sizeof(uint) + Pointer.Size * 2 * index);
+		return new MemoryHeap(Pointer + sizeof(uint) + Pointer.Size * 2 * index);
 	}
 }

@@ -2236,6 +2236,8 @@ public static class IDT
 
 				if (cr2 >= 0xF0000000u)
 				{
+					Debug.WriteLine("CR2: ", new Hex8(cr2));
+
 					Error(stack, "Invalid Access Above 0xF0000000");
 					break;
 				}
@@ -2277,8 +2279,31 @@ public static class IDT
 
 	private static unsafe void Error(IDTStackEntry stack, string message)
 	{
-		Debug.Write("***IDT Error***");
+		Debug.WriteLine("***IDT Error***");
 		Debug.WriteLine(message);
+		Debug.WriteLine("Stack: ", new Hex8(stack.Pointer));
+		Debug.WriteLine("EIP: ", new Hex8(stack.EIP));
+		Debug.WriteLine("ESP: ", new Hex8(stack.ESP));
+		Debug.WriteLine("EBP: ", new Hex8(stack.EBP));
+		Debug.WriteLine("EAX: ", new Hex8(stack.EAX));
+		Debug.WriteLine("EBX: ", new Hex8(stack.EBX));
+		Debug.WriteLine("ECX: ", new Hex8(stack.ECX));
+		Debug.WriteLine("EDX: ", new Hex8(stack.EDX));
+		Debug.WriteLine("EDI: ", new Hex8(stack.EDI));
+		Debug.WriteLine("ESI: ", new Hex8(stack.ESI));
+
+		var frame = new Pointer(stack.EBP);
+		var depth = 0u;
+
+		while (!frame.IsNull && depth++ < 5)
+		{
+			var previousEIP = frame.LoadPointer(4);
+
+			Debug.WriteLine("Depth: ", depth, " Return EIP:", new Hex8(previousEIP));
+
+			frame = frame.LoadPointer();
+		}
+
 		Debug.Fatal();
 	}
 

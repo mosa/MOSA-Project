@@ -6,9 +6,7 @@ namespace Mosa.DeviceDriver.ISA.ACPI;
 
 public struct RSDT
 {
-	private readonly Pointer Entry;
-
-	public readonly Pointer Pointer => Entry;
+	public readonly Pointer Pointer;
 
 	public readonly uint Size => Offset.Size;
 
@@ -19,9 +17,9 @@ public struct RSDT
 		public const int Size = PointerToOtherSDT + (8 * 4);
 	}
 
-	public RSDT(Pointer entry) => Entry = entry;
+	public RSDT(Pointer entry) => Pointer = entry;
 
 	public readonly ACPISDTHeader ACPISDTHeader { get { return new ACPISDTHeader(Pointer + Offset.ACPISDTHeader); } }
 
-	public uint GetPointerToOtherSDT(uint index) => Entry.Load32(Offset.PointerToOtherSDT + 4 * index);
+	public uint GetPointerToOtherSDT(uint index) => Pointer.Load32(Offset.PointerToOtherSDT + 4 * index);
 }

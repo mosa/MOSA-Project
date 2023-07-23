@@ -24,10 +24,6 @@ public class UnitTestEngine : IDisposable
 
 	public bool IsAborted => Aborted;
 
-	public string TestAssemblyPath { get; set; }
-
-	public string TestSuiteFile { get; set; }
-
 	public TypeSystem TypeSystem { get; internal set; }
 
 	public MosaLinker Linker { get; internal set; }
@@ -77,6 +73,7 @@ public class UnitTestEngine : IDisposable
 		MosaSettings.Merge(mosaSettings);
 		SetRequiredSettings();
 		MosaSettings.NormalizeSettings();
+		MosaSettings.ExpandSearchPaths();
 
 		Initialize();
 	}
@@ -97,14 +94,13 @@ public class UnitTestEngine : IDisposable
 
 	private void Initialize()
 	{
-		if (TestAssemblyPath == null)
+		if (MosaSettings.SourceFiles == null || MosaSettings.SourceFiles.Count == 0)
 		{
-			TestAssemblyPath = AppContext.BaseDirectory;
-		}
+			MosaSettings.AddSourceFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"Mosa.UnitTests.{MosaSettings.Platform}.dll"));
 
-		if (TestSuiteFile == null)
-		{
-			TestSuiteFile = $"Mosa.UnitTests.{MosaSettings.Platform}.dll";
+			//MosaSettings.AddSearchPath(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory));
+
+			Console.WriteLine(AppDomain.CurrentDomain.BaseDirectory);
 		}
 
 		Aborted = !Compile();
@@ -236,9 +232,9 @@ public class UnitTestEngine : IDisposable
 	{
 		Stopwatch.Restart();
 
-		MosaSettings.AddSearchPath(TestAssemblyPath);
-		MosaSettings.ClearSourceFiles();
-		MosaSettings.AddSourceFile(Path.Combine(TestAssemblyPath, TestSuiteFile));
+		//MosaSettings.AddSearchPath(TestAssemblyPath);
+		//MosaSettings.ClearSourceFiles();
+		//MosaSettings.AddSourceFile(Path.Combine(TestAssemblyPath, TestSuiteFile));
 
 		var compilerHook = CreateCompilerHook();
 

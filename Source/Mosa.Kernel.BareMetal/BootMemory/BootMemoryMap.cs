@@ -107,7 +107,7 @@ public static class BootMemoryMap
 		Debug.WriteLine("BootMemoryMap - Dump:");
 		Debug.WriteLine("=====================");
 		Debug.Write("Entries: ");
-		Debug.WriteValue(List.Count);
+		Debug.Write(List.Count);
 		Debug.WriteLine();
 
 		for (var slot = 0u; slot < List.Count; slot++)
@@ -115,11 +115,11 @@ public static class BootMemoryMap
 			var entry = GetBootMemoryMapEntry(slot);
 
 			Debug.Write("Start: 0x");
-			Debug.WriteValue(new Hex8(entry.StartAddress));
+			Debug.Write(new Hex8(entry.StartAddress));
 			Debug.Write(" Size: 0x");
-			Debug.WriteValue(new Hex8(entry.Size));
+			Debug.Write(new Hex8(entry.Size));
 			Debug.Write(" Type: ");
-			Debug.WriteValue((byte)entry.Type);
+			Debug.Write((ulong)(byte)entry.Type);
 			Debug.WriteLine();
 		}
 

@@ -39,6 +39,10 @@ public static class Debug
 	{
 		WriteLine("***Fatal***");
 		Kill();
+
+		while (true)
+		{
+		}
 	}
 
 	public static void Assert(bool condition, string message = null)
@@ -58,7 +62,7 @@ public static class Debug
 
 		Write("Assert failed: ");
 		Write(message);
-		WriteValue(value);
+		Write(value);
 		WriteLine();
 		Kill();
 	}
@@ -115,12 +119,15 @@ public static class Debug
 			return;
 
 		Write(message);
-		WriteValue(value);
+		Write(value);
 		Write(NewLine);
 	}
 
 	public static void WriteLine(string message, long value)
 	{
+		if (!IsEnabled)
+			return;
+
 		WriteLine(message, (ulong)value);
 	}
 
@@ -130,20 +137,56 @@ public static class Debug
 			return;
 
 		Write(message1);
-		WriteValue(value1);
+		Write(value1);
 		Write(message2);
-		WriteValue(value2);
+		Write(value2);
 		Write(NewLine);
 	}
 
-	public static void WriteValue(Hex value)
+	public static void WriteLine(string message1, ulong value1, string message2, Hex8 value2)
 	{
+		if (!IsEnabled)
+			return;
+
+		Write(message1);
+		Write(value1);
+		Write(message2);
+		Write(value2);
+		Write(NewLine);
+	}
+
+	public static void Write(Hex value)
+	{
+		if (!IsEnabled)
+			return;
+
 		WriteValue(value.Value, 16, -1);
 	}
 
-	public static void WriteValue(Hex8 value)
+	public static void Write(Hex8 value)
 	{
+		if (!IsEnabled)
+			return;
+
 		WriteValue(value.Value, 16, 8);
+	}
+
+	public static void WriteLine(Hex value)
+	{
+		if (!IsEnabled)
+			return;
+
+		WriteValue(value.Value, 16, -1);
+		WriteLine();
+	}
+
+	public static void WriteLine(Hex8 value)
+	{
+		if (!IsEnabled)
+			return;
+
+		WriteValue(value.Value, 16, 8);
+		WriteLine();
 	}
 
 	public static void WriteLine(string message, Hex value)
@@ -152,7 +195,17 @@ public static class Debug
 			return;
 
 		Write(message);
-		WriteValue(value);
+		Write(value);
+		Write(NewLine);
+	}
+
+	public static void WriteLine(string message, Hex8 value)
+	{
+		if (!IsEnabled)
+			return;
+
+		Write(message);
+		Write(value);
 		Write(NewLine);
 	}
 
@@ -162,9 +215,9 @@ public static class Debug
 			return;
 
 		Write(message1);
-		WriteValue(value1);
+		Write(value1);
 		Write(message2);
-		WriteValue(value2);
+		Write(value2);
 		Write(NewLine);
 	}
 
@@ -174,20 +227,20 @@ public static class Debug
 			return;
 
 		Write(message1);
-		WriteValue(value1);
+		Write(value1);
 		Write(message2);
-		WriteValue(value2);
+		Write(value2);
 		Write(NewLine);
 	}
 
 	// Following 4 methods copied from Console.cs
 
-	public static void WriteValue(ulong value)
+	public static void Write(ulong value)
 	{
 		WriteValue(value, 10, -1);
 	}
 
-	public static void WriteValue(ulong value, int length)
+	public static void Write(ulong value, int length)
 	{
 		WriteValue(value, 10, length);
 	}

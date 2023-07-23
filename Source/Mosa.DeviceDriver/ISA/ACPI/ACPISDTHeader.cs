@@ -6,9 +6,7 @@ namespace Mosa.DeviceDriver.ISA.ACPI;
 
 public struct ACPISDTHeader
 {
-	private readonly Pointer Entry;
-
-	public readonly Pointer Pointer => Entry;
+	public readonly Pointer Pointer;
 
 	public readonly uint Size = Offset.Size;
 
@@ -26,23 +24,23 @@ public struct ACPISDTHeader
 		public const int Size = CreatorRevision + 4;
 	}
 
-	public ACPISDTHeader(Pointer entry) => Entry = entry;
+	public ACPISDTHeader(Pointer entry) => Pointer = entry;
 
-	public readonly uint Signature => Entry.Load32(Offset.Signature);
+	public readonly uint Signature => Pointer.Load32(Offset.Signature);
 
-	public readonly uint Length => Entry.Load32(Offset.Length);
+	public readonly uint Length => Pointer.Load32(Offset.Length);
 
-	public readonly byte Revision => Entry.Load8(Offset.Revision);
+	public readonly byte Revision => Pointer.Load8(Offset.Revision);
 
-	public readonly byte Checksum => Entry.Load8(Offset.Checksum);
+	public readonly byte Checksum => Pointer.Load8(Offset.Checksum);
 
-	public byte GetOEMID(int index) => Entry.Load8(Offset.OEMID + index);
+	public byte GetOEMID(int index) => Pointer.Load8(Offset.OEMID + index);
 
-	public byte GetOEMTableID(int index) => Entry.Load8(Offset.OEMTableID + index);
+	public byte GetOEMTableID(int index) => Pointer.Load8(Offset.OEMTableID + index);
 
-	public readonly uint OEMRevision => Entry.Load32(Offset.OEMRevision);
+	public readonly uint OEMRevision => Pointer.Load32(Offset.OEMRevision);
 
-	public readonly uint CreatorID => Entry.Load32(Offset.CreatorID);
+	public readonly uint CreatorID => Pointer.Load32(Offset.CreatorID);
 
-	public readonly uint CreatorRevision => Entry.Load32(Offset.CreatorRevision);
+	public readonly uint CreatorRevision => Pointer.Load32(Offset.CreatorRevision);
 }

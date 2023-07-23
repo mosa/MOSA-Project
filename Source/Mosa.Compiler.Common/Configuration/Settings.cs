@@ -259,7 +259,7 @@ public sealed class Settings
 			return;
 
 		var property = CreateProperty(fullname);
-		property.List.Add(value);
+		property.List.AddIfNew(value);
 	}
 
 	public void AddPropertyListValueIfNew(string fullname, string value)

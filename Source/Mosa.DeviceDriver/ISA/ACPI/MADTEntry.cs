@@ -6,9 +6,7 @@ namespace Mosa.DeviceDriver.ISA.ACPI;
 
 public struct MADTEntry
 {
-	private readonly Pointer Entry;
-
-	public readonly Pointer Pointer => Entry;
+	public readonly Pointer Pointer;
 
 	public readonly uint Size => Offset.Size;
 
@@ -19,9 +17,9 @@ public struct MADTEntry
 		public const int Size = Length + 1;
 	}
 
-	public MADTEntry(Pointer entry) => Entry = entry;
+	public MADTEntry(Pointer entry) => Pointer = entry;
 
-	public readonly byte Type => Entry.Load8(Offset.Type);
+	public readonly byte Type => Pointer.Load8(Offset.Type);
 
-	public readonly byte Length => Entry.Load8(Offset.Length);
+	public readonly byte Length => Pointer.Load8(Offset.Length);
 }

@@ -133,9 +133,13 @@ public static class Boot
 
 		var system = new X86System();
 
-		//Console.Write(ConsoleColor.BrightGreen, "> X86System...");
-		//deviceService.Initialize(system, null);
-		//Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
+		Debug.WriteLine("Name: ");
+
+		Console.WriteLine(system.Device.Name);
+
+		Console.Write(ConsoleColor.BrightGreen, "> X86System...");
+		deviceService.Initialize(system, null);
+		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 
 		Debug.WriteLine("Done");
 		Debug.Kill();

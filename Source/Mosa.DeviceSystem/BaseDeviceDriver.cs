@@ -9,7 +9,7 @@ namespace Mosa.DeviceSystem;
 /// </summary>
 public abstract class BaseDeviceDriver
 {
-	protected Device Device;
+	public Device Device;   // Future: Set to private
 
 	protected DeviceService DeviceService => Device.DeviceService;
 

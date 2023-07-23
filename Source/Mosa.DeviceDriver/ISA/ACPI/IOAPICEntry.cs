@@ -6,9 +6,7 @@ namespace Mosa.DeviceDriver.ISA.ACPI;
 
 public struct IOAPICEntry
 {
-	private readonly Pointer Entry;
-
-	public readonly Pointer Pointer => Entry;
+	public readonly Pointer Pointer;
 
 	public readonly uint Size = Offset.Size;
 
@@ -22,15 +20,15 @@ public struct IOAPICEntry
 		public const int Size = GlobalSystemInterruptBase + 4;
 	}
 
-	public IOAPICEntry(Pointer entry) => Entry = entry;
+	public IOAPICEntry(Pointer entry) => Pointer = entry;
 
 	public readonly MADTEntry MADTEntry { get { return new MADTEntry(Pointer + Offset.MADTEntry); } }
 
-	public readonly byte ApicID => Entry.Load8(Offset.ApicID);
+	public readonly byte ApicID => Pointer.Load8(Offset.ApicID);
 
-	public readonly byte Reserved => Entry.Load8(Offset.Reserved);
+	public readonly byte Reserved => Pointer.Load8(Offset.Reserved);
 
-	public readonly uint ApicAddress => Entry.Load8(Offset.ApicAddress);
+	public readonly uint ApicAddress => Pointer.Load8(Offset.ApicAddress);
 
-	public readonly uint GlobalSystemInterruptBase => Entry.Load8(Offset.GlobalSystemInterruptBase);
+	public readonly uint GlobalSystemInterruptBase => Pointer.Load8(Offset.GlobalSystemInterruptBase);
 }
