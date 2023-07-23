@@ -72,8 +72,8 @@ public class UnitTestEngine : IDisposable
 		MosaSettings.SetDetfaultSettings();
 		MosaSettings.Merge(mosaSettings);
 		SetRequiredSettings();
-		MosaSettings.ExpandSearchPaths();
 		MosaSettings.NormalizeSettings();
+		MosaSettings.ExpandSearchPaths();
 
 		Initialize();
 	}
