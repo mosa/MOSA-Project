@@ -318,6 +318,21 @@ public sealed class String : IEnumerable, IEnumerable<char>, IEquatable<String>,
 		return str;
 	}
 
+	public string Insert(int startIndex, string str)
+	{
+		return this.Substring(0, startIndex) + str + this.Substring(startIndex);
+	}
+
+	public string Remove(int startIndex, int count)
+	{
+		return this.Substring(0, startIndex) + this.Substring(startIndex + count);
+	}
+
+	public static string Format(string format, params object[] args)
+	{
+		return format;
+	}
+
 	public bool Equals(string s)
 	{
 		return Equals(this, s);
@@ -715,6 +730,19 @@ public sealed class String : IEnumerable, IEnumerable<char>, IEquatable<String>,
 	public static bool IsNullOrEmpty(string value)
 	{
 		return (value == null) || (value.Length == 0);
+	}
+
+	public static bool IsNullOrWhiteSpace(string value)
+	{
+		if (value == null) return true;
+
+		for (var i = 0; i < value.Length; i++)
+		{
+			if (!char.IsWhiteSpace(value[i]))
+				return false;
+		}
+
+		return true;
 	}
 
 	public bool Contains(string value)
