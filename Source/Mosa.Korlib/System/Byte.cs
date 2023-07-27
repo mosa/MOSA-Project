@@ -57,6 +57,38 @@ public struct Byte: IComparable, IComparable<byte>, IEquatable<byte>
 		return m_value;
 	}
 
+	public static bool TryParse(string s, out byte result)
+	{
+		try
+		{
+			result = Parse(s);
+			return true;
+		}
+		catch
+		{
+			result = 0;
+			return false;
+		}
+	}
+
+	public static byte Parse(string s)
+	{
+		const string digits = "0123456789";
+		byte result = 0;
+
+		for (int i = 0; i < s.Length; i++)
+		{
+			int ind = digits.IndexOf(s[i]);
+			if (ind == -1)
+			{
+				throw new Exception("Format is incorrect");
+			}
+			result = (byte)(result * 10 + ind);
+		}
+
+		return result;
+	}
+
 	public override string ToString()
 	{
 		return int.CreateString(m_value, false, false);
