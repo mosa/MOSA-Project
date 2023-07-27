@@ -83,6 +83,8 @@
 			stageLabel = new System.Windows.Forms.Label();
 			tbInstructions = new System.Windows.Forms.RichTextBox();
 			tabStageDebug = new System.Windows.Forms.TabPage();
+			panel1 = new System.Windows.Forms.Panel();
+			cbGraphviz = new System.Windows.Forms.CheckBox();
 			cbDebugStages = new System.Windows.Forms.ComboBox();
 			label3 = new System.Windows.Forms.Label();
 			tbDebugResult = new System.Windows.Forms.RichTextBox();
@@ -440,10 +442,10 @@
 			cbEnableMethodScanner.Size = new System.Drawing.Size(206, 22);
 			cbEnableMethodScanner.Text = "Enable Method Scanner";
 			// 
-			// EnableDebugDiagnostic
+			// cbEnableDebugDiagnostic
 			// 
 			cbEnableDebugDiagnostic.CheckOnClick = true;
-			cbEnableDebugDiagnostic.Name = "EnableDebugDiagnostic";
+			cbEnableDebugDiagnostic.Name = "cbEnableDebugDiagnostic";
 			cbEnableDebugDiagnostic.Size = new System.Drawing.Size(206, 22);
 			cbEnableDebugDiagnostic.Text = "Enable Debug Diagnostic";
 			// 
@@ -634,6 +636,8 @@
 			// tabStageDebug
 			// 
 			tabStageDebug.BackColor = System.Drawing.Color.Gainsboro;
+			tabStageDebug.Controls.Add(panel1);
+			tabStageDebug.Controls.Add(cbGraphviz);
 			tabStageDebug.Controls.Add(cbDebugStages);
 			tabStageDebug.Controls.Add(label3);
 			tabStageDebug.Controls.Add(tbDebugResult);
@@ -643,6 +647,26 @@
 			tabStageDebug.Size = new System.Drawing.Size(683, 361);
 			tabStageDebug.TabIndex = 1;
 			tabStageDebug.Text = "Debug";
+			// 
+			// panel1
+			// 
+			panel1.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+			panel1.AutoScroll = true;
+			panel1.Location = new System.Drawing.Point(5, 40);
+			panel1.Name = "panel1";
+			panel1.Size = new System.Drawing.Size(674, 321);
+			panel1.TabIndex = 45;
+			// 
+			// cbGraphviz
+			// 
+			cbGraphviz.AutoSize = true;
+			cbGraphviz.Location = new System.Drawing.Point(523, 10);
+			cbGraphviz.Name = "cbGraphviz";
+			cbGraphviz.Size = new System.Drawing.Size(73, 21);
+			cbGraphviz.TabIndex = 44;
+			cbGraphviz.Text = "Display";
+			cbGraphviz.UseVisualStyleBackColor = true;
+			cbGraphviz.CheckedChanged += cbGraphviz_CheckedChanged;
 			// 
 			// cbDebugStages
 			// 
@@ -883,7 +907,7 @@
 			gridMethodCounters.ShowCellToolTips = false;
 			gridMethodCounters.ShowEditingIcon = false;
 			gridMethodCounters.ShowRowErrors = false;
-			gridMethodCounters.Size = new System.Drawing.Size(481, 335);
+			gridMethodCounters.Size = new System.Drawing.Size(481, 334);
 			gridMethodCounters.TabIndex = 7;
 			// 
 			// tabPage2
@@ -1035,7 +1059,7 @@
 			gridCompilerCounters.ShowCellToolTips = false;
 			gridCompilerCounters.ShowEditingIcon = false;
 			gridCompilerCounters.ShowRowErrors = false;
-			gridCompilerCounters.Size = new System.Drawing.Size(481, 333);
+			gridCompilerCounters.Size = new System.Drawing.Size(481, 332);
 			gridCompilerCounters.TabIndex = 7;
 			// 
 			// tabPage5
@@ -1160,6 +1184,7 @@
 			tabControl.ResumeLayout(false);
 			tabStages.ResumeLayout(false);
 			tabStageDebug.ResumeLayout(false);
+			tabStageDebug.PerformLayout();
 			tabTransforms.ResumeLayout(false);
 			tabTransforms.PerformLayout();
 			tabMethodCounters.ResumeLayout(false);
@@ -1243,7 +1268,6 @@
 		private System.Windows.Forms.TabPage tabStageDebug;
 		private System.Windows.Forms.ComboBox cbDebugStages;
 		private System.Windows.Forms.Label label3;
-		private System.Windows.Forms.RichTextBox tbDebugResult;
 		private System.Windows.Forms.TabPage tabMethodCounters;
 		private System.Windows.Forms.TabControl tabControl1;
 		private System.Windows.Forms.TabPage tabPage1;
@@ -1281,5 +1305,8 @@
 		private System.Windows.Forms.ToolStripMenuItem removeIRNop;
 		private System.Windows.Forms.ToolStripMenuItem cbEnableDebugDiagnostic;
 		private System.Windows.Forms.ToolStripButton tsbRefresh;
+		private System.Windows.Forms.CheckBox cbGraphviz;
+		private System.Windows.Forms.RichTextBox tbDebugResult;
+		private System.Windows.Forms.Panel panel1;
 	}
 }

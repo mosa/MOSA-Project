@@ -2236,8 +2236,6 @@ public static class IDT
 
 				if (cr2 >= 0xF0000000u)
 				{
-					Debug.WriteLine("CR2: ", new Hex8(cr2));
-
 					Error(stack, "Invalid Access Above 0xF0000000");
 					break;
 				}
@@ -2291,6 +2289,10 @@ public static class IDT
 		Debug.WriteLine("EDX: ", new Hex8(stack.EDX));
 		Debug.WriteLine("EDI: ", new Hex8(stack.EDI));
 		Debug.WriteLine("ESI: ", new Hex8(stack.ESI));
+		Debug.WriteLine("IRQ: ", new Hex8(stack.Interrupt));
+		Debug.WriteLine("CR2: ", new Hex8(Native.GetCR2()));
+		Debug.WriteLine("EFLAGS: ", new Hex8(stack.EFLAGS));
+		Debug.WriteLine("Error Code: ", new Hex8(stack.ErrorCode));
 
 		var frame = new Pointer(stack.EBP);
 		var depth = 0u;

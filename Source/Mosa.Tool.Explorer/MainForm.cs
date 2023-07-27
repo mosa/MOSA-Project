@@ -4,12 +4,12 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using Mosa.Compiler.Common;
-using Mosa.Compiler.Common.Configuration;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.CompilerStages;
 using Mosa.Compiler.Framework.Trace;
@@ -24,6 +24,8 @@ namespace Mosa.Tool.Explorer;
 
 public partial class MainForm : Form
 {
+	private const string graphviz = "C:\\Program Files\\Graphviz\\bin\\dot.exe";
+
 	#region Classes
 
 	protected class CounterEntry
@@ -64,6 +66,8 @@ public partial class MainForm : Form
 
 	private Stopwatch Stopwatch = new Stopwatch();
 
+	private bool GraphwizFound = false;
+
 	public MainForm()
 	{
 		InitializeComponent();
@@ -83,6 +87,11 @@ public partial class MainForm : Form
 		ClearAll();
 
 		RegisterPlatforms();
+
+		GraphwizFound = File.Exists(graphviz);
+
+		cbGraphviz.Checked = GraphwizFound;
+		cbGraphviz.Enabled = GraphwizFound;
 
 		Stopwatch.Restart();
 	}
@@ -1010,6 +1019,8 @@ public partial class MainForm : Form
 			return;
 
 		tbDebugResult.Text = CreateText(lines);
+
+		UpdateGraphviz();
 	}
 
 	private void UpdateDebugStages()
@@ -1264,5 +1275,72 @@ public partial class MainForm : Form
 		{
 			OpenFile();
 		}
+	}
+
+	private bool DisplayGraphviz()
+	{
+		panel1.Controls.Clear();
+
+		if (!GraphwizFound)
+			return false;
+
+		if (!cbGraphviz.Checked)
+			return false;
+
+		if (!tbDebugResult.Text.Contains("digraph blocks"))
+			return false;
+
+		var dot = Path.GetTempFileName();
+		var bmp = Path.GetTempFileName();
+
+		try
+		{
+			File.WriteAllText(dot, tbDebugResult.Text);
+
+			var process = new Process();
+
+			process.StartInfo.FileName = graphviz;
+			process.StartInfo.Arguments = $"dot -Tbmp -o \"{bmp}\" \"{dot}\"";
+			process.StartInfo.CreateNoWindow = true;
+
+			process.Start();
+			process.WaitForExit();
+
+			var file = File.ReadAllBytes(bmp);
+
+			using var stream = new MemoryStream(file);
+			var bitmap = new Bitmap(stream);
+
+			var picture = new PictureBox();
+			panel1.Controls.Add(picture);
+
+			picture.Size = bitmap.Size;
+			picture.SizeMode = PictureBoxSizeMode.AutoSize;
+			picture.Image = bitmap;
+			picture.BorderStyle = BorderStyle.None;
+			picture.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom | AnchorStyles.Top;
+
+			panel1.AutoScrollMinSize = bitmap.Size;
+		}
+		finally
+		{
+			File.Delete(dot);
+			File.Delete(bmp);
+		}
+
+		return true;
+	}
+
+	private void UpdateGraphviz()
+	{
+		var graphviz = DisplayGraphviz();
+
+		panel1.Visible = graphviz;
+		tbDebugResult.Visible = !graphviz;
+	}
+
+	private void cbGraphviz_CheckedChanged(object sender, EventArgs e)
+	{
+		UpdateGraphviz();
 	}
 }
