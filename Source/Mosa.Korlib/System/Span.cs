@@ -137,4 +137,14 @@ public readonly ref struct Span<T>
 
 		return new Span<T>(ref Unsafe.Add(ref _pointer.Value, (nint)(uint)start), length);
 	}
+
+	public override string ToString()
+	{
+		if (typeof(T) == typeof(char))
+		{
+			return new string(new ReadOnlySpan<char>(ref Unsafe.As<T, char>(ref this._pointer.Value), this._length));
+		}
+
+		return $"{nameof(System)}.{nameof(Span<T>)}";
+	}
 }
