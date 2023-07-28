@@ -172,14 +172,14 @@ internal class ClrMetadataResolver
 					value = metadata.Loader.GetType(sig);
 					break;
 				}
-			case CAArgument[] valueArray:
+			case List<CAArgument> values:
 				{
-					var resultArray = new MosaCustomAttribute.Argument[valueArray.Length];
+					var resultArray = new MosaCustomAttribute.Argument[values.Count];
 					for (var i = 0; i < resultArray.Length; i++)
 					{
-						resultArray[i] = ToMosaCAArgument(valueArray[i]);
+						resultArray[i] = ToMosaCAArgument(values[i]);
 					}
-
+					value = resultArray;
 					break;
 				}
 		}
