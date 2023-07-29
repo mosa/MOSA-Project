@@ -276,8 +276,8 @@ jobs:
           path: bin
       #- name: Install Homebrew
       #  run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-      #- name: Install Qemu
-      #  run: brew install qemu
+      - name: Install Qemu
+        run: brew install qemu
       - name: Unit Test 
         run: dotnet bin/Mosa.Utility.UnitTests.dll -check -o${{ matrix.optimization }}
 
