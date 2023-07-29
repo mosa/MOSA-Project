@@ -72,7 +72,7 @@ jobs:
 
   windows-build-packaging:
     name: Windows Build Packaging
-    needs: [windows-build, linux-build, generate-docs, windows-unit-testing, linux-unit-testing, windows-demo-testing, linux-demo-testing]
+    needs: [windows-build, linux-build, generate-docs, windows-unit-testing, linux-unit-testing, windows-demo-testing, linux-demo-testing, macos-build, macos-unit-testing]
     runs-on: windows-latest
     if: github.event_name == 'push' && github.repository == 'mosa/MOSA-Project' && github.ref == 'refs/heads/master'
     env:
@@ -142,6 +142,34 @@ jobs:
           name: linux-build-artifact
           path: bin
          
+  macos-build:
+    name: MacOS Build
+    runs-on: macos-latest
+    steps:
+      - name: Set net7.0
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'
+      - name: View Build Version
+        run: echo ${{ env.BUILD_VERSION }}
+      - name: View Github Info
+        run: echo repository=${{ github.repository }} event_name=${{ github.event_name }} ref=${{ github.ref }} head_ref=${{ github.head_ref }} base_ref=${{ github.base_ref }}
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Restore nuget Packages
+        run: dotnet restore Source/Mosa.Linux.sln
+      - name: Build
+        run: dotnet build Source/Mosa.Linux.sln
+      #- name: Unit Test
+      #  run: dotnet test Source/Mosa.Linux.sln
+      - name: Store Build Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: macos-build-artifact
+          path: bin
+
   generate-docs:
     name: Generate Documentation
     runs-on: ubuntu-latest
@@ -199,7 +227,6 @@ jobs:
     name: Linux - Unit Test -o${{ matrix.optimization }}
     runs-on: ubuntu-latest
     needs: linux-build
-
     steps:
       - name: Set net7.0
         uses: actions/setup-dotnet@v3
@@ -219,6 +246,35 @@ jobs:
       - name: Install Qemu and Dependencies
         run: sudo apt-get -y -o Acquire::Retries=5 install qemu-system-x86
       - name: Unit Test  
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -check -o${{ matrix.optimization }}
+        
+  macos-unit-testing:
+    strategy:
+      matrix:
+        optimization: [0,1,2,3,4,5,6,7,8,9]
+      fail-fast: false
+    name: MacOS - Unit Test -o${{ matrix.optimization }}
+    runs-on: macos-latest
+    needs: macos-build
+    env:
+      HOMEBREW_NO_INSTALL_CLEANUP: 1
+    steps:
+      - name: Set net7.0
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'
+      #- name: Install Qemu
+      #  run: brew install qemu
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: macos-build-artifact
+          path: bin
+      - name: Unit Test 
         run: dotnet bin/Mosa.Utility.UnitTests.dll -check -o${{ matrix.optimization }}
 
   windows-demo-testing:
@@ -278,3 +334,34 @@ jobs:
         run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.Demo.CoolWorld.x86.dll -o${{ matrix.optimization }} -check -test
       - name: Demo Test - SVGAWorld
         run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.Demo.SVGAWorld.x86.dll -o${{ matrix.optimization }} -check -test
+        
+  #macos-demo-testing:
+  #  strategy:
+  #    matrix:
+  #      optimization: [0,1,2,3,4,5,6,7,8,9]
+  #    fail-fast: false
+  #  name: MacOS - Demo Test -o${{ matrix.optimization }}
+  #  runs-on: macos-latest
+  #  needs: macos-build
+  #  steps:
+  #    - name: Set net7.0
+  #      uses: actions/setup-dotnet@v3
+  #      with:
+  #        dotnet-version: '7.0.x'
+  #    - name: Checkout
+  #      uses: actions/checkout@v3
+  #      with:
+  #        submodules: recursive
+  #    - name: Download Build Artifact
+  #      uses: actions/download-artifact@v3
+  #      with:
+  #        name: macos-build-artifact
+  #        path: bin
+  #    #- name: Install Qemu
+  #    #  run: brew install qemu
+  #    - name: Demo Test - HelloWorld
+  #      run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.Demo.HelloWorld.x86.dll -o${{ matrix.optimization }} -check -test
+  #    - name: Demo Test - CoolWorld
+  #      run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.Demo.CoolWorld.x86.dll -o${{ matrix.optimization }} -check -test
+  #    - name: Demo Test - SVGAWorld
+  #      run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.Demo.SVGAWorld.x86.dll -o${{ matrix.optimization }} -check -test

@@ -24,8 +24,6 @@ namespace Mosa.Tool.Explorer;
 
 public partial class MainForm : Form
 {
-	private const string graphviz = "C:\\Program Files\\Graphviz\\bin\\dot.exe";
-
 	#region Classes
 
 	protected class CounterEntry
@@ -88,10 +86,6 @@ public partial class MainForm : Form
 
 		RegisterPlatforms();
 
-		GraphwizFound = File.Exists(graphviz);
-
-		cbGraphviz.Checked = GraphwizFound;
-		cbGraphviz.Enabled = GraphwizFound;
 
 		Stopwatch.Restart();
 	}
@@ -114,7 +108,11 @@ public partial class MainForm : Form
 	{
 		MosaSettings.SetDetfaultSettings();
 		MosaSettings.LoadArguments(args);
+		MosaSettings.LoadAppLocations();
+
 		SetRequiredSettings();
+
+		GraphwizFound = File.Exists(MosaSettings.GraphwizApp);
 
 		UpdateDisplay();
 	}
@@ -1070,6 +1068,9 @@ public partial class MainForm : Form
 			"armv8a32" => 2,
 			_ => cbPlatform.SelectedIndex
 		};
+
+		cbGraphviz.Checked = GraphwizFound;
+		cbGraphviz.Enabled = GraphwizFound;
 	}
 
 	private void UpdateInstructionLabels()
@@ -1301,7 +1302,7 @@ public partial class MainForm : Form
 
 			var process = new Process();
 
-			process.StartInfo.FileName = graphviz;
+			process.StartInfo.FileName = MosaSettings.GraphwizApp;
 			process.StartInfo.Arguments = $"dot -Tbmp -o \"{bmp}\" \"{dot}\"";
 			process.StartInfo.CreateNoWindow = true;
 

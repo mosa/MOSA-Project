@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
-using Mosa.Compiler.Common.Configuration;
 
 namespace Mosa.Utility.Configuration;
 
@@ -20,7 +19,7 @@ public static class AppLocationsSettings
 	private static readonly bool IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
 	private static readonly bool IsOSX = RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
 
-	private static readonly string[] LinuxDirectories = new string[] { "/bin", "/usr/bin", "/opt/homebrew/bin" };
+	private static readonly string[] LinuxDirectories = new string[] { "/bin", "/usr/bin", "/opt/homebrew/bin", "/usr/local/bin/", "/usr/local/Cellar" };
 
 	public static void GetAppLocations(MosaSettings mosaSettings)
 	{
@@ -37,6 +36,7 @@ public static class AppLocationsSettings
 		mosaSettings.NdisasmApp = FindNdisasm();
 		mosaSettings.MkisofsApp = FindMkisofs();
 		mosaSettings.GDBApp = FindGDB();
+		mosaSettings.GraphwizApp = FindGraphwiz();
 	}
 
 	private static string FindQemu()
@@ -287,6 +287,17 @@ public static class AppLocationsSettings
 					"/usr/share/OVMF",
 					"/opt/homebrew/share/qemu/"
 				});
+	}
+
+	private static string FindGraphwiz()
+	{
+		return
+			IsWindows ? TryFind("dot.exe",
+				new string[] {
+					@"%ProgramFiles%\Graphviz\bin",
+					@"%ProgramFiles(x86)%\Graphviz\bin",
+				})
+			: TryFind("dot", LinuxDirectories);
 	}
 
 	public static string ReplaceWithParameters(string directory)

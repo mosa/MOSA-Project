@@ -625,6 +625,12 @@ public class MosaSettings
 		set => Settings.SetValue(Name.Multiboot_Video_Depth, value);
 	}
 
+	public string GraphwizApp
+	{
+		get => Settings.GetValue(Name.AppLocation_Graphwiz, null);
+		set => Settings.SetValue(Name.AppLocation_Graphwiz, value);
+	}
+
 	//public bool UnitTestBareMetal
 	//{
 	//	get => Settings.GetValue(Name.UnitTest_BareMetal, false);

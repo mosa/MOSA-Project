@@ -97,10 +97,6 @@ public class UnitTestEngine : IDisposable
 		if (MosaSettings.SourceFiles == null || MosaSettings.SourceFiles.Count == 0)
 		{
 			MosaSettings.AddSourceFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"Mosa.UnitTests.{MosaSettings.Platform}.dll"));
-
-			//MosaSettings.AddSearchPath(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory));
-
-			Console.WriteLine(AppDomain.CurrentDomain.BaseDirectory);
 		}
 
 		Aborted = !Compile();
