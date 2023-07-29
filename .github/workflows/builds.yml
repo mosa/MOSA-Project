@@ -255,7 +255,7 @@ jobs:
       fail-fast: false
     name: MacOS - Unit Test -o${{ matrix.optimization }}
     runs-on: ubuntu-latest
-    needs: linux-build
+    needs: macos-build
     steps:
       - name: Set net7.0
         uses: actions/setup-dotnet@v3
