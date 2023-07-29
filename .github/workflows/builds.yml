@@ -265,6 +265,10 @@ jobs:
         uses: actions/checkout@v3
         with:
           submodules: recursive
+      - name: Homebrew Packages
+        uses: ConorMacBride/install-package@v1
+        with:
+          brew: qemu
       - name: Download Build Artifact
         uses: actions/download-artifact@v3
         with:
@@ -272,8 +276,8 @@ jobs:
           path: bin
       #- name: Install Homebrew
       #  run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-      - name: Install Qemu
-        run: brew install qemu
+      #- name: Install Qemu
+      #  run: brew install qemu
       - name: Unit Test 
         run: dotnet bin/Mosa.Utility.UnitTests.dll -check -o${{ matrix.optimization }}
 
