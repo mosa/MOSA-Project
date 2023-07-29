@@ -72,7 +72,7 @@ jobs:
 
   windows-build-packaging:
     name: Windows Build Packaging
-    needs: [windows-build, linux-build, generate-docs, windows-unit-testing, linux-unit-testing, windows-demo-testing, linux-demo-testing]
+    needs: [windows-build, linux-build, generate-docs, windows-unit-testing, linux-unit-testing, windows-demo-testing, linux-demo-testing, macos-build]
     runs-on: windows-latest
     if: github.event_name == 'push' && github.repository == 'mosa/MOSA-Project' && github.ref == 'refs/heads/master'
     env:
@@ -142,7 +142,7 @@ jobs:
           name: linux-build-artifact
           path: bin
          
-  maxos-build:
+  macos-build:
     name: MacOS Build
     runs-on: macos-13
     steps:
@@ -167,7 +167,7 @@ jobs:
       - name: Store Build Artifact
         uses: actions/upload-artifact@v3
         with:
-          name: linux-build-artifact
+          name: macos-build-artifact
           path: bin
 
   generate-docs:
