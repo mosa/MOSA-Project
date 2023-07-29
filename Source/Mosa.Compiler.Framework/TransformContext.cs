@@ -219,17 +219,17 @@ public sealed class TransformContext
 
 	public void TraceBefore(Context context, BaseTransform transformation, int count)
 	{
-		TraceLog?.Log($"[{context.Block}-{count}] {transformation.Name}");
+		TraceLog?.Log($"{count,-7}\t| {transformation.Name}");
 
 		if (transformation.Log)
 			SpecialTraceLog?.Log($"{transformation.Name}\t{Method.FullName} at {context}");
 
-		TraceLog?.Log($"BEFORE:\t{context}");
+		TraceLog?.Log($"{context.Block}\t| {context}");
 	}
 
 	public void TraceAfter(Context context)
 	{
-		TraceLog?.Log($"AFTER: \t{context}");
+		TraceLog?.Log($"       \t| {context}");
 		TraceLog?.Log();
 	}
 

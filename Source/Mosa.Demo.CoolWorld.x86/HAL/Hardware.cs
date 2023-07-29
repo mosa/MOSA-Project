@@ -86,7 +86,7 @@ public sealed class Hardware : BaseHardwareAbstraction
 	/// <param name="message">The message.</param>
 	public override void DebugWrite(string message)
 	{
-		Boot.Console.Write(message);
+		//Boot.Debug.Write(message);
 	}
 
 	/// <summary>
@@ -95,7 +95,7 @@ public sealed class Hardware : BaseHardwareAbstraction
 	/// <param name="message">The message.</param>
 	public override void DebugWriteLine(string message)
 	{
-		Boot.Console.WriteLine(message);
+		//Boot.Debug.WriteLine(message);
 	}
 
 	/// <summary>

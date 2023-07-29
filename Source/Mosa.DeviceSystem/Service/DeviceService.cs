@@ -109,12 +109,6 @@ public sealed class DeviceService : BaseService
 	{
 		HAL.DebugWriteLine("DeviceService:Initialize()");
 
-		if (deviceDriverRegistryEntry != null)
-		{
-			HAL.DebugWrite($" > Driver: ");
-			HAL.DebugWriteLine(deviceDriverRegistryEntry.Name);
-		}
-
 		var device = new Device
 		{
 			DeviceDriver = deviceDriver,
@@ -146,14 +140,7 @@ public sealed class DeviceService : BaseService
 	{
 		HAL.DebugWriteLine("DeviceService:StartDevice()");
 
-		if (device.Name != null)
-		{
-			HAL.DebugWriteLine("#Device Name Length: " + device.Name.Length.ToString());
-
-			HAL.DebugWrite($" > Device: ");
-
-			HAL.DebugWriteLine(device.Name);
-		}
+		HAL.DebugWriteLine($" # Lock");
 
 		lock (_lock)
 		{
@@ -165,34 +152,46 @@ public sealed class DeviceService : BaseService
 			}
 		}
 
+		HAL.DebugWriteLine($" # Unlock");
+
 		device.Status = DeviceStatus.Initializing;
+
+		HAL.DebugWriteLine($" # Setup");
 
 		device.DeviceDriver.Setup(device);
 
+		HAL.DebugWriteLine($" # Setup [Done]");
+
 		if (device.Status == DeviceStatus.Initializing)
 		{
-			//HAL.DebugWriteLine("DeviceService:StartDevice():Initializing = " + (device.Name ?? string.Empty));
-			//Debug.WriteLine(" > Initializing: ", device.Name);
-
+			HAL.DebugWriteLine(" > Initializing");
 			device.DeviceDriver.Initialize();
+
+			HAL.DebugWrite(" > Initialized: ");
+			HAL.DebugWriteLine(device.Name);
+
 			if (device.Status == DeviceStatus.Initializing)
 			{
-				//HAL.DebugWriteLine("DeviceService:StartDevice():Probing = " + (device.Name ?? string.Empty));
+				HAL.DebugWriteLine(" > Probing");
 				device.DeviceDriver.Probe();
 
 				if (device.Status == DeviceStatus.Available)
 				{
-					//HAL.DebugWriteLine("DeviceService:StartDevice():Starting = " + (device.Name ?? string.Empty));
+					HAL.DebugWriteLine(" > Starting");
 					device.DeviceDriver.Start();
+
+					HAL.DebugWriteLine(" > Started");
 
 					AddInterruptHandler(device);
 				}
 			}
 		}
 
+		HAL.DebugWriteLine($" # ServiceManager.AddEvent");
+
 		ServiceManager.AddEvent(new ServiceEvent(ServiceEventType.Start, device));
 
-		//HAL.DebugWriteLine("DeviceService:StartDevice():Exit");
+		HAL.DebugWriteLine("DeviceService:StartDevice():Exit");
 	}
 
 	#endregion Initialize Devices Drivers
@@ -349,9 +348,11 @@ public sealed class DeviceService : BaseService
 
 	public void AddInterruptHandler(Device device)
 	{
+		HAL.DebugWriteLine("DeviceService::AddInterruptHandler()");
+
 		if (device.Resources != null)
 		{
-			byte irq = device.Resources.IRQ;
+			var irq = device.Resources.IRQ;
 
 			if (irq >= MaxInterrupts)
 				return;
@@ -361,6 +362,8 @@ public sealed class DeviceService : BaseService
 				IRQDispatch[irq].Add(device);
 			}
 		}
+
+		HAL.DebugWriteLine("DeviceService::AddInterruptHandler() [Exit]");
 	}
 
 	public void ReleaseInterruptHandler(Device device)
