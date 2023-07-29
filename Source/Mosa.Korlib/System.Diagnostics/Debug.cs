@@ -32,7 +32,6 @@ public static class Debug
 	[Conditional("DEBUG")]
 	public static void Assert(bool condition, string message, string detailMessageFormat, params object[] args)
 	{
-		//Assert(condition,message, string.Format(detailMessageFormat, args));
 		throw new NotImplementedException();
 	}
 
@@ -75,7 +74,7 @@ public static class Debug
 	[Conditional("DEBUG")]
 	public static void Write(object value)
 	{
-		Write(value, "");
+		Write(value, string.Empty);
 	}
 
 	[Conditional("DEBUG")]
@@ -89,13 +88,14 @@ public static class Debug
 	{
 		if (value == null)
 			return;
-		Console.Write("DEBUG (" + category + "): " + value);
+
+		Write("DEBUG (" + category + "): " + value);
 	}
 
 	[Conditional("DEBUG")]
 	public static void Write(string message, string category)
 	{
-		Console.Write("DEBUG (" + category + "): " + message);
+		Write("DEBUG (" + category + "): " + message);
 	}
 
 	[Conditional("DEBUG")]
@@ -129,21 +129,18 @@ public static class Debug
 	[Conditional("DEBUG")]
 	public static void WriteLine(object value)
 	{
-		WriteLine(value, null);
 	}
 
 	[Conditional("DEBUG")]
 	public static void WriteLine(string message)
 	{
-		WriteLine(message, (string)null);
+		// Needs to be plugged
 	}
 
 	[Conditional("DEBUG")]
 	public static void WriteLine(string format, params object[] args)
 	{
 		throw new NotImplementedException();
-
-		//WriteLine(string.Format(format, args));
 	}
 
 	[Conditional("DEBUG")]
@@ -151,13 +148,14 @@ public static class Debug
 	{
 		if (value == null)
 			return;
-		Console.WriteLine("DEBUG (" + category + "): " + value);
+
+		WriteLine("DEBUG (" + category + "): " + value);
 	}
 
 	[Conditional("DEBUG")]
 	public static void WriteLine(string message, string category)
 	{
-		Console.WriteLine("DEBUG (" + category + "): " + message);
+		WriteLine("DEBUG (" + category + "): " + message);
 	}
 
 	[Conditional("DEBUG")]
@@ -183,14 +181,12 @@ public static class Debug
 	[Conditional("DEBUG")]
 	public static void Print(string message)
 	{
-		Console.Write(message);
+		Write(message);
 	}
 
 	[Conditional("DEBUG")]
 	public static void Print(string format, params object[] args)
 	{
 		throw new NotImplementedException();
-
-		//Print(string.Format(format, args));
 	}
 }

@@ -80,6 +80,12 @@ public static class Debug
 		if (!IsEnabled)
 			return;
 
+		if (message == null)
+		{
+			WriteLine();
+			return;
+		}
+
 		Write(message);
 		Write(NewLine);
 	}

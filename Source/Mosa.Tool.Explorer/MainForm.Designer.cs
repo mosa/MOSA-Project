@@ -83,22 +83,25 @@
 			stageLabel = new System.Windows.Forms.Label();
 			tbInstructions = new System.Windows.Forms.RichTextBox();
 			tabStageDebug = new System.Windows.Forms.TabPage();
-			panel1 = new System.Windows.Forms.Panel();
 			cbGraphviz = new System.Windows.Forms.CheckBox();
 			cbDebugStages = new System.Windows.Forms.ComboBox();
 			label3 = new System.Windows.Forms.Label();
 			tbDebugResult = new System.Windows.Forms.RichTextBox();
+			panel1 = new System.Windows.Forms.Panel();
 			tabTransforms = new System.Windows.Forms.TabPage();
-			label7 = new System.Windows.Forms.Label();
-			cbTransformLabels = new System.Windows.Forms.ComboBox();
-			cbTransformStages = new System.Windows.Forms.ComboBox();
-			label8 = new System.Windows.Forms.Label();
+			splitContainer2 = new System.Windows.Forms.SplitContainer();
 			lbSteps = new System.Windows.Forms.Label();
 			btnLast = new System.Windows.Forms.Button();
 			btnNext = new System.Windows.Forms.Button();
 			btnPrevious = new System.Windows.Forms.Button();
 			btnFirst = new System.Windows.Forms.Button();
 			tbTransforms = new System.Windows.Forms.RichTextBox();
+			cbSetBlock = new System.Windows.Forms.CheckBox();
+			dataGridView1 = new System.Windows.Forms.DataGridView();
+			label7 = new System.Windows.Forms.Label();
+			cbTransformLabels = new System.Windows.Forms.ComboBox();
+			cbTransformStages = new System.Windows.Forms.ComboBox();
+			label8 = new System.Windows.Forms.Label();
 			tabMethodCounters = new System.Windows.Forms.TabPage();
 			tabControl1 = new System.Windows.Forms.TabControl();
 			tabPage1 = new System.Windows.Forms.TabPage();
@@ -140,6 +143,11 @@
 			tabStages.SuspendLayout();
 			tabStageDebug.SuspendLayout();
 			tabTransforms.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)splitContainer2).BeginInit();
+			splitContainer2.Panel1.SuspendLayout();
+			splitContainer2.Panel2.SuspendLayout();
+			splitContainer2.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
 			tabMethodCounters.SuspendLayout();
 			tabControl1.SuspendLayout();
 			tabPage1.SuspendLayout();
@@ -466,7 +474,7 @@
 			// 
 			treeView.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
 			treeView.Location = new System.Drawing.Point(4, 31);
-			treeView.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+			treeView.Margin = new System.Windows.Forms.Padding(0);
 			treeView.Name = "treeView";
 			treeView.Size = new System.Drawing.Size(239, 365);
 			treeView.TabIndex = 3;
@@ -483,6 +491,7 @@
 			// 
 			// splitContainer1.Panel1
 			// 
+			splitContainer1.Panel1.BackColor = System.Drawing.SystemColors.Control;
 			splitContainer1.Panel1.Controls.Add(label2);
 			splitContainer1.Panel1.Controls.Add(tbFilter);
 			splitContainer1.Panel1.Controls.Add(treeView);
@@ -500,7 +509,7 @@
 			// label2
 			// 
 			label2.AutoSize = true;
-			label2.Location = new System.Drawing.Point(4, 8);
+			label2.Location = new System.Drawing.Point(4, 9);
 			label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
 			label2.Name = "label2";
 			label2.Size = new System.Drawing.Size(36, 15);
@@ -510,7 +519,7 @@
 			// tbFilter
 			// 
 			tbFilter.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
-			tbFilter.Location = new System.Drawing.Point(45, 3);
+			tbFilter.Location = new System.Drawing.Point(45, 5);
 			tbFilter.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			tbFilter.Name = "tbFilter";
 			tbFilter.Size = new System.Drawing.Size(192, 23);
@@ -528,7 +537,7 @@
 			tabControl.Controls.Add(tabLogs);
 			tabControl.Controls.Add(tabCompilerCounters);
 			tabControl.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			tabControl.Location = new System.Drawing.Point(1, 4);
+			tabControl.Location = new System.Drawing.Point(1, 3);
 			tabControl.Margin = new System.Windows.Forms.Padding(0);
 			tabControl.Name = "tabControl";
 			tabControl.Padding = new System.Drawing.Point(0, 0);
@@ -582,7 +591,7 @@
 			label1.Name = "label1";
 			label1.Size = new System.Drawing.Size(56, 23);
 			label1.TabIndex = 41;
-			label1.Text = "Label:";
+			label1.Text = "Block:";
 			// 
 			// cbInstructionLabels
 			// 
@@ -636,26 +645,17 @@
 			// tabStageDebug
 			// 
 			tabStageDebug.BackColor = System.Drawing.Color.Gainsboro;
-			tabStageDebug.Controls.Add(panel1);
 			tabStageDebug.Controls.Add(cbGraphviz);
 			tabStageDebug.Controls.Add(cbDebugStages);
 			tabStageDebug.Controls.Add(label3);
 			tabStageDebug.Controls.Add(tbDebugResult);
+			tabStageDebug.Controls.Add(panel1);
 			tabStageDebug.Location = new System.Drawing.Point(4, 28);
 			tabStageDebug.Margin = new System.Windows.Forms.Padding(0);
 			tabStageDebug.Name = "tabStageDebug";
 			tabStageDebug.Size = new System.Drawing.Size(683, 361);
 			tabStageDebug.TabIndex = 1;
 			tabStageDebug.Text = "Debug";
-			// 
-			// panel1
-			// 
-			panel1.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
-			panel1.AutoScroll = true;
-			panel1.Location = new System.Drawing.Point(5, 40);
-			panel1.Name = "panel1";
-			panel1.Size = new System.Drawing.Size(674, 321);
-			panel1.TabIndex = 45;
 			// 
 			// cbGraphviz
 			// 
@@ -703,25 +703,141 @@
 			tbDebugResult.Text = "";
 			tbDebugResult.WordWrap = false;
 			// 
+			// panel1
+			// 
+			panel1.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+			panel1.AutoScroll = true;
+			panel1.Location = new System.Drawing.Point(5, 40);
+			panel1.Name = "panel1";
+			panel1.Size = new System.Drawing.Size(674, 321);
+			panel1.TabIndex = 45;
+			// 
 			// tabTransforms
 			// 
 			tabTransforms.BackColor = System.Drawing.Color.Gainsboro;
+			tabTransforms.Controls.Add(splitContainer2);
 			tabTransforms.Controls.Add(label7);
 			tabTransforms.Controls.Add(cbTransformLabels);
 			tabTransforms.Controls.Add(cbTransformStages);
 			tabTransforms.Controls.Add(label8);
-			tabTransforms.Controls.Add(lbSteps);
-			tabTransforms.Controls.Add(btnLast);
-			tabTransforms.Controls.Add(btnNext);
-			tabTransforms.Controls.Add(btnPrevious);
-			tabTransforms.Controls.Add(btnFirst);
-			tabTransforms.Controls.Add(tbTransforms);
 			tabTransforms.Location = new System.Drawing.Point(4, 28);
 			tabTransforms.Name = "tabTransforms";
 			tabTransforms.Padding = new System.Windows.Forms.Padding(3);
 			tabTransforms.Size = new System.Drawing.Size(683, 361);
 			tabTransforms.TabIndex = 9;
 			tabTransforms.Text = "Transforms";
+			// 
+			// splitContainer2
+			// 
+			splitContainer2.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+			splitContainer2.Location = new System.Drawing.Point(0, 34);
+			splitContainer2.Margin = new System.Windows.Forms.Padding(0);
+			splitContainer2.Name = "splitContainer2";
+			// 
+			// splitContainer2.Panel1
+			// 
+			splitContainer2.Panel1.Controls.Add(lbSteps);
+			splitContainer2.Panel1.Controls.Add(btnLast);
+			splitContainer2.Panel1.Controls.Add(btnNext);
+			splitContainer2.Panel1.Controls.Add(btnPrevious);
+			splitContainer2.Panel1.Controls.Add(btnFirst);
+			splitContainer2.Panel1.Controls.Add(tbTransforms);
+			// 
+			// splitContainer2.Panel2
+			// 
+			splitContainer2.Panel2.Controls.Add(cbSetBlock);
+			splitContainer2.Panel2.Controls.Add(dataGridView1);
+			splitContainer2.Size = new System.Drawing.Size(683, 327);
+			splitContainer2.SplitterDistance = 424;
+			splitContainer2.TabIndex = 48;
+			// 
+			// lbSteps
+			// 
+			lbSteps.AutoSize = true;
+			lbSteps.Location = new System.Drawing.Point(348, 7);
+			lbSteps.Name = "lbSteps";
+			lbSteps.Size = new System.Drawing.Size(52, 17);
+			lbSteps.TabIndex = 42;
+			lbSteps.Text = "## / ##";
+			// 
+			// btnLast
+			// 
+			btnLast.Location = new System.Drawing.Point(250, 4);
+			btnLast.Name = "btnLast";
+			btnLast.Size = new System.Drawing.Size(75, 23);
+			btnLast.TabIndex = 41;
+			btnLast.Text = "Last";
+			btnLast.UseVisualStyleBackColor = true;
+			// 
+			// btnNext
+			// 
+			btnNext.Location = new System.Drawing.Point(169, 4);
+			btnNext.Name = "btnNext";
+			btnNext.Size = new System.Drawing.Size(75, 23);
+			btnNext.TabIndex = 40;
+			btnNext.Text = "Next";
+			btnNext.UseVisualStyleBackColor = true;
+			// 
+			// btnPrevious
+			// 
+			btnPrevious.Location = new System.Drawing.Point(88, 4);
+			btnPrevious.Name = "btnPrevious";
+			btnPrevious.Size = new System.Drawing.Size(75, 23);
+			btnPrevious.TabIndex = 39;
+			btnPrevious.Text = "Previous";
+			btnPrevious.UseVisualStyleBackColor = true;
+			// 
+			// btnFirst
+			// 
+			btnFirst.Location = new System.Drawing.Point(7, 4);
+			btnFirst.Name = "btnFirst";
+			btnFirst.Size = new System.Drawing.Size(75, 23);
+			btnFirst.TabIndex = 38;
+			btnFirst.Text = "First";
+			btnFirst.UseVisualStyleBackColor = true;
+			// 
+			// tbTransforms
+			// 
+			tbTransforms.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+			tbTransforms.Font = new System.Drawing.Font("Lucida Console", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			tbTransforms.Location = new System.Drawing.Point(0, 34);
+			tbTransforms.Margin = new System.Windows.Forms.Padding(0);
+			tbTransforms.Name = "tbTransforms";
+			tbTransforms.Size = new System.Drawing.Size(416, 287);
+			tbTransforms.TabIndex = 33;
+			tbTransforms.Text = "";
+			tbTransforms.WordWrap = false;
+			// 
+			// cbSetBlock
+			// 
+			cbSetBlock.AutoSize = true;
+			cbSetBlock.Location = new System.Drawing.Point(5, 6);
+			cbSetBlock.Name = "cbSetBlock";
+			cbSetBlock.Size = new System.Drawing.Size(86, 21);
+			cbSetBlock.TabIndex = 50;
+			cbSetBlock.Text = "Set Block";
+			cbSetBlock.UseVisualStyleBackColor = true;
+			cbSetBlock.CheckedChanged += cbSetBlock_CheckedChanged;
+			// 
+			// dataGridView1
+			// 
+			dataGridView1.AllowUserToAddRows = false;
+			dataGridView1.AllowUserToDeleteRows = false;
+			dataGridView1.AllowUserToResizeRows = false;
+			dataGridView1.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+			dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			dataGridView1.Location = new System.Drawing.Point(0, 34);
+			dataGridView1.Margin = new System.Windows.Forms.Padding(0);
+			dataGridView1.MultiSelect = false;
+			dataGridView1.Name = "dataGridView1";
+			dataGridView1.ReadOnly = true;
+			dataGridView1.RowHeadersVisible = false;
+			dataGridView1.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Consolas", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			dataGridView1.RowTemplate.Height = 18;
+			dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+			dataGridView1.Size = new System.Drawing.Size(253, 290);
+			dataGridView1.TabIndex = 48;
+			dataGridView1.SelectionChanged += dataGridView1_SelectionChanged;
 			// 
 			// label7
 			// 
@@ -731,7 +847,7 @@
 			label7.Name = "label7";
 			label7.Size = new System.Drawing.Size(56, 23);
 			label7.TabIndex = 45;
-			label7.Text = "Label:";
+			label7.Text = "Block:";
 			// 
 			// cbTransformLabels
 			// 
@@ -770,67 +886,6 @@
 			label8.TabIndex = 43;
 			label8.Text = "Stage:";
 			// 
-			// lbSteps
-			// 
-			lbSteps.AutoSize = true;
-			lbSteps.Location = new System.Drawing.Point(348, 39);
-			lbSteps.Name = "lbSteps";
-			lbSteps.Size = new System.Drawing.Size(52, 17);
-			lbSteps.TabIndex = 37;
-			lbSteps.Text = "## / ##";
-			// 
-			// btnLast
-			// 
-			btnLast.Location = new System.Drawing.Point(250, 36);
-			btnLast.Name = "btnLast";
-			btnLast.Size = new System.Drawing.Size(75, 23);
-			btnLast.TabIndex = 36;
-			btnLast.Text = "Last";
-			btnLast.UseVisualStyleBackColor = true;
-			btnLast.Click += btnLast_Click;
-			// 
-			// btnNext
-			// 
-			btnNext.Location = new System.Drawing.Point(169, 36);
-			btnNext.Name = "btnNext";
-			btnNext.Size = new System.Drawing.Size(75, 23);
-			btnNext.TabIndex = 35;
-			btnNext.Text = "Next";
-			btnNext.UseVisualStyleBackColor = true;
-			btnNext.Click += btnNext_Click;
-			// 
-			// btnPrevious
-			// 
-			btnPrevious.Location = new System.Drawing.Point(88, 36);
-			btnPrevious.Name = "btnPrevious";
-			btnPrevious.Size = new System.Drawing.Size(75, 23);
-			btnPrevious.TabIndex = 34;
-			btnPrevious.Text = "Previous";
-			btnPrevious.UseVisualStyleBackColor = true;
-			btnPrevious.Click += btnPrevious_Click;
-			// 
-			// btnFirst
-			// 
-			btnFirst.Location = new System.Drawing.Point(7, 36);
-			btnFirst.Name = "btnFirst";
-			btnFirst.Size = new System.Drawing.Size(75, 23);
-			btnFirst.TabIndex = 33;
-			btnFirst.Text = "First";
-			btnFirst.UseVisualStyleBackColor = true;
-			btnFirst.Click += btnFirst_Click;
-			// 
-			// tbTransforms
-			// 
-			tbTransforms.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
-			tbTransforms.Font = new System.Drawing.Font("Lucida Console", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			tbTransforms.Location = new System.Drawing.Point(0, 67);
-			tbTransforms.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-			tbTransforms.Name = "tbTransforms";
-			tbTransforms.Size = new System.Drawing.Size(683, 298);
-			tbTransforms.TabIndex = 32;
-			tbTransforms.Text = "";
-			tbTransforms.WordWrap = false;
-			// 
 			// tabMethodCounters
 			// 
 			tabMethodCounters.BackColor = System.Drawing.Color.Gainsboro;
@@ -858,6 +913,7 @@
 			// 
 			// tabPage1
 			// 
+			tabPage1.BackColor = System.Drawing.SystemColors.Control;
 			tabPage1.Controls.Add(label5);
 			tabPage1.Controls.Add(tbCounterFilter);
 			tabPage1.Controls.Add(gridMethodCounters);
@@ -868,7 +924,6 @@
 			tabPage1.Size = new System.Drawing.Size(679, 336);
 			tabPage1.TabIndex = 0;
 			tabPage1.Text = "Grid";
-			tabPage1.UseVisualStyleBackColor = true;
 			// 
 			// label5
 			// 
@@ -1005,11 +1060,12 @@
 			tabControl2.Multiline = true;
 			tabControl2.Name = "tabControl2";
 			tabControl2.SelectedIndex = 0;
-			tabControl2.Size = new System.Drawing.Size(697, 365);
+			tabControl2.Size = new System.Drawing.Size(687, 365);
 			tabControl2.TabIndex = 8;
 			// 
 			// tabPage4
 			// 
+			tabPage4.BackColor = System.Drawing.SystemColors.Control;
 			tabPage4.Controls.Add(label6);
 			tabPage4.Controls.Add(tbCompilerCounterFilter);
 			tabPage4.Controls.Add(gridCompilerCounters);
@@ -1017,10 +1073,9 @@
 			tabPage4.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
 			tabPage4.Name = "tabPage4";
 			tabPage4.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-			tabPage4.Size = new System.Drawing.Size(689, 333);
+			tabPage4.Size = new System.Drawing.Size(679, 333);
 			tabPage4.TabIndex = 0;
 			tabPage4.Text = "Grid";
-			tabPage4.UseVisualStyleBackColor = true;
 			// 
 			// label6
 			// 
@@ -1069,7 +1124,7 @@
 			tabPage5.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
 			tabPage5.Name = "tabPage5";
 			tabPage5.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-			tabPage5.Size = new System.Drawing.Size(689, 334);
+			tabPage5.Size = new System.Drawing.Size(679, 334);
 			tabPage5.TabIndex = 1;
 			tabPage5.Text = "Text";
 			tabPage5.UseVisualStyleBackColor = true;
@@ -1081,7 +1136,7 @@
 			tbCompilerCounters.Location = new System.Drawing.Point(0, 0);
 			tbCompilerCounters.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			tbCompilerCounters.Name = "tbCompilerCounters";
-			tbCompilerCounters.Size = new System.Drawing.Size(686, 330);
+			tbCompilerCounters.Size = new System.Drawing.Size(676, 330);
 			tbCompilerCounters.TabIndex = 10;
 			tbCompilerCounters.Text = "";
 			tbCompilerCounters.WordWrap = false;
@@ -1186,7 +1241,13 @@
 			tabStageDebug.ResumeLayout(false);
 			tabStageDebug.PerformLayout();
 			tabTransforms.ResumeLayout(false);
-			tabTransforms.PerformLayout();
+			splitContainer2.Panel1.ResumeLayout(false);
+			splitContainer2.Panel1.PerformLayout();
+			splitContainer2.Panel2.ResumeLayout(false);
+			splitContainer2.Panel2.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)splitContainer2).EndInit();
+			splitContainer2.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
 			tabMethodCounters.ResumeLayout(false);
 			tabControl1.ResumeLayout(false);
 			tabPage1.ResumeLayout(false);
@@ -1288,12 +1349,6 @@
 		private System.Windows.Forms.TabPage tabPage5;
 		private System.Windows.Forms.RichTextBox tbCompilerCounters;
 		private System.Windows.Forms.TabPage tabTransforms;
-		private System.Windows.Forms.RichTextBox tbTransforms;
-		private System.Windows.Forms.Button btnLast;
-		private System.Windows.Forms.Button btnNext;
-		private System.Windows.Forms.Button btnPrevious;
-		private System.Windows.Forms.Button btnFirst;
-		private System.Windows.Forms.Label lbSteps;
 		private System.Windows.Forms.Label label7;
 		private System.Windows.Forms.ComboBox cbTransformLabels;
 		private System.Windows.Forms.ComboBox cbTransformStages;
@@ -1308,5 +1363,14 @@
 		private System.Windows.Forms.CheckBox cbGraphviz;
 		private System.Windows.Forms.RichTextBox tbDebugResult;
 		private System.Windows.Forms.Panel panel1;
+		private System.Windows.Forms.SplitContainer splitContainer2;
+		private System.Windows.Forms.RichTextBox tbTransforms;
+		private System.Windows.Forms.DataGridView dataGridView1;
+		private System.Windows.Forms.Label lbSteps;
+		private System.Windows.Forms.Button btnLast;
+		private System.Windows.Forms.Button btnNext;
+		private System.Windows.Forms.Button btnPrevious;
+		private System.Windows.Forms.Button btnFirst;
+		private System.Windows.Forms.CheckBox cbSetBlock;
 	}
 }

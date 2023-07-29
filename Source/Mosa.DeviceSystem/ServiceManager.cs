@@ -10,30 +10,21 @@ namespace Mosa.DeviceSystem;
 /// </summary>
 public sealed class ServiceManager
 {
-	/// <summary>
-	/// The services
-	/// </summary>
-	private readonly List<BaseService> services;
+	private readonly List<BaseService> Services = new List<BaseService>();
+	private readonly List<ServiceEvent> Events = new List<ServiceEvent>();
 
-	private readonly List<ServiceEvent> events;
+	private readonly object lockServices = new object();
+	private readonly object lockEvents = new object();
 
-	private readonly object _lockServices = new object();
-	private readonly object _lockEvents = new object();
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="ServiceManager" /> class.
-	/// </summary>
 	public ServiceManager()
 	{
-		services = new List<BaseService>();
-		events = new List<ServiceEvent>();
 	}
 
 	public void AddService(BaseService service)
 	{
-		lock (_lockServices)
+		lock (lockServices)
 		{
-			services.Add(service);
+			Services.Add(service);
 		}
 
 		service.Start(this);
@@ -41,30 +32,35 @@ public sealed class ServiceManager
 
 	public void AddEvent(ServiceEvent serviceEvent)
 	{
-		//HAL.DebugWriteLine("ServiceManager:AddEvent():Start");
-		//HAL.Pause();
+		HAL.DebugWriteLine("ServiceManager:AddEvent()");
 
-		lock (_lockEvents)
+		HAL.DebugWriteLine(" # Lock");
+
+		lock (lockEvents)
 		{
-			events.Add(serviceEvent);
+			HAL.DebugWriteLine(" # Adding");
+
+			Events.Add(serviceEvent);
+
+			HAL.DebugWriteLine(" # Added");
 		}
 
-		//HAL.DebugWriteLine("ServiceManager:AddEvent():SendEvents");
-		//HAL.Pause();
+		HAL.DebugWriteLine(" # Unlock");
+
+		HAL.DebugWriteLine(" > SendEvents");
 
 		SendEvents();
 
-		//HAL.DebugWriteLine("ServiceManager:AddEvent():End");
-		//HAL.Pause();
+		HAL.DebugWriteLine("ServiceManager:AddEvent() [Exit]");
 	}
 
 	public List<T> GetService<T>() where T : BaseService
 	{
 		var list = new List<T>();
 
-		lock (_lockServices)
+		lock (lockServices)
 		{
-			foreach (var service in services)
+			foreach (var service in Services)
 			{
 				if (service is T s)
 				{
@@ -78,9 +74,9 @@ public sealed class ServiceManager
 
 	public T GetFirstService<T>() where T : BaseService
 	{
-		lock (_lockServices)
+		lock (lockServices)
 		{
-			foreach (var service in services)
+			foreach (var service in Services)
 			{
 				if (service is T s)
 				{
@@ -94,11 +90,11 @@ public sealed class ServiceManager
 
 	public List<BaseService> GetAllServices()
 	{
-		lock (_lockServices)
+		lock (lockServices)
 		{
-			var list = new List<BaseService>(services.Count);
+			var list = new List<BaseService>(Services.Count);
 
-			foreach (var service in services)
+			foreach (var service in Services)
 			{
 				list.Add(service);
 			}
@@ -110,61 +106,53 @@ public sealed class ServiceManager
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	private void SendEvents()
 	{
-		//HAL.DebugWriteLine("ServiceManager:SendEvents():Start");
-		//HAL.Pause();
+		HAL.DebugWriteLine("ServiceManager:SendEvents()");
 
 		while (true)
 		{
 			ServiceEvent serviceEvent;
 
-			lock (_lockEvents)
+			lock (lockEvents)
 			{
-				if (events.Count == 0)
-					return;
+				if (Events.Count == 0)
+					break;
 
-				serviceEvent = events[0];
-				events.RemoveAt(0);
+				serviceEvent = Events[0];
+				Events.RemoveAt(0);
 			}
 
-			//HAL.DebugWriteLine("ServiceManager:SendEvents():Middle");
-			//HAL.Pause();
+			HAL.DebugWriteLine(" > DispatchEvents");
 
 			DispatchEvents(serviceEvent);
 		}
+
+		HAL.DebugWriteLine("ServiceManager:SendEvents() [Exit]");
 	}
 
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	private void DispatchEvents(ServiceEvent serviceEvent)
 	{
-		int i = 0;
+		HAL.DebugWriteLine("ServiceManager:DispatchEvents()");
+
+		var i = 0;
 
 		while (true)
 		{
 			BaseService service;
 
-			//HAL.DebugWriteLine("ServiceManager:SendEvents():Loop-A: " + i.ToString() + "/" + services.Count.ToString());
-			//HAL.Pause();
-
-			lock (_lockServices)
+			lock (lockServices)
 			{
-				if (i >= services.Count)
-					return;
+				if (i >= Services.Count)
+					break;
 
-				service = services[i];
+				service = Services[i];
 			}
-
-			//HAL.DebugWriteLine("ServiceManager:SendEvents():Loop-B: " + i.ToString() + "/" + services.Count.ToString());
-			//HAL.Pause();
 
 			i++;
 
-			//HAL.DebugWriteLine("ServiceManager:SendEvents():Loop-C: " + i.ToString() + "/" + services.Count.ToString());
-			//HAL.Pause();
-
 			service.PostEvent(serviceEvent);
-
-			//HAL.DebugWriteLine("ServiceManager:SendEvents():Post-PostEvent");
-			//HAL.Pause();
 		}
+
+		HAL.DebugWriteLine("ServiceManager:DispatchEvents() [Exit]");
 	}
 }

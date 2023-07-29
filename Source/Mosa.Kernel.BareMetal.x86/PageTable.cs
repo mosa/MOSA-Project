@@ -22,6 +22,9 @@ internal static class PageTable
 		PageDirectory = PageFrameAllocator.Allocate(1024);
 		PageTables = PageFrameAllocator.Allocate(1024);
 
+		Debug.WriteLine(" * Page Directory @ ", new Hex(PageDirectory));
+		Debug.WriteLine(" * Page Table @ ", new Hex(PageTables));
+
 		Debug.WriteLine("x86.PageTable:Setup() [Exit]");
 	}
 
@@ -48,6 +51,8 @@ internal static class PageTable
 
 		// Map the first 128MB of memory
 		var endPage = new Pointer(128 * 1024 * 1024);
+
+		Debug.WriteLine(" * Identity End @ ", new Hex(endPage));
 
 		for (var page = Pointer.Zero; page < endPage; page += Page.Size)
 		{

@@ -6,7 +6,7 @@ using System.Text;
 namespace Mosa.DeviceSystem;
 
 /// <summary>
-/// Data Block (Little Endian)
+/// Data Block
 /// </summary>
 public class DataBlock
 {
