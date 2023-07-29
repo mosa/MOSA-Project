@@ -72,7 +72,7 @@ jobs:
 
   windows-build-packaging:
     name: Windows Build Packaging
-    needs: [windows-build, linux-build, generate-docs, windows-unit-testing, linux-unit-testing, windows-demo-testing, linux-demo-testing, macos-build]
+    needs: [windows-build, linux-build, generate-docs, windows-unit-testing, linux-unit-testing, windows-demo-testing, linux-demo-testing, macos-build, macos-unit-testing]
     runs-on: windows-latest
     if: github.event_name == 'push' && github.repository == 'mosa/MOSA-Project' && github.ref == 'refs/heads/master'
     env:
@@ -263,10 +263,10 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '7.0.x'
-      - name: Set up Homebrew
-        uses: Homebrew/actions/setup-homebrew@master
-      - name: Install Qemu
-        run: brew install qemu
+      #- name: Set up Homebrew
+      #  uses: Homebrew/actions/setup-homebrew@master
+      #- name: Install Qemu
+      #  run: brew install qemu
       - name: Checkout
         uses: actions/checkout@v3
         with:

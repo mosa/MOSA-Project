@@ -19,7 +19,7 @@ public static class AppLocationsSettings
 	private static readonly bool IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
 	private static readonly bool IsOSX = RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
 
-	private static readonly string[] LinuxDirectories = new string[] { "/bin", "/usr/bin", "/opt/homebrew/bin", "/usr/local/bin/" };
+	private static readonly string[] LinuxDirectories = new string[] { "/bin", "/usr/bin", "/opt/homebrew/bin", "/usr/local/bin/", "/usr/local/Cellar" };
 
 	public static void GetAppLocations(MosaSettings mosaSettings)
 	{
