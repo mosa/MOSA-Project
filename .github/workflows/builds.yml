@@ -142,6 +142,34 @@ jobs:
           name: linux-build-artifact
           path: bin
          
+  maxos-build:
+    name: MacOS Build
+    runs-on: macos-13
+    steps:
+      - name: Set net7.0
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'
+      - name: View Build Version
+        run: echo ${{ env.BUILD_VERSION }}
+      - name: View Github Info
+        run: echo repository=${{ github.repository }} event_name=${{ github.event_name }} ref=${{ github.ref }} head_ref=${{ github.head_ref }} base_ref=${{ github.base_ref }}
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Restore nuget Packages
+        run: dotnet restore Source/Mosa.Linux.sln
+      - name: Build
+        run: dotnet build Source/Mosa.Linux.sln
+      #- name: Unit Test
+      #  run: dotnet test Source/Mosa.Linux.sln
+      - name: Store Build Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: linux-build-artifact
+          path: bin
+
   generate-docs:
     name: Generate Documentation
     runs-on: ubuntu-latest
