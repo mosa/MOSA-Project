@@ -20,7 +20,7 @@ public static class AppLocationsSettings
 	private static readonly bool IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
 	private static readonly bool IsOSX = RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
 
-	private static readonly string[] LinuxDirectories = new string[] { "/bin", "/usr/bin" };
+	private static readonly string[] LinuxDirectories = new string[] { "/bin", "/usr/bin", "/opt/homebrew/bin" };
 
 	public static void GetAppLocations(MosaSettings mosaSettings)
 	{
@@ -55,8 +55,7 @@ public static class AppLocationsSettings
 					@"%ProgramFiles%\qemu",
 					@"%ProgramFiles(x86)%\qemu",
 				})
-			: IsOSX ? TryFind("qemu-system-i386", "/opt/homebrew/bin/qemu-system-i386")
-			: IsLinux ? TryFind("qemu-system-i386", LinuxDirectories) : null;
+			: TryFind("qemu-system-i386", LinuxDirectories);
 	}
 
 	private static string FindGDB()
@@ -186,7 +185,6 @@ public static class AppLocationsSettings
 					@"%ProgramFiles(x86)%\qemu",
 					@"%ProgramFiles(x86)%\Mosa-Project\Tools\qemu",
 				})
-			: IsOSX ? TryFind("qemu-img", "/opt/homebrew/bin/qemu-system-i386")
 			: TryFind("qemu-img", LinuxDirectories);
 	}
 
@@ -206,11 +204,11 @@ public static class AppLocationsSettings
 						@"%ProgramFiles(x86)%\qemu",
 						@"%ProgramFiles(x86)%\qemu\share",
 					})
-				: IsOSX ? TryFind("bios.bin", "/opt/homebrew/bin/qemu-system-i386")
 				: TryFind("bios.bin",
 					new string[] {
 						"/usr/share/qemu",
-						"/usr/share/seabios"
+						"/usr/share/seabios",
+						"/opt/homebrew/share/qemu/"
 					})
 		);
 	}
@@ -231,12 +229,12 @@ public static class AppLocationsSettings
 					@"%ProgramFiles(x86)%\qemu",
 					@"%ProgramFiles(x86)%\qemu\share",
 				})
-			: IsOSX ? TryFind("edk2-i386-code.fd", "/opt/homebrew/bin/qemu-system-i386")
 			: TryFind("edk2-i386-code.fd",
 				new string[] {
 					"/usr/share/qemu",
 					"/usr/share/ovmf",
-					"/usr/share/OVMF"
+					"/usr/share/OVMF",
+					"/opt/homebrew/share/qemu/"
 				});
 	}
 
@@ -256,12 +254,12 @@ public static class AppLocationsSettings
 					@"%ProgramFiles(x86)%\qemu",
 					@"%ProgramFiles(x86)%\qemu\share"
 				})
-			: IsOSX ? TryFind("edk2-x86_64-code.fd", "/opt/homebrew/bin/qemu-system-i386")
 			: TryFind("edk2-x86_64-code.fd",
 				new string[] {
 					"/usr/share/qemu",
 					"/usr/share/ovmf",
-					"/usr/share/OVMF"
+					"/usr/share/OVMF",
+					"/opt/homebrew/share/qemu/"
 				});
 	}
 
@@ -286,7 +284,8 @@ public static class AppLocationsSettings
 				new string[] {
 					"/usr/share/qemu",
 					"/usr/share/ovmf",
-					"/usr/share/OVMF"
+					"/usr/share/OVMF",
+					"/opt/homebrew/share/qemu/"
 				});
 	}
 
