@@ -278,7 +278,14 @@ public class Starter : BaseLauncher
 		}
 		else
 		{
-			arg.Append(" -display sdl");
+			if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+			{
+				arg.Append(" -display cocoa");
+			}
+			else
+			{
+				arg.Append(" -display sdl");
+			}
 		}
 
 		var serial = MosaSettings.EmulatorSerial;
