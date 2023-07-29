@@ -140,8 +140,6 @@ public sealed class DeviceService : BaseService
 	{
 		HAL.DebugWriteLine("DeviceService:StartDevice()");
 
-		HAL.DebugWriteLine($" # Lock");
-
 		lock (_lock)
 		{
 			Devices.Add(device);
@@ -151,8 +149,6 @@ public sealed class DeviceService : BaseService
 				device.Parent.Children.Add(device);
 			}
 		}
-
-		HAL.DebugWriteLine($" # Unlock");
 
 		device.Status = DeviceStatus.Initializing;
 
@@ -164,23 +160,23 @@ public sealed class DeviceService : BaseService
 
 		if (device.Status == DeviceStatus.Initializing)
 		{
-			HAL.DebugWriteLine(" > Initializing");
+			HAL.DebugWriteLine(" # Initializing");
 			device.DeviceDriver.Initialize();
 
-			HAL.DebugWrite(" > Initialized: ");
+			HAL.DebugWrite(" # Initialized: ");
 			HAL.DebugWriteLine(device.Name);
 
 			if (device.Status == DeviceStatus.Initializing)
 			{
-				HAL.DebugWriteLine(" > Probing");
+				HAL.DebugWriteLine(" # Probing");
 				device.DeviceDriver.Probe();
 
 				if (device.Status == DeviceStatus.Available)
 				{
-					HAL.DebugWriteLine(" > Starting");
+					HAL.DebugWriteLine(" # Starting");
 					device.DeviceDriver.Start();
 
-					HAL.DebugWriteLine(" > Started");
+					HAL.DebugWriteLine(" # Started");
 
 					AddInterruptHandler(device);
 				}

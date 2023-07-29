@@ -10,27 +10,21 @@ namespace Mosa.DeviceSystem;
 /// </summary>
 public sealed class ServiceManager
 {
-	private readonly List<BaseService> services;
+	private readonly List<BaseService> Services = new List<BaseService>();
+	private readonly List<ServiceEvent> Events = new List<ServiceEvent>();
 
-	private readonly List<ServiceEvent> events;
+	private readonly object lockServices = new object();
+	private readonly object lockEvents = new object();
 
-	private readonly object _lockServices = new object();
-	private readonly object _lockEvents = new object();
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="ServiceManager" /> class.
-	/// </summary>
 	public ServiceManager()
 	{
-		services = new List<BaseService>();
-		events = new List<ServiceEvent>();
 	}
 
 	public void AddService(BaseService service)
 	{
-		lock (_lockServices)
+		lock (lockServices)
 		{
-			services.Add(service);
+			Services.Add(service);
 		}
 
 		service.Start(this);
@@ -40,10 +34,18 @@ public sealed class ServiceManager
 	{
 		HAL.DebugWriteLine("ServiceManager:AddEvent()");
 
-		lock (_lockEvents)
+		HAL.DebugWriteLine(" # Lock");
+
+		lock (lockEvents)
 		{
-			events.Add(serviceEvent);
+			HAL.DebugWriteLine(" # Adding");
+
+			Events.Add(serviceEvent);
+
+			HAL.DebugWriteLine(" # Added");
 		}
+
+		HAL.DebugWriteLine(" # Unlock");
 
 		HAL.DebugWriteLine(" > SendEvents");
 
@@ -56,9 +58,9 @@ public sealed class ServiceManager
 	{
 		var list = new List<T>();
 
-		lock (_lockServices)
+		lock (lockServices)
 		{
-			foreach (var service in services)
+			foreach (var service in Services)
 			{
 				if (service is T s)
 				{
@@ -72,9 +74,9 @@ public sealed class ServiceManager
 
 	public T GetFirstService<T>() where T : BaseService
 	{
-		lock (_lockServices)
+		lock (lockServices)
 		{
-			foreach (var service in services)
+			foreach (var service in Services)
 			{
 				if (service is T s)
 				{
@@ -88,11 +90,11 @@ public sealed class ServiceManager
 
 	public List<BaseService> GetAllServices()
 	{
-		lock (_lockServices)
+		lock (lockServices)
 		{
-			var list = new List<BaseService>(services.Count);
+			var list = new List<BaseService>(Services.Count);
 
-			foreach (var service in services)
+			foreach (var service in Services)
 			{
 				list.Add(service);
 			}
@@ -110,13 +112,13 @@ public sealed class ServiceManager
 		{
 			ServiceEvent serviceEvent;
 
-			lock (_lockEvents)
+			lock (lockEvents)
 			{
-				if (events.Count == 0)
+				if (Events.Count == 0)
 					break;
 
-				serviceEvent = events[0];
-				events.RemoveAt(0);
+				serviceEvent = Events[0];
+				Events.RemoveAt(0);
 			}
 
 			HAL.DebugWriteLine(" > DispatchEvents");
@@ -138,12 +140,12 @@ public sealed class ServiceManager
 		{
 			BaseService service;
 
-			lock (_lockServices)
+			lock (lockServices)
 			{
-				if (i >= services.Count)
+				if (i >= Services.Count)
 					break;
 
-				service = services[i];
+				service = Services[i];
 			}
 
 			i++;
