@@ -261,12 +261,16 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '7.0.x'
+      - name: Set up Homebrew
+        uses: Homebrew/actions/setup-homebrew@master
+      - name: Install Qemu
+        run: brew install qemu
       - name: Checkout
         uses: actions/checkout@v3
         with:
           submodules: recursive
-      - name: Install Homebrew
-        run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+      #- name: Install Homebrew
+      #  run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
       - name: Homebrew Packages
         uses: ConorMacBride/install-package@v1
         with:
@@ -276,9 +280,6 @@ jobs:
         with:
           name: macos-build-artifact
           path: bin
-
-      - name: Install Qemu
-        run: brew install qemu
       - name: Unit Test 
         run: dotnet bin/Mosa.Utility.UnitTests.dll -check -o${{ matrix.optimization }}
 
