@@ -266,7 +266,7 @@ public static class Internal
 	}
 
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static void MemoryClear4(Pointer dest, uint count)
+	private static void MemoryClear4(Pointer dest, uint count)
 	{
 		if (count == 0)
 			return;

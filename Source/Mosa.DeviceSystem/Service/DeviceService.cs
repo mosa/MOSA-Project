@@ -34,7 +34,7 @@ public sealed class DeviceService : BaseService
 	/// </summary>
 	private readonly List<Device> pendingOnChange;
 
-	private readonly object _lock = new object();
+	private readonly object sync = new object();
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="DeviceService" /> class.
@@ -70,7 +70,7 @@ public sealed class DeviceService : BaseService
 
 	public void RegisterDeviceDriver(DeviceDriverRegistryEntry deviceDriver)
 	{
-		lock (_lock)
+		lock (sync)
 		{
 			Registry.Add(deviceDriver);
 		}
@@ -80,7 +80,7 @@ public sealed class DeviceService : BaseService
 	{
 		var drivers = new List<DeviceDriverRegistryEntry>();
 
-		lock (_lock)
+		lock (sync)
 		{
 			foreach (var deviceDriver in Registry)
 			{
@@ -108,6 +108,8 @@ public sealed class DeviceService : BaseService
 	public Device Initialize(BaseDeviceDriver deviceDriver, Device parent, bool autoStart = true, BaseDeviceConfiguration configuration = null, HardwareResources resources = null, DeviceDriverRegistryEntry deviceDriverRegistryEntry = null)
 	{
 		HAL.DebugWriteLine("DeviceService:Initialize()");
+
+		HAL.Assert(ServiceManager.lockEvents != null, "BUG: Service Manager lock is null");
 
 		var device = new Device
 		{
@@ -140,7 +142,7 @@ public sealed class DeviceService : BaseService
 	{
 		HAL.DebugWriteLine("DeviceService:StartDevice()");
 
-		lock (_lock)
+		lock (sync)
 		{
 			Devices.Add(device);
 
@@ -152,15 +154,10 @@ public sealed class DeviceService : BaseService
 
 		device.Status = DeviceStatus.Initializing;
 
-		//HAL.DebugWriteLine($" # Setup");
-
 		device.DeviceDriver.Setup(device);
-
-		//HAL.DebugWriteLine($" # Setup [Done]");
 
 		if (device.Status == DeviceStatus.Initializing)
 		{
-			//HAL.DebugWriteLine(" # Initializing");
 			device.DeviceDriver.Initialize();
 
 			HAL.DebugWrite(" # Initialized: ");
@@ -168,22 +165,16 @@ public sealed class DeviceService : BaseService
 
 			if (device.Status == DeviceStatus.Initializing)
 			{
-				//HAL.DebugWriteLine(" # Probing");
 				device.DeviceDriver.Probe();
 
 				if (device.Status == DeviceStatus.Available)
 				{
-					//HAL.DebugWriteLine(" # Starting");
 					device.DeviceDriver.Start();
-
-					//HAL.DebugWriteLine(" # Started");
 
 					AddInterruptHandler(device);
 				}
 			}
 		}
-
-		HAL.DebugWriteLine($" # ServiceManager.AddEvent");
 
 		ServiceManager.AddEvent(new ServiceEvent(ServiceEventType.Start, device));
 
@@ -196,7 +187,7 @@ public sealed class DeviceService : BaseService
 
 	public Device GetFirstDevice<T>()
 	{
-		lock (_lock)
+		lock (sync)
 		{
 			foreach (var device in Devices)
 			{
@@ -214,7 +205,7 @@ public sealed class DeviceService : BaseService
 	{
 		var list = new List<Device>();
 
-		lock (_lock)
+		lock (sync)
 		{
 			foreach (var device in Devices)
 			{
@@ -230,7 +221,7 @@ public sealed class DeviceService : BaseService
 
 	public Device GetFirstDevice<T>(DeviceStatus status)
 	{
-		lock (_lock)
+		lock (sync)
 		{
 			foreach (var device in Devices)
 			{
@@ -248,7 +239,7 @@ public sealed class DeviceService : BaseService
 	{
 		var list = new List<Device>();
 
-		lock (_lock)
+		lock (sync)
 		{
 			foreach (var device in Devices)
 			{
@@ -266,7 +257,7 @@ public sealed class DeviceService : BaseService
 	{
 		var list = new List<Device>();
 
-		lock (_lock)
+		lock (sync)
 		{
 			foreach (var device in Devices)
 			{
@@ -284,7 +275,7 @@ public sealed class DeviceService : BaseService
 	{
 		var list = new List<Device>();
 
-		lock (_lock)
+		lock (sync)
 		{
 			foreach (var device in parent.Children)
 			{
@@ -297,7 +288,7 @@ public sealed class DeviceService : BaseService
 
 	public List<Device> GetAllDevices()
 	{
-		lock (_lock)
+		lock (sync)
 		{
 			var list = new List<Device>(Devices.Count);
 
@@ -312,7 +303,7 @@ public sealed class DeviceService : BaseService
 
 	public bool CheckExists(Device parent, ulong componentID)
 	{
-		lock (_lock)
+		lock (sync)
 		{
 			foreach (var device in Devices)
 			{
@@ -332,7 +323,7 @@ public sealed class DeviceService : BaseService
 
 	public void ProcessInterrupt(byte irq)
 	{
-		lock (_lock)
+		lock (sync)
 		{
 			foreach (var device in IRQDispatch[irq])
 			{
@@ -353,7 +344,7 @@ public sealed class DeviceService : BaseService
 			if (irq >= MaxInterrupts)
 				return;
 
-			lock (_lock)
+			lock (sync)
 			{
 				IRQDispatch[irq].Add(device);
 			}
@@ -371,7 +362,7 @@ public sealed class DeviceService : BaseService
 			if (irq >= MaxInterrupts)
 				return;
 
-			lock (_lock)
+			lock (sync)
 			{
 				IRQDispatch[irq].Remove(device);
 			}

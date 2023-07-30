@@ -93,28 +93,30 @@ public static class Boot
 		var serviceManager = new ServiceManager();
 		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 
+		Console.Write(ConsoleColor.BrightGreen, "> Device Service...");
+		var deviceService = new DeviceService();
+		serviceManager.AddService(deviceService);
+		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
+
 		Console.Write(ConsoleColor.BrightGreen, "> Disk Device Service...");
 		var diskDeviceService = new DiskDeviceService();
+		serviceManager.AddService(diskDeviceService);
 		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 
 		Console.Write(ConsoleColor.BrightGreen, "> Partition Service...");
-		var partitionService = new PartitionService();
+		serviceManager.AddService(new PartitionService());
 		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 
 		Console.Write(ConsoleColor.BrightGreen, "> PCI Controller Service...");
-		var pciControllerService = new PCIControllerService();
+		serviceManager.AddService(new PCIControllerService());
 		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 
 		Console.Write(ConsoleColor.BrightGreen, "> PCI Device Service...");
-		var pciDeviceService = new PCIDeviceService();
+		serviceManager.AddService(new PCIDeviceService());
 		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 
 		Console.Write(ConsoleColor.BrightGreen, "> PC Service...");
-		var pcService = new PCService();
-		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
-
-		Console.Write(ConsoleColor.BrightGreen, "> Device Manager...");
-		var deviceService = new DeviceService();
+		serviceManager.AddService(new PCService());
 		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 
 		Console.Write(ConsoleColor.BrightGreen, "> Initializing hardware abstraction layer...");
