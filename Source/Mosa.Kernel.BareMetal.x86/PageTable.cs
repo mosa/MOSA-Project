@@ -14,16 +14,34 @@ internal static class PageTable
 	public static Pointer PageTables;
 	public static GDT GDTTable;
 
+	#region Constants
+
+	private static class Constant
+	{
+		public const uint Present = 0x01;
+		public const uint ReadWrite = 0x02;
+		public const uint UserSupervisor = 0x04;
+		public const uint WriteThrough = 0x08;
+		public const uint CacheDisable = 1 << 4;
+		public const uint Accessed = 1 << 5;
+		public const uint Dirty = 1 << 6;
+	}
+
+	#endregion Constants
+
+	public const uint PageTableCount = 1024;
+	public const uint IdentityPages = 32768; // 128MB
+
 	public static void Setup()
 	{
 		Debug.WriteLine("x86.PageTable:Setup()");
 
 		GDTTable.Setup();
-		PageDirectory = PageFrameAllocator.Allocate(1024);
-		PageTables = PageFrameAllocator.Allocate(1024);
+		PageDirectory = PageFrameAllocator.Allocate();
+		PageTables = PageFrameAllocator.Allocate(PageTableCount);
 
-		Debug.WriteLine(" * Page Directory @ ", new Hex(PageDirectory));
-		Debug.WriteLine(" * Page Table @ ", new Hex(PageTables));
+		Debug.WriteLine(" > Page Directory @ ", new Hex(PageDirectory));
+		Debug.WriteLine(" > Page Table @ ", new Hex(PageTables));
 
 		Debug.WriteLine("x86.PageTable:Setup() [Exit]");
 	}
@@ -33,33 +51,40 @@ internal static class PageTable
 		Debug.WriteLine("x86.PageTable:Initialize()");
 
 		// Setup Page Directory
-		Debug.WriteLine(" > Setup Page Directory");
-		for (uint index = 0; index < 1024; index++)
+		Debug.WriteLine(" * Setup Page Directory");
+		for (var index = 0u; index < PageTableCount; index++)
 		{
-			PageDirectory.Store32(index << 2, (PageTables.ToUInt32() + index * Page.Size) | 0x04 | 0x02 | 0x01);
+			PageDirectory.Store32(index << 2, (PageTables.ToUInt32() + index * Page.Size) | Constant.Present | Constant.ReadWrite | Constant.UserSupervisor);
 		}
 
-		// Clear the Page Tables
-		Debug.WriteLine(" > Clear the Page Tables");
-		for (uint index = 0; index < PageFrameAllocator.TotalPages; index++)
-		{
-			PageTables.Store32(index << 2, (index * Page.Size) | 0x04 | 0x02 | 0x01);
-		}
+		Debug.WriteLine(" * Clearing Page Table Entries");
+		PageTables.Clear(PageTableCount * Page.Size);
 
 		// Setup Identity Pages
-		Debug.WriteLine(" > Setup Identity Pages");
+		Debug.WriteLine(" * Setup Identity Pages");
+		MapIdentityPages(PageTables, PageTableCount);
+		MapIdentityPages(PageDirectory, 1);
 
-		// Map the first 128MB of memory
-		var endPage = new Pointer(128 * 1024 * 1024);
+		MapIdentityPages(Pointer.Zero, IdentityPages);
 
-		Debug.WriteLine(" * Identity End @ ", new Hex(endPage));
+		Debug.WriteLine("x86.PageTable:Initialize() [Exit]");
+	}
 
-		for (var page = Pointer.Zero; page < endPage; page += Page.Size)
+	private static void MapIdentityPages(Pointer start, uint pages)
+	{
+		Debug.WriteLine("x86.PageTable:MapIdentityPages()");
+		Debug.WriteLine(" > Start: ", new Hex(start));
+
+		var end = start + (pages * Page.Size);
+
+		Debug.WriteLine(" > End: ", new Hex(end));
+
+		for (var page = start; page < end; page += Page.Size)
 		{
 			MapVirtualAddressToPhysical(page, page, true);
 		}
 
-		Debug.WriteLine("x86.PageTable:Initialize() [Exit]");
+		Debug.WriteLine("x86.PageTable:MapIdentityPages() [Exit]");
 	}
 
 	public static void Enable()
@@ -77,15 +102,11 @@ internal static class PageTable
 
 	public static void MapVirtualAddressToPhysical(Pointer virtualAddress, Pointer physicalAddress, bool present = true)
 	{
-		//FUTURE: traverse page directory from CR3 --- do not assume page table is linearly allocated
-
-		PageTables.Store32((virtualAddress.ToUInt32() & 0xFFFFF000u) >> 10, physicalAddress.ToUInt32() & 0xFFFFF000u | 0x04u | 0x02u | (present ? 0x1u : 0x0u));
+		PageTables.Store32((virtualAddress.ToUInt32() & 0xFFFFF000u) >> 10, (physicalAddress.ToUInt32() & 0xFFFFF000u) | (present ? Constant.Present : 0x0u) | Constant.ReadWrite | Constant.UserSupervisor);
 	}
 
 	public static Pointer GetPhysicalAddressFromVirtual(Pointer virtualAddress)
 	{
-		//FUTURE: traverse page directory from CR3 --- do not assume page table is linearly allocated
-
 		var address = virtualAddress.ToUInt32();
 		var offset = ((address & 0xFFFFF000u) >> 10) + (address & 0xFFFu);
 

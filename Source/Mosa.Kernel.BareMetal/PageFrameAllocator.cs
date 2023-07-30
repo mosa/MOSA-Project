@@ -138,14 +138,9 @@ public static class PageFrameAllocator
 			SetPageBitMapEntry(startPage, pages, false);
 		}
 
-		// Reserve the first page
-		SetPageBitMapEntry(1, 1, false);
-
-		// TODO - reserve kernel code + memory
-
 		SearchNextStartPage = MinimumAvailablePage;
 
-		//Debug.Kill();
+		ReserveMemory();
 	}
 
 	public static void Release(Pointer page, uint count)
@@ -194,7 +189,7 @@ public static class PageFrameAllocator
 
 				SearchNextStartPage = restartAt;
 
-				//Debug.WriteLine(" > return: ", at);
+				Debug.WriteLine(" > Return: ", new Hex(at));
 
 				return new Pointer(at * Page.Size);
 			}
@@ -209,7 +204,9 @@ public static class PageFrameAllocator
 				restartAt = MinimumAvailablePage;
 
 				if (wrap)
+				{
 					Debug.Kill();
+				}
 
 				wrap = true;
 			}
@@ -219,7 +216,8 @@ public static class PageFrameAllocator
 				// looped around in the search
 				// quit, as there are no free pages
 
-				//Debug.WriteLine(" > return: Zero");
+				Debug.WriteLine(" > return: Zero");
+				Debug.Fatal();
 
 				return Pointer.Zero;
 			}
@@ -303,9 +301,9 @@ public static class PageFrameAllocator
 		}
 	}
 
-	private static bool CheckFreePage32(uint at, uint count, out uint nextAt)
+	private static bool CheckFreePage32(uint at, uint count, out uint next)
 	{
-		nextAt = at;
+		next = at;
 
 		//Debug.WriteLine("CheckFreePage32:PhysicalPageAllocator()");
 		//Debug.WriteLine(" > count = ", count);
@@ -330,20 +328,35 @@ public static class PageFrameAllocator
 
 			if (maskvalue == 0)
 			{
-				nextAt = at + bitlen;
+				next = at + bitlen;
 				count -= bitlen;
 				at += bitlen;
 			}
 			else
 			{
 				// Future optimization: return nextAt page of the first available bit after the first unavailble bit, and if not, then start at next 32-bit aligned page number
-				nextAt = at + 1;
+				next = at + 1;
 
 				return false;
 			}
 		}
 
 		return true;
+	}
+
+	private static void ReserveMemory()
+	{
+		// Reserve the first page
+		SetPageBitMapEntry(0, 1, false);
+
+		// Reserve Boot Page Allocator
+		var region = Platform.GetBootReservedRegion();
+		SetPageBitMapEntry((uint)(region.Address.ToInt64() / Page.Size), ((uint)region.Size / Page.Size) + 1, false);
+
+		// Reserve first 24MB
+		SetPageBitMapEntry(0, 24 * 1024 * 1024 / Page.Size, false);
+
+		// TODO - reserve kernel code + memory
 	}
 
 	#endregion Private API

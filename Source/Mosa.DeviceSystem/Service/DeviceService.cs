@@ -152,15 +152,15 @@ public sealed class DeviceService : BaseService
 
 		device.Status = DeviceStatus.Initializing;
 
-		HAL.DebugWriteLine($" # Setup");
+		//HAL.DebugWriteLine($" # Setup");
 
 		device.DeviceDriver.Setup(device);
 
-		HAL.DebugWriteLine($" # Setup [Done]");
+		//HAL.DebugWriteLine($" # Setup [Done]");
 
 		if (device.Status == DeviceStatus.Initializing)
 		{
-			HAL.DebugWriteLine(" # Initializing");
+			//HAL.DebugWriteLine(" # Initializing");
 			device.DeviceDriver.Initialize();
 
 			HAL.DebugWrite(" # Initialized: ");
@@ -168,15 +168,15 @@ public sealed class DeviceService : BaseService
 
 			if (device.Status == DeviceStatus.Initializing)
 			{
-				HAL.DebugWriteLine(" # Probing");
+				//HAL.DebugWriteLine(" # Probing");
 				device.DeviceDriver.Probe();
 
 				if (device.Status == DeviceStatus.Available)
 				{
-					HAL.DebugWriteLine(" # Starting");
+					//HAL.DebugWriteLine(" # Starting");
 					device.DeviceDriver.Start();
 
-					HAL.DebugWriteLine(" # Started");
+					//HAL.DebugWriteLine(" # Started");
 
 					AddInterruptHandler(device);
 				}

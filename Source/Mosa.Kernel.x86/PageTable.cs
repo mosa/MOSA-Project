@@ -10,15 +10,23 @@ namespace Mosa.Kernel.x86;
 /// </summary>
 public static class PageTable
 {
-	/// <summary>
-	/// Sets up the PageTable
-	/// </summary>
+	private static class Constant
+	{
+		public const uint Present = 1 << 0;
+		public const uint ReadWrite = 1 << 1;
+		public const uint UserSupervisor = 1 << 2;
+		public const uint WriteThrough = 1 << 3;
+		public const uint CacheDisable = 1 << 4;
+		public const uint Accessed = 1 << 5;
+		public const uint Dirty = 1 << 6;
+	}
+
 	public static void Setup()
 	{
 		// Setup Page Directory
 		for (int index = 0; index < 1024; index++)
 		{
-			new Pointer(Address.PageDirectory).Store32(index << 2, (uint)(Address.PageTable + index * 4096 | 0x04 | 0x02 | 0x01));
+			new Pointer(Address.PageDirectory).Store32(index << 2, (uint)(Address.PageTable + index * 4096 | Constant.UserSupervisor | Constant.ReadWrite | Constant.Present));
 		}
 
 		// Map the first 128MB of memory (32786 4K pages) (why 128MB?)

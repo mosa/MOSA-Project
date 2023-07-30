@@ -583,4 +583,10 @@ public struct Pointer
 	{
 		Intrinsic.StorePointer(this, offset, value);
 	}
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public void Clear(uint size)
+	{
+		Internal.MemoryClear(this, size);
+	}
 }
