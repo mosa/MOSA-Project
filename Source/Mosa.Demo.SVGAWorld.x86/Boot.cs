@@ -44,6 +44,8 @@ public static class Boot
 		Random = new Random();
 		DeviceService = new DeviceService();
 
+		DeviceSystem.Setup.Initialize(HAL, DeviceService.ProcessInterrupt);
+
 		// Create service manager and basic services
 		var serviceManager = new ServiceManager();
 		var partitionService = new PartitionService();
@@ -55,19 +57,22 @@ public static class Boot
 		serviceManager.AddService(new PCIControllerService());
 		serviceManager.AddService(new PCIDeviceService());
 
-		DeviceSystem.Setup.Initialize(HAL, DeviceService.ProcessInterrupt);
-
 		DeviceService.RegisterDeviceDriver(DeviceDriver.Setup.GetDeviceDriverRegistryEntries());
 		DeviceService.Initialize(new X86System(), null);
-
 		PCService = serviceManager.GetFirstService<PCService>();
 
 		partitionService.CreatePartitionDevices();
 
 		foreach (var partition in DeviceService.GetDevices<IPartitionDevice>())
+		{
 			FileManager.Register(new FatFileSystem(partition.DeviceDriver as IPartitionDevice));
+		}
 
-		Display.DefaultFont = Utils.Load(File.ReadAllBytes("font.bin"));
+		var file = File.ReadAllBytes("font.bin");
+		Logger.Log("Here-B");
+
+		Display.DefaultFont = Utils.Load(file);
+		Logger.Log("Here-C");
 
 		Utils.Fonts = new List<ISimpleFont>
 		{

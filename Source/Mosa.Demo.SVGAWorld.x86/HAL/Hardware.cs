@@ -91,7 +91,7 @@ public sealed class Hardware : BaseHardwareAbstraction
 	/// <param name="message">The message.</param>
 	public override void DebugWrite(string message)
 	{
-		Console.Write(message);
+		//Console.Write(message);
 	}
 
 	/// <summary>
@@ -100,8 +100,8 @@ public sealed class Hardware : BaseHardwareAbstraction
 	/// <param name="message">The message.</param>
 	public override void DebugWriteLine(string message)
 	{
-		Serial.Write(Serial.COM1, message);
-		Serial.Write(Serial.COM1, (byte)'\n');
+		//Serial.Write(Serial.COM1, message);
+		//Serial.Write(Serial.COM1, (byte)'\n');
 	}
 
 	/// <summary>
