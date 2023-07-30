@@ -16,7 +16,7 @@ public static class Page
 	{
 		var writes = Size / 4;
 
-		for (uint i = 0; i < writes; i += 4)
+		for (var i = 0u; i < writes; i += 4)
 		{
 			page.Store32(i, 0);
 		}
