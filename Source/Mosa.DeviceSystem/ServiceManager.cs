@@ -17,18 +17,18 @@ public sealed class ServiceManager
 	public readonly object lockServices = new object();
 	public readonly object lockEvents = new object();
 
-	public ServiceManager()
-	{
-	}
-
 	public void AddService(BaseService service)
 	{
+		HAL.DebugWriteLine("ServiceManager:AddService()");
+
 		lock (lockServices)
 		{
 			Services.Add(service);
 		}
 
 		service.Start(this);
+
+		HAL.DebugWriteLine("ServiceManager:AddService() [Exit]");
 	}
 
 	public void AddEvent(ServiceEvent serviceEvent)
@@ -111,8 +111,6 @@ public sealed class ServiceManager
 				serviceEvent = Events[0];
 				Events.RemoveAt(0);
 			}
-
-			HAL.DebugWriteLine(" > DispatchEvents");
 
 			DispatchEvents(serviceEvent);
 		}

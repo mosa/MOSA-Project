@@ -86,6 +86,16 @@ public static class Boot
 		//Scheduler.Setup();
 		//Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 
+		Console.Write(ConsoleColor.BrightGreen, "> Hardware abstraction layer...");
+		var hardware = new HAL.Hardware();
+		var deviceService = new DeviceService();
+		DeviceSystem.Setup.Initialize(hardware, deviceService.ProcessInterrupt);
+		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
+
+		Console.Write(ConsoleColor.BrightGreen, "> Registering device drivers...");
+		deviceService.RegisterDeviceDriver(DeviceDriver.Setup.GetDeviceDriverRegistryEntries());
+		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
+
 		Console.WriteLine();
 		Console.WriteLine(ConsoleColor.BrightYellow, "Initializing services...");
 
@@ -94,13 +104,11 @@ public static class Boot
 		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 
 		Console.Write(ConsoleColor.BrightGreen, "> Device Service...");
-		var deviceService = new DeviceService();
 		serviceManager.AddService(deviceService);
 		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 
 		Console.Write(ConsoleColor.BrightGreen, "> Disk Device Service...");
-		var diskDeviceService = new DiskDeviceService();
-		serviceManager.AddService(diskDeviceService);
+		serviceManager.AddService(new DiskDeviceService());
 		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 
 		Console.Write(ConsoleColor.BrightGreen, "> Partition Service...");
@@ -119,24 +127,9 @@ public static class Boot
 		serviceManager.AddService(new PCService());
 		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 
-		Console.Write(ConsoleColor.BrightGreen, "> Initializing hardware abstraction layer...");
-		var hardware = new HAL.Hardware();
-		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
-
-		Console.Write(ConsoleColor.BrightGreen, "> Intalizing device system...");
-		DeviceSystem.Setup.Initialize(hardware, deviceService.ProcessInterrupt);
-		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
-
-		Console.Write(ConsoleColor.BrightGreen, "> Registering device drivers...");
-		deviceService.RegisterDeviceDriver(DeviceDriver.Setup.GetDeviceDriverRegistryEntries());
-		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
-
 		Debug.WriteLine("[System]");
-
-		var system = new X86System();
-
 		Console.Write(ConsoleColor.BrightGreen, "> X86System...");
-		deviceService.Initialize(system, null);
+		deviceService.Initialize(new X86System(), null);
 		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 
 		Debug.WriteLine("Done");

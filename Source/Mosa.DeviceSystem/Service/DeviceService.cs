@@ -109,8 +109,6 @@ public sealed class DeviceService : BaseService
 	{
 		HAL.DebugWriteLine("DeviceService:Initialize()");
 
-		HAL.Assert(ServiceManager.lockEvents != null, "BUG: Service Manager lock is null");
-
 		var device = new Device
 		{
 			DeviceDriver = deviceDriver,
