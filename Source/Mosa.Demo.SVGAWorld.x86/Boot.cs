@@ -40,8 +40,6 @@ public static class Boot
 		Kernel.x86.Kernel.Setup();
 		IDT.SetInterruptHandler(ProcessInterrupt);
 
-		Console.WriteLine("##PASS##");
-
 		HAL = new Hardware();
 		Random = new Random();
 		DeviceService = new DeviceService();
@@ -50,14 +48,14 @@ public static class Boot
 		var serviceManager = new ServiceManager();
 		var partitionService = new PartitionService();
 
+		DeviceSystem.Setup.Initialize(HAL, DeviceService.ProcessInterrupt);
+
 		serviceManager.AddService(DeviceService);
 		serviceManager.AddService(new DiskDeviceService());
 		serviceManager.AddService(partitionService);
 		serviceManager.AddService(new PCService());
 		serviceManager.AddService(new PCIControllerService());
 		serviceManager.AddService(new PCIDeviceService());
-
-		DeviceSystem.Setup.Initialize(HAL, DeviceService.ProcessInterrupt);
 
 		DeviceService.RegisterDeviceDriver(DeviceDriver.Setup.GetDeviceDriverRegistryEntries());
 		DeviceService.Initialize(new X86System(), null);
@@ -92,6 +90,8 @@ public static class Boot
 
 	private static void DoGraphics()
 	{
+		bool confirm = false;
+
 		Utils.BackColor = Color.Indigo;
 		Utils.Mouse.SetScreenResolution(Display.Width, Display.Height);
 
@@ -143,6 +143,12 @@ public static class Boot
 			// Update graphics and FPS meter
 			Display.Update();
 			FPSMeter.Update();
+
+			if (!confirm)
+			{
+				Logger.Log("##PASS##");
+				confirm = true;
+			}
 		}
 	}
 
