@@ -140,7 +140,7 @@ public static class Boot
 		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 
 		Debug.WriteLine("Done");
-		Debug.Kill();
+		//Debug.Kill();
 	}
 
 	[Plug("Mosa.Runtime.GC::AllocateMemory")]
