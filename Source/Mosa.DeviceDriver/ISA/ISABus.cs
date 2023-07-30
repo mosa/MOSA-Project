@@ -38,7 +38,7 @@ public class ISABus : BaseDeviceDriver
 		{
 			if (driver is ISADeviceDriverRegistryEntry)
 			{
-				HAL.DebugWrite("ISA: ");
+				HAL.DebugWrite(" > ISA Driver: ");
 				HAL.DebugWriteLine(driver.Name);
 
 				StartISADevice(driver as ISADeviceDriverRegistryEntry);
