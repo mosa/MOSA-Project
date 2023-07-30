@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace Mosa.DeviceSystem;
@@ -13,8 +14,8 @@ public sealed class ServiceManager
 	private readonly List<BaseService> Services = new List<BaseService>();
 	private readonly List<ServiceEvent> Events = new List<ServiceEvent>();
 
-	private readonly object lockServices = new object();
-	private readonly object lockEvents = new object();
+	public readonly object lockServices = new object();
+	public readonly object lockEvents = new object();
 
 	public ServiceManager()
 	{
@@ -34,20 +35,10 @@ public sealed class ServiceManager
 	{
 		HAL.DebugWriteLine("ServiceManager:AddEvent()");
 
-		HAL.DebugWriteLine(" # Lock");
-
 		lock (lockEvents)
 		{
-			HAL.DebugWriteLine(" # Adding");
-
 			Events.Add(serviceEvent);
-
-			HAL.DebugWriteLine(" # Added");
 		}
-
-		HAL.DebugWriteLine(" # Unlock");
-
-		HAL.DebugWriteLine(" > SendEvents");
 
 		SendEvents();
 

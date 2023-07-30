@@ -19,7 +19,7 @@ public class PCIDeviceService : BaseService
 	/// <summary>
 	/// Initializes this instance.
 	/// </summary>
-	public override void Initialize()
+	protected override void Initialize()
 	{
 		DeviceService = ServiceManager.GetFirstService<DeviceService>();
 	}
