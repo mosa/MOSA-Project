@@ -40,8 +40,6 @@ public static class Boot
 		Kernel.x86.Kernel.Setup();
 		IDT.SetInterruptHandler(ProcessInterrupt);
 
-		Console.WriteLine("##PASS##");
-
 		HAL = new Hardware();
 		Random = new Random();
 		DeviceService = new DeviceService();
@@ -86,6 +84,8 @@ public static class Boot
 		Utils.Mouse = DeviceService.GetFirstDevice<StandardMouse>().DeviceDriver as StandardMouse;
 		if (Utils.Mouse == null)
 			HAL.Abort("Mouse not found.");
+
+		Logger.Log("##PASS##");
 
 		DoGraphics();
 	}
