@@ -2,7 +2,7 @@
 
 namespace Mosa.Kernel.BareMetal;
 
-public enum ConsoleColor : byte
+public enum ScreenColor : byte
 {
 	Black = 30,
 	Red = 31,
