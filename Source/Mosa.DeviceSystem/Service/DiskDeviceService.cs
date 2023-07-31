@@ -9,8 +9,7 @@ public class DiskDeviceService : BaseService
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public override void PostEvent(ServiceEvent serviceEvent)
 	{
-		//HAL.DebugWriteLine("DiskDeviceService:PostEvent()-A");
-		//HAL.Pause();
+		//HAL.DebugWriteLine("DiskDeviceService:PostEvent()");
 
 		var device = MatchEvent<IDiskControllerDevice>(serviceEvent, ServiceEventType.Start);
 

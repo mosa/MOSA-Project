@@ -86,42 +86,9 @@ public static class Boot
 		//Scheduler.Setup();
 		//Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 
-		Console.WriteLine();
-		Console.WriteLine(ConsoleColor.BrightYellow, "Initializing services...");
-
-		Console.Write(ConsoleColor.BrightGreen, "> Service Manager...");
-		var serviceManager = new ServiceManager();
-		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
-
-		Console.Write(ConsoleColor.BrightGreen, "> Disk Device Service...");
-		var diskDeviceService = new DiskDeviceService();
-		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
-
-		Console.Write(ConsoleColor.BrightGreen, "> Partition Service...");
-		var partitionService = new PartitionService();
-		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
-
-		Console.Write(ConsoleColor.BrightGreen, "> PCI Controller Service...");
-		var pciControllerService = new PCIControllerService();
-		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
-
-		Console.Write(ConsoleColor.BrightGreen, "> PCI Device Service...");
-		var pciDeviceService = new PCIDeviceService();
-		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
-
-		Console.Write(ConsoleColor.BrightGreen, "> PC Service...");
-		var pcService = new PCService();
-		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
-
-		Console.Write(ConsoleColor.BrightGreen, "> Device Manager...");
-		var deviceService = new DeviceService();
-		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
-
-		Console.Write(ConsoleColor.BrightGreen, "> Initializing hardware abstraction layer...");
+		Console.Write(ConsoleColor.BrightGreen, "> Hardware abstraction layer...");
 		var hardware = new HAL.Hardware();
-		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
-
-		Console.Write(ConsoleColor.BrightGreen, "> Intalizing device system...");
+		var deviceService = new DeviceService();
 		DeviceSystem.Setup.Initialize(hardware, deviceService.ProcessInterrupt);
 		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 
@@ -129,16 +96,44 @@ public static class Boot
 		deviceService.RegisterDeviceDriver(DeviceDriver.Setup.GetDeviceDriverRegistryEntries());
 		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 
+		Console.WriteLine();
+		Console.WriteLine(ConsoleColor.BrightYellow, "Initializing services...");
+
+		Console.Write(ConsoleColor.BrightGreen, "> Service Manager...");
+		var serviceManager = new ServiceManager();
+		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
+
+		Console.Write(ConsoleColor.BrightGreen, "> Device Service...");
+		serviceManager.AddService(deviceService);
+		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
+
+		Console.Write(ConsoleColor.BrightGreen, "> Disk Device Service...");
+		serviceManager.AddService(new DiskDeviceService());
+		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
+
+		Console.Write(ConsoleColor.BrightGreen, "> Partition Service...");
+		serviceManager.AddService(new PartitionService());
+		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
+
+		Console.Write(ConsoleColor.BrightGreen, "> PCI Controller Service...");
+		serviceManager.AddService(new PCIControllerService());
+		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
+
+		Console.Write(ConsoleColor.BrightGreen, "> PCI Device Service...");
+		serviceManager.AddService(new PCIDeviceService());
+		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
+
+		Console.Write(ConsoleColor.BrightGreen, "> PC Service...");
+		serviceManager.AddService(new PCService());
+		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
+
 		Debug.WriteLine("[System]");
-
-		var system = new X86System();
-
 		Console.Write(ConsoleColor.BrightGreen, "> X86System...");
-		deviceService.Initialize(system, null);
+		deviceService.Initialize(new X86System(), null);
 		Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 
 		Debug.WriteLine("Done");
-		Debug.Kill();
+		//Debug.Kill();
 	}
 
 	[Plug("Mosa.Runtime.GC::AllocateMemory")]

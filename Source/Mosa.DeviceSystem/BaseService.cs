@@ -24,7 +24,7 @@ public abstract class BaseService
 	/// <summary>
 	/// Initializes this instance.
 	/// </summary>
-	public virtual void Initialize()
+	protected virtual void Initialize()
 	{ }
 
 	/// <summary>

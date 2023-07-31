@@ -64,19 +64,19 @@ public static class Boot
 		var pciDeviceService = new PCIDeviceService();
 		var pcService = new PCService();
 
-		serviceManager.AddService(DeviceService);
-		serviceManager.AddService(diskDeviceService);
-		serviceManager.AddService(partitionService);
-		serviceManager.AddService(pciControllerService);
-		serviceManager.AddService(pciDeviceService);
-		serviceManager.AddService(pcService);
-
 		Console.WriteLine("> Initializing hardware abstraction layer...");
 
 		// Set device driver system with the hardware HAL
 		var hardware = new HAL.Hardware();
 
 		DeviceSystem.Setup.Initialize(hardware, DeviceService.ProcessInterrupt);
+
+		serviceManager.AddService(DeviceService);
+		serviceManager.AddService(diskDeviceService);
+		serviceManager.AddService(partitionService);
+		serviceManager.AddService(pciControllerService);
+		serviceManager.AddService(pciDeviceService);
+		serviceManager.AddService(pcService);
 
 		Console.WriteLine("> Registering device drivers...");
 
