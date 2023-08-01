@@ -144,7 +144,7 @@ public static class VGAConsole
 								case 34: VGAText.SetColor(VGAColor.Blue); break;
 								case 35: VGAText.SetColor(VGAColor.Magenta); break;
 								case 36: VGAText.SetColor(VGAColor.Cyan); break;
-								case 37: VGAText.SetColor(VGAColor.LightGray); break;
+								case 37: VGAText.SetColor(VGAColor.White); break;
 
 								case 90: VGAText.SetColor(VGAColor.DarkGray); break;
 								case 91: VGAText.SetColor(VGAColor.LightRed); break;
@@ -153,7 +153,7 @@ public static class VGAConsole
 								case 94: VGAText.SetColor(VGAColor.LightBlue); break;
 								case 95: VGAText.SetColor(VGAColor.LightMagenta); break;
 								case 96: VGAText.SetColor(VGAColor.LightCyan); break;
-								case 97: VGAText.SetColor(VGAColor.White); break;
+								case 97: VGAText.SetColor(VGAColor.LightGray); break;
 
 								case 40: VGAText.SetBackground(VGAColor.Black); break;
 								case 41: VGAText.SetBackground(VGAColor.Red); break;
@@ -171,7 +171,7 @@ public static class VGAConsole
 								case 104: VGAText.SetBackground(VGAColor.LightBlue); break;
 								case 105: VGAText.SetBackground(VGAColor.LightMagenta); break;
 								case 106: VGAText.SetBackground(VGAColor.LightCyan); break;
-								case 107: VGAText.SetBackground(VGAColor.White); break;
+								case 107: VGAText.SetBackground(VGAColor.LightGray); break;
 
 								// FUTURE:
 								//0   Reset all attributes

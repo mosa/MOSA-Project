@@ -3,12 +3,12 @@
 using Mosa.DeviceSystem;
 using Mosa.Runtime;
 
-namespace Mosa.Kernel.BareMetal.HAL;
+namespace Mosa.Kernel.BareMetal;
 
 /// <summary>
-/// Hardware Interface
+/// Hardware Abstraction Layer
 /// </summary>
-public sealed class Hardware : BaseHardwareAbstraction
+public sealed class HardwareAbstractionLayer : BaseHardwareAbstraction
 {
 	public override uint PageSize => Page.Size;
 
@@ -21,20 +21,14 @@ public sealed class Hardware : BaseHardwareAbstraction
 
 	public override void DisableInterrupts() => Platform.Interrupt.Disable();
 
-	public override void ProcessInterrupt(byte irq) => DeviceSystem.HAL.ProcessInterrupt(irq);
+	public override void ProcessInterrupt(byte irq) => HAL.ProcessInterrupt(irq);
 
 	public override void Sleep(uint milliseconds)
 	{
 		// TODO
 	}
 
-	public override ConstrainedPointer AllocateVirtualMemory(uint size, uint alignment)
-	{
-		var address = VirtualMemoryAllocator.AllocateMemory(size);
-
-		//return new ConstrainedPointer(address, size);
-		return new ConstrainedPointer(Pointer.Zero, 0);
-	}
+	public override ConstrainedPointer AllocateVirtualMemory(uint size, uint alignment) => VirtualMemoryAllocator.AllocateMemory(size);
 
 	public override void DebugWrite(string message) => Debug.Write(message);
 

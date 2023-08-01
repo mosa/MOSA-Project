@@ -15,7 +15,7 @@ public class EnvironmentPlug
 		Debug.Fatal();
 	}
 
-	[Plug("System.Environme::Exit")]
+	[Plug("System.Environment::Exit")]
 	public static void Exit(int exitCode)
 	{
 		Debug.Fatal();

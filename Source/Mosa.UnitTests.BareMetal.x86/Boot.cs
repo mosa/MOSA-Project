@@ -22,13 +22,13 @@ public static class Boot
 
 		UnitTestEngine.Setup(0x3F8); // Serial.COM1
 
-		Console.SetBackground(ConsoleColor.Blue);
-		Console.ClearScreen();
-		Console.GotoTop();
-		Console.SetForground(ConsoleColor.Yellow);
-		Console.Write("MOSA OS Version 2.0 - UnitTest");
-		Console.WriteLine();
-		Console.WriteLine();
+		ScreenConsole.SetBackground(ScreenColor.Blue);
+		ScreenConsole.ClearScreen();
+		ScreenConsole.GotoTop();
+		ScreenConsole.SetForground(ScreenColor.Yellow);
+		ScreenConsole.Write("MOSA OS Version 2.0 - UnitTest");
+		ScreenConsole.WriteLine();
+		ScreenConsole.WriteLine();
 
 		UnitTestEngine.DisplayUpdate();
 

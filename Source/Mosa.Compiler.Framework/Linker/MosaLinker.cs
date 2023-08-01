@@ -274,6 +274,9 @@ public sealed class MosaLinker
 			if (symbol.IsResolved)
 				continue;
 
+			if (symbol.Size == 0)
+				continue;
+
 			symbol.SectionOffset = position;
 			symbol.VirtualAddress = VirtualAddress + position;
 

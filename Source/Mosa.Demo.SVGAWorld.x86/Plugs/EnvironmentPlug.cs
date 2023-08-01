@@ -22,7 +22,4 @@ public static class EnvironmentPlug
 		Console.WriteLine("***FAIL FAST*** " + message);
 		for (; ; );
 	}
-
-	[Plug("System.Environment::GetProcessorCount")]
-	internal static int GetProcessorCount() => 1; // TODO: APIC
 }

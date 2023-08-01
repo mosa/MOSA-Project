@@ -100,7 +100,9 @@ public static class HAL
 	public static void Assert(bool condition, string message)
 	{
 		if (!condition)
+		{
 			hardwareAbstraction.Abort(message);
+		}
 	}
 
 	/// <summary>

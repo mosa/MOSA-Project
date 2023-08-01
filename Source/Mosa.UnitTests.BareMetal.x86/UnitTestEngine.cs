@@ -279,21 +279,21 @@ public static class UnitTestEngine
 	{
 		if (!test)
 		{
-			Console.Goto(4, 0);
-			Console.Write("Total  : ");
-			Console.WriteValue(TestCount, 7);
+			ScreenConsole.Goto(4, 0);
+			ScreenConsole.Write("Total  : ");
+			ScreenConsole.WriteValue(TestCount, 7);
 
-			Console.Goto(5, 0);
-			Console.Write("Pending: ");
-			Console.WriteValue(PendingCount, 7);
+			ScreenConsole.Goto(5, 0);
+			ScreenConsole.Write("Pending: ");
+			ScreenConsole.WriteValue(PendingCount, 7);
 		}
 		else
 		{
-			Console.Goto(6, 0);
-			Console.Write("Active : ");
-			Console.WriteValue(TestID, 7);
-			Console.Write(" @ ");
-			Console.WriteValueAsHex(TestMethodAddress.ToUInt32(), 8);
+			ScreenConsole.Goto(6, 0);
+			ScreenConsole.Write("Active : ");
+			ScreenConsole.WriteValue(TestID, 7);
+			ScreenConsole.Write(" @ ");
+			ScreenConsole.WriteValueAsHex(TestMethodAddress.ToUInt32(), 8);
 		}
 	}
 }

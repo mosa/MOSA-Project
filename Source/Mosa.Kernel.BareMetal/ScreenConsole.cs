@@ -2,7 +2,7 @@
 
 namespace Mosa.Kernel.BareMetal;
 
-public static class Console
+public static class ScreenConsole
 {
 	public const byte Escape = 0x1b;
 	public const byte Newline = 0x0A;
@@ -51,25 +51,25 @@ public static class Console
 		Write(Newline);
 	}
 
-	public static void WriteLine(ConsoleColor color, string s)
+	public static void WriteLine(ScreenColor color, string s)
 	{
 		SetForground(color);
 		WriteLine(s);
 	}
 
-	public static void Write(ConsoleColor color, string s)
+	public static void Write(ScreenColor color, string s)
 	{
 		SetForground(color);
 		Write(s);
 	}
 
-	public static void WriteLine(ConsoleColor color)
+	public static void WriteLine(ScreenColor color)
 	{
 		SetForground(color);
 		Write(Newline);
 	}
 
-	public static void Write(ConsoleColor color)
+	public static void Write(ScreenColor color)
 	{
 		SetForground(color);
 	}
@@ -85,7 +85,7 @@ public static class Console
 		Write("[2J");
 	}
 
-	public static void SetForground(ConsoleColor color)
+	public static void SetForground(ScreenColor color)
 	{
 		var c = (byte)color;
 
@@ -96,7 +96,7 @@ public static class Console
 		Write("m");
 	}
 
-	public static void SetBackground(ConsoleColor color)
+	public static void SetBackground(ScreenColor color)
 	{
 		var c = (byte)color + 10;
 
