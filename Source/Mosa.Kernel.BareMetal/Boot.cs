@@ -40,7 +40,7 @@ public static class Boot
 	[Plug("Mosa.Runtime.StartUp::KernelEntryPoint")]
 	public static void EntryPoint()
 	{
-		Debug.WriteLine("[Entry Point]");
+		Debug.WriteLine("[Kernel Entry Point]");
 
 		ScreenConsole.Write(ScreenColor.BrightGreen, "> Enabling debug logging...");
 		Debug.Setup(true);
@@ -87,7 +87,7 @@ public static class Boot
 		//Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 
 		ScreenConsole.Write(ScreenColor.BrightGreen, "> Hardware abstraction layer...");
-		var hardware = new HAL.Hardware();
+		var hardware = new HardwareAbstractionLayer();
 		var deviceService = new DeviceService();
 		DeviceSystem.Setup.Initialize(hardware, deviceService.ProcessInterrupt);
 		ScreenConsole.WriteLine(ScreenColor.BrightBlack, " [Completed]");
@@ -131,10 +131,6 @@ public static class Boot
 		ScreenConsole.Write(ScreenColor.BrightGreen, "> X86System...");
 		deviceService.Initialize(new X86System(), null);
 		ScreenConsole.WriteLine(ScreenColor.BrightBlack, " [Completed]");
-
-		Debug.WriteLine("[Kernel Ready]");
-
-		//Debug.Kill();
 	}
 
 	[Plug("Mosa.Runtime.GC::AllocateMemory")]

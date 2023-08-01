@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Diagnostics;
 using Mosa.Runtime.Plug;
 
 namespace Mosa.Kernel.BareMetal.Korlib;

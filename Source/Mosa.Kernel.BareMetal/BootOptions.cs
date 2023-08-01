@@ -4,7 +4,10 @@ namespace Mosa.Kernel.BareMetal
 {
 	public static class BootOptions
 	{
-		public static bool EanbleVirtualMemory;
+		// FUTURE
+
+		public static bool EnableVirtualMemory;
+		public static bool EnableMinimalBoot;
 		public static bool EnableDebugOutput;
 	}
 }
