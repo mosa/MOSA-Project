@@ -105,7 +105,7 @@ public static class StringTests
 	[MosaUnitTest]
 	public static bool InsertTest1()
 	{
-		return "aaa".Insert(0, "bbb").Equals("aaabbb");
+		return "aaa".Insert(0, "bbb").Equals("bbbaaa");
 	}
 
 	[MosaUnitTest]
@@ -148,6 +148,6 @@ public static class StringTests
 	[MosaUnitTest]
 	public static bool IsNullOrWhiteSpaceTest4()
 	{
-		return string.IsNullOrWhiteSpace("test") == false;
+		return !string.IsNullOrWhiteSpace("test");
 	}
 }
