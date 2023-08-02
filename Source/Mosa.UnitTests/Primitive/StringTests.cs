@@ -78,4 +78,76 @@ public static class StringTests
 
 		return string.Equals(a, b);
 	}
+
+	[MosaUnitTest]
+	public static bool SubstringTest1()
+	{
+		return "abc".Substring(1).Equals("bc");
+	}
+
+	[MosaUnitTest]
+	public static bool SubstringTest2()
+	{
+		return "abcdef".Substring(3).Equals("def");
+	}
+
+	[MosaUnitTest]
+	public static bool SubstringTest3() {
+		return "abcdef".Substring(0, 3).Equals("abc");
+	}
+
+	[MosaUnitTest]
+	public static bool SubstringTest4()
+	{
+		return "abcdef".Substring(2, 1).Equals("c");
+	}
+
+	[MosaUnitTest]
+	public static bool InsertTest1()
+	{
+		return "aaa".Insert(0, "bbb").Equals("aaabbb");
+	}
+
+	[MosaUnitTest]
+	public static bool InsertTest2()
+	{
+		return "aaa".Insert(2, "bbb").Equals("aabbba");
+	}
+
+	[MosaUnitTest]
+	public static bool RemoveTest1()
+	{
+		return "aaabbb".Remove(0, 3).Equals("bbb");
+	}
+
+	[MosaUnitTest]
+	public static bool RemoveTest2()
+	{
+		return "aabbba".Remove(2, 3).Equals("aaa");
+	}
+
+	[MosaUnitTest]
+	public static bool IsNullOrWhiteSpaceTest1()
+	{
+		return string.IsNullOrWhiteSpace("");
+	}
+
+	[MosaUnitTest]
+	public static bool IsNullOrWhiteSpaceTest2()
+	{
+		return string.IsNullOrWhiteSpace(" ");
+	}
+
+	[MosaUnitTest]
+	public static bool IsNullOrWhiteSpaceTest3()
+	{
+		// ReSharper disable once ConditionIsAlwaysTrueOrFalse
+		return string.IsNullOrWhiteSpace(null);
+	}
+
+	[MosaUnitTest]
+	public static bool IsNullOrWhiteSpaceTest4()
+	{
+		return string.IsNullOrWhiteSpace("test") == false;
+	}
 }

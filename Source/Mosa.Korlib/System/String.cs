@@ -320,6 +320,7 @@ public sealed class String : IEnumerable, IEnumerable<char>, IEquatable<String>,
 
 	public string Insert(int startIndex, string str)
 	{
+		if (startIndex == 0) return str + this;
 		return this.Substring(0, startIndex) + str + this.Substring(startIndex);
 	}
 
