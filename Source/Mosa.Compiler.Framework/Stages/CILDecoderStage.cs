@@ -1849,6 +1849,13 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 				context.AppendInstruction(IRInstruction.Compare64x32, conditionCode, result, entry1.Operand, entry2.Operand);
 				return true;
 
+			case PrimitiveType.Int64 when entry2.PrimitiveType == PrimitiveType.Int32:
+				var v1 = MethodCompiler.VirtualRegisters.Allocate64();
+
+				context.AppendInstruction(IRInstruction.ZeroExtend32x64, v1, entry2.Operand);
+				context.AppendInstruction(IRInstruction.Compare64x32, conditionCode, result, entry1.Operand, v1);
+				return true;
+
 			default:
 
 				// TODO: Managed Pointers

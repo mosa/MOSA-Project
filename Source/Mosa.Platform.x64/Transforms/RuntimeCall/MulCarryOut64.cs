@@ -3,12 +3,12 @@
 using System.Diagnostics;
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x86.Transforms.RuntimeCall;
+namespace Mosa.Platform.x64.Transforms.RuntimeCall;
 
 /// <summary>
 /// MulCarryOut64
 /// </summary>
-[Transform("x86.RuntimeCall")]
+[Transform("x64.RuntimeCall")]
 public sealed class MulCarryOut64 : BaseTransform
 {
 	public MulCarryOut64() : base(IRInstruction.MulCarryOut64, TransformType.Manual | TransformType.Transform)
@@ -32,7 +32,7 @@ public sealed class MulCarryOut64 : BaseTransform
 		var result2 = context.Result2;
 
 		var v1 = transform.LocalStack.Allocate(result2);   // REVIEW
-		var v2 = transform.VirtualRegisters.Allocate32();
+		var v2 = transform.VirtualRegisters.Allocate64();
 
 		Debug.Assert(method != null, $"Cannot find method: Mul64Carry");
 
@@ -40,7 +40,7 @@ public sealed class MulCarryOut64 : BaseTransform
 
 		context.SetInstruction(IRInstruction.AddressOf, v2, v1);
 		context.AppendInstruction(IRInstruction.CallStatic, result, symbol, operand1, operand2, v2);
-		context.AppendInstruction(IRInstruction.LoadZeroExtend8x32, result2, v2, Operand.Constant32_0);
+		context.AppendInstruction(IRInstruction.LoadZeroExtend8x32, result2, v2, Operand.Constant64_0);
 
 		transform.MethodScanner.MethodInvoked(method, transform.Method);
 	}

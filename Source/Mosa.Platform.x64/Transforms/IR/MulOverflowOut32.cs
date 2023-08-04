@@ -5,25 +5,26 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x64.Transforms.IR;
 
 /// <summary>
-/// RemSigned32
+/// MulOverflowOut32
 /// </summary>
 [Transform("x64.IR")]
-public sealed class RemSigned32 : BaseIRTransform
+public sealed class MulOverflowOut32 : BaseIRTransform
 {
-	public RemSigned32() : base(IRInstruction.RemSigned32, TransformType.Manual | TransformType.Transform)
+	public MulOverflowOut32() : base(IRInstruction.MulOverflowOut32, TransformType.Manual | TransformType.Transform)
 	{
 	}
 
 	public override void Transform(Context context, TransformContext transform)
 	{
 		var result = context.Result;
+		var result2 = context.Result2;
 		var operand1 = context.Operand1;
 		var operand2 = context.Operand2;
 
 		var v1 = transform.VirtualRegisters.Allocate32();
-		var v2 = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction(X64.Cdq32, v1, operand1);
-		context.AppendInstruction2(X64.IDiv32, result, v2, v1, operand1, operand2);
+		context.SetInstruction(X64.IMul32, result, operand1, operand2);
+		context.AppendInstruction(X64.Setcc, ConditionCode.Overflow, v1);
+		context.AppendInstruction(X64.Movzx8To32, result2, v1);
 	}
 }

@@ -86,7 +86,6 @@ public partial class MainForm : Form
 
 		RegisterPlatforms();
 
-
 		Stopwatch.Restart();
 	}
 
@@ -1376,9 +1375,8 @@ public partial class MainForm : Form
 			return;
 
 		var list = new List<TranformEntry>();
-		//{
-		//	new TranformEntry() { ID = -1, Name = "***Start***" }
-		//};
+
+		list.Add(new TranformEntry() { ID = 0, Name = "***Start***" });
 
 		var pass = 0;
 		TranformEntry entry = null;
@@ -1417,11 +1415,12 @@ public partial class MainForm : Form
 				continue;
 			}
 
-			entry = new TranformEntry();
-
-			entry.ID = Convert.ToInt32(parts[0].Trim());
-			entry.Name = part1;
-			entry.Pass = pass;
+			entry = new TranformEntry
+			{
+				ID = Convert.ToInt32(parts[0].Trim()) + 1,
+				Name = part1,
+				Pass = pass
+			};
 
 			list.Add(entry);
 		}

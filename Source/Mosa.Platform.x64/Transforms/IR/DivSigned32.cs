@@ -21,10 +21,12 @@ public sealed class DivSigned32 : BaseIRTransform
 		var result = context.Result;
 
 		var v1 = transform.VirtualRegisters.Allocate32();
-		var v2 = transform.VirtualRegisters.Allocate32();
-		var v3 = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction2(X64.Cdq32, v1, v2, operand1);
-		context.AppendInstruction2(X64.IDiv32, v3, result, v1, v2, operand2);
+		var rax = Operand.CreateCPURegister32(CPURegister.RAX);
+		var rdx = Operand.CreateCPURegister32(CPURegister.RDX);
+
+		context.SetInstruction(X64.Mov32, rax, operand1);
+		context.AppendInstruction(X64.Cdq32, rdx, rax);
+		context.AppendInstruction2(X64.IDiv32, v1, result, rdx, rax, operand2);
 	}
 }

@@ -27,13 +27,4 @@
     <ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj" />
     <ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="Intrinsic\SuppressStackFrame.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Transforms\Optimizations\Auto\Ordering\" />
-    <Folder Include="Transforms\Optimizations\Auto\Shrink\" />
-    <Folder Include="Transforms\Optimizations\Auto\Special\" />
-    <Folder Include="Transforms\Optimizations\Manual\Simplification\" />
-  </ItemGroup>
 </Project>
