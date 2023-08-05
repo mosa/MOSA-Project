@@ -53,19 +53,19 @@ public static class ConvFloatTests
 	}
 
 	[MosaUnitTest(Series = "R4")]
-	public static ulong ConvR4U4(float a)
+	public static uint ConvR4U4(float a)
 	{
 		return (uint)a;
 	}
 
 	[MosaUnitTest(Series = "R8")]
-	public static long ConvR4I4(double a)
+	public static int ConvR8I4(double a)
 	{
 		return (int)a;
 	}
 
 	[MosaUnitTest(Series = "R8")]
-	public static ulong ConvR4U4(double a)
+	public static uint ConvR8U4(double a)
 	{
 		return (uint)a;
 	}

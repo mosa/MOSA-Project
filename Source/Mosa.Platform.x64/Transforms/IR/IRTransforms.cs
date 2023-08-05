@@ -38,7 +38,7 @@ public static class IRTransforms
 		new ConvertR4ToI64(),
 		new ConvertR8ToR4(),
 		new ConvertR8ToI32(),
-		//new ConvertR8ToU32(),
+		new ConvertR8ToU32(),
 		new ConvertR8ToI64(),
 		new ConvertI32ToR4(),
 		new ConvertI32ToR8(),
