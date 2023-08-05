@@ -22,9 +22,8 @@ public sealed class RemSigned64 : BaseIRTransform
 
 		var v1 = transform.VirtualRegisters.Allocate32();
 		var v2 = transform.VirtualRegisters.Allocate32();
-		var v3 = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction2(X64.Cdq64, v1, v2, operand1);
-		context.AppendInstruction2(X64.IDiv64, result, v3, v1, v2, operand2);
+		context.SetInstruction(X64.Mov64, v1, Operand.Constant64_0);
+		context.AppendInstruction2(X64.Div64, result, v2, v1, operand1, operand2);
 	}
 }

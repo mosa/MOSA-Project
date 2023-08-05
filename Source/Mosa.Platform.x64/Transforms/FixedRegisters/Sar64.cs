@@ -16,6 +16,12 @@ public sealed class Sar64 : BaseTransform
 
 	public override bool Match(Context context, TransformContext transform)
 	{
+		if (context.Operand2.IsConstant)
+			return false;
+
+		if (context.Operand2.Register == CPURegister.RCX)
+			return false;
+
 		return true;
 	}
 

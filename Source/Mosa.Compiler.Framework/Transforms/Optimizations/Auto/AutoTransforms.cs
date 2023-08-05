@@ -286,7 +286,6 @@ public static class AutoTransforms
 		new Simplification.Or32SignExtend16x32SignExtend16x32_v1(),
 		new Simplification.Or64SignExtend16x64SignExtend16x64(),
 		new Simplification.Or64SignExtend16x64SignExtend16x64_v1(),
-		new Simplification.Or32Truncate64x32Truncate64x32(),
 		new Simplification.SignExtend32x64Truncate64x32(),
 		new StrengthReduction.Add32Zero(),
 		new StrengthReduction.Add32Zero_v1(),

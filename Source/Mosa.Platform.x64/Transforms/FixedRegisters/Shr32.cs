@@ -14,10 +14,18 @@ public sealed class Shr32 : BaseTransform
 	{
 	}
 
+
 	public override bool Match(Context context, TransformContext transform)
 	{
+		if (context.Operand2.IsConstant)
+			return false;
+
+		if (context.Operand2.Register == CPURegister.RCX)
+			return false;
+
 		return true;
 	}
+
 
 	public override void Transform(Context context, TransformContext transform)
 	{

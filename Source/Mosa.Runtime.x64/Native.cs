@@ -68,7 +68,7 @@ public static unsafe class Native
 	[DllImport("Mosa.Platform.x64.Intrinsic::Int")]
 	public static extern void Int(byte interrupt);
 
-	[DllImport("Mosa.Platform.x86.Intrinsic::Blsr32")]
+	[DllImport("Mosa.Platform.x64.Intrinsic::Blsr32")]
 	public static extern uint Blsr32(uint esp);
 
 	[DllImport("Mosa.Platform.x64.Intrinsic::Blsr64")]
@@ -86,10 +86,10 @@ public static unsafe class Native
 	//[DllImport("Mosa.Platform.x64.Intrinsic::Lzcnt64")]
 	//public static extern uint Lzcnt64(uint esp);
 
-	//[DllImport("Mosa.Platform.x86.Intrinsic::Tzcnt32")]
+	//[DllImport("Mosa.Platform.x64.Intrinsic::Tzcnt32")]
 	//public static extern uint Tzcnt32(uint esp);
 
-	//[DllImport("Mosa.Platform.x86.Intrinsic::Tzcnt64")]
+	//[DllImport("Mosa.Platform.x64.Intrinsic::Tzcnt64")]
 	//public static extern uint Tzcnt64(uint esp);
 
 	#endregion Intrinsic Instructions
