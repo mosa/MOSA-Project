@@ -24,25 +24,29 @@ public static class R8
 	{
 		var list = new List<double>
 		{
-			0,
-			1,
-			2,
-
-			//list.Add(double.MinValue);
-			//list.Add(double.MaxValue);
+			0d,
+			1d,
+			2d,
+			double.MinValue,
+			double.MaxValue,
 			double.NaN,
 			double.PositiveInfinity,
 			double.NegativeInfinity,
-			17,
-			23,
-			12321452132,
-
+			1.00012d,
+			17.0002501d,
+			23d,
+			12321452132.561d,
+			17d,
+			12321452132d,
 			// negatives
-			-1,
-			-2,
-			-17,
-			-23,
-			-12321452132
+			-1d,
+			-2d,
+			-17d,
+			-23d,
+			-12321452132d
+			-1.00012d,
+			-17.0002501d,
+			-12321452132.561d
 		};
 
 		list = list.Distinct().ToList();
