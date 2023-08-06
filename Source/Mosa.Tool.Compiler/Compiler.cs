@@ -19,13 +19,6 @@ public class Compiler
 
 	private DateTime CompileStartTime;
 
-	/// <summary>
-	/// A string holding a simple usage description.
-	/// </summary>
-	private readonly string usageString = @"Usage: Mosa.Tool.Compiler.exe -o outputfile --platform [x86|x64] {additional options} inputfiles.
-
-Example: Mosa.Tool.Compiler.exe -o Mosa.HelloWorld.x86.bin -platform x86 Mosa.HelloWorld.x86.dll System.Runtime.dll Mosa.Plug.Korlib.dll Mosa.Plug.Korlib.x86.dll";
-
 	#endregion Data
 
 	#region Public Methods
@@ -77,8 +70,8 @@ Example: Mosa.Tool.Compiler.exe -o Mosa.HelloWorld.x86.bin -platform x86 Mosa.He
 			Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
 			Debug.AutoFlush = true;
 
-			Console.WriteLine($" > Output file: {compiler.MosaSettings.OutputFile}");
 			Console.WriteLine($" > Input file(s): {string.Join(", ", new List<string>(compiler.MosaSettings.SourceFiles.ToArray()))}");
+			Console.WriteLine($" > Output file: {compiler.MosaSettings.OutputFile}");
 			Console.WriteLine($" > Platform: {compiler.MosaSettings.Platform}");
 
 			Console.WriteLine();
@@ -91,7 +84,8 @@ Example: Mosa.Tool.Compiler.exe -o Mosa.HelloWorld.x86.bin -platform x86 Mosa.He
 		}
 		catch (Exception ce)
 		{
-			ShowError(ce.Message);
+			Output($"Exception: {ce.Message}");
+			Output($"Exception: {ce.StackTrace}");
 			Environment.Exit(1);
 			return;
 		}
@@ -136,23 +130,13 @@ Example: Mosa.Tool.Compiler.exe -o Mosa.HelloWorld.x86.bin -platform x86 Mosa.He
 			&& compilerEvent != CompilerEvent.FinalizationStageEnd)
 		{
 			message = string.IsNullOrWhiteSpace(message) ? string.Empty : $": {message}";
-			Console.WriteLine($"{(DateTime.Now - CompileStartTime).TotalSeconds:0.00} [{threadID}] {compilerEvent.ToText()}{message}");
+			Output($"[{threadID}] {compilerEvent.ToText()}{message}");
 		}
 	}
 
-	/// <summary>
-	/// Shows an error and a short information text.
-	/// </summary>
-	/// <param name="message">The error message to show.</param>
-	private void ShowError(string message)
+	private void Output(string log)
 	{
-		Console.WriteLine(usageString);
-		Console.WriteLine();
-		Console.Write("Error: ");
-		Console.WriteLine(message);
-		Console.WriteLine();
-		Console.WriteLine("Execute 'Mosa.Tool.Compiler.exe --help' for more information.");
-		Console.WriteLine();
+		Console.WriteLine($"{(DateTime.Now - CompileStartTime).TotalSeconds:0.00} | {log}");
 	}
 
 	#endregion Private Methods
