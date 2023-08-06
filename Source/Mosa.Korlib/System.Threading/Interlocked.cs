@@ -47,12 +47,8 @@ public static class Interlocked
 	[MethodImplAttribute(MethodImplOptions.InternalCall)]
 	public static extern int CompareExchange(ref int location1, int value, int comparand);
 
-	//[MethodImplAttribute(MethodImplOptions.InternalCall)]
-	//public static extern long CompareExchange(ref long location1, long value, long comparand);
-	public static long CompareExchange(ref long location1, long value, long comparand)
-	{
-		return 0; //temp
-	}
+	[MethodImplAttribute(MethodImplOptions.InternalCall)]
+	public static extern long CompareExchange(ref long location1, long value, long comparand);
 
 	[MethodImplAttribute(MethodImplOptions.InternalCall)]
 	public static extern float CompareExchange(ref float location1, float value, float comparand);
