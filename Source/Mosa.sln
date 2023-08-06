@@ -163,6 +163,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Transforms", "Transforms", 
 		Data\IR-Optimizations-ConstantFolding.json = Data\IR-Optimizations-ConstantFolding.json
 		Data\IR-Optimizations-ConstantMove-Expression.json = Data\IR-Optimizations-ConstantMove-Expression.json
 		Data\IR-Optimizations-ConstantMove.json = Data\IR-Optimizations-ConstantMove.json
+		Data\IR-Optimizations-LowerTo32.json = Data\IR-Optimizations-LowerTo32.json
 		Data\IR-Optimizations-Phi.json = Data\IR-Optimizations-Phi.json
 		Data\IR-Optimizations-Reorder.json = Data\IR-Optimizations-Reorder.json
 		Data\IR-Optimizations-Rewrite.json = Data\IR-Optimizations-Rewrite.json

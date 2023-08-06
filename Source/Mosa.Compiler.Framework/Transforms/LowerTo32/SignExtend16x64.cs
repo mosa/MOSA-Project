@@ -10,7 +10,7 @@ public sealed class SignExtend16x64 : BaseLower32Transform
 
 	public override bool Match(Context context, TransformContext transform)
 	{
-		return transform.LowerTo32;
+		return transform.IsLowerTo32;
 	}
 
 	public override void Transform(Context context, TransformContext transform)

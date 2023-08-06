@@ -18,7 +18,7 @@ public sealed class Branch64 : BaseLower32Transform
 		if (branch64Extends.Match(context, transform))
 			return false;
 
-		return transform.LowerTo32;
+		return transform.IsLowerTo32;
 	}
 
 	public override void Transform(Context context, TransformContext transform)

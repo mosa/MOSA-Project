@@ -86,6 +86,13 @@ public static class Program
 		).Execute();
 
 		new BuildTransformations(
+			Path.Combine(dataPath, @"IR-Optimizations-LowerTo32.json"),
+			Path.Combine(targetPath, @"Mosa.Compiler.Framework\Transforms\Optimizations\Auto"),
+			"Mosa.Compiler.Framework",
+			"Mosa.Compiler.Framework"
+		).Execute();
+
+		new BuildTransformations(
 			Path.Combine(dataPath, @"IR-Optimizations-Algebraic.json"),
 			Path.Combine(targetPath, @"Mosa.Compiler.Framework\Transforms\Optimizations\Auto"),
 			"Mosa.Compiler.Framework",
@@ -215,22 +222,5 @@ public static class Program
 			Path.Combine(dataPath, @"ARMv8A32-Instructions.json"),
 			Path.Combine(targetPath, @"Mosa.Platform.ARMv8A32\Instructions")
 		).Execute();
-
-		//new BuildESP32(
-		//	Path.Combine(dataPath, @"ESP32-Instructions.json"),
-		//	Path.Combine(targetPath, @"Mosa.Platform.ESP32\"),
-		//	"ESP32.cs"
-		//).Execute();
-
-		//new BuildESP32Instructions(
-		//	Path.Combine(dataPath, @"ESP32-Instructions.json"),
-		//	Path.Combine(targetPath, @"Mosa.Platform.ESP32\"),
-		//	"ESP32Instructions.cs"
-		//).Execute();
-
-		//new BuildESP32InstructionFiles(
-		//	Path.Combine(dataPath, @"ESP32-Instructions.json"),
-		//	Path.Combine(targetPath, @"Mosa.Platform.ESP32\Instructions")
-		//).Execute();
 	}
 }

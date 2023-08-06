@@ -50,12 +50,6 @@ public class BuildIRInstructionFiles : BuildBaseTemplate
 		Lines.AppendLine("\t{");
 		Lines.AppendLine("\t}");
 
-		//if (node.FlowControl != null && node.FlowControl != "Next")
-		//{
-		//	Lines.AppendLine();
-		//	Lines.AppendLine("\tpublic override FlowControl FlowControl => FlowControl." + node.FlowControl + ";");
-		//}
-
 		if (node.FlowControl != null && node.FlowControl != "Next")
 		{
 			Lines.AppendLine();

@@ -8,40 +8,47 @@ public class Transformation
 {
 	public readonly string ExpressionText;
 	public readonly string FilterText;
+	public readonly string PrefilterText;
 	public readonly string ResultText;
 
 	protected readonly List<Token> TokenizedExpression;
 	protected readonly List<Token> TokenizedFilter;
 	protected readonly List<Token> TokenizedResult;
+	protected readonly List<Token> TokenizedPrefilter;
 
 	public readonly LabelSet LabelSet;
 	public readonly InstructionNode InstructionTree;
 	public readonly InstructionNode ResultInstructionTree;
 	public readonly List<Method> Filters;
+	public readonly List<Method> Prefilters;
 
-	public Transformation(string expression, string filter, string result)
+	public Transformation(string expression, string filter, string result, string prefilterText)
 	{
 		ExpressionText = expression;
 		FilterText = filter;
 		ResultText = result;
+		PrefilterText = prefilterText;
 
 		TokenizedExpression = Tokenizer.Parse(ExpressionText);
 		TokenizedFilter = Tokenizer.Parse(FilterText);
+		TokenizedPrefilter = Tokenizer.Parse(PrefilterText);
 		TokenizedResult = Tokenizer.Parse(ResultText);
 
 		InstructionTree = InstructionParser.Parse(TokenizedExpression);
 		ResultInstructionTree = ResultParser.Parse(TokenizedResult);
 		Filters = FilterParser.ParseAll(TokenizedFilter);
+		Prefilters = PrefilterParser.ParseAll(TokenizedPrefilter);
 
 		LabelSet = new LabelSet(InstructionTree);
 		LabelSet.AddUse(ResultInstructionTree);
 	}
 
-	private Transformation(InstructionNode instructionTree, InstructionNode resultInstructionTree, List<Method> filters)
+	private Transformation(InstructionNode instructionTree, InstructionNode resultInstructionTree, List<Method> filters, List<Method> prefilters)
 	{
 		InstructionTree = instructionTree;
 		ResultInstructionTree = resultInstructionTree;
 		Filters = filters;
+		Prefilters = prefilters;
 
 		LabelSet = new LabelSet(InstructionTree);
 		LabelSet.AddUse(ResultInstructionTree);
@@ -352,7 +359,7 @@ public class Transformation
 			}
 		}
 
-		return new Transformation(instructionTree, ResultInstructionTree, Filters);
+		return new Transformation(instructionTree, ResultInstructionTree, Filters, Prefilters);
 	}
 
 	public static ConditionCode GetReverse(ConditionCode conditionCode)

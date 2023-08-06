@@ -770,6 +770,7 @@ public static class AutoTransforms
 		new Simplification.Xor32Max_v1(),
 		new Simplification.Xor64Max(),
 		new Simplification.Xor64Max_v1(),
+		new LowerTo32.Or32Truncate64x32Truncate64x32(),
 		new Algebraic.Signed32AAPlusBBPlus2AB(),
 		new Algebraic.Signed32AAPlusBBPlus2AB_v1(),
 		new Algebraic.Signed32AAPlusBBPlus2AB_v2(),
