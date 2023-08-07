@@ -1,25 +1,16 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.UnitTests.Optimization;
+using Mosa.Kernel.BareMetal;
 
 namespace Mosa.BareMetal.HelloWorld.ARMv8A32;
 
-/// <summary>
-/// Boot
-/// </summary>
 public static class Boot
 {
-	/// <summary>
-	/// Main
-	/// </summary>
 	public static void Main()
 	{
-		while (true)
-		{ }
-	}
+		Debug.WriteLine("Boot::Main()");
+		Debug.WriteLine("MOSA ARMv8A32 Kernel");
 
-	public static bool IncludeUnitTestAssembly()
-	{
-		return CommonTests.OptimizationTest1();
+		Program.EntryPoint();
 	}
 }

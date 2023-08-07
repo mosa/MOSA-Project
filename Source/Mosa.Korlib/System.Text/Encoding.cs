@@ -7,12 +7,7 @@ namespace System.Text;
 /// </summary>
 public abstract class Encoding
 {
-	public static ASCIIEncoding ASCII;
-
-	public static void Setup()
-	{
-		ASCII = new ASCIIEncoding();
-	}
+	public static ASCIIEncoding ASCII = new ASCIIEncoding();
 
 	public abstract String GetString(byte[] bytes, int index, int count);
 
