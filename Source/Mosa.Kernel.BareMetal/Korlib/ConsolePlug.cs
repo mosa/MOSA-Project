@@ -1,14 +1,15 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
+using Mosa.DeviceSystem;
 using Mosa.Runtime.Plug;
 
 namespace Mosa.Kernel.BareMetal.Korlib;
 
 public static class ConsolePlug
 {
-	private static ConsoleColor forgroundColor = ConsoleColor.White;
-	private static ConsoleColor backgroundColor = ConsoleColor.Black;
+	private static ConsoleColor ForegroundColor = ConsoleColor.White;
+	private static ConsoleColor BackgroundColor = ConsoleColor.Black;
 
 	[Plug("System.Console::Clear")]
 	public static void Clear()
@@ -43,27 +44,27 @@ public static class ConsolePlug
 	[Plug("System.Console::SetForegroundColor")]
 	public static void SetForegroundColor(ConsoleColor color)
 	{
-		forgroundColor = color;
+		ForegroundColor = color;
 		ScreenConsole.SetForground(Convert(color));
 	}
 
 	[Plug("System.Console::SetBackgroundColor")]
 	public static void SetBackgroundColor(ConsoleColor color)
 	{
-		backgroundColor = color;
+		BackgroundColor = color;
 		ScreenConsole.SetBackground(Convert(color));
 	}
 
 	[Plug("System.Console::GetForegroundColor")]
 	public static ConsoleColor GetForegroundColor()
 	{
-		return forgroundColor;
+		return ForegroundColor;
 	}
 
 	[Plug("System.Console::GetBackgroundColor")]
 	public static ConsoleColor GetBackgroundColor()
 	{
-		return backgroundColor;
+		return BackgroundColor;
 	}
 
 	[Plug("System.Console::SetCursorPosition")]
@@ -77,6 +78,53 @@ public static class ConsolePlug
 	{
 		SetBackgroundColor(ConsoleColor.Black);
 		SetForegroundColor(ConsoleColor.White);
+	}
+
+	// TODO: Fix!
+	[Plug("System.Console::ReadLine")]
+	public static string ReadLine()
+	{
+		var length = 0;
+		var buffer = new char[1024];
+
+		for (; ; )
+		{
+			HAL.Yield();
+
+			var key = Kernel.Keyboard.GetKeyPressed();
+			if (key == null) continue;
+
+			switch (key.Character)
+			{
+				// Enter key
+				case '\n':
+				{
+					ScreenConsole.Write(ScreenConsole.Newline);
+					return new string(buffer, 0, length);
+				}
+
+				// Backspace key
+				case '\b':
+				{
+					if (length > 0)
+					{
+						ScreenConsole.Write(ScreenConsole.Backspace);
+						ScreenConsole.Write(' ');
+						length--;
+					}
+					break;
+				}
+
+				// Any other key
+				default:
+				{
+					WriteLine("char");
+					buffer[length++] = key.Character;
+					ScreenConsole.Write(key.Character);
+					break;
+				}
+			}
+		}
 	}
 
 	private static ConsoleColor Convert(ScreenColor color)

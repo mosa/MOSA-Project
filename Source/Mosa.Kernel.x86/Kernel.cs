@@ -36,8 +36,5 @@ public static class Kernel
 		Scheduler.Setup();
 		SmbiosManager.Setup();
 		ConsoleManager.Setup();
-
-		// Setup the Encoding objects
-		Encoding.Setup();
 	}
 }

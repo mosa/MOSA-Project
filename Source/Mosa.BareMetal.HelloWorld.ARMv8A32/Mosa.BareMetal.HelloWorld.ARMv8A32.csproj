@@ -13,9 +13,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mosa.Kernel.BareMetal.x86\Mosa.Kernel.BareMetal.x86.csproj" />
-    <ProjectReference Include="..\Mosa.Kernel.BareMetal\Mosa.Kernel.BareMetal.csproj" />
-    <ProjectReference Include="..\Mosa.Korlib\Mosa.Korlib.csproj" />
-    <ProjectReference Include="..\Mosa.UnitTests\Mosa.UnitTests.csproj" />
+	<ProjectReference Include="..\Mosa.BareMetal.HelloWorld\Mosa.BareMetal.HelloWorld.csproj" />
+	<ProjectReference Include="..\Mosa.Kernel.BareMetal.ARMv8A32\Mosa.Kernel.BareMetal.ARMv8A32.csproj" />
   </ItemGroup>
 </Project>

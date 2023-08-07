@@ -11,11 +11,9 @@
     <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
     <UseAppHost>false</UseAppHost>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <NoWarn>MSB3245</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mosa.Kernel.BareMetal.x64\Mosa.Kernel.BareMetal.x64.csproj" />
-    <ProjectReference Include="..\Mosa.Kernel.BareMetal\Mosa.Kernel.BareMetal.csproj" />
-    <ProjectReference Include="..\Mosa.Korlib\Mosa.Korlib.csproj" />
+	<ProjectReference Include="..\Mosa.BareMetal.HelloWorld\Mosa.BareMetal.HelloWorld.csproj" />
+	<ProjectReference Include="..\Mosa.Kernel.BareMetal.x64\Mosa.Kernel.BareMetal.x64.csproj" />
   </ItemGroup>
 </Project>

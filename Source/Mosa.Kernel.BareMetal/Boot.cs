@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.DeviceDriver;
+using Mosa.DeviceDriver.ISA;
+using Mosa.DeviceDriver.ScanCodeMap;
 using Mosa.DeviceSystem;
 using Mosa.DeviceSystem.Service;
 using Mosa.Kernel.BareMetal.BootMemory;
@@ -131,14 +133,25 @@ public static class Boot
 		ScreenConsole.Write(ScreenColor.BrightGreen, "> X86System...");
 		deviceService.Initialize(new X86System(), null);
 		ScreenConsole.WriteLine(ScreenColor.BrightBlack, " [Completed]");
+
+		ScreenConsole.Write(ScreenColor.BrightGreen, "> StandardKeyboard...");
+		{
+			var stdKeyboard = deviceService.GetFirstDevice<StandardKeyboard>().DeviceDriver as IKeyboardDevice;
+			if (stdKeyboard == null)
+			{
+				ScreenConsole.WriteLine(ScreenColor.Red, " [FAIL]");
+				ScreenConsole.WriteLine(ScreenColor.Red, "No keyboard detected!");
+				while (true) HAL.Yield();
+			}
+
+			Kernel.Keyboard = new Keyboard(stdKeyboard, new US());
+		}
+		ScreenConsole.WriteLine(ScreenColor.BrightBlack, " [Completed]");
 	}
 
 	[Plug("Mosa.Runtime.GC::AllocateMemory")]
 	private static Pointer AllocateMemory(uint size)
 	{
-		if (BootStatus.IsGCEnabled)
-			return GCMemory.AllocateMemory(size);
-		else
-			return InitialGCMemory.AllocateMemory(size);
+		return BootStatus.IsGCEnabled ? GCMemory.AllocateMemory(size) : InitialGCMemory.AllocateMemory(size);
 	}
 }
