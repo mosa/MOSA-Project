@@ -8,26 +8,14 @@ public static class Console
 {
 	public static ConsoleColor ForegroundColor
 	{
-		get
-		{
-			return GetForegroundColor();
-		}
-		set
-		{
-			SetForegroundColor(value);
-		}
+		get => GetForegroundColor();
+		set => SetForegroundColor(value);
 	}
 
 	public static ConsoleColor BackgroundColor
 	{
-		get
-		{
-			return GetBackgroundColor();
-		}
-		set
-		{
-			SetBackgroundColor(value);
-		}
+		get => GetBackgroundColor();
+		set => SetBackgroundColor(value);
 	}
 
 	[MethodImpl(MethodImplOptions.InternalCall)]
@@ -62,4 +50,7 @@ public static class Console
 
 	[MethodImpl(MethodImplOptions.InternalCall)]
 	public static extern void SetCursorPosition(int left, int top);
+
+	[MethodImpl(MethodImplOptions.InternalCall)]
+	public static extern string ReadLine();
 }
