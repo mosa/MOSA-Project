@@ -1,7 +1,8 @@
 {
-	"profiles": {
-		"Mosa.Tool.Compiler": {
-			"commandName": "Project"
-		}
-	}
+  "profiles": {
+    "Mosa.Tool.Compiler": {
+      "commandName": "Project",
+      "commandLineArgs": "Mosa.BareMetal.HelloWorldARMv8A32.dll -check -arm32"
+    }
+  }
 }

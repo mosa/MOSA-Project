@@ -167,6 +167,10 @@ public sealed class Architecture : BaseArchitecture
 		pipeline.InsertBefore<CodeGenerationStage>(
 			new JumpOptimizationStage()
 		);
+
+		//pipeline.InsertBefore<GreedyRegisterAllocatorStage>(
+		//	new StopStage()
+		//);
 	}
 
 	/// <summary>
@@ -178,12 +182,34 @@ public sealed class Architecture : BaseArchitecture
 	/// <exception cref="NotImplementCompilerException"></exception>
 	public override void InsertMoveInstruction(Context context, Operand destination, Operand source)
 	{
-		throw new NotImplementCompilerException();
+		var instruction = ARMv8A32.Mov;
+
+		if (destination.IsR4)
+		{
+			instruction = ARMv8A32.Mvf;
+		}
+		else if (destination.IsR8)
+		{
+			instruction = ARMv8A32.Mvf;
+		}
+
+		context.AppendInstruction(instruction, destination, source);
 	}
 
 	public override void InsertStoreInstruction(Context context, Operand destination, Operand offset, Operand value)
 	{
-		throw new NotImplementCompilerException();
+		var instruction = ARMv8A32.Str32;
+
+		if (destination.IsR4)
+		{
+			instruction = ARMv8A32.Stf;
+		}
+		else if (destination.IsR8)
+		{
+			instruction = ARMv8A32.Stf;
+		}
+
+		context.AppendInstruction(instruction, null, destination, offset, value);
 	}
 
 	/// <summary>
@@ -196,7 +222,18 @@ public sealed class Architecture : BaseArchitecture
 	/// <exception cref="NotImplementCompilerException"></exception>
 	public override void InsertLoadInstruction(Context context, Operand destination, Operand source, Operand offset)
 	{
-		throw new NotImplementCompilerException();
+		var instruction = ARMv8A32.Ldr32;
+
+		if (destination.IsR4)
+		{
+			instruction = ARMv8A32.Ldf;
+		}
+		else if (destination.IsR8)
+		{
+			instruction = ARMv8A32.Ldf;
+		}
+
+		context.AppendInstruction(instruction, destination, source, offset);
 	}
 
 	/// <summary>
@@ -217,7 +254,8 @@ public sealed class Architecture : BaseArchitecture
 	/// <param name="destination">The destination.</param>
 	public override void InsertJumpInstruction(Context context, BasicBlock destination)
 	{
-		// TODO
+		context.AppendInstruction(ARMv8A32.B, destination);
+		context.ConditionCode = ConditionCode.Always;
 	}
 
 	/// <summary>

@@ -65,7 +65,7 @@ public static class CompilerEventExtension
 			CompilerEvent.SetupStageStart => "Setting Up Stage ",
 			CompilerEvent.SetupStageEnd => "Setting Up Stage [Completed]",
 			CompilerEvent.FinalizationStageStart => "Finalizing Stage",
-			CompilerEvent.FinalizationStageEnd => "Finalizing Stage Completed]",
+			CompilerEvent.FinalizationStageEnd => "Finalizing Stage [Completed]",
 			CompilerEvent.DebugInfo => "Debug Info",
 			CompilerEvent.Warning => "Warning",
 			CompilerEvent.Error => "Error",
