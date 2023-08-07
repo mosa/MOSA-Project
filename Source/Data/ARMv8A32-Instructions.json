@@ -725,7 +725,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[constant]",
-					"Encoding": "conditional|1011|rel24:label"
+					"Encoding": "conditional|1011|rel24:o1"
 				}
 			]
 		},

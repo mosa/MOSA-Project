@@ -438,6 +438,12 @@ public sealed class OpcodeEncoder
 		Append32BitImmediate((uint)offset);
 	}
 
+	public void EmitRelative24(Operand operand)
+	{
+		Emitter.EmitRelative24(operand);
+		Append24Bits(0);
+	}
+
 	public void EmitRelative32(Operand operand)
 	{
 		Emitter.EmitRelative32(operand);

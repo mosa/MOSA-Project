@@ -26,7 +26,7 @@ public sealed class Bl : ARMv8A32Instruction
 		{
 			opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
 			opcodeEncoder.Append4Bits(0b1011);
-			opcodeEncoder.EmitRelative24(node.BranchTargets[0].Label);
+			opcodeEncoder.EmitRelative24(node.Operand1);
 			return;
 		}
 

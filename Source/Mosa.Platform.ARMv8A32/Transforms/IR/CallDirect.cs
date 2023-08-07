@@ -27,7 +27,7 @@ public sealed class CallDirect : BaseIRTransform
 		}
 		else
 		{
-			context.SetInstruction(ARMv8A32.Bl, operand1);
+			context.ReplaceInstruction(ARMv8A32.Bl);
 		}
 	}
 }
