@@ -24,8 +24,6 @@ public sealed class PlatformTransformationStage : Compiler.Framework.Stages.Base
 		AddTranforms(StackTransforms.List);
 		AddTranforms(AddressModeTransforms.List);
 
-		//AddTranform(new GetLow32Register());
-
 		AddTranform(new Mov32Unless());
 		AddTranform(new Mov32Coalescing());
 		AddTranform(new Deadcode());

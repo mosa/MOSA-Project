@@ -335,6 +335,7 @@ public sealed class MethodCompiler
 	private void LogException(Exception exception, string title)
 	{
 		Compiler.PostEvent(CompilerEvent.Exception, title);
+		Compiler.PostEvent(CompilerEvent.Exception, exception.ToString());
 
 		var exceptionLog = new TraceLog(TraceType.MethodDebug, Method, "Exception", MethodData.Version);
 

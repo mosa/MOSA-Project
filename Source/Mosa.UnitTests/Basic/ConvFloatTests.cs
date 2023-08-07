@@ -45,4 +45,45 @@ public static class ConvFloatTests
 	{
 		return (ulong)a;
 	}
+
+	public static int ConvR4I4(float a)
+	{
+		return (int)a;
+	}
+
+	[MosaUnitTest(0.0f)]
+	[MosaUnitTest(1.0f)]
+	[MosaUnitTest(2.0f)]
+	[MosaUnitTest(3.0f)]
+	[MosaUnitTest(100000.0f)]
+	[MosaUnitTest(-1.0f)]
+	[MosaUnitTest(-2.0f)]
+	[MosaUnitTest(-100000.0f)]
+	public static uint ConvR4U4(float a)
+	{
+		return (uint)a;
+	}
+
+	[MosaUnitTest(Series = "R8")]
+	public static int ConvR8I4(double a)
+	{
+		return (int)a;
+	}
+
+	[MosaUnitTest(0d)]
+	[MosaUnitTest(1d)]
+	[MosaUnitTest(2d)]
+	[MosaUnitTest(3d)]
+	[MosaUnitTest(100000.0d)]
+	[MosaUnitTest(-1d)]
+	[MosaUnitTest(-2d)]
+	[MosaUnitTest(-1.00012d)]
+	[MosaUnitTest(17.0002501d)]
+	[MosaUnitTest(23d)]
+	[MosaUnitTest(-23d)]
+	[MosaUnitTest(-17.0002501d)]
+	public static uint ConvR8U4(double a)
+	{
+		return (uint)a;
+	}
 }

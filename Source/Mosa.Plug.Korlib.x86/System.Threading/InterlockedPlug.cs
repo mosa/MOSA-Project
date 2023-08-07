@@ -33,4 +33,11 @@ public static class InterlockedPlug
 
 		return new IntPtr(CompareExchange(ref address, value.ToInt32(), comparand.ToInt32()));
 	}
+
+	[Plug("System.Threading.Interlocked::CompareExchange")]
+	internal static long CompareExchange(ref long location1, long value, long comparand)
+	{
+		int location = (int)location1;
+		return Native.CmpXChgLoad32(location, (int)value, (int)comparand);
+	}
 }

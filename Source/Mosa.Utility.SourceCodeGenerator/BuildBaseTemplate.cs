@@ -9,7 +9,9 @@ namespace Mosa.Utility.SourceCodeGenerator;
 public class BuildBaseTemplate
 {
 	public string JsonFile { get; }
+
 	public string DestinationPath { get; }
+
 	protected string DestinationFile { get; set; }
 
 	protected StringBuilder Lines { get; } = new StringBuilder();

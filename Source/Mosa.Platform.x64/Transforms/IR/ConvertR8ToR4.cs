@@ -17,7 +17,7 @@ public sealed class ConvertR8ToR4 : BaseIRTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		Debug.Assert(context.Result.IsFloatingPoint && !context.Result.IsFloatingPoint);
+		Debug.Assert(context.Result.IsFloatingPoint && context.Result.IsFloatingPoint);
 
 		var result = context.Result;
 		var operand1 = context.Operand1;

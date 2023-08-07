@@ -25,6 +25,7 @@ internal static class CheckedConversion
 		// 0x402 is epsilon used to get us to the next value
 		if (!(r8Value > -two63 - 0x402 && r8Value < two63))
 			Internal.ThrowOverflowException();
+
 		return (long)value;
 	}
 
@@ -36,6 +37,7 @@ internal static class CheckedConversion
 		// 0x402 is epsilon used to get us to the next value
 		if (!(value > -two63 - 0x402 && value < two63))
 			Internal.ThrowOverflowException();
+
 		return (long)value;
 	}
 

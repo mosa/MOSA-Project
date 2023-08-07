@@ -265,15 +265,11 @@ public sealed class Architecture : BaseArchitecture
 	/// <param name="source">The source.</param>
 	public override void InsertExchangeInstruction(Context context, Operand destination, Operand source)
 	{
-		if (source.IsR4)
+		if (source.IsR8 || source.IsR4)
 		{
-			// TODO
-			throw new CompilerException("R4 not implemented in InsertExchangeInstruction method");
-		}
-		else if (source.IsR8)
-		{
-			// TODO
-			throw new CompilerException("R8 not implemented in InsertExchangeInstruction method");
+			context.AppendInstruction(X64.PXor, destination, source);
+			context.AppendInstruction(X64.PXor, source, destination);
+			context.AppendInstruction(X64.PXor, destination, source);
 		}
 		else
 		{

@@ -18,7 +18,7 @@ public sealed class Compare64x64RestInSSA : BaseLower32Transform
 		if (!transform.IsInSSAForm)
 			return false;
 
-		return transform.LowerTo32;
+		return transform.IsLowerTo32;
 	}
 
 	public override void Transform(Context context, TransformContext transform)

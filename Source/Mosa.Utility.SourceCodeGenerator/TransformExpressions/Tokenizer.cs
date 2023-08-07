@@ -11,6 +11,10 @@ public static class Tokenizer
 	public static List<Token> Parse(string expression)
 	{
 		var tokens = new List<Token>();
+
+		if (expression == null)
+			return tokens;
+
 		var length = expression.Length;
 
 		var index = 0;

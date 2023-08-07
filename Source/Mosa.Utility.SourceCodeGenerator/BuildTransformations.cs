@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections.Generic;
-using System.Security;
 using System.Text;
 using Mosa.Utility.SourceCodeGenerator.TransformExpressions;
 
@@ -59,7 +58,9 @@ public class BuildTransformations : BuildBaseTemplate
 		string subName = node.SubName;
 		string expression = node.Expression;
 		string filter = node.Filter;
+		string prefilter = node.Prefilter;
 		string result = node.Result;
+
 		bool log = node.Log != null && node.Log == "Yes";
 		bool variations = node.Variations != null && node.Variations == "Yes";
 
@@ -75,24 +76,24 @@ public class BuildTransformations : BuildBaseTemplate
 		if (!optimization && !transformation)
 			optimization = true;
 
-		GenerateTranformations(name, Family, type, subName, expression, filter, result, variations, log, optimization, priority);
+		GenerateTranformations(name, Family, type, subName, expression, filter, prefilter, result, variations, log, optimization, priority);
 	}
 
-	private void GenerateTranformations(string name, string familyName, string type, string subName, string expression, string filter, string result, bool variations, bool log, bool optimization, int priority)
+	private void GenerateTranformations(string name, string familyName, string type, string subName, string expression, string filter, string prefilter, string result, bool variations, bool log, bool optimization, int priority)
 	{
 		if (expression.Contains("R#"))
 		{
-			GenerateTransformation(R4(name), R4(familyName), R4(type), R4(subName), new Transformation(R4(expression), R4(filter), R4(result)), variations, log, optimization, priority);
-			GenerateTransformation(R8(name), R8(familyName), R8(type), R8(subName), new Transformation(R8(expression), R8(filter), R8(result)), variations, log, optimization, priority);
+			GenerateTransformation(R4(name), R4(familyName), R4(type), R4(subName), new Transformation(R4(expression), R4(filter), R4(result), prefilter), variations, log, optimization, priority);
+			GenerateTransformation(R8(name), R8(familyName), R8(type), R8(subName), new Transformation(R8(expression), R8(filter), R8(result), prefilter), variations, log, optimization, priority);
 		}
 		else if (expression.Contains("##"))
 		{
-			GenerateTransformation(To32(name), To32(familyName), To32(type), To32(subName), new Transformation(To32(expression), To32(filter), To32(result)), variations, log, optimization, priority);
-			GenerateTransformation(To64(name), To64(familyName), To64(type), To64(subName), new Transformation(To64(expression), To64(filter), To64(result)), variations, log, optimization, priority);
+			GenerateTransformation(To32(name), To32(familyName), To32(type), To32(subName), new Transformation(To32(expression), To32(filter), To32(result), prefilter), variations, log, optimization, priority);
+			GenerateTransformation(To64(name), To64(familyName), To64(type), To64(subName), new Transformation(To64(expression), To64(filter), To64(result), prefilter), variations, log, optimization, priority);
 		}
 		else
 		{
-			GenerateTransformation(name, familyName, type, subName, new Transformation(expression, filter, result), variations, log, optimization, priority);
+			GenerateTransformation(name, familyName, type, subName, new Transformation(expression, filter, result, prefilter), variations, log, optimization, priority);
 		}
 	}
 
@@ -186,13 +187,12 @@ public class BuildTransformations : BuildBaseTemplate
 		Lines.AppendLine($"public sealed class {name}{subName} : BaseTransform");
 		Lines.AppendLine("{");
 
-		var typestring = "TransformType.Auto" +
-						 (optimization ? " | TransformType.Optimization" : string.Empty);
+		var typestring = $"TransformType.Auto{(optimization ? " | TransformType.Optimization" : string.Empty)}";
 
 		if (log)
-			Lines.AppendLine($"\tpublic {name}{subName}() : base({instructionName}, " + typestring + ", true)");
+			Lines.AppendLine($"\tpublic {name}{subName}() : base({instructionName}, {typestring}, true)");
 		else
-			Lines.AppendLine($"\tpublic {name}{subName}() : base({instructionName}, " + typestring + ")");
+			Lines.AppendLine($"\tpublic {name}{subName}() : base({instructionName}, {typestring})");
 
 		Lines.AppendLine("\t{");
 		Lines.AppendLine("\t}");
@@ -206,6 +206,8 @@ public class BuildTransformations : BuildBaseTemplate
 
 		Lines.AppendLine("\tpublic override bool Match(Context context, TransformContext transform)");
 		Lines.AppendLine("\t{");
+
+		ProcessPrefilters(transform);
 
 		ProcessExpressionNode(transform.InstructionTree);
 
@@ -324,9 +326,6 @@ public class BuildTransformations : BuildBaseTemplate
 				{
 					methodToMethodNbr.Add(operand.Method, found);
 					continue;
-
-					//Lines.AppendLine($"\t\tvar e{found} = Operand.CreateConstant({name});");
-					//continue;
 				}
 
 				methodNbr++;
@@ -517,6 +516,62 @@ public class BuildTransformations : BuildBaseTemplate
 		}
 	}
 
+	private void ProcessPrefilters(Transformation transform)
+	{
+		var filters = transform.Prefilters;
+
+		foreach (var filter in filters)
+		{
+			var sb = new StringBuilder();
+
+			if (!filter.IsNegated)
+				sb.Append('!');
+
+			sb.Append(ProcessPrefilters(filter, transform));
+
+			EmitCondition(sb.ToString());
+		}
+	}
+
+	private string ProcessPrefilters(Method filter, Transformation transform)
+	{
+		var sb = new StringBuilder();
+
+		sb.Append("transform.");
+		sb.Append(filter.MethodName);
+		sb.Append('(');
+
+		foreach (var parameter in filter.Parameters)
+		{
+			if (parameter.IsInteger)
+			{
+				sb.Append(CreateConstantName(parameter));
+			}
+			else if (parameter.IsDouble)
+			{
+				sb.Append(CreateConstantName(parameter));
+			}
+			else if (parameter.IsFloat)
+			{
+				sb.Append(CreateConstantName(parameter));
+			}
+			if (parameter.IsAt)
+			{
+				sb.Length--;
+				return sb.ToString();
+			}
+
+			sb.Append(", ");
+		}
+
+		if (filter.Parameters.Count != 0)
+			sb.Length -= 2;
+
+		sb.Append(')');
+
+		return sb.ToString();
+	}
+
 	private void ProcessFilters(Transformation transform)
 	{
 		var filters = transform.Filters;
@@ -579,21 +634,14 @@ public class BuildTransformations : BuildBaseTemplate
 			else if (parameter.IsInteger)
 			{
 				sb.Append(CreateConstantName(parameter));
-
-				//sb.Append(parameter.Integer.ToString());
 			}
 			else if (parameter.IsDouble)
 			{
 				sb.Append(CreateConstantName(parameter));
-
-				//sb.Append(parameter.Double.ToString());
 			}
 			else if (parameter.IsFloat)
 			{
 				sb.Append(CreateConstantName(parameter));
-
-				//sb.Append(parameter.Float.ToString());
-				//sb.Append('f');
 			}
 
 			if (!register)

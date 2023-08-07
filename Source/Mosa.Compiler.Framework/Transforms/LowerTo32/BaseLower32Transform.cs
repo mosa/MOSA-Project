@@ -12,7 +12,7 @@ namespace Mosa.Compiler.Framework.Transforms.LowerTo32
 
 		public override bool Match(Context context, TransformContext transform)
 		{
-			return transform.LowerTo32;
+			return transform.IsLowerTo32;
 		}
 	}
 }

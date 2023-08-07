@@ -24,8 +24,7 @@ public sealed class MulOverflowOut64 : BaseTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		var methodName = "Mul64Overflow";
-		var method = transform.GetMethod("Mosa.Runtime.Math.Multiplication", methodName);
+		var method = transform.GetMethod("Mosa.Runtime.Math.Multiplication", "Mul64Overflow");
 
 		var operand1 = context.Operand1;
 		var operand2 = context.Operand2;
@@ -35,7 +34,7 @@ public sealed class MulOverflowOut64 : BaseTransform
 		var v1 = transform.LocalStack.Allocate(result2);
 		var v2 = transform.VirtualRegisters.Allocate32();
 
-		Debug.Assert(method != null, $"Cannot find method: {methodName}");
+		Debug.Assert(method != null, $"Cannot find method: Mul64Overflow");
 
 		var symbol = Operand.CreateLabel(method, transform.Is32BitPlatform);
 

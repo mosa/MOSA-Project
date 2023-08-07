@@ -133,7 +133,7 @@ public static class Boot
 
 		//			var fatFileStream = new FatFileStream(fat, location);
 
-		//			uint len = (uint)fatFileStream.Length;
+		//			var len = (uint)fatFileStream.Length;
 
 		//			Console.WriteLine(" - Length: " + len + " bytes");
 

@@ -735,7 +735,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex32],opcode=0xF2,opcode2=0x0F,opcode3=0x5A,mod=11,reg=reg3:o1,rm=reg3:o2,rex.r=reg4x:o1,rex.x=0,rex.b=reg4x:o1"
+					"Encoding": "[x64-rex32],opcode=0xF2,opcode2=0x0F,opcode3=0x5A,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
 				}
 			]
 		},

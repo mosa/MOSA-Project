@@ -1,0 +1,38 @@
+﻿{
+	"Family": "IR",
+	"Section": "Optimizations.Auto",
+	"Commutative": [
+		"IR.Add32",
+		"IR.Add64",
+		"IR.AddR4",
+		"IR.AddR8",
+		"IR.And32",
+		"IR.And64",
+		"IR.Or32",
+		"IR.Or64",
+		"IR.Xor32",
+		"IR.Xor64",
+		"IR.MulR4",
+		"IR.MulR8",
+		"IR.MulUnsigned32",
+		"IR.MulUnsigned64",
+		"IR.MulSigned32",
+		"IR.MulSigned64",
+		"IR.AddCarryOut64",
+		"IR.AddCarryOut32",
+		"IR.AddCarryIn32",
+		"IR.AddCarryIn64"
+	],
+	"Optimizations": [
+		{
+			"Type": "LowerTo32",
+			"Name": "Or32Truncate64x32Truncate64x32",
+			"SubName": "",
+			"Expression": "IR.Or32 (IR.Truncate64x32 x) (IR.Truncate64x32 y)",
+			"Filter": "",
+			"Prefilter": "Is32BitPlatform(@) && IsLowerTo32(@)",
+			"Result": "(IR.GetLow32 (IR.Or64 x y))",
+			"Variations": "No"
+		}
+	]
+}

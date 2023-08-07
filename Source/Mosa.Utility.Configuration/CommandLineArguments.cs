@@ -72,6 +72,7 @@ public static class CommandLineArguments
 			new Argument { Name = "-x86", Setting = Name.Compiler_Platform, Value= "x86"},
 			new Argument { Name = "-x64", Setting = Name.Compiler_Platform, Value= "x64"},
 			new Argument { Name = "-armv8a32", Setting = Name.Compiler_Platform, Value= "armv8a32"},
+			new Argument { Name = "-arm32", Setting = Name.Compiler_Platform, Value= "armv8a32"},
 
 			new Argument { Name = "-interrupt-method", Setting = Name.X86_InterruptMethodName},
 

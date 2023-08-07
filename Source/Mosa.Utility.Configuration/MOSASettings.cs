@@ -764,6 +764,10 @@ public class MosaSettings
 		Emulator = Emulator == null ? string.Empty : Emulator.ToLowerInvariant().Trim();
 		Platform = Platform == null ? string.Empty : Platform.ToLowerInvariant().Trim();
 		LinkerFormat = LinkerFormat == null ? string.Empty : LinkerFormat.ToLowerInvariant().Trim();
+
+		// special case - to match with DLL
+		if (Platform == "armv8a32")
+			Platform = "ARMv8A32";
 	}
 
 	public void UpdateFileAndPathSettings()

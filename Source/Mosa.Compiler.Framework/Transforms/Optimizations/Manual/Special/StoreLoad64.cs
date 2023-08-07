@@ -19,6 +19,9 @@ public sealed class StoreLoad64 : BaseTransform
 		if (context.Operand1 != transform.StackFrame)
 			return false;
 
+		if (context.Operand2.Uses.Count != 2)   // FUTURE: traverse all uses
+			return false;
+
 		if (!(context.Operand3.IsConstant || context.Operand3.IsDefinedOnce))
 			return false;
 

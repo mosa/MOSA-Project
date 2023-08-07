@@ -1,6 +1,8 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Platform.x64.Transforms.AddressMode;
 using Mosa.Platform.x64.Transforms.FixedRegisters;
+using Mosa.Platform.x64.Transforms.Optimizations.Manual.Special;
 using Mosa.Platform.x64.Transforms.Stack;
 using Mosa.Platform.x64.Transforms.Tweak;
 
@@ -20,6 +22,13 @@ public sealed class PlatformTransformationStage : Compiler.Framework.Stages.Base
 		AddTranforms(TweakTransforms.List);
 		AddTranforms(FixedRegistersTransforms.List);
 		AddTranforms(StackTransforms.List);
+		AddTranforms(AddressModeTransforms.List);
 		AddTranforms(SpecialTransforms.List);
+
+		AddTranform(new Mov32Unless());
+		AddTranform(new Mov64Unless());
+		AddTranform(new Mov32Coalescing());
+		AddTranform(new Mov64Coalescing());
+		AddTranform(new Deadcode());
 	}
 }

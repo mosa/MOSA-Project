@@ -10,7 +10,7 @@ public sealed class Branch64Extends : BaseLower32Transform
 
 	public override bool Match(Context context, TransformContext transform)
 	{
-		if (!transform.LowerTo32)
+		if (!transform.IsLowerTo32)
 			return false;
 
 		if (!context.Operand1.IsVirtualRegister)

@@ -16,7 +16,7 @@ public sealed class GetLow32CPURegister : BaseTransform
 		if (!transform.Is32BitPlatform)
 			return false;
 
-		if (!transform.LowerTo32)
+		if (!transform.IsLowerTo32)
 			return false;
 
 		if (!context.Operand1.IsCPURegister)

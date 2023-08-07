@@ -4,12 +4,12 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
+namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.LowerTo32;
 
 /// <summary>
 /// Or32Truncate64x32Truncate64x32
 /// </summary>
-[Transform("IR.Optimizations.Auto.Simplification")]
+[Transform("IR.Optimizations.Auto.LowerTo32")]
 public sealed class Or32Truncate64x32Truncate64x32 : BaseTransform
 {
 	public Or32Truncate64x32Truncate64x32() : base(IRInstruction.Or32, TransformType.Auto | TransformType.Optimization)
@@ -18,6 +18,12 @@ public sealed class Or32Truncate64x32Truncate64x32 : BaseTransform
 
 	public override bool Match(Context context, TransformContext transform)
 	{
+		if (!transform.Is32BitPlatform)
+			return false;
+
+		if (!transform.IsLowerTo32)
+			return false;
+
 		if (!context.Operand1.IsVirtualRegister)
 			return false;
 
