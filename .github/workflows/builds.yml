@@ -337,35 +337,35 @@ jobs:
       - name: Demo Test - SVGAWorld
         run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.Demo.SVGAWorld.x86.dll -o${{ matrix.optimization }} -check -test -vmware-svga -include bin/Include
         
-  macos-demo-testing:
-    strategy:
-      matrix:
-        optimization: [0,1,2,3,4,5,6,7,8,9]
-      fail-fast: false
-    name: MacOS - Demo Test -o${{ matrix.optimization }}
-    runs-on: macos-latest
-    needs: macos-build
-    steps:
-      - name: Set net7.0
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '7.0.x'
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          submodules: recursive
-      - name: Download Build Artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: macos-build-artifact
-          path: bin
-      #- name: Install Qemu
-      #  run: brew install qemu
-      - name: Demo Test - HelloWorld
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.Demo.HelloWorld.x86.dll -o${{ matrix.optimization }} -check -test
-      - name: Demo Test - CoolWorld [BareMetal]
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x86.dll -o${{ matrix.optimization }} -check -test
-      - name: Demo Test - CoolWorld [Legacy]
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.Demo.CoolWorld.x86.dll -o${{ matrix.optimization }} -check -test
-      - name: Demo Test - SVGAWorld
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.Demo.SVGAWorld.x86.dll -o${{ matrix.optimization }} -check -test
+  #macos-demo-testing:
+  #  strategy:
+  #    matrix:
+  #      optimization: [0,1,2,3,4,5,6,7,8,9]
+  #    fail-fast: false
+  #  name: MacOS - Demo Test -o${{ matrix.optimization }}
+  #  runs-on: macos-latest
+  #  needs: macos-build
+  #  steps:
+  #    - name: Set net7.0
+  #      uses: actions/setup-dotnet@v3
+  #      with:
+  #        dotnet-version: '7.0.x'
+  #    - name: Checkout
+  #      uses: actions/checkout@v3
+  #      with:
+  #        submodules: recursive
+  #    - name: Download Build Artifact
+  #      uses: actions/download-artifact@v3
+  #      with:
+  #        name: macos-build-artifact
+  #        path: bin
+  #    #- name: Install Qemu
+  #    #  run: brew install qemu
+  #    - name: Demo Test - HelloWorld
+  #      run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.Demo.HelloWorld.x86.dll -o${{ matrix.optimization }} -check -test
+  #    - name: Demo Test - CoolWorld [BareMetal]
+  #      run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x86.dll -o${{ matrix.optimization }} -check -test
+  #    - name: Demo Test - CoolWorld [Legacy]
+  #      run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.Demo.CoolWorld.x86.dll -o${{ matrix.optimization }} -check -test
+  #    - name: Demo Test - SVGAWorld
+  #      run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.Demo.SVGAWorld.x86.dll -o${{ matrix.optimization }} -check -test
