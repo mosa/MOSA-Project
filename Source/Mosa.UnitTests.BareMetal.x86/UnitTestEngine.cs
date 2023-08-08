@@ -1,10 +1,11 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
 using Mosa.Kernel.BareMetal;
 using Mosa.Runtime;
 using Mosa.Runtime.x86;
 
-namespace Mosa.UnitTests.Framework;
+namespace Mosa.UnitTests.BareMetal.x86;
 
 /// <summary>
 /// Unit Test Engine
@@ -279,21 +280,21 @@ public static class UnitTestEngine
 	{
 		if (!test)
 		{
-			ScreenConsole.Goto(4, 0);
-			ScreenConsole.Write("Total  : ");
-			ScreenConsole.WriteValue(TestCount, 7);
+			Console.SetCursorPosition(4, 0);
+			Console.Write("Total  : ");
+			Console.Write(TestCount.ToString("D7"));
 
-			ScreenConsole.Goto(5, 0);
-			ScreenConsole.Write("Pending: ");
-			ScreenConsole.WriteValue(PendingCount, 7);
+			Console.SetCursorPosition(5, 0);
+			Console.Write("Pending: ");
+			Console.Write(PendingCount.ToString("D7"));
 		}
 		else
 		{
-			ScreenConsole.Goto(6, 0);
-			ScreenConsole.Write("Active : ");
-			ScreenConsole.WriteValue(TestID, 7);
-			ScreenConsole.Write(" @ ");
-			ScreenConsole.WriteValueAsHex(TestMethodAddress.ToUInt32(), 8);
+			Console.SetCursorPosition(6, 0);
+			Console.Write("Active : ");
+			Console.Write(TestID.ToString("D7"));
+			Console.Write(" @ ");
+			Console.Write(TestMethodAddress.ToUInt32().ToString("X8"));
 		}
 	}
 }

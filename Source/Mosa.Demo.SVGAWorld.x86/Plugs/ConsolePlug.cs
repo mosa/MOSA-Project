@@ -8,13 +8,6 @@ namespace Mosa.Demo.SVGAWorld.x86.Plugs;
 
 public static class ConsolePlug
 {
-	[Plug("System.Console::ResetColor")]
-	internal static void ResetColor()
-	{
-		Screen.Color = (byte)ConsoleColor.White;
-		Screen.BackgroundColor = (byte)ConsoleColor.Black;
-	}
-
 	[Plug("System.Console::Clear")]
 	internal static void Clear()
 	{
@@ -56,26 +49,14 @@ public static class ConsolePlug
 		Screen.Goto((uint)left, (uint)top);
 	}
 
-	[Plug("System.Console::GetForegroundColor")]
-	internal static ConsoleColor GetForegroundColor()
-	{
-		return (ConsoleColor)Screen.Color;
-	}
-
-	[Plug("System.Console::GetBackgroundColor")]
-	internal static ConsoleColor GetBackgroundColor()
-	{
-		return (ConsoleColor)Screen.BackgroundColor;
-	}
-
-	[Plug("System.Console::SetForegroundColor")]
-	internal static void SetForegroundColor(ConsoleColor color)
+	[Plug("System.Console::UpdateForegroundColor")]
+	internal static void UpdateForegroundColor(ConsoleColor color)
 	{
 		Screen.Color = (byte)color;
 	}
 
-	[Plug("System.Console::SetBackgroundColor")]
-	internal static void SetBackgroundColor(ConsoleColor color)
+	[Plug("System.Console::UpdateBackgroundColor")]
+	internal static void UpdateBackgroundColor(ConsoleColor color)
 	{
 		Screen.BackgroundColor = (byte)color;
 	}

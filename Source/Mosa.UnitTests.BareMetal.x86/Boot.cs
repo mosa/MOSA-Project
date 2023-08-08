@@ -1,9 +1,9 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
 using Mosa.Kernel.BareMetal;
 using Mosa.Kernel.BareMetal.x86;
 using Mosa.Runtime.Plug;
-using Mosa.UnitTests.Framework;
 using Mosa.UnitTests.Optimization;
 
 namespace Mosa.UnitTests.BareMetal.x86;
@@ -22,13 +22,13 @@ public static class Boot
 
 		UnitTestEngine.Setup(0x3F8); // Serial.COM1
 
-		ScreenConsole.SetBackground(ScreenColor.Blue);
-		ScreenConsole.ClearScreen();
-		ScreenConsole.GotoTop();
-		ScreenConsole.SetForground(ScreenColor.Yellow);
-		ScreenConsole.Write("MOSA OS Version 2.0 - UnitTest");
-		ScreenConsole.WriteLine();
-		ScreenConsole.WriteLine();
+		Console.BackgroundColor = ConsoleColor.Blue;
+		Console.Clear();
+		Console.SetCursorPosition(0, 0);
+		Console.ForegroundColor = ConsoleColor.Yellow;
+		Console.Write("MOSA OS Version 2.4 - UnitTest");
+		Console.WriteLine();
+		Console.WriteLine();
 
 		UnitTestEngine.DisplayUpdate();
 

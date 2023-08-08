@@ -20,4 +20,10 @@ public class EnvironmentPlug
 	{
 		Debug.Fatal();
 	}
+
+	[Plug("System.Environment::GetProcessorCount")]
+	internal static int GetProcessorCount()
+	{
+		return 1;
+	}
 }

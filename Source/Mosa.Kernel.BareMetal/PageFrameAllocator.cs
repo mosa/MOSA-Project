@@ -12,6 +12,8 @@ public static class PageFrameAllocator
 
 	public static uint TotalPages { get; private set; }
 
+	public static uint UsedPages { get; private set; }
+
 	#endregion Public Members
 
 	#region Private Members
@@ -146,6 +148,7 @@ public static class PageFrameAllocator
 	public static void Release(Pointer page, uint count)
 	{
 		SetPageBitMapEntry((uint)page.ToInt64() / Page.Size, count, true);
+		UsedPages--;
 	}
 
 	public static Pointer Allocate()
@@ -188,6 +191,7 @@ public static class PageFrameAllocator
 				SetPageBitMapEntry(at, count, true);
 
 				SearchNextStartPage = restartAt;
+				UsedPages++;
 
 				Debug.WriteLine(" > Return: ", new Hex(at));
 
