@@ -101,8 +101,8 @@ public static class Boot
 		Console.ForegroundColor = ConsoleColor.DarkGray;
 		Console.WriteLine(" [Completed]");
 		Console.ForegroundColor = ConsoleColor.LightGreen;
-		Console.Write("> Interrupt Handler...");
-		InterruptManager.SetHandler(ProcessInterrupt);
+		Console.Write("> Initializing interrupt handler...");
+		InterruptManager.SetHandler(null);
 		Console.ForegroundColor = ConsoleColor.DarkGray;
 		Console.WriteLine(" [Completed]");
 
@@ -208,6 +208,12 @@ public static class Boot
 
 			Kernel.Keyboard = new Keyboard(stdKeyboard, new US());
 		}
+		Console.ForegroundColor = ConsoleColor.DarkGray;
+		Console.WriteLine(" [Completed]");
+
+		Console.ForegroundColor = ConsoleColor.LightGreen;
+		Console.Write("> Setting interrupt handler...");
+		InterruptManager.SetHandler(ProcessInterrupt);
 		Console.ForegroundColor = ConsoleColor.DarkGray;
 		Console.WriteLine(" [Completed]");
 
