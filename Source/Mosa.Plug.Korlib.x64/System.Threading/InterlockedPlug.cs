@@ -26,6 +26,12 @@ public static class InterlockedPlug
 		return Native.XAddLoad64(ref location1, value);
 	}
 
+	[Plug("System.Threading.Interlocked::ExchangeAdd")]
+	internal static long ExchangeAdd(ref int location1, int value)
+	{
+		return Native.XAddLoad32(ref location1, value);
+	}
+
 	[Plug("System.Threading.Interlocked::CompareExchange")]
 	public static IntPtr CompareExchange(ref IntPtr location1, IntPtr value, IntPtr comparand)
 	{

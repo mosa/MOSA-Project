@@ -2,7 +2,7 @@
   "profiles": {
     "Mosa.Tool.Compiler": {
       "commandName": "Project",
-      "commandLineArgs": "Mosa.BareMetal.HelloWorldARMv8A32.dll -check -arm32"
+      "commandLineArgs": "Mosa.BareMetal.HelloWorld.x64.dll -check -x64 -threads 1 -o0"
     }
   }
 }

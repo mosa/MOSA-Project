@@ -74,6 +74,24 @@ public static unsafe class Native
 	[DllImport("Mosa.Platform.x64.Intrinsic::Blsr64")]
 	public static extern uint Blsr64(uint esp);
 
+	[DllImport("Mosa.Platform.x64.Intrinsic::Sqrtsd")]
+	public static extern double Sqrtsd(double destination);
+
+	[DllImport("Mosa.Platform.x64.Intrinsic::Sqrtss")]
+	public static extern float Sqrtss(float destination);
+
+	[DllImport("Mosa.Platform.x64.Intrinsic::Roundsd2Negative")]
+	public static extern double Roundsd2Negative(double destination);
+
+	[DllImport("Mosa.Platform.x64.Intrinsic::Roundsd2Positive")]
+	public static extern double Roundsd2Positive(double destination);
+
+	[DllImport("Mosa.Platform.x64.Intrinsic::Roundss2Negative")]
+	public static extern float Roundss2Negative(float destination);
+
+	[DllImport("Mosa.Platform.x64.Intrinsic::Roundss2Positive")]
+	public static extern float Roundss2Positive(float destination);
+
 	//[DllImport("Mosa.Platform.x64.Intrinsic::Popcnt32")]
 	//public static extern uint Popcnt32(uint esp);
 
@@ -159,11 +177,17 @@ public static unsafe class Native
 	[DllImport("Mosa.Platform.x64.Intrinsic::CmpXChgLoad64")]
 	public static extern long CmpXChgLoad64(long location, long value, long comparand);
 
+	[DllImport("Mosa.Platform.x64.Intrinsic::XAddLoad32")]
+	public static extern long XAddLoad32(ref int location, int value);
+
 	[DllImport("Mosa.Platform.x64.Intrinsic::XAddLoad64")]
 	public static extern long XAddLoad64(ref long location, long value);
 
 	[DllImport("Mosa.Platform.x64.Intrinsic::XAddLoad64")]
 	public static extern long XAddLoad64(long location, long value);
+
+	[DllImport("Mosa.Platform.x64.Intrinsic::XChgLoad32")]
+	public static extern long XChgLoad32(ref int location, int value);
 
 	[DllImport("Mosa.Platform.x64.Intrinsic::XChgLoad64")]
 	public static extern long XChgLoad64(ref long location, long value);
