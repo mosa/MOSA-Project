@@ -4,7 +4,7 @@ namespace Mosa.Kernel.BareMetal;
 
 public delegate void InterruptHandler(uint irq, uint error);
 
-public static class InterreuptManager
+public static class InterruptManager
 {
 	public static void Setup()
 	{

@@ -54,7 +54,8 @@ public struct UInt32: IComparable, IComparable<uint>, IEquatable<uint>
 
 	public string ToString(string format)
 	{
-		return int.CreateString(m_value, false, true);
+		// TOOO: Actual formats
+		return int.CreateString(m_value, false, char.ToLower(format[0]) == 'x');
 	}
 
 	public override int GetHashCode()

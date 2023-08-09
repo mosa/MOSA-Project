@@ -4,7 +4,7 @@ using Mosa.Runtime;
 
 namespace Mosa.Kernel.BareMetal;
 
-public class BootPageAllocator
+public static class BootPageAllocator
 {
 	#region Private Members
 

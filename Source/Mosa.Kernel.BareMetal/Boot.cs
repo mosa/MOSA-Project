@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
 using Mosa.DeviceDriver;
 using Mosa.DeviceDriver.ISA;
 using Mosa.DeviceDriver.ScanCodeMap;
@@ -16,27 +17,34 @@ public static class Boot
 	[Plug("Mosa.Runtime.StartUp::PlatformInitialization")]
 	public static void PlatformInitialization()
 	{
+		Platform.Interrupt.Disable();
+
 		Debug.WriteLine("[Platform Initialization]");
 
 		BootStatus.Initalize();
 
-		ScreenConsole.SetBackground(ScreenColor.Black);
-		ScreenConsole.ClearScreen();
+		Console.BackgroundColor = ConsoleColor.Black;
+		Console.ForegroundColor = ConsoleColor.Yellow;
+		Console.Clear();
 
-		ScreenConsole.WriteLine(ScreenColor.BrightYellow, "MOSA BareMetal v0.1");
+		Console.WriteLine("MOSA BareMetal v2.4");
 
-		ScreenConsole.WriteLine();
+		Console.WriteLine();
 
-		ScreenConsole.WriteLine(ScreenColor.BrightYellow, "Initializing kernel...");
+		Console.WriteLine("Initializing kernel...");
 		Debug.Setup(true);
 
-		ScreenConsole.Write(ScreenColor.BrightGreen, "> Initial garbage collection...");
+		Console.ForegroundColor = ConsoleColor.LightGreen;
+		Console.Write("> Initial garbage collection...");
 		InitialGCMemory.Initialize();
-		ScreenConsole.WriteLine(ScreenColor.BrightBlack, " [Completed]");
+		Console.ForegroundColor = ConsoleColor.DarkGray;
+		Console.WriteLine(" [Completed]");
 
-		ScreenConsole.Write(ScreenColor.BrightGreen, "> Platform initialization...");
+		Console.ForegroundColor = ConsoleColor.LightGreen;
+		Console.Write("> Platform initialization...");
 		Platform.EntryPoint();
-		ScreenConsole.WriteLine(ScreenColor.BrightBlack, " [Completed]");
+		Console.ForegroundColor = ConsoleColor.DarkGray;
+		Console.WriteLine(" [Completed]");
 	}
 
 	[Plug("Mosa.Runtime.StartUp::KernelEntryPoint")]
@@ -44,114 +52,187 @@ public static class Boot
 	{
 		Debug.WriteLine("[Kernel Entry Point]");
 
-		ScreenConsole.Write(ScreenColor.BrightGreen, "> Enabling debug logging...");
+		Console.ForegroundColor = ConsoleColor.LightGreen;
+		Console.Write("> Enabling debug logging...");
 		Debug.Setup(true);
-		ScreenConsole.WriteLine(ScreenColor.BrightBlack, " [Completed]");
+		Console.ForegroundColor = ConsoleColor.DarkGray;
+		Console.WriteLine(" [Completed]");
 
-		ScreenConsole.Write(ScreenColor.BrightGreen, "> Boot page allocator...");
+		Console.ForegroundColor = ConsoleColor.LightGreen;
+		Console.Write("> Boot page allocator...");
 		BootPageAllocator.Setup();
-		ScreenConsole.WriteLine(ScreenColor.BrightBlack, " [Completed]");
+		Console.ForegroundColor = ConsoleColor.DarkGray;
+		Console.WriteLine(" [Completed]");
 
-		ScreenConsole.Write(ScreenColor.BrightGreen, "> Memory map...");
+		Console.ForegroundColor = ConsoleColor.LightGreen;
+		Console.Write("> Memory map...");
 		BootMemoryMap.Setup();
 		BootMemoryMap.Dump();
-		ScreenConsole.WriteLine(ScreenColor.BrightBlack, " [Completed]");
+		Console.ForegroundColor = ConsoleColor.DarkGray;
+		Console.WriteLine(" [Completed]");
 
-		ScreenConsole.Write(ScreenColor.BrightGreen, "> Physical page allocator...");
+		Console.ForegroundColor = ConsoleColor.LightGreen;
+		Console.Write("> Physical page allocator...");
 		PageFrameAllocator.Setup();
-		ScreenConsole.WriteLine(ScreenColor.BrightBlack, " [Completed]");
+		Console.ForegroundColor = ConsoleColor.DarkGray;
+		Console.WriteLine(" [Completed]");
 
-		ScreenConsole.Write(ScreenColor.BrightGreen, "> Page table...");
+		Console.ForegroundColor = ConsoleColor.LightGreen;
+		Console.Write("> Page table...");
 		PageTable.Setup();
-		ScreenConsole.WriteLine(ScreenColor.BrightBlack, " [Completed]");
+		Console.ForegroundColor = ConsoleColor.DarkGray;
+		Console.WriteLine(" [Completed]");
 
-		ScreenConsole.Write(ScreenColor.BrightGreen, "> Virtual page allocator...");
+		Console.ForegroundColor = ConsoleColor.LightGreen;
+		Console.Write("> Virtual page allocator...");
 		VirtualPageAllocator.Setup();
-		ScreenConsole.WriteLine(ScreenColor.BrightBlack, " [Completed]");
+		Console.ForegroundColor = ConsoleColor.DarkGray;
+		Console.WriteLine(" [Completed]");
 
-		ScreenConsole.Write(ScreenColor.BrightGreen, "> Interrupt Manager...");
-		InterreuptManager.Setup();
-		ScreenConsole.WriteLine(ScreenColor.BrightBlack, " [Completed]");
+		Console.ForegroundColor = ConsoleColor.LightGreen;
+		Console.Write("> Interrupt Manager...");
+		InterruptManager.Setup();
+		Console.ForegroundColor = ConsoleColor.DarkGray;
+		Console.WriteLine(" [Completed]");
 
-		ScreenConsole.Write(ScreenColor.BrightGreen, "> Garbage collection...");
+		Console.ForegroundColor = ConsoleColor.LightGreen;
+		Console.Write("> Garbage collection...");
 		GCMemory.Setup();
-		ScreenConsole.WriteLine(ScreenColor.BrightBlack, " [Completed]");
-		ScreenConsole.Write(ScreenColor.BrightGreen, "> Interrupt Handler...");
-		InterreuptManager.SetHandler(null);
-		ScreenConsole.WriteLine(ScreenColor.BrightBlack, " [Completed]");
+		Console.ForegroundColor = ConsoleColor.DarkGray;
+		Console.WriteLine(" [Completed]");
+		Console.ForegroundColor = ConsoleColor.LightGreen;
+		Console.Write("> Initializing interrupt handler...");
+		InterruptManager.SetHandler(null);
+		Console.ForegroundColor = ConsoleColor.DarkGray;
+		Console.WriteLine(" [Completed]");
 
-		ScreenConsole.Write(ScreenColor.BrightGreen, "> Virtual memory allocator...");
+		Console.ForegroundColor = ConsoleColor.LightGreen;
+		Console.Write("> Virtual memory allocator...");
 		VirtualMemoryAllocator.Setup();
-		ScreenConsole.WriteLine(ScreenColor.BrightBlack, " [Completed]");
+		Console.ForegroundColor = ConsoleColor.DarkGray;
+		Console.WriteLine(" [Completed]");
 
 		//Console.Write(ConsoleColor.BrightGreen, "> Scheduler...");
 		//Scheduler.Setup();
 		//Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
 
-		ScreenConsole.Write(ScreenColor.BrightGreen, "> Hardware abstraction layer...");
+		Console.ForegroundColor = ConsoleColor.LightGreen;
+		Console.Write("> Hardware abstraction layer...");
 		var hardware = new HardwareAbstractionLayer();
 		var deviceService = new DeviceService();
 		DeviceSystem.Setup.Initialize(hardware, deviceService.ProcessInterrupt);
-		ScreenConsole.WriteLine(ScreenColor.BrightBlack, " [Completed]");
+		Console.ForegroundColor = ConsoleColor.DarkGray;
+		Console.WriteLine(" [Completed]");
 
-		ScreenConsole.Write(ScreenColor.BrightGreen, "> Registering device drivers...");
+		Console.ForegroundColor = ConsoleColor.LightGreen;
+		Console.Write("> Registering device drivers...");
 		deviceService.RegisterDeviceDriver(DeviceDriver.Setup.GetDeviceDriverRegistryEntries());
-		ScreenConsole.WriteLine(ScreenColor.BrightBlack, " [Completed]");
+		Console.ForegroundColor = ConsoleColor.DarkGray;
+		Console.WriteLine(" [Completed]");
 
-		ScreenConsole.WriteLine();
-		ScreenConsole.WriteLine(ScreenColor.BrightYellow, "Initializing services...");
+		Console.ForegroundColor = ConsoleColor.Yellow;
+		Console.WriteLine();
+		Console.WriteLine("Initializing services...");
 
-		ScreenConsole.Write(ScreenColor.BrightGreen, "> Service Manager...");
+		Console.ForegroundColor = ConsoleColor.LightGreen;
+		Console.Write("> Service Manager...");
 		var serviceManager = new ServiceManager();
-		Kernel.ServiceManger = serviceManager;
-		ScreenConsole.WriteLine(ScreenColor.BrightBlack, " [Completed]");
+		var diskDeviceService = new DiskDeviceService();
+		var partitionService = new PartitionService();
+		var pciControllerService = new PCIControllerService();
+		var pciDeviceService = new PCIDeviceService();
+		var pcService = new PCService();
+		Kernel.ServiceManager = serviceManager;
+		Console.ForegroundColor = ConsoleColor.DarkGray;
+		Console.WriteLine(" [Completed]");
 
-		ScreenConsole.Write(ScreenColor.BrightGreen, "> Device Service...");
+		Console.ForegroundColor = ConsoleColor.LightGreen;
+		Console.Write("> Device Service...");
 		serviceManager.AddService(deviceService);
-		ScreenConsole.WriteLine(ScreenColor.BrightBlack, " [Completed]");
+		Console.ForegroundColor = ConsoleColor.DarkGray;
+		Console.WriteLine(" [Completed]");
 
-		ScreenConsole.Write(ScreenColor.BrightGreen, "> Disk Device Service...");
-		serviceManager.AddService(new DiskDeviceService());
-		ScreenConsole.WriteLine(ScreenColor.BrightBlack, " [Completed]");
+		Console.ForegroundColor = ConsoleColor.LightGreen;
+		Console.Write("> Disk Device Service...");
+		serviceManager.AddService(diskDeviceService);
+		Console.ForegroundColor = ConsoleColor.DarkGray;
+		Console.WriteLine(" [Completed]");
 
-		ScreenConsole.Write(ScreenColor.BrightGreen, "> Partition Service...");
-		serviceManager.AddService(new PartitionService());
-		ScreenConsole.WriteLine(ScreenColor.BrightBlack, " [Completed]");
+		Console.ForegroundColor = ConsoleColor.LightGreen;
+		Console.Write("> Partition Service...");
+		serviceManager.AddService(partitionService);
+		Console.ForegroundColor = ConsoleColor.DarkGray;
+		Console.WriteLine(" [Completed]");
 
-		ScreenConsole.Write(ScreenColor.BrightGreen, "> PCI Controller Service...");
-		serviceManager.AddService(new PCIControllerService());
-		ScreenConsole.WriteLine(ScreenColor.BrightBlack, " [Completed]");
+		Console.ForegroundColor = ConsoleColor.LightGreen;
+		Console.Write("> PCI Controller Service...");
+		serviceManager.AddService(pciControllerService);
+		Console.ForegroundColor = ConsoleColor.DarkGray;
+		Console.WriteLine(" [Completed]");
 
-		ScreenConsole.Write(ScreenColor.BrightGreen, "> PCI Device Service...");
-		serviceManager.AddService(new PCIDeviceService());
-		ScreenConsole.WriteLine(ScreenColor.BrightBlack, " [Completed]");
+		Console.ForegroundColor = ConsoleColor.LightGreen;
+		Console.Write("> PCI Device Service...");
+		serviceManager.AddService(pciDeviceService);
+		Console.ForegroundColor = ConsoleColor.DarkGray;
+		Console.WriteLine(" [Completed]");
 
-		ScreenConsole.Write(ScreenColor.BrightGreen, "> PC Service...");
-		serviceManager.AddService(new PCService());
-		ScreenConsole.WriteLine(ScreenColor.BrightBlack, " [Completed]");
+		Console.ForegroundColor = ConsoleColor.LightGreen;
+		Console.Write("> PC Service...");
+		serviceManager.AddService(pcService);
+		Console.ForegroundColor = ConsoleColor.DarkGray;
+		Console.WriteLine(" [Completed]");
 
-		ScreenConsole.Write(ScreenColor.BrightGreen, "> X86System...");
+		Console.ForegroundColor = ConsoleColor.LightGreen;
+		Console.Write("> X86System...");
 		deviceService.Initialize(new X86System(), null);
-		ScreenConsole.WriteLine(ScreenColor.BrightBlack, " [Completed]");
+		Console.ForegroundColor = ConsoleColor.DarkGray;
+		Console.WriteLine(" [Completed]");
 
-		ScreenConsole.Write(ScreenColor.BrightGreen, "> StandardKeyboard...");
+		Console.ForegroundColor = ConsoleColor.LightGreen;
+		Console.Write("> Creating partition devices...");
+		partitionService.CreatePartitionDevices();
+		Console.ForegroundColor = ConsoleColor.DarkGray;
+		Console.WriteLine(" [Completed]");
+
+		Console.ForegroundColor = ConsoleColor.LightGreen;
+		Console.Write("> StandardKeyboard...");
 		{
 			var stdKeyboard = deviceService.GetFirstDevice<StandardKeyboard>().DeviceDriver as IKeyboardDevice;
 			if (stdKeyboard == null)
 			{
-				ScreenConsole.WriteLine(ScreenColor.Red, " [FAIL]");
-				ScreenConsole.WriteLine(ScreenColor.Red, "No keyboard detected!");
+				Console.ForegroundColor = ConsoleColor.Red;
+				Console.WriteLine(" [FAIL]");
+				Console.WriteLine("No keyboard detected!");
 				while (true) HAL.Yield();
 			}
 
 			Kernel.Keyboard = new Keyboard(stdKeyboard, new US());
 		}
-		ScreenConsole.WriteLine(ScreenColor.BrightBlack, " [Completed]");
+		Console.ForegroundColor = ConsoleColor.DarkGray;
+		Console.WriteLine(" [Completed]");
+
+		Console.ForegroundColor = ConsoleColor.LightGreen;
+		Console.Write("> Setting interrupt handler...");
+		InterruptManager.SetHandler(ProcessInterrupt);
+		Console.ForegroundColor = ConsoleColor.DarkGray;
+		Console.WriteLine(" [Completed]");
+
+		Console.ForegroundColor = ConsoleColor.LightGreen;
+		Console.Write("> Enabling interrupts...");
+		Platform.Interrupt.Enable();
+		Console.ForegroundColor = ConsoleColor.DarkGray;
+		Console.WriteLine(" [Completed]");
 	}
 
 	[Plug("Mosa.Runtime.GC::AllocateMemory")]
 	private static Pointer AllocateMemory(uint size)
 	{
 		return BootStatus.IsGCEnabled ? GCMemory.AllocateMemory(size) : InitialGCMemory.AllocateMemory(size);
+	}
+
+	private static void ProcessInterrupt(uint interrupt, uint errorCode)
+	{
+		if (interrupt is >= 0x20 and < 0x30)
+			HAL.ProcessInterrupt((byte)(interrupt - 0x20));
 	}
 }
