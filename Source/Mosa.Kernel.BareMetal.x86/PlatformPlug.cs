@@ -35,30 +35,30 @@ public static class PlatformPlug
 	public static PlatformArchitecture GetPlatformArchitecture() => PlatformArchitecture.X86;
 
 	[Plug("Mosa.Kernel.BareMetal.Platform::ConsoleWrite")]
-	public static void ConsoleWrite(byte c) => x86.VGAConsole.Write(c);
+	public static void ConsoleWrite(byte c) => VGAConsole.Write(c);
 
 	[Plug("Mosa.Kernel.BareMetal.Platform::DebugWrite")]
-	public static void DebugWrite(byte c) => x86.SerialDebug.Write(c);
+	public static void DebugWrite(byte c) => SerialDebug.Write(c);
 
 	public static class PageTablePlug
 	{
 		[Plug("Mosa.Kernel.BareMetal.Platform+PageTable::Setup")]
-		public static void Setup() => x86.PageTable.Setup();
+		public static void Setup() => PageTable.Setup();
 
 		[Plug("Mosa.Kernel.BareMetal.Platform+PageTable::GetPageShift")]
 		public static uint GetPageShift() => 12;
 
 		[Plug("Mosa.Kernel.BareMetal.Platform+PageTable::Initialize")]
-		public static void Initialize() => x86.PageTable.Initialize();
+		public static void Initialize() => PageTable.Initialize();
 
 		[Plug("Mosa.Kernel.BareMetal.Platform+PageTable::Enable")]
-		public static void Enable() => x86.PageTable.Enable();
+		public static void Enable() => PageTable.Enable();
 
 		[Plug("Mosa.Kernel.BareMetal.Platform+PageTable::MapVirtualAddressToPhysical")]
-		public static void MapVirtualAddressToPhysical(Pointer virtualAddress, Pointer physicalAddress, bool present = true) => x86.PageTable.MapVirtualAddressToPhysical(virtualAddress, physicalAddress, present);
+		public static void MapVirtualAddressToPhysical(Pointer virtualAddress, Pointer physicalAddress, bool present = true) => PageTable.MapVirtualAddressToPhysical(virtualAddress, physicalAddress, present);
 
 		[Plug("Mosa.Kernel.BareMetal.Platform+PageTable::GetPhysicalAddressFromVirtual")]
-		public static Pointer GetPhysicalAddressFromVirtual(Pointer virtualAddress) => x86.PageTable.GetPhysicalAddressFromVirtual(virtualAddress);
+		public static Pointer GetPhysicalAddressFromVirtual(Pointer virtualAddress) => PageTable.GetPhysicalAddressFromVirtual(virtualAddress);
 	}
 
 	public static class InterruptPlug
@@ -76,7 +76,7 @@ public static class PlatformPlug
 		public static void Disable() => Native.Cli();
 	}
 
-	public static class IOPlugPlug
+	public static class IOPlug
 	{
 		[Plug("Mosa.Kernel.BareMetal.Platform+IO::In8")]
 		public static byte In8(ushort address) => Native.In8(address);
@@ -100,29 +100,29 @@ public static class PlatformPlug
 	public static class SchedulerPlug
 	{
 		[Plug("Mosa.Kernel.BareMetal.Platform+Scheduler::Start")]
-		public static void Start() => x86.Scheduler.Start();
+		public static void Start() => Scheduler.Start();
 
 		[Plug("Mosa.Kernel.BareMetal.Platform+Scheduler::Yield")]
-		public static void Yield() => x86.Scheduler.Yield();
+		public static void Yield() => Scheduler.Yield();
 
 		[Plug("Mosa.Kernel.BareMetal.Platform+Scheduler::SignalTermination")]
-		public static void SignalTermination() => x86.Scheduler.SignalTermination();
+		public static void SignalTermination() => Scheduler.SignalTermination();
 
 		[Plug("Mosa.Kernel.BareMetal.Platform+Scheduler::SwitchToThread")]
-		public static void SwitchToThread(Thread thread) => x86.Scheduler.SwitchToThread(thread);
+		public static void SwitchToThread(Thread thread) => Scheduler.SwitchToThread(thread);
 
 		[Plug("Mosa.Kernel.BareMetal.Platform+Scheduler::SetupThreadStack")]
-		public static Pointer SetupThreadStack(Pointer stackTop, Pointer methodAddress, Pointer termAddress) => x86.Scheduler.SetupThreadStack(stackTop, methodAddress, termAddress);
+		public static Pointer SetupThreadStack(Pointer stackTop, Pointer methodAddress, Pointer termAddress) => Scheduler.SetupThreadStack(stackTop, methodAddress, termAddress);
 	}
 
 	public static class SerialPlug
 	{
-		public static void Setup(int serial) => x86.Serial.Setup((ushort)serial);
+		public static void Setup(int serial) => Serial.Setup((ushort)serial);
 
-		public static void Write(int serial, byte data) => x86.Serial.Write((ushort)serial, data);
+		public static void Write(int serial, byte data) => Serial.Write((ushort)serial, data);
 
-		public static byte Read(int serial) => x86.Serial.Read((ushort)serial);
+		public static byte Read(int serial) => Serial.Read((ushort)serial);
 
-		public static bool IsDataReady(int serial) => x86.Serial.IsDataReady((ushort)serial);
+		public static bool IsDataReady(int serial) => Serial.IsDataReady((ushort)serial);
 	}
 }

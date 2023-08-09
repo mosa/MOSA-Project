@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.UnitTests.Framework;
+namespace Mosa.UnitTests.BareMetal.x86;
 
 public static class Address
 {

@@ -11,7 +11,7 @@ public static class Debug
 {
 	private const byte NewLine = (byte)'\n';
 
-	public static bool IsEnabled { get; set; } = false;
+	public static bool IsEnabled { get; set; }
 
 	#region Public API
 
@@ -28,7 +28,7 @@ public static class Debug
 
 	public static void Enable() => IsEnabled = true;
 
-	public static void Disable() => IsEnabled = true;
+	public static void Disable() => IsEnabled = false;
 
 	public static void Kill()
 	{

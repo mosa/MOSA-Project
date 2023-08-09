@@ -6,9 +6,19 @@ namespace Mosa.BareMetal.HelloWorld;
 
 public static class AppManager
 {
-	private static readonly IApp[] Applications =
+	public static readonly IApp[] Applications =
 	{
-		new Shell()
+		new Clear(),
+		new Credits(),
+		new Help(),
+		new Mem(),
+		new Reboot(),
+		new Shell(),
+		new ShowDisks(),
+		new ShowFS(),
+		new ShowISA(),
+		new ShowPCI(),
+		new Shutdown()
 	};
 
 	public static bool Execute(string name)

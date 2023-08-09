@@ -3,7 +3,7 @@
 using Mosa.Runtime;
 using Mosa.Runtime.x86;
 
-namespace Mosa.UnitTests.Framework;
+namespace Mosa.UnitTests.BareMetal.x86;
 
 /// <summary>
 /// Screen

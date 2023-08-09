@@ -6,32 +6,33 @@ namespace System;
 
 public static class Console
 {
+	private static ConsoleColor foregroundColor, backgroundColor;
+
 	public static ConsoleColor ForegroundColor
 	{
-		get => GetForegroundColor();
-		set => SetForegroundColor(value);
+		get => foregroundColor;
+		set
+		{
+			foregroundColor = value;
+			UpdateForegroundColor(value);
+		}
 	}
 
 	public static ConsoleColor BackgroundColor
 	{
-		get => GetBackgroundColor();
-		set => SetBackgroundColor(value);
+		get => backgroundColor;
+		set
+		{
+			backgroundColor = value;
+			UpdateBackgroundColor(value);
+		}
 	}
 
-	[MethodImpl(MethodImplOptions.InternalCall)]
-	private static extern ConsoleColor GetForegroundColor();
-
-	[MethodImpl(MethodImplOptions.InternalCall)]
-	private static extern ConsoleColor GetBackgroundColor();
-
-	[MethodImpl(MethodImplOptions.InternalCall)]
-	private static extern void SetForegroundColor(ConsoleColor color);
-
-	[MethodImpl(MethodImplOptions.InternalCall)]
-	private static extern void SetBackgroundColor(ConsoleColor color);
-
-	[MethodImpl(MethodImplOptions.InternalCall)]
-	public static extern void ResetColor();
+	public static void ResetColor()
+	{
+		BackgroundColor = ConsoleColor.Black;
+		ForegroundColor = ConsoleColor.White;
+	}
 
 	[MethodImpl(MethodImplOptions.InternalCall)]
 	public static extern void Clear();
@@ -53,4 +54,10 @@ public static class Console
 
 	[MethodImpl(MethodImplOptions.InternalCall)]
 	public static extern string ReadLine();
+
+	[MethodImpl(MethodImplOptions.InternalCall)]
+	private static extern void UpdateForegroundColor(ConsoleColor color);
+
+	[MethodImpl(MethodImplOptions.InternalCall)]
+	private static extern void UpdateBackgroundColor(ConsoleColor color);
 }
