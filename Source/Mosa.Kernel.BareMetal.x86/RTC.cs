@@ -7,70 +7,25 @@ namespace Mosa.Kernel.BareMetal.x86;
 
 public static class RTC
 {
-	public static byte Second
-	{
-		get
-		{
-			var b = Get(0);
-			return (byte)((b & 0x0F) + b / 16 * 10);
-		}
-	}
+	public static bool BCD { get; private set; }
 
-	public static byte Minute
-	{
-		get
-		{
-			var b = Get(2);
-			return (byte)((b & 0x0F) + b / 16 * 10);
-		}
-	}
+	public static byte Second => Get(0);
 
-	public static byte Hour
-	{
-		get
-		{
-			var b = Get(4);
-			return (byte)(((b & 0x0F) + (b & 0x70) / 16 * 10) | (b & 0x80));
-		}
-	}
+	public static byte Minute => Get(2);
 
-	public static byte Century
-	{
-		get
-		{
-			var b = Get(0x32);
-			return (byte)((b & 0x0F) + b / 16 * 10);
-		}
-	}
+	public static byte Hour => Get(4);
 
-	public static byte Year
-	{
-		get
-		{
-			var b = Get(9);
-			return (byte)((b & 0x0F) + b / 16 * 10);
-		}
-	}
+	public static byte Day => Get(7);
 
-	public static byte Month
-	{
-		get
-		{
-			var b = Get(8);
-			return (byte)((b & 0x0F) + b / 16 * 10);
-		}
-	}
+	public static byte Month => Get(8);
 
-	public static byte Day
-	{
-		get
-		{
-			var b = Get(7);
-			return (byte)((b & 0x0F) + b / 16 * 10);
-		}
-	}
+	public static byte Year => Get(9);
 
-	public static bool BCD => (Get(0x0B) & 0x04) == 0x00;
+	public static byte Century => Get(0x32);
+
+	public static void Setup() => BCD = (Get(0x0B) & 0x04) == 0x00;
+
+	public static byte BCDToBinary(byte value) => BCD ? (byte)(value / 16 * 10 + (value & 0xF)) : value;
 
 	public static byte Get(byte index)
 	{
@@ -83,11 +38,5 @@ public static class RTC
 	{
 		Native.Out8(0x70, index);
 		Native.Out8(0x71, value);
-	}
-
-	private static void Delay()
-	{
-		Native.In8(0x80);
-		Native.Out8(0x80, 0);
 	}
 }

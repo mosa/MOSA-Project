@@ -1,6 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
 using Mosa.Runtime.x86;
 
 namespace Mosa.Kernel.BareMetal.x86;
@@ -21,76 +20,79 @@ public static class CPUInfo
 
 	public static bool SupportsBrandString => Native.CpuIdEAX(0x80000000, 0) >= 0x80000004U;
 
-	public static void PrintVendorString()
+	public static string GetVendorString()
 	{
+		var vendor = string.Empty;
+
 		var identifier = Native.CpuIdEBX(0, 0);
 		for (var i = 0; i < 4; ++i)
-			Console.Write((char)((identifier >> (i * 8)) & 0xFF));
+			vendor += (char)((identifier >> (i * 8)) & 0xFF);
 
 		identifier = Native.CpuIdEDX(0, 0);
 		for (var i = 0; i < 4; ++i)
-			Console.Write((char)((identifier >> (i * 8)) & 0xFF));
+			vendor += (char)((identifier >> (i * 8)) & 0xFF);
 
 		identifier = Native.CpuIdECX(0, 0);
 		for (var i = 0; i < 4; ++i)
-			Console.Write((char)((identifier >> (i * 8)) & 0xFF));
+			vendor += (char)((identifier >> (i * 8)) & 0xFF);
+
+		return vendor;
 	}
 
-	public static void PrintBrandString()
+	public static string GetBrandString()
 	{
-		if (SupportsBrandString)
-		{
-			PrintBrand(0x80000002);
-			PrintBrand(0x80000003);
-			PrintBrand(0x80000004);
-			return;
-		}
+		if (!SupportsBrandString) return "Unknown (Generic x86)";
 
-		Console.Write(@"Unknown (Generic x86)");
+		var brand = PrintBrand(0x80000002);
+		brand += PrintBrand(0x80000003);
+		brand += PrintBrand(0x80000004);
+		return brand;
 	}
 
-	private static void PrintBrand(uint param)
+	private static string PrintBrand(uint param)
 	{
 		var whitespace = true;
+		var brand = string.Empty;
 
 		var identifier = Native.CpuIdEAX(param, 0);
 		if (identifier != 0x20202020)
 			for (var i = 0; i < 4; ++i)
-				PrintBrandPart(identifier, i, ref whitespace);
+				brand += PrintBrandPart(identifier, i, ref whitespace);
 
 		identifier = Native.CpuIdEBX(param, 0);
 		if (identifier != 0x20202020)
 			for (var i = 0; i < 4; ++i)
-				PrintBrandPart(identifier, i, ref whitespace);
+				brand += PrintBrandPart(identifier, i, ref whitespace);
 
 		identifier = Native.CpuIdECX(param, 0);
 		if (identifier != 0x20202020)
 			for (var i = 0; i < 4; ++i)
-				PrintBrandPart(identifier, i, ref whitespace);
+				brand += PrintBrandPart(identifier, i, ref whitespace);
 
 		identifier = Native.CpuIdEDX(param, 0);
 		if (identifier != 0x20202020)
 			for (var i = 0; i < 4; ++i)
-				PrintBrandPart(identifier, i, ref whitespace);
+				brand += PrintBrandPart(identifier, i, ref whitespace);
+
+		return brand;
 	}
 
-	private static void PrintBrandPart(uint identifier, int i, ref bool whitespace)
+	private static string PrintBrandPart(uint identifier, int i, ref bool whitespace)
 	{
 		var character = (char)((identifier >> (i * 8)) & 0xFF);
 
 		switch (whitespace)
 		{
-			case true when character == ' ': return;
+			case true when character == ' ': return string.Empty;
 			case true when character != ' ':
 			{
-				Console.Write(character);
 				whitespace = false;
-				return;
+				return character.ToString();
 			}
 		}
 
 		if (character == ' ') whitespace = true;
 
-		Console.Write(character);
+		return character.ToString();
 	}
 }

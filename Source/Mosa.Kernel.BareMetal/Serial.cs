@@ -2,10 +2,11 @@
 
 namespace Mosa.Kernel.BareMetal
 {
-	public class Serial
+	public static class Serial
 	{
-		public static void Setup(ushort comPort)
+		public static void Setup(ushort serial)
 		{
+			Platform.Serial.Setup(serial);
 		}
 
 		public static void Write(int serial, byte b)

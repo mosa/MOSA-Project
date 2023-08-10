@@ -24,6 +24,7 @@ public static class PlatformPlug
 		SSE.Setup();
 		SerialDebug.Setup();
 		PIC.Setup();
+		RTC.Setup();
 	}
 
 	[Plug("Mosa.Kernel.BareMetal.Platform::GetBootReservedRegion")]
@@ -117,12 +118,49 @@ public static class PlatformPlug
 
 	public static class SerialPlug
 	{
+		[Plug("Mosa.Kernel.BareMetal.Platform+Serial::Setup")]
 		public static void Setup(int serial) => Serial.Setup((ushort)serial);
 
+		[Plug("Mosa.Kernel.BareMetal.Platform+Serial::Write")]
 		public static void Write(int serial, byte data) => Serial.Write((ushort)serial, data);
 
+		[Plug("Mosa.Kernel.BareMetal.Platform+Serial::Read")]
 		public static byte Read(int serial) => Serial.Read((ushort)serial);
 
+		[Plug("Mosa.Kernel.BareMetal.Platform+Serial::IsDataReady")]
 		public static bool IsDataReady(int serial) => Serial.IsDataReady((ushort)serial);
+	}
+
+	public static class TimePlug
+	{
+		[Plug("Mosa.Kernel.BareMetal.Platform+Time::GetSecond")]
+		public static byte GetSecond() => RTC.BCDToBinary(RTC.Second);
+
+		[Plug("Mosa.Kernel.BareMetal.Platform+Time::GetMinute")]
+		public static byte GetMinute() => RTC.BCDToBinary(RTC.Minute);
+
+		[Plug("Mosa.Kernel.BareMetal.Platform+Time::GetHour")]
+		public static byte GetHour() => RTC.BCDToBinary(RTC.Hour);
+
+		[Plug("Mosa.Kernel.BareMetal.Platform+Time::GetDay")]
+		public static byte GetDay() => RTC.BCDToBinary(RTC.Day);
+
+		[Plug("Mosa.Kernel.BareMetal.Platform+Time::GetMonth")]
+		public static byte GetMonth() => RTC.BCDToBinary(RTC.Month);
+
+		[Plug("Mosa.Kernel.BareMetal.Platform+Time::GetYear")]
+		public static ushort GetYear() => (ushort)(RTC.BCDToBinary(RTC.Century) * 100 + RTC.BCDToBinary(RTC.Year));
+	}
+
+	public static class CPUPlug
+	{
+		[Plug("Mosa.Kernel.BareMetal.Platform+CPU::GetCores")]
+		public static uint GetCores() => CPUInfo.NumberOfCores;
+
+		[Plug("Mosa.Kernel.BareMetal.Platform+CPU::GetVendor")]
+		public static string GetVendor() => CPUInfo.GetVendorString();
+
+		[Plug("Mosa.Kernel.BareMetal.Platform+CPU::GetModel")]
+		public static string GetModel() => CPUInfo.GetBrandString();
 	}
 }

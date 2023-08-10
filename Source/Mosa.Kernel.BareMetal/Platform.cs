@@ -105,4 +105,28 @@ public static class Platform
 
 		public static bool IsDataReady(int serial) => false;
 	}
+
+	public static class Time
+	{
+		public static byte GetSecond() => 0;
+
+		public static byte GetMinute() => 0;
+
+		public static byte GetHour() => 0;
+
+		public static byte GetDay() => 0;
+
+		public static byte GetMonth() => 0;
+
+		public static ushort GetYear() => 0;
+	}
+
+	public static class CPU
+	{
+		public static uint GetCores() => 0;
+
+		public static string GetVendor() => string.Empty;
+
+		public static string GetModel() => string.Empty;
+	}
 }
