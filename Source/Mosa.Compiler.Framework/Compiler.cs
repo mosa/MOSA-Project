@@ -550,6 +550,7 @@ public sealed class Compiler
 	private void LogException(Exception exception, string title, string stage)
 	{
 		PostEvent(CompilerEvent.Exception, exception.Message);
+		PostEvent(CompilerEvent.Exception, exception.ToString());
 
 		var exceptionLog = new TraceLog(TraceType.GlobalDebug, null, stage, "Exception");
 
@@ -647,7 +648,9 @@ public sealed class Compiler
 
 	private MosaType GetPlatformInternalRuntimeType()
 	{
-		return TypeSystem.GetTypeByName("Mosa.Runtime." + Architecture.PlatformName + ".Internal");
+		Console.WriteLine($"Mosa.Runtime.{Architecture.PlatformName}.Internal");
+
+		return TypeSystem.GetTypeByName($"Mosa.Runtime.{Architecture.PlatformName}.Internal");
 	}
 
 	private MosaType GeInternalRuntimeType()
