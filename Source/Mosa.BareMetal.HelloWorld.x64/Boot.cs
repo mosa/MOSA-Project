@@ -13,4 +13,9 @@ public static class Boot
 
 		Program.EntryPoint();
 	}
+
+	public static void Include()
+	{
+		Kernel.BareMetal.x64.VGAText.Clear();
+	}
 }

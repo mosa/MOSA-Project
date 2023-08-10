@@ -20,6 +20,18 @@ public static class MonitorPlug
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[Plug("System.Threading.Monitor::ReliableEnter")]
+	internal static void ReliableEnter(Object obj, ref bool lockTaken)
+	{
+		var sync = Mosa.Runtime.Internal.GetObjectLockAndStatus(obj);
+
+		while (Native.CmpXChgLoad64(sync.ToInt64(), 1, 0) != 0)
+		{ }
+
+		lockTaken = true;
+	}
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	[Plug("System.Threading.Monitor::Exit")]
 	internal static void Exit(Object obj)
 	{

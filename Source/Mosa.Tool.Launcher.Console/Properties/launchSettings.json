@@ -2,7 +2,7 @@
   "profiles": {
     "Mosa.Tool.Launcher.Console": {
       "commandName": "Project",
-      "commandLineArgs": "Mosa.Demo.TestWorld.x64.dll -check -x64 -o5",
+      "commandLineArgs": "Mosa.BareMetal.HelloWorld.x64.dll -check -x64",
       "workingDirectory": "..\\..\\bin"
     }
   }
