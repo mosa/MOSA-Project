@@ -648,8 +648,6 @@ public sealed class Compiler
 
 	private MosaType GetPlatformInternalRuntimeType()
 	{
-		Console.WriteLine($"Mosa.Runtime.{Architecture.PlatformName}.Internal");
-
 		return TypeSystem.GetTypeByName($"Mosa.Runtime.{Architecture.PlatformName}.Internal");
 	}
 
