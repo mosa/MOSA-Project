@@ -24,6 +24,10 @@ public static class Platform
 	public static void DebugWrite(byte c)
 	{ }
 
+	public static Time GetTime() => default;
+
+	public static CPU GetCPU() => default;
+
 	public static class PageTable
 	{
 		public static uint GetPageShift() => 0;
@@ -104,29 +108,5 @@ public static class Platform
 		public static byte Read(int serial) => 0;
 
 		public static bool IsDataReady(int serial) => false;
-	}
-
-	public static class Time
-	{
-		public static byte GetSecond() => 0;
-
-		public static byte GetMinute() => 0;
-
-		public static byte GetHour() => 0;
-
-		public static byte GetDay() => 0;
-
-		public static byte GetMonth() => 0;
-
-		public static ushort GetYear() => 0;
-	}
-
-	public static class CPU
-	{
-		public static uint GetCores() => 0;
-
-		public static string GetVendor() => string.Empty;
-
-		public static string GetModel() => string.Empty;
 	}
 }
