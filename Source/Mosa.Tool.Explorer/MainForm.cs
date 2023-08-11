@@ -1196,7 +1196,7 @@ public partial class MainForm : Form
 		MosaSettings.AddSourceFile(filename);
 		MosaSettings.AddSourceFile(fileHunter.HuntFile("Mosa.Plug.Korlib.dll")?.FullName);
 		MosaSettings.AddSourceFile(fileHunter.HuntFile($"Mosa.Plug.Korlib.{MosaSettings.Platform}.dll")?.FullName);
-		MosaSettings.AddSourceFile(fileHunter.HuntFile(filename: "Mosa.Runtime." + MosaSettings.Platform + ".dll")?.FullName);
+		MosaSettings.AddSourceFile(fileHunter.HuntFile($"Mosa.Runtime.{MosaSettings.Platform}.dll")?.FullName);
 
 		// Search Paths
 		MosaSettings.ClearSearchPaths();

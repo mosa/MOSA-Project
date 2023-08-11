@@ -92,7 +92,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Packages", "Packages", "{52
 		Mosa.Packages\Mosa.Tools.Package.Qemu.nuspec = Mosa.Packages\Mosa.Tools.Package.Qemu.nuspec
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Setup", "Setup", "{624E8284-4F0A-4C3F-B5F2-271105E48ECF}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{624E8284-4F0A-4C3F-B5F2-271105E48ECF}"
 	ProjectSection(SolutionItems) = preProject
 		..\.github\workflows\builds.yml = ..\.github\workflows\builds.yml
 	EndProjectSection
@@ -227,7 +227,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Compiler.MosaTypeSyste
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.UnitTests.BareMetal.x86", "Mosa.UnitTests.BareMetal.x86\Mosa.UnitTests.BareMetal.x86.csproj", "{3F820CBC-E5DB-4E72-BA98-491D06355C53}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.BareMetal.HelloWorld", "Mosa.BareMetal.HelloWorld\Mosa.BareMetal.HelloWorld.csproj", "{6BF93B57-2BCB-4BE7-88B9-F071394B3FA7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.BareMetal.HelloWorld", "Mosa.BareMetal.HelloWorld\Mosa.BareMetal.HelloWorld.csproj", "{6BF93B57-2BCB-4BE7-88B9-F071394B3FA7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

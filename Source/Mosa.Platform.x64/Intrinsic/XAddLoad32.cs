@@ -9,8 +9,8 @@ namespace Mosa.Platform.x64.Intrinsic;
 /// </summary>
 internal static partial class IntrinsicMethods
 {
-	[IntrinsicMethod("Mosa.Platform.x64.Intrinsic::XAddLoad64")]
-	private static void XAddLoad64(Context context, TransformContext transformContext)
+	[IntrinsicMethod("Mosa.Platform.x64.Intrinsic::XAddLoad32")]
+	private static void XAddLoad32(Context context, TransformContext transformContext)
 	{
 		var location = context.Operand1;
 		var value = context.Operand2;
@@ -18,9 +18,9 @@ internal static partial class IntrinsicMethods
 
 		var v1 = transformContext.VirtualRegisters.Allocate64();
 
-		context.SetInstruction(X64.Mov64, v1, value);
+		context.SetInstruction(X64.Mov32, v1, value);
 		context.AppendInstruction(X64.Lock);
-		context.AppendInstruction(X64.XAddLoad64, v1, location, Operand.Constant64_0, v1);
-		context.AppendInstruction(X64.Mov64, result, v1);
+		context.AppendInstruction(X64.XAddLoad32, v1, location, Operand.Constant32_0, v1);
+		context.AppendInstruction(X64.Mov32, result, v1);
 	}
 }

@@ -767,7 +767,9 @@ public class MosaSettings
 
 		// special case - to match with DLL
 		if (Platform == "armv8a32")
+		{
 			Platform = "ARMv8A32";
+		}
 	}
 
 	public void UpdateFileAndPathSettings()
@@ -883,7 +885,7 @@ public class MosaSettings
 		}
 	}
 
-	#region Customer Helpers
+	#region Custom Helpers
 
 	public void ClearSourceFiles()
 	{
@@ -905,5 +907,5 @@ public class MosaSettings
 		Settings.AddPropertyListValue(Name.SearchPaths, filename);
 	}
 
-	#endregion Customer Helpers
+	#endregion Custom Helpers
 }

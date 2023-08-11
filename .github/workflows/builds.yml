@@ -112,8 +112,6 @@ jobs:
         run: dotnet nuget push bin\nupkg\Mosa.Kernel.x86.${{ env.BUILD_VERSION }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
       - name: Publish Package - Mosa.Platform.x64
         run: dotnet nuget push bin\nupkg\Mosa.Platform.x64.${{ env.BUILD_VERSION }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
-      - name: Publish Package - Mosa.Kernel.x64
-        run: dotnet nuget push bin\nupkg\Mosa.Kernel.x64.${{ env.BUILD_VERSION }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
 
   linux-build:
     name: Linux Build
