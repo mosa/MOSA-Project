@@ -24,6 +24,10 @@ public static class Platform
 	public static void DebugWrite(byte c)
 	{ }
 
+	public static Time GetTime() => default;
+
+	public static CPU GetCPU() => default;
+
 	public static class PageTable
 	{
 		public static uint GetPageShift() => 0;

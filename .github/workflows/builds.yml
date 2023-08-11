@@ -4,6 +4,9 @@ on:
   push:
   pull_request:
 
+permissions:
+  contents: write
+
 env:
   BUILD_VERSION: 2.4.0.${{ github.run_number }}
 
@@ -169,6 +172,7 @@ jobs:
   generate-docs:
     name: Generate Documentation
     runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.repository == 'mosa/MOSA-Project' && github.ref == 'refs/heads/master'
     steps:
       - name: Set python3.11
         uses: actions/setup-python@v4
@@ -178,7 +182,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           submodules: recursive
-      - name: Update package respository
+      - name: Update package repository
         run: sudo apt-get -y -o Acquire::Check-Valid-Until=false update
       - name: Install Graphviz
         run: sudo apt-get install -y graphviz
@@ -186,13 +190,15 @@ jobs:
         run: pip3 install sphinx sphinxcontrib.httpdomain sphinx-prompt sphinx_rtd_theme sphinx-tabs
       - name: Generate HTML website
         run: sphinx-build -b html Source/Docs sphinx-docs
-      - name: Create ZIP archive
-        run: zip -r docs-${{ env.BUILD_VERSION }}.zip sphinx-docs
-      - name: Create artifact
-        uses: actions/upload-artifact@master
+      - name: Copy CNAME file
+        run: cp Source/Docs/CNAME sphinx-docs/
+      - name: Copy .nojekyll file
+        run: cp Source/Docs/.nojekyll sphinx-docs/
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          name: docs-${{ env.BUILD_VERSION }}.zip
-          path: docs-${{ env.BUILD_VERSION }}.zip
+          folder: sphinx-docs
+          branch: docs
 
   windows-unit-testing:
     strategy:
@@ -293,10 +299,8 @@ jobs:
           path: bin
       - name: Demo Test - HelloWorld
         run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.Demo.HelloWorld.x86.dll -o${{ matrix.optimization }} -check -test
-      - name: Demo Test - CoolWorld [BareMetal]
+      - name: Demo Test - BareMetal CoolWorld
         run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.BareMetal.HelloWorld.x86.dll -o${{ matrix.optimization }} -check -test
-      - name: Demo Test - CoolWorld [Legacy]
-        run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.Demo.CoolWorld.x86.dll -o${{ matrix.optimization }} -check -test
       - name: Demo Test - SVGAWorld
         run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.Demo.SVGAWorld.x86.dll -o${{ matrix.optimization }} -check -test -vmware-svga -include bin\Include
 
@@ -328,10 +332,8 @@ jobs:
         run: sudo apt-get -y -o Acquire::Retries=5 install qemu-system-x86
       - name: Demo Test - HelloWorld
         run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.Demo.HelloWorld.x86.dll -o${{ matrix.optimization }} -check -test
-      - name: Demo Test - CoolWorld [BareMetal]
+      - name: Demo Test - BareMetal CoolWorld
         run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x86.dll -o${{ matrix.optimization }} -check -test
-      - name: Demo Test - CoolWorld [Legacy]
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.Demo.CoolWorld.x86.dll -o${{ matrix.optimization }} -check -test
       - name: Demo Test - SVGAWorld
         run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.Demo.SVGAWorld.x86.dll -o${{ matrix.optimization }} -check -test -vmware-svga -include bin/Include
         
@@ -361,9 +363,7 @@ jobs:
   #    #  run: brew install qemu
   #    - name: Demo Test - HelloWorld
   #      run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.Demo.HelloWorld.x86.dll -o${{ matrix.optimization }} -check -test
-  #    - name: Demo Test - CoolWorld [BareMetal]
+  #    - name: Demo Test - BareMetal CoolWorld
   #      run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x86.dll -o${{ matrix.optimization }} -check -test
-  #    - name: Demo Test - CoolWorld [Legacy]
-  #      run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.Demo.CoolWorld.x86.dll -o${{ matrix.optimization }} -check -test
   #    - name: Demo Test - SVGAWorld
   #      run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.Demo.SVGAWorld.x86.dll -o${{ matrix.optimization }} -check -test
