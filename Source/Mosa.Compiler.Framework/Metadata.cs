@@ -31,4 +31,6 @@ public struct Metadata
 	public const string MethodExceptionLookupTable = "<$>MethodExceptionLookupTable";
 
 	public const string StaticSymbolPrefix = "$static$";
+
+	public const string BootOptions = "$BootOptions$";
 }

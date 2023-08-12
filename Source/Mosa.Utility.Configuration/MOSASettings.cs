@@ -16,7 +16,7 @@ public class MosaSettings
 		public const string MultibootVersion = "v1";
 
 		public const int MaxErrors = 1000;
-		public const int ConnectionTimeOut = 10000; // in milliseconds
+		public const int ConnectionTimeOut = 15000; // in milliseconds
 		public const int TimeOut = 10000; // in milliseconds
 		public const int MaxAttempts = 20;
 		public const int Port = 11110;
@@ -631,11 +631,11 @@ public class MosaSettings
 		set => Settings.SetValue(Name.AppLocation_Graphwiz, value);
 	}
 
-	//public bool UnitTestBareMetal
-	//{
-	//	get => Settings.GetValue(Name.UnitTest_BareMetal, false);
-	//	set => Settings.SetValue(Name.UnitTest_BareMetal, value);
-	//}
+	public string OSBootOptions
+	{
+		get => Settings.GetValue(Name.OS_BootOptions, null);
+		set => Settings.SetValue(Name.OS_BootOptions, value);
+	}
 
 	#endregion Properties
 

@@ -158,6 +158,7 @@ public sealed class Compiler
 		new UnitTestStage(),
 		new TypeInitializerStage(),
 		mosaSettings.Devirtualization ? new DevirtualizationStage() : null,
+		new BootOptionStage(),
 		new StaticFieldStage(),
 		new MethodTableStage(),
 		new ExceptionTableStage(),
