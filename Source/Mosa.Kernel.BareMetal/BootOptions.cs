@@ -84,7 +84,7 @@ namespace Mosa.Kernel.BareMetal
 
 			unsafe
 			{
-				return new string((char*)Options, start, len);
+				return new string((sbyte*)Options, start, len);
 			}
 		}
 	}
