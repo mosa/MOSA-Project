@@ -52,9 +52,9 @@ public abstract class BaseCompilerStage
 
 	protected MethodScanner MethodScanner => Compiler.MethodScanner;
 
-	protected uint NativePointerSize;
+	protected uint NativePointerSize => TypeLayout.NativePointerSize;
 
-	protected PatchType NativePatchType;
+	protected PatchType NativePatchType => NativePointerSize == 4 ? PatchType.I32 : PatchType.I64;
 
 	/// <summary>
 	/// Retrieves the name of the compilation stage.
@@ -74,9 +74,6 @@ public abstract class BaseCompilerStage
 		Compiler = compiler;
 
 		Initialization();
-
-		NativePointerSize = TypeLayout.NativePointerSize;
-		NativePatchType = NativePointerSize == 4 ? PatchType.I32 : PatchType.I64;
 	}
 
 	/// <summary>

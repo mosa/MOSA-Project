@@ -24,6 +24,7 @@ public static class PlatformPlug
 		SSE.Setup();
 		SerialDebug.Setup();
 		PIC.Setup();
+		RTC.Setup();
 	}
 
 	[Plug("Mosa.Kernel.BareMetal.Platform::GetBootReservedRegion")]
@@ -39,6 +40,19 @@ public static class PlatformPlug
 
 	[Plug("Mosa.Kernel.BareMetal.Platform::DebugWrite")]
 	public static void DebugWrite(byte c) => SerialDebug.Write(c);
+
+	[Plug("Mosa.Kernel.BareMetal.Platform::GetTime")]
+	public static Time GetTime() => new(
+		RTC.BCDToBinary(RTC.Second),
+		RTC.BCDToBinary(RTC.Minute),
+		RTC.BCDToBinary(RTC.Hour),
+		RTC.BCDToBinary(RTC.Day),
+		RTC.BCDToBinary(RTC.Month),
+		(ushort)(RTC.BCDToBinary(RTC.Century) * 100 + RTC.BCDToBinary(RTC.Year))
+	);
+
+	[Plug("Mosa.Kernel.BareMetal.Platform::GetCPU")]
+	public static CPU GetCPU() => new(CPUInfo.NumberOfCores, CPUInfo.GetVendorString(), CPUInfo.GetBrandString());
 
 	public static class PageTablePlug
 	{
@@ -117,12 +131,16 @@ public static class PlatformPlug
 
 	public static class SerialPlug
 	{
+		[Plug("Mosa.Kernel.BareMetal.Platform+Serial::Setup")]
 		public static void Setup(int serial) => Serial.Setup((ushort)serial);
 
+		[Plug("Mosa.Kernel.BareMetal.Platform+Serial::Write")]
 		public static void Write(int serial, byte data) => Serial.Write((ushort)serial, data);
 
+		[Plug("Mosa.Kernel.BareMetal.Platform+Serial::Read")]
 		public static byte Read(int serial) => Serial.Read((ushort)serial);
 
+		[Plug("Mosa.Kernel.BareMetal.Platform+Serial::IsDataReady")]
 		public static bool IsDataReady(int serial) => Serial.IsDataReady((ushort)serial);
 	}
 }

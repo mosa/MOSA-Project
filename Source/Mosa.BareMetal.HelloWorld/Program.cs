@@ -1,11 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
-using Mosa.DeviceDriver.ISA;
 using Mosa.DeviceSystem;
-using Mosa.DeviceSystem.PCI;
 using Mosa.DeviceSystem.Service;
-using Mosa.FileSystem.FAT;
 using Mosa.Kernel.BareMetal;
 
 namespace Mosa.BareMetal.HelloWorld;
