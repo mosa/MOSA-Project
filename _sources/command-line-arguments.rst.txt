@@ -66,6 +66,8 @@ Below are the command line arguments available:
     -output-hash,CompilerDebug.PreLinkHashFile,%DEFAULT%
     -output-hash,CompilerDebug.PostLinkHashFile,%DEFAULT%
     -check,CompilerDebug.FullCheckMode,true
+	-asm,CompilerDebug.AsmFile,%DEFAULT%
+	-map,CompilerDebug.AsmFile,%DEFAULT%
 
     Compiler - X86:
     -interrupt-method,X86.InterruptMethodName,{value}
@@ -158,6 +160,7 @@ Below are the command line arguments available:
 
     Operating System:
     -osname,OS.Name,{value}
+	-bootoptions,OS.BootOptions,{value}
 
     Debugger:
     -breakpoints,Debugger.BreakpointFile,{value}
