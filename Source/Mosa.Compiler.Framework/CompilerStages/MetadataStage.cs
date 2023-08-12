@@ -19,18 +19,9 @@ public sealed class MetadataStage : BaseCompilerStage
 {
 	#region Data Members
 
-	private PatchType NativePatchType;
-	private uint NativePointerSize;
-
 	private IList<MosaType> Interfaces;
 
 	#endregion Data Members
-
-	protected override void Initialization()
-	{
-		NativePointerSize = TypeLayout.NativePointerSize;
-		NativePatchType = NativePointerSize == 4 ? PatchType.I32 : PatchType.I64;
-	}
 
 	protected override void Finalization()
 	{

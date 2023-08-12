@@ -13,17 +13,6 @@ namespace Mosa.Compiler.Framework.CompilerStages;
 /// <seealso cref="Mosa.Compiler.Framework.BaseCompilerStage" />
 public class ExceptionTableStage : BaseCompilerStage
 {
-	#region Data Members
-
-	private PatchType NativePatchType;
-
-	#endregion Data Members
-
-	protected override void Initialization()
-	{
-		NativePatchType = TypeLayout.NativePointerSize == 4 ? PatchType.I32 : NativePatchType = PatchType.I64;
-	}
-
 	protected override void Finalization()
 	{
 		CreateMethodExceptionLookupTable();

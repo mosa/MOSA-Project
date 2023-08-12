@@ -218,6 +218,7 @@ OS Settings
    :widths: 50, 200
 
     OS.Name, Name of operating system
+	OS.BootOptions, Specifies a boot string to pass to the operating system
 
 Import Settings
 ---------------
