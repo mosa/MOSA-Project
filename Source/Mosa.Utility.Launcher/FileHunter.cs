@@ -75,7 +75,18 @@ public class FileHunter
 	{
 		if (Directory.Exists(path))
 		{
-			var result = Directory.GetFiles(path, filename, SearchOption.AllDirectories);
+			var enumerationOptions = new EnumerationOptions()
+			{
+				IgnoreInaccessible = true,
+				MaxRecursionDepth = 5,
+				RecurseSubdirectories = true,
+				MatchType = MatchType.Simple,
+				MatchCasing = MatchCasing.PlatformDefault,
+				ReturnSpecialDirectories = false,
+				AttributesToSkip = FileAttributes.ReparsePoint | FileAttributes.Device
+			};
+
+			var result = Directory.GetFiles(path, filename, enumerationOptions);
 
 			if (result?.Length >= 1)
 			{
