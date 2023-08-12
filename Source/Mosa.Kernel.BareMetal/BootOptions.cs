@@ -8,13 +8,27 @@ namespace Mosa.Kernel.BareMetal
 	{
 		private static Pointer Options;
 
-		public static void Setup(Pointer options)
+		public static void Setup()
 		{
-			Options = options;
+			Options = Intrinsic.GetBootOptions();
+
+			var debug = GetValue("Debug.Option");
+
+			if (debug != null)
+			{
+				Debug.WriteLine("Debug.Option: ", debug);
+			}
+			else
+			{
+				Debug.WriteLine("Debug.Option: None");
+			}
 		}
 
 		public static string GetValue(string key)
 		{
+			if (Options.IsNull)
+				return null;
+
 			var keylen = key.Length;
 
 			var parsekey = true;

@@ -119,6 +119,16 @@ public static class Debug
 
 	// Helpers
 
+	public static void WriteLine(string message, string value)
+	{
+		if (!IsEnabled)
+			return;
+
+		Write(message);
+		Write(value);
+		Write(NewLine);
+	}
+
 	public static void WriteLine(string message, ulong value)
 	{
 		if (!IsEnabled)
