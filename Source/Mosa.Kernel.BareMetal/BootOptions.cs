@@ -6,11 +6,13 @@ namespace Mosa.Kernel.BareMetal
 {
 	public class BootOptions
 	{
-		private static Pointer Options;
+		private static Pointer StaticOptions;
+		private static Pointer RuntimeOptions;
 
 		public static void Setup()
 		{
-			Options = Intrinsic.GetBootOptions();
+			StaticOptions = Intrinsic.GetBootOptions();
+			RuntimeOptions = Multiboot.IsAvailable ? Multiboot.MultibootV1.CommandLineAddress : Pointer.Zero;
 
 			var debug = GetValue("Debug.Option");
 
@@ -26,7 +28,19 @@ namespace Mosa.Kernel.BareMetal
 
 		public static string GetValue(string key)
 		{
-			if (Options.IsNull)
+			var result = GetValue(RuntimeOptions, key);
+
+			if (result != null)
+			{
+				result = GetValue(StaticOptions, key);
+			}
+
+			return result;
+		}
+
+		private static string GetValue(Pointer options, string key)
+		{
+			if (options.IsNull)
 				return null;
 
 			var keylen = key.Length;
@@ -39,7 +53,7 @@ namespace Mosa.Kernel.BareMetal
 
 			for (var at = 0; ; at++)
 			{
-				var c = Options.Load8(at);
+				var c = options.Load8(at);
 
 				if (c == 0)
 					break;
@@ -84,7 +98,7 @@ namespace Mosa.Kernel.BareMetal
 
 			unsafe
 			{
-				return new string((sbyte*)Options, start, len);
+				return new string((sbyte*)options, start, len);
 			}
 		}
 	}

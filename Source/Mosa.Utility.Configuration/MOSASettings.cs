@@ -638,6 +638,12 @@ public class MosaSettings
 		set => Settings.SetValue(Name.OS_BootOptions, value);
 	}
 
+	public int BootLoaderTimeout
+	{
+		get => Settings.GetValue(Name.BootLoaderTimeout, 0);
+		set => Settings.SetValue(Name.BootLoaderTimeout, value);
+	}
+
 	#endregion Properties
 
 	public MosaSettings()

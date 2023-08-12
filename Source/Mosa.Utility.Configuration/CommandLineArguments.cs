@@ -163,6 +163,7 @@ public static class CommandLineArguments
 
 			new Argument { Name = "-osname", Setting = Name.OS_Name},
 			new Argument { Name = "-bootoptions", Setting = Name.OS_BootOptions},
+			new Argument { Name = "-bootloader-timeout", Setting = Name.BootLoaderTimeout},
 
 			new Argument { Name = "-launch-gdb", Setting = Name.Launcher_GDB, Value="true"},
 			new Argument { Name = "-launch-debugger", Setting = Name.Launcher_Debugger, Value="true"},
