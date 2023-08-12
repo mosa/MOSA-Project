@@ -97,6 +97,7 @@ public class Starter : BaseLauncher
 		var kill = false;
 
 		var client = new SimpleTCP();
+		var watchDog = new WatchDog(MosaSettings.EmulatorMaxRuntime * 1000);
 
 		client.OnStatusUpdate = Output;
 
@@ -116,6 +117,8 @@ public class Starter : BaseLauncher
 
 				if (line == "##KILL##")
 					kill = true;
+
+				watchDog.Restart();
 			}
 		};
 
@@ -131,7 +134,7 @@ public class Starter : BaseLauncher
 			if (!client.Connect(MosaSettings.EmulatorSerialHost, MosaSettings.EmulatorSerialPort, 10000))
 				return false;
 
-			var watchDog = new WatchDog(MosaSettings.EmulatorMaxRuntime * 1000);
+			watchDog.Restart();
 
 			while (!(success || watchDog.IsTimedOut || kill))
 			{
@@ -174,6 +177,7 @@ public class Starter : BaseLauncher
 		var kill = false;
 
 		var client = new SimpleTCP();
+		var watchDog = new WatchDog(MosaSettings.EmulatorMaxRuntime * 1000);
 
 		client.OnStatusUpdate = Output;
 
@@ -190,6 +194,8 @@ public class Starter : BaseLauncher
 
 				if (line == "##KILL##")
 					kill = true;
+
+				watchDog.Restart();
 			}
 		};
 
@@ -205,7 +211,7 @@ public class Starter : BaseLauncher
 			if (!client.Connect(MosaSettings.EmulatorSerialHost, MosaSettings.EmulatorSerialPort, 10000))
 				return false;
 
-			var watchDog = new WatchDog(MosaSettings.EmulatorMaxRuntime * 1000);
+			watchDog.Restart();
 
 			while (!(success || watchDog.IsTimedOut || kill))
 			{

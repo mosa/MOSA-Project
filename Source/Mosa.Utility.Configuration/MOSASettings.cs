@@ -20,7 +20,7 @@ public class MosaSettings
 		public const int TimeOut = 10000; // in milliseconds
 		public const int MaxAttempts = 20;
 		public const int Port = 11110;
-		public const int EmulatorMaxRuntime = 30; // in seconds
+		public const int EmulatorMaxRuntime = 20; // in seconds
 	}
 
 	#endregion Constants
