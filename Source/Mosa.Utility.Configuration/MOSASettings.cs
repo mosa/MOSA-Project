@@ -20,6 +20,7 @@ public class MosaSettings
 		public const int TimeOut = 10000; // in milliseconds
 		public const int MaxAttempts = 20;
 		public const int Port = 11110;
+		public const int EmulatorMaxRuntime = 30; // in seconds
 	}
 
 	#endregion Constants
@@ -361,8 +362,8 @@ public class MosaSettings
 
 	public int EmulatorMaxRuntime
 	{
-		get => Settings.GetValue(Name.Emulator_MaxRuntime, 10);
-		set => Settings.SetValue(Name.Emulator_MaxRuntime, 10);
+		get => Settings.GetValue(Name.Emulator_MaxRuntime, Constant.EmulatorMaxRuntime);
+		set => Settings.SetValue(Name.Emulator_MaxRuntime, Constant.EmulatorMaxRuntime);
 	}
 
 	public List<string> SearchPaths => Settings.GetValueList(Name.SearchPaths);
