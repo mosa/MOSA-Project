@@ -19,6 +19,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Mosa.DeviceDriver\Mosa.DeviceDriver.csproj" />
     <ProjectReference Include="..\Mosa.DeviceSystem\Mosa.DeviceSystem.csproj" />
+    <ProjectReference Include="..\Mosa.FileSystem\Mosa.FileSystem.csproj" />
     <ProjectReference Include="..\Mosa.Runtime\Mosa.Runtime.csproj" />
   </ItemGroup>
   <ItemGroup>
