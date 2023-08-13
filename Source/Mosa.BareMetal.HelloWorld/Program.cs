@@ -14,8 +14,8 @@ public static class Program
 	public static void SetBootOptions()
 	{
 		BootSettings.EnableDebugOutput = true;
-		//BootOptions.EnableVirtualMemory = true;
-		//BootOptions.EnableMinimalBoot = true;
+		//BootSettings.EnableVirtualMemory = true;
+		//BootSettings.EnableMinimalBoot = true;
 	}
 
 	public static DeviceService DeviceService { get; private set; }
