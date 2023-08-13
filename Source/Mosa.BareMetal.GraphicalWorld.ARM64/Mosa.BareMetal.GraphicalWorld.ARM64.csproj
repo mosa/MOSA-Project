@@ -14,7 +14,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Mosa.BareMetal.GraphicalWorld\Mosa.BareMetal.GraphicalWorld.csproj" />
-		<ProjectReference Include="..\Mosa.Kernel.BareMetal.ARMv8A32\Mosa.Kernel.BareMetal.ARMv8A32.csproj" />
+		<ProjectReference Include="..\Mosa.Kernel.BareMetal.ARM64\Mosa.Kernel.BareMetal.ARM64.csproj" />
 	</ItemGroup>
 
 </Project>

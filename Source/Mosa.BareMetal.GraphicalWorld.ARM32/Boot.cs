@@ -2,14 +2,14 @@
 
 using Mosa.Kernel.BareMetal;
 
-namespace Mosa.BareMetal.GraphicalWorld.ARMv8A32;
+namespace Mosa.BareMetal.GraphicalWorld.ARM32;
 
 public static class Boot
 {
 	public static void Main()
 	{
 		Debug.WriteLine("Boot::Main()");
-		Debug.WriteLine("MOSA ARMv8A32 Kernel");
+		Debug.WriteLine("MOSA ARM32 Kernel");
 
 		Program.EntryPoint();
 	}
