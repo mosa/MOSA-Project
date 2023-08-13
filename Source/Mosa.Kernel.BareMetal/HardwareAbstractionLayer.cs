@@ -1,6 +1,8 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
 using Mosa.DeviceSystem;
+using Mosa.DeviceSystem.Service;
 using Mosa.Runtime;
 
 namespace Mosa.Kernel.BareMetal;
@@ -36,7 +38,7 @@ public sealed class HardwareAbstractionLayer : BaseHardwareAbstraction
 
 	public override void Abort(string message)
 	{
-		Debug.Write("***HAL Abort***");
+		Debug.Write("*** HAL Abort ***");
 		Debug.WriteLine(message ?? "Abort");
 		Debug.Fatal();
 	}

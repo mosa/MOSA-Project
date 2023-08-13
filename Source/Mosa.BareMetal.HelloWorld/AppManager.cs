@@ -18,7 +18,8 @@ public static class AppManager
 		new ShowFS(),
 		new ShowISA(),
 		new ShowPCI(),
-		new Shutdown()
+		new Shutdown(),
+		new Time()
 	};
 
 	public static bool Execute(string name)

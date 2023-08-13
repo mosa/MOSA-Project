@@ -51,9 +51,6 @@ public static class PlatformPlug
 		(ushort)(RTC.BCDToBinary(RTC.Century) * 100 + RTC.BCDToBinary(RTC.Year))
 	);
 
-	[Plug("Mosa.Kernel.BareMetal.Platform::GetCPU")]
-	public static CPU GetCPU() => new(CPUInfo.NumberOfCores, CPUInfo.GetVendorString(), CPUInfo.GetBrandString());
-
 	public static class PageTablePlug
 	{
 		[Plug("Mosa.Kernel.BareMetal.Platform+PageTable::Setup")]

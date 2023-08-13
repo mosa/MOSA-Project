@@ -89,6 +89,8 @@ public class VirtIOGPU : BaseDeviceDriver, IGraphicsDevice
 		Internal.MemorySet(flushHeader, 0, 48);
 	}
 
+	public override void Start() => Device.Status = DeviceStatus.Online;
+
 	public void SetMode(uint width, uint height)
 	{
 		const uint x = 0;
@@ -127,14 +129,10 @@ public class VirtIOGPU : BaseDeviceDriver, IGraphicsDevice
 	}
 
 	public void Disable()
-	{
-		throw new NotImplementedException();
-	}
+	{ }
 
 	public void Enable()
-	{
-		throw new NotImplementedException();
-	}
+	{ }
 
 	public void Update(uint x, uint y, uint width, uint height)
 	{

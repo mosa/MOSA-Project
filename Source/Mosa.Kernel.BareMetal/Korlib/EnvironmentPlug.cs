@@ -9,21 +9,14 @@ public class EnvironmentPlug
 	[Plug("System.Environment::FailFast")]
 	public static void FailFast(string message)
 	{
-		Debug.WriteLine("DEBUG: ");
+		Debug.WriteLine("*** FailFast ***");
 		Debug.WriteLine(message);
-
 		Debug.Fatal();
 	}
 
 	[Plug("System.Environment::Exit")]
-	public static void Exit(int exitCode)
-	{
-		Debug.Fatal();
-	}
+	public static void Exit(int exitCode) => Debug.Fatal();
 
 	[Plug("System.Environment::GetProcessorCount")]
-	internal static int GetProcessorCount()
-	{
-		return 1;
-	}
+	public static int GetProcessorCount() => 1;
 }

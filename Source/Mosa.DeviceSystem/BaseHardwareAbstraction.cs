@@ -1,5 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Diagnostics.CodeAnalysis;
 using Mosa.Runtime;
 
 namespace Mosa.DeviceSystem;
@@ -69,6 +70,7 @@ public abstract class BaseHardwareAbstraction
 	/// Aborts with the specified message.
 	/// </summary>
 	/// <param name="message">The message.</param>
+	[DoesNotReturn]
 	public abstract void Abort(string message);
 
 	/// <summary>

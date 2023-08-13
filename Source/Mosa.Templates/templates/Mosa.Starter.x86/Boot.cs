@@ -4,35 +4,33 @@ using Mosa.DeviceSystem;
 using Mosa.Kernel.x86;
 using Mosa.Runtime.Plug;
 
-namespace Mosa.Starter.x86
+namespace Mosa.Starter.x86;
+
+public static class Boot
 {
-    public static class Boot
-    {
-        [Plug("Mosa.Runtime.StartUp::SetInitialMemory")]
-        public static void SetInitialMemory()
-        {
-            KernelMemory.SetInitialMemory(Address.GCInitialMemory, 0x01000000);
-        }
+	[Plug("Mosa.Runtime.StartUp::SetInitialMemory")]
+	public static void SetInitialMemory()
+	{
+		KernelMemory.SetInitialMemory(Address.GCInitialMemory, 0x01000000);
+	}
 
-        public static void Main()
-        {
-            #region Initialization
+	public static void Main()
+	{
+		#region Initialization
 
-            Kernel.Setup();
-            IDT.SetInterruptHandler(ProcessInterrupt);
+		Kernel.x86.Kernel.Setup();
+		IDT.SetInterruptHandler(ProcessInterrupt);
 
-            #endregion
+		#endregion
 
-            Program.Setup();
+		Program.Setup();
 
-            for (; ; )
-                Program.Loop();
-        }
+		for (; ; ) Program.Loop();
+	}
 
-        public static void ProcessInterrupt(uint interrupt, uint errorCode)
-        {
-            if (interrupt >= 0x20 && interrupt < 0x30)
-                HAL.ProcessInterrupt((byte)(interrupt - 0x20));
-        }
-    }
+	private static void ProcessInterrupt(uint interrupt, uint errorCode)
+	{
+		if (interrupt >= 0x20 && interrupt < 0x30)
+			HAL.ProcessInterrupt((byte)(interrupt - 0x20));
+	}
 }

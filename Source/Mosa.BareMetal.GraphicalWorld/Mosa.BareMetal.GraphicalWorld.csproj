@@ -13,7 +13,21 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Mosa.Kernel.BareMetal\Mosa.Kernel.BareMetal.csproj" />
 		<ProjectReference Include="..\Mosa.Korlib\Mosa.Korlib.csproj" />
+		<ProjectReference Include="..\Mosa.DeviceSystem\Mosa.DeviceSystem.csproj" />
+		<ProjectReference Include="..\Mosa.DeviceDriver\Mosa.DeviceDriver.csproj" />
 		<ProjectReference Include="..\Mosa.FileSystem\Mosa.FileSystem.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="Include\cur.bmp">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Include\font.bin">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Include\font2.bin">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 	</ItemGroup>
 
 </Project>
