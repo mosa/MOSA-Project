@@ -199,11 +199,11 @@ public partial class MainWindow : Window
 		bochsPathLbl.Content = MosaSettings.BochsApp;
 		ndiasmPathLbl.Content = MosaSettings.NdisasmApp;
 
-		qemuPathLbl.Content = MosaSettings.QEMUApp;
-		qemuBiosPathLbl.Content = MosaSettings.QEMUBios;
-		qemuEdk2X86PathLbl.Content = MosaSettings.QEMUEdk2X86;
-		qemuEdk2X64PathLbl.Content = MosaSettings.QEMUEdk2X64;
-		qemuEdk2ARMPathLbl.Content = MosaSettings.QEMUEdk2ARM;
+		qemuPathLbl.Content = MosaSettings.QemuX86App;
+		qemuBiosPathLbl.Content = MosaSettings.QemuBIOS;
+		qemuEdk2X86PathLbl.Content = MosaSettings.QemuEdk2X86;
+		qemuEdk2X64PathLbl.Content = MosaSettings.QemuEdk2X64;
+		qemuEdk2ARMPathLbl.Content = MosaSettings.QemuEdk2ARM32;
 		qemuImgPathLbl.Content = MosaSettings.QemuImgApp;
 		vboxPathLbl.Content = MosaSettings.VirtualBoxApp;
 		mkisofsPathLbl.Content = MosaSettings.MkisofsApp;
