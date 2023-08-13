@@ -1,0 +1,27 @@
+{
+	"Encoding": [
+
+	],
+	"Instructions": [
+		{
+			"Name": "Nop",
+			"Commutative": "false",
+			"FamilyName": "ARM64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "CNZV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 0,
+			"ResultCount": 0,
+			"Description": "No Operation",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0xBF00"
+				}
+			]
+		}
+	]
+}

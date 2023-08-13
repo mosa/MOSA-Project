@@ -1156,7 +1156,7 @@
 			cbPlatform.BackColor = System.Drawing.SystemColors.Window;
 			cbPlatform.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			cbPlatform.FlatStyle = System.Windows.Forms.FlatStyle.Standard;
-			cbPlatform.Items.AddRange(new object[] { "x86", "x64", "ARMv8A32" });
+			cbPlatform.Items.AddRange(new object[] { "x86", "x64", "ARM32" });
 			cbPlatform.Name = "cbPlatform";
 			cbPlatform.Size = new System.Drawing.Size(104, 27);
 			cbPlatform.SelectedIndexChanged += cbPlatform_SelectedIndexChanged;

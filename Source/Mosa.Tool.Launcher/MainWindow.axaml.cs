@@ -146,7 +146,7 @@ public partial class MainWindow : Window
 		// Register all platforms supported by the compiler
 		PlatformRegistry.Add(new Platform.x86.Architecture());
 		PlatformRegistry.Add(new Platform.x64.Architecture());
-		PlatformRegistry.Add(new Platform.ARMv8A32.Architecture());
+		PlatformRegistry.Add(new Platform.ARM32.Architecture());
 
 		// Initialize paths
 		UpdatePaths();
@@ -298,7 +298,7 @@ public partial class MainWindow : Window
 		{
 			"x86" => 0,
 			"x64" => 1,
-			"armv8a32" => 2,
+			"arm32" => 2,
 			_ => 0
 		};
 
@@ -403,7 +403,7 @@ public partial class MainWindow : Window
 		{
 			0 => "x86",
 			1 => "x64",
-			2 => "ARMv8A32",
+			2 => "ARM32",
 			_ => string.Empty,
 		};
 

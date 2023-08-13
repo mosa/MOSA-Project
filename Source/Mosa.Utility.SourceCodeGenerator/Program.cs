@@ -206,21 +206,38 @@ public static class Program
 			Path.Combine(targetPath, @"Mosa.Platform.x64\Instructions")
 		).Execute();
 
-		new BuildARMv8A32(
-			Path.Combine(dataPath, @"ARMv8A32-Instructions.json"),
-			Path.Combine(targetPath, @"Mosa.Platform.ARMv8A32\"),
-			"ARMv8A32.cs"
+		new BuildARM32(
+			Path.Combine(dataPath, @"ARM32-Instructions.json"),
+			Path.Combine(targetPath, @"Mosa.Platform.ARM32\"),
+			"ARM32.cs"
 		).Execute();
 
-		new BuildARMv8A32Instructions(
-			Path.Combine(dataPath, @"ARMv8A32-Instructions.json"),
-			Path.Combine(targetPath, @"Mosa.Platform.ARMv8A32\"),
-			"ARMv8A32Instructions.cs"
+		new BuildARM32Instructions(
+			Path.Combine(dataPath, @"ARM32-Instructions.json"),
+			Path.Combine(targetPath, @"Mosa.Platform.ARM32\"),
+			"ARM32Instructions.cs"
 		).Execute();
 
-		new BuildARMv8A32InstructionFiles(
-			Path.Combine(dataPath, @"ARMv8A32-Instructions.json"),
-			Path.Combine(targetPath, @"Mosa.Platform.ARMv8A32\Instructions")
+		new BuildARM32InstructionFiles(
+			Path.Combine(dataPath, @"ARM32-Instructions.json"),
+			Path.Combine(targetPath, @"Mosa.Platform.ARM32\Instructions")
+		).Execute();
+
+		new BuildARM64(
+			Path.Combine(dataPath, @"ARM64-Instructions.json"),
+			Path.Combine(targetPath, @"Mosa.Platform.ARM64\"),
+			"ARM64.cs"
+		).Execute();
+
+		new BuildARM64Instructions(
+			Path.Combine(dataPath, @"ARM64-Instructions.json"),
+			Path.Combine(targetPath, @"Mosa.Platform.ARM64\"),
+			"ARM64Instructions.cs"
+		).Execute();
+
+		new BuildARM64InstructionFiles(
+			Path.Combine(dataPath, @"ARM64-Instructions.json"),
+			Path.Combine(targetPath, @"Mosa.Platform.ARM64\Instructions")
 		).Execute();
 	}
 }

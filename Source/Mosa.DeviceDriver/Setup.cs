@@ -220,7 +220,7 @@ public static class Setup
 			new PCIDeviceDriverRegistryEntry
 			{
 				Name = "VirtIOGPU",
-				Platform = PlatformArchitecture.X86AndX64 | PlatformArchitecture.ARMv8A32,
+				Platform = PlatformArchitecture.X86AndX64 | PlatformArchitecture.ARM32,
 				BusType = DeviceBusType.PCI,
 				VendorID = 0x1AF4,
 				DeviceID = 0x1050,

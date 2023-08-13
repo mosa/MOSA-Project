@@ -116,17 +116,18 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Kernel.BareMetal.x64",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.BareMetal.HelloWorld.x86", "Mosa.BareMetal.HelloWorld.x86\Mosa.BareMetal.HelloWorld.x86.csproj", "{F1776FF2-A727-4FBF-B6BE-D37D6B019038}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Platform.ARMv8A32", "Mosa.Platform.ARMv8A32\Mosa.Platform.ARMv8A32.csproj", "{1D3F8C25-77DE-4E04-81DF-5E7EF1ABE914}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Platform.ARM32", "Mosa.Platform.ARM32\Mosa.Platform.ARM32.csproj", "{1D3F8C25-77DE-4E04-81DF-5E7EF1ABE914}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Plug.Korlib.ARMv8A32", "Mosa.Plug.Korlib.ARMv8A32\Mosa.Plug.Korlib.ARMv8A32.csproj", "{024D8FB8-37F2-4F22-A637-3AFF13CB3F56}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Plug.Korlib.ARM32", "Mosa.Plug.Korlib.ARM32\Mosa.Plug.Korlib.ARM32.csproj", "{024D8FB8-37F2-4F22-A637-3AFF13CB3F56}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Runtime.ARMv8A32", "Mosa.Runtime.ARMv8A32\Mosa.Runtime.ARMv8A32.csproj", "{599D1C00-7C78-4211-A958-1285C4CB76C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Runtime.ARM32", "Mosa.Runtime.ARM32\Mosa.Runtime.ARM32.csproj", "{599D1C00-7C78-4211-A958-1285C4CB76C1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Kernel.BareMetal.ARMv8A32", "Mosa.Kernel.BareMetal.ARMv8A32\Mosa.Kernel.BareMetal.ARMv8A32.csproj", "{6D7FEE6A-1623-49D2-817A-7307BE2BD8BC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Kernel.BareMetal.ARM32", "Mosa.Kernel.BareMetal.ARM32\Mosa.Kernel.BareMetal.ARM32.csproj", "{6D7FEE6A-1623-49D2-817A-7307BE2BD8BC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Instructions", "Instructions", "{225883A6-A279-4F4A-9A06-9FE4E32A1B6A}"
 	ProjectSection(SolutionItems) = preProject
-		Data\ARMv8A32-Instructions.json = Data\ARMv8A32-Instructions.json
+		Data\ARM32-Instructions.json = Data\ARM32-Instructions.json
+		Data\ARM64-Instructions.json = Data\ARM64-Instructions.json
 		Data\IR-Instructions.json = Data\IR-Instructions.json
 		Data\X64-Instructions.json = Data\X64-Instructions.json
 		Data\X86-Instructions.json = Data\X86-Instructions.json
@@ -159,7 +160,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.UnitTests.BareMetal.x8
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.BareMetal.HelloWorld.x64", "Mosa.BareMetal.HelloWorld.x64\Mosa.BareMetal.HelloWorld.x64.csproj", "{BDBC1CE5-848F-4EBE-9731-B4AC33F1D0DC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.BareMetal.HelloWorld.ARMv8A32", "Mosa.BareMetal.HelloWorld.ARMv8A32\Mosa.BareMetal.HelloWorld.ARMv8A32.csproj", "{6B6FC829-9A26-465F-8056-7F986E40C7AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.BareMetal.HelloWorld.ARM32", "Mosa.BareMetal.HelloWorld.ARM32\Mosa.BareMetal.HelloWorld.ARM32.csproj", "{6B6FC829-9A26-465F-8056-7F986E40C7AB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.BareMetal.HelloWorld", "Mosa.BareMetal.HelloWorld\Mosa.BareMetal.HelloWorld.csproj", "{3DE842F8-07E8-49C5-9F99-D38968AA83A0}"
 EndProject

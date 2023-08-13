@@ -277,9 +277,10 @@ public class Starter : BaseLauncher
 			case "x64":
 				qemuApp = MosaSettings.QemuX64App;
 				uefi = $" -drive if=pflash,format=raw,readonly=on,file={Quote(MosaSettings.QemuEdk2X64)}";
+				arg.Append(" -cpu qemu32,+sse4.1,abm,bmi1,bmi2,popcnt");
 				break;
 
-			case "armv8a32":
+			case "ARM32":
 				qemuApp = MosaSettings.QemuARM32App;
 				uefi = $" -drive if=pflash,format=raw,readonly=on,file={Quote(MosaSettings.QemuEdk2ARM32)}";
 				arg.Append(" -cpu arm1176");
