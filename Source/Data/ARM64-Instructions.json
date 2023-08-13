@@ -1,23 +1,6 @@
 {
 	"Encoding": [
-		"[arm-data-processing-immediate]=           conditional|00|1|[opcode]|[s]|[rn]|[rd]|[immediate12]",
-		"[arm-data-processing-shift-amount]=        conditional|00|0|[opcode]|[s]|[rn]|[rd]|[shiftamount]|[shifttype]|0|[rm]",
-		"[arm-data-processing-shift-register]=      conditional|00|0|[opcode]|[s]|[rn]|[rd]|[rs]|0|[shifttype]|1|[rm]",
 
-		"[arm-single-data-transfer-immediate]=      conditional|01|[i]|[p]|[u]|[b]|[w]|[l]|[rn]|[rd]|[offset]",
-		"[arm-single-data-transfer-shift-register]= conditional|01|[i]|[p]|[u]|[b]|[w]|[l]|[rn]|[rd]|[shiftamount]|[shifttype]|0|[rm]",
-
-		"[arm-halfword-data-transfer-immediate]=    conditional|000|[p]|[u]|1|[w]|[l]|[rn]|[rd]|[offsethigh]|1|[s]|[h]|1|[offsetlow]",
-		"[arm-halfword-data-transfer-register]=     conditional|000|[p]|[u]|0|[w]|[l]|[rn]|[rd]|0000|1|[s]|[h]|1|[rm]",
-
-		"[arm-extended-register]=                   conditional|01101|[s]|1|[b]|1111|[rd]|[rotate]|00|0111|[rm]",
-
-		"[arm-block-transfer]=                      conditional|100|[p]|[u]|[s]|[w]|[l]|[rn]|[list]",
-
-		"[arm-fp-data-processing]=                  conditional|1110|[opcode]|[e]|[fn]|0|[fd]|0001|[f]|[gh]|0|[i]|[fm]",
-		"[arm-fp-register-transfer]=                conditional|1110|[opcode]|[e]|[fn]|[rd]|0001|[f]|[gh]|1|[i]|[fm]",
-		"[arm-fp-comparision]=                      conditional|1110|[opcode]|1|[e]|[fn]|1111|0001|[f]|[gh]|1|[i]|[fm]",
-		"[arm-fp-data-transfer-register]=           conditional|110|[p]|[ud]|[t1]|[wb]||[ls]|[rn]|[t0]|[fd]|0001|[offset]"
 	],
 	"Instructions": [
 		{

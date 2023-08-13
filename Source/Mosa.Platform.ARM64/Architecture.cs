@@ -19,7 +19,7 @@ public sealed class Architecture : BaseArchitecture
 	/// <summary>
 	/// Gets the type of the elf machine.
 	/// </summary>
-	public override MachineType ElfMachineType => MachineType.ARM;
+	public override MachineType ElfMachineType => MachineType.ARM;  // FIXME
 
 	/// <summary>
 	/// Gets the name of the platform.
@@ -32,7 +32,7 @@ public sealed class Architecture : BaseArchitecture
 	private static readonly PhysicalRegister[] registers = new PhysicalRegister[]
 	{
 		////////////////////////////////////////////////////////
-		// 32-bit general purpose registers
+		// 64-bit general purpose registers
 		////////////////////////////////////////////////////////
 		CPURegister.R0,
 		CPURegister.R1,
@@ -67,8 +67,8 @@ public sealed class Architecture : BaseArchitecture
 	/// <summary>
 	/// Gets the native size of architecture in bytes.
 	/// </summary>
-	/// <value>This property always returns 4.</value>
-	public override uint NativePointerSize => 4;
+	/// <value>This property always returns 8.</value>
+	public override uint NativePointerSize => 8;
 
 	/// <summary>
 	/// Retrieves the register set of the ARM64 platform.
