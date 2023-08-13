@@ -66,6 +66,16 @@ public static class SMBIOSManager
 	public static bool IsAvailable => EntryPoint != new Pointer(0x100000);
 
 	/// <summary>
+	/// Gets the BIOS information structure
+	/// </summary>
+	public static BIOSInformationStructure BIOSInformation { get; private set; }
+
+	/// <summary>
+	/// Gets the CPU structure
+	/// </summary>
+	public static CPUStructure CPU { get; private set; }
+
+	/// <summary>
 	/// Setups this instance.
 	/// </summary>
 	public static void Setup()
@@ -80,6 +90,9 @@ public static class SMBIOSManager
 		GetNumberOfStructures();
 		GetMajorVersion();
 		GetMinorVersion();
+
+		BIOSInformation = new BIOSInformationStructure();
+		CPU = new CPUStructure();
 	}
 
 	/// <summary>

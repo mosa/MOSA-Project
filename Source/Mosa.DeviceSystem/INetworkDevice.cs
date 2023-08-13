@@ -8,6 +8,11 @@ namespace Mosa.DeviceSystem;
 public interface INetworkDevice
 {
 	/// <summary>
+	/// The device name.
+	/// </summary>
+	string Name { get; }
+
+	/// <summary>
 	/// Gets the MAC address.
 	/// </summary>
 	/// <value>The MAC address.</value>

@@ -24,6 +24,8 @@ public static class Platform
 	public static void DebugWrite(byte c)
 	{ }
 
+	public static Firmware GetFirmware() => default;
+
 	public static Time GetTime() => default;
 
 	public static CPU GetCPU() => default;

@@ -4,6 +4,11 @@ namespace Mosa.DeviceSystem;
 
 public interface IAudioDevice
 {
+	/// <summary>
+	/// The device name.
+	/// </summary>
+	string Name { get; }
+
 	// Format is WAV (unsigned PCM)
 	byte[] TestSound { get; }
 

@@ -1,5 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Diagnostics.CodeAnalysis;
 using Mosa.Runtime;
 
 namespace Mosa.DeviceSystem;
@@ -91,6 +92,7 @@ public static class HAL
 	/// Aborts with the specified message.
 	/// </summary>
 	/// <param name="message">The message.</param>
+	[DoesNotReturn]
 	public static void Abort(string message) => hardwareAbstraction.Abort(message);
 
 	/// <summary>

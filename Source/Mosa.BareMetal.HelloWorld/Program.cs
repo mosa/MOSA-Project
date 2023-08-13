@@ -4,12 +4,13 @@ using System;
 using Mosa.DeviceSystem;
 using Mosa.DeviceSystem.Service;
 using Mosa.Kernel.BareMetal;
+using Mosa.Runtime.Plug;
 
 namespace Mosa.BareMetal.HelloWorld;
 
 public static class Program
 {
-	//[Plug("Mosa.Runtime.StartUp::BootOptions")]
+	[Plug("Mosa.Runtime.StartUp::BootOptions")]
 	public static void SetBootOptions()
 	{
 		BootOptions.EnableDebugOutput = true;
@@ -22,6 +23,7 @@ public static class Program
 	public static void EntryPoint()
 	{
 		Debug.WriteLine("Program::EntryPoint()");
+		Debug.WriteLine("##PASS##");
 
 		DeviceService = Kernel.BareMetal.Kernel.ServiceManager.GetFirstService<DeviceService>();
 
@@ -33,9 +35,6 @@ public static class Program
 		AppManager.Execute("ShowPCI");
 		AppManager.Execute("ShowDisks");
 		AppManager.Execute("ShowFS");
-
-		Debug.WriteLine("##PASS##");
-
 		AppManager.Execute("Shell");
 
 		Console.WriteLine("User has decided to exit out of shell.");

@@ -6,6 +6,7 @@ using Mosa.DeviceDriver.ISA;
 using Mosa.DeviceDriver.ScanCodeMap;
 using Mosa.DeviceSystem;
 using Mosa.DeviceSystem.Service;
+using Mosa.FileSystem.FAT;
 using Mosa.Kernel.BareMetal.BootMemory;
 using Mosa.Runtime;
 using Mosa.Runtime.Plug;
@@ -191,6 +192,15 @@ public static class Boot
 		Console.ForegroundColor = ConsoleColor.LightGreen;
 		Console.Write("> Creating partition devices...");
 		partitionService.CreatePartitionDevices();
+		Console.ForegroundColor = ConsoleColor.DarkGray;
+		Console.WriteLine(" [Completed]");
+
+		Console.ForegroundColor = ConsoleColor.LightGreen;
+		Console.Write("> Registering partition devices...");
+		{
+			foreach (var partition in deviceService.GetDevices<IPartitionDevice>())
+				FileManager.Register(new FatFileSystem(partition.DeviceDriver as IPartitionDevice));
+		}
 		Console.ForegroundColor = ConsoleColor.DarkGray;
 		Console.WriteLine(" [Completed]");
 

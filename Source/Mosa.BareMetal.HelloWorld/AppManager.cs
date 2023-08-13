@@ -10,6 +10,7 @@ public static class AppManager
 	{
 		new Clear(),
 		new Credits(),
+		new DumpInfo(),
 		new Help(),
 		new Mem(),
 		new Reboot(),
@@ -18,7 +19,8 @@ public static class AppManager
 		new ShowFS(),
 		new ShowISA(),
 		new ShowPCI(),
-		new Shutdown()
+		new Shutdown(),
+		new Time()
 	};
 
 	public static bool Execute(string name)
