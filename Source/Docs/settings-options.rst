@@ -201,7 +201,9 @@ Application Location Settings
    :widths: 50, 200
 
     AppLocation.Bochs,Location of the BOCHS application
-    AppLocation.Qemu,Location of the QEMU application
+    AppLocation.QemuX86,Location of the QEMU application for x86 (i386)
+    AppLocation.QemuARM32,Location of the QEMU application for ARM32
+    AppLocation.QemuARM64,Location of the QEMU application for ARM64
     AppLocation.QemuBIOS,Location of the QEMU BIOS
     AppLocation.QemuImg,Location of the QEMUImg application
 	AppLocation.VmwareWorkstation, Location of the VMWorkstation application

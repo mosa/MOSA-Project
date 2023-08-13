@@ -23,11 +23,14 @@ public static class AppLocationsSettings
 
 	public static void GetAppLocations(MosaSettings mosaSettings)
 	{
-		mosaSettings.QEMUApp = FindQemu();
-		mosaSettings.QEMUBios = FindQemuBIOS();
-		mosaSettings.QEMUEdk2X86 = FindQemuEDK2X86();
-		mosaSettings.QEMUEdk2X64 = FindQemuEDK2X64();
-		mosaSettings.QEMUEdk2ARM = FindQemuEDK2ARM();
+		mosaSettings.QemuX86App = FindQemuX86();
+		mosaSettings.QemuX64App = FindQemuX64();
+		mosaSettings.QemuARM32App = FindQemuARM32();
+		mosaSettings.QemuARM64App = FindQemuARM64();
+		mosaSettings.QemuBIOS = FindQemuBIOS();
+		mosaSettings.QemuEdk2X86 = FindQemuEDK2X86();
+		mosaSettings.QemuEdk2X64 = FindQemuEDK2X64();
+		mosaSettings.QemuEdk2ARM = FindQemuEDK2ARM();
 		mosaSettings.QemuImgApp = FindQemuImg();
 		mosaSettings.BochsApp = FindBochs();
 		mosaSettings.VmwarePlayerApp = FindVmwarePlayer();
@@ -39,7 +42,7 @@ public static class AppLocationsSettings
 		mosaSettings.GraphwizApp = FindGraphwiz();
 	}
 
-	private static string FindQemu()
+	private static string FindQemuX86()
 	{
 		return
 			IsWindows ? TryFind("qemu-system-i386.exe",
@@ -56,6 +59,63 @@ public static class AppLocationsSettings
 					@"%ProgramFiles(x86)%\qemu",
 				})
 			: TryFind("qemu-system-i386", LinuxDirectories);
+	}
+
+	private static string FindQemuX64()
+	{
+		return
+			IsWindows ? TryFind("qemu-system-x86_64.exe",
+				new string[] {
+					@"%CURRENT%\qemu",
+					@"%CURRENT%\..\Tools\qemu",
+					@"%CURRENT%\Tools\qemu",
+
+					@"%APPDIR%\qemu",
+					@"%APPDIR%\Tools\qemu",
+					@"%APPDIR%\..\Tools\qemu",
+
+					@"%ProgramFiles%\qemu",
+					@"%ProgramFiles(x86)%\qemu",
+				})
+			: TryFind("qemu-system-x86_64", LinuxDirectories);
+	}
+
+	private static string FindQemuARM32()
+	{
+		return
+			IsWindows ? TryFind("qemu-system-arm.exe",
+				new string[] {
+					@"%CURRENT%\qemu",
+					@"%CURRENT%\..\Tools\qemu",
+					@"%CURRENT%\Tools\qemu",
+
+					@"%APPDIR%\qemu",
+					@"%APPDIR%\Tools\qemu",
+					@"%APPDIR%\..\Tools\qemu",
+
+					@"%ProgramFiles%\qemu",
+					@"%ProgramFiles(x86)%\qemu",
+				})
+			: TryFind("qemu-system-arm", LinuxDirectories);
+	}
+
+	private static string FindQemuARM64()
+	{
+		return
+			IsWindows ? TryFind("qemu-system-aarch64.exe",
+				new string[] {
+					@"%CURRENT%\qemu",
+					@"%CURRENT%\..\Tools\qemu",
+					@"%CURRENT%\Tools\qemu",
+
+					@"%APPDIR%\qemu",
+					@"%APPDIR%\Tools\qemu",
+					@"%APPDIR%\..\Tools\qemu",
+
+					@"%ProgramFiles%\qemu",
+					@"%ProgramFiles(x86)%\qemu",
+				})
+			: TryFind("qemu-system-aarch64", LinuxDirectories);
 	}
 
 	private static string FindGDB()

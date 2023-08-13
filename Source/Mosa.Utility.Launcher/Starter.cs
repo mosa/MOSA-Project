@@ -12,6 +12,8 @@ using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Utility.Configuration;
+using Reko.Arch.Arm;
+using Reko.Arch.X86;
 using static Mosa.Utility.Launcher.SimpleTCP;
 
 namespace Mosa.Utility.Launcher;
@@ -257,18 +259,40 @@ public class Starter : BaseLauncher
 
 	private Process LaunchQemu()
 	{
+		string qemuApp;
+		string uefi = null;
+
 		var arg = new StringBuilder();
 
-		arg.Append("-m ");
-		arg.Append(MosaSettings.EmulatorMemory);
-		arg.Append('M');
+		arg.Append($"-m {MosaSettings.EmulatorMemory}M");
+		arg.Append($" -smp cores={MosaSettings.EmulatorCores}");
 
-		arg.Append(" -smp cores=");
-		arg.Append(MosaSettings.EmulatorCores);
-
-		if (MosaSettings.Platform == "x86")
+		switch (MosaSettings.Platform.ToLowerInvariant())
 		{
-			arg.Append(" -cpu qemu32,+sse4.1,abm,bmi1,bmi2,popcnt");
+			case "x86":
+				qemuApp = MosaSettings.QemuX86App;
+				uefi = $" -drive if=pflash,format=raw,readonly=on,file={Quote(MosaSettings.QemuEdk2X86)}";
+				arg.Append(" -cpu qemu32,+sse4.1,abm,bmi1,bmi2,popcnt");
+				break;
+
+			case "x64":
+				qemuApp = MosaSettings.QemuX64App;
+				uefi = $" -drive if=pflash,format=raw,readonly=on,file={Quote(MosaSettings.QemuEdk2X64)}";
+				break;
+
+			case "armv8a32":
+				qemuApp = MosaSettings.QemuARM32App;
+				uefi = $" -drive if=pflash,format=raw,readonly=on,file={Quote(MosaSettings.QemuEdk2ARM)}";
+				arg.Append(" -cpu arm1176");
+				break;
+
+			case "arm64":
+				qemuApp = MosaSettings.QemuARM64App;
+				arg.Append(" -cpu cortex-a7");
+				break;
+
+			default:
+				throw new CompilerException($"Unknown platform: {MosaSettings.Platform}");
 		}
 
 		switch (MosaSettings.EmulatorSVGA)
@@ -305,34 +329,29 @@ public class Starter : BaseLauncher
 		switch (serial)
 		{
 			case "pipe":
-				{
-					arg.Append(" -serial pipe:");
-					arg.Append(MosaSettings.EmulatorSerialPipe);
-					break;
-				}
+				arg.Append(" -serial pipe:");
+				arg.Append(MosaSettings.EmulatorSerialPipe);
+				break;
+
 			case "tcpserver":
-				{
-					arg.Append(" -serial tcp:");
-					arg.Append(MosaSettings.EmulatorSerialHost);
-					arg.Append(':');
-					arg.Append(MosaSettings.EmulatorSerialPort);
-					arg.Append(",server,nowait");
-					break;
-				}
+				arg.Append(" -serial tcp:");
+				arg.Append(MosaSettings.EmulatorSerialHost);
+				arg.Append(':');
+				arg.Append(MosaSettings.EmulatorSerialPort);
+				arg.Append(",server,nowait");
+				break;
+
 			case "tcpclient":
-				{
-					arg.Append(" -serial tcp:");
-					arg.Append(MosaSettings.EmulatorSerialHost);
-					arg.Append(':');
-					arg.Append(MosaSettings.EmulatorSerialPort);
-					arg.Append(",client,nowait");
-					break;
-				}
+				arg.Append(" -serial tcp:");
+				arg.Append(MosaSettings.EmulatorSerialHost);
+				arg.Append(':');
+				arg.Append(MosaSettings.EmulatorSerialPort);
+				arg.Append(",client,nowait");
+				break;
+
 			default:
-				{
-					arg.Append(" -serial null");
-					break;
-				}
+				arg.Append(" -serial null");
+				break;
 		}
 
 		if (MosaSettings.EmulatorGDB)
@@ -359,29 +378,15 @@ public class Starter : BaseLauncher
 
 		if (MosaSettings.ImageFirmware == "bios")
 		{
-			arg.Append(" -L ");
-			arg.Append(Quote(MosaSettings.QEMUBios));
-		}
-		else if (MosaSettings.ImageFirmware == "uefi")
-		{
-			if (MosaSettings.Platform == "x86")
-			{
-				arg.Append(" -drive if=pflash,format=raw,readonly=on,file=");
-				arg.Append(Quote(MosaSettings.QEMUEdk2X86));
-			}
-			else if (MosaSettings.Platform == "x64")
-			{
-				arg.Append(" -drive if=pflash,format=raw,readonly=on,file=");
-				arg.Append(Quote(MosaSettings.QEMUEdk2X64));
-			}
-			else if (MosaSettings.Platform == "ARMv8A32")
-			{
-				arg.Append(" -drive if=pflash,format=raw,readonly=on,file=");
-				arg.Append(Quote(MosaSettings.QEMUEdk2ARM));
-			}
+			arg.Append($" -L {Quote(MosaSettings.QemuBIOS)}");
 		}
 
-		return CreateApplicationProcess(MosaSettings.QEMUApp, arg.ToString());
+		if (MosaSettings.ImageFirmware == "uefi")
+		{
+			arg.Append(uefi);
+		}
+
+		return CreateApplicationProcess(qemuApp, arg.ToString());
 	}
 
 	private Process LaunchBochs()
