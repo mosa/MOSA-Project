@@ -298,7 +298,7 @@ public partial class MainWindow : Window
 		{
 			"x86" => 0,
 			"x64" => 1,
-			"ARM32" => 2,
+			"arm32" => 2,
 			_ => 0
 		};
 

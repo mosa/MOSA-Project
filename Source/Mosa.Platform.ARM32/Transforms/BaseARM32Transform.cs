@@ -6,9 +6,9 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Platform.ARM32.Transforms
 {
-	public abstract class BaseARMv8A32Transform : BaseTransform
+	public abstract class BaseARM32Transform : BaseTransform
 	{
-		public BaseARMv8A32Transform(BaseInstruction instruction, TransformType type, bool log = false)
+		public BaseARM32Transform(BaseInstruction instruction, TransformType type, bool log = false)
 			: base(instruction, type, log)
 		{ }
 

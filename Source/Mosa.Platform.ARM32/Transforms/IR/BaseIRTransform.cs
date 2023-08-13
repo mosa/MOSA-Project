@@ -4,7 +4,7 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Platform.ARM32.Transforms.IR;
 
-public abstract class BaseIRTransform : BaseARMv8A32Transform
+public abstract class BaseIRTransform : BaseARM32Transform
 {
 	public BaseIRTransform(BaseInstruction instruction, TransformType type, bool log = false)
 		: base(instruction, type, log)
