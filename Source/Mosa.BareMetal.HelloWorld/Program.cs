@@ -13,7 +13,7 @@ public static class Program
 	[Plug("Mosa.Runtime.StartUp::BootOptions")]
 	public static void SetBootOptions()
 	{
-		BootOptions.EnableDebugOutput = true;
+		BootSettings.EnableDebugOutput = true;
 		//BootOptions.EnableVirtualMemory = true;
 		//BootOptions.EnableMinimalBoot = true;
 	}
@@ -31,6 +31,8 @@ public static class Program
 		Console.ForegroundColor = ConsoleColor.White;
 		Console.Clear();
 
+		Debug.WriteLine("##PASS##");
+
 		AppManager.Execute("ShowISA");
 		AppManager.Execute("ShowPCI");
 		AppManager.Execute("ShowDisks");
@@ -43,7 +45,7 @@ public static class Program
 		var pcService = Kernel.BareMetal.Kernel.ServiceManager.GetFirstService<PCService>();
 		pcService.Shutdown();
 
-		for (;;) HAL.Yield();
+		for (; ; ) HAL.Yield();
 	}
 
 	public static void InBrackets(string message, ConsoleColor outerColor, ConsoleColor innerColor)

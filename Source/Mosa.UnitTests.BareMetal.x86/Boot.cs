@@ -51,6 +51,6 @@ public static class Boot
 	[Plug("Mosa.Runtime.StartUp::BootOptions")]
 	public static void SetBootOptions()
 	{
-		BootOptions.EnableDebugOutput = false;
+		BootSettings.EnableDebugOutput = false;
 	}
 }

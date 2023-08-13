@@ -65,6 +65,8 @@ public static class CommandLineArguments
 			new Argument { Name = "-output-hash", Setting = Name.CompilerDebug_PreLinkHashFile, Value= "%DEFAULT%"},
 			new Argument { Name = "-output-hash", Setting = Name.CompilerDebug_PostLinkHashFile, Value= "%DEFAULT%"},
 			new Argument { Name = "-output-debug-file", Setting = Name.CompilerDebug_DebugFile},
+			new Argument { Name = "-asm", Setting = Name.CompilerDebug_AsmFile, Value= "%DEFAULT%"},
+			new Argument { Name = "-map", Setting = Name.CompilerDebug_MapFile, Value= "%DEFAULT%"},
 
 			new Argument { Name = "-check", Setting = Name.CompilerDebug_FullCheckMode, Value= "true"},
 
@@ -160,6 +162,8 @@ public static class CommandLineArguments
 			new Argument { Name = "-gdb-host", Setting = Name.GDB_Host},
 
 			new Argument { Name = "-osname", Setting = Name.OS_Name},
+			new Argument { Name = "-bootoptions", Setting = Name.OS_BootOptions},
+			new Argument { Name = "-bootloader-timeout", Setting = Name.BootLoaderTimeout},
 
 			new Argument { Name = "-launch-gdb", Setting = Name.Launcher_GDB, Value="true"},
 			new Argument { Name = "-launch-debugger", Setting = Name.Launcher_Debugger, Value="true"},

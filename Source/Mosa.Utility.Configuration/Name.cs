@@ -104,7 +104,12 @@ public static class Name
 	public const string Optimizations_SSA = "Optimizations.SSA";
 	public const string Optimizations_TwoPass = "Optimizations.TwoPass";
 	public const string Optimizations_ValueNumbering = "Optimizations.ValueNumbering";
+
 	public const string OS_Name = "OS.Name";
+	public const string OS_BootOptions = "OS.BootOptions";
+
+	public const string BootLoaderTimeout = "BootLoader.Timeout";
+
 	public const string SearchPaths = "SearchPaths";
 	public const string TemporaryFolder = "TemporaryFolder";
 	public const string UnitTest_Connection_MaxAttempts = "UnitTest.Connection.MaxAttempts";

@@ -158,6 +158,7 @@ public sealed class Compiler
 		new UnitTestStage(),
 		new TypeInitializerStage(),
 		mosaSettings.Devirtualization ? new DevirtualizationStage() : null,
+		new BootOptionStage(),
 		new StaticFieldStage(),
 		new MethodTableStage(),
 		new ExceptionTableStage(),
@@ -648,8 +649,6 @@ public sealed class Compiler
 
 	private MosaType GetPlatformInternalRuntimeType()
 	{
-		Console.WriteLine($"Mosa.Runtime.{Architecture.PlatformName}.Internal");
-
 		return TypeSystem.GetTypeByName($"Mosa.Runtime.{Architecture.PlatformName}.Internal");
 	}
 
