@@ -23,11 +23,15 @@ public static class AppLocationsSettings
 
 	public static void GetAppLocations(MosaSettings mosaSettings)
 	{
-		mosaSettings.QEMUApp = FindQemu();
-		mosaSettings.QEMUBios = FindQemuBIOS();
-		mosaSettings.QEMUEdk2X86 = FindQemuEDK2X86();
-		mosaSettings.QEMUEdk2X64 = FindQemuEDK2X64();
-		mosaSettings.QEMUEdk2ARM = FindQemuEDK2ARM();
+		mosaSettings.QemuX86App = FindQemuX86();
+		mosaSettings.QemuX64App = FindQemuX64();
+		mosaSettings.QemuARM32App = FindQemuARM32();
+		mosaSettings.QemuARM64App = FindQemuARM64();
+		mosaSettings.QemuBIOS = FindQemuBIOS();
+		mosaSettings.QemuEdk2X86 = FindQemuEDK2X86();
+		mosaSettings.QemuEdk2X64 = FindQemuEDK2X64();
+		mosaSettings.QemuEdk2ARM32 = FindQemuEDK2ARM32();
+		mosaSettings.QemuEdk2ARM64 = FindQemuEDK2ARM64();
 		mosaSettings.QemuImgApp = FindQemuImg();
 		mosaSettings.BochsApp = FindBochs();
 		mosaSettings.VmwarePlayerApp = FindVmwarePlayer();
@@ -39,7 +43,7 @@ public static class AppLocationsSettings
 		mosaSettings.GraphwizApp = FindGraphwiz();
 	}
 
-	private static string FindQemu()
+	private static string FindQemuX86()
 	{
 		return
 			IsWindows ? TryFind("qemu-system-i386.exe",
@@ -56,6 +60,63 @@ public static class AppLocationsSettings
 					@"%ProgramFiles(x86)%\qemu",
 				})
 			: TryFind("qemu-system-i386", LinuxDirectories);
+	}
+
+	private static string FindQemuX64()
+	{
+		return
+			IsWindows ? TryFind("qemu-system-x86_64.exe",
+				new string[] {
+					@"%CURRENT%\qemu",
+					@"%CURRENT%\..\Tools\qemu",
+					@"%CURRENT%\Tools\qemu",
+
+					@"%APPDIR%\qemu",
+					@"%APPDIR%\Tools\qemu",
+					@"%APPDIR%\..\Tools\qemu",
+
+					@"%ProgramFiles%\qemu",
+					@"%ProgramFiles(x86)%\qemu",
+				})
+			: TryFind("qemu-system-x86_64", LinuxDirectories);
+	}
+
+	private static string FindQemuARM32()
+	{
+		return
+			IsWindows ? TryFind("qemu-system-arm.exe",
+				new string[] {
+					@"%CURRENT%\qemu",
+					@"%CURRENT%\..\Tools\qemu",
+					@"%CURRENT%\Tools\qemu",
+
+					@"%APPDIR%\qemu",
+					@"%APPDIR%\Tools\qemu",
+					@"%APPDIR%\..\Tools\qemu",
+
+					@"%ProgramFiles%\qemu",
+					@"%ProgramFiles(x86)%\qemu",
+				})
+			: TryFind("qemu-system-arm", LinuxDirectories);
+	}
+
+	private static string FindQemuARM64()
+	{
+		return
+			IsWindows ? TryFind("qemu-system-aarch64.exe",
+				new string[] {
+					@"%CURRENT%\qemu",
+					@"%CURRENT%\..\Tools\qemu",
+					@"%CURRENT%\Tools\qemu",
+
+					@"%APPDIR%\qemu",
+					@"%APPDIR%\Tools\qemu",
+					@"%APPDIR%\..\Tools\qemu",
+
+					@"%ProgramFiles%\qemu",
+					@"%ProgramFiles(x86)%\qemu",
+				})
+			: TryFind("qemu-system-aarch64", LinuxDirectories);
 	}
 
 	private static string FindGDB()
@@ -263,7 +324,7 @@ public static class AppLocationsSettings
 				});
 	}
 
-	private static string FindQemuEDK2ARM()
+	private static string FindQemuEDK2ARM32()
 	{
 		return
 			IsWindows ? TryFind("edk2-arm-code.fd",
@@ -279,8 +340,34 @@ public static class AppLocationsSettings
 					@"%ProgramFiles(x86)%\qemu",
 					@"%ProgramFiles(x86)%\qemu\share"
 				})
-			: IsOSX ? TryFind("edk2-x86_64-code.fd", "/opt/homebrew/bin/qemu-system-i386")
-			: TryFind("edk2-x86_64-code.fd",
+			: IsOSX ? TryFind("edk2-arm-code.fd", "/opt/homebrew/bin/qemu-system-arm32")
+			: TryFind("edk2-arm-code.fd",
+				new string[] {
+					"/usr/share/qemu",
+					"/usr/share/ovmf",
+					"/usr/share/OVMF",
+					"/opt/homebrew/share/qemu/"
+				});
+	}
+
+	private static string FindQemuEDK2ARM64()
+	{
+		return
+			IsWindows ? TryFind("edk2-aarch64-code.fd",
+				new string[] {
+					@"%CURRENT%\..\Tools\qemu\share",
+					@"%CURRENT%\Tools\qemu\share",
+
+					@"%APPDIR%\Tools\qemu\share",
+					@"%APPDIR%\..\Tools\qemu\share",
+
+					@"%ProgramFiles%\qemu",
+					@"%ProgramFiles%\qemu\share",
+					@"%ProgramFiles(x86)%\qemu",
+					@"%ProgramFiles(x86)%\qemu\share"
+				})
+			: IsOSX ? TryFind("edk2-aarch64-code.fd", "/opt/homebrew/bin/qemu-system-aarch64")
+			: TryFind("edk2-aarch64-code.fd",
 				new string[] {
 					"/usr/share/qemu",
 					"/usr/share/ovmf",
