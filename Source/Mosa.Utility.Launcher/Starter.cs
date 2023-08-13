@@ -92,20 +92,33 @@ public class Starter : BaseLauncher
 
 	private bool StartTest(Process process, string successText)
 	{
-		var output = new StringBuilder();
 		var lastLength = 0;
 		var success = false;
+		var kill = false;
 
 		var client = new SimpleTCP();
+		var watchDog = new WatchDog(MosaSettings.EmulatorMaxRuntime * 1000);
 
 		client.OnStatusUpdate = Output;
 
 		client.OnDataAvailable = () =>
 		{
-			lock (output)
+			while (client.HasLine)
 			{
-				var line = client.GetFullLine();
-				output.Append(line);
+				var line = client.GetLine();
+
+				lock (this)
+				{
+					Output(line);
+				}
+
+				if (line.Contains(successText))
+					success = true;
+
+				if (line == "##KILL##")
+					kill = true;
+
+				watchDog.Restart();
 			}
 		};
 
@@ -113,31 +126,18 @@ public class Starter : BaseLauncher
 		{
 			process.Start();
 
+			Output("VM Output");
+			Output("========================");
+
 			Thread.Sleep(50); // wait a bit for the process to start
 
 			if (!client.Connect(MosaSettings.EmulatorSerialHost, MosaSettings.EmulatorSerialPort, 10000))
 				return false;
 
-			var watchDog = new WatchDog(MosaSettings.EmulatorMaxRuntime * 1000);
+			watchDog.Restart();
 
-			while (!(success || watchDog.IsTimedOut))
+			while (!(success || watchDog.IsTimedOut || kill))
 			{
-				lock (output)
-				{
-					var length = output.Length;
-
-					if (length >= successText.Length && lastLength != length)
-					{
-						if (output.ToString().Contains(successText))
-						{
-							success = true;
-							break;
-						}
-					}
-
-					lastLength = length;
-				}
-
 				if (!client.IsConnected)
 					return false;
 
@@ -150,7 +150,11 @@ public class Starter : BaseLauncher
 			process.WaitForExit();
 		}
 
-		Output($"VM Output: {output.Replace('\n', '|')}");
+		Output("========================");
+
+		if (kill)
+			Output("Kill command received");
+
 		Output($"VM Exit Code: {process.ExitCode}");
 
 		if (success)
@@ -173,6 +177,7 @@ public class Starter : BaseLauncher
 		var kill = false;
 
 		var client = new SimpleTCP();
+		var watchDog = new WatchDog(MosaSettings.EmulatorMaxRuntime * 1000);
 
 		client.OnStatusUpdate = Output;
 
@@ -189,6 +194,8 @@ public class Starter : BaseLauncher
 
 				if (line == "##KILL##")
 					kill = true;
+
+				watchDog.Restart();
 			}
 		};
 
@@ -198,13 +205,13 @@ public class Starter : BaseLauncher
 
 			Thread.Sleep(50); // wait a bit for the process to start
 
-			if (!client.Connect(MosaSettings.EmulatorSerialHost, MosaSettings.EmulatorSerialPort, 10000))
-				return false;
-
 			Output("VM Output");
 			Output("========================");
 
-			var watchDog = new WatchDog(MosaSettings.EmulatorMaxRuntime * 1000);
+			if (!client.Connect(MosaSettings.EmulatorSerialHost, MosaSettings.EmulatorSerialPort, 10000))
+				return false;
+
+			watchDog.Restart();
 
 			while (!(success || watchDog.IsTimedOut || kill))
 			{
@@ -381,8 +388,8 @@ public class Starter : BaseLauncher
 	{
 		var bochsdirectory = Path.GetDirectoryName(MosaSettings.BochsApp);
 
-		var logfile = Path.Combine(MosaSettings.TemporaryFolder, Path.GetFileNameWithoutExtension(MosaSettings.ImageFile) + "-bochs.log");
-		var configfile = Path.Combine(MosaSettings.TemporaryFolder, Path.GetFileNameWithoutExtension(MosaSettings.ImageFile) + ".bxrc");
+		var logfile = Path.Combine(MosaSettings.TemporaryFolder, $"{Path.GetFileNameWithoutExtension(MosaSettings.ImageFile)}-bochs.log");
+		var configfile = Path.Combine(MosaSettings.TemporaryFolder, $"{Path.GetFileNameWithoutExtension(MosaSettings.ImageFile)}.bxrc");
 
 		var sb = new StringBuilder();
 
@@ -550,7 +557,7 @@ public class Starter : BaseLauncher
 		}
 
 		LaunchApplication(MosaSettings.VirtualBoxApp, $"createvm --name {MosaSettings.OSName} --ostype Other --register").WaitForExit();
-		LaunchApplication(MosaSettings.VirtualBoxApp, $"modifyvm {MosaSettings.OSName} --memory {MosaSettings.EmulatorMemory.ToString()} --cpus {MosaSettings.EmulatorCores} --graphicscontroller vmsvga").WaitForExit();
+		LaunchApplication(MosaSettings.VirtualBoxApp, $"modifyvm {MosaSettings.OSName} --memory {MosaSettings.EmulatorMemory} --cpus {MosaSettings.EmulatorCores} --graphicscontroller vmsvga").WaitForExit();
 		LaunchApplication(MosaSettings.VirtualBoxApp, $"storagectl {MosaSettings.OSName} --name Controller --add ide --controller PIIX4").WaitForExit();
 		LaunchApplication(MosaSettings.VirtualBoxApp, $"storageattach {MosaSettings.OSName} --storagectl Controller --port 0 --device 0 --type hdd --medium {Quote(MosaSettings.ImageFile)}").WaitForExit();
 

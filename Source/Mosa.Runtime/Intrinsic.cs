@@ -43,6 +43,22 @@ public static unsafe class Intrinsic
 	public static extern Pointer GetValueTypeAddress<T>(T obj) where T : struct;
 
 	[MethodImpl(MethodImplOptions.InternalCall)]
+	public static extern void SuppressStackFrame();
+
+	[MethodImpl(MethodImplOptions.InternalCall)]
+	public static extern Pointer GetStackFrame();
+
+	[MethodImpl(MethodImplOptions.InternalCall)]
+	public static extern Pointer GetExceptionRegister();
+
+	[MethodImpl(MethodImplOptions.InternalCall)]
+	public static extern Pointer GetBootOptions();
+
+	#endregion Intrinsic
+
+	#region Instrinsic - Load/Stores
+
+	[MethodImpl(MethodImplOptions.InternalCall)]
 	public static extern ushort Load16(Pointer address);
 
 	[MethodImpl(MethodImplOptions.InternalCall)]
@@ -246,14 +262,5 @@ public static unsafe class Intrinsic
 	[MethodImpl(MethodImplOptions.InternalCall)]
 	public static extern void StoreR8(Pointer address, uint offset, double value);
 
-	[MethodImpl(MethodImplOptions.InternalCall)]
-	public static extern void SuppressStackFrame();
-
-	[MethodImpl(MethodImplOptions.InternalCall)]
-	public static extern Pointer GetStackFrame();
-
-	[MethodImpl(MethodImplOptions.InternalCall)]
-	public static extern Pointer GetExceptionRegister();
-
-	#endregion Intrinsic
+	#endregion Instrinsic - Load/Stores
 }
