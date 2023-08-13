@@ -36,7 +36,12 @@ public sealed class HardwareAbstractionLayer : BaseHardwareAbstraction
 
 	public override void DebugWriteLine(string message) => Debug.WriteLine(message);
 
-	public override void Abort(string message) => Environment.FailFast(message ?? "No message specified.");
+	public override void Abort(string message)
+	{
+		Debug.Write("*** HAL Abort ***");
+		Debug.WriteLine(message ?? "Abort");
+		Debug.Fatal();
+	}
 
 	public override void Yield() => Platform.Scheduler.Yield();
 

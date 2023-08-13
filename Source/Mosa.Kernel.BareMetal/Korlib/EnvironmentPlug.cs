@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.DeviceSystem;
 using Mosa.DeviceSystem.Service;
 using Mosa.Runtime.Plug;
 
@@ -11,11 +10,6 @@ public class EnvironmentPlug
 	[Plug("System.Environment::FailFast")]
 	public static void FailFast(string message)
 	{
-		var deviceService = Kernel.ServiceManager.GetFirstService<DeviceService>();
-		var graphicsDevices = deviceService.GetDevices<IGraphicsDevice>(DeviceStatus.Online);
-
-		foreach (var device in graphicsDevices) ((IGraphicsDevice)device.DeviceDriver).Disable();
-
 		Debug.WriteLine("*** FailFast ***");
 		Debug.WriteLine(message);
 		Debug.Fatal();
@@ -29,5 +23,5 @@ public class EnvironmentPlug
 	}
 
 	[Plug("System.Environment::GetProcessorCount")]
-	public static int GetProcessorCount() => (int)Platform.GetCPU().Cores;
+	public static int GetProcessorCount() => 1;
 }

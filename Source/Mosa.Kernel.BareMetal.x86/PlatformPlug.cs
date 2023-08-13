@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.DeviceSystem;
-using Mosa.Kernel.BareMetal.x86.SMBIOS;
 using Mosa.Runtime;
 using Mosa.Runtime.Plug;
 using Mosa.Runtime.x86;
@@ -26,7 +25,6 @@ public static class PlatformPlug
 		SerialDebug.Setup();
 		PIC.Setup();
 		RTC.Setup();
-		SMBIOSManager.Setup();
 	}
 
 	[Plug("Mosa.Kernel.BareMetal.Platform::GetBootReservedRegion")]
@@ -43,13 +41,6 @@ public static class PlatformPlug
 	[Plug("Mosa.Kernel.BareMetal.Platform::DebugWrite")]
 	public static void DebugWrite(byte c) => SerialDebug.Write(c);
 
-	[Plug("Mosa.Kernel.BareMetal.Platform::GetFirmware")]
-	public static Firmware GetFirmware() => new(
-		SMBIOSManager.BIOSInformation.BiosVendor,
-		SMBIOSManager.BIOSInformation.BiosVersion,
-		SMBIOSManager.BIOSInformation.BiosDate
-	);
-
 	[Plug("Mosa.Kernel.BareMetal.Platform::GetTime")]
 	public static Time GetTime() => new(
 		RTC.BCDToBinary(RTC.Second),
@@ -59,9 +50,6 @@ public static class PlatformPlug
 		RTC.BCDToBinary(RTC.Month),
 		(ushort)(RTC.BCDToBinary(RTC.Century) * 100 + RTC.BCDToBinary(RTC.Year))
 	);
-
-	[Plug("Mosa.Kernel.BareMetal.Platform::GetCPU")]
-	public static CPU GetCPU() => new(CPUInfo.NumberOfCores, CPUInfo.GetVendorString(), CPUInfo.GetBrandString());
 
 	public static class PageTablePlug
 	{

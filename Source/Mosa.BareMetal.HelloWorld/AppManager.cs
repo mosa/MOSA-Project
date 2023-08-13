@@ -10,7 +10,6 @@ public static class AppManager
 	{
 		new Clear(),
 		new Credits(),
-		new DumpInfo(),
 		new Help(),
 		new Mem(),
 		new Reboot(),
