@@ -27,7 +27,7 @@ public partial class Disassembler
 
 		arch = platform.ToLowerInvariant() switch
 		{
-			"armv8a32" => new Arm32Architecture(services, "arm32", options),
+			"ARM32" => new Arm32Architecture(services, "arm32", options),
 			"arm64" => new Arm64Architecture(services, "arm64", options),
 			"x86" => new X86ArchitectureFlat32(services, "x86-protected-32", options),
 			"x64" => new X86ArchitectureFlat64(services, "x86-protected-64", options),

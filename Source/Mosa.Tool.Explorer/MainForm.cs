@@ -320,7 +320,7 @@ public partial class MainForm : Form
 	{
 		PlatformRegistry.Add(new Platform.x86.Architecture());
 		PlatformRegistry.Add(new Platform.x64.Architecture());
-		PlatformRegistry.Add(new Platform.ARMv8A32.Architecture());
+		PlatformRegistry.Add(new Platform.ARM32.Architecture());
 	}
 
 	private void btnFirst_Click(object sender, EventArgs e)
@@ -1064,7 +1064,7 @@ public partial class MainForm : Form
 		{
 			"x86" => 0,
 			"x64" => 1,
-			"armv8a32" => 2,
+			"ARM32" => 2,
 			_ => cbPlatform.SelectedIndex
 		};
 

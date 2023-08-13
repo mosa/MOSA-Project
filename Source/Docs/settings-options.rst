@@ -11,7 +11,7 @@ Compiler Settings
    :header: "Settings", "Description"
    :widths: 50, 200
 
-    Compiler.Platform,"Platform x86, x64, ARMv8A32"
+    Compiler.Platform,"Platform x86, x64, ARM32"
     Compiler.BaseAddress,Base address of the compiled application
     Compiler.TraceLevel,Trace level for debugging
     Compiler.MethodScanner,"If true, enable the experimental method scanner"

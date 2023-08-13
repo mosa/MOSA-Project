@@ -14,10 +14,10 @@ public class BuildARMv8A32Instructions : BuildBaseTemplate
 		Lines.AppendLine("using System.Collections.Generic;");
 		Lines.AppendLine("using Mosa.Compiler.Framework;");
 		Lines.AppendLine();
-		Lines.AppendLine("namespace Mosa.Platform.ARMv8A32;");
+		Lines.AppendLine("namespace Mosa.Platform.ARM32;");
 		Lines.AppendLine();
 		Lines.AppendLine("/// <summary>");
-		Lines.AppendLine("/// ARMv8A32 Instruction Map");
+		Lines.AppendLine("/// ARM32 Instruction Map");
 		Lines.AppendLine("/// </summary>");
 		Lines.AppendLine("public static class ARMv8A32Instructions");
 		Lines.AppendLine("{");

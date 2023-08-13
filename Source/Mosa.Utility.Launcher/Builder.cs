@@ -122,9 +122,9 @@ public class Builder : BaseLauncher
 
 			var platform = MosaSettings.Platform;
 
-			if (platform == "armv8a32")
+			if (platform == "ARM32")
 			{
-				platform = "ARMv8A32";
+				platform = "ARM32";
 			}
 
 			var fileKorlibPlatform = fileHunter.HuntFile($"Mosa.Plug.Korlib.{platform}.dll");

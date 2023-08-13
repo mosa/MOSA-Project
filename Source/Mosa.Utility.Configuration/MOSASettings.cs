@@ -797,9 +797,9 @@ public class MosaSettings
 		LinkerFormat = LinkerFormat == null ? string.Empty : LinkerFormat.ToLowerInvariant().Trim();
 
 		// special case - to match with DLL
-		if (Platform == "armv8a32")
+		if (Platform == "ARM32")
 		{
-			Platform = "ARMv8A32";
+			Platform = "ARM32";
 		}
 	}
 

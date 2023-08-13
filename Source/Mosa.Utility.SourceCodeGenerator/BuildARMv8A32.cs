@@ -12,14 +12,14 @@ public class BuildARMv8A32 : BuildBaseTemplate
 	protected override void Body()
 	{
 		Lines.AppendLine("using Mosa.Compiler.Framework;");
-		Lines.AppendLine("using Mosa.Platform.ARMv8A32.Instructions;");
+		Lines.AppendLine("using Mosa.Platform.ARM32.Instructions;");
 		Lines.AppendLine();
-		Lines.AppendLine("namespace Mosa.Platform.ARMv8A32;");
+		Lines.AppendLine("namespace Mosa.Platform.ARM32;");
 		Lines.AppendLine();
 		Lines.AppendLine("/// <summary>");
-		Lines.AppendLine("/// ARMv8A32 Instructions");
+		Lines.AppendLine("/// ARM32 Instructions");
 		Lines.AppendLine("/// </summary>");
-		Lines.AppendLine("public static class ARMv8A32");
+		Lines.AppendLine("public static class ARM32");
 		Lines.AppendLine("{");
 
 		foreach (var entry in Entries.Instructions)

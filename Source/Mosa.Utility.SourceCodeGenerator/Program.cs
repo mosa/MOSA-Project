@@ -207,20 +207,20 @@ public static class Program
 		).Execute();
 
 		new BuildARMv8A32(
-			Path.Combine(dataPath, @"ARMv8A32-Instructions.json"),
-			Path.Combine(targetPath, @"Mosa.Platform.ARMv8A32\"),
-			"ARMv8A32.cs"
+			Path.Combine(dataPath, @"ARM32-Instructions.json"),
+			Path.Combine(targetPath, @"Mosa.Platform.ARM32\"),
+			"ARM32.cs"
 		).Execute();
 
 		new BuildARMv8A32Instructions(
-			Path.Combine(dataPath, @"ARMv8A32-Instructions.json"),
-			Path.Combine(targetPath, @"Mosa.Platform.ARMv8A32\"),
-			"ARMv8A32Instructions.cs"
+			Path.Combine(dataPath, @"ARM32-Instructions.json"),
+			Path.Combine(targetPath, @"Mosa.Platform.ARM32\"),
+			"ARM32Instructions.cs"
 		).Execute();
 
 		new BuildARMv8A32InstructionFiles(
-			Path.Combine(dataPath, @"ARMv8A32-Instructions.json"),
-			Path.Combine(targetPath, @"Mosa.Platform.ARMv8A32\Instructions")
+			Path.Combine(dataPath, @"ARM32-Instructions.json"),
+			Path.Combine(targetPath, @"Mosa.Platform.ARM32\Instructions")
 		).Execute();
 	}
 }
