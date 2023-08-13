@@ -26,7 +26,7 @@ public enum PlatformArchitecture
 	/// <summary>
 	/// The ARMv8 32bit
 	/// </summary>
-	ARMv8A32 = 3,
+	ARM32 = 3,
 
 	/// <summary>
 	/// The X86 and X64

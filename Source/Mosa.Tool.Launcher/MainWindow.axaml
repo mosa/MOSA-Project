@@ -61,7 +61,7 @@
 							<ComboBox FontSize="12" SelectedIndex="0" HorizontalContentAlignment="Center" Name="PltCmb" Margin="105,0, 0, 0" Width="195" BorderBrush="LightGray">
 								<Label>x86</Label>
 								<Label>x64</Label>
-								<Label>ARMv8A32</Label>
+								<Label>ARM32</Label>
 							</ComboBox>
 							<Label Margin="0,40, 0, 0">Image Format:</Label>
 							<ComboBox FontSize="12" SelectedIndex="0" HorizontalContentAlignment="Center" Name="ImgCmb" Margin="105,40, 0, 0" Width="195" BorderBrush="LightGray">

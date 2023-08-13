@@ -54,7 +54,8 @@ Below are the command line arguments available:
     -platform,Compiler.Platform,{value}
     -x86,Compiler.Platform,x86
     -x64,Compiler.Platform,x64
-    -armv8a32,Compiler.Platform,armv8a32
+    -arm32,Compiler.Platform,ARM32
+    -arm64,Compiler.Platform,ARM64
 
     Compiler - Debug Output Information:
     -output-nasm,CompilerDebug.NasmFile,%DEFAULT%
