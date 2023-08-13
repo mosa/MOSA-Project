@@ -203,7 +203,7 @@ public partial class MainWindow : Window
 		qemuBiosPathLbl.Content = MosaSettings.QemuBIOS;
 		qemuEdk2X86PathLbl.Content = MosaSettings.QemuEdk2X86;
 		qemuEdk2X64PathLbl.Content = MosaSettings.QemuEdk2X64;
-		qemuEdk2ARMPathLbl.Content = MosaSettings.QemuEdk2ARM;
+		qemuEdk2ARMPathLbl.Content = MosaSettings.QemuEdk2ARM32;
 		qemuImgPathLbl.Content = MosaSettings.QemuImgApp;
 		vboxPathLbl.Content = MosaSettings.VirtualBoxApp;
 		mkisofsPathLbl.Content = MosaSettings.MkisofsApp;

@@ -94,7 +94,6 @@ public class Starter : BaseLauncher
 
 	private bool StartTest(Process process, string successText)
 	{
-		var lastLength = 0;
 		var success = false;
 		var kill = false;
 
@@ -282,12 +281,13 @@ public class Starter : BaseLauncher
 
 			case "armv8a32":
 				qemuApp = MosaSettings.QemuARM32App;
-				uefi = $" -drive if=pflash,format=raw,readonly=on,file={Quote(MosaSettings.QemuEdk2ARM)}";
+				uefi = $" -drive if=pflash,format=raw,readonly=on,file={Quote(MosaSettings.QemuEdk2ARM32)}";
 				arg.Append(" -cpu arm1176");
 				break;
 
 			case "arm64":
 				qemuApp = MosaSettings.QemuARM64App;
+				uefi = $" -drive if=pflash,format=raw,readonly=on,file={Quote(MosaSettings.QemuEdk2ARM64)}";
 				arg.Append(" -cpu cortex-a7");
 				break;
 
@@ -329,24 +329,15 @@ public class Starter : BaseLauncher
 		switch (serial)
 		{
 			case "pipe":
-				arg.Append(" -serial pipe:");
-				arg.Append(MosaSettings.EmulatorSerialPipe);
+				arg.Append($" -serial pipe:{MosaSettings.EmulatorSerialPipe}");
 				break;
 
 			case "tcpserver":
-				arg.Append(" -serial tcp:");
-				arg.Append(MosaSettings.EmulatorSerialHost);
-				arg.Append(':');
-				arg.Append(MosaSettings.EmulatorSerialPort);
-				arg.Append(",server,nowait");
+				arg.Append($" -serial tcp:{MosaSettings.EmulatorSerialHost}:{MosaSettings.EmulatorSerialPort},server,nowait");
 				break;
 
 			case "tcpclient":
-				arg.Append(" -serial tcp:");
-				arg.Append(MosaSettings.EmulatorSerialHost);
-				arg.Append(':');
-				arg.Append(MosaSettings.EmulatorSerialPort);
-				arg.Append(",client,nowait");
+				arg.Append($" -serial tcp:{MosaSettings.EmulatorSerialHost}:,client,nowait");
 				break;
 
 			default:
@@ -356,22 +347,19 @@ public class Starter : BaseLauncher
 
 		if (MosaSettings.EmulatorGDB)
 		{
-			arg.Append(" -S -gdb tcp::");
-			arg.Append(MosaSettings.GDBPort);
+			arg.Append($" -S -gdb tcp::{MosaSettings.GDBPort}");
 		}
 
 		switch (MosaSettings.ImageFormat)
 		{
 			case "bin":
 				{
-					arg.Append(" -kernel ");
-					arg.Append(Quote(MosaSettings.ImageFile));
+					arg.Append($" -kernel {Quote(MosaSettings.ImageFile)}");
 					break;
 				}
 			default:
 				{
-					arg.Append(" -drive format=raw,file=");
-					arg.Append(Quote(MosaSettings.ImageFile));
+					arg.Append($" -drive format=raw,file={Quote(MosaSettings.ImageFile)}");
 					break;
 				}
 		}
@@ -398,31 +386,24 @@ public class Starter : BaseLauncher
 
 		var sb = new StringBuilder();
 
-		sb.Append("megs: ");
-		sb.Append(MosaSettings.EmulatorMemory);
-		sb.AppendLine();
+		sb.AppendLine($"megs: {MosaSettings.EmulatorMemory}");
 
 		sb.AppendLine("ata0: enabled=1,ioaddr1=0x1f0,ioaddr2=0x3f0,irq=14");
 		sb.AppendLine("cpuid: mmx=1,sep=1,simd=sse4_2,apic=xapic,aes=1,movbe=1,xsave=1");
 		sb.AppendLine("boot: cdrom,disk");
 
-		sb.Append("log: ");
-		sb.AppendLine(Quote(logfile));
+		sb.AppendLine($"log: {Quote(logfile)}");
 
-		sb.Append("romimage: file=");
-		sb.AppendLine(Quote(Path.Combine(bochsdirectory, "BIOS-bochs-latest")));
+		sb.AppendLine($"romimage: file={Quote(Path.Combine(bochsdirectory, "BIOS-bochs-latest"))}");
 
-		sb.Append("vgaromimage: file=");
-		sb.AppendLine(Quote(Path.Combine(bochsdirectory, "VGABIOS-lgpl-latest")));
+		sb.AppendLine($"vgaromimage: file={Quote(Path.Combine(bochsdirectory, "VGABIOS-lgpl-latest"))}");
 
 		if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
 		{
 			sb.AppendLine("display_library: x, options=gui_debug");
 		}
 
-		sb.Append("ata0-master: type=disk,path=");
-		sb.Append(Quote(MosaSettings.ImageFile));
-		sb.AppendLine(",biosdetect=none,cylinders=0,heads=0,spt=0");
+		sb.AppendLine($"ata0-master: type=disk,path={Quote(MosaSettings.ImageFile)},biosdetect=none,cylinders=0,heads=0,spt=0");
 
 		switch (MosaSettings.EmulatorSVGA)
 		{
@@ -433,37 +414,22 @@ public class Starter : BaseLauncher
 		switch (MosaSettings.EmulatorSerial)
 		{
 			case "pipe":
-				{
-					sb.Append("com1: enabled=1, mode=pipe-server, dev=\\\\.\\pipe\\");
-					sb.AppendLine(MosaSettings.EmulatorSerialPipe);
-					break;
-				}
+				sb.Append($"com1: enabled=1, mode=pipe-server, dev=\\\\.\\pipe\\{MosaSettings.EmulatorSerialPipe}");
+				break;
+
 			case "tcpserver":
-				{
-					sb.Append("com1: enabled=1, mode=socket-server, dev=");
-					sb.Append(MosaSettings.EmulatorSerialHost);
-					sb.Append(':');
-					sb.Append(MosaSettings.EmulatorSerialPort);
-					sb.AppendLine();
-					break;
-				}
+				sb.AppendLine($"com1: enabled=1, mode=socket-server, dev={MosaSettings.EmulatorSerialHost}:{MosaSettings.EmulatorSerialPort}");
+				break;
+
 			case "tcpclient":
-				{
-					sb.Append("com1: enabled=1, mode=socket-client, dev=");
-					sb.Append(MosaSettings.EmulatorSerialHost);
-					sb.Append(':');
-					sb.Append(MosaSettings.EmulatorSerialPort);
-					sb.AppendLine();
-					break;
-				}
+				sb.AppendLine($"com1: enabled=1, mode=socket-client, dev={MosaSettings.EmulatorSerialHost}:{MosaSettings.EmulatorSerialPort}");
+				break;
 		}
 
 		if (MosaSettings.EmulatorGDB)
 		{
 			// Untested
-			sb.Append("gdbstub: enabled=1, port=");
-			sb.Append(MosaSettings.GDBPort);
-			sb.AppendLine(", text_base=0, data_base=0, bss_base=0");
+			sb.AppendLine($"gdbstub: enabled=1, port={MosaSettings.GDBPort}, text_base=0, data_base=0, bss_base=0");
 		}
 
 		File.WriteAllText(configfile, sb.ToString());
@@ -480,12 +446,9 @@ public class Starter : BaseLauncher
 		sb.AppendLine("config.version = \"8\"");
 		sb.AppendLine("virtualHW.version = \"14\"");
 
-		sb.Append("memsize = ");
-		sb.AppendLine(Quote(MosaSettings.EmulatorMemory.ToString()));
+		sb.AppendLine($"memsize = {Quote(MosaSettings.EmulatorMemory.ToString())}");
 
-		sb.Append("displayName = \"MOSA - ");
-		sb.Append(Path.GetFileNameWithoutExtension(MosaSettings.SourceFiles[0]));
-		sb.AppendLine("\"");
+		sb.Append($"displayName = \"MOSA - {Path.GetFileNameWithoutExtension(MosaSettings.SourceFiles[0])}\"");
 
 		sb.AppendLine("guestOS = \"other\"");
 		sb.AppendLine("priority.grabbed = \"normal\"");
@@ -493,13 +456,10 @@ public class Starter : BaseLauncher
 		sb.AppendLine("virtualHW.productCompatibility = \"hosted\"");
 		sb.AppendLine("numvcpus = \"1\"");
 
-		sb.Append("cpuid.coresPerSocket = ");
-		sb.AppendLine(Quote(MosaSettings.EmulatorCores.ToString()));
+		sb.AppendLine($"cpuid.coresPerSocket = {Quote(MosaSettings.EmulatorCores.ToString())}");
 
 		sb.AppendLine("ide0:0.present = \"TRUE\"");
-
-		sb.Append("ide0:0.fileName = ");
-		sb.AppendLine(Quote(MosaSettings.ImageFile));
+		sb.AppendLine("ide0:0.fileName = " + Quote(MosaSettings.ImageFile));
 
 		sb.AppendLine("sound.present = \"TRUE\"");
 		sb.AppendLine("sound.opl3.enabled = \"TRUE\"");
@@ -514,9 +474,7 @@ public class Starter : BaseLauncher
 			sb.AppendLine("serial1.yieldOnMsrRead = \"FALSE\"");
 			sb.AppendLine("serial1.fileType = \"pipe\"");
 
-			sb.Append("serial1.fileName = \"\\\\.\\pipe\\");
-			sb.AppendLine(MosaSettings.EmulatorSerialPipe);
-			sb.AppendLine("\"");
+			sb.AppendLine($"serial1.fileName = \"\\\\.\\pipe\\{MosaSettings.EmulatorSerialPipe}\"");
 
 			sb.AppendLine("serial1.pipe.endPoint = \"server\"");
 			sb.AppendLine("serial1.tryNoRxLoss = \"FALSE\"");

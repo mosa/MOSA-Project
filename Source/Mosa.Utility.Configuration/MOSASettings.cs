@@ -354,10 +354,16 @@ public class MosaSettings
 		set => Settings.SetValue(Name.AppLocation_QemuEDK2X64, value);
 	}
 
-	public string QemuEdk2ARM
+	public string QemuEdk2ARM32
 	{
-		get => Settings.GetValue(Name.AppLocation_QemuEDK2ARM, null);
-		set => Settings.SetValue(Name.AppLocation_QemuEDK2ARM, value);
+		get => Settings.GetValue(Name.AppLocation_QemuEDK2ARM32, null);
+		set => Settings.SetValue(Name.AppLocation_QemuEDK2ARM32, value);
+	}
+
+	public string QemuEdk2ARM64
+	{
+		get => Settings.GetValue(Name.AppLocation_QemuEDK2ARM64, null);
+		set => Settings.SetValue(Name.AppLocation_QemuEDK2ARM64, value);
 	}
 
 	public string QemuImgApp

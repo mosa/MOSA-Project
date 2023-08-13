@@ -30,7 +30,8 @@ public static class AppLocationsSettings
 		mosaSettings.QemuBIOS = FindQemuBIOS();
 		mosaSettings.QemuEdk2X86 = FindQemuEDK2X86();
 		mosaSettings.QemuEdk2X64 = FindQemuEDK2X64();
-		mosaSettings.QemuEdk2ARM = FindQemuEDK2ARM();
+		mosaSettings.QemuEdk2ARM32 = FindQemuEDK2ARM32();
+		mosaSettings.QemuEdk2ARM64 = FindQemuEDK2ARM64();
 		mosaSettings.QemuImgApp = FindQemuImg();
 		mosaSettings.BochsApp = FindBochs();
 		mosaSettings.VmwarePlayerApp = FindVmwarePlayer();
@@ -323,7 +324,7 @@ public static class AppLocationsSettings
 				});
 	}
 
-	private static string FindQemuEDK2ARM()
+	private static string FindQemuEDK2ARM32()
 	{
 		return
 			IsWindows ? TryFind("edk2-arm-code.fd",
@@ -339,8 +340,34 @@ public static class AppLocationsSettings
 					@"%ProgramFiles(x86)%\qemu",
 					@"%ProgramFiles(x86)%\qemu\share"
 				})
-			: IsOSX ? TryFind("edk2-x86_64-code.fd", "/opt/homebrew/bin/qemu-system-i386")
-			: TryFind("edk2-x86_64-code.fd",
+			: IsOSX ? TryFind("edk2-arm-code.fd", "/opt/homebrew/bin/qemu-system-arm32")
+			: TryFind("edk2-arm-code.fd",
+				new string[] {
+					"/usr/share/qemu",
+					"/usr/share/ovmf",
+					"/usr/share/OVMF",
+					"/opt/homebrew/share/qemu/"
+				});
+	}
+
+	private static string FindQemuEDK2ARM64()
+	{
+		return
+			IsWindows ? TryFind("edk2-aarch64-code.fd",
+				new string[] {
+					@"%CURRENT%\..\Tools\qemu\share",
+					@"%CURRENT%\Tools\qemu\share",
+
+					@"%APPDIR%\Tools\qemu\share",
+					@"%APPDIR%\..\Tools\qemu\share",
+
+					@"%ProgramFiles%\qemu",
+					@"%ProgramFiles%\qemu\share",
+					@"%ProgramFiles(x86)%\qemu",
+					@"%ProgramFiles(x86)%\qemu\share"
+				})
+			: IsOSX ? TryFind("edk2-aarch64-code.fd", "/opt/homebrew/bin/qemu-system-aarch64")
+			: TryFind("edk2-aarch64-code.fd",
 				new string[] {
 					"/usr/share/qemu",
 					"/usr/share/ovmf",

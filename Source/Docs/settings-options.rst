@@ -202,6 +202,7 @@ Application Location Settings
 
     AppLocation.Bochs,Location of the BOCHS application
     AppLocation.QemuX86,Location of the QEMU application for x86 (i386)
+    AppLocation.QemuX64,Location of the QEMU application for x64
     AppLocation.QemuARM32,Location of the QEMU application for ARM32
     AppLocation.QemuARM64,Location of the QEMU application for ARM64
     AppLocation.QemuBIOS,Location of the QEMU BIOS

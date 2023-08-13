@@ -20,7 +20,8 @@ public static class Name
 
 	public const string AppLocation_QemuEDK2X86 = "AppLocation.QemuEDK2X86";
 	public const string AppLocation_QemuEDK2X64 = "AppLocation.QemuEDK2X64";
-	public const string AppLocation_QemuEDK2ARM = "AppLocation.QemuEDK2ARM";
+	public const string AppLocation_QemuEDK2ARM32 = "AppLocation.QemuEDK2ARM32";
+	public const string AppLocation_QemuEDK2ARM64 = "AppLocation.QemuEDK2ARM64";
 	public const string AppLocation_VirtualBox = "AppLocation.VirtualBox";
 
 	public const string Compiler_BaseAddress = "Compiler.BaseAddress";
