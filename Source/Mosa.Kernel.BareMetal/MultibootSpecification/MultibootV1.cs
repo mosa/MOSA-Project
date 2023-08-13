@@ -43,9 +43,16 @@ public struct MultibootV1
 		public const byte VbeInterfaceLength = 92;
 	}
 
+	public struct Flag
+	{
+		public const byte Cmdline = 1 << 2;
+	}
+
 	#endregion Multiboot Info Offsets
 
 	public MultibootV1(Pointer entry) => Entry = entry;
+
+	public bool HasCmdline => IsAvailable && (Flags & Flag.Cmdline) == 1;
 
 	/// <summary>
 	/// Gets a value indicating whether multiboot v1 is available.
@@ -75,7 +82,7 @@ public struct MultibootV1
 	/// <summary>
 	/// Gets the command line address.
 	/// </summary>
-	public Pointer CommandLineAddress => Entry.LoadPointer(MultiBootInfoOffset.CommandLine);
+	public Pointer CommandLineAddress => HasCmdline ? Entry.LoadPointer(MultiBootInfoOffset.CommandLine) : Pointer.Zero;
 
 	/// <summary>
 	/// Gets the module count.

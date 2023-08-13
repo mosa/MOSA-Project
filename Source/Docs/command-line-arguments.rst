@@ -67,7 +67,7 @@ Below are the command line arguments available:
     -output-hash,CompilerDebug.PostLinkHashFile,%DEFAULT%
     -check,CompilerDebug.FullCheckMode,true
 	-asm,CompilerDebug.AsmFile,%DEFAULT%
-	-map,CompilerDebug.AsmFile,%DEFAULT%
+	-map,CompilerDebug.MapFile,%DEFAULT%
 
     Compiler - X86:
     -interrupt-method,X86.InterruptMethodName,{value}

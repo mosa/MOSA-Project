@@ -29,13 +29,12 @@ public static class Program
 		Console.ForegroundColor = ConsoleColor.White;
 		Console.Clear();
 
+		Debug.WriteLine("##PASS##");
+
 		AppManager.Execute("ShowISA");
 		AppManager.Execute("ShowPCI");
 		AppManager.Execute("ShowDisks");
 		AppManager.Execute("ShowFS");
-
-		Debug.WriteLine("##PASS##");
-
 		AppManager.Execute("Shell");
 
 		Console.WriteLine("User has decided to exit out of shell.");
