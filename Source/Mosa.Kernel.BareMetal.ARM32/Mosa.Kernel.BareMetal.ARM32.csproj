@@ -18,7 +18,7 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mosa.Kernel.BareMetal\Mosa.Kernel.BareMetal.csproj" />
-    <ProjectReference Include="..\Mosa.Runtime.ARMv8A32\Mosa.Runtime.ARM32.csproj" />
+    <ProjectReference Include="..\Mosa.Runtime.ARM32\Mosa.Runtime.ARM32.csproj" />
     <ProjectReference Include="..\Mosa.Runtime\Mosa.Runtime.csproj" />
   </ItemGroup>
 </Project>

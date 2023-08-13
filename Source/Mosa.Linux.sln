@@ -131,6 +131,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Instructions", "Instructions", "{225883A6-A279-4F4A-9A06-9FE4E32A1B6A}"
 	ProjectSection(SolutionItems) = preProject
 		Data\ARM32-Instructions.json = Data\ARM32-Instructions.json
+		Data\ARM64-Instructions.json = Data\ARM64-Instructions.json
 		Data\IR-Instructions.json = Data\IR-Instructions.json
 		Data\X64-Instructions.json = Data\X64-Instructions.json
 		Data\X86-Instructions.json = Data\X86-Instructions.json

@@ -222,5 +222,22 @@ public static class Program
 			Path.Combine(dataPath, @"ARM32-Instructions.json"),
 			Path.Combine(targetPath, @"Mosa.Platform.ARM32\Instructions")
 		).Execute();
+
+		new BuildARM64(
+			Path.Combine(dataPath, @"ARM64-Instructions.json"),
+			Path.Combine(targetPath, @"Mosa.Platform.ARM64\"),
+			"ARM64.cs"
+		).Execute();
+
+		new BuildARM64Instructions(
+			Path.Combine(dataPath, @"ARM64-Instructions.json"),
+			Path.Combine(targetPath, @"Mosa.Platform.ARM64\"),
+			"ARM64Instructions.cs"
+		).Execute();
+
+		new BuildARM64InstructionFiles(
+			Path.Combine(dataPath, @"ARM64-Instructions.json"),
+			Path.Combine(targetPath, @"Mosa.Platform.ARM64\Instructions")
+		).Execute();
 	}
 }
