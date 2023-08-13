@@ -2,31 +2,33 @@
 
 namespace Mosa.Utility.SourceCodeGenerator;
 
-public class BuildARMv8A32 : BuildBaseTemplate
+public class BuildARM32Instructions : BuildBaseTemplate
 {
-	public BuildARMv8A32(string jsonFile, string destinationPath, string destinationFile)
+	public BuildARM32Instructions(string jsonFile, string destinationPath, string destinationFile)
 		: base(jsonFile, destinationPath, destinationFile)
 	{
 	}
 
 	protected override void Body()
 	{
+		Lines.AppendLine("using System.Collections.Generic;");
 		Lines.AppendLine("using Mosa.Compiler.Framework;");
-		Lines.AppendLine("using Mosa.Platform.ARM32.Instructions;");
 		Lines.AppendLine();
 		Lines.AppendLine("namespace Mosa.Platform.ARM32;");
 		Lines.AppendLine();
 		Lines.AppendLine("/// <summary>");
-		Lines.AppendLine("/// ARM32 Instructions");
+		Lines.AppendLine("/// ARM32 Instruction Map");
 		Lines.AppendLine("/// </summary>");
-		Lines.AppendLine("public static class ARM32");
+		Lines.AppendLine("public static class ARM32Instructions");
 		Lines.AppendLine("{");
+		Lines.AppendLine("\tpublic static readonly List<BaseInstruction> List = new List<BaseInstruction> {");
 
 		foreach (var entry in Entries.Instructions)
 		{
-			Lines.AppendLine("\tpublic static readonly BaseInstruction " + entry.Name + " = new " + entry.Name + "();");
+			Lines.AppendLine("\t\tARM32." + entry.Name + ",");
 		}
 
+		Lines.AppendLine("\t};");
 		Lines.AppendLine("}");
 	}
 }

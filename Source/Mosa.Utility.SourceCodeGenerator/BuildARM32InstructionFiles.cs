@@ -2,11 +2,11 @@
 
 namespace Mosa.Utility.SourceCodeGenerator;
 
-public class BuildARMv8A32InstructionFiles : BuildCommonInstructionFiles
+public class BuildARM32InstructionFiles : BuildCommonInstructionFiles
 {
 	protected override string Platform => "ARM32";
 
-	public BuildARMv8A32InstructionFiles(string jsonFile, string destinationPath)
+	public BuildARM32InstructionFiles(string jsonFile, string destinationPath)
 		: base(jsonFile, destinationPath)
 	{
 	}
