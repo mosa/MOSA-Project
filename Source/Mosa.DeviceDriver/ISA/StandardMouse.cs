@@ -19,8 +19,6 @@ public class StandardMouse : BaseDeviceDriver, IMouseDevice
 
 	private readonly byte[] mData = new byte[3];
 
-	public string Name => "PS/2 Mouse";
-
 	public uint X { get; set; }
 
 	public uint Y { get; set; }

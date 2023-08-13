@@ -8,11 +8,6 @@ namespace Mosa.DeviceSystem;
 public interface IKeyboardDevice
 {
 	/// <summary>
-	/// The device name.
-	/// </summary>
-	string Name { get; }
-
-	/// <summary>
 	/// Gets the scan code from the keyboard device
 	/// </summary>
 	/// <returns></returns>

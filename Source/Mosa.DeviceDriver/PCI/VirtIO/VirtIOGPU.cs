@@ -50,8 +50,6 @@ public class VirtIOGPU : BaseDeviceDriver, IGraphicsDevice
 	private Pointer transferHeader;
 	private Pointer flushHeader;
 
-	public string Name => "VirtIO GPU";
-
 	public FrameBuffer32 FrameBuffer { get; private set; }
 
 	public override void Initialize()

@@ -201,8 +201,6 @@ public class VMwareSVGA2 : BaseDeviceDriver, IGraphicsDevice
 
 	private ConstrainedPointer buffer, fifo;
 
-	public string Name => "VMware SVGA II GPU";
-
 	public FrameBuffer32 FrameBuffer { get; private set; }
 
 	public override void Initialize()

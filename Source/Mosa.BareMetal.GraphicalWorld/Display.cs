@@ -13,8 +13,6 @@ public static class Display
 
 	public static IGraphicsDevice Driver { get; private set; }
 
-	public static string CurrentDriver { get; private set; }
-
 	public static uint Width { get; private set; }
 
 	public static uint Height { get; private set; }
@@ -29,8 +27,6 @@ public static class Display
 		Driver = Program.DeviceService.GetFirstDevice<IGraphicsDevice>().DeviceDriver as IGraphicsDevice;
 
 		if (Driver == null) return false;
-
-		CurrentDriver = Driver.Name;
 
 		Driver.SetMode((ushort)Width, (ushort)Height);
 

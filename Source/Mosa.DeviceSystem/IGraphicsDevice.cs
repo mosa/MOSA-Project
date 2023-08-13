@@ -7,9 +7,6 @@ namespace Mosa.DeviceSystem;
 /// </summary>
 public interface IGraphicsDevice
 {
-	/// <summary>The device name.</summary>
-	string Name { get; }
-
 	/// <summary>The frame buffer.</summary>
 	FrameBuffer32 FrameBuffer { get; }
 

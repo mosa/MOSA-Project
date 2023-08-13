@@ -85,15 +85,14 @@ public static class Program
 			{
 				new("Current resolution is " + Display.Width + "x" + Display.Height, Display.DefaultFont, 10, 10, Color.OrangeRed),
 				new("FPS is " + FPSMeter.FPS, Display.DefaultFont, 10, 26, Color.Lime),
-				new("Current driver is " + Display.CurrentDriver, Display.DefaultFont, 10, 42, Color.MidnightBlue),
-				new("Current font is " + Display.DefaultFont.Name, Display.DefaultFont, 10, 58, Color.LightSeaGreen),
+				new("Current font is " + Display.DefaultFont.Name, Display.DefaultFont, 10, 42, Color.MidnightBlue),
 				new(
 					(time.Hour < 10 ? "0" + time.Hour : time.Hour)
 					+ ":" +
 					(time.Minute < 10 ? "0" + time.Minute : time.Minute)
 					+ ":" +
 					(time.Second < 10 ? "0" + time.Second : time.Second),
-					Display.DefaultFont, 10, 74, Color.DeepPink
+					Display.DefaultFont, 10, 58, Color.LightSeaGreen
 				)
 			};
 

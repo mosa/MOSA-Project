@@ -24,8 +24,6 @@ public class StandardKeyboard : BaseDeviceDriver, IKeyboardDevice
 
 	protected uint fifoEnd;
 
-	public string Name => "PS/2 Keyboard";
-
 	public override void Initialize()
 	{
 		Device.Name = "StandardKeyboard";

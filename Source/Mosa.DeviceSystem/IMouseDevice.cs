@@ -8,11 +8,6 @@ namespace Mosa.DeviceSystem;
 public interface IMouseDevice
 {
 	/// <summary>
-	/// The device name.
-	/// </summary>
-	string Name { get; }
-
-	/// <summary>
 	/// The X coordinate.
 	/// </summary>
 	uint X { get; set; }
