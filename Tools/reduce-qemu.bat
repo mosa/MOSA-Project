@@ -1,4 +1,4 @@
-# curl https://qemu.weilnetz.de/w64/qemu-w64-setup-20230424.exe --output qemu-installer.exe
+# curl https://qemu.weilnetz.de/w64/qemu-w64-setup-20230810.exe --output qemu-installer.exe
 # del /S /Q qemu
 # 7zip\7z.exe x -wqemu -oqemu -x!*.nsis -y qemu-installer.exe
 # del /Q qemu-installer.exe
@@ -11,7 +11,6 @@ del /S /Q qemu\qemu-edid.exe
 del /S /Q qemu\qemu-ga.exe
 del /S /Q qemu\qemu-io.exe
 del /S /Q qemu\qemu-storage-daemon.exe
-del /S /Q qemu\qemu-system-aarch64.exe
 del /S /Q qemu\qemu-system-aarch64w.exe
 del /S /Q qemu\qemu-system-alpha.exe
 del /S /Q qemu\qemu-system-alphaw.exe
