@@ -8,7 +8,10 @@ public static class Name
 	public const string AppLocation_GDB = "AppLocation.GDB";
 	public const string AppLocation_Mkisofs = "AppLocation.Mkisofs";
 	public const string AppLocation_Ndisasm = "AppLocation.Ndisasm";
-	public const string AppLocation_Qemu = "AppLocation.Qemu";
+	public const string AppLocation_QemuX86 = "AppLocation.QemuX86";
+	public const string AppLocation_QemuX64 = "AppLocation.QemuX64";
+	public const string AppLocation_QemuARM32 = "AppLocation.QemuARM32";
+	public const string AppLocation_QemuARM64 = "AppLocation.QemuARM64";
 	public const string AppLocation_QemuBIOS = "AppLocation.QemuBIOS";
 	public const string AppLocation_QemuImg = "AppLocation.QemuImg";
 	public const string AppLocation_VmwarePlayer = "AppLocation.VmwarePlayer";
@@ -17,7 +20,8 @@ public static class Name
 
 	public const string AppLocation_QemuEDK2X86 = "AppLocation.QemuEDK2X86";
 	public const string AppLocation_QemuEDK2X64 = "AppLocation.QemuEDK2X64";
-	public const string AppLocation_QemuEDK2ARM = "AppLocation.QemuEDK2ARM";
+	public const string AppLocation_QemuEDK2ARM32 = "AppLocation.QemuEDK2ARM32";
+	public const string AppLocation_QemuEDK2ARM64 = "AppLocation.QemuEDK2ARM64";
 	public const string AppLocation_VirtualBox = "AppLocation.VirtualBox";
 
 	public const string Compiler_BaseAddress = "Compiler.BaseAddress";

@@ -312,34 +312,58 @@ public class MosaSettings
 		set => Settings.SetValue(Name.CompilerDebug_PreLinkHashFile, value);
 	}
 
-	public string QEMUApp
+	public string QemuX86App
 	{
-		get => Settings.GetValue(Name.AppLocation_Qemu, null);
-		set => Settings.SetValue(Name.AppLocation_Qemu, value);
+		get => Settings.GetValue(Name.AppLocation_QemuX86, null);
+		set => Settings.SetValue(Name.AppLocation_QemuX86, value);
 	}
 
-	public string QEMUBios
+	public string QemuX64App
+	{
+		get => Settings.GetValue(Name.AppLocation_QemuX64, null);
+		set => Settings.SetValue(Name.AppLocation_QemuX64, value);
+	}
+
+	public string QemuARM32App
+	{
+		get => Settings.GetValue(Name.AppLocation_QemuARM32, null);
+		set => Settings.SetValue(Name.AppLocation_QemuARM32, value);
+	}
+
+	public string QemuARM64App
+	{
+		get => Settings.GetValue(Name.AppLocation_QemuARM64, null);
+		set => Settings.SetValue(Name.AppLocation_QemuARM64, value);
+	}
+
+	public string QemuBIOS
 	{
 		get => Settings.GetValue(Name.AppLocation_QemuBIOS, null);
 		set => Settings.SetValue(Name.AppLocation_QemuBIOS, value);
 	}
 
-	public string QEMUEdk2X86
+	public string QemuEdk2X86
 	{
 		get => Settings.GetValue(Name.AppLocation_QemuEDK2X86, null);
 		set => Settings.SetValue(Name.AppLocation_QemuEDK2X86, value);
 	}
 
-	public string QEMUEdk2X64
+	public string QemuEdk2X64
 	{
 		get => Settings.GetValue(Name.AppLocation_QemuEDK2X64, null);
 		set => Settings.SetValue(Name.AppLocation_QemuEDK2X64, value);
 	}
 
-	public string QEMUEdk2ARM
+	public string QemuEdk2ARM32
 	{
-		get => Settings.GetValue(Name.AppLocation_QemuEDK2ARM, null);
-		set => Settings.SetValue(Name.AppLocation_QemuEDK2ARM, value);
+		get => Settings.GetValue(Name.AppLocation_QemuEDK2ARM32, null);
+		set => Settings.SetValue(Name.AppLocation_QemuEDK2ARM32, value);
+	}
+
+	public string QemuEdk2ARM64
+	{
+		get => Settings.GetValue(Name.AppLocation_QemuEDK2ARM64, null);
+		set => Settings.SetValue(Name.AppLocation_QemuEDK2ARM64, value);
 	}
 
 	public string QemuImgApp
