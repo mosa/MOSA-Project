@@ -152,7 +152,6 @@ public static class CommandLineArguments
 			new Argument { Name = "-video", Setting = Name.Multiboot_Video, Value= "true"},
 			new Argument { Name = "-video-width", Setting = Name.Multiboot_Video_Width},
 			new Argument { Name = "-video-height", Setting = Name.Multiboot_Video_Height},
-			new Argument { Name = "-video-depth", Setting = Name.Multiboot_Video_Depth},
 
 			new Argument { Name = "-vmware-svga", Setting = Name.Emulator_SVGA, Value="vmware"},
 			new Argument { Name = "-virtio-vga", Setting = Name.Emulator_SVGA, Value="virtio"},
