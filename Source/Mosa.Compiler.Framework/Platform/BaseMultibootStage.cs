@@ -2,6 +2,7 @@
 
 using System.IO;
 using System.Text;
+using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 
@@ -32,32 +33,6 @@ public abstract class BaseMultibootStage : BaseCompilerStage
 	/// This address is the top of the initial kernel stack.
 	/// </summary>
 	private const uint StackAddress = 0x00A00000 - 8;
-
-	private struct MultibootV1Constants
-	{
-		/// <summary>
-		/// Magic value in the multiboot header.
-		/// </summary>
-		internal const uint HeaderMbMagic = 0x1BADB002;
-
-		/// <summary>
-		/// Multiboot flag, which indicates that additional modules must be
-		/// loaded on page boundaries.
-		/// </summary>
-		internal const uint HeaderMbFlagModulesPageAligned = 0x00000001;
-
-		/// <summary>
-		/// Multiboot flag, which indicates if memory information must be
-		/// provided in the boot information structure.
-		/// </summary>
-		internal const uint HeaderMbFlagMemoryInfoRequired = 0x00000002;
-
-		/// <summary>
-		/// Multiboot flag, which indicates that the supported video mode
-		/// table must be provided in the boot information structure.
-		/// </summary>
-		internal const uint HeaderMbFlagVideoModesRequired = 0x00000004;
-	}
 
 	private struct MultibootV2Constants
 	{
@@ -99,7 +74,7 @@ public abstract class BaseMultibootStage : BaseCompilerStage
 		/// <summary>
 		/// Framebuffer tag size.
 		/// </summary>
-		internal const uint FramebufferTagSize = 0x00000020;
+		internal const uint FramebufferTagSize = 0x00000014;
 	}
 
 	#endregion Constants
@@ -124,8 +99,6 @@ public abstract class BaseMultibootStage : BaseCompilerStage
 
 	public int Height { get; set; }
 
-	public int Depth { get; set; }
-
 	public long InitialStackAddress { get; set; }
 
 	#endregion Data Members
@@ -136,7 +109,6 @@ public abstract class BaseMultibootStage : BaseCompilerStage
 		HasVideo = MosaSettings.MultibootVideo;
 		Width = MosaSettings.MultibootVideoWidth;
 		Height = MosaSettings.MultibootVideoHeight;
-		Depth = MosaSettings.MultibootVideoDepth;
 
 		InitialStackAddress = MosaSettings.Settings.GetValue("Multiboot.InitialStackAddress", StackAddress);
 	}
@@ -179,87 +151,42 @@ public abstract class BaseMultibootStage : BaseCompilerStage
 
 		var writer = new BinaryWriter(multibootHeader.Stream, Encoding.ASCII);
 
-		if (IsV2)
+		if (!IsV2) throw new CompilerException("Multiboot.Version != v2");
+
+		// Header size + entry tag size + (framebuffer size if chosen) + end tag size
+		var headerLength = MultibootV2Constants.HeaderSize + MultibootV2Constants.EntryTagSize + sizeof(uint);
+		if (HasVideo) headerLength += MultibootV2Constants.FramebufferTagSize;
+
+		// Header
+		while (writer.BaseStream.Position % 8 != 0) writer.Write((byte)0);
+		writer.Write(MultibootV2Constants.HeaderMbMagic);
+		writer.Write(MultibootV2Constants.HeaderMbArchitecture);
+		writer.Write(headerLength);
+		writer.Write((uint)(0x100000000 - (MultibootV2Constants.HeaderMbMagic + MultibootV2Constants.HeaderMbArchitecture + headerLength)));
+
+		// Framebuffer tag
+		if (HasVideo)
 		{
-			// Header size + entry tag size + (framebuffer size if chosen) + end tag size
-			var headerLength = MultibootV2Constants.HeaderSize + MultibootV2Constants.EntryTagSize + sizeof(uint);
-
-			if (HasVideo)
-			{
-				headerLength += MultibootV2Constants.FramebufferTagSize;
-			}
-
-			// Header
 			while (writer.BaseStream.Position % 8 != 0) writer.Write((byte)0);
-			writer.Write(MultibootV2Constants.HeaderMbMagic);
-			writer.Write(MultibootV2Constants.HeaderMbArchitecture);
-			writer.Write(headerLength);
-			writer.Write((uint)(0x100000000 - (MultibootV2Constants.HeaderMbMagic + MultibootV2Constants.HeaderMbArchitecture + headerLength)));
-
-			// Framebuffer tag
-			if (HasVideo)
-			{
-				while (writer.BaseStream.Position % 8 != 0) writer.Write((byte)0);
-				writer.Write(MultibootV2Constants.FramebufferTag);
-				writer.Write(MultibootV2Constants.RequiredFlag);
-				writer.Write(MultibootV2Constants.FramebufferTagSize);
-				writer.Write((uint)Width);
-				writer.Write((uint)Height);
-				writer.Write((uint)Depth);
-			}
-
-			// Entry tag
-			while (writer.BaseStream.Position % 8 != 0) writer.Write((byte)0);
-			writer.Write(MultibootV2Constants.EntryTag);
+			writer.Write(MultibootV2Constants.FramebufferTag);
 			writer.Write(MultibootV2Constants.RequiredFlag);
-			writer.Write(MultibootV2Constants.EntryTagSize);
-			Linker.Link(LinkType.AbsoluteAddress, PatchType.I32, multibootHeader, writer.BaseStream.Position, entryPoint, 0);
-
-			// End tag
-			while (writer.BaseStream.Position % 8 != 0) writer.Write((byte)0);
-			writer.Write((ushort)0);
-			writer.Write((ushort)0);
+			writer.Write(MultibootV2Constants.FramebufferTagSize);
+			writer.Write((uint)Width);
+			writer.Write((uint)Height);
+			writer.Write(32U);
 		}
-		else
-		{
-			// flags - multiboot flags
-			var flags =
-				MultibootV1Constants.HeaderMbFlagMemoryInfoRequired
-				| MultibootV1Constants.HeaderMbFlagModulesPageAligned
-				| (HasVideo ? MultibootV1Constants.HeaderMbFlagVideoModesRequired : 0);
 
-			// magic
-			writer.Write(MultibootV1Constants.HeaderMbMagic);
+		// Entry tag
+		while (writer.BaseStream.Position % 8 != 0) writer.Write((byte)0);
+		writer.Write(MultibootV2Constants.EntryTag);
+		writer.Write(MultibootV2Constants.RequiredFlag);
+		writer.Write(MultibootV2Constants.EntryTagSize);
+		Linker.Link(LinkType.AbsoluteAddress, PatchType.I32, multibootHeader, writer.BaseStream.Position, entryPoint, 0);
 
-			// flags
-			writer.Write(flags);
-
-			// checksum
-			writer.Write(unchecked(0U - MultibootV1Constants.HeaderMbMagic - flags));
-
-			// header_addr - load address of the multiboot header
-			Linker.Link(LinkType.AbsoluteAddress, PatchType.I32, multibootHeader, (int)writer.BaseStream.Position, multibootHeader, 0);
-			writer.Write(0);
-
-			// load_addr - address of the binary in memory
-			writer.Write(0);
-
-			// load_end_addr - address past the last byte to load from the image
-			writer.Write(0);
-
-			// bss_end_addr - address of the last byte to be zeroed out
-			writer.Write(0);
-
-			// entry_addr - address of the entry point to invoke
-			Linker.Link(LinkType.AbsoluteAddress, PatchType.I32, multibootHeader, (int)writer.BaseStream.Position, entryPoint, 0);
-			writer.Write(0);
-
-			// Write video settings if video has been specified, otherwise pad
-			writer.Write(0);
-			writer.Write(HasVideo ? Width : 0);
-			writer.Write(HasVideo ? Height : 0);
-			writer.Write(HasVideo ? Depth : 0);
-		}
+		// End tag
+		while (writer.BaseStream.Position % 8 != 0) writer.Write((byte)0);
+		writer.Write((ushort)0);
+		writer.Write((ushort)0);
 	}
 
 	#endregion Internals

@@ -1183,7 +1183,7 @@ public partial class MainForm : Form
 		MosaSettings.TraceLevel = 10;
 		MosaSettings.InlineMaximum = 12;
 		MosaSettings.InlineAggressiveMaximum = 24;
-		MosaSettings.MultibootVersion = "v1";
+		MosaSettings.MultibootVersion = "v2";
 	}
 
 	private void UpdateSettings(string filename)

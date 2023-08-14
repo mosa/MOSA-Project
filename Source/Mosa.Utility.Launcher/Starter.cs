@@ -449,7 +449,7 @@ public class Starter : BaseLauncher
 
 		sb.AppendLine($"memsize = {Quote(MosaSettings.EmulatorMemory.ToString())}");
 
-		sb.Append($"displayName = \"MOSA - {Path.GetFileNameWithoutExtension(MosaSettings.SourceFiles[0])}\"");
+		sb.AppendLine($"displayName = \"MOSA - {Path.GetFileNameWithoutExtension(MosaSettings.SourceFiles[0])}\"");
 
 		sb.AppendLine("guestOS = \"other\"");
 		sb.AppendLine("priority.grabbed = \"normal\"");

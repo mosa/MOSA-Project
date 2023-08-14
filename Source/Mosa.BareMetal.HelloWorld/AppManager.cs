@@ -8,6 +8,7 @@ public static class AppManager
 {
 	public static readonly IApp[] Applications =
 	{
+		new BootInfo(),
 		new Clear(),
 		new Credits(),
 		new Help(),

@@ -14,12 +14,12 @@ public struct RSDT
 	{
 		public const int ACPISDTHeader = 0;
 		public const int PointerToOtherSDT = ACPI.ACPISDTHeader.Offset.Size + ACPISDTHeader;
-		public const int Size = PointerToOtherSDT + (8 * 4);
+		public const int Size = PointerToOtherSDT + 8 * 4;
 	}
 
 	public RSDT(Pointer entry) => Pointer = entry;
 
-	public readonly ACPISDTHeader ACPISDTHeader { get { return new ACPISDTHeader(Pointer + Offset.ACPISDTHeader); } }
+	public readonly ACPISDTHeader ACPISDTHeader => new(Pointer + Offset.ACPISDTHeader);
 
-	public uint GetPointerToOtherSDT(uint index) => Pointer.Load32(Offset.PointerToOtherSDT + 4 * index);
+	public Pointer GetPointerToOtherSDT(uint index) => new(Pointer.Load32(Offset.PointerToOtherSDT + 4 * index));
 }

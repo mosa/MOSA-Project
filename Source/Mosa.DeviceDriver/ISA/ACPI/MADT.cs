@@ -20,7 +20,7 @@ public struct MADT
 
 	public MADT(Pointer entry) => Pointer = entry;
 
-	public readonly ACPISDTHeader ACPISDTHeader { get { return new ACPISDTHeader(Pointer + Offset.ACPISDTHeader); } }
+	public readonly ACPISDTHeader ACPISDTHeader => new(Pointer + Offset.ACPISDTHeader);
 
 	public readonly uint LocalApicAddress => Pointer.Load32(Offset.LocalApicAddress);
 

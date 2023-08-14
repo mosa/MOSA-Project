@@ -22,7 +22,7 @@ public struct IOAPICEntry
 
 	public IOAPICEntry(Pointer entry) => Pointer = entry;
 
-	public readonly MADTEntry MADTEntry { get { return new MADTEntry(Pointer + Offset.MADTEntry); } }
+	public readonly MADTEntry MADTEntry => new(Pointer + Offset.MADTEntry);
 
 	public readonly byte ApicID => Pointer.Load8(Offset.ApicID);
 

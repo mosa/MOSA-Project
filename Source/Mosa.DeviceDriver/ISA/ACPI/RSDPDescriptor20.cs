@@ -36,11 +36,11 @@ public struct RSDPDescriptor20
 
 	public readonly byte Revision => Pointer.Load8(Offset.Revision);
 
-	public readonly Pointer RsdtAddress => new Pointer(Pointer.Load32(Offset.RsdtAddress));
+	public readonly Pointer RsdtAddress => new(Pointer.Load32(Offset.RsdtAddress));
 
 	public readonly uint Length => Pointer.Load32(Offset.Length);
 
-	public readonly ulong XsdtAddress => Pointer.Load32(Offset.XsdtAddress);
+	public readonly Pointer XsdtAddress => new(Pointer.Load64(Offset.XsdtAddress));
 
 	public readonly byte ExtendedChecksum => Pointer.Load8(Offset.ExtendedChecksum);
 }

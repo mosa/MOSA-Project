@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
 using System.Collections.Generic;
 using System.IO;
 using Mosa.Compiler.Common.Configuration;
@@ -13,7 +12,7 @@ public class MosaSettings
 
 	public static class Constant
 	{
-		public const string MultibootVersion = "v1";
+		public const string MultibootVersion = "v2";
 
 		public const int MaxErrors = 1000;
 		public const int ConnectionTimeOut = 15000; // in milliseconds
@@ -644,12 +643,6 @@ public class MosaSettings
 		set => Settings.SetValue(Name.Multiboot_Video_Height, value);
 	}
 
-	public int MultibootVideoDepth
-	{
-		get => Settings.GetValue(Name.Multiboot_Video_Depth, 32);
-		set => Settings.SetValue(Name.Multiboot_Video_Depth, value);
-	}
-
 	public string GraphwizApp
 	{
 		get => Settings.GetValue(Name.AppLocation_Graphwiz, null);
@@ -778,7 +771,6 @@ public class MosaSettings
 		MultibootVideo = false;
 		MultibootVideoWidth = 640;
 		MultibootVideoHeight = 480;
-		MultibootVideoDepth = 32;
 
 		EmitSumbols = false;
 		EmitStaticRelocations = false;
