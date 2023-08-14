@@ -28,7 +28,7 @@ public struct RSDPDescriptor
 
 	public readonly byte Revision => Pointer.Load8(Offset.Revision);
 
-	public readonly Pointer RsdtAddress => new Pointer(Pointer.Load32(Offset.RsdtAddress));
+	public readonly Pointer RsdtAddress => new(Pointer.Load32(Offset.RsdtAddress));
 
 	public byte GetSignature(int index) => Pointer.Load8(Offset.Signature + index);
 }

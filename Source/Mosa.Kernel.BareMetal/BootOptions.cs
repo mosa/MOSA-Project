@@ -2,104 +2,103 @@
 
 using Mosa.Runtime;
 
-namespace Mosa.Kernel.BareMetal
+namespace Mosa.Kernel.BareMetal;
+
+public class BootOptions
 {
-	public class BootOptions
+	private static Pointer StaticOptions;
+	private static Pointer RuntimeOptions;
+
+	public static void Setup()
 	{
-		private static Pointer StaticOptions;
-		private static Pointer RuntimeOptions;
+		StaticOptions = Intrinsic.GetBootOptions();
+		RuntimeOptions = Multiboot.V2.CommandLinePointer;
 
-		public static void Setup()
+		var debug = GetValue("Debug.Option");
+
+		if (debug != null)
 		{
-			StaticOptions = Intrinsic.GetBootOptions();
-			RuntimeOptions = Multiboot.IsAvailable ? Multiboot.MultibootV1.CommandLineAddress : Pointer.Zero;
+			Debug.WriteLine("Debug.Option: ", debug);
+		}
+		else
+		{
+			Debug.WriteLine("Debug.Option: None");
+		}
+	}
 
-			var debug = GetValue("Debug.Option");
+	public static string GetValue(string key)
+	{
+		var result = GetValue(RuntimeOptions, key);
 
-			if (debug != null)
-			{
-				Debug.WriteLine("Debug.Option: ", debug);
-			}
-			else
-			{
-				Debug.WriteLine("Debug.Option: None");
-			}
+		if (result != null)
+		{
+			result = GetValue(StaticOptions, key);
 		}
 
-		public static string GetValue(string key)
+		return result;
+	}
+
+	private static string GetValue(Pointer options, string key)
+	{
+		if (options.IsNull)
+			return null;
+
+		var keylen = key.Length;
+
+		var parsekey = true;
+		var parsematch = true;
+		var parsevalue = false;
+		var start = 0;
+		var len = 0;
+
+		for (var at = 0; ; at++)
 		{
-			var result = GetValue(RuntimeOptions, key);
+			var c = options.Load8(at);
 
-			if (result != null)
+			if (c == 0)
+				break;
+
+			if (c == ',')
 			{
-				result = GetValue(StaticOptions, key);
-			}
-
-			return result;
-		}
-
-		private static string GetValue(Pointer options, string key)
-		{
-			if (options.IsNull)
-				return null;
-
-			var keylen = key.Length;
-
-			var parsekey = true;
-			var parsematch = true;
-			var parsevalue = false;
-			var start = 0;
-			var len = 0;
-
-			for (var at = 0; ; at++)
-			{
-				var c = options.Load8(at);
-
-				if (c == 0)
+				if (parsematch)
 					break;
 
-				if (c == ',')
-				{
-					if (parsematch)
-						break;
-
-					parsekey = true;
-					parsevalue = false;
-					parsematch = true;
-					start = 0;
-					len = 0;
-				}
-				else if (c == '=')
-				{
-					parsematch = parsematch && (len == keylen);
-					parsekey = false;
-					parsevalue = true;
-					start = at + 1;
-					len = 0;
-				}
-				else if (parsekey)
-				{
-					if (len >= keylen || c != (byte)key[len])
-						parsematch = false;
-
-					len++;
-				}
-				else if (parsevalue)
-				{
-					len++;
-				}
+				parsekey = true;
+				parsevalue = false;
+				parsematch = true;
+				start = 0;
+				len = 0;
 			}
-
-			if (!parsematch)
-				return null;
-
-			if (len == 0)
-				return string.Empty;
-
-			unsafe
+			else if (c == '=')
 			{
-				return new string((sbyte*)options, start, len);
+				parsematch = parsematch && (len == keylen);
+				parsekey = false;
+				parsevalue = true;
+				start = at + 1;
+				len = 0;
 			}
+			else if (parsekey)
+			{
+				if (len >= keylen || c != (byte)key[len])
+					parsematch = false;
+
+				len++;
+			}
+			else if (parsevalue)
+			{
+				len++;
+			}
+		}
+
+		if (!parsematch)
+			return null;
+
+		if (len == 0)
+			return string.Empty;
+
+		unsafe
+		{
+			return new string((sbyte*)options, start, len);
 		}
 	}
 }

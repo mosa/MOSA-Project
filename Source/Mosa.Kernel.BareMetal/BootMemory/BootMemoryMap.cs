@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Kernel.BareMetal.MultibootSpecification;
 using Mosa.Runtime;
 
 namespace Mosa.Kernel.BareMetal.BootMemory;
@@ -27,7 +26,7 @@ public static class BootMemoryMap
 			Count = 0
 		};
 
-		ImportMultibootV1MemoryMap();
+		ImportMultibootV2MemoryMap();
 		ImportPlatformMemoryMap();
 	}
 
@@ -65,28 +64,20 @@ public static class BootMemoryMap
 
 	#region Private API
 
-	private static void ImportMultibootV1MemoryMap()
+	private static void ImportMultibootV2MemoryMap()
 	{
-		Debug.WriteLine("BootMemoryMap::ImportMultibootV1MemoryMap()");
+		Debug.WriteLine("BootMemoryMap::ImportMultibootV2MemoryMap()");
 
-		if (!Multiboot.IsAvailable)
-			return;
+		if (Multiboot.V2.EntrySize == 0) return;
 
-		if (Multiboot.MultibootV1.MemoryMapStart.IsNull)
-			return;
-
-		AvailableMemory = new Pointer(Multiboot.MultibootV1.MemoryUpper * 1024);
+		AvailableMemory = new Pointer(Multiboot.V2.MemoryUpper * 1024);
 
 		Debug.WriteLine(" > Available Memory: ", AvailableMemory.ToInt64());
 
-		var memoryMapEnd = Multiboot.MultibootV1.MemoryMapStart + Multiboot.MultibootV1.MemoryMapLength;
-
-		var entry = new MultibootV1MemoryMapEntry(Multiboot.MultibootV1.MemoryMapStart);
-
-		while (entry.Entry < memoryMapEnd)
+		var entry = Multiboot.V2.FirstEntry;
+		for (var i = 0; i < Multiboot.V2.Entries; i++)
 		{
-			SetMemoryMap(entry.BaseAddr, entry.Length, entry.Type == 1 ? BootMemoryType.Available : BootMemoryType.Reserved);
-
+			SetMemoryMap(entry.BaseAddress, entry.Length, entry.Type == 1 ? BootMemoryType.Available : BootMemoryType.Reserved);
 			entry = entry.GetNext();
 		}
 	}

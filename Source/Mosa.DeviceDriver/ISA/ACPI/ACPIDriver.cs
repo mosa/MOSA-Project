@@ -12,9 +12,6 @@ namespace Mosa.DeviceDriver.ISA.ACPI;
 
 public unsafe class ACPIDriver : BaseDeviceDriver, IACPI
 {
-	private RSDPDescriptor Descriptor;
-	//private RSDPDescriptor20 Descriptor20; // Unused
-
 	private FADT FADT;
 	private RSDT RSDT;
 	private XSDT XSDT;
@@ -48,32 +45,24 @@ public unsafe class ACPIDriver : BaseDeviceDriver, IACPI
 	{
 		Device.Name = "ACPI";
 
-		for (var addr = 0x000E0000; addr <= 0x000FFFFF; addr += 8)
-		{
-			var rsdpPtr = new Pointer(addr);
+		var rsdp = HAL.GetRSDP();
+		var version2 = HAL.IsACPIVersion2();
 
-			if (rsdpPtr.Load64() == 0x2052545020445352) // 'RSD PTR '
-			{
-				Descriptor = new RSDPDescriptor(rsdpPtr);
-				break;
-			}
+		if (version2)
+		{
+			var descriptor20 = new RSDPDescriptor20(rsdp);
+			XSDT = new XSDT(HAL.GetPhysicalMemory(descriptor20.XsdtAddress, 0xFFFF).Address);
 		}
-
-		if (Descriptor.Pointer.IsNull)
-			return;
-
-		/*if (Descriptor.Revision == 2) // ACPI v2.0+
+		else
 		{
-			Descriptor20 = (RSDPDescriptor20*)rsdpPtr;
-			XSDT = (XSDT*)HAL.GetPhysicalMemory(Descriptor20.XsdtAddress, 0xFFFF).Address;
-		} else */
-		RSDT = new RSDT(HAL.GetPhysicalMemory(Descriptor.RsdtAddress, 0xFFFF).Address);
+			var descriptor = new RSDPDescriptor(rsdp);
+			RSDT = new RSDT(HAL.GetPhysicalMemory(descriptor.RsdtAddress, 0xFFFF).Address);
+		}
 
 		FADT = new FADT(HAL.GetPhysicalMemory(FindBySignature("FACP"), 0xFFFF).Address);
 		MADT = new MADT(HAL.GetPhysicalMemory(FindBySignature("APIC"), 0xFFFF).Address);
 
-		if (FADT.Pointer.IsNull)
-			return;
+		if (FADT.Pointer.IsNull) return;
 
 		if (!MADT.Pointer.IsNull)
 		{
@@ -119,8 +108,7 @@ public unsafe class ACPIDriver : BaseDeviceDriver, IACPI
 
 			for (var k = 0; k < dsdtLength; k++)
 			{
-				if (S5Addr.Load32() == 0x5f35535f) //_S5_
-					break;
+				if (S5Addr.Load32() == 0x5f35535f) break; //_S5_
 
 				S5Addr++;
 			}
@@ -131,14 +119,12 @@ public unsafe class ACPIDriver : BaseDeviceDriver, IACPI
 				S5Addr += 5;
 				S5Addr += ((S5Addr.Load32() & 0xC0) >> 6) + 2;
 
-				if (S5Addr.Load8() == 0x0A)
-					S5Addr++;
+				if (S5Addr.Load8() == 0x0A) S5Addr++;
 
 				SLP_TYPa = (short)(S5Addr.Load16() << 10);
 				S5Addr++;
 
-				if (S5Addr.Load8() == 0x0A)
-					S5Addr++;
+				if (S5Addr.Load8() == 0x0A) S5Addr++;
 
 				SLP_TYPb = (short)(S5Addr.Load16() << 10);
 				SLP_EN = 1 << 13;
@@ -147,7 +133,7 @@ public unsafe class ACPIDriver : BaseDeviceDriver, IACPI
 
 				var has64BitPtr = false;
 
-				if (Descriptor.Revision == 2)
+				if (version2)
 				{
 					ResetAddress = new IOPortWrite((ushort)FADT.ResetReg.Address);
 					ResetValue = FADT.ResetValue;
@@ -157,18 +143,14 @@ public unsafe class ACPIDriver : BaseDeviceDriver, IACPI
 						has64BitPtr = true;
 
 						PM1aControlBlock = new IOPortWrite((ushort)FADT.X_PM1aControlBlock.Address);
-						if (FADT.X_PM1bControlBlock.Address != 0)
-						{
-							PM1bControlBlock = new IOPortWrite((ushort)FADT.X_PM1bControlBlock.Address);
-						}
+						if (FADT.X_PM1bControlBlock.Address != 0) PM1bControlBlock = new IOPortWrite((ushort)FADT.X_PM1bControlBlock.Address);
 					}
 				}
 
 				if (!has64BitPtr)
 				{
 					PM1aControlBlock = new IOPortWrite((ushort)FADT.PM1aControlBlock);
-					if (FADT.PM1bControlBlock != 0)
-						PM1bControlBlock = new IOPortWrite((ushort)FADT.PM1bControlBlock);
+					if (FADT.PM1bControlBlock != 0) PM1bControlBlock = new IOPortWrite((ushort)FADT.PM1bControlBlock);
 				}
 			}
 		}
@@ -205,25 +187,21 @@ public unsafe class ACPIDriver : BaseDeviceDriver, IACPI
 	private Pointer FindBySignature(string signature)
 	{
 		var xsdt = !XSDT.Pointer.IsNull;
+		var value = CalculateSignatureValue(signature);
 
-		var value = CalculateSignatureVaule(signature);
-
-		for (var i = 0u; i < (xsdt ? 16 : 8); i++)
+		for (var i = 0U; i < (xsdt ? 16 : 8); i++)
 		{
 			// On some systems or VM software (e.g. VirtualBox), we have to map the pointer, or else it will crash.
 			// See: https://github.com/msareedjr/MOSA-MikeOS/commit/6867064fedae707280083ba4d9ff12d468a6dce0
-			var h = new ACPISDTHeader(HAL.GetPhysicalMemory(new Pointer(xsdt ? XSDT.GetPointerToOtherSDT(i) : RSDT.GetPointerToOtherSDT(i)), 0xfff).Address);
+			var h = new ACPISDTHeader(HAL.GetPhysicalMemory(xsdt ? XSDT.GetPointerToOtherSDT(i) : RSDT.GetPointerToOtherSDT(i), 0xFFF).Address);
 
-			if (!h.Pointer.IsNull && h.Signature == value)
-				return h.Pointer;
+			if (!h.Pointer.IsNull && h.Signature == value) return h.Pointer;
 		}
 
 		// No SDT found (by signature)
 		return Pointer.Zero;
 	}
 
-	private static int CalculateSignatureVaule(string signature)
-	{
-		return ((byte)signature[0] & 0xff) | (((byte)signature[1] & 0xff) << 8) | (((byte)signature[2] & 0xff) << 16) | (((byte)signature[3] & 0xff) << 24);
-	}
+	private static int CalculateSignatureValue(string signature)
+		=> ((byte)signature[0] & 0xFF) | (((byte)signature[1] & 0xFF) << 8) | (((byte)signature[2] & 0xFF) << 16) | (((byte)signature[3] & 0xFF) << 24);
 }

@@ -13,7 +13,7 @@ public class MosaSettings
 
 	public static class Constant
 	{
-		public const string MultibootVersion = "v1";
+		public const string MultibootVersion = "v2";
 
 		public const int MaxErrors = 1000;
 		public const int ConnectionTimeOut = 15000; // in milliseconds

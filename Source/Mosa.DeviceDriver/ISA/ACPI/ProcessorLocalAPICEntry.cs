@@ -21,7 +21,7 @@ public struct ProcessorLocalAPICEntry
 
 	public ProcessorLocalAPICEntry(Pointer entry) => Pointer = entry;
 
-	public readonly MADTEntry MADTEntry { get { return new MADTEntry(Pointer + Offset.Entry); } }
+	public readonly MADTEntry MADTEntry => new(Pointer + Offset.Entry);
 
 	public readonly byte AcpiProcessorID => Pointer.Load8(Offset.AcpiProcessorID);
 

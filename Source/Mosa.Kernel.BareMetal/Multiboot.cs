@@ -7,18 +7,10 @@ namespace Mosa.Kernel.BareMetal;
 
 public static class Multiboot
 {
-	/// <summary>
-	/// Location of the Multiboot Structure
-	/// </summary>
-	public static MultibootV1 MultibootV1 { get; private set; }
+	public static MultibootV2 V2 { get; private set; }
 
 	public static void Setup(Pointer location, uint magic)
 	{
-		MultibootV1 = new MultibootV1(magic == MultibootV1.MultibootMagic ? location : Pointer.Zero);
+		V2 = new MultibootV2(magic == MultibootV2.Magic ? location : Pointer.Zero);
 	}
-
-	/// <summary>
-	/// Gets a value indicating whether multiboot is available.
-	/// </summary>
-	public static bool IsAvailable => MultibootV1.IsAvailable;
 }

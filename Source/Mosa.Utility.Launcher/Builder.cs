@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using Mosa.Compiler.Common;
-using Mosa.Compiler.Common.Configuration;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Linker;
@@ -237,7 +236,7 @@ public class Builder : BaseLauncher
 
 	private byte[] GetLimineCFG()
 	{
-		return Encoding.ASCII.GetBytes($"TIMEOUT={MosaSettings.BootLoaderTimeout}\nINTERFACE_RESOLUTION=640x480\nINTERFACE_BRANDING=Managed Operating System Alliance\n:{MosaSettings.OSName}\nPROTOCOL={(MosaSettings.MultibootVersion == "v2" ? "multiboot2" : "multiboot1")}\nKERNEL_PATH=boot:///kernel.bin");
+		return Encoding.ASCII.GetBytes($"TIMEOUT={MosaSettings.BootLoaderTimeout}\nINTERFACE_RESOLUTION=640x480\nINTERFACE_BRANDING=Managed Operating System Alliance\n:{MosaSettings.OSName}\nPROTOCOL=multiboot2\nKERNEL_PATH=boot:///kernel.bin");
 	}
 
 	private void CreateVMDK(string source)

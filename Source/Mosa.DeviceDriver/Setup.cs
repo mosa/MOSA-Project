@@ -242,7 +242,7 @@ public static class Setup
 			new ISADeviceDriverRegistryEntry
 			{
 				Name = "ACPI",
-				Platform = PlatformArchitecture.X86,
+				Platform = PlatformArchitecture.X86AndX64 | PlatformArchitecture.ARM32,
 				AutoLoad = true,
 				Factory = () => new ISA.ACPI.ACPIDriver()
 			},

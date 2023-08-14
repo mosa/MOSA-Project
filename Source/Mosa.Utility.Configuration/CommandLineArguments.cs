@@ -137,7 +137,6 @@ public static class CommandLineArguments
 			new Argument { Name = "-b", Setting = Name.Image_BootBlockFile},
 
 			// Launcher - Boot:
-			new Argument { Name = "-multiboot-v1", Setting = Name.Multiboot_Version, Value= "v1"},
 			new Argument { Name = "-multiboot-v2", Setting = Name.Multiboot_Version, Value= "v2"},
 			new Argument { Name = "-multiboot-none", Setting = Name.Multiboot_Version, Value= ""},
 			new Argument { Name = "-multiboot", Setting = Name.Multiboot_Version, Value= null},
