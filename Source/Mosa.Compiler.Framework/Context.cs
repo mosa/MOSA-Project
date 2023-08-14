@@ -98,6 +98,20 @@ public sealed class Context
 	{ get => Node.Operand3; set => Node.Operand3 = value; }
 
 	/// <summary>
+	/// Gets or sets the fourth operand.
+	/// </summary>
+	/// <value>The third operand.</value>
+	public Operand Operand4
+	{ get => Node.Operand4; set => Node.Operand4 = value; }
+
+	/// <summary>
+	/// Gets or sets the fifth operand.
+	/// </summary>
+	/// <value>The third operand.</value>
+	public Operand Operand5
+	{ get => Node.Operand5; set => Node.Operand5 = value; }
+
+	/// <summary>
 	/// Gets all operands.
 	/// </summary>
 	/// <value>The operands.</value>
@@ -320,15 +334,6 @@ public sealed class Context
 	public Operand GetResult(int index)
 	{
 		return Node.GetResult(index);
-	}
-
-	/// <summary>
-	/// Adds the operand.
-	/// </summary>
-	/// <param name="operand">The operand.</param>
-	public void AddOperand(Operand operand)
-	{
-		Node.AddOperand(operand);
 	}
 
 	/// <summary>
@@ -716,6 +721,21 @@ public sealed class Context
 	public void SetInstruction(BaseInstruction instruction, Operand result, Operand operand1, Operand operand2, Operand operand3, Operand operand4)
 	{
 		Node.SetInstruction(instruction, result, operand1, operand2, operand3, operand4);
+	}
+
+	/// <summary>
+	/// Sets the instruction.
+	/// </summary>
+	/// <param name="instruction">The instruction.</param>
+	/// <param name="result">The result.</param>
+	/// <param name="operand1">The operand1.</param>
+	/// <param name="operand2">The operand2.</param>
+	/// <param name="operand3">The operand3.</param>
+	/// <param name="operand4">The operand4.</param>
+	/// <param name="operand5">The operand4.</param>
+	public void SetInstruction(BaseInstruction instruction, Operand result, Operand operand1, Operand operand2, Operand operand3, Operand operand4, Operand operand5)
+	{
+		Node.SetInstruction(instruction, result, operand1, operand2, operand3, operand4, operand5);
 	}
 
 	#endregion Set Instruction Methods

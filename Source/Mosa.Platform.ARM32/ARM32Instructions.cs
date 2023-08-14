@@ -13,6 +13,8 @@ namespace Mosa.Platform.ARM32;
 public static class ARM32Instructions
 {
 	public static readonly List<BaseInstruction> List = new List<BaseInstruction> {
+		ARM32.Mrc,
+		ARM32.Mcr,
 		ARM32.Adc,
 		ARM32.AdcRegShift,
 		ARM32.Add,

@@ -49,13 +49,13 @@ public sealed class CmpXChgLoad64 : X64Instruction
 			opcodeEncoder.SuppressByte(0x40);
 			opcodeEncoder.Append4Bits(0b0100);
 			opcodeEncoder.Append1Bit(0b1);
-			opcodeEncoder.Append1Bit(node.GetOperand(3).Register.RegisterCode >> 3);
+			opcodeEncoder.Append1Bit(node.Operand4.Register.RegisterCode >> 3);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append1Bit(node.Operand2.Register.RegisterCode >> 3);
 			opcodeEncoder.Append8Bits(0x0F);
 			opcodeEncoder.Append8Bits(0xB1);
 			opcodeEncoder.Append2Bits(0b00);
-			opcodeEncoder.Append3Bits(node.GetOperand(3).Register.RegisterCode);
+			opcodeEncoder.Append3Bits(node.Operand4.Register.RegisterCode);
 			opcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
 			return;
 		}

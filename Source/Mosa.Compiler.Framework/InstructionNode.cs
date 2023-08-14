@@ -174,6 +174,32 @@ public sealed class InstructionNode
 	}
 
 	/// <summary>
+	/// Gets or sets the fourth operand.
+	/// </summary>
+	/// <value>The third operand.</value>
+	public Operand Operand4
+	{
+		get => GetOperand(3);
+		set
+		{
+			SetOperand(3, value);
+		}
+	}
+
+	/// <summary>
+	/// Gets or sets the fifth operand.
+	/// </summary>
+	/// <value>The third operand.</value>
+	public Operand Operand5
+	{
+		get => GetOperand(4);
+		set
+		{
+			SetOperand(4, value);
+		}
+	}
+
+	/// <summary>
 	/// Gets all operands.
 	/// </summary>
 	/// <value>The operands.</value>
@@ -625,16 +651,6 @@ public sealed class InstructionNode
 			1 => Result2,
 			_ => throw new IndexOutOfRangeException()
 		};
-	}
-
-	/// <summary>
-	/// Adds the operand.
-	/// </summary>
-	/// <param name="operand">The operand.</param>
-	public void AddOperand(Operand operand)
-	{
-		SetOperand(OperandCount, operand);
-		OperandCount++;
 	}
 
 	/// <summary>
@@ -1358,7 +1374,28 @@ public sealed class InstructionNode
 		Operand1 = operand1;
 		Operand2 = operand2;
 		Operand3 = operand3;
-		SetOperand(3, operand4);
+		Operand4 = operand4;
+	}
+
+	/// <summary>
+	/// Sets the instruction.
+	/// </summary>
+	/// <param name="instruction">The instruction.</param>
+	/// <param name="result">The result.</param>
+	/// <param name="operand1">The operand1.</param>
+	/// <param name="operand2">The operand2.</param>
+	/// <param name="operand3">The operand3.</param>
+	/// <param name="operand4">The operand4.</param>
+	/// <param name="operand5">The operand4.</param>
+	public void SetInstruction(BaseInstruction instruction, Operand result, Operand operand1, Operand operand2, Operand operand3, Operand operand4, Operand operand5)
+	{
+		SetInstruction(instruction, 4, (byte)(result == null ? 0 : 1));
+		Result = result;
+		Operand1 = operand1;
+		Operand2 = operand2;
+		Operand3 = operand3;
+		Operand4 = operand4;
+		Operand5 = operand5;
 	}
 
 	public void SetInstruction(BaseInstruction instruction, ConditionCode conditionCode, Operand result, Operand operand1, Operand operand2, Operand operand3, Operand operand4)
@@ -1525,6 +1562,27 @@ public sealed class InstructionNode
 		Operand1 = operand1;
 		Operand2 = operand2;
 		Operand3 = operand3;
+		StatusRegister = statusRegister;
+	}
+
+	/// <summary>
+	/// Sets the instruction.
+	/// </summary>
+	/// <param name="instruction">The instruction.</param>
+	/// <param name="condition">The condition.</param>
+	/// <param name="updateStatus">if set to <c>true</c> [update status].</param>
+	/// <param name="result">The result.</param>
+	/// <param name="operand1">The operand1.</param>
+	/// <param name="operand2">The operand2.</param>
+	/// <param name="operand3">The operand3.</param>
+	public void SetInstruction(BaseInstruction instruction, StatusRegister statusRegister, Operand result, Operand operand1, Operand operand2, Operand operand3, Operand operand4)
+	{
+		SetInstruction(instruction, 3, (byte)(result == null ? 0 : 1));
+		Result = result;
+		Operand1 = operand1;
+		Operand2 = operand2;
+		Operand3 = operand3;
+		Operand4 = operand4;
 		StatusRegister = statusRegister;
 	}
 

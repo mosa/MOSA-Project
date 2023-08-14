@@ -12,6 +12,8 @@ namespace Mosa.Platform.ARM32;
 /// </summary>
 public static class ARM32
 {
+	public static readonly BaseInstruction Mrc = new Mrc();
+	public static readonly BaseInstruction Mcr = new Mcr();
 	public static readonly BaseInstruction Adc = new Adc();
 	public static readonly BaseInstruction AdcRegShift = new AdcRegShift();
 	public static readonly BaseInstruction Add = new Add();

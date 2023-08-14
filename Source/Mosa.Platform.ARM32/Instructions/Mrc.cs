@@ -7,13 +7,13 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ARM32.Instructions;
 
 /// <summary>
-/// OrrRegShift - Or
+/// Mrc - Move from processor register to coprocessor
 /// </summary>
 /// <seealso cref="Mosa.Platform.ARM32.ARM32Instruction" />
-public sealed class OrrRegShift : ARM32Instruction
+public sealed class Mrc : ARM32Instruction
 {
-	internal OrrRegShift()
-		: base(1, 4)
+	internal Mrc()
+		: base(1, 5)
 	{
 	}
 
@@ -22,20 +22,18 @@ public sealed class OrrRegShift : ARM32Instruction
 	public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 	{
 		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
-		System.Diagnostics.Debug.Assert(node.OperandCount == 4);
+		System.Diagnostics.Debug.Assert(node.OperandCount == 5);
 
-		if (node.Operand1.IsCPURegister && node.Operand2.IsCPURegister && node.Operand3.IsCPURegister && node.GetOperand(3).IsConstant)
+		if (node.Operand1.IsCPURegister && node.Operand2.IsCPURegister && node.Operand3.IsConstant && node.GetOperand(3).IsConstant && node.GetOperand(4).IsConstant)
 		{
 			opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
-			opcodeEncoder.Append2Bits(0b00);
-			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append4Bits(0b1100);
-			opcodeEncoder.Append1Bit(node.StatusRegister == StatusRegister.Set ? 1 : 0);
+			opcodeEncoder.Append4Bits(0b1110);
+			opcodeEncoder.Append4BitImmediate(node.Operand4);
+			opcodeEncoder.Append1Bit(0b1);
 			opcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);
 			opcodeEncoder.Append4Bits(node.Result.Register.RegisterCode);
-			opcodeEncoder.Append4Bits(node.Operand3.Register.RegisterCode);
-			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append2BitImmediate(node.Operand4);
+			opcodeEncoder.Append4BitImmediate(node.Operand3);
+			opcodeEncoder.Append4BitImmediate(node.Operand5);
 			opcodeEncoder.Append1Bit(0b1);
 			opcodeEncoder.Append4Bits(node.Operand2.Register.RegisterCode);
 			return;
