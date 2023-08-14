@@ -8,10 +8,10 @@ The command line arguments serve as shortcuts to the common set of :doc:`setting
 
 Below are the command line arguments available:
 
-.. csv-table:: 
+.. csv-table::
    :header: "Argument","Setting","Value Set"
    :widths: 100, 100, 50
-   
+
    Compiler:
     {none},Compiler.SourceFiles,{value}
     -settings,Settings,{value}
@@ -23,7 +23,7 @@ Below are the command line arguments available:
     -base,Compiler.BaseAddress,{value}
     -scanner,Compiler.MethodScanner,true
     -no-code,Compiler.Binary,false
-    -path,SearchPaths, 
+    -path,SearchPaths,
     -inline,Optimizations.Inline,true
     -inline-off,Optimizations.Inline,false
     -ssa,Optimizations.SSA,true
@@ -50,7 +50,7 @@ Below are the command line arguments available:
     -devirtualization,Optimizations.Devirtualization,true
     -devirtualization-off,Optimizations.Devirtualization,false
     -inline-level,Optimizations.Inline.Maximum,{value}
-    
+
     -platform,Compiler.Platform,{value}
     -x86,Compiler.Platform,x86
     -x64,Compiler.Platform,x64
@@ -109,7 +109,7 @@ Below are the command line arguments available:
     -gdb,Emulator.GDB,true
 	-timeout,Emulator.MaxRuntime,{value}
 	-debug,Launcher.Serial,true
-    
+
     Launcher - Emulator - Qemu & VMWare:
     -vmware-svga,Emulator.SVGA,vmware
 	-virtio-vga,Emulator.SVGA,virtio
@@ -129,7 +129,6 @@ Below are the command line arguments available:
 	-include,Image.FileSystem.RootInclude,{value}
 
     Launcher - Boot:
-    -multiboot-v1,Multiboot.Version,v1
     -multiboot-v2,Multiboot.Version,v2
     -multiboot-none,Multiboot.Version,
     -multiboot,Multiboot.Version,{value}

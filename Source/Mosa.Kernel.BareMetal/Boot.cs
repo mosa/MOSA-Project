@@ -131,6 +131,12 @@ public static class Boot
 		Console.WriteLine(" [Completed]");
 
 		Console.ForegroundColor = ConsoleColor.LightGreen;
+		Console.Write("> Setting ACPI RSDP address...");
+		HAL.SetRSDP(Multiboot.V2.RSDP, Multiboot.V2.ACPIv2);
+		Console.ForegroundColor = ConsoleColor.DarkGray;
+		Console.WriteLine(" [Completed]");
+
+		Console.ForegroundColor = ConsoleColor.LightGreen;
 		Console.Write("> Registering device drivers...");
 		deviceService.RegisterDeviceDriver(DeviceDriver.Setup.GetDeviceDriverRegistryEntries());
 		Console.ForegroundColor = ConsoleColor.DarkGray;

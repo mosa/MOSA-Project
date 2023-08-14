@@ -1,8 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
 using Mosa.DeviceSystem;
-using Mosa.DeviceSystem.Service;
 using Mosa.Runtime;
 
 namespace Mosa.Kernel.BareMetal;
@@ -10,14 +8,17 @@ namespace Mosa.Kernel.BareMetal;
 /// <summary>
 /// Hardware Abstraction Layer
 /// </summary>
-public sealed class HardwareAbstractionLayer : BaseHardwareAbstraction
+public class HardwareAbstractionLayer : BaseHardwareAbstraction
 {
+	private Pointer RSDP;
+	private bool ACPIv2;
+
 	public override uint PageSize => Page.Size;
 
 	public override PlatformArchitecture PlatformArchitecture => Platform.GetPlatformArchitecture();
 
 	public override ConstrainedPointer GetPhysicalMemory(Pointer address, uint size)
-		=> new ConstrainedPointer(VirtualPageAllocator.MapPhysical(address, size, false), size);
+		=> new(VirtualPageAllocator.MapPhysical(address, size, false), size);
 
 	public override void EnableInterrupts() => Platform.Interrupt.Enable();
 
@@ -44,6 +45,16 @@ public sealed class HardwareAbstractionLayer : BaseHardwareAbstraction
 	}
 
 	public override void Yield() => Platform.Scheduler.Yield();
+
+	public override void SetRSDP(Pointer pointer, bool version2)
+	{
+		RSDP = pointer;
+		ACPIv2 = version2;
+	}
+
+	public override Pointer GetRSDP() => RSDP;
+
+	public override bool IsACPIVersion2() => ACPIv2;
 
 	public override byte In8(ushort address) => Platform.IO.In8(address);
 
