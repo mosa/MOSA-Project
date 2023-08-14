@@ -88,7 +88,6 @@ public static class Name
 	public const string Multiboot_InitialStackAddress = "Multiboot.InitialStackAddress";
 	public const string Multiboot_Version = "Multiboot.Version";
 	public const string Multiboot_Video = "Multiboot.Video";
-	public const string Multiboot_Video_Depth = "Multiboot.Video.Depth";
 	public const string Multiboot_Video_Height = "Multiboot.Video.Height";
 	public const string Multiboot_Video_Width = "Multiboot.Video.Width";
 	public const string Optimizations_Basic = "Optimizations.Basic";

@@ -19,10 +19,10 @@ using Mosa.Utility.Launcher;
 
 namespace Mosa.Tool.Launcher;
 
-// TODO: Implement settings for FmtCmb and FrmCmb
+// TODO: Implement settings for FrmCmb
 public partial class MainWindow : Window
 {
-	private readonly MosaSettings MosaSettings = new MosaSettings();
+	private readonly MosaSettings MosaSettings = new();
 
 	private Builder Builder;
 	private readonly OpenFileDialog Source;
@@ -251,10 +251,9 @@ public partial class MainWindow : Window
 		MemVal.Value = MosaSettings.EmulatorMemory;
 		CpuVal.Value = MosaSettings.EmulatorCores;
 
-		EnableVbe.IsChecked = MosaSettings.MultibootVideo;
-		VbeWidth.Value = MosaSettings.MultibootVideoWidth;
-		VbeHeight.Value = MosaSettings.MultibootVideoHeight;
-		VbeDepth.Value = MosaSettings.MultibootVideoDepth;
+		EnableMbGraphics.IsChecked = MosaSettings.MultibootVideo;
+		GraphicsWidth.Value = MosaSettings.MultibootVideoWidth;
+		GraphicsHeight.Value = MosaSettings.MultibootVideoHeight;
 
 		PlugKorlib.IsChecked = MosaSettings.PlugKorlib;
 		OsNameTxt.Text = MosaSettings.OSName;
@@ -292,6 +291,13 @@ public partial class MainWindow : Window
 			"FAT16" => 1,
 			"FAT32" => 2,
 			_ => FsCmb.SelectedIndex
+		};
+
+		FmtCmb.SelectedIndex = MosaSettings.MultibootVersion.ToLowerInvariant() switch
+		{
+			"" => 0,
+			"v2" => 1,
+			_ => FmtCmb.SelectedIndex
 		};
 
 		PltCmb.SelectedIndex = MosaSettings.Platform.ToLowerInvariant() switch
@@ -354,10 +360,9 @@ public partial class MainWindow : Window
 		MosaSettings.EmulatorMemory = (int)MemVal.Value;
 		MosaSettings.EmulatorCores = (int)CpuVal.Value;
 
-		MosaSettings.MultibootVideo = EnableVbe.IsChecked!.Value;
-		MosaSettings.MultibootVideoWidth = (int)VbeWidth.Value;
-		MosaSettings.MultibootVideoHeight = (int)VbeHeight.Value;
-		MosaSettings.MultibootVideoDepth = (int)VbeDepth.Value;
+		MosaSettings.MultibootVideo = EnableMbGraphics.IsChecked!.Value;
+		MosaSettings.MultibootVideoWidth = (int)GraphicsWidth.Value;
+		MosaSettings.MultibootVideoHeight = (int)GraphicsHeight.Value;
 
 		MosaSettings.PlugKorlib = PlugKorlib.IsChecked!.Value;
 		MosaSettings.OSName = OsNameTxt.Text;
@@ -396,6 +401,13 @@ public partial class MainWindow : Window
 			0 => "FAT12",
 			1 => "FAT16",
 			2 => "FAT32",
+			_ => string.Empty,
+		};
+
+		MosaSettings.MultibootVersion = FmtCmb.SelectedIndex switch
+		{
+			0 => "",
+			1 => "v2",
 			_ => string.Empty,
 		};
 

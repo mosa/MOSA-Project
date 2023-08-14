@@ -99,8 +99,6 @@ public abstract class BaseMultibootStage : BaseCompilerStage
 
 	public int Height { get; set; }
 
-	public int Depth { get; set; }
-
 	public long InitialStackAddress { get; set; }
 
 	#endregion Data Members
@@ -111,7 +109,6 @@ public abstract class BaseMultibootStage : BaseCompilerStage
 		HasVideo = MosaSettings.MultibootVideo;
 		Width = MosaSettings.MultibootVideoWidth;
 		Height = MosaSettings.MultibootVideoHeight;
-		Depth = MosaSettings.MultibootVideoDepth;
 
 		InitialStackAddress = MosaSettings.Settings.GetValue("Multiboot.InitialStackAddress", StackAddress);
 	}
@@ -176,7 +173,7 @@ public abstract class BaseMultibootStage : BaseCompilerStage
 			writer.Write(MultibootV2Constants.FramebufferTagSize);
 			writer.Write((uint)Width);
 			writer.Write((uint)Height);
-			writer.Write((uint)Depth);
+			writer.Write(32U);
 		}
 
 		// Entry tag

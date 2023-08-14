@@ -116,15 +116,13 @@
 						</StackPanel>
 					</Border>
 
-					<Border Margin="0,160,0,0" Name="VbeBox" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" Padding="4" HorizontalAlignment="Left" VerticalAlignment="Top" Height="160">
+					<Border Margin="0,160,0,0" Name="GraphicsBox" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" Padding="4" HorizontalAlignment="Left" VerticalAlignment="Top" Height="160">
 						<StackPanel>
-							<CheckBox FontSize="12" Name="EnableVbe">Enable VBE Graphics</CheckBox>
+							<CheckBox FontSize="12" Name="EnableMbGraphics">Enable Multiboot Graphics</CheckBox>
 							<Label Margin="0,5,0,0">Width:</Label>
-							<NumericUpDown FontSize="12" Name="VbeWidth" Margin="85, -20, 0, 0" Width="160" BorderBrush="LightGray" HorizontalContentAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Left" Minimum="640" Maximum="1920" Value="640"></NumericUpDown>
+							<NumericUpDown FontSize="12" Name="GraphicsWidth" Margin="85, -20, 0, 0" Width="160" BorderBrush="LightGray" HorizontalContentAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Left" Minimum="640" Maximum="1920" Value="640"></NumericUpDown>
 							<Label Margin="0,5,0,0">Height:</Label>
-							<NumericUpDown FontSize="12" Name="VbeHeight" Margin="85, -20, 0, 0" Width="160" BorderBrush="LightGray" HorizontalContentAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Left" Minimum="480" Maximum="1080" Value="480"></NumericUpDown>
-							<Label Margin="0,5,0,0">Depth:</Label>
-							<NumericUpDown FontSize="12" Name="VbeDepth" Margin="85, -20, 0, 0" Width="160" BorderBrush="LightGray" HorizontalContentAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Left" Minimum="8" Maximum="32" Value="32" Increment="8"></NumericUpDown>
+							<NumericUpDown FontSize="12" Name="GraphicsHeight" Margin="85, -20, 0, 0" Width="160" BorderBrush="LightGray" HorizontalContentAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Left" Minimum="480" Maximum="1080" Value="480"></NumericUpDown>
 						</StackPanel>
 					</Border>
 
@@ -147,8 +145,9 @@
 								<Label>FAT32</Label>
 							</ComboBox>
 							<Label Margin="0,40, 0, 0">Boot Format:</Label>
-							<ComboBox FontSize="12" SelectedIndex="0" HorizontalContentAlignment="Center" Name="FmtCmb" Margin="85,40, 0, 0" Width="146" BorderBrush="LightGray">
-								<Label>Multiboot v1</Label>
+							<ComboBox FontSize="12" SelectedIndex="1" HorizontalContentAlignment="Center" Name="FmtCmb" Margin="85,40, 0, 0" Width="146" BorderBrush="LightGray">
+								<Label>None</Label>
+								<Label>Multiboot v2</Label>
 							</ComboBox>
 							<Label Margin="0,80, 0, 0">Firmware:</Label>
 							<ComboBox FontSize="12" SelectedIndex="0" HorizontalContentAlignment="Center" Name="FrmCmb" Margin="85,80, 0, 0" Width="146" BorderBrush="LightGray">
