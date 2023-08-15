@@ -58,12 +58,16 @@ jobs:
         run: nuget pack Source\Mosa.Packages\Mosa.DeviceSystem.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}
       - name: Create Package - Mosa.Runtime
         run: nuget pack Source\Mosa.Packages\Mosa.Runtime.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}
+      - name: Create Package - Mosa.Kernel
+        run: nuget pack Source\Mosa.Packages\Mosa.Kernel.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}
       - name: Create Package - Mosa.Platform.x86
         run: nuget pack Source\Mosa.Packages\Mosa.Platform.x86.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}
       - name: Create Package - Mosa.Kernel.x86
         run: nuget pack Source\Mosa.Packages\Mosa.Kernel.x86.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}
       - name: Create Package - Mosa.Platform.x64
         run: nuget pack Source\Mosa.Packages\Mosa.Platform.x64.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}
+      - name: Create Package - Mosa.Kernel.x64
+        run: nuget pack Source\Mosa.Packages\Mosa.Kernel.x64.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}
       - name: Store Nuget Packages Artifact
         uses: actions/upload-artifact@v3
         with:
@@ -108,12 +112,16 @@ jobs:
         run: dotnet nuget push bin\nupkg\Mosa.DeviceSystem.${{ env.BUILD_VERSION }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
       - name: Publish Package - Mosa.Runtime
         run: dotnet nuget push bin\nupkg\Mosa.Runtime.${{ env.BUILD_VERSION }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
+      - name: Publish Package - Mosa.Kernel
+        run: dotnet nuget push bin\nupkg\Mosa.Kernel.${{ env.BUILD_VERSION }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
       - name: Publish Package - Mosa.Platform.x86
         run: dotnet nuget push bin\nupkg\Mosa.Platform.x86.${{ env.BUILD_VERSION }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
       - name: Publish Package - Mosa.Kernel.x86
         run: dotnet nuget push bin\nupkg\Mosa.Kernel.x86.${{ env.BUILD_VERSION }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
       - name: Publish Package - Mosa.Platform.x64
         run: dotnet nuget push bin\nupkg\Mosa.Platform.x64.${{ env.BUILD_VERSION }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
+      - name: Publish Package - Mosa.Kernel.x64
+        run: dotnet nuget push bin\nupkg\Mosa.Kernel.x64.${{ env.BUILD_VERSION }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
 
   linux-build:
     name: Linux Build
@@ -306,9 +314,9 @@ jobs:
         with:
           name: windows-build-artifact
           path: bin
-      - name: Demo Test - BareMetal CoolWorld
+      - name: Demo Test - HelloWorld
         run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.BareMetal.HelloWorld.x86.dll -o${{ matrix.optimization }} -check -test
-      - name: Demo Test - BareMetal GraphicalWorld
+      - name: Demo Test - GraphicalWorld
         run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.BareMetal.GraphicalWorld.x86.dll -o${{ matrix.optimization }} -check -test -vmware-svga -include bin\Include
 
   linux-demo-testing:
@@ -338,9 +346,9 @@ jobs:
         run: sudo apt-get -y -o Acquire::Check-Valid-Until=false update
       - name: Install Qemu and Dependencies
         run: sudo apt-get -y -o Acquire::Retries=5 install qemu-system-x86
-      - name: Demo Test - BareMetal CoolWorld
+      - name: Demo Test - HelloWorld
         run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x86.dll -o${{ matrix.optimization }} -check -test
-      - name: Demo Test - BareMetal GraphicalWorld
+      - name: Demo Test - GraphicalWorld
         run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.GraphicalWorld.x86.dll -o${{ matrix.optimization }} -check -test -vmware-svga -include bin/Include
         
   #macos-demo-testing:
@@ -368,7 +376,7 @@ jobs:
   #        path: bin
   #    #- name: Install Qemu
   #    #  run: brew install qemu
-  #    - name: Demo Test - BareMetal CoolWorld
+  #    - name: Demo Test - HelloWorld
   #      run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x86.dll -o${{ matrix.optimization }} -check -test
-  #    - name: Demo Test - BareMetal GraphicalWorld
+  #    - name: Demo Test - GraphicalWorld
   #      run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.GraphicalWorld.x86.dll -o${{ matrix.optimization }} -check -test

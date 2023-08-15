@@ -255,6 +255,8 @@ public class Builder : BaseLauncher
 
 	private void LaunchNDISASM()
 	{
+		Output($"Executing NDISASM: {MosaSettings.NasmFile}");
+
 		//var textSection = Linker.Sections[(int)SectionKind.Text];
 		var startingAddress = MosaSettings.BaseAddress + MultibootHeaderLength;
 		var fileOffset = Linker.BaseFileOffset + MultibootHeaderLength;
@@ -272,6 +274,8 @@ public class Builder : BaseLauncher
 
 	private void GenerateASMFile()
 	{
+		Output($"Executing Reko Disassembler: {MosaSettings.AsmFile}");
+
 		var map = new Dictionary<ulong, List<string>>();
 
 		foreach (var symbol in Linker.Symbols)

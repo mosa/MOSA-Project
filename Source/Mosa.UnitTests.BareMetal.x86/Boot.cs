@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
 using Mosa.Kernel.BareMetal;
 using Mosa.Kernel.BareMetal.x86;
 using Mosa.Runtime.Plug;
@@ -8,39 +7,23 @@ using Mosa.UnitTests.Optimization;
 
 namespace Mosa.UnitTests.BareMetal.x86;
 
-/// <summary>
-/// Boot
-/// </summary>
 public static class Boot
 {
-	/// <summary>
-	/// Main
-	/// </summary>
+	[Plug("Mosa.Runtime.StartUp::BootOptions")]
+	public static void SetBootOptions()
+	{
+		BootSettings.EnableDebugOutput = false;
+	}
+
 	public static void Main()
 	{
 		IDT.SetInterruptHandler(ProcessInterrupt);
 
-		UnitTestEngine.Setup(0x3F8); // Serial.COM1
-
-		Console.BackgroundColor = ConsoleColor.Blue;
-		Console.Clear();
-		Console.SetCursorPosition(0, 0);
-		Console.ForegroundColor = ConsoleColor.Yellow;
-		Console.Write("MOSA OS Version 2.4 - UnitTest");
-		Console.WriteLine();
-		Console.WriteLine();
-
-		UnitTestEngine.DisplayUpdate();
-
-		UnitTestEngine.Setup(1);
-
+		UnitTestEngine.Setup(Serial.COM1);
 		UnitTestEngine.EnterTestReadyLoop();
 	}
 
-	public static void ProcessInterrupt(uint interrupt, uint errorCode)
-	{
-		UnitTestEngine.Process();
-	}
+	private static void ProcessInterrupt(uint interrupt, uint errorCode) => UnitTestEngine.Process();
 
 	private static void ForceTestCollection()
 	{
@@ -48,9 +31,8 @@ public static class Boot
 		CommonTests.OptimizationTest1();
 	}
 
-	[Plug("Mosa.Runtime.StartUp::BootOptions")]
-	public static void SetBootOptions()
+	public static void Include()
 	{
-		BootSettings.EnableDebugOutput = false;
+		Kernel.BareMetal.x86.Scheduler.SwitchToThread(null);
 	}
 }

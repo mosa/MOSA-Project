@@ -2,20 +2,20 @@
 
 using Mosa.Kernel.BareMetal;
 
-namespace Mosa.Starter.x86;
+namespace Mosa.Starter.x64;
 
 public static class Boot
 {
 	public static void Main()
 	{
 		Debug.WriteLine("Boot::Main()");
-		Debug.WriteLine("MOSA x86 Kernel");
+		Debug.WriteLine("MOSA x64 Kernel");
 
 		Program.EntryPoint();
 	}
 
 	public static void Include()
 	{
-		Kernel.BareMetal.x86.Scheduler.SwitchToThread(null);
+		Kernel.BareMetal.x64.VGAText.Clear();
 	}
 }

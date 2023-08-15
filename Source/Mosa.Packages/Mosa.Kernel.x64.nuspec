@@ -1,27 +1,26 @@
 ﻿<?xml version="1.0"?>
 <package>
 	<metadata>
-		<id>Mosa.DeviceSystem</id>
+		<id>Mosa.Kernel.x64</id>
 		<version>$version$</version>
-		<title>Mosa.DeviceSystem</title>
+		<title>Mosa.Kernel.x64 Library</title>
 		<authors>MOSA Project</authors>
 		<owners>MOSA Project</owners>
 		<license type="expression">BSD-3-Clause-Clear</license>
 		<projectUrl>https://www.mosa-project.org</projectUrl>
 		<icon>images/Mosa Icon.png</icon>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
-		<summary>MOSA device drivers framework and file system</summary>
-		<description>This package contains the MOSA device drivers framework along with the VFS (Virtual File System) and the file systems implementations.</description>
+		<summary>MOSA x64 kernel</summary>
+		<description>This package contains the x64 implementation of the MOSA kernel.</description>
 		<copyright>Copyright © MOSA Project 2023</copyright>
 		<tags>MOSA Compiler</tags>
 		<dependencies>
-			<dependency id="Mosa.Runtime" version="$version$" />
+			<dependency id="Mosa.Kernel" version="$version$" />
+			<dependency id="Mosa.Platform.x64" version="$version$" />
 		</dependencies>
 	</metadata>
 	<files>
 		<file src="..\Art\Mosa Icon.png" target="images" />
-		<file src="..\..\bin\Mosa.DeviceSystem.dll" target="lib\net7.0" />
-		<file src="..\..\bin\Mosa.DeviceDriver.dll" target="lib\net7.0" />
-		<file src="..\..\bin\Mosa.FileSystem.dll" target="lib\net7.0" />
+		<file src="..\..\bin\Mosa.Kernel.BareMetal.x64.dll" target="lib\net7.0" />
 	</files>
 </package>
