@@ -7,7 +7,7 @@ Here are the setting options for the compiler tools:
 Compiler Settings
 -----------------
 
-.. csv-table:: 
+.. csv-table::
    :header: "Settings", "Description"
    :widths: 50, 200
 
@@ -25,7 +25,7 @@ Compiler Settings
 Compiler Optimizations Settings
 -------------------------------
 
-.. csv-table:: 
+.. csv-table::
    :header: "Settings", "Description"
    :widths: 50, 200
 
@@ -50,7 +50,7 @@ Compiler Optimizations Settings
 Linker Settings
 ---------------
 
-.. csv-table:: 
+.. csv-table::
    :header: "Settings", "Description"
    :widths: 50, 200
 
@@ -66,7 +66,7 @@ Linker Settings
 Common Settings
 ---------------
 
-.. csv-table:: 
+.. csv-table::
    :header: "Settings", "Description"
    :widths: 50, 200
 
@@ -77,25 +77,25 @@ Common Settings
 Compiler Debug Settings
 -----------------------
 
-.. csv-table:: 
+.. csv-table::
    :header: "Settings", "Description"
    :widths: 50, 200
 
     CompilerDebug.Statistics,"If true, enables statistics gathering"
     CompilerDebug.DebugFile,Filename to emit a MOSA specific debug information
-    CompilerDebug.MapFile,Filename to emit a map of all symbols 
+    CompilerDebug.MapFile,Filename to emit a map of all symbols
     CompilerDebug.CompileTimeFile,Filename to emit compile times for each method
     CompilerDebug.AsmFile,Filename to emit ASM disassembly
     CompilerDebug.NasmFile,Filename to emit disassembly using the NASM tool
     CompilerDebug.InlinedFile,Filename to emit a list of all methods that were inlined
-    CompilerDebug.PreLinkHashFile,Filename to emit a list of all methods with their hash value prior to linking 
+    CompilerDebug.PreLinkHashFile,Filename to emit a list of all methods with their hash value prior to linking
     CompilerDebug.PostLinkHashFile,Filename to emit a list of all methods with their hash value after linking
 	CompilerDebug.FullCheckMode,"If true, causes the compiler to run internal validate checks (used to test the compiler)"
 
 Compiler X86 Settings
 ---------------------
 
-.. csv-table:: 
+.. csv-table::
    :header: "Settings", "Description"
    :widths: 50, 200
 
@@ -104,7 +104,7 @@ Compiler X86 Settings
 Explorer Settings
 -----------------
 
-.. csv-table:: 
+.. csv-table::
    :header: "Settings", "Description"
    :widths: 50, 200
 
@@ -115,7 +115,7 @@ Explorer Settings
 Launcher Settings
 -----------------
 
-.. csv-table:: 
+.. csv-table::
    :header: "Settings", "Description"
    :widths: 50, 200
 
@@ -131,7 +131,7 @@ Launcher Settings
 Image Settings
 --------------
 
-.. csv-table:: 
+.. csv-table::
    :header: "Settings", "Description"
    :widths: 50, 200
 
@@ -144,7 +144,7 @@ Image Settings
 Emulator Settings
 -----------------
 
-.. csv-table:: 
+.. csv-table::
    :header: "Settings", "Description"
    :widths: 50, 200
 
@@ -162,7 +162,7 @@ Emulator Settings
 GDB Settings
 ------------
 
-.. csv-table:: 
+.. csv-table::
    :header: "Settings", "Description"
    :widths: 50, 200
 
@@ -172,21 +172,20 @@ GDB Settings
 Multiboot Settings
 ------------------
 
-.. csv-table:: 
+.. csv-table::
    :header: "Settings", "Description"
    :widths: 50, 200
 
-    Multiboot.Version,"Multiboot version none, v1, v2"
-    Multiboot.Video,"If true, enable VGA BIOS Extension (VBE)"
+    Multiboot.Version,"Multiboot version none, v2"
+    Multiboot.Video,"If true, enable the framebuffer provided by Multiboot"
     Multiboot.Video.Width,Video Width
     Multiboot.Video.Height,Video Height
-    Multiboot.Video.Depth,Video Depth
 	Multiboot.InitialStackAddress,Initial Stack Address
 
 Debugger Settings
 -----------------
 
-.. csv-table:: 
+.. csv-table::
    :header: "Settings", "Description"
    :widths: 50, 200
 
@@ -196,7 +195,7 @@ Debugger Settings
 Application Location Settings
 -----------------------------
 
-.. csv-table:: 
+.. csv-table::
    :header: "Settings", "Description"
    :widths: 50, 200
 
@@ -212,11 +211,11 @@ Application Location Settings
     AppLocation.Ndisasm,Location of the Ndisasm application
     AppLocation.Mkisofs,Location of the Mkisofs application
     AppLocation.GDB,Location of the GDB application
-	
+
 OS Settings
 -----------------------------
 
-.. csv-table:: 
+.. csv-table::
    :header: "Settings", "Description"
    :widths: 50, 200
 
@@ -226,17 +225,17 @@ OS Settings
 Import Settings
 ---------------
 
-.. csv-table:: 
+.. csv-table::
    :header: "Settings", "Description"
    :widths: 50, 200
 
     Import,Filename of another settings file to import
 
-	
+
 Unit Test Settings
 ---------------
 
-.. csv-table:: 
+.. csv-table::
    :header: "Settings", "Description"
    :widths: 50, 200
 

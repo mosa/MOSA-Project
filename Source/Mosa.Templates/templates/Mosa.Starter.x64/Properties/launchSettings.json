@@ -1,0 +1,10 @@
+{
+	"profiles": {
+		"Mosa.Starter.x64": {
+			"commandName": "Executable",
+			"executablePath": "dotnet",
+			"commandLineArgs": "Tools/Mosa.Tool.Launcher.dll Mosa.Starter.x64.dll",
+			"workingDirectory": "bin"
+		}
+	}
+}

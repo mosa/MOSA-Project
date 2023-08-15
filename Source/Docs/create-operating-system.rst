@@ -7,6 +7,8 @@ Introduction
 
 Now that you've learned to either launch a pre-existing demo project or make your own, we'll teach you the basics of the MOSA framework, and how to make your OS more interesting! Let's get started!
 
+.. tip:: You don't need to follow this guide if you're using the BareMetal kernel (which the template is using). This guide is only for those who wish to create a more barebones kernel.
+
 Theory
 ======
 
@@ -19,7 +21,7 @@ The HAL needs to be implemented in some way. In MOSA, it is implemented by the e
 Now that we've seen how device drivers typically work, let's look more about how the MOSA framework specifically works. In a typical MOSA project, you'll see the following structure:
 
 **Architecture-specific kernel initialization code**
-- This would typically be a call to ``Mosa.Kernel.*Architecture*.Setup()``, but can also be other stuff (for example, ``Mosa.Kernel.x86.IDT.SetInterruptHandler()``).
+- Here you would initialize architecture-specific stuff like the GDT or IDT on x86 for example.
 
 **Initialize system services**
 - The most useful one is the ``DeviceService`` which allows one to get either all devices via their respective device driver, or to get a specific device. But you also have important ones, like the PCI services for controlling PCI devices, and the ``PCService`` for shutting down and rebooting the system, amongst others.
@@ -45,29 +47,7 @@ Implementation
 
 **Architecture-specific kernel initialization code**
 
-.. code-block:: csharp
-
-	Mosa.Kernel.x86.Kernel.Setup();
-
-And we're done! Well, almost... you see, on x86, we need to initialize what's called the IDT, which is for system interrupts. This guide won't cover it, but you can find information about it online.
-
-Create a method like so in your code:
-
-.. code-block:: csharp
-
-	private static void ProcessInterrupt(uint interrupt, uint errorCode)
-	{
-		if (interrupt is >= 0x20 and < 0x30)
-			DeviceSystem.HAL.ProcessInterrupt((byte)(interrupt - 0x20));
-	}
-
-This method will process any incoming system interrupt for a device. Next, right after your ``Setup()`` call, add this one:
-
-.. code-block:: csharp
-
-	Mosa.Kernel.x86.IDT.SetInterruptHandler(ProcessInterrupt);
-
-And now, we're done for real this time!
+We need to initialize things like the GDT, IDT, etc... if we want to proceed any further. You can check out the x86 implementation of the BareMetal kernel to find out how these are implemented. Alternatively, if you wish to learn more about those, you can check the `OSDev Wiki <https://wiki.osdev.org>` which contains a ton of useful information about OS development, as its name would indicate.
 
 **Initialize system services**
 
@@ -130,4 +110,4 @@ Finally, you can initialize specific services here. For example, you could call 
 
 Well, we can't write the code for you, but you get it now. After all these steps, you can finally build the OS you've always wanted to create!
 
-If you have any more questions, don't hesitate to ask on our `Discord <https://discord.gg/tRNMn3npsv>` server! We'll happily answer them all :D
+If you have any more questions, don't hesitate to ask on our `Discord <https://discord.gg/tRNMn3npsv>`__ server! We'll happily answer them all :D

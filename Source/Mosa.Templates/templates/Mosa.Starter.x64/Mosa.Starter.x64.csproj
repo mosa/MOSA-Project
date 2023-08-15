@@ -16,7 +16,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="../Mosa.Starter/Mosa.Starter.csproj" />
-		<PackageReference Include="Mosa.Kernel.x86" Version="*" />
+		<PackageReference Include="Mosa.Kernel.x64" Version="*" />
 	</ItemGroup>
 
 </Project>
