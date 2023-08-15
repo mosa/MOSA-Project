@@ -7,6 +7,14 @@ namespace Mosa.Starter;
 
 public static class Program
 {
+	[Plug("Mosa.Runtime.StartUp::BootOptions")]
+	public static void SetBootOptions()
+	{
+		BootSettings.EnableDebugOutput = true;
+		//BootSettings.EnableVirtualMemory = true;
+		//BootSettings.EnableMinimalBoot = true;
+	}
+
 	public static void EntryPoint()
 	{
 		Debug.WriteLine("Program::EntryPoint()");
