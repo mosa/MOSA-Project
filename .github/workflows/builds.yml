@@ -15,6 +15,7 @@ jobs:
   windows-build:
     name: Windows Build
     runs-on: windows-latest
+    timeout-minutes: 15
     env:
       NUGET_ENABLE_LEGACY_CSPROJ_PACK: true
     steps:
@@ -79,6 +80,7 @@ jobs:
     name: Windows Build Packaging
     needs: [windows-build, linux-build, generate-docs, windows-unit-testing, linux-unit-testing, windows-demo-testing, linux-demo-testing, macos-build, macos-unit-testing]
     runs-on: windows-latest
+    timeout-minutes: 15
     if: github.event_name == 'push' && github.repository == 'mosa/MOSA-Project' && github.ref == 'refs/heads/master'
     env:
       NUGET_ENABLE_LEGACY_CSPROJ_PACK: true
@@ -124,6 +126,7 @@ jobs:
   linux-build:
     name: Linux Build
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Set net7.0
         uses: actions/setup-dotnet@v3
@@ -152,6 +155,7 @@ jobs:
   macos-build:
     name: MacOS Build
     runs-on: macos-latest
+    timeout-minutes: 15
     steps:
       - name: Set net7.0
         uses: actions/setup-dotnet@v3
@@ -180,6 +184,7 @@ jobs:
   generate-docs:
     name: Generate Documentation
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     if: github.event_name == 'push' && github.repository == 'mosa/MOSA-Project' && github.ref == 'refs/heads/master'
     steps:
       - name: Set python3.11
@@ -215,6 +220,7 @@ jobs:
       fail-fast: false
     name: Windows - Unit Test -o${{ matrix.optimization }}
     runs-on: windows-latest
+    timeout-minutes: 15
     needs: windows-build
     steps:
       - name: Checkout
@@ -236,6 +242,7 @@ jobs:
       fail-fast: false
     name: Linux - Unit Test -o${{ matrix.optimization }}
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     needs: linux-build
     steps:
       - name: Set net7.0
@@ -265,6 +272,7 @@ jobs:
       fail-fast: false
     name: MacOS - Unit Test -o${{ matrix.optimization }}
     runs-on: macos-latest
+    timeout-minutes: 15
     needs: macos-build
     env:
       HOMEBREW_NO_INSTALL_CLEANUP: 1
@@ -294,6 +302,7 @@ jobs:
       fail-fast: false
     name: Windows - Demo Test -o${{ matrix.optimization }}
     runs-on: windows-latest
+    timeout-minutes: 15
     needs: windows-build
     steps:
       - name: Checkout
@@ -317,6 +326,7 @@ jobs:
       fail-fast: false
     name: Linux - Demo Test -o${{ matrix.optimization }}
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     needs: linux-build
     steps:
       - name: Set net7.0
@@ -348,6 +358,7 @@ jobs:
   #    fail-fast: false
   #  name: MacOS - Demo Test -o${{ matrix.optimization }}
   #  runs-on: macos-latest
+  #  timeout-minutes: 15
   #  needs: macos-build
   #  steps:
   #    - name: Set net7.0
