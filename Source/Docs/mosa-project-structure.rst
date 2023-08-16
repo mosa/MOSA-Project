@@ -20,7 +20,7 @@ Those projects make the MOSA compiler. You can learn more about it :doc:`here<co
 Mosa.DeviceDriver
 *****************
 
-This project hosts all the drivers MOSA offers. They're not required to create an OS, nor are they required if you want to make your own drivers.
+This project hosts all the drivers MOSA offers, whether they're ISA, PCI, USB, etc...
 
 *****************
 Mosa.DeviceSystem
@@ -28,7 +28,7 @@ Mosa.DeviceSystem
 
 This project contains all kinds of miscelleanous classes and utilities, useful to device drivers and other stuff. It can almost be fully used outside MOSA (it does contain a few classes related to MOSA, like ``ConstrainedPointer``) and can serve as a great utilities project. For example, it contains classes for generating a VDI header or VHD footer, MBR generation and some PCI utilities. But it contains much more!
 
-It's also not required to create an OS, however it is a dependecy of **Mosa.DeviceDriver**.
+It is a dependecy of **Mosa.DeviceDriver**.
 
 ***************
 Mosa.FileSystem
@@ -40,7 +40,7 @@ This project is the MOSA implementation for the file system. It currently only s
 Mosa.Kernel.BareMetal
 *********************
 
-This project is the mainline, platform-agnostic implementation of the MOSA kernel. It's not strictly required to create an OS with MOSA though, if you want to implement it yourself.
+This project is the mainline, platform-agnostic implementation of the MOSA kernel.
 
 ***********************
 Mosa.Kernel.BareMetal.*
@@ -52,7 +52,7 @@ Those projects implement the internal, platform-specific functions of **Mosa.Ker
 Mosa.Korlib
 ***********
 
-This project is the MOSA implementation of the .NET standard library. While it is currently missing a lot of features, it is highly portable and can be used in any project. You can also use your own implementation if you want to.
+This project is the MOSA implementation of the .NET standard library. While it is currently missing a lot of features, it is highly portable and can be used in any project requiring a custom core library.
 
 ***************
 Mosa.Platform.*
@@ -64,7 +64,7 @@ Those projects host the code generation stages of their respective platform for 
 Mosa.Plug.Korlib
 ****************
 
-While the MOSA implementation of the .NET standard library is portable, it does need some functions implemented by the compiler in order to fully benefit from its potential. This is where this project comes in. It replaces those internal, unimplemented functions with **plugs**. It has a couple of dependencies on other projects, including **Mosa.Runtime** for example. However, it does **not** have dependencies on projects which are built on a specific platform (like **Mosa.Kernel.x86** for example).
+While the MOSA implementation of the .NET standard library is portable, it does need some functions implemented by the compiler in order to fully benefit from its potential. This is where this project comes in. It replaces those internal, unimplemented functions with **plugs**. It has a couple of dependencies on other projects, including **Mosa.Runtime** for example. However, it does **not** have dependencies on projects which are built on a specific platform (like **Mosa.Kernel.BareMetal.x86** for example).
 
 ******************
 Mosa.Plug.Korlib.*
@@ -76,7 +76,7 @@ Those platform-specific projects are identical to the one above, except they do 
 Mosa.Runtime
 ************
 
-This project provides the boot function and process for the kernel, which the compiler integrates in the final binary. It is therefore strictly required, even if you don't use any of the other projects in your OS.
+This project provides the boot function and process for the kernel, which the compiler integrates in the final binary.
 
 However, it also provides classes like Pointer or GC.
 
@@ -84,7 +84,7 @@ However, it also provides classes like Pointer or GC.
 Mosa.Runtime.*
 **************
 
-Those projects help in providing additional functions for using native instructions of the specific platform. Those projects aren't strictly required to create an OS with MOSA.
+Those projects help in providing additional functions for using native instructions of the specific platform.
 
 ***********
 Mosa.Tool.*
@@ -114,4 +114,4 @@ Those projects are simple playgrounds, which are there to be able to test stuff,
 Other projects
 **************
 
-If some projects are not mentioned here, it's probably because they're miscelleanous and/or do not fit in any of the categories cited above.
+If some projects are not mentioned here, it's probably because they're miscellaneous and/or do not fit in any of the categories cited above.

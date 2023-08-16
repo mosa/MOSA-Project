@@ -40,11 +40,11 @@ public static class UnitTestEngine
 	{
 		ComPort = comPort;
 
-		Platform.Serial.Setup(ComPort);
+		Serial.Setup(ComPort);
 
-		Buffer = new Pointer(Address.DebuggerBuffer);
-		Stack = new Pointer(Address.UnitTestStack);
-		Queue = new Pointer(Address.UnitTestQueue);
+		Buffer = PageFrameAllocator.Allocate(16);
+		Stack = PageFrameAllocator.Allocate(1);
+		Queue = PageFrameAllocator.Allocate(512);
 
 		Enabled = true;
 		ReadySent = false;
@@ -63,7 +63,7 @@ public static class UnitTestEngine
 		QueueNext.Store32(0);
 	}
 
-	private static void SendByte(byte b) => Platform.Serial.Write(ComPort, b);
+	private static void SendByte(byte b) => Serial.Write(ComPort, b);
 
 	private static void SendByte(int i) => SendByte((byte)i);
 
@@ -106,9 +106,9 @@ public static class UnitTestEngine
 
 	private static bool ProcessSerial()
 	{
-		if (!Platform.Serial.IsDataReady(ComPort)) return false;
+		if (!Serial.IsDataReady(ComPort)) return false;
 
-		var b = Platform.Serial.Read(ComPort);
+		var b = Serial.Read(ComPort);
 
 		if (UsedBuffer + 1 > MaxBuffer)
 		{

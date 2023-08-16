@@ -2,15 +2,12 @@
 	<PropertyGroup>
 		<TargetFramework>net7.0</TargetFramework>
 		<OutputType>Exe</OutputType>
-		<StartupObject>Mosa.Demo.TestWorld.x86.Boot</StartupObject>
-		<DebugType>full</DebugType>
 		<LangVersion>11.0</LangVersion>
 		<OutputPath>..\..\bin\</OutputPath>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<DisableStandardFrameworkResolution>true</DisableStandardFrameworkResolution>
 		<DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
 		<UseAppHost>false</UseAppHost>
-		<RootNamespace>Mosa.Demo.TestWorld.x86</RootNamespace>
 	</PropertyGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Mosa.Korlib\Mosa.Korlib.csproj" />

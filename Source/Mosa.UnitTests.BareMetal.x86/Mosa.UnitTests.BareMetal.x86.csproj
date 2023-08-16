@@ -22,4 +22,9 @@
 		<ProjectReference Include="..\Mosa.Korlib\Mosa.Korlib.csproj" />
 		<ProjectReference Include="..\Mosa.UnitTests\Mosa.UnitTests.csproj" />
 	</ItemGroup>
+	<ItemGroup>
+		<None Update="Asm\Return10.o">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 </Project>

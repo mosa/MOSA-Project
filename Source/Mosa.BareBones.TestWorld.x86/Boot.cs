@@ -4,7 +4,7 @@ using Mosa.Runtime;
 using Mosa.Runtime.Plug;
 using Mosa.Runtime.x86;
 
-namespace Mosa.Demo.TestWorld.x86;
+namespace Mosa.BareBones.TestWorld.x86;
 
 public static class Boot
 {
