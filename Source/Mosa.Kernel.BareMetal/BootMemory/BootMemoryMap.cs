@@ -68,7 +68,8 @@ public static class BootMemoryMap
 	{
 		Debug.WriteLine("BootMemoryMap::ImportMultibootV2MemoryMap()");
 
-		if (Multiboot.V2.EntrySize == 0) return;
+		if (Multiboot.V2.EntrySize == 0)
+			return;
 
 		AvailableMemory = new Pointer(Multiboot.V2.MemoryUpper * 1024);
 

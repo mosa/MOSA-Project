@@ -32,7 +32,7 @@ public sealed class DeviceService : BaseService
 	/// <summary>
 	/// The pending on change
 	/// </summary>
-	private readonly List<Device> pendingOnChange;
+	private readonly List<Device> PendingOnChange;
 
 	private readonly object sync = new object();
 
@@ -43,7 +43,7 @@ public sealed class DeviceService : BaseService
 	{
 		Registry = new List<DeviceDriverRegistryEntry>();
 		Devices = new List<Device>();
-		pendingOnChange = new List<Device>();
+		PendingOnChange = new List<Device>();
 
 		IRQDispatch = new List<Device>[MaxInterrupts];
 

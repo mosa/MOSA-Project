@@ -108,7 +108,8 @@ public unsafe class ACPIDriver : BaseDeviceDriver, IACPI
 
 			for (var k = 0; k < dsdtLength; k++)
 			{
-				if (S5Addr.Load32() == 0x5f35535f) break; //_S5_
+				if (S5Addr.Load32() == 0x5f35535f)
+					break; //_S5_
 
 				S5Addr++;
 			}

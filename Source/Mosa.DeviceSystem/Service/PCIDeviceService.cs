@@ -7,7 +7,7 @@ using Mosa.DeviceSystem.PCI;
 namespace Mosa.DeviceSystem.Service;
 
 /// <summary>
-/// PCI Controller Service
+/// PCI Device Service
 /// </summary>
 public class PCIDeviceService : BaseService
 {
