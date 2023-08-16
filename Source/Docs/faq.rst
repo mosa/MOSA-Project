@@ -30,4 +30,4 @@ Another important difference is Cosmos compiles to Assembly and uses YASM, to fi
 Are Cosmos and MOSA working together?
 -------------------------------------
 
-Recently, there have been talks to integrate the MOSA compiler into Cosmos, thus potentially being able to fix more bugs in the MOSA compiler while also providing more stability and performance for Cosmos. While nothing has come out of this yet, you can express your opinion on this in our Discord in #cosmos-integration and in the Cosmos Discord in #mosa-cosmos-crossdev.
+Recently, there have been talks to integrate the MOSA compiler into Cosmos, thus potentially being able to implement more features in the MOSA compiler while also providing more stability and performance for Cosmos. While nothing has come out of this yet, you can express your opinion on this in our Discord in #cosmos-integration and in the Cosmos Discord in #mosa-cosmos-crossdev.

@@ -4,6 +4,7 @@ using Mosa.Kernel.BareMetal;
 using Mosa.Kernel.BareMetal.x86;
 using Mosa.Runtime.Plug;
 using Mosa.UnitTests.Optimization;
+using Serial = Mosa.Kernel.BareMetal.x86.Serial;
 
 namespace Mosa.UnitTests.BareMetal.x86;
 
