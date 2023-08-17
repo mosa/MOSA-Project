@@ -6,20 +6,18 @@ namespace Mosa.Kernel.BareMetal.MultibootSpecification;
 
 public class MultibootV2MemoryMapEntry
 {
-	private Pointer Entry;
+	private readonly Pointer Pointer;
 
-	public readonly Pointer BaseAddress;
-	public readonly ulong Length;
-	public readonly uint Type;
+	public Pointer BaseAddress => Pointer;
+
+	public ulong Length => Pointer.Load64(8);
+
+	public uint Type => Pointer.Load32(16);
 
 	public MultibootV2MemoryMapEntry(Pointer entry)
 	{
-		Entry = entry;
-
-		BaseAddress = (Pointer)entry.Load64(0);
-		Length = entry.Load64(8);
-		Type = entry.Load32(16);
+		Pointer = entry;
 	}
 
-	public MultibootV2MemoryMapEntry GetNext() => new(Entry + Multiboot.V2.EntrySize);
+	public MultibootV2MemoryMapEntry GetNext() => new(Pointer + Multiboot.V2.EntrySize);
 }

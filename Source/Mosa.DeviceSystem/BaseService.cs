@@ -52,9 +52,6 @@ public abstract class BaseService
 		if (service == null)
 			return null;
 
-		//HAL.DebugWriteLine("BaseService:MatchEvent()-Z");
-		//HAL.Pause();
-
 		return device;
 	}
 }

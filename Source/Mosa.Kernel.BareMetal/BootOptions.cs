@@ -12,7 +12,7 @@ public class BootOptions
 	public static void Setup()
 	{
 		StaticOptions = Intrinsic.GetBootOptions();
-		RuntimeOptions = Multiboot.V2.CommandLinePointer;
+		RuntimeOptions = Multiboot.CommandLinePointer;
 
 		var debug = GetValue("Debug.Option");
 

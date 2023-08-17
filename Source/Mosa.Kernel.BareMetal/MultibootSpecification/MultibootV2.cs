@@ -30,6 +30,7 @@ public sealed class MultibootV2
 		var pointer = entry + 8;
 
 		uint type;
+
 		while ((type = pointer.Load32(0)) != 0)
 		{
 			var size = pointer.Load32(4);
@@ -37,65 +38,65 @@ public sealed class MultibootV2
 			switch (type)
 			{
 				case 1:
-				{
-					CommandLinePointer = pointer + 8;
-					break;
-				}
+					{
+						CommandLinePointer = pointer + 8;
+						break;
+					}
 				case 2:
-				{
-					BootloaderNamePointer = pointer + 8;
-					break;
-				}
+					{
+						BootloaderNamePointer = pointer + 8;
+						break;
+					}
 				case 4:
-				{
-					MemoryLower = pointer.Load32(8);
-					MemoryUpper = pointer.Load32(12);
-					break;
-				}
+					{
+						MemoryLower = pointer.Load32(8);
+						MemoryUpper = pointer.Load32(12);
+						break;
+					}
 				case 6:
-				{
-					EntrySize = pointer.Load32(8);
-					EntryVersion = pointer.Load32(12);
-					Entries = (size - 16) / EntrySize;
-					FirstEntry = new MultibootV2MemoryMapEntry(pointer + 16);
-					break;
-				}
+					{
+						EntrySize = pointer.Load32(8);
+						EntryVersion = pointer.Load32(12);
+						Entries = (size - 16) / EntrySize;
+						FirstEntry = new MultibootV2MemoryMapEntry(pointer + 16);
+						break;
+					}
 				case 8:
-				{
-					var address = (Pointer)pointer.Load64(8);
-					var pitch = pointer.Load32(16);
-					var width = pointer.Load32(20);
-					var height = pointer.Load32(24);
-					var bpp = pointer.Load8(28);
-					var fbType = pointer.Load8(29);
+					{
+						var address = (Pointer)pointer.Load64(8);
+						var pitch = pointer.Load32(16);
+						var width = pointer.Load32(20);
+						var height = pointer.Load32(24);
+						var bpp = pointer.Load8(28);
+						var fbType = pointer.Load8(29);
 
-					FramebufferAvailable = bpp == 32 && fbType <= 1;
-					Framebuffer = new FrameBuffer32(
-						new ConstrainedPointer(address, width * height * 4),
-						width,
-						height,
-						(x, y) => y * pitch + x * 4
-					);
+						FramebufferAvailable = bpp == 32 && fbType <= 1;
+						Framebuffer = new FrameBuffer32(
+							new ConstrainedPointer(address, width * height * 4),
+							width,
+							height,
+							(x, y) => y * pitch + x * 4
+						);
 
-					break;
-				}
+						break;
+					}
 				case 13:
-				{
-					// TODO: SMBIOS
-					break;
-				}
+					{
+						// TODO: SMBIOS
+						break;
+					}
 				case 14:
-				{
-					ACPIv2 = false;
-					RSDP = pointer + 8;
-					break;
-				}
+					{
+						ACPIv2 = false;
+						RSDP = pointer + 8;
+						break;
+					}
 				case 15:
-				{
-					ACPIv2 = true;
-					RSDP = pointer + 8;
-					break;
-				}
+					{
+						ACPIv2 = true;
+						RSDP = pointer + 8;
+						break;
+					}
 			}
 
 			pointer += (size + 7) & ~7;

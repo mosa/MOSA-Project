@@ -1,13 +1,12 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace Mosa.DeviceSystem;
 
 /// <summary>
-/// Device Manager
+/// Service Manager
 /// </summary>
 public sealed class ServiceManager
 {

@@ -49,7 +49,7 @@ public sealed class CmpXChgLoad32 : X86Instruction
 			opcodeEncoder.Append8Bits(0x0F);
 			opcodeEncoder.Append8Bits(0xB1);
 			opcodeEncoder.Append2Bits(0b00);
-			opcodeEncoder.Append3Bits(node.GetOperand(3).Register.RegisterCode);
+			opcodeEncoder.Append3Bits(node.Operand4.Register.RegisterCode);
 			opcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
 			return;
 		}

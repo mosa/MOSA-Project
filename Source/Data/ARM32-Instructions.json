@@ -16,10 +16,74 @@
 
 		"[arm-fp-data-processing]=                  conditional|1110|[opcode]|[e]|[fn]|0|[fd]|0001|[f]|[gh]|0|[i]|[fm]",
 		"[arm-fp-register-transfer]=                conditional|1110|[opcode]|[e]|[fn]|[rd]|0001|[f]|[gh]|1|[i]|[fm]",
-		"[arm-fp-comparision]=                      conditional|1110|[opcode]|1|[e]|[fn]|1111|0001|[f]|[gh]|1|[i]|[fm]",
-		"[arm-fp-data-transfer-register]=           conditional|110|[p]|[ud]|[t1]|[wb]||[ls]|[rn]|[t0]|[fd]|0001|[offset]"
+		"[arm-fp-comparison]=                       conditional|1110|[opcode]|1|[e]|[fn]|1111|0001|[f]|[gh]|1|[i]|[fm]",
+		"[arm-fp-data-transfer-register]=           conditional|110|[p]|[ud]|[t1]|[wb]||[ls]|[rn]|[t0]|[fd]|0001|[offset]",
+
+		"[arm-coprocessor-transfer]=                conditional|1110|[opcode]|[l]|[crn]|[rd]|[cpn]|[cp]|1|[crm]"
 	],
 	"Instructions": [
+		{
+			"Name": "Mrc",
+			"Commutative": "true",
+			"FamilyName": "ARM32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 5,
+			"ResultCount": 1,
+			"Description": "Move from processor register to coprocessor",
+			"OperandDescriptions": [
+				{
+					"Result": "ARM source/destination register",
+					"Operand1": "Coprocessor source/destination register",
+					"Operand2": "Coprocessor operand register",
+					"Operand3": "Coprocessor number",
+					"Operand4": "Coprocessor operation mode",
+					"Operand5": "Coprocessor information"
+				}
+			],
+			"OpcodeEncodingAppend": "",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant][constant][constant]",
+					"Encoding": "[arm-coprocessor-transfer],s=status:status,l=1,rd=reg4:r,crn=reg4:o1,crm=reg4:o2,cpn=imm4:o3,opcode=imm4:o4,cp=imm4:o5"
+				}
+			]
+		},
+		{
+			"Name": "Mcr",
+			"Commutative": "true",
+			"FamilyName": "ARM32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 5,
+			"ResultCount": 1,
+			"Description": "Move from coprocessor to processor register",
+			"OperandDescriptions": [
+				{
+					"Result": "ARM source/destination register",
+					"Operand1": "Coprocessor source/destination register",
+					"Operand2": "Coprocessor operand register",
+					"Operand3": "Coprocessor number",
+					"Operand4": "Coprocessor operation mode",
+					"Operand5": "Coprocessor information"
+				}
+			],
+			"OpcodeEncodingAppend": "",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant][constant][constant]",
+					"Encoding": "[arm-coprocessor-transfer],s=status:status,l=0,rd=reg4:r,crn=reg4:o1,crm=reg4:o2,cpn=imm4:o3,opcode=imm4:o4,cp=imm4:o5"
+				}
+			]
+		},
 		{
 			"Name": "Adc",
 			"Commutative": "true",
@@ -2340,11 +2404,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
-					"Encoding": "[arm-fp-comparision],opcode=100,e=0,f=fp:o1,gh=00,i=0,fn=reg3:o1,fm=reg3:o2"
+					"Encoding": "[arm-fp-comparison],opcode=100,e=0,f=fp:o1,gh=00,i=0,fn=reg3:o1,fm=reg3:o2"
 				},
 				{
 					"Condition": "[register][constant]",
-					"Encoding": "[arm-fp-comparision],opcode=100,e=0,f=fp:o1,gh=00,i=1,fn=reg3:o1,fm=imm4:o2"
+					"Encoding": "[arm-fp-comparison],opcode=100,e=0,f=fp:o1,gh=00,i=1,fn=reg3:o1,fm=imm4:o2"
 				}
 			]
 		},
@@ -2365,11 +2429,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
-					"Encoding": "[arm-fp-comparision],opcode=101,e=0,f=fp:o1,gh=00,i=0,fn=reg3:o1,fm=reg3:o2"
+					"Encoding": "[arm-fp-comparison],opcode=101,e=0,f=fp:o1,gh=00,i=0,fn=reg3:o1,fm=reg3:o2"
 				},
 				{
 					"Condition": "[register][constant]",
-					"Encoding": "[arm-fp-comparision],opcode=101,e=0,f=fp:o1,gh=00,i=1,fn=reg3:o1,fm=imm4:o2"
+					"Encoding": "[arm-fp-comparison],opcode=101,e=0,f=fp:o1,gh=00,i=1,fn=reg3:o1,fm=imm4:o2"
 				}
 			]
 		},
@@ -2391,11 +2455,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register]",
-					"Encoding": "[arm-fp-comparision],opcode=110,e=0,f=fp:o1,gh=00,i=0,fn=reg3:o1,fm=reg3:o2"
+					"Encoding": "[arm-fp-comparison],opcode=110,e=0,f=fp:o1,gh=00,i=0,fn=reg3:o1,fm=reg3:o2"
 				},
 				{
 					"Condition": "[register][constant]",
-					"Encoding": "[arm-fp-comparision],opcode=110,e=0,f=fp:o1,gh=00,i=1,fn=reg3:o1,fm=imm4:o2"
+					"Encoding": "[arm-fp-comparison],opcode=110,e=0,f=fp:o1,gh=00,i=1,fn=reg3:o1,fm=imm4:o2"
 				}
 			]
 		},
@@ -2416,11 +2480,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register]",
-					"Encoding": "[arm-fp-comparision],opcode=111,e=0,f=fp:o1,gh=00,i=0,fn=reg3:o1,fm=reg3:o2"
+					"Encoding": "[arm-fp-comparison],opcode=111,e=0,f=fp:o1,gh=00,i=0,fn=reg3:o1,fm=reg3:o2"
 				},
 				{
 					"Condition": "[register][constant]",
-					"Encoding": "[arm-fp-comparision],opcode=111,e=0,f=fp:o1,gh=00,i=1,fn=reg3:o1,fm=imm4:o2"
+					"Encoding": "[arm-fp-comparison],opcode=111,e=0,f=fp:o1,gh=00,i=1,fn=reg3:o1,fm=imm4:o2"
 				}
 			]
 		},

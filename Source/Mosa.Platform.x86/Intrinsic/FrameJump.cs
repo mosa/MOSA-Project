@@ -15,7 +15,7 @@ internal static partial class IntrinsicMethods
 		var v0 = context.Operand1;
 		var v1 = context.Operand2;
 		var v2 = context.Operand3;
-		var v3 = context.GetOperand(3);
+		var v3 = context.Operand4;
 
 		var esp = Operand.CreateCPURegister32(CPURegister.ESP);
 		var ebp = Operand.CreateCPURegister32(CPURegister.EBP);
