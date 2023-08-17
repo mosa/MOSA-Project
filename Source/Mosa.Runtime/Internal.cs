@@ -17,7 +17,7 @@ public static class Internal
 	/// <summary>
 	/// An object header the following memory layout:
 	///   - Hash Value (32-bit)
-	///   - Lock & Status (32-bit)
+	///   - Lock and Status (32-bit)
 	///   - MethodTable (native int)
 	/// </summary>
 	internal static int ObjectHeaderSize
