@@ -7,14 +7,6 @@ namespace Mosa.FileSystem.VFS;
 /// </summary>
 public sealed class SymbolicLinkNode : NodeBase
 {
-	#region Data Members
-
-	/// <summary>
-	/// The target of the symbolic link.
-	/// </summary>
-
-	#endregion Data Members
-
 	#region Construction
 
 	/// <summary>
