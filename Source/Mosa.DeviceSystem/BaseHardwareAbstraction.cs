@@ -25,6 +25,7 @@ public abstract class BaseHardwareAbstraction
 	/// <returns></returns>
 	public abstract ConstrainedPointer GetPhysicalMemory(Pointer address, uint size);
 
+	/// <summary>
 	/// Disables all interrupts.
 	/// </summary>
 	public abstract void DisableInterrupts();
