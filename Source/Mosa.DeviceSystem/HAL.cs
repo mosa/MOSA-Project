@@ -44,15 +44,14 @@ public static class HAL
 	public static void ProcessInterrupt(byte irq) => handleInterrupt?.Invoke(irq);
 
 	/// <summary>
-
-	/// <summary>
 	/// Requests a block of memory from the kernel
-	/// </summary>
 	/// <param name="address">The address.</param>
 	/// <param name="size">The size.</param>
+	/// </summary>
 	/// <returns></returns>
 	public static ConstrainedPointer GetPhysicalMemory(Pointer address, uint size) => hardwareAbstraction.GetPhysicalMemory(address, size);
 
+	/// <summary>
 	/// Disables all interrupts.
 	/// </summary>
 	internal static void DisableAllInterrupts() => hardwareAbstraction.DisableInterrupts();
