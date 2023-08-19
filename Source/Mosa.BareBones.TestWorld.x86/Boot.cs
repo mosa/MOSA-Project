@@ -15,7 +15,7 @@ public static class Boot
 		Serial.Setup(Serial.COM1);
 		Serial.Write(Serial.COM1, 0x41);
 
-		BootPageAllocator.Setup();
+		BootMemoryAllocator.Setup();
 	}
 
 	[Plug("Mosa.Runtime.Interrupt::Process")]
@@ -31,10 +31,7 @@ public static class Boot
 		// Call to your memory allocator here
 		Serial.Write(Serial.COM1, 0x43);
 
-		var alignedSize = size;
-		while (alignedSize % BootPageAllocator.PageSize != 0) alignedSize++;
-
-		return new Pointer(BootPageAllocator.Reserve(alignedSize / BootPageAllocator.PageSize));
+		return new Pointer(BootMemoryAllocator.Allocate(size));
 	}
 
 	public static void Main()
