@@ -561,7 +561,7 @@ public sealed class SparseConditionalConstantPropagation
 				 || instruction == IRInstruction.ZeroExtend16x64
 				 || instruction == IRInstruction.ZeroExtend32x64)
 		{
-			Move(node);
+			SignOrZeroExtend(node);
 		}
 		else if (instruction == IRInstruction.Switch)
 		{
@@ -815,6 +815,58 @@ public sealed class SparseConditionalConstantPropagation
 		SetReferenceNotNull(result);
 	}
 
+	private void SignOrZeroExtend(InstructionNode node)
+	{
+		var result = GetVariableState(node.Result);
+
+		if (result.IsOverDefined)
+			return;
+
+		var operand1 = GetVariableState(node.Operand1);
+
+		if (operand1.IsOverDefined)
+		{
+			UpdateToOverDefined(result);
+			return;
+		}
+		else if (operand1.IsUnknown)
+		{
+			Debug.Assert(result.IsUnknown);
+			return;
+		}
+		else if (operand1.IsSingleConstant)
+		{
+			if (SignOrZeroExtend(node.Instruction, operand1.ConstantUnsignedLongInteger, out var value))
+			{
+				UpdateToConstant(result, value);
+				return;
+			}
+			else
+			{
+				UpdateToOverDefined(result);
+				return;
+			}
+		}
+		else if (operand1.HasOnlyConstants)
+		{
+			foreach (var c1 in operand1.Constants)
+			{
+				if (SignOrZeroExtend(node.Instruction, c1, out var value))
+				{
+					UpdateToConstant(result, value);
+				}
+				else
+				{
+					UpdateToOverDefined(result);
+					return;
+				}
+
+				if (result.IsOverDefined)
+					return;
+			}
+		}
+	}
+
 	private void IntegerOperation(InstructionNode node)
 	{
 		var result = GetVariableState(node.Result);
@@ -948,6 +1000,62 @@ public sealed class SparseConditionalConstantPropagation
 				result = compare.Value ? 1u : 0u;
 				return true;
 			}
+		}
+		result = 0;
+		return false;
+	}
+
+	private static bool SignOrZeroExtend(BaseInstruction instruction, ulong operand1, out ulong result)
+	{
+		if (instruction == IRInstruction.SignExtend8x32)
+		{
+			result = (operand1 & 0x80) == 0 ? operand1 : operand1 | 0xFFFFFF00;
+			return true;
+		}
+		else if (instruction == IRInstruction.SignExtend16x32)
+		{
+			result = (operand1 & 0x8000) == 0 ? operand1 : operand1 | 0xFFFF0000;
+			return true;
+		}
+		else if (instruction == IRInstruction.SignExtend8x64)
+		{
+			result = (operand1 & 0x80) == 0 ? operand1 : operand1 | 0xFFFFFFFFFFFFFF00ul;
+			return true;
+		}
+		else if (instruction == IRInstruction.SignExtend16x64)
+		{
+			result = (operand1 & 0x8000) == 0 ? operand1 : operand1 | 0xFFFFFFFFFFFF0000ul;
+			return true;
+		}
+		else if (instruction == IRInstruction.SignExtend32x64)
+		{
+			result = (operand1 & 0x80000000) == 0 ? operand1 : operand1 | 0xFFFFFFFF00000000ul;
+			return true;
+		}
+		else if (instruction == IRInstruction.ZeroExtend8x32)
+		{
+			result = (byte)operand1;
+			return true;
+		}
+		else if (instruction == IRInstruction.ZeroExtend16x32)
+		{
+			result = (byte)operand1;
+			return true;
+		}
+		else if (instruction == IRInstruction.ZeroExtend8x64)
+		{
+			result = (byte)operand1;
+			return true;
+		}
+		else if (instruction == IRInstruction.ZeroExtend16x64)
+		{
+			result = (ushort)operand1;
+			return true;
+		}
+		else if (instruction == IRInstruction.ZeroExtend32x64)
+		{
+			result = (uint)operand1;
+			return true;
 		}
 		result = 0;
 		return false;
