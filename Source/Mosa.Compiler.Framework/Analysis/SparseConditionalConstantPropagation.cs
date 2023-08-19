@@ -1009,27 +1009,32 @@ public sealed class SparseConditionalConstantPropagation
 	{
 		if (instruction == IRInstruction.SignExtend8x32)
 		{
-			result = (operand1 & 0x80) == 0 ? operand1 : operand1 | 0xFFFFFF00;
+			var value = (byte)operand1;
+			result = (value & 0x80) == 0 ? value : value | 0xFFFFFF00;
 			return true;
 		}
 		else if (instruction == IRInstruction.SignExtend16x32)
 		{
-			result = (operand1 & 0x8000) == 0 ? operand1 : operand1 | 0xFFFF0000;
+			var value = (ushort)operand1;
+			result = (value & 0x8000) == 0 ? value : value | 0xFFFF0000;
 			return true;
 		}
 		else if (instruction == IRInstruction.SignExtend8x64)
 		{
-			result = (operand1 & 0x80) == 0 ? operand1 : operand1 | 0xFFFFFFFFFFFFFF00ul;
+			var value = (byte)operand1;
+			result = (value & 0x80) == 0 ? value : value | 0xFFFFFFFFFFFFFF00ul;
 			return true;
 		}
 		else if (instruction == IRInstruction.SignExtend16x64)
 		{
-			result = (operand1 & 0x8000) == 0 ? operand1 : operand1 | 0xFFFFFFFFFFFF0000ul;
+			var value = (ushort)operand1;
+			result = (value & 0x8000) == 0 ? value : value | 0xFFFFFFFFFFFF0000ul;
 			return true;
 		}
 		else if (instruction == IRInstruction.SignExtend32x64)
 		{
-			result = (operand1 & 0x80000000) == 0 ? operand1 : operand1 | 0xFFFFFFFF00000000ul;
+			var value = (uint)operand1;
+			result = (value & 0x80000000) == 0 ? value : value | 0xFFFFFFFF00000000ul;
 			return true;
 		}
 		else if (instruction == IRInstruction.ZeroExtend8x32)
