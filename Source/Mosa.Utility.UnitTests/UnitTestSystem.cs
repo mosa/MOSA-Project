@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using Mosa.Compiler.Common.Configuration;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Utility.Configuration;
@@ -30,7 +29,7 @@ public static class UnitTestSystem
 
 		var discoveredUnitTests = Discovery.DiscoverUnitTests(mosaSettings.UnitTestFilter);
 
-		Console.WriteLine($"Found Tests: {discoveredUnitTests.Count} in {(stopwatch.ElapsedMilliseconds / 1000.0).ToString("F2")} secs");
+		Console.WriteLine($"Found Tests: {discoveredUnitTests.Count} in {stopwatch.ElapsedMilliseconds / 1000.0:F2} secs");
 		Console.WriteLine();
 		Console.WriteLine("Starting Unit Test Engine...");
 
@@ -49,7 +48,7 @@ public static class UnitTestSystem
 		Execute(unitTests, unitTestEngine);
 		stopwatch.Stop();
 
-		Console.WriteLine("Unit Testing: " + ((stopwatch.ElapsedMilliseconds - executeStart) / 1000.0).ToString("F2") + " secs");
+		Console.WriteLine($"Unit Testing: {(stopwatch.ElapsedMilliseconds - executeStart) / 1000.0:F2} secs");
 		Console.WriteLine("Total: " + stopwatch.ElapsedMilliseconds / 1000.0 + " secs");
 
 		unitTestEngine.Terminate();

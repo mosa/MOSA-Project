@@ -4,7 +4,7 @@ using Mosa.Runtime;
 
 namespace Mosa.Kernel.BareMetal;
 
-public class BootOptions
+public static class BootOptions
 {
 	private static Pointer StaticOptions;
 	private static Pointer RuntimeOptions;

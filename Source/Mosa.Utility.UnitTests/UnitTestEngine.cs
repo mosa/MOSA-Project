@@ -33,7 +33,8 @@ public class UnitTestEngine : IDisposable
 	#region Constants
 
 	private const int MaxSentQueue = 10000;
-	private const int MinSend = 2000;
+	private const int MaxSendBatch = 1000;
+	private const int MinSendBatch = 200;
 	private const int ConnectionDelay = 150;
 
 	#endregion Constants
@@ -50,6 +51,8 @@ public class UnitTestEngine : IDisposable
 
 	private volatile bool Aborted;
 	private volatile bool Ready;
+	private volatile int Errors;
+	private volatile int SendOneCount = 0;
 
 	private readonly Queue<UnitTest> Queue = new Queue<UnitTest>();
 	private readonly Dictionary<int, UnitTest> Active = new Dictionary<int, UnitTest>();
@@ -60,9 +63,6 @@ public class UnitTestEngine : IDisposable
 	private WatchDog WatchDog;
 
 	private int CompletedUnitTestCount;
-
-	private int SendOneCount = -1;
-	private int Errors;
 
 	#endregion Private Data Members
 
@@ -140,8 +140,6 @@ public class UnitTestEngine : IDisposable
 		if (Aborted)
 			return;
 
-		var messages = new List<UnitTest>();
-
 		Stopwatch.Start();
 		Aborted = !StartEngine();
 
@@ -162,35 +160,50 @@ public class UnitTestEngine : IDisposable
 				if (Aborted)
 					return;
 
-				var sendFlag = Queue.Count > 0 && Active.Count < MaxSentQueue;
+				var count = MaxSendBatch;
 
-				if (MaxSentQueue - Active.Count < MinSend && Queue.Count > MinSend)
+				count = Math.Min(count, Queue.Count);
+				count = Math.Min(count, MaxSentQueue - Active.Count);
+
+				if (count < MinSendBatch & SendOneCount == 0 & Queue.Count > MinSendBatch)
 				{
-					sendFlag = false;
+					count = 0;
 				}
 
-				// check if queue has requests or too many have already been sent
-				while ((SendOneCount < 0 && sendFlag && Active.Count < MaxSentQueue && Queue.Count > 0)
-					   || (SendOneCount >= 0 && Queue.Count > 0 && Active.Count == 0))
+				if (count > 0 && SendOneCount > 0)
 				{
-					var message = Queue.Dequeue();
-
-					Active.Add(message.UnitTestID, message);
-
-					messages.Add(message);
-
-					if (SendOneCount >= 0)
-					{
-						--SendOneCount;
-					}
+					count = Active.Count == 0 ? 1 : 0;
 				}
 
-				DebugServerEngine.Send(messages);
-				messages.Clear();
+				Send(count);
+
+				if (count == 1 && SendOneCount > 0)
+					SendOneCount--;
 			}
 
-			Thread.Yield();
+			Thread.Sleep(100);
 		}
+	}
+
+	private void Send(int count)
+	{
+		if (count <= 0)
+			return;
+
+		//OutputStatus($"Batch: {count}");
+
+		var messages = new List<UnitTest>(count);
+
+		for (int i = 0; i < count; ++i)
+		{
+			var message = Queue.Dequeue();
+
+			Active.Add(message.UnitTestID, message);
+
+			messages.Add(message);
+		}
+
+		DebugServerEngine.Send(messages);
 	}
 
 	public void QueueUnitTests(List<UnitTest> unitTests)
@@ -383,7 +396,7 @@ public class UnitTestEngine : IDisposable
 		if (!Process.HasExited)
 		{
 			Process.Kill();
-			Process.WaitForExit(10000); // wait for up to 10 seconds
+			Process.WaitForExit(8000); // wait for up to 10 seconds
 			Thread.Sleep(250);
 		}
 
@@ -484,6 +497,7 @@ public class UnitTestEngine : IDisposable
 			// Has the process not started? If yes, start
 			if (Process == null)
 			{
+				OutputStatus("ERROR: Proces not started");
 				restart = true;
 			}
 
@@ -510,37 +524,46 @@ public class UnitTestEngine : IDisposable
 
 			if (restart)
 			{
+				IncrementErrorCount();
+
 				KillVirtualMachine();
+
+				SendOneCount = 5;
 
 				if (Active.Count == 1)
 				{
 					foreach (var entry in Active)
 					{
 						entry.Value.Status = UnitTestStatus.FailedByCrash;
+						OutputStatus($"ERROR: {UnitTestSystem.OutputUnitTestResult(entry.Value)}");
 					}
-
-					Active.Clear();
 				}
-
-				foreach (var test in Active)
+				else
 				{
-					Queue.Enqueue(test.Value);
+					foreach (var test in Active)
+					{
+						Queue.Enqueue(test.Value);
+					}
 				}
 
 				Active.Clear();
-				SendOneCount = 10;
 
-				OutputStatus("Re-starting engine...");
-
-				MosaSettings.EmulatorSerialPort++;
-
-				if (!StartEngine())
+				if (!Aborted)
 				{
-					KillVirtualMachine();
-					Aborted = true;
+					OutputStatus("Re-starting engine...");
+
+					MosaSettings.EmulatorSerialPort++;
+
+					if (!StartEngine())
+					{
+						KillVirtualMachine();
+						Aborted = true;
+					}
 				}
 			}
 		}
+
+		return;
 	}
 
 	private void MessageCallBack(int id, ulong data)
@@ -577,15 +600,20 @@ public class UnitTestEngine : IDisposable
 			{
 				unittest.Status = UnitTestStatus.Failed;
 
-				Errors++;
-
 				OutputStatus($"ERROR: {UnitTestSystem.OutputUnitTestResult(unittest)}");
 
-				if (Errors >= MosaSettings.MaxErrors)
-				{
-					Aborted = true;
-				}
+				IncrementErrorCount();
 			}
+		}
+	}
+
+	private void IncrementErrorCount()
+	{
+		Errors++;
+
+		if (Errors >= MosaSettings.MaxErrors)
+		{
+			Aborted = true;
 		}
 	}
 

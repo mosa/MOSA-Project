@@ -26,7 +26,6 @@ public static class Name
 
 	public const string Compiler_BaseAddress = "Compiler.BaseAddress";
 	public const string Compiler_Binary = "Compiler.Binary";
-	public const string Compiler_EmitInline = "Compiler.EmitInline";
 	public const string Compiler_MethodScanner = "Compiler.MethodScanner";
 	public const string Compiler_Multithreading = "Compiler.Multithreading";
 	public const string Compiler_Multithreading_MaxThreads = "Compiler.Multithreading.MaxThreads";

@@ -258,8 +258,7 @@ public class Starter : BaseLauncher
 
 	private Process LaunchQemu()
 	{
-		string qemuApp;
-		string uefi = null;
+		string qemuApp, uefi;
 
 		var arg = new StringBuilder();
 
