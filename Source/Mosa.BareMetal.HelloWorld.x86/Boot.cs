@@ -13,21 +13,10 @@ public static class Boot
 		Debug.WriteLine("MOSA x86 Kernel");
 
 		var result = CheckedTests.AddU8U8(18446744073709551615, 1);
-
-		if (result == 95272687)
-		{
-			Debug.WriteLine("CheckedTests::AddU8U8() -> Pass");
-		}
-		else
-		{
-			Debug.WriteLine("CheckedTests::AddU8U8() -> Fail");
-		}
-
+		Debug.WriteLine(result == 95272687 ? "CheckedTests::AddU8U8() -> Pass" : "CheckedTests::AddU8U8() -> Fail");
 		Debug.WriteLine("##PASS##");
 
-		while (true)
-		{
-		}
+		Program.EntryPoint();
 	}
 
 	public static void Include()
