@@ -14,11 +14,11 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -127,13 +127,13 @@
            <div itemprop="articleBody">
              
   <section id="create-your-own-operating-system">
-<h1>Create your own operating system<a class="headerlink" href="#create-your-own-operating-system" title="Permalink to this heading"></a></h1>
+<h1>Create your own operating system<a class="headerlink" href="#create-your-own-operating-system" title="Link to this heading"></a></h1>
 <section id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading"></a></h2>
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
 <p>Now that you’ve learned to either launch a pre-existing demo project or make your own, we’ll teach you the basics of the MOSA framework, and how to make your OS more interesting! Let’s get started!</p>
 </section>
 <section id="theory">
-<h2>Theory<a class="headerlink" href="#theory" title="Permalink to this heading"></a></h2>
+<h2>Theory<a class="headerlink" href="#theory" title="Link to this heading"></a></h2>
 <p>But first, a bit of theory (or how the MOSA framework works). The idea around MOSA is modularity, and it is its sort of key selling point. You can either use all of it, part of it, or close to none at all (at least the Mosa.Runtime.* projects are required for the architecture you want to compile for). It thus means that getting started is quite more difficult than one might think. But it’s also not that difficult!</p>
 <p>Let’s take the example of device drivers. Typically, a device driver might want to talk to the rest of the system (for example, it might want to print to the standard output/console, write to an I/O port, etc…). To be able to do this, it uses the OS’ <strong>Hardware Abstraction Layer</strong>. Essentially, it’s an interface which lets parts of the OS communicate with each other.</p>
 <p>The HAL needs to be implemented in some way. In MOSA, it is implemented by the end user, for modularity reasons. It inherits the <code class="docutils literal notranslate"><span class="pre">BaseHardwareAbstraction</span></code> class which provides a couple of methods commonly used by device drivers, and other code (it doesn’t have to be used just by the device drivers!).</p>
@@ -153,7 +153,7 @@
 <p>All of this might seem a bit daunting at first, however, once you have all the initialization code in place, you don’t have to touch it anymore! With that being said, let’s look at how we initialize all of this:</p>
 </section>
 <section id="implementation">
-<h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this heading"></a></h2>
+<h2>Implementation<a class="headerlink" href="#implementation" title="Link to this heading"></a></h2>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>This guide will assume you’re compiling for the <strong>x86</strong> architecture.</p>

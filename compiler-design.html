@@ -14,11 +14,11 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -128,19 +128,19 @@
            <div itemprop="articleBody">
              
   <section id="compiler-design">
-<h1>Compiler Design<a class="headerlink" href="#compiler-design" title="Permalink to this heading"></a></h1>
+<h1>Compiler Design<a class="headerlink" href="#compiler-design" title="Link to this heading"></a></h1>
 <p>The MOSA Compiler framework is designed around two pipelines each with multiple stages.</p>
 <section id="type-system">
-<h2>Type System<a class="headerlink" href="#type-system" title="Permalink to this heading"></a></h2>
+<h2>Type System<a class="headerlink" href="#type-system" title="Link to this heading"></a></h2>
 <p>The <strong>Type System</strong> is a fundamental part of the MOSA compiler. Essentially, all CIL types and methods are compiled into MOSA types and methods. This also allows for other potential frontends using the MOSA compiler to compile the chosen types and methods into MOSA ones.</p>
 </section>
 <section id="compiler-pipeline">
-<h2>Compiler Pipeline<a class="headerlink" href="#compiler-pipeline" title="Permalink to this heading"></a></h2>
+<h2>Compiler Pipeline<a class="headerlink" href="#compiler-pipeline" title="Link to this heading"></a></h2>
 <p>The <strong>Compiler Pipeline</strong> is the primary pipeline that executes the steps necessary to compile an application, such as building the type system, compiling each method, linking, and emitting the final object file.</p>
 <p>One stage executes the <strong>Method Compiler Pipeline</strong> for each method in the application.</p>
 </section>
 <section id="method-compiler-pipeline">
-<h2>Method Compiler Pipeline<a class="headerlink" href="#method-compiler-pipeline" title="Permalink to this heading"></a></h2>
+<h2>Method Compiler Pipeline<a class="headerlink" href="#method-compiler-pipeline" title="Link to this heading"></a></h2>
 <p>The <strong>Method Compiler Pipeline</strong> is used to compile a single method by progressively lowers the high level instruction representation to the final opcode instructions of the target platform. This pipeline is executed at least once for all methods in the application.</p>
 <p>All the stages can be grouped into one or more of these categories:</p>
 <dl class="simple">
@@ -157,7 +157,7 @@
 </dl>
 </section>
 <section id="intermediate-representations">
-<h2>Intermediate Representations<a class="headerlink" href="#intermediate-representations" title="Permalink to this heading"></a></h2>
+<h2>Intermediate Representations<a class="headerlink" href="#intermediate-representations" title="Link to this heading"></a></h2>
 <p>The compiler framework uses a linear intermediate representation (vs an expression tree) to transform the source application into binary machine code. There are several levels of intermediate representations before code generation. These are:</p>
 <ul class="simple">
 <li><p>Common Intermediate Language (CIL)</p></li>

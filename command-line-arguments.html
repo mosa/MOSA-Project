@@ -14,11 +14,11 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -122,11 +122,11 @@
            <div itemprop="articleBody">
              
   <section id="command-line-arguments">
-<h1>Command Line Arguments<a class="headerlink" href="#command-line-arguments" title="Permalink to this heading"></a></h1>
+<h1>Command Line Arguments<a class="headerlink" href="#command-line-arguments" title="Link to this heading"></a></h1>
 <p>The command line arguments serve as shortcuts to the common set of <a class="reference internal" href="settings-options.html"><span class="doc">Settings Options</span></a> used by the MOSA tools.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>Specific settings may also be specified on the command line using the <code class="docutils literal notranslate"><span class="pre">-setting</span></code> argument (or using the shorthand version <code class="docutils literal notranslate"><span class="pre">-s</span></code> ). For example to set the <code class="docutils literal notranslate"><span class="pre">Compiler.OutputFile</span></code> setting with <code class="docutils literal notranslate"><span class="pre">Mosa.Demo.HelloWorld.x86.bin</span></code>, pass the following two arguments <code class="docutils literal notranslate"><span class="pre">-setting</span> <span class="pre">Compiler.OutputFile=Mosa.Demo.HelloWorld.x86.bin</span></code> on the command line.</p>
+<p>Specific settings may also be specified on the command line using the <code class="docutils literal notranslate"><span class="pre">-setting</span></code> argument (or using the shorthand version <code class="docutils literal notranslate"><span class="pre">-s</span></code> ). For example to set the <code class="docutils literal notranslate"><span class="pre">Compiler.OutputFile</span></code> setting with <code class="docutils literal notranslate"><span class="pre">Mosa.HelloWorld.x86.bin</span></code>, pass the following two arguments <code class="docutils literal notranslate"><span class="pre">-setting</span> <span class="pre">Compiler.OutputFile=Mosa.HelloWorld.x86.bin</span></code> on the command line.</p>
 </div>
 <p>Below are the command line arguments available:</p>
 <table class="docutils align-default">
@@ -674,883 +674,879 @@
 <td><p>Multiboot.Video.Height</p></td>
 <td><p>{value}</p></td>
 </tr>
-<tr class="row-odd"><td><p>-video-depth</p></td>
-<td><p>Multiboot.Video.Depth</p></td>
-<td><p>{value}</p></td>
-</tr>
-<tr class="row-even"><td></td>
+<tr class="row-odd"><td></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p>Launcher - GDB:</p></td>
+<tr class="row-even"><td><p>Launcher - GDB:</p></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>-launch-debugger</p></td>
+<tr class="row-odd"><td><p>-launch-debugger</p></td>
 <td><p>Launcher.GDB</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-launch-gdb</p></td>
+<tr class="row-even"><td><p>-launch-gdb</p></td>
 <td><p>Launcher.Debugger</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td></td>
+<tr class="row-odd"><td></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p>Launcher &amp; Debugger - GDB</p></td>
+<tr class="row-even"><td><p>Launcher &amp; Debugger - GDB</p></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>-gdb-port</p></td>
+<tr class="row-odd"><td><p>-gdb-port</p></td>
 <td><p>GDB.Port</p></td>
 <td><p>{value}</p></td>
 </tr>
-<tr class="row-odd"><td><p>-gdb-host</p></td>
+<tr class="row-even"><td><p>-gdb-host</p></td>
 <td><p>GDB.Host</p></td>
 <td><p>{value}</p></td>
 </tr>
-<tr class="row-even"><td></td>
+<tr class="row-odd"><td></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p>Launcher - Advance:</p></td>
+<tr class="row-even"><td><p>Launcher - Advance:</p></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>-plug-korlib</p></td>
+<tr class="row-odd"><td><p>-plug-korlib</p></td>
 <td><p>Launcher.PlugKorlib</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td></td>
+<tr class="row-even"><td></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>Operating System:</p></td>
+<tr class="row-odd"><td><p>Operating System:</p></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p>-osname</p></td>
+<tr class="row-even"><td><p>-osname</p></td>
 <td><p>OS.Name</p></td>
 <td><p>{value}</p></td>
 </tr>
-<tr class="row-even"><td><p>-bootoptions</p></td>
+<tr class="row-odd"><td><p>-bootoptions</p></td>
 <td><p>OS.BootOptions</p></td>
-<td><p>{value}</p></td>
-</tr>
-<tr class="row-odd"><td></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p>Debugger:</p></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p>-breakpoints</p></td>
-<td><p>Debugger.BreakpointFile</p></td>
-<td><p>{value}</p></td>
-</tr>
-<tr class="row-even"><td><p>-watch</p></td>
-<td><p>Debugger.WatchFile</p></td>
-<td><p>{value}</p></td>
-</tr>
-<tr class="row-odd"><td></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p>Unit Testings:</p></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p>-unittest-maxerrors</p></td>
-<td><p>UnitTest.MaxErrors</p></td>
 <td><p>{value}</p></td>
 </tr>
 <tr class="row-even"><td></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p>Optimization Levels:</p></td>
+<tr class="row-odd"><td><p>Debugger:</p></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>-o0</p></td>
+<tr class="row-even"><td><p>-breakpoints</p></td>
+<td><p>Debugger.BreakpointFile</p></td>
+<td><p>{value}</p></td>
+</tr>
+<tr class="row-odd"><td><p>-watch</p></td>
+<td><p>Debugger.WatchFile</p></td>
+<td><p>{value}</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Unit Testings:</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>-maxerrors</p></td>
+<td><p>UnitTest.MaxErrors</p></td>
+<td><p>{value}</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Optimization Levels:</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>-o0</p></td>
 <td><p>Optimizations.Basic</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o0</p></td>
+<tr class="row-even"><td><p>-o0</p></td>
 <td><p>Optimizations.SSA</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-o0</p></td>
+<tr class="row-odd"><td><p>-o0</p></td>
 <td><p>Optimizations.ValueNumbering</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o0</p></td>
+<tr class="row-even"><td><p>-o0</p></td>
 <td><p>Optimizations.SCCP</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-o0</p></td>
+<tr class="row-odd"><td><p>-o0</p></td>
 <td><p>Optimizations.Devirtualization</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o0</p></td>
+<tr class="row-even"><td><p>-o0</p></td>
 <td><p>Optimizations.LongExpansion</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-o0</p></td>
+<tr class="row-odd"><td><p>-o0</p></td>
 <td><p>Optimizations.Platform</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o0</p></td>
+<tr class="row-even"><td><p>-o0</p></td>
 <td><p>Optimizations.Inline</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-o0</p></td>
+<tr class="row-odd"><td><p>-o0</p></td>
 <td><p>Optimizations.LoopInvariantCodeMotion</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o0</p></td>
+<tr class="row-even"><td><p>-o0</p></td>
 <td><p>Optimizations.BitTracker</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-o0</p></td>
+<tr class="row-odd"><td><p>-o0</p></td>
 <td><p>Optimizations.TwoPass</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o0</p></td>
+<tr class="row-even"><td><p>-o0</p></td>
 <td><p>Optimizations.Inline.Maximum</p></td>
 <td><p>0</p></td>
 </tr>
-<tr class="row-even"><td><p>-o0</p></td>
+<tr class="row-odd"><td><p>-o0</p></td>
 <td><p>Optimizations.Basic.Window</p></td>
 <td><p>1</p></td>
 </tr>
-<tr class="row-odd"><td></td>
+<tr class="row-even"><td></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>-o1</p></td>
+<tr class="row-odd"><td><p>-o1</p></td>
 <td><p>Optimizations.Basic</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o1</p></td>
+<tr class="row-even"><td><p>-o1</p></td>
 <td><p>Optimizations.SSA</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-o1</p></td>
+<tr class="row-odd"><td><p>-o1</p></td>
 <td><p>Optimizations.ValueNumbering</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o1</p></td>
+<tr class="row-even"><td><p>-o1</p></td>
 <td><p>Optimizations.SCCP</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-o1</p></td>
+<tr class="row-odd"><td><p>-o1</p></td>
 <td><p>Optimizations.Devirtualization</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o1</p></td>
+<tr class="row-even"><td><p>-o1</p></td>
 <td><p>Optimizations.LongExpansion</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-o1</p></td>
+<tr class="row-odd"><td><p>-o1</p></td>
 <td><p>Optimizations.Platform</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o1</p></td>
+<tr class="row-even"><td><p>-o1</p></td>
 <td><p>Optimizations.Inline</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-o1</p></td>
+<tr class="row-odd"><td><p>-o1</p></td>
 <td><p>Optimizations.LoopInvariantCodeMotion</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o1</p></td>
+<tr class="row-even"><td><p>-o1</p></td>
 <td><p>Optimizations.BitTracker</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-o1</p></td>
+<tr class="row-odd"><td><p>-o1</p></td>
 <td><p>Optimizations.TwoPass</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o1</p></td>
+<tr class="row-even"><td><p>-o1</p></td>
 <td><p>Optimizations.Inline.Maximum</p></td>
 <td><p>0</p></td>
 </tr>
-<tr class="row-even"><td><p>-o1</p></td>
+<tr class="row-odd"><td><p>-o1</p></td>
 <td><p>Optimizations.Basic.Window</p></td>
 <td><p>1</p></td>
 </tr>
-<tr class="row-odd"><td></td>
+<tr class="row-even"><td></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>-o2</p></td>
+<tr class="row-odd"><td><p>-o2</p></td>
 <td><p>Optimizations.Basic</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o2</p></td>
+<tr class="row-even"><td><p>-o2</p></td>
 <td><p>Optimizations.SSA</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-o2</p></td>
+<tr class="row-odd"><td><p>-o2</p></td>
 <td><p>Optimizations.ValueNumbering</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o2</p></td>
+<tr class="row-even"><td><p>-o2</p></td>
 <td><p>Optimizations.SCCP</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-o2</p></td>
+<tr class="row-odd"><td><p>-o2</p></td>
 <td><p>Optimizations.Devirtualization</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o2</p></td>
+<tr class="row-even"><td><p>-o2</p></td>
 <td><p>Optimizations.LongExpansion</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-o2</p></td>
+<tr class="row-odd"><td><p>-o2</p></td>
 <td><p>Optimizations.Platform</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o2</p></td>
+<tr class="row-even"><td><p>-o2</p></td>
 <td><p>Optimizations.Inline</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-o2</p></td>
+<tr class="row-odd"><td><p>-o2</p></td>
 <td><p>Optimizations.LoopInvariantCodeMotion</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o2</p></td>
+<tr class="row-even"><td><p>-o2</p></td>
 <td><p>Optimizations.BitTracker</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-o2</p></td>
+<tr class="row-odd"><td><p>-o2</p></td>
 <td><p>Optimizations.TwoPass</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o2</p></td>
+<tr class="row-even"><td><p>-o2</p></td>
 <td><p>Optimizations.Inline.Maximum</p></td>
 <td><p>0</p></td>
 </tr>
-<tr class="row-even"><td><p>-o2</p></td>
+<tr class="row-odd"><td><p>-o2</p></td>
 <td><p>Optimizations.Basic.Window</p></td>
 <td><p>1</p></td>
 </tr>
-<tr class="row-odd"><td></td>
+<tr class="row-even"><td></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>-o3</p></td>
+<tr class="row-odd"><td><p>-o3</p></td>
 <td><p>Optimizations.Basic</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o3</p></td>
+<tr class="row-even"><td><p>-o3</p></td>
 <td><p>Optimizations.SSA</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-o3</p></td>
+<tr class="row-odd"><td><p>-o3</p></td>
 <td><p>Optimizations.ValueNumbering</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o3</p></td>
+<tr class="row-even"><td><p>-o3</p></td>
 <td><p>Optimizations.SCCP</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-o3</p></td>
+<tr class="row-odd"><td><p>-o3</p></td>
 <td><p>Optimizations.Devirtualization</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o3</p></td>
+<tr class="row-even"><td><p>-o3</p></td>
 <td><p>Optimizations.LongExpansion</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-o3</p></td>
+<tr class="row-odd"><td><p>-o3</p></td>
 <td><p>Optimizations.Platform</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o3</p></td>
+<tr class="row-even"><td><p>-o3</p></td>
 <td><p>Optimizations.Inline</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-o3</p></td>
+<tr class="row-odd"><td><p>-o3</p></td>
 <td><p>Optimizations.LoopInvariantCodeMotion</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o3</p></td>
+<tr class="row-even"><td><p>-o3</p></td>
 <td><p>Optimizations.BitTracker</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-o3</p></td>
+<tr class="row-odd"><td><p>-o3</p></td>
 <td><p>Optimizations.TwoPass</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o3</p></td>
+<tr class="row-even"><td><p>-o3</p></td>
 <td><p>Optimizations.Inline.Maximum</p></td>
 <td><p>0</p></td>
 </tr>
-<tr class="row-even"><td><p>-o3</p></td>
+<tr class="row-odd"><td><p>-o3</p></td>
 <td><p>Optimizations.Basic.Window</p></td>
 <td><p>5</p></td>
 </tr>
-<tr class="row-odd"><td></td>
+<tr class="row-even"><td></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>-o4</p></td>
+<tr class="row-odd"><td><p>-o4</p></td>
 <td><p>Optimizations.Basic</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o4</p></td>
+<tr class="row-even"><td><p>-o4</p></td>
 <td><p>Optimizations.SSA</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-o4</p></td>
+<tr class="row-odd"><td><p>-o4</p></td>
 <td><p>Optimizations.ValueNumbering</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o4</p></td>
+<tr class="row-even"><td><p>-o4</p></td>
 <td><p>Optimizations.SCCP</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-o4</p></td>
+<tr class="row-odd"><td><p>-o4</p></td>
 <td><p>Optimizations.Devirtualization</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o4</p></td>
+<tr class="row-even"><td><p>-o4</p></td>
 <td><p>Optimizations.LongExpansion</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-o4</p></td>
+<tr class="row-odd"><td><p>-o4</p></td>
 <td><p>Optimizations.Platform</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o4</p></td>
+<tr class="row-even"><td><p>-o4</p></td>
 <td><p>Optimizations.Inline</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-o4</p></td>
+<tr class="row-odd"><td><p>-o4</p></td>
 <td><p>Optimizations.LoopInvariantCodeMotion</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o4</p></td>
+<tr class="row-even"><td><p>-o4</p></td>
 <td><p>Optimizations.BitTracker</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-o4</p></td>
+<tr class="row-odd"><td><p>-o4</p></td>
 <td><p>Optimizations.TwoPass</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o4</p></td>
+<tr class="row-even"><td><p>-o4</p></td>
 <td><p>Optimizations.Inline.Maximum</p></td>
 <td><p>0</p></td>
 </tr>
-<tr class="row-even"><td><p>-o4</p></td>
+<tr class="row-odd"><td><p>-o4</p></td>
 <td><p>Optimizations.Basic.Window</p></td>
 <td><p>5</p></td>
 </tr>
-<tr class="row-odd"><td></td>
+<tr class="row-even"><td></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>-o5</p></td>
+<tr class="row-odd"><td><p>-o5</p></td>
 <td><p>Optimizations.Basic</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o5</p></td>
+<tr class="row-even"><td><p>-o5</p></td>
 <td><p>Optimizations.SSA</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-o5</p></td>
+<tr class="row-odd"><td><p>-o5</p></td>
 <td><p>Optimizations.ValueNumbering</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o5</p></td>
+<tr class="row-even"><td><p>-o5</p></td>
 <td><p>Optimizations.SCCP</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-o5</p></td>
+<tr class="row-odd"><td><p>-o5</p></td>
 <td><p>Optimizations.Devirtualization</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o5</p></td>
+<tr class="row-even"><td><p>-o5</p></td>
 <td><p>Optimizations.LongExpansion</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-o5</p></td>
+<tr class="row-odd"><td><p>-o5</p></td>
 <td><p>Optimizations.Platform</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o5</p></td>
+<tr class="row-even"><td><p>-o5</p></td>
 <td><p>Optimizations.Inline</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-o5</p></td>
+<tr class="row-odd"><td><p>-o5</p></td>
 <td><p>Optimizations.LoopInvariantCodeMotion</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o5</p></td>
+<tr class="row-even"><td><p>-o5</p></td>
 <td><p>Optimizations.BitTracker</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-o5</p></td>
+<tr class="row-odd"><td><p>-o5</p></td>
 <td><p>Optimizations.TwoPass</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o5</p></td>
+<tr class="row-even"><td><p>-o5</p></td>
 <td><p>Optimizations.Inline.Maximum</p></td>
 <td><p>0</p></td>
 </tr>
-<tr class="row-even"><td><p>-o5</p></td>
+<tr class="row-odd"><td><p>-o5</p></td>
 <td><p>Optimizations.Basic.Window</p></td>
 <td><p>5</p></td>
 </tr>
-<tr class="row-odd"><td></td>
+<tr class="row-even"><td></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>-o6</p></td>
+<tr class="row-odd"><td><p>-o6</p></td>
 <td><p>Optimizations.Basic</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o6</p></td>
+<tr class="row-even"><td><p>-o6</p></td>
 <td><p>Optimizations.SSA</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-o6</p></td>
+<tr class="row-odd"><td><p>-o6</p></td>
 <td><p>Optimizations.ValueNumbering</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o6</p></td>
+<tr class="row-even"><td><p>-o6</p></td>
 <td><p>Optimizations.SCCP</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-o6</p></td>
+<tr class="row-odd"><td><p>-o6</p></td>
 <td><p>Optimizations.Devirtualization</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o6</p></td>
+<tr class="row-even"><td><p>-o6</p></td>
 <td><p>Optimizations.LongExpansion</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-o6</p></td>
+<tr class="row-odd"><td><p>-o6</p></td>
 <td><p>Optimizations.Platform</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o6</p></td>
+<tr class="row-even"><td><p>-o6</p></td>
 <td><p>Optimizations.Inline</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-o6</p></td>
+<tr class="row-odd"><td><p>-o6</p></td>
 <td><p>Optimizations.LoopInvariantCodeMotion</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o6</p></td>
+<tr class="row-even"><td><p>-o6</p></td>
 <td><p>Optimizations.BitTracker</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-o6</p></td>
+<tr class="row-odd"><td><p>-o6</p></td>
 <td><p>Optimizations.TwoPass</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o6</p></td>
+<tr class="row-even"><td><p>-o6</p></td>
 <td><p>Optimizations.Inline.Maximum</p></td>
 <td><p>5</p></td>
 </tr>
-<tr class="row-even"><td><p>-o6</p></td>
+<tr class="row-odd"><td><p>-o6</p></td>
 <td><p>Optimizations.Basic.Window</p></td>
 <td><p>5</p></td>
 </tr>
-<tr class="row-odd"><td></td>
+<tr class="row-even"><td></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>-o7</p></td>
+<tr class="row-odd"><td><p>-o7</p></td>
 <td><p>Optimizations.Basic</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o7</p></td>
+<tr class="row-even"><td><p>-o7</p></td>
 <td><p>Optimizations.SSA</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-o7</p></td>
+<tr class="row-odd"><td><p>-o7</p></td>
 <td><p>Optimizations.ValueNumbering</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o7</p></td>
+<tr class="row-even"><td><p>-o7</p></td>
 <td><p>Optimizations.SCCP</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-o7</p></td>
+<tr class="row-odd"><td><p>-o7</p></td>
 <td><p>Optimizations.Devirtualization</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o7</p></td>
+<tr class="row-even"><td><p>-o7</p></td>
 <td><p>Optimizations.LongExpansion</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-o7</p></td>
+<tr class="row-odd"><td><p>-o7</p></td>
 <td><p>Optimizations.Platform</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o7</p></td>
+<tr class="row-even"><td><p>-o7</p></td>
 <td><p>Optimizations.Inline</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-o7</p></td>
+<tr class="row-odd"><td><p>-o7</p></td>
 <td><p>Optimizations.LoopInvariantCodeMotion</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o7</p></td>
+<tr class="row-even"><td><p>-o7</p></td>
 <td><p>Optimizations.BitTracker</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-o7</p></td>
+<tr class="row-odd"><td><p>-o7</p></td>
 <td><p>Optimizations.TwoPass</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o7</p></td>
+<tr class="row-even"><td><p>-o7</p></td>
 <td><p>Optimizations.Inline.Maximum</p></td>
 <td><p>10</p></td>
 </tr>
-<tr class="row-even"><td><p>-o7</p></td>
+<tr class="row-odd"><td><p>-o7</p></td>
 <td><p>Optimizations.Basic.Window</p></td>
 <td><p>5</p></td>
 </tr>
-<tr class="row-odd"><td></td>
+<tr class="row-even"><td></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>-o8</p></td>
+<tr class="row-odd"><td><p>-o8</p></td>
 <td><p>Optimizations.Basic</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o8</p></td>
+<tr class="row-even"><td><p>-o8</p></td>
 <td><p>Optimizations.SSA</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-o8</p></td>
+<tr class="row-odd"><td><p>-o8</p></td>
 <td><p>Optimizations.ValueNumbering</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o8</p></td>
+<tr class="row-even"><td><p>-o8</p></td>
 <td><p>Optimizations.SCCP</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-o8</p></td>
+<tr class="row-odd"><td><p>-o8</p></td>
 <td><p>Optimizations.Devirtualization</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o8</p></td>
+<tr class="row-even"><td><p>-o8</p></td>
 <td><p>Optimizations.LongExpansion</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-o8</p></td>
+<tr class="row-odd"><td><p>-o8</p></td>
 <td><p>Optimizations.Platform</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o8</p></td>
+<tr class="row-even"><td><p>-o8</p></td>
 <td><p>Optimizations.Inline</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-o8</p></td>
+<tr class="row-odd"><td><p>-o8</p></td>
 <td><p>Optimizations.LoopInvariantCodeMotion</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o8</p></td>
+<tr class="row-even"><td><p>-o8</p></td>
 <td><p>Optimizations.BitTracker</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-o8</p></td>
+<tr class="row-odd"><td><p>-o8</p></td>
 <td><p>Optimizations.TwoPass</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o8</p></td>
+<tr class="row-even"><td><p>-o8</p></td>
 <td><p>Optimizations.Inline.Maximum</p></td>
 <td><p>10</p></td>
 </tr>
-<tr class="row-even"><td><p>-o8</p></td>
+<tr class="row-odd"><td><p>-o8</p></td>
 <td><p>Optimizations.Basic.Window</p></td>
 <td><p>5</p></td>
 </tr>
-<tr class="row-odd"><td></td>
+<tr class="row-even"><td></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>-o9</p></td>
+<tr class="row-odd"><td><p>-o9</p></td>
 <td><p>Optimizations.Basic</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o9</p></td>
+<tr class="row-even"><td><p>-o9</p></td>
 <td><p>Optimizations.SSA</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-o9</p></td>
+<tr class="row-odd"><td><p>-o9</p></td>
 <td><p>Optimizations.ValueNumbering</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o9</p></td>
+<tr class="row-even"><td><p>-o9</p></td>
 <td><p>Optimizations.SCCP</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-o9</p></td>
+<tr class="row-odd"><td><p>-o9</p></td>
 <td><p>Optimizations.Devirtualization</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o9</p></td>
+<tr class="row-even"><td><p>-o9</p></td>
 <td><p>Optimizations.LongExpansion</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-o9</p></td>
+<tr class="row-odd"><td><p>-o9</p></td>
 <td><p>Optimizations.Platform</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o9</p></td>
+<tr class="row-even"><td><p>-o9</p></td>
 <td><p>Optimizations.Inline</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-o9</p></td>
+<tr class="row-odd"><td><p>-o9</p></td>
 <td><p>Optimizations.LoopInvariantCodeMotion</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o9</p></td>
+<tr class="row-even"><td><p>-o9</p></td>
 <td><p>Optimizations.BitTracker</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-o9</p></td>
+<tr class="row-odd"><td><p>-o9</p></td>
 <td><p>Optimizations.TwoPass</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o9</p></td>
+<tr class="row-even"><td><p>-o9</p></td>
 <td><p>Optimizations.Inline.Maximum</p></td>
 <td><p>15</p></td>
 </tr>
-<tr class="row-even"><td><p>-o9</p></td>
+<tr class="row-odd"><td><p>-o9</p></td>
 <td><p>Optimizations.Basic.Window</p></td>
 <td><p>10</p></td>
 </tr>
-<tr class="row-odd"><td></td>
+<tr class="row-even"><td></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>-oNone</p></td>
+<tr class="row-odd"><td><p>-oNone</p></td>
 <td><p>Optimizations.Basic</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-oNone</p></td>
+<tr class="row-even"><td><p>-oNone</p></td>
 <td><p>Optimizations.SSA</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-oNone</p></td>
+<tr class="row-odd"><td><p>-oNone</p></td>
 <td><p>Optimizations.ValueNumbering</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-oNone</p></td>
+<tr class="row-even"><td><p>-oNone</p></td>
 <td><p>Optimizations.SCCP</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-oNone</p></td>
+<tr class="row-odd"><td><p>-oNone</p></td>
 <td><p>Optimizations.Devirtualization</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-oNone</p></td>
+<tr class="row-even"><td><p>-oNone</p></td>
 <td><p>Optimizations.LongExpansion</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-oNone</p></td>
+<tr class="row-odd"><td><p>-oNone</p></td>
 <td><p>Optimizations.Platform</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-oNone</p></td>
+<tr class="row-even"><td><p>-oNone</p></td>
 <td><p>Optimizations.Inline</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-oNone</p></td>
+<tr class="row-odd"><td><p>-oNone</p></td>
 <td><p>Optimizations.LoopInvariantCodeMotion</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-oNone</p></td>
+<tr class="row-even"><td><p>-oNone</p></td>
 <td><p>Optimizations.BitTracker</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-oNone</p></td>
+<tr class="row-odd"><td><p>-oNone</p></td>
 <td><p>Optimizations.TwoPass</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-oNone</p></td>
+<tr class="row-even"><td><p>-oNone</p></td>
 <td><p>Optimizations.Inline.Maximum</p></td>
 <td><p>0</p></td>
 </tr>
-<tr class="row-even"><td><p>-oNone</p></td>
+<tr class="row-odd"><td><p>-oNone</p></td>
 <td><p>Optimizations.Basic.Window</p></td>
 <td><p>1</p></td>
 </tr>
-<tr class="row-odd"><td></td>
+<tr class="row-even"><td></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>-oMax</p></td>
+<tr class="row-odd"><td><p>-oMax</p></td>
 <td><p>Optimizations.Basic</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-oMax</p></td>
+<tr class="row-even"><td><p>-oMax</p></td>
 <td><p>Optimizations.SSA</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-oMax</p></td>
+<tr class="row-odd"><td><p>-oMax</p></td>
 <td><p>Optimizations.ValueNumbering</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-oMax</p></td>
+<tr class="row-even"><td><p>-oMax</p></td>
 <td><p>Optimizations.SCCP</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-oMax</p></td>
+<tr class="row-odd"><td><p>-oMax</p></td>
 <td><p>Optimizations.Devirtualization</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-oMax</p></td>
+<tr class="row-even"><td><p>-oMax</p></td>
 <td><p>Optimizations.LongExpansion</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-oMax</p></td>
+<tr class="row-odd"><td><p>-oMax</p></td>
 <td><p>Optimizations.Platform</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-oMax</p></td>
+<tr class="row-even"><td><p>-oMax</p></td>
 <td><p>Optimizations.Inline</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-oMax</p></td>
+<tr class="row-odd"><td><p>-oMax</p></td>
 <td><p>Optimizations.LoopInvariantCodeMotion</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-oMax</p></td>
+<tr class="row-even"><td><p>-oMax</p></td>
 <td><p>Optimizations.BitTracker</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-oMax</p></td>
+<tr class="row-odd"><td><p>-oMax</p></td>
 <td><p>Optimizations.TwoPass</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-oMax</p></td>
+<tr class="row-even"><td><p>-oMax</p></td>
 <td><p>Optimizations.Inline.Maximum</p></td>
 <td><p>15</p></td>
 </tr>
-<tr class="row-even"><td><p>-oMax</p></td>
+<tr class="row-odd"><td><p>-oMax</p></td>
 <td><p>Optimizations.Basic.Window</p></td>
 <td><p>20</p></td>
 </tr>
-<tr class="row-odd"><td></td>
+<tr class="row-even"><td></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>-oSize</p></td>
+<tr class="row-odd"><td><p>-oSize</p></td>
 <td><p>Optimizations.Basic</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-oSize</p></td>
+<tr class="row-even"><td><p>-oSize</p></td>
 <td><p>Optimizations.SSA</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-oSize</p></td>
+<tr class="row-odd"><td><p>-oSize</p></td>
 <td><p>Optimizations.ValueNumbering</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-oSize</p></td>
+<tr class="row-even"><td><p>-oSize</p></td>
 <td><p>Optimizations.SCCP</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-oSize</p></td>
+<tr class="row-odd"><td><p>-oSize</p></td>
 <td><p>Optimizations.Devirtualization</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-oSize</p></td>
+<tr class="row-even"><td><p>-oSize</p></td>
 <td><p>Optimizations.LongExpansion</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-oSize</p></td>
+<tr class="row-odd"><td><p>-oSize</p></td>
 <td><p>Optimizations.Platform</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-oSize</p></td>
+<tr class="row-even"><td><p>-oSize</p></td>
 <td><p>Optimizations.Inline</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-oSize</p></td>
+<tr class="row-odd"><td><p>-oSize</p></td>
 <td><p>Optimizations.LoopInvariantCodeMotion</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-oSize</p></td>
+<tr class="row-even"><td><p>-oSize</p></td>
 <td><p>Optimizations.BitTracker</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-oSize</p></td>
+<tr class="row-odd"><td><p>-oSize</p></td>
 <td><p>Optimizations.TwoPass</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-oSize</p></td>
+<tr class="row-even"><td><p>-oSize</p></td>
 <td><p>Optimizations.Inline.Maximum</p></td>
 <td><p>3</p></td>
 </tr>
-<tr class="row-even"><td><p>-oSize</p></td>
+<tr class="row-odd"><td><p>-oSize</p></td>
 <td><p>Optimizations.Basic.Window</p></td>
 <td><p>10</p></td>
 </tr>
-<tr class="row-odd"><td></td>
+<tr class="row-even"><td></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>-oFast</p></td>
+<tr class="row-odd"><td><p>-oFast</p></td>
 <td><p>Optimizations.Basic</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-oFast</p></td>
+<tr class="row-even"><td><p>-oFast</p></td>
 <td><p>Optimizations.SSA</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-oFast</p></td>
+<tr class="row-odd"><td><p>-oFast</p></td>
 <td><p>Optimizations.ValueNumbering</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-oFast</p></td>
+<tr class="row-even"><td><p>-oFast</p></td>
 <td><p>Optimizations.SCCP</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-oFast</p></td>
+<tr class="row-odd"><td><p>-oFast</p></td>
 <td><p>Optimizations.Devirtualization</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-oFast</p></td>
+<tr class="row-even"><td><p>-oFast</p></td>
 <td><p>Optimizations.LongExpansion</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-oFast</p></td>
+<tr class="row-odd"><td><p>-oFast</p></td>
 <td><p>Optimizations.Platform</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-oFast</p></td>
+<tr class="row-even"><td><p>-oFast</p></td>
 <td><p>Optimizations.Inline</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-oFast</p></td>
+<tr class="row-odd"><td><p>-oFast</p></td>
 <td><p>Optimizations.LoopInvariantCodeMotion</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-oFast</p></td>
+<tr class="row-even"><td><p>-oFast</p></td>
 <td><p>Optimizations.BitTracker</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-oFast</p></td>
+<tr class="row-odd"><td><p>-oFast</p></td>
 <td><p>Optimizations.TwoPass</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-oFast</p></td>
+<tr class="row-even"><td><p>-oFast</p></td>
 <td><p>Optimizations.Inline.Maximum</p></td>
 <td><p>0</p></td>
 </tr>
-<tr class="row-even"><td><p>-oFast</p></td>
+<tr class="row-odd"><td><p>-oFast</p></td>
 <td><p>Optimizations.Basic.Window</p></td>
 <td><p>1</p></td>
 </tr>

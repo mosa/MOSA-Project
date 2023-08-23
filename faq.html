@@ -14,11 +14,11 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -129,29 +129,29 @@
            <div itemprop="articleBody">
              
   <section id="frequently-asked-questions-faqs">
-<h1>Frequently Asked Questions (FAQs)<a class="headerlink" href="#frequently-asked-questions-faqs" title="Permalink to this heading"></a></h1>
+<h1>Frequently Asked Questions (FAQs)<a class="headerlink" href="#frequently-asked-questions-faqs" title="Link to this heading"></a></h1>
 <p>These are questions we’re frequently answering in our Discord server or which come up during conversations.</p>
 <section id="what-does-mosa-stand-for">
-<h2>What does MOSA stand for?<a class="headerlink" href="#what-does-mosa-stand-for" title="Permalink to this heading"></a></h2>
+<h2>What does MOSA stand for?<a class="headerlink" href="#what-does-mosa-stand-for" title="Link to this heading"></a></h2>
 <p>It stands for Managed Operating System Alliance. It was originally an alliance with the SharpOS project to create a .NET based operating system and toolsets. As operating systems share a lot of common groundwork, MOSA aims to standardize interfaces in order to foster portability and to provide both projects with basic implementations of these interfaces.</p>
 </section>
 <section id="who-can-join">
-<h2>Who can join?<a class="headerlink" href="#who-can-join" title="Permalink to this heading"></a></h2>
+<h2>Who can join?<a class="headerlink" href="#who-can-join" title="Link to this heading"></a></h2>
 <p>Anyone who is interested in operating system or .NET development can join. You have to keep in mind our <a class="reference internal" href="license.html"><span class="doc">New BSD License</span></a> for your contributions though.</p>
 </section>
 <section id="what-kind-of-net-runtime-will-be-available">
-<h2>What kind of .NET runtime will be available?<a class="headerlink" href="#what-kind-of-net-runtime-will-be-available" title="Permalink to this heading"></a></h2>
+<h2>What kind of .NET runtime will be available?<a class="headerlink" href="#what-kind-of-net-runtime-will-be-available" title="Link to this heading"></a></h2>
 <p>We are developing an entirely new runtime as part of the MOSA effort. This runtime is developed along the CIL specifications published by ECMA. We are building our own runtime with pluggable algorithms in order to be very flexible and usable for research.</p>
 </section>
 <section id="how-is-the-cosmos-project-different-than-mosa">
-<h2>How is the Cosmos project different than MOSA?<a class="headerlink" href="#how-is-the-cosmos-project-different-than-mosa" title="Permalink to this heading"></a></h2>
+<h2>How is the Cosmos project different than MOSA?<a class="headerlink" href="#how-is-the-cosmos-project-different-than-mosa" title="Link to this heading"></a></h2>
 <p>Cosmos is designed to be an operating system toolkit plugin for Visual Studio. The Cosmos toolkit, once installed, integrates with Visual Studio in two significant ways. First, the toolkit introduces a new Cosmos project type that can launch and control the build process. Second, the toolkit integrates with Visual Studio’s debugger and provides break points and watches. The toolkit requires Microsoft’s implementation of the .NET framework to compile a Cosmos operating system.</p>
-<p>In comparison, MOSA has no dependencies on any Microsoft’s applications including Visual Studio, the .NET framework or Windows operating system. MOSA can run on all the platforms where .NET runs!</p>
+<p>In comparison, MOSA has no dependencies on any of those applications like Visual Studio or Windows. MOSA can run on all the platforms where .NET runs!</p>
 <p>Another important difference is Cosmos compiles to Assembly and uses YASM, to finally compile to binary code. MOSA compiles directly to binary code and has its own linker implementation.</p>
 </section>
 <section id="are-cosmos-and-mosa-working-together">
-<h2>Are Cosmos and MOSA working together?<a class="headerlink" href="#are-cosmos-and-mosa-working-together" title="Permalink to this heading"></a></h2>
-<p>No, Cosmos and MOSA are seperate and independent projects.</p>
+<h2>Are Cosmos and MOSA working together?<a class="headerlink" href="#are-cosmos-and-mosa-working-together" title="Link to this heading"></a></h2>
+<p>Recently, there have been talks to integrate the MOSA compiler into Cosmos, thus potentially being able to implement more features in the MOSA compiler while also providing more stability and performance for Cosmos. While nothing has come out of this yet, you can express your opinion on this in our Discord in #cosmos-integration and in the Cosmos Discord in #mosa-cosmos-crossdev.</p>
 </section>
 </section>
 

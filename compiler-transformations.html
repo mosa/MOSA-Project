@@ -14,11 +14,11 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -131,16 +131,16 @@
            <div itemprop="articleBody">
              
   <section id="compiler-transformations">
-<h1>Compiler Transformations<a class="headerlink" href="#compiler-transformations" title="Permalink to this heading"></a></h1>
+<h1>Compiler Transformations<a class="headerlink" href="#compiler-transformations" title="Link to this heading"></a></h1>
 <p>The MOSA compiler utilitizes a datebase of transformations to represent specific types of optimizations. These transformation are described in json formatted text files to make it easy to add new optimizations to the compiler.</p>
 <p>A special parser program, called <code class="docutils literal notranslate"><span class="pre">Mosa.Utility.SourceCodeGenerator</span></code>, reads the text files and translates them into C# source code files, which are then included and compiled into the MOSA compiler.</p>
 <p>These files are located at <code class="docutils literal notranslate"><span class="pre">Source/Data/IR-Optimization-*.json</span></code>.</p>
 <section id="transformation">
-<h2>Transformation<a class="headerlink" href="#transformation" title="Permalink to this heading"></a></h2>
+<h2>Transformation<a class="headerlink" href="#transformation" title="Link to this heading"></a></h2>
 <p>Each tranformation has three functional parts: <strong>Expression</strong>, <strong>Filter</strong>, and <strong>Rule</strong>.</p>
 <p>The <strong>expression</strong> describes the required expression tree necessary in order for the rule to execute. The <strong>filter</strong> describes the specific attributes of operands in the expression tree that must also be satified for the rule to execute. And the <strong>rule</strong> represents the new, replacement expression tree.</p>
 <section id="example-1">
-<h3>Example #1<a class="headerlink" href="#example-1" title="Permalink to this heading"></a></h3>
+<h3>Example #1<a class="headerlink" href="#example-1" title="Link to this heading"></a></h3>
 <p>Here’s an example of a constant folding optimization where an add operation with two constants are translated into a simple move operation.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">{</span>
 <span class="w">        </span><span class="s2">&quot;FamilyName&quot;</span>:<span class="w"> </span><span class="s2">&quot;IR&quot;</span>,
@@ -188,7 +188,7 @@
 </div>
 </section>
 <section id="example-2">
-<h3>Example #2<a class="headerlink" href="#example-2" title="Permalink to this heading"></a></h3>
+<h3>Example #2<a class="headerlink" href="#example-2" title="Link to this heading"></a></h3>
 <p>Here’s an example of a rewrite optimization where three operations are reduce to two:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">{</span>
 <span class="w">        </span><span class="s2">&quot;FamilyName&quot;</span>:<span class="w"> </span><span class="s2">&quot;IR&quot;</span>,
@@ -203,7 +203,7 @@
 </div>
 </section>
 <section id="example-3">
-<h3>Example #3<a class="headerlink" href="#example-3" title="Permalink to this heading"></a></h3>
+<h3>Example #3<a class="headerlink" href="#example-3" title="Link to this heading"></a></h3>
 <p>Here’s an example of a strength reduction optimization where a multiplication operation by a power of two is translated into a cheaper shift operation:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">{</span>
 <span class="w">        </span><span class="s2">&quot;FamilyName&quot;</span>:<span class="w"> </span><span class="s2">&quot;IR&quot;</span>,
@@ -219,7 +219,7 @@
 </section>
 </section>
 <section id="functions">
-<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this heading"></a></h2>
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
 <p>To find the available filter and expression functions, see the methods in the <code class="docutils literal notranslate"><span class="pre">Filter</span> <span class="pre">Methods</span></code> and <code class="docutils literal notranslate"><span class="pre">Expression</span> <span class="pre">Methods</span></code> regions of <code class="docutils literal notranslate"><span class="pre">Source/Mosa.Compiler.Framework/Transform/BaseTransformation.cs</span></code>.</p>
 </section>
 </section>
