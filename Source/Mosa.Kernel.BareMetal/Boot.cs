@@ -41,6 +41,7 @@ public static class Boot
 		Console.ForegroundColor = ConsoleColor.DarkGray;
 		Console.WriteLine(" [Completed]");
 
+		Console.ForegroundColor = ConsoleColor.LightGreen;
 		Console.Write("> Boot options...");
 		BootOptions.Setup();
 		Console.ForegroundColor = ConsoleColor.DarkGray;

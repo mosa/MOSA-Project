@@ -4,7 +4,7 @@ Command Line Arguments
 
 The command line arguments serve as shortcuts to the common set of :doc:`settings-options` used by the MOSA tools.
 
-.. tip:: Specific settings may also be specified on the command line using the ``-setting`` argument (or using the shorthand version ``-s`` ). For example to set the ``Compiler.OutputFile`` setting with ``Mosa.Demo.HelloWorld.x86.bin``, pass the following two arguments ``-setting Compiler.OutputFile=Mosa.Demo.HelloWorld.x86.bin`` on the command line.
+.. tip:: Specific settings may also be specified on the command line using the ``-setting`` argument (or using the shorthand version ``-s`` ). For example to set the ``Compiler.OutputFile`` setting with ``Mosa.BareMetal.HelloWorld.x86.bin``, pass the following two arguments ``-setting Compiler.OutputFile=Mosa.BareMetal.HelloWorld.x86.bin`` on the command line.
 
 Below are the command line arguments available:
 
@@ -145,7 +145,6 @@ Below are the command line arguments available:
     -video,Multiboot.Video,true
     -video-width,Multiboot.Video.Width,{value}
     -video-height,Multiboot.Video.Height,{value}
-    -video-depth,Multiboot.Video.Depth,{value}
 
     Launcher - GDB:
     -launch-debugger,Launcher.GDB,true
@@ -167,7 +166,7 @@ Below are the command line arguments available:
     -watch,Debugger.WatchFile,{value}
 
 	Unit Testings:
-	-unittest-maxerrors,UnitTest.MaxErrors,{value}
+	-maxerrors,UnitTest.MaxErrors,{value}
 
     Optimization Levels:
     -o0,Optimizations.Basic,false

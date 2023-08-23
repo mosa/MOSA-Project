@@ -23,11 +23,11 @@ How is the Cosmos project different than MOSA?
 
 Cosmos is designed to be an operating system toolkit plugin for Visual Studio. The Cosmos toolkit, once installed, integrates with Visual Studio in two significant ways. First, the toolkit introduces a new Cosmos project type that can launch and control the build process. Second, the toolkit integrates with Visual Studio’s debugger and provides break points and watches. The toolkit requires Microsoft’s implementation of the .NET framework to compile a Cosmos operating system.
 
-In comparison, MOSA has no dependencies on any Microsoft’s applications including Visual Studio, the .NET framework or Windows operating system. MOSA can run on all the platforms where .NET runs!
+In comparison, MOSA has no dependencies on any of those applications like Visual Studio or Windows. MOSA can run on all the platforms where .NET runs!
 
 Another important difference is Cosmos compiles to Assembly and uses YASM, to finally compile to binary code. MOSA compiles directly to binary code and has its own linker implementation.
 
 Are Cosmos and MOSA working together?
 -------------------------------------
 
-No, Cosmos and MOSA are seperate and independent projects. 
+Recently, there have been talks to integrate the MOSA compiler into Cosmos, thus potentially being able to implement more features in the MOSA compiler while also providing more stability and performance for Cosmos. While nothing has come out of this yet, you can express your opinion on this in our Discord in #cosmos-integration and in the Cosmos Discord in #mosa-cosmos-crossdev.

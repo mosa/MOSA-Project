@@ -3,7 +3,6 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using Mosa.Compiler.Common.Configuration;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.MosaTypeSystem.CLR;
@@ -33,7 +32,7 @@ internal static class Program
 		};
 
 		mosaSettings.AddSearchPath(AppContext.BaseDirectory);
-		mosaSettings.AddSourceFile(Path.Combine(AppContext.BaseDirectory, "Mosa.UnitTests.x86.dll"));
+		mosaSettings.AddSourceFile(Path.Combine(AppContext.BaseDirectory, "Mosa.UnitTests.BareMetal.x86.dll"));
 		mosaSettings.AddSourceFile(Path.Combine(AppContext.BaseDirectory, "Mosa.Plug.Korlib.dll"));
 		mosaSettings.AddSourceFile(Path.Combine(AppContext.BaseDirectory, "Mosa.Plug.Korlib.x86.dll"));
 

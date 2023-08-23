@@ -33,7 +33,7 @@ internal static class Program
 	{
 		PlatformRegistry.Add(new Platform.x86.Architecture());
 		PlatformRegistry.Add(new Platform.x64.Architecture());
-
-		//PlatformRegistry.Add(new Platform.ARM32.Architecture());
+		PlatformRegistry.Add(new Platform.ARM32.Architecture());
+		//PlatformRegistry.Add(new Platform.ARM64.Architecture());
 	}
 }

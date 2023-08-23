@@ -189,9 +189,7 @@ public static class CommandLineArguments
 
 			// Unit Test:
 			new Argument { Name = "-filter", Setting = Name.UnitTest_Filter, Value= null},
-			new Argument { Name = "-unittest-maxerrors", Setting = Name.UnitTest_MaxErrors},
-			//new Argument { Name = "-unittest-baremetal", Setting = Name.UnitTest_BareMetal, Value= "true"},
-			//new Argument { Name = "-baremetal", Setting = Name.UnitTest_BareMetal, Value= "true"},
+			new Argument { Name = "-maxerrors", Setting = Name.UnitTest_MaxErrors},
 
 			// Optimization Levels:
 			new Argument { Name = "-o0", Setting = Name.Optimizations_Basic, Value= "false"},
