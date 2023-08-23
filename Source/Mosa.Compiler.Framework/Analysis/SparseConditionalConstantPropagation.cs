@@ -1010,7 +1010,7 @@ public sealed class SparseConditionalConstantPropagation
 		if (instruction == IRInstruction.SignExtend8x32)
 		{
 			var value = (byte)operand1;
-			result = (value & 0x80) == 0 ? value : value | 0xFFFFFF00;
+			result = (value & 0x80) == 0 ? value : (byte)value | 0xFFFFFF00;
 			return true;
 		}
 		else if (instruction == IRInstruction.SignExtend16x32)

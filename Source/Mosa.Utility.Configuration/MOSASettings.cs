@@ -14,9 +14,9 @@ public class MosaSettings
 	{
 		public const string MultibootVersion = "v2";
 
-		public const int MaxErrors = 1000;
+		public const int MaxErrors = 20;
 		public const int ConnectionTimeOut = 15000; // in milliseconds
-		public const int TimeOut = 10000; // in milliseconds
+		public const int TimeOut = 5000; // in milliseconds
 		public const int MaxAttempts = 20;
 		public const int Port = 11110;
 		public const int EmulatorMaxRuntime = 20; // in seconds
@@ -559,12 +559,6 @@ public class MosaSettings
 	{
 		get => Settings.GetValue(Name.CompilerDebug_Statistics, true);
 		set => Settings.SetValue(Name.CompilerDebug_Statistics, value);
-	}
-
-	public bool EmitInline
-	{
-		get => Settings.GetValue(Name.Compiler_EmitInline, false);
-		set => Settings.SetValue(Name.Compiler_EmitInline, value);
 	}
 
 	public bool EmitSumbols

@@ -18,7 +18,6 @@ Compiler Settings
     Compiler.Multithreading,"If true, enables multithreading during compiling process"
     Compiler.Multithreading.MaxThreads,Maximum number of threads used by the compiler
     Compiler.Binary,"If true, emits object file, otherwise no object file is created"
-    Compiler.EmitInline,"If true, emits all inlined methods into the object file"
     Compiler.OutputFile,Filename of the object file
     Compiler.SourceFiles,Filename(s) of the source files
 
