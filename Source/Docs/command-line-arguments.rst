@@ -4,7 +4,7 @@ Command Line Arguments
 
 The command line arguments serve as shortcuts to the common set of :doc:`settings-options` used by the MOSA tools.
 
-.. tip:: Specific settings may also be specified on the command line using the ``-setting`` argument (or using the shorthand version ``-s`` ). For example to set the ``Compiler.OutputFile`` setting with ``Mosa.BareMetal.HelloWorld.x86.bin``, pass the following two arguments ``-setting Compiler.OutputFile=Mosa.BareMetal.HelloWorld.x86.bin`` on the command line.
+.. tip:: Specific settings may also be specified on the command line using the ``-setting`` argument (or using the shorthand version ``-s`` ). For example to set the ``Compiler.OutputFile`` setting with ``Mosa.HelloWorld.x86.bin``, pass the following two arguments ``-setting Compiler.OutputFile=Mosa.HelloWorld.x86.bin`` on the command line.
 
 Below are the command line arguments available:
 

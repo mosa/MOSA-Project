@@ -23,10 +23,11 @@ public static class Boot
 			Debug.WriteLine("CheckedTests::AddU8U8() -> Fail");
 		}
 
+		Debug.WriteLine("##PASS##");
+
 		while (true)
 		{
 		}
-		//Program.EntryPoint();
 	}
 
 	public static void Include()
