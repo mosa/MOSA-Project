@@ -396,7 +396,7 @@ public class UnitTestEngine : IDisposable
 		if (!Process.HasExited)
 		{
 			Process.Kill();
-			Process.WaitForExit(8000); // wait for up to 10 seconds
+			Process.WaitForExit(8000); // wait for up to 8 seconds
 			Thread.Sleep(250);
 		}
 
