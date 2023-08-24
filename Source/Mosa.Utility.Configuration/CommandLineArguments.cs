@@ -183,6 +183,7 @@ public static class CommandLineArguments
 			// Advance:
 			new Argument { Name = "-plug-korlib", Setting = Name.Launcher_PlugKorlib, Value= "true"},
 			new Argument { Name = "-test", Setting = Name.Launcher_Test, Value= "true"},
+			new Argument { Name = "-test", Setting = Name.OS_BootOptions, Value="bootoptions=serialdebug"},
 
 			// Debugger:
 			new Argument { Name = "-breakpoints", Setting = Name.Debugger_BreakpointFile},
