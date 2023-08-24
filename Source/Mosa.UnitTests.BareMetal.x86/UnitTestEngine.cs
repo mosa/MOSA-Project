@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Diagnostics.CodeAnalysis;
 using Mosa.Kernel.BareMetal;
 using Mosa.Runtime;
 using Mosa.Runtime.x86;
@@ -245,7 +244,7 @@ public static class UnitTestEngine
 		}
 
 		TestID = QueueCurrent.Load32(4);
-		TestMethodAddress = QueueCurrent.LoadPointer(8);    // fix for 64bit
+		TestMethodAddress = QueueCurrent.LoadPointer(8);    // FUTURE: fix for 64bit
 		TestResultType = QueueCurrent.Load8(12);
 		TestParameterCount = QueueCurrent.Load8(16);
 
