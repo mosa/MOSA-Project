@@ -157,6 +157,8 @@ Below are the command line arguments available:
 
     Launcher - Advance:
     -plug-korlib,Launcher.PlugKorlib,true
+	-test,OS.BootOptions,bootoptions=serialdebug
+	-test,Launcher.Test,true
 
     Operating System:
     -osname,OS.Name,{value}
