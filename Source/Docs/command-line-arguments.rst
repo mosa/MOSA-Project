@@ -109,6 +109,7 @@ Below are the command line arguments available:
     -gdb,Emulator.GDB,true
 	-timeout,Emulator.MaxRuntime,{value}
 	-debug,Launcher.Serial,true
+	-debug,OS.BootOptions,bootoptions=serialdebug
 
     Launcher - Emulator - Qemu & VMWare:
     -vmware-svga,Emulator.SVGA,vmware

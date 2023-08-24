@@ -169,6 +169,7 @@ public static class CommandLineArguments
 			new Argument { Name = "-output-serial-connection", Setting = Name.Launcher_Serial},
 			new Argument { Name = "-output-serial-file", Setting = Name.Launcher_Serial_File},
 			new Argument { Name = "-debug", Setting = Name.Launcher_Serial, Value="true"},
+			new Argument { Name = "-debug", Setting = Name.OS_BootOptions, Value="bootoptions=serialdebug"},
 
 			new Argument { Name = "-timeout", Setting = Name.Emulator_MaxRuntime},
 
