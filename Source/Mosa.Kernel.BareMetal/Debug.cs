@@ -17,7 +17,7 @@ public static class Debug
 
 	public static void Setup(bool enable = false)
 	{
-		IsEnabled = BootOptions.GetValue("serialdebug") != null;
+		IsEnabled = BootOptions.Contains("serialdebug");
 
 		WriteLine("[Serial Debug]");
 	}

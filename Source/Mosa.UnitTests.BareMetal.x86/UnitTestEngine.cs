@@ -12,7 +12,6 @@ public static class UnitTestEngine
 	private const byte MaxBuffer = 255;
 	private const uint MaxParameters = 8; // max 32-bit parameters
 	private const uint QueueSize = 0x00100000;
-	private const int HeaderSize = 4 + 1;
 
 	private static Pointer Buffer;
 	private static Pointer Stack;
@@ -83,6 +82,8 @@ public static class UnitTestEngine
 		SendInteger((uint)((i >> 32) & 0xFFFFFFFF));
 	}
 
+	private const int HeaderSize = 4 + 1;
+
 	private static void SendResponse(uint id, ulong data)
 	{
 		SendInteger(id);
@@ -91,7 +92,8 @@ public static class UnitTestEngine
 
 	public static void Process()
 	{
-		if (!Enabled) return;
+		if (!Enabled)
+			return;
 
 		if (!ReadySent)
 		{
@@ -100,13 +102,22 @@ public static class UnitTestEngine
 		}
 
 		ProcessQueue();
-		for (var i = 0; i < 75; i++) while (ProcessSerial()) { }
-		ProcessQueue();
+
+		for (var x = 0; x < 5; x++)
+		{
+			for (var i = 0; i < 75; i++)
+			{
+				while (ProcessSerial()) ;
+			}
+
+			ProcessQueue();
+		}
 	}
 
 	private static bool ProcessSerial()
 	{
-		if (!Serial.IsDataReady(ComPort)) return false;
+		if (!Serial.IsDataReady(ComPort))
+			return false;
 
 		var b = Serial.Read(ComPort);
 
@@ -118,14 +129,22 @@ public static class UnitTestEngine
 
 		Buffer.Store8(UsedBuffer++, b);
 
-		if (UsedBuffer < HeaderSize) return true;
+		if (UsedBuffer >= HeaderSize)
+		{
+			var length = Buffer.Load8(4);
 
-		var length = Buffer.Load8(4);
+			if (length > MaxBuffer)
+			{
+				UsedBuffer = 0;
+				return true;
+			}
 
-		if (UsedBuffer != length + HeaderSize) return true;
-
-		QueueUnitTest();
-		UsedBuffer = 0;
+			if (UsedBuffer == length + HeaderSize)
+			{
+				QueueUnitTest();
+				UsedBuffer = 0;
+			}
+		}
 
 		return true;
 	}
@@ -141,38 +160,39 @@ public static class UnitTestEngine
 		QueueUnitTest(id, start, end);
 	}
 
-	[DoesNotReturn]
 	public static void EnterTestReadyLoop()
 	{
 		var stackPointer = new Pointer(Native.AllocateStackSpace(MaxParameters * 4));
 
-		for (; ; )
+		while (true)
 		{
-			if (!Ready) continue;
-
-			TestResult = 0;
-			ResultReported = false;
-			Ready = false;
-
-			for (var index = 0; index < TestParameterCount; index++)
+			if (Ready)
 			{
-				var value = Stack.Load32(index * 4);
-				stackPointer.Store32(index * 4, value);
+				TestResult = 0;
+				ResultReported = false;
+				Ready = false;
+
+				for (var index = 0; index < TestParameterCount; index++)
+				{
+					var value = Stack.Load32(index * 4);
+					stackPointer.Store32(index * 4, value);
+				}
+
+				switch (TestResultType)
+				{
+					case 0: Native.FrameCall(TestMethodAddress.ToUInt32()); break;
+					case 1: TestResult = Native.FrameCallRetU4(TestMethodAddress.ToUInt32()); break;
+					case 2: TestResult = Native.FrameCallRetU8(TestMethodAddress.ToUInt32()); break;
+					case 3: TestResult = Native.FrameCallRetR8(TestMethodAddress.ToUInt32()); break;
+					default: break;
+				}
+
+				SendResponse(TestID, TestResult);
+
+				ResultReported = true;
+
+				Native.Int(255);
 			}
-
-			switch (TestResultType)
-			{
-				case 0: Native.FrameCall(TestMethodAddress.ToUInt32()); break;
-				case 1: TestResult = Native.FrameCallRetU4(TestMethodAddress.ToUInt32()); break;
-				case 2: TestResult = Native.FrameCallRetU8(TestMethodAddress.ToUInt32()); break;
-				case 3: TestResult = Native.FrameCallRetR8(TestMethodAddress.ToUInt32()); break;
-			}
-
-			SendResponse(TestID, TestResult);
-
-			ResultReported = true;
-
-			Native.Int(255);
 		}
 	}
 
@@ -182,7 +202,8 @@ public static class UnitTestEngine
 
 		if (QueueNext + len + 32 > Queue + QueueSize)
 		{
-			if (Queue + len + 32 >= QueueCurrent) return; // no space
+			if (Queue + len + 32 >= QueueCurrent)
+				return;
 
 			// mark jump to front
 			QueueNext.Store32(uint.MaxValue);
@@ -204,18 +225,24 @@ public static class UnitTestEngine
 			QueueNext += 4;
 		}
 
-		QueueNext.Store32(0); // mark end
+		// mark end
+		QueueNext.Store32(0);
 	}
 
 	private static void ProcessQueue()
 	{
-		if (QueueNext == QueueCurrent) return;
+		if (QueueNext == QueueCurrent)
+			return;
 
-		if (!(ResultReported && !Ready)) return;
+		if (!(ResultReported && !Ready))
+			return;
 
 		var marker = QueueCurrent.Load32();
 
-		if (marker == uint.MaxValue) QueueCurrent = Queue;
+		if (marker == uint.MaxValue)
+		{
+			QueueCurrent = Queue;
+		}
 
 		TestID = QueueCurrent.Load32(4);
 		TestMethodAddress = QueueCurrent.LoadPointer(8);    // fix for 64bit
