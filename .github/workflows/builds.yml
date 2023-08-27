@@ -60,8 +60,6 @@ jobs:
         run: nuget pack Source\Mosa.Packages\Mosa.Runtime.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}
       - name: Create Package - Mosa.Platform.x86
         run: nuget pack Source\Mosa.Packages\Mosa.Platform.x86.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}
-      - name: Create Package - Mosa.Kernel.x86
-        run: nuget pack Source\Mosa.Packages\Mosa.Kernel.x86.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}
       - name: Create Package - Mosa.Platform.x64
         run: nuget pack Source\Mosa.Packages\Mosa.Platform.x64.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}
       - name: Store Nuget Packages Artifact

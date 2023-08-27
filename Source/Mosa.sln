@@ -71,7 +71,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Packages", "Packages", "{52646152-3847-437E-9CCC-55DE500A5D6F}"
 	ProjectSection(SolutionItems) = preProject
 		Mosa.Packages\Mosa.DeviceSystem.nuspec = Mosa.Packages\Mosa.DeviceSystem.nuspec
-		Mosa.Packages\Mosa.Kernel.x86.nuspec = Mosa.Packages\Mosa.Kernel.x86.nuspec
 		Mosa.Packages\Mosa.Korlib.nuspec = Mosa.Packages\Mosa.Korlib.nuspec
 		Mosa.Packages\Mosa.Platform.x64.nuspec = Mosa.Packages\Mosa.Platform.x64.nuspec
 		Mosa.Packages\Mosa.Platform.x86.nuspec = Mosa.Packages\Mosa.Platform.x86.nuspec
