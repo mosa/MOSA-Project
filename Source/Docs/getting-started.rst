@@ -58,10 +58,10 @@ You can then create a new project based on one of the templates you've just inst
 
 .. code-block:: bash
 
-   dotnet new mosastrx86 -o MyMosaKernel
+   dotnet new mosakrnl -o MyMosaKernel
    cd MyMosaKernel
 
-.. tip:: ``mosastrx86`` is a template for a 32-bit x86 kernel. It is currently the only template, although more are to come in the future.
+.. tip:: ``mosakrnl`` is a template for a cross-architecture kernel.
 
 You may now want to build your newly created kernel using the following command:
 

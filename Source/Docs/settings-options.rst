@@ -179,6 +179,7 @@ Multiboot Settings
     Multiboot.Video,"If true, enable the framebuffer provided by Multiboot"
     Multiboot.Video.Width,Video Width
     Multiboot.Video.Height,Video Height
+	Multiboot.InitialStackAddress,Initial Stack Address
 
 Debugger Settings
 -----------------

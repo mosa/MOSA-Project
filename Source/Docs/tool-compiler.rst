@@ -11,18 +11,18 @@ The compiler is invoked via Command Line:
 
 .. code-block:: console
 
-	Mosa.Tool.Compiler -o Mosa.Demo.HelloWorld.x86.bin Mosa.Demo.HelloWorld.x86.dll
+	Mosa.Tool.Compiler -o Mosa.BareMetal.HelloWorld.x86.bin Mosa.BareMetal.HelloWorld.x86.dll
 
 Output:
 
 .. code-block:: console
 
-	MOSA Compiler, Version 2.0.0.0.
-	Copyright 2020 by the MOSA Project. Licensed under the New BSD License.
+	MOSA Compiler, Version 2.4.0.0.
+	Copyright 2023 by the MOSA Project. Licensed under the New BSD License.
 
 	Parsing options...
-	 > Output file: Mosa.Demo.HelloWorld.x86.bin
-	 > Input file(s): Mosa.Demo.HelloWorld.x86.dll
+	 > Output file: Mosa.BareMetal.HelloWorld.x86.bin
+	 > Input file(s): Mosa.BareMetal.HelloWorld.x86.dll
 	 > Platform: x86
 
 	Compiling ...
