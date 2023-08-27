@@ -306,7 +306,7 @@ jobs:
         with:
           name: windows-build-artifact
           path: bin
-      - name: Demo Test - BareMetal CoolWorld
+      - name: Demo Test - BareMetal HelloWorld
         run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.BareMetal.HelloWorld.x86.dll -o${{ matrix.optimization }} -check -test
       - name: Demo Test - BareMetal GraphicalWorld
         run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.BareMetal.GraphicalWorld.x86.dll -o${{ matrix.optimization }} -check -test -vmware-svga -include bin\Include
@@ -338,7 +338,7 @@ jobs:
         run: sudo apt-get -y -o Acquire::Check-Valid-Until=false update
       - name: Install Qemu and Dependencies
         run: sudo apt-get -y -o Acquire::Retries=5 install qemu-system-x86
-      - name: Demo Test - BareMetal CoolWorld
+      - name: Demo Test - BareMetal HelloWorld
         run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x86.dll -o${{ matrix.optimization }} -check -test
       - name: Demo Test - BareMetal GraphicalWorld
         run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.GraphicalWorld.x86.dll -o${{ matrix.optimization }} -check -test -vmware-svga -include bin/Include
@@ -368,7 +368,7 @@ jobs:
   #        path: bin
   #    #- name: Install Qemu
   #    #  run: brew install qemu
-  #    - name: Demo Test - BareMetal CoolWorld
+  #    - name: Demo Test - BareMetal HelloWorld
   #      run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x86.dll -o${{ matrix.optimization }} -check -test
   #    - name: Demo Test - BareMetal GraphicalWorld
   #      run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.GraphicalWorld.x86.dll -o${{ matrix.optimization }} -check -test
