@@ -32,7 +32,7 @@ public abstract class BaseMultibootStage : BaseCompilerStage
 	/// <summary>
 	/// This address is the top of the initial kernel stack.
 	/// </summary>
-	private const uint StackAddress = 0x00A00000 - 8;
+	//private const uint StackAddress = 0x00A00000 - 8;
 
 	private struct MultibootV2Constants
 	{
@@ -99,7 +99,7 @@ public abstract class BaseMultibootStage : BaseCompilerStage
 
 	public int Height { get; set; }
 
-	public long InitialStackAddress { get; set; }
+	//public long InitialStackAddress { get; set; }
 
 	#endregion Data Members
 
@@ -110,7 +110,7 @@ public abstract class BaseMultibootStage : BaseCompilerStage
 		Width = MosaSettings.MultibootVideoWidth;
 		Height = MosaSettings.MultibootVideoHeight;
 
-		InitialStackAddress = MosaSettings.Settings.GetValue("Multiboot.InitialStackAddress", StackAddress);
+		//InitialStackAddress = MosaSettings.Settings.GetValue("Multiboot.InitialStackAddress", StackAddress);
 	}
 
 	protected override void Setup()

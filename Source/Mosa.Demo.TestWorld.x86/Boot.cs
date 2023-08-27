@@ -336,7 +336,7 @@ public static class Boot
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static bool Test5()
 	{
-		return Mosa.UnitTests.Basic.ArrayLayoutTests.I8a();
+		return Mosa.UnitTests.Basic.ArrayLayoutTests.I8_4a();
 	}
 
 	public static string str = null!;

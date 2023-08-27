@@ -36,6 +36,7 @@ public class UnitTestEngine : IDisposable
 	private const int MaxSendBatch = 1000;
 	private const int MinSendBatch = 200;
 	private const int ConnectionDelay = 150;
+	private const int MaxConnectionErrors = 20;
 
 	#endregion Constants
 
@@ -52,6 +53,8 @@ public class UnitTestEngine : IDisposable
 	private volatile bool Aborted;
 	private volatile bool Ready;
 	private volatile int Errors;
+	private volatile int ConnectionErrors;
+
 	private volatile int SendOneCount = 0;
 
 	private readonly Queue<UnitTest> Queue = new Queue<UnitTest>();
@@ -524,9 +527,10 @@ public class UnitTestEngine : IDisposable
 
 			if (restart)
 			{
-				IncrementErrorCount();
-
 				KillVirtualMachine();
+
+				ConnectionErrors++;
+				CheckAbort();
 
 				SendOneCount = 5;
 
@@ -602,16 +606,15 @@ public class UnitTestEngine : IDisposable
 
 				OutputStatus($"ERROR: {UnitTestSystem.OutputUnitTestResult(unittest)}");
 
-				IncrementErrorCount();
+				Errors++;
+				CheckAbort();
 			}
 		}
 	}
 
-	private void IncrementErrorCount()
+	private void CheckAbort()
 	{
-		Errors++;
-
-		if (Errors >= MosaSettings.MaxErrors)
+		if (Errors >= MosaSettings.MaxErrors || ConnectionErrors >= MaxConnectionErrors)
 		{
 			Aborted = true;
 		}

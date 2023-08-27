@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Kernel.BareMetal.x86;
+using Mosa.UnitTests.Basic;
 using Mosa.UnitTests.Optimization;
 using Serial = Mosa.Kernel.BareMetal.x86.Serial;
 
@@ -10,6 +11,8 @@ public static class Boot
 {
 	public static void Main()
 	{
+		var result = ArrayLayoutTests.C_4();
+
 		IDT.SetInterruptHandler(ProcessInterrupt);
 
 		UnitTestEngine.Setup(Serial.COM1);

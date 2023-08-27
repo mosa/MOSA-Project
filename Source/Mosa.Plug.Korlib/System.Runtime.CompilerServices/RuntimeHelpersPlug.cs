@@ -34,7 +34,7 @@ internal static class RuntimeHelpersPlug
 
 		var arrayElements = arrayAddress + Pointer.Size;
 		var fieldData = fieldDefinition.FieldData;
-		uint dataLength = fieldDefinition.Size;
+		var dataLength = fieldDefinition.Size;
 
 		Mosa.Runtime.Internal.MemoryCopy(arrayElements, fieldData, dataLength);
 	}
