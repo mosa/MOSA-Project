@@ -109,6 +109,7 @@ Below are the command line arguments available:
     -gdb,Emulator.GDB,true
 	-timeout,Emulator.MaxRuntime,{value}
 	-debug,Launcher.Serial,true
+	-debug,OS.BootOptions,bootoptions=serialdebug
 
     Launcher - Emulator - Qemu & VMWare:
     -vmware-svga,Emulator.SVGA,vmware
@@ -156,6 +157,8 @@ Below are the command line arguments available:
 
     Launcher - Advance:
     -plug-korlib,Launcher.PlugKorlib,true
+	-test,OS.BootOptions,bootoptions=serialdebug
+	-test,Launcher.Test,true
 
     Operating System:
     -osname,OS.Name,{value}
