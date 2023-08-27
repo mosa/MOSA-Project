@@ -84,7 +84,6 @@ public static class Name
 	public const string Linker_ShortSymbolNames = "Linker.ShortSymbolNames";
 	public const string Linker_StaticRelocations = "Linker.StaticRelocations";
 	public const string Linker_Symbols = "Linker.Symbols";
-	public const string Multiboot_InitialStackAddress = "Multiboot.InitialStackAddress";
 	public const string Multiboot_Version = "Multiboot.Version";
 	public const string Multiboot_Video = "Multiboot.Video";
 	public const string Multiboot_Video_Height = "Multiboot.Video.Height";
