@@ -30,9 +30,9 @@ public sealed class MultibootStage : Mosa.Compiler.Framework.Platform.BaseMultib
 		var multibootEAX = Operand.CreateLabel(MultibootEAX, Architecture.Is32BitPlatform);
 		var multibootEBX = Operand.CreateLabel(MultibootEBX, Architecture.Is32BitPlatform);
 
-		var stackTop = CreateConstant(InitialStackAddress);
+		//var stackTop = CreateConstant(InitialStackAddress);
 		var zero = CreateConstant(0);
-		var offset = CreateConstant(8);
+		//var offset = CreateConstant(8);
 
 		var basicBlocks = new BasicBlocks();
 
@@ -41,10 +41,10 @@ public sealed class MultibootStage : Mosa.Compiler.Framework.Platform.BaseMultib
 		var context = new Context(prologueBlock);
 
 		// Setup the stack and place the sentinel on the stack to indicate the start of the stack
-		context.AppendInstruction(X64.Mov64, rsp, stackTop);
-		context.AppendInstruction(X64.Mov64, rbp, stackTop);
-		context.AppendInstruction(X64.MovStore64, null, rsp, zero, zero);
-		context.AppendInstruction(X64.MovStore64, null, rsp, offset, zero);
+		//context.AppendInstruction(X64.Mov64, rsp, stackTop);
+		//context.AppendInstruction(X64.Mov64, rbp, stackTop);
+		//context.AppendInstruction(X64.MovStore64, null, rsp, zero, zero);
+		//context.AppendInstruction(X64.MovStore64, null, rsp, offset, zero);
 
 		// Place the multiboot address into a static field
 		context.AppendInstruction(X64.MovStore64, null, multibootEAX, zero, rax);

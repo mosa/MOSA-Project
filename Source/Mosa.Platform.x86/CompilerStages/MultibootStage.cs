@@ -24,15 +24,15 @@ public sealed class MultibootStage : Mosa.Compiler.Framework.Platform.BaseMultib
 
 		var eax = Operand.CreateCPURegister32(CPURegister.EAX);
 		var ebx = Operand.CreateCPURegister32(CPURegister.EBX);
-		var ebp = Operand.CreateCPURegister32(CPURegister.EBP);
-		var esp = Operand.CreateCPURegister32(CPURegister.ESP);
+		//var ebp = Operand.CreateCPURegister32(CPURegister.EBP);
+		//var esp = Operand.CreateCPURegister32(CPURegister.ESP);
 
 		var multibootEAX = Operand.CreateLabel(MultibootEAX, Architecture.Is32BitPlatform);
 		var multibootEBX = Operand.CreateLabel(MultibootEBX, Architecture.Is32BitPlatform);
 
-		var stackTop = CreateConstant(InitialStackAddress);
+		//var stackTop = CreateConstant(InitialStackAddress);
 		var zero = CreateConstant(0);
-		var offset = CreateConstant(4);
+		//var offset = CreateConstant(4);
 
 		var basicBlocks = new BasicBlocks();
 
@@ -41,10 +41,10 @@ public sealed class MultibootStage : Mosa.Compiler.Framework.Platform.BaseMultib
 		var context = new Context(prologueBlock);
 
 		// Setup the stack and place the sentinel on the stack to indicate the start of the stack
-		context.AppendInstruction(X86.Mov32, esp, stackTop);
-		context.AppendInstruction(X86.Mov32, ebp, stackTop);
-		context.AppendInstruction(X86.MovStore32, null, esp, zero, zero);
-		context.AppendInstruction(X86.MovStore32, null, esp, offset, zero);
+		//context.AppendInstruction(X86.Mov32, esp, stackTop);
+		//context.AppendInstruction(X86.Mov32, ebp, stackTop);
+		//context.AppendInstruction(X86.MovStore32, null, esp, zero, zero);
+		//context.AppendInstruction(X86.MovStore32, null, esp, offset, zero);
 
 		// Place the multiboot address into a static field
 		context.AppendInstruction(X86.MovStore32, null, multibootEAX, zero, eax);

@@ -48,13 +48,13 @@ public class Starter : BaseLauncher
 
 			if (MosaSettings.LauncherTest)
 			{
-				IsSucccessful = StartTest(Process, "##PASS##");
+				IsSucccessful = StartTestMonitor(Process, "##PASS##");
 				return IsSucccessful;
 			}
 
 			if (MosaSettings.LauncherSerial)
 			{
-				IsSucccessful = StartDebug(Process);
+				IsSucccessful = StartSerialMonitor(Process);
 				return IsSucccessful;
 			}
 
@@ -92,7 +92,7 @@ public class Starter : BaseLauncher
 		return IsSucccessful;
 	}
 
-	private bool StartTest(Process process, string successText)
+	private bool StartTestMonitor(Process process, string successText)
 	{
 		var success = false;
 		var kill = false;
@@ -171,7 +171,7 @@ public class Starter : BaseLauncher
 		return success;
 	}
 
-	private bool StartDebug(Process process)
+	private bool StartSerialMonitor(Process process)
 	{
 		var output = new StringBuilder();
 		var success = false;

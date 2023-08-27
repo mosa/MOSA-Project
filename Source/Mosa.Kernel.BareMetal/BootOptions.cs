@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.DeviceSystem;
 using Mosa.Runtime;
 
 namespace Mosa.Kernel.BareMetal;
@@ -36,6 +37,14 @@ public static class BootOptions
 		}
 
 		return result;
+	}
+
+	public static bool Contains(string value)
+	{
+		if (Contains(RuntimeOptions, value))
+			return true;
+
+		return Contains(StaticOptions, value);
 	}
 
 	private static string GetValue(Pointer options, string key)
@@ -100,5 +109,27 @@ public static class BootOptions
 		{
 			return new string((sbyte*)options, start, len);
 		}
+	}
+
+	private static bool Contains(Pointer options, string value)
+	{
+		var valuelen = value.Length;
+
+		var index = 0;
+
+		for (var at = 0; ; at++)
+		{
+			var c = options.Load8(at);
+
+			if (c == 0)
+				break;
+
+			if (c == value[index])
+				index++;
+			else
+				index = 0;
+		}
+
+		return index == valuelen;
 	}
 }

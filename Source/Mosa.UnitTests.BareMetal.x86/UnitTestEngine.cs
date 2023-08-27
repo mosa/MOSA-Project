@@ -1,15 +1,11 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
 using Mosa.Kernel.BareMetal;
 using Mosa.Runtime;
 using Mosa.Runtime.x86;
 
 namespace Mosa.UnitTests.BareMetal.x86;
 
-/// <summary>
-/// Unit Test Engine
-/// </summary>
 public static class UnitTestEngine
 {
 	private const byte MaxBuffer = 255;
@@ -38,18 +34,15 @@ public static class UnitTestEngine
 	private static Pointer QueueNext;
 	private static Pointer QueueCurrent;
 
-	private static uint PendingCount;
-	private static uint TestCount;
-
 	public static void Setup(ushort comPort)
 	{
 		ComPort = comPort;
 
 		Serial.Setup(ComPort);
 
-		Buffer = new Pointer(Address.DebuggerBuffer);
-		Stack = new Pointer(Address.UnitTestStack);
-		Queue = new Pointer(Address.UnitTestQueue);
+		Buffer = PageFrameAllocator.Allocate(16);
+		Stack = PageFrameAllocator.Allocate(1);
+		Queue = PageFrameAllocator.Allocate(512);
 
 		Enabled = true;
 		ReadySent = false;
@@ -64,9 +57,6 @@ public static class UnitTestEngine
 
 		QueueNext = Queue;
 		QueueCurrent = Queue;
-
-		PendingCount = 0;
-		TestCount = 0;
 
 		QueueNext.Store32(0);
 	}
@@ -93,7 +83,7 @@ public static class UnitTestEngine
 
 	private const int HeaderSize = 4 + 1;
 
-	public static void SendResponse(uint id, ulong data)
+	private static void SendResponse(uint id, ulong data)
 	{
 		SendInteger(id);
 		SendInteger(data);
@@ -112,12 +102,15 @@ public static class UnitTestEngine
 
 		ProcessQueue();
 
-		for (var i = 0; i < 75; i++)
+		for (var x = 0; x < 5; x++)
 		{
-			while (ProcessSerial()) ;
-		}
+			for (var i = 0; i < 75; i++)
+			{
+				while (ProcessSerial()) ;
+			}
 
-		ProcessQueue();
+			ProcessQueue();
+		}
 	}
 
 	private static bool ProcessSerial()
@@ -177,9 +170,6 @@ public static class UnitTestEngine
 				TestResult = 0;
 				ResultReported = false;
 				Ready = false;
-				TestCount++;
-
-				DisplayUpdate(true);
 
 				for (var index = 0; index < TestParameterCount; index++)
 				{
@@ -205,16 +195,17 @@ public static class UnitTestEngine
 		}
 	}
 
-	public static bool QueueUnitTest(uint id, Pointer start, Pointer end)
+	private static void QueueUnitTest(uint id, Pointer start, Pointer end)
 	{
 		var len = (uint)start.GetOffset(end);
 
 		if (QueueNext + len + 32 > Queue + QueueSize)
 		{
 			if (Queue + len + 32 >= QueueCurrent)
-				return false; // no space
+				return;
 
-			QueueNext.Store32(uint.MaxValue); // mark jump to front
+			// mark jump to front
+			QueueNext.Store32(uint.MaxValue);
 
 			// cycle to front
 			QueueNext = Queue;
@@ -228,18 +219,16 @@ public static class UnitTestEngine
 
 		for (var i = start; i < end; i += 4)
 		{
-			uint value = i.Load32();
+			var value = i.Load32();
 			QueueNext.Store32(value);
 			QueueNext += 4;
 		}
 
-		QueueNext.Store32(0); // mark end
-		++PendingCount;
-
-		return true;
+		// mark end
+		QueueNext.Store32(0);
 	}
 
-	public static void ProcessQueue()
+	private static void ProcessQueue()
 	{
 		if (QueueNext == QueueCurrent)
 			return;
@@ -255,7 +244,7 @@ public static class UnitTestEngine
 		}
 
 		TestID = QueueCurrent.Load32(4);
-		TestMethodAddress = QueueCurrent.LoadPointer(8);    // fix for 64bit
+		TestMethodAddress = QueueCurrent.LoadPointer(8);    // FUTURE: fix for 64bit
 		TestResultType = QueueCurrent.Load8(12);
 		TestParameterCount = QueueCurrent.Load8(16);
 
@@ -269,32 +258,7 @@ public static class UnitTestEngine
 		var len = QueueCurrent.Load32();
 
 		QueueCurrent = QueueCurrent + len + 4;
-		--PendingCount;
-
-		DisplayUpdate();
 
 		Ready = true;
-	}
-
-	public static void DisplayUpdate(bool test = false)
-	{
-		if (!test)
-		{
-			Console.SetCursorPosition(4, 0);
-			Console.Write("Total  : ");
-			Console.Write(TestCount.ToString("D7"));
-
-			Console.SetCursorPosition(5, 0);
-			Console.Write("Pending: ");
-			Console.Write(PendingCount.ToString("D7"));
-		}
-		else
-		{
-			Console.SetCursorPosition(6, 0);
-			Console.Write("Active : ");
-			Console.Write(TestID.ToString("D7"));
-			Console.Write(" @ ");
-			Console.Write(TestMethodAddress.ToUInt32().ToString("X8"));
-		}
 	}
 }

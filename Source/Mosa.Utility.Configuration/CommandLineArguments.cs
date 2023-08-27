@@ -169,6 +169,7 @@ public static class CommandLineArguments
 			new Argument { Name = "-output-serial-connection", Setting = Name.Launcher_Serial},
 			new Argument { Name = "-output-serial-file", Setting = Name.Launcher_Serial_File},
 			new Argument { Name = "-debug", Setting = Name.Launcher_Serial, Value="true"},
+			new Argument { Name = "-debug", Setting = Name.OS_BootOptions, Value="bootoptions=serialdebug"},
 
 			new Argument { Name = "-timeout", Setting = Name.Emulator_MaxRuntime},
 
@@ -182,6 +183,7 @@ public static class CommandLineArguments
 			// Advance:
 			new Argument { Name = "-plug-korlib", Setting = Name.Launcher_PlugKorlib, Value= "true"},
 			new Argument { Name = "-test", Setting = Name.Launcher_Test, Value= "true"},
+			new Argument { Name = "-test", Setting = Name.OS_BootOptions, Value="bootoptions=serialdebug"},
 
 			// Debugger:
 			new Argument { Name = "-breakpoints", Setting = Name.Debugger_BreakpointFile},

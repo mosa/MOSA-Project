@@ -46,7 +46,7 @@ internal static class Program
 
 		stopwatch.Start();
 
-		MeasureCompileTime(stopwatch, compiler, "Mosa.Kernel.x86.IDT::SetTableEntries");
+		MeasureCompileTime(stopwatch, compiler, "Mosa.UnitTests.Basic.ArrayLayoutTests::C_4");
 
 		compiler.ScheduleAll();
 
