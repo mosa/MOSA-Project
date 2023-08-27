@@ -1,12 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
 		<OutputType>Exe</OutputType>
-		<DebugType>full</DebugType>
+		<TargetFramework>net7.0</TargetFramework>
 		<LangVersion>11.0</LangVersion>
 		<OutputPath>bin</OutputPath>
-		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -17,12 +15,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Mosa.Korlib" Version="*" />
-		<PackageReference Include="Mosa.DeviceSystem" Version="*" />
+		<ProjectReference Include="../Mosa.Starter/Mosa.Starter.csproj" />
 		<PackageReference Include="Mosa.Kernel.x86" Version="*" />
-		<PackageReference Include="Mosa.Platform.x86" Version="*" />
-		<PackageReference Include="Mosa.Runtime" Version="*" />
-		<PackageReference Include="Mosa.Tools.Package" Version="*" />
 	</ItemGroup>
 
 </Project>
