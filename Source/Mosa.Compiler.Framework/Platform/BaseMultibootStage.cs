@@ -26,13 +26,14 @@ public abstract class BaseMultibootStage : BaseCompilerStage
 
 	public const string MultibootEAX = "<$>mosa-multiboot-eax";
 	public const string MultibootEBX = "<$>mosa-multiboot-ebx";
+	public const string MultibootInitialStack = "<$>mosa-multiboot-initial-stack";
 
 	#region Constants
 
 	/// <summary>
-	/// This address is the top of the initial kernel stack.
+	/// This is the size of the initial kernel stack. (8KiB)
 	/// </summary>
-	//private const uint StackAddress = 0x00A00000 - 8;
+	protected const uint StackSize = 0x2000;
 
 	private struct MultibootV2Constants
 	{
@@ -99,8 +100,6 @@ public abstract class BaseMultibootStage : BaseCompilerStage
 
 	public int Height { get; set; }
 
-	//public long InitialStackAddress { get; set; }
-
 	#endregion Data Members
 
 	protected override void Initialization()
@@ -109,8 +108,6 @@ public abstract class BaseMultibootStage : BaseCompilerStage
 		HasVideo = MosaSettings.MultibootVideo;
 		Width = MosaSettings.MultibootVideoWidth;
 		Height = MosaSettings.MultibootVideoHeight;
-
-		//InitialStackAddress = MosaSettings.Settings.GetValue("Multiboot.InitialStackAddress", StackAddress);
 	}
 
 	protected override void Setup()
@@ -119,6 +116,7 @@ public abstract class BaseMultibootStage : BaseCompilerStage
 
 		Linker.DefineSymbol(MultibootEAX, SectionKind.BSS, Architecture.NativeAlignment, Architecture.NativePointerSize);
 		Linker.DefineSymbol(MultibootEBX, SectionKind.BSS, Architecture.NativeAlignment, Architecture.NativePointerSize);
+		Linker.DefineSymbol(MultibootInitialStack, SectionKind.BSS, Architecture.NativeAlignment, StackSize);
 
 		multibootMethod = Compiler.CreateLinkerMethod("MultibootInit");
 		var methodData = Compiler.GetMethodData(multibootMethod);
