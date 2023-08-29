@@ -59,12 +59,11 @@
 <p class="caption" role="heading"><span class="caption-text">Structure</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">MOSA Project Structure</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#mosa-demo-and-mosa-baremetal">Mosa.Demo.* and Mosa.BareMetal.*</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mosa-baremetal">Mosa.BareMetal.*</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#mosa-compiler">Mosa.Compiler.*</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#mosa-devicedriver">Mosa.DeviceDriver</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#mosa-devicesystem">Mosa.DeviceSystem</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#mosa-filesystem">Mosa.FileSystem</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#mosa-kernel">Mosa.Kernel.*</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#mosa-kernel-baremetal">Mosa.Kernel.BareMetal</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id1">Mosa.Kernel.BareMetal.*</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#mosa-korlib">Mosa.Korlib</a></li>
@@ -145,9 +144,9 @@
   <section id="mosa-project-structure">
 <h1>MOSA Project Structure<a class="headerlink" href="#mosa-project-structure" title="Link to this heading"></a></h1>
 <p>MOSA has a lot of projects, which can seem daunting at first. This page will exclusively cover all the types of projects that MOSA has, and explain what they are for.</p>
-<section id="mosa-demo-and-mosa-baremetal">
-<h2>Mosa.Demo.* and Mosa.BareMetal.*<a class="headerlink" href="#mosa-demo-and-mosa-baremetal" title="Link to this heading"></a></h2>
-<p>Those are demo projects, for <strong>Mosa.Kernel</strong>.* and <strong>Mosa.Kernel.BareMetal</strong>.* projects respectively.</p>
+<section id="mosa-baremetal">
+<h2>Mosa.BareMetal.*<a class="headerlink" href="#mosa-baremetal" title="Link to this heading"></a></h2>
+<p>Those are the demo projects using the <strong>Mosa.Kernel.BareMetal</strong> kernel.</p>
 </section>
 <section id="mosa-compiler">
 <h2>Mosa.Compiler.*<a class="headerlink" href="#mosa-compiler" title="Link to this heading"></a></h2>
@@ -155,32 +154,28 @@
 </section>
 <section id="mosa-devicedriver">
 <h2>Mosa.DeviceDriver<a class="headerlink" href="#mosa-devicedriver" title="Link to this heading"></a></h2>
-<p>This project hosts all the drivers MOSA offers. They’re not required to run a demo, nor are they required if you want to make your own drivers.</p>
+<p>This project hosts all the drivers MOSA offers, whether they’re ISA, PCI, USB, etc…</p>
 </section>
 <section id="mosa-devicesystem">
 <h2>Mosa.DeviceSystem<a class="headerlink" href="#mosa-devicesystem" title="Link to this heading"></a></h2>
 <p>This project contains all kinds of miscelleanous classes and utilities, useful to device drivers and other stuff. It can almost be fully used outside MOSA (it does contain a few classes related to MOSA, like <code class="docutils literal notranslate"><span class="pre">ConstrainedPointer</span></code>) and can serve as a great utilities project. For example, it contains classes for generating a VDI header or VHD footer, MBR generation and some PCI utilities. But it contains much more!</p>
-<p>It’s also not required to run a demo, however it is a dependecy of <strong>Mosa.DeviceDriver</strong>.</p>
+<p>It is a dependecy of <strong>Mosa.DeviceDriver</strong>.</p>
 </section>
 <section id="mosa-filesystem">
 <h2>Mosa.FileSystem<a class="headerlink" href="#mosa-filesystem" title="Link to this heading"></a></h2>
 <p>This project is the MOSA implementation for the file system. It currently only supports FAT32, but it aims to support more in the future.</p>
 </section>
-<section id="mosa-kernel">
-<h2>Mosa.Kernel.*<a class="headerlink" href="#mosa-kernel" title="Link to this heading"></a></h2>
-<p>Those projects are the MOSA kernel implementations for various platforms. They’re not strictly required to create an OS with MOSA though, if you want to implement it yourself.</p>
-</section>
 <section id="mosa-kernel-baremetal">
 <h2>Mosa.Kernel.BareMetal<a class="headerlink" href="#mosa-kernel-baremetal" title="Link to this heading"></a></h2>
-<p>This project is part of the <a class="reference internal" href="baremetal.html"><span class="doc">BareMetal</span></a> experiment, and aims to unify platform-agnostic code into one project, for other projects to use. It provides a <strong>Platform</strong> class, in which specific BareMetal kernel implementations can implement those functions via <strong>plugs</strong>.</p>
+<p>This project is the mainline, platform-agnostic implementation of the MOSA kernel.</p>
 </section>
 <section id="id1">
 <h2>Mosa.Kernel.BareMetal.*<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
-<p>Those projects implement the internal, unimplemented functions of <strong>Mosa.Kernel.BareMetal</strong> as <strong>plugs</strong>.</p>
+<p>Those projects implement the internal, platform-specific functions of <strong>Mosa.Kernel.BareMetal</strong> as <strong>plugs</strong>.</p>
 </section>
 <section id="mosa-korlib">
 <h2>Mosa.Korlib<a class="headerlink" href="#mosa-korlib" title="Link to this heading"></a></h2>
-<p>This project is the MOSA implementation of the .NET standard library. While it is currently missing a lot of features, it is highly portable and can be used in any project. You can also use your own implementation if you want to.</p>
+<p>This project is the MOSA implementation of the .NET standard library. While it is currently missing a lot of features, it is highly portable and can be used in any project requiring a custom core library.</p>
 </section>
 <section id="mosa-platform">
 <h2>Mosa.Platform.*<a class="headerlink" href="#mosa-platform" title="Link to this heading"></a></h2>
@@ -188,20 +183,20 @@
 </section>
 <section id="mosa-plug-korlib">
 <h2>Mosa.Plug.Korlib<a class="headerlink" href="#mosa-plug-korlib" title="Link to this heading"></a></h2>
-<p>While the MOSA implementation of the .NET standard library is portable, it does need some functions implemented by the compiler in order to fully benefit from its potential. This is where this project comes in. It replaces those internal, unimplemented functions with <strong>plugs</strong>. It has a couple of dependencies on other projects, including <strong>Mosa.Runtime</strong> for example. However, it does <strong>not</strong> have dependencies on projects which are built on a specific platform (like <strong>Mosa.Kernel.x86</strong> for example).</p>
+<p>While the MOSA implementation of the .NET standard library is portable, it does need some functions implemented by the compiler in order to fully benefit from its potential. This is where this project comes in. It replaces those internal, unimplemented functions with <strong>plugs</strong>. It has a couple of dependencies on other projects, including <strong>Mosa.Runtime</strong> for example. However, it does <strong>not</strong> have dependencies on projects which are built on a specific platform (like <strong>Mosa.Kernel.BareMetal.x86</strong> for example).</p>
 </section>
 <section id="id2">
 <h2>Mosa.Plug.Korlib.*<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
-<p>Those platform-specific projects are identical to the one above, except they do use platform-specific dependencies like <strong>Mosa.Kernel.x86</strong> in the case of <strong>Mosa.Plug.Korlib.x86</strong>. Those are used if the <strong>plug</strong> must be implemented via a platform-specific standard or device.</p>
+<p>Those platform-specific projects are identical to the one above, except they do use platform-specific dependencies like <strong>Mosa.Runtime.x86</strong> in the case of <strong>Mosa.Plug.Korlib.x86</strong>. Those are used if the <strong>plug</strong> must be implemented via platform-specific instructions for example.</p>
 </section>
 <section id="mosa-runtime">
 <h2>Mosa.Runtime<a class="headerlink" href="#mosa-runtime" title="Link to this heading"></a></h2>
-<p>This project provides the boot function and process for the kernel, which the compiler integrates in the final binary. It is therefore strictly required, even if you don’t use any of the other projects in your OS.</p>
+<p>This project provides the boot function and process for the kernel, which the compiler integrates in the final binary.</p>
 <p>However, it also provides classes like Pointer or GC.</p>
 </section>
 <section id="id3">
 <h2>Mosa.Runtime.*<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
-<p>Those projects help in providing additional functions for using native instructions of the specific platform. For the platform you’re using, that project is not strictly required to create an OS with MOSA.</p>
+<p>Those projects help in providing additional functions for using native instructions of the specific platform.</p>
 </section>
 <section id="mosa-tool">
 <h2>Mosa.Tool.*<a class="headerlink" href="#mosa-tool" title="Link to this heading"></a></h2>
@@ -213,7 +208,7 @@
 </section>
 <section id="mosa-unittests">
 <h2>Mosa.UnitTests.*<a class="headerlink" href="#mosa-unittests" title="Link to this heading"></a></h2>
-<p>Those projects host the unit tests, which are triggered in pull requests and main repository commits, but can also <a class="reference internal" href="unit-tests.html"><span class="doc">be triggered manually</span></a>.</p>
+<p>Those projects host the unit tests, which are automatically triggered in pull requests and main repository commits, but can also <a class="reference internal" href="unit-tests.html"><span class="doc">be triggered manually</span></a>.</p>
 </section>
 <section id="mosa-workspace">
 <h2>Mosa.Workspace.*<a class="headerlink" href="#mosa-workspace" title="Link to this heading"></a></h2>
@@ -221,7 +216,7 @@
 </section>
 <section id="other-projects">
 <h2>Other projects<a class="headerlink" href="#other-projects" title="Link to this heading"></a></h2>
-<p>If some projects are not mentioned here, it’s probably because they’re miscelleanous and/or do not fit in any of the categories cited above.</p>
+<p>If some projects are not mentioned here, it’s probably because they’re miscellaneous and/or do not fit in any of the categories cited above.</p>
 </section>
 </section>
 

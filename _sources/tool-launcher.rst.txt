@@ -17,7 +17,7 @@ In addition, the tool can be launched from the command line with arguments:
 
 .. code-block:: text
 
-	Mosa.Tool.Launcher Mosa.Demo.HelloWorld.x86.dll
+	Mosa.Tool.Launcher Mosa.BareMetal.HelloWorld.x86.dll
 
 
 Command Line Options

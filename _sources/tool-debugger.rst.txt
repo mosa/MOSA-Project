@@ -24,15 +24,15 @@ Under the hood, **MOSA Debugger** utilitizes the QEMU virtual machine emulator a
 Usage
 ------
 
-The **MOSA Debugger** can be launched by executing ``Mosa.Tool.Debugger``. 
+The **MOSA Debugger** can be launched by executing ``Mosa.Tool.Debugger``.
 
 In addition, the tool can be launched from the command line with arguments:
 
 .. code-block:: text
 
-	Mosa.Tool.Debugger Mosa.Demo.HelloWorld.x86.dll
+	Mosa.Tool.Debugger Mosa.BareMetal.HelloWorld.x86.dll
 
 Command Line Options
 --------------------
 
-See the :doc:`command line arguments<command-line-arguments>` for a list of available options. 
+See the :doc:`command line arguments<command-line-arguments>` for a list of available options.

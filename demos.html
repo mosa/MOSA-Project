@@ -54,10 +54,9 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Demos</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#graphicalworld">GraphicalWorld</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#helloworld">HelloWorld</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#testworld">TestWorld</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#coolworld">CoolWorld</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#svgaworld">SVGAWorld</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="create-operating-system.html">Create your own operating system</a></li>
@@ -134,25 +133,19 @@
 <p class="admonition-title">Tip</p>
 <p>You can start any demo by launching its respective script in the Demos folder.</p>
 </div>
+<section id="graphicalworld">
+<h2>GraphicalWorld<a class="headerlink" href="#graphicalworld" title="Link to this heading"></a></h2>
+<p>The <strong>GraphicalWorld</strong> demo uses, as its name would suggest, the GPU and some other features offered by MOSA to make a nice, graphical demo.</p>
+<img alt="_images/mosa-demo-graphicalworld.png" src="_images/mosa-demo-graphicalworld.png" />
+</section>
 <section id="helloworld">
 <h2>HelloWorld<a class="headerlink" href="#helloworld" title="Link to this heading"></a></h2>
-<p>The <strong>HelloWorld</strong> demo is the classic rendition of <a class="reference external" href="https://en.wikipedia.org/wiki/%22Hello,_World!%22_program">“Hello, World!”</a>, except it does not actually display those words. Instead it displays basic information hardware information, such as the BIOS information, the CMOS time, and the Multiboot memory map.</p>
+<p>The <strong>HelloWorld</strong> demo is the classic rendition of <a class="reference external" href="https://en.wikipedia.org/wiki/%22Hello,_World!%22_program">“Hello, World!”</a>, except it does not actually display those words. Instead it implements a basic shell with a few basic commands, like boot information, memory usage, and device information.</p>
 <img alt="_images/mosa-demo-helloworld.png" src="_images/mosa-demo-helloworld.png" />
 </section>
 <section id="testworld">
 <h2>TestWorld<a class="headerlink" href="#testworld" title="Link to this heading"></a></h2>
-<p>The <strong>TestWorld</strong> demo performs version simple, basic tests to validate the compiler, runtime, and kernel functionality.</p>
-<img alt="_images/mosa-demo-testworld.png" src="_images/mosa-demo-testworld.png" />
-</section>
-<section id="coolworld">
-<h2>CoolWorld<a class="headerlink" href="#coolworld" title="Link to this heading"></a></h2>
-<p>The <strong>CoolWorld</strong> demo utilitizes the MOSA device drivers system to enumerate hardware devices and instantiate drivers, such as for the IDE controller, disk devices, and FAT file system.</p>
-<img alt="_images/mosa-demo-coolworld.png" src="_images/mosa-demo-coolworld.png" />
-</section>
-<section id="svgaworld">
-<h2>SVGAWorld<a class="headerlink" href="#svgaworld" title="Link to this heading"></a></h2>
-<p>The <strong>SVGAWorld</strong> demo uses the VMware SVGA II driver for graphics, and uses multiple other features (similar to the ones used by <strong>CoolWorld</strong>) offered by MOSA to make a nice demo.</p>
-<img alt="_images/mosa-demo-svgaworld.webp" src="_images/mosa-demo-svgaworld.webp" />
+<p>The <strong>TestWorld</strong> demo is a barebones demo meant to show how you can create a barebones kernel using MOSA.</p>
 </section>
 </section>
 
