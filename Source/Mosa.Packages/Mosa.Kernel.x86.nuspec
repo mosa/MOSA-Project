@@ -21,6 +21,7 @@
 	</metadata>
 	<files>
 		<file src="..\Art\Mosa Icon.png" target="images" />
+		<file src="..\..\bin\Mosa.Kernel.BareMetal.dll" target="lib\net7.0" />
 		<file src="..\..\bin\Mosa.Kernel.BareMetal.x86.dll" target="lib\net7.0" />
 	</files>
 </package>
