@@ -15,7 +15,6 @@
 		<copyright>Copyright © MOSA Project 2023</copyright>
 		<tags>MOSA Compiler</tags>
 		<dependencies>
-			<dependency id="Mosa.Korlib" version="$version$" />
 			<dependency id="Mosa.Runtime" version="$version$" />
 		</dependencies>
 	</metadata>

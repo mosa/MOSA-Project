@@ -115,18 +115,10 @@ public class Builder : BaseLauncher
 
 			if (fileKorlib != null)
 			{
-				//MosaSettings.SourceFiles.Add(fileKorlib.FullName);
 				MosaSettings.AddSourceFile(fileKorlib.FullName);
 			}
 
-			var platform = MosaSettings.Platform;
-
-			if (platform == "ARM32")
-			{
-				platform = "ARM32";
-			}
-
-			var fileKorlibPlatform = fileHunter.HuntFile($"Mosa.Plug.Korlib.{platform}.dll");
+			var fileKorlibPlatform = fileHunter.HuntFile($"Mosa.Plug.Korlib.{MosaSettings.Platform}.dll");
 
 			if (fileKorlibPlatform != null)
 			{

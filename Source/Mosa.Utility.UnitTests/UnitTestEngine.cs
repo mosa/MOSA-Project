@@ -440,6 +440,8 @@ public class UnitTestEngine : IDisposable
 				else
 				{
 					OutputStatus("ERROR: Engine start failed!");
+
+					MosaSettings.EmulatorSerialPort++;
 					KillVirtualMachine();
 				}
 
