@@ -61,7 +61,7 @@ jobs:
       - name: Create Package - Mosa.Kernel.x86
         run: nuget pack Source\Mosa.Packages\Mosa.Kernel.x86.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}
       - name: Create Package - Mosa.Platform.x86
-        run: nuget pack Source\Mosa.Packages\Mosa.Platform.x86.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}
+        run: nuget pack Source\Mosa.Packages\Mosa.Compiler.x86.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}
       - name: Store Nuget Packages Artifact
         uses: actions/upload-artifact@v3
         with:
@@ -109,7 +109,7 @@ jobs:
       - name: Publish Package - Mosa.Kernel.x86
         run: dotnet nuget push bin\nupkg\Mosa.Kernel.x86.${{ env.BUILD_VERSION }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
       - name: Publish Package - Mosa.Platform.x86
-        run: dotnet nuget push bin\nupkg\Mosa.Platform.x86.${{ env.BUILD_VERSION }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
+        run: dotnet nuget push bin\nupkg\Mosa.Compiler.x86.${{ env.BUILD_VERSION }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
 
   linux-build:
     name: Linux Build

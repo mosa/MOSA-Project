@@ -32,9 +32,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Compiler.Common", "Mos
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Utility.BootImage", "Mosa.Utility.BootImage\Mosa.Utility.BootImage.csproj", "{65F7691A-B355-4D98-BB97-0B19F13E2190}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Platform.x64", "Mosa.Platform.x64\Mosa.Platform.x64.csproj", "{F445DB8E-E25A-41EF-A158-C742F14E94E4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Compiler.x64", "Mosa.Compiler.x64\Mosa.Compiler.x64.csproj", "{F445DB8E-E25A-41EF-A158-C742F14E94E4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Platform.x86", "Mosa.Platform.x86\Mosa.Platform.x86.csproj", "{DE30CBE9-50F3-4A3E-BCC9-A8A36348530E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Compiler.x86", "Mosa.Compiler.x86\Mosa.Compiler.x86.csproj", "{DE30CBE9-50F3-4A3E-BCC9-A8A36348530E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Utility.Disassembler", "Mosa.Utility.Disassembler\Mosa.Utility.Disassembler.csproj", "{E45FBA9E-6F57-4511-8977-D8045DE09622}"
 EndProject
@@ -59,8 +59,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Packages", "Packages", "{52
 		Mosa.Packages\Mosa.DeviceSystem.nuspec = Mosa.Packages\Mosa.DeviceSystem.nuspec
 		Mosa.Packages\Mosa.Kernel.x86.nuspec = Mosa.Packages\Mosa.Kernel.x86.nuspec
 		Mosa.Packages\Mosa.Korlib.nuspec = Mosa.Packages\Mosa.Korlib.nuspec
-		Mosa.Packages\Mosa.Platform.x64.nuspec = Mosa.Packages\Mosa.Platform.x64.nuspec
-		Mosa.Packages\Mosa.Platform.x86.nuspec = Mosa.Packages\Mosa.Platform.x86.nuspec
+		Mosa.Packages\Mosa.Compiler.x64.nuspec = Mosa.Packages\Mosa.Compiler.x64.nuspec
+		Mosa.Packages\Mosa.Compiler.x86.nuspec = Mosa.Packages\Mosa.Compiler.x86.nuspec
 		Mosa.Packages\Mosa.Runtime.nuspec = Mosa.Packages\Mosa.Runtime.nuspec
 		Mosa.Packages\Mosa.Tools.Package.nuspec = Mosa.Packages\Mosa.Tools.Package.nuspec
 		Mosa.Packages\Mosa.Tools.Package.Qemu.nuspec = Mosa.Packages\Mosa.Tools.Package.Qemu.nuspec
@@ -101,7 +101,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Kernel.BareMetal.x64",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.BareMetal.HelloWorld.x86", "Mosa.BareMetal.HelloWorld.x86\Mosa.BareMetal.HelloWorld.x86.csproj", "{F1776FF2-A727-4FBF-B6BE-D37D6B019038}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Platform.ARM32", "Mosa.Platform.ARM32\Mosa.Platform.ARM32.csproj", "{1D3F8C25-77DE-4E04-81DF-5E7EF1ABE914}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Compiler.ARM32", "Mosa.Compiler.ARM32\Mosa.Compiler.ARM32.csproj", "{1D3F8C25-77DE-4E04-81DF-5E7EF1ABE914}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Plug.Korlib.ARM32", "Mosa.Plug.Korlib.ARM32\Mosa.Plug.Korlib.ARM32.csproj", "{024D8FB8-37F2-4F22-A637-3AFF13CB3F56}"
 EndProject
@@ -161,7 +161,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Plug.Korlib.ARM64", "M
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Kernel.BareMetal.ARM64", "Mosa.Kernel.BareMetal.ARM64\Mosa.Kernel.BareMetal.ARM64.csproj", "{7307F8B1-7BC0-4299-AD98-AB0C68D53153}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Platform.ARM64", "Mosa.Platform.ARM64\Mosa.Platform.ARM64.csproj", "{3B36F570-1522-4C55-8BD2-3E8A4507B799}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Compiler.ARM64", "Mosa.Platform.ARM64\Mosa.Compiler.ARM64.csproj", "{3B36F570-1522-4C55-8BD2-3E8A4507B799}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Runtime.ARM64", "Mosa.Runtime.ARM64\Mosa.Runtime.ARM64.csproj", "{57E229B7-7E72-4CF5-B52E-F9C40CE4B387}"
 EndProject
