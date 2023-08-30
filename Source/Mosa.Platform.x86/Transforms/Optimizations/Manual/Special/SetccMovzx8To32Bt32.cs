@@ -2,7 +2,7 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x86.Transforms.Optimizations.Manual.Special;
+namespace Mosa.Compiler.x86.Transforms.Optimizations.Manual.Special;
 
 /// <summary>
 /// Bt32Movzx8To32Setcc

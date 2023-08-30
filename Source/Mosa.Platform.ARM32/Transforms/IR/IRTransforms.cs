@@ -3,7 +3,7 @@
 using System.Collections.Generic;
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.ARM32.Transforms.IR;
+namespace Mosa.Compiler.ARM32.Transforms.IR;
 
 /// <summary>
 /// IR Transformation List

@@ -1,6 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Platform.ARM64.Stages;
+namespace Mosa.Compiler.ARM64.Stages;
 
 /// <summary>
 /// ARM64 IR Transformation Stage

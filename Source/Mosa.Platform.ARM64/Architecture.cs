@@ -5,10 +5,10 @@ using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Linker.Elf;
 using Mosa.Compiler.Framework.Stages;
-using Mosa.Platform.ARM64.Stages;
+using Mosa.Compiler.ARM64.Stages;
 using Mosa.Utility.Configuration;
 
-namespace Mosa.Platform.ARM64;
+namespace Mosa.Compiler.ARM64;
 
 /// <summary>
 /// This class provides a common base class for architecture

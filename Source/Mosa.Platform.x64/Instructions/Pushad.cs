@@ -4,12 +4,12 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x64.Instructions;
+namespace Mosa.Compiler.x64.Instructions;
 
 /// <summary>
 /// Pushad
 /// </summary>
-/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
+/// <seealso cref="Mosa.Compiler.x64.X64Instruction" />
 public sealed class Pushad : X64Instruction
 {
 	internal Pushad()

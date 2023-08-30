@@ -5,7 +5,7 @@
 using System.Collections.Generic;
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x86;
+namespace Mosa.Compiler.x86;
 
 /// <summary>
 /// X86 Instruction Map

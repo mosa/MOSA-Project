@@ -1,9 +1,9 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Platform.ARM32.Transforms.Optimizations.Auto;
-using Mosa.Platform.ARM32.Transforms.Optimizations.Manual;
+using Mosa.Compiler.ARM32.Transforms.Optimizations.Auto;
+using Mosa.Compiler.ARM32.Transforms.Optimizations.Manual;
 
-namespace Mosa.Platform.ARM32.Stages;
+namespace Mosa.Compiler.ARM32.Stages;
 
 /// <summary>
 /// ARM32 Optimization Stage

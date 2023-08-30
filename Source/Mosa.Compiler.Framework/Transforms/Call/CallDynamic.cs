@@ -1,9 +1,8 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Transforms.Call;
 
-namespace Mosa.Platform.Framework.Call;
+namespace Mosa.Compiler.Framework.Transforms.Call;
 
 /// <summary>
 /// CallDynamic

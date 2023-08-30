@@ -3,7 +3,7 @@
 using System.Diagnostics;
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x64.Transforms.IR;
+namespace Mosa.Compiler.x64.Transforms.IR;
 
 /// <summary>
 /// LoadManagedPointer

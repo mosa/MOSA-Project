@@ -1,10 +1,10 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Platform.ARM32.Transforms.FixedRegisters;
-using Mosa.Platform.ARM32.Transforms.Stack;
-using Mosa.Platform.ARM32.Transforms.Tweak;
+using Mosa.Compiler.ARM32.Transforms.FixedRegisters;
+using Mosa.Compiler.ARM32.Transforms.Stack;
+using Mosa.Compiler.ARM32.Transforms.Tweak;
 
-namespace Mosa.Platform.ARM32.Stages;
+namespace Mosa.Compiler.ARM32.Stages;
 
 /// <summary>
 /// Platform Transformation Stage

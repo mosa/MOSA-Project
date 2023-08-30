@@ -30,9 +30,9 @@
 		<ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
 		<ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj" />
 		<ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem.CLR\Mosa.Compiler.MosaTypeSystem.CLR.csproj" />
-		<ProjectReference Include="..\Mosa.Platform.ARM32\Mosa.Platform.ARM32.csproj" />
-		<ProjectReference Include="..\Mosa.Platform.x64\Mosa.Platform.x64.csproj" />
-		<ProjectReference Include="..\Mosa.Platform.x86\Mosa.Platform.x86.csproj" />
+		<ProjectReference Include="..\Mosa.Platform.ARM32\Mosa.Compiler.ARM32.csproj" />
+		<ProjectReference Include="..\Mosa.Platform.x64\Mosa.Compiler.x64.csproj" />
+		<ProjectReference Include="..\Mosa.Platform.x86\Mosa.Compiler.x86.csproj" />
 		<ProjectReference Include="..\Mosa.Utility.Configuration\Mosa.Utility.Configuration.csproj" />
 		<ProjectReference Include="..\Mosa.Utility.Disassembler\Mosa.Utility.Disassembler.csproj" />
 		<ProjectReference Include="..\Mosa.Utility.Launcher\Mosa.Utility.Launcher.csproj" />

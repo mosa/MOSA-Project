@@ -4,7 +4,7 @@ using System.Diagnostics;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x86.Intrinsic;
+namespace Mosa.Compiler.x86.Intrinsic;
 
 /// <summary>
 /// IntrinsicMethods

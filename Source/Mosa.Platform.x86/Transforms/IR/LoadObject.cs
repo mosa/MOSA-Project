@@ -3,7 +3,7 @@
 using System.Diagnostics;
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x86.Transforms.IR;
+namespace Mosa.Compiler.x86.Transforms.IR;
 
 /// <summary>
 /// LoadObject

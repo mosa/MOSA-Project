@@ -4,12 +4,12 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.ARM32.Instructions;
+namespace Mosa.Compiler.ARM32.Instructions;
 
 /// <summary>
 /// Fix - Convert Floating-Point to Integer
 /// </summary>
-/// <seealso cref="Mosa.Platform.ARM32.ARM32Instruction" />
+/// <seealso cref="Mosa.Compiler.ARM32.ARM32Instruction" />
 public sealed class Fix : ARM32Instruction
 {
 	internal Fix()

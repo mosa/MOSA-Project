@@ -2,7 +2,7 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x64.Transforms.FixedRegisters;
+namespace Mosa.Compiler.x64.Transforms.FixedRegisters;
 
 /// <summary>
 /// WrMSR

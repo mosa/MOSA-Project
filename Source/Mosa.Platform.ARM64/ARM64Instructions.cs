@@ -5,7 +5,7 @@
 using System.Collections.Generic;
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.ARM64;
+namespace Mosa.Compiler.ARM64;
 
 /// <summary>
 /// ARM64 Instruction Map

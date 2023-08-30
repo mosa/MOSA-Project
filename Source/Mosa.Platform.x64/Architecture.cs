@@ -6,11 +6,11 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.CompilerStages;
 using Mosa.Compiler.Framework.Linker.Elf;
 using Mosa.Compiler.Framework.Stages;
-using Mosa.Platform.x64.CompilerStages;
-using Mosa.Platform.x64.Stages;
+using Mosa.Compiler.x64.CompilerStages;
+using Mosa.Compiler.x64.Stages;
 using Mosa.Utility.Configuration;
 
-namespace Mosa.Platform.x64;
+namespace Mosa.Compiler.x64;
 
 /// <summary>
 /// This class provides a common base class for architecture

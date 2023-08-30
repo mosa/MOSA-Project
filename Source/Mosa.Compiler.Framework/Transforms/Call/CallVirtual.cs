@@ -4,7 +4,7 @@ using System.Diagnostics;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transforms.Call;
 
-namespace Mosa.Platform.Framework.Call;
+namespace Mosa.Compiler.Framework.Transforms.Call;
 
 /// <summary>
 /// CallVirtual

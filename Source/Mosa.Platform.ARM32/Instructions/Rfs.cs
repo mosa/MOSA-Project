@@ -4,12 +4,12 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.ARM32.Instructions;
+namespace Mosa.Compiler.ARM32.Instructions;
 
 /// <summary>
 /// Rfs - Read Floating-Point Status Register
 /// </summary>
-/// <seealso cref="Mosa.Platform.ARM32.ARM32Instruction" />
+/// <seealso cref="Mosa.Compiler.ARM32.ARM32Instruction" />
 public sealed class Rfs : ARM32Instruction
 {
 	internal Rfs()

@@ -4,12 +4,12 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.ARM64.Instructions;
+namespace Mosa.Compiler.ARM64.Instructions;
 
 /// <summary>
 /// Nop - No Operation
 /// </summary>
-/// <seealso cref="Mosa.Platform.ARM64.ARM64Instruction" />
+/// <seealso cref="Mosa.Compiler.ARM64.ARM64Instruction" />
 public sealed class Nop : ARM64Instruction
 {
 	internal Nop()

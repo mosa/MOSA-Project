@@ -4,12 +4,12 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.ARM32.Instructions;
+namespace Mosa.Compiler.ARM32.Instructions;
 
 /// <summary>
 /// Ldr8 - Single Data Transfer
 /// </summary>
-/// <seealso cref="Mosa.Platform.ARM32.ARM32Instruction" />
+/// <seealso cref="Mosa.Compiler.ARM32.ARM32Instruction" />
 public sealed class Ldr8 : ARM32Instruction
 {
 	internal Ldr8()

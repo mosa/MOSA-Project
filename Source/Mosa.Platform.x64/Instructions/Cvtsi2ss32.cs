@@ -4,12 +4,12 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x64.Instructions;
+namespace Mosa.Compiler.x64.Instructions;
 
 /// <summary>
 /// Cvtsi2ss32
 /// </summary>
-/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
+/// <seealso cref="Mosa.Compiler.x64.X64Instruction" />
 public sealed class Cvtsi2ss32 : X64Instruction
 {
 	internal Cvtsi2ss32()

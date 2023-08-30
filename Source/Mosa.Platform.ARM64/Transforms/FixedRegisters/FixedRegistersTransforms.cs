@@ -3,7 +3,7 @@
 using System.Collections.Generic;
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.ARM64.Transforms.FixedRegisters;
+namespace Mosa.Compiler.ARM64.Transforms.FixedRegisters;
 
 /// <summary>
 /// Fixed Registers Transformation List

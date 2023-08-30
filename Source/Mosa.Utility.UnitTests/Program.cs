@@ -31,9 +31,9 @@ internal static class Program
 
 	private static void RegisterPlatforms()
 	{
-		PlatformRegistry.Add(new Platform.x86.Architecture());
-		PlatformRegistry.Add(new Platform.x64.Architecture());
-		PlatformRegistry.Add(new Platform.ARM32.Architecture());
+		PlatformRegistry.Add(new Compiler.x86.Architecture());
+		PlatformRegistry.Add(new Compiler.x64.Architecture());
+		PlatformRegistry.Add(new Compiler.ARM32.Architecture());
 		//PlatformRegistry.Add(new Platform.ARM64.Architecture());
 	}
 }

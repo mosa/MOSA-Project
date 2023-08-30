@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.ARM32;
+namespace Mosa.Compiler.ARM32;
 
 public static class CPURegister
 {

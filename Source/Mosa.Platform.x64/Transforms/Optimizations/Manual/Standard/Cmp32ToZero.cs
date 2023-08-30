@@ -2,7 +2,7 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x64.Transforms.Optimizations.Manual.Standard;
+namespace Mosa.Compiler.x64.Transforms.Optimizations.Manual.Standard;
 
 [Transform("x64.Optimizations.Manual.Standard")]
 public sealed class Cmp32ToZero : BaseTransform

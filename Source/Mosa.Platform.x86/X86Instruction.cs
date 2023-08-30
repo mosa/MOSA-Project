@@ -4,7 +4,7 @@ using System;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Platform;
 
-namespace Mosa.Platform.x86;
+namespace Mosa.Compiler.x86;
 
 /// <summary>
 /// X86Instruction

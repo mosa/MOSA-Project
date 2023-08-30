@@ -2,7 +2,7 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x86.Transforms
+namespace Mosa.Compiler.x86.Transforms
 {
 	public abstract class BaseX86Transform : BaseTransform
 	{

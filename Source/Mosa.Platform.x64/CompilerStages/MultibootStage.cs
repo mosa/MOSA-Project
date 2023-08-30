@@ -2,7 +2,7 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x64.CompilerStages;
+namespace Mosa.Compiler.x64.CompilerStages;
 
 public sealed class MultibootStage : Mosa.Compiler.Framework.Platform.BaseMultibootStage
 {

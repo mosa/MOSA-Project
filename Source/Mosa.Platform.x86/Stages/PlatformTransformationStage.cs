@@ -1,12 +1,12 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Platform.x86.Transforms.AddressMode;
-using Mosa.Platform.x86.Transforms.FixedRegisters;
-using Mosa.Platform.x86.Transforms.Optimizations.Manual.Special;
-using Mosa.Platform.x86.Transforms.Stack;
-using Mosa.Platform.x86.Transforms.Tweak;
+using Mosa.Compiler.x86.Transforms.AddressMode;
+using Mosa.Compiler.x86.Transforms.FixedRegisters;
+using Mosa.Compiler.x86.Transforms.Optimizations.Manual.Special;
+using Mosa.Compiler.x86.Transforms.Stack;
+using Mosa.Compiler.x86.Transforms.Tweak;
 
-namespace Mosa.Platform.x86.Stages;
+namespace Mosa.Compiler.x86.Stages;
 
 /// <summary>
 /// Platform Transformation Stage

@@ -2,7 +2,7 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x64.Transforms.RuntimeCall;
+namespace Mosa.Compiler.x64.Transforms.RuntimeCall;
 
 /// <summary>
 /// ConvertR8ToU64

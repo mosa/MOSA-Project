@@ -1,8 +1,8 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Platform.x86.Transforms.RuntimeCall;
+using Mosa.Compiler.x86.Transforms.RuntimeCall;
 
-namespace Mosa.Platform.x86.Stages;
+namespace Mosa.Compiler.x86.Stages;
 
 /// <summary>
 /// Runtime Call Transformation Stage

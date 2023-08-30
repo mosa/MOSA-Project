@@ -2,7 +2,7 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x64.Transforms.AddressMode;
+namespace Mosa.Compiler.x64.Transforms.AddressMode;
 
 /// <summary>
 /// Neg64

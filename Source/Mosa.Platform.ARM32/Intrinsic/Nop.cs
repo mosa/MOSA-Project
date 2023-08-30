@@ -2,7 +2,7 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.ARM32.Intrinsic;
+namespace Mosa.Compiler.ARM32.Intrinsic;
 
 /// <summary>
 /// IntrinsicMethods

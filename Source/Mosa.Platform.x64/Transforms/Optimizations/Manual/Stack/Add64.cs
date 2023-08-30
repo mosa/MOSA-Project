@@ -5,7 +5,7 @@
 using System.Diagnostics;
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x64.Transforms.Optimizations.Manual.Stack;
+namespace Mosa.Compiler.x64.Transforms.Optimizations.Manual.Stack;
 
 /// <summary>
 /// Add32

@@ -5,7 +5,7 @@
 using System.Collections.Generic;
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.ARM32;
+namespace Mosa.Compiler.ARM32;
 
 /// <summary>
 /// ARM32 Instruction Map

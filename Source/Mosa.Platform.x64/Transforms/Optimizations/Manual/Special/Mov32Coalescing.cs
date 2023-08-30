@@ -2,7 +2,7 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x64.Transforms.Optimizations.Manual.Special;
+namespace Mosa.Compiler.x64.Transforms.Optimizations.Manual.Special;
 
 [Transform("x64.Optimizations.Manual.Special")]
 public sealed class Mov32Coalescing : BaseTransform

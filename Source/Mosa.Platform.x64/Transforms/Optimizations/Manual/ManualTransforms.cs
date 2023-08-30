@@ -3,7 +3,7 @@
 using System.Collections.Generic;
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x64.Transforms.Optimizations.Manual;
+namespace Mosa.Compiler.x64.Transforms.Optimizations.Manual;
 
 /// <summary>
 /// Manual Optimizations Transformations

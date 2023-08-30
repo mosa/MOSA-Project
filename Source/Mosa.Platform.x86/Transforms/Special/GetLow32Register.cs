@@ -2,7 +2,7 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x86.Transforms.Special;
+namespace Mosa.Compiler.x86.Transforms.Special;
 
 [Transform("x86.Special")]
 public sealed class GetLow32Register : BaseTransform

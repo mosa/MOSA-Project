@@ -1,8 +1,8 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Platform.ARM32.Transforms.IR;
+using Mosa.Compiler.ARM32.Transforms.IR;
 
-namespace Mosa.Platform.ARM32.Stages;
+namespace Mosa.Compiler.ARM32.Stages;
 
 /// <summary>
 /// ARM32 IR Transformation Stage

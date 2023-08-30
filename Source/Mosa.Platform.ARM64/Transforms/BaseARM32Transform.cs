@@ -4,7 +4,7 @@ using System.Diagnostics;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.ARM64.Transforms
+namespace Mosa.Compiler.ARM64.Transforms
 {
 	public abstract class BaseARM32Transform : BaseTransform
 	{

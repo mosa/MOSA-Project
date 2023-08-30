@@ -2,7 +2,7 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x86.Transforms.FixedRegisters;
+namespace Mosa.Compiler.x86.Transforms.FixedRegisters;
 
 /// <summary>
 /// Shrd32

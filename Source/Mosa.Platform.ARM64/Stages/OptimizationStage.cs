@@ -1,9 +1,9 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Platform.ARM64.Transforms.Optimizations.Auto;
-using Mosa.Platform.ARM64.Transforms.Optimizations.Manual;
+using Mosa.Compiler.ARM64.Transforms.Optimizations.Auto;
+using Mosa.Compiler.ARM64.Transforms.Optimizations.Manual;
 
-namespace Mosa.Platform.ARM64.Stages;
+namespace Mosa.Compiler.ARM64.Stages;
 
 /// <summary>
 /// ARM64 Optimization Stage

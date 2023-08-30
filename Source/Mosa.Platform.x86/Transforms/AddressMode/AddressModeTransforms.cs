@@ -3,7 +3,7 @@
 using System.Collections.Generic;
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x86.Transforms.AddressMode;
+namespace Mosa.Compiler.x86.Transforms.AddressMode;
 
 /// <summary>
 /// Address Mode Transformation List

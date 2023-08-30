@@ -2,7 +2,7 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x86.Transforms.RuntimeCall;
+namespace Mosa.Compiler.x86.Transforms.RuntimeCall;
 
 /// <summary>
 /// DivSigned64

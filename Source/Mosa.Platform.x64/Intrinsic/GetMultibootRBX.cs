@@ -3,7 +3,7 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Platform;
 
-namespace Mosa.Platform.x64.Intrinsic;
+namespace Mosa.Compiler.x64.Intrinsic;
 
 /// <summary>
 /// IntrinsicMethods

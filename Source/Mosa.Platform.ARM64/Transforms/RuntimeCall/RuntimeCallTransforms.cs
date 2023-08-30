@@ -3,7 +3,7 @@
 using System.Collections.Generic;
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.ARM64.Transforms.RuntimeCall;
+namespace Mosa.Compiler.ARM64.Transforms.RuntimeCall;
 
 /// <summary>
 /// RuntimeCall Transformation List

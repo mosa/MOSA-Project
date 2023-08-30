@@ -2,7 +2,7 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x86.Transforms.Optimizations.Manual.Standard;
+namespace Mosa.Compiler.x86.Transforms.Optimizations.Manual.Standard;
 // This transformation can reduce restrictions placed on the register allocator.
 // The LEA does not change any of the status flags, however, the add instruction does modify some flags (carry, zero, etc.)
 // Therefore, this transformation can only occur if the status flags are unused later.

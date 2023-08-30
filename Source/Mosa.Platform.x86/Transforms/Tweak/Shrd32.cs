@@ -2,7 +2,7 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x86.Transforms.Tweak;
+namespace Mosa.Compiler.x86.Transforms.Tweak;
 
 /// <summary>
 /// Shrd32

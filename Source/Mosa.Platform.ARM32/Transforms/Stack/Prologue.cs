@@ -2,7 +2,7 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.ARM32.Transforms.Stack;
+namespace Mosa.Compiler.ARM32.Transforms.Stack;
 
 /// <summary>
 /// ConvertR4ToI64

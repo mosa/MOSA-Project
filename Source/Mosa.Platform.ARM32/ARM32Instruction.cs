@@ -4,7 +4,7 @@ using System;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Platform;
 
-namespace Mosa.Platform.ARM32;
+namespace Mosa.Compiler.ARM32;
 
 /// <summary>
 /// ARM32 Instruction

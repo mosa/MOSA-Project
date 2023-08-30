@@ -5,7 +5,7 @@
 using System.Collections.Generic;
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.ARM64.Transforms.Optimizations.Auto;
+namespace Mosa.Compiler.ARM64.Transforms.Optimizations.Auto;
 
 /// <summary>
 /// Transformations
