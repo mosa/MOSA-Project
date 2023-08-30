@@ -13,8 +13,7 @@ using Mosa.Utility.Configuration;
 namespace Mosa.Compiler.x64;
 
 /// <summary>
-/// This class provides a common base class for architecture
-/// specific operations.
+/// x86 Architecture
 /// </summary>
 public sealed class Architecture : BaseArchitecture
 {

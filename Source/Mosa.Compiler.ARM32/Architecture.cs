@@ -11,8 +11,7 @@ using Mosa.Utility.Configuration;
 namespace Mosa.Compiler.ARM32;
 
 /// <summary>
-/// This class provides a common base class for architecture
-/// specific operations.
+/// ARM32 Architecture
 /// </summary>
 public sealed class Architecture : BaseArchitecture
 {
