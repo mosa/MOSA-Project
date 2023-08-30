@@ -15,7 +15,7 @@
 		<copyright>Copyright © MOSA Project 2023</copyright>
 		<tags>MOSA Compiler</tags>
 		<dependencies>
-			<dependency id="Mosa.Platform.x86" version="$version$" />
+			<dependency id="Mosa.Compiler.x86" version="$version$" />
 		</dependencies>
 	</metadata>
 	<files>

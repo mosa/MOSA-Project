@@ -14,7 +14,7 @@ public class BuildARM32Instructions : BuildBaseTemplate
 		Lines.AppendLine("using System.Collections.Generic;");
 		Lines.AppendLine("using Mosa.Compiler.Framework;");
 		Lines.AppendLine();
-		Lines.AppendLine("namespace Mosa.Platform.ARM32;");
+		Lines.AppendLine("namespace Mosa.Compiler.ARM32;");
 		Lines.AppendLine();
 		Lines.AppendLine("/// <summary>");
 		Lines.AppendLine("/// ARM32 Instruction Map");

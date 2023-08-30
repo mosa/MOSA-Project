@@ -11,7 +11,7 @@ using Mosa.Utility.Configuration;
 namespace Mosa.Tool.Compiler;
 
 /// <summary>
-/// Class containing the Compiler.
+/// Compiler
 /// </summary>
 public class Compiler
 {

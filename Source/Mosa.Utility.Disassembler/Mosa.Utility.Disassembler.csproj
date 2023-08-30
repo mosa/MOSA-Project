@@ -17,8 +17,8 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj" />
-    <ProjectReference Include="..\Mosa.Platform.ARM32\Mosa.Compiler.ARM32.csproj" />
-    <ProjectReference Include="..\Mosa.Platform.x64\Mosa.Compiler.x64.csproj" />
-    <ProjectReference Include="..\Mosa.Platform.x86\Mosa.Compiler.x86.csproj" />
+    <ProjectReference Include="..\Mosa.Compiler.ARM32\Mosa.Compiler.ARM32.csproj" />
+    <ProjectReference Include="..\Mosa.Compiler.x64\Mosa.Compiler.x64.csproj" />
+    <ProjectReference Include="..\Mosa.Compiler.x86\Mosa.Compiler.x86.csproj" />
   </ItemGroup>
 </Project>

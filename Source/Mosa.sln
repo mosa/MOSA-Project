@@ -34,9 +34,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Tool.Explorer", "Mosa.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Utility.BootImage", "Mosa.Utility.BootImage\Mosa.Utility.BootImage.csproj", "{65F7691A-B355-4D98-BB97-0B19F13E2190}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Compiler.x64", "Mosa.Platform.x64\Mosa.Compiler.x64.csproj", "{F445DB8E-E25A-41EF-A158-C742F14E94E4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Compiler.x64", "Mosa.Compiler.x64\Mosa.Compiler.x64.csproj", "{F445DB8E-E25A-41EF-A158-C742F14E94E4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Compiler.x86", "Mosa.Platform.x86\Mosa.Compiler.x86.csproj", "{DE30CBE9-50F3-4A3E-BCC9-A8A36348530E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Compiler.x86", "Mosa.Compiler.x86\Mosa.Compiler.x86.csproj", "{DE30CBE9-50F3-4A3E-BCC9-A8A36348530E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Compiler.Framework.xUnit", "Mosa.Compiler.Framework.xUnit\Mosa.Compiler.Framework.xUnit.csproj", "{C286833F-D1CD-4618-98E7-F3A5BA9ECFA1}"
 EndProject
@@ -112,7 +112,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Kernel.BareMetal.x64",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.BareMetal.HelloWorld.x86", "Mosa.BareMetal.HelloWorld.x86\Mosa.BareMetal.HelloWorld.x86.csproj", "{F1776FF2-A727-4FBF-B6BE-D37D6B019038}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Compiler.ARM32", "Mosa.Platform.ARM32\Mosa.Compiler.ARM32.csproj", "{1D3F8C25-77DE-4E04-81DF-5E7EF1ABE914}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Compiler.ARM32", "Mosa.Compiler.ARM32\Mosa.Compiler.ARM32.csproj", "{1D3F8C25-77DE-4E04-81DF-5E7EF1ABE914}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Plug.Korlib.ARM32", "Mosa.Plug.Korlib.ARM32\Mosa.Plug.Korlib.ARM32.csproj", "{024D8FB8-37F2-4F22-A637-3AFF13CB3F56}"
 EndProject
@@ -212,7 +212,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Plug.Korlib.ARM64", "M
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Runtime.ARM64", "Mosa.Runtime.ARM64\Mosa.Runtime.ARM64.csproj", "{6144CA26-0ED9-47D7-903F-CC594CEAFE7B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Compiler.ARM64", "Mosa.Platform.ARM64\Mosa.Compiler.ARM64.csproj", "{1ECAEBAB-841C-4FF6-B6E9-5D4A05754FD3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Compiler.ARM64", "Mosa.Compiler.ARM64\Mosa.Compiler.ARM64.csproj", "{1ECAEBAB-841C-4FF6-B6E9-5D4A05754FD3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Kernel.BareMetal.ARM64", "Mosa.Kernel.BareMetal.ARM64\Mosa.Kernel.BareMetal.ARM64.csproj", "{47E061A9-56A4-4490-A069-CF2E13E97A37}"
 EndProject
