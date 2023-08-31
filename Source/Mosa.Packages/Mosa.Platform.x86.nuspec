@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0"?>
 <package>
 	<metadata>
-		<id>Mosa.Compiler.x86</id>
+		<id>Mosa.Platform.x86</id>
 		<version>$version$</version>
-		<title>Mosa.Compiler.x86 Libraries</title>
+		<title>Mosa.Platform.x86 Libraries</title>
 		<authors>MOSA Project</authors>
 		<owners>MOSA Project</owners>
 		<license type="expression">BSD-3-Clause-Clear</license>
