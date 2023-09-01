@@ -14,7 +14,7 @@ public class BuildX86Instructions : BuildBaseTemplate
 		Lines.AppendLine("using System.Collections.Generic;");
 		Lines.AppendLine("using Mosa.Compiler.Framework;");
 		Lines.AppendLine();
-		Lines.AppendLine("namespace Mosa.Platform.x86;");
+		Lines.AppendLine("namespace Mosa.Compiler.x86;");
 		Lines.AppendLine();
 		Lines.AppendLine("/// <summary>");
 		Lines.AppendLine("/// X86 Instruction Map");

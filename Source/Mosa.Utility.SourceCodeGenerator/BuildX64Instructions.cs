@@ -14,7 +14,7 @@ public class BuildX64Instructions : BuildBaseTemplate
 		Lines.AppendLine("using System.Collections.Generic;");
 		Lines.AppendLine("using Mosa.Compiler.Framework;");
 		Lines.AppendLine();
-		Lines.AppendLine("namespace Mosa.Platform.x64;");
+		Lines.AppendLine("namespace Mosa.Compiler.x64;");
 		Lines.AppendLine();
 		Lines.AppendLine("/// <summary>");
 		Lines.AppendLine("/// X64 Instruction Map");

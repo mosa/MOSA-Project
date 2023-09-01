@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Platform.Framework.Call;
+using Mosa.Compiler.Framework.Transforms.Call;
 
 namespace Mosa.Compiler.Framework.Stages;
 

@@ -11,7 +11,7 @@ using Mosa.Utility.Configuration;
 namespace Mosa.Tool.Compiler;
 
 /// <summary>
-/// Class containing the Compiler.
+/// Compiler
 /// </summary>
 public class Compiler
 {
@@ -93,9 +93,9 @@ public class Compiler
 
 	private static void RegisterPlatforms()
 	{
-		PlatformRegistry.Add(new Platform.x86.Architecture());
-		PlatformRegistry.Add(new Platform.x64.Architecture());
-		PlatformRegistry.Add(new Platform.ARM32.Architecture());
+		PlatformRegistry.Add(new Mosa.Compiler.x86.Architecture());
+		PlatformRegistry.Add(new Mosa.Compiler.x64.Architecture());
+		PlatformRegistry.Add(new Mosa.Compiler.ARM32.Architecture());
 	}
 
 	#endregion Public Methods

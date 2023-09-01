@@ -120,7 +120,6 @@ public class InlineStage : BaseMethodCompilerStage
 			mapBlocks.Add(block, newBlock);
 		}
 
-
 		// copy instructions
 		foreach (var block in blocks)
 		{
@@ -148,7 +147,6 @@ public class InlineStage : BaseMethodCompilerStage
 					|| node.Instruction == IRInstruction.SetReturnR8
 					|| node.Instruction == IRInstruction.SetReturnCompound)
 				{
-
 					if (callSiteNode.Result != null)
 					{
 						var newOperand = Map(node.Operand1, map, callSiteNode);

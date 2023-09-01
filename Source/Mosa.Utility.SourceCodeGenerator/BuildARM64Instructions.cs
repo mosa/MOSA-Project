@@ -14,7 +14,7 @@ public class BuildARM64Instructions : BuildBaseTemplate
 		Lines.AppendLine("using System.Collections.Generic;");
 		Lines.AppendLine("using Mosa.Compiler.Framework;");
 		Lines.AppendLine();
-		Lines.AppendLine("namespace Mosa.Platform.ARM64;");
+		Lines.AppendLine("namespace Mosa.Compiler.ARM64;");
 		Lines.AppendLine();
 		Lines.AppendLine("/// <summary>");
 		Lines.AppendLine("/// ARM64 Instruction Map");

@@ -11,7 +11,7 @@ public static class Native
 {
 	#region Intrinsic
 
-	[DllImport("Mosa.Platform.ARM64.Intrinsic::Nop")]
+	[DllImport("Mosa.Compiler.ARM64.Intrinsic::Nop")]
 	public static extern void Nop();
 
 	#endregion Intrinsic

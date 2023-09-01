@@ -12,9 +12,9 @@ public class BuildARM32 : BuildBaseTemplate
 	protected override void Body()
 	{
 		Lines.AppendLine("using Mosa.Compiler.Framework;");
-		Lines.AppendLine("using Mosa.Platform.ARM32.Instructions;");
+		Lines.AppendLine("using Mosa.Compiler.ARM32.Instructions;");
 		Lines.AppendLine();
-		Lines.AppendLine("namespace Mosa.Platform.ARM32;");
+		Lines.AppendLine("namespace Mosa.Compiler.ARM32;");
 		Lines.AppendLine();
 		Lines.AppendLine("/// <summary>");
 		Lines.AppendLine("/// ARM32 Instructions");

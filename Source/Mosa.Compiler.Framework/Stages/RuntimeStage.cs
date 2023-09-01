@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework.Transforms.CheckedConversion;
 using Mosa.Compiler.Framework.Transforms.Runtime;
 
 namespace Mosa.Compiler.Framework.Stages;

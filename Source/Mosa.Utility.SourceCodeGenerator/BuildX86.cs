@@ -12,9 +12,9 @@ public class BuildX86 : BuildBaseTemplate
 	protected override void Body()
 	{
 		Lines.AppendLine("using Mosa.Compiler.Framework;");
-		Lines.AppendLine("using Mosa.Platform.x86.Instructions;");
+		Lines.AppendLine("using Mosa.Compiler.x86.Instructions;");
 		Lines.AppendLine();
-		Lines.AppendLine("namespace Mosa.Platform.x86;");
+		Lines.AppendLine("namespace Mosa.Compiler.x86;");
 		Lines.AppendLine();
 		Lines.AppendLine("/// <summary>");
 		Lines.AppendLine("/// X86 Instructions");

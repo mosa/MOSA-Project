@@ -100,27 +100,27 @@ public static class Program
 
 		new BuildTransformations(
 			Path.Combine(dataPath, @"X86-Optimizations-Standard.json"),
-			Path.Combine(targetPath, @"Mosa.Platform.x86\Transforms\Optimizations\Auto"),
-			"Mosa.Platform.x86",
-			"Mosa.Platform.x86").Execute();
+			Path.Combine(targetPath, @"Mosa.Compiler.x86\Transforms\Optimizations\Auto"),
+			"Mosa.Compiler.x86",
+			"Mosa.Compiler.x86").Execute();
 
 		new BuildTransformations(
 			Path.Combine(dataPath, @"X86-Optimizations-Ordering.json"),
-			Path.Combine(targetPath, @"Mosa.Platform.x86\Transforms\Optimizations\Auto"),
-			"Mosa.Platform.x86",
-			"Mosa.Platform.x86").Execute();
+			Path.Combine(targetPath, @"Mosa.Compiler.x86\Transforms\Optimizations\Auto"),
+			"Mosa.Compiler.x86",
+			"Mosa.Compiler.x86").Execute();
 
 		new BuildTransformations(
 			Path.Combine(dataPath, @"X64-Optimizations-Standard.json"),
-			Path.Combine(targetPath, @"Mosa.Platform.x64\Transforms\Optimizations\Auto"),
-			"Mosa.Platform.x64",
-			"Mosa.Platform.x64").Execute();
+			Path.Combine(targetPath, @"Mosa.Compiler.x64\Transforms\Optimizations\Auto"),
+			"Mosa.Compiler.x64",
+			"Mosa.Compiler.x64").Execute();
 
 		new BuildTransformations(
 			Path.Combine(dataPath, @"X64-Optimizations-Ordering.json"),
-			Path.Combine(targetPath, @"Mosa.Platform.x64\Transforms\Optimizations\Auto"),
-			"Mosa.Platform.x64",
-			"Mosa.Platform.x64").Execute();
+			Path.Combine(targetPath, @"Mosa.Compiler.x64\Transforms\Optimizations\Auto"),
+			"Mosa.Compiler.x64",
+			"Mosa.Compiler.x64").Execute();
 
 		new BuildTransformationListFile(
 			Path.Combine(targetPath, @"Mosa.Compiler.Framework\Transforms\Optimizations\Auto"),
@@ -134,9 +134,9 @@ public static class Program
 		).Execute();
 
 		new BuildTransformationListFile(
-			Path.Combine(targetPath, @"Mosa.Platform.x86\Transforms\Optimizations\Auto"),
+			Path.Combine(targetPath, @"Mosa.Compiler.x86\Transforms\Optimizations\Auto"),
 			"AutoTransforms.cs",
-			"Mosa.Platform.x86.Transforms.Optimizations.Auto",
+			"Mosa.Compiler.x86.Transforms.Optimizations.Auto",
 			"AutoTransforms",
 			new List<string>
 			{
@@ -145,9 +145,9 @@ public static class Program
 		).Execute();
 
 		new BuildTransformationListFile(
-			Path.Combine(targetPath, @"Mosa.Platform.x64\Transforms\Optimizations\Auto"),
+			Path.Combine(targetPath, @"Mosa.Compiler.x64\Transforms\Optimizations\Auto"),
 			"AutoTransforms.cs",
-			"Mosa.Platform.x64.Transforms.Optimizations.Auto",
+			"Mosa.Compiler.x64.Transforms.Optimizations.Auto",
 			"AutoTransforms",
 			new List<string>
 			{
@@ -174,70 +174,70 @@ public static class Program
 
 		new BuildX86(
 			Path.Combine(dataPath, @"X86-Instructions.json"),
-			Path.Combine(targetPath, @"Mosa.Platform.x86\"),
+			Path.Combine(targetPath, @"Mosa.Compiler.x86\"),
 			"X86.cs"
 		).Execute();
 
 		new BuildX86Instructions(
 			Path.Combine(dataPath, @"X86-Instructions.json"),
-			Path.Combine(targetPath, @"Mosa.Platform.x86\"),
+			Path.Combine(targetPath, @"Mosa.Compiler.x86\"),
 			"X86Instructions.cs"
 		).Execute();
 
 		new BuildX86InstructionFiles(
 			Path.Combine(dataPath, @"X86-Instructions.json"),
-			Path.Combine(targetPath, @"Mosa.Platform.x86\Instructions")
+			Path.Combine(targetPath, @"Mosa.Compiler.x86\Instructions")
 		).Execute();
 
 		new BuildX64(
 			Path.Combine(dataPath, @"X64-Instructions.json"),
-			Path.Combine(targetPath, @"Mosa.Platform.x64\"),
+			Path.Combine(targetPath, @"Mosa.Compiler.x64\"),
 			"X64.cs"
 		).Execute();
 
 		new BuildX64Instructions(
 			Path.Combine(dataPath, @"X64-Instructions.json"),
-			Path.Combine(targetPath, @"Mosa.Platform.x64\"),
+			Path.Combine(targetPath, @"Mosa.Compiler.x64\"),
 			"X64Instructions.cs"
 		).Execute();
 
 		new BuildX64InstructionFiles(
 			Path.Combine(dataPath, @"X64-Instructions.json"),
-			Path.Combine(targetPath, @"Mosa.Platform.x64\Instructions")
+			Path.Combine(targetPath, @"Mosa.Compiler.x64\Instructions")
 		).Execute();
 
 		new BuildARM32(
 			Path.Combine(dataPath, @"ARM32-Instructions.json"),
-			Path.Combine(targetPath, @"Mosa.Platform.ARM32\"),
+			Path.Combine(targetPath, @"Mosa.Compiler.ARM32\"),
 			"ARM32.cs"
 		).Execute();
 
 		new BuildARM32Instructions(
 			Path.Combine(dataPath, @"ARM32-Instructions.json"),
-			Path.Combine(targetPath, @"Mosa.Platform.ARM32\"),
+			Path.Combine(targetPath, @"Mosa.Compiler.ARM32\"),
 			"ARM32Instructions.cs"
 		).Execute();
 
 		new BuildARM32InstructionFiles(
 			Path.Combine(dataPath, @"ARM32-Instructions.json"),
-			Path.Combine(targetPath, @"Mosa.Platform.ARM32\Instructions")
+			Path.Combine(targetPath, @"Mosa.Compiler.ARM32\Instructions")
 		).Execute();
 
 		new BuildARM64(
 			Path.Combine(dataPath, @"ARM64-Instructions.json"),
-			Path.Combine(targetPath, @"Mosa.Platform.ARM64\"),
+			Path.Combine(targetPath, @"Mosa.Compiler.ARM64\"),
 			"ARM64.cs"
 		).Execute();
 
 		new BuildARM64Instructions(
 			Path.Combine(dataPath, @"ARM64-Instructions.json"),
-			Path.Combine(targetPath, @"Mosa.Platform.ARM64\"),
+			Path.Combine(targetPath, @"Mosa.Compiler.ARM64\"),
 			"ARM64Instructions.cs"
 		).Execute();
 
 		new BuildARM64InstructionFiles(
 			Path.Combine(dataPath, @"ARM64-Instructions.json"),
-			Path.Combine(targetPath, @"Mosa.Platform.ARM64\Instructions")
+			Path.Combine(targetPath, @"Mosa.Compiler.ARM64\Instructions")
 		).Execute();
 	}
 }

@@ -11,13 +11,13 @@ public static class Native
 {
 	#region Intrinsic
 
-	[DllImport("Mosa.Platform.ARM32.Intrinsic::Nop")]
+	[DllImport("Mosa.Compiler.ARM32.Intrinsic::Nop")]
 	public static extern void Nop();
 
-	[DllImport("Mosa.Platform.ARM32.Intrinsic::Mcr")]
+	[DllImport("Mosa.Compiler.ARM32.Intrinsic::Mcr")]
 	public static extern uint Mcr(uint op1, uint op2, uint op3, uint op4, uint op5);
 
-	[DllImport("Mosa.Platform.ARM32.Intrinsic::Mrc")]
+	[DllImport("Mosa.Compiler.ARM32.Intrinsic::Mrc")]
 	public static extern uint Mrc(uint op1, uint op2, uint op3, uint op4, uint op5);
 
 	#endregion Intrinsic
