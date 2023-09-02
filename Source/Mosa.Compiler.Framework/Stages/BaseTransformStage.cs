@@ -19,9 +19,6 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 	private int TotalTransformCount;
 	private int TransformCount;
 	private int OptimizationCount;
-	private int SkippedEmptyBlocksCount;
-	private int RemoveUnreachableBlocksCount;
-	private int BlocksMergedCount;
 
 	private readonly List<BaseTransform>[] transforms = new List<BaseTransform>[MaximumInstructionID];
 	private readonly List<BaseBlockTransform> blockTransforms = new List<BaseBlockTransform>();
@@ -46,9 +43,6 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 	private string TransformCountStage;
 	private string OptimizationCountStage;
-	private string SkippedEmptyBlocksCountStage;
-	private string RemoveUnreachableBlocksCountStage;
-	private string BlocksMergedCountStage;
 
 	public BaseTransformStage(int maxPasses = MaximumPasses)
 	{
@@ -62,9 +56,6 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 		TransformCountStage = $"{Name}.Transforms";
 		OptimizationCountStage = $"{Name}.Optimizations";
-		SkippedEmptyBlocksCountStage = $"{Name}.SkippedEmptyBlocks";
-		RemoveUnreachableBlocksCountStage = $"{Name}.RemoveUnreachableBlocks";
-		BlocksMergedCountStage = $"{Name}.BlocksMerged";
 	}
 
 	protected override void Finish()
@@ -72,24 +63,15 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 		UpdateCounter("Transform.Total", TotalTransformCount);
 		UpdateCounter("Transform.Transforms", TransformCount);
 		UpdateCounter("Transform.Optimizations", OptimizationCount);
-		UpdateCounter("Transform.SkippedEmptyBlocks", SkippedEmptyBlocksCount);
-		UpdateCounter("Transform.RemoveUnreachableBlocks", RemoveUnreachableBlocksCount);
-		UpdateCounter("Transform.BlocksMerged", BlocksMergedCount);
 
 		UpdateCounter(TransformCountStage, TransformCount);
 		UpdateCounter(OptimizationCountStage, OptimizationCount);
-		UpdateCounter(SkippedEmptyBlocksCountStage, SkippedEmptyBlocksCount);
-		UpdateCounter(RemoveUnreachableBlocksCountStage, RemoveUnreachableBlocksCount);
-		UpdateCounter(BlocksMergedCountStage, BlocksMergedCount);
 
 		MethodCompiler.Compiler.PostTraceLog(specialTrace);
 
 		TotalTransformCount = 0;
 		TransformCount = 0;
 		OptimizationCount = 0;
-		SkippedEmptyBlocksCount = 0;
-		RemoveUnreachableBlocksCount = 0;
-		BlocksMergedCount = 0;
 
 		trace = null;
 	}
@@ -281,36 +263,19 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 	{
 		var changed = false;
 
-		foreach (var blockTransform in blockTransforms)
+		foreach (var transform in blockTransforms)
 		{
-			trace?.Log($"*** {blockTransform}");
+			var count = transform.Process(TransformContext);
 
-			changed |= blockTransform.Process(TransformContext);
+			var updated = count != 0;
+			changed |= updated;
+
+			if (updated && MethodCompiler.Statistics)
+			{
+				UpdateCounter(transform.Name, count);
+			}
 		}
 
 		return changed;
-	}
-
-	private bool ApplyBlockTransforms2()
-	{
-		if (!EnableBlockOptimizations)
-			return false;
-
-		return MergeBlocks() || RemoveUnreachableBlocks() || SkipEmptyBlocks();
-	}
-
-	protected bool MergeBlocks()
-	{
-		return new MergeBlocks().Process(TransformContext);
-	}
-
-	protected bool RemoveUnreachableBlocks()
-	{
-		return new RemoveUnreachableBlocks().Process(TransformContext);
-	}
-
-	protected bool SkipEmptyBlocks()
-	{
-		return new SkipEmptyBlocks().Process(TransformContext);
 	}
 }

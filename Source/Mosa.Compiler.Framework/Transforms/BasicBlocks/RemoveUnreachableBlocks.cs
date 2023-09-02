@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Transforms.BasicBlocks;
 
 public class RemoveUnreachableBlocks : BaseBlockTransform
 {
-	public override bool Process(TransformContext transformContext)
+	public override int Process(TransformContext transformContext)
 	{
 		var basicBlocks = transformContext.BasicBlocks;
 		var hasProtectedRegions = transformContext.MethodCompiler.HasProtectedRegions;
@@ -64,9 +64,11 @@ public class RemoveUnreachableBlocks : BaseBlockTransform
 			block.EmptyBlockOfAllInstructions(true);
 			PhiHelper.UpdatePhiBlocks(nextBlocks);
 
+			emptied++;
+
 			trace?.Log($"Removed Unreachable Block: {block}");
 		}
 
-		return emptied != 0;
+		return emptied;
 	}
 }
