@@ -342,6 +342,42 @@ public sealed class BasicBlocks : IEnumerable<BasicBlock>
 		return result;
 	}
 
+	#region Advanced Methods
+
+	/// <summary>
+	/// Replaces the branch targets.
+	/// </summary>
+	/// <param name="target">The current from block.</param>
+	/// <param name="oldTarget">The current destination block.</param>
+	/// <param name="newTarget">The new target block.</param>
+	public static void ReplaceBranchTargets(BasicBlock target, BasicBlock oldTarget, BasicBlock newTarget)
+	{
+		for (var node = target.BeforeLast; !node.IsBlockStartInstruction; node = node.Previous)
+		{
+			if (node.IsEmptyOrNop)
+				continue;
+
+			if (node.BranchTargetsCount == 0)
+				continue;
+
+			// TODO: When non branch instruction encountered, return (fast out)
+
+			var targets = node.BranchTargets;
+
+			for (var index = 0; index < targets.Count; index++)
+			{
+				if (targets[index] == oldTarget)
+				{
+					node.UpdateBranchTarget(index, newTarget);
+				}
+			}
+		}
+	}
+
+	#endregion Advanced Methods
+
+	#region Validation
+
 	public void RuntimeValidationWithFail()
 	{
 		Debug.Assert(RuntimeValidation(), "BasicBlocks Validation Failed");
@@ -370,4 +406,6 @@ public sealed class BasicBlocks : IEnumerable<BasicBlock>
 
 		return true;
 	}
+
+	#endregion Validation
 }

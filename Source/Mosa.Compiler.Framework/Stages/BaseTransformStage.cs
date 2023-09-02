@@ -38,8 +38,6 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 	protected int MaxPasses;
 	protected int Steps;
 
-	protected BitArray EmptyBlocks;
-
 	protected readonly Dictionary<string, Counter> TransformCounters = new Dictionary<string, Counter>();
 
 	private bool SortedByPriority;
@@ -92,7 +90,6 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 		RemoveUnreachableBlocksCount = 0;
 		BlocksMergedCount = 0;
 
-		EmptyBlocks = null;
 		trace = null;
 	}
 
@@ -274,11 +271,6 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 		if (!EnableBlockOptimizations)
 			return false;
 
-		if (EmptyBlocks == null)
-		{
-			EmptyBlocks = new BitArray(BasicBlocks.Count, false);
-		}
-
 		var changed1 = MergeBlocks();
 		var changed2 = RemoveUnreachableBlocks();
 		var changed3 = SkipEmptyBlocks();
@@ -331,16 +323,14 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 			if (HasProtectedRegions && !block.IsCompilerBlock)
 				continue;
 
-			if (EmptyBlocks.Get(block.Sequence))
+			if (block.IsCompletelyEmpty)
 				continue;
 
 			var nextBlocks = block.NextBlocks.ToArray();
 
-			EmptyBlockOfAllInstructions(block, true);
-
-			UpdatePhiBlocks(nextBlocks);
-
-			EmptyBlocks.Set(block.Sequence, true);
+			block.EmptyBlockOfAllInstructions(true);
+			PhiHelper.
+						UpdatePhiBlocks(nextBlocks);
 
 			trace?.Log($"Removed Unreachable Block: {block}");
 		}
@@ -371,16 +361,16 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 			if (block.PreviousBlocks.Count == 0)
 				continue;
 
-			if (EmptyBlocks.Get(block.Sequence))
+			if (block.IsCompletelyEmpty)
 				continue;
 
 			if (block.PreviousBlocks.Contains(block))
 				continue;
 
-			if (!IsEmptyBlockWithSingleJump(block))
+			if (!block.IsEmptyBlockWithSingleJump())
 				continue;
 
-			var hasPhi = IsInSSAForm && HasPhiInstruction(block.NextBlocks[0]);
+			var hasPhi = IsInSSAForm && block.NextBlocks[0].HasPhiInstruction();
 
 			if (hasPhi && IsInSSAForm && (block.PreviousBlocks.Count != 1 || block.NextBlocks[0].PreviousBlocks.Count != 1))
 				continue;
@@ -389,12 +379,10 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 			if (IsInSSAForm)
 			{
-				UpdatePhiTargets(block.NextBlocks, block, block.PreviousBlocks[0]);
+				PhiHelper.UpdatePhiTargets(block.NextBlocks, block, block.PreviousBlocks[0]);
 			}
 
-			RemoveEmptyBlockWithSingleJump(block, true);
-
-			EmptyBlocks.Set(block.Sequence, true);
+			block.RemoveEmptyBlockWithSingleJump(true);
 
 			emptied++;
 
@@ -447,7 +435,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 				if (IsInSSAForm)
 				{
-					UpdatePhiTargets(next.NextBlocks, next, block);
+					PhiHelper.UpdatePhiTargets(next.NextBlocks, next, block);
 				}
 
 				var insertPoint = block.BeforeLast.BackwardsToNonEmpty;

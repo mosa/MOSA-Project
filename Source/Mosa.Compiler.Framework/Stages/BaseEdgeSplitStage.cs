@@ -52,6 +52,6 @@ public class BaseEdgeSplitStage : BaseMethodCompilerStage
 
 		ctx.Label = -1;
 
-		ReplaceBranchTargets(from, to, ctx.Block);
+		BasicBlocks.ReplaceBranchTargets(from, to, ctx.Block);
 	}
 }

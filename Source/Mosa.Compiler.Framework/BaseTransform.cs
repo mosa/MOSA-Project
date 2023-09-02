@@ -1007,7 +1007,7 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 
 	#region Block Helpers
 
-	protected static void RemoveRemainingInstructionInBlock(Context context)
+	public static void RemoveRemainingInstructionInBlock(Context context)
 	{
 		var node = context.Node.Next;
 
@@ -1021,7 +1021,7 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 		}
 	}
 
-	protected static BasicBlock GetOtherBranchTarget(BasicBlock block, BasicBlock target)
+	public static BasicBlock GetOtherBranchTarget(BasicBlock block, BasicBlock target)
 	{
 		return block.NextBlocks[0] == target ? block.NextBlocks[1] : block.NextBlocks[0];
 	}

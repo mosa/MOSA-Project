@@ -290,7 +290,7 @@ public sealed class LoopInvariantCodeMotionStage : BaseMethodCompilerStage
 		{
 			if (!loop.Backedges.Contains(previous))
 			{
-				ReplaceBranchTargets(previous, header, landingpadBlock);
+				BasicBlocks.ReplaceBranchTargets(previous, header, landingpadBlock);
 			}
 		}
 
