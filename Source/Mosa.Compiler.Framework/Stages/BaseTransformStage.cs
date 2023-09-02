@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Mosa.Compiler.Framework.Trace;
+using Mosa.Compiler.Framework.Transforms.BasicBlocks;
 
 namespace Mosa.Compiler.Framework.Stages;
 
@@ -18,11 +19,9 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 	private int TotalTransformCount;
 	private int TransformCount;
 	private int OptimizationCount;
-	private int SkippedEmptyBlocksCount;
-	private int RemoveUnreachableBlocksCount;
-	private int BlocksMergedCount;
 
 	private readonly List<BaseTransform>[] transforms = new List<BaseTransform>[MaximumInstructionID];
+	private readonly List<BaseBlockTransform> blockTransforms = new List<BaseBlockTransform>();
 
 	private readonly TransformContext TransformContext = new TransformContext();
 
@@ -44,15 +43,11 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 	private string TransformCountStage;
 	private string OptimizationCountStage;
-	private string SkippedEmptyBlocksCountStage;
-	private string RemoveUnreachableBlocksCountStage;
-	private string BlocksMergedCountStage;
 
-	public BaseTransformStage(bool enableTransformOptimizations = false, bool enableBlockOptimizations = false, int maxPasses = MaximumPasses)
+	public BaseTransformStage(int maxPasses = MaximumPasses)
 	{
-		EnableTransformOptimizations = enableTransformOptimizations;
-		EnableBlockOptimizations = enableBlockOptimizations;
 		MaxPasses = maxPasses;
+		EnableTransformOptimizations = false;
 	}
 
 	protected override void Initialize()
@@ -61,9 +56,6 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 		TransformCountStage = $"{Name}.Transforms";
 		OptimizationCountStage = $"{Name}.Optimizations";
-		SkippedEmptyBlocksCountStage = $"{Name}.SkippedEmptyBlocks";
-		RemoveUnreachableBlocksCountStage = $"{Name}.RemoveUnreachableBlocks";
-		BlocksMergedCountStage = $"{Name}.BlocksMerged";
 	}
 
 	protected override void Finish()
@@ -71,24 +63,15 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 		UpdateCounter("Transform.Total", TotalTransformCount);
 		UpdateCounter("Transform.Transforms", TransformCount);
 		UpdateCounter("Transform.Optimizations", OptimizationCount);
-		UpdateCounter("Transform.SkippedEmptyBlocks", SkippedEmptyBlocksCount);
-		UpdateCounter("Transform.RemoveUnreachableBlocks", RemoveUnreachableBlocksCount);
-		UpdateCounter("Transform.BlocksMerged", BlocksMergedCount);
 
 		UpdateCounter(TransformCountStage, TransformCount);
 		UpdateCounter(OptimizationCountStage, OptimizationCount);
-		UpdateCounter(SkippedEmptyBlocksCountStage, SkippedEmptyBlocksCount);
-		UpdateCounter(RemoveUnreachableBlocksCountStage, RemoveUnreachableBlocksCount);
-		UpdateCounter(BlocksMergedCountStage, BlocksMergedCount);
 
 		MethodCompiler.Compiler.PostTraceLog(specialTrace);
 
 		TotalTransformCount = 0;
 		TransformCount = 0;
 		OptimizationCount = 0;
-		SkippedEmptyBlocksCount = 0;
-		RemoveUnreachableBlocksCount = 0;
-		BlocksMergedCount = 0;
 
 		trace = null;
 	}
@@ -125,7 +108,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 		}
 	}
 
-	public void AddTranform(BaseTransform transform)
+	protected void AddTranform(BaseTransform transform)
 	{
 		var id = transform.Instruction == null ? 0 : transform.Instruction.ID;
 
@@ -135,6 +118,16 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 		}
 
 		transforms[id].Add(transform);
+
+		EnableTransformOptimizations = true;
+	}
+
+	protected void AddTranforms(List<BaseBlockTransform> list)
+	{
+		foreach (var transform in list)
+		{
+			blockTransforms.Add(transform);
+		}
 	}
 
 	private void SortByPriority()
@@ -167,7 +160,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 			trace?.Log($"*** Pass # {pass}");
 
 			var changed1 = InstructionTransformationPass();
-			var changed2 = (!changed1 || pass == 1) && BranchOptimizationPass();
+			var changed2 = (!changed1 || pass == 1) && ApplyBlockTransforms();
 
 			changed = changed1 || changed2;
 
@@ -266,197 +259,23 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 		return false;
 	}
 
-	private bool BranchOptimizationPass()
+	private bool ApplyBlockTransforms()
 	{
-		if (!EnableBlockOptimizations)
-			return false;
+		var changed = false;
 
-		var changed1 = MergeBlocks();
-		var changed2 = RemoveUnreachableBlocks();
-		var changed3 = SkipEmptyBlocks();
-
-		return changed1 || changed2 || changed3;
-	}
-
-	protected bool RemoveUnreachableBlocks()
-	{
-		var emptied = 0;
-
-		var stack = new Stack<BasicBlock>();
-		var bitmap = new BitArray(BasicBlocks.Count, false);
-
-		foreach (var block in BasicBlocks)
+		foreach (var transform in blockTransforms)
 		{
-			if (block.IsHeadBlock || block.IsHandlerHeadBlock || block.IsTryHeadBlock)
+			var count = transform.Process(TransformContext);
+
+			var updated = count != 0;
+			changed |= updated;
+
+			if (updated && MethodCompiler.Statistics)
 			{
-				bitmap.Set(block.Sequence, true);
-				stack.Push(block);
+				UpdateCounter(transform.Name, count);
 			}
 		}
 
-		while (stack.Count != 0)
-		{
-			var block = stack.Pop();
-
-			//trace?.Log($"Used Block: {block}");
-
-			foreach (var next in block.NextBlocks)
-			{
-				//trace?.Log($"Visited Block: {block}");
-
-				if (!bitmap.Get(next.Sequence))
-				{
-					bitmap.Set(next.Sequence, true);
-					stack.Push(next);
-				}
-			}
-		}
-
-		foreach (var block in BasicBlocks)
-		{
-			if (bitmap.Get(block.Sequence))
-				continue;
-
-			if (block.IsHandlerHeadBlock || block.IsTryHeadBlock)
-				continue;
-
-			if (HasProtectedRegions && !block.IsCompilerBlock)
-				continue;
-
-			if (block.IsCompletelyEmpty)
-				continue;
-
-			var nextBlocks = block.NextBlocks.ToArray();
-
-			block.EmptyBlockOfAllInstructions(true);
-			PhiHelper.
-						UpdatePhiBlocks(nextBlocks);
-
-			trace?.Log($"Removed Unreachable Block: {block}");
-		}
-
-		RemoveUnreachableBlocksCount += emptied;
-
-		return emptied != 0;
-	}
-
-	protected bool SkipEmptyBlocks()
-	{
-		var emptied = 0;
-
-		foreach (var block in BasicBlocks)
-		{
-			if (block.NextBlocks.Count != 1)
-				continue;
-
-			if (block.IsPrologue || block.IsEpilogue)
-				continue;
-
-			if (block.IsHandlerHeadBlock || block.IsTryHeadBlock)
-				continue;
-
-			if (HasProtectedRegions && !block.IsCompilerBlock)
-				continue;
-
-			if (block.PreviousBlocks.Count == 0)
-				continue;
-
-			if (block.IsCompletelyEmpty)
-				continue;
-
-			if (block.PreviousBlocks.Contains(block))
-				continue;
-
-			if (!block.IsEmptyBlockWithSingleJump())
-				continue;
-
-			var hasPhi = IsInSSAForm && block.NextBlocks[0].HasPhiInstruction();
-
-			if (hasPhi && IsInSSAForm && (block.PreviousBlocks.Count != 1 || block.NextBlocks[0].PreviousBlocks.Count != 1))
-				continue;
-
-			trace?.Log($"Removed Block: {block} - Skipped to: {block.NextBlocks[0]}");
-
-			if (IsInSSAForm)
-			{
-				PhiHelper.UpdatePhiTargets(block.NextBlocks, block, block.PreviousBlocks[0]);
-			}
-
-			block.RemoveEmptyBlockWithSingleJump(true);
-
-			emptied++;
-
-			//if (mosaSettings.FullValidationMode)
-			//	CheckAllPhiInstructions();
-		}
-
-		SkippedEmptyBlocksCount += emptied;
-
-		return emptied != 0;
-	}
-
-	protected bool MergeBlocks()
-	{
-		var emptied = 0;
-		var changed = true;
-
-		while (changed)
-		{
-			changed = false;
-
-			foreach (var block in BasicBlocks)
-			{
-				if (block.NextBlocks.Count != 1)
-					continue;
-
-				if (block.IsEpilogue
-					|| block.IsPrologue
-					|| block.IsTryHeadBlock
-					|| block.IsHandlerHeadBlock
-					|| (!block.IsCompilerBlock && HasProtectedRegions))
-					continue;
-
-				// don't remove block if it jumps back to itself
-				if (block.PreviousBlocks.Contains(block))
-					continue;
-
-				var next = block.NextBlocks[0];
-
-				if (next.PreviousBlocks.Count != 1)
-					continue;
-
-				if (next.IsEpilogue
-					|| next.IsPrologue
-					|| next.IsTryHeadBlock
-					|| next.IsHandlerHeadBlock)
-					continue;
-
-				trace?.Log($"Merge Blocking: {block} with: {next}");
-
-				if (IsInSSAForm)
-				{
-					PhiHelper.UpdatePhiTargets(next.NextBlocks, next, block);
-				}
-
-				var insertPoint = block.BeforeLast.BackwardsToNonEmpty;
-
-				var beforeInsertPoint = insertPoint.Previous.BackwardsToNonEmpty;
-
-				if (beforeInsertPoint.BranchTargetsCount != 0)
-				{
-					Debug.Assert(beforeInsertPoint.BranchTargets[0] == next);
-					beforeInsertPoint.Empty();
-				}
-
-				insertPoint.Empty();
-				insertPoint.MoveFrom(next.AfterFirst.ForwardToNonEmpty, next.Last.Previous.BackwardsToNonEmpty);
-				emptied++;
-				changed = true;
-			}
-		}
-
-		BlocksMergedCount += emptied;
-
-		return emptied != 0;
+		return changed;
 	}
 }

@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Stages;
 public class CheckedConversionStage : BaseTransformStage
 {
 	public CheckedConversionStage()
-		: base(true, false)
+		: base()
 	{
 		AddTranforms(CheckedConversionTransforms.List);
 	}

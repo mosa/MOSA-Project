@@ -11,7 +11,7 @@ public sealed class IRTransformationStage : Compiler.Framework.Stages.BaseTransf
 	public override string Name => "ARM64." + GetType().Name;
 
 	public IRTransformationStage()
-		: base(true, false)
+		: base()
 	{
 		//AddTranforms(IRTransforms.List);
 	}

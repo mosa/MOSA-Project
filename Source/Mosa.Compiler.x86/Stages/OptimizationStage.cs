@@ -14,7 +14,7 @@ public sealed class OptimizationStage : Compiler.Framework.Stages.BaseTransformS
 	public override string Name => "x86." + GetType().Name;
 
 	public OptimizationStage()
-		: base(true, false)
+		: base()
 	{
 		AddTranforms(AutoTransforms.List);
 		AddTranforms(ManualTransforms.List);

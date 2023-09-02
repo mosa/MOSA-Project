@@ -3,7 +3,6 @@
 namespace Mosa.UnitTests.Other;
 
 public static class SpecificTests
-
 {
 	[MosaUnitTest(Series = "I8")]
 	public static long SwitchI8_v2(long a)

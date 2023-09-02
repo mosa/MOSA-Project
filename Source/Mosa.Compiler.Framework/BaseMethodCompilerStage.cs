@@ -602,7 +602,7 @@ public abstract class BaseMethodCompilerStage
 		return true;
 	}
 
-	protected bool CheckAllPhiInstructions()
+	protected  bool CheckAllPhiInstructions()
 	{
 		foreach (var block in BasicBlocks)
 		{
@@ -623,6 +623,8 @@ public abstract class BaseMethodCompilerStage
 
 		return true;
 	}
+
+	// FUTURE: Check Block CompletelyEmpty flag
 
 	#endregion Check Methods
 }

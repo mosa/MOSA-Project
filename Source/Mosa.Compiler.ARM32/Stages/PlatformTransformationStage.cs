@@ -15,7 +15,7 @@ public sealed class PlatformTransformationStage : Compiler.Framework.Stages.Base
 	public override string Name => "ARM32." + GetType().Name;
 
 	public PlatformTransformationStage()
-		: base(true, false, 0)
+		: base(0)
 	{
 		AddTranforms(TweakTransforms.List);
 		AddTranforms(FixedRegistersTransforms.List);

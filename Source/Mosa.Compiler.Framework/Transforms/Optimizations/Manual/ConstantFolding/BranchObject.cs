@@ -18,6 +18,9 @@ public sealed class BranchObject : BaseTransform
 		if (!IsResolvedConstant(context.Operand2))
 			return false;
 
+		if (context.BranchTargetsCount == 1)
+			return false;
+
 		return IsNormal(context.ConditionCode);
 	}
 

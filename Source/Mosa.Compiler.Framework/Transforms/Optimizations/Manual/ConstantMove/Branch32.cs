@@ -16,6 +16,9 @@ public sealed class Branch32 : BaseTransform
 		if (!IsConstant(context.Operand1))
 			return false;
 
+		if (context.BranchTargetsCount == 1)
+			return false;
+
 		return true;
 	}
 

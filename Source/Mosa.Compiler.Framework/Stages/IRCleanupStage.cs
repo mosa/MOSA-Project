@@ -9,8 +9,11 @@ namespace Mosa.Compiler.Framework.Stages;
 /// </summary>
 public class IRCleanupStage : BaseTransformStage
 {
-	public IRCleanupStage() : base(false, true)
+	public IRCleanupStage() : base()
 	{
+		AddTranforms(Transforms.BasicBlocks.BasicBlocksTransforms.List);
+
+		EnableBlockOptimizations = true;
 	}
 
 	protected override void Run()

@@ -2,9 +2,9 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.ConstantFolding;
 
-public sealed class Branch64 : BaseTransform
+public sealed class BranchManagedPointer : BaseTransform
 {
-	public Branch64() : base(IRInstruction.Branch64, TransformType.Manual | TransformType.Optimization)
+	public BranchManagedPointer() : base(IRInstruction.BranchManagedPointer, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -27,7 +27,6 @@ public sealed class Branch64 : BaseTransform
 	public override void Transform(Context context, TransformContext transform)
 	{
 		var target = context.BranchTargets[0];
-		var block = context.Block;
 
 		if (!Compare64(context.ConditionCode, context.Operand1, context.Operand2))
 		{
@@ -37,7 +36,7 @@ public sealed class Branch64 : BaseTransform
 		}
 		else
 		{
-			var phiBlock = GetOtherBranchTarget(block, target);
+			var phiBlock = GetOtherBranchTarget(context.Block, target);
 
 			context.SetInstruction(IRInstruction.Jmp, target);
 

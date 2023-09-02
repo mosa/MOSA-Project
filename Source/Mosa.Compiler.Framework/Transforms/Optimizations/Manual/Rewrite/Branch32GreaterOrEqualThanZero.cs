@@ -16,6 +16,9 @@ public sealed class Branch32GreaterOrEqualThanZero : BaseTransform
 		if (!IsZero(context.Operand2))
 			return false;
 
+		if (context.BranchTargetsCount == 1)
+			return false;
+
 		return true;
 	}
 

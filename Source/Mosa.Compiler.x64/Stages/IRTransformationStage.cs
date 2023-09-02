@@ -13,7 +13,7 @@ public sealed class IRTransformationStage : Compiler.Framework.Stages.BaseTransf
 	public override string Name => "x64." + GetType().Name;
 
 	public IRTransformationStage()
-		: base(true, false)
+		: base()
 	{
 		AddTranforms(IRTransforms.List);
 	}

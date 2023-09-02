@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Stages;
 public class IRTransformsStage : BaseTransformStage
 {
 	public IRTransformsStage()
-		: base(true, false)
+		: base()
 	{
 		AddTranforms(IRTransforms.List);
 		AddTranforms(CheckedConversionTransforms.List);

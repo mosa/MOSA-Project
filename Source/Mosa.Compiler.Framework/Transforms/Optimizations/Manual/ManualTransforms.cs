@@ -49,6 +49,8 @@ public static class ManualTransforms
 		new ConstantFolding.Compare64x64(),
 		new ConstantFolding.Branch32(),
 		new ConstantFolding.Branch64(),
+		new ConstantFolding.BranchObject(),
+		new ConstantFolding.BranchManagedPointer(),
 		new ConstantFolding.Switch(),
 
 		new StrengthReduction.AddCarryOut32ByZero(),

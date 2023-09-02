@@ -19,6 +19,9 @@ public sealed class Branch32Object : BaseTransform
 		if (!IsResolvedConstant(context.Operand2))
 			return false;
 
+		if (context.BranchTargetsCount == 1)
+			return false;
+
 		if (context.Operand2.ConstantUnsigned32 != 0)
 			return false;
 
