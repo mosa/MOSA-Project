@@ -305,27 +305,27 @@ public sealed class TransformContext
 
 	public static void UpdatePhiTarget(BasicBlock target, BasicBlock source, BasicBlock newSource)
 	{
-		BaseMethodCompilerStage.UpdatePhiTarget(target, source, newSource);
+		PhiHelper.UpdatePhiTarget(target, source, newSource);
 	}
 
 	public static void UpdatePhiTargets(List<BasicBlock> targets, BasicBlock source, BasicBlock newSource)
 	{
-		BaseMethodCompilerStage.UpdatePhiTargets(targets, source, newSource);
+		PhiHelper.UpdatePhiTargets(targets, source, newSource);
 	}
 
 	public static void UpdatePhiBlocks(List<BasicBlock> phiBlocks)
 	{
-		BaseMethodCompilerStage.UpdatePhiBlocks(phiBlocks);
+		PhiHelper.UpdatePhiBlocks(phiBlocks);
 	}
 
 	public static void UpdatePhiBlock(BasicBlock phiBlock)
 	{
-		BaseMethodCompilerStage.UpdatePhiBlock(phiBlock);
+		PhiHelper.UpdatePhiBlock(phiBlock);
 	}
 
 	public static void UpdatePhi(InstructionNode node)
 	{
-		BaseMethodCompilerStage.UpdatePhi(node);
+		PhiHelper.UpdatePhi(node);
 	}
 
 	#endregion Phi Helpers

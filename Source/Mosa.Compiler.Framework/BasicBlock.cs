@@ -132,6 +132,11 @@ public sealed class BasicBlock : IComparable<BasicBlock>
 		}
 	}
 
+	/// <summary>
+	/// Gets if the block is completely empty.
+	/// </summary>
+	public bool IsCompletelyEmpty { get; private set; } = false;
+
 	#endregion Properties
 
 	#region Construction
@@ -270,6 +275,96 @@ public sealed class BasicBlock : IComparable<BasicBlock>
 	}
 
 	#endregion Methods
+
+	#region Advanced Methods
+
+	/// <summary>
+	/// Determines whether [is empty block with single jump] [the specified block].
+	/// </summary>
+	/// <returns>
+	///   <c>true</c> if [is empty block with single jump] [the specified block]; otherwise, <c>false</c>.
+	/// </returns>
+	public bool IsEmptyBlockWithSingleJump()
+	{
+		if (NextBlocks.Count != 1)
+			return false;
+
+		for (var node = AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
+		{
+			if (node.IsEmptyOrNop)
+				continue;
+
+			if (!node.Instruction.IsUnconditionalBranch)
+				return false;
+		}
+
+		return true;
+	}
+
+	public void RemoveEmptyBlockWithSingleJump(bool useNop = false)
+	{
+		Debug.Assert(NextBlocks.Count == 1);
+
+		var target = NextBlocks[0];
+
+		foreach (var previous in PreviousBlocks.ToArray())
+		{
+			BasicBlocks.ReplaceBranchTargets(previous, this, target);
+		}
+
+		EmptyBlockOfAllInstructions(useNop);
+
+		Debug.Assert(PreviousBlocks.Count == 0);
+	}
+
+	/// <summary>
+	/// Empties the block of all instructions.
+	/// </summary>
+	/// <param name="useNop"></param>
+	public bool EmptyBlockOfAllInstructions(bool useNop = false)
+	{
+		var found = false;
+
+		for (var node = AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
+		{
+			if (node.IsEmpty)
+				continue;
+
+			if (node.IsNop)
+			{
+				if (!useNop)
+					node.Empty();
+
+				continue;
+			}
+
+			node.SetNop();
+
+			found = true;
+		}
+
+		IsCompletelyEmpty = true;
+
+		return found;
+	}
+
+	public bool HasPhiInstruction()
+	{
+		for (var node = AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
+		{
+			if (node.IsEmptyOrNop)
+				continue;
+
+			if (node.Instruction.IsPhi)
+				return true;
+
+			return false;
+		}
+
+		return false;
+	}
+
+	#endregion Advanced Methods
 
 	public int CompareTo(BasicBlock other)
 	{
