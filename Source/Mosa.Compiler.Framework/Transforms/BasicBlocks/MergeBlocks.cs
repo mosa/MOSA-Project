@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Transforms.BasicBlocks;
 
-public abstract class MergeBlocks : BaseBlockTransform
+public class MergeBlocks : BaseBlockTransform
 {
 	public override bool Process(TransformContext transformContext)
 	{

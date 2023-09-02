@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Stages;
 public sealed class NewObjectStage : BaseTransformStage
 {
 	public NewObjectStage()
-		: base(true, false, 1)
+		: base(1)
 	{
 		AddTranforms(RuntimeTransforms.NewList);
 	}

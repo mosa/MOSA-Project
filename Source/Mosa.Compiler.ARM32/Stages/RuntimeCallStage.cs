@@ -13,7 +13,7 @@ public sealed class RuntimeCallStage : Compiler.Framework.Stages.BaseTransformSt
 	public override string Name => "ARM32." + GetType().Name;
 
 	public RuntimeCallStage()
-		: base(true, false, 1)
+		: base(1)
 	{
 		AddTranforms(RuntimeCallTransforms.List);
 	}

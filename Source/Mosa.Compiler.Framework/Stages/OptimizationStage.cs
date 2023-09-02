@@ -16,7 +16,7 @@ public class OptimizationStage : BaseTransformStage
 	private readonly bool LowerTo32;
 
 	public OptimizationStage(bool lowerTo32)
-		: base(true, true)
+		: base()
 	{
 		LowerTo32 = lowerTo32;
 
@@ -25,6 +25,10 @@ public class OptimizationStage : BaseTransformStage
 
 		if (LowerTo32)
 			AddTranforms(LowerTo32Transforms.List);
+
+		AddTranforms(Transforms.BasicBlocks.BasicBlocksTransforms.List);
+
+		EnableBlockOptimizations = true;
 	}
 
 	protected override void CustomizeTransform(TransformContext transformContext)

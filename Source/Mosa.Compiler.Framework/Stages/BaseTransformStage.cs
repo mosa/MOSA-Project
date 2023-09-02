@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Mosa.Compiler.Framework.Trace;
+using Mosa.Compiler.Framework.Transforms.BasicBlocks;
 
 namespace Mosa.Compiler.Framework.Stages;
 
@@ -23,6 +24,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 	private int BlocksMergedCount;
 
 	private readonly List<BaseTransform>[] transforms = new List<BaseTransform>[MaximumInstructionID];
+	private readonly List<BaseBlockTransform> blockTransforms = new List<BaseBlockTransform>();
 
 	private readonly TransformContext TransformContext = new TransformContext();
 
@@ -48,11 +50,10 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 	private string RemoveUnreachableBlocksCountStage;
 	private string BlocksMergedCountStage;
 
-	public BaseTransformStage(bool enableTransformOptimizations = false, bool enableBlockOptimizations = false, int maxPasses = MaximumPasses)
+	public BaseTransformStage(int maxPasses = MaximumPasses)
 	{
-		EnableTransformOptimizations = enableTransformOptimizations;
-		EnableBlockOptimizations = enableBlockOptimizations;
 		MaxPasses = maxPasses;
+		EnableTransformOptimizations = false;
 	}
 
 	protected override void Initialize()
@@ -125,7 +126,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 		}
 	}
 
-	public void AddTranform(BaseTransform transform)
+	protected void AddTranform(BaseTransform transform)
 	{
 		var id = transform.Instruction == null ? 0 : transform.Instruction.ID;
 
@@ -135,6 +136,16 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 		}
 
 		transforms[id].Add(transform);
+
+		EnableTransformOptimizations = true;
+	}
+
+	protected void AddTranforms(List<BaseBlockTransform> list)
+	{
+		foreach (var transform in list)
+		{
+			blockTransforms.Add(transform);
+		}
 	}
 
 	private void SortByPriority()
@@ -271,14 +282,45 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 		if (!EnableBlockOptimizations)
 			return false;
 
-		var changed1 = MergeBlocks();
-		var changed2 = RemoveUnreachableBlocks();
-		var changed3 = SkipEmptyBlocks();
+		return MergeBlocks() || RemoveUnreachableBlocks() || SkipEmptyBlocks();
+	}
 
-		return changed1 || changed2 || changed3;
+	private bool BranchOptimizationPass2()
+	{
+		if (blockTransforms.Count == 0)
+			return false;
+
+		var updated = true;
+		var changed = false;
+
+		while (updated)
+		{
+			updated = ApplyBlockTransforms();
+
+			changed |= updated;
+		}
+
+		return changed;
+	}
+
+	private bool ApplyBlockTransforms()
+	{
+		var changed = false;
+
+		foreach (var blockTransform in blockTransforms)
+		{
+			changed |= blockTransform.Process(TransformContext);
+		}
+
+		return changed;
 	}
 
 	protected bool RemoveUnreachableBlocks()
+	{
+		return new RemoveUnreachableBlocks().Process(TransformContext);
+	}
+
+	protected bool RemoveUnreachableBlocks2()
 	{
 		var emptied = 0;
 
@@ -342,6 +384,11 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 	protected bool SkipEmptyBlocks()
 	{
+		return new SkipEmptyBlocks().Process(TransformContext);
+	}
+
+	protected bool SkipEmptyBlocks2()
+	{
 		var emptied = 0;
 
 		foreach (var block in BasicBlocks)
@@ -396,6 +443,11 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 	}
 
 	protected bool MergeBlocks()
+	{
+		return new MergeBlocks().Process(TransformContext);
+	}
+
+	protected bool MergeBlocks2()
 	{
 		var emptied = 0;
 		var changed = true;

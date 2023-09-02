@@ -1,10 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Diagnostics;
-
 namespace Mosa.Compiler.Framework.Transforms.BasicBlocks;
 
-public abstract class SkipEmptyBlocks : BaseBlockTransform
+public class SkipEmptyBlocks : BaseBlockTransform
 {
 	public override bool Process(TransformContext transformContext)
 	{
