@@ -1,7 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Net;
-
 namespace Mosa.Compiler.Framework.Transforms.PlatformIntrinsic;
 
 /// <summary>
