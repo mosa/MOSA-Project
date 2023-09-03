@@ -7,6 +7,8 @@ Introduction
 
 Now that you've learned to either launch a pre-existing demo project or make your own, we'll teach you the basics of the MOSA framework, and how to make your OS more interesting! Let's get started!
 
+.. tip:: You don't need to follow this guide if you're using the BareMetal kernel (which the template is using). This guide is only for those who wish to learn more about the internals of MOSA.
+
 Theory
 ======
 
