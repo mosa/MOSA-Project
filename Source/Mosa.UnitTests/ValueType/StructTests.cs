@@ -560,4 +560,4 @@ internal struct Struct3C
 	public char Three;
 }
 
-#pragma warning enabled CS0649 // Fields are never assigned to, and will always have its default value
+#pragma warning restore CS0649 // Fields are never assigned to, and will always have its default value

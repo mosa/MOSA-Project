@@ -2,6 +2,8 @@
 
 namespace Mosa.UnitTests.ValueType;
 
+#pragma warning disable CS0649
+
 internal struct InitStruct
 {
 	public byte ValueU1;
@@ -103,6 +105,6 @@ public static class InitStructTests
 		InitStruct d = new InitStruct();
 		return d.ValueC;
 	}
-
 }
 
+#pragma warning restore CS0649
