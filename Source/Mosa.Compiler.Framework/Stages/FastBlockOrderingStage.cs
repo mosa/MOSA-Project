@@ -5,7 +5,7 @@ using Mosa.Compiler.Framework.Analysis;
 namespace Mosa.Compiler.Framework.Stages;
 
 /// <summary>
-///	This stage quickly reorders branches.
+/// This stage quickly reorders branches.
 /// </summary>
 public class FastBlockOrderingStage : BaseTransformStage
 {
