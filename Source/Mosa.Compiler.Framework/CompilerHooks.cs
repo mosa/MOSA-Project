@@ -20,8 +20,6 @@ public class CompilerHooks
 
 	public delegate void NotifyMethodCompiledHandler(MosaMethod method);
 
-	public delegate IList<CustomELFSection> CustomElfSectionsHandler();
-
 	public delegate NotifyTraceLogHandler NotifyMethodInstructionTraceHandler(MosaMethod method);
 
 	public delegate NotifyTraceLogHandler NotifyMethodTranformTraceHandler(MosaMethod method);
