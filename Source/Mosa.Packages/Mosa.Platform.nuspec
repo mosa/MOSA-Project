@@ -1,25 +1,25 @@
 ﻿<?xml version="1.0"?>
 <package>
 	<metadata>
-		<id>Mosa.Runtime</id>
+		<id>Mosa.Platform</id>
 		<version>$version$</version>
-		<title>Mosa.Runtime Library</title>
+		<title>Mosa.Platform Library</title>
 		<authors>MOSA Project</authors>
 		<owners>MOSA Project</owners>
 		<license type="expression">BSD-3-Clause-Clear</license>
 		<projectUrl>https://www.mosa-project.org</projectUrl>
 		<icon>images/Mosa Icon.png</icon>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
-		<summary>MOSA runtime library</summary>
-		<description>This package contains the base MOSA runtime library.</description>
+		<summary>MOSA BareMetal kernel and runtime libraries</summary>
+		<description>This package contains the platform-agnostic BareMetal kernel and runtime libraries (including the core library).</description>
 		<copyright>Copyright © MOSA Project 2023</copyright>
 		<tags>MOSA Compiler</tags>
-		<dependencies>
-			<dependency id="Mosa.Korlib" version="$version$" />
-		</dependencies>
 	</metadata>
 	<files>
 		<file src="..\Art\Mosa Icon.png" target="images" />
+		<file src="..\..\bin\Mosa.Kernel.BareMetal.dll" target="lib\net7.0" />
 		<file src="..\..\bin\Mosa.Runtime.dll" target="lib\net7.0" />
+		<file src="..\..\bin\System.Runtime.dll" target="lib\net7.0" />
+		<file src="..\..\bin\Mosa.Plug.Korlib.dll" target="lib\net7.0" />
 	</files>
 </package>

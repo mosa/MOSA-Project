@@ -14,7 +14,7 @@ Those are the demo projects using the **Mosa.Kernel.BareMetal** kernel.
 Mosa.Compiler.*
 ***************
 
-Those projects make the MOSA compiler. You can learn more about it :doc:`here<compiler-design>`.
+Those projects make up the MOSA compiler. They include the CIL, IR transformations and native code generation stages. You can learn more about it :doc:`here<compiler-design>`.
 
 *****************
 Mosa.DeviceDriver
@@ -53,12 +53,6 @@ Mosa.Korlib
 ***********
 
 This project is the MOSA implementation of the .NET standard library. While it is currently missing a lot of features, it is highly portable and can be used in any project requiring a custom core library.
-
-***************
-Mosa.Platform.*
-***************
-
-Those projects host the code generation stages of their respective platform for the MOSA compiler.
 
 ****************
 Mosa.Plug.Korlib

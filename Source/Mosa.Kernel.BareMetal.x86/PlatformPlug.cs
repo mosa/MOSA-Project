@@ -22,9 +22,10 @@ public static class PlatformPlug
 		Multiboot.Setup(new Pointer(ebx), eax);
 
 		SSE.Setup();
-		SerialDebug.Setup();
 		PIC.Setup();
 		RTC.Setup();
+
+		if (BootSettings.EnableDebugOutput) Serial.Setup(Serial.COM1);
 	}
 
 	[Plug("Mosa.Kernel.BareMetal.Platform::GetBootReservedRegion")]
@@ -39,7 +40,10 @@ public static class PlatformPlug
 	public static void ConsoleWrite(byte c) => VGAConsole.Write(c);
 
 	[Plug("Mosa.Kernel.BareMetal.Platform::DebugWrite")]
-	public static void DebugWrite(byte c) => SerialDebug.Write(c);
+	public static void DebugWrite(byte c)
+	{
+		if (BootSettings.EnableDebugOutput) Serial.Write(Serial.COM1, c);
+	}
 
 	[Plug("Mosa.Kernel.BareMetal.Platform::GetTime")]
 	public static Time GetTime() => new(

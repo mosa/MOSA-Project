@@ -31,8 +31,6 @@ public static class Program
 		Console.ForegroundColor = ConsoleColor.White;
 		Console.Clear();
 
-		Debug.WriteLine("##PASS##");
-
 		AppManager.Execute("ShowISA");
 		AppManager.Execute("ShowPCI");
 		AppManager.Execute("ShowDisks");
