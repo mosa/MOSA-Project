@@ -94,6 +94,8 @@ public sealed class BitValue
 
 	public ulong MinValue { get; private set; }
 
+	public bool Is32Bit { get; private set; }
+
 	#region Future
 
 	//public ulong A { get; private set; }
@@ -113,8 +115,6 @@ public sealed class BitValue
 	//public bool IsFullSet64 => A == ulong.MaxValue && B == ulong.MaxValue;
 
 	#endregion Future
-
-	public bool Is32Bit { get; private set; }
 
 	public bool Is64Bit => !Is32Bit;
 
