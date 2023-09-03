@@ -105,6 +105,6 @@ public static class InitStructTests
 		InitStruct d = new InitStruct();
 		return d.ValueC;
 	}
+
 }
 
-#pragma warning restore CS0649
