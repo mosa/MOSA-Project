@@ -1,9 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
-using Mosa.DeviceDriver.ISA;
 using Mosa.DeviceSystem;
-using Mosa.DeviceSystem.Service;
 
 namespace Mosa.BareMetal.HelloWorld.Apps;
 

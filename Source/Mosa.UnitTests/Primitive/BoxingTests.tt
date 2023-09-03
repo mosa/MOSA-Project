@@ -1,10 +1,9 @@
 ﻿<#@ include file="../../TemplateLibrary.txt" #>
 namespace Mosa.UnitTests;
 
-public static class BoxingTests 
+public static class BoxingTests
 {
 <# foreach (KeyValuePair<string, string> number in NumbersWithChar) { #>
-
 	[MosaUnitTest(Series = "<#= number.Value #>")]
 	public static <#= number.Key #> Box<#= number.Value #>(<#= number.Key #> value)
 	{
@@ -18,5 +17,6 @@ public static class BoxingTests
 		object o = value;
 		return o.Equals(value);
 	}
+
 <# } #>
 }

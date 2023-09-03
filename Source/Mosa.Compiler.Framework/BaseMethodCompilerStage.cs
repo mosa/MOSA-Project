@@ -624,5 +624,7 @@ public abstract class BaseMethodCompilerStage
 		return true;
 	}
 
+	// FUTURE: Check Block CompletelyEmpty flag
+
 	#endregion Check Methods
 }

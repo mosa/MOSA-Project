@@ -1,6 +1,8 @@
 ﻿<#@ include file="../../TemplateLibrary.txt" #>
 namespace Mosa.UnitTests.ValueType;
 
+#pragma warning disable CS0649
+
 internal struct InitStruct
 {
 <# foreach (KeyValuePair<string, string> primitives in PrimitivesWithChar) { #>

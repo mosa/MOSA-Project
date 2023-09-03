@@ -4,7 +4,6 @@ namespace Mosa.UnitTests.FlowControl;
 public static class SwitchTests
 {
 <# foreach (KeyValuePair<string, string> number in NegativeIntegers) { #>
-
 	[MosaUnitTest(Series = "<#= number.Value #>")]
 	public static <#= number.Key #> Switch<#= number.Value #>(<#= number.Key #> a)
 	{

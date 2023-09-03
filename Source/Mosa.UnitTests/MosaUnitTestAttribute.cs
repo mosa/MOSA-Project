@@ -10,15 +10,23 @@ public class MosaUnitTestAttribute : Attribute
 	public String Series { get; set; }
 
 	public object Param1 { get; }
+
 	public object Param2 { get; }
+
 	public object Param3 { get; }
+
 	public object Param4 { get; }
+
 	public object Param5 { get; }
 
 	public String ParamSeries1 { get; }
+
 	public String ParamSeries2 { get; }
+
 	public String ParamSeries3 { get; }
+
 	public String ParamSeries4 { get; }
+
 	public String ParamSeries5 { get; }
 
 	public int ParamCount { get; }

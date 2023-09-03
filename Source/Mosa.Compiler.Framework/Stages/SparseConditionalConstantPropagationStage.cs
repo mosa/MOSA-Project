@@ -200,8 +200,7 @@ public class SparseConditionalConstantPropagationStage : BaseMethodCompilerStage
 		var nextBlocks = block.NextBlocks.ToArray();
 
 		block.EmptyBlockOfAllInstructions(true);
-		PhiHelper.
-				UpdatePhiBlocks(nextBlocks);
+		PhiHelper.UpdatePhiBlocks(nextBlocks);
 
 		foreach (var next in nextBlocks)
 		{

@@ -4,9 +4,9 @@ using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Transforms.BasicBlocks;
 
-public abstract class MergeBlocks : BaseBlockTransform
+public class MergeBlocks : BaseBlockTransform
 {
-	public override bool Process(TransformContext transformContext)
+	public override int Process(TransformContext transformContext)
 	{
 		var basicBlocks = transformContext.BasicBlocks;
 		var hasProtectedRegions = transformContext.MethodCompiler.HasProtectedRegions;
@@ -71,6 +71,6 @@ public abstract class MergeBlocks : BaseBlockTransform
 			}
 		}
 
-		return emptied != 0;
+		return emptied;
 	}
 }

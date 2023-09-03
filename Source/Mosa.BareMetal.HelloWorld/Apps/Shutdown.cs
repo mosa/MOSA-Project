@@ -19,6 +19,6 @@ public class Shutdown : IApp
 		var pc = Kernel.BareMetal.Kernel.ServiceManager.GetFirstService<PCService>();
 		pc.Shutdown();
 
-		for (;;) HAL.Yield();
+		for (; ; ) HAL.Yield();
 	}
 }

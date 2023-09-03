@@ -14,7 +14,6 @@ public sealed class Shr32 : BaseTransform
 	{
 	}
 
-
 	public override bool Match(Context context, TransformContext transform)
 	{
 		if (context.Operand2.IsConstant)
@@ -25,7 +24,6 @@ public sealed class Shr32 : BaseTransform
 
 		return true;
 	}
-
 
 	public override void Transform(Context context, TransformContext transform)
 	{

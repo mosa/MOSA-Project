@@ -7,7 +7,6 @@ namespace Mosa.DeviceSystem;
 /// </summary>
 public class GenericPartition
 {
-
 	/// <summary>
 	/// Initializes a new instance of the <see cref="GenericPartition"/> class.
 	/// </summary>
@@ -34,6 +33,7 @@ public class GenericPartition
 	After:
 			public uint Index { get; } }
 	*/
+
 	public uint Index { get; private set; }
 
 	/// <summary>

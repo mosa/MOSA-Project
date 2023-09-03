@@ -364,6 +364,17 @@ public sealed class BasicBlock : IComparable<BasicBlock>
 		return false;
 	}
 
+	public void RemoveNops()
+	{
+		for (var node = AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
+		{
+			if (node.IsEmpty || !node.IsNop)
+				continue;
+
+			node.Empty();
+		}
+	}
+
 	#endregion Advanced Methods
 
 	public int CompareTo(BasicBlock other)

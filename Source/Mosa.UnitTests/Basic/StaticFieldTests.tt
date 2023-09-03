@@ -20,5 +20,4 @@ public static class StaticFieldTest<#= number.Value #>
 		return field;
 	}
 }
-
 <# } #>

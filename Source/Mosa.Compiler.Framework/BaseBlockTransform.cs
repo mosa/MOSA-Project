@@ -22,14 +22,14 @@ public abstract class BaseBlockTransform : IComparable<BaseBlockTransform>
 	{
 		Log = log;
 
-		Name = GetType().FullName.Replace("Mosa.Compiler.", string.Empty).Replace("Mosa.Compiler.Framework.Transforms", "IR").Replace("Transforms.", string.Empty);
+		Name = GetType().FullName.Replace("Mosa.Compiler.Framework.", string.Empty);
 	}
 
 	#endregion Constructors
 
 	#region Abstract Methods
 
-	public abstract bool Process(TransformContext transformContext);
+	public abstract int Process(TransformContext transformContext);
 
 	#endregion Abstract Methods
 

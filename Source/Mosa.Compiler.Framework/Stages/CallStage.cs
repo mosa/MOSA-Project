@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Stages;
 public class CallStage : BaseTransformStage
 {
 	public CallStage()
-		: base(true, false)
+		: base()
 	{
 		AddTranforms(CallTransforms.List);
 	}

@@ -73,31 +73,31 @@ public static class ConsolePlug
 			{
 				// Enter key
 				case '\n':
-				{
-					ScreenConsole.Write(ScreenConsole.Newline);
-					return new string(buffer, 0, length);
-				}
+					{
+						ScreenConsole.Write(ScreenConsole.Newline);
+						return new string(buffer, 0, length);
+					}
 
 				// Backspace key
 				case '\b':
-				{
-					if (length > 0)
 					{
-						ScreenConsole.Write(ScreenConsole.Backspace);
-						ScreenConsole.Write(' ');
-						ScreenConsole.Write(ScreenConsole.Backspace);
-						length--;
+						if (length > 0)
+						{
+							ScreenConsole.Write(ScreenConsole.Backspace);
+							ScreenConsole.Write(' ');
+							ScreenConsole.Write(ScreenConsole.Backspace);
+							length--;
+						}
+						break;
 					}
-					break;
-				}
 
 				// Any other key
 				default:
-				{
-					buffer[length++] = key.Character;
-					ScreenConsole.Write(key.Character);
-					break;
-				}
+					{
+						buffer[length++] = key.Character;
+						ScreenConsole.Write(key.Character);
+						break;
+					}
 			}
 		}
 	}

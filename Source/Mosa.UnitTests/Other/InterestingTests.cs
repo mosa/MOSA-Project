@@ -3,10 +3,11 @@
 namespace Mosa.UnitTests.Other;
 
 public static class InterestingTests
-
 {
 	public struct Struct
-	{ public int X { get; set; } }
+	{
+		public int X { get; set; }
+	}
 
 	public static int Slow()
 	{

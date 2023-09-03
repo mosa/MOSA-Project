@@ -18,6 +18,9 @@ public sealed class Branch64 : BaseTransform
 		if (!IsResolvedConstant(context.Operand2))
 			return false;
 
+		if (context.Block.NextBlocks.Count == 1)
+			return false;
+
 		return IsNormal(context.ConditionCode);
 	}
 

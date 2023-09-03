@@ -6,7 +6,9 @@ public static class AnalysisTests
 
 {
 	private struct Struct
-	{ public int X { get; set; } }
+	{
+		public int X { get; set; }
+	}
 
 	[MosaUnitTest]
 	public static int Slow()

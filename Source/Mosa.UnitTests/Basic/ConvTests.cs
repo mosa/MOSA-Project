@@ -1,7 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-
 namespace Mosa.UnitTests.Basic;
 
 public static class ConvTests
@@ -391,4 +389,3 @@ public static class ConvTests
 		return expect == (long)a;
 	}
 }
-

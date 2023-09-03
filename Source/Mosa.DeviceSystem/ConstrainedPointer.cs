@@ -11,7 +11,6 @@ namespace Mosa.DeviceSystem;
 /// </summary>
 public readonly struct ConstrainedPointer
 {
-
 	/// <summary>
 	/// Gets the address.
 	/// </summary>

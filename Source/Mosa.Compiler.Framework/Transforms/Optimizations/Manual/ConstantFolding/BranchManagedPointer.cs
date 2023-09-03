@@ -2,9 +2,9 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.ConstantFolding;
 
-public sealed class BranchObject : BaseTransform
+public sealed class BranchManagedPointer : BaseTransform
 {
-	public BranchObject() : base(IRInstruction.BranchObject, TransformType.Manual | TransformType.Optimization)
+	public BranchManagedPointer() : base(IRInstruction.BranchManagedPointer, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

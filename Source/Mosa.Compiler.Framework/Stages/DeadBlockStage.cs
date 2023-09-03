@@ -7,7 +7,10 @@ namespace Mosa.Compiler.Framework.Stages;
 /// </summary>
 public class DeadBlockStage : BaseTransformStage
 {
-	public DeadBlockStage() : base(false, true)
+	public DeadBlockStage() : base()
 	{
+		AddTranforms(Transforms.BasicBlocks.BasicBlocksTransforms.List);
+
+		EnableBlockOptimizations = true;
 	}
 }

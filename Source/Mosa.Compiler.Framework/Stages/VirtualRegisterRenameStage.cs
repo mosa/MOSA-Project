@@ -8,14 +8,9 @@ namespace Mosa.Compiler.Framework.Stages;
 /// <summary>
 /// Virtual Register Rename Stage
 /// </summary>
-/// <seealso cref="Mosa.Compiler.Framework.BaseCodeTransformationStage" />
-public sealed class VirtualRegisterRenameStage : BaseCodeTransformationStage
+/// <seealso cref="Mosa.Compiler.Framework.BaseMethodCompilerStage" />
+public sealed class VirtualRegisterRenameStage : BaseMethodCompilerStage
 {
-	protected override void PopulateVisitationDictionary()
-	{
-		// Nothing to do
-	}
-
 	protected override void Run()
 	{
 		var vr = new List<Operand>();

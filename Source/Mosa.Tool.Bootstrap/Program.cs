@@ -1,11 +1,11 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Avalonia;
 using System;
+using Avalonia;
 
 namespace Mosa.Tool.Bootstrap;
 
-class Program
+internal class Program
 {
 	// Initialization code. Don't use any Avalonia, third-party APIs or any
 	// SynchronizationContext-reliant code before AppMain is called: things aren't initialized

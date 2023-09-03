@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Stages;
 public sealed class CompoundStage : BaseTransformStage
 {
 	public CompoundStage()
-		: base(true, false, 1)
+		: base(1)
 	{
 		AddTranforms(CompoundTransforms.List);
 	}

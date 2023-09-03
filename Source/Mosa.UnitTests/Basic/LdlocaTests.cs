@@ -2,7 +2,7 @@
 
 namespace Mosa.UnitTests.Basic;
 
-public static class LdlocaTests 
+public static class LdlocaTests
 {
 
 	[MosaUnitTest(Series = "U1")]

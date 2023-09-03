@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Stages;
 public class PlugStage : BaseTransformStage
 {
 	public PlugStage()
-		: base(true, false)
+		: base()
 	{
 		AddTranforms(PlugTransforms.List);
 	}

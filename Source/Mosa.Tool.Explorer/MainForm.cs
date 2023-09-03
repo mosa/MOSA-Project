@@ -1366,6 +1366,10 @@ public partial class MainForm : Form
 			return;
 
 		var stage = GetCurrentTransformStage();
+
+		if (!CurrentMethodData.DebugLogs.ContainsKey(stage))
+			return;
+
 		var debug = CurrentMethodData.DebugLogs[stage];
 
 		if (debug.Contains("*** Pass"))

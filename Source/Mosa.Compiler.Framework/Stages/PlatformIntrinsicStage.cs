@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Stages;
 public class PlatformIntrinsicStage : BaseTransformStage
 {
 	public PlatformIntrinsicStage()
-		: base(true, false)
+		: base()
 	{
 		AddTranforms(PlatformIntrinsicTransforms.List);
 	}

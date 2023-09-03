@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Collections.Generic;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 
@@ -19,8 +18,6 @@ public class CompilerHooks
 	public delegate void NotifyTraceLogHandler(TraceLog traceLog);
 
 	public delegate void NotifyMethodCompiledHandler(MosaMethod method);
-
-	public delegate IList<CustomELFSection> CustomElfSectionsHandler();
 
 	public delegate NotifyTraceLogHandler NotifyMethodInstructionTraceHandler(MosaMethod method);
 

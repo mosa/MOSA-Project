@@ -5,38 +5,11 @@ using Mosa.Compiler.Framework.Analysis;
 namespace Mosa.Compiler.Framework.Stages;
 
 /// <summary>
-/// IR Cleanup Stage
+/// This stage quickly reorders branches.
 /// </summary>
-public class IRCleanupStage : BaseTransformStage
+public class FastBlockOrderingStage : BaseTransformStage
 {
-	public IRCleanupStage() : base(false, true)
-	{
-	}
-
 	protected override void Run()
-	{
-		RemoveNops();
-
-		base.Run();
-
-		OrderBlocks();
-	}
-
-	private void RemoveNops()
-	{
-		foreach (var block in BasicBlocks)
-		{
-			for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
-			{
-				if (node.IsEmpty || !node.IsNop)
-					continue;
-
-				node.Empty();
-			}
-		}
-	}
-
-	private void OrderBlocks()
 	{
 		var blockOrderAnalysis = new SimpleTraceBlockOrder();
 

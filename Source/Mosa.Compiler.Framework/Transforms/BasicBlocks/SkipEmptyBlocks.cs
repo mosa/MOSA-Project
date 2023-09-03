@@ -1,12 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Diagnostics;
-
 namespace Mosa.Compiler.Framework.Transforms.BasicBlocks;
 
-public abstract class SkipEmptyBlocks : BaseBlockTransform
+public class SkipEmptyBlocks : BaseBlockTransform
 {
-	public override bool Process(TransformContext transformContext)
+	public override int Process(TransformContext transformContext)
 	{
 		var basicBlocks = transformContext.BasicBlocks;
 		var hasProtectedRegions = transformContext.MethodCompiler.HasProtectedRegions;
@@ -43,7 +41,7 @@ public abstract class SkipEmptyBlocks : BaseBlockTransform
 
 			var hasPhi = isInSSAForm && block.NextBlocks[0].HasPhiInstruction();
 
-			if (hasPhi && isInSSAForm && (block.PreviousBlocks.Count != 1 || block.NextBlocks[0].PreviousBlocks.Count != 1))
+			if (hasPhi && (block.PreviousBlocks.Count != 1 || block.NextBlocks[0].PreviousBlocks.Count != 1))
 				continue;
 
 			trace?.Log($"Removed Block: {block} - Skipped to: {block.NextBlocks[0]}");
@@ -58,6 +56,6 @@ public abstract class SkipEmptyBlocks : BaseBlockTransform
 			emptied++;
 		}
 
-		return emptied != 0;
+		return emptied;
 	}
 }

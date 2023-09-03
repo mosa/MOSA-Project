@@ -2,7 +2,7 @@
 
 namespace Mosa.UnitTests.Primitive;
 
-enum EnumU1Type : byte
+internal enum EnumU1Type : byte
 {
 	Positive49 = 49,
 	Positive50,
@@ -56,7 +56,7 @@ public static class EnumU1
 	[MosaUnitTest]
 	public static byte PositiveMul2()
 	{
-		return  (byte)EnumU1Type.Positive50 * 2;
+		return (byte)EnumU1Type.Positive50 * 2;
 	}
 
 	[MosaUnitTest]
@@ -325,7 +325,7 @@ public static class EnumU2
 	[MosaUnitTest]
 	public static ushort PositiveMul2()
 	{
-		return  (ushort)EnumU2Type.Positive50 * 2;
+		return (ushort)EnumU2Type.Positive50 * 2;
 	}
 
 	[MosaUnitTest]
@@ -594,7 +594,7 @@ public static class EnumU4
 	[MosaUnitTest]
 	public static uint PositiveMul2()
 	{
-		return  (uint)EnumU4Type.Positive50 * 2;
+		return (uint)EnumU4Type.Positive50 * 2;
 	}
 
 	[MosaUnitTest]
@@ -863,7 +863,7 @@ public static class EnumU8
 	[MosaUnitTest]
 	public static ulong PositiveMul2()
 	{
-		return  (ulong)EnumU8Type.Positive50 * 2;
+		return (ulong)EnumU8Type.Positive50 * 2;
 	}
 
 	[MosaUnitTest]
@@ -1135,7 +1135,7 @@ public static class EnumI1
 	[MosaUnitTest]
 	public static sbyte PositiveMul2()
 	{
-		return  (sbyte)EnumI1Type.Positive50 * 2;
+		return (sbyte)EnumI1Type.Positive50 * 2;
 	}
 
 	[MosaUnitTest]
@@ -1393,7 +1393,7 @@ public static class EnumI1
 	[MosaUnitTest]
 	public static sbyte NegativeMul2()
 	{
-		return  (sbyte)EnumI1Type.Negative50 * 2;
+		return (sbyte)EnumI1Type.Negative50 * 2;
 	}
 
 	[MosaUnitTest]
@@ -1665,7 +1665,7 @@ public static class EnumI2
 	[MosaUnitTest]
 	public static short PositiveMul2()
 	{
-		return  (short)EnumI2Type.Positive50 * 2;
+		return (short)EnumI2Type.Positive50 * 2;
 	}
 
 	[MosaUnitTest]
@@ -1923,7 +1923,7 @@ public static class EnumI2
 	[MosaUnitTest]
 	public static short NegativeMul2()
 	{
-		return  (short)EnumI2Type.Negative50 * 2;
+		return (short)EnumI2Type.Negative50 * 2;
 	}
 
 	[MosaUnitTest]
@@ -2195,7 +2195,7 @@ public static class EnumI4
 	[MosaUnitTest]
 	public static int PositiveMul2()
 	{
-		return  (int)EnumI4Type.Positive50 * 2;
+		return (int)EnumI4Type.Positive50 * 2;
 	}
 
 	[MosaUnitTest]
@@ -2453,7 +2453,7 @@ public static class EnumI4
 	[MosaUnitTest]
 	public static int NegativeMul2()
 	{
-		return  (int)EnumI4Type.Negative50 * 2;
+		return (int)EnumI4Type.Negative50 * 2;
 	}
 
 	[MosaUnitTest]
@@ -2725,7 +2725,7 @@ public static class EnumI8
 	[MosaUnitTest]
 	public static long PositiveMul2()
 	{
-		return  (long)EnumI8Type.Positive50 * 2;
+		return (long)EnumI8Type.Positive50 * 2;
 	}
 
 	[MosaUnitTest]
@@ -2983,7 +2983,7 @@ public static class EnumI8
 	[MosaUnitTest]
 	public static long NegativeMul2()
 	{
-		return  (long)EnumI8Type.Negative50 * 2;
+		return (long)EnumI8Type.Negative50 * 2;
 	}
 
 	[MosaUnitTest]

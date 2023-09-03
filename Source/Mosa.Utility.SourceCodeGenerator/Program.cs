@@ -161,12 +161,6 @@ public static class Program
 			"IRInstruction.cs"
 		).Execute();
 
-		new BuildIRInstructions(
-			Path.Combine(dataPath, @"IR-Instructions.json"),
-			Path.Combine(targetPath, @"Mosa.Compiler.Framework\"),
-			"IRInstructions.cs"
-		).Execute();
-
 		new BuildIRInstructionFiles(
 			Path.Combine(dataPath, @"IR-Instructions.json"),
 			Path.Combine(targetPath, @"Mosa.Compiler.Framework\IR\")

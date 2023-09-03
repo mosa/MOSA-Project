@@ -202,9 +202,12 @@ public sealed class Compiler
 		mosaSettings.TwoPassOptimization && mosaSettings.BitTracker ? new BitTrackerStage() : null,
 		mosaSettings.TwoPassOptimization && mosaSettings.BasicOptimizations && mosaSettings.SSA ? new OptimizationStage(mosaSettings.LongExpansion) : null,
 
+		new NopRemovalStage(),
+		new FastBlockOrderingStage(),
+
 		mosaSettings.SSA ? new ExitSSAStage() : null,
 
-		new IRCleanupStage(),
+		new DeadBlockStage(),
 
 		mosaSettings.InlineMethods || mosaSettings.InlineExplicit ? new InlineEvaluationStage() : null,
 		new NewObjectStage(),
@@ -217,7 +220,7 @@ public sealed class Compiler
 		new GreedyRegisterAllocatorStage(),
 		new StackLayoutStage(),
 		new DeadBlockStage(),
-		new BlockOrderingStage(),
+		new AdvancedBlockOrderingStage(),
 
 		//new PreciseGCStage(),
 

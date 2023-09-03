@@ -13,7 +13,7 @@ public class ExceptionStage : BaseTransformStage
 	private readonly ExceptionManager ExceptionManager = new ExceptionManager();
 
 	public ExceptionStage()
-		: base(true, false)
+		: base()
 	{
 		AddTranforms(ExceptionTransforms.List);
 	}

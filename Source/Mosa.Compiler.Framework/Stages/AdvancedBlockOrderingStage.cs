@@ -5,9 +5,9 @@ using Mosa.Compiler.Framework.Analysis;
 namespace Mosa.Compiler.Framework.Stages;
 
 /// <summary>
-/// The Block Ordering Stage reorders blocks to optimize loops and reduce the distance of jumps and branches.
+/// This stage reorders blocks to optimize loops and reduce the distance of jumps and branches.
 /// </summary>
-public class BlockOrderingStage : BaseMethodCompilerStage
+public class AdvancedBlockOrderingStage : BaseMethodCompilerStage
 {
 	protected override void Run()
 	{

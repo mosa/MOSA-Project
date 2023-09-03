@@ -2,19 +2,26 @@
 
 namespace Mosa.UnitTests.Basic;
 
-public interface IAA { }
+public interface IAA
+{ }
 
-public interface IBB { }
+public interface IBB
+{ }
 
-public interface ICC { }
+public interface ICC
+{ }
 
-public class AA : IAA { }
+public class AA : IAA
+{ }
 
-public class BB : AA, IBB { }
+public class BB : AA, IBB
+{ }
 
-public class CC { }
+public class CC
+{ }
 
-public class DD : BB { }
+public class DD : BB
+{ }
 
 public static class IsInstTests
 {
