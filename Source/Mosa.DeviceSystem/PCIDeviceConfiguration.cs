@@ -8,6 +8,8 @@ namespace Mosa.DeviceSystem;
 public class PCIDeviceConfiguration : BaseDeviceConfiguration
 {
 	public byte Bus { get; set; }
+
 	public byte Slot { get; set; }
+
 	public byte Function { get; set; }
 }

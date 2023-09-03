@@ -1,7 +1,7 @@
 ﻿<#@ include file="../../TemplateLibrary.txt" #>
 namespace Mosa.UnitTests.Primitive;
 
-<# foreach (bool isSigned in new bool[2] {false, true}) {
+internal <# foreach (bool isSigned in new bool[2] {false, true}) {
 foreach (KeyValuePair<string, string> numberT in isSigned ? NegativeIntegers : PositiveIntegers) {
 	string enumType = "Enum" + numberT.Value;
 	string valueType = numberT.Key;
@@ -73,7 +73,7 @@ public static class <#= enumType #>
 	[MosaUnitTest]
 	public static <#= valueType #> <#= number.Value #>Mul2()
 	{
-		return  (<#= valueType #>)<#= enumElement #> * 2;
+		return (<#= valueType #>)<#= enumElement #> * 2;
 	}
 
 	[MosaUnitTest]

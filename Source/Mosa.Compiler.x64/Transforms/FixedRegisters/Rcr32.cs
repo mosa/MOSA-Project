@@ -13,6 +13,7 @@ public sealed class Rcr32 : BaseTransform
 	public Rcr32() : base(X64.Rcr32, TransformType.Manual | TransformType.Transform)
 	{
 	}
+
 	public override bool Match(Context context, TransformContext transform)
 	{
 		if (context.Operand2.IsConstant)
@@ -23,7 +24,6 @@ public sealed class Rcr32 : BaseTransform
 
 		return true;
 	}
-
 
 	public override void Transform(Context context, TransformContext transform)
 	{

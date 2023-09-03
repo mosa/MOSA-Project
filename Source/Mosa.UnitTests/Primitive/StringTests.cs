@@ -92,7 +92,8 @@ public static class StringTests
 	}
 
 	[MosaUnitTest]
-	public static bool SubstringTest3() {
+	public static bool SubstringTest3()
+	{
 		return "abcdef".Substring(0, 3).Equals("abc");
 	}
 

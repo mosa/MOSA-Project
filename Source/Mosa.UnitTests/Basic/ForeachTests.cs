@@ -1,7 +1,4 @@
-﻿
-// Copyright (c) MOSA Project. Licensed under the New BSD License.
-
-using System;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.UnitTests.Basic;
 

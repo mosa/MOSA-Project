@@ -6,10 +6,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Tool.Debugger.DebugData;
 using Mosa.Tool.Debugger.GDB;
@@ -17,7 +15,6 @@ using Mosa.Tool.Debugger.Views;
 using Mosa.Utility.Configuration;
 using Mosa.Utility.Launcher;
 using WeifenLuo.WinFormsUI.Docking;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Mosa.Tool.Debugger;
 

@@ -8,5 +8,6 @@ namespace Mosa.DeviceSystem;
 public class DiskDeviceConfiguration : BaseDeviceConfiguration
 {
 	public uint DriveNbr { get; set; }
+
 	public bool ReadOnly { get; set; }
 }

@@ -2,7 +2,6 @@
 
 using Mosa.Kernel.BareMetal;
 using Mosa.UnitTests.Basic;
-using Mosa.UnitTests.Primitive;
 
 namespace Mosa.BareMetal.HelloWorld.x86;
 

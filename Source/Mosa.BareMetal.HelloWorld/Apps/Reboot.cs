@@ -19,6 +19,6 @@ public class Reboot : IApp
 		var pc = Kernel.BareMetal.Kernel.ServiceManager.GetFirstService<PCService>();
 		pc.Reset();
 
-		for (;;) HAL.Yield();
+		for (; ; ) HAL.Yield();
 	}
 }

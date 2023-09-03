@@ -1,7 +1,4 @@
-﻿
-<#@ include file="../../TemplateLibrary.txt" #>
-using System;
-
+﻿<#@ include file="../../TemplateLibrary.txt" #>
 namespace Mosa.UnitTests.Basic;
 
 public static class ForeachTests

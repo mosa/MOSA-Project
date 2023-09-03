@@ -20,7 +20,6 @@ public static class StaticFieldTestU1
 		return field;
 	}
 }
-
 public static class StaticFieldTestU2
 {
 	private static ushort field;
@@ -39,7 +38,6 @@ public static class StaticFieldTestU2
 		return field;
 	}
 }
-
 public static class StaticFieldTestU4
 {
 	private static uint field;
@@ -58,7 +56,6 @@ public static class StaticFieldTestU4
 		return field;
 	}
 }
-
 public static class StaticFieldTestU8
 {
 	private static ulong field;
@@ -77,7 +74,6 @@ public static class StaticFieldTestU8
 		return field;
 	}
 }
-
 public static class StaticFieldTestI1
 {
 	private static sbyte field;
@@ -96,7 +92,6 @@ public static class StaticFieldTestI1
 		return field;
 	}
 }
-
 public static class StaticFieldTestI2
 {
 	private static short field;
@@ -115,7 +110,6 @@ public static class StaticFieldTestI2
 		return field;
 	}
 }
-
 public static class StaticFieldTestI4
 {
 	private static int field;
@@ -134,7 +128,6 @@ public static class StaticFieldTestI4
 		return field;
 	}
 }
-
 public static class StaticFieldTestI8
 {
 	private static long field;
@@ -153,7 +146,6 @@ public static class StaticFieldTestI8
 		return field;
 	}
 }
-
 public static class StaticFieldTestR4
 {
 	private static float field;
@@ -172,7 +164,6 @@ public static class StaticFieldTestR4
 		return field;
 	}
 }
-
 public static class StaticFieldTestR8
 {
 	private static double field;
@@ -191,7 +182,6 @@ public static class StaticFieldTestR8
 		return field;
 	}
 }
-
 public static class StaticFieldTestB
 {
 	private static bool field;
@@ -210,7 +200,6 @@ public static class StaticFieldTestB
 		return field;
 	}
 }
-
 public static class StaticFieldTestC
 {
 	private static char field;
@@ -229,4 +218,3 @@ public static class StaticFieldTestC
 		return field;
 	}
 }
-

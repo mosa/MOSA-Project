@@ -36,7 +36,6 @@ public static class Bitmap
 
 			if (bytesPerPixel == 3 && width * bytesPerPixel % 4 > 0)
 				dataSectionOffset += 4 - width * bytesPerPixel % 4;
-
 		} while (height > 0);
 
 		return buffer;

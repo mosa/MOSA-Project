@@ -1,6 +1,4 @@
 ﻿<#@ include file="../../TemplateLibrary.txt" #>
-using System;
-
 namespace Mosa.UnitTests.Basic;
 
 public static class ConvTests
@@ -15,4 +13,3 @@ public static class ConvTests
 	}
 <# } #>
 }
-

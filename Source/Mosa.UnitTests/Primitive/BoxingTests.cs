@@ -2,9 +2,8 @@
 
 namespace Mosa.UnitTests;
 
-public static class BoxingTests 
+public static class BoxingTests
 {
-
 	[MosaUnitTest(Series = "U1")]
 	public static byte BoxU1(byte value)
 	{
@@ -158,4 +157,5 @@ public static class BoxingTests
 		object o = value;
 		return o.Equals(value);
 	}
+
 }

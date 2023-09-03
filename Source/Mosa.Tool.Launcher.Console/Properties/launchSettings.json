@@ -1,9 +1,0 @@
-{
-  "profiles": {
-    "Mosa.Tool.Launcher.Console": {
-      "commandName": "Project",
-      "commandLineArgs": "Mosa.BareMetal.HelloWorld.x64.dll -check -x64",
-      "workingDirectory": "..\\..\\bin"
-    }
-  }
-}

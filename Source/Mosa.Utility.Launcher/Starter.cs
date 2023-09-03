@@ -7,14 +7,10 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using Mosa.Compiler.Common;
-using Mosa.Compiler.Common.Configuration;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Utility.Configuration;
-using Reko.Arch.Arm;
-using Reko.Arch.X86;
-using static Mosa.Utility.Launcher.SimpleTCP;
 
 namespace Mosa.Utility.Launcher;
 

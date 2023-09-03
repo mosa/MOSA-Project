@@ -1,7 +1,7 @@
 ﻿<#@ include file="../../TemplateLibrary.txt" #>
 namespace Mosa.UnitTests.Basic;
 
-public static class LdlocaTests 
+public static class LdlocaTests
 {
 <# foreach (KeyValuePair<string, string> number in NumbersWithChar) { #>
 

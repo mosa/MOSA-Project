@@ -19,7 +19,7 @@ public static class LdargaTests
 	[MosaUnitTest(Series = "<#= number.Value #><#= number.Value #>")]
 	public static <#= number.Key #> LdargaChangeValue<#= number.Value #>(<#= number.Key #> a, <#= number.Key #> b)
 	{
-		LdargaChangeValueRef<#= number.Value #>(ref a,b);
+		LdargaChangeValueRef<#= number.Value #>(ref a, b);
 		return a;
 	}
 

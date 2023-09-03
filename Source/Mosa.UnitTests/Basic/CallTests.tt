@@ -7,12 +7,12 @@ public static class CallTests
 
 	[MosaUnitTest(Series = "<#= number.Value #>")]
 	public static bool Call<#= number.Value #>(<#= number.Key #> value)
-	{ 
+	{
 		return value == CallTarget<#= number.Value #>(value);
 	}
 
 	private static <#= number.Key #> CallTarget<#= number.Value #>(<#= number.Key #> value)
-	{ 
+	{
 		return value;
 	}
 <# } #>

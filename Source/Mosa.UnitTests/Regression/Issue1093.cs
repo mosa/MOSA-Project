@@ -13,7 +13,8 @@ public static class Issue1093
 
 	public class Attr : Attribute
 	{
-		public Attr(byte[] flags) { }
+		public Attr(byte[] flags)
+		{ }
 	}
 
 	[Attr(new byte[] { 1, 2, 3 })]
