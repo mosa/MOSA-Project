@@ -169,7 +169,7 @@
 		<Content Include="bug.ico" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="dnlib" Version="3.6.0" />
+		<PackageReference Include="dnlib" Version="4.1.0" />
 	</ItemGroup>
 	<ItemGroup>
 		<Compile Remove="DebugVMImageWindow.cs" />
