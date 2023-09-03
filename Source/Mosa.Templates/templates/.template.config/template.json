@@ -1,0 +1,14 @@
+{
+	"$schema": "http://json.schemastore.org/template",
+	"author": "MOSA-Project",
+	"classifications": [ "Common", "OS", "Kernel" ],
+	"identity": "Mosa.Starter",
+	"sourceName": "Mosa.Starter",
+	"name": "MOSA Kernel",
+	"shortName": "mosakrnl",
+	"preferNameDirectory": true,
+	"tags": {
+		"language": "C#",
+		"type": "solution"
+	}
+}

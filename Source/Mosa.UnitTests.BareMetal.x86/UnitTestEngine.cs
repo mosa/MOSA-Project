@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Diagnostics.CodeAnalysis;
 using Mosa.Kernel.BareMetal;
 using Mosa.Runtime;
 using Mosa.Runtime.x86;
@@ -91,8 +92,7 @@ public static class UnitTestEngine
 
 	public static void Process()
 	{
-		if (!Enabled)
-			return;
+		if (!Enabled) return;
 
 		if (!ReadySent)
 		{
@@ -106,7 +106,8 @@ public static class UnitTestEngine
 		{
 			for (var i = 0; i < 75; i++)
 			{
-				while (ProcessSerial()) ;
+				while (ProcessSerial())
+				{ }
 			}
 
 			ProcessQueue();
@@ -128,22 +129,13 @@ public static class UnitTestEngine
 
 		Buffer.Store8(UsedBuffer++, b);
 
-		if (UsedBuffer >= HeaderSize)
-		{
-			var length = Buffer.Load8(4);
+		if (UsedBuffer < HeaderSize) return true;
 
-			if (length > MaxBuffer)
-			{
-				UsedBuffer = 0;
-				return true;
-			}
+		var length = Buffer.Load8(4);
+		if (UsedBuffer != length + HeaderSize) return true;
 
-			if (UsedBuffer == length + HeaderSize)
-			{
-				QueueUnitTest();
-				UsedBuffer = 0;
-			}
-		}
+		QueueUnitTest();
+		UsedBuffer = 0;
 
 		return true;
 	}
@@ -159,39 +151,38 @@ public static class UnitTestEngine
 		QueueUnitTest(id, start, end);
 	}
 
+	[DoesNotReturn]
 	public static void EnterTestReadyLoop()
 	{
 		var stackPointer = new Pointer(Native.AllocateStackSpace(MaxParameters * 4));
 
 		while (true)
 		{
-			if (Ready)
+			if (!Ready) continue;
+
+			TestResult = 0;
+			ResultReported = false;
+			Ready = false;
+
+			for (var index = 0; index < TestParameterCount; index++)
 			{
-				TestResult = 0;
-				ResultReported = false;
-				Ready = false;
-
-				for (var index = 0; index < TestParameterCount; index++)
-				{
-					var value = Stack.Load32(index * 4);
-					stackPointer.Store32(index * 4, value);
-				}
-
-				switch (TestResultType)
-				{
-					case 0: Native.FrameCall(TestMethodAddress.ToUInt32()); break;
-					case 1: TestResult = Native.FrameCallRetU4(TestMethodAddress.ToUInt32()); break;
-					case 2: TestResult = Native.FrameCallRetU8(TestMethodAddress.ToUInt32()); break;
-					case 3: TestResult = Native.FrameCallRetR8(TestMethodAddress.ToUInt32()); break;
-					default: break;
-				}
-
-				SendResponse(TestID, TestResult);
-
-				ResultReported = true;
-
-				Native.Int(255);
+				var value = Stack.Load32(index * 4);
+				stackPointer.Store32(index * 4, value);
 			}
+
+			switch (TestResultType)
+			{
+				case 0: Native.FrameCall(TestMethodAddress.ToUInt32()); break;
+				case 1: TestResult = Native.FrameCallRetU4(TestMethodAddress.ToUInt32()); break;
+				case 2: TestResult = Native.FrameCallRetU8(TestMethodAddress.ToUInt32()); break;
+				case 3: TestResult = Native.FrameCallRetR8(TestMethodAddress.ToUInt32()); break;
+			}
+
+			SendResponse(TestID, TestResult);
+
+			ResultReported = true;
+
+			Native.Int(255);
 		}
 	}
 

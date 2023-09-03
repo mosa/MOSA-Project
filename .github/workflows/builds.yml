@@ -46,22 +46,20 @@ jobs:
         with:
           name: windows-build-artifact
           path: bin
+      - name: Create Package - Mosa.Tools.Package
+        run: nuget pack Source\Mosa.Packages\Mosa.Tools.Package.nuspec -Tool -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}
+      - name: Create Package - Mosa.Tools.Package.Qemu
+        run: nuget pack Source\Mosa.Packages\Mosa.Tools.Package.Qemu.nuspec -Tool -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}
+      - name: Create Package - Mosa.Platform
+        run: nuget pack Source\Mosa.Packages\Mosa.Platform.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}
+      - name: Create Package - Mosa.Platform.x86
+        run: nuget pack Source\Mosa.Packages\Mosa.Platform.x86.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}
+      - name: Create Package - Mosa.DeviceSystem
+        run: nuget pack Source\Mosa.Packages\Mosa.DeviceSystem.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}
       - name: Build Project - Mosa.Templates
         run: dotnet build Source\Mosa.Templates\Mosa.Templates.csproj
       - name: Create Package - Mosa.Templates
         run: nuget pack Source\Mosa.Templates\Mosa.Templates.csproj -Tool -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}
-      - name: Create Package - Mosa.Tools.Package
-        run: nuget pack Source\Mosa.Packages\Mosa.Tools.Package.nuspec -Tool -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}
-      - name: Create Package - Mosa.Korlib
-        run: nuget pack Source\Mosa.Packages\Mosa.Korlib.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}
-      - name: Create Package - Mosa.DeviceSystem
-        run: nuget pack Source\Mosa.Packages\Mosa.DeviceSystem.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}
-      - name: Create Package - Mosa.Runtime
-        run: nuget pack Source\Mosa.Packages\Mosa.Runtime.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}
-      - name: Create Package - Mosa.Kernel.x86
-        run: nuget pack Source\Mosa.Packages\Mosa.Kernel.x86.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}
-      - name: Create Package - Mosa.Platform.x86
-        run: nuget pack Source\Mosa.Packages\Mosa.Platform.x86.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}
       - name: Store Nuget Packages Artifact
         uses: actions/upload-artifact@v3
         with:
@@ -72,7 +70,7 @@ jobs:
 
   windows-build-packaging:
     name: Windows Build Packaging
-    needs: [windows-build, linux-build, generate-docs, windows-unit-testing, linux-unit-testing, windows-demo-testing, linux-demo-testing, macos-build, macos-unit-testing]
+    needs: [windows-build, linux-build, macos-build, generate-docs, windows-unit-testing, linux-unit-testing, macos-unit-testing, windows-demo-testing, linux-demo-testing, macos-demo-testing]
     runs-on: windows-latest
     timeout-minutes: 15
     if: github.event_name == 'push' && github.repository == 'mosa/MOSA-Project' && github.ref == 'refs/heads/master'
@@ -96,20 +94,18 @@ jobs:
         with:
           name: Nuget Packages
           path: bin\nupkg
-      - name: Publish Package - Mosa.Templates
-        run: dotnet nuget push bin\nupkg\Mosa.Templates.${{ env.BUILD_VERSION }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
       - name: Publish Package - Mosa.Tools.Package
         run: dotnet nuget push bin\nupkg\Mosa.Tools.Package.${{ env.BUILD_VERSION }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
-      - name: Publish Package - Mosa.Korlib
-        run: dotnet nuget push bin\nupkg\Mosa.Korlib.${{ env.BUILD_VERSION }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
-      - name: Publish Package - Mosa.DeviceSystem
-        run: dotnet nuget push bin\nupkg\Mosa.DeviceSystem.${{ env.BUILD_VERSION }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
-      - name: Publish Package - Mosa.Runtime
-        run: dotnet nuget push bin\nupkg\Mosa.Runtime.${{ env.BUILD_VERSION }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
-      - name: Publish Package - Mosa.Kernel.x86
-        run: dotnet nuget push bin\nupkg\Mosa.Kernel.x86.${{ env.BUILD_VERSION }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
+      - name: Publish Package - Mosa.Tools.Package.Qemu
+        run: dotnet nuget push bin\nupkg\Mosa.Tools.Package.Qemu.${{ env.BUILD_VERSION }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
+      - name: Publish Package - Mosa.Platform
+        run: dotnet nuget push bin\nupkg\Mosa.Platform.${{ env.BUILD_VERSION }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
       - name: Publish Package - Mosa.Platform.x86
         run: dotnet nuget push bin\nupkg\Mosa.Platform.x86.${{ env.BUILD_VERSION }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
+      - name: Publish Package - Mosa.DeviceSystem
+        run: dotnet nuget push bin\nupkg\Mosa.DeviceSystem.${{ env.BUILD_VERSION }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
+      - name: Publish Package - Mosa.Templates
+        run: dotnet nuget push bin\nupkg\Mosa.Templates.${{ env.BUILD_VERSION }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
 
   linux-build:
     name: Linux Build
@@ -262,15 +258,11 @@ jobs:
     runs-on: macos-latest
     timeout-minutes: 15
     needs: macos-build
-    env:
-      HOMEBREW_NO_INSTALL_CLEANUP: 1
     steps:
       - name: Set net7.0
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '7.0.x'
-      #- name: Install Qemu
-      #  run: brew install qemu
       - name: Checkout
         uses: actions/checkout@v3
         with:
@@ -338,33 +330,31 @@ jobs:
         run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x86.dll -o${{ matrix.optimization }} -check -test
       - name: Demo Test - BareMetal GraphicalWorld
         run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.GraphicalWorld.x86.dll -o${{ matrix.optimization }} -check -test -vmware-svga -include bin/Include
-        
-  #macos-demo-testing:
-  #  strategy:
-  #    matrix:
-  #      optimization: [0,1,2,3,4,5,6,7,8,9]
-  #    fail-fast: false
-  #  name: MacOS - Demo Test -o${{ matrix.optimization }}
-  #  runs-on: macos-latest
-  #  timeout-minutes: 15
-  #  needs: macos-build
-  #  steps:
-  #    - name: Set net7.0
-  #      uses: actions/setup-dotnet@v3
-  #      with:
-  #        dotnet-version: '7.0.x'
-  #    - name: Checkout
-  #      uses: actions/checkout@v3
-  #      with:
-  #        submodules: recursive
-  #    - name: Download Build Artifact
-  #      uses: actions/download-artifact@v3
-  #      with:
-  #        name: macos-build-artifact
-  #        path: bin
-  #    #- name: Install Qemu
-  #    #  run: brew install qemu
-  #    - name: Demo Test - BareMetal HelloWorld
-  #      run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x86.dll -o${{ matrix.optimization }} -check -test
-  #    - name: Demo Test - BareMetal GraphicalWorld
-  #      run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.GraphicalWorld.x86.dll -o${{ matrix.optimization }} -check -test
+
+  macos-demo-testing:
+    strategy:
+      matrix:
+        optimization: [0,1,2,3,4,5,6,7,8,9]
+      fail-fast: false
+    name: MacOS - Demo Test -o${{ matrix.optimization }}
+    runs-on: macos-latest
+    timeout-minutes: 15
+    needs: macos-build
+    steps:
+      - name: Set net7.0
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: macos-build-artifact
+          path: bin
+      - name: Demo Test - BareMetal HelloWorld
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x86.dll -o${{ matrix.optimization }} -check -test
+      - name: Demo Test - BareMetal GraphicalWorld
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.GraphicalWorld.x86.dll -o${{ matrix.optimization }} -check -test -vmware-svga -include bin/Include

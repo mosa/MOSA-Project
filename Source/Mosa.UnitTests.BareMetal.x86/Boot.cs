@@ -1,7 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Kernel.BareMetal;
 using Mosa.Kernel.BareMetal.x86;
-using Mosa.UnitTests.Basic;
+using Mosa.Runtime.Plug;
 using Mosa.UnitTests.Optimization;
 using Serial = Mosa.Kernel.BareMetal.x86.Serial;
 
@@ -9,10 +10,16 @@ namespace Mosa.UnitTests.BareMetal.x86;
 
 public static class Boot
 {
+	[Plug("Mosa.Runtime.StartUp::BootOptions")]
+	public static void SetBootOptions()
+	{
+		BootSettings.EnableDebugOutput = false;
+		//BootSettings.EnableVirtualMemory = true;
+		//BootSettings.EnableMinimalBoot = true;
+	}
+
 	public static void Main()
 	{
-		var result = ArrayLayoutTests.C_4();
-
 		IDT.SetInterruptHandler(ProcessInterrupt);
 
 		UnitTestEngine.Setup(Serial.COM1);

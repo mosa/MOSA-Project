@@ -20,8 +20,3 @@ HelloWorld
 The **HelloWorld** demo is the classic rendition of `"Hello, World!" <https://en.wikipedia.org/wiki/%22Hello,_World!%22_program>`__, except it does not actually display those words. Instead it implements a basic shell with a few basic commands, like boot information, memory usage, and device information.
 
 .. image:: images/mosa-demo-helloworld.png
-
-TestWorld
-=========
-
-The **TestWorld** demo is a barebones demo meant to show how you can create a barebones kernel using MOSA.

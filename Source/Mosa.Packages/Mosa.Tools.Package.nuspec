@@ -10,8 +10,8 @@
 		<projectUrl>https://www.mosa-project.org</projectUrl>
 		<icon>images/Mosa Icon.png</icon>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
-		<summary>MOSA Tools</summary>
-		<description>This package contains all the tools for MOSA.</description>
+		<summary>MOSA Tools without QEMU</summary>
+		<description>This package contains all the tools for MOSA without QEMU binaries.</description>
 		<copyright>Copyright © MOSA Project 2023</copyright>
 		<tags>MOSA Compiler</tags>
 		<contentFiles>

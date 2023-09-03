@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<OutputType>Exe</OutputType>
 		<TargetFramework>net7.0</TargetFramework>
 		<LangVersion>11.0</LangVersion>
 		<OutputPath>bin</OutputPath>
@@ -15,8 +14,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="../Mosa.Starter/Mosa.Starter.csproj" />
-		<PackageReference Include="Mosa.Platform.x86" Version="*" />
+		<PackageReference Include="Mosa.Platform" Version="*" />
+		<PackageReference Include="Mosa.DeviceSystem" Version="*" />
+		<PackageReference Include="Mosa.Tools.Package.Qemu" Version="*" />
 	</ItemGroup>
 
 </Project>

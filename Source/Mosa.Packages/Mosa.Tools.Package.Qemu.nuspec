@@ -10,7 +10,7 @@
 		<projectUrl>https://www.mosa-project.org</projectUrl>
 		<icon>images/Mosa Icon.png</icon>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
-		<summary>MOSA tools with QEMU (Windows/Linux)</summary>
+		<summary>MOSA tools with QEMU for Windows</summary>
 		<description>This package contains all the tools for MOSA along with QEMU binaries for Windows.</description>
 		<copyright>Copyright © MOSA Project 2023</copyright>
 		<tags>MOSA Compiler</tags>
