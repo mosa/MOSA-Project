@@ -1,24 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
 	<PropertyGroup>
 		<TargetFramework>net7.0-windows</TargetFramework>
 		<OutputType>WinExe</OutputType>
 		<UseWindowsForms>true</UseWindowsForms>
-		<Title>Mosa.Tool.Explorer</Title>
-		<Company>MOSA Project</Company>
-		<Copyright>Copyright © MOSA Project 2023</Copyright>
-		<LangVersion>11.0</LangVersion>
-		<DebugType>full</DebugType>
-		<OutputPath>..\..\bin\</OutputPath>
-		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<WarningLevel>2</WarningLevel>
-		<DebugSymbols>True</DebugSymbols>
 	</PropertyGroup>
-	<PropertyGroup>
-		<StartupObject>Mosa.Tool.Explorer.Program</StartupObject>
-	</PropertyGroup>
+
 	<PropertyGroup>
 		<ApplicationIcon>magnifier.ico</ApplicationIcon>
 	</PropertyGroup>
+
 	<ItemGroup>
 		<Compile Update="MainForm.cs" />
 		<Compile Update="MainForm.Designer.cs">
@@ -37,13 +28,16 @@
 		<ProjectReference Include="..\Mosa.Utility.Disassembler\Mosa.Utility.Disassembler.csproj" />
 		<ProjectReference Include="..\Mosa.Utility.Launcher\Mosa.Utility.Launcher.csproj" />
 	</ItemGroup>
+
 	<ItemGroup>
 		<Content Include="magnifier.ico" />
 	</ItemGroup>
+
 	<ItemGroup>
 		<PackageReference Include="System.ComponentModel.Composition" Version="7.0.0" />
-		<PackageReference Include="dnlib" Version="3.6.0" />
+		<PackageReference Include="dnlib" Version="4.1.0" />
 	</ItemGroup>
+
 	<ItemGroup>
 		<Compile Remove="Properties\Settings.Designer.cs" />
 	</ItemGroup>
