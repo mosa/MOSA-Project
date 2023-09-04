@@ -1,23 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <AssemblyTitle>Mosa.Utility.BootImage</AssemblyTitle>
-    <Company>MOSA Project</Company>
-    <Product>Mosa.Utility.BootImage</Product>
-    <Copyright>Copyright © MOSA Project 2023</Copyright>
-    <LangVersion>11.0</LangVersion>
-    <DebugType>full</DebugType>
-    <OutputPath>..\..\bin\</OutputPath>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <NoWarn>1591</NoWarn>
-    <DebugSymbols>True</DebugSymbols>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
+
   <ItemGroup>
-    <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
-    <ProjectReference Include="..\Mosa.Utility.FileSystem\Mosa.Utility.FileSystem.csproj" />
+	  <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
+	  <ProjectReference Include="..\Mosa.Utility.FileSystem\Mosa.Utility.FileSystem.csproj" />
   </ItemGroup>
+
   <ItemGroup>
-    <PackageReference Include="System.IO.Hashing" Version="7.0.0" />
+	  <PackageReference Include="System.IO.Hashing" Version="7.0.0" />
   </ItemGroup>
+
 </Project>

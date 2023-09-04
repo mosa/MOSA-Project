@@ -85,6 +85,7 @@ public class UnitTestEngine : IDisposable
 	{
 		MosaSettings.BaseAddress = 0x00500000;
 		MosaSettings.EmitBinary = true;
+		MosaSettings.PlugKernel = true;
 		MosaSettings.PlugKorlib = true;
 		MosaSettings.Emulator = "qemu";
 		MosaSettings.EmulatorMemory = 128;
@@ -97,9 +98,18 @@ public class UnitTestEngine : IDisposable
 
 	private void Initialize()
 	{
+		var fileHunter = new FileHunter(AppDomain.CurrentDomain.BaseDirectory);
+
+		var fileUnitTestsPlatform = fileHunter.HuntFile($"Mosa.UnitTests.BareMetal.{MosaSettings.Platform}.dll");
+		if (fileUnitTestsPlatform != null) MosaSettings.AddSourceFile(fileUnitTestsPlatform.FullName);
+
+		var fileUnitTests = fileHunter.HuntFile("Mosa.UnitTests.dll");
+		if (fileUnitTests != null) MosaSettings.AddSourceFile(fileUnitTests.FullName);
+
 		if (MosaSettings.SourceFiles == null || MosaSettings.SourceFiles.Count == 0)
 		{
-			MosaSettings.AddSourceFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"Mosa.UnitTests.BareMetal.{MosaSettings.Platform}.dll"));
+			Aborted = true;
+			return;
 		}
 
 		Aborted = !Compile();

@@ -112,18 +112,16 @@ public class Builder : BaseLauncher
 		if (MosaSettings.PlugKorlib)
 		{
 			var fileKorlib = fileHunter.HuntFile("Mosa.Plug.Korlib.dll");
-
-			if (fileKorlib != null)
-			{
-				MosaSettings.AddSourceFile(fileKorlib.FullName);
-			}
+			if (fileKorlib != null) MosaSettings.AddSourceFile(fileKorlib.FullName);
 
 			var fileKorlibPlatform = fileHunter.HuntFile($"Mosa.Plug.Korlib.{MosaSettings.Platform}.dll");
+			if (fileKorlibPlatform != null) MosaSettings.AddSourceFile(fileKorlibPlatform.FullName);
+		}
 
-			if (fileKorlibPlatform != null)
-			{
-				MosaSettings.AddSourceFile(fileKorlibPlatform.FullName);
-			}
+		if (MosaSettings.PlugKernel)
+		{
+			var fileKernelPlatform = fileHunter.HuntFile($"Mosa.Kernel.BareMetal.{MosaSettings.Platform}.dll");
+			if (fileKernelPlatform != null) MosaSettings.AddSourceFile(fileKernelPlatform.FullName);
 		}
 
 		Output($"Compiling: {MosaSettings.SourceFiles[0]}");
@@ -143,30 +141,31 @@ public class Builder : BaseLauncher
 
 	private void BuildImage()
 	{
-		if (string.IsNullOrWhiteSpace(MosaSettings.ImageFormat))
-			return;
+		if (string.IsNullOrWhiteSpace(MosaSettings.ImageFormat)) return;
 
 		Output($"Generating Image: {MosaSettings.ImageFormat}");
 
-		if (MosaSettings.ImageFormat == "vmdk")
+		switch (MosaSettings.ImageFormat)
 		{
-			var tmpimagefile = Path.Combine(MosaSettings.TemporaryFolder, $"{Path.GetFileNameWithoutExtension(MosaSettings.ImageFile)}.img");
-
-			CreateDiskImage(tmpimagefile);
-
-			CreateVMDK(tmpimagefile);
-		}
-		else if (MosaSettings.ImageFormat == "vdi")
-		{
-			var tmpimagefile = Path.Combine(MosaSettings.TemporaryFolder, $"{Path.GetFileNameWithoutExtension(MosaSettings.ImageFile)}.img");
-
-			CreateDiskImage(tmpimagefile);
-
-			CreateVDI(tmpimagefile);
-		}
-		else
-		{
-			CreateDiskImage(MosaSettings.ImageFile);
+			case "vmdk":
+			{
+				var imageFile = Path.Combine(MosaSettings.TemporaryFolder, $"{Path.GetFileNameWithoutExtension(MosaSettings.ImageFile)}.img");
+				CreateDiskImage(imageFile);
+				CreateVMDK(imageFile);
+				break;
+			}
+			case "vdi":
+			{
+				var imageFile = Path.Combine(MosaSettings.TemporaryFolder, $"{Path.GetFileNameWithoutExtension(MosaSettings.ImageFile)}.img");
+				CreateDiskImage(imageFile);
+				CreateVDI(imageFile);
+				break;
+			}
+			default:
+			{
+				CreateDiskImage(MosaSettings.ImageFile);
+				break;
+			}
 		}
 	}
 
@@ -178,7 +177,7 @@ public class Builder : BaseLauncher
 		Counters.Add(data);
 	}
 
-	private void CreateDiskImage(string imagefile)
+	private void CreateDiskImage(string imageFile)
 	{
 		var bootImageOptions = new BootImageOptions();
 
@@ -200,7 +199,7 @@ public class Builder : BaseLauncher
 		}
 
 		bootImageOptions.VolumeLabel = MosaSettings.OSName;
-		bootImageOptions.DiskImageFileName = imagefile;
+		bootImageOptions.DiskImageFileName = imageFile;
 		bootImageOptions.ImageFirmware = MosaSettings.ImageFirmware switch
 		{
 			"bios" => ImageFirmware.Bios,
