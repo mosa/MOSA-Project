@@ -69,8 +69,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Packages", "Packages", "{52646152-3847-437E-9CCC-55DE500A5D6F}"
 	ProjectSection(SolutionItems) = preProject
 		Mosa.Packages\Mosa.DeviceSystem.nuspec = Mosa.Packages\Mosa.DeviceSystem.nuspec
-		Mosa.Packages\Mosa.Platform.x86.nuspec = Mosa.Packages\Mosa.Platform.x86.nuspec
 		Mosa.Packages\Mosa.Platform.nuspec = Mosa.Packages\Mosa.Platform.nuspec
+		Mosa.Packages\Mosa.Platform.x86.nuspec = Mosa.Packages\Mosa.Platform.x86.nuspec
 		Mosa.Packages\Mosa.Tools.Package.nuspec = Mosa.Packages\Mosa.Tools.Package.nuspec
 		Mosa.Packages\Mosa.Tools.Package.Qemu.nuspec = Mosa.Packages\Mosa.Tools.Package.Qemu.nuspec
 	EndProjectSection
@@ -221,6 +221,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Templates", "Mosa.Templates\Mosa.Templates.csproj", "{29A7CEFB-8051-4C10-9C95-A7011CC5BF0E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.BareMetal.GraphicalWorld.ARM64", "Mosa.BareMetal.GraphicalWorld.ARM64\Mosa.BareMetal.GraphicalWorld.ARM64.csproj", "{0410B744-084D-4932-A462-355CA1B7112A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Compiler.Common.xUnit", "Mosa.Compiler.Common.xUnit\Mosa.Compiler.Common.xUnit.csproj", "{4FF48DB2-1F54-434E-9F70-48C74997A9AE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1280,6 +1282,24 @@ Global
 		{0410B744-084D-4932-A462-355CA1B7112A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{0410B744-084D-4932-A462-355CA1B7112A}.Release|x86.ActiveCfg = Release|Any CPU
 		{0410B744-084D-4932-A462-355CA1B7112A}.Release|x86.Build.0 = Release|Any CPU
+		{4FF48DB2-1F54-434E-9F70-48C74997A9AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4FF48DB2-1F54-434E-9F70-48C74997A9AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4FF48DB2-1F54-434E-9F70-48C74997A9AE}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{4FF48DB2-1F54-434E-9F70-48C74997A9AE}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{4FF48DB2-1F54-434E-9F70-48C74997A9AE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4FF48DB2-1F54-434E-9F70-48C74997A9AE}.Debug|x86.Build.0 = Debug|Any CPU
+		{4FF48DB2-1F54-434E-9F70-48C74997A9AE}.Description|Any CPU.ActiveCfg = Debug|Any CPU
+		{4FF48DB2-1F54-434E-9F70-48C74997A9AE}.Description|Any CPU.Build.0 = Debug|Any CPU
+		{4FF48DB2-1F54-434E-9F70-48C74997A9AE}.Description|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{4FF48DB2-1F54-434E-9F70-48C74997A9AE}.Description|Mixed Platforms.Build.0 = Debug|Any CPU
+		{4FF48DB2-1F54-434E-9F70-48C74997A9AE}.Description|x86.ActiveCfg = Debug|Any CPU
+		{4FF48DB2-1F54-434E-9F70-48C74997A9AE}.Description|x86.Build.0 = Debug|Any CPU
+		{4FF48DB2-1F54-434E-9F70-48C74997A9AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4FF48DB2-1F54-434E-9F70-48C74997A9AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4FF48DB2-1F54-434E-9F70-48C74997A9AE}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{4FF48DB2-1F54-434E-9F70-48C74997A9AE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{4FF48DB2-1F54-434E-9F70-48C74997A9AE}.Release|x86.ActiveCfg = Release|Any CPU
+		{4FF48DB2-1F54-434E-9F70-48C74997A9AE}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1348,6 +1368,7 @@ Global
 		{8A22ACB2-D1F2-41AB-AE6D-315CF5822839} = {3A538FDC-0226-4971-A3C0-31570CDA340D}
 		{29A7CEFB-8051-4C10-9C95-A7011CC5BF0E} = {B18E2E7E-87FD-4E57-BA7F-7EB47BDF0BA3}
 		{0410B744-084D-4932-A462-355CA1B7112A} = {3A538FDC-0226-4971-A3C0-31570CDA340D}
+		{4FF48DB2-1F54-434E-9F70-48C74997A9AE} = {DDBC7F79-A2A1-4D92-9AE7-ADDC838F1E5E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C22A5C94-6B05-4B1B-845A-A2EA7615E093}

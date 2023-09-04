@@ -3,7 +3,7 @@
 using Mosa.Compiler.Common;
 using Xunit;
 
-namespace Mosa.Compiler.Framework.xUnit;
+namespace Mosa.Compiler.Common.xUnit;
 
 public class SparseBitArrayTests
 {
