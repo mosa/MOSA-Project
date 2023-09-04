@@ -293,6 +293,12 @@ public class MosaSettings
 		set => Settings.SetValue(Name.Compiler_Platform, value);
 	}
 
+	public bool PlugKernel
+	{
+		get => Settings.GetValue(Name.Launcher_PlugKernel, false);
+		set => Settings.SetValue(Name.Launcher_PlugKernel, value);
+	}
+
 	public bool PlugKorlib
 	{
 		get => Settings.GetValue(Name.Launcher_PlugKorlib, false);
@@ -756,6 +762,7 @@ public class MosaSettings
 		ConnectionTimeOut = Constant.ConnectionTimeOut;
 		MaxAttempts = Constant.MaxAttempts;
 
+		PlugKernel = true;
 		PlugKorlib = true;
 
 		LauncherStart = false;

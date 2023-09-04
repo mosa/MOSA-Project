@@ -1,19 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
-		<LangVersion>11.0</LangVersion>
-		<OutputPath>..\..\bin\</OutputPath>
-		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<DisableStandardFrameworkResolution>true</DisableStandardFrameworkResolution>
-		<DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
-		<DebugType>full</DebugType>
-    </PropertyGroup>
+	<Import Project="../Mosa.BareMetal.targets" />
 
 	<ItemGroup>
 		<ProjectReference Include="..\Mosa.Kernel.BareMetal\Mosa.Kernel.BareMetal.csproj" />
-		<ProjectReference Include="..\Mosa.Korlib\Mosa.Korlib.csproj" />
-		<ProjectReference Include="..\Mosa.FileSystem\Mosa.FileSystem.csproj" />
 	</ItemGroup>
 
 </Project>

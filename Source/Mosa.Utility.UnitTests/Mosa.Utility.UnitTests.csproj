@@ -1,25 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
 	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
 		<OutputType>Exe</OutputType>
-		<AssemblyTitle>Mosa.Utility.UnitTests</AssemblyTitle>
-		<Company>MOSA Project</Company>
-		<Product>Mosa.Utility.UnitTests</Product>
-		<Copyright>Copyright © MOSA Project 2023</Copyright>
-		<DebugType>full</DebugType>
-		<LangVersion>11.0</LangVersion>
-		<OutputPath>..\..\bin\</OutputPath>
-		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<NoWarn>NU1702</NoWarn>
-		<DebugSymbols>True</DebugSymbols>
-		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-	</PropertyGroup>
-	<PropertyGroup>
-		<StartupObject>Mosa.Utility.UnitTests.Program</StartupObject>
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
+
 	<ItemGroup>
 		<Compile Include="..\Mosa.UnitTests\Basic\ArrayLayoutTests.cs" Link="Tests\Basic\ArrayLayoutTests.cs" />
 		<Compile Include="..\Mosa.UnitTests\Basic\ArrayTest.cs" Link="Tests\Basic\ArrayTest.cs" />
@@ -62,7 +47,7 @@
 		<Compile Include="..\Mosa.UnitTests\Optimization\RemAndModTests.cs" Link="Tests\Optimization\RemAndModTests.cs" />
 		<Compile Include="..\Mosa.UnitTests\Optimization\SwitchTests.cs" Link="Tests\Optimization\SwitchTests.cs" />
 		<Compile Include="..\Mosa.UnitTests\Optimization\SpecificTests.cs" Link="Tests\Optimization\SpecificTests.cs" />
-		
+
 		<Compile Include="..\Mosa.UnitTests\Optimization\LoopUnrollingTests.cs" Link="Tests\Optimization\LoopUnrollingTests.cs" />
 
 		<Compile Include="..\Mosa.UnitTests\Other\CompilerBugTests.cs" Link="Tests\Other\CompilerBugTests.cs" />
@@ -97,20 +82,21 @@
 		<Compile Include="..\Mosa.UnitTests\ValueType\InitStructTests.cs" Link="Tests\ValueType\InitStructTests.cs" />
 		<Compile Include="..\Mosa.UnitTests\ValueType\StructTests.cs" Link="Tests\ValueType\StructTests.cs" />
 		<Compile Include="..\Mosa.UnitTests\ValueType\ValueTypeTests.cs" Link="Tests\ValueType\ValueTypeTests.cs" />
-		
+
 		<Compile Include="..\Mosa.UnitTests\Regression\Issue1093.cs" Link="Tests\Regression\Issue1093.cs" />
 
 		<!--<Compile Include="..\Mosa.UnitTests\Mosa.Collections.Generic\BitFlagsTests.cs" Link="Tests\Mosa.Collections.Generic\BitFlagsTests.cs" />-->
 	</ItemGroup>
+
 	<ItemGroup>
-		<ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
 		<ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj" />
-		<ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj" />
 		<ProjectReference Include="..\Mosa.Utility.BootImage\Mosa.Utility.BootImage.csproj" />
 		<ProjectReference Include="..\Mosa.Utility.Configuration\Mosa.Utility.Configuration.csproj" />
 		<ProjectReference Include="..\Mosa.Utility.Launcher\Mosa.Utility.Launcher.csproj" />
 	</ItemGroup>
+
 	<ItemGroup>
 		<Folder Include="Tests\" />
 	</ItemGroup>
+
 </Project>

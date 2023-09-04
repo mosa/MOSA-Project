@@ -1,24 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <DebugType>full</DebugType>
-    <LangVersion>11.0</LangVersion>
-    <OutputPath>..\..\bin\</OutputPath>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <DisableStandardFrameworkResolution>true</DisableStandardFrameworkResolution>
-    <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DocumentationFile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugSymbols>True</DebugSymbols>
-    <DocumentationFile>..\..\bin\Mosa.Runtime.xml</DocumentationFile>
-    <WarningLevel>2</WarningLevel>
-  </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Mosa.Korlib\Mosa.Korlib.csproj" />
-    <ProjectReference Include="..\Mosa.Runtime\Mosa.Runtime.csproj" />
-  </ItemGroup>
+
+	<Import Project="../Mosa.BareMetal.targets" />
+
+	<ItemGroup>
+		<ProjectReference Include="..\Mosa.Runtime.ARM64\Mosa.Runtime.ARM64.csproj" />
+	</ItemGroup>
+
 </Project>

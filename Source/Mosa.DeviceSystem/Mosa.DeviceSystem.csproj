@@ -1,26 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
-		<DebugType>full</DebugType>
-		<LangVersion>11.0</LangVersion>
-		<OutputPath>..\..\bin\</OutputPath>
-		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<DisableStandardFrameworkResolution>true</DisableStandardFrameworkResolution>
-		<DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
-		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-		<NuspecFile>Mosa.DeviceSystem.nuspec</NuspecFile>
-	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-		<DocumentationFile />
-	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-		<DebugSymbols>True</DebugSymbols>
-		<DocumentationFile>..\..\bin\Mosa.DeviceSystem.xml</DocumentationFile>
-		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-		<WarningLevel>2</WarningLevel>
-	</PropertyGroup>
+
+	<Import Project="../Mosa.BareMetal.targets" />
+
 	<ItemGroup>
-		<ProjectReference Include="..\Mosa.Korlib\Mosa.Korlib.csproj" />
 		<ProjectReference Include="..\Mosa.Runtime\Mosa.Runtime.csproj" />
 	</ItemGroup>
+
 </Project>

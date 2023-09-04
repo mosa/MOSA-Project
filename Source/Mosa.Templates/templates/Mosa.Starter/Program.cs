@@ -2,6 +2,7 @@
 
 using System;
 using Mosa.Kernel.BareMetal;
+using Mosa.Runtime.Plug;
 
 namespace Mosa.Starter;
 

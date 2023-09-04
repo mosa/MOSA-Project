@@ -13,14 +13,7 @@ internal static class Program
 		{
 			RegisterPlatforms();
 
-			if (UnitTestSystem.Start(args) == 0)
-			{
-				Environment.Exit(0);
-			}
-			else
-			{
-				Environment.Exit(1);
-			}
+			Environment.Exit(UnitTestSystem.Start(args));
 		}
 		catch (Exception ex)
 		{

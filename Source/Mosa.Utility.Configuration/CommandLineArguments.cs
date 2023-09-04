@@ -180,7 +180,8 @@ public static class CommandLineArguments
 			new Argument { Name = "-uefi", Setting = Name.Image_Firmware, Value="uefi"},
 			new Argument { Name = "-firmware", Setting = Name.Image_Firmware},
 
-			// Advance:
+			// Advanced:
+			new Argument { Name = "-plug-kernel", Setting = Name.Launcher_PlugKernel, Value= "true"},
 			new Argument { Name = "-plug-korlib", Setting = Name.Launcher_PlugKorlib, Value= "true"},
 			new Argument { Name = "-test", Setting = Name.Launcher_Test, Value= "true"},
 			new Argument { Name = "-test", Setting = Name.OS_BootOptions, Value="bootoptions=serialdebug"},

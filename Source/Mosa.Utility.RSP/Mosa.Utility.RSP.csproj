@@ -1,15 +1,3 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <AssemblyTitle>Mosa.Utility.RSP</AssemblyTitle>
-    <Company>MOSA Project</Company>
-    <Product>Mosa.Utility.RSP</Product>
-    <Copyright>Copyright © MOSA Project 2023</Copyright>
-    <DebugType>full</DebugType>
-    <LangVersion>11.0</LangVersion>
-    <OutputPath>..\..\bin\</OutputPath>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <NoWarn>1591</NoWarn>
-    <DebugSymbols>True</DebugSymbols>
-  </PropertyGroup>
+
 </Project>

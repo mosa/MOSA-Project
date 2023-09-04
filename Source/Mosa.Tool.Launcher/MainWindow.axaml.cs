@@ -255,6 +255,7 @@ public partial class MainWindow : Window
 		GraphicsWidth.Value = MosaSettings.MultibootVideoWidth;
 		GraphicsHeight.Value = MosaSettings.MultibootVideoHeight;
 
+		PlugKernel.IsChecked = MosaSettings.PlugKernel;
 		PlugKorlib.IsChecked = MosaSettings.PlugKorlib;
 		OsNameTxt.Text = MosaSettings.OSName;
 
@@ -364,6 +365,7 @@ public partial class MainWindow : Window
 		MosaSettings.MultibootVideoWidth = (int)GraphicsWidth.Value;
 		MosaSettings.MultibootVideoHeight = (int)GraphicsHeight.Value;
 
+		MosaSettings.PlugKernel = PlugKernel.IsChecked!.Value;
 		MosaSettings.PlugKorlib = PlugKorlib.IsChecked!.Value;
 		MosaSettings.OSName = OsNameTxt.Text;
 
