@@ -1,20 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <AssemblyName>System.Runtime</AssemblyName>
-    <RootNamespace />
-    <DebugType>full</DebugType>
-    <LangVersion>11.0</LangVersion>
-    <OutputPath>..\..\bin\</OutputPath>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <DisableStandardFrameworkResolution>true</DisableStandardFrameworkResolution>
-    <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <AddAdditionalExplicitAssemblyReferences>false</AddAdditionalExplicitAssemblyReferences>
-    <AdditionalExplicitAssemblyReferences />
-    <SkipCommonResourcesIncludes>true</SkipCommonResourcesIncludes>
-    <NoWarn>$(NoWarn),0419,0649,1573,1591,3021,CA2002</NoWarn>
-    <RuntimeMetadataVersion>v4.0.30319</RuntimeMetadataVersion>
-    <AssemblyVersion>5.0.0.0</AssemblyVersion>
-  </PropertyGroup>
+
+	<Import Project="../Mosa.BareMetal.targets" />
+
+	<PropertyGroup>
+		<AssemblyName>System.Runtime</AssemblyName>
+		<RootNamespace />
+		<SkipCommonResourcesIncludes>true</SkipCommonResourcesIncludes>
+		<RuntimeMetadataVersion>v4.0.30319</RuntimeMetadataVersion>
+		<AssemblyVersion>7.0.0.0</AssemblyVersion>
+	</PropertyGroup>
+
 </Project>

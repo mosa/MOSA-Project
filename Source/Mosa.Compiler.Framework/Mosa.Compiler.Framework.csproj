@@ -1,17 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <LangVersion>11.0</LangVersion>
-    <OutputPath>..\..\bin\</OutputPath>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-  </PropertyGroup>
+
   <ItemGroup>
-    <PackageReference Include="OptimizedPriorityQueue" Version="5.1.0" />
-    <PackageReference Include="System.Threading.Channels" Version="7.0.0" />
+	  <PackageReference Include="OptimizedPriorityQueue" Version="5.1.0" />
+	  <PackageReference Include="System.Threading.Channels" Version="7.0.0" />
   </ItemGroup>
+
   <ItemGroup>
-    <ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj" />
-    <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
-    <ProjectReference Include="..\Mosa.Utility.Configuration\Mosa.Utility.Configuration.csproj" />
+	  <ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj" />
+	  <ProjectReference Include="..\Mosa.Utility.Configuration\Mosa.Utility.Configuration.csproj" />
   </ItemGroup>
+
 </Project>

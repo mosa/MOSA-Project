@@ -1,27 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <AssemblyTitle>Mosa.Utility.Configuration</AssemblyTitle>
-    <Company>MOSA Project</Company>
-    <Product>Mosa.Utility.Configuration</Product>
-    <Copyright>Copyright © MOSA Project 2023</Copyright>
-    <LangVersion>11.0</LangVersion>
-    <BaseAddress>285212672</BaseAddress>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <RemoveIntegerChecks>False</RemoveIntegerChecks>
-    <ConfigurationOverrideFile />
-    <RegisterForComInterop>False</RegisterForComInterop>
-    <DebugType>full</DebugType>
-    <FileAlignment>4096</FileAlignment>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DebugSymbols>True</DebugSymbols>
-    <WarningLevel>2</WarningLevel>
-    <OutputPath>..\..\bin\</OutputPath>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <AssemblyName>Mosa.Utility.Configuration</AssemblyName>
-    <RootNamespace>Mosa.Utility.Configuration</RootNamespace>
-  </PropertyGroup>
+
   <ItemGroup>
-    <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
+	  <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
   </ItemGroup>
+
 </Project>

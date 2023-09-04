@@ -1,24 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <AssemblyTitle>Mosa.Utility.Disassembler</AssemblyTitle>
-    <Company>MOSA Project</Company>
-    <Product>Mosa.Utility.Disassembler</Product>
-    <Copyright>Copyright © MOSA Project 2023</Copyright>
-    <DebugType>full</DebugType>
-    <LangVersion>11.0</LangVersion>
-    <OutputPath>..\..\bin\</OutputPath>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <NoWarn>1591</NoWarn>
-    <DebugSymbols>True</DebugSymbols>
-  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Reko.Decompiler.Runtime" Version="0.11.4" />
+	  <PackageReference Include="Reko.Decompiler.Runtime" Version="0.11.3" />
   </ItemGroup>
+
   <ItemGroup>
-    <ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj" />
-    <ProjectReference Include="..\Mosa.Compiler.ARM32\Mosa.Compiler.ARM32.csproj" />
-    <ProjectReference Include="..\Mosa.Compiler.x64\Mosa.Compiler.x64.csproj" />
-    <ProjectReference Include="..\Mosa.Compiler.x86\Mosa.Compiler.x86.csproj" />
+	  <ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj" />
+	  <ProjectReference Include="..\Mosa.Compiler.ARM32\Mosa.Compiler.ARM32.csproj" />
+	  <ProjectReference Include="..\Mosa.Compiler.x64\Mosa.Compiler.x64.csproj" />
+	  <ProjectReference Include="..\Mosa.Compiler.x86\Mosa.Compiler.x86.csproj" />
   </ItemGroup>
+
 </Project>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+    <PropertyGroup>
+		<OutputPath>../../bin</OutputPath>
+		<TargetFramework>net7.0</TargetFramework>
+		<LangVersion>11.0</LangVersion>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+<!--		<WarningsAsErrors>nullable</WarningsAsErrors>-->
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+		<CodeAnalysisRuleSet>../Common.ruleset</CodeAnalysisRuleSet>
+		<Company>MOSA Project</Company>
+		<Copyright>Copyright © MOSA Project 2023</Copyright>
+		<AssemblyVersion>2.5.0.0</AssemblyVersion>
+    </PropertyGroup>
+
+</Project>

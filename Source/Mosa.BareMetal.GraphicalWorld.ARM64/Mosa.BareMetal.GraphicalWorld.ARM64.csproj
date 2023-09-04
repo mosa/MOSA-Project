@@ -2,15 +2,9 @@
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<TargetFramework>net7.0</TargetFramework>
-		<LangVersion>11.0</LangVersion>
-		<OutputPath>..\..\bin\</OutputPath>
-		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<DisableStandardFrameworkResolution>true</DisableStandardFrameworkResolution>
-		<DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
-		<UseAppHost>false</UseAppHost>
-		<DebugType>full</DebugType>
 	</PropertyGroup>
+
+	<Import Project="../Mosa.BareMetal.targets" />
 
 	<ItemGroup>
 		<ProjectReference Include="..\Mosa.BareMetal.GraphicalWorld\Mosa.BareMetal.GraphicalWorld.csproj" />

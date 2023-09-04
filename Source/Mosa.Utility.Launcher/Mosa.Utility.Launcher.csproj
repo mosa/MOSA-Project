@@ -1,28 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
-		<AssemblyTitle>Mosa.Utility.Launcher</AssemblyTitle>
-		<Company>MOSA Project</Company>
-		<Product>Mosa.Utility.Launcher</Product>
-		<Copyright>Copyright © MOSA Project 2023</Copyright>
-		<DebugType>full</DebugType>
-		<LangVersion>11.0</LangVersion>
-		<OutputPath>..\..\bin\</OutputPath>
-		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<NoWarn>1591</NoWarn>
-		<DebugSymbols>True</DebugSymbols>
-	</PropertyGroup>
+
 	<ItemGroup>
-		<ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
 		<ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj" />
 		<ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem.CLR\Mosa.Compiler.MosaTypeSystem.CLR.csproj" />
-		<ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj" />
 		<ProjectReference Include="..\Mosa.Compiler.x64\Mosa.Compiler.x64.csproj" />
 		<ProjectReference Include="..\Mosa.Compiler.x86\Mosa.Compiler.x86.csproj" />
 		<ProjectReference Include="..\Mosa.Utility.BootImage\Mosa.Utility.BootImage.csproj" />
 		<ProjectReference Include="..\Mosa.Utility.Configuration\Mosa.Utility.Configuration.csproj" />
 		<ProjectReference Include="..\Mosa.Utility.Disassembler\Mosa.Utility.Disassembler.csproj" />
 	</ItemGroup>
+
 	<ItemGroup>
 		<EmbeddedResource Include="..\..\Tools\raspberrypi-firmware\bootcode.bin">
 			<Link>Resources\raspberrypi-firmware\bootcode.bin</Link>
@@ -37,4 +24,5 @@
 			<Link>Resources\limine\limine.sys</Link>
 		</EmbeddedResource>
 	</ItemGroup>
+
 </Project>

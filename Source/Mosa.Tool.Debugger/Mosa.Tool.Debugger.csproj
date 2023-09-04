@@ -1,24 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
 	<PropertyGroup>
 		<TargetFramework>net7.0-windows</TargetFramework>
 		<OutputType>WinExe</OutputType>
 		<UseWindowsForms>true</UseWindowsForms>
-		<Title>Mosa.Tool.Debugger</Title>
-		<Company>MOSA Project</Company>
-		<Copyright>Copyright © MOSA Project 2023</Copyright>
-		<LangVersion>11.0</LangVersion>
-		<DebugType>full</DebugType>
-		<OutputPath>..\..\bin\</OutputPath>
-		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<WarningLevel>2</WarningLevel>
-		<DebugSymbols>True</DebugSymbols>
 	</PropertyGroup>
-	<PropertyGroup>
-		<StartupObject>Mosa.Tool.Debugger.Program</StartupObject>
-	</PropertyGroup>
+
 	<PropertyGroup>
 		<ApplicationIcon>bug.ico</ApplicationIcon>
 	</PropertyGroup>
+
 	<ItemGroup>
 		<Compile Update="ConnectWindow.cs" />
 		<Compile Update="ConnectWindow.Designer.cs">
@@ -107,6 +98,7 @@
 			<DependentUpon>StatusView.cs</DependentUpon>
 		</Compile>
 	</ItemGroup>
+
 	<ItemGroup>
 		<ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
 		<ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj" />
@@ -124,6 +116,7 @@
 			<Private>true</Private>
 		</Reference>
 	</ItemGroup>
+
 	<ItemGroup>
 		<EmbeddedResource Update="ConnectWindow.resx">
 			<DependentUpon>ConnectWindow.cs</DependentUpon>
@@ -165,15 +158,19 @@
 			<DependentUpon>WatchView.cs</DependentUpon>
 		</EmbeddedResource>
 	</ItemGroup>
+
 	<ItemGroup>
 		<Content Include="bug.ico" />
 	</ItemGroup>
+
 	<ItemGroup>
 		<PackageReference Include="dnlib" Version="4.1.0" />
 	</ItemGroup>
+
 	<ItemGroup>
 		<Compile Remove="DebugVMImageWindow.cs" />
 		<Compile Remove="DebugInfo\DebugSource.cs" />
 	</ItemGroup>
+
 </Project>
 
