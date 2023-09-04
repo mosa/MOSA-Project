@@ -143,6 +143,7 @@ public class Starter : BaseLauncher
 		}
 		finally
 		{
+			client.Disconnect();
 			process.Kill(true);
 			process.WaitForExit();
 		}
