@@ -43,7 +43,6 @@
 		<file src="..\..\bin\Reko.Arch.Arm.dll" target="contentFiles/any/net7.0/Tools" />
 		<file src="..\..\bin\Reko.Arch.X86.dll" target="contentFiles/any/net7.0/Tools" />
 		<file src="..\..\bin\Reko.Core.dll" target="contentFiles/any/net7.0/Tools" />
-		<!--<file src="..\..\bin\Reko.dll" target="contentFiles/any/net7.0/Tools" />-->
 		<file src="..\..\bin\PriorityQueue.dll" target="contentFiles/any/net7.0/Tools" />
 		<file src="..\..\bin\WinFormsUI.dll" target="contentFiles/any/net7.0/Tools" />
 		<file src="..\..\bin\WeifenLuo.WinFormsUI.Docking.ThemeVS2015.dll" target="contentFiles/any/net7.0/Tools" />
