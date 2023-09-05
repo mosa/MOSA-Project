@@ -57,13 +57,13 @@ public static class DivisionMagicNumber
 		return ((uint)M, (uint)s);
 	}
 
-	public static (uint M, uint s, uint a) GetMagicNumber(uint d)
+	public static (uint M, uint s, bool a) GetMagicNumber(uint d)
 	{
 		// Must have 1 <= d <= 2**32-1.
 		int p;
 		uint nc, delta, q1, r1, q2, r2;
 
-		var a = 0; // Initialize "add" indicator.
+		var a = false; // Initialize "add" indicator.
 		nc = (uint)(-1 - (-d) % d); // Unsigned arithmetic here.
 		p = 31; // Init. p.
 		q1 = 0x80000000 / nc; // Init. q1 = 2**p/nc.
@@ -85,13 +85,13 @@ public static class DivisionMagicNumber
 			}
 			if (r2 + 1 >= d - r2)
 			{
-				if (q2 >= 0x7FFFFFFF) a = 1;
+				if (q2 >= 0x7FFFFFFF) a = true;
 				q2 = 2 * q2 + 1; // Update q2.
 				r2 = 2 * r2 + 1 - d;
 			} // Update r2.
 			else
 			{
-				if (q2 >= 0x80000000) a = 1;
+				if (q2 >= 0x80000000) a = true;
 				q2 = 2 * q2;
 				r2 = 2 * r2 + 1;
 			}
@@ -100,17 +100,17 @@ public static class DivisionMagicNumber
 				(q1 < delta || (q1 == delta && r1 == 0)));
 
 		var M = q2 + 1; // Magic number
-		var s = p - 32; // and shift amount to return
-		return ((uint)M, (uint)s, (uint)a); // (magu.a was set above).
+		var s = (uint)(p - 32); // and shift amount to return
+		return (M, s, a);
 	}
 
-	public static (uint M, uint s, uint a) GetMagicNumber2(uint d)
+	public static (uint M, uint s, bool a) GetMagicNumber2(uint d)
 	{
 		// Must have 1 <= d <= 2**32-1.
 		int p;
 		uint p32 = 0u, q, r, delta;
 
-		var a = 0; // Initialize "add" indicator.
+		var a = false; // Initialize "add" indicator.
 		p = 31; // Initialize p.
 		q = 0x7FFFFFFF / d; // Initialize q = (2**p - 1)/d.
 		r = 0x7FFFFFFF - q * d; // Init. r = rem(2**p - 1, d).
@@ -121,20 +121,20 @@ public static class DivisionMagicNumber
 			else p32 = 2 * p32;
 			if (r + 1 >= d - r)
 			{
-				if (q >= 0x7FFFFFFF) a = 1;
+				if (q >= 0x7FFFFFFF) a = true;
 				q = 2 * q + 1; // Update q.
 				r = 2 * r + 1 - d; // Update r.
 			}
 			else
 			{
-				if (q >= 0x80000000) a = 1;
+				if (q >= 0x80000000) a = true;
 				q = 2 * q;
 				r = 2 * r + 1;
 			}
 			delta = d - 1 - r;
 		} while (p < 64 && p32 < delta);
 		var M = q + 1; // Magic number and
-		var s = p - 32; // shift amount to return
-		return (M, (uint)s, (uint)a); // (magu.a was set above).
+		var s = (uint)(p - 32); // shift amount to return
+		return (M, s, a); // (magu.a was set above).
 	}
 }

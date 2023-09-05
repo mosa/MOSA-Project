@@ -1,6 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Collections.Generic;
 using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x86.Transforms.Optimizations.Manual;
@@ -28,5 +27,8 @@ public static class ManualTransforms
 		//new Special.Mov32Propagate(),
 		//Add32ToLea32
 		//Sub32ToLea32
+
+		new StrengthReduction.Mul32ByZero(),
+		new StrengthReduction.Mul32ByZero_v1(),
 	};
 }

@@ -239,7 +239,7 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 
 	public static bool AreStatusFlagUsed(Context context)
 	{
-		return AreAnyStatusFlagsUsed(context.Node) != TriState.No;
+		return AreStatusFlagsUsed(context.Instruction, context.Node) != TriState.No;
 	}
 
 	public static bool IsCarryFlagUsed(Context context)
@@ -766,6 +766,16 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 	public static TriState IsCarryFlagUsed(InstructionNode node)
 	{
 		return AreStatusFlagsUsed(node.Next, false, true, false, false, false);
+	}
+
+	public static TriState AreStatusFlagsUsed(BaseInstruction instruction, InstructionNode node)
+	{
+		return AreStatusFlagsUsed(node.Next,
+			instruction.IsZeroFlagModified,
+			instruction.IsCarryFlagModified,
+			instruction.IsSignFlagModified,
+			instruction.IsOverflowFlagModified,
+			instruction.IsParityFlagModified);
 	}
 
 	public static TriState AreStatusFlagsUsed(InstructionNode node, bool checkZero, bool checkCarry, bool checkSign, bool checkOverlow, bool checkParity)
