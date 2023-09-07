@@ -56,15 +56,15 @@ public static class BitTwiddling
 		if (count == 0)
 			return 0;
 
-		return ~((1uL << (64 - count + 1)) - 1uL);
+		return ~((1uL << (64 - count)) - 1uL);
 	}
 
-	public static int CountBits(ulong value)
+	public static int CountSetBits(ulong value)
 	{
 		return BitOperations.PopCount(value);
 	}
 
-	public static int CountBits(uint value)
+	public static int CountSetBits(uint value)
 	{
 		return BitOperations.PopCount(value);
 	}

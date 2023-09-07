@@ -29,6 +29,12 @@ public sealed class DivUnsignedMagicNumber32 : BaseTransform
 		if (context.Operand2.ConstantUnsigned32 <= 2)
 			return false;
 
+		if (IsPowerOfTwo32(context.Operand2))
+			return false;
+
+		//if (!(context.Operand2.ConstantUnsigned32 == 3 || context.Operand2.ConstantUnsigned32 == 7 || context.Operand2.ConstantUnsigned32 == 11))
+		//	return false;
+
 		return true;
 	}
 
@@ -41,15 +47,12 @@ public sealed class DivUnsignedMagicNumber32 : BaseTransform
 
 		var magic = DivisionMagicNumber.GetMagicNumber(c);
 
-		//uint32_t __magicu_div(uint32_t x, struct magicu d)
-		//return ((((uint64_t)x * d.M) >> 32) + ((d.s & 64) ? x : 0)) >> (d.s & 63);
-
 		var v1 = transform.VirtualRegisters.Allocate64();
 		var v2 = transform.VirtualRegisters.Allocate64();
 		var v3 = transform.VirtualRegisters.Allocate64();
 		var v4 = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction(IRInstruction.To64, v1, Operand.Constant32_0, operand1);
+		context.SetInstruction(IRInstruction.To64, v1, operand1, Operand.Constant32_0);
 		context.AppendInstruction(IRInstruction.MulUnsigned64, v2, v1, Operand.CreateConstant64(magic.M));
 		context.AppendInstruction(IRInstruction.ShiftRight64, v3, v2, Operand.Constant64_32); // v3 = GetHigh(v2)
 		context.AppendInstruction(IRInstruction.GetLow32, v4, v3);
@@ -66,7 +69,7 @@ public sealed class DivUnsignedMagicNumber32 : BaseTransform
 
 			context.AppendInstruction(IRInstruction.Sub32, v5, operand1, v4);   // n - q
 			context.AppendInstruction(IRInstruction.ShiftRight32, v6, v5, Operand.Constant32_1);
-			context.AppendInstruction(IRInstruction.Add32, v7, v6, v2);
+			context.AppendInstruction(IRInstruction.Add32, v7, v6, v4);
 			context.AppendInstruction(IRInstruction.ShiftRight32, result, v7, Operand.CreateConstant32(magic.s - 1));
 		}
 	}
