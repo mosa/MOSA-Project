@@ -277,5 +277,6 @@ public static class ManualTransforms
 		new StaticLoad.Load64(),
 
 		new Simplification.DivUnsignedMagicNumber32(),
+		new Simplification.DivUnsignedMagicNumber64(),
 	};
 }
