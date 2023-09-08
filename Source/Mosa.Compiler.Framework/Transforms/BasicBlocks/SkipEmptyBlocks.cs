@@ -8,7 +8,7 @@ public class SkipEmptyBlocks : BaseBlockTransform
 	{
 		var basicBlocks = transformContext.BasicBlocks;
 		var hasProtectedRegions = transformContext.MethodCompiler.HasProtectedRegions;
-		var isInSSAForm = transformContext.MethodCompiler.IsInSSAForm;
+		var isInSSAForm = transformContext.IsInSSAForm;
 		var trace = transformContext.TraceLog;
 
 		var emptied = 0;

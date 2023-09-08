@@ -33,8 +33,6 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 	private delegate (BitValue, BitValue) NodeVisitationDelegate2(InstructionNode node, TransformContext transform);
 
-	private readonly TransformContext TransformContext = new TransformContext();
-
 	private BitValueManager BitValueManager;
 
 	protected override void Finish()
@@ -45,8 +43,6 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 	protected override void Initialize()
 	{
-		TransformContext.SetCompiler(Compiler);
-
 		Register(InstructionsUpdatedCount);
 		Register(InstructionsRemovedCount);
 		Register(BranchesRemovedCount);
@@ -187,7 +183,6 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 		BitValueManager = new BitValueManager(Is32BitPlatform);
 
-		TransformContext.SetMethodCompiler(MethodCompiler);
 		TransformContext.AddManager(BitValueManager);
 		TransformContext.SetLog(trace);
 

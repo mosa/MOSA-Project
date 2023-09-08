@@ -20,8 +20,6 @@ public sealed class DemandBitStage : BaseMethodCompilerStage
 
 	private delegate ulong NodeVisitationDelegate(InstructionNode node, TransformContext transform);
 
-	private readonly TransformContext TransformContext = new TransformContext();
-
 	protected override void Finish()
 	{
 		trace = null;
@@ -29,8 +27,6 @@ public sealed class DemandBitStage : BaseMethodCompilerStage
 
 	protected override void Initialize()
 	{
-		TransformContext.SetCompiler(Compiler);
-
 		Register(InstructionsRemovedCount);
 
 		RegisterAffected(IRInstruction.Or32, AffectedBits_Or32);
@@ -73,7 +69,6 @@ public sealed class DemandBitStage : BaseMethodCompilerStage
 
 		var bitValueManager = new BitValueManager(Is32BitPlatform);
 
-		TransformContext.SetMethodCompiler(MethodCompiler);
 		TransformContext.AddManager(bitValueManager);
 		TransformContext.SetLog(trace);
 

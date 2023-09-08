@@ -1,7 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Managers;
@@ -34,8 +32,6 @@ public sealed class TransformContext
 
 	public bool IsLowerTo32 { get; private set; }
 
-	public bool IsInSSAForm { get; private set; }
-
 	public bool AreCPURegistersAllocated { get; private set; }
 
 	public bool Is32BitPlatform { get; private set; }
@@ -43,6 +39,12 @@ public sealed class TransformContext
 	public int Window { get; private set; }
 
 	public bool Devirtualization { get; private set; }
+
+	public BaseMethodCompilerStage Stage { get; private set; }
+
+	public int TotalTransformCount { get; private set; }
+
+	public bool IsInSSAForm { get; private set; }
 
 	#endregion Properties
 
@@ -118,6 +120,8 @@ public sealed class TransformContext
 
 	#endregion Data
 
+	#region Set Contexts
+
 	public void SetCompiler(Compiler compiler)
 	{
 		Compiler = compiler;
@@ -137,26 +141,42 @@ public sealed class TransformContext
 		MulSignedInstruction = Is32BitPlatform ? IRInstruction.MulSigned32 : IRInstruction.MulSigned64;
 		MulUnsignedInstruction = Is32BitPlatform ? IRInstruction.MulUnsigned32 : IRInstruction.MulUnsigned64;
 		BranchInstruction = Is32BitPlatform ? IRInstruction.Branch32 : IRInstruction.Branch64;
-	}
-
-	public void SetMethodCompiler(MethodCompiler methodCompiler)
-	{
-		MethodCompiler = methodCompiler;
-
-		VirtualRegisters = methodCompiler.VirtualRegisters;
-		LocalStack = methodCompiler.LocalStack;
-
-		BasicBlocks = methodCompiler.BasicBlocks;
-
-		AreCPURegistersAllocated = methodCompiler.AreCPURegistersAllocated;
-		IsInSSAForm = methodCompiler.IsInSSAForm;
 
 		IsLowerTo32 = false;
 		TraceLog = null;
 		Managers.Clear();
 
-		BitValueManager = null;
+		// clear - just in case
+		MethodCompiler = null;
+		VirtualRegisters = null;
+		LocalStack = null;
+		BasicBlocks = null;
 	}
+
+	public void SetMethodCompiler(MethodCompiler methodCompiler)
+	{
+		MethodCompiler = methodCompiler;
+		VirtualRegisters = methodCompiler.VirtualRegisters;
+		LocalStack = methodCompiler.LocalStack;
+		BasicBlocks = methodCompiler.BasicBlocks;
+		AreCPURegistersAllocated = methodCompiler.AreCPURegistersAllocated;
+
+		IsLowerTo32 = false;
+		TraceLog = null;
+		Managers.Clear();
+
+		Stage = null;
+	}
+
+	public void SetStage(BaseMethodCompilerStage stage)
+	{
+		Stage = stage;
+		TotalTransformCount = 0;
+		IsInSSAForm = MethodCompiler.IsInSSAForm;
+		Managers.Clear();
+	}
+
+	#endregion Set Contexts
 
 	public void SetStageOptions(bool lowerTo32)
 	{
@@ -182,6 +202,8 @@ public sealed class TransformContext
 
 	#endregion Manager
 
+	#region Logs
+
 	public void ClearLogs()
 	{
 		TraceLog = null;
@@ -199,12 +221,14 @@ public sealed class TransformContext
 		SpecialTraceLog = specialTraceLog;
 	}
 
-	public bool ApplyTransform(Context context, BaseTransform transform, int count)
+	#endregion Logs
+
+	public bool ApplyTransform(Context context, BaseTransform transform)
 	{
 		if (!transform.Match(context, this))
 			return false;
 
-		TraceBefore(context, transform, count);
+		TraceBefore(context, transform);
 
 		transform.Transform(context, this);
 
@@ -215,14 +239,16 @@ public sealed class TransformContext
 
 	#region Trace
 
-	public void TraceBefore(Context context, BaseTransform transformation, int count)
+	public void TraceBefore(Context context, BaseTransform transformation)
 	{
-		TraceLog?.Log($"{count,-7}\t| {transformation.Name}");
+		TraceLog?.Log($"{TotalTransformCount,-7}\t| {transformation.Name}");
 
 		if (transformation.Log)
 			SpecialTraceLog?.Log($"{transformation.Name}\t{Method.FullName} at {context}");
 
 		TraceLog?.Log($"{context.Block}\t| {context}");
+
+		TotalTransformCount++;
 	}
 
 	public void TraceAfter(Context context)

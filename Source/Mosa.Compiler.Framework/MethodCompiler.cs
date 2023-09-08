@@ -1,7 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Exceptions;
@@ -22,11 +20,6 @@ namespace Mosa.Compiler.Framework;
 public sealed class MethodCompiler
 {
 	#region Data Members
-
-	/// <summary>
-	/// The empty operand list
-	/// </summary>
-	private static readonly Operand[] emptyOperandList = System.Array.Empty<Operand>();
 
 	private readonly Stopwatch Stopwatch;
 
@@ -229,9 +222,9 @@ public sealed class MethodCompiler
 		MethodTraceLevel = compiler.CompilerHooks.GetMethodTraceLevel != null ? compiler.CompilerHooks.GetMethodTraceLevel(method) : null;
 
 		Statistics = compiler.Statistics;
-		IsInSSAForm = false;
 		AreCPURegistersAllocated = false;
 		IsLocalStackFinalized = false;
+		IsInSSAForm = false;
 
 		BasicBlocks = basicBlocks ?? new BasicBlocks();
 
@@ -368,6 +361,8 @@ public sealed class MethodCompiler
 
 			try
 			{
+				TransformContext.SetStage(stage);
+
 				stage.Setup(this, i);
 				stage.Execute();
 
