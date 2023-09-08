@@ -5,7 +5,7 @@
 namespace Mosa.Compiler.Framework.IR;
 
 /// <summary>
-/// MulHu32 - Multiply high unsigned (future)
+/// MulHu32 - Multiply high unsigned
 /// </summary>
 /// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 public sealed class MulHu32 : BaseIRInstruction

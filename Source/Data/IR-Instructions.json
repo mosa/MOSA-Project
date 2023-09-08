@@ -970,7 +970,7 @@
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2,
-			"Description": "Multiply high unsigned (future)",
+			"Description": "Multiply high unsigned",
 			"Commutative": "true"
 		},
 		{
@@ -978,7 +978,7 @@
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2,
-			"Description": "Multiply high unsigned (future)",
+			"Description": "Multiply high unsigned",
 			"Commutative": "true"
 		},
 		{
