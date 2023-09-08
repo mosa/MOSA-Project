@@ -12,7 +12,7 @@ public sealed class DemandBitStage : BaseMethodCompilerStage
 {
 	private const int MaxInstructions = 1024;
 
-	private readonly Counter InstructionsRemovedCount = new Counter("DemandBitStage.InstructionsRemoved");
+	private readonly Counter InstructionsRemovedCount = new("DemandBitStage.InstructionsRemoved");
 	private TraceLog trace;
 
 	private readonly NodeVisitationDelegate[] affected = new NodeVisitationDelegate[MaxInstructions];

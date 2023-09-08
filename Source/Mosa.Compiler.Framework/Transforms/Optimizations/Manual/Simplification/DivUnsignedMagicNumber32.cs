@@ -40,15 +40,15 @@ public sealed class DivUnsignedMagicNumber32 : BaseTransform
 		var operand1 = context.Operand1;
 		var c = context.Operand2.ConstantUnsigned32;
 
-		var magic = DivisionMagicNumber.GetMagicNumber(c);
+		var (M, s, a) = DivisionMagicNumber.GetMagicNumber(c);
 
 		var v1 = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction(IRInstruction.MulHu32, v1, operand1, Operand.CreateConstant64(magic.M));
+		context.SetInstruction(IRInstruction.MulHu32, v1, operand1, Operand.CreateConstant64(M));
 
-		if (!magic.a)
+		if (!a)
 		{
-			context.AppendInstruction(IRInstruction.ShiftRight32, result, v1, Operand.CreateConstant32(magic.s));
+			context.AppendInstruction(IRInstruction.ShiftRight32, result, v1, Operand.CreateConstant32(s));
 		}
 		else
 		{
@@ -59,7 +59,7 @@ public sealed class DivUnsignedMagicNumber32 : BaseTransform
 			context.AppendInstruction(IRInstruction.Sub32, v2, operand1, v1);
 			context.AppendInstruction(IRInstruction.ShiftRight32, v3, v2, Operand.Constant32_1);
 			context.AppendInstruction(IRInstruction.Add32, v4, v3, v1);
-			context.AppendInstruction(IRInstruction.ShiftRight32, result, v4, Operand.CreateConstant32(magic.s - 1));
+			context.AppendInstruction(IRInstruction.ShiftRight32, result, v4, Operand.CreateConstant32(s - 1));
 		}
 	}
 }

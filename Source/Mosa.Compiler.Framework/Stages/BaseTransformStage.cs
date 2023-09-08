@@ -16,7 +16,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 	private int OptimizationCount;
 
 	private readonly List<BaseTransform>[] transforms = new List<BaseTransform>[MaximumInstructionID];
-	private readonly List<BaseBlockTransform> blockTransforms = new List<BaseBlockTransform>();
+	private readonly List<BaseBlockTransform> blockTransforms = new();
 
 	protected TraceLog trace;
 
@@ -29,7 +29,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 	protected int MaxPasses;
 	protected int Steps;
 
-	protected readonly Dictionary<string, Counter> TransformCounters = new Dictionary<string, Counter>();
+	protected readonly Dictionary<string, Counter> TransformCounters = new();
 
 	private bool SortedByPriority;
 

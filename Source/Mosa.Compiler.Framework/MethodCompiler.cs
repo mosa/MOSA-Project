@@ -27,7 +27,7 @@ public sealed class MethodCompiler
 
 	private readonly NotifyTraceLogHandler NotifyTranformTraceHandler;
 
-	public readonly TransformContext TransformContext = new TransformContext();
+	public readonly TransformContext TransformContext = new();
 
 	#endregion Data Members
 
@@ -419,15 +419,15 @@ public sealed class MethodCompiler
 
 				var per = (int)percentage / 5;
 
-				var entry = $"[{i:00}] {Pipeline[i].Name.PadRight(45)} : {percentage:00.00} % [{string.Empty.PadRight(per, '#').PadRight(20, ' ')}] ({ticks})";
+				var entry = $"[{i:00}] {Pipeline[i].Name,-45} : {percentage:00.00} % [{string.Empty.PadRight(per, '#'),-20}] ({ticks})";
 
 				executionTimeLog.Log(entry);
 
 				MethodData.Counters.NewCountSkipLock($"ExecutionTime.{i:00}.{Pipeline[i].Name}.Ticks", (int)ticks);
 			}
 
-			executionTimeLog.Log($"{"****Total Time".PadRight(57)}({lastTick} Ticks)");
-			executionTimeLog.Log($"{"****Total Time".PadRight(57)}({lastMS} Milliseconds)");
+			executionTimeLog.Log($"{"****Total Time",-57}({lastTick} Ticks)");
+			executionTimeLog.Log($"{"****Total Time",-57}({lastMS} Milliseconds)");
 
 			PostTraceLog(executionTimeLog);
 		}
@@ -728,7 +728,7 @@ public sealed class MethodCompiler
 
 	#region Constant Helper Methods
 
-	public Operand CreateConstant(byte value)
+	public static Operand CreateConstant(byte value)
 	{
 		return Operand.CreateConstant32(value);
 	}

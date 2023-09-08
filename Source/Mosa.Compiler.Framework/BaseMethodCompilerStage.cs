@@ -175,7 +175,7 @@ public abstract class BaseMethodCompilerStage
 	/// <summary>
 	/// The counters
 	/// </summary>
-	private readonly List<Counter> RegisteredCounters = new List<Counter>();
+	private readonly List<Counter> RegisteredCounters = new();
 
 	protected uint ObjectHeaderSize;
 

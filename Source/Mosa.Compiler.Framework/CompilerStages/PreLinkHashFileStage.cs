@@ -13,15 +13,6 @@ namespace Mosa.Compiler.Framework.CompilerStages;
 /// <seealso cref="Mosa.Compiler.Framework.BaseCompilerStage" />
 public class PreLinkHashFileStage : BaseCompilerStage
 {
-	#region Data Members
-
-	/// <summary>
-	/// Holds the text writer used to emit the map file.
-	/// </summary>
-	private TextWriter writer;
-
-	#endregion Data Members
-
 	private class HashInfo
 	{
 		public string Name;
@@ -42,16 +33,15 @@ public class PreLinkHashFileStage : BaseCompilerStage
 		if (string.IsNullOrEmpty(filename))
 			return;
 
-		using (writer = new StreamWriter(filename))
+		using var writer = new StreamWriter(filename);
+
+		writer.WriteLine("Symbol Name\tHash");
+
+		var info = GetAndSortSymbolHashData();
+
+		foreach (var data in info)
 		{
-			writer.WriteLine("Symbol Name\tHash");
-
-			var info = GetAndSortSymbolHashData();
-
-			foreach (var data in info)
-			{
-				writer.WriteLine($"{data.Name}\t{data.Hash}");
-			}
+			writer.WriteLine($"{data.Name}\t{data.Hash}");
 		}
 	}
 

@@ -10,7 +10,7 @@ namespace Mosa.Compiler.x86.Transforms.IR;
 /// </summary>
 public static class IRTransforms
 {
-	public static readonly List<BaseTransform> List = new List<BaseTransform>
+	public static readonly List<BaseTransform> List = new()
 	{
 		new Add32(),
 		new AddCarryIn32(),

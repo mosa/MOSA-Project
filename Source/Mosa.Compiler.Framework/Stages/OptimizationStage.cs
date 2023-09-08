@@ -12,7 +12,7 @@ namespace Mosa.Compiler.Framework.Stages;
 /// </summary>
 public class OptimizationStage : BaseTransformStage
 {
-	private readonly CodeMotionManager CodeMotion = new CodeMotionManager();
+	private readonly CodeMotionManager CodeMotion = new();
 	private readonly bool LowerTo32;
 
 	public OptimizationStage(bool lowerTo32)

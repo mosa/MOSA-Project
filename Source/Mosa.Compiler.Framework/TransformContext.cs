@@ -116,7 +116,7 @@ public sealed class TransformContext
 
 	#region Data
 
-	private readonly Dictionary<Type, BaseTransformManager> Managers = new Dictionary<Type, BaseTransformManager>();
+	private readonly Dictionary<Type, BaseTransformManager> Managers = new();
 
 	#endregion Data
 

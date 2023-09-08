@@ -46,9 +46,9 @@ public class UnitTestEngine : IDisposable
 	protected Starter Starter;
 	protected Process Process;
 
-	private MosaSettings MosaSettings = new MosaSettings();
+	private MosaSettings MosaSettings = new();
 
-	private readonly object _lock = new object();
+	private readonly object _lock = new();
 
 	private volatile bool Aborted;
 	private volatile bool Ready;
@@ -57,12 +57,12 @@ public class UnitTestEngine : IDisposable
 
 	private volatile int SendOneCount = 0;
 
-	private readonly Queue<UnitTest> Queue = new Queue<UnitTest>();
-	private readonly Dictionary<int, UnitTest> Active = new Dictionary<int, UnitTest>();
+	private readonly Queue<UnitTest> Queue = new();
+	private readonly Dictionary<int, UnitTest> Active = new();
 
 	private Thread ProcessThread;
 
-	private readonly Stopwatch Stopwatch = new Stopwatch();
+	private readonly Stopwatch Stopwatch = new();
 	private WatchDog WatchDog;
 
 	private int CompletedUnitTestCount;
@@ -603,7 +603,7 @@ public class UnitTestEngine : IDisposable
 
 			if (CompletedUnitTestCount % 1000 == 0 && Stopwatch.Elapsed.Seconds != 0)
 			{
-				OutputStatus($"Unit Tests - Count: {CompletedUnitTestCount} Elapsed: {(int)Stopwatch.Elapsed.TotalSeconds} ({(CompletedUnitTestCount / Stopwatch.Elapsed.TotalSeconds).ToString("F2")} per second)");
+				OutputStatus($"Unit Tests - Count: {CompletedUnitTestCount} Elapsed: {(int)Stopwatch.Elapsed.TotalSeconds} ({CompletedUnitTestCount / Stopwatch.Elapsed.TotalSeconds:F2} per second)");
 			}
 
 			UnitTestSystem.ParseResultData(unittest, data);
