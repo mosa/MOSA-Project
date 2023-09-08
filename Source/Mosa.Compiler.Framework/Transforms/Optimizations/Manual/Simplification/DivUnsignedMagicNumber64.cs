@@ -43,7 +43,7 @@ public sealed class DivUnsignedMagicNumber64 : BaseTransform
 		var operand1 = context.Operand1;
 		var c = context.Operand2.ConstantUnsigned32;
 
-		var (M, s, a) = DivisionMagicNumber.GetMagicNumber(c);
+		var (M, s, a) = DivisionTwiddling.GetMagicNumber(c);
 
 		var v1 = transform.VirtualRegisters.Allocate64();
 

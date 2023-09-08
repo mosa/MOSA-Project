@@ -6,7 +6,7 @@
 
 namespace Mosa.Compiler.Common;
 
-public static class DivisionMagicNumber
+public static class DivisionTwiddling
 {
 	public static (uint M, uint s) GetMagicNumber(int d)
 	{
