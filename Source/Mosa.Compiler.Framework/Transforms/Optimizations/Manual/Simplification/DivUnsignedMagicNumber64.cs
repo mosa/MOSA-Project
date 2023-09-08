@@ -6,13 +6,15 @@ using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Simplification;
 
+// DRAFT - Need ability to handle 128bit multiple
+
 /// <summary>
-/// DivUnsignedMagicNumber32
+/// DivUnsignedMagicNumber64
 /// </summary>
 [Transform("IR.Optimizations.Manual.Simplification")]
-public sealed class DivUnsignedMagicNumber32 : BaseTransform
+public sealed class DivUnsignedMagicNumber64 : BaseTransform
 {
-	public DivUnsignedMagicNumber32() : base(IRInstruction.DivUnsigned32, TransformType.Auto | TransformType.Optimization)
+	public DivUnsignedMagicNumber64() : base(IRInstruction.DivUnsigned64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -26,7 +28,7 @@ public sealed class DivUnsignedMagicNumber32 : BaseTransform
 		if (IsResolvedConstant(context.Operand1))
 			return false;
 
-		if (context.Operand2.ConstantUnsigned32 <= 2)
+		if (context.Operand2.ConstantUnsigned64 <= 2)
 			return false;
 
 		if (IsPowerOfTwo32(context.Operand2))

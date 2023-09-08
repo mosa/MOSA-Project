@@ -5,9 +5,9 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Compiler.x86.Transforms.Optimizations.Manual.StrengthReduction;
 
 [Transform("x86.Optimizations.Manual.StrengthReduction")]
-public sealed class Mul32ByZero_v1 : BaseTransform
+public sealed class Mul32WithMov32ByZero : BaseTransform
 {
-	public Mul32ByZero_v1() : base(X86.Mul32, TransformType.Manual | TransformType.Optimization, true)
+	public Mul32WithMov32ByZero() : base(X86.Mul32, TransformType.Manual | TransformType.Optimization, true)
 	{
 	}
 

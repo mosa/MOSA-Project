@@ -32,6 +32,6 @@ public static class ManualTransforms
 		new Special.Mov32Coalescing(),
 
 		new StrengthReduction.Mul32ByZero(),
-		new StrengthReduction.Mul32ByZero_v1(),
+		new StrengthReduction.Mul32WithMov32ByZero(),
 	};
 }

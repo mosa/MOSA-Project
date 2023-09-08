@@ -966,6 +966,22 @@
 			"Commutative": "true"
 		},
 		{
+			"Name": "MulHu32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Description": "Multiply high unsigned (future)",
+			"Commutative": "true"
+		},
+		{
+			"Name": "MulHu64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Description": "Multiply high unsigned (future)",
+			"Commutative": "true"
+		},
+		{
 			"Name": "MulR4",
 			"FamilyName": "IR",
 			"ResultCount": 1,
