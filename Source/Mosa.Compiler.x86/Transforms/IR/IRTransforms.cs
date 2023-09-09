@@ -75,6 +75,7 @@ public static class IRTransforms
 		new Move32(),
 		new MoveObject(),
 		new MoveManagedPointer(),
+		new MulHs32(),
 		new MulHu32(),
 		new MulCarryOut32(),
 		new MulOverflowOut32(),

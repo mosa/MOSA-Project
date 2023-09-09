@@ -982,6 +982,22 @@
 			"Commutative": "true"
 		},
 		{
+			"Name": "MulHs32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Description": "Multiply high signed",
+			"Commutative": "true"
+		},
+		{
+			"Name": "MulHs64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Description": "Multiply high signed",
+			"Commutative": "true"
+		},
+		{
 			"Name": "MulR4",
 			"FamilyName": "IR",
 			"ResultCount": 1,

@@ -152,6 +152,8 @@ public static class IRInstruction
 	public static readonly BaseInstruction MulOverflowOut64 = new MulOverflowOut64();
 	public static readonly BaseInstruction MulHu32 = new MulHu32();
 	public static readonly BaseInstruction MulHu64 = new MulHu64();
+	public static readonly BaseInstruction MulHs32 = new MulHs32();
+	public static readonly BaseInstruction MulHs64 = new MulHs64();
 	public static readonly BaseInstruction MulR4 = new MulR4();
 	public static readonly BaseInstruction MulR8 = new MulR8();
 	public static readonly BaseInstruction MulSigned32 = new MulSigned32();
