@@ -24,12 +24,12 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 
 	private BitArray ParamReadOnly;
 
-	private readonly Counter InstructionRemovalCount = new Counter("ValueNumberingStage.IRInstructionRemoved");
-	private readonly Counter ConstantFoldingAndStrengthReductionCount = new Counter("ValueNumberingStage.ConstantFoldingAndStrengthReduction");
-	private readonly Counter SubexpressionEliminationCount = new Counter("ValueNumberingStage.SubexpressionElimination");
-	private readonly Counter ParameterLoadEliminationCount = new Counter("ValueNumberingStage.ParameterLoadElimination");
-	private readonly Counter DeadCodeEliminationCount = new Counter("ValueNumberingStage.DeadCodeElimination");
-	private readonly Counter StrengthReductionAndSimplificationCount = new Counter("ValueNumberingStage.StrengthReductionAndSimplification");
+	private readonly Counter InstructionRemovalCount = new("ValueNumberingStage.IRInstructionRemoved");
+	private readonly Counter ConstantFoldingAndStrengthReductionCount = new("ValueNumberingStage.ConstantFoldingAndStrengthReduction");
+	private readonly Counter SubexpressionEliminationCount = new("ValueNumberingStage.SubexpressionElimination");
+	private readonly Counter ParameterLoadEliminationCount = new("ValueNumberingStage.ParameterLoadElimination");
+	private readonly Counter DeadCodeEliminationCount = new("ValueNumberingStage.DeadCodeElimination");
+	private readonly Counter StrengthReductionAndSimplificationCount = new("ValueNumberingStage.StrengthReductionAndSimplification");
 
 	private class Expression
 	{

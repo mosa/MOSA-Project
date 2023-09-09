@@ -24,17 +24,16 @@ public sealed class MulSigned64 : BaseIRTransform
 		var v2 = transform.VirtualRegisters.Allocate32();
 		var v3 = transform.VirtualRegisters.Allocate32();
 		var v4 = transform.VirtualRegisters.Allocate32();
+		var v5 = transform.VirtualRegisters.Allocate32();
+		var v6 = transform.VirtualRegisters.Allocate32();
 
 		context.SetInstruction2(X86.Mul32, v1, resultLow, op2L, op1L);
 
-		if (!resultHigh.IsConstantZero)
-		{
-			context.AppendInstruction(X86.Mov32, v2, op1L);
-			context.AppendInstruction(X86.IMul32, v3, v2, op2H);
-			context.AppendInstruction(X86.Add32, v4, v1, v3);
-			context.AppendInstruction(X86.Mov32, v3, op2L);
-			context.AppendInstruction(X86.IMul32, v3, v3, op1H);
-			context.AppendInstruction(X86.Add32, resultHigh, v4, v3);
-		}
+		context.AppendInstruction(X86.Mov32, v2, op1L);
+		context.AppendInstruction(X86.IMul32, v3, v2, op2H);
+		context.AppendInstruction(X86.Add32, v4, v1, v3);
+		context.AppendInstruction(X86.Mov32, v5, op2L);
+		context.AppendInstruction(X86.IMul32, v6, v5, op1H);
+		context.AppendInstruction(X86.Add32, resultHigh, v4, v6);
 	}
 }

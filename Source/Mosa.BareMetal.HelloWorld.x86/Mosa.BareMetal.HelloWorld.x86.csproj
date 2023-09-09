@@ -9,6 +9,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Mosa.BareMetal.HelloWorld\Mosa.BareMetal.HelloWorld.csproj" />
 		<ProjectReference Include="..\Mosa.Kernel.BareMetal.x86\Mosa.Kernel.BareMetal.x86.csproj" />
+		<ProjectReference Include="..\Mosa.UnitTests\Mosa.UnitTests.csproj" />
 	</ItemGroup>
 
 </Project>

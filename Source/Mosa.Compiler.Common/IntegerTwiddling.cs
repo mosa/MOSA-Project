@@ -104,6 +104,13 @@ public static class IntegerTwiddling
 		return ulong.MaxValue / a < b;
 	}
 
+	public static bool IsMultiplyUnsignedOverflow(ulong a, ulong b)
+	{
+		var x = a * b;
+
+		return a != 0 && x / a != b;
+	}
+
 	public static bool IsMultiplySignedOverflow(long a, long b)
 	{
 		var z = a * b;

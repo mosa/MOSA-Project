@@ -11,8 +11,8 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 {
 	public static string InlineMethodAttribute = "System.Runtime.CompilerServices.MethodImplAttribute";
 
-	private readonly Counter InlineCount = new Counter("InlineMethodEvaluationStage.Inline");
-	private readonly Counter ReversedInlineCount = new Counter("InlineMethodEvaluationStage.ReversedInline");
+	private readonly Counter InlineCount = new("InlineMethodEvaluationStage.Inline");
+	private readonly Counter ReversedInlineCount = new("InlineMethodEvaluationStage.ReversedInline");
 
 	public const int MaximumCompileCount = 10;
 

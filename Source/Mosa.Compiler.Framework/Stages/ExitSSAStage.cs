@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Stages;
 /// <seealso cref="Mosa.Compiler.Framework.BaseMethodCompilerStage" />
 public class ExitSSAStage : BaseMethodCompilerStage
 {
-	private readonly Counter InstructionCount = new Counter("ExitSSAStage.IRInstructions");
+	private readonly Counter InstructionCount = new("ExitSSAStage.IRInstructions");
 
 	protected override void Initialize()
 	{

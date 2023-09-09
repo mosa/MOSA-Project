@@ -18,7 +18,7 @@ public sealed class DebugFileStage : BaseCompilerStage
 	/// </summary>
 	private TextWriter writer;
 
-	private readonly Dictionary<string, int> SourceFiles = new Dictionary<string, int>();
+	private readonly Dictionary<string, int> SourceFiles = new();
 
 	#endregion Data Members
 

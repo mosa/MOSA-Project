@@ -6,7 +6,7 @@ namespace Mosa.Compiler.Framework.Managers;
 
 public class BitValueManager : BaseTransformManager
 {
-	private readonly Dictionary<Operand, BitValue> Values = new Dictionary<Operand, BitValue>();
+	private readonly Dictionary<Operand, BitValue> Values = new();
 
 	private readonly BitValue Any;
 	private readonly BitValue Zero;
@@ -19,9 +19,7 @@ public class BitValueManager : BaseTransformManager
 
 	public BitValue GetBitValue(Operand operand)
 	{
-		BitValue value;
-
-		if (Values.TryGetValue(operand, out value))
+		if (Values.TryGetValue(operand, out BitValue value))
 			return value;
 
 		if (operand.IsResolvedConstant && operand.IsInteger)

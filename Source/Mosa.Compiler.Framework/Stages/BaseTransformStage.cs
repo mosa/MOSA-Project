@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Collections.Generic;
 using Mosa.Compiler.Framework.Trace;
 
 namespace Mosa.Compiler.Framework.Stages;
@@ -13,14 +12,11 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 	private const int MaximumInstructionID = 1000;
 	private const int MaximumPasses = 20;
 
-	private int TotalTransformCount;
 	private int TransformCount;
 	private int OptimizationCount;
 
 	private readonly List<BaseTransform>[] transforms = new List<BaseTransform>[MaximumInstructionID];
-	private readonly List<BaseBlockTransform> blockTransforms = new List<BaseBlockTransform>();
-
-	private readonly TransformContext TransformContext = new TransformContext();
+	private readonly List<BaseBlockTransform> blockTransforms = new();
 
 	protected TraceLog trace;
 
@@ -28,13 +24,12 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 	protected bool EnableTransformOptimizations;
 	protected bool EnableBlockOptimizations;
-	protected bool IsInSSAForm;
 	protected bool AreCPURegistersAllocated;
 
 	protected int MaxPasses;
 	protected int Steps;
 
-	protected readonly Dictionary<string, Counter> TransformCounters = new Dictionary<string, Counter>();
+	protected readonly Dictionary<string, Counter> TransformCounters = new();
 
 	private bool SortedByPriority;
 
@@ -49,15 +44,13 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 	protected override void Initialize()
 	{
-		TransformContext.SetCompiler(Compiler);
-
 		TransformCountStage = $"{Name}.Transforms";
 		OptimizationCountStage = $"{Name}.Optimizations";
 	}
 
 	protected override void Finish()
 	{
-		UpdateCounter("Transform.Total", TotalTransformCount);
+		UpdateCounter("Transform.Total", TransformContext.TotalTransformCount);
 		UpdateCounter("Transform.Transforms", TransformCount);
 		UpdateCounter("Transform.Optimizations", OptimizationCount);
 
@@ -66,7 +59,6 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 		MethodCompiler.Compiler.PostTraceLog(specialTrace);
 
-		TotalTransformCount = 0;
 		TransformCount = 0;
 		OptimizationCount = 0;
 
@@ -75,13 +67,10 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 	protected override void Run()
 	{
-		TransformContext.SetMethodCompiler(MethodCompiler);
-
 		SortByPriority();
 
 		trace = CreateTraceLog(5);
 
-		IsInSSAForm = MethodCompiler.IsInSSAForm;
 		AreCPURegistersAllocated = MethodCompiler.AreCPURegistersAllocated;
 
 		Steps = 0;
@@ -89,7 +78,6 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 		specialTrace = new TraceLog(TraceType.GlobalDebug, null, null, "Special Optimizations");
 
-		TransformContext.SetMethodCompiler(MethodCompiler);
 		TransformContext.SetLogs(trace, specialTrace);
 
 		CustomizeTransform(TransformContext);
@@ -230,12 +218,10 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 		{
 			var transform = instructionTransforms[i];
 
-			var updated = TransformContext.ApplyTransform(context, transform, TotalTransformCount);
+			var updated = TransformContext.ApplyTransform(context, transform);
 
 			if (updated)
 			{
-				TotalTransformCount++;
-
 				if (transform.IsOptimization)
 					OptimizationCount++;
 				else if (transform.IsTranformation)

@@ -1,11 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading;
 using Mosa.Compiler.Common;
 
 namespace Mosa.Utility.Launcher;
@@ -25,9 +22,9 @@ public class SimpleTCP
 	private NetworkStream stream;
 
 	private readonly byte[] receiveBuffer = new byte[4096];
-	private readonly Queue<byte> receivedData = new Queue<byte>();
+	private readonly Queue<byte> receivedData = new();
 
-	private static readonly byte[] Empty = new byte[0];
+	private static readonly byte[] Empty = Array.Empty<byte>();
 
 	private volatile int lines = 0;
 
@@ -98,8 +95,10 @@ public class SimpleTCP
 		{
 			Output("Connecting...");
 
-			tcpClient = new TcpClient(hostname, port);
-			tcpClient.NoDelay = true;
+			tcpClient = new TcpClient(hostname, port)
+			{
+				NoDelay = true
+			};
 
 			stream = tcpClient.GetStream();
 			SetReadCallBack();

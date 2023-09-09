@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<OutputType>Exe</OutputType>
+		<OutputType>WinExe</OutputType>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
 
@@ -83,8 +83,10 @@
 		<Compile Include="..\Mosa.UnitTests\ValueType\StructTests.cs" Link="Tests\ValueType\StructTests.cs" />
 		<Compile Include="..\Mosa.UnitTests\ValueType\ValueTypeTests.cs" Link="Tests\ValueType\ValueTypeTests.cs" />
 
-		<Compile Include="..\Mosa.UnitTests\Regression\Issue1093.cs" Link="Tests\Regression\Issue1093.cs" />
+		<Compile Include="..\Mosa.UnitTests\Optimization\Division.cs" Link="Tests\Optimization\Division.cs" />
 
+		<Compile Include="..\Mosa.UnitTests\Regression\Issue1093.cs" Link="Tests\Regression\Issue1093.cs" />
+		
 		<!--<Compile Include="..\Mosa.UnitTests\Mosa.Collections.Generic\BitFlagsTests.cs" Link="Tests\Mosa.Collections.Generic\BitFlagsTests.cs" />-->
 	</ItemGroup>
 

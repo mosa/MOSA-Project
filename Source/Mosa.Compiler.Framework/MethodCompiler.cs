@@ -1,7 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Exceptions;
@@ -23,18 +21,13 @@ public sealed class MethodCompiler
 {
 	#region Data Members
 
-	/// <summary>
-	/// The empty operand list
-	/// </summary>
-	private static readonly Operand[] emptyOperandList = System.Array.Empty<Operand>();
-
 	private readonly Stopwatch Stopwatch;
 
 	private readonly NotifyTraceLogHandler NotifyInstructionTraceHandler;
 
 	private readonly NotifyTraceLogHandler NotifyTranformTraceHandler;
 
-	public readonly TransformContext TransformContext = new TransformContext();
+	public readonly TransformContext TransformContext = new();
 
 	#endregion Data Members
 
@@ -229,9 +222,9 @@ public sealed class MethodCompiler
 		MethodTraceLevel = compiler.CompilerHooks.GetMethodTraceLevel != null ? compiler.CompilerHooks.GetMethodTraceLevel(method) : null;
 
 		Statistics = compiler.Statistics;
-		IsInSSAForm = false;
 		AreCPURegistersAllocated = false;
 		IsLocalStackFinalized = false;
+		IsInSSAForm = false;
 
 		BasicBlocks = basicBlocks ?? new BasicBlocks();
 
@@ -368,6 +361,8 @@ public sealed class MethodCompiler
 
 			try
 			{
+				TransformContext.SetStage(stage);
+
 				stage.Setup(this, i);
 				stage.Execute();
 
@@ -424,15 +419,15 @@ public sealed class MethodCompiler
 
 				var per = (int)percentage / 5;
 
-				var entry = $"[{i:00}] {Pipeline[i].Name.PadRight(45)} : {percentage:00.00} % [{string.Empty.PadRight(per, '#').PadRight(20, ' ')}] ({ticks})";
+				var entry = $"[{i:00}] {Pipeline[i].Name,-45} : {percentage:00.00} % [{string.Empty.PadRight(per, '#'),-20}] ({ticks})";
 
 				executionTimeLog.Log(entry);
 
 				MethodData.Counters.NewCountSkipLock($"ExecutionTime.{i:00}.{Pipeline[i].Name}.Ticks", (int)ticks);
 			}
 
-			executionTimeLog.Log($"{"****Total Time".PadRight(57)}({lastTick} Ticks)");
-			executionTimeLog.Log($"{"****Total Time".PadRight(57)}({lastMS} Milliseconds)");
+			executionTimeLog.Log($"{"****Total Time",-57}({lastTick} Ticks)");
+			executionTimeLog.Log($"{"****Total Time",-57}({lastMS} Milliseconds)");
 
 			PostTraceLog(executionTimeLog);
 		}
@@ -733,7 +728,7 @@ public sealed class MethodCompiler
 
 	#region Constant Helper Methods
 
-	public Operand CreateConstant(byte value)
+	public static Operand CreateConstant(byte value)
 	{
 		return Operand.CreateConstant32(value);
 	}

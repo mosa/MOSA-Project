@@ -12,15 +12,13 @@ public sealed class DemandBitStage : BaseMethodCompilerStage
 {
 	private const int MaxInstructions = 1024;
 
-	private readonly Counter InstructionsRemovedCount = new Counter("DemandBitStage.InstructionsRemoved");
+	private readonly Counter InstructionsRemovedCount = new("DemandBitStage.InstructionsRemoved");
 	private TraceLog trace;
 
 	private readonly NodeVisitationDelegate[] affected = new NodeVisitationDelegate[MaxInstructions];
 	private readonly NodeVisitationDelegate[] demanded = new NodeVisitationDelegate[MaxInstructions];
 
 	private delegate ulong NodeVisitationDelegate(InstructionNode node, TransformContext transform);
-
-	private readonly TransformContext TransformContext = new TransformContext();
 
 	protected override void Finish()
 	{
@@ -29,8 +27,6 @@ public sealed class DemandBitStage : BaseMethodCompilerStage
 
 	protected override void Initialize()
 	{
-		TransformContext.SetCompiler(Compiler);
-
 		Register(InstructionsRemovedCount);
 
 		RegisterAffected(IRInstruction.Or32, AffectedBits_Or32);
@@ -73,7 +69,6 @@ public sealed class DemandBitStage : BaseMethodCompilerStage
 
 		var bitValueManager = new BitValueManager(Is32BitPlatform);
 
-		TransformContext.SetMethodCompiler(MethodCompiler);
 		TransformContext.AddManager(bitValueManager);
 		TransformContext.SetLog(trace);
 

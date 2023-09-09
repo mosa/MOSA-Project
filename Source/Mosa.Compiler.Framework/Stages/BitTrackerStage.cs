@@ -22,9 +22,9 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 	private const ulong Upper48BitsSet = ~(ulong)ushort.MaxValue;
 	private const ulong Upper56BitsSet = ~(ulong)byte.MaxValue;
 
-	private readonly Counter BranchesRemovedCount = new Counter("BitTrackerStage.BranchesRemoved");
-	private readonly Counter InstructionsRemovedCount = new Counter("BitTrackerStage.InstructionsRemoved");
-	private readonly Counter InstructionsUpdatedCount = new Counter("BitTrackerStage.InstructionsUpdated");
+	private readonly Counter BranchesRemovedCount = new("BitTrackerStage.BranchesRemoved");
+	private readonly Counter InstructionsRemovedCount = new("BitTrackerStage.InstructionsRemoved");
+	private readonly Counter InstructionsUpdatedCount = new("BitTrackerStage.InstructionsUpdated");
 	private TraceLog trace;
 
 	private readonly NodeVisitationDelegate[] visitation = new NodeVisitationDelegate[MaxInstructions];
@@ -32,8 +32,6 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 	private delegate BitValue NodeVisitationDelegate(InstructionNode node, TransformContext transform);
 
 	private delegate (BitValue, BitValue) NodeVisitationDelegate2(InstructionNode node, TransformContext transform);
-
-	private readonly TransformContext TransformContext = new TransformContext();
 
 	private BitValueManager BitValueManager;
 
@@ -45,8 +43,6 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 	protected override void Initialize()
 	{
-		TransformContext.SetCompiler(Compiler);
-
 		Register(InstructionsUpdatedCount);
 		Register(InstructionsRemovedCount);
 		Register(BranchesRemovedCount);
@@ -187,7 +183,6 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 		BitValueManager = new BitValueManager(Is32BitPlatform);
 
-		TransformContext.SetMethodCompiler(MethodCompiler);
 		TransformContext.AddManager(BitValueManager);
 		TransformContext.SetLog(trace);
 
@@ -840,14 +835,19 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			return BitValue.Any64;
 		}
 
-		return BitValue.CreateValue(
-			bitsSet: 0,
-			bitsClear: BitTwiddling.GetBitsOver(value1.MaxValue + value2.MaxValue),
-			maxValue: value1.MaxValue + value2.MaxValue,
-			minValue: value1.MinValue + value2.MinValue,
-			rangeDeterminate: true,
-			is32Bit: false
-		);
+		if (!IntegerTwiddling.IsAddUnsignedCarry(value1.MaxValue, value2.MaxValue))
+		{
+			return BitValue.CreateValue(
+				bitsSet: 0,
+				bitsClear: BitTwiddling.GetBitsOver(value1.MaxValue + value2.MaxValue),
+				maxValue: value1.MaxValue + value2.MaxValue,
+				minValue: value1.MinValue + value2.MinValue,
+				rangeDeterminate: true,
+				is32Bit: false
+			);
+		}
+
+		return BitValue.Any64;
 	}
 
 	private static BitValue AddCarryIn32(InstructionNode node, TransformContext transform)
@@ -1557,7 +1557,8 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			&& !IntegerTwiddling.HasSignBitSet((long)value2.MaxValue)
 			&& !IntegerTwiddling.HasSignBitSet((long)value1.MinValue)
 			&& !IntegerTwiddling.HasSignBitSet((long)value2.MinValue)
-			&& !IntegerTwiddling.IsMultiplySignedOverflow((long)value1.MaxValue, (long)value2.MaxValue))
+			&& !IntegerTwiddling.IsMultiplySignedOverflow((long)value1.MaxValue, (long)value2.MaxValue)
+			&& !IntegerTwiddling.IsMultiplySignedOverflow((long)value1.MinValue, (long)value2.MinValue))
 		{
 			var max = Math.Max(value1.MaxValue, value2.MaxValue);
 			var min = Math.Min(value1.MinValue, value2.MinValue);
@@ -1676,14 +1677,20 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 		// TODO: Special power of two handling for bits, handle similar to shift left
 
-		return BitValue.CreateValue(
-			bitsSet: 0,
-			bitsClear: BitTwiddling.GetBitsOver(value1.MaxValue * value2.MaxValue),
-			maxValue: value1.MaxValue * value2.MaxValue,
-			minValue: value1.MinValue * value2.MinValue,
-			rangeDeterminate: !IntegerTwiddling.IsMultiplyUnsignedCarry(value1.MaxValue, value2.MaxValue),
-			is32Bit: false
-		);
+		if (!IntegerTwiddling.IsMultiplyUnsignedOverflow(value1.MaxValue, value2.MaxValue)
+			&& !IntegerTwiddling.IsMultiplyUnsignedOverflow(value1.MinValue, value2.MinValue))
+		{
+			return BitValue.CreateValue(
+				bitsSet: 0,
+				bitsClear: BitTwiddling.GetBitsOver(value1.MaxValue * value2.MaxValue),
+				maxValue: value1.MaxValue * value2.MaxValue,
+				minValue: value1.MinValue * value2.MinValue,
+				rangeDeterminate: true,
+				is32Bit: false
+			);
+		}
+
+		return BitValue.Any64;
 	}
 
 	private static BitValue Phi32(InstructionNode node, TransformContext transform)

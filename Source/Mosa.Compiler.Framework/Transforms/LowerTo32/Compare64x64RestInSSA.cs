@@ -27,7 +27,7 @@ public sealed class Compare64x64RestInSSA : BaseLower32Transform
 		var operand1 = context.Operand1;
 		var operand2 = context.Operand2;
 
-		transform.SplitOperand(result, out Operand resultLow, out Operand resultHigh);
+		transform.SplitOperand(result, out Operand resultLow, out _);
 
 		var branch = context.ConditionCode;
 		var branchUnsigned = context.ConditionCode.GetUnsigned();

@@ -9,7 +9,7 @@ namespace Mosa.Compiler.x86.Stages;
 /// X86 Optimization Stage
 /// </summary>
 /// <seealso cref="Mosa.Compiler.Framework.Stages.BaseTransformStage" />
-public sealed class OptimizationStage : Compiler.Framework.Stages.BaseTransformStage
+public sealed class OptimizationStage : Framework.Stages.BaseTransformStage
 {
 	public override string Name => "x86." + GetType().Name;
 

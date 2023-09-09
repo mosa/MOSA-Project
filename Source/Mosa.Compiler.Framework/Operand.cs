@@ -25,7 +25,7 @@ public sealed partial class Operand
 
 	#region Static Properties
 
-	public static readonly Operand NullObject = new Operand
+	public static readonly Operand NullObject = new()
 	{
 		Primitive = PrimitiveType.Object,
 		Location = LocationType.Constant,

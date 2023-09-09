@@ -13,7 +13,7 @@ public sealed class DebugServerEngine
 {
 	private Stream stream;
 
-	private readonly List<byte> SendBuffer = new List<byte>(2048);
+	private readonly List<byte> SendBuffer = new(2048);
 
 	private readonly byte[] ReceivedData = new byte[2000];
 

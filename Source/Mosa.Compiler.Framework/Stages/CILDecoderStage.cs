@@ -89,9 +89,9 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 	#region Data Members
 
-	private readonly Dictionary<BasicBlock, StackEntry> ExceptionStackEntries = new Dictionary<BasicBlock, StackEntry>();
+	private readonly Dictionary<BasicBlock, StackEntry> ExceptionStackEntries = new();
 
-	private readonly Dictionary<BasicBlock, StackEntry[]> OutgoingStacks = new Dictionary<BasicBlock, StackEntry[]>();
+	private readonly Dictionary<BasicBlock, StackEntry[]> OutgoingStacks = new();
 
 	private Operand[] LocalStack;
 	private PrimitiveType[] LocalPrimitiveType;
@@ -99,7 +99,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 	private SortedList<int, int> Targets;
 
-	private readonly Dictionary<MosaMethod, IntrinsicMethodDelegate> InstrinsicMap = new Dictionary<MosaMethod, IntrinsicMethodDelegate>();
+	private readonly Dictionary<MosaMethod, IntrinsicMethodDelegate> InstrinsicMap = new();
 
 	private TraceLog trace;
 
@@ -3339,7 +3339,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		return true;
 	}
 
-	private bool Endfinally(Context context)
+	private static bool Endfinally(Context context)
 	{
 		context.AppendInstruction(IRInstruction.FinallyEnd);
 
@@ -3628,19 +3628,16 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		Operand source = null;
 
-		if (instruction.Operand is MosaType)
+		if (instruction.Operand is MosaType type)
 		{
-			var type = (MosaType)instruction.Operand;
 			source = Operand.CreateLabel(Metadata.TypeDefinition + type.FullName, Is32BitPlatform);
 		}
-		else if (instruction.Operand is MosaMethod)
+		else if (instruction.Operand is MosaMethod method)
 		{
-			var method = (MosaMethod)instruction.Operand;
 			source = Operand.CreateLabel(Metadata.MethodDefinition + method.FullName, Is32BitPlatform);
 		}
-		else if (instruction.Operand is MosaField)
+		else if (instruction.Operand is MosaField field)
 		{
-			var field = (MosaField)instruction.Operand;
 			source = Operand.CreateLabel(Metadata.FieldDefinition + field.FullName, Is32BitPlatform);
 			MethodScanner.AccessedField(field);
 		}
@@ -5346,7 +5343,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	private bool Unbox(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
 	{
 		var entry = PopStack(stack);
-		var type = (MosaType)instruction.Operand;
+		var type = instruction.Operand as MosaType;
 
 		var result = MethodCompiler.VirtualRegisters.AllocateManagedPointer();
 		PushStack(stack, new StackEntry(result));
