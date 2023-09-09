@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Mosa.Compiler.Common.xUnit;
 
-public class DivisionMagicNumberTests
+public class DivisionTwiddlingTests
 {
 	[Fact]
 	public static void SignedMagic_3()
