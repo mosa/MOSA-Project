@@ -832,7 +832,8 @@ public abstract class BaseRegisterAllocator
 					{
 						intervalTrace?.Log($"Replace First {register} : {slot} destination {first.End}");
 						intervalTrace?.Log($"   Before: {LiveIntervalsToString(register.LiveIntervals)}");
-						register.FirstRange = new LiveInterval(register, slot, first.End);
+						register.AddLiveInterval(slot, first.End);
+						//register.FirstRange = new LiveInterval(register, slot, first.End);
 						intervalTrace?.Log($"    After: {LiveIntervalsToString(register.LiveIntervals)}");
 					}
 					else
