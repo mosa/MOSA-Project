@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Collections.Generic;
 using System.Diagnostics;
 using static Mosa.Compiler.Framework.BaseMethodCompilerStage;
 
@@ -33,93 +32,72 @@ public sealed class GreedyRegisterAllocator : BasicRegisterAllocator
 		SplitIntervalsAtCallSites();
 	}
 
-	private bool PlaceLiveIntervalOnTrack(LiveInterval liveInterval, MoveHint[] hints)
+	private bool PlaceLiveIntervalOnTrack(LiveInterval liveInterval, MoveHint a, MoveHint b)
 	{
-		if (hints == null)
+		if (a == null)
 			return false;
 
-		foreach (var moveHint in hints)
-		{
-			var register = liveInterval.Start == moveHint.Slot ? moveHint.FromRegister : moveHint.ToRegister;
+		if (TryHint(liveInterval, a))
+			return true;
 
-			if (register == null)
-				continue;   // no usable hint
-
-			Trace?.Log($"  Trying move hint: {register}  [ {moveHint} ]");
-
-			if (PlaceLiveIntervalOnTrack(liveInterval, LiveIntervalTracks[register.Index]))
-			{
-				return true;
-			}
-		}
+		if (TryHint(liveInterval, b))
+			return true;
 
 		return false;
 	}
 
-	private MoveHint[] GetMoveHints(LiveInterval liveInterval)
+	private bool TryHint(LiveInterval liveInterval, MoveHint moveHint)
 	{
-		MoveHint endMoveHint = null;
-		moveHints.TryGetValue(liveInterval.Start, out MoveHint startMoveHint);
+		if (moveHint == null)
+			return false;
+
+		var register = liveInterval.Start == moveHint.Slot ? moveHint.FromRegister : moveHint.ToRegister;
+
+		if (register == null)
+			return false;
+
+		Trace?.Log($"  Trying move hint: {register}  [ {moveHint} ]");
+
+		return TryPlaceLiveIntervalOnTrack(liveInterval, LiveIntervalTracks[register.Index]);
+	}
+
+	private (MoveHint a, MoveHint b) GetMoveHints(LiveInterval liveInterval)
+	{
+		MoveHint a = null;
+		MoveHint b = null;
+
+		moveHints.TryGetValue(liveInterval.Start, out a);
 
 		if (!GetNode(liveInterval.End).IsBlockStartInstruction)
 		{
-			moveHints.TryGetValue(liveInterval.End, out endMoveHint);
+			moveHints.TryGetValue(liveInterval.End, out b);
 		}
 
-		var cnt = (startMoveHint == null ? 0 : 1) + (endMoveHint == null ? 0 : 1);
-
-		if (cnt == 0)
-			return null;
-
-		var hints = new MoveHint[cnt];
-
-		if (startMoveHint != null && endMoveHint != null)
+		if (a != null && b != null)
 		{
 			// sorted by bonus
-			if (startMoveHint.Bonus > endMoveHint.Bonus)
+			if (a.Bonus > b.Bonus)
 			{
-				hints[0] = startMoveHint;
-				hints[1] = endMoveHint;
+				return (a, b);
 			}
 			else
 			{
-				hints[0] = endMoveHint;
-				hints[1] = startMoveHint;
+				return (b, a);
 			}
 		}
-		else
-		{
-			hints[0] = startMoveHint ?? endMoveHint;
-		}
 
-		return hints;
+		return (a ?? b, null);
 	}
 
-	private void UpdateMoveHints(LiveInterval liveInterval, MoveHint[] moveHints)
+	private void UpdateMoveHints(LiveInterval liveInterval, MoveHint a, MoveHint b)
 	{
-		if (moveHints == null)
-			return;
-
-		if (moveHints.Length >= 1)
+		if (a != null)
 		{
-			moveHints[0].Update(liveInterval);
+			a.Update(liveInterval);
 		}
-		else if (moveHints.Length >= 2)
+		else if (b != null)
 		{
-			moveHints[1].Update(liveInterval);
-		}
-	}
-
-	private void UpdateMoveHints(LiveInterval liveInterval)
-	{
-		if (moveHints.TryGetValue(liveInterval.Start, out MoveHint MoveHint))
-		{
-			MoveHint.Update(liveInterval);
-		}
-
-		if (moveHints.TryGetValue(liveInterval.End, out MoveHint))
-		{
-			MoveHint.Update(liveInterval);
+			b.Update(liveInterval);
 		}
 	}
 
@@ -139,9 +117,9 @@ public sealed class GreedyRegisterAllocator : BasicRegisterAllocator
 		var moveHints = GetMoveHints(liveInterval);
 
 		// Try to place using move hints first
-		if (PlaceLiveIntervalOnTrack(liveInterval, moveHints))
+		if (PlaceLiveIntervalOnTrack(liveInterval, moveHints.a, moveHints.b))
 		{
-			UpdateMoveHints(liveInterval, moveHints);
+			UpdateMoveHints(liveInterval, moveHints.a, moveHints.b);
 			return true;
 		}
 
@@ -150,7 +128,7 @@ public sealed class GreedyRegisterAllocator : BasicRegisterAllocator
 		// Find any available track and place interval there
 		if (PlaceLiveIntervalOnAnyAvailableTrack(liveInterval))
 		{
-			UpdateMoveHints(liveInterval, moveHints);
+			UpdateMoveHints(liveInterval, moveHints.a, moveHints.b);
 			return true;
 		}
 
@@ -159,7 +137,7 @@ public sealed class GreedyRegisterAllocator : BasicRegisterAllocator
 		// No place for live interval; find live interval(s) to evict based on spill costs
 		if (PlaceLiveIntervalOnTrackAllowEvictions(liveInterval))
 		{
-			UpdateMoveHints(liveInterval, moveHints);
+			UpdateMoveHints(liveInterval, moveHints.a, moveHints.b);
 			return true;
 		}
 
@@ -424,7 +402,13 @@ public sealed class GreedyRegisterAllocator : BasicRegisterAllocator
 
 				var factor = (from.IsPhysicalRegister ? 5 : 1) + (to.IsPhysicalRegister ? 20 : 1);
 
-				var bonus = ExtendedBlocks[block.Sequence].LoopDepth * factor;
+				var bonus = 10 + (ExtendedBlocks[block.Sequence].LoopDepth * factor);
+
+				if (from.IsPhysicalRegister)
+					bonus += 2;
+
+				if (to.IsPhysicalRegister)
+					bonus += 4;
 
 				var slot = new SlotIndex(node);
 

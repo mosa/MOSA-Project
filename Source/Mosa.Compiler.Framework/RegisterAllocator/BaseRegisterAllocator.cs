@@ -776,7 +776,7 @@ public abstract class BaseRegisterAllocator
 
 			for (var node = block.BasicBlock.Last; !node.IsBlockStartInstruction; node = node.Previous)
 			{
-				if (node.IsEmpty)
+				if (node.IsEmptyOrNop)
 					continue;
 
 				var slot = new SlotIndex(node);
@@ -837,11 +837,11 @@ public abstract class BaseRegisterAllocator
 					}
 					else
 					{
-						// This is necessary to handled a result that is never used!
-						// This is common with instructions with more than one result.
-						intervalTrace?.Log($"Add (Unused) {register} : {slot} destination {slotAfter}");
+						// This is necessary to handled a result that is never used; which is common with
+						// instructions with more than one result.
+						intervalTrace?.Log($"Add (Unused) {register} : {slotAfter} destination {slotAfter}");
 						intervalTrace?.Log($"   Before: {LiveIntervalsToString(register.LiveIntervals)}");
-						register.AddLiveInterval(slot, slotAfter);
+						register.AddLiveInterval(slotAfter, slotAfter);
 						intervalTrace?.Log($"    After: {LiveIntervalsToString(register.LiveIntervals)}");
 					}
 				}
@@ -979,16 +979,25 @@ public abstract class BaseRegisterAllocator
 		}
 	}
 
-	protected bool PlaceLiveIntervalOnTrack(LiveInterval liveInterval, LiveIntervalTrack track)
+	protected bool TryPlaceLiveIntervalOnTrack(LiveInterval liveInterval, LiveIntervalTrack track)
 	{
 		if (track.IsReserved)
+		{
+			//Trace?.Log($"  No - Reserved");
 			return false;
+		}
 
 		if (track.IsFloatingPoint != liveInterval.VirtualRegister.IsFloatingPoint)
+		{
+			//Trace?.Log($"  No - Type Mismatch");
 			return false;
+		}
 
 		if (track.Intersects(liveInterval))
+		{
+			Trace?.Log($"  No - Intersected; track: {track.ToString2()} interval: {liveInterval}");
 			return false;
+		}
 
 		Trace?.Log($"  Assigned live interval destination: {track}");
 
@@ -1001,7 +1010,7 @@ public abstract class BaseRegisterAllocator
 	{
 		foreach (var track in LiveIntervalTracks)
 		{
-			if (PlaceLiveIntervalOnTrack(liveInterval, track))
+			if (TryPlaceLiveIntervalOnTrack(liveInterval, track))
 			{
 				return true;
 			}
@@ -1093,6 +1102,7 @@ public abstract class BaseRegisterAllocator
 
 		//Debug.Assert(!liveInterval.IsSplit);
 
+		Trace?.Log();
 		Trace?.Log($"Processing Interval: {liveInterval} / Length: {liveInterval.Length} / Spill Cost: {liveInterval.SpillCost} / Stage: {liveInterval.Stage}");
 		Trace?.Log($"  Defs ({liveInterval.LiveRange.DefCount}): {SlotsToString(liveInterval.DefPositions)}");
 		Trace?.Log($"  Uses ({liveInterval.LiveRange.UseCount}): {SlotsToString(liveInterval.UsePositions)}");

@@ -66,11 +66,6 @@ public sealed class LiveIntervalTrack
 		return intervals.SearchFirstOverlapping(slotIndex.Value);
 	}
 
-	/// <summary>
-	/// Gets the intersections.
-	/// </summary>
-	/// <param name="liveInterval">The live interval.</param>
-	/// <returns></returns>
 	public List<LiveInterval> GetIntersections(LiveInterval liveInterval)
 	{
 		return intervals.Search(liveInterval.StartValue, liveInterval.EndValue);
