@@ -763,6 +763,26 @@
 			]
 		},
 		{
+			"Name": "IMul32o1",
+			"Commutative": "true",
+			"FamilyName": "X86",
+			"FlagsCleared": "",
+			"FlagsModified": "CO",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "ZSP",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 2,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x86],opcode=0xF7,mod=11,reg=101,rm=reg3:o2"
+				}
+			]
+		},
+		{
 			"Name": "IMul1o32",
 			"FamilyName": "X86",
 			"FlagsCleared": "",

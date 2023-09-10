@@ -159,6 +159,24 @@
 		},
 		{
 			"Type": "StrengthReduction",
+			"Name": "ArithShiftRight##",
+			"SubName": "ZeroValue",
+			"Expression": "IR.ArithShiftRight## 0 a",
+			"Filter": "",
+			"Result": "(IR.Move## [To##(0)])",
+			"Priority": "80"
+		},
+		{
+			"Type": "StrengthReduction",
+			"Name": "ArithShiftRight##",
+			"SubName": "ByZero",
+			"Expression": "IR.ArithShiftRight## a 0",
+			"Filter": "",
+			"Result": "(IR.Move## a)",
+			"Priority": "80"
+		},
+		{
+			"Type": "StrengthReduction",
 			"Name": "ShiftLeft##",
 			"SubName": "ByZero",
 			"Expression": "IR.ShiftLeft## a 0",
@@ -361,6 +379,15 @@
 		},
 		{
 			"Type": "StrengthReduction",
+			"Name": "ArithShiftRight32",
+			"SubName": "By32",
+			"Expression": "IR.ArithShiftRight32 a 32",
+			"Filter": "",
+			"Result": "(IR.Move32 0)",
+			"Priority": "80"
+		},
+		{
+			"Type": "StrengthReduction",
 			"Name": "ShiftLeft32",
 			"SubName": "By32",
 			"Expression": "IR.ShiftLeft32 a 32",
@@ -368,12 +395,20 @@
 			"Result": "(IR.Move32 0)",
 			"Priority": "80"
 		},
-
 		{
 			"Type": "StrengthReduction",
 			"Name": "ShiftRight64",
 			"SubName": "By64",
 			"Expression": "IR.ShiftRight64 a 64",
+			"Filter": "",
+			"Result": "(IR.Move64 0)",
+			"Priority": "80"
+		},
+		{
+			"Type": "StrengthReduction",
+			"Name": "ArithShiftRight64",
+			"SubName": "By64",
+			"Expression": "IR.ArithShiftRight64 a 64",
 			"Filter": "",
 			"Result": "(IR.Move64 0)",
 			"Priority": "80"

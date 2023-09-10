@@ -44,6 +44,7 @@ public static class X86
 	public static readonly BaseInstruction Hlt = new Hlt();
 	public static readonly BaseInstruction IDiv32 = new IDiv32();
 	public static readonly BaseInstruction IMul32 = new IMul32();
+	public static readonly BaseInstruction IMul32o1 = new IMul32o1();
 	public static readonly BaseInstruction IMul1o32 = new IMul1o32();
 	public static readonly BaseInstruction IMul3o32 = new IMul3o32();
 	public static readonly BaseInstruction In8 = new In8();
