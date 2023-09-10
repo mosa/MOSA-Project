@@ -105,6 +105,12 @@ public static class Program
 			"Mosa.Compiler.x86").Execute();
 
 		new BuildTransformations(
+			Path.Combine(dataPath, @"X86-Optimizations-ConstantMove.json"),
+			Path.Combine(targetPath, @"Mosa.Compiler.x86\Transforms\Optimizations\Auto"),
+			"Mosa.Compiler.x86",
+			"Mosa.Compiler.x86").Execute();
+
+		new BuildTransformations(
 			Path.Combine(dataPath, @"X86-Optimizations-Ordering.json"),
 			Path.Combine(targetPath, @"Mosa.Compiler.x86\Transforms\Optimizations\Auto"),
 			"Mosa.Compiler.x86",

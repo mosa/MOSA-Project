@@ -4,15 +4,15 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.Consolidating;
+namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.ConstantMove;
 
 /// <summary>
-/// Add32Mov32ByZero
+/// Shl32
 /// </summary>
-[Transform("x86.Optimizations.Auto.Consolidating")]
-public sealed class Add32Mov32ByZero : BaseTransform
+[Transform("x86.Optimizations.Auto.ConstantMove")]
+public sealed class Shl32 : BaseTransform
 {
-	public Add32Mov32ByZero() : base(X86.Add32, TransformType.Auto | TransformType.Optimization)
+	public Shl32() : base(X86.Shl32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -27,10 +27,7 @@ public sealed class Add32Mov32ByZero : BaseTransform
 		if (context.Operand2.Definitions[0].Instruction != X86.Mov32)
 			return false;
 
-		if (!context.Operand2.Definitions[0].Operand1.IsResolvedConstant)
-			return false;
-
-		if (context.Operand2.Definitions[0].Operand1.ConstantUnsigned64 != 0)
+		if (!IsConstant(context.Operand2.Definitions[0].Operand1))
 			return false;
 
 		if (AreStatusFlagUsed(context))
@@ -44,7 +41,8 @@ public sealed class Add32Mov32ByZero : BaseTransform
 		var result = context.Result;
 
 		var t1 = context.Operand1;
+		var t2 = context.Operand2.Definitions[0].Operand1;
 
-		context.SetInstruction(X86.Mov32, result, t1);
+		context.SetInstruction(X86.Shl32, result, t1, t2);
 	}
 }

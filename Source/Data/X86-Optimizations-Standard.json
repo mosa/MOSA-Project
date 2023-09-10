@@ -4,7 +4,8 @@
 	"Commutative": [
 		"X86.Add32",
 		"X86.And32",
-		"X86.Or32"
+		"X86.Or32",
+		"X86.Xor32"
 	],
 	"Optimizations": [
 		{
@@ -55,36 +56,6 @@
 			"Log": "No"
 		},
 		{
-			"Type": "Consolidating",
-			"Name": "Add32Mov32",
-			"SubName": "ByZero",
-			"Expression": "X86.Add32 a (X86.Mov32 0)",
-			"Filter": "!AreStatusFlagUsed(@)",
-			"Result": "(X86.Mov32 a)",
-			"Variations": "No",
-			"Log": "No"
-		},
-		{
-			"Type": "Consolidating",
-			"Name": "IMul32Mov32",
-			"SubName": "ByZero",
-			"Expression": "X86.IMul32 a (X86.Mov32 0)",
-			"Filter": "!AreStatusFlagUsed(@)",
-			"Result": "(X86.Mov32 0)",
-			"Variations": "No",
-			"Log": "No"
-		},
-		{
-			"Type": "Consolidating",
-			"Name": "IMul32Mov32",
-			"SubName": "ByOne",
-			"Expression": "X86.IMul32 a (X86.Mov32 1)",
-			"Filter": "!AreStatusFlagUsed(@)",
-			"Result": "(X86.Mov32 a)",
-			"Variations": "No",
-			"Log": "No"
-		},
-		{
 			"Type": "Shrink",
 			"Name": "And32",
 			"SubName": "ByFF",
@@ -129,6 +100,101 @@
 			"Expression": "X86.Sub32 0 x",
 			"Filter": "IsVirtualRegister(x)",
 			"Result": "(X86.Neg32 x)",
+			"Variations": "No",
+			"Log": "No"
+		},
+		{
+			"Type": "StrengthReduction",
+			"Name": "And32",
+			"SubName": "ByZero",
+			"Expression": "X86.And32 a 0",
+			"Filter": "!AreStatusFlagUsed(@)",
+			"Result": "(X86.Mov32 0)",
+			"Variations": "Yes",
+			"Log": "Yes"
+		},
+		{
+			"Type": "StrengthReduction",
+			"Name": "And32",
+			"SubName": "ByMax",
+			"Expression": "X86.And32 a 0xFFFFFFFF",
+			"Filter": "!AreStatusFlagUsed(@)",
+			"Result": "(X86.Mov32 0xFFFFFFFF)",
+			"Variations": "Yes",
+			"Log": "Yes"
+		},
+		{
+			"Type": "StrengthReduction",
+			"Name": "Sar32",
+			"SubName": "ZeroValue",
+			"Expression": "X86.Sar32 0 a",
+			"Filter": "!AreStatusFlagUsed(@)",
+			"Result": "(X86.Mov32 0)",
+			"Priority": "80"
+		},
+		{
+			"Type": "StrengthReduction",
+			"Name": "Sar32",
+			"SubName": "ByZero",
+			"Expression": "X86.Sar32 a 0",
+			"Filter": "!AreStatusFlagUsed(@)",
+			"Result": "(X86.Mov32 a)",
+			"Priority": "80"
+		},
+		{
+			"Type": "StrengthReduction",
+			"Name": "Shl32",
+			"SubName": "ZeroValue",
+			"Expression": "X86.Shl32 0 a",
+			"Filter": "!AreStatusFlagUsed(@)",
+			"Result": "(X86.Mov32 0)",
+			"Priority": "80"
+		},
+		{
+			"Type": "StrengthReduction",
+			"Name": "Shl32",
+			"SubName": "ByZero",
+			"Expression": "X86.Shl32 a 0",
+			"Filter": "!AreStatusFlagUsed(@)",
+			"Result": "(X86.Mov32 a)",
+			"Priority": "80"
+		},
+		{
+			"Type": "StrengthReduction",
+			"Name": "Shr32",
+			"SubName": "ZeroValue",
+			"Expression": "X86.Shr32 0 a",
+			"Filter": "!AreStatusFlagUsed(@)",
+			"Result": "(X86.Mov32 0)",
+			"Priority": "80"
+		},
+		{
+			"Type": "StrengthReduction",
+			"Name": "Shr32",
+			"SubName": "ByZero",
+			"Expression": "X86.Shr32 a 0",
+			"Filter": "!AreStatusFlagUsed(@)",
+			"Result": "(X86.Mov32 a)",
+			"Priority": "80"
+		},
+
+		{
+			"Type": "Consolidation",
+			"Name": "IMul32Mov32",
+			"SubName": "ByZero",
+			"Expression": "X86.IMul32 a (X86.Mov32 0)",
+			"Filter": "!AreStatusFlagUsed(@)",
+			"Result": "(X86.Mov32 0)",
+			"Variations": "No",
+			"Log": "No"
+		},
+		{
+			"Type": "Consolidation",
+			"Name": "IMul32Mov32",
+			"SubName": "ByOne",
+			"Expression": "X86.IMul32 a (X86.Mov32 1)",
+			"Filter": "!AreStatusFlagUsed(@)",
+			"Result": "(X86.Mov32 a)",
 			"Variations": "No",
 			"Log": "No"
 		}
