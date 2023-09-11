@@ -842,7 +842,8 @@ public abstract class BaseRegisterAllocator
 						// instructions with more than one result.
 						intervalTrace?.Log($"Add (Unused) {register} : {slotAfter} destination {slotAfter}");
 						intervalTrace?.Log($"   Before: {LiveIntervalsToString(register.LiveIntervals)}");
-						register.AddLiveInterval(slotAfter, slotAfter);
+						//register.AddLiveInterval(slotAfter, slotAfter);
+						register.AddLiveInterval(slot, slotAfter);
 						intervalTrace?.Log($"    After: {LiveIntervalsToString(register.LiveIntervals)}");
 					}
 				}

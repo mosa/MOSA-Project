@@ -28,7 +28,7 @@ public sealed class VirtualRegister
 	public LiveInterval FirstRange
 	{
 		get => LiveIntervals.Count == 0 ? null : LiveIntervals[0];
-		//set => LiveIntervals[0] = value;
+		set => LiveIntervals[0] = value;
 	}
 
 	public Operand SpillSlotOperand;

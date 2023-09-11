@@ -63,10 +63,9 @@ public sealed class GreedyRegisterAllocator : BasicRegisterAllocator
 
 	private (MoveHint a, MoveHint b) GetMoveHints(LiveInterval liveInterval)
 	{
-		MoveHint a = null;
-		MoveHint b = null;
+		moveHints.TryGetValue(liveInterval.Start,  out var a);
 
-		moveHints.TryGetValue(liveInterval.Start, out a);
+		MoveHint b = null;
 
 		if (!GetNode(liveInterval.End).IsBlockStartInstruction)
 		{
