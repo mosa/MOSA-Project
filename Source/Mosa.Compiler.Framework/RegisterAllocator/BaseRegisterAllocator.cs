@@ -627,7 +627,7 @@ public abstract class BaseRegisterAllocator
 
 			for (var node = block.BasicBlock.First; !node.IsBlockEndInstruction; node = node.Next)
 			{
-				if (node.IsEmpty)
+				if (node.IsEmptyOrNop)
 					continue;
 
 				liveSetTrace?.Log(node.ToString());
@@ -706,10 +706,8 @@ public abstract class BaseRegisterAllocator
 		{
 			changed = false;
 
-			for (var i = BasicBlocks.Count - 1; i >= 0; i--)
+			foreach (var block in ExtendedBlocks)
 			{
-				var block = ExtendedBlocks[i];
-
 				var liveOut = new BitArray(RegisterCount);
 
 				foreach (var next in block.BasicBlock.NextBlocks)
@@ -832,13 +830,13 @@ public abstract class BaseRegisterAllocator
 					{
 						intervalTrace?.Log($"Replace First {register} : {slot} destination {first.End}");
 						intervalTrace?.Log($"   Before: {LiveIntervalsToString(register.LiveIntervals)}");
-						register.AddLiveInterval(slot, first.End);
-						//register.FirstRange = new LiveInterval(register, slot, first.End);
+						//register.AddLiveInterval(slot, first.End);
+						register.FirstRange = new LiveInterval(register, slot, first.End);
 						intervalTrace?.Log($"    After: {LiveIntervalsToString(register.LiveIntervals)}");
 					}
 					else
 					{
-						// This is necessary to handled a result that is never used; which is common with
+						// This is necessary to handle a result that is never used; which is common with
 						// instructions with more than one result.
 						intervalTrace?.Log($"Add (Unused) {register} : {slotAfter} destination {slotAfter}");
 						intervalTrace?.Log($"   Before: {LiveIntervalsToString(register.LiveIntervals)}");
