@@ -45,6 +45,7 @@ public static class X86Instructions
 		X86.Hlt,
 		X86.IDiv32,
 		X86.IMul32,
+		X86.IMul32o1,
 		X86.IMul1o32,
 		X86.IMul3o32,
 		X86.In8,

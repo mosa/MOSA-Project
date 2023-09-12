@@ -4,15 +4,15 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.Consolidating;
+namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.ConstantMove;
 
 /// <summary>
-/// IMul32Mov32ByOne
+/// And32
 /// </summary>
-[Transform("x86.Optimizations.Auto.Consolidating")]
-public sealed class IMul32Mov32ByOne : BaseTransform
+[Transform("x86.Optimizations.Auto.ConstantMove")]
+public sealed class And32 : BaseTransform
 {
-	public IMul32Mov32ByOne() : base(X86.IMul32, TransformType.Auto | TransformType.Optimization)
+	public And32() : base(X86.And32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -27,10 +27,7 @@ public sealed class IMul32Mov32ByOne : BaseTransform
 		if (context.Operand2.Definitions[0].Instruction != X86.Mov32)
 			return false;
 
-		if (!context.Operand2.Definitions[0].Operand1.IsResolvedConstant)
-			return false;
-
-		if (context.Operand2.Definitions[0].Operand1.ConstantUnsigned64 != 1)
+		if (!IsConstant(context.Operand2.Definitions[0].Operand1))
 			return false;
 
 		if (AreStatusFlagUsed(context))
@@ -44,7 +41,8 @@ public sealed class IMul32Mov32ByOne : BaseTransform
 		var result = context.Result;
 
 		var t1 = context.Operand1;
+		var t2 = context.Operand2.Definitions[0].Operand1;
 
-		context.SetInstruction(X86.Mov32, result, t1);
+		context.SetInstruction(X86.And32, result, t1, t2);
 	}
 }

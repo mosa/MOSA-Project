@@ -13,7 +13,7 @@ public static class BitTwiddling
 
 	public static uint GetPowerOfTwo(ulong n)
 	{
-		uint bits = 0;
+		var bits = 0u;
 
 		while (n != 0)
 		{

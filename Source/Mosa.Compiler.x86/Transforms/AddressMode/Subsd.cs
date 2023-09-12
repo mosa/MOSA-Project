@@ -16,6 +16,6 @@ public sealed class Subsd : BaseAddressModeTransform
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		AddressModeConversion(context, X86.Mov32);
+		AddressModeConversion(context, X86.Movsd);
 	}
 }
