@@ -873,9 +873,9 @@ public sealed class InstructionNode
 		Instruction = instruction;
 	}
 
-	public bool ConstainsOperand(Operand operand)
+	public bool ContainsOperand(Operand operand)
 	{
-		foreach(var op in Operands)
+		foreach (var op in Operands)
 		{
 			if (op == operand)
 				return true;
