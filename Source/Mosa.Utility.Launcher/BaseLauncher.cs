@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Diagnostics;
-using System.IO;
 using System.Reflection;
 using Mosa.Compiler.Framework;
 using Mosa.Utility.Configuration;
@@ -28,8 +27,7 @@ public class BaseLauncher
 
 	protected void Output(string status)
 	{
-		if (status == null)
-			return;
+		if (string.IsNullOrEmpty(status)) return;
 
 		OutputEvent(status);
 	}

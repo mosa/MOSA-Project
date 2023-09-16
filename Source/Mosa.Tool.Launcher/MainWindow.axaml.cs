@@ -1,16 +1,11 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
 using System.Diagnostics;
 using System.Globalization;
-using System.IO;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.Platform;
+using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
@@ -19,85 +14,60 @@ using Mosa.Utility.Launcher;
 
 namespace Mosa.Tool.Launcher;
 
-// TODO: Implement settings for FrmCmb
 public partial class MainWindow : Window
 {
-	private readonly MosaSettings MosaSettings = new();
+	private readonly MosaSettings mosaSettings = new();
+	private readonly Stopwatch stopwatch = new();
+	private readonly CompilerHooks compilerHooks;
+	private readonly DispatcherTimer timer;
 
-	private Builder Builder;
-	private readonly OpenFileDialog Source;
-	private readonly OpenFolderDialog Destination;
-	private readonly OpenFolderDialog Include;
-
-	private bool IsDone;
-	private int TotalMethods;
-	private int CompletedMethods;
-
-	private Stopwatch Stopwatch = new Stopwatch();
-
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+	private Builder? builder;
+	private int totalMethods;
+	private int completedMethods;
 
 	public MainWindow()
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 	{
 		InitializeComponent();
 
-		var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(1) };
+		timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(10) };
 		timer.Tick += (_, _) =>
 		{
-			OutputProgress.Maximum = TotalMethods;
-			OutputProgress.Value = CompletedMethods;
-		};
-		timer.Start();
-
-		Source = new OpenFileDialog
-		{
-			AllowMultiple = false,
-			Title = "Select the file to compile"
+			OutputProgress.Maximum = totalMethods;
+			OutputProgress.Value = completedMethods;
 		};
 
-		Destination = new OpenFolderDialog
+		compilerHooks = new CompilerHooks
 		{
-			Title = "Select the output directory"
-		};
-
-		Include = new OpenFolderDialog
-		{
-			Title = "Select the include directory"
+			NotifyProgress = NotifyProgress,
+			NotifyStatus = NotifyStatus
 		};
 
 		DstLbl.Content = Path.Combine(Path.GetTempPath(), "MOSA");
-
-		Stopwatch.Reset();
 	}
 
 	private void NotifyProgress(int total, int at)
 	{
-		TotalMethods = total;
-		CompletedMethods = at;
+		totalMethods = total;
+		completedMethods = at;
 	}
 
 	private void AddOutput(string status)
 	{
-		if (string.IsNullOrEmpty(status))
-			return;
+		if (string.IsNullOrEmpty(status)) return;
 
-		OutputTxt.Text += $"{Stopwatch.Elapsed.TotalSeconds:00.00} | {status}{Environment.NewLine}";
-
-		//<Setter Property="FontFamily" Value="Consolas"/>
+		OutputTxt.Text += $"{stopwatch.Elapsed.TotalSeconds:00.00} | {status}{Environment.NewLine}";
 	}
 
 	public void Initialize(string[] args)
 	{
-		MosaSettings.LoadAppLocations();
-		MosaSettings.SetDetfaultSettings();
-		MosaSettings.LoadArguments(args);
+		mosaSettings.LoadAppLocations();
+		mosaSettings.SetDetfaultSettings();
+		mosaSettings.LoadArguments(args);
 		SetRequiredSettings();
-		MosaSettings.ExpandSearchPaths();
-		MosaSettings.NormalizeSettings();
-		MosaSettings.UpdateFileAndPathSettings();
+		mosaSettings.ExpandSearchPaths();
+		mosaSettings.NormalizeSettings();
+		mosaSettings.UpdateFileAndPathSettings();
 
-		// Update the GUI settings
 		UpdateGuiSettings();
 
 		var sb = new StringBuilder();
@@ -109,157 +79,119 @@ public partial class MainWindow : Window
 		}
 
 		AddOutput($"Arguments: {sb}");
-
-		// Output the current directory
 		AddOutput($"Current Directory: {Environment.CurrentDirectory}");
 
-		if (MosaSettings.SourceFiles != null)
+		if (mosaSettings.SourceFiles is { Count: > 0 })
 		{
-			var src = MosaSettings.SourceFiles[0];
-
-			if (src != null)
+			var src = mosaSettings.SourceFiles[0];
+			if (!string.IsNullOrEmpty(src))
 			{
 				OsNameTxt.Text = Path.GetFileNameWithoutExtension(src);
 				SrcLbl.Content = Path.GetFullPath(src);
 			}
 
-			foreach (var file in MosaSettings.SourceFiles)
+			foreach (var file in mosaSettings.SourceFiles)
 			{
 				var path = Path.GetDirectoryName(Path.GetFullPath(file));
-
-				if (!string.IsNullOrWhiteSpace(path))
-				{
-					MosaSettings.SearchPaths.Add(path);
-				}
+				if (!string.IsNullOrWhiteSpace(path)) mosaSettings.AddSearchPath(path);
 			}
-		}
-		else
-		{
-			MosaSettings.ExplorerStart = false;
-		}
+		} else mosaSettings.ExplorerStart = false;
 
-		IncDirTxt.Text = MosaSettings.FileSystemRootInclude;
-
-		// Set title label with the current compiler version
+		IncDirTxt.Text = mosaSettings.FileSystemRootInclude;
 		TitleLbl.Content += CompilerVersion.VersionString;
 
-		// Register all platforms supported by the compiler
 		PlatformRegistry.Add(new Compiler.x86.Architecture());
 		PlatformRegistry.Add(new Compiler.x64.Architecture());
 		PlatformRegistry.Add(new Compiler.ARM32.Architecture());
 
-		// Initialize paths
 		UpdatePaths();
-
 		UpdateInterfaceAppLocations();
 
-		if (MosaSettings.LauncherStart)
-		{
-			Tabs.SelectedIndex = 4;
-			CompileBuildAndStart();
-		}
+		if (!mosaSettings.LauncherStart) return;
 
-		// Hacky method to center the window on the screen
-		this.GetObservable(IsVisibleProperty).Subscribe(value =>
-		{
-			if (!value || IsDone)
-				return;
+		Tabs.SelectedIndex = 4;
 
-			IsDone = true;
-			CenterWindow();
-		});
+		var result = CheckOptions.Verify(mosaSettings);
+
+		if (string.IsNullOrEmpty(result)) CompileBuildAndStart();
+		else AddOutput($"ERROR: {result}");
 	}
 
 	private void SetRequiredSettings()
 	{
-		MosaSettings.EmulatorDisplay = true;
-		MosaSettings.LauncherStart = true;
-		MosaSettings.Launcher = true;
-		MosaSettings.LauncherExit = true;
+		mosaSettings.EmulatorDisplay = true;
+		if (mosaSettings is { SourceFiles.Count: > 0, LauncherStart: true }) mosaSettings.LauncherStart = true;
+		mosaSettings.Launcher = true;
+		mosaSettings.LauncherExit = true;
 	}
 
-	private void AddCounters(string data)
-	{
-		CountersTxt.Text += data + Environment.NewLine;
-	}
-
-	private CompilerHooks CreateCompilerHook()
-	{
-		return new CompilerHooks
-		{
-			NotifyProgress = NotifyProgress,
-			NotifyStatus = NotifyStatus
-		};
-	}
+	private void AddCounters(string data) => CountersTxt.Text += data + Environment.NewLine;
 
 	private void NotifyStatus(string status) => Dispatcher.UIThread.Post(() => AddOutput(status));
 
 	private void UpdateInterfaceAppLocations()
 	{
-		bochsPathLbl.Content = MosaSettings.BochsApp;
-		ndiasmPathLbl.Content = MosaSettings.NdisasmApp;
-
-		qemuPathLbl.Content = MosaSettings.QemuX86App;
-		qemuBiosPathLbl.Content = MosaSettings.QemuBIOS;
-		qemuEdk2X86PathLbl.Content = MosaSettings.QemuEdk2X86;
-		qemuEdk2X64PathLbl.Content = MosaSettings.QemuEdk2X64;
-		qemuEdk2ARMPathLbl.Content = MosaSettings.QemuEdk2ARM32;
-		qemuImgPathLbl.Content = MosaSettings.QemuImgApp;
-		vboxPathLbl.Content = MosaSettings.VirtualBoxApp;
-		mkisofsPathLbl.Content = MosaSettings.MkisofsApp;
-
-		vmwarePathLbl.Content = string.IsNullOrEmpty(MosaSettings.VmwarePlayerApp) ? MosaSettings.VmwareWorkstationApp : MosaSettings.VmwarePlayerApp;
+		qemuPathLbl.Content = mosaSettings.QemuX86App;
+		qemuBiosPathLbl.Content = mosaSettings.QemuBIOS;
+		qemuEdk2X86PathLbl.Content = mosaSettings.QemuEdk2X86;
+		qemuEdk2X64PathLbl.Content = mosaSettings.QemuEdk2X64;
+		qemuEdk2ARMPathLbl.Content = mosaSettings.QemuEdk2ARM32;
+		qemuImgPathLbl.Content = mosaSettings.QemuImgApp;
+		bochsPathLbl.Content = mosaSettings.BochsApp;
+		vmwarePathLbl.Content = string.IsNullOrEmpty(mosaSettings.VmwarePlayerApp) ? mosaSettings.VmwareWorkstationApp : mosaSettings.VmwarePlayerApp;
+		vboxPathLbl.Content = mosaSettings.VirtualBoxApp;
+		mkisofsPathLbl.Content = mosaSettings.MkisofsApp;
+		ndiasmPathLbl.Content = mosaSettings.NdisasmApp;
 	}
 
 	private void UpdateGuiSettings()
 	{
-		SsaOpts.IsChecked = MosaSettings.SSA;
-		BasicOpts.IsChecked = MosaSettings.BasicOptimizations;
-		SccpOpts.IsChecked = MosaSettings.SparseConditionalConstantPropagation;
-		DevirtOpts.IsChecked = MosaSettings.Devirtualization;
-		InlineOpts.IsChecked = MosaSettings.InlineMethods;
-		InlineExplOpts.IsChecked = MosaSettings.InlineExplicit;
-		LongExpOpts.IsChecked = MosaSettings.LongExpansion;
-		TwoOptPass.IsChecked = MosaSettings.TwoPassOptimization;
-		ValueNumOpts.IsChecked = MosaSettings.ValueNumbering;
-		BtOpts.IsChecked = MosaSettings.BitTracker;
-		PlatOpts.IsChecked = MosaSettings.PlatformOptimizations;
-		LicmOpts.IsChecked = MosaSettings.LoopInvariantCodeMotion;
+		SsaOpts.IsChecked = mosaSettings.SSA;
+		BasicOpts.IsChecked = mosaSettings.BasicOptimizations;
+		SccpOpts.IsChecked = mosaSettings.SparseConditionalConstantPropagation;
+		DevirtOpts.IsChecked = mosaSettings.Devirtualization;
+		InlineOpts.IsChecked = mosaSettings.InlineMethods;
+		InlineExplOpts.IsChecked = mosaSettings.InlineExplicit;
+		LongExpOpts.IsChecked = mosaSettings.LongExpansion;
+		TwoOptPass.IsChecked = mosaSettings.TwoPassOptimization;
+		ValueNumOpts.IsChecked = mosaSettings.ValueNumbering;
+		BtOpts.IsChecked = mosaSettings.BitTracker;
+		PlatOpts.IsChecked = mosaSettings.PlatformOptimizations;
+		LicmOpts.IsChecked = mosaSettings.LoopInvariantCodeMotion;
 
-		EmtSymbs.IsChecked = MosaSettings.EmitSumbols;
-		EmtRelocs.IsChecked = MosaSettings.EmitStaticRelocations;
-		EmtDwarf.IsChecked = MosaSettings.EmitDwarf;
-		BaseAddrTxt.Text = MosaSettings.BaseAddress.ToHex();
+		EmtSymbs.IsChecked = mosaSettings.EmitSumbols;
+		EmtRelocs.IsChecked = mosaSettings.EmitStaticRelocations;
+		EmtDwarf.IsChecked = mosaSettings.EmitDwarf;
+		BaseAddrTxt.Text = mosaSettings.BaseAddress.ToHex();
 
-		NasmFile.IsChecked = !string.IsNullOrEmpty(MosaSettings.NasmFile);
-		AsmFile.IsChecked = !string.IsNullOrEmpty(MosaSettings.AsmFile);
-		MapFile.IsChecked = !string.IsNullOrEmpty(MosaSettings.MapFile);
-		DbgFile.IsChecked = !string.IsNullOrEmpty(MosaSettings.DebugFile);
-		InlLstFile.IsChecked = !string.IsNullOrEmpty(MosaSettings.InlinedFile);
-		HashFiles.IsChecked = !string.IsNullOrEmpty(MosaSettings.PreLinkHashFile);
-		CompTimeFile.IsChecked = !string.IsNullOrEmpty(MosaSettings.CompileTimeFile);
+		NasmFile.IsChecked = !string.IsNullOrEmpty(mosaSettings.NasmFile);
+		AsmFile.IsChecked = !string.IsNullOrEmpty(mosaSettings.AsmFile);
+		MapFile.IsChecked = !string.IsNullOrEmpty(mosaSettings.MapFile);
+		DbgFile.IsChecked = !string.IsNullOrEmpty(mosaSettings.DebugFile);
+		InlLstFile.IsChecked = !string.IsNullOrEmpty(mosaSettings.InlinedFile);
+		HashFiles.IsChecked = !string.IsNullOrEmpty(mosaSettings.PreLinkHashFile);
+		CompTimeFile.IsChecked = !string.IsNullOrEmpty(mosaSettings.CompileTimeFile);
 
-		ExitOnLaunch.IsChecked = MosaSettings.LauncherExit;
+		ExitOnLaunch.IsChecked = mosaSettings.LauncherExit;
 
-		QemuGdb.IsChecked = MosaSettings.LaunchGDB;
-		LaunchGdb.IsChecked = MosaSettings.LaunchGDB;
-		MosaDbger.IsChecked = MosaSettings.LaunchDebugger;
+		QemuGdb.IsChecked = mosaSettings.LaunchGDB;
+		LaunchGdb.IsChecked = mosaSettings.LaunchGDB;
+		MosaDbger.IsChecked = mosaSettings.LaunchDebugger;
 
-		MultiThreading.IsChecked = MosaSettings.Multithreading;
-		MethodScanner.IsChecked = MosaSettings.MethodScanner;
+		MultiThreading.IsChecked = mosaSettings.Multithreading;
+		MethodScanner.IsChecked = mosaSettings.MethodScanner;
 
-		MemVal.Value = MosaSettings.EmulatorMemory;
-		CpuVal.Value = MosaSettings.EmulatorCores;
+		MemVal.Value = mosaSettings.EmulatorMemory;
+		CpuVal.Value = mosaSettings.EmulatorCores;
 
-		EnableMbGraphics.IsChecked = MosaSettings.MultibootVideo;
-		GraphicsWidth.Value = MosaSettings.MultibootVideoWidth;
-		GraphicsHeight.Value = MosaSettings.MultibootVideoHeight;
+		EnableMbGraphics.IsChecked = mosaSettings.MultibootVideo;
+		GraphicsWidth.Value = mosaSettings.MultibootVideoWidth;
+		GraphicsHeight.Value = mosaSettings.MultibootVideoHeight;
 
-		PlugKernel.IsChecked = MosaSettings.PlugKernel;
-		PlugKorlib.IsChecked = MosaSettings.PlugKorlib;
-		OsNameTxt.Text = MosaSettings.OSName;
+		PlugKorlib.IsChecked = mosaSettings.PlugKorlib;
+		OsNameTxt.Text = mosaSettings.OSName;
 
-		ImgCmb.SelectedIndex = MosaSettings.ImageFormat.ToUpperInvariant() switch
+		ImgCmb.SelectedIndex = mosaSettings.ImageFormat.ToUpperInvariant() switch
 		{
 			"IMG" => 0,
 			"VHD" => 1,
@@ -268,7 +200,7 @@ public partial class MainWindow : Window
 			_ => ImgCmb.SelectedIndex
 		};
 
-		EmuCmb.SelectedIndex = MosaSettings.Emulator switch
+		EmuCmb.SelectedIndex = mosaSettings.Emulator switch
 		{
 			"Qemu" => 0,
 			"Bochs" => 1,
@@ -277,7 +209,7 @@ public partial class MainWindow : Window
 			_ => EmuCmb.SelectedIndex
 		};
 
-		CntCmb.SelectedIndex = MosaSettings.EmulatorSerial switch
+		CntCmb.SelectedIndex = mosaSettings.EmulatorSerial switch
 		{
 			"None" => 0,
 			"Pipe" => 1,
@@ -286,7 +218,7 @@ public partial class MainWindow : Window
 			_ => CntCmb.SelectedIndex
 		};
 
-		FsCmb.SelectedIndex = MosaSettings.FileSystem.ToUpperInvariant() switch
+		FsCmb.SelectedIndex = mosaSettings.FileSystem.ToUpperInvariant() switch
 		{
 			"FAT12" => 0,
 			"FAT16" => 1,
@@ -294,152 +226,154 @@ public partial class MainWindow : Window
 			_ => FsCmb.SelectedIndex
 		};
 
-		FmtCmb.SelectedIndex = MosaSettings.MultibootVersion.ToLowerInvariant() switch
+		FmtCmb.SelectedIndex = mosaSettings.MultibootVersion.ToLowerInvariant() switch
 		{
 			"" => 0,
 			"v2" => 1,
 			_ => FmtCmb.SelectedIndex
 		};
 
-		PltCmb.SelectedIndex = MosaSettings.Platform.ToLowerInvariant() switch
+		PltCmb.SelectedIndex = mosaSettings.Platform.ToLowerInvariant() switch
 		{
 			"x86" => 0,
 			"x64" => 1,
 			"arm32" => 2,
-			_ => 0
+			_ => PltCmb.SelectedIndex
 		};
 
-		FrmCmb.SelectedIndex = MosaSettings.ImageFirmware.ToLowerInvariant() switch
+		FrmCmb.SelectedIndex = mosaSettings.ImageFirmware.ToLowerInvariant() switch
 		{
 			"bios" => 0,
-			_ => 0
+			_ => FrmCmb.SelectedIndex
 		};
 	}
 
 	private void UpdateSettings()
 	{
-		MosaSettings.SSA = SsaOpts.IsChecked!.Value;
-		MosaSettings.BasicOptimizations = BasicOpts.IsChecked!.Value;
-		MosaSettings.SparseConditionalConstantPropagation = SccpOpts.IsChecked!.Value;
-		MosaSettings.Devirtualization = DevirtOpts.IsChecked!.Value;
-		MosaSettings.InlineMethods = InlineOpts.IsChecked!.Value;
-		MosaSettings.InlineExplicit = InlineExplOpts.IsChecked!.Value;
-		MosaSettings.LongExpansion = LongExpOpts.IsChecked!.Value;
-		MosaSettings.TwoPassOptimization = TwoOptPass.IsChecked!.Value;
-		MosaSettings.ValueNumbering = ValueNumOpts.IsChecked!.Value;
-		MosaSettings.BitTracker = BtOpts.IsChecked!.Value;
-		MosaSettings.PlatformOptimizations = PlatOpts.IsChecked!.Value;
-		MosaSettings.LoopInvariantCodeMotion = LicmOpts.IsChecked!.Value;
+		mosaSettings.SSA = SsaOpts.IsChecked!.Value;
+		mosaSettings.BasicOptimizations = BasicOpts.IsChecked!.Value;
+		mosaSettings.SparseConditionalConstantPropagation = SccpOpts.IsChecked!.Value;
+		mosaSettings.Devirtualization = DevirtOpts.IsChecked!.Value;
+		mosaSettings.InlineMethods = InlineOpts.IsChecked!.Value;
+		mosaSettings.InlineExplicit = InlineExplOpts.IsChecked!.Value;
+		mosaSettings.LongExpansion = LongExpOpts.IsChecked!.Value;
+		mosaSettings.TwoPassOptimization = TwoOptPass.IsChecked!.Value;
+		mosaSettings.ValueNumbering = ValueNumOpts.IsChecked!.Value;
+		mosaSettings.BitTracker = BtOpts.IsChecked!.Value;
+		mosaSettings.PlatformOptimizations = PlatOpts.IsChecked!.Value;
+		mosaSettings.LoopInvariantCodeMotion = LicmOpts.IsChecked!.Value;
 
-		MosaSettings.EmitSumbols = EmtSymbs.IsChecked!.Value;
-		MosaSettings.EmitStaticRelocations = EmtRelocs.IsChecked!.Value;
-		MosaSettings.EmitDwarf = EmtDwarf.IsChecked!.Value;
+		mosaSettings.EmitSumbols = EmtSymbs.IsChecked!.Value;
+		mosaSettings.EmitStaticRelocations = EmtRelocs.IsChecked!.Value;
+		mosaSettings.EmitDwarf = EmtDwarf.IsChecked!.Value;
 
-		MosaSettings.BaseAddress = BaseAddrTxt.Text.StartsWith("0x")
+		mosaSettings.BaseAddress = BaseAddrTxt.Text!.StartsWith("0x")
 			? uint.Parse(BaseAddrTxt.Text[2..], NumberStyles.HexNumber)
 			: uint.Parse(BaseAddrTxt.Text);
 
-		MosaSettings.NasmFile = NasmFile.IsChecked!.Value ? "%DEFAULT%" : string.Empty;
-		MosaSettings.AsmFile = AsmFile.IsChecked!.Value ? "%DEFAULT%" : string.Empty;
-		MosaSettings.MapFile = MapFile.IsChecked!.Value ? "%DEFAULT%" : string.Empty;
-		MosaSettings.DebugFile = DbgFile.IsChecked!.Value ? "%DEFAULT%" : string.Empty;
-		MosaSettings.InlinedFile = InlLstFile.IsChecked!.Value ? "%DEFAULT%" : string.Empty;
-		MosaSettings.PreLinkHashFile = HashFiles.IsChecked!.Value ? "%DEFAULT%" : string.Empty;
-		MosaSettings.PostLinkHashFile = HashFiles.IsChecked.Value ? "%DEFAULT%" : string.Empty;
-		MosaSettings.CompileTimeFile = CompTimeFile.IsChecked!.Value ? "%DEFAULT%" : string.Empty;
+		mosaSettings.NasmFile = NasmFile.IsChecked!.Value ? "%DEFAULT%" : string.Empty;
+		mosaSettings.AsmFile = AsmFile.IsChecked!.Value ? "%DEFAULT%" : string.Empty;
+		mosaSettings.MapFile = MapFile.IsChecked!.Value ? "%DEFAULT%" : string.Empty;
+		mosaSettings.DebugFile = DbgFile.IsChecked!.Value ? "%DEFAULT%" : string.Empty;
+		mosaSettings.InlinedFile = InlLstFile.IsChecked!.Value ? "%DEFAULT%" : string.Empty;
+		mosaSettings.PreLinkHashFile = HashFiles.IsChecked!.Value ? "%DEFAULT%" : string.Empty;
+		mosaSettings.PostLinkHashFile = HashFiles.IsChecked.Value ? "%DEFAULT%" : string.Empty;
+		mosaSettings.CompileTimeFile = CompTimeFile.IsChecked!.Value ? "%DEFAULT%" : string.Empty;
 
-		MosaSettings.LauncherExit = ExitOnLaunch.IsChecked!.Value;
+		mosaSettings.LauncherExit = ExitOnLaunch.IsChecked!.Value;
 
-		MosaSettings.EmulatorGDB = QemuGdb.IsChecked!.Value;
-		MosaSettings.LaunchGDB = LaunchGdb.IsChecked!.Value;
-		MosaSettings.LaunchDebugger = MosaDbger.IsChecked!.Value;
+		mosaSettings.EmulatorGDB = QemuGdb.IsChecked!.Value;
+		mosaSettings.LaunchGDB = LaunchGdb.IsChecked!.Value;
+		mosaSettings.LaunchDebugger = MosaDbger.IsChecked!.Value;
 
-		MosaSettings.Multithreading = MultiThreading.IsChecked!.Value;
-		MosaSettings.MaxThreads = 0;
-		MosaSettings.MethodScanner = MethodScanner.IsChecked!.Value;
+		mosaSettings.Multithreading = MultiThreading.IsChecked!.Value;
+		mosaSettings.MaxThreads = 0;
+		mosaSettings.MethodScanner = MethodScanner.IsChecked!.Value;
 
-		MosaSettings.EmulatorMemory = (int)MemVal.Value;
-		MosaSettings.EmulatorCores = (int)CpuVal.Value;
+		mosaSettings.EmulatorMemory = (int)MemVal.Value!;
+		mosaSettings.EmulatorCores = (int)CpuVal.Value!;
 
-		MosaSettings.MultibootVideo = EnableMbGraphics.IsChecked!.Value;
-		MosaSettings.MultibootVideoWidth = (int)GraphicsWidth.Value;
-		MosaSettings.MultibootVideoHeight = (int)GraphicsHeight.Value;
+		mosaSettings.MultibootVideo = EnableMbGraphics.IsChecked!.Value;
+		mosaSettings.MultibootVideoWidth = (int)GraphicsWidth.Value!;
+		mosaSettings.MultibootVideoHeight = (int)GraphicsHeight.Value!;
 
-		MosaSettings.PlugKernel = PlugKernel.IsChecked!.Value;
-		MosaSettings.PlugKorlib = PlugKorlib.IsChecked!.Value;
-		MosaSettings.OSName = OsNameTxt.Text;
+		mosaSettings.PlugKorlib = PlugKorlib.IsChecked!.Value;
+		mosaSettings.OSName = OsNameTxt.Text!;
 
 		UpdatePaths();
 
-		MosaSettings.ImageFormat = ImgCmb.SelectedIndex switch
+		mosaSettings.ImageFormat = ImgCmb.SelectedIndex switch
 		{
 			0 => "img",
 			1 => "vhd",
 			2 => "vdi",
 			3 => "vmdk",
-			_ => string.Empty,
+			_ => mosaSettings.ImageFormat
 		};
 
-		MosaSettings.Emulator = EmuCmb.SelectedIndex switch
+		mosaSettings.Emulator = EmuCmb.SelectedIndex switch
 		{
 			0 => "Qemu",
 			1 => "Bochs",
 			2 => "VMware",
 			3 => "VirtualBox",
-			_ => string.Empty,
+			_ => mosaSettings.Emulator
 		};
 
-		MosaSettings.EmulatorSerial = CntCmb.SelectedIndex switch
+		mosaSettings.EmulatorSerial = CntCmb.SelectedIndex switch
 		{
 			0 => "None",
 			1 => "Pipe",
 			2 => "TCPServer",
 			3 => "TCPClient",
-			_ => string.Empty,
+			_ => mosaSettings.EmulatorSerial
 		};
 
-		MosaSettings.FileSystem = FsCmb.SelectedIndex switch
+		mosaSettings.FileSystem = FsCmb.SelectedIndex switch
 		{
 			0 => "FAT12",
 			1 => "FAT16",
 			2 => "FAT32",
-			_ => string.Empty,
+			_ => mosaSettings.FileSystem
 		};
 
-		MosaSettings.MultibootVersion = FmtCmb.SelectedIndex switch
+		mosaSettings.MultibootVersion = FmtCmb.SelectedIndex switch
 		{
-			0 => "",
+			0 => string.Empty,
 			1 => "v2",
-			_ => string.Empty,
+			_ => mosaSettings.MultibootVersion
 		};
 
-		MosaSettings.Platform = PltCmb.SelectedIndex switch
+		mosaSettings.Platform = PltCmb.SelectedIndex switch
 		{
 			0 => "x86",
 			1 => "x64",
 			2 => "ARM32",
-			_ => string.Empty,
+			_ => mosaSettings.Platform
 		};
 
-		MosaSettings.ImageFirmware = FrmCmb.SelectedIndex switch
+		mosaSettings.ImageFirmware = FrmCmb.SelectedIndex switch
 		{
 			0 => "bios",
-			_ => string.Empty,
+			_ => mosaSettings.ImageFirmware
 		};
 	}
 
 	private void UpdatePaths()
 	{
-		var src = SrcLbl.Content.ToString();
+		var src = SrcLbl.Content!.ToString()!;
+		mosaSettings.ClearSourceFiles();
+		mosaSettings.AddSourceFile(src);
 
-		MosaSettings.ClearSourceFiles();
-		MosaSettings.AddSourceFile(src);
+		var path = Path.GetDirectoryName(src);
+		if (!string.IsNullOrEmpty(path))
+		{
+			mosaSettings.ClearSearchPaths();
+			mosaSettings.AddSearchPath(path);
+		}
 
-		MosaSettings.ClearSearchPaths();
-		MosaSettings.AddSearchPath(Path.GetDirectoryName(src));
-
-		MosaSettings.ImageFolder = DstLbl.Content.ToString();
-		MosaSettings.FileSystemRootInclude = IncDirTxt.Text;
+		mosaSettings.ImageFolder = DstLbl.Content!.ToString()!;
+		mosaSettings.FileSystemRootInclude = IncDirTxt.Text!;
 	}
 
 	private void CompileBuildAndStart()
@@ -447,14 +381,15 @@ public partial class MainWindow : Window
 		OutputTxt.Clear();
 		CountersTxt.Clear();
 
-		Stopwatch.Start();
+		stopwatch.Start();
+		timer.Start();
 
 		ThreadPool.QueueUserWorkItem(_ =>
 		{
 			try
 			{
-				Builder = new Builder(MosaSettings, CreateCompilerHook());
-				Builder.Build();
+				builder = new Builder(mosaSettings, compilerHooks);
+				builder.Build();
 			}
 			catch (Exception e)
 			{
@@ -462,83 +397,73 @@ public partial class MainWindow : Window
 			}
 			finally
 			{
-				if (Builder.IsSucccessful)
-					Dispatcher.UIThread.Post(CompileCompleted);
+				if (builder!.IsSucccessful) Dispatcher.UIThread.Post(CompileCompleted);
 			}
 		});
 	}
 
 	private void CompileCompleted()
 	{
-		if (!MosaSettings.LauncherStart)
-			return;
+		if (!mosaSettings.Launcher) return;
 
-		foreach (var line in Builder.Counters)
-			AddCounters(line);
+		foreach (var line in builder!.Counters) AddCounters(line);
 
-		var starter = new Starter(Builder.MosaSettings, CreateCompilerHook(), Builder.Linker);
+		var starter = new Starter(builder.MosaSettings, compilerHooks, builder.Linker);
+		if (!starter.Launch(true)) return;
 
-		if (!starter.Launch(true))
-			return;
+		if (mosaSettings.LauncherExit) Close();
 
-		if (MosaSettings.LauncherExit)
-			Close();
-
-		Stopwatch.Stop();
+		timer.Stop();
+		stopwatch.Stop();
 	}
 
-	private async void CenterWindow()
-	{
-		Screen? screen = null;
-		while (screen == null)
-		{
-			await Task.Delay(1);
-			screen = Screens.ScreenFromVisual(this);
-		}
-
-		var x = (int)Math.Floor(screen.Bounds.Width / 2 - Bounds.Width / 2);
-		var y = (int)Math.Floor(screen.Bounds.Height / 2 - (Bounds.Height + 30) / 2);
-
-		Position = new PixelPoint(x, y);
-	}
-
-	private void LnchBtn_OnClick(object? _, RoutedEventArgs __)
+	private void LnchBtn_OnClick(object? sender, RoutedEventArgs e)
 	{
 		Tabs.SelectedIndex = 4;
 		UpdateSettings();
 
-		var result = CheckOptions.Verify(MosaSettings);
+		var result = CheckOptions.Verify(mosaSettings);
 
-		if (result == null)
-			CompileBuildAndStart();
-		else
-			AddOutput($"ERROR: {result}");
+		if (string.IsNullOrEmpty(result)) CompileBuildAndStart();
+		else AddOutput($"ERROR: {result}");
 	}
 
-	private async void SrcBtn_OnClick(object? _, RoutedEventArgs __)
+	private async void SrcBtn_OnClick(object? sender, RoutedEventArgs e)
 	{
-		var result = await Source.ShowAsync(this);
-		if (result == null)
-			return;
+		var files = await StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+		{
+			Title = "Select the file to compile",
+			AllowMultiple = false
+		});
 
-		SrcLbl.Content = result[0];
+		if (files.Count == 0) return;
+
+		SrcLbl.Content = files[0].Path.LocalPath;
 	}
 
-	private async void DstBtn_OnClick(object? _, RoutedEventArgs __)
+	private async void DstBtn_OnClick(object? sender, RoutedEventArgs e)
 	{
-		var result = await Destination.ShowAsync(this);
-		if (result == null)
-			return;
+		var folders = await StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
+		{
+			Title = "Select the output directory",
+			AllowMultiple = false
+		});
 
-		DstLbl.Content = result;
+		if (folders.Count == 0) return;
+
+		DstLbl.Content = folders[0].Path.LocalPath;
 	}
 
-	private async void IncBtn_OnClick(object? _, RoutedEventArgs __)
+	private async void IncBtn_OnClick(object? sender, RoutedEventArgs e)
 	{
-		var result = await Include.ShowAsync(this);
-		if (result == null)
-			return;
+		var folders = await StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
+		{
+			Title = "Select the include directory",
+			AllowMultiple = false
+		});
 
-		IncDirTxt.Text = result;
+		if (folders.Count == 0) return;
+
+		IncDirTxt.Text = folders[0].Path.LocalPath;
 	}
 }

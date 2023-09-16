@@ -1,11 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
 using System.Diagnostics;
-using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
@@ -240,21 +237,20 @@ public class Starter : BaseLauncher
 		return success;
 	}
 
-	public Process LaunchVM()
+	private Process LaunchVM() => MosaSettings.Emulator switch
 	{
-		return MosaSettings.Emulator switch
-		{
-			"qemu" => LaunchQemu(),
-			"bochs" => LaunchBochs(),
-			"vmware" => LaunchVMware(),
-			"virtualbox" => LaunchVirtualBox(),
-			_ => throw new InvalidCompilerOperationException()
-		};
-	}
+		"qemu" => LaunchQemu(),
+		"bochs" => LaunchBochs(),
+		"vmware" => LaunchVMware(),
+		"virtualbox" => LaunchVirtualBox(),
+		_ => throw new InvalidCompilerOperationException()
+	};
 
 	private Process LaunchQemu()
 	{
-		string qemuApp, uefi;
+		Output("Launching QEMU");
+
+		string qemuApp, qemuUefi;
 
 		var arg = new StringBuilder();
 
@@ -264,31 +260,34 @@ public class Starter : BaseLauncher
 		switch (MosaSettings.Platform.ToLowerInvariant())
 		{
 			case "x86":
+			{
 				qemuApp = MosaSettings.QemuX86App;
-				uefi = $" -drive if=pflash,format=raw,readonly=on,file={Quote(MosaSettings.QemuEdk2X86)}";
+				qemuUefi = MosaSettings.QemuEdk2X86;
 				arg.Append(" -cpu qemu32,+sse4.1,abm,bmi1,bmi2,popcnt");
 				break;
-
+			}
 			case "x64":
+			{
 				qemuApp = MosaSettings.QemuX64App;
-				uefi = $" -drive if=pflash,format=raw,readonly=on,file={Quote(MosaSettings.QemuEdk2X64)}";
-				arg.Append(" -cpu qemu32,+sse4.1,abm,bmi1,bmi2,popcnt");
+				qemuUefi = MosaSettings.QemuEdk2X64;
+				arg.Append(" -cpu qemu64,+sse4.1,abm,bmi1,bmi2,popcnt");
 				break;
-
+			}
 			case "ARM32":
+			{
 				qemuApp = MosaSettings.QemuARM32App;
-				uefi = $" -drive if=pflash,format=raw,readonly=on,file={Quote(MosaSettings.QemuEdk2ARM32)}";
+				qemuUefi = MosaSettings.QemuEdk2ARM32;
 				arg.Append(" -cpu arm1176");
 				break;
-
+			}
 			case "arm64":
+			{
 				qemuApp = MosaSettings.QemuARM64App;
-				uefi = $" -drive if=pflash,format=raw,readonly=on,file={Quote(MosaSettings.QemuEdk2ARM64)}";
+				qemuUefi = MosaSettings.QemuEdk2ARM64;
 				arg.Append(" -cpu cortex-a7");
 				break;
-
-			default:
-				throw new CompilerException($"Unknown platform: {MosaSettings.Platform}");
+			}
+			default: throw new CompilerException($"Unknown platform: {MosaSettings.Platform}");
 		}
 
 		switch (MosaSettings.EmulatorSVGA)
@@ -305,69 +304,66 @@ public class Starter : BaseLauncher
 		}
 		else
 		{
-			if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-			{
-				arg.Append(" -display cocoa");
-			}
-			else
-			{
-				arg.Append(" -display sdl");
-			}
+			arg.Append(RuntimeInformation.IsOSPlatform(OSPlatform.OSX) ? " -display cocoa" : " -display sdl");
 		}
 
 		var serial = MosaSettings.EmulatorSerial;
 
-		if (MosaSettings.LauncherSerial || MosaSettings.LauncherTest)
-		{
-			serial = "tcpserver";
-		}
+		if (MosaSettings.LauncherSerial || MosaSettings.LauncherTest) serial = "tcpserver";
 
 		switch (serial)
 		{
 			case "pipe":
+			{
 				arg.Append($" -serial pipe:{MosaSettings.EmulatorSerialPipe}");
 				break;
-
+			}
 			case "tcpserver":
-				arg.Append($" -serial tcp:{MosaSettings.EmulatorSerialHost}:{MosaSettings.EmulatorSerialPort},server,nowait");
+			{
+				arg.Append(
+					$" -serial tcp:{MosaSettings.EmulatorSerialHost}:{MosaSettings.EmulatorSerialPort},server,nowait");
 				break;
-
+			}
 			case "tcpclient":
+			{
 				arg.Append($" -serial tcp:{MosaSettings.EmulatorSerialHost}:,client,nowait");
 				break;
-
+			}
 			default:
+			{
 				arg.Append(" -serial null");
 				break;
+			}
 		}
 
-		if (MosaSettings.EmulatorGDB)
-		{
-			arg.Append($" -S -gdb tcp::{MosaSettings.GDBPort}");
-		}
+		if (MosaSettings.EmulatorGDB) arg.Append($" -S -gdb tcp::{MosaSettings.GDBPort}");
 
 		switch (MosaSettings.ImageFormat)
 		{
 			case "bin":
-				{
-					arg.Append($" -kernel {Quote(MosaSettings.ImageFile)}");
-					break;
-				}
+			{
+				arg.Append($" -kernel {Quote(MosaSettings.ImageFile)}");
+				break;
+			}
 			default:
-				{
-					arg.Append($" -drive format=raw,file={Quote(MosaSettings.ImageFile)}");
-					break;
-				}
+			{
+				arg.Append($" -drive format=raw,file={Quote(MosaSettings.ImageFile)}");
+				break;
+			}
 		}
 
-		if (MosaSettings.ImageFirmware == "bios")
+		switch (MosaSettings.ImageFirmware)
 		{
-			arg.Append($" -L {Quote(MosaSettings.QemuBIOS)}");
-		}
-
-		if (MosaSettings.ImageFirmware == "uefi")
-		{
-			arg.Append(uefi);
+			case "bios":
+			{
+				arg.Append($" -L {Quote(MosaSettings.QemuBIOS)}");
+				break;
+			}
+			case "uefi":
+			{
+				arg.Append($"-drive if=pflash,format=raw,readonly=on,file={Quote(qemuUefi)}");
+				break;
+			}
 		}
 
 		return CreateApplicationProcess(qemuApp, arg.ToString());
@@ -375,6 +371,8 @@ public class Starter : BaseLauncher
 
 	private Process LaunchBochs()
 	{
+		Output("Launching Bochs");
+
 		var bochsdirectory = Path.GetDirectoryName(MosaSettings.BochsApp);
 
 		var logfile = Path.Combine(MosaSettings.TemporaryFolder, $"{Path.GetFileNameWithoutExtension(MosaSettings.ImageFile)}-bochs.log");
@@ -394,10 +392,7 @@ public class Starter : BaseLauncher
 
 		sb.AppendLine($"vgaromimage: file={Quote(Path.Combine(bochsdirectory, "VGABIOS-lgpl-latest"))}");
 
-		if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-		{
-			sb.AppendLine("display_library: x, options=gui_debug");
-		}
+		if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) sb.AppendLine("display_library: x, options=gui_debug");
 
 		sb.AppendLine($"ata0-master: type=disk,path={Quote(MosaSettings.ImageFile)},biosdetect=none,cylinders=0,heads=0,spt=0");
 
@@ -410,16 +405,20 @@ public class Starter : BaseLauncher
 		switch (MosaSettings.EmulatorSerial)
 		{
 			case "pipe":
-				sb.Append($"com1: enabled=1, mode=pipe-server, dev=\\\\.\\pipe\\{MosaSettings.EmulatorSerialPipe}");
+			{
+				sb.Append($@"com1: enabled=1, mode=pipe-server, dev=\\.\pipe\{MosaSettings.EmulatorSerialPipe}");
 				break;
-
+			}
 			case "tcpserver":
+			{
 				sb.AppendLine($"com1: enabled=1, mode=socket-server, dev={MosaSettings.EmulatorSerialHost}:{MosaSettings.EmulatorSerialPort}");
 				break;
-
+			}
 			case "tcpclient":
+			{
 				sb.AppendLine($"com1: enabled=1, mode=socket-client, dev={MosaSettings.EmulatorSerialHost}:{MosaSettings.EmulatorSerialPort}");
 				break;
+			}
 		}
 
 		if (MosaSettings.EmulatorGDB)
@@ -435,12 +434,14 @@ public class Starter : BaseLauncher
 
 	private Process LaunchVMware()
 	{
+		Output("Launching VMware Workstation");
+
 		var configFile = Path.Combine(MosaSettings.TemporaryFolder, Path.ChangeExtension(MosaSettings.ImageFile, ".vmx")!);
 		var sb = new StringBuilder();
 
 		sb.AppendLine(".encoding = \"windows-1252\"");
 		sb.AppendLine("config.version = \"8\"");
-		sb.AppendLine("virtualHW.version = \"14\"");
+		sb.AppendLine("virtualHW.version = \"17\"");
 
 		sb.AppendLine($"memsize = {Quote(MosaSettings.EmulatorMemory.ToString())}");
 
@@ -484,23 +485,22 @@ public class Starter : BaseLauncher
 
 		File.WriteAllText(configFile, sb.ToString());
 
-		var arg = Quote(configFile);
+		var arg = Quote(configFile) + " -x -q";
 
 		if (!string.IsNullOrWhiteSpace(MosaSettings.VmwareWorkstationApp))
 		{
 			return CreateApplicationProcess(MosaSettings.VmwareWorkstationApp, arg);
 		}
 
-		if (!string.IsNullOrWhiteSpace(MosaSettings.VmwarePlayerApp))
-		{
-			return CreateApplicationProcess(MosaSettings.VmwarePlayerApp, arg);
-		}
-
-		return null;
+		return !string.IsNullOrWhiteSpace(MosaSettings.VmwarePlayerApp)
+			? CreateApplicationProcess(MosaSettings.VmwarePlayerApp, arg)
+			: null;
 	}
 
 	private Process LaunchVirtualBox()
 	{
+		Output("Launching VirtualBox");
+
 		if (GetOutput(LaunchApplication(MosaSettings.VirtualBoxApp, "list vms")).Contains(MosaSettings.OSName))
 		{
 			var newFile = Path.ChangeExtension(MosaSettings.ImageFile, "bak");
