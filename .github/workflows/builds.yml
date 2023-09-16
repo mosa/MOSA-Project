@@ -39,6 +39,8 @@ jobs:
         run: dotnet restore Source/Mosa.sln
       - name: Build
         run: dotnet build Source/Mosa.sln /p:Version=${{ env.BUILD_VERSION }}
+      - name: Unit Test
+        run: dotnet test Source/Mosa.sln
       - name: Cleanup 
         run: cmd.exe /C "rmdir /s /q bin\reko bin\cs bin\de bin\es bin\fr bin\it bin\ja bin\ko bin\pl bin\pt-BR bin\ru bin\tr bin\zh-Hans bin\zh-Hant"
       - name: Store Build Artifact
@@ -65,8 +67,6 @@ jobs:
         with:
           name: Nuget Packages
           path: bin\nupkg
-      - name: Unit Test
-        run: dotnet test Source/Mosa.sln
 
   windows-build-packaging:
     name: Windows Build Packaging
@@ -128,8 +128,8 @@ jobs:
         run: dotnet restore Source/Mosa.Linux.sln
       - name: Build
         run: dotnet build Source/Mosa.Linux.sln
-      #- name: Unit Test
-      #  run: dotnet test Source/Mosa.Linux.sln
+      - name: Unit Test
+        run: dotnet test Source/Mosa.Linux.sln
       - name: Store Build Artifact
         uses: actions/upload-artifact@v3
         with:
@@ -157,8 +157,8 @@ jobs:
         run: dotnet restore Source/Mosa.Linux.sln
       - name: Build
         run: dotnet build Source/Mosa.Linux.sln
-      #- name: Unit Test
-      #  run: dotnet test Source/Mosa.Linux.sln
+      - name: Unit Test
+        run: dotnet test Source/Mosa.Linux.sln
       - name: Store Build Artifact
         uses: actions/upload-artifact@v3
         with:
