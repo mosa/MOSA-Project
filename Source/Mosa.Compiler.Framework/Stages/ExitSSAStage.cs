@@ -12,10 +12,12 @@ namespace Mosa.Compiler.Framework.Stages;
 public class ExitSSAStage : BaseMethodCompilerStage
 {
 	private readonly Counter InstructionCount = new("ExitSSAStage.IRInstructions");
+	private readonly Counter MoveAvoidedCount = new("ExitSSAStage.MoveAvoided");
 
 	protected override void Initialize()
 	{
 		Register(InstructionCount);
+		Register(MoveAvoidedCount);
 	}
 
 	protected override void Run()
@@ -56,7 +58,7 @@ public class ExitSSAStage : BaseMethodCompilerStage
 	{
 		var sourceBlocks = node.PhiBlocks;
 
-		for (var index = 0; index < node.Block.PreviousBlocks.Count; index++)
+		for (var index = 0; index < sourceBlocks.Count; index++)
 		{
 			var operand = node.GetOperand(index);
 			var predecessor = sourceBlocks[index];
@@ -78,6 +80,16 @@ public class ExitSSAStage : BaseMethodCompilerStage
 		if (destination == source)
 			return;
 
+		if (source.IsDefinedOnce && source.IsUsedOnce && source.Definitions[0].Block == predecessor)
+		{
+			if (destination.IsUsedOnce || CheckIfLast(predecessor, destination, source))
+			{
+				source.Definitions[0].Result = destination;
+				MoveAvoidedCount.Increment();
+				return;
+			}
+		}
+
 		var node = predecessor.BeforeLast;
 
 		while (node.Instruction != IRInstruction.Jmp)
@@ -95,5 +107,19 @@ public class ExitSSAStage : BaseMethodCompilerStage
 
 		var moveInstruction = MethodCompiler.GetMoveInstruction(destination.Primitive);
 		context.AppendInstruction(moveInstruction, destination, source);
+	}
+
+	private bool CheckIfLast(BasicBlock block, Operand stop, Operand okay)
+	{
+		for (var node = block.BeforeLast; !node.IsBlockStartInstruction; node = node.Previous)
+		{
+			if (node.ConstainsOperand(stop))
+				return false;
+
+			if (node.ConstainsOperand(okay))
+				return true;
+		}
+
+		return false;
 	}
 }
