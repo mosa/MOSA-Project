@@ -873,6 +873,31 @@ public sealed class InstructionNode
 		Instruction = instruction;
 	}
 
+	public bool ContainsOperand(Operand operand)
+	{
+		foreach (var op in Operands)
+		{
+			if (op == operand)
+				return true;
+		}
+
+		return false;
+	}
+
+	public bool ContainsResult(Operand operand)
+	{
+		if (ResultCount == 0)
+			return false;
+
+		if (ResultCount >= 1 && Result == operand)
+			return true;
+
+		if (ResultCount == 2 && Result2 == operand)
+			return true;
+
+		return false;
+	}
+
 	#endregion Methods
 
 	#region Navigation
