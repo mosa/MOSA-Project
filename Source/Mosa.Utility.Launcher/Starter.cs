@@ -238,7 +238,7 @@ public class Starter : BaseLauncher
 		return success;
 	}
 
-	private Process LaunchVM() => MosaSettings.Emulator switch
+	public Process LaunchVM() => MosaSettings.Emulator switch
 	{
 		"qemu" => LaunchQemu(),
 		"bochs" => LaunchBochs(),
