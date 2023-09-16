@@ -70,16 +70,16 @@ public class BitTwiddlingTests
 	}
 
 	[Fact]
-	public void CountBits()
+	public void CountSetBits()
 	{
-		Debug.Assert(BitTwiddling.CountBits(uint.MaxValue) == 32);
-		Debug.Assert(BitTwiddling.CountBits(0b110U) == 2);
-		Debug.Assert(BitTwiddling.CountBits(0b1U) == 1);
-		Debug.Assert(BitTwiddling.CountBits(0b1111U) != 5);
+		Debug.Assert(BitTwiddling.CountSetBits(uint.MaxValue) == 32);
+		Debug.Assert(BitTwiddling.CountSetBits(0b110U) == 2);
+		Debug.Assert(BitTwiddling.CountSetBits(0b1U) == 1);
+		Debug.Assert(BitTwiddling.CountSetBits(0b1111U) != 5);
 
-		Debug.Assert(BitTwiddling.CountBits(ulong.MaxValue) == 64);
-		Debug.Assert(BitTwiddling.CountBits(0b110UL) == 2);
-		Debug.Assert(BitTwiddling.CountBits(0b1UL) == 1);
-		Debug.Assert(BitTwiddling.CountBits(0b1111UL) != 5);
+		Debug.Assert(BitTwiddling.CountSetBits(ulong.MaxValue) == 64);
+		Debug.Assert(BitTwiddling.CountSetBits(0b110UL) == 2);
+		Debug.Assert(BitTwiddling.CountSetBits(0b1UL) == 1);
+		Debug.Assert(BitTwiddling.CountSetBits(0b1111UL) != 5);
 	}
 }

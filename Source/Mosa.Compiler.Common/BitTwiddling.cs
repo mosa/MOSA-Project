@@ -10,7 +10,7 @@ public static class BitTwiddling
 
 	public static uint GetPowerOfTwo(ulong n)
 	{
-		uint bits = 0;
+		var bits = 0U;
 
 		while (n != 0)
 		{
@@ -36,10 +36,10 @@ public static class BitTwiddling
 		var count = BitOperations.LeadingZeroCount(value);
 		if (count == 0) return 0;
 
-		return ~((1UL << (64 - count + 1)) - 1UL);
+		return ~((1UL << (64 - count)) - 1UL);
 	}
 
-	public static int CountBits(ulong value) => BitOperations.PopCount(value);
+	public static int CountSetBits(ulong value) => BitOperations.PopCount(value);
 
-	public static int CountBits(uint value) => BitOperations.PopCount(value);
+	public static int CountSetBits(uint value) => BitOperations.PopCount(value);
 }

@@ -50,6 +50,8 @@ public static class IntegerTwiddling
 
 	public static bool IsMultiplyUnsignedCarry(uint a, uint b) => a * (ulong)b > uint.MaxValue;
 
+	public static bool IsMultiplyUnsignedOverflow(ulong a, ulong b) => a != 0 && a * b / a != b;
+
 	public static bool IsMultiplySignedOverflow(int a, int b) => (b < 0 && a == int.MinValue) || (b != 0 && a * b / b != a);
 
 	public static bool IsMultiplyUnsignedCarry(ulong a, ulong b)
