@@ -270,7 +270,7 @@ public static class SpecificTests
 		return result;
 	}
 
-	public static string str = null!;
+	private static string str = null!;
 
 #nullable enable
 
@@ -289,7 +289,7 @@ public static class Extension
 {
 	public static uint SetBits(this uint self, byte index, byte count, uint value, byte sourceIndex)
 	{
-		value = value >> sourceIndex;
+		value >>= sourceIndex;
 		var mask = 0xFFFFFFFFU >> (32 - count);
 		var bits = (value & mask) << index;
 		return (self & ~(mask << index)) | bits;
@@ -297,7 +297,7 @@ public static class Extension
 
 	public static ulong SetBits(this ulong self, byte index, byte count, ulong value, byte sourceIndex)
 	{
-		value = value >> sourceIndex;
+		value >>= sourceIndex;
 		var mask = 0xFFFFFFFFFFFFFFFFU >> (64 - count);
 		var bits = (value & mask) << index;
 		return (self & ~(mask << index)) | bits;
