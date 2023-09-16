@@ -8,6 +8,6 @@
         MaxWidth="300" MaxHeight="16"
         CanResize="False"
         x:Class="Mosa.Tool.Bootstrap.MainWindow"
-        Title="Mosa.Tool.Bootstrap">
+        Title="MOSA Bootstrap Tool">
     <Label Name="StatusLbl" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" />
 </Window>

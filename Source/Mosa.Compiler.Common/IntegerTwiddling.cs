@@ -4,136 +4,65 @@ namespace Mosa.Compiler.Common;
 
 public static class IntegerTwiddling
 {
-	public static bool IsAddUnsignedCarry(ulong a, ulong b)
+	public static bool IsAddUnsignedCarry(ulong a, ulong b) => b > 0 && a > ulong.MaxValue - b;
+
+	public static bool IsAddUnsignedCarry(uint a, uint b) => b > 0 && a > uint.MaxValue - b;
+
+	public static bool IsAddSignedOverflow(int a, int b) => a switch
 	{
-		return b > 0 && a > ulong.MaxValue - b;
-	}
+		> 0 when b > 0 && b > int.MaxValue - a => true,
+		< 0 when b < 0 && b < int.MinValue - a => true,
+		_ => false
+	};
 
-	public static bool IsAddUnsignedCarry(uint a, uint b)
+	public static bool IsAddSignedOverflow(long a, long b) => a switch
 	{
-		return b > 0 && a > uint.MaxValue - b;
-	}
-
-	public static bool IsAddSignedOverflow(int a, int b)
-	{
-		if (a > 0 && b > 0)
-			if (b > int.MaxValue - a)
-				return true;
-
-		if (a < 0 && b < 0)
-			if (b < int.MinValue - a)
-				return true;
-
-		return false;
-	}
-
-	public static bool IsAddSignedOverflow(long a, long b)
-	{
-		if (a > 0 && b > 0)
-			if (b > long.MaxValue - a)
-				return true;
-
-		if (a < 0 && b < 0)
-			if (b < long.MinValue - a)
-				return true;
-
-		return false;
-	}
+		> 0 when b > 0 && b > long.MaxValue - a => true,
+		< 0 when b < 0 && b < long.MinValue - a => true,
+		_ => false
+	};
 
 	public static bool IsAddUnsignedCarry(uint a, uint b, bool carry)
 	{
 		if (IsAddUnsignedCarry(a, b))
 			return true;
 
-		if (carry & a + b == uint.MaxValue)
-			return true;
-
-		return false;
+		return carry & a + b == uint.MaxValue;
 	}
 
-	public static bool IsSubSignedOverflow(int a, int b)
+	public static bool IsSubSignedOverflow(int a, int b) => b switch
 	{
-		if (b < 0 && a < int.MinValue - b)
-			return true;
+		< 0 when a < int.MinValue - b => true,
+		> 0 when a > int.MaxValue - b => true,
+		_ => false
+	};
 
-		if (b > 0 && a > int.MaxValue - b)
-			return true;
-
-		return false;
-	}
-
-	public static bool IsSubSignedOverflow(long a, long b)
+	public static bool IsSubSignedOverflow(long a, long b) => b switch
 	{
-		if (b < 0 && a < long.MinValue - b)
-			return true;
+		< 0 when a < long.MinValue - b => true,
+		> 0 when a > long.MaxValue - b => true,
+		_ => false
+	};
 
-		if (b > 0 && a > long.MaxValue - b)
-			return true;
+	public static bool IsSubUnsignedCarry(uint a, uint b) => b > a;
 
-		return false;
-	}
+	public static bool IsSubUnsignedCarry(ulong a, ulong b) => b > a;
 
-	public static bool IsSubUnsignedCarry(uint a, uint b)
-	{
-		return b > a;
-	}
+	public static bool IsMultiplyUnsignedCarry(uint a, uint b) => a * (ulong)b > uint.MaxValue;
 
-	public static bool IsSubUnsignedCarry(ulong a, ulong b)
-	{
-		return b > a;
-	}
+	public static bool IsMultiplyUnsignedOverflow(ulong a, ulong b) => a != 0 && a * b / a != b;
 
-	public static bool IsMultiplyUnsignedCarry(uint a, uint b)
-	{
-		var r = a * (ulong)b;
-
-		return r > uint.MaxValue;
-	}
-
-	public static bool IsMultiplySignedOverflow(int a, int b)
-	{
-		var z = a * b;
-		return (b < 0 && a == int.MinValue) | (b != 0 && z / b != a);
-	}
+	public static bool IsMultiplySignedOverflow(int a, int b) => (b < 0 && a == int.MinValue) || (b != 0 && a * b / b != a);
 
 	public static bool IsMultiplyUnsignedCarry(ulong a, ulong b)
 	{
-		if (a == 0 | b == 0)
-			return false;
-
+		if (a == 0 || b == 0) return false;
 		return ulong.MaxValue / a < b;
 	}
 
-	public static bool IsMultiplyUnsignedOverflow(ulong a, ulong b)
-	{
-		var x = a * b;
+	public static bool IsMultiplySignedOverflow(long a, long b) => (b < 0 && a == long.MinValue) || (b != 0 && a * b / b != a);
 
-		return a != 0 && x / a != b;
-	}
+	public static bool HasSignBitSet(int a) => a < 0;
 
-	public static bool IsMultiplySignedOverflow(long a, long b)
-	{
-		var z = a * b;
-		return (b < 0 && a == long.MinValue) | (b != 0 && z / b != a);
-	}
-
-	public static bool HasSignBitSet(int a)
-	{
-		return a < 0;
-	}
-
-	public static bool HasSignBitSet(uint a)
-	{
-		return HasSignBitSet((int)a);
-	}
-
-	public static bool HasSignBitSet(long a)
-	{
-		return a < 0;
-	}
-
-	public static bool HasSignBitSet(ulong a)
-	{
-		return HasSignBitSet((long)a);
-	}
+	public static bool HasSignBitSet(long a) => a < 0;
 }

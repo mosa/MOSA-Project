@@ -15,7 +15,7 @@
 				<Grid>
 					<Button Name="SrcBtn" Click="SrcBtn_OnClick" VerticalAlignment="Top" HorizontalContentAlignment="Center" Margin="0,5" Width="93">Source</Button>
 					<Label Name="SrcLbl" Margin="100,8,0,0">No path specified</Label>
-					<Button Name="DstBtn" Click="DstBtn_OnClick" VerticalAlignment="Top" Margin="0,40">Destination</Button>
+					<Button Name="DstBtn" Click="DstBtn_OnClick" VerticalAlignment="Top" HorizontalContentAlignment="Center" Margin="0,40" Width="93">Destination</Button>
 					<Label Name="DstLbl" Margin="100,43,0,0">No path specified</Label>
 
 					<Border Name="OptsBox" Margin="0,80" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" Padding="4" HorizontalAlignment="Left" VerticalAlignment="Top">
@@ -68,19 +68,19 @@
 								<Label>IMG (.img)</Label>
 								<Label>Microsoft (.vhd)</Label>
 								<Label>VirtualBox (.vdi)</Label>
-								<Label>VMWare (.vmdk)</Label>
+								<Label>VMware (.vmdk)</Label>
 							</ComboBox>
 							<Label Margin="0,80, 0, 0">Emulator:</Label>
 							<ComboBox FontSize="12" SelectedIndex="0" HorizontalContentAlignment="Center" Name="EmuCmb" Margin="105,80, 0, 0" Width="195" BorderBrush="LightGray">
 								<Label>QEMU</Label>
 								<Label>Bochs</Label>
-								<Label>VMWare</Label>
+								<Label>VMware</Label>
 								<Label>VirtualBox</Label>
 							</ComboBox>
 							<Label Margin="0,120, 0, 0">Memory:</Label>
-							<NumericUpDown FontSize="12" Name="MemVal" Margin="105, 120, 0, 0" Width="195" BorderBrush="LightGray" HorizontalContentAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Left" Minimum="128" Value="128"></NumericUpDown>
+							<NumericUpDown FontSize="12" Name="MemVal" ParsingNumberStyle="None" Margin="105, 120, 0, 0" Width="195" BorderBrush="LightGray" HorizontalContentAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Left" Minimum="128" Value="128"></NumericUpDown>
 							<Label Margin="0,160, 0, 0">Cores:</Label>
-							<NumericUpDown FontSize="12" Name="CpuVal" Margin="105, 160, 0, 0" Width="195" BorderBrush="LightGray" HorizontalContentAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Left" Minimum="1" Value="1" Maximum="4"></NumericUpDown>
+							<NumericUpDown FontSize="12" Name="CpuVal" ParsingNumberStyle="None" Margin="105, 160, 0, 0" Width="195" BorderBrush="LightGray" HorizontalContentAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Left" Minimum="1" Value="1" Maximum="4"></NumericUpDown>
 						</Grid>
 					</Border>
 
@@ -120,9 +120,9 @@
 						<StackPanel>
 							<CheckBox FontSize="12" Name="EnableMbGraphics">Enable Multiboot Graphics</CheckBox>
 							<Label Margin="0,5,0,0">Width:</Label>
-							<NumericUpDown FontSize="12" Name="GraphicsWidth" Margin="85, -20, 0, 0" Width="160" BorderBrush="LightGray" HorizontalContentAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Left" Minimum="640" Maximum="1920" Value="640"></NumericUpDown>
+							<NumericUpDown FontSize="12" Name="GraphicsWidth" ParsingNumberStyle="None" Margin="85, -20, 0, 0" Width="160" BorderBrush="LightGray" HorizontalContentAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Left" Minimum="640" Maximum="1920" Value="640"></NumericUpDown>
 							<Label Margin="0,5,0,0">Height:</Label>
-							<NumericUpDown FontSize="12" Name="GraphicsHeight" Margin="85, -20, 0, 0" Width="160" BorderBrush="LightGray" HorizontalContentAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Left" Minimum="480" Maximum="1080" Value="480"></NumericUpDown>
+							<NumericUpDown FontSize="12" Name="GraphicsHeight" ParsingNumberStyle="None" Margin="85, -20, 0, 0" Width="160" BorderBrush="LightGray" HorizontalContentAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Left" Minimum="480" Maximum="1080" Value="480"></NumericUpDown>
 						</StackPanel>
 					</Border>
 

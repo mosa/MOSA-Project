@@ -16,12 +16,14 @@ public partial class App : Application
 	public override void OnFrameworkInitializationCompleted()
 	{
 		if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+		{
 			desktop.Startup += (_, args) =>
 			{
 				var win = new MainWindow();
 				win.Initialize(args.Args);
 				desktop.MainWindow = win;
 			};
+		}
 
 		base.OnFrameworkInitializationCompleted();
 	}
