@@ -111,8 +111,11 @@ public class ExitSSAStage : BaseMethodCompilerStage
 
 	private bool CheckIfLast(BasicBlock block, Operand stop, Operand okay)
 	{
-		for (var node = block.BeforeLast; !node.IsBlockStartInstruction; node = node.PreviousNonEmpty)
+		for (var node = block.BeforeLast; !node.IsBlockStartInstruction; node = node.Previous)
 		{
+			if (node.IsEmptyOrNop)
+				continue;
+
 			if (node.ContainsOperand(stop))
 				return false;
 
