@@ -10,7 +10,7 @@ namespace Mosa.Compiler.x86.Transforms.IR;
 /// </summary>
 public static class IRTransforms
 {
-	public static readonly List<BaseTransform> List = new List<BaseTransform>
+	public static readonly List<BaseTransform> List = new()
 	{
 		new Add32(),
 		new AddCarryIn32(),
@@ -75,6 +75,8 @@ public static class IRTransforms
 		new Move32(),
 		new MoveObject(),
 		new MoveManagedPointer(),
+		new MulHs32(),
+		new MulHu32(),
 		new MulCarryOut32(),
 		new MulOverflowOut32(),
 		new MulR4(),

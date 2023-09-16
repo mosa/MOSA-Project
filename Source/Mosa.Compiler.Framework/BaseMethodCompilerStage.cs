@@ -1,6 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Collections.Generic;
 using System.Diagnostics;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.Linker;
@@ -176,11 +175,13 @@ public abstract class BaseMethodCompilerStage
 	/// <summary>
 	/// The counters
 	/// </summary>
-	private readonly List<Counter> RegisteredCounters = new List<Counter>();
+	private readonly List<Counter> RegisteredCounters = new();
 
 	protected uint ObjectHeaderSize;
 
 	#endregion Method Properties
+
+	public TransformContext TransformContext { get; private set; }
 
 	#region Methods
 
@@ -213,6 +214,7 @@ public abstract class BaseMethodCompilerStage
 	{
 		MethodCompiler = methodCompiler;
 		BasicBlocks = methodCompiler.BasicBlocks;
+		TransformContext = methodCompiler.TransformContext;
 
 		traceLogs = new List<TraceLog>();
 

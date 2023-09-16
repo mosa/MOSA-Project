@@ -13,8 +13,8 @@ namespace Mosa.Compiler.Framework.Stages;
 /// </summary>
 public class InlineStage : BaseMethodCompilerStage
 {
-	private readonly Counter InlineCount = new Counter("InlineStage.MethodsWithInlinedCallSites");
-	private readonly Counter InlinedCallSitesCount = new Counter("InlineStage.InlinedCallSites");
+	private readonly Counter InlineCount = new("InlineStage.MethodsWithInlinedCallSites");
+	private readonly Counter InlinedCallSitesCount = new("InlineStage.InlinedCallSites");
 
 	private Dictionary<MosaMethod, KeyValuePair<MethodData, InlineMethodData>> cache;
 

@@ -16,10 +16,10 @@ public class SparseConditionalConstantPropagationStage : BaseMethodCompilerStage
 {
 	protected TraceLog trace;
 
-	private readonly Counter ConstantCount = new Counter("SparseConditionalConstantPropagationStage.ConstantVariables");
-	private readonly Counter ConditionalConstantPropagationCount = new Counter("SparseConditionalConstantPropagationStage.ConstantPropagations");
-	private readonly Counter DeadBlockCount = new Counter("SparseConditionalConstantPropagationStage.DeadBlocks");
-	private readonly Counter InstructionsRemovedCount = new Counter("SparseConditionalConstantPropagationStage.IRInstructionRemoved");
+	private readonly Counter ConstantCount = new("SparseConditionalConstantPropagationStage.ConstantVariables");
+	private readonly Counter ConditionalConstantPropagationCount = new("SparseConditionalConstantPropagationStage.ConstantPropagations");
+	private readonly Counter DeadBlockCount = new("SparseConditionalConstantPropagationStage.DeadBlocks");
+	private readonly Counter InstructionsRemovedCount = new("SparseConditionalConstantPropagationStage.IRInstructionRemoved");
 
 	protected int Steps;
 

@@ -22,7 +22,7 @@ public sealed class ZeroExtend8x64 : BaseIRTransform
 		op1L = MoveConstantToRegisterOrImmediate(transform, context, op1L);
 
 		context.SetInstruction(ARM32.Mov, resultLow, op1L);
-		context.AppendInstruction(ARM32.And, resultLow, resultLow, Operand.CreateConstant32((uint)0xFF));
+		context.AppendInstruction(ARM32.And, resultLow, resultLow, Operand.Constant32_FF);
 		context.AppendInstruction(ARM32.Mov, resultHigh, Operand.Constant32_0);
 	}
 }

@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Stages;
 /// <seealso cref="Mosa.Compiler.Framework.BaseTransformStage" />
 public class ExceptionStage : BaseTransformStage
 {
-	private readonly ExceptionManager ExceptionManager = new ExceptionManager();
+	private readonly ExceptionManager ExceptionManager = new();
 
 	public ExceptionStage()
 		: base()

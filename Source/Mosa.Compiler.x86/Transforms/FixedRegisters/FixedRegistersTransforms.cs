@@ -34,5 +34,6 @@ public static class FixedRegistersTransforms
 		new Out32(),
 
 		new IMul32Constant(),
+		new IMul32o1(),
 	};
 }

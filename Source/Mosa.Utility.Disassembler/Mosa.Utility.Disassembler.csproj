@@ -1,15 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <ItemGroup>
-    <PackageReference Include="Reko.Decompiler.Runtime" Version="0.11.4" />
-	  <PackageReference Include="Reko.Decompiler.Runtime" Version="0.11.3" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Reko.Decompiler.Runtime" Version="0.11.4" />
+	</ItemGroup>
 
-  <ItemGroup>
-	  <ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj" />
-	  <ProjectReference Include="..\Mosa.Compiler.ARM32\Mosa.Compiler.ARM32.csproj" />
-	  <ProjectReference Include="..\Mosa.Compiler.x64\Mosa.Compiler.x64.csproj" />
-	  <ProjectReference Include="..\Mosa.Compiler.x86\Mosa.Compiler.x86.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj" />
+		<ProjectReference Include="..\Mosa.Compiler.ARM32\Mosa.Compiler.ARM32.csproj" />
+		<ProjectReference Include="..\Mosa.Compiler.x64\Mosa.Compiler.x64.csproj" />
+		<ProjectReference Include="..\Mosa.Compiler.x86\Mosa.Compiler.x86.csproj" />
+	</ItemGroup>
 
 </Project>
