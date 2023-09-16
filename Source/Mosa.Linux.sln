@@ -212,6 +212,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tool.Launcher", "Mosa.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tool.Bootstrap", "Mosa.Tool.Bootstrap\Mosa.Tool.Bootstrap.csproj", "{4E37074A-710D-4331-AD6C-D2A44FD2FD43}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Compiler.Common.xUnit", "Mosa.Compiler.Common.xUnit\Mosa.Compiler.Common.xUnit.csproj", "{E03F2078-4C66-4DF1-9EE7-8C58EE32399E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1180,6 +1182,24 @@ Global
 		{4E37074A-710D-4331-AD6C-D2A44FD2FD43}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{4E37074A-710D-4331-AD6C-D2A44FD2FD43}.Release|x86.ActiveCfg = Release|Any CPU
 		{4E37074A-710D-4331-AD6C-D2A44FD2FD43}.Release|x86.Build.0 = Release|Any CPU
+		{E03F2078-4C66-4DF1-9EE7-8C58EE32399E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E03F2078-4C66-4DF1-9EE7-8C58EE32399E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E03F2078-4C66-4DF1-9EE7-8C58EE32399E}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E03F2078-4C66-4DF1-9EE7-8C58EE32399E}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E03F2078-4C66-4DF1-9EE7-8C58EE32399E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E03F2078-4C66-4DF1-9EE7-8C58EE32399E}.Debug|x86.Build.0 = Debug|Any CPU
+		{E03F2078-4C66-4DF1-9EE7-8C58EE32399E}.Description|Any CPU.ActiveCfg = Debug|Any CPU
+		{E03F2078-4C66-4DF1-9EE7-8C58EE32399E}.Description|Any CPU.Build.0 = Debug|Any CPU
+		{E03F2078-4C66-4DF1-9EE7-8C58EE32399E}.Description|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E03F2078-4C66-4DF1-9EE7-8C58EE32399E}.Description|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E03F2078-4C66-4DF1-9EE7-8C58EE32399E}.Description|x86.ActiveCfg = Debug|Any CPU
+		{E03F2078-4C66-4DF1-9EE7-8C58EE32399E}.Description|x86.Build.0 = Debug|Any CPU
+		{E03F2078-4C66-4DF1-9EE7-8C58EE32399E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E03F2078-4C66-4DF1-9EE7-8C58EE32399E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E03F2078-4C66-4DF1-9EE7-8C58EE32399E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{E03F2078-4C66-4DF1-9EE7-8C58EE32399E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{E03F2078-4C66-4DF1-9EE7-8C58EE32399E}.Release|x86.ActiveCfg = Release|Any CPU
+		{E03F2078-4C66-4DF1-9EE7-8C58EE32399E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1242,6 +1262,7 @@ Global
 		{1DE6C790-7F2B-4AC1-B422-69D5E9C328E2} = {D032B24A-CE3A-4881-BACE-CC4FE0AFD69D}
 		{4E37074A-710D-4331-AD6C-D2A44FD2FD43} = {D032B24A-CE3A-4881-BACE-CC4FE0AFD69D}
 		{47E061A9-56A4-4490-A069-CF2E13E97A37} = {75BB6B40-C122-422F-8B40-F50A70A08E0D}
+		{E03F2078-4C66-4DF1-9EE7-8C58EE32399E} = {DDBC7F79-A2A1-4D92-9AE7-ADDC838F1E5E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C22A5C94-6B05-4B1B-845A-A2EA7615E093}
