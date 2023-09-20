@@ -70,6 +70,6 @@ public sealed class Parameters : IEnumerable<Operand>
 	internal void Reorder(Operand virtualRegister, int index)
 	{
 		parameters[index - 1] = virtualRegister;
-		virtualRegister.RenameIndex(index);
+		virtualRegister.Reindex(index);
 	}
 }

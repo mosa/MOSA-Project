@@ -57,9 +57,7 @@ public sealed class LiveRange
 		End = end;
 
 		if (virtualRegister.IsPhysicalRegister)
-		{
 			return;
-		}
 
 		var lastUseIndex = -1;
 		var firstUseIndex = -1;

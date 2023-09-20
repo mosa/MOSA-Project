@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
 using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator;
@@ -17,10 +16,7 @@ public struct SlotIndex : IComparable<SlotIndex>
 
 	public SlotIndex After => new SlotIndex(this, true);
 
-	private SlotIndex(int index)
-	{
-		Value = (index << 2) | 0b01;
-	}
+	private SlotIndex(int index) => Value = (index << 2) | 0b01;
 
 	public SlotIndex(InstructionNode node)
 		: this(node.Offset)
@@ -44,57 +40,27 @@ public struct SlotIndex : IComparable<SlotIndex>
 
 	public bool IsNotNull => !IsNull;
 
-	public static bool operator ==(SlotIndex s1, SlotIndex s2)
-	{
-		return s1.Value == s2.Value;
-	}
+	public static bool operator ==(SlotIndex s1, SlotIndex s2) => s1.Value == s2.Value;
 
-	public static bool operator !=(SlotIndex s1, SlotIndex s2)
-	{
-		return s1.Value != s2.Value;
-	}
+	public static bool operator !=(SlotIndex s1, SlotIndex s2) => s1.Value != s2.Value;
 
-	public static bool operator >=(SlotIndex s1, SlotIndex s2)
-	{
-		return s1.Value >= s2.Value;
-	}
+	public static bool operator >=(SlotIndex s1, SlotIndex s2) => s1.Value >= s2.Value;
 
-	public static bool operator <=(SlotIndex s1, SlotIndex s2)
-	{
-		return s1.Value <= s2.Value;
-	}
+	public static bool operator <=(SlotIndex s1, SlotIndex s2) => s1.Value <= s2.Value;
 
-	public static bool operator >(SlotIndex s1, SlotIndex s2)
-	{
-		return s1.Value > s2.Value;
-	}
+	public static bool operator >(SlotIndex s1, SlotIndex s2) => s1.Value > s2.Value;
 
-	public static bool operator <(SlotIndex s1, SlotIndex s2)
-	{
-		return s1.Value < s2.Value;
-	}
+	public static bool operator <(SlotIndex s1, SlotIndex s2) => s1.Value < s2.Value;
 
-	public static int operator -(SlotIndex s1, SlotIndex s2)
-	{
-		return s1.Index - s2.Index;
-	}
+	public static int operator -(SlotIndex s1, SlotIndex s2) => s1.Index - s2.Index;
 
-	public static SlotIndex operator ++(SlotIndex s)
-	{
-		return new SlotIndex(s, true);
-	}
+	public static SlotIndex operator ++(SlotIndex s) => new SlotIndex(s, true);
 
-	public static SlotIndex operator --(SlotIndex s)
-	{
-		return new SlotIndex(s, false);
-	}
+	public static SlotIndex operator --(SlotIndex s) => new SlotIndex(s, false);
 
-	public int CompareTo(SlotIndex other)
-	{
-		return Value - other.Value;
-	}
+	public readonly int CompareTo(SlotIndex other) => Value - other.Value;
 
-	public override bool Equals(object obj)
+	public override readonly bool Equals(object obj)
 	{
 		if (obj == null)
 			return false;
@@ -102,10 +68,7 @@ public struct SlotIndex : IComparable<SlotIndex>
 		return Value == ((SlotIndex)obj).Value;
 	}
 
-	public override int GetHashCode()
-	{
-		return Value;
-	}
+	public override readonly int GetHashCode() => Value;
 
 	public override string ToString()
 	{

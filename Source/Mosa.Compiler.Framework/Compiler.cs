@@ -216,7 +216,7 @@ public sealed class Compiler
 		new PlatformIntrinsicStage(),
 
 		new PlatformEdgeSplitStage(),
-		new VirtualRegisterRenameStage(),
+		new VirtualRegisterReindexStage(),
 		new GreedyRegisterAllocatorStage(),
 		new StackLayoutStage(),
 		new DeadBlockStage(),

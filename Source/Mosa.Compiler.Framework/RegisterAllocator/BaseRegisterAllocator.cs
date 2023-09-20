@@ -384,20 +384,25 @@ public abstract class BaseRegisterAllocator
 				if (node.IsEmpty)
 					continue;
 
-				var visitor = new OperandVisitor(node);
 				var sb = new StringBuilder();
 
 				var def = new List<Operand>();
 				var use = new List<Operand>();
 
-				foreach (var op in visitor.Output)
+				foreach (var operand in node.Operands)
 				{
-					def.AddIfNew(op);
+					if (operand.IsVirtualRegister || operand.IsCPURegister)
+					{
+						def.AddIfNew(operand);
+					}
 				}
 
-				foreach (var op in visitor.Input)
+				foreach (var operand in node.Results)
 				{
-					use.AddIfNew(op);
+					if (operand.IsVirtualRegister || operand.IsCPURegister)
+					{
+						use.AddIfNew(operand);
+					}
 				}
 
 				//if (output.Count == 0 && input.Count == 0)
@@ -481,11 +486,9 @@ public abstract class BaseRegisterAllocator
 
 					if (!innerslot.IsOnSlot)
 					{
-						var visitor = new OperandVisitor(node);
-
-						foreach (var op in visitor.Output)
+						foreach (var op in node.Results)
 						{
-							if (op.IsCPURegister && op.Register.IsSpecial)
+							if (!(op.IsVirtualRegister || (op.IsCPURegister && !op.Register.IsSpecial)))
 								continue;
 
 							var s = row[GetIndex(op)] ?? string.Empty;
@@ -493,9 +496,9 @@ public abstract class BaseRegisterAllocator
 							row[GetIndex(op)] = s + "+D";
 						}
 
-						foreach (var op in visitor.Input)
+						foreach (var op in node.Operands)
 						{
-							if (op.IsCPURegister && op.Register.IsSpecial)
+							if (!(op.IsVirtualRegister || (op.IsCPURegister && !op.Register.IsSpecial)))
 								continue;
 
 							var s = row[GetIndex(op)] ?? string.Empty;
@@ -632,11 +635,9 @@ public abstract class BaseRegisterAllocator
 
 				liveSetTrace?.Log(node.ToString());
 
-				var visitor = new OperandVisitor(node);
-
-				foreach (var op in visitor.Input)
+				foreach (var op in node.Operands)
 				{
-					if (op.IsCPURegister && op.Register.IsSpecial)
+					if (!(op.IsVirtualRegister || (op.IsCPURegister && !op.Register.IsSpecial)))
 						continue;
 
 					liveSetTrace?.Log($"INPUT:  {op}");
@@ -674,9 +675,9 @@ public abstract class BaseRegisterAllocator
 					liveSetTrace?.Log($"KILL EXCEPT PHYSICAL: {node.Operand1}");
 				}
 
-				foreach (var op in visitor.Output)
+				foreach (var op in node.Results)
 				{
-					if (op.IsCPURegister && op.Register.IsSpecial)
+					if (!(op.IsVirtualRegister || (op.IsCPURegister && !op.Register.IsSpecial)))
 						continue;
 
 					liveSetTrace?.Log($"OUTPUT: {op}");
@@ -742,6 +743,8 @@ public abstract class BaseRegisterAllocator
 	private void BuildLiveIntervals()
 	{
 		var intervalTrace = CreateTrace("BuildLiveIntervals", 9);
+
+		//var slots = new SlotIndex[RegisterCount];
 
 		for (var b = BasicBlocks.Count - 1; b >= 0; b--)
 		{
@@ -812,11 +815,9 @@ public abstract class BaseRegisterAllocator
 					}
 				}
 
-				var visitor = new OperandVisitor(node);
-
-				foreach (var result in visitor.Output)
+				foreach (var result in node.Results)
 				{
-					if (result.IsCPURegister && result.Register.IsSpecial)
+					if (!(result.IsVirtualRegister || (result.IsCPURegister && !result.Register.IsSpecial)))
 						continue;
 
 					var register = VirtualRegisters[GetIndex(result)];
@@ -846,12 +847,12 @@ public abstract class BaseRegisterAllocator
 					}
 				}
 
-				foreach (var result in visitor.Input)
+				foreach (var operand in node.Operands)
 				{
-					if (result.IsCPURegister && result.Register.IsSpecial)
+					if (!(operand.IsVirtualRegister || (operand.IsCPURegister && !operand.Register.IsSpecial)))
 						continue;
 
-					var register = VirtualRegisters[GetIndex(result)];
+					var register = VirtualRegisters[GetIndex(operand)];
 
 					if (register.IsReserved)
 						continue;

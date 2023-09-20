@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using Mosa.Compiler.Common.Exceptions;
+using Mosa.Compiler.Framework.RegisterAllocator;
 using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework;
@@ -195,6 +196,25 @@ public sealed partial class Operand
 	public bool IsUsed => Uses.Count != 0;
 
 	public bool IsUsedOnce => Uses.Count == 1;
+
+	public bool IsVirtualRegisterUsed
+	{
+		get
+		{
+			Debug.Assert(IsVirtualRegister);
+
+			if (IsUsed || IsDefined)
+				return true;
+
+			if (IsParent && (High.IsUsed || Low.IsDefined || High.IsUsed || Low.IsDefined))
+				return true;
+
+			if (IsChild && (Parent.IsUsed || Parent.IsDefined))
+				return true;
+
+			return false;
+		}
+	}
 
 	#endregion Properties
 
@@ -1003,7 +1023,7 @@ public sealed partial class Operand
 
 	#endregion Override - ToString()
 
-	internal void RenameIndex(int index)
+	internal void Reindex(int index)
 	{
 		Debug.Assert(IsVirtualRegister || IsLocalStack);
 
