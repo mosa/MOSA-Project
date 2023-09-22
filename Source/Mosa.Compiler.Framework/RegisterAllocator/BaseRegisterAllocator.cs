@@ -1,13 +1,11 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using Microsoft.Win32;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis;
-using Mosa.Compiler.Framework.Common;
 using Mosa.Compiler.Framework.Trace;
 using Priority_Queue;
 using static Mosa.Compiler.Framework.BaseMethodCompilerStage;
@@ -344,9 +342,12 @@ public abstract class BaseRegisterAllocator
 	private void TraceNumberInstructions()
 	{
 		var numberTrace = CreateTrace("InstructionNumber", 9);
+		var outputTrace = CreateTrace("InstructionOutput", 9);
 
 		if (numberTrace == null)
 			return;
+
+		var sb = new StringBuilder();
 
 		foreach (var block in BasicBlocks)
 		{
@@ -354,6 +355,8 @@ public abstract class BaseRegisterAllocator
 			{
 				if (node.IsEmpty)
 					continue;
+
+				sb.Clear();
 
 				var log = $"{node.Offset} = {node}";
 
@@ -363,6 +366,31 @@ public abstract class BaseRegisterAllocator
 				}
 
 				numberTrace.Log(log);
+
+				if (node.OperandCount != 0 || node.ResultCount != 0)
+				{
+					sb.Append($"{node.Label:X5}/{node.Offset}: ");
+
+					foreach (var operand in node.Results)
+					{
+						if (operand.IsCPURegister)
+							sb.Append($"{operand.Register} ");
+						else if (operand.IsVirtualRegister)
+							sb.Append($"v{operand.Index} ");
+					}
+
+					sb.Append("<= ");
+
+					foreach (var operand in node.Operands)
+					{
+						if (operand.IsCPURegister)
+							sb.Append($"{operand.Register} ");
+						else if (operand.IsVirtualRegister)
+							sb.Append($"v{operand.Index} ");
+					}
+
+					outputTrace.Log(sb);
+				}
 
 				if (node.IsBlockEndInstruction)
 					break;
@@ -426,12 +454,12 @@ public abstract class BaseRegisterAllocator
 					sb.Append("USE: ");
 					foreach (var op in use)
 					{
-						sb.Append(op.ToString());
+						sb.Append(op);
 						sb.Append(' ');
 					}
 				}
 
-				locationTrace.Log(sb.ToString());
+				locationTrace.Log(sb);
 
 				if (node.IsBlockEndInstruction)
 					break;
@@ -567,7 +595,7 @@ public abstract class BaseRegisterAllocator
 			}
 		}
 
-		usageMap.Log(header.ToString());
+		usageMap.Log(header);
 
 		for (var index = 0; index < RegisterCount; index++)
 		{
@@ -595,7 +623,7 @@ public abstract class BaseRegisterAllocator
 				sb.Append('\t');
 			}
 
-			usageMap.Log(sb.ToString());
+			usageMap.Log(sb);
 		}
 	}
 
@@ -740,11 +768,11 @@ public abstract class BaseRegisterAllocator
 		}
 	}
 
-	private void BuildLiveIntervals()
+	private void Original_BuildLiveIntervals()
 	{
 		var intervalTrace = CreateTrace("BuildLiveIntervals", 9);
 
-		//var slots = new SlotIndex[RegisterCount];
+		var endSlots = new SlotIndex[RegisterCount];
 
 		for (var b = BasicBlocks.Count - 1; b >= 0; b--)
 		{
@@ -758,6 +786,10 @@ public abstract class BaseRegisterAllocator
 					continue;
 
 				var register = VirtualRegisters[r];
+
+				endSlots[r] = b + 1 != BasicBlocks.Count && ExtendedBlocks[b + 1].LiveIn.Get(r)
+					? ExtendedBlocks[b + 1].Start
+					: block.End;
 
 				if (b + 1 != BasicBlocks.Count && ExtendedBlocks[b + 1].LiveIn.Get(r))
 				{
@@ -868,6 +900,153 @@ public abstract class BaseRegisterAllocator
 		KillAll.Sort();
 	}
 
+	private void BuildLiveIntervals()
+	{
+		var intervalTrace = CreateTrace("BuildLiveIntervals", 9);
+
+		var endSlots = new SlotIndex[RegisterCount];
+
+		for (var b = BasicBlocks.Count - 1; b >= 0; b--)
+		{
+			var block = ExtendedBlocks[b];
+
+			intervalTrace?.Log($"Block # {block.BasicBlock.Sequence}");
+
+			for (var r = 0; r < RegisterCount; r++)
+			{
+				if (!block.LiveOut.Get(r))
+				{
+					endSlots[r] = SlotIndex.NullSlot;
+					continue;
+				}
+
+				endSlots[r] = b + 1 != BasicBlocks.Count && ExtendedBlocks[b + 1].LiveIn.Get(r)
+					? ExtendedBlocks[b + 1].Start
+					: block.End;
+
+				intervalTrace?.Log($"EndSlot: {VirtualRegisters[r]} = {endSlots[r]} [LiveOut]");
+			}
+
+			for (var node = block.BasicBlock.Last; !node.IsBlockStartInstruction; node = node.Previous)
+			{
+				if (node.IsEmptyOrNop)
+					continue;
+
+				var slot = new SlotIndex(node);
+				var slotAfter = slot.After;
+
+				if (node.Instruction.IsCall || node.Instruction == IRInstruction.KillAll)
+				{
+					for (var r = 0; r < PhysicalRegisterCount; r++)
+					{
+						var register = VirtualRegisters[r];
+
+						if (register.IsReserved)
+							continue;
+
+						register.AddLiveInterval(slot, slotAfter);
+
+						intervalTrace?.Log($"Range: {node.Label:X5}/{node.Offset} : {register} = {slot} to {slotAfter} [Add]");
+
+						endSlots[r] = SlotIndex.NullSlot;
+
+						intervalTrace?.Log($"EndSlot: {node.Label:X5}/{node.Offset} : {register} = {endSlots[r]} [Call/KillAll]");
+					}
+
+					KillAll.Add(slot);
+				}
+				else if (node.Instruction == IRInstruction.KillAllExcept)
+				{
+					for (var r = 0; r < PhysicalRegisterCount; r++)
+					{
+						if (r == node.Operand1.Register.Index)
+							continue;
+
+						var register = VirtualRegisters[r];
+
+						if (register.IsReserved)
+							continue;
+
+						register.AddLiveInterval(slot, slotAfter);
+
+						intervalTrace?.Log($"Range: {node.Label:X5}/{node.Offset} : {register} = {slot} to {slotAfter} [Add]");
+
+						endSlots[r] = SlotIndex.NullSlot;
+
+						intervalTrace?.Log($"EndSlot: {node.Label:X5}/{node.Offset} : {register} = {endSlots[r]} [KillExcept]");
+					}
+				}
+
+				foreach (var result in node.Results)
+				{
+					if (!(result.IsVirtualRegister || (result.IsCPURegister && !result.Register.IsSpecial)))
+						continue;
+
+					var r = GetIndex(result);
+
+					var register = VirtualRegisters[r];
+
+					if (register.IsReserved)
+						continue;
+
+					if (endSlots[r].IsNotNull)
+					{
+						register.AddLiveInterval(slotAfter, endSlots[r]);
+
+						intervalTrace?.Log($"Range: {node.Label:X5}/{node.Offset} : {register} = {slotAfter} to {endSlots[r]} [Add]");
+
+						endSlots[r] = SlotIndex.NullSlot;
+
+						intervalTrace?.Log($"EndSlot: {node.Label:X5}/{node.Offset} : {register} = {endSlots[r]} [KillExcept]");
+					}
+					else
+					{
+						register.AddLiveInterval(slotAfter, slotAfter);
+
+						intervalTrace?.Log($"Range: {node.Label:X5}/{node.Offset} : {register} = {slotAfter} to {slotAfter} [Add - Output]");
+					}
+				}
+
+				foreach (var operand in node.Operands)
+				{
+					if (!(operand.IsVirtualRegister || (operand.IsCPURegister && !operand.Register.IsSpecial)))
+						continue;
+
+					var r = GetIndex(operand);
+
+					var register = VirtualRegisters[r];
+
+					if (register.IsReserved)
+						continue;
+
+					if (endSlots[r].IsNotNull)
+						continue;
+
+					endSlots[r] = slot;
+
+					intervalTrace?.Log($"EndSlot: {node.Label:X5}/{node.Offset} : {register} = {endSlots[r]} [Add - Input]");
+				}
+			}
+
+			for (var r = 0; r < RegisterCount; r++)
+			{
+				if (endSlots[r].IsNotNull)
+				{
+					var register = VirtualRegisters[r];
+
+					if (register.IsReserved)
+						continue;
+
+					register.AddLiveInterval(block.Start, endSlots[r]);
+
+					intervalTrace?.Log($"Range: {register} = {block.Start} to {endSlots[r]} [Block Start]");
+				}
+			}
+		}
+
+		KillAll.Sort();
+	}
+
 	private ExtendedBlock GetContainingBlock(SlotIndex slot)
 	{
 		var node = GetNode(slot);
@@ -912,12 +1091,6 @@ public abstract class BaseRegisterAllocator
 					// fixed and not spillable
 					liveInterval.NeverSpill = true;
 				}
-
-				//else if (liveInterval.VirtualRegister.VirtualRegisterOperand.Type.IsUserValueType)
-				//{
-				//	// Value types will never be spilled (they are already allocated in stack anyways)
-				//	liveInterval.NeverSpill = true;
-				//}
 				else
 				{
 					// Calculate spill costs for live interval

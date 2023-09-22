@@ -1,10 +1,8 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using Mosa.Compiler.Common.Exceptions;
-using Mosa.Compiler.Framework.RegisterAllocator;
 using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework;

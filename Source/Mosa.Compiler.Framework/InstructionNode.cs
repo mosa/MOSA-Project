@@ -782,7 +782,7 @@ public sealed class InstructionNode
 		// TODO: Copy this method into calling class
 		var sb = new StringBuilder();
 
-		sb.AppendFormat("{0:X5}:", Label);
+		sb.AppendFormat($"{Label:X5}:");
 
 		if (Marked)
 			sb.Append('*');

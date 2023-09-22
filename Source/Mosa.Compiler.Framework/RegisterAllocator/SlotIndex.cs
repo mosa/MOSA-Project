@@ -6,15 +6,25 @@ namespace Mosa.Compiler.Framework.RegisterAllocator;
 
 public struct SlotIndex : IComparable<SlotIndex>
 {
-	public static SlotIndex NullSlot = new SlotIndex(0);
+	public static SlotIndex NullSlot = new(0);
 
-	public readonly int Value;
+	private readonly int Value;
 
-	public int Index => Value >> 2;
+	public readonly int Index => Value >> 2;
 
-	public SlotIndex Before => new SlotIndex(this, false);
+	public readonly SlotIndex Before => new SlotIndex(this, false);
 
-	public SlotIndex After => new SlotIndex(this, true);
+	public readonly SlotIndex After => new SlotIndex(this, true);
+
+	public readonly bool IsBeforeSlot => (Value & 0b11) == 0b00;
+
+	public readonly bool IsOnSlot => (Value & 0b11) == 0b01;
+
+	public readonly bool IsAfterSlot => (Value & 0b11) == 0b11;
+
+	public readonly bool IsNull => Value == 0b01;
+
+	public readonly bool IsNotNull => !IsNull;
 
 	private SlotIndex(int index) => Value = (index << 2) | 0b01;
 
@@ -30,16 +40,6 @@ public struct SlotIndex : IComparable<SlotIndex>
 		Value = (slot.Value & ~0b11) | (after ? 0b11 : 0b00);
 	}
 
-	public bool IsBeforeSlot => (Value & 0b11) == 0b00;
-
-	public bool IsOnSlot => (Value & 0b11) == 0b01;
-
-	public bool IsAfterSlot => (Value & 0b11) == 0b11;
-
-	public bool IsNull => Value == 0b01;
-
-	public bool IsNotNull => !IsNull;
-
 	public static bool operator ==(SlotIndex s1, SlotIndex s2) => s1.Value == s2.Value;
 
 	public static bool operator !=(SlotIndex s1, SlotIndex s2) => s1.Value != s2.Value;
@@ -54,9 +54,9 @@ public struct SlotIndex : IComparable<SlotIndex>
 
 	public static int operator -(SlotIndex s1, SlotIndex s2) => s1.Index - s2.Index;
 
-	public static SlotIndex operator ++(SlotIndex s) => new SlotIndex(s, true);
+	//public static SlotIndex operator ++(SlotIndex s) => new SlotIndex(s, true);
 
-	public static SlotIndex operator --(SlotIndex s) => new SlotIndex(s, false);
+	//public static SlotIndex operator --(SlotIndex s) => new SlotIndex(s, false);
 
 	public readonly int CompareTo(SlotIndex other) => Value - other.Value;
 
