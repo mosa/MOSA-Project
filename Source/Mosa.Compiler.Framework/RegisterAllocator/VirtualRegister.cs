@@ -190,7 +190,7 @@ public sealed class VirtualRegister
 		}
 		else
 		{
-			return $"V_{VirtualRegisterOperand.Index}";
+			return $"v{VirtualRegisterOperand.Index}";
 		}
 	}
 }

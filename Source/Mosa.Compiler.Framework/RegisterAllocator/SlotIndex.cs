@@ -8,7 +8,7 @@ public struct SlotIndex : IComparable<SlotIndex>
 {
 	public static SlotIndex NullSlot = new(0);
 
-	private readonly int Value;
+	public readonly int Value;
 
 	public readonly int Index => Value >> 2;
 
