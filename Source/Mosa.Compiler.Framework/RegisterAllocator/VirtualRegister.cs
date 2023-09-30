@@ -22,14 +22,6 @@ public sealed class VirtualRegister
 
 	public int Count => LiveIntervals.Count;
 
-	public LiveInterval LastRange => LiveIntervals.Count == 0 ? null : LiveIntervals[LiveIntervals.Count - 1];
-
-	public LiveInterval FirstRange
-	{
-		get => LiveIntervals.Count == 0 ? null : LiveIntervals[0];
-		set => LiveIntervals[0] = value;
-	}
-
 	public Operand SpillSlotOperand;
 
 	public bool IsFloatingPoint => VirtualRegisterOperand.IsFloatingPoint;
@@ -46,31 +38,28 @@ public sealed class VirtualRegister
 		IsReserved = false;
 		IsSpilled = false;
 
-		if (virtualRegister.IsVirtualRegister)
-		{
-			UsePositions = new List<SlotIndex>(VirtualRegisterOperand.Uses.Count);
-			DefPositions = new List<SlotIndex>(VirtualRegisterOperand.Definitions.Count);
-		}
+		if (!virtualRegister.IsVirtualRegister)
+			return;
+
+		UsePositions = new List<SlotIndex>(VirtualRegisterOperand.Uses.Count);
+		DefPositions = new List<SlotIndex>(VirtualRegisterOperand.Definitions.Count);
 	}
 
 	public void UpdatePositions()
 	{
-		var usePositions = UsePositions;
-
 		foreach (var use in VirtualRegisterOperand.Uses)
 		{
-			usePositions.AddIfNew(new SlotIndex(use));
+			UsePositions.AddIfNew(new SlotIndex(use));
 		}
 
-		usePositions.Sort();
+		UsePositions.Sort();
 
-		var defPositions = DefPositions;
 		foreach (var def in VirtualRegisterOperand.Definitions)
 		{
-			defPositions.AddIfNew(new SlotIndex(def));
+			DefPositions.AddIfNew(new SlotIndex(def));
 		}
 
-		defPositions.Sort();
+		DefPositions.Sort();
 	}
 
 	public VirtualRegister(PhysicalRegister physicalRegister, bool reserved)

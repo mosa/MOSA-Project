@@ -3,7 +3,6 @@
 using System.Collections;
 using System.Diagnostics;
 using System.Text;
-using Microsoft.Win32;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.Trace;
@@ -768,138 +767,6 @@ public abstract class BaseRegisterAllocator
 		}
 	}
 
-	private void Original_BuildLiveIntervals()
-	{
-		var intervalTrace = CreateTrace("BuildLiveIntervals", 9);
-
-		var endSlots = new SlotIndex[RegisterCount];
-
-		for (var b = BasicBlocks.Count - 1; b >= 0; b--)
-		{
-			var block = ExtendedBlocks[b];
-
-			intervalTrace?.Log($"Block # {block.BasicBlock.Sequence}");
-
-			for (var r = 0; r < RegisterCount; r++)
-			{
-				if (!block.LiveOut.Get(r))
-					continue;
-
-				var register = VirtualRegisters[r];
-
-				endSlots[r] = b + 1 != BasicBlocks.Count && ExtendedBlocks[b + 1].LiveIn.Get(r)
-					? ExtendedBlocks[b + 1].Start
-					: block.End;
-
-				if (b + 1 != BasicBlocks.Count && ExtendedBlocks[b + 1].LiveIn.Get(r))
-				{
-					intervalTrace?.Log($"Add (LiveOut) {register} : {block.Start} destination {ExtendedBlocks[b + 1].Start}");
-					intervalTrace?.Log($"   Before: {LiveIntervalsToString(register.LiveIntervals)}");
-					register.AddLiveInterval(block.Start, ExtendedBlocks[b + 1].Start);
-					intervalTrace?.Log($"    After: {LiveIntervalsToString(register.LiveIntervals)}");
-				}
-				else
-				{
-					intervalTrace?.Log($"Add (!LiveOut) {register} : {block.Start} destination {block.End}");
-					intervalTrace?.Log($"   Before: {LiveIntervalsToString(register.LiveIntervals)}");
-					register.AddLiveInterval(block.Start, block.End);
-					intervalTrace?.Log($"    After: {LiveIntervalsToString(register.LiveIntervals)}");
-				}
-			}
-
-			for (var node = block.BasicBlock.Last; !node.IsBlockStartInstruction; node = node.Previous)
-			{
-				if (node.IsEmptyOrNop)
-					continue;
-
-				var slot = new SlotIndex(node);
-				var slotAfter = slot.After;
-
-				if (node.Instruction.IsCall || node.Instruction == IRInstruction.KillAll)
-				{
-					for (var s = 0; s < PhysicalRegisterCount; s++)
-					{
-						var register = VirtualRegisters[s];
-
-						intervalTrace?.Log($"Add (Call) {register} : {slot} destination {slotAfter}");
-						intervalTrace?.Log($"   Before: {LiveIntervalsToString(register.LiveIntervals)}");
-						register.AddLiveInterval(slot, slotAfter);
-						intervalTrace?.Log($"    After: {LiveIntervalsToString(register.LiveIntervals)}");
-					}
-
-					KillAll.Add(slot);
-				}
-				else if (node.Instruction == IRInstruction.KillAllExcept)
-				{
-					for (var s = 0; s < PhysicalRegisterCount; s++)
-					{
-						var except = node.Operand1.Register.Index;
-
-						if (s == except)
-							continue;
-
-						var register = VirtualRegisters[s];
-
-						intervalTrace?.Log($"Add (Call) {register} : {slot} destination {slotAfter}");
-						intervalTrace?.Log($"   Before: {LiveIntervalsToString(register.LiveIntervals)}");
-						register.AddLiveInterval(slot, slotAfter);
-						intervalTrace?.Log($"    After: {LiveIntervalsToString(register.LiveIntervals)}");
-					}
-				}
-
-				foreach (var result in node.Results)
-				{
-					if (!(result.IsVirtualRegister || (result.IsCPURegister && !result.Register.IsSpecial)))
-						continue;
-
-					var register = VirtualRegisters[GetIndex(result)];
-
-					if (register.IsReserved)
-						continue;
-
-					var first = register.FirstRange;
-
-					if (first != null)
-					{
-						intervalTrace?.Log($"Replace First {register} : {slot} destination {first.End}");
-						intervalTrace?.Log($"   Before: {LiveIntervalsToString(register.LiveIntervals)}");
-						//register.AddLiveInterval(slot, first.End);
-						register.FirstRange = new LiveInterval(register, slot, first.End);
-						intervalTrace?.Log($"    After: {LiveIntervalsToString(register.LiveIntervals)}");
-					}
-					else
-					{
-						// This is necessary to handle a result that is never used; which is common with
-						// instructions with more than one result.
-						intervalTrace?.Log($"Add (Unused) {register} : {slotAfter} destination {slotAfter}");
-						intervalTrace?.Log($"   Before: {LiveIntervalsToString(register.LiveIntervals)}");
-						//register.AddLiveInterval(slotAfter, slotAfter);
-						register.AddLiveInterval(slot, slotAfter);
-						intervalTrace?.Log($"    After: {LiveIntervalsToString(register.LiveIntervals)}");
-					}
-				}
-
-				foreach (var operand in node.Operands)
-				{
-					if (!(operand.IsVirtualRegister || (operand.IsCPURegister && !operand.Register.IsSpecial)))
-						continue;
-
-					var register = VirtualRegisters[GetIndex(operand)];
-
-					if (register.IsReserved)
-						continue;
-
-					intervalTrace?.Log($"Add (normal) {register} : {block.Start} destination {slot}");
-					intervalTrace?.Log($"   Before: {LiveIntervalsToString(register.LiveIntervals)}");
-					register.AddLiveInterval(block.Start, slot);
-					intervalTrace?.Log($"    After: {LiveIntervalsToString(register.LiveIntervals)}");
-				}
-			}
-		}
-
-		KillAll.Sort();
-	}
-
 	private void BuildLiveIntervals()
 	{
 		var intervalTrace = CreateTrace("BuildLiveIntervals", 9);
@@ -946,7 +813,7 @@ public abstract class BaseRegisterAllocator
 
 						register.AddLiveInterval(slot, slotAfter);
 
-						intervalTrace?.Log($"Range: {node.Label:X5}/{node.Offset} : {register} = {slot} to {slotAfter} [Add]");
+						intervalTrace?.Log($"Range:   {node.Label:X5}/{node.Offset} : {register} = {slot} to {slotAfter} [Add]");
 
 						endSlots[r] = SlotIndex.NullSlot;
 
@@ -969,7 +836,7 @@ public abstract class BaseRegisterAllocator
 
 						register.AddLiveInterval(slot, slotAfter);
 
-						intervalTrace?.Log($"Range: {node.Label:X5}/{node.Offset} : {register} = {slot} to {slotAfter} [Add]");
+						intervalTrace?.Log($"Range:   {node.Label:X5}/{node.Offset} : {register} = {slot} to {slotAfter} [Add]");
 
 						endSlots[r] = SlotIndex.NullSlot;
 
@@ -989,21 +856,27 @@ public abstract class BaseRegisterAllocator
 					if (register.IsReserved)
 						continue;
 
+					var dual = node.Operands.Contains(result);
+
+					var slotStart = dual ? slot : slotAfter;
+
+					intervalTrace?.Log($"Dual:    {dual}");
+
 					if (endSlots[r].IsNotNull)
 					{
-						register.AddLiveInterval(slotAfter, endSlots[r]);
+						register.AddLiveInterval(slotStart, endSlots[r]);
 
-						intervalTrace?.Log($"Range: {node.Label:X5}/{node.Offset} : {register} = {slotAfter} to {endSlots[r]} [Add]");
+						intervalTrace?.Log($"Range:   {node.Label:X5}/{node.Offset} : {register} = {slotStart} to {endSlots[r]} [Add]");
 
 						endSlots[r] = SlotIndex.NullSlot;
 
-						intervalTrace?.Log($"EndSlot: {node.Label:X5}/{node.Offset} : {register} = {endSlots[r]} [KillExcept]");
+						intervalTrace?.Log($"EndSlot: {node.Label:X5}/{node.Offset} : {register} = {endSlots[r]} [Add]");
 					}
 					else
 					{
-						register.AddLiveInterval(slotAfter, slotAfter);
+						register.AddLiveInterval(slotStart, slotAfter);
 
-						intervalTrace?.Log($"Range: {node.Label:X5}/{node.Offset} : {register} = {slotAfter} to {slotAfter} [Add - Output]");
+						intervalTrace?.Log($"Range:   {node.Label:X5}/{node.Offset} : {register} = {slotStart} to {slotAfter} [Add - Output]");
 					}
 				}
 
@@ -1039,7 +912,7 @@ public abstract class BaseRegisterAllocator
 
 					register.AddLiveInterval(block.Start, endSlots[r]);
 
-					intervalTrace?.Log($"Range: {register} = {block.Start} to {endSlots[r]} [Block Start]");
+					intervalTrace?.Log($"Range:   {register} = {block.Start} to {endSlots[r]} [Block Start]");
 				}
 			}
 		}
