@@ -1,86 +1,83 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Diagnostics;
-
 namespace Mosa.Compiler.Framework.RegisterAllocator;
 
 public struct SlotIndex : IComparable<SlotIndex>
 {
-	public static SlotIndex NullSlot = new(0);
+	public static SlotIndex Null = new(0);
 
-	public readonly int Value;
+	public readonly int Index;
 
-	public readonly int Index => Value >> 2;
+	public readonly SlotIndex Previous => new(Index - 1);
 
-	public readonly SlotIndex Before => new SlotIndex(this, false);
+	public readonly SlotIndex Next => new(Index + 1);
 
-	public readonly SlotIndex After => new SlotIndex(this, true);
+	public readonly bool IsOnSlot => (Index % 2) == 0;
 
-	public readonly bool IsBeforeSlot => (Value & 0b11) == 0b00;
+	public readonly bool IsAfterSlot => (Index % 2) == 1;
 
-	public readonly bool IsOnSlot => (Value & 0b11) == 0b01;
-
-	public readonly bool IsAfterSlot => (Value & 0b11) == 0b11;
-
-	public readonly bool IsNull => Value == 0b01;
+	public readonly bool IsNull => Index == 0;
 
 	public readonly bool IsNotNull => !IsNull;
 
-	private SlotIndex(int index) => Value = (index << 2) | 0b01;
+	private SlotIndex(int index) => Index = index;
+
+	public static SlotIndex Use(InstructionNode node) => new SlotIndex(node.Offset);
+
+	public static SlotIndex Def(InstructionNode node) => new SlotIndex(node.Offset + 1);
 
 	public SlotIndex(InstructionNode node)
 		: this(node.Offset)
 	{
 	}
 
-	private SlotIndex(SlotIndex slot, bool after)
-	{
-		Debug.Assert(slot.IsOnSlot);
+	public static bool operator ==(SlotIndex s1, SlotIndex s2) => s1.Index == s2.Index;
 
-		Value = (slot.Value & ~0b11) | (after ? 0b11 : 0b00);
-	}
+	public static bool operator !=(SlotIndex s1, SlotIndex s2) => s1.Index != s2.Index;
 
-	public static bool operator ==(SlotIndex s1, SlotIndex s2) => s1.Value == s2.Value;
+	public static bool operator >=(SlotIndex s1, SlotIndex s2) => s1.Index >= s2.Index;
 
-	public static bool operator !=(SlotIndex s1, SlotIndex s2) => s1.Value != s2.Value;
+	public static bool operator <=(SlotIndex s1, SlotIndex s2) => s1.Index <= s2.Index;
 
-	public static bool operator >=(SlotIndex s1, SlotIndex s2) => s1.Value >= s2.Value;
+	public static bool operator >(SlotIndex s1, SlotIndex s2) => s1.Index > s2.Index;
 
-	public static bool operator <=(SlotIndex s1, SlotIndex s2) => s1.Value <= s2.Value;
-
-	public static bool operator >(SlotIndex s1, SlotIndex s2) => s1.Value > s2.Value;
-
-	public static bool operator <(SlotIndex s1, SlotIndex s2) => s1.Value < s2.Value;
+	public static bool operator <(SlotIndex s1, SlotIndex s2) => s1.Index < s2.Index;
 
 	public static int operator -(SlotIndex s1, SlotIndex s2) => s1.Index - s2.Index;
 
-	//public static SlotIndex operator ++(SlotIndex s) => new SlotIndex(s, true);
+	public static SlotIndex operator ++(SlotIndex s) => new SlotIndex(s.Index + 1);
 
-	//public static SlotIndex operator --(SlotIndex s) => new SlotIndex(s, false);
+	public static SlotIndex operator --(SlotIndex s) => new SlotIndex(s.Index - 1);
 
-	public readonly int CompareTo(SlotIndex other) => Value - other.Value;
+	public readonly int CompareTo(SlotIndex other) => Index - other.Index;
+
+	public static SlotIndex Max(SlotIndex a, SlotIndex b)
+	{
+		if (a.IsNull) return b;
+		else if (b.IsNull) return a;
+		else if (b == a) return a;
+
+		return a > b ? a : b;
+	}
+
+	public static SlotIndex Min(SlotIndex a, SlotIndex b)
+	{
+		if (a.IsNull) return b;
+		else if (b.IsNull) return a;
+		else if (b == a) return a;
+
+		return a < b ? a : b;
+	}
 
 	public override readonly bool Equals(object obj)
 	{
 		if (obj == null)
 			return false;
 
-		return Value == ((SlotIndex)obj).Value;
+		return Index == ((SlotIndex)obj).Index;
 	}
 
-	public override readonly int GetHashCode() => Value;
+	public override readonly int GetHashCode() => Index;
 
-	public override string ToString()
-	{
-		if (IsNull)
-			return "Null";
-
-		if (IsBeforeSlot)
-			return $"{Index}-";
-
-		if (IsAfterSlot)
-			return $"{Index}+";
-
-		return $"{Index}";
-	}
+	public override string ToString() => $"{Index}";
 }

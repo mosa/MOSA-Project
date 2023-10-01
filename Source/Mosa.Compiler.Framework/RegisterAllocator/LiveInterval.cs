@@ -25,9 +25,9 @@ public sealed class LiveInterval
 
 	public readonly LiveRange LiveRange;
 
-	public int StartValue => LiveRange.Start.Value;
+	public int StartValue => LiveRange.Start.Index;
 
-	public int EndValue => LiveRange.End.Value;
+	public int EndValue => LiveRange.End.Index;
 
 	public int SpillValue;
 
@@ -132,7 +132,7 @@ public sealed class LiveInterval
 
 			Debug.Assert(firstUse.IsNotNull);
 
-			if (firstUse.Before == Start && firstUse.After == End)
+			if (firstUse == Start && firstUse.Next == End)
 				return true;
 		}
 

@@ -58,12 +58,12 @@ public sealed class LiveIntervalTrack
 
 	public bool Intersects(SlotIndex slotIndex)
 	{
-		return intervals.Contains(slotIndex.Value);
+		return intervals.Contains(slotIndex.Index);
 	}
 
 	public LiveInterval GetLiveIntervalAt(SlotIndex slotIndex)
 	{
-		return intervals.SearchFirstOverlapping(slotIndex.Value);
+		return intervals.SearchFirstOverlapping(slotIndex.Index);
 	}
 
 	public List<LiveInterval> GetIntersections(LiveInterval liveInterval)

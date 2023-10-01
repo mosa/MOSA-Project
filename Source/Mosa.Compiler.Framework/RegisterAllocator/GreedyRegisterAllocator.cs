@@ -1,19 +1,19 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Diagnostics;
-using static Mosa.Compiler.Framework.BaseMethodCompilerStage;
+using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator;
 
 /// <summary>
 /// Greedy Register Allocator
 /// </summary>
-/// <seealso cref="Mosa.Compiler.Framework.RegisterAllocator.BasicRegisterAllocator" />
-public sealed class GreedyRegisterAllocator : BasicRegisterAllocator
+/// <seealso cref="Mosa.Compiler.Framework.RegisterAllocator.BaseRegisterAllocator" />
+public sealed class GreedyRegisterAllocator : BaseRegisterAllocator
 {
 	private Dictionary<SlotIndex, MoveHint> moveHints;
 
-	public GreedyRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters virtualRegisters, BaseArchitecture architecture, LocalStack localStack, Operand stackFrame, CreateTraceHandler createTrace)
+	public GreedyRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters virtualRegisters, BaseArchitecture architecture, LocalStack localStack, Operand stackFrame, BaseMethodCompilerStage.CreateTraceHandler createTrace)
 		: base(basicBlocks, virtualRegisters, architecture, localStack, stackFrame, createTrace)
 	{
 	}
@@ -30,6 +30,57 @@ public sealed class GreedyRegisterAllocator : BasicRegisterAllocator
 
 		// Split intervals at call sites
 		SplitIntervalsAtCallSites();
+	}
+
+	protected override void CalculateSpillCost(LiveInterval liveInterval)
+	{
+		var spillvalue = 0;
+
+		foreach (var use in liveInterval.UsePositions)
+		{
+			spillvalue += GetSpillCost(use, 100);
+		}
+
+		foreach (var use in liveInterval.DefPositions)
+		{
+			spillvalue += GetSpillCost(use, 115);
+		}
+
+		liveInterval.SpillValue = spillvalue;
+	}
+
+	protected override int CalculatePriorityValue(LiveInterval liveInterval)
+	{
+		return liveInterval.Length | ((int)((int)LiveInterval.AllocationStage.Max - liveInterval.Stage) << 20);
+	}
+
+	private void SplitIntervalsAtCallSites()
+	{
+		foreach (var virtualRegister in VirtualRegisters)
+		{
+			if (virtualRegister.IsPhysicalRegister)
+				continue;
+
+			for (var i = 0; i < virtualRegister.LiveIntervals.Count; i++)
+			{
+				var liveInterval = virtualRegister.LiveIntervals[i];
+
+				if (liveInterval.ForceSpilled)
+					continue;
+
+				if (liveInterval.IsEmpty)
+					continue;
+
+				var callSite = FindKillAllSite(liveInterval);
+
+				if (callSite.IsNull)
+					continue;
+
+				SplitIntervalAtCallSite(liveInterval, callSite);
+
+				i = 0; // list was modified
+			}
+		}
 	}
 
 	private bool PlaceLiveIntervalOnTrack(LiveInterval liveInterval, MoveHint a, MoveHint b)
@@ -63,7 +114,7 @@ public sealed class GreedyRegisterAllocator : BasicRegisterAllocator
 
 	private (MoveHint a, MoveHint b) GetMoveHints(LiveInterval liveInterval)
 	{
-		moveHints.TryGetValue(liveInterval.Start,  out var a);
+		moveHints.TryGetValue(liveInterval.Start, out var a);
 
 		MoveHint b = null;
 
@@ -143,7 +194,7 @@ public sealed class GreedyRegisterAllocator : BasicRegisterAllocator
 		return false;
 	}
 
-	protected override void SplitIntervalAtCallSite(LiveInterval liveInterval, SlotIndex callSite)
+	private void SplitIntervalAtCallSite(LiveInterval liveInterval, SlotIndex callSite)
 	{
 		PreferBlockBoundaryIntervalSplit(liveInterval, callSite, false);
 	}
@@ -208,7 +259,7 @@ public sealed class GreedyRegisterAllocator : BasicRegisterAllocator
 
 	private bool TrySimplePartialFreeIntervalSplit(LiveInterval liveInterval)
 	{
-		var furthest = SlotIndex.NullSlot;
+		var furthest = SlotIndex.Null;
 
 		foreach (var track in LiveIntervalTracks)
 		{
@@ -263,9 +314,9 @@ public sealed class GreedyRegisterAllocator : BasicRegisterAllocator
 
 		Trace?.Log($"  Partial free up destination: {furthest}");
 
-		if (liveInterval.LiveRange.ContainUse(furthest))
+		if (liveInterval.LiveRange.ContainsUseAt(furthest))
 		{
-			var nextfurthest = furthest.Before;
+			var nextfurthest = furthest.Previous;
 
 			if (liveInterval.Contains(nextfurthest))
 			{
@@ -276,42 +327,11 @@ public sealed class GreedyRegisterAllocator : BasicRegisterAllocator
 		return PreferBlockBoundaryIntervalSplit(liveInterval, furthest, true);
 	}
 
-	private bool IntervalSplitAtFirstUseOrDef(LiveInterval liveInterval)
-	{
-		if (liveInterval.IsEmpty)
-			return false;
-
-		var at = SlotIndex.NullSlot;
-
-		var firstUse = liveInterval.LiveRange.FirstUse;
-		var firstDef = liveInterval.LiveRange.FirstDef;
-
-		if (at.IsNull)
-		{
-			at = firstUse;
-		}
-
-		if (at.IsNotNull && firstDef.IsNotNull && firstDef < at)
-		{
-			at = firstDef;
-		}
-
-		if (at >= liveInterval.End)
-			return false;
-
-		if (at <= liveInterval.Start)
-			return false;
-
-		Trace?.Log(" Splitting around first use/def");
-
-		return PreferBlockBoundaryIntervalSplit(liveInterval, at, true);
-	}
-
 	private SlotIndex GetLowerOptimalSplitLocation(LiveInterval liveInterval, SlotIndex at)
 	{
 		Trace?.Log($"--Low Splitting: {liveInterval} at: {at}");
 
-		var max = SlotIndex.NullSlot;
+		var max = SlotIndex.Null;
 
 		var blockStart = GetBlockStart(at);
 		Trace?.Log($"   Block Start : {blockStart}");
@@ -324,17 +344,17 @@ public sealed class GreedyRegisterAllocator : BasicRegisterAllocator
 		var prevUse = liveInterval.LiveRange.GetPreviousUsePosition(at);
 		Trace?.Log($"  Previous Use : {prevUse}");
 
-		if (prevUse.IsNotNull && prevUse.After < at && (max.IsNull || prevUse.After > max))
+		if (prevUse.IsNotNull && prevUse.Next < at && (max.IsNull || prevUse.Next > max))
 		{
-			max = prevUse.After;
+			max = prevUse.Next;
 		}
 
 		var prevDef = liveInterval.LiveRange.GetPreviousDefPosition(at);
 		Trace?.Log($"  Previous Def : {prevDef}");
 
-		if (prevDef.IsNotNull && prevDef.After < at && (max.IsNull || prevDef.After > max))
+		if (prevDef.IsNotNull && prevDef.Next < at && (max.IsNull || prevDef.Next > max))
 		{
-			max = prevDef.After;
+			max = prevDef.Next;
 		}
 
 		Trace?.Log($"   Low Optimal : {max}");
@@ -346,7 +366,7 @@ public sealed class GreedyRegisterAllocator : BasicRegisterAllocator
 	{
 		Trace?.Log($"--High Splitting: {liveInterval} at: {at}");
 
-		var min = SlotIndex.NullSlot;
+		var min = SlotIndex.Null;
 
 		var blockEnd = GetBlockEnd(at);
 		Trace?.Log($"     Block End : {blockEnd}");
@@ -359,9 +379,9 @@ public sealed class GreedyRegisterAllocator : BasicRegisterAllocator
 		var nextUse = liveInterval.LiveRange.GetNextUsePosition(at);
 		Trace?.Log($"      Next Use : {nextUse}");
 
-		if (nextUse.IsNotNull && nextUse.Before > at && (min.IsNull || nextUse.Before < min))
+		if (nextUse.IsNotNull && nextUse > at && (min.IsNull || nextUse < min))
 		{
-			min = nextUse.Before;
+			min = nextUse;
 		}
 
 		var nextDef = liveInterval.LiveRange.GetNextDefPosition(at);

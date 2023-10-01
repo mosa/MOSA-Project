@@ -49,14 +49,14 @@ public sealed class VirtualRegister
 	{
 		foreach (var use in VirtualRegisterOperand.Uses)
 		{
-			UsePositions.AddIfNew(new SlotIndex(use));
+			UsePositions.AddIfNew(SlotIndex.Use(use));
 		}
 
 		UsePositions.Sort();
 
 		foreach (var def in VirtualRegisterOperand.Definitions)
 		{
-			DefPositions.AddIfNew(new SlotIndex(def));
+			DefPositions.AddIfNew(SlotIndex.Def(def));
 		}
 
 		DefPositions.Sort();
