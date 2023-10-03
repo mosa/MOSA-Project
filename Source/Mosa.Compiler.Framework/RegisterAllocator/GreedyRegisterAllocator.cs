@@ -65,7 +65,7 @@ public sealed class GreedyRegisterAllocator : BaseRegisterAllocator
 			{
 				var liveInterval = virtualRegister.LiveIntervals[i];
 
-				if (liveInterval.ForceSpilled)
+				if (liveInterval.ForceSpill)
 					continue;
 
 				if (liveInterval.IsEmpty)
@@ -76,9 +76,12 @@ public sealed class GreedyRegisterAllocator : BaseRegisterAllocator
 				if (callSite.IsNull)
 					continue;
 
-				SplitIntervalAtCallSite(liveInterval, callSite);
+				if (liveInterval.End == callSite)
+					continue;
 
-				i = 0; // list was modified
+				SplitIntervalAtCallSite(liveInterval, callSite.Next);
+
+				i = 0; // reset - list was modified
 			}
 		}
 	}
@@ -341,7 +344,7 @@ public sealed class GreedyRegisterAllocator : BaseRegisterAllocator
 			max = blockStart;
 		}
 
-		var prevUse = liveInterval.LiveRange.GetPreviousUsePosition(at);
+		var prevUse = liveInterval.LiveRange.GetPreviousUse(at);
 		Trace?.Log($"  Previous Use : {prevUse}");
 
 		if (prevUse.IsNotNull && prevUse.Next < at && (max.IsNull || prevUse.Next > max))
@@ -349,7 +352,7 @@ public sealed class GreedyRegisterAllocator : BaseRegisterAllocator
 			max = prevUse.Next;
 		}
 
-		var prevDef = liveInterval.LiveRange.GetPreviousDefPosition(at);
+		var prevDef = liveInterval.LiveRange.GetPreviousDef(at);
 		Trace?.Log($"  Previous Def : {prevDef}");
 
 		if (prevDef.IsNotNull && prevDef.Next < at && (max.IsNull || prevDef.Next > max))
@@ -376,7 +379,7 @@ public sealed class GreedyRegisterAllocator : BaseRegisterAllocator
 			min = blockEnd;
 		}
 
-		var nextUse = liveInterval.LiveRange.GetNextUsePosition(at);
+		var nextUse = liveInterval.LiveRange.GetNextUse(at);
 		Trace?.Log($"      Next Use : {nextUse}");
 
 		if (nextUse.IsNotNull && nextUse > at && (min.IsNull || nextUse < min))
@@ -384,7 +387,7 @@ public sealed class GreedyRegisterAllocator : BaseRegisterAllocator
 			min = nextUse;
 		}
 
-		var nextDef = liveInterval.LiveRange.GetNextDefPosition(at);
+		var nextDef = liveInterval.LiveRange.GetNextDef(at);
 		Trace?.Log($"      Next Def : {nextDef}");
 
 		if (nextDef.IsNotNull && nextDef > at && (min.IsNull || nextDef < min))

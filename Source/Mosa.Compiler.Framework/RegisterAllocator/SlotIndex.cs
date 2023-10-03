@@ -55,7 +55,7 @@ public struct SlotIndex : IComparable<SlotIndex>
 	{
 		if (a.IsNull) return b;
 		else if (b.IsNull) return a;
-		else if (b == a) return a;
+		else if (a == b) return a;
 
 		return a > b ? a : b;
 	}
@@ -64,9 +64,29 @@ public struct SlotIndex : IComparable<SlotIndex>
 	{
 		if (a.IsNull) return b;
 		else if (b.IsNull) return a;
-		else if (b == a) return a;
+		else if (a == b) return a;
 
 		return a < b ? a : b;
+	}
+
+	public static SlotIndex Max(SlotIndex a, SlotIndex b, SlotIndex c)
+	{
+		return Max(a, Max(b, c));
+	}
+
+	public static SlotIndex Min(SlotIndex a, SlotIndex b, SlotIndex c)
+	{
+		return Min(a, Min(b, c));
+	}
+
+	public SlotIndex GetNext()
+	{
+		return IsNull ? SlotIndex.Null : Next;
+	}
+
+	public SlotIndex GetPrevious()
+	{
+		return IsNull ? SlotIndex.Null : Previous;
 	}
 
 	public override readonly bool Equals(object obj)
@@ -75,6 +95,16 @@ public struct SlotIndex : IComparable<SlotIndex>
 			return false;
 
 		return Index == ((SlotIndex)obj).Index;
+	}
+
+	public static SlotIndex Clamp(SlotIndex slot, SlotIndex start, SlotIndex end)
+	{
+		return slot >= start && slot <= end ? slot : SlotIndex.Null;
+	}
+
+	public readonly SlotIndex GetClamp(SlotIndex start, SlotIndex end)
+	{
+		return this >= start && this <= end ? this : SlotIndex.Null;
 	}
 
 	public override readonly int GetHashCode() => Index;

@@ -39,7 +39,7 @@ public abstract class BaseRegisterAllocator
 
 	private readonly List<LiveInterval> SpilledIntervals;
 
-	protected readonly List<SlotIndex> KillAll;
+	protected readonly List<SlotIndex> KillSite;
 
 	protected readonly CreateTraceHandler CreateTrace;
 
@@ -98,7 +98,7 @@ public abstract class BaseRegisterAllocator
 		PriorityQueue = new SimplePriorityQueue<LiveInterval, int>();
 		SpilledIntervals = new List<LiveInterval>();
 
-		KillAll = new List<SlotIndex>();
+		KillSite = new List<SlotIndex>();
 
 		SlotsToNodes = new List<InstructionNode>(512);
 	}
@@ -630,7 +630,7 @@ public abstract class BaseRegisterAllocator
 				var slot = new SlotIndex(node);
 				var slotAfter = slot.Next;
 
-				if (node.Instruction.IsCall || node.Instruction == IRInstruction.KillAll)
+				if (node.Instruction.IsCall || node.Instruction == IRInstruction.KillAll || node.Instruction == IRInstruction.KillAllExcept)
 				{
 					for (var r = 0; r < PhysicalRegisterCount; r++)
 					{
@@ -639,27 +639,7 @@ public abstract class BaseRegisterAllocator
 						if (register.IsReserved)
 							continue;
 
-						register.AddLiveInterval(slot, slotAfter);
-
-						intervalTrace?.Log($"Range:   {node.Label:X5}/{node.Offset} : {register} = {slot} to {slotAfter} [Add]");
-
-						endSlots[r] = SlotIndex.Null;
-
-						intervalTrace?.Log($"EndSlot: {node.Label:X5}/{node.Offset} : {register} = {endSlots[r]} [Call/KillAll]");
-					}
-
-					KillAll.Add(slot);
-				}
-				else if (node.Instruction == IRInstruction.KillAllExcept)
-				{
-					for (var r = 0; r < PhysicalRegisterCount; r++)
-					{
-						if (r == node.Operand1.Register.Index)
-							continue;
-
-						var register = VirtualRegisters[r];
-
-						if (register.IsReserved)
+						if (node.Instruction == IRInstruction.KillAllExcept && r == node.Operand1.Register.Index)
 							continue;
 
 						register.AddLiveInterval(slot, slotAfter);
@@ -668,8 +648,10 @@ public abstract class BaseRegisterAllocator
 
 						endSlots[r] = SlotIndex.Null;
 
-						intervalTrace?.Log($"EndSlot: {node.Label:X5}/{node.Offset} : {register} = {endSlots[r]} [KillExcept]");
+						intervalTrace?.Log($"EndSlot: {node.Label:X5}/{node.Offset} : {register} = {endSlots[r]} [KillSite]");
 					}
+
+					KillSite.Add(slot);
 				}
 
 				foreach (var result in node.Results)
@@ -745,13 +727,13 @@ public abstract class BaseRegisterAllocator
 			}
 		}
 
-		KillAll.Sort();
+		KillSite.Sort();
 	}
 
 	protected SlotIndex FindKillAllSite(LiveInterval liveInterval)
 	{
 		// FUTURE: Optimization - KillAll is sorted!
-		foreach (var slot in KillAll)
+		foreach (var slot in KillSite)
 		{
 			if (liveInterval.Contains(slot))
 			{
@@ -817,7 +799,6 @@ public abstract class BaseRegisterAllocator
 
 	protected void AddPriorityQueue(LiveInterval liveInterval)
 	{
-		//Debug.Assert(!liveInterval.IsSplit);
 		Debug.Assert(liveInterval.LiveIntervalTrack == null);
 
 		// priority is based on allocation stage (primary, lower first) and interval size (secondary, higher first)
@@ -1091,55 +1072,164 @@ public abstract class BaseRegisterAllocator
 
 	protected abstract bool TrySplitInterval(LiveInterval liveInterval, int level);
 
-	private SlotIndex FindFrontSplitPoint(LiveInterval liveInterval)
-	{
-		var liveRange = liveInterval.LiveRange;
+	#region Split Options
 
-		if (liveRange.IsEmpty || liveRange.First == liveRange.Start)
+	private SlotIndex FindAnySplitPoint(LiveRange liveRange)
+	{
+		var at = FindSplit_TrimFrontDef(liveRange);
+
+		if (at.IsNotNull)
+			return at;
+
+		at = FindSplit_TrimBackUse(liveRange);
+
+		if (at.IsNotNull)
+			return at;
+
+		at = FindSplit_AfterFirstUse(liveRange);
+
+		if (at.IsNotNull)
+			return at;
+
+		at = FindSplit_AfterFirstDef(liveRange);
+
+		if (at.IsNotNull)
+			return at;
+
+		at = FindSplit_TrimFrontUse(liveRange);
+
+		if (at.IsNotNull)
+			return at;
+
+		// what remains is the smallest interval
+
+		return SlotIndex.Null;
+	}
+
+	private SlotIndex FindSplit_TrimFrontDef(LiveRange liveRange)
+	{
+		if (liveRange.IsEmpty
+			|| liveRange.DefCount == 0
+			|| liveRange.FirstDef == liveRange.Start)
 			return SlotIndex.Null;
 
-		var at = liveRange.First.Previous;
+		var at = liveRange.FirstDef.Previous;
 
 		while (liveRange.ContainsUseAt(at) || liveRange.ContainsDefAt(at))
 		{
 			at = at.Previous;
 
-			if (at < liveRange.First)
+			if (at < liveRange.Start)
 				return SlotIndex.Null;
 		}
 
 		return at;
 	}
 
-	private SlotIndex FindBackSplitPoint(LiveInterval liveInterval)
+	private SlotIndex FindSplit_TrimBackUse(LiveRange liveRange)
 	{
-		var liveRange = liveInterval.LiveRange;
-
-		if (liveRange.IsEmpty || liveRange.First == liveRange.Start)
+		if (liveRange.IsEmpty
+			|| liveRange.UseCount == 0
+			|| liveRange.LastUse == liveRange.End)
 			return SlotIndex.Null;
 
-		var at = liveRange.First.Next;
+		var at = liveRange.LastUse.Next;
 
 		while (liveRange.ContainsUseAt(at) || liveRange.ContainsDefAt(at))
 		{
 			at = at.Next;
 
-			if (at > liveRange.Last)
+			if (at > liveRange.End)
 				return SlotIndex.Null;
 		}
 
 		return at;
 	}
 
-	private SlotIndex FindLastSprintPoint(LiveInterval liveInterval)
+	private SlotIndex FindSplit_AfterFirstUse(LiveRange liveRange)
 	{
-		var at = FindBackSplitPoint(liveInterval);
-
-		if (at.IsNotNull)
+		if (liveRange.IsEmpty
+			|| liveRange.UseCount == 0
+			|| liveRange.FirstUse == liveRange.End)
 			return SlotIndex.Null;
 
-		return FindFrontSplitPoint(liveInterval);
+		var at = liveRange.FirstUse.Next;
+
+		while (liveRange.ContainsUseAt(at) || liveRange.ContainsDefAt(at))
+		{
+			at = at.Next;
+
+			if (at > liveRange.End)
+				return SlotIndex.Null;
+		}
+
+		return at;
 	}
+
+	private SlotIndex FindSplit_AfterFirstDef(LiveRange liveRange)
+	{
+		if (liveRange.IsEmpty
+			|| liveRange.DefCount == 0
+			|| liveRange.FirstDef == liveRange.End)
+			return SlotIndex.Null;
+
+		var at = liveRange.FirstDef.Next;
+
+		while (liveRange.ContainsUseAt(at) || liveRange.ContainsDefAt(at))
+		{
+			at = at.Next;
+
+			if (at > liveRange.End)
+				return SlotIndex.Null;
+		}
+
+		return at;
+	}
+
+	private SlotIndex FindSplit_TrimFrontUse(LiveRange liveRange)
+	{
+		if (liveRange.IsEmpty
+			|| liveRange.UseCount == 0
+			|| liveRange.FirstUse == liveRange.Start)
+			return SlotIndex.Null;
+
+		var at = liveRange.LastUse.Previous;
+
+		while (liveRange.ContainsUseAt(at) || liveRange.ContainsDefAt(at))
+		{
+			at = at.Previous;
+
+			if (at < liveRange.Start)
+				return SlotIndex.Null;
+		}
+
+		return at;
+	}
+
+	private SlotIndex FindSplit_LowerBoundary(LiveRange liveRange, SlotIndex at)
+	{
+		var block = GetBlockStart(at).GetClamp(liveRange.Start, liveRange.End);
+
+		var use = liveRange.GetPreviousUse(at).GetNext();
+		var def = liveRange.GetPreviousDef(at).GetNext();
+
+		var max = SlotIndex.Max(block, use, def);
+
+		return max;
+	}
+
+	private SlotIndex FindSplit_UpperBoundary(LiveRange liveRange, SlotIndex at)
+	{
+		var block = GetBlockEnd(at).GetClamp(liveRange.Start, liveRange.End);
+		var use = liveRange.GetNextUse(at).GetPrevious();
+		var def = liveRange.GetNextDef(at).GetPrevious();
+
+		var min = SlotIndex.Min(block, use, def);
+
+		return min;
+	}
+
+	#endregion Split Options
 
 	private void SplitLastResort(LiveInterval liveInterval)
 	{
@@ -1154,10 +1244,18 @@ public abstract class BaseRegisterAllocator
 
 		Trace?.Log(" Splitting around first use/def");
 
-		var splitAt = FindLastSprintPoint(liveInterval);
+		var splitAt = FindAnySplitPoint(liveInterval.LiveRange);
+
+		if (!liveInterval.LiveRange.CanSplitAt(splitAt))
+		{
+			return;
+		}
 
 		if (splitAt.IsNull)
+		{
+			// can not be split any further
 			return;
+		}
 
 		var intervals = liveInterval.SplitAt(splitAt);
 

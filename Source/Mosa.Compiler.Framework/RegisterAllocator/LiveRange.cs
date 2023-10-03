@@ -4,16 +4,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator;
 
 public sealed class LiveRange
 {
-	// Live ranges includes:
-	// 1. Use > start && Use <= end
-	// 2. Def >= start && Def < end
-
-	// Notes:
-	// Uses can not be at the start of a live range
-	// Uses can end at the end of a live range
-	// Defs can be at the start of a live range
-	// Defs can not end at the end of a live range
-
 	private readonly VirtualRegister VirtualRegister;
 
 	private readonly int StartIndex;
@@ -154,41 +144,6 @@ public sealed class LiveRange
 		//Debug.Assert(InternalValidation());
 	}
 
-	private bool InternalValidation()
-	{
-		foreach (var use in UsePositions)
-		{
-			if (!ContainsUseAt(use))
-				return false;
-
-			if (UseCount == 0)
-				return false;
-		}
-
-		foreach (var def in DefPositions)
-		{
-			if (!ContainsDefAt(def))
-				return false;
-
-			if (DefCount == 0)
-				return false;
-		}
-
-		if (FirstUse.IsNotNull && !ContainsUseAt(FirstUse))
-			return false;
-
-		if (LastUse.IsNotNull && !ContainsUseAt(LastUse))
-			return false;
-
-		if (FirstDef.IsNotNull && !ContainsDefAt(FirstDef))
-			return false;
-
-		if (LastDef.IsNotNull && !ContainsDefAt(LastDef))
-			return false;
-
-		return true;
-	}
-
 	private static int LowestGreaterThanZero(int a, int b)
 	{
 		if (a < 0)
@@ -247,7 +202,7 @@ public sealed class LiveRange
 		return false;
 	}
 
-	public SlotIndex GetNextUsePosition(SlotIndex at)
+	public SlotIndex GetNextUse(SlotIndex at)
 	{
 		if (UseCount == 0 || at < Start || at > LastUse) // || at > End
 			return SlotIndex.Null;
@@ -263,7 +218,7 @@ public sealed class LiveRange
 		return SlotIndex.Null;
 	}
 
-	public SlotIndex GetNextDefPosition(SlotIndex at)
+	public SlotIndex GetNextDef(SlotIndex at)
 	{
 		if (DefCount == 0 || at < Start || at > LastDef) // || at > End
 			return SlotIndex.Null;
@@ -279,7 +234,7 @@ public sealed class LiveRange
 		return SlotIndex.Null;
 	}
 
-	public SlotIndex GetPreviousUsePosition(SlotIndex at)
+	public SlotIndex GetPreviousUse(SlotIndex at)
 	{
 		if (UseCount == 0 || at < Start || at < FirstUse) // || at > End
 			return SlotIndex.Null;
@@ -295,7 +250,7 @@ public sealed class LiveRange
 		return SlotIndex.Null;
 	}
 
-	public SlotIndex GetPreviousDefPosition(SlotIndex at)
+	public SlotIndex GetPreviousDef(SlotIndex at)
 	{
 		if (DefCount == 0 || at < Start || at < FirstDef)  // || at > End
 			return SlotIndex.Null;
@@ -313,7 +268,7 @@ public sealed class LiveRange
 
 	public bool CanSplitAt(SlotIndex at)
 	{
-		if (at <= Start || at >= End)
+		if (at < Start || at > End)
 			return false;
 
 		return !ContainsUseAt(at) && !ContainsDefAt(at);
@@ -331,6 +286,17 @@ public sealed class LiveRange
 		if (!CanSplitAt(at))
 			throw new Exception($"Can not split at {at}");
 
+		// special case
+		if (at == End)
+		{
+			return new List<LiveRange>(2)
+			{
+				new LiveRange(Start, at.Previous, VirtualRegister, StartIndex, EndIndex),
+				new LiveRange(at, End, VirtualRegister, StartIndex, EndIndex)
+			};
+		}
+
+		// normal case
 		return new List<LiveRange>(2)
 		{
 			new LiveRange(Start, at, VirtualRegister, StartIndex, EndIndex),
