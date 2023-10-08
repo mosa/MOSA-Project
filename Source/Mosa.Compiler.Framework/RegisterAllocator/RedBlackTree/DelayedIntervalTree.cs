@@ -1,7 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Collections.Generic;
-
 namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree;
 
 /// <summary>
@@ -41,12 +39,12 @@ public sealed class DelayedIntervalTree<T> where T : class
 
 	private static bool Contains(int start, int end, int at)
 	{
-		return at >= start && at < end;
+		return at >= start && at <= end;
 	}
 
 	public bool Contains(int start, int end)
 	{
-		if (delayedDelete && start >= delayedDeleteStart && end < delayedDeleteEnd)
+		if (delayedDelete && start >= delayedDeleteStart && end <= delayedDeleteEnd)
 		{
 			return false;
 		}

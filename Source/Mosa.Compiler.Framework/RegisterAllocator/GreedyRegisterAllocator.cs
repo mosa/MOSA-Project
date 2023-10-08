@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Diagnostics;
-using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator;
 
@@ -11,8 +10,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator;
 /// <seealso cref="Mosa.Compiler.Framework.RegisterAllocator.BaseRegisterAllocator" />
 public sealed class GreedyRegisterAllocator : BaseRegisterAllocator
 {
-	private Dictionary<SlotIndex, MoveHint> moveHints;
-
 	public GreedyRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters virtualRegisters, BaseArchitecture architecture, LocalStack localStack, Operand stackFrame, BaseMethodCompilerStage.CreateTraceHandler createTrace)
 		: base(basicBlocks, virtualRegisters, architecture, localStack, stackFrame, createTrace)
 	{
@@ -20,16 +17,6 @@ public sealed class GreedyRegisterAllocator : BaseRegisterAllocator
 
 	protected override void AdditionalSetup()
 	{
-		moveHints = new Dictionary<SlotIndex, MoveHint>();
-
-		// Collect move locations
-		CollectMoveHints();
-
-		// Generate trace information for move hints
-		TraceMoveHints();
-
-		// Split intervals at call sites
-		SplitIntervalsAtCallSites();
 	}
 
 	protected override void CalculateSpillCost(LiveInterval liveInterval)
@@ -52,106 +39,6 @@ public sealed class GreedyRegisterAllocator : BaseRegisterAllocator
 	protected override int CalculatePriorityValue(LiveInterval liveInterval)
 	{
 		return liveInterval.Length | ((int)((int)LiveInterval.AllocationStage.Max - liveInterval.Stage) << 20);
-	}
-
-	private void SplitIntervalsAtCallSites()
-	{
-		foreach (var virtualRegister in VirtualRegisters)
-		{
-			if (virtualRegister.IsPhysicalRegister)
-				continue;
-
-			for (var i = 0; i < virtualRegister.LiveIntervals.Count; i++)
-			{
-				var liveInterval = virtualRegister.LiveIntervals[i];
-
-				if (liveInterval.ForceSpill)
-					continue;
-
-				if (liveInterval.IsEmpty)
-					continue;
-
-				var callSite = FindKillAllSite(liveInterval);
-
-				if (callSite.IsNull)
-					continue;
-
-				if (liveInterval.End == callSite)
-					continue;
-
-				SplitIntervalAtCallSite(liveInterval, callSite.Next);
-
-				i = 0; // reset - list was modified
-			}
-		}
-	}
-
-	private bool PlaceLiveIntervalOnTrack(LiveInterval liveInterval, MoveHint a, MoveHint b)
-	{
-		if (a == null)
-			return false;
-
-		if (TryHint(liveInterval, a))
-			return true;
-
-		if (TryHint(liveInterval, b))
-			return true;
-
-		return false;
-	}
-
-	private bool TryHint(LiveInterval liveInterval, MoveHint moveHint)
-	{
-		if (moveHint == null)
-			return false;
-
-		var register = liveInterval.Start == moveHint.Slot ? moveHint.FromRegister : moveHint.ToRegister;
-
-		if (register == null)
-			return false;
-
-		Trace?.Log($"  Trying move hint: {register}  [ {moveHint} ]");
-
-		return TryPlaceLiveIntervalOnTrack(liveInterval, LiveIntervalTracks[register.Index]);
-	}
-
-	private (MoveHint a, MoveHint b) GetMoveHints(LiveInterval liveInterval)
-	{
-		moveHints.TryGetValue(liveInterval.Start, out var a);
-
-		MoveHint b = null;
-
-		if (!GetNode(liveInterval.End).IsBlockStartInstruction)
-		{
-			moveHints.TryGetValue(liveInterval.End, out b);
-		}
-
-		if (a != null && b != null)
-		{
-			// sorted by bonus
-			if (a.Bonus > b.Bonus)
-			{
-				return (a, b);
-			}
-			else
-			{
-				return (b, a);
-			}
-		}
-
-		return (a ?? b, null);
-	}
-
-	private void UpdateMoveHints(LiveInterval liveInterval, MoveHint a, MoveHint b)
-	{
-		if (a != null)
-		{
-			a.Update(liveInterval);
-		}
-		else if (b != null)
-		{
-			b.Update(liveInterval);
-		}
 	}
 
 	protected override bool PlaceLiveInterval(LiveInterval liveInterval)
@@ -197,11 +84,6 @@ public sealed class GreedyRegisterAllocator : BaseRegisterAllocator
 		return false;
 	}
 
-	private void SplitIntervalAtCallSite(LiveInterval liveInterval, SlotIndex callSite)
-	{
-		PreferBlockBoundaryIntervalSplit(liveInterval, callSite, false);
-	}
-
 	protected override bool TrySplitInterval(LiveInterval liveInterval, int level)
 	{
 		//if (level <= 1)
@@ -222,49 +104,93 @@ public sealed class GreedyRegisterAllocator : BaseRegisterAllocator
 		return false;
 	}
 
-	private bool PreferBlockBoundaryIntervalSplit(LiveInterval liveInterval, SlotIndex at, bool addToQueue)
+	private bool PlaceLiveIntervalOnTrack(LiveInterval liveInterval, MoveHint a, MoveHint b)
 	{
-		var low = GetLowerOptimalSplitLocation(liveInterval, at);
-		var high = GetUpperOptimalSplitLocation(liveInterval, at);
+		if (TryHint(liveInterval, a))
+			return true;
 
-		List<LiveInterval> intervals;
+		if (TryHint(liveInterval, b))
+			return true;
 
-		if (low.IsNull && high.IsNotNull)
-		{
-			if (!liveInterval.LiveRange.CanSplitAt(high))
-				return false;
+		return false;
+	}
 
-			intervals = liveInterval.SplitAt(high);
-		}
-		else if (high.IsNull && low.IsNotNull)
-		{
-			if (!liveInterval.LiveRange.CanSplitAt(low))
-				return false;
-
-			intervals = liveInterval.SplitAt(low);
-		}
-		else if (low.IsNotNull && high.IsNotNull)
-		{
-			if (!liveInterval.LiveRange.CanSplitAt(low, high))
-				return false;
-
-			intervals = liveInterval.SplitAt(low, high);
-		}
-		else
-		{
+	private bool TryHint(LiveInterval liveInterval, MoveHint moveHint)
+	{
+		if (moveHint == null)
 			return false;
+
+		PhysicalRegister register = null;
+
+		if (moveHint.Slot == liveInterval.Start)
+			register = moveHint.FromRegister;
+
+		if (register == null && moveHint.Slot == liveInterval.End)
+			register = moveHint.ToRegister;
+
+		if (register == null && moveHint.Slot == liveInterval.Start)
+			register = moveHint.ToRegister;
+
+		if (register == null && moveHint.Slot == liveInterval.End)
+			register = moveHint.FromRegister;
+
+		if (register == null)
+			return false;
+
+		Trace?.Log($"  Trying move hint: {register}  [ {moveHint} ]");
+
+		return TryPlaceLiveIntervalOnTrack(liveInterval, Tracks[register.Index]);
+	}
+
+	private (MoveHint a, MoveHint b) GetMoveHints(LiveInterval liveInterval)
+	{
+		MoveHints.TryGetValue(liveInterval.Start, out var a);
+
+		MoveHint b = null;
+
+		if (!GetNode(liveInterval.End).IsBlockStartInstruction)
+		{
+			MoveHints.TryGetValue(liveInterval.End, out b);
 		}
 
-		ReplaceIntervals(liveInterval, intervals, addToQueue);
+		if (a == b)
+		{
+			return (a, null);
+		}
 
-		return true;
+		if (a != null && b != null)
+		{
+			// sorted by bonus
+			if (a.Bonus > b.Bonus)
+			{
+				return (a, b);
+			}
+			else
+			{
+				return (b, a);
+			}
+		}
+
+		return (a ?? b, null);
+	}
+
+	private void UpdateMoveHints(LiveInterval liveInterval, MoveHint a, MoveHint b)
+	{
+		if (a != null)
+		{
+			a.Update(liveInterval);
+		}
+		else if (b != null)
+		{
+			b.Update(liveInterval);
+		}
 	}
 
 	private bool TrySimplePartialFreeIntervalSplit(LiveInterval liveInterval)
 	{
 		var furthest = SlotIndex.Null;
 
-		foreach (var track in LiveIntervalTracks)
+		foreach (var track in Tracks)
 		{
 			if (track.IsReserved)
 				continue;
@@ -283,13 +209,13 @@ public sealed class GreedyRegisterAllocator : BaseRegisterAllocator
 			{
 				var start = interval.Start;
 
-				Trace?.Log($"  Register {track} free up to {start}");
-
 				if (furthest.IsNull || start > furthest)
 				{
 					furthest = start;
 				}
 			}
+
+			Trace?.Log($"  Register {track} free up to {furthest}");
 		}
 
 		if (furthest.IsNull)
@@ -327,80 +253,41 @@ public sealed class GreedyRegisterAllocator : BaseRegisterAllocator
 			}
 		}
 
-		return PreferBlockBoundaryIntervalSplit(liveInterval, furthest, true);
+		var low = FindSplit_LowerBoundary(liveInterval.LiveRange, furthest);
+		var high = FindSplit_UpperBoundary(liveInterval.LiveRange, furthest);
+
+		Trace?.Log($"   Low Split:  {low}");
+		Trace?.Log($"   High Split: {high}");
+
+		if (low.IsNull && high.IsNull)
+			return false;
+
+		if (high == liveInterval.End)
+			high = SlotIndex.Null;
+
+		if (low.IsNotNull && high.IsNotNull)
+		{
+			var newInternals = liveInterval.SplitAt(low, high);
+			UpdateIntervals(liveInterval, newInternals, true);
+			return true;
+		}
+		else if (low.IsNotNull) // && high.IsNull
+		{
+			var newInternals = liveInterval.SplitAt(low);
+			UpdateIntervals(liveInterval, newInternals, true);
+			return true;
+		}
+		else if (high.IsNotNull) // && low.IsNull
+		{
+			var newInternals = liveInterval.SplitAt(high);
+			UpdateIntervals(liveInterval, newInternals, true);
+			return true;
+		}
+
+		return false;
 	}
 
-	private SlotIndex GetLowerOptimalSplitLocation(LiveInterval liveInterval, SlotIndex at)
-	{
-		Trace?.Log($"--Low Splitting: {liveInterval} at: {at}");
-
-		var max = SlotIndex.Null;
-
-		var blockStart = GetBlockStart(at);
-		Trace?.Log($"   Block Start : {blockStart}");
-
-		if (blockStart < at && blockStart > liveInterval.Start)
-		{
-			max = blockStart;
-		}
-
-		var prevUse = liveInterval.LiveRange.GetPreviousUse(at);
-		Trace?.Log($"  Previous Use : {prevUse}");
-
-		if (prevUse.IsNotNull && prevUse.Next < at && (max.IsNull || prevUse.Next > max))
-		{
-			max = prevUse.Next;
-		}
-
-		var prevDef = liveInterval.LiveRange.GetPreviousDef(at);
-		Trace?.Log($"  Previous Def : {prevDef}");
-
-		if (prevDef.IsNotNull && prevDef.Next < at && (max.IsNull || prevDef.Next > max))
-		{
-			max = prevDef.Next;
-		}
-
-		Trace?.Log($"   Low Optimal : {max}");
-
-		return max;
-	}
-
-	private SlotIndex GetUpperOptimalSplitLocation(LiveInterval liveInterval, SlotIndex at)
-	{
-		Trace?.Log($"--High Splitting: {liveInterval} at: {at}");
-
-		var min = SlotIndex.Null;
-
-		var blockEnd = GetBlockEnd(at);
-		Trace?.Log($"     Block End : {blockEnd}");
-
-		if (blockEnd > at && blockEnd < liveInterval.End)
-		{
-			min = blockEnd;
-		}
-
-		var nextUse = liveInterval.LiveRange.GetNextUse(at);
-		Trace?.Log($"      Next Use : {nextUse}");
-
-		if (nextUse.IsNotNull && nextUse > at && (min.IsNull || nextUse < min))
-		{
-			min = nextUse;
-		}
-
-		var nextDef = liveInterval.LiveRange.GetNextDef(at);
-		Trace?.Log($"      Next Def : {nextDef}");
-
-		if (nextDef.IsNotNull && nextDef > at && (min.IsNull || nextDef < min))
-		{
-			min = nextDef;
-		}
-
-		Trace?.Log($"  High Optimal : {min}");
-
-		return min;
-	}
-
-	private void CollectMoveHints()
+	protected override void CollectMoveHints()
 	{
 		foreach (var block in BasicBlocks)
 		{
@@ -434,21 +321,11 @@ public sealed class GreedyRegisterAllocator : BaseRegisterAllocator
 
 				var slot = new SlotIndex(node);
 
-				moveHints.Add(slot, new MoveHint(slot, from, to, bonus));
+				if (to.IsVirtualRegister)
+					slot = slot.Next;
+
+				MoveHints.Add(slot, new MoveHint(slot, from, to, bonus));
 			}
-		}
-	}
-
-	private void TraceMoveHints()
-	{
-		var moveHintTrace = CreateTrace("MoveHints", 9);
-
-		if (moveHintTrace == null)
-			return;
-
-		foreach (var moveHint in moveHints)
-		{
-			moveHintTrace.Log(moveHint.Value.ToString());
 		}
 	}
 }

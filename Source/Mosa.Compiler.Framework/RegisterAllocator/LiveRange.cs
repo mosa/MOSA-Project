@@ -319,8 +319,8 @@ public sealed class LiveRange
 		return new List<LiveRange>(3)
 		{
 			new LiveRange(Start, low,  VirtualRegister, StartIndex, EndIndex),
-			new LiveRange(low.Next, high.Previous,  VirtualRegister, StartIndex, EndIndex),
-			new LiveRange(high, End,  VirtualRegister, StartIndex, EndIndex)
+			new LiveRange(low.Next, high,  VirtualRegister, StartIndex, EndIndex),
+			new LiveRange(high.Next, End,  VirtualRegister, StartIndex, EndIndex)
 		};
 	}
 }

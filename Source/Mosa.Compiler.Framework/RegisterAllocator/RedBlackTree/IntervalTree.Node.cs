@@ -46,12 +46,5 @@ public sealed partial class IntervalTree<T>
 			Interval = interval;
 			Value = value;
 		}
-
-		//public int CompareTo(IntervalNode<T> other)
-		//{
-		//	return Interval.CompareTo(other.Interval);
-		//}
-
-		//public bool IsSentinel { get { return Value == null; } }
 	}
 }

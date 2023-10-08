@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Text;
 using Mosa.Compiler.Common;
@@ -20,6 +21,8 @@ public abstract class BaseRegisterAllocator
 	protected readonly BaseArchitecture Architecture;
 	protected readonly LocalStack LocalStack;
 
+	protected readonly Dictionary<SlotIndex, MoveHint> MoveHints = new Dictionary<SlotIndex, MoveHint>();
+
 	protected readonly Operand StackFrame;
 
 	private readonly int VirtualRegisterCount;
@@ -30,7 +33,7 @@ public abstract class BaseRegisterAllocator
 	protected readonly List<VirtualRegister> VirtualRegisters;
 
 	private readonly SimplePriorityQueue<LiveInterval, int> PriorityQueue;
-	protected readonly List<LiveIntervalTrack> LiveIntervalTracks;
+	protected readonly List<LiveIntervalTrack> Tracks;
 
 	private readonly PhysicalRegister StackFrameRegister;
 	private readonly PhysicalRegister StackPointerRegister;
@@ -64,7 +67,7 @@ public abstract class BaseRegisterAllocator
 		PhysicalRegisterCount = architecture.RegisterSet.Length;
 		RegisterCount = VirtualRegisterCount + PhysicalRegisterCount;
 
-		LiveIntervalTracks = new List<LiveIntervalTrack>(PhysicalRegisterCount);
+		Tracks = new List<LiveIntervalTrack>(PhysicalRegisterCount);
 		VirtualRegisters = new List<VirtualRegister>(RegisterCount);
 		ExtendedBlocks = new List<ExtendedBlock>(basicBlocks.Count);
 
@@ -84,7 +87,7 @@ public abstract class BaseRegisterAllocator
 				|| (ProgramCounter != null && physicalRegister == ProgramCounter);
 
 			VirtualRegisters.Add(new VirtualRegister(physicalRegister, reserved));
-			LiveIntervalTracks.Add(new LiveIntervalTrack(physicalRegister, reserved));
+			Tracks.Add(new LiveIntervalTrack(physicalRegister, reserved));
 		}
 
 		// Setup extended virtual registers
@@ -132,6 +135,15 @@ public abstract class BaseRegisterAllocator
 
 		// Generate trace information for live intervals
 		TraceLiveIntervals("InitialLiveIntervals", false);
+
+		// Split intervals at call sites
+		SplitIntervalsAtCallSites();
+
+		// Collect move locations
+		CollectMoveHints();
+
+		// Generate trace information for move hints
+		TraceMoveHints();
 
 		AdditionalSetup();
 
@@ -642,13 +654,16 @@ public abstract class BaseRegisterAllocator
 						if (node.Instruction == IRInstruction.KillAllExcept && r == node.Operand1.Register.Index)
 							continue;
 
-						register.AddLiveInterval(slot, slotAfter);
+						if (endSlots[r].IsNotNull)
+						{
+							register.AddLiveInterval(endSlots[r], slotAfter);
 
-						intervalTrace?.Log($"Range:   {node.Label:X5}/{node.Offset} : {register} = {slot} to {slotAfter} [Add]");
+							intervalTrace?.Log($"Range:   {node.Label:X5}/{node.Offset} : {register} = {slot} to {slotAfter} [Add]");
 
-						endSlots[r] = SlotIndex.Null;
+							endSlots[r] = SlotIndex.Null;
 
-						intervalTrace?.Log($"EndSlot: {node.Label:X5}/{node.Offset} : {register} = {endSlots[r]} [KillSite]");
+							intervalTrace?.Log($"EndSlot: {node.Label:X5}/{node.Offset} : {register} = {endSlots[r]} [KillSite]");
+						}
 					}
 
 					KillSite.Add(slot);
@@ -743,6 +758,63 @@ public abstract class BaseRegisterAllocator
 		return SlotIndex.Null;
 	}
 
+	private void SplitIntervalsAtCallSites()
+	{
+		foreach (var virtualRegister in VirtualRegisters)
+		{
+			if (virtualRegister.IsPhysicalRegister)
+				continue;
+
+			for (var i = 0; i < virtualRegister.LiveIntervals.Count; i++)
+			{
+				var liveInterval = virtualRegister.LiveIntervals[i];
+
+				if (liveInterval.ForceSpill)
+					continue;
+
+				if (liveInterval.IsEmpty)
+					continue;
+
+				var callSite = FindKillAllSite(liveInterval);
+
+				if (callSite.IsNull)
+					continue;
+
+				if (liveInterval.End == callSite)
+					continue;
+
+				var low = FindSplit_LowerBoundary(liveInterval.LiveRange, callSite.Next);
+				var high = FindSplit_UpperBoundary(liveInterval.LiveRange, callSite.Next);
+
+				var newInternals = high == liveInterval.End
+					? liveInterval.SplitAt(low)
+					: liveInterval.SplitAt(low, high);
+
+				UpdateIntervals(liveInterval, newInternals, false);
+
+				i = 0; // reset - list was modified
+			}
+		}
+	}
+
+	protected virtual void CollectMoveHints()
+	{
+		return;
+	}
+
+	private void TraceMoveHints()
+	{
+		var moveHintTrace = CreateTrace("MoveHints", 9);
+
+		if (moveHintTrace == null)
+			return;
+
+		foreach (var moveHint in MoveHints)
+		{
+			moveHintTrace.Log(moveHint.Value.ToString());
+		}
+	}
+
 	private ExtendedBlock GetContainingBlock(SlotIndex slot)
 	{
 		var node = GetNode(slot);
@@ -816,7 +888,7 @@ public abstract class BaseRegisterAllocator
 				// Skip adding live intervals for physical registers to priority queue
 				if (liveInterval.VirtualRegister.IsPhysicalRegister)
 				{
-					LiveIntervalTracks[liveInterval.VirtualRegister.PhysicalRegister.Index].Add(liveInterval);
+					Tracks[liveInterval.VirtualRegister.PhysicalRegister.Index].Add(liveInterval);
 
 					continue;
 				}
@@ -855,7 +927,7 @@ public abstract class BaseRegisterAllocator
 
 		if (track.Intersects(liveInterval))
 		{
-			Trace?.Log($"  No - Intersected; track: {track.ToString2()} interval: {liveInterval}");
+			Trace?.Log($"  No - Intersected; track: {track}");
 			return false;
 		}
 
@@ -868,7 +940,7 @@ public abstract class BaseRegisterAllocator
 
 	protected bool PlaceLiveIntervalOnAnyAvailableTrack(LiveInterval liveInterval)
 	{
-		foreach (var track in LiveIntervalTracks)
+		foreach (var track in Tracks)
 		{
 			if (TryPlaceLiveIntervalOnTrack(liveInterval, track))
 			{
@@ -882,7 +954,7 @@ public abstract class BaseRegisterAllocator
 	protected bool PlaceLiveIntervalOnTrackAllowEvictions(LiveInterval liveInterval)
 	{
 		// find live interval(s) to evict based on spill costs
-		foreach (var track in LiveIntervalTracks)
+		foreach (var track in Tracks)
 		{
 			if (track.IsReserved)
 				continue;
@@ -890,13 +962,15 @@ public abstract class BaseRegisterAllocator
 			if (track.IsFloatingPoint != liveInterval.VirtualRegister.IsFloatingPoint)
 				continue;
 
-			var intersections = track.GetIntersections(liveInterval);
-
 			var evict = true;
+			var intersections = track.GetIntersections(liveInterval);
 
 			foreach (var intersection in intersections)
 			{
-				if (intersection.SpillCost >= liveInterval.SpillCost || intersection.SpillCost == int.MaxValue || intersection.VirtualRegister.IsPhysicalRegister || intersection.IsPhysicalRegister)
+				if (intersection.SpillCost >= liveInterval.SpillCost
+					|| intersection.SpillCost == int.MaxValue
+					|| intersection.VirtualRegister.IsPhysicalRegister
+					|| intersection.IsPhysicalRegister)
 				{
 					evict = false;
 					break;
@@ -958,14 +1032,17 @@ public abstract class BaseRegisterAllocator
 
 	protected void ProcessLiveInterval(LiveInterval liveInterval)
 	{
-		Debug.Assert(liveInterval.LiveIntervalTrack == null);
-
 		//Debug.Assert(!liveInterval.IsSplit);
 
 		Trace?.Log();
 		Trace?.Log($"Processing Interval: {liveInterval} / Length: {liveInterval.Length} / Spill Cost: {liveInterval.SpillCost} / Stage: {liveInterval.Stage}");
 		Trace?.Log($"  Defs ({liveInterval.LiveRange.DefCount}): {SlotsToString(liveInterval.DefPositions)}");
 		Trace?.Log($"  Uses ({liveInterval.LiveRange.UseCount}): {SlotsToString(liveInterval.UsePositions)}");
+
+		if (liveInterval.LiveIntervalTrack != null)
+			Trace?.Log("ERROR!");
+
+		Debug.Assert(liveInterval.LiveIntervalTrack == null);
 
 		if (PlaceLiveInterval(liveInterval))
 		{
@@ -974,28 +1051,6 @@ public abstract class BaseRegisterAllocator
 
 		// No live intervals to evict!
 		Trace?.Log("  No live intervals to evict");
-
-		if (Trace != null)
-		{
-			foreach (var track in LiveIntervalTracks)
-			{
-				if (track.IsReserved)
-					continue;
-
-				if (track.IsFloatingPoint != liveInterval.VirtualRegister.IsFloatingPoint)
-					continue;
-
-				var assignedList = track.GetIntersections(liveInterval);
-
-				if (assignedList == null)
-					continue;
-
-				foreach (var assigned in assignedList)
-				{
-					Trace.Log($"     Track: {track} Assigned: {assigned} / Spill Cost: {assigned.SpillCost}");
-				}
-			}
-		}
 
 		// prepare to split live interval
 		if (liveInterval.Stage == LiveInterval.AllocationStage.Initial)
@@ -1074,7 +1129,7 @@ public abstract class BaseRegisterAllocator
 
 	#region Split Options
 
-	private SlotIndex FindAnySplitPoint(LiveRange liveRange)
+	protected SlotIndex FindAnySplitPoint(LiveRange liveRange)
 	{
 		var at = FindSplit_TrimFrontDef(liveRange);
 
@@ -1106,7 +1161,7 @@ public abstract class BaseRegisterAllocator
 		return SlotIndex.Null;
 	}
 
-	private SlotIndex FindSplit_TrimFrontDef(LiveRange liveRange)
+	protected SlotIndex FindSplit_TrimFrontDef(LiveRange liveRange)
 	{
 		if (liveRange.IsEmpty
 			|| liveRange.DefCount == 0
@@ -1126,7 +1181,7 @@ public abstract class BaseRegisterAllocator
 		return at;
 	}
 
-	private SlotIndex FindSplit_TrimBackUse(LiveRange liveRange)
+	protected SlotIndex FindSplit_TrimBackUse(LiveRange liveRange)
 	{
 		if (liveRange.IsEmpty
 			|| liveRange.UseCount == 0
@@ -1146,7 +1201,7 @@ public abstract class BaseRegisterAllocator
 		return at;
 	}
 
-	private SlotIndex FindSplit_AfterFirstUse(LiveRange liveRange)
+	protected SlotIndex FindSplit_AfterFirstUse(LiveRange liveRange)
 	{
 		if (liveRange.IsEmpty
 			|| liveRange.UseCount == 0
@@ -1166,7 +1221,7 @@ public abstract class BaseRegisterAllocator
 		return at;
 	}
 
-	private SlotIndex FindSplit_AfterFirstDef(LiveRange liveRange)
+	protected SlotIndex FindSplit_AfterFirstDef(LiveRange liveRange)
 	{
 		if (liveRange.IsEmpty
 			|| liveRange.DefCount == 0
@@ -1186,7 +1241,7 @@ public abstract class BaseRegisterAllocator
 		return at;
 	}
 
-	private SlotIndex FindSplit_TrimFrontUse(LiveRange liveRange)
+	protected SlotIndex FindSplit_TrimFrontUse(LiveRange liveRange)
 	{
 		if (liveRange.IsEmpty
 			|| liveRange.UseCount == 0
@@ -1206,7 +1261,7 @@ public abstract class BaseRegisterAllocator
 		return at;
 	}
 
-	private SlotIndex FindSplit_LowerBoundary(LiveRange liveRange, SlotIndex at)
+	protected SlotIndex FindSplit_LowerBoundary(LiveRange liveRange, SlotIndex at)
 	{
 		var block = GetBlockStart(at).GetClamp(liveRange.Start, liveRange.End);
 
@@ -1218,7 +1273,7 @@ public abstract class BaseRegisterAllocator
 		return max;
 	}
 
-	private SlotIndex FindSplit_UpperBoundary(LiveRange liveRange, SlotIndex at)
+	protected SlotIndex FindSplit_UpperBoundary(LiveRange liveRange, SlotIndex at)
 	{
 		var block = GetBlockEnd(at).GetClamp(liveRange.Start, liveRange.End);
 		var use = liveRange.GetNextUse(at).GetPrevious();
@@ -1259,14 +1314,14 @@ public abstract class BaseRegisterAllocator
 
 		var intervals = liveInterval.SplitAt(splitAt);
 
-		ReplaceIntervals(liveInterval, intervals, true);
+		UpdateIntervals(liveInterval, intervals, true);
 	}
 
-	protected void ReplaceIntervals(LiveInterval replaceLiveInterval, List<LiveInterval> newIntervals, bool addToQueue)
+	protected void UpdateIntervals(LiveInterval replacedInterval, List<LiveInterval> newIntervals, bool addToQueue)
 	{
 		CalculateSpillCosts(newIntervals);
 
-		replaceLiveInterval.VirtualRegister.ReplaceWithSplit(replaceLiveInterval, newIntervals);
+		replacedInterval.VirtualRegister.ReplaceWithSplit(replacedInterval, newIntervals);
 
 		if (Trace != null)
 		{
@@ -1339,6 +1394,8 @@ public abstract class BaseRegisterAllocator
 			{
 				foreach (var def in liveInterval.DefPositions)
 				{
+					// FUTURE: Spills after every definition; this can be improved
+
 					var context = new Context(GetNode(def));
 
 					Architecture.InsertStoreInstruction(context, StackFrame, register.SpillSlotOperand, liveInterval.AssignedPhysicalOperand);
@@ -1507,12 +1564,12 @@ public abstract class BaseRegisterAllocator
 		var keyedList = new MoveKeyedList();
 
 		// collect edge slot indexes
-		var blockEdges = new Dictionary<SlotIndex, ExtendedBlock>();
+		var blockEdges = new HashSet<SlotIndex>();
 
 		foreach (var block in ExtendedBlocks)
 		{
-			blockEdges.Add(block.Start, block);
-			blockEdges.Add(block.End, block);
+			blockEdges.Add(block.Start);
+			blockEdges.Add(block.End);
 		}
 
 		foreach (var virtualRegister in VirtualRegisters)
@@ -1526,17 +1583,19 @@ public abstract class BaseRegisterAllocator
 			foreach (var currentInterval in virtualRegister.LiveIntervals)
 			{
 				// No moves at block edges (these are done in the resolve move phase later)
-				if (blockEdges.ContainsKey(currentInterval.End))
+				if (blockEdges.Contains(currentInterval.End))
 					continue;
+
+				var currentInternalEndNext = currentInterval.End.Next;
 
 				// List is not sorted, so scan thru each one
 				foreach (var nextInterval in virtualRegister.LiveIntervals)
 				{
-					// same interval
-					if (currentInterval == nextInterval)
+					if (currentInternalEndNext != nextInterval.Start)
 						continue;
 
-					if (nextInterval.Start != currentInterval.End)
+					// same interval
+					if (currentInterval == nextInterval)
 						continue;
 
 					// next interval is stack - stores to stack are done elsewhere
@@ -1551,20 +1610,11 @@ public abstract class BaseRegisterAllocator
 					}
 
 					// don't load from slot if next live interval starts with a def before use
-					if (nextInterval.LiveRange.DefCount != 0)
-					{
-						if (nextInterval.LiveRange.UseCount == 0)
-						{
-							continue;
-						}
-						else
-						{
-							if (nextInterval.LiveRange.FirstDef < nextInterval.LiveRange.FirstUse)
-								continue;
-						}
-					}
+					if (nextInterval.LiveRange.DefCount != 0
+						&& (nextInterval.LiveRange.UseCount == 0 || nextInterval.LiveRange.FirstDef < nextInterval.LiveRange.FirstUse))
+						continue;
 
-					keyedList.Add(currentInterval.End, currentInterval.AssignedOperand, nextInterval.AssignedOperand);
+					keyedList.Add(nextInterval.Start, currentInterval.AssignedOperand, nextInterval.AssignedOperand);
 
 					break;
 				}

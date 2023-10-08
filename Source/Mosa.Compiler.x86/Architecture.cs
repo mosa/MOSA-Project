@@ -197,7 +197,7 @@ public sealed class Architecture : BaseArchitecture
 	/// <param name="value">The value.</param>
 	public override void InsertStoreInstruction(Context context, Operand destination, Operand offset, Operand value)
 	{
-		BaseInstruction instruction = X86.MovStore32;
+		var instruction = X86.MovStore32;
 
 		if (value.IsR4)
 		{

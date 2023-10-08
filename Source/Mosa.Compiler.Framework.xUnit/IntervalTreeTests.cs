@@ -68,4 +68,19 @@ public class IntervalTreeTests
 		tree.Remove(3, 4);
 		Debug.Assert(!tree.Contains(3));
 	}
+
+	[Fact]
+	public void CheckIntervals()
+	{
+		var tree = new IntervalTree<object>();
+
+		tree.Add(1, 2, null);
+
+		Debug.Assert(!tree.Contains(0));
+		Debug.Assert(tree.Contains(1));
+		Debug.Assert(tree.Contains(2));
+
+		Debug.Assert(tree.Contains(2, 3));
+		Debug.Assert(!tree.Contains(3, 4));
+	}
 }
