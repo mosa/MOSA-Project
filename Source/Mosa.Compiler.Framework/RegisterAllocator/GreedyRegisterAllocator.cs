@@ -268,19 +268,19 @@ public sealed class GreedyRegisterAllocator : BaseRegisterAllocator
 		if (low.IsNotNull && high.IsNotNull)
 		{
 			var newInternals = liveInterval.SplitAt(low, high);
-			UpdateIntervals(liveInterval, newInternals, true);
+			UpdateLiveIntervals(liveInterval, newInternals, true);
 			return true;
 		}
 		else if (low.IsNotNull) // && high.IsNull
 		{
 			var newInternals = liveInterval.SplitAt(low);
-			UpdateIntervals(liveInterval, newInternals, true);
+			UpdateLiveIntervals(liveInterval, newInternals, true);
 			return true;
 		}
 		else if (high.IsNotNull) // && low.IsNull
 		{
 			var newInternals = liveInterval.SplitAt(high);
-			UpdateIntervals(liveInterval, newInternals, true);
+			UpdateLiveIntervals(liveInterval, newInternals, true);
 			return true;
 		}
 

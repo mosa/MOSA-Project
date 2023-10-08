@@ -31,9 +31,9 @@ public abstract class BaseRegisterAllocator
 
 	protected readonly List<ExtendedBlock> ExtendedBlocks;
 	protected readonly List<VirtualRegister> VirtualRegisters;
+	protected readonly List<RegisterTrack> Tracks;
 
 	private readonly SimplePriorityQueue<LiveInterval, int> PriorityQueue;
-	protected readonly List<LiveIntervalTrack> Tracks;
 
 	private readonly PhysicalRegister StackFrameRegister;
 	private readonly PhysicalRegister StackPointerRegister;
@@ -67,7 +67,7 @@ public abstract class BaseRegisterAllocator
 		PhysicalRegisterCount = architecture.RegisterSet.Length;
 		RegisterCount = VirtualRegisterCount + PhysicalRegisterCount;
 
-		Tracks = new List<LiveIntervalTrack>(PhysicalRegisterCount);
+		Tracks = new List<RegisterTrack>(PhysicalRegisterCount);
 		VirtualRegisters = new List<VirtualRegister>(RegisterCount);
 		ExtendedBlocks = new List<ExtendedBlock>(basicBlocks.Count);
 
@@ -87,7 +87,7 @@ public abstract class BaseRegisterAllocator
 				|| (ProgramCounter != null && physicalRegister == ProgramCounter);
 
 			VirtualRegisters.Add(new VirtualRegister(physicalRegister, reserved));
-			Tracks.Add(new LiveIntervalTrack(physicalRegister, reserved));
+			Tracks.Add(new RegisterTrack(physicalRegister, reserved));
 		}
 
 		// Setup extended virtual registers
@@ -640,7 +640,7 @@ public abstract class BaseRegisterAllocator
 					continue;
 
 				var slot = new SlotIndex(node);
-				var slotAfter = slot.Next;
+				var slotNext = slot.Next;
 
 				if (node.Instruction.IsCall || node.Instruction == IRInstruction.KillAll || node.Instruction == IRInstruction.KillAllExcept)
 				{
@@ -656,13 +656,18 @@ public abstract class BaseRegisterAllocator
 
 						if (endSlots[r].IsNotNull)
 						{
-							register.AddLiveInterval(endSlots[r], slotAfter);
-
-							intervalTrace?.Log($"Range:   {node.Label:X5}/{node.Offset} : {register} = {slot} to {slotAfter} [Add]");
+							register.AddLiveInterval(endSlots[r], slotNext);
 
 							endSlots[r] = SlotIndex.Null;
 
+							intervalTrace?.Log($"Range:   {node.Label:X5}/{node.Offset} : {register} = {endSlots[r]} to {slotNext} [Add]");
 							intervalTrace?.Log($"EndSlot: {node.Label:X5}/{node.Offset} : {register} = {endSlots[r]} [KillSite]");
+						}
+						else
+						{
+							register.AddLiveInterval(slotNext, slotNext);
+
+							intervalTrace?.Log($"Range:   {node.Label:X5}/{node.Offset} : {register} = {slot} to {slotNext} [Add]");
 						}
 					}
 
@@ -683,7 +688,7 @@ public abstract class BaseRegisterAllocator
 
 					var dual = node.Operands.Contains(result);
 
-					var slotStart = dual ? slot : slotAfter;
+					var slotStart = dual ? slot : slotNext;
 
 					intervalTrace?.Log($"Dual:    {dual}");
 
@@ -699,9 +704,9 @@ public abstract class BaseRegisterAllocator
 					}
 					else
 					{
-						register.AddLiveInterval(slotStart, slotAfter);
+						register.AddLiveInterval(slotStart, slotNext);
 
-						intervalTrace?.Log($"Range:   {node.Label:X5}/{node.Offset} : {register} = {slotStart} to {slotAfter} [Add - Output]");
+						intervalTrace?.Log($"Range:   {node.Label:X5}/{node.Offset} : {register} = {slotStart} to {slotNext} [Add - Output]");
 					}
 				}
 
@@ -790,9 +795,9 @@ public abstract class BaseRegisterAllocator
 					? liveInterval.SplitAt(low)
 					: liveInterval.SplitAt(low, high);
 
-				UpdateIntervals(liveInterval, newInternals, false);
+				UpdateLiveIntervals(liveInterval, newInternals, false);
 
-				i = 0; // reset - list was modified
+				i = 0; // reset loop - list was modified
 			}
 		}
 	}
@@ -911,7 +916,7 @@ public abstract class BaseRegisterAllocator
 		}
 	}
 
-	protected bool TryPlaceLiveIntervalOnTrack(LiveInterval liveInterval, LiveIntervalTrack track)
+	protected bool TryPlaceLiveIntervalOnTrack(LiveInterval liveInterval, RegisterTrack track)
 	{
 		if (track.IsReserved)
 		{
@@ -1314,10 +1319,10 @@ public abstract class BaseRegisterAllocator
 
 		var intervals = liveInterval.SplitAt(splitAt);
 
-		UpdateIntervals(liveInterval, intervals, true);
+		UpdateLiveIntervals(liveInterval, intervals, true);
 	}
 
-	protected void UpdateIntervals(LiveInterval replacedInterval, List<LiveInterval> newIntervals, bool addToQueue)
+	protected void UpdateLiveIntervals(LiveInterval replacedInterval, List<LiveInterval> newIntervals, bool addToQueue)
 	{
 		CalculateSpillCosts(newIntervals);
 

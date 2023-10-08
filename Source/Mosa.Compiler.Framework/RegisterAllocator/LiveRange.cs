@@ -1,5 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Diagnostics;
+
 namespace Mosa.Compiler.Framework.RegisterAllocator;
 
 public sealed class LiveRange
@@ -140,8 +142,6 @@ public sealed class LiveRange
 		Last = SlotIndex.Max(LastUse, LastDef);
 
 		IsDefFirst = defCount != 0 && (useCount == 0 || FirstDefIndex < FirstUseIndex);
-
-		//Debug.Assert(InternalValidation());
 	}
 
 	private static int LowestGreaterThanZero(int a, int b)
@@ -281,10 +281,7 @@ public sealed class LiveRange
 
 	public List<LiveRange> SplitAt(SlotIndex at)
 	{
-		//Debug.Assert(CanSplitAt(at));
-
-		if (!CanSplitAt(at))
-			throw new Exception($"Can not split at {at}");
+		Debug.Assert(CanSplitAt(at));
 
 		// special case
 		if (at == End)
@@ -311,10 +308,7 @@ public sealed class LiveRange
 			return SplitAt(low);
 		}
 
-		if (!CanSplitAt(low, high))
-			throw new Exception($"Can not split at {low} and {high}");
-
-		//Debug.Assert(CanSplitAt(low, high));
+		Debug.Assert(CanSplitAt(low, high));
 
 		return new List<LiveRange>(3)
 		{

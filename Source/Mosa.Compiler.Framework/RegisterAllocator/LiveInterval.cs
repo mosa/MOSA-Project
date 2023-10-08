@@ -21,9 +21,9 @@ public sealed class LiveInterval
 	public readonly SlotIndex Start;
 	public readonly SlotIndex End;
 
-	public int Length => (End - Start) + 1;
-
 	public readonly LiveRange LiveRange;
+
+	public int Length => End - Start + 1;
 
 	public int StartValue => LiveRange.Start.Index;
 
@@ -33,7 +33,7 @@ public sealed class LiveInterval
 
 	public int SpillCost => NeverSpill || IsUnsplitable ? int.MaxValue : SpillValue / Length;
 
-	public LiveIntervalTrack LiveIntervalTrack;
+	public RegisterTrack LiveIntervalTrack;
 
 	public AllocationStage Stage;
 
@@ -50,6 +50,24 @@ public sealed class LiveInterval
 	public bool NeverSpill;
 
 	public bool IsUnsplitable { get; }
+
+	public LiveInterval(VirtualRegister virtualRegister, SlotIndex start, SlotIndex end)
+	{
+		Debug.Assert(start <= end);
+
+		VirtualRegister = virtualRegister;
+		Start = start;
+		End = end;
+
+		LiveRange = new LiveRange(start, end, virtualRegister);
+
+		SpillValue = 0;
+		Stage = AllocationStage.Initial;
+		ForceSpill = false;
+		NeverSpill = false;
+
+		IsUnsplitable = Start == End;
+	}
 
 	#region Short Cuts
 
@@ -90,24 +108,6 @@ public sealed class LiveInterval
 		return Intersects(other.Start, other.End);
 	}
 
-	public LiveInterval(VirtualRegister virtualRegister, SlotIndex start, SlotIndex end)
-	{
-		Debug.Assert(start <= end);
-
-		VirtualRegister = virtualRegister;
-		Start = start;
-		End = end;
-
-		LiveRange = new LiveRange(start, end, virtualRegister);
-
-		SpillValue = 0;
-		Stage = AllocationStage.Initial;
-		ForceSpill = false;
-		NeverSpill = false;
-
-		IsUnsplitable = Start == End;
-	}
-
 	public LiveInterval CreateExpandedLiveInterval(LiveInterval interval)
 	{
 		Debug.Assert(VirtualRegister == interval.VirtualRegister);
@@ -126,14 +126,14 @@ public sealed class LiveInterval
 		return new LiveInterval(VirtualRegister, mergedStart, mergedEnd);
 	}
 
-	public override string ToString() => $"{VirtualRegister} between {LiveRange}";
-
-	public void Evict() => LiveIntervalTrack.Evict(this);
-
 	private LiveInterval CreateSplit(LiveRange liveRange)
 	{
 		return new LiveInterval(VirtualRegister, liveRange.Start, liveRange.End);
 	}
+
+	public override string ToString() => $"{VirtualRegister} between {LiveRange}";
+
+	public void Evict() => LiveIntervalTrack.Evict(this);
 
 	public List<LiveInterval> SplitAt(SlotIndex at)
 	{
