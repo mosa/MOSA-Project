@@ -195,6 +195,23 @@ public abstract class BaseArchitecture
 	public abstract bool IsInstructionMove(BaseInstruction instruction);
 
 	/// <summary>
+	/// Determines whether [is parameter store] [the specified context].
+	/// </summary>
+	/// <param name="context">The context.</param>
+	/// <param name="node">The node.</param>
+	/// <returns>
+	///   <c>true</c> if [is parameter store] [the specified context]; otherwise, <c>false</c>.</returns>
+	public abstract bool IsParameterStore(InstructionNode node, out Operand operand);
+
+	/// <summary>
+	/// Determines whether [is parameter load] [the specified context].
+	/// </summary>
+	/// <param name="node">The node.</param>
+	/// <returns>
+	///   <c>true</c> if [is parameter load] [the specified context]; otherwise, <c>false</c>.</returns>
+	public abstract bool IsParameterLoad(InstructionNode node, out Operand operand);
+
+	/// <summary>
 	/// Gets the platform intrinsic method.
 	/// </summary>
 	/// <param name="name">The name.</param>

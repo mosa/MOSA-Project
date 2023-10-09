@@ -272,4 +272,77 @@ public sealed class Architecture : BaseArchitecture
 	{
 		return instruction == X86.Mov32 || instruction == X86.Movsd || instruction == X86.Movss;
 	}
+
+	/// <summary>
+	/// Determines whether [is parameter store] [the specified context].
+	/// </summary>
+	/// <param name="node">The node.</param>
+	/// <param name="operand">The operand.</param>
+	/// <returns>
+	///   <c>true</c> if [is parameter store] [the specified context]; otherwise, <c>false</c>.</returns>
+	public override bool IsParameterStore(InstructionNode node, out Operand operand)
+	{
+		operand = null;
+
+		if (node.OperandCount != 3
+			|| !node.Instruction.IsMemoryWrite
+			|| !node.Operand1.IsCPURegister
+			|| node.Operand1.Register != CPURegister.EBP
+			)
+			return false;
+
+		if (node.Instruction == X86.MovStore32
+			|| node.Instruction == X86.MovStore16
+			|| node.Instruction == X86.MovStore8
+			|| node.Instruction == X86.MovssStore
+			|| node.Instruction == X86.MovssStore
+			|| node.Instruction == X86.MovsdStore
+			)
+		{
+			operand = node.Operand2;
+			return true;
+		}
+
+		return false;
+	}
+
+	/// <summary>
+	/// Determines whether [is parameter load] [the specified context].
+	/// </summary>
+	/// <param name="node">The node.</param>
+	/// <returns>
+	///   <c>true</c> if [is parameter load] [the specified context]; otherwise, <c>false</c>.</returns>
+	public override bool IsParameterLoad(InstructionNode node, out Operand operand)
+	{
+		operand = null;
+
+		if (node.ResultCount != 1
+			|| node.OperandCount != 2
+			|| !node.Instruction.IsMemoryRead
+			|| !node.Operand1.IsCPURegister
+			|| node.Operand1.Register != CPURegister.EBP)
+			return false;
+
+		if (node.Instruction == X86.MovLoad32
+			|| node.Instruction == X86.MovLoad16
+			|| node.Instruction == X86.MovLoad8
+			|| node.Instruction == X86.MovssLoad
+			|| node.Instruction == X86.MovsdLoad
+
+			|| node.Instruction == X86.MovzxLoad16
+			|| node.Instruction == X86.MovzxLoad8
+			|| node.Instruction == X86.Movzx16To32
+			|| node.Instruction == X86.Movzx8To32
+
+			|| node.Instruction == X86.MovsxLoad16
+			|| node.Instruction == X86.MovsxLoad8
+			|| node.Instruction == X86.Movsx16To32
+			|| node.Instruction == X86.Movsx8To32)
+		{
+			operand = node.Operand2;
+			return true;
+		}
+
+		return false;
+	}
 }
