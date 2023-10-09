@@ -6,7 +6,6 @@ using System.Text;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.Trace;
-using static Mosa.Compiler.Framework.BaseMethodCompilerStage;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator;
 
@@ -19,7 +18,7 @@ public abstract class BaseRegisterAllocator
 	protected readonly BaseArchitecture Architecture;
 	protected readonly LocalStack LocalStack;
 
-	protected readonly Dictionary<SlotIndex, MoveHint> MoveHints = new Dictionary<SlotIndex, MoveHint>();
+	protected readonly Dictionary<SlotIndex, MoveHint> MoveHints = new();
 
 	protected readonly Operand StackFrame;
 
@@ -31,28 +30,28 @@ public abstract class BaseRegisterAllocator
 	protected readonly List<VirtualRegister> VirtualRegisters;
 	protected readonly List<RegisterTrack> Tracks;
 
-	private readonly PriorityQueue<LiveInterval, int> PriorityQueue;
+	private readonly PriorityQueue<LiveInterval, int> PriorityQueue = new();
 
 	private readonly PhysicalRegister StackFrameRegister;
 	private readonly PhysicalRegister StackPointerRegister;
 	private readonly PhysicalRegister ProgramCounter;
 	private readonly PhysicalRegister LinkRegister;
 
-	private readonly List<LiveInterval> SpilledIntervals;
+	private readonly List<LiveInterval> SpilledIntervals = new();
 
-	protected readonly List<SlotIndex> KillSite;
+	private readonly List<InstructionNode> SlotsToNodes = new(512);
 
-	protected readonly CreateTraceHandler CreateTrace;
+	protected readonly List<SlotIndex> KillSite = new();
+
+	protected readonly BaseMethodCompilerStage.CreateTraceHandler CreateTrace;
 
 	protected readonly TraceLog Trace;
-
-	private readonly List<InstructionNode> SlotsToNodes;
 
 	public int SpillMoves = 0;
 	public int DataFlowMoves = 0;
 	public int ResolvingMoves = 0;
 
-	protected BaseRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters virtualRegisters, BaseArchitecture architecture, LocalStack localStack, Operand stackFrame, CreateTraceHandler createTrace)
+	protected BaseRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters virtualRegisters, BaseArchitecture architecture, LocalStack localStack, Operand stackFrame, BaseMethodCompilerStage.CreateTraceHandler createTrace)
 	{
 		CreateTrace = createTrace;
 
@@ -95,13 +94,6 @@ public abstract class BaseRegisterAllocator
 
 			VirtualRegisters.Add(new VirtualRegister(virtualRegister));
 		}
-
-		PriorityQueue = new PriorityQueue<LiveInterval, int>();
-		SpilledIntervals = new List<LiveInterval>();
-
-		KillSite = new List<SlotIndex>();
-
-		SlotsToNodes = new List<InstructionNode>(512);
 	}
 
 	public virtual void Start()
@@ -109,8 +101,11 @@ public abstract class BaseRegisterAllocator
 		// Order all the blocks
 		CreateExtendedBlocks();
 
-		// Number all the instructions in block order
-		NumberInstructions();
+		// Collect instruction data and Number all the instructions in block order
+		CollectInstructionData();
+
+		// Collect block information
+		CollectBlockInformation();
 
 		// Update virtual register with index numbers
 		UpdateVirtualRegisterPositions();
@@ -302,11 +297,13 @@ public abstract class BaseRegisterAllocator
 		SpilledIntervals.Add(liveInterval);
 	}
 
-	public void NumberInstructions(BasicBlocks basicBlocks)
+	private void CollectInstructionData()
 	{
+		var paramStoreSet = new HashSet<Operand>();
+
 		SlotsToNodes.Add(null);
 
-		foreach (var block in basicBlocks)
+		foreach (var block in BasicBlocks)
 		{
 			for (var node = block.First; ; node = node.Next)
 			{
@@ -317,18 +314,44 @@ public abstract class BaseRegisterAllocator
 
 				SlotsToNodes.Add(node);
 
+				if (Architecture.IsParameterStore(node, out var storeParam))
+				{
+					paramStoreSet.Add(storeParam);
+				}
+				else if (Architecture.IsParameterLoad(node, out var loadParam))
+				{
+					var result = node.Result;
+
+					// FUTURE: check can be improved to allow multiple defines, as long as the load is exactly the same
+					if (result.IsDefinedOnce)
+					{
+						var register = VirtualRegisters[GetIndex(result)];
+
+						register.IsParamLoad = true;
+						register.ParamLoadNode = node;
+						register.ParamOperand = loadParam;
+					}
+				}
+
 				if (node.IsBlockEndInstruction)
 					break;
 			}
 
 			Debug.Assert(block.Last.Offset != 0);
 		}
+
+		// Mark if parameter is writable (vs. read-only)
+		foreach (var register in VirtualRegisters)
+		{
+			if (register.ParamOperand != null && paramStoreSet.Contains(register.ParamOperand))
+			{
+				register.IsParamStore = true;
+			}
+		}
 	}
 
-	private void NumberInstructions()
+	private void CollectBlockInformation()
 	{
-		NumberInstructions(BasicBlocks);
-
 		foreach (var block in BasicBlocks)
 		{
 			ExtendedBlocks[block.Sequence].Start = new SlotIndex(block.First);
@@ -1363,6 +1386,9 @@ public abstract class BaseRegisterAllocator
 			if (!register.IsSpilled)
 				continue;
 
+			//if (!register.IsParamLoad || register.IsParamStore)
+			//	continue;
+
 			Debug.Assert(register.IsVirtualRegister);
 
 			register.SpillSlotOperand = LocalStack.Allocate(register.VirtualRegisterOperand);
@@ -1392,6 +1418,9 @@ public abstract class BaseRegisterAllocator
 		{
 			if (!register.IsUsed || register.IsPhysicalRegister || !register.IsSpilled)
 				continue;
+
+			//if (register.IsParamLoad && !register.IsParamStore)
+			//	continue; // No store required
 
 			foreach (var liveInterval in register.LiveIntervals)
 			{
@@ -1433,7 +1462,7 @@ public abstract class BaseRegisterAllocator
 		}
 	}
 
-	protected void AssignPhysicalRegistersToInstructions(InstructionNode node, Operand old, Operand replacement)
+	protected static void AssignPhysicalRegistersToInstructions(InstructionNode node, Operand old, Operand replacement)
 	{
 		for (var i = 0; i < node.OperandCount; i++)
 		{
