@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.IO;
 using Mosa.Compiler.Framework.Trace;
 
 namespace Mosa.Compiler.Framework.CompilerStages;
