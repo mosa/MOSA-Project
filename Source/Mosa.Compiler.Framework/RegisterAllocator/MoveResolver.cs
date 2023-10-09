@@ -19,20 +19,20 @@ public sealed class MoveResolver
 
 	public readonly List<Move> Moves;
 
-	public readonly InstructionNode Index;
+	public readonly InstructionNode Node;
 
 	public readonly bool Before;
 
-	public MoveResolver(InstructionNode index, bool before)
+	public MoveResolver(InstructionNode node, bool before)
 	{
 		Moves = new List<Move>();
 
 		Before = before;
-		Index = index;
+		Node = node;
 	}
 
-	public MoveResolver(InstructionNode index, bool before, List<Move> moves)
-		: this(index, before)
+	public MoveResolver(InstructionNode node, bool before, List<Move> moves)
+		: this(node, before)
 	{
 		foreach (var move in moves)
 			Moves.Add(move);
@@ -171,7 +171,7 @@ public sealed class MoveResolver
 
 		var moves = GetResolveMoves();
 
-		var context = new Context(Index);
+		var context = new Context(Node);
 
 		if (Before)
 		{
