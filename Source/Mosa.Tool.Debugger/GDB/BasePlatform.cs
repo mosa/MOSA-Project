@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Collections.Generic;
 using Mosa.Utility.RSP;
 
 namespace Mosa.Tool.Debugger.GDB;

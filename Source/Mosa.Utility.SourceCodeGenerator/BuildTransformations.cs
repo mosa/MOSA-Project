@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Collections.Generic;
 using System.Text;
 using Mosa.Utility.SourceCodeGenerator.TransformExpressions;
 

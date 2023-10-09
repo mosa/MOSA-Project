@@ -1,6 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Windows.Forms;
 using Mosa.Utility.Disassembler;
 
 namespace Mosa.Tool.Debugger.Views;

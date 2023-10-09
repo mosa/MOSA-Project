@@ -261,33 +261,33 @@ public class Starter : BaseLauncher
 		switch (MosaSettings.Platform.ToLowerInvariant())
 		{
 			case "x86":
-			{
-				qemuApp = MosaSettings.QemuX86App;
-				qemuUefi = MosaSettings.QemuEdk2X86;
-				arg.Append(" -cpu qemu32,+sse4.1,abm,bmi1,bmi2,popcnt");
-				break;
-			}
+				{
+					qemuApp = MosaSettings.QemuX86App;
+					qemuUefi = MosaSettings.QemuEdk2X86;
+					arg.Append(" -cpu qemu32,+sse4.1,abm,bmi1,bmi2,popcnt");
+					break;
+				}
 			case "x64":
-			{
-				qemuApp = MosaSettings.QemuX64App;
-				qemuUefi = MosaSettings.QemuEdk2X64;
-				arg.Append(" -cpu qemu64,+sse4.1,abm,bmi1,bmi2,popcnt");
-				break;
-			}
+				{
+					qemuApp = MosaSettings.QemuX64App;
+					qemuUefi = MosaSettings.QemuEdk2X64;
+					arg.Append(" -cpu qemu64,+sse4.1,abm,bmi1,bmi2,popcnt");
+					break;
+				}
 			case "ARM32":
-			{
-				qemuApp = MosaSettings.QemuARM32App;
-				qemuUefi = MosaSettings.QemuEdk2ARM32;
-				arg.Append(" -cpu arm1176");
-				break;
-			}
+				{
+					qemuApp = MosaSettings.QemuARM32App;
+					qemuUefi = MosaSettings.QemuEdk2ARM32;
+					arg.Append(" -cpu arm1176");
+					break;
+				}
 			case "arm64":
-			{
-				qemuApp = MosaSettings.QemuARM64App;
-				qemuUefi = MosaSettings.QemuEdk2ARM64;
-				arg.Append(" -cpu cortex-a7");
-				break;
-			}
+				{
+					qemuApp = MosaSettings.QemuARM64App;
+					qemuUefi = MosaSettings.QemuEdk2ARM64;
+					arg.Append(" -cpu cortex-a7");
+					break;
+				}
 			default: throw new CompilerException($"Unknown platform: {MosaSettings.Platform}");
 		}
 
@@ -315,26 +315,26 @@ public class Starter : BaseLauncher
 		switch (serial)
 		{
 			case "pipe":
-			{
-				arg.Append($" -serial pipe:{MosaSettings.EmulatorSerialPipe}");
-				break;
-			}
+				{
+					arg.Append($" -serial pipe:{MosaSettings.EmulatorSerialPipe}");
+					break;
+				}
 			case "tcpserver":
-			{
-				arg.Append(
-					$" -serial tcp:{MosaSettings.EmulatorSerialHost}:{MosaSettings.EmulatorSerialPort},server,nowait");
-				break;
-			}
+				{
+					arg.Append(
+						$" -serial tcp:{MosaSettings.EmulatorSerialHost}:{MosaSettings.EmulatorSerialPort},server,nowait");
+					break;
+				}
 			case "tcpclient":
-			{
-				arg.Append($" -serial tcp:{MosaSettings.EmulatorSerialHost}:,client,nowait");
-				break;
-			}
+				{
+					arg.Append($" -serial tcp:{MosaSettings.EmulatorSerialHost}:,client,nowait");
+					break;
+				}
 			default:
-			{
-				arg.Append(" -serial null");
-				break;
-			}
+				{
+					arg.Append(" -serial null");
+					break;
+				}
 		}
 
 		if (MosaSettings.EmulatorGDB) arg.Append($" -S -gdb tcp::{MosaSettings.GDBPort}");
@@ -342,29 +342,29 @@ public class Starter : BaseLauncher
 		switch (MosaSettings.ImageFormat)
 		{
 			case "bin":
-			{
-				arg.Append($" -kernel {Quote(MosaSettings.ImageFile)}");
-				break;
-			}
+				{
+					arg.Append($" -kernel {Quote(MosaSettings.ImageFile)}");
+					break;
+				}
 			default:
-			{
-				arg.Append($" -drive format=raw,file={Quote(MosaSettings.ImageFile)}");
-				break;
-			}
+				{
+					arg.Append($" -drive format=raw,file={Quote(MosaSettings.ImageFile)}");
+					break;
+				}
 		}
 
 		switch (MosaSettings.ImageFirmware)
 		{
 			case "bios":
-			{
-				arg.Append($" -L {Quote(MosaSettings.QemuBIOS)}");
-				break;
-			}
+				{
+					arg.Append($" -L {Quote(MosaSettings.QemuBIOS)}");
+					break;
+				}
 			case "uefi":
-			{
-				arg.Append($"-drive if=pflash,format=raw,readonly=on,file={Quote(qemuUefi)}");
-				break;
-			}
+				{
+					arg.Append($"-drive if=pflash,format=raw,readonly=on,file={Quote(qemuUefi)}");
+					break;
+				}
 		}
 
 		return CreateApplicationProcess(qemuApp, arg.ToString());
@@ -406,20 +406,20 @@ public class Starter : BaseLauncher
 		switch (MosaSettings.EmulatorSerial)
 		{
 			case "pipe":
-			{
-				sb.Append($@"com1: enabled=1, mode=pipe-server, dev=\\.\pipe\{MosaSettings.EmulatorSerialPipe}");
-				break;
-			}
+				{
+					sb.Append($@"com1: enabled=1, mode=pipe-server, dev=\\.\pipe\{MosaSettings.EmulatorSerialPipe}");
+					break;
+				}
 			case "tcpserver":
-			{
-				sb.AppendLine($"com1: enabled=1, mode=socket-server, dev={MosaSettings.EmulatorSerialHost}:{MosaSettings.EmulatorSerialPort}");
-				break;
-			}
+				{
+					sb.AppendLine($"com1: enabled=1, mode=socket-server, dev={MosaSettings.EmulatorSerialHost}:{MosaSettings.EmulatorSerialPort}");
+					break;
+				}
 			case "tcpclient":
-			{
-				sb.AppendLine($"com1: enabled=1, mode=socket-client, dev={MosaSettings.EmulatorSerialHost}:{MosaSettings.EmulatorSerialPort}");
-				break;
-			}
+				{
+					sb.AppendLine($"com1: enabled=1, mode=socket-client, dev={MosaSettings.EmulatorSerialHost}:{MosaSettings.EmulatorSerialPort}");
+					break;
+				}
 		}
 
 		if (MosaSettings.EmulatorGDB)

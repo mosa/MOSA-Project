@@ -1,7 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-using System.Windows.Forms;
 using Mosa.Utility.Configuration;
 
 namespace Mosa.Tool.Debugger;
