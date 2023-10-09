@@ -9,19 +9,13 @@ public sealed class MoveResolver
 	public enum ResolvedMoveType
 	{ Move, Exchange, Load }
 
-	public sealed class ResolvedMoveList : List<MoveExtended<ResolvedMoveType>>
-	{
-		public void Add(Operand source, Operand destination, ResolvedMoveType type)
-		{
-			Add(new MoveExtended<ResolvedMoveType>(source, destination, type));
-		}
-	}
-
-	private readonly List<Move> Moves = new List<Move>();
-
 	private readonly InstructionNode Node;
 
 	private readonly bool Before;
+
+	private readonly List<OperandMove> Moves = new();
+
+	private readonly List<OperandResolvedMove> ResolvedMoves = new();
 
 	private MoveResolver(InstructionNode node, bool before)
 	{
@@ -29,7 +23,7 @@ public sealed class MoveResolver
 		Node = node;
 	}
 
-	public MoveResolver(InstructionNode node, bool before, List<Move> moves)
+	public MoveResolver(InstructionNode node, bool before, List<OperandMove> moves)
 		: this(node, before)
 	{
 		foreach (var move in moves)
@@ -43,7 +37,7 @@ public sealed class MoveResolver
 
 	public void AddMove(Operand source, Operand destination)
 	{
-		Moves.Add(new Move(source, destination));
+		Moves.Add(new OperandMove(source, destination));
 	}
 
 	private int FindIndex(PhysicalRegister register, bool source)
@@ -64,7 +58,7 @@ public sealed class MoveResolver
 		return -1;
 	}
 
-	private void TrySimpleMoves(ResolvedMoveList moves)
+	private void TrySimpleMoves()
 	{
 		var loop = true;
 
@@ -86,7 +80,7 @@ public sealed class MoveResolver
 
 				Debug.Assert(move.Destination.IsCPURegister);
 
-				moves.Add(move.Source, move.Destination, move.Source.IsCPURegister ? ResolvedMoveType.Move : ResolvedMoveType.Load);
+				ResolvedMoves.Add(new OperandResolvedMove(move.Source, move.Destination, move.Source.IsCPURegister ? ResolvedMoveType.Move : ResolvedMoveType.Load));
 
 				Moves.RemoveAt(i);
 
@@ -95,7 +89,7 @@ public sealed class MoveResolver
 		}
 	}
 
-	private void TryExchange(ResolvedMoveList moves)
+	private void TryExchange()
 	{
 		var loop = true;
 
@@ -118,9 +112,9 @@ public sealed class MoveResolver
 				Debug.Assert(Moves[other].Source.IsCPURegister);
 				Debug.Assert(move.Source.IsCPURegister);
 
-				moves.Add(Moves[other].Source, move.Source, ResolvedMoveType.Exchange);
+				ResolvedMoves.Add(new OperandResolvedMove(Moves[other].Source, move.Source, ResolvedMoveType.Exchange));
 
-				Moves[other] = new Move(move.Source, Moves[other].Destination);
+				Moves[other] = new OperandMove(move.Source, Moves[other].Destination);
 
 				Moves.RemoveAt(i);
 
@@ -135,7 +129,7 @@ public sealed class MoveResolver
 		}
 	}
 
-	private void CreateMemoryMoves(ResolvedMoveList moves)
+	private void CreateMemoryMoves()
 	{
 		for (var i = 0; i < Moves.Count; i++)
 		{
@@ -147,19 +141,15 @@ public sealed class MoveResolver
 			Debug.Assert(move.Destination.IsCPURegister);
 			Debug.Assert(move.Source.IsCPURegister);
 
-			moves.Add(move.Destination, move.Source, ResolvedMoveType.Move);
+			ResolvedMoves.Add(new OperandResolvedMove(move.Destination, move.Source, ResolvedMoveType.Move));
 		}
 	}
 
-	private ResolvedMoveList GetResolveMoves()
+	private void GetResolveMoves()
 	{
-		var moves = new ResolvedMoveList();
-
-		TrySimpleMoves(moves);
-		TryExchange(moves);
-		CreateMemoryMoves(moves);
-
-		return moves;
+		TrySimpleMoves();
+		TryExchange();
+		CreateMemoryMoves();
 	}
 
 	public int InsertResolvingMoves(BaseArchitecture architecture, Operand stackFrame)
@@ -167,13 +157,13 @@ public sealed class MoveResolver
 		if (Moves.Count == 0)
 			return 0;
 
-		var moves = GetResolveMoves();
+		GetResolveMoves();
 
 		var context = new Context(Node);
 
 		if (Before)
 		{
-			// TODO: Generalize XXXX
+			// TODO: Generalize
 			context.GotoPrevious();
 
 			// Note: This won't work for expanded switch statements... but we can't insert into the end of those blocks anyway
@@ -186,11 +176,11 @@ public sealed class MoveResolver
 			}
 		}
 
-		foreach (var move in moves)
+		foreach (var move in ResolvedMoves)
 		{
 			Debug.Assert(move.Destination.IsCPURegister);
 
-			switch (move.Value)
+			switch (move.ResolvedMoveType)
 			{
 				case ResolvedMoveType.Move: architecture.InsertMoveInstruction(context, move.Destination, move.Source); break;
 				case ResolvedMoveType.Exchange: architecture.InsertExchangeInstruction(context, move.Destination, move.Source); break;

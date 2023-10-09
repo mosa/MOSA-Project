@@ -1558,11 +1558,11 @@ public abstract class BaseRegisterAllocator
 		}
 	}
 
-	protected class MoveKeyedList : KeyedList<SlotIndex, Move>
+	protected class MoveKeyedList : KeyedList<SlotIndex, OperandMove>
 	{
 		public void Add(SlotIndex at, Operand source, Operand destination)
 		{
-			Add(at, new Move(source, destination));
+			Add(at, new OperandMove(source, destination));
 		}
 	}
 

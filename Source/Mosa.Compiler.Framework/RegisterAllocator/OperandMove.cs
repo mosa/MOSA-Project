@@ -4,13 +4,13 @@ using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator;
 
-public sealed class Move
+public struct OperandMove
 {
 	public readonly Operand Source;
 
 	public readonly Operand Destination;
 
-	public Move(Operand source, Operand destination)
+	public OperandMove(Operand source, Operand destination)
 	{
 		Debug.Assert(source != null);
 		Debug.Assert(destination != null);
