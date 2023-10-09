@@ -17,16 +17,14 @@ public sealed class MoveResolver
 		}
 	}
 
-	public readonly List<Move> Moves;
+	private readonly List<Move> Moves = new List<Move>();
 
-	public readonly InstructionNode Node;
+	private readonly InstructionNode Node;
 
-	public readonly bool Before;
+	private readonly bool Before;
 
-	public MoveResolver(InstructionNode node, bool before)
+	private MoveResolver(InstructionNode node, bool before)
 	{
-		Moves = new List<Move>();
-
 		Before = before;
 		Node = node;
 	}
@@ -153,7 +151,7 @@ public sealed class MoveResolver
 		}
 	}
 
-	public ResolvedMoveList GetResolveMoves()
+	private ResolvedMoveList GetResolveMoves()
 	{
 		var moves = new ResolvedMoveList();
 

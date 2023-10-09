@@ -159,22 +159,6 @@ public sealed class VirtualRegister
 		return null;
 	}
 
-	/// <summary>
-	/// Gets the interval at or ends at.
-	/// </summary>
-	/// <param name="at">At.</param>
-	/// <returns></returns>
-	public LiveInterval GetIntervalAtOrEndsAt(SlotIndex at)
-	{
-		foreach (var liveInterval in LiveIntervals)
-		{
-			if (liveInterval.Contains(at) || at == liveInterval.End)
-				return liveInterval;
-		}
-
-		return null;
-	}
-
 	public void ReplaceWithSplit(LiveInterval source, List<LiveInterval> liveIntervals)
 	{
 		Remove(source);

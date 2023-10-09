@@ -2,6 +2,7 @@
 
 using System.Collections;
 using System.Diagnostics;
+using System.Net.WebSockets;
 using System.Text;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis;
@@ -1501,13 +1502,14 @@ public abstract class BaseRegisterAllocator
 				var fromAnchorFlag = from.BasicBlock.NextBlocks.Count == 1;
 
 				var anchor = fromAnchorFlag ? from : to;
+				var anchorIndex = fromAnchorFlag ? 0 : 1;
 
-				var moveResolver = moveResolvers[fromAnchorFlag ? 0 : 1, anchor.Sequence];
+				var moveResolver = moveResolvers[anchorIndex, anchor.Sequence];
 
 				if (moveResolver == null)
 				{
 					moveResolver = new MoveResolver(anchor.BasicBlock, from.BasicBlock, to.BasicBlock);
-					moveResolvers[fromAnchorFlag ? 0 : 1, anchor.Sequence] = moveResolver;
+					moveResolvers[anchorIndex, anchor.Sequence] = moveResolver;
 				}
 
 				foreach (var virtualRegister in GetVirtualRegisters(to.LiveIn))
@@ -1515,7 +1517,7 @@ public abstract class BaseRegisterAllocator
 					//if (virtualRegister.IsPhysicalRegister)
 					//continue;
 
-					var fromLiveInterval = virtualRegister.GetIntervalAtOrEndsAt(from.End);
+					var fromLiveInterval = virtualRegister.GetIntervalAt(from.End);
 					var toLiveInterval = virtualRegister.GetIntervalAt(to.Start);
 
 					Debug.Assert(fromLiveInterval != null);
