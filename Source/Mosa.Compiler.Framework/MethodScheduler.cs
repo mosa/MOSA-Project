@@ -1,9 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Collections.Generic;
-using System.Threading;
 using Mosa.Compiler.MosaTypeSystem;
-using Priority_Queue;
 
 namespace Mosa.Compiler.Framework;
 
@@ -18,7 +15,9 @@ public sealed class MethodScheduler
 
 	private readonly HashSet<MethodData> workingSet = new HashSet<MethodData>();
 
-	private readonly SimplePriorityQueue<MethodData> queue = new SimplePriorityQueue<MethodData>();
+	private readonly PriorityQueue<MethodData, int> queue = new PriorityQueue<MethodData, int>();
+
+	private readonly HashSet<MethodData> queueSet = new HashSet<MethodData>();
 
 	private int totalMethods;
 	private int totalQueued;
@@ -128,7 +127,7 @@ public sealed class MethodScheduler
 
 		lock (queue)
 		{
-			if (queue.Contains(methodData))
+			if (queueSet.Contains(methodData))
 			{
 				//Debug.WriteLine($"Already in Queue: {method}");
 
@@ -139,6 +138,7 @@ public sealed class MethodScheduler
 			var priority = GetCompilePriorityLevel(methodData);
 
 			queue.Enqueue(methodData, priority);
+			queueSet.Add(methodData);
 
 			Interlocked.Increment(ref totalQueued);
 		}
@@ -148,8 +148,10 @@ public sealed class MethodScheduler
 	{
 		lock (queue)
 		{
-			if (queue.TryDequeue(out var methodData))
+			if (queue.TryDequeue(out var methodData, out var priority))
 			{
+				queueSet.Remove(methodData);
+
 				Interlocked.Decrement(ref totalQueued);
 
 				//Debug.WriteLine($"Dequeued: {method}");

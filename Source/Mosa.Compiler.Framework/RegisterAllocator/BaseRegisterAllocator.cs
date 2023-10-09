@@ -1,13 +1,11 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Text;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.Trace;
-using Priority_Queue;
 using static Mosa.Compiler.Framework.BaseMethodCompilerStage;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator;
@@ -33,7 +31,7 @@ public abstract class BaseRegisterAllocator
 	protected readonly List<VirtualRegister> VirtualRegisters;
 	protected readonly List<RegisterTrack> Tracks;
 
-	private readonly SimplePriorityQueue<LiveInterval, int> PriorityQueue;
+	private readonly PriorityQueue<LiveInterval, int> PriorityQueue;
 
 	private readonly PhysicalRegister StackFrameRegister;
 	private readonly PhysicalRegister StackPointerRegister;
@@ -98,7 +96,7 @@ public abstract class BaseRegisterAllocator
 			VirtualRegisters.Add(new VirtualRegister(virtualRegister));
 		}
 
-		PriorityQueue = new SimplePriorityQueue<LiveInterval, int>();
+		PriorityQueue = new PriorityQueue<LiveInterval, int>();
 		SpilledIntervals = new List<LiveInterval>();
 
 		KillSite = new List<SlotIndex>();
