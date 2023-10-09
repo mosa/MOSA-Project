@@ -32,6 +32,20 @@ public sealed class VirtualRegister
 
 	public bool IsUsed => Count != 0;
 
+	#region Parameter Information
+
+	public bool IsParamLoad = false;
+
+	public bool IsParamStore = false;
+
+	public BaseInstruction SpillInstruction;
+
+	public InstructionNode ParamLoadNode;
+
+	public Operand ParamOperand;
+
+	#endregion Parameter Information
+
 	public VirtualRegister(Operand virtualRegister)
 	{
 		VirtualRegisterOperand = virtualRegister;
