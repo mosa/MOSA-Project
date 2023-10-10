@@ -10,9 +10,9 @@ public sealed class MoveResolver
 
 	public readonly bool Before;
 
-	public readonly List<OperandMove> Moves = new();
+	public readonly List<LiveIntervalTransition> Moves = new();
 
-	private readonly List<OperandResolvedMove> ResolvedMoves = new();
+	private readonly List<LiveIntervalTransition> ResolvedMoves = new();
 
 	public MoveResolver(InstructionNode node, bool before)
 	{
@@ -22,7 +22,7 @@ public sealed class MoveResolver
 
 	public void AddMove(LiveInterval from, LiveInterval to)
 	{
-		Moves.Add(new OperandMove(from.AssignedOperand, to.AssignedOperand));
+		Moves.Add(new LiveIntervalTransition(from, to));
 	}
 
 	private void ResolveMoves()
@@ -72,10 +72,10 @@ public sealed class MoveResolver
 
 				Debug.Assert(move.Destination.IsCPURegister);
 
-				ResolvedMoves.Add(new OperandResolvedMove(
+				ResolvedMoves.Add(new LiveIntervalTransition(
 					move.Source.IsCPURegister ? ResolvedMoveType.Move : ResolvedMoveType.Load,
-					move.Source,
-					move.Destination)
+					move.From,
+					move.To)
 				);
 
 				Moves.RemoveAt(i);
@@ -108,13 +108,13 @@ public sealed class MoveResolver
 				Debug.Assert(Moves[other].Source.IsCPURegister);
 				Debug.Assert(move.Source.IsCPURegister);
 
-				ResolvedMoves.Add(new OperandResolvedMove(
+				ResolvedMoves.Add(new LiveIntervalTransition(
 					ResolvedMoveType.Exchange,
-					Moves[other].Source,
-					move.Source)
+					Moves[other].From,
+					move.From)
 				);
 
-				Moves[other] = new OperandMove(move.Source, Moves[other].Destination);
+				Moves[other] = new LiveIntervalTransition(move.From, Moves[other].To);
 
 				Moves.RemoveAt(i);
 
@@ -141,10 +141,10 @@ public sealed class MoveResolver
 			Debug.Assert(move.Destination.IsCPURegister);
 			Debug.Assert(move.Source.IsCPURegister);
 
-			ResolvedMoves.Add(new OperandResolvedMove(
+			ResolvedMoves.Add(new LiveIntervalTransition(
 				ResolvedMoveType.Move,
-				move.Destination,
-				move.Source)
+				move.To,
+				move.From)
 			);
 		}
 	}

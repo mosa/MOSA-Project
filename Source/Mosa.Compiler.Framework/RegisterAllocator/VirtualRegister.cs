@@ -55,8 +55,8 @@ public sealed class VirtualRegister
 		if (!virtualRegister.IsVirtualRegister)
 			return;
 
-		UsePositions = new List<SlotIndex>(VirtualRegisterOperand.Uses.Count);
-		DefPositions = new List<SlotIndex>(VirtualRegisterOperand.Definitions.Count);
+		UsePositions = new List<SlotIndex>(virtualRegister.Uses.Count);
+		DefPositions = new List<SlotIndex>(virtualRegister.Definitions.Count);
 	}
 
 	public void UpdatePositions()
@@ -171,13 +171,8 @@ public sealed class VirtualRegister
 
 	public override string ToString()
 	{
-		if (IsPhysicalRegister)
-		{
-			return PhysicalRegister.ToString();
-		}
-		else
-		{
-			return $"v{VirtualRegisterOperand.Index}";
-		}
+		return IsPhysicalRegister
+			? PhysicalRegister.ToString()
+			: $"v{VirtualRegisterOperand.Index}";
 	}
 }
