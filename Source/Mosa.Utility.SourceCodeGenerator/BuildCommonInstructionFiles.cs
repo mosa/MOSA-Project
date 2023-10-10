@@ -590,6 +590,8 @@ public class BuildCommonInstructionFiles : BuildBaseTemplate
 					0 => "Operand1",
 					1 => "Operand2",
 					2 => "Operand3",
+					3 => "Operand4",
+					4 => "Operand5",
 					_ => $"GetOperand({i})"
 				};
 

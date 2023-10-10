@@ -24,7 +24,7 @@ public sealed class Mrc : ARM32Instruction
 		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 5);
 
-		if (node.Operand1.IsCPURegister && node.Operand2.IsCPURegister && node.Operand3.IsConstant && node.GetOperand(3).IsConstant && node.GetOperand(4).IsConstant)
+		if (node.Operand1.IsCPURegister && node.Operand2.IsCPURegister && node.Operand3.IsConstant && node.Operand4.IsConstant && node.Operand5.IsConstant)
 		{
 			opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
 			opcodeEncoder.Append4Bits(0b1110);
