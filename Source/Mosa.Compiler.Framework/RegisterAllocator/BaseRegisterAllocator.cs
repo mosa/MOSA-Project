@@ -1450,14 +1450,17 @@ public abstract class BaseRegisterAllocator
 
 			foreach (var liveInterval in register.LiveIntervals)
 			{
+				if (liveInterval.AssignedPhysicalOperand == null)
+					continue;
+
 				foreach (var use in liveInterval.UsePositions)
 				{
-					AssignPhysicalRegistersToInstructions(GetNode(use), register.VirtualRegisterOperand, liveInterval.AssignedPhysicalOperand ?? liveInterval.VirtualRegister.SpillSlotOperand);
+					AssignPhysicalRegistersToInstructions(GetNode(use), register.VirtualRegisterOperand, liveInterval.AssignedPhysicalOperand);
 				}
 
 				foreach (var def in liveInterval.DefPositions)
 				{
-					AssignPhysicalRegistersToInstructions(GetNode(def), register.VirtualRegisterOperand, liveInterval.AssignedPhysicalOperand ?? liveInterval.VirtualRegister.SpillSlotOperand);
+					AssignPhysicalRegistersToInstructions(GetNode(def), register.VirtualRegisterOperand, liveInterval.AssignedPhysicalOperand);
 				}
 			}
 		}
@@ -1482,78 +1485,6 @@ public abstract class BaseRegisterAllocator
 			if (operand == old)
 			{
 				node.SetResult(i, replacement);
-			}
-		}
-	}
-
-	protected void ResolveDataFlow()
-	{
-		var resolverTrace = CreateTrace("ResolveDataFlow", 9);
-
-		var moveResolvers = new MoveResolver[2, BasicBlocks.Count];
-
-		foreach (var from in ExtendedBlocks)
-		{
-			foreach (var nextBlock in from.BasicBlock.NextBlocks)
-			{
-				var to = ExtendedBlocks[nextBlock.Sequence];
-
-				// determine where to insert resolving moves
-				var fromAnchorFlag = from.BasicBlock.NextBlocks.Count == 1;
-
-				var anchor = fromAnchorFlag ? from : to;
-				var anchorIndex = fromAnchorFlag ? 0 : 1;
-
-				var moveResolver = moveResolvers[anchorIndex, anchor.Sequence];
-
-				if (moveResolver == null)
-				{
-					moveResolver = new MoveResolver(anchor.BasicBlock, from.BasicBlock, to.BasicBlock);
-					moveResolvers[anchorIndex, anchor.Sequence] = moveResolver;
-				}
-
-				foreach (var virtualRegister in GetVirtualRegisters(to.LiveIn))
-				{
-					//if (virtualRegister.IsPhysicalRegister)
-					//continue;
-
-					var fromLiveInterval = virtualRegister.GetIntervalAt(from.End);
-					var toLiveInterval = virtualRegister.GetIntervalAt(to.Start);
-
-					Debug.Assert(fromLiveInterval != null);
-					Debug.Assert(toLiveInterval != null);
-
-					if (fromLiveInterval.AssignedPhysicalRegister != toLiveInterval.AssignedPhysicalRegister)
-					{
-						resolverTrace?.Log($"REGISTER: {fromLiveInterval.VirtualRegister}");
-						resolverTrace?.Log($"    FROM: {from,-7} {fromLiveInterval.AssignedOperand}");
-						resolverTrace?.Log($"      TO: {to,-7} {toLiveInterval.AssignedOperand}");
-
-						resolverTrace?.Log($"  INSERT: {(fromAnchorFlag ? "FROM (bottom)" : "TO (Before)")}{(toLiveInterval.AssignedPhysicalOperand == null ? "  ****SKIPPED***" : string.Empty)}");
-						resolverTrace?.Log();
-
-						// interval was spilled (spill moves are inserted elsewhere)
-						if (toLiveInterval.AssignedPhysicalOperand == null)
-							continue;
-
-						Debug.Assert(from.BasicBlock.NextBlocks.Count == 1 || to.BasicBlock.PreviousBlocks.Count == 1);
-
-						moveResolver.AddMove(fromLiveInterval.AssignedOperand, toLiveInterval.AssignedOperand);
-					}
-				}
-			}
-		}
-
-		for (var b = 0; b < BasicBlocks.Count; b++)
-		{
-			for (var fromTag = 0; fromTag < 2; fromTag++)
-			{
-				var moveResolver = moveResolvers[fromTag, b];
-
-				if (moveResolver == null)
-					continue;
-
-				DataFlowMoves += moveResolver.InsertResolvingMoves(Architecture, StackFrame);
 			}
 		}
 	}
@@ -1656,6 +1587,78 @@ public abstract class BaseRegisterAllocator
 		}
 
 		return keyedList;
+	}
+
+	protected void ResolveDataFlow()
+	{
+		var resolverTrace = CreateTrace("ResolveDataFlow", 9);
+
+		var moveResolvers = new MoveResolver[2, BasicBlocks.Count];
+
+		foreach (var from in ExtendedBlocks)
+		{
+			foreach (var nextBlock in from.BasicBlock.NextBlocks)
+			{
+				var to = ExtendedBlocks[nextBlock.Sequence];
+
+				// determine where to insert resolving moves
+				var fromAnchorFlag = from.BasicBlock.NextBlocks.Count == 1;
+
+				var anchor = fromAnchorFlag ? from : to;
+				var anchorIndex = fromAnchorFlag ? 0 : 1;
+
+				var moveResolver = moveResolvers[anchorIndex, anchor.Sequence];
+
+				if (moveResolver == null)
+				{
+					moveResolver = new MoveResolver(anchor.BasicBlock, from.BasicBlock, to.BasicBlock);
+					moveResolvers[anchorIndex, anchor.Sequence] = moveResolver;
+				}
+
+				foreach (var virtualRegister in GetVirtualRegisters(to.LiveIn))
+				{
+					//if (virtualRegister.IsPhysicalRegister)
+					//continue;
+
+					var fromLiveInterval = virtualRegister.GetIntervalAt(from.End);
+					var toLiveInterval = virtualRegister.GetIntervalAt(to.Start);
+
+					Debug.Assert(fromLiveInterval != null);
+					Debug.Assert(toLiveInterval != null);
+
+					if (fromLiveInterval.AssignedPhysicalRegister != toLiveInterval.AssignedPhysicalRegister)
+					{
+						resolverTrace?.Log($"REGISTER: {fromLiveInterval.VirtualRegister}");
+						resolverTrace?.Log($"    FROM: {from,-7} {fromLiveInterval.AssignedOperand}");
+						resolverTrace?.Log($"      TO: {to,-7} {toLiveInterval.AssignedOperand}");
+
+						resolverTrace?.Log($"  INSERT: {(fromAnchorFlag ? "FROM (bottom)" : "TO (Before)")}{(toLiveInterval.AssignedPhysicalOperand == null ? "  ****SKIPPED***" : string.Empty)}");
+						resolverTrace?.Log();
+
+						// interval was spilled (spill moves are inserted elsewhere)
+						if (toLiveInterval.AssignedPhysicalOperand == null)
+							continue;
+
+						Debug.Assert(from.BasicBlock.NextBlocks.Count == 1 || to.BasicBlock.PreviousBlocks.Count == 1);
+
+						moveResolver.AddMove(fromLiveInterval.AssignedOperand, toLiveInterval.AssignedOperand);
+					}
+				}
+			}
+		}
+
+		for (var b = 0; b < BasicBlocks.Count; b++)
+		{
+			for (var fromTag = 0; fromTag < 2; fromTag++)
+			{
+				var moveResolver = moveResolvers[fromTag, b];
+
+				if (moveResolver == null)
+					continue;
+
+				DataFlowMoves += moveResolver.InsertResolvingMoves(Architecture, StackFrame);
+			}
+		}
 	}
 
 	protected int GetSpillCost(SlotIndex use, int factor) => factor * GetLoopDepth(use) * 100;

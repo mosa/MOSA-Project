@@ -145,7 +145,7 @@ public sealed class MoveResolver
 		}
 	}
 
-	private void GetResolveMoves()
+	private void ResolveMoves()
 	{
 		TrySimpleMoves();
 		TryExchange();
@@ -157,7 +157,7 @@ public sealed class MoveResolver
 		if (Moves.Count == 0)
 			return 0;
 
-		GetResolveMoves();
+		ResolveMoves();
 
 		var context = new Context(Node);
 

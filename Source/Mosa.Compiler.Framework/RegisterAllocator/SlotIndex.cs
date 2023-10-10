@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator;
 
 public struct SlotIndex : IComparable<SlotIndex>
 {
-	public static SlotIndex Null = new(0);
+	public static readonly SlotIndex Null = new(0);
 
 	public readonly int Index;
 
@@ -22,9 +22,9 @@ public struct SlotIndex : IComparable<SlotIndex>
 
 	private SlotIndex(int index) => Index = index;
 
-	public static SlotIndex Use(InstructionNode node) => new SlotIndex(node.Offset);
+	public static SlotIndex Use(InstructionNode node) => new(node.Offset);
 
-	public static SlotIndex Def(InstructionNode node) => new SlotIndex(node.Offset + 1);
+	public static SlotIndex Def(InstructionNode node) => new(node.Offset + 1);
 
 	public SlotIndex(InstructionNode node)
 		: this(node.Offset)
@@ -79,12 +79,12 @@ public struct SlotIndex : IComparable<SlotIndex>
 		return Min(a, Min(b, c));
 	}
 
-	public SlotIndex GetNext()
+	public readonly SlotIndex GetNext()
 	{
 		return IsNull ? SlotIndex.Null : Next;
 	}
 
-	public SlotIndex GetPrevious()
+	public readonly SlotIndex GetPrevious()
 	{
 		return IsNull ? SlotIndex.Null : Previous;
 	}
@@ -109,5 +109,5 @@ public struct SlotIndex : IComparable<SlotIndex>
 
 	public override readonly int GetHashCode() => Index;
 
-	public override string ToString() => $"{Index}";
+	public override readonly string ToString() => $"{Index}";
 }
