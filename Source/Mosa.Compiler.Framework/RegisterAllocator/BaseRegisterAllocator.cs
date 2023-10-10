@@ -1478,22 +1478,19 @@ public abstract class BaseRegisterAllocator
 	{
 		var insertTrace = CreateTrace("InsertRegisterMoves", 9);
 
-		var moves = GetRegisterMoves();
+		var moveResolvers = GetRegisterMoves();
 
-		foreach (var key in moves.Keys)
+		foreach (var entry in moveResolvers)
 		{
-			var moveResolver = new MoveResolver(GetNode(key), !key.IsAfterSlot);
-
-			moveResolver.AddMoves(moves[key]);
+			var moveResolver = entry.Value;
 
 			ResolvingMoves += moveResolver.InsertResolvingMoves(Architecture, StackFrame);
 
 			if (insertTrace != null)
 			{
-				foreach (var move in moves[key])
+				foreach (var move in moveResolver.Moves)
 				{
-					//insertTrace.Log("REGISTER: " + virtualRegister.ToString());
-					insertTrace.Log($"  AT: {key}");
+					insertTrace.Log($"  AT: {entry.Key}");
 					insertTrace.Log($"FROM: {move.Source}");
 					insertTrace.Log($"  TO: {move.Destination}");
 
@@ -1503,9 +1500,9 @@ public abstract class BaseRegisterAllocator
 		}
 	}
 
-	private KeyedList<SlotIndex, OperandMove> GetRegisterMoves()
+	private Dictionary<SlotIndex, MoveResolver> GetRegisterMoves()
 	{
-		var keyedList = new KeyedList<SlotIndex, OperandMove>();
+		var moveResolvers = new Dictionary<SlotIndex, MoveResolver>();
 
 		foreach (var virtualRegister in VirtualRegisters)
 		{
@@ -1549,14 +1546,20 @@ public abstract class BaseRegisterAllocator
 						&& (nextInterval.LiveRange.UseCount == 0 || nextInterval.LiveRange.FirstDef < nextInterval.LiveRange.FirstUse))
 						continue;
 
-					keyedList.Add(nextInterval.Start, new OperandMove(currentInterval.AssignedOperand, nextInterval.AssignedOperand));
+					if (!moveResolvers.TryGetValue(nextInterval.Start, out var moveResolver))
+					{
+						moveResolver = new MoveResolver(GetNode(nextInterval.Start), !nextInterval.Start.IsAfterSlot);
+						moveResolvers.Add(nextInterval.Start, moveResolver);
+					}
+
+					moveResolver.AddMove(currentInterval.AssignedOperand, nextInterval.AssignedOperand);
 
 					break;
 				}
 			}
 		}
 
-		return keyedList;
+		return moveResolvers;
 	}
 
 	protected void ResolveDataFlow()

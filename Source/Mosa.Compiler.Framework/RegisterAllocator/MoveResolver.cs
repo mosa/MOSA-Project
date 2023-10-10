@@ -9,11 +9,11 @@ public sealed class MoveResolver
 	public enum ResolvedMoveType
 	{ Move, Exchange, Load }
 
-	private readonly InstructionNode Node;
+	public readonly InstructionNode Node;
 
-	private readonly bool Before;
+	public readonly bool Before;
 
-	private readonly List<OperandMove> Moves = new();
+	public readonly List<OperandMove> Moves = new();
 
 	private readonly List<OperandResolvedMove> ResolvedMoves = new();
 
