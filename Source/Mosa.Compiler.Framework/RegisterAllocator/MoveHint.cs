@@ -7,13 +7,15 @@ namespace Mosa.Compiler.Framework.RegisterAllocator;
 public sealed class MoveHint
 {
 	public readonly SlotIndex Slot;
+
 	public readonly VirtualRegister From;
 	public readonly VirtualRegister To;
 
 	public readonly int Bonus;
 
-	public LiveInterval FromInterval;
-	public LiveInterval ToInterval;
+	public LiveInterval FromInterval { get; private set; }
+
+	public LiveInterval ToInterval { get; private set; }
 
 	public PhysicalRegister FromRegister
 	{

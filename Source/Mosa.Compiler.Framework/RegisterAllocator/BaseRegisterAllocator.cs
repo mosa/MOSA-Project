@@ -1552,7 +1552,7 @@ public abstract class BaseRegisterAllocator
 						moveResolvers.Add(nextInterval.Start, moveResolver);
 					}
 
-					moveResolver.AddMove(currentInterval.AssignedOperand, nextInterval.AssignedOperand);
+					moveResolver.AddMove(currentInterval, nextInterval);
 
 					break;
 				}
@@ -1617,7 +1617,7 @@ public abstract class BaseRegisterAllocator
 
 						Debug.Assert(from.BasicBlock.NextBlocks.Count == 1 || to.BasicBlock.PreviousBlocks.Count == 1);
 
-						moveResolver.AddMove(fromLiveInterval.AssignedOperand, toLiveInterval.AssignedOperand);
+						moveResolver.AddMove(fromLiveInterval, toLiveInterval);
 					}
 				}
 			}

@@ -180,9 +180,9 @@ public sealed class GreedyRegisterAllocator : BaseRegisterAllocator
 		{
 			a.Update(liveInterval);
 		}
-		else if (b != null)
+		else
 		{
-			b.Update(liveInterval);
+			b?.Update(liveInterval);
 		}
 	}
 
@@ -302,9 +302,7 @@ public sealed class GreedyRegisterAllocator : BaseRegisterAllocator
 				if (!((node.Result.IsVirtualRegister && node.Operand1.IsVirtualRegister)
 					  || (node.Result.IsVirtualRegister && node.Operand1.IsCPURegister)
 					  || (node.Result.IsCPURegister && node.Operand1.IsVirtualRegister)))
-				{
 					continue;
-				}
 
 				var from = VirtualRegisters[GetIndex(node.Operand1)];
 				var to = VirtualRegisters[GetIndex(node.Result)];

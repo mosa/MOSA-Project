@@ -6,9 +6,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator;
 
 public sealed class MoveResolver
 {
-	public enum ResolvedMoveType
-	{ Move, Exchange, Load }
-
 	public readonly InstructionNode Node;
 
 	public readonly bool Before;
@@ -23,17 +20,16 @@ public sealed class MoveResolver
 		Before = before;
 	}
 
-	public void AddMoves(List<OperandMove> moves)
+	public void AddMove(LiveInterval from, LiveInterval to)
 	{
-		foreach (var move in moves)
-		{
-			Moves.Add(move);
-		}
+		Moves.Add(new OperandMove(from.AssignedOperand, to.AssignedOperand));
 	}
 
-	public void AddMove(Operand source, Operand destination)
+	private void ResolveMoves()
 	{
-		Moves.Add(new OperandMove(source, destination));
+		TrySimpleMoves();
+		TryExchange();
+		CreateMemoryMoves();
 	}
 
 	private int FindIndex(PhysicalRegister register, bool source)
@@ -153,13 +149,6 @@ public sealed class MoveResolver
 		}
 	}
 
-	private void ResolveMoves()
-	{
-		TrySimpleMoves();
-		TryExchange();
-		CreateMemoryMoves();
-	}
-
 	public int InsertResolvingMoves(BaseArchitecture architecture, Operand stackFrame)
 	{
 		if (Moves.Count == 0)
@@ -171,7 +160,6 @@ public sealed class MoveResolver
 
 		if (Before)
 		{
-			// TODO: Generalize
 			context.GotoPrevious();
 
 			// Note: This won't work for expanded switch statements... but we can't insert into the end of those blocks anyway
