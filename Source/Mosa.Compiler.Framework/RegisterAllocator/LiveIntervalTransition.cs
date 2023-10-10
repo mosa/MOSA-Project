@@ -17,7 +17,7 @@ public class LiveIntervalTransition
 	{
 		From = source;
 		To = destination;
-		ResolvedMoveType = ResolvedMoveType.None;
+		ResolvedMoveType = ResolvedMoveType.Invalid;
 	}
 
 	public LiveIntervalTransition(ResolvedMoveType resolvedMoveType, LiveInterval source, LiveInterval destination)

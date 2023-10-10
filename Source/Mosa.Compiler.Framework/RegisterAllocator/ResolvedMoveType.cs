@@ -4,8 +4,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator;
 
 public enum ResolvedMoveType
 {
-	None,
+	Invalid,
 	Move,
 	Exchange,
-	Load
+	Load,
+	Spill, // Store
 }
