@@ -17,22 +17,18 @@ public sealed class MoveResolver
 
 	private readonly List<OperandResolvedMove> ResolvedMoves = new();
 
-	private MoveResolver(InstructionNode node, bool before)
+	public MoveResolver(InstructionNode node, bool before)
 	{
-		Before = before;
 		Node = node;
+		Before = before;
 	}
 
-	public MoveResolver(InstructionNode node, bool before, List<OperandMove> moves)
-		: this(node, before)
+	public void AddMoves(List<OperandMove> moves)
 	{
 		foreach (var move in moves)
+		{
 			Moves.Add(move);
-	}
-
-	public MoveResolver(BasicBlock anchor, BasicBlock source, BasicBlock destination)
-		: this(source == anchor ? source.Last : destination.First, source == anchor)
-	{
+		}
 	}
 
 	public void AddMove(Operand source, Operand destination)

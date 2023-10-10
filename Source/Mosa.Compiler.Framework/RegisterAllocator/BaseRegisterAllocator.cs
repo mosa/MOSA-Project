@@ -20,7 +20,6 @@ public abstract class BaseRegisterAllocator
 	protected readonly LocalStack LocalStack;
 
 	protected readonly Dictionary<SlotIndex, MoveHint> MoveHints = new();
-
 	protected readonly Operand StackFrame;
 
 	private readonly int VirtualRegisterCount;
@@ -28,6 +27,7 @@ public abstract class BaseRegisterAllocator
 	private readonly int RegisterCount;
 
 	protected readonly List<ExtendedBlock> ExtendedBlocks;
+	protected readonly HashSet<SlotIndex> BlockEdges = new();
 	protected readonly List<VirtualRegister> VirtualRegisters;
 	protected readonly List<RegisterTrack> Tracks;
 
@@ -355,8 +355,16 @@ public abstract class BaseRegisterAllocator
 	{
 		foreach (var block in BasicBlocks)
 		{
-			ExtendedBlocks[block.Sequence].Start = new SlotIndex(block.First);
-			ExtendedBlocks[block.Sequence].End = new SlotIndex(block.Last);
+			var extendedBlock = ExtendedBlocks[block.Sequence];
+
+			var first = new SlotIndex(block.First);
+			var last = new SlotIndex(block.Last);
+
+			extendedBlock.Start = first;
+			extendedBlock.End = last;
+
+			BlockEdges.Add(first);
+			BlockEdges.Add(last);
 		}
 	}
 
@@ -1466,15 +1474,7 @@ public abstract class BaseRegisterAllocator
 		}
 	}
 
-	protected class MoveKeyedList : KeyedList<SlotIndex, OperandMove>
-	{
-		public void Add(SlotIndex at, Operand source, Operand destination)
-		{
-			Add(at, new OperandMove(source, destination));
-		}
-	}
-
-	protected void InsertRegisterMoves()
+	private void InsertRegisterMoves()
 	{
 		var insertTrace = CreateTrace("InsertRegisterMoves", 9);
 
@@ -1482,7 +1482,9 @@ public abstract class BaseRegisterAllocator
 
 		foreach (var key in moves.Keys)
 		{
-			var moveResolver = new MoveResolver(GetNode(key), !key.IsAfterSlot, moves[key]);
+			var moveResolver = new MoveResolver(GetNode(key), !key.IsAfterSlot);
+
+			moveResolver.AddMoves(moves[key]);
 
 			ResolvingMoves += moveResolver.InsertResolvingMoves(Architecture, StackFrame);
 
@@ -1501,18 +1503,9 @@ public abstract class BaseRegisterAllocator
 		}
 	}
 
-	protected MoveKeyedList GetRegisterMoves()
+	private KeyedList<SlotIndex, OperandMove> GetRegisterMoves()
 	{
-		var keyedList = new MoveKeyedList();
-
-		// collect edge slot indexes
-		var blockEdges = new HashSet<SlotIndex>();
-
-		foreach (var block in ExtendedBlocks)
-		{
-			blockEdges.Add(block.Start);
-			blockEdges.Add(block.End);
-		}
+		var keyedList = new KeyedList<SlotIndex, OperandMove>();
 
 		foreach (var virtualRegister in VirtualRegisters)
 		{
@@ -1525,7 +1518,7 @@ public abstract class BaseRegisterAllocator
 			foreach (var currentInterval in virtualRegister.LiveIntervals)
 			{
 				// No moves at block edges (these are done in the resolve move phase later)
-				if (blockEdges.Contains(currentInterval.End))
+				if (BlockEdges.Contains(currentInterval.End))
 					continue;
 
 				var currentInternalEndNext = currentInterval.End.Next;
@@ -1556,7 +1549,7 @@ public abstract class BaseRegisterAllocator
 						&& (nextInterval.LiveRange.UseCount == 0 || nextInterval.LiveRange.FirstDef < nextInterval.LiveRange.FirstUse))
 						continue;
 
-					keyedList.Add(nextInterval.Start, currentInterval.AssignedOperand, nextInterval.AssignedOperand);
+					keyedList.Add(nextInterval.Start, new OperandMove(currentInterval.AssignedOperand, nextInterval.AssignedOperand));
 
 					break;
 				}
@@ -1588,7 +1581,10 @@ public abstract class BaseRegisterAllocator
 
 				if (moveResolver == null)
 				{
-					moveResolver = new MoveResolver(anchor.BasicBlock, from.BasicBlock, to.BasicBlock);
+					moveResolver = anchor.BasicBlock == from.BasicBlock
+						? new MoveResolver(from.BasicBlock.Last, true)
+						: new MoveResolver(to.BasicBlock.First, false);
+
 					moveResolvers[anchorIndex, anchor.Sequence] = moveResolver;
 				}
 

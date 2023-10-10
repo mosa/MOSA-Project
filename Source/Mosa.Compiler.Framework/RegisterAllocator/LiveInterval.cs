@@ -43,7 +43,7 @@ public sealed class LiveInterval
 
 	public Operand AssignedPhysicalOperand;
 
-	public Operand AssignedOperand => AssignedPhysicalRegister != null ? AssignedPhysicalOperand : VirtualRegister.SpillSlotOperand;
+	public Operand AssignedOperand => AssignedPhysicalOperand ?? VirtualRegister.SpillSlotOperand ?? VirtualRegister.ParamOperand;
 
 	public bool ForceSpill;
 
