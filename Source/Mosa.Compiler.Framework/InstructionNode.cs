@@ -896,6 +896,32 @@ public sealed class InstructionNode
 		return false;
 	}
 
+	public void ReplaceOperand(Operand target, Operand replacement)
+	{
+		for (var i = 0; i < OperandCount; i++)
+		{
+			var operand = GetOperand(i);
+
+			if (operand == target)
+			{
+				SetOperand(i, replacement);
+			}
+		}
+	}
+
+	public void ReplaceResult(Operand target, Operand replacement)
+	{
+		for (var i = 0; i < ResultCount; i++)
+		{
+			var operand = GetResult(i);
+
+			if (operand == target)
+			{
+				SetResult(i, replacement);
+			}
+		}
+	}
+
 	#endregion Methods
 
 	#region Navigation

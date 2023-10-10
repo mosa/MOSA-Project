@@ -1455,36 +1455,13 @@ public abstract class BaseRegisterAllocator
 
 				foreach (var use in liveInterval.UsePositions)
 				{
-					AssignPhysicalRegistersToInstructions(GetNode(use), register.VirtualRegisterOperand, liveInterval.AssignedPhysicalOperand);
+					GetNode(use).ReplaceOperand(register.VirtualRegisterOperand, liveInterval.AssignedPhysicalOperand);
 				}
 
 				foreach (var def in liveInterval.DefPositions)
 				{
-					AssignPhysicalRegistersToInstructions(GetNode(def), register.VirtualRegisterOperand, liveInterval.AssignedPhysicalOperand);
+					GetNode(def).ReplaceResult(register.VirtualRegisterOperand, liveInterval.AssignedPhysicalOperand);
 				}
-			}
-		}
-	}
-
-	protected static void AssignPhysicalRegistersToInstructions(InstructionNode node, Operand old, Operand replacement)
-	{
-		for (var i = 0; i < node.OperandCount; i++)
-		{
-			var operand = node.GetOperand(i);
-
-			if (operand == old)
-			{
-				node.SetOperand(i, replacement);
-			}
-		}
-
-		for (var i = 0; i < node.ResultCount; i++)
-		{
-			var operand = node.GetResult(i);
-
-			if (operand == old)
-			{
-				node.SetResult(i, replacement);
 			}
 		}
 	}

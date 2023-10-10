@@ -511,15 +511,7 @@ public abstract class BaseMethodCompilerStage
 	{
 		foreach (var node in target.Uses.ToArray())
 		{
-			for (var i = 0; i < node.OperandCount; i++)
-			{
-				var operand = node.GetOperand(i);
-
-				if (target == operand)
-				{
-					node.SetOperand(i, replacement);
-				}
-			}
+			node.ReplaceOperand(target, replacement);
 		}
 	}
 

@@ -401,13 +401,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		{
 			trace?.Log($"BEFORE:\t{node2}");
 
-			for (var i = 0; i < node2.OperandCount; i++)
-			{
-				if (node2.GetOperand(i) == virtualRegister)
-				{
-					node2.SetOperand(i, constantOperand);
-				}
-			}
+			node2.ReplaceOperand(virtualRegister, constantOperand);
 
 			trace?.Log($"AFTER: \t{node2}");
 			InstructionsUpdatedCount.Increment();
