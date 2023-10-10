@@ -65,12 +65,12 @@ public sealed class MoveHint
 	{
 		var updateInterval = interval.AssignedPhysicalRegister == null ? null : interval;
 
-		if (interval.VirtualRegister == From)
+		if (interval.Register == From)
 		{
 			FromInterval = updateInterval;
 		}
 
-		if (interval.VirtualRegister == To)
+		if (interval.Register == To)
 		{
 			ToInterval = updateInterval;
 		}

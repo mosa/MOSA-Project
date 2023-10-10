@@ -46,17 +46,17 @@ public sealed class Register
 
 	#endregion Parameter Information
 
-	public Register(Operand virtualRegister)
+	public Register(Operand register)
 	{
-		RegisterOperand = virtualRegister;
+		RegisterOperand = register;
 		IsReserved = false;
 		IsSpilled = false;
 
-		if (!virtualRegister.IsVirtualRegister)
+		if (!register.IsVirtualRegister)
 			return;
 
-		UsePositions = new List<SlotIndex>(virtualRegister.Uses.Count);
-		DefPositions = new List<SlotIndex>(virtualRegister.Definitions.Count);
+		UsePositions = new List<SlotIndex>(register.Uses.Count);
+		DefPositions = new List<SlotIndex>(register.Definitions.Count);
 	}
 
 	public void UpdatePositions()

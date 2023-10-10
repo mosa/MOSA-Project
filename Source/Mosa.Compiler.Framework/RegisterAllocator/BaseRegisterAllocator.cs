@@ -109,7 +109,7 @@ public abstract class BaseRegisterAllocator
 		CollectBlockInformation();
 
 		// Update virtual register with index numbers
-		UpdateVirtualRegisterPositions();
+		UpdateRegisterPositions();
 
 		// Generate trace information for instruction numbering
 		TraceNumberInstructions();
@@ -172,7 +172,7 @@ public abstract class BaseRegisterAllocator
 		TraceLiveIntervals("PostLiveIntervals", true);
 	}
 
-	private void UpdateVirtualRegisterPositions()
+	private void UpdateRegisterPositions()
 	{
 		foreach (var register in Registers)
 		{
@@ -880,7 +880,7 @@ public abstract class BaseRegisterAllocator
 			foreach (var liveInterval in register.LiveIntervals)
 			{
 				// Skip adding live intervals for physical registers to priority queue
-				if (liveInterval.VirtualRegister.IsPhysicalRegister)
+				if (liveInterval.Register.IsPhysicalRegister)
 				{
 					// fixed and not spillable
 					liveInterval.NeverSpill = true;
@@ -921,9 +921,9 @@ public abstract class BaseRegisterAllocator
 			foreach (var liveInterval in register.LiveIntervals)
 			{
 				// Skip adding live intervals for physical registers to priority queue
-				if (liveInterval.VirtualRegister.IsPhysicalRegister)
+				if (liveInterval.Register.IsPhysicalRegister)
 				{
-					Tracks[liveInterval.VirtualRegister.PhysicalRegister.Index].Add(liveInterval);
+					Tracks[liveInterval.Register.PhysicalRegister.Index].Add(liveInterval);
 
 					continue;
 				}
@@ -954,7 +954,7 @@ public abstract class BaseRegisterAllocator
 			return false;
 		}
 
-		if (track.IsFloatingPoint != liveInterval.VirtualRegister.IsFloatingPoint)
+		if (track.IsFloatingPoint != liveInterval.Register.IsFloatingPoint)
 		{
 			//Trace?.Log($"  No - Type Mismatch");
 			return false;
@@ -994,7 +994,7 @@ public abstract class BaseRegisterAllocator
 			if (track.IsReserved)
 				continue;
 
-			if (track.IsFloatingPoint != liveInterval.VirtualRegister.IsFloatingPoint)
+			if (track.IsFloatingPoint != liveInterval.Register.IsFloatingPoint)
 				continue;
 
 			var evict = true;
@@ -1004,7 +1004,7 @@ public abstract class BaseRegisterAllocator
 			{
 				if (intersection.SpillCost >= liveInterval.SpillCost
 					|| intersection.SpillCost == int.MaxValue
-					|| intersection.VirtualRegister.IsPhysicalRegister
+					|| intersection.Register.IsPhysicalRegister
 					|| intersection.IsPhysicalRegister)
 				{
 					evict = false;
@@ -1047,7 +1047,7 @@ public abstract class BaseRegisterAllocator
 		{
 			Trace?.Log("  Spilled");
 
-			liveInterval.VirtualRegister.IsSpilled = true;
+			liveInterval.Register.IsSpilled = true;
 			AddSpilledInterval(liveInterval);
 
 			return true;
@@ -1356,7 +1356,7 @@ public abstract class BaseRegisterAllocator
 	{
 		CalculateSpillCosts(newIntervals);
 
-		replacedInterval.VirtualRegister.ReplaceWithSplit(replacedInterval, newIntervals);
+		replacedInterval.Register.ReplaceWithSplit(replacedInterval, newIntervals);
 
 		if (Trace != null)
 		{
@@ -1380,7 +1380,7 @@ public abstract class BaseRegisterAllocator
 			{
 				var register = Registers[i];
 
-				if (!register.IsPhysicalRegister)
+				if (register.IsVirtualRegister)
 				{
 					yield return register;
 				}
@@ -1416,7 +1416,7 @@ public abstract class BaseRegisterAllocator
 				if (liveInterval.AssignedPhysicalRegister == null)
 					continue;
 
-				liveInterval.AssignedPhysicalOperand = Operand.CreateCPURegister(liveInterval.VirtualRegister.RegisterOperand, liveInterval.AssignedPhysicalRegister);
+				liveInterval.AssignedPhysicalOperand = Operand.CreateCPURegister(liveInterval.Register.RegisterOperand, liveInterval.AssignedPhysicalRegister);
 			}
 		}
 	}
@@ -1591,20 +1591,20 @@ public abstract class BaseRegisterAllocator
 					moveResolvers[anchorIndex, anchor.Sequence] = moveResolver;
 				}
 
-				foreach (var virtualRegister in GetVirtualRegisters(to.LiveIn))
+				foreach (var register in GetVirtualRegisters(to.LiveIn))
 				{
 					//if (virtualRegister.IsPhysicalRegister)
 					//continue;
 
-					var fromLiveInterval = virtualRegister.GetIntervalAt(from.End);
-					var toLiveInterval = virtualRegister.GetIntervalAt(to.Start);
+					var fromLiveInterval = register.GetIntervalAt(from.End);
+					var toLiveInterval = register.GetIntervalAt(to.Start);
 
 					Debug.Assert(fromLiveInterval != null);
 					Debug.Assert(toLiveInterval != null);
 
 					if (fromLiveInterval.AssignedPhysicalRegister != toLiveInterval.AssignedPhysicalRegister)
 					{
-						resolverTrace?.Log($"REGISTER: {fromLiveInterval.VirtualRegister}");
+						resolverTrace?.Log($"REGISTER: {fromLiveInterval.Register}");
 						resolverTrace?.Log($"    FROM: {from,-7} {fromLiveInterval.AssignedOperand}");
 						resolverTrace?.Log($"      TO: {to,-7} {toLiveInterval.AssignedOperand}");
 

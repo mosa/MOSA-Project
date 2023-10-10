@@ -16,7 +16,7 @@ public sealed class LiveInterval
 		Max = 5,
 	}
 
-	public readonly Register VirtualRegister;
+	public readonly Register Register;
 
 	public readonly SlotIndex Start;
 	public readonly SlotIndex End;
@@ -37,13 +37,13 @@ public sealed class LiveInterval
 
 	public AllocationStage Stage;
 
-	public bool IsPhysicalRegister => VirtualRegister.IsPhysicalRegister;
+	public bool IsPhysicalRegister => Register.IsPhysicalRegister;
 
 	public PhysicalRegister AssignedPhysicalRegister => LiveIntervalTrack?.Register;
 
 	public Operand AssignedPhysicalOperand;
 
-	public Operand AssignedOperand => AssignedPhysicalOperand ?? VirtualRegister.SpillSlotOperand ?? VirtualRegister.ParamOperand;
+	public Operand AssignedOperand => AssignedPhysicalOperand ?? Register.SpillSlotOperand ?? Register.ParamOperand;
 
 	public bool ForceSpill;
 
@@ -55,7 +55,7 @@ public sealed class LiveInterval
 	{
 		Debug.Assert(start <= end);
 
-		VirtualRegister = virtualRegister;
+		Register = virtualRegister;
 		Start = start;
 		End = end;
 
@@ -110,12 +110,12 @@ public sealed class LiveInterval
 
 	public LiveInterval CreateExpandedLiveInterval(LiveInterval interval)
 	{
-		Debug.Assert(VirtualRegister == interval.VirtualRegister);
+		Debug.Assert(Register == interval.Register);
 
 		var start = Start <= interval.Start ? Start : interval.Start;
 		var end = End >= interval.End ? End : interval.End;
 
-		return new LiveInterval(VirtualRegister, start, end);
+		return new LiveInterval(Register, start, end);
 	}
 
 	public LiveInterval CreateExpandedLiveRange(SlotIndex start, SlotIndex end)
@@ -123,15 +123,15 @@ public sealed class LiveInterval
 		var mergedStart = Start <= start ? Start : start;
 		var mergedEnd = End >= end ? End : end;
 
-		return new LiveInterval(VirtualRegister, mergedStart, mergedEnd);
+		return new LiveInterval(Register, mergedStart, mergedEnd);
 	}
 
 	private LiveInterval CreateSplit(LiveRange liveRange)
 	{
-		return new LiveInterval(VirtualRegister, liveRange.Start, liveRange.End);
+		return new LiveInterval(Register, liveRange.Start, liveRange.End);
 	}
 
-	public override string ToString() => $"{VirtualRegister} between {LiveRange}";
+	public override string ToString() => $"{Register} between {LiveRange}";
 
 	public void Evict() => LiveIntervalTrack.Evict(this);
 

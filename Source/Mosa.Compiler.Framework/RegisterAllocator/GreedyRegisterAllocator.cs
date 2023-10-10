@@ -48,7 +48,7 @@ public sealed class GreedyRegisterAllocator : BaseRegisterAllocator
 		{
 			Trace?.Log("  Spilled");
 
-			liveInterval.VirtualRegister.IsSpilled = true;
+			liveInterval.Register.IsSpilled = true;
 			AddSpilledInterval(liveInterval);
 
 			return true;
@@ -195,7 +195,7 @@ public sealed class GreedyRegisterAllocator : BaseRegisterAllocator
 			if (track.IsReserved)
 				continue;
 
-			if (track.IsFloatingPoint != liveInterval.VirtualRegister.IsFloatingPoint)
+			if (track.IsFloatingPoint != liveInterval.Register.IsFloatingPoint)
 				continue;
 
 			if (track.Intersects(liveInterval.Start))

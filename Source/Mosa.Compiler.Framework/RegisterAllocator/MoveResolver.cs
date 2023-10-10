@@ -178,10 +178,23 @@ public sealed class MoveResolver
 
 			switch (move.ResolvedMoveType)
 			{
-				case ResolvedMoveType.Move: architecture.InsertMoveInstruction(context, move.Destination, move.Source); break;
-				case ResolvedMoveType.Exchange: architecture.InsertExchangeInstruction(context, move.Destination, move.Source); break;
-				case ResolvedMoveType.Load when !move.From.VirtualRegister.IsParamLoadOnly: architecture.InsertLoadInstruction(context, move.Destination, stackFrame, move.Source); break;
-				case ResolvedMoveType.Load when move.From.VirtualRegister.IsParamLoadOnly: architecture.InsertLoadInstruction(context, move.Destination, stackFrame, move.Source); break;
+				case ResolvedMoveType.Move:
+					architecture.InsertMoveInstruction(context, move.Destination, move.Source);
+					break;
+
+				case ResolvedMoveType.Exchange:
+					architecture.InsertExchangeInstruction(context, move.Destination, move.Source);
+					break;
+
+				case ResolvedMoveType.Load when !move.From.Register.IsParamLoadOnly:
+					architecture.InsertLoadInstruction(context, move.Destination, stackFrame, move.Source);
+					break;
+
+				case ResolvedMoveType.Load when move.From.Register.IsParamLoadOnly:
+					// Assumes that loads are three operands
+					var node = move.From.Register.ParamLoadNode;
+					context.AppendInstruction(node.Instruction, move.Destination, node.Operand1, node.Operand2);
+					break;
 			}
 
 			context.Marked = true;
