@@ -4,19 +4,19 @@ using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator;
 
-public sealed class VirtualRegister
+public sealed class Register
 {
 	public readonly List<SlotIndex> UsePositions;
 
 	public readonly List<SlotIndex> DefPositions;
 
-	public readonly Operand VirtualRegisterOperand;
+	public readonly Operand RegisterOperand;
 
 	public readonly PhysicalRegister PhysicalRegister;
 
-	public bool IsPhysicalRegister => VirtualRegisterOperand == null;
+	public bool IsPhysicalRegister => RegisterOperand == null;
 
-	public bool IsVirtualRegister => VirtualRegisterOperand != null;
+	public bool IsVirtualRegister => RegisterOperand != null;
 
 	public List<LiveInterval> LiveIntervals { get; } = new List<LiveInterval>(1);
 
@@ -24,7 +24,7 @@ public sealed class VirtualRegister
 
 	public Operand SpillSlotOperand;
 
-	public bool IsFloatingPoint => VirtualRegisterOperand.IsFloatingPoint;
+	public bool IsFloatingPoint => RegisterOperand.IsFloatingPoint;
 
 	public bool IsReserved { get; }
 
@@ -38,17 +38,17 @@ public sealed class VirtualRegister
 
 	public bool IsParamStore = false;
 
-	public BaseInstruction SpillInstruction;
+	public Operand ParamOperand;
 
 	public InstructionNode ParamLoadNode;
 
-	public Operand ParamOperand;
+	public bool IsParamLoadOnly => false; // IsParamLoad && !IsParamStore;
 
 	#endregion Parameter Information
 
-	public VirtualRegister(Operand virtualRegister)
+	public Register(Operand virtualRegister)
 	{
-		VirtualRegisterOperand = virtualRegister;
+		RegisterOperand = virtualRegister;
 		IsReserved = false;
 		IsSpilled = false;
 
@@ -61,14 +61,14 @@ public sealed class VirtualRegister
 
 	public void UpdatePositions()
 	{
-		foreach (var use in VirtualRegisterOperand.Uses)
+		foreach (var use in RegisterOperand.Uses)
 		{
 			UsePositions.AddIfNew(SlotIndex.Use(use));
 		}
 
 		UsePositions.Sort();
 
-		foreach (var def in VirtualRegisterOperand.Definitions)
+		foreach (var def in RegisterOperand.Definitions)
 		{
 			DefPositions.AddIfNew(SlotIndex.Def(def));
 		}
@@ -76,7 +76,7 @@ public sealed class VirtualRegister
 		DefPositions.Sort();
 	}
 
-	public VirtualRegister(PhysicalRegister physicalRegister, bool reserved)
+	public Register(PhysicalRegister physicalRegister, bool reserved)
 	{
 		PhysicalRegister = physicalRegister;
 		IsReserved = reserved;
@@ -173,6 +173,6 @@ public sealed class VirtualRegister
 	{
 		return IsPhysicalRegister
 			? PhysicalRegister.ToString()
-			: $"v{VirtualRegisterOperand.Index}";
+			: $"v{RegisterOperand.Index}";
 	}
 }

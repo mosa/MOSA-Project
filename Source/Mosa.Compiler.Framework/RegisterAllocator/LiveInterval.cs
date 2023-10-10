@@ -16,7 +16,7 @@ public sealed class LiveInterval
 		Max = 5,
 	}
 
-	public readonly VirtualRegister VirtualRegister;
+	public readonly Register VirtualRegister;
 
 	public readonly SlotIndex Start;
 	public readonly SlotIndex End;
@@ -51,7 +51,7 @@ public sealed class LiveInterval
 
 	public bool IsUnsplitable { get; }
 
-	public LiveInterval(VirtualRegister virtualRegister, SlotIndex start, SlotIndex end)
+	public LiveInterval(Register virtualRegister, SlotIndex start, SlotIndex end)
 	{
 		Debug.Assert(start <= end);
 

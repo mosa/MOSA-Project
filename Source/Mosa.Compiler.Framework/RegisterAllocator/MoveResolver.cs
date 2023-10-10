@@ -180,7 +180,8 @@ public sealed class MoveResolver
 			{
 				case ResolvedMoveType.Move: architecture.InsertMoveInstruction(context, move.Destination, move.Source); break;
 				case ResolvedMoveType.Exchange: architecture.InsertExchangeInstruction(context, move.Destination, move.Source); break;
-				case ResolvedMoveType.Load: architecture.InsertLoadInstruction(context, move.Destination, stackFrame, move.Source); break;
+				case ResolvedMoveType.Load when !move.From.VirtualRegister.IsParamLoadOnly: architecture.InsertLoadInstruction(context, move.Destination, stackFrame, move.Source); break;
+				case ResolvedMoveType.Load when move.From.VirtualRegister.IsParamLoadOnly: architecture.InsertLoadInstruction(context, move.Destination, stackFrame, move.Source); break;
 			}
 
 			context.Marked = true;

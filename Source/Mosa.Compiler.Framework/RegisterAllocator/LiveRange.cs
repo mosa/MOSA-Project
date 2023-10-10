@@ -6,7 +6,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator;
 
 public sealed class LiveRange
 {
-	private readonly VirtualRegister VirtualRegister;
+	private readonly Register Register;
 
 	private readonly int StartIndex;
 	private readonly int EndIndex;
@@ -46,7 +46,7 @@ public sealed class LiveRange
 
 			for (var i = FirstUseIndex; i <= LastUseIndex; i++)
 			{
-				yield return VirtualRegister.UsePositions[i];
+				yield return Register.UsePositions[i];
 			}
 		}
 	}
@@ -60,20 +60,20 @@ public sealed class LiveRange
 
 			for (var i = FirstDefIndex; i <= LastDefIndex; i++)
 			{
-				yield return VirtualRegister.DefPositions[i];
+				yield return Register.DefPositions[i];
 			}
 		}
 	}
 
 	public override string ToString() => $"({Start} to {End})";
 
-	public LiveRange(SlotIndex start, SlotIndex end, VirtualRegister virtualRegister, int startIndex = 0, int endIndex = Int32.MaxValue)
+	public LiveRange(SlotIndex start, SlotIndex end, Register register, int startIndex = 0, int endIndex = Int32.MaxValue)
 	{
-		VirtualRegister = virtualRegister;
+		Register = register;
 		Start = start;
 		End = end;
 
-		if (virtualRegister.IsPhysicalRegister)
+		if (register.IsPhysicalRegister)
 			return;
 
 		var lastUseIndex = -1;
@@ -83,9 +83,9 @@ public sealed class LiveRange
 		var useCount = 0;
 		var defCount = 0;
 
-		for (var i = startIndex; i < virtualRegister.UsePositions.Count && i <= endIndex; i++)
+		for (var i = startIndex; i < register.UsePositions.Count && i <= endIndex; i++)
 		{
-			var use = virtualRegister.UsePositions[i];
+			var use = register.UsePositions[i];
 
 			if (use > end)
 				break;
@@ -101,9 +101,9 @@ public sealed class LiveRange
 			}
 		}
 
-		for (var i = startIndex; i < virtualRegister.DefPositions.Count && i <= endIndex; i++)
+		for (var i = startIndex; i < register.DefPositions.Count && i <= endIndex; i++)
 		{
-			var def = virtualRegister.DefPositions[i];
+			var def = register.DefPositions[i];
 
 			if (def > end)
 				break;
@@ -133,10 +133,10 @@ public sealed class LiveRange
 
 		IsEmpty = useCount + defCount == 0;
 
-		FirstUse = useCount == 0 ? SlotIndex.Null : VirtualRegister.UsePositions[firstUseIndex];
-		FirstDef = defCount == 0 ? SlotIndex.Null : VirtualRegister.DefPositions[firstDefIndex];
-		LastUse = useCount == 0 ? SlotIndex.Null : VirtualRegister.UsePositions[lastUseIndex];
-		LastDef = defCount == 0 ? SlotIndex.Null : VirtualRegister.DefPositions[lastDefIndex];
+		FirstUse = useCount == 0 ? SlotIndex.Null : Register.UsePositions[firstUseIndex];
+		FirstDef = defCount == 0 ? SlotIndex.Null : Register.DefPositions[firstDefIndex];
+		LastUse = useCount == 0 ? SlotIndex.Null : Register.UsePositions[lastUseIndex];
+		LastDef = defCount == 0 ? SlotIndex.Null : Register.DefPositions[lastDefIndex];
 
 		First = SlotIndex.Min(FirstUse, FirstDef);
 		Last = SlotIndex.Max(LastUse, LastDef);
@@ -168,7 +168,7 @@ public sealed class LiveRange
 
 		for (var i = FirstUseIndex; i <= LastUseIndex; i++)
 		{
-			var use = VirtualRegister.UsePositions[i];
+			var use = Register.UsePositions[i];
 
 			if (at == use)
 				return true;
@@ -190,7 +190,7 @@ public sealed class LiveRange
 
 		for (var i = FirstDefIndex; i <= LastDefIndex; i++)
 		{
-			var def = VirtualRegister.DefPositions[i];
+			var def = Register.DefPositions[i];
 
 			if (at == def)
 				return true;
@@ -209,7 +209,7 @@ public sealed class LiveRange
 
 		for (var i = FirstUseIndex; i <= LastUseIndex; i++)
 		{
-			var use = VirtualRegister.UsePositions[i];
+			var use = Register.UsePositions[i];
 
 			if (use > at)
 				return use;
@@ -225,7 +225,7 @@ public sealed class LiveRange
 
 		for (var i = FirstDefIndex; i <= LastDefIndex; i++)
 		{
-			var def = VirtualRegister.DefPositions[i];
+			var def = Register.DefPositions[i];
 
 			if (def > at)
 				return def;
@@ -241,7 +241,7 @@ public sealed class LiveRange
 
 		for (var i = LastUseIndex; i >= FirstUseIndex; i--)
 		{
-			var use = VirtualRegister.UsePositions[i];
+			var use = Register.UsePositions[i];
 
 			if (use < at)
 				return use;
@@ -257,7 +257,7 @@ public sealed class LiveRange
 
 		for (var i = LastDefIndex; i >= FirstDefIndex; i--)
 		{
-			var def = VirtualRegister.DefPositions[i];
+			var def = Register.DefPositions[i];
 
 			if (def < at)
 				return def;
@@ -288,16 +288,16 @@ public sealed class LiveRange
 		{
 			return new List<LiveRange>(2)
 			{
-				new LiveRange(Start, at.Previous, VirtualRegister, StartIndex, EndIndex),
-				new LiveRange(at, End, VirtualRegister, StartIndex, EndIndex)
+				new LiveRange(Start, at.Previous, Register, StartIndex, EndIndex),
+				new LiveRange(at, End, Register, StartIndex, EndIndex)
 			};
 		}
 
 		// normal case
 		return new List<LiveRange>(2)
 		{
-			new LiveRange(Start, at, VirtualRegister, StartIndex, EndIndex),
-			new LiveRange(at.Next, End, VirtualRegister, StartIndex, EndIndex)
+			new LiveRange(Start, at, Register, StartIndex, EndIndex),
+			new LiveRange(at.Next, End, Register, StartIndex, EndIndex)
 		};
 	}
 
@@ -312,9 +312,9 @@ public sealed class LiveRange
 
 		return new List<LiveRange>(3)
 		{
-			new LiveRange(Start, low,  VirtualRegister, StartIndex, EndIndex),
-			new LiveRange(low.Next, high,  VirtualRegister, StartIndex, EndIndex),
-			new LiveRange(high.Next, End,  VirtualRegister, StartIndex, EndIndex)
+			new LiveRange(Start, low,  Register, StartIndex, EndIndex),
+			new LiveRange(low.Next, high,  Register, StartIndex, EndIndex),
+			new LiveRange(high.Next, End,  Register, StartIndex, EndIndex)
 		};
 	}
 }

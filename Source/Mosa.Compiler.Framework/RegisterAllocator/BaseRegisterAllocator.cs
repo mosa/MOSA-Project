@@ -28,7 +28,7 @@ public abstract class BaseRegisterAllocator
 
 	protected readonly List<ExtendedBlock> ExtendedBlocks;
 	protected readonly HashSet<SlotIndex> BlockEdges = new();
-	protected readonly List<VirtualRegister> VirtualRegisters;
+	protected readonly List<Register> Registers;
 	protected readonly List<RegisterTrack> Tracks;
 
 	private readonly PriorityQueue<LiveInterval, int> PriorityQueue = new();
@@ -66,7 +66,7 @@ public abstract class BaseRegisterAllocator
 		RegisterCount = VirtualRegisterCount + PhysicalRegisterCount;
 
 		Tracks = new List<RegisterTrack>(PhysicalRegisterCount);
-		VirtualRegisters = new List<VirtualRegister>(RegisterCount);
+		Registers = new List<Register>(RegisterCount);
 		ExtendedBlocks = new List<ExtendedBlock>(basicBlocks.Count);
 
 		Trace = CreateTrace("Main", 7);
@@ -84,16 +84,16 @@ public abstract class BaseRegisterAllocator
 				|| (LinkRegister != null && physicalRegister == LinkRegister)
 				|| (ProgramCounter != null && physicalRegister == ProgramCounter);
 
-			VirtualRegisters.Add(new VirtualRegister(physicalRegister, reserved));
+			Registers.Add(new Register(physicalRegister, reserved));
 			Tracks.Add(new RegisterTrack(physicalRegister, reserved));
 		}
 
 		// Setup extended virtual registers
 		foreach (var virtualRegister in virtualRegisters)
 		{
-			Debug.Assert(virtualRegister.Index == VirtualRegisters.Count - PhysicalRegisterCount + 1);
+			Debug.Assert(virtualRegister.Index == Registers.Count - PhysicalRegisterCount + 1);
 
-			VirtualRegisters.Add(new VirtualRegister(virtualRegister));
+			Registers.Add(new Register(virtualRegister));
 		}
 	}
 
@@ -174,7 +174,7 @@ public abstract class BaseRegisterAllocator
 
 	private void UpdateVirtualRegisterPositions()
 	{
-		foreach (var register in VirtualRegisters)
+		foreach (var register in Registers)
 		{
 			if (register.IsVirtualRegister)
 			{
@@ -211,23 +211,23 @@ public abstract class BaseRegisterAllocator
 		if (registerTrace == null)
 			return;
 
-		foreach (var virtualRegister in VirtualRegisters)
+		foreach (var register in Registers)
 		{
-			if (virtualRegister.IsPhysicalRegister)
+			if (register.IsPhysicalRegister)
 			{
-				registerTrace.Log($"Physical Register # {virtualRegister.PhysicalRegister}");
+				registerTrace.Log($"Physical Register # {register.PhysicalRegister}");
 			}
 			else
 			{
-				registerTrace.Log($"Virtual Register # {virtualRegister.VirtualRegisterOperand.Index}");
+				registerTrace.Log($"Virtual Register # {register.RegisterOperand.Index}");
 			}
 
-			registerTrace.Log($"Live Intervals ({virtualRegister.LiveIntervals.Count}): {LiveIntervalsToString(virtualRegister.LiveIntervals, operand)}");
+			registerTrace.Log($"Live Intervals ({register.LiveIntervals.Count}): {LiveIntervalsToString(register.LiveIntervals, operand)}");
 
-			if (virtualRegister.IsVirtualRegister)
+			if (register.IsVirtualRegister)
 			{
-				registerTrace.Log($"Def Positions ({virtualRegister.DefPositions.Count}): {SlotsToString(virtualRegister.DefPositions)}");
-				registerTrace.Log($"Use Positions ({virtualRegister.UsePositions.Count}): {SlotsToString(virtualRegister.UsePositions)}");
+				registerTrace.Log($"Def Positions ({register.DefPositions.Count}): {SlotsToString(register.DefPositions)}");
+				registerTrace.Log($"Use Positions ({register.UsePositions.Count}): {SlotsToString(register.UsePositions)}");
 			}
 		}
 	}
@@ -326,7 +326,7 @@ public abstract class BaseRegisterAllocator
 					// FUTURE: check can be improved to allow multiple defines, as long as the load is exactly the same
 					if (result.IsDefinedOnce)
 					{
-						var register = VirtualRegisters[GetIndex(result)];
+						var register = Registers[GetIndex(result)];
 
 						register.IsParamLoad = true;
 						register.ParamLoadNode = node;
@@ -342,7 +342,7 @@ public abstract class BaseRegisterAllocator
 		}
 
 		// Mark if parameter is writable (vs. read-only)
-		foreach (var register in VirtualRegisters)
+		foreach (var register in Registers)
 		{
 			if (register.ParamOperand != null && paramStoreSet.Contains(register.ParamOperand))
 			{
@@ -661,7 +661,7 @@ public abstract class BaseRegisterAllocator
 					? ExtendedBlocks[b + 1].Start
 					: block.End;
 
-				intervalTrace?.Log($"EndSlot: {VirtualRegisters[r]} = {endSlots[r]} [LiveOut]");
+				intervalTrace?.Log($"EndSlot: {Registers[r]} = {endSlots[r]} [LiveOut]");
 			}
 
 			for (var node = block.BasicBlock.Last; !node.IsBlockStartInstruction; node = node.Previous)
@@ -676,7 +676,7 @@ public abstract class BaseRegisterAllocator
 				{
 					for (var r = 0; r < PhysicalRegisterCount; r++)
 					{
-						var register = VirtualRegisters[r];
+						var register = Registers[r];
 
 						if (register.IsReserved)
 							continue;
@@ -711,7 +711,7 @@ public abstract class BaseRegisterAllocator
 
 					var r = GetIndex(result);
 
-					var register = VirtualRegisters[r];
+					var register = Registers[r];
 
 					if (register.IsReserved)
 						continue;
@@ -747,7 +747,7 @@ public abstract class BaseRegisterAllocator
 
 					var r = GetIndex(operand);
 
-					var register = VirtualRegisters[r];
+					var register = Registers[r];
 
 					if (register.IsReserved)
 						continue;
@@ -765,7 +765,7 @@ public abstract class BaseRegisterAllocator
 			{
 				if (endSlots[r].IsNotNull)
 				{
-					var register = VirtualRegisters[r];
+					var register = Registers[r];
 
 					if (register.IsReserved)
 						continue;
@@ -795,14 +795,14 @@ public abstract class BaseRegisterAllocator
 
 	private void SplitIntervalsAtCallSites()
 	{
-		foreach (var virtualRegister in VirtualRegisters)
+		foreach (var register in Registers)
 		{
-			if (virtualRegister.IsPhysicalRegister)
+			if (register.IsPhysicalRegister)
 				continue;
 
-			for (var i = 0; i < virtualRegister.LiveIntervals.Count; i++)
+			for (var i = 0; i < register.LiveIntervals.Count; i++)
 			{
-				var liveInterval = virtualRegister.LiveIntervals[i];
+				var liveInterval = register.LiveIntervals[i];
 
 				if (liveInterval.ForceSpill)
 					continue;
@@ -875,9 +875,9 @@ public abstract class BaseRegisterAllocator
 
 	private void AssignSpillCosts()
 	{
-		foreach (var virtualRegister in VirtualRegisters)
+		foreach (var register in Registers)
 		{
-			foreach (var liveInterval in virtualRegister.LiveIntervals)
+			foreach (var liveInterval in register.LiveIntervals)
 			{
 				// Skip adding live intervals for physical registers to priority queue
 				if (liveInterval.VirtualRegister.IsPhysicalRegister)
@@ -916,9 +916,9 @@ public abstract class BaseRegisterAllocator
 
 	protected virtual void PopulatePriorityQueue()
 	{
-		foreach (var virtualRegister in VirtualRegisters)
+		foreach (var register in Registers)
 		{
-			foreach (var liveInterval in virtualRegister.LiveIntervals)
+			foreach (var liveInterval in register.LiveIntervals)
 			{
 				// Skip adding live intervals for physical registers to priority queue
 				if (liveInterval.VirtualRegister.IsPhysicalRegister)
@@ -1372,17 +1372,17 @@ public abstract class BaseRegisterAllocator
 		}
 	}
 
-	private IEnumerable<VirtualRegister> GetVirtualRegisters(BitArray array)
+	private IEnumerable<Register> GetVirtualRegisters(BitArray array)
 	{
 		for (var i = 0; i < array.Count; i++)
 		{
 			if (array.Get(i))
 			{
-				var virtualRegister = VirtualRegisters[i];
+				var register = Registers[i];
 
-				if (!virtualRegister.IsPhysicalRegister)
+				if (!register.IsPhysicalRegister)
 				{
-					yield return virtualRegister;
+					yield return register;
 				}
 			}
 		}
@@ -1390,23 +1390,23 @@ public abstract class BaseRegisterAllocator
 
 	protected void CreateSpillSlotOperands()
 	{
-		foreach (var register in VirtualRegisters)
+		foreach (var register in Registers)
 		{
 			if (!register.IsSpilled)
 				continue;
 
-			//if (!register.IsParamLoad || register.IsParamStore)
-			//	continue;
+			if (register.IsParamLoadOnly)
+				continue;
 
 			Debug.Assert(register.IsVirtualRegister);
 
-			register.SpillSlotOperand = LocalStack.Allocate(register.VirtualRegisterOperand);
+			register.SpillSlotOperand = LocalStack.Allocate(register.RegisterOperand);
 		}
 	}
 
 	protected void CreatePhysicalRegisterOperands()
 	{
-		foreach (var register in VirtualRegisters)
+		foreach (var register in Registers)
 		{
 			if (!register.IsUsed || register.IsPhysicalRegister)
 				continue;
@@ -1416,20 +1416,20 @@ public abstract class BaseRegisterAllocator
 				if (liveInterval.AssignedPhysicalRegister == null)
 					continue;
 
-				liveInterval.AssignedPhysicalOperand = Operand.CreateCPURegister(liveInterval.VirtualRegister.VirtualRegisterOperand, liveInterval.AssignedPhysicalRegister);
+				liveInterval.AssignedPhysicalOperand = Operand.CreateCPURegister(liveInterval.VirtualRegister.RegisterOperand, liveInterval.AssignedPhysicalRegister);
 			}
 		}
 	}
 
 	protected void InsertSpillMoves()
 	{
-		foreach (var register in VirtualRegisters)
+		foreach (var register in Registers)
 		{
 			if (!register.IsUsed || register.IsPhysicalRegister || !register.IsSpilled)
 				continue;
 
-			//if (register.IsParamLoad && !register.IsParamStore)
-			//	continue; // No store required
+			if (register.IsParamLoadOnly)
+				continue; // No store required
 
 			foreach (var liveInterval in register.LiveIntervals)
 			{
@@ -1451,7 +1451,7 @@ public abstract class BaseRegisterAllocator
 
 	protected void AssignRegisters()
 	{
-		foreach (var register in VirtualRegisters)
+		foreach (var register in Registers)
 		{
 			if (!register.IsUsed || register.IsPhysicalRegister)
 				continue;
@@ -1463,12 +1463,12 @@ public abstract class BaseRegisterAllocator
 
 				foreach (var use in liveInterval.UsePositions)
 				{
-					GetNode(use).ReplaceOperand(register.VirtualRegisterOperand, liveInterval.AssignedPhysicalOperand);
+					GetNode(use).ReplaceOperand(register.RegisterOperand, liveInterval.AssignedPhysicalOperand);
 				}
 
 				foreach (var def in liveInterval.DefPositions)
 				{
-					GetNode(def).ReplaceResult(register.VirtualRegisterOperand, liveInterval.AssignedPhysicalOperand);
+					GetNode(def).ReplaceResult(register.RegisterOperand, liveInterval.AssignedPhysicalOperand);
 				}
 			}
 		}
@@ -1504,15 +1504,15 @@ public abstract class BaseRegisterAllocator
 	{
 		var moveResolvers = new Dictionary<SlotIndex, MoveResolver>();
 
-		foreach (var virtualRegister in VirtualRegisters)
+		foreach (var register in Registers)
 		{
-			if (virtualRegister.IsPhysicalRegister)
+			if (register.IsPhysicalRegister)
 				continue;
 
-			if (virtualRegister.LiveIntervals.Count <= 1)
+			if (register.LiveIntervals.Count <= 1)
 				continue;
 
-			foreach (var currentInterval in virtualRegister.LiveIntervals)
+			foreach (var currentInterval in register.LiveIntervals)
 			{
 				// No moves at block edges (these are done in the resolve move phase later)
 				if (BlockEdges.Contains(currentInterval.End))
@@ -1521,7 +1521,7 @@ public abstract class BaseRegisterAllocator
 				var currentInternalEndNext = currentInterval.End.Next;
 
 				// List is not sorted, so scan thru each one
-				foreach (var nextInterval in virtualRegister.LiveIntervals)
+				foreach (var nextInterval in register.LiveIntervals)
 				{
 					if (currentInternalEndNext != nextInterval.Start)
 						continue;

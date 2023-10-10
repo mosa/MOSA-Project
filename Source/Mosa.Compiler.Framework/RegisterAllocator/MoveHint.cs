@@ -8,8 +8,8 @@ public sealed class MoveHint
 {
 	public readonly SlotIndex Slot;
 
-	public readonly VirtualRegister From;
-	public readonly VirtualRegister To;
+	public readonly Register From;
+	public readonly Register To;
 
 	public readonly int Bonus;
 
@@ -53,7 +53,7 @@ public sealed class MoveHint
 		}
 	}
 
-	public MoveHint(SlotIndex slot, VirtualRegister from, VirtualRegister to, int bonus)
+	public MoveHint(SlotIndex slot, Register from, Register to, int bonus)
 	{
 		Slot = slot;
 		From = from;
@@ -90,7 +90,7 @@ public sealed class MoveHint
 		}
 		else
 		{
-			sb.AppendFormat("v{0}", From.VirtualRegisterOperand.Index);
+			sb.AppendFormat("v{0}", From.RegisterOperand.Index);
 
 			if (FromRegister != null)
 			{
@@ -105,7 +105,7 @@ public sealed class MoveHint
 		}
 		else
 		{
-			sb.AppendFormat("v{0}", To.VirtualRegisterOperand.Index);
+			sb.AppendFormat("v{0}", To.RegisterOperand.Index);
 
 			if (ToRegister != null)
 			{

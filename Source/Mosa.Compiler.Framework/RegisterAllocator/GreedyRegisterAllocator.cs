@@ -304,8 +304,8 @@ public sealed class GreedyRegisterAllocator : BaseRegisterAllocator
 					  || (node.Result.IsCPURegister && node.Operand1.IsVirtualRegister)))
 					continue;
 
-				var from = VirtualRegisters[GetIndex(node.Operand1)];
-				var to = VirtualRegisters[GetIndex(node.Result)];
+				var from = Registers[GetIndex(node.Operand1)];
+				var to = Registers[GetIndex(node.Result)];
 
 				var factor = (from.IsPhysicalRegister ? 5 : 1) + (to.IsPhysicalRegister ? 20 : 1);
 
