@@ -76,7 +76,11 @@ public sealed class MoveResolver
 
 				Debug.Assert(move.Destination.IsCPURegister);
 
-				ResolvedMoves.Add(new OperandResolvedMove(move.Source, move.Destination, move.Source.IsCPURegister ? ResolvedMoveType.Move : ResolvedMoveType.Load));
+				ResolvedMoves.Add(new OperandResolvedMove(
+					move.Source.IsCPURegister ? ResolvedMoveType.Move : ResolvedMoveType.Load,
+					move.Source,
+					move.Destination)
+				);
 
 				Moves.RemoveAt(i);
 
@@ -108,7 +112,11 @@ public sealed class MoveResolver
 				Debug.Assert(Moves[other].Source.IsCPURegister);
 				Debug.Assert(move.Source.IsCPURegister);
 
-				ResolvedMoves.Add(new OperandResolvedMove(Moves[other].Source, move.Source, ResolvedMoveType.Exchange));
+				ResolvedMoves.Add(new OperandResolvedMove(
+					ResolvedMoveType.Exchange,
+					Moves[other].Source,
+					move.Source)
+				);
 
 				Moves[other] = new OperandMove(move.Source, Moves[other].Destination);
 
@@ -137,7 +145,11 @@ public sealed class MoveResolver
 			Debug.Assert(move.Destination.IsCPURegister);
 			Debug.Assert(move.Source.IsCPURegister);
 
-			ResolvedMoves.Add(new OperandResolvedMove(move.Destination, move.Source, ResolvedMoveType.Move));
+			ResolvedMoves.Add(new OperandResolvedMove(
+				ResolvedMoveType.Move,
+				move.Destination,
+				move.Source)
+			);
 		}
 	}
 

@@ -12,7 +12,7 @@ public struct OperandResolvedMove
 
 	public readonly ResolvedMoveType ResolvedMoveType;
 
-	public OperandResolvedMove(Operand source, Operand destination, ResolvedMoveType resolvedMoveType)
+	public OperandResolvedMove(ResolvedMoveType resolvedMoveType, Operand source, Operand destination)
 	{
 		Source = source;
 		Destination = destination;
