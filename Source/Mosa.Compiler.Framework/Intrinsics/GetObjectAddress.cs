@@ -17,22 +17,10 @@ internal static partial class IntrinsicMethods
 		if (operand1.IsValueType)
 		{
 			var def = operand1.Definitions[0];
-			var replacements = new List<Tuple<InstructionNode, int>>();
 
 			foreach (var use in operand1.Uses)
 			{
-				for (var i = 0; i < use.OperandCount; i++)
-				{
-					if (use.GetOperand(i) == operand1)
-					{
-						replacements.Add(new Tuple<InstructionNode, int>(use, i));
-					}
-				}
-			}
-
-			foreach (var replace in replacements)
-			{
-				replace.Item1.SetOperand(replace.Item2, def.Operand1);
+				use.ReplaceOperand(operand1, def.Operand1);
 			}
 
 			operand1 = def.Operand1;
