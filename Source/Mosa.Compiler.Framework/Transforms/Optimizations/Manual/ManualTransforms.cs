@@ -278,5 +278,20 @@ public static class ManualTransforms
 
 		new Simplification.DivUnsignedMagicNumber32(),
 		new Simplification.DivUnsignedMagicNumber64(),
+
+		new Useless.LoadParamZeroExtend8x32Double(),
+		new Useless.LoadParamZeroExtend16x32Double(),
+		new Useless.LoadParamZeroExtend8x64Double(),
+		new Useless.LoadParamZeroExtend16x64Double(),
+		new Useless.LoadParamZeroExtend32x64Double(),
+		new Useless.LoadParamSignExtend8x32Double(),
+		new Useless.LoadParamSignExtend16x32Double(),
+		new Useless.LoadParamSignExtend8x64Double(),
+		new Useless.LoadParamSignExtend16x64Double(),
+		new Useless.LoadParamSignExtend32x64Double(),
+
+		new Useless.ZeroExtend8x32Compare32x32(),
+		new Useless.ZeroExtend8x64Compare32x64(),
+		new Useless.ZeroExtend8x64Compare64x64(),
 	};
 }

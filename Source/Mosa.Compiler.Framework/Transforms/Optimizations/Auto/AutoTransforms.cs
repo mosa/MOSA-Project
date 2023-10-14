@@ -861,5 +861,15 @@ public static class AutoTransforms
 		new Algebraic.Signed64PerfectSquareFormula_v5(),
 		new Algebraic.Signed64PerfectSquareFormula_v6(),
 		new Algebraic.Signed64PerfectSquareFormula_v7(),
+		new Useless.ZeroExtend8x32Double(),
+		new Useless.ZeroExtend16x32Double(),
+		new Useless.ZeroExtend8x64Double(),
+		new Useless.ZeroExtend16x64Double(),
+		new Useless.ZeroExtend32x64Double(),
+		new Useless.SignExtend8x32Double(),
+		new Useless.SignExtend16x32Double(),
+		new Useless.SignExtend8x64Double(),
+		new Useless.SignExtend16x64Double(),
+		new Useless.SignExtend32x64Double(),
 	};
 }
