@@ -328,12 +328,10 @@ public sealed class Architecture : BaseArchitecture
 			|| node.Instruction == X86.MovLoad8
 			|| node.Instruction == X86.MovssLoad
 			|| node.Instruction == X86.MovsdLoad
-
 			|| node.Instruction == X86.MovzxLoad16
 			|| node.Instruction == X86.MovzxLoad8
 			|| node.Instruction == X86.Movzx16To32
 			|| node.Instruction == X86.Movzx8To32
-
 			|| node.Instruction == X86.MovsxLoad16
 			|| node.Instruction == X86.MovsxLoad8
 			|| node.Instruction == X86.Movsx16To32

@@ -42,7 +42,7 @@ public sealed class Register
 
 	public InstructionNode ParamLoadNode;
 
-	public bool IsParamLoadOnly => false; // IsParamLoad && !IsParamStore;
+	public bool IsParamLoadOnly => IsParamLoad && !IsParamStore;
 
 	#endregion Parameter Information
 

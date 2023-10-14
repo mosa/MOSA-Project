@@ -253,6 +253,7 @@ public sealed partial class Operand
 	public static readonly Operand Constant32_124 = CreateConstant32Internal(124);
 	public static readonly Operand Constant32_128 = CreateConstant32Internal(128);
 	public static readonly Operand Constant32_168 = CreateConstant32Internal(168);
+	public static readonly Operand Constant32_F = Constant32_16;
 	public static readonly Operand Constant32_FF = CreateConstant32Internal(0xFF);
 	public static readonly Operand Constant32_FFFF = CreateConstant32Internal(0xFFFF);
 	public static readonly Operand Constant32_FFFFFFCE = CreateConstant32Internal(0xFFFFFFCE);
@@ -283,6 +284,7 @@ public sealed partial class Operand
 	public static readonly Operand Constant64_31 = CreateConstant64Internal(31);
 	public static readonly Operand Constant64_32 = CreateConstant64Internal(32);
 	public static readonly Operand Constant64_64 = CreateConstant64Internal(64);
+	public static readonly Operand Constant64_F = Constant64_16;
 	public static readonly Operand Constant64_FF = CreateConstant64Internal(0xFF);
 	public static readonly Operand Constant64_FFFF = CreateConstant64Internal(0xFFFF);
 	public static readonly Operand Constant64_FFFFFFFF = CreateConstant64Internal(0xFFFFFFFF);

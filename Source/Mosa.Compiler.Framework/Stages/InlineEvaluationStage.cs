@@ -126,6 +126,9 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 
 		var inline = CanInline(MethodData);
 
+		//if (Method.FullName.StartsWith("Mosa.Runtime.Internal::MemoryCopy("))
+		//	inline = false; // DEBUGGING
+
 		SetInlinedBasicBlocks(inline ? BasicBlocks : null);
 
 		trace?.Log($"IRInstructionCount: {MethodData.IRInstructionCount}");

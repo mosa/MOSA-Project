@@ -469,10 +469,10 @@ public sealed class TransformContext
 		return BitValueManager.GetBitValue(operand);
 	}
 
-	public BitValue GetBitValueWithDefault(Operand operand)
-	{
-		return BitValueManager.GetBitValueDefaultAny(operand);
-	}
+	//public BitValue GetBitValueWithDefault(Operand operand)
+	//{
+	//	return BitValueManager.GetBitValueDefaultAny(operand);
+	//}
 
 	#endregion BitValue (experimental)
 

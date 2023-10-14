@@ -254,13 +254,29 @@ public class InlineStage : BaseMethodCompilerStage
 		{
 			newNode.Instruction = IRInstruction.MoveR8;
 		}
-		else if (instruction == IRInstruction.LoadParam32
-			|| instruction == IRInstruction.LoadParamSignExtend8x32
-			|| instruction == IRInstruction.LoadParamSignExtend16x32
-			|| instruction == IRInstruction.LoadParamZeroExtend8x32
-			|| instruction == IRInstruction.LoadParamZeroExtend16x32)
+		else if (instruction == IRInstruction.LoadParam32)
 		{
 			newNode.Instruction = IRInstruction.Move32;
+		}
+		else if (instruction == IRInstruction.LoadParamSignExtend8x32)
+		{
+			newNode.Instruction = IRInstruction.SignExtend8x32;
+		}
+		else if (instruction == IRInstruction.LoadParamSignExtend16x32)
+		{
+			newNode.Instruction = IRInstruction.SignExtend16x32;
+		}
+		else if (instruction == IRInstruction.ZeroExtend8x32)
+		{
+			newNode.Instruction = IRInstruction.ZeroExtend8x32;
+		}
+		else if (instruction == IRInstruction.LoadParamZeroExtend16x32)
+		{
+			newNode.Instruction = IRInstruction.ZeroExtend16x32;
+		}
+		else if (instruction == IRInstruction.LoadParamZeroExtend8x32)
+		{
+			newNode.Instruction = IRInstruction.ZeroExtend8x32;
 		}
 		else if (instruction == IRInstruction.LoadParamObject)
 		{
@@ -270,21 +286,45 @@ public class InlineStage : BaseMethodCompilerStage
 		{
 			newNode.Instruction = IRInstruction.MoveManagedPointer;
 		}
-		else if (instruction == IRInstruction.LoadParam64
-			|| instruction == IRInstruction.LoadParamSignExtend8x64
-			|| instruction == IRInstruction.LoadParamSignExtend16x64
-			|| instruction == IRInstruction.LoadParamSignExtend32x64
-			|| instruction == IRInstruction.LoadParamZeroExtend8x64
-			|| instruction == IRInstruction.LoadParamZeroExtend16x64
-			|| instruction == IRInstruction.LoadParamZeroExtend32x64)
+		else if (instruction == IRInstruction.LoadParam64)
 		{
 			newNode.Instruction = IRInstruction.Move64;
 		}
-		else if (instruction == IRInstruction.StoreParam8
-			|| instruction == IRInstruction.StoreParam16
-			|| instruction == IRInstruction.StoreParam32)
+		else if (instruction == IRInstruction.LoadParamSignExtend8x64)
+		{
+			newNode.Instruction = IRInstruction.SignExtend8x64;
+		}
+		else if (instruction == IRInstruction.LoadParamSignExtend16x64)
+		{
+			newNode.Instruction = IRInstruction.SignExtend16x64;
+		}
+		else if (instruction == IRInstruction.LoadParamSignExtend32x64)
+		{
+			newNode.Instruction = IRInstruction.SignExtend32x64;
+		}
+		else if (instruction == IRInstruction.LoadParamZeroExtend8x64)
+		{
+			newNode.Instruction = IRInstruction.ZeroExtend8x64;
+		}
+		else if (instruction == IRInstruction.LoadParamZeroExtend16x64)
+		{
+			newNode.Instruction = IRInstruction.ZeroExtend16x64;
+		}
+		else if (instruction == IRInstruction.LoadParamZeroExtend32x64)
+		{
+			newNode.Instruction = IRInstruction.ZeroExtend32x64;
+		}
+		else if (instruction == IRInstruction.StoreParam32)
 		{
 			newNode.SetInstruction(IRInstruction.Move32, newNode.Operand1, newNode.Operand2);
+		}
+		else if (instruction == IRInstruction.StoreParam8)
+		{
+			newNode.SetInstruction(IRInstruction.ZeroExtend8x32, newNode.Operand1, newNode.Operand2);
+		}
+		else if (instruction == IRInstruction.StoreParam16)
+		{
+			newNode.SetInstruction(IRInstruction.ZeroExtend16x32, newNode.Operand1, newNode.Operand2);
 		}
 		else if (instruction == IRInstruction.StoreParamObject)
 		{

@@ -217,14 +217,15 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			if (value == null)
 			{
 				valueTrace?.Log($"*** INDETERMINATE");
-				continue;
 			}
-
-			valueTrace?.Log($"  MaxValue:  {value.MaxValue}");
-			valueTrace?.Log($"  MinValue:  {value.MinValue}");
-			valueTrace?.Log($"  BitsSet:   {Convert.ToString((long)value.BitsSet, 2).PadLeft(64, '0')}");
-			valueTrace?.Log($"  BitsClear: {Convert.ToString((long)value.BitsClear, 2).PadLeft(64, '0')}");
-			valueTrace?.Log($"  BitsKnown: {Convert.ToString((long)value.BitsKnown, 2).PadLeft(64, '0')}");
+			else
+			{
+				valueTrace?.Log($"  MinValue:  {value.MinValue}");
+				valueTrace?.Log($"  MaxValue:  {value.MaxValue}");
+				valueTrace?.Log($"  BitsSet:   {Convert.ToString((long)value.BitsSet, 2).PadLeft(64, '0')}");
+				valueTrace?.Log($"  BitsClear: {Convert.ToString((long)value.BitsClear, 2).PadLeft(64, '0')}");
+				valueTrace?.Log($"  BitsKnown: {Convert.ToString((long)value.BitsKnown, 2).PadLeft(64, '0')}");
+			}
 
 			valueTrace?.Log();
 		}
