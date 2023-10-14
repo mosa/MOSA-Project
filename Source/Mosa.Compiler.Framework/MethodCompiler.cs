@@ -270,8 +270,8 @@ public sealed class MethodCompiler
 		MethodData.ReturnSize = methodInfo.ReturnSize;
 		MethodData.ReturnInRegister = methodInfo.ReturnInRegister;
 
-		MethodData.Counters.NewCountSkipLock("ExecutionTime.Setup.Ticks", (int)Stopwatch.ElapsedTicks);
-		MethodData.Counters.NewCountSkipLock("ExecutionTime.Setup.MicroSeconds", Stopwatch.Elapsed.Microseconds);
+		MethodData.Counters.Update("ExecutionTime.Setup.Ticks", (int)Stopwatch.ElapsedTicks);
+		MethodData.Counters.Update("ExecutionTime.Setup.MicroSeconds", Stopwatch.Elapsed.Microseconds);
 
 		TransformContext.SetCompiler(compiler);
 		TransformContext.SetMethodCompiler(this);
@@ -306,7 +306,10 @@ public sealed class MethodCompiler
 			{
 				var log = new TraceLog(TraceType.MethodCounters, Method, string.Empty, MethodData.Version);
 
-				log.Log(MethodData.Counters.Export());
+				foreach (var counter in MethodData.Counters.GetCounters())
+				{
+					log.Log($"{counter}");
+				}
 
 				Compiler.PostTraceLog(log);
 			}
@@ -400,10 +403,10 @@ public sealed class MethodCompiler
 
 			MethodData.ElapsedTicks = lastTick;
 
-			MethodData.Counters.NewCountSkipLock("ExecutionTime.StageStart.Ticks", (int)startTick);
-			MethodData.Counters.NewCountSkipLock("ExecutionTime.StageStart.Milliseconds", (int)startMS);
-			MethodData.Counters.NewCountSkipLock("ExecutionTime.Total.Ticks", (int)lastTick);
-			MethodData.Counters.NewCountSkipLock("ExecutionTime.Total.Milliseconds", (int)lastMS);
+			MethodData.Counters.Update("ExecutionTime.StageStart.Ticks", (int)startTick);
+			MethodData.Counters.Update("ExecutionTime.StageStart.Milliseconds", (int)startMS);
+			MethodData.Counters.Update("ExecutionTime.Total.Ticks", (int)lastTick);
+			MethodData.Counters.Update("ExecutionTime.Total.Milliseconds", (int)lastMS);
 
 			var executionTimeLog = new TraceLog(TraceType.MethodDebug, Method, "Execution Time/Ticks", MethodData.Version);
 
@@ -423,7 +426,7 @@ public sealed class MethodCompiler
 
 				executionTimeLog.Log(entry);
 
-				MethodData.Counters.NewCountSkipLock($"ExecutionTime.{i:00}.{Pipeline[i].Name}.Ticks", (int)ticks);
+				MethodData.Counters.Update($"ExecutionTime.{i:00}.{Pipeline[i].Name}.Ticks", (int)ticks);
 			}
 
 			executionTimeLog.Log($"{"****Total Time",-57}({lastTick} Ticks)");

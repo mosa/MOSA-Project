@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework;
 /// </summary>
 public sealed class Counters
 {
-	private readonly Dictionary<string, int> Entries = new();
+	private readonly Dictionary<string, Counter> Entries = new();
 	private readonly object _lock = new();
 
 	public void Reset()
@@ -17,51 +17,33 @@ public sealed class Counters
 
 	public void Update(string name, int count)
 	{
-		lock (_lock)
-		{
-			UpdateSkipLock(name, count);
-		}
+		UpdateCounter(name, count);
 	}
 
-	private void UpdateSkipLock(string name, int count)
+	public void Update(Counter counter)
 	{
-		if (Entries.TryGetValue(name, out var current))
-		{
-			Entries[name] = current + count;
-		}
-		else
-		{
-			Entries.Add(name, count);
-		}
+		UpdateCounter(counter.Name, counter.Count);
 	}
 
-	public void NewCountSkipLock(string name, int count)
+	public void Update(Counters counters)
 	{
-		Entries.Add(name, count);
-	}
-
-	public List<string> Export(string prefex = null)
-	{
-		var counts = new List<string>();
-
-		foreach (var item in Entries)
+		foreach (var counter in counters.Entries.Values)
 		{
-			if (prefex == null)
-				counts.Add($"{item.Key}: {item.Value}");
-			else
-				counts.Add($"{prefex}{item.Key}: {item.Value}");
+			UpdateCounter(counter.Name, counter.Count);
 		}
-
-		return counts;
 	}
 
-	public void Merge(Counters counters)
+	private void UpdateCounter(string name, int count)
 	{
 		lock (_lock)
 		{
-			foreach (var entry in counters.Entries)
+			if (Entries.TryGetValue(name, out var counter))
 			{
-				UpdateSkipLock(entry.Key, entry.Value);
+				counter.Increment(count);
+			}
+			else
+			{
+				Entries.Add(name, new Counter(name, count));
 			}
 		}
 	}
@@ -72,7 +54,7 @@ public sealed class Counters
 
 		foreach (var counter in Entries)
 		{
-			list.Add(new Counter(counter.Key, counter.Value));
+			list.Add(counter.Value);
 		}
 
 		return list;

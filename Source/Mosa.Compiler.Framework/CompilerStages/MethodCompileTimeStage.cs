@@ -15,14 +15,13 @@ public class MethodCompileTimeStage : BaseCompilerStage
 
 		var methods = GetAndSortMethodData();
 
-		using (var writer = new StreamWriter(MosaSettings.CompileTimeFile))
-		{
-			writer.WriteLine("Ticks\tMilliseconds\tCompiler Count\tMethod");
+		using var writer = new StreamWriter(MosaSettings.CompileTimeFile);
 
-			foreach (var data in methods)
-			{
-				writer.WriteLine($"{data.ElapsedTicks}{'\t'}{data.ElapsedTicks / TimeSpan.TicksPerMillisecond}{'\t'}{data.Version}{'\t'}{data.Method.FullName}");
-			}
+		writer.WriteLine("Ticks\tMilliseconds\tCompiler Count\tMethod");
+
+		foreach (var data in methods)
+		{
+			writer.WriteLine($"{data.ElapsedTicks}{'\t'}{data.ElapsedTicks / TimeSpan.TicksPerMillisecond}{'\t'}{data.Version}{'\t'}{data.Method.FullName}");
 		}
 	}
 

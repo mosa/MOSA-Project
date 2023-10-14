@@ -19,25 +19,24 @@ public sealed class MapFileStage : BaseCompilerStage
 		if (string.IsNullOrEmpty(MosaSettings.MapFile))
 			return;
 
-		using (var writer = new StreamWriter(MosaSettings.MapFile))
-		{
-			// Emit map file header
-			writer.WriteLine(MosaSettings.OutputFile);
-			writer.WriteLine();
-			writer.WriteLine($"Timestamp is {DateTime.Now}");
-			writer.WriteLine();
-			writer.WriteLine($"Preferred load address is {Linker.MosaSettings.BaseAddress:x16}");
-			writer.WriteLine();
+		using var writer = new StreamWriter(MosaSettings.MapFile);
 
-			// Emit the sections
-			EmitSections(writer);
-			writer.WriteLine();
+		// Emit map file header
+		writer.WriteLine(MosaSettings.OutputFile);
+		writer.WriteLine();
+		writer.WriteLine($"Timestamp is {DateTime.Now}");
+		writer.WriteLine();
+		writer.WriteLine($"Preferred load address is {Linker.MosaSettings.BaseAddress:x16}");
+		writer.WriteLine();
 
-			// Emit all symbols
-			EmitSymbols(writer);
+		// Emit the sections
+		EmitSections(writer);
+		writer.WriteLine();
 
-			writer.Close();
-		}
+		// Emit all symbols
+		EmitSymbols(writer);
+
+		writer.Close();
 	}
 
 	#region Internals

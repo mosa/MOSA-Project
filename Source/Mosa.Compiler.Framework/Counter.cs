@@ -38,5 +38,5 @@ public class Counter
 		Count = condition ? truevalue : falsevalue;
 	}
 
-	public override string ToString() => $"{Name} = {Count}";
+	public override string ToString() => $"{Name}: {Count}";
 }

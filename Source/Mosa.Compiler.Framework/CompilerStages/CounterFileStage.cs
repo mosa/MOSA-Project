@@ -21,23 +21,25 @@ public sealed class CounterFileStage : BaseCompilerStage
 
 		var counters = Compiler.GlobalCounters.GetCounters();
 
-		// TODO: sort filters by name
+		counters.Sort(delegate (Counter x, Counter y)
+		{
+			return x.Name.CompareTo(y.Name);
+		});
 
 		var filter = MosaSettings.CounterFilter;
 
-		using (var writer = new StreamWriter(MosaSettings.CounterFile))
+		using var writer = new StreamWriter(MosaSettings.CounterFile);
+
+		writer.WriteLine($"Counter Name\tCount");
+
+		foreach (var counter in counters)
 		{
-			writer.WriteLine($"Counter Name\tCount");
+			if (!string.IsNullOrWhiteSpace(filter) && !counter.Name.Contains(filter))
+				continue;
 
-			foreach (var counter in counters)
-			{
-				if (!string.IsNullOrWhiteSpace(filter) && !counter.Name.Contains(filter))
-					continue;
-
-				writer.WriteLine($"{counter.Name}\t{counter.Count}");
-			}
-
-			writer.Close();
+			writer.WriteLine($"{counter.Name}\t{counter.Count}");
 		}
+
+		writer.Close();
 	}
 }

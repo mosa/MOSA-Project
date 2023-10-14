@@ -1,12 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Threading;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.CompilerStages;
 using Mosa.Compiler.Framework.Linker;
@@ -516,6 +511,12 @@ public sealed class Compiler
 	{
 		PostEvent(CompilerEvent.FinalizationStart);
 
+		// Sum up the counters
+		foreach (var methodData in CompilerData.MethodData)
+		{
+			GlobalCounters.Update(methodData.Counters);
+		}
+
 		foreach (var stage in CompilerPipeline)
 		{
 			PostEvent(CompilerEvent.FinalizationStageStart, stage.Name);
@@ -539,12 +540,6 @@ public sealed class Compiler
 		}
 
 		MethodScanner.Complete();
-
-		// Sum up the counters
-		foreach (var methodData in CompilerData.MethodData)
-		{
-			GlobalCounters.Merge(methodData.Counters);
-		}
 
 		EmitCounters();
 
@@ -592,9 +587,9 @@ public sealed class Compiler
 
 	private void EmitCounters()
 	{
-		foreach (var counter in GlobalCounters.Export())
+		foreach (var counter in GlobalCounters.GetCounters())
 		{
-			PostEvent(CompilerEvent.Counter, counter);
+			PostEvent(CompilerEvent.Counter, counter.ToString());
 		}
 	}
 
