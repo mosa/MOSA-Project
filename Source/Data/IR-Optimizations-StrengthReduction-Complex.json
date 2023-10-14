@@ -135,6 +135,16 @@
 			"Filter": "",
 			"Result": "(IR.Or## a b)",
 			"Variations": "Yes"
+		},
+		{
+			"Type": "StrengthReduction",
+			"Name": "ArithShiftRight64",
+			"SubName": "By32",
+			"Expression": "IR.GetLow32 (IR.ArithShiftRight64 (IR.To64 a b) 32)",
+			"Filter": "",
+			"Result": "(IR.Move32 b)",
+			"Variations": "Yes",
+			"Log": "Yes"
 		}
 	]
 }
