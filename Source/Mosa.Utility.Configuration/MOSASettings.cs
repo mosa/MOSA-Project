@@ -242,6 +242,18 @@ public class MosaSettings
 		set => Settings.SetValue(Name.CompilerDebug_MapFile, value);
 	}
 
+	public string CounterFile
+	{
+		get => Settings.GetValue(Name.CompilerDebug_CounterFile, null);
+		set => Settings.SetValue(Name.CompilerDebug_CounterFile, value);
+	}
+
+	public string CounterFilter
+	{
+		get => Settings.GetValue(Name.CompilerDebug_CounterFilter, null);
+		set => Settings.SetValue(Name.CompilerDebug_CounterFilter, value);
+	}
+
 	public int MaxThreads
 	{
 		get => Settings.GetValue(Name.Compiler_Multithreading_MaxThreads, 0);
@@ -715,6 +727,7 @@ public class MosaSettings
 		DebugFile = null;
 		AsmFile = null;
 		MapFile = null;
+		CounterFile = null;
 		NasmFile = null;
 		InlinedFile = null;
 
@@ -846,6 +859,11 @@ public class MosaSettings
 		if (MapFile == "%DEFAULT%")
 		{
 			MapFile = Path.Combine(defaultFolder, $"{baseFilename}-map.txt");
+		}
+
+		if (CounterFile == "%DEFAULT%")
+		{
+			CounterFile = Path.Combine(defaultFolder, $"{baseFilename}-counters.txt");
 		}
 
 		if (CompileTimeFile == "%DEFAULT%")

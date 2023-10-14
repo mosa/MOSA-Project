@@ -169,6 +169,7 @@ public sealed class Compiler
 		!string.IsNullOrEmpty(mosaSettings.CompileTimeFile) ? new MethodCompileTimeStage() : null,
 		!string.IsNullOrEmpty(mosaSettings.OutputFile) && mosaSettings.EmitBinary ? new LinkerEmitStage() : null,
 		!string.IsNullOrEmpty(mosaSettings.MapFile) ? new MapFileStage() : null,
+		!string.IsNullOrEmpty(mosaSettings.CounterFile) ? new CounterFileStage() : null,
 		!string.IsNullOrEmpty(mosaSettings.DebugFile) ? new DebugFileStage() : null,
 		!string.IsNullOrEmpty(mosaSettings.InlinedFile) ? new InlinedFileStage() : null,
 	};

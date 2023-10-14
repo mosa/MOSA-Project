@@ -5,7 +5,7 @@ using Mosa.Compiler.Framework.Linker;
 namespace Mosa.Compiler.Framework.CompilerStages;
 
 /// <summary>
-/// An compilation stage, which generates a map file of the built binary file.
+/// An compilation stage which generates a map file of the built binary file.
 /// </summary>
 /// <seealso cref="Mosa.Compiler.Framework.BaseCompilerStage" />
 public sealed class MapFileStage : BaseCompilerStage

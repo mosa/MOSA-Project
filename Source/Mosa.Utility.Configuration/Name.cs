@@ -39,10 +39,12 @@ public static class Name
 	public const string CompilerDebug_FullCheckMode = "CompilerDebug.FullCheckMode";
 	public const string CompilerDebug_InlinedFile = "CompilerDebug.InlinedFile";
 	public const string CompilerDebug_MapFile = "CompilerDebug.MapFile";
+	public const string CompilerDebug_CounterFile = "CompilerDebug.CounterFile";
 	public const string CompilerDebug_NasmFile = "CompilerDebug.NasmFile";
 	public const string CompilerDebug_PostLinkHashFile = "CompilerDebug.PostLinkHashFile";
 	public const string CompilerDebug_PreLinkHashFile = "CompilerDebug.PreLinkHashFile";
 	public const string CompilerDebug_Statistics = "CompilerDebug.Statistics";
+	public const string CompilerDebug_CounterFilter = "CompilerDebug.CounterFilter";
 	public const string Debugger_BreakpointFile = "Debugger.BreakpointFile";
 	public const string Debugger_WatchFile = "Debugger.WatchFile";
 	public const string DefaultFolder = "DefaultFolder";

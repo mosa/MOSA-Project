@@ -1,7 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Collections.Generic;
-
 namespace Mosa.Compiler.Framework;
 
 /// <summary>
@@ -9,12 +7,12 @@ namespace Mosa.Compiler.Framework;
 /// </summary>
 public sealed class Counters
 {
-	private readonly Dictionary<string, int> Entry = new Dictionary<string, int>();
-	private readonly object _lock = new object();
+	private readonly Dictionary<string, int> Entries = new();
+	private readonly object _lock = new();
 
 	public void Reset()
 	{
-		Entry.Clear();
+		Entries.Clear();
 	}
 
 	public void Update(string name, int count)
@@ -25,28 +23,28 @@ public sealed class Counters
 		}
 	}
 
-	public void UpdateSkipLock(string name, int count)
+	private void UpdateSkipLock(string name, int count)
 	{
-		if (Entry.TryGetValue(name, out var current))
+		if (Entries.TryGetValue(name, out var current))
 		{
-			Entry[name] = current + count;
+			Entries[name] = current + count;
 		}
 		else
 		{
-			Entry.Add(name, count);
+			Entries.Add(name, count);
 		}
 	}
 
 	public void NewCountSkipLock(string name, int count)
 	{
-		Entry.Add(name, count);
+		Entries.Add(name, count);
 	}
 
 	public List<string> Export(string prefex = null)
 	{
 		var counts = new List<string>();
 
-		foreach (var item in Entry)
+		foreach (var item in Entries)
 		{
 			if (prefex == null)
 				counts.Add($"{item.Key}: {item.Value}");
@@ -61,15 +59,24 @@ public sealed class Counters
 	{
 		lock (_lock)
 		{
-			foreach (var entry in counters.Entry)
+			foreach (var entry in counters.Entries)
 			{
 				UpdateSkipLock(entry.Key, entry.Value);
 			}
 		}
 	}
 
-	public override string ToString()
+	public List<Counter> GetCounters()
 	{
-		return $"Counts = {Entry.Count}";
+		var list = new List<Counter>();
+
+		foreach (var counter in Entries)
+		{
+			list.Add(new Counter(counter.Key, counter.Value));
+		}
+
+		return list;
 	}
+
+	public override string ToString() => $"Counts = {Entries.Count}";
 }
