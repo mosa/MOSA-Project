@@ -21,10 +21,7 @@ public sealed class CounterFileStage : BaseCompilerStage
 
 		var counters = Compiler.GlobalCounters.GetCounters();
 
-		counters.Sort(delegate (Counter x, Counter y)
-		{
-			return x.Name.CompareTo(y.Name);
-		});
+		counters.Sort((Counter x, Counter y) => String.Compare(x.Name, y.Name));
 
 		var filter = MosaSettings.CounterFilter;
 
