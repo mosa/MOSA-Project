@@ -871,5 +871,15 @@ public static class AutoTransforms
 		new Useless.SignExtend8x64Double(),
 		new Useless.SignExtend16x64Double(),
 		new Useless.SignExtend32x64Double(),
+		new Useless.ZeroExtend8x32ZeroExtend16x32(),
+		new Useless.ZeroExtend16x32ZeroExtend8x32(),
+		new Useless.ZeroExtend8x32ZeroExtend16x32(),
+		new Useless.ZeroExtend16x32ZeroExtend8x32(),
+		new Useless.ZeroExtend8x64ZeroExtend16x64(),
+		new Useless.ZeroExtend8x64ZeroExtend32x64(),
+		new Useless.ZeroExtend16x64ZeroExtend8x64(),
+		new Useless.ZeroExtend16x64ZeroExtend32x64(),
+		new Useless.ZeroExtend32x64ZeroExtend8x64(),
+		new Useless.ZeroExtend32x64ZeroExtend16x64(),
 	};
 }
