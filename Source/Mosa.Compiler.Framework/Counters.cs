@@ -1,7 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Collections.Generic;
-
 namespace Mosa.Compiler.Framework;
 
 /// <summary>
@@ -9,67 +7,58 @@ namespace Mosa.Compiler.Framework;
 /// </summary>
 public sealed class Counters
 {
-	private readonly Dictionary<string, int> Entry = new Dictionary<string, int>();
-	private readonly object _lock = new object();
+	private readonly Dictionary<string, Counter> Entries = new();
+	private readonly object _lock = new();
 
 	public void Reset()
 	{
-		Entry.Clear();
+		Entries.Clear();
 	}
 
 	public void Update(string name, int count)
 	{
-		lock (_lock)
-		{
-			UpdateSkipLock(name, count);
-		}
+		UpdateCounter(name, count);
 	}
 
-	public void UpdateSkipLock(string name, int count)
+	public void Update(Counter counter)
 	{
-		if (Entry.TryGetValue(name, out var current))
-		{
-			Entry[name] = current + count;
-		}
-		else
-		{
-			Entry.Add(name, count);
-		}
+		UpdateCounter(counter.Name, counter.Count);
 	}
 
-	public void NewCountSkipLock(string name, int count)
+	public void Update(Counters counters)
 	{
-		Entry.Add(name, count);
-	}
-
-	public List<string> Export(string prefex = null)
-	{
-		var counts = new List<string>();
-
-		foreach (var item in Entry)
+		foreach (var counter in counters.Entries.Values)
 		{
-			if (prefex == null)
-				counts.Add($"{item.Key}: {item.Value}");
-			else
-				counts.Add($"{prefex}{item.Key}: {item.Value}");
+			UpdateCounter(counter.Name, counter.Count);
 		}
-
-		return counts;
 	}
 
-	public void Merge(Counters counters)
+	private void UpdateCounter(string name, int count)
 	{
 		lock (_lock)
 		{
-			foreach (var entry in counters.Entry)
+			if (Entries.TryGetValue(name, out var counter))
 			{
-				UpdateSkipLock(entry.Key, entry.Value);
+				counter.Increment(count);
+			}
+			else
+			{
+				Entries.Add(name, new Counter(name, count));
 			}
 		}
 	}
 
-	public override string ToString()
+	public List<Counter> GetCounters()
 	{
-		return $"Counts = {Entry.Count}";
+		var list = new List<Counter>();
+
+		foreach (var counter in Entries)
+		{
+			list.Add(counter.Value);
+		}
+
+		return list;
 	}
+
+	public override string ToString() => $"Counts = {Entries.Count}";
 }

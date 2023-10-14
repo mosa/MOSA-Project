@@ -274,7 +274,7 @@ public abstract class BaseMethodCompilerStage
 
 	protected void UpdateCounter(string name, int count = 1)
 	{
-		MethodData.Counters.UpdateSkipLock(name, count);
+		MethodData.Counters.Update(name, count);
 	}
 
 	#endregion Counters

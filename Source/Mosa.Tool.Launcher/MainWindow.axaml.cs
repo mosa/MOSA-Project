@@ -275,6 +275,7 @@ public partial class MainWindow : Window
 		mosaSettings.NasmFile = NasmFile.IsChecked!.Value ? "%DEFAULT%" : string.Empty;
 		mosaSettings.AsmFile = AsmFile.IsChecked!.Value ? "%DEFAULT%" : string.Empty;
 		mosaSettings.MapFile = MapFile.IsChecked!.Value ? "%DEFAULT%" : string.Empty;
+		//mosaSettings.CounterFile = CounterFile.IsChecked!.Value ? "%DEFAULT%" : string.Empty;
 		mosaSettings.DebugFile = DbgFile.IsChecked!.Value ? "%DEFAULT%" : string.Empty;
 		mosaSettings.InlinedFile = InlLstFile.IsChecked!.Value ? "%DEFAULT%" : string.Empty;
 		mosaSettings.PreLinkHashFile = HashFiles.IsChecked!.Value ? "%DEFAULT%" : string.Empty;

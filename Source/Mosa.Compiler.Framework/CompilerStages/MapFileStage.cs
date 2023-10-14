@@ -5,7 +5,7 @@ using Mosa.Compiler.Framework.Linker;
 namespace Mosa.Compiler.Framework.CompilerStages;
 
 /// <summary>
-/// An compilation stage, which generates a map file of the built binary file.
+/// An compilation stage which generates a map file of the built binary file.
 /// </summary>
 /// <seealso cref="Mosa.Compiler.Framework.BaseCompilerStage" />
 public sealed class MapFileStage : BaseCompilerStage
@@ -19,25 +19,24 @@ public sealed class MapFileStage : BaseCompilerStage
 		if (string.IsNullOrEmpty(MosaSettings.MapFile))
 			return;
 
-		using (var writer = new StreamWriter(MosaSettings.MapFile))
-		{
-			// Emit map file header
-			writer.WriteLine(MosaSettings.OutputFile);
-			writer.WriteLine();
-			writer.WriteLine($"Timestamp is {DateTime.Now}");
-			writer.WriteLine();
-			writer.WriteLine($"Preferred load address is {Linker.MosaSettings.BaseAddress:x16}");
-			writer.WriteLine();
+		using var writer = new StreamWriter(MosaSettings.MapFile);
 
-			// Emit the sections
-			EmitSections(writer);
-			writer.WriteLine();
+		// Emit map file header
+		writer.WriteLine(MosaSettings.OutputFile);
+		writer.WriteLine();
+		writer.WriteLine($"Timestamp is {DateTime.Now}");
+		writer.WriteLine();
+		writer.WriteLine($"Preferred load address is {Linker.MosaSettings.BaseAddress:x16}");
+		writer.WriteLine();
 
-			// Emit all symbols
-			EmitSymbols(writer);
+		// Emit the sections
+		EmitSections(writer);
+		writer.WriteLine();
 
-			writer.Close();
-		}
+		// Emit all symbols
+		EmitSymbols(writer);
+
+		writer.Close();
 	}
 
 	#region Internals
