@@ -4,35 +4,27 @@ using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator;
 
-public sealed class VirtualRegister
+public sealed class Register
 {
 	public readonly List<SlotIndex> UsePositions;
 
 	public readonly List<SlotIndex> DefPositions;
 
-	public readonly Operand VirtualRegisterOperand;
+	public readonly Operand RegisterOperand;
 
 	public readonly PhysicalRegister PhysicalRegister;
 
-	public bool IsPhysicalRegister => VirtualRegisterOperand == null;
+	public bool IsPhysicalRegister => RegisterOperand == null;
 
-	public bool IsVirtualRegister => VirtualRegisterOperand != null;
+	public bool IsVirtualRegister => RegisterOperand != null;
 
 	public List<LiveInterval> LiveIntervals { get; } = new List<LiveInterval>(1);
 
 	public int Count => LiveIntervals.Count;
 
-	public LiveInterval LastRange => LiveIntervals.Count == 0 ? null : LiveIntervals[LiveIntervals.Count - 1];
-
-	public LiveInterval FirstRange
-	{
-		get => LiveIntervals.Count == 0 ? null : LiveIntervals[0];
-		set => LiveIntervals[0] = value;
-	}
-
 	public Operand SpillSlotOperand;
 
-	public bool IsFloatingPoint => VirtualRegisterOperand.IsFloatingPoint;
+	public bool IsFloatingPoint => RegisterOperand.IsFloatingPoint;
 
 	public bool IsReserved { get; }
 
@@ -40,40 +32,51 @@ public sealed class VirtualRegister
 
 	public bool IsUsed => Count != 0;
 
-	public VirtualRegister(Operand virtualRegister)
+	#region Parameter Information
+
+	public bool IsParamLoad = false;
+
+	public bool IsParamStore = false;
+
+	public Operand ParamOperand;
+
+	public InstructionNode ParamLoadNode;
+
+	public bool IsParamLoadOnly => IsParamLoad && !IsParamStore;
+
+	#endregion Parameter Information
+
+	public Register(Operand register)
 	{
-		VirtualRegisterOperand = virtualRegister;
+		RegisterOperand = register;
 		IsReserved = false;
 		IsSpilled = false;
 
-		if (virtualRegister.IsVirtualRegister)
-		{
-			UsePositions = new List<SlotIndex>(VirtualRegisterOperand.Uses.Count);
-			DefPositions = new List<SlotIndex>(VirtualRegisterOperand.Definitions.Count);
-		}
+		if (!register.IsVirtualRegister)
+			return;
+
+		UsePositions = new List<SlotIndex>(register.Uses.Count);
+		DefPositions = new List<SlotIndex>(register.Definitions.Count);
 	}
 
 	public void UpdatePositions()
 	{
-		var usePositions = UsePositions;
-
-		foreach (var use in VirtualRegisterOperand.Uses)
+		foreach (var use in RegisterOperand.Uses)
 		{
-			usePositions.AddIfNew(new SlotIndex(use));
+			UsePositions.AddIfNew(SlotIndex.Use(use));
 		}
 
-		usePositions.Sort();
+		UsePositions.Sort();
 
-		var defPositions = DefPositions;
-		foreach (var def in VirtualRegisterOperand.Definitions)
+		foreach (var def in RegisterOperand.Definitions)
 		{
-			defPositions.AddIfNew(new SlotIndex(def));
+			DefPositions.AddIfNew(SlotIndex.Def(def));
 		}
 
-		defPositions.Sort();
+		DefPositions.Sort();
 	}
 
-	public VirtualRegister(PhysicalRegister physicalRegister, bool reserved)
+	public Register(PhysicalRegister physicalRegister, bool reserved)
 	{
 		PhysicalRegister = physicalRegister;
 		IsReserved = reserved;
@@ -156,22 +159,6 @@ public sealed class VirtualRegister
 		return null;
 	}
 
-	/// <summary>
-	/// Gets the interval at or ends at.
-	/// </summary>
-	/// <param name="at">At.</param>
-	/// <returns></returns>
-	public LiveInterval GetIntervalAtOrEndsAt(SlotIndex at)
-	{
-		foreach (var liveInterval in LiveIntervals)
-		{
-			if (liveInterval.Contains(at) || at == liveInterval.End)
-				return liveInterval;
-		}
-
-		return null;
-	}
-
 	public void ReplaceWithSplit(LiveInterval source, List<LiveInterval> liveIntervals)
 	{
 		Remove(source);
@@ -184,13 +171,8 @@ public sealed class VirtualRegister
 
 	public override string ToString()
 	{
-		if (IsPhysicalRegister)
-		{
-			return PhysicalRegister.ToString();
-		}
-		else
-		{
-			return $"V_{VirtualRegisterOperand.Index}";
-		}
+		return IsPhysicalRegister
+			? PhysicalRegister.ToString()
+			: $"v{RegisterOperand.Index}";
 	}
 }

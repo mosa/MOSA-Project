@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Dynamic;
-using System.Linq;
 using System.Text.Json;
 
 namespace Mosa.Utility.SourceCodeGenerator;

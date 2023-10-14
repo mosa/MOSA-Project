@@ -1,11 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Collections.Generic;
+using Mosa.Compiler.ARM32.Stages;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Linker.Elf;
 using Mosa.Compiler.Framework.Stages;
-using Mosa.Compiler.ARM32.Stages;
 using Mosa.Utility.Configuration;
 
 namespace Mosa.Compiler.ARM32;
@@ -265,5 +264,40 @@ public sealed class Architecture : BaseArchitecture
 	public override bool IsInstructionMove(BaseInstruction instruction)
 	{
 		return instruction == ARM32.Mov || instruction == ARM32.Mvf;
+	}
+
+	/// <summary>
+	/// Determines whether [is parameter store] [the specified context].
+	/// </summary>
+	/// <param name="node">the node</param>
+	/// <param name="operand">The operand.</param>
+	/// <returns>
+	///   <c>true</c> if [is parameter store] [the specified context]; otherwise, <c>false</c>.</returns>
+	public override bool IsParameterStore(InstructionNode node, out Operand operand)
+	{
+		// TODO
+		operand = null;
+		return false;
+	}
+
+	/// <summary>
+	/// Determines whether [is parameter load] [the specified context].
+	/// </summary>
+	/// <param name="node">the node</param>
+	/// <returns>
+	///   <c>true</c> if [is parameter load] [the specified context]; otherwise, <c>false</c>.</returns>
+	public override bool IsParameterLoad(InstructionNode node, out Operand operand)
+	{
+		// TODO
+		operand = null;
+
+		if (node.ResultCount != 1
+			|| node.OperandCount != 2
+			|| !node.Instruction.IsMemoryRead
+			|| !node.Operand1.IsCPURegister
+			|| node.Operand1.Register != CPURegister.FP)
+			return false;
+
+		return false;
 	}
 }

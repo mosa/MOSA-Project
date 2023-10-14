@@ -1,7 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Mosa.Utility.SourceCodeGenerator;
@@ -592,6 +590,8 @@ public class BuildCommonInstructionFiles : BuildBaseTemplate
 					0 => "Operand1",
 					1 => "Operand2",
 					2 => "Operand3",
+					3 => "Operand4",
+					4 => "Operand5",
 					_ => $"GetOperand({i})"
 				};
 

@@ -2,6 +2,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using Mosa.Compiler.Framework.RegisterAllocator;
 
 namespace Mosa.Compiler.Framework;
 
@@ -114,6 +115,43 @@ public sealed class VirtualRegisters : IEnumerable<Operand>
 	internal void Reorder(Operand virtualRegister, int index)
 	{
 		virtualRegisters[index - 1] = virtualRegister;
-		virtualRegister.RenameIndex(index);
+		virtualRegister.Reindex(index);
+	}
+
+	internal void SwapPosition(Operand a, Operand b)
+	{
+		if (a == b)
+			return;
+
+		virtualRegisters[a.Index - 1] = b;
+		virtualRegisters[b.Index - 1] = a;
+
+		var t = a.Index;
+		a.Reindex(b.Index);
+		b.Reindex(t);
+	}
+
+	internal void RemoveUnused()
+	{
+		var updated = false;
+
+		for (var i = virtualRegisters.Count - 1; i >= 0; i--)
+		{
+			var virtualRegister = virtualRegisters[i];
+
+			if (virtualRegister.IsVirtualRegisterUsed)
+				continue;
+
+			virtualRegisters.RemoveAt(i);
+			updated = true;
+		}
+
+		if (!updated)
+			return;
+
+		for (var i = 0; i < virtualRegisters.Count; i++)
+		{
+			virtualRegisters[i].Reindex(i + 1);
+		}
 	}
 }

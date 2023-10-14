@@ -1,9 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Text;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Exceptions;
@@ -148,24 +145,24 @@ public class Builder : BaseLauncher
 		switch (MosaSettings.ImageFormat)
 		{
 			case "vmdk":
-			{
-				var imageFile = Path.Combine(MosaSettings.TemporaryFolder, $"{Path.GetFileNameWithoutExtension(MosaSettings.ImageFile)}.img");
-				CreateDiskImage(imageFile);
-				CreateVMDK(imageFile);
-				break;
-			}
+				{
+					var imageFile = Path.Combine(MosaSettings.TemporaryFolder, $"{Path.GetFileNameWithoutExtension(MosaSettings.ImageFile)}.img");
+					CreateDiskImage(imageFile);
+					CreateVMDK(imageFile);
+					break;
+				}
 			case "vdi":
-			{
-				var imageFile = Path.Combine(MosaSettings.TemporaryFolder, $"{Path.GetFileNameWithoutExtension(MosaSettings.ImageFile)}.img");
-				CreateDiskImage(imageFile);
-				CreateVDI(imageFile);
-				break;
-			}
+				{
+					var imageFile = Path.Combine(MosaSettings.TemporaryFolder, $"{Path.GetFileNameWithoutExtension(MosaSettings.ImageFile)}.img");
+					CreateDiskImage(imageFile);
+					CreateVDI(imageFile);
+					break;
+				}
 			default:
-			{
-				CreateDiskImage(MosaSettings.ImageFile);
-				break;
-			}
+				{
+					CreateDiskImage(MosaSettings.ImageFile);
+					break;
+				}
 		}
 	}
 

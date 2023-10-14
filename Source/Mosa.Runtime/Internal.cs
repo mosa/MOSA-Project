@@ -183,7 +183,7 @@ public static class Internal
 
 	#region Memory Manipulation
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	[MethodImpl(MethodImplOptions.NoInlining)] // TODO: AggressiveInlining
 	public static void MemoryCopy(Pointer dest, Pointer src, uint count)
 	{
 		//MemoryCopy1(dest, src, count);

@@ -1,8 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-using System.Windows.Forms;
-
 namespace Mosa.Tool.Debugger;
 
 public partial class DebugAppLocationsWindow : Form

@@ -1,7 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Text;
-using System.Threading;
 
 namespace Mosa.Utility.RSP;
 

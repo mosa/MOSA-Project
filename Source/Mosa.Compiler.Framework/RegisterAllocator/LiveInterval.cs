@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator;
@@ -17,40 +16,58 @@ public sealed class LiveInterval
 		Max = 5,
 	}
 
-	public readonly VirtualRegister VirtualRegister;
+	public readonly Register Register;
 
 	public readonly SlotIndex Start;
 	public readonly SlotIndex End;
 
-	public int Length => End - Start;
-
 	public readonly LiveRange LiveRange;
 
-	public int StartValue => LiveRange.Start.Value;
+	public int Length => End - Start + 1;
 
-	public int EndValue => LiveRange.End.Value;
+	public int StartValue => LiveRange.Start.Index;
+
+	public int EndValue => LiveRange.End.Index;
 
 	public int SpillValue;
 
-	public int SpillCost => NeverSpill || TooSmallToSplit ? int.MaxValue : SpillValue / (Length + 1);
+	public int SpillCost => NeverSpill || IsUnsplitable ? int.MaxValue : SpillValue / Length;
 
-	public LiveIntervalTrack LiveIntervalTrack;
+	public RegisterTrack LiveIntervalTrack;
 
 	public AllocationStage Stage;
 
-	public bool IsPhysicalRegister => VirtualRegister.IsPhysicalRegister;
+	public bool IsPhysicalRegister => Register.IsPhysicalRegister;
 
 	public PhysicalRegister AssignedPhysicalRegister => LiveIntervalTrack?.Register;
 
 	public Operand AssignedPhysicalOperand;
 
-	public Operand AssignedOperand => AssignedPhysicalRegister != null ? AssignedPhysicalOperand : VirtualRegister.SpillSlotOperand;
+	public Operand AssignedOperand => AssignedPhysicalOperand ?? Register.SpillSlotOperand ?? Register.ParamOperand;
 
-	public bool ForceSpilled;
+	public bool ForceSpill;
 
 	public bool NeverSpill;
 
-	public bool TooSmallToSplit { get; }
+	public bool IsUnsplitable { get; }
+
+	public LiveInterval(Register virtualRegister, SlotIndex start, SlotIndex end)
+	{
+		Debug.Assert(start <= end);
+
+		Register = virtualRegister;
+		Start = start;
+		End = end;
+
+		LiveRange = new LiveRange(start, end, virtualRegister);
+
+		SpillValue = 0;
+		Stage = AllocationStage.Initial;
+		ForceSpill = false;
+		NeverSpill = false;
+
+		IsUnsplitable = Start == End;
+	}
 
 	#region Short Cuts
 
@@ -64,19 +81,16 @@ public sealed class LiveInterval
 
 	public SlotIndex Last => LiveRange.Last;
 
-	public bool IsAdjacent(SlotIndex start, SlotIndex end)
-	{
-		return start == End || end == Start;
-	}
-
-	public bool Intersects(SlotIndex start, SlotIndex end)
-	{
-		return (Start <= start && End > start) || (start <= Start && end > Start);
-	}
+	#endregion Short Cuts
 
 	public bool Contains(SlotIndex at)
 	{
-		return at >= Start && at < End;
+		return at >= Start && at <= End;
+	}
+
+	public bool IsAdjacent(SlotIndex start, SlotIndex end)
+	{
+		return Start == end.Next || End == start.Previous;
 	}
 
 	public bool IsAdjacent(LiveInterval other)
@@ -84,76 +98,42 @@ public sealed class LiveInterval
 		return IsAdjacent(other.Start, other.End);
 	}
 
+	public bool Intersects(SlotIndex start, SlotIndex end)
+	{
+		return Contains(start) || Contains(end);
+	}
+
 	public bool Intersects(LiveInterval other)
 	{
 		return Intersects(other.Start, other.End);
 	}
 
-	#endregion Short Cuts
-
-	public LiveInterval(VirtualRegister virtualRegister, SlotIndex start, SlotIndex end)
-	{
-		VirtualRegister = virtualRegister;
-		Start = start;
-		End = end;
-
-		LiveRange = new LiveRange(start, end, virtualRegister);
-
-		SpillValue = 0;
-		Stage = AllocationStage.Initial;
-		ForceSpilled = false;
-		NeverSpill = false;
-
-		TooSmallToSplit = IsTooSmallToSplit();
-	}
-
 	public LiveInterval CreateExpandedLiveInterval(LiveInterval interval)
 	{
-		Debug.Assert(VirtualRegister == interval.VirtualRegister);
+		Debug.Assert(Register == interval.Register);
 
-		var start = Start < interval.Start ? Start : interval.Start;
-		var end = End > interval.End ? End : interval.End;
+		var start = Start <= interval.Start ? Start : interval.Start;
+		var end = End >= interval.End ? End : interval.End;
 
-		return new LiveInterval(VirtualRegister, start, end);
+		return new LiveInterval(Register, start, end);
 	}
 
 	public LiveInterval CreateExpandedLiveRange(SlotIndex start, SlotIndex end)
 	{
-		var mergedStart = Start < start ? Start : start;
-		var mergedEnd = End > end ? End : end;
+		var mergedStart = Start <= start ? Start : start;
+		var mergedEnd = End >= end ? End : end;
 
-		return new LiveInterval(VirtualRegister, mergedStart, mergedEnd);
-	}
-
-	private bool IsTooSmallToSplit()
-	{
-		if (LiveRange.UseCount == 1)
-		{
-			var firstUse = LiveRange.FirstUse;
-
-			Debug.Assert(firstUse.IsNotNull);
-
-			if (firstUse.Before == Start && firstUse.After == End)
-				return true;
-		}
-
-		return false;
-	}
-
-	public override string ToString()
-	{
-		return $"{VirtualRegister} between {LiveRange}";
-	}
-
-	public void Evict()
-	{
-		LiveIntervalTrack.Evict(this);
+		return new LiveInterval(Register, mergedStart, mergedEnd);
 	}
 
 	private LiveInterval CreateSplit(LiveRange liveRange)
 	{
-		return new LiveInterval(VirtualRegister, liveRange.Start, liveRange.End);
+		return new LiveInterval(Register, liveRange.Start, liveRange.End);
 	}
+
+	public override string ToString() => $"{Register} between {LiveRange}";
+
+	public void Evict() => LiveIntervalTrack.Evict(this);
 
 	public List<LiveInterval> SplitAt(SlotIndex at)
 	{

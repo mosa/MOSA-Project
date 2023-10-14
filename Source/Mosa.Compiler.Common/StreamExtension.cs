@@ -1,7 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.IO;
-
 namespace Mosa.Compiler.Common;
 
 public static class StreamExtension

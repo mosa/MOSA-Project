@@ -1,6 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Collections.Generic;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.CompilerStages;
@@ -294,5 +293,60 @@ public sealed class Architecture : BaseArchitecture
 	public override bool IsInstructionMove(BaseInstruction instruction)
 	{
 		return instruction == X64.Mov64 || instruction == X64.Mov32 || instruction == X64.Movsd || instruction == X64.Movss;
+	}
+
+	/// <summary>
+	/// Determines whether [is parameter store] [the specified context].
+	/// </summary>
+	/// <param name="context">The context.</param>
+	/// <param name="node">The node.</param>
+	/// <returns>
+	///   <c>true</c> if [is parameter store] [the specified context]; otherwise, <c>false</c>.</returns>
+	public override bool IsParameterStore(InstructionNode node, out Operand operand)
+	{
+		// TODO
+		operand = null;
+		return false;
+	}
+
+	/// <summary>
+	/// Determines whether [is parameter load] [the specified context].
+	/// </summary>
+	/// <param name="node">The node.</param>
+	/// <returns>
+	///   <c>true</c> if [is parameter load] [the specified context]; otherwise, <c>false</c>.</returns>
+	public override bool IsParameterLoad(InstructionNode node, out Operand operand)
+	{
+		operand = null;
+
+		if (node.ResultCount != 1
+			|| node.OperandCount != 2
+			|| !node.Instruction.IsMemoryRead
+			|| !node.Operand1.IsCPURegister
+			|| node.Operand1.Register != CPURegister.RBP)
+			return false;
+
+		// TODO - incomplete, add 64bit load instructions
+		if (node.Instruction == X64.MovLoad32
+			|| node.Instruction == X64.MovLoad16
+			|| node.Instruction == X64.MovLoad8
+			|| node.Instruction == X64.MovssLoad
+			|| node.Instruction == X64.MovsdLoad
+
+			|| node.Instruction == X64.MovzxLoad16
+			|| node.Instruction == X64.MovzxLoad8
+			|| node.Instruction == X64.Movzx16To32
+			|| node.Instruction == X64.Movzx8To32
+
+			|| node.Instruction == X64.MovsxLoad16
+			|| node.Instruction == X64.MovsxLoad8
+			|| node.Instruction == X64.Movsx16To32
+			|| node.Instruction == X64.Movsx8To32)
+		{
+			operand = node.Operand2;
+			return true;
+		}
+
+		return false;
 	}
 }

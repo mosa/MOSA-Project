@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
 using Mosa.Compiler.Common;
 using static Mosa.Compiler.Framework.BaseMethodCompilerStage;

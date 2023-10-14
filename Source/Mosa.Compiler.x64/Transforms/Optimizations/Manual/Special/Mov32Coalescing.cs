@@ -32,15 +32,7 @@ public sealed class Mov32Coalescing : BaseTransform
 
 		foreach (var use in result.Uses.ToArray())
 		{
-			for (int i = 0; i < use.OperandCount; i++)
-			{
-				var operand = use.GetOperand(i);
-
-				if (operand == result)
-				{
-					use.SetOperand(i, operand1);
-				}
-			}
+			use.ReplaceOperand(result, operand1);
 		}
 
 		context.Empty();

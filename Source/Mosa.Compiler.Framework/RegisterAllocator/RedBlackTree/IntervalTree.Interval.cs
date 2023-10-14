@@ -17,39 +17,36 @@ public sealed partial class IntervalTree<T>
 		{
 			Start = start;
 			End = end;
-
-			//Debug.Assert(End >= Start);
-			//Debug.Assert(Start.CompareTo(End) <= 0);
 		}
 
-		public int Length => End - Start;
+		public readonly int Length => End - Start;
 
-		public bool IsSame(Interval interval)
+		public readonly bool IsSame(Interval interval)
 		{
 			return Start == interval.Start && End == interval.End;
 		}
 
-		public bool Overlaps(Interval interval)
+		public readonly bool Overlaps(Interval interval)
 		{
-			return (Start <= interval.Start && End > interval.Start) || (interval.Start <= Start && interval.End > Start);
+			return (Start <= interval.Start && End >= interval.Start) || (interval.Start <= Start && interval.End >= Start);
 		}
 
-		public bool Overlaps(int at)
+		public readonly bool Overlaps(int at)
 		{
 			return Contains(at);
 		}
 
-		public bool Contains(Interval interval)
+		public readonly bool Contains(Interval interval)
 		{
-			return Start >= interval.Start && interval.End < End;
+			return Start >= interval.Start && interval.End <= End;
 		}
 
-		public bool Contains(int at)
+		public readonly bool Contains(int at)
 		{
-			return at >= Start && at < End;
+			return at >= Start && at <= End;
 		}
 
-		public int CompareTo(Interval interval)
+		public readonly int CompareTo(Interval interval)
 		{
 			if (Overlaps(interval))
 				return 0;
@@ -57,7 +54,7 @@ public sealed partial class IntervalTree<T>
 			return Start.CompareTo(interval.Start);
 		}
 
-		public int CompareTo(int at)
+		public readonly int CompareTo(int at)
 		{
 			if (Contains(at))
 				return 0;
@@ -65,17 +62,7 @@ public sealed partial class IntervalTree<T>
 			return Start.CompareTo(at);
 		}
 
-		public bool IsAdjacent(int start, int end)
-		{
-			return start == End || end == Start;
-		}
-
-		public bool IsAdjacent(Interval interval)
-		{
-			return IsAdjacent(interval.Start, interval.End);
-		}
-
-		public override string ToString()
+		public override readonly string ToString()
 		{
 			return $"{Start}-{End}";
 		}

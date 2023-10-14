@@ -95,7 +95,8 @@ public partial class MainWindow : Window
 				var path = Path.GetDirectoryName(Path.GetFullPath(file));
 				if (!string.IsNullOrWhiteSpace(path)) mosaSettings.AddSearchPath(path);
 			}
-		} else mosaSettings.ExplorerStart = false;
+		}
+		else mosaSettings.ExplorerStart = false;
 
 		IncDirTxt.Text = mosaSettings.FileSystemRootInclude;
 		TitleLbl.Content += CompilerVersion.VersionString;

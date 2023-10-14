@@ -31,15 +31,7 @@ public sealed class Phi32Propagate : BaseTransform
 
 		foreach (var use in result.Uses.ToArray())
 		{
-			for (var i = 0; i < use.OperandCount; i++)
-			{
-				var operand = use.GetOperand(i);
-
-				if (operand == result)
-				{
-					use.SetOperand(i, operand1);
-				}
-			}
+			use.ReplaceOperand(result, operand1);
 		}
 
 		context.SetNop();

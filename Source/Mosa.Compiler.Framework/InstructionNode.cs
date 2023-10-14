@@ -1,7 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
@@ -784,7 +782,7 @@ public sealed class InstructionNode
 		// TODO: Copy this method into calling class
 		var sb = new StringBuilder();
 
-		sb.AppendFormat("{0:X5}:", Label);
+		sb.AppendFormat($"{Label:X5}:");
 
 		if (Marked)
 			sb.Append('*');
@@ -896,6 +894,32 @@ public sealed class InstructionNode
 			return true;
 
 		return false;
+	}
+
+	public void ReplaceOperand(Operand target, Operand replacement)
+	{
+		for (var i = 0; i < OperandCount; i++)
+		{
+			var operand = GetOperand(i);
+
+			if (operand == target)
+			{
+				SetOperand(i, replacement);
+			}
+		}
+	}
+
+	public void ReplaceResult(Operand target, Operand replacement)
+	{
+		for (var i = 0; i < ResultCount; i++)
+		{
+			var operand = GetResult(i);
+
+			if (operand == target)
+			{
+				SetResult(i, replacement);
+			}
+		}
 	}
 
 	#endregion Methods

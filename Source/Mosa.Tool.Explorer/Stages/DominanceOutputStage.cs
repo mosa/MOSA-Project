@@ -50,7 +50,7 @@ public class DominanceOutputStage : BaseMethodCompilerStage
 					sb.Length -= 2;
 				}
 
-				trace.Log(sb.ToString());
+				trace.Log(sb);
 			}
 
 			trace.Log();
@@ -107,7 +107,7 @@ public class DominanceOutputStage : BaseMethodCompilerStage
 
 				sb.Append((dom != null) ? dom.ToString() : string.Empty);
 
-				trace.Log(sb.ToString());
+				trace.Log(sb);
 			}
 
 			trace.Log();

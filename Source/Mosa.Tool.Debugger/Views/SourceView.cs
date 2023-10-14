@@ -1,7 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Drawing;
-using System.IO;
 using Mosa.Tool.Debugger.DebugData;
 
 namespace Mosa.Tool.Debugger.Views;

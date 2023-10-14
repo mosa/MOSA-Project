@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
 using System.Net.Sockets;
-using System.Threading;
 using Mosa.Utility.RSP;
 using Mosa.Utility.RSP.Command;
 

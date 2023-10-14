@@ -1,52 +1,35 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator;
 
 public sealed class MoveResolver
 {
-	public enum ResolvedMoveType
-	{ Move, Exchange, Load }
-
-	public sealed class ResolvedMoveList : List<MoveExtended<ResolvedMoveType>>
-	{
-		public void Add(Operand source, Operand destination, ResolvedMoveType type)
-		{
-			Add(new MoveExtended<ResolvedMoveType>(source, destination, type));
-		}
-	}
-
-	public readonly List<Move> Moves;
-
-	public readonly InstructionNode Index;
+	public readonly InstructionNode Node;
 
 	public readonly bool Before;
 
-	public MoveResolver(InstructionNode index, bool before)
-	{
-		Moves = new List<Move>();
+	public readonly List<LiveIntervalTransition> Moves = new();
 
+	private readonly List<LiveIntervalTransition> ResolvedMoves = new();
+
+	public MoveResolver(InstructionNode node, bool before)
+	{
+		Node = node;
 		Before = before;
-		Index = index;
 	}
 
-	public MoveResolver(InstructionNode index, bool before, List<Move> moves)
-		: this(index, before)
+	public void AddMove(LiveInterval from, LiveInterval to)
 	{
-		foreach (var move in moves)
-			Moves.Add(move);
+		Moves.Add(new LiveIntervalTransition(from, to));
 	}
 
-	public MoveResolver(BasicBlock anchor, BasicBlock source, BasicBlock destination)
-		: this(source == anchor ? source.Last : destination.First, source == anchor)
+	private void ResolveMoves()
 	{
-	}
-
-	public void AddMove(Operand source, Operand destination)
-	{
-		Moves.Add(new Move(source, destination));
+		TrySimpleMoves();
+		TryExchange();
+		CreateMemoryMoves();
 	}
 
 	private int FindIndex(PhysicalRegister register, bool source)
@@ -67,7 +50,7 @@ public sealed class MoveResolver
 		return -1;
 	}
 
-	private void TrySimpleMoves(ResolvedMoveList moves)
+	private void TrySimpleMoves()
 	{
 		var loop = true;
 
@@ -89,7 +72,11 @@ public sealed class MoveResolver
 
 				Debug.Assert(move.Destination.IsCPURegister);
 
-				moves.Add(move.Source, move.Destination, move.Source.IsCPURegister ? ResolvedMoveType.Move : ResolvedMoveType.Load);
+				ResolvedMoves.Add(new LiveIntervalTransition(
+					move.Source.IsCPURegister ? ResolvedMoveType.Move : ResolvedMoveType.Load,
+					move.From,
+					move.To)
+				);
 
 				Moves.RemoveAt(i);
 
@@ -98,7 +85,7 @@ public sealed class MoveResolver
 		}
 	}
 
-	private void TryExchange(ResolvedMoveList moves)
+	private void TryExchange()
 	{
 		var loop = true;
 
@@ -121,9 +108,13 @@ public sealed class MoveResolver
 				Debug.Assert(Moves[other].Source.IsCPURegister);
 				Debug.Assert(move.Source.IsCPURegister);
 
-				moves.Add(Moves[other].Source, move.Source, ResolvedMoveType.Exchange);
+				ResolvedMoves.Add(new LiveIntervalTransition(
+					ResolvedMoveType.Exchange,
+					Moves[other].From,
+					move.From)
+				);
 
-				Moves[other] = new Move(move.Source, Moves[other].Destination);
+				Moves[other] = new LiveIntervalTransition(move.From, Moves[other].To);
 
 				Moves.RemoveAt(i);
 
@@ -138,7 +129,7 @@ public sealed class MoveResolver
 		}
 	}
 
-	private void CreateMemoryMoves(ResolvedMoveList moves)
+	private void CreateMemoryMoves()
 	{
 		for (var i = 0; i < Moves.Count; i++)
 		{
@@ -150,19 +141,12 @@ public sealed class MoveResolver
 			Debug.Assert(move.Destination.IsCPURegister);
 			Debug.Assert(move.Source.IsCPURegister);
 
-			moves.Add(move.Destination, move.Source, ResolvedMoveType.Move);
+			ResolvedMoves.Add(new LiveIntervalTransition(
+				ResolvedMoveType.Move,
+				move.To,
+				move.From)
+			);
 		}
-	}
-
-	public ResolvedMoveList GetResolveMoves()
-	{
-		var moves = new ResolvedMoveList();
-
-		TrySimpleMoves(moves);
-		TryExchange(moves);
-		CreateMemoryMoves(moves);
-
-		return moves;
 	}
 
 	public int InsertResolvingMoves(BaseArchitecture architecture, Operand stackFrame)
@@ -170,13 +154,12 @@ public sealed class MoveResolver
 		if (Moves.Count == 0)
 			return 0;
 
-		var moves = GetResolveMoves();
+		ResolveMoves();
 
-		var context = new Context(Index);
+		var context = new Context(Node);
 
 		if (Before)
 		{
-			// TODO: Generalize XXXX
 			context.GotoPrevious();
 
 			// Note: This won't work for expanded switch statements... but we can't insert into the end of those blocks anyway
@@ -189,15 +172,29 @@ public sealed class MoveResolver
 			}
 		}
 
-		foreach (var move in moves)
+		foreach (var move in ResolvedMoves)
 		{
 			Debug.Assert(move.Destination.IsCPURegister);
 
-			switch (move.Value)
+			switch (move.ResolvedMoveType)
 			{
-				case ResolvedMoveType.Move: architecture.InsertMoveInstruction(context, move.Destination, move.Source); break;
-				case ResolvedMoveType.Exchange: architecture.InsertExchangeInstruction(context, move.Destination, move.Source); break;
-				case ResolvedMoveType.Load: architecture.InsertLoadInstruction(context, move.Destination, stackFrame, move.Source); break;
+				case ResolvedMoveType.Move:
+					architecture.InsertMoveInstruction(context, move.Destination, move.Source);
+					break;
+
+				case ResolvedMoveType.Exchange:
+					architecture.InsertExchangeInstruction(context, move.Destination, move.Source);
+					break;
+
+				case ResolvedMoveType.Load when !move.From.Register.IsParamLoadOnly:
+					architecture.InsertLoadInstruction(context, move.Destination, stackFrame, move.Source);
+					break;
+
+				case ResolvedMoveType.Load when move.From.Register.IsParamLoadOnly:
+					// Assumes that loads are three operands
+					var node = move.From.Register.ParamLoadNode;
+					context.AppendInstruction(node.Instruction, move.Destination, node.Operand1, node.Operand2);
+					break;
 			}
 
 			context.Marked = true;

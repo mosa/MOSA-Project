@@ -58,6 +58,11 @@ public sealed class TraceLog
 		Lines.Add(line);
 	}
 
+	public void Log(StringBuilder sb)
+	{
+		Lines.Add(sb.ToString());
+	}
+
 	public void Log(IEnumerable<string> lines)
 	{
 		foreach (var line in lines)

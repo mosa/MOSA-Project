@@ -1,25 +1,24 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator;
 
-public sealed class LiveIntervalTrack
+public sealed class RegisterTrack
 {
-	private readonly IntervalTree<LiveInterval> intervals = new IntervalTree<LiveInterval>();
+	public readonly PhysicalRegister Register;
+
+	private readonly IntervalTree<LiveInterval> Intervals = new IntervalTree<LiveInterval>();
 
 	public readonly bool IsReserved;
-
-	public readonly PhysicalRegister Register;
 
 	public bool IsFloatingPoint => Register.IsFloatingPoint;
 
 	public bool IsInteger => Register.IsInteger;
 
-	public LiveIntervalTrack(PhysicalRegister register, bool reserved)
+	public RegisterTrack(PhysicalRegister register, bool reserved)
 	{
 		Register = register;
 		IsReserved = reserved;
@@ -27,18 +26,18 @@ public sealed class LiveIntervalTrack
 
 	public void Add(LiveInterval liveInterval)
 	{
-		Debug.Assert(!intervals.Contains(liveInterval.StartValue, liveInterval.EndValue));
+		Debug.Assert(!Intervals.Contains(liveInterval.StartValue, liveInterval.EndValue));
 
-		intervals.Add(liveInterval.StartValue, liveInterval.EndValue, liveInterval);
+		Intervals.Add(liveInterval.StartValue, liveInterval.EndValue, liveInterval);
 
 		liveInterval.LiveIntervalTrack = this;
 	}
 
 	public void Evict(LiveInterval liveInterval)
 	{
-		intervals.Remove(liveInterval.StartValue, liveInterval.EndValue);
+		Intervals.Remove(liveInterval.StartValue, liveInterval.EndValue);
 
-		Debug.Assert(!intervals.Contains(liveInterval.StartValue, liveInterval.EndValue));
+		Debug.Assert(!Intervals.Contains(liveInterval.StartValue, liveInterval.EndValue));
 
 		liveInterval.LiveIntervalTrack = null;
 	}
@@ -53,28 +52,25 @@ public sealed class LiveIntervalTrack
 
 	public bool Intersects(LiveInterval liveInterval)
 	{
-		return intervals.Contains(liveInterval.StartValue, liveInterval.EndValue);
+		return Intervals.Contains(liveInterval.StartValue, liveInterval.EndValue);
 	}
 
 	public bool Intersects(SlotIndex slotIndex)
 	{
-		return intervals.Contains(slotIndex.Value);
+		return Intervals.Contains(slotIndex.Index);
 	}
 
 	public LiveInterval GetLiveIntervalAt(SlotIndex slotIndex)
 	{
-		return intervals.SearchFirstOverlapping(slotIndex.Value);
+		return Intervals.SearchFirstOverlapping(slotIndex.Index);
 	}
 
 	public List<LiveInterval> GetIntersections(LiveInterval liveInterval)
 	{
-		return intervals.Search(liveInterval.StartValue, liveInterval.EndValue);
+		return Intervals.Search(liveInterval.StartValue, liveInterval.EndValue);
 	}
 
-	public override string ToString()
-	{
-		return Register.ToString();
-	}
+	public override string ToString() => Register.ToString();
 
 	public string ToString2()
 	{
@@ -83,7 +79,7 @@ public sealed class LiveIntervalTrack
 		sb.Append(Register);
 		sb.Append(' ');
 
-		foreach (var interval in intervals)
+		foreach (var interval in Intervals)
 		{
 			sb.Append(interval);
 			sb.Append(", ");

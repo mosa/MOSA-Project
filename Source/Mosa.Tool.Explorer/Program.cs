@@ -1,8 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-using System.Windows.Forms;
-
 namespace Mosa.Tool.Explorer;
 
 internal static class Program

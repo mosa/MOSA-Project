@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
 using System.IO.Hashing;
 using System.Text;
 using Mosa.DeviceSystem;

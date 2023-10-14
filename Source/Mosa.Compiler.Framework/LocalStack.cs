@@ -114,6 +114,6 @@ public sealed class LocalStack : IEnumerable<Operand>
 	internal void Reorder(Operand virtualRegister, int index)
 	{
 		localStack[index - 1] = virtualRegister;
-		virtualRegister.RenameIndex(index);
+		virtualRegister.Reindex(index);
 	}
 }

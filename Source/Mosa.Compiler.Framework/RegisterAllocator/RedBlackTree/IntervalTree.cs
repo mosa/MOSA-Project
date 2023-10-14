@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Collections.Generic;
 using System.Text;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree;
@@ -155,7 +154,7 @@ public sealed partial class IntervalTree<T> where T : class
 		}
 
 		// Interval start is greater than largest endpoint in this subtree
-		if (node.Right != Sentinel && interval.Start.CompareTo(node.MaxEnd) < 0)
+		if (node.Right != Sentinel && interval.Start.CompareTo(node.MaxEnd) <= 0)
 		{
 			SearchSubtree(node.Right, interval, result);
 		}
@@ -179,7 +178,7 @@ public sealed partial class IntervalTree<T> where T : class
 		}
 
 		// Interval start is greater than largest endpoint in this subtree
-		if (node.Right != Sentinel && at.CompareTo(node.MaxEnd) < 0)
+		if (node.Right != Sentinel && at.CompareTo(node.MaxEnd) <= 0)
 		{
 			SearchSubtree(node.Right, at, result);
 		}
@@ -204,7 +203,7 @@ public sealed partial class IntervalTree<T> where T : class
 		}
 
 		// Interval start is greater than largest endpoint in this subtree
-		if (node.Right != Sentinel && interval.Start.CompareTo(node.MaxEnd) < 0)
+		if (node.Right != Sentinel && interval.Start.CompareTo(node.MaxEnd) <= 0)
 		{
 			return SearchSubtree(node.Right, interval);
 		}
@@ -231,7 +230,7 @@ public sealed partial class IntervalTree<T> where T : class
 		}
 
 		// Interval start is greater than largest endpoint in this subtree
-		if (node.Right != Sentinel && at.CompareTo(node.MaxEnd) < 0)
+		if (node.Right != Sentinel && at.CompareTo(node.MaxEnd) <= 0)
 		{
 			return SearchSubtree(node.Right, at);
 		}
@@ -744,7 +743,7 @@ public sealed partial class IntervalTree<T> where T : class
 
 		if (node.Right != Sentinel)
 		{
-			if (node.Right.MaxEnd.CompareTo(max) > 0)
+			if (node.Right.MaxEnd.CompareTo(max) >= 0)
 			{
 				max = node.Right.MaxEnd;
 			}
@@ -752,7 +751,7 @@ public sealed partial class IntervalTree<T> where T : class
 
 		if (node.Left != Sentinel)
 		{
-			if (node.Left.MaxEnd.CompareTo(max) > 0)
+			if (node.Left.MaxEnd.CompareTo(max) >= 0)
 			{
 				max = node.Left.MaxEnd;
 			}
