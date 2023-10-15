@@ -61,11 +61,13 @@ Below are the command line arguments available:
     -output-nasm,CompilerDebug.NasmFile,%DEFAULT%
     -output-asm,CompilerDebug.AsmFile,%DEFAULT%
     -output-map,CompilerDebug.MapFile,%DEFAULT%
+    -output-counters,CompilerDebug.CountersFile,%DEFAULT%
     -output-time,CompilerDebug.CompilerTimeFile,%DEFAULT%
     -output-debug,CompilerDebug.DebugFile,%DEFAULT%
     -output-inlined,CompilerDebug.InlinedFile,%DEFAULT%
     -output-hash,CompilerDebug.PreLinkHashFile,%DEFAULT%
     -output-hash,CompilerDebug.PostLinkHashFile,%DEFAULT%
+	-counters-filter,CompilerDebug.CountersFilter,{value}
     -check,CompilerDebug.FullCheckMode,true
 	-asm,CompilerDebug.AsmFile,%DEFAULT%
 	-map,CompilerDebug.MapFile,%DEFAULT%
@@ -110,7 +112,7 @@ Below are the command line arguments available:
 	-timeout,Emulator.MaxRuntime,{value}
 	-debug,Launcher.Serial,true
 	-debug,OS.BootOptions,bootoptions=serialdebug
-
+	
     Launcher - Emulator - Qemu & VMWare:
     -vmware-svga,Emulator.SVGA,vmware
 	-virtio-vga,Emulator.SVGA,virtio

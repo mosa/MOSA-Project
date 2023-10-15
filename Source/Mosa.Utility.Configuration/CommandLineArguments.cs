@@ -67,8 +67,7 @@ public static class CommandLineArguments
 			new Argument { Name = "-output-debug-file", Setting = Name.CompilerDebug_DebugFile},
 			new Argument { Name = "-asm", Setting = Name.CompilerDebug_AsmFile, Value= "%DEFAULT%"},
 			new Argument { Name = "-map", Setting = Name.CompilerDebug_MapFile, Value= "%DEFAULT%"},
-			new Argument { Name = "-counters", Setting = Name.CompilerDebug_CounterFile, Value= "%DEFAULT%"},
-			new Argument { Name = "-counter-filter", Setting = Name.CompilerDebug_CounterFilter},
+			new Argument { Name = "-counters-filter", Setting = Name.CompilerDebug_CounterFilter},
 
 			new Argument { Name = "-check", Setting = Name.CompilerDebug_FullCheckMode, Value= "true"},
 

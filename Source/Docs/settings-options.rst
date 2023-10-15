@@ -85,6 +85,8 @@ Compiler Debug Settings
     CompilerDebug.MapFile,Filename to emit a map of all symbols
     CompilerDebug.CompileTimeFile,Filename to emit compile times for each method
     CompilerDebug.AsmFile,Filename to emit ASM disassembly
+    CompilerDebug.CountersFile,Filename to emit the global counters
+	CompilerDebug.CountersFilter,Filters the global counters within the global counters file
     CompilerDebug.NasmFile,Filename to emit disassembly using the NASM tool
     CompilerDebug.InlinedFile,Filename to emit a list of all methods that were inlined
     CompilerDebug.PreLinkHashFile,Filename to emit a list of all methods with their hash value prior to linking

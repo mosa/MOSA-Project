@@ -443,6 +443,7 @@ public static class AutoTransforms
 		new StrengthReduction.Or64Xor64_v1(),
 		new StrengthReduction.Or64Xor64_v2(),
 		new StrengthReduction.Or64Xor64_v3(),
+		new StrengthReduction.ArithShiftRight64By32(),
 		new Reorder.MulUnsigned32WithShiftLeft32(),
 		new Reorder.MulUnsigned32WithShiftLeft32_v1(),
 		new Reorder.MulUnsigned64WithShiftLeft64(),
