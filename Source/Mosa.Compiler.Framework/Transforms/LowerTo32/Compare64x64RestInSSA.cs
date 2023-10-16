@@ -1,7 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Collections.Generic;
-
 namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
 public sealed class Compare64x64RestInSSA : BaseLower32Transform
