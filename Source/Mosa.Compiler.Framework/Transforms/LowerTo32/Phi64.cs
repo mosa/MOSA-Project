@@ -13,71 +13,79 @@ public sealed class Phi64 : BaseLower32Transform
 		if (!transform.IsLowerTo32)
 			return false;
 
-		if (context.OperandCount != 2)
+		if (context.OperandCount == 1)
 			return false;
 
-		if (!context.Operand1.IsVirtualRegister)
-			return false;
+		foreach (var operand in context.Operands)
+		{
+			if (operand.IsConstant)
+				continue;
 
-		if (!context.Operand2.IsVirtualRegister)
-			return false;
+			if (!operand.IsVirtualRegister || !operand.IsDefinedOnce)
+				return false;
 
-		if (!context.Operand1.IsDefinedOnce)
-			return false;
+			var def = operand.Definitions[0];
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.To64)
-			return false;
+			if (def.Instruction != IRInstruction.To64)
+				return false;
 
-		if (!context.Operand2.IsDefinedOnce)
-			return false;
+			if (!(def.Operand1.IsDefinedOnce || def.Operand1.IsConstant))
+				return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.To64)
-			return false;
-
-		if (!context.Operand1.Definitions[0].Operand1.IsDefinedOnce)
-			return false;
-
-		if (!context.Operand1.Definitions[0].Operand2.IsDefinedOnce)
-			return false;
-
-		if (!context.Operand2.Definitions[0].Operand1.IsDefinedOnce)
-			return false;
-
-		if (!context.Operand2.Definitions[0].Operand2.IsDefinedOnce)
-			return false;
+			if (!(def.Operand2.IsDefinedOnce || def.Operand2.IsConstant))
+				return false;
+		}
 
 		return true;
 	}
 
 	public override void Transform(Context context, TransformContext transform)
 	{
-		var result = context.Result;
-		var operand1 = context.Operand1;
-		var operand2 = context.Operand2;
+		var ctx = new Context(context.Node);
 
-		var blockA = context.PhiBlocks[0];
-		var blockB = context.PhiBlocks[1];
+		// Low
+		var low = transform.VirtualRegisters.Allocate32();
+		ctx.AppendInstruction(IRInstruction.Phi32, low);
+		ctx.PhiBlocks = new List<BasicBlock>(context.PhiBlocks.Count);
+		ctx.OperandCount = context.OperandCount;
 
-		var operand1A = operand1.Definitions[0].Operand1;
-		var operand1B = operand1.Definitions[0].Operand2;
-
-		var operand2A = operand2.Definitions[0].Operand1;
-		var operand2B = operand2.Definitions[0].Operand2;
-
-		var v1 = transform.VirtualRegisters.Allocate32();
-		var v2 = transform.VirtualRegisters.Allocate32();
-
-		context.SetInstruction(IRInstruction.Phi32, v1, operand1A, operand2A);
-		context.PhiBlocks = new List<BasicBlock> { blockA, blockB };
-
-		context.AppendInstruction(IRInstruction.Phi32, v2, operand1B, operand2B);
-		context.PhiBlocks = new List<BasicBlock> { blockA, blockB };
-
-		while (context.Node.NextNonEmpty.Instruction.IsPhi)
+		for (var i = 0; i < context.OperandCount; i++)
 		{
-			context.GotoNext();
+			var operand = context.GetOperand(i);
+
+			var value = operand.IsConstant
+				? Operand.CreateConstant32(operand.ConstantUnsigned32)
+				: operand.Definitions[0].Operand1;
+
+			ctx.SetOperand(i, value);
+			ctx.PhiBlocks.Add(context.PhiBlocks[i]);
 		}
 
-		context.AppendInstruction(IRInstruction.To64, result, v1, v2);
+		// High
+		var high = transform.VirtualRegisters.Allocate32();
+		ctx.AppendInstruction(IRInstruction.Phi32, high);
+		ctx.PhiBlocks = new List<BasicBlock>(context.PhiBlocks.Count);
+		ctx.OperandCount = context.OperandCount;
+
+		for (var i = 0; i < context.OperandCount; i++)
+		{
+			var operand = context.GetOperand(i);
+
+			var value = operand.IsConstant
+				? Operand.CreateConstant32(operand.ConstantUnsigned64 >> 32)
+				: operand.Definitions[0].Operand1;
+
+			ctx.SetOperand(i, value);
+			ctx.PhiBlocks.Add(context.PhiBlocks[i]);
+		}
+
+		while (ctx.Node.NextNonEmpty.Instruction.IsPhi)
+		{
+			ctx.GotoNext();
+		}
+
+		ctx.AppendInstruction(IRInstruction.To64, context.Result, low, high);
+
+		context.SetNop();
 	}
 }

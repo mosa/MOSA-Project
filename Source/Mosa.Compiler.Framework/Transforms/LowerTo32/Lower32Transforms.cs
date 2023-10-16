@@ -52,6 +52,5 @@ public static class LowerTo32Transforms
 		new Branch64(),
 
 		new Phi64(),
-		new Phi64v2(),
 	};
 }
