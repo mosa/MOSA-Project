@@ -1,7 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Collections.Generic;
-
 namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
 /// <summary>
@@ -50,5 +48,7 @@ public static class LowerTo32Transforms
 		new Compare64x64Rest(),
 		new Compare64x64RestInSSA(),
 		new Branch64(),
+
+		new Phi64(),
 	};
 }

@@ -24,7 +24,9 @@ public class OptimizationStage : BaseTransformStage
 		AddTranforms(AutoTransforms.List);
 
 		if (LowerTo32)
+		{
 			AddTranforms(LowerTo32Transforms.List);
+		}
 
 		AddTranforms(Transforms.BasicBlocks.BasicBlocksTransforms.List);
 
