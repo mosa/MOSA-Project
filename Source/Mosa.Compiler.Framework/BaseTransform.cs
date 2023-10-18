@@ -973,7 +973,7 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 			ConditionCode.UnsignedGreaterOrEqual => a.ConstantUnsigned32 >= b.ConstantUnsigned32,
 			ConditionCode.UnsignedLess => a.ConstantUnsigned32 < b.ConstantUnsigned32,
 			ConditionCode.UnsignedLessOrEqual => a.ConstantUnsigned32 <= b.ConstantUnsigned32,
-			_ => throw new InvalidCompilerOperationException()
+			_ => throw new InvalidOperationCompilerException()
 		};
 	}
 
@@ -991,7 +991,7 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 			ConditionCode.UnsignedGreaterOrEqual => a.ConstantUnsigned64 >= b.ConstantUnsigned64,
 			ConditionCode.UnsignedLess => a.ConstantUnsigned64 < b.ConstantUnsigned64,
 			ConditionCode.UnsignedLessOrEqual => a.ConstantUnsigned64 <= b.ConstantUnsigned64,
-			_ => throw new InvalidCompilerOperationException()
+			_ => throw new InvalidOperationCompilerException()
 		};
 	}
 

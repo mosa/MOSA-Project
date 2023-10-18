@@ -43,7 +43,7 @@ public class ClrMetadataCache
 	{
 		var unitDesc = type.GetUnderlyingObject<UnitDesc<TypeDef, TypeSig>>();
 		if (unitDesc == null)
-			throw new InvalidCompilerOperationException("Underlying object (unit description) of type is null!");
+			throw new InvalidOperationCompilerException("Underlying object (unit description) of type is null!");
 
 		typeLookup.Add(unitDesc.Token, type);
 	}
@@ -57,7 +57,7 @@ public class ClrMetadataCache
 	{
 		var unitDesc = method.GetUnderlyingObject<UnitDesc<MethodDef, MethodSig>>();
 		if (unitDesc == null)
-			throw new InvalidCompilerOperationException("Underlying object (unit description) of method is null!");
+			throw new InvalidOperationCompilerException("Underlying object (unit description) of method is null!");
 
 		methodLookup.Add(unitDesc.Token, method);
 	}
@@ -71,7 +71,7 @@ public class ClrMetadataCache
 	{
 		var unitDesc = field.GetUnderlyingObject<UnitDesc<FieldDef, FieldSig>>();
 		if (unitDesc == null)
-			throw new InvalidCompilerOperationException("Underlying object (unit description) of field is null!");
+			throw new InvalidOperationCompilerException("Underlying object (unit description) of field is null!");
 
 		fieldLookup.Add(unitDesc.Token, field);
 	}
@@ -85,7 +85,7 @@ public class ClrMetadataCache
 	{
 		var unitDesc = property.GetUnderlyingObject<UnitDesc<PropertyDef, PropertySig>>();
 		if (unitDesc == null)
-			throw new InvalidCompilerOperationException("Underlying object (unit description) of property is null!");
+			throw new InvalidOperationCompilerException("Underlying object (unit description) of property is null!");
 
 		propertyLookup.Add(unitDesc.Token, property);
 	}

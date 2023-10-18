@@ -15,6 +15,8 @@ public static class ManualTransforms
 		new ConstantMove.Compare64x64(),
 		new ConstantMove.Branch32(),
 		new ConstantMove.Branch64(),
+//		new ConstantMove.BranchObject(),
+//		new ConstantMove.BranchManagedPointer(),
 		new ConstantMove.AddCarryOut32(),
 		new ConstantMove.AddCarryOut64(),
 		new ConstantMove.AddOverflowOut32(),
@@ -293,5 +295,9 @@ public static class ManualTransforms
 		new Useless.ZeroExtend8x32Compare32x32(),
 		new Useless.ZeroExtend8x64Compare32x64(),
 		new Useless.ZeroExtend8x64Compare64x64(),
+
+		new ConstantMove.BranchManagedPointer(),
+		new ConstantMove.BranchObject(),
+		//new Find(),
 	};
 }

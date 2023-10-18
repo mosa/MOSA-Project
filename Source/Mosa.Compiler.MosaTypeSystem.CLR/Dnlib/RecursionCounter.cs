@@ -46,7 +46,7 @@ internal struct RecursionCounter
 	{
 #if DEBUG
 		if (Counter <= 0)
-			throw new InvalidCompilerOperationException("recursionCounter <= 0");
+			throw new InvalidOperationCompilerException("recursionCounter <= 0");
 #endif
 		Counter--;
 	}

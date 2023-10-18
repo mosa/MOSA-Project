@@ -124,7 +124,7 @@ internal class GenericArgumentResolver
 	private TypeSig ResolveGenericArgs(TypeSig typeSig)
 	{
 		if (!recursionCounter.Increment())
-			throw new InvalidCompilerOperationException("Could not increment recursion counter!");
+			throw new InvalidOperationCompilerException("Could not increment recursion counter!");
 
 		if (ReplaceGenericArg(ref typeSig))
 		{
@@ -149,7 +149,7 @@ internal class GenericArgumentResolver
 				var fnPtrSig = typeSig as FnPtrSig;
 
 				if (fnPtrSig?.Signature is null)
-					throw new InvalidCompilerOperationException("Function pointer signature is null");
+					throw new InvalidOperationCompilerException("Function pointer signature is null");
 
 				result = new FnPtrSig(fnPtrSig.Signature);
 				break;

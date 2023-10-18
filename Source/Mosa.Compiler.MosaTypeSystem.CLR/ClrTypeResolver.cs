@@ -24,7 +24,7 @@ public class ClrTypeResolver : ITypeResolver
 		var resolvedType = GetTypeByName(module, typeName);
 
 		if (resolvedType == null)
-			throw new InvalidCompilerOperationException($"Type {typeName} is null or does not exist!");
+			throw new InvalidOperationCompilerException($"Type {typeName} is null or does not exist!");
 
 		return resolvedType;
 	}
@@ -35,7 +35,7 @@ public class ClrTypeResolver : ITypeResolver
 		var resolvedType = GetTypeByName(module, typeName);
 
 		if (resolvedType == null)
-			throw new InvalidCompilerOperationException($"Type {typeName} is null or does not exist!");
+			throw new InvalidOperationCompilerException($"Type {typeName} is null or does not exist!");
 
 		return resolvedType;
 	}

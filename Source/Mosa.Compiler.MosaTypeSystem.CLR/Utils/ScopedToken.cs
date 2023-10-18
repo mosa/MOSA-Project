@@ -32,7 +32,7 @@ public readonly struct ScopedToken : IEquatable<ScopedToken>
 	public override int GetHashCode()
 	{
 		if (Module == null)
-			throw new InvalidCompilerOperationException("Module is null!");
+			throw new InvalidOperationCompilerException("Module is null!");
 
 		return Module.GetHashCode() * 7 + (int)Token.Raw;
 	}

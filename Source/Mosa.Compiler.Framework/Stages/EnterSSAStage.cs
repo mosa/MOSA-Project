@@ -105,7 +105,7 @@ public sealed class EnterSSAStage : BaseMethodCompilerStage
 			}
 		}
 
-		throw new InvalidCompilerOperationException();
+		throw new InvalidOperationCompilerException();
 	}
 
 	#endregion Helpers Methods
@@ -373,7 +373,7 @@ public sealed class EnterSSAStage : BaseMethodCompilerStage
 			PrimitiveType.R8 => IRInstruction.PhiR8,
 			PrimitiveType.Object => IRInstruction.PhiObject,
 			PrimitiveType.ManagedPointer => IRInstruction.PhiManagedPointer,
-			_ => throw new InvalidCompilerOperationException(),
+			_ => throw new InvalidOperationCompilerException(),
 		};
 	}
 

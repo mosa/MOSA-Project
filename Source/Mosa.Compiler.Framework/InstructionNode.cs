@@ -937,7 +937,7 @@ public sealed class InstructionNode
 				next = next.Next;
 			}
 
-			return next.IsBlockEndInstruction ? null : next;
+			return next;
 		}
 	}
 
@@ -952,7 +952,7 @@ public sealed class InstructionNode
 				previous = previous.Previous;
 			}
 
-			return previous.IsBlockStartInstruction ? null : previous;
+			return previous;
 		}
 	}
 

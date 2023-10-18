@@ -1168,7 +1168,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		else if ((type.IsI || type.IsN) && Is64BitPlatform)
 			return IRInstruction.Load64;
 
-		throw new InvalidCompilerOperationException();
+		throw new InvalidOperationCompilerException();
 	}
 
 	#endregion Instruction Maps
