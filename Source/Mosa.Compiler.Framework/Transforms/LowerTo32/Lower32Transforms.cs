@@ -49,6 +49,6 @@ public static class LowerTo32Transforms
 		new Compare64x64RestInSSA(),
 		new Branch64(),
 
-		new Phi64(),
+		//new Phi64(),
 	};
 }
