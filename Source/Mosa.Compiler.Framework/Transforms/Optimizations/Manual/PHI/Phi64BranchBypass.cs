@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Phi;
 
 public sealed class Phi64BranchBypass : BasePhiTransform
 {
-	public Phi64BranchBypass() : base(IRInstruction.Phi64, TransformType.Manual | TransformType.Optimization, true)
+	public Phi64BranchBypass() : base(IRInstruction.Phi64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

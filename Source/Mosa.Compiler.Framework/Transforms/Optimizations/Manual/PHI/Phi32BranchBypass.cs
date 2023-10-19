@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Phi;
 
 public sealed class Phi32BranchBypass : BasePhiTransform
 {
-	public Phi32BranchBypass() : base(IRInstruction.Phi32, TransformType.Manual | TransformType.Optimization, true)
+	public Phi32BranchBypass() : base(IRInstruction.Phi32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -56,31 +56,4 @@ public sealed class Phi32BranchBypass : BasePhiTransform
 
 		UpdatePhiBlock(context.Block);
 	}
-
-	private static void ReplaceBranchTarget(BasicBlock source, BasicBlock oldTarget, BasicBlock newTarget)
-	{
-		for (var node = source.BeforeLast; !node.IsBlockStartInstruction; node = node.Previous)
-		{
-			if (node.IsEmptyOrNop)
-				continue;
-
-			if (node.Instruction.IsConditionalBranch || node.Instruction.IsUnconditionalBranch)
-			{
-				if (node.BranchTargets[0] == oldTarget)
-				{
-					node.UpdateBranchTarget(0, newTarget);
-				}
-				continue;
-			}
-
-			break;
-		}
-	}
 }
-
-//Block #4 - Label L_00015
-//  Prev: L_00009, L_00014
-//00015: IR.Phi32 v23 <= v36, 1 {L_00009, L_00014}
-//00017: IR.Branch32[>=] v23, 0 L_0001D
-//00017: IR.Jmp L_00019
-//  Next: L_0001D, L_00019

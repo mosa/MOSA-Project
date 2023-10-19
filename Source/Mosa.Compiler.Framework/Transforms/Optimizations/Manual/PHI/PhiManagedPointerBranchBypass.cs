@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Phi;
 
 public sealed class PhiManagedPointerBranchBypass : BasePhiTransform
 {
-	public PhiManagedPointerBranchBypass() : base(IRInstruction.PhiManagedPointer, TransformType.Manual | TransformType.Optimization, true)
+	public PhiManagedPointerBranchBypass() : base(IRInstruction.PhiManagedPointer, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

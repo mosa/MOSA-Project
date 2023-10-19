@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Phi;
 
 public sealed class PhiObjectBranchBypass : BasePhiTransform
 {
-	public PhiObjectBranchBypass() : base(IRInstruction.PhiObject, TransformType.Manual | TransformType.Optimization, true)
+	public PhiObjectBranchBypass() : base(IRInstruction.PhiObject, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
