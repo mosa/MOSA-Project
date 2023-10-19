@@ -244,7 +244,7 @@ public class Starter : BaseLauncher
 		"bochs" => LaunchBochs(),
 		"vmware" => LaunchVMware(),
 		"virtualbox" => LaunchVirtualBox(),
-		_ => throw new InvalidCompilerOperationException()
+		_ => throw new InvalidOperationCompilerException()
 	};
 
 	private Process LaunchQemu()

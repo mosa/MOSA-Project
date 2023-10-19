@@ -206,7 +206,7 @@ public class MosaMethodFullNameComparer : IEqualityComparer<MosaMethod>
 	public int GetHashCode(MosaMethod obj)
 	{
 		if (obj.FullName == null)
-			throw new InvalidCompilerOperationException("Full name of method is null");
+			throw new InvalidOperationCompilerException("Full name of method is null");
 
 		return obj.FullName.GetHashCode();
 	}

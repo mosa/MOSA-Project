@@ -43,7 +43,7 @@ internal class ClrMetadataResolver
 						{
 							var typeDef = type.GetUnderlyingObject<UnitDesc<TypeDef, TypeSig>>()?.Definition;
 							if (typeDef == null)
-								throw new InvalidCompilerOperationException("Definition of type is null!");
+								throw new InvalidOperationCompilerException("Definition of type is null!");
 
 							if (typeDef.BaseType != null)
 							{
@@ -115,7 +115,7 @@ internal class ClrMetadataResolver
 
 						var definition = module.GetUnderlyingObject<UnitDesc<ModuleDef, object>>()?.Definition;
 						if (definition == null)
-							throw new InvalidCompilerOperationException("Module's definition is null!");
+							throw new InvalidOperationCompilerException("Module's definition is null!");
 
 						ResolveCustomAttributes(mosaModule, definition);
 						break;
@@ -259,7 +259,7 @@ internal class ClrMetadataResolver
 
 			var definition = srcType.GetUnderlyingObject<UnitDesc<TypeDef, TypeSig>>()?.Definition;
 			if (definition == null)
-				throw new InvalidCompilerOperationException("Source type definition is null!");
+				throw new InvalidOperationCompilerException("Source type definition is null!");
 
 			ResolveCustomAttributes(mosaType, definition);
 		}
@@ -285,7 +285,7 @@ internal class ClrMetadataResolver
 
 		var definition = field.GetUnderlyingObject<UnitDesc<FieldDef, FieldSig>>()?.Definition;
 		if (definition == null)
-			throw new InvalidCompilerOperationException("Field definition is null!");
+			throw new InvalidOperationCompilerException("Field definition is null!");
 
 		ResolveCustomAttributes(mosaField, definition);
 	}
@@ -304,7 +304,7 @@ internal class ClrMetadataResolver
 
 		var definition = property.GetUnderlyingObject<UnitDesc<PropertyDef, PropertySig>>()?.Definition;
 		if (definition == null)
-			throw new InvalidCompilerOperationException("Property definition is null!");
+			throw new InvalidOperationCompilerException("Property definition is null!");
 
 		ResolveCustomAttributes(mosaProperty, definition);
 	}
@@ -312,7 +312,7 @@ internal class ClrMetadataResolver
 	private void ResolveMethod(MosaMethod method)
 	{
 		if (method.DeclaringType == null)
-			throw new InvalidCompilerOperationException("Method's declaring type is null!");
+			throw new InvalidOperationCompilerException("Method's declaring type is null!");
 
 		var resolver = new GenericArgumentResolver();
 		var hasOpening = method.DeclaringType.HasOpenGenericParams;
@@ -341,10 +341,10 @@ internal class ClrMetadataResolver
 		var desc = method.GetUnderlyingObject<UnitDesc<MethodDef, MethodSig>>();
 
 		if (desc == null)
-			throw new InvalidCompilerOperationException("Underlying object for method is null!");
+			throw new InvalidOperationCompilerException("Underlying object for method is null!");
 
 		if (desc.Signature == null)
-			throw new InvalidCompilerOperationException("Signature for unit description is null!");
+			throw new InvalidOperationCompilerException("Signature for unit description is null!");
 
 		var returnType = metadata.Loader.GetType(resolver.Resolve(desc.Signature.RetType));
 		hasOpening |= returnType.HasOpenGenericParams;
@@ -631,7 +631,7 @@ internal class ClrMetadataResolver
 		var szHelper = typeSystem.GetTypeByName(typeSystem.CorLib, "System.Array+SZArrayHelper");
 
 		if (szHelper == null)
-			throw new InvalidCompilerOperationException("Type is null or does not exist");
+			throw new InvalidOperationCompilerException("Type is null or does not exist");
 
 		using var type = typeSystem.Controller.MutateType(arrayType);
 		using var szHelperType = typeSystem.Controller.MutateType(szHelper);
@@ -662,7 +662,7 @@ internal class ClrMetadataResolver
 		foreach (var iface in list)
 		{
 			if (iface == null)
-				throw new InvalidCompilerOperationException("Interface is null or does not exist");
+				throw new InvalidOperationCompilerException("Interface is null or does not exist");
 
 			type.Interfaces.Add(iface);
 			foreach (var property in iface.Properties)

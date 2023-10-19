@@ -19,7 +19,7 @@ public class MosaProperty : MosaUnit, IEquatable<MosaProperty>
 		get
 		{
 			if (GetterMethodName == null)
-				throw new InvalidCompilerOperationException("Method name is null, unable to get getter method");
+				throw new InvalidOperationCompilerException("Method name is null, unable to get getter method");
 
 			return DeclaringType?.FindMethodByName(GetterMethodName);
 		}
@@ -32,7 +32,7 @@ public class MosaProperty : MosaUnit, IEquatable<MosaProperty>
 		get
 		{
 			if (SetterMethodName == null)
-				throw new InvalidCompilerOperationException("Method name is null, unable to get setter method");
+				throw new InvalidOperationCompilerException("Method name is null, unable to get setter method");
 
 			return DeclaringType?.FindMethodByName(SetterMethodName);
 		}

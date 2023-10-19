@@ -703,7 +703,7 @@ public sealed class MethodCompiler
 			return;
 		}
 
-		throw new InvalidCompilerOperationException();
+		throw new InvalidOperationCompilerException();
 	}
 
 	/// <summary>
@@ -980,7 +980,7 @@ public sealed class MethodCompiler
 			ElementType.I when Is32BitPlatform => IRInstruction.LoadParam32,
 			ElementType.I when Is64BitPlatform => IRInstruction.LoadParam64,
 			ElementType.ManagedPointer => IRInstruction.LoadParamManagedPointer,
-			_ => throw new InvalidCompilerOperationException(),
+			_ => throw new InvalidOperationCompilerException(),
 		};
 	}
 
@@ -995,7 +995,7 @@ public sealed class MethodCompiler
 			PrimitiveType.Object => IRInstruction.SetReturnObject,
 			PrimitiveType.ValueType => IRInstruction.SetReturnCompound,
 			PrimitiveType.ManagedPointer => IRInstruction.SetReturnManagedPointer,
-			_ => throw new InvalidCompilerOperationException(),
+			_ => throw new InvalidOperationCompilerException(),
 		};
 	}
 

@@ -14,7 +14,7 @@ public static class LowerTo32Transforms
 		new Branch64Extends(),
 		new Compare64x32EqualOrNotEqual(),
 		new Compare64x64EqualOrNotEqual(),
-		//Compare64x32UnsignedGreater(), //
+		//Compare64x32UnsignedGreater(),
 		new ArithShiftRight64By32(),
 		new ShiftRight64ByConstant32(),
 		new ShiftRight64ByConstant32Plus(),
@@ -42,7 +42,6 @@ public static class LowerTo32Transforms
 		new ZeroExtend32x64(),
 		new Move64(),
 
-		// LowerTo32 -- but try other transformations first!
 		new Compare64x32Rest(),
 		new Compare64x32RestInSSA(),
 		new Compare64x64Rest(),

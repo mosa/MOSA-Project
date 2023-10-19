@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework;
@@ -230,12 +229,22 @@ public sealed class Context
 		Node = Node.Next;
 	}
 
+	public void NextNonEmpty()
+	{
+		Node = Node.NextNonEmpty;
+	}
+
 	/// <summary>
 	/// Gotos to the previous instruction.
 	/// </summary>
 	public void GotoPrevious()
 	{
 		Node = Node.Previous;
+	}
+
+	public void PreviousNonEmpty()
+	{
+		Node = Node.PreviousNonEmpty;
 	}
 
 	/// <summary>

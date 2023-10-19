@@ -750,7 +750,7 @@ public class MosaTypeLayout
 		if (methodFound != null)
 			return methodFound;
 
-		throw new InvalidCompilerOperationException($"Failed to find implicit interface implementation for type {type} and interface method {interfaceMethod}");
+		throw new InvalidOperationCompilerException($"Failed to find implicit interface implementation for type {type} and interface method {interfaceMethod}");
 	}
 
 	private MosaMethod FindImplicitInterfaceMethod(MosaType type, MosaMethod interfaceMethod)

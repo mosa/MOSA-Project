@@ -35,7 +35,7 @@ public sealed class CombineAddressOfStore32 : BaseTransform
 
 		var store2 = context.Node.PreviousNonEmpty;
 
-		if (store2 == null)
+		if (store2.IsBlockStartInstruction)
 			return false;
 
 		if (store2.Instruction != IRInstruction.Store32)

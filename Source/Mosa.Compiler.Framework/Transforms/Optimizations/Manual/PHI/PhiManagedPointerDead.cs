@@ -2,9 +2,9 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Phi;
 
-public sealed class PhiR8Dead : BasePhiTransform
+public sealed class PhiManagedPointerDead : BaseTransform
 {
-	public PhiR8Dead() : base(IRInstruction.PhiR8, TransformType.Manual | TransformType.Optimization)
+	public PhiManagedPointerDead() : base(IRInstruction.PhiManagedPointer, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
