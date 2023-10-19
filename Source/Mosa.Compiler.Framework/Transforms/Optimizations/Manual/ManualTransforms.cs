@@ -298,6 +298,15 @@ public static class ManualTransforms
 
 		new ConstantMove.BranchManagedPointer(),
 		new ConstantMove.BranchObject(),
-		//new Find(),
+
+		new Phi.Phi32BranchBypass(),
+		new Phi.Phi64BranchBypass(),
+
+		new Phi.PhiObjectDead(),
+		new Phi.PhiObjectUpdate(),
+		new Phi.PhiManagedPointerDead(),
+		new Phi.PhiManagedPointerUpdate(),
+
+		new Phi.PhiObjectBranchBypass(),
 	};
 }

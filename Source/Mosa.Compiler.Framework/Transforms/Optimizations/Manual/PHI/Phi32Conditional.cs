@@ -2,7 +2,7 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Phi;
 
-public sealed class Phi32Conditional : BaseTransform
+public sealed class Phi32Conditional : BasePhiTransform
 {
 	public Phi32Conditional() : base(IRInstruction.Phi32, TransformType.Manual | TransformType.Optimization)
 	{
