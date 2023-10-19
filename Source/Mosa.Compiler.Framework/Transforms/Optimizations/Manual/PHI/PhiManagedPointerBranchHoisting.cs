@@ -2,9 +2,9 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Phi;
 
-public sealed class Phi64BranchBypass : BasePhiTransform
+public sealed class PhiManagedPointerBranchHoisting : BasePhiTransform
 {
-	public Phi64BranchBypass() : base(IRInstruction.Phi64, TransformType.Manual | TransformType.Optimization)
+	public PhiManagedPointerBranchHoisting() : base(IRInstruction.PhiManagedPointer, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -24,7 +24,7 @@ public sealed class Phi64BranchBypass : BasePhiTransform
 
 		var ctx = context.Result.Uses[0];
 
-		if (ctx.Instruction != IRInstruction.Branch64)
+		if (ctx.Instruction != IRInstruction.BranchManagedPointer)
 			return false;
 
 		if (!ctx.Operand2.IsResolvedConstant)

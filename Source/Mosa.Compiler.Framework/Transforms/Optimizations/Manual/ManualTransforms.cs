@@ -15,8 +15,8 @@ public static class ManualTransforms
 		new ConstantMove.Compare64x64(),
 		new ConstantMove.Branch32(),
 		new ConstantMove.Branch64(),
-//		new ConstantMove.BranchObject(),
-//		new ConstantMove.BranchManagedPointer(),
+		new ConstantMove.BranchObject(),
+		new ConstantMove.BranchManagedPointer(),
 		new ConstantMove.AddCarryOut32(),
 		new ConstantMove.AddCarryOut64(),
 		new ConstantMove.AddOverflowOut32(),
@@ -101,7 +101,7 @@ public static class ManualTransforms
 		new Propagate.MoveObjectPropagate(),
 		new Propagate.MoveManagedPointerPropagate(),
 		new Propagate.MoveObjectPropagateConstant(),
-		// new Propagate.MoveManagedPointerPropagateConstant(),
+		new Propagate.MoveManagedPointerPropagateConstant(),
 
 		new Propagate.Phi32Propagate(),
 		new Propagate.Phi64Propagate(),
@@ -299,14 +299,14 @@ public static class ManualTransforms
 		new ConstantMove.BranchManagedPointer(),
 		new ConstantMove.BranchObject(),
 
-		new Phi.Phi32BranchBypass(),
-		new Phi.Phi64BranchBypass(),
+		new Phi.Phi32BranchHoisting(),
+		new Phi.Phi64BranchHoisting(),
+		new Phi.PhiObjectBranchHoisting(),
+		new Phi.PhiManagedPointerBranchHoisting(),
 
 		new Phi.PhiObjectDead(),
 		new Phi.PhiObjectUpdate(),
 		new Phi.PhiManagedPointerDead(),
 		new Phi.PhiManagedPointerUpdate(),
-
-		new Phi.PhiObjectBranchBypass(),
 	};
 }

@@ -2,9 +2,9 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Phi;
 
-public sealed class Phi32BranchBypass : BasePhiTransform
+public sealed class Phi64BranchHoisting : BasePhiTransform
 {
-	public Phi32BranchBypass() : base(IRInstruction.Phi32, TransformType.Manual | TransformType.Optimization)
+	public Phi64BranchHoisting() : base(IRInstruction.Phi64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -24,7 +24,7 @@ public sealed class Phi32BranchBypass : BasePhiTransform
 
 		var ctx = context.Result.Uses[0];
 
-		if (ctx.Instruction != IRInstruction.Branch32)
+		if (ctx.Instruction != IRInstruction.Branch64)
 			return false;
 
 		if (!ctx.Operand2.IsResolvedConstant)
@@ -46,7 +46,7 @@ public sealed class Phi32BranchBypass : BasePhiTransform
 
 		var ctx = context.Result.Uses[0];
 
-		var result = Compare32(ctx.ConditionCode, phiValue, ctx.Operand2);
+		var result = Compare64(ctx.ConditionCode, phiValue, ctx.Operand2);
 
 		var targetBlock = result
 			? ctx.BranchTargets[0]
