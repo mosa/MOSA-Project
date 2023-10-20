@@ -254,6 +254,12 @@ public class MosaSettings
 		set => Settings.SetValue(Name.CompilerDebug_CounterFilter, value);
 	}
 
+	public string TestFilter
+	{
+		get => Settings.GetValue(Name.CompilerDebug_TestFilter, null);
+		set => Settings.SetValue(Name.CompilerDebug_TestFilter, value);
+	}
+
 	public int MaxThreads
 	{
 		get => Settings.GetValue(Name.Compiler_Multithreading_MaxThreads, 0);

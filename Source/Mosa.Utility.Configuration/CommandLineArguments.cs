@@ -55,6 +55,14 @@ public static class CommandLineArguments
 			new Argument { Name = "-inline-level", Setting = Name.Optimizations_Inline_Maximum},
 			new Argument { Name = "-basic-optimization-window", Setting = Name.Optimizations_Basic_Window},
 
+			// Compiler - Platforms:
+			new Argument { Name = "-platform", Setting = Name.Compiler_Platform},
+			new Argument { Name = "-x86", Setting = Name.Compiler_Platform, Value= "x86"},
+			new Argument { Name = "-x64", Setting = Name.Compiler_Platform, Value= "x64"},
+			new Argument { Name = "-arm32", Setting = Name.Compiler_Platform, Value= "ARM32"},
+			new Argument { Name = "-arm64", Setting = Name.Compiler_Platform, Value= "ARM64"},
+
+			// Compiler - Debug Output:
 			new Argument { Name = "-output-nasm", Setting = Name.CompilerDebug_NasmFile, Value= "%DEFAULT%"},
 			new Argument { Name = "-output-asm", Setting = Name.CompilerDebug_AsmFile, Value= "%DEFAULT%"},
 			new Argument { Name = "-output-map", Setting = Name.CompilerDebug_MapFile, Value= "%DEFAULT%"},
@@ -69,17 +77,12 @@ public static class CommandLineArguments
 			new Argument { Name = "-map", Setting = Name.CompilerDebug_MapFile, Value= "%DEFAULT%"},
 			new Argument { Name = "-counters-filter", Setting = Name.CompilerDebug_CounterFilter},
 
+			// Compiler - Debug:
+			new Argument { Name = "-inline-exclude", Setting = Name.Optimizations_Inline_Exclude, IsList = true},
+			new Argument { Name = "-test-filter", Setting = Name.CompilerDebug_TestFilter},
 			new Argument { Name = "-check", Setting = Name.CompilerDebug_FullCheckMode, Value= "true"},
 
-			new Argument { Name = "-platform", Setting = Name.Compiler_Platform},
-			new Argument { Name = "-x86", Setting = Name.Compiler_Platform, Value= "x86"},
-			new Argument { Name = "-x64", Setting = Name.Compiler_Platform, Value= "x64"},
-			new Argument { Name = "-arm32", Setting = Name.Compiler_Platform, Value= "ARM32"},
-			new Argument { Name = "-arm64", Setting = Name.Compiler_Platform, Value= "ARM64"},
-
 			new Argument { Name = "-interrupt-method", Setting = Name.X86_InterruptMethodName},
-
-			new Argument { Name = "-inline-exclude", Setting = Name.Optimizations_Inline_Exclude, IsList = true},
 
 			// Linker:
 			new Argument { Name = "-emit-all-symbols", Setting = Name.Linker_Symbols, Value= "true"},

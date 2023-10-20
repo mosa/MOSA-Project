@@ -80,6 +80,7 @@ public static class ManualTransforms
 		new Special.Store64AddressOf(),
 		new Special.Load32AddressOf(),
 		new Special.Load64AddressOf(),
+		new Special.StoreLoadObject(),
 		new Special.StoreLoadManagedPointer(),
 		new Special.StoreLoad32(),
 		new Special.StoreLoad64(),
@@ -229,8 +230,6 @@ public static class ManualTransforms
 		new Memory.DoubleLoadParamR4(),
 		new Memory.DoubleLoadParamR8(),
 		new Memory.DoubleLoadParamObject(), // Dup for MP
-
-		//new Special.Phi32Conditional(),
 
 		new Rewrite.Branch32GreaterOrEqualThanZero(),
 		new Rewrite.Branch32LessThanZero(),
