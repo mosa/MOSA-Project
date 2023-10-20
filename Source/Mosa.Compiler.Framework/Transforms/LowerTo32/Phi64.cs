@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
 public sealed class Phi64 : BaseLower32Transform
 {
-	public Phi64() : base(IRInstruction.Phi64, TransformType.Manual | TransformType.Optimization)
+	public Phi64() : base(IRInstruction.Phi64, TransformType.Manual | TransformType.Optimization, true)
 	{
 	}
 
@@ -73,7 +73,7 @@ public sealed class Phi64 : BaseLower32Transform
 
 			var value = operand.IsConstant
 				? Operand.CreateConstant32(operand.ConstantUnsigned64 >> 32)
-				: operand.Definitions[0].Operand1;
+				: operand.Definitions[0].Operand2;
 
 			ctx.SetOperand(i, value);
 			ctx.PhiBlocks.Add(context.PhiBlocks[i]);

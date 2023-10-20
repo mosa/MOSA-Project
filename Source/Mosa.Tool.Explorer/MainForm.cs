@@ -1443,4 +1443,14 @@ public partial class MainForm : Form
 	{
 		dataGridView1_SelectionChanged(sender, e);
 	}
+
+	private void button2_Click(object sender, EventArgs e)
+	{
+		File.WriteAllText(Path.Combine(Path.GetTempPath(), "MOSA", "1.txt"), tbTransforms.Text);
+	}
+
+	private void button1_Click(object sender, EventArgs e)
+	{
+		File.WriteAllText(Path.Combine(Path.GetTempPath(), "MOSA", "2.txt"), tbTransforms.Text);
+	}
 }
