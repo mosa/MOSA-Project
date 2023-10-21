@@ -33,16 +33,11 @@ public sealed class MulSigned64 : BaseLower32Transform
 		context.AppendInstruction(IRInstruction.GetLow32, op1Low, operand2);
 		context.AppendInstruction(IRInstruction.GetHigh32, op1High, operand2);
 
-		context.SetInstruction(IRInstruction.GetLow32, op0Low, operand1);
-		context.AppendInstruction(IRInstruction.GetHigh32, op0High, operand1);
-		context.AppendInstruction(IRInstruction.GetLow32, op1Low, operand2);
-		context.AppendInstruction(IRInstruction.GetHigh32, op1High, operand2);
-
 		context.AppendInstruction(IRInstruction.MulSigned32, v1, op1High, op0Low);
 		context.AppendInstruction(IRInstruction.MulSigned32, v2, op1Low, op0High);
+		context.AppendInstruction(IRInstruction.Add32, v4, v2, v1);
 		context.AppendInstruction(IRInstruction.MulHu32, v3, op1Low, op0Low);
 		context.AppendInstruction(IRInstruction.MulUnsigned32, v6, op1Low, op0Low);
-		context.AppendInstruction(IRInstruction.Add32, v4, v2, v1);
 		context.AppendInstruction(IRInstruction.Add32, v5, v3, v4);
 
 		context.AppendInstruction(IRInstruction.To64, result, v6, v5);
