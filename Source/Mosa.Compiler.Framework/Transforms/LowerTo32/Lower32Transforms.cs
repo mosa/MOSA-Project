@@ -28,6 +28,12 @@ public static class LowerTo32Transforms
 		new LoadParamZeroExtend16x64(),
 		new LoadParamZeroExtend32x64(),
 		new LoadParamZeroExtend8x64(),
+		new LoadZeroExtend8x64(),
+		new LoadZeroExtend16x64(),
+		new LoadZeroExtend32x64(),
+		new LoadSignExtend8x64(),
+		new LoadSignExtend16x64(),
+		new LoadSignExtend32x64(),
 		new Not64(),
 		new Or64(),
 		new SignExtend16x64(),
@@ -38,6 +44,7 @@ public static class LowerTo32Transforms
 		new Sub64(),
 		new Truncate64x32(),
 		new Xor64(),
+		new ZeroExtend8x64(),
 		new ZeroExtend16x64(),
 		new ZeroExtend32x64(),
 		new Move64(),
@@ -51,5 +58,6 @@ public static class LowerTo32Transforms
 		new Phi64(),
 		new MulSigned64(),
 		new MulUnsigned64(),
+		new Compare32x64(),
 	};
 }
