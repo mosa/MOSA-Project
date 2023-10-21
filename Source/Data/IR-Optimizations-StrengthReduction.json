@@ -26,7 +26,10 @@
 		"IR.Compare32x32",
 		"IR.Compare32x64",
 		"IR.Compare64x32",
-		"IR.Compare64x64"
+		"IR.Compare64x64",
+		"IR.CompareObject",
+		"IR.CompareManagedPointer",
+		"IR.MulHu32"
 	],
 	"Optimizations": [
 		{
@@ -421,6 +424,16 @@
 			"Filter": "",
 			"Result": "(IR.Move64 0)",
 			"Priority": "80"
+		},
+		{
+			"Type": "StrengthReduction",
+			"Name": "MulHu32",
+			"SubName": "ByZero",
+			"Expression": "IR.MulHu32 a 0",
+			"Filter": "",
+			"Result": "(IR.Move32 [To32(0)])",
+			"Priority": "80",
+			"Variations": "Yes"
 		}
 	]
 }

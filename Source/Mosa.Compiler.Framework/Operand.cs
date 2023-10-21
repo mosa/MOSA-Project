@@ -195,6 +195,8 @@ public sealed partial class Operand
 
 	public bool IsUsedOnce => Uses.Count == 1;
 
+	public bool IsUsedMoreThanOnce => Uses.Count > 1;
+
 	public bool IsVirtualRegisterUsed
 	{
 		get

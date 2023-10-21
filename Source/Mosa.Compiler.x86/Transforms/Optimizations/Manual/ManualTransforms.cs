@@ -27,11 +27,13 @@ public static class ManualTransforms
 		//new Special.Mov32Propagate(),
 		//Add32ToLea32
 		//Sub32ToLea32
-		
+
 		new Special.Mov32Unless(),
 		new Special.Mov32Coalescing(),
 
 		new StrengthReduction.Mul32ByZero(),
 		new StrengthReduction.Mul32WithMov32ByZero(),
+
+		new Special.Mul32Ditto(),
 	};
 }

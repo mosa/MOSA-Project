@@ -27,8 +27,8 @@ public sealed class Compare64x64RestInSSA : BaseLower32Transform
 
 		transform.SplitOperand(result, out Operand resultLow, out _);
 
-		var branch = context.ConditionCode;
-		var branchUnsigned = context.ConditionCode.GetUnsigned();
+		var condition = context.ConditionCode;
+		var conditionUnsigned = context.ConditionCode.GetUnsigned();
 
 		var nextBlock = transform.Split(context);
 		var newBlocks = transform.CreateNewBlockContexts(5, context.Label);
@@ -50,18 +50,18 @@ public sealed class Compare64x64RestInSSA : BaseLower32Transform
 		context.AppendInstruction(IRInstruction.Jmp, newBlocks[0].Block);
 
 		// Branch if check already gave results
-		if (branch == ConditionCode.Equal)
+		if (condition == ConditionCode.Equal)
 		{
 			newBlocks[0].AppendInstruction(IRInstruction.Jmp, newBlocks[3].Block);
 		}
 		else
 		{
-			newBlocks[0].AppendInstruction(IRInstruction.Branch32, branch, null, op0High, op1High, newBlocks[2].Block);
+			newBlocks[0].AppendInstruction(IRInstruction.Branch32, condition, null, op0High, op1High, newBlocks[2].Block);
 			newBlocks[0].AppendInstruction(IRInstruction.Jmp, newBlocks[3].Block);
 		}
 
 		// Compare low
-		newBlocks[1].AppendInstruction(IRInstruction.Branch32, branchUnsigned, null, op0Low, op1Low, newBlocks[2].Block);
+		newBlocks[1].AppendInstruction(IRInstruction.Branch32, conditionUnsigned, null, op0Low, op1Low, newBlocks[2].Block);
 		newBlocks[1].AppendInstruction(IRInstruction.Jmp, newBlocks[3].Block);
 
 		// Success
