@@ -6,6 +6,7 @@
 		"IR.Add64",
 		"IR.AddR4",
 		"IR.AddR8",
+		"IR.AddManagedPointer",
 		"IR.And32",
 		"IR.And64",
 		"IR.Or32",
@@ -27,7 +28,8 @@
 		"IR.Compare64x32",
 		"IR.Compare64x64",
 		"IR.CompareObject",
-		"IR.CompareManagedPointer"
+		"IR.CompareManagedPointer",
+		"IR.MulHu32"
 	],
 	"Optimizations": [
 		{

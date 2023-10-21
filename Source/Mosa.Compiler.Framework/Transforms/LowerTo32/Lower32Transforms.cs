@@ -49,5 +49,7 @@ public static class LowerTo32Transforms
 		new Branch64(),
 
 		new Phi64(),
+		//new MulSigned64(),
+		//new MulUnsigned64(),
 	};
 }

@@ -70,6 +70,57 @@ public sealed class Compare64x32PassThru2_v1 : BaseTransform
 		if (context.ConditionCode != ConditionCode.Equal)
 			return false;
 
+		if (!context.Operand1.IsResolvedConstant)
+			return false;
+
+		if (context.Operand1.ConstantUnsigned64 != 1)
+			return false;
+
+		if (!context.Operand2.IsVirtualRegister)
+			return false;
+
+		if (!context.Operand2.IsDefinedOnce)
+			return false;
+
+		if (context.Operand2.Definitions[0].Instruction != IRInstruction.And32)
+			return false;
+
+		if (!context.Operand2.Definitions[0].Operand2.IsResolvedConstant)
+			return false;
+
+		if (context.Operand2.Definitions[0].Operand2.ConstantUnsigned64 != 1)
+			return false;
+
+		return true;
+	}
+
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
+
+		var t1 = context.Operand2.Definitions[0].Operand1;
+
+		var c1 = Operand.CreateConstant(1);
+
+		context.SetInstruction(IRInstruction.And32, result, t1, c1);
+	}
+}
+
+/// <summary>
+/// Compare64x32PassThru2_v2
+/// </summary>
+[Transform("IR.Optimizations.Auto.Simplification")]
+public sealed class Compare64x32PassThru2_v2 : BaseTransform
+{
+	public Compare64x32PassThru2_v2() : base(IRInstruction.Compare64x32, TransformType.Auto | TransformType.Optimization)
+	{
+	}
+
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (context.ConditionCode != ConditionCode.Equal)
+			return false;
+
 		if (!context.Operand1.IsVirtualRegister)
 			return false;
 
@@ -99,6 +150,57 @@ public sealed class Compare64x32PassThru2_v1 : BaseTransform
 		var result = context.Result;
 
 		var t1 = context.Operand1.Definitions[0].Operand2;
+
+		var c1 = Operand.CreateConstant(1);
+
+		context.SetInstruction(IRInstruction.And32, result, t1, c1);
+	}
+}
+
+/// <summary>
+/// Compare64x32PassThru2_v3
+/// </summary>
+[Transform("IR.Optimizations.Auto.Simplification")]
+public sealed class Compare64x32PassThru2_v3 : BaseTransform
+{
+	public Compare64x32PassThru2_v3() : base(IRInstruction.Compare64x32, TransformType.Auto | TransformType.Optimization)
+	{
+	}
+
+	public override bool Match(Context context, TransformContext transform)
+	{
+		if (context.ConditionCode != ConditionCode.Equal)
+			return false;
+
+		if (!context.Operand1.IsResolvedConstant)
+			return false;
+
+		if (context.Operand1.ConstantUnsigned64 != 1)
+			return false;
+
+		if (!context.Operand2.IsVirtualRegister)
+			return false;
+
+		if (!context.Operand2.IsDefinedOnce)
+			return false;
+
+		if (context.Operand2.Definitions[0].Instruction != IRInstruction.And32)
+			return false;
+
+		if (!context.Operand2.Definitions[0].Operand1.IsResolvedConstant)
+			return false;
+
+		if (context.Operand2.Definitions[0].Operand1.ConstantUnsigned64 != 1)
+			return false;
+
+		return true;
+	}
+
+	public override void Transform(Context context, TransformContext transform)
+	{
+		var result = context.Result;
+
+		var t1 = context.Operand2.Definitions[0].Operand2;
 
 		var c1 = Operand.CreateConstant(1);
 
