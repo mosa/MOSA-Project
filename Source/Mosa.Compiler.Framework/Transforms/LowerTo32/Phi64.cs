@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
 public sealed class Phi64 : BaseLower32Transform
 {
-	public Phi64() : base(IRInstruction.Phi64, TransformType.Manual | TransformType.Optimization)
+	public Phi64() : base(IRInstruction.Phi64, TransformType.Manual | TransformType.Optimization, true)
 	{
 	}
 
