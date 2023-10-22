@@ -296,8 +296,8 @@ jobs:
           path: bin
       - name: Demo Test - BareMetal HelloWorld
         run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.BareMetal.HelloWorld.x86.dll -o${{ matrix.optimization }} -check -test
-      - name: Demo Test - BareMetal GraphicalWorld
-        run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.BareMetal.GraphicalWorld.x86.dll -o${{ matrix.optimization }} -check -test -vmware-svga -include bin\Include
+      - name: Demo Test - BareMetal CoolWorld
+        run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.BareMetal.CoolWorld.x86.dll -o${{ matrix.optimization }} -check -test -vmware-svga -include bin\Include
 
   linux-demo-testing:
     strategy:
@@ -328,8 +328,8 @@ jobs:
         run: sudo apt-get -y -o Acquire::Retries=5 install qemu-system-x86
       - name: Demo Test - BareMetal HelloWorld
         run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x86.dll -o${{ matrix.optimization }} -check -test
-      - name: Demo Test - BareMetal GraphicalWorld
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.GraphicalWorld.x86.dll -o${{ matrix.optimization }} -check -test -vmware-svga -include bin/Include
+      - name: Demo Test - BareMetal CoolWorld
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.CoolWorld.x86.dll -o${{ matrix.optimization }} -check -test -vmware-svga -include bin/Include
 
   macos-demo-testing:
     strategy:
@@ -356,5 +356,5 @@ jobs:
           path: bin
       - name: Demo Test - BareMetal HelloWorld
         run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x86.dll -o${{ matrix.optimization }} -check -test
-      - name: Demo Test - BareMetal GraphicalWorld
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.GraphicalWorld.x86.dll -o${{ matrix.optimization }} -check -test -vmware-svga -include bin/Include
+      - name: Demo Test - BareMetal CoolWorld
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.CoolWorld.x86.dll -o${{ matrix.optimization }} -check -test -vmware-svga -include bin/Include
