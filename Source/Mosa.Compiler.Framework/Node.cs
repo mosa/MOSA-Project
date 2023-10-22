@@ -8,7 +8,7 @@ namespace Mosa.Compiler.Framework;
 /// <summary>
 /// Instruction Node
 /// </summary>
-public sealed class InstructionNode
+public sealed class Node
 {
 	#region Data Members
 
@@ -45,7 +45,7 @@ public sealed class InstructionNode
 	/// <summary>
 	/// The additional properties of an instruction node
 	/// </summary>
-	private InstructionNodeAddition addition;
+	private NodeAddition addition;
 
 	#endregion Data Members
 
@@ -54,12 +54,12 @@ public sealed class InstructionNode
 	/// <summary>
 	/// Gets or sets the previous instruction node.
 	/// </summary>
-	public InstructionNode Previous { get; set; }
+	public Node Previous { get; set; }
 
 	/// <summary>
 	/// Gets or sets the next instruction node.
 	/// </summary>
-	public InstructionNode Next { get; set; }
+	public Node Next { get; set; }
 
 	/// <summary>
 	/// Holds the instruction type of this instruction
@@ -334,7 +334,7 @@ public sealed class InstructionNode
 	}
 
 	/// <summary>
-	/// Gets or sets a value indicating whether this <see cref="InstructionNode"/> is marked.
+	/// Gets or sets a value indicating whether this <see cref="Node"/> is marked.
 	/// </summary>
 	public bool Marked { get; set; }
 
@@ -352,7 +352,7 @@ public sealed class InstructionNode
 	{
 		if (addition == null)
 		{
-			addition = new InstructionNodeAddition();
+			addition = new NodeAddition();
 		}
 	}
 
@@ -444,7 +444,7 @@ public sealed class InstructionNode
 		//Block.DebugCheck();
 	}
 
-	public void Insert(InstructionNode node)
+	public void Insert(Node node)
 	{
 		//Block.DebugCheck();
 
@@ -477,7 +477,7 @@ public sealed class InstructionNode
 		//Block.DebugCheck();
 	}
 
-	public void MoveFrom(InstructionNode startNode, InstructionNode endNode)
+	public void MoveFrom(Node startNode, Node endNode)
 	{
 		//var cutBlock = startNode.Previous.Block;
 
@@ -492,7 +492,7 @@ public sealed class InstructionNode
 		Insert(startNode);
 	}
 
-	public void MoveFrom(InstructionNode node)
+	public void MoveFrom(Node node)
 	{
 		//var cutBlock = node.Previous.Block;
 
@@ -511,7 +511,7 @@ public sealed class InstructionNode
 	/// Replaces the specified node with the given node, the existing node is invalid afterwards
 	/// </summary>
 	/// <param name="node">The node.</param>
-	public void Replace(InstructionNode node)
+	public void Replace(Node node)
 	{
 		//Block.DebugCheck();
 
@@ -926,7 +926,7 @@ public sealed class InstructionNode
 
 	#region Navigation
 
-	public InstructionNode NextNonEmpty
+	public Node NextNonEmpty
 	{
 		get
 		{
@@ -941,7 +941,7 @@ public sealed class InstructionNode
 		}
 	}
 
-	public InstructionNode PreviousNonEmpty
+	public Node PreviousNonEmpty
 	{
 		get
 		{
@@ -957,7 +957,7 @@ public sealed class InstructionNode
 	}
 
 	/// <summary>Returns the 1st non empty node (including the current) by traversing the instructions forward</summary>
-	public InstructionNode ForwardToNonEmpty
+	public Node ForwardToNonEmpty
 	{
 		get
 		{
@@ -973,7 +973,7 @@ public sealed class InstructionNode
 	}
 
 	/// <summary>Returns the 1st non empty node (including the current) by traversing the instructions backwards</summary>
-	public InstructionNode BackwardsToNonEmpty
+	public Node BackwardsToNonEmpty
 	{
 		get
 		{
@@ -992,7 +992,7 @@ public sealed class InstructionNode
 
 	#region Constructors
 
-	public InstructionNode()
+	public Node()
 	{
 	}
 
@@ -1002,7 +1002,7 @@ public sealed class InstructionNode
 	/// <param name="instruction">The instruction.</param>
 	/// <param name="operandCount">The operand count.</param>
 	/// <param name="resultCount">The result count.</param>
-	public InstructionNode(BaseInstruction instruction, int operandCount, int resultCount)
+	public Node(BaseInstruction instruction, int operandCount, int resultCount)
 	{
 		Instruction = instruction;
 		OperandCount = operandCount;
@@ -1013,7 +1013,7 @@ public sealed class InstructionNode
 	/// Sets the instruction.
 	/// </summary>
 	/// <param name="instruction">The instruction.</param>
-	public InstructionNode(BaseInstruction instruction)
+	public Node(BaseInstruction instruction)
 		: this(instruction, instruction.DefaultOperandCount, instruction.DefaultResultCount)
 	{
 	}
@@ -1023,7 +1023,7 @@ public sealed class InstructionNode
 	/// </summary>
 	/// <param name="instruction">The instruction.</param>
 	/// <param name="block">The block.</param>
-	public InstructionNode(BaseInstruction instruction, BasicBlock block)
+	public Node(BaseInstruction instruction, BasicBlock block)
 		: this(instruction)
 	{
 		AddBranchTarget(block);
@@ -1035,7 +1035,7 @@ public sealed class InstructionNode
 	/// <param name="instruction">The instruction.</param>
 	/// <param name="block1">The block1.</param>
 	/// <param name="block2">The block2.</param>
-	public InstructionNode(BaseInstruction instruction, BasicBlock block1, BasicBlock block2)
+	public Node(BaseInstruction instruction, BasicBlock block1, BasicBlock block2)
 		: this(instruction)
 	{
 		AddBranchTarget(block1);
@@ -1047,7 +1047,7 @@ public sealed class InstructionNode
 	/// </summary>
 	/// <param name="instruction">The instruction.</param>
 	/// <param name="condition">The condition.</param>
-	public InstructionNode(BaseInstruction instruction, ConditionCode condition)
+	public Node(BaseInstruction instruction, ConditionCode condition)
 		: this(instruction)
 	{
 		ConditionCode = condition;
@@ -1059,7 +1059,7 @@ public sealed class InstructionNode
 	/// <param name="instruction">The instruction.</param>
 	/// <param name="condition">The condition.</param>
 	/// <param name="block">The block.</param>
-	public InstructionNode(BaseInstruction instruction, ConditionCode condition, BasicBlock block)
+	public Node(BaseInstruction instruction, ConditionCode condition, BasicBlock block)
 		: this(instruction, condition)
 	{
 		AddBranchTarget(block);
@@ -1070,7 +1070,7 @@ public sealed class InstructionNode
 	/// </summary>
 	/// <param name="instruction">The instruction.</param>
 	/// <param name="result">The result.</param>
-	public InstructionNode(BaseInstruction instruction, Operand result)
+	public Node(BaseInstruction instruction, Operand result)
 		: this(instruction, 0, 1)
 	{
 		Result = result;
@@ -1082,7 +1082,7 @@ public sealed class InstructionNode
 	/// <param name="instruction">The instruction.</param>
 	/// <param name="updateStatus">if set to <c>true</c> [update status].</param>
 	/// <param name="result">The result.</param>
-	public InstructionNode(BaseInstruction instruction, StatusRegister statusRegister, Operand result)
+	public Node(BaseInstruction instruction, StatusRegister statusRegister, Operand result)
 		: this(instruction, result)
 	{
 		StatusRegister = statusRegister;
@@ -1094,14 +1094,14 @@ public sealed class InstructionNode
 	/// <param name="instruction">The instruction.</param>
 	/// <param name="result">The result.</param>
 	/// <param name="operand1">The operand1.</param>
-	public InstructionNode(BaseInstruction instruction, Operand result, Operand operand1)
+	public Node(BaseInstruction instruction, Operand result, Operand operand1)
 		: this(instruction, 1, 1)
 	{
 		Result = result;
 		Operand1 = operand1;
 	}
 
-	public InstructionNode(BaseInstruction instruction, Operand result, Operand operand1, Operand operand2)
+	public Node(BaseInstruction instruction, Operand result, Operand operand1, Operand operand2)
 		: this(instruction, 2, 1)
 	{
 		Result = result;

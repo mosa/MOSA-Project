@@ -15,7 +15,7 @@ public sealed class ConvertR8ToI64 : BaseIRTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		Debug.Assert(context.Result.IsInteger && !context.Result.IsFloatingPoint);
 		context.ReplaceInstruction(X64.Cvttss2si64);

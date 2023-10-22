@@ -11,7 +11,7 @@ public sealed class Mul32ByZero : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (!(context.Operand1.IsConstantZero || context.Operand2.IsConstantZero))
 			return false;
@@ -22,7 +22,7 @@ public sealed class Mul32ByZero : BaseTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var result = context.Result;
 		var result2 = context.Result2;

@@ -14,7 +14,7 @@ public sealed class StoreParamR8 : BaseIRTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var operand1 = context.Operand1;
 		var operand2 = context.Operand2;

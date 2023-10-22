@@ -11,7 +11,7 @@ public sealed class ExceptionStart : BaseExceptionTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var exceptionVirtualRegister = context.Result;
 

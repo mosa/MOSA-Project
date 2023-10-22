@@ -10,7 +10,7 @@ namespace Mosa.Compiler.ARM32.Intrinsic;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Compiler.ARM32.Intrinsic::Mrc")]
-	private static void Mrc(Context context, TransformContext transformContext)
+	private static void Mrc(Context context, Transform transform)
 	{
 		context.SetInstruction(ARM32.Mcr, context.Result, context.Operand1, context.Operand2, context.Operand3, context.Operand4, context.Operand5);
 	}

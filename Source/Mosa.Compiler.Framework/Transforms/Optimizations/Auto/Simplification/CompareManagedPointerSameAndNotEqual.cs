@@ -14,7 +14,7 @@ public sealed class CompareManagedPointerSameAndNotEqual : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		var condition = context.ConditionCode;
 
@@ -27,7 +27,7 @@ public sealed class CompareManagedPointerSameAndNotEqual : BaseTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var result = context.Result;
 

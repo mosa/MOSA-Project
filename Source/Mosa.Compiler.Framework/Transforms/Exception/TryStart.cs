@@ -11,7 +11,7 @@ public sealed class TryStart : BaseExceptionTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		context.Empty();
 	}

@@ -379,7 +379,7 @@ public class BuildCommonInstructionFiles : BuildBaseTemplate
 		if (node.StaticEmitMethod != null)
 		{
 			Lines.AppendLine();
-			Lines.AppendLine("\tpublic override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)");
+			Lines.AppendLine("\tpublic override void Emit(Node node, OpcodeEncoder opcodeEncoder)");
 			Lines.AppendLine("\t{");
 
 			if (node.VariableOperands == null || node.VariableOperands == "false")
@@ -396,7 +396,7 @@ public class BuildCommonInstructionFiles : BuildBaseTemplate
 		if (node.OpcodeEncoding != null)
 		{
 			Lines.AppendLine();
-			Lines.AppendLine("\tpublic override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)");
+			Lines.AppendLine("\tpublic override void Emit(Node node, OpcodeEncoder opcodeEncoder)");
 			Lines.AppendLine("\t{");
 			if (node.VariableOperands == null || node.VariableOperands == "false")
 			{

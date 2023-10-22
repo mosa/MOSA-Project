@@ -8,7 +8,7 @@ public sealed class MulSigned64 : BaseLower32Transform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		// same code as with MulUnsigned64!
 

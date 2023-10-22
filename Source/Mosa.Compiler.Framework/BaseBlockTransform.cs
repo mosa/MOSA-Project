@@ -29,7 +29,7 @@ public abstract class BaseBlockTransform : IComparable<BaseBlockTransform>
 
 	#region Abstract Methods
 
-	public abstract int Process(TransformContext transformContext);
+	public abstract int Process(Transform transform);
 
 	#endregion Abstract Methods
 

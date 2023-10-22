@@ -14,7 +14,7 @@ namespace Mosa.Compiler.ARM32.Transforms
 
 		#region Helpers
 
-		public static void ExpandMul(TransformContext transform, Context context)
+		public static void ExpandMul(Transform transform, Context context)
 		{
 			transform.SplitOperand(context.Result, out var resultLow, out var resultHigh);
 			transform.SplitOperand(context.Operand1, out var op1L, out var op1H);
@@ -51,7 +51,7 @@ namespace Mosa.Compiler.ARM32.Transforms
 			context.ConditionCode = context.ConditionCode.GetReverse();
 		}
 
-		public static void Translate(TransformContext transform, Context context, BaseInstruction instruction, bool allowImmediate)
+		public static void Translate(Transform transform, Context context, BaseInstruction instruction, bool allowImmediate)
 		{
 			var result = context.Result;
 			var operand1 = context.Operand1;
@@ -78,7 +78,7 @@ namespace Mosa.Compiler.ARM32.Transforms
 			}
 		}
 
-		public static void MoveConstantRight(TransformContext transform, Context context)
+		public static void MoveConstantRight(Transform transform, Context context)
 		{
 			Debug.Assert(context.OperandCount == 2);
 			Debug.Assert(context.Instruction.IsCommutative);
@@ -94,7 +94,7 @@ namespace Mosa.Compiler.ARM32.Transforms
 			}
 		}
 
-		public static void TransformLoad(TransformContext transform, Context context, BaseInstruction loadInstruction, Operand result, Operand baseOperand, Operand offsetOperand)
+		public static void TransformLoad(Transform transform, Context context, BaseInstruction loadInstruction, Operand result, Operand baseOperand, Operand offsetOperand)
 		{
 			baseOperand = MoveConstantToRegister(transform, context, baseOperand);
 			bool upDirection = true;
@@ -123,7 +123,7 @@ namespace Mosa.Compiler.ARM32.Transforms
 			context.SetInstruction(loadInstruction, upDirection ? StatusRegister.UpDirection : StatusRegister.DownDirection, result, baseOperand, offsetOperand);
 		}
 
-		public static void TransformStore(TransformContext transform, Context context, BaseInstruction storeInstruction, Operand baseOperand, Operand offsetOperand, Operand sourceOperand)
+		public static void TransformStore(Transform transform, Context context, BaseInstruction storeInstruction, Operand baseOperand, Operand offsetOperand, Operand sourceOperand)
 		{
 			baseOperand = MoveConstantToRegister(transform, context, baseOperand);
 			sourceOperand = MoveConstantToRegister(transform, context, sourceOperand);
@@ -154,17 +154,17 @@ namespace Mosa.Compiler.ARM32.Transforms
 			context.SetInstruction(storeInstruction, upDirection ? StatusRegister.UpDirection : StatusRegister.DownDirection, null, baseOperand, offsetOperand, sourceOperand);
 		}
 
-		public static Operand MoveConstantToRegister(TransformContext transform, Context context, Operand operand)
+		public static Operand MoveConstantToRegister(Transform transform, Context context, Operand operand)
 		{
 			return MoveConstantToRegisterOrImmediate(transform, context, operand, false);
 		}
 
-		public static Operand MoveConstantToRegisterOrImmediate(TransformContext transform, Context context, Operand operand)
+		public static Operand MoveConstantToRegisterOrImmediate(Transform transform, Context context, Operand operand)
 		{
 			return MoveConstantToRegisterOrImmediate(transform, context, operand, true);
 		}
 
-		public static Operand MoveConstantToRegisterOrImmediate(TransformContext transform, Context context, Operand operand, bool allowImmediate)
+		public static Operand MoveConstantToRegisterOrImmediate(Transform transform, Context context, Operand operand, bool allowImmediate)
 		{
 			if (operand.IsVirtualRegister || operand.IsCPURegister)
 				return operand;
@@ -219,17 +219,17 @@ namespace Mosa.Compiler.ARM32.Transforms
 			throw new CompilerException("Error at {context} in {Method}");
 		}
 
-		public static Operand MoveConstantToFloatRegisterOrImmediate(TransformContext transform, Context context, Operand operand)
+		public static Operand MoveConstantToFloatRegisterOrImmediate(Transform transform, Context context, Operand operand)
 		{
 			return MoveConstantToFloatRegisterOrImmediate(transform, context, operand, true);
 		}
 
-		public static Operand MoveConstantToFloatRegister(TransformContext transform, Context context, Operand operand)
+		public static Operand MoveConstantToFloatRegister(Transform transform, Context context, Operand operand)
 		{
 			return MoveConstantToFloatRegisterOrImmediate(transform, context, operand, false);
 		}
 
-		public static Operand MoveConstantToFloatRegisterOrImmediate(TransformContext transform, Context context, Operand operand, bool allowImmediate)
+		public static Operand MoveConstantToFloatRegisterOrImmediate(Transform transform, Context context, Operand operand, bool allowImmediate)
 		{
 			if (operand.IsVirtualRegister || operand.IsCPURegister)
 				return operand;
@@ -261,7 +261,7 @@ namespace Mosa.Compiler.ARM32.Transforms
 			return v1;
 		}
 
-		public static Operand ConvertFloatToImm(TransformContext transform, Operand operand)
+		public static Operand ConvertFloatToImm(Transform transform, Operand operand)
 		{
 			if (operand.IsCPURegister || operand.IsVirtualRegister || operand.IsUnresolvedConstant)
 				return operand;

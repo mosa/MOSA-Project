@@ -14,7 +14,7 @@ public sealed class Compare32x32SwapToZero : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (context.ConditionCode != ConditionCode.NotEqual)
 			return false;
@@ -43,7 +43,7 @@ public sealed class Compare32x32SwapToZero : BaseTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var result = context.Result;
 
@@ -69,7 +69,7 @@ public sealed class Compare32x32SwapToZero_v1 : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (context.ConditionCode != ConditionCode.NotEqual)
 			return false;
@@ -98,7 +98,7 @@ public sealed class Compare32x32SwapToZero_v1 : BaseTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var result = context.Result;
 
@@ -124,7 +124,7 @@ public sealed class Compare32x32SwapToZero_v2 : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (context.ConditionCode != ConditionCode.NotEqual)
 			return false;
@@ -153,7 +153,7 @@ public sealed class Compare32x32SwapToZero_v2 : BaseTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var result = context.Result;
 
@@ -179,7 +179,7 @@ public sealed class Compare32x32SwapToZero_v3 : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (context.ConditionCode != ConditionCode.NotEqual)
 			return false;
@@ -208,7 +208,7 @@ public sealed class Compare32x32SwapToZero_v3 : BaseTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var result = context.Result;
 

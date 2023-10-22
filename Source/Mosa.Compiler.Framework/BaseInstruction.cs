@@ -198,7 +198,7 @@ public abstract class BaseInstruction
 
 	#region Methods
 
-	public virtual void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
+	public virtual void Emit(Node node, OpcodeEncoder opcodeEncoder)
 	{
 		return;
 	}

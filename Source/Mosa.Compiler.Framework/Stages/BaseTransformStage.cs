@@ -50,7 +50,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 	protected override void Finish()
 	{
-		UpdateCounter("Transform.Total", TransformContext.TotalTransformCount);
+		UpdateCounter("Transform.Total", Transform.TotalTransformCount);
 		UpdateCounter("Transform.Transforms", TransformCount);
 		UpdateCounter("Transform.Optimizations", OptimizationCount);
 
@@ -78,9 +78,9 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 		specialTrace = new TraceLog(TraceType.GlobalDebug, null, null, "Special Optimizations");
 
-		TransformContext.SetLogs(trace, specialTrace);
+		Transform.SetLogs(trace, specialTrace);
 
-		CustomizeTransform(TransformContext);
+		CustomizeTransform(Transform);
 
 		ExecutePasses();
 	}
@@ -132,7 +132,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 		SortedByPriority = true;
 	}
 
-	protected virtual void CustomizeTransform(TransformContext transformContext)
+	protected virtual void CustomizeTransform(Transform transform)
 	{ }
 
 	private void ExecutePasses()
@@ -218,7 +218,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 		{
 			var transform = instructionTransforms[i];
 
-			var updated = TransformContext.ApplyTransform(context, transform);
+			var updated = Transform.ApplyTransform(context, transform);
 
 			if (updated)
 			{
@@ -248,7 +248,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 		foreach (var transform in blockTransforms)
 		{
-			var count = transform.Process(TransformContext);
+			var count = transform.Process(Transform);
 
 			var updated = count != 0;
 			changed |= updated;

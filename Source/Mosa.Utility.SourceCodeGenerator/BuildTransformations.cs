@@ -203,7 +203,7 @@ public class BuildTransformations : BuildBaseTemplate
 			Lines.AppendLine("");
 		}
 
-		Lines.AppendLine("\tpublic override bool Match(Context context, TransformContext transform)");
+		Lines.AppendLine("\tpublic override bool Match(Context context, Transform transform)");
 		Lines.AppendLine("\t{");
 
 		ProcessPrefilters(transform);
@@ -218,7 +218,7 @@ public class BuildTransformations : BuildBaseTemplate
 		Lines.AppendLine("\t}");
 
 		Lines.AppendLine("");
-		Lines.AppendLine("\tpublic override void Transform(Context context, TransformContext transform)");
+		Lines.AppendLine("\tpublic override void Transform(Context context, Transform transform)");
 		Lines.AppendLine("\t{");
 
 		ProcessResultInstructionTree(transform);
@@ -363,7 +363,7 @@ public class BuildTransformations : BuildBaseTemplate
 				}
 				else if (operand.IsInstruction)
 				{
-					sb.Append($"v{nodeNbrToVirtualRegisterNbr[operand.InstructionNode.NodeNbr]}");
+					sb.Append($"v{nodeNbrToVirtualRegisterNbr[operand.Node.NodeNbr]}");
 				}
 				else if (operand.IsMethod)
 				{
@@ -464,7 +464,7 @@ public class BuildTransformations : BuildBaseTemplate
 		return null;
 	}
 
-	private string DetermineResultType(InstructionNode node)
+	private string DetermineResultType(Node node)
 	{
 		if (!string.IsNullOrWhiteSpace(node.ResultType))
 			return node.ResultType;
@@ -657,7 +657,7 @@ public class BuildTransformations : BuildBaseTemplate
 		return sb.ToString();
 	}
 
-	private void ProcessExpressionNode(InstructionNode instructionNode)
+	private void ProcessExpressionNode(Node instructionNode)
 	{
 		if (instructionNode.NodeNbr == 0)
 		{
@@ -684,7 +684,7 @@ public class BuildTransformations : BuildBaseTemplate
 		}
 	}
 
-	private void EmitConditions(InstructionNode node, string path)
+	private void EmitConditions(Node node, string path)
 	{
 		if (node.Condition == ConditionCode.Always)
 			return;
@@ -748,7 +748,7 @@ public class BuildTransformations : BuildBaseTemplate
 		Lines.AppendLine("");
 	}
 
-	protected void ProcessConditions(Operand operand, InstructionNode parent)
+	protected void ProcessConditions(Operand operand, Node parent)
 	{
 		if (operand.IsAny)
 			return; // nothing;
@@ -781,7 +781,7 @@ public class BuildTransformations : BuildBaseTemplate
 		}
 	}
 
-	protected void ProcessNestedConditions(Operand operand, InstructionNode node)
+	protected void ProcessNestedConditions(Operand operand, Node node)
 	{
 		if (!operand.IsInstruction)
 			return;
@@ -791,13 +791,13 @@ public class BuildTransformations : BuildBaseTemplate
 
 		EmitCondition($"!context.{parent}{operandName}.IsDefinedOnce");
 
-		var instructionName = operand.InstructionNode.InstructionName.Replace("IR.", "IRInstruction.");
+		var instructionName = operand.Node.InstructionName.Replace("IR.", "IRInstruction.");
 
 		EmitCondition($"context.{parent}{operandName}.Definitions[0].Instruction != {instructionName}");
 
-		NodeNbrToNode.Add(operand.InstructionNode.NodeNbr, $"{parent}{operandName}.Definitions[0].");
+		NodeNbrToNode.Add(operand.Node.NodeNbr, $"{parent}{operandName}.Definitions[0].");
 
-		ProcessExpressionNode(operand.InstructionNode);
+		ProcessExpressionNode(operand.Node);
 	}
 
 	protected string GetOperandName(int index)

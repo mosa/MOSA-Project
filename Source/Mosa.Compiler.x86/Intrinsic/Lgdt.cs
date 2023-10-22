@@ -10,7 +10,7 @@ namespace Mosa.Compiler.x86.Intrinsic;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Compiler.x86.Intrinsic::Lgdt")]
-	private static void Lgdt(Context context, TransformContext transformContext)
+	private static void Lgdt(Context context, Transform transform)
 	{
 		context.SetInstruction(X86.Lgdt, null, context.Operand1);
 		context.AppendInstruction(X86.JmpFar);

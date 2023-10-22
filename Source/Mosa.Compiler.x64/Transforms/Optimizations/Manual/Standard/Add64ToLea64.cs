@@ -16,7 +16,7 @@ public sealed class Add64ToLea64 : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (!context.Operand1.IsVirtualRegister)
 			return false;
@@ -36,7 +36,7 @@ public sealed class Add64ToLea64 : BaseTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		context.SetInstruction(X64.Lea64, context.Result, context.Operand1, context.Operand2);
 	}

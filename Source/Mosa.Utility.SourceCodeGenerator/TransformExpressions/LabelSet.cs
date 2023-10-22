@@ -8,7 +8,7 @@ public class LabelSet
 
 	public List<string> Labels { get; } = new List<string>();
 
-	public LabelSet(InstructionNode node)
+	public LabelSet(Node node)
 	{
 		AddPositions(node);
 	}
@@ -36,7 +36,7 @@ public class LabelSet
 		expressionLabel.Add(nodeNbr, operandIndex);
 	}
 
-	protected void AddPositions(InstructionNode node)
+	protected void AddPositions(Node node)
 	{
 		foreach (var operand in node.Operands)
 		{
@@ -52,12 +52,12 @@ public class LabelSet
 
 			if (operand.IsInstruction)
 			{
-				AddPositions(operand.InstructionNode);
+				AddPositions(operand.Node);
 			}
 		}
 	}
 
-	public void AddUse(InstructionNode node)
+	public void AddUse(Node node)
 	{
 		foreach (var operand in node.Operands)
 		{
@@ -69,7 +69,7 @@ public class LabelSet
 			}
 			else if (operand.IsInstruction)
 			{
-				AddUse(operand.InstructionNode);
+				AddUse(operand.Node);
 			}
 			else if (operand.IsMethod)
 			{
@@ -90,7 +90,7 @@ public class LabelSet
 			}
 			else if (operand.IsInstruction)
 			{
-				AddUse(operand.InstructionNode);
+				AddUse(operand.Node);
 			}
 			else if (operand.IsMethod)
 			{

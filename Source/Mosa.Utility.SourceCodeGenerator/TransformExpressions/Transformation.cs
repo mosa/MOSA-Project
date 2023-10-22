@@ -15,8 +15,8 @@ public class Transformation
 	protected readonly List<Token> TokenizedPrefilter;
 
 	public readonly LabelSet LabelSet;
-	public readonly InstructionNode InstructionTree;
-	public readonly InstructionNode ResultInstructionTree;
+	public readonly Node InstructionTree;
+	public readonly Node ResultInstructionTree;
 	public readonly List<Method> Filters;
 	public readonly List<Method> Prefilters;
 
@@ -41,7 +41,7 @@ public class Transformation
 		LabelSet.AddUse(ResultInstructionTree);
 	}
 
-	private Transformation(InstructionNode instructionTree, InstructionNode resultInstructionTree, List<Method> filters, List<Method> prefilters)
+	private Transformation(Node instructionTree, Node resultInstructionTree, List<Method> filters, List<Method> prefilters)
 	{
 		InstructionTree = instructionTree;
 		ResultInstructionTree = resultInstructionTree;
@@ -57,11 +57,11 @@ public class Transformation
 		return $"{InstructionTree} & {FilterText} -> {ResultText}";
 	}
 
-	public List<InstructionNode> __Preorder(InstructionNode tree)
+	public List<Node> __Preorder(Node tree)
 	{
-		var result = new List<InstructionNode>();
-		var worklist = new Queue<InstructionNode>();
-		var contains = new HashSet<InstructionNode>();
+		var result = new List<Node>();
+		var worklist = new Queue<Node>();
+		var contains = new HashSet<Node>();
 
 		worklist.Enqueue(tree);
 
@@ -78,7 +78,7 @@ public class Transformation
 				{
 					if (next.IsInstruction)
 					{
-						worklist.Enqueue(next.InstructionNode);
+						worklist.Enqueue(next.Node);
 					}
 				}
 			}
@@ -87,10 +87,10 @@ public class Transformation
 		return result;
 	}
 
-	public List<InstructionNode> GetPreorder(InstructionNode tree)
+	public List<Node> GetPreorder(Node tree)
 	{
-		var result = new List<InstructionNode>();
-		var worklist = new Stack<InstructionNode>();
+		var result = new List<Node>();
+		var worklist = new Stack<Node>();
 
 		worklist.Push(tree);
 
@@ -103,7 +103,7 @@ public class Transformation
 			{
 				if (operand.IsInstruction)
 				{
-					worklist.Push(operand.InstructionNode);
+					worklist.Push(operand.Node);
 				}
 			}
 		}
@@ -135,10 +135,10 @@ public class Transformation
 		return result;
 	}
 
-	public List<InstructionNode> GetPostorder(InstructionNode tree)
+	public List<Node> GetPostorder(Node tree)
 	{
-		var result = new List<InstructionNode>();
-		var contains = new HashSet<InstructionNode>();
+		var result = new List<Node>();
+		var contains = new HashSet<Node>();
 
 		var list = GetPreorder(tree);
 
@@ -155,7 +155,7 @@ public class Transformation
 				{
 					if (operand.IsInstruction)
 					{
-						if (!contains.Contains(operand.InstructionNode))
+						if (!contains.Contains(operand.Node))
 						{
 							children = false;
 							break;
@@ -215,10 +215,10 @@ public class Transformation
 		return result;
 	}
 
-	public List<Method> GetAllInstructionNodeMethods(InstructionNode tree)
+	public List<Method> GetAllNodeMethods(Node tree)
 	{
 		var result = new List<Method>();
-		var worklist = new Stack<InstructionNode>();
+		var worklist = new Stack<Node>();
 
 		worklist.Push(tree);
 
@@ -230,7 +230,7 @@ public class Transformation
 			{
 				if (operand.IsInstruction)
 				{
-					worklist.Push(operand.InstructionNode);
+					worklist.Push(operand.Node);
 				}
 				if (operand.IsMethod)
 				{
@@ -242,10 +242,10 @@ public class Transformation
 		return result;
 	}
 
-	public List<Operand> GetAllOperands(InstructionNode tree)
+	public List<Operand> GetAllOperands(Node tree)
 	{
 		var result = new List<Operand>();
-		var worklistNode = new Stack<InstructionNode>();
+		var worklistNode = new Stack<Node>();
 		var worklistMethod = new Stack<Method>();
 
 		worklistNode.Push(tree);
@@ -260,7 +260,7 @@ public class Transformation
 				{
 					if (operand.IsInstruction)
 					{
-						worklistNode.Push(operand.InstructionNode);
+						worklistNode.Push(operand.Node);
 					}
 					else if (operand.IsMethod)
 					{

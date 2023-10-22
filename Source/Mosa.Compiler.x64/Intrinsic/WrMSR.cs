@@ -10,9 +10,9 @@ namespace Mosa.Compiler.x64.Intrinsic;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Compiler.x64.Intrinsic::WrMSR")]
-	private static void WrMSR(Context context, TransformContext transformContext)
+	private static void WrMSR(Context context, Transform transform)
 	{
-		transformContext.SplitOperand(context.Operand2, out Operand resultLow, out Operand resultHigh);
+		transform.SplitOperand(context.Operand2, out Operand resultLow, out Operand resultHigh);
 
 		context.SetInstruction(X64.WrMSR, null, context.Operand1, resultLow, resultHigh);
 	}

@@ -14,7 +14,7 @@ public sealed class Shl32 : BaseAddressModeTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		AddressModeConversion(context, X64.Mov32);
 	}

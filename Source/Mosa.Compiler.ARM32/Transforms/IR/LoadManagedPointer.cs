@@ -15,7 +15,7 @@ public sealed class LoadManagedPointer : BaseIRTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		Debug.Assert(!context.Result.IsR4);
 		Debug.Assert(!context.Result.IsR8);

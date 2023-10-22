@@ -54,7 +54,7 @@ public class ExitSSAStage : BaseMethodCompilerStage
 	/// Processes the phi instruction.
 	/// </summary>
 	/// <param name="node">The context.</param>
-	private void ProcessPhiInstruction(InstructionNode node)
+	private void ProcessPhiInstruction(Node node)
 	{
 		var sourceBlocks = node.PhiBlocks;
 

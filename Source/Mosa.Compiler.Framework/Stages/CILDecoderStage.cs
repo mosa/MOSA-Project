@@ -103,8 +103,6 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 	private TraceLog trace;
 
-	//private readonly TransformContext TransformContext = new TransformContext();
-
 	#endregion Data Members
 
 	#region Overrides Methods
@@ -411,7 +409,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		}
 	}
 
-	private bool IsSourceAndTargetWithinSameTryOrException(InstructionNode node)
+	private bool IsSourceAndTargetWithinSameTryOrException(Node node)
 	{
 		var leaveLabel = TraverseBackToNativeBlock(node.Block).Label;
 		var targetLabel = TraverseBackToNativeBlock(node.BranchTargets[0]).Label;
@@ -477,7 +475,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 				if (!entry.IsLabelWithinTry(label))
 					break;
 
-				var flowNode = new InstructionNode(IRInstruction.Flow, target);
+				var flowNode = new Node(IRInstruction.Flow, target);
 
 				node.Insert(flowNode);
 
@@ -999,7 +997,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		}
 	}
 
-	private static void UpdateLabel(InstructionNode node, int label, InstructionNode endNode)
+	private static void UpdateLabel(Node node, int label, Node endNode)
 	{
 		while (node != endNode)
 		{
@@ -3540,7 +3538,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var elementOffset = CalculateArrayElementOffset(context, size, index);
 		var totalElementOffset = CalculateTotalArrayOffset(context, elementOffset);
 
-		context.AppendInstruction(MethodCompiler.TransformContext.AddInstruction, result, array, totalElementOffset);
+		context.AppendInstruction(MethodCompiler.Transform.AddInstruction, result, array, totalElementOffset);
 
 		PushStack(stack, new StackEntry(result));
 
@@ -5506,7 +5504,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		{
 			context.RemoveOperand(0);
 
-			intrinsic(context, MethodCompiler.TransformContext);
+			intrinsic(context, MethodCompiler.Transform);
 
 			return true;
 		}
@@ -5581,7 +5579,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		var fixedOffset = Operand.CreateConstant32(Architecture.NativePointerSize);
 		var arrayElement = MethodCompiler.VirtualRegisters.AllocateNativeInteger();
 
-		context.AppendInstruction(MethodCompiler.TransformContext.AddInstruction, arrayElement, elementOffset, fixedOffset);
+		context.AppendInstruction(MethodCompiler.Transform.AddInstruction, arrayElement, elementOffset, fixedOffset);
 
 		return arrayElement;
 	}

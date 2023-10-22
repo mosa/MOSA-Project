@@ -18,7 +18,7 @@ public sealed class Mulsd : BaseTransform
 
 	public override int Priority => 10;
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (!IsVirtualRegister(context.Operand1))
 			return false;
@@ -35,7 +35,7 @@ public sealed class Mulsd : BaseTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var result = context.Result;
 

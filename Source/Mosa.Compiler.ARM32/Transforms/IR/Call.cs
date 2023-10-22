@@ -14,7 +14,7 @@ public sealed class Call : BaseIRTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		if (context.Result?.IsInt64 == true)
 		{

@@ -16,7 +16,7 @@ public sealed class And32ByMax : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (!context.Operand2.IsResolvedConstant)
 			return false;
@@ -30,7 +30,7 @@ public sealed class And32ByMax : BaseTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var result = context.Result;
 
@@ -50,7 +50,7 @@ public sealed class And32ByMax_v1 : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (!context.Operand1.IsResolvedConstant)
 			return false;
@@ -64,7 +64,7 @@ public sealed class And32ByMax_v1 : BaseTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var result = context.Result;
 

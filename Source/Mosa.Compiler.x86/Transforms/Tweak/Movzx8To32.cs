@@ -15,7 +15,7 @@ public sealed class Movzx8To32 : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (!context.Operand1.IsCPURegister)
 			return false;
@@ -23,7 +23,7 @@ public sealed class Movzx8To32 : BaseTransform
 		return !(context.Operand1.Register != CPURegister.ESI && context.Operand1.Register != CPURegister.EDI);
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		Debug.Assert(context.Result.IsCPURegister);
 

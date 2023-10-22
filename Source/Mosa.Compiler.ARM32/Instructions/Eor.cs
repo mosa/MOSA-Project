@@ -21,7 +21,7 @@ public sealed class Eor : ARM32Instruction
 
 	public override bool IsCarryFlagUsed => true;
 
-	public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
+	public override void Emit(Node node, OpcodeEncoder opcodeEncoder)
 	{
 		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 2);

@@ -11,7 +11,7 @@ public sealed class GetLow32Register : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (transform.AreCPURegistersAllocated)
 			return false;
@@ -28,7 +28,7 @@ public sealed class GetLow32Register : BaseTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		context.SetInstruction(IRInstruction.Move32, context.Result, context.Operand1);
 	}

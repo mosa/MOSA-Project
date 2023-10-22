@@ -8,7 +8,7 @@ public sealed class StoreLoadParamR8 : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		var previous = GetPreviousNodeUntil(context, IRInstruction.LoadParamR8, transform.Window, context.Operand2);
 
@@ -21,7 +21,7 @@ public sealed class StoreLoadParamR8 : BaseTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		context.SetNop();
 	}

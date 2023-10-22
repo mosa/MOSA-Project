@@ -201,7 +201,7 @@ public abstract class BaseArchitecture
 	/// <param name="node">The node.</param>
 	/// <returns>
 	///   <c>true</c> if [is parameter store] [the specified context]; otherwise, <c>false</c>.</returns>
-	public abstract bool IsParameterStore(InstructionNode node, out Operand operand);
+	public abstract bool IsParameterStore(Node node, out Operand operand);
 
 	/// <summary>
 	/// Determines whether [is parameter load] [the specified context].
@@ -209,7 +209,7 @@ public abstract class BaseArchitecture
 	/// <param name="node">The node.</param>
 	/// <returns>
 	///   <c>true</c> if [is parameter load] [the specified context]; otherwise, <c>false</c>.</returns>
-	public abstract bool IsParameterLoad(InstructionNode node, out Operand operand);
+	public abstract bool IsParameterLoad(Node node, out Operand operand);
 
 	/// <summary>
 	/// Gets the platform intrinsic method.

@@ -33,9 +33,9 @@ public class OptimizationStage : BaseTransformStage
 		EnableBlockOptimizations = true;
 	}
 
-	protected override void CustomizeTransform(TransformContext transformContext)
+	protected override void CustomizeTransform(Transform transform)
 	{
-		transformContext.SetStageOptions(LowerTo32 && MosaSettings.LongExpansion && Is32BitPlatform);
-		transformContext.AddManager(CodeMotion);
+		transform.SetStageOptions(LowerTo32 && MosaSettings.LongExpansion && Is32BitPlatform);
+		transform.AddManager(CodeMotion);
 	}
 }

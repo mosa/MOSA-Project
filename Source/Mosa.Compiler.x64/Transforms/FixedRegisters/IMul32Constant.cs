@@ -14,12 +14,12 @@ public sealed class IMul32Constant : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		return context.Operand2.IsConstant;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var operand2 = context.Operand2;
 

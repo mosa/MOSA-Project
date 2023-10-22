@@ -11,7 +11,7 @@ public sealed class Throw : BaseExceptionTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var method = transform.Compiler.PlatformInternalRuntimeType.FindMethodByName("ExceptionHandler");
 

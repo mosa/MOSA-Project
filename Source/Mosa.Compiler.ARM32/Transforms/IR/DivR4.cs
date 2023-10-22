@@ -14,7 +14,7 @@ public sealed class DivR4 : BaseIRTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		Translate(transform, context, ARM32.Dvf, true);
 	}

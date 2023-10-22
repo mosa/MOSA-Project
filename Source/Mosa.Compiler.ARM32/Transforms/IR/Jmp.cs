@@ -14,7 +14,7 @@ public sealed class Jmp : BaseIRTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		context.ReplaceInstruction(ARM32.B);
 		context.ConditionCode = ConditionCode.Always;

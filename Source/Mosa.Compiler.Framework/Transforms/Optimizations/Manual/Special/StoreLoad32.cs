@@ -8,7 +8,7 @@ public sealed class StoreLoad32 : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (!context.Operand2.IsLocalStack)
 			return false;
@@ -41,7 +41,7 @@ public sealed class StoreLoad32 : BaseTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var load = context.Operand2.Uses[0] != context.Node
 			? context.Operand2.Uses[0]

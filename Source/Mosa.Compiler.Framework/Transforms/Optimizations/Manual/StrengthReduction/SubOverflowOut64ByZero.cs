@@ -13,7 +13,7 @@ public sealed class SubOverflowOut64ByZero : BaseTransform
 
 	public override int Priority => 80;
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (!context.Operand2.IsResolvedConstant)
 			return false;
@@ -24,7 +24,7 @@ public sealed class SubOverflowOut64ByZero : BaseTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var result = context.Result;
 		var result2 = context.Result2;
@@ -46,7 +46,7 @@ public sealed class SubOverflowOut64ByZero2 : BaseTransform
 
 	public override int Priority => 80;
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (!context.Operand1.IsResolvedConstant)
 			return false;
@@ -57,7 +57,7 @@ public sealed class SubOverflowOut64ByZero2 : BaseTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var result = context.Result;
 		var result2 = context.Result2;

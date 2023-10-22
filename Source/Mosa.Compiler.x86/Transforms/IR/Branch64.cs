@@ -14,7 +14,7 @@ public sealed class Branch64 : BaseIRTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		transform.SplitOperand(context.Operand1, out var op1L, out var op1H);
 		transform.SplitOperand(context.Operand2, out var op2L, out var op2H);

@@ -20,7 +20,7 @@ public class RegisterAllocatorEnvironment : BaseLivenessAnalysisEnvironment
 		return operand.IsCPURegister ? operand.Register.Index : operand.Index + PhysicalRegisterCount - 1;
 	}
 
-	public override IEnumerable<int> GetInputs(InstructionNode node)
+	public override IEnumerable<int> GetInputs(Node node)
 	{
 		foreach (var operand in node.Operands)
 		{
@@ -34,7 +34,7 @@ public class RegisterAllocatorEnvironment : BaseLivenessAnalysisEnvironment
 		}
 	}
 
-	public override IEnumerable<int> GetOutputs(InstructionNode node)
+	public override IEnumerable<int> GetOutputs(Node node)
 	{
 		foreach (var operand in node.Results)
 		{
@@ -48,7 +48,7 @@ public class RegisterAllocatorEnvironment : BaseLivenessAnalysisEnvironment
 		}
 	}
 
-	public override IEnumerable<int> GetKills(InstructionNode node)
+	public override IEnumerable<int> GetKills(Node node)
 	{
 		if (node.Instruction.IsCall || node.Instruction == IRInstruction.KillAll)
 		{

@@ -13,12 +13,12 @@ public sealed class StoreCompound : BaseCompoundTransform
 
 	public override int Priority => -10;
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		CopyCompound(transform, context, context.Operand1, context.Operand2, transform.StackFrame, context.Operand3, context.Operand3);
 	}

@@ -14,12 +14,12 @@ public sealed class Prologue : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		return transform.MethodCompiler.IsLocalStackFinalized;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		if (!transform.MethodCompiler.IsStackFrameRequired)
 			return;

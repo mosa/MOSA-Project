@@ -4,19 +4,19 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions;
 
 public static class InstructionParser
 {
-	public static InstructionNode Parse(List<Token> tokens)
+	public static Node Parse(List<Token> tokens)
 	{
 		if (tokens[0].TokenType != TokenType.OpenParens)
 		{
 			tokens.Insert(0, new Token(TokenType.OpenParens, 0));
 			tokens.Add(new Token(TokenType.CloseParens, 0));
 		}
-		return ParseInstructionNode(tokens, 0, 0).node;
+		return ParseNode(tokens, 0, 0).node;
 	}
 
-	private static (InstructionNode node, int end, int nodeNbr) ParseInstructionNode(List<Token> tokens, int start, int nodeNbr)
+	private static (Node node, int end, int nodeNbr) ParseNode(List<Token> tokens, int start, int nodeNbr)
 	{
-		var node = new InstructionNode { NodeNbr = nodeNbr };
+		var node = new Node { NodeNbr = nodeNbr };
 		var length = tokens.Count;
 
 		for (var index = start; index < length; index++)
@@ -32,7 +32,7 @@ public static class InstructionParser
 				}
 				else
 				{
-					var childNode = ParseInstructionNode(tokens, index, nodeNbr + 1);
+					var childNode = ParseNode(tokens, index, nodeNbr + 1);
 
 					index = childNode.end;
 					nodeNbr = childNode.nodeNbr;

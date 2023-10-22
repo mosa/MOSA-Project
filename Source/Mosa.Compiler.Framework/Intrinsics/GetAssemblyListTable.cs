@@ -8,8 +8,8 @@ namespace Mosa.Compiler.Framework.Intrinsics;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Runtime.Intrinsic::GetAssemblyListTable")]
-	private static void GetAssemblyListTable(Context context, TransformContext transformContext)
+	private static void GetAssemblyListTable(Context context, Transform transform)
 	{
-		context.SetInstruction(transformContext.MoveInstruction, context.Result, Operand.CreateLabel(Metadata.AssembliesTable, transformContext.Is32BitPlatform));
+		context.SetInstruction(transform.MoveInstruction, context.Result, Operand.CreateLabel(Metadata.AssembliesTable, transform.Is32BitPlatform));
 	}
 }

@@ -10,7 +10,7 @@ namespace Mosa.Compiler.x64.Intrinsic;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Compiler.x64.Intrinsic::Pause")]
-	private static void Pause(Context context, TransformContext transformContext)
+	private static void Pause(Context context, Transform transform)
 	{
 		context.SetInstruction(X64.Pause);
 	}

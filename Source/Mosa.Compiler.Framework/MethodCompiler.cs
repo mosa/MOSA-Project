@@ -27,7 +27,7 @@ public sealed class MethodCompiler
 
 	private readonly NotifyTraceLogHandler NotifyTranformTraceHandler;
 
-	public readonly TransformContext TransformContext = new();
+	public readonly Transform Transform = new();
 
 	#endregion Data Members
 
@@ -273,8 +273,8 @@ public sealed class MethodCompiler
 		MethodData.Counters.Update("ExecutionTime.Setup.Ticks", (int)Stopwatch.ElapsedTicks);
 		MethodData.Counters.Update("ExecutionTime.Setup.MicroSeconds", Stopwatch.Elapsed.Microseconds);
 
-		TransformContext.SetCompiler(compiler);
-		TransformContext.SetMethodCompiler(this);
+		Transform.SetCompiler(compiler);
+		Transform.SetMethodCompiler(this);
 	}
 
 	#endregion Construction
@@ -364,7 +364,7 @@ public sealed class MethodCompiler
 
 			try
 			{
-				TransformContext.SetStage(stage);
+				Transform.SetStage(stage);
 
 				stage.Setup(this, i);
 				stage.Execute();
@@ -600,7 +600,7 @@ public sealed class MethodCompiler
 
 		var start = new Context(startBlock);
 
-		stub(start, TransformContext);
+		stub(start, Transform);
 
 		if (NotifyInstructionTraceHandler != null)
 		{

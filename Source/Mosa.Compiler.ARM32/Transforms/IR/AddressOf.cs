@@ -15,7 +15,7 @@ public sealed class AddressOf : BaseIRTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		Debug.Assert(context.Operand1.IsOnStack || context.Operand1.IsStaticField);
 

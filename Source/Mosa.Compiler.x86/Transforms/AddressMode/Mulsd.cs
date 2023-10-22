@@ -14,7 +14,7 @@ public sealed class Mulsd : BaseAddressModeTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		AddressModeConversionCummulative(context, X86.Movsd);
 	}

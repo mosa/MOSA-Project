@@ -14,7 +14,7 @@ namespace Mosa.Compiler.Framework.Transforms.Runtime
 
 		#region Helpers
 
-		public static MosaMethod GetVMCallMethod(TransformContext transform, string vmcall)
+		public static MosaMethod GetVMCallMethod(Transform transform, string vmcall)
 		{
 			var method = transform.Compiler.InternalRuntimeType.FindMethodByName(vmcall)
 				?? transform.Compiler.PlatformInternalRuntimeType.FindMethodByName(vmcall);
@@ -26,7 +26,7 @@ namespace Mosa.Compiler.Framework.Transforms.Runtime
 			return method;
 		}
 
-		public static void SetVMCall(TransformContext transform, Context context, string vmcall, Operand result, List<Operand> operands)
+		public static void SetVMCall(Transform transform, Context context, string vmcall, Operand result, List<Operand> operands)
 		{
 			var method = GetVMCallMethod(transform, vmcall);
 			var symbol = Operand.CreateLabel(method, transform.Is32BitPlatform);

@@ -8,12 +8,12 @@ public sealed class IfThenElse32Same : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		return AreSame(context.Operand2, context.Operand3);
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		context.SetInstruction(IRInstruction.Move32, context.Result, context.Operand1);
 	}

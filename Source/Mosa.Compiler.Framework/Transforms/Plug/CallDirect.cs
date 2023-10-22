@@ -13,12 +13,12 @@ public sealed class CallDirect : BasePlugTransform
 
 	public override int Priority => 100;
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		return IsPlugged(context, transform);
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		Plug(context, transform);
 	}

@@ -45,7 +45,7 @@ public class GCEnvironment : BaseLivenessAnalysisEnvironment
 		return false;
 	}
 
-	public override IEnumerable<int> GetInputs(InstructionNode node)
+	public override IEnumerable<int> GetInputs(Node node)
 	{
 		if (node.Instruction == IRInstruction.KillAll || node.Instruction == IRInstruction.KillAllExcept || node.Instruction == IRInstruction.Kill)
 			yield break;
@@ -59,7 +59,7 @@ public class GCEnvironment : BaseLivenessAnalysisEnvironment
 		}
 	}
 
-	public override IEnumerable<int> GetOutputs(InstructionNode node)
+	public override IEnumerable<int> GetOutputs(Node node)
 	{
 		if (node.Instruction == IRInstruction.KillAll || node.Instruction == IRInstruction.KillAllExcept || node.Instruction == IRInstruction.Kill)
 			yield break;
@@ -73,7 +73,7 @@ public class GCEnvironment : BaseLivenessAnalysisEnvironment
 		}
 	}
 
-	public override IEnumerable<int> GetKills(InstructionNode node)
+	public override IEnumerable<int> GetKills(Node node)
 	{
 		if (node.Instruction.IsCall || node.Instruction == IRInstruction.KillAll)
 		{

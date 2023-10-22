@@ -12,7 +12,7 @@ public abstract class BaseIRTransform : BaseARM32Transform
 
 	#region Overrides
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		return true;
 	}

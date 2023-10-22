@@ -8,7 +8,7 @@ public sealed class Phi64Dead : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (context.ResultCount == 0)
 			return true;
@@ -25,7 +25,7 @@ public sealed class Phi64Dead : BaseTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		context.SetNop();
 	}

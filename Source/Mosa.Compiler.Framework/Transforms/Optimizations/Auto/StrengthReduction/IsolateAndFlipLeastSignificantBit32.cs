@@ -14,7 +14,7 @@ public sealed class IsolateAndFlipLeastSignificantBit32 : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (!context.Operand1.IsVirtualRegister)
 			return false;
@@ -55,7 +55,7 @@ public sealed class IsolateAndFlipLeastSignificantBit32 : BaseTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var result = context.Result;
 
@@ -80,7 +80,7 @@ public sealed class IsolateAndFlipLeastSignificantBit32_v1 : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (!context.Operand1.IsResolvedConstant)
 			return false;
@@ -121,7 +121,7 @@ public sealed class IsolateAndFlipLeastSignificantBit32_v1 : BaseTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var result = context.Result;
 

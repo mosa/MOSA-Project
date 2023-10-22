@@ -10,9 +10,9 @@ namespace Mosa.Compiler.x86.Intrinsic;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Compiler.x86.Intrinsic::In16")]
-	private static void In16(Context context, TransformContext transformContext)
+	private static void In16(Context context, Transform transform)
 	{
-		var v1 = transformContext.VirtualRegisters.Allocate32();
+		var v1 = transform.VirtualRegisters.Allocate32();
 
 		var result = context.Result;
 

@@ -14,7 +14,7 @@ public sealed class Store64 : BaseIRTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		transform.SplitOperand(context.Operand1, out var baseLow, out var baseHigh);
 		transform.SplitOperand(context.Operand2, out var lowOffset, out var highOffset);

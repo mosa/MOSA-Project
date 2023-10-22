@@ -14,7 +14,7 @@ public sealed class AddOverflowOut64 : BaseIRTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var result = context.Result;
 		var result2 = context.Result2;

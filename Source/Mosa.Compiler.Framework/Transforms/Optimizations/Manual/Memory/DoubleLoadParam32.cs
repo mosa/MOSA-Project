@@ -8,7 +8,7 @@ public sealed class DoubleLoadParam32 : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		var previous = GetPreviousNodeUntil(context, IRInstruction.LoadParam32, transform.Window, context.Result);
 
@@ -21,7 +21,7 @@ public sealed class DoubleLoadParam32 : BaseTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var previous = GetPreviousNodeUntil(context, IRInstruction.LoadParam32, transform.Window);
 

@@ -14,7 +14,7 @@ public sealed class Movsd : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (!context.Result.IsCPURegister)
 			return false;
@@ -25,7 +25,7 @@ public sealed class Movsd : BaseTransform
 		return context.Result.Register == context.Operand1.Register;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		context.Empty();
 	}

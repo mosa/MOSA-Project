@@ -11,7 +11,7 @@ public sealed class GetLow32From64 : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (!transform.Is32BitPlatform)
 			return false;
@@ -42,7 +42,7 @@ public sealed class GetLow32From64 : BaseTransform
 		return false;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		context.SetInstruction(IRInstruction.Move32, context.Result, context.Operand1);
 	}

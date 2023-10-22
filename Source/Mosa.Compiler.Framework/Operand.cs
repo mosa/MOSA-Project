@@ -41,7 +41,7 @@ public sealed partial class Operand
 
 	public LocationType Location { get; private set; }
 
-	public ConstantType Constant { get; private set; }
+	public ConstantType Constant { get; private set; } = ConstantType.Default;
 
 	public ElementType Element { get; private set; }
 
@@ -57,7 +57,7 @@ public sealed partial class Operand
 
 	public uint ConstantUnsigned32 { get => (uint)ConstantUnsigned64; private set => ConstantUnsigned64 = value; }
 
-	public List<InstructionNode> Definitions { get; }
+	public readonly List<Node> Definitions = new();
 
 	public MosaField Field { get; private set; }
 
@@ -133,7 +133,7 @@ public sealed partial class Operand
 
 	public bool IsObject => Primitive == PrimitiveType.Object;
 
-	public bool IsResolved { get; internal set; }    // FUTURE: make set private
+	public bool IsResolved { get; internal set; } = true;
 
 	public bool IsResolvedConstant => IsConstant && IsResolved;
 
@@ -181,7 +181,7 @@ public sealed partial class Operand
 
 	public MosaType Type { get; private set; }
 
-	public List<InstructionNode> Uses { get; }
+	public readonly List<Node> Uses = new();
 
 	public bool IsDefined => Definitions.Count != 0;
 
@@ -299,19 +299,6 @@ public sealed partial class Operand
 	public static readonly Operand ConstantR8_1 = CreateConstantR8Internal(1d);
 
 	#endregion Static Constants
-
-	#region Construction
-
-	private Operand()
-	{
-		Definitions = new List<InstructionNode>();
-		Uses = new List<InstructionNode>();
-		Constant = ConstantType.Default;
-
-		IsResolved = true;
-	}
-
-	#endregion Construction
 
 	#region Factory Methods - Constants
 
@@ -568,18 +555,6 @@ public sealed partial class Operand
 	#endregion Factory Methods - Constants
 
 	#region Factory Methods - Operands
-
-	public static Operand CreateVirtualRegister(Operand operand, int index)
-	{
-		Debug.Assert(operand.Type == null);
-
-		return new Operand()
-		{
-			Location = LocationType.VirtualRegister,
-			Primitive = operand.Primitive,
-			Index = index
-		};
-	}
 
 	public static Operand CreateCPURegister(Operand operand, PhysicalRegister register)
 	{

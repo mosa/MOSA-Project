@@ -8,14 +8,14 @@ namespace Mosa.Compiler.Framework.Intrinsics;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Runtime.Intrinsic::LoadR4")]
-	private static void LoadR4(Context context, TransformContext transformContext)
+	private static void LoadR4(Context context, Transform transform)
 	{
 		var instruction = IRInstruction.LoadR4;
 
 		var result = context.Result;
 		var operand1 = context.Operand1;
-		var operand2 = context.OperandCount == 2 ? context.Operand2 : transformContext.ConstantZero;
+		var operand2 = context.OperandCount == 2 ? context.Operand2 : transform.ConstantZero;
 
-		LoadStore.Set(context, transformContext, instruction, result, operand1, operand2);
+		LoadStore.Set(context, transform, instruction, result, operand1, operand2);
 	}
 }

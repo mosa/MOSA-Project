@@ -213,16 +213,16 @@ public sealed class SparseConditionalConstantPropagation
 
 	private readonly Dictionary<Operand, VariableState> variableStates;
 
-	private readonly Stack<InstructionNode> instructionWorkList;
+	private readonly Stack<Node> instructionWorkList;
 	private readonly Stack<BasicBlock> blockWorklist;
 
-	private readonly HashSet<InstructionNode> executedStatements;
+	private readonly HashSet<Node> executedStatements;
 
 	private readonly BasicBlocks BasicBlocks;
 	private readonly CreateTraceHandler CreateTrace;
 	private readonly TraceLog MainTrace;
 
-	private readonly KeyedList<BasicBlock, InstructionNode> phiStatements;
+	private readonly KeyedList<BasicBlock, Node> phiStatements;
 
 	private readonly bool Is32BitPlatform;
 
@@ -237,10 +237,10 @@ public sealed class SparseConditionalConstantPropagation
 		Is32BitPlatform = is32BitPlatform;
 
 		variableStates = new Dictionary<Operand, VariableState>();
-		instructionWorkList = new Stack<InstructionNode>();
+		instructionWorkList = new Stack<Node>();
 		blockWorklist = new Stack<BasicBlock>();
-		phiStatements = new KeyedList<BasicBlock, InstructionNode>();
-		executedStatements = new HashSet<InstructionNode>();
+		phiStatements = new KeyedList<BasicBlock, Node>();
+		executedStatements = new HashSet<Node>();
 
 		MainTrace = CreateTrace("SparseConditionalConstantPropagation", 5);
 
@@ -348,7 +348,7 @@ public sealed class SparseConditionalConstantPropagation
 		blockWorklist.Push(block);
 	}
 
-	private void AddInstruction(InstructionNode node)
+	private void AddInstruction(Node node)
 	{
 		instructionWorkList.Push(node);
 	}
@@ -397,7 +397,7 @@ public sealed class SparseConditionalConstantPropagation
 		}
 	}
 
-	private void ProcessInstructionsContinuiously(InstructionNode node)
+	private void ProcessInstructionsContinuiously(Node node)
 	{
 		// instead of adding items to the worklist, the whole block will be processed
 		for (; !node.IsBlockEndInstruction; node = node.Next)
@@ -434,7 +434,7 @@ public sealed class SparseConditionalConstantPropagation
 		}
 	}
 
-	private bool ProcessInstruction(InstructionNode node)
+	private bool ProcessInstruction(Node node)
 	{
 		//MainTrace?.Log(node.ToString());
 
@@ -630,7 +630,7 @@ public sealed class SparseConditionalConstantPropagation
 		return null;
 	}
 
-	private void CompareOperation(InstructionNode node)
+	private void CompareOperation(Node node)
 	{
 		var result = GetVariableState(node.Result);
 
@@ -709,7 +709,7 @@ public sealed class SparseConditionalConstantPropagation
 		AddInstruction(variable);
 	}
 
-	private void Jmp(InstructionNode node)
+	private void Jmp(Node node)
 	{
 		if (node.BranchTargets == null || node.BranchTargetsCount == 0)
 			return;
@@ -717,7 +717,7 @@ public sealed class SparseConditionalConstantPropagation
 		Branch(node);
 	}
 
-	private void Move(InstructionNode node)
+	private void Move(Node node)
 	{
 		if (!node.Result.IsVirtualRegister)
 			return;
@@ -785,7 +785,7 @@ public sealed class SparseConditionalConstantPropagation
 		}
 	}
 
-	private void Call(InstructionNode node)
+	private void Call(Node node)
 	{
 		if (node.ResultCount == 0)
 			return;
@@ -800,7 +800,7 @@ public sealed class SparseConditionalConstantPropagation
 		SetReferenceOverdefined(result);
 	}
 
-	private void NewObject(InstructionNode node)
+	private void NewObject(Node node)
 	{
 		if (node.ResultCount == 0)
 			return;
@@ -813,7 +813,7 @@ public sealed class SparseConditionalConstantPropagation
 		SetReferenceNotNull(result);
 	}
 
-	private void SignOrZeroExtend(InstructionNode node)
+	private void SignOrZeroExtend(Node node)
 	{
 		var result = GetVariableState(node.Result);
 
@@ -865,7 +865,7 @@ public sealed class SparseConditionalConstantPropagation
 		}
 	}
 
-	private void IntegerOperation(InstructionNode node)
+	private void IntegerOperation(Node node)
 	{
 		var result = GetVariableState(node.Result);
 
@@ -1064,14 +1064,14 @@ public sealed class SparseConditionalConstantPropagation
 		return false;
 	}
 
-	private void Load(InstructionNode node)
+	private void Load(Node node)
 	{
 		var result = GetVariableState(node.Result);
 		UpdateToOverDefined(result);
 		SetReferenceOverdefined(result);
 	}
 
-	private void AddressOf(InstructionNode node)
+	private void AddressOf(Node node)
 	{
 		var result = GetVariableState(node.Result);
 		var operand1 = GetVariableState(node.Operand1);
@@ -1082,7 +1082,7 @@ public sealed class SparseConditionalConstantPropagation
 		SetReferenceOverdefined(operand1);
 	}
 
-	private void FinallyStart(InstructionNode node)
+	private void FinallyStart(Node node)
 	{
 		var result = GetVariableState(node.Result);
 
@@ -1090,7 +1090,7 @@ public sealed class SparseConditionalConstantPropagation
 		SetReferenceOverdefined(result);
 	}
 
-	private void Default(InstructionNode node)
+	private void Default(Node node)
 	{
 		if (node.ResultCount == 0)
 			return;
@@ -1109,7 +1109,7 @@ public sealed class SparseConditionalConstantPropagation
 		}
 	}
 
-	private bool CompareBranch(InstructionNode node)
+	private bool CompareBranch(Node node)
 	{
 		var operand1 = GetVariableState(node.Operand1);
 		var operand2 = GetVariableState(node.Operand2);
@@ -1242,7 +1242,7 @@ public sealed class SparseConditionalConstantPropagation
 		};
 	}
 
-	private void Branch(InstructionNode node)
+	private void Branch(Node node)
 	{
 		//Debug.Assert(node.BranchTargets.Length == 1);
 
@@ -1252,13 +1252,13 @@ public sealed class SparseConditionalConstantPropagation
 		}
 	}
 
-	private void Switch(InstructionNode node)
+	private void Switch(Node node)
 	{
 		// no optimization attempted
 		Branch(node);
 	}
 
-	private void IfThenElse(InstructionNode node)
+	private void IfThenElse(Node node)
 	{
 		MainTrace?.Log(node.ToString());
 
@@ -1300,7 +1300,7 @@ public sealed class SparseConditionalConstantPropagation
 		}
 	}
 
-	private void Phi(InstructionNode node)
+	private void Phi(Node node)
 	{
 		MainTrace?.Log(node.ToString());
 

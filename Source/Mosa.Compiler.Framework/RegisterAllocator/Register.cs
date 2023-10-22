@@ -40,7 +40,7 @@ public sealed class Register
 
 	public Operand ParamOperand;
 
-	public InstructionNode ParamLoadNode;
+	public Node ParamLoadNode;
 
 	public bool IsParamLoadOnly => IsParamLoad && !IsParamStore;
 

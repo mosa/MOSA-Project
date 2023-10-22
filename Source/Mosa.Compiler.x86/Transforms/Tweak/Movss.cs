@@ -14,12 +14,12 @@ public sealed class Movss : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		return context.Operand1.IsCPURegister && context.Result.Register == context.Operand1.Register;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		context.Empty();
 	}

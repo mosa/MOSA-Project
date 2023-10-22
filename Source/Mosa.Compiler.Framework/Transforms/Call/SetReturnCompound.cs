@@ -11,12 +11,12 @@ public sealed class SetReturnCompound : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var offset = Operand.CreateConstant32(transform.Architecture.OffsetOfFirstParameter);
 		context.SetInstruction(IRInstruction.StoreCompound, null, transform.StackFrame, offset, context.Operand1);
