@@ -68,10 +68,10 @@ public static class Scheduler
 
 	public static void ClockInterrupt(Pointer stackSate)
 	{
-		Interlocked.Increment(ref clockTicks);
-
 		if (!Enabled)
 			return;
+
+		Interlocked.Increment(ref clockTicks);
 
 		// Save current stack state
 		var threadID = GetCurrentThreadID();
