@@ -186,6 +186,8 @@ public static class Scheduler
 
 	private static void CreateThread(Pointer methodAddress, uint pages, uint threadID)
 	{
+		Debug.WriteLine("Scheduler:CreateThread(Pointer, uint, uint)");
+
 		var thread = Threads[threadID];
 
 		var stack = VirtualPageAllocator.ReservePages(pages);
@@ -197,6 +199,8 @@ public static class Scheduler
 		thread.StackBottom = stack;
 		thread.StackTop = stackTop;
 		thread.StackStatePointer = bottom;
+
+		Debug.WriteLine("Scheduler:CreateThread(Pointer, uint, uint) [Exit]");
 	}
 
 	private static void SaveThreadState(uint threadID, Pointer stackSate)
