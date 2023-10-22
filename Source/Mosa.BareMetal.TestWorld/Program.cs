@@ -20,7 +20,7 @@ public static class Program
 		Debug.WriteLine("Program::Main()");
 		Debug.WriteLine("##PASS##");
 
-		Console.SetCursorPosition(0, 10);
+		Console.SetCursorPosition(0, 8);
 
 		Console.WriteLine("Main loop started...");
 

@@ -70,7 +70,7 @@ public static class Boot
 		{
 			lock (spinlock)
 			{
-				Console.SetCursorPosition(0, 3 + thread);
+				Console.SetCursorPosition(0, 1 + thread);
 				Console.Write("Thread #" + thread + ": " + ticks);
 			}
 		}
