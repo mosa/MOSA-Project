@@ -200,13 +200,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.UnitTests.BareMetal.x8
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.BareMetal.HelloWorld", "Mosa.BareMetal.HelloWorld\Mosa.BareMetal.HelloWorld.csproj", "{6BF93B57-2BCB-4BE7-88B9-F071394B3FA7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.BareMetal.GraphicalWorld", "Mosa.BareMetal.GraphicalWorld\Mosa.BareMetal.GraphicalWorld.csproj", "{F0709818-07C4-4346-A517-739A64AAC930}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.BareMetal.CoolWorld", "Mosa.BareMetal.CoolWorld\Mosa.BareMetal.CoolWorld.csproj", "{F0709818-07C4-4346-A517-739A64AAC930}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.BareMetal.GraphicalWorld.ARM32", "Mosa.BareMetal.GraphicalWorld.ARM32\Mosa.BareMetal.GraphicalWorld.ARM32.csproj", "{3445D589-567A-4902-8C86-F884408F7EDD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.BareMetal.CoolWorld.ARM32", "Mosa.BareMetal.CoolWorld.ARM32\Mosa.BareMetal.CoolWorld.ARM32.csproj", "{3445D589-567A-4902-8C86-F884408F7EDD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.BareMetal.GraphicalWorld.x64", "Mosa.BareMetal.GraphicalWorld.x64\Mosa.BareMetal.GraphicalWorld.x64.csproj", "{BE47BAED-7041-4DFB-B2BF-5CAD69665F03}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.BareMetal.CoolWorld.x64", "Mosa.BareMetal.CoolWorld.x64\Mosa.BareMetal.CoolWorld.x64.csproj", "{BE47BAED-7041-4DFB-B2BF-5CAD69665F03}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.BareMetal.GraphicalWorld.x86", "Mosa.BareMetal.GraphicalWorld.x86\Mosa.BareMetal.GraphicalWorld.x86.csproj", "{31C489FB-8B1F-4F33-8CC6-103BCBD1AA0E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.BareMetal.CoolWorld.x86", "Mosa.BareMetal.CoolWorld.x86\Mosa.BareMetal.CoolWorld.x86.csproj", "{31C489FB-8B1F-4F33-8CC6-103BCBD1AA0E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Plug.Korlib.ARM64", "Mosa.Plug.Korlib.ARM64\Mosa.Plug.Korlib.ARM64.csproj", "{AC9E9FEE-DCCB-481F-AA19-7BBCF2A6CE51}"
 EndProject
@@ -222,7 +222,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Templates", "Templates", "{
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Templates", "Mosa.Templates\Mosa.Templates.csproj", "{29A7CEFB-8051-4C10-9C95-A7011CC5BF0E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.BareMetal.GraphicalWorld.ARM64", "Mosa.BareMetal.GraphicalWorld.ARM64\Mosa.BareMetal.GraphicalWorld.ARM64.csproj", "{0410B744-084D-4932-A462-355CA1B7112A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.BareMetal.CoolWorld.ARM64", "Mosa.BareMetal.CoolWorld.ARM64\Mosa.BareMetal.CoolWorld.ARM64.csproj", "{0410B744-084D-4932-A462-355CA1B7112A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Compiler.Common.xUnit", "Mosa.Compiler.Common.xUnit\Mosa.Compiler.Common.xUnit.csproj", "{4FF48DB2-1F54-434E-9F70-48C74997A9AE}"
 EndProject

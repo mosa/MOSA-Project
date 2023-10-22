@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+	</PropertyGroup>
+
+	<Import Project="../Mosa.BareMetal.targets" />
+
+	<ItemGroup>
+		<ProjectReference Include="..\Mosa.BareMetal.CoolWorld\Mosa.BareMetal.CoolWorld.csproj" />
+		<ProjectReference Include="..\Mosa.Kernel.BareMetal.ARM32\Mosa.Kernel.BareMetal.ARM32.csproj" />
+	</ItemGroup>
+
+</Project>
