@@ -3,6 +3,10 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Starter", "Mosa.Starter\Mosa.Starter.csproj", "{58ABBB25-806D-4057-80E0-5AF297348CCD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Starter.x86", "Mosa.Starter.x86\Mosa.Starter.x86.csproj", "{D2EF0C18-5744-45FF-A49D-4853D3263662}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -10,5 +14,15 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{58ABBB25-806D-4057-80E0-5AF297348CCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58ABBB25-806D-4057-80E0-5AF297348CCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58ABBB25-806D-4057-80E0-5AF297348CCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58ABBB25-806D-4057-80E0-5AF297348CCD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2EF0C18-5744-45FF-A49D-4853D3263662}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2EF0C18-5744-45FF-A49D-4853D3263662}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2EF0C18-5744-45FF-A49D-4853D3263662}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2EF0C18-5744-45FF-A49D-4853D3263662}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
