@@ -8,7 +8,7 @@ public sealed class StoreParam64 : BaseLower32Transform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var offset = context.Operand1;
 		var value = context.Operand2;

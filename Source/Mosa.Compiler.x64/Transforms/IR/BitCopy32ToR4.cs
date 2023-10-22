@@ -14,7 +14,7 @@ public sealed class BitCopy32ToR4 : BaseIRTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		//context.ReplaceInstruction(X64.Movdi32ss);	// TODO
 	}

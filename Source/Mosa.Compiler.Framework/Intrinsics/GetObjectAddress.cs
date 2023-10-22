@@ -9,7 +9,7 @@ internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Runtime.Intrinsic::GetObjectAddress")]
 	[IntrinsicMethod("Mosa.Runtime.Intrinsic::GetValueTypeAddress")]
-	private static void GetObjectAddress(Context context, TransformContext transformContext)
+	private static void GetObjectAddress(Context context, Transform transform)
 	{
 		var result = context.Result;
 		var operand1 = context.Operand1;
@@ -27,6 +27,6 @@ internal static partial class IntrinsicMethods
 			def.Empty();
 		}
 
-		context.SetInstruction(transformContext.MoveInstruction, result, operand1);
+		context.SetInstruction(transform.MoveInstruction, result, operand1);
 	}
 }

@@ -14,7 +14,7 @@ public sealed class GetHigh32 : BaseIRTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		transform.SplitOperand(context.Result, out var resultLow, out _);
 		transform.SplitOperand(context.Operand1, out _, out var op1H);

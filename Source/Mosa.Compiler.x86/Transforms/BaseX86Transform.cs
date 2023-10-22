@@ -12,7 +12,7 @@ namespace Mosa.Compiler.x86.Transforms
 
 		#region Helpers
 
-		public static Operand MoveConstantToFloatRegister(TransformContext transform, Context context, Operand operand)
+		public static Operand MoveConstantToFloatRegister(Transform transform, Context context, Operand operand)
 		{
 			if (!operand.IsConstant)
 				return operand;
@@ -28,7 +28,7 @@ namespace Mosa.Compiler.x86.Transforms
 			return v1;
 		}
 
-		public static Operand MoveConstantToFloatRegister(TransformContext transform, Context context, float value)
+		public static Operand MoveConstantToFloatRegister(Transform transform, Context context, float value)
 		{
 			var label = transform.CreateR4Label(value);
 
@@ -39,7 +39,7 @@ namespace Mosa.Compiler.x86.Transforms
 			return v1;
 		}
 
-		public static Operand MoveConstantToFloatRegister(TransformContext transform, Context context, double value)
+		public static Operand MoveConstantToFloatRegister(Transform transform, Context context, double value)
 		{
 			var label = transform.CreateR8Label(value);
 

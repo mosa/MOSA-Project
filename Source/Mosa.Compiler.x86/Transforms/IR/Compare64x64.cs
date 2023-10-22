@@ -15,7 +15,7 @@ public sealed class Compare64x64 : BaseIRTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		Debug.Assert(context.Operand1 != null && context.Operand2 != null);
 		Debug.Assert(context.Result.IsVirtualRegister);

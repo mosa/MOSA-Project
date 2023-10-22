@@ -14,7 +14,7 @@ public sealed class BitCopyR8To64 : BaseIRTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var operand1 = context.Operand1;
 

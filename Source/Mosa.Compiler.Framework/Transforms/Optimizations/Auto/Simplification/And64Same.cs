@@ -14,7 +14,7 @@ public sealed class And64Same : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (!AreSame(context.Operand1, context.Operand2))
 			return false;
@@ -22,7 +22,7 @@ public sealed class And64Same : BaseTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var result = context.Result;
 

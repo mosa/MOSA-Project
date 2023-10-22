@@ -7,15 +7,15 @@ namespace Mosa.Compiler.Framework;
 /// </summary>
 public static class LoadStore
 {
-	public static void Set(Context context, TransformContext transformContext, BaseInstruction instruction, Operand result, Operand operand1, Operand operand2, Operand operand3 = null)
+	public static void Set(Context context, Transform transform, BaseInstruction instruction, Operand result, Operand operand1, Operand operand2, Operand operand3 = null)
 	{
 		if (operand1.IsResolvedConstant && operand2.IsResolvedConstant)
 		{
-			operand1 = transformContext.Is32BitPlatform
+			operand1 = transform.Is32BitPlatform
 				? Operand.CreateConstant32(operand1.ConstantUnsigned32 + operand2.ConstantUnsigned32)
 				: Operand.CreateConstant64(operand1.ConstantUnsigned64 + operand2.ConstantUnsigned64);
 
-			operand2 = transformContext.ConstantZero;
+			operand2 = transform.ConstantZero;
 		}
 		else if (operand1.IsConstant && !operand2.IsConstant)
 		{
@@ -24,18 +24,18 @@ public static class LoadStore
 			operand2 = swap;
 		}
 
-		if (transformContext.Is32BitPlatform)
+		if (transform.Is32BitPlatform)
 		{
 			if (operand1.IsInt64)
 			{
-				var low = transformContext.VirtualRegisters.Allocate32();
+				var low = transform.VirtualRegisters.Allocate32();
 				context.InsertBefore().SetInstruction(IRInstruction.GetLow32, low, operand1);
 				operand1 = low;
 			}
 
 			if (operand2.IsInt64)
 			{
-				var low = transformContext.VirtualRegisters.Allocate32();
+				var low = transform.VirtualRegisters.Allocate32();
 				context.InsertBefore().SetInstruction(IRInstruction.GetLow32, low, operand2);
 				operand2 = low;
 			}

@@ -8,7 +8,7 @@ public sealed class Branch64LessThanZero : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (context.ConditionCode != ConditionCode.UnsignedLess)
 			return false;
@@ -19,12 +19,12 @@ public sealed class Branch64LessThanZero : BaseTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var target = context.BranchTargets[0];
 
 		context.SetNop();
 
-		TransformContext.UpdatePhiBlock(target);
+		Framework.Transform.UpdatePhiBlock(target);
 	}
 }

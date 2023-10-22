@@ -14,7 +14,7 @@ public sealed class In32 : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		return !(context.Result.IsCPURegister
 				 && context.Operand1.IsCPURegister
@@ -22,13 +22,13 @@ public sealed class In32 : BaseTransform
 				 && (context.Operand1.Register == CPURegister.RDX || context.Operand1.IsConstant));
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var result = context.Result;
 		var operand1 = context.Operand1;
 
 		var rax = Operand.CreateCPURegister64(CPURegister.RAX);
-		var rdx = Operand.CreateCPURegister(operand1, CPURegister.RDX);
+		var rdx = Operand.CreateCPURegister32(CPURegister.RDX);
 
 		context.SetInstruction(X64.Mov64, rdx, operand1);
 		context.AppendInstruction(X64.In32, rax, rdx);

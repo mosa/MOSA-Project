@@ -175,7 +175,7 @@ public static class DelegatePatcher
 	{
 		var start = CreateMethodStructure(methodCompiler);
 
-		start.First.Insert(new InstructionNode(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock));
+		start.First.Insert(new Node(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock));
 	}
 
 	private static BasicBlock CreateMethodStructure(MethodCompiler methodCompiler)

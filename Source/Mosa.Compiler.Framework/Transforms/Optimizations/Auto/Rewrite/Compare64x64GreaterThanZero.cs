@@ -14,7 +14,7 @@ public sealed class Compare64x64GreaterThanZero : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (context.ConditionCode != ConditionCode.UnsignedGreater)
 			return false;
@@ -25,7 +25,7 @@ public sealed class Compare64x64GreaterThanZero : BaseTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var result = context.Result;
 
@@ -46,7 +46,7 @@ public sealed class Compare64x64GreaterThanZero_v1 : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (context.ConditionCode != ConditionCode.UnsignedLess)
 			return false;
@@ -57,7 +57,7 @@ public sealed class Compare64x64GreaterThanZero_v1 : BaseTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var result = context.Result;
 

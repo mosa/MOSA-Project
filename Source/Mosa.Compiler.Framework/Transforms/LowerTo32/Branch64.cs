@@ -10,7 +10,7 @@ public sealed class Branch64 : BaseLower32Transform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (context.Block.NextBlocks.Count == 1)
 			return false;
@@ -21,7 +21,7 @@ public sealed class Branch64 : BaseLower32Transform
 		return transform.IsLowerTo32;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		//Debug.Assert(context.ConditionCode != ConditionCode.Equal);
 
@@ -36,10 +36,10 @@ public sealed class Branch64 : BaseLower32Transform
 		var newBlocks = transform.CreateNewBlockContexts(4, context.Label);
 
 		// no branch
-		TransformContext.UpdatePhiTargets(nextBlock.Block.NextBlocks, context.Block, nextBlock.Block);
+		Framework.Transform.UpdatePhiTargets(nextBlock.Block.NextBlocks, context.Block, nextBlock.Block);
 
 		// Branch
-		TransformContext.UpdatePhiTarget(target, context.Block, newBlocks[3].Block);
+		Framework.Transform.UpdatePhiTarget(target, context.Block, newBlocks[3].Block);
 
 		var op0Low = transform.VirtualRegisters.Allocate32();
 		var op0High = transform.VirtualRegisters.Allocate32();

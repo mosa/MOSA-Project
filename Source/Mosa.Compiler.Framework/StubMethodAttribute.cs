@@ -4,7 +4,7 @@ using System;
 
 namespace Mosa.Compiler.Framework;
 
-public delegate void StubMethodDelegate(Context context, TransformContext transformContext);
+public delegate void StubMethodDelegate(Context context, Transform transform);
 
 /// <summary>
 /// Used for defining targets when using intrinsic replacements

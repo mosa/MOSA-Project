@@ -14,7 +14,7 @@ public sealed class ExceptionEnd : BaseExceptionTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		//var exceptionManager = transform.GetManager<ExceptionManager>();
 

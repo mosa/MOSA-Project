@@ -15,7 +15,7 @@ public sealed class Load32 : BaseTransform
 
 	public override int Priority => 100;
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		var operand1 = context.Operand1;
 
@@ -28,7 +28,7 @@ public sealed class Load32 : BaseTransform
 		return operand1.Field.DeclaringType.IsValueType && operand1.Field.DeclaringType.Name is "System.IntPtr" or "System.UIntPtr" && operand1.Field.Name == "Zero";
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		context.SetInstruction(IRInstruction.Move32, context.Result, Operand.Constant32_0);
 	}

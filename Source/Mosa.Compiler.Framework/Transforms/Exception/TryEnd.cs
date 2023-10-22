@@ -14,7 +14,7 @@ public sealed class TryEnd : BaseExceptionTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var label = TraverseBackToNativeBlock(context.Block).Label;
 		var immediate = FindImmediateExceptionHandler(transform, label);

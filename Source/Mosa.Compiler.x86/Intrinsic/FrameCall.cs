@@ -10,7 +10,7 @@ namespace Mosa.Compiler.x86.Intrinsic;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Compiler.x86.Intrinsic::FrameCall")]
-	private static void FrameCall(Context context, TransformContext transformContext)
+	private static void FrameCall(Context context, Transform transform)
 	{
 		context.SetInstruction(X86.Call, null, context.Operand1);
 	}

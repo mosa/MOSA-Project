@@ -14,9 +14,9 @@ public sealed class BranchManagedPointer : BaseIRTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
-		TransformContext.MoveConstantRight(context);
+		Framework.Transform.MoveConstantRight(context);
 
 		var target = context.BranchTargets[0];
 		var condition = context.ConditionCode;

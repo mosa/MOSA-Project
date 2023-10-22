@@ -14,9 +14,9 @@ public sealed class MulR4 : BaseIRTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
-		TransformContext.MoveConstantRight(context);
+		Framework.Transform.MoveConstantRight(context);
 
 		Translate(transform, context, ARM32.Muf, true);
 	}

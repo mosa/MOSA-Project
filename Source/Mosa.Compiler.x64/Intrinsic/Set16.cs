@@ -10,7 +10,7 @@ namespace Mosa.Compiler.x64.Intrinsic;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Compiler.x64.Intrinsic::Set16")]
-	private static void Set16(Context context, TransformContext transformContext)
+	private static void Set16(Context context, Transform transform)
 	{
 		context.SetInstruction(X64.MovStore16, null, context.Operand1, Operand.Constant32_0, context.Operand2);
 	}

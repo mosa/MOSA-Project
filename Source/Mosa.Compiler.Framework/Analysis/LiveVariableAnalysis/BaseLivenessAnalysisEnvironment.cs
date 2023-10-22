@@ -9,11 +9,11 @@ public abstract class BaseLivenessAnalysisEnvironment
 {
 	public BasicBlocks BasicBlocks { get; protected set; }
 
-	public abstract IEnumerable<int> GetInputs(InstructionNode node);
+	public abstract IEnumerable<int> GetInputs(Node node);
 
-	public abstract IEnumerable<int> GetOutputs(InstructionNode node);
+	public abstract IEnumerable<int> GetOutputs(Node node);
 
-	public abstract IEnumerable<int> GetKills(InstructionNode node);
+	public abstract IEnumerable<int> GetKills(Node node);
 
 	public int IndexCount { get; protected set; }
 }

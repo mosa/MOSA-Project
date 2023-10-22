@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.LowerTo32
 
 		//public override int Priority => 0;
 
-		public override bool Match(Context context, TransformContext transform)
+		public override bool Match(Context context, Transform transform)
 		{
 			return transform.IsLowerTo32;
 		}

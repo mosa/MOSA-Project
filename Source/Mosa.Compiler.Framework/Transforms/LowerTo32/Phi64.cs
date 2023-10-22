@@ -8,7 +8,7 @@ public sealed class Phi64 : BaseLower32Transform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (!transform.IsLowerTo32)
 			return false;
@@ -39,7 +39,7 @@ public sealed class Phi64 : BaseLower32Transform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var ctx = new Context(context.Node);
 

@@ -15,7 +15,7 @@ public sealed class ConvertI32ToR8 : BaseIRTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		Debug.Assert(context.Result.IsR8);
 		context.ReplaceInstruction(X64.Cvtsi2sd32);

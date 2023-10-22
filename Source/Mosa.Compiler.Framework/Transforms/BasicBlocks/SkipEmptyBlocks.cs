@@ -4,12 +4,12 @@ namespace Mosa.Compiler.Framework.Transforms.BasicBlocks;
 
 public class SkipEmptyBlocks : BaseBlockTransform
 {
-	public override int Process(TransformContext transformContext)
+	public override int Process(Transform transform)
 	{
-		var basicBlocks = transformContext.BasicBlocks;
-		var hasProtectedRegions = transformContext.MethodCompiler.HasProtectedRegions;
-		var isInSSAForm = transformContext.IsInSSAForm;
-		var trace = transformContext.TraceLog;
+		var basicBlocks = transform.BasicBlocks;
+		var hasProtectedRegions = transform.MethodCompiler.HasProtectedRegions;
+		var isInSSAForm = transform.IsInSSAForm;
+		var trace = transform.TraceLog;
 
 		var emptied = 0;
 

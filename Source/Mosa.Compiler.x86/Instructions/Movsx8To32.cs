@@ -17,7 +17,7 @@ public sealed class Movsx8To32 : X86Instruction
 	{
 	}
 
-	public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
+	public override void Emit(Node node, OpcodeEncoder opcodeEncoder)
 	{
 		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 1);

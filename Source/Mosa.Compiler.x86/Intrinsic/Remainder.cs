@@ -10,7 +10,7 @@ namespace Mosa.Compiler.x86.Intrinsic;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Compiler.x86.Intrinsic::Remainder")]
-	private static void Remainder(Context context, TransformContext transformContext)
+	private static void Remainder(Context context, Transform transform)
 	{
 		var result = context.Result;
 		var dividend = context.Operand1;
@@ -18,9 +18,9 @@ internal static partial class IntrinsicMethods
 
 		if (result.IsR8)
 		{
-			var xmm1 = transformContext.VirtualRegisters.AllocateR8();
-			var xmm2 = transformContext.VirtualRegisters.AllocateR8();
-			var xmm3 = transformContext.VirtualRegisters.AllocateR8();
+			var xmm1 = transform.VirtualRegisters.AllocateR8();
+			var xmm2 = transform.VirtualRegisters.AllocateR8();
+			var xmm3 = transform.VirtualRegisters.AllocateR8();
 
 			context.SetInstruction(X86.Divsd, xmm1, dividend, divisor);
 			context.AppendInstruction(X86.Roundsd, xmm2, xmm1, Operand.Constant32_3);
@@ -29,9 +29,9 @@ internal static partial class IntrinsicMethods
 		}
 		else
 		{
-			var xmm1 = transformContext.VirtualRegisters.AllocateR4();
-			var xmm2 = transformContext.VirtualRegisters.AllocateR4();
-			var xmm3 = transformContext.VirtualRegisters.AllocateR4();
+			var xmm1 = transform.VirtualRegisters.AllocateR4();
+			var xmm2 = transform.VirtualRegisters.AllocateR4();
+			var xmm3 = transform.VirtualRegisters.AllocateR4();
 
 			context.SetInstruction(X86.Divss, xmm1, dividend, divisor);
 			context.AppendInstruction(X86.Roundss, xmm2, xmm1, Operand.Constant32_3);

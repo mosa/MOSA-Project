@@ -8,7 +8,7 @@ public sealed class CombineAddressOfStore32 : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (!context.Operand2.IsResolvedConstant)
 			return false;
@@ -59,7 +59,7 @@ public sealed class CombineAddressOfStore32 : BaseTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var addressof = context.Operand1.Definitions[0];
 		var store2 = context.Node.PreviousNonEmpty;

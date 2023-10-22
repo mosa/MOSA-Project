@@ -22,11 +22,11 @@ public struct SlotIndex : IComparable<SlotIndex>
 
 	private SlotIndex(int index) => Index = index;
 
-	public static SlotIndex Use(InstructionNode node) => new(node.Offset);
+	public static SlotIndex Use(Node node) => new(node.Offset);
 
-	public static SlotIndex Def(InstructionNode node) => new(node.Offset + 1);
+	public static SlotIndex Def(Node node) => new(node.Offset + 1);
 
-	public SlotIndex(InstructionNode node)
+	public SlotIndex(Node node)
 		: this(node.Offset)
 	{
 	}

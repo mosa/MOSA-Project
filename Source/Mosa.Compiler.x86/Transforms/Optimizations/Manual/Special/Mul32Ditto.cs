@@ -11,7 +11,7 @@ public sealed class Mul32Ditto : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (transform.AreCPURegistersAllocated)
 			return false;
@@ -36,7 +36,7 @@ public sealed class Mul32Ditto : BaseTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var previous = context.Node.PreviousNonEmpty;
 		var result = context.Result;

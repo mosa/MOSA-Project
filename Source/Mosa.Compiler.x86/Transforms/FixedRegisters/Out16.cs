@@ -14,7 +14,7 @@ public sealed class Out16 : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (context.Operand1.IsCPURegister
 			&& context.Operand2.IsCPURegister
@@ -25,7 +25,7 @@ public sealed class Out16 : BaseTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var operand1 = context.Operand1;
 		var operand2 = context.Operand2;

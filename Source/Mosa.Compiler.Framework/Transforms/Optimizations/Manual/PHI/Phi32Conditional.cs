@@ -8,7 +8,7 @@ public sealed class Phi32Conditional : BasePhiTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (context.OperandCount != 2)
 			return false;
@@ -31,7 +31,7 @@ public sealed class Phi32Conditional : BasePhiTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var parent = context.PhiBlocks[0].PreviousBlocks[0];
 		var op1 = context.Operand1;

@@ -8,7 +8,7 @@ public sealed class Branch64Extends : BaseLower32Transform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (!transform.IsLowerTo32)
 			return false;
@@ -34,7 +34,7 @@ public sealed class Branch64Extends : BaseLower32Transform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var t1 = context.Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand2.Definitions[0].Operand1;

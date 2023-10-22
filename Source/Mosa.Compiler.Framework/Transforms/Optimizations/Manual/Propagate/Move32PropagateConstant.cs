@@ -8,7 +8,7 @@ public sealed class Move32PropagateConstant : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (!context.Result.IsDefinedOnce)
 			return false;
@@ -19,7 +19,7 @@ public sealed class Move32PropagateConstant : BaseTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var result = context.Result;
 		var operand1 = context.Operand1;

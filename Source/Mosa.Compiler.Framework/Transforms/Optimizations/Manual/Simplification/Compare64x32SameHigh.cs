@@ -10,7 +10,7 @@ public sealed class Compare64x32SameHigh : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (!context.Operand1.IsVirtualRegister)
 			return false;
@@ -45,7 +45,7 @@ public sealed class Compare64x32SameHigh : BaseTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var operand1 = context.Operand1.Definitions[0].Operand1;
 		var operand2 = context.Operand2.Definitions[0].Operand1;

@@ -8,7 +8,7 @@ public sealed class Load32AddressOf : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (!context.Operand2.IsConstantZero)
 			return false;
@@ -25,7 +25,7 @@ public sealed class Load32AddressOf : BaseTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		context.SetInstruction(IRInstruction.Load32, context.Result, transform.StackFrame, context.Operand1.Definitions[0].Operand1);
 	}

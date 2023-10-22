@@ -10,7 +10,7 @@ namespace Mosa.Compiler.x86.Intrinsic;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Compiler.x86.Intrinsic::Hlt")]
-	private static void Hlt(Context context, TransformContext transformContext)
+	private static void Hlt(Context context, Transform transform)
 	{
 		context.SetInstruction(X86.Hlt);
 	}

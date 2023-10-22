@@ -2,7 +2,7 @@
 
 namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions;
 
-public class InstructionNode
+public class Node
 {
 	public string InstructionName { get; set; }
 
@@ -16,7 +16,7 @@ public class InstructionNode
 
 	public int NodeNbr { get; set; }
 
-	public InstructionNode Parent { get; set; }
+	public Node Parent { get; set; }
 
 	public override string ToString()
 	{
@@ -26,9 +26,9 @@ public class InstructionNode
 			return $"{NodeNbr} : {InstructionName}<{ResultType}>";
 	}
 
-	public InstructionNode Clone(InstructionNode parent)
+	public Node Clone(Node parent)
 	{
-		var node = new InstructionNode
+		var node = new Node
 		{
 			InstructionName = InstructionName,
 			ResultType = ResultType,

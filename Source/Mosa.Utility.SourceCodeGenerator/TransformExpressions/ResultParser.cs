@@ -4,14 +4,14 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions;
 
 public static class ResultParser
 {
-	public static InstructionNode Parse(List<Token> tokens)
+	public static Node Parse(List<Token> tokens)
 	{
-		return ParseInstructionNode(tokens, 0, 0, null).node;
+		return ParseNode(tokens, 0, 0, null).node;
 	}
 
-	private static (InstructionNode node, int end, int nodeNbr) ParseInstructionNode(List<Token> tokens, int start, int nodeNbr, InstructionNode parent)
+	private static (Node node, int end, int nodeNbr) ParseNode(List<Token> tokens, int start, int nodeNbr, Node parent)
 	{
-		var node = new InstructionNode { NodeNbr = nodeNbr, Parent = parent };
+		var node = new Node { NodeNbr = nodeNbr, Parent = parent };
 		var length = tokens.Count;
 
 		for (var index = start; index < length; index++)
@@ -27,7 +27,7 @@ public static class ResultParser
 				}
 				else
 				{
-					var childNode = ParseInstructionNode(tokens, index, nodeNbr + 1, node);
+					var childNode = ParseNode(tokens, index, nodeNbr + 1, node);
 
 					index = childNode.end;
 					nodeNbr = childNode.nodeNbr;

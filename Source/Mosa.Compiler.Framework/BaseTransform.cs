@@ -63,9 +63,9 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 
 	#region Abstract Methods
 
-	public abstract bool Match(Context context, TransformContext transform);
+	public abstract bool Match(Context context, Transform transform);
 
-	public abstract void Transform(Context context, TransformContext transform);
+	public abstract void Transform(Context context, Transform transform);
 
 	#endregion Abstract Methods
 
@@ -758,17 +758,17 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 		return AreAnyStatusFlagsUsed(context.Node);
 	}
 
-	public static TriState AreAnyStatusFlagsUsed(InstructionNode node)
+	public static TriState AreAnyStatusFlagsUsed(Node node)
 	{
 		return AreStatusFlagsUsed(node.Next, true, true, true, true, true);
 	}
 
-	public static TriState IsCarryFlagUsed(InstructionNode node)
+	public static TriState IsCarryFlagUsed(Node node)
 	{
 		return AreStatusFlagsUsed(node.Next, false, true, false, false, false);
 	}
 
-	public static TriState AreStatusFlagsUsed(BaseInstruction instruction, InstructionNode node)
+	public static TriState AreStatusFlagsUsed(BaseInstruction instruction, Node node)
 	{
 		return AreStatusFlagsUsed(node.Next,
 			instruction.IsZeroFlagModified,
@@ -778,7 +778,7 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 			instruction.IsParityFlagModified);
 	}
 
-	public static TriState AreStatusFlagsUsed(InstructionNode node, bool checkZero, bool checkCarry, bool checkSign, bool checkOverlow, bool checkParity)
+	public static TriState AreStatusFlagsUsed(Node node, bool checkZero, bool checkCarry, bool checkSign, bool checkOverlow, bool checkParity)
 	{
 		// if none are being checked, then for sure it's a no
 		if (!checkZero && !checkCarry && !checkSign && !checkOverlow && !checkParity)
@@ -851,12 +851,12 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 
 	#region Navigation
 
-	protected static InstructionNode GetPreviousNodeUntil(Context context, BaseInstruction untilInstruction, int window, Operand operand1 = null, Operand operand2 = null)
+	protected static Node GetPreviousNodeUntil(Context context, BaseInstruction untilInstruction, int window, Operand operand1 = null, Operand operand2 = null)
 	{
 		return GetPreviousNodeUntil(context, untilInstruction, window, out _, operand1, operand2);
 	}
 
-	protected static InstructionNode GetPreviousNodeUntil(Context context, BaseInstruction untilInstruction, int window, out bool immediate, Operand operand1 = null, Operand operand2 = null)
+	protected static Node GetPreviousNodeUntil(Context context, BaseInstruction untilInstruction, int window, out bool immediate, Operand operand1 = null, Operand operand2 = null)
 	{
 		var previous = context.Node.Previous;
 		var count = 0;
@@ -907,12 +907,12 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 		return null;
 	}
 
-	protected static InstructionNode GetNextNodeUntil(Context context, BaseInstruction untilInstruction, int window, Operand operand = null)
+	protected static Node GetNextNodeUntil(Context context, BaseInstruction untilInstruction, int window, Operand operand = null)
 	{
 		return GetNextNodeUntil(context, untilInstruction, window, out _, operand);
 	}
 
-	protected static InstructionNode GetNextNodeUntil(Context context, BaseInstruction untilInstruction, int window, out bool immediate, Operand operand = null)
+	protected static Node GetNextNodeUntil(Context context, BaseInstruction untilInstruction, int window, out bool immediate, Operand operand = null)
 	{
 		var next = context.Node.Next;
 		var count = 0;

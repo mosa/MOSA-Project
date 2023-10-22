@@ -17,12 +17,12 @@ public sealed class MulCarryOut64 : BaseTransform
 
 	public override int Priority => -100;
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var method = transform.GetMethod("Mosa.Runtime.Math.Multiplication", "Mul64Carry");
 

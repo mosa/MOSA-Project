@@ -14,7 +14,7 @@ public sealed class MulUnsigned32 : BaseIRTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var v1 = transform.VirtualRegisters.Allocate32();
 		context.SetInstruction2(X64.Mul32, v1, context.Result, context.Operand1, context.Operand2);

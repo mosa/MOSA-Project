@@ -12,7 +12,7 @@ namespace Mosa.Compiler.x86.Transforms.AddressMode
 
 		#region Overrides
 
-		public override bool Match(Context context, TransformContext transform)
+		public override bool Match(Context context, Transform transform)
 		{
 			return !IsAddressMode(context);
 		}

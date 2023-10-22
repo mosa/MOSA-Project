@@ -17,7 +17,7 @@ public sealed class Context
 	/// <value>
 	/// The node.
 	/// </value>
-	public InstructionNode Node { get; set; }
+	public Node Node { get; set; }
 
 	/// <summary>
 	/// Gets or sets the basic block currently processed.
@@ -198,7 +198,7 @@ public sealed class Context
 	/// Initializes a new instance of the <see cref="Context" /> class.
 	/// </summary>
 	/// <param name="instructionNode">The instruction node.</param>
-	public Context(InstructionNode instructionNode)
+	public Context(Node instructionNode)
 	{
 		Node = instructionNode;
 	}
@@ -255,7 +255,7 @@ public sealed class Context
 		Debug.Assert(!IsBlockEndInstruction);
 		Debug.Assert(Block != null);
 
-		var node = new InstructionNode
+		var node = new Node
 		{
 			Label = Label
 		};
@@ -272,7 +272,7 @@ public sealed class Context
 	{
 		Debug.Assert(!IsBlockStartInstruction);
 
-		var node = new InstructionNode
+		var node = new Node
 		{
 			Label = Label
 		};
@@ -289,7 +289,7 @@ public sealed class Context
 	{
 		Debug.Assert(!IsBlockStartInstruction);
 
-		var node = new InstructionNode
+		var node = new Node
 		{
 			Label = Label
 		};

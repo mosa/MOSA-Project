@@ -11,12 +11,12 @@ public sealed class SetReturnManagedPointer : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		context.SetInstruction(IRInstruction.MoveManagedPointer, Operand.CreateCPURegisterObject(transform.Architecture.ReturnRegister), context.Operand1);
 	}

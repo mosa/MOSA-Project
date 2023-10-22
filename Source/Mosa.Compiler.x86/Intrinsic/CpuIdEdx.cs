@@ -10,7 +10,7 @@ namespace Mosa.Compiler.x86.Intrinsic;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Compiler.x86.Intrinsic::CpuIdEDX")]
-	private static void CpuIdEDX(Context context, TransformContext transformContext)
+	private static void CpuIdEDX(Context context, Transform transform)
 	{
 		var result = context.Result;
 		var operand1 = context.Operand1;

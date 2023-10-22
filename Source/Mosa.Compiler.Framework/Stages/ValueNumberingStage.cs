@@ -443,7 +443,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 		}
 	}
 
-	private bool CanAssignValueNumberToExpression(InstructionNode node)
+	private bool CanAssignValueNumberToExpression(Node node)
 	{
 		if (node.Instruction.IsParameterLoad
 			&& node.Instruction != IRInstruction.LoadParamCompound
@@ -479,7 +479,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 		return (hash << 8) + addition;
 	}
 
-	private static int ComputeExpressionHash(InstructionNode node)
+	private static int ComputeExpressionHash(Node node)
 	{
 		var hash = node.Instruction.ID;
 
@@ -541,7 +541,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 		return false;
 	}
 
-	private static Expression FindMatch(List<Expression> expressions, InstructionNode node)
+	private static Expression FindMatch(List<Expression> expressions, Node node)
 	{
 		if (expressions == null)
 			return null;
@@ -575,7 +575,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 		MapToValueNumber[operand] = valueVumber;
 	}
 
-	private bool IsPhiUseless(InstructionNode node)
+	private bool IsPhiUseless(Node node)
 	{
 		Debug.Assert(node.Instruction.IsPhi);
 
@@ -591,7 +591,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 		return true;
 	}
 
-	private bool ArePhisRedundant(InstructionNode a, InstructionNode b)
+	private bool ArePhisRedundant(Node a, Node b)
 	{
 		Debug.Assert(a.Instruction.IsPhi);
 		Debug.Assert(b.Instruction.IsPhi);
@@ -633,7 +633,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 		trace?.Log($"Removed Expression: {expression.ValueNumber} <= {expression.Instruction} {expression.Operand1} {expression.Operand2}" ?? string.Empty);
 	}
 
-	private void UpdateNodeWithValueNumbers(InstructionNode node)
+	private void UpdateNodeWithValueNumbers(Node node)
 	{
 		// update operands with their value number
 		for (var i = 0; i < node.OperandCount; i++)
@@ -691,7 +691,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 		}
 	}
 
-	private Operand CheckRedundant(InstructionNode node)
+	private Operand CheckRedundant(Node node)
 	{
 		Operand redundant = null;
 

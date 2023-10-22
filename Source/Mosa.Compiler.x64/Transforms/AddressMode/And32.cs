@@ -14,12 +14,12 @@ public sealed class And32 : BaseAddressModeTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		return !IsAddressMode(context);
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		AddressModeConversionCummulative(context, X64.Mov32);
 	}

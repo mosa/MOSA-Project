@@ -14,7 +14,7 @@ public sealed class GetLow32 : BaseIRTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var op0 = transform.SplitOperand(context.Operand1);
 

@@ -14,7 +14,7 @@ public sealed class ConvertI64ToR4 : BaseIRTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		context.SetInstruction(X64.Cvtsi2ss64, context.Result, context.Operand1);
 	}

@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.CheckedConversion
 			: base(instruction, type, log)
 		{ }
 
-		public void CallCheckOverflow(TransformContext transform, Context context, string vmcall)
+		public void CallCheckOverflow(Transform transform, Context context, string vmcall)
 		{
 			var result = context.Result;
 			var source = context.Operand1;

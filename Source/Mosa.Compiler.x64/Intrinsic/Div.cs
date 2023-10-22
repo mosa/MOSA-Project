@@ -10,14 +10,14 @@ namespace Mosa.Compiler.x64.Intrinsic;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Compiler.x64.Intrinsic::Div")]
-	private static void Div(Context context, TransformContext transformContext)
+	private static void Div(Context context, Transform transform)
 	{
 		var n = context.Operand1;
 		var d = context.Operand2;
 		var result = context.Result;
-		var result2 = transformContext.VirtualRegisters.Allocate64();
+		var result2 = transform.VirtualRegisters.Allocate64();
 
-		transformContext.SplitOperand(n, out Operand op0L, out Operand op0H);
+		transform.SplitOperand(n, out Operand op0L, out Operand op0H);
 
 		context.SetInstruction2(X64.Div64, result2, result, op0H, op0L, d);
 	}

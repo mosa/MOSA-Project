@@ -280,7 +280,7 @@ public sealed class Architecture : BaseArchitecture
 	/// <param name="operand">The operand.</param>
 	/// <returns>
 	///   <c>true</c> if [is parameter store] [the specified context]; otherwise, <c>false</c>.</returns>
-	public override bool IsParameterStore(InstructionNode node, out Operand operand)
+	public override bool IsParameterStore(Node node, out Operand operand)
 	{
 		operand = null;
 
@@ -312,7 +312,7 @@ public sealed class Architecture : BaseArchitecture
 	/// <param name="node">The node.</param>
 	/// <returns>
 	///   <c>true</c> if [is parameter load] [the specified context]; otherwise, <c>false</c>.</returns>
-	public override bool IsParameterLoad(InstructionNode node, out Operand operand)
+	public override bool IsParameterLoad(Node node, out Operand operand)
 	{
 		operand = null;
 

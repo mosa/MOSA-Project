@@ -8,7 +8,7 @@ public sealed class SignExtend8x64 : BaseLower32Transform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var result = context.Result;
 		var operand1 = context.Operand1;

@@ -14,7 +14,7 @@ public sealed class StoreR8 : BaseIRTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		TransformStore(transform, context, ARM32.Stf, context.Operand1, context.Operand2, context.Operand3);
 	}

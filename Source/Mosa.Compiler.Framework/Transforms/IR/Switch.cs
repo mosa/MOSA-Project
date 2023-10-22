@@ -8,12 +8,12 @@ public sealed class Switch : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var targets = context.BranchTargets;
 		var blocks = transform.CreateNewBlockContexts(targets.Count, context.Label);

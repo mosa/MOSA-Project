@@ -8,7 +8,7 @@ public sealed class Phi32Add32 : BasePhiTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (context.OperandCount != 2)
 			return false;
@@ -42,7 +42,7 @@ public sealed class Phi32Add32 : BasePhiTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var ctx = context.Result.Uses[0];
 		var result = ctx.Result;

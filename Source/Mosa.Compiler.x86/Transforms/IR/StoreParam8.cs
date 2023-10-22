@@ -14,7 +14,7 @@ public sealed class StoreParam8 : BaseIRTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		context.SetInstruction(X86.MovStore8, null, transform.StackFrame, context.Operand1, context.Operand2);
 	}

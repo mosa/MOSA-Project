@@ -8,12 +8,12 @@ namespace Mosa.Compiler.Framework.Intrinsics;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Runtime.Intrinsic::GetStringType")]
-	private static void GetStringType(Context context, TransformContext transformContext)
+	private static void GetStringType(Context context, Transform transform)
 	{
 		var result = context.Result;
 
-		var typeDef = Operand.CreateLabel(Metadata.TypeDefinition + "System.String", transformContext.Is32BitPlatform);
+		var typeDef = Operand.CreateLabel(Metadata.TypeDefinition + "System.String", transform.Is32BitPlatform);
 
-		context.SetInstruction(transformContext.MoveInstruction, result, typeDef);
+		context.SetInstruction(transform.MoveInstruction, result, typeDef);
 	}
 }

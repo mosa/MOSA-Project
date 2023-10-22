@@ -14,7 +14,7 @@ public sealed class ConvertI64ToR4 : BaseIRTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		transform.SplitOperand(context.Result, out var op1Low, out _);
 

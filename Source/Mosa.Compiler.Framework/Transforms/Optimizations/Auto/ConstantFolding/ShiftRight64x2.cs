@@ -16,7 +16,7 @@ public sealed class ShiftRight64x2 : BaseTransform
 
 	public override int Priority => 90;
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (!context.Operand1.IsVirtualRegister)
 			return false;
@@ -42,7 +42,7 @@ public sealed class ShiftRight64x2 : BaseTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var result = context.Result;
 

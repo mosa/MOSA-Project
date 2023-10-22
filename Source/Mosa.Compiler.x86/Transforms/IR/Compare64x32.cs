@@ -15,7 +15,7 @@ public sealed class Compare64x32 : BaseIRTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		//Compare64x64(context);
 

@@ -15,7 +15,7 @@ public sealed class MovLoad8 : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (!context.Result.IsCPURegister)
 			return false;
@@ -23,7 +23,7 @@ public sealed class MovLoad8 : BaseTransform
 		return context.Result.Register == CPURegister.ESI || context.Result.Register == CPURegister.EDI;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		Debug.Assert(context.Result.IsCPURegister);
 

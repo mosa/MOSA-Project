@@ -14,7 +14,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.CodeMotion
 
 		#region Overrides
 
-		public override bool Match(Context context, TransformContext transform)
+		public override bool Match(Context context, Transform transform)
 		{
 			if (!context.Result.IsVirtualRegister)
 				return false;
@@ -40,7 +40,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.CodeMotion
 			return !CheckCodeMotion(transform, context);
 		}
 
-		public override void Transform(Context context, TransformContext transform)
+		public override void Transform(Context context, Transform transform)
 		{
 			transform.GetManager<CodeMotionManager>().MarkMotion(context.Node);
 
@@ -53,7 +53,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.CodeMotion
 
 		#region Helpers
 
-		public static bool CheckCodeMotion(TransformContext transform, Context context)
+		public static bool CheckCodeMotion(Transform transform, Context context)
 		{
 			var codeMotion = transform.GetManager<CodeMotionManager>();
 
@@ -63,7 +63,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.CodeMotion
 			return codeMotion.CheckMotion(context.Node);
 		}
 
-		protected static InstructionNode GetMotionLocation(InstructionNode start, InstructionNode end, int window)
+		protected static Node GetMotionLocation(Node start, Node end, int window)
 		{
 			var count = 0;
 

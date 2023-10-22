@@ -14,7 +14,7 @@ public sealed class StoreParam16 : BaseIRTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		context.SetInstruction(X64.MovStore16, null, transform.StackFrame, context.Operand1, context.Operand2);
 	}

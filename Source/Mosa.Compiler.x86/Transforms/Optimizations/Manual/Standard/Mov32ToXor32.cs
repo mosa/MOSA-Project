@@ -11,7 +11,7 @@ public sealed class Mov32ToXor32 : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (!context.Operand1.IsConstantZero)
 			return false;
@@ -22,7 +22,7 @@ public sealed class Mov32ToXor32 : BaseTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		context.SetInstruction(X86.Xor32, context.Result, context.Result, context.Result);
 	}

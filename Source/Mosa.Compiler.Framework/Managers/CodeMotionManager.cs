@@ -6,14 +6,14 @@ namespace Mosa.Compiler.Framework.Managers;
 
 public class CodeMotionManager : BaseTransformManager
 {
-	private readonly HashSet<InstructionNode> Motion = new HashSet<InstructionNode>();
+	private readonly HashSet<Node> Motion = new HashSet<Node>();
 
-	public void MarkMotion(InstructionNode node)
+	public void MarkMotion(Node node)
 	{
 		Motion.Add(node);
 	}
 
-	public bool CheckMotion(InstructionNode node)
+	public bool CheckMotion(Node node)
 	{
 		return Motion.Contains(node);
 	}

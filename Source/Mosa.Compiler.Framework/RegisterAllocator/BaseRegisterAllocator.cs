@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator;
 /// </summary>
 public abstract class BaseRegisterAllocator
 {
-	protected readonly TransformContext TransformContext;
+	protected readonly Transform Transform;
 
 	protected readonly BasicBlocks BasicBlocks;
 	protected readonly BaseArchitecture Architecture;
@@ -42,7 +42,7 @@ public abstract class BaseRegisterAllocator
 
 	private readonly List<LiveInterval> SpilledIntervals = new();
 
-	private readonly List<InstructionNode> SlotsToNodes = new(512);
+	private readonly List<Node> SlotsToNodes = new(512);
 
 	protected readonly List<SlotIndex> KillSite = new();
 
@@ -54,18 +54,18 @@ public abstract class BaseRegisterAllocator
 	public int DataFlowMoves = 0;
 	public int ResolvingMoves = 0;
 
-	protected BaseRegisterAllocator(TransformContext transformContext, Operand stackFrame, BaseMethodCompilerStage.CreateTraceHandler createTrace)
+	protected BaseRegisterAllocator(Transform transform, Operand stackFrame, BaseMethodCompilerStage.CreateTraceHandler createTrace)
 	{
-		TransformContext = transformContext;
-		BasicBlocks = transformContext.BasicBlocks;
-		Architecture = transformContext.Architecture;
-		LocalStack = transformContext.MethodCompiler.LocalStack;
+		Transform = transform;
+		BasicBlocks = transform.BasicBlocks;
+		Architecture = transform.Architecture;
+		LocalStack = transform.MethodCompiler.LocalStack;
 
 		CreateTrace = createTrace;
 
 		StackFrame = stackFrame;
 
-		VirtualRegisterCount = transformContext.MethodCompiler.VirtualRegisters.Count;
+		VirtualRegisterCount = transform.MethodCompiler.VirtualRegisters.Count;
 		PhysicalRegisterCount = Architecture.RegisterSet.Length;
 		RegisterCount = VirtualRegisterCount + PhysicalRegisterCount;
 
@@ -93,7 +93,7 @@ public abstract class BaseRegisterAllocator
 		}
 
 		// Setup extended virtual registers
-		foreach (var virtualRegister in transformContext.VirtualRegisters)
+		foreach (var virtualRegister in transform.VirtualRegisters)
 		{
 			Debug.Assert(virtualRegister.Index == Registers.Count - PhysicalRegisterCount + 1);
 
@@ -189,7 +189,7 @@ public abstract class BaseRegisterAllocator
 
 	protected abstract void AdditionalSetup();
 
-	protected InstructionNode GetNode(SlotIndex slot) => SlotsToNodes[slot.Index >> 1];
+	protected Node GetNode(SlotIndex slot) => SlotsToNodes[slot.Index >> 1];
 
 	private void TraceBlocks()
 	{

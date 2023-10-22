@@ -8,7 +8,7 @@ public sealed class LoadZeroExtend16x64Store16 : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (!context.Operand1.IsVirtualRegister)
 			return false;
@@ -36,7 +36,7 @@ public sealed class LoadZeroExtend16x64Store16 : BaseTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var previous = GetPreviousNodeUntil(context, IRInstruction.Store16, transform.Window, context.Operand1);
 

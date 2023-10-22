@@ -14,7 +14,7 @@ public sealed class SignExtend8x64 : BaseIRTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		context.ReplaceInstruction(X64.Movsx8To64);
 	}

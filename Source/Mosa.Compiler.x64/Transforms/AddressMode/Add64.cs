@@ -14,7 +14,7 @@ public sealed class Add64 : BaseAddressModeTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		AddressModeConversionCummulative(context, X64.Mov64);
 	}

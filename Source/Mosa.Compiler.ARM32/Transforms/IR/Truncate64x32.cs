@@ -15,7 +15,7 @@ public sealed class Truncate64x32 : BaseIRTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		Debug.Assert(context.Operand1.IsInt64);
 		Debug.Assert(!context.Result.IsInt64);

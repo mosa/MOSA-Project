@@ -12,7 +12,7 @@ public abstract class BaseExceptionTransform : BaseTransform
 
 	#region Overrides
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		return true;
 	}
@@ -21,7 +21,7 @@ public abstract class BaseExceptionTransform : BaseTransform
 
 	#region Helpers
 
-	public MosaExceptionHandler FindImmediateExceptionHandler(TransformContext transform, int label)
+	public MosaExceptionHandler FindImmediateExceptionHandler(Transform transform, int label)
 	{
 		foreach (var handler in transform.Method.ExceptionHandlers)
 		{
@@ -34,7 +34,7 @@ public abstract class BaseExceptionTransform : BaseTransform
 		return null;
 	}
 
-	public MosaExceptionHandler FindNextEnclosingFinallyHandler(TransformContext transform, MosaExceptionHandler exceptionHandler)
+	public MosaExceptionHandler FindNextEnclosingFinallyHandler(Transform transform, MosaExceptionHandler exceptionHandler)
 	{
 		var index = transform.Method.ExceptionHandlers.IndexOf(exceptionHandler);
 		var at = exceptionHandler.TryStart;

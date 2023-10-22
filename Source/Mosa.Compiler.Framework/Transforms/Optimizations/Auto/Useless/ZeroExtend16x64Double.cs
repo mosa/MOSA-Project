@@ -16,7 +16,7 @@ public sealed class ZeroExtend16x64Double : BaseTransform
 
 	public override int Priority => 85;
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (!context.Operand1.IsVirtualRegister)
 			return false;
@@ -33,7 +33,7 @@ public sealed class ZeroExtend16x64Double : BaseTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var result = context.Result;
 

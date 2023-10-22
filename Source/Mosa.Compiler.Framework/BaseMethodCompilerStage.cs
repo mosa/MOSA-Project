@@ -181,7 +181,7 @@ public abstract class BaseMethodCompilerStage
 
 	#endregion Method Properties
 
-	public TransformContext TransformContext { get; private set; }
+	public Transform Transform { get; private set; }
 
 	#region Methods
 
@@ -214,7 +214,7 @@ public abstract class BaseMethodCompilerStage
 	{
 		MethodCompiler = methodCompiler;
 		BasicBlocks = methodCompiler.BasicBlocks;
-		TransformContext = methodCompiler.TransformContext;
+		Transform = methodCompiler.Transform;
 
 		traceLogs = new List<TraceLog>();
 
@@ -342,7 +342,7 @@ public abstract class BaseMethodCompilerStage
 	/// </summary>
 	/// <param name="node">The node.</param>
 	/// <returns></returns>
-	protected BasicBlock Split(InstructionNode node)
+	protected BasicBlock Split(Node node)
 	{
 		var newblock = BasicBlocks.CreateBlock(-1, node.Label);
 

@@ -10,7 +10,7 @@ namespace Mosa.Compiler.x86.Intrinsic;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Compiler.x86.Intrinsic::BochsDebug")]
-	private static void BochsDebug(Context context, TransformContext transformContext)
+	private static void BochsDebug(Context context, Transform transform)
 	{
 		context.SetInstruction(X86.BochsDebug);
 	}

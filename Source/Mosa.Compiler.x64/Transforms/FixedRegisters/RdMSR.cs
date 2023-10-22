@@ -14,7 +14,7 @@ public sealed class RdMSR : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		return !(context.Result.IsCPURegister
 				 && context.Result2.IsCPURegister
@@ -24,7 +24,7 @@ public sealed class RdMSR : BaseTransform
 				 && context.Operand1.Register == CPURegister.RCX);
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var operand1 = context.Operand1;
 		var result = context.Result;

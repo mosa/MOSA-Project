@@ -15,12 +15,12 @@ public sealed class MovLoad16 : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		return context.Result.Register == CPURegister.RSI || context.Result.Register == CPURegister.RDI;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		Debug.Assert(context.Result.IsCPURegister);
 

@@ -10,7 +10,7 @@ namespace Mosa.Compiler.x86.Intrinsic;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Compiler.x86.Intrinsic::Sti")]
-	private static void Sti(Context context, TransformContext transformContext)
+	private static void Sti(Context context, Transform transform)
 	{
 		context.SetInstruction(X86.Sti);
 	}

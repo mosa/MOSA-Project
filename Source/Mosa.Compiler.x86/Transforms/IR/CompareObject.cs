@@ -14,7 +14,7 @@ public sealed class CompareObject : BaseIRTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var condition = context.ConditionCode;
 		var result = context.Result;
