@@ -160,7 +160,7 @@
 <span class="w">        </span><span class="p">{</span>
 <span class="w">        </span><span class="p">}</span>
 
-<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">Match</span><span class="p">(</span><span class="n">Context</span><span class="w"> </span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">TransformContext</span><span class="w"> </span><span class="n">transform</span><span class="p">)</span>
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">Match</span><span class="p">(</span><span class="n">Context</span><span class="w"> </span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">Transform</span><span class="w"> </span><span class="n">transform</span><span class="p">)</span>
 <span class="w">        </span><span class="p">{</span>
 <span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">IsResolvedConstant</span><span class="p">(</span><span class="n">context</span><span class="p">.</span><span class="n">Operand1</span><span class="p">))</span>
 <span class="w">                        </span><span class="k">return</span><span class="w"> </span><span class="k">false</span><span class="p">;</span>
@@ -171,7 +171,7 @@
 <span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="k">true</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
 
-<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Transform</span><span class="p">(</span><span class="n">Context</span><span class="w"> </span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">TransformContext</span><span class="w"> </span><span class="n">transform</span><span class="p">)</span>
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Transform</span><span class="p">(</span><span class="n">Context</span><span class="w"> </span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">Transform</span><span class="w"> </span><span class="n">transform</span><span class="p">)</span>
 <span class="w">        </span><span class="p">{</span>
 <span class="w">                </span><span class="kt">var</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">context</span><span class="p">.</span><span class="n">Result</span><span class="p">;</span>
 

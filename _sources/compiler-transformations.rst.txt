@@ -44,7 +44,7 @@ This is translated into the following C# code:
 		{
 		}
 
-		public override bool Match(Context context, TransformContext transform)
+		public override bool Match(Context context, Transform transform)
 		{
 			if (!IsResolvedConstant(context.Operand1))
 				return false;
@@ -55,7 +55,7 @@ This is translated into the following C# code:
 			return true;
 		}
 
-		public override void Transform(Context context, TransformContext transform)
+		public override void Transform(Context context, Transform transform)
 		{
 			var result = context.Result;
 
