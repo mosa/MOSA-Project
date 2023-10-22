@@ -21,10 +21,6 @@ public static class Program
 		Debug.WriteLine("Program::Main()");
 		Debug.WriteLine("##PASS##");
 
-		Console.BackgroundColor = ConsoleColor.Black;
-		Console.ForegroundColor = ConsoleColor.White;
-		Console.Clear();
-
 		for (; ; )
 			HAL.Yield();
 	}
