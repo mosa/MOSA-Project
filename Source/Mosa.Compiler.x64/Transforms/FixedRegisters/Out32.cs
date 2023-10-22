@@ -29,8 +29,8 @@ public sealed class Out32 : BaseTransform
 		var operand1 = context.Operand1;
 		var operand2 = context.Operand2;
 
-		var rax = Operand.CreateCPURegister(operand2, CPURegister.RAX);
-		var rdx = Operand.CreateCPURegister(operand1, CPURegister.RDX);
+		var rax = Operand.CreateCPURegister32(CPURegister.RAX);
+		var rdx = Operand.CreateCPURegister32(CPURegister.RDX);
 
 		context.SetInstruction(X64.Mov64, rdx, operand1);
 		context.AppendInstruction(X64.Mov64, rax, operand2);
