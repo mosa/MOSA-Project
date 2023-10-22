@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
 using Mosa.DeviceSystem;
 using Mosa.Kernel.BareMetal;
 using Mosa.Runtime.Plug;
@@ -19,7 +20,13 @@ public static class Program
 		Debug.WriteLine("Program::Main()");
 		Debug.WriteLine("##PASS##");
 
-		for (; ; )
+		Console.SetCursorPosition(0, 10);
+
+		Console.WriteLine("Main loop started...");
+
+		while (true)
+		{
 			HAL.Yield();
+		}
 	}
 }

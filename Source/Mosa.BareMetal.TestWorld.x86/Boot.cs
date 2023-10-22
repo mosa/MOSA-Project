@@ -2,6 +2,7 @@
 
 using System;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using Mosa.Kernel.BareMetal;
 using Mosa.UnitTests.Optimization;
 
@@ -23,24 +24,29 @@ public static class Boot
 
 		InterruptManager.SetHandler(ProcessInterrupt);
 
-		StartThreadTest();
+		StartThreading();
 
-		Program.EntryPoint();
+		// Will never get here!
 	}
 
-	private static uint counter = 0;
+	private static int counter = 0;
 
 	public static void ProcessInterrupt(uint interrupt, uint errorCode)
 	{
-		counter++;
+		Interlocked.Increment(ref counter);
 
-		Console.SetCursorPosition(0, 23);
-		Console.Write("Counter: " + counter + " IRQ: " + interrupt + " Code: " + errorCode);
+		//lock (spinlock)
+		{
+			Console.SetCursorPosition(0, 23);
+			Console.Write("Counter: " + counter + " IRQ: " + interrupt + " Code: " + errorCode);
+		}
 	}
 
-	private static void StartThreadTest()
+	private static void StartThreading()
 	{
 		Debug.WriteLine("Boot::StartThreadTest()");
+
+		Scheduler.CreateThread(Program.EntryPoint, Page.Size);
 
 		Scheduler.CreateThread(Thread1, Page.Size);
 		Scheduler.CreateThread(Thread2, Page.Size);
@@ -54,11 +60,11 @@ public static class Boot
 	}
 
 	private static readonly object spinlock = new();
-	private static uint totalticks = 0;
+	private static int totalticks = 0;
 
 	private static void UpdateThreadTicks(int thread, uint ticks)
 	{
-		++totalticks;
+		Interlocked.Increment(ref totalticks);
 
 		if (totalticks % 10000 == 0)
 		{
@@ -67,8 +73,6 @@ public static class Boot
 				Console.SetCursorPosition(0, 3 + thread);
 				Console.Write("Thread #" + thread + ": " + ticks);
 			}
-
-			//Native.Hlt();
 		}
 	}
 

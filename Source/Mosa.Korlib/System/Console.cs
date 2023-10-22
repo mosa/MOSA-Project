@@ -34,6 +34,10 @@ public static class Console
 		ForegroundColor = ConsoleColor.White;
 	}
 
+	public static int CursorLeft { get; set; }
+
+	public static int CursorTop { get; set; }
+
 	[MethodImpl(MethodImplOptions.InternalCall)]
 	public static extern void Clear();
 

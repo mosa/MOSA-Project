@@ -2259,7 +2259,7 @@ public static class IDT
 				break;
 
 			case Scheduler.ClockIRQ:
-				//	Interrupt?.Invoke(stack.Interrupt, stack.ErrorCode);
+				Interrupt?.Invoke(stack.Interrupt, stack.ErrorCode);
 				BareMetal.Scheduler.ClockInterrupt(stackStatePointer);
 				break;
 
@@ -2268,11 +2268,11 @@ public static class IDT
 				break;
 
 			default:
-				Interrupt?.Invoke(stack.Interrupt, stack.ErrorCode);
+				//Interrupt?.Invoke(stack.Interrupt, stack.ErrorCode);
 				break;
 		}
 
-		PIC.SendEndOfInterrupt(stack.Interrupt);    // LocalAPIC.
+		PIC.SendEndOfInterrupt(stack.Interrupt);    // LocalAPIC
 	}
 
 	private static unsafe void Error(IDTStackEntry stack, string message)
