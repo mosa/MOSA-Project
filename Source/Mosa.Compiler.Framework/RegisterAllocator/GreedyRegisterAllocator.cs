@@ -10,8 +10,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator;
 /// <seealso cref="Mosa.Compiler.Framework.RegisterAllocator.BaseRegisterAllocator" />
 public sealed class GreedyRegisterAllocator : BaseRegisterAllocator
 {
-	public GreedyRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters virtualRegisters, BaseArchitecture architecture, LocalStack localStack, Operand stackFrame, BaseMethodCompilerStage.CreateTraceHandler createTrace)
-		: base(basicBlocks, virtualRegisters, architecture, localStack, stackFrame, createTrace)
+	public GreedyRegisterAllocator(TransformContext transform, Operand stackFrame, BaseMethodCompilerStage.CreateTraceHandler createTrace)
+		: base(transform, stackFrame, createTrace)
 	{
 	}
 

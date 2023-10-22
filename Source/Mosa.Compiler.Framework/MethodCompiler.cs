@@ -96,7 +96,7 @@ public sealed class MethodCompiler
 	public int StackSize { get; set; }
 
 	/// <summary>
-	/// Gets the virtual register layout.
+	/// Gets the virtual registers.
 	/// </summary>
 	public VirtualRegisters VirtualRegisters { get; }
 

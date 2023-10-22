@@ -13,7 +13,7 @@ public sealed class VirtualRegisters : IEnumerable<Operand>
 {
 	#region Data Members
 
-	private readonly List<Operand> virtualRegisters = new List<Operand>();
+	private readonly List<Operand> virtualRegisters = new();
 
 	#endregion Data Members
 
