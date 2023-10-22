@@ -13,12 +13,12 @@ public sealed class CheckedConversionI64ToU64 : BaseCheckedConversionTransform
 
 	public override int Priority => -10;
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		CallCheckOverflow(transform, context, "I8ToU8");
 	}

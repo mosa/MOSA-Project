@@ -14,7 +14,7 @@ public sealed class ShiftLeft64 : BaseIRTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		context.ReplaceInstruction(X64.Shl64);
 	}

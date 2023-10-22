@@ -14,7 +14,7 @@ public sealed class MoveObject : BaseIRTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		context.ReplaceInstruction(X64.Mov32);
 	}

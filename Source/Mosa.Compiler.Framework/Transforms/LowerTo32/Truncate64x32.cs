@@ -8,7 +8,7 @@ public sealed class Truncate64x32 : BaseLower32Transform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		context.SetInstruction(IRInstruction.GetLow32, context.Result, context.Operand1);
 	}

@@ -14,7 +14,7 @@ public sealed class MoveR8 : BaseIRTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var result = context.Result;
 		var operand1 = context.Operand1;

@@ -197,10 +197,10 @@ public sealed class LoopInvariantCodeMotionStage : BaseMethodCompilerStage
 		}
 	}
 
-	private List<InstructionNode> FindLoopInvariantInstructions(Loop loop)
+	private List<Node> FindLoopInvariantInstructions(Loop loop)
 	{
-		var invariantsSet = new HashSet<InstructionNode>();
-		var invariantsList = new List<InstructionNode>();
+		var invariantsSet = new HashSet<Node>();
+		var invariantsList = new List<Node>();
 
 		var changed = true;
 
@@ -254,7 +254,7 @@ public sealed class LoopInvariantCodeMotionStage : BaseMethodCompilerStage
 		return invariantsList;
 	}
 
-	private static bool IsInvariant(Operand operand, Loop loop, HashSet<InstructionNode> invariants)
+	private static bool IsInvariant(Operand operand, Loop loop, HashSet<Node> invariants)
 	{
 		// constant
 		if (operand.IsResolvedConstant)
@@ -348,7 +348,7 @@ public sealed class LoopInvariantCodeMotionStage : BaseMethodCompilerStage
 		return landingpadBlock;
 	}
 
-	private void MoveToPreHeader(List<InstructionNode> nodes, Loop loop)
+	private void MoveToPreHeader(List<Node> nodes, Loop loop)
 	{
 		if (nodes.Count == 0)
 			return;

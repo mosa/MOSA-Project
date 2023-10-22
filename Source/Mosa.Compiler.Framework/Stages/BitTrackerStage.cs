@@ -29,9 +29,9 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 	private readonly NodeVisitationDelegate[] visitation = new NodeVisitationDelegate[MaxInstructions];
 
-	private delegate BitValue NodeVisitationDelegate(InstructionNode node, TransformContext transform);
+	private delegate BitValue NodeVisitationDelegate(Node node, Transform transform);
 
-	private delegate (BitValue, BitValue) NodeVisitationDelegate2(InstructionNode node, TransformContext transform);
+	private delegate (BitValue, BitValue) NodeVisitationDelegate2(Node node, Transform transform);
 
 	private BitValueManager BitValueManager;
 
@@ -183,8 +183,8 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 		BitValueManager = new BitValueManager(Is32BitPlatform);
 
-		TransformContext.AddManager(BitValueManager);
-		TransformContext.SetLog(trace);
+		Transform.AddManager(BitValueManager);
+		Transform.SetLog(trace);
 
 		EvaluateVirtualRegisters();
 
@@ -241,12 +241,12 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 			foreach (var register in MethodCompiler.VirtualRegisters)
 			{
-				change |= Evaluate(register, TransformContext);
+				change |= Evaluate(register, Transform);
 			}
 		}
 	}
 
-	private bool Evaluate(Operand virtualRegister, TransformContext transform)
+	private bool Evaluate(Operand virtualRegister, Transform transform)
 	{
 		var value = BitValueManager.GetBitValue(virtualRegister);
 
@@ -290,7 +290,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		if (method == null)
 			return Any(virtualRegister);
 
-		value = method.Invoke(node, TransformContext);
+		value = method.Invoke(node, Transform);
 
 		return value;
 	}
@@ -330,7 +330,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		throw new InvalidProgramException();
 	}
 
-	private static BitValue Any(Operand virtualRegister, TransformContext transform)
+	private static BitValue Any(Operand virtualRegister, Transform transform)
 	{
 		if (virtualRegister.IsInteger)
 			return virtualRegister.IsInt32 ? BitValue.Any32 : BitValue.Any64;
@@ -439,13 +439,13 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 			Debug.Assert(node.Instruction.IsBranch);
 
-			var value1 = TransformContext.GetBitValue(node.Operand1);
-			var value2 = TransformContext.GetBitValue(node.Operand2);
+			var value1 = Transform.GetBitValue(node.Operand1);
+			var value2 = Transform.GetBitValue(node.Operand2);
 
 			if (value1 == null || value2 == null)
 				continue;
 
-			var result = EvaluateCompare(value1, value2, node.ConditionCode, TransformContext);
+			var result = EvaluateCompare(value1, value2, node.ConditionCode, Transform);
 
 			if (!result.HasValue)
 				continue;
@@ -471,7 +471,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		}
 	}
 
-	private static bool? EvaluateCompare(BitValue value1, BitValue value2, ConditionCode condition, TransformContext transform)
+	private static bool? EvaluateCompare(BitValue value1, BitValue value2, ConditionCode condition, Transform transform)
 	{
 		if (value1 == null || value2 == null)
 			return null;
@@ -754,7 +754,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 	#region IR Instructions
 
-	private static BitValue Add32(InstructionNode node, TransformContext transform)
+	private static BitValue Add32(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand1);
 		var value2 = transform.GetBitValue(node.Operand2);
@@ -797,7 +797,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		);
 	}
 
-	private static BitValue Add64(InstructionNode node, TransformContext transform)
+	private static BitValue Add64(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand1);
 		var value2 = transform.GetBitValue(node.Operand2);
@@ -845,7 +845,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		return BitValue.Any64;
 	}
 
-	private static BitValue AddCarryIn32(InstructionNode node, TransformContext transform)
+	private static BitValue AddCarryIn32(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand1);
 		var value2 = transform.GetBitValue(node.Operand2);
@@ -874,7 +874,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		return BitValue.Any32;
 	}
 
-	private static BitValue ArithShiftRight32(InstructionNode node, TransformContext transform)
+	private static BitValue ArithShiftRight32(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand1);
 		var value2 = transform.GetBitValue(node.Operand2);
@@ -917,7 +917,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		return BitValue.Any32;
 	}
 
-	private static BitValue ArithShiftRight64(InstructionNode node, TransformContext transform)
+	private static BitValue ArithShiftRight64(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand1);
 		var value2 = transform.GetBitValue(node.Operand2);
@@ -960,7 +960,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		return BitValue.Any64;
 	}
 
-	private static BitValue Compare32x32(InstructionNode node, TransformContext transform)
+	private static BitValue Compare32x32(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand1);
 		var value2 = transform.GetBitValue(node.Operand2);
@@ -976,7 +976,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		return BitValue.CreateValue(result.Value, true);
 	}
 
-	private static BitValue Compare64x32(InstructionNode node, TransformContext transform)
+	private static BitValue Compare64x32(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand1);
 		var value2 = transform.GetBitValue(node.Operand2);
@@ -992,7 +992,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		return BitValue.CreateValue(result.Value, true);
 	}
 
-	private static BitValue Compare64x64(InstructionNode node, TransformContext transform)
+	private static BitValue Compare64x64(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand1);
 		var value2 = transform.GetBitValue(node.Operand2);
@@ -1008,7 +1008,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		return BitValue.CreateValue(result.Value, false);
 	}
 
-	private static BitValue GetHigh32(InstructionNode node, TransformContext transform)
+	private static BitValue GetHigh32(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand1);
 
@@ -1035,7 +1035,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		);
 	}
 
-	private static BitValue GetLow32(InstructionNode node, TransformContext transform)
+	private static BitValue GetLow32(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand1);
 
@@ -1057,7 +1057,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		); ;
 	}
 
-	private static BitValue LoadParamZeroExtend16x32(InstructionNode node, TransformContext transform)
+	private static BitValue LoadParamZeroExtend16x32(Node node, Transform transform)
 	{
 		return BitValue.CreateValue(
 			bitsSet: 0,
@@ -1069,7 +1069,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		);
 	}
 
-	private static BitValue LoadParamZeroExtend16x64(InstructionNode node, TransformContext transform)
+	private static BitValue LoadParamZeroExtend16x64(Node node, Transform transform)
 	{
 		return BitValue.CreateValue(
 			bitsSet: 0,
@@ -1081,7 +1081,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		);
 	}
 
-	private static BitValue LoadParamZeroExtend8x32(InstructionNode node, TransformContext transform)
+	private static BitValue LoadParamZeroExtend8x32(Node node, Transform transform)
 	{
 		return BitValue.CreateValue(
 			bitsSet: 0,
@@ -1093,7 +1093,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		);
 	}
 
-	private static BitValue LoadParamZeroExtend8x64(InstructionNode node, TransformContext transform)
+	private static BitValue LoadParamZeroExtend8x64(Node node, Transform transform)
 	{
 		return BitValue.CreateValue(
 			bitsSet: 0,
@@ -1105,7 +1105,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		);
 	}
 
-	private static BitValue LoadParamZeroExtend32x64(InstructionNode node, TransformContext transform)
+	private static BitValue LoadParamZeroExtend32x64(Node node, Transform transform)
 	{
 		return BitValue.CreateValue(
 			bitsSet: 0,
@@ -1117,7 +1117,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		);
 	}
 
-	private static BitValue LoadZeroExtend16x32(InstructionNode node, TransformContext transform)
+	private static BitValue LoadZeroExtend16x32(Node node, Transform transform)
 	{
 		return BitValue.CreateValue(
 			bitsSet: 0,
@@ -1129,7 +1129,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		);
 	}
 
-	private static BitValue LoadZeroExtend16x64(InstructionNode node, TransformContext transform)
+	private static BitValue LoadZeroExtend16x64(Node node, Transform transform)
 	{
 		return BitValue.CreateValue(
 			bitsSet: 0,
@@ -1141,7 +1141,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		);
 	}
 
-	private static BitValue LoadZeroExtend8x32(InstructionNode node, TransformContext transform)
+	private static BitValue LoadZeroExtend8x32(Node node, Transform transform)
 	{
 		return BitValue.CreateValue(
 			bitsSet: 0,
@@ -1153,7 +1153,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		);
 	}
 
-	private static BitValue LoadZeroExtend8x64(InstructionNode node, TransformContext transform)
+	private static BitValue LoadZeroExtend8x64(Node node, Transform transform)
 	{
 		return BitValue.CreateValue(
 			bitsSet: 0,
@@ -1165,7 +1165,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		);
 	}
 
-	private static BitValue LoadZeroExtend32x64(InstructionNode node, TransformContext transform)
+	private static BitValue LoadZeroExtend32x64(Node node, Transform transform)
 	{
 		return BitValue.CreateValue(
 			bitsSet: 0,
@@ -1177,7 +1177,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		);
 	}
 
-	private static BitValue And32(InstructionNode node, TransformContext transform)
+	private static BitValue And32(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand1);
 		var value2 = transform.GetBitValue(node.Operand2);
@@ -1205,7 +1205,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		);
 	}
 
-	private static BitValue And64(InstructionNode node, TransformContext transform)
+	private static BitValue And64(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand1);
 		var value2 = transform.GetBitValue(node.Operand2);
@@ -1233,7 +1233,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		);
 	}
 
-	private static BitValue Not32(InstructionNode node, TransformContext transform)
+	private static BitValue Not32(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand1);
 
@@ -1256,7 +1256,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		);
 	}
 
-	private static BitValue Not64(InstructionNode node, TransformContext transform)
+	private static BitValue Not64(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand1);
 
@@ -1279,7 +1279,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		);
 	}
 
-	private static BitValue Or32(InstructionNode node, TransformContext transform)
+	private static BitValue Or32(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand1);
 		var value2 = transform.GetBitValue(node.Operand2);
@@ -1317,7 +1317,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		);
 	}
 
-	private static BitValue Or64(InstructionNode node, TransformContext transform)
+	private static BitValue Or64(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand1);
 		var value2 = transform.GetBitValue(node.Operand2);
@@ -1355,7 +1355,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		);
 	}
 
-	private static BitValue Xor32(InstructionNode node, TransformContext transform)
+	private static BitValue Xor32(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand1);
 		var value2 = transform.GetBitValue(node.Operand2);
@@ -1380,7 +1380,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		);
 	}
 
-	private static BitValue Xor64(InstructionNode node, TransformContext transform)
+	private static BitValue Xor64(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand1);
 		var value2 = transform.GetBitValue(node.Operand2);
@@ -1405,7 +1405,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		);
 	}
 
-	private static BitValue Move32(InstructionNode node, TransformContext transform)
+	private static BitValue Move32(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand1);
 
@@ -1425,7 +1425,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		);
 	}
 
-	private static BitValue Move64(InstructionNode node, TransformContext transform)
+	private static BitValue Move64(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand1);
 
@@ -1435,7 +1435,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		return value1;
 	}
 
-	private static BitValue MulSigned32(InstructionNode node, TransformContext transform)
+	private static BitValue MulSigned32(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand1);
 		var value2 = transform.GetBitValue(node.Operand2);
@@ -1503,7 +1503,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		return BitValue.Any32;
 	}
 
-	private static BitValue MulSigned64(InstructionNode node, TransformContext transform)
+	private static BitValue MulSigned64(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand1);
 		var value2 = transform.GetBitValue(node.Operand2);
@@ -1572,7 +1572,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		return BitValue.Any64;
 	}
 
-	private static BitValue MulUnsigned32(InstructionNode node, TransformContext transform)
+	private static BitValue MulUnsigned32(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand1);
 		var value2 = transform.GetBitValue(node.Operand2);
@@ -1627,7 +1627,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		);
 	}
 
-	private static BitValue MulUnsigned64(InstructionNode node, TransformContext transform)
+	private static BitValue MulUnsigned64(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand1);
 		var value2 = transform.GetBitValue(node.Operand2);
@@ -1688,7 +1688,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		return BitValue.Any64;
 	}
 
-	private static BitValue Phi32(InstructionNode node, TransformContext transform)
+	private static BitValue Phi32(Node node, Transform transform)
 	{
 		Debug.Assert(node.OperandCount != 0);
 
@@ -1726,7 +1726,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		);
 	}
 
-	private static BitValue Phi64(InstructionNode node, TransformContext transform)
+	private static BitValue Phi64(Node node, Transform transform)
 	{
 		Debug.Assert(node.OperandCount != 0);
 
@@ -1764,7 +1764,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		);
 	}
 
-	private static BitValue RemUnsigned32(InstructionNode node, TransformContext transform)
+	private static BitValue RemUnsigned32(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand1);
 		var value2 = transform.GetBitValue(node.Operand2);
@@ -1814,7 +1814,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		return BitValue.Any32;
 	}
 
-	private static BitValue RemUnsigned64(InstructionNode node, TransformContext transform)
+	private static BitValue RemUnsigned64(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand1);
 		var value2 = transform.GetBitValue(node.Operand2);
@@ -1864,7 +1864,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		return BitValue.Any64;
 	}
 
-	private static BitValue ShiftLeft32(InstructionNode node, TransformContext transform)
+	private static BitValue ShiftLeft32(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand1);
 		var value2 = transform.GetBitValue(node.Operand2);
@@ -1925,7 +1925,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		return BitValue.Any32;
 	}
 
-	private static BitValue ShiftLeft64(InstructionNode node, TransformContext transform)
+	private static BitValue ShiftLeft64(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand1);
 		var value2 = transform.GetBitValue(node.Operand2);
@@ -1979,7 +1979,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		return BitValue.Any64;
 	}
 
-	private static BitValue ShiftRight32(InstructionNode node, TransformContext transform)
+	private static BitValue ShiftRight32(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand1);
 		var value2 = transform.GetBitValue(node.Operand2);
@@ -2040,7 +2040,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		return BitValue.Any32;
 	}
 
-	private static BitValue ShiftRight64(InstructionNode node, TransformContext transform)
+	private static BitValue ShiftRight64(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand1);
 		var value2 = transform.GetBitValue(node.Operand2);
@@ -2113,7 +2113,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		return BitValue.Any64;
 	}
 
-	private static BitValue SignExtend16x32(InstructionNode node, TransformContext transform)
+	private static BitValue SignExtend16x32(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand1);
 
@@ -2151,7 +2151,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		);
 	}
 
-	private static BitValue SignExtend16x64(InstructionNode node, TransformContext transform)
+	private static BitValue SignExtend16x64(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand1);
 
@@ -2189,7 +2189,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		);
 	}
 
-	private static BitValue SignExtend32x64(InstructionNode node, TransformContext transform)
+	private static BitValue SignExtend32x64(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand1);
 
@@ -2227,7 +2227,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		);
 	}
 
-	private static BitValue SignExtend8x32(InstructionNode node, TransformContext transform)
+	private static BitValue SignExtend8x32(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand1);
 
@@ -2265,7 +2265,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		);
 	}
 
-	private static BitValue SignExtend8x64(InstructionNode node, TransformContext transform)
+	private static BitValue SignExtend8x64(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand1);
 
@@ -2303,7 +2303,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		);
 	}
 
-	private static BitValue To64(InstructionNode node, TransformContext transform)
+	private static BitValue To64(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand1);
 		var value2 = transform.GetBitValue(node.Operand2);
@@ -2326,7 +2326,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		);
 	}
 
-	private static BitValue Truncate64x32(InstructionNode node, TransformContext transform)
+	private static BitValue Truncate64x32(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand1);
 
@@ -2343,7 +2343,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		);
 	}
 
-	private static BitValue ZeroExtend16x32(InstructionNode node, TransformContext transform)
+	private static BitValue ZeroExtend16x32(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand1);
 
@@ -2365,12 +2365,12 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		);
 	}
 
-	private static BitValue ZeroExtend16x64(InstructionNode node, TransformContext transform)
+	private static BitValue ZeroExtend16x64(Node node, Transform transform)
 	{
 		return ZeroExtend16x32(node, transform);
 	}
 
-	private static BitValue ZeroExtend32x64(InstructionNode node, TransformContext transform)
+	private static BitValue ZeroExtend32x64(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand1);
 
@@ -2392,7 +2392,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		);
 	}
 
-	private static BitValue ZeroExtend8x32(InstructionNode node, TransformContext transform)
+	private static BitValue ZeroExtend8x32(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand1);
 
@@ -2414,7 +2414,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		);
 	}
 
-	private static BitValue ZeroExtend8x64(InstructionNode node, TransformContext transform)
+	private static BitValue ZeroExtend8x64(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand1);
 
@@ -2436,7 +2436,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		);
 	}
 
-	private static BitValue IfThenElse32(InstructionNode node, TransformContext transform)
+	private static BitValue IfThenElse32(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand2);
 		var value2 = transform.GetBitValue(node.Operand3);
@@ -2459,7 +2459,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		return BitValue.Any32;
 	}
 
-	private static BitValue IfThenElse64(InstructionNode node, TransformContext transform)
+	private static BitValue IfThenElse64(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand2);
 		var value2 = transform.GetBitValue(node.Operand3);
@@ -2482,22 +2482,22 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		return BitValue.Any64;
 	}
 
-	private static BitValue NewString(InstructionNode node, TransformContext transform)
+	private static BitValue NewString(Node node, Transform transform)
 	{
 		return transform.Is32BitPlatform ? BitValue.AnyExceptZero32 : BitValue.AnyExceptZero64;
 	}
 
-	private static BitValue NewObject(InstructionNode node, TransformContext transform)
+	private static BitValue NewObject(Node node, Transform transform)
 	{
 		return transform.Is32BitPlatform ? BitValue.AnyExceptZero32 : BitValue.AnyExceptZero64;
 	}
 
-	private static BitValue NewArray(InstructionNode node, TransformContext transform)
+	private static BitValue NewArray(Node node, Transform transform)
 	{
 		return transform.Is32BitPlatform ? BitValue.AnyExceptZero32 : BitValue.AnyExceptZero64;
 	}
 
-	private static BitValue DivUnsigned32(InstructionNode node, TransformContext transform)
+	private static BitValue DivUnsigned32(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand1);
 		var value2 = transform.GetBitValue(node.Operand2);
@@ -2536,7 +2536,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		);
 	}
 
-	private static BitValue DivUnsigned64(InstructionNode node, TransformContext transform)
+	private static BitValue DivUnsigned64(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand1);
 		var value2 = transform.GetBitValue(node.Operand2);
@@ -2581,12 +2581,12 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		);
 	}
 
-	private static BitValue Any32(InstructionNode node, TransformContext transform)
+	private static BitValue Any32(Node node, Transform transform)
 	{
 		return BitValue.Any32;
 	}
 
-	private static BitValue Any64(InstructionNode node, TransformContext transform)
+	private static BitValue Any64(Node node, Transform transform)
 	{
 		return BitValue.Any64;
 	}

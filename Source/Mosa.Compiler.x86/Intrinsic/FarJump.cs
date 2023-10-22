@@ -10,7 +10,7 @@ namespace Mosa.Compiler.x86.Intrinsic;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Compiler.x86.Intrinsic::FarJump")]
-	private static void FarJump(Context context, TransformContext transformContext)
+	private static void FarJump(Context context, Transform transform)
 	{
 		context.SetInstruction(X86.JmpFar);
 	}

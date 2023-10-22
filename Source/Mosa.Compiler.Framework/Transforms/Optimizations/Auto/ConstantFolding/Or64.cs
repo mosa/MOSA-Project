@@ -16,7 +16,7 @@ public sealed class Or64 : BaseTransform
 
 	public override int Priority => 100;
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (!IsResolvedConstant(context.Operand1))
 			return false;
@@ -27,7 +27,7 @@ public sealed class Or64 : BaseTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var result = context.Result;
 

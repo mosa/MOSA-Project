@@ -14,7 +14,7 @@ public abstract class BasePlugTransform : BaseTransform
 
 	#region Helpers
 
-	public static uint CalculateInterfaceMethodTableOffset(TransformContext transform, MosaMethod invokeTarget)
+	public static uint CalculateInterfaceMethodTableOffset(Transform transform, MosaMethod invokeTarget)
 	{
 		var slot = transform.TypeLayout.GetMethodSlot(invokeTarget);
 
@@ -24,7 +24,7 @@ public abstract class BasePlugTransform : BaseTransform
 		return transform.NativePointerSize * slot;
 	}
 
-	public static uint CalculateInterfaceSlotOffset(TransformContext transform, MosaMethod invokeTarget)
+	public static uint CalculateInterfaceSlotOffset(Transform transform, MosaMethod invokeTarget)
 	{
 		var slot = CalculateInterfaceSlot(transform, invokeTarget.DeclaringType);
 
@@ -34,14 +34,14 @@ public abstract class BasePlugTransform : BaseTransform
 		return slot * transform.NativePointerSize;
 	}
 
-	public static uint CalculateMethodTableOffset(TransformContext transform, MosaMethod invokeTarget)
+	public static uint CalculateMethodTableOffset(Transform transform, MosaMethod invokeTarget)
 	{
 		var slot = transform.TypeLayout.GetMethodSlot(invokeTarget);
 
 		return transform.NativePointerSize * (slot + 14); // 14 is the offset into the TypeDef to the start of the MethodTable
 	}
 
-	public static uint CalculateParameterStackSize(TransformContext transform, List<Operand> operands)
+	public static uint CalculateParameterStackSize(Transform transform, List<Operand> operands)
 	{
 		uint stackSize = 0;
 
@@ -56,7 +56,7 @@ public abstract class BasePlugTransform : BaseTransform
 		return stackSize;
 	}
 
-	public static void MakeCall(TransformContext transform, Context context, Operand target, Operand result, List<Operand> operands)
+	public static void MakeCall(Transform transform, Context context, Operand target, Operand result, List<Operand> operands)
 	{
 		//var data = TypeLayout.__GetMethodInfo(method);
 
@@ -75,12 +75,12 @@ public abstract class BasePlugTransform : BaseTransform
 		FreeStackAfterCall(transform, context, totalStack);
 	}
 
-	private static uint CalculateInterfaceSlot(TransformContext transform, MosaType interaceType)
+	private static uint CalculateInterfaceSlot(Transform transform, MosaType interaceType)
 	{
 		return transform.TypeLayout.GetInterfaceSlot(interaceType);
 	}
 
-	private static uint CalculateReturnSize(TransformContext transform, Operand result)
+	private static uint CalculateReturnSize(Transform transform, Operand result)
 	{
 		if (result == null)
 			return 0;
@@ -91,7 +91,7 @@ public abstract class BasePlugTransform : BaseTransform
 		return transform.MethodCompiler.GetSize(result, true);
 	}
 
-	private static void FreeStackAfterCall(TransformContext transform, Context context, uint stackSize)
+	private static void FreeStackAfterCall(Transform transform, Context context, uint stackSize)
 	{
 		if (stackSize == 0)
 			return;
@@ -99,7 +99,7 @@ public abstract class BasePlugTransform : BaseTransform
 		context.AppendInstruction(transform.AddInstruction, transform.StackPointer, transform.StackPointer, Operand.CreateConstant32(stackSize));
 	}
 
-	private static void GetReturnValue(TransformContext transform, Context context, Operand result)
+	private static void GetReturnValue(Transform transform, Context context, Operand result)
 	{
 		if (result == null)
 			return;
@@ -149,7 +149,7 @@ public abstract class BasePlugTransform : BaseTransform
 		}
 	}
 
-	private static void Push(TransformContext transform, Context context, Operand operand, uint offset)
+	private static void Push(Transform transform, Context context, Operand operand, uint offset)
 	{
 		var offsetOperand = Operand.CreateConstant32(offset);
 
@@ -183,7 +183,7 @@ public abstract class BasePlugTransform : BaseTransform
 		}
 	}
 
-	private static void PushOperands(TransformContext transform, Context context, List<Operand> operands, uint offset)
+	private static void PushOperands(Transform transform, Context context, List<Operand> operands, uint offset)
 	{
 		for (var index = operands.Count - 1; index >= 0; index--)
 		{
@@ -196,7 +196,7 @@ public abstract class BasePlugTransform : BaseTransform
 		}
 	}
 
-	private static void ReserveStackSizeForCall(TransformContext transform, Context context, uint stackSize)
+	private static void ReserveStackSizeForCall(Transform transform, Context context, uint stackSize)
 	{
 		if (stackSize == 0)
 			return;

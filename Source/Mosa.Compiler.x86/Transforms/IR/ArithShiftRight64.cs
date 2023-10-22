@@ -14,7 +14,7 @@ public sealed class ArithShiftRight64 : BaseIRTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		transform.SplitOperand(context.Result, out var resultLow, out var resultHigh);
 		transform.SplitOperand(context.Operand1, out var op1L, out var op1H);

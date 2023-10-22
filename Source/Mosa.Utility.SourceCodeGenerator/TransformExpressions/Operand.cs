@@ -8,13 +8,13 @@ public class Operand
 
 	public int Index { get; set; }
 
-	public InstructionNode InstructionNode { get; set; }
+	public Node Node { get; set; }
 
 	public Method Method { get; set; }
 
 	public string Value => Token.Value;
 
-	public bool IsInstruction => InstructionNode != null;
+	public bool IsInstruction => Node != null;
 
 	public bool IsMethod => Method != null;
 
@@ -48,9 +48,9 @@ public class Operand
 		Index = index;
 	}
 
-	public Operand(InstructionNode instructionNode, int index)
+	public Operand(Node instructionNode, int index)
 	{
-		InstructionNode = instructionNode;
+		Node = instructionNode;
 		Index = index;
 	}
 
@@ -60,13 +60,13 @@ public class Operand
 		Index = index;
 	}
 
-	public Operand Clone(InstructionNode parent)
+	public Operand Clone(Node parent)
 	{
 		var operand = new Operand(Token, Index);
 
-		if (InstructionNode != null)
+		if (Node != null)
 		{
-			operand.InstructionNode = InstructionNode.Clone(null);
+			operand.Node = Node.Clone(null);
 		}
 
 		if (Method != null)
@@ -97,7 +97,7 @@ public class Operand
 	public override string ToString()
 	{
 		if (IsInstruction)
-			return $"{Index} : {InstructionNode}";
+			return $"{Index} : {Node}";
 		else if (IsMethod)
 			return $"{Index} : {Method}";
 		else

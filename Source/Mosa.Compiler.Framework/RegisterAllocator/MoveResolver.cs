@@ -6,7 +6,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator;
 
 public sealed class MoveResolver
 {
-	public readonly InstructionNode Node;
+	public readonly Node Node;
 
 	public readonly bool Before;
 
@@ -14,7 +14,7 @@ public sealed class MoveResolver
 
 	private readonly List<LiveIntervalTransition> ResolvedMoves = new();
 
-	public MoveResolver(InstructionNode node, bool before)
+	public MoveResolver(Node node, bool before)
 	{
 		Node = node;
 		Before = before;

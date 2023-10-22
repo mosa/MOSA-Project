@@ -12,7 +12,7 @@ public sealed class Move64Overwrite : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (!context.Block.IsPrologue)
 			return false;
@@ -58,7 +58,7 @@ public sealed class Move64Overwrite : BaseTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		context.SetNop();
 	}

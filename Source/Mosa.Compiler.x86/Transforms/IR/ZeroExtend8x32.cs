@@ -14,7 +14,7 @@ public sealed class ZeroExtend8x32 : BaseIRTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		context.ReplaceInstruction(X86.Movzx8To32);
 	}

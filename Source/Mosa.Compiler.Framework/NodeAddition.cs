@@ -1,13 +1,11 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Collections.Generic;
-
 namespace Mosa.Compiler.Framework;
 
 /// <summary>
 /// Instruction Node Addition
 /// </summary>
-public sealed class InstructionNodeAddition
+public sealed class NodeAddition
 {
 	#region Properties
 

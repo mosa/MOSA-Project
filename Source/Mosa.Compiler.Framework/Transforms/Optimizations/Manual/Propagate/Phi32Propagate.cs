@@ -8,7 +8,7 @@ public sealed class Phi32Propagate : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (context.OperandCount == 1)
 			return true;
@@ -24,7 +24,7 @@ public sealed class Phi32Propagate : BaseTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var result = context.Result;
 		var operand1 = context.Operand1;

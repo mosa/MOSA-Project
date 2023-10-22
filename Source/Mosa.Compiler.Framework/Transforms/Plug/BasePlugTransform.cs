@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Plug
 
 		#region Helpers
 
-		public static bool IsPlugged(Context context, TransformContext transform)
+		public static bool IsPlugged(Context context, Transform transform)
 		{
 			if (context.Operand1.Method == null)
 				return false;
@@ -18,7 +18,7 @@ namespace Mosa.Compiler.Framework.Transforms.Plug
 			return transform.Compiler.PlugSystem.GetReplacement(context.Operand1.Method) != null;
 		}
 
-		public static void Plug(Context context, TransformContext transform)
+		public static void Plug(Context context, Transform transform)
 		{
 			var newTarget = transform.Compiler.PlugSystem.GetReplacement(context.Operand1.Method);
 

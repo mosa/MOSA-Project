@@ -12,7 +12,7 @@ namespace Mosa.Compiler.x64.Transforms.IR
 
 		#region Overrides
 
-		public override bool Match(Context context, TransformContext transform)
+		public override bool Match(Context context, Transform transform)
 		{
 			return true;
 		}

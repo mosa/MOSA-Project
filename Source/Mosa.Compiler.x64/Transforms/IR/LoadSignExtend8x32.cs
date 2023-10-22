@@ -14,7 +14,7 @@ public sealed class LoadSignExtend8x32 : BaseIRTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		transform.OrderLoadStoreOperands(context);
 

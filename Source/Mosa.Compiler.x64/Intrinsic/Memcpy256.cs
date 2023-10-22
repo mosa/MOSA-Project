@@ -10,13 +10,13 @@ namespace Mosa.Compiler.x64.Intrinsic;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Compiler.x64.Intrinsic::Memcpy256")]
-	private static void Memcpy256(Context context, TransformContext transformContext)
+	private static void Memcpy256(Context context, Transform transform)
 	{
 		var dest = context.Operand1;
 		var src = context.Operand2;
 
-		var v0 = transformContext.VirtualRegisters.Allocate64();
-		var v1 = transformContext.VirtualRegisters.Allocate64();
+		var v0 = transform.VirtualRegisters.Allocate64();
+		var v1 = transform.VirtualRegisters.Allocate64();
 		var offset16 = Operand.Constant64_16;
 
 		context.SetInstruction(X64.MovupsLoad, v0, dest, Operand.Constant64_0);

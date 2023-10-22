@@ -14,7 +14,7 @@ public sealed class Load64 : BaseIRTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		transform.SplitOperand(context.Result, out var resultLow, out var resultHigh);
 

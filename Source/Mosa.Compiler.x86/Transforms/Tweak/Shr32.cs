@@ -14,7 +14,7 @@ public sealed class Shr32 : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (!context.Operand1.IsConstant)
 			return false;
@@ -25,7 +25,7 @@ public sealed class Shr32 : BaseTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		transform.MoveOperand1ToVirtualRegister(context, X86.Mov32);
 	}

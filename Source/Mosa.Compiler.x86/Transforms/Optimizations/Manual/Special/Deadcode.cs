@@ -13,7 +13,7 @@ public sealed class Deadcode : BaseTransform
 
 	public override int Priority => 100;
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (context.ResultCount != 1)
 			return false;
@@ -61,7 +61,7 @@ public sealed class Deadcode : BaseTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		context.SetNop();
 	}

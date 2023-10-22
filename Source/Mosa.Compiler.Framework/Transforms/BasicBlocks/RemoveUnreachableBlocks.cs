@@ -7,11 +7,11 @@ namespace Mosa.Compiler.Framework.Transforms.BasicBlocks;
 
 public class RemoveUnreachableBlocks : BaseBlockTransform
 {
-	public override int Process(TransformContext transformContext)
+	public override int Process(Transform transform)
 	{
-		var basicBlocks = transformContext.BasicBlocks;
-		var hasProtectedRegions = transformContext.MethodCompiler.HasProtectedRegions;
-		var trace = transformContext.TraceLog;
+		var basicBlocks = transform.BasicBlocks;
+		var hasProtectedRegions = transform.MethodCompiler.HasProtectedRegions;
+		var trace = transform.TraceLog;
 
 		var emptied = 0;
 

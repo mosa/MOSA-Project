@@ -12,7 +12,7 @@ public abstract class BaseCompoundTransform : BaseTransform
 
 	#region Helpers
 
-	protected static void CopyCompound(TransformContext transform, Context context, Operand destinationBase, Operand destination, Operand sourceBase, Operand source, Operand operandType)
+	protected static void CopyCompound(Transform transform, Context context, Operand destinationBase, Operand destination, Operand sourceBase, Operand source, Operand operandType)
 	{
 		var size = transform.MethodCompiler.GetSize(operandType);
 

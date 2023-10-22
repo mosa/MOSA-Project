@@ -14,7 +14,7 @@ public sealed class Rcr32 : BaseAddressModeTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		AddressModeConversion(context, X86.Mov32);
 	}

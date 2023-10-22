@@ -14,7 +14,7 @@ public sealed class LoadParamSignExtend8x64 : BaseIRTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		context.SetInstruction(X64.MovsxLoad8, context.Result, transform.StackFrame, context.Operand1);
 	}

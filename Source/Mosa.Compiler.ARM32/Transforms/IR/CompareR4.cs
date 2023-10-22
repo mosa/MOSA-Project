@@ -14,7 +14,7 @@ public sealed class CompareR4 : BaseIRTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		MoveConstantRightForComparison(context);
 

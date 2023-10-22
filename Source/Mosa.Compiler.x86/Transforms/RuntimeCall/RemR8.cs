@@ -17,12 +17,12 @@ public sealed class RemR8 : BaseTransform
 
 	public override int Priority => -100;
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		Debug.Assert(context.Result.IsR8);
 		Debug.Assert(context.Operand1.IsR8);

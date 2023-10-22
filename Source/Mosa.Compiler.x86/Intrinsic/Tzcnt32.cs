@@ -10,7 +10,7 @@ namespace Mosa.Compiler.x86.Intrinsic;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Compiler.x86.Intrinsic::Tzcnt32")]
-	private static void Tzcnt32(Context context, TransformContext transformContext)
+	private static void Tzcnt32(Context context, Transform transform)
 	{
 		context.SetInstruction(X86.Tzcnt32, context.Result, context.Operand1);
 	}

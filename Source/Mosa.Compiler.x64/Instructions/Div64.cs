@@ -37,7 +37,7 @@ public sealed class Div64 : X64Instruction
 
 	public override bool IsParityFlagUndefined => true;
 
-	public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
+	public override void Emit(Node node, OpcodeEncoder opcodeEncoder)
 	{
 		System.Diagnostics.Debug.Assert(node.ResultCount == 2);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 3);

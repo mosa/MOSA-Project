@@ -16,7 +16,7 @@ public sealed class SubManagedPointerSame : BaseTransform
 
 	public override int Priority => 80;
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (!AreSame(context.Operand1, context.Operand2))
 			return false;
@@ -24,7 +24,7 @@ public sealed class SubManagedPointerSame : BaseTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var result = context.Result;
 

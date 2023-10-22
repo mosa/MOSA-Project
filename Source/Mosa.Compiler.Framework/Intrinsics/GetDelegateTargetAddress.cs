@@ -8,8 +8,8 @@ namespace Mosa.Compiler.Framework.Intrinsics;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Runtime.Intrinsic::GetDelegateTargetAddress")]
-	private static void GetDelegateTargetAddress(Context context, TransformContext transformContext)
+	private static void GetDelegateTargetAddress(Context context, Transform transform)
 	{
-		context.SetInstruction(transformContext.LoadInstruction, context.Result, context.Operand1, Operand.CreateConstant32(transformContext.Architecture.NativePointerSize));
+		context.SetInstruction(transform.LoadInstruction, context.Result, context.Operand1, Operand.CreateConstant32(transform.Architecture.NativePointerSize));
 	}
 }

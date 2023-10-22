@@ -8,12 +8,12 @@ public sealed class PhiR4Update : BasePhiTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		return context.OperandCount != context.Block.PreviousBlocks.Count;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		UpdatePhi(context.Node);
 	}

@@ -10,7 +10,7 @@ public sealed class Branch64 : BaseTransform
 
 	public override int Priority => 100;
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (!IsResolvedConstant(context.Operand1))
 			return false;
@@ -24,7 +24,7 @@ public sealed class Branch64 : BaseTransform
 		return IsNormal(context.ConditionCode);
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var target = context.BranchTargets[0];
 		var block = context.Block;
@@ -33,7 +33,7 @@ public sealed class Branch64 : BaseTransform
 		{
 			context.SetNop();
 
-			TransformContext.UpdatePhiBlock(target);
+			Framework.Transform.UpdatePhiBlock(target);
 		}
 		else
 		{
@@ -43,7 +43,7 @@ public sealed class Branch64 : BaseTransform
 
 			RemoveRemainingInstructionInBlock(context);
 
-			TransformContext.UpdatePhiBlock(phiBlock);
+			Framework.Transform.UpdatePhiBlock(phiBlock);
 		}
 	}
 }

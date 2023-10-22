@@ -8,8 +8,8 @@ namespace Mosa.Compiler.Framework.Intrinsics;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Runtime.Intrinsic::GetMethodExceptionLookupTable")]
-	private static void GetMethodExceptionLookupTable(Context context, TransformContext transformContext)
+	private static void GetMethodExceptionLookupTable(Context context, Transform transform)
 	{
-		context.SetInstruction(transformContext.MoveInstruction, context.Result, Operand.CreateLabel(Metadata.MethodExceptionLookupTable, transformContext.Is32BitPlatform));
+		context.SetInstruction(transform.MoveInstruction, context.Result, Operand.CreateLabel(Metadata.MethodExceptionLookupTable, transform.Is32BitPlatform));
 	}
 }

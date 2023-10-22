@@ -6,12 +6,12 @@ namespace Mosa.Compiler.Framework.Transforms.BasicBlocks;
 
 public class MergeBlocks : BaseBlockTransform
 {
-	public override int Process(TransformContext transformContext)
+	public override int Process(Transform transform)
 	{
-		var basicBlocks = transformContext.BasicBlocks;
-		var hasProtectedRegions = transformContext.MethodCompiler.HasProtectedRegions;
-		var isInSSAForm = transformContext.MethodCompiler.IsInSSAForm;
-		var trace = transformContext.TraceLog;
+		var basicBlocks = transform.BasicBlocks;
+		var hasProtectedRegions = transform.MethodCompiler.HasProtectedRegions;
+		var isInSSAForm = transform.MethodCompiler.IsInSSAForm;
+		var trace = transform.TraceLog;
 
 		var emptied = 0;
 		var changed = true;

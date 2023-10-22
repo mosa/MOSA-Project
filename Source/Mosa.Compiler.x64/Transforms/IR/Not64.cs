@@ -14,7 +14,7 @@ public sealed class Not64 : BaseIRTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		context.SetInstruction(X64.Mov64, context.Result, context.Operand1);
 	}

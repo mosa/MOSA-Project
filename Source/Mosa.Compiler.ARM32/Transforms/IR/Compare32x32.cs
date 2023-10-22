@@ -14,7 +14,7 @@ public sealed class Compare32x32 : BaseIRTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		MoveConstantRightForComparison(context);
 

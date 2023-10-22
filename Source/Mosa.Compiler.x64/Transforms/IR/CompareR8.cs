@@ -14,7 +14,7 @@ public sealed class CompareR8 : BaseIRTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		//FloatCompare(context, X64.Ucomisd);
 

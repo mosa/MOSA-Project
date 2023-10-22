@@ -8,7 +8,7 @@ public sealed class Compare64x32EqualOrNotEqual : BaseLower32Transform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (context.ConditionCode != ConditionCode.Equal && context.ConditionCode != ConditionCode.NotEqual)
 			return false;
@@ -16,7 +16,7 @@ public sealed class Compare64x32EqualOrNotEqual : BaseLower32Transform
 		return transform.IsLowerTo32;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var result = context.Result;
 		var operand1 = context.Operand1;

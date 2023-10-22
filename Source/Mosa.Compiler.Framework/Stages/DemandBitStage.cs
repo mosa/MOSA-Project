@@ -18,7 +18,7 @@ public sealed class DemandBitStage : BaseMethodCompilerStage
 	private readonly NodeVisitationDelegate[] affected = new NodeVisitationDelegate[MaxInstructions];
 	private readonly NodeVisitationDelegate[] demanded = new NodeVisitationDelegate[MaxInstructions];
 
-	private delegate ulong NodeVisitationDelegate(InstructionNode node, TransformContext transform);
+	private delegate ulong NodeVisitationDelegate(Node node, Transform transform);
 
 	protected override void Finish()
 	{
@@ -69,15 +69,15 @@ public sealed class DemandBitStage : BaseMethodCompilerStage
 
 		var bitValueManager = new BitValueManager(Is32BitPlatform);
 
-		TransformContext.AddManager(bitValueManager);
-		TransformContext.SetLog(trace);
+		Transform.AddManager(bitValueManager);
+		Transform.SetLog(trace);
 
 		// TODO
 	}
 
 	#region IR Instructions
 
-	private static ulong AffectedBits_Or32(InstructionNode node, TransformContext transform)
+	private static ulong AffectedBits_Or32(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand1);
 		var value2 = transform.GetBitValue(node.Operand2);
@@ -87,7 +87,7 @@ public sealed class DemandBitStage : BaseMethodCompilerStage
 		return affected;
 	}
 
-	private static ulong AffectedBits_Or64(InstructionNode node, TransformContext transform)
+	private static ulong AffectedBits_Or64(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand1);
 		var value2 = transform.GetBitValue(node.Operand2);
@@ -97,7 +97,7 @@ public sealed class DemandBitStage : BaseMethodCompilerStage
 		return affected;
 	}
 
-	private static ulong AffectedBits_And32(InstructionNode node, TransformContext transform)
+	private static ulong AffectedBits_And32(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand1);
 		var value2 = transform.GetBitValue(node.Operand2);
@@ -107,7 +107,7 @@ public sealed class DemandBitStage : BaseMethodCompilerStage
 		return affected;
 	}
 
-	private static ulong AffectedBits_And64(InstructionNode node, TransformContext transform)
+	private static ulong AffectedBits_And64(Node node, Transform transform)
 	{
 		var value1 = transform.GetBitValue(node.Operand1);
 		var value2 = transform.GetBitValue(node.Operand2);
@@ -117,7 +117,7 @@ public sealed class DemandBitStage : BaseMethodCompilerStage
 		return affected;
 	}
 
-	private static ulong DemandedBits_And32(InstructionNode node, TransformContext transform)
+	private static ulong DemandedBits_And32(Node node, Transform transform)
 	{
 		if (node.Operand1.IsVirtualRegister && node.Operand2.IsResolvedConstant)
 			return node.Operand2.ConstantUnsigned32;
@@ -128,7 +128,7 @@ public sealed class DemandBitStage : BaseMethodCompilerStage
 		return uint.MaxValue;
 	}
 
-	private static ulong DemandedBits_And64(InstructionNode node, TransformContext transform)
+	private static ulong DemandedBits_And64(Node node, Transform transform)
 	{
 		if (node.Operand1.IsVirtualRegister && node.Operand2.IsResolvedConstant)
 			return node.Operand2.ConstantUnsigned64;
@@ -139,7 +139,7 @@ public sealed class DemandBitStage : BaseMethodCompilerStage
 		return ulong.MaxValue;
 	}
 
-	private static ulong DemandedBits_Or32(InstructionNode node, TransformContext transform)
+	private static ulong DemandedBits_Or32(Node node, Transform transform)
 	{
 		if (node.Operand1.IsVirtualRegister && node.Operand2.IsResolvedConstant)
 			return ~node.Operand2.ConstantUnsigned32;
@@ -150,7 +150,7 @@ public sealed class DemandBitStage : BaseMethodCompilerStage
 		return uint.MaxValue;
 	}
 
-	private static ulong DemandedBits_Or64(InstructionNode node, TransformContext transform)
+	private static ulong DemandedBits_Or64(Node node, Transform transform)
 	{
 		if (node.Operand1.IsVirtualRegister && node.Operand2.IsResolvedConstant)
 			return ~node.Operand2.ConstantUnsigned64;
@@ -161,7 +161,7 @@ public sealed class DemandBitStage : BaseMethodCompilerStage
 		return ulong.MaxValue;
 	}
 
-	private static ulong DemandedBits_ShiftRight32(InstructionNode node, TransformContext transform)
+	private static ulong DemandedBits_ShiftRight32(Node node, Transform transform)
 	{
 		if (node.Operand1.IsVirtualRegister && node.Operand2.IsResolvedConstant)
 			return (uint.MaxValue << (node.Operand2.ConstantSigned32 & 0x3F)) & uint.MaxValue;
@@ -172,7 +172,7 @@ public sealed class DemandBitStage : BaseMethodCompilerStage
 		return uint.MaxValue;
 	}
 
-	private static ulong DemandedBits_ShiftRight64(InstructionNode node, TransformContext transform)
+	private static ulong DemandedBits_ShiftRight64(Node node, Transform transform)
 	{
 		if (node.Operand1.IsVirtualRegister && node.Operand2.IsResolvedConstant)
 			return ulong.MaxValue << (node.Operand2.ConstantSigned32 & 0x3F);

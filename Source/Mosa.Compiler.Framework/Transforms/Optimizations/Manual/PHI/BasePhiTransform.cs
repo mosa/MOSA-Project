@@ -54,7 +54,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Phi
 			PhiHelper.UpdatePhiBlock(phiBlock);
 		}
 
-		public static void UpdatePhi(InstructionNode node)
+		public static void UpdatePhi(Node node)
 		{
 			PhiHelper.UpdatePhi(node);
 		}

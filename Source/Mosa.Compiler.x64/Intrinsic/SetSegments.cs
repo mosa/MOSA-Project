@@ -10,7 +10,7 @@ namespace Mosa.Compiler.x64.Intrinsic;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Compiler.x64.Intrinsic::SetSegments")]
-	private static void SetSegments(Context context, TransformContext transformContext)
+	private static void SetSegments(Context context, Transform transform)
 	{
 		var operand1 = context.Operand1;
 		var operand2 = context.Operand2;

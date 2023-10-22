@@ -8,12 +8,12 @@ public sealed class SubCarryOut32CarryNotUsed : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		return !context.Result2.IsUsed;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		context.SetInstruction(IRInstruction.Sub32, context.Result, context.Operand1, context.Operand2);
 	}

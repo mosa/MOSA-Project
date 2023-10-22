@@ -8,7 +8,7 @@ public sealed class Phi32BranchHoisting : BasePhiTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (context.Block.PreviousBlocks.Count != 2 || context.Block.NextBlocks.Count != 2)
 			return false;
@@ -39,7 +39,7 @@ public sealed class Phi32BranchHoisting : BasePhiTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var phiValue = context.Operand1.IsResolvedConstant ? context.Operand1 : context.Operand2;
 		var incomingBlock = context.PhiBlocks[context.Operand1.IsResolvedConstant ? 0 : 1];

@@ -8,12 +8,12 @@ public sealed class ThrowOverflow : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var method = transform.Compiler.InternalRuntimeType.FindMethodByName("ThrowOverflowException");
 		var symbolOperand = Operand.CreateLabel(method, transform.Is32BitPlatform);

@@ -59,7 +59,7 @@ public static class InstructionTrace
 	/// </summary>
 	/// <param name="traceLog">The trace log.</param>
 	/// <param name="node">The context.</param>
-	private static void LogInstructions(TraceLog traceLog, InstructionNode node)
+	private static void LogInstructions(TraceLog traceLog, Node node)
 	{
 		for (; !node.IsBlockEndInstruction; node = node.Next)
 		{

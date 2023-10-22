@@ -12,7 +12,7 @@ namespace Mosa.Compiler.x64.Transforms
 
 		#region Helpers
 
-		public static Operand MoveConstantToFloatRegister(TransformContext transform, Context context, Operand operand)
+		public static Operand MoveConstantToFloatRegister(Transform transform, Context context, Operand operand)
 		{
 			if (!operand.IsConstant)
 				return operand;

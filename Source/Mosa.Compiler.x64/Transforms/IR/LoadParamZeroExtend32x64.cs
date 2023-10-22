@@ -14,7 +14,7 @@ public sealed class LoadParamZeroExtend32x64 : BaseIRTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		context.SetInstruction(X64.MovzxLoad32, context.Result, transform.StackFrame, context.Operand1);
 	}

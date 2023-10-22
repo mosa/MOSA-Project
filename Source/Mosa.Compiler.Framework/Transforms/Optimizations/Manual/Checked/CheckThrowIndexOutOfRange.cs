@@ -10,12 +10,12 @@ public sealed class CheckThrowIndexOutOfRange : BaseTransform
 
 	public override int Priority => 100;
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		return context.Operand1.IsResolvedConstant;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		if (context.Operand1.ConstantUnsigned64 == 0)
 		{

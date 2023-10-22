@@ -16,7 +16,7 @@ public sealed class DivSignedMagicNumber32 : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (!IsResolvedConstant(context.Operand2))
 			return false;
@@ -33,7 +33,7 @@ public sealed class DivSignedMagicNumber32 : BaseTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var result = context.Result;
 

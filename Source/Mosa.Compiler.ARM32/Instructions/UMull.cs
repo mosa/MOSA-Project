@@ -27,7 +27,7 @@ public sealed class UMull : ARM32Instruction
 
 	public override bool IsSignFlagModified => true;
 
-	public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
+	public override void Emit(Node node, OpcodeEncoder opcodeEncoder)
 	{
 		System.Diagnostics.Debug.Assert(node.ResultCount == 2);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 2);

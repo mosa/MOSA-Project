@@ -8,7 +8,7 @@ using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework;
 
-public sealed class TransformContext
+public sealed class Transform
 {
 	#region Properties
 
@@ -276,7 +276,7 @@ public sealed class TransformContext
 	/// </summary>
 	/// <param name="node">The node.</param>
 	/// <returns></returns>
-	public BasicBlock Split(InstructionNode node)
+	public BasicBlock Split(Node node)
 	{
 		var newblock = CreateNewBlock(-1, node.Label);
 
@@ -349,7 +349,7 @@ public sealed class TransformContext
 		PhiHelper.UpdatePhiBlock(phiBlock);
 	}
 
-	public static void UpdatePhi(InstructionNode node)
+	public static void UpdatePhi(Node node)
 	{
 		PhiHelper.UpdatePhi(node);
 	}

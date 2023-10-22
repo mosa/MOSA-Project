@@ -14,12 +14,12 @@ public sealed class ConvertR8ToR4 : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		transform.ReplaceWithCall(context, "Mosa.Runtime.ARM32.Math.FloatingPoint", "DoubleToFloat");
 	}

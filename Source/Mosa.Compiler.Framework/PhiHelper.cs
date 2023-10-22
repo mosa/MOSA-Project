@@ -35,7 +35,7 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		public static void UpdatePhi(InstructionNode node)
+		public static void UpdatePhi(Node node)
 		{
 			Debug.Assert(node.OperandCount != node.Block.PreviousBlocks.Count);
 

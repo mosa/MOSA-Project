@@ -10,7 +10,7 @@ namespace Mosa.Compiler.x64.Intrinsic;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Compiler.x64.Intrinsic::GetIRQHandler")]
-	private static void GetIRQHandler(Context context, TransformContext transformContext)
+	private static void GetIRQHandler(Context context, Transform transform)
 	{
 	}
 }

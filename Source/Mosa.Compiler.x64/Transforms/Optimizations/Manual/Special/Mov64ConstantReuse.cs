@@ -11,7 +11,7 @@ public sealed class Mov64ConstantReuse : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (!transform.AreCPURegistersAllocated)
 			return false;
@@ -48,7 +48,7 @@ public sealed class Mov64ConstantReuse : BaseTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var previous = context.Node.PreviousNonEmpty;
 

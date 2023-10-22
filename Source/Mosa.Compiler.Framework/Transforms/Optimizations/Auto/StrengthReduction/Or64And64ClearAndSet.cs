@@ -16,7 +16,7 @@ public sealed class Or64And64ClearAndSet : BaseTransform
 
 	public override int Priority => 80;
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (!context.Operand1.IsVirtualRegister)
 			return false;
@@ -39,7 +39,7 @@ public sealed class Or64And64ClearAndSet : BaseTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var result = context.Result;
 
@@ -62,7 +62,7 @@ public sealed class Or64And64ClearAndSet_v1 : BaseTransform
 
 	public override int Priority => 80;
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (!context.Operand2.IsVirtualRegister)
 			return false;
@@ -85,7 +85,7 @@ public sealed class Or64And64ClearAndSet_v1 : BaseTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var result = context.Result;
 
@@ -108,7 +108,7 @@ public sealed class Or64And64ClearAndSet_v2 : BaseTransform
 
 	public override int Priority => 80;
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (!context.Operand1.IsVirtualRegister)
 			return false;
@@ -131,7 +131,7 @@ public sealed class Or64And64ClearAndSet_v2 : BaseTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var result = context.Result;
 
@@ -154,7 +154,7 @@ public sealed class Or64And64ClearAndSet_v3 : BaseTransform
 
 	public override int Priority => 80;
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (!context.Operand2.IsVirtualRegister)
 			return false;
@@ -177,7 +177,7 @@ public sealed class Or64And64ClearAndSet_v3 : BaseTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var result = context.Result;
 

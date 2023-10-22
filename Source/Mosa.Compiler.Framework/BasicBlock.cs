@@ -21,7 +21,7 @@ public sealed class BasicBlock : IComparable<BasicBlock>
 	/// <summary>
 	/// The branch instructions
 	/// </summary>
-	private readonly List<InstructionNode> branchInstructions = new List<InstructionNode>(2);
+	private readonly List<Node> branchInstructions = new List<Node>(2);
 
 	#endregion Data Fields
 
@@ -30,22 +30,22 @@ public sealed class BasicBlock : IComparable<BasicBlock>
 	/// <summary>
 	/// Gets the first instruction node.
 	/// </summary>
-	public InstructionNode First { get; }
+	public Node First { get; }
 
 	/// <summary>
 	/// Gets the last instruction node.
 	/// </summary>
-	public InstructionNode Last { get; }
+	public Node Last { get; }
 
 	/// <summary>
 	/// Gets the before last instruction node.
 	/// </summary>
-	public InstructionNode BeforeLast => Last.Previous;
+	public Node BeforeLast => Last.Previous;
 
 	/// <summary>
 	/// Gets the instruction after the first instruction.
 	/// </summary>
-	public InstructionNode AfterFirst => First.Next;
+	public Node AfterFirst => First.Next;
 
 	/// <summary>
 	/// Retrieves the label, which uniquely identifies this block.
@@ -112,7 +112,7 @@ public sealed class BasicBlock : IComparable<BasicBlock>
 
 	public Context ContextBeforeBranch => new Context(BeforeBranch);
 
-	public InstructionNode BeforeBranch
+	public Node BeforeBranch
 	{
 		get
 		{
@@ -148,19 +148,19 @@ public sealed class BasicBlock : IComparable<BasicBlock>
 		Label = blockLabel;
 		Sequence = sequence;
 
-		First = new InstructionNode(IRInstruction.BlockStart)
+		First = new Node(IRInstruction.BlockStart)
 		{
 			Label = instructionLabel,
 			Block = this
 		};
 
-		var middle = new InstructionNode
+		var middle = new Node
 		{
 			Label = instructionLabel,
 			Block = this
 		};
 
-		Last = new InstructionNode(IRInstruction.BlockEnd)
+		Last = new Node(IRInstruction.BlockEnd)
 		{
 			Label = instructionLabel,
 			Block = this,
@@ -177,7 +177,7 @@ public sealed class BasicBlock : IComparable<BasicBlock>
 
 	#region Methods
 
-	internal void AddBranchInstruction(InstructionNode node)
+	internal void AddBranchInstruction(Node node)
 	{
 		if (node.Instruction?.IgnoreInstructionBasicBlockTargets == true)
 			return;
@@ -200,7 +200,7 @@ public sealed class BasicBlock : IComparable<BasicBlock>
 		}
 	}
 
-	internal void RemoveBranchInstruction(InstructionNode node)
+	internal void RemoveBranchInstruction(Node node)
 	{
 		if (node.BranchTargets == null || node.BranchTargetsCount == 0)
 			return;

@@ -8,7 +8,7 @@ public sealed class BranchManagedPointer : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (IsConstant(context.Operand2))
 			return false;
@@ -22,7 +22,7 @@ public sealed class BranchManagedPointer : BaseTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		context.SetInstruction(IRInstruction.BranchManagedPointer, context.ConditionCode.GetReverse(), context.Result, context.Operand2, context.Operand1, context.BranchTargets[0]);
 	}

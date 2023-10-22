@@ -14,7 +14,7 @@ public sealed class IDiv64 : BaseTransform
 	{
 	}
 
-	public override bool Match(Context context, TransformContext transform)
+	public override bool Match(Context context, Transform transform)
 	{
 		if (context.Result.IsCPURegister
 			&& context.Result2.IsCPURegister
@@ -29,7 +29,7 @@ public sealed class IDiv64 : BaseTransform
 		return true;
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		var operand1 = context.Operand1;
 		var operand2 = context.Operand2;

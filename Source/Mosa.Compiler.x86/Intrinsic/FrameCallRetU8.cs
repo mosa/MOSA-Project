@@ -10,7 +10,7 @@ namespace Mosa.Compiler.x86.Intrinsic;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Compiler.x86.Intrinsic::FrameCallRetU8")]
-	private static void FrameCallRetU8(Context context, TransformContext transformContext)
+	private static void FrameCallRetU8(Context context, Transform transform)
 	{
 		var result = context.Result;
 		var methodAddress = context.Operand1;

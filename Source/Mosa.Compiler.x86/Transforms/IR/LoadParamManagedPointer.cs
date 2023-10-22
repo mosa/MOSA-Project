@@ -14,7 +14,7 @@ public sealed class LoadParamManagedPointer : BaseIRTransform
 	{
 	}
 
-	public override void Transform(Context context, TransformContext transform)
+	public override void Transform(Context context, Transform transform)
 	{
 		context.SetInstruction(X86.MovLoad32, context.Result, transform.StackFrame, context.Operand1);
 	}

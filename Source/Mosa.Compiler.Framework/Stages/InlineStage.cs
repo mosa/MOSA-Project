@@ -44,7 +44,7 @@ public class InlineStage : BaseMethodCompilerStage
 		var callSiteCount = 0;
 
 		// find all call sites
-		var callSites = new List<InstructionNode>();
+		var callSites = new List<Node>();
 
 		foreach (var block in BasicBlocks)
 		{
@@ -106,7 +106,7 @@ public class InlineStage : BaseMethodCompilerStage
 		}
 	}
 
-	protected void Inline(InstructionNode callSiteNode, BasicBlocks blocks)
+	protected void Inline(Node callSiteNode, BasicBlocks blocks)
 	{
 		var mapBlocks = new Dictionary<BasicBlock, BasicBlock>(blocks.Count);
 		var map = new Dictionary<Operand, Operand>();
@@ -135,7 +135,7 @@ public class InlineStage : BaseMethodCompilerStage
 
 				if (node.Instruction == IRInstruction.Epilogue)
 				{
-					newBlock.BeforeLast.Insert(new InstructionNode(IRInstruction.Jmp, nextBlock));
+					newBlock.BeforeLast.Insert(new Node(IRInstruction.Jmp, nextBlock));
 					continue;
 				}
 
@@ -152,7 +152,7 @@ public class InlineStage : BaseMethodCompilerStage
 						var newOperand = Map(node.Operand1, map, callSiteNode);
 						var moveInstruction = GetMoveInstruction(node);
 
-						var moveNode = new InstructionNode(moveInstruction, callSiteNode.Result, newOperand);
+						var moveNode = new Node(moveInstruction, callSiteNode.Result, newOperand);
 
 						newBlock.BeforeLast.Insert(moveNode);
 					}
@@ -160,7 +160,7 @@ public class InlineStage : BaseMethodCompilerStage
 					continue;
 				}
 
-				var newNode = new InstructionNode(node.Instruction, node.OperandCount, node.ResultCount)
+				var newNode = new Node(node.Instruction, node.OperandCount, node.ResultCount)
 				{
 					ConditionCode = node.ConditionCode,
 					Label = callSiteNode.Label,
@@ -220,7 +220,7 @@ public class InlineStage : BaseMethodCompilerStage
 		callSiteNode.SetInstruction(IRInstruction.Jmp, prologue);
 	}
 
-	private static BaseInstruction GetMoveInstruction(InstructionNode node)
+	private static BaseInstruction GetMoveInstruction(Node node)
 	{
 		var instruction = node.Instruction;
 
@@ -242,7 +242,7 @@ public class InlineStage : BaseMethodCompilerStage
 		throw new CompilerException();
 	}
 
-	private static void UpdateParameterInstruction(InstructionNode newNode)
+	private static void UpdateParameterInstruction(Node newNode)
 	{
 		var instruction = newNode.Instruction;
 
@@ -356,7 +356,7 @@ public class InlineStage : BaseMethodCompilerStage
 		}
 	}
 
-	private Operand Map(Operand operand, Dictionary<Operand, Operand> map, InstructionNode callSiteNode)
+	private Operand Map(Operand operand, Dictionary<Operand, Operand> map, Node callSiteNode)
 	{
 		if (operand == null)
 			return null;

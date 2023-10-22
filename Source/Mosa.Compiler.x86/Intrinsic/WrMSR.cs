@@ -10,7 +10,7 @@ namespace Mosa.Compiler.x86.Intrinsic;
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Compiler.x86.Intrinsic::WrMSR")]
-	private static void WrMSR(Context context, TransformContext transformContext)
+	private static void WrMSR(Context context, Transform transform)
 	{
 		context.SetInstruction(X86.WrMSR, null, context.Operand1, context.Operand2, context.Operand3);
 	}
