@@ -31,7 +31,7 @@ public static class Scheduler
 		CurrentThreadID = 0;
 		clockTicks = 0;
 
-		for (int i = 0; i < MaxThreads; i++)
+		for (var i = 0; i < MaxThreads; i++)
 		{
 			Threads[i] = new Thread();
 		}
@@ -155,8 +155,6 @@ public static class Scheduler
 		Debug.WriteLine("Scheduler:CreateThread()");
 
 		var address = GetAddress(thread);
-
-		Debug.WriteLine("Scheduler:CreateThread() [1]");
 
 		var newthread = CreateThread(address, stackSize);
 

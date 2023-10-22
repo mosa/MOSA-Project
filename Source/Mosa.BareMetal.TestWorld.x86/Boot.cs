@@ -64,7 +64,7 @@ public static class Boot
 		{
 			lock (spinlock)
 			{
-				Console.SetCursorPosition(18 + thread, 0);
+				Console.SetCursorPosition(0, 3 + thread);
 				Console.Write("Thread #" + thread + ": " + ticks);
 			}
 

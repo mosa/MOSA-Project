@@ -331,9 +331,9 @@ jobs:
       - name: Install Qemu and Dependencies
         run: sudo apt-get -y -o Acquire::Retries=5 install qemu-system-x86
       - name: Demo Test - BareMetal Starter
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.Starter.x86.dll -o${{ matrix.optimization }} -check -test -include bin/Include
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.Starter.x86.dll -o${{ matrix.optimization }} -check -test 
       - name: Demo Test - BareMetal TestWorld
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.x86.dll -o${{ matrix.optimization }} -check -test -include bin/Include
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.x86.dll -o${{ matrix.optimization }} -check -test
       - name: Demo Test - BareMetal HelloWorld
         run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x86.dll -o${{ matrix.optimization }} -check -test
       - name: Demo Test - BareMetal CoolWorld
@@ -363,9 +363,9 @@ jobs:
           name: macos-build-artifact
           path: bin
       - name: Demo Test - BareMetal Starter
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.Starter.x86.dll -o${{ matrix.optimization }} -check -test -include bin/Include
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.Starter.x86.dll -o${{ matrix.optimization }} -check -test
       - name: Demo Test - BareMetal TestWorld
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.x86.dll -o${{ matrix.optimization }} -check -test -include bin/Include
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.x86.dll -o${{ matrix.optimization }} -check -test
       - name: Demo Test - BareMetal HelloWorld
         run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x86.dll -o${{ matrix.optimization }} -check -test
       - name: Demo Test - BareMetal CoolWorld
