@@ -21,9 +21,21 @@ public static class Boot
 
 		Division.DivisionBy7(254u);
 
-		StartThreadTest();
+		InterruptManager.SetHandler(ProcessInterrupt);
+
+		//StartThreadTest();
 
 		Program.EntryPoint();
+	}
+
+	private static uint counter = 0;
+
+	public static void ProcessInterrupt(uint interrupt, uint errorCode)
+	{
+		counter++;
+
+		Console.SetCursorPosition(0, 23);
+		Console.Write("Counter: " + counter + " IRQ: " + interrupt + " Code: " + errorCode);
 	}
 
 	private static void StartThreadTest()
