@@ -23,7 +23,7 @@ public static class Boot
 
 		InterruptManager.SetHandler(ProcessInterrupt);
 
-		//StartThreadTest();
+		StartThreadTest();
 
 		Program.EntryPoint();
 	}
@@ -40,6 +40,8 @@ public static class Boot
 
 	private static void StartThreadTest()
 	{
+		Debug.WriteLine("Boot::StartThreadTest()");
+
 		Scheduler.CreateThread(Thread1, Page.Size);
 		Scheduler.CreateThread(Thread2, Page.Size);
 		Scheduler.CreateThread(Thread3, Page.Size);
@@ -47,6 +49,8 @@ public static class Boot
 		Scheduler.CreateThread(Thread5, Page.Size);
 
 		Scheduler.Start();
+
+		Debug.WriteLine("Boot::StartThreadTest() [Exit]");
 	}
 
 	private static readonly object spinlock = new();

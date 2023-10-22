@@ -25,7 +25,7 @@ public static unsafe class Internal
 				Runtime.Internal.Fault(0XBAD00002, i);
 			}
 
-			var exceptionType = new TypeDefinition(Mosa.Runtime.Internal.GetTypeDefinition(exceptionObject));
+			var exceptionType = new TypeDefinition(Runtime.Internal.GetTypeDefinition(exceptionObject));
 
 			var methodDef = Runtime.Internal.GetMethodDefinitionViaMethodExceptionLookup(returnAddress);
 

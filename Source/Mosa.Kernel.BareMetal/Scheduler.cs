@@ -24,6 +24,8 @@ public static class Scheduler
 
 	public static void Setup()
 	{
+		Debug.WriteLine("Scheduler:Setup()");
+
 		Enabled = false;
 		Threads = new Thread[MaxThreads];
 		CurrentThreadID = 0;
@@ -39,14 +41,20 @@ public static class Scheduler
 		SignalThreadTerminationMethodAddress = GetAddress(SignalTermination);
 
 		CreateThread(address, 2, 0);
+
+		Debug.WriteLine("Scheduler:Setup() [Exit]");
 	}
 
 	public static void Start()
 	{
+		Debug.WriteLine("Scheduler:Start()");
+
 		SetThreadID(0);
 		Enabled = true;
 
 		Platform.Scheduler.Start();
+
+		Debug.WriteLine("Scheduler:Start() [Exit]");
 	}
 
 	[MethodImpl(MethodImplOptions.NoInlining)]
@@ -144,14 +152,24 @@ public static class Scheduler
 
 	public static uint CreateThread(ThreadStart thread, uint stackSize)
 	{
+		Debug.WriteLine("Scheduler:CreateThread()");
+
 		var address = GetAddress(thread);
 
-		return CreateThread(address, stackSize);
+		Debug.WriteLine("Scheduler:CreateThread() [1]");
+
+		var newthread = CreateThread(address, stackSize);
+
+		Debug.WriteLine("Scheduler:CreateThread() [Exit]");
+
+		return newthread;
 	}
 
 	public static uint CreateThread(Pointer methodAddress, uint stackSize)
 	{
-		uint threadID = FindEmptyThreadSlot();
+		Debug.WriteLine("Scheduler:CreateThread(Pointer,uint)");
+
+		var threadID = FindEmptyThreadSlot();
 
 		if (threadID == 0)
 		{
@@ -160,6 +178,8 @@ public static class Scheduler
 		}
 
 		CreateThread(methodAddress, stackSize, threadID);
+
+		Debug.WriteLine("Scheduler:CreateThread(Pointer,uint) [Exit]");
 
 		return threadID;
 	}
@@ -213,23 +233,31 @@ public static class Scheduler
 
 	private static uint FindEmptyThreadSlot()
 	{
-		for (uint i = 0; i < MaxThreads; i++)
+		Debug.WriteLine("Scheduler:FindEmptyThreadSlot()");
+
+		for (var i = 0u; i < MaxThreads; i++)
 		{
 			if (Threads[i].Status == ThreadStatus.Empty)
 				return i;
 		}
+
+		Debug.WriteLine("Scheduler:FindEmptyThreadSlot() [Exit]");
 
 		return 0;
 	}
 
 	private static void ResetTerminatedThreads()
 	{
-		for (uint i = 0; i < MaxThreads; i++)
+		Debug.WriteLine("Scheduler:ResetTerminatedThreads()");
+
+		for (var i = 0u; i < MaxThreads; i++)
 		{
 			if (Threads[i].Status == ThreadStatus.Terminated)
 			{
 				Threads[i].Status = ThreadStatus.Empty;
 			}
 		}
+
+		Debug.WriteLine("Scheduler:ResetTerminatedThreads() [Exit]");
 	}
 }
