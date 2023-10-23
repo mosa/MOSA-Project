@@ -2259,8 +2259,8 @@ public static class IDT
 				break;
 
 			case Scheduler.ClockIRQ:
-				Interrupt?.Invoke(stack.Interrupt, stack.ErrorCode);
-				BareMetal.Scheduler.ClockInterrupt(stackStatePointer);
+				//Interrupt?.Invoke(stack.Interrupt, stack.ErrorCode);
+				//BareMetal.Scheduler.ClockInterrupt(stackStatePointer);
 				break;
 
 			case Scheduler.ThreadTerminationSignalIRQ:
@@ -2268,7 +2268,7 @@ public static class IDT
 				break;
 
 			default:
-				//Interrupt?.Invoke(stack.Interrupt, stack.ErrorCode);
+				Interrupt?.Invoke(stack.Interrupt, stack.ErrorCode);
 				break;
 		}
 

@@ -94,6 +94,9 @@ public static class Scheduler
 
 	public static void TerminateCurrentThread()
 	{
+		if (!Enabled)
+			return;
+
 		var threadID = GetCurrentThreadID();
 
 		if (threadID != 0)
