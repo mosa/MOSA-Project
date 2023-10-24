@@ -27,6 +27,8 @@ public static class Boot
 		StartThreading();
 
 		// Will never get here!
+		Debug.WriteLine("ERROR: Thread Start Failure");
+		Debug.Fatal();
 	}
 
 	private static int counter = 0;
