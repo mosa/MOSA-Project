@@ -1,7 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Kernel.BareMetal;
-using Mosa.UnitTests.Optimization;
 
 namespace Mosa.BareMetal.HelloWorld.x86;
 
@@ -11,8 +10,6 @@ public static class Boot
 	{
 		Debug.WriteLine("Boot::Main()");
 		Debug.WriteLine("MOSA x86 Kernel");
-
-		Division.DivisionBy7(254u);
 
 		Program.EntryPoint();
 	}

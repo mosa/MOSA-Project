@@ -42,14 +42,14 @@ public static class GCMemory
 			CurrentHeap = AllocateHeap();
 			CurrentHeap.Used = size;
 
-			Debug.WriteLine("+ Allocating Object: size = ", size, " @ ", new Hex(CurrentHeap.Address));
+			//Debug.WriteLine("+ Allocating Object: size = ", size, " @ ", new Hex(CurrentHeap.Address));
 
 			return CurrentHeap.Address;
 		}
 
 		var at = heapStart + heapUsed;
 
-		Debug.WriteLine("+ Allocating Object: size = ", size, " @ ", new Hex(at));
+		//Debug.WriteLine("+ Allocating Object: size = ", size, " @ ", new Hex(at));
 
 		CurrentHeap.Used = heapUsed + size;
 		return at;
