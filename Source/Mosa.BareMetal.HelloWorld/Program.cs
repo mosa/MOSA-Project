@@ -10,14 +10,6 @@ namespace Mosa.BareMetal.HelloWorld;
 
 public static class Program
 {
-	[Plug("Mosa.Runtime.StartUp::BootOptions")]
-	public static void SetBootOptions()
-	{
-		BootSettings.EnableDebugOutput = true;
-		//BootSettings.EnableVirtualMemory = true;
-		//BootSettings.EnableMinimalBoot = true;
-	}
-
 	public static DeviceService DeviceService { get; private set; }
 
 	public static void EntryPoint()
@@ -64,5 +56,11 @@ public static class Program
 		Console.ForegroundColor = color;
 		Console.Write("*");
 		Console.ForegroundColor = restore;
+	}
+
+	[Plug("Mosa.Runtime.StartUp::BootOptions")]
+	public static void SetBootOptions()
+	{
+		BootSettings.EnableDebugOutput = true;
 	}
 }

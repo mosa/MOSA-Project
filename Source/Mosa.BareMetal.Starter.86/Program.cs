@@ -2,6 +2,7 @@
 
 using System;
 using Mosa.Kernel.BareMetal;
+using Mosa.Runtime.Plug;
 
 namespace Mosa.BareMetal.Starter.x86;
 
@@ -17,5 +18,11 @@ public static class Program
 		Console.WriteLine("Welcome to the MOSA Project!");
 
 		// Add your code here!
+	}
+
+	[Plug("Mosa.Runtime.StartUp::BootOptions")]
+	public static void SetBootOptions()
+	{
+		BootSettings.EnableDebugOutput = true;
 	}
 }
