@@ -295,9 +295,9 @@ jobs:
           name: windows-build-artifact
           path: bin
       - name: Demo Test - BareMetal Starter
-        run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.BareMetal.Starter.x86.dll -o${{ matrix.optimization }} -check -test -vmware-svga -include bin\Include
+        run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.BareMetal.Starter.x86.dll -o${{ matrix.optimization }} -check -test 
       - name: Demo Test - BareMetal TestWorld
-        run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.BareMetal.TestWorld.x86.dll -o${{ matrix.optimization }} -check -test -vmware-svga -include bin\Include
+        run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.BareMetal.TestWorld.x86.dll -o${{ matrix.optimization }} -check -test
       - name: Demo Test - BareMetal HelloWorld
         run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.BareMetal.HelloWorld.x86.dll -o${{ matrix.optimization }} -check -test
       - name: Demo Test - BareMetal CoolWorld
