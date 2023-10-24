@@ -37,7 +37,7 @@ public static class Boot
 	{
 		Interlocked.Increment(ref counter);
 
-		//lock (spinlock)
+		lock (spinlock)
 		{
 			Console.SetCursorPosition(0, 23);
 			Console.Write("Counter: " + counter + " IRQ: " + interrupt + " Code: " + errorCode);
@@ -131,5 +131,10 @@ public static class Boot
 		{
 			UpdateThreadTicks(5, ++ticks);
 		}
+	}
+
+	public static void ForceInclude()
+	{
+		Mosa.Kernel.BareMetal.x86.PlatformPlug.ForceInclude();
 	}
 }

@@ -12,4 +12,9 @@ internal class Boot
 	{
 		BootSettings.EnableDebugOutput = true;
 	}
+
+	public static void ForceInclude()
+	{
+		Mosa.Kernel.BareMetal.x86.PlatformPlug.ForceInclude();
+	}
 }
