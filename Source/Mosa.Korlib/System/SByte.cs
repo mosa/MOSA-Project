@@ -54,6 +54,6 @@ public readonly struct SByte: IComparable, IComparable<sbyte>, IEquatable<sbyte>
 
 	public override string ToString()
 	{
-		return int.CreateString((uint)m_value, true, false);
+		return Numbers.Int8ToString(m_value);
 	}
 }

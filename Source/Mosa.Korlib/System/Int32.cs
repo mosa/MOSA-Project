@@ -49,66 +49,13 @@ public struct Int32: IComparable, IComparable<int>, IEquatable<int>
 
 	public override string ToString()
 	{
-		return CreateString((uint)m_value, true, false);
+		return Numbers.Int32ToString(m_value);
 	}
 
 	public string ToString(string format)
-	{
-		return CreateString((uint)m_value, false, true);
-	}
-
-	unsafe internal static string CreateString(uint value, bool signed, bool hex)
-	{
-		int offset = 0;
-
-		uint uvalue = value;
-		var divisor = hex ? 16u : 10;
-		int length = 0;
-		int count = 0;
-		uint temp;
-		bool negative = false;
-
-		if (value < 0 && !hex && signed)
-		{
-			count++;
-			uvalue = (uint)-value;
-			negative = true;
-		}
-
-		temp = uvalue;
-
-		do
-		{
-			temp /= divisor;
-			count++;
-		}
-		while (temp != 0);
-
-		length = count;
-		var result = String.InternalAllocateString(length);
-
-		var chars = result.first_char;
-
-		if (negative)
-		{
-			*(chars + offset) = '-';
-			offset++;
-			count--;
-		}
-
-		for (var i = 0; i < count; i++)
-		{
-			var remainder = uvalue % divisor;
-
-			if (remainder < 10)
-				*(chars + offset + count - 1 - i) = (char)('0' + remainder);
-			else
-				*(chars + offset + count - 1 - i) = (char)('A' + remainder - 10);
-
-			uvalue /= divisor;
-		}
-
-		return result;
+	{		
+		// TODO: Actual formats
+		return Numbers.Int32ToString(m_value);
 	}
 
 	public override int GetHashCode()
