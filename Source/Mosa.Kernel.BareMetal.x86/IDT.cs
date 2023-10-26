@@ -2259,7 +2259,6 @@ public static class IDT
 				break;
 
 			case Scheduler.ClockIRQ:
-				Interrupt?.Invoke(stack.Interrupt, stack.ErrorCode);
 				BareMetal.Scheduler.ClockInterrupt(stackStatePointer);
 				break;
 

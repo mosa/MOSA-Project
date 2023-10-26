@@ -22,7 +22,7 @@ public static class Boot
 
 		Division.DivisionBy7(254u);
 
-		InterruptManager.SetHandler(ProcessInterrupt);
+		//InterruptManager.SetHandler(ProcessInterrupt);
 
 		StartThreading();
 
