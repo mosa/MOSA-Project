@@ -24,12 +24,14 @@ public static class Scheduler
 
 	public static void Setup()
 	{
+		Debug.WriteLine("Scheduler:Setup()");
+
 		Enabled = false;
 		Threads = new Thread[MaxThreads];
 		CurrentThreadID = 0;
 		clockTicks = 0;
 
-		for (int i = 0; i < MaxThreads; i++)
+		for (var i = 0; i < MaxThreads; i++)
 		{
 			Threads[i] = new Thread();
 		}
@@ -39,14 +41,20 @@ public static class Scheduler
 		SignalThreadTerminationMethodAddress = GetAddress(SignalTermination);
 
 		CreateThread(address, 2, 0);
+
+		Debug.WriteLine("Scheduler:Setup() [Exit]");
 	}
 
 	public static void Start()
 	{
+		Debug.WriteLine("Scheduler:Start()");
+
 		SetThreadID(0);
 		Enabled = true;
 
 		Platform.Scheduler.Start();
+
+		Debug.WriteLine("Scheduler:Start() [Exit]");
 	}
 
 	[MethodImpl(MethodImplOptions.NoInlining)]
@@ -60,10 +68,10 @@ public static class Scheduler
 
 	public static void ClockInterrupt(Pointer stackSate)
 	{
-		Interlocked.Increment(ref clockTicks);
-
 		if (!Enabled)
 			return;
+
+		Interlocked.Increment(ref clockTicks);
 
 		// Save current stack state
 		var threadID = GetCurrentThreadID();
@@ -86,6 +94,9 @@ public static class Scheduler
 
 	public static void TerminateCurrentThread()
 	{
+		if (!Enabled)
+			return;
+
 		var threadID = GetCurrentThreadID();
 
 		if (threadID != 0)
@@ -144,14 +155,22 @@ public static class Scheduler
 
 	public static uint CreateThread(ThreadStart thread, uint stackSize)
 	{
+		Debug.WriteLine("Scheduler:CreateThread()");
+
 		var address = GetAddress(thread);
 
-		return CreateThread(address, stackSize);
+		var newthread = CreateThread(address, stackSize);
+
+		Debug.WriteLine("Scheduler:CreateThread() [Exit]");
+
+		return newthread;
 	}
 
 	public static uint CreateThread(Pointer methodAddress, uint stackSize)
 	{
-		uint threadID = FindEmptyThreadSlot();
+		Debug.WriteLine("Scheduler:CreateThread(Pointer,uint)");
+
+		var threadID = FindEmptyThreadSlot();
 
 		if (threadID == 0)
 		{
@@ -161,11 +180,15 @@ public static class Scheduler
 
 		CreateThread(methodAddress, stackSize, threadID);
 
+		Debug.WriteLine("Scheduler:CreateThread(Pointer,uint) [Exit]");
+
 		return threadID;
 	}
 
 	private static void CreateThread(Pointer methodAddress, uint pages, uint threadID)
 	{
+		Debug.WriteLine("Scheduler:CreateThread(Pointer, uint, uint)");
+
 		var thread = Threads[threadID];
 
 		var stack = VirtualPageAllocator.ReservePages(pages);
@@ -177,6 +200,8 @@ public static class Scheduler
 		thread.StackBottom = stack;
 		thread.StackTop = stackTop;
 		thread.StackStatePointer = bottom;
+
+		Debug.WriteLine("Scheduler:CreateThread(Pointer, uint, uint) [Exit]");
 	}
 
 	private static void SaveThreadState(uint threadID, Pointer stackSate)
@@ -213,23 +238,31 @@ public static class Scheduler
 
 	private static uint FindEmptyThreadSlot()
 	{
-		for (uint i = 0; i < MaxThreads; i++)
+		Debug.WriteLine("Scheduler:FindEmptyThreadSlot()");
+
+		for (var i = 0u; i < MaxThreads; i++)
 		{
 			if (Threads[i].Status == ThreadStatus.Empty)
 				return i;
 		}
+
+		Debug.WriteLine("Scheduler:FindEmptyThreadSlot() [Exit]");
 
 		return 0;
 	}
 
 	private static void ResetTerminatedThreads()
 	{
-		for (uint i = 0; i < MaxThreads; i++)
+		Debug.WriteLine("Scheduler:ResetTerminatedThreads()");
+
+		for (var i = 0u; i < MaxThreads; i++)
 		{
 			if (Threads[i].Status == ThreadStatus.Terminated)
 			{
 				Threads[i].Status = ThreadStatus.Empty;
 			}
 		}
+
+		Debug.WriteLine("Scheduler:ResetTerminatedThreads() [Exit]");
 	}
 }

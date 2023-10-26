@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Collections.Generic;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.MosaTypeSystem;
 
@@ -12,10 +11,10 @@ namespace Mosa.Compiler.Framework.Stages;
 /// <seealso cref="Mosa.Compiler.Framework.BaseTransformManager" />
 public class ExceptionManager : BaseTransformManager
 {
-	public readonly List<BasicBlock> LeaveTargets = new List<BasicBlock>();
+	public readonly List<BasicBlock> LeaveTargets = new();
 
-	public readonly Dictionary<BasicBlock, Operand> ExceptionVirtualRegisters = new Dictionary<BasicBlock, Operand>();
-	public readonly Dictionary<BasicBlock, Operand> LeaveTargetVirtualRegisters = new Dictionary<BasicBlock, Operand>();
+	public readonly Dictionary<BasicBlock, Operand> ExceptionVirtualRegisters = new();
+	public readonly Dictionary<BasicBlock, Operand> LeaveTargetVirtualRegisters = new();
 
 	public MosaMethod ExceptionHandler { get; private set; }
 

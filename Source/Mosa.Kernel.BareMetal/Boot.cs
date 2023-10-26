@@ -119,9 +119,11 @@ public static class Boot
 		Console.ForegroundColor = ConsoleColor.DarkGray;
 		Console.WriteLine(" [Completed]");
 
-		//Console.Write(ConsoleColor.BrightGreen, "> Scheduler...");
-		//Scheduler.Setup();
-		//Console.WriteLine(ConsoleColor.BrightBlack, " [Completed]");
+		Console.ForegroundColor = ConsoleColor.LightGreen;
+		Console.Write("> Scheduler...");
+		Scheduler.Setup();
+		Console.ForegroundColor = ConsoleColor.DarkGray;
+		Console.WriteLine(" [Completed]");
 
 		Console.ForegroundColor = ConsoleColor.LightGreen;
 		Console.Write("> Hardware abstraction layer...");
