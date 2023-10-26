@@ -7,8 +7,16 @@
 	<Import Project="../Mosa.BareMetal.targets" />
 
 	<ItemGroup>
-		<ProjectReference Include="..\Mosa.BareMetal.HelloWorld\Mosa.BareMetal.HelloWorld.csproj" />
+	  <None Remove="Properties\launchSettings.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="Properties\launchSettings.json" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<ProjectReference Include="..\Mosa.Kernel.BareMetal.x86\Mosa.Kernel.BareMetal.x86.csproj" />
+
 	</ItemGroup>
 
 </Project>

@@ -30,6 +30,8 @@ public static class Scheduler
 
 	public static Pointer SetupThreadStack(Pointer stackTop, Pointer methodAddress, Pointer termAddress)
 	{
+		Debug.WriteLine("x86.Scheduler:SetupThreadStack()");
+
 		// Setup stack state
 		stackTop.Store32(-4, 0);          // Zero Sentinel
 		stackTop.Store32(-8, termAddress.ToInt32());  // Address of method that will raise a interrupt signal to terminate thread
@@ -49,6 +51,8 @@ public static class Scheduler
 		stackTop.Store32(-52, (stackTop - 8).ToInt32()); // EBP
 		stackTop.Store32(-56, 0);     // ESI
 		stackTop.Store32(-60, 0);     // EDI
+
+		Debug.WriteLine("x86.Scheduler:SetupThreadStack() [Exit]");
 
 		return stackTop - 60;
 	}

@@ -8,20 +8,11 @@ using Mosa.DeviceDriver.ISA;
 using Mosa.DeviceSystem;
 using Mosa.DeviceSystem.Service;
 using Mosa.Kernel.BareMetal;
-using Mosa.Runtime.Plug;
 
 namespace Mosa.BareMetal.CoolWorld;
 
 public static class Program
 {
-	[Plug("Mosa.Runtime.StartUp::BootOptions")]
-	public static void SetBootOptions()
-	{
-		BootSettings.EnableDebugOutput = true;
-		//BootSettings.EnableVirtualMemory = true;
-		//BootSettings.EnableMinimalBoot = true;
-	}
-
 	public static DeviceService DeviceService { get; private set; }
 
 	public static PCService PCService { get; private set; }

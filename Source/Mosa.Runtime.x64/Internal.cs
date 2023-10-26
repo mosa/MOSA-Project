@@ -15,7 +15,7 @@ public static unsafe class Internal
 
 		var stackFrame = Runtime.Internal.GetStackFrame(1);
 
-		for (uint i = 0; ; i++)
+		for (var i = 0u; ; i++)
 		{
 			var returnAddress = Runtime.Internal.GetReturnAddressFromStackFrame(stackFrame);
 
@@ -25,7 +25,7 @@ public static unsafe class Internal
 				Runtime.Internal.Fault(0XBAD00002, i);
 			}
 
-			var exceptionType = new TypeDefinition(Mosa.Runtime.Internal.GetTypeDefinition(exceptionObject));
+			var exceptionType = new TypeDefinition(Runtime.Internal.GetTypeDefinition(exceptionObject));
 
 			var methodDef = Runtime.Internal.GetMethodDefinitionViaMethodExceptionLookup(returnAddress);
 

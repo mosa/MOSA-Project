@@ -92,7 +92,8 @@ public static class UnitTestEngine
 
 	public static void Process()
 	{
-		if (!Enabled) return;
+		if (!Enabled)
+			return;
 
 		if (!ReadySent)
 		{
