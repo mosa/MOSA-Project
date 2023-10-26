@@ -91,11 +91,11 @@ public struct Byte: IComparable, IComparable<byte>, IEquatable<byte>
 
 	public override string ToString()
 	{
-		return int.CreateString(m_value, false, false);
+		return Numbers.UInt8ToString(m_value);
 	}
 
 	public string ToString(string format)
 	{
-		return int.CreateString(m_value, false, true);
+		return Numbers.UInt8ToString(m_value, format);
 	}
 }

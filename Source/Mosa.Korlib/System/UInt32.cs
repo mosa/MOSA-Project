@@ -49,13 +49,12 @@ public struct UInt32: IComparable, IComparable<uint>, IEquatable<uint>
 
 	public override string ToString()
 	{
-		return int.CreateString(m_value, false, false);
+		return Numbers.UInt32ToString(m_value);
 	}
 
 	public string ToString(string format)
 	{
-		// TOOO: Actual formats
-		return int.CreateString(m_value, false, char.ToLower(format[0]) == 'x');
+		return Numbers.UInt32ToString(m_value);
 	}
 
 	public override int GetHashCode()
