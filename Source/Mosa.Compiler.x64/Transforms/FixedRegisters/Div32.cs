@@ -16,9 +16,9 @@ public sealed class Div32 : BaseTransform
 
 	public override bool Match(Context context, Transform transform)
 	{
-		if (context.Result.IsCPURegister
-			&& context.Result2.IsCPURegister
-			&& context.Operand1.IsCPURegister
+		if (context.Result.IsPhysicalRegister
+			&& context.Result2.IsPhysicalRegister
+			&& context.Operand1.IsPhysicalRegister
 			&& context.Result.Register == CPURegister.RDX
 			&& context.Result2.Register == CPURegister.RAX
 			&& context.Operand1.Register == CPURegister.RDX

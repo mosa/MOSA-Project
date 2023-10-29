@@ -19,7 +19,7 @@ public sealed class Blsr32 : BaseTransform
 		if (!context.Operand1.IsConstant)
 			return false;
 
-		if (context.Operand1.IsCPURegister)
+		if (context.Operand1.IsPhysicalRegister)
 			return false;
 
 		return true;

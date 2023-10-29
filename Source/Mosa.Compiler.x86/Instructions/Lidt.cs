@@ -24,7 +24,7 @@ public sealed class Lidt : X86Instruction
 		System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
-		if (node.Operand1.IsCPURegister)
+		if (node.Operand1.IsPhysicalRegister)
 		{
 			opcodeEncoder.Append8Bits(0x0F);
 			opcodeEncoder.Append8Bits(0x01);

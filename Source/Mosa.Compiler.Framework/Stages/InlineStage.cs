@@ -388,7 +388,7 @@ public class InlineStage : BaseMethodCompilerStage
 		{
 			mappedOperand = MethodCompiler.VirtualRegisters.Allocate(operand);
 		}
-		else if (operand.IsCPURegister)
+		else if (operand.IsPhysicalRegister)
 		{
 			mappedOperand = MethodCompiler.PhysicalRegisters.Allocate(operand);
 		}

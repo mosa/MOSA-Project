@@ -17,12 +17,12 @@ public sealed class Mov64 : BaseTransform
 
 	public override bool Match(Context context, Transform transform)
 	{
-		return context.Operand1.IsCPURegister && context.Result.Register == context.Operand1.Register;
+		return context.Operand1.IsPhysicalRegister && context.Result.Register == context.Operand1.Register;
 	}
 
 	public override void Transform(Context context, Transform transform)
 	{
-		Debug.Assert(context.Result.IsCPURegister);
+		Debug.Assert(context.Result.IsPhysicalRegister);
 
 		context.Empty();
 	}

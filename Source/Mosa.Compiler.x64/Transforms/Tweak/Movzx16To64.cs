@@ -22,7 +22,7 @@ public sealed class Movzx16To64 : BaseTransform
 
 	public override void Transform(Context context, Transform transform)
 	{
-		Debug.Assert(context.Result.IsCPURegister);
+		Debug.Assert(context.Result.IsPhysicalRegister);
 
 		// Movzx8To64 can not use with RSI or RDI registers
 		var result = context.Result;

@@ -16,9 +16,9 @@ public sealed class WrMSR : BaseTransform
 
 	public override bool Match(Context context, Transform transform)
 	{
-		if (context.Operand1.IsCPURegister
-			&& context.Operand2.IsCPURegister
-			&& context.Operand3.IsCPURegister
+		if (context.Operand1.IsPhysicalRegister
+			&& context.Operand2.IsPhysicalRegister
+			&& context.Operand3.IsPhysicalRegister
 			&& context.Operand1.Register == CPURegister.ECX
 			&& context.Operand2.Register == CPURegister.EAX
 			&& context.Operand3.Register == CPURegister.EDX)

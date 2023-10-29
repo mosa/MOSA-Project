@@ -16,8 +16,8 @@ public sealed class In8 : BaseTransform
 
 	public override bool Match(Context context, Transform transform)
 	{
-		if (context.Result.IsCPURegister
-			&& context.Operand1.IsCPURegister
+		if (context.Result.IsPhysicalRegister
+			&& context.Operand1.IsPhysicalRegister
 			&& context.Result.Register == CPURegister.EAX
 			&& (context.Operand1.Register == CPURegister.EDX || context.Operand1.IsConstant))
 			return false;

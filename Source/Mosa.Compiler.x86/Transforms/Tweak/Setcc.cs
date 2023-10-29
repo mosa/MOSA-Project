@@ -17,7 +17,7 @@ public sealed class Setcc : BaseTransform
 
 	public override bool Match(Context context, Transform transform)
 	{
-		if (!context.Result.IsCPURegister)
+		if (!context.Result.IsPhysicalRegister)
 			return false;
 
 		return context.Result.Register == CPURegister.ESI || context.Result.Register == CPURegister.EDI;
@@ -25,8 +25,8 @@ public sealed class Setcc : BaseTransform
 
 	public override void Transform(Context context, Transform transform)
 	{
-		Debug.Assert(context.Result.IsCPURegister);
-		Debug.Assert(context.Result.IsCPURegister);
+		Debug.Assert(context.Result.IsPhysicalRegister);
+		Debug.Assert(context.Result.IsPhysicalRegister);
 
 		var result = context.Result;
 		var instruction = context.Instruction;

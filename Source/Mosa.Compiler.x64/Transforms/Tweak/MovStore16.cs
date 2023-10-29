@@ -16,7 +16,7 @@ public sealed class MovStore16 : BaseTransform
 
 	public override bool Match(Context context, Transform transform)
 	{
-		return context.Operand3.IsCPURegister && (context.Operand3.Register == CPURegister.RSI || context.Operand3.Register == CPURegister.RDI);
+		return context.Operand3.IsPhysicalRegister && (context.Operand3.Register == CPURegister.RSI || context.Operand3.Register == CPURegister.RDI);
 	}
 
 	public override void Transform(Context context, Transform transform)

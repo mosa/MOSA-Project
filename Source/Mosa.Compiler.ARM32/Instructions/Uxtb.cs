@@ -22,7 +22,7 @@ public sealed class Uxtb : ARM32Instruction
 		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
-		if (node.Operand1.IsCPURegister)
+		if (node.Operand1.IsPhysicalRegister)
 		{
 			opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
 			opcodeEncoder.Append4Bits(0b0110);

@@ -24,7 +24,7 @@ public sealed class MovRegShift : ARM32Instruction
 		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 3);
 
-		if (node.Operand1.IsCPURegister && node.Operand2.IsCPURegister && node.Operand3.IsConstant)
+		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsPhysicalRegister && node.Operand3.IsConstant)
 		{
 			opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
 			opcodeEncoder.Append2Bits(0b00);

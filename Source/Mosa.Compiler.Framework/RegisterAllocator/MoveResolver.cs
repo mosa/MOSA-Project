@@ -40,7 +40,7 @@ public sealed class MoveResolver
 
 			var operand = source ? move.Source : move.Destination;
 
-			if (!operand.IsCPURegister)
+			if (!operand.IsPhysicalRegister)
 				continue;
 
 			if (operand.Register == register)
@@ -62,7 +62,7 @@ public sealed class MoveResolver
 			{
 				var move = Moves[i];
 
-				if (!(move.Source.IsCPURegister || move.Destination.IsCPURegister))
+				if (!(move.Source.IsPhysicalRegister || move.Destination.IsPhysicalRegister))
 					continue;
 
 				var other = FindIndex(move.Destination.Register, true);
@@ -70,10 +70,10 @@ public sealed class MoveResolver
 				if (other != -1)
 					continue;
 
-				Debug.Assert(move.Destination.IsCPURegister);
+				Debug.Assert(move.Destination.IsPhysicalRegister);
 
 				ResolvedMoves.Add(new LiveIntervalTransition(
-					move.Source.IsCPURegister ? ResolvedMoveType.Move : ResolvedMoveType.Load,
+					move.Source.IsPhysicalRegister ? ResolvedMoveType.Move : ResolvedMoveType.Load,
 					move.From,
 					move.To)
 				);
@@ -97,7 +97,7 @@ public sealed class MoveResolver
 			{
 				var move = Moves[i];
 
-				if (!(move.Source.IsCPURegister || move.Destination.IsCPURegister))
+				if (!(move.Source.IsPhysicalRegister || move.Destination.IsPhysicalRegister))
 					continue;
 
 				var other = FindIndex(move.Destination.Register, true);
@@ -105,8 +105,8 @@ public sealed class MoveResolver
 				if (other == -1)
 					continue;
 
-				Debug.Assert(Moves[other].Source.IsCPURegister);
-				Debug.Assert(move.Source.IsCPURegister);
+				Debug.Assert(Moves[other].Source.IsPhysicalRegister);
+				Debug.Assert(move.Source.IsPhysicalRegister);
 
 				ResolvedMoves.Add(new LiveIntervalTransition(
 					ResolvedMoveType.Exchange,
@@ -135,11 +135,11 @@ public sealed class MoveResolver
 		{
 			var move = Moves[i];
 
-			if (!(move.Source.IsCPURegister || move.Destination.IsCPURegister))
+			if (!(move.Source.IsPhysicalRegister || move.Destination.IsPhysicalRegister))
 				continue;
 
-			Debug.Assert(move.Destination.IsCPURegister);
-			Debug.Assert(move.Source.IsCPURegister);
+			Debug.Assert(move.Destination.IsPhysicalRegister);
+			Debug.Assert(move.Source.IsPhysicalRegister);
 
 			ResolvedMoves.Add(new LiveIntervalTransition(
 				ResolvedMoveType.Move,
@@ -174,7 +174,7 @@ public sealed class MoveResolver
 
 		foreach (var move in ResolvedMoves)
 		{
-			Debug.Assert(move.Destination.IsCPURegister);
+			Debug.Assert(move.Destination.IsPhysicalRegister);
 
 			switch (move.ResolvedMoveType)
 			{

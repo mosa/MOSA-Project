@@ -19,7 +19,7 @@ public sealed class GetLow32Register : BaseTransform
 		if (!context.Result.IsVirtualRegister)
 			return false;
 
-		if (!context.Operand1.IsCPURegister)
+		if (!context.Operand1.IsPhysicalRegister)
 			return false;
 
 		if (!(context.Operand1.Register == CPURegister.EBP || context.Operand1.Register == CPURegister.ESP))

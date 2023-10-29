@@ -17,9 +17,9 @@ public sealed class IMul32o1 : BaseTransform
 
 	public override bool Match(Context context, Transform transform)
 	{
-		if (context.Result.IsCPURegister
-			&& context.Result2.IsCPURegister
-			&& context.Operand1.IsCPURegister
+		if (context.Result.IsPhysicalRegister
+			&& context.Result2.IsPhysicalRegister
+			&& context.Operand1.IsPhysicalRegister
 			&& !context.Operand2.IsConstant
 			&& context.Result.Register == CPURegister.EDX
 			&& context.Result2.Register == CPURegister.EAX
@@ -48,7 +48,7 @@ public sealed class IMul32o1 : BaseTransform
 			operand2 = v1;
 		}
 
-		Debug.Assert(operand2.IsCPURegister || operand2.IsVirtualRegister);
+		Debug.Assert(operand2.IsPhysicalRegister || operand2.IsVirtualRegister);
 
 		context.AppendInstruction2(X86.IMul32o1, edx, eax, eax, operand2);
 		context.AppendInstruction(X86.Mov32, result, edx);

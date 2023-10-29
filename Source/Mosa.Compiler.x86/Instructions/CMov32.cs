@@ -36,7 +36,7 @@ public sealed class CMov32 : X86Instruction
 		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
-		if (node.Operand1.IsCPURegister && node.Operand2.IsCPURegister)
+		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsPhysicalRegister)
 		{
 			opcodeEncoder.Append8Bits(0x0F);
 			opcodeEncoder.Append4Bits(0b0100);

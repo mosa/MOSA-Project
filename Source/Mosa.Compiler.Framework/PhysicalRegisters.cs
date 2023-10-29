@@ -50,7 +50,7 @@ public sealed class PhysicalRegisters : IEnumerable<Operand>
 
 	public Operand Allocate(Operand operand)
 	{
-		Debug.Assert(operand.IsCPURegister);
+		Debug.Assert(operand.IsPhysicalRegister);
 		return Allocate(operand.Primitive, operand.Register);
 	}
 
@@ -129,7 +129,7 @@ public sealed class PhysicalRegisters : IEnumerable<Operand>
 		{
 			var virtualRegister = registers[i];
 
-			if (virtualRegister.IsCPURegister)
+			if (virtualRegister.IsPhysicalRegister)
 				continue;
 
 			registers.RemoveAt(i);

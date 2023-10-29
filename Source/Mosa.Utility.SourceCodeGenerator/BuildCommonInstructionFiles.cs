@@ -405,8 +405,8 @@ public class BuildCommonInstructionFiles : BuildBaseTemplate
 
 				if (node.ThreeTwoAddressConversion != null && node.ThreeTwoAddressConversion == "true")
 				{
-					Lines.AppendLine("\t\tSystem.Diagnostics.Debug.Assert(node.Result.IsCPURegister);");
-					Lines.AppendLine("\t\tSystem.Diagnostics.Debug.Assert(node.Operand1.IsCPURegister);");
+					Lines.AppendLine("\t\tSystem.Diagnostics.Debug.Assert(node.Result.IsPhysicalRegister);");
+					Lines.AppendLine("\t\tSystem.Diagnostics.Debug.Assert(node.Operand1.IsPhysicalRegister);");
 					Lines.AppendLine("\t\tSystem.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);");
 				}
 				Lines.AppendLine();
@@ -603,16 +603,16 @@ public class BuildCommonInstructionFiles : BuildBaseTemplate
 				{
 					case "skip": continue;
 					case "ignore": continue;
-					case "register": cond1 = ".IsCPURegister"; break;
+					case "register": cond1 = ".IsPhysicalRegister"; break;
 					case "constant": cond1 = ".IsConstant"; break;
-					case "eax": cond1 = ".IsCPURegister"; cond2 = ".Register.RegisterCode == 0"; break;
-					case "ecx": cond1 = ".IsCPURegister"; cond2 = ".Register.RegisterCode == 1"; break;
-					case "edx": cond1 = ".IsCPURegister"; cond2 = ".Register.RegisterCode == 2"; break;
-					case "ebx": cond1 = ".IsCPURegister"; cond2 = ".Register.RegisterCode == 3"; break;
-					case "esp": cond1 = ".IsCPURegister"; cond2 = ".Register.RegisterCode == 4"; break;
-					case "ebp": cond1 = ".IsCPURegister"; cond2 = ".Register.RegisterCode == 5"; break;
-					case "esi": cond1 = ".IsCPURegister"; cond2 = ".Register.RegisterCode == 6"; break;
-					case "edi": cond1 = ".IsCPURegister"; cond2 = ".Register.RegisterCode == 7"; break;
+					case "eax": cond1 = ".IsPhysicalRegister"; cond2 = ".Register.RegisterCode == 0"; break;
+					case "ecx": cond1 = ".IsPhysicalRegister"; cond2 = ".Register.RegisterCode == 1"; break;
+					case "edx": cond1 = ".IsPhysicalRegister"; cond2 = ".Register.RegisterCode == 2"; break;
+					case "ebx": cond1 = ".IsPhysicalRegister"; cond2 = ".Register.RegisterCode == 3"; break;
+					case "esp": cond1 = ".IsPhysicalRegister"; cond2 = ".Register.RegisterCode == 4"; break;
+					case "ebp": cond1 = ".IsPhysicalRegister"; cond2 = ".Register.RegisterCode == 5"; break;
+					case "esi": cond1 = ".IsPhysicalRegister"; cond2 = ".Register.RegisterCode == 6"; break;
+					case "edi": cond1 = ".IsPhysicalRegister"; cond2 = ".Register.RegisterCode == 7"; break;
 					case "zero":
 					case "0": cond1 = ".IsConstantZero"; break;
 					case "one":

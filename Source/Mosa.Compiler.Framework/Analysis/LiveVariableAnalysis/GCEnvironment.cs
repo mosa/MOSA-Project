@@ -28,12 +28,12 @@ public class GCEnvironment : BaseLivenessAnalysisEnvironment
 
 	protected int GetIndex(Operand operand)
 	{
-		return operand.IsCPURegister ? operand.Register.Index : stackLookup[operand];
+		return operand.IsPhysicalRegister ? operand.Register.Index : stackLookup[operand];
 	}
 
 	protected bool ContainsObjectReference(Operand operand)
 	{
-		if (operand.IsCPURegister && ContainsReference(operand))
+		if (operand.IsPhysicalRegister && ContainsReference(operand))
 		{
 			return true;
 		}
@@ -107,7 +107,7 @@ public class GCEnvironment : BaseLivenessAnalysisEnvironment
 
 		foreach (var operand in node.Operands)
 		{
-			if (operand.IsCPURegister && !ContainsReference(operand))
+			if (operand.IsPhysicalRegister && !ContainsReference(operand))
 			{
 				yield return GetIndex(operand);
 			}

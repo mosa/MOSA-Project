@@ -22,7 +22,7 @@ public sealed class Str32 : ARM32Instruction
 		System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 3);
 
-		if (node.Operand1.IsCPURegister && node.Operand2.IsConstant && node.Operand3.IsCPURegister)
+		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsConstant && node.Operand3.IsPhysicalRegister)
 		{
 			opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
 			opcodeEncoder.Append2Bits(0b01);
@@ -38,7 +38,7 @@ public sealed class Str32 : ARM32Instruction
 			return;
 		}
 
-		if (node.Operand1.IsCPURegister && node.Operand2.IsCPURegister && node.Operand3.IsCPURegister)
+		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsPhysicalRegister && node.Operand3.IsPhysicalRegister)
 		{
 			opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
 			opcodeEncoder.Append2Bits(0b01);

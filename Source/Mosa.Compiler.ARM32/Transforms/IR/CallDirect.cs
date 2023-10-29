@@ -18,7 +18,7 @@ public sealed class CallDirect : BaseIRTransform
 	{
 		var operand1 = context.Operand1;
 
-		if (operand1.IsCPURegister || operand1.IsVirtualRegister || operand1.IsResolvedConstant)
+		if (operand1.IsPhysicalRegister || operand1.IsVirtualRegister || operand1.IsResolvedConstant)
 		{
 			operand1 = MoveConstantToRegister(transform, context, operand1);
 

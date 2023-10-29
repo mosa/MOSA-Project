@@ -729,7 +729,7 @@ public sealed class MethodCompiler
 				return;
 			}
 		}
-		else if (operand.IsCPURegister)
+		else if (operand.IsPhysicalRegister)
 		{
 			if (operand.IsInt32)
 			{

@@ -13,7 +13,7 @@ public sealed class StoreLoad64 : BaseTransform
 		if (!context.Operand2.IsLocalStack)
 			return false;
 
-		if (!context.Operand1.IsCPURegister)
+		if (!context.Operand1.IsPhysicalRegister)
 			return false;
 
 		if (context.Operand1 != transform.StackFrame)

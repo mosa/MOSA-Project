@@ -107,7 +107,7 @@ public sealed partial class Operand
 		}
 	}
 
-	public bool IsCPURegister => Location == LocationType.PhysicalRegister;
+	public bool IsPhysicalRegister => Location == LocationType.PhysicalRegister;
 
 	public bool IsFloatingPoint => IsR4 | IsR8;
 
@@ -878,7 +878,7 @@ public sealed partial class Operand
 				}
 			}
 		}
-		else if (IsCPURegister)
+		else if (IsPhysicalRegister)
 		{
 			sb.Append($"{Register}");
 		}

@@ -16,10 +16,10 @@ public sealed class IDiv64 : BaseTransform
 
 	public override bool Match(Context context, Transform transform)
 	{
-		if (context.Result.IsCPURegister
-			&& context.Result2.IsCPURegister
-			&& context.Operand1.IsCPURegister
-			&& context.Operand2.IsCPURegister
+		if (context.Result.IsPhysicalRegister
+			&& context.Result2.IsPhysicalRegister
+			&& context.Operand1.IsPhysicalRegister
+			&& context.Operand2.IsPhysicalRegister
 			&& context.Result.Register == CPURegister.RDX
 			&& context.Result2.Register == CPURegister.RAX
 			&& context.Operand1.Register == CPURegister.RDX
@@ -43,7 +43,7 @@ public sealed class IDiv64 : BaseTransform
 		context.SetInstruction(X64.Mov64, rdx, operand1);
 		context.AppendInstruction(X64.Mov64, rax, operand2);
 
-		if (operand3.IsCPURegister)
+		if (operand3.IsPhysicalRegister)
 		{
 			context.AppendInstruction2(X64.IDiv64, rdx, rax, rdx, rax, operand3);
 		}

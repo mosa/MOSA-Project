@@ -36,7 +36,7 @@ public sealed class Fmov : ARM32Instruction
 			return;
 		}
 
-		if (node.Operand1.IsCPURegister)
+		if (node.Operand1.IsPhysicalRegister)
 		{
 			opcodeEncoder.Append4Bits(0b0011);
 			opcodeEncoder.Append3Bits(0b110);

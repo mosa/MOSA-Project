@@ -24,7 +24,7 @@ public sealed class MovStore16 : X64Instruction
 		System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 3);
 
-		if (node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 5 && node.Operand2.IsConstantZero && node.Operand3.IsCPURegister)
+		if (node.Operand1.IsPhysicalRegister && node.Operand1.Register.RegisterCode == 5 && node.Operand2.IsConstantZero && node.Operand3.IsPhysicalRegister)
 		{
 			opcodeEncoder.Append8Bits(0x66);
 			opcodeEncoder.SuppressByte(0x40);
@@ -41,7 +41,7 @@ public sealed class MovStore16 : X64Instruction
 			return;
 		}
 
-		if (node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 5 && node.Operand2.IsCPURegister && node.Operand3.IsCPURegister)
+		if (node.Operand1.IsPhysicalRegister && node.Operand1.Register.RegisterCode == 5 && node.Operand2.IsPhysicalRegister && node.Operand3.IsPhysicalRegister)
 		{
 			opcodeEncoder.Append8Bits(0x66);
 			opcodeEncoder.SuppressByte(0x40);
@@ -61,7 +61,7 @@ public sealed class MovStore16 : X64Instruction
 			return;
 		}
 
-		if (node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 4 && node.Operand2.IsConstantZero && node.Operand3.IsCPURegister)
+		if (node.Operand1.IsPhysicalRegister && node.Operand1.Register.RegisterCode == 4 && node.Operand2.IsConstantZero && node.Operand3.IsPhysicalRegister)
 		{
 			opcodeEncoder.Append8Bits(0x66);
 			opcodeEncoder.SuppressByte(0x40);
@@ -80,7 +80,7 @@ public sealed class MovStore16 : X64Instruction
 			return;
 		}
 
-		if (node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 4 && node.Operand2.IsConstant && node.Operand2.ConstantSigned32 >= -128 && node.Operand2.ConstantSigned32 <= 127 && node.Operand3.IsCPURegister)
+		if (node.Operand1.IsPhysicalRegister && node.Operand1.Register.RegisterCode == 4 && node.Operand2.IsConstant && node.Operand2.ConstantSigned32 >= -128 && node.Operand2.ConstantSigned32 <= 127 && node.Operand3.IsPhysicalRegister)
 		{
 			opcodeEncoder.Append8Bits(0x66);
 			opcodeEncoder.SuppressByte(0x40);
@@ -100,7 +100,7 @@ public sealed class MovStore16 : X64Instruction
 			return;
 		}
 
-		if (node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 4 && node.Operand2.IsConstant && node.Operand3.IsCPURegister)
+		if (node.Operand1.IsPhysicalRegister && node.Operand1.Register.RegisterCode == 4 && node.Operand2.IsConstant && node.Operand3.IsPhysicalRegister)
 		{
 			opcodeEncoder.Append8Bits(0x66);
 			opcodeEncoder.SuppressByte(0x40);
@@ -117,7 +117,7 @@ public sealed class MovStore16 : X64Instruction
 			return;
 		}
 
-		if (node.Operand1.IsCPURegister && node.Operand2.IsCPURegister && node.Operand3.IsCPURegister)
+		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsPhysicalRegister && node.Operand3.IsPhysicalRegister)
 		{
 			opcodeEncoder.Append8Bits(0x66);
 			opcodeEncoder.SuppressByte(0x40);
@@ -136,7 +136,7 @@ public sealed class MovStore16 : X64Instruction
 			return;
 		}
 
-		if (node.Operand1.IsCPURegister && node.Operand2.IsConstantZero && node.Operand3.IsCPURegister)
+		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsConstantZero && node.Operand3.IsPhysicalRegister)
 		{
 			opcodeEncoder.Append8Bits(0x66);
 			opcodeEncoder.SuppressByte(0x40);
@@ -152,7 +152,7 @@ public sealed class MovStore16 : X64Instruction
 			return;
 		}
 
-		if (node.Operand1.IsCPURegister && node.Operand2.IsConstant && node.Operand2.ConstantSigned32 >= -128 && node.Operand2.ConstantSigned32 <= 127 && node.Operand3.IsCPURegister)
+		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsConstant && node.Operand2.ConstantSigned32 >= -128 && node.Operand2.ConstantSigned32 <= 127 && node.Operand3.IsPhysicalRegister)
 		{
 			opcodeEncoder.Append8Bits(0x66);
 			opcodeEncoder.SuppressByte(0x40);
@@ -169,7 +169,7 @@ public sealed class MovStore16 : X64Instruction
 			return;
 		}
 
-		if (node.Operand1.IsCPURegister && node.Operand2.IsConstant && node.Operand3.IsCPURegister)
+		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsConstant && node.Operand3.IsPhysicalRegister)
 		{
 			opcodeEncoder.Append8Bits(0x66);
 			opcodeEncoder.SuppressByte(0x40);
@@ -186,7 +186,7 @@ public sealed class MovStore16 : X64Instruction
 			return;
 		}
 
-		if (node.Operand1.IsConstant && node.Operand2.IsConstantZero && node.Operand3.IsCPURegister)
+		if (node.Operand1.IsConstant && node.Operand2.IsConstantZero && node.Operand3.IsPhysicalRegister)
 		{
 			opcodeEncoder.Append8Bits(0x66);
 			opcodeEncoder.SuppressByte(0x40);
@@ -203,7 +203,7 @@ public sealed class MovStore16 : X64Instruction
 			return;
 		}
 
-		if (node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 5 && node.Operand2.IsConstantZero && node.Operand3.IsConstant)
+		if (node.Operand1.IsPhysicalRegister && node.Operand1.Register.RegisterCode == 5 && node.Operand2.IsConstantZero && node.Operand3.IsConstant)
 		{
 			opcodeEncoder.Append8Bits(0x66);
 			opcodeEncoder.SuppressByte(0x40);
@@ -221,7 +221,7 @@ public sealed class MovStore16 : X64Instruction
 			return;
 		}
 
-		if (node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 5 && node.Operand2.IsCPURegister && node.Operand3.IsConstant)
+		if (node.Operand1.IsPhysicalRegister && node.Operand1.Register.RegisterCode == 5 && node.Operand2.IsPhysicalRegister && node.Operand3.IsConstant)
 		{
 			opcodeEncoder.Append8Bits(0x66);
 			opcodeEncoder.SuppressByte(0x40);
@@ -241,7 +241,7 @@ public sealed class MovStore16 : X64Instruction
 			return;
 		}
 
-		if (node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 4 && node.Operand2.IsConstantZero && node.Operand3.IsConstant)
+		if (node.Operand1.IsPhysicalRegister && node.Operand1.Register.RegisterCode == 4 && node.Operand2.IsConstantZero && node.Operand3.IsConstant)
 		{
 			opcodeEncoder.Append8Bits(0x66);
 			opcodeEncoder.SuppressByte(0x40);
@@ -261,7 +261,7 @@ public sealed class MovStore16 : X64Instruction
 			return;
 		}
 
-		if (node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 4 && node.Operand2.IsConstant && node.Operand2.ConstantSigned32 >= -128 && node.Operand2.ConstantSigned32 <= 127 && node.Operand3.IsConstant)
+		if (node.Operand1.IsPhysicalRegister && node.Operand1.Register.RegisterCode == 4 && node.Operand2.IsConstant && node.Operand2.ConstantSigned32 >= -128 && node.Operand2.ConstantSigned32 <= 127 && node.Operand3.IsConstant)
 		{
 			opcodeEncoder.Append8Bits(0x66);
 			opcodeEncoder.SuppressByte(0x40);
@@ -282,7 +282,7 @@ public sealed class MovStore16 : X64Instruction
 			return;
 		}
 
-		if (node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 4 && node.Operand2.IsConstant && node.Operand3.IsConstant)
+		if (node.Operand1.IsPhysicalRegister && node.Operand1.Register.RegisterCode == 4 && node.Operand2.IsConstant && node.Operand3.IsConstant)
 		{
 			opcodeEncoder.Append8Bits(0x66);
 			opcodeEncoder.SuppressByte(0x40);
@@ -300,7 +300,7 @@ public sealed class MovStore16 : X64Instruction
 			return;
 		}
 
-		if (node.Operand1.IsCPURegister && node.Operand2.IsCPURegister && node.Operand3.IsConstant)
+		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsPhysicalRegister && node.Operand3.IsConstant)
 		{
 			opcodeEncoder.Append8Bits(0x66);
 			opcodeEncoder.SuppressByte(0x40);
@@ -320,7 +320,7 @@ public sealed class MovStore16 : X64Instruction
 			return;
 		}
 
-		if (node.Operand1.IsCPURegister && node.Operand2.IsConstantZero && node.Operand3.IsConstant)
+		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsConstantZero && node.Operand3.IsConstant)
 		{
 			opcodeEncoder.Append8Bits(0x66);
 			opcodeEncoder.SuppressByte(0x40);
@@ -337,7 +337,7 @@ public sealed class MovStore16 : X64Instruction
 			return;
 		}
 
-		if (node.Operand1.IsCPURegister && node.Operand2.IsConstant && node.Operand2.ConstantSigned32 >= -128 && node.Operand2.ConstantSigned32 <= 127 && node.Operand3.IsConstant)
+		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsConstant && node.Operand2.ConstantSigned32 >= -128 && node.Operand2.ConstantSigned32 <= 127 && node.Operand3.IsConstant)
 		{
 			opcodeEncoder.Append8Bits(0x66);
 			opcodeEncoder.SuppressByte(0x40);
@@ -355,7 +355,7 @@ public sealed class MovStore16 : X64Instruction
 			return;
 		}
 
-		if (node.Operand1.IsCPURegister && node.Operand2.IsConstant && node.Operand3.IsConstant)
+		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsConstant && node.Operand3.IsConstant)
 		{
 			opcodeEncoder.Append8Bits(0x66);
 			opcodeEncoder.SuppressByte(0x40);
@@ -409,7 +409,7 @@ public sealed class MovStore16 : X64Instruction
 			return;
 		}
 
-		if (node.Operand1.IsConstant && node.Operand2.IsConstant && node.Operand3.IsCPURegister)
+		if (node.Operand1.IsConstant && node.Operand2.IsConstant && node.Operand3.IsPhysicalRegister)
 		{
 			return;
 		}

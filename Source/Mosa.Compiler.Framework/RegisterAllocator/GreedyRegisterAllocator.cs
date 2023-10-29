@@ -300,8 +300,8 @@ public sealed class GreedyRegisterAllocator : BaseRegisterAllocator
 					continue;
 
 				if (!((node.Result.IsVirtualRegister && node.Operand1.IsVirtualRegister)
-					  || (node.Result.IsVirtualRegister && node.Operand1.IsCPURegister)
-					  || (node.Result.IsCPURegister && node.Operand1.IsVirtualRegister)))
+					  || (node.Result.IsVirtualRegister && node.Operand1.IsPhysicalRegister)
+					  || (node.Result.IsPhysicalRegister && node.Operand1.IsVirtualRegister)))
 					continue;
 
 				var from = Registers[GetIndex(node.Operand1)];

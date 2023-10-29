@@ -19,7 +19,7 @@ public sealed class GetLow32CPURegister : BaseTransform
 		if (!transform.IsLowerTo32)
 			return false;
 
-		if (!context.Operand1.IsCPURegister)
+		if (!context.Operand1.IsPhysicalRegister)
 			return false;
 
 		return true;

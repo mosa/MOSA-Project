@@ -22,8 +22,8 @@ public sealed class Setcc : BaseTransform
 
 	public override void Transform(Context context, Transform transform)
 	{
-		Debug.Assert(context.Result.IsCPURegister);
-		Debug.Assert(context.Result.IsCPURegister);
+		Debug.Assert(context.Result.IsPhysicalRegister);
+		Debug.Assert(context.Result.IsPhysicalRegister);
 
 		var result = context.Result;
 		var instruction = context.Instruction;

@@ -279,7 +279,7 @@ public abstract class BaseRegisterAllocator
 	protected int GetIndex(Operand operand)
 	{
 		//FUTURE: Make private by refactoring
-		return operand.IsCPURegister ? operand.Register.Index : operand.Index + PhysicalRegisterCount - 1;
+		return operand.IsPhysicalRegister ? operand.Register.Index : operand.Index + PhysicalRegisterCount - 1;
 	}
 
 	private void CreateExtendedBlocks()
@@ -406,7 +406,7 @@ public abstract class BaseRegisterAllocator
 
 					foreach (var operand in node.Results)
 					{
-						if (operand.IsCPURegister)
+						if (operand.IsPhysicalRegister)
 							sb.Append($"{operand.Register} ");
 						else if (operand.IsVirtualRegister)
 							sb.Append($"v{operand.Index} ");
@@ -416,7 +416,7 @@ public abstract class BaseRegisterAllocator
 
 					foreach (var operand in node.Operands)
 					{
-						if (operand.IsCPURegister)
+						if (operand.IsPhysicalRegister)
 							sb.Append($"{operand.Register} ");
 						else if (operand.IsVirtualRegister)
 							sb.Append($"v{operand.Index} ");
@@ -452,7 +452,7 @@ public abstract class BaseRegisterAllocator
 
 				foreach (var operand in node.Operands)
 				{
-					if (operand.IsVirtualRegister || operand.IsCPURegister)
+					if (operand.IsVirtualRegister || operand.IsPhysicalRegister)
 					{
 						def.AddIfNew(operand);
 					}
@@ -460,7 +460,7 @@ public abstract class BaseRegisterAllocator
 
 				foreach (var operand in node.Results)
 				{
-					if (operand.IsVirtualRegister || operand.IsCPURegister)
+					if (operand.IsVirtualRegister || operand.IsPhysicalRegister)
 					{
 						use.AddIfNew(operand);
 					}
@@ -538,7 +538,7 @@ public abstract class BaseRegisterAllocator
 
 				foreach (var op in node.Operands)
 				{
-					if (!(op.IsVirtualRegister || (op.IsCPURegister && !op.Register.IsSpecial)))
+					if (!(op.IsVirtualRegister || (op.IsPhysicalRegister && !op.Register.IsSpecial)))
 						continue;
 
 					liveSetTrace?.Log($"INPUT:  {op}");
@@ -578,7 +578,7 @@ public abstract class BaseRegisterAllocator
 
 				foreach (var op in node.Results)
 				{
-					if (!(op.IsVirtualRegister || (op.IsCPURegister && !op.Register.IsSpecial)))
+					if (!(op.IsVirtualRegister || (op.IsPhysicalRegister && !op.Register.IsSpecial)))
 						continue;
 
 					liveSetTrace?.Log($"OUTPUT: {op}");
@@ -710,7 +710,7 @@ public abstract class BaseRegisterAllocator
 
 				foreach (var result in node.Results)
 				{
-					if (!(result.IsVirtualRegister || (result.IsCPURegister && !result.Register.IsSpecial)))
+					if (!(result.IsVirtualRegister || (result.IsPhysicalRegister && !result.Register.IsSpecial)))
 						continue;
 
 					var r = GetIndex(result);
@@ -746,7 +746,7 @@ public abstract class BaseRegisterAllocator
 
 				foreach (var operand in node.Operands)
 				{
-					if (!(operand.IsVirtualRegister || (operand.IsCPURegister && !operand.Register.IsSpecial)))
+					if (!(operand.IsVirtualRegister || (operand.IsPhysicalRegister && !operand.Register.IsSpecial)))
 						continue;
 
 					var r = GetIndex(operand);
