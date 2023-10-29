@@ -210,6 +210,8 @@ public abstract class BaseArchitecture
 	///   <c>true</c> if [is parameter load] [the specified context]; otherwise, <c>false</c>.</returns>
 	public abstract bool IsParameterLoad(Node node, out Operand operand);
 
+	public abstract bool IsConstantIntegerLoad(Node node, out Operand operand);
+
 	/// <summary>
 	/// Gets the platform intrinsic method.
 	/// </summary>

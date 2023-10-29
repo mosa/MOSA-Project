@@ -809,17 +809,17 @@ public class MosaSettings
 
 	public void UpdateFileAndPathSettings()
 	{
-		if (string.IsNullOrWhiteSpace(TemporaryFolder) || TemporaryFolder != "%DEFAULT%")
+		if (string.IsNullOrWhiteSpace(TemporaryFolder) || TemporaryFolder == "%DEFAULT%")
 		{
 			TemporaryFolder = Path.Combine(Path.GetTempPath(), "MOSA");
 		}
 
-		if (string.IsNullOrWhiteSpace(ImageFolder) || ImageFolder != "%DEFAULT%")
+		if (string.IsNullOrWhiteSpace(ImageFolder) || ImageFolder == "%DEFAULT%")
 		{
 			ImageFolder = TemporaryFolder;
 		}
 
-		if (string.IsNullOrWhiteSpace(DefaultFolder) || DefaultFolder != "%DEFAULT%")
+		if (string.IsNullOrWhiteSpace(DefaultFolder) || DefaultFolder == "%DEFAULT%")
 		{
 			if (OutputFile != null && OutputFile != "%DEFAULT%")
 			{

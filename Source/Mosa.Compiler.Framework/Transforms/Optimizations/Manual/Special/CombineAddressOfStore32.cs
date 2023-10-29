@@ -2,6 +2,8 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Special;
 
+// NOT WORKING!
+
 public sealed class CombineAddressOfStore32 : BaseTransform
 {
 	public CombineAddressOfStore32() : base(IRInstruction.Store32, TransformType.Manual | TransformType.Optimization)

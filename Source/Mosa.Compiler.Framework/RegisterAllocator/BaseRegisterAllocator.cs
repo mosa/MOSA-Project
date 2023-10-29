@@ -2,7 +2,6 @@
 
 using System.Collections;
 using System.Diagnostics;
-using System.Net.WebSockets;
 using System.Text;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis;
@@ -51,6 +50,8 @@ public abstract class BaseRegisterAllocator
 	protected readonly TraceLog Trace;
 
 	public int SpillMoves = 0;
+	public int RematerializationParamLoad = 0;
+	public int RematerializationConstant = 0;
 	public int DataFlowMoves = 0;
 	public int ResolvingMoves = 0;
 
@@ -319,27 +320,29 @@ public abstract class BaseRegisterAllocator
 
 				SlotsToNodes.Add(node);
 
-				if (Architecture.IsParameterStore(node, out var storeParam))
+				if (node.Result != null && node.Result.IsDefinedOnce && Architecture.IsConstantIntegerLoad(node, out var constantOperand))
+				{
+					var register = Registers[GetIndex(node.Result)];
+
+					register.IsConstantLoad = true;
+					register.LoadOperand = constantOperand;
+				}
+				else if (Architecture.IsParameterStore(node, out var storeParam))
 				{
 					paramStoreSet.Add(storeParam);
 				}
-				else if (Architecture.IsParameterLoad(node, out var loadParam))
+				else if (node.Result != null && node.Result.IsDefinedOnce && Architecture.IsParameterLoad(node, out var loadParam))
 				{
-					var result = node.Result;
+					var register = Registers[GetIndex(node.Result)];
 
-					// FUTURE: check can be improved to allow multiple defines, as long as the load is exactly the same
-					if (result.IsDefinedOnce)
-					{
-						var register = Registers[GetIndex(result)];
-
-						register.IsParamLoad = true;
-						register.ParamLoadNode = node;
-						register.ParamOperand = loadParam;
-					}
+					register.IsParamLoad = true;
+					register.ParamLoadNode = node;
+					register.LoadOperand = loadParam;
 				}
-
-				if (node.IsBlockEndInstruction)
+				else if (node.IsBlockEndInstruction)
+				{
 					break;
+				}
 			}
 
 			Debug.Assert(block.Last.Offset != 0);
@@ -348,7 +351,7 @@ public abstract class BaseRegisterAllocator
 		// Mark if parameter is writable (vs. read-only)
 		foreach (var register in Registers)
 		{
-			if (register.ParamOperand != null && paramStoreSet.Contains(register.ParamOperand))
+			if (register.LoadOperand != null && paramStoreSet.Contains(register.LoadOperand))
 			{
 				register.IsParamStore = true;
 			}
@@ -1399,7 +1402,7 @@ public abstract class BaseRegisterAllocator
 			if (!register.IsSpilled)
 				continue;
 
-			if (register.IsParamLoadOnly)
+			if (register.IsParamLoadOnly || register.IsConstantLoad)
 				continue;
 
 			Debug.Assert(register.IsVirtualRegister);
@@ -1433,7 +1436,16 @@ public abstract class BaseRegisterAllocator
 				continue;
 
 			if (register.IsParamLoadOnly)
+			{
+				RematerializationParamLoad++;
 				continue; // No store required
+			}
+
+			if (register.IsConstantLoad)
+			{
+				RematerializationConstant++;
+				continue; // No store required
+			}
 
 			foreach (var liveInterval in register.LiveIntervals)
 			{

@@ -84,7 +84,7 @@ public static class ManualTransforms
 		new Special.StoreLoadManagedPointer(),
 		new Special.StoreLoad32(),
 		new Special.StoreLoad64(),
-		new Special.CombineAddressOfStore32(),
+		//new Special.CombineAddressOfStore32(),
 
 		new Simplification.AddCarryOut32CarryNotUsed(),
 		new Simplification.AddCarryOut64CarryNotUsed(),

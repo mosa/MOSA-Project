@@ -349,4 +349,17 @@ public sealed class Architecture : BaseArchitecture
 
 		return false;
 	}
+
+	public override bool IsConstantIntegerLoad(Node node, out Operand operand)
+	{
+		operand = null;
+
+		if ((node.Instruction == X64.Mov32 || node.Instruction == X64.Mov64) && node.Operand1.IsResolvedConstant)
+		{
+
+			operand = node.Operand1;
+			return true;
+		}
+		return true;
+	}
 }

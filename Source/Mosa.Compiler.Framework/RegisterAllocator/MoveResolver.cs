@@ -30,6 +30,7 @@ public sealed class MoveResolver
 		TrySimpleMoves();
 		TryExchange();
 		CreateMemoryMoves();
+		CreateConstantLoads();
 	}
 
 	private int FindIndex(PhysicalRegister register, bool source)
@@ -61,6 +62,9 @@ public sealed class MoveResolver
 			for (var i = 0; i < Moves.Count; i++)
 			{
 				var move = Moves[i];
+
+				if (!(!move.Source.IsResolvedConstant || move.Source.IsOnStack))
+					continue;
 
 				if (!(move.Source.IsPhysicalRegister || move.Destination.IsPhysicalRegister))
 					continue;
@@ -96,6 +100,9 @@ public sealed class MoveResolver
 			for (var i = 0; i < Moves.Count; i++)
 			{
 				var move = Moves[i];
+
+				if (!(!move.Source.IsResolvedConstant || move.Source.IsOnStack))
+					continue;
 
 				if (!(move.Source.IsPhysicalRegister || move.Destination.IsPhysicalRegister))
 					continue;
@@ -135,6 +142,9 @@ public sealed class MoveResolver
 		{
 			var move = Moves[i];
 
+			if (!(!move.Source.IsResolvedConstant || move.Source.IsOnStack))
+				continue;
+
 			if (!(move.Source.IsPhysicalRegister || move.Destination.IsPhysicalRegister))
 				continue;
 
@@ -143,9 +153,32 @@ public sealed class MoveResolver
 
 			ResolvedMoves.Add(new LiveIntervalTransition(
 				ResolvedMoveType.Move,
-				move.To,
-				move.From)
+				move.From,
+				move.To)
 			);
+
+			Moves.RemoveAt(i);
+		}
+	}
+
+	private void CreateConstantLoads()
+	{
+		for (var i = 0; i < Moves.Count; i++)
+		{
+			var move = Moves[i];
+
+			if (!move.Source.IsResolvedConstant || move.Source.IsOnStack)
+				continue;
+
+			Debug.Assert(move.Destination.IsPhysicalRegister);
+
+			ResolvedMoves.Add(new LiveIntervalTransition(
+				ResolvedMoveType.ConstantLoad,
+				move.From,
+				move.To)
+			);
+
+			Moves.RemoveAt(i);
 		}
 	}
 
@@ -178,6 +211,10 @@ public sealed class MoveResolver
 
 			switch (move.ResolvedMoveType)
 			{
+				case ResolvedMoveType.ConstantLoad:
+					architecture.InsertMoveInstruction(context, move.Destination, move.Source); // FIXME: Change to InsertConstantLoad
+					break;
+
 				case ResolvedMoveType.Move:
 					architecture.InsertMoveInstruction(context, move.Destination, move.Source);
 					break;

@@ -302,4 +302,15 @@ public sealed class Architecture : BaseArchitecture
 		// TODO
 		return false;
 	}
+
+	public override bool IsConstantIntegerLoad(Node node, out Operand operand)
+	{
+		operand = null;
+
+		//if (node.Instruction != ARM64.Mov64)
+		return false;
+
+		//operand = node.Operand1;
+		//return true;
+	}
 }

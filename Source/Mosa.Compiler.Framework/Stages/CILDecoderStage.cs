@@ -1,10 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Text;
 
 using Mosa.Compiler.Common;
@@ -136,7 +132,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		CreateLocalVariables();
 
-		InitializeLocalVariables();
+		//InitializeLocalVariables();
 
 		CreateInstructions();
 

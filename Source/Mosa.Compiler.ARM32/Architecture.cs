@@ -300,4 +300,15 @@ public sealed class Architecture : BaseArchitecture
 
 		return false;
 	}
+
+	public override bool IsConstantIntegerLoad(Node node, out Operand operand)
+	{
+		operand = null;
+
+		if (node.Instruction != ARM32.Mov)
+			return false;
+
+		operand = node.Operand1;
+		return true;
+	}
 }
