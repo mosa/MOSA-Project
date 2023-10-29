@@ -31,6 +31,8 @@ public sealed class MoveResolver
 		TryExchange();
 		CreateMemoryMoves();
 		CreateConstantLoads();
+
+		Debug.Assert(Moves.Count == 0);
 	}
 
 	private int FindIndex(PhysicalRegister register, bool source)
@@ -158,6 +160,7 @@ public sealed class MoveResolver
 			);
 
 			Moves.RemoveAt(i);
+			i--;
 		}
 	}
 
@@ -179,6 +182,7 @@ public sealed class MoveResolver
 			);
 
 			Moves.RemoveAt(i);
+			i--;
 		}
 	}
 
@@ -236,8 +240,6 @@ public sealed class MoveResolver
 
 			context.Marked = true;
 		}
-
-		Debug.Assert(Moves.Count == 0);
 
 		return Moves.Count;
 	}
