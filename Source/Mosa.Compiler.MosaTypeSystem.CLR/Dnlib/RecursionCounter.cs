@@ -4,6 +4,10 @@
 // "I don't plan on making that type public ever again. If you need to use it,
 // you can just copy the source code to your project, it's not a lot of code."
 
+#if DEBUG
+using Mosa.Compiler.Common.Exceptions;
+#endif
+
 namespace dnlib.DotNet;
 
 /// <summary>
