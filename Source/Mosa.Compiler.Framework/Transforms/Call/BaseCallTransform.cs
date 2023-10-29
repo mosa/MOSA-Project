@@ -106,14 +106,14 @@ public abstract class BasePlugTransform : BaseTransform
 
 		if (result.IsObject)
 		{
-			var returnLow = Operand.CreateCPURegisterObject(transform.Architecture.ReturnRegister);
+			var returnLow = transform.PhysicalRegisters.AllocateObject(transform.Architecture.ReturnRegister);
 			context.AppendInstruction(IRInstruction.Gen, returnLow);
 			context.AppendInstruction(IRInstruction.MoveObject, result, returnLow);
 		}
 		else if (result.IsInt64 && transform.Is32BitPlatform)
 		{
-			var returnLow = Operand.CreateCPURegister32(transform.Architecture.ReturnRegister);
-			var returnHigh = Operand.CreateCPURegister32(transform.Architecture.ReturnHighRegister);
+			var returnLow = transform.PhysicalRegisters.Allocate32(transform.Architecture.ReturnRegister);
+			var returnHigh = transform.PhysicalRegisters.Allocate32(transform.Architecture.ReturnHighRegister);
 
 			context.AppendInstruction(IRInstruction.Gen, returnLow);
 			context.AppendInstruction(IRInstruction.Gen, returnHigh);
@@ -121,19 +121,19 @@ public abstract class BasePlugTransform : BaseTransform
 		}
 		else if (result.IsInteger)
 		{
-			var returnLow = Operand.CreateCPURegister(result, transform.Architecture.ReturnRegister);
+			var returnLow = transform.PhysicalRegisters.Allocate(result, transform.Architecture.ReturnRegister);
 			context.AppendInstruction(IRInstruction.Gen, returnLow);
 			context.AppendInstruction(transform.MoveInstruction, result, returnLow);
 		}
 		else if (result.IsR4)
 		{
-			var returnFP = Operand.CreateCPURegisterR4(transform.Architecture.ReturnFloatingPointRegister);
+			var returnFP = transform.PhysicalRegisters.AllocateR4(transform.Architecture.ReturnFloatingPointRegister);
 			context.AppendInstruction(IRInstruction.Gen, returnFP);
 			context.AppendInstruction(IRInstruction.MoveR4, result, returnFP);
 		}
 		else if (result.IsR8)
 		{
-			var returnFP = Operand.CreateCPURegisterR8(transform.Architecture.ReturnFloatingPointRegister);
+			var returnFP = transform.PhysicalRegisters.AllocateR8(transform.Architecture.ReturnFloatingPointRegister);
 			context.AppendInstruction(IRInstruction.Gen, returnFP);
 			context.AppendInstruction(IRInstruction.MoveR8, result, returnFP);
 		}
@@ -143,7 +143,7 @@ public abstract class BasePlugTransform : BaseTransform
 		}
 		else
 		{
-			var returnLow = Operand.CreateCPURegister(result, transform.Architecture.ReturnRegister);
+			var returnLow = transform.PhysicalRegisters.Allocate(result, transform.Architecture.ReturnRegister);
 			context.AppendInstruction(IRInstruction.Gen, returnLow);
 			context.AppendInstruction(transform.MoveInstruction, result, returnLow);
 		}

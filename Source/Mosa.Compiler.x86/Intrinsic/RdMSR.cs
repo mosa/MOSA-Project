@@ -17,9 +17,9 @@ internal static partial class IntrinsicMethods
 
 		//transform.SplitOperand(result, out Operand resultLow, out Operand resultHigh);
 
-		var eax = Operand.CreateCPURegister32(CPURegister.EAX);
-		var edx = Operand.CreateCPURegister32(CPURegister.EDX);
-		var ecx = Operand.CreateCPURegister32(CPURegister.ECX);
+		var eax = transform.PhysicalRegisters.Allocate32(CPURegister.EAX);
+		var edx = transform.PhysicalRegisters.Allocate32(CPURegister.EDX);
+		var ecx = transform.PhysicalRegisters.Allocate32(CPURegister.ECX);
 
 		context.SetInstruction(X86.Mov32, ecx, operand1);
 		context.AppendInstruction2(X86.RdMSR, eax, edx, ecx);

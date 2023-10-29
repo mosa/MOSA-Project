@@ -101,36 +101,6 @@ public sealed class Compiler
 	/// </summary>
 	public bool IsStopped { get; private set; }
 
-	/// <summary>
-	/// The stack frame
-	/// </summary>
-	public Operand StackFrame { get; }
-
-	/// <summary>
-	/// The stack frame
-	/// </summary>
-	public Operand StackPointer { get; }
-
-	/// <summary>
-	/// The program counter
-	/// </summary>
-	internal Operand ProgramCounter { get; }
-
-	/// <summary>
-	/// The link register
-	/// </summary>
-	internal Operand LinkRegister { get; }
-
-	/// <summary>
-	/// The exception register
-	/// </summary>
-	public Operand ExceptionRegister { get; }
-
-	/// <summary>
-	/// The ;eave target register
-	/// </summary>
-	public Operand LeaveTargetRegister { get; }
-
 	public CompilerHooks CompilerHooks { get; }
 
 	public int TraceLevel { get; }
@@ -245,14 +215,6 @@ public sealed class Compiler
 
 		ObjectHeaderSize = Architecture.NativePointerSize + 4 + 4; // Hash Value (32-bit) + Lock & Status (32-bit) + Method Table
 
-		StackFrame = Operand.CreateCPURegisterNativeInteger(Architecture.StackFrameRegister, Architecture.Is32BitPlatform);
-		StackPointer = Operand.CreateCPURegisterNativeInteger(Architecture.StackPointerRegister, Architecture.Is32BitPlatform);
-		ExceptionRegister = Operand.CreateCPURegisterObject(Architecture.ExceptionRegister);
-		LeaveTargetRegister = Operand.CreateCPURegisterNativeInteger(Architecture.LeaveTargetRegister, Architecture.Is32BitPlatform);
-
-		LinkRegister = Architecture.LinkRegister == null ? null : Operand.CreateCPURegisterNativeInteger(Architecture.LinkRegister, Architecture.Is32BitPlatform);
-		ProgramCounter = Architecture.ProgramCounter == null ? null : Operand.CreateCPURegisterNativeInteger(Architecture.ProgramCounter, Architecture.Is32BitPlatform);
-
 		MethodStagePipelines = new Pipeline<BaseMethodCompilerStage>[MaxThreads];
 
 		MethodScheduler = new MethodScheduler(this);
@@ -333,6 +295,20 @@ public sealed class Compiler
 		PostEvent(CompilerEvent.MethodCompileEnd, method.FullName, threadID);
 
 		CompilerHooks.NotifyMethodCompiled?.Invoke(method);
+	}
+
+	public void CompileMethod(Transform transform)
+	{
+		PostEvent(CompilerEvent.MethodCompileStart, transform.Method.FullName, transform.MethodCompiler.ThreadID);
+
+		var pipeline = GetOrCreateMethodStagePipeline(transform.MethodCompiler.ThreadID);
+
+		transform.MethodCompiler.Pipeline = pipeline;
+		transform.MethodCompiler.Compile();
+
+		PostEvent(CompilerEvent.MethodCompileEnd, transform.Method.FullName, transform.MethodCompiler.ThreadID);
+
+		CompilerHooks.NotifyMethodCompiled?.Invoke(transform.Method);
 	}
 
 	private Pipeline<BaseMethodCompilerStage> GetOrCreateMethodStagePipeline(int threadID)

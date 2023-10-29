@@ -34,7 +34,7 @@ public sealed class Setcc : BaseTransform
 		// SETcc can not use with ESI or EDI registers as source registers
 		var condition = context.ConditionCode;
 
-		var eax = Operand.CreateCPURegister32(CPURegister.EAX);
+		var eax = transform.PhysicalRegisters.Allocate32(CPURegister.EAX);
 
 		context.SetInstruction2(X86.XChg32, eax, result, result, eax);
 		context.AppendInstruction(instruction, condition, eax);

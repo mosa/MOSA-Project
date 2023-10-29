@@ -17,7 +17,7 @@ internal static partial class IntrinsicMethods
 		var comparand = context.Operand3;
 		var result = context.Result;
 
-		var eax = Operand.CreateCPURegister32(CPURegister.EAX);
+		var eax = transform.PhysicalRegisters.Allocate32(CPURegister.EAX);
 		var v1 = transform.VirtualRegisters.Allocate32();
 
 		context.SetInstruction(X86.Mov32, eax, comparand);

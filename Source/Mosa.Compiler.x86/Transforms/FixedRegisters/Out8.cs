@@ -30,8 +30,8 @@ public sealed class Out8 : BaseTransform
 		var operand1 = context.Operand1;
 		var operand2 = context.Operand2;
 
-		var eax = Operand.CreateCPURegister32(CPURegister.EAX);
-		var edx = Operand.CreateCPURegister32(CPURegister.EDX);
+		var eax = transform.PhysicalRegisters.Allocate32(CPURegister.EAX);
+		var edx = transform.PhysicalRegisters.Allocate32(CPURegister.EDX);
 
 		context.SetInstruction(X86.Mov32, edx, operand1);
 		context.AppendInstruction(X86.Mov32, eax, operand2);

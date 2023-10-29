@@ -15,7 +15,7 @@ internal static partial class IntrinsicMethods
 		Operand result = context.Result;
 		Operand size = context.Operand1;
 
-		Operand esp = Operand.CreateCPURegister64(CPURegister.RSP);
+		Operand esp = transform.PhysicalRegisters.Allocate64(CPURegister.RSP);
 
 		context.SetInstruction(X64.Sub64, esp, esp, size);
 		context.AppendInstruction(X64.Mov64, result, esp);

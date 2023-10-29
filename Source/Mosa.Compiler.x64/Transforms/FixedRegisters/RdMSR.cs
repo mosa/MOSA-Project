@@ -30,9 +30,9 @@ public sealed class RdMSR : BaseTransform
 		var result = context.Result;
 		var result2 = context.Result2;
 
-		var rax = Operand.CreateCPURegister64(CPURegister.RAX);
-		var rdx = Operand.CreateCPURegister64(CPURegister.RDX);
-		var rcx = Operand.CreateCPURegister64(CPURegister.RCX);
+		var rax = transform.PhysicalRegisters.Allocate64(CPURegister.RAX);
+		var rdx = transform.PhysicalRegisters.Allocate64(CPURegister.RDX);
+		var rcx = transform.PhysicalRegisters.Allocate64(CPURegister.RCX);
 
 		context.SetInstruction(X64.Mov64, rcx, operand1);
 		context.AppendInstruction2(X64.RdMSR, rax, rdx, rcx);

@@ -36,8 +36,8 @@ public sealed class IMul32o1 : BaseTransform
 		var result = context.Result;
 		var result2 = context.Result2;
 
-		var eax = Operand.CreateCPURegister32(CPURegister.EAX);
-		var edx = Operand.CreateCPURegister32(CPURegister.EDX);
+		var eax = transform.PhysicalRegisters.Allocate32(CPURegister.EAX);
+		var edx = transform.PhysicalRegisters.Allocate32(CPURegister.EDX);
 
 		context.SetInstruction(X86.Mov32, eax, operand1);
 

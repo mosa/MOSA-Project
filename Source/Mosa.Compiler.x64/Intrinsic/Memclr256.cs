@@ -14,7 +14,7 @@ internal static partial class IntrinsicMethods
 	{
 		var dest = context.Operand1;
 
-		var v0 = Operand.CreateCPURegisterR8(CPURegister.XMM0);
+		var v0 = transform.PhysicalRegisters.AllocateR8(CPURegister.XMM0);
 		var offset16 = Operand.Constant64_16;
 
 		context.SetInstruction(X64.PXor, v0, v0, v0);

@@ -15,9 +15,9 @@ internal static partial class IntrinsicMethods
 		var result = context.Result;
 		var methodAddress = context.Operand1;
 
-		var eax = Operand.CreateCPURegister64(CPURegister.RAX);
-		var edx = Operand.CreateCPURegister64(CPURegister.RDX);
-		var xmm0 = Operand.CreateCPURegister64(CPURegister.XMM0);
+		var eax = transform.PhysicalRegisters.Allocate64(CPURegister.RAX);
+		var edx = transform.PhysicalRegisters.Allocate64(CPURegister.RDX);
+		var xmm0 = transform.PhysicalRegisters.Allocate64(CPURegister.XMM0);
 
 		transform.SplitOperand(result, out Operand op0L, out Operand op0H);
 

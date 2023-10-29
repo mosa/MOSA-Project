@@ -36,8 +36,8 @@ public sealed class Mul32 : BaseTransform
 		var result = context.Result;
 		var result2 = context.Result2;
 
-		var rax = Operand.CreateCPURegister32(CPURegister.RAX);
-		var rdx = Operand.CreateCPURegister32(CPURegister.RDX);
+		var rax = transform.PhysicalRegisters.Allocate32(CPURegister.RAX);
+		var rdx = transform.PhysicalRegisters.Allocate32(CPURegister.RDX);
 
 		context.SetInstruction(X64.Mov64, rax, operand1);
 

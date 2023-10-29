@@ -1,8 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections;
-using System.Collections.Generic;
-using Mosa.Compiler.Framework.RegisterAllocator;
 
 namespace Mosa.Compiler.Framework;
 

@@ -48,13 +48,13 @@ public static class Boot
 	{
 		Debug.WriteLine("Boot::StartThreadTest()");
 
-		Scheduler.CreateThread(Program.EntryPoint, Page.Size);
+		Scheduler.CreateThread(Program.EntryPoint);
 
-		Scheduler.CreateThread(Thread1, Page.Size);
-		Scheduler.CreateThread(Thread2, Page.Size);
-		Scheduler.CreateThread(Thread3, Page.Size);
-		Scheduler.CreateThread(Thread4, Page.Size);
-		Scheduler.CreateThread(Thread5, Page.Size);
+		Scheduler.CreateThread(Thread1);
+		Scheduler.CreateThread(Thread2);
+		Scheduler.CreateThread(Thread3);
+		Scheduler.CreateThread(Thread4);
+		Scheduler.CreateThread(Thread5);
 
 		Scheduler.Start();
 

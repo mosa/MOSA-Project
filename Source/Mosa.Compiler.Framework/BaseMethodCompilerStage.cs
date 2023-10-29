@@ -135,32 +135,27 @@ public abstract class BaseMethodCompilerStage
 	/// <summary>
 	/// Gets the stack frame.
 	/// </summary>
-	protected Operand StackFrame => MethodCompiler.Compiler.StackFrame;
+	protected Operand StackFrame => MethodCompiler.StackFrame;
 
 	/// <summary>
 	/// Gets the stack pointer.
 	/// </summary>
-	protected Operand StackPointer => MethodCompiler.Compiler.StackPointer;
+	protected Operand StackPointer => MethodCompiler.StackPointer;
 
 	/// <summary>
 	/// Gets the link register.
 	/// </summary>
-	protected Operand LinkRegister => MethodCompiler.Compiler.LinkRegister;
+	protected Operand LinkRegister => MethodCompiler.LinkRegister;
 
 	/// <summary>
 	/// Gets the program counter
 	/// </summary>
-	protected Operand ProgramCounter => MethodCompiler.Compiler.ProgramCounter;
-
-	/// <summary>
-	/// Gets the exception register.
-	/// </summary>
-	protected Operand ExceptionRegister => MethodCompiler.Compiler.ExceptionRegister;
+	protected Operand ProgramCounter => MethodCompiler.ProgramCounter;
 
 	/// <summary>
 	/// Gets the leave target register.
 	/// </summary>
-	protected Operand LeaveTargetRegister => MethodCompiler.Compiler.LeaveTargetRegister;
+	protected Operand LeaveTargetRegister => MethodCompiler.LeaveTargetRegister;
 
 	/// <summary>
 	/// Gets a value indicating whether this instance has protected regions.

@@ -18,6 +18,6 @@ public sealed class SetReturnObject : BaseTransform
 
 	public override void Transform(Context context, Transform transform)
 	{
-		context.SetInstruction(IRInstruction.MoveObject, Operand.CreateCPURegisterObject(transform.Architecture.ReturnRegister), context.Operand1);
+		context.SetInstruction(IRInstruction.MoveObject, transform.PhysicalRegisters.AllocateObject(transform.Architecture.ReturnRegister), context.Operand1);
 	}
 }

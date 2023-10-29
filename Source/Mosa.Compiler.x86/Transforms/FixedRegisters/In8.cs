@@ -30,8 +30,8 @@ public sealed class In8 : BaseTransform
 		var result = context.Result;
 		var operand1 = context.Operand1;
 
-		var eax = Operand.CreateCPURegister32(CPURegister.EAX);
-		var edx = Operand.CreateCPURegister32(CPURegister.EDX);
+		var eax = transform.PhysicalRegisters.Allocate32(CPURegister.EAX);
+		var edx = transform.PhysicalRegisters.Allocate32(CPURegister.EDX);
 
 		context.SetInstruction(X86.Mov32, edx, operand1);
 		context.AppendInstruction(X86.In8, eax, edx);

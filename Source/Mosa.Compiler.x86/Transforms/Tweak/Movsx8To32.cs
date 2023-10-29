@@ -31,7 +31,7 @@ public sealed class Movsx8To32 : BaseTransform
 		var source = context.Operand1;
 
 		// Movsx8To32 can not use with ESI or EDI registers as source registers
-		var eax = Operand.CreateCPURegister32(CPURegister.EAX);
+		var eax = transform.PhysicalRegisters.Allocate32(CPURegister.EAX);
 
 		if (source.Register == result.Register)
 		{

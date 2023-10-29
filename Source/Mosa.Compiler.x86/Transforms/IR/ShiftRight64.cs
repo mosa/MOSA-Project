@@ -53,7 +53,7 @@ public sealed class ShiftRight64 : BaseIRTransform
 		var newBlocks = transform.CreateNewBlockContexts(1, context.Label);
 		var nextBlock = transform.Split(context);
 
-		var ECX = Operand.CreateCPURegister32(CPURegister.ECX);
+		var ECX = transform.PhysicalRegisters.Allocate32(CPURegister.ECX);
 
 		context.SetInstruction(X86.Mov32, ECX, count);
 		context.AppendInstruction(X86.Shrd32, resultLow, op1L, op1H, ECX);

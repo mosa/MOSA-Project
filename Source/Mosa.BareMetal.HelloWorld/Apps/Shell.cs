@@ -20,13 +20,15 @@ public class Shell : IApp
 		{
 			Console.Write("> ");
 
-			var cmd = Console.ReadLine().ToLower();
+			var cmd = Console.ReadLine();
 
 			if (cmd == "quit")
 				break;
 
 			if (!AppManager.Execute(cmd))
+			{
 				Console.WriteLine("Unknown command: " + cmd);
+			}
 		}
 	}
 }

@@ -8,6 +8,8 @@ namespace Mosa.Kernel.BareMetal;
 
 public static class Scheduler
 {
+	#region Private Members
+
 	private const int MaxThreads = 256;
 
 	private static Pointer SignalThreadTerminationMethodAddress;
@@ -20,9 +22,69 @@ public static class Scheduler
 
 	private static int clockTicks;
 
+	private static uint DefaultStackSize => Page.Size * 8;
+
+	#endregion Private Members
+
+	#region Public Members
+
 	public static uint ClockTicks => (uint)clockTicks;
 
-	public static void Setup()
+	#endregion Public Members
+
+	#region Public API
+
+	public static void Start()
+	{
+		Debug.WriteLine("Scheduler:Start()");
+
+		SetThreadID(0);
+		Enabled = true;
+
+		Platform.Scheduler.Start();
+
+		Debug.WriteLine("Scheduler:Start() [Exit]");
+	}
+
+	public static uint CreateThread(ThreadStart thread)
+	{
+		return CreateThread(thread, DefaultStackSize);
+	}
+
+	public static void ClockInterrupt(Pointer stackSate)
+	{
+		if (!Enabled)
+			return;
+
+		Interlocked.Increment(ref clockTicks);
+
+		// Save current stack state
+		var threadID = GetCurrentThreadID();
+		SaveThreadState(threadID, stackSate);
+
+		ScheduleNextThread(threadID);
+	}
+
+	public static void TerminateCurrentThread()
+	{
+		if (!Enabled)
+			return;
+
+		var threadID = GetCurrentThreadID();
+
+		if (threadID != 0)
+		{
+			TerminateThread(threadID);
+		}
+
+		ScheduleNextThread(threadID);
+	}
+
+	#endregion Public API
+
+	#region Internal API
+
+	internal static void Setup()
 	{
 		Debug.WriteLine("Scheduler:Setup()");
 
@@ -45,17 +107,28 @@ public static class Scheduler
 		Debug.WriteLine("Scheduler:Setup() [Exit]");
 	}
 
-	public static void Start()
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	internal static void SignalTermination()
 	{
-		Debug.WriteLine("Scheduler:Start()");
-
-		SetThreadID(0);
-		Enabled = true;
-
-		Platform.Scheduler.Start();
-
-		Debug.WriteLine("Scheduler:Start() [Exit]");
+		Platform.Scheduler.SignalTermination();
 	}
+
+	private static uint CreateThread(ThreadStart thread, uint stackSize)
+	{
+		Debug.WriteLine("Scheduler:CreateThread()");
+
+		var address = GetAddress(thread);
+
+		var newthread = CreateThread(address, stackSize);
+
+		Debug.WriteLine("Scheduler:CreateThread() [Exit]");
+
+		return newthread;
+	}
+
+	#endregion Internal API
+
+	#region Private API
 
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	private static void IdleThread()
@@ -66,45 +139,10 @@ public static class Scheduler
 		}
 	}
 
-	public static void ClockInterrupt(Pointer stackSate)
-	{
-		if (!Enabled)
-			return;
-
-		Interlocked.Increment(ref clockTicks);
-
-		// Save current stack state
-		var threadID = GetCurrentThreadID();
-		SaveThreadState(threadID, stackSate);
-
-		ScheduleNextThread(threadID);
-	}
-
 	private static void ScheduleNextThread(uint threadID)
 	{
 		threadID = GetNextThread(threadID);
 		SwitchToThread(threadID);
-	}
-
-	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static void SignalTermination()
-	{
-		Platform.Scheduler.SignalTermination();
-	}
-
-	public static void TerminateCurrentThread()
-	{
-		if (!Enabled)
-			return;
-
-		var threadID = GetCurrentThreadID();
-
-		if (threadID != 0)
-		{
-			TerminateThread(threadID);
-		}
-
-		ScheduleNextThread(threadID);
 	}
 
 	private static void TerminateThread(uint threadID)
@@ -153,20 +191,7 @@ public static class Scheduler
 		return Intrinsic.GetDelegateTargetAddress(d);
 	}
 
-	public static uint CreateThread(ThreadStart thread, uint stackSize)
-	{
-		Debug.WriteLine("Scheduler:CreateThread()");
-
-		var address = GetAddress(thread);
-
-		var newthread = CreateThread(address, stackSize);
-
-		Debug.WriteLine("Scheduler:CreateThread() [Exit]");
-
-		return newthread;
-	}
-
-	public static uint CreateThread(Pointer methodAddress, uint stackSize)
+	private static uint CreateThread(Pointer methodAddress, uint stackSize)
 	{
 		Debug.WriteLine("Scheduler:CreateThread(Pointer,uint)");
 
@@ -265,4 +290,6 @@ public static class Scheduler
 
 		Debug.WriteLine("Scheduler:ResetTerminatedThreads() [Exit]");
 	}
+
+	#endregion Private API
 }

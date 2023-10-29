@@ -18,11 +18,11 @@ internal static partial class IntrinsicMethods
 		var operand4 = context.Operand4;
 		var operand5 = context.Operand5;
 
-		var ds = Operand.CreateCPURegister64(CPURegister.DS);
-		var es = Operand.CreateCPURegister64(CPURegister.ES);
-		var fs = Operand.CreateCPURegister64(CPURegister.FS);
-		var gs = Operand.CreateCPURegister64(CPURegister.GS);
-		var ss = Operand.CreateCPURegister64(CPURegister.SS);
+		var ds = transform.PhysicalRegisters.Allocate64(CPURegister.DS);
+		var es = transform.PhysicalRegisters.Allocate64(CPURegister.ES);
+		var fs = transform.PhysicalRegisters.Allocate64(CPURegister.FS);
+		var gs = transform.PhysicalRegisters.Allocate64(CPURegister.GS);
+		var ss = transform.PhysicalRegisters.Allocate64(CPURegister.SS);
 
 		context.SetInstruction(X64.MovStoreSeg64, ds, operand1);
 		context.AppendInstruction(X64.MovStoreSeg64, es, operand2);

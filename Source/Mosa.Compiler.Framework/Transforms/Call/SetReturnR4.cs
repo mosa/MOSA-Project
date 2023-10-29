@@ -18,6 +18,6 @@ public sealed class SetReturnR4 : BaseTransform
 
 	public override void Transform(Context context, Transform transform)
 	{
-		context.SetInstruction(IRInstruction.MoveR4, Operand.CreateCPURegisterR4(transform.Architecture.ReturnFloatingPointRegister), context.Operand1);
+		context.SetInstruction(IRInstruction.MoveR4, transform.PhysicalRegisters.AllocateR4(transform.Architecture.ReturnFloatingPointRegister), context.Operand1);
 	}
 }

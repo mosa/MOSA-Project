@@ -110,7 +110,7 @@ public sealed class BasicBlock : IComparable<BasicBlock>
 
 	public bool IsHeadBlock { get; internal set; }
 
-	public Context ContextBeforeBranch => new Context(BeforeBranch);
+	public Context ContextBeforeBranch => new(BeforeBranch);
 
 	public Node BeforeBranch
 	{

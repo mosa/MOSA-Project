@@ -12,27 +12,27 @@ public sealed class PhysicalRegister
 	/// <summary>
 	/// Retrieves the numeric index of this register in its architecture.
 	/// </summary>
-	public int Index { get; }
+	public readonly int Index;
 
 	/// <summary>
 	/// Gets the name of the register
 	/// </summary>
-	public string Name { get; }
+	public readonly string Name;
 
 	/// <summary>
 	/// Holds the machine specific index or code of the register.
 	/// </summary>
-	public uint RegisterCode { get; }
+	public readonly uint RegisterCode;
 
 	/// <summary>
 	/// Determines if this is a floating point register.
 	/// </summary>
-	public bool IsFloatingPoint { get; }
+	public readonly bool IsFloatingPoint;
 
 	/// <summary>
 	/// Determines if this is a integer register.
 	/// </summary>
-	public bool IsInteger { get; }
+	public readonly bool IsInteger;
 
 	/// <summary>
 	/// Gets a value indicating whether this register is special register that the
@@ -61,10 +61,7 @@ public sealed class PhysicalRegister
 
 	#region Methods
 
-	public override string ToString()
-	{
-		return Name;
-	}
+	public override string ToString() => Name;
 
 	#endregion Methods
 }

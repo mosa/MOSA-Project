@@ -15,27 +15,30 @@ public sealed class MultibootStage : Mosa.Compiler.Framework.Platform.BaseMultib
 
 	private void CreateMultibootMethod()
 	{
+		var basicBlocks = new BasicBlocks();
+
+		var methodCompiler = new MethodCompiler(Compiler, multibootMethod, basicBlocks, 0);
+		methodCompiler.MethodData.DoNotInline = true;
+
+		var transform = new Transform();
+		transform.SetCompiler(Compiler);
+		transform.SetMethodCompiler(methodCompiler);
+
 		var startUpType = TypeSystem.GetTypeByName("Mosa.Runtime.StartUp");
 		var initializeMethod = startUpType.FindMethodByName("Initialize");
 
-		Compiler.GetMethodData(initializeMethod).DoNotInline = true;
-
 		var entryPoint = Operand.CreateLabel(initializeMethod, Architecture.Is32BitPlatform);
 
-		var rax = Operand.CreateCPURegister64(CPURegister.RAX);
-		var rbx = Operand.CreateCPURegister64(CPURegister.RBX);
-		var rbp = Operand.CreateCPURegister64(CPURegister.RBP);
-		var rsp = Operand.CreateCPURegister64(CPURegister.RSP);
+		var rax = transform.PhysicalRegisters.Allocate64(CPURegister.RAX);
+		var rbx = transform.PhysicalRegisters.Allocate64(CPURegister.RBX);
+		var rbp = transform.PhysicalRegisters.Allocate64(CPURegister.RBP);
+		var rsp = transform.PhysicalRegisters.Allocate64(CPURegister.RSP);
 
 		var multibootEAX = Operand.CreateLabel(MultibootEAX, Architecture.Is32BitPlatform);
 		var multibootEBX = Operand.CreateLabel(MultibootEBX, Architecture.Is32BitPlatform);
 		var stackBottom = Operand.CreateLabel(MultibootInitialStack, Architecture.Is32BitPlatform);
 
-		var stackTopOffset = CreateConstant(StackSize - 8);
-		var zero = CreateConstant(0);
-		var offset = CreateConstant(8);
-
-		var basicBlocks = new BasicBlocks();
+		var stackTopOffset = CreateConstant(StackSize - 16);
 
 		var prologueBlock = basicBlocks.CreatePrologueBlock();
 
@@ -46,12 +49,12 @@ public sealed class MultibootStage : Mosa.Compiler.Framework.Platform.BaseMultib
 		context.AppendInstruction(X64.Add64, rsp, rsp, stackTopOffset);
 		context.AppendInstruction(X64.Mov64, rbp, stackBottom);
 		context.AppendInstruction(X64.Add64, rbp, rbp, stackTopOffset);
-		context.AppendInstruction(X64.MovStore64, null, rsp, zero, zero);
-		context.AppendInstruction(X64.MovStore64, null, rsp, offset, zero);
+		context.AppendInstruction(X64.MovStore64, null, rsp, Operand.Constant64_0, Operand.Constant64_0);
+		context.AppendInstruction(X64.MovStore64, null, rsp, Operand.Constant64_16, Operand.Constant64_0);
 
 		// Place the multiboot address into a static field
-		context.AppendInstruction(X64.MovStore64, null, multibootEAX, zero, rax);
-		context.AppendInstruction(X64.MovStore64, null, multibootEBX, zero, rbx);
+		context.AppendInstruction(X64.MovStore64, null, multibootEAX, Operand.Constant64_0, rax);
+		context.AppendInstruction(X64.MovStore64, null, multibootEBX, Operand.Constant64_0, rbx);
 
 		context.AppendInstruction(X64.Call, null, entryPoint);
 		context.AppendInstruction(X64.Ret);

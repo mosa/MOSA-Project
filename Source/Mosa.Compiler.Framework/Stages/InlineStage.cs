@@ -388,11 +388,11 @@ public class InlineStage : BaseMethodCompilerStage
 		{
 			mappedOperand = MethodCompiler.VirtualRegisters.Allocate(operand);
 		}
-		else if (operand.IsStaticField)
-		{
-			mappedOperand = operand;
-		}
 		else if (operand.IsCPURegister)
+		{
+			mappedOperand = MethodCompiler.PhysicalRegisters.Allocate(operand);
+		}
+		else if (operand.IsStaticField)
 		{
 			mappedOperand = operand;
 		}
