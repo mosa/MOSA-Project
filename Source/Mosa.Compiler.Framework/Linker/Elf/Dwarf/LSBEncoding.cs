@@ -1,7 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.IO;
-
 namespace Mosa.Compiler.Framework.Linker.Elf.Dwarf;
 
 // Source: https://github.com/aumcode/nfx/blob/9fca1a4d1672cd724025f5ea242811d53197fad4/Source/NFX/IO/LEB128.cs

@@ -356,7 +356,6 @@ public sealed class Architecture : BaseArchitecture
 
 		if ((node.Instruction == X64.Mov32 || node.Instruction == X64.Mov64) && node.Operand1.IsResolvedConstant)
 		{
-
 			operand = node.Operand1;
 			return true;
 		}
