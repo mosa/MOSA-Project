@@ -404,6 +404,9 @@ public class InlineStage : BaseMethodCompilerStage
 
 		if (operand.IsParent)
 		{
+			Debug.Assert(operand.Low != null);
+			Debug.Assert(operand.High != null);
+
 			MethodCompiler.VirtualRegisters.SplitOperand(mappedOperand);
 
 			map.AddIfNew(operand.Low, mappedOperand.Low);

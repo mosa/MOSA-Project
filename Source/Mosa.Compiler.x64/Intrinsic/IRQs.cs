@@ -42,7 +42,7 @@ internal static partial class IntrinsicMethods
 
 		var interrupt = Operand.CreateLabel(method, transform.Is32BitPlatform);
 
-		var esp = transform.PhysicalRegisters.Allocate32(CPURegister.RSP);
+		var rsp = transform.PhysicalRegisters.Allocate64(CPURegister.RSP);
 
 		context.SetInstruction(X64.Cli);
 		if (irq <= 7 || irq >= 16 | irq == 9) // For IRQ 8, 10, 11, 12, 13, 14 the cpu will automatically pushed the error code
@@ -51,11 +51,11 @@ internal static partial class IntrinsicMethods
 		}
 		context.AppendInstruction(X64.Push64, null, Operand.CreateConstant64(irq));
 		context.AppendInstruction(X64.Pushad);
-		context.AppendInstruction(X64.Push64, null, esp);
+		context.AppendInstruction(X64.Push64, null, rsp);
 		context.AppendInstruction(X64.Call, null, interrupt);
-		context.AppendInstruction(X64.Pop64, esp);
+		context.AppendInstruction(X64.Pop64, rsp);
 		context.AppendInstruction(X64.Popad);
-		context.AppendInstruction(X64.Add64, esp, esp, Operand.Constant64_8);
+		context.AppendInstruction(X64.Add64, rsp, rsp, Operand.Constant64_8);
 		context.AppendInstruction(X64.Sti);
 		context.AppendInstruction(X64.IRetd);
 	}

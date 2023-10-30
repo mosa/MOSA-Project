@@ -22,16 +22,16 @@ public sealed class PhysicalRegisters : IEnumerable<Operand>
 
 	public Operand this[int index] => registers[index];
 
-	public bool Is32Platform { get; private set; }
+	public bool Is32BitPlatform { get; private set; }
 
 	#endregion Properties
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="PhysicalRegisters" /> class.
 	/// </summary>
-	public PhysicalRegisters(bool is32Platform)
+	public PhysicalRegisters(bool is32BitPlatform)
 	{
-		Is32Platform = is32Platform;
+		Is32BitPlatform = is32BitPlatform;
 	}
 
 	public Operand Allocate(PrimitiveType primitiveType, PhysicalRegister register)
@@ -86,7 +86,7 @@ public sealed class PhysicalRegisters : IEnumerable<Operand>
 
 	public Operand AllocateNativeInteger(PhysicalRegister register)
 	{
-		return Is32Platform ? Allocate32(register) : Allocate64(register);
+		return Is32BitPlatform ? Allocate32(register) : Allocate64(register);
 	}
 
 	public IEnumerator<Operand> GetEnumerator()

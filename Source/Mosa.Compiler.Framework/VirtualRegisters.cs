@@ -21,16 +21,16 @@ public sealed class VirtualRegisters : IEnumerable<Operand>
 
 	public Operand this[int index] => virtualRegisters[index];
 
-	public bool Is32Platform { get; private set; }
+	public bool Is32BitPlatform { get; private set; }
 
 	#endregion Properties
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="VirtualRegisters" /> class.
 	/// </summary>
-	public VirtualRegisters(bool is32Platform)
+	public VirtualRegisters(bool is32BitPlatform)
 	{
-		Is32Platform = is32Platform;
+		Is32BitPlatform = is32BitPlatform;
 	}
 
 	public Operand Allocate(PrimitiveType primitiveType)
@@ -79,7 +79,7 @@ public sealed class VirtualRegisters : IEnumerable<Operand>
 
 	public Operand AllocateNativeInteger()
 	{
-		return Is32Platform ? Allocate32() : Allocate64();
+		return Is32BitPlatform ? Allocate32() : Allocate64();
 	}
 
 	public void SplitOperand(Operand operand)
