@@ -22,15 +22,33 @@ public sealed class GreedyRegisterAllocator : BaseRegisterAllocator
 	protected override void CalculateSpillCost(LiveInterval liveInterval)
 	{
 		var spillvalue = 0;
+		var spillFactorUse = 100;
+		var spillFactorDef = 115;
 
-		foreach (var use in liveInterval.UsePositions)
+		if (liveInterval.Register.IsConstantLoad)
 		{
-			spillvalue += GetSpillCost(use, 100);
+			spillFactorUse = 10;
+			spillFactorDef = 0;
+		}
+		else if (liveInterval.Register.IsParamLoadOnly)
+		{
+			spillFactorDef = 95;
 		}
 
-		foreach (var use in liveInterval.DefPositions)
+		if (spillFactorUse != 0)
 		{
-			spillvalue += GetSpillCost(use, 115);
+			foreach (var use in liveInterval.UsePositions)
+			{
+				spillvalue += GetSpillCost(use, spillFactorUse);
+			}
+		}
+
+		if (spillFactorDef != 0)
+		{
+			foreach (var def in liveInterval.DefPositions)
+			{
+				spillvalue += GetSpillCost(def, spillFactorDef);
+			}
 		}
 
 		liveInterval.SpillValue = spillvalue;
@@ -300,8 +318,8 @@ public sealed class GreedyRegisterAllocator : BaseRegisterAllocator
 					continue;
 
 				if (!((node.Result.IsVirtualRegister && node.Operand1.IsVirtualRegister)
-					  || (node.Result.IsVirtualRegister && node.Operand1.IsCPURegister)
-					  || (node.Result.IsCPURegister && node.Operand1.IsVirtualRegister)))
+					  || (node.Result.IsVirtualRegister && node.Operand1.IsPhysicalRegister)
+					  || (node.Result.IsPhysicalRegister && node.Operand1.IsVirtualRegister)))
 					continue;
 
 				var from = Registers[GetIndex(node.Operand1)];

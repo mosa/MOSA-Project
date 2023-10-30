@@ -10,6 +10,6 @@ internal static partial class IntrinsicMethods
 	[IntrinsicMethod("Mosa.Runtime.Intrinsic::GetStackPointer")]
 	private static void GetStackPointer(Context context, Transform transform)
 	{
-		context.SetInstruction(transform.MoveInstruction, context.Result, transform.Compiler.StackPointer);
+		context.SetInstruction(transform.MoveInstruction, context.Result, transform.StackPointer);
 	}
 }

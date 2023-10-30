@@ -46,7 +46,7 @@ public sealed class JmpExternal : X86Instruction
 		System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
-		if (node.Operand1.IsCPURegister)
+		if (node.Operand1.IsPhysicalRegister)
 		{
 			opcodeEncoder.Append8Bits(0xFF);
 			opcodeEncoder.Append2Bits(0b11);

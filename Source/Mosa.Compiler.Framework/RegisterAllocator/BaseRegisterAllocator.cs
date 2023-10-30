@@ -2,7 +2,6 @@
 
 using System.Collections;
 using System.Diagnostics;
-using System.Net.WebSockets;
 using System.Text;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis;
@@ -51,6 +50,8 @@ public abstract class BaseRegisterAllocator
 	protected readonly TraceLog Trace;
 
 	public int SpillMoves = 0;
+	public int RematerializationParamLoad = 0;
+	public int RematerializationConstant = 0;
 	public int DataFlowMoves = 0;
 	public int ResolvingMoves = 0;
 
@@ -279,7 +280,7 @@ public abstract class BaseRegisterAllocator
 	protected int GetIndex(Operand operand)
 	{
 		//FUTURE: Make private by refactoring
-		return operand.IsCPURegister ? operand.Register.Index : operand.Index + PhysicalRegisterCount - 1;
+		return operand.IsPhysicalRegister ? operand.Register.Index : operand.Index + PhysicalRegisterCount - 1;
 	}
 
 	private void CreateExtendedBlocks()
@@ -319,27 +320,29 @@ public abstract class BaseRegisterAllocator
 
 				SlotsToNodes.Add(node);
 
-				if (Architecture.IsParameterStore(node, out var storeParam))
+				if (node.Result != null && node.Result.IsDefinedOnce && Architecture.IsConstantIntegerLoad(node, out var constantOperand))
+				{
+					var register = Registers[GetIndex(node.Result)];
+
+					register.IsConstantLoad = true;
+					register.LoadOperand = constantOperand;
+				}
+				else if (Architecture.IsParameterStore(node, out var storeParam))
 				{
 					paramStoreSet.Add(storeParam);
 				}
-				else if (Architecture.IsParameterLoad(node, out var loadParam))
+				else if (node.Result != null && node.Result.IsDefinedOnce && Architecture.IsParameterLoad(node, out var loadParam))
 				{
-					var result = node.Result;
+					var register = Registers[GetIndex(node.Result)];
 
-					// FUTURE: check can be improved to allow multiple defines, as long as the load is exactly the same
-					if (result.IsDefinedOnce)
-					{
-						var register = Registers[GetIndex(result)];
-
-						register.IsParamLoad = true;
-						register.ParamLoadNode = node;
-						register.ParamOperand = loadParam;
-					}
+					register.IsParamLoad = true;
+					register.ParamLoadNode = node;
+					register.LoadOperand = loadParam;
 				}
-
-				if (node.IsBlockEndInstruction)
+				else if (node.IsBlockEndInstruction)
+				{
 					break;
+				}
 			}
 
 			Debug.Assert(block.Last.Offset != 0);
@@ -348,7 +351,7 @@ public abstract class BaseRegisterAllocator
 		// Mark if parameter is writable (vs. read-only)
 		foreach (var register in Registers)
 		{
-			if (register.ParamOperand != null && paramStoreSet.Contains(register.ParamOperand))
+			if (register.LoadOperand != null && paramStoreSet.Contains(register.LoadOperand))
 			{
 				register.IsParamStore = true;
 			}
@@ -406,7 +409,7 @@ public abstract class BaseRegisterAllocator
 
 					foreach (var operand in node.Results)
 					{
-						if (operand.IsCPURegister)
+						if (operand.IsPhysicalRegister)
 							sb.Append($"{operand.Register} ");
 						else if (operand.IsVirtualRegister)
 							sb.Append($"v{operand.Index} ");
@@ -416,7 +419,7 @@ public abstract class BaseRegisterAllocator
 
 					foreach (var operand in node.Operands)
 					{
-						if (operand.IsCPURegister)
+						if (operand.IsPhysicalRegister)
 							sb.Append($"{operand.Register} ");
 						else if (operand.IsVirtualRegister)
 							sb.Append($"v{operand.Index} ");
@@ -452,7 +455,7 @@ public abstract class BaseRegisterAllocator
 
 				foreach (var operand in node.Operands)
 				{
-					if (operand.IsVirtualRegister || operand.IsCPURegister)
+					if (operand.IsVirtualRegister || operand.IsPhysicalRegister)
 					{
 						def.AddIfNew(operand);
 					}
@@ -460,7 +463,7 @@ public abstract class BaseRegisterAllocator
 
 				foreach (var operand in node.Results)
 				{
-					if (operand.IsVirtualRegister || operand.IsCPURegister)
+					if (operand.IsVirtualRegister || operand.IsPhysicalRegister)
 					{
 						use.AddIfNew(operand);
 					}
@@ -538,7 +541,7 @@ public abstract class BaseRegisterAllocator
 
 				foreach (var op in node.Operands)
 				{
-					if (!(op.IsVirtualRegister || (op.IsCPURegister && !op.Register.IsSpecial)))
+					if (!(op.IsVirtualRegister || (op.IsPhysicalRegister && !op.Register.IsSpecial)))
 						continue;
 
 					liveSetTrace?.Log($"INPUT:  {op}");
@@ -578,7 +581,7 @@ public abstract class BaseRegisterAllocator
 
 				foreach (var op in node.Results)
 				{
-					if (!(op.IsVirtualRegister || (op.IsCPURegister && !op.Register.IsSpecial)))
+					if (!(op.IsVirtualRegister || (op.IsPhysicalRegister && !op.Register.IsSpecial)))
 						continue;
 
 					liveSetTrace?.Log($"OUTPUT: {op}");
@@ -710,7 +713,7 @@ public abstract class BaseRegisterAllocator
 
 				foreach (var result in node.Results)
 				{
-					if (!(result.IsVirtualRegister || (result.IsCPURegister && !result.Register.IsSpecial)))
+					if (!(result.IsVirtualRegister || (result.IsPhysicalRegister && !result.Register.IsSpecial)))
 						continue;
 
 					var r = GetIndex(result);
@@ -746,7 +749,7 @@ public abstract class BaseRegisterAllocator
 
 				foreach (var operand in node.Operands)
 				{
-					if (!(operand.IsVirtualRegister || (operand.IsCPURegister && !operand.Register.IsSpecial)))
+					if (!(operand.IsVirtualRegister || (operand.IsPhysicalRegister && !operand.Register.IsSpecial)))
 						continue;
 
 					var r = GetIndex(operand);
@@ -1399,7 +1402,7 @@ public abstract class BaseRegisterAllocator
 			if (!register.IsSpilled)
 				continue;
 
-			if (register.IsParamLoadOnly)
+			if (register.IsParamLoadOnly || register.IsConstantLoad)
 				continue;
 
 			Debug.Assert(register.IsVirtualRegister);
@@ -1420,7 +1423,7 @@ public abstract class BaseRegisterAllocator
 				if (liveInterval.AssignedPhysicalRegister == null)
 					continue;
 
-				liveInterval.AssignedPhysicalOperand = Operand.CreateCPURegister(liveInterval.Register.RegisterOperand, liveInterval.AssignedPhysicalRegister);
+				liveInterval.AssignedPhysicalOperand = Transform.PhysicalRegisters.Allocate(liveInterval.Register.RegisterOperand, liveInterval.AssignedPhysicalRegister);
 			}
 		}
 	}
@@ -1433,7 +1436,16 @@ public abstract class BaseRegisterAllocator
 				continue;
 
 			if (register.IsParamLoadOnly)
+			{
+				RematerializationParamLoad++;
 				continue; // No store required
+			}
+
+			if (register.IsConstantLoad)
+			{
+				RematerializationConstant++;
+				continue; // No store required
+			}
 
 			foreach (var liveInterval in register.LiveIntervals)
 			{

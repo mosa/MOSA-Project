@@ -16,9 +16,9 @@ public sealed class RdMSR : BaseTransform
 
 	public override bool Match(Context context, Transform transform)
 	{
-		if (context.Result.IsCPURegister
-			&& context.Result2.IsCPURegister
-			&& context.Operand1.IsCPURegister
+		if (context.Result.IsPhysicalRegister
+			&& context.Result2.IsPhysicalRegister
+			&& context.Operand1.IsPhysicalRegister
 			&& context.Result.Register == CPURegister.EAX
 			&& context.Result2.Register == CPURegister.EDX
 			&& context.Operand1.Register == CPURegister.ECX)
@@ -33,9 +33,9 @@ public sealed class RdMSR : BaseTransform
 		var result = context.Result;
 		var result2 = context.Result2;
 
-		var eax = Operand.CreateCPURegister32(CPURegister.EAX);
-		var edx = Operand.CreateCPURegister32(CPURegister.EDX);
-		var ecx = Operand.CreateCPURegister32(CPURegister.ECX);
+		var eax = transform.PhysicalRegisters.Allocate32(CPURegister.EAX);
+		var edx = transform.PhysicalRegisters.Allocate32(CPURegister.EDX);
+		var ecx = transform.PhysicalRegisters.Allocate32(CPURegister.ECX);
 
 		context.SetInstruction(X86.Mov32, ecx, operand1);
 		context.AppendInstruction2(X86.RdMSR, eax, edx, ecx);

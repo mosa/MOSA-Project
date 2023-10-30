@@ -5,6 +5,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator;
 public enum ResolvedMoveType
 {
 	Invalid,
+	ConstantLoad,
 	Move,
 	Exchange,
 	Load,

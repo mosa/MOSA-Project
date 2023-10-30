@@ -16,8 +16,8 @@ public sealed class Cdq32 : BaseTransform
 
 	public override bool Match(Context context, Transform transform)
 	{
-		if (context.Result.IsCPURegister
-			&& context.Operand1.IsCPURegister
+		if (context.Result.IsPhysicalRegister
+			&& context.Operand1.IsPhysicalRegister
 			&& context.Result.Register == CPURegister.EDX
 			&& context.Operand1.Register == CPURegister.EAX)
 			return false;
@@ -30,8 +30,8 @@ public sealed class Cdq32 : BaseTransform
 		var operand1 = context.Operand1;
 		var result = context.Result;
 
-		var eax = Operand.CreateCPURegister32(CPURegister.EAX);
-		var edx = Operand.CreateCPURegister32(CPURegister.EDX);
+		var eax = transform.PhysicalRegisters.Allocate32(CPURegister.EAX);
+		var edx = transform.PhysicalRegisters.Allocate32(CPURegister.EDX);
 
 		context.SetInstruction(X86.Mov32, eax, operand1);
 		context.AppendInstruction(X86.Cdq32, edx, eax);

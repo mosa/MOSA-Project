@@ -32,7 +32,7 @@ public sealed class Shrd32 : BaseTransform
 		var operand3 = context.Operand3;
 		var result = context.Result;
 
-		var ecx = Operand.CreateCPURegister32(CPURegister.ECX);
+		var ecx = transform.PhysicalRegisters.Allocate32(CPURegister.ECX);
 
 		context.SetInstruction(X86.Mov32, ecx, operand3);
 		context.AppendInstruction(X86.Shrd32, result, operand1, operand2, ecx);

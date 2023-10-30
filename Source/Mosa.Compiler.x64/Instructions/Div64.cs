@@ -41,8 +41,8 @@ public sealed class Div64 : X64Instruction
 	{
 		System.Diagnostics.Debug.Assert(node.ResultCount == 2);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 3);
-		System.Diagnostics.Debug.Assert(node.Result.IsCPURegister);
-		System.Diagnostics.Debug.Assert(node.Operand1.IsCPURegister);
+		System.Diagnostics.Debug.Assert(node.Result.IsPhysicalRegister);
+		System.Diagnostics.Debug.Assert(node.Operand1.IsPhysicalRegister);
 		System.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);
 
 		opcodeEncoder.SuppressByte(0x40);

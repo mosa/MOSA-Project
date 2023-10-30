@@ -18,6 +18,6 @@ public sealed class SetReturn32 : BaseTransform
 
 	public override void Transform(Context context, Transform transform)
 	{
-		context.SetInstruction(IRInstruction.Move32, Operand.CreateCPURegister32(transform.Architecture.ReturnRegister), context.Operand1);
+		context.SetInstruction(IRInstruction.Move32, transform.PhysicalRegisters.Allocate32(transform.Architecture.ReturnRegister), context.Operand1);
 	}
 }

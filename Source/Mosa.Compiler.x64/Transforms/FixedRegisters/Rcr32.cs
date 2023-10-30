@@ -31,7 +31,7 @@ public sealed class Rcr32 : BaseTransform
 		var operand2 = context.Operand2;
 		var result = context.Result;
 
-		var rcx = Operand.CreateCPURegister64(CPURegister.RCX);
+		var rcx = transform.PhysicalRegisters.Allocate64(CPURegister.RCX);
 
 		context.SetInstruction(X64.Mov64, rcx, operand2);
 		context.AppendInstruction(X64.Rcr32, result, operand1, rcx);

@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Collections.Generic;
 using System.Diagnostics;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Exceptions;
@@ -388,11 +387,11 @@ public class InlineStage : BaseMethodCompilerStage
 		{
 			mappedOperand = MethodCompiler.VirtualRegisters.Allocate(operand);
 		}
-		else if (operand.IsStaticField)
+		else if (operand.IsPhysicalRegister)
 		{
-			mappedOperand = operand;
+			mappedOperand = MethodCompiler.PhysicalRegisters.Allocate(operand);
 		}
-		else if (operand.IsCPURegister)
+		else if (operand.IsStaticField)
 		{
 			mappedOperand = operand;
 		}
@@ -405,6 +404,9 @@ public class InlineStage : BaseMethodCompilerStage
 
 		if (operand.IsParent)
 		{
+			Debug.Assert(operand.Low != null);
+			Debug.Assert(operand.High != null);
+
 			MethodCompiler.VirtualRegisters.SplitOperand(mappedOperand);
 
 			map.AddIfNew(operand.Low, mappedOperand.Low);

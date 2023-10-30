@@ -35,7 +35,7 @@ public abstract class BaseAddressModeTransform : BaseX64Transform
 		if (context.Result == context.Operand1)
 			return true;
 
-		if (context.Result.IsCPURegister && context.Operand1.IsCPURegister && context.Result.Register == context.Operand1.Register)
+		if (context.Result.IsPhysicalRegister && context.Operand1.IsPhysicalRegister && context.Result.Register == context.Operand1.Register)
 			return true;
 
 		return false;

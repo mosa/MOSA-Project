@@ -294,10 +294,21 @@ public sealed class Architecture : BaseArchitecture
 		if (node.ResultCount != 1
 			|| node.OperandCount != 2
 			|| !node.Instruction.IsMemoryRead
-			|| !node.Operand1.IsCPURegister
+			|| !node.Operand1.IsPhysicalRegister
 			|| node.Operand1.Register != CPURegister.FP)
 			return false;
 
 		return false;
+	}
+
+	public override bool IsConstantIntegerLoad(Node node, out Operand operand)
+	{
+		operand = null;
+
+		if (node.Instruction != ARM32.Mov)
+			return false;
+
+		operand = node.Operand1;
+		return true;
 	}
 }

@@ -17,9 +17,9 @@ public sealed class Mul64 : BaseTransform
 
 	public override bool Match(Context context, Transform transform)
 	{
-		if (context.Result.IsCPURegister
-			&& context.Result2.IsCPURegister
-			&& context.Operand1.IsCPURegister
+		if (context.Result.IsPhysicalRegister
+			&& context.Result2.IsPhysicalRegister
+			&& context.Operand1.IsPhysicalRegister
 			&& !context.Operand2.IsConstant
 			&& context.Result.Register == CPURegister.RDX
 			&& context.Result2.Register == CPURegister.RAX
@@ -36,8 +36,8 @@ public sealed class Mul64 : BaseTransform
 		var result = context.Result;
 		var result2 = context.Result2;
 
-		var rax = Operand.CreateCPURegister64(CPURegister.RAX);
-		var rdx = Operand.CreateCPURegister64(CPURegister.RDX);
+		var rax = transform.PhysicalRegisters.Allocate64(CPURegister.RAX);
+		var rdx = transform.PhysicalRegisters.Allocate64(CPURegister.RDX);
 
 		context.SetInstruction(X64.Mov64, rax, operand1);
 
@@ -48,7 +48,7 @@ public sealed class Mul64 : BaseTransform
 			operand2 = v3;
 		}
 
-		Debug.Assert(operand2.IsCPURegister || operand2.IsVirtualRegister);
+		Debug.Assert(operand2.IsPhysicalRegister || operand2.IsVirtualRegister);
 
 		context.AppendInstruction2(X64.Mul64, rdx, rax, rax, operand2);
 		context.AppendInstruction(X64.Mov64, result, rdx);

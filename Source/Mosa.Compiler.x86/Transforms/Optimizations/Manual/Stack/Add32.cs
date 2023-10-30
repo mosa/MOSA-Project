@@ -22,7 +22,7 @@ public sealed class Add32 : BaseTransform
 		if (transform.AreCPURegistersAllocated)
 			return false;
 
-		if (!context.Operand1.IsCPURegister)
+		if (!context.Operand1.IsPhysicalRegister)
 			return false;
 
 		if (context.Operand1.Register != CPURegister.ESP)

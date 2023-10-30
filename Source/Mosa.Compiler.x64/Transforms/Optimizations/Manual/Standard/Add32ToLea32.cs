@@ -21,7 +21,7 @@ public sealed class Add32ToLea32 : BaseTransform
 		if (!context.Operand1.IsVirtualRegister)
 			return false;
 
-		if (context.Operand2.IsCPURegister)
+		if (context.Operand2.IsPhysicalRegister)
 			return false;
 
 		if (context.Operand1.Register == CPURegister.RSP)

@@ -19,7 +19,7 @@ public sealed class Add32 : BaseTransform
 
 	public override bool Match(Context context, Transform transform)
 	{
-		if (!context.Operand1.IsCPURegister)
+		if (!context.Operand1.IsPhysicalRegister)
 			return false;
 
 		if (context.Operand1.Register != CPURegister.RSP)

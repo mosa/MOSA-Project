@@ -36,14 +36,14 @@ public sealed class Test32 : X86Instruction
 		System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
-		if (node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 0 && node.Operand2.IsConstant)
+		if (node.Operand1.IsPhysicalRegister && node.Operand1.Register.RegisterCode == 0 && node.Operand2.IsConstant)
 		{
 			opcodeEncoder.Append8Bits(0xA9);
 			opcodeEncoder.Append32BitImmediate(node.Operand2);
 			return;
 		}
 
-		if (node.Operand2.IsCPURegister)
+		if (node.Operand2.IsPhysicalRegister)
 		{
 			opcodeEncoder.Append8Bits(0x85);
 			opcodeEncoder.Append2Bits(0b11);

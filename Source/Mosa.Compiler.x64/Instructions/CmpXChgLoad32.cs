@@ -44,7 +44,7 @@ public sealed class CmpXChgLoad32 : X64Instruction
 		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 4);
 
-		if (node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 0 && node.Operand2.IsCPURegister && node.Operand3.IsConstantZero && node.Operand4.IsCPURegister)
+		if (node.Operand1.IsPhysicalRegister && node.Operand1.Register.RegisterCode == 0 && node.Operand2.IsPhysicalRegister && node.Operand3.IsConstantZero && node.Operand4.IsPhysicalRegister)
 		{
 			opcodeEncoder.SuppressByte(0x40);
 			opcodeEncoder.Append4Bits(0b0100);

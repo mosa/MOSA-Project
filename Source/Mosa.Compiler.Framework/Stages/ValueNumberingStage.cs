@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.Analysis;
@@ -280,7 +279,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 
 			if (node.Instruction.IsMove && node.Instruction.IsIRInstruction)
 			{
-				if (node.Result.IsCPURegister || node.Operand1.IsCPURegister)
+				if (node.Result.IsPhysicalRegister || node.Operand1.IsPhysicalRegister)
 				{
 					SetValueNumber(node.Result, node.Result);
 					continue;

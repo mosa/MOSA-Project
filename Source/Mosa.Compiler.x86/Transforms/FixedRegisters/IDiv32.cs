@@ -16,10 +16,10 @@ public sealed class IDiv32 : BaseTransform
 
 	public override bool Match(Context context, Transform transform)
 	{
-		if (context.Result.IsCPURegister
-			&& context.Result2.IsCPURegister
-			&& context.Operand1.IsCPURegister
-			&& context.Operand2.IsCPURegister
+		if (context.Result.IsPhysicalRegister
+			&& context.Result2.IsPhysicalRegister
+			&& context.Operand1.IsPhysicalRegister
+			&& context.Operand2.IsPhysicalRegister
 			&& context.Result.Register == CPURegister.EDX
 			&& context.Result2.Register == CPURegister.EAX
 			&& context.Operand1.Register == CPURegister.EDX
@@ -37,8 +37,8 @@ public sealed class IDiv32 : BaseTransform
 		var result = context.Result;
 		var result2 = context.Result2;
 
-		var eax = Operand.CreateCPURegister32(CPURegister.EAX);
-		var edx = Operand.CreateCPURegister32(CPURegister.EDX);
+		var eax = transform.PhysicalRegisters.Allocate32(CPURegister.EAX);
+		var edx = transform.PhysicalRegisters.Allocate32(CPURegister.EDX);
 
 		context.SetInstruction(X86.Mov32, edx, operand1);
 		context.AppendInstruction(X86.Mov32, eax, operand2);

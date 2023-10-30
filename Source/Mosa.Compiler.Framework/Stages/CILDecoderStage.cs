@@ -1,10 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Text;
 
 using Mosa.Compiler.Common;
@@ -135,8 +131,6 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		CreateHandlersBlocks();
 
 		CreateLocalVariables();
-
-		InitializeLocalVariables();
 
 		CreateInstructions();
 
@@ -953,47 +947,6 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 			LocalPrimitiveType[index] = primitiveType;
 			LocalElementType[index] = isPrimitive ? MethodCompiler.GetElementType(underlyingType) : Is32BitPlatform ? ElementType.I4 : ElementType.I8;
-		}
-	}
-
-	private void InitializeLocalVariables()
-	{
-		var prologue = new Context(BasicBlocks.PrologueBlock.AfterFirst);
-
-		for (var index = 0; index < LocalStack.Length; index++)
-		{
-			var local = LocalStack[index];
-			var localstacktype = LocalPrimitiveType[index];
-
-			if (!local.IsVirtualRegister)
-				continue;
-
-			switch (localstacktype)
-			{
-				case PrimitiveType.Object:
-					prologue.AppendInstruction(IRInstruction.MoveObject, local, Operand.NullObject);
-					break;
-
-				case PrimitiveType.Int32:
-					prologue.AppendInstruction(IRInstruction.Move32, local, Operand.Constant32_0);
-					break;
-
-				case PrimitiveType.Int64:
-					prologue.AppendInstruction(IRInstruction.Move64, local, Operand.Constant64_0);
-					break;
-
-				case PrimitiveType.R4:
-					prologue.AppendInstruction(IRInstruction.MoveR4, local, Operand.ConstantR4_0);
-					break;
-
-				case PrimitiveType.R8:
-					prologue.AppendInstruction(IRInstruction.MoveR8, local, Operand.ConstantR8_0);
-					break;
-
-				default:
-					prologue.AppendInstruction(IRInstruction.Move32, local, Operand.Constant32_0);
-					break;
-			}
 		}
 	}
 

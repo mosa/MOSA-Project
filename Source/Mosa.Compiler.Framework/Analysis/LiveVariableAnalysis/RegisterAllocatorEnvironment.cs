@@ -17,17 +17,17 @@ public class RegisterAllocatorEnvironment : BaseLivenessAnalysisEnvironment
 
 	protected int GetIndex(Operand operand)
 	{
-		return operand.IsCPURegister ? operand.Register.Index : operand.Index + PhysicalRegisterCount - 1;
+		return operand.IsPhysicalRegister ? operand.Register.Index : operand.Index + PhysicalRegisterCount - 1;
 	}
 
 	public override IEnumerable<int> GetInputs(Node node)
 	{
 		foreach (var operand in node.Operands)
 		{
-			if (operand.IsCPURegister && operand.Register.IsSpecial)
+			if (operand.IsPhysicalRegister && operand.Register.IsSpecial)
 				continue;
 
-			if (operand.IsVirtualRegister || operand.IsCPURegister)
+			if (operand.IsVirtualRegister || operand.IsPhysicalRegister)
 			{
 				yield return GetIndex(operand);
 			}
@@ -38,10 +38,10 @@ public class RegisterAllocatorEnvironment : BaseLivenessAnalysisEnvironment
 	{
 		foreach (var operand in node.Results)
 		{
-			if (operand.IsCPURegister && operand.Register.IsSpecial)
+			if (operand.IsPhysicalRegister && operand.Register.IsSpecial)
 				continue;
 
-			if (operand.IsVirtualRegister || operand.IsCPURegister)
+			if (operand.IsVirtualRegister || operand.IsPhysicalRegister)
 			{
 				yield return GetIndex(operand);
 			}

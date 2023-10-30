@@ -22,7 +22,7 @@ public sealed class Mov32ConstantReuse : BaseTransform
 		if (context.Operand1.ConstantUnsigned32 == 0)
 			return false;
 
-		if (!context.Result.IsCPURegister)
+		if (!context.Result.IsPhysicalRegister)
 			return false;
 
 		if (context.Result.Register != CPURegister.ESP)
@@ -39,7 +39,7 @@ public sealed class Mov32ConstantReuse : BaseTransform
 		if (!previous.Operand1.IsResolvedConstant)
 			return false;
 
-		if (!previous.Result.IsCPURegister)
+		if (!previous.Result.IsPhysicalRegister)
 			return false;
 
 		if (context.Operand1.ConstantUnsigned64 != previous.Operand1.ConstantUnsigned64)

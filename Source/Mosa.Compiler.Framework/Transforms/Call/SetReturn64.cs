@@ -22,12 +22,12 @@ public sealed class SetReturn64 : BaseTransform
 
 		if (transform.Is32BitPlatform)
 		{
-			context.SetInstruction(IRInstruction.GetLow32, Operand.CreateCPURegister32(transform.Architecture.ReturnRegister), operand);
-			context.AppendInstruction(IRInstruction.GetHigh32, Operand.CreateCPURegister32(transform.Architecture.ReturnHighRegister), operand);
+			context.SetInstruction(IRInstruction.GetLow32, transform.PhysicalRegisters.Allocate32(transform.Architecture.ReturnRegister), operand);
+			context.AppendInstruction(IRInstruction.GetHigh32, transform.PhysicalRegisters.Allocate32(transform.Architecture.ReturnHighRegister), operand);
 		}
 		else
 		{
-			context.SetInstruction(IRInstruction.Move64, Operand.CreateCPURegister64(transform.Architecture.ReturnRegister), context.Operand1);
+			context.SetInstruction(IRInstruction.Move64, transform.PhysicalRegisters.Allocate64(transform.Architecture.ReturnRegister), context.Operand1);
 		}
 	}
 }

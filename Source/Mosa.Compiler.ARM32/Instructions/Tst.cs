@@ -32,7 +32,7 @@ public sealed class Tst : ARM32Instruction
 		System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
-		if (node.Operand1.IsCPURegister && node.Operand2.IsCPURegister)
+		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsPhysicalRegister)
 		{
 			opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
 			opcodeEncoder.Append2Bits(0b00);
@@ -49,7 +49,7 @@ public sealed class Tst : ARM32Instruction
 			return;
 		}
 
-		if (node.Operand1.IsCPURegister && node.Operand2.IsConstant)
+		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsConstant)
 		{
 			opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
 			opcodeEncoder.Append2Bits(0b00);

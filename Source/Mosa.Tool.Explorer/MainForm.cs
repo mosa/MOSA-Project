@@ -1175,8 +1175,8 @@ public partial class MainForm : Form
 		MosaSettings.InlineExplicit = cbInlineExplicit.Checked;
 
 		MosaSettings.TraceLevel = 10;
-		MosaSettings.InlineMaximum = 12;
-		MosaSettings.InlineAggressiveMaximum = 24;
+		//MosaSettings.InlineMaximum = 12;
+		//MosaSettings.InlineAggressiveMaximum = 24;
 		MosaSettings.MultibootVersion = "v2";
 	}
 

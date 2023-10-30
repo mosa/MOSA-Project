@@ -22,7 +22,7 @@ public sealed class Ldm : ARM32Instruction
 		System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
-		if (node.Operand1.IsCPURegister && node.Operand2.IsConstant)
+		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsConstant)
 		{
 			opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
 			opcodeEncoder.Append3Bits(0b100);

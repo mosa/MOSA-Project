@@ -286,7 +286,7 @@ public sealed class Architecture : BaseArchitecture
 
 		if (node.OperandCount != 3
 			|| !node.Instruction.IsMemoryWrite
-			|| !node.Operand1.IsCPURegister
+			|| !node.Operand1.IsPhysicalRegister
 			|| node.Operand1.Register != CPURegister.EBP
 			)
 			return false;
@@ -319,7 +319,7 @@ public sealed class Architecture : BaseArchitecture
 		if (node.ResultCount != 1
 			|| node.OperandCount != 2
 			|| !node.Instruction.IsMemoryRead
-			|| !node.Operand1.IsCPURegister
+			|| !node.Operand1.IsPhysicalRegister
 			|| node.Operand1.Register != CPURegister.EBP)
 			return false;
 
@@ -338,6 +338,19 @@ public sealed class Architecture : BaseArchitecture
 			|| node.Instruction == X86.Movsx8To32)
 		{
 			operand = node.Operand2;
+			return true;
+		}
+
+		return false;
+	}
+
+	public override bool IsConstantIntegerLoad(Node node, out Operand operand)
+	{
+		operand = null;
+
+		if (node.Instruction == X86.Mov32 && node.Operand1.IsResolvedConstant)
+		{
+			operand = node.Operand1;
 			return true;
 		}
 

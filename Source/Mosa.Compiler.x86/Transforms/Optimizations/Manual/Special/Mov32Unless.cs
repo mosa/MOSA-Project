@@ -16,10 +16,10 @@ public sealed class Mov32Unless : BaseTransform
 		if (!transform.AreCPURegistersAllocated)
 			return false;
 
-		if (!context.Result.IsCPURegister)
+		if (!context.Result.IsPhysicalRegister)
 			return false;
 
-		if (!context.Operand1.IsCPURegister)
+		if (!context.Operand1.IsPhysicalRegister)
 			return false;
 
 		//if (context.Result.Register != CPURegister.ESP)
@@ -33,10 +33,10 @@ public sealed class Mov32Unless : BaseTransform
 		//if (previous.Result.Register != CPURegister.ESP)
 		//	return false;
 
-		if (!previous.Result.IsCPURegister)
+		if (!previous.Result.IsPhysicalRegister)
 			return false;
 
-		if (!previous.Operand1.IsCPURegister)
+		if (!previous.Operand1.IsPhysicalRegister)
 			return false;
 
 		if (context.Result.Register != previous.Operand1.Register)

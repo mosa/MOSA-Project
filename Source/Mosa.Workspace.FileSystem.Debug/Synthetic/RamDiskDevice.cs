@@ -49,13 +49,15 @@ public class RamDiskDevice : BaseDeviceDriver, IDiskDevice
 	/// Gets a value indicating whether this instance can write.
 	/// </summary>
 	/// <value><c>true</c> if this instance can write; otherwise, <c>false</c>.</value>
-	public bool CanWrite { get { return true; } }
+	public bool CanWrite
+	{ get { return true; } }
 
 	/// <summary>
 	/// Gets the size of the block.
 	/// </summary>
 	/// <value>The size of the block.</value>
-	public uint BlockSize { get { return 512; } }
+	public uint BlockSize
+	{ get { return 512; } }
 
 	/// <summary>
 	/// Reads the block.

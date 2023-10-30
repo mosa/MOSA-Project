@@ -17,7 +17,7 @@ public sealed class Movsx8To32 : BaseTransform
 
 	public override bool Match(Context context, Transform transform)
 	{
-		if (!context.Operand1.IsCPURegister)
+		if (!context.Operand1.IsPhysicalRegister)
 			return false;
 
 		return !(context.Operand1.Register != CPURegister.ESI && context.Operand1.Register != CPURegister.EDI);
@@ -25,13 +25,13 @@ public sealed class Movsx8To32 : BaseTransform
 
 	public override void Transform(Context context, Transform transform)
 	{
-		Debug.Assert(context.Result.IsCPURegister);
+		Debug.Assert(context.Result.IsPhysicalRegister);
 
 		var result = context.Result;
 		var source = context.Operand1;
 
 		// Movsx8To32 can not use with ESI or EDI registers as source registers
-		var eax = Operand.CreateCPURegister32(CPURegister.EAX);
+		var eax = transform.PhysicalRegisters.Allocate32(CPURegister.EAX);
 
 		if (source.Register == result.Register)
 		{

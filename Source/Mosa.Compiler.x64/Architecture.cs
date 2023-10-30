@@ -322,7 +322,7 @@ public sealed class Architecture : BaseArchitecture
 		if (node.ResultCount != 1
 			|| node.OperandCount != 2
 			|| !node.Instruction.IsMemoryRead
-			|| !node.Operand1.IsCPURegister
+			|| !node.Operand1.IsPhysicalRegister
 			|| node.Operand1.Register != CPURegister.RBP)
 			return false;
 
@@ -348,5 +348,17 @@ public sealed class Architecture : BaseArchitecture
 		}
 
 		return false;
+	}
+
+	public override bool IsConstantIntegerLoad(Node node, out Operand operand)
+	{
+		operand = null;
+
+		if ((node.Instruction == X64.Mov32 || node.Instruction == X64.Mov64) && node.Operand1.IsResolvedConstant)
+		{
+			operand = node.Operand1;
+			return true;
+		}
+		return true;
 	}
 }

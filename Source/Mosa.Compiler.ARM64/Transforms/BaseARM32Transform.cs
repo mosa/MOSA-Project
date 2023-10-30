@@ -166,7 +166,7 @@ namespace Mosa.Compiler.ARM64.Transforms
 
 		public static Operand MoveConstantToRegisterOrImmediate(Transform transform, Context context, Operand operand, bool allowImmediate)
 		{
-			if (operand.IsVirtualRegister || operand.IsCPURegister)
+			if (operand.IsVirtualRegister || operand.IsPhysicalRegister)
 				return operand;
 
 			if (operand.IsResolvedConstant)
@@ -231,7 +231,7 @@ namespace Mosa.Compiler.ARM64.Transforms
 
 		public static Operand MoveConstantToFloatRegisterOrImmediate(Transform transform, Context context, Operand operand, bool allowImmediate)
 		{
-			if (operand.IsVirtualRegister || operand.IsCPURegister)
+			if (operand.IsVirtualRegister || operand.IsPhysicalRegister)
 				return operand;
 
 			if (allowImmediate)
@@ -263,7 +263,7 @@ namespace Mosa.Compiler.ARM64.Transforms
 
 		public static Operand ConvertFloatToImm(Transform transform, Operand operand)
 		{
-			if (operand.IsCPURegister || operand.IsVirtualRegister || operand.IsUnresolvedConstant)
+			if (operand.IsPhysicalRegister || operand.IsVirtualRegister || operand.IsUnresolvedConstant)
 				return operand;
 
 			if (operand.IsR4)

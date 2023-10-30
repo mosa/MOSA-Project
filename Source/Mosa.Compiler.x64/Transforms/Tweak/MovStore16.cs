@@ -16,7 +16,7 @@ public sealed class MovStore16 : BaseTransform
 
 	public override bool Match(Context context, Transform transform)
 	{
-		return context.Operand3.IsCPURegister && (context.Operand3.Register == CPURegister.RSI || context.Operand3.Register == CPURegister.RDI);
+		return context.Operand3.IsPhysicalRegister && (context.Operand3.Register == CPURegister.RSI || context.Operand3.Register == CPURegister.RDI);
 	}
 
 	public override void Transform(Context context, Transform transform)
@@ -29,19 +29,19 @@ public sealed class MovStore16 : BaseTransform
 
 		if (dest.Register != CPURegister.RAX && offset.Register != CPURegister.RAX)
 		{
-			temporaryRegister = Operand.CreateCPURegister32(CPURegister.RAX);
+			temporaryRegister = transform.PhysicalRegisters.Allocate32(CPURegister.RAX);
 		}
 		else if (dest.Register != CPURegister.RBX && offset.Register != CPURegister.RBX)
 		{
-			temporaryRegister = Operand.CreateCPURegister32(CPURegister.RBX);
+			temporaryRegister = transform.PhysicalRegisters.Allocate32(CPURegister.RBX);
 		}
 		else if (dest.Register != CPURegister.RAX && offset.Register != CPURegister.RAX)
 		{
-			temporaryRegister = Operand.CreateCPURegister32(CPURegister.RAX);
+			temporaryRegister = transform.PhysicalRegisters.Allocate32(CPURegister.RAX);
 		}
 		else
 		{
-			temporaryRegister = Operand.CreateCPURegister32(CPURegister.RAX);
+			temporaryRegister = transform.PhysicalRegisters.Allocate32(CPURegister.RAX);
 		}
 
 		context.SetInstruction2(X64.XChg64, temporaryRegister, value, value, temporaryRegister);

@@ -36,7 +36,7 @@ public sealed class Bt32 : X86Instruction
 		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
-		if (node.Operand2.IsCPURegister)
+		if (node.Operand2.IsPhysicalRegister)
 		{
 			opcodeEncoder.Append8Bits(0x0F);
 			opcodeEncoder.Append8Bits(0xA3);

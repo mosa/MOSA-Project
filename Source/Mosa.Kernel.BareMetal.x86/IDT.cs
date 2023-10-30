@@ -2258,12 +2258,12 @@ public static class IDT
 				Error(stack, "SIMD Floating-Point Exception");
 				break;
 
-			case Scheduler.ClockIRQ:
+			case Scheduler.IRQ.Clock:
 				Interrupt?.Invoke(stack.Interrupt, stack.ErrorCode);
 				BareMetal.Scheduler.ClockInterrupt(stackStatePointer);
 				break;
 
-			case Scheduler.ThreadTerminationSignalIRQ:
+			case Scheduler.IRQ.ThreadTermination:
 				BareMetal.Scheduler.TerminateCurrentThread();
 				break;
 

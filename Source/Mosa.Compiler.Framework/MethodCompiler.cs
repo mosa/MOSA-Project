@@ -101,6 +101,11 @@ public sealed class MethodCompiler
 	public VirtualRegisters VirtualRegisters { get; }
 
 	/// <summary>
+	/// Gets the physical registers.
+	/// </summary>
+	public PhysicalRegisters PhysicalRegisters { get; }
+
+	/// <summary>
 	/// Gets the parameters.
 	/// </summary>
 	public Parameters Parameters { get; }
@@ -191,6 +196,40 @@ public sealed class MethodCompiler
 
 	#endregion Properties
 
+	#region Properties - Operand
+
+	/// <summary>
+	/// The stack frame
+	/// </summary>
+	public Operand StackFrame { get; }
+
+	/// <summary>
+	/// The stack frame
+	/// </summary>
+	public Operand StackPointer { get; }
+
+	/// <summary>
+	/// The program counter
+	/// </summary>
+	internal Operand ProgramCounter { get; }
+
+	/// <summary>
+	/// The link register
+	/// </summary>
+	internal Operand LinkRegister { get; }
+
+	/// <summary>
+	/// The exception register
+	/// </summary>
+	public Operand ExceptionRegister { get; }
+
+	/// <summary>
+	/// The ;eave target register
+	/// </summary>
+	public Operand LeaveTargetRegister { get; }
+
+	#endregion Properties - Operand
+
 	#region Construction
 
 	/// <summary>
@@ -229,8 +268,17 @@ public sealed class MethodCompiler
 		BasicBlocks = basicBlocks ?? new BasicBlocks();
 
 		LocalStack = new LocalStack(Is32BitPlatform);
-		VirtualRegisters = new VirtualRegisters(Is32BitPlatform);
 		Parameters = new Parameters(Is32BitPlatform);
+
+		VirtualRegisters = new VirtualRegisters(Is32BitPlatform);
+		PhysicalRegisters = new PhysicalRegisters(Is32BitPlatform);
+
+		StackFrame = PhysicalRegisters.AllocateNativeInteger(Architecture.StackFrameRegister);
+		StackPointer = PhysicalRegisters.AllocateNativeInteger(Architecture.StackPointerRegister);
+		ExceptionRegister = PhysicalRegisters.AllocateObject(Architecture.ExceptionRegister);
+		LeaveTargetRegister = PhysicalRegisters.AllocateNativeInteger(Architecture.LeaveTargetRegister);
+		LinkRegister = Architecture.LinkRegister == null ? null : PhysicalRegisters.AllocateNativeInteger(Architecture.LinkRegister);
+		ProgramCounter = Architecture.ProgramCounter == null ? null : PhysicalRegisters.AllocateNativeInteger(Architecture.ProgramCounter);
 
 		ConstantZero = Is32BitPlatform ? Operand.Constant32_0 : Operand.Constant64_0;
 
@@ -681,7 +729,7 @@ public sealed class MethodCompiler
 				return;
 			}
 		}
-		else if (operand.IsCPURegister)
+		else if (operand.IsPhysicalRegister)
 		{
 			if (operand.IsInt32)
 			{

@@ -16,7 +16,7 @@ public sealed class Deadcode : BaseTransform
 		if (context.ResultCount != 1)
 			return false;
 
-		if (context.Result.IsCPURegister)
+		if (context.Result.IsPhysicalRegister)
 			return false;
 
 		if (context.Instruction.IsCall)

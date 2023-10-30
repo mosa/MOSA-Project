@@ -10,6 +10,6 @@ internal static partial class IntrinsicMethods
 	[IntrinsicMethod("Mosa.Runtime.Intrinsic::GetStackFrame")]
 	private static void GetStackFrame(Context context, Transform transform)
 	{
-		context.SetInstruction(transform.MoveInstruction, context.Result, transform.Compiler.StackFrame);
+		context.SetInstruction(transform.MoveInstruction, context.Result, transform.StackFrame);
 	}
 }

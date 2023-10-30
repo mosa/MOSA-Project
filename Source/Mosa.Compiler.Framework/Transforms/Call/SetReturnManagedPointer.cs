@@ -18,6 +18,6 @@ public sealed class SetReturnManagedPointer : BaseTransform
 
 	public override void Transform(Context context, Transform transform)
 	{
-		context.SetInstruction(IRInstruction.MoveManagedPointer, Operand.CreateCPURegisterObject(transform.Architecture.ReturnRegister), context.Operand1);
+		context.SetInstruction(IRInstruction.MoveManagedPointer, transform.PhysicalRegisters.AllocateObject(transform.Architecture.ReturnRegister), context.Operand1);
 	}
 }

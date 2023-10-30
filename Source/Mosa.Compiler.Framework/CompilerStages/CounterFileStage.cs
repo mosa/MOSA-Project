@@ -1,7 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Diagnostics.Metrics;
-
 namespace Mosa.Compiler.Framework.CompilerStages;
 
 /// <summary>

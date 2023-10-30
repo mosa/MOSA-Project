@@ -16,10 +16,10 @@ public sealed class Movsd : BaseTransform
 
 	public override bool Match(Context context, Transform transform)
 	{
-		if (!context.Result.IsCPURegister)
+		if (!context.Result.IsPhysicalRegister)
 			return false;
 
-		if (!context.Operand1.IsCPURegister)
+		if (!context.Operand1.IsPhysicalRegister)
 			return false;
 
 		return context.Result.Register == context.Operand1.Register;

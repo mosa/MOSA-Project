@@ -12,6 +12,6 @@ internal static partial class IntrinsicMethods
 	[IntrinsicMethod("Mosa.Compiler.x64.Intrinsic::GetFS")]
 	private static void GetFS(Context context, Transform transform)
 	{
-		context.SetInstruction(X64.MovLoadSeg64, context.Result, Operand.CreateCPURegister64(CPURegister.FS));
+		context.SetInstruction(X64.MovLoadSeg64, context.Result, transform.PhysicalRegisters.Allocate64(CPURegister.FS));
 	}
 }

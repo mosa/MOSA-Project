@@ -22,8 +22,8 @@ public sealed class Setcc : BaseTransform
 
 	public override void Transform(Context context, Transform transform)
 	{
-		Debug.Assert(context.Result.IsCPURegister);
-		Debug.Assert(context.Result.IsCPURegister);
+		Debug.Assert(context.Result.IsPhysicalRegister);
+		Debug.Assert(context.Result.IsPhysicalRegister);
 
 		var result = context.Result;
 		var instruction = context.Instruction;
@@ -31,7 +31,7 @@ public sealed class Setcc : BaseTransform
 
 		// SETcc can not use with RSI or RDI registers
 
-		var rax = Operand.CreateCPURegister32(CPURegister.RAX);
+		var rax = transform.PhysicalRegisters.Allocate32(CPURegister.RAX);
 
 		context.SetInstruction2(X64.XChg64, rax, result, result, rax);
 		context.AppendInstruction(instruction, condition, rax);

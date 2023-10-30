@@ -1,6 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Collections.Generic;
 using System.Reflection;
 using Mosa.Compiler.Framework.Linker.Elf;
 using Mosa.Utility.Configuration;
@@ -210,6 +209,8 @@ public abstract class BaseArchitecture
 	/// <returns>
 	///   <c>true</c> if [is parameter load] [the specified context]; otherwise, <c>false</c>.</returns>
 	public abstract bool IsParameterLoad(Node node, out Operand operand);
+
+	public abstract bool IsConstantIntegerLoad(Node node, out Operand operand);
 
 	/// <summary>
 	/// Gets the platform intrinsic method.

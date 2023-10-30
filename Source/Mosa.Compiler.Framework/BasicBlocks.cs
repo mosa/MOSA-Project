@@ -1,7 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework;
@@ -16,12 +15,12 @@ public sealed class BasicBlocks : IEnumerable<BasicBlock>
 	/// <summary>
 	/// The basic blocks
 	/// </summary>
-	private readonly List<BasicBlock> basicBlocks = new List<BasicBlock>();
+	private readonly List<BasicBlock> basicBlocks = new();
 
 	/// <summary>
 	/// Holds the blocks indexed by label
 	/// </summary>
-	private readonly Dictionary<int, BasicBlock> basicBlocksByLabel = new Dictionary<int, BasicBlock>();
+	private readonly Dictionary<int, BasicBlock> basicBlocksByLabel = new();
 
 	/// <summary>
 	/// The prologue block

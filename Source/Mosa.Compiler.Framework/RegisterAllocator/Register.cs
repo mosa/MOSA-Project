@@ -38,7 +38,9 @@ public sealed class Register
 
 	public bool IsParamStore = false;
 
-	public Operand ParamOperand;
+	public bool IsConstantLoad = false;
+
+	public Operand LoadOperand;
 
 	public Node ParamLoadNode;
 

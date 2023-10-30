@@ -22,7 +22,7 @@ public sealed class MovLoad16 : BaseTransform
 
 	public override void Transform(Context context, Transform transform)
 	{
-		Debug.Assert(context.Result.IsCPURegister);
+		Debug.Assert(context.Result.IsPhysicalRegister);
 
 		var source = context.Operand1;
 		var offset = context.Operand2;

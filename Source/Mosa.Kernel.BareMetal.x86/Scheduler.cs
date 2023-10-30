@@ -8,12 +8,15 @@ namespace Mosa.Kernel.BareMetal.x86;
 
 public static class Scheduler
 {
-	public const int ClockIRQ = 0x20;
-	public const int ThreadTerminationSignalIRQ = 254;
+	public static class IRQ
+	{
+		public const int Clock = 0x20;
+		public const int ThreadTermination = 254;
+	}
 
 	public static void Start()
 	{
-		Native.Int(ClockIRQ);
+		Native.Int(IRQ.Clock);
 	}
 
 	[MethodImpl(MethodImplOptions.NoInlining)]
@@ -25,7 +28,7 @@ public static class Scheduler
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static void SignalTermination()
 	{
-		Native.Int(ThreadTerminationSignalIRQ);
+		Native.Int(IRQ.ThreadTermination);
 	}
 
 	public static Pointer SetupThreadStack(Pointer stackTop, Pointer methodAddress, Pointer termAddress)
@@ -59,7 +62,7 @@ public static class Scheduler
 
 	public static void SwitchToThread(Thread thread)
 	{
-		PIC.SendEndOfInterrupt(ClockIRQ);
+		PIC.SendEndOfInterrupt(IRQ.Clock);
 
 		Native.InterruptReturn((uint)thread.StackStatePointer.ToInt32());
 	}

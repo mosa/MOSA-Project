@@ -24,7 +24,7 @@ public sealed class Invlpg : X64Instruction
 		System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
-		if (node.Operand2.IsCPURegister)
+		if (node.Operand2.IsPhysicalRegister)
 		{
 			opcodeEncoder.SuppressByte(0x40);
 			opcodeEncoder.Append4Bits(0b0100);

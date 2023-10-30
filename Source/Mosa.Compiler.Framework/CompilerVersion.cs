@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
 using System.Reflection;
 
 namespace Mosa.Compiler.Framework;
@@ -19,7 +18,7 @@ public static class CompilerVersion
 		if (version.Build == 0)
 		{
 			// Revision and build number are reversed by design
-			version = new Version(2, 5, 0, 0);
+			version = new Version(2, 6, 0, 0);
 		}
 
 		return version;
