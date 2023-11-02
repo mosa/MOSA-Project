@@ -2,7 +2,6 @@
 
 using System.Diagnostics;
 using Mosa.Compiler.Framework.Linker;
-using Mosa.Compiler.Framework.Trace;
 
 namespace Mosa.Compiler.Framework.Stages;
 

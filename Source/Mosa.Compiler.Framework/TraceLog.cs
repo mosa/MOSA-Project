@@ -3,7 +3,7 @@
 using System.Text;
 using Mosa.Compiler.MosaTypeSystem;
 
-namespace Mosa.Compiler.Framework.Trace;
+namespace Mosa.Compiler.Framework;
 
 public enum TraceType
 { MethodInstructions, MethodDebug, MethodCounters, GlobalDebug }

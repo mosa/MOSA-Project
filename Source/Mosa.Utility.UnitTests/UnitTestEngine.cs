@@ -6,7 +6,6 @@ using System.Net.Sockets;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Linker;
-using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Utility.Configuration;
 using Mosa.Utility.Launcher;
@@ -304,7 +303,7 @@ public class UnitTestEngine : IDisposable
 
 	private void NotifyStatus(string status)
 	{
-		OutputStatus($"[{status}]");
+		OutputStatus($"{status}");
 	}
 
 	private void OutputStatus(string status)

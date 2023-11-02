@@ -16,6 +16,7 @@ public static class LowerTo32Transforms
 		new Compare64x64EqualOrNotEqual(),
 		//Compare64x32UnsignedGreater(),
 		new ArithShiftRight64By32(),
+		new ArithShiftRight64By63(),
 		new ShiftRight64ByConstant32(),
 		new ShiftRight64ByConstant32Plus(),
 		new ShiftLeft64ByConstant32Plus(),

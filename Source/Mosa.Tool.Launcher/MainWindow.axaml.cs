@@ -51,7 +51,7 @@ public partial class MainWindow : Window
 		completedMethods = at;
 	}
 
-	private void AddOutput(string status)
+	private void OutputStatus(string status)
 	{
 		if (string.IsNullOrEmpty(status)) return;
 
@@ -66,6 +66,7 @@ public partial class MainWindow : Window
 		SetRequiredSettings();
 		mosaSettings.ExpandSearchPaths();
 		mosaSettings.NormalizeSettings();
+		mosaSettings.AddStandardPlugs();
 		mosaSettings.UpdateFileAndPathSettings();
 
 		UpdateGuiSettings();
@@ -78,8 +79,8 @@ public partial class MainWindow : Window
 			sb.Append(' ');
 		}
 
-		AddOutput($"Arguments: {sb}");
-		AddOutput($"Current Directory: {Environment.CurrentDirectory}");
+		OutputStatus($"Arguments: {sb}");
+		OutputStatus($"Current Directory: {Environment.CurrentDirectory}");
 
 		if (mosaSettings.SourceFiles is { Count: > 0 })
 		{
@@ -115,7 +116,7 @@ public partial class MainWindow : Window
 		var result = CheckOptions.Verify(mosaSettings);
 
 		if (string.IsNullOrEmpty(result)) CompileBuildAndStart();
-		else AddOutput($"ERROR: {result}");
+		else OutputStatus($"ERROR: {result}");
 	}
 
 	private void SetRequiredSettings()
@@ -128,7 +129,7 @@ public partial class MainWindow : Window
 
 	private void AddCounters(string data) => CountersTxt.Text += data + Environment.NewLine;
 
-	private void NotifyStatus(string status) => Dispatcher.UIThread.Post(() => AddOutput(status));
+	private void NotifyStatus(string status) => Dispatcher.UIThread.Post(() => OutputStatus(status));
 
 	private void UpdateInterfaceAppLocations()
 	{
@@ -395,7 +396,7 @@ public partial class MainWindow : Window
 			}
 			catch (Exception e)
 			{
-				Dispatcher.UIThread.Post(() => AddOutput(e.ToString()));
+				Dispatcher.UIThread.Post(() => OutputStatus(e.ToString()));
 			}
 			finally
 			{
@@ -427,7 +428,7 @@ public partial class MainWindow : Window
 		var result = CheckOptions.Verify(mosaSettings);
 
 		if (string.IsNullOrEmpty(result)) CompileBuildAndStart();
-		else AddOutput($"ERROR: {result}");
+		else OutputStatus($"ERROR: {result}");
 	}
 
 	private async void SrcBtn_OnClick(object? sender, RoutedEventArgs e)

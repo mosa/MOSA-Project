@@ -6,7 +6,6 @@ using System.Text;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.Common;
-using Mosa.Compiler.Framework.Trace;
 
 namespace Mosa.Compiler.Framework.Stages;
 

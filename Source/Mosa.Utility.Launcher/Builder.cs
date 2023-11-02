@@ -6,7 +6,6 @@ using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Linker;
-using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.MosaTypeSystem.CLR;
 using Mosa.Utility.BootImage;
@@ -60,16 +59,16 @@ public class Builder : BaseLauncher
 
 			if (string.IsNullOrEmpty(MosaSettings.SourceFiles[0]))
 			{
-				Output("ERROR: Missing source file");
+				OutputStatus("ERROR: Missing source file");
 				return;
 			}
 			else if (!File.Exists(MosaSettings.SourceFiles[0]))
 			{
-				Output($"File {MosaSettings.SourceFiles[0]} does not exists");
+				OutputStatus($"ERROR: File {MosaSettings.SourceFiles[0]} does not exists");
 				return;
 			}
 
-			if (!Compile())
+			if (!Compile(GetMosaSettings()))
 			{
 				IsSucccessful = false;
 				return;
@@ -92,7 +91,7 @@ public class Builder : BaseLauncher
 		catch (Exception e)
 		{
 			IsSucccessful = false;
-			Output($"Exception: {e}");
+			OutputStatus($"Exception: {e}");
 		}
 		finally
 		{
@@ -102,26 +101,14 @@ public class Builder : BaseLauncher
 		}
 	}
 
-	private bool Compile()
+	private MosaSettings GetMosaSettings()
 	{
-		var fileHunter = new FileHunter(Path.GetDirectoryName(MosaSettings.SourceFiles[0]));
+		return MosaSettings;
+	}
 
-		if (MosaSettings.PlugKorlib)
-		{
-			var fileKorlib = fileHunter.HuntFile("Mosa.Plug.Korlib.dll");
-			if (fileKorlib != null) MosaSettings.AddSourceFile(fileKorlib.FullName);
-
-			var fileKorlibPlatform = fileHunter.HuntFile($"Mosa.Plug.Korlib.{MosaSettings.Platform}.dll");
-			if (fileKorlibPlatform != null) MosaSettings.AddSourceFile(fileKorlibPlatform.FullName);
-		}
-
-		if (MosaSettings.PlugKernel)
-		{
-			var fileKernelPlatform = fileHunter.HuntFile($"Mosa.Kernel.BareMetal.{MosaSettings.Platform}.dll");
-			if (fileKernelPlatform != null) MosaSettings.AddSourceFile(fileKernelPlatform.FullName);
-		}
-
-		Output($"Compiling: {MosaSettings.SourceFiles[0]}");
+	private bool Compile(MosaSettings mosaSettings)
+	{
+		OutputStatus($"Compiling: {MosaSettings.SourceFiles[0]}");
 
 		var compiler = new MosaCompiler(MosaSettings, CompilerHooks, new ClrModuleLoader(), new ClrTypeResolver());
 
@@ -140,7 +127,7 @@ public class Builder : BaseLauncher
 	{
 		if (string.IsNullOrWhiteSpace(MosaSettings.ImageFormat)) return;
 
-		Output($"Generating Image: {MosaSettings.ImageFormat}");
+		OutputStatus($"Generating Image: {MosaSettings.ImageFormat}");
 
 		switch (MosaSettings.ImageFormat)
 		{
@@ -190,7 +177,7 @@ public class Builder : BaseLauncher
 			{
 				var name = Path.GetFileName(file).ToUpper();
 
-				Output($"Adding file: {name}");
+				OutputStatus($"Adding file: {name}");
 				bootImageOptions.IncludeFiles.Add(new IncludeFile(name, File.ReadAllBytes(file)));
 			}
 		}
@@ -243,7 +230,7 @@ public class Builder : BaseLauncher
 
 	private void LaunchNDISASM()
 	{
-		Output($"Executing NDISASM: {MosaSettings.NasmFile}");
+		OutputStatus($"Executing NDISASM: {MosaSettings.NasmFile}");
 
 		//var textSection = Linker.Sections[(int)SectionKind.Text];
 		var startingAddress = MosaSettings.BaseAddress + MultibootHeaderLength;
@@ -262,7 +249,7 @@ public class Builder : BaseLauncher
 
 	private void GenerateASMFile()
 	{
-		Output($"Executing Reko Disassembler: {MosaSettings.AsmFile}");
+		OutputStatus($"Executing Reko Disassembler: {MosaSettings.AsmFile}");
 
 		var map = new Dictionary<ulong, List<string>>();
 
@@ -318,7 +305,7 @@ public class Builder : BaseLauncher
 		{
 			var status = $"[Exception] {message}";
 
-			Output(status);
+			OutputStatus(status);
 		}
 		else if (compilerEvent is CompilerEvent.CompilerStart or CompilerEvent.CompilerEnd or CompilerEvent.CompilingMethodsStart or CompilerEvent.CompilingMethodsCompleted or CompilerEvent.InlineMethodsScheduled or CompilerEvent.LinkingStart or CompilerEvent.LinkingEnd or CompilerEvent.Warning or CompilerEvent.Error)
 		{
@@ -327,7 +314,7 @@ public class Builder : BaseLauncher
 			if (!string.IsNullOrEmpty(message))
 				status += $" => {message}";
 
-			Output(status);
+			OutputStatus(status);
 		}
 		else if (compilerEvent == CompilerEvent.Counter)
 		{

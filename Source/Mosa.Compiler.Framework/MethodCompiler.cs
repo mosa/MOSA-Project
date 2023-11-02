@@ -5,9 +5,7 @@ using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.Linker;
-using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
-using static Mosa.Compiler.Framework.CompilerHooks;
 
 namespace Mosa.Compiler.Framework;
 
@@ -23,9 +21,9 @@ public sealed class MethodCompiler
 
 	private readonly Stopwatch Stopwatch;
 
-	private readonly NotifyTraceLogHandler NotifyInstructionTraceHandler;
+	private readonly CompilerHooks.NotifyTraceLogHandler NotifyInstructionTraceHandler;
 
-	private readonly NotifyTraceLogHandler NotifyTranformTraceHandler;
+	private readonly CompilerHooks.NotifyTraceLogHandler NotifyTranformTraceHandler;
 
 	public readonly Transform Transform = new();
 

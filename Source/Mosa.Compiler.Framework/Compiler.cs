@@ -6,7 +6,6 @@ using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.CompilerStages;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Stages;
-using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Utility.Configuration;
 

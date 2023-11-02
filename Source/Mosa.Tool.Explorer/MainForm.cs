@@ -6,13 +6,11 @@ using System.Text;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.CompilerStages;
-using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.MosaTypeSystem.CLR;
 using Mosa.Tool.Explorer.Stages;
 using Mosa.Utility.Configuration;
 using Mosa.Utility.Launcher;
-using static Mosa.Compiler.Framework.CompilerHooks;
 
 namespace Mosa.Tool.Explorer;
 
@@ -127,7 +125,7 @@ public partial class MainForm : Form
 		SetStatus("Assemblies Loaded!");
 	}
 
-	public NotifyTraceLogHandler NotifyMethodInstructionTrace(MosaMethod method)
+	public CompilerHooks.NotifyTraceLogHandler NotifyMethodInstructionTrace(MosaMethod method)
 	{
 		if (method != CurrentMethod)
 			return null;
@@ -730,7 +728,7 @@ public partial class MainForm : Form
 		MethodStore.SetInstructionTraceInformation(traceLog.Method, traceLog.Stage, traceLog.Lines, traceLog.Version);
 	}
 
-	private NotifyTraceLogHandler NotifyMethodTranformTrace(MosaMethod method)
+	private CompilerHooks.NotifyTraceLogHandler NotifyMethodTranformTrace(MosaMethod method)
 	{
 		if (method != CurrentMethod)
 			return null;

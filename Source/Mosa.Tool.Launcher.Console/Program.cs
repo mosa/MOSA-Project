@@ -20,9 +20,9 @@ internal static class Program
 		System.Console.WriteLine("MOSA Launcher, Version {0}.", CompilerVersion.VersionString);
 		System.Console.WriteLine("Copyright 2023 by the MOSA Project. Licensed under the New BSD License.");
 
-		Stopwatch.Start();
+		OutputStatus($"Current Directory: {Environment.CurrentDirectory}");
 
-		NotifyStatus($"Current Directory: {Environment.CurrentDirectory}");
+		Stopwatch.Start();
 
 		try
 		{
@@ -34,6 +34,7 @@ internal static class Program
 			SetRequiredSettings(mosaSettings);
 			mosaSettings.ExpandSearchPaths();
 			mosaSettings.NormalizeSettings();
+			mosaSettings.AddStandardPlugs();
 			mosaSettings.UpdateFileAndPathSettings();
 
 			var compilerHooks = CreateCompilerHooks();
@@ -44,7 +45,7 @@ internal static class Program
 
 			if (!Builder.IsSucccessful)
 			{
-				NotifyStatus("Aborting! A build error has occurred.");
+				OutputStatus("Aborting! A build error has occurred.");
 				return 1;
 			}
 
@@ -54,14 +55,15 @@ internal static class Program
 
 				if (!starter.Launch())
 				{
-					NotifyStatus("Aborting! A launch error has occurred.");
+					OutputStatus("Aborting! A launch error has occurred.");
 					return 1;
 				}
 			}
 		}
-		catch (Exception e)
+		catch (Exception ce)
 		{
-			NotifyStatus($"Exception: {e}");
+			OutputStatus($"Exception: {ce.Message}");
+			OutputStatus($"Exception: {ce.StackTrace}");
 			return 1;
 		}
 
@@ -76,7 +78,7 @@ internal static class Program
 		mosaSettings.EmulatorDisplay = true;
 	}
 
-	private static void NotifyStatus(string status)
+	private static void OutputStatus(string status)
 	{
 		System.Console.WriteLine($"{Stopwatch.Elapsed.TotalSeconds:00.00} | {status}");
 	}
@@ -85,7 +87,7 @@ internal static class Program
 	{
 		var compilerHooks = new CompilerHooks
 		{
-			NotifyStatus = NotifyStatus
+			NotifyStatus = OutputStatus
 		};
 
 		return compilerHooks;
