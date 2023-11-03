@@ -217,7 +217,7 @@ jobs:
           name: windows-build-artifact
           path: bin
       - name: Unit Test
-        run: bin\Mosa.Utility.UnitTests.exe -check -o${{ matrix.optimization }}
+        run: bin\Mosa.Utility.UnitTests.exe -check -output-counters -o${{ matrix.optimization }}
 
   linux-unit-testing:
     strategy:
@@ -247,7 +247,7 @@ jobs:
       - name: Install Qemu and Dependencies
         run: sudo apt-get -y -o Acquire::Retries=5 install qemu-system-x86
       - name: Unit Test  
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -check -o${{ matrix.optimization }}
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -check -output-counters -o${{ matrix.optimization }}
         
   macos-unit-testing:
     strategy:
@@ -273,7 +273,7 @@ jobs:
           name: macos-build-artifact
           path: bin
       - name: Unit Test 
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -check -o${{ matrix.optimization }}
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -check -output-counters -o${{ matrix.optimization }}
 
   windows-demo-testing:
     strategy:
@@ -295,13 +295,13 @@ jobs:
           name: windows-build-artifact
           path: bin
       - name: Demo Test - BareMetal Starter
-        run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.BareMetal.Starter.x86.dll -o${{ matrix.optimization }} -check -test 
+        run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.BareMetal.Starter.x86.dll -o${{ matrix.optimization }} -check -test -output-counters
       - name: Demo Test - BareMetal TestWorld
-        run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.BareMetal.TestWorld.x86.dll -o${{ matrix.optimization }} -check -test
+        run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.BareMetal.TestWorld.x86.dll -o${{ matrix.optimization }} -check -test -output-counters
       - name: Demo Test - BareMetal HelloWorld
-        run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.BareMetal.HelloWorld.x86.dll -o${{ matrix.optimization }} -check -test
+        run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.BareMetal.HelloWorld.x86.dll -o${{ matrix.optimization }} -check -test -output-counters
       - name: Demo Test - BareMetal CoolWorld
-        run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.BareMetal.CoolWorld.x86.dll -o${{ matrix.optimization }} -check -test -vmware-svga -include bin\Include
+        run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.BareMetal.CoolWorld.x86.dll -o${{ matrix.optimization }} -check -test -output-counters -vmware-svga -include bin\Include
 
   linux-demo-testing:
     strategy:
@@ -331,13 +331,13 @@ jobs:
       - name: Install Qemu and Dependencies
         run: sudo apt-get -y -o Acquire::Retries=5 install qemu-system-x86
       - name: Demo Test - BareMetal Starter
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.Starter.x86.dll -o${{ matrix.optimization }} -check -test 
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.Starter.x86.dll -o${{ matrix.optimization }} -check -test -output-counters
       - name: Demo Test - BareMetal TestWorld
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.x86.dll -o${{ matrix.optimization }} -check -test
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.x86.dll -o${{ matrix.optimization }} -check -test -output-counters
       - name: Demo Test - BareMetal HelloWorld
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x86.dll -o${{ matrix.optimization }} -check -test
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x86.dll -o${{ matrix.optimization }} -check -test -output-counters
       - name: Demo Test - BareMetal CoolWorld
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.CoolWorld.x86.dll -o${{ matrix.optimization }} -check -test -vmware-svga -include bin/Include
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.CoolWorld.x86.dll -o${{ matrix.optimization }} -check -test -output-counters -vmware-svga -include bin/Include
 
   macos-demo-testing:
     strategy:
@@ -363,10 +363,10 @@ jobs:
           name: macos-build-artifact
           path: bin
       - name: Demo Test - BareMetal Starter
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.Starter.x86.dll -o${{ matrix.optimization }} -check -test
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.Starter.x86.dll -o${{ matrix.optimization }} -check -test -output-counters
       - name: Demo Test - BareMetal TestWorld
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.x86.dll -o${{ matrix.optimization }} -check -test
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.x86.dll -o${{ matrix.optimization }} -check -test -output-counters
       - name: Demo Test - BareMetal HelloWorld
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x86.dll -o${{ matrix.optimization }} -check -test
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x86.dll -o${{ matrix.optimization }} -check -test -output-counters
       - name: Demo Test - BareMetal CoolWorld
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.CoolWorld.x86.dll -o${{ matrix.optimization }} -check -test -vmware-svga -include bin/Include
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.CoolWorld.x86.dll -o${{ matrix.optimization }} -check -test -output-counters -vmware-svga -include bin/Include

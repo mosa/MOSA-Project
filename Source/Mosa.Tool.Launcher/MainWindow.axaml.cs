@@ -65,8 +65,8 @@ public partial class MainWindow : Window
 		mosaSettings.LoadArguments(args);
 		SetRequiredSettings();
 		mosaSettings.ExpandSearchPaths();
-		mosaSettings.NormalizeSettings();
 		mosaSettings.AddStandardPlugs();
+		mosaSettings.NormalizeSettings();
 		mosaSettings.UpdateFileAndPathSettings();
 
 		UpdateGuiSettings();
@@ -80,11 +80,12 @@ public partial class MainWindow : Window
 		}
 
 		OutputStatus($"Arguments: {sb}");
-		OutputStatus($"Current Directory: {Environment.CurrentDirectory}");
+		//OutputStatus($"Current Directory: {Environment.CurrentDirectory}");
 
 		if (mosaSettings.SourceFiles is { Count: > 0 })
 		{
 			var src = mosaSettings.SourceFiles[0];
+
 			if (!string.IsNullOrEmpty(src))
 			{
 				OsNameTxt.Text = Path.GetFileNameWithoutExtension(src);
@@ -94,7 +95,10 @@ public partial class MainWindow : Window
 			foreach (var file in mosaSettings.SourceFiles)
 			{
 				var path = Path.GetDirectoryName(Path.GetFullPath(file));
-				if (!string.IsNullOrWhiteSpace(path)) mosaSettings.AddSearchPath(path);
+				if (!string.IsNullOrWhiteSpace(path))
+				{
+					mosaSettings.AddSearchPath(path);
+				}
 			}
 		}
 		else mosaSettings.ExplorerStart = false;

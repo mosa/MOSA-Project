@@ -1,6 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using dnlib.DotNet;
+using Mosa.Compiler.Common;
 using Mosa.Compiler.MosaTypeSystem.CLR.Metadata;
 
 namespace Mosa.Compiler.MosaTypeSystem.CLR;
@@ -24,7 +25,9 @@ public class ClrModuleLoader : IModuleLoader
 
 	public void LoadModuleFromFile(string file)
 	{
-		var module = ModuleDefMD.Load(file, Resolver.DefaultModuleContext);
+		var fullpath = FileFinder.Find(file, Resolver.PostSearchPaths);
+
+		var module = ModuleDefMD.Load(fullpath, Resolver.DefaultModuleContext);
 		module.EnableTypeDefFindCache = true;
 
 		LoadDependencies(module);

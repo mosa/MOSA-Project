@@ -14,7 +14,7 @@ public class Compiler
 {
 	#region Data
 
-	private static Stopwatch Stopwatch = new Stopwatch();
+	private static readonly Stopwatch Stopwatch = new();
 
 	#endregion Data
 
@@ -32,7 +32,7 @@ public class Compiler
 		Console.WriteLine("MOSA Compiler, Version {0}.", CompilerVersion.VersionString);
 		Console.WriteLine("Copyright 2023 by the MOSA Project. Licensed under the New BSD License.");
 
-		OutputStatus($"Current Directory: {Environment.CurrentDirectory}");
+		//OutputStatus($"Current Directory: {Environment.CurrentDirectory}");
 
 		Stopwatch.Start();
 
@@ -45,8 +45,8 @@ public class Compiler
 			mosaSettings.LoadArguments(args);
 			SetRequiredSettings(mosaSettings);
 			mosaSettings.ExpandSearchPaths();
-			mosaSettings.NormalizeSettings();
 			mosaSettings.AddStandardPlugs();
+			mosaSettings.NormalizeSettings();
 			mosaSettings.UpdateFileAndPathSettings();
 
 			OutputStatus($"Compiling: {mosaSettings.SourceFiles[0]}");
@@ -75,6 +75,7 @@ public class Compiler
 			Debug.AutoFlush = true;
 
 			OutputStatus($"Input file(s): {string.Join(", ", new List<string>(compiler.MosaSettings.SourceFiles.ToArray()))}");
+			OutputStatus($"Search Folder(s): {string.Join(", ", new List<string>(compiler.MosaSettings.SearchPaths.ToArray()))}");
 			OutputStatus($"Output file: {compiler.MosaSettings.OutputFile}");
 			OutputStatus($"Platform: {compiler.MosaSettings.Platform}");
 

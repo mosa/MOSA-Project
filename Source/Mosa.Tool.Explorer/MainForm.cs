@@ -1180,9 +1180,6 @@ public partial class MainForm : Form
 
 	private void UpdateSettings(string filename)
 	{
-		var sourceDirectory = Path.GetDirectoryName(filename);
-		var fileHunter = new FileHunter(sourceDirectory);
-
 		// Source Files
 		MosaSettings.ClearSourceFiles();
 		MosaSettings.AddSourceFile(filename);

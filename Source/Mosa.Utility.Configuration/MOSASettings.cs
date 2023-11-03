@@ -934,7 +934,7 @@ public class MosaSettings
 
 			if (!string.IsNullOrWhiteSpace(path))
 			{
-				Settings.AddPropertyListValueIfNew("SearchPaths", path);
+				AddSearchPath(path);
 			}
 		}
 	}

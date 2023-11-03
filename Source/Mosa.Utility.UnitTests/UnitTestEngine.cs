@@ -70,8 +70,10 @@ public class UnitTestEngine : IDisposable
 		MosaSettings.SetDetfaultSettings();
 		MosaSettings.Merge(mosaSettings);
 		SetRequiredSettings();
-		MosaSettings.NormalizeSettings();
 		MosaSettings.ExpandSearchPaths();
+		MosaSettings.AddStandardPlugs();
+		MosaSettings.NormalizeSettings();
+		MosaSettings.UpdateFileAndPathSettings();
 
 		Initialize();
 	}
@@ -89,24 +91,13 @@ public class UnitTestEngine : IDisposable
 		MosaSettings.LauncherStart = false;
 		MosaSettings.LauncherExit = true;
 		MosaSettings.TraceLevel = 0;
+
+		MosaSettings.AddSourceFile($"Mosa.UnitTests.BareMetal.{MosaSettings.Platform}.dll");
+		MosaSettings.AddSourceFile("Mosa.UnitTests.dll");
 	}
 
 	private void Initialize()
 	{
-		var fileHunter = new FileHunter(AppDomain.CurrentDomain.BaseDirectory);
-
-		var fileUnitTestsPlatform = fileHunter.HuntFile($"Mosa.UnitTests.BareMetal.{MosaSettings.Platform}.dll");
-		if (fileUnitTestsPlatform != null) MosaSettings.AddSourceFile(fileUnitTestsPlatform.FullName);
-
-		var fileUnitTests = fileHunter.HuntFile("Mosa.UnitTests.dll");
-		if (fileUnitTests != null) MosaSettings.AddSourceFile(fileUnitTests.FullName);
-
-		if (MosaSettings.SourceFiles == null || MosaSettings.SourceFiles.Count == 0)
-		{
-			Aborted = true;
-			return;
-		}
-
 		Aborted = !Compile();
 
 		if (Aborted)

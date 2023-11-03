@@ -4,7 +4,7 @@ namespace Mosa.Compiler.MosaTypeSystem;
 
 public interface IModuleLoader : IDisposable
 {
-	public void AddSearchPaths(List<string>? paths)
+	public void AddSearchPaths(List<string> paths)
 	{
 		if (paths == null)
 			return;

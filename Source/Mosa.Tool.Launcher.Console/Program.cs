@@ -11,7 +11,7 @@ internal static class Program
 {
 	private static Builder Builder;
 
-	private static Stopwatch Stopwatch = new Stopwatch();
+	private static readonly Stopwatch Stopwatch = new();
 
 	internal static int Main(string[] args)
 	{
@@ -20,7 +20,7 @@ internal static class Program
 		System.Console.WriteLine("MOSA Launcher, Version {0}.", CompilerVersion.VersionString);
 		System.Console.WriteLine("Copyright 2023 by the MOSA Project. Licensed under the New BSD License.");
 
-		OutputStatus($"Current Directory: {Environment.CurrentDirectory}");
+		//OutputStatus($"Current Directory: {Environment.CurrentDirectory}");
 
 		Stopwatch.Start();
 
@@ -33,8 +33,8 @@ internal static class Program
 			mosaSettings.LoadArguments(args);
 			SetRequiredSettings(mosaSettings);
 			mosaSettings.ExpandSearchPaths();
-			mosaSettings.NormalizeSettings();
 			mosaSettings.AddStandardPlugs();
+			mosaSettings.NormalizeSettings();
 			mosaSettings.UpdateFileAndPathSettings();
 
 			var compilerHooks = CreateCompilerHooks();
