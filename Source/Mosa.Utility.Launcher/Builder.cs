@@ -62,7 +62,7 @@ public class Builder : BaseLauncher
 				OutputStatus("ERROR: Missing source file");
 				return;
 			}
-			else if (!File.Exists(MosaSettings.SourceFiles[0]))
+			else if (!File.Exists(FileFinder.Find(MosaSettings.SourceFiles[0], MosaSettings.SearchPaths)))
 			{
 				OutputStatus($"ERROR: File {MosaSettings.SourceFiles[0]} does not exists");
 				return;

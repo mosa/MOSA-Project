@@ -94,6 +94,12 @@ public class UnitTestEngine : IDisposable
 
 		MosaSettings.AddSourceFile($"Mosa.UnitTests.BareMetal.{MosaSettings.Platform}.dll");
 		MosaSettings.AddSourceFile("Mosa.UnitTests.dll");
+
+		MosaSettings.AddSearchPath(AppContext.BaseDirectory);
+		//MosaSettings.AddSearchPath(Environment.CurrentDirectory);
+		//MosaSettings.AddSearchPath(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location));
+
+		OutputStatus($"Search Folder(s): {string.Join(", ", new List<string>(MosaSettings.SearchPaths.ToArray()))}");
 	}
 
 	private void Initialize()
