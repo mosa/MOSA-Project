@@ -62,16 +62,17 @@ public static class LauncherHunter
 		return CheckLauncher(Environment.CurrentDirectory);
 	}
 
-	private static string CheckLauncher(string? directory)
+	private static string CheckLauncher(string directory)
 	{
-		if (directory == null) return null;
+		if (directory == null)
+			return null;
 
 		var location = Path.Combine(directory, LauncherFileName);
 
 		return File.Exists(location) ? location : null;
 	}
 
-	private static string FindLauncherInGlobalCatalog(FileVersionInfo? targetVersion)
+	private static string FindLauncherInGlobalCatalog(FileVersionInfo targetVersion)
 	{
 		var userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 		var globalPackageDirectory = Path.Combine(userProfile, GlobalPackageDirectory, ToolsPackage);
