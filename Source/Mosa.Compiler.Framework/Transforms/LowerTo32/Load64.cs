@@ -24,7 +24,7 @@ public sealed class Load64 : BaseLower32Transform
 		context.AppendInstruction(IRInstruction.GetLow32, offsetLow, offset);
 
 		context.AppendInstruction(IRInstruction.Load32, resultLow, addressLow, offset);
-		context.AppendInstruction(IRInstruction.Add32, offset4, offsetLow, Operand.CreateConstant((uint)4));
+		context.AppendInstruction(IRInstruction.Add32, offset4, offsetLow, Operand.Constant32_4);
 		context.AppendInstruction(IRInstruction.Load32, resultHigh, addressLow, offset4);
 		context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 	}

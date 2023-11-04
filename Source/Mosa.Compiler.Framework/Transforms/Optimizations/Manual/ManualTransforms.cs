@@ -294,6 +294,9 @@ public static class ManualTransforms
 		new Useless.ZeroExtend8x64Compare32x64(),
 		new Useless.ZeroExtend8x64Compare64x64(),
 
+		new Useless.Store8ZeroExtend8x32(),
+		new Useless.Store16ZeroExtend16x32(),
+
 		new ConstantMove.BranchManagedPointer(),
 		new ConstantMove.BranchObject(),
 

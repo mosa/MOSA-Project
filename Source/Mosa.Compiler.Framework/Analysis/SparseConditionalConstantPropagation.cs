@@ -3,8 +3,6 @@
 using System.Diagnostics;
 using System.Text;
 using Mosa.Compiler.Common;
-using Mosa.Compiler.Framework.Trace;
-using static Mosa.Compiler.Framework.BaseMethodCompilerStage;
 
 namespace Mosa.Compiler.Framework.Analysis;
 
@@ -219,14 +217,14 @@ public sealed class SparseConditionalConstantPropagation
 	private readonly HashSet<Node> executedStatements;
 
 	private readonly BasicBlocks BasicBlocks;
-	private readonly CreateTraceHandler CreateTrace;
+	private readonly BaseMethodCompilerStage.CreateTraceHandler CreateTrace;
 	private readonly TraceLog MainTrace;
 
 	private readonly KeyedList<BasicBlock, Node> phiStatements;
 
 	private readonly bool Is32BitPlatform;
 
-	public SparseConditionalConstantPropagation(BasicBlocks basicBlocks, CreateTraceHandler createTrace, bool is32BitPlatform)
+	public SparseConditionalConstantPropagation(BasicBlocks basicBlocks, BaseMethodCompilerStage.CreateTraceHandler createTrace, bool is32BitPlatform)
 	{
 		// Method is empty - must be a plugged method
 		if (basicBlocks.HeadBlocks.Count == 0)

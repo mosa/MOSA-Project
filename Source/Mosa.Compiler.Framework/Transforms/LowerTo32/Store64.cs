@@ -26,7 +26,7 @@ public sealed class Store64 : BaseLower32Transform
 		context.AppendInstruction(IRInstruction.GetLow32, offsetLow, offset);
 
 		context.AppendInstruction(IRInstruction.Store32, null, addressLow, offset, valueLow);
-		context.AppendInstruction(IRInstruction.Add32, offset4, offsetLow, Operand.CreateConstant((uint)4));
+		context.AppendInstruction(IRInstruction.Add32, offset4, offsetLow, Operand.Constant32_4);
 		context.AppendInstruction(IRInstruction.Store32, null, addressLow, offset4, valueHigh);
 	}
 }

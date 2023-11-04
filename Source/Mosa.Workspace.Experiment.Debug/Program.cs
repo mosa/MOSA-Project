@@ -29,10 +29,10 @@ internal static class Program
 			ImageFolder = Path.Combine(Path.GetTempPath(), "MOSA-UnitTest")
 		};
 
-		mosaSettings.AddSearchPath(AppContext.BaseDirectory);
-		mosaSettings.AddSourceFile(Path.Combine(AppContext.BaseDirectory, "Mosa.UnitTests.BareMetal.x86.dll"));
-		mosaSettings.AddSourceFile(Path.Combine(AppContext.BaseDirectory, "Mosa.Plug.Korlib.dll"));
-		mosaSettings.AddSourceFile(Path.Combine(AppContext.BaseDirectory, "Mosa.Plug.Korlib.x86.dll"));
+		//mosaSettings.AddSearchPath(AppContext.BaseDirectory);
+		//mosaSettings.AddSourceFile(Path.Combine(AppContext.BaseDirectory, "Mosa.UnitTests.BareMetal.x86.dll"));
+		//mosaSettings.AddSourceFile(Path.Combine(AppContext.BaseDirectory, "Mosa.Plug.Korlib.dll"));
+		//mosaSettings.AddSourceFile(Path.Combine(AppContext.BaseDirectory, "Mosa.Plug.Korlib.x86.dll"));
 
 		var stopwatch = new Stopwatch();
 

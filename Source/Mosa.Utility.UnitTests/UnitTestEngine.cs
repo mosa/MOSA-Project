@@ -6,7 +6,6 @@ using System.Net.Sockets;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Linker;
-using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Utility.Configuration;
 using Mosa.Utility.Launcher;
@@ -71,8 +70,10 @@ public class UnitTestEngine : IDisposable
 		MosaSettings.SetDetfaultSettings();
 		MosaSettings.Merge(mosaSettings);
 		SetRequiredSettings();
-		MosaSettings.NormalizeSettings();
 		MosaSettings.ExpandSearchPaths();
+		MosaSettings.AddStandardPlugs();
+		MosaSettings.NormalizeSettings();
+		MosaSettings.UpdateFileAndPathSettings();
 
 		Initialize();
 	}
@@ -90,24 +91,19 @@ public class UnitTestEngine : IDisposable
 		MosaSettings.LauncherStart = false;
 		MosaSettings.LauncherExit = true;
 		MosaSettings.TraceLevel = 0;
+
+		MosaSettings.AddSourceFile($"Mosa.UnitTests.BareMetal.{MosaSettings.Platform}.dll");
+		MosaSettings.AddSourceFile("Mosa.UnitTests.dll");
+
+		MosaSettings.AddSearchPath(AppContext.BaseDirectory);
+		//MosaSettings.AddSearchPath(Environment.CurrentDirectory);
+		//MosaSettings.AddSearchPath(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location));
+
+		OutputStatus($"Search Folder(s): {string.Join(", ", new List<string>(MosaSettings.SearchPaths.ToArray()))}");
 	}
 
 	private void Initialize()
 	{
-		var fileHunter = new FileHunter(AppDomain.CurrentDomain.BaseDirectory);
-
-		var fileUnitTestsPlatform = fileHunter.HuntFile($"Mosa.UnitTests.BareMetal.{MosaSettings.Platform}.dll");
-		if (fileUnitTestsPlatform != null) MosaSettings.AddSourceFile(fileUnitTestsPlatform.FullName);
-
-		var fileUnitTests = fileHunter.HuntFile("Mosa.UnitTests.dll");
-		if (fileUnitTests != null) MosaSettings.AddSourceFile(fileUnitTests.FullName);
-
-		if (MosaSettings.SourceFiles == null || MosaSettings.SourceFiles.Count == 0)
-		{
-			Aborted = true;
-			return;
-		}
-
 		Aborted = !Compile();
 
 		if (Aborted)
@@ -304,7 +300,7 @@ public class UnitTestEngine : IDisposable
 
 	private void NotifyStatus(string status)
 	{
-		OutputStatus($"[{status}]");
+		OutputStatus($"{status}");
 	}
 
 	private void OutputStatus(string status)

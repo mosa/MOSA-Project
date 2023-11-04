@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Trace;
 using Mosa.Utility.Disassembler;
 
 namespace Mosa.Tool.Explorer.Stages;

@@ -1,9 +1,8 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Text;
+using Mosa.Compiler.Framework;
 using Mosa.Compiler.MosaTypeSystem;
-
-namespace Mosa.Compiler.Framework.Trace;
 
 /// <summary>
 /// Logs all instructions.

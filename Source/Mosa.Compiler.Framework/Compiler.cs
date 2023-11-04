@@ -2,11 +2,11 @@
 
 using System.Diagnostics;
 using System.Reflection;
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.CompilerStages;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Stages;
-using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Utility.Configuration;
 
@@ -569,24 +569,9 @@ public sealed class Compiler
 		}
 	}
 
-	public string SearchPathsForFile(string filename)
-	{
-		foreach (var path in MosaSettings.SearchPaths)
-		{
-			var file = Path.Combine(path, filename);
-
-			if (File.Exists(file))
-			{
-				return file;
-			}
-		}
-
-		return null;
-	}
-
 	public byte[] SearchPathsForFileAndLoad(string filename)
 	{
-		var file = SearchPathsForFile(filename);
+		var file = FileFinder.Find(filename, MosaSettings.SearchPaths);
 
 		if (file == null)
 			return null;

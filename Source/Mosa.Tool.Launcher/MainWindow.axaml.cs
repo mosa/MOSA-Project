@@ -51,7 +51,7 @@ public partial class MainWindow : Window
 		completedMethods = at;
 	}
 
-	private void AddOutput(string status)
+	private void OutputStatus(string status)
 	{
 		if (string.IsNullOrEmpty(status)) return;
 
@@ -65,6 +65,7 @@ public partial class MainWindow : Window
 		mosaSettings.LoadArguments(args);
 		SetRequiredSettings();
 		mosaSettings.ExpandSearchPaths();
+		mosaSettings.AddStandardPlugs();
 		mosaSettings.NormalizeSettings();
 		mosaSettings.UpdateFileAndPathSettings();
 
@@ -78,12 +79,13 @@ public partial class MainWindow : Window
 			sb.Append(' ');
 		}
 
-		AddOutput($"Arguments: {sb}");
-		AddOutput($"Current Directory: {Environment.CurrentDirectory}");
+		OutputStatus($"Arguments: {sb}");
+		//OutputStatus($"Current Directory: {Environment.CurrentDirectory}");
 
 		if (mosaSettings.SourceFiles is { Count: > 0 })
 		{
 			var src = mosaSettings.SourceFiles[0];
+
 			if (!string.IsNullOrEmpty(src))
 			{
 				OsNameTxt.Text = Path.GetFileNameWithoutExtension(src);
@@ -93,7 +95,10 @@ public partial class MainWindow : Window
 			foreach (var file in mosaSettings.SourceFiles)
 			{
 				var path = Path.GetDirectoryName(Path.GetFullPath(file));
-				if (!string.IsNullOrWhiteSpace(path)) mosaSettings.AddSearchPath(path);
+				if (!string.IsNullOrWhiteSpace(path))
+				{
+					mosaSettings.AddSearchPath(path);
+				}
 			}
 		}
 		else mosaSettings.ExplorerStart = false;
@@ -115,7 +120,7 @@ public partial class MainWindow : Window
 		var result = CheckOptions.Verify(mosaSettings);
 
 		if (string.IsNullOrEmpty(result)) CompileBuildAndStart();
-		else AddOutput($"ERROR: {result}");
+		else OutputStatus($"ERROR: {result}");
 	}
 
 	private void SetRequiredSettings()
@@ -128,7 +133,7 @@ public partial class MainWindow : Window
 
 	private void AddCounters(string data) => CountersTxt.Text += data + Environment.NewLine;
 
-	private void NotifyStatus(string status) => Dispatcher.UIThread.Post(() => AddOutput(status));
+	private void NotifyStatus(string status) => Dispatcher.UIThread.Post(() => OutputStatus(status));
 
 	private void UpdateInterfaceAppLocations()
 	{
@@ -395,7 +400,7 @@ public partial class MainWindow : Window
 			}
 			catch (Exception e)
 			{
-				Dispatcher.UIThread.Post(() => AddOutput(e.ToString()));
+				Dispatcher.UIThread.Post(() => OutputStatus(e.ToString()));
 			}
 			finally
 			{
@@ -427,7 +432,7 @@ public partial class MainWindow : Window
 		var result = CheckOptions.Verify(mosaSettings);
 
 		if (string.IsNullOrEmpty(result)) CompileBuildAndStart();
-		else AddOutput($"ERROR: {result}");
+		else OutputStatus($"ERROR: {result}");
 	}
 
 	private async void SrcBtn_OnClick(object? sender, RoutedEventArgs e)

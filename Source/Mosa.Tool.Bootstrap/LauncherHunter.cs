@@ -46,7 +46,7 @@ public static class LauncherHunter
 		Environment.Exit(0);
 	}
 
-	private static string? FindLauncher(string source)
+	private static string FindLauncher(string source)
 	{
 		var location = FindLauncherInCurrentDirectory();
 
@@ -57,21 +57,22 @@ public static class LauncherHunter
 		return FindLauncherInGlobalCatalog(targetVersion);
 	}
 
-	private static string? FindLauncherInCurrentDirectory()
+	private static string FindLauncherInCurrentDirectory()
 	{
 		return CheckLauncher(Environment.CurrentDirectory);
 	}
 
-	private static string? CheckLauncher(string? directory)
+	private static string CheckLauncher(string directory)
 	{
-		if (directory == null) return null;
+		if (directory == null)
+			return null;
 
 		var location = Path.Combine(directory, LauncherFileName);
 
 		return File.Exists(location) ? location : null;
 	}
 
-	private static string? FindLauncherInGlobalCatalog(FileVersionInfo? targetVersion)
+	private static string FindLauncherInGlobalCatalog(FileVersionInfo targetVersion)
 	{
 		var userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 		var globalPackageDirectory = Path.Combine(userProfile, GlobalPackageDirectory, ToolsPackage);
@@ -79,7 +80,7 @@ public static class LauncherHunter
 		if (!Directory.Exists(globalPackageDirectory)) return null;
 
 		string? bestLocation = null;
-		FileVersionInfo? bestVersion = null;
+		FileVersionInfo bestVersion = null;
 
 		foreach (var directory in Directory.GetDirectories(globalPackageDirectory))
 		{
@@ -107,7 +108,7 @@ public static class LauncherHunter
 		return bestLocation;
 	}
 
-	private static FileVersionInfo? GetIdealFileVersion(string directory)
+	private static FileVersionInfo GetIdealFileVersion(string directory)
 	{
 		var location = Path.Combine(directory, Korlib);
 

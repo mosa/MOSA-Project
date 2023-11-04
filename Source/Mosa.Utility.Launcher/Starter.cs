@@ -73,7 +73,7 @@ public class Starter : BaseLauncher
 		{
 			IsSucccessful = false;
 			Process = null;
-			Output($"Exception: {e}");
+			OutputStatus($"Exception: {e}");
 		}
 		finally
 		{
@@ -93,7 +93,7 @@ public class Starter : BaseLauncher
 		var client = new SimpleTCP();
 		var watchDog = new WatchDog(MosaSettings.EmulatorMaxRuntime * 1000);
 
-		client.OnStatusUpdate = Output;
+		client.OnStatusUpdate = OutputStatus;
 
 		client.OnDataAvailable = () =>
 		{
@@ -103,7 +103,7 @@ public class Starter : BaseLauncher
 
 				lock (this)
 				{
-					Output(line);
+					OutputStatus(line);
 				}
 
 				if (line.Contains(successText))
@@ -120,8 +120,8 @@ public class Starter : BaseLauncher
 		{
 			process.Start();
 
-			Output("VM Output");
-			Output("========================");
+			OutputStatus("VM Output");
+			OutputStatus("========================");
 
 			Thread.Sleep(50); // wait a bit for the process to start
 
@@ -145,17 +145,17 @@ public class Starter : BaseLauncher
 			process.WaitForExit();
 		}
 
-		Output("========================");
+		OutputStatus("========================");
 
 		if (kill)
-			Output("Kill command received");
+			OutputStatus("Kill command received");
 
-		Output($"VM Exit Code: {process.ExitCode}");
+		OutputStatus($"VM Exit Code: {process.ExitCode}");
 
 		if (success)
-			Output("Test Result: PASSED");
+			OutputStatus("Test Result: PASSED");
 		else
-			Output("Test Result: FAILED");
+			OutputStatus("Test Result: FAILED");
 
 		if (MosaSettings.LauncherExit)
 		{
@@ -174,7 +174,7 @@ public class Starter : BaseLauncher
 		var client = new SimpleTCP();
 		var watchDog = new WatchDog(MosaSettings.EmulatorMaxRuntime * 1000);
 
-		client.OnStatusUpdate = Output;
+		client.OnStatusUpdate = OutputStatus;
 
 		client.OnDataAvailable = () =>
 		{
@@ -184,7 +184,7 @@ public class Starter : BaseLauncher
 
 				lock (this)
 				{
-					Output(line);
+					OutputStatus(line);
 				}
 
 				if (line == "##KILL##")
@@ -200,8 +200,8 @@ public class Starter : BaseLauncher
 
 			Thread.Sleep(50); // wait a bit for the process to start
 
-			Output("VM Output");
-			Output("========================");
+			OutputStatus("VM Output");
+			OutputStatus("========================");
 
 			if (!client.Connect(MosaSettings.EmulatorSerialHost, MosaSettings.EmulatorSerialPort, 10000))
 				return false;
@@ -223,12 +223,12 @@ public class Starter : BaseLauncher
 			process.WaitForExit();
 		}
 
-		Output("========================");
+		OutputStatus("========================");
 
 		if (kill)
-			Output("Kill command received");
+			OutputStatus("Kill command received");
 
-		Output($"VM Exit Code: {process.ExitCode}");
+		OutputStatus($"VM Exit Code: {process.ExitCode}");
 
 		if (MosaSettings.LauncherExit)
 		{
@@ -249,7 +249,7 @@ public class Starter : BaseLauncher
 
 	private Process LaunchQemu()
 	{
-		Output("Launching QEMU");
+		OutputStatus("Launching QEMU");
 
 		string qemuApp, qemuUefi;
 
@@ -372,7 +372,7 @@ public class Starter : BaseLauncher
 
 	private Process LaunchBochs()
 	{
-		Output("Launching Bochs");
+		OutputStatus("Launching Bochs");
 
 		var bochsdirectory = Path.GetDirectoryName(MosaSettings.BochsApp);
 
@@ -435,7 +435,7 @@ public class Starter : BaseLauncher
 
 	private Process LaunchVMware()
 	{
-		Output("Launching VMware Workstation");
+		OutputStatus("Launching VMware Workstation");
 
 		var configFile = Path.Combine(MosaSettings.TemporaryFolder, Path.ChangeExtension(MosaSettings.ImageFile, ".vmx")!);
 		var sb = new StringBuilder();
@@ -500,7 +500,7 @@ public class Starter : BaseLauncher
 
 	private Process LaunchVirtualBox()
 	{
-		Output("Launching VirtualBox");
+		OutputStatus("Launching VirtualBox");
 
 		if (GetOutput(LaunchApplication(MosaSettings.VirtualBoxApp, "list vms")).Contains(MosaSettings.OSName))
 		{
@@ -571,10 +571,10 @@ public class Starter : BaseLauncher
 
 		File.WriteAllText(gdbScript, script);
 
-		Output($"Created configuration file: {gdbScript}");
-		Output("==================");
-		Output(script);
-		Output("==================");
+		OutputStatus($"Created configuration file: {gdbScript}");
+		OutputStatus("==================");
+		OutputStatus(script);
+		OutputStatus("==================");
 
 		sb.Clear();
 		sb.Append("-d ");

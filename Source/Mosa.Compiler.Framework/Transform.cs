@@ -3,7 +3,6 @@
 using System.Diagnostics;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Managers;
-using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework;

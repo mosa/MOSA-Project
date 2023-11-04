@@ -908,6 +908,20 @@ public class MosaSettings
 		}
 	}
 
+	public void AddStandardPlugs()
+	{
+		if (PlugKorlib)
+		{
+			AddSourceFile("Mosa.Plug.Korlib.dll");
+			AddSourceFile($"Mosa.Plug.Korlib.{Platform}.dll");
+		}
+
+		if (PlugKernel)
+		{
+			AddSourceFile($"Mosa.Kernel.BareMetal.{Platform}.dll");
+		}
+	}
+
 	public void ExpandSearchPaths()
 	{
 		if (SourceFiles == null)
@@ -920,7 +934,7 @@ public class MosaSettings
 
 			if (!string.IsNullOrWhiteSpace(path))
 			{
-				Settings.AddPropertyListValueIfNew("SearchPaths", path);
+				AddSearchPath(path);
 			}
 		}
 	}
