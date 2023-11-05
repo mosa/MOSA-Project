@@ -241,11 +241,6 @@ public sealed class BitValue
 		return Narrow();
 	}
 
-	public BitValue Narrow(ulong minValue, ulong maxValue, ulong bitsSet, ulong bitsClear)
-	{
-		return NarrowRange(minValue, maxValue).NarrowBits(bitsSet, bitsClear);
-	}
-
 	public BitValue SetNotNull()
 	{
 		if (IsFixed)

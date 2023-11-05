@@ -1076,12 +1076,14 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		}
 		else
 		{
-			result.Narrow(
-				Math.Min(value1.MinValue, value2.MinValue),
-				Math.Max(value1.MaxValue, value2.MaxValue),
-				value1.BitsSet & value2.BitsSet,
-				value2.BitsClear | value1.BitsClear
-			).SetStable(value1, value2);
+			result
+				.NarrowRange(
+					Math.Min(value1.MinValue, value2.MinValue),
+					Math.Max(value1.MaxValue, value2.MaxValue))
+				.NarrowBits(
+					value1.BitsSet & value2.BitsSet,
+					value2.BitsClear | value1.BitsClear)
+				.SetStable(value1, value2);
 		}
 	}
 
@@ -1101,12 +1103,14 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		}
 		else
 		{
-			result.Narrow(
-				Math.Min(value1.MinValue, value2.MinValue),
-				Math.Max(value1.MaxValue, value2.MaxValue),
-				value1.BitsSet & value2.BitsSet,
-				value2.BitsClear | value1.BitsClear
-			).SetStable(value1, value2);
+			result
+				.NarrowRange(
+					Math.Min(value1.MinValue, value2.MinValue),
+					Math.Max(value1.MaxValue, value2.MaxValue))
+				.NarrowBits(
+					value1.BitsSet & value2.BitsSet,
+					value2.BitsClear | value1.BitsClear)
+				.SetStable(value1, value2);
 		}
 	}
 
@@ -1139,10 +1143,11 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		}
 		else
 		{
-			result.NarrowBits(
-				 value1.BitsClear,
-				 value1.BitsSet
-			).SetStable(value1);
+			result
+				.NarrowBits(
+					 value1.BitsClear,
+					 value1.BitsSet)
+				.SetStable(value1);
 		}
 	}
 
@@ -1162,12 +1167,14 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		}
 		else
 		{
-			result.Narrow(
-				Math.Min(value1.MinValue, value2.MinValue),
-				Math.Max(value1.MaxValue, value2.MaxValue),
-				value1.BitsSet | value2.BitsSet,
-				value2.BitsClear & value1.BitsClear
-			).SetStable(value1, value2);
+			result
+				.NarrowRange(
+					Math.Min(value1.MinValue, value2.MinValue),
+					Math.Max(value1.MaxValue, value2.MaxValue))
+				.NarrowBits(
+					value1.BitsSet | value2.BitsSet,
+					value2.BitsClear & value1.BitsClear)
+				.SetStable(value1, value2);
 		}
 	}
 
@@ -1187,12 +1194,14 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		}
 		else
 		{
-			result.Narrow(
-				Math.Min(value1.MinValue, value2.MinValue),
-				Math.Max(value1.MaxValue, value2.MaxValue),
-				value1.BitsSet | value2.BitsSet,
-				value2.BitsClear & value1.BitsClear
-			).SetStable(value1, value2);
+			result
+				.NarrowRange(
+					Math.Min(value1.MinValue, value2.MinValue),
+					Math.Max(value1.MaxValue, value2.MaxValue))
+				.NarrowBits(
+					value1.BitsSet | value2.BitsSet,
+					value2.BitsClear & value1.BitsClear)
+				.SetStable(value1, value2);
 		}
 	}
 
@@ -1210,10 +1219,11 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		}
 		else
 		{
-			result.NarrowBits(
-				 (value1.BitsSet ^ value2.BitsSet) & bitsKnown,
-				 (value2.BitsClear ^ value1.BitsClear) & bitsKnown
-			).SetStable(value1, value2);
+			result
+				.NarrowBits(
+					(value1.BitsSet ^ value2.BitsSet) & bitsKnown,
+					(value2.BitsClear ^ value1.BitsClear) & bitsKnown)
+				.SetStable(value1, value2);
 		}
 	}
 
@@ -1231,10 +1241,11 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		}
 		else
 		{
-			result.NarrowBits(
-				 (value1.BitsSet ^ value2.BitsSet) & bitsKnown,
-				 (value2.BitsClear ^ value1.BitsClear) & bitsKnown
-			).SetStable(value1, value2);
+			result
+				.NarrowBits(
+					 (value1.BitsSet ^ value2.BitsSet) & bitsKnown,
+					 (value2.BitsClear ^ value1.BitsClear) & bitsKnown)
+				.SetStable(value1, value2);
 		}
 	}
 
@@ -1292,12 +1303,14 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			var min = Math.Min(value1.MinValue, value2.MinValue);
 			var uppermax = max * max;
 
-			result.Narrow(
-				 (uint)(min * min),
-				 (uint)(max * max),
-				 0,
-				 Upper32BitsSet | BitTwiddling.GetBitsOver((uint)uppermax)
-			).SetStable(value1, value2);
+			result
+				.NarrowRange(
+					(uint)(min * min),
+					(uint)(max * max))
+				.NarrowBits(
+					0,
+					Upper32BitsSet | BitTwiddling.GetBitsOver((uint)uppermax))
+				.SetStable(value1, value2);
 		}
 		else
 		{
@@ -1344,10 +1357,11 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			var min = Math.Min(value1.MinValue, value2.MinValue);
 			var uppermax = max * max;
 
-			result.NarrowBits(
-				 0,
-				BitTwiddling.GetBitsOver(uppermax)
-			).SetStable(value1, value2);
+			result
+				.NarrowBits(
+					0,
+					BitTwiddling.GetBitsOver(uppermax))
+				.SetStable(value1, value2);
 		}
 		else
 		{
@@ -1385,19 +1399,22 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		}
 		else if (IntegerTwiddling.IsMultiplyUnsignedCarry((uint)value1.MaxValue, (uint)value2.MaxValue))
 		{
-			result.NarrowBits(
-				 0,
-				 Upper32BitsSet | BitTwiddling.GetBitsOver(value1.MaxValue * value2.MaxValue)
-			).SetStable(value1, value2);
+			result
+				.NarrowBits(
+					0,
+					Upper32BitsSet | BitTwiddling.GetBitsOver(value1.MaxValue * value2.MaxValue))
+				.SetStable(value1, value2);
 		}
 		else
 		{
-			result.Narrow(
-				 (uint)(value1.MinValue * value2.MinValue),
-				 (uint)(value1.MaxValue * value2.MaxValue),
-				 0,
-				 Upper32BitsSet | BitTwiddling.GetBitsOver(value1.MaxValue * value2.MaxValue)
-			).SetStable(value1, value2);
+			result
+				.NarrowRange(
+					(uint)(value1.MinValue * value2.MinValue),
+					(uint)(value1.MaxValue * value2.MaxValue))
+				.NarrowBits(
+					0,
+					Upper32BitsSet | BitTwiddling.GetBitsOver(value1.MaxValue * value2.MaxValue))
+				.SetStable(value1, value2);
 		}
 	}
 
@@ -1432,12 +1449,14 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		else if (!IntegerTwiddling.IsMultiplyUnsignedOverflow(value1.MaxValue, value2.MaxValue)
 			&& !IntegerTwiddling.IsMultiplyUnsignedOverflow(value1.MinValue, value2.MinValue))
 		{
-			result.Narrow(
-				 value1.MinValue * value2.MinValue,
-				 value1.MaxValue * value2.MaxValue,
-				 0,
-				 BitTwiddling.GetBitsOver(value1.MaxValue * value2.MaxValue)
-			).SetStable(value1, value2);
+			result
+				.NarrowRange(
+					value1.MinValue * value2.MinValue,
+					value1.MaxValue * value2.MaxValue)
+				.NarrowBits(
+					0,
+					BitTwiddling.GetBitsOver(value1.MaxValue * value2.MaxValue))
+				.SetStable(value1, value2);
 		}
 		else
 		{
@@ -1469,12 +1488,12 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			stable &= value.IsStable;
 		}
 
-		result.Narrow(
-			 min,
-			 max,
-			 bitsset,
-			 bitsclear
-		).SetStable(stable);
+		result
+			.NarrowMin(min)
+			.NarrowMax(max)
+			.NarrowSetBits(bitsset)
+			.NarrowClearBits(bitsclear)
+			.SetStable(stable);
 	}
 
 	private static void Phi64(Node node)
@@ -1502,12 +1521,12 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			stable &= value.IsStable;
 		}
 
-		result.Narrow(
-			 min,
-			 max,
-			 bitsset,
-			 bitsclear
-		).SetStable(stable);
+		result
+			.NarrowMin(min)
+			.NarrowMax(max)
+			.NarrowSetBits(bitsset)
+			.NarrowClearBits(bitsclear)
+			.SetStable(stable);
 	}
 
 	private static void RemUnsigned32(Node node)
@@ -1531,12 +1550,10 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		}
 		else if (value2.AreLower32BitsKnown && value2.BitsSet32 != 0)
 		{
-			result.Narrow(
-				 0,
-				 value2.BitsSet - 1,
-				 0,
-				 BitTwiddling.GetBitsOver(value2.BitsSet - 1)
-			).SetStable(value1, value2);
+			result
+				.NarrowMax(value2.BitsSet - 1)
+				.NarrowClearBits(BitTwiddling.GetBitsOver(value2.BitsSet - 1))
+				.SetStable(value1, value2);
 		}
 		else
 		{
@@ -1565,12 +1582,10 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		}
 		else if (value2.AreAll64BitsKnown && value2.BitsSet32 != 0)
 		{
-			result.Narrow(
-				 0,
-				 value2.BitsSet - 1,
-				 0,
-				 BitTwiddling.GetBitsOver(value2.BitsSet - 1)
-			).SetStable(value1, value2);
+			result
+				.NarrowMax(value2.BitsSet - 1)
+				.NarrowClearBits(BitTwiddling.GetBitsOver(value2.BitsSet - 1))
+				.SetStable(value1, value2);
 		}
 		else
 		{
@@ -1603,23 +1618,23 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		}
 		else if (value2.AreLower5BitsKnown && shift != 0)
 		{
-			result.Narrow(
-				 value1.MinValue << shift > value1.MinValue ? value1.MinValue << shift : 0,
-				 value1.MaxValue << shift < uint.MaxValue ? value1.MaxValue << shift : ulong.MaxValue,
-				 value1.BitsSet << shift,
-				 Upper32BitsSet | (value1.BitsClear << shift) | ~(ulong.MaxValue << shift)
-			).SetStable(value1, value2);
+			result
+				.NarrowRange(
+					 value1.MinValue << shift > value1.MinValue ? value1.MinValue << shift : 0,
+					 value1.MaxValue << shift < uint.MaxValue ? value1.MaxValue << shift : ulong.MaxValue)
+				.NarrowBits(
+					 value1.BitsSet << shift,
+					 Upper32BitsSet | (value1.BitsClear << shift) | ~(ulong.MaxValue << shift))
+				.SetStable(value1, value2);
 		}
 		else if (value1.AreAnyBitsKnown && lowest >= 1)
 		{
 			var low = (ulong)(1 << lowest);
 
-			result.Narrow(
-				 low,
-				 ulong.MaxValue,
-				 0,
-				 low - 1
-			).SetStable(value1, value2);
+			result
+				.NarrowMin(low)
+				.NarrowClearBits(low - 1)
+				.SetStable(value1, value2);
 		}
 		else
 		{
@@ -1651,12 +1666,14 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		}
 		else if (value2.AreLower6BitsKnown && shift != 0)
 		{
-			result.Narrow(
-				 value1.MinValue << shift > value1.MinValue ? value1.MinValue << shift : 0,
-				 value1.MaxValue << shift > value1.MaxValue ? value1.MaxValue << shift : ulong.MaxValue,
-				 value1.BitsSet << shift,
-				 (value1.BitsClear << shift) | ~(ulong.MaxValue << shift)
-			).SetStable(value1, value2);
+			result
+				.NarrowRange(
+					 value1.MinValue << shift > value1.MinValue ? value1.MinValue << shift : 0,
+					 value1.MaxValue << shift > value1.MaxValue ? value1.MaxValue << shift : ulong.MaxValue)
+				.NarrowBits(
+					 value1.BitsSet << shift,
+					 (value1.BitsClear << shift) | ~(ulong.MaxValue << shift))
+				.SetStable(value1, value2);
 		}
 		else if (value1.AreLower32BitsKnown && (value1.BitsSet & uint.MaxValue) == 0)
 		{
@@ -1694,12 +1711,14 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		}
 		else if (value2.AreLower5BitsKnown && shift != 0)
 		{
-			result.Narrow(
-				 value1.MinValue >> shift,
-				 value1.MaxValue >> shift,
-				 value1.BitsSet >> shift,
-				 Upper32BitsSet | (value1.BitsClear >> shift) | ~(uint.MaxValue >> shift)
-			).SetStable(value1, value2);
+			result
+				.NarrowRange(
+					value1.MinValue >> shift,
+					value1.MaxValue >> shift)
+				.NarrowBits(
+					value1.BitsSet >> shift,
+					Upper32BitsSet | (value1.BitsClear >> shift) | ~(uint.MaxValue >> shift))
+				.SetStable(value1, value2);
 		}
 		else
 		{
@@ -1729,12 +1748,14 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		}
 		else if (value2.AreLower6BitsKnown && shift != 0)
 		{
-			result.Narrow(
-				 value1.MinValue >> shift,
-				 value1.MaxValue >> shift,
-				 value1.BitsSet >> shift,
-				 value1.BitsClear >> shift | ~(ulong.MaxValue >> shift)
-			);
+			result
+				.NarrowRange(
+					value1.MinValue >> shift,
+					value1.MaxValue >> shift)
+				.NarrowBits(
+					value1.BitsSet >> shift,
+					value1.BitsClear >> shift | ~(ulong.MaxValue >> shift))
+				.SetStable(value1);
 		}
 		else if (value1.AreUpper32BitsKnown && value1.BitsSet >> 32 == 0)
 		{
@@ -1763,17 +1784,19 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		}
 		else if (!knownSignedBit)
 		{
-			result.NarrowBits(
-				 value1.BitsSet16,
-				 value1.BitsClear16
-			).SetStable(value1);
+			result
+				.NarrowBits(
+					value1.BitsSet16,
+					value1.BitsClear16)
+				.SetStable(value1);
 		}
 		else
 		{
-			result.NarrowBits(
-				 value1.BitsSet16 | (signed ? Upper48BitsSet : 0),
-				 value1.BitsClear16 | (signed ? 0 : Upper48BitsSet)
-			).SetStable(value1);
+			result
+				.NarrowBits(
+					value1.BitsSet16 | (signed ? Upper48BitsSet : 0),
+					value1.BitsClear16 | (signed ? 0 : Upper48BitsSet))
+				.SetStable(value1);
 		}
 	}
 
@@ -1791,17 +1814,19 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		}
 		else if (!knownSignedBit)
 		{
-			result.NarrowBits(
-				 value1.BitsSet16,
-				 value1.BitsClear16
-			).SetStable(value1);
+			result
+				.NarrowBits(
+					value1.BitsSet16,
+					value1.BitsClear16)
+				.SetStable(value1);
 		}
 		else
 		{
-			result.NarrowBits(
-				 value1.BitsSet16 | (signed ? Upper48BitsSet : 0),
-				 value1.BitsClear16 | (signed ? 0 : Upper48BitsSet)
-			).SetStable(value1);
+			result
+				.NarrowBits(
+					 value1.BitsSet16 | (signed ? Upper48BitsSet : 0),
+					 value1.BitsClear16 | (signed ? 0 : Upper48BitsSet))
+				.SetStable(value1);
 		}
 	}
 
@@ -1819,17 +1844,19 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		}
 		else if (!knownSignedBit)
 		{
-			result.NarrowBits(
-				 value1.BitsSet32,
-				 value1.BitsClear32
-			).SetStable(value1);
+			result
+				.NarrowBits(
+					 value1.BitsSet32,
+					 value1.BitsClear32)
+				.SetStable(value1);
 		}
 		else
 		{
-			result.NarrowBits(
-				 value1.BitsSet32 | (signed ? Upper56BitsSet : 0),
-				 value1.BitsClear32 | (signed ? 0 : Upper56BitsSet)
-			).SetStable(value1);
+			result
+				.NarrowBits(
+					value1.BitsSet32 | (signed ? Upper56BitsSet : 0),
+					 value1.BitsClear32 | (signed ? 0 : Upper56BitsSet))
+				.SetStable(value1);
 		}
 	}
 
@@ -1847,17 +1874,19 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		}
 		else if (!knownSignedBit)
 		{
-			result.NarrowBits(
-				 value1.BitsSet8,
-				 value1.BitsClear8
-			).SetStable(value1);
+			result
+				.NarrowBits(
+					 value1.BitsSet8,
+					 value1.BitsClear8)
+				.SetStable(value1);
 		}
 		else
 		{
-			result.NarrowBits(
-				 value1.BitsSet8 | (signed ? Upper56BitsSet : 0),
-				 value1.BitsClear8 | (signed ? 0 : Upper56BitsSet)
-			).SetStable(value1);
+			result
+				.NarrowBits(
+					 value1.BitsSet8 | (signed ? Upper56BitsSet : 0),
+					 value1.BitsClear8 | (signed ? 0 : Upper56BitsSet))
+				.SetStable(value1);
 		}
 	}
 
@@ -1875,17 +1904,19 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		}
 		else if (!knownSignedBit)
 		{
-			result.NarrowBits(
-				 value1.BitsSet8,
-				 value1.BitsClear8
-			).SetStable(value1);
+			result
+				.NarrowBits(
+					value1.BitsSet8,
+					value1.BitsClear8)
+				.SetStable(value1);
 		}
 		else
 		{
-			result.NarrowBits(
-				 value1.BitsSet8 | (signed ? Upper56BitsSet : 0),
-				 value1.BitsClear8 | (signed ? 0 : Upper56BitsSet)
-			).SetStable(value1);
+			result
+				.NarrowBits(
+					value1.BitsSet8 | (signed ? Upper56BitsSet : 0),
+					value1.BitsClear8 | (signed ? 0 : Upper56BitsSet))
+				.SetStable(value1);
 		}
 	}
 
@@ -1901,12 +1932,14 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		}
 		else
 		{
-			result.Narrow(
-				 (value2.MinValue << 32) | (value1.MinValue & uint.MaxValue),
-				 (value2.MaxValue << 32) | (value1.MaxValue & uint.MaxValue),
-				 (value2.BitsSet << 32) | value1.BitsSet32,
-				 (value2.BitsClear << 32) | value1.BitsClear32
-			).SetStable(value1, value2);
+			result
+				.NarrowRange(
+					(value2.MinValue << 32) | (value1.MinValue & uint.MaxValue),
+					(value2.MaxValue << 32) | (value1.MaxValue & uint.MaxValue))
+				.NarrowBits(
+					(value2.BitsSet << 32) | value1.BitsSet32,
+					(value2.BitsClear << 32) | value1.BitsClear32)
+				.SetStable(value1, value2);
 		}
 	}
 
@@ -1915,12 +1948,14 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		var result = node.Result.BitValue;
 		var value1 = node.Operand1.BitValue;
 
-		result.Narrow(
-			value1.MinValue > uint.MaxValue ? 0 : value1.MinValue,
-			Math.Min(uint.MaxValue, value1.MaxValue),
-			value1.BitsSet & uint.MaxValue,
-			Upper32BitsSet | value1.BitsClear
-		).SetStable(value1);
+		result
+			.NarrowRange(
+				value1.MinValue > uint.MaxValue ? 0 : value1.MinValue,
+				Math.Min(uint.MaxValue, value1.MaxValue))
+				.NarrowBits(
+				value1.BitsSet & uint.MaxValue,
+				Upper32BitsSet | value1.BitsClear)
+			.SetStable(value1);
 	}
 
 	private static void ZeroExtend16x32(Node node)
@@ -1934,12 +1969,14 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		}
 		else
 		{
-			result.Narrow(
-				 value1.MinValue > byte.MaxValue ? 0 : value1.MinValue,
-				 Math.Min(byte.MaxValue, value1.MaxValue),
-				 value1.BitsSet16,
-				 value1.BitsClear | Upper48BitsSet
-			).SetStable(value1);
+			result
+				.NarrowRange(
+					value1.MinValue > byte.MaxValue ? 0 : value1.MinValue,
+					Math.Min(byte.MaxValue, value1.MaxValue))
+				.NarrowBits(
+					value1.BitsSet16,
+					value1.BitsClear | Upper48BitsSet)
+				.SetStable(value1);
 		}
 	}
 
@@ -1959,12 +1996,14 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		}
 		else
 		{
-			result.Narrow(
-				 value1.MinValue > uint.MaxValue ? 0 : value1.MinValue,
-				 Math.Min(uint.MaxValue, value1.MaxValue),
-				 value1.BitsSet32,
-				 Upper32BitsSet | value1.BitsClear
-			).SetStable(value1);
+			result
+				.NarrowRange(
+					value1.MinValue > uint.MaxValue ? 0 : value1.MinValue,
+					Math.Min(uint.MaxValue, value1.MaxValue))
+				.NarrowBits(
+					value1.BitsSet32,
+					Upper32BitsSet | value1.BitsClear)
+				.SetStable(value1);
 		}
 	}
 
@@ -1979,12 +2018,14 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		}
 		else
 		{
-			result.Narrow(
-				 value1.MinValue > byte.MaxValue ? 0 : value1.MinValue,
-				 Math.Min(byte.MaxValue, value1.MaxValue),
-				 value1.BitsSet8,
-				 value1.BitsClear | Upper56BitsSet
-			).SetStable(value1);
+			result
+				.NarrowRange(
+					value1.MinValue > byte.MaxValue ? 0 : value1.MinValue,
+					Math.Min(byte.MaxValue, value1.MaxValue))
+				.NarrowBits(
+					value1.BitsSet8,
+					value1.BitsClear | Upper56BitsSet)
+				.SetStable(value1);
 		}
 	}
 
@@ -1999,12 +2040,14 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		}
 		else
 		{
-			result.Narrow(
-				 value1.MinValue > byte.MaxValue ? 0 : value1.MinValue,
-				 Math.Min(byte.MaxValue, value1.MaxValue),
-				 value1.BitsSet8,
-				 value1.BitsClear | Upper56BitsSet
-			).SetStable(value1);
+			result
+				.NarrowRange(
+					value1.MinValue > byte.MaxValue ? 0 : value1.MinValue,
+					Math.Min(byte.MaxValue, value1.MaxValue))
+				.NarrowBits(
+					value1.BitsSet8,
+					value1.BitsClear | Upper56BitsSet)
+				.SetStable(value1);
 		}
 	}
 
@@ -2016,12 +2059,14 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 		if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown)
 		{
-			result.Narrow(
-				 Math.Min(value1.MinValue, value2.MinValue),
-				 Math.Max(value1.MaxValue, value2.MaxValue),
-				 value1.MaxValue & value2.MaxValue,
-				 ~value1.MaxValue & ~value2.MaxValue
-			).SetStable();
+			result
+				.NarrowRange(
+					Math.Min(value1.MinValue, value2.MinValue),
+					Math.Max(value1.MaxValue, value2.MaxValue))
+				.NarrowBits(
+					value1.MaxValue & value2.MaxValue,
+					~value1.MaxValue & ~value2.MaxValue)
+				.SetStable();
 		}
 		else
 		{
@@ -2037,12 +2082,14 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 		if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
 		{
-			result.Narrow(
-				 Math.Min(value1.MinValue, value2.MinValue),
-				 Math.Max(value1.MaxValue, value2.MaxValue),
-				 value1.MaxValue & value2.MaxValue,
-				 ~value1.MaxValue & ~value2.MaxValue
-			).SetStable();
+			result
+				.NarrowRange(
+					Math.Min(value1.MinValue, value2.MinValue),
+					Math.Max(value1.MaxValue, value2.MaxValue))
+				.NarrowBits(
+					value1.MaxValue & value2.MaxValue,
+					~value1.MaxValue & ~value2.MaxValue)
+				.SetStable();
 		}
 		else
 		{
@@ -2092,12 +2139,14 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		}
 		else
 		{
-			result.Narrow(
-				 value2.MaxValue == 0 ? 0 : value1.MinValue / value2.MaxValue,
-				 value2.MinValue == 0 ? value1.MaxValue : value1.MaxValue / value2.MinValue,
-				 0,
-				 Upper32BitsSet | BitTwiddling.GetBitsOver(value2.MinValue == 0 ? value1.MaxValue : value1.MaxValue / value2.MinValue)
-			).SetStable(value1, value2);
+			result
+				.NarrowRange(
+					value2.MaxValue == 0 ? 0 : value1.MinValue / value2.MaxValue,
+					value2.MinValue == 0 ? value1.MaxValue : value1.MaxValue / value2.MinValue)
+				.NarrowBits(
+					0,
+					Upper32BitsSet | BitTwiddling.GetBitsOver(value2.MinValue == 0 ? value1.MaxValue : value1.MaxValue / value2.MinValue))
+				.SetStable(value1, value2);
 		}
 	}
 
@@ -2122,12 +2171,14 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		}
 		else
 		{
-			result.Narrow(
-				 value2.MaxValue == 0 ? 0 : value1.MinValue / value2.MaxValue,
-				 value2.MinValue == 0 ? value1.MaxValue : value1.MaxValue / value2.MinValue,
-				 0,
-				 BitTwiddling.GetBitsOver(value2.MinValue == 0 ? value1.MaxValue : value1.MaxValue / value2.MinValue)
-			).SetStable(value1, value2);
+			result
+				.NarrowRange(
+					value2.MaxValue == 0 ? 0 : value1.MinValue / value2.MaxValue,
+					value2.MinValue == 0 ? value1.MaxValue : value1.MaxValue / value2.MinValue)
+				.NarrowBits(
+					0,
+					BitTwiddling.GetBitsOver(value2.MinValue == 0 ? value1.MaxValue : value1.MaxValue / value2.MinValue))
+				.SetStable(value1, value2);
 		}
 	}
 
