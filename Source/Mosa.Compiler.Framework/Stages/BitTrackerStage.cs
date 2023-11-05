@@ -940,7 +940,6 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 		result
 			.NarrowMax(ushort.MaxValue)
-			.NarrowSetBits(0)
 			.NarrowClearBits(~(ulong)ushort.MaxValue);
 	}
 
@@ -950,7 +949,6 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 		result
 			.NarrowMax(ushort.MaxValue)
-			.NarrowSetBits(0)
 			.NarrowClearBits(~(ulong)ushort.MaxValue);
 	}
 
@@ -960,7 +958,6 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 		result
 			.NarrowMax(byte.MaxValue)
-			.NarrowSetBits(0)
 			.NarrowClearBits(~(ulong)byte.MaxValue);
 	}
 
@@ -970,7 +967,6 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 		result
 			.NarrowMax(byte.MaxValue)
-			.NarrowSetBits(0)
 			.NarrowClearBits(~(ulong)byte.MaxValue);
 	}
 
@@ -980,7 +976,6 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 		result
 			.NarrowMax(uint.MaxValue)
-			.NarrowSetBits(0)
 			.NarrowClearBits(~uint.MaxValue);
 	}
 
@@ -990,7 +985,6 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 		result
 			.NarrowMax(ushort.MaxValue)
-			.NarrowSetBits(0)
 			.NarrowClearBits(~(ulong)ushort.MaxValue);
 	}
 
@@ -1000,8 +994,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 		result
 			.NarrowMax(ushort.MaxValue)
-			.NarrowSetBits(0)
-					.NarrowClearBits(~(ulong)ushort.MaxValue);
+			.NarrowClearBits(~(ulong)ushort.MaxValue);
 	}
 
 	private static void LoadZeroExtend8x32(Node node)
@@ -1010,7 +1003,6 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 		result
 			.NarrowMax(byte.MaxValue)
-			.NarrowSetBits(0)
 			.NarrowClearBits(~(ulong)byte.MaxValue);
 	}
 
@@ -1020,7 +1012,6 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 		result
 			.NarrowMax(byte.MaxValue)
-			.NarrowSetBits(0)
 			.NarrowClearBits(~(ulong)byte.MaxValue);
 	}
 
@@ -1030,8 +1021,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 		result
 			.NarrowMax(uint.MaxValue)
-			.NarrowSetBits(0)
-					.NarrowClearBits(~uint.MaxValue);
+			.NarrowClearBits(~uint.MaxValue);
 	}
 
 	private static void And32(Node node)
@@ -1268,7 +1258,6 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			result
 				.NarrowMin((uint)(min * min))
 				.NarrowMax((uint)(max * max))
-				.NarrowSetBits(0)
 				.NarrowClearBits(Upper32BitsSet | BitTwiddling.GetBitsOver((uint)uppermax))
 				.SetStable(value1, value2);
 		}
@@ -1318,7 +1307,6 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			var uppermax = max * max;
 
 			result
-				.NarrowSetBits(0)
 				.NarrowClearBits(BitTwiddling.GetBitsOver(uppermax))
 				.SetStable(value1, value2);
 		}
@@ -1359,7 +1347,6 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		else if (IntegerTwiddling.IsMultiplyUnsignedCarry((uint)value1.MaxValue, (uint)value2.MaxValue))
 		{
 			result
-				.NarrowSetBits(0)
 				.NarrowClearBits(Upper32BitsSet | BitTwiddling.GetBitsOver(value1.MaxValue * value2.MaxValue))
 				.SetStable(value1, value2);
 		}
@@ -1368,7 +1355,6 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			result
 				.NarrowMin((uint)(value1.MinValue * value2.MinValue))
 				.NarrowMax((uint)(value1.MaxValue * value2.MaxValue))
-				.NarrowSetBits(0)
 				.NarrowClearBits(Upper32BitsSet | BitTwiddling.GetBitsOver(value1.MaxValue * value2.MaxValue))
 				.SetStable(value1, value2);
 		}
@@ -1408,7 +1394,6 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			result
 				.NarrowMin(value1.MinValue * value2.MinValue)
 				.NarrowMax(value1.MaxValue * value2.MaxValue)
-				.NarrowSetBits(0)
 				.NarrowClearBits(BitTwiddling.GetBitsOver(value1.MaxValue * value2.MaxValue))
 				.SetStable(value1, value2);
 		}
@@ -1707,7 +1692,6 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		{
 			result
 				.NarrowMax(uint.MaxValue)
-				.NarrowSetBits(0)
 				.NarrowClearBits(~uint.MaxValue)
 				.SetStable(value1, value2);
 		}
@@ -2063,7 +2047,6 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			result
 				.NarrowMin(value2.MaxValue == 0 ? 0 : value1.MinValue / value2.MaxValue)
 				.NarrowMax(value2.MinValue == 0 ? value1.MaxValue : value1.MaxValue / value2.MinValue)
-				.NarrowSetBits(0)
 				.NarrowClearBits(Upper32BitsSet | BitTwiddling.GetBitsOver(value2.MinValue == 0 ? value1.MaxValue : value1.MaxValue / value2.MinValue))
 				.SetStable(value1, value2);
 		}
@@ -2093,7 +2076,6 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			result
 				.NarrowMin(value2.MaxValue == 0 ? 0 : value1.MinValue / value2.MaxValue)
 				.NarrowMax(value2.MinValue == 0 ? value1.MaxValue : value1.MaxValue / value2.MinValue)
-				.NarrowSetBits(0)
 				.NarrowClearBits(BitTwiddling.GetBitsOver(value2.MinValue == 0 ? value1.MaxValue : value1.MaxValue / value2.MinValue))
 				.SetStable(value1, value2);
 		}
