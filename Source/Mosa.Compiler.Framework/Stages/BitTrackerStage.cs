@@ -207,18 +207,11 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 				valueTrace?.Log($"Definition: {virtualRegister.Definitions[0]}");
 			}
 
-			if (value == null)
-			{
-				valueTrace?.Log($"*** INDETERMINATE");
-			}
-			else
-			{
-				valueTrace?.Log($"  MinValue:  {value.MinValue}");
-				valueTrace?.Log($"  MaxValue:  {value.MaxValue}");
-				valueTrace?.Log($"  BitsSet:   {Convert.ToString((long)value.BitsSet, 2).PadLeft(64, '0')}");
-				valueTrace?.Log($"  BitsClear: {Convert.ToString((long)value.BitsClear, 2).PadLeft(64, '0')}");
-				valueTrace?.Log($"  BitsKnown: {Convert.ToString((long)value.BitsKnown, 2).PadLeft(64, '0')}");
-			}
+			valueTrace?.Log($"  MinValue:  {value.MinValue}");
+			valueTrace?.Log($"  MaxValue:  {value.MaxValue}");
+			valueTrace?.Log($"  BitsSet:   {Convert.ToString((long)value.BitsSet, 2).PadLeft(64, '0')}");
+			valueTrace?.Log($"  BitsClear: {Convert.ToString((long)value.BitsClear, 2).PadLeft(64, '0')}");
+			valueTrace?.Log($"  BitsKnown: {Convert.ToString((long)value.BitsKnown, 2).PadLeft(64, '0')}");
 
 			valueTrace?.Log();
 		}
@@ -227,16 +220,26 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 	private void EvaluateVirtualRegisters()
 	{
 		var partial = 0;
+		var last = 0;
 
-		for (int i = 0; i < 10; i++)
+		for (var i = 0; i < 10; i++)
 		{
 			foreach (var register in MethodCompiler.VirtualRegisters)
 			{
-				EvaluateBitValue(register);
+				EvaluateBitValue(register, 10);
 
-				if (register.BitValue.IsPartial)
+				if (!register.BitValue.IsStable)
 					partial++;
 			}
+
+			if (partial == 0)
+				return;
+
+			if (partial == last)
+				return;
+
+			last = partial;
+			partial = 0;
 		}
 	}
 
@@ -248,33 +251,47 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		}
 	}
 
-	private void EvaluateBitValue(Operand virtualRegister)
+	private void EvaluateBitValue(Operand virtualRegister, int recursion = 0)
 	{
 		if (!IsBitTrackable(virtualRegister))
 			return;
 
-		if (!virtualRegister.IsDefinedOnce)
+		if (virtualRegister.BitValue.IsResolved)
 			return;
 
 		var node = virtualRegister.Definitions[0];
 
-		//if (node.Instruction.IsCall)
-		//	return;
+		if (recursion > 0)
+		{
+			if (!node.Instruction.IsPhi)
+			{
+				foreach (var operand in node.Operands)
+				{
+					if (operand.BitValue.IsStable)
+						continue;
+
+					EvaluateBitValue(operand, recursion - 1);
+				}
+			}
+		}
+
+		if (virtualRegister.BitValue.IsResolved)
+			return;
 
 		var method = visitation[node.Instruction.ID];
 
-		if (method == null)
-			return;
-
-		method.Invoke(node);
+		method?.Invoke(node);
 	}
 
-	private static bool IsBitTrackable(Operand virtualRegister)
+	private static bool IsBitTrackable(Operand operand)
 	{
-		if (virtualRegister.IsFloatingPoint)
+		if (operand.IsFloatingPoint)
 			return false;
 
-		if (virtualRegister.IsInteger || virtualRegister.IsObject || virtualRegister.IsManagedPointer)
+		if (!operand.IsDefinedOnce)
+			return false;
+
+		if (operand.IsInteger || operand.IsObject || operand.IsManagedPointer)
 			return true;
 
 		return false;
@@ -285,37 +302,14 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		if (!IsBitTrackable(virtualRegister))
 			return;
 
-		Debug.Assert(!virtualRegister.IsFloatingPoint);
-
-		//Debug.Assert(virtualRegister.Definitions.Count == 1);
-
-		if (!virtualRegister.IsDefinedOnce)
-			return;
-
 		var value = virtualRegister.BitValue;
 
-		ulong replaceValue;
-
-		if (value.AreAll64BitsKnown)
-		{
-			replaceValue = value.BitsSet;
-		}
-		else if (value.MaxValue == value.MinValue)
-		{
-			replaceValue = value.MaxValue;
-		}
-		else if (virtualRegister.IsInt32 && value.AreLower32BitsKnown)
-		{
-			replaceValue = value.BitsSet32;
-		}
-		else
-		{
+		if (!value.IsResolved)
 			return;
-		}
 
 		var constantOperand = virtualRegister.IsInt32
-			? Operand.CreateConstant32((uint)replaceValue)
-			: Operand.CreateConstant64(replaceValue);
+			? Operand.CreateConstant32((uint)value.BitsSet)
+			: Operand.CreateConstant64(value.BitsSet);
 
 		if (trace != null)
 		{
@@ -676,7 +670,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		}
 		else if (value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
 		{
-			result.Narrow(value2).SetStable(value2); 
+			result.Narrow(value2).SetStable(value2);
 		}
 		else if (value2.AreLower32BitsKnown && value2.BitsSet32 == 0)
 		{
@@ -697,12 +691,8 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		else
 		{
 			result
-				.NarrowRange(
-					value1.MinValue + value2.MinValue,
-					value1.MaxValue + value2.MaxValue)
-				.NarrowBits(
-					0,
-					Upper32BitsSet | BitTwiddling.GetBitsOver(value1.MaxValue + value2.MaxValue))
+				.NarrowMin(value1.MinValue + value2.MinValue)
+				.NarrowMax(value1.MaxValue + value2.MaxValue)
 				.SetStable(value1, value2);
 		}
 	}
@@ -736,12 +726,8 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		else if (!IntegerTwiddling.IsAddUnsignedCarry(value1.MaxValue, value2.MaxValue))
 		{
 			result
-				.NarrowRange(
-					value1.MinValue + value2.MinValue,
-					value1.MaxValue + value2.MaxValue)
-				.NarrowBits(
-					0,
-					BitTwiddling.GetBitsOver(value1.MaxValue + value2.MaxValue))
+				.NarrowMin(value1.MinValue + value2.MinValue)
+				.NarrowMax(value1.MaxValue + value2.MaxValue)
 				.SetStable(value1, value2);
 		}
 		else
@@ -925,10 +911,10 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		else
 		{
 			result
-				.Narrow(
+				.NarrowRange(
 					value1.MinValue >> 32,
-					value1.MaxValue >> 32,
-					value1.BitsSet >> 32,
+					value1.MaxValue >> 32)
+				.NarrowBits(value1.BitsSet >> 32,
 					Upper32BitsSet | (value1.BitsClear >> 32)
 				).SetStable(value1);
 		}
@@ -946,9 +932,8 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		else
 		{
 			result
-				.Narrow(
-					0,
-					uint.MaxValue,
+				.NarrowMax(uint.MaxValue)
+				.NarrowBits(
 					value1.BitsSet & uint.MaxValue,
 					value1.BitsClear & uint.MaxValue
 				).SetStable(value1);
@@ -960,11 +945,11 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		var result = node.Result.BitValue;
 
 		result
-			.Narrow(
+			.NarrowMax(ushort.MaxValue)
+			.NarrowBits(
 				0,
-				ushort.MaxValue,
-				0,
-				~(ulong)ushort.MaxValue);
+				~(ulong)ushort.MaxValue
+			);
 	}
 
 	private static void LoadParamZeroExtend16x64(Node node)
@@ -972,11 +957,11 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		var result = node.Result.BitValue;
 
 		result
-			.Narrow(
-				0,
-				ushort.MaxValue,
-				0,
-				~(ulong)ushort.MaxValue);
+			.NarrowMax(ushort.MaxValue)
+			.NarrowBits(
+			0,
+			~(ulong)ushort.MaxValue
+		);
 	}
 
 	private static void LoadParamZeroExtend8x32(Node node)
@@ -984,11 +969,11 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		var result = node.Result.BitValue;
 
 		result
-			.Narrow(
-				0,
-				byte.MaxValue,
-				0,
-				~(ulong)byte.MaxValue);
+			.NarrowMax(byte.MaxValue)
+			.NarrowBits(
+			0,
+			~(ulong)byte.MaxValue
+		);
 	}
 
 	private static void LoadParamZeroExtend8x64(Node node)
@@ -996,11 +981,11 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		var result = node.Result.BitValue;
 
 		result
-			.Narrow(
+			.NarrowMax(byte.MaxValue)
+			.NarrowBits(
 				0,
-				byte.MaxValue,
-				0,
-				~(ulong)byte.MaxValue);
+				~(ulong)byte.MaxValue
+				);
 	}
 
 	private static void LoadParamZeroExtend32x64(Node node)
@@ -1008,11 +993,11 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		var result = node.Result.BitValue;
 
 		result
-			.Narrow(
+			.NarrowMax(uint.MaxValue)
+			.NarrowBits(
 				0,
-				uint.MaxValue,
-				0,
-				~uint.MaxValue);
+				~uint.MaxValue
+				);
 	}
 
 	private static void LoadZeroExtend16x32(Node node)
@@ -1020,11 +1005,11 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		var result = node.Result.BitValue;
 
 		result
-			.Narrow(
-				0,
-				ushort.MaxValue,
-				0,
-				~(ulong)ushort.MaxValue);
+			.NarrowMax(ushort.MaxValue)
+			.NarrowBits(
+			0,
+			~(ulong)ushort.MaxValue
+		);
 	}
 
 	private static void LoadZeroExtend16x64(Node node)
@@ -1032,11 +1017,11 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		var result = node.Result.BitValue;
 
 		result
-			.Narrow(
-				0,
-				ushort.MaxValue,
-				0,
-				~(ulong)ushort.MaxValue);
+			.NarrowMax(ushort.MaxValue)
+			.NarrowBits(
+			0,
+			~(ulong)ushort.MaxValue
+		);
 	}
 
 	private static void LoadZeroExtend8x32(Node node)
@@ -1044,11 +1029,11 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		var result = node.Result.BitValue;
 
 		result
-			.Narrow(
-				0,
-				byte.MaxValue,
-				0,
-				~(ulong)byte.MaxValue);
+			.NarrowMax(byte.MaxValue)
+			.NarrowBits(
+			0,
+			~(ulong)byte.MaxValue
+		);
 	}
 
 	private static void LoadZeroExtend8x64(Node node)
@@ -1056,11 +1041,11 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		var result = node.Result.BitValue;
 
 		result
-			.Narrow(
-				0,
-				byte.MaxValue,
-				0,
-				~(ulong)byte.MaxValue);
+			.NarrowMax(byte.MaxValue)
+			.NarrowBits(
+			0,
+			~(ulong)byte.MaxValue
+		);
 	}
 
 	private static void LoadZeroExtend32x64(Node node)
@@ -1068,11 +1053,11 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		var result = node.Result.BitValue;
 
 		result
-			.Narrow(
-				0,
-				uint.MaxValue,
-				0,
-				~uint.MaxValue);
+			.NarrowMax(uint.MaxValue)
+			.NarrowBits(
+			0,
+			~uint.MaxValue
+		);
 	}
 
 	private static void And32(Node node)
@@ -1093,7 +1078,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		{
 			result.Narrow(
 				Math.Min(value1.MinValue, value2.MinValue),
-				 Math.Max(value1.MaxValue, value2.MaxValue),
+				Math.Max(value1.MaxValue, value2.MaxValue),
 				value1.BitsSet & value2.BitsSet,
 				value2.BitsClear | value1.BitsClear
 			);
@@ -1137,7 +1122,6 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		else
 		{
 			result.NarrowBits(
-
 				 value1.BitsClear32,
 				 value1.BitsSet32
 			);
@@ -1204,10 +1188,10 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		else
 		{
 			result.Narrow(
-				 Math.Min(value1.MinValue, value2.MinValue),
-				 Math.Max(value1.MaxValue, value2.MaxValue),
-				 value1.BitsSet | value2.BitsSet,
-				 value2.BitsClear & value1.BitsClear
+				Math.Min(value1.MinValue, value2.MinValue),
+				Math.Max(value1.MaxValue, value2.MaxValue),
+				value1.BitsSet | value2.BitsSet,
+				value2.BitsClear & value1.BitsClear
 			);
 		}
 	}
@@ -1327,6 +1311,8 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		var value1 = node.Operand1.BitValue;
 		var value2 = node.Operand2.BitValue;
 
+		// TODO: Special power of two handling for bits, handle similar to shift left
+
 		if (value1.AreAll64BitsKnown && value1.BitsSet32 == 0)
 		{
 			result.SetValue(0);
@@ -1347,8 +1333,6 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		{
 			result.Narrow(value1).SetStable(value1);
 		}
-
-		// TODO: Special power of two handling for bits, handle similar to shift left
 		else if (!IntegerTwiddling.HasSignBitSet((long)value1.MaxValue)
 				&& !IntegerTwiddling.HasSignBitSet((long)value2.MaxValue)
 				&& !IntegerTwiddling.HasSignBitSet((long)value1.MinValue)
@@ -1604,7 +1588,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 		// FUTURE: if the value2 has any set bits, the lower bound could be raised
 
-		if (value1 != null && value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
+		if (value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
 		{
 			result.SetValue(0);
 		}
@@ -1676,12 +1660,12 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		}
 		else if (value1.AreLower32BitsKnown && (value1.BitsSet & uint.MaxValue) == 0)
 		{
-			result.Narrow(
-				 0,
-				 ulong.MaxValue,
-				 0,
-				 uint.MaxValue
-			);
+			result
+				.NarrowMax(ulong.MaxValue)
+				.NarrowBits(
+					 0,
+					uint.MaxValue
+				);
 		}
 		else
 		{

@@ -2,6 +2,7 @@
 
 using System.Diagnostics;
 using System.Text;
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Configuration;
 
 namespace Mosa.Compiler.Framework;
@@ -30,7 +31,7 @@ public sealed class BitValue
 
 	public bool IsStable { get; private set; }
 
-	public bool IsPartial => !IsStable;
+	public bool IsResolved => (MinValue == MaxValue) || AreAll64BitsKnown;
 
 	#endregion Status Fields
 
@@ -86,6 +87,8 @@ public sealed class BitValue
 
 	#endregion Property Values
 
+	#region Constructors
+
 	public BitValue(bool is32Bit)
 	{
 		Is32Bit = is32Bit;
@@ -124,6 +127,10 @@ public sealed class BitValue
 		MinValue = value;
 	}
 
+	#endregion Constructors
+
+	#region Public Methods
+
 	public BitValue SetValue(BitValue value)
 	{
 		return Narrow(value).SetStable();
@@ -158,7 +165,27 @@ public sealed class BitValue
 		MinValue = Math.Max(MinValue, minValue);
 		MaxValue = Math.Min(MaxValue, maxValue);
 
-		return NarrowMinMax();
+		return Narrow();
+	}
+
+	public BitValue NarrowMax(ulong maxValue)
+	{
+		if (IsFixed)
+			return this;
+
+		MaxValue = Math.Min(MaxValue, maxValue);
+
+		return Narrow();
+	}
+
+	public BitValue NarrowMin(ulong minValue)
+	{
+		if (IsFixed)
+			return this;
+
+		MinValue = Math.Min(MinValue, minValue);
+
+		return Narrow();
 	}
 
 	public BitValue NarrowBits(ulong bitsSet, ulong bitsClear)
@@ -177,12 +204,7 @@ public sealed class BitValue
 
 		Debug.Assert((BitsSet & BitsClear) == 0);
 
-		return NarrowMinMax();
-	}
-
-	public BitValue Narrow(ulong minValue, ulong maxValue, ulong bitsSet, ulong bitsClear)
-	{
-		return NarrowRange(minValue, maxValue).NarrowBits(bitsSet, bitsClear);
+		return Narrow();
 	}
 
 	public BitValue NarrowSetBits(ulong bitsSet)
@@ -199,7 +221,7 @@ public sealed class BitValue
 
 		Debug.Assert((BitsSet & BitsClear) == 0);
 
-		return NarrowMinMax();
+		return Narrow();
 	}
 
 	public BitValue NarrowClearBits(ulong bitsClear)
@@ -216,7 +238,12 @@ public sealed class BitValue
 
 		Debug.Assert((BitsSet & BitsClear) == 0);
 
-		return NarrowMinMax();
+		return Narrow();
+	}
+
+	public BitValue Narrow(ulong minValue, ulong maxValue, ulong bitsSet, ulong bitsClear)
+	{
+		return NarrowRange(minValue, maxValue).NarrowBits(bitsSet, bitsClear);
 	}
 
 	public BitValue SetNotNull()
@@ -229,7 +256,7 @@ public sealed class BitValue
 
 	public BitValue Set32BitValue()
 	{
-		return NarrowRange(0, uint.MaxValue).NarrowClearBits(Upper32BitsSet).NarrowMinMax();
+		return NarrowRange(0, uint.MaxValue).NarrowClearBits(Upper32BitsSet).Narrow();
 	}
 
 	public BitValue SetValue(bool value)
@@ -240,36 +267,6 @@ public sealed class BitValue
 	public BitValue Narrow(BitValue value)
 	{
 		return NarrowRange(value.MinValue, value.MaxValue).NarrowBits(value.BitsSet, value.BitsClear);
-	}
-
-	private BitValue NarrowMinMax()
-	{
-		var bitsUnknown = ~(BitsSet | BitsClear);
-		var maxPossible = BitsSet | bitsUnknown;
-		var minPossible = BitsSet & bitsUnknown;
-
-		MinValue = Math.Max(MinValue, minPossible);
-		MaxValue = Math.Min(MaxValue, maxPossible);
-
-		return CheckStable();
-	}
-
-	private BitValue CheckStable()
-	{
-		if (MinValue == MaxValue)
-			IsStable = true;
-
-		if ((BitsSet | BitsClear) == ulong.MaxValue)
-			IsStable = true;
-
-		return this;
-	}
-
-	public BitValue SetStable()
-	{
-		IsStable = true;
-
-		return this;
 	}
 
 	public BitValue SetStable(bool stable)
@@ -294,6 +291,40 @@ public sealed class BitValue
 	{
 		return SetStable(a.IsStable && b.IsStable & c.IsStable);
 	}
+
+	public BitValue SetStable()
+	{
+		IsStable = true;
+
+		return this;
+	}
+
+	#endregion Public Methods
+
+	#region Private Methods
+
+	private BitValue Narrow()
+	{
+		var bitsUnknown = ~(BitsSet | BitsClear);
+		var maxPossible = BitsSet | bitsUnknown;
+		var minPossible = BitsSet & bitsUnknown;
+
+		MinValue = Math.Max(MinValue, minPossible);
+		MaxValue = Math.Min(MaxValue, maxPossible);
+
+		BitsClear |= BitTwiddling.GetBitsOver(MaxValue);
+
+		return CheckStable();
+	}
+
+	private BitValue CheckStable()
+	{
+		IsStable |= IsResolved;
+
+		return this;
+	}
+
+	#endregion Private Methods
 
 	public override string ToString()
 	{
