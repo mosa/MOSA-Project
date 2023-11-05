@@ -787,9 +787,8 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		else if (value2.AreLower5BitsKnown && knownSignedBit && shift != 0)
 		{
 			result
-				.NarrowRange(
-					(value1.MinValue >> shift) | highbits,
-					(value1.MaxValue >> shift) | highbits)
+				.NarrowMin((value1.MinValue >> shift) | highbits)
+				.NarrowMax((value1.MaxValue >> shift) | highbits)
 				.NarrowBits(
 					value1.BitsSet >> shift | highbits,
 					Upper32BitsSet | (value1.BitsClear >> shift) | ~(uint.MaxValue >> shift) | highbits)
@@ -827,9 +826,8 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		else if (value2.AreLower6BitsKnown && knownSignedBit && shift != 0)
 		{
 			result
-				.NarrowRange(
-					(value1.MinValue >> shift) | highbits,
-					(value1.MaxValue >> shift) | highbits)
+				.NarrowMin((value1.MinValue >> shift) | highbits)
+				.NarrowMax((value1.MaxValue >> shift) | highbits)
 				.NarrowBits(
 					value1.BitsSet >> shift | highbits,
 					(value1.BitsClear >> shift) | ~(ulong.MaxValue >> shift) | highbits)
@@ -911,9 +909,8 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		else
 		{
 			result
-				.NarrowRange(
-					value1.MinValue >> 32,
-					value1.MaxValue >> 32)
+				.NarrowMin(value1.MinValue >> 32)
+				.NarrowMax(value1.MaxValue >> 32)
 				.NarrowBits(value1.BitsSet >> 32,
 					Upper32BitsSet | (value1.BitsClear >> 32)
 				).SetStable(value1);
@@ -1077,9 +1074,8 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		else
 		{
 			result
-				.NarrowRange(
-					Math.Min(value1.MinValue, value2.MinValue),
-					Math.Max(value1.MaxValue, value2.MaxValue))
+				.NarrowMin(Math.Min(value1.MinValue, value2.MinValue))
+				.NarrowMax(Math.Max(value1.MaxValue, value2.MaxValue))
 				.NarrowBits(
 					value1.BitsSet & value2.BitsSet,
 					value2.BitsClear | value1.BitsClear)
@@ -1104,9 +1100,8 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		else
 		{
 			result
-				.NarrowRange(
-					Math.Min(value1.MinValue, value2.MinValue),
-					Math.Max(value1.MaxValue, value2.MaxValue))
+				.NarrowMin(Math.Min(value1.MinValue, value2.MinValue))
+				.NarrowMax(Math.Max(value1.MaxValue, value2.MaxValue))
 				.NarrowBits(
 					value1.BitsSet & value2.BitsSet,
 					value2.BitsClear | value1.BitsClear)
@@ -1168,9 +1163,8 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		else
 		{
 			result
-				.NarrowRange(
-					Math.Min(value1.MinValue, value2.MinValue),
-					Math.Max(value1.MaxValue, value2.MaxValue))
+				.NarrowMin(Math.Min(value1.MinValue, value2.MinValue))
+				.NarrowMax(Math.Max(value1.MaxValue, value2.MaxValue))
 				.NarrowBits(
 					value1.BitsSet | value2.BitsSet,
 					value2.BitsClear & value1.BitsClear)
@@ -1195,9 +1189,8 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		else
 		{
 			result
-				.NarrowRange(
-					Math.Min(value1.MinValue, value2.MinValue),
-					Math.Max(value1.MaxValue, value2.MaxValue))
+				.NarrowMin(Math.Min(value1.MinValue, value2.MinValue))
+				.NarrowMax(Math.Max(value1.MaxValue, value2.MaxValue))
 				.NarrowBits(
 					value1.BitsSet | value2.BitsSet,
 					value2.BitsClear & value1.BitsClear)
@@ -1304,9 +1297,8 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			var uppermax = max * max;
 
 			result
-				.NarrowRange(
-					(uint)(min * min),
-					(uint)(max * max))
+				.NarrowMin((uint)(min * min))
+				.NarrowMax((uint)(max * max))
 				.NarrowBits(
 					0,
 					Upper32BitsSet | BitTwiddling.GetBitsOver((uint)uppermax))
@@ -1408,9 +1400,8 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		else
 		{
 			result
-				.NarrowRange(
-					(uint)(value1.MinValue * value2.MinValue),
-					(uint)(value1.MaxValue * value2.MaxValue))
+				.NarrowMin((uint)(value1.MinValue * value2.MinValue))
+				.NarrowMax((uint)(value1.MaxValue * value2.MaxValue))
 				.NarrowBits(
 					0,
 					Upper32BitsSet | BitTwiddling.GetBitsOver(value1.MaxValue * value2.MaxValue))
@@ -1450,9 +1441,8 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			&& !IntegerTwiddling.IsMultiplyUnsignedOverflow(value1.MinValue, value2.MinValue))
 		{
 			result
-				.NarrowRange(
-					value1.MinValue * value2.MinValue,
-					value1.MaxValue * value2.MaxValue)
+				.NarrowMin(value1.MinValue * value2.MinValue)
+				.NarrowMax(value1.MaxValue * value2.MaxValue)
 				.NarrowBits(
 					0,
 					BitTwiddling.GetBitsOver(value1.MaxValue * value2.MaxValue))
@@ -1619,9 +1609,8 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		else if (value2.AreLower5BitsKnown && shift != 0)
 		{
 			result
-				.NarrowRange(
-					 value1.MinValue << shift > value1.MinValue ? value1.MinValue << shift : 0,
-					 value1.MaxValue << shift < uint.MaxValue ? value1.MaxValue << shift : ulong.MaxValue)
+				.NarrowMin(value1.MinValue << shift > value1.MinValue ? value1.MinValue << shift : 0)
+				.NarrowMax(value1.MaxValue << shift < uint.MaxValue ? value1.MaxValue << shift : ulong.MaxValue)
 				.NarrowBits(
 					 value1.BitsSet << shift,
 					 Upper32BitsSet | (value1.BitsClear << shift) | ~(ulong.MaxValue << shift))
@@ -1667,9 +1656,8 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		else if (value2.AreLower6BitsKnown && shift != 0)
 		{
 			result
-				.NarrowRange(
-					 value1.MinValue << shift > value1.MinValue ? value1.MinValue << shift : 0,
-					 value1.MaxValue << shift > value1.MaxValue ? value1.MaxValue << shift : ulong.MaxValue)
+				.NarrowMin(value1.MinValue << shift > value1.MinValue ? value1.MinValue << shift : 0)
+				.NarrowMax(value1.MaxValue << shift > value1.MaxValue ? value1.MaxValue << shift : ulong.MaxValue)
 				.NarrowBits(
 					 value1.BitsSet << shift,
 					 (value1.BitsClear << shift) | ~(ulong.MaxValue << shift))
@@ -1712,9 +1700,8 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		else if (value2.AreLower5BitsKnown && shift != 0)
 		{
 			result
-				.NarrowRange(
-					value1.MinValue >> shift,
-					value1.MaxValue >> shift)
+				.NarrowMin(value1.MinValue >> shift)
+				.NarrowMax(value1.MaxValue >> shift)
 				.NarrowBits(
 					value1.BitsSet >> shift,
 					Upper32BitsSet | (value1.BitsClear >> shift) | ~(uint.MaxValue >> shift))
@@ -1749,9 +1736,8 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		else if (value2.AreLower6BitsKnown && shift != 0)
 		{
 			result
-				.NarrowRange(
-					value1.MinValue >> shift,
-					value1.MaxValue >> shift)
+				.NarrowMin(value1.MinValue >> shift)
+				.NarrowMax(value1.MaxValue >> shift)
 				.NarrowBits(
 					value1.BitsSet >> shift,
 					value1.BitsClear >> shift | ~(ulong.MaxValue >> shift))
@@ -1933,9 +1919,8 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		else
 		{
 			result
-				.NarrowRange(
-					(value2.MinValue << 32) | (value1.MinValue & uint.MaxValue),
-					(value2.MaxValue << 32) | (value1.MaxValue & uint.MaxValue))
+				.NarrowMin((value2.MinValue << 32) | (value1.MinValue & uint.MaxValue))
+				.NarrowMax((value2.MaxValue << 32) | (value1.MaxValue & uint.MaxValue))
 				.NarrowBits(
 					(value2.BitsSet << 32) | value1.BitsSet32,
 					(value2.BitsClear << 32) | value1.BitsClear32)
@@ -1949,8 +1934,9 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		var value1 = node.Operand1.BitValue;
 
 		result
-			.NarrowRange(
-				value1.MinValue > uint.MaxValue ? 0 : value1.MinValue,
+			.NarrowMin(
+				value1.MinValue > uint.MaxValue ? 0 : value1.MinValue)
+				.NarrowMax(
 				Math.Min(uint.MaxValue, value1.MaxValue))
 				.NarrowBits(
 				value1.BitsSet & uint.MaxValue,
@@ -1970,9 +1956,8 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		else
 		{
 			result
-				.NarrowRange(
-					value1.MinValue > byte.MaxValue ? 0 : value1.MinValue,
-					Math.Min(byte.MaxValue, value1.MaxValue))
+				.NarrowMin(value1.MinValue > byte.MaxValue ? 0 : value1.MinValue)
+				.NarrowMax(Math.Min(byte.MaxValue, value1.MaxValue))
 				.NarrowBits(
 					value1.BitsSet16,
 					value1.BitsClear | Upper48BitsSet)
@@ -1997,9 +1982,8 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		else
 		{
 			result
-				.NarrowRange(
-					value1.MinValue > uint.MaxValue ? 0 : value1.MinValue,
-					Math.Min(uint.MaxValue, value1.MaxValue))
+				.NarrowMin(value1.MinValue > uint.MaxValue ? 0 : value1.MinValue)
+				.NarrowMax(Math.Min(uint.MaxValue, value1.MaxValue))
 				.NarrowBits(
 					value1.BitsSet32,
 					Upper32BitsSet | value1.BitsClear)
@@ -2019,9 +2003,8 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		else
 		{
 			result
-				.NarrowRange(
-					value1.MinValue > byte.MaxValue ? 0 : value1.MinValue,
-					Math.Min(byte.MaxValue, value1.MaxValue))
+				.NarrowMin(value1.MinValue > byte.MaxValue ? 0 : value1.MinValue)
+				.NarrowMax(Math.Min(byte.MaxValue, value1.MaxValue))
 				.NarrowBits(
 					value1.BitsSet8,
 					value1.BitsClear | Upper56BitsSet)
@@ -2041,9 +2024,8 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		else
 		{
 			result
-				.NarrowRange(
-					value1.MinValue > byte.MaxValue ? 0 : value1.MinValue,
-					Math.Min(byte.MaxValue, value1.MaxValue))
+				.NarrowMin(value1.MinValue > byte.MaxValue ? 0 : value1.MinValue)
+				.NarrowMax(Math.Min(byte.MaxValue, value1.MaxValue))
 				.NarrowBits(
 					value1.BitsSet8,
 					value1.BitsClear | Upper56BitsSet)
@@ -2060,9 +2042,8 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown)
 		{
 			result
-				.NarrowRange(
-					Math.Min(value1.MinValue, value2.MinValue),
-					Math.Max(value1.MaxValue, value2.MaxValue))
+				.NarrowMin(Math.Min(value1.MinValue, value2.MinValue))
+				.NarrowMax(Math.Max(value1.MaxValue, value2.MaxValue))
 				.NarrowBits(
 					value1.MaxValue & value2.MaxValue,
 					~value1.MaxValue & ~value2.MaxValue)
@@ -2083,9 +2064,8 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
 		{
 			result
-				.NarrowRange(
-					Math.Min(value1.MinValue, value2.MinValue),
-					Math.Max(value1.MaxValue, value2.MaxValue))
+				.NarrowMin(Math.Min(value1.MinValue, value2.MinValue))
+				.NarrowMax(Math.Max(value1.MaxValue, value2.MaxValue))
 				.NarrowBits(
 					value1.MaxValue & value2.MaxValue,
 					~value1.MaxValue & ~value2.MaxValue)
@@ -2140,9 +2120,8 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		else
 		{
 			result
-				.NarrowRange(
-					value2.MaxValue == 0 ? 0 : value1.MinValue / value2.MaxValue,
-					value2.MinValue == 0 ? value1.MaxValue : value1.MaxValue / value2.MinValue)
+				.NarrowMin(value2.MaxValue == 0 ? 0 : value1.MinValue / value2.MaxValue)
+				.NarrowMax(value2.MinValue == 0 ? value1.MaxValue : value1.MaxValue / value2.MinValue)
 				.NarrowBits(
 					0,
 					Upper32BitsSet | BitTwiddling.GetBitsOver(value2.MinValue == 0 ? value1.MaxValue : value1.MaxValue / value2.MinValue))
@@ -2172,9 +2151,8 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		else
 		{
 			result
-				.NarrowRange(
-					value2.MaxValue == 0 ? 0 : value1.MinValue / value2.MaxValue,
-					value2.MinValue == 0 ? value1.MaxValue : value1.MaxValue / value2.MinValue)
+				.NarrowMin(value2.MaxValue == 0 ? 0 : value1.MinValue / value2.MaxValue)
+				.NarrowMax(value2.MinValue == 0 ? value1.MaxValue : value1.MaxValue / value2.MinValue)
 				.NarrowBits(
 					0,
 					BitTwiddling.GetBitsOver(value2.MinValue == 0 ? value1.MaxValue : value1.MaxValue / value2.MinValue))

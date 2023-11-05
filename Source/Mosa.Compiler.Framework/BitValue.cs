@@ -157,17 +157,6 @@ public sealed class BitValue
 		return this;
 	}
 
-	public BitValue NarrowRange(ulong minValue, ulong maxValue)
-	{
-		if (IsFixed)
-			return this;
-
-		MinValue = Math.Max(MinValue, minValue);
-		MaxValue = Math.Min(MaxValue, maxValue);
-
-		return Narrow();
-	}
-
 	public BitValue NarrowMax(ulong maxValue)
 	{
 		if (IsFixed)
@@ -246,12 +235,13 @@ public sealed class BitValue
 		if (IsFixed)
 			return this;
 
-		return NarrowRange(1, ulong.MaxValue);
+		return NarrowMin(1);
 	}
 
 	public BitValue Set32BitValue()
 	{
-		return NarrowRange(0, uint.MaxValue).NarrowClearBits(Upper32BitsSet).Narrow();
+		return NarrowMax(uint.MaxValue)
+			.NarrowClearBits(Upper32BitsSet).Narrow();
 	}
 
 	public BitValue SetValue(bool value)
@@ -261,7 +251,10 @@ public sealed class BitValue
 
 	public BitValue Narrow(BitValue value)
 	{
-		return NarrowRange(value.MinValue, value.MaxValue).NarrowBits(value.BitsSet, value.BitsClear);
+		return NarrowMin(value.MinValue)
+			.NarrowMax(value.MaxValue)
+			.NarrowSetBits(value.BitsSet)
+			.NarrowClearBits(value.BitsClear);
 	}
 
 	public BitValue SetStable(bool stable)
