@@ -918,5 +918,11 @@ public static class AutoTransforms
 		new Useless.ZeroExtend32x64ZeroExtend16x64(),
 		new BitValue.MulSigned32NotSigned(),
 		new BitValue.MulSigned32NotSigned_v1(),
+		new BitValue.MulSigned64NotSigned(),
+		new BitValue.MulSigned64NotSigned_v1(),
+		new BitValue.RemSigned32NotSigned(),
+		new BitValue.RemSigned64NotSigned(),
+		new BitValue.ArithShiftRight32NotSigned(),
+		new BitValue.ArithShiftRight64NotSigned(),
 	};
 }

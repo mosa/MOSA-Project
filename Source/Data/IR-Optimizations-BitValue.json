@@ -34,13 +34,35 @@
 	"Optimizations": [
 		{
 			"Type": "BitValue",
-			"Name": "MulSigned32",
+			"Name": "MulSigned##",
 			"SubName": "NotSigned",
-			"Expression": "IR.MulSigned32 a b",
-			"Filter": "IsBitValueSignBitCleared32(a) && IsBitValueSignBitCleared32(b)",
-			"Result": "(IR.MulUnsigned32 a b)",
-			"Priority": "75",
+			"Expression": "IR.MulSigned## a b",
+			"Filter": "IsBitValueSignBitCleared##(a) && IsBitValueSignBitCleared##(b)",
+			"Result": "(IR.MulUnsigned## a b)",
+			"Priority": "20",
 			"Variations": "Yes",
+			"Log": "Yes"
+		},
+		{
+			"Type": "BitValue",
+			"Name": "RemSigned##",
+			"SubName": "NotSigned",
+			"Expression": "IR.RemSigned## a b",
+			"Filter": "IsBitValueSignBitCleared##(a) && IsBitValueSignBitCleared##(b)",
+			"Result": "(IR.RemUnsigned## a b)",
+			"Priority": "20",
+			"Variations": "No",
+			"Log": "Yes"
+		},
+		{
+			"Type": "BitValue",
+			"Name": "ArithShiftRight##",
+			"SubName": "NotSigned",
+			"Expression": "IR.ArithShiftRight## a b",
+			"Filter": "IsBitValueSignBitCleared##(a)",
+			"Result": "(IR.ShiftRight## a b)",
+			"Priority": "20",
+			"Variations": "No",
 			"Log": "Yes"
 		}
 	]

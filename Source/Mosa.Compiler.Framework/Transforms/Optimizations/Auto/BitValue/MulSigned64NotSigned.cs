@@ -5,12 +5,12 @@
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.BitValue;
 
 /// <summary>
-/// MulSigned32NotSigned
+/// MulSigned64NotSigned
 /// </summary>
 [Transform("IR.Optimizations.Auto.BitValue")]
-public sealed class MulSigned32NotSigned : BaseTransform
+public sealed class MulSigned64NotSigned : BaseTransform
 {
-	public MulSigned32NotSigned() : base(IRInstruction.MulSigned32, TransformType.Auto | TransformType.Optimization, true)
+	public MulSigned64NotSigned() : base(IRInstruction.MulSigned64, TransformType.Auto | TransformType.Optimization, true)
 	{
 	}
 
@@ -18,10 +18,10 @@ public sealed class MulSigned32NotSigned : BaseTransform
 
 	public override bool Match(Context context, Transform transform)
 	{
-		if (!IsBitValueSignBitCleared32(context.Operand1))
+		if (!IsBitValueSignBitCleared64(context.Operand1))
 			return false;
 
-		if (!IsBitValueSignBitCleared32(context.Operand2))
+		if (!IsBitValueSignBitCleared64(context.Operand2))
 			return false;
 
 		return true;
@@ -34,17 +34,17 @@ public sealed class MulSigned32NotSigned : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2;
 
-		context.SetInstruction(IRInstruction.MulUnsigned32, result, t1, t2);
+		context.SetInstruction(IRInstruction.MulUnsigned64, result, t1, t2);
 	}
 }
 
 /// <summary>
-/// MulSigned32NotSigned_v1
+/// MulSigned64NotSigned_v1
 /// </summary>
 [Transform("IR.Optimizations.Auto.BitValue")]
-public sealed class MulSigned32NotSigned_v1 : BaseTransform
+public sealed class MulSigned64NotSigned_v1 : BaseTransform
 {
-	public MulSigned32NotSigned_v1() : base(IRInstruction.MulSigned32, TransformType.Auto | TransformType.Optimization, true)
+	public MulSigned64NotSigned_v1() : base(IRInstruction.MulSigned64, TransformType.Auto | TransformType.Optimization, true)
 	{
 	}
 
@@ -52,10 +52,10 @@ public sealed class MulSigned32NotSigned_v1 : BaseTransform
 
 	public override bool Match(Context context, Transform transform)
 	{
-		if (!IsBitValueSignBitCleared32(context.Operand2))
+		if (!IsBitValueSignBitCleared64(context.Operand2))
 			return false;
 
-		if (!IsBitValueSignBitCleared32(context.Operand1))
+		if (!IsBitValueSignBitCleared64(context.Operand1))
 			return false;
 
 		return true;
@@ -68,6 +68,6 @@ public sealed class MulSigned32NotSigned_v1 : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2;
 
-		context.SetInstruction(IRInstruction.MulUnsigned32, result, t2, t1);
+		context.SetInstruction(IRInstruction.MulUnsigned64, result, t2, t1);
 	}
 }
