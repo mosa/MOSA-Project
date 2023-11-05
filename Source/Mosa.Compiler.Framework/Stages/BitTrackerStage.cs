@@ -1977,7 +1977,12 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		}
 		else
 		{
-			result.SetStable(value1, value2);
+			result
+				.NarrowMin(Math.Min(value1.MinValue, value2.MinValue))
+				.NarrowMax(Math.Max(value1.MaxValue, value2.MaxValue))
+				.NarrowSetBits(value1.MaxValue & value2.MaxValue)
+				.NarrowClearBits(~value1.MaxValue & ~value2.MaxValue)
+				.SetStable(value1, value2);
 		}
 	}
 
@@ -1998,7 +2003,12 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		}
 		else
 		{
-			result.SetStable(value1, value2);
+			result
+				.NarrowMin(Math.Min(value1.MinValue, value2.MinValue))
+				.NarrowMax(Math.Max(value1.MaxValue, value2.MaxValue))
+				.NarrowSetBits(value1.MaxValue & value2.MaxValue)
+				.NarrowClearBits(~value1.MaxValue & ~value2.MaxValue)
+				.SetStable(value1, value2);
 		}
 	}
 

@@ -916,5 +916,7 @@ public static class AutoTransforms
 		new Useless.ZeroExtend16x64ZeroExtend32x64(),
 		new Useless.ZeroExtend32x64ZeroExtend8x64(),
 		new Useless.ZeroExtend32x64ZeroExtend16x64(),
+		new BitValue.MulSigned32NotSigned(),
+		new BitValue.MulSigned32NotSigned_v1(),
 	};
 }

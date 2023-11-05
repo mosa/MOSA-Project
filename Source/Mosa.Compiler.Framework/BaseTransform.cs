@@ -848,6 +848,20 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 
 	#endregion Status Helpers
 
+	#region BitTracker Helpers
+
+	protected static bool IsBitValueSignBitCleared32(Operand operand1)
+	{
+		return operand1.BitValue.IsSignBitClear32;
+	}
+
+	protected static bool IsBitValueSignBitCleared64(Operand operand1)
+	{
+		return operand1.BitValue.IsSignBitClear64;
+	}
+
+	#endregion BitTracker Helpers
+
 	#region Navigation
 
 	protected static Node GetPreviousNodeUntil(Context context, BaseInstruction untilInstruction, int window, Operand operand1 = null, Operand operand2 = null)

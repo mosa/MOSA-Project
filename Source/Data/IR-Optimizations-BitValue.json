@@ -1,0 +1,47 @@
+﻿{
+	"Family": "IR",
+	"Section": "Optimizations.Auto",
+	"Commutative": [
+		"IR.Add32",
+		"IR.Add64",
+		"IR.AddR4",
+		"IR.AddR8",
+		"IR.AddManagedPointer",
+		"IR.And32",
+		"IR.And64",
+		"IR.Or32",
+		"IR.Or64",
+		"IR.Xor32",
+		"IR.Xor64",
+		"IR.MulR4",
+		"IR.MulR8",
+		"IR.MulUnsigned32",
+		"IR.MulUnsigned64",
+		"IR.MulSigned32",
+		"IR.MulSigned64",
+		"IR.AddCarryOut64",
+		"IR.AddCarryOut32",
+		"IR.AddCarryIn32",
+		"IR.AddCarryIn64",
+		"IR.Compare32x32",
+		"IR.Compare32x64",
+		"IR.Compare64x32",
+		"IR.Compare64x64",
+		"IR.CompareObject",
+		"IR.CompareManagedPointer",
+		"IR.MulHu32"
+	],
+	"Optimizations": [
+		{
+			"Type": "BitValue",
+			"Name": "MulSigned32",
+			"SubName": "NotSigned",
+			"Expression": "IR.MulSigned32 a b",
+			"Filter": "IsBitValueSignBitCleared32(a) && IsBitValueSignBitCleared32(b)",
+			"Result": "(IR.MulUnsigned32 a b)",
+			"Priority": "75",
+			"Variations": "Yes",
+			"Log": "Yes"
+		}
+	]
+}
