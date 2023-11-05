@@ -23,20 +23,16 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 	private readonly Counter BranchesRemovedCount = new("BitTrackerStage.BranchesRemoved");
 	private readonly Counter InstructionsRemovedCount = new("BitTrackerStage.InstructionsRemoved");
 	private readonly Counter InstructionsUpdatedCount = new("BitTrackerStage.InstructionsUpdated");
+
 	private TraceLog trace;
 
 	private readonly NodeVisitationDelegate[] visitation = new NodeVisitationDelegate[MaxInstructions];
 
-	private delegate BitValue NodeVisitationDelegate(Node node, Transform transform);
-
-	private delegate (BitValue, BitValue) NodeVisitationDelegate2(Node node, Transform transform);
-
-	private BitValueManager BitValueManager;
+	private delegate void NodeVisitationDelegate(Node node);
 
 	protected override void Finish()
 	{
 		trace = null;
-		BitValueManager = null;
 	}
 
 	protected override void Initialize()
@@ -128,17 +124,17 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 		// Any result
 
-		Register(IRInstruction.LoadParamSignExtend16x32, Any32);
-		Register(IRInstruction.LoadParamSignExtend16x64, Any64);
-		Register(IRInstruction.LoadParamSignExtend32x64, Any64);
-		Register(IRInstruction.LoadParamSignExtend8x32, Any32);
-		Register(IRInstruction.LoadParamSignExtend8x64, Any64);
+		//Register(IRInstruction.LoadParamSignExtend16x32, Any32);
+		//Register(IRInstruction.LoadParamSignExtend16x64, Any64);
+		//Register(IRInstruction.LoadParamSignExtend32x64, Any64);
+		//Register(IRInstruction.LoadParamSignExtend8x32, Any32);
+		//Register(IRInstruction.LoadParamSignExtend8x64, Any64);
 
-		Register(IRInstruction.LoadSignExtend16x32, Any32);
-		Register(IRInstruction.LoadSignExtend16x64, Any64);
-		Register(IRInstruction.LoadSignExtend32x64, Any64);
-		Register(IRInstruction.LoadSignExtend8x32, Any32);
-		Register(IRInstruction.LoadSignExtend8x64, Any64);
+		//Register(IRInstruction.LoadSignExtend16x32, Any32);
+		//Register(IRInstruction.LoadSignExtend16x64, Any64);
+		//Register(IRInstruction.LoadSignExtend32x64, Any64);
+		//Register(IRInstruction.LoadSignExtend8x32, Any32);
+		//Register(IRInstruction.LoadSignExtend8x64, Any64);
 
 		// TODO:
 
@@ -179,12 +175,11 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 		trace = CreateTraceLog(5);
 
-		BitValueManager = new BitValueManager(Is32BitPlatform);
-
-		Transform.AddManager(BitValueManager);
 		Transform.SetLog(trace);
 
 		EvaluateVirtualRegisters();
+
+		UpdateInstructions();
 
 		UpdateBranchInstructions();
 
@@ -203,7 +198,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		for (var i = 0; i < count; i++)
 		{
 			var virtualRegister = MethodCompiler.VirtualRegisters[i];
-			var value = BitValueManager.GetBitValue(virtualRegister);
+			var value = virtualRegister.BitValue;
 
 			valueTrace?.Log($"Virtual Register: {virtualRegister}");
 
@@ -231,66 +226,47 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 	private void EvaluateVirtualRegisters()
 	{
-		var change = true;
+		var partial = 0;
 
-		while (change)
+		for (int i = 0; i < 10; i++)
 		{
-			change = false;
-
 			foreach (var register in MethodCompiler.VirtualRegisters)
 			{
-				change |= Evaluate(register, Transform);
+				EvaluateBitValue(register);
+
+				if (register.BitValue.IsPartial)
+					partial++;
 			}
 		}
 	}
 
-	private bool Evaluate(Operand virtualRegister, Transform transform)
+	private void UpdateInstructions()
 	{
-		var value = BitValueManager.GetBitValue(virtualRegister);
-
-		if (value != null)
-			return false;
-
-		value = EvaluateBitValue(virtualRegister);
-
-		if (value == null)
-			return false;
-
-		BitValueManager.UpdateBitValue(virtualRegister, value);
-
-		UpdateInstruction(virtualRegister, value);
-
-		return true;
+		foreach (var register in MethodCompiler.VirtualRegisters)
+		{
+			UpdateInstruction(register);
+		}
 	}
 
-	private BitValue EvaluateBitValue(Operand virtualRegister)
+	private void EvaluateBitValue(Operand virtualRegister)
 	{
-		var value = BitValueManager.GetBitValue(virtualRegister);
-
 		if (!IsBitTrackable(virtualRegister))
-			return null;
+			return;
 
 		if (!virtualRegister.IsDefinedOnce)
-			return Any(virtualRegister);
+			return;
 
 		var node = virtualRegister.Definitions[0];
 
-		Debug.Assert(node.ResultCount != 0);
-
-		if (!IsBitTrackable(node.Result))
-			return Any(virtualRegister);
-
-		if (node.Instruction.IsCall)
-			return Any(virtualRegister);
+		//if (node.Instruction.IsCall)
+		//	return;
 
 		var method = visitation[node.Instruction.ID];
 
 		if (method == null)
-			return Any(virtualRegister);
+			return;
 
-		value = method.Invoke(node, Transform);
-
-		return value;
+		method.Invoke(node);
 	}
 
 	private static bool IsBitTrackable(Operand virtualRegister)
@@ -301,62 +277,22 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		if (virtualRegister.IsInteger || virtualRegister.IsObject || virtualRegister.IsManagedPointer)
 			return true;
 
-		//if (virtualRegister.IsValueType && virtualRegister.FitsIntegerRegister)
-		//	return true;
-
 		return false;
 	}
 
-	private BitValue Any(Operand virtualRegister)
+	private void UpdateInstruction(Operand virtualRegister)
 	{
-		if (virtualRegister.IsInteger)
-			return virtualRegister.IsInt32 ? BitValue.Any32 : BitValue.Any64;
-		else if (virtualRegister.IsObject || virtualRegister.IsManagedPointer)
-			return Is32BitPlatform ? BitValue.Any32 : BitValue.Any64;
-		else if (virtualRegister.IsR4)
-			return BitValue.Any32;
-		else if (virtualRegister.IsR8)
-			return BitValue.Any64;
+		if (!IsBitTrackable(virtualRegister))
+			return;
 
-		//else if (virtualRegister.IsValueType)
-		//{
-		//	if (virtualRegister.FitsNativeSizeRegister)
-		//		return Is32BitPlatform ? BitValue.Any32 : BitValue.Any64;
-		//	else
-		//		return virtualRegister.IsInteger32 ? BitValue.Any32 : BitValue.Any64;
-		//}
-		throw new InvalidProgramException();
-	}
-
-	private static BitValue Any(Operand virtualRegister, Transform transform)
-	{
-		if (virtualRegister.IsInteger)
-			return virtualRegister.IsInt32 ? BitValue.Any32 : BitValue.Any64;
-		else if (virtualRegister.IsObject || virtualRegister.IsManagedPointer)
-			return transform.Is32BitPlatform ? BitValue.Any32 : BitValue.Any64;
-		else if (virtualRegister.IsR4)
-			return BitValue.Any32;
-		else if (virtualRegister.IsR8)
-			return BitValue.Any64;
-
-		//else if (virtualRegister.IsValueType)
-		//{
-		//	if (virtualRegister.FitsNativeSizeRegister)
-		//		return Is32BitPlatform ? BitValue.Any32 : BitValue.Any64;
-		//	else
-		//		return virtualRegister.IsInteger32 ? BitValue.Any32 : BitValue.Any64;
-		//}
-		throw new InvalidProgramException();
-	}
-
-	private void UpdateInstruction(Operand virtualRegister, BitValue value)
-	{
 		Debug.Assert(!virtualRegister.IsFloatingPoint);
 
 		//Debug.Assert(virtualRegister.Definitions.Count == 1);
 
 		if (!virtualRegister.IsDefinedOnce)
 			return;
+
+		var value = virtualRegister.BitValue;
 
 		ulong replaceValue;
 
@@ -437,13 +373,10 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 			Debug.Assert(node.Instruction.IsBranch);
 
-			var value1 = Transform.GetBitValue(node.Operand1);
-			var value2 = Transform.GetBitValue(node.Operand2);
+			var value1 = node.Operand1.BitValue;
+			var value2 = node.Operand2.BitValue;
 
-			if (value1 == null || value2 == null)
-				continue;
-
-			var result = EvaluateCompare(value1, value2, node.ConditionCode, Transform);
+			var result = EvaluateCompare(value1, value2, node.ConditionCode);
 
 			if (!result.HasValue)
 				continue;
@@ -469,29 +402,8 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		}
 	}
 
-	private static bool? EvaluateCompare(BitValue value1, BitValue value2, ConditionCode condition, Transform transform)
+	private static bool? EvaluateCompare(BitValue value1, BitValue value2, ConditionCode condition)
 	{
-		if (value1 == null || value2 == null)
-			return null;
-
-		//Debug.Assert(value1.Is32Bit == value2.Is32Bit);
-
-		//var bitsSet1 = value1.BitsSet;
-		//var bitsClear1 = value1.BitsClear;
-		//var maxValue1 = value1.MaxValue;
-		//var minValue1 = value1.MinValue;
-
-		//var bitsSet2 = value2.BitsSet;
-		//var bitsClear2 = value2.BitsClear;
-		//var maxValue2 = value2.MaxValue;
-		//var minValue2 = value2.MinValue;
-
-		//var areAll64BitsKnown1 = value1.AreAll64BitsKnown;
-		//var areAll64BitsKnown2 = value2.AreAll64BitsKnown;
-
-		//var areAnyBitsKnown1 = value1.AreAnyBitsKnown;
-		//var areAnyBitsKnown2 = value2.AreAnyBitsKnown;
-
 		switch (condition)
 		{
 			case ConditionCode.Equal:
@@ -752,176 +664,162 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 	#region IR Instructions
 
-	private static BitValue Add32(Node node, Transform transform)
+	private static void Add32(Node node)
 	{
-		var value1 = transform.GetBitValue(node.Operand1);
-		var value2 = transform.GetBitValue(node.Operand2);
-
-		if (value1 == null || value2 == null)
-			return null;
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
+		var value2 = node.Operand2.BitValue;
 
 		if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown)
 		{
-			return BitValue.CreateValue(value1.BitsSet32 + value2.BitsSet32, true);
+			result.SetValue(value1.BitsSet32 + value2.BitsSet32);
 		}
-
-		if (value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
+		else if (value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
 		{
-			return value2;
+			result.Narrow(value2).SetStable(value2); 
 		}
-
-		if (value2.AreLower32BitsKnown && value2.BitsSet32 == 0)
+		else if (value2.AreLower32BitsKnown && value2.BitsSet32 == 0)
 		{
-			return value1;
+			result.Narrow(value1).SetStable(value1);
 		}
-
-		if (IntegerTwiddling.IsAddUnsignedCarry((uint)value1.MaxValue, (uint)value2.MaxValue) || value1.MaxValue > uint.MaxValue || value2.MaxValue > uint.MaxValue)
+		else if (IntegerTwiddling.IsAddUnsignedCarry((uint)value1.MaxValue, (uint)value2.MaxValue)
+			|| value1.MaxValue > uint.MaxValue
+			|| value2.MaxValue > uint.MaxValue)
 		{
-			return BitValue.Any32;
+			result.SetStable(value1, value2); // Indeterminate, but stable
 		}
-
-		if (IntegerTwiddling.IsAddUnsignedCarry((uint)value1.MinValue, (uint)value2.MinValue) || value1.MaxValue > uint.MaxValue || value2.MaxValue > uint.MaxValue)
+		else if (IntegerTwiddling.IsAddUnsignedCarry((uint)value1.MinValue, (uint)value2.MinValue)
+			|| value1.MaxValue > uint.MaxValue
+			|| value2.MaxValue > uint.MaxValue)
 		{
-			return BitValue.Any32;
+			result.SetStable(value1, value2); // Indeterminate, but stable
 		}
-
-		return BitValue.CreateValue(
-			bitsSet: 0,
-			bitsClear: Upper32BitsSet | BitTwiddling.GetBitsOver(value1.MaxValue + value2.MaxValue),
-			maxValue: value1.MaxValue + value2.MaxValue,
-			minValue: value1.MinValue + value2.MinValue,
-			rangeDeterminate: true,
-			is32Bit: true
-		);
+		else
+		{
+			result
+				.NarrowRange(
+					value1.MinValue + value2.MinValue,
+					value1.MaxValue + value2.MaxValue)
+				.NarrowBits(
+					0,
+					Upper32BitsSet | BitTwiddling.GetBitsOver(value1.MaxValue + value2.MaxValue))
+				.SetStable(value1, value2);
+		}
 	}
 
-	private static BitValue Add64(Node node, Transform transform)
+	private static void Add64(Node node)
 	{
-		var value1 = transform.GetBitValue(node.Operand1);
-		var value2 = transform.GetBitValue(node.Operand2);
-
-		if (value1 == null || value2 == null)
-			return null;
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
+		var value2 = node.Operand2.BitValue;
 
 		if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
 		{
-			return BitValue.CreateValue(value1.BitsSet + value2.BitsSet, false);
+			result.SetValue(value1.BitsSet32 + value2.BitsSet32);
 		}
-
-		if (value1.AreAll64BitsKnown && value1.BitsSet == 0)
+		else if (value1.AreAll64BitsKnown && value1.BitsSet == 0)
 		{
-			return value2;
+			result.Narrow(value2).SetStable(value2);
 		}
-
-		if (value2.AreAll64BitsKnown && value2.BitsSet == 0)
+		else if (value2.AreAll64BitsKnown && value2.BitsSet == 0)
 		{
-			return value1;
+			result.Narrow(value1).SetStable(value1);
 		}
-
-		if (IntegerTwiddling.IsAddUnsignedCarry(value1.MaxValue, value2.MaxValue))
+		else if (IntegerTwiddling.IsAddUnsignedCarry(value1.MaxValue, value2.MaxValue))
 		{
-			return BitValue.Any64;
+			result.SetStable(value1, value2); // Indeterminate, but stable
 		}
-
-		if (IntegerTwiddling.IsAddUnsignedCarry(value1.MinValue, value2.MinValue))
+		else if (IntegerTwiddling.IsAddUnsignedCarry(value1.MinValue, value2.MinValue))
 		{
-			return BitValue.Any64;
+			result.SetStable(value1, value2); // Indeterminate, but stable
 		}
-
-		if (!IntegerTwiddling.IsAddUnsignedCarry(value1.MaxValue, value2.MaxValue))
+		else if (!IntegerTwiddling.IsAddUnsignedCarry(value1.MaxValue, value2.MaxValue))
 		{
-			return BitValue.CreateValue(
-				bitsSet: 0,
-				bitsClear: BitTwiddling.GetBitsOver(value1.MaxValue + value2.MaxValue),
-				maxValue: value1.MaxValue + value2.MaxValue,
-				minValue: value1.MinValue + value2.MinValue,
-				rangeDeterminate: true,
-				is32Bit: false
-			);
+			result
+				.NarrowRange(
+					value1.MinValue + value2.MinValue,
+					value1.MaxValue + value2.MaxValue)
+				.NarrowBits(
+					0,
+					BitTwiddling.GetBitsOver(value1.MaxValue + value2.MaxValue))
+				.SetStable(value1, value2);
 		}
-
-		return BitValue.Any64;
+		else
+		{
+			result.SetStable(value1, value2);
+		}
 	}
 
-	private static BitValue AddCarryIn32(Node node, Transform transform)
+	private static void AddCarryIn32(Node node)
 	{
-		var value1 = transform.GetBitValue(node.Operand1);
-		var value2 = transform.GetBitValue(node.Operand2);
-		var value3 = transform.GetBitValue(node.Operand3);
-
-		if (value1 == null || value2 == null || value3 == null)
-			return null;
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
+		var value2 = node.Operand2.BitValue;
+		var value3 = node.Operand3.BitValue;
 
 		if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown && value3.AreLower32BitsKnown)
 		{
-			return BitValue.CreateValue(value1.BitsSet32 + value2.BitsSet32 + value3.BitsSet32, true);
+			result.SetValue(value1.BitsSet32 + value2.BitsSet32 + value3.BitsSet32);
 		}
-
-		if (value1.AreLower32BitsKnown && value1.BitsSet32 == 0 && value3.AreLower32BitsKnown && value3.BitsSet32 == 0)
+		else if (value1.AreLower32BitsKnown && value1.BitsSet32 == 0 && value3.AreLower32BitsKnown && value3.BitsSet32 == 0)
 		{
-			return value2;
+			result.Narrow(value2).SetStable(value2);
 		}
-
-		if (value2.AreLower32BitsKnown && value2.BitsSet32 == 0 && value3.AreLower32BitsKnown && value3.BitsSet32 == 0)
+		else if (value2.AreLower32BitsKnown && value2.BitsSet32 == 0 && value3.AreLower32BitsKnown && value3.BitsSet32 == 0)
 		{
-			return value1;
+			result.Narrow(value1).SetStable(value1);
 		}
-
-		// TODO
-
-		return BitValue.Any32;
+		else
+		{
+			result.SetStable(value1, value2, value3);
+		}
 	}
 
-	private static BitValue ArithShiftRight32(Node node, Transform transform)
+	private static void ArithShiftRight32(Node node)
 	{
-		var value1 = transform.GetBitValue(node.Operand1);
-		var value2 = transform.GetBitValue(node.Operand2);
-
-		if (value1 == null || value2 == null)
-			return null;
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
+		var value2 = node.Operand2.BitValue;
 
 		var shift = (int)(value2.BitsSet & 0b11111);
 		var knownSignedBit = ((value1.BitsKnown >> 31) & 1) == 1;
 		var signed = ((value1.BitsSet >> 31) & 1) == 1 || ((value1.BitsClear >> 31) & 1) != 1;
-		ulong highbits = knownSignedBit && signed ? ~(~uint.MaxValue >> shift) : 0;
+		var highbits = knownSignedBit && signed ? ~(~uint.MaxValue >> shift) : 0;
 
 		if (value1.AreLower32BitsKnown && value2.AreLower5BitsKnown)
 		{
-			return BitValue.CreateValue(value1.BitsSet32 >> shift | highbits, true);
+			result.SetValue(value1.BitsSet32 >> shift | highbits);
 		}
-
-		if (value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
+		else if (value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
 		{
-			return BitValue.Zero32;
+			result.SetValue(0);
 		}
-
-		if (value2.AreLower5BitsKnown && knownSignedBit && shift == 0)
+		else if (value2.AreLower5BitsKnown && knownSignedBit && shift == 0)
 		{
-			return value1;
+			result.Narrow(value1).SetStable(value1);
 		}
-
-		if (value2.AreLower5BitsKnown && knownSignedBit && shift != 0)
+		else if (value2.AreLower5BitsKnown && knownSignedBit && shift != 0)
 		{
-			return BitValue.CreateValue(
-				bitsSet: value1.BitsSet >> shift | highbits,
-				bitsClear: Upper32BitsSet | (value1.BitsClear >> shift) | ~(uint.MaxValue >> shift) | highbits,
-				maxValue: (value1.MaxValue >> shift) | highbits,
-				minValue: (value1.MinValue >> shift) | highbits,
-				rangeDeterminate: true,
-				is32Bit: true
-			);
+			result
+				.NarrowRange(
+					(value1.MinValue >> shift) | highbits,
+					(value1.MaxValue >> shift) | highbits)
+				.NarrowBits(
+					value1.BitsSet >> shift | highbits,
+					Upper32BitsSet | (value1.BitsClear >> shift) | ~(uint.MaxValue >> shift) | highbits)
+				.SetStable(value1, value2);
 		}
-
-		return BitValue.Any32;
+		else
+		{
+			result.SetStable(value1, value2);
+		}
 	}
 
-	private static BitValue ArithShiftRight64(Node node, Transform transform)
+	private static void ArithShiftRight64(Node node)
 	{
-		var value1 = transform.GetBitValue(node.Operand1);
-		var value2 = transform.GetBitValue(node.Operand2);
-
-		if (value1 == null || value2 == null)
-			return null;
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
+		var value2 = node.Operand2.BitValue;
 
 		var shift = (int)(value2.BitsSet & 0b111111);
 		var knownSignedBit = ((value1.BitsKnown >> 63) & 1) == 1;
@@ -930,555 +828,477 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 		if (value1.AreAll64BitsKnown && value2.AreLower6BitsKnown)
 		{
-			return BitValue.CreateValue(value1.BitsSet >> shift | highbits, true);
+			result.SetValue(value1.BitsSet >> shift | highbits);
 		}
-
-		if (value1.AreAll64BitsKnown && value1.BitsSet == 0)
+		else if (value1.AreAll64BitsKnown && value1.BitsSet == 0)
 		{
-			return BitValue.Zero64;
+			result.SetValue(0);
 		}
-
-		if (value2.AreAll64BitsKnown && knownSignedBit && shift == 0)
+		else if (value2.AreAll64BitsKnown && knownSignedBit && shift == 0)
 		{
-			return value1;
+			result.Narrow(value1).SetStable(value1);
 		}
-
-		if (value2.AreLower6BitsKnown && knownSignedBit && shift != 0)
+		else if (value2.AreLower6BitsKnown && knownSignedBit && shift != 0)
 		{
-			return BitValue.CreateValue(
-				bitsSet: value1.BitsSet >> shift | highbits,
-				bitsClear: (value1.BitsClear >> shift) | ~(ulong.MaxValue >> shift) | highbits,
-				maxValue: (value1.MaxValue >> shift) | highbits,
-				minValue: (value1.MinValue >> shift) | highbits,
-				rangeDeterminate: true,
-				is32Bit: false
-			);
+			result
+				.NarrowRange(
+					(value1.MinValue >> shift) | highbits,
+					(value1.MaxValue >> shift) | highbits)
+				.NarrowBits(
+					value1.BitsSet >> shift | highbits,
+					(value1.BitsClear >> shift) | ~(ulong.MaxValue >> shift) | highbits)
+				.SetStable(value1, value2);
 		}
-
-		return BitValue.Any64;
+		else
+		{
+			result.SetStable(value1, value2);
+		}
 	}
 
-	private static BitValue Compare32x32(Node node, Transform transform)
+	private static void Compare32x32(Node node)
 	{
-		var value1 = transform.GetBitValue(node.Operand1);
-		var value2 = transform.GetBitValue(node.Operand2);
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
+		var value2 = node.Operand2.BitValue;
 
-		if (value1 == null || value2 == null)
-			return null;
+		var compare = EvaluateCompare(value1, value2, node.ConditionCode);
 
-		var result = EvaluateCompare(value1, value2, node.ConditionCode, transform);
-
-		if (!result.HasValue)
-			return BitValue.Any32;
-
-		return BitValue.CreateValue(result.Value, true);
+		if (compare.HasValue)
+		{
+			result.SetValue(compare.Value);
+		}
+		else
+		{
+			result.SetStable(value1, value2);
+		}
 	}
 
-	private static BitValue Compare64x32(Node node, Transform transform)
+	private static void Compare64x32(Node node)
 	{
-		var value1 = transform.GetBitValue(node.Operand1);
-		var value2 = transform.GetBitValue(node.Operand2);
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
+		var value2 = node.Operand2.BitValue;
 
-		if (value1 == null || value2 == null)
-			return null;
+		var compare = EvaluateCompare(value1, value2, node.ConditionCode);
 
-		var result = EvaluateCompare(value1, value2, node.ConditionCode, transform);
-
-		if (!result.HasValue)
-			return BitValue.Any32;
-
-		return BitValue.CreateValue(result.Value, true);
+		if (compare.HasValue)
+		{
+			result.SetValue(compare.Value);
+		}
+		else
+		{
+			result.SetStable(value1, value2);
+		}
 	}
 
-	private static BitValue Compare64x64(Node node, Transform transform)
+	private static void Compare64x64(Node node)
 	{
-		var value1 = transform.GetBitValue(node.Operand1);
-		var value2 = transform.GetBitValue(node.Operand2);
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
+		var value2 = node.Operand2.BitValue;
 
-		if (value1 == null || value2 == null)
-			return null;
+		var compare = EvaluateCompare(value1, value2, node.ConditionCode);
 
-		var result = EvaluateCompare(value1, value2, node.ConditionCode, transform);
-
-		if (!result.HasValue)
-			return BitValue.Any64;
-
-		return BitValue.CreateValue(result.Value, false);
+		if (compare.HasValue)
+		{
+			result.SetValue(compare.Value);
+		}
+		else
+		{
+			result.SetStable(value1, value2);
+		}
 	}
 
-	private static BitValue GetHigh32(Node node, Transform transform)
+	private static void GetHigh32(Node node)
 	{
-		var value1 = transform.GetBitValue(node.Operand1);
-
-		if (value1 == null)
-			return null;
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
 
 		if (value1.AreUpper32BitsKnown)
 		{
-			return BitValue.CreateValue(value1.BitsSet >> 32, true);
+			result.SetValue(value1.BitsSet >> 32);
 		}
-
-		if (value1.MaxValue <= uint.MaxValue)
+		else if (value1.MaxValue <= uint.MaxValue)
 		{
-			return BitValue.Zero32;
+			result.SetValue(0);
 		}
-
-		return BitValue.CreateValue(
-			bitsSet: value1.BitsSet >> 32,
-			bitsClear: Upper32BitsSet | (value1.BitsClear >> 32),
-			maxValue: value1.MaxValue >> 32,
-			minValue: value1.MinValue >> 32,
-			rangeDeterminate: true,
-			is32Bit: true
-		);
+		else
+		{
+			result
+				.Narrow(
+					value1.MinValue >> 32,
+					value1.MaxValue >> 32,
+					value1.BitsSet >> 32,
+					Upper32BitsSet | (value1.BitsClear >> 32)
+				).SetStable(value1);
+		}
 	}
 
-	private static BitValue GetLow32(Node node, Transform transform)
+	private static void GetLow32(Node node)
 	{
-		var value1 = transform.GetBitValue(node.Operand1);
-
-		if (value1 == null)
-			return null;
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
 
 		if (value1.AreLower32BitsKnown)
 		{
-			return BitValue.CreateValue(value1.BitsSet & uint.MaxValue, true);
+			result.SetValue(value1.BitsSet & uint.MaxValue);
 		}
-
-		return BitValue.CreateValue(
-			bitsSet: value1.BitsSet & uint.MaxValue,
-			bitsClear: value1.BitsClear & uint.MaxValue,
-			maxValue: uint.MaxValue,
-			minValue: 0,
-			rangeDeterminate: true,
-			is32Bit: true
-		); ;
+		else
+		{
+			result
+				.Narrow(
+					0,
+					uint.MaxValue,
+					value1.BitsSet & uint.MaxValue,
+					value1.BitsClear & uint.MaxValue
+				).SetStable(value1);
+		}
 	}
 
-	private static BitValue LoadParamZeroExtend16x32(Node node, Transform transform)
+	private static void LoadParamZeroExtend16x32(Node node)
 	{
-		return BitValue.CreateValue(
-			bitsSet: 0,
-			bitsClear: ~(ulong)ushort.MaxValue,
-			maxValue: ushort.MaxValue,
-			minValue: 0,
-			rangeDeterminate: true,
-			is32Bit: true
-		);
+		var result = node.Result.BitValue;
+
+		result
+			.Narrow(
+				0,
+				ushort.MaxValue,
+				0,
+				~(ulong)ushort.MaxValue);
 	}
 
-	private static BitValue LoadParamZeroExtend16x64(Node node, Transform transform)
+	private static void LoadParamZeroExtend16x64(Node node)
 	{
-		return BitValue.CreateValue(
-			bitsSet: 0,
-			bitsClear: ~(ulong)ushort.MaxValue,
-			maxValue: ushort.MaxValue,
-			minValue: 0,
-			rangeDeterminate: true,
-			is32Bit: false
-		);
+		var result = node.Result.BitValue;
+
+		result
+			.Narrow(
+				0,
+				ushort.MaxValue,
+				0,
+				~(ulong)ushort.MaxValue);
 	}
 
-	private static BitValue LoadParamZeroExtend8x32(Node node, Transform transform)
+	private static void LoadParamZeroExtend8x32(Node node)
 	{
-		return BitValue.CreateValue(
-			bitsSet: 0,
-			bitsClear: ~(ulong)byte.MaxValue,
-			maxValue: byte.MaxValue,
-			minValue: 0,
-			rangeDeterminate: true,
-			is32Bit: true
-		);
+		var result = node.Result.BitValue;
+
+		result
+			.Narrow(
+				0,
+				byte.MaxValue,
+				0,
+				~(ulong)byte.MaxValue);
 	}
 
-	private static BitValue LoadParamZeroExtend8x64(Node node, Transform transform)
+	private static void LoadParamZeroExtend8x64(Node node)
 	{
-		return BitValue.CreateValue(
-			bitsSet: 0,
-			bitsClear: ~(ulong)byte.MaxValue,
-			maxValue: byte.MaxValue,
-			minValue: 0,
-			rangeDeterminate: true,
-			is32Bit: false
-		);
+		var result = node.Result.BitValue;
+
+		result
+			.Narrow(
+				0,
+				byte.MaxValue,
+				0,
+				~(ulong)byte.MaxValue);
 	}
 
-	private static BitValue LoadParamZeroExtend32x64(Node node, Transform transform)
+	private static void LoadParamZeroExtend32x64(Node node)
 	{
-		return BitValue.CreateValue(
-			bitsSet: 0,
-			bitsClear: ~uint.MaxValue,
-			maxValue: uint.MaxValue,
-			minValue: 0,
-			rangeDeterminate: true,
-			is32Bit: false
-		);
+		var result = node.Result.BitValue;
+
+		result
+			.Narrow(
+				0,
+				uint.MaxValue,
+				0,
+				~uint.MaxValue);
 	}
 
-	private static BitValue LoadZeroExtend16x32(Node node, Transform transform)
+	private static void LoadZeroExtend16x32(Node node)
 	{
-		return BitValue.CreateValue(
-			bitsSet: 0,
-			bitsClear: ~(ulong)ushort.MaxValue,
-			maxValue: ushort.MaxValue,
-			minValue: 0,
-			rangeDeterminate: true,
-			is32Bit: true
-		);
+		var result = node.Result.BitValue;
+
+		result
+			.Narrow(
+				0,
+				ushort.MaxValue,
+				0,
+				~(ulong)ushort.MaxValue);
 	}
 
-	private static BitValue LoadZeroExtend16x64(Node node, Transform transform)
+	private static void LoadZeroExtend16x64(Node node)
 	{
-		return BitValue.CreateValue(
-			bitsSet: 0,
-			bitsClear: ~(ulong)ushort.MaxValue,
-			maxValue: ushort.MaxValue,
-			minValue: 0,
-			rangeDeterminate: true,
-			is32Bit: false
-		);
+		var result = node.Result.BitValue;
+
+		result
+			.Narrow(
+				0,
+				ushort.MaxValue,
+				0,
+				~(ulong)ushort.MaxValue);
 	}
 
-	private static BitValue LoadZeroExtend8x32(Node node, Transform transform)
+	private static void LoadZeroExtend8x32(Node node)
 	{
-		return BitValue.CreateValue(
-			bitsSet: 0,
-			bitsClear: ~(ulong)byte.MaxValue,
-			maxValue: byte.MaxValue,
-			minValue: 0,
-			rangeDeterminate: true,
-			is32Bit: true
-		);
+		var result = node.Result.BitValue;
+
+		result
+			.Narrow(
+				0,
+				byte.MaxValue,
+				0,
+				~(ulong)byte.MaxValue);
 	}
 
-	private static BitValue LoadZeroExtend8x64(Node node, Transform transform)
+	private static void LoadZeroExtend8x64(Node node)
 	{
-		return BitValue.CreateValue(
-			bitsSet: 0,
-			bitsClear: ~(ulong)byte.MaxValue,
-			maxValue: byte.MaxValue,
-			minValue: 0,
-			rangeDeterminate: true,
-			is32Bit: false
-		);
+		var result = node.Result.BitValue;
+
+		result
+			.Narrow(
+				0,
+				byte.MaxValue,
+				0,
+				~(ulong)byte.MaxValue);
 	}
 
-	private static BitValue LoadZeroExtend32x64(Node node, Transform transform)
+	private static void LoadZeroExtend32x64(Node node)
 	{
-		return BitValue.CreateValue(
-			bitsSet: 0,
-			bitsClear: ~uint.MaxValue,
-			maxValue: uint.MaxValue,
-			minValue: 0,
-			rangeDeterminate: true,
-			is32Bit: false
-		);
+		var result = node.Result.BitValue;
+
+		result
+			.Narrow(
+				0,
+				uint.MaxValue,
+				0,
+				~uint.MaxValue);
 	}
 
-	private static BitValue And32(Node node, Transform transform)
+	private static void And32(Node node)
 	{
-		var value1 = transform.GetBitValue(node.Operand1);
-		var value2 = transform.GetBitValue(node.Operand2);
-
-		if (value1 == null || value2 == null)
-			return null;
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
+		var value2 = node.Operand2.BitValue;
 
 		if (value1.AreLower32BitsKnown && (value1.BitsSet & ulong.MaxValue) == 0)
 		{
-			return BitValue.Zero32;
+			result.SetValue(0);
 		}
-
-		if (value2.AreLower32BitsKnown && (value2.BitsSet & ulong.MaxValue) == 0)
+		else if (value2.AreLower32BitsKnown && (value2.BitsSet & ulong.MaxValue) == 0)
 		{
-			return BitValue.Zero32;
+			result.SetValue(0);
 		}
-
-		return BitValue.CreateValue(
-			bitsSet: value1.BitsSet & value2.BitsSet,
-			bitsClear: value2.BitsClear | value1.BitsClear,
-			maxValue: Math.Max(value1.MaxValue, value2.MaxValue),
-			minValue: Math.Min(value1.MinValue, value2.MinValue),
-			rangeDeterminate: true,
-			is32Bit: true
-		);
+		else
+		{
+			result.Narrow(
+				Math.Min(value1.MinValue, value2.MinValue),
+				 Math.Max(value1.MaxValue, value2.MaxValue),
+				value1.BitsSet & value2.BitsSet,
+				value2.BitsClear | value1.BitsClear
+			);
+		}
 	}
 
-	private static BitValue And64(Node node, Transform transform)
+	private static void And64(Node node)
 	{
-		var value1 = transform.GetBitValue(node.Operand1);
-		var value2 = transform.GetBitValue(node.Operand2);
-
-		if (value1 == null || value2 == null)
-			return null;
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
+		var value2 = node.Operand2.BitValue;
 
 		if (value1.AreAll64BitsKnown && value1.BitsSet == 0)
 		{
-			return BitValue.Zero64;
+			result.SetValue(0);
 		}
-
-		if (value2.AreAll64BitsKnown && value2.BitsSet == 0)
+		else if (value2.AreAll64BitsKnown && value2.BitsSet == 0)
 		{
-			return BitValue.Zero64;
+			result.SetValue(0);
 		}
-
-		return BitValue.CreateValue(
-			bitsSet: value1.BitsSet & value2.BitsSet,
-			bitsClear: value2.BitsClear | value1.BitsClear,
-			maxValue: Math.Max(value1.MaxValue, value2.MaxValue),
-			minValue: Math.Min(value1.MinValue, value2.MinValue),
-			rangeDeterminate: true,
-			is32Bit: false
-		);
+		else
+		{
+			result.Narrow(
+				Math.Min(value1.MinValue, value2.MinValue),
+				Math.Max(value1.MaxValue, value2.MaxValue),
+				value1.BitsSet & value2.BitsSet,
+				value2.BitsClear | value1.BitsClear
+			);
+		}
 	}
 
-	private static BitValue Not32(Node node, Transform transform)
+	private static void Not32(Node node)
 	{
-		var value1 = transform.GetBitValue(node.Operand1);
-
-		if (value1 == null)
-			return null;
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
 
 		if (value1.AreLower32BitsKnown)
 		{
-			return BitValue.CreateValue(~value1.BitsSet32, true);
+			result.SetValue(~value1.BitsSet32);
 		}
+		else
+		{
+			result.NarrowBits(
 
-		return BitValue.CreateValue(
-
-			bitsSet: value1.BitsClear32,
-			bitsClear: value1.BitsSet32,
-			maxValue: 0,
-			minValue: 0,
-			rangeDeterminate: false,
-			is32Bit: true
-		);
+				 value1.BitsClear32,
+				 value1.BitsSet32
+			);
+		}
 	}
 
-	private static BitValue Not64(Node node, Transform transform)
+	private static void Not64(Node node)
 	{
-		var value1 = transform.GetBitValue(node.Operand1);
-
-		if (value1 == null)
-			return null;
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
 
 		if (value1.AreAll64BitsKnown)
 		{
-			return BitValue.CreateValue(~value1.BitsSet, false);
+			result.SetValue(~value1.BitsSet);
 		}
-
-		return BitValue.CreateValue(
-			bitsSet: value1.BitsClear,
-			bitsClear: value1.BitsSet,
-			maxValue: 0,
-			minValue: 0,
-			rangeDeterminate: false,
-			is32Bit: false
-
-		);
+		else
+		{
+			result.NarrowBits(
+				 value1.BitsClear,
+				 value1.BitsSet
+			);
+		}
 	}
 
-	private static BitValue Or32(Node node, Transform transform)
+	private static void Or32(Node node)
 	{
-		var value1 = transform.GetBitValue(node.Operand1);
-		var value2 = transform.GetBitValue(node.Operand2);
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
+		var value2 = node.Operand2.BitValue;
 
-		if (value1 != null && value1.AreLower32BitsKnown && value1.BitsSet32 == uint.MaxValue)
+		if (value1.AreLower32BitsKnown && value1.BitsSet32 == uint.MaxValue)
 		{
-			return value1;
+			result.SetValue(value1);
 		}
-
-		if (value2 != null && value2.AreLower32BitsKnown && value2.BitsSet32 == uint.MaxValue)
+		else if (value2.AreLower32BitsKnown && value2.BitsSet32 == uint.MaxValue)
 		{
-			return value2;
+			result.SetValue(value2);
 		}
-
-		if (value1 == null || value2 == null)
-			return null;
-
-		//if (value1.AreLower32BitsKnown && value1.BitsSet32 == uint.MaxValue)
-		//{
-		//	return value2;
-		//}
-
-		//if (value2.AreLower32BitsKnown && value1.BitsSet32 == uint.MaxValue)
-		//{
-		//	return value1;
-		//}
-
-		return BitValue.CreateValue(
-			bitsSet: value1.BitsSet | value2.BitsSet,
-			bitsClear: value2.BitsClear & value1.BitsClear,
-			maxValue: Math.Max(value1.MaxValue, value2.MaxValue),
-			minValue: Math.Min(value1.MinValue, value2.MinValue),
-			rangeDeterminate: true,
-			is32Bit: true
-		);
+		else
+		{
+			result.Narrow(
+				Math.Min(value1.MinValue, value2.MinValue),
+				Math.Max(value1.MaxValue, value2.MaxValue),
+				value1.BitsSet | value2.BitsSet,
+				value2.BitsClear & value1.BitsClear
+			);
+		}
 	}
 
-	private static BitValue Or64(Node node, Transform transform)
+	private static void Or64(Node node)
 	{
-		var value1 = transform.GetBitValue(node.Operand1);
-		var value2 = transform.GetBitValue(node.Operand2);
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
+		var value2 = node.Operand2.BitValue;
 
-		if (value1 != null && value1.AreAll64BitsKnown && value1.BitsSet == ulong.MaxValue)
+		if (value1.AreAll64BitsKnown && value1.BitsSet == ulong.MaxValue)
 		{
-			return value1;
+			result.SetValue(value1);
 		}
-
-		if (value2 != null && value2.AreAll64BitsKnown && value2.BitsSet == ulong.MaxValue)
+		else if (value2.AreAll64BitsKnown && value2.BitsSet == ulong.MaxValue)
 		{
-			return value2;
+			result.SetValue(value2);
 		}
-
-		if (value1 == null || value2 == null)
-			return null;
-
-		//if (value1.AreLower32BitsKnown && (value1.BitsSet & ulong.MaxValue) == ulong.MaxValue)
-		//{
-		//	return value2;
-		//}
-
-		//if (value2.AreLower32BitsKnown && (value1.BitsSet & ulong.MaxValue) == ulong.MaxValue)
-		//{
-		//	return value1;
-		//}
-
-		return BitValue.CreateValue(
-			bitsSet: value1.BitsSet | value2.BitsSet,
-			bitsClear: value2.BitsClear & value1.BitsClear,
-			maxValue: Math.Max(value1.MaxValue, value2.MaxValue),
-			minValue: Math.Min(value1.MinValue, value2.MinValue),
-			rangeDeterminate: true,
-			is32Bit: false
-		);
+		else
+		{
+			result.Narrow(
+				 Math.Min(value1.MinValue, value2.MinValue),
+				 Math.Max(value1.MaxValue, value2.MaxValue),
+				 value1.BitsSet | value2.BitsSet,
+				 value2.BitsClear & value1.BitsClear
+			);
+		}
 	}
 
-	private static BitValue Xor32(Node node, Transform transform)
+	private static void Xor32(Node node)
 	{
-		var value1 = transform.GetBitValue(node.Operand1);
-		var value2 = transform.GetBitValue(node.Operand2);
-
-		if (value1 == null || value2 == null)
-			return null;
-
-		if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown)
-		{
-			return BitValue.CreateValue((value1.BitsSet32 ^ value2.BitsSet32) & uint.MaxValue, true);
-		}
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
+		var value2 = node.Operand2.BitValue;
 
 		var bitsKnown = value1.BitsKnown & value2.BitsKnown & uint.MaxValue;
 
-		return BitValue.CreateValue(
-			bitsSet: (value1.BitsSet ^ value2.BitsSet) & bitsKnown,
-			bitsClear: (value2.BitsClear ^ value1.BitsClear) & bitsKnown,
-			maxValue: 0,
-			minValue: 0,
-			rangeDeterminate: false,
-			is32Bit: true
-		);
+		if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown)
+		{
+			result.SetValue((value1.BitsSet32 ^ value2.BitsSet32) & uint.MaxValue);
+		}
+		else
+		{
+			result.NarrowBits(
+				 (value1.BitsSet ^ value2.BitsSet) & bitsKnown,
+				 (value2.BitsClear ^ value1.BitsClear) & bitsKnown
+			);
+		}
 	}
 
-	private static BitValue Xor64(Node node, Transform transform)
+	private static void Xor64(Node node)
 	{
-		var value1 = transform.GetBitValue(node.Operand1);
-		var value2 = transform.GetBitValue(node.Operand2);
-
-		if (value1 == null || value2 == null)
-			return null;
-
-		if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
-		{
-			return BitValue.CreateValue(value1.BitsSet ^ value2.BitsSet, true);
-		}
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
+		var value2 = node.Operand2.BitValue;
 
 		var bitsKnown = value1.BitsKnown & value2.BitsKnown;
 
-		return BitValue.CreateValue(
-			bitsSet: (value1.BitsSet ^ value2.BitsSet) & bitsKnown,
-			bitsClear: (value2.BitsClear ^ value1.BitsClear) & bitsKnown,
-			maxValue: 0,
-			minValue: 0,
-			rangeDeterminate: false,
-			is32Bit: false
-		);
+		if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
+		{
+			result.SetValue(value1.BitsSet ^ value2.BitsSet);
+		}
+		else
+		{
+			result.NarrowBits(
+				 (value1.BitsSet ^ value2.BitsSet) & bitsKnown,
+				 (value2.BitsClear ^ value1.BitsClear) & bitsKnown
+			);
+		}
 	}
 
-	private static BitValue Move32(Node node, Transform transform)
+	private static void Move32(Node node)
 	{
-		var value1 = transform.GetBitValue(node.Operand1);
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
 
-		if (value1 == null)
-			return null;
-
-		if (value1.Is32Bit)
-			return value1;
-
-		return BitValue.CreateValue(
-			bitsSet: value1.BitsSet & uint.MaxValue,
-			bitsClear: value1.BitsClear | Upper32BitsSet,
-			maxValue: Math.Min(uint.MaxValue, value1.MaxValue),
-			minValue: value1.MinValue > uint.MaxValue ? 0 : value1.MinValue,
-			rangeDeterminate: false,
-			is32Bit: true
-		);
+		result.Narrow(value1).SetStable();
 	}
 
-	private static BitValue Move64(Node node, Transform transform)
+	private static void Move64(Node node)
 	{
-		var value1 = transform.GetBitValue(node.Operand1);
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
 
-		if (value1 == null)
-			return null;
-
-		return value1;
+		result.Narrow(value1).SetStable();
 	}
 
-	private static BitValue MulSigned32(Node node, Transform transform)
+	private static void MulSigned32(Node node)
 	{
-		var value1 = transform.GetBitValue(node.Operand1);
-		var value2 = transform.GetBitValue(node.Operand2);
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
+		var value2 = node.Operand2.BitValue;
 
-		if (value1 != null && value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
+		// FUTURE: Special power of two handling for bits, handle similar to shift left
+
+		if (value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
 		{
-			return BitValue.Zero32;
+			result.SetValue(0);
 		}
-
-		if (value2 != null && value2.AreLower32BitsKnown && value2.BitsSet32 == 0)
+		else if (value2.AreLower32BitsKnown && value2.BitsSet32 == 0)
 		{
-			return BitValue.Zero32;
+			result.SetValue(0);
 		}
-
-		if (value1 == null || value2 == null)
-			return null;
-
-		if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown)
+		else if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown)
 		{
-			return BitValue.CreateValue((ulong)((int)value1.BitsSet32 * (int)value2.BitsSet32), true);
+			result.SetValue((ulong)((int)value1.BitsSet32 * (int)value2.BitsSet32));
 		}
-
-		//if (value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
-		//{
-		//	return BitValue.Zero32;
-		//}
-
-		//if (value2.AreLower32BitsKnown && value2.BitsSet32 == 0)
-		//{
-		//	return BitValue.Zero32;
-		//}
-
-		if (value1.AreLower32BitsKnown && value1.BitsSet32 == 1)
+		else if (value1.AreLower32BitsKnown && value1.BitsSet32 == 1)
 		{
-			return value2;
+			result.Narrow(value2).SetStable(value2);
 		}
-
-		if (value2.AreLower32BitsKnown && value2.BitsSet32 == 1)
+		else if (value2.AreLower32BitsKnown && value2.BitsSet32 == 1)
 		{
-			return value1;
+			result.Narrow(value1).SetStable(value1);
 		}
-
-		// TODO: Special power of two handling for bits, handle similar to shift left
-
-		if (!IntegerTwiddling.HasSignBitSet((int)value1.MaxValue)
+		else if (!IntegerTwiddling.HasSignBitSet((int)value1.MaxValue)
 			&& !IntegerTwiddling.HasSignBitSet((int)value2.MaxValue)
 			&& !IntegerTwiddling.HasSignBitSet((int)value1.MinValue)
 			&& !IntegerTwiddling.HasSignBitSet((int)value2.MinValue)
@@ -1488,1105 +1308,850 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			var min = Math.Min(value1.MinValue, value2.MinValue);
 			var uppermax = max * max;
 
-			return BitValue.CreateValue(
-				bitsSet: 0,
-				bitsClear: Upper32BitsSet | BitTwiddling.GetBitsOver((uint)uppermax),
-				maxValue: (uint)(max * max),
-				minValue: (uint)(min * min),
-				rangeDeterminate: true,
-				is32Bit: true
+			result.Narrow(
+				 (uint)(min * min),
+				 (uint)(max * max),
+				 0,
+				 Upper32BitsSet | BitTwiddling.GetBitsOver((uint)uppermax)
 			);
 		}
-
-		return BitValue.Any32;
+		else
+		{
+			result.SetStable(value1, value2);
+		}
 	}
 
-	private static BitValue MulSigned64(Node node, Transform transform)
+	private static void MulSigned64(Node node)
 	{
-		var value1 = transform.GetBitValue(node.Operand1);
-		var value2 = transform.GetBitValue(node.Operand2);
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
+		var value2 = node.Operand2.BitValue;
 
-		if (value1 != null && value1.AreAll64BitsKnown && value1.BitsSet32 == 0)
+		if (value1.AreAll64BitsKnown && value1.BitsSet32 == 0)
 		{
-			return BitValue.Zero32;
+			result.SetValue(0);
 		}
-
-		if (value2 != null && value2.AreAll64BitsKnown && value2.BitsSet32 == 0)
+		else if (value2.AreAll64BitsKnown && value2.BitsSet32 == 0)
 		{
-			return BitValue.Zero32;
+			result.SetValue(0);
 		}
-
-		if (value1 == null || value2 == null)
-			return null;
-
-		if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
+		else if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
 		{
-			return BitValue.CreateValue((ulong)((long)value1.BitsSet * (long)value2.BitsSet), false);
+			result.SetValue((ulong)((long)value1.BitsSet * (long)value2.BitsSet));
 		}
-
-		//if (value1.AreAll64BitsKnown && value1.BitsSet == 0)
-		//{
-		//	return BitValue.Zero64;
-		//}
-
-		//if (value2.AreAll64BitsKnown && value2.BitsSet == 0)
-		//{
-		//	return BitValue.Zero64;
-		//}
-
-		if (value1.AreAll64BitsKnown && value1.BitsSet == 1)
+		else if (value1.AreAll64BitsKnown && value1.BitsSet == 1)
 		{
-			return value2;
+			result.Narrow(value2).SetStable(value2);
 		}
-
-		if (value2.AreAll64BitsKnown && value2.BitsSet == 1)
+		else if (value2.AreAll64BitsKnown && value2.BitsSet == 1)
 		{
-			return value1;
+			result.Narrow(value1).SetStable(value1);
 		}
 
 		// TODO: Special power of two handling for bits, handle similar to shift left
-
-		if (!IntegerTwiddling.HasSignBitSet((long)value1.MaxValue)
-			&& !IntegerTwiddling.HasSignBitSet((long)value2.MaxValue)
-			&& !IntegerTwiddling.HasSignBitSet((long)value1.MinValue)
-			&& !IntegerTwiddling.HasSignBitSet((long)value2.MinValue)
-			&& !IntegerTwiddling.IsMultiplySignedOverflow((long)value1.MaxValue, (long)value2.MaxValue)
-			&& !IntegerTwiddling.IsMultiplySignedOverflow((long)value1.MinValue, (long)value2.MinValue))
+		else if (!IntegerTwiddling.HasSignBitSet((long)value1.MaxValue)
+				&& !IntegerTwiddling.HasSignBitSet((long)value2.MaxValue)
+				&& !IntegerTwiddling.HasSignBitSet((long)value1.MinValue)
+				&& !IntegerTwiddling.HasSignBitSet((long)value2.MinValue)
+				&& !IntegerTwiddling.IsMultiplySignedOverflow((long)value1.MaxValue, (long)value2.MaxValue)
+				&& !IntegerTwiddling.IsMultiplySignedOverflow((long)value1.MinValue, (long)value2.MinValue))
 		{
 			var max = Math.Max(value1.MaxValue, value2.MaxValue);
 			var min = Math.Min(value1.MinValue, value2.MinValue);
 			var uppermax = max * max;
 
-			return BitValue.CreateValue(
-				bitsSet: 0,
-				bitsClear: BitTwiddling.GetBitsOver(uppermax),
-				maxValue: max * max,
-				minValue: min * min,
-				rangeDeterminate: false,
-				is32Bit: false
+			result.NarrowBits(
+				 0,
+				BitTwiddling.GetBitsOver(uppermax)
 			);
 		}
-
-		return BitValue.Any64;
+		else
+		{
+			result.SetStable(value1, value2);
+		}
 	}
 
-	private static BitValue MulUnsigned32(Node node, Transform transform)
+	private static void MulUnsigned32(Node node)
 	{
-		var value1 = transform.GetBitValue(node.Operand1);
-		var value2 = transform.GetBitValue(node.Operand2);
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
+		var value2 = node.Operand2.BitValue;
 
-		if (value1 != null && value1.AreAll64BitsKnown && value1.BitsSet32 == 0)
+		// FUTURE: Special power of two handling for bits, handle similar to shift left
+
+		if (value1.AreAll64BitsKnown && value1.BitsSet32 == 0)
 		{
-			return BitValue.Zero32;
+			result.SetValue(0);
 		}
-
-		if (value2 != null && value2.AreAll64BitsKnown && value2.BitsSet32 == 0)
+		else if (value2.AreAll64BitsKnown && value2.BitsSet32 == 0)
 		{
-			return BitValue.Zero32;
+			result.SetValue(0);
 		}
-
-		if (value1 == null || value2 == null)
-			return null;
-
-		if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown)
+		else if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown)
 		{
-			return BitValue.CreateValue(value1.BitsSet32 * value2.BitsSet32, true);
+			result.SetValue(value1.BitsSet32 * value2.BitsSet32);
 		}
-
-		//if (value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
-		//{
-		//	return BitValue.Zero32;
-		//}
-
-		//if (value2.AreLower32BitsKnown && value2.BitsSet32 == 0)
-		//{
-		//	return BitValue.Zero32;
-		//}
-
-		if (value1.AreLower32BitsKnown && value1.BitsSet32 == 1)
+		else if (value1.AreLower32BitsKnown && value1.BitsSet32 == 1)
 		{
-			return value2;
+			result.Narrow(value2).SetStable(value2);
 		}
-
-		if (value2.AreLower32BitsKnown && value2.BitsSet32 == 1)
+		else if (value2.AreLower32BitsKnown && value2.BitsSet32 == 1)
 		{
-			return value1;
+			result.Narrow(value1).SetStable(value1);
 		}
-
-		// TODO: Special power of two handling for bits, handle similar to shift left
-
-		return BitValue.CreateValue(
-			bitsSet: 0,
-			bitsClear: Upper32BitsSet | BitTwiddling.GetBitsOver(value1.MaxValue * value2.MaxValue),
-			maxValue: (uint)(value1.MaxValue * value2.MaxValue),
-			minValue: (uint)(value1.MinValue * value2.MinValue),
-			rangeDeterminate: !IntegerTwiddling.IsMultiplyUnsignedCarry((uint)value1.MaxValue, (uint)value2.MaxValue),
-			is32Bit: true
-		);
+		else if (IntegerTwiddling.IsMultiplyUnsignedCarry((uint)value1.MaxValue, (uint)value2.MaxValue))
+		{
+			result.NarrowBits(
+				 0,
+				 Upper32BitsSet | BitTwiddling.GetBitsOver(value1.MaxValue * value2.MaxValue));
+		}
+		else
+		{
+			result.Narrow(
+				 (uint)(value1.MinValue * value2.MinValue),
+				 (uint)(value1.MaxValue * value2.MaxValue),
+				 0,
+				 Upper32BitsSet | BitTwiddling.GetBitsOver(value1.MaxValue * value2.MaxValue)
+			);
+		}
 	}
 
-	private static BitValue MulUnsigned64(Node node, Transform transform)
+	private static void MulUnsigned64(Node node)
 	{
-		var value1 = transform.GetBitValue(node.Operand1);
-		var value2 = transform.GetBitValue(node.Operand2);
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
+		var value2 = node.Operand2.BitValue;
 
-		if (value1 != null && value1.AreAll64BitsKnown && value1.BitsSet32 == 0)
+		// FUTURE: Special power of two handling for bits, handle similar to shift left
+
+		if (value1.AreAll64BitsKnown && value1.BitsSet32 == 0)
 		{
-			return BitValue.Zero32;
+			result.SetValue(0);
 		}
-
-		if (value2 != null && value2.AreAll64BitsKnown && value2.BitsSet32 == 0)
+		else if (value2.AreAll64BitsKnown && value2.BitsSet32 == 0)
 		{
-			return BitValue.Zero32;
+			result.SetValue(0);
 		}
-
-		if (value1 == null || value2 == null)
-			return null;
-
-		if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
+		else if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
 		{
-			return BitValue.CreateValue(value1.BitsSet * value2.BitsSet, false);
+			result.SetValue(value1.BitsSet * value2.BitsSet);
 		}
-
-		//if (value1.AreAll64BitsKnown && value1.BitsSet == 0)
-		//{
-		//	return BitValue.Zero64;
-		//}
-
-		//if (value2.AreAll64BitsKnown && value2.BitsSet == 0)
-		//{
-		//	return BitValue.Zero64;
-		//}
-
-		if (value1.AreAll64BitsKnown && value1.BitsSet == 1)
+		else if (value1.AreAll64BitsKnown && value1.BitsSet == 1)
 		{
-			return value2;
+			result.Narrow(value2).SetStable(value2);
 		}
-
-		if (value2.AreAll64BitsKnown && value2.BitsSet == 1)
+		else if (value2.AreAll64BitsKnown && value2.BitsSet == 1)
 		{
-			return value1;
+			result.Narrow(value1).SetStable(value1);
 		}
-
-		// TODO: Special power of two handling for bits, handle similar to shift left
-
-		if (!IntegerTwiddling.IsMultiplyUnsignedOverflow(value1.MaxValue, value2.MaxValue)
+		else if (!IntegerTwiddling.IsMultiplyUnsignedOverflow(value1.MaxValue, value2.MaxValue)
 			&& !IntegerTwiddling.IsMultiplyUnsignedOverflow(value1.MinValue, value2.MinValue))
 		{
-			return BitValue.CreateValue(
-				bitsSet: 0,
-				bitsClear: BitTwiddling.GetBitsOver(value1.MaxValue * value2.MaxValue),
-				maxValue: value1.MaxValue * value2.MaxValue,
-				minValue: value1.MinValue * value2.MinValue,
-				rangeDeterminate: true,
-				is32Bit: false
+			result.Narrow(
+				 value1.MinValue * value2.MinValue,
+				 value1.MaxValue * value2.MaxValue,
+				 0,
+				 BitTwiddling.GetBitsOver(value1.MaxValue * value2.MaxValue)
 			);
 		}
-
-		return BitValue.Any64;
+		else
+		{
+			result.SetStable(value1, value2);
+		}
 	}
 
-	private static BitValue Phi32(Node node, Transform transform)
+	private static void Phi32(Node node)
 	{
 		Debug.Assert(node.OperandCount != 0);
 
-		var value1 = transform.GetBitValue(node.Operand1);
-
-		if (value1 == null)
-			return null;
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
 
 		var max = value1.MaxValue;
 		var min = value1.MinValue;
 		var bitsset = value1.BitsSet;
 		var bitsclear = value1.BitsClear;
+		var stable = node.Operand1.BitValue.IsStable;
 
 		for (var i = 1; i < node.OperandCount; i++)
 		{
-			var operand = node.GetOperand(i);
-			var value = transform.GetBitValue(operand);
-
-			if (value == null)
-				return null;
+			var value = node.GetOperand(i).BitValue;
 
 			max = Math.Max(max, value.MaxValue);
 			min = Math.Min(min, value.MinValue);
 			bitsset &= value.BitsSet;
 			bitsclear &= value.BitsClear;
+			stable &= value.IsStable;
 		}
 
-		return BitValue.CreateValue(
-			bitsSet: bitsset,
-			bitsClear: bitsclear,
-			maxValue: max,
-			minValue: min,
-			rangeDeterminate: true,
-			is32Bit: true
-		);
+		result.Narrow(
+			 min,
+			 max,
+			 bitsset,
+			 bitsclear
+		).SetStable(stable);
 	}
 
-	private static BitValue Phi64(Node node, Transform transform)
+	private static void Phi64(Node node)
 	{
 		Debug.Assert(node.OperandCount != 0);
 
-		var value1 = transform.GetBitValue(node.Operand1);
-
-		if (value1 == null)
-			return null;
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
 
 		var max = value1.MaxValue;
 		var min = value1.MinValue;
 		var bitsset = value1.BitsSet;
 		var bitsclear = value1.BitsClear;
+		var stable = node.Operand1.BitValue.IsStable;
 
 		for (var i = 1; i < node.OperandCount; i++)
 		{
-			var operand = node.GetOperand(i);
-			var value = transform.GetBitValue(operand);
-
-			if (value == null)
-				return null;
+			var value = node.GetOperand(i).BitValue;
 
 			max = Math.Max(max, value.MaxValue);
 			min = Math.Min(min, value.MinValue);
 			bitsset &= value.BitsSet;
 			bitsclear &= value.BitsClear;
+
+			stable &= value.IsStable;
 		}
 
-		return BitValue.CreateValue(
-			bitsSet: bitsset,
-			bitsClear: bitsclear,
-			maxValue: max,
-			minValue: min,
-			rangeDeterminate: true,
-			is32Bit: false
-		);
+		result.Narrow(
+			 min,
+			 max,
+			 bitsset,
+			 bitsclear
+		).SetStable(stable);
 	}
 
-	private static BitValue RemUnsigned32(Node node, Transform transform)
+	private static void RemUnsigned32(Node node)
 	{
-		var value1 = transform.GetBitValue(node.Operand1);
-		var value2 = transform.GetBitValue(node.Operand2);
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
+		var value2 = node.Operand2.BitValue;
 
-		if (value1 != null && value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
+		if (value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
 		{
-			return BitValue.Zero32;
+			result.SetValue(0);
 		}
-
-		if (value2 != null && value2.AreLower32BitsKnown && value2.AreLower32BitsKnown && value2.BitsSet32 == 0)
+		else if (value2.AreLower32BitsKnown && value2.AreLower32BitsKnown && value2.BitsSet32 == 0)
 		{
 			// divide by zero!
-			return null;
+			return;
 		}
-
-		if (value1 == null || value2 == null)
-			return null;
-
-		//if (value2.AreLower32BitsKnown && value2.AreLower32BitsKnown && value2.BitsSet32 == 0)
-		//{
-		//	// divide by zero!
-		//	return null; // BitValue.Any32;
-		//}
-
-		if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown)
+		else if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown)
 		{
-			return BitValue.CreateValue(value1.BitsSet32 % value2.BitsSet32, true);
+			result.SetValue(value1.BitsSet32 % value2.BitsSet32);
 		}
-
-		//if (value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
-		//{
-		//	return BitValue.Zero32;
-		//}
-
-		if (value2.AreLower32BitsKnown && value2.BitsSet32 != 0)
+		else if (value2.AreLower32BitsKnown && value2.BitsSet32 != 0)
 		{
-			return BitValue.CreateValue(
-				bitsSet: 0,
-				bitsClear: BitTwiddling.GetBitsOver(value2.BitsSet - 1),
-				maxValue: value2.BitsSet - 1,
-				minValue: 0,
-				rangeDeterminate: true,
-				is32Bit: true
+			result.Narrow(
+				 0,
+				 value2.BitsSet - 1,
+				 0,
+				 BitTwiddling.GetBitsOver(value2.BitsSet - 1)
 			);
 		}
-
-		return BitValue.Any32;
+		else
+		{
+			result.SetStable(value1, value2);
+		}
 	}
 
-	private static BitValue RemUnsigned64(Node node, Transform transform)
+	private static void RemUnsigned64(Node node)
 	{
-		var value1 = transform.GetBitValue(node.Operand1);
-		var value2 = transform.GetBitValue(node.Operand2);
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
+		var value2 = node.Operand2.BitValue;
 
-		if (value1 != null && value1.AreAll64BitsKnown && value1.BitsSet32 == 0)
+		if (value1.AreAll64BitsKnown && value1.BitsSet32 == 0)
 		{
-			return BitValue.Zero32;
+			result.SetValue(0);
 		}
-
-		if (value2 != null && value2.AreAll64BitsKnown && value2.AreLower32BitsKnown && value2.BitsSet32 == 0)
+		else if (value2.AreAll64BitsKnown && value2.AreLower32BitsKnown && value2.BitsSet32 == 0)
 		{
 			// divide by zero!
-			return null;
+			return;
 		}
-
-		if (value1 == null || value2 == null)
-			return null;
-
-		//if (value2.AreAll64BitsKnown && value2.AreAll64BitsKnown && value2.BitsSet32 == 0)
-		//{
-		//	// divide by zero!
-		//	return null; // BitValue.Any64;
-		//}
-
-		if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
+		else if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
 		{
-			return BitValue.CreateValue(value1.BitsSet % value2.BitsSet, true);
+			result.SetValue(value1.BitsSet % value2.BitsSet);
 		}
-
-		//if (value1.AreAll64BitsKnown && value1.BitsSet32 == 0)
-		//{
-		//	return BitValue.Zero64;
-		//}
-
-		if (value2.AreAll64BitsKnown && value2.BitsSet32 != 0)
+		else if (value2.AreAll64BitsKnown && value2.BitsSet32 != 0)
 		{
-			return BitValue.CreateValue(
-				bitsSet: 0,
-				bitsClear: BitTwiddling.GetBitsOver(value2.BitsSet - 1),
-				maxValue: value2.BitsSet - 1,
-				minValue: 0,
-				rangeDeterminate: true,
-				is32Bit: false
+			result.Narrow(
+				 0,
+				 value2.BitsSet - 1,
+				 0,
+				 BitTwiddling.GetBitsOver(value2.BitsSet - 1)
 			);
 		}
-
-		return BitValue.Any64;
+		else
+		{
+			result.SetStable(value1, value2);
+		}
 	}
 
-	private static BitValue ShiftLeft32(Node node, Transform transform)
+	private static void ShiftLeft32(Node node)
 	{
-		var value1 = transform.GetBitValue(node.Operand1);
-		var value2 = transform.GetBitValue(node.Operand2);
-
-		if (value1 != null && value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
-		{
-			return BitValue.Zero32;
-		}
-
-		if (value1 == null || value2 == null)
-			return null;
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
+		var value2 = node.Operand2.BitValue;
 
 		var shift = (int)(value2.BitsSet & 0b11111);
+		var lowest = BitTwiddling.CountTrailingZeros(value1.BitsSet | value1.BitsUnknown);
 
-		if (value1.AreLower32BitsKnown && value2.AreLower5BitsKnown)
+		// FUTURE: if the value2 has any set bits, the lower bound could be raised
+
+		if (value1 != null && value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
 		{
-			return BitValue.CreateValue(value1.BitsSet32 << shift, true);
+			result.SetValue(0);
 		}
-
-		if (value2.AreLower5BitsKnown && shift == 0)
+		else if (value1.AreLower32BitsKnown && value2.AreLower5BitsKnown)
 		{
-			return value1;
+			result.SetValue(value1.BitsSet32 << shift);
 		}
-
-		if (value2.AreLower5BitsKnown && shift != 0)
+		else if (value2.AreLower5BitsKnown && shift == 0)
 		{
-			return BitValue.CreateValue(
-				bitsSet: value1.BitsSet << shift,
-				bitsClear: Upper32BitsSet | (value1.BitsClear << shift) | ~(ulong.MaxValue << shift),
-				maxValue: value1.MaxValue << shift < uint.MaxValue ? value1.MaxValue << shift : ulong.MaxValue,
-				minValue: value1.MinValue << shift > value1.MinValue ? value1.MinValue << shift : 0,
-				rangeDeterminate: true,
-				is32Bit: true
+			result.Narrow(value1).SetStable(value1);
+		}
+		else if (value2.AreLower5BitsKnown && shift != 0)
+		{
+			result.Narrow(
+				 value1.MinValue << shift > value1.MinValue ? value1.MinValue << shift : 0,
+				 value1.MaxValue << shift < uint.MaxValue ? value1.MaxValue << shift : ulong.MaxValue,
+				 value1.BitsSet << shift,
+				 Upper32BitsSet | (value1.BitsClear << shift) | ~(ulong.MaxValue << shift)
 			);
 		}
-
-		if (value1.AreAnyBitsKnown)
+		else if (value1.AreAnyBitsKnown && lowest >= 1)
 		{
-			var lowest = BitTwiddling.CountTrailingZeros(value1.BitsSet | value1.BitsUnknown);
+			var low = (ulong)(1 << lowest);
 
-			// FUTURE: if the value2 has any set bits, the lower bound could be raised
-
-			if (lowest >= 1)
-			{
-				var low = (ulong)(1 << lowest);
-
-				return BitValue.CreateValue(
-					bitsSet: 0,
-					bitsClear: low - 1,
-					maxValue: ulong.MaxValue,
-					minValue: low,
-					rangeDeterminate: true,
-					is32Bit: true
-				);
-			}
+			result.Narrow(
+				 low,
+				 ulong.MaxValue,
+				 0,
+				 low - 1
+			);
 		}
-
-		return BitValue.Any32;
+		else
+		{
+			result.SetStable(value1, value2);
+		}
 	}
 
-	private static BitValue ShiftLeft64(Node node, Transform transform)
+	private static void ShiftLeft64(Node node)
 	{
-		var value1 = transform.GetBitValue(node.Operand1);
-		var value2 = transform.GetBitValue(node.Operand2);
-
-		if (value1 != null && value1.AreAll64BitsKnown && value1.BitsSet32 == 0)
-		{
-			return BitValue.Zero32;
-		}
-
-		if (value1 == null || value2 == null)
-			return null;
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
+		var value2 = node.Operand2.BitValue;
 
 		var shift = (int)(value2.BitsSet & 0b111111);
 
-		if (value1.AreAll64BitsKnown && value2.AreLower6BitsKnown)
-		{
-			return BitValue.CreateValue(value1.BitsSet32 << shift, false);
-		}
-
-		if (value2.AreLower6BitsKnown && shift == 0)
-		{
-			return value1;
-		}
-
-		if (value2.AreLower6BitsKnown && shift != 0)
-		{
-			return BitValue.CreateValue(
-				bitsSet: value1.BitsSet << shift,
-				bitsClear: (value1.BitsClear << shift) | ~(ulong.MaxValue << shift),
-				maxValue: value1.MaxValue << shift > value1.MaxValue ? value1.MaxValue << shift : ulong.MaxValue,
-				minValue: value1.MinValue << shift > value1.MinValue ? value1.MinValue << shift : 0,
-				rangeDeterminate: true,
-				is32Bit: false
-			);
-		}
-
-		if (value1.AreLower32BitsKnown && (value1.BitsSet & uint.MaxValue) == 0)
-		{
-			return BitValue.CreateValue(
-				bitsSet: 0,
-				bitsClear: uint.MaxValue,
-				maxValue: ulong.MaxValue,
-				minValue: 0,
-				rangeDeterminate: true,
-				is32Bit: false
-			);
-		}
-
 		// FUTURE: Using the known highest and lowers bit sequences, the bit sets and ranges can be set and narrower respectively
 
-		return BitValue.Any64;
-	}
-
-	private static BitValue ShiftRight32(Node node, Transform transform)
-	{
-		var value1 = transform.GetBitValue(node.Operand1);
-		var value2 = transform.GetBitValue(node.Operand2);
-
-		if (value1 != null && value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
+		if (value1.AreAll64BitsKnown && value1.BitsSet32 == 0)
 		{
-			return BitValue.Zero32;
+			result.SetValue(0);
 		}
-
-		if (value1 == null || value2 == null)
-			return null;
-
-		var shift = (int)(value2.BitsSet & 0b11111);
-
-		if (value1.AreLower32BitsKnown && value2.AreLower5BitsKnown)
+		else if (value1.AreAll64BitsKnown && value2.AreLower6BitsKnown)
 		{
-			return BitValue.CreateValue(value1.BitsSet32 >> shift, true);
+			result.SetValue(value1.BitsSet32 << shift);
 		}
-
-		//if (value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
-		//{
-		//	return BitValue.Zero32;
-		//}
-
-		if (value2.AreLower5BitsKnown && shift == 0)
+		else if (value2.AreLower6BitsKnown && shift == 0)
 		{
-			return value1;
+			result.Narrow(value1).SetStable(value1);
 		}
-
-		if (value2.AreLower5BitsKnown && shift != 0)
+		else if (value2.AreLower6BitsKnown && shift != 0)
 		{
-			return BitValue.CreateValue(
-				bitsSet: value1.BitsSet >> shift,
-				bitsClear: Upper32BitsSet | (value1.BitsClear >> shift) | ~(uint.MaxValue >> shift),
-				maxValue: value1.MaxValue >> shift,
-				minValue: value1.MinValue >> shift,
-				rangeDeterminate: true,
-				is32Bit: true
+			result.Narrow(
+				 value1.MinValue << shift > value1.MinValue ? value1.MinValue << shift : 0,
+				 value1.MaxValue << shift > value1.MaxValue ? value1.MaxValue << shift : ulong.MaxValue,
+				 value1.BitsSet << shift,
+				 (value1.BitsClear << shift) | ~(ulong.MaxValue << shift)
+
 			);
 		}
+		else if (value1.AreLower32BitsKnown && (value1.BitsSet & uint.MaxValue) == 0)
+		{
+			result.Narrow(
+				 0,
+				 ulong.MaxValue,
+				 0,
+				 uint.MaxValue
+			);
+		}
+		else
+		{
+			result.SetStable(value1, value2);
+		}
+	}
+
+	private static void ShiftRight32(Node node)
+	{
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
+		var value2 = node.Operand2.BitValue;
+
+		var shift = (int)(value2.BitsSet & 0b11111);
 
 		// FUTURE: Using the known highest and lowers bit sequences, the bit sets and ranges can be set and narrower respectively
 		// FUTURE: If the shift has a range, and some bits are known --- then some bits might be determinable
 
-		//if (value1.AreRangeValuesDeterminate)
-		//{
-		//	return new Value(
-		//	{
-		//		maxValue: value1.MaxValue, // must be equal or less, but not more
-		//		minValue: 0,
-		//		rangeValuesDeterminate: true,
-		//		bitsSet:0,
-		//		bitsClear: 0,
-		//		Is64Bit = false
-		//	};
-		//}
-
-		return BitValue.Any32;
+		if (value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
+		{
+			result.SetValue(0);
+		}
+		else if (value1.AreLower32BitsKnown && value2.AreLower5BitsKnown)
+		{
+			result.SetValue(value1.BitsSet32 >> shift);
+		}
+		else if (value2.AreLower5BitsKnown && shift == 0)
+		{
+			result.Narrow(value1).SetStable(value1);
+		}
+		else if (value2.AreLower5BitsKnown && shift != 0)
+		{
+			result.Narrow(
+				 value1.MinValue >> shift,
+				 value1.MaxValue >> shift,
+				 value1.BitsSet >> shift,
+				 Upper32BitsSet | (value1.BitsClear >> shift) | ~(uint.MaxValue >> shift)
+			);
+		}
+		else
+		{
+			result.SetStable(value1, value2);
+		}
 	}
 
-	private static BitValue ShiftRight64(Node node, Transform transform)
+	private static void ShiftRight64(Node node)
 	{
-		var value1 = transform.GetBitValue(node.Operand1);
-		var value2 = transform.GetBitValue(node.Operand2);
-
-		if (value1 != null && value1.AreAll64BitsKnown && value1.BitsSet32 == 0)
-		{
-			return BitValue.Zero32;
-		}
-
-		if (value1 == null || value2 == null)
-			return null;
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
+		var value2 = node.Operand2.BitValue;
 
 		var shift = (int)(value2.BitsSet & 0b111111);
 
-		if (value1.AreAll64BitsKnown && value2.AreLower6BitsKnown)
+		if (value1.AreAll64BitsKnown && value1.BitsSet32 == 0)
 		{
-			return BitValue.CreateValue(value1.BitsSet >> shift, false);
+			result.SetValue(0);
 		}
-
-		//if (value1.AreAll64BitsKnown && value1.BitsSet == 0)
-		//{
-		//	return BitValue.Zero64;
-		//}
-
-		if (value2.AreLower6BitsKnown && shift == 0)
+		else if (value1.AreAll64BitsKnown && value2.AreLower6BitsKnown)
 		{
-			return value1;
+			result.SetValue(value1.BitsSet >> shift);
 		}
-
-		if (value2.AreLower6BitsKnown && shift != 0)
+		else if (value2.AreLower6BitsKnown && shift == 0)
 		{
-			return BitValue.CreateValue(
-				bitsSet: value1.BitsSet >> shift,
-				bitsClear: value1.BitsClear >> shift | ~(ulong.MaxValue >> shift),
-				maxValue: value1.MaxValue >> shift,
-				minValue: value1.MinValue >> shift,
-				rangeDeterminate: true,
-				is32Bit: false
+			result.Narrow(value1).SetStable(value1);
+		}
+		else if (value2.AreLower6BitsKnown && shift != 0)
+		{
+			result.Narrow(
+				 value1.MinValue >> shift,
+				 value1.MaxValue >> shift,
+				 value1.BitsSet >> shift,
+				 value1.BitsClear >> shift | ~(ulong.MaxValue >> shift)
 			);
 		}
-
-		if (value1.AreUpper32BitsKnown && value1.BitsSet >> 32 == 0)
+		else if (value1.AreUpper32BitsKnown && value1.BitsSet >> 32 == 0)
 		{
-			return BitValue.CreateValue(
-				bitsSet: 0,
-				bitsClear: ~uint.MaxValue,
-				maxValue: uint.MaxValue,
-				minValue: 0,
-				rangeDeterminate: true,
-				is32Bit: false
+			result.Narrow(
+				 0,
+				 uint.MaxValue,
+				 0,
+				 ~uint.MaxValue
+
 			);
 		}
-
-		// FUTURE: Using the known highest and lowers bit sequences, the bit sets and ranges can be set and narrower respectively
-		// FUTURE: If the shift has a range, and some bits are known --- then some bits might be determinable
-
-		//if (value1.AreRangeValuesDeterminate)
-		//{
-		//	return new Value(
-		//	{
-		//		maxValue: value1.MaxValue, // must be equal or less, but not more
-		//		minValue: 0,
-		//		rangeValuesDeterminate: true,
-		//		bitsSet:0,
-		//		bitsClear: 0,
-		//		Is64Bit = true
-		//	};
-		//}
-
-		return BitValue.Any64;
+		else
+		{
+			result.SetStable(value1, value2);
+		}
 	}
 
-	private static BitValue SignExtend16x32(Node node, Transform transform)
+	private static void SignExtend16x32(Node node)
 	{
-		var value1 = transform.GetBitValue(node.Operand1);
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
 
-		if (value1 == null)
-			return null;
+		var knownSignedBit = ((value1.BitsKnown >> 15) & 1) == 1;
+		var signed = ((value1.BitsSet >> 15) & 1) == 1 || ((value1.BitsClear >> 15) & 1) != 1;
 
 		if (value1.AreLower16BitsKnown)
 		{
-			return BitValue.CreateValue(value1.BitsSet16 | (((value1.BitsSet >> 15) & 1) == 1 ? Upper48BitsSet : 0), true);
+			result.SetValue(value1.BitsSet16 | (((value1.BitsSet >> 15) & 1) == 1 ? Upper48BitsSet : 0));
 		}
-
-		var knownSignedBit = ((value1.BitsKnown >> 15) & 1) == 1;
-
-		if (!knownSignedBit)
+		else if (!knownSignedBit)
 		{
-			return BitValue.CreateValue(
-				bitsSet: value1.BitsSet16,
-				bitsClear: value1.BitsClear16,
-				maxValue: 0,
-				minValue: 0,
-				rangeDeterminate: false,
-				is32Bit: true
+			result.NarrowBits(
+				 value1.BitsSet16,
+				 value1.BitsClear16
 			);
 		}
-
-		var signed = ((value1.BitsSet >> 15) & 1) == 1 || ((value1.BitsClear >> 15) & 1) != 1;
-
-		return BitValue.CreateValue(
-			bitsSet: value1.BitsSet16 | (signed ? Upper48BitsSet : 0),
-			bitsClear: value1.BitsClear16 | (signed ? 0 : Upper48BitsSet),
-			maxValue: 0,
-			minValue: 0,
-			rangeDeterminate: false,
-			is32Bit: true
-		);
+		else
+		{
+			result.NarrowBits(
+				 value1.BitsSet16 | (signed ? Upper48BitsSet : 0),
+				 value1.BitsClear16 | (signed ? 0 : Upper48BitsSet)
+			);
+		}
 	}
 
-	private static BitValue SignExtend16x64(Node node, Transform transform)
+	private static void SignExtend16x64(Node node)
 	{
-		var value1 = transform.GetBitValue(node.Operand1);
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
 
-		if (value1 == null)
-			return null;
+		var knownSignedBit = ((value1.BitsKnown >> 15) & 1) == 1;
+		var signed = ((value1.BitsSet >> 15) & 1) == 1 || ((value1.BitsClear >> 15) & 1) != 1;
 
 		if (value1.AreLower16BitsKnown)
 		{
-			return BitValue.CreateValue(value1.BitsSet16 | (((value1.BitsSet >> 15) & 1) == 1 ? Upper48BitsSet : 0), true);
+			result.SetValue(value1.BitsSet16 | (((value1.BitsSet >> 15) & 1) == 1 ? Upper48BitsSet : 0));
 		}
-
-		var knownSignedBit = ((value1.BitsKnown >> 15) & 1) == 1;
-
-		if (!knownSignedBit)
+		else if (!knownSignedBit)
 		{
-			return BitValue.CreateValue(
-				bitsSet: value1.BitsSet16,
-				bitsClear: value1.BitsClear16,
-				maxValue: 0,
-				minValue: 0,
-				rangeDeterminate: false,
-				is32Bit: false
+			result.NarrowBits(
+				 value1.BitsSet16,
+				 value1.BitsClear16
 			);
 		}
-
-		var signed = ((value1.BitsSet >> 15) & 1) == 1 || ((value1.BitsClear >> 15) & 1) != 1;
-
-		return BitValue.CreateValue(
-			bitsSet: value1.BitsSet16 | (signed ? Upper48BitsSet : 0),
-			bitsClear: value1.BitsClear16 | (signed ? 0 : Upper48BitsSet),
-			maxValue: 0,
-			minValue: 0,
-			rangeDeterminate: false,
-			is32Bit: false
-		);
+		else
+		{
+			result.NarrowBits(
+				 value1.BitsSet16 | (signed ? Upper48BitsSet : 0),
+				 value1.BitsClear16 | (signed ? 0 : Upper48BitsSet)
+			);
+		}
 	}
 
-	private static BitValue SignExtend32x64(Node node, Transform transform)
+	private static void SignExtend32x64(Node node)
 	{
-		var value1 = transform.GetBitValue(node.Operand1);
-
-		if (value1 == null)
-			return null;
-
-		if (value1.AreLower32BitsKnown)
-		{
-			return BitValue.CreateValue(value1.BitsSet32 | (((value1.BitsSet >> 31) & 1) == 1 ? Upper32BitsSet : 0), false);
-		}
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
 
 		var knownSignedBit = ((value1.BitsKnown >> 31) & 1) == 1;
-
-		if (!knownSignedBit)
-		{
-			return BitValue.CreateValue(
-				bitsSet: value1.BitsSet32,
-				bitsClear: value1.BitsClear32,
-				maxValue: 0,
-				minValue: 0,
-				rangeDeterminate: false,
-				is32Bit: false
-			);
-		}
-
 		var signed = ((value1.BitsSet >> 31) & 1) == 1 || ((value1.BitsClear >> 31) & 1) != 1;
-
-		return BitValue.CreateValue(
-			bitsSet: value1.BitsSet32 | (signed ? Upper56BitsSet : 0),
-			bitsClear: value1.BitsClear32 | (signed ? 0 : Upper56BitsSet),
-			maxValue: 0,
-			minValue: 0,
-			rangeDeterminate: false,
-			is32Bit: false
-		);
-	}
-
-	private static BitValue SignExtend8x32(Node node, Transform transform)
-	{
-		var value1 = transform.GetBitValue(node.Operand1);
-
-		if (value1 == null)
-			return null;
-
-		if (value1.AreLower8BitsKnown)
-		{
-			return BitValue.CreateValue(value1.BitsSet16 | (((value1.BitsSet >> 7) & 1) == 1 ? Upper56BitsSet : 0), true);
-		}
-
-		var knownSignedBit = ((value1.BitsKnown >> 7) & 1) == 1;
-
-		if (!knownSignedBit)
-		{
-			return BitValue.CreateValue(
-				bitsSet: value1.BitsSet8,
-				bitsClear: value1.BitsClear8,
-				maxValue: 0,
-				minValue: 0,
-				rangeDeterminate: false,
-				is32Bit: true
-			);
-		}
-
-		var signed = ((value1.BitsSet >> 7) & 1) == 1 || ((value1.BitsClear >> 7) & 1) != 1;
-
-		return BitValue.CreateValue(
-			bitsSet: value1.BitsSet8 | (signed ? Upper56BitsSet : 0),
-			bitsClear: value1.BitsClear8 | (signed ? 0 : Upper56BitsSet),
-			maxValue: 0,
-			minValue: 0,
-			rangeDeterminate: false,
-			is32Bit: true
-		);
-	}
-
-	private static BitValue SignExtend8x64(Node node, Transform transform)
-	{
-		var value1 = transform.GetBitValue(node.Operand1);
-
-		if (value1 == null)
-			return null;
-
-		if (value1.AreLower8BitsKnown)
-		{
-			return BitValue.CreateValue(value1.BitsSet16 | (((value1.BitsSet >> 7) & 1) == 1 ? Upper56BitsSet : 0), false);
-		}
-
-		var knownSignedBit = ((value1.BitsKnown >> 7) & 1) == 1;
-
-		if (!knownSignedBit)
-		{
-			return BitValue.CreateValue(
-				bitsSet: value1.BitsSet8,
-				bitsClear: value1.BitsClear8,
-				maxValue: 0,
-				minValue: 0,
-				rangeDeterminate: false,
-				is32Bit: false
-			);
-		}
-
-		var signed = ((value1.BitsSet >> 7) & 1) == 1 || ((value1.BitsClear >> 7) & 1) != 1;
-
-		return BitValue.CreateValue(
-			bitsSet: value1.BitsSet8 | (signed ? Upper56BitsSet : 0),
-			bitsClear: value1.BitsClear8 | (signed ? 0 : Upper56BitsSet),
-			maxValue: 0,
-			minValue: 0,
-			rangeDeterminate: false,
-			is32Bit: false
-		);
-	}
-
-	private static BitValue To64(Node node, Transform transform)
-	{
-		var value1 = transform.GetBitValue(node.Operand1);
-		var value2 = transform.GetBitValue(node.Operand2);
-
-		if (value1 == null || value2 == null)
-			return null;
-
-		if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown)
-		{
-			return BitValue.CreateValue(value2.MaxValue << 32 | (value1.MaxValue & uint.MaxValue), false);
-		}
-
-		return BitValue.CreateValue(
-			bitsSet: (value2.BitsSet << 32) | value1.BitsSet32,
-			bitsClear: (value2.BitsClear << 32) | value1.BitsClear32,
-			maxValue: (value2.MaxValue << 32) | (value1.MaxValue & uint.MaxValue),
-			minValue: (value2.MinValue << 32) | (value1.MinValue & uint.MaxValue),
-			rangeDeterminate: true,
-			is32Bit: false
-		);
-	}
-
-	private static BitValue Truncate64x32(Node node, Transform transform)
-	{
-		var value1 = transform.GetBitValue(node.Operand1);
-
-		if (value1 == null)
-			return null;
-
-		return BitValue.CreateValue(
-			bitsSet: value1.BitsSet & uint.MaxValue,
-			bitsClear: Upper32BitsSet | value1.BitsClear,
-			maxValue: Math.Min(uint.MaxValue, value1.MaxValue),
-			minValue: value1.MinValue > uint.MaxValue ? 0 : value1.MinValue,
-			rangeDeterminate: true,
-			is32Bit: true
-		);
-	}
-
-	private static BitValue ZeroExtend16x32(Node node, Transform transform)
-	{
-		var value1 = transform.GetBitValue(node.Operand1);
-
-		if (value1 == null)
-			return null;
-
-		if (value1.AreLower16BitsKnown)
-		{
-			return BitValue.CreateValue(value1.BitsSet16, true);
-		}
-
-		return BitValue.CreateValue(
-			bitsSet: value1.BitsSet16,
-			bitsClear: value1.BitsClear | Upper48BitsSet,
-			maxValue: Math.Min(byte.MaxValue, value1.MaxValue),
-			minValue: value1.MinValue > byte.MaxValue ? 0 : value1.MinValue,
-			rangeDeterminate: true,
-			is32Bit: true
-		);
-	}
-
-	private static BitValue ZeroExtend16x64(Node node, Transform transform)
-	{
-		return ZeroExtend16x32(node, transform);
-	}
-
-	private static BitValue ZeroExtend32x64(Node node, Transform transform)
-	{
-		var value1 = transform.GetBitValue(node.Operand1);
-
-		if (value1 == null)
-			return null;
 
 		if (value1.AreLower32BitsKnown)
 		{
-			return BitValue.CreateValue(value1.BitsSet32, false);
+			result.SetValue(value1.BitsSet32 | (((value1.BitsSet >> 31) & 1) == 1 ? Upper32BitsSet : 0));
 		}
-
-		return BitValue.CreateValue(
-			bitsSet: value1.BitsSet32,
-			bitsClear: Upper32BitsSet | value1.BitsClear,
-			maxValue: Math.Min(uint.MaxValue, value1.MaxValue),
-			minValue: value1.MinValue > uint.MaxValue ? 0 : value1.MinValue,
-			rangeDeterminate: true,
-			is32Bit: false
-		);
+		else if (!knownSignedBit)
+		{
+			result.NarrowBits(
+				 value1.BitsSet32,
+				 value1.BitsClear32
+			);
+		}
+		else
+		{
+			result.NarrowBits(
+				 value1.BitsSet32 | (signed ? Upper56BitsSet : 0),
+				 value1.BitsClear32 | (signed ? 0 : Upper56BitsSet)
+			);
+		}
 	}
 
-	private static BitValue ZeroExtend8x32(Node node, Transform transform)
+	private static void SignExtend8x32(Node node)
 	{
-		var value1 = transform.GetBitValue(node.Operand1);
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
 
-		if (value1 == null)
-			return null;
+		var knownSignedBit = ((value1.BitsKnown >> 7) & 1) == 1;
+		var signed = ((value1.BitsSet >> 7) & 1) == 1 || ((value1.BitsClear >> 7) & 1) != 1;
 
 		if (value1.AreLower8BitsKnown)
 		{
-			return BitValue.CreateValue(value1.BitsSet8, true);
+			result.SetValue(value1.BitsSet16 | (((value1.BitsSet >> 7) & 1) == 1 ? Upper56BitsSet : 0));
 		}
-
-		return BitValue.CreateValue(
-			bitsSet: value1.BitsSet8,
-			bitsClear: value1.BitsClear | Upper56BitsSet,
-			maxValue: Math.Min(byte.MaxValue, value1.MaxValue),
-			minValue: value1.MinValue > byte.MaxValue ? 0 : value1.MinValue,
-			rangeDeterminate: true,
-			is32Bit: true
-		);
+		else if (!knownSignedBit)
+		{
+			result.NarrowBits(
+				 value1.BitsSet8,
+				 value1.BitsClear8
+			);
+		}
+		else
+		{
+			result.NarrowBits(
+				 value1.BitsSet8 | (signed ? Upper56BitsSet : 0),
+				 value1.BitsClear8 | (signed ? 0 : Upper56BitsSet)
+			);
+		}
 	}
 
-	private static BitValue ZeroExtend8x64(Node node, Transform transform)
+	private static void SignExtend8x64(Node node)
 	{
-		var value1 = transform.GetBitValue(node.Operand1);
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
 
-		if (value1 == null)
-			return null;
+		var signed = ((value1.BitsSet >> 7) & 1) == 1 || ((value1.BitsClear >> 7) & 1) != 1;
+		var knownSignedBit = ((value1.BitsKnown >> 7) & 1) == 1;
 
 		if (value1.AreLower8BitsKnown)
 		{
-			return BitValue.CreateValue(value1.BitsSet8, true);
+			result.SetValue(value1.BitsSet16 | (((value1.BitsSet >> 7) & 1) == 1 ? Upper56BitsSet : 0));
 		}
-
-		return BitValue.CreateValue(
-			bitsSet: value1.BitsSet8,
-			bitsClear: value1.BitsClear | Upper56BitsSet,
-			maxValue: Math.Min(byte.MaxValue, value1.MaxValue),
-			minValue: value1.MinValue > byte.MaxValue ? 0 : value1.MinValue,
-			rangeDeterminate: true,
-			is32Bit: false
-		);
+		else if (!knownSignedBit)
+		{
+			result.NarrowBits(
+				 value1.BitsSet8,
+				 value1.BitsClear8
+			);
+		}
+		else
+		{
+			result.NarrowBits(
+				 value1.BitsSet8 | (signed ? Upper56BitsSet : 0),
+				 value1.BitsClear8 | (signed ? 0 : Upper56BitsSet)
+			);
+		}
 	}
 
-	private static BitValue IfThenElse32(Node node, Transform transform)
+	private static void To64(Node node)
 	{
-		var value1 = transform.GetBitValue(node.Operand2);
-		var value2 = transform.GetBitValue(node.Operand3);
-
-		if (value1 == null || value2 == null)
-			return null;
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
+		var value2 = node.Operand2.BitValue;
 
 		if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown)
 		{
-			return BitValue.CreateValue(
-				bitsSet: value1.MaxValue & value2.MaxValue,
-				bitsClear: ~value1.MaxValue & ~value2.MaxValue,
-				maxValue: Math.Max(value1.MaxValue, value2.MaxValue),
-				minValue: Math.Min(value1.MinValue, value2.MinValue),
-				rangeDeterminate: true,
-				is32Bit: true
+			result.SetValue(value2.MaxValue << 32 | (value1.MaxValue & uint.MaxValue));
+		}
+		else
+		{
+			result.Narrow(
+				 (value2.MinValue << 32) | (value1.MinValue & uint.MaxValue),
+				 (value2.MaxValue << 32) | (value1.MaxValue & uint.MaxValue),
+				 (value2.BitsSet << 32) | value1.BitsSet32,
+				 (value2.BitsClear << 32) | value1.BitsClear32
 			);
 		}
-
-		return BitValue.Any32;
 	}
 
-	private static BitValue IfThenElse64(Node node, Transform transform)
+	private static void Truncate64x32(Node node)
 	{
-		var value1 = transform.GetBitValue(node.Operand2);
-		var value2 = transform.GetBitValue(node.Operand3);
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
 
-		if (value1 == null || value2 == null)
-			return null;
+		result.Narrow(
+			value1.MinValue > uint.MaxValue ? 0 : value1.MinValue,
+			Math.Min(uint.MaxValue, value1.MaxValue),
+			value1.BitsSet & uint.MaxValue,
+			Upper32BitsSet | value1.BitsClear
+		).SetStable(value1);
+	}
+
+	private static void ZeroExtend16x32(Node node)
+	{
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
+
+		if (value1.AreLower16BitsKnown)
+		{
+			result.SetValue(value1.BitsSet16);
+		}
+		else
+		{
+			result.Narrow(
+				 value1.MinValue > byte.MaxValue ? 0 : value1.MinValue,
+				 Math.Min(byte.MaxValue, value1.MaxValue),
+				 value1.BitsSet16,
+				 value1.BitsClear | Upper48BitsSet
+			);
+		}
+	}
+
+	private static void ZeroExtend16x64(Node node)
+	{
+		ZeroExtend16x32(node);
+	}
+
+	private static void ZeroExtend32x64(Node node)
+	{
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
+
+		if (value1.AreLower32BitsKnown)
+		{
+			result.SetValue(value1.BitsSet32);
+		}
+		else
+		{
+			result.Narrow(
+				 value1.MinValue > uint.MaxValue ? 0 : value1.MinValue,
+				 Math.Min(uint.MaxValue, value1.MaxValue),
+				 value1.BitsSet32,
+				 Upper32BitsSet | value1.BitsClear
+			);
+		}
+	}
+
+	private static void ZeroExtend8x32(Node node)
+	{
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
+
+		if (value1.AreLower8BitsKnown)
+		{
+			result.SetValue(value1.BitsSet8);
+		}
+		else
+		{
+			result.Narrow(
+				 value1.MinValue > byte.MaxValue ? 0 : value1.MinValue,
+				 Math.Min(byte.MaxValue, value1.MaxValue),
+				 value1.BitsSet8,
+				 value1.BitsClear | Upper56BitsSet
+			);
+		}
+	}
+
+	private static void ZeroExtend8x64(Node node)
+	{
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
+
+		if (value1.AreLower8BitsKnown)
+		{
+			result.SetValue(value1.BitsSet8);
+		}
+		else
+		{
+			result.Narrow(
+				 value1.MinValue > byte.MaxValue ? 0 : value1.MinValue,
+				 Math.Min(byte.MaxValue, value1.MaxValue),
+				 value1.BitsSet8,
+				 value1.BitsClear | Upper56BitsSet
+			);
+		}
+	}
+
+	private static void IfThenElse32(Node node)
+	{
+		var result = node.Result.BitValue;
+		var value1 = node.Operand2.BitValue;
+		var value2 = node.Operand3.BitValue;
+
+		if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown)
+		{
+			result.Narrow(
+				 Math.Min(value1.MinValue, value2.MinValue),
+				 Math.Max(value1.MaxValue, value2.MaxValue),
+				 value1.MaxValue & value2.MaxValue,
+				 ~value1.MaxValue & ~value2.MaxValue
+			).SetStable();
+		}
+		else
+		{
+			result.SetStable(value1, value2);
+		}
+	}
+
+	private static void IfThenElse64(Node node)
+	{
+		var result = node.Result.BitValue;
+		var value1 = node.Operand2.BitValue;
+		var value2 = node.Operand3.BitValue;
 
 		if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
 		{
-			return BitValue.CreateValue(
-				bitsSet: value1.MaxValue & value2.MaxValue,
-				bitsClear: ~value1.MaxValue & ~value2.MaxValue,
-				maxValue: Math.Max(value1.MaxValue, value2.MaxValue),
-				minValue: Math.Min(value1.MinValue, value2.MinValue),
-				rangeDeterminate: true,
-				is32Bit: false
+			result.Narrow(
+				 Math.Min(value1.MinValue, value2.MinValue),
+				 Math.Max(value1.MaxValue, value2.MaxValue),
+				 value1.MaxValue & value2.MaxValue,
+				 ~value1.MaxValue & ~value2.MaxValue
+			).SetStable();
+		}
+		else
+		{
+			result.SetStable(value1, value2);
+		}
+	}
+
+	private static void NewString(Node node)
+	{
+		var result = node.Result.BitValue;
+
+		result.SetNotNull();
+	}
+
+	private static void NewObject(Node node)
+	{
+		var result = node.Result.BitValue;
+
+		result.SetNotNull();
+	}
+
+	private static void NewArray(Node node)
+	{
+		var result = node.Result.BitValue;
+
+		result.SetNotNull();
+	}
+
+	private static void DivUnsigned32(Node node)
+	{
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
+		var value2 = node.Operand2.BitValue;
+
+		if (value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
+		{
+			result.SetValue(0);
+		}
+		else if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown && value2.BitsSet32 != 0)
+		{
+			result.SetValue(value1.BitsSet32 / value2.BitsSet32);
+		}
+		else if (value2.AreLower32BitsKnown && value2.BitsSet32 == 0)
+		{
+			// divide by zero!
+			return;
+		}
+		else
+		{
+			result.Narrow(
+				 value2.MaxValue == 0 ? 0 : value1.MinValue / value2.MaxValue,
+				 value2.MinValue == 0 ? value1.MaxValue : value1.MaxValue / value2.MinValue,
+				 0,
+				 Upper32BitsSet | BitTwiddling.GetBitsOver(value2.MinValue == 0 ? value1.MaxValue : value1.MaxValue / value2.MinValue)
 			);
 		}
-
-		return BitValue.Any64;
 	}
 
-	private static BitValue NewString(Node node, Transform transform)
+	private static void DivUnsigned64(Node node)
 	{
-		return transform.Is32BitPlatform ? BitValue.AnyExceptZero32 : BitValue.AnyExceptZero64;
-	}
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
+		var value2 = node.Operand2.BitValue;
 
-	private static BitValue NewObject(Node node, Transform transform)
-	{
-		return transform.Is32BitPlatform ? BitValue.AnyExceptZero32 : BitValue.AnyExceptZero64;
-	}
-
-	private static BitValue NewArray(Node node, Transform transform)
-	{
-		return transform.Is32BitPlatform ? BitValue.AnyExceptZero32 : BitValue.AnyExceptZero64;
-	}
-
-	private static BitValue DivUnsigned32(Node node, Transform transform)
-	{
-		var value1 = transform.GetBitValue(node.Operand1);
-		var value2 = transform.GetBitValue(node.Operand2);
-
-		if (value1 != null && value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
+		if (value1.AreAll64BitsKnown && value1.BitsSet32 == 0)
 		{
-			return BitValue.Zero32;
+			result.SetValue(0);
 		}
-
-		if (value1 == null || value2 == null)
-			return null;
-
-		if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown && value2.BitsSet32 != 0)
-		{
-			return BitValue.CreateValue(value1.BitsSet32 / value2.BitsSet32, true);
-		}
-
-		if (value2.AreLower32BitsKnown && value2.BitsSet32 == 0)
+		else if (value2.AreAll64BitsKnown && value2.BitsSet == 0)
 		{
 			// divide by zero!
-			return null; // BitValue.Any64;
+			return;
 		}
-
-		//if (value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
-		//{
-		//	return BitValue.Zero32;
-		//}
-
-		return BitValue.CreateValue(
-			bitsSet: 0,
-			bitsClear: Upper32BitsSet | BitTwiddling.GetBitsOver(value2.MinValue == 0 ? value1.MaxValue : value1.MaxValue / value2.MinValue),
-			maxValue: value2.MinValue == 0 ? value1.MaxValue : value1.MaxValue / value2.MinValue,
-			minValue: value2.MaxValue == 0 ? 0 : value1.MinValue / value2.MaxValue,
-			rangeDeterminate: true,
-			is32Bit: true
-		);
-	}
-
-	private static BitValue DivUnsigned64(Node node, Transform transform)
-	{
-		var value1 = transform.GetBitValue(node.Operand1);
-		var value2 = transform.GetBitValue(node.Operand2);
-
-		if (value1 != null && value1.AreAll64BitsKnown && value1.BitsSet32 == 0)
+		else if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && value2.BitsSet32 != 0)
 		{
-			return BitValue.Zero32;
+			result.SetValue(value1.BitsSet / value2.BitsSet);
 		}
-
-		if (value2 != null && value2.AreAll64BitsKnown && value2.BitsSet == 0)
+		else
 		{
-			// divide by zero!
-			return null; // BitValue.Any64;
+			result.Narrow(
+				 value2.MaxValue == 0 ? 0 : value1.MinValue / value2.MaxValue,
+				 value2.MinValue == 0 ? value1.MaxValue : value1.MaxValue / value2.MinValue,
+				 0,
+				 BitTwiddling.GetBitsOver(value2.MinValue == 0 ? value1.MaxValue : value1.MaxValue / value2.MinValue)
+			);
 		}
-
-		if (value1 == null || value2 == null)
-			return null;
-
-		if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && value2.BitsSet32 != 0)
-		{
-			return BitValue.CreateValue(value1.BitsSet / value2.BitsSet, true);
-		}
-
-		//if (value2.AreAll64BitsKnown && value2.BitsSet == 0)
-		//{
-		//	// divide by zero!
-		//	return null; // BitValue.Any64;
-		//}
-
-		//if (value1.AreAll64BitsKnown && value1.BitsSet == 0)
-		//{
-		//	return BitValue.Zero64;
-		//}
-
-		return BitValue.CreateValue(
-			bitsSet: 0,
-			bitsClear: BitTwiddling.GetBitsOver(value2.MinValue == 0 ? value1.MaxValue : value1.MaxValue / value2.MinValue),
-			maxValue: value2.MinValue == 0 ? value1.MaxValue : value1.MaxValue / value2.MinValue,
-			minValue: value2.MaxValue == 0 ? 0 : value1.MinValue / value2.MaxValue,
-			rangeDeterminate: true,
-			is32Bit: false
-		);
-	}
-
-	private static BitValue Any32(Node node, Transform transform)
-	{
-		return BitValue.Any32;
-	}
-
-	private static BitValue Any64(Node node, Transform transform)
-	{
-		return BitValue.Any64;
 	}
 
 	#endregion IR Instructions

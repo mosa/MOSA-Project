@@ -35,6 +35,12 @@ public sealed partial class Operand
 
 	#endregion Static Properties
 
+	#region Member Data
+
+	private BitValue bitValue;
+
+	#endregion Member Data
+
 	#region Properties
 
 	public PrimitiveType Primitive { get; private set; }
@@ -216,6 +222,8 @@ public sealed partial class Operand
 		}
 	}
 
+	public readonly BitValue BitValue;
+
 	#endregion Properties
 
 	#region Static Constants
@@ -300,11 +308,26 @@ public sealed partial class Operand
 
 	#endregion Static Constants
 
+	private Operand()
+	{
+		BitValue = new BitValue(false);
+	}
+
+	private Operand(bool is32Bit)
+	{
+		BitValue = new BitValue(is32Bit);
+	}
+
+	private Operand(bool is32Bit, ulong value)
+	{
+		BitValue = new BitValue(is32Bit, value);
+	}
+
 	#region Factory Methods - Constants
 
 	private static Operand CreateConstant32Internal(uint value)
 	{
-		return new Operand
+		return new Operand(true, value)
 		{
 			Location = LocationType.Constant,
 			Primitive = PrimitiveType.Int32,
@@ -396,7 +419,7 @@ public sealed partial class Operand
 
 	private static Operand CreateConstant64Internal(ulong value)
 	{
-		return new Operand
+		return new Operand(false, value)
 		{
 			Location = LocationType.Constant,
 			Primitive = PrimitiveType.Int64,
@@ -558,7 +581,7 @@ public sealed partial class Operand
 
 	internal static Operand CreateVirtualRegister(PrimitiveType primitiveType, int index, MosaType type = null)
 	{
-		return new Operand
+		return new Operand(primitiveType == PrimitiveType.Int32)
 		{
 			Location = LocationType.VirtualRegister,
 			Primitive = primitiveType,
@@ -569,7 +592,7 @@ public sealed partial class Operand
 
 	internal static Operand CreateCPURegister(PrimitiveType primitiveType, PhysicalRegister register, int index)
 	{
-		return new Operand()
+		return new Operand(primitiveType == PrimitiveType.Int32)
 		{
 			Location = LocationType.PhysicalRegister,
 			Primitive = primitiveType,
@@ -580,7 +603,7 @@ public sealed partial class Operand
 
 	internal static Operand CreateStackLocal(PrimitiveType primitiveType, int index, bool pinned, MosaType type = null)
 	{
-		return new Operand
+		return new Operand(primitiveType == PrimitiveType.Int32)
 		{
 			Primitive = primitiveType,
 			Location = LocationType.StackFrame,
@@ -594,7 +617,7 @@ public sealed partial class Operand
 
 	internal static Operand CreateStackParameter(PrimitiveType primitiveType, ElementType elementType, int index, string name, int offset, uint size, MosaType type = null)
 	{
-		return new Operand
+		return new Operand(primitiveType == PrimitiveType.Int32)
 		{
 			Primitive = primitiveType,
 			Location = LocationType.StackParameter,
@@ -621,7 +644,7 @@ public sealed partial class Operand
 
 		if (longOperand.IsParameter)
 		{
-			operand = new Operand
+			operand = new Operand(true)
 			{
 				Primitive = longOperand.Primitive,
 				Location = LocationType.StackParameter,
@@ -637,7 +660,7 @@ public sealed partial class Operand
 		}
 		else if (longOperand.IsVirtualRegister)
 		{
-			operand = new Operand
+			operand = new Operand(true)
 			{
 				Location = LocationType.VirtualRegister,
 				Primitive = PrimitiveType.Int32,
@@ -647,7 +670,7 @@ public sealed partial class Operand
 		}
 		else if (longOperand.IsLocalStack)
 		{
-			operand = new Operand
+			operand = new Operand(true)
 			{
 				Location = LocationType.StackFrame,
 				Primitive = PrimitiveType.Int32,
@@ -679,7 +702,7 @@ public sealed partial class Operand
 
 		if (longOperand.IsParameter)
 		{
-			operand = new Operand
+			operand = new Operand(true)
 			{
 				Primitive = longOperand.Primitive,
 				Location = LocationType.StackParameter,
@@ -695,7 +718,7 @@ public sealed partial class Operand
 		}
 		else if (longOperand.IsVirtualRegister)
 		{
-			operand = new Operand
+			operand = new Operand(true)
 			{
 				Location = LocationType.VirtualRegister,
 				Primitive = PrimitiveType.Int32,
@@ -705,7 +728,7 @@ public sealed partial class Operand
 		}
 		else if (longOperand.IsLocalStack)
 		{
-			operand = new Operand
+			operand = new Operand(true)
 			{
 				Location = LocationType.StackFrame,
 				Primitive = PrimitiveType.Int32,
@@ -752,7 +775,7 @@ public sealed partial class Operand
 	{
 		Debug.Assert(method != null);
 
-		return new Operand
+		return new Operand(is32Platform)
 		{
 			Location = LocationType.Constant,
 			Primitive = is32Platform ? PrimitiveType.Int32 : PrimitiveType.Int64,
