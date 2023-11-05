@@ -309,5 +309,15 @@ public static class ManualTransforms
 		new Phi.PhiObjectUpdate(),
 		new Phi.PhiManagedPointerDead(),
 		new Phi.PhiManagedPointerUpdate(),
+
+		new BitValue.Compare32x32BitValue(),
+		new BitValue.Compare32x64BitValue(),
+		new BitValue.Compare64x32BitValue(),
+		new BitValue.Compare64x64BitValue(),
+
+		new BitValue.Branch32(),
+		new BitValue.Branch64(),
+		new BitValue.BranchManagedPointer(),
+		new BitValue.BranchObject(),
 	};
 }

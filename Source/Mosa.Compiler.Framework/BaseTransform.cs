@@ -860,6 +860,271 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 		return operand1.BitValue.IsSignBitClear64;
 	}
 
+	protected static bool? EvaluateCompare(Operand operand1, Operand operand2, ConditionCode condition)
+	{
+		return EvaluateCompare(operand1.BitValue, operand2.BitValue, condition);
+	}
+
+	protected static bool? EvaluateCompare(BitValue value1, BitValue value2, ConditionCode condition)
+	{
+		switch (condition)
+		{
+			case ConditionCode.Equal:
+				if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
+				{
+					return value1.BitsSet == value2.BitsSet;
+				}
+				else if (value1.MaxValue == value1.MinValue && value1.MaxValue == value2.MaxValue && value1.MinValue == value2.MinValue)
+				{
+					return true;
+				}
+				else if (((value1.BitsSet & value2.BitsSet) != value1.BitsSet || (value1.BitsClear & value2.BitsClear) != value1.BitsClear) && !value1.AreAnyBitsKnown && !value2.AreAnyBitsKnown)
+				{
+					return false;
+				}
+				else if ((value1.BitsSet & value2.BitsClear) != 0 || (value2.BitsSet & value1.BitsClear) != 0)
+				{
+					return false;
+				}
+				else if (value1.MaxValue < value2.MinValue)
+				{
+					return false;
+				}
+				else if (value1.MinValue > value2.MaxValue)
+				{
+					return false;
+				}
+				break;
+
+			case ConditionCode.NotEqual:
+				if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
+				{
+					return value1.BitsSet != value2.BitsSet;
+				}
+				else if (value1.MaxValue == value1.MinValue && value1.MaxValue == value2.MaxValue && value1.MinValue == value2.MinValue)
+				{
+					return false;
+				}
+				else if (value1.AreAll64BitsKnown && value1.MaxValue == 0 && value2.BitsSet != 0)
+				{
+					return true;
+				}
+				else if (value2.AreAll64BitsKnown && value2.MaxValue == 0 && value1.BitsSet != 0)
+				{
+					return true;
+				}
+				else if ((value1.BitsSet & value2.BitsClear) != 0 || (value2.BitsSet & value1.BitsClear) != 0)
+				{
+					return true;
+				}
+				else if (value1.MaxValue < value2.MinValue)
+				{
+					return true;
+				}
+				else if (value1.MinValue > value2.MaxValue)
+				{
+					return true;
+				}
+				break;
+
+			case ConditionCode.UnsignedGreater:
+				if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
+				{
+					return value1.BitsSet > value2.BitsSet;
+				}
+				else if (value2.AreAll64BitsKnown && value2.MaxValue == 0 && value1.BitsSet != 0)
+				{
+					return true;
+				}
+				else if (value1.MinValue > value2.MaxValue)
+				{
+					return true;
+				}
+				else if (value1.MaxValue <= value2.MinValue)
+				{
+					return false;
+				}
+				break;
+
+			case ConditionCode.UnsignedLess:
+				if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
+				{
+					return value1.MaxValue < value2.MaxValue;
+				}
+				else if (value1.AreAll64BitsKnown && value1.MaxValue == 0 && value2.BitsSet != 0)
+				{
+					return true;
+				}
+				else if (value2.MinValue > value1.MaxValue)
+				{
+					return true;
+				}
+				else if (value2.MaxValue <= value1.MinValue)
+				{
+					return false;
+				}
+
+				break;
+
+			case ConditionCode.UnsignedGreaterOrEqual:
+				if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
+				{
+					return value1.BitsSet <= value2.BitsSet;
+				}
+				else if (value1.AreAll64BitsKnown && value1.MaxValue == 0 && value2.BitsSet != 0)
+				{
+					return true;
+				}
+				else if (value1.MinValue >= value2.MaxValue)
+				{
+					return true;
+				}
+				else if (value1.MaxValue < value2.MinValue)
+				{
+					return false;
+				}
+
+				break;
+
+			case ConditionCode.UnsignedLessOrEqual:
+				if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
+				{
+					return value1.BitsSet <= value2.BitsSet;
+				}
+				else if (value1.AreAll64BitsKnown && value1.MaxValue == 0 && value2.BitsSet != 0)
+				{
+					return true;
+				}
+				else if (value2.MinValue >= value1.MaxValue)
+				{
+					return true;
+				}
+				else if (value2.MaxValue < value1.MinValue)
+				{
+					return false;
+				}
+
+				break;
+
+			case ConditionCode.Greater:
+				if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && value1.Is64Bit && value2.Is64Bit)
+				{
+					return (long)value1.BitsSet > (long)value2.BitsSet;
+				}
+				else if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && value1.Is32Bit && value2.Is32Bit)
+				{
+					return (int)value1.BitsSet > (int)value2.BitsSet;
+				}
+				else if (value1.Is32Bit && value2.Is32Bit && value1.IsSignBitClear32 && value2.IsSignBitClear32 && value1.MinValue > value2.MaxValue)
+				{
+					return true;
+				}
+				else if (value1.Is32Bit && value2.Is32Bit && value1.IsSignBitClear32 && value2.IsSignBitClear32 && value1.MaxValue < value2.MinValue)
+				{
+					return false;
+				}
+				else if (value1.Is64Bit && value2.Is64Bit && value1.IsSignBitClear64 && value2.IsSignBitClear64 && value1.MinValue > value2.MaxValue)
+				{
+					return true;
+				}
+				else if (value1.Is64Bit && value2.Is64Bit && value1.IsSignBitClear64 && value2.IsSignBitClear64 && value1.MaxValue < value2.MinValue)
+				{
+					return false;
+				}
+
+				break;
+
+			case ConditionCode.Less:
+				if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && value1.Is64Bit && value2.Is64Bit)
+				{
+					return (long)value1.BitsSet < (long)value2.BitsSet;
+				}
+				else if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && value1.Is32Bit && value2.Is32Bit)
+				{
+					return (int)value1.BitsSet < (int)value2.BitsSet;
+				}
+				else if (value1.Is32Bit && value2.Is32Bit && value1.IsSignBitClear32 && value2.IsSignBitClear32 && value1.MaxValue < value2.MinValue)
+				{
+					return true;
+				}
+				else if (value1.Is32Bit && value2.Is32Bit && value1.IsSignBitClear32 && value2.IsSignBitClear32 && value1.MinValue > value2.MaxValue)
+				{
+					return false;
+				}
+				else if (value1.Is64Bit && value2.Is64Bit && value1.IsSignBitClear64 && value2.IsSignBitClear64 && value1.MaxValue < value2.MinValue)
+				{
+					return true;
+				}
+				else if (value1.Is64Bit && value2.Is64Bit && value1.IsSignBitClear64 && value2.IsSignBitClear64 && value1.MinValue > value2.MaxValue)
+				{
+					return false;
+				}
+
+				break;
+
+			case ConditionCode.GreaterOrEqual:
+				if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && value1.Is64Bit && value2.Is64Bit)
+				{
+					return (long)value1.BitsSet >= (long)value2.BitsSet;
+				}
+				else if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && value1.Is32Bit && value2.Is32Bit)
+				{
+					return (int)value1.BitsSet >= (int)value2.BitsSet;
+				}
+				else if (value1.Is32Bit && value2.Is32Bit && value1.IsSignBitClear32 && value2.IsSignBitClear32 && value1.MinValue >= value2.MaxValue)
+				{
+					return true;
+				}
+				else if (value1.Is32Bit && value2.Is32Bit && value1.IsSignBitClear32 && value2.IsSignBitClear32 && value1.MaxValue <= value2.MinValue)
+				{
+					return false;
+				}
+				else if (value1.Is64Bit && value2.Is64Bit && value1.IsSignBitClear64 && value2.IsSignBitClear64 && value1.MinValue >= value2.MaxValue)
+				{
+					return true;
+				}
+				else if (value1.Is64Bit && value2.Is64Bit && value1.IsSignBitClear64 && value2.IsSignBitClear64 && value1.MaxValue <= value2.MinValue)
+				{
+					return false;
+				}
+
+				break;
+
+			case ConditionCode.LessOrEqual:
+				if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && value1.Is64Bit && value2.Is64Bit)
+				{
+					return (long)value1.BitsSet <= (long)value2.BitsSet;
+				}
+				else if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && value1.Is32Bit && value2.Is32Bit)
+				{
+					return (int)value1.BitsSet <= (int)value2.BitsSet;
+				}
+				else if (value1.Is32Bit && value2.Is32Bit && value1.IsSignBitClear32 && value2.IsSignBitClear32 && value1.MaxValue <= value2.MinValue)
+				{
+					return true;
+				}
+				else if (value1.Is32Bit && value2.Is32Bit && value1.IsSignBitClear32 && value2.IsSignBitClear32 && value1.MinValue >= value2.MaxValue)
+				{
+					return false;
+				}
+				else if (value1.Is64Bit && value2.Is64Bit && value1.IsSignBitClear64 && value2.IsSignBitClear64 && value1.MaxValue <= value2.MinValue)
+				{
+					return true;
+				}
+				else if (value1.Is64Bit && value2.Is64Bit && value1.IsSignBitClear64 && value2.IsSignBitClear64 && value1.MinValue >= value2.MaxValue)
+				{
+					return false;
+				}
+
+				break;
+
+			default:
+				return null;
+		}
+
+		return null;
+	}
+
 	#endregion BitTracker Helpers
 
 	#region Navigation

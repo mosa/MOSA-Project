@@ -14,6 +14,8 @@ public sealed class MoveObjectCoalescing : BaseTransform
 	{
 	}
 
+	public override int Priority => 25;
+
 	public override bool Match(Context context, Transform transform)
 	{
 		if (!context.Operand1.IsVirtualRegister)

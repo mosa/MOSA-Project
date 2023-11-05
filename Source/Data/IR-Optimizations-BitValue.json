@@ -41,7 +41,7 @@
 			"Result": "(IR.MulUnsigned## a b)",
 			"Priority": "20",
 			"Variations": "Yes",
-			"Log": "Yes"
+			"Log": "No"
 		},
 		{
 			"Type": "BitValue",
@@ -52,7 +52,7 @@
 			"Result": "(IR.RemUnsigned## a b)",
 			"Priority": "20",
 			"Variations": "No",
-			"Log": "Yes"
+			"Log": "No"
 		},
 		{
 			"Type": "BitValue",
@@ -63,7 +63,7 @@
 			"Result": "(IR.ShiftRight## a b)",
 			"Priority": "20",
 			"Variations": "No",
-			"Log": "Yes"
+			"Log": "No"
 		}
 	]
 }
