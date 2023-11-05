@@ -177,25 +177,6 @@ public sealed class BitValue
 		return Narrow();
 	}
 
-	public BitValue NarrowBits(ulong bitsSet, ulong bitsClear)
-	{
-		if (IsFixed)
-			return this;
-
-		if (Is32Bit)
-		{
-			bitsSet &= uint.MaxValue;
-			bitsClear |= Upper32BitsSet;
-		}
-
-		BitsSet |= bitsSet;
-		BitsClear |= bitsClear;
-
-		Debug.Assert((BitsSet & BitsClear) == 0);
-
-		return Narrow();
-	}
-
 	public BitValue NarrowSetBits(ulong bitsSet)
 	{
 		if (IsFixed)
@@ -232,9 +213,6 @@ public sealed class BitValue
 
 	public BitValue SetNotNull()
 	{
-		if (IsFixed)
-			return this;
-
 		return NarrowMin(1);
 	}
 
