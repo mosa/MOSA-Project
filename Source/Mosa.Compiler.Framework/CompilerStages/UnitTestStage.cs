@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.CompilerStages;
 /// <seealso cref="Mosa.Compiler.Framework.BaseCompilerStage" />
 public sealed class UnitTestStage : BaseCompilerStage
 {
-	private const string MosaUnitTestAttribute = "Mosa.UnitTests.MosaUnitTestAttribute";
+	private const string MosaUnitTestAttributeName = "Mosa.UnitTests.MosaUnitTestAttribute";
 
 	#region Overrides
 
@@ -20,7 +20,7 @@ public sealed class UnitTestStage : BaseCompilerStage
 		{
 			foreach (var method in type.Methods)
 			{
-				var methodAttribute = method.FindCustomAttribute(MosaUnitTestAttribute);
+				var methodAttribute = method.FindCustomAttribute(MosaUnitTestAttributeName);
 
 				if (methodAttribute != null)
 				{

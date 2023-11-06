@@ -17,6 +17,8 @@ namespace Mosa.Compiler.Framework;
 /// </remarks>
 public sealed class MethodCompiler
 {
+	private const string IntrinsicAttributeName = "System.Runtime.CompilerServices.IntrinsicAttribute";
+
 	#region Data Members
 
 	private readonly Stopwatch Stopwatch;
@@ -621,7 +623,7 @@ public sealed class MethodCompiler
 
 	private void StubMethod()
 	{
-		var intrinsicAttribute = Method.FindCustomAttribute("System.Runtime.CompilerServices.IntrinsicAttribute");
+		var intrinsicAttribute = Method.FindCustomAttribute(IntrinsicAttributeName);
 
 		if (intrinsicAttribute == null)
 			return;
