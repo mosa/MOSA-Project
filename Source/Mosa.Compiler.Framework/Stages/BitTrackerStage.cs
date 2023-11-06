@@ -20,9 +20,9 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 	private const ulong Upper48BitsSet = ~(ulong)ushort.MaxValue;
 	private const ulong Upper56BitsSet = ~(ulong)byte.MaxValue;
 
-	private readonly Counter BranchesRemovedCount = new("BitTrackerStage.BranchesRemoved");
-	private readonly Counter InstructionsRemovedCount = new("BitTrackerStage.InstructionsRemoved");
-	private readonly Counter InstructionsUpdatedCount = new("BitTrackerStage.InstructionsUpdated");
+	private readonly Counter BranchesRemovedCount = new("BitTracker.BranchesRemoved");
+	private readonly Counter InstructionsRemovedCount = new("BitTracker.InstructionsRemoved");
+	private readonly Counter InstructionsUpdatedCount = new("BitTracker.InstructionsUpdated");
 
 	private TraceLog trace;
 

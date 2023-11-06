@@ -8,7 +8,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.BitValue;
 [Transform("IR.Optimizations.Manual.BitVaule")]
 public sealed class Compare32x32BitValue : BaseTransform
 {
-	public Compare32x32BitValue() : base(IRInstruction.Compare32x32, TransformType.Manual | TransformType.Optimization, true)
+	public Compare32x32BitValue() : base(IRInstruction.Compare32x32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

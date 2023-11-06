@@ -65,6 +65,40 @@
 			"Variations": "No",
 			"Log": "No"
 		},
+
+		{
+			"Type": "BitValue",
+			"Name": "Compare##x32Equal",
+			"SubName": "Add##",
+			"Expression": "IR.Compare##x32 {=} (IR.Add## a c1) c2",
+			"Filter": "IsResolvedConstant(c1) && IsResolvedConstant(c2) && !IsAddOverflow##(BitValueMax##(a), BitValueMax##(c1))",
+			"Result": "(IR.Compare##x32 {=} a (IR.Sub## c2 c1))",
+			"Variations": "Yes",
+			"Log": "No",
+			"Commutative": [
+				"IR.Compare32x32",
+				"IR.Compare32x64",
+				"IR.Compare64x32",
+				"IR.Compare64x64"
+			]
+		},
+		{
+			"Type": "BitValue",
+			"Name": "Compare##x64Equal",
+			"SubName": "Add##",
+			"Expression": "IR.Compare##x64 {=} (IR.Add## a c1) c2",
+			"Filter": "IsResolvedConstant(c1) && IsResolvedConstant(c2) && !IsAddOverflow##(BitValueMax##(a), BitValueMax##(c1))",
+			"Result": "(IR.Compare##x64 {=} a (IR.Sub## c2 c1))",
+			"Variations": "Yes",
+			"Log": "No",
+			"Commutative": [
+				"IR.Compare32x32",
+				"IR.Compare32x64",
+				"IR.Compare64x32",
+				"IR.Compare64x64"
+			]
+		},
+
 		{
 			"Type": "BitValue",
 			"Name": "Compare##x32SignedLess",
@@ -73,7 +107,7 @@
 			"Filter": "IsResolvedConstant(c1) && IsResolvedConstant(c2) && !IsAddOverflow##(BitValueMax##(a), BitValueMax##(c1))",
 			"Result": "(IR.Compare##x32 {<} a (IR.Sub## c2 c1))",
 			"Variations": "Yes",
-			"Log": "Yes",
+			"Log": "No",
 			"Commutative": [
 				"IR.Compare32x32",
 				"IR.Compare32x64",
@@ -89,7 +123,7 @@
 			"Filter": "IsResolvedConstant(c1) && IsResolvedConstant(c2) && !IsAddOverflow##(BitValueMax##(a), BitValueMax##(c1))",
 			"Result": "(IR.Compare##x64 {<} a (IR.Sub## c2 c1))",
 			"Variations": "Yes",
-			"Log": "Yes",
+			"Log": "No",
 			"Commutative": [
 				"IR.Compare32x32",
 				"IR.Compare32x64",
@@ -103,9 +137,9 @@
 			"SubName": "Add##",
 			"Expression": "IR.Compare##x32 {< u} (IR.Add## a c1) c2",
 			"Filter": "IsResolvedConstant(c1) && IsResolvedConstant(c2) && !IsAddOverflow##(BitValueMax##(a), BitValueMax##(c1))",
-			"Result": "(IR.Compare##x32 {<} a (IR.Sub## c2 c1))",
+			"Result": "(IR.Compare##x32 {< u} a (IR.Sub## c2 c1))",
 			"Variations": "Yes",
-			"Log": "Yes",
+			"Log": "No",
 			"Commutative": [
 				"IR.Compare32x32",
 				"IR.Compare32x64",
@@ -119,9 +153,9 @@
 			"SubName": "Add##",
 			"Expression": "IR.Compare##x64 {< u} (IR.Add## a c1) c2",
 			"Filter": "IsResolvedConstant(c1) && IsResolvedConstant(c2) && !IsAddOverflow##(BitValueMax##(a), BitValueMax##(c1))",
-			"Result": "(IR.Compare##x64 {<} a (IR.Sub## c2 c1))",
+			"Result": "(IR.Compare##x64 {< u} a (IR.Sub## c2 c1))",
 			"Variations": "Yes",
-			"Log": "Yes",
+			"Log": "No",
 			"Commutative": [
 				"IR.Compare32x32",
 				"IR.Compare32x64",

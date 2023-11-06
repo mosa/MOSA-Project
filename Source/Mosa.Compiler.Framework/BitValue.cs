@@ -85,6 +85,12 @@ public sealed class BitValue
 
 	public bool IsSignBitClear64 => ((BitsClear >> 63) & 1) == 1;
 
+	public bool IsZeroOrOne => (MinValue == 0 && MaxValue == 1) || (BitsClear == ~1ul);
+
+	public bool IsZero => (MinValue == 0 && MaxValue == 0) || (BitsClear == ~0ul);
+
+	public bool IsOne => (MinValue == 1 && MaxValue == 1) || (BitsClear == ~1ul && BitsSet == 1);
+
 	#endregion Property Values
 
 	#region Constructors

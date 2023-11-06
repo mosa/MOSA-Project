@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.BitValue;
 
 public sealed class Branch32 : BaseTransform
 {
-	public Branch32() : base(IRInstruction.Branch32, TransformType.Manual | TransformType.Optimization, true)
+	public Branch32() : base(IRInstruction.Branch32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

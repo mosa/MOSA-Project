@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.BitValue;
 [Transform("IR.Optimizations.Auto.BitValue")]
 public sealed class Compare64x64UnsignedLessAdd64 : BaseTransform
 {
-	public Compare64x64UnsignedLessAdd64() : base(IRInstruction.Compare64x64, TransformType.Auto | TransformType.Optimization, true)
+	public Compare64x64UnsignedLessAdd64() : base(IRInstruction.Compare64x64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -51,7 +51,7 @@ public sealed class Compare64x64UnsignedLessAdd64 : BaseTransform
 		var v1 = transform.VirtualRegisters.Allocate64();
 
 		context.SetInstruction(IRInstruction.Sub64, v1, t3, t2);
-		context.AppendInstruction(IRInstruction.Compare64x64, ConditionCode.Less, result, t1, v1);
+		context.AppendInstruction(IRInstruction.Compare64x64, ConditionCode.UnsignedLess, result, t1, v1);
 	}
 }
 
@@ -61,7 +61,7 @@ public sealed class Compare64x64UnsignedLessAdd64 : BaseTransform
 [Transform("IR.Optimizations.Auto.BitValue")]
 public sealed class Compare64x64UnsignedLessAdd64_v1 : BaseTransform
 {
-	public Compare64x64UnsignedLessAdd64_v1() : base(IRInstruction.Compare64x64, TransformType.Auto | TransformType.Optimization, true)
+	public Compare64x64UnsignedLessAdd64_v1() : base(IRInstruction.Compare64x64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -102,6 +102,6 @@ public sealed class Compare64x64UnsignedLessAdd64_v1 : BaseTransform
 		var v1 = transform.VirtualRegisters.Allocate64();
 
 		context.SetInstruction(IRInstruction.Sub64, v1, t1, t3);
-		context.AppendInstruction(IRInstruction.Compare64x64, ConditionCode.Less, result, t2, v1);
+		context.AppendInstruction(IRInstruction.Compare64x64, ConditionCode.UnsignedLess, result, t2, v1);
 	}
 }

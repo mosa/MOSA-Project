@@ -316,8 +316,8 @@ public sealed class MethodCompiler
 		MethodData.ReturnSize = methodInfo.ReturnSize;
 		MethodData.ReturnInRegister = methodInfo.ReturnInRegister;
 
-		MethodData.Counters.Update("ExecutionTime.Setup.Ticks", (int)Stopwatch.ElapsedTicks);
-		MethodData.Counters.Update("ExecutionTime.Setup.MicroSeconds", Stopwatch.Elapsed.Microseconds);
+		//MethodData.Counters.Update("ExecutionTime.Setup.Ticks", (int)Stopwatch.ElapsedTicks);
+		MethodData.Counters.Update("ExecutionTime.Setup.Milliseconds", (int)(Stopwatch.Elapsed.Ticks / TimeSpan.TicksPerMillisecond));
 
 		Transform.SetCompiler(compiler);
 		Transform.SetMethodCompiler(this);
@@ -449,9 +449,10 @@ public sealed class MethodCompiler
 
 			MethodData.ElapsedTicks = lastTick;
 
-			MethodData.Counters.Update("ExecutionTime.StageStart.Ticks", (int)startTick);
-			MethodData.Counters.Update("ExecutionTime.StageStart.Milliseconds", (int)startMS);
-			MethodData.Counters.Update("ExecutionTime.Total.Ticks", (int)lastTick);
+			//MethodData.Counters.Update("ExecutionTime.StageStart.Ticks", (int)startTick);
+			//MethodData.Counters.Update("ExecutionTime.Total.Ticks", (int)lastTick);
+			MethodData.Counters.Update("ExecutionTime.Setup.Milliseconds", (int)startMS);
+			MethodData.Counters.Update("ExecutionTime.Execution.Milliseconds", (int)(lastMS - startMS));
 			MethodData.Counters.Update("ExecutionTime.Total.Milliseconds", (int)lastMS);
 
 			var executionTimeLog = new TraceLog(TraceType.MethodDebug, Method, "Execution Time/Ticks", MethodData.Version);
@@ -472,7 +473,8 @@ public sealed class MethodCompiler
 
 				executionTimeLog.Log(entry);
 
-				MethodData.Counters.Update($"ExecutionTime.{i:00}.{Pipeline[i].Name}.Ticks", (int)ticks);
+				//MethodData.Counters.Update($"ExecutionTime.{i:00}.{Pipeline[i].Name}.Ticks", (int)ticks);
+				MethodData.Counters.Update($"ExecutionTime.{i:00}.{Pipeline[i].Name}.Milliseconds", (int)(ticks / TimeSpan.TicksPerMillisecond));
 			}
 
 			executionTimeLog.Log($"{"****Total Time",-57}({lastTick} Ticks)");

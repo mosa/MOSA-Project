@@ -10,10 +10,15 @@ namespace Mosa.Compiler.Framework.Stages;
 /// <seealso cref="Mosa.Compiler.Framework.BaseMethodCompilerStage" />
 public sealed class JumpOptimizationStage : BaseMethodCompilerStage
 {
+	private readonly Counter JumpsRemovedCount = new("JumpOptimization.JumpsRemoved");
+
+	protected override void Initialize()
+	{
+		Register(JumpsRemovedCount);
+	}
+
 	protected override void Run()
 	{
-		var trace = CreateTraceLog();
-
 		for (var f = 0; f < BasicBlocks.Count - 1; f++)
 		{
 			var from = BasicBlocks[f];
@@ -33,6 +38,7 @@ public sealed class JumpOptimizationStage : BaseMethodCompilerStage
 			{
 				// insert pseudo flow instruction --- this is important when protected regions exists
 				node.SetInstruction(IRInstruction.Flow, target);
+				JumpsRemovedCount.Increment();
 				continue;
 			}
 			else
@@ -53,10 +59,10 @@ public sealed class JumpOptimizationStage : BaseMethodCompilerStage
 
 				// insert pseudo flow instruction --- this is important when protected regions exists
 				jumpNode.SetInstruction(IRInstruction.Flow, branchNode.BranchTargets[0]);
-
 				// update branch target
 				branchNode.UpdateBranchTarget(0, jumpTarget);
 
+				JumpsRemovedCount.Increment();
 				continue;
 			}
 		}

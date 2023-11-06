@@ -103,24 +103,6 @@
 			"Filter": "",
 			"Result": "(IR.IfThenElse## a x y)",
 			"Variations": "Yes"
-		},
-		{
-			"Type": "Simplification",
-			"Name": "Xor32",
-			"SubName": "Max",
-			"Expression": "IR.Xor32 x 0xFFFFFFFF",
-			"Filter": "",
-			"Result": "(IR.Not32 x)",
-			"Variations": "Yes"
-		},
-		{
-			"Type": "Simplification",
-			"Name": "Xor64",
-			"SubName": "Max",
-			"Expression": "IR.Xor64 x 0xFFFFFFFFFFFFFFFF",
-			"Filter": "",
-			"Result": "(IR.Not64 x)",
-			"Variations": "Yes"
 		}
 	]
 }

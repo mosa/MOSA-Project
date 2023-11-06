@@ -84,6 +84,8 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 	#region Data Members
 
+	private readonly Counter InstructionCount = new("CILDecoder.Instructions");
+
 	private readonly Dictionary<BasicBlock, StackEntry> ExceptionStackEntries = new();
 
 	private readonly Dictionary<BasicBlock, StackEntry[]> OutgoingStacks = new();
@@ -101,6 +103,11 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	#endregion Data Members
 
 	#region Overrides Methods
+
+	protected override void Initialize()
+	{
+		Register(InstructionCount);
+	}
 
 	protected override void Setup()
 	{
@@ -493,6 +500,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		var code = Method.Code;
 		var totalCode = code.Count;
+		InstructionCount.Set(totalCode);
 
 		trace?.Log($"Block => {block}");
 

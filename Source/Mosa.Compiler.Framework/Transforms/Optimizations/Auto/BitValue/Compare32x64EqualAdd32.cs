@@ -5,18 +5,18 @@
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.BitValue;
 
 /// <summary>
-/// Compare64x32SignedLessAdd64
+/// Compare32x64EqualAdd32
 /// </summary>
 [Transform("IR.Optimizations.Auto.BitValue")]
-public sealed class Compare64x32SignedLessAdd64 : BaseTransform
+public sealed class Compare32x64EqualAdd32 : BaseTransform
 {
-	public Compare64x32SignedLessAdd64() : base(IRInstruction.Compare64x32, TransformType.Auto | TransformType.Optimization)
+	public Compare32x64EqualAdd32() : base(IRInstruction.Compare32x64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
 	public override bool Match(Context context, Transform transform)
 	{
-		if (context.ConditionCode != ConditionCode.Less)
+		if (context.ConditionCode != ConditionCode.Equal)
 			return false;
 
 		if (!context.Operand1.IsVirtualRegister)
@@ -25,7 +25,7 @@ public sealed class Compare64x32SignedLessAdd64 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Add64)
+		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Add32)
 			return false;
 
 		if (!IsResolvedConstant(context.Operand1.Definitions[0].Operand2))
@@ -34,7 +34,7 @@ public sealed class Compare64x32SignedLessAdd64 : BaseTransform
 		if (!IsResolvedConstant(context.Operand2))
 			return false;
 
-		if (IsAddOverflow64(BitValueMax64(context.Operand1.Definitions[0].Operand1), BitValueMax64(context.Operand1.Definitions[0].Operand2)))
+		if (IsAddOverflow32(BitValueMax32(context.Operand1.Definitions[0].Operand1), BitValueMax32(context.Operand1.Definitions[0].Operand2)))
 			return false;
 
 		return true;
@@ -48,26 +48,26 @@ public sealed class Compare64x32SignedLessAdd64 : BaseTransform
 		var t2 = context.Operand1.Definitions[0].Operand2;
 		var t3 = context.Operand2;
 
-		var v1 = transform.VirtualRegisters.Allocate64();
+		var v1 = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction(IRInstruction.Sub64, v1, t3, t2);
-		context.AppendInstruction(IRInstruction.Compare64x32, ConditionCode.Less, result, t1, v1);
+		context.SetInstruction(IRInstruction.Sub32, v1, t3, t2);
+		context.AppendInstruction(IRInstruction.Compare32x64, ConditionCode.Equal, result, t1, v1);
 	}
 }
 
 /// <summary>
-/// Compare64x32SignedLessAdd64_v1
+/// Compare32x64EqualAdd32_v1
 /// </summary>
 [Transform("IR.Optimizations.Auto.BitValue")]
-public sealed class Compare64x32SignedLessAdd64_v1 : BaseTransform
+public sealed class Compare32x64EqualAdd32_v1 : BaseTransform
 {
-	public Compare64x32SignedLessAdd64_v1() : base(IRInstruction.Compare64x32, TransformType.Auto | TransformType.Optimization)
+	public Compare32x64EqualAdd32_v1() : base(IRInstruction.Compare32x64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
 	public override bool Match(Context context, Transform transform)
 	{
-		if (context.ConditionCode != ConditionCode.Greater)
+		if (context.ConditionCode != ConditionCode.Equal)
 			return false;
 
 		if (!context.Operand2.IsVirtualRegister)
@@ -76,7 +76,7 @@ public sealed class Compare64x32SignedLessAdd64_v1 : BaseTransform
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.Add64)
+		if (context.Operand2.Definitions[0].Instruction != IRInstruction.Add32)
 			return false;
 
 		if (!IsResolvedConstant(context.Operand2.Definitions[0].Operand2))
@@ -85,7 +85,7 @@ public sealed class Compare64x32SignedLessAdd64_v1 : BaseTransform
 		if (!IsResolvedConstant(context.Operand1))
 			return false;
 
-		if (IsAddOverflow64(BitValueMax64(context.Operand2.Definitions[0].Operand1), BitValueMax64(context.Operand2.Definitions[0].Operand2)))
+		if (IsAddOverflow32(BitValueMax32(context.Operand2.Definitions[0].Operand1), BitValueMax32(context.Operand2.Definitions[0].Operand2)))
 			return false;
 
 		return true;
@@ -99,9 +99,9 @@ public sealed class Compare64x32SignedLessAdd64_v1 : BaseTransform
 		var t2 = context.Operand2.Definitions[0].Operand1;
 		var t3 = context.Operand2.Definitions[0].Operand2;
 
-		var v1 = transform.VirtualRegisters.Allocate64();
+		var v1 = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction(IRInstruction.Sub64, v1, t1, t3);
-		context.AppendInstruction(IRInstruction.Compare64x32, ConditionCode.Less, result, t2, v1);
+		context.SetInstruction(IRInstruction.Sub32, v1, t1, t3);
+		context.AppendInstruction(IRInstruction.Compare32x64, ConditionCode.Equal, result, t2, v1);
 	}
 }

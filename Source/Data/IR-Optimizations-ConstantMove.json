@@ -73,6 +73,15 @@
 			"Expression": "IR.Xor## a b",
 			"Filter": "IsResolvedConstant(a) & !IsResolvedConstant(b)",
 			"Result": "(IR.Xor## b a)"
+		},
+		{
+			"Type": "ConstantMove",
+			"Name": "Sub##",
+			"SubName": "ToAdd",
+			"Expression": "IR.Sub## a b",
+			"Filter": "!IsResolvedConstant(a) &IsResolvedConstant(b)",
+			"Result": "(IR.Add## a [Neg##(To##(b))])",
+			"Log": "Yes"
 		}
 	]
 }

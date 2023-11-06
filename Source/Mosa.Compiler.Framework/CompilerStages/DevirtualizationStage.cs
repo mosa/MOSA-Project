@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.CompilerStages;
 /// <seealso cref="Mosa.Compiler.Framework.BaseCompilerStage" />
 public sealed class DevirtualizationStage : BaseCompilerStage
 {
-	private readonly Counter DevirtualizedMethodsCount = new("DevirtualizationStage.DevirtualizedMethodsCount");
+	private readonly Counter DevirtualizedMethodsCount = new("Devirtualization.DevirtualizedMethodsCount");
 
 	#region Overrides
 

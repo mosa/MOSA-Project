@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.BitValue;
 [Transform("IR.Optimizations.Auto.BitValue")]
 public sealed class Compare32x32UnsignedLessAdd32 : BaseTransform
 {
-	public Compare32x32UnsignedLessAdd32() : base(IRInstruction.Compare32x32, TransformType.Auto | TransformType.Optimization, true)
+	public Compare32x32UnsignedLessAdd32() : base(IRInstruction.Compare32x32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -51,7 +51,7 @@ public sealed class Compare32x32UnsignedLessAdd32 : BaseTransform
 		var v1 = transform.VirtualRegisters.Allocate32();
 
 		context.SetInstruction(IRInstruction.Sub32, v1, t3, t2);
-		context.AppendInstruction(IRInstruction.Compare32x32, ConditionCode.Less, result, t1, v1);
+		context.AppendInstruction(IRInstruction.Compare32x32, ConditionCode.UnsignedLess, result, t1, v1);
 	}
 }
 
@@ -61,7 +61,7 @@ public sealed class Compare32x32UnsignedLessAdd32 : BaseTransform
 [Transform("IR.Optimizations.Auto.BitValue")]
 public sealed class Compare32x32UnsignedLessAdd32_v1 : BaseTransform
 {
-	public Compare32x32UnsignedLessAdd32_v1() : base(IRInstruction.Compare32x32, TransformType.Auto | TransformType.Optimization, true)
+	public Compare32x32UnsignedLessAdd32_v1() : base(IRInstruction.Compare32x32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -102,6 +102,6 @@ public sealed class Compare32x32UnsignedLessAdd32_v1 : BaseTransform
 		var v1 = transform.VirtualRegisters.Allocate32();
 
 		context.SetInstruction(IRInstruction.Sub32, v1, t1, t3);
-		context.AppendInstruction(IRInstruction.Compare32x32, ConditionCode.Less, result, t2, v1);
+		context.AppendInstruction(IRInstruction.Compare32x32, ConditionCode.UnsignedLess, result, t2, v1);
 	}
 }

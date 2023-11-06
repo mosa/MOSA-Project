@@ -436,9 +436,19 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 		return -a;
 	}
 
+	protected static int Neg32(uint a)
+	{
+		return -((int)a);
+	}
+
 	protected static long Neg64(long a)
 	{
 		return -a;
+	}
+
+	protected static long Neg64(ulong a)
+	{
+		return -((long)a);
 	}
 
 	protected static uint Not32(uint a)
@@ -916,7 +926,12 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 		return EvaluateCompare(operand1.BitValue, operand2.BitValue, condition);
 	}
 
-	protected static bool? EvaluateCompare(BitValue value1, BitValue value2, ConditionCode condition)
+	protected static bool IsBitValueZeroOrOne(Operand operand)
+	{
+		return operand.BitValue.IsZeroOrOne;
+	}
+
+	public static bool? EvaluateCompare(BitValue value1, BitValue value2, ConditionCode condition)
 	{
 		switch (condition)
 		{
