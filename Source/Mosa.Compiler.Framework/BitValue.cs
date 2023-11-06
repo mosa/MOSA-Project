@@ -85,11 +85,13 @@ public sealed class BitValue
 
 	public bool IsSignBitClear64 => ((BitsClear >> 63) & 1) == 1;
 
-	public bool IsZeroOrOne => (MinValue == 0 && MaxValue == 1) || (BitsClear == ~1ul);
+	public bool IsZeroOrOne => MinValue <= 1 || BitsClear == ~((ulong)1);
 
 	public bool IsZero => (MinValue == 0 && MaxValue == 0) || (BitsClear == ~0ul);
 
 	public bool IsOne => (MinValue == 1 && MaxValue == 1) || (BitsClear == ~1ul && BitsSet == 1);
+
+	public bool IsNotZero => MinValue >= 1 || BitsSet != 0;
 
 	#endregion Property Values
 
@@ -168,6 +170,8 @@ public sealed class BitValue
 		if (IsFixed)
 			return this;
 
+		Debug.Assert(maxValue >= MinValue);
+
 		MaxValue = Math.Min(MaxValue, maxValue);
 
 		return Narrow();
@@ -178,7 +182,9 @@ public sealed class BitValue
 		if (IsFixed)
 			return this;
 
-		MinValue = Math.Min(MinValue, minValue);
+		Debug.Assert(minValue <= MaxValue);
+
+		MinValue = Math.Max(MinValue, minValue);
 
 		return Narrow();
 	}
@@ -285,6 +291,14 @@ public sealed class BitValue
 		MaxValue = Math.Min(MaxValue, maxPossible);
 
 		BitsClear |= BitTwiddling.GetBitsOver(MaxValue);
+
+		if (MinValue == ulong.MaxValue)
+			BitsSet = ulong.MaxValue;
+		else if (MinValue == uint.MaxValue && Is32Bit)
+			BitsSet = uint.MaxValue;
+
+		Debug.Assert(MinValue <= MaxValue);
+		Debug.Assert((BitsSet & BitsClear) == 0);
 
 		return CheckStable();
 	}
