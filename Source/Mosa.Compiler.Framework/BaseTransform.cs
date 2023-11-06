@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Diagnostics;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Exceptions;
 
@@ -716,6 +717,36 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 		return (uint)operand.Uses.Count;
 	}
 
+	protected static bool IsAddSignedOverflow32(int a, int b)
+	{
+		return IntegerTwiddling.IsAddSignedOverflow(a, b);
+	}
+
+	protected static bool IsAddSignedOverflow64(long a, long b)
+	{
+		return IntegerTwiddling.IsAddSignedOverflow(a, b);
+	}
+
+	protected static bool IsAddUnsignedOverflow32(uint a, uint b)
+	{
+		return IntegerTwiddling.IsAddUnsignedCarry(a, b);
+	}
+
+	protected static bool IsAddUnsignedOverflow64(ulong a, ulong b)
+	{
+		return IntegerTwiddling.IsAddUnsignedCarry(a, b);
+	}
+
+	protected static bool IsAddOverflow32(ulong a, ulong b)
+	{
+		return IsAddSignedOverflow32((int)a, (int)b) || IsAddUnsignedOverflow32((uint)a, (uint)b);
+	}
+
+	protected static bool IsAddOverflow64(ulong a, ulong b)
+	{
+		return IsAddSignedOverflow64((long)a, (long)b) || IsAddUnsignedOverflow64(a, b);
+	}
+
 	#endregion Expression Methods
 
 	#region SignExtend Helpers
@@ -850,14 +881,34 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 
 	#region BitTracker Helpers
 
-	protected static bool IsBitValueSignBitCleared32(Operand operand1)
+	protected static uint BitValueMax32(Operand operand)
 	{
-		return operand1.BitValue.IsSignBitClear32;
+		return (uint)operand.BitValue.MaxValue;
 	}
 
-	protected static bool IsBitValueSignBitCleared64(Operand operand1)
+	protected static ulong BitValueMax64(Operand operand)
 	{
-		return operand1.BitValue.IsSignBitClear64;
+		return (ulong)operand.BitValue.MaxValue;
+	}
+
+	protected static uint BitValueMin32(Operand operand)
+	{
+		return (uint)operand.BitValue.MinValue;
+	}
+
+	protected static ulong BitValueMin64(Operand operand)
+	{
+		return (ulong)operand.BitValue.MinValue;
+	}
+
+	protected static bool IsBitValueSignBitCleared32(Operand operand)
+	{
+		return operand.BitValue.IsSignBitClear32;
+	}
+
+	protected static bool IsBitValueSignBitCleared64(Operand operand)
+	{
+		return operand.BitValue.IsSignBitClear64;
 	}
 
 	protected static bool? EvaluateCompare(Operand operand1, Operand operand2, ConditionCode condition)

@@ -165,4 +165,44 @@ public static class SpecificTests
 
 	[MosaUnitTest(Series = "I8")]
 	public static long ShiftRightI8By64(long x) => x >> 64;
+
+	[MosaUnitTest(Series = "U4")]
+	public static bool CompareAddU4(uint v)
+	{
+		var a = v & 0xFFFF;
+		var c1 = 10;
+		var v2 = 100;
+
+		return a + c1 < v2;
+	}
+
+	[MosaUnitTest(Series = "I4")]
+	public static bool CompareAddI4(int v)
+	{
+		var a = v & 0xFFFF;
+		var c1 = 10;
+		var v2 = 100;
+
+		return a + c1 < v2;
+	}
+
+	[MosaUnitTest(Series = "U8")]
+	public static bool CompareAddU8(ulong v)
+	{
+		var a = v & 0xFFFF;
+		var c1 = 10ul;
+		var v2 = 100ul;
+
+		return a + c1 < v2;
+	}
+
+	[MosaUnitTest(Series = "I8")]
+	public static bool CompareAddU8(long v)
+	{
+		var a = v & 0xFFFF;
+		var c1 = 10l;
+		var v2 = 100l;
+
+		return a + c1 < v2;
+	}
 }
