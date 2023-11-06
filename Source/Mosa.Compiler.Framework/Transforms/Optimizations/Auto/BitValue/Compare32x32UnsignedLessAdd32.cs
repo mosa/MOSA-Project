@@ -54,3 +54,54 @@ public sealed class Compare32x32UnsignedLessAdd32 : BaseTransform
 		context.AppendInstruction(IRInstruction.Compare32x32, ConditionCode.Less, result, t1, v1);
 	}
 }
+
+/// <summary>
+/// Compare32x32UnsignedLessAdd32_v1
+/// </summary>
+[Transform("IR.Optimizations.Auto.BitValue")]
+public sealed class Compare32x32UnsignedLessAdd32_v1 : BaseTransform
+{
+	public Compare32x32UnsignedLessAdd32_v1() : base(IRInstruction.Compare32x32, TransformType.Auto | TransformType.Optimization, true)
+	{
+	}
+
+	public override bool Match(Context context, Transform transform)
+	{
+		if (context.ConditionCode != ConditionCode.UnsignedGreater)
+			return false;
+
+		if (!context.Operand2.IsVirtualRegister)
+			return false;
+
+		if (!context.Operand2.IsDefinedOnce)
+			return false;
+
+		if (context.Operand2.Definitions[0].Instruction != IRInstruction.Add32)
+			return false;
+
+		if (!IsResolvedConstant(context.Operand2.Definitions[0].Operand2))
+			return false;
+
+		if (!IsResolvedConstant(context.Operand1))
+			return false;
+
+		if (IsAddOverflow32(BitValueMax32(context.Operand2.Definitions[0].Operand1), BitValueMax32(context.Operand2.Definitions[0].Operand2)))
+			return false;
+
+		return true;
+	}
+
+	public override void Transform(Context context, Transform transform)
+	{
+		var result = context.Result;
+
+		var t1 = context.Operand1;
+		var t2 = context.Operand2.Definitions[0].Operand1;
+		var t3 = context.Operand2.Definitions[0].Operand2;
+
+		var v1 = transform.VirtualRegisters.Allocate32();
+
+		context.SetInstruction(IRInstruction.Sub32, v1, t1, t3);
+		context.AppendInstruction(IRInstruction.Compare32x32, ConditionCode.Less, result, t2, v1);
+	}
+}

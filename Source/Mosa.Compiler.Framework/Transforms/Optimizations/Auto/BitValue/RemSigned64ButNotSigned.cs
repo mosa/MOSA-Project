@@ -5,12 +5,12 @@
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.BitValue;
 
 /// <summary>
-/// ArithShiftRight64NotSigned
+/// RemSigned64ButNotSigned
 /// </summary>
 [Transform("IR.Optimizations.Auto.BitValue")]
-public sealed class ArithShiftRight64NotSigned : BaseTransform
+public sealed class RemSigned64ButNotSigned : BaseTransform
 {
-	public ArithShiftRight64NotSigned() : base(IRInstruction.ArithShiftRight64, TransformType.Auto | TransformType.Optimization)
+	public RemSigned64ButNotSigned() : base(IRInstruction.RemSigned64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -19,6 +19,9 @@ public sealed class ArithShiftRight64NotSigned : BaseTransform
 	public override bool Match(Context context, Transform transform)
 	{
 		if (!IsBitValueSignBitCleared64(context.Operand1))
+			return false;
+
+		if (!IsBitValueSignBitCleared64(context.Operand2))
 			return false;
 
 		return true;
@@ -31,6 +34,6 @@ public sealed class ArithShiftRight64NotSigned : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2;
 
-		context.SetInstruction(IRInstruction.ShiftRight64, result, t1, t2);
+		context.SetInstruction(IRInstruction.RemUnsigned64, result, t1, t2);
 	}
 }
