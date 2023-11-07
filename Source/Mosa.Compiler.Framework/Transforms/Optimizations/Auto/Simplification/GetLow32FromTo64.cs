@@ -14,6 +14,8 @@ public sealed class GetLow32FromTo64 : BaseTransform
 	{
 	}
 
+	public override int Priority => 25;
+
 	public override bool Match(Context context, Transform transform)
 	{
 		if (!context.Operand1.IsVirtualRegister)

@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
 public sealed class MulSigned64 : BaseLower32Transform
 {
-	public MulSigned64() : base(IRInstruction.MulSigned64, TransformType.Manual | TransformType.Optimization, true)
+	public MulSigned64() : base(IRInstruction.MulSigned64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

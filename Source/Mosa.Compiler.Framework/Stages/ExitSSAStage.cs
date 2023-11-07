@@ -11,13 +11,13 @@ namespace Mosa.Compiler.Framework.Stages;
 /// <seealso cref="Mosa.Compiler.Framework.BaseMethodCompilerStage" />
 public class ExitSSAStage : BaseMethodCompilerStage
 {
-	private readonly Counter InstructionCount = new("ExitSSAStage.IRInstructions");
-	private readonly Counter MoveAvoidedCount = new("ExitSSAStage.MoveAvoided");
+	private readonly Counter InstructionCount = new("ExitSSA.IRInstructions");
+	private readonly Counter MovesAvoidedCount = new("ExitSSA.MovesAvoided");
 
 	protected override void Initialize()
 	{
 		Register(InstructionCount);
-		Register(MoveAvoidedCount);
+		Register(MovesAvoidedCount);
 	}
 
 	protected override void Run()
@@ -85,7 +85,7 @@ public class ExitSSAStage : BaseMethodCompilerStage
 			if (destination.IsUsedOnce || CheckIfLast(predecessor, destination, source))
 			{
 				source.Definitions[0].Result = destination;
-				MoveAvoidedCount.Increment();
+				MovesAvoidedCount.Increment();
 				return;
 			}
 		}

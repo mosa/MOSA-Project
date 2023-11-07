@@ -2,7 +2,6 @@
 
 using System.Diagnostics;
 using Mosa.Compiler.Framework.Linker;
-using Mosa.Compiler.Framework.Managers;
 using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework;
@@ -14,8 +13,6 @@ public sealed class Transform
 	public MethodCompiler MethodCompiler { get; private set; }
 
 	public Compiler Compiler { get; private set; }
-
-	public BitValueManager BitValueManager { get; private set; }
 
 	public TypeSystem TypeSystem { get; private set; }
 
@@ -198,9 +195,6 @@ public sealed class Transform
 	public void AddManager(BaseTransformManager transformManager)
 	{
 		Managers.Add(transformManager.GetType(), transformManager);
-
-		// minor hack for now
-		BitValueManager = transformManager as BitValueManager;
 	}
 
 	#endregion Manager
@@ -464,20 +458,6 @@ public sealed class Transform
 	}
 
 	#endregion Linker Helpers
-
-	#region BitValue (experimental)
-
-	public BitValue GetBitValue(Operand operand)
-	{
-		return BitValueManager.GetBitValue(operand);
-	}
-
-	//public BitValue GetBitValueWithDefault(Operand operand)
-	//{
-	//	return BitValueManager.GetBitValueDefaultAny(operand);
-	//}
-
-	#endregion BitValue (experimental)
 
 	#region Floating Point Helpers
 

@@ -1,0 +1,167 @@
+﻿{
+	"Family": "IR",
+	"Section": "Optimizations.Auto",
+	"Commutative": [
+		"IR.Add32",
+		"IR.Add64",
+		"IR.AddR4",
+		"IR.AddR8",
+		"IR.AddManagedPointer",
+		"IR.And32",
+		"IR.And64",
+		"IR.Or32",
+		"IR.Or64",
+		"IR.Xor32",
+		"IR.Xor64",
+		"IR.MulR4",
+		"IR.MulR8",
+		"IR.MulUnsigned32",
+		"IR.MulUnsigned64",
+		"IR.MulSigned32",
+		"IR.MulSigned64",
+		"IR.AddCarryOut64",
+		"IR.AddCarryOut32",
+		"IR.AddCarryIn32",
+		"IR.AddCarryIn64",
+		"IR.Compare32x32",
+		"IR.Compare32x64",
+		"IR.Compare64x32",
+		"IR.Compare64x64",
+		"IR.CompareObject",
+		"IR.CompareManagedPointer",
+		"IR.MulHu32"
+	],
+	"Optimizations": [
+		{
+			"Type": "BitValue",
+			"Name": "MulSigned##",
+			"SubName": "ButNotSigned",
+			"Expression": "IR.MulSigned## a b",
+			"Filter": "IsBitValueSignBitCleared##(a) && IsBitValueSignBitCleared##(b)",
+			"Result": "(IR.MulUnsigned## a b)",
+			"Priority": "20",
+			"Variations": "No",
+			"Log": "No"
+		},
+		{
+			"Type": "BitValue",
+			"Name": "RemSigned##",
+			"SubName": "ButNotSigned",
+			"Expression": "IR.RemSigned## a b",
+			"Filter": "IsBitValueSignBitCleared##(a) && IsBitValueSignBitCleared##(b)",
+			"Result": "(IR.RemUnsigned## a b)",
+			"Priority": "20",
+			"Variations": "No",
+			"Log": "No"
+		},
+		{
+			"Type": "BitValue",
+			"Name": "ArithShiftRight##",
+			"SubName": "ButNotSigned",
+			"Expression": "IR.ArithShiftRight## a b",
+			"Filter": "IsBitValueSignBitCleared##(a)",
+			"Result": "(IR.ShiftRight## a b)",
+			"Priority": "20",
+			"Variations": "No",
+			"Log": "No"
+		},
+
+		{
+			"Type": "BitValue",
+			"Name": "Compare##x32Equal",
+			"SubName": "Add##",
+			"Expression": "IR.Compare##x32 {=} (IR.Add## a c1) c2",
+			"Filter": "IsResolvedConstant(c1) && IsResolvedConstant(c2) && !IsAddOverflow##(BitValueMax##(a), BitValueMax##(c1))",
+			"Result": "(IR.Compare##x32 {=} a (IR.Sub## c2 c1))",
+			"Variations": "Yes",
+			"Log": "No",
+			"Commutative": [
+				"IR.Compare32x32",
+				"IR.Compare32x64",
+				"IR.Compare64x32",
+				"IR.Compare64x64"
+			]
+		},
+		{
+			"Type": "BitValue",
+			"Name": "Compare##x64Equal",
+			"SubName": "Add##",
+			"Expression": "IR.Compare##x64 {=} (IR.Add## a c1) c2",
+			"Filter": "IsResolvedConstant(c1) && IsResolvedConstant(c2) && !IsAddOverflow##(BitValueMax##(a), BitValueMax##(c1))",
+			"Result": "(IR.Compare##x64 {=} a (IR.Sub## c2 c1))",
+			"Variations": "Yes",
+			"Log": "No",
+			"Commutative": [
+				"IR.Compare32x32",
+				"IR.Compare32x64",
+				"IR.Compare64x32",
+				"IR.Compare64x64"
+			]
+		},
+
+		{
+			"Type": "BitValue",
+			"Name": "Compare##x32SignedLess",
+			"SubName": "Add##",
+			"Expression": "IR.Compare##x32 {<} (IR.Add## a c1) c2",
+			"Filter": "IsResolvedConstant(c1) && IsResolvedConstant(c2) && !IsAddOverflow##(BitValueMax##(a), BitValueMax##(c1))",
+			"Result": "(IR.Compare##x32 {<} a (IR.Sub## c2 c1))",
+			"Variations": "Yes",
+			"Log": "No",
+			"Commutative": [
+				"IR.Compare32x32",
+				"IR.Compare32x64",
+				"IR.Compare64x32",
+				"IR.Compare64x64"
+			]
+		},
+		{
+			"Type": "BitValue",
+			"Name": "Compare##x64SignedLess",
+			"SubName": "Add##",
+			"Expression": "IR.Compare##x64 {<} (IR.Add## a c1) c2",
+			"Filter": "IsResolvedConstant(c1) && IsResolvedConstant(c2) && !IsAddOverflow##(BitValueMax##(a), BitValueMax##(c1))",
+			"Result": "(IR.Compare##x64 {<} a (IR.Sub## c2 c1))",
+			"Variations": "Yes",
+			"Log": "No",
+			"Commutative": [
+				"IR.Compare32x32",
+				"IR.Compare32x64",
+				"IR.Compare64x32",
+				"IR.Compare64x64"
+			]
+		},
+		{
+			"Type": "BitValue",
+			"Name": "Compare##x32UnsignedLess",
+			"SubName": "Add##",
+			"Expression": "IR.Compare##x32 {< u} (IR.Add## a c1) c2",
+			"Filter": "IsResolvedConstant(c1) && IsResolvedConstant(c2) && !IsAddOverflow##(BitValueMax##(a), BitValueMax##(c1))",
+			"Result": "(IR.Compare##x32 {< u} a (IR.Sub## c2 c1))",
+			"Variations": "Yes",
+			"Log": "No",
+			"Commutative": [
+				"IR.Compare32x32",
+				"IR.Compare32x64",
+				"IR.Compare64x32",
+				"IR.Compare64x64"
+			]
+		},
+		{
+			"Type": "BitValue",
+			"Name": "Compare##x64UnsignedLess",
+			"SubName": "Add##",
+			"Expression": "IR.Compare##x64 {< u} (IR.Add## a c1) c2",
+			"Filter": "IsResolvedConstant(c1) && IsResolvedConstant(c2) && !IsAddOverflow##(BitValueMax##(a), BitValueMax##(c1))",
+			"Result": "(IR.Compare##x64 {< u} a (IR.Sub## c2 c1))",
+			"Variations": "Yes",
+			"Log": "No",
+			"Commutative": [
+				"IR.Compare32x32",
+				"IR.Compare32x64",
+				"IR.Compare64x32",
+				"IR.Compare64x64"
+			]
+		}
+	]
+}

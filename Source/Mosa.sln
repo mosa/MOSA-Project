@@ -132,6 +132,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Transforms", "Transforms", "{F84EFA2E-4B38-410F-A7DE-385DB71BB37F}"
 	ProjectSection(SolutionItems) = preProject
 		Data\IR-Optimizations-Algebraic.json = Data\IR-Optimizations-Algebraic.json
+		Data\IR-Optimizations-BitValue.json = Data\IR-Optimizations-BitValue.json
 		Data\IR-Optimizations-ConstantFolding-Expression.json = Data\IR-Optimizations-ConstantFolding-Expression.json
 		Data\IR-Optimizations-ConstantFolding-MemoryAccess.json = Data\IR-Optimizations-ConstantFolding-MemoryAccess.json
 		Data\IR-Optimizations-ConstantFolding-MemoryAccess2.json = Data\IR-Optimizations-ConstantFolding-MemoryAccess2.json

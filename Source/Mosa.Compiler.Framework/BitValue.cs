@@ -1,6 +1,9 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Diagnostics;
 using System.Text;
+using Mosa.Compiler.Common;
+using Mosa.Compiler.Common.Configuration;
 
 namespace Mosa.Compiler.Framework;
 
@@ -8,82 +11,7 @@ public sealed class BitValue
 {
 	private const ulong Upper32BitsSet = ~(ulong)uint.MaxValue;
 
-	#region Static Values
-
-	public static readonly BitValue Any32 = new BitValue(0, Upper32BitsSet, uint.MaxValue, 0, true);
-	public static readonly BitValue Any64 = new BitValue(0, 0, ulong.MaxValue, 0, false);
-
-	public static readonly BitValue AnyExceptZero32 = new BitValue(0, Upper32BitsSet, uint.MaxValue, 1, true);
-	public static readonly BitValue AnyExceptZero64 = new BitValue(0, 0, ulong.MaxValue, 1, false);
-
-	public static readonly BitValue Zero32 = new BitValue(0, true);
-	public static readonly BitValue Zero64 = new BitValue(0, false);
-
-	public static readonly BitValue One32 = new BitValue(1, true);
-	public static readonly BitValue One64 = new BitValue(1, false);
-
-	public static readonly BitValue I2_32 = new BitValue(2, true);
-	public static readonly BitValue I2_64 = new BitValue(2, false);
-
-	public static readonly BitValue I3_32 = new BitValue(3, true);
-	public static readonly BitValue I3_64 = new BitValue(3, false);
-
-	public static readonly BitValue I4_32 = new BitValue(4, true);
-	public static readonly BitValue I4_64 = new BitValue(4, false);
-
-	public static readonly BitValue I5_32 = new BitValue(5, true);
-	public static readonly BitValue I5_64 = new BitValue(5, false);
-
-	public static readonly BitValue I7_32 = new BitValue(7, true);
-	public static readonly BitValue I7_64 = new BitValue(7, false);
-
-	public static readonly BitValue I8_32 = new BitValue(8, true);
-	public static readonly BitValue I8_64 = new BitValue(8, false);
-
-	public static readonly BitValue I10_32 = new BitValue(10, true);
-	public static readonly BitValue I10_64 = new BitValue(10, false);
-
-	public static readonly BitValue I16_32 = new BitValue(16, true);
-	public static readonly BitValue I16_64 = new BitValue(16, false);
-
-	public static readonly BitValue I31_32 = new BitValue(31, true);
-	public static readonly BitValue I31_64 = new BitValue(31, false);
-
-	public static readonly BitValue I32_32 = new BitValue(32, true);
-	public static readonly BitValue I32_64 = new BitValue(32, false);
-
-	public static readonly BitValue I50_32 = new BitValue(50, true);
-	public static readonly BitValue I50_64 = new BitValue(50, false);
-
-	public static readonly BitValue I64_32 = new BitValue(64, true);
-	public static readonly BitValue I64_64 = new BitValue(64, false);
-
-	public static readonly BitValue I256_32 = new BitValue(256, true);
-	public static readonly BitValue I256_64 = new BitValue(256, false);
-
-	public static readonly BitValue xF32 = new BitValue(0xF, true);
-	public static readonly BitValue xF64 = new BitValue(0xF, false);
-
-	public static readonly BitValue xFF32 = new BitValue(0xFF, true);
-	public static readonly BitValue xFF64 = new BitValue(0xFF, false);
-
-	public static readonly BitValue xFFFF32 = new BitValue(0xFFFF, true);
-	public static readonly BitValue xFFFF64 = new BitValue(0xFFFF, false);
-
-	public static readonly BitValue IntMin32 = new BitValue(unchecked((ulong)int.MinValue), true);
-	public static readonly BitValue IntMax32 = new BitValue(int.MaxValue, true);
-	public static readonly BitValue UIntMax32 = new BitValue(uint.MaxValue, true);
-
-	public static readonly BitValue IntMax64 = new BitValue(int.MaxValue, false);
-	public static readonly BitValue IntMin64 = new BitValue(unchecked((ulong)int.MinValue), false);
-	public static readonly BitValue LongMin64 = new BitValue(unchecked((ulong)long.MinValue), false);
-	public static readonly BitValue UIntMax64 = new BitValue(uint.MaxValue, false);
-	public static readonly BitValue ULongMax64 = new BitValue(ulong.MaxValue, false);
-
-	public static readonly BitValue Upper48BitsSet = new BitValue(~(ulong)ushort.MaxValue, false);
-	public static readonly BitValue Upper56BitsSet = new BitValue(~(ulong)byte.MaxValue, false);
-
-	#endregion Static Values
+	#region Property Fields - Bits
 
 	public ulong BitsClear { get; private set; }
 
@@ -93,27 +21,21 @@ public sealed class BitValue
 
 	public ulong MinValue { get; private set; }
 
-	public bool Is32Bit { get; private set; }
+	public readonly bool Is32Bit;
 
-	#region Future
+	#endregion Property Fields - Bits
 
-	//public ulong A { get; private set; }
+	#region Status Fields
 
-	//public ulong B { get; private set; }
+	public bool IsFixed { get; private set; }
 
-	//public bool IsSetValid => A != B || IsSetEmptySet || IsFullSet);
+	public bool IsStable { get; private set; }
 
-	//public bool IsSetEmptySet => A == 0 && B == 0;
+	public bool IsResolved => (MinValue == MaxValue) || AreAll64BitsKnown;
 
-	//public bool IsSetWrapped => A > B;
+	#endregion Status Fields
 
-	//public bool IsFullSet => IsSetFull64BitSet || (IsSetFull32BitSet && Is32Bit);
-
-	//public bool IsFullSet32 => (A == uint.MaxValue && B == uint.MaxValue) || (A == 0 && B > uint.MaxValue);
-
-	//public bool IsFullSet64 => A == ulong.MaxValue && B == ulong.MaxValue;
-
-	#endregion Future
+	#region Property Values
 
 	public bool Is64Bit => !Is32Bit;
 
@@ -163,133 +85,232 @@ public sealed class BitValue
 
 	public bool IsSignBitClear64 => ((BitsClear >> 63) & 1) == 1;
 
-	private BitValue(ulong value, bool is32Bit)
+	public bool IsZeroOrOne => MinValue <= 1 || BitsClear == ~((ulong)1);
+
+	public bool IsZero => (MinValue == 0 && MaxValue == 0) || (BitsClear == ~0ul);
+
+	public bool IsOne => (MinValue == 1 && MaxValue == 1) || (BitsClear == ~1ul && BitsSet == 1);
+
+	public bool IsNotZero => MinValue >= 1 || BitsSet != 0;
+
+	#endregion Property Values
+
+	#region Constructors
+
+	public BitValue(bool is32Bit)
 	{
+		Is32Bit = is32Bit;
+
+		IsFixed = false;
+		IsStable = false;
+
+		BitsSet = 0;
+		MinValue = 0;
+
+		if (Is32Bit)
+		{
+			BitsClear = Upper32BitsSet;
+			MaxValue = uint.MaxValue;
+		}
+		else
+		{
+			BitsClear = 0;
+			MaxValue = ulong.MaxValue;
+		}
+	}
+
+	public BitValue(bool is32Bit, ulong value)
+	{
+		Is32Bit = is32Bit;
+
+		if (Is32Bit)
+			value &= uint.MaxValue;
+
+		IsFixed = true;
+		IsStable = true;
+
 		BitsSet = value;
 		BitsClear = ~value;
 		MaxValue = value;
 		MinValue = value;
-		Is32Bit = is32Bit;
-
-		if (is32Bit)
-		{
-			MaxValue &= uint.MaxValue;
-			MinValue &= uint.MaxValue;
-			BitsSet &= uint.MaxValue;
-			BitsClear |= Upper32BitsSet;
-		}
 	}
 
-	private BitValue(ulong bitsSet, ulong bitsClear, ulong maxValue, ulong minValue, bool is32Bit)
+	#endregion Constructors
+
+	#region Public Methods
+
+	public BitValue SetValue(BitValue value)
 	{
-		BitsSet = bitsSet;
-		BitsClear = bitsClear;
-		MaxValue = maxValue;
-		MinValue = minValue;
-		Is32Bit = is32Bit;
+		return Narrow(value).SetStable();
 	}
 
-	public static BitValue CreateValue(ulong bitsSet, ulong bitsClear, ulong maxValue, ulong minValue, bool rangeDeterminate, bool is32Bit)
+	public BitValue SetValue(ulong value)
 	{
-		var _maxValue = rangeDeterminate ? maxValue : ulong.MaxValue;
-		var _minValue = rangeDeterminate ? minValue : 0;
+		if (Is32Bit)
+			value &= uint.MaxValue;
 
-		if (is32Bit)
+		Debug.Assert(value >= MinValue && value <= MaxValue);
+		Debug.Assert((value & BitsClear) == 0);
+
+		if (IsFixed)
+			return this;
+
+		IsStable = true;
+
+		BitsSet = value;
+		BitsClear = ~value;
+		MaxValue = value;
+		MinValue = value;
+
+		return this;
+	}
+
+	public BitValue NarrowMax(ulong maxValue)
+	{
+		if (IsFixed)
+			return this;
+
+		Debug.Assert(maxValue >= MinValue);
+
+		MaxValue = Math.Min(MaxValue, maxValue);
+
+		return Narrow();
+	}
+
+	public BitValue NarrowMin(ulong minValue)
+	{
+		if (IsFixed)
+			return this;
+
+		Debug.Assert(minValue <= MaxValue);
+
+		MinValue = Math.Max(MinValue, minValue);
+
+		return Narrow();
+	}
+
+	public BitValue NarrowSetBits(ulong bitsSet)
+	{
+		if (IsFixed)
+			return this;
+
+		if (Is32Bit)
 		{
-			_maxValue &= uint.MaxValue;
-			_minValue &= uint.MaxValue;
 			bitsSet &= uint.MaxValue;
+		}
+
+		BitsSet |= bitsSet;
+
+		Debug.Assert((BitsSet & BitsClear) == 0);
+
+		return Narrow();
+	}
+
+	public BitValue NarrowClearBits(ulong bitsClear)
+	{
+		if (IsFixed)
+			return this;
+
+		if (Is32Bit)
+		{
 			bitsClear |= Upper32BitsSet;
 		}
 
-		var bitsUnknown = ~(bitsSet | bitsClear);
-		var maxPossible = bitsSet | bitsUnknown;
-		var minPossible = bitsSet & bitsUnknown;
+		BitsClear |= bitsClear;
 
-		_minValue = Math.Max(_minValue, minPossible);
-		_maxValue = Math.Min(_maxValue, maxPossible);
+		Debug.Assert((BitsSet & BitsClear) == 0);
 
-		if (_maxValue == _minValue)
-			return CreateValue(_maxValue, is32Bit);
-
-		if ((bitsSet | bitsClear) == ulong.MaxValue)
-			return CreateValue(bitsSet, is32Bit);
-
-		if (bitsSet == 0 && bitsClear == Upper32BitsSet && _maxValue == uint.MaxValue && _minValue == 0 && is32Bit)
-			return Any32;
-
-		if (bitsSet == 0 && bitsClear == 0 && _maxValue == ulong.MaxValue && _minValue == 0 && !is32Bit)
-			return Any64;
-
-		return new BitValue(bitsSet, bitsClear, _maxValue, _minValue, is32Bit);
+		return Narrow();
 	}
 
-	public static BitValue CreateValue(bool value, bool is32Bit)
+	public BitValue SetNotNull()
 	{
-		return CreateValue(value ? 1u : 0, is32Bit);
+		return NarrowMin(1);
 	}
 
-	public static BitValue CreateValue(ulong value, bool is32Bit)
+	public BitValue Set32BitValue()
 	{
-		if (is32Bit)
-		{
-			switch ((uint)value)
-			{
-				case 0: return Zero32;
-				case 1: return One32;
-				case 2: return I2_32;
-				case 3: return I3_32;
-				case 4: return I4_32;
-				case 5: return I5_32;
-				case 7: return I7_32;
-				case 8: return I8_32;
-				case 10: return I10_32;
-				case 16: return I16_32;
-				case 32: return I32_32;
-				case 50: return I50_32;
-				case 64: return I64_32;
-				case 256: return I256_32;
-				case 0xF: return xF32;
-				case 0xFF: return xFF32;
-				case 0xFFFF: return xFFFF32;
-				case uint.MaxValue: return UIntMax32;
-				case int.MaxValue: return IntMax32;
-				case unchecked((uint)int.MinValue): return IntMin32;
-			}
-		}
-		else
-		{
-			switch (value)
-			{
-				case 0: return Zero64;
-				case 1: return One64;
-				case 2: return I2_64;
-				case 3: return I3_64;
-				case 4: return I4_64;
-				case 5: return I5_64;
-				case 7: return I7_64;
-				case 8: return I8_64;
-				case 10: return I10_64;
-				case 16: return I16_64;
-				case 32: return I32_64;
-				case 50: return I50_64;
-				case 64: return I64_64;
-				case 256: return I256_64;
-				case 0xF: return xF64;
-				case 0xFF: return xFF64;
-				case 0xFFFF: return xFFFF64;
-				case ulong.MaxValue: return ULongMax64;
-				case int.MaxValue: return IntMax64;
-				case unchecked((ulong)int.MinValue): return IntMin64;
-				case uint.MaxValue: return UIntMax64;
-				case unchecked((ulong)long.MinValue): return LongMin64;
-				case ~(ulong)ushort.MaxValue: return Upper48BitsSet;
-				case ~(ulong)byte.MaxValue: return Upper48BitsSet;
-			}
-		}
-
-		return new BitValue(value, is32Bit);
+		return NarrowMax(uint.MaxValue)
+			.NarrowClearBits(Upper32BitsSet).Narrow();
 	}
+
+	public BitValue SetValue(bool value)
+	{
+		return SetValue(value ? 1u : 0);
+	}
+
+	public BitValue Narrow(BitValue value)
+	{
+		return NarrowMin(value.MinValue)
+			.NarrowMax(value.MaxValue)
+			.NarrowSetBits(value.BitsSet)
+			.NarrowClearBits(value.BitsClear);
+	}
+
+	public BitValue SetStable(bool stable)
+	{
+		if (!IsStable && stable)
+			IsStable = stable;
+
+		return this;
+	}
+
+	public BitValue SetStable(BitValue stable)
+	{
+		return SetStable(stable.IsStable);
+	}
+
+	public BitValue SetStable(BitValue a, BitValue b)
+	{
+		return SetStable(a.IsStable && b.IsStable);
+	}
+
+	public BitValue SetStable(BitValue a, BitValue b, BitValue c)
+	{
+		return SetStable(a.IsStable && b.IsStable & c.IsStable);
+	}
+
+	public BitValue SetStable()
+	{
+		IsStable = true;
+
+		return this;
+	}
+
+	#endregion Public Methods
+
+	#region Private Methods
+
+	private BitValue Narrow()
+	{
+		var bitsUnknown = ~(BitsSet | BitsClear);
+		var maxPossible = BitsSet | bitsUnknown;
+		var minPossible = BitsSet & bitsUnknown;
+
+		MinValue = Math.Max(MinValue, minPossible);
+		MaxValue = Math.Min(MaxValue, maxPossible);
+
+		BitsClear |= BitTwiddling.GetBitsOver(MaxValue);
+
+		if (MinValue == ulong.MaxValue)
+			BitsSet = ulong.MaxValue;
+		else if (MinValue == uint.MaxValue && Is32Bit)
+			BitsSet = uint.MaxValue;
+
+		Debug.Assert(MinValue <= MaxValue);
+		Debug.Assert((BitsSet & BitsClear) == 0);
+
+		return CheckStable();
+	}
+
+	private BitValue CheckStable()
+	{
+		IsStable |= IsResolved;
+
+		return this;
+	}
+
+	#endregion Private Methods
 
 	public override string ToString()
 	{

@@ -38,7 +38,8 @@
 			"SubName": "Coalescing",
 			"Expression": "IR.Move## (IR.Move## a)",
 			"Filter": "!IsCPURegister(a)",
-			"Result": "(IR.Move## a)"
+			"Result": "(IR.Move## a)",
+			"Priority": "25"
 		},
 		{
 			"Type": "Simplification",
@@ -46,7 +47,8 @@
 			"SubName": "Coalescing",
 			"Expression": "IR.MoveObject (IR.MoveObject a)",
 			"Filter": "",
-			"Result": "(IR.MoveObject a)"
+			"Result": "(IR.MoveObject a)",
+			"Priority": "25"
 		},
 		{
 			"Type": "Simplification",
@@ -54,7 +56,8 @@
 			"SubName": "Coalescing",
 			"Expression": "IR.MoveManagedPointer (IR.MoveManagedPointer a)",
 			"Filter": "",
-			"Result": "(IR.MoveManagedPointer a)"
+			"Result": "(IR.MoveManagedPointer a)",
+			"Priority": "25"
 		},
 		{
 			"Type": "Simplification",
@@ -62,7 +65,8 @@
 			"SubName": "Twice",
 			"Expression": "IR.Not## (IR.Not## x)",
 			"Filter": "",
-			"Result": "(IR.Move## x)"
+			"Result": "(IR.Move## x)",
+			"Priority": "25"
 		},
 		{
 			"Type": "Simplification",
@@ -70,7 +74,8 @@
 			"SubName": "FromTo64",
 			"Expression": "IR.GetLow32 (IR.To64 a b))",
 			"Filter": "",
-			"Result": "(IR.Move32 a)"
+			"Result": "(IR.Move32 a)",
+			"Priority": "25"
 		},
 		{
 			"Type": "Simplification",
@@ -78,7 +83,8 @@
 			"SubName": "FromTo64",
 			"Expression": "IR.GetHigh32 (IR.To64 a b))",
 			"Filter": "",
-			"Result": "(IR.Move32 b)"
+			"Result": "(IR.Move32 b)",
+			"Priority": "25"
 		},
 		{
 			"Type": "Simplification",
@@ -86,7 +92,8 @@
 			"SubName": "To64",
 			"Expression": "IR.GetHigh32 (IR.To64 a b)",
 			"Filter": "",
-			"Result": "(IR.Move32 b)"
+			"Result": "(IR.Move32 b)",
+			"Priority": "25"
 		},
 		{
 			"Type": "Simplification",
@@ -94,7 +101,8 @@
 			"SubName": "To64",
 			"Expression": "IR.GetLow32 (IR.To64 a b)",
 			"Filter": "",
-			"Result": "(IR.Move32 a)"
+			"Result": "(IR.Move32 a)",
+			"Priority": "25"
 		},
 		{
 			"Type": "Simplification",
@@ -459,6 +467,24 @@
 			"Filter": "",
 			"Result": "(IR.SignExtend32x64 x)",
 			"Variations": "No"
+		},
+		{
+			"Type": "Simplification",
+			"Name": "Xor32",
+			"SubName": "Max",
+			"Expression": "IR.Xor32 x 0xFFFFFFFF",
+			"Filter": "",
+			"Result": "(IR.Not32 x)",
+			"Variations": "Yes"
+		},
+		{
+			"Type": "Simplification",
+			"Name": "Xor64",
+			"SubName": "Max",
+			"Expression": "IR.Xor64 x 0xFFFFFFFFFFFFFFFF",
+			"Filter": "",
+			"Result": "(IR.Not64 x)",
+			"Variations": "Yes"
 		}
 	]
 }
