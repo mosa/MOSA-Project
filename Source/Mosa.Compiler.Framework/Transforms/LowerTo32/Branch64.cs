@@ -2,7 +2,7 @@
 
 namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
-public sealed class Branch64 : BaseLower32Transform
+public sealed class Branch64 : BaseLowerTo32Transform
 {
 	private readonly Branch64Extends branch64Extends = new Branch64Extends(); // BUG?
 
@@ -18,7 +18,7 @@ public sealed class Branch64 : BaseLower32Transform
 		if (branch64Extends.Match(context, transform))
 			return false;
 
-		return transform.IsLowerTo32;
+		return base.Match(context, transform);
 	}
 
 	public override void Transform(Context context, Transform transform)

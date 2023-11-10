@@ -2,7 +2,7 @@
 
 namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
-public sealed class MulUnsigned64 : BaseLower32Transform
+public sealed class MulUnsigned64 : BaseLowerTo32Transform
 {
 	public MulUnsigned64() : base(IRInstruction.MulUnsigned64, TransformType.Manual | TransformType.Optimization)
 	{

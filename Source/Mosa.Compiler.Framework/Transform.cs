@@ -28,7 +28,7 @@ public sealed class Transform
 
 	public BasicBlocks BasicBlocks { get; set; }
 
-	public bool IsLowerTo32 { get; private set; }
+	public TransformStageOption Options { get; private set; }
 
 	public bool AreCPURegistersAllocated { get; private set; }
 
@@ -43,6 +43,8 @@ public sealed class Transform
 	public int TotalTransformCount { get; private set; }
 
 	public bool IsInSSAForm { get; private set; }
+
+	public bool IsLowerTo32 => Options.HasFlag(TransformStageOption.LowerTo32);
 
 	#endregion Properties
 
@@ -127,7 +129,6 @@ public sealed class Transform
 		Is32BitPlatform = Compiler.Architecture.Is32BitPlatform;
 		TypeSystem = Compiler.TypeSystem;
 
-		IsLowerTo32 = Compiler.MosaSettings.LongExpansion;
 		Devirtualization = Compiler.MosaSettings.Devirtualization;
 		Window = Math.Max(Compiler.MosaSettings.OptimizationBasicWindow, 1);
 
@@ -140,7 +141,8 @@ public sealed class Transform
 		MulUnsignedInstruction = Is32BitPlatform ? IRInstruction.MulUnsigned32 : IRInstruction.MulUnsigned64;
 		BranchInstruction = Is32BitPlatform ? IRInstruction.Branch32 : IRInstruction.Branch64;
 
-		IsLowerTo32 = false;
+		Options = TransformStageOption.None;
+
 		TraceLog = null;
 		Managers.Clear();
 
@@ -161,7 +163,8 @@ public sealed class Transform
 		BasicBlocks = methodCompiler.BasicBlocks;
 		AreCPURegistersAllocated = methodCompiler.AreCPURegistersAllocated;
 
-		IsLowerTo32 = false;
+		Options = TransformStageOption.None;
+
 		TraceLog = null;
 		Managers.Clear();
 
@@ -178,9 +181,9 @@ public sealed class Transform
 
 	#endregion Set Contexts
 
-	public void SetStageOptions(bool lowerTo32)
+	public void SetStageOptions(TransformStageOption options)
 	{
-		IsLowerTo32 = Compiler.MosaSettings.LongExpansion && lowerTo32 && Is32BitPlatform;
+		Options = options;
 	}
 
 	#region Manager

@@ -33,9 +33,23 @@ public class OptimizationStage : BaseTransformStage
 		EnableBlockOptimizations = true;
 	}
 
-	protected override void CustomizeTransform(Transform transform)
+	protected override void Setup()
 	{
-		transform.SetStageOptions(LowerTo32 && MosaSettings.LongExpansion && Is32BitPlatform);
-		transform.AddManager(CodeMotion);
+		Transform.AddManager(CodeMotion);
+	}
+
+	protected override bool SetupPhase(int phase)
+	{
+		switch (phase)
+		{
+			case 0:
+				return true;
+
+			case 1 when LowerTo32:
+				Transform.SetStageOptions(TransformStageOption.LowerTo32);
+				return true;
+		}
+
+		return false;
 	}
 }

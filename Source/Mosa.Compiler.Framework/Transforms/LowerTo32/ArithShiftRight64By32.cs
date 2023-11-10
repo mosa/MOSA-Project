@@ -2,7 +2,7 @@
 
 namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
-public sealed class ArithShiftRight64By32 : BaseLower32Transform
+public sealed class ArithShiftRight64By32 : BaseLowerTo32Transform
 {
 	public ArithShiftRight64By32() : base(IRInstruction.ArithShiftRight64, TransformType.Manual | TransformType.Optimization)
 	{
@@ -10,7 +10,10 @@ public sealed class ArithShiftRight64By32 : BaseLower32Transform
 
 	public override bool Match(Context context, Transform transform)
 	{
-		return transform.IsLowerTo32 && context.Operand2.IsResolvedConstant && context.Operand2.ConstantUnsigned32 == 32;
+		if (!base.Match(context, transform))
+			return false;
+
+		return context.Operand2.IsResolvedConstant && context.Operand2.ConstantUnsigned32 == 32;
 	}
 
 	public override void Transform(Context context, Transform transform)

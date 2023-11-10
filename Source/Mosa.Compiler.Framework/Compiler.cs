@@ -154,12 +154,12 @@ public sealed class Compiler
 		mosaSettings.SSA ? new EdgeSplitStage() : null,
 		mosaSettings.SSA ? new EnterSSAStage() : null,
 		mosaSettings.BasicOptimizations && mosaSettings.SSA ? new OptimizationStage(false) : null,
+
 		mosaSettings.ValueNumbering && mosaSettings.SSA ? new ValueNumberingStage() : null,
 		mosaSettings.LoopInvariantCodeMotion && mosaSettings.SSA ? new LoopInvariantCodeMotionStage() : null,
 		mosaSettings.SparseConditionalConstantPropagation && mosaSettings.SSA ? new SparseConditionalConstantPropagationStage() : null,
 		mosaSettings.BasicOptimizations && mosaSettings.SSA && (mosaSettings.ValueNumbering || mosaSettings.LoopInvariantCodeMotion || mosaSettings.SparseConditionalConstantPropagation) ? new OptimizationStage(false) : null,
 		mosaSettings.BitTracker ? new BitTrackerStage() : null,
-		mosaSettings.BasicOptimizations && mosaSettings.BitTracker ? new OptimizationStage(false) : null,
 		mosaSettings.BasicOptimizations && mosaSettings.LongExpansion ? new OptimizationStage(mosaSettings.LongExpansion) : null,
 
 		mosaSettings.TwoPassOptimization && mosaSettings.ValueNumbering && mosaSettings.SSA ? new ValueNumberingStage() : null,

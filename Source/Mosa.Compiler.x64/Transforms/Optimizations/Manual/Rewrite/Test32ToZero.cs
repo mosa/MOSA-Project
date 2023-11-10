@@ -30,7 +30,7 @@ public sealed class Test32ToZero : BaseTransform
 		if (previous.Instruction.IsMemoryRead)
 			return false;
 
-		if (previous.Result != context.Operand1)
+		if (!AreSame(context.Operand1, context.Result))
 			return false;
 
 		if (!previous.Instruction.IsZeroFlagModified)

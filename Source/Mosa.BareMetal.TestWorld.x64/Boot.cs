@@ -6,7 +6,7 @@ using System.Threading;
 using Mosa.Kernel.BareMetal;
 using Mosa.UnitTests.Optimization;
 
-namespace Mosa.BareMetal.TestWorld.x86;
+namespace Mosa.BareMetal.TestWorld.x64;
 
 public static class Boot
 {
@@ -17,17 +17,19 @@ public static class Boot
 		Console.BackgroundColor = ConsoleColor.Blue;
 		Console.ForegroundColor = ConsoleColor.White;
 		Console.Clear();
-		Console.WriteLine("Mosa.BareMetal.TextWorld.x86");
+		Console.WriteLine("Mosa.BareMetal.TextWorld.x64");
 		Console.WriteLine();
 
 		Division.DivisionBy7(254u);
 
 		//InterruptManager.SetHandler(ProcessInterrupt);
 
-		StartThreading();
+		//StartThreading();
 
 		// Will never get here!
-		Debug.WriteLine("ERROR: Thread Start Failure");
+		//Debug.WriteLine("ERROR: Thread Start Failure");
+
+		Debug.WriteLine("ERROR: Done!");
 		Debug.Fatal();
 	}
 
@@ -135,6 +137,6 @@ public static class Boot
 
 	public static void ForceInclude()
 	{
-		Mosa.Kernel.BareMetal.x86.PlatformPlug.ForceInclude();
+		Mosa.Kernel.BareMetal.x64.PlatformPlug.ForceInclude();
 	}
 }

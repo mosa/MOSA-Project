@@ -31,8 +31,6 @@ public sealed class Deadcode : BaseTransform
 			return false;
 
 		if (context.Instruction.IsIOOperation
-
-			//|| context.Instruction.IsMemoryRead
 			|| context.Instruction.IsMemoryWrite
 			|| context.Instruction.HasUnspecifiedSideEffect)
 			return false;
@@ -45,9 +43,6 @@ public sealed class Deadcode : BaseTransform
 
 		if (!instruction.IsPlatformInstruction)
 			return false;
-
-		//if (!AreStatusFlagUsed(context))
-		//	return false;
 
 		if (instruction.IsCarryFlagModified
 			|| instruction.IsOverflowFlagModified

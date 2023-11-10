@@ -2,7 +2,7 @@
 
 namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
-public sealed class And64 : BaseLower32Transform
+public sealed class And64 : BaseLowerTo32Transform
 {
 	public And64() : base(IRInstruction.And64, TransformType.Manual | TransformType.Optimization)
 	{

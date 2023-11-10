@@ -2,7 +2,7 @@
 
 namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
-public sealed class Branch64Extends : BaseLower32Transform
+public sealed class Branch64Extends : BaseLowerTo32Transform
 {
 	public Branch64Extends() : base(IRInstruction.Branch64, TransformType.Manual | TransformType.Optimization)
 	{
@@ -10,7 +10,7 @@ public sealed class Branch64Extends : BaseLower32Transform
 
 	public override bool Match(Context context, Transform transform)
 	{
-		if (!transform.IsLowerTo32)
+		if (!base.Match(context, transform))
 			return false;
 
 		if (!context.Operand1.IsVirtualRegister)

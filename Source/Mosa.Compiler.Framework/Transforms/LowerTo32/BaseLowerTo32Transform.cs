@@ -2,9 +2,9 @@
 
 namespace Mosa.Compiler.Framework.Transforms.LowerTo32
 {
-	public abstract class BaseLower32Transform : BaseTransform
+	public abstract class BaseLowerTo32Transform : BaseTransform
 	{
-		public BaseLower32Transform(BaseInstruction instruction, TransformType type, bool log = false)
+		public BaseLowerTo32Transform(BaseInstruction instruction, TransformType type, bool log = false)
 			: base(instruction, type, log)
 		{ }
 
@@ -12,7 +12,7 @@ namespace Mosa.Compiler.Framework.Transforms.LowerTo32
 
 		public override bool Match(Context context, Transform transform)
 		{
-			return transform.IsLowerTo32;
+			return transform.Is32BitPlatform && transform.IsLowerTo32;
 		}
 	}
 }

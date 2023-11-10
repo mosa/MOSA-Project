@@ -22,16 +22,10 @@ public sealed class Mov32Unless : BaseTransform
 		if (!context.Operand1.IsPhysicalRegister)
 			return false;
 
-		//if (context.Result.Register != CPURegister.ESP)
-		//	return false;
-
 		var previous = context.Node.PreviousNonEmpty;
 
 		if (previous == null || previous.Instruction != X86.Mov32)
 			return false;
-
-		//if (previous.Result.Register != CPURegister.ESP)
-		//	return false;
 
 		if (!previous.Result.IsPhysicalRegister)
 			return false;

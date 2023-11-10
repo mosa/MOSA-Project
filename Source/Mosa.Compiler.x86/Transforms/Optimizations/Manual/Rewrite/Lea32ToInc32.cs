@@ -7,9 +7,9 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Compiler.x86.Transforms.Optimizations.Manual.Standard;
 
 [Transform("x86.Optimizations.Manual.Standard")]
-public sealed class Sub32ToDec32 : BaseTransform
+public sealed class Lea32ToInc32 : BaseTransform
 {
-	public Sub32ToDec32() : base(X86.Sub32, TransformType.Manual | TransformType.Optimization)
+	public Lea32ToInc32() : base(X86.Lea32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -21,7 +21,7 @@ public sealed class Sub32ToDec32 : BaseTransform
 		if (context.Operand2.ConstantUnsigned64 != 1)
 			return false;
 
-		if (context.Operand1 != context.Result)
+		if (!AreSame(context.Operand1, context.Result))
 			return false;
 
 		if (context.Operand1.Register == CPURegister.ESP)
@@ -37,6 +37,6 @@ public sealed class Sub32ToDec32 : BaseTransform
 	{
 		var result = context.Result;
 
-		context.SetInstruction(X86.Dec32, result, result);
+		context.SetInstruction(X86.Inc32, result, result);
 	}
 }

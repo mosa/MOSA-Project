@@ -2,7 +2,7 @@
 
 namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
-public sealed class StoreParam64 : BaseLower32Transform
+public sealed class StoreParam64 : BaseLowerTo32Transform
 {
 	public StoreParam64() : base(IRInstruction.StoreParam64, TransformType.Manual | TransformType.Optimization)
 	{

@@ -2,7 +2,7 @@
 
 namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
-public sealed class LoadParamZeroExtend16x64 : BaseLower32Transform
+public sealed class LoadParamZeroExtend16x64 : BaseLowerTo32Transform
 {
 	public LoadParamZeroExtend16x64() : base(IRInstruction.LoadParamZeroExtend16x64, TransformType.Manual | TransformType.Optimization)
 	{

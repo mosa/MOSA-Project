@@ -2,12 +2,12 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.x86.Transforms.Optimizations.Manual.Standard;
+namespace Mosa.Compiler.x64.Transforms.Optimizations.Manual.Standard;
 
-[Transform("x86.Optimizations.Manual.Standard")]
+[Transform("x64.Optimizations.Manual.Standard")]
 public sealed class Cmp32ToZero : BaseTransform
 {
-	public Cmp32ToZero() : base(X86.Cmp32, TransformType.Manual | TransformType.Optimization)
+	public Cmp32ToZero() : base(X64.Cmp32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -30,7 +30,7 @@ public sealed class Cmp32ToZero : BaseTransform
 		if (previous.Instruction.IsMemoryRead)
 			return false;
 
-		if (previous.Result != context.Operand1)
+		if (!AreSame(context.Operand1, context.Result))
 			return false;
 
 		if (!previous.Instruction.IsZeroFlagModified)

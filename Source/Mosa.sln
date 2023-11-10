@@ -235,6 +235,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.BareMetal.TestWorld", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.BareMetal.TestWorld.x86", "Mosa.BareMetal.TestWorld.x86\Mosa.BareMetal.TestWorld.x86.csproj", "{E6A30C96-A0D2-43A3-8681-12067C094253}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.BareMetal.TestWorld.x64", "Mosa.BareMetal.TestWorld.x64\Mosa.BareMetal.TestWorld.x64.csproj", "{282FA278-D577-48BC-93BD-214519F3AB28}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1365,6 +1367,24 @@ Global
 		{E6A30C96-A0D2-43A3-8681-12067C094253}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{E6A30C96-A0D2-43A3-8681-12067C094253}.Release|x86.ActiveCfg = Release|Any CPU
 		{E6A30C96-A0D2-43A3-8681-12067C094253}.Release|x86.Build.0 = Release|Any CPU
+		{282FA278-D577-48BC-93BD-214519F3AB28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{282FA278-D577-48BC-93BD-214519F3AB28}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{282FA278-D577-48BC-93BD-214519F3AB28}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{282FA278-D577-48BC-93BD-214519F3AB28}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{282FA278-D577-48BC-93BD-214519F3AB28}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{282FA278-D577-48BC-93BD-214519F3AB28}.Debug|x86.Build.0 = Debug|Any CPU
+		{282FA278-D577-48BC-93BD-214519F3AB28}.Description|Any CPU.ActiveCfg = Debug|Any CPU
+		{282FA278-D577-48BC-93BD-214519F3AB28}.Description|Any CPU.Build.0 = Debug|Any CPU
+		{282FA278-D577-48BC-93BD-214519F3AB28}.Description|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{282FA278-D577-48BC-93BD-214519F3AB28}.Description|Mixed Platforms.Build.0 = Debug|Any CPU
+		{282FA278-D577-48BC-93BD-214519F3AB28}.Description|x86.ActiveCfg = Debug|Any CPU
+		{282FA278-D577-48BC-93BD-214519F3AB28}.Description|x86.Build.0 = Debug|Any CPU
+		{282FA278-D577-48BC-93BD-214519F3AB28}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{282FA278-D577-48BC-93BD-214519F3AB28}.Release|Any CPU.Build.0 = Release|Any CPU
+		{282FA278-D577-48BC-93BD-214519F3AB28}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{282FA278-D577-48BC-93BD-214519F3AB28}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{282FA278-D577-48BC-93BD-214519F3AB28}.Release|x86.ActiveCfg = Release|Any CPU
+		{282FA278-D577-48BC-93BD-214519F3AB28}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1437,6 +1457,7 @@ Global
 		{33E50A9F-D090-4ADB-B62E-F64B8C0EC3E8} = {4B46061F-49A8-4C15-8F68-FC97506CABA2}
 		{3B66393E-1640-4156-8462-B6F695F1F3AE} = {3A538FDC-0226-4971-A3C0-31570CDA340D}
 		{E6A30C96-A0D2-43A3-8681-12067C094253} = {3A538FDC-0226-4971-A3C0-31570CDA340D}
+		{282FA278-D577-48BC-93BD-214519F3AB28} = {3A538FDC-0226-4971-A3C0-31570CDA340D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C22A5C94-6B05-4B1B-845A-A2EA7615E093}

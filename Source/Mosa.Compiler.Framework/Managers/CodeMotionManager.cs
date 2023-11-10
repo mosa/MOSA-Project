@@ -1,12 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Collections.Generic;
-
 namespace Mosa.Compiler.Framework.Managers;
 
 public class CodeMotionManager : BaseTransformManager
 {
-	private readonly HashSet<Node> Motion = new HashSet<Node>();
+	private readonly HashSet<Node> Motion = new();
 
 	public void MarkMotion(Node node)
 	{

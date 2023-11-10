@@ -1,6 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Collections.Generic;
 using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x64.Transforms.Optimizations.Manual;
@@ -14,7 +13,7 @@ public static class ManualTransforms
 	{
 		new Special.Deadcode(),
 
-		new Standard.Mov32ToXor32(),
+		//new Standard.Mov32ToXor32(),
 		new Standard.Mov64ToXor64(),
 		new Standard.Add32ToInc32(),
 		new Standard.Sub32ToDec32(),

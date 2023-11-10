@@ -2,12 +2,12 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.x86.Transforms.Optimizations.Manual.Special;
+namespace Mosa.Compiler.x64.Transforms.Optimizations.Manual.Special;
 
-[Transform("x86.Optimizations.Manual.Special")]
-public sealed class Mul32Ditto : BaseTransform
+[Transform("x64.Optimizations.Manual.Special")]
+public sealed class Mul64Ditto : BaseTransform
 {
-	public Mul32Ditto() : base(X86.Mul32, TransformType.Manual | TransformType.Optimization)
+	public Mul64Ditto() : base(X64.Mul64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -24,7 +24,7 @@ public sealed class Mul32Ditto : BaseTransform
 
 		var previous = context.Node.PreviousNonEmpty;
 
-		if (previous == null || previous.Instruction != X86.Mul32)
+		if (previous == null || previous.Instruction != X64.Mul64)
 			return false;
 
 		if (!AreSame(context.Operand1, previous.Operand1))
@@ -42,7 +42,7 @@ public sealed class Mul32Ditto : BaseTransform
 		var result = context.Result;
 		var result2 = context.Result2;
 
-		context.SetInstruction(X86.Mov32, result, previous.Result);
-		context.AppendInstruction(X86.Mov32, result2, previous.Result2);
+		context.SetInstruction(X64.Mov64, result, previous.Result);
+		context.AppendInstruction(X64.Mov64, result2, previous.Result2);
 	}
 }
