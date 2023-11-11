@@ -103,6 +103,15 @@
 			"Filter": "",
 			"Result": "(IR.IfThenElse## a x y)",
 			"Variations": "Yes"
+		},
+		{
+			"Type": "Rewrite",
+			"Name": "DivSigned32",
+			"SubName": "ToUnsignedDivide",
+			"Expression": "IR.DivSigned32 a c",
+			"Filter": "IsResolvedConstant(c) & IsLessThanZero(To32(c)) & !IsUnsignedMax32(To32(c))",
+			"Result": "(IR.Neg32 (IR.DivUnsigned32 a [Neg32(To32(c))]))",
+			"Priority": "50"
 		}
 	]
 }

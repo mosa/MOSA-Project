@@ -549,6 +549,15 @@
 			"Filter": "IsResolvedConstant(a)",
 			"Result": "(IR.Move32 [To32(a)])",
 			"Priority": "100"
+		},
+		{
+			"Type": "ConstantFolding",
+			"Name": "Neg##",
+			"SubName": "",
+			"Expression": "IR.Neg## a",
+			"Filter": "IsResolvedConstant(a)",
+			"Result": "(IR.Move32 [To32(a)])",
+			"Priority": "100"
 		}
 	]
 }

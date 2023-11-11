@@ -164,6 +164,11 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 		return a < b;
 	}
 
+	protected static bool IsLessThanZero(ulong a)
+	{
+		return (long)a < 0;
+	}
+
 	protected static bool IsNaturalSquareRoot32(Operand operand)
 	{
 		var value = operand.ConstantUnsigned32;
@@ -248,6 +253,27 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 	{
 		return context.Result == context.Operand1;
 	}
+
+	protected static bool IsSignedMax32(uint a)
+	{
+		return a == uint.MaxValue;
+	}
+
+	protected static bool IsUnsignedMax32(uint a)
+	{
+		return (int)a == int.MaxValue;
+	}
+
+	protected static bool IsSignedMax64(ulong a)
+	{
+		return (long)a == long.MaxValue;
+	}
+
+	protected static bool IsUnsignedMax64(ulong a)
+	{
+		return a == ulong.MaxValue;
+	}
+
 
 	#endregion Filter Methods
 
@@ -426,6 +452,26 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 	protected static ulong MulUnsigned64(ulong a, ulong b)
 	{
 		return a * b;
+	}
+
+	protected static uint NaxU32()
+	{
+		return uint.MaxValue;
+	}
+
+	protected static int NaxI32()
+	{
+		return int.MaxValue;
+	}
+
+	protected static ulong NaxU64()
+	{
+		return ulong.MaxValue;
+	}
+
+	protected static long NaxI64()
+	{
+		return long.MaxValue;
 	}
 
 	protected static int Neg32(int a)

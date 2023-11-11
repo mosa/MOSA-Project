@@ -160,6 +160,8 @@ public static class IRInstruction
 	public static readonly BaseInstruction MulSigned64 = new MulSigned64();
 	public static readonly BaseInstruction MulUnsigned64 = new MulUnsigned64();
 	public static readonly BaseInstruction MulUnsigned32 = new MulUnsigned32();
+	public static readonly BaseInstruction Neg32 = new Neg32();
+	public static readonly BaseInstruction Neg64 = new Neg64();
 	public static readonly BaseInstruction NewArray = new NewArray();
 	public static readonly BaseInstruction NewObject = new NewObject();
 	public static readonly BaseInstruction NewString = new NewString();

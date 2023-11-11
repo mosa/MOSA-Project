@@ -1040,6 +1040,20 @@
 			"Commutative": "true"
 		},
 		{
+			"Name": "Neg32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "Neg64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
 			"Name": "NewArray",
 			"FamilyName": "IR",
 			"ResultCount": 1,

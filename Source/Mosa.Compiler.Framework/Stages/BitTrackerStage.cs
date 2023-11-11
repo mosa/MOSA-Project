@@ -59,6 +59,8 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		Register(IRInstruction.And64, And64);
 		Register(IRInstruction.Xor32, Xor32);
 		Register(IRInstruction.Xor64, Xor64);
+		Register(IRInstruction.Neg32, Neg32);
+		Register(IRInstruction.Neg64, Neg64);
 		Register(IRInstruction.Not32, Not32);
 		Register(IRInstruction.Not64, Not64);
 
@@ -811,6 +813,38 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 				.NarrowSetBits(value1.BitsSet & value2.BitsSet)
 				.NarrowClearBits(value2.BitsClear | value1.BitsClear)
 				.SetStable(value1, value2);
+		}
+	}
+
+	private static void Neg32(Node node)
+	{
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
+
+		if (value1.AreLower32BitsKnown)
+		{
+			result.SetValue((ulong)(-(int)value1.BitsSet32));
+		}
+		else
+		{
+			// FUTURE: (~b + 1)
+			result.SetStable(value1);
+		}
+	}
+
+	private static void Neg64(Node node)
+	{
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
+
+		if (value1.AreAll64BitsKnown)
+		{
+			result.SetValue((ulong)(-value1.BitsSet32));
+		}
+		else
+		{
+			// FUTURE: (~b + 1)
+			result.SetStable(value1);
 		}
 	}
 

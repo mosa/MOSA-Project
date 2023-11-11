@@ -292,6 +292,16 @@
 		},
 		{
 			"Type": "StrengthReduction",
+			"Name": "MulSigned##",
+			"SubName": "ByNegative1",
+			"Expression": "IR.MulSigned## x -1",
+			"Filter": "!IsZero(x) & !IsOne(x)",
+			"Result": "(IR.Neg## x)",
+			"Priority": "50",
+			"Variations": "Yes"
+		},
+		{
+			"Type": "StrengthReduction",
 			"Name": "DivSigned##",
 			"SubName": "ByZero",
 			"Expression": "IR.DivSigned## 0 c",

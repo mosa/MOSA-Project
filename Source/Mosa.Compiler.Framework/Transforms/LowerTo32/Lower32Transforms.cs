@@ -35,6 +35,7 @@ public static class LowerTo32Transforms
 		new LoadSignExtend8x64(),
 		new LoadSignExtend16x64(),
 		new LoadSignExtend32x64(),
+		new Neg64(),
 		new Not64(),
 		new Or64(),
 		new SignExtend16x64(),

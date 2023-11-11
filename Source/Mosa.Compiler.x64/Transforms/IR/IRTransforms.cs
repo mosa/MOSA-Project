@@ -96,6 +96,8 @@ public static class IRTransforms
 		new MulR8(),
 		new MulSigned32(),
 		new MulUnsigned32(),
+		new Neg32(),
+		new Neg64(),
 		new Nop(),
 		new RemSigned32(),
 		new RemUnsigned32(),
