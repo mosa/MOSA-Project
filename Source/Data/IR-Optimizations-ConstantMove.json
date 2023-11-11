@@ -81,7 +81,7 @@
 			"Expression": "IR.Sub## a b",
 			"Filter": "!IsResolvedConstant(a) &IsResolvedConstant(b)",
 			"Result": "(IR.Add## a [Neg##(To##(b))])",
-			"Log": "Yes"
+			"Log": "No"
 		}
 	]
 }

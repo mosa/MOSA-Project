@@ -16,9 +16,9 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 	private readonly List<BaseTransform>[] transforms = new List<BaseTransform>[MaximumInstructionID];
 	private readonly List<BaseBlockTransform> blockTransforms = new();
 
-	protected TraceLog trace;
+	protected TraceLog Trace;
 
-	protected TraceLog specialTrace;
+	protected TraceLog SpecialTrace;
 
 	protected bool EnableTransformOptimizations;
 	protected bool EnableBlockOptimizations;
@@ -55,32 +55,32 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 		UpdateCounter(TransformCountStage, TransformCount);
 		UpdateCounter(OptimizationCountStage, OptimizationCount);
 
-		MethodCompiler.Compiler.PostTraceLog(specialTrace);
+		MethodCompiler.Compiler.PostTraceLog(SpecialTrace);
 
 		TransformCount = 0;
 		OptimizationCount = 0;
 
-		trace = null;
+		Trace = null;
 	}
 
 	protected override void Run()
 	{
 		SortByPriority();
 
-		trace = CreateTraceLog(5);
+		Trace = CreateTraceLog(5);
 
 		AreCPURegistersAllocated = MethodCompiler.AreCPURegistersAllocated;
 
 		Steps = 0;
 		MethodCompiler.CreateTranformInstructionTrace(this, Steps++);
 
-		specialTrace = new TraceLog(TraceType.GlobalDebug, null, null, "Special Optimizations");
+		SpecialTrace = new TraceLog(TraceType.GlobalDebug, null, null, "Special Optimizations");
 
-		Transform.SetLogs(trace, specialTrace);
+		Transform.SetLogs(Trace, SpecialTrace);
 
-		CustomizeTransform(Transform);
+		Setup();
 
-		ExecutePasses();
+		ExecutePhases();
 	}
 
 	protected void AddTranforms(List<BaseTransform> list)
@@ -130,28 +130,51 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 		SortedByPriority = true;
 	}
 
-	protected virtual void CustomizeTransform(Transform transform)
-	{ }
-
-	private void ExecutePasses()
+	protected virtual void Setup()
 	{
+	}
+
+	protected virtual bool SetupPhase(int phase)
+	{
+		return phase == 0;
+	}
+
+	private void ExecutePhases()
+	{
+		var phase = 0;
 		var pass = 1;
+
+		while (true)
+		{
+			if (!SetupPhase(phase++))
+				break;
+
+			pass = ExecutePasses(pass, MaxPasses);
+		}
+	}
+
+	private int ExecutePasses(int pass, int maxPasses)
+	{
 		var changed = true;
+		var firstPass = true;
 
 		while (changed)
 		{
-			trace?.Log($"*** Pass # {pass}");
+			Trace?.Log($"*** Pass # {pass}");
 
 			var changed1 = InstructionTransformationPass();
-			var changed2 = (!changed1 || pass == 1) && ApplyBlockTransforms();
+			var changed2 = (!changed1 || firstPass) && ApplyBlockTransforms();
 
 			changed = changed1 || changed2;
 
 			pass++;
+			firstPass = false;
 
-			if (pass >= MaxPasses && MaxPasses != 0)
+			if (pass >= maxPasses && maxPasses != 0)
 				break;
 		}
+
+		return pass;
 	}
 
 	private bool InstructionTransformationPass()

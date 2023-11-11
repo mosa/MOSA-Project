@@ -1,6 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Collections.Generic;
 using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x86.Transforms.IR;
@@ -83,7 +82,11 @@ public static class IRTransforms
 		new MulR8(),
 		new MulSigned32(),
 		new MulUnsigned32(),
+		new Neg32(),
 		new Nop(),
+		new Nop(),
+		new Neg32(),
+		new Neg64(),
 		new RemSigned32(),
 		new RemUnsigned32(),
 		new ShiftLeft32(),

@@ -316,12 +316,11 @@ public sealed class BitValue
 	{
 		var sb = new StringBuilder();
 
-		sb.Append($" MaxValue: {MaxValue}");
-		sb.Append($" MinValue: {MinValue}");
-
-		sb.Append($" BitsSet: {Convert.ToString((long)BitsSet, 2).PadLeft(64, '0')}");
-		sb.Append($" BitsClear: {Convert.ToString((long)BitsClear, 2).PadLeft(64, '0')}");
-		sb.Append($" BitsKnown: {Convert.ToString((long)BitsKnown, 2).PadLeft(64, '0')}");
+		sb.Append($"MaxValue: {MaxValue}");
+		sb.Append($"MinValue: {MinValue}");
+		sb.Append($"BitsSet: {Convert.ToString((long)BitsSet, 2).PadLeft(64, '0')}");
+		sb.Append($"BitsClear: {Convert.ToString((long)BitsClear, 2).PadLeft(64, '0')}");
+		sb.Append($"BitsKnown: {Convert.ToString((long)BitsKnown, 2).PadLeft(64, '0')}");
 
 		return sb.ToString();
 	}

@@ -4,7 +4,7 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x64.Transforms.Optimizations.Manual.Special;
 
-[Transform("x86.Optimizations.Manual.Special")]
+[Transform("x64.Optimizations.Manual.Special")]
 public sealed class Mov64Unless : BaseTransform
 {
 	public Mov64Unless() : base(X64.Mov64, TransformType.Manual | TransformType.Optimization)
@@ -22,16 +22,10 @@ public sealed class Mov64Unless : BaseTransform
 		if (!context.Operand1.IsPhysicalRegister)
 			return false;
 
-		//if (context.Result.Register != CPURegister.ESP)
-		//	return false;
-
 		var previous = context.Node.PreviousNonEmpty;
 
 		if (previous == null || previous.Instruction != X64.Mov64)
 			return false;
-
-		//if (previous.Result.Register != CPURegister.ESP)
-		//	return false;
 
 		if (!previous.Result.IsPhysicalRegister)
 			return false;

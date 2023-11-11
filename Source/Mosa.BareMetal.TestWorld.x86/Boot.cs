@@ -17,7 +17,7 @@ public static class Boot
 		Console.BackgroundColor = ConsoleColor.Blue;
 		Console.ForegroundColor = ConsoleColor.White;
 		Console.Clear();
-		Console.WriteLine("Mosa.BareMetal.TextWold.x86");
+		Console.WriteLine("Mosa.BareMetal.TextWorld.x86");
 		Console.WriteLine();
 
 		Division.DivisionBy7(254u);

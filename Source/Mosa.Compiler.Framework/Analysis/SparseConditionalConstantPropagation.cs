@@ -518,13 +518,21 @@ public sealed class SparseConditionalConstantPropagation
 				 || instruction == IRInstruction.ArithShiftRight32
 				 || instruction == IRInstruction.ArithShiftRight64)
 		{
-			IntegerOperation(node);
+			IntegerOperation2(node);
+		}
+		else if (instruction == IRInstruction.Neg32
+				 || instruction == IRInstruction.Neg64
+				 || instruction == IRInstruction.Not32
+				 || instruction == IRInstruction.Not64)
+		{
+			IntegerOperation1(node);
 		}
 		else if (instruction == IRInstruction.Compare32x32
 				 || instruction == IRInstruction.Compare32x64
 				 || instruction == IRInstruction.Compare64x32
 				 || instruction == IRInstruction.Compare64x64
-				 || instruction == IRInstruction.CompareObject)
+				 || instruction == IRInstruction.CompareObject
+				 || instruction == IRInstruction.CompareManagedPointer)
 		{
 			CompareOperation(node);
 		}
@@ -538,7 +546,8 @@ public sealed class SparseConditionalConstantPropagation
 		}
 		else if (instruction == IRInstruction.Branch32
 				 || instruction == IRInstruction.Branch64
-				 || instruction == IRInstruction.BranchObject)
+				 || instruction == IRInstruction.BranchObject
+				 || instruction == IRInstruction.BranchManagedPointer)
 		{
 			return CompareBranch(node);
 		}
@@ -574,6 +583,7 @@ public sealed class SparseConditionalConstantPropagation
 		}
 		else if (instruction == IRInstruction.SetReturn32
 				 || instruction == IRInstruction.SetReturnObject
+				 || instruction == IRInstruction.SetReturnManagedPointer
 				 || instruction == IRInstruction.SetReturn64
 				 || instruction == IRInstruction.SetReturnR4
 				 || instruction == IRInstruction.SetReturnR8
@@ -646,7 +656,7 @@ public sealed class SparseConditionalConstantPropagation
 			return;
 		}
 
-		IntegerOperation(node);
+		IntegerOperation2(node);
 	}
 
 	private void UpdateToConstant(VariableState variable, ulong value)
@@ -863,7 +873,82 @@ public sealed class SparseConditionalConstantPropagation
 		}
 	}
 
-	private void IntegerOperation(Node node)
+	private void IntegerOperation1(Node node)
+	{
+		var result = GetVariableState(node.Result);
+
+		if (result.IsOverDefined)
+			return;
+
+		var operand1 = GetVariableState(node.Operand1);
+
+		if (operand1.IsOverDefined )
+		{
+			UpdateToOverDefined(result);
+			return;
+		}
+		else if (operand1.IsUnknown)
+		{
+			Debug.Assert(result.IsUnknown);
+			return;
+		}
+		else if (operand1.IsSingleConstant)
+		{
+			if (IntegerOperation1(node.Instruction, operand1.ConstantUnsignedLongInteger, out var value))
+			{
+				UpdateToConstant(result, value);
+				return;
+			}
+			else
+			{
+				UpdateToOverDefined(result);
+				return;
+			}
+		}
+		else if (operand1.HasOnlyConstants)
+		{
+			foreach (var c1 in operand1.Constants)
+			{
+				if (IntegerOperation1(node.Instruction, c1, out var value))
+				{
+					UpdateToConstant(result, value);
+				}
+				else
+				{
+					UpdateToOverDefined(result);
+					return;
+				}
+
+				if (result.IsOverDefined)
+					return;
+			}
+		}
+	}
+
+	private static bool IntegerOperation1(BaseInstruction instruction, ulong operand1, out ulong result)
+	{
+		if (instruction == IRInstruction.Neg32)
+		{
+			result = (uint)-((int)operand1);
+			return true;
+		}
+		else if (instruction == IRInstruction.Neg64)
+		{
+			result = (ulong)-((long)operand1);
+			return true;
+		}
+		else if (instruction == IRInstruction.Not32 || instruction == IRInstruction.Neg64)
+		{
+			result = ~operand1;
+			return true;
+		}
+
+		result = 0;
+		return false;
+	}
+
+
+	private void IntegerOperation2(Node node)
 	{
 		var result = GetVariableState(node.Result);
 

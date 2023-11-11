@@ -2,7 +2,7 @@
 
 namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
-public sealed class Phi64 : BaseLower32Transform
+public sealed class Phi64 : BaseLowerTo32Transform
 {
 	public Phi64() : base(IRInstruction.Phi64, TransformType.Manual | TransformType.Optimization)
 	{
@@ -10,7 +10,7 @@ public sealed class Phi64 : BaseLower32Transform
 
 	public override bool Match(Context context, Transform transform)
 	{
-		if (!transform.IsLowerTo32)
+		if (!base.Match(context, transform))
 			return false;
 
 		if (context.OperandCount == 1)

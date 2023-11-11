@@ -4,12 +4,12 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.x64.Transforms.Optimizations.Manual.Standard;
+namespace Mosa.Compiler.x86.Transforms.Optimizations.Manual.Standard;
 
-[Transform("x64.Optimizations.Manual.Standard")]
+[Transform("x86.Optimizations.Manual.Standard")]
 public sealed class Add32ToInc32 : BaseTransform
 {
-	public Add32ToInc32() : base(X64.Add32, TransformType.Manual | TransformType.Optimization)
+	public Add32ToInc32() : base(X86.Add32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -21,10 +21,10 @@ public sealed class Add32ToInc32 : BaseTransform
 		if (context.Operand2.ConstantUnsigned64 != 1)
 			return false;
 
-		if (context.Operand1.Register == CPURegister.RSP)
+		if (context.Operand1.Register == CPURegister.ESP)
 			return false;
 
-		if (context.Operand1 != context.Result)
+		if (!AreSame(context.Operand1, context.Result))
 			return false;
 
 		if (!(AreStatusFlagsUsed(context.Node.Next, false, true, false, false, false) == TriState.No))
@@ -37,6 +37,6 @@ public sealed class Add32ToInc32 : BaseTransform
 	{
 		var result = context.Result;
 
-		context.SetInstruction(X64.Inc32, result, result);
+		context.SetInstruction(X86.Inc32, result, result);
 	}
 }

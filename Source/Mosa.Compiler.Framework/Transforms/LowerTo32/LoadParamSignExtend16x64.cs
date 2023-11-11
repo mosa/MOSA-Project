@@ -2,7 +2,7 @@
 
 namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
-public sealed class LoadParamSignExtend16x64 : BaseLower32Transform
+public sealed class LoadParamSignExtend16x64 : BaseLowerTo32Transform
 {
 	public LoadParamSignExtend16x64() : base(IRInstruction.LoadParamSignExtend16x64, TransformType.Manual | TransformType.Optimization)
 	{

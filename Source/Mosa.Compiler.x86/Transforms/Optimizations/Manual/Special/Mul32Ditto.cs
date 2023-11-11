@@ -27,10 +27,10 @@ public sealed class Mul32Ditto : BaseTransform
 		if (previous == null || previous.Instruction != X86.Mul32)
 			return false;
 
-		if (context.Operand1 != previous.Operand1)
+		if (!AreSame(context.Operand1, previous.Operand1))
 			return false;
 
-		if (context.Operand2 != previous.Operand2)
+		if (!AreSame(context.Operand2, previous.Operand2))
 			return false;
 
 		return true;

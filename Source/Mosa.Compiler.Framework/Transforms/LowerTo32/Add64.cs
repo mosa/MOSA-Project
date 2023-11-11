@@ -2,7 +2,7 @@
 
 namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
-public sealed class Add64 : BaseLower32Transform
+public sealed class Add64 : BaseLowerTo32Transform
 {
 	public Add64() : base(IRInstruction.Add64, TransformType.Manual | TransformType.Optimization)
 	{

@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
-public sealed class Compare64x32Rest : BaseLower32Transform
+public sealed class Compare64x32Rest : BaseLowerTo32Transform
 {
 	public Compare64x32Rest() : base(IRInstruction.Compare64x32, TransformType.Manual | TransformType.Optimization)
 	{
@@ -12,13 +12,16 @@ public sealed class Compare64x32Rest : BaseLower32Transform
 
 	public override bool Match(Context context, Transform transform)
 	{
+		if (!base.Match(context, transform))
+			return false;
+
 		if (context.ConditionCode is ConditionCode.Equal or ConditionCode.NotEqual)
 			return false;
 
 		if (transform.IsInSSAForm)
 			return false;
 
-		return transform.IsLowerTo32;
+		return true;
 	}
 
 	public override void Transform(Context context, Transform transform)

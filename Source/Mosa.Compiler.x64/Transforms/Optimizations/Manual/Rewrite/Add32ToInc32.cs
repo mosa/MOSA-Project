@@ -7,9 +7,9 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Compiler.x64.Transforms.Optimizations.Manual.Standard;
 
 [Transform("x64.Optimizations.Manual.Standard")]
-public sealed class Lea32ToDec32 : BaseTransform
+public sealed class Add32ToInc32 : BaseTransform
 {
-	public Lea32ToDec32() : base(X64.Lea32, TransformType.Manual | TransformType.Optimization)
+	public Add32ToInc32() : base(X64.Add32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -18,13 +18,13 @@ public sealed class Lea32ToDec32 : BaseTransform
 		if (!context.Operand2.IsResolvedConstant)
 			return false;
 
-		if (context.Operand2.ConstantSigned64 != -1)
-			return false;
-
-		if (context.Operand1 != context.Result)
+		if (context.Operand2.ConstantUnsigned64 != 1)
 			return false;
 
 		if (context.Operand1.Register == CPURegister.RSP)
+			return false;
+
+		if (!AreSame(context.Operand1, context.Result))
 			return false;
 
 		if (!(AreStatusFlagsUsed(context.Node.Next, false, true, false, false, false) == TriState.No))
@@ -37,6 +37,6 @@ public sealed class Lea32ToDec32 : BaseTransform
 	{
 		var result = context.Result;
 
-		context.SetInstruction(X64.Dec32, result, result);
+		context.SetInstruction(X64.Inc32, result, result);
 	}
 }

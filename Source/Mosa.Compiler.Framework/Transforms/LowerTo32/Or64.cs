@@ -2,7 +2,7 @@
 
 namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
-public sealed class Or64 : BaseLower32Transform
+public sealed class Or64 : BaseLowerTo32Transform
 {
 	public Or64() : base(IRInstruction.Or64, TransformType.Manual | TransformType.Optimization)
 	{

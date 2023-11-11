@@ -25,10 +25,10 @@ public class ExceptionStage : BaseTransformStage
 		base.Initialize();
 	}
 
-	protected override void CustomizeTransform(Transform transform)
+	protected override void Setup()
 	{
-		ExceptionManager.Setup(transform.MethodCompiler);
+		ExceptionManager.Setup(Transform.MethodCompiler);
 
-		transform.AddManager(ExceptionManager);
+		Transform.AddManager(ExceptionManager);
 	}
 }

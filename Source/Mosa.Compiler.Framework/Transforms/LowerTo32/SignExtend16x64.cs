@@ -2,15 +2,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
-public sealed class SignExtend16x64 : BaseLower32Transform
+public sealed class SignExtend16x64 : BaseLowerTo32Transform
 {
 	public SignExtend16x64() : base(IRInstruction.SignExtend16x64, TransformType.Manual | TransformType.Optimization)
 	{
-	}
-
-	public override bool Match(Context context, Transform transform)
-	{
-		return transform.IsLowerTo32;
 	}
 
 	public override void Transform(Context context, Transform transform)
