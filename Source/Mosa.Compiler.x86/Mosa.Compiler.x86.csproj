@@ -1,11 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<ItemGroup>
-		<ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj" />
+	  <Compile Remove="Transforms\Optimizations\Manual\Simplification\**" />
+	  <EmbeddedResource Remove="Transforms\Optimizations\Manual\Simplification\**" />
+	  <None Remove="Transforms\Optimizations\Manual\Simplification\**" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Transforms\Optimizations\Manual\Simplification\" />
+		<ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj" />
 	</ItemGroup>
 
 </Project>

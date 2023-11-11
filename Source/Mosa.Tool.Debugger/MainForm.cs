@@ -102,7 +102,7 @@ public partial class MainForm : Form
 		launchView = new LaunchView(this);
 
 		MosaSettings.LoadAppLocations();
-		MosaSettings.SetDetfaultSettings();
+		MosaSettings.SetDefaultSettings();
 
 		SetDefaultSettings();
 
@@ -131,6 +131,7 @@ public partial class MainForm : Form
 	public void LoadArguments(string[] args)
 	{
 		MosaSettings.LoadArguments(args);
+		MosaSettings.NormalizeSettings();
 		SetRequiredSettings();
 	}
 

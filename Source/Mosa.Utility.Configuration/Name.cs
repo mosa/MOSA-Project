@@ -103,6 +103,7 @@ public static class Name
 	public const string Optimizations_Inline_Explicit = "Optimizations.Inline.Explicit";
 	public const string Optimizations_Inline_Maximum = "Optimizations.Inline.Maximum";
 	public const string Optimizations_LongExpansion = "Optimizations.LongExpansion";
+	public const string Optimizations_ReduceCodeSize = "Optimizations.ReduceCodeSize";
 	public const string Optimizations_LoopInvariantCodeMotion = "Optimizations.LoopInvariantCodeMotion";
 	public const string Optimizations_Platform = "Optimizations.Platform";
 	public const string Optimizations_SCCP = "Optimizations.SCCP";

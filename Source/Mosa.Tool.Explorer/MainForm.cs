@@ -3,6 +3,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Text;
+using Microsoft.Win32;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.CompilerStages;
@@ -10,7 +11,7 @@ using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.MosaTypeSystem.CLR;
 using Mosa.Tool.Explorer.Stages;
 using Mosa.Utility.Configuration;
-using Mosa.Utility.Launcher;
+using static Mosa.Utility.Configuration.MosaSettings;
 
 namespace Mosa.Tool.Explorer;
 
@@ -62,7 +63,7 @@ public partial class MainForm : Form
 	{
 		InitializeComponent();
 
-		cbPlatform.SelectedIndex = 0;
+		//cbPlatform.SelectedIndex = 0;
 
 		gridMethodCounters.DataSource = MethodCounters;
 		gridMethodCounters.Columns[0].Width = 370;
@@ -78,7 +79,15 @@ public partial class MainForm : Form
 
 		RegisterPlatforms();
 
+		CreateAppRegistryKey();
+
 		Stopwatch.Restart();
+	}
+
+	protected void CreateAppRegistryKey()
+	{
+		var software = Registry.CurrentUser.OpenSubKey(WindowsRegistry.Software, RegistryKeyPermissionCheck.ReadWriteSubTree);
+		software.CreateSubKey(WindowsRegistry.MosaApp);
 	}
 
 	public void ClearAllLogs()
@@ -97,9 +106,20 @@ public partial class MainForm : Form
 
 	public void LoadArguments(string[] args)
 	{
-		MosaSettings.SetDetfaultSettings();
-		MosaSettings.LoadArguments(args);
+		MosaSettings.SetDefaultSettings();
 		MosaSettings.LoadAppLocations();
+		MosaSettings.LoadArguments(args);
+		MosaSettings.NormalizeSettings();
+
+		if (MosaSettings.SourceFiles == null || MosaSettings.SourceFiles.Count == 0)
+		{
+			if (MosaSettings.Platform == "%DEFAULT%")
+				MosaSettings.Platform = "%REGISTRY%";
+
+			openFileDialog.FileName = MosaSettings.GetRegistry(WindowsRegistry.LastOpened, null);
+		}
+
+		MosaSettings.ResolveDefaults();
 
 		SetRequiredSettings();
 
@@ -313,6 +333,7 @@ public partial class MainForm : Form
 		PlatformRegistry.Add(new Compiler.x86.Architecture());
 		PlatformRegistry.Add(new Compiler.x64.Architecture());
 		PlatformRegistry.Add(new Compiler.ARM32.Architecture());
+		//PlatformRegistry.Add(new Compiler.ARM64.Architecture());
 	}
 
 	private void btnFirst_Click(object sender, EventArgs e)
@@ -383,6 +404,8 @@ public partial class MainForm : Form
 	private void cbPlatform_SelectedIndexChanged(object sender, EventArgs e)
 	{
 		ClearAll();
+
+		MosaSettings.SetRegistry(WindowsRegistry.ExplorerPlatform, cbPlatform.Text);
 	}
 
 	private void cbTransformLabels_SelectedIndexChanged(object sender, EventArgs e)
@@ -663,7 +686,7 @@ public partial class MainForm : Form
 
 		SetStatus("Ready!");
 
-		if (MosaSettings.SourceFiles != null && MosaSettings.SourceFiles.Count >= 1)
+		if (MosaSettings.SourceFiles != null && MosaSettings.SourceFiles.Count != 0)
 		{
 			var filename = Path.GetFullPath(MosaSettings.SourceFiles[0]);
 
@@ -787,6 +810,8 @@ public partial class MainForm : Form
 		if (openFileDialog.ShowDialog() == DialogResult.OK)
 		{
 			OpenFile();
+
+			MosaSettings.SetRegistry(WindowsRegistry.LastOpened, openFileDialog.FileName);
 		}
 	}
 
@@ -916,6 +941,8 @@ public partial class MainForm : Form
 	private void tbFilter_TextChanged(object sender, EventArgs e)
 	{
 		CreateTree();
+
+		MosaSettings.SetRegistry(WindowsRegistry.ExplorerFilter, tbFilter.Text);
 	}
 
 	private void tbMethodCounterFilter_TextChanged(object sender, EventArgs e)
@@ -946,6 +973,7 @@ public partial class MainForm : Form
 		cbLoopInvariantCodeMotion.Checked = state;
 		cbPlatformOptimizations.Checked = state;
 		cbEnableDevirtualization.Checked = state;
+		cbEnableCodeSizeReduction.Checked = false;
 	}
 
 	private void ToolStripButton1_Click(object sender, EventArgs e)
@@ -1051,6 +1079,7 @@ public partial class MainForm : Form
 		cbEnableMultithreading.Checked = MosaSettings.Multithreading;
 		tbFilter.Text = MosaSettings.ExplorerFilter; ;
 		cbEnableDebugDiagnostic.Checked = MosaSettings.DebugDiagnostic;
+		cbEnableCodeSizeReduction.Checked = MosaSettings.ReduceCodeSize;
 
 		cbPlatform.SelectedIndex = MosaSettings.Platform.ToLowerInvariant() switch
 		{
@@ -1171,6 +1200,7 @@ public partial class MainForm : Form
 		MosaSettings.PlatformOptimizations = cbPlatformOptimizations.Checked;
 		MosaSettings.InlineMethods = cbEnableInline.Checked;
 		MosaSettings.InlineExplicit = cbInlineExplicit.Checked;
+		MosaSettings.ReduceCodeSize = cbEnableCodeSizeReduction.Checked;
 
 		MosaSettings.TraceLevel = 10;
 		//MosaSettings.InlineMaximum = 12;
@@ -1187,6 +1217,8 @@ public partial class MainForm : Form
 		// Search Paths
 		MosaSettings.ClearSearchPaths();
 		MosaSettings.AddSearchPath(Path.GetDirectoryName(filename));
+
+		MosaSettings.ResolveFileAndPathSettings();
 	}
 
 	private void UpdateTransformLabels()

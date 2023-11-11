@@ -32,5 +32,8 @@ public static class ManualTransforms
 		new StrengthReduction.Mul32WithMov32ByZero(),
 
 		new Stack.Add32(),
+
+		new Size.Add32By2ToInc32(),
+		new Size.Lea32By2(),
 	};
 }

@@ -58,6 +58,7 @@
 			cbEnableTwoPassOptimizations = new ToolStripMenuItem();
 			cbPlatformOptimizations = new ToolStripMenuItem();
 			cbEnableBinaryCodeGeneration = new ToolStripMenuItem();
+			cbEnableCodeSizeReduction = new ToolStripMenuItem();
 			displayOptionsToolStripMenuItem = new ToolStripMenuItem();
 			showOperandTypes = new ToolStripMenuItem();
 			padInstructions = new ToolStripMenuItem();
@@ -243,7 +244,7 @@
 			// 
 			// optionsToolStripMenuItem
 			// 
-			optionsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { cbEnableAllOptimizations, cbDisableAllOptimizations, toolStripSeparator4, cbEnableSSA, cbEnableBasicOptimizations, cbEnableValueNumbering, cbEnableSparseConditionalConstantPropagation, cbEnableDevirtualization, cbEnableInline, cbInlineExplicit, cbEnableLongExpansion, cbLoopInvariantCodeMotion, cbEnableBitTracker, cbEnableTwoPassOptimizations, cbPlatformOptimizations, cbEnableBinaryCodeGeneration });
+			optionsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { cbEnableAllOptimizations, cbDisableAllOptimizations, toolStripSeparator4, cbEnableSSA, cbEnableBasicOptimizations, cbEnableValueNumbering, cbEnableSparseConditionalConstantPropagation, cbEnableDevirtualization, cbEnableInline, cbInlineExplicit, cbEnableLongExpansion, cbLoopInvariantCodeMotion, cbEnableBitTracker, cbEnableTwoPassOptimizations, cbPlatformOptimizations, cbEnableBinaryCodeGeneration, cbEnableCodeSizeReduction });
 			optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
 			optionsToolStripMenuItem.Size = new Size(93, 20);
 			optionsToolStripMenuItem.Text = "Optimizations";
@@ -383,6 +384,13 @@
 			cbEnableBinaryCodeGeneration.Name = "cbEnableBinaryCodeGeneration";
 			cbEnableBinaryCodeGeneration.Size = new Size(293, 22);
 			cbEnableBinaryCodeGeneration.Text = "Enable Binary Code Generation";
+			// 
+			// cbEnableCodeSizeReduction
+			// 
+			cbEnableCodeSizeReduction.CheckOnClick = true;
+			cbEnableCodeSizeReduction.Name = "cbEnableCodeSizeReduction";
+			cbEnableCodeSizeReduction.Size = new Size(293, 22);
+			cbEnableCodeSizeReduction.Text = "Enable Code Size Reduction";
 			// 
 			// displayOptionsToolStripMenuItem
 			// 
@@ -1398,5 +1406,6 @@
 		private CheckBox cbSetBlock;
 		private Button button1;
 		private Button button2;
+		private ToolStripMenuItem cbEnableCodeSizeReduction;
 	}
 }

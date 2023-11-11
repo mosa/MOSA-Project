@@ -46,6 +46,8 @@ public sealed class Transform
 
 	public bool IsLowerTo32 => Options.HasFlag(TransformStageOption.LowerTo32);
 
+	public bool IsLowerCodeSize => Options.HasFlag(TransformStageOption.ReduceCodeSize);
+
 	#endregion Properties
 
 	#region Properties - Indirect
@@ -181,9 +183,9 @@ public sealed class Transform
 
 	#endregion Set Contexts
 
-	public void SetStageOptions(TransformStageOption options)
+	public void SetStageOption(TransformStageOption option)
 	{
-		Options = options;
+		Options = option | option;
 	}
 
 	#region Manager

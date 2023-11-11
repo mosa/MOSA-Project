@@ -7,4 +7,5 @@ public enum TransformStageOption
 {
 	None,
 	LowerTo32,
+	ReduceCodeSize,
 };
