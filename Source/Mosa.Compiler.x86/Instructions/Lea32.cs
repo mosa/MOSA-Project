@@ -116,7 +116,7 @@ public sealed class Lea32 : X86Instruction
 			opcodeEncoder.Append3Bits(0b100);
 			opcodeEncoder.Append2BitSScale(node.Operand3);
 			opcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
-			opcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
+			opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
 			return;
 		}
 
@@ -128,7 +128,7 @@ public sealed class Lea32 : X86Instruction
 			opcodeEncoder.Append3Bits(0b100);
 			opcodeEncoder.Append2BitSScale(node.Operand3);
 			opcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
-			opcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
+			opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
 			opcodeEncoder.Append8BitImmediate(node.Operand4);
 			return;
 		}
@@ -141,7 +141,7 @@ public sealed class Lea32 : X86Instruction
 			opcodeEncoder.Append3Bits(0b100);
 			opcodeEncoder.Append2BitSScale(node.Operand3);
 			opcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
-			opcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
+			opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
 			opcodeEncoder.Append32BitImmediate(node.Operand4);
 			return;
 		}
