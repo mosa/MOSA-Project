@@ -9,17 +9,19 @@ namespace Mosa.Compiler.x86.Transforms.Optimizations.Manual;
 /// </summary>
 public static class ManualTransforms
 {
-	public static readonly List<BaseTransform> List = new List<BaseTransform>
+	public static readonly List<BaseTransform> List = new()
 	{
-		new Standard.Add32ToInc32(),
-		new Standard.Add32ToLea32(), //
-		new Standard.Cmp32ToTest32(),
-		new Standard.Cmp32ToZero(),
-		new Standard.Lea32ToInc32(),
-		new Standard.Sub32ToDec32(),
-		new Standard.Lea32ToDec32(),
-		new Standard.Sub32ToLea32(),
-		new Standard.Test32ToZero(),
+		new Rewrite.Add32ToInc32(),
+		new Rewrite.Add32ToLea32(),
+		new Rewrite.Cmp32ToTest32(),
+		new Rewrite.Cmp32ToZero(),
+		new Rewrite.Lea32ToInc32(),
+		new Rewrite.Lea32ToDec32(),
+		new Rewrite.Lea32ToMov32(),
+		new Rewrite.Lea32ToMov32Constant(),
+		new Rewrite.Sub32ToDec32(),
+		new Rewrite.Sub32ToLea32(),
+		new Rewrite.Test32ToZero(),
 
 		new Special.Deadcode(),
 		new Special.Mov32Coalescing(),

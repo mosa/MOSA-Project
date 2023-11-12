@@ -620,6 +620,8 @@ public class BuildCommonInstructionFiles : BuildBaseTemplate
 					case "constant_imm8": cond1 = ".IsConstant"; cond2 = ".ConstantSigned32 >= " + sbyte.MinValue; cond3 = ".ConstantSigned32 <= " + sbyte.MaxValue; break;
 					case "constant_imm16": cond1 = ".IsConstant"; cond2 = ".ConstantSigned32 >= " + short.MinValue; cond3 = ".ConstantSigned32 <= " + short.MaxValue; break;
 					case "constant_imm32": cond1 = ".IsConstant"; cond2 = ".ConstantSigned32 >= " + int.MinValue; cond3 = ".ConstantSigned32 <= " + int.MaxValue; break;
+					case "constant_1to4": cond1 = ".IsConstant"; cond2 = ".ConstantUnsigned32 >= 1"; cond3 = ".ConstantUnsigned32 <= 4"; break;
+					case "constant_0or1": cond1 = ".IsConstant"; cond2 = ".ConstantUnsigned32 >= 0"; cond3 = ".ConstantUnsigned32 <= 1"; break;
 				}
 
 				var subexpression = $"node.{operand}{cond1}";

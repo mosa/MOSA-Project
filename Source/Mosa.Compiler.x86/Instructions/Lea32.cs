@@ -13,16 +13,16 @@ namespace Mosa.Compiler.x86.Instructions;
 public sealed class Lea32 : X86Instruction
 {
 	internal Lea32()
-		: base(1, 2)
+		: base(1, 4)
 	{
 	}
 
 	public override void Emit(Node node, OpcodeEncoder opcodeEncoder)
 	{
 		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
-		System.Diagnostics.Debug.Assert(node.OperandCount == 2);
+		System.Diagnostics.Debug.Assert(node.OperandCount == 4);
 
-		if (node.Operand1.IsPhysicalRegister && node.Operand1.Register.RegisterCode == 5 && node.Operand2.IsConstantZero)
+		if (node.Operand1.IsPhysicalRegister && node.Operand1.Register.RegisterCode == 5 && node.Operand2.IsConstantZero && node.Operand3.IsConstant && node.Operand3.ConstantUnsigned32 >= 0 && node.Operand3.ConstantUnsigned32 <= 1 && node.Operand4.IsConstantZero)
 		{
 			opcodeEncoder.Append8Bits(0x8D);
 			opcodeEncoder.Append2Bits(0b01);
@@ -32,7 +32,7 @@ public sealed class Lea32 : X86Instruction
 			return;
 		}
 
-		if (node.Operand1.IsPhysicalRegister && node.Operand1.Register.RegisterCode == 4 && node.Operand2.IsConstantZero)
+		if (node.Operand1.IsPhysicalRegister && node.Operand1.Register.RegisterCode == 4 && node.Operand2.IsConstantZero && node.Operand3.IsConstant && node.Operand3.ConstantUnsigned32 >= 0 && node.Operand3.ConstantUnsigned32 <= 1 && node.Operand4.IsConstantZero)
 		{
 			opcodeEncoder.Append8Bits(0x8D);
 			opcodeEncoder.Append2Bits(0b00);
@@ -44,7 +44,7 @@ public sealed class Lea32 : X86Instruction
 			return;
 		}
 
-		if (node.Operand1.IsPhysicalRegister && node.Operand1.Register.RegisterCode == 4 && node.Operand2.IsConstant && node.Operand2.ConstantSigned32 >= -128 && node.Operand2.ConstantSigned32 <= 127)
+		if (node.Operand1.IsPhysicalRegister && node.Operand1.Register.RegisterCode == 4 && node.Operand2.IsConstantZero && node.Operand3.IsConstant && node.Operand3.ConstantUnsigned32 >= 0 && node.Operand3.ConstantUnsigned32 <= 1 && node.Operand4.IsConstant && node.Operand4.ConstantSigned32 >= -128 && node.Operand4.ConstantSigned32 <= 127)
 		{
 			opcodeEncoder.Append8Bits(0x8D);
 			opcodeEncoder.Append2Bits(0b01);
@@ -53,21 +53,21 @@ public sealed class Lea32 : X86Instruction
 			opcodeEncoder.Append2Bits(0b00);
 			opcodeEncoder.Append3Bits(0b100);
 			opcodeEncoder.Append3Bits(0b100);
-			opcodeEncoder.Append8BitImmediate(node.Operand2);
+			opcodeEncoder.Append8BitImmediate(node.Operand4);
 			return;
 		}
 
-		if (node.Operand1.IsPhysicalRegister && node.Operand1.Register.RegisterCode == 4 && node.Operand2.IsConstant)
+		if (node.Operand1.IsPhysicalRegister && node.Operand1.Register.RegisterCode == 4 && node.Operand2.IsConstantZero && node.Operand3.IsConstant && node.Operand3.ConstantUnsigned32 >= 0 && node.Operand3.ConstantUnsigned32 <= 1 && node.Operand4.IsConstant)
 		{
 			opcodeEncoder.Append8Bits(0x8D);
 			opcodeEncoder.Append2Bits(0b10);
 			opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
 			opcodeEncoder.Append3Bits(0b100);
-			opcodeEncoder.Append8BitImmediate(node.Operand2);
+			opcodeEncoder.Append8BitImmediate(node.Operand4);
 			return;
 		}
 
-		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsPhysicalRegister)
+		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsPhysicalRegister && node.Operand3.IsConstantOne && node.Operand4.IsConstantZero)
 		{
 			opcodeEncoder.Append8Bits(0x8D);
 			opcodeEncoder.Append2Bits(0b00);
@@ -79,7 +79,7 @@ public sealed class Lea32 : X86Instruction
 			return;
 		}
 
-		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsConstantZero)
+		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsConstantZero && node.Operand3.IsConstant && node.Operand3.ConstantUnsigned32 >= 0 && node.Operand3.ConstantUnsigned32 <= 1 && node.Operand4.IsConstantZero)
 		{
 			opcodeEncoder.Append8Bits(0x8D);
 			opcodeEncoder.Append2Bits(0b00);
@@ -88,33 +88,38 @@ public sealed class Lea32 : X86Instruction
 			return;
 		}
 
-		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsConstant && node.Operand2.ConstantSigned32 >= -128 && node.Operand2.ConstantSigned32 <= 127)
+		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsConstantZero && node.Operand3.IsConstant && node.Operand3.ConstantUnsigned32 >= 0 && node.Operand3.ConstantUnsigned32 <= 1 && node.Operand4.IsConstant && node.Operand4.ConstantSigned32 >= -128 && node.Operand4.ConstantSigned32 <= 127)
 		{
 			opcodeEncoder.Append8Bits(0x8D);
 			opcodeEncoder.Append2Bits(0b01);
 			opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
 			opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
-			opcodeEncoder.Append8BitImmediate(node.Operand2);
+			opcodeEncoder.Append8BitImmediate(node.Operand4);
 			return;
 		}
 
-		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsConstant)
+		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsConstantZero && node.Operand3.IsConstant && node.Operand3.ConstantUnsigned32 >= 0 && node.Operand3.ConstantUnsigned32 <= 1 && node.Operand4.IsConstant)
 		{
 			opcodeEncoder.Append8Bits(0x8D);
 			opcodeEncoder.Append2Bits(0b10);
 			opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
 			opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
-			opcodeEncoder.Append32BitImmediate(node.Operand2);
+			opcodeEncoder.Append32BitImmediate(node.Operand4);
 			return;
 		}
 
-		if (node.Operand1.IsConstant && node.Operand2.IsConstantZero)
+		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsPhysicalRegister && node.Operand3.IsConstant && node.Operand3.ConstantUnsigned32 >= 1 && node.Operand3.ConstantUnsigned32 <= 4 && node.Operand4.IsConstantZero)
 		{
-			opcodeEncoder.Append8Bits(0x8D);
-			opcodeEncoder.Append2Bits(0b00);
-			opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
-			opcodeEncoder.Append3Bits(0b101);
-			opcodeEncoder.Append32BitImmediate(node.Operand1);
+			return;
+		}
+
+		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsPhysicalRegister && node.Operand3.IsConstant && node.Operand3.ConstantUnsigned32 >= 1 && node.Operand3.ConstantUnsigned32 <= 4 && node.Operand4.IsConstant && node.Operand4.ConstantSigned32 >= -128 && node.Operand4.ConstantSigned32 <= 127)
+		{
+			return;
+		}
+
+		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsPhysicalRegister && node.Operand3.IsConstant && node.Operand3.ConstantUnsigned32 >= 1 && node.Operand3.ConstantUnsigned32 <= 4 && node.Operand4.IsConstant)
+		{
 			return;
 		}
 

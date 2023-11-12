@@ -2,14 +2,14 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.x64.Transforms.Optimizations.Manual.Standard;
+namespace Mosa.Compiler.x64.Transforms.Optimizations.Manual.Rewrite;
 // This transformation can reduce restrictions placed on the register allocator.
 // The LEA does not change any of the status flags, however, the add instruction does modify some flags (carry, zero, etc.)
 // Therefore, this transformation can only occur if the status flags are unused later.
 // A search is required to determine if a status flag is used.
 // However, if the search is not conclusive, the transformation is not made.
 
-[Transform("x64.Optimizations.Manual.Standard")]
+[Transform("x64.Optimizations.Manual.Rewrite")]
 public sealed class Add64ToLea64 : BaseTransform
 {
 	public Add64ToLea64() : base(X64.Add64, TransformType.Manual | TransformType.Optimization)

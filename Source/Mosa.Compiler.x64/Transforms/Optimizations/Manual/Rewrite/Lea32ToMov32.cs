@@ -1,13 +1,13 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x64.Transforms.Optimizations.Manual.Rewrite;
 
 [Transform("x64.Optimizations.Manual.Rewrite")]
-public sealed class Cmp32ToTest32 : BaseTransform
+public sealed class Lea32ToMov32 : BaseTransform
 {
-	public Cmp32ToTest32() : base(X64.Cmp32, TransformType.Manual | TransformType.Optimization)
+	public Lea32ToMov32() : base(X64.Lea32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -24,6 +24,9 @@ public sealed class Cmp32ToTest32 : BaseTransform
 
 	public override void Transform(Context context, Transform transform)
 	{
-		context.SetInstruction(X64.Test32, null, context.Operand1, context.Operand1);
+		var result = context.Result;
+		var operand1 = context.Operand1;
+
+		context.SetInstruction(X64.Mov32, result, operand1);
 	}
 }

@@ -2,9 +2,9 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.x64.Transforms.Optimizations.Manual.Standard;
+namespace Mosa.Compiler.x64.Transforms.Optimizations.Manual.Rewrite;
 
-[Transform("x64.Optimizations.Manual.Standard")]
+[Transform("x64.Optimizations.Manual.Rewrite")]
 public sealed class Test32ToZero : BaseTransform
 {
 	public Test32ToZero() : base(X64.Test32, TransformType.Manual | TransformType.Optimization)

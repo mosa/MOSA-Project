@@ -4,9 +4,9 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.x86.Transforms.Optimizations.Manual.Standard;
+namespace Mosa.Compiler.x86.Transforms.Optimizations.Manual.Rewrite;
 
-[Transform("x86.Optimizations.Manual.Standard")]
+[Transform("x86.Optimizations.Manual.Rewrite")]
 public sealed class Lea32ToDec32 : BaseTransform
 {
 	public Lea32ToDec32() : base(X86.Lea32, TransformType.Manual | TransformType.Optimization)
@@ -15,13 +15,16 @@ public sealed class Lea32ToDec32 : BaseTransform
 
 	public override bool Match(Context context, Transform transform)
 	{
-		if (!context.Operand2.IsResolvedConstant)
+		if (!context.Operand4.IsResolvedConstant)
 			return false;
 
-		if (context.Operand2.ConstantSigned64 != -1)
+		if (!context.Operand2.IsConstantZero)
 			return false;
 
-		if (context.Operand1 != context.Result)
+		if (context.Operand4.ConstantSigned64 != -1)
+			return false;
+
+		if (!AreSame(context.Operand1, context.Result))
 			return false;
 
 		if (context.Operand1.Register == CPURegister.ESP)
