@@ -40,13 +40,18 @@ public class OptimizationStage : BaseTransformStage
 
 	protected override bool SetupPhase(int phase)
 	{
+		if (Compiler.MosaSettings.ReduceCodeSize)
+		{
+			Transform.SetStageOption(TransformStageOption.ReduceCodeSize);
+		}
+
 		switch (phase)
 		{
 			case 0:
 				return true;
 
 			case 1 when LowerTo32:
-				Transform.SetStageOptions(TransformStageOption.LowerTo32);
+				Transform.SetStageOption(TransformStageOption.LowerTo32);
 				return true;
 		}
 

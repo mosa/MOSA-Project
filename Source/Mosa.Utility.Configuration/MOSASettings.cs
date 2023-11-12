@@ -1,10 +1,12 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Runtime.InteropServices;
+using Microsoft.Win32;
 using Mosa.Compiler.Common.Configuration;
 
 namespace Mosa.Utility.Configuration;
 
-public class MosaSettings
+public partial class MosaSettings
 {
 	#region Constants
 
@@ -541,6 +543,12 @@ public class MosaSettings
 		set => Settings.SetValue(Name.Optimizations_LongExpansion, value);
 	}
 
+	public bool ReduceCodeSize
+	{
+		get => Settings.GetValue(Name.Optimizations_ReduceCodeSize, true);
+		set => Settings.SetValue(Name.Optimizations_ReduceCodeSize, value);
+	}
+
 	public bool TwoPassOptimization
 	{
 		get => Settings.GetValue(Name.Optimizations_TwoPass, true);
@@ -716,13 +724,13 @@ public class MosaSettings
 		Settings.Merge(settings);
 	}
 
-	public void SetDetfaultSettings()
+	public void SetDefaultSettings()
 	{
 		TemporaryFolder = Path.Combine(Path.GetTempPath(), "MOSA");
 
 		MethodScanner = false;
 		Multithreading = true;
-		Platform = "x86";
+		Platform = "%DEFAULT%";
 		Multithreading = true;
 		BaseAddress = 0x00400000;
 		EmitBinary = true;
@@ -755,6 +763,7 @@ public class MosaSettings
 		InlineAggressiveMaximum = 24;
 		InlineMaximum = 12;
 		OptimizationBasicWindow = 5;
+		ReduceCodeSize = false;
 
 		Emulator = "Qemu";
 		EmulatorDisplay = false;
@@ -795,19 +804,32 @@ public class MosaSettings
 		EmitShortSymbolNames = false;
 
 		LinkerFormat = "elf32";
+
+		ExplorerFilter = "%REGISTRY%";
 	}
 
 	public void NormalizeSettings()
 	{
-		ImageFormat = ImageFormat == null ? string.Empty : ImageFormat.ToLowerInvariant().Trim();
-		FileSystem = FileSystem == null ? string.Empty : FileSystem.ToLowerInvariant().Trim();
-		EmulatorSerial = EmulatorSerial == null ? string.Empty : EmulatorSerial.ToLowerInvariant().Trim();
-		Emulator = Emulator == null ? string.Empty : Emulator.ToLowerInvariant().Trim();
-		Platform = Platform == null ? string.Empty : Platform.ToLowerInvariant().Trim();
-		LinkerFormat = LinkerFormat == null ? string.Empty : LinkerFormat.ToLowerInvariant().Trim();
+		ImageFormat = ToLower(ImageFormat);
+		FileSystem = ToLower(FileSystem);
+		EmulatorSerial = ToLower(EmulatorSerial);
+		Emulator = ToLower(Emulator);
+		Platform = ToLower(Platform);
+		LinkerFormat = ToLower(LinkerFormat);
 	}
 
-	public void UpdateFileAndPathSettings()
+	private string ToLower(string value)
+	{
+		if (value == null)
+			return string.Empty;
+
+		if (value == "%DEFAULT%" || value == "%REGISTRY%")
+			return value;
+
+		return value.ToLowerInvariant().Trim();
+	}
+
+	public void ResolveDefaults()
 	{
 		if (string.IsNullOrWhiteSpace(TemporaryFolder) || TemporaryFolder == "%DEFAULT%")
 		{
@@ -821,16 +843,58 @@ public class MosaSettings
 
 		if (string.IsNullOrWhiteSpace(DefaultFolder) || DefaultFolder == "%DEFAULT%")
 		{
-			if (OutputFile != null && OutputFile != "%DEFAULT%")
+			DefaultFolder = TemporaryFolder;
+		}
+
+		if (ExplorerFilter == "%REGISTRY%")
+		{
+			ExplorerFilter = GetRegistry(WindowsRegistry.ExplorerFilter, string.Empty);
+		}
+
+		if (Platform == "%REGISTRY%")
+		{
+			Platform = GetRegistry(WindowsRegistry.ExplorerPlatform, string.Empty);
+		}
+
+		if (string.IsNullOrWhiteSpace(Platform) || Platform == "%DEFAULT%")
+		{
+			Platform = "x86";
+		}
+	}
+
+	public static string GetRegistry(string name, string defaultValue)
+	{
+		if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+		{
+			try
 			{
-				DefaultFolder = Path.GetDirectoryName(Path.GetFullPath(OutputFile));
+				return (string)Registry.CurrentUser
+						.OpenSubKey(WindowsRegistry.Software)
+						.OpenSubKey(WindowsRegistry.MosaApp)
+						.GetValue(name, defaultValue);
 			}
-			else
+			catch
 			{
-				DefaultFolder = TemporaryFolder;
+				return defaultValue;
 			}
 		}
 
+		return defaultValue;
+	}
+
+	public static void SetRegistry(string name, string value)
+	{
+		if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+		{
+			Registry.CurrentUser
+			.OpenSubKey(WindowsRegistry.Software)
+			.OpenSubKey(WindowsRegistry.MosaApp, RegistryKeyPermissionCheck.ReadWriteSubTree)
+			.SetValue(name, value);
+		}
+	}
+
+	public void ResolveFileAndPathSettings()
+	{
 		string baseFilename;
 
 		if (OutputFile != null && OutputFile != "%DEFAULT%")
@@ -850,11 +914,9 @@ public class MosaSettings
 			baseFilename = "_mosa_";
 		}
 
-		var defaultFolder = DefaultFolder;
-
 		if (OutputFile is null or "%DEFAULT%")
 		{
-			OutputFile = Path.Combine(defaultFolder, $"{baseFilename}.bin");
+			OutputFile = Path.Combine(DefaultFolder, $"{baseFilename}.bin");
 		}
 
 		if (ImageFile == "%DEFAULT%")
@@ -864,47 +926,47 @@ public class MosaSettings
 
 		if (MapFile == "%DEFAULT%")
 		{
-			MapFile = Path.Combine(defaultFolder, $"{baseFilename}-map.txt");
+			MapFile = Path.Combine(DefaultFolder, $"{baseFilename}-map.txt");
 		}
 
 		if (CounterFile == "%DEFAULT%")
 		{
-			CounterFile = Path.Combine(defaultFolder, $"{baseFilename}-counters.txt");
+			CounterFile = Path.Combine(DefaultFolder, $"{baseFilename}-counters.txt");
 		}
 
 		if (CompileTimeFile == "%DEFAULT%")
 		{
-			CompileTimeFile = Path.Combine(defaultFolder, $"{baseFilename}-time.txt");
+			CompileTimeFile = Path.Combine(DefaultFolder, $"{baseFilename}-time.txt");
 		}
 
 		if (DebugFile == "%DEFAULT%")
 		{
-			DebugFile = Path.Combine(defaultFolder, $"{baseFilename}.debug");
+			DebugFile = Path.Combine(DefaultFolder, $"{baseFilename}.debug");
 		}
 
 		if (InlinedFile == "%DEFAULT%")
 		{
-			InlinedFile = Path.Combine(defaultFolder, $"{baseFilename}-inlined.txt");
+			InlinedFile = Path.Combine(DefaultFolder, $"{baseFilename}-inlined.txt");
 		}
 
 		if (PreLinkHashFile == "%DEFAULT%")
 		{
-			PreLinkHashFile = Path.Combine(defaultFolder, $"{baseFilename}-prelink-hash.txt");
+			PreLinkHashFile = Path.Combine(DefaultFolder, $"{baseFilename}-prelink-hash.txt");
 		}
 
 		if (PostLinkHashFile == "%DEFAULT%")
 		{
-			PostLinkHashFile = Path.Combine(defaultFolder, $"{baseFilename}-postlink-hash.txt");
+			PostLinkHashFile = Path.Combine(DefaultFolder, $"{baseFilename}-postlink-hash.txt");
 		}
 
 		if (AsmFile == "%DEFAULT%")
 		{
-			AsmFile = Path.Combine(defaultFolder, $"{baseFilename}.asm");
+			AsmFile = Path.Combine(DefaultFolder, $"{baseFilename}.asm");
 		}
 
 		if (NasmFile == "%DEFAULT%")
 		{
-			NasmFile = Path.Combine(defaultFolder, $"{baseFilename}.nasm");
+			NasmFile = Path.Combine(DefaultFolder, $"{baseFilename}.nasm");
 		}
 	}
 

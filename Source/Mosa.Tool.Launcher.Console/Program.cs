@@ -29,13 +29,14 @@ internal static class Program
 			var mosaSettings = new MosaSettings();
 
 			mosaSettings.LoadAppLocations();
-			mosaSettings.SetDetfaultSettings();
+			mosaSettings.SetDefaultSettings();
 			mosaSettings.LoadArguments(args);
-			SetRequiredSettings(mosaSettings);
-			mosaSettings.ExpandSearchPaths();
-			mosaSettings.AddStandardPlugs();
 			mosaSettings.NormalizeSettings();
-			mosaSettings.UpdateFileAndPathSettings();
+			mosaSettings.ResolveDefaults();
+			SetRequiredSettings(mosaSettings);
+			mosaSettings.ResolveFileAndPathSettings();
+			mosaSettings.AddStandardPlugs();
+			mosaSettings.ExpandSearchPaths();
 
 			var compilerHooks = CreateCompilerHooks();
 

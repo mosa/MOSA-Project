@@ -4,8 +4,4 @@
 		<ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Transforms\Optimizations\Manual\Simplification\" />
-	</ItemGroup>
-
 </Project>

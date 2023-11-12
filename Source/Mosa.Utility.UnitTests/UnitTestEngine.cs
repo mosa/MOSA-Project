@@ -67,13 +67,14 @@ public class UnitTestEngine : IDisposable
 	public UnitTestEngine(MosaSettings mosaSettings)
 	{
 		MosaSettings.LoadAppLocations();
-		MosaSettings.SetDetfaultSettings();
+		MosaSettings.SetDefaultSettings();
 		MosaSettings.Merge(mosaSettings);
-		SetRequiredSettings();
-		MosaSettings.ExpandSearchPaths();
-		MosaSettings.AddStandardPlugs();
 		MosaSettings.NormalizeSettings();
-		MosaSettings.UpdateFileAndPathSettings();
+		MosaSettings.ResolveDefaults();
+		SetRequiredSettings();
+		MosaSettings.ResolveFileAndPathSettings();
+		MosaSettings.AddStandardPlugs();
+		MosaSettings.ExpandSearchPaths();
 
 		Initialize();
 	}
@@ -96,8 +97,6 @@ public class UnitTestEngine : IDisposable
 		MosaSettings.AddSourceFile("Mosa.UnitTests.dll");
 
 		MosaSettings.AddSearchPath(AppContext.BaseDirectory);
-		//MosaSettings.AddSearchPath(Environment.CurrentDirectory);
-		//MosaSettings.AddSearchPath(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location));
 
 		OutputStatus($"Search Folder(s): {string.Join(", ", new List<string>(MosaSettings.SearchPaths.ToArray()))}");
 	}
