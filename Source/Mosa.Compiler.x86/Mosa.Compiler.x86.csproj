@@ -1,12 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<ItemGroup>
-	  <Compile Remove="Transforms\Optimizations\Manual\Simplification\**" />
-	  <EmbeddedResource Remove="Transforms\Optimizations\Manual\Simplification\**" />
-	  <None Remove="Transforms\Optimizations\Manual\Simplification\**" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj" />
 	</ItemGroup>
 

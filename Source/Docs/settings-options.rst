@@ -45,6 +45,7 @@ Compiler Optimizations Settings
     Optimizations.TwoPass,"If true, some optimization stages are executed twice"
     Optimizations.Inline.Aggressive,Methods to be aggressively inline
     Optimizations.Inline.Exclude,Methods that may not be inlined
+	Optimizations.ReduceCodeSize,"If true, the compiler will favor smaller code size"
 
 Linker Settings
 ---------------
