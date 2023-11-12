@@ -21,7 +21,7 @@ public partial class MainWindow : Window
 	private readonly CompilerHooks compilerHooks;
 	private readonly DispatcherTimer timer;
 
-	private Builder? builder;
+	private Builder builder;
 	private int totalMethods;
 	private int completedMethods;
 
@@ -425,7 +425,7 @@ public partial class MainWindow : Window
 		stopwatch.Stop();
 	}
 
-	private void LnchBtn_OnClick(object? sender, RoutedEventArgs e)
+	private void LnchBtn_OnClick(object sender, RoutedEventArgs e)
 	{
 		Tabs.SelectedIndex = 4;
 		UpdateSettings();
@@ -436,7 +436,7 @@ public partial class MainWindow : Window
 		else OutputStatus($"ERROR: {result}");
 	}
 
-	private async void SrcBtn_OnClick(object? sender, RoutedEventArgs e)
+	private async void SrcBtn_OnClick(object sender, RoutedEventArgs e)
 	{
 		var files = await StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
 		{
@@ -449,7 +449,7 @@ public partial class MainWindow : Window
 		SrcLbl.Content = files[0].Path.LocalPath;
 	}
 
-	private async void DstBtn_OnClick(object? sender, RoutedEventArgs e)
+	private async void DstBtn_OnClick(object sender, RoutedEventArgs e)
 	{
 		var folders = await StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
 		{
@@ -462,7 +462,7 @@ public partial class MainWindow : Window
 		DstLbl.Content = folders[0].Path.LocalPath;
 	}
 
-	private async void IncBtn_OnClick(object? sender, RoutedEventArgs e)
+	private async void IncBtn_OnClick(object sender, RoutedEventArgs e)
 	{
 		var folders = await StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
 		{

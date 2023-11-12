@@ -200,11 +200,12 @@ public static class SpecificTests
 	public static bool CompareLessAddI8(long v)
 	{
 		var a = v & 0xFFFF;
-		var c1 = 10l;
-		var v2 = 100l;
+		var c1 = 10L;
+		var v2 = 100L;
 
 		return a + c1 < v2;
 	}
+
 	[MosaUnitTest(Series = "U4")]
 	public static bool CompareEqualAddU4(uint v)
 	{
@@ -224,6 +225,7 @@ public static class SpecificTests
 
 		return a + c1 == v2;
 	}
+
 	[MosaUnitTest(Series = "U8")]
 	public static bool CompareEqualAddU8(ulong v)
 	{
@@ -238,8 +240,8 @@ public static class SpecificTests
 	public static bool CompareEqualAddI8(long v)
 	{
 		var a = v & 0xFFFF;
-		var c1 = 10l;
-		var v2 = 100l;
+		var c1 = 10L;
+		var v2 = 100L;
 
 		return a + c1 == v2;
 	}
