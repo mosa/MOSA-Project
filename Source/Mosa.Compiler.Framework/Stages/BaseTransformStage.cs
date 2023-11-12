@@ -130,6 +130,10 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 		SortedByPriority = true;
 	}
 
+	protected virtual void Setup()
+	{
+	}
+
 	protected virtual bool SetupPhase(int phase)
 	{
 		return phase == 0;
