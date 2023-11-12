@@ -834,6 +834,7 @@ public class BuildCommonInstructionFiles : BuildBaseTemplate
 			case "reg3s1": code = "Append3Bits"; postcode = ".Register.RegisterCode >> 1"; return;
 			case "imm1": code = "Append1BitImmediate"; return;
 			case "imm2": code = "Append2BitImmediate"; return;
+			case "imm2scale": code = "Append2BitSScale"; return;
 			case "imm4": code = "Append4BitImmediate"; return;
 			case "imm4hn": code = "Append4BitImmediateHighNibble"; return;
 			case "imm5": code = "Append5BitImmediate"; return;

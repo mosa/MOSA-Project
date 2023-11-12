@@ -1,7 +1,6 @@
 {
 	"Encoding": [
 		"[x86]=[instruction-prefix]|[address-prefix]|[operand-prefix]|[opcode]|[opcode2]|[opcode3]|[opcode4]|[mod]|[reg]|[rm]|[scale]|[index]|[base]|[displacement]|[immediate]",
-		"[x64]=[instruction-prefix]|[address-prefix]|[operand-prefix]|[rex.opcode]|[rex.w]|[rex.r]|[rex.x]|[rex.b]|[opcode]|[opcode2]|[opcode3]|[opcode4]|[mod]|[reg]|[rm]|[scale]|[index]|[base]|[displacement]|[immediate]",
 
 		"[x86-vex-3]=[vex.opcode]|[vex.R]|[vex.X]|[vex.B]|[vex.MapSelect]|[vex.WE]|[vex.vvvv]|[vex.L]|[vex.PP]|[vex.opcode2]|[mod]|[reg]|[rm],vex.opcode=0xC4,vex.R=1,vex.X=1,vex.B=1,vex.WE=0,vex.L=0,vex.PP=00",
 
@@ -1075,15 +1074,15 @@
 				},
 				{
 					"Condition": "[register][register][constant_1to4][zero]",
-					"Encoding": "[todo]"
+					"Encoding": "[x86],mod=00,reg=reg3:r,rm=100,scale=imm2scale:o3,index=reg3:o2,base=reg3:o2"
 				},
 				{
 					"Condition": "[register][register][constant_1to4][constant_imm8]",
-					"Encoding": "[todo]"
+					"Encoding": "[x86],mod=01,reg=reg3:r,rm=100,scale=imm2scale:o3,index=reg3:o2,base=reg3:o2,immediate=imm8:o4"
 				},
 				{
 					"Condition": "[register][register][constant_1to4][constant]",
-					"Encoding": "[todo]"
+					"Encoding": "[x86],mod=10,reg=reg3:r,rm=100,scale=imm2scale:o3,index=reg3:o2,base=reg3:o2,immediate=imm32:o4"
 				}
 			]
 		},

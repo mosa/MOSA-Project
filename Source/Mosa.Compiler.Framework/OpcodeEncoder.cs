@@ -239,6 +239,19 @@ public sealed class OpcodeEncoder
 		AppendByte((byte)(value >> 56));
 	}
 
+	public void Append2BitSScale(Operand operand)
+	{
+		var v = operand.ConstantUnsigned32;
+
+		switch (v)
+		{
+			case 1: Append2Bits(0); return;
+			case 2: Append2Bits(1); return;
+			case 4: Append2Bits(2); return;
+			case 8: Append2Bits(3); return;
+		}
+	}
+
 	public void Append32BitImmediateWithOffset(Operand operand, Operand offset)
 	{
 		Debug.Assert(operand.IsConstant);
