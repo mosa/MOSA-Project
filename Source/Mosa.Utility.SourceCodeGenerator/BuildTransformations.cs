@@ -402,7 +402,8 @@ public class BuildTransformations : BuildBaseTemplate
 
 			if (!string.IsNullOrWhiteSpace(node.InstructionName))
 			{
-				var instruction = node.InstructionName.Replace("IR.", "IRInstruction."); ;
+				//var instruction = node.InstructionName.Replace("IR.", "IRInstruction.");
+				var instruction = node.InstructionName;
 				var result = node == transform.ResultInstructionTree ? "result" : $"v{nodeNbrToVirtualRegisterNbr[node.NodeNbr]}";
 
 				Lines.AppendLine($"\t\tcontext.{operation}Instruction({instruction}, {condition}{result}, {operands});");
@@ -806,7 +807,8 @@ public class BuildTransformations : BuildBaseTemplate
 
 		EmitCondition($"!context.{parent}{operandName}.IsDefinedOnce");
 
-		var instructionName = operand.Node.InstructionName.Replace("IR.", "IRInstruction.");
+		//var instructionName = operand.Node.InstructionName.Replace("IR.", "IRInstruction.");
+		var instructionName = operand.Node.InstructionName;
 
 		EmitCondition($"context.{parent}{operandName}.Definitions[0].Instruction != {instructionName}");
 
