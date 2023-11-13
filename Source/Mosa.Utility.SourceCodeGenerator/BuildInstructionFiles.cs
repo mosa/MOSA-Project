@@ -66,7 +66,7 @@ public class BuildInstructionFiles : BuildBaseTemplate
 		}
 
 		Lines.AppendLine();
-		Lines.AppendLine("namespace Mosa.Compiler." + Platform + ".Instructions;");
+		Lines.AppendLine($"namespace Mosa.Compiler.{Platform}.Instructions;");
 		Lines.AppendLine();
 		Lines.AppendLine("/// <summary>");
 		Lines.Append("/// " + node.Name);
@@ -78,7 +78,7 @@ public class BuildInstructionFiles : BuildBaseTemplate
 
 		Lines.AppendLine();
 		Lines.AppendLine("/// </summary>");
-		Lines.AppendLine("/// <seealso cref=\"Mosa.Compiler." + Platform + "." + NormalizedPlatform + "Instruction\" />");
+		Lines.AppendLine($"/// <seealso cref=\"Mosa.Compiler.{Platform}.{NormalizedPlatform}Instruction\" />");
 		Lines.AppendLine("public sealed class " + node.Name + " : " + NormalizedPlatform + "Instruction");
 		Lines.AppendLine("{");
 		Lines.AppendLine("\tinternal " + node.Name + "()");
