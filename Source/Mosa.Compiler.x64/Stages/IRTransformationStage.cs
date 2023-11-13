@@ -1,6 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.x64.Transforms.IR;
+using Mosa.Compiler.x64.Transforms.BaseIR;
 
 namespace Mosa.Compiler.x64.Stages;
 
