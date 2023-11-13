@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace Mosa.Utility.SourceCodeGenerator;
 
-public class BuildCommonInstructionFiles : BuildBaseTemplate
+public class BuildInstructionFiles : BuildBaseTemplate
 {
 	protected virtual string Platform { get; }
 
@@ -12,9 +12,10 @@ public class BuildCommonInstructionFiles : BuildBaseTemplate
 
 	private readonly Dictionary<string, string> EncodingTemplates = new Dictionary<string, string>();
 
-	public BuildCommonInstructionFiles(string jsonFile, string destinationPath)
+	public BuildInstructionFiles(string jsonFile, string destinationPath, string platform)
 		: base(jsonFile, destinationPath)
 	{
+		Platform = platform;
 	}
 
 	protected override void Iterator()
