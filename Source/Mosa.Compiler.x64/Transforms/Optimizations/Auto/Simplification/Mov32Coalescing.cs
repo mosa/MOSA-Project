@@ -4,15 +4,15 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.Standard;
+namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.Simplification;
 
 /// <summary>
-/// Mov64Coalescing
+/// Mov32Coalescing
 /// </summary>
-[Transform("x64.Optimizations.Auto.Standard")]
-public sealed class Mov64Coalescing : BaseTransform
+[Transform("x64.Optimizations.Auto.Simplification")]
+public sealed class Mov32Coalescing : BaseTransform
 {
-	public Mov64Coalescing() : base(X64.Mov64, TransformType.Auto | TransformType.Optimization)
+	public Mov32Coalescing() : base(X64.Mov32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -24,7 +24,7 @@ public sealed class Mov64Coalescing : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != X64.Mov64)
+		if (context.Operand1.Definitions[0].Instruction != X64.Mov32)
 			return false;
 
 		if (!IsVirtualRegister(context.Operand1.Definitions[0].Operand1))
@@ -39,6 +39,6 @@ public sealed class Mov64Coalescing : BaseTransform
 
 		var t1 = context.Operand1.Definitions[0].Operand1;
 
-		context.SetInstruction(X64.Mov64, result, t1);
+		context.SetInstruction(X64.Mov32, result, t1);
 	}
 }

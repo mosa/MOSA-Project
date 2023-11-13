@@ -11,7 +11,7 @@
 	],
 	"Optimizations": [
 		{
-			"Type": "Standard",
+			"Type": "Simplification",
 			"Name": "Mov##",
 			"SubName": "Coalescing",
 			"Expression": "X64.Mov## (X64.Mov## a)",

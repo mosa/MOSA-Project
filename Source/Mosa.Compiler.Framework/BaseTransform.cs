@@ -144,6 +144,26 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 		return operand.IsInteger;
 	}
 
+	protected static bool IsUnsignedBetween32(Operand operand, uint a, uint b)
+	{
+		return operand.IsInteger && operand.ConstantUnsigned32 >= a && operand.ConstantUnsigned32 <= b;
+	}
+
+	protected static bool IsUnsignedBetween64(Operand operand, uint a, uint b)
+	{
+		return operand.IsInteger && operand.ConstantUnsigned64 >= a && operand.ConstantUnsigned64 <= b;
+	}
+
+	protected static bool IsSignedBetween32(Operand operand, uint a, uint b)
+	{
+		return operand.IsInteger && operand.ConstantSigned32 >= a && operand.ConstantSigned32 <= b;
+	}
+
+	protected static bool IsSignedBetween64(Operand operand, uint a, uint b)
+	{
+		return operand.IsInteger && operand.ConstantSigned64 >= a && operand.ConstantSigned64 <= b;
+	}
+
 	protected static bool IsIntegerBetween0And32(Operand operand)
 	{
 		return operand.IsInteger && operand.ConstantSigned64 >= 0 && operand.ConstantSigned64 <= 32;
@@ -273,7 +293,6 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 	{
 		return a == ulong.MaxValue;
 	}
-
 
 	#endregion Filter Methods
 

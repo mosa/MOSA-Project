@@ -108,6 +108,12 @@ public static class Program
 			"Mosa.Compiler.Framework").Execute();
 
 		new BuildTransformations(
+			Path.Combine(dataPath, @"X86-Optimizations-IRTransform.json"),
+			Path.Combine(targetPath, @"Mosa.Compiler.x86\Transforms\IR\Auto"),
+			"Mosa.Compiler.x86",
+			"Mosa.Compiler.x86").Execute();
+
+		new BuildTransformations(
 			Path.Combine(dataPath, @"X86-Optimizations-Standard.json"),
 			Path.Combine(targetPath, @"Mosa.Compiler.x86\Transforms\Optimizations\Auto"),
 			"Mosa.Compiler.x86",

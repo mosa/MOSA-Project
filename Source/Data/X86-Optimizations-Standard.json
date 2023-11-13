@@ -9,7 +9,7 @@
 	],
 	"Optimizations": [
 		{
-			"Type": "Standard",
+			"Type": "Simplification",
 			"Name": "Mov32",
 			"SubName": "Coalescing",
 			"Expression": "X86.Mov32 (X86.Mov32 a)",

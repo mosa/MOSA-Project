@@ -13,7 +13,10 @@ namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto;
 public static class AutoTransforms
 {
 	public static readonly List<BaseTransform> List = new List<BaseTransform> {
-		new Standard.Mov32Coalescing(),
+		new Advanced.Add32ToLea32Constant(),
+		new Advanced.Add32ToLea32(),
+		new Advanced.Add32ShiftLeft3232ToLea32(),
+		new Simplification.Mov32Coalescing(),
 		new StrengthReduction.Add32ByZero(),
 		new StrengthReduction.Sub32ByZero(),
 		new StrengthReduction.IMul32ByZero(),
