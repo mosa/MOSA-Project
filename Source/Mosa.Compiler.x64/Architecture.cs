@@ -127,11 +127,6 @@ public sealed class Architecture : BaseArchitecture
 	/// </summary>
 	public override string PlatformName => "x64";
 
-	/// <summary>
-	/// Gets the instructions.
-	/// </summary>
-	public override List<BaseInstruction> Instructions => X64Instructions.List;
-
 	public override OpcodeEncoder GetOpcodeEncoder()
 	{
 		return new OpcodeEncoder(8);

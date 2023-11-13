@@ -108,11 +108,6 @@ public sealed class Architecture : BaseArchitecture
 	/// </summary>
 	public override string PlatformName => "x86";
 
-	/// <summary>
-	/// Gets the instructions.
-	/// </summary>
-	public override List<BaseInstruction> Instructions => X86Instructions.List;
-
 	public override OpcodeEncoder GetOpcodeEncoder()
 	{
 		return new OpcodeEncoder(8);

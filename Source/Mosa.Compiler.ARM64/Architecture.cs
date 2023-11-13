@@ -115,14 +115,6 @@ public sealed class Architecture : BaseArchitecture
 	/// </summary>
 	public override PhysicalRegister ProgramCounter => CPURegister.PC;
 
-	/// <summary>
-	/// Gets the instructions.
-	/// </summary>
-	/// <value>
-	/// The instructions.
-	/// </value>
-	public override List<BaseInstruction> Instructions => ARM64Instructions.List;
-
 	public override OpcodeEncoder GetOpcodeEncoder()
 	{
 		return new OpcodeEncoder(32);
