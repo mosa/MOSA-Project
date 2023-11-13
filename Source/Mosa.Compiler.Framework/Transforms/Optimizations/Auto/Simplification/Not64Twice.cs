@@ -4,9 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
-/// <summary>
-/// Not64Twice
-/// </summary>
 [Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class Not64Twice : BaseTransform
 {

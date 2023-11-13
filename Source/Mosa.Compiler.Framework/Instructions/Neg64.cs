@@ -7,7 +7,6 @@ namespace Mosa.Compiler.Framework.Instructions;
 /// <summary>
 /// Neg64
 /// </summary>
-/// <seealso cref="Mosa.Compiler.Framework.Instructions.BaseIRInstruction" />
 public sealed class Neg64 : BaseIRInstruction
 {
 	public Neg64()

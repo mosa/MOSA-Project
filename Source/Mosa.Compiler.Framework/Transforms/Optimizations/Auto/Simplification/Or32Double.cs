@@ -4,9 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
-/// <summary>
-/// Or32Double
-/// </summary>
 [Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class Or32Double : BaseTransform
 {
@@ -42,9 +39,6 @@ public sealed class Or32Double : BaseTransform
 	}
 }
 
-/// <summary>
-/// Or32Double_v1
-/// </summary>
 [Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class Or32Double_v1 : BaseTransform
 {
@@ -80,9 +74,6 @@ public sealed class Or32Double_v1 : BaseTransform
 	}
 }
 
-/// <summary>
-/// Or32Double_v2
-/// </summary>
 [Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class Or32Double_v2 : BaseTransform
 {
@@ -118,9 +109,6 @@ public sealed class Or32Double_v2 : BaseTransform
 	}
 }
 
-/// <summary>
-/// Or32Double_v3
-/// </summary>
 [Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class Or32Double_v3 : BaseTransform
 {

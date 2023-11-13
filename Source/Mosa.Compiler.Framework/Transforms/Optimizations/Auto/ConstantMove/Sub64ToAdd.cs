@@ -4,9 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove;
 
-/// <summary>
-/// Sub64ToAdd
-/// </summary>
 [Transform("IR.Optimizations.Auto.ConstantMove")]
 public sealed class Sub64ToAdd : BaseTransform
 {

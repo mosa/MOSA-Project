@@ -7,7 +7,6 @@ namespace Mosa.Compiler.Framework.Instructions;
 /// <summary>
 /// MulUnsigned32
 /// </summary>
-/// <seealso cref="Mosa.Compiler.Framework.Instructions.BaseIRInstruction" />
 public sealed class MulUnsigned32 : BaseIRInstruction
 {
 	public MulUnsigned32()

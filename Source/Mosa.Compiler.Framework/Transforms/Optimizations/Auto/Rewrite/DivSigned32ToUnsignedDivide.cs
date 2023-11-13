@@ -4,9 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Rewrite;
 
-/// <summary>
-/// DivSigned32ToUnsignedDivide
-/// </summary>
 [Transform("IR.Optimizations.Auto.Rewrite")]
 public sealed class DivSigned32ToUnsignedDivide : BaseTransform
 {

@@ -7,7 +7,6 @@ namespace Mosa.Compiler.Framework.Instructions;
 /// <summary>
 /// FinallyEnd
 /// </summary>
-/// <seealso cref="Mosa.Compiler.Framework.Instructions.BaseIRInstruction" />
 public sealed class FinallyEnd : BaseIRInstruction
 {
 	public FinallyEnd()

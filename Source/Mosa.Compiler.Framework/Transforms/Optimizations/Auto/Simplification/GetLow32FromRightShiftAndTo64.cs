@@ -4,9 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
-/// <summary>
-/// GetLow32FromRightShiftAndTo64
-/// </summary>
 [Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class GetLow32FromRightShiftAndTo64 : BaseTransform
 {

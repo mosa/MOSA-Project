@@ -9,7 +9,6 @@ namespace Mosa.Compiler.x86.Instructions;
 /// <summary>
 /// Movsx16To32
 /// </summary>
-/// <seealso cref="Mosa.Compiler.x86.X86Instruction" />
 public sealed class Movsx16To32 : X86Instruction
 {
 	internal Movsx16To32()

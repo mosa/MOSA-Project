@@ -9,7 +9,6 @@ namespace Mosa.Compiler.x86.Instructions;
 /// <summary>
 /// Popad
 /// </summary>
-/// <seealso cref="Mosa.Compiler.x86.X86Instruction" />
 public sealed class Popad : X86Instruction
 {
 	internal Popad()

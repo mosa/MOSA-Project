@@ -9,7 +9,6 @@ namespace Mosa.Compiler.x86.Instructions;
 /// <summary>
 /// Movups
 /// </summary>
-/// <seealso cref="Mosa.Compiler.x86.X86Instruction" />
 public sealed class Movups : X86Instruction
 {
 	internal Movups()

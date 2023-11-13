@@ -9,7 +9,6 @@ namespace Mosa.Compiler.ARM32.Instructions;
 /// <summary>
 /// Uxth - Unsigned Extend Halfword
 /// </summary>
-/// <seealso cref="Mosa.Compiler.ARM32.ARM32Instruction" />
 public sealed class Uxth : ARM32Instruction
 {
 	internal Uxth()

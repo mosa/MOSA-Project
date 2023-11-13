@@ -9,7 +9,6 @@ namespace Mosa.Compiler.x86.Instructions;
 /// <summary>
 /// Sub32
 /// </summary>
-/// <seealso cref="Mosa.Compiler.x86.X86Instruction" />
 public sealed class Sub32 : X86Instruction
 {
 	internal Sub32()

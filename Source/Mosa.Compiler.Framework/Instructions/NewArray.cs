@@ -7,7 +7,6 @@ namespace Mosa.Compiler.Framework.Instructions;
 /// <summary>
 /// NewArray
 /// </summary>
-/// <seealso cref="Mosa.Compiler.Framework.Instructions.BaseIRInstruction" />
 public sealed class NewArray : BaseIRInstruction
 {
 	public NewArray()

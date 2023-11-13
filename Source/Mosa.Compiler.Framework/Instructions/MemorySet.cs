@@ -7,7 +7,6 @@ namespace Mosa.Compiler.Framework.Instructions;
 /// <summary>
 /// MemorySet
 /// </summary>
-/// <seealso cref="Mosa.Compiler.Framework.Instructions.BaseIRInstruction" />
 public sealed class MemorySet : BaseIRInstruction
 {
 	public MemorySet()

@@ -9,7 +9,6 @@ namespace Mosa.Compiler.ARM32.Instructions;
 /// <summary>
 /// Str16 - Halfword Data Transfer
 /// </summary>
-/// <seealso cref="Mosa.Compiler.ARM32.ARM32Instruction" />
 public sealed class Str16 : ARM32Instruction
 {
 	internal Str16()

@@ -9,7 +9,6 @@ namespace Mosa.Compiler.Framework.Instructions;
 /// <summary>
 /// CompareManagedPointer
 /// </summary>
-/// <seealso cref="Mosa.Compiler.Framework.Instructions.BaseIRInstruction" />
 public sealed class CompareManagedPointer : BaseIRInstruction
 {
 	public CompareManagedPointer()

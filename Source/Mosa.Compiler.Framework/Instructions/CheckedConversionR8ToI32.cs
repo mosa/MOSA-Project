@@ -7,7 +7,6 @@ namespace Mosa.Compiler.Framework.Instructions;
 /// <summary>
 /// CheckedConversionR8ToI32
 /// </summary>
-/// <seealso cref="Mosa.Compiler.Framework.Instructions.BaseIRInstruction" />
 public sealed class CheckedConversionR8ToI32 : BaseIRInstruction
 {
 	public CheckedConversionR8ToI32()

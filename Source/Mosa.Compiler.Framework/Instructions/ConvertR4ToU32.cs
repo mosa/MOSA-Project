@@ -7,7 +7,6 @@ namespace Mosa.Compiler.Framework.Instructions;
 /// <summary>
 /// ConvertR4ToU32
 /// </summary>
-/// <seealso cref="Mosa.Compiler.Framework.Instructions.BaseIRInstruction" />
 public sealed class ConvertR4ToU32 : BaseIRInstruction
 {
 	public ConvertR4ToU32()

@@ -9,7 +9,6 @@ namespace Mosa.Compiler.x64.Instructions;
 /// <summary>
 /// Neg32
 /// </summary>
-/// <seealso cref="Mosa.Compiler.x64.X64Instruction" />
 public sealed class Neg32 : X64Instruction
 {
 	internal Neg32()

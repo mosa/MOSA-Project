@@ -9,7 +9,6 @@ namespace Mosa.Compiler.Framework.Instructions;
 /// <summary>
 /// Compare64x64
 /// </summary>
-/// <seealso cref="Mosa.Compiler.Framework.Instructions.BaseIRInstruction" />
 public sealed class Compare64x64 : BaseIRInstruction
 {
 	public Compare64x64()

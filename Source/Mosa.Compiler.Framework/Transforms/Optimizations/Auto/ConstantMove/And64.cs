@@ -4,9 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove;
 
-/// <summary>
-/// And64
-/// </summary>
 [Transform("IR.Optimizations.Auto.ConstantMove")]
 public sealed class And64 : BaseTransform
 {

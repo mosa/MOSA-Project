@@ -9,7 +9,6 @@ namespace Mosa.Compiler.x64.Instructions;
 /// <summary>
 /// Rcr32
 /// </summary>
-/// <seealso cref="Mosa.Compiler.x64.X64Instruction" />
 public sealed class Rcr32 : X64Instruction
 {
 	internal Rcr32()

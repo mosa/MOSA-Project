@@ -9,7 +9,6 @@ namespace Mosa.Compiler.x64.Instructions;
 /// <summary>
 /// Movzx8To64
 /// </summary>
-/// <seealso cref="Mosa.Compiler.x64.X64Instruction" />
 public sealed class Movzx8To64 : X64Instruction
 {
 	internal Movzx8To64()

@@ -7,7 +7,6 @@ namespace Mosa.Compiler.Framework.Instructions;
 /// <summary>
 /// MoveManagedPointer
 /// </summary>
-/// <seealso cref="Mosa.Compiler.Framework.Instructions.BaseIRInstruction" />
 public sealed class MoveManagedPointer : BaseIRInstruction
 {
 	public MoveManagedPointer()

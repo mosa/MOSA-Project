@@ -7,7 +7,6 @@ namespace Mosa.Compiler.Framework.Instructions;
 /// <summary>
 /// CheckedConversionU32ToU16
 /// </summary>
-/// <seealso cref="Mosa.Compiler.Framework.Instructions.BaseIRInstruction" />
 public sealed class CheckedConversionU32ToU16 : BaseIRInstruction
 {
 	public CheckedConversionU32ToU16()

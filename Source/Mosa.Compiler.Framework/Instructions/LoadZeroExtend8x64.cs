@@ -7,7 +7,6 @@ namespace Mosa.Compiler.Framework.Instructions;
 /// <summary>
 /// LoadZeroExtend8x64
 /// </summary>
-/// <seealso cref="Mosa.Compiler.Framework.Instructions.BaseIRInstruction" />
 public sealed class LoadZeroExtend8x64 : BaseIRInstruction
 {
 	public LoadZeroExtend8x64()

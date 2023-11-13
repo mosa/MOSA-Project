@@ -9,7 +9,6 @@ namespace Mosa.Compiler.x64.Instructions;
 /// <summary>
 /// Movdi64sd
 /// </summary>
-/// <seealso cref="Mosa.Compiler.x64.X64Instruction" />
 public sealed class Movdi64sd : X64Instruction
 {
 	internal Movdi64sd()

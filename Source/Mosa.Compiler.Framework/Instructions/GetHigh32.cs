@@ -9,7 +9,6 @@ namespace Mosa.Compiler.Framework.Instructions;
 /// <summary>
 /// GetHigh32
 /// </summary>
-/// <seealso cref="Mosa.Compiler.Framework.Instructions.BaseIRInstruction" />
 public sealed class GetHigh32 : BaseIRInstruction
 {
 	public GetHigh32()

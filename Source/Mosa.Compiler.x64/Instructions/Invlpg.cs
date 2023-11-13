@@ -9,7 +9,6 @@ namespace Mosa.Compiler.x64.Instructions;
 /// <summary>
 /// Invlpg
 /// </summary>
-/// <seealso cref="Mosa.Compiler.x64.X64Instruction" />
 public sealed class Invlpg : X64Instruction
 {
 	internal Invlpg()

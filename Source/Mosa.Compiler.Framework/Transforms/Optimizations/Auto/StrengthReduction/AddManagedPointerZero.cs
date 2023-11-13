@@ -4,9 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
 
-/// <summary>
-/// AddManagedPointerZero
-/// </summary>
 [Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class AddManagedPointerZero : BaseTransform
 {
@@ -37,9 +34,6 @@ public sealed class AddManagedPointerZero : BaseTransform
 	}
 }
 
-/// <summary>
-/// AddManagedPointerZero_v1
-/// </summary>
 [Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class AddManagedPointerZero_v1 : BaseTransform
 {

@@ -6,9 +6,6 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.StrengthReduction;
 
-/// <summary>
-/// And32ByMax
-/// </summary>
 [Transform("x86.Optimizations.Auto.StrengthReduction")]
 public sealed class And32ByMax : BaseTransform
 {
@@ -40,9 +37,6 @@ public sealed class And32ByMax : BaseTransform
 	}
 }
 
-/// <summary>
-/// And32ByMax_v1
-/// </summary>
 [Transform("x86.Optimizations.Auto.StrengthReduction")]
 public sealed class And32ByMax_v1 : BaseTransform
 {

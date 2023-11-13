@@ -4,9 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-/// <summary>
-/// MulUnsigned32
-/// </summary>
 [Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class MulUnsigned32 : BaseTransform
 {

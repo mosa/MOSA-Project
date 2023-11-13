@@ -9,7 +9,6 @@ namespace Mosa.Compiler.ARM32.Instructions;
 /// <summary>
 /// TeqRegShift
 /// </summary>
-/// <seealso cref="Mosa.Compiler.ARM32.ARM32Instruction" />
 public sealed class TeqRegShift : ARM32Instruction
 {
 	internal TeqRegShift()

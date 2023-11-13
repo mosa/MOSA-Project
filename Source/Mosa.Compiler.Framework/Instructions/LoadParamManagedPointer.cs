@@ -7,7 +7,6 @@ namespace Mosa.Compiler.Framework.Instructions;
 /// <summary>
 /// LoadParamManagedPointer
 /// </summary>
-/// <seealso cref="Mosa.Compiler.Framework.Instructions.BaseIRInstruction" />
 public sealed class LoadParamManagedPointer : BaseIRInstruction
 {
 	public LoadParamManagedPointer()

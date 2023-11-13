@@ -4,9 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
 
-/// <summary>
-/// SubManagedPointerSame
-/// </summary>
 [Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class SubManagedPointerSame : BaseTransform
 {

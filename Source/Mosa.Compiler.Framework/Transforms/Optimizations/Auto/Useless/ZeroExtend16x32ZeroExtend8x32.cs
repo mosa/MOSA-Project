@@ -4,9 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Useless;
 
-/// <summary>
-/// ZeroExtend16x32ZeroExtend8x32
-/// </summary>
 [Transform("IR.Optimizations.Auto.Useless")]
 public sealed class ZeroExtend16x32ZeroExtend8x32 : BaseTransform
 {

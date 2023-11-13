@@ -9,7 +9,6 @@ namespace Mosa.Compiler.ARM32.Instructions;
 /// <summary>
 /// Rnd - Round to integral value
 /// </summary>
-/// <seealso cref="Mosa.Compiler.ARM32.ARM32Instruction" />
 public sealed class Rnd : ARM32Instruction
 {
 	internal Rnd()

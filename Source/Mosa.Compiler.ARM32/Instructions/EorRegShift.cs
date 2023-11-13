@@ -9,7 +9,6 @@ namespace Mosa.Compiler.ARM32.Instructions;
 /// <summary>
 /// EorRegShift - Exclusive OR
 /// </summary>
-/// <seealso cref="Mosa.Compiler.ARM32.ARM32Instruction" />
 public sealed class EorRegShift : ARM32Instruction
 {
 	internal EorRegShift()

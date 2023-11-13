@@ -4,9 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-/// <summary>
-/// AddCarryIn64Zero2
-/// </summary>
 [Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class AddCarryIn64Zero2 : BaseTransform
 {

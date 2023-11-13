@@ -9,7 +9,6 @@ namespace Mosa.Compiler.ARM32.Instructions;
 /// <summary>
 /// Ldm - Block transfer multiple registers from memory
 /// </summary>
-/// <seealso cref="Mosa.Compiler.ARM32.ARM32Instruction" />
 public sealed class Ldm : ARM32Instruction
 {
 	internal Ldm()

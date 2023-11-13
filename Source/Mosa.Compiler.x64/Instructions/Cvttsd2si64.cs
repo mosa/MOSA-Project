@@ -9,7 +9,6 @@ namespace Mosa.Compiler.x64.Instructions;
 /// <summary>
 /// Cvttsd2si64
 /// </summary>
-/// <seealso cref="Mosa.Compiler.x64.X64Instruction" />
 public sealed class Cvttsd2si64 : X64Instruction
 {
 	internal Cvttsd2si64()

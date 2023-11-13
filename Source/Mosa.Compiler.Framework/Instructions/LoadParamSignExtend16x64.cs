@@ -7,7 +7,6 @@ namespace Mosa.Compiler.Framework.Instructions;
 /// <summary>
 /// LoadParamSignExtend16x64
 /// </summary>
-/// <seealso cref="Mosa.Compiler.Framework.Instructions.BaseIRInstruction" />
 public sealed class LoadParamSignExtend16x64 : BaseIRInstruction
 {
 	public LoadParamSignExtend16x64()

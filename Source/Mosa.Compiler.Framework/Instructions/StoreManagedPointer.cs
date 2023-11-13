@@ -7,7 +7,6 @@ namespace Mosa.Compiler.Framework.Instructions;
 /// <summary>
 /// StoreManagedPointer
 /// </summary>
-/// <seealso cref="Mosa.Compiler.Framework.Instructions.BaseIRInstruction" />
 public sealed class StoreManagedPointer : BaseIRInstruction
 {
 	public StoreManagedPointer()

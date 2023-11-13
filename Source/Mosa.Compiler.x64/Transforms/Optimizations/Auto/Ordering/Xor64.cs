@@ -6,9 +6,6 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.Ordering;
 
-/// <summary>
-/// Xor64
-/// </summary>
 [Transform("x64.Optimizations.Auto.Ordering")]
 public sealed class Xor64 : BaseTransform
 {

@@ -9,7 +9,6 @@ namespace Mosa.Compiler.ARM32.Instructions;
 /// <summary>
 /// Ldr16 - Halfword Data Transfer
 /// </summary>
-/// <seealso cref="Mosa.Compiler.ARM32.ARM32Instruction" />
 public sealed class Ldr16 : ARM32Instruction
 {
 	internal Ldr16()

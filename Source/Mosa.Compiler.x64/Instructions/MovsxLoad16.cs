@@ -9,7 +9,6 @@ namespace Mosa.Compiler.x64.Instructions;
 /// <summary>
 /// MovsxLoad16
 /// </summary>
-/// <seealso cref="Mosa.Compiler.x64.X64Instruction" />
 public sealed class MovsxLoad16 : X64Instruction
 {
 	internal MovsxLoad16()

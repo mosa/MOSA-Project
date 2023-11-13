@@ -10,7 +10,7 @@ public class BuildInstructionFiles : BuildBaseTemplate
 
 	protected string NormalizedPlatform => Platform.Substring(0, 1).ToUpperInvariant() + Platform.Substring(1);
 
-	private readonly Dictionary<string, string> EncodingTemplates = new Dictionary<string, string>();
+	private readonly Dictionary<string, string> EncodingTemplates = new();
 
 	public BuildInstructionFiles(string jsonFile, string destinationPath, string platform)
 		: base(jsonFile, destinationPath)
@@ -78,7 +78,6 @@ public class BuildInstructionFiles : BuildBaseTemplate
 
 		Lines.AppendLine();
 		Lines.AppendLine("/// </summary>");
-		Lines.AppendLine($"/// <seealso cref=\"Mosa.Compiler.{Platform}.{NormalizedPlatform}Instruction\" />");
 		Lines.AppendLine("public sealed class " + node.Name + " : " + NormalizedPlatform + "Instruction");
 		Lines.AppendLine("{");
 		Lines.AppendLine("\tinternal " + node.Name + "()");

@@ -9,7 +9,6 @@ namespace Mosa.Compiler.Framework.Instructions;
 /// <summary>
 /// CompareObject
 /// </summary>
-/// <seealso cref="Mosa.Compiler.Framework.Instructions.BaseIRInstruction" />
 public sealed class CompareObject : BaseIRInstruction
 {
 	public CompareObject()

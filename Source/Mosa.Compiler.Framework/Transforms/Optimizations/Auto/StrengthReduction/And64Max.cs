@@ -4,9 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
 
-/// <summary>
-/// And64Max
-/// </summary>
 [Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class And64Max : BaseTransform
 {
@@ -37,9 +34,6 @@ public sealed class And64Max : BaseTransform
 	}
 }
 
-/// <summary>
-/// And64Max_v1
-/// </summary>
 [Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class And64Max_v1 : BaseTransform
 {

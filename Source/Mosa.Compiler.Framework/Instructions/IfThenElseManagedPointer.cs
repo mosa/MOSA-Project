@@ -7,7 +7,6 @@ namespace Mosa.Compiler.Framework.Instructions;
 /// <summary>
 /// IfThenElseManagedPointer
 /// </summary>
-/// <seealso cref="Mosa.Compiler.Framework.Instructions.BaseIRInstruction" />
 public sealed class IfThenElseManagedPointer : BaseIRInstruction
 {
 	public IfThenElseManagedPointer()

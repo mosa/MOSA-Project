@@ -9,7 +9,6 @@ namespace Mosa.Compiler.ARM32.Instructions;
 /// <summary>
 /// SbcRegShift - Subtract with Carry
 /// </summary>
-/// <seealso cref="Mosa.Compiler.ARM32.ARM32Instruction" />
 public sealed class SbcRegShift : ARM32Instruction
 {
 	internal SbcRegShift()

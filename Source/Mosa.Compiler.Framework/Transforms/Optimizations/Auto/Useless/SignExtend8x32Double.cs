@@ -4,9 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Useless;
 
-/// <summary>
-/// SignExtend8x32Double
-/// </summary>
 [Transform("IR.Optimizations.Auto.Useless")]
 public sealed class SignExtend8x32Double : BaseTransform
 {

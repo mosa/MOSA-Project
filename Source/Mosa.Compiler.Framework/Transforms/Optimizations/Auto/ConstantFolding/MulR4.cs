@@ -4,9 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-/// <summary>
-/// MulR4
-/// </summary>
 [Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class MulR4 : BaseTransform
 {

@@ -4,9 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Algebraic;
 
-/// <summary>
-/// Signed64PerfectSquareFormula
-/// </summary>
 [Transform("IR.Optimizations.Auto.Algebraic")]
 public sealed class Signed64PerfectSquareFormula : BaseTransform
 {
@@ -82,9 +79,6 @@ public sealed class Signed64PerfectSquareFormula : BaseTransform
 	}
 }
 
-/// <summary>
-/// Signed64PerfectSquareFormula_v1
-/// </summary>
 [Transform("IR.Optimizations.Auto.Algebraic")]
 public sealed class Signed64PerfectSquareFormula_v1 : BaseTransform
 {
@@ -160,9 +154,6 @@ public sealed class Signed64PerfectSquareFormula_v1 : BaseTransform
 	}
 }
 
-/// <summary>
-/// Signed64PerfectSquareFormula_v2
-/// </summary>
 [Transform("IR.Optimizations.Auto.Algebraic")]
 public sealed class Signed64PerfectSquareFormula_v2 : BaseTransform
 {
@@ -238,9 +229,6 @@ public sealed class Signed64PerfectSquareFormula_v2 : BaseTransform
 	}
 }
 
-/// <summary>
-/// Signed64PerfectSquareFormula_v3
-/// </summary>
 [Transform("IR.Optimizations.Auto.Algebraic")]
 public sealed class Signed64PerfectSquareFormula_v3 : BaseTransform
 {
@@ -316,9 +304,6 @@ public sealed class Signed64PerfectSquareFormula_v3 : BaseTransform
 	}
 }
 
-/// <summary>
-/// Signed64PerfectSquareFormula_v4
-/// </summary>
 [Transform("IR.Optimizations.Auto.Algebraic")]
 public sealed class Signed64PerfectSquareFormula_v4 : BaseTransform
 {
@@ -394,9 +379,6 @@ public sealed class Signed64PerfectSquareFormula_v4 : BaseTransform
 	}
 }
 
-/// <summary>
-/// Signed64PerfectSquareFormula_v5
-/// </summary>
 [Transform("IR.Optimizations.Auto.Algebraic")]
 public sealed class Signed64PerfectSquareFormula_v5 : BaseTransform
 {
@@ -472,9 +454,6 @@ public sealed class Signed64PerfectSquareFormula_v5 : BaseTransform
 	}
 }
 
-/// <summary>
-/// Signed64PerfectSquareFormula_v6
-/// </summary>
 [Transform("IR.Optimizations.Auto.Algebraic")]
 public sealed class Signed64PerfectSquareFormula_v6 : BaseTransform
 {
@@ -550,9 +529,6 @@ public sealed class Signed64PerfectSquareFormula_v6 : BaseTransform
 	}
 }
 
-/// <summary>
-/// Signed64PerfectSquareFormula_v7
-/// </summary>
 [Transform("IR.Optimizations.Auto.Algebraic")]
 public sealed class Signed64PerfectSquareFormula_v7 : BaseTransform
 {

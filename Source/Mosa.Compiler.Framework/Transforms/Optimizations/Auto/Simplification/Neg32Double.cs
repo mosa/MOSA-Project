@@ -4,9 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
-/// <summary>
-/// Neg32Double
-/// </summary>
 [Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class Neg32Double : BaseTransform
 {

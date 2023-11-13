@@ -4,9 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
-/// <summary>
-/// And32Not32Not32
-/// </summary>
 [Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class And32Not32Not32 : BaseTransform
 {

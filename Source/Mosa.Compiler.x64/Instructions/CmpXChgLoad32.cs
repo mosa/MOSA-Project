@@ -9,7 +9,6 @@ namespace Mosa.Compiler.x64.Instructions;
 /// <summary>
 /// CmpXChgLoad32
 /// </summary>
-/// <seealso cref="Mosa.Compiler.x64.X64Instruction" />
 public sealed class CmpXChgLoad32 : X64Instruction
 {
 	internal CmpXChgLoad32()

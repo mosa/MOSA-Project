@@ -4,9 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Rewrite;
 
-/// <summary>
-/// CompareManagedPointerGreaterThanZero
-/// </summary>
 [Transform("IR.Optimizations.Auto.Rewrite")]
 public sealed class CompareManagedPointerGreaterThanZero : BaseTransform
 {
@@ -36,9 +33,6 @@ public sealed class CompareManagedPointerGreaterThanZero : BaseTransform
 	}
 }
 
-/// <summary>
-/// CompareManagedPointerGreaterThanZero_v1
-/// </summary>
 [Transform("IR.Optimizations.Auto.Rewrite")]
 public sealed class CompareManagedPointerGreaterThanZero_v1 : BaseTransform
 {

@@ -6,9 +6,6 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.StrengthReduction;
 
-/// <summary>
-/// Add32By1Not32
-/// </summary>
 [Transform("x64.Optimizations.Auto.StrengthReduction")]
 public sealed class Add32By1Not32 : BaseTransform
 {
@@ -52,9 +49,6 @@ public sealed class Add32By1Not32 : BaseTransform
 	}
 }
 
-/// <summary>
-/// Add32By1Not32_v1
-/// </summary>
 [Transform("x64.Optimizations.Auto.StrengthReduction")]
 public sealed class Add32By1Not32_v1 : BaseTransform
 {

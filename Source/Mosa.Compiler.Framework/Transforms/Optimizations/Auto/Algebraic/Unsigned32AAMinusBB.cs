@@ -4,9 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Algebraic;
 
-/// <summary>
-/// Unsigned32AAMinusBB
-/// </summary>
 [Transform("IR.Optimizations.Auto.Algebraic")]
 public sealed class Unsigned32AAMinusBB : BaseTransform
 {

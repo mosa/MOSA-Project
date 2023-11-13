@@ -4,9 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
-/// <summary>
-/// MulSigned64ByNegative1
-/// </summary>
 [Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class MulSigned64ByNegative1 : BaseTransform
 {
@@ -37,9 +34,6 @@ public sealed class MulSigned64ByNegative1 : BaseTransform
 	}
 }
 
-/// <summary>
-/// MulSigned64ByNegative1_v1
-/// </summary>
 [Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class MulSigned64ByNegative1_v1 : BaseTransform
 {

@@ -7,7 +7,6 @@ namespace Mosa.Compiler.Framework.Instructions;
 /// <summary>
 /// BitCopy32ToR4
 /// </summary>
-/// <seealso cref="Mosa.Compiler.Framework.Instructions.BaseIRInstruction" />
 public sealed class BitCopy32ToR4 : BaseIRInstruction
 {
 	public BitCopy32ToR4()

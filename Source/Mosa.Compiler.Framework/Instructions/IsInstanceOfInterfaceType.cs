@@ -7,7 +7,6 @@ namespace Mosa.Compiler.Framework.Instructions;
 /// <summary>
 /// IsInstanceOfInterfaceType
 /// </summary>
-/// <seealso cref="Mosa.Compiler.Framework.Instructions.BaseIRInstruction" />
 public sealed class IsInstanceOfInterfaceType : BaseIRInstruction
 {
 	public IsInstanceOfInterfaceType()

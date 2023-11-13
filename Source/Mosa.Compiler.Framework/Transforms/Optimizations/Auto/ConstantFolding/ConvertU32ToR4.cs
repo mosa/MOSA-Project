@@ -4,9 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-/// <summary>
-/// ConvertU32ToR4
-/// </summary>
 [Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class ConvertU32ToR4 : BaseTransform
 {

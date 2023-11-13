@@ -4,9 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
-/// <summary>
-/// GetHigh32FromShiftedMore32
-/// </summary>
 [Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class GetHigh32FromShiftedMore32 : BaseTransform
 {

@@ -7,7 +7,6 @@ namespace Mosa.Compiler.Framework.Instructions;
 /// <summary>
 /// IntrinsicMethodCall
 /// </summary>
-/// <seealso cref="Mosa.Compiler.Framework.Instructions.BaseIRInstruction" />
 public sealed class IntrinsicMethodCall : BaseIRInstruction
 {
 	public IntrinsicMethodCall()

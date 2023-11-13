@@ -6,9 +6,6 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.Consolidation;
 
-/// <summary>
-/// IMul32Mov32ByZero
-/// </summary>
 [Transform("x86.Optimizations.Auto.Consolidation")]
 public sealed class IMul32Mov32ByZero : BaseTransform
 {

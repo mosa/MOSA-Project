@@ -4,9 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
-/// <summary>
-/// Xor64Max
-/// </summary>
 [Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class Xor64Max : BaseTransform
 {
@@ -35,9 +32,6 @@ public sealed class Xor64Max : BaseTransform
 	}
 }
 
-/// <summary>
-/// Xor64Max_v1
-/// </summary>
 [Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class Xor64Max_v1 : BaseTransform
 {

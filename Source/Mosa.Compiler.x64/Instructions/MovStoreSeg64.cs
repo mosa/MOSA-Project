@@ -9,7 +9,6 @@ namespace Mosa.Compiler.x64.Instructions;
 /// <summary>
 /// MovStoreSeg64
 /// </summary>
-/// <seealso cref="Mosa.Compiler.x64.X64Instruction" />
 public sealed class MovStoreSeg64 : X64Instruction
 {
 	internal MovStoreSeg64()

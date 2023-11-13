@@ -4,9 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
 
-/// <summary>
-/// Add32Zero
-/// </summary>
 [Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class Add32Zero : BaseTransform
 {
@@ -37,9 +34,6 @@ public sealed class Add32Zero : BaseTransform
 	}
 }
 
-/// <summary>
-/// Add32Zero_v1
-/// </summary>
 [Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class Add32Zero_v1 : BaseTransform
 {

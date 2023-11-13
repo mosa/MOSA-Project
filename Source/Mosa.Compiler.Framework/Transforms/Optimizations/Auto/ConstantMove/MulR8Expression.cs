@@ -4,9 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove;
 
-/// <summary>
-/// MulR8Expression
-/// </summary>
 [Transform("IR.Optimizations.Auto.ConstantMove")]
 public sealed class MulR8Expression : BaseTransform
 {
@@ -52,9 +49,6 @@ public sealed class MulR8Expression : BaseTransform
 	}
 }
 
-/// <summary>
-/// MulR8Expression_v1
-/// </summary>
 [Transform("IR.Optimizations.Auto.ConstantMove")]
 public sealed class MulR8Expression_v1 : BaseTransform
 {
@@ -100,9 +94,6 @@ public sealed class MulR8Expression_v1 : BaseTransform
 	}
 }
 
-/// <summary>
-/// MulR8Expression_v2
-/// </summary>
 [Transform("IR.Optimizations.Auto.ConstantMove")]
 public sealed class MulR8Expression_v2 : BaseTransform
 {
@@ -148,9 +139,6 @@ public sealed class MulR8Expression_v2 : BaseTransform
 	}
 }
 
-/// <summary>
-/// MulR8Expression_v3
-/// </summary>
 [Transform("IR.Optimizations.Auto.ConstantMove")]
 public sealed class MulR8Expression_v3 : BaseTransform
 {

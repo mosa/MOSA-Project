@@ -9,7 +9,6 @@ namespace Mosa.Compiler.x86.Instructions;
 /// <summary>
 /// Cvtsi2ss32
 /// </summary>
-/// <seealso cref="Mosa.Compiler.x86.X86Instruction" />
 public sealed class Cvtsi2ss32 : X86Instruction
 {
 	internal Cvtsi2ss32()

@@ -6,9 +6,6 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.StrengthReduction;
 
-/// <summary>
-/// Inc64Not64
-/// </summary>
 [Transform("x64.Optimizations.Auto.StrengthReduction")]
 public sealed class Inc64Not64 : BaseTransform
 {

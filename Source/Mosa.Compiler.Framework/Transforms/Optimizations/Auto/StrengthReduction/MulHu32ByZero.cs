@@ -4,9 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
 
-/// <summary>
-/// MulHu32ByZero
-/// </summary>
 [Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class MulHu32ByZero : BaseTransform
 {
@@ -37,9 +34,6 @@ public sealed class MulHu32ByZero : BaseTransform
 	}
 }
 
-/// <summary>
-/// MulHu32ByZero_v1
-/// </summary>
 [Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class MulHu32ByZero_v1 : BaseTransform
 {

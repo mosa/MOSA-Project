@@ -4,9 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
-/// <summary>
-/// Or64Same
-/// </summary>
 [Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class Or64Same : BaseTransform
 {

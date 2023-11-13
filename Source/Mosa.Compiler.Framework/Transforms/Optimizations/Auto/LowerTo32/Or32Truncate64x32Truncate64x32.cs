@@ -4,9 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.LowerTo32;
 
-/// <summary>
-/// Or32Truncate64x32Truncate64x32
-/// </summary>
 [Transform("IR.Optimizations.Auto.LowerTo32")]
 public sealed class Or32Truncate64x32Truncate64x32 : BaseTransform
 {

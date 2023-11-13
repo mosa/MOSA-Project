@@ -4,9 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.BitValue;
 
-/// <summary>
-/// RemSigned32ButNotSigned
-/// </summary>
 [Transform("IR.Optimizations.Auto.BitValue")]
 public sealed class RemSigned32ButNotSigned : BaseTransform
 {

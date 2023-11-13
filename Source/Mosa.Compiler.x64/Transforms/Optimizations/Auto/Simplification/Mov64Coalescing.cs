@@ -6,9 +6,6 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.Simplification;
 
-/// <summary>
-/// Mov64Coalescing
-/// </summary>
 [Transform("x64.Optimizations.Auto.Simplification")]
 public sealed class Mov64Coalescing : BaseTransform
 {

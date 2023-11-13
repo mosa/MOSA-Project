@@ -4,9 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove;
 
-/// <summary>
-/// MulSigned32Expression
-/// </summary>
 [Transform("IR.Optimizations.Auto.ConstantMove")]
 public sealed class MulSigned32Expression : BaseTransform
 {
@@ -52,9 +49,6 @@ public sealed class MulSigned32Expression : BaseTransform
 	}
 }
 
-/// <summary>
-/// MulSigned32Expression_v1
-/// </summary>
 [Transform("IR.Optimizations.Auto.ConstantMove")]
 public sealed class MulSigned32Expression_v1 : BaseTransform
 {
@@ -100,9 +94,6 @@ public sealed class MulSigned32Expression_v1 : BaseTransform
 	}
 }
 
-/// <summary>
-/// MulSigned32Expression_v2
-/// </summary>
 [Transform("IR.Optimizations.Auto.ConstantMove")]
 public sealed class MulSigned32Expression_v2 : BaseTransform
 {
@@ -148,9 +139,6 @@ public sealed class MulSigned32Expression_v2 : BaseTransform
 	}
 }
 
-/// <summary>
-/// MulSigned32Expression_v3
-/// </summary>
 [Transform("IR.Optimizations.Auto.ConstantMove")]
 public sealed class MulSigned32Expression_v3 : BaseTransform
 {

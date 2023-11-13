@@ -7,7 +7,6 @@ namespace Mosa.Compiler.Framework.Instructions;
 /// <summary>
 /// CheckThrowDivideByZero
 /// </summary>
-/// <seealso cref="Mosa.Compiler.Framework.Instructions.BaseIRInstruction" />
 public sealed class CheckThrowDivideByZero : BaseIRInstruction
 {
 	public CheckThrowDivideByZero()

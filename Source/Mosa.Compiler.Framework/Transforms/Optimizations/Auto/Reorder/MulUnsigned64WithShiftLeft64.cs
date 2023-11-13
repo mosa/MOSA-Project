@@ -4,9 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Reorder;
 
-/// <summary>
-/// MulUnsigned64WithShiftLeft64
-/// </summary>
 [Transform("IR.Optimizations.Auto.Reorder")]
 public sealed class MulUnsigned64WithShiftLeft64 : BaseTransform
 {
@@ -43,9 +40,6 @@ public sealed class MulUnsigned64WithShiftLeft64 : BaseTransform
 	}
 }
 
-/// <summary>
-/// MulUnsigned64WithShiftLeft64_v1
-/// </summary>
 [Transform("IR.Optimizations.Auto.Reorder")]
 public sealed class MulUnsigned64WithShiftLeft64_v1 : BaseTransform
 {

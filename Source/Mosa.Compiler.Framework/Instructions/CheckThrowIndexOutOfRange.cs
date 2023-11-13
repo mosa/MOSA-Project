@@ -7,7 +7,6 @@ namespace Mosa.Compiler.Framework.Instructions;
 /// <summary>
 /// CheckThrowIndexOutOfRange
 /// </summary>
-/// <seealso cref="Mosa.Compiler.Framework.Instructions.BaseIRInstruction" />
 public sealed class CheckThrowIndexOutOfRange : BaseIRInstruction
 {
 	public CheckThrowIndexOutOfRange()

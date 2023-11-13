@@ -9,7 +9,6 @@ namespace Mosa.Compiler.x86.Instructions;
 /// <summary>
 /// MovsxLoad8
 /// </summary>
-/// <seealso cref="Mosa.Compiler.x86.X86Instruction" />
 public sealed class MovsxLoad8 : X86Instruction
 {
 	internal MovsxLoad8()

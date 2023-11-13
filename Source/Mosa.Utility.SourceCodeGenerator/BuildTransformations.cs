@@ -176,7 +176,6 @@ public class BuildTransformations : BuildBaseTemplate
 
 	private void GenerateTransformation2(string name, string familyName, string type, string subName, Transformation transform, bool log, bool optimization, int priority)
 	{
-		//var instructionName = transform.InstructionTree.InstructionName.Replace("IR.", "IRInstruction.");
 		var instructionName = transform.InstructionTree.InstructionName;
 
 		Transformations.Add($"{familyName}.{type}.{name}{subName}");
@@ -190,9 +189,9 @@ public class BuildTransformations : BuildBaseTemplate
 			Lines.AppendLine();
 		}
 
-		Lines.AppendLine("/// <summary>");
-		Lines.AppendLine($"/// {name}{subName}");
-		Lines.AppendLine("/// </summary>");
+		//Lines.AppendLine("/// <summary>");
+		//Lines.AppendLine($"/// {name}{subName}");
+		//Lines.AppendLine("/// </summary>");
 
 		var section = $"{Family}.{Section}.{type}";
 
@@ -402,7 +401,6 @@ public class BuildTransformations : BuildBaseTemplate
 
 			if (!string.IsNullOrWhiteSpace(node.InstructionName))
 			{
-				//var instruction = node.InstructionName.Replace("IR.", "IRInstruction.");
 				var instruction = node.InstructionName;
 				var result = node == transform.ResultInstructionTree ? "result" : $"v{nodeNbrToVirtualRegisterNbr[node.NodeNbr]}";
 
@@ -807,7 +805,6 @@ public class BuildTransformations : BuildBaseTemplate
 
 		EmitCondition($"!context.{parent}{operandName}.IsDefinedOnce");
 
-		//var instructionName = operand.Node.InstructionName.Replace("IR.", "IRInstruction.");
 		var instructionName = operand.Node.InstructionName;
 
 		EmitCondition($"context.{parent}{operandName}.Definitions[0].Instruction != {instructionName}");
