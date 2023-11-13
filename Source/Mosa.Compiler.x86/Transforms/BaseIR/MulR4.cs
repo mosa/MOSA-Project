@@ -10,7 +10,7 @@ namespace Mosa.Compiler.x86.Transforms.BaseIR;
 [Transform("x86.BaseIR")]
 public sealed class MulR4 : BaseIRTransform
 {
-	public MulR4() : base(Framework.IR.MulR4, TransformType.Manual | TransformType.Transform)
+	public MulR4() : base(IR.MulR4, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

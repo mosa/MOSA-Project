@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Transforms.Runtime;
 /// </summary>
 public sealed class GetVirtualFunctionPtr : BaseRuntimeTransform
 {
-	public GetVirtualFunctionPtr() : base(Framework.IR.GetVirtualFunctionPtr, TransformType.Manual | TransformType.Transform)
+	public GetVirtualFunctionPtr() : base(IR.GetVirtualFunctionPtr, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

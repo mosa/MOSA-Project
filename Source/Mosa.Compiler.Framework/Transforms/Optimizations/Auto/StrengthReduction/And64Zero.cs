@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 [Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class And64Zero : BaseTransform
 {
-	public And64Zero() : base(Framework.IR.And64, TransformType.Auto | TransformType.Optimization)
+	public And64Zero() : base(IR.And64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -33,7 +33,7 @@ public sealed class And64Zero : BaseTransform
 
 		var e1 = Operand.CreateConstant(To64(0));
 
-		context.SetInstruction(Framework.IR.Move64, result, e1);
+		context.SetInstruction(IR.Move64, result, e1);
 	}
 }
 
@@ -43,7 +43,7 @@ public sealed class And64Zero : BaseTransform
 [Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class And64Zero_v1 : BaseTransform
 {
-	public And64Zero_v1() : base(Framework.IR.And64, TransformType.Auto | TransformType.Optimization)
+	public And64Zero_v1() : base(IR.And64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -66,6 +66,6 @@ public sealed class And64Zero_v1 : BaseTransform
 
 		var e1 = Operand.CreateConstant(To64(0));
 
-		context.SetInstruction(Framework.IR.Move64, result, e1);
+		context.SetInstruction(IR.Move64, result, e1);
 	}
 }

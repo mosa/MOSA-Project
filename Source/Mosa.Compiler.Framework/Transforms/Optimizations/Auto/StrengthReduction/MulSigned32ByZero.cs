@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 [Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class MulSigned32ByZero : BaseTransform
 {
-	public MulSigned32ByZero() : base(Framework.IR.MulSigned32, TransformType.Auto | TransformType.Optimization)
+	public MulSigned32ByZero() : base(IR.MulSigned32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -33,7 +33,7 @@ public sealed class MulSigned32ByZero : BaseTransform
 
 		var e1 = Operand.CreateConstant(To32(0));
 
-		context.SetInstruction(Framework.IR.Move32, result, e1);
+		context.SetInstruction(IR.Move32, result, e1);
 	}
 }
 
@@ -43,7 +43,7 @@ public sealed class MulSigned32ByZero : BaseTransform
 [Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class MulSigned32ByZero_v1 : BaseTransform
 {
-	public MulSigned32ByZero_v1() : base(Framework.IR.MulSigned32, TransformType.Auto | TransformType.Optimization)
+	public MulSigned32ByZero_v1() : base(IR.MulSigned32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -66,6 +66,6 @@ public sealed class MulSigned32ByZero_v1 : BaseTransform
 
 		var e1 = Operand.CreateConstant(To32(0));
 
-		context.SetInstruction(Framework.IR.Move32, result, e1);
+		context.SetInstruction(IR.Move32, result, e1);
 	}
 }

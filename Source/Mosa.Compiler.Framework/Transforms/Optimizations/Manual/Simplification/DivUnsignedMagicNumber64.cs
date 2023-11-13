@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Simplification
 [Transform("IR.Optimizations.Manual.Simplification")]
 public sealed class DivUnsignedMagicNumber64 : BaseTransform
 {
-	public DivUnsignedMagicNumber64() : base(Framework.IR.DivUnsigned64, TransformType.Auto | TransformType.Optimization)
+	public DivUnsignedMagicNumber64() : base(IR.DivUnsigned64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -47,11 +47,11 @@ public sealed class DivUnsignedMagicNumber64 : BaseTransform
 
 		var v1 = transform.VirtualRegisters.Allocate64();
 
-		context.SetInstruction(Framework.IR.MulHu64, v1, n, Operand.CreateConstant64(M));
+		context.SetInstruction(IR.MulHu64, v1, n, Operand.CreateConstant64(M));
 
 		if (!a)
 		{
-			context.AppendInstruction(Framework.IR.ShiftRight64, result, v1, Operand.CreateConstant32(s));
+			context.AppendInstruction(IR.ShiftRight64, result, v1, Operand.CreateConstant32(s));
 		}
 		else
 		{
@@ -59,10 +59,10 @@ public sealed class DivUnsignedMagicNumber64 : BaseTransform
 			var v3 = transform.VirtualRegisters.Allocate64();
 			var v4 = transform.VirtualRegisters.Allocate64();
 
-			context.AppendInstruction(Framework.IR.Sub64, v2, n, v1);
-			context.AppendInstruction(Framework.IR.ShiftRight64, v3, v2, Operand.Constant32_1);
-			context.AppendInstruction(Framework.IR.Add64, v4, v3, v1);
-			context.AppendInstruction(Framework.IR.ShiftRight64, result, v4, Operand.CreateConstant32(s - 1));
+			context.AppendInstruction(IR.Sub64, v2, n, v1);
+			context.AppendInstruction(IR.ShiftRight64, v3, v2, Operand.Constant32_1);
+			context.AppendInstruction(IR.Add64, v4, v3, v1);
+			context.AppendInstruction(IR.ShiftRight64, result, v4, Operand.CreateConstant32(s - 1));
 		}
 	}
 }

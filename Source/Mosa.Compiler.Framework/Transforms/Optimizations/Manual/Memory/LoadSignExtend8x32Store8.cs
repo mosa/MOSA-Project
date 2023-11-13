@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Memory;
 
 public sealed class LoadSignExtend8x32Store8 : BaseTransform
 {
-	public LoadSignExtend8x32Store8() : base(Framework.IR.LoadSignExtend8x32, TransformType.Manual | TransformType.Optimization)
+	public LoadSignExtend8x32Store8() : base(IR.LoadSignExtend8x32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -16,7 +16,7 @@ public sealed class LoadSignExtend8x32Store8 : BaseTransform
 		if (!context.Operand2.IsResolvedConstant)
 			return false;
 
-		var previous = GetPreviousNodeUntil(context, Framework.IR.Store8, transform.Window, out var immediate, context.Operand1);
+		var previous = GetPreviousNodeUntil(context, IR.Store8, transform.Window, out var immediate, context.Operand1);
 
 		if (previous == null)
 			return false;
@@ -38,8 +38,8 @@ public sealed class LoadSignExtend8x32Store8 : BaseTransform
 
 	public override void Transform(Context context, Transform transform)
 	{
-		var previous = GetPreviousNodeUntil(context, Framework.IR.Store8, transform.Window, context.Operand1);
+		var previous = GetPreviousNodeUntil(context, IR.Store8, transform.Window, context.Operand1);
 
-		context.SetInstruction(Framework.IR.SignExtend8x32, context.Result, previous.Operand3);
+		context.SetInstruction(IR.SignExtend8x32, context.Result, previous.Operand3);
 	}
 }

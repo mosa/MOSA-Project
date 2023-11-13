@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Transforms.Runtime;
 /// </summary>
 public sealed class MemorySet : BaseRuntimeTransform
 {
-	public MemorySet() : base(Framework.IR.MemorySet, TransformType.Manual | TransformType.Transform)
+	public MemorySet() : base(IR.MemorySet, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

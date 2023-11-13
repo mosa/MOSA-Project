@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.StrengthReduct
 /// </summary>
 public sealed class SubCarryOut64ByZero : BaseTransform
 {
-	public SubCarryOut64ByZero() : base(Framework.IR.SubCarryOut64, TransformType.Manual | TransformType.Optimization, true)
+	public SubCarryOut64ByZero() : base(IR.SubCarryOut64, TransformType.Manual | TransformType.Optimization, true)
 	{
 	}
 
@@ -30,7 +30,7 @@ public sealed class SubCarryOut64ByZero : BaseTransform
 		var result2 = context.Result2;
 		var operand1 = context.Operand1;
 
-		context.SetInstruction(Framework.IR.Move64, result, operand1);
-		context.AppendInstruction(Framework.IR.Move64, result2, Operand.Constant64_0);
+		context.SetInstruction(IR.Move64, result, operand1);
+		context.AppendInstruction(IR.Move64, result2, Operand.Constant64_0);
 	}
 }

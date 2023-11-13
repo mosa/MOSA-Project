@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 [Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class StoreR8FoldAdd32 : BaseTransform
 {
-	public StoreR8FoldAdd32() : base(Framework.IR.StoreR8, TransformType.Auto | TransformType.Optimization)
+	public StoreR8FoldAdd32() : base(IR.StoreR8, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -22,7 +22,7 @@ public sealed class StoreR8FoldAdd32 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != Framework.IR.Add32)
+		if (context.Operand1.Definitions[0].Instruction != IR.Add32)
 			return false;
 
 		if (!IsResolvedConstant(context.Operand2))
@@ -45,6 +45,6 @@ public sealed class StoreR8FoldAdd32 : BaseTransform
 
 		var e1 = Operand.CreateConstant(Add32(To32(t2), To32(t3)));
 
-		context.SetInstruction(Framework.IR.StoreR8, result, t1, e1, t4);
+		context.SetInstruction(IR.StoreR8, result, t1, e1, t4);
 	}
 }

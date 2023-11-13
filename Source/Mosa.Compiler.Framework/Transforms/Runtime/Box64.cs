@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Transforms.Runtime;
 /// </summary>
 public sealed class Box64 : BaseRuntimeTransform
 {
-	public Box64() : base(Framework.IR.Box64, TransformType.Manual | TransformType.Transform)
+	public Box64() : base(IR.Box64, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

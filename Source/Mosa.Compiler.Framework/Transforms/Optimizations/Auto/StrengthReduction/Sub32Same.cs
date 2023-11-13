@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 [Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class Sub32Same : BaseTransform
 {
-	public Sub32Same() : base(Framework.IR.Sub32, TransformType.Auto | TransformType.Optimization)
+	public Sub32Same() : base(IR.Sub32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -30,6 +30,6 @@ public sealed class Sub32Same : BaseTransform
 
 		var e1 = Operand.CreateConstant(To32(0));
 
-		context.SetInstruction(Framework.IR.Move32, result, e1);
+		context.SetInstruction(IR.Move32, result, e1);
 	}
 }

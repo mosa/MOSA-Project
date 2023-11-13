@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
 public sealed class Load64 : BaseLowerTo32Transform
 {
-	public Load64() : base(Framework.IR.Load64, TransformType.Manual | TransformType.Optimization)
+	public Load64() : base(IR.Load64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -20,12 +20,12 @@ public sealed class Load64 : BaseLowerTo32Transform
 		var addressLow = transform.VirtualRegisters.Allocate32();
 		var offset4 = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction(Framework.IR.GetLow32, addressLow, address);
-		context.AppendInstruction(Framework.IR.GetLow32, offsetLow, offset);
+		context.SetInstruction(IR.GetLow32, addressLow, address);
+		context.AppendInstruction(IR.GetLow32, offsetLow, offset);
 
-		context.AppendInstruction(Framework.IR.Load32, resultLow, addressLow, offset);
-		context.AppendInstruction(Framework.IR.Add32, offset4, offsetLow, Operand.Constant32_4);
-		context.AppendInstruction(Framework.IR.Load32, resultHigh, addressLow, offset4);
-		context.AppendInstruction(Framework.IR.To64, result, resultLow, resultHigh);
+		context.AppendInstruction(IR.Load32, resultLow, addressLow, offset);
+		context.AppendInstruction(IR.Add32, offset4, offsetLow, Operand.Constant32_4);
+		context.AppendInstruction(IR.Load32, resultHigh, addressLow, offset4);
+		context.AppendInstruction(IR.To64, result, resultLow, resultHigh);
 	}
 }

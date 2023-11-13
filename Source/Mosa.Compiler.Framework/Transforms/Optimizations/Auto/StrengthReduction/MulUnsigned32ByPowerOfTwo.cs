@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 [Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class MulUnsigned32ByPowerOfTwo : BaseTransform
 {
-	public MulUnsigned32ByPowerOfTwo() : base(Framework.IR.MulUnsigned32, TransformType.Auto | TransformType.Optimization)
+	public MulUnsigned32ByPowerOfTwo() : base(IR.MulUnsigned32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -40,7 +40,7 @@ public sealed class MulUnsigned32ByPowerOfTwo : BaseTransform
 
 		var e1 = Operand.CreateConstant(GetPowerOfTwo(To32(t2)));
 
-		context.SetInstruction(Framework.IR.ShiftLeft32, result, t1, e1);
+		context.SetInstruction(IR.ShiftLeft32, result, t1, e1);
 	}
 }
 
@@ -50,7 +50,7 @@ public sealed class MulUnsigned32ByPowerOfTwo : BaseTransform
 [Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class MulUnsigned32ByPowerOfTwo_v1 : BaseTransform
 {
-	public MulUnsigned32ByPowerOfTwo_v1() : base(Framework.IR.MulUnsigned32, TransformType.Auto | TransformType.Optimization)
+	public MulUnsigned32ByPowerOfTwo_v1() : base(IR.MulUnsigned32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -80,6 +80,6 @@ public sealed class MulUnsigned32ByPowerOfTwo_v1 : BaseTransform
 
 		var e1 = Operand.CreateConstant(GetPowerOfTwo(To32(t1)));
 
-		context.SetInstruction(Framework.IR.ShiftLeft32, result, t2, e1);
+		context.SetInstruction(IR.ShiftLeft32, result, t2, e1);
 	}
 }

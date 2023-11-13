@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
 public sealed class Compare64x32EqualOrNotEqual : BaseLowerTo32Transform
 {
-	public Compare64x32EqualOrNotEqual() : base(Framework.IR.Compare64x32, TransformType.Manual | TransformType.Optimization)
+	public Compare64x32EqualOrNotEqual() : base(IR.Compare64x32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -35,14 +35,14 @@ public sealed class Compare64x32EqualOrNotEqual : BaseLowerTo32Transform
 		var v2 = transform.VirtualRegisters.Allocate32();
 		var v3 = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction(Framework.IR.GetLow32, op0Low, operand1);
-		context.AppendInstruction(Framework.IR.GetHigh32, op0High, operand1);
-		context.AppendInstruction(Framework.IR.GetLow32, op1Low, operand2);
-		context.AppendInstruction(Framework.IR.GetHigh32, op1High, operand2);
+		context.SetInstruction(IR.GetLow32, op0Low, operand1);
+		context.AppendInstruction(IR.GetHigh32, op0High, operand1);
+		context.AppendInstruction(IR.GetLow32, op1Low, operand2);
+		context.AppendInstruction(IR.GetHigh32, op1High, operand2);
 
-		context.AppendInstruction(Framework.IR.Xor32, v1, op0Low, op1Low);
-		context.AppendInstruction(Framework.IR.Xor32, v2, op0High, op1High);
-		context.AppendInstruction(Framework.IR.Or32, v3, v1, v2);
-		context.AppendInstruction(Framework.IR.Compare32x32, condition, result, v3, Operand.Constant32_0);
+		context.AppendInstruction(IR.Xor32, v1, op0Low, op1Low);
+		context.AppendInstruction(IR.Xor32, v2, op0High, op1High);
+		context.AppendInstruction(IR.Or32, v3, v1, v2);
+		context.AppendInstruction(IR.Compare32x32, condition, result, v3, Operand.Constant32_0);
 	}
 }

@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Checked;
 
 public sealed class CheckThrowDivideByZero : BaseTransform
 {
-	public CheckThrowDivideByZero() : base(Framework.IR.CheckThrowDivideByZero, TransformType.Manual | TransformType.Optimization, true)
+	public CheckThrowDivideByZero() : base(IR.CheckThrowDivideByZero, TransformType.Manual | TransformType.Optimization, true)
 	{
 	}
 
@@ -23,7 +23,7 @@ public sealed class CheckThrowDivideByZero : BaseTransform
 		}
 		else
 		{
-			context.SetInstruction(Framework.IR.ThrowDivideByZero);
+			context.SetInstruction(IR.ThrowDivideByZero);
 		}
 	}
 }

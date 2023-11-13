@@ -10,7 +10,7 @@ namespace Mosa.Compiler.x64.Transforms.BaseIR;
 [Transform("x64.BaseIR")]
 public sealed class MoveR8 : BaseIRTransform
 {
-	public MoveR8() : base(Framework.IR.MoveR8, TransformType.Manual | TransformType.Transform)
+	public MoveR8() : base(IR.MoveR8, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

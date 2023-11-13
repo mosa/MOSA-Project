@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.ConstantMove;
 
 public sealed class Branch64 : BaseTransform
 {
-	public Branch64() : base(Framework.IR.Branch64, TransformType.Manual | TransformType.Optimization)
+	public Branch64() : base(IR.Branch64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -21,6 +21,6 @@ public sealed class Branch64 : BaseTransform
 
 	public override void Transform(Context context, Transform transform)
 	{
-		context.SetInstruction(Framework.IR.Branch64, context.ConditionCode.GetReverse(), context.Result, context.Operand2, context.Operand1, context.BranchTargets[0]);
+		context.SetInstruction(IR.Branch64, context.ConditionCode.GetReverse(), context.Result, context.Operand2, context.Operand1, context.BranchTargets[0]);
 	}
 }

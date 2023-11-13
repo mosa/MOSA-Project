@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
 public sealed class SignExtend8x64 : BaseLowerTo32Transform
 {
-	public SignExtend8x64() : base(Framework.IR.SignExtend8x64, TransformType.Manual | TransformType.Optimization)
+	public SignExtend8x64() : base(IR.SignExtend8x64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -17,9 +17,9 @@ public sealed class SignExtend8x64 : BaseLowerTo32Transform
 		var resultHigh = transform.VirtualRegisters.Allocate32();
 		var v1 = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction(Framework.IR.GetLow32, v1, operand1);
-		context.AppendInstruction(Framework.IR.SignExtend8x32, resultLow, v1);
-		context.AppendInstruction(Framework.IR.ArithShiftRight32, resultHigh, resultLow, Operand.Constant32_31);
-		context.AppendInstruction(Framework.IR.To64, result, resultLow, resultHigh);
+		context.SetInstruction(IR.GetLow32, v1, operand1);
+		context.AppendInstruction(IR.SignExtend8x32, resultLow, v1);
+		context.AppendInstruction(IR.ArithShiftRight32, resultHigh, resultLow, Operand.Constant32_31);
+		context.AppendInstruction(IR.To64, result, resultLow, resultHigh);
 	}
 }

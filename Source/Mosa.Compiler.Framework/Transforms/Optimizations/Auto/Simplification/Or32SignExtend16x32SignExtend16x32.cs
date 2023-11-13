@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 [Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class Or32SignExtend16x32SignExtend16x32 : BaseTransform
 {
-	public Or32SignExtend16x32SignExtend16x32() : base(Framework.IR.Or32, TransformType.Auto | TransformType.Optimization)
+	public Or32SignExtend16x32SignExtend16x32() : base(IR.Or32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -25,13 +25,13 @@ public sealed class Or32SignExtend16x32SignExtend16x32 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != Framework.IR.SignExtend16x32)
+		if (context.Operand1.Definitions[0].Instruction != IR.SignExtend16x32)
 			return false;
 
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != Framework.IR.SignExtend16x32)
+		if (context.Operand2.Definitions[0].Instruction != IR.SignExtend16x32)
 			return false;
 
 		return true;
@@ -46,8 +46,8 @@ public sealed class Or32SignExtend16x32SignExtend16x32 : BaseTransform
 
 		var v1 = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction(Framework.IR.Or32, v1, t1, t2);
-		context.AppendInstruction(Framework.IR.SignExtend16x32, result, v1);
+		context.SetInstruction(IR.Or32, v1, t1, t2);
+		context.AppendInstruction(IR.SignExtend16x32, result, v1);
 	}
 }
 
@@ -57,7 +57,7 @@ public sealed class Or32SignExtend16x32SignExtend16x32 : BaseTransform
 [Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class Or32SignExtend16x32SignExtend16x32_v1 : BaseTransform
 {
-	public Or32SignExtend16x32SignExtend16x32_v1() : base(Framework.IR.Or32, TransformType.Auto | TransformType.Optimization)
+	public Or32SignExtend16x32SignExtend16x32_v1() : base(IR.Or32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -72,13 +72,13 @@ public sealed class Or32SignExtend16x32SignExtend16x32_v1 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != Framework.IR.SignExtend16x32)
+		if (context.Operand1.Definitions[0].Instruction != IR.SignExtend16x32)
 			return false;
 
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != Framework.IR.SignExtend16x32)
+		if (context.Operand2.Definitions[0].Instruction != IR.SignExtend16x32)
 			return false;
 
 		return true;
@@ -93,7 +93,7 @@ public sealed class Or32SignExtend16x32SignExtend16x32_v1 : BaseTransform
 
 		var v1 = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction(Framework.IR.Or32, v1, t2, t1);
-		context.AppendInstruction(Framework.IR.SignExtend16x32, result, v1);
+		context.SetInstruction(IR.Or32, v1, t2, t1);
+		context.AppendInstruction(IR.SignExtend16x32, result, v1);
 	}
 }

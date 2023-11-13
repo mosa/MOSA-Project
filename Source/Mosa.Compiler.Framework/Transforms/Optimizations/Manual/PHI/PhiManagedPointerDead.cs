@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Phi;
 
 public sealed class PhiManagedPointerDead : BaseTransform
 {
-	public PhiManagedPointerDead() : base(Framework.IR.PhiManagedPointer, TransformType.Manual | TransformType.Optimization)
+	public PhiManagedPointerDead() : base(IR.PhiManagedPointer, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

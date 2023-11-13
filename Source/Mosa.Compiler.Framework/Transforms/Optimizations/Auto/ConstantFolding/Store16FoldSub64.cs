@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 [Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class Store16FoldSub64 : BaseTransform
 {
-	public Store16FoldSub64() : base(Framework.IR.Store16, TransformType.Auto | TransformType.Optimization)
+	public Store16FoldSub64() : base(IR.Store16, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -22,7 +22,7 @@ public sealed class Store16FoldSub64 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != Framework.IR.Sub64)
+		if (context.Operand1.Definitions[0].Instruction != IR.Sub64)
 			return false;
 
 		if (!IsResolvedConstant(context.Operand2))
@@ -45,6 +45,6 @@ public sealed class Store16FoldSub64 : BaseTransform
 
 		var e1 = Operand.CreateConstant(Sub64(To64(t3), To64(t2)));
 
-		context.SetInstruction(Framework.IR.Store16, result, t1, e1, t4);
+		context.SetInstruction(IR.Store16, result, t1, e1, t4);
 	}
 }

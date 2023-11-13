@@ -11,7 +11,7 @@ namespace Mosa.Compiler.x64.Transforms.BaseIR;
 [Transform("x64.BaseIR")]
 public sealed class Load64 : BaseIRTransform
 {
-	public Load64() : base(Framework.IR.Load64, TransformType.Manual | TransformType.Transform)
+	public Load64() : base(IR.Load64, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

@@ -1,10 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Compiler.Framework.Transforms.IR;
+namespace Mosa.Compiler.Framework.Transforms.Expand;
 
-public sealed class CheckThrowOverflow : BaseTransform
+public sealed class CheckThrowIndexOutOfRange : BaseTransform
 {
-	public CheckThrowOverflow() : base(Framework.IR.CheckThrowOverflow, TransformType.Manual | TransformType.Transform)
+	public CheckThrowIndexOutOfRange() : base(IR.CheckThrowIndexOutOfRange, TransformType.Manual | TransformType.Transform)
 	{
 	}
 
@@ -26,7 +26,7 @@ public sealed class CheckThrowOverflow : BaseTransform
 			}
 			else
 			{
-				context.SetInstruction(Framework.IR.ThrowOverflow);
+				context.SetInstruction(IR.ThrowIndexOutOfRange);
 			}
 			return;
 		}
@@ -35,8 +35,8 @@ public sealed class CheckThrowOverflow : BaseTransform
 		var nextBlock = transform.Split(context);
 
 		context.SetInstruction(transform.BranchInstruction, ConditionCode.NotEqual, null, operand1, Operand.Constant32_0, newBlock.Block);
-		context.AppendInstruction(Framework.IR.Jmp, nextBlock.Block);
+		context.AppendInstruction(IR.Jmp, nextBlock.Block);
 
-		newBlock.AppendInstruction(Framework.IR.ThrowOverflow);
+		newBlock.AppendInstruction(IR.ThrowIndexOutOfRange);
 	}
 }

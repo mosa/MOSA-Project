@@ -10,7 +10,7 @@ namespace Mosa.Compiler.ARM32.Transforms.BaseIR;
 [Transform("ARM32.BaseIR")]
 public sealed class SubCarryIn32 : BaseIRTransform
 {
-	public SubCarryIn32() : base(Framework.IR.SubCarryIn32, TransformType.Manual | TransformType.Transform)
+	public SubCarryIn32() : base(IR.SubCarryIn32, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

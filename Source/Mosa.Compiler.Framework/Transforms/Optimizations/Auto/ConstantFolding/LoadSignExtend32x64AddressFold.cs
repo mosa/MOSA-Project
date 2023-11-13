@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 [Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class LoadSignExtend32x64AddressFold : BaseTransform
 {
-	public LoadSignExtend32x64AddressFold() : base(Framework.IR.LoadSignExtend32x64, TransformType.Auto | TransformType.Optimization)
+	public LoadSignExtend32x64AddressFold() : base(IR.LoadSignExtend32x64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -28,7 +28,7 @@ public sealed class LoadSignExtend32x64AddressFold : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != Framework.IR.AddressOf)
+		if (context.Operand1.Definitions[0].Instruction != IR.AddressOf)
 			return false;
 
 		if (!IsParameter(context.Operand1.Definitions[0].Operand1))
@@ -43,6 +43,6 @@ public sealed class LoadSignExtend32x64AddressFold : BaseTransform
 
 		var t1 = context.Operand1.Definitions[0].Operand1;
 
-		context.SetInstruction(Framework.IR.LoadParamSignExtend32x64, result, t1);
+		context.SetInstruction(IR.LoadParamSignExtend32x64, result, t1);
 	}
 }

@@ -10,7 +10,7 @@ namespace Mosa.Compiler.x64.Transforms.BaseIR;
 [Transform("x64.BaseIR")]
 public sealed class ConvertU32ToR8 : BaseIRTransform
 {
-	public ConvertU32ToR8() : base(Framework.IR.ConvertU32ToR8, TransformType.Manual | TransformType.Transform, true)
+	public ConvertU32ToR8() : base(IR.ConvertU32ToR8, TransformType.Manual | TransformType.Transform, true)
 	{
 	}
 

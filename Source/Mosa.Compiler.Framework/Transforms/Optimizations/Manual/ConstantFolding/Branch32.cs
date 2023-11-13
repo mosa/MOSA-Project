@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.ConstantFoldin
 
 public sealed class Branch32 : BaseTransform
 {
-	public Branch32() : base(Framework.IR.Branch32, TransformType.Manual | TransformType.Optimization)
+	public Branch32() : base(IR.Branch32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -39,7 +39,7 @@ public sealed class Branch32 : BaseTransform
 		{
 			var phiBlock = GetOtherBranchTarget(block, target);
 
-			context.SetInstruction(Framework.IR.Jmp, target);
+			context.SetInstruction(IR.Jmp, target);
 
 			RemoveRemainingInstructionInBlock(context);
 

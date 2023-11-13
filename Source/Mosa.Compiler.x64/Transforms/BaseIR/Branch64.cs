@@ -10,7 +10,7 @@ namespace Mosa.Compiler.x64.Transforms.BaseIR;
 [Transform("x64.BaseIR")]
 public sealed class Branch64 : BaseIRTransform
 {
-	public Branch64() : base(Framework.IR.Branch64, TransformType.Manual | TransformType.Transform)
+	public Branch64() : base(IR.Branch64, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

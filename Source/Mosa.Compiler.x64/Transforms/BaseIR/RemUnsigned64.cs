@@ -10,7 +10,7 @@ namespace Mosa.Compiler.x64.Transforms.BaseIR;
 [Transform("x64.BaseIR")]
 public sealed class RemUnsigned64 : BaseIRTransform
 {
-	public RemUnsigned64() : base(Framework.IR.RemUnsigned64, TransformType.Manual | TransformType.Transform)
+	public RemUnsigned64() : base(IR.RemUnsigned64, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

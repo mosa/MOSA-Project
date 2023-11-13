@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 [Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class Or32Same : BaseTransform
 {
-	public Or32Same() : base(Framework.IR.Or32, TransformType.Auto | TransformType.Optimization)
+	public Or32Same() : base(IR.Or32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -28,6 +28,6 @@ public sealed class Or32Same : BaseTransform
 
 		var t1 = context.Operand1;
 
-		context.SetInstruction(Framework.IR.Move32, result, t1);
+		context.SetInstruction(IR.Move32, result, t1);
 	}
 }

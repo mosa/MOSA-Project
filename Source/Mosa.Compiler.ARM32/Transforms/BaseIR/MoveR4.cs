@@ -10,7 +10,7 @@ namespace Mosa.Compiler.ARM32.Transforms.BaseIR;
 [Transform("ARM32.BaseIR")]
 public sealed class MoveR4 : BaseIRTransform
 {
-	public MoveR4() : base(Framework.IR.MoveR4, TransformType.Manual | TransformType.Transform)
+	public MoveR4() : base(IR.MoveR4, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

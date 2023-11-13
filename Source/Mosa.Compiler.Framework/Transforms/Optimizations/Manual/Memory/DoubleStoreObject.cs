@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Memory;
 
 public sealed class DoubleStoreObject : BaseTransform
 {
-	public DoubleStoreObject() : base(Framework.IR.StoreObject, TransformType.Manual | TransformType.Optimization)
+	public DoubleStoreObject() : base(IR.StoreObject, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -16,7 +16,7 @@ public sealed class DoubleStoreObject : BaseTransform
 		if (!context.Operand2.IsResolvedConstant)
 			return false;
 
-		var next = GetNextNodeUntil(context, Framework.IR.StoreObject, transform.Window, context.Operand1);
+		var next = GetNextNodeUntil(context, IR.StoreObject, transform.Window, context.Operand1);
 
 		if (next == null)
 			return false;

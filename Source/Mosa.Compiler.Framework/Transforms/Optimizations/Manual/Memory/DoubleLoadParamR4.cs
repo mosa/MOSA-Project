@@ -4,13 +4,13 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Memory;
 
 public sealed class DoubleLoadParamR4 : BaseTransform
 {
-	public DoubleLoadParamR4() : base(Framework.IR.LoadParamR4, TransformType.Manual | TransformType.Optimization)
+	public DoubleLoadParamR4() : base(IR.LoadParamR4, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
 	public override bool Match(Context context, Transform transform)
 	{
-		var previous = GetPreviousNodeUntil(context, Framework.IR.LoadParamR4, transform.Window, context.Result);
+		var previous = GetPreviousNodeUntil(context, IR.LoadParamR4, transform.Window, context.Result);
 
 		if (previous == null)
 			return false;
@@ -23,8 +23,8 @@ public sealed class DoubleLoadParamR4 : BaseTransform
 
 	public override void Transform(Context context, Transform transform)
 	{
-		var previous = GetPreviousNodeUntil(context, Framework.IR.LoadParamR4, transform.Window);
+		var previous = GetPreviousNodeUntil(context, IR.LoadParamR4, transform.Window);
 
-		context.SetInstruction(Framework.IR.MoveR4, context.Result, previous.Result);
+		context.SetInstruction(IR.MoveR4, context.Result, previous.Result);
 	}
 }

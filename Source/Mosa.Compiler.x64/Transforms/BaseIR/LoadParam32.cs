@@ -10,7 +10,7 @@ namespace Mosa.Compiler.x64.Transforms.BaseIR;
 [Transform("x64.BaseIR")]
 public sealed class LoadParam32 : BaseIRTransform
 {
-	public LoadParam32() : base(Framework.IR.LoadParam32, TransformType.Manual | TransformType.Transform)
+	public LoadParam32() : base(IR.LoadParam32, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

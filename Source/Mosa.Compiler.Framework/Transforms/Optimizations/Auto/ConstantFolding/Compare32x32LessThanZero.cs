@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 [Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class Compare32x32LessThanZero : BaseTransform
 {
-	public Compare32x32LessThanZero() : base(Framework.IR.Compare32x32, TransformType.Auto | TransformType.Optimization)
+	public Compare32x32LessThanZero() : base(IR.Compare32x32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -36,6 +36,6 @@ public sealed class Compare32x32LessThanZero : BaseTransform
 
 		var c1 = Operand.CreateConstant(0);
 
-		context.SetInstruction(Framework.IR.Move32, result, c1);
+		context.SetInstruction(IR.Move32, result, c1);
 	}
 }

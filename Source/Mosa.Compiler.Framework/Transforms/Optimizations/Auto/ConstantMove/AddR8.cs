@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove;
 [Transform("IR.Optimizations.Auto.ConstantMove")]
 public sealed class AddR8 : BaseTransform
 {
-	public AddR8() : base(Framework.IR.AddR8, TransformType.Auto | TransformType.Optimization)
+	public AddR8() : base(IR.AddR8, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -32,6 +32,6 @@ public sealed class AddR8 : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2;
 
-		context.SetInstruction(Framework.IR.AddR8, result, t2, t1);
+		context.SetInstruction(IR.AddR8, result, t2, t1);
 	}
 }

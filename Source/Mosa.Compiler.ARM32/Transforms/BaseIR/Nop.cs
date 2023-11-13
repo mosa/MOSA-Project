@@ -10,7 +10,7 @@ namespace Mosa.Compiler.ARM32.Transforms.BaseIR;
 [Transform("ARM32.BaseIR")]
 public sealed class Nop : BaseIRTransform
 {
-	public Nop() : base(Framework.IR.Nop, TransformType.Manual | TransformType.Transform)
+	public Nop() : base(IR.Nop, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

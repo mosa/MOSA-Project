@@ -10,7 +10,7 @@ namespace Mosa.Compiler.ARM32.Transforms.BaseIR;
 [Transform("ARM32.BaseIR")]
 public sealed class Or32 : BaseIRTransform
 {
-	public Or32() : base(Framework.IR.Or32, TransformType.Manual | TransformType.Transform)
+	public Or32() : base(IR.Or32, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

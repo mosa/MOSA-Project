@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 [Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class ArithShiftRight64ByZero : BaseTransform
 {
-	public ArithShiftRight64ByZero() : base(Framework.IR.ArithShiftRight64, TransformType.Auto | TransformType.Optimization)
+	public ArithShiftRight64ByZero() : base(IR.ArithShiftRight64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -33,6 +33,6 @@ public sealed class ArithShiftRight64ByZero : BaseTransform
 
 		var t1 = context.Operand1;
 
-		context.SetInstruction(Framework.IR.Move64, result, t1);
+		context.SetInstruction(IR.Move64, result, t1);
 	}
 }

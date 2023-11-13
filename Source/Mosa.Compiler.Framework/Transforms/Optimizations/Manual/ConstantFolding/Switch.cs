@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.ConstantFoldin
 
 public sealed class Switch : BaseTransform
 {
-	public Switch() : base(Framework.IR.Switch, TransformType.Manual | TransformType.Optimization)
+	public Switch() : base(IR.Switch, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -34,7 +34,7 @@ public sealed class Switch : BaseTransform
 		{
 			var newtarget = context.BranchTargets[index];
 
-			context.SetInstruction(Framework.IR.Jmp, newtarget);
+			context.SetInstruction(IR.Jmp, newtarget);
 
 			RemoveRemainingInstructionInBlock(context);
 		}

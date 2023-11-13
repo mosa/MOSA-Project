@@ -10,7 +10,7 @@ namespace Mosa.Compiler.ARM32.Transforms.Stack;
 [Transform("ARM32.Stack")]
 public sealed class Epilogue : BaseTransform
 {
-	public Epilogue() : base(Framework.IR.Epilogue, TransformType.Manual | TransformType.Transform)
+	public Epilogue() : base(IR.Epilogue, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Memory;
 
 public sealed class DoubleLoad64 : BaseTransform
 {
-	public DoubleLoad64() : base(Framework.IR.Load64, TransformType.Manual | TransformType.Optimization)
+	public DoubleLoad64() : base(IR.Load64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -16,7 +16,7 @@ public sealed class DoubleLoad64 : BaseTransform
 		if (!context.Operand2.IsResolvedConstant)
 			return false;
 
-		var previous = GetPreviousNodeUntil(context, Framework.IR.Load64, transform.Window, context.Result);
+		var previous = GetPreviousNodeUntil(context, IR.Load64, transform.Window, context.Result);
 
 		if (previous == null)
 			return false;
@@ -35,8 +35,8 @@ public sealed class DoubleLoad64 : BaseTransform
 
 	public override void Transform(Context context, Transform transform)
 	{
-		var previous = GetPreviousNodeUntil(context, Framework.IR.Load64, transform.Window);
+		var previous = GetPreviousNodeUntil(context, IR.Load64, transform.Window);
 
-		context.SetInstruction(Framework.IR.Move64, context.Result, previous.Result);
+		context.SetInstruction(IR.Move64, context.Result, previous.Result);
 	}
 }

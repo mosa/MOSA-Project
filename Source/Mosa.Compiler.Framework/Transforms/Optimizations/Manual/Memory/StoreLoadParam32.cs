@@ -4,13 +4,13 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Memory;
 
 public sealed class StoreLoadParam32 : BaseTransform
 {
-	public StoreLoadParam32() : base(Framework.IR.StoreParam32, TransformType.Manual | TransformType.Optimization)
+	public StoreLoadParam32() : base(IR.StoreParam32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
 	public override bool Match(Context context, Transform transform)
 	{
-		var previous = GetPreviousNodeUntil(context, Framework.IR.LoadParam32, transform.Window, context.Operand2);
+		var previous = GetPreviousNodeUntil(context, IR.LoadParam32, transform.Window, context.Operand2);
 
 		if (previous == null)
 			return false;

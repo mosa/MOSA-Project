@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.BitValue;
 
 public sealed class Branch64 : BaseTransform
 {
-	public Branch64() : base(Framework.IR.Branch64, TransformType.Manual | TransformType.Optimization)
+	public Branch64() : base(IR.Branch64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -40,7 +40,7 @@ public sealed class Branch64 : BaseTransform
 		{
 			var phiBlock = GetOtherBranchTarget(block, target);
 
-			context.SetInstruction(Framework.IR.Jmp, target);
+			context.SetInstruction(IR.Jmp, target);
 
 			RemoveRemainingInstructionInBlock(context);
 

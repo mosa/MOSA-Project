@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Special;
 /// </summary>
 public sealed class GetLow32From64 : BaseTransform
 {
-	public GetLow32From64() : base(Framework.IR.GetLow32, TransformType.Manual | TransformType.Optimization)
+	public GetLow32From64() : base(IR.GetLow32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -44,6 +44,6 @@ public sealed class GetLow32From64 : BaseTransform
 
 	public override void Transform(Context context, Transform transform)
 	{
-		context.SetInstruction(Framework.IR.Move32, context.Result, context.Operand1);
+		context.SetInstruction(IR.Move32, context.Result, context.Operand1);
 	}
 }

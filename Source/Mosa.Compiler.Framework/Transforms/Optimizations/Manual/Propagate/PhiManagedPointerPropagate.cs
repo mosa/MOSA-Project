@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Propagate;
 
 public sealed class PhiManagedPointerPropagate : BaseTransform
 {
-	public PhiManagedPointerPropagate() : base(Framework.IR.PhiManagedPointer, TransformType.Manual | TransformType.Optimization)
+	public PhiManagedPointerPropagate() : base(IR.PhiManagedPointer, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

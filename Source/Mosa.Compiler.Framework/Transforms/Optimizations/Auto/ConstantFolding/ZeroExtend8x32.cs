@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 [Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class ZeroExtend8x32 : BaseTransform
 {
-	public ZeroExtend8x32() : base(Framework.IR.ZeroExtend8x32, TransformType.Auto | TransformType.Optimization)
+	public ZeroExtend8x32() : base(IR.ZeroExtend8x32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -32,6 +32,6 @@ public sealed class ZeroExtend8x32 : BaseTransform
 
 		var e1 = Operand.CreateConstant(To32(ToByte(t1)));
 
-		context.SetInstruction(Framework.IR.Move32, result, e1);
+		context.SetInstruction(IR.Move32, result, e1);
 	}
 }

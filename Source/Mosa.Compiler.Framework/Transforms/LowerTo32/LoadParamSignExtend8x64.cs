@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
 public sealed class LoadParamSignExtend8x64 : BaseLowerTo32Transform
 {
-	public LoadParamSignExtend8x64() : base(Framework.IR.LoadParamSignExtend8x64, TransformType.Manual | TransformType.Optimization)
+	public LoadParamSignExtend8x64() : base(IR.LoadParamSignExtend8x64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -18,8 +18,8 @@ public sealed class LoadParamSignExtend8x64 : BaseLowerTo32Transform
 		var resultLow = transform.VirtualRegisters.Allocate32();
 		var resultHigh = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction(Framework.IR.LoadParamSignExtend8x32, resultLow, op0Low);
-		context.AppendInstruction(Framework.IR.ArithShiftRight32, resultHigh, resultLow, Operand.Constant32_31);
-		context.AppendInstruction(Framework.IR.To64, result, resultLow, resultHigh);
+		context.SetInstruction(IR.LoadParamSignExtend8x32, resultLow, op0Low);
+		context.AppendInstruction(IR.ArithShiftRight32, resultHigh, resultLow, Operand.Constant32_31);
+		context.AppendInstruction(IR.To64, result, resultLow, resultHigh);
 	}
 }

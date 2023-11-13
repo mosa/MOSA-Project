@@ -10,7 +10,7 @@ namespace Mosa.Compiler.x64.Transforms.Stack;
 [Transform("x64.Stack")]
 public sealed class Prologue : BaseTransform
 {
-	public Prologue() : base(Framework.IR.Prologue, TransformType.Manual | TransformType.Transform)
+	public Prologue() : base(IR.Prologue, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

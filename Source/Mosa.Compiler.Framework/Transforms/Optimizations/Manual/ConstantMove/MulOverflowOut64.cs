@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.ConstantMove;
 /// </summary>
 public sealed class MulOverflowOut64 : BaseTransform
 {
-	public MulOverflowOut64() : base(Framework.IR.MulOverflowOut64, TransformType.Manual | TransformType.Optimization)
+	public MulOverflowOut64() : base(IR.MulOverflowOut64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

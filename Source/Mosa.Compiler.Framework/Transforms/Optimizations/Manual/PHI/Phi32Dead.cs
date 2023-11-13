@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Phi;
 
 public sealed class Phi32Dead : BasePhiTransform
 {
-	public Phi32Dead() : base(Framework.IR.Phi32, TransformType.Manual | TransformType.Optimization)
+	public Phi32Dead() : base(IR.Phi32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

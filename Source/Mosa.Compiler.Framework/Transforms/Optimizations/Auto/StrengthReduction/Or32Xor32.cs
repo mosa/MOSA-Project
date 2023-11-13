@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 [Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class Or32Xor32 : BaseTransform
 {
-	public Or32Xor32() : base(Framework.IR.Or32, TransformType.Auto | TransformType.Optimization)
+	public Or32Xor32() : base(IR.Or32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -22,7 +22,7 @@ public sealed class Or32Xor32 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != Framework.IR.Xor32)
+		if (context.Operand1.Definitions[0].Instruction != IR.Xor32)
 			return false;
 
 		if (!AreSame(context.Operand1.Definitions[0].Operand1, context.Operand2))
@@ -38,7 +38,7 @@ public sealed class Or32Xor32 : BaseTransform
 		var t1 = context.Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand1.Definitions[0].Operand2;
 
-		context.SetInstruction(Framework.IR.Or32, result, t1, t2);
+		context.SetInstruction(IR.Or32, result, t1, t2);
 	}
 }
 
@@ -48,7 +48,7 @@ public sealed class Or32Xor32 : BaseTransform
 [Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class Or32Xor32_v1 : BaseTransform
 {
-	public Or32Xor32_v1() : base(Framework.IR.Or32, TransformType.Auto | TransformType.Optimization)
+	public Or32Xor32_v1() : base(IR.Or32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -60,7 +60,7 @@ public sealed class Or32Xor32_v1 : BaseTransform
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != Framework.IR.Xor32)
+		if (context.Operand2.Definitions[0].Instruction != IR.Xor32)
 			return false;
 
 		if (!AreSame(context.Operand1, context.Operand2.Definitions[0].Operand1))
@@ -76,7 +76,7 @@ public sealed class Or32Xor32_v1 : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2.Definitions[0].Operand2;
 
-		context.SetInstruction(Framework.IR.Or32, result, t1, t2);
+		context.SetInstruction(IR.Or32, result, t1, t2);
 	}
 }
 
@@ -86,7 +86,7 @@ public sealed class Or32Xor32_v1 : BaseTransform
 [Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class Or32Xor32_v2 : BaseTransform
 {
-	public Or32Xor32_v2() : base(Framework.IR.Or32, TransformType.Auto | TransformType.Optimization)
+	public Or32Xor32_v2() : base(IR.Or32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -98,7 +98,7 @@ public sealed class Or32Xor32_v2 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != Framework.IR.Xor32)
+		if (context.Operand1.Definitions[0].Instruction != IR.Xor32)
 			return false;
 
 		if (!AreSame(context.Operand1.Definitions[0].Operand2, context.Operand2))
@@ -114,7 +114,7 @@ public sealed class Or32Xor32_v2 : BaseTransform
 		var t1 = context.Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand1.Definitions[0].Operand2;
 
-		context.SetInstruction(Framework.IR.Or32, result, t2, t1);
+		context.SetInstruction(IR.Or32, result, t2, t1);
 	}
 }
 
@@ -124,7 +124,7 @@ public sealed class Or32Xor32_v2 : BaseTransform
 [Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class Or32Xor32_v3 : BaseTransform
 {
-	public Or32Xor32_v3() : base(Framework.IR.Or32, TransformType.Auto | TransformType.Optimization)
+	public Or32Xor32_v3() : base(IR.Or32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -136,7 +136,7 @@ public sealed class Or32Xor32_v3 : BaseTransform
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != Framework.IR.Xor32)
+		if (context.Operand2.Definitions[0].Instruction != IR.Xor32)
 			return false;
 
 		if (!AreSame(context.Operand1, context.Operand2.Definitions[0].Operand2))
@@ -152,6 +152,6 @@ public sealed class Or32Xor32_v3 : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2.Definitions[0].Operand1;
 
-		context.SetInstruction(Framework.IR.Or32, result, t1, t2);
+		context.SetInstruction(IR.Or32, result, t1, t2);
 	}
 }

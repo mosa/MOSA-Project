@@ -10,7 +10,7 @@ namespace Mosa.Compiler.x64.Transforms.BaseIR;
 [Transform("x64.BaseIR")]
 public sealed class DivUnsigned64 : BaseIRTransform
 {
-	public DivUnsigned64() : base(Framework.IR.DivUnsigned64, TransformType.Manual | TransformType.Transform)
+	public DivUnsigned64() : base(IR.DivUnsigned64, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

@@ -9,7 +9,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.ConstantFoldin
 /// </summary>
 public sealed class AddCarryOut32 : BaseTransform
 {
-	public AddCarryOut32() : base(Framework.IR.AddCarryOut32, TransformType.Manual | TransformType.Optimization)
+	public AddCarryOut32() : base(IR.AddCarryOut32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -37,7 +37,7 @@ public sealed class AddCarryOut32 : BaseTransform
 		var e1 = Operand.CreateConstant(t1 + t2);
 		var carry = IntegerTwiddling.IsAddUnsignedCarry(t1, t2);
 
-		context.SetInstruction(Framework.IR.Move32, result, e1);
-		context.AppendInstruction(Framework.IR.Move32, result2, carry ? Operand.Constant32_1 : Operand.Constant32_0);
+		context.SetInstruction(IR.Move32, result, e1);
+		context.AppendInstruction(IR.Move32, result2, carry ? Operand.Constant32_1 : Operand.Constant32_0);
 	}
 }

@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 [Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class MulSignedShiftLeft64 : BaseTransform
 {
-	public MulSignedShiftLeft64() : base(Framework.IR.MulSigned64, TransformType.Auto | TransformType.Optimization)
+	public MulSignedShiftLeft64() : base(IR.MulSigned64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -22,7 +22,7 @@ public sealed class MulSignedShiftLeft64 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != Framework.IR.ShiftLeft64)
+		if (context.Operand1.Definitions[0].Instruction != IR.ShiftLeft64)
 			return false;
 
 		if (IsResolvedConstant(context.Operand1.Definitions[0].Operand1))
@@ -47,8 +47,8 @@ public sealed class MulSignedShiftLeft64 : BaseTransform
 
 		var v1 = transform.VirtualRegisters.Allocate64();
 
-		context.SetInstruction(Framework.IR.MulSigned64, v1, t1, t3);
-		context.AppendInstruction(Framework.IR.ShiftLeft64, result, v1, t2);
+		context.SetInstruction(IR.MulSigned64, v1, t1, t3);
+		context.AppendInstruction(IR.ShiftLeft64, result, v1, t2);
 	}
 }
 
@@ -58,7 +58,7 @@ public sealed class MulSignedShiftLeft64 : BaseTransform
 [Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class MulSignedShiftLeft64_v1 : BaseTransform
 {
-	public MulSignedShiftLeft64_v1() : base(Framework.IR.MulSigned64, TransformType.Auto | TransformType.Optimization)
+	public MulSignedShiftLeft64_v1() : base(IR.MulSigned64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -70,7 +70,7 @@ public sealed class MulSignedShiftLeft64_v1 : BaseTransform
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != Framework.IR.ShiftLeft64)
+		if (context.Operand2.Definitions[0].Instruction != IR.ShiftLeft64)
 			return false;
 
 		if (IsResolvedConstant(context.Operand2.Definitions[0].Operand1))
@@ -95,7 +95,7 @@ public sealed class MulSignedShiftLeft64_v1 : BaseTransform
 
 		var v1 = transform.VirtualRegisters.Allocate64();
 
-		context.SetInstruction(Framework.IR.MulSigned64, v1, t2, t1);
-		context.AppendInstruction(Framework.IR.ShiftLeft64, result, v1, t3);
+		context.SetInstruction(IR.MulSigned64, v1, t2, t1);
+		context.AppendInstruction(IR.ShiftLeft64, result, v1, t3);
 	}
 }

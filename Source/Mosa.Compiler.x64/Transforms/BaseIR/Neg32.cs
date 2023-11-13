@@ -10,7 +10,7 @@ namespace Mosa.Compiler.x64.Transforms.BaseIR;
 [Transform("x64.BaseIR")]
 public sealed class Neg32 : BaseIRTransform
 {
-	public Neg32() : base(Framework.IR.Neg32, TransformType.Manual | TransformType.Transform)
+	public Neg32() : base(IR.Neg32, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

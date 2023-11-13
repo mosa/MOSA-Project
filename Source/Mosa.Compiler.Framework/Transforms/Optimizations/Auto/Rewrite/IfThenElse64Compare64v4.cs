@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Rewrite;
 [Transform("IR.Optimizations.Auto.Rewrite")]
 public sealed class IfThenElse64Compare64v4 : BaseTransform
 {
-	public IfThenElse64Compare64v4() : base(Framework.IR.IfThenElse64, TransformType.Auto | TransformType.Optimization)
+	public IfThenElse64Compare64v4() : base(IR.IfThenElse64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -22,7 +22,7 @@ public sealed class IfThenElse64Compare64v4 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != Framework.IR.Compare64x64)
+		if (context.Operand1.Definitions[0].Instruction != IR.Compare64x64)
 			return false;
 
 		if (context.Operand1.Definitions[0].ConditionCode != ConditionCode.NotEqual)
@@ -45,7 +45,7 @@ public sealed class IfThenElse64Compare64v4 : BaseTransform
 		var t2 = context.Operand2;
 		var t3 = context.Operand3;
 
-		context.SetInstruction(Framework.IR.IfThenElse64, result, t1, t2, t3);
+		context.SetInstruction(IR.IfThenElse64, result, t1, t2, t3);
 	}
 }
 
@@ -55,7 +55,7 @@ public sealed class IfThenElse64Compare64v4 : BaseTransform
 [Transform("IR.Optimizations.Auto.Rewrite")]
 public sealed class IfThenElse64Compare64v4_v1 : BaseTransform
 {
-	public IfThenElse64Compare64v4_v1() : base(Framework.IR.IfThenElse64, TransformType.Auto | TransformType.Optimization)
+	public IfThenElse64Compare64v4_v1() : base(IR.IfThenElse64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -67,7 +67,7 @@ public sealed class IfThenElse64Compare64v4_v1 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != Framework.IR.Compare64x64)
+		if (context.Operand1.Definitions[0].Instruction != IR.Compare64x64)
 			return false;
 
 		if (context.Operand1.Definitions[0].ConditionCode != ConditionCode.NotEqual)
@@ -90,6 +90,6 @@ public sealed class IfThenElse64Compare64v4_v1 : BaseTransform
 		var t2 = context.Operand2;
 		var t3 = context.Operand3;
 
-		context.SetInstruction(Framework.IR.IfThenElse64, result, t1, t2, t3);
+		context.SetInstruction(IR.IfThenElse64, result, t1, t2, t3);
 	}
 }

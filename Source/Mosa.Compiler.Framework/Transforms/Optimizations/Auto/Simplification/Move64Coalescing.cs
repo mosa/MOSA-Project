@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 [Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class Move64Coalescing : BaseTransform
 {
-	public Move64Coalescing() : base(Framework.IR.Move64, TransformType.Auto | TransformType.Optimization)
+	public Move64Coalescing() : base(IR.Move64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -24,7 +24,7 @@ public sealed class Move64Coalescing : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != Framework.IR.Move64)
+		if (context.Operand1.Definitions[0].Instruction != IR.Move64)
 			return false;
 
 		if (IsCPURegister(context.Operand1.Definitions[0].Operand1))
@@ -39,6 +39,6 @@ public sealed class Move64Coalescing : BaseTransform
 
 		var t1 = context.Operand1.Definitions[0].Operand1;
 
-		context.SetInstruction(Framework.IR.Move64, result, t1);
+		context.SetInstruction(IR.Move64, result, t1);
 	}
 }

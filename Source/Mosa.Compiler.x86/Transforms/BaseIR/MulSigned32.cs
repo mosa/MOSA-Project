@@ -10,7 +10,7 @@ namespace Mosa.Compiler.x86.Transforms.BaseIR;
 [Transform("x86.BaseIR")]
 public sealed class MulSigned32 : BaseIRTransform
 {
-	public MulSigned32() : base(Framework.IR.MulSigned32, TransformType.Manual | TransformType.Transform)
+	public MulSigned32() : base(IR.MulSigned32, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

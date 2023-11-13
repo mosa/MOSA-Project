@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.ConstantFoldin
 
 public sealed class BranchObject : BaseTransform
 {
-	public BranchObject() : base(Framework.IR.BranchObject, TransformType.Manual | TransformType.Optimization)
+	public BranchObject() : base(IR.BranchObject, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -38,7 +38,7 @@ public sealed class BranchObject : BaseTransform
 		{
 			var phiBlock = GetOtherBranchTarget(context.Block, target);
 
-			context.SetInstruction(Framework.IR.Jmp, target);
+			context.SetInstruction(IR.Jmp, target);
 
 			RemoveRemainingInstructionInBlock(context);
 

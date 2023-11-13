@@ -8,7 +8,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Useless;
 [Transform("IR.Optimizations.Manual.Useless")]
 public sealed class LoadParamSignExtend8x32Double : BaseTransform
 {
-	public LoadParamSignExtend8x32Double() : base(Framework.IR.SignExtend8x32, TransformType.Manual | TransformType.Optimization)
+	public LoadParamSignExtend8x32Double() : base(IR.SignExtend8x32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -22,7 +22,7 @@ public sealed class LoadParamSignExtend8x32Double : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != Framework.IR.LoadParamSignExtend8x32)
+		if (context.Operand1.Definitions[0].Instruction != IR.LoadParamSignExtend8x32)
 			return false;
 
 		return true;
@@ -33,6 +33,6 @@ public sealed class LoadParamSignExtend8x32Double : BaseTransform
 		var result = context.Result;
 		var operand1 = context.Operand1;
 
-		context.SetInstruction(Framework.IR.Move32, result, operand1);
+		context.SetInstruction(IR.Move32, result, operand1);
 	}
 }

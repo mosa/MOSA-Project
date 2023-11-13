@@ -9,7 +9,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.ConstantFoldin
 /// </summary>
 public sealed class AddOverflowOut32 : BaseTransform
 {
-	public AddOverflowOut32() : base(Framework.IR.AddOverflowOut32, TransformType.Manual | TransformType.Optimization)
+	public AddOverflowOut32() : base(IR.AddOverflowOut32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -37,7 +37,7 @@ public sealed class AddOverflowOut32 : BaseTransform
 		var e1 = Operand.CreateConstant(t1 + t2);
 		var carry = IntegerTwiddling.IsAddSignedOverflow(t1, t2);
 
-		context.SetInstruction(Framework.IR.Move32, result, e1);
-		context.AppendInstruction(Framework.IR.Move32, result2, carry ? Operand.Constant32_1 : Operand.Constant32_0);
+		context.SetInstruction(IR.Move32, result, e1);
+		context.AppendInstruction(IR.Move32, result2, carry ? Operand.Constant32_1 : Operand.Constant32_0);
 	}
 }

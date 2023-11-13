@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 [Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class Sub64ByZero : BaseTransform
 {
-	public Sub64ByZero() : base(Framework.IR.Sub64, TransformType.Auto | TransformType.Optimization)
+	public Sub64ByZero() : base(IR.Sub64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -33,6 +33,6 @@ public sealed class Sub64ByZero : BaseTransform
 
 		var t1 = context.Operand1;
 
-		context.SetInstruction(Framework.IR.Move64, result, t1);
+		context.SetInstruction(IR.Move64, result, t1);
 	}
 }

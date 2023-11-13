@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 [Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class Compare64x32DivUnsignedRange : BaseTransform
 {
-	public Compare64x32DivUnsignedRange() : base(Framework.IR.Compare64x32, TransformType.Auto | TransformType.Optimization)
+	public Compare64x32DivUnsignedRange() : base(IR.Compare64x32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -25,7 +25,7 @@ public sealed class Compare64x32DivUnsignedRange : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != Framework.IR.DivUnsigned32)
+		if (context.Operand1.Definitions[0].Instruction != IR.DivUnsigned32)
 			return false;
 
 		if (!IsResolvedConstant(context.Operand2))
@@ -52,8 +52,8 @@ public sealed class Compare64x32DivUnsignedRange : BaseTransform
 
 		var e1 = Operand.CreateConstant(MulUnsigned32(To32(t2), To32(t3)));
 
-		context.SetInstruction(Framework.IR.Sub32, v1, t1, e1);
-		context.AppendInstruction(Framework.IR.Compare64x32, ConditionCode.UnsignedLess, result, v1, t2);
+		context.SetInstruction(IR.Sub32, v1, t1, e1);
+		context.AppendInstruction(IR.Compare64x32, ConditionCode.UnsignedLess, result, v1, t2);
 	}
 }
 
@@ -63,7 +63,7 @@ public sealed class Compare64x32DivUnsignedRange : BaseTransform
 [Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class Compare64x32DivUnsignedRange_v1 : BaseTransform
 {
-	public Compare64x32DivUnsignedRange_v1() : base(Framework.IR.Compare64x32, TransformType.Auto | TransformType.Optimization)
+	public Compare64x32DivUnsignedRange_v1() : base(IR.Compare64x32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -78,7 +78,7 @@ public sealed class Compare64x32DivUnsignedRange_v1 : BaseTransform
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != Framework.IR.DivUnsigned32)
+		if (context.Operand2.Definitions[0].Instruction != IR.DivUnsigned32)
 			return false;
 
 		if (!IsResolvedConstant(context.Operand1))
@@ -105,7 +105,7 @@ public sealed class Compare64x32DivUnsignedRange_v1 : BaseTransform
 
 		var e1 = Operand.CreateConstant(MulUnsigned32(To32(t3), To32(t1)));
 
-		context.SetInstruction(Framework.IR.Sub32, v1, t2, e1);
-		context.AppendInstruction(Framework.IR.Compare64x32, ConditionCode.UnsignedLess, result, v1, t3);
+		context.SetInstruction(IR.Sub32, v1, t2, e1);
+		context.AppendInstruction(IR.Compare64x32, ConditionCode.UnsignedLess, result, v1, t3);
 	}
 }

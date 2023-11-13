@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Rewrite;
 [Transform("IR.Optimizations.Auto.Rewrite")]
 public sealed class Compare64x32GreaterThanZero : BaseTransform
 {
-	public Compare64x32GreaterThanZero() : base(Framework.IR.Compare64x32, TransformType.Auto | TransformType.Optimization)
+	public Compare64x32GreaterThanZero() : base(IR.Compare64x32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -32,7 +32,7 @@ public sealed class Compare64x32GreaterThanZero : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2;
 
-		context.SetInstruction(Framework.IR.Compare64x32, ConditionCode.NotEqual, result, t1, t2);
+		context.SetInstruction(IR.Compare64x32, ConditionCode.NotEqual, result, t1, t2);
 	}
 }
 
@@ -42,7 +42,7 @@ public sealed class Compare64x32GreaterThanZero : BaseTransform
 [Transform("IR.Optimizations.Auto.Rewrite")]
 public sealed class Compare64x32GreaterThanZero_v1 : BaseTransform
 {
-	public Compare64x32GreaterThanZero_v1() : base(Framework.IR.Compare64x32, TransformType.Auto | TransformType.Optimization)
+	public Compare64x32GreaterThanZero_v1() : base(IR.Compare64x32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -64,6 +64,6 @@ public sealed class Compare64x32GreaterThanZero_v1 : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2;
 
-		context.SetInstruction(Framework.IR.Compare64x32, ConditionCode.NotEqual, result, t2, t1);
+		context.SetInstruction(IR.Compare64x32, ConditionCode.NotEqual, result, t2, t1);
 	}
 }

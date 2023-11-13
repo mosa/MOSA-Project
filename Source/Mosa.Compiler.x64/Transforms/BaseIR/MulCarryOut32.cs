@@ -10,7 +10,7 @@ namespace Mosa.Compiler.x64.Transforms.BaseIR;
 [Transform("x64.BaseIR")]
 public sealed class MulCarryOut32 : BaseIRTransform
 {
-	public MulCarryOut32() : base(Framework.IR.MulCarryOut32, TransformType.Manual | TransformType.Transform)
+	public MulCarryOut32() : base(IR.MulCarryOut32, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

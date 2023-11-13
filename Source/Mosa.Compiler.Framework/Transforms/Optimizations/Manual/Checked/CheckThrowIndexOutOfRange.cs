@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Checked;
 
 public sealed class CheckThrowIndexOutOfRange : BaseTransform
 {
-	public CheckThrowIndexOutOfRange() : base(Framework.IR.CheckThrowIndexOutOfRange, TransformType.Manual | TransformType.Optimization, true)
+	public CheckThrowIndexOutOfRange() : base(IR.CheckThrowIndexOutOfRange, TransformType.Manual | TransformType.Optimization, true)
 	{
 	}
 
@@ -23,7 +23,7 @@ public sealed class CheckThrowIndexOutOfRange : BaseTransform
 		}
 		else
 		{
-			context.SetInstruction(Framework.IR.ThrowIndexOutOfRange);
+			context.SetInstruction(IR.ThrowIndexOutOfRange);
 		}
 	}
 }

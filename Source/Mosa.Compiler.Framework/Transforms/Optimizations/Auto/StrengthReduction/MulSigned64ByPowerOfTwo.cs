@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 [Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class MulSigned64ByPowerOfTwo : BaseTransform
 {
-	public MulSigned64ByPowerOfTwo() : base(Framework.IR.MulSigned64, TransformType.Auto | TransformType.Optimization)
+	public MulSigned64ByPowerOfTwo() : base(IR.MulSigned64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -40,7 +40,7 @@ public sealed class MulSigned64ByPowerOfTwo : BaseTransform
 
 		var e1 = Operand.CreateConstant(GetPowerOfTwo(To32(t2)));
 
-		context.SetInstruction(Framework.IR.ShiftLeft64, result, t1, e1);
+		context.SetInstruction(IR.ShiftLeft64, result, t1, e1);
 	}
 }
 
@@ -50,7 +50,7 @@ public sealed class MulSigned64ByPowerOfTwo : BaseTransform
 [Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class MulSigned64ByPowerOfTwo_v1 : BaseTransform
 {
-	public MulSigned64ByPowerOfTwo_v1() : base(Framework.IR.MulSigned64, TransformType.Auto | TransformType.Optimization)
+	public MulSigned64ByPowerOfTwo_v1() : base(IR.MulSigned64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -80,6 +80,6 @@ public sealed class MulSigned64ByPowerOfTwo_v1 : BaseTransform
 
 		var e1 = Operand.CreateConstant(GetPowerOfTwo(To32(t1)));
 
-		context.SetInstruction(Framework.IR.ShiftLeft64, result, t2, e1);
+		context.SetInstruction(IR.ShiftLeft64, result, t2, e1);
 	}
 }

@@ -10,7 +10,7 @@ namespace Mosa.Compiler.x64.Transforms.BaseIR;
 [Transform("x64.BaseIR")]
 public sealed class MulHu64 : BaseIRTransform
 {
-	public MulHu64() : base(Framework.IR.MulHu64, TransformType.Manual | TransformType.Transform, true)
+	public MulHu64() : base(IR.MulHu64, TransformType.Manual | TransformType.Transform, true)
 	{
 	}
 

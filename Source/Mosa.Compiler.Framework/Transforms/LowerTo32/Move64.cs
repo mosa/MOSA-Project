@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
 public sealed class Move64 : BaseLowerTo32Transform
 {
-	public Move64() : base(Framework.IR.Move64, TransformType.Manual | TransformType.Optimization)
+	public Move64() : base(IR.Move64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -16,8 +16,8 @@ public sealed class Move64 : BaseLowerTo32Transform
 		var resultLow = transform.VirtualRegisters.Allocate32();
 		var resultHigh = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction(Framework.IR.GetLow32, resultLow, operand1);
-		context.AppendInstruction(Framework.IR.GetHigh32, resultHigh, operand1);
-		context.AppendInstruction(Framework.IR.To64, result, resultLow, resultHigh);
+		context.SetInstruction(IR.GetLow32, resultLow, operand1);
+		context.AppendInstruction(IR.GetHigh32, resultHigh, operand1);
+		context.AppendInstruction(IR.To64, result, resultLow, resultHigh);
 	}
 }

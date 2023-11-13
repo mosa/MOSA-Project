@@ -10,7 +10,7 @@ namespace Mosa.Compiler.x86.Transforms.BaseIR;
 [Transform("x86.BaseIR")]
 public sealed class Call : BaseIRTransform
 {
-	public Call() : base(Framework.IR.Call, TransformType.Manual | TransformType.Transform)
+	public Call() : base(IR.Call, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

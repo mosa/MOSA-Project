@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Transforms.Compound;
 /// </summary>
 public sealed class LoadCompound : BaseCompoundTransform
 {
-	public LoadCompound() : base(Framework.IR.LoadCompound, TransformType.Manual | TransformType.Transform)
+	public LoadCompound() : base(IR.LoadCompound, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove;
 [Transform("IR.Optimizations.Auto.ConstantMove")]
 public sealed class And64 : BaseTransform
 {
-	public And64() : base(Framework.IR.And64, TransformType.Auto | TransformType.Optimization)
+	public And64() : base(IR.And64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -32,6 +32,6 @@ public sealed class And64 : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2;
 
-		context.SetInstruction(Framework.IR.And64, result, t2, t1);
+		context.SetInstruction(IR.And64, result, t2, t1);
 	}
 }

@@ -42,7 +42,7 @@ public class BuildIRInstructionFiles : BuildBaseTemplate
 		Lines.AppendLine();
 
 		Lines.AppendLine("/// </summary>");
-		Lines.AppendLine("/// <seealso cref=\"Mosa.Compiler.Framework.IR.BaseIRInstruction\" />");
+		Lines.AppendLine("/// <seealso cref=\"Mosa.Compiler.IR.BaseIRInstruction\" />");
 		Lines.AppendLine($"public sealed class {node.Name} : BaseIRInstruction");
 		Lines.AppendLine("{");
 		Lines.AppendLine("\tpublic " + node.Name + "()");

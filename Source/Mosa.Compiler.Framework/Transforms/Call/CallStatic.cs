@@ -9,7 +9,7 @@ namespace Mosa.Compiler.Framework.Transforms.Call;
 /// </summary>
 public sealed class CallStatic : BasePlugTransform
 {
-	public CallStatic() : base(Framework.IR.CallStatic, TransformType.Manual | TransformType.Transform)
+	public CallStatic() : base(IR.CallStatic, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

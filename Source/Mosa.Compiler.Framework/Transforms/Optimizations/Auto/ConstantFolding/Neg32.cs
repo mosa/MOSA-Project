@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 [Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class Neg32 : BaseTransform
 {
-	public Neg32() : base(Framework.IR.Neg32, TransformType.Auto | TransformType.Optimization)
+	public Neg32() : base(IR.Neg32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -32,6 +32,6 @@ public sealed class Neg32 : BaseTransform
 
 		var e1 = Operand.CreateConstant(To32(t1));
 
-		context.SetInstruction(Framework.IR.Move32, result, e1);
+		context.SetInstruction(IR.Move32, result, e1);
 	}
 }

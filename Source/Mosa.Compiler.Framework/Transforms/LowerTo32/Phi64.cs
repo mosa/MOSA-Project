@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
 public sealed class Phi64 : BaseLowerTo32Transform
 {
-	public Phi64() : base(Framework.IR.Phi64, TransformType.Manual | TransformType.Optimization)
+	public Phi64() : base(IR.Phi64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -26,7 +26,7 @@ public sealed class Phi64 : BaseLowerTo32Transform
 
 			var def = operand.Definitions[0];
 
-			if (def.Instruction != Framework.IR.To64)
+			if (def.Instruction != IR.To64)
 				return false;
 
 			if (!(def.Operand1.IsDefinedOnce || def.Operand1.IsConstant))
@@ -45,7 +45,7 @@ public sealed class Phi64 : BaseLowerTo32Transform
 
 		// Low
 		var low = transform.VirtualRegisters.Allocate32();
-		ctx.AppendInstruction(Framework.IR.Phi32, low);
+		ctx.AppendInstruction(IR.Phi32, low);
 		ctx.PhiBlocks = new List<BasicBlock>(context.PhiBlocks.Count);
 		ctx.OperandCount = context.OperandCount;
 
@@ -63,7 +63,7 @@ public sealed class Phi64 : BaseLowerTo32Transform
 
 		// High
 		var high = transform.VirtualRegisters.Allocate32();
-		ctx.AppendInstruction(Framework.IR.Phi32, high);
+		ctx.AppendInstruction(IR.Phi32, high);
 		ctx.PhiBlocks = new List<BasicBlock>(context.PhiBlocks.Count);
 		ctx.OperandCount = context.OperandCount;
 
@@ -84,7 +84,7 @@ public sealed class Phi64 : BaseLowerTo32Transform
 			ctx.GotoNext();
 		}
 
-		ctx.AppendInstruction(Framework.IR.To64, context.Result, low, high);
+		ctx.AppendInstruction(IR.To64, context.Result, low, high);
 
 		context.SetNop();
 	}

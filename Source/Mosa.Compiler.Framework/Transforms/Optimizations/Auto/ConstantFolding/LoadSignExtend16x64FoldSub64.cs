@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 [Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class LoadSignExtend16x64FoldSub64 : BaseTransform
 {
-	public LoadSignExtend16x64FoldSub64() : base(Framework.IR.LoadSignExtend16x64, TransformType.Auto | TransformType.Optimization)
+	public LoadSignExtend16x64FoldSub64() : base(IR.LoadSignExtend16x64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -22,7 +22,7 @@ public sealed class LoadSignExtend16x64FoldSub64 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != Framework.IR.Sub64)
+		if (context.Operand1.Definitions[0].Instruction != IR.Sub64)
 			return false;
 
 		if (!IsResolvedConstant(context.Operand2))
@@ -44,6 +44,6 @@ public sealed class LoadSignExtend16x64FoldSub64 : BaseTransform
 
 		var e1 = Operand.CreateConstant(Sub64(To64(t3), To64(t2)));
 
-		context.SetInstruction(Framework.IR.LoadSignExtend16x64, result, t1, e1);
+		context.SetInstruction(IR.LoadSignExtend16x64, result, t1, e1);
 	}
 }

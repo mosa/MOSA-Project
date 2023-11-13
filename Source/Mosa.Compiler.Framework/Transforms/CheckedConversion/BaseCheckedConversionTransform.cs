@@ -21,7 +21,7 @@ namespace Mosa.Compiler.Framework.Transforms.CheckedConversion
 
 			var symbol = Operand.CreateLabel(method, transform.Is32BitPlatform);
 
-			context.SetInstruction(Framework.IR.CallStatic, result, symbol, source);
+			context.SetInstruction(IR.CallStatic, result, symbol, source);
 
 			transform.MethodScanner.MethodInvoked(method, transform.Method);
 		}

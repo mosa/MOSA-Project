@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 [Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class SubManagedPointerSame : BaseTransform
 {
-	public SubManagedPointerSame() : base(Framework.IR.SubManagedPointer, TransformType.Auto | TransformType.Optimization)
+	public SubManagedPointerSame() : base(IR.SubManagedPointer, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -30,6 +30,6 @@ public sealed class SubManagedPointerSame : BaseTransform
 
 		var e1 = Operand.CreateConstant(To32(0));
 
-		context.SetInstruction(Framework.IR.MoveManagedPointer, result, e1);
+		context.SetInstruction(IR.MoveManagedPointer, result, e1);
 	}
 }

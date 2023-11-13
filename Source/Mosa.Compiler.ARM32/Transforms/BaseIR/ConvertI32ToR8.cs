@@ -10,7 +10,7 @@ namespace Mosa.Compiler.ARM32.Transforms.BaseIR;
 [Transform("ARM32.BaseIR")]
 public sealed class ConvertI32ToR8 : BaseIRTransform
 {
-	public ConvertI32ToR8() : base(Framework.IR.ConvertI32ToR8, TransformType.Manual | TransformType.Transform)
+	public ConvertI32ToR8() : base(IR.ConvertI32ToR8, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

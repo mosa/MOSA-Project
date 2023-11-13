@@ -4,13 +4,13 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Memory;
 
 public sealed class DoubleStoreParamR4 : BaseTransform
 {
-	public DoubleStoreParamR4() : base(Framework.IR.StoreParamR4, TransformType.Manual | TransformType.Optimization)
+	public DoubleStoreParamR4() : base(IR.StoreParamR4, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
 	public override bool Match(Context context, Transform transform)
 	{
-		var next = GetNextNodeUntil(context, Framework.IR.StoreParamR4, transform.Window);
+		var next = GetNextNodeUntil(context, IR.StoreParamR4, transform.Window);
 
 		if (next == null)
 			return false;

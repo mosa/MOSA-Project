@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 [Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class GetHigh32To64 : BaseTransform
 {
-	public GetHigh32To64() : base(Framework.IR.GetHigh32, TransformType.Auto | TransformType.Optimization)
+	public GetHigh32To64() : base(IR.GetHigh32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -24,7 +24,7 @@ public sealed class GetHigh32To64 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != Framework.IR.To64)
+		if (context.Operand1.Definitions[0].Instruction != IR.To64)
 			return false;
 
 		return true;
@@ -36,6 +36,6 @@ public sealed class GetHigh32To64 : BaseTransform
 
 		var t1 = context.Operand1.Definitions[0].Operand2;
 
-		context.SetInstruction(Framework.IR.Move32, result, t1);
+		context.SetInstruction(IR.Move32, result, t1);
 	}
 }

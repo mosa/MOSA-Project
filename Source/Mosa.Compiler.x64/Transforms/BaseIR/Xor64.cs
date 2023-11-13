@@ -10,7 +10,7 @@ namespace Mosa.Compiler.x64.Transforms.BaseIR;
 [Transform("x64.BaseIR")]
 public sealed class Xor64 : BaseIRTransform
 {
-	public Xor64() : base(Framework.IR.Xor64, TransformType.Manual | TransformType.Transform)
+	public Xor64() : base(IR.Xor64, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

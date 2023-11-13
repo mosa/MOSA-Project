@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Algebraic;
 [Transform("IR.Optimizations.Auto.Algebraic")]
 public sealed class Signed32AAPlusBBMinus2AB : BaseTransform
 {
-	public Signed32AAPlusBBMinus2AB() : base(Framework.IR.Sub32, TransformType.Auto | TransformType.Optimization)
+	public Signed32AAPlusBBMinus2AB() : base(IR.Sub32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -25,7 +25,7 @@ public sealed class Signed32AAPlusBBMinus2AB : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != Framework.IR.Add32)
+		if (context.Operand1.Definitions[0].Instruction != IR.Add32)
 			return false;
 
 		if (!context.Operand1.Definitions[0].Operand1.IsVirtualRegister)
@@ -37,19 +37,19 @@ public sealed class Signed32AAPlusBBMinus2AB : BaseTransform
 		if (!context.Operand1.Definitions[0].Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != Framework.IR.MulSigned32)
+		if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IR.MulSigned32)
 			return false;
 
 		if (!context.Operand1.Definitions[0].Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != Framework.IR.MulSigned32)
+		if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IR.MulSigned32)
 			return false;
 
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != Framework.IR.ShiftLeft32)
+		if (context.Operand2.Definitions[0].Instruction != IR.ShiftLeft32)
 			return false;
 
 		if (!context.Operand2.Definitions[0].Operand1.IsVirtualRegister)
@@ -64,7 +64,7 @@ public sealed class Signed32AAPlusBBMinus2AB : BaseTransform
 		if (!context.Operand2.Definitions[0].Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != Framework.IR.MulSigned32)
+		if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IR.MulSigned32)
 			return false;
 
 		if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2))
@@ -92,9 +92,9 @@ public sealed class Signed32AAPlusBBMinus2AB : BaseTransform
 		var v1 = transform.VirtualRegisters.Allocate32();
 		var v2 = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction(Framework.IR.Sub32, v1, t1, t2);
-		context.AppendInstruction(Framework.IR.Sub32, v2, t1, t2);
-		context.AppendInstruction(Framework.IR.MulSigned32, result, v2, v1);
+		context.SetInstruction(IR.Sub32, v1, t1, t2);
+		context.AppendInstruction(IR.Sub32, v2, t1, t2);
+		context.AppendInstruction(IR.MulSigned32, result, v2, v1);
 	}
 }
 
@@ -104,7 +104,7 @@ public sealed class Signed32AAPlusBBMinus2AB : BaseTransform
 [Transform("IR.Optimizations.Auto.Algebraic")]
 public sealed class Signed32AAPlusBBMinus2AB_v1 : BaseTransform
 {
-	public Signed32AAPlusBBMinus2AB_v1() : base(Framework.IR.Sub32, TransformType.Auto | TransformType.Optimization)
+	public Signed32AAPlusBBMinus2AB_v1() : base(IR.Sub32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -119,7 +119,7 @@ public sealed class Signed32AAPlusBBMinus2AB_v1 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != Framework.IR.Add32)
+		if (context.Operand1.Definitions[0].Instruction != IR.Add32)
 			return false;
 
 		if (!context.Operand1.Definitions[0].Operand1.IsVirtualRegister)
@@ -131,19 +131,19 @@ public sealed class Signed32AAPlusBBMinus2AB_v1 : BaseTransform
 		if (!context.Operand1.Definitions[0].Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != Framework.IR.MulSigned32)
+		if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IR.MulSigned32)
 			return false;
 
 		if (!context.Operand1.Definitions[0].Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != Framework.IR.MulSigned32)
+		if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IR.MulSigned32)
 			return false;
 
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != Framework.IR.ShiftLeft32)
+		if (context.Operand2.Definitions[0].Instruction != IR.ShiftLeft32)
 			return false;
 
 		if (!context.Operand2.Definitions[0].Operand1.IsVirtualRegister)
@@ -158,7 +158,7 @@ public sealed class Signed32AAPlusBBMinus2AB_v1 : BaseTransform
 		if (!context.Operand2.Definitions[0].Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != Framework.IR.MulSigned32)
+		if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IR.MulSigned32)
 			return false;
 
 		if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2))
@@ -186,9 +186,9 @@ public sealed class Signed32AAPlusBBMinus2AB_v1 : BaseTransform
 		var v1 = transform.VirtualRegisters.Allocate32();
 		var v2 = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction(Framework.IR.Sub32, v1, t1, t2);
-		context.AppendInstruction(Framework.IR.Sub32, v2, t1, t2);
-		context.AppendInstruction(Framework.IR.MulSigned32, result, v2, v1);
+		context.SetInstruction(IR.Sub32, v1, t1, t2);
+		context.AppendInstruction(IR.Sub32, v2, t1, t2);
+		context.AppendInstruction(IR.MulSigned32, result, v2, v1);
 	}
 }
 
@@ -198,7 +198,7 @@ public sealed class Signed32AAPlusBBMinus2AB_v1 : BaseTransform
 [Transform("IR.Optimizations.Auto.Algebraic")]
 public sealed class Signed32AAPlusBBMinus2AB_v2 : BaseTransform
 {
-	public Signed32AAPlusBBMinus2AB_v2() : base(Framework.IR.Sub32, TransformType.Auto | TransformType.Optimization)
+	public Signed32AAPlusBBMinus2AB_v2() : base(IR.Sub32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -213,7 +213,7 @@ public sealed class Signed32AAPlusBBMinus2AB_v2 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != Framework.IR.Add32)
+		if (context.Operand1.Definitions[0].Instruction != IR.Add32)
 			return false;
 
 		if (!context.Operand1.Definitions[0].Operand1.IsVirtualRegister)
@@ -225,19 +225,19 @@ public sealed class Signed32AAPlusBBMinus2AB_v2 : BaseTransform
 		if (!context.Operand1.Definitions[0].Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != Framework.IR.MulSigned32)
+		if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IR.MulSigned32)
 			return false;
 
 		if (!context.Operand1.Definitions[0].Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != Framework.IR.MulSigned32)
+		if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IR.MulSigned32)
 			return false;
 
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != Framework.IR.ShiftLeft32)
+		if (context.Operand2.Definitions[0].Instruction != IR.ShiftLeft32)
 			return false;
 
 		if (!context.Operand2.Definitions[0].Operand1.IsVirtualRegister)
@@ -252,7 +252,7 @@ public sealed class Signed32AAPlusBBMinus2AB_v2 : BaseTransform
 		if (!context.Operand2.Definitions[0].Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != Framework.IR.MulSigned32)
+		if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IR.MulSigned32)
 			return false;
 
 		if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2))
@@ -280,9 +280,9 @@ public sealed class Signed32AAPlusBBMinus2AB_v2 : BaseTransform
 		var v1 = transform.VirtualRegisters.Allocate32();
 		var v2 = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction(Framework.IR.Sub32, v1, t2, t1);
-		context.AppendInstruction(Framework.IR.Sub32, v2, t2, t1);
-		context.AppendInstruction(Framework.IR.MulSigned32, result, v2, v1);
+		context.SetInstruction(IR.Sub32, v1, t2, t1);
+		context.AppendInstruction(IR.Sub32, v2, t2, t1);
+		context.AppendInstruction(IR.MulSigned32, result, v2, v1);
 	}
 }
 
@@ -292,7 +292,7 @@ public sealed class Signed32AAPlusBBMinus2AB_v2 : BaseTransform
 [Transform("IR.Optimizations.Auto.Algebraic")]
 public sealed class Signed32AAPlusBBMinus2AB_v3 : BaseTransform
 {
-	public Signed32AAPlusBBMinus2AB_v3() : base(Framework.IR.Sub32, TransformType.Auto | TransformType.Optimization)
+	public Signed32AAPlusBBMinus2AB_v3() : base(IR.Sub32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -307,7 +307,7 @@ public sealed class Signed32AAPlusBBMinus2AB_v3 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != Framework.IR.Add32)
+		if (context.Operand1.Definitions[0].Instruction != IR.Add32)
 			return false;
 
 		if (!context.Operand1.Definitions[0].Operand1.IsVirtualRegister)
@@ -319,19 +319,19 @@ public sealed class Signed32AAPlusBBMinus2AB_v3 : BaseTransform
 		if (!context.Operand1.Definitions[0].Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != Framework.IR.MulSigned32)
+		if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IR.MulSigned32)
 			return false;
 
 		if (!context.Operand1.Definitions[0].Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != Framework.IR.MulSigned32)
+		if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IR.MulSigned32)
 			return false;
 
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != Framework.IR.ShiftLeft32)
+		if (context.Operand2.Definitions[0].Instruction != IR.ShiftLeft32)
 			return false;
 
 		if (!context.Operand2.Definitions[0].Operand1.IsVirtualRegister)
@@ -346,7 +346,7 @@ public sealed class Signed32AAPlusBBMinus2AB_v3 : BaseTransform
 		if (!context.Operand2.Definitions[0].Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != Framework.IR.MulSigned32)
+		if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IR.MulSigned32)
 			return false;
 
 		if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2))
@@ -374,8 +374,8 @@ public sealed class Signed32AAPlusBBMinus2AB_v3 : BaseTransform
 		var v1 = transform.VirtualRegisters.Allocate32();
 		var v2 = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction(Framework.IR.Sub32, v1, t2, t1);
-		context.AppendInstruction(Framework.IR.Sub32, v2, t2, t1);
-		context.AppendInstruction(Framework.IR.MulSigned32, result, v2, v1);
+		context.SetInstruction(IR.Sub32, v1, t2, t1);
+		context.AppendInstruction(IR.Sub32, v2, t2, t1);
+		context.AppendInstruction(IR.MulSigned32, result, v2, v1);
 	}
 }

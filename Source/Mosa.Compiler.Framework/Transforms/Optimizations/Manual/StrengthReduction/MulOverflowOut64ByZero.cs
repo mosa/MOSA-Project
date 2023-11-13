@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.StrengthReduct
 /// </summary>
 public sealed class MulOverflowOut64ByZero : BaseTransform
 {
-	public MulOverflowOut64ByZero() : base(Framework.IR.MulOverflowOut64, TransformType.Manual | TransformType.Optimization, true)
+	public MulOverflowOut64ByZero() : base(IR.MulOverflowOut64, TransformType.Manual | TransformType.Optimization, true)
 	{
 	}
 
@@ -29,7 +29,7 @@ public sealed class MulOverflowOut64ByZero : BaseTransform
 		var result = context.Result;
 		var result2 = context.Result2;
 
-		context.SetInstruction(Framework.IR.Move64, result, Operand.Constant64_0);
-		context.AppendInstruction(Framework.IR.Move64, result2, Operand.Constant64_1);
+		context.SetInstruction(IR.Move64, result, Operand.Constant64_0);
+		context.AppendInstruction(IR.Move64, result2, Operand.Constant64_1);
 	}
 }

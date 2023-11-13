@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.LowerTo32;
 [Transform("IR.Optimizations.Auto.LowerTo32")]
 public sealed class Or32Truncate64x32Truncate64x32 : BaseTransform
 {
-	public Or32Truncate64x32Truncate64x32() : base(Framework.IR.Or32, TransformType.Auto | TransformType.Optimization)
+	public Or32Truncate64x32Truncate64x32() : base(IR.Or32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -31,13 +31,13 @@ public sealed class Or32Truncate64x32Truncate64x32 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != Framework.IR.Truncate64x32)
+		if (context.Operand1.Definitions[0].Instruction != IR.Truncate64x32)
 			return false;
 
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != Framework.IR.Truncate64x32)
+		if (context.Operand2.Definitions[0].Instruction != IR.Truncate64x32)
 			return false;
 
 		return true;
@@ -52,7 +52,7 @@ public sealed class Or32Truncate64x32Truncate64x32 : BaseTransform
 
 		var v1 = transform.VirtualRegisters.Allocate64();
 
-		context.SetInstruction(Framework.IR.Or64, v1, t1, t2);
-		context.AppendInstruction(Framework.IR.GetLow32, result, v1);
+		context.SetInstruction(IR.Or64, v1, t1, t2);
+		context.AppendInstruction(IR.GetLow32, result, v1);
 	}
 }

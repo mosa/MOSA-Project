@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.ConstantMove;
 
 public sealed class Compare64x32 : BaseTransform
 {
-	public Compare64x32() : base(Framework.IR.Compare64x32, TransformType.Manual | TransformType.Optimization)
+	public Compare64x32() : base(IR.Compare64x32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -21,6 +21,6 @@ public sealed class Compare64x32 : BaseTransform
 
 	public override void Transform(Context context, Transform transform)
 	{
-		context.SetInstruction(Framework.IR.Compare64x32, context.ConditionCode.GetReverse(), context.Result, context.Operand2, context.Operand1);
+		context.SetInstruction(IR.Compare64x32, context.ConditionCode.GetReverse(), context.Result, context.Operand2, context.Operand1);
 	}
 }

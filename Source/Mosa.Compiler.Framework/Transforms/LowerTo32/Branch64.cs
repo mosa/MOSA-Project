@@ -6,7 +6,7 @@ public sealed class Branch64 : BaseLowerTo32Transform
 {
 	private readonly Branch64Extends branch64Extends = new Branch64Extends(); // BUG?
 
-	public Branch64() : base(Framework.IR.Branch64, TransformType.Manual | TransformType.Optimization)
+	public Branch64() : base(IR.Branch64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -46,27 +46,27 @@ public sealed class Branch64 : BaseLowerTo32Transform
 		var op1Low = transform.VirtualRegisters.Allocate32();
 		var op1High = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction(Framework.IR.GetLow32, op0Low, operand1);
-		context.AppendInstruction(Framework.IR.GetHigh32, op0High, operand1);
-		context.AppendInstruction(Framework.IR.GetLow32, op1Low, operand2);
-		context.AppendInstruction(Framework.IR.GetHigh32, op1High, operand2);
+		context.SetInstruction(IR.GetLow32, op0Low, operand1);
+		context.AppendInstruction(IR.GetHigh32, op0High, operand1);
+		context.AppendInstruction(IR.GetLow32, op1Low, operand2);
+		context.AppendInstruction(IR.GetHigh32, op1High, operand2);
 
 		// Compare high (equal)
-		context.AppendInstruction(Framework.IR.Branch32, ConditionCode.Equal, null, op0High, op1High, newBlocks[1].Block);
-		context.AppendInstruction(Framework.IR.Jmp, newBlocks[0].Block);
+		context.AppendInstruction(IR.Branch32, ConditionCode.Equal, null, op0High, op1High, newBlocks[1].Block);
+		context.AppendInstruction(IR.Jmp, newBlocks[0].Block);
 
 		// Compare high
-		newBlocks[0].AppendInstruction(Framework.IR.Branch32, branch, null, op0High, op1High, newBlocks[3].Block);
-		newBlocks[0].AppendInstruction(Framework.IR.Jmp, newBlocks[2].Block);
+		newBlocks[0].AppendInstruction(IR.Branch32, branch, null, op0High, op1High, newBlocks[3].Block);
+		newBlocks[0].AppendInstruction(IR.Jmp, newBlocks[2].Block);
 
 		// Compare low
-		newBlocks[1].AppendInstruction(Framework.IR.Branch32, branchUnsigned, null, op0Low, op1Low, newBlocks[3].Block);
-		newBlocks[1].AppendInstruction(Framework.IR.Jmp, newBlocks[2].Block);
+		newBlocks[1].AppendInstruction(IR.Branch32, branchUnsigned, null, op0Low, op1Low, newBlocks[3].Block);
+		newBlocks[1].AppendInstruction(IR.Jmp, newBlocks[2].Block);
 
 		// No branch
-		newBlocks[2].AppendInstruction(Framework.IR.Jmp, nextBlock.Block);
+		newBlocks[2].AppendInstruction(IR.Jmp, nextBlock.Block);
 
 		// Branch
-		newBlocks[3].AppendInstruction(Framework.IR.Jmp, target);
+		newBlocks[3].AppendInstruction(IR.Jmp, target);
 	}
 }

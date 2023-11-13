@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Checked;
 
 public sealed class CheckThrowOverflow : BaseTransform
 {
-	public CheckThrowOverflow() : base(Framework.IR.CheckThrowOverflow, TransformType.Manual | TransformType.Optimization, true)
+	public CheckThrowOverflow() : base(IR.CheckThrowOverflow, TransformType.Manual | TransformType.Optimization, true)
 	{
 	}
 
@@ -23,7 +23,7 @@ public sealed class CheckThrowOverflow : BaseTransform
 		}
 		else
 		{
-			context.SetInstruction(Framework.IR.ThrowOverflow);
+			context.SetInstruction(IR.ThrowOverflow);
 		}
 	}
 }

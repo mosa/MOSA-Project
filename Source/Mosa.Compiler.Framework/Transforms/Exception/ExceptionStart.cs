@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Transforms.Exception;
 /// </summary>
 public sealed class ExceptionStart : BaseExceptionTransform
 {
-	public ExceptionStart() : base(Framework.IR.ExceptionStart, TransformType.Manual | TransformType.Transform)
+	public ExceptionStart() : base(IR.ExceptionStart, TransformType.Manual | TransformType.Transform)
 	{
 	}
 
@@ -15,8 +15,8 @@ public sealed class ExceptionStart : BaseExceptionTransform
 	{
 		var exceptionVirtualRegister = context.Result;
 
-		context.SetInstruction(Framework.IR.KillAll);
-		context.AppendInstruction(Framework.IR.Gen, transform.ExceptionRegister);
-		context.AppendInstruction(Framework.IR.MoveObject, exceptionVirtualRegister, transform.ExceptionRegister);
+		context.SetInstruction(IR.KillAll);
+		context.AppendInstruction(IR.Gen, transform.ExceptionRegister);
+		context.AppendInstruction(IR.MoveObject, exceptionVirtualRegister, transform.ExceptionRegister);
 	}
 }

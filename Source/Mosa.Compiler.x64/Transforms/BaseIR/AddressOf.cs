@@ -11,7 +11,7 @@ namespace Mosa.Compiler.x64.Transforms.BaseIR;
 [Transform("x64.BaseIR")]
 public sealed class AddressOf : BaseIRTransform
 {
-	public AddressOf() : base(Framework.IR.AddressOf, TransformType.Manual | TransformType.Transform)
+	public AddressOf() : base(IR.AddressOf, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

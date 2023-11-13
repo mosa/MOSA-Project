@@ -9,7 +9,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.StaticLoad;
 /// </summary>
 public sealed class Load64 : BaseTransform
 {
-	public Load64() : base(Framework.IR.Load64, TransformType.Manual | TransformType.Transform)
+	public Load64() : base(IR.Load64, TransformType.Manual | TransformType.Transform)
 	{
 	}
 
@@ -30,6 +30,6 @@ public sealed class Load64 : BaseTransform
 
 	public override void Transform(Context context, Transform transform)
 	{
-		context.SetInstruction(Framework.IR.Move64, context.Result, Operand.Constant64_0);
+		context.SetInstruction(IR.Move64, context.Result, Operand.Constant64_0);
 	}
 }

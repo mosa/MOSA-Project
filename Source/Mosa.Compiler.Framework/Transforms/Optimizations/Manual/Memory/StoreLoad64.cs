@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Memory;
 
 public sealed class StoreLoad64 : BaseTransform
 {
-	public StoreLoad64() : base(Framework.IR.Store64, TransformType.Manual | TransformType.Optimization)
+	public StoreLoad64() : base(IR.Store64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -16,7 +16,7 @@ public sealed class StoreLoad64 : BaseTransform
 		if (!context.Operand2.IsResolvedConstant)
 			return false;
 
-		var previous = GetPreviousNodeUntil(context, Framework.IR.Load64, transform.Window, context.Operand3, context.Operand1);
+		var previous = GetPreviousNodeUntil(context, IR.Load64, transform.Window, context.Operand3, context.Operand1);
 
 		if (previous == null)
 			return false;

@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 [Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class ConvertI64ToR8 : BaseTransform
 {
-	public ConvertI64ToR8() : base(Framework.IR.ConvertI64ToR8, TransformType.Auto | TransformType.Optimization)
+	public ConvertI64ToR8() : base(IR.ConvertI64ToR8, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -32,6 +32,6 @@ public sealed class ConvertI64ToR8 : BaseTransform
 
 		var e1 = Operand.CreateConstant(ToR8(ToSigned64(t1)));
 
-		context.SetInstruction(Framework.IR.MoveR8, result, e1);
+		context.SetInstruction(IR.MoveR8, result, e1);
 	}
 }

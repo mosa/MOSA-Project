@@ -10,7 +10,7 @@ namespace Mosa.Compiler.ARM32.Transforms.BaseIR;
 [Transform("ARM32.BaseIR")]
 public sealed class SignExtend16x32 : BaseIRTransform
 {
-	public SignExtend16x32() : base(Framework.IR.SignExtend16x32, TransformType.Manual | TransformType.Transform)
+	public SignExtend16x32() : base(IR.SignExtend16x32, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

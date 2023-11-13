@@ -9,7 +9,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.ConstantFoldin
 /// </summary>
 public sealed class MulOverflowOut32 : BaseTransform
 {
-	public MulOverflowOut32() : base(Framework.IR.MulOverflowOut32, TransformType.Auto | TransformType.Optimization, true)
+	public MulOverflowOut32() : base(IR.MulOverflowOut32, TransformType.Auto | TransformType.Optimization, true)
 	{
 	}
 
@@ -39,7 +39,7 @@ public sealed class MulOverflowOut32 : BaseTransform
 
 		var e1 = Operand.CreateConstant(MulSigned32(ToSigned32(t1), ToSigned32(t2)));
 
-		context.SetInstruction(Framework.IR.Move32, result, e1);
-		context.AppendInstruction(Framework.IR.Move32, result2, Operand.Constant32_1);
+		context.SetInstruction(IR.Move32, result, e1);
+		context.AppendInstruction(IR.Move32, result2, Operand.Constant32_1);
 	}
 }

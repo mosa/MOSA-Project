@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
 public sealed class StoreParam64 : BaseLowerTo32Transform
 {
-	public StoreParam64() : base(Framework.IR.StoreParam64, TransformType.Manual | TransformType.Optimization)
+	public StoreParam64() : base(IR.StoreParam64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -18,10 +18,10 @@ public sealed class StoreParam64 : BaseLowerTo32Transform
 
 		transform.SplitOperand(offset, out Operand op1Low, out Operand op1High);
 
-		context.SetInstruction(Framework.IR.GetLow32, valueLow, value);
-		context.AppendInstruction(Framework.IR.GetHigh32, valueHigh, value);
+		context.SetInstruction(IR.GetLow32, valueLow, value);
+		context.AppendInstruction(IR.GetHigh32, valueHigh, value);
 
-		context.AppendInstruction(Framework.IR.StoreParam32, null, op1Low, valueLow);
-		context.AppendInstruction(Framework.IR.StoreParam32, null, op1High, valueHigh);
+		context.AppendInstruction(IR.StoreParam32, null, op1Low, valueLow);
+		context.AppendInstruction(IR.StoreParam32, null, op1High, valueHigh);
 	}
 }

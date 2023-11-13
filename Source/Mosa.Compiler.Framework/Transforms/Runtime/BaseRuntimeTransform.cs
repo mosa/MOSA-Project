@@ -30,7 +30,7 @@ namespace Mosa.Compiler.Framework.Transforms.Runtime
 			var method = GetVMCallMethod(transform, vmcall);
 			var symbol = Operand.CreateLabel(method, transform.Is32BitPlatform);
 
-			context.SetInstruction(Framework.IR.CallStatic, result, symbol, operands);
+			context.SetInstruction(IR.CallStatic, result, symbol, operands);
 		}
 
 		#endregion Helpers

@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 [Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class Or32 : BaseTransform
 {
-	public Or32() : base(Framework.IR.Or32, TransformType.Auto | TransformType.Optimization)
+	public Or32() : base(IR.Or32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -36,6 +36,6 @@ public sealed class Or32 : BaseTransform
 
 		var e1 = Operand.CreateConstant(Or32(To32(t1), To32(t2)));
 
-		context.SetInstruction(Framework.IR.Move32, result, e1);
+		context.SetInstruction(IR.Move32, result, e1);
 	}
 }

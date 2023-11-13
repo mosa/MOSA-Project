@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
 public sealed class Branch64Extends : BaseLowerTo32Transform
 {
-	public Branch64Extends() : base(Framework.IR.Branch64, TransformType.Manual | TransformType.Optimization)
+	public Branch64Extends() : base(IR.Branch64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -22,13 +22,13 @@ public sealed class Branch64Extends : BaseLowerTo32Transform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (!(context.Operand1.Definitions[0].Instruction == Framework.IR.ZeroExtend32x64 || context.Operand1.Definitions[0].Instruction == Framework.IR.SignExtend32x64))
+		if (!(context.Operand1.Definitions[0].Instruction == IR.ZeroExtend32x64 || context.Operand1.Definitions[0].Instruction == IR.SignExtend32x64))
 			return false;
 
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (!(context.Operand2.Definitions[0].Instruction == Framework.IR.ZeroExtend32x64 || context.Operand2.Definitions[0].Instruction == Framework.IR.SignExtend32x64))
+		if (!(context.Operand2.Definitions[0].Instruction == IR.ZeroExtend32x64 || context.Operand2.Definitions[0].Instruction == IR.SignExtend32x64))
 			return false;
 
 		return true;
@@ -41,6 +41,6 @@ public sealed class Branch64Extends : BaseLowerTo32Transform
 		var conditionCode = context.ConditionCode;
 		var target = context.BranchTargets[0];
 
-		context.SetInstruction(Framework.IR.Branch32, conditionCode, null, t1, t2, target);
+		context.SetInstruction(IR.Branch32, conditionCode, null, t1, t2, target);
 	}
 }

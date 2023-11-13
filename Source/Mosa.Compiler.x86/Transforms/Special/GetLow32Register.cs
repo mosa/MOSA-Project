@@ -7,7 +7,7 @@ namespace Mosa.Compiler.x86.Transforms.Special;
 [Transform("x86.Special")]
 public sealed class GetLow32Register : BaseTransform
 {
-	public GetLow32Register() : base(Framework.IR.GetLow32, TransformType.Manual | TransformType.Optimization)
+	public GetLow32Register() : base(IR.GetLow32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -30,6 +30,6 @@ public sealed class GetLow32Register : BaseTransform
 
 	public override void Transform(Context context, Transform transform)
 	{
-		context.SetInstruction(Framework.IR.Move32, context.Result, context.Operand1);
+		context.SetInstruction(IR.Move32, context.Result, context.Operand1);
 	}
 }

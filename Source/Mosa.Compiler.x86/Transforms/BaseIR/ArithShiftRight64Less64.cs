@@ -10,7 +10,7 @@ namespace Mosa.Compiler.x86.Transforms.BaseIR;
 [Transform("x86.BaseIR")]
 public sealed class ArithShiftRight64Less64 : BaseIRTransform
 {
-	public ArithShiftRight64Less64() : base(Framework.IR.ArithShiftRight64, TransformType.Manual | TransformType.Transform)
+	public ArithShiftRight64Less64() : base(IR.ArithShiftRight64, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

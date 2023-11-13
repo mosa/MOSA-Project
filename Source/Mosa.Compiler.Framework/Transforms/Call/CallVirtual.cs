@@ -9,7 +9,7 @@ namespace Mosa.Compiler.Framework.Transforms.Call;
 /// </summary>
 public sealed class CallVirtual : BasePlugTransform
 {
-	public CallVirtual() : base(Framework.IR.CallVirtual, TransformType.Manual | TransformType.Transform)
+	public CallVirtual() : base(IR.CallVirtual, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

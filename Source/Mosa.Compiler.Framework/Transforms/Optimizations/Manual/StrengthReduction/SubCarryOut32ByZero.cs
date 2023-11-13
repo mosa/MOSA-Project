@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.StrengthReduct
 /// </summary>
 public sealed class SubCarryOut32ByZero : BaseTransform
 {
-	public SubCarryOut32ByZero() : base(Framework.IR.SubCarryOut32, TransformType.Manual | TransformType.Optimization, true)
+	public SubCarryOut32ByZero() : base(IR.SubCarryOut32, TransformType.Manual | TransformType.Optimization, true)
 	{
 	}
 
@@ -30,7 +30,7 @@ public sealed class SubCarryOut32ByZero : BaseTransform
 		var result2 = context.Result2;
 		var operand1 = context.Operand1;
 
-		context.SetInstruction(Framework.IR.Move32, result, operand1);
-		context.AppendInstruction(Framework.IR.Move32, result2, Operand.Constant32_0);
+		context.SetInstruction(IR.Move32, result, operand1);
+		context.AppendInstruction(IR.Move32, result2, Operand.Constant32_0);
 	}
 }
