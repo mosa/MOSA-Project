@@ -19,7 +19,7 @@ public static class Program
 
 		new BuildIRInstructionFiles(
 			Path.Combine(dataPath, @"IR-Instructions.json"),
-			Path.Combine(targetPath, @"Mosa.Compiler.Framework\IR\")
+			Path.Combine(targetPath, @"Mosa.Compiler.Framework\Instructions\")
 		).Execute();
 
 		new BuildTransformations(
