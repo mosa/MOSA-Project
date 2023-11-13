@@ -10,7 +10,7 @@ namespace Mosa.Compiler.ARM32.Transforms.RuntimeCall;
 [Transform("ARM32.RuntimeCall")]
 public sealed class DivSigned64 : BaseTransform
 {
-	public DivSigned64() : base(IRInstruction.DivSigned64, TransformType.Manual | TransformType.Transform)
+	public DivSigned64() : base(Framework.IR.DivSigned64, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

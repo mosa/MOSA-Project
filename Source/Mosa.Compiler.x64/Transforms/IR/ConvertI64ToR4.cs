@@ -10,7 +10,7 @@ namespace Mosa.Compiler.x64.Transforms.IR;
 [Transform("x64.IR")]
 public sealed class ConvertI64ToR4 : BaseIRTransform
 {
-	public ConvertI64ToR4() : base(IRInstruction.ConvertI64ToR4, TransformType.Manual | TransformType.Transform)
+	public ConvertI64ToR4() : base(Framework.IR.ConvertI64ToR4, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

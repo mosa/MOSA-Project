@@ -8,7 +8,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.BitValue;
 [Transform("IR.Optimizations.Manual.BitVaule")]
 public sealed class Compare64x64BitValue : BaseTransform
 {
-	public Compare64x64BitValue() : base(IRInstruction.Compare64x64, TransformType.Manual | TransformType.Optimization)
+	public Compare64x64BitValue() : base(Framework.IR.Compare64x64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -32,6 +32,6 @@ public sealed class Compare64x64BitValue : BaseTransform
 
 		var constant = Operand.CreateConstant64(value.Value ? 1 : 0);
 
-		context.SetInstruction(IRInstruction.Move64, result, constant);
+		context.SetInstruction(Framework.IR.Move64, result, constant);
 	}
 }

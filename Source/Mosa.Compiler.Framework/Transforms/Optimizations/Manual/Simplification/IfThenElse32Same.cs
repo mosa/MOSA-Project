@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Simplification
 
 public sealed class IfThenElse32Same : BaseTransform
 {
-	public IfThenElse32Same() : base(IRInstruction.IfThenElse32, TransformType.Manual | TransformType.Optimization)
+	public IfThenElse32Same() : base(Framework.IR.IfThenElse32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -15,6 +15,6 @@ public sealed class IfThenElse32Same : BaseTransform
 
 	public override void Transform(Context context, Transform transform)
 	{
-		context.SetInstruction(IRInstruction.Move32, context.Result, context.Operand1);
+		context.SetInstruction(Framework.IR.Move32, context.Result, context.Operand1);
 	}
 }

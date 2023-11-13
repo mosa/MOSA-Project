@@ -4,12 +4,12 @@ namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
 public sealed class Truncate64x32 : BaseLowerTo32Transform
 {
-	public Truncate64x32() : base(IRInstruction.Truncate64x32, TransformType.Manual | TransformType.Optimization)
+	public Truncate64x32() : base(Framework.IR.Truncate64x32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
 	public override void Transform(Context context, Transform transform)
 	{
-		context.SetInstruction(IRInstruction.GetLow32, context.Result, context.Operand1);
+		context.SetInstruction(Framework.IR.GetLow32, context.Result, context.Operand1);
 	}
 }

@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 [Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class Sub32MultipleWithCommon : BaseTransform
 {
-	public Sub32MultipleWithCommon() : base(IRInstruction.Sub32, TransformType.Auto | TransformType.Optimization)
+	public Sub32MultipleWithCommon() : base(Framework.IR.Sub32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -25,13 +25,13 @@ public sealed class Sub32MultipleWithCommon : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+		if (context.Operand1.Definitions[0].Instruction != Framework.IR.MulUnsigned32)
 			return false;
 
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+		if (context.Operand2.Definitions[0].Instruction != Framework.IR.MulUnsigned32)
 			return false;
 
 		if (!AreSame(context.Operand1.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand1))
@@ -50,8 +50,8 @@ public sealed class Sub32MultipleWithCommon : BaseTransform
 
 		var v1 = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction(IRInstruction.Sub32, v1, t2, t3);
-		context.AppendInstruction(IRInstruction.MulUnsigned32, result, t1, v1);
+		context.SetInstruction(Framework.IR.Sub32, v1, t2, t3);
+		context.AppendInstruction(Framework.IR.MulUnsigned32, result, t1, v1);
 	}
 }
 
@@ -61,7 +61,7 @@ public sealed class Sub32MultipleWithCommon : BaseTransform
 [Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class Sub32MultipleWithCommon_v1 : BaseTransform
 {
-	public Sub32MultipleWithCommon_v1() : base(IRInstruction.Sub32, TransformType.Auto | TransformType.Optimization)
+	public Sub32MultipleWithCommon_v1() : base(Framework.IR.Sub32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -76,13 +76,13 @@ public sealed class Sub32MultipleWithCommon_v1 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+		if (context.Operand1.Definitions[0].Instruction != Framework.IR.MulUnsigned32)
 			return false;
 
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+		if (context.Operand2.Definitions[0].Instruction != Framework.IR.MulUnsigned32)
 			return false;
 
 		if (!AreSame(context.Operand1.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand2))
@@ -101,8 +101,8 @@ public sealed class Sub32MultipleWithCommon_v1 : BaseTransform
 
 		var v1 = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction(IRInstruction.Sub32, v1, t2, t3);
-		context.AppendInstruction(IRInstruction.MulUnsigned32, result, t1, v1);
+		context.SetInstruction(Framework.IR.Sub32, v1, t2, t3);
+		context.AppendInstruction(Framework.IR.MulUnsigned32, result, t1, v1);
 	}
 }
 
@@ -112,7 +112,7 @@ public sealed class Sub32MultipleWithCommon_v1 : BaseTransform
 [Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class Sub32MultipleWithCommon_v2 : BaseTransform
 {
-	public Sub32MultipleWithCommon_v2() : base(IRInstruction.Sub32, TransformType.Auto | TransformType.Optimization)
+	public Sub32MultipleWithCommon_v2() : base(Framework.IR.Sub32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -127,13 +127,13 @@ public sealed class Sub32MultipleWithCommon_v2 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+		if (context.Operand1.Definitions[0].Instruction != Framework.IR.MulUnsigned32)
 			return false;
 
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+		if (context.Operand2.Definitions[0].Instruction != Framework.IR.MulUnsigned32)
 			return false;
 
 		if (!AreSame(context.Operand1.Definitions[0].Operand2, context.Operand2.Definitions[0].Operand1))
@@ -152,8 +152,8 @@ public sealed class Sub32MultipleWithCommon_v2 : BaseTransform
 
 		var v1 = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction(IRInstruction.Sub32, v1, t1, t3);
-		context.AppendInstruction(IRInstruction.MulUnsigned32, result, t2, v1);
+		context.SetInstruction(Framework.IR.Sub32, v1, t1, t3);
+		context.AppendInstruction(Framework.IR.MulUnsigned32, result, t2, v1);
 	}
 }
 
@@ -163,7 +163,7 @@ public sealed class Sub32MultipleWithCommon_v2 : BaseTransform
 [Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class Sub32MultipleWithCommon_v3 : BaseTransform
 {
-	public Sub32MultipleWithCommon_v3() : base(IRInstruction.Sub32, TransformType.Auto | TransformType.Optimization)
+	public Sub32MultipleWithCommon_v3() : base(Framework.IR.Sub32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -178,13 +178,13 @@ public sealed class Sub32MultipleWithCommon_v3 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+		if (context.Operand1.Definitions[0].Instruction != Framework.IR.MulUnsigned32)
 			return false;
 
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+		if (context.Operand2.Definitions[0].Instruction != Framework.IR.MulUnsigned32)
 			return false;
 
 		if (!AreSame(context.Operand1.Definitions[0].Operand2, context.Operand2.Definitions[0].Operand2))
@@ -203,7 +203,7 @@ public sealed class Sub32MultipleWithCommon_v3 : BaseTransform
 
 		var v1 = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction(IRInstruction.Sub32, v1, t1, t3);
-		context.AppendInstruction(IRInstruction.MulUnsigned32, result, t2, v1);
+		context.SetInstruction(Framework.IR.Sub32, v1, t1, t3);
+		context.AppendInstruction(Framework.IR.MulUnsigned32, result, t2, v1);
 	}
 }

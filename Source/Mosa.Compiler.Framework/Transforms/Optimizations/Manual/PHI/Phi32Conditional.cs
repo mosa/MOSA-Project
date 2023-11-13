@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Phi;
 
 public sealed class Phi32Conditional : BasePhiTransform
 {
-	public Phi32Conditional() : base(IRInstruction.Phi32, TransformType.Manual | TransformType.Optimization)
+	public Phi32Conditional() : base(Framework.IR.Phi32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -54,13 +54,13 @@ public sealed class Phi32Conditional : BasePhiTransform
 		var branch = ctx.BranchTargets[0];
 
 		var resultCondition = transform.VirtualRegisters.Allocate(result);
-		var conditionInstruction = instruction == IRInstruction.Branch32 ? IRInstruction.Compare32x32 : IRInstruction.Compare64x64;
+		var conditionInstruction = instruction == Framework.IR.Branch32 ? Framework.IR.Compare32x32 : Framework.IR.Compare64x64;
 		var swap = block1 == branch;
 
 		ctx.GotoPrevious();
 
 		ctx.AppendInstruction(conditionInstruction, condition, resultCondition, op1Condition, op2Condition);
-		ctx.AppendInstruction(IRInstruction.IfThenElse32, result, resultCondition, swap ? op1 : op2, swap ? op2 : op1);
+		ctx.AppendInstruction(Framework.IR.IfThenElse32, result, resultCondition, swap ? op1 : op2, swap ? op2 : op1);
 
 		context.SetNop();
 	}

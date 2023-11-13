@@ -11,7 +11,7 @@ namespace Mosa.Compiler.x64.Transforms.RuntimeCall;
 [Transform("x64.RuntimeCall")]
 public sealed class RemR8 : BaseTransform
 {
-	public RemR8() : base(IRInstruction.RemR8, TransformType.Manual | TransformType.Transform)
+	public RemR8() : base(Framework.IR.RemR8, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

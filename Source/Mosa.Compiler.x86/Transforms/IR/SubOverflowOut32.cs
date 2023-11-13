@@ -10,7 +10,7 @@ namespace Mosa.Compiler.x86.Transforms.IR;
 [Transform("x86.IR")]
 public sealed class SubOverflowOut32 : BaseIRTransform
 {
-	public SubOverflowOut32() : base(IRInstruction.SubOverflowOut32, TransformType.Manual | TransformType.Transform)
+	public SubOverflowOut32() : base(Framework.IR.SubOverflowOut32, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

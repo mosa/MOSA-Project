@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
 public sealed class LoadParamZeroExtend16x64 : BaseLowerTo32Transform
 {
-	public LoadParamZeroExtend16x64() : base(IRInstruction.LoadParamZeroExtend16x64, TransformType.Manual | TransformType.Optimization)
+	public LoadParamZeroExtend16x64() : base(Framework.IR.LoadParamZeroExtend16x64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -17,7 +17,7 @@ public sealed class LoadParamZeroExtend16x64 : BaseLowerTo32Transform
 
 		var resultLow = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction(IRInstruction.LoadParamZeroExtend16x32, resultLow, op0Low);
-		context.AppendInstruction(IRInstruction.To64, result, resultLow, Operand.Constant32_0);
+		context.SetInstruction(Framework.IR.LoadParamZeroExtend16x32, resultLow, op0Low);
+		context.AppendInstruction(Framework.IR.To64, result, resultLow, Operand.Constant32_0);
 	}
 }

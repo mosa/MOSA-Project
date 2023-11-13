@@ -10,7 +10,7 @@ namespace Mosa.Compiler.ARM32.Transforms.IR;
 [Transform("ARM32.IR")]
 public sealed class StoreParamManagedPointer : BaseIRTransform
 {
-	public StoreParamManagedPointer() : base(IRInstruction.StoreParamManagedPointer, TransformType.Manual | TransformType.Transform)
+	public StoreParamManagedPointer() : base(Framework.IR.StoreParamManagedPointer, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

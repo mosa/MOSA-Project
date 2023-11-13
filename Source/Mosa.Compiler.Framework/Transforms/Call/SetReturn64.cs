@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Transforms.Call;
 /// </summary>
 public sealed class SetReturn64 : BaseTransform
 {
-	public SetReturn64() : base(IRInstruction.SetReturn64, TransformType.Manual | TransformType.Transform)
+	public SetReturn64() : base(Framework.IR.SetReturn64, TransformType.Manual | TransformType.Transform)
 	{
 	}
 
@@ -22,12 +22,12 @@ public sealed class SetReturn64 : BaseTransform
 
 		if (transform.Is32BitPlatform)
 		{
-			context.SetInstruction(IRInstruction.GetLow32, transform.PhysicalRegisters.Allocate32(transform.Architecture.ReturnRegister), operand);
-			context.AppendInstruction(IRInstruction.GetHigh32, transform.PhysicalRegisters.Allocate32(transform.Architecture.ReturnHighRegister), operand);
+			context.SetInstruction(Framework.IR.GetLow32, transform.PhysicalRegisters.Allocate32(transform.Architecture.ReturnRegister), operand);
+			context.AppendInstruction(Framework.IR.GetHigh32, transform.PhysicalRegisters.Allocate32(transform.Architecture.ReturnHighRegister), operand);
 		}
 		else
 		{
-			context.SetInstruction(IRInstruction.Move64, transform.PhysicalRegisters.Allocate64(transform.Architecture.ReturnRegister), context.Operand1);
+			context.SetInstruction(Framework.IR.Move64, transform.PhysicalRegisters.Allocate64(transform.Architecture.ReturnRegister), context.Operand1);
 		}
 	}
 }

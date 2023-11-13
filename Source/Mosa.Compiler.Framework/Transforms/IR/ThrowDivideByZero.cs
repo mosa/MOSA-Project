@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.IR;
 
 public sealed class ThrowDivideByZero : BaseTransform
 {
-	public ThrowDivideByZero() : base(IRInstruction.ThrowDivideByZero, TransformType.Manual | TransformType.Transform)
+	public ThrowDivideByZero() : base(Framework.IR.ThrowDivideByZero, TransformType.Manual | TransformType.Transform)
 	{
 	}
 
@@ -18,6 +18,6 @@ public sealed class ThrowDivideByZero : BaseTransform
 		var method = transform.Compiler.InternalRuntimeType.FindMethodByName("ThrowDivideByZeroException");
 		var symbolOperand = Operand.CreateLabel(method, transform.Is32BitPlatform);
 
-		context.SetInstruction(IRInstruction.CallStatic, null, symbolOperand);
+		context.SetInstruction(Framework.IR.CallStatic, null, symbolOperand);
 	}
 }

@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 [Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class Sub64 : BaseTransform
 {
-	public Sub64() : base(IRInstruction.Sub64, TransformType.Auto | TransformType.Optimization)
+	public Sub64() : base(Framework.IR.Sub64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -36,6 +36,6 @@ public sealed class Sub64 : BaseTransform
 
 		var e1 = Operand.CreateConstant(Sub64(To64(t1), To64(t2)));
 
-		context.SetInstruction(IRInstruction.Move64, result, e1);
+		context.SetInstruction(Framework.IR.Move64, result, e1);
 	}
 }

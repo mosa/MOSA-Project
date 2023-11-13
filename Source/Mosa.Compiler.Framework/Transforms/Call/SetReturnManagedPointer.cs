@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Transforms.Call;
 /// </summary>
 public sealed class SetReturnManagedPointer : BaseTransform
 {
-	public SetReturnManagedPointer() : base(IRInstruction.SetReturnManagedPointer, TransformType.Manual | TransformType.Transform)
+	public SetReturnManagedPointer() : base(Framework.IR.SetReturnManagedPointer, TransformType.Manual | TransformType.Transform)
 	{
 	}
 
@@ -18,6 +18,6 @@ public sealed class SetReturnManagedPointer : BaseTransform
 
 	public override void Transform(Context context, Transform transform)
 	{
-		context.SetInstruction(IRInstruction.MoveManagedPointer, transform.PhysicalRegisters.AllocateObject(transform.Architecture.ReturnRegister), context.Operand1);
+		context.SetInstruction(Framework.IR.MoveManagedPointer, transform.PhysicalRegisters.AllocateObject(transform.Architecture.ReturnRegister), context.Operand1);
 	}
 }

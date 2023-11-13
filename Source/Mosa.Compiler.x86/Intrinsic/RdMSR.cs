@@ -23,6 +23,6 @@ internal static partial class IntrinsicMethods
 
 		context.SetInstruction(X86.Mov32, ecx, operand1);
 		context.AppendInstruction2(X86.RdMSR, eax, edx, ecx);
-		context.AppendInstruction(IRInstruction.To64, result, edx, ecx);
+		context.AppendInstruction(IR.To64, result, edx, ecx);
 	}
 }

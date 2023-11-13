@@ -10,7 +10,7 @@ internal static partial class IntrinsicMethods
 	[IntrinsicMethod("Mosa.Runtime.Intrinsic::Store64")]
 	private static void Store64(Context context, Transform transform)
 	{
-		var instruction = IRInstruction.Store64;
+		var instruction = IR.Store64;
 
 		var operand1 = context.Operand1;
 		var operand2 = context.OperandCount == 3 ? context.Operand2 : transform.ConstantZero;

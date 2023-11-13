@@ -10,7 +10,7 @@ namespace Mosa.Compiler.x86.Transforms.IR;
 [Transform("x86.IR")]
 public sealed class SubManagedPointer : BaseIRTransform
 {
-	public SubManagedPointer() : base(IRInstruction.SubManagedPointer, TransformType.Manual | TransformType.Transform)
+	public SubManagedPointer() : base(Framework.IR.SubManagedPointer, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

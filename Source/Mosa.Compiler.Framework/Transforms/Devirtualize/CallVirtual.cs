@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Devirtualize;
 
 public sealed class CallVirtual : BaseTransform
 {
-	public CallVirtual() : base(IRInstruction.CallVirtual, TransformType.Manual | TransformType.Optimization)
+	public CallVirtual() : base(Framework.IR.CallVirtual, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -37,7 +37,7 @@ public sealed class CallVirtual : BaseTransform
 
 		var symbol = Operand.CreateLabel(method, transform.Is32BitPlatform);
 
-		context.SetInstruction(IRInstruction.CallStatic, context.Result, symbol, operands);
+		context.SetInstruction(Framework.IR.CallStatic, context.Result, symbol, operands);
 
 		transform.MethodScanner.MethodInvoked(method, transform.Method);
 	}

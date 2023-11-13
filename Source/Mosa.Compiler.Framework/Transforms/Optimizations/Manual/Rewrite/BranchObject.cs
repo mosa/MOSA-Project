@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Rewrite;
 
 public sealed class BranchObject : BaseTransform
 {
-	public BranchObject() : base(IRInstruction.BranchObject, TransformType.Manual | TransformType.Optimization)
+	public BranchObject() : base(Framework.IR.BranchObject, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -25,7 +25,7 @@ public sealed class BranchObject : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.CompareObject)
+		if (context.Operand1.Definitions[0].Instruction != Framework.IR.CompareObject)
 			return false;
 
 		return true;
@@ -36,6 +36,6 @@ public sealed class BranchObject : BaseTransform
 		var node2 = context.Operand1.Definitions[0];
 		var conditionCode = context.ConditionCode == ConditionCode.NotEqual ? node2.ConditionCode : node2.ConditionCode.GetOpposite();
 
-		context.SetInstruction(IRInstruction.BranchObject, conditionCode, null, node2.Operand1, node2.Operand2, context.BranchTargets[0]);
+		context.SetInstruction(Framework.IR.BranchObject, conditionCode, null, node2.Operand1, node2.Operand2, context.BranchTargets[0]);
 	}
 }

@@ -10,7 +10,7 @@ internal static partial class IntrinsicMethods
 	[IntrinsicMethod("Mosa.Runtime.Intrinsic::Load8")]
 	private static void Load8(Context context, Transform transform)
 	{
-		var instruction = transform.Is32BitPlatform ? IRInstruction.LoadZeroExtend8x32 : IRInstruction.LoadZeroExtend8x64;
+		var instruction = transform.Is32BitPlatform ? IR.LoadZeroExtend8x32 : IR.LoadZeroExtend8x64;
 
 		var result = context.Result;
 		var operand1 = context.Operand1;

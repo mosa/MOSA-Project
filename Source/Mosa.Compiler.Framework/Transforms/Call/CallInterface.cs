@@ -9,7 +9,7 @@ namespace Mosa.Compiler.Framework.Transforms.Call;
 /// </summary>
 public sealed class CallInterface : BasePlugTransform
 {
-	public CallInterface() : base(IRInstruction.CallInterface, TransformType.Manual | TransformType.Transform)
+	public CallInterface() : base(Framework.IR.CallInterface, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

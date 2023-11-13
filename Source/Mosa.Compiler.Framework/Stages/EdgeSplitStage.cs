@@ -37,7 +37,7 @@ public class EdgeSplitStage : BaseMethodCompilerStage
 
 	protected virtual void InsertJumpInstruction(Context context, BasicBlock block)
 	{
-		context.AppendInstruction(IRInstruction.Jmp, block);
+		context.AppendInstruction(IR.Jmp, block);
 	}
 
 	private void SplitEdge(BasicBlock from, BasicBlock to)

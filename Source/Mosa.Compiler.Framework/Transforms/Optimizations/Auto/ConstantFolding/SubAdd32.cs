@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 [Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class SubAdd32 : BaseTransform
 {
-	public SubAdd32() : base(IRInstruction.Sub32, TransformType.Auto | TransformType.Optimization)
+	public SubAdd32() : base(Framework.IR.Sub32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -24,7 +24,7 @@ public sealed class SubAdd32 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Add32)
+		if (context.Operand1.Definitions[0].Instruction != Framework.IR.Add32)
 			return false;
 
 		if (!IsResolvedConstant(context.Operand1.Definitions[0].Operand2))
@@ -46,7 +46,7 @@ public sealed class SubAdd32 : BaseTransform
 
 		var e1 = Operand.CreateConstant(Sub32(To32(t2), To32(t3)));
 
-		context.SetInstruction(IRInstruction.Add32, result, t1, e1);
+		context.SetInstruction(Framework.IR.Add32, result, t1, e1);
 	}
 }
 
@@ -56,7 +56,7 @@ public sealed class SubAdd32 : BaseTransform
 [Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class SubAdd32_v1 : BaseTransform
 {
-	public SubAdd32_v1() : base(IRInstruction.Sub32, TransformType.Auto | TransformType.Optimization)
+	public SubAdd32_v1() : base(Framework.IR.Sub32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -70,7 +70,7 @@ public sealed class SubAdd32_v1 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Add32)
+		if (context.Operand1.Definitions[0].Instruction != Framework.IR.Add32)
 			return false;
 
 		if (!IsResolvedConstant(context.Operand1.Definitions[0].Operand1))
@@ -92,6 +92,6 @@ public sealed class SubAdd32_v1 : BaseTransform
 
 		var e1 = Operand.CreateConstant(Sub32(To32(t1), To32(t3)));
 
-		context.SetInstruction(IRInstruction.Add32, result, t2, e1);
+		context.SetInstruction(Framework.IR.Add32, result, t2, e1);
 	}
 }

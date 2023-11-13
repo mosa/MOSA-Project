@@ -8,7 +8,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Useless;
 [Transform("IR.Optimizations.Manual.Useless")]
 public sealed class Store8ZeroExtend8x32 : BaseTransform
 {
-	public Store8ZeroExtend8x32() : base(IRInstruction.Store8, TransformType.Manual | TransformType.Optimization)
+	public Store8ZeroExtend8x32() : base(Framework.IR.Store8, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -22,7 +22,7 @@ public sealed class Store8ZeroExtend8x32 : BaseTransform
 		if (!context.Operand3.IsDefinedOnce)
 			return false;
 
-		if (context.Operand3.Definitions[0].Instruction != IRInstruction.ZeroExtend8x32)
+		if (context.Operand3.Definitions[0].Instruction != Framework.IR.ZeroExtend8x32)
 			return false;
 
 		return true;
@@ -34,6 +34,6 @@ public sealed class Store8ZeroExtend8x32 : BaseTransform
 		var t2 = context.Operand2;
 		var t3 = context.Operand3.Definitions[0].Operand1;
 
-		context.SetInstruction(IRInstruction.Store8, null, t1, t2, t3);
+		context.SetInstruction(Framework.IR.Store8, null, t1, t2, t3);
 	}
 }

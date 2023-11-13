@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.IR;
 
 public sealed class ThrowIndexOutOfRange : BaseTransform
 {
-	public ThrowIndexOutOfRange() : base(IRInstruction.ThrowIndexOutOfRange, TransformType.Manual | TransformType.Transform)
+	public ThrowIndexOutOfRange() : base(Framework.IR.ThrowIndexOutOfRange, TransformType.Manual | TransformType.Transform)
 	{
 	}
 
@@ -18,6 +18,6 @@ public sealed class ThrowIndexOutOfRange : BaseTransform
 		var method = transform.Compiler.InternalRuntimeType.FindMethodByName("ThrowIndexOutOfRangeException");
 		var symbolOperand = Operand.CreateLabel(method, transform.Is32BitPlatform);
 
-		context.SetInstruction(IRInstruction.CallStatic, null, symbolOperand);
+		context.SetInstruction(Framework.IR.CallStatic, null, symbolOperand);
 	}
 }

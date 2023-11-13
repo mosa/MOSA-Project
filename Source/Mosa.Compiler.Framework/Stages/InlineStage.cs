@@ -52,7 +52,7 @@ public class InlineStage : BaseMethodCompilerStage
 				if (node.IsEmptyOrNop)
 					continue;
 
-				if (node.Instruction != IRInstruction.CallStatic)
+				if (node.Instruction != IR.CallStatic)
 					continue;
 
 				callSites.Add(node);
@@ -129,22 +129,22 @@ public class InlineStage : BaseMethodCompilerStage
 				if (node.IsEmpty)
 					continue;
 
-				if (node.Instruction == IRInstruction.Prologue)
+				if (node.Instruction == IR.Prologue)
 					continue;
 
-				if (node.Instruction == IRInstruction.Epilogue)
+				if (node.Instruction == IR.Epilogue)
 				{
-					newBlock.BeforeLast.Insert(new Node(IRInstruction.Jmp, nextBlock));
+					newBlock.BeforeLast.Insert(new Node(IR.Jmp, nextBlock));
 					continue;
 				}
 
-				if (node.Instruction == IRInstruction.SetReturn32
-					|| node.Instruction == IRInstruction.SetReturn64
-					|| node.Instruction == IRInstruction.SetReturnObject
-					|| node.Instruction == IRInstruction.SetReturnManagedPointer
-					|| node.Instruction == IRInstruction.SetReturnR4
-					|| node.Instruction == IRInstruction.SetReturnR8
-					|| node.Instruction == IRInstruction.SetReturnCompound)
+				if (node.Instruction == IR.SetReturn32
+					|| node.Instruction == IR.SetReturn64
+					|| node.Instruction == IR.SetReturnObject
+					|| node.Instruction == IR.SetReturnManagedPointer
+					|| node.Instruction == IR.SetReturnR4
+					|| node.Instruction == IR.SetReturnR8
+					|| node.Instruction == IR.SetReturnCompound)
 				{
 					if (callSiteNode.Result != null)
 					{
@@ -211,32 +211,32 @@ public class InlineStage : BaseMethodCompilerStage
 				if (!operand.IsVirtualRegister || operand.Low == null)
 					continue;
 
-				context.AppendInstruction(IRInstruction.GetLow32, operand.Low, operand);
-				context.AppendInstruction(IRInstruction.GetHigh32, operand.High, operand);
+				context.AppendInstruction(IR.GetLow32, operand.Low, operand);
+				context.AppendInstruction(IR.GetHigh32, operand.High, operand);
 			}
 		}
 
-		callSiteNode.SetInstruction(IRInstruction.Jmp, prologue);
+		callSiteNode.SetInstruction(IR.Jmp, prologue);
 	}
 
 	private static BaseInstruction GetMoveInstruction(Node node)
 	{
 		var instruction = node.Instruction;
 
-		if (instruction == IRInstruction.SetReturn32)
-			return IRInstruction.Move32;
-		else if (instruction == IRInstruction.SetReturn64)
-			return IRInstruction.Move64;
-		else if (instruction == IRInstruction.SetReturnObject)
-			return IRInstruction.MoveObject;
-		else if (instruction == IRInstruction.SetReturnManagedPointer)
-			return IRInstruction.MoveManagedPointer;
-		else if (instruction == IRInstruction.SetReturnR4)
-			return IRInstruction.MoveR4;
-		else if (instruction == IRInstruction.SetReturnR8)
-			return IRInstruction.MoveR8;
-		else if (instruction == IRInstruction.SetReturnCompound)
-			return IRInstruction.MoveCompound;
+		if (instruction == IR.SetReturn32)
+			return IR.Move32;
+		else if (instruction == IR.SetReturn64)
+			return IR.Move64;
+		else if (instruction == IR.SetReturnObject)
+			return IR.MoveObject;
+		else if (instruction == IR.SetReturnManagedPointer)
+			return IR.MoveManagedPointer;
+		else if (instruction == IR.SetReturnR4)
+			return IR.MoveR4;
+		else if (instruction == IR.SetReturnR8)
+			return IR.MoveR8;
+		else if (instruction == IR.SetReturnCompound)
+			return IR.MoveCompound;
 
 		throw new CompilerException();
 	}
@@ -245,113 +245,113 @@ public class InlineStage : BaseMethodCompilerStage
 	{
 		var instruction = newNode.Instruction;
 
-		if (instruction == IRInstruction.LoadParamR4)
+		if (instruction == IR.LoadParamR4)
 		{
-			newNode.Instruction = IRInstruction.MoveR4;
+			newNode.Instruction = IR.MoveR4;
 		}
-		else if (instruction == IRInstruction.LoadParamR8)
+		else if (instruction == IR.LoadParamR8)
 		{
-			newNode.Instruction = IRInstruction.MoveR8;
+			newNode.Instruction = IR.MoveR8;
 		}
-		else if (instruction == IRInstruction.LoadParam32)
+		else if (instruction == IR.LoadParam32)
 		{
-			newNode.Instruction = IRInstruction.Move32;
+			newNode.Instruction = IR.Move32;
 		}
-		else if (instruction == IRInstruction.LoadParamSignExtend8x32)
+		else if (instruction == IR.LoadParamSignExtend8x32)
 		{
-			newNode.Instruction = IRInstruction.SignExtend8x32;
+			newNode.Instruction = IR.SignExtend8x32;
 		}
-		else if (instruction == IRInstruction.LoadParamSignExtend16x32)
+		else if (instruction == IR.LoadParamSignExtend16x32)
 		{
-			newNode.Instruction = IRInstruction.SignExtend16x32;
+			newNode.Instruction = IR.SignExtend16x32;
 		}
-		else if (instruction == IRInstruction.ZeroExtend8x32)
+		else if (instruction == IR.ZeroExtend8x32)
 		{
-			newNode.Instruction = IRInstruction.ZeroExtend8x32;
+			newNode.Instruction = IR.ZeroExtend8x32;
 		}
-		else if (instruction == IRInstruction.LoadParamZeroExtend16x32)
+		else if (instruction == IR.LoadParamZeroExtend16x32)
 		{
-			newNode.Instruction = IRInstruction.ZeroExtend16x32;
+			newNode.Instruction = IR.ZeroExtend16x32;
 		}
-		else if (instruction == IRInstruction.LoadParamZeroExtend8x32)
+		else if (instruction == IR.LoadParamZeroExtend8x32)
 		{
-			newNode.Instruction = IRInstruction.ZeroExtend8x32;
+			newNode.Instruction = IR.ZeroExtend8x32;
 		}
-		else if (instruction == IRInstruction.LoadParamObject)
+		else if (instruction == IR.LoadParamObject)
 		{
-			newNode.Instruction = IRInstruction.MoveObject;
+			newNode.Instruction = IR.MoveObject;
 		}
-		else if (instruction == IRInstruction.LoadParamManagedPointer)
+		else if (instruction == IR.LoadParamManagedPointer)
 		{
-			newNode.Instruction = IRInstruction.MoveManagedPointer;
+			newNode.Instruction = IR.MoveManagedPointer;
 		}
-		else if (instruction == IRInstruction.LoadParam64)
+		else if (instruction == IR.LoadParam64)
 		{
-			newNode.Instruction = IRInstruction.Move64;
+			newNode.Instruction = IR.Move64;
 		}
-		else if (instruction == IRInstruction.LoadParamSignExtend8x64)
+		else if (instruction == IR.LoadParamSignExtend8x64)
 		{
-			newNode.Instruction = IRInstruction.SignExtend8x64;
+			newNode.Instruction = IR.SignExtend8x64;
 		}
-		else if (instruction == IRInstruction.LoadParamSignExtend16x64)
+		else if (instruction == IR.LoadParamSignExtend16x64)
 		{
-			newNode.Instruction = IRInstruction.SignExtend16x64;
+			newNode.Instruction = IR.SignExtend16x64;
 		}
-		else if (instruction == IRInstruction.LoadParamSignExtend32x64)
+		else if (instruction == IR.LoadParamSignExtend32x64)
 		{
-			newNode.Instruction = IRInstruction.SignExtend32x64;
+			newNode.Instruction = IR.SignExtend32x64;
 		}
-		else if (instruction == IRInstruction.LoadParamZeroExtend8x64)
+		else if (instruction == IR.LoadParamZeroExtend8x64)
 		{
-			newNode.Instruction = IRInstruction.ZeroExtend8x64;
+			newNode.Instruction = IR.ZeroExtend8x64;
 		}
-		else if (instruction == IRInstruction.LoadParamZeroExtend16x64)
+		else if (instruction == IR.LoadParamZeroExtend16x64)
 		{
-			newNode.Instruction = IRInstruction.ZeroExtend16x64;
+			newNode.Instruction = IR.ZeroExtend16x64;
 		}
-		else if (instruction == IRInstruction.LoadParamZeroExtend32x64)
+		else if (instruction == IR.LoadParamZeroExtend32x64)
 		{
-			newNode.Instruction = IRInstruction.ZeroExtend32x64;
+			newNode.Instruction = IR.ZeroExtend32x64;
 		}
-		else if (instruction == IRInstruction.StoreParam32)
+		else if (instruction == IR.StoreParam32)
 		{
-			newNode.SetInstruction(IRInstruction.Move32, newNode.Operand1, newNode.Operand2);
+			newNode.SetInstruction(IR.Move32, newNode.Operand1, newNode.Operand2);
 		}
-		else if (instruction == IRInstruction.StoreParam8)
+		else if (instruction == IR.StoreParam8)
 		{
-			newNode.SetInstruction(IRInstruction.ZeroExtend8x32, newNode.Operand1, newNode.Operand2);
+			newNode.SetInstruction(IR.ZeroExtend8x32, newNode.Operand1, newNode.Operand2);
 		}
-		else if (instruction == IRInstruction.StoreParam16)
+		else if (instruction == IR.StoreParam16)
 		{
-			newNode.SetInstruction(IRInstruction.ZeroExtend16x32, newNode.Operand1, newNode.Operand2);
+			newNode.SetInstruction(IR.ZeroExtend16x32, newNode.Operand1, newNode.Operand2);
 		}
-		else if (instruction == IRInstruction.StoreParamObject)
+		else if (instruction == IR.StoreParamObject)
 		{
-			newNode.SetInstruction(IRInstruction.MoveObject, newNode.Operand1, newNode.Operand2);
+			newNode.SetInstruction(IR.MoveObject, newNode.Operand1, newNode.Operand2);
 		}
-		else if (instruction == IRInstruction.StoreParamManagedPointer)
+		else if (instruction == IR.StoreParamManagedPointer)
 		{
-			newNode.SetInstruction(IRInstruction.MoveManagedPointer, newNode.Operand1, newNode.Operand2);
+			newNode.SetInstruction(IR.MoveManagedPointer, newNode.Operand1, newNode.Operand2);
 		}
-		else if (instruction == IRInstruction.StoreParam64)
+		else if (instruction == IR.StoreParam64)
 		{
-			newNode.SetInstruction(IRInstruction.Move64, newNode.Operand1, newNode.Operand2);
+			newNode.SetInstruction(IR.Move64, newNode.Operand1, newNode.Operand2);
 		}
-		else if (instruction == IRInstruction.StoreParamR4)
+		else if (instruction == IR.StoreParamR4)
 		{
-			newNode.SetInstruction(IRInstruction.MoveR4, newNode.Operand1, newNode.Operand2);
+			newNode.SetInstruction(IR.MoveR4, newNode.Operand1, newNode.Operand2);
 		}
-		else if (instruction == IRInstruction.StoreParamR8)
+		else if (instruction == IR.StoreParamR8)
 		{
-			newNode.SetInstruction(IRInstruction.MoveR8, newNode.Operand1, newNode.Operand2);
+			newNode.SetInstruction(IR.MoveR8, newNode.Operand1, newNode.Operand2);
 		}
-		else if (instruction == IRInstruction.StoreParamCompound)
+		else if (instruction == IR.StoreParamCompound)
 		{
-			newNode.Instruction = IRInstruction.MoveCompound;
+			newNode.Instruction = IR.MoveCompound;
 		}
-		else if (instruction == IRInstruction.LoadParamCompound)
+		else if (instruction == IR.LoadParamCompound)
 		{
-			newNode.Instruction = IRInstruction.MoveCompound;
+			newNode.Instruction = IR.MoveCompound;
 		}
 	}
 

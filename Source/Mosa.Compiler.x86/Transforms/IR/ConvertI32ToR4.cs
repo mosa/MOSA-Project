@@ -11,7 +11,7 @@ namespace Mosa.Compiler.x86.Transforms.IR;
 [Transform("x86.IR")]
 public sealed class ConvertI32ToR4 : BaseIRTransform
 {
-	public ConvertI32ToR4() : base(IRInstruction.ConvertI32ToR4, TransformType.Manual | TransformType.Transform)
+	public ConvertI32ToR4() : base(Framework.IR.ConvertI32ToR4, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

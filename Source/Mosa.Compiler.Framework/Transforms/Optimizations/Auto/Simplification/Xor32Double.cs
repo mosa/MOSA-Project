@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 [Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class Xor32Double : BaseTransform
 {
-	public Xor32Double() : base(IRInstruction.Xor32, TransformType.Auto | TransformType.Optimization)
+	public Xor32Double() : base(Framework.IR.Xor32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -22,7 +22,7 @@ public sealed class Xor32Double : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Or32)
+		if (context.Operand1.Definitions[0].Instruction != Framework.IR.Or32)
 			return false;
 
 		if (!AreSame(context.Operand1.Definitions[0].Operand1, context.Operand2))
@@ -37,7 +37,7 @@ public sealed class Xor32Double : BaseTransform
 
 		var t1 = context.Operand1.Definitions[0].Operand2;
 
-		context.SetInstruction(IRInstruction.Move32, result, t1);
+		context.SetInstruction(Framework.IR.Move32, result, t1);
 	}
 }
 
@@ -47,7 +47,7 @@ public sealed class Xor32Double : BaseTransform
 [Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class Xor32Double_v1 : BaseTransform
 {
-	public Xor32Double_v1() : base(IRInstruction.Xor32, TransformType.Auto | TransformType.Optimization)
+	public Xor32Double_v1() : base(Framework.IR.Xor32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -59,7 +59,7 @@ public sealed class Xor32Double_v1 : BaseTransform
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.Or32)
+		if (context.Operand2.Definitions[0].Instruction != Framework.IR.Or32)
 			return false;
 
 		if (!AreSame(context.Operand1, context.Operand2.Definitions[0].Operand1))
@@ -74,7 +74,7 @@ public sealed class Xor32Double_v1 : BaseTransform
 
 		var t1 = context.Operand2.Definitions[0].Operand2;
 
-		context.SetInstruction(IRInstruction.Move32, result, t1);
+		context.SetInstruction(Framework.IR.Move32, result, t1);
 	}
 }
 
@@ -84,7 +84,7 @@ public sealed class Xor32Double_v1 : BaseTransform
 [Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class Xor32Double_v2 : BaseTransform
 {
-	public Xor32Double_v2() : base(IRInstruction.Xor32, TransformType.Auto | TransformType.Optimization)
+	public Xor32Double_v2() : base(Framework.IR.Xor32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -96,7 +96,7 @@ public sealed class Xor32Double_v2 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Or32)
+		if (context.Operand1.Definitions[0].Instruction != Framework.IR.Or32)
 			return false;
 
 		if (!AreSame(context.Operand1.Definitions[0].Operand2, context.Operand2))
@@ -111,7 +111,7 @@ public sealed class Xor32Double_v2 : BaseTransform
 
 		var t1 = context.Operand1.Definitions[0].Operand1;
 
-		context.SetInstruction(IRInstruction.Move32, result, t1);
+		context.SetInstruction(Framework.IR.Move32, result, t1);
 	}
 }
 
@@ -121,7 +121,7 @@ public sealed class Xor32Double_v2 : BaseTransform
 [Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class Xor32Double_v3 : BaseTransform
 {
-	public Xor32Double_v3() : base(IRInstruction.Xor32, TransformType.Auto | TransformType.Optimization)
+	public Xor32Double_v3() : base(Framework.IR.Xor32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -133,7 +133,7 @@ public sealed class Xor32Double_v3 : BaseTransform
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.Or32)
+		if (context.Operand2.Definitions[0].Instruction != Framework.IR.Or32)
 			return false;
 
 		if (!AreSame(context.Operand1, context.Operand2.Definitions[0].Operand2))
@@ -148,6 +148,6 @@ public sealed class Xor32Double_v3 : BaseTransform
 
 		var t1 = context.Operand2.Definitions[0].Operand1;
 
-		context.SetInstruction(IRInstruction.Move32, result, t1);
+		context.SetInstruction(Framework.IR.Move32, result, t1);
 	}
 }

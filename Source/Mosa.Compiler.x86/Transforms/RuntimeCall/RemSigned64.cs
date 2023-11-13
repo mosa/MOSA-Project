@@ -10,7 +10,7 @@ namespace Mosa.Compiler.x86.Transforms.RuntimeCall;
 [Transform("x86.RuntimeCall")]
 public sealed class RemSigned64 : BaseTransform
 {
-	public RemSigned64() : base(IRInstruction.RemSigned64, TransformType.Manual | TransformType.Transform)
+	public RemSigned64() : base(Framework.IR.RemSigned64, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

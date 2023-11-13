@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 [Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class Truncate64x32MulUnsigned64FromZeroExtended32x64 : BaseTransform
 {
-	public Truncate64x32MulUnsigned64FromZeroExtended32x64() : base(IRInstruction.Truncate64x32, TransformType.Auto | TransformType.Optimization)
+	public Truncate64x32MulUnsigned64FromZeroExtended32x64() : base(Framework.IR.Truncate64x32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -22,7 +22,7 @@ public sealed class Truncate64x32MulUnsigned64FromZeroExtended32x64 : BaseTransf
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned64)
+		if (context.Operand1.Definitions[0].Instruction != Framework.IR.MulUnsigned64)
 			return false;
 
 		if (!context.Operand1.Definitions[0].Operand1.IsVirtualRegister)
@@ -34,13 +34,13 @@ public sealed class Truncate64x32MulUnsigned64FromZeroExtended32x64 : BaseTransf
 		if (!context.Operand1.Definitions[0].Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.ZeroExtend32x64)
+		if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != Framework.IR.ZeroExtend32x64)
 			return false;
 
 		if (!context.Operand1.Definitions[0].Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.ZeroExtend32x64)
+		if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != Framework.IR.ZeroExtend32x64)
 			return false;
 
 		return true;
@@ -53,6 +53,6 @@ public sealed class Truncate64x32MulUnsigned64FromZeroExtended32x64 : BaseTransf
 		var t1 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1;
 
-		context.SetInstruction(IRInstruction.MulUnsigned32, result, t1, t2);
+		context.SetInstruction(Framework.IR.MulUnsigned32, result, t1, t2);
 	}
 }

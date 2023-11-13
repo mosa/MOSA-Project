@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 [Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class Compare64x64SwapToZero : BaseTransform
 {
-	public Compare64x64SwapToZero() : base(IRInstruction.Compare64x64, TransformType.Auto | TransformType.Optimization)
+	public Compare64x64SwapToZero() : base(Framework.IR.Compare64x64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -31,7 +31,7 @@ public sealed class Compare64x64SwapToZero : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.And64)
+		if (context.Operand1.Definitions[0].Instruction != Framework.IR.And64)
 			return false;
 
 		if (!context.Operand1.Definitions[0].Operand2.IsResolvedConstant)
@@ -54,8 +54,8 @@ public sealed class Compare64x64SwapToZero : BaseTransform
 		var c1 = Operand.CreateConstant(0);
 		var c2 = Operand.CreateConstant(1);
 
-		context.SetInstruction(IRInstruction.And64, v1, t1, c2);
-		context.AppendInstruction(IRInstruction.Compare64x64, ConditionCode.Equal, result, v1, c1);
+		context.SetInstruction(Framework.IR.And64, v1, t1, c2);
+		context.AppendInstruction(Framework.IR.Compare64x64, ConditionCode.Equal, result, v1, c1);
 	}
 }
 
@@ -65,7 +65,7 @@ public sealed class Compare64x64SwapToZero : BaseTransform
 [Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class Compare64x64SwapToZero_v1 : BaseTransform
 {
-	public Compare64x64SwapToZero_v1() : base(IRInstruction.Compare64x64, TransformType.Auto | TransformType.Optimization)
+	public Compare64x64SwapToZero_v1() : base(Framework.IR.Compare64x64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -86,7 +86,7 @@ public sealed class Compare64x64SwapToZero_v1 : BaseTransform
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.And64)
+		if (context.Operand2.Definitions[0].Instruction != Framework.IR.And64)
 			return false;
 
 		if (!context.Operand2.Definitions[0].Operand2.IsResolvedConstant)
@@ -109,8 +109,8 @@ public sealed class Compare64x64SwapToZero_v1 : BaseTransform
 		var c1 = Operand.CreateConstant(0);
 		var c2 = Operand.CreateConstant(1);
 
-		context.SetInstruction(IRInstruction.And64, v1, t1, c2);
-		context.AppendInstruction(IRInstruction.Compare64x64, ConditionCode.Equal, result, v1, c1);
+		context.SetInstruction(Framework.IR.And64, v1, t1, c2);
+		context.AppendInstruction(Framework.IR.Compare64x64, ConditionCode.Equal, result, v1, c1);
 	}
 }
 
@@ -120,7 +120,7 @@ public sealed class Compare64x64SwapToZero_v1 : BaseTransform
 [Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class Compare64x64SwapToZero_v2 : BaseTransform
 {
-	public Compare64x64SwapToZero_v2() : base(IRInstruction.Compare64x64, TransformType.Auto | TransformType.Optimization)
+	public Compare64x64SwapToZero_v2() : base(Framework.IR.Compare64x64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -141,7 +141,7 @@ public sealed class Compare64x64SwapToZero_v2 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.And64)
+		if (context.Operand1.Definitions[0].Instruction != Framework.IR.And64)
 			return false;
 
 		if (!context.Operand1.Definitions[0].Operand1.IsResolvedConstant)
@@ -164,8 +164,8 @@ public sealed class Compare64x64SwapToZero_v2 : BaseTransform
 		var c1 = Operand.CreateConstant(0);
 		var c2 = Operand.CreateConstant(1);
 
-		context.SetInstruction(IRInstruction.And64, v1, t1, c2);
-		context.AppendInstruction(IRInstruction.Compare64x64, ConditionCode.Equal, result, v1, c1);
+		context.SetInstruction(Framework.IR.And64, v1, t1, c2);
+		context.AppendInstruction(Framework.IR.Compare64x64, ConditionCode.Equal, result, v1, c1);
 	}
 }
 
@@ -175,7 +175,7 @@ public sealed class Compare64x64SwapToZero_v2 : BaseTransform
 [Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class Compare64x64SwapToZero_v3 : BaseTransform
 {
-	public Compare64x64SwapToZero_v3() : base(IRInstruction.Compare64x64, TransformType.Auto | TransformType.Optimization)
+	public Compare64x64SwapToZero_v3() : base(Framework.IR.Compare64x64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -196,7 +196,7 @@ public sealed class Compare64x64SwapToZero_v3 : BaseTransform
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.And64)
+		if (context.Operand2.Definitions[0].Instruction != Framework.IR.And64)
 			return false;
 
 		if (!context.Operand2.Definitions[0].Operand1.IsResolvedConstant)
@@ -219,7 +219,7 @@ public sealed class Compare64x64SwapToZero_v3 : BaseTransform
 		var c1 = Operand.CreateConstant(0);
 		var c2 = Operand.CreateConstant(1);
 
-		context.SetInstruction(IRInstruction.And64, v1, t1, c2);
-		context.AppendInstruction(IRInstruction.Compare64x64, ConditionCode.Equal, result, v1, c1);
+		context.SetInstruction(Framework.IR.And64, v1, t1, c2);
+		context.AppendInstruction(Framework.IR.Compare64x64, ConditionCode.Equal, result, v1, c1);
 	}
 }

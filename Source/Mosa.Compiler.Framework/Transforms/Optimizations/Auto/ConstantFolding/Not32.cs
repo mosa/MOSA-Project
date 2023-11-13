@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 [Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class Not32 : BaseTransform
 {
-	public Not32() : base(IRInstruction.Not32, TransformType.Auto | TransformType.Optimization)
+	public Not32() : base(Framework.IR.Not32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -32,6 +32,6 @@ public sealed class Not32 : BaseTransform
 
 		var e1 = Operand.CreateConstant(Not32(To32(t1)));
 
-		context.SetInstruction(IRInstruction.Move32, result, e1);
+		context.SetInstruction(Framework.IR.Move32, result, e1);
 	}
 }

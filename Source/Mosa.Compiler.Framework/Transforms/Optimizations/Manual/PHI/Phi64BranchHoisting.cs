@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Phi;
 
 public sealed class Phi64BranchHoisting : BasePhiTransform
 {
-	public Phi64BranchHoisting() : base(IRInstruction.Phi64, TransformType.Manual | TransformType.Optimization)
+	public Phi64BranchHoisting() : base(Framework.IR.Phi64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -24,7 +24,7 @@ public sealed class Phi64BranchHoisting : BasePhiTransform
 
 		var ctx = context.Result.Uses[0];
 
-		if (ctx.Instruction != IRInstruction.Branch64)
+		if (ctx.Instruction != Framework.IR.Branch64)
 			return false;
 
 		if (!ctx.Operand2.IsResolvedConstant)

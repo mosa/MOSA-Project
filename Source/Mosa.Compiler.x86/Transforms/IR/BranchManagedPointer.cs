@@ -10,7 +10,7 @@ namespace Mosa.Compiler.x86.Transforms.IR;
 [Transform("x86.IR")]
 public sealed class BranchManagedPointer : BaseIRTransform
 {
-	public BranchManagedPointer() : base(IRInstruction.BranchManagedPointer, TransformType.Manual | TransformType.Transform)
+	public BranchManagedPointer() : base(Framework.IR.BranchManagedPointer, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

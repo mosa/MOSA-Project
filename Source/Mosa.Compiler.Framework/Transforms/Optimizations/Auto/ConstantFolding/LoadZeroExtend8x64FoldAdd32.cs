@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 [Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class LoadZeroExtend8x64FoldAdd32 : BaseTransform
 {
-	public LoadZeroExtend8x64FoldAdd32() : base(IRInstruction.LoadZeroExtend8x64, TransformType.Auto | TransformType.Optimization)
+	public LoadZeroExtend8x64FoldAdd32() : base(Framework.IR.LoadZeroExtend8x64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -22,7 +22,7 @@ public sealed class LoadZeroExtend8x64FoldAdd32 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Add32)
+		if (context.Operand1.Definitions[0].Instruction != Framework.IR.Add32)
 			return false;
 
 		if (!IsResolvedConstant(context.Operand2))
@@ -44,6 +44,6 @@ public sealed class LoadZeroExtend8x64FoldAdd32 : BaseTransform
 
 		var e1 = Operand.CreateConstant(Add32(To32(t2), To32(t3)));
 
-		context.SetInstruction(IRInstruction.LoadZeroExtend8x64, result, t1, e1);
+		context.SetInstruction(Framework.IR.LoadZeroExtend8x64, result, t1, e1);
 	}
 }

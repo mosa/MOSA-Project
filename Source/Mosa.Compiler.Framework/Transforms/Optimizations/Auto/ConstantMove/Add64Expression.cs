@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove;
 [Transform("IR.Optimizations.Auto.ConstantMove")]
 public sealed class Add64Expression : BaseTransform
 {
-	public Add64Expression() : base(IRInstruction.Add64, TransformType.Auto | TransformType.Optimization)
+	public Add64Expression() : base(Framework.IR.Add64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -22,7 +22,7 @@ public sealed class Add64Expression : BaseTransform
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.Add64)
+		if (context.Operand2.Definitions[0].Instruction != Framework.IR.Add64)
 			return false;
 
 		if (IsResolvedConstant(context.Operand1))
@@ -47,8 +47,8 @@ public sealed class Add64Expression : BaseTransform
 
 		var v1 = transform.VirtualRegisters.Allocate64();
 
-		context.SetInstruction(IRInstruction.Add64, v1, t1, t2);
-		context.AppendInstruction(IRInstruction.Add64, result, v1, t3);
+		context.SetInstruction(Framework.IR.Add64, v1, t1, t2);
+		context.AppendInstruction(Framework.IR.Add64, result, v1, t3);
 	}
 }
 
@@ -58,7 +58,7 @@ public sealed class Add64Expression : BaseTransform
 [Transform("IR.Optimizations.Auto.ConstantMove")]
 public sealed class Add64Expression_v1 : BaseTransform
 {
-	public Add64Expression_v1() : base(IRInstruction.Add64, TransformType.Auto | TransformType.Optimization)
+	public Add64Expression_v1() : base(Framework.IR.Add64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -70,7 +70,7 @@ public sealed class Add64Expression_v1 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Add64)
+		if (context.Operand1.Definitions[0].Instruction != Framework.IR.Add64)
 			return false;
 
 		if (IsResolvedConstant(context.Operand2))
@@ -95,8 +95,8 @@ public sealed class Add64Expression_v1 : BaseTransform
 
 		var v1 = transform.VirtualRegisters.Allocate64();
 
-		context.SetInstruction(IRInstruction.Add64, v1, t3, t1);
-		context.AppendInstruction(IRInstruction.Add64, result, v1, t2);
+		context.SetInstruction(Framework.IR.Add64, v1, t3, t1);
+		context.AppendInstruction(Framework.IR.Add64, result, v1, t2);
 	}
 }
 
@@ -106,7 +106,7 @@ public sealed class Add64Expression_v1 : BaseTransform
 [Transform("IR.Optimizations.Auto.ConstantMove")]
 public sealed class Add64Expression_v2 : BaseTransform
 {
-	public Add64Expression_v2() : base(IRInstruction.Add64, TransformType.Auto | TransformType.Optimization)
+	public Add64Expression_v2() : base(Framework.IR.Add64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -118,7 +118,7 @@ public sealed class Add64Expression_v2 : BaseTransform
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.Add64)
+		if (context.Operand2.Definitions[0].Instruction != Framework.IR.Add64)
 			return false;
 
 		if (IsResolvedConstant(context.Operand1))
@@ -143,8 +143,8 @@ public sealed class Add64Expression_v2 : BaseTransform
 
 		var v1 = transform.VirtualRegisters.Allocate64();
 
-		context.SetInstruction(IRInstruction.Add64, v1, t1, t3);
-		context.AppendInstruction(IRInstruction.Add64, result, v1, t2);
+		context.SetInstruction(Framework.IR.Add64, v1, t1, t3);
+		context.AppendInstruction(Framework.IR.Add64, result, v1, t2);
 	}
 }
 
@@ -154,7 +154,7 @@ public sealed class Add64Expression_v2 : BaseTransform
 [Transform("IR.Optimizations.Auto.ConstantMove")]
 public sealed class Add64Expression_v3 : BaseTransform
 {
-	public Add64Expression_v3() : base(IRInstruction.Add64, TransformType.Auto | TransformType.Optimization)
+	public Add64Expression_v3() : base(Framework.IR.Add64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -166,7 +166,7 @@ public sealed class Add64Expression_v3 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Add64)
+		if (context.Operand1.Definitions[0].Instruction != Framework.IR.Add64)
 			return false;
 
 		if (IsResolvedConstant(context.Operand2))
@@ -191,7 +191,7 @@ public sealed class Add64Expression_v3 : BaseTransform
 
 		var v1 = transform.VirtualRegisters.Allocate64();
 
-		context.SetInstruction(IRInstruction.Add64, v1, t3, t2);
-		context.AppendInstruction(IRInstruction.Add64, result, v1, t1);
+		context.SetInstruction(Framework.IR.Add64, v1, t3, t2);
+		context.AppendInstruction(Framework.IR.Add64, result, v1, t1);
 	}
 }

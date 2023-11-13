@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 [Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class ArithShiftRight32ZeroValue : BaseTransform
 {
-	public ArithShiftRight32ZeroValue() : base(IRInstruction.ArithShiftRight32, TransformType.Auto | TransformType.Optimization)
+	public ArithShiftRight32ZeroValue() : base(Framework.IR.ArithShiftRight32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -33,6 +33,6 @@ public sealed class ArithShiftRight32ZeroValue : BaseTransform
 
 		var e1 = Operand.CreateConstant(To32(0));
 
-		context.SetInstruction(IRInstruction.Move32, result, e1);
+		context.SetInstruction(Framework.IR.Move32, result, e1);
 	}
 }

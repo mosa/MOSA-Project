@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.StrengthReduct
 /// </summary>
 public sealed class AddCarryOut32ByZero : BaseTransform
 {
-	public AddCarryOut32ByZero() : base(IRInstruction.AddCarryOut32, TransformType.Manual | TransformType.Optimization, true)
+	public AddCarryOut32ByZero() : base(Framework.IR.AddCarryOut32, TransformType.Manual | TransformType.Optimization, true)
 	{
 	}
 
@@ -30,8 +30,8 @@ public sealed class AddCarryOut32ByZero : BaseTransform
 		var result2 = context.Result2;
 		var operand1 = context.Operand1;
 
-		context.SetInstruction(IRInstruction.Move32, result, operand1);
-		context.AppendInstruction(IRInstruction.Move32, result2, Operand.Constant32_0);
+		context.SetInstruction(Framework.IR.Move32, result, operand1);
+		context.AppendInstruction(Framework.IR.Move32, result2, Operand.Constant32_0);
 	}
 }
 
@@ -40,7 +40,7 @@ public sealed class AddCarryOut32ByZero : BaseTransform
 /// </summary>
 public sealed class AddCarryOut32ByZero2 : BaseTransform
 {
-	public AddCarryOut32ByZero2() : base(IRInstruction.AddCarryOut32, TransformType.Manual | TransformType.Optimization, true)
+	public AddCarryOut32ByZero2() : base(Framework.IR.AddCarryOut32, TransformType.Manual | TransformType.Optimization, true)
 	{
 	}
 
@@ -63,7 +63,7 @@ public sealed class AddCarryOut32ByZero2 : BaseTransform
 		var result2 = context.Result2;
 		var operand2 = context.Operand2;
 
-		context.SetInstruction(IRInstruction.Move32, result, operand2);
-		context.AppendInstruction(IRInstruction.Move32, result2, Operand.Constant32_0);
+		context.SetInstruction(Framework.IR.Move32, result, operand2);
+		context.AppendInstruction(Framework.IR.Move32, result2, Operand.Constant32_0);
 	}
 }

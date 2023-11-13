@@ -8,7 +8,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Overwrite;
 [Transform("IR.Optimizations.Manual.Overwrite")]
 public sealed class Move64Overwrite : BaseTransform
 {
-	public Move64Overwrite() : base(IRInstruction.Move64, TransformType.Manual | TransformType.Optimization | TransformType.Search)
+	public Move64Overwrite() : base(Framework.IR.Move64, TransformType.Manual | TransformType.Optimization | TransformType.Search)
 	{
 	}
 

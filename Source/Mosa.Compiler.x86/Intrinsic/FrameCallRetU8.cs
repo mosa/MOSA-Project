@@ -19,8 +19,8 @@ internal static partial class IntrinsicMethods
 		var edx = transform.PhysicalRegisters.Allocate32(CPURegister.EDX);
 
 		context.SetInstruction(X86.Call, null, methodAddress);
-		context.AppendInstruction(IRInstruction.Gen, eax);
-		context.AppendInstruction(IRInstruction.Gen, edx);
-		context.AppendInstruction(IRInstruction.To64, result, eax, edx);
+		context.AppendInstruction(IR.Gen, eax);
+		context.AppendInstruction(IR.Gen, edx);
+		context.AppendInstruction(IR.To64, result, eax, edx);
 	}
 }

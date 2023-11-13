@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Transforms.Plug;
 /// </summary>
 public sealed class CallDirect : BasePlugTransform
 {
-	public CallDirect() : base(IRInstruction.CallDirect, TransformType.Manual | TransformType.Transform)
+	public CallDirect() : base(Framework.IR.CallDirect, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

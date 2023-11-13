@@ -10,7 +10,7 @@ internal static partial class IntrinsicMethods
 	[IntrinsicMethod("Mosa.Runtime.Intrinsic::Load64")]
 	private static void Load64(Context context, Transform transform)
 	{
-		var instruction = IRInstruction.Load64;
+		var instruction = IR.Load64;
 
 		var result = context.Result;
 		var operand1 = context.Operand1;

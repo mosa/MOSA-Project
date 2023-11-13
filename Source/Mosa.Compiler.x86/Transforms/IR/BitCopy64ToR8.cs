@@ -10,7 +10,7 @@ namespace Mosa.Compiler.x86.Transforms.IR;
 [Transform("x86.IR")]
 public sealed class BitCopy64ToR8 : BaseIRTransform
 {
-	public BitCopy64ToR8() : base(IRInstruction.BitCopy64ToR8, TransformType.Manual | TransformType.Transform)
+	public BitCopy64ToR8() : base(Framework.IR.BitCopy64ToR8, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

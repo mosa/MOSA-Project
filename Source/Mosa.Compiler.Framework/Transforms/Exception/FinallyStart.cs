@@ -9,7 +9,7 @@ namespace Mosa.Compiler.Framework.Transforms.Exception;
 /// </summary>
 public sealed class FinallyStart : BaseExceptionTransform
 {
-	public FinallyStart() : base(IRInstruction.FinallyStart, TransformType.Manual | TransformType.Transform)
+	public FinallyStart() : base(Framework.IR.FinallyStart, TransformType.Manual | TransformType.Transform)
 	{
 	}
 
@@ -23,12 +23,12 @@ public sealed class FinallyStart : BaseExceptionTransform
 		var exceptionVirtualRegister = context.Result;
 		var leaveTargetVirtualRegister = context.Result2;
 
-		context.SetInstruction(IRInstruction.KillAll);
-		context.AppendInstruction(IRInstruction.Gen, transform.ExceptionRegister);
-		context.AppendInstruction(IRInstruction.Gen, transform.LeaveTargetRegister);
+		context.SetInstruction(Framework.IR.KillAll);
+		context.AppendInstruction(Framework.IR.Gen, transform.ExceptionRegister);
+		context.AppendInstruction(Framework.IR.Gen, transform.LeaveTargetRegister);
 
-		context.AppendInstruction(IRInstruction.MoveObject, exceptionVirtualRegister, transform.ExceptionRegister);
-		context.AppendInstruction(IRInstruction.MoveObject, leaveTargetVirtualRegister, transform.LeaveTargetRegister);
+		context.AppendInstruction(Framework.IR.MoveObject, exceptionVirtualRegister, transform.ExceptionRegister);
+		context.AppendInstruction(Framework.IR.MoveObject, leaveTargetVirtualRegister, transform.LeaveTargetRegister);
 
 		exceptionManager.ExceptionVirtualRegisters.Add(context.Block, exceptionVirtualRegister);
 		exceptionManager.LeaveTargetVirtualRegisters.Add(context.Block, leaveTargetVirtualRegister);

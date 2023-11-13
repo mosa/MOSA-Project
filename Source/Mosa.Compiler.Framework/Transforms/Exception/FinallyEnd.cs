@@ -9,7 +9,7 @@ namespace Mosa.Compiler.Framework.Transforms.Exception;
 /// </summary>
 public sealed class FinallyEnd : BaseExceptionTransform
 {
-	public FinallyEnd() : base(IRInstruction.FinallyEnd, TransformType.Manual | TransformType.Transform)
+	public FinallyEnd() : base(Framework.IR.FinallyEnd, TransformType.Manual | TransformType.Transform)
 	{
 	}
 
@@ -49,11 +49,11 @@ public sealed class FinallyEnd : BaseExceptionTransform
 		var newBlocks = transform.CreateNewBlockContexts(targetcount, context.Label);
 		var exceptionCallBlock = newBlocks[0];
 
-		context.SetInstruction(IRInstruction.BranchObject, ConditionCode.NotEqual, null, exceptionVirtualRegister, Operand.NullObject, exceptionCallBlock.Block);
-		context.AppendInstruction(IRInstruction.Jmp, newBlocks[1].Block);
+		context.SetInstruction(Framework.IR.BranchObject, ConditionCode.NotEqual, null, exceptionVirtualRegister, Operand.NullObject, exceptionCallBlock.Block);
+		context.AppendInstruction(Framework.IR.Jmp, newBlocks[1].Block);
 
-		exceptionCallBlock.AppendInstruction(IRInstruction.MoveObject, transform.ExceptionRegister, exceptionVirtualRegister);
-		exceptionCallBlock.AppendInstruction(IRInstruction.CallStatic, null, Operand.CreateLabel(exceptionManager.ExceptionHandler, transform.Is32BitPlatform));
+		exceptionCallBlock.AppendInstruction(Framework.IR.MoveObject, transform.ExceptionRegister, exceptionVirtualRegister);
+		exceptionCallBlock.AppendInstruction(Framework.IR.CallStatic, null, Operand.CreateLabel(exceptionManager.ExceptionHandler, transform.Is32BitPlatform));
 
 		transform.MethodScanner.MethodInvoked(exceptionManager.ExceptionHandler, transform.Method);
 
@@ -65,7 +65,7 @@ public sealed class FinallyEnd : BaseExceptionTransform
 				var conditionBlock = newBlocks[i + 1];
 
 				conditionBlock.AppendInstruction(transform.BranchInstruction, ConditionCode.Equal, null, leaveTargetRegister, Operand.CreateConstant32(target.Label), target);
-				conditionBlock.AppendInstruction(IRInstruction.Jmp, newBlocks[i + 2].Block);
+				conditionBlock.AppendInstruction(Framework.IR.Jmp, newBlocks[i + 2].Block);
 			}
 		}
 
@@ -73,9 +73,9 @@ public sealed class FinallyEnd : BaseExceptionTransform
 
 		if (next != null)
 		{
-			finallyCallBlock.AppendInstruction(IRInstruction.MoveObject, transform.ExceptionRegister, Operand.NullObject);
-			finallyCallBlock.AppendInstruction(IRInstruction.MoveObject, transform.LeaveTargetRegister, leaveTargetRegister);
-			finallyCallBlock.AppendInstruction(IRInstruction.Jmp, transform.BasicBlocks.GetByLabel(next.HandlerStart));
+			finallyCallBlock.AppendInstruction(Framework.IR.MoveObject, transform.ExceptionRegister, Operand.NullObject);
+			finallyCallBlock.AppendInstruction(Framework.IR.MoveObject, transform.LeaveTargetRegister, leaveTargetRegister);
+			finallyCallBlock.AppendInstruction(Framework.IR.Jmp, transform.BasicBlocks.GetByLabel(next.HandlerStart));
 		}
 		else
 		{

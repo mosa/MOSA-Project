@@ -11,7 +11,7 @@ namespace Mosa.Compiler.x86.Transforms.IR;
 [Transform("x86.IR")]
 public sealed class LoadManagedPointer : BaseIRTransform
 {
-	public LoadManagedPointer() : base(IRInstruction.LoadManagedPointer, TransformType.Manual | TransformType.Transform)
+	public LoadManagedPointer() : base(Framework.IR.LoadManagedPointer, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

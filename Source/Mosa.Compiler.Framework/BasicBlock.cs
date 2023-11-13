@@ -148,7 +148,7 @@ public sealed class BasicBlock : IComparable<BasicBlock>
 		Label = blockLabel;
 		Sequence = sequence;
 
-		First = new Node(IRInstruction.BlockStart)
+		First = new Node(IR.BlockStart)
 		{
 			Label = instructionLabel,
 			Block = this
@@ -160,7 +160,7 @@ public sealed class BasicBlock : IComparable<BasicBlock>
 			Block = this
 		};
 
-		Last = new Node(IRInstruction.BlockEnd)
+		Last = new Node(IR.BlockEnd)
 		{
 			Label = instructionLabel,
 			Block = this,

@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 [Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class Truncate64x32 : BaseTransform
 {
-	public Truncate64x32() : base(IRInstruction.Truncate64x32, TransformType.Auto | TransformType.Optimization)
+	public Truncate64x32() : base(Framework.IR.Truncate64x32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -32,6 +32,6 @@ public sealed class Truncate64x32 : BaseTransform
 
 		var e1 = Operand.CreateConstant(To32(t1));
 
-		context.SetInstruction(IRInstruction.Move32, result, e1);
+		context.SetInstruction(Framework.IR.Move32, result, e1);
 	}
 }

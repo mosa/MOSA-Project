@@ -17,9 +17,9 @@ internal static partial class StubMethods
 
 		var size = transform.MethodCompiler.GetElementSize(type);
 
-		context.AppendInstruction(IRInstruction.Move32, opReturn, Operand.CreateConstant32(size));
-		context.AppendInstruction(IRInstruction.SetReturn32, null, opReturn);
-		context.AppendInstruction(IRInstruction.Jmp, transform.BasicBlocks.EpilogueBlock);
+		context.AppendInstruction(IR.Move32, opReturn, Operand.CreateConstant32(size));
+		context.AppendInstruction(IR.SetReturn32, null, opReturn);
+		context.AppendInstruction(IR.Jmp, transform.BasicBlocks.EpilogueBlock);
 	}
 
 	[StubMethod("System.Runtime.CompilerServices.Unsafe::AsPointer")]
@@ -35,12 +35,12 @@ internal static partial class StubMethods
 			: transform.VirtualRegisters.AllocateManagedPointer();
 
 		var loadSource = source.IsObject
-			? IRInstruction.LoadParamObject
-			: transform.Is32BitPlatform ? IRInstruction.LoadParam32 : IRInstruction.LoadParam64;
+			? IR.LoadParamObject
+			: transform.Is32BitPlatform ? IR.LoadParam32 : IR.LoadParam64;
 
 		var setReturn = source.IsObject
-			? IRInstruction.SetReturnObject
-			: transform.Is32BitPlatform ? IRInstruction.SetReturn32 : IRInstruction.SetReturn64;
+			? IR.SetReturnObject
+			: transform.Is32BitPlatform ? IR.SetReturn32 : IR.SetReturn64;
 
 		// Load source into return operand
 		context.AppendInstruction(loadSource, opReturn, source);
@@ -48,7 +48,7 @@ internal static partial class StubMethods
 		// Set return
 		context.AppendInstruction(setReturn, null, opReturn);
 
-		context.AppendInstruction(IRInstruction.Jmp, transform.BasicBlocks.EpilogueBlock);
+		context.AppendInstruction(IR.Jmp, transform.BasicBlocks.EpilogueBlock);
 	}
 
 	[StubMethod("System.Runtime.CompilerServices.Unsafe::AreSame")]
@@ -63,19 +63,19 @@ internal static partial class StubMethods
 		var opReturn = transform.VirtualRegisters.AllocateNativeInteger();
 
 		// Load left parameter
-		context.AppendInstruction(IRInstruction.LoadParamObject, opLeft, left);
+		context.AppendInstruction(IR.LoadParamObject, opLeft, left);
 
 		// Load right parameter
-		context.AppendInstruction(IRInstruction.LoadParamObject, opRight, right);
+		context.AppendInstruction(IR.LoadParamObject, opRight, right);
 
 		// Compare and store into result operand
-		context.AppendInstruction(IRInstruction.CompareObject, ConditionCode.Equal, opReturn, opLeft, opRight);
+		context.AppendInstruction(IR.CompareObject, ConditionCode.Equal, opReturn, opLeft, opRight);
 
 		// Set return
-		var setReturn = transform.Is32BitPlatform ? IRInstruction.SetReturn32 : IRInstruction.SetReturn64;
+		var setReturn = transform.Is32BitPlatform ? IR.SetReturn32 : IR.SetReturn64;
 		context.AppendInstruction(setReturn, null, opReturn);
 
-		context.AppendInstruction(IRInstruction.Jmp, transform.BasicBlocks.EpilogueBlock);
+		context.AppendInstruction(IR.Jmp, transform.BasicBlocks.EpilogueBlock);
 	}
 
 	[StubMethod("System.Runtime.CompilerServices.Unsafe::AddByteOffset")]
@@ -90,21 +90,21 @@ internal static partial class StubMethods
 		var opReturn = transform.VirtualRegisters.AllocateNativeInteger();
 
 		// Load left parameter
-		var loadSource = transform.Is32BitPlatform ? IRInstruction.LoadParam32 : IRInstruction.LoadParam64;
+		var loadSource = transform.Is32BitPlatform ? IR.LoadParam32 : IR.LoadParam64;
 		context.AppendInstruction(loadSource, opSource, source);
 
 		// Load right parameter
-		var loadByteOffset = transform.Is32BitPlatform ? IRInstruction.LoadParam32 : IRInstruction.LoadParam64;
+		var loadByteOffset = transform.Is32BitPlatform ? IR.LoadParam32 : IR.LoadParam64;
 		context.AppendInstruction(loadByteOffset, opByteOffset, byteOffset);
 
 		// Compare and store into result operand
-		var add = transform.Is32BitPlatform ? IRInstruction.Add32 : IRInstruction.Add64;
+		var add = transform.Is32BitPlatform ? IR.Add32 : IR.Add64;
 		context.AppendInstruction(add, opReturn, opSource, opByteOffset);
 
 		// Return comparison result
-		var setReturn = transform.Is32BitPlatform ? IRInstruction.SetReturn32 : IRInstruction.SetReturn64;
+		var setReturn = transform.Is32BitPlatform ? IR.SetReturn32 : IR.SetReturn64;
 		context.AppendInstruction(setReturn, null, opReturn);
 
-		context.AppendInstruction(IRInstruction.Jmp, transform.BasicBlocks.EpilogueBlock);
+		context.AppendInstruction(IR.Jmp, transform.BasicBlocks.EpilogueBlock);
 	}
 }

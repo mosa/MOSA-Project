@@ -20,9 +20,9 @@ internal static partial class IntrinsicMethods
 		var xmm0 = transform.PhysicalRegisters.Allocate32(CPURegister.XMM0);
 
 		context.SetInstruction(X86.Call, null, methodAddress);
-		context.AppendInstruction(IRInstruction.Gen, xmm0);
+		context.AppendInstruction(IR.Gen, xmm0);
 		context.AppendInstruction(X86.Movdi32ss, eax, xmm0);    // CHECK
 		context.AppendInstruction(X86.Pextrd32, edx, xmm0, Operand.Constant32_1);
-		context.AppendInstruction(IRInstruction.To64, result, eax, edx);
+		context.AppendInstruction(IR.To64, result, eax, edx);
 	}
 }

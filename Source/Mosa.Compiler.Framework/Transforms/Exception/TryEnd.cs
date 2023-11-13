@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Exception;
 /// </summary>
 public sealed class TryEnd : BaseExceptionTransform
 {
-	public TryEnd() : base(IRInstruction.TryEnd, TransformType.Manual | TransformType.Transform)
+	public TryEnd() : base(Framework.IR.TryEnd, TransformType.Manual | TransformType.Transform)
 	{
 	}
 
@@ -24,9 +24,9 @@ public sealed class TryEnd : BaseExceptionTransform
 
 		if (immediate.ExceptionHandlerType == ExceptionHandlerType.Finally)
 		{
-			context.SetInstruction(IRInstruction.MoveObject, transform.LeaveTargetRegister, Operand.CreateConstant32(target.Label));
-			context.AppendInstruction(IRInstruction.MoveObject, transform.ExceptionRegister, Operand.NullObject);
-			context.AppendInstruction(IRInstruction.Jmp, transform.BasicBlocks.GetByLabel(immediate.HandlerStart));
+			context.SetInstruction(Framework.IR.MoveObject, transform.LeaveTargetRegister, Operand.CreateConstant32(target.Label));
+			context.AppendInstruction(Framework.IR.MoveObject, transform.ExceptionRegister, Operand.NullObject);
+			context.AppendInstruction(Framework.IR.Jmp, transform.BasicBlocks.GetByLabel(immediate.HandlerStart));
 			return;
 		}
 
@@ -36,12 +36,12 @@ public sealed class TryEnd : BaseExceptionTransform
 
 		if (next != null && next.HandlerEnd > immediate.HandlerEnd)
 		{
-			context.SetInstruction(IRInstruction.MoveObject, transform.LeaveTargetRegister, Operand.CreateConstant32(target.Label));
-			context.AppendInstruction(IRInstruction.MoveObject, transform.ExceptionRegister, Operand.NullObject);
-			context.AppendInstruction(IRInstruction.Jmp, transform.BasicBlocks.GetByLabel(next.HandlerStart));
+			context.SetInstruction(Framework.IR.MoveObject, transform.LeaveTargetRegister, Operand.CreateConstant32(target.Label));
+			context.AppendInstruction(Framework.IR.MoveObject, transform.ExceptionRegister, Operand.NullObject);
+			context.AppendInstruction(Framework.IR.Jmp, transform.BasicBlocks.GetByLabel(next.HandlerStart));
 			return;
 		}
 
-		context.SetInstruction(IRInstruction.Jmp, target);
+		context.SetInstruction(Framework.IR.Jmp, target);
 	}
 }

@@ -8,7 +8,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Useless;
 [Transform("IR.Optimizations.Manual.Useless")]
 public sealed class ZeroExtend8x64Compare64x64 : BaseTransform
 {
-	public ZeroExtend8x64Compare64x64() : base(IRInstruction.ZeroExtend8x64, TransformType.Manual | TransformType.Optimization)
+	public ZeroExtend8x64Compare64x64() : base(Framework.IR.ZeroExtend8x64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -22,7 +22,7 @@ public sealed class ZeroExtend8x64Compare64x64 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Compare64x64)
+		if (context.Operand1.Definitions[0].Instruction != Framework.IR.Compare64x64)
 			return false;
 
 		return true;
@@ -33,6 +33,6 @@ public sealed class ZeroExtend8x64Compare64x64 : BaseTransform
 		var result = context.Result;
 		var operand1 = context.Operand1;
 
-		context.SetInstruction(IRInstruction.Move64, result, operand1);
+		context.SetInstruction(Framework.IR.Move64, result, operand1);
 	}
 }

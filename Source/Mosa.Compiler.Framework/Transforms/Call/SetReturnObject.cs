@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Transforms.Call;
 /// </summary>
 public sealed class SetReturnObject : BaseTransform
 {
-	public SetReturnObject() : base(IRInstruction.SetReturnObject, TransformType.Manual | TransformType.Transform)
+	public SetReturnObject() : base(Framework.IR.SetReturnObject, TransformType.Manual | TransformType.Transform)
 	{
 	}
 
@@ -18,6 +18,6 @@ public sealed class SetReturnObject : BaseTransform
 
 	public override void Transform(Context context, Transform transform)
 	{
-		context.SetInstruction(IRInstruction.MoveObject, transform.PhysicalRegisters.AllocateObject(transform.Architecture.ReturnRegister), context.Operand1);
+		context.SetInstruction(Framework.IR.MoveObject, transform.PhysicalRegisters.AllocateObject(transform.Architecture.ReturnRegister), context.Operand1);
 	}
 }

@@ -176,7 +176,8 @@ public class BuildTransformations : BuildBaseTemplate
 
 	private void GenerateTransformation2(string name, string familyName, string type, string subName, Transformation transform, bool log, bool optimization, int priority)
 	{
-		var instructionName = transform.InstructionTree.InstructionName.Replace("IR.", "IRInstruction.");
+		//var instructionName = transform.InstructionTree.InstructionName.Replace("IR.", "IRInstruction.");
+		var instructionName = transform.InstructionTree.InstructionName;
 
 		Transformations.Add($"{familyName}.{type}.{name}{subName}");
 

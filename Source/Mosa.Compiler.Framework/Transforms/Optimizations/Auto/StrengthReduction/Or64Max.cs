@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 [Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class Or64Max : BaseTransform
 {
-	public Or64Max() : base(IRInstruction.Or64, TransformType.Auto | TransformType.Optimization)
+	public Or64Max() : base(Framework.IR.Or64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -33,7 +33,7 @@ public sealed class Or64Max : BaseTransform
 
 		var c1 = Operand.CreateConstant(0xFFFFFFFFFFFFFFFF);
 
-		context.SetInstruction(IRInstruction.Move64, result, c1);
+		context.SetInstruction(Framework.IR.Move64, result, c1);
 	}
 }
 
@@ -43,7 +43,7 @@ public sealed class Or64Max : BaseTransform
 [Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class Or64Max_v1 : BaseTransform
 {
-	public Or64Max_v1() : base(IRInstruction.Or64, TransformType.Auto | TransformType.Optimization)
+	public Or64Max_v1() : base(Framework.IR.Or64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -66,6 +66,6 @@ public sealed class Or64Max_v1 : BaseTransform
 
 		var c1 = Operand.CreateConstant(0xFFFFFFFFFFFFFFFF);
 
-		context.SetInstruction(IRInstruction.Move64, result, c1);
+		context.SetInstruction(Framework.IR.Move64, result, c1);
 	}
 }

@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 [Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class Or32Zero : BaseTransform
 {
-	public Or32Zero() : base(IRInstruction.Or32, TransformType.Auto | TransformType.Optimization)
+	public Or32Zero() : base(Framework.IR.Or32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -33,7 +33,7 @@ public sealed class Or32Zero : BaseTransform
 
 		var t1 = context.Operand1;
 
-		context.SetInstruction(IRInstruction.Move32, result, t1);
+		context.SetInstruction(Framework.IR.Move32, result, t1);
 	}
 }
 
@@ -43,7 +43,7 @@ public sealed class Or32Zero : BaseTransform
 [Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class Or32Zero_v1 : BaseTransform
 {
-	public Or32Zero_v1() : base(IRInstruction.Or32, TransformType.Auto | TransformType.Optimization)
+	public Or32Zero_v1() : base(Framework.IR.Or32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -66,6 +66,6 @@ public sealed class Or32Zero_v1 : BaseTransform
 
 		var t1 = context.Operand2;
 
-		context.SetInstruction(IRInstruction.Move32, result, t1);
+		context.SetInstruction(Framework.IR.Move32, result, t1);
 	}
 }

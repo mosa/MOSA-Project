@@ -10,7 +10,7 @@ namespace Mosa.Compiler.ARM32.Transforms.IR;
 [Transform("ARM32.IR")]
 public sealed class GetLow32 : BaseIRTransform
 {
-	public GetLow32() : base(IRInstruction.GetLow32, TransformType.Manual | TransformType.Transform)
+	public GetLow32() : base(Framework.IR.GetLow32, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

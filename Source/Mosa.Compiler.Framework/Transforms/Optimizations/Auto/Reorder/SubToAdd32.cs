@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Reorder;
 [Transform("IR.Optimizations.Auto.Reorder")]
 public sealed class SubToAdd32 : BaseTransform
 {
-	public SubToAdd32() : base(IRInstruction.Sub32, TransformType.Auto | TransformType.Optimization)
+	public SubToAdd32() : base(Framework.IR.Sub32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -31,6 +31,6 @@ public sealed class SubToAdd32 : BaseTransform
 
 		var e1 = Operand.CreateConstant(Neg32(ToSigned32(t2)));
 
-		context.SetInstruction(IRInstruction.Add32, result, t1, e1);
+		context.SetInstruction(Framework.IR.Add32, result, t1, e1);
 	}
 }

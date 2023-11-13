@@ -134,14 +134,14 @@ public sealed class Transform
 		Devirtualization = Compiler.MosaSettings.Devirtualization;
 		Window = Math.Max(Compiler.MosaSettings.OptimizationBasicWindow, 1);
 
-		LoadInstruction = Is32BitPlatform ? IRInstruction.Load32 : IRInstruction.Load64;
-		StoreInstruction = Is32BitPlatform ? IRInstruction.Store32 : IRInstruction.Store64;
-		MoveInstruction = Is32BitPlatform ? IRInstruction.Move32 : IRInstruction.Move64;
-		AddInstruction = Is32BitPlatform ? IRInstruction.Add32 : IRInstruction.Add64;
-		SubInstruction = Is32BitPlatform ? IRInstruction.Sub32 : IRInstruction.Sub64;
-		MulSignedInstruction = Is32BitPlatform ? IRInstruction.MulSigned32 : IRInstruction.MulSigned64;
-		MulUnsignedInstruction = Is32BitPlatform ? IRInstruction.MulUnsigned32 : IRInstruction.MulUnsigned64;
-		BranchInstruction = Is32BitPlatform ? IRInstruction.Branch32 : IRInstruction.Branch64;
+		LoadInstruction = Is32BitPlatform ? IR.Load32 : IR.Load64;
+		StoreInstruction = Is32BitPlatform ? IR.Store32 : IR.Store64;
+		MoveInstruction = Is32BitPlatform ? IR.Move32 : IR.Move64;
+		AddInstruction = Is32BitPlatform ? IR.Add32 : IR.Add64;
+		SubInstruction = Is32BitPlatform ? IR.Sub32 : IR.Sub64;
+		MulSignedInstruction = Is32BitPlatform ? IR.MulSigned32 : IR.MulSigned64;
+		MulUnsignedInstruction = Is32BitPlatform ? IR.MulUnsigned32 : IR.MulUnsigned64;
+		BranchInstruction = Is32BitPlatform ? IR.Branch32 : IR.Branch64;
 
 		Options = TransformStageOption.None;
 
@@ -542,11 +542,11 @@ public sealed class Transform
 
 		if (context.OperandCount == 1)
 		{
-			context.SetInstruction(IRInstruction.CallStatic, context.Result, symbol, context.Operand1);
+			context.SetInstruction(IR.CallStatic, context.Result, symbol, context.Operand1);
 		}
 		else if (context.OperandCount == 2)
 		{
-			context.SetInstruction(IRInstruction.CallStatic, context.Result, symbol, context.Operand1, context.Operand2);
+			context.SetInstruction(IR.CallStatic, context.Result, symbol, context.Operand1, context.Operand2);
 		}
 		else
 		{

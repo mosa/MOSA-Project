@@ -92,16 +92,16 @@ public class ExitSSAStage : BaseMethodCompilerStage
 
 		var node = predecessor.BeforeLast;
 
-		while (node.Instruction != IRInstruction.Jmp)
+		while (node.Instruction != IR.Jmp)
 		{
 			node = node.Previous;
 		}
 
 		node = node.Previous;
 
-		Debug.Assert(node.Instruction != IRInstruction.Branch32);
-		Debug.Assert(node.Instruction != IRInstruction.Branch64);
-		Debug.Assert(node.Instruction != IRInstruction.BranchObject);
+		Debug.Assert(node.Instruction != IR.Branch32);
+		Debug.Assert(node.Instruction != IR.Branch64);
+		Debug.Assert(node.Instruction != IR.BranchObject);
 
 		var context = new Context(node);
 

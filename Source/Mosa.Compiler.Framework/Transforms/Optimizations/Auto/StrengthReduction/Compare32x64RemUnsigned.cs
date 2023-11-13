@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 [Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class Compare32x64RemUnsigned : BaseTransform
 {
-	public Compare32x64RemUnsigned() : base(IRInstruction.Compare32x64, TransformType.Auto | TransformType.Optimization)
+	public Compare32x64RemUnsigned() : base(Framework.IR.Compare32x64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -31,7 +31,7 @@ public sealed class Compare32x64RemUnsigned : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.RemUnsigned64)
+		if (context.Operand1.Definitions[0].Instruction != Framework.IR.RemUnsigned64)
 			return false;
 
 		if (!context.Operand1.Definitions[0].Operand2.IsResolvedConstant)
@@ -51,7 +51,7 @@ public sealed class Compare32x64RemUnsigned : BaseTransform
 
 		var c1 = Operand.CreateConstant(1);
 
-		context.SetInstruction(IRInstruction.And64, result, t1, c1);
+		context.SetInstruction(Framework.IR.And64, result, t1, c1);
 	}
 }
 
@@ -61,7 +61,7 @@ public sealed class Compare32x64RemUnsigned : BaseTransform
 [Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class Compare32x64RemUnsigned_v1 : BaseTransform
 {
-	public Compare32x64RemUnsigned_v1() : base(IRInstruction.Compare32x64, TransformType.Auto | TransformType.Optimization)
+	public Compare32x64RemUnsigned_v1() : base(Framework.IR.Compare32x64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -82,7 +82,7 @@ public sealed class Compare32x64RemUnsigned_v1 : BaseTransform
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.RemUnsigned64)
+		if (context.Operand2.Definitions[0].Instruction != Framework.IR.RemUnsigned64)
 			return false;
 
 		if (!context.Operand2.Definitions[0].Operand2.IsResolvedConstant)
@@ -102,6 +102,6 @@ public sealed class Compare32x64RemUnsigned_v1 : BaseTransform
 
 		var c1 = Operand.CreateConstant(1);
 
-		context.SetInstruction(IRInstruction.And64, result, t1, c1);
+		context.SetInstruction(Framework.IR.And64, result, t1, c1);
 	}
 }

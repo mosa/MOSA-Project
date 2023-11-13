@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 [Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class ArithShiftRight64By32 : BaseTransform
 {
-	public ArithShiftRight64By32() : base(IRInstruction.GetLow32, TransformType.Auto | TransformType.Optimization, true)
+	public ArithShiftRight64By32() : base(Framework.IR.GetLow32, TransformType.Auto | TransformType.Optimization, true)
 	{
 	}
 
@@ -22,7 +22,7 @@ public sealed class ArithShiftRight64By32 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.ArithShiftRight64)
+		if (context.Operand1.Definitions[0].Instruction != Framework.IR.ArithShiftRight64)
 			return false;
 
 		if (!context.Operand1.Definitions[0].Operand1.IsVirtualRegister)
@@ -37,7 +37,7 @@ public sealed class ArithShiftRight64By32 : BaseTransform
 		if (!context.Operand1.Definitions[0].Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.To64)
+		if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != Framework.IR.To64)
 			return false;
 
 		return true;
@@ -49,6 +49,6 @@ public sealed class ArithShiftRight64By32 : BaseTransform
 
 		var t1 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2;
 
-		context.SetInstruction(IRInstruction.Move32, result, t1);
+		context.SetInstruction(Framework.IR.Move32, result, t1);
 	}
 }

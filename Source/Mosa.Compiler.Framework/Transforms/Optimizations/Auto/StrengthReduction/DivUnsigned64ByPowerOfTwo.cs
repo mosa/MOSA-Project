@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 [Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class DivUnsigned64ByPowerOfTwo : BaseTransform
 {
-	public DivUnsigned64ByPowerOfTwo() : base(IRInstruction.DivUnsigned64, TransformType.Auto | TransformType.Optimization)
+	public DivUnsigned64ByPowerOfTwo() : base(Framework.IR.DivUnsigned64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -40,6 +40,6 @@ public sealed class DivUnsigned64ByPowerOfTwo : BaseTransform
 
 		var e1 = Operand.CreateConstant(GetPowerOfTwo(To32(t2)));
 
-		context.SetInstruction(IRInstruction.ShiftRight64, result, t1, e1);
+		context.SetInstruction(Framework.IR.ShiftRight64, result, t1, e1);
 	}
 }

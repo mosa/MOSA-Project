@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 [Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class SubCarryIn64Outside1 : BaseTransform
 {
-	public SubCarryIn64Outside1() : base(IRInstruction.SubCarryIn64, TransformType.Auto | TransformType.Optimization)
+	public SubCarryIn64Outside1() : base(Framework.IR.SubCarryIn64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -34,6 +34,6 @@ public sealed class SubCarryIn64Outside1 : BaseTransform
 
 		var e1 = Operand.CreateConstant(Sub64(To64(t1), BoolTo64(To64(t2))));
 
-		context.SetInstruction(IRInstruction.Sub64, result, e1);
+		context.SetInstruction(Framework.IR.Sub64, result, e1);
 	}
 }

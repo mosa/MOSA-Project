@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 [Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class MoveManagedPointerCoalescing : BaseTransform
 {
-	public MoveManagedPointerCoalescing() : base(IRInstruction.MoveManagedPointer, TransformType.Auto | TransformType.Optimization)
+	public MoveManagedPointerCoalescing() : base(Framework.IR.MoveManagedPointer, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -24,7 +24,7 @@ public sealed class MoveManagedPointerCoalescing : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.MoveManagedPointer)
+		if (context.Operand1.Definitions[0].Instruction != Framework.IR.MoveManagedPointer)
 			return false;
 
 		return true;
@@ -36,6 +36,6 @@ public sealed class MoveManagedPointerCoalescing : BaseTransform
 
 		var t1 = context.Operand1.Definitions[0].Operand1;
 
-		context.SetInstruction(IRInstruction.MoveManagedPointer, result, t1);
+		context.SetInstruction(Framework.IR.MoveManagedPointer, result, t1);
 	}
 }

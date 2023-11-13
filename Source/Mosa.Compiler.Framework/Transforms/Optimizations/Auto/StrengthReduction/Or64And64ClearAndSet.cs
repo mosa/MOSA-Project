@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 [Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class Or64And64ClearAndSet : BaseTransform
 {
-	public Or64And64ClearAndSet() : base(IRInstruction.Or64, TransformType.Auto | TransformType.Optimization)
+	public Or64And64ClearAndSet() : base(Framework.IR.Or64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -24,7 +24,7 @@ public sealed class Or64And64ClearAndSet : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.And64)
+		if (context.Operand1.Definitions[0].Instruction != Framework.IR.And64)
 			return false;
 
 		if (!IsResolvedConstant(context.Operand2))
@@ -46,7 +46,7 @@ public sealed class Or64And64ClearAndSet : BaseTransform
 		var t1 = context.Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand2;
 
-		context.SetInstruction(IRInstruction.Or64, result, t1, t2);
+		context.SetInstruction(Framework.IR.Or64, result, t1, t2);
 	}
 }
 
@@ -56,7 +56,7 @@ public sealed class Or64And64ClearAndSet : BaseTransform
 [Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class Or64And64ClearAndSet_v1 : BaseTransform
 {
-	public Or64And64ClearAndSet_v1() : base(IRInstruction.Or64, TransformType.Auto | TransformType.Optimization)
+	public Or64And64ClearAndSet_v1() : base(Framework.IR.Or64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -70,7 +70,7 @@ public sealed class Or64And64ClearAndSet_v1 : BaseTransform
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.And64)
+		if (context.Operand2.Definitions[0].Instruction != Framework.IR.And64)
 			return false;
 
 		if (!IsResolvedConstant(context.Operand1))
@@ -92,7 +92,7 @@ public sealed class Or64And64ClearAndSet_v1 : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2.Definitions[0].Operand1;
 
-		context.SetInstruction(IRInstruction.Or64, result, t2, t1);
+		context.SetInstruction(Framework.IR.Or64, result, t2, t1);
 	}
 }
 
@@ -102,7 +102,7 @@ public sealed class Or64And64ClearAndSet_v1 : BaseTransform
 [Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class Or64And64ClearAndSet_v2 : BaseTransform
 {
-	public Or64And64ClearAndSet_v2() : base(IRInstruction.Or64, TransformType.Auto | TransformType.Optimization)
+	public Or64And64ClearAndSet_v2() : base(Framework.IR.Or64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -116,7 +116,7 @@ public sealed class Or64And64ClearAndSet_v2 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.And64)
+		if (context.Operand1.Definitions[0].Instruction != Framework.IR.And64)
 			return false;
 
 		if (!IsResolvedConstant(context.Operand2))
@@ -138,7 +138,7 @@ public sealed class Or64And64ClearAndSet_v2 : BaseTransform
 		var t1 = context.Operand1.Definitions[0].Operand2;
 		var t2 = context.Operand2;
 
-		context.SetInstruction(IRInstruction.Or64, result, t1, t2);
+		context.SetInstruction(Framework.IR.Or64, result, t1, t2);
 	}
 }
 
@@ -148,7 +148,7 @@ public sealed class Or64And64ClearAndSet_v2 : BaseTransform
 [Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class Or64And64ClearAndSet_v3 : BaseTransform
 {
-	public Or64And64ClearAndSet_v3() : base(IRInstruction.Or64, TransformType.Auto | TransformType.Optimization)
+	public Or64And64ClearAndSet_v3() : base(Framework.IR.Or64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -162,7 +162,7 @@ public sealed class Or64And64ClearAndSet_v3 : BaseTransform
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.And64)
+		if (context.Operand2.Definitions[0].Instruction != Framework.IR.And64)
 			return false;
 
 		if (!IsResolvedConstant(context.Operand1))
@@ -184,6 +184,6 @@ public sealed class Or64And64ClearAndSet_v3 : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2.Definitions[0].Operand2;
 
-		context.SetInstruction(IRInstruction.Or64, result, t2, t1);
+		context.SetInstruction(Framework.IR.Or64, result, t2, t1);
 	}
 }

@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Simplification
 
 public sealed class AddCarryOut32CarryNotUsed : BaseTransform
 {
-	public AddCarryOut32CarryNotUsed() : base(IRInstruction.AddCarryOut32, TransformType.Manual | TransformType.Optimization)
+	public AddCarryOut32CarryNotUsed() : base(Framework.IR.AddCarryOut32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -15,6 +15,6 @@ public sealed class AddCarryOut32CarryNotUsed : BaseTransform
 
 	public override void Transform(Context context, Transform transform)
 	{
-		context.SetInstruction(IRInstruction.Add32, context.Result, context.Operand1, context.Operand2);
+		context.SetInstruction(Framework.IR.Add32, context.Result, context.Operand1, context.Operand2);
 	}
 }

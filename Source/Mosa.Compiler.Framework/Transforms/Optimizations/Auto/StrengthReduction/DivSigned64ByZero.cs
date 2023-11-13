@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 [Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class DivSigned64ByZero : BaseTransform
 {
-	public DivSigned64ByZero() : base(IRInstruction.DivSigned64, TransformType.Auto | TransformType.Optimization)
+	public DivSigned64ByZero() : base(Framework.IR.DivSigned64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -39,6 +39,6 @@ public sealed class DivSigned64ByZero : BaseTransform
 
 		var e1 = Operand.CreateConstant(To64(0));
 
-		context.SetInstruction(IRInstruction.Move64, result, e1);
+		context.SetInstruction(Framework.IR.Move64, result, e1);
 	}
 }

@@ -894,18 +894,18 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 			if (at.IsBlockEndInstruction)
 				return TriState.Unknown;
 
-			if (at.Instruction == IRInstruction.StableObjectTracking
-				|| at.Instruction == IRInstruction.UnstableObjectTracking
-				|| at.Instruction == IRInstruction.Kill
-				|| at.Instruction == IRInstruction.KillAll
-				|| at.Instruction == IRInstruction.KillAllExcept
-				|| at.Instruction == IRInstruction.Gen)
+			if (at.Instruction == IR.StableObjectTracking
+				|| at.Instruction == IR.UnstableObjectTracking
+				|| at.Instruction == IR.Kill
+				|| at.Instruction == IR.KillAll
+				|| at.Instruction == IR.KillAllExcept
+				|| at.Instruction == IR.Gen)
 				continue;
 
 			if (at.Instruction.IsReturn)
 				return TriState.No;
 
-			if (at.Instruction == IRInstruction.Epilogue)
+			if (at.Instruction == IR.Epilogue)
 				return TriState.No;
 
 			if (at.Instruction.IsUnconditionalBranch && at.Block.NextBlocks.Count == 1)

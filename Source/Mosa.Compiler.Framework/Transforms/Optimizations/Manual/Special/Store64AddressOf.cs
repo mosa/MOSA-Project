@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Special;
 
 public sealed class Store64AddressOf : BaseTransform
 {
-	public Store64AddressOf() : base(IRInstruction.Store64, TransformType.Manual | TransformType.Optimization)
+	public Store64AddressOf() : base(Framework.IR.Store64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -16,7 +16,7 @@ public sealed class Store64AddressOf : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.AddressOf)
+		if (context.Operand1.Definitions[0].Instruction != Framework.IR.AddressOf)
 			return false;
 
 		if (!context.Operand1.Definitions[0].Operand1.IsLocalStack)
@@ -27,6 +27,6 @@ public sealed class Store64AddressOf : BaseTransform
 
 	public override void Transform(Context context, Transform transform)
 	{
-		context.SetInstruction(IRInstruction.Store64, null, transform.StackFrame, context.Operand1.Definitions[0].Operand1, context.Operand3);
+		context.SetInstruction(Framework.IR.Store64, null, transform.StackFrame, context.Operand1.Definitions[0].Operand1, context.Operand3);
 	}
 }

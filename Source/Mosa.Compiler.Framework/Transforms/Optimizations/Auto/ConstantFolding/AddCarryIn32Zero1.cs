@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 [Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class AddCarryIn32Zero1 : BaseTransform
 {
-	public AddCarryIn32Zero1() : base(IRInstruction.AddCarryIn32, TransformType.Auto | TransformType.Optimization)
+	public AddCarryIn32Zero1() : base(Framework.IR.AddCarryIn32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -32,6 +32,6 @@ public sealed class AddCarryIn32Zero1 : BaseTransform
 		var t1 = context.Operand2;
 		var t2 = context.Operand3;
 
-		context.SetInstruction(IRInstruction.Add32, result, t1, t2);
+		context.SetInstruction(Framework.IR.Add32, result, t1, t2);
 	}
 }

@@ -10,7 +10,7 @@ namespace Mosa.Compiler.x64.Transforms.IR;
 [Transform("x64.IR")]
 public sealed class MoveManagedPointer : BaseIRTransform
 {
-	public MoveManagedPointer() : base(IRInstruction.MoveManagedPointer, TransformType.Manual | TransformType.Transform)
+	public MoveManagedPointer() : base(Framework.IR.MoveManagedPointer, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

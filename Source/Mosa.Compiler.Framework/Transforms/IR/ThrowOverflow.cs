@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.IR;
 
 public sealed class ThrowOverflow : BaseTransform
 {
-	public ThrowOverflow() : base(IRInstruction.ThrowOverflow, TransformType.Manual | TransformType.Transform)
+	public ThrowOverflow() : base(Framework.IR.ThrowOverflow, TransformType.Manual | TransformType.Transform)
 	{
 	}
 
@@ -18,6 +18,6 @@ public sealed class ThrowOverflow : BaseTransform
 		var method = transform.Compiler.InternalRuntimeType.FindMethodByName("ThrowOverflowException");
 		var symbolOperand = Operand.CreateLabel(method, transform.Is32BitPlatform);
 
-		context.SetInstruction(IRInstruction.CallStatic, null, symbolOperand);
+		context.SetInstruction(Framework.IR.CallStatic, null, symbolOperand);
 	}
 }

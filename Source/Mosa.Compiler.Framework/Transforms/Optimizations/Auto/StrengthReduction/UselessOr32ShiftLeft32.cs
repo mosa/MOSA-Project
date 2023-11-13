@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 [Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class UselessOr32ShiftLeft32 : BaseTransform
 {
-	public UselessOr32ShiftLeft32() : base(IRInstruction.ShiftLeft32, TransformType.Auto | TransformType.Optimization)
+	public UselessOr32ShiftLeft32() : base(Framework.IR.ShiftLeft32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -22,7 +22,7 @@ public sealed class UselessOr32ShiftLeft32 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Or32)
+		if (context.Operand1.Definitions[0].Instruction != Framework.IR.Or32)
 			return false;
 
 		if (!IsConstant(context.Operand1.Definitions[0].Operand2))
@@ -47,7 +47,7 @@ public sealed class UselessOr32ShiftLeft32 : BaseTransform
 		var t1 = context.Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand2;
 
-		context.SetInstruction(IRInstruction.ShiftLeft32, result, t1, t2);
+		context.SetInstruction(Framework.IR.ShiftLeft32, result, t1, t2);
 	}
 }
 
@@ -57,7 +57,7 @@ public sealed class UselessOr32ShiftLeft32 : BaseTransform
 [Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class UselessOr32ShiftLeft32_v1 : BaseTransform
 {
-	public UselessOr32ShiftLeft32_v1() : base(IRInstruction.ShiftLeft32, TransformType.Auto | TransformType.Optimization)
+	public UselessOr32ShiftLeft32_v1() : base(Framework.IR.ShiftLeft32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -69,7 +69,7 @@ public sealed class UselessOr32ShiftLeft32_v1 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Or32)
+		if (context.Operand1.Definitions[0].Instruction != Framework.IR.Or32)
 			return false;
 
 		if (!IsConstant(context.Operand1.Definitions[0].Operand1))
@@ -94,6 +94,6 @@ public sealed class UselessOr32ShiftLeft32_v1 : BaseTransform
 		var t1 = context.Operand1.Definitions[0].Operand2;
 		var t2 = context.Operand2;
 
-		context.SetInstruction(IRInstruction.ShiftLeft32, result, t1, t2);
+		context.SetInstruction(Framework.IR.ShiftLeft32, result, t1, t2);
 	}
 }

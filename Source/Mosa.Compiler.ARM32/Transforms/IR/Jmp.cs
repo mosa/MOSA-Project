@@ -10,7 +10,7 @@ namespace Mosa.Compiler.ARM32.Transforms.IR;
 [Transform("ARM32.IR")]
 public sealed class Jmp : BaseIRTransform
 {
-	public Jmp() : base(IRInstruction.Jmp, TransformType.Manual | TransformType.Transform)
+	public Jmp() : base(Framework.IR.Jmp, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

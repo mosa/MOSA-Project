@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Transforms.PlatformIntrinsic;
 /// </summary>
 public sealed class IntrinsicMethodCall : BaseTransform
 {
-	public IntrinsicMethodCall() : base(IRInstruction.IntrinsicMethodCall, TransformType.Manual | TransformType.Transform)
+	public IntrinsicMethodCall() : base(Framework.IR.IntrinsicMethodCall, TransformType.Manual | TransformType.Transform)
 	{
 	}
 
@@ -25,7 +25,7 @@ public sealed class IntrinsicMethodCall : BaseTransform
 		var operands = context.GetOperands();
 		operands.RemoveAt(0);
 
-		context.SetInstruction(IRInstruction.IntrinsicMethodCall, context.Result, operands);
+		context.SetInstruction(Framework.IR.IntrinsicMethodCall, context.Result, operands);
 
 		intrinsic(context, transform);
 	}

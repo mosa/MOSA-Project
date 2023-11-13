@@ -12,7 +12,7 @@ namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.Advanced;
 [Transform("x86.IRTransform.Auto.Advanced")]
 public sealed class Add32ToLea32 : BaseTransform
 {
-	public Add32ToLea32() : base(IRInstruction.Add32, TransformType.Auto | TransformType.Optimization, true)
+	public Add32ToLea32() : base(Framework.IR.Add32, TransformType.Auto | TransformType.Optimization, true)
 	{
 	}
 

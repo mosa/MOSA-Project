@@ -444,13 +444,13 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 	private bool CanAssignValueNumberToExpression(Node node)
 	{
 		if (node.Instruction.IsParameterLoad
-			&& node.Instruction != IRInstruction.LoadParamCompound
+			&& node.Instruction != IR.LoadParamCompound
 			&& ParamReadOnly.Get(node.Operand1.Index))
 		{
 			return true;
 		}
 
-		if (node.Instruction == IRInstruction.AddressOf
+		if (node.Instruction == IR.AddressOf
 			&& (node.Operand1.IsLocalStack || node.Operand1.IsStaticField))
 		{
 			return true;
@@ -523,14 +523,14 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 			return true;
 
 		if (instruction != null
-			&& instruction == IRInstruction.AddressOf
+			&& instruction == IR.AddressOf
 			&& operand1.IsStaticField
 			&& operand2.IsStaticField
 			&& operand1.Field == operand2.Field)
 			return true;
 
 		if (instruction != null
-			&& instruction == IRInstruction.AddressOf
+			&& instruction == IR.AddressOf
 			&& operand1.IsLocalStack
 			&& operand2.IsLocalStack
 			&& operand1.Index == operand2.Index)

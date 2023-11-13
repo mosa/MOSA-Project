@@ -9,7 +9,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.ConstantFoldin
 /// </summary>
 public sealed class MulCarryOut64 : BaseTransform
 {
-	public MulCarryOut64() : base(IRInstruction.MulCarryOut64, TransformType.Auto | TransformType.Optimization, true)
+	public MulCarryOut64() : base(Framework.IR.MulCarryOut64, TransformType.Auto | TransformType.Optimization, true)
 	{
 	}
 
@@ -39,7 +39,7 @@ public sealed class MulCarryOut64 : BaseTransform
 
 		var e1 = Operand.CreateConstant(MulUnsigned64(To64(t1), To64(t2)));
 
-		context.SetInstruction(IRInstruction.Move64, result, e1);
-		context.AppendInstruction(IRInstruction.Move64, result2, Operand.Constant64_1);
+		context.SetInstruction(Framework.IR.Move64, result, e1);
+		context.AppendInstruction(Framework.IR.Move64, result2, Operand.Constant64_1);
 	}
 }

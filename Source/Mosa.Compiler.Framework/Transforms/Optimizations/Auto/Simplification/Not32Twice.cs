@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 [Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class Not32Twice : BaseTransform
 {
-	public Not32Twice() : base(IRInstruction.Not32, TransformType.Auto | TransformType.Optimization)
+	public Not32Twice() : base(Framework.IR.Not32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -24,7 +24,7 @@ public sealed class Not32Twice : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Not32)
+		if (context.Operand1.Definitions[0].Instruction != Framework.IR.Not32)
 			return false;
 
 		return true;
@@ -36,6 +36,6 @@ public sealed class Not32Twice : BaseTransform
 
 		var t1 = context.Operand1.Definitions[0].Operand1;
 
-		context.SetInstruction(IRInstruction.Move32, result, t1);
+		context.SetInstruction(Framework.IR.Move32, result, t1);
 	}
 }

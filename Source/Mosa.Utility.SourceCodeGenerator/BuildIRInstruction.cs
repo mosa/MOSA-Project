@@ -11,15 +11,14 @@ public class BuildIRInstruction : BuildBaseTemplate
 
 	protected override void Body()
 	{
-		Lines.AppendLine("using Mosa.Compiler.Framework;");
-		Lines.AppendLine("using Mosa.Compiler.Framework.IR;");
+		Lines.AppendLine("using Mosa.Compiler.Framework.Instructions;");
 		Lines.AppendLine();
 		Lines.AppendLine("namespace Mosa.Compiler.Framework;");
 		Lines.AppendLine();
 		Lines.AppendLine("/// <summary>");
 		Lines.AppendLine("/// IR Instructions");
 		Lines.AppendLine("/// </summary>");
-		Lines.AppendLine("public static class IRInstruction");
+		Lines.AppendLine("public static class IR");
 		Lines.AppendLine("{");
 
 		var instructions = Entries.Instructions;

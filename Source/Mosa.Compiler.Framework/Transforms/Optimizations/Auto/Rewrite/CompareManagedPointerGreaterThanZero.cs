@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Rewrite;
 [Transform("IR.Optimizations.Auto.Rewrite")]
 public sealed class CompareManagedPointerGreaterThanZero : BaseTransform
 {
-	public CompareManagedPointerGreaterThanZero() : base(IRInstruction.CompareManagedPointer, TransformType.Auto | TransformType.Optimization)
+	public CompareManagedPointerGreaterThanZero() : base(Framework.IR.CompareManagedPointer, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -32,7 +32,7 @@ public sealed class CompareManagedPointerGreaterThanZero : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2;
 
-		context.SetInstruction(IRInstruction.CompareManagedPointer, ConditionCode.NotEqual, result, t1, t2);
+		context.SetInstruction(Framework.IR.CompareManagedPointer, ConditionCode.NotEqual, result, t1, t2);
 	}
 }
 
@@ -42,7 +42,7 @@ public sealed class CompareManagedPointerGreaterThanZero : BaseTransform
 [Transform("IR.Optimizations.Auto.Rewrite")]
 public sealed class CompareManagedPointerGreaterThanZero_v1 : BaseTransform
 {
-	public CompareManagedPointerGreaterThanZero_v1() : base(IRInstruction.CompareManagedPointer, TransformType.Auto | TransformType.Optimization)
+	public CompareManagedPointerGreaterThanZero_v1() : base(Framework.IR.CompareManagedPointer, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -64,6 +64,6 @@ public sealed class CompareManagedPointerGreaterThanZero_v1 : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2;
 
-		context.SetInstruction(IRInstruction.CompareManagedPointer, ConditionCode.NotEqual, result, t2, t1);
+		context.SetInstruction(Framework.IR.CompareManagedPointer, ConditionCode.NotEqual, result, t2, t1);
 	}
 }

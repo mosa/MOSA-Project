@@ -374,13 +374,13 @@ public sealed class Node
 	/// <value>
 	/// 	<c>true</c> if this is the first instruction; otherwise, <c>false</c>.
 	/// </value>
-	public bool IsBlockStartInstruction => Instruction == IRInstruction.BlockStart;
+	public bool IsBlockStartInstruction => Instruction == IR.BlockStart;
 
 	/// <summary>
 	/// Gets a value indicating whether this is the last instruction.
 	/// </summary>
 	/// <value><c>true</c> if this is the last instruction; otherwise, <c>false</c>.</value>
-	public bool IsBlockEndInstruction => Instruction == IRInstruction.BlockEnd;
+	public bool IsBlockEndInstruction => Instruction == IR.BlockEnd;
 
 	/// <summary>
 	/// Gets a value indicating whether this node is empty.
@@ -396,7 +396,7 @@ public sealed class Node
 	/// <value>
 	///   <c>true</c> if this instance is nop; otherwise, <c>false</c>.
 	/// </value>
-	public bool IsNop => Instruction == IRInstruction.Nop;
+	public bool IsNop => Instruction == IR.Nop;
 
 	/// <summary>
 	/// Gets a value indicating whether this node is empty or a NOP instruction.
@@ -404,7 +404,7 @@ public sealed class Node
 	/// <value>
 	///   <c>true</c> if this instance is empty or nop; otherwise, <c>false</c>.
 	/// </value>
-	public bool IsEmptyOrNop => Instruction == null || Instruction == IRInstruction.Nop;
+	public bool IsEmptyOrNop => Instruction == null || Instruction == IR.Nop;
 
 	#endregion Properties
 
@@ -1115,7 +1115,7 @@ public sealed class Node
 
 	public void SetNop()
 	{
-		SetInstruction(IRInstruction.Nop);
+		SetInstruction(IR.Nop);
 	}
 
 	/// <summary>

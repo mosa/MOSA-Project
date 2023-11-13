@@ -54,20 +54,20 @@ public static class DelegatePatcher
 		var v3 = methodCompiler.VirtualRegisters.AllocateObject();
 
 		var loadParameterInstruction = methodCompiler.Is32BitPlatform
-			? IRInstruction.LoadParam32
-			: IRInstruction.LoadParam64;
+			? IR.LoadParam32
+			: IR.LoadParam64;
 
 		context.AppendInstruction(loadParameterInstruction, v1, thisOperand);
 		context.AppendInstruction(loadParameterInstruction, v2, methodPointerOperand);
 		context.AppendInstruction(loadParameterInstruction, v3, instanceOperand);
 
 		var storeIntegerInstruction = methodCompiler.Is32BitPlatform
-			? IRInstruction.Store32
-			: IRInstruction.Store64;
+			? IR.Store32
+			: IR.Store64;
 
 		context.AppendInstruction(storeIntegerInstruction, null, v1, methodPointerOffsetOperand, v2);
 		context.AppendInstruction(storeIntegerInstruction, null, v1, instanceOffsetOperand, v3);
-		context.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);
+		context.AppendInstruction(IR.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);
 	}
 
 	private static void PatchInvoke(MethodCompiler methodCompiler)
@@ -77,12 +77,12 @@ public static class DelegatePatcher
 		// check if instance is null (if so, it's a static call to the methodPointer)
 
 		var loadInstruction = methodCompiler.Is32BitPlatform
-			? IRInstruction.Load32
-			: IRInstruction.Load64;
+			? IR.Load32
+			: IR.Load64;
 
 		var branchInstruction = methodCompiler.Is32BitPlatform
-			? IRInstruction.Branch32
-			: IRInstruction.Branch64;
+			? IR.Branch32
+			: IR.Branch64;
 
 		var methodPointerField = GetField(methodCompiler.Method.DeclaringType, "methodPointer");
 		var methodPointerOffset = methodCompiler.TypeLayout.GetFieldOffset(methodPointerField);
@@ -115,7 +115,7 @@ public static class DelegatePatcher
 			{
 				vrs[i] = methodCompiler.LocalStack.Allocate(parameter);
 
-				b0.AppendInstruction(IRInstruction.LoadParamCompound, vrs[i], parameter);
+				b0.AppendInstruction(IR.LoadParamCompound, vrs[i], parameter);
 			}
 		}
 
@@ -127,9 +127,9 @@ public static class DelegatePatcher
 
 		b0.AppendInstruction(loadInstruction, opMethod, thisOperand, methodPointerOffsetOperand);
 		b0.AppendInstruction(loadInstruction, opInstance, thisOperand, instanceOffsetOperand);
-		b0.AppendInstruction(IRInstruction.CompareObject, ConditionCode.Equal, opCompare, opInstance, Operand.NullObject);
+		b0.AppendInstruction(IR.CompareObject, ConditionCode.Equal, opCompare, opInstance, Operand.NullObject);
 		b0.AppendInstruction(branchInstruction, ConditionCode.Equal, null, opCompare, methodCompiler.ConstantZero, b2.Block);
-		b0.AppendInstruction(IRInstruction.Jmp, b1.Block);
+		b0.AppendInstruction(IR.Jmp, b1.Block);
 
 		var operands = new List<Operand>(methodCompiler.Parameters.Count + 1);
 
@@ -143,12 +143,12 @@ public static class DelegatePatcher
 		var result = returnType.IsVoid ? null : methodCompiler.AllocateVirtualRegisterOrStackLocal(returnType);
 
 		// no instance
-		b1.AppendInstruction(IRInstruction.CallDynamic, result, opMethod, operands);
-		b1.AppendInstruction(IRInstruction.Jmp, b3.Block);
+		b1.AppendInstruction(IR.CallDynamic, result, opMethod, operands);
+		b1.AppendInstruction(IR.Jmp, b3.Block);
 
 		// instance
-		b2.AppendInstruction(IRInstruction.CallDynamic, result, opMethod, opInstance, operands);
-		b2.AppendInstruction(IRInstruction.Jmp, b3.Block);
+		b2.AppendInstruction(IR.CallDynamic, result, opMethod, opInstance, operands);
+		b2.AppendInstruction(IR.Jmp, b3.Block);
 
 		// return
 		if (result != null)
@@ -157,7 +157,7 @@ public static class DelegatePatcher
 			b3.AppendInstruction(setReturn, null, result);
 		}
 
-		b3.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);
+		b3.AppendInstruction(IR.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);
 	}
 
 	private static void PatchBeginInvoke(MethodCompiler methodCompiler)
@@ -167,14 +167,14 @@ public static class DelegatePatcher
 		var setReturn = methodCompiler.GetReturnInstruction(PrimitiveType.Object);
 
 		context.AppendInstruction(setReturn, null, Operand.NullObject);
-		context.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);
+		context.AppendInstruction(IR.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);
 	}
 
 	private static void PatchEndInvoke(MethodCompiler methodCompiler)
 	{
 		var start = CreateMethodStructure(methodCompiler);
 
-		start.First.Insert(new Node(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock));
+		start.First.Insert(new Node(IR.Jmp, methodCompiler.BasicBlocks.EpilogueBlock));
 	}
 
 	private static BasicBlock CreateMethodStructure(MethodCompiler methodCompiler)
@@ -185,11 +185,11 @@ public static class DelegatePatcher
 		var epilogueBlock = methodCompiler.BasicBlocks.CreateEpilogueBlock();
 
 		var prologue = new Context(prologueBlock);
-		prologue.AppendInstruction(IRInstruction.Prologue);
-		prologue.AppendInstruction(IRInstruction.Jmp, startBlock);
+		prologue.AppendInstruction(IR.Prologue);
+		prologue.AppendInstruction(IR.Jmp, startBlock);
 
 		var epilogue = new Context(epilogueBlock);
-		epilogue.AppendInstruction(IRInstruction.Epilogue);
+		epilogue.AppendInstruction(IR.Epilogue);
 
 		return startBlock;
 	}

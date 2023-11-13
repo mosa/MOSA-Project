@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Transforms.Runtime;
 /// </summary>
 public sealed class Rethrow : BaseRuntimeTransform
 {
-	public Rethrow() : base(IRInstruction.Rethrow, TransformType.Manual | TransformType.Transform)
+	public Rethrow() : base(Framework.IR.Rethrow, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

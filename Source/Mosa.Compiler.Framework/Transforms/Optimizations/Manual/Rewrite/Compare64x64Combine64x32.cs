@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Rewrite;
 
 public sealed class Compare64x64Combine64x32 : BaseTransform
 {
-	public Compare64x64Combine64x32() : base(IRInstruction.Compare64x64, TransformType.Manual | TransformType.Optimization)
+	public Compare64x64Combine64x32() : base(Framework.IR.Compare64x64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -25,7 +25,7 @@ public sealed class Compare64x64Combine64x32 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Compare64x32)
+		if (context.Operand1.Definitions[0].Instruction != Framework.IR.Compare64x32)
 			return false;
 
 		return true;
@@ -36,6 +36,6 @@ public sealed class Compare64x64Combine64x32 : BaseTransform
 		var node2 = context.Operand1.Definitions[0];
 		var conditionCode = context.ConditionCode == ConditionCode.NotEqual ? node2.ConditionCode : node2.ConditionCode.GetOpposite();
 
-		context.SetInstruction(IRInstruction.Compare64x32, conditionCode, context.Result, node2.Operand1, node2.Operand2);
+		context.SetInstruction(Framework.IR.Compare64x32, conditionCode, context.Result, node2.Operand1, node2.Operand2);
 	}
 }

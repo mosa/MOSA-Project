@@ -10,7 +10,7 @@ namespace Mosa.Compiler.ARM32.Transforms.IR;
 [Transform("ARM32.IR")]
 public sealed class CompareObject : BaseIRTransform
 {
-	public CompareObject() : base(IRInstruction.CompareObject, TransformType.Manual | TransformType.Transform)
+	public CompareObject() : base(Framework.IR.CompareObject, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

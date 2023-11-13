@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Rewrite;
 
 public sealed class Branch32LessOrEqualThanZero : BaseTransform
 {
-	public Branch32LessOrEqualThanZero() : base(IRInstruction.Branch32, TransformType.Manual | TransformType.Optimization)
+	public Branch32LessOrEqualThanZero() : base(Framework.IR.Branch32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -28,7 +28,7 @@ public sealed class Branch32LessOrEqualThanZero : BaseTransform
 
 		var phiBlock = GetOtherBranchTarget(context.Block, target);
 
-		context.SetInstruction(IRInstruction.Jmp, target);
+		context.SetInstruction(Framework.IR.Jmp, target);
 
 		RemoveRemainingInstructionInBlock(context);
 

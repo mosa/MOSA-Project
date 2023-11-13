@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Memory;
 
 public sealed class DoubleLoadR8 : BaseTransform
 {
-	public DoubleLoadR8() : base(IRInstruction.LoadR8, TransformType.Manual | TransformType.Optimization)
+	public DoubleLoadR8() : base(Framework.IR.LoadR8, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -16,7 +16,7 @@ public sealed class DoubleLoadR8 : BaseTransform
 		if (!context.Operand2.IsResolvedConstant)
 			return false;
 
-		var previous = GetPreviousNodeUntil(context, IRInstruction.LoadR8, transform.Window, context.Result);
+		var previous = GetPreviousNodeUntil(context, Framework.IR.LoadR8, transform.Window, context.Result);
 
 		if (previous == null)
 			return false;
@@ -35,8 +35,8 @@ public sealed class DoubleLoadR8 : BaseTransform
 
 	public override void Transform(Context context, Transform transform)
 	{
-		var previous = GetPreviousNodeUntil(context, IRInstruction.LoadR8, transform.Window);
+		var previous = GetPreviousNodeUntil(context, Framework.IR.LoadR8, transform.Window);
 
-		context.SetInstruction(IRInstruction.MoveR8, context.Result, previous.Result);
+		context.SetInstruction(Framework.IR.MoveR8, context.Result, previous.Result);
 	}
 }

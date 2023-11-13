@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 [Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class AddCarryIn64NoCarry : BaseTransform
 {
-	public AddCarryIn64NoCarry() : base(IRInstruction.AddCarryIn64, TransformType.Auto | TransformType.Optimization)
+	public AddCarryIn64NoCarry() : base(Framework.IR.AddCarryIn64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -32,6 +32,6 @@ public sealed class AddCarryIn64NoCarry : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2;
 
-		context.SetInstruction(IRInstruction.Add64, result, t1, t2);
+		context.SetInstruction(Framework.IR.Add64, result, t1, t2);
 	}
 }

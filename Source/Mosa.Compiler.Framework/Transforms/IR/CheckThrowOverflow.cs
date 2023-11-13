@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.IR;
 
 public sealed class CheckThrowOverflow : BaseTransform
 {
-	public CheckThrowOverflow() : base(IRInstruction.CheckThrowOverflow, TransformType.Manual | TransformType.Transform)
+	public CheckThrowOverflow() : base(Framework.IR.CheckThrowOverflow, TransformType.Manual | TransformType.Transform)
 	{
 	}
 
@@ -26,7 +26,7 @@ public sealed class CheckThrowOverflow : BaseTransform
 			}
 			else
 			{
-				context.SetInstruction(IRInstruction.ThrowOverflow);
+				context.SetInstruction(Framework.IR.ThrowOverflow);
 			}
 			return;
 		}
@@ -35,8 +35,8 @@ public sealed class CheckThrowOverflow : BaseTransform
 		var nextBlock = transform.Split(context);
 
 		context.SetInstruction(transform.BranchInstruction, ConditionCode.NotEqual, null, operand1, Operand.Constant32_0, newBlock.Block);
-		context.AppendInstruction(IRInstruction.Jmp, nextBlock.Block);
+		context.AppendInstruction(Framework.IR.Jmp, nextBlock.Block);
 
-		newBlock.AppendInstruction(IRInstruction.ThrowOverflow);
+		newBlock.AppendInstruction(Framework.IR.ThrowOverflow);
 	}
 }

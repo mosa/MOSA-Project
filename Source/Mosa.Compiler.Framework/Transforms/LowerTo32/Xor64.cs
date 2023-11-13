@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
 public sealed class Xor64 : BaseLowerTo32Transform
 {
-	public Xor64() : base(IRInstruction.Xor64, TransformType.Manual | TransformType.Optimization)
+	public Xor64() : base(Framework.IR.Xor64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -21,13 +21,13 @@ public sealed class Xor64 : BaseLowerTo32Transform
 		var resultLow = transform.VirtualRegisters.Allocate32();
 		var resultHigh = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction(IRInstruction.GetLow32, op0Low, operand1);
-		context.AppendInstruction(IRInstruction.GetHigh32, op0High, operand1);
-		context.AppendInstruction(IRInstruction.GetLow32, op1Low, operand2);
-		context.AppendInstruction(IRInstruction.GetHigh32, op1High, operand2);
+		context.SetInstruction(Framework.IR.GetLow32, op0Low, operand1);
+		context.AppendInstruction(Framework.IR.GetHigh32, op0High, operand1);
+		context.AppendInstruction(Framework.IR.GetLow32, op1Low, operand2);
+		context.AppendInstruction(Framework.IR.GetHigh32, op1High, operand2);
 
-		context.AppendInstruction(IRInstruction.Xor32, resultLow, op0Low, op1Low);
-		context.AppendInstruction(IRInstruction.Xor32, resultHigh, op0High, op1High);
-		context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
+		context.AppendInstruction(Framework.IR.Xor32, resultLow, op0Low, op1Low);
+		context.AppendInstruction(Framework.IR.Xor32, resultHigh, op0High, op1High);
+		context.AppendInstruction(Framework.IR.To64, result, resultLow, resultHigh);
 	}
 }

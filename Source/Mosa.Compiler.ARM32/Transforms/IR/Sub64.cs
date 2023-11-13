@@ -10,7 +10,7 @@ namespace Mosa.Compiler.ARM32.Transforms.IR;
 [Transform("ARM32.IR")]
 public sealed class Sub64 : BaseIRTransform
 {
-	public Sub64() : base(IRInstruction.Sub64, TransformType.Manual | TransformType.Transform)
+	public Sub64() : base(Framework.IR.Sub64, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
 public sealed class Store64 : BaseLowerTo32Transform
 {
-	public Store64() : base(IRInstruction.Store64, TransformType.Manual | TransformType.Optimization)
+	public Store64() : base(Framework.IR.Store64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -20,13 +20,13 @@ public sealed class Store64 : BaseLowerTo32Transform
 		var addressLow = transform.VirtualRegisters.Allocate32();
 		var offset4 = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction(IRInstruction.GetLow32, valueLow, value);
-		context.AppendInstruction(IRInstruction.GetHigh32, valueHigh, value);
-		context.AppendInstruction(IRInstruction.GetLow32, addressLow, address);
-		context.AppendInstruction(IRInstruction.GetLow32, offsetLow, offset);
+		context.SetInstruction(Framework.IR.GetLow32, valueLow, value);
+		context.AppendInstruction(Framework.IR.GetHigh32, valueHigh, value);
+		context.AppendInstruction(Framework.IR.GetLow32, addressLow, address);
+		context.AppendInstruction(Framework.IR.GetLow32, offsetLow, offset);
 
-		context.AppendInstruction(IRInstruction.Store32, null, addressLow, offset, valueLow);
-		context.AppendInstruction(IRInstruction.Add32, offset4, offsetLow, Operand.Constant32_4);
-		context.AppendInstruction(IRInstruction.Store32, null, addressLow, offset4, valueHigh);
+		context.AppendInstruction(Framework.IR.Store32, null, addressLow, offset, valueLow);
+		context.AppendInstruction(Framework.IR.Add32, offset4, offsetLow, Operand.Constant32_4);
+		context.AppendInstruction(Framework.IR.Store32, null, addressLow, offset4, valueHigh);
 	}
 }

@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Simplification
 
 public sealed class BranchManagedPointerOnlyOneExit : BaseTransform
 {
-	public BranchManagedPointerOnlyOneExit() : base(IRInstruction.BranchManagedPointer, TransformType.Manual | TransformType.Optimization)
+	public BranchManagedPointerOnlyOneExit() : base(Framework.IR.BranchManagedPointer, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

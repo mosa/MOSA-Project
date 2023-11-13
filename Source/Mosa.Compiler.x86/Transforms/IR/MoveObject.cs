@@ -10,7 +10,7 @@ namespace Mosa.Compiler.x86.Transforms.IR;
 [Transform("x86.IR")]
 public sealed class MoveObject : BaseIRTransform
 {
-	public MoveObject() : base(IRInstruction.MoveObject, TransformType.Manual | TransformType.Transform)
+	public MoveObject() : base(Framework.IR.MoveObject, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

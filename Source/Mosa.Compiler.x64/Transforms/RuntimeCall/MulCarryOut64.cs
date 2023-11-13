@@ -11,7 +11,7 @@ namespace Mosa.Compiler.x64.Transforms.RuntimeCall;
 [Transform("x64.RuntimeCall")]
 public sealed class MulCarryOut64 : BaseTransform
 {
-	public MulCarryOut64() : base(IRInstruction.MulCarryOut64, TransformType.Manual | TransformType.Transform)
+	public MulCarryOut64() : base(Framework.IR.MulCarryOut64, TransformType.Manual | TransformType.Transform)
 	{
 	}
 
@@ -38,9 +38,9 @@ public sealed class MulCarryOut64 : BaseTransform
 
 		var symbol = Operand.CreateLabel(method, transform.Is32BitPlatform);
 
-		context.SetInstruction(IRInstruction.AddressOf, v2, v1);
-		context.AppendInstruction(IRInstruction.CallStatic, result, symbol, operand1, operand2, v2);
-		context.AppendInstruction(IRInstruction.LoadZeroExtend8x32, result2, v2, Operand.Constant64_0);
+		context.SetInstruction(Framework.IR.AddressOf, v2, v1);
+		context.AppendInstruction(Framework.IR.CallStatic, result, symbol, operand1, operand2, v2);
+		context.AppendInstruction(Framework.IR.LoadZeroExtend8x32, result2, v2, Operand.Constant64_0);
 
 		transform.MethodScanner.MethodInvoked(method, transform.Method);
 	}

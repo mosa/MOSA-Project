@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 [Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class GetLow32 : BaseTransform
 {
-	public GetLow32() : base(IRInstruction.GetLow32, TransformType.Auto | TransformType.Optimization)
+	public GetLow32() : base(Framework.IR.GetLow32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -32,6 +32,6 @@ public sealed class GetLow32 : BaseTransform
 
 		var e1 = Operand.CreateConstant(To32(t1));
 
-		context.SetInstruction(IRInstruction.Move32, result, e1);
+		context.SetInstruction(Framework.IR.Move32, result, e1);
 	}
 }

@@ -418,9 +418,9 @@ public sealed class SparseConditionalConstantPropagation
 		{
 			var node = instructionWorkList.Pop();
 
-			if (node.Instruction == IRInstruction.Branch32
-				|| node.Instruction == IRInstruction.Branch64
-				|| node.Instruction == IRInstruction.BranchObject)
+			if (node.Instruction == IR.Branch32
+				|| node.Instruction == IR.Branch64
+				|| node.Instruction == IR.BranchObject)
 			{
 				// special case
 				ProcessInstructionsContinuiously(node);
@@ -438,101 +438,101 @@ public sealed class SparseConditionalConstantPropagation
 
 		var instruction = node.Instruction;
 
-		if (instruction == IRInstruction.Move32
-			|| instruction == IRInstruction.Move64
-			|| instruction == IRInstruction.MoveObject)
+		if (instruction == IR.Move32
+			|| instruction == IR.Move64
+			|| instruction == IR.MoveObject)
 		{
 			Move(node);
 		}
-		else if (instruction == IRInstruction.NewObject
-				 || instruction == IRInstruction.NewArray
-				 || instruction == IRInstruction.NewString)
+		else if (instruction == IR.NewObject
+				 || instruction == IR.NewArray
+				 || instruction == IR.NewString)
 		{
 			NewObject(node);
 		}
-		else if (instruction == IRInstruction.CallDynamic
-				 || instruction == IRInstruction.CallInterface
-				 || instruction == IRInstruction.CallDirect
-				 || instruction == IRInstruction.CallStatic
-				 || instruction == IRInstruction.CallVirtual
-				 || instruction == IRInstruction.IntrinsicMethodCall)
+		else if (instruction == IR.CallDynamic
+				 || instruction == IR.CallInterface
+				 || instruction == IR.CallDirect
+				 || instruction == IR.CallStatic
+				 || instruction == IR.CallVirtual
+				 || instruction == IR.IntrinsicMethodCall)
 		{
 			Call(node);
 		}
-		else if (instruction == IRInstruction.Load32
-				 || instruction == IRInstruction.Load64
-				 || instruction == IRInstruction.LoadObject
+		else if (instruction == IR.Load32
+				 || instruction == IR.Load64
+				 || instruction == IR.LoadObject
 
-				 || instruction == IRInstruction.LoadSignExtend8x32
-				 || instruction == IRInstruction.LoadSignExtend16x32
-				 || instruction == IRInstruction.LoadSignExtend8x64
-				 || instruction == IRInstruction.LoadSignExtend16x64
-				 || instruction == IRInstruction.LoadSignExtend32x64
+				 || instruction == IR.LoadSignExtend8x32
+				 || instruction == IR.LoadSignExtend16x32
+				 || instruction == IR.LoadSignExtend8x64
+				 || instruction == IR.LoadSignExtend16x64
+				 || instruction == IR.LoadSignExtend32x64
 
-				 || instruction == IRInstruction.LoadZeroExtend8x32
-				 || instruction == IRInstruction.LoadZeroExtend16x32
-				 || instruction == IRInstruction.LoadZeroExtend8x64
-				 || instruction == IRInstruction.LoadZeroExtend16x64
-				 || instruction == IRInstruction.LoadZeroExtend32x64
+				 || instruction == IR.LoadZeroExtend8x32
+				 || instruction == IR.LoadZeroExtend16x32
+				 || instruction == IR.LoadZeroExtend8x64
+				 || instruction == IR.LoadZeroExtend16x64
+				 || instruction == IR.LoadZeroExtend32x64
 
-				 || instruction == IRInstruction.LoadR4
-				 || instruction == IRInstruction.LoadR8
+				 || instruction == IR.LoadR4
+				 || instruction == IR.LoadR8
 
-				 || instruction == IRInstruction.LoadParamSignExtend8x32
-				 || instruction == IRInstruction.LoadParamSignExtend16x32
-				 || instruction == IRInstruction.LoadParam32
-				 || instruction == IRInstruction.LoadParam64
-				 || instruction == IRInstruction.LoadParamSignExtend8x64
-				 || instruction == IRInstruction.LoadParamSignExtend16x64
-				 || instruction == IRInstruction.LoadParamSignExtend32x64
-				 || instruction == IRInstruction.LoadParamZeroExtend8x32
-				 || instruction == IRInstruction.LoadParamZeroExtend16x32
-				 || instruction == IRInstruction.LoadParamZeroExtend8x64
-				 || instruction == IRInstruction.LoadParamZeroExtend16x64
-				 || instruction == IRInstruction.LoadParamZeroExtend32x64
-				 || instruction == IRInstruction.LoadParamR4
-				 || instruction == IRInstruction.LoadParamR8)
+				 || instruction == IR.LoadParamSignExtend8x32
+				 || instruction == IR.LoadParamSignExtend16x32
+				 || instruction == IR.LoadParam32
+				 || instruction == IR.LoadParam64
+				 || instruction == IR.LoadParamSignExtend8x64
+				 || instruction == IR.LoadParamSignExtend16x64
+				 || instruction == IR.LoadParamSignExtend32x64
+				 || instruction == IR.LoadParamZeroExtend8x32
+				 || instruction == IR.LoadParamZeroExtend16x32
+				 || instruction == IR.LoadParamZeroExtend8x64
+				 || instruction == IR.LoadParamZeroExtend16x64
+				 || instruction == IR.LoadParamZeroExtend32x64
+				 || instruction == IR.LoadParamR4
+				 || instruction == IR.LoadParamR8)
 		{
 			Load(node);
 		}
-		else if (instruction == IRInstruction.Add32
-				 || instruction == IRInstruction.Add64
-				 || instruction == IRInstruction.Sub32
-				 || instruction == IRInstruction.Sub64
-				 || instruction == IRInstruction.MulSigned32
-				 || instruction == IRInstruction.MulUnsigned32
-				 || instruction == IRInstruction.MulSigned64
-				 || instruction == IRInstruction.MulUnsigned64
-				 || instruction == IRInstruction.DivSigned32
-				 || instruction == IRInstruction.DivUnsigned32
-				 || instruction == IRInstruction.RemSigned32
-				 || instruction == IRInstruction.RemUnsigned32
-				 || instruction == IRInstruction.DivSigned64
-				 || instruction == IRInstruction.DivUnsigned64
-				 || instruction == IRInstruction.RemSigned64
-				 || instruction == IRInstruction.RemUnsigned64
-				 || instruction == IRInstruction.ShiftLeft32
-				 || instruction == IRInstruction.ShiftRight32
-				 || instruction == IRInstruction.ShiftLeft64
-				 || instruction == IRInstruction.ShiftRight64
-				 || instruction == IRInstruction.ArithShiftRight32
-				 || instruction == IRInstruction.ArithShiftRight64)
+		else if (instruction == IR.Add32
+				 || instruction == IR.Add64
+				 || instruction == IR.Sub32
+				 || instruction == IR.Sub64
+				 || instruction == IR.MulSigned32
+				 || instruction == IR.MulUnsigned32
+				 || instruction == IR.MulSigned64
+				 || instruction == IR.MulUnsigned64
+				 || instruction == IR.DivSigned32
+				 || instruction == IR.DivUnsigned32
+				 || instruction == IR.RemSigned32
+				 || instruction == IR.RemUnsigned32
+				 || instruction == IR.DivSigned64
+				 || instruction == IR.DivUnsigned64
+				 || instruction == IR.RemSigned64
+				 || instruction == IR.RemUnsigned64
+				 || instruction == IR.ShiftLeft32
+				 || instruction == IR.ShiftRight32
+				 || instruction == IR.ShiftLeft64
+				 || instruction == IR.ShiftRight64
+				 || instruction == IR.ArithShiftRight32
+				 || instruction == IR.ArithShiftRight64)
 		{
 			IntegerOperation2(node);
 		}
-		else if (instruction == IRInstruction.Neg32
-				 || instruction == IRInstruction.Neg64
-				 || instruction == IRInstruction.Not32
-				 || instruction == IRInstruction.Not64)
+		else if (instruction == IR.Neg32
+				 || instruction == IR.Neg64
+				 || instruction == IR.Not32
+				 || instruction == IR.Not64)
 		{
 			IntegerOperation1(node);
 		}
-		else if (instruction == IRInstruction.Compare32x32
-				 || instruction == IRInstruction.Compare32x64
-				 || instruction == IRInstruction.Compare64x32
-				 || instruction == IRInstruction.Compare64x64
-				 || instruction == IRInstruction.CompareObject
-				 || instruction == IRInstruction.CompareManagedPointer)
+		else if (instruction == IR.Compare32x32
+				 || instruction == IR.Compare32x64
+				 || instruction == IR.Compare64x32
+				 || instruction == IR.Compare64x64
+				 || instruction == IR.CompareObject
+				 || instruction == IR.CompareManagedPointer)
 		{
 			CompareOperation(node);
 		}
@@ -540,54 +540,54 @@ public sealed class SparseConditionalConstantPropagation
 		{
 			Phi(node);
 		}
-		else if (instruction == IRInstruction.Jmp)
+		else if (instruction == IR.Jmp)
 		{
 			Jmp(node);
 		}
-		else if (instruction == IRInstruction.Branch32
-				 || instruction == IRInstruction.Branch64
-				 || instruction == IRInstruction.BranchObject
-				 || instruction == IRInstruction.BranchManagedPointer)
+		else if (instruction == IR.Branch32
+				 || instruction == IR.Branch64
+				 || instruction == IR.BranchObject
+				 || instruction == IR.BranchManagedPointer)
 		{
 			return CompareBranch(node);
 		}
-		else if (instruction == IRInstruction.AddressOf)
+		else if (instruction == IR.AddressOf)
 		{
 			AddressOf(node);
 		}
-		else if (instruction == IRInstruction.SignExtend8x32
-				 || instruction == IRInstruction.SignExtend16x32
-				 || instruction == IRInstruction.SignExtend8x64
-				 || instruction == IRInstruction.SignExtend16x64
-				 || instruction == IRInstruction.SignExtend32x64
-				 || instruction == IRInstruction.ZeroExtend8x32
-				 || instruction == IRInstruction.ZeroExtend16x32
-				 || instruction == IRInstruction.ZeroExtend8x64
-				 || instruction == IRInstruction.ZeroExtend16x64
-				 || instruction == IRInstruction.ZeroExtend32x64)
+		else if (instruction == IR.SignExtend8x32
+				 || instruction == IR.SignExtend16x32
+				 || instruction == IR.SignExtend8x64
+				 || instruction == IR.SignExtend16x64
+				 || instruction == IR.SignExtend32x64
+				 || instruction == IR.ZeroExtend8x32
+				 || instruction == IR.ZeroExtend16x32
+				 || instruction == IR.ZeroExtend8x64
+				 || instruction == IR.ZeroExtend16x64
+				 || instruction == IR.ZeroExtend32x64)
 		{
 			SignOrZeroExtend(node);
 		}
-		else if (instruction == IRInstruction.Switch)
+		else if (instruction == IR.Switch)
 		{
 			Switch(node);
 		}
-		else if (instruction == IRInstruction.IfThenElse32
-				 || instruction == IRInstruction.IfThenElse64)
+		else if (instruction == IR.IfThenElse32
+				 || instruction == IR.IfThenElse64)
 		{
 			IfThenElse(node);
 		}
-		else if (instruction == IRInstruction.FinallyStart)
+		else if (instruction == IR.FinallyStart)
 		{
 			FinallyStart(node);
 		}
-		else if (instruction == IRInstruction.SetReturn32
-				 || instruction == IRInstruction.SetReturnObject
-				 || instruction == IRInstruction.SetReturnManagedPointer
-				 || instruction == IRInstruction.SetReturn64
-				 || instruction == IRInstruction.SetReturnR4
-				 || instruction == IRInstruction.SetReturnR8
-				 || instruction == IRInstruction.SetReturnCompound)
+		else if (instruction == IR.SetReturn32
+				 || instruction == IR.SetReturnObject
+				 || instruction == IR.SetReturnManagedPointer
+				 || instruction == IR.SetReturn64
+				 || instruction == IR.SetReturnR4
+				 || instruction == IR.SetReturnR8
+				 || instruction == IR.SetReturnCompound)
 		{
 			// nothing
 		}
@@ -927,17 +927,17 @@ public sealed class SparseConditionalConstantPropagation
 
 	private static bool IntegerOperation1(BaseInstruction instruction, ulong operand1, out ulong result)
 	{
-		if (instruction == IRInstruction.Neg32)
+		if (instruction == IR.Neg32)
 		{
 			result = (uint)-((int)operand1);
 			return true;
 		}
-		else if (instruction == IRInstruction.Neg64)
+		else if (instruction == IR.Neg64)
 		{
 			result = (ulong)-((long)operand1);
 			return true;
 		}
-		else if (instruction == IRInstruction.Not32 || instruction == IRInstruction.Neg64)
+		else if (instruction == IR.Not32 || instruction == IR.Neg64)
 		{
 			result = ~operand1;
 			return true;
@@ -1006,62 +1006,62 @@ public sealed class SparseConditionalConstantPropagation
 
 	private static bool IntegerOperation(BaseInstruction instruction, ulong operand1, ulong operand2, ConditionCode conditionCode, out ulong result)
 	{
-		if (instruction == IRInstruction.Add32
-			|| instruction == IRInstruction.Add64)
+		if (instruction == IR.Add32
+			|| instruction == IR.Add64)
 		{
 			result = operand1 + operand2;
 			return true;
 		}
-		else if (instruction == IRInstruction.Sub32
-				 || instruction == IRInstruction.Sub64)
+		else if (instruction == IR.Sub32
+				 || instruction == IR.Sub64)
 		{
 			result = operand1 - operand2;
 			return true;
 		}
-		else if (instruction == IRInstruction.MulUnsigned32
-				 || instruction == IRInstruction.MulSigned32
-				 || instruction == IRInstruction.MulUnsigned64
-				 || instruction == IRInstruction.MulSigned64)
+		else if (instruction == IR.MulUnsigned32
+				 || instruction == IR.MulSigned32
+				 || instruction == IR.MulUnsigned64
+				 || instruction == IR.MulSigned64)
 		{
 			result = operand1 * operand2;
 			return true;
 		}
-		else if ((instruction == IRInstruction.DivUnsigned32 || instruction == IRInstruction.DivUnsigned64) && operand2 != 0)
+		else if ((instruction == IR.DivUnsigned32 || instruction == IR.DivUnsigned64) && operand2 != 0)
 		{
 			result = operand1 / operand2;
 			return true;
 		}
-		else if ((instruction == IRInstruction.DivSigned32 || instruction == IRInstruction.DivSigned64) && operand2 != 0)
+		else if ((instruction == IR.DivSigned32 || instruction == IR.DivSigned64) && operand2 != 0)
 		{
 			result = (ulong)((long)operand1 / (long)operand2);
 			return true;
 		}
-		else if ((instruction == IRInstruction.RemUnsigned32 || instruction == IRInstruction.RemUnsigned64) && operand2 != 0)
+		else if ((instruction == IR.RemUnsigned32 || instruction == IR.RemUnsigned64) && operand2 != 0)
 		{
 			result = operand1 % operand2;
 			return true;
 		}
-		else if ((instruction == IRInstruction.RemSigned32 || instruction == IRInstruction.RemSigned64) && operand2 != 0)
+		else if ((instruction == IR.RemSigned32 || instruction == IR.RemSigned64) && operand2 != 0)
 		{
 			result = (ulong)((long)operand1 % (long)operand2);
 			return true;
 		}
-		else if (instruction == IRInstruction.ArithShiftRight32 || instruction == IRInstruction.ArithShiftRight64)
+		else if (instruction == IR.ArithShiftRight32 || instruction == IR.ArithShiftRight64)
 		{
 			result = (ulong)((long)operand1 >> (int)operand2);
 			return true;
 		}
-		else if (instruction == IRInstruction.ShiftRight32 || instruction == IRInstruction.ShiftRight64)
+		else if (instruction == IR.ShiftRight32 || instruction == IR.ShiftRight64)
 		{
 			result = operand1 >> (int)operand2;
 			return true;
 		}
-		else if (instruction == IRInstruction.ShiftLeft32 || instruction == IRInstruction.ShiftLeft64)
+		else if (instruction == IR.ShiftLeft32 || instruction == IR.ShiftLeft64)
 		{
 			result = operand1 << (int)operand2;
 			return true;
 		}
-		else if (instruction == IRInstruction.Compare32x32)
+		else if (instruction == IR.Compare32x32)
 		{
 			var compare = Compare32((uint)operand1, (uint)operand2, conditionCode);
 
@@ -1071,8 +1071,8 @@ public sealed class SparseConditionalConstantPropagation
 				return true;
 			}
 		}
-		else if (instruction == IRInstruction.Compare64x32
-				 || instruction == IRInstruction.Compare64x64)
+		else if (instruction == IR.Compare64x32
+				 || instruction == IR.Compare64x64)
 		{
 			var compare = Compare64(operand1, operand2, conditionCode);
 
@@ -1088,57 +1088,57 @@ public sealed class SparseConditionalConstantPropagation
 
 	private static bool SignOrZeroExtend(BaseInstruction instruction, ulong operand1, out ulong result)
 	{
-		if (instruction == IRInstruction.SignExtend8x32)
+		if (instruction == IR.SignExtend8x32)
 		{
 			var value = (byte)operand1;
 			result = (value & 0x80) == 0 ? value : value | 0xFFFFFF00;
 			return true;
 		}
-		else if (instruction == IRInstruction.SignExtend16x32)
+		else if (instruction == IR.SignExtend16x32)
 		{
 			var value = (ushort)operand1;
 			result = (value & 0x8000) == 0 ? value : value | 0xFFFF0000;
 			return true;
 		}
-		else if (instruction == IRInstruction.SignExtend8x64)
+		else if (instruction == IR.SignExtend8x64)
 		{
 			var value = (byte)operand1;
 			result = (value & 0x80) == 0 ? value : value | 0xFFFFFFFFFFFFFF00ul;
 			return true;
 		}
-		else if (instruction == IRInstruction.SignExtend16x64)
+		else if (instruction == IR.SignExtend16x64)
 		{
 			var value = (ushort)operand1;
 			result = (value & 0x8000) == 0 ? value : value | 0xFFFFFFFFFFFF0000ul;
 			return true;
 		}
-		else if (instruction == IRInstruction.SignExtend32x64)
+		else if (instruction == IR.SignExtend32x64)
 		{
 			var value = (uint)operand1;
 			result = (value & 0x80000000) == 0 ? value : value | 0xFFFFFFFF00000000ul;
 			return true;
 		}
-		else if (instruction == IRInstruction.ZeroExtend8x32)
+		else if (instruction == IR.ZeroExtend8x32)
 		{
 			result = (byte)operand1;
 			return true;
 		}
-		else if (instruction == IRInstruction.ZeroExtend16x32)
+		else if (instruction == IR.ZeroExtend16x32)
 		{
 			result = (byte)operand1;
 			return true;
 		}
-		else if (instruction == IRInstruction.ZeroExtend8x64)
+		else if (instruction == IR.ZeroExtend8x64)
 		{
 			result = (byte)operand1;
 			return true;
 		}
-		else if (instruction == IRInstruction.ZeroExtend16x64)
+		else if (instruction == IR.ZeroExtend16x64)
 		{
 			result = (ushort)operand1;
 			return true;
 		}
-		else if (instruction == IRInstruction.ZeroExtend32x64)
+		else if (instruction == IR.ZeroExtend32x64)
 		{
 			result = (uint)operand1;
 			return true;
@@ -1209,7 +1209,7 @@ public sealed class SparseConditionalConstantPropagation
 			return !compareNull.Value;
 		}
 
-		var is32Bit = node.Instruction == IRInstruction.Branch32 || (node.Instruction == IRInstruction.BranchObject && Is32BitPlatform);
+		var is32Bit = node.Instruction == IR.Branch32 || (node.Instruction == IR.BranchObject && Is32BitPlatform);
 
 		if (operand1.IsOverDefined || operand2.IsOverDefined)
 		{

@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Transforms.Runtime;
 /// </summary>
 public sealed class NewArray : BaseRuntimeTransform
 {
-	public NewArray() : base(IRInstruction.NewArray, TransformType.Manual | TransformType.Transform)
+	public NewArray() : base(Framework.IR.NewArray, TransformType.Manual | TransformType.Transform)
 	{
 	}
 
@@ -23,6 +23,6 @@ public sealed class NewArray : BaseRuntimeTransform
 		var method = GetVMCallMethod(transform, "AllocateArray");
 		var symbol = Operand.CreateLabel(method, transform.Is32BitPlatform);
 
-		context.SetInstruction(IRInstruction.CallStatic, context.Result, symbol, context.GetOperands());
+		context.SetInstruction(Framework.IR.CallStatic, context.Result, symbol, context.GetOperands());
 	}
 }

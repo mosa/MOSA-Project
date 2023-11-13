@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.IR;
 
 public sealed class CheckThrowDivideByZero : BaseTransform
 {
-	public CheckThrowDivideByZero() : base(IRInstruction.CheckThrowDivideByZero, TransformType.Manual | TransformType.Transform)
+	public CheckThrowDivideByZero() : base(Framework.IR.CheckThrowDivideByZero, TransformType.Manual | TransformType.Transform)
 	{
 	}
 
@@ -26,7 +26,7 @@ public sealed class CheckThrowDivideByZero : BaseTransform
 			}
 			else
 			{
-				context.SetInstruction(IRInstruction.ThrowDivideByZero);
+				context.SetInstruction(Framework.IR.ThrowDivideByZero);
 			}
 			return;
 		}
@@ -35,8 +35,8 @@ public sealed class CheckThrowDivideByZero : BaseTransform
 		var nextBlock = transform.Split(context);
 
 		context.SetInstruction(transform.BranchInstruction, ConditionCode.NotEqual, null, operand1, Operand.Constant32_0, newBlock.Block);
-		context.AppendInstruction(IRInstruction.Jmp, nextBlock.Block);
+		context.AppendInstruction(Framework.IR.Jmp, nextBlock.Block);
 
-		newBlock.AppendInstruction(IRInstruction.ThrowDivideByZero);
+		newBlock.AppendInstruction(Framework.IR.ThrowDivideByZero);
 	}
 }

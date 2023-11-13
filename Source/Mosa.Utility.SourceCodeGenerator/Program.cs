@@ -14,7 +14,7 @@ public static class Program
 		new BuildIRInstruction(
 			Path.Combine(dataPath, @"IR-Instructions.json"),
 			Path.Combine(targetPath, @"Mosa.Compiler.Framework\"),
-			"IRInstruction.cs"
+			"IR.cs"
 		).Execute();
 
 		new BuildIRInstructionFiles(

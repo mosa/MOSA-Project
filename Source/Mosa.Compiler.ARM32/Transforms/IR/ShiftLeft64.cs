@@ -10,7 +10,7 @@ namespace Mosa.Compiler.ARM32.Transforms.IR;
 [Transform("ARM32.IR")]
 public sealed class ShiftLeft64 : BaseIRTransform
 {
-	public ShiftLeft64() : base(IRInstruction.ShiftLeft64, TransformType.Manual | TransformType.Transform)
+	public ShiftLeft64() : base(Framework.IR.ShiftLeft64, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

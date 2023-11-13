@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Transforms.CheckedConversion;
 /// </summary>
 public sealed class CheckedConversionR4ToI8 : BaseCheckedConversionTransform
 {
-	public CheckedConversionR4ToI8() : base(IRInstruction.CheckedConversionR4ToI8, TransformType.Manual | TransformType.Transform)
+	public CheckedConversionR4ToI8() : base(Framework.IR.CheckedConversionR4ToI8, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

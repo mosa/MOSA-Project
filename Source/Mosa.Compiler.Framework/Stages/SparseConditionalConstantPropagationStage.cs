@@ -99,7 +99,7 @@ public class SparseConditionalConstantPropagationStage : BaseMethodCompilerStage
 			// for each statement T that uses operand, substituted c in statement T
 			foreach (var node in target.Uses.ToArray())
 			{
-				Debug.Assert(node.Instruction != IRInstruction.AddressOf);
+				Debug.Assert(node.Instruction != IR.AddressOf);
 
 				for (var i = 0; i < node.OperandCount; i++)
 				{
@@ -171,7 +171,7 @@ public class SparseConditionalConstantPropagationStage : BaseMethodCompilerStage
 					continue;
 				}
 
-				if (node.Instruction == IRInstruction.Jmp)
+				if (node.Instruction == IR.Jmp)
 				{
 					trace?.Log("*** RemoveBranchesToDeadBlocks");
 					trace?.Log($"BEFORE:\t{node}");

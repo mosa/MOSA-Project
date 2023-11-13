@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 [Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class DivUnsigned64 : BaseTransform
 {
-	public DivUnsigned64() : base(IRInstruction.DivUnsigned64, TransformType.Auto | TransformType.Optimization)
+	public DivUnsigned64() : base(Framework.IR.DivUnsigned64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -36,6 +36,6 @@ public sealed class DivUnsigned64 : BaseTransform
 
 		var e1 = Operand.CreateConstant(DivUnsigned64(To64(t1), To64(t2)));
 
-		context.SetInstruction(IRInstruction.Move64, result, e1);
+		context.SetInstruction(Framework.IR.Move64, result, e1);
 	}
 }

@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
 public sealed class Compare32x64 : BaseLowerTo32Transform
 {
-	public Compare32x64() : base(IRInstruction.Compare32x64, TransformType.Manual | TransformType.Optimization)
+	public Compare32x64() : base(Framework.IR.Compare32x64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -15,7 +15,7 @@ public sealed class Compare32x64 : BaseLowerTo32Transform
 		var operand2 = context.Operand2;
 		var condition = context.ConditionCode;
 
-		context.SetInstruction(IRInstruction.Compare32x32, condition, result, operand1, operand2);
-		context.AppendInstruction(IRInstruction.To64, result, Operand.Constant32_0);
+		context.SetInstruction(Framework.IR.Compare32x32, condition, result, operand1, operand2);
+		context.AppendInstruction(Framework.IR.To64, result, Operand.Constant32_0);
 	}
 }

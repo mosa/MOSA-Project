@@ -11,7 +11,7 @@ namespace Mosa.Compiler.x86.Transforms.IR;
 [Transform("x86.IR")]
 public sealed class LoadR8 : BaseIRTransform
 {
-	public LoadR8() : base(IRInstruction.LoadR8, TransformType.Manual | TransformType.Transform)
+	public LoadR8() : base(Framework.IR.LoadR8, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

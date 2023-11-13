@@ -529,11 +529,11 @@ public abstract class BaseMethodCompilerStage
 
 		if (context.OperandCount == 1)
 		{
-			context.SetInstruction(IRInstruction.CallStatic, context.Result, symbol, context.Operand1);
+			context.SetInstruction(IR.CallStatic, context.Result, symbol, context.Operand1);
 		}
 		else if (context.OperandCount == 2)
 		{
-			context.SetInstruction(IRInstruction.CallStatic, context.Result, symbol, context.Operand1, context.Operand2);
+			context.SetInstruction(IR.CallStatic, context.Result, symbol, context.Operand1, context.Operand2);
 		}
 		else
 		{

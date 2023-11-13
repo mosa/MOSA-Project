@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 [Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class ShiftRight32 : BaseTransform
 {
-	public ShiftRight32() : base(IRInstruction.ShiftRight32, TransformType.Auto | TransformType.Optimization)
+	public ShiftRight32() : base(Framework.IR.ShiftRight32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -36,6 +36,6 @@ public sealed class ShiftRight32 : BaseTransform
 
 		var e1 = Operand.CreateConstant(ShiftRight32(To32(t1), ToSigned32(t2)));
 
-		context.SetInstruction(IRInstruction.Move32, result, e1);
+		context.SetInstruction(Framework.IR.Move32, result, e1);
 	}
 }

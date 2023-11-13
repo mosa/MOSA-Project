@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Transforms.Exception;
 /// </summary>
 public sealed class TryStart : BaseExceptionTransform
 {
-	public TryStart() : base(IRInstruction.TryStart, TransformType.Manual | TransformType.Transform)
+	public TryStart() : base(Framework.IR.TryStart, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

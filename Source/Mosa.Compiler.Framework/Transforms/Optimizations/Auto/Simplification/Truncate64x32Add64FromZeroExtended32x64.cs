@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 [Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class Truncate64x32Add64FromZeroExtended32x64 : BaseTransform
 {
-	public Truncate64x32Add64FromZeroExtended32x64() : base(IRInstruction.Truncate64x32, TransformType.Auto | TransformType.Optimization)
+	public Truncate64x32Add64FromZeroExtended32x64() : base(Framework.IR.Truncate64x32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -22,7 +22,7 @@ public sealed class Truncate64x32Add64FromZeroExtended32x64 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Add64)
+		if (context.Operand1.Definitions[0].Instruction != Framework.IR.Add64)
 			return false;
 
 		if (!context.Operand1.Definitions[0].Operand1.IsVirtualRegister)
@@ -34,13 +34,13 @@ public sealed class Truncate64x32Add64FromZeroExtended32x64 : BaseTransform
 		if (!context.Operand1.Definitions[0].Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.ZeroExtend32x64)
+		if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != Framework.IR.ZeroExtend32x64)
 			return false;
 
 		if (!context.Operand1.Definitions[0].Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.ZeroExtend32x64)
+		if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != Framework.IR.ZeroExtend32x64)
 			return false;
 
 		return true;
@@ -53,6 +53,6 @@ public sealed class Truncate64x32Add64FromZeroExtended32x64 : BaseTransform
 		var t1 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1;
 
-		context.SetInstruction(IRInstruction.Add32, result, t1, t2);
+		context.SetInstruction(Framework.IR.Add32, result, t1, t2);
 	}
 }

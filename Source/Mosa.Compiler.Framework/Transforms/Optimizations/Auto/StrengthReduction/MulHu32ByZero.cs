@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 [Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class MulHu32ByZero : BaseTransform
 {
-	public MulHu32ByZero() : base(IRInstruction.MulHu32, TransformType.Auto | TransformType.Optimization)
+	public MulHu32ByZero() : base(Framework.IR.MulHu32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -33,7 +33,7 @@ public sealed class MulHu32ByZero : BaseTransform
 
 		var e1 = Operand.CreateConstant(To32(0));
 
-		context.SetInstruction(IRInstruction.Move32, result, e1);
+		context.SetInstruction(Framework.IR.Move32, result, e1);
 	}
 }
 
@@ -43,7 +43,7 @@ public sealed class MulHu32ByZero : BaseTransform
 [Transform("IR.Optimizations.Auto.StrengthReduction")]
 public sealed class MulHu32ByZero_v1 : BaseTransform
 {
-	public MulHu32ByZero_v1() : base(IRInstruction.MulHu32, TransformType.Auto | TransformType.Optimization)
+	public MulHu32ByZero_v1() : base(Framework.IR.MulHu32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -66,6 +66,6 @@ public sealed class MulHu32ByZero_v1 : BaseTransform
 
 		var e1 = Operand.CreateConstant(To32(0));
 
-		context.SetInstruction(IRInstruction.Move32, result, e1);
+		context.SetInstruction(Framework.IR.Move32, result, e1);
 	}
 }

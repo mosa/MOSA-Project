@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 [Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class MulUnsigned64x2 : BaseTransform
 {
-	public MulUnsigned64x2() : base(IRInstruction.MulUnsigned64, TransformType.Auto | TransformType.Optimization)
+	public MulUnsigned64x2() : base(Framework.IR.MulUnsigned64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -24,7 +24,7 @@ public sealed class MulUnsigned64x2 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned64)
+		if (context.Operand1.Definitions[0].Instruction != Framework.IR.MulUnsigned64)
 			return false;
 
 		if (!IsResolvedConstant(context.Operand1.Definitions[0].Operand2))
@@ -46,7 +46,7 @@ public sealed class MulUnsigned64x2 : BaseTransform
 
 		var e1 = Operand.CreateConstant(MulUnsigned64(To64(t2), To64(t3)));
 
-		context.SetInstruction(IRInstruction.MulUnsigned64, result, t1, e1);
+		context.SetInstruction(Framework.IR.MulUnsigned64, result, t1, e1);
 	}
 }
 
@@ -56,7 +56,7 @@ public sealed class MulUnsigned64x2 : BaseTransform
 [Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class MulUnsigned64x2_v1 : BaseTransform
 {
-	public MulUnsigned64x2_v1() : base(IRInstruction.MulUnsigned64, TransformType.Auto | TransformType.Optimization)
+	public MulUnsigned64x2_v1() : base(Framework.IR.MulUnsigned64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -70,7 +70,7 @@ public sealed class MulUnsigned64x2_v1 : BaseTransform
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned64)
+		if (context.Operand2.Definitions[0].Instruction != Framework.IR.MulUnsigned64)
 			return false;
 
 		if (!IsResolvedConstant(context.Operand2.Definitions[0].Operand2))
@@ -92,7 +92,7 @@ public sealed class MulUnsigned64x2_v1 : BaseTransform
 
 		var e1 = Operand.CreateConstant(MulUnsigned64(To64(t3), To64(t1)));
 
-		context.SetInstruction(IRInstruction.MulUnsigned64, result, t2, e1);
+		context.SetInstruction(Framework.IR.MulUnsigned64, result, t2, e1);
 	}
 }
 
@@ -102,7 +102,7 @@ public sealed class MulUnsigned64x2_v1 : BaseTransform
 [Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class MulUnsigned64x2_v2 : BaseTransform
 {
-	public MulUnsigned64x2_v2() : base(IRInstruction.MulUnsigned64, TransformType.Auto | TransformType.Optimization)
+	public MulUnsigned64x2_v2() : base(Framework.IR.MulUnsigned64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -116,7 +116,7 @@ public sealed class MulUnsigned64x2_v2 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned64)
+		if (context.Operand1.Definitions[0].Instruction != Framework.IR.MulUnsigned64)
 			return false;
 
 		if (!IsResolvedConstant(context.Operand1.Definitions[0].Operand1))
@@ -138,7 +138,7 @@ public sealed class MulUnsigned64x2_v2 : BaseTransform
 
 		var e1 = Operand.CreateConstant(MulUnsigned64(To64(t1), To64(t3)));
 
-		context.SetInstruction(IRInstruction.MulUnsigned64, result, t2, e1);
+		context.SetInstruction(Framework.IR.MulUnsigned64, result, t2, e1);
 	}
 }
 
@@ -148,7 +148,7 @@ public sealed class MulUnsigned64x2_v2 : BaseTransform
 [Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class MulUnsigned64x2_v3 : BaseTransform
 {
-	public MulUnsigned64x2_v3() : base(IRInstruction.MulUnsigned64, TransformType.Auto | TransformType.Optimization)
+	public MulUnsigned64x2_v3() : base(Framework.IR.MulUnsigned64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -162,7 +162,7 @@ public sealed class MulUnsigned64x2_v3 : BaseTransform
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned64)
+		if (context.Operand2.Definitions[0].Instruction != Framework.IR.MulUnsigned64)
 			return false;
 
 		if (!IsResolvedConstant(context.Operand2.Definitions[0].Operand1))
@@ -184,6 +184,6 @@ public sealed class MulUnsigned64x2_v3 : BaseTransform
 
 		var e1 = Operand.CreateConstant(MulUnsigned64(To64(t2), To64(t1)));
 
-		context.SetInstruction(IRInstruction.MulUnsigned64, result, t3, e1);
+		context.SetInstruction(Framework.IR.MulUnsigned64, result, t3, e1);
 	}
 }

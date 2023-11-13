@@ -44,12 +44,12 @@ public class ExceptionManager : BaseTransformManager
 		{
 			var node = block.BeforeLast;
 
-			while (node.IsEmptyOrNop || node.Instruction == IRInstruction.Flow)
+			while (node.IsEmptyOrNop || node.Instruction == IR.Flow)
 			{
 				node = node.Previous;
 			}
 
-			if (node.Instruction == IRInstruction.ExceptionEnd || node.Instruction == IRInstruction.TryEnd)
+			if (node.Instruction == IR.ExceptionEnd || node.Instruction == IR.TryEnd)
 			{
 				LeaveTargets.AddIfNew(node.BranchTargets[0]);
 			}

@@ -90,15 +90,15 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 						totalNonIRCount++;
 					}
 
-					if (node.Instruction == IRInstruction.AddressOf)
+					if (node.Instruction == IR.AddressOf)
 					{
 						MethodData.HasAddressOfInstruction = true;
 					}
-					else if (node.Instruction == IRInstruction.CallStatic && node.Operand1.Method == Method)
+					else if (node.Instruction == IR.CallStatic && node.Operand1.Method == Method)
 					{
 						MethodData.IsSelfReferenced = true;
 					}
-					else if (node.Instruction == IRInstruction.Epilogue)
+					else if (node.Instruction == IR.Epilogue)
 					{
 						MethodData.HasEpilogue = true;
 					}

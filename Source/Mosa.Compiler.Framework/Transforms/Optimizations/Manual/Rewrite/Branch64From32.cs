@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Rewrite;
 
 public sealed class Branch64From32 : BaseTransform
 {
-	public Branch64From32() : base(IRInstruction.Branch32, TransformType.Manual | TransformType.Optimization)
+	public Branch64From32() : base(Framework.IR.Branch32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -25,7 +25,7 @@ public sealed class Branch64From32 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Compare32x64)
+		if (context.Operand1.Definitions[0].Instruction != Framework.IR.Compare32x64)
 			return false;
 
 		return true;
@@ -36,6 +36,6 @@ public sealed class Branch64From32 : BaseTransform
 		var node2 = context.Operand1.Definitions[0];
 		var conditionCode = context.ConditionCode == ConditionCode.NotEqual ? node2.ConditionCode : node2.ConditionCode.GetOpposite();
 
-		context.SetInstruction(IRInstruction.Branch32, conditionCode, null, node2.Operand1, node2.Operand2, context.BranchTargets[0]);
+		context.SetInstruction(Framework.IR.Branch32, conditionCode, null, node2.Operand1, node2.Operand2, context.BranchTargets[0]);
 	}
 }

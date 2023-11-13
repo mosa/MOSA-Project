@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 [Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class Compare32x32PassThru : BaseTransform
 {
-	public Compare32x32PassThru() : base(IRInstruction.Compare32x32, TransformType.Auto | TransformType.Optimization)
+	public Compare32x32PassThru() : base(Framework.IR.Compare32x32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -31,7 +31,7 @@ public sealed class Compare32x32PassThru : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.And32)
+		if (context.Operand1.Definitions[0].Instruction != Framework.IR.And32)
 			return false;
 
 		if (!context.Operand1.Definitions[0].Operand2.IsResolvedConstant)
@@ -51,7 +51,7 @@ public sealed class Compare32x32PassThru : BaseTransform
 
 		var c1 = Operand.CreateConstant(1);
 
-		context.SetInstruction(IRInstruction.And32, result, t1, c1);
+		context.SetInstruction(Framework.IR.And32, result, t1, c1);
 	}
 }
 
@@ -61,7 +61,7 @@ public sealed class Compare32x32PassThru : BaseTransform
 [Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class Compare32x32PassThru_v1 : BaseTransform
 {
-	public Compare32x32PassThru_v1() : base(IRInstruction.Compare32x32, TransformType.Auto | TransformType.Optimization)
+	public Compare32x32PassThru_v1() : base(Framework.IR.Compare32x32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -82,7 +82,7 @@ public sealed class Compare32x32PassThru_v1 : BaseTransform
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.And32)
+		if (context.Operand2.Definitions[0].Instruction != Framework.IR.And32)
 			return false;
 
 		if (!context.Operand2.Definitions[0].Operand2.IsResolvedConstant)
@@ -102,7 +102,7 @@ public sealed class Compare32x32PassThru_v1 : BaseTransform
 
 		var c1 = Operand.CreateConstant(1);
 
-		context.SetInstruction(IRInstruction.And32, result, t1, c1);
+		context.SetInstruction(Framework.IR.And32, result, t1, c1);
 	}
 }
 
@@ -112,7 +112,7 @@ public sealed class Compare32x32PassThru_v1 : BaseTransform
 [Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class Compare32x32PassThru_v2 : BaseTransform
 {
-	public Compare32x32PassThru_v2() : base(IRInstruction.Compare32x32, TransformType.Auto | TransformType.Optimization)
+	public Compare32x32PassThru_v2() : base(Framework.IR.Compare32x32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -133,7 +133,7 @@ public sealed class Compare32x32PassThru_v2 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.And32)
+		if (context.Operand1.Definitions[0].Instruction != Framework.IR.And32)
 			return false;
 
 		if (!context.Operand1.Definitions[0].Operand1.IsResolvedConstant)
@@ -153,7 +153,7 @@ public sealed class Compare32x32PassThru_v2 : BaseTransform
 
 		var c1 = Operand.CreateConstant(1);
 
-		context.SetInstruction(IRInstruction.And32, result, t1, c1);
+		context.SetInstruction(Framework.IR.And32, result, t1, c1);
 	}
 }
 
@@ -163,7 +163,7 @@ public sealed class Compare32x32PassThru_v2 : BaseTransform
 [Transform("IR.Optimizations.Auto.Simplification")]
 public sealed class Compare32x32PassThru_v3 : BaseTransform
 {
-	public Compare32x32PassThru_v3() : base(IRInstruction.Compare32x32, TransformType.Auto | TransformType.Optimization)
+	public Compare32x32PassThru_v3() : base(Framework.IR.Compare32x32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -184,7 +184,7 @@ public sealed class Compare32x32PassThru_v3 : BaseTransform
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.And32)
+		if (context.Operand2.Definitions[0].Instruction != Framework.IR.And32)
 			return false;
 
 		if (!context.Operand2.Definitions[0].Operand1.IsResolvedConstant)
@@ -204,6 +204,6 @@ public sealed class Compare32x32PassThru_v3 : BaseTransform
 
 		var c1 = Operand.CreateConstant(1);
 
-		context.SetInstruction(IRInstruction.And32, result, t1, c1);
+		context.SetInstruction(Framework.IR.And32, result, t1, c1);
 	}
 }

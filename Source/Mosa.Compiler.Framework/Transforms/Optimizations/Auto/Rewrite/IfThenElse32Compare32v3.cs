@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Rewrite;
 [Transform("IR.Optimizations.Auto.Rewrite")]
 public sealed class IfThenElse32Compare32v3 : BaseTransform
 {
-	public IfThenElse32Compare32v3() : base(IRInstruction.IfThenElse32, TransformType.Auto | TransformType.Optimization)
+	public IfThenElse32Compare32v3() : base(Framework.IR.IfThenElse32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -22,7 +22,7 @@ public sealed class IfThenElse32Compare32v3 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Compare32x32)
+		if (context.Operand1.Definitions[0].Instruction != Framework.IR.Compare32x32)
 			return false;
 
 		if (context.Operand1.Definitions[0].ConditionCode != ConditionCode.NotEqual)
@@ -45,7 +45,7 @@ public sealed class IfThenElse32Compare32v3 : BaseTransform
 		var t2 = context.Operand2;
 		var t3 = context.Operand3;
 
-		context.SetInstruction(IRInstruction.IfThenElse32, result, t1, t2, t3);
+		context.SetInstruction(Framework.IR.IfThenElse32, result, t1, t2, t3);
 	}
 }
 
@@ -55,7 +55,7 @@ public sealed class IfThenElse32Compare32v3 : BaseTransform
 [Transform("IR.Optimizations.Auto.Rewrite")]
 public sealed class IfThenElse32Compare32v3_v1 : BaseTransform
 {
-	public IfThenElse32Compare32v3_v1() : base(IRInstruction.IfThenElse32, TransformType.Auto | TransformType.Optimization)
+	public IfThenElse32Compare32v3_v1() : base(Framework.IR.IfThenElse32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -67,7 +67,7 @@ public sealed class IfThenElse32Compare32v3_v1 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Compare32x32)
+		if (context.Operand1.Definitions[0].Instruction != Framework.IR.Compare32x32)
 			return false;
 
 		if (context.Operand1.Definitions[0].ConditionCode != ConditionCode.NotEqual)
@@ -90,6 +90,6 @@ public sealed class IfThenElse32Compare32v3_v1 : BaseTransform
 		var t2 = context.Operand2;
 		var t3 = context.Operand3;
 
-		context.SetInstruction(IRInstruction.IfThenElse32, result, t1, t2, t3);
+		context.SetInstruction(Framework.IR.IfThenElse32, result, t1, t2, t3);
 	}
 }

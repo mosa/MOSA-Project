@@ -339,7 +339,7 @@ public sealed class LoopInvariantCodeMotionStage : BaseMethodCompilerStage
 			node.PhiBlocks = headerSourceBlocks;
 		}
 
-		landingpad.AppendInstruction(IRInstruction.Jmp, header);
+		landingpad.AppendInstruction(IR.Jmp, header);
 
 		LandingPadsCount.Increment();
 
@@ -358,7 +358,7 @@ public sealed class LoopInvariantCodeMotionStage : BaseMethodCompilerStage
 
 		var at = preheader.BeforeLast;
 
-		while (at.IsEmpty || at.Instruction != IRInstruction.Jmp)
+		while (at.IsEmpty || at.Instruction != IR.Jmp)
 		{
 			at = at.Previous;
 		}

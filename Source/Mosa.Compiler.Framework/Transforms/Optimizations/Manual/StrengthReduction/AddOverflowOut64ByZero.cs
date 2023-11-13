@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.StrengthReduct
 /// </summary>
 public sealed class AddOverflowOut64ByZero : BaseTransform
 {
-	public AddOverflowOut64ByZero() : base(IRInstruction.AddOverflowOut64, TransformType.Manual | TransformType.Optimization, true)
+	public AddOverflowOut64ByZero() : base(Framework.IR.AddOverflowOut64, TransformType.Manual | TransformType.Optimization, true)
 	{
 	}
 
@@ -30,8 +30,8 @@ public sealed class AddOverflowOut64ByZero : BaseTransform
 		var result2 = context.Result2;
 		var operand1 = context.Operand1;
 
-		context.SetInstruction(IRInstruction.Move64, result, operand1);
-		context.AppendInstruction(IRInstruction.Move64, result2, Operand.Constant64_0);
+		context.SetInstruction(Framework.IR.Move64, result, operand1);
+		context.AppendInstruction(Framework.IR.Move64, result2, Operand.Constant64_0);
 	}
 }
 
@@ -40,7 +40,7 @@ public sealed class AddOverflowOut64ByZero : BaseTransform
 /// </summary>
 public sealed class AddOverflowOut64ByZero2 : BaseTransform
 {
-	public AddOverflowOut64ByZero2() : base(IRInstruction.AddOverflowOut64, TransformType.Manual | TransformType.Optimization, true)
+	public AddOverflowOut64ByZero2() : base(Framework.IR.AddOverflowOut64, TransformType.Manual | TransformType.Optimization, true)
 	{
 	}
 
@@ -63,7 +63,7 @@ public sealed class AddOverflowOut64ByZero2 : BaseTransform
 		var result2 = context.Result2;
 		var operand2 = context.Operand2;
 
-		context.SetInstruction(IRInstruction.Move64, result, operand2);
-		context.AppendInstruction(IRInstruction.Move64, result2, Operand.Constant64_0);
+		context.SetInstruction(Framework.IR.Move64, result, operand2);
+		context.AppendInstruction(Framework.IR.Move64, result2, Operand.Constant64_0);
 	}
 }

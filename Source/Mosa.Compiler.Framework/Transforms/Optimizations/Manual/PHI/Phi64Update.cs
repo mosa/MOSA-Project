@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Phi;
 
 public sealed class Phi64Update : BasePhiTransform
 {
-	public Phi64Update() : base(IRInstruction.Phi32, TransformType.Manual | TransformType.Optimization)
+	public Phi64Update() : base(Framework.IR.Phi32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

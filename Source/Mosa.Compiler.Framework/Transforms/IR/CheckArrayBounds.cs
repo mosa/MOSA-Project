@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.IR;
 
 public sealed class CheckArrayBounds : BaseTransform
 {
-	public CheckArrayBounds() : base(IRInstruction.CheckArrayBounds, TransformType.Manual | TransformType.Transform)
+	public CheckArrayBounds() : base(Framework.IR.CheckArrayBounds, TransformType.Manual | TransformType.Transform)
 	{
 	}
 
@@ -29,8 +29,8 @@ public sealed class CheckArrayBounds : BaseTransform
 		// If index is greater than or equal to the length then jump to exception block, otherwise jump to next block
 		context.SetInstruction(transform.LoadInstruction, v1_length, array, Operand.Constant32_0);
 		context.AppendInstruction(transform.BranchInstruction, ConditionCode.UnsignedGreaterOrEqual, null, index, v1_length, newBlock.Block);
-		context.AppendInstruction(IRInstruction.Jmp, nextBlock.Block);
+		context.AppendInstruction(Framework.IR.Jmp, nextBlock.Block);
 
-		newBlock.AppendInstruction(IRInstruction.ThrowIndexOutOfRange);
+		newBlock.AppendInstruction(Framework.IR.ThrowIndexOutOfRange);
 	}
 }

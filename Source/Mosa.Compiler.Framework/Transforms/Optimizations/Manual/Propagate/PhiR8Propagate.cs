@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Propagate;
 
 public sealed class PhiR8Propagate : BaseTransform
 {
-	public PhiR8Propagate() : base(IRInstruction.PhiR8, TransformType.Manual | TransformType.Optimization)
+	public PhiR8Propagate() : base(Framework.IR.PhiR8, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

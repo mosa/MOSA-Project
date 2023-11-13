@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Memory;
 
 public sealed class DoubleStore64 : BaseTransform
 {
-	public DoubleStore64() : base(IRInstruction.Store64, TransformType.Manual | TransformType.Optimization)
+	public DoubleStore64() : base(Framework.IR.Store64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -16,7 +16,7 @@ public sealed class DoubleStore64 : BaseTransform
 		if (!context.Operand2.IsResolvedConstant)
 			return false;
 
-		var next = GetNextNodeUntil(context, IRInstruction.Store64, transform.Window, context.Operand1);
+		var next = GetNextNodeUntil(context, Framework.IR.Store64, transform.Window, context.Operand1);
 
 		if (next == null)
 			return false;

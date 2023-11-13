@@ -12,7 +12,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.StrengthReduct
 [Transform("IR.Optimizations.Manual.StrengthReduction")]
 public sealed class DivSignedMagicNumber32 : BaseTransform
 {
-	public DivSignedMagicNumber32() : base(IRInstruction.DivSigned32, TransformType.Auto | TransformType.Optimization, true)
+	public DivSignedMagicNumber32() : base(Framework.IR.DivSigned32, TransformType.Auto | TransformType.Optimization, true)
 	{
 	}
 
@@ -48,26 +48,26 @@ public sealed class DivSignedMagicNumber32 : BaseTransform
 		var v4 = transform.VirtualRegisters.Allocate32();
 
 		//mulhs q, M, n ; q = floor(M * n / 2 * *32).
-		context.SetInstruction(IRInstruction.MulHs32, v1, n, Operand.CreateConstant32(M));
+		context.SetInstruction(Framework.IR.MulHs32, v1, n, Operand.CreateConstant32(M));
 
 		//sub q, q, n ; q = floor(M * n / 2 * *32) - n.
 		if (d > 0 && M < 0)
-			context.AppendInstruction(IRInstruction.Add32, v2, v1, n);
+			context.AppendInstruction(Framework.IR.Add32, v2, v1, n);
 		else if (d < 0 && M > 0)
-			context.AppendInstruction(IRInstruction.Sub32, v2, v1, n);
+			context.AppendInstruction(Framework.IR.Sub32, v2, v1, n);
 		else
-			context.AppendInstruction(IRInstruction.Move32, v2, v1);
+			context.AppendInstruction(Framework.IR.Move32, v2, v1);
 
 		//shrsi q, q, s
 		if (s > 0)
-			context.AppendInstruction(IRInstruction.ArithShiftRight32, v3, v2, Operand.CreateConstant32(s));
+			context.AppendInstruction(Framework.IR.ArithShiftRight32, v3, v2, Operand.CreateConstant32(s));
 		else
-			context.AppendInstruction(IRInstruction.Move32, v3, v2);
+			context.AppendInstruction(Framework.IR.Move32, v3, v2);
 
 		//shri t, q,31 ; Add 1 to q if
-		context.AppendInstruction(IRInstruction.ShiftRight32, v4, n, Operand.Constant32_31);
+		context.AppendInstruction(Framework.IR.ShiftRight32, v4, n, Operand.Constant32_31);
 
 		//add q,q,t ; q is negative(n is positive).
-		context.AppendInstruction(IRInstruction.Add32, result, v3, v4);
+		context.AppendInstruction(Framework.IR.Add32, result, v3, v4);
 	}
 }

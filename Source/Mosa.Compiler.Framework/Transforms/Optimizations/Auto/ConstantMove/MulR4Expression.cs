@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove;
 [Transform("IR.Optimizations.Auto.ConstantMove")]
 public sealed class MulR4Expression : BaseTransform
 {
-	public MulR4Expression() : base(IRInstruction.MulR4, TransformType.Auto | TransformType.Optimization)
+	public MulR4Expression() : base(Framework.IR.MulR4, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -22,7 +22,7 @@ public sealed class MulR4Expression : BaseTransform
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.MulR4)
+		if (context.Operand2.Definitions[0].Instruction != Framework.IR.MulR4)
 			return false;
 
 		if (IsResolvedConstant(context.Operand1))
@@ -47,8 +47,8 @@ public sealed class MulR4Expression : BaseTransform
 
 		var v1 = transform.VirtualRegisters.AllocateR4();
 
-		context.SetInstruction(IRInstruction.MulR4, v1, t1, t2);
-		context.AppendInstruction(IRInstruction.MulR4, result, v1, t3);
+		context.SetInstruction(Framework.IR.MulR4, v1, t1, t2);
+		context.AppendInstruction(Framework.IR.MulR4, result, v1, t3);
 	}
 }
 
@@ -58,7 +58,7 @@ public sealed class MulR4Expression : BaseTransform
 [Transform("IR.Optimizations.Auto.ConstantMove")]
 public sealed class MulR4Expression_v1 : BaseTransform
 {
-	public MulR4Expression_v1() : base(IRInstruction.MulR4, TransformType.Auto | TransformType.Optimization)
+	public MulR4Expression_v1() : base(Framework.IR.MulR4, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -70,7 +70,7 @@ public sealed class MulR4Expression_v1 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.MulR4)
+		if (context.Operand1.Definitions[0].Instruction != Framework.IR.MulR4)
 			return false;
 
 		if (IsResolvedConstant(context.Operand2))
@@ -95,8 +95,8 @@ public sealed class MulR4Expression_v1 : BaseTransform
 
 		var v1 = transform.VirtualRegisters.AllocateR4();
 
-		context.SetInstruction(IRInstruction.MulR4, v1, t3, t1);
-		context.AppendInstruction(IRInstruction.MulR4, result, v1, t2);
+		context.SetInstruction(Framework.IR.MulR4, v1, t3, t1);
+		context.AppendInstruction(Framework.IR.MulR4, result, v1, t2);
 	}
 }
 
@@ -106,7 +106,7 @@ public sealed class MulR4Expression_v1 : BaseTransform
 [Transform("IR.Optimizations.Auto.ConstantMove")]
 public sealed class MulR4Expression_v2 : BaseTransform
 {
-	public MulR4Expression_v2() : base(IRInstruction.MulR4, TransformType.Auto | TransformType.Optimization)
+	public MulR4Expression_v2() : base(Framework.IR.MulR4, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -118,7 +118,7 @@ public sealed class MulR4Expression_v2 : BaseTransform
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.MulR4)
+		if (context.Operand2.Definitions[0].Instruction != Framework.IR.MulR4)
 			return false;
 
 		if (IsResolvedConstant(context.Operand1))
@@ -143,8 +143,8 @@ public sealed class MulR4Expression_v2 : BaseTransform
 
 		var v1 = transform.VirtualRegisters.AllocateR4();
 
-		context.SetInstruction(IRInstruction.MulR4, v1, t1, t3);
-		context.AppendInstruction(IRInstruction.MulR4, result, v1, t2);
+		context.SetInstruction(Framework.IR.MulR4, v1, t1, t3);
+		context.AppendInstruction(Framework.IR.MulR4, result, v1, t2);
 	}
 }
 
@@ -154,7 +154,7 @@ public sealed class MulR4Expression_v2 : BaseTransform
 [Transform("IR.Optimizations.Auto.ConstantMove")]
 public sealed class MulR4Expression_v3 : BaseTransform
 {
-	public MulR4Expression_v3() : base(IRInstruction.MulR4, TransformType.Auto | TransformType.Optimization)
+	public MulR4Expression_v3() : base(Framework.IR.MulR4, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -166,7 +166,7 @@ public sealed class MulR4Expression_v3 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.MulR4)
+		if (context.Operand1.Definitions[0].Instruction != Framework.IR.MulR4)
 			return false;
 
 		if (IsResolvedConstant(context.Operand2))
@@ -191,7 +191,7 @@ public sealed class MulR4Expression_v3 : BaseTransform
 
 		var v1 = transform.VirtualRegisters.AllocateR4();
 
-		context.SetInstruction(IRInstruction.MulR4, v1, t3, t2);
-		context.AppendInstruction(IRInstruction.MulR4, result, v1, t1);
+		context.SetInstruction(Framework.IR.MulR4, v1, t3, t2);
+		context.AppendInstruction(Framework.IR.MulR4, result, v1, t1);
 	}
 }

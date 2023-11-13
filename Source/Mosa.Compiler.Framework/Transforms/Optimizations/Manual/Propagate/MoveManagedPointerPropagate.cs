@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Propagate;
 
 public sealed class MoveManagedPointerPropagate : BaseTransform
 {
-	public MoveManagedPointerPropagate() : base(IRInstruction.MoveManagedPointer, TransformType.Manual | TransformType.Optimization)
+	public MoveManagedPointerPropagate() : base(Framework.IR.MoveManagedPointer, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

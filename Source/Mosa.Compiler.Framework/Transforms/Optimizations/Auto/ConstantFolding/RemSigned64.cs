@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 [Transform("IR.Optimizations.Auto.ConstantFolding")]
 public sealed class RemSigned64 : BaseTransform
 {
-	public RemSigned64() : base(IRInstruction.RemSigned64, TransformType.Auto | TransformType.Optimization)
+	public RemSigned64() : base(Framework.IR.RemSigned64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -36,6 +36,6 @@ public sealed class RemSigned64 : BaseTransform
 
 		var e1 = Operand.CreateConstant(RemSigned64(ToSigned64(t1), ToSigned64(t2)));
 
-		context.SetInstruction(IRInstruction.Move64, result, e1);
+		context.SetInstruction(Framework.IR.Move64, result, e1);
 	}
 }
