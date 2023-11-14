@@ -5,8 +5,4 @@
 	  <ProjectReference Include="..\Mosa.Utility.Configuration\Mosa.Utility.Configuration.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Transforms\Optimizations\Auto\BitValue\" />
-  </ItemGroup>
-
 </Project>

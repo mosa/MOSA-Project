@@ -5,9 +5,9 @@
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 [Transform("IR.Optimizations.Auto.ConstantFolding")]
-public sealed class Compare64x64LessOrEqualThanZero : BaseTransform
+public sealed class Compare64x64LessThanOrEqualMax : BaseTransform
 {
-	public Compare64x64LessOrEqualThanZero() : base(IR.Compare64x64, TransformType.Auto | TransformType.Optimization)
+	public Compare64x64LessThanOrEqualMax() : base(IR.Compare64x64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -15,13 +15,13 @@ public sealed class Compare64x64LessOrEqualThanZero : BaseTransform
 
 	public override bool Match(Context context, Transform transform)
 	{
-		if (context.ConditionCode != ConditionCode.UnsignedLessOrEqual)
+		if (context.ConditionCode != ConditionCode.UnsignedGreaterOrEqual)
 			return false;
 
 		if (!context.Operand1.IsResolvedConstant)
 			return false;
 
-		if (context.Operand1.ConstantUnsigned64 != 0)
+		if (context.Operand1.ConstantUnsigned64 != 0xFFFFFFFFFFFFFFFF)
 			return false;
 
 		return true;
@@ -38,9 +38,9 @@ public sealed class Compare64x64LessOrEqualThanZero : BaseTransform
 }
 
 [Transform("IR.Optimizations.Auto.ConstantFolding")]
-public sealed class Compare64x64LessOrEqualThanZero_v1 : BaseTransform
+public sealed class Compare64x64LessThanOrEqualMax_v1 : BaseTransform
 {
-	public Compare64x64LessOrEqualThanZero_v1() : base(IR.Compare64x64, TransformType.Auto | TransformType.Optimization)
+	public Compare64x64LessThanOrEqualMax_v1() : base(IR.Compare64x64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -48,13 +48,13 @@ public sealed class Compare64x64LessOrEqualThanZero_v1 : BaseTransform
 
 	public override bool Match(Context context, Transform transform)
 	{
-		if (context.ConditionCode != ConditionCode.UnsignedGreaterOrEqual)
+		if (context.ConditionCode != ConditionCode.UnsignedLessOrEqual)
 			return false;
 
 		if (!context.Operand2.IsResolvedConstant)
 			return false;
 
-		if (context.Operand2.ConstantUnsigned64 != 0)
+		if (context.Operand2.ConstantUnsigned64 != 0xFFFFFFFFFFFFFFFF)
 			return false;
 
 		return true;

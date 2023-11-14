@@ -6,16 +6,17 @@ namespace Mosa.Utility.SourceCodeGenerator;
 
 public class BuildInstructionFiles : BuildBaseTemplate
 {
-	protected virtual string Platform { get; }
+	protected virtual string Namespace { get; }
 
-	protected string NormalizedPlatform => Platform.Substring(0, 1).ToUpperInvariant() + Platform.Substring(1);
+	protected virtual string BaseInstruction { get; }
 
 	private readonly Dictionary<string, string> EncodingTemplates = new();
 
-	public BuildInstructionFiles(string jsonFile, string destinationPath, string platform)
+	public BuildInstructionFiles(string jsonFile, string destinationPath, string @namespace, string baseInstruction)
 		: base(jsonFile, destinationPath)
 	{
-		Platform = platform;
+		Namespace = @namespace;
+		BaseInstruction = baseInstruction;
 	}
 
 	protected override void Iterator()
@@ -66,7 +67,7 @@ public class BuildInstructionFiles : BuildBaseTemplate
 		}
 
 		Lines.AppendLine();
-		Lines.AppendLine($"namespace Mosa.Compiler.{Platform}.Instructions;");
+		Lines.AppendLine($"namespace {Namespace}.Instructions;");
 		Lines.AppendLine();
 		Lines.AppendLine("/// <summary>");
 		Lines.Append("/// " + node.Name);
@@ -78,7 +79,7 @@ public class BuildInstructionFiles : BuildBaseTemplate
 
 		Lines.AppendLine();
 		Lines.AppendLine("/// </summary>");
-		Lines.AppendLine("public sealed class " + node.Name + " : " + NormalizedPlatform + "Instruction");
+		Lines.AppendLine("public sealed class " + node.Name + " : " + BaseInstruction);
 		Lines.AppendLine("{");
 		Lines.AppendLine("\tinternal " + node.Name + "()");
 		Lines.AppendLine("\t\t: base(" + node.ResultCount + ", " + node.OperandCount + ")");

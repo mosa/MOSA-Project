@@ -77,8 +77,8 @@
 		},
 		{
 			"Type": "Simplication",
-			"Name": "SubFromZero",
-			"SubName": "",
+			"Name": "Sub##",
+			"SubName": "FromZero",
 			"Expression": "X64.Sub## 0 x",
 			"Filter": "IsVirtualRegister(x)",
 			"Result": "(X64.Neg## x)",

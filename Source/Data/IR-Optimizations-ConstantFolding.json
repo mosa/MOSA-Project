@@ -1,6 +1,14 @@
 ﻿{
 	"Family": "IR",
 	"Section": "Optimizations.Auto",
+	"Commutative": [
+		"IR.Compare32x32",
+		"IR.Compare32x64",
+		"IR.Compare64x32",
+		"IR.Compare64x64",
+		"IR.CompareObject",
+		"IR.CompareManagedPointer"
+	],
 	"Optimizations": [
 
 		{
@@ -424,26 +432,6 @@
 		{
 			"Type": "ConstantFolding",
 			"Name": "Compare32x##",
-			"SubName": "LessThanZero",
-			"Expression": "IR.Compare32x## {>u} 0 a",
-			"Filter": "",
-			"Result": "(IR.Move## 0)",
-			"Priority": "100",
-			"Variations": "Yes"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "Compare64x##",
-			"SubName": "LessThanZero",
-			"Expression": "IR.Compare64x## {>u} 0 a",
-			"Filter": "",
-			"Result": "(IR.Move## 0)",
-			"Priority": "100",
-			"Variations": "Yes"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "Compare32x##",
 			"SubName": "LessOrEqualThanZero",
 			"Expression": "IR.Compare32x## {<=u} 0 a",
 			"Filter": "",
@@ -504,27 +492,7 @@
 		{
 			"Type": "ConstantFolding",
 			"Name": "Compare32x##",
-			"SubName": "LessThanMax",
-			"Expression": "IR.Compare32x## {<u} 0xFFFFFFFF a",
-			"Filter": "",
-			"Result": "(IR.Move## 0)",
-			"Priority": "100",
-			"Variations": "Yes"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "Compare64x##",
-			"SubName": "LessThanMax",
-			"Expression": "IR.Compare64x## {<u} 0xFFFFFFFFFFFFFFFF a",
-			"Filter": "",
-			"Result": "(IR.Move## 0)",
-			"Priority": "100",
-			"Variations": "Yes"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "Compare32x##",
-			"SubName": "LessThanMax",
+			"SubName": "LessThanOrEqualMax",
 			"Expression": "IR.Compare32x## {>=u} 0xFFFFFFFF a",
 			"Filter": "",
 			"Result": "(IR.Move## 1)",
@@ -534,7 +502,7 @@
 		{
 			"Type": "ConstantFolding",
 			"Name": "Compare64x##",
-			"SubName": "LessThanMax",
+			"SubName": "LessThanOrEqualMax",
 			"Expression": "IR.Compare64x## {>=u} 0xFFFFFFFFFFFFFFFF a",
 			"Filter": "",
 			"Result": "(IR.Move## 1)",

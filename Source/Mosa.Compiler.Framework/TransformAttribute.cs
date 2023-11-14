@@ -10,6 +10,10 @@ public class TransformAttribute : Attribute
 {
 	public string Section { get; }
 
+	public TransformAttribute()
+	{
+	}
+
 	public TransformAttribute(string section)
 	{
 		Section = section;

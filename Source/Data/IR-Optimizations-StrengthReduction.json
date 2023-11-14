@@ -374,15 +374,6 @@
 		},
 		{
 			"Type": "StrengthReduction",
-			"Name": "ShiftLeft64",
-			"SubName": "By64",
-			"Expression": "IR.ShiftLeft64 x 64",
-			"Filter": "",
-			"Result": "(IR.Move64 0)",
-			"Priority": "80"
-		},
-		{
-			"Type": "StrengthReduction",
 			"Name": "ShiftRight32",
 			"SubName": "By32",
 			"Expression": "IR.ShiftRight32 a 32",
@@ -401,13 +392,14 @@
 		},
 		{
 			"Type": "StrengthReduction",
-			"Name": "ShiftLeft32",
-			"SubName": "By32",
-			"Expression": "IR.ShiftLeft32 a 32",
+			"Name": "ShiftLeft64",
+			"SubName": "By64",
+			"Expression": "IR.ShiftLeft64 x 64",
 			"Filter": "",
-			"Result": "(IR.Move32 0)",
+			"Result": "(IR.Move64 0)",
 			"Priority": "80"
 		},
+
 		{
 			"Type": "StrengthReduction",
 			"Name": "ShiftRight64",
@@ -422,15 +414,6 @@
 			"Name": "ArithShiftRight64",
 			"SubName": "By64",
 			"Expression": "IR.ArithShiftRight64 a 64",
-			"Filter": "",
-			"Result": "(IR.Move64 0)",
-			"Priority": "80"
-		},
-		{
-			"Type": "StrengthReduction",
-			"Name": "ShiftLeft64",
-			"SubName": "By64",
-			"Expression": "IR.ShiftLeft64 a 64",
 			"Filter": "",
 			"Result": "(IR.Move64 0)",
 			"Priority": "80"

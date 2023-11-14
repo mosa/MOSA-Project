@@ -7,26 +7,24 @@ namespace Mosa.Utility.SourceCodeGenerator;
 
 public class BuildTransformations : BuildBaseTemplate
 {
-	public static readonly List<string> Transformations = new List<string>();
+	public static readonly Dictionary<string, string> Transformations = new();
 
-	protected readonly List<string> CommutativeInstructions = new List<string>();
+	protected readonly List<string> CommutativeInstructions = new();
 
-	protected readonly Dictionary<int, string> NodeNbrToNode = new Dictionary<int, string>();
+	protected readonly Dictionary<int, string> NodeNbrToNode = new();
 
-	protected readonly Dictionary<string, string> OperandLabelToVariable = new Dictionary<string, string>();
+	protected readonly Dictionary<string, string> OperandLabelToVariable = new();
 
 	protected bool First = true;
 
-	protected readonly string Namespace;
 	protected readonly string Path;
 
 	private string Family;
 	private string Section;
 
-	public BuildTransformations(string jsonFile, string destinationPath, string path, string name)
+	public BuildTransformations(string jsonFile, string destinationPath, string path)
 		: base(jsonFile, destinationPath)
 	{
-		this.Namespace = name;
 		this.Path = path;
 	}
 
@@ -52,7 +50,6 @@ public class BuildTransformations : BuildBaseTemplate
 	protected override void Body(dynamic node = null)
 	{
 		string name = node.Name;
-		//string familyName = Family; // node.FamilyName;
 		string type = node.Type;
 		string subName = node.SubName;
 		string expression = node.Expression;
@@ -89,24 +86,24 @@ public class BuildTransformations : BuildBaseTemplate
 		if (commutativeInstructions == null)
 			commutativeInstructions = CommutativeInstructions;
 
-		GenerateTranformations(name, Family, type, subName, expression, filter, prefilter, result, variations, log, optimization, priority, commutativeInstructions);
+		GenerateTranformations(name, type, subName, expression, filter, prefilter, result, variations, log, optimization, priority, commutativeInstructions);
 	}
 
-	private void GenerateTranformations(string name, string familyName, string type, string subName, string expression, string filter, string prefilter, string result, bool variations, bool log, bool optimization, int priority, List<string> commutativeInstructions)
+	private void GenerateTranformations(string name, string type, string subName, string expression, string filter, string prefilter, string result, bool variations, bool log, bool optimization, int priority, List<string> commutativeInstructions)
 	{
 		if (expression.Contains("R#"))
 		{
-			GenerateTransformation(R4(name), R4(familyName), R4(type), R4(subName), new Transformation(R4(expression), R4(filter), R4(result), prefilter), variations, log, optimization, priority, commutativeInstructions);
-			GenerateTransformation(R8(name), R8(familyName), R8(type), R8(subName), new Transformation(R8(expression), R8(filter), R8(result), prefilter), variations, log, optimization, priority, commutativeInstructions);
+			GenerateTransformation(R4(name), R4(type), R4(subName), new Transformation(R4(expression), R4(filter), R4(result), prefilter), variations, log, optimization, priority, commutativeInstructions);
+			GenerateTransformation(R8(name), R8(type), R8(subName), new Transformation(R8(expression), R8(filter), R8(result), prefilter), variations, log, optimization, priority, commutativeInstructions);
 		}
 		else if (expression.Contains("##"))
 		{
-			GenerateTransformation(To32(name), To32(familyName), To32(type), To32(subName), new Transformation(To32(expression), To32(filter), To32(result), prefilter), variations, log, optimization, priority, commutativeInstructions);
-			GenerateTransformation(To64(name), To64(familyName), To64(type), To64(subName), new Transformation(To64(expression), To64(filter), To64(result), prefilter), variations, log, optimization, priority, commutativeInstructions);
+			GenerateTransformation(To32(name), To32(type), To32(subName), new Transformation(To32(expression), To32(filter), To32(result), prefilter), variations, log, optimization, priority, commutativeInstructions);
+			GenerateTransformation(To64(name), To64(type), To64(subName), new Transformation(To64(expression), To64(filter), To64(result), prefilter), variations, log, optimization, priority, commutativeInstructions);
 		}
 		else
 		{
-			GenerateTransformation(name, familyName, type, subName, new Transformation(expression, filter, result, prefilter), variations, log, optimization, priority, commutativeInstructions);
+			GenerateTransformation(name, type, subName, new Transformation(expression, filter, result, prefilter), variations, log, optimization, priority, commutativeInstructions);
 		}
 	}
 
@@ -130,7 +127,7 @@ public class BuildTransformations : BuildBaseTemplate
 		return s?.Replace("R#", "R8");
 	}
 
-	private void GenerateTransformation(string name, string familyName, string type, string subName, Transformation transform, bool Variations, bool log, bool optimization, int priority, List<string> commutativeInstructions)
+	private void GenerateTransformation(string name, string type, string subName, Transformation transform, bool Variations, bool log, bool optimization, int priority, List<string> commutativeInstructions)
 	{
 		Lines.Clear();
 		First = true;
@@ -138,25 +135,23 @@ public class BuildTransformations : BuildBaseTemplate
 		DestinationFile = $"{type}\\{name}{subName}.cs";
 		AddSourceHeader();
 
-		//Lines.AppendLine($"using {Namespace};");
-
-		if (!Namespace.Contains("Framework"))
+		if (!Path.Contains("Framework"))
 		{
 			Lines.AppendLine($"using Mosa.Compiler.Framework;");
 			Lines.AppendLine();
 		}
 
-		Lines.AppendLine($"namespace {Path}.Transforms.Optimizations.Auto.{type};");
+		Lines.AppendLine($"namespace {Path}.{type};");
 		Lines.AppendLine();
 
-		GenerateTransformations(name, familyName, type, subName, transform, Variations, log, optimization, priority, commutativeInstructions);
+		GenerateTransformations(name, type, subName, transform, Variations, log, optimization, priority, commutativeInstructions);
 
 		Save();
 	}
 
-	private void GenerateTransformations(string name, string familyName, string type, string subName, Transformation transform, bool variations, bool log, bool optimization, int priority, List<string> commutativeInstructions)
+	private void GenerateTransformations(string name, string type, string subName, Transformation transform, bool variations, bool log, bool optimization, int priority, List<string> commutativeInstructions)
 	{
-		GenerateTransformation2(name, familyName, type, subName, transform, log, optimization, priority);
+		GenerateTransformation2(name, type, subName, transform, log, optimization, priority);
 
 		if (!variations)
 			return;
@@ -169,16 +164,16 @@ public class BuildTransformations : BuildBaseTemplate
 		var index = 1;
 		foreach (var variation in derivedVariations)
 		{
-			GenerateTransformation2(name, familyName, type, $"{subName}_v{index}", variation, log, optimization, priority);
+			GenerateTransformation2(name, type, $"{subName}_v{index}", variation, log, optimization, priority);
 			index++;
 		}
 	}
 
-	private void GenerateTransformation2(string name, string familyName, string type, string subName, Transformation transform, bool log, bool optimization, int priority)
+	private void GenerateTransformation2(string name, string type, string subName, Transformation transform, bool log, bool optimization, int priority)
 	{
 		var instructionName = transform.InstructionTree.InstructionName;
 
-		Transformations.Add($"{familyName}.{type}.{name}{subName}");
+		Transformations.Add($"{Path}.{type}.{name}{subName}", $"{type}.{name}{subName}");
 
 		if (First)
 		{
@@ -189,13 +184,7 @@ public class BuildTransformations : BuildBaseTemplate
 			Lines.AppendLine();
 		}
 
-		//Lines.AppendLine("/// <summary>");
-		//Lines.AppendLine($"/// {name}{subName}");
-		//Lines.AppendLine("/// </summary>");
-
-		var section = $"{Family}.{Section}.{type}";
-
-		Lines.AppendLine($"[Transform(\"{section}\")]");
+		Lines.AppendLine($"[Transform(\"{Family}.{Section}.{type}\")]");
 
 		Lines.AppendLine($"public sealed class {name}{subName} : BaseTransform");
 		Lines.AppendLine("{");

@@ -5,42 +5,9 @@
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 [Transform("IR.Optimizations.Auto.ConstantFolding")]
-public sealed class Compare64x64LessOrEqualThanZero : BaseTransform
+public sealed class Compare64x32LessThanOrEqualMax : BaseTransform
 {
-	public Compare64x64LessOrEqualThanZero() : base(IR.Compare64x64, TransformType.Auto | TransformType.Optimization)
-	{
-	}
-
-	public override int Priority => 100;
-
-	public override bool Match(Context context, Transform transform)
-	{
-		if (context.ConditionCode != ConditionCode.UnsignedLessOrEqual)
-			return false;
-
-		if (!context.Operand1.IsResolvedConstant)
-			return false;
-
-		if (context.Operand1.ConstantUnsigned64 != 0)
-			return false;
-
-		return true;
-	}
-
-	public override void Transform(Context context, Transform transform)
-	{
-		var result = context.Result;
-
-		var c1 = Operand.CreateConstant(1);
-
-		context.SetInstruction(IR.Move64, result, c1);
-	}
-}
-
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
-public sealed class Compare64x64LessOrEqualThanZero_v1 : BaseTransform
-{
-	public Compare64x64LessOrEqualThanZero_v1() : base(IR.Compare64x64, TransformType.Auto | TransformType.Optimization)
+	public Compare64x32LessThanOrEqualMax() : base(IR.Compare64x32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -51,10 +18,10 @@ public sealed class Compare64x64LessOrEqualThanZero_v1 : BaseTransform
 		if (context.ConditionCode != ConditionCode.UnsignedGreaterOrEqual)
 			return false;
 
-		if (!context.Operand2.IsResolvedConstant)
+		if (!context.Operand1.IsResolvedConstant)
 			return false;
 
-		if (context.Operand2.ConstantUnsigned64 != 0)
+		if (context.Operand1.ConstantUnsigned64 != 0xFFFFFFFFFFFFFFFF)
 			return false;
 
 		return true;
@@ -66,6 +33,39 @@ public sealed class Compare64x64LessOrEqualThanZero_v1 : BaseTransform
 
 		var c1 = Operand.CreateConstant(1);
 
-		context.SetInstruction(IR.Move64, result, c1);
+		context.SetInstruction(IR.Move32, result, c1);
+	}
+}
+
+[Transform("IR.Optimizations.Auto.ConstantFolding")]
+public sealed class Compare64x32LessThanOrEqualMax_v1 : BaseTransform
+{
+	public Compare64x32LessThanOrEqualMax_v1() : base(IR.Compare64x32, TransformType.Auto | TransformType.Optimization)
+	{
+	}
+
+	public override int Priority => 100;
+
+	public override bool Match(Context context, Transform transform)
+	{
+		if (context.ConditionCode != ConditionCode.UnsignedLessOrEqual)
+			return false;
+
+		if (!context.Operand2.IsResolvedConstant)
+			return false;
+
+		if (context.Operand2.ConstantUnsigned64 != 0xFFFFFFFFFFFFFFFF)
+			return false;
+
+		return true;
+	}
+
+	public override void Transform(Context context, Transform transform)
+	{
+		var result = context.Result;
+
+		var c1 = Operand.CreateConstant(1);
+
+		context.SetInstruction(IR.Move32, result, c1);
 	}
 }
