@@ -15,10 +15,7 @@ public sealed class DivSigned32ByOne : BaseTransform
 
 	public override bool Match(Context context, Transform transform)
 	{
-		if (!context.Operand2.IsResolvedConstant)
-			return false;
-
-		if (context.Operand2.ConstantUnsigned64 != 1)
+		if (!context.Operand2.IsConstantOne)
 			return false;
 
 		return true;

@@ -25,10 +25,7 @@ public sealed class IfThenElse64Compare64v1 : BaseTransform
 		if (context.Operand1.Definitions[0].ConditionCode != ConditionCode.Equal)
 			return false;
 
-		if (!context.Operand1.Definitions[0].Operand2.IsResolvedConstant)
-			return false;
-
-		if (context.Operand1.Definitions[0].Operand2.ConstantUnsigned64 != 0)
+		if (!context.Operand1.Definitions[0].Operand2.IsConstantZero)
 			return false;
 
 		return true;
@@ -67,10 +64,7 @@ public sealed class IfThenElse64Compare64v1_v1 : BaseTransform
 		if (context.Operand1.Definitions[0].ConditionCode != ConditionCode.Equal)
 			return false;
 
-		if (!context.Operand1.Definitions[0].Operand1.IsResolvedConstant)
-			return false;
-
-		if (context.Operand1.Definitions[0].Operand1.ConstantUnsigned64 != 0)
+		if (!context.Operand1.Definitions[0].Operand1.IsConstantZero)
 			return false;
 
 		return true;

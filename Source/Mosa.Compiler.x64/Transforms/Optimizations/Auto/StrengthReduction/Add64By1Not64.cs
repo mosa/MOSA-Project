@@ -18,10 +18,7 @@ public sealed class Add64By1Not64 : BaseTransform
 		if (!context.Operand1.IsVirtualRegister)
 			return false;
 
-		if (!context.Operand2.IsResolvedConstant)
-			return false;
-
-		if (context.Operand2.ConstantUnsigned64 != 1)
+		if (!context.Operand2.IsConstantOne)
 			return false;
 
 		if (!context.Operand1.IsDefinedOnce)
@@ -58,10 +55,7 @@ public sealed class Add64By1Not64_v1 : BaseTransform
 
 	public override bool Match(Context context, Transform transform)
 	{
-		if (!context.Operand1.IsResolvedConstant)
-			return false;
-
-		if (context.Operand1.ConstantUnsigned64 != 1)
+		if (!context.Operand1.IsConstantOne)
 			return false;
 
 		if (!context.Operand2.IsVirtualRegister)

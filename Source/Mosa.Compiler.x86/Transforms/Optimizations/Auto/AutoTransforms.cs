@@ -55,6 +55,8 @@ public static class AutoTransforms
 		new Ordering.Mulsd(),
 		new Ordering.Or32(),
 		new Ordering.Xor32(),
-		new Special.Lea32Shift32(),
+		new Rewrite.Lea32Shift32(),
+		new Rewrite.Lea32ToMov32Constant1(),
+		new Rewrite.Lea32ToMov32Constant2(),
 	};
 }

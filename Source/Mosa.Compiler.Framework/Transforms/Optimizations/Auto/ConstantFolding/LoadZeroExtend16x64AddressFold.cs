@@ -16,10 +16,7 @@ public sealed class LoadZeroExtend16x64AddressFold : BaseTransform
 		if (!context.Operand1.IsVirtualRegister)
 			return false;
 
-		if (!context.Operand2.IsResolvedConstant)
-			return false;
-
-		if (context.Operand2.ConstantUnsigned64 != 0)
+		if (!context.Operand2.IsConstantZero)
 			return false;
 
 		if (!context.Operand1.IsDefinedOnce)

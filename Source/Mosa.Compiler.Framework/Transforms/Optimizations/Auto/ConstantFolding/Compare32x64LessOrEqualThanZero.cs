@@ -18,10 +18,7 @@ public sealed class Compare32x64LessOrEqualThanZero : BaseTransform
 		if (context.ConditionCode != ConditionCode.UnsignedLessOrEqual)
 			return false;
 
-		if (!context.Operand1.IsResolvedConstant)
-			return false;
-
-		if (context.Operand1.ConstantUnsigned64 != 0)
+		if (!context.Operand1.IsConstantZero)
 			return false;
 
 		return true;
@@ -51,10 +48,7 @@ public sealed class Compare32x64LessOrEqualThanZero_v1 : BaseTransform
 		if (context.ConditionCode != ConditionCode.UnsignedGreaterOrEqual)
 			return false;
 
-		if (!context.Operand2.IsResolvedConstant)
-			return false;
-
-		if (context.Operand2.ConstantUnsigned64 != 0)
+		if (!context.Operand2.IsConstantZero)
 			return false;
 
 		return true;

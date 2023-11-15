@@ -17,10 +17,7 @@ public sealed class Shr32ByZero : BaseTransform
 
 	public override bool Match(Context context, Transform transform)
 	{
-		if (!context.Operand2.IsResolvedConstant)
-			return false;
-
-		if (context.Operand2.ConstantUnsigned64 != 0)
+		if (!context.Operand2.IsConstantZero)
 			return false;
 
 		if (AreAnyStatusFlagsUsed(context))

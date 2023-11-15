@@ -4,9 +4,9 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.Special;
+namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.Rewrite;
 
-[Transform("x86.Optimizations.Auto.Special")]
+[Transform("x86.Optimizations.Auto.Rewrite")]
 public sealed class Lea32Shift32 : BaseTransform
 {
 	public Lea32Shift32() : base(X86.Lea32, TransformType.Auto | TransformType.Optimization, true)
@@ -18,10 +18,7 @@ public sealed class Lea32Shift32 : BaseTransform
 		if (!context.Operand2.IsVirtualRegister)
 			return false;
 
-		if (!context.Operand3.IsResolvedConstant)
-			return false;
-
-		if (context.Operand3.ConstantUnsigned64 != 1)
+		if (!context.Operand3.IsConstantOne)
 			return false;
 
 		if (!context.Operand2.IsDefinedOnce)

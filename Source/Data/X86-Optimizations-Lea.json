@@ -9,12 +9,32 @@
 	],
 	"Optimizations": [
 		{
-			"Type": "Special",
+			"Type": "Rewrite",
 			"Name": "Lea32",
 			"SubName": "Shift32",
 			"Expression": "X86.Lea32 a (X86.Shl32 b c) 1 d",
 			"Filter": "IsResolvedConstant(c) && IsUnsignedBetween32(c, 1, 3) && IsVirtualRegister(b)",
 			"Result": "(X86.Lea32 a b [ShiftLeft32(1,To32(c))] d)",
+			"Variations": "No",
+			"Log": "Yes"
+		},
+		{
+			"Type": "Rewrite",
+			"Name": "Lea32",
+			"SubName": "ToMov32Constant1",
+			"Expression": "X86.Lea32 0 0 c d",
+			"Filter": "",
+			"Result": "(X86.Mov32 d)",
+			"Variations": "No",
+			"Log": "Yes"
+		},
+		{
+			"Type": "Rewrite",
+			"Name": "Lea32",
+			"SubName": "ToMov32Constant2",
+			"Expression": "X86.Lea32 a 0 c 0",
+			"Filter": "",
+			"Result": "(X86.Mov32 a)",
 			"Variations": "No",
 			"Log": "Yes"
 		}

@@ -15,10 +15,7 @@ public sealed class ShiftRight32ZeroValue : BaseTransform
 
 	public override bool Match(Context context, Transform transform)
 	{
-		if (!context.Operand1.IsResolvedConstant)
-			return false;
-
-		if (context.Operand1.ConstantUnsigned64 != 0)
+		if (!context.Operand1.IsConstantZero)
 			return false;
 
 		return true;

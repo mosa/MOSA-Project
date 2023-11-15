@@ -19,10 +19,7 @@ public sealed class Compare32x32RemUnsigned : BaseTransform
 		if (!context.Operand1.IsVirtualRegister)
 			return false;
 
-		if (!context.Operand2.IsResolvedConstant)
-			return false;
-
-		if (context.Operand2.ConstantUnsigned64 != 0)
+		if (!context.Operand2.IsConstantZero)
 			return false;
 
 		if (!context.Operand1.IsDefinedOnce)
@@ -64,10 +61,7 @@ public sealed class Compare32x32RemUnsigned_v1 : BaseTransform
 		if (context.ConditionCode != ConditionCode.Equal)
 			return false;
 
-		if (!context.Operand1.IsResolvedConstant)
-			return false;
-
-		if (context.Operand1.ConstantUnsigned64 != 0)
+		if (!context.Operand1.IsConstantZero)
 			return false;
 
 		if (!context.Operand2.IsVirtualRegister)

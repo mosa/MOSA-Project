@@ -4,12 +4,12 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.Simplication;
+namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.Rewrite;
 
-[Transform("x64.Optimizations.Auto.Simplication")]
-public sealed class Sub64FromZero : BaseTransform
+[Transform("x86.Optimizations.Auto.Rewrite")]
+public sealed class Lea32ToMov32Constant1 : BaseTransform
 {
-	public Sub64FromZero() : base(X64.Sub64, TransformType.Auto | TransformType.Optimization)
+	public Lea32ToMov32Constant1() : base(X86.Lea32, TransformType.Auto | TransformType.Optimization, true)
 	{
 	}
 
@@ -18,7 +18,7 @@ public sealed class Sub64FromZero : BaseTransform
 		if (!context.Operand1.IsConstantZero)
 			return false;
 
-		if (!IsVirtualRegister(context.Operand2))
+		if (!context.Operand2.IsConstantZero)
 			return false;
 
 		return true;
@@ -28,8 +28,8 @@ public sealed class Sub64FromZero : BaseTransform
 	{
 		var result = context.Result;
 
-		var t1 = context.Operand2;
+		var t1 = context.GetOperand(3);
 
-		context.SetInstruction(X64.Neg64, result, t1);
+		context.SetInstruction(X86.Mov32, result, t1);
 	}
 }

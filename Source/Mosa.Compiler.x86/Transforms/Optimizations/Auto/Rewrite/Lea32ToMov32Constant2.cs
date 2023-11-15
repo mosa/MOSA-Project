@@ -4,12 +4,12 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.StrengthReduction;
+namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.Rewrite;
 
-[Transform("x86.Optimizations.Auto.StrengthReduction")]
-public sealed class IMul32ByZero : BaseTransform
+[Transform("x86.Optimizations.Auto.Rewrite")]
+public sealed class Lea32ToMov32Constant2 : BaseTransform
 {
-	public IMul32ByZero() : base(X86.IMul32, TransformType.Auto | TransformType.Optimization)
+	public Lea32ToMov32Constant2() : base(X86.Lea32, TransformType.Auto | TransformType.Optimization, true)
 	{
 	}
 
@@ -18,7 +18,7 @@ public sealed class IMul32ByZero : BaseTransform
 		if (!context.Operand2.IsConstantZero)
 			return false;
 
-		if (AreAnyStatusFlagsUsed(context))
+		if (!context.GetOperand(3).IsConstantZero)
 			return false;
 
 		return true;
@@ -28,8 +28,8 @@ public sealed class IMul32ByZero : BaseTransform
 	{
 		var result = context.Result;
 
-		var c1 = Operand.CreateConstant(0);
+		var t1 = context.Operand1;
 
-		context.SetInstruction(X86.Mov32, result, c1);
+		context.SetInstruction(X86.Mov32, result, t1);
 	}
 }

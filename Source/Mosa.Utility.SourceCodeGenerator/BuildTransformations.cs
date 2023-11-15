@@ -763,6 +763,18 @@ public class BuildTransformations : BuildBaseTemplate
 			EmitCondition($"!context.{operandName}.IsVirtualRegister");
 		}
 
+		if (operand.IsInteger && operand.Integer == 0)
+		{
+			EmitCondition($"!context.{operandName}.IsConstantZero");
+			return;
+		}
+
+		if (operand.IsInteger && operand.Integer == 1)
+		{
+			EmitCondition($"!context.{operandName}.IsConstantOne");
+			return;
+		}
+
 		if (operand.IsDouble || operand.IsFloat || operand.IsInteger)
 		{
 			EmitCondition($"!context.{operandName}.IsResolvedConstant");

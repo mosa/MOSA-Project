@@ -24,10 +24,7 @@ public sealed class IMul32Mov32ByOne : BaseTransform
 		if (context.Operand2.Definitions[0].Instruction != X86.Mov32)
 			return false;
 
-		if (!context.Operand2.Definitions[0].Operand1.IsResolvedConstant)
-			return false;
-
-		if (context.Operand2.Definitions[0].Operand1.ConstantUnsigned64 != 1)
+		if (!context.Operand2.Definitions[0].Operand1.IsConstantOne)
 			return false;
 
 		if (AreAnyStatusFlagsUsed(context))

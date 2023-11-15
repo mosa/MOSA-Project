@@ -19,10 +19,7 @@ public sealed class Compare64x64SwapToZero : BaseTransform
 		if (!context.Operand1.IsVirtualRegister)
 			return false;
 
-		if (!context.Operand2.IsResolvedConstant)
-			return false;
-
-		if (context.Operand2.ConstantUnsigned64 != 1)
+		if (!context.Operand2.IsConstantOne)
 			return false;
 
 		if (!context.Operand1.IsDefinedOnce)
@@ -31,10 +28,7 @@ public sealed class Compare64x64SwapToZero : BaseTransform
 		if (context.Operand1.Definitions[0].Instruction != IR.And64)
 			return false;
 
-		if (!context.Operand1.Definitions[0].Operand2.IsResolvedConstant)
-			return false;
-
-		if (context.Operand1.Definitions[0].Operand2.ConstantUnsigned64 != 1)
+		if (!context.Operand1.Definitions[0].Operand2.IsConstantOne)
 			return false;
 
 		return true;
@@ -68,10 +62,7 @@ public sealed class Compare64x64SwapToZero_v1 : BaseTransform
 		if (context.ConditionCode != ConditionCode.NotEqual)
 			return false;
 
-		if (!context.Operand1.IsResolvedConstant)
-			return false;
-
-		if (context.Operand1.ConstantUnsigned64 != 1)
+		if (!context.Operand1.IsConstantOne)
 			return false;
 
 		if (!context.Operand2.IsVirtualRegister)
@@ -83,10 +74,7 @@ public sealed class Compare64x64SwapToZero_v1 : BaseTransform
 		if (context.Operand2.Definitions[0].Instruction != IR.And64)
 			return false;
 
-		if (!context.Operand2.Definitions[0].Operand2.IsResolvedConstant)
-			return false;
-
-		if (context.Operand2.Definitions[0].Operand2.ConstantUnsigned64 != 1)
+		if (!context.Operand2.Definitions[0].Operand2.IsConstantOne)
 			return false;
 
 		return true;
@@ -123,10 +111,7 @@ public sealed class Compare64x64SwapToZero_v2 : BaseTransform
 		if (!context.Operand1.IsVirtualRegister)
 			return false;
 
-		if (!context.Operand2.IsResolvedConstant)
-			return false;
-
-		if (context.Operand2.ConstantUnsigned64 != 1)
+		if (!context.Operand2.IsConstantOne)
 			return false;
 
 		if (!context.Operand1.IsDefinedOnce)
@@ -135,10 +120,7 @@ public sealed class Compare64x64SwapToZero_v2 : BaseTransform
 		if (context.Operand1.Definitions[0].Instruction != IR.And64)
 			return false;
 
-		if (!context.Operand1.Definitions[0].Operand1.IsResolvedConstant)
-			return false;
-
-		if (context.Operand1.Definitions[0].Operand1.ConstantUnsigned64 != 1)
+		if (!context.Operand1.Definitions[0].Operand1.IsConstantOne)
 			return false;
 
 		return true;
@@ -172,10 +154,7 @@ public sealed class Compare64x64SwapToZero_v3 : BaseTransform
 		if (context.ConditionCode != ConditionCode.NotEqual)
 			return false;
 
-		if (!context.Operand1.IsResolvedConstant)
-			return false;
-
-		if (context.Operand1.ConstantUnsigned64 != 1)
+		if (!context.Operand1.IsConstantOne)
 			return false;
 
 		if (!context.Operand2.IsVirtualRegister)
@@ -187,10 +166,7 @@ public sealed class Compare64x64SwapToZero_v3 : BaseTransform
 		if (context.Operand2.Definitions[0].Instruction != IR.And64)
 			return false;
 
-		if (!context.Operand2.Definitions[0].Operand1.IsResolvedConstant)
-			return false;
-
-		if (context.Operand2.Definitions[0].Operand1.ConstantUnsigned64 != 1)
+		if (!context.Operand2.Definitions[0].Operand1.IsConstantOne)
 			return false;
 
 		return true;

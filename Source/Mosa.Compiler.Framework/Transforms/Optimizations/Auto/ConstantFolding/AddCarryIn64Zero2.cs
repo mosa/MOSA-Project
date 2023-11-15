@@ -13,10 +13,7 @@ public sealed class AddCarryIn64Zero2 : BaseTransform
 
 	public override bool Match(Context context, Transform transform)
 	{
-		if (!context.Operand2.IsResolvedConstant)
-			return false;
-
-		if (context.Operand2.ConstantUnsigned64 != 0)
+		if (!context.Operand2.IsConstantZero)
 			return false;
 
 		return true;

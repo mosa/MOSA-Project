@@ -17,8 +17,6 @@ public static class ManualTransforms
 		new Rewrite.Cmp32ToZero(),
 		new Rewrite.Lea32ToInc32(),
 		new Rewrite.Lea32ToDec32(),
-		new Rewrite.Lea32ToMov32(),
-		new Rewrite.Lea32ToMov32Constant(),
 		new Rewrite.Sub32ToDec32(),
 		new Rewrite.Sub32ToLea32(),
 		new Rewrite.Test32ToZero(),
