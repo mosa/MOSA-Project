@@ -37,6 +37,16 @@
 			"Result": "(X86.Mov32 a)",
 			"Variations": "No",
 			"Log": "Yes"
+		},
+		{
+			"Type": "Rewrite",
+			"Name": "Lea32",
+			"SubName": "RemoveScale",
+			"Expression": "X86.Lea32 a 0 c d",
+			"Filter": "!IsOne(c)",
+			"Result": "(X86.Lea32 a 0 1 d)",
+			"Variations": "No",
+			"Log": "Yes"
 		}
 	]
 }
