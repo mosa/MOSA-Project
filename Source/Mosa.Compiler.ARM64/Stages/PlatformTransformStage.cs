@@ -10,11 +10,11 @@ namespace Mosa.Compiler.ARM64.Stages;
 /// Platform Transformation Stage
 /// </summary>
 /// <seealso cref="Mosa.Compiler.Framework.Stages.BaseTransformStage" />
-public sealed class PlatformTransformationStage : Compiler.Framework.Stages.BaseTransformStage
+public sealed class PlatformTransformStage : Compiler.Framework.Stages.BaseTransformStage
 {
 	public override string Name => "ARM64." + GetType().Name;
 
-	public PlatformTransformationStage()
+	public PlatformTransformStage()
 		: base(0)
 	{
 		AddTranforms(TweakTransforms.List);

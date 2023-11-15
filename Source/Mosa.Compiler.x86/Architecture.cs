@@ -143,15 +143,16 @@ public sealed class Architecture : BaseArchitecture
 		pipeline.InsertAfterLast<PlatformIntrinsicStage>(
 			new BaseMethodCompilerStage[]
 			{
+				//new AdvanceIRTransformStage(),
 				new IRTransformationStage(),
 				mosaSettings.PlatformOptimizations ? new Stages.OptimizationStage() : null,
-				new PlatformTransformationStage(),
+				new PlatformTransformStage(),
 			});
 
 		pipeline.InsertBefore<CodeGenerationStage>(
 			new BaseMethodCompilerStage[]
 			{
-				new PlatformTransformationStage(),
+				new PlatformTransformStage(),
 				mosaSettings.PlatformOptimizations ? new Stages.OptimizationStage() : null,
 			});
 

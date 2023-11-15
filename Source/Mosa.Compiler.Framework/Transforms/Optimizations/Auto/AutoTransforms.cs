@@ -7,7 +7,7 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto;
 
 /// <summary>
-/// Transformations
+/// AutoTransforms
 /// </summary>
 public static class AutoTransforms
 {

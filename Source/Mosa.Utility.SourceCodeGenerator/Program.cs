@@ -166,11 +166,11 @@ public static class Program
 			"Mosa.Compiler.x86.Transforms.Optimizations.Auto")
 			.Execute();
 
-		//new BuildTransformations(
-		//	Path.Combine(dataPath, @"X86-Optimizations-IRTransform.json"),
-		//	Path.Combine(targetPath, @"Mosa.Compiler.x86\Transforms\BaseIR\Auto"),
-		//	"Mosa.Compiler.x86.Transforms")
-		//	.Execute();
+		new BuildTransformations(
+			Path.Combine(dataPath, @"X86-Optimizations-IRTransform.json"),
+			Path.Combine(targetPath, @"Mosa.Compiler.x86\Transforms\BaseIR\Auto"),
+			"Mosa.Compiler.x86.Transforms.BaseIR.Auto")
+			.Execute();
 
 		new BuildTransformationListFile(
 			Path.Combine(targetPath, @"Mosa.Compiler.x86\Transforms\Optimizations\Auto"),
@@ -182,6 +182,17 @@ public static class Program
 				"Mosa.Compiler.x86.Transforms.Optimizations.Auto."
 			})
 			.Execute();
+
+		//new BuildTransformationListFile(
+		//	Path.Combine(targetPath, @"Mosa.Compiler.x86\Transforms\BaseIR\Auto"),
+		//	"AutoTransforms.cs",
+		//	"Mosa.Compiler.x86.Transforms.BaseIR.Auto",
+		//	"AutoTransforms",
+		//	new List<string>
+		//	{
+		//		"Mosa.Compiler.x86.Transforms.BaseIR.Auto"
+		//	})
+		//	.Execute();
 
 		// X64
 

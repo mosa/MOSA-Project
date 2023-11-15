@@ -24,7 +24,7 @@ public class BuildTransformationListFile : BuildBaseTemplate
 		Lines.AppendLine($"namespace {Namespace};");
 		Lines.AppendLine();
 		Lines.AppendLine("/// <summary>");
-		Lines.AppendLine("/// Transformations");
+		Lines.AppendLine($"/// {Classname}");
 		Lines.AppendLine("/// </summary>");
 		Lines.AppendLine($"public static class {Classname}");
 		Lines.AppendLine("{");

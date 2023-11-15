@@ -13,7 +13,7 @@
 			"Name": "Add32",
 			"SubName": "ToLea32Constant",
 			"Expression": "IR.Add32 a b",
-			"Filter": "IsConstant(b)",
+			"Filter": "IsResolvedConstant(b)",
 			"Result": "(X86.Lea32 a 0 1 b)",
 			"Priority": "45",
 			"Variations": "Yes",

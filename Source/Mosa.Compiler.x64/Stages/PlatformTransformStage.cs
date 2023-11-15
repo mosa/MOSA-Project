@@ -9,14 +9,14 @@ using Mosa.Compiler.x64.Transforms.Tweak;
 namespace Mosa.Compiler.x64.Stages;
 
 /// <summary>
-/// Platform Transformation Stage
+/// Platform Transform Stage
 /// </summary>
 /// <seealso cref="Mosa.Compiler.Framework.Stages.BaseTransformStage" />
-public sealed class PlatformTransformationStage : Compiler.Framework.Stages.BaseTransformStage
+public sealed class PlatformTransformStage : Compiler.Framework.Stages.BaseTransformStage
 {
 	public override string Name => "x64." + GetType().Name;
 
-	public PlatformTransformationStage()
+	public PlatformTransformStage()
 		: base(0)
 	{
 		AddTranforms(TweakTransforms.List);
