@@ -21,7 +21,7 @@ public sealed class IMul32ByOne : BaseTransform
 		if (context.Operand2.ConstantUnsigned64 != 1)
 			return false;
 
-		if (AreStatusFlagUsed(context))
+		if (AreAnyStatusFlagsUsed(context))
 			return false;
 
 		return true;

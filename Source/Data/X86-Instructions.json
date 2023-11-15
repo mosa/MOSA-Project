@@ -1073,15 +1073,15 @@
 					"Encoding": "[x86-base-load-register+constant],dest=r,membase=o1,offset=o4"
 				},
 				{
-					"Condition": "[register][register][constant_1to4][zero]",
+					"Condition": "[register][register][constant_1to8][zero]",
 					"Encoding": "[x86],mod=00,reg=reg3:r,rm=100,scale=imm2scale:o3,index=reg3:o2,base=reg3:o1"
 				},
 				{
-					"Condition": "[register][register][constant_1to4][constant_imm8]",
+					"Condition": "[register][register][constant_1to8][constant_imm8]",
 					"Encoding": "[x86],mod=01,reg=reg3:r,rm=100,scale=imm2scale:o3,index=reg3:o2,base=reg3:o1,immediate=imm8:o4"
 				},
 				{
-					"Condition": "[register][register][constant_1to4][constant]",
+					"Condition": "[register][register][constant_1to8][constant]",
 					"Encoding": "[x86],mod=10,reg=reg3:r,rm=100,scale=imm2scale:o3,index=reg3:o2,base=reg3:o1,immediate=imm32:o4"
 				}
 			]

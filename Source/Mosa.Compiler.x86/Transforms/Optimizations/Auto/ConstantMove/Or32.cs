@@ -27,7 +27,7 @@ public sealed class Or32 : BaseTransform
 		if (!IsConstant(context.Operand2.Definitions[0].Operand1))
 			return false;
 
-		if (AreStatusFlagUsed(context))
+		if (AreAnyStatusFlagsUsed(context))
 			return false;
 
 		return true;

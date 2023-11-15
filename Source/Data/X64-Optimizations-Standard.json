@@ -24,7 +24,7 @@
 			"Name": "Add##",
 			"SubName": "ByZero",
 			"Expression": "X64.Add## a 0",
-			"Filter": "!AreStatusFlagUsed(@)",
+			"Filter": "!AreAnyStatusFlagsUsed(@)",
 			"Result": "(X64.Mov## a)",
 			"Variations": "No"
 		},
@@ -33,7 +33,7 @@
 			"Name": "Sub##",
 			"SubName": "ByZero",
 			"Expression": "X64.Sub## a 0",
-			"Filter": "!AreStatusFlagUsed(@)",
+			"Filter": "!AreAnyStatusFlagsUsed(@)",
 			"Result": "(X64.Mov## a)",
 			"Variations": "Yes"
 		},
@@ -42,7 +42,7 @@
 			"Name": "And##",
 			"SubName": "ByFF",
 			"Expression": "X64.And## a 0xFF",
-			"Filter": "!IsCPURegister(a,%RSI) && !IsCPURegister(a,%RDI) && !AreStatusFlagUsed(@)",
+			"Filter": "!IsCPURegister(a,%RSI) && !IsCPURegister(a,%RDI) && !AreAnyStatusFlagsUsed(@)",
 			"Result": "(X64.Movzx8To## a)",
 			"Variations": "Yes",
 			"Log": "Yes",

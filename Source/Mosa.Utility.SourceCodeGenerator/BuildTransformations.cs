@@ -808,6 +808,6 @@ public class BuildTransformations : BuildBaseTemplate
 		if (index < 3)
 			return $"Operand{index + 1}";
 		else
-			return "GetOperand({index})";
+			return $"GetOperand({index})";
 	}
 }

@@ -30,7 +30,7 @@ public sealed class Add32By2ToInc32 : BaseTransform
 		if (!AreSame(context.Operand1, context.Result))
 			return false;
 
-		if (AreStatusFlagUsed(context))
+		if (AreAnyStatusFlagsUsed(context))
 			return false;
 
 		return true;

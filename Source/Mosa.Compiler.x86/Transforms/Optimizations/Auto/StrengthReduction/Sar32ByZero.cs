@@ -23,7 +23,7 @@ public sealed class Sar32ByZero : BaseTransform
 		if (context.Operand2.ConstantUnsigned64 != 0)
 			return false;
 
-		if (AreStatusFlagUsed(context))
+		if (AreAnyStatusFlagsUsed(context))
 			return false;
 
 		return true;

@@ -30,7 +30,7 @@ public sealed class IMul32Mov32ByOne : BaseTransform
 		if (context.Operand2.Definitions[0].Operand1.ConstantUnsigned64 != 1)
 			return false;
 
-		if (AreStatusFlagUsed(context))
+		if (AreAnyStatusFlagsUsed(context))
 			return false;
 
 		return true;

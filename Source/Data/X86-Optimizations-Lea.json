@@ -1,0 +1,22 @@
+﻿{
+	"Family": "x86",
+	"Section": "Optimizations.Auto",
+	"Commutative": [
+		"X86.Add32",
+		"X86.And32",
+		"X86.Or32",
+		"X86.Xor32"
+	],
+	"Optimizations": [
+		{
+			"Type": "Special",
+			"Name": "Lea32",
+			"SubName": "Shift32",
+			"Expression": "X86.Lea32 a (X86.Shl32 b c) 1 d",
+			"Filter": "IsResolvedConstant(c) && IsUnsignedBetween32(c, 1, 3) && IsVirtualRegister(b)",
+			"Result": "(X86.Lea32 a b [ShiftLeft32(1,To32(c))] d)",
+			"Variations": "No",
+			"Log": "Yes"
+		}
+	]
+}

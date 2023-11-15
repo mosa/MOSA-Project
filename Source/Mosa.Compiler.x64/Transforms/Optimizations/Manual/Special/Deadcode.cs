@@ -48,7 +48,7 @@ public sealed class Deadcode : BaseTransform
 			|| instruction.IsSignFlagModified
 			|| instruction.IsParityFlagModified)
 		{
-			return !AreStatusFlagUsed(context);
+			return !AreAnyStatusFlagsUsed(context);
 		}
 
 		return true;

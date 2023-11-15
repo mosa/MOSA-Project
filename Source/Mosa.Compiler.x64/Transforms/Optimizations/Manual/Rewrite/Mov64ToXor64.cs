@@ -16,7 +16,7 @@ public sealed class Mov64ToXor64 : BaseTransform
 		if (!context.Operand1.IsConstantZero)
 			return false;
 
-		if (AreStatusFlagUsed(context))
+		if (AreAnyStatusFlagsUsed(context))
 			return false;
 
 		return true;

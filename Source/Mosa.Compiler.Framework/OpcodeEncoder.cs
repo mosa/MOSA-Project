@@ -239,7 +239,7 @@ public sealed class OpcodeEncoder
 		AppendByte((byte)(value >> 56));
 	}
 
-	public void Append2BitSScale(Operand operand)
+	public void Append2BitScale(Operand operand)
 	{
 		var v = operand.ConstantUnsigned32;
 

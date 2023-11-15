@@ -150,8 +150,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Transforms", "Transforms", 
 		Data\X64-Optimizations-Ordering.json = Data\X64-Optimizations-Ordering.json
 		Data\X64-Optimizations-Standard.json = Data\X64-Optimizations-Standard.json
 		Data\X86-Optimizations-ConstantMove.json = Data\X86-Optimizations-ConstantMove.json
-		Data\X86-Optimizations-Ordering.json = Data\X86-Optimizations-Ordering.json
 		Data\X86-Optimizations-IRTransform.json = Data\X86-Optimizations-IRTransform.json
+		Data\X86-Optimizations-Lea.json = Data\X86-Optimizations-Lea.json
+		Data\X86-Optimizations-Ordering.json = Data\X86-Optimizations-Ordering.json
 		Data\X86-Optimizations-Standard.json = Data\X86-Optimizations-Standard.json
 	EndProjectSection
 EndProject

@@ -622,6 +622,7 @@ public class BuildInstructionFiles : BuildBaseTemplate
 					case "constant_imm16": cond1 = ".IsConstant"; cond2 = ".ConstantSigned32 >= " + short.MinValue; cond3 = ".ConstantSigned32 <= " + short.MaxValue; break;
 					case "constant_imm32": cond1 = ".IsConstant"; cond2 = ".ConstantSigned32 >= " + int.MinValue; cond3 = ".ConstantSigned32 <= " + int.MaxValue; break;
 					case "constant_1to4": cond1 = ".IsConstant"; cond2 = ".ConstantUnsigned32 >= 1"; cond3 = ".ConstantUnsigned32 <= 4"; break;
+					case "constant_1to8": cond1 = ".IsConstant"; cond2 = ".ConstantUnsigned32 >= 1"; cond3 = ".ConstantUnsigned32 <= 8"; break;
 					case "constant_0or1": cond1 = ".IsConstant"; cond2 = ".ConstantUnsigned32 >= 0"; cond3 = ".ConstantUnsigned32 <= 1"; break;
 				}
 
@@ -835,7 +836,7 @@ public class BuildInstructionFiles : BuildBaseTemplate
 			case "reg3s1": code = "Append3Bits"; postcode = ".Register.RegisterCode >> 1"; return;
 			case "imm1": code = "Append1BitImmediate"; return;
 			case "imm2": code = "Append2BitImmediate"; return;
-			case "imm2scale": code = "Append2BitSScale"; return;
+			case "imm2scale": code = "Append2BitScale"; return;
 			case "imm4": code = "Append4BitImmediate"; return;
 			case "imm4hn": code = "Append4BitImmediateHighNibble"; return;
 			case "imm5": code = "Append5BitImmediate"; return;

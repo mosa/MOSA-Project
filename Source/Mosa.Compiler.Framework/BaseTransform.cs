@@ -259,7 +259,7 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 		return value == 0;
 	}
 
-	public static bool AreStatusFlagUsed(Context context)
+	public static bool AreAnyStatusFlagsUsed(Context context)
 	{
 		return AreStatusFlagsUsed(context.Instruction, context.Node) != TriState.No;
 	}
@@ -854,11 +854,6 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 
 	public enum TriState
 	{ Yes, No, Unknown };
-
-	public static TriState AreAnyStatusFlagsUsed(Context context)
-	{
-		return AreAnyStatusFlagsUsed(context.Node);
-	}
 
 	public static TriState AreAnyStatusFlagsUsed(Node node)
 	{
