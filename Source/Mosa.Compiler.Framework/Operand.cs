@@ -237,6 +237,7 @@ public sealed partial class Operand
 	public static readonly Operand Constant32_6 = CreateConstant32Internal(6);
 	public static readonly Operand Constant32_7 = CreateConstant32Internal(7);
 	public static readonly Operand Constant32_8 = CreateConstant32Internal(8);
+	public static readonly Operand Constant32_9 = CreateConstant32Internal(9);
 	public static readonly Operand Constant32_15 = CreateConstant32Internal(15);
 	public static readonly Operand Constant32_16 = CreateConstant32Internal(16);
 	public static readonly Operand Constant32_20 = CreateConstant32Internal(20);

@@ -35,5 +35,7 @@ public static class ManualTransforms
 
 		new Size.Add32By2ToInc32(),
 		new Size.Lea32By2(),
+
+		new Rewrite.Mul32By3Or5Or9ToLea32(),
 	};
 }
