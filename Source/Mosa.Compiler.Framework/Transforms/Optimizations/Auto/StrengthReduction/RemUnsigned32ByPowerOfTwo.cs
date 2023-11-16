@@ -4,7 +4,7 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
 
-[Transform("IR.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class RemUnsigned32ByPowerOfTwo : BaseTransform
 {
 	public RemUnsigned32ByPowerOfTwo() : base(IR.RemUnsigned32, TransformType.Auto | TransformType.Optimization)

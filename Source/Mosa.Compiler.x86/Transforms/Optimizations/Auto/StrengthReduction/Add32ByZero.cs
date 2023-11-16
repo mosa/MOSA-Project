@@ -6,7 +6,7 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.StrengthReduction;
 
-[Transform("x86.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class Add32ByZero : BaseTransform
 {
 	public Add32ByZero() : base(X86.Add32, TransformType.Auto | TransformType.Optimization)

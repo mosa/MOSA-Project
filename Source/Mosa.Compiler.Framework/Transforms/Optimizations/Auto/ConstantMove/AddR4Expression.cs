@@ -4,7 +4,7 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove;
 
-[Transform("IR.Optimizations.Auto.ConstantMove")]
+[Transform()]
 public sealed class AddR4Expression : BaseTransform
 {
 	public AddR4Expression() : base(IR.AddR4, TransformType.Auto | TransformType.Optimization)
@@ -49,7 +49,7 @@ public sealed class AddR4Expression : BaseTransform
 	}
 }
 
-[Transform("IR.Optimizations.Auto.ConstantMove")]
+[Transform()]
 public sealed class AddR4Expression_v1 : BaseTransform
 {
 	public AddR4Expression_v1() : base(IR.AddR4, TransformType.Auto | TransformType.Optimization)
@@ -94,7 +94,7 @@ public sealed class AddR4Expression_v1 : BaseTransform
 	}
 }
 
-[Transform("IR.Optimizations.Auto.ConstantMove")]
+[Transform()]
 public sealed class AddR4Expression_v2 : BaseTransform
 {
 	public AddR4Expression_v2() : base(IR.AddR4, TransformType.Auto | TransformType.Optimization)
@@ -139,7 +139,7 @@ public sealed class AddR4Expression_v2 : BaseTransform
 	}
 }
 
-[Transform("IR.Optimizations.Auto.ConstantMove")]
+[Transform()]
 public sealed class AddR4Expression_v3 : BaseTransform
 {
 	public AddR4Expression_v3() : base(IR.AddR4, TransformType.Auto | TransformType.Optimization)

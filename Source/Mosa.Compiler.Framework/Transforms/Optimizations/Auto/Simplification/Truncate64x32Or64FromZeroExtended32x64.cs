@@ -4,7 +4,7 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
-[Transform("IR.Optimizations.Auto.Simplification")]
+[Transform()]
 public sealed class Truncate64x32Or64FromZeroExtended32x64 : BaseTransform
 {
 	public Truncate64x32Or64FromZeroExtended32x64() : base(IR.Truncate64x32, TransformType.Auto | TransformType.Optimization)

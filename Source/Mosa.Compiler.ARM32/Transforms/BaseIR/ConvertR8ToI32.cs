@@ -7,7 +7,7 @@ namespace Mosa.Compiler.ARM32.Transforms.BaseIR;
 /// <summary>
 /// ConvertR8ToI32
 /// </summary>
-[Transform("ARM32.BaseIR")]
+[Transform]
 public sealed class ConvertR8ToI32 : BaseIRTransform
 {
 	public ConvertR8ToI32() : base(IR.ConvertR8ToI32, TransformType.Manual | TransformType.Transform)

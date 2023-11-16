@@ -7,7 +7,7 @@ namespace Mosa.Compiler.x86.Transforms.BaseIR;
 /// <summary>
 /// BranchObject
 /// </summary>
-[Transform("x86.BaseIR")]
+[Transform]
 public sealed class BranchObject : BaseIRTransform
 {
 	public BranchObject() : base(IR.BranchObject, TransformType.Manual | TransformType.Transform)

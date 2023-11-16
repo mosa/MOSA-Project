@@ -4,7 +4,7 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.BitValue;
 
-[Transform("IR.Optimizations.Auto.BitValue")]
+[Transform()]
 public sealed class MulSigned32ButNotSigned : BaseTransform
 {
 	public MulSigned32ButNotSigned() : base(IR.MulSigned32, TransformType.Auto | TransformType.Optimization)

@@ -13,9 +13,4 @@ public class TransformAttribute : Attribute
 	public TransformAttribute()
 	{
 	}
-
-	public TransformAttribute(string section)
-	{
-		Section = section;
-	}
 }

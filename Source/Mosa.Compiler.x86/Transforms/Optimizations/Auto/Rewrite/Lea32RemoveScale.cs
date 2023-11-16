@@ -6,7 +6,7 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.Rewrite;
 
-[Transform("x86.Optimizations.Auto.Rewrite")]
+[Transform()]
 public sealed class Lea32RemoveScale : BaseTransform
 {
 	public Lea32RemoveScale() : base(X86.Lea32, TransformType.Auto | TransformType.Optimization, true)

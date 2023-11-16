@@ -4,7 +4,7 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class Or64 : BaseTransform
 {
 	public Or64() : base(IR.Or64, TransformType.Auto | TransformType.Optimization)

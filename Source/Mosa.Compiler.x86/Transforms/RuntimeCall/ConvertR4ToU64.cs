@@ -7,7 +7,7 @@ namespace Mosa.Compiler.x86.Transforms.RuntimeCall;
 /// <summary>
 /// ConvertR4ToU64
 /// </summary>
-[Transform("x86.RuntimeCall")]
+[Transform]
 public sealed class ConvertR4ToU64 : BaseTransform
 {
 	public ConvertR4ToU64() : base(IR.ConvertR4ToU64, TransformType.Manual | TransformType.Transform)

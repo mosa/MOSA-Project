@@ -7,7 +7,7 @@ namespace Mosa.Compiler.ARM32.Transforms.BaseIR;
 /// <summary>
 /// BranchManagedPointer
 /// </summary>
-[Transform("ARM32.BaseIR")]
+[Transform]
 public sealed class BranchManagedPointer : BaseIRTransform
 {
 	public BranchManagedPointer() : base(IR.BranchManagedPointer, TransformType.Manual | TransformType.Transform)

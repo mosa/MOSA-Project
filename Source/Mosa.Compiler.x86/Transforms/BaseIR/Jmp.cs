@@ -7,7 +7,7 @@ namespace Mosa.Compiler.x86.Transforms.BaseIR;
 /// <summary>
 /// Jmp
 /// </summary>
-[Transform("x86.BaseIR")]
+[Transform]
 public sealed class Jmp : BaseIRTransform
 {
 	public Jmp() : base(IR.Jmp, TransformType.Manual | TransformType.Transform)

@@ -6,7 +6,7 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.Ordering;
 
-[Transform("x86.Optimizations.Auto.Ordering")]
+[Transform()]
 public sealed class Addsd : BaseTransform
 {
 	public Addsd() : base(X86.Addsd, TransformType.Auto | TransformType.Optimization)

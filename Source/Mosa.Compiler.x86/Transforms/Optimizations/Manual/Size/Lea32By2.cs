@@ -6,7 +6,7 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x86.Transforms.Optimizations.Manual.Size;
 
-[Transform("x86.Optimizations.Manual.Size")]
+[Transform]
 public sealed class Lea32By2 : BaseTransform
 {
 	public Lea32By2() : base(X86.Lea32, TransformType.Manual | TransformType.Optimization)

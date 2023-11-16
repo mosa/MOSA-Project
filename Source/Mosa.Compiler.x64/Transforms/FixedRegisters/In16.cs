@@ -7,7 +7,7 @@ namespace Mosa.Compiler.x64.Transforms.FixedRegisters;
 /// <summary>
 /// In16
 /// </summary>
-[Transform("x64.FixedRegisters")]
+[Transform]
 public sealed class In16 : BaseTransform
 {
 	public In16() : base(X64.In16, TransformType.Manual | TransformType.Transform)

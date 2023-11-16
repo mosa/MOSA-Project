@@ -4,7 +4,7 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Reorder;
 
-[Transform("IR.Optimizations.Auto.Reorder")]
+[Transform()]
 public sealed class SubToAdd32 : BaseTransform
 {
 	public SubToAdd32() : base(IR.Sub32, TransformType.Auto | TransformType.Optimization)

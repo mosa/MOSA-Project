@@ -4,7 +4,7 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Algebraic;
 
-[Transform("IR.Optimizations.Auto.Algebraic")]
+[Transform()]
 public sealed class Signed32AAMinusBB : BaseTransform
 {
 	public Signed32AAMinusBB() : base(IR.Sub32, TransformType.Auto | TransformType.Optimization)

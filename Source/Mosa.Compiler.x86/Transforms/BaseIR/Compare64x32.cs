@@ -8,7 +8,7 @@ namespace Mosa.Compiler.x86.Transforms.BaseIR;
 /// <summary>
 /// Compare64x32
 /// </summary>
-[Transform("x86.BaseIR")]
+[Transform]
 public sealed class Compare64x32 : BaseIRTransform
 {
 	public Compare64x32() : base(IR.Compare64x32, TransformType.Manual | TransformType.Transform)

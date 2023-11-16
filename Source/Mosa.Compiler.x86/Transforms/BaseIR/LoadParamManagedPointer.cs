@@ -7,7 +7,7 @@ namespace Mosa.Compiler.x86.Transforms.BaseIR;
 /// <summary>
 /// LoadParamManagedPointer
 /// </summary>
-[Transform("x86.BaseIR")]
+[Transform]
 public sealed class LoadParamManagedPointer : BaseIRTransform
 {
 	public LoadParamManagedPointer() : base(IR.LoadParamManagedPointer, TransformType.Manual | TransformType.Transform)

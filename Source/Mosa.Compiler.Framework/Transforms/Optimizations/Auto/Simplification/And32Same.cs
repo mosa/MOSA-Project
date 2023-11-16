@@ -4,7 +4,7 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
-[Transform("IR.Optimizations.Auto.Simplification")]
+[Transform()]
 public sealed class And32Same : BaseTransform
 {
 	public And32Same() : base(IR.And32, TransformType.Auto | TransformType.Optimization)

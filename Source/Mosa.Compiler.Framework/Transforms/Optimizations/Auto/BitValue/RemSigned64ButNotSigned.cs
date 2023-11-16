@@ -4,7 +4,7 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.BitValue;
 
-[Transform("IR.Optimizations.Auto.BitValue")]
+[Transform()]
 public sealed class RemSigned64ButNotSigned : BaseTransform
 {
 	public RemSigned64ButNotSigned() : base(IR.RemSigned64, TransformType.Auto | TransformType.Optimization)

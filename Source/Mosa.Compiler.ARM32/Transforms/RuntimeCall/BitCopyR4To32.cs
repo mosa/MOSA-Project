@@ -7,7 +7,7 @@ namespace Mosa.Compiler.ARM32.Transforms.RuntimeCall;
 /// <summary>
 /// BitCopyR4To32
 /// </summary>
-[Transform("ARM32.RuntimeCall")]
+[Transform]
 public sealed class BitCopyR4To32 : BaseTransform
 {
 	public BitCopyR4To32() : base(IR.BitCopyR4To32, TransformType.Manual | TransformType.Transform)

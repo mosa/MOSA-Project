@@ -8,7 +8,7 @@ namespace Mosa.Compiler.x64.Transforms.FixedRegisters;
 /// <summary>
 /// Mul32
 /// </summary>
-[Transform("x64.FixedRegisters")]
+[Transform]
 public sealed class Mul32 : BaseTransform
 {
 	public Mul32() : base(X64.Mul32, TransformType.Manual | TransformType.Transform)

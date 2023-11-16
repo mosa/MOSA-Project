@@ -4,7 +4,7 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.LowerTo32;
 
-[Transform("IR.Optimizations.Auto.LowerTo32")]
+[Transform()]
 public sealed class Or32Truncate64x32Truncate64x32 : BaseTransform
 {
 	public Or32Truncate64x32Truncate64x32() : base(IR.Or32, TransformType.Auto | TransformType.Optimization)

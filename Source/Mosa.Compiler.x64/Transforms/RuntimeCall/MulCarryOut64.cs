@@ -8,7 +8,7 @@ namespace Mosa.Compiler.x64.Transforms.RuntimeCall;
 /// <summary>
 /// MulCarryOut64
 /// </summary>
-[Transform("x64.RuntimeCall")]
+[Transform]
 public sealed class MulCarryOut64 : BaseTransform
 {
 	public MulCarryOut64() : base(IR.MulCarryOut64, TransformType.Manual | TransformType.Transform)

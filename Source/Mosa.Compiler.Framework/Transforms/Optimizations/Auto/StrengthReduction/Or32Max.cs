@@ -4,7 +4,7 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
 
-[Transform("IR.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class Or32Max : BaseTransform
 {
 	public Or32Max() : base(IR.Or32, TransformType.Auto | TransformType.Optimization)
@@ -34,7 +34,7 @@ public sealed class Or32Max : BaseTransform
 	}
 }
 
-[Transform("IR.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class Or32Max_v1 : BaseTransform
 {
 	public Or32Max_v1() : base(IR.Or32, TransformType.Auto | TransformType.Optimization)

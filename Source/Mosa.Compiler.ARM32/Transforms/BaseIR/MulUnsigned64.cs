@@ -7,7 +7,7 @@ namespace Mosa.Compiler.ARM32.Transforms.BaseIR;
 /// <summary>
 /// MulUnsigned64
 /// </summary>
-[Transform("ARM32.BaseIR")]
+[Transform]
 public sealed class MulUnsigned64 : BaseIRTransform
 {
 	public MulUnsigned64() : base(IR.MulUnsigned64, TransformType.Manual | TransformType.Transform)

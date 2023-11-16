@@ -6,7 +6,7 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.Ordering;
 
-[Transform("x86.Optimizations.Auto.Ordering")]
+[Transform()]
 public sealed class Mulss : BaseTransform
 {
 	public Mulss() : base(X86.Mulss, TransformType.Auto | TransformType.Optimization)

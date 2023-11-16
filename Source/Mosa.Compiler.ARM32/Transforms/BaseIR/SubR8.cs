@@ -7,7 +7,7 @@ namespace Mosa.Compiler.ARM32.Transforms.BaseIR;
 /// <summary>
 /// SubR8
 /// </summary>
-[Transform("ARM32.BaseIR")]
+[Transform]
 public sealed class SubR8 : BaseIRTransform
 {
 	public SubR8() : base(IR.SubR8, TransformType.Manual | TransformType.Transform)

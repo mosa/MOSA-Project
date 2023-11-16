@@ -4,7 +4,7 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
-[Transform("IR.Optimizations.Auto.Simplification")]
+[Transform()]
 public sealed class Or64And64And64ByConstant : BaseTransform
 {
 	public Or64And64And64ByConstant() : base(IR.Or64, TransformType.Auto | TransformType.Optimization)
@@ -52,7 +52,7 @@ public sealed class Or64And64And64ByConstant : BaseTransform
 	}
 }
 
-[Transform("IR.Optimizations.Auto.Simplification")]
+[Transform()]
 public sealed class Or64And64And64ByConstant_v1 : BaseTransform
 {
 	public Or64And64And64ByConstant_v1() : base(IR.Or64, TransformType.Auto | TransformType.Optimization)
@@ -100,7 +100,7 @@ public sealed class Or64And64And64ByConstant_v1 : BaseTransform
 	}
 }
 
-[Transform("IR.Optimizations.Auto.Simplification")]
+[Transform()]
 public sealed class Or64And64And64ByConstant_v2 : BaseTransform
 {
 	public Or64And64And64ByConstant_v2() : base(IR.Or64, TransformType.Auto | TransformType.Optimization)
@@ -148,7 +148,7 @@ public sealed class Or64And64And64ByConstant_v2 : BaseTransform
 	}
 }
 
-[Transform("IR.Optimizations.Auto.Simplification")]
+[Transform()]
 public sealed class Or64And64And64ByConstant_v3 : BaseTransform
 {
 	public Or64And64And64ByConstant_v3() : base(IR.Or64, TransformType.Auto | TransformType.Optimization)
@@ -196,7 +196,7 @@ public sealed class Or64And64And64ByConstant_v3 : BaseTransform
 	}
 }
 
-[Transform("IR.Optimizations.Auto.Simplification")]
+[Transform()]
 public sealed class Or64And64And64ByConstant_v4 : BaseTransform
 {
 	public Or64And64And64ByConstant_v4() : base(IR.Or64, TransformType.Auto | TransformType.Optimization)
@@ -244,7 +244,7 @@ public sealed class Or64And64And64ByConstant_v4 : BaseTransform
 	}
 }
 
-[Transform("IR.Optimizations.Auto.Simplification")]
+[Transform()]
 public sealed class Or64And64And64ByConstant_v5 : BaseTransform
 {
 	public Or64And64And64ByConstant_v5() : base(IR.Or64, TransformType.Auto | TransformType.Optimization)
@@ -292,7 +292,7 @@ public sealed class Or64And64And64ByConstant_v5 : BaseTransform
 	}
 }
 
-[Transform("IR.Optimizations.Auto.Simplification")]
+[Transform()]
 public sealed class Or64And64And64ByConstant_v6 : BaseTransform
 {
 	public Or64And64And64ByConstant_v6() : base(IR.Or64, TransformType.Auto | TransformType.Optimization)
@@ -340,7 +340,7 @@ public sealed class Or64And64And64ByConstant_v6 : BaseTransform
 	}
 }
 
-[Transform("IR.Optimizations.Auto.Simplification")]
+[Transform()]
 public sealed class Or64And64And64ByConstant_v7 : BaseTransform
 {
 	public Or64And64And64ByConstant_v7() : base(IR.Or64, TransformType.Auto | TransformType.Optimization)

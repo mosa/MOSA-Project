@@ -7,7 +7,7 @@ namespace Mosa.Compiler.x86.Transforms.Stack;
 /// <summary>
 /// Epilogue
 /// </summary>
-[Transform("x86.Stack")]
+[Transform]
 public sealed class Epilogue : BaseTransform
 {
 	public Epilogue() : base(IR.Epilogue, TransformType.Manual | TransformType.Transform)

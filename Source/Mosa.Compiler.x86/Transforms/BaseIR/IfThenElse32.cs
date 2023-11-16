@@ -7,7 +7,7 @@ namespace Mosa.Compiler.x86.Transforms.BaseIR;
 /// <summary>
 /// IfThenElse32
 /// </summary>
-[Transform("x86.BaseIR")]
+[Transform]
 public sealed class IfThenElse32 : BaseIRTransform
 {
 	public IfThenElse32() : base(IR.IfThenElse32, TransformType.Manual | TransformType.Transform)

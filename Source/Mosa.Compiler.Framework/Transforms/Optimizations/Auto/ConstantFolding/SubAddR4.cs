@@ -4,7 +4,7 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class SubAddR4 : BaseTransform
 {
 	public SubAddR4() : base(IR.SubR4, TransformType.Auto | TransformType.Optimization)
@@ -47,7 +47,7 @@ public sealed class SubAddR4 : BaseTransform
 	}
 }
 
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class SubAddR4_v1 : BaseTransform
 {
 	public SubAddR4_v1() : base(IR.SubR4, TransformType.Auto | TransformType.Optimization)

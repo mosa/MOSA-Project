@@ -7,7 +7,7 @@ namespace Mosa.Compiler.x64.Transforms.FixedRegisters;
 /// <summary>
 /// Rcr32
 /// </summary>
-[Transform("x64.FixedRegisters")]
+[Transform]
 public sealed class Rcr32 : BaseTransform
 {
 	public Rcr32() : base(X64.Rcr32, TransformType.Manual | TransformType.Transform)

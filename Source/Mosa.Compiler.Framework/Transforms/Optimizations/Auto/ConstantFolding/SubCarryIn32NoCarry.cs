@@ -4,7 +4,7 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class SubCarryIn32NoCarry : BaseTransform
 {
 	public SubCarryIn32NoCarry() : base(IR.SubCarryIn32, TransformType.Auto | TransformType.Optimization)

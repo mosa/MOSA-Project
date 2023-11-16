@@ -4,7 +4,7 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x64.Transforms.Optimizations.Manual.Rewrite;
 
-[Transform("x64.Optimizations.Manual.Rewrite")]
+[Transform]
 public sealed class Sub32ToDec32 : BaseTransform
 {
 	public Sub32ToDec32() : base(X64.Sub32, TransformType.Manual | TransformType.Optimization)

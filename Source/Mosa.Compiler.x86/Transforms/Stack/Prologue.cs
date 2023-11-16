@@ -7,7 +7,7 @@ namespace Mosa.Compiler.x86.Transforms.Stack;
 /// <summary>
 /// ConvertR4ToI64
 /// </summary>
-[Transform("x86.Stack")]
+[Transform]
 public sealed class Prologue : BaseTransform
 {
 	public Prologue() : base(IR.Prologue, TransformType.Manual | TransformType.Transform)

@@ -4,7 +4,7 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class MulUnsignedShiftLeft32 : BaseTransform
 {
 	public MulUnsignedShiftLeft32() : base(IR.MulUnsigned32, TransformType.Auto | TransformType.Optimization)
@@ -49,7 +49,7 @@ public sealed class MulUnsignedShiftLeft32 : BaseTransform
 	}
 }
 
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class MulUnsignedShiftLeft32_v1 : BaseTransform
 {
 	public MulUnsignedShiftLeft32_v1() : base(IR.MulUnsigned32, TransformType.Auto | TransformType.Optimization)

@@ -5,7 +5,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Useless;
 /// <summary>
 /// ZeroExtend8x64Compare64x64
 /// </summary>
-[Transform("IR.Optimizations.Manual.Useless")]
+[Transform]
 public sealed class ZeroExtend8x64Compare64x64 : BaseTransform
 {
 	public ZeroExtend8x64Compare64x64() : base(IR.ZeroExtend8x64, TransformType.Manual | TransformType.Optimization)

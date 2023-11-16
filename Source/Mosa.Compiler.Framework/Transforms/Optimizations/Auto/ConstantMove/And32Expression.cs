@@ -4,7 +4,7 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove;
 
-[Transform("IR.Optimizations.Auto.ConstantMove")]
+[Transform()]
 public sealed class And32Expression : BaseTransform
 {
 	public And32Expression() : base(IR.And32, TransformType.Auto | TransformType.Optimization)
@@ -49,7 +49,7 @@ public sealed class And32Expression : BaseTransform
 	}
 }
 
-[Transform("IR.Optimizations.Auto.ConstantMove")]
+[Transform()]
 public sealed class And32Expression_v1 : BaseTransform
 {
 	public And32Expression_v1() : base(IR.And32, TransformType.Auto | TransformType.Optimization)
@@ -94,7 +94,7 @@ public sealed class And32Expression_v1 : BaseTransform
 	}
 }
 
-[Transform("IR.Optimizations.Auto.ConstantMove")]
+[Transform()]
 public sealed class And32Expression_v2 : BaseTransform
 {
 	public And32Expression_v2() : base(IR.And32, TransformType.Auto | TransformType.Optimization)
@@ -139,7 +139,7 @@ public sealed class And32Expression_v2 : BaseTransform
 	}
 }
 
-[Transform("IR.Optimizations.Auto.ConstantMove")]
+[Transform()]
 public sealed class And32Expression_v3 : BaseTransform
 {
 	public And32Expression_v3() : base(IR.And32, TransformType.Auto | TransformType.Optimization)

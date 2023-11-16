@@ -6,7 +6,7 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.Ordering;
 
-[Transform("x64.Optimizations.Auto.Ordering")]
+[Transform()]
 public sealed class Adc32 : BaseTransform
 {
 	public Adc32() : base(X64.Adc32, TransformType.Auto | TransformType.Optimization)

@@ -7,7 +7,7 @@ namespace Mosa.Compiler.x86.Transforms.FixedRegisters;
 /// <summary>
 /// Div32
 /// </summary>
-[Transform("x86.FixedRegisters")]
+[Transform]
 public sealed class Div32 : BaseTransform
 {
 	public Div32() : base(X86.Div32, TransformType.Manual | TransformType.Transform)

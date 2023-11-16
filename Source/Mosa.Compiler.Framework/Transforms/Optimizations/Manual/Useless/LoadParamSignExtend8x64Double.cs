@@ -5,7 +5,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Useless;
 /// <summary>
 /// LoadParamSignExtend8x64Double
 /// </summary>
-[Transform("IR.Optimizations.Manual.Useless")]
+[Transform]
 public sealed class LoadParamSignExtend8x64Double : BaseTransform
 {
 	public LoadParamSignExtend8x64Double() : base(IR.SignExtend8x64, TransformType.Manual | TransformType.Optimization)

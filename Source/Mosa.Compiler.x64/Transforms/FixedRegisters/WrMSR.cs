@@ -7,7 +7,7 @@ namespace Mosa.Compiler.x64.Transforms.FixedRegisters;
 /// <summary>
 /// WrMSR
 /// </summary>
-[Transform("x64.FixedRegisters")]
+[Transform]
 public sealed class WrMSR : BaseTransform
 {
 	public WrMSR() : base(X64.WrMSR, TransformType.Manual | TransformType.Transform)

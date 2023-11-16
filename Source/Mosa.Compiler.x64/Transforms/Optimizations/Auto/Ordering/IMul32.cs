@@ -6,7 +6,7 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.Ordering;
 
-[Transform("x64.Optimizations.Auto.Ordering")]
+[Transform()]
 public sealed class IMul32 : BaseTransform
 {
 	public IMul32() : base(X64.IMul32, TransformType.Auto | TransformType.Optimization)

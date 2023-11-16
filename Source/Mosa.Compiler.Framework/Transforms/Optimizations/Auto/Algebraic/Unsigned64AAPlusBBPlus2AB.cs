@@ -4,7 +4,7 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Algebraic;
 
-[Transform("IR.Optimizations.Auto.Algebraic")]
+[Transform()]
 public sealed class Unsigned64AAPlusBBPlus2AB : BaseTransform
 {
 	public Unsigned64AAPlusBBPlus2AB() : base(IR.Add64, TransformType.Auto | TransformType.Optimization)
@@ -92,7 +92,7 @@ public sealed class Unsigned64AAPlusBBPlus2AB : BaseTransform
 	}
 }
 
-[Transform("IR.Optimizations.Auto.Algebraic")]
+[Transform()]
 public sealed class Unsigned64AAPlusBBPlus2AB_v1 : BaseTransform
 {
 	public Unsigned64AAPlusBBPlus2AB_v1() : base(IR.Add64, TransformType.Auto | TransformType.Optimization)
@@ -180,7 +180,7 @@ public sealed class Unsigned64AAPlusBBPlus2AB_v1 : BaseTransform
 	}
 }
 
-[Transform("IR.Optimizations.Auto.Algebraic")]
+[Transform()]
 public sealed class Unsigned64AAPlusBBPlus2AB_v2 : BaseTransform
 {
 	public Unsigned64AAPlusBBPlus2AB_v2() : base(IR.Add64, TransformType.Auto | TransformType.Optimization)
@@ -268,7 +268,7 @@ public sealed class Unsigned64AAPlusBBPlus2AB_v2 : BaseTransform
 	}
 }
 
-[Transform("IR.Optimizations.Auto.Algebraic")]
+[Transform()]
 public sealed class Unsigned64AAPlusBBPlus2AB_v3 : BaseTransform
 {
 	public Unsigned64AAPlusBBPlus2AB_v3() : base(IR.Add64, TransformType.Auto | TransformType.Optimization)
@@ -356,7 +356,7 @@ public sealed class Unsigned64AAPlusBBPlus2AB_v3 : BaseTransform
 	}
 }
 
-[Transform("IR.Optimizations.Auto.Algebraic")]
+[Transform()]
 public sealed class Unsigned64AAPlusBBPlus2AB_v4 : BaseTransform
 {
 	public Unsigned64AAPlusBBPlus2AB_v4() : base(IR.Add64, TransformType.Auto | TransformType.Optimization)
@@ -444,7 +444,7 @@ public sealed class Unsigned64AAPlusBBPlus2AB_v4 : BaseTransform
 	}
 }
 
-[Transform("IR.Optimizations.Auto.Algebraic")]
+[Transform()]
 public sealed class Unsigned64AAPlusBBPlus2AB_v5 : BaseTransform
 {
 	public Unsigned64AAPlusBBPlus2AB_v5() : base(IR.Add64, TransformType.Auto | TransformType.Optimization)
@@ -532,7 +532,7 @@ public sealed class Unsigned64AAPlusBBPlus2AB_v5 : BaseTransform
 	}
 }
 
-[Transform("IR.Optimizations.Auto.Algebraic")]
+[Transform()]
 public sealed class Unsigned64AAPlusBBPlus2AB_v6 : BaseTransform
 {
 	public Unsigned64AAPlusBBPlus2AB_v6() : base(IR.Add64, TransformType.Auto | TransformType.Optimization)
@@ -620,7 +620,7 @@ public sealed class Unsigned64AAPlusBBPlus2AB_v6 : BaseTransform
 	}
 }
 
-[Transform("IR.Optimizations.Auto.Algebraic")]
+[Transform()]
 public sealed class Unsigned64AAPlusBBPlus2AB_v7 : BaseTransform
 {
 	public Unsigned64AAPlusBBPlus2AB_v7() : base(IR.Add64, TransformType.Auto | TransformType.Optimization)

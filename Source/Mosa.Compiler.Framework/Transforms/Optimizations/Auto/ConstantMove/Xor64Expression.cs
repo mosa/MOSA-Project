@@ -4,7 +4,7 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove;
 
-[Transform("IR.Optimizations.Auto.ConstantMove")]
+[Transform()]
 public sealed class Xor64Expression : BaseTransform
 {
 	public Xor64Expression() : base(IR.Xor64, TransformType.Auto | TransformType.Optimization)
@@ -49,7 +49,7 @@ public sealed class Xor64Expression : BaseTransform
 	}
 }
 
-[Transform("IR.Optimizations.Auto.ConstantMove")]
+[Transform()]
 public sealed class Xor64Expression_v1 : BaseTransform
 {
 	public Xor64Expression_v1() : base(IR.Xor64, TransformType.Auto | TransformType.Optimization)
@@ -94,7 +94,7 @@ public sealed class Xor64Expression_v1 : BaseTransform
 	}
 }
 
-[Transform("IR.Optimizations.Auto.ConstantMove")]
+[Transform()]
 public sealed class Xor64Expression_v2 : BaseTransform
 {
 	public Xor64Expression_v2() : base(IR.Xor64, TransformType.Auto | TransformType.Optimization)
@@ -139,7 +139,7 @@ public sealed class Xor64Expression_v2 : BaseTransform
 	}
 }
 
-[Transform("IR.Optimizations.Auto.ConstantMove")]
+[Transform()]
 public sealed class Xor64Expression_v3 : BaseTransform
 {
 	public Xor64Expression_v3() : base(IR.Xor64, TransformType.Auto | TransformType.Optimization)

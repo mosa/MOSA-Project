@@ -7,7 +7,7 @@ namespace Mosa.Compiler.x64.Transforms.BaseIR;
 /// <summary>
 /// Truncate64x32
 /// </summary>
-[Transform("x64.BaseIR")]
+[Transform]
 public sealed class Truncate64x32 : BaseIRTransform
 {
 	public Truncate64x32() : base(IR.Truncate64x32, TransformType.Manual | TransformType.Transform)

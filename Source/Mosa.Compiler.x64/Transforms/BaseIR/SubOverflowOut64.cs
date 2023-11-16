@@ -7,7 +7,7 @@ namespace Mosa.Compiler.x64.Transforms.BaseIR;
 /// <summary>
 /// SubOverflowOut64
 /// </summary>
-[Transform("x64.BaseIR")]
+[Transform]
 public sealed class SubOverflowOut64 : BaseIRTransform
 {
 	public SubOverflowOut64() : base(IR.SubOverflowOut64, TransformType.Manual | TransformType.Transform)

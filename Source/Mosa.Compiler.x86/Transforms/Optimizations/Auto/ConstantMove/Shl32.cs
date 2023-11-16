@@ -6,7 +6,7 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.ConstantMove;
 
-[Transform("x86.Optimizations.Auto.ConstantMove")]
+[Transform()]
 public sealed class Shl32 : BaseTransform
 {
 	public Shl32() : base(X86.Shl32, TransformType.Auto | TransformType.Optimization)

@@ -7,7 +7,7 @@ namespace Mosa.Compiler.x64.Transforms.AddressMode;
 /// <summary>
 /// Sbb32
 /// </summary>
-[Transform("x64.AddressMode")]
+[Transform]
 public sealed class Sbb32 : BaseAddressModeTransform
 {
 	public Sbb32() : base(X64.Sbb32, TransformType.Manual | TransformType.Transform)

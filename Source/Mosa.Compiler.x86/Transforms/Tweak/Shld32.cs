@@ -7,7 +7,7 @@ namespace Mosa.Compiler.x86.Transforms.Tweak;
 /// <summary>
 /// Shld32
 /// </summary>
-[Transform("x86.Tweak")]
+[Transform]
 public sealed class Shld32 : BaseTransform
 {
 	public Shld32() : base(X86.Shld32, TransformType.Manual | TransformType.Transform)

@@ -4,7 +4,7 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
 
-[Transform("IR.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class Compare32x32RemUnsigned : BaseTransform
 {
 	public Compare32x32RemUnsigned() : base(IR.Compare32x32, TransformType.Auto | TransformType.Optimization)
@@ -49,7 +49,7 @@ public sealed class Compare32x32RemUnsigned : BaseTransform
 	}
 }
 
-[Transform("IR.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class Compare32x32RemUnsigned_v1 : BaseTransform
 {
 	public Compare32x32RemUnsigned_v1() : base(IR.Compare32x32, TransformType.Auto | TransformType.Optimization)

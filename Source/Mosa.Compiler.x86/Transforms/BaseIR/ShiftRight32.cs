@@ -7,7 +7,7 @@ namespace Mosa.Compiler.x86.Transforms.BaseIR;
 /// <summary>
 /// ShiftRight32
 /// </summary>
-[Transform("x86.BaseIR")]
+[Transform]
 public sealed class ShiftRight32 : BaseIRTransform
 {
 	public ShiftRight32() : base(IR.ShiftRight32, TransformType.Manual | TransformType.Transform)

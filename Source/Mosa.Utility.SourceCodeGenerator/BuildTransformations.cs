@@ -184,7 +184,7 @@ public class BuildTransformations : BuildBaseTemplate
 			Lines.AppendLine();
 		}
 
-		Lines.AppendLine($"[Transform(\"{Family}.{Section}.{type}\")]");
+		Lines.AppendLine($"[Transform()]");
 
 		Lines.AppendLine($"public sealed class {name}{subName} : BaseTransform");
 		Lines.AppendLine("{");

@@ -7,7 +7,7 @@ namespace Mosa.Compiler.x64.Transforms.Tweak;
 /// <summary>
 /// Nop
 /// </summary>
-[Transform("x64.Tweak")]
+[Transform]
 public sealed class Nop : BaseTransform
 {
 	public Nop() : base(X64.Nop, TransformType.Manual | TransformType.Transform)

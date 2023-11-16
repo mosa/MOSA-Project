@@ -6,7 +6,7 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.ConstantMove;
 
-[Transform("x86.Optimizations.Auto.ConstantMove")]
+[Transform()]
 public sealed class Sar32 : BaseTransform
 {
 	public Sar32() : base(X86.Sar32, TransformType.Auto | TransformType.Optimization)

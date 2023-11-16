@@ -4,7 +4,7 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x86.Transforms.Special;
 
-[Transform("x86.Special")]
+[Transform]
 public sealed class GetLow32Register : BaseTransform
 {
 	public GetLow32Register() : base(IR.GetLow32, TransformType.Manual | TransformType.Optimization)

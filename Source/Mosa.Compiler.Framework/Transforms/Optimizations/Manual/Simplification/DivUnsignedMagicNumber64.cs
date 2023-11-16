@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Simplification
 /// <summary>
 /// DivUnsignedMagicNumber64
 /// </summary>
-[Transform("IR.Optimizations.Manual.Simplification")]
+[Transform]
 public sealed class DivUnsignedMagicNumber64 : BaseTransform
 {
 	public DivUnsignedMagicNumber64() : base(IR.DivUnsigned64, TransformType.Auto | TransformType.Optimization)

@@ -7,7 +7,7 @@ namespace Mosa.Compiler.x64.Transforms.Tweak;
 /// <summary>
 /// CMov32
 /// </summary>
-[Transform("x64.Tweak")]
+[Transform]
 public sealed class CMov32 : BaseTransform
 {
 	public CMov32() : base(X64.CMov32, TransformType.Manual | TransformType.Transform)

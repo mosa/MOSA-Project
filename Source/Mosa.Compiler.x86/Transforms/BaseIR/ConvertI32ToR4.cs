@@ -8,7 +8,7 @@ namespace Mosa.Compiler.x86.Transforms.BaseIR;
 /// <summary>
 /// ConvertI32ToR4
 /// </summary>
-[Transform("x86.BaseIR")]
+[Transform]
 public sealed class ConvertI32ToR4 : BaseIRTransform
 {
 	public ConvertI32ToR4() : base(IR.ConvertI32ToR4, TransformType.Manual | TransformType.Transform)

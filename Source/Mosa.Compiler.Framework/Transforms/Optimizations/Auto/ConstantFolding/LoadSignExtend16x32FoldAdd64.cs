@@ -4,7 +4,7 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class LoadSignExtend16x32FoldAdd64 : BaseTransform
 {
 	public LoadSignExtend16x32FoldAdd64() : base(IR.LoadSignExtend16x32, TransformType.Auto | TransformType.Optimization)

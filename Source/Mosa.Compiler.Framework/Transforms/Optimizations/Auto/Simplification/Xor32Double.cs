@@ -4,7 +4,7 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
-[Transform("IR.Optimizations.Auto.Simplification")]
+[Transform()]
 public sealed class Xor32Double : BaseTransform
 {
 	public Xor32Double() : base(IR.Xor32, TransformType.Auto | TransformType.Optimization)
@@ -38,7 +38,7 @@ public sealed class Xor32Double : BaseTransform
 	}
 }
 
-[Transform("IR.Optimizations.Auto.Simplification")]
+[Transform()]
 public sealed class Xor32Double_v1 : BaseTransform
 {
 	public Xor32Double_v1() : base(IR.Xor32, TransformType.Auto | TransformType.Optimization)
@@ -72,7 +72,7 @@ public sealed class Xor32Double_v1 : BaseTransform
 	}
 }
 
-[Transform("IR.Optimizations.Auto.Simplification")]
+[Transform()]
 public sealed class Xor32Double_v2 : BaseTransform
 {
 	public Xor32Double_v2() : base(IR.Xor32, TransformType.Auto | TransformType.Optimization)
@@ -106,7 +106,7 @@ public sealed class Xor32Double_v2 : BaseTransform
 	}
 }
 
-[Transform("IR.Optimizations.Auto.Simplification")]
+[Transform()]
 public sealed class Xor32Double_v3 : BaseTransform
 {
 	public Xor32Double_v3() : base(IR.Xor32, TransformType.Auto | TransformType.Optimization)

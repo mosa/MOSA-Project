@@ -4,7 +4,7 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
 
-[Transform("IR.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class MulSigned64ByZero : BaseTransform
 {
 	public MulSigned64ByZero() : base(IR.MulSigned64, TransformType.Auto | TransformType.Optimization)
@@ -31,7 +31,7 @@ public sealed class MulSigned64ByZero : BaseTransform
 	}
 }
 
-[Transform("IR.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class MulSigned64ByZero_v1 : BaseTransform
 {
 	public MulSigned64ByZero_v1() : base(IR.MulSigned64, TransformType.Auto | TransformType.Optimization)

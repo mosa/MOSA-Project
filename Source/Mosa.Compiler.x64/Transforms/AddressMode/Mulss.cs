@@ -7,7 +7,7 @@ namespace Mosa.Compiler.x64.Transforms.AddressMode;
 /// <summary>
 /// Mulss
 /// </summary>
-[Transform("x64.AddressMode")]
+[Transform]
 public sealed class Mulss : BaseAddressModeTransform
 {
 	public Mulss() : base(X64.Mulss, TransformType.Manual | TransformType.Transform)

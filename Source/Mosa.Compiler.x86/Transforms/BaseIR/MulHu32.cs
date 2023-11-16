@@ -7,7 +7,7 @@ namespace Mosa.Compiler.x86.Transforms.BaseIR;
 /// <summary>
 /// MulHu32
 /// </summary>
-[Transform("x86.BaseIR")]
+[Transform]
 public sealed class MulHu32 : BaseIRTransform
 {
 	public MulHu32() : base(IR.MulHu32, TransformType.Manual | TransformType.Transform)

@@ -4,7 +4,7 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class MulR8x2 : BaseTransform
 {
 	public MulR8x2() : base(IR.MulR8, TransformType.Auto | TransformType.Optimization)
@@ -47,7 +47,7 @@ public sealed class MulR8x2 : BaseTransform
 	}
 }
 
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class MulR8x2_v1 : BaseTransform
 {
 	public MulR8x2_v1() : base(IR.MulR8, TransformType.Auto | TransformType.Optimization)
@@ -90,7 +90,7 @@ public sealed class MulR8x2_v1 : BaseTransform
 	}
 }
 
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class MulR8x2_v2 : BaseTransform
 {
 	public MulR8x2_v2() : base(IR.MulR8, TransformType.Auto | TransformType.Optimization)
@@ -133,7 +133,7 @@ public sealed class MulR8x2_v2 : BaseTransform
 	}
 }
 
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class MulR8x2_v3 : BaseTransform
 {
 	public MulR8x2_v3() : base(IR.MulR8, TransformType.Auto | TransformType.Optimization)

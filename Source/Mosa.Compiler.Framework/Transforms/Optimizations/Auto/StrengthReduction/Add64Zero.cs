@@ -4,7 +4,7 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
 
-[Transform("IR.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class Add64Zero : BaseTransform
 {
 	public Add64Zero() : base(IR.Add64, TransformType.Auto | TransformType.Optimization)
@@ -31,7 +31,7 @@ public sealed class Add64Zero : BaseTransform
 	}
 }
 
-[Transform("IR.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class Add64Zero_v1 : BaseTransform
 {
 	public Add64Zero_v1() : base(IR.Add64, TransformType.Auto | TransformType.Optimization)

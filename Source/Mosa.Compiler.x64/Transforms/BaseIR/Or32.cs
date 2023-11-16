@@ -7,7 +7,7 @@ namespace Mosa.Compiler.x64.Transforms.BaseIR;
 /// <summary>
 /// Or32
 /// </summary>
-[Transform("x64.BaseIR")]
+[Transform]
 public sealed class Or32 : BaseIRTransform
 {
 	public Or32() : base(IR.Or32, TransformType.Manual | TransformType.Transform)

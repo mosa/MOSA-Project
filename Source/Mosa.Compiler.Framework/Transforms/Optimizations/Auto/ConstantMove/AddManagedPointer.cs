@@ -4,7 +4,7 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove;
 
-[Transform("IR.Optimizations.Auto.ConstantMove")]
+[Transform()]
 public sealed class AddManagedPointer : BaseTransform
 {
 	public AddManagedPointer() : base(IR.AddManagedPointer, TransformType.Auto | TransformType.Optimization)

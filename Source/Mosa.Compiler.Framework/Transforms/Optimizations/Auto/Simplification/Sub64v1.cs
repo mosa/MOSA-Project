@@ -4,7 +4,7 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
-[Transform("IR.Optimizations.Auto.Simplification")]
+[Transform()]
 public sealed class Sub64v1 : BaseTransform
 {
 	public Sub64v1() : base(IR.Sub64, TransformType.Auto | TransformType.Optimization)
@@ -38,7 +38,7 @@ public sealed class Sub64v1 : BaseTransform
 	}
 }
 
-[Transform("IR.Optimizations.Auto.Simplification")]
+[Transform()]
 public sealed class Sub64v1_v1 : BaseTransform
 {
 	public Sub64v1_v1() : base(IR.Sub64, TransformType.Auto | TransformType.Optimization)

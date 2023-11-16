@@ -7,7 +7,7 @@ namespace Mosa.Compiler.x86.Transforms.BaseIR;
 /// <summary>
 /// AddR4
 /// </summary>
-[Transform("x86.BaseIR")]
+[Transform]
 public sealed class AddR4 : BaseIRTransform
 {
 	public AddR4() : base(IR.AddR4, TransformType.Manual | TransformType.Transform)

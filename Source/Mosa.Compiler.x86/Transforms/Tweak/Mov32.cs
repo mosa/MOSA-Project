@@ -8,7 +8,7 @@ namespace Mosa.Compiler.x86.Transforms.Tweak;
 /// <summary>
 /// Mov32
 /// </summary>
-[Transform("x86.Tweak")]
+[Transform]
 public sealed class Mov32 : BaseTransform
 {
 	public Mov32() : base(X86.Mov32, TransformType.Manual | TransformType.Optimization)

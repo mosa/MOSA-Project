@@ -7,7 +7,7 @@ namespace Mosa.Compiler.x64.Transforms.BaseIR;
 /// <summary>
 /// Add32
 /// </summary>
-[Transform("x64.BaseIR")]
+[Transform]
 public sealed class AddManagedPointer : BaseIRTransform
 {
 	public AddManagedPointer() : base(IR.AddManagedPointer, TransformType.Manual | TransformType.Transform)

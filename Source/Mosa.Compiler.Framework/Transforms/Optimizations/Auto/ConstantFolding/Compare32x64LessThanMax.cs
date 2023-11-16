@@ -4,7 +4,7 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class Compare32x64LessThanMax : BaseTransform
 {
 	public Compare32x64LessThanMax() : base(IR.Compare32x64, TransformType.Auto | TransformType.Optimization)
@@ -37,7 +37,7 @@ public sealed class Compare32x64LessThanMax : BaseTransform
 	}
 }
 
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class Compare32x64LessThanMax_v1 : BaseTransform
 {
 	public Compare32x64LessThanMax_v1() : base(IR.Compare32x64, TransformType.Auto | TransformType.Optimization)
