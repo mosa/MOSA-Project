@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
 
-/// <summary>
-/// Xor64Xor64
-/// </summary>
-[Transform("IR.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class Xor64Xor64 : BaseTransform
 {
-	public Xor64Xor64() : base(IRInstruction.Xor64, TransformType.Auto | TransformType.Optimization)
+	public Xor64Xor64() : base(IR.Xor64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -24,7 +21,7 @@ public sealed class Xor64Xor64 : BaseTransform
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.Xor64)
+		if (context.Operand2.Definitions[0].Instruction != IR.Xor64)
 			return false;
 
 		if (!AreSame(context.Operand1, context.Operand2.Definitions[0].Operand1))
@@ -39,17 +36,14 @@ public sealed class Xor64Xor64 : BaseTransform
 
 		var t1 = context.Operand2.Definitions[0].Operand2;
 
-		context.SetInstruction(IRInstruction.Move64, result, t1);
+		context.SetInstruction(IR.Move64, result, t1);
 	}
 }
 
-/// <summary>
-/// Xor64Xor64_v1
-/// </summary>
-[Transform("IR.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class Xor64Xor64_v1 : BaseTransform
 {
-	public Xor64Xor64_v1() : base(IRInstruction.Xor64, TransformType.Auto | TransformType.Optimization)
+	public Xor64Xor64_v1() : base(IR.Xor64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -63,7 +57,7 @@ public sealed class Xor64Xor64_v1 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Xor64)
+		if (context.Operand1.Definitions[0].Instruction != IR.Xor64)
 			return false;
 
 		if (!AreSame(context.Operand1.Definitions[0].Operand1, context.Operand2))
@@ -78,17 +72,14 @@ public sealed class Xor64Xor64_v1 : BaseTransform
 
 		var t1 = context.Operand1.Definitions[0].Operand2;
 
-		context.SetInstruction(IRInstruction.Move64, result, t1);
+		context.SetInstruction(IR.Move64, result, t1);
 	}
 }
 
-/// <summary>
-/// Xor64Xor64_v2
-/// </summary>
-[Transform("IR.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class Xor64Xor64_v2 : BaseTransform
 {
-	public Xor64Xor64_v2() : base(IRInstruction.Xor64, TransformType.Auto | TransformType.Optimization)
+	public Xor64Xor64_v2() : base(IR.Xor64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -102,7 +93,7 @@ public sealed class Xor64Xor64_v2 : BaseTransform
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.Xor64)
+		if (context.Operand2.Definitions[0].Instruction != IR.Xor64)
 			return false;
 
 		if (!AreSame(context.Operand1, context.Operand2.Definitions[0].Operand2))
@@ -117,17 +108,14 @@ public sealed class Xor64Xor64_v2 : BaseTransform
 
 		var t1 = context.Operand2.Definitions[0].Operand1;
 
-		context.SetInstruction(IRInstruction.Move64, result, t1);
+		context.SetInstruction(IR.Move64, result, t1);
 	}
 }
 
-/// <summary>
-/// Xor64Xor64_v3
-/// </summary>
-[Transform("IR.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class Xor64Xor64_v3 : BaseTransform
 {
-	public Xor64Xor64_v3() : base(IRInstruction.Xor64, TransformType.Auto | TransformType.Optimization)
+	public Xor64Xor64_v3() : base(IR.Xor64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -141,7 +129,7 @@ public sealed class Xor64Xor64_v3 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Xor64)
+		if (context.Operand1.Definitions[0].Instruction != IR.Xor64)
 			return false;
 
 		if (!AreSame(context.Operand1.Definitions[0].Operand2, context.Operand2))
@@ -156,6 +144,6 @@ public sealed class Xor64Xor64_v3 : BaseTransform
 
 		var t1 = context.Operand1.Definitions[0].Operand1;
 
-		context.SetInstruction(IRInstruction.Move64, result, t1);
+		context.SetInstruction(IR.Move64, result, t1);
 	}
 }

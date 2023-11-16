@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove;
 
-/// <summary>
-/// MulR4
-/// </summary>
-[Transform("IR.Optimizations.Auto.ConstantMove")]
+[Transform()]
 public sealed class MulR4 : BaseTransform
 {
-	public MulR4() : base(IRInstruction.MulR4, TransformType.Auto | TransformType.Optimization)
+	public MulR4() : base(IR.MulR4, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -32,6 +29,6 @@ public sealed class MulR4 : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2;
 
-		context.SetInstruction(IRInstruction.MulR4, result, t2, t1);
+		context.SetInstruction(IR.MulR4, result, t2, t1);
 	}
 }

@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-/// <summary>
-/// Load32FoldAdd32
-/// </summary>
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class Load32FoldAdd32 : BaseTransform
 {
-	public Load32FoldAdd32() : base(IRInstruction.Load32, TransformType.Auto | TransformType.Optimization)
+	public Load32FoldAdd32() : base(IR.Load32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -22,7 +19,7 @@ public sealed class Load32FoldAdd32 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Add32)
+		if (context.Operand1.Definitions[0].Instruction != IR.Add32)
 			return false;
 
 		if (!IsResolvedConstant(context.Operand2))
@@ -44,6 +41,6 @@ public sealed class Load32FoldAdd32 : BaseTransform
 
 		var e1 = Operand.CreateConstant(Add32(To32(t2), To32(t3)));
 
-		context.SetInstruction(IRInstruction.Load32, result, t1, e1);
+		context.SetInstruction(IR.Load32, result, t1, e1);
 	}
 }

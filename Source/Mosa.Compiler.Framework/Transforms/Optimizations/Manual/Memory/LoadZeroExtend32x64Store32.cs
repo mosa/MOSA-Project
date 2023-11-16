@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Memory;
 
 public sealed class LoadZeroExtend32x64Store32 : BaseTransform
 {
-	public LoadZeroExtend32x64Store32() : base(IRInstruction.LoadZeroExtend32x64, TransformType.Manual | TransformType.Optimization)
+	public LoadZeroExtend32x64Store32() : base(IR.LoadZeroExtend32x64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -16,7 +16,7 @@ public sealed class LoadZeroExtend32x64Store32 : BaseTransform
 		if (!context.Operand2.IsResolvedConstant)
 			return false;
 
-		var previous = GetPreviousNodeUntil(context, IRInstruction.Store32, transform.Window, out var immediate, context.Operand1);
+		var previous = GetPreviousNodeUntil(context, IR.Store32, transform.Window, out var immediate, context.Operand1);
 
 		if (previous == null)
 			return false;
@@ -38,8 +38,8 @@ public sealed class LoadZeroExtend32x64Store32 : BaseTransform
 
 	public override void Transform(Context context, Transform transform)
 	{
-		var previous = GetPreviousNodeUntil(context, IRInstruction.Store32, transform.Window, context.Operand1);
+		var previous = GetPreviousNodeUntil(context, IR.Store32, transform.Window, context.Operand1);
 
-		context.SetInstruction(IRInstruction.ZeroExtend32x64, context.Result, previous.Operand3);
+		context.SetInstruction(IR.ZeroExtend32x64, context.Result, previous.Operand3);
 	}
 }

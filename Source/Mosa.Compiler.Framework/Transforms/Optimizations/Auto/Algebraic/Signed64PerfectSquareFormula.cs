@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Algebraic;
 
-/// <summary>
-/// Signed64PerfectSquareFormula
-/// </summary>
-[Transform("IR.Optimizations.Auto.Algebraic")]
+[Transform()]
 public sealed class Signed64PerfectSquareFormula : BaseTransform
 {
-	public Signed64PerfectSquareFormula() : base(IRInstruction.Add64, TransformType.Auto | TransformType.Optimization)
+	public Signed64PerfectSquareFormula() : base(IR.Add64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -22,7 +19,7 @@ public sealed class Signed64PerfectSquareFormula : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Add64)
+		if (context.Operand1.Definitions[0].Instruction != IR.Add64)
 			return false;
 
 		if (!context.Operand1.Definitions[0].Operand1.IsVirtualRegister)
@@ -34,13 +31,13 @@ public sealed class Signed64PerfectSquareFormula : BaseTransform
 		if (!context.Operand1.Definitions[0].Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulSigned64)
+		if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IR.MulSigned64)
 			return false;
 
 		if (!context.Operand1.Definitions[0].Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulSigned64)
+		if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IR.MulSigned64)
 			return false;
 
 		if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2))
@@ -76,19 +73,16 @@ public sealed class Signed64PerfectSquareFormula : BaseTransform
 
 		var e1 = Operand.CreateConstant(DivSigned64(ToSigned64(t2), 2));
 
-		context.SetInstruction(IRInstruction.Add64, v1, t1, e1);
-		context.AppendInstruction(IRInstruction.Add64, v2, t1, e1);
-		context.AppendInstruction(IRInstruction.MulSigned64, result, v2, v1);
+		context.SetInstruction(IR.Add64, v1, t1, e1);
+		context.AppendInstruction(IR.Add64, v2, t1, e1);
+		context.AppendInstruction(IR.MulSigned64, result, v2, v1);
 	}
 }
 
-/// <summary>
-/// Signed64PerfectSquareFormula_v1
-/// </summary>
-[Transform("IR.Optimizations.Auto.Algebraic")]
+[Transform()]
 public sealed class Signed64PerfectSquareFormula_v1 : BaseTransform
 {
-	public Signed64PerfectSquareFormula_v1() : base(IRInstruction.Add64, TransformType.Auto | TransformType.Optimization)
+	public Signed64PerfectSquareFormula_v1() : base(IR.Add64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -100,7 +94,7 @@ public sealed class Signed64PerfectSquareFormula_v1 : BaseTransform
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.Add64)
+		if (context.Operand2.Definitions[0].Instruction != IR.Add64)
 			return false;
 
 		if (!context.Operand2.Definitions[0].Operand1.IsVirtualRegister)
@@ -112,13 +106,13 @@ public sealed class Signed64PerfectSquareFormula_v1 : BaseTransform
 		if (!context.Operand2.Definitions[0].Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulSigned64)
+		if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IR.MulSigned64)
 			return false;
 
 		if (!context.Operand2.Definitions[0].Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulSigned64)
+		if (context.Operand2.Definitions[0].Operand2.Definitions[0].Instruction != IR.MulSigned64)
 			return false;
 
 		if (!AreSame(context.Operand2.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand1.Definitions[0].Operand2))
@@ -154,19 +148,16 @@ public sealed class Signed64PerfectSquareFormula_v1 : BaseTransform
 
 		var e1 = Operand.CreateConstant(DivSigned64(ToSigned64(t2), 2));
 
-		context.SetInstruction(IRInstruction.Add64, v1, t1, e1);
-		context.AppendInstruction(IRInstruction.Add64, v2, t1, e1);
-		context.AppendInstruction(IRInstruction.MulSigned64, result, v2, v1);
+		context.SetInstruction(IR.Add64, v1, t1, e1);
+		context.AppendInstruction(IR.Add64, v2, t1, e1);
+		context.AppendInstruction(IR.MulSigned64, result, v2, v1);
 	}
 }
 
-/// <summary>
-/// Signed64PerfectSquareFormula_v2
-/// </summary>
-[Transform("IR.Optimizations.Auto.Algebraic")]
+[Transform()]
 public sealed class Signed64PerfectSquareFormula_v2 : BaseTransform
 {
-	public Signed64PerfectSquareFormula_v2() : base(IRInstruction.Add64, TransformType.Auto | TransformType.Optimization)
+	public Signed64PerfectSquareFormula_v2() : base(IR.Add64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -178,7 +169,7 @@ public sealed class Signed64PerfectSquareFormula_v2 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Add64)
+		if (context.Operand1.Definitions[0].Instruction != IR.Add64)
 			return false;
 
 		if (!context.Operand1.Definitions[0].Operand1.IsVirtualRegister)
@@ -190,13 +181,13 @@ public sealed class Signed64PerfectSquareFormula_v2 : BaseTransform
 		if (!context.Operand1.Definitions[0].Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulSigned64)
+		if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IR.MulSigned64)
 			return false;
 
 		if (!context.Operand1.Definitions[0].Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulSigned64)
+		if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IR.MulSigned64)
 			return false;
 
 		if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2, context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1))
@@ -232,19 +223,16 @@ public sealed class Signed64PerfectSquareFormula_v2 : BaseTransform
 
 		var e1 = Operand.CreateConstant(DivSigned64(ToSigned64(t1), 2));
 
-		context.SetInstruction(IRInstruction.Add64, v1, t2, e1);
-		context.AppendInstruction(IRInstruction.Add64, v2, t2, e1);
-		context.AppendInstruction(IRInstruction.MulSigned64, result, v2, v1);
+		context.SetInstruction(IR.Add64, v1, t2, e1);
+		context.AppendInstruction(IR.Add64, v2, t2, e1);
+		context.AppendInstruction(IR.MulSigned64, result, v2, v1);
 	}
 }
 
-/// <summary>
-/// Signed64PerfectSquareFormula_v3
-/// </summary>
-[Transform("IR.Optimizations.Auto.Algebraic")]
+[Transform()]
 public sealed class Signed64PerfectSquareFormula_v3 : BaseTransform
 {
-	public Signed64PerfectSquareFormula_v3() : base(IRInstruction.Add64, TransformType.Auto | TransformType.Optimization)
+	public Signed64PerfectSquareFormula_v3() : base(IR.Add64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -256,7 +244,7 @@ public sealed class Signed64PerfectSquareFormula_v3 : BaseTransform
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.Add64)
+		if (context.Operand2.Definitions[0].Instruction != IR.Add64)
 			return false;
 
 		if (!context.Operand2.Definitions[0].Operand1.IsVirtualRegister)
@@ -268,13 +256,13 @@ public sealed class Signed64PerfectSquareFormula_v3 : BaseTransform
 		if (!context.Operand2.Definitions[0].Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulSigned64)
+		if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IR.MulSigned64)
 			return false;
 
 		if (!context.Operand2.Definitions[0].Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulSigned64)
+		if (context.Operand2.Definitions[0].Operand2.Definitions[0].Instruction != IR.MulSigned64)
 			return false;
 
 		if (!AreSame(context.Operand2.Definitions[0].Operand1.Definitions[0].Operand2, context.Operand2.Definitions[0].Operand2.Definitions[0].Operand1))
@@ -310,19 +298,16 @@ public sealed class Signed64PerfectSquareFormula_v3 : BaseTransform
 
 		var e1 = Operand.CreateConstant(DivSigned64(ToSigned64(t1), 2));
 
-		context.SetInstruction(IRInstruction.Add64, v1, t2, e1);
-		context.AppendInstruction(IRInstruction.Add64, v2, t2, e1);
-		context.AppendInstruction(IRInstruction.MulSigned64, result, v2, v1);
+		context.SetInstruction(IR.Add64, v1, t2, e1);
+		context.AppendInstruction(IR.Add64, v2, t2, e1);
+		context.AppendInstruction(IR.MulSigned64, result, v2, v1);
 	}
 }
 
-/// <summary>
-/// Signed64PerfectSquareFormula_v4
-/// </summary>
-[Transform("IR.Optimizations.Auto.Algebraic")]
+[Transform()]
 public sealed class Signed64PerfectSquareFormula_v4 : BaseTransform
 {
-	public Signed64PerfectSquareFormula_v4() : base(IRInstruction.Add64, TransformType.Auto | TransformType.Optimization)
+	public Signed64PerfectSquareFormula_v4() : base(IR.Add64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -334,7 +319,7 @@ public sealed class Signed64PerfectSquareFormula_v4 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Add64)
+		if (context.Operand1.Definitions[0].Instruction != IR.Add64)
 			return false;
 
 		if (!context.Operand1.Definitions[0].Operand1.IsVirtualRegister)
@@ -346,13 +331,13 @@ public sealed class Signed64PerfectSquareFormula_v4 : BaseTransform
 		if (!context.Operand1.Definitions[0].Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulSigned64)
+		if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IR.MulSigned64)
 			return false;
 
 		if (!context.Operand1.Definitions[0].Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulSigned64)
+		if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IR.MulSigned64)
 			return false;
 
 		if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2))
@@ -388,19 +373,16 @@ public sealed class Signed64PerfectSquareFormula_v4 : BaseTransform
 
 		var e1 = Operand.CreateConstant(DivSigned64(ToSigned64(t2), 2));
 
-		context.SetInstruction(IRInstruction.Add64, v1, t1, e1);
-		context.AppendInstruction(IRInstruction.Add64, v2, t1, e1);
-		context.AppendInstruction(IRInstruction.MulSigned64, result, v2, v1);
+		context.SetInstruction(IR.Add64, v1, t1, e1);
+		context.AppendInstruction(IR.Add64, v2, t1, e1);
+		context.AppendInstruction(IR.MulSigned64, result, v2, v1);
 	}
 }
 
-/// <summary>
-/// Signed64PerfectSquareFormula_v5
-/// </summary>
-[Transform("IR.Optimizations.Auto.Algebraic")]
+[Transform()]
 public sealed class Signed64PerfectSquareFormula_v5 : BaseTransform
 {
-	public Signed64PerfectSquareFormula_v5() : base(IRInstruction.Add64, TransformType.Auto | TransformType.Optimization)
+	public Signed64PerfectSquareFormula_v5() : base(IR.Add64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -412,7 +394,7 @@ public sealed class Signed64PerfectSquareFormula_v5 : BaseTransform
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.Add64)
+		if (context.Operand2.Definitions[0].Instruction != IR.Add64)
 			return false;
 
 		if (!context.Operand2.Definitions[0].Operand1.IsVirtualRegister)
@@ -424,13 +406,13 @@ public sealed class Signed64PerfectSquareFormula_v5 : BaseTransform
 		if (!context.Operand2.Definitions[0].Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulSigned64)
+		if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IR.MulSigned64)
 			return false;
 
 		if (!context.Operand2.Definitions[0].Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulSigned64)
+		if (context.Operand2.Definitions[0].Operand2.Definitions[0].Instruction != IR.MulSigned64)
 			return false;
 
 		if (!AreSame(context.Operand2.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand1.Definitions[0].Operand2))
@@ -466,19 +448,16 @@ public sealed class Signed64PerfectSquareFormula_v5 : BaseTransform
 
 		var e1 = Operand.CreateConstant(DivSigned64(ToSigned64(t2), 2));
 
-		context.SetInstruction(IRInstruction.Add64, v1, t1, e1);
-		context.AppendInstruction(IRInstruction.Add64, v2, t1, e1);
-		context.AppendInstruction(IRInstruction.MulSigned64, result, v2, v1);
+		context.SetInstruction(IR.Add64, v1, t1, e1);
+		context.AppendInstruction(IR.Add64, v2, t1, e1);
+		context.AppendInstruction(IR.MulSigned64, result, v2, v1);
 	}
 }
 
-/// <summary>
-/// Signed64PerfectSquareFormula_v6
-/// </summary>
-[Transform("IR.Optimizations.Auto.Algebraic")]
+[Transform()]
 public sealed class Signed64PerfectSquareFormula_v6 : BaseTransform
 {
-	public Signed64PerfectSquareFormula_v6() : base(IRInstruction.Add64, TransformType.Auto | TransformType.Optimization)
+	public Signed64PerfectSquareFormula_v6() : base(IR.Add64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -490,7 +469,7 @@ public sealed class Signed64PerfectSquareFormula_v6 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Add64)
+		if (context.Operand1.Definitions[0].Instruction != IR.Add64)
 			return false;
 
 		if (!context.Operand1.Definitions[0].Operand1.IsVirtualRegister)
@@ -502,13 +481,13 @@ public sealed class Signed64PerfectSquareFormula_v6 : BaseTransform
 		if (!context.Operand1.Definitions[0].Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulSigned64)
+		if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IR.MulSigned64)
 			return false;
 
 		if (!context.Operand1.Definitions[0].Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulSigned64)
+		if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IR.MulSigned64)
 			return false;
 
 		if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1))
@@ -544,19 +523,16 @@ public sealed class Signed64PerfectSquareFormula_v6 : BaseTransform
 
 		var e1 = Operand.CreateConstant(DivSigned64(ToSigned64(t2), 2));
 
-		context.SetInstruction(IRInstruction.Add64, v1, t1, e1);
-		context.AppendInstruction(IRInstruction.Add64, v2, t1, e1);
-		context.AppendInstruction(IRInstruction.MulSigned64, result, v2, v1);
+		context.SetInstruction(IR.Add64, v1, t1, e1);
+		context.AppendInstruction(IR.Add64, v2, t1, e1);
+		context.AppendInstruction(IR.MulSigned64, result, v2, v1);
 	}
 }
 
-/// <summary>
-/// Signed64PerfectSquareFormula_v7
-/// </summary>
-[Transform("IR.Optimizations.Auto.Algebraic")]
+[Transform()]
 public sealed class Signed64PerfectSquareFormula_v7 : BaseTransform
 {
-	public Signed64PerfectSquareFormula_v7() : base(IRInstruction.Add64, TransformType.Auto | TransformType.Optimization)
+	public Signed64PerfectSquareFormula_v7() : base(IR.Add64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -568,7 +544,7 @@ public sealed class Signed64PerfectSquareFormula_v7 : BaseTransform
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.Add64)
+		if (context.Operand2.Definitions[0].Instruction != IR.Add64)
 			return false;
 
 		if (!context.Operand2.Definitions[0].Operand1.IsVirtualRegister)
@@ -580,13 +556,13 @@ public sealed class Signed64PerfectSquareFormula_v7 : BaseTransform
 		if (!context.Operand2.Definitions[0].Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulSigned64)
+		if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IR.MulSigned64)
 			return false;
 
 		if (!context.Operand2.Definitions[0].Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulSigned64)
+		if (context.Operand2.Definitions[0].Operand2.Definitions[0].Instruction != IR.MulSigned64)
 			return false;
 
 		if (!AreSame(context.Operand2.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand2.Definitions[0].Operand1))
@@ -622,8 +598,8 @@ public sealed class Signed64PerfectSquareFormula_v7 : BaseTransform
 
 		var e1 = Operand.CreateConstant(DivSigned64(ToSigned64(t2), 2));
 
-		context.SetInstruction(IRInstruction.Add64, v1, t1, e1);
-		context.AppendInstruction(IRInstruction.Add64, v2, t1, e1);
-		context.AppendInstruction(IRInstruction.MulSigned64, result, v2, v1);
+		context.SetInstruction(IR.Add64, v1, t1, e1);
+		context.AppendInstruction(IR.Add64, v2, t1, e1);
+		context.AppendInstruction(IR.MulSigned64, result, v2, v1);
 	}
 }

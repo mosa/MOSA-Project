@@ -68,7 +68,7 @@ public abstract class BasePlugTransform : BaseTransform
 		PushOperands(transform, context, operands, totalStack);
 
 		// the mov/call two-instructions combo is to help facilitate the register allocator
-		context.AppendInstruction(IRInstruction.CallDirect, null, target);
+		context.AppendInstruction(IR.CallDirect, null, target);
 
 		GetReturnValue(transform, context, result);
 		FreeStackAfterCall(transform, context, totalStack);
@@ -106,44 +106,44 @@ public abstract class BasePlugTransform : BaseTransform
 		if (result.IsObject)
 		{
 			var returnLow = transform.PhysicalRegisters.AllocateObject(transform.Architecture.ReturnRegister);
-			context.AppendInstruction(IRInstruction.Gen, returnLow);
-			context.AppendInstruction(IRInstruction.MoveObject, result, returnLow);
+			context.AppendInstruction(IR.Gen, returnLow);
+			context.AppendInstruction(IR.MoveObject, result, returnLow);
 		}
 		else if (result.IsInt64 && transform.Is32BitPlatform)
 		{
 			var returnLow = transform.PhysicalRegisters.Allocate32(transform.Architecture.ReturnRegister);
 			var returnHigh = transform.PhysicalRegisters.Allocate32(transform.Architecture.ReturnHighRegister);
 
-			context.AppendInstruction(IRInstruction.Gen, returnLow);
-			context.AppendInstruction(IRInstruction.Gen, returnHigh);
-			context.AppendInstruction(IRInstruction.To64, result, returnLow, returnHigh);
+			context.AppendInstruction(IR.Gen, returnLow);
+			context.AppendInstruction(IR.Gen, returnHigh);
+			context.AppendInstruction(IR.To64, result, returnLow, returnHigh);
 		}
 		else if (result.IsInteger)
 		{
 			var returnLow = transform.PhysicalRegisters.Allocate(result, transform.Architecture.ReturnRegister);
-			context.AppendInstruction(IRInstruction.Gen, returnLow);
+			context.AppendInstruction(IR.Gen, returnLow);
 			context.AppendInstruction(transform.MoveInstruction, result, returnLow);
 		}
 		else if (result.IsR4)
 		{
 			var returnFP = transform.PhysicalRegisters.AllocateR4(transform.Architecture.ReturnFloatingPointRegister);
-			context.AppendInstruction(IRInstruction.Gen, returnFP);
-			context.AppendInstruction(IRInstruction.MoveR4, result, returnFP);
+			context.AppendInstruction(IR.Gen, returnFP);
+			context.AppendInstruction(IR.MoveR4, result, returnFP);
 		}
 		else if (result.IsR8)
 		{
 			var returnFP = transform.PhysicalRegisters.AllocateR8(transform.Architecture.ReturnFloatingPointRegister);
-			context.AppendInstruction(IRInstruction.Gen, returnFP);
-			context.AppendInstruction(IRInstruction.MoveR8, result, returnFP);
+			context.AppendInstruction(IR.Gen, returnFP);
+			context.AppendInstruction(IR.MoveR8, result, returnFP);
 		}
 		else if (result.IsValueType)
 		{
-			context.AppendInstruction(IRInstruction.LoadCompound, result, transform.StackPointer, Operand.Constant32_0);
+			context.AppendInstruction(IR.LoadCompound, result, transform.StackPointer, Operand.Constant32_0);
 		}
 		else
 		{
 			var returnLow = transform.PhysicalRegisters.Allocate(result, transform.Architecture.ReturnRegister);
-			context.AppendInstruction(IRInstruction.Gen, returnLow);
+			context.AppendInstruction(IR.Gen, returnLow);
 			context.AppendInstruction(transform.MoveInstruction, result, returnLow);
 		}
 	}
@@ -154,27 +154,27 @@ public abstract class BasePlugTransform : BaseTransform
 
 		if (operand.IsObject)
 		{
-			context.AppendInstruction(IRInstruction.StoreObject, null, transform.StackPointer, offsetOperand, operand);
+			context.AppendInstruction(IR.StoreObject, null, transform.StackPointer, offsetOperand, operand);
 		}
 		else if (operand.IsInt32)
 		{
-			context.AppendInstruction(IRInstruction.Store32, null, transform.StackPointer, offsetOperand, operand);
+			context.AppendInstruction(IR.Store32, null, transform.StackPointer, offsetOperand, operand);
 		}
 		else if (operand.IsInt64)
 		{
-			context.AppendInstruction(IRInstruction.Store64, null, transform.StackPointer, offsetOperand, operand);
+			context.AppendInstruction(IR.Store64, null, transform.StackPointer, offsetOperand, operand);
 		}
 		else if (operand.IsR4)
 		{
-			context.AppendInstruction(IRInstruction.StoreR4, null, transform.StackPointer, offsetOperand, operand);
+			context.AppendInstruction(IR.StoreR4, null, transform.StackPointer, offsetOperand, operand);
 		}
 		else if (operand.IsR8)
 		{
-			context.AppendInstruction(IRInstruction.StoreR8, null, transform.StackPointer, offsetOperand, operand);
+			context.AppendInstruction(IR.StoreR8, null, transform.StackPointer, offsetOperand, operand);
 		}
 		else if (operand.IsValueType)
 		{
-			context.AppendInstruction(IRInstruction.StoreCompound, null, transform.StackPointer, offsetOperand, operand);
+			context.AppendInstruction(IR.StoreCompound, null, transform.StackPointer, offsetOperand, operand);
 		}
 		else
 		{

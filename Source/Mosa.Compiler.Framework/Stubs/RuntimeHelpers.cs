@@ -17,13 +17,13 @@ internal static partial class StubMethods
 		var result = transform.VirtualRegisters.AllocateNativeInteger();
 
 		// Move constant into return operand
-		var move = transform.Is32BitPlatform ? IRInstruction.Move32 : IRInstruction.Move64;
+		var move = transform.Is32BitPlatform ? IR.Move32 : IR.Move64;
 		context.AppendInstruction(move, result, isReferenceOrContainsReferences ? Operand.Constant32_1 : Operand.Constant32_0);
 
 		// Set return
-		var setReturn = transform.Is32BitPlatform ? IRInstruction.SetReturn32 : IRInstruction.SetReturn64;
+		var setReturn = transform.Is32BitPlatform ? IR.SetReturn32 : IR.SetReturn64;
 		context.AppendInstruction(setReturn, null, result);
 
-		context.AppendInstruction(IRInstruction.Jmp, transform.BasicBlocks.EpilogueBlock);
+		context.AppendInstruction(IR.Jmp, transform.BasicBlocks.EpilogueBlock);
 	}
 }

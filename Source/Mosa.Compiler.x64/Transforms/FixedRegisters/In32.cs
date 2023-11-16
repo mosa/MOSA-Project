@@ -7,7 +7,7 @@ namespace Mosa.Compiler.x64.Transforms.FixedRegisters;
 /// <summary>
 /// In32
 /// </summary>
-[Transform("x64.FixedRegisters")]
+[Transform]
 public sealed class In32 : BaseTransform
 {
 	public In32() : base(X64.In32, TransformType.Manual | TransformType.Transform)

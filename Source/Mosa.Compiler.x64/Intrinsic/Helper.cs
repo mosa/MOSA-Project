@@ -30,7 +30,7 @@ internal static class Helper
 
 			var node = operand1.Definitions[0];
 
-			if ((node.Instruction == X64.Mov64 || node.Instruction == IRInstruction.Move64) && node.Operand1.IsConstant)
+			if ((node.Instruction == X64.Mov64 || node.Instruction == IR.Move64) && node.Operand1.IsConstant)
 			{
 				operand1 = node.Operand1;
 				continue;

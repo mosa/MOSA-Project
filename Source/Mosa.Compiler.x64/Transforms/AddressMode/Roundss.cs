@@ -7,7 +7,7 @@ namespace Mosa.Compiler.x64.Transforms.AddressMode;
 /// <summary>
 /// Roundss
 /// </summary>
-[Transform("x64.AddressMode")]
+[Transform]
 public sealed class Roundss : BaseAddressModeTransform
 {
 	public Roundss() : base(X64.Roundss, TransformType.Manual | TransformType.Transform)

@@ -115,14 +115,6 @@ public sealed class Architecture : BaseArchitecture
 	/// </summary>
 	public override PhysicalRegister ProgramCounter => CPURegister.PC;
 
-	/// <summary>
-	/// Gets the instructions.
-	/// </summary>
-	/// <value>
-	/// The instructions.
-	/// </value>
-	public override List<BaseInstruction> Instructions => ARM32Instructions.List;
-
 	public override OpcodeEncoder GetOpcodeEncoder()
 	{
 		return new OpcodeEncoder(32);
@@ -150,15 +142,15 @@ public sealed class Architecture : BaseArchitecture
 		pipeline.InsertAfterLast<PlatformIntrinsicStage>(
 			new BaseMethodCompilerStage[]
 			{
-				new IRTransformationStage(),
+				new IRTransformStage(),
 				mosaSettings.PlatformOptimizations ? new Stages.OptimizationStage() : null,
-				new PlatformTransformationStage(),
+				new PlatformTransformStage(),
 			});
 
 		pipeline.InsertBefore<CodeGenerationStage>(
 			new BaseMethodCompilerStage[]
 			{
-				new PlatformTransformationStage(),
+				new PlatformTransformStage(),
 				mosaSettings.PlatformOptimizations ? new Stages.OptimizationStage() : null,
 			});
 

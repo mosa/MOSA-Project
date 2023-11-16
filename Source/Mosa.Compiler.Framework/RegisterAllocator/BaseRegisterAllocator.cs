@@ -554,7 +554,7 @@ public abstract class BaseRegisterAllocator
 					}
 				}
 
-				if (node.Instruction.IsCall || node.Instruction == IRInstruction.KillAll)
+				if (node.Instruction.IsCall || node.Instruction == IR.KillAll)
 				{
 					for (var reg = 0; reg < PhysicalRegisterCount; reg++)
 					{
@@ -563,7 +563,7 @@ public abstract class BaseRegisterAllocator
 
 					liveSetTrace?.Log("KILL ALL PHYSICAL");
 				}
-				else if (node.Instruction == IRInstruction.KillAllExcept)
+				else if (node.Instruction == IR.KillAllExcept)
 				{
 					var except = node.Operand1.Register.Index;
 
@@ -678,7 +678,7 @@ public abstract class BaseRegisterAllocator
 				var slot = new SlotIndex(node);
 				var slotNext = slot.Next;
 
-				if (node.Instruction.IsCall || node.Instruction == IRInstruction.KillAll || node.Instruction == IRInstruction.KillAllExcept)
+				if (node.Instruction.IsCall || node.Instruction == IR.KillAll || node.Instruction == IR.KillAllExcept)
 				{
 					for (var r = 0; r < PhysicalRegisterCount; r++)
 					{
@@ -687,7 +687,7 @@ public abstract class BaseRegisterAllocator
 						if (register.IsReserved)
 							continue;
 
-						if (node.Instruction == IRInstruction.KillAllExcept && r == node.Operand1.Register.Index)
+						if (node.Instruction == IR.KillAllExcept && r == node.Operand1.Register.Index)
 							continue;
 
 						if (endSlots[r].IsNotNull)

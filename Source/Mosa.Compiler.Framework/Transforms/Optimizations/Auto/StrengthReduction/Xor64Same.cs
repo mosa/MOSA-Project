@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
 
-/// <summary>
-/// Xor64Same
-/// </summary>
-[Transform("IR.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class Xor64Same : BaseTransform
 {
-	public Xor64Same() : base(IRInstruction.Xor64, TransformType.Auto | TransformType.Optimization)
+	public Xor64Same() : base(IR.Xor64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -30,6 +27,6 @@ public sealed class Xor64Same : BaseTransform
 
 		var e1 = Operand.CreateConstant(To64(0));
 
-		context.SetInstruction(IRInstruction.Move64, result, e1);
+		context.SetInstruction(IR.Move64, result, e1);
 	}
 }

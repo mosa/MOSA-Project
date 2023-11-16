@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
 
-/// <summary>
-/// UselessAnd32ShiftRight32
-/// </summary>
-[Transform("IR.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class UselessAnd32ShiftRight32 : BaseTransform
 {
-	public UselessAnd32ShiftRight32() : base(IRInstruction.ShiftRight32, TransformType.Auto | TransformType.Optimization)
+	public UselessAnd32ShiftRight32() : base(IR.ShiftRight32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -22,7 +19,7 @@ public sealed class UselessAnd32ShiftRight32 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.And32)
+		if (context.Operand1.Definitions[0].Instruction != IR.And32)
 			return false;
 
 		if (!IsConstant(context.Operand1.Definitions[0].Operand2))
@@ -47,17 +44,14 @@ public sealed class UselessAnd32ShiftRight32 : BaseTransform
 		var t1 = context.Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand2;
 
-		context.SetInstruction(IRInstruction.ShiftRight32, result, t1, t2);
+		context.SetInstruction(IR.ShiftRight32, result, t1, t2);
 	}
 }
 
-/// <summary>
-/// UselessAnd32ShiftRight32_v1
-/// </summary>
-[Transform("IR.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class UselessAnd32ShiftRight32_v1 : BaseTransform
 {
-	public UselessAnd32ShiftRight32_v1() : base(IRInstruction.ShiftRight32, TransformType.Auto | TransformType.Optimization)
+	public UselessAnd32ShiftRight32_v1() : base(IR.ShiftRight32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -69,7 +63,7 @@ public sealed class UselessAnd32ShiftRight32_v1 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.And32)
+		if (context.Operand1.Definitions[0].Instruction != IR.And32)
 			return false;
 
 		if (!IsConstant(context.Operand1.Definitions[0].Operand1))
@@ -94,6 +88,6 @@ public sealed class UselessAnd32ShiftRight32_v1 : BaseTransform
 		var t1 = context.Operand1.Definitions[0].Operand2;
 		var t2 = context.Operand2;
 
-		context.SetInstruction(IRInstruction.ShiftRight32, result, t1, t2);
+		context.SetInstruction(IR.ShiftRight32, result, t1, t2);
 	}
 }

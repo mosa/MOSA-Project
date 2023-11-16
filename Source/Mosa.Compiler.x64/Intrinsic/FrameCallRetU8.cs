@@ -21,8 +21,8 @@ internal static partial class IntrinsicMethods
 		transform.SplitOperand(result, out Operand op0L, out Operand op0H);
 
 		context.SetInstruction(X64.Call, null, methodAddress);
-		context.AppendInstruction(IRInstruction.Gen, eax);
-		context.AppendInstruction(IRInstruction.Gen, edx);
+		context.AppendInstruction(IR.Gen, eax);
+		context.AppendInstruction(IR.Gen, edx);
 		context.AppendInstruction(X64.Mov64, op0L, eax);
 		context.AppendInstruction(X64.Mov64, op0H, edx);
 	}

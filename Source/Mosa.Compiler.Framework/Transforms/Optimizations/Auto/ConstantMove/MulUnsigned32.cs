@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove;
 
-/// <summary>
-/// MulUnsigned32
-/// </summary>
-[Transform("IR.Optimizations.Auto.ConstantMove")]
+[Transform()]
 public sealed class MulUnsigned32 : BaseTransform
 {
-	public MulUnsigned32() : base(IRInstruction.MulUnsigned32, TransformType.Auto | TransformType.Optimization)
+	public MulUnsigned32() : base(IR.MulUnsigned32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -32,6 +29,6 @@ public sealed class MulUnsigned32 : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2;
 
-		context.SetInstruction(IRInstruction.MulUnsigned32, result, t2, t1);
+		context.SetInstruction(IR.MulUnsigned32, result, t2, t1);
 	}
 }

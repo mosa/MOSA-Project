@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
-/// <summary>
-/// GetHigh32FromRightLeftAndTo64
-/// </summary>
-[Transform("IR.Optimizations.Auto.Simplification")]
+[Transform()]
 public sealed class GetHigh32FromRightLeftAndTo64 : BaseTransform
 {
-	public GetHigh32FromRightLeftAndTo64() : base(IRInstruction.GetHigh32, TransformType.Auto | TransformType.Optimization)
+	public GetHigh32FromRightLeftAndTo64() : base(IR.GetHigh32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -22,7 +19,7 @@ public sealed class GetHigh32FromRightLeftAndTo64 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.ShiftLeft64)
+		if (context.Operand1.Definitions[0].Instruction != IR.ShiftLeft64)
 			return false;
 
 		if (!context.Operand1.Definitions[0].Operand1.IsVirtualRegister)
@@ -37,7 +34,7 @@ public sealed class GetHigh32FromRightLeftAndTo64 : BaseTransform
 		if (!context.Operand1.Definitions[0].Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.To64)
+		if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IR.To64)
 			return false;
 
 		return true;
@@ -49,6 +46,6 @@ public sealed class GetHigh32FromRightLeftAndTo64 : BaseTransform
 
 		var t1 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1;
 
-		context.SetInstruction(IRInstruction.Move32, result, t1);
+		context.SetInstruction(IR.Move32, result, t1);
 	}
 }

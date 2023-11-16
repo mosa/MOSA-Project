@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Rewrite;
 
-/// <summary>
-/// IfThenElse64Compare64v2
-/// </summary>
-[Transform("IR.Optimizations.Auto.Rewrite")]
+[Transform()]
 public sealed class IfThenElse64Compare64v2 : BaseTransform
 {
-	public IfThenElse64Compare64v2() : base(IRInstruction.IfThenElse64, TransformType.Auto | TransformType.Optimization)
+	public IfThenElse64Compare64v2() : base(IR.IfThenElse64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -22,16 +19,13 @@ public sealed class IfThenElse64Compare64v2 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Compare64x64)
+		if (context.Operand1.Definitions[0].Instruction != IR.Compare64x64)
 			return false;
 
 		if (context.Operand1.Definitions[0].ConditionCode != ConditionCode.Equal)
 			return false;
 
-		if (!context.Operand1.Definitions[0].Operand1.IsResolvedConstant)
-			return false;
-
-		if (context.Operand1.Definitions[0].Operand1.ConstantUnsigned64 != 0)
+		if (!context.Operand1.Definitions[0].Operand1.IsConstantZero)
 			return false;
 
 		return true;
@@ -45,17 +39,14 @@ public sealed class IfThenElse64Compare64v2 : BaseTransform
 		var t2 = context.Operand2;
 		var t3 = context.Operand3;
 
-		context.SetInstruction(IRInstruction.IfThenElse64, result, t1, t3, t2);
+		context.SetInstruction(IR.IfThenElse64, result, t1, t3, t2);
 	}
 }
 
-/// <summary>
-/// IfThenElse64Compare64v2_v1
-/// </summary>
-[Transform("IR.Optimizations.Auto.Rewrite")]
+[Transform()]
 public sealed class IfThenElse64Compare64v2_v1 : BaseTransform
 {
-	public IfThenElse64Compare64v2_v1() : base(IRInstruction.IfThenElse64, TransformType.Auto | TransformType.Optimization)
+	public IfThenElse64Compare64v2_v1() : base(IR.IfThenElse64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -67,16 +58,13 @@ public sealed class IfThenElse64Compare64v2_v1 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Compare64x64)
+		if (context.Operand1.Definitions[0].Instruction != IR.Compare64x64)
 			return false;
 
 		if (context.Operand1.Definitions[0].ConditionCode != ConditionCode.Equal)
 			return false;
 
-		if (!context.Operand1.Definitions[0].Operand2.IsResolvedConstant)
-			return false;
-
-		if (context.Operand1.Definitions[0].Operand2.ConstantUnsigned64 != 0)
+		if (!context.Operand1.Definitions[0].Operand2.IsConstantZero)
 			return false;
 
 		return true;
@@ -90,6 +78,6 @@ public sealed class IfThenElse64Compare64v2_v1 : BaseTransform
 		var t2 = context.Operand2;
 		var t3 = context.Operand3;
 
-		context.SetInstruction(IRInstruction.IfThenElse64, result, t1, t3, t2);
+		context.SetInstruction(IR.IfThenElse64, result, t1, t3, t2);
 	}
 }

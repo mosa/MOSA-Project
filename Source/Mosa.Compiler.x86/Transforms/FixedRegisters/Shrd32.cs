@@ -7,7 +7,7 @@ namespace Mosa.Compiler.x86.Transforms.FixedRegisters;
 /// <summary>
 /// Shrd32
 /// </summary>
-[Transform("x86.FixedRegisters")]
+[Transform]
 public sealed class Shrd32 : BaseTransform
 {
 	public Shrd32() : base(X86.Shrd32, TransformType.Manual | TransformType.Transform)

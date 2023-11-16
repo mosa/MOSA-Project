@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
-/// <summary>
-/// And32Same
-/// </summary>
-[Transform("IR.Optimizations.Auto.Simplification")]
+[Transform()]
 public sealed class And32Same : BaseTransform
 {
-	public And32Same() : base(IRInstruction.And32, TransformType.Auto | TransformType.Optimization)
+	public And32Same() : base(IR.And32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -28,6 +25,6 @@ public sealed class And32Same : BaseTransform
 
 		var t1 = context.Operand1;
 
-		context.SetInstruction(IRInstruction.Move32, result, t1);
+		context.SetInstruction(IR.Move32, result, t1);
 	}
 }

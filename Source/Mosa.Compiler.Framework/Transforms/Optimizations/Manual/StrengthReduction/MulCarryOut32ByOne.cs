@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.StrengthReduct
 /// </summary>
 public sealed class MulCarryOut32ByOne : BaseTransform
 {
-	public MulCarryOut32ByOne() : base(IRInstruction.MulCarryOut32, TransformType.Manual | TransformType.Optimization, true)
+	public MulCarryOut32ByOne() : base(IR.MulCarryOut32, TransformType.Manual | TransformType.Optimization, true)
 	{
 	}
 
@@ -31,7 +31,7 @@ public sealed class MulCarryOut32ByOne : BaseTransform
 
 		var t1 = context.Operand1;
 
-		context.SetInstruction(IRInstruction.Move32, result, t1);
-		context.AppendInstruction(IRInstruction.Move32, result2, Operand.Constant32_1);
+		context.SetInstruction(IR.Move32, result, t1);
+		context.AppendInstruction(IR.Move32, result2, Operand.Constant32_1);
 	}
 }

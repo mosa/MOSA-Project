@@ -6,10 +6,7 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.StrengthReduction;
 
-/// <summary>
-/// Shr32ByZero
-/// </summary>
-[Transform("x86.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class Shr32ByZero : BaseTransform
 {
 	public Shr32ByZero() : base(X86.Shr32, TransformType.Auto | TransformType.Optimization)
@@ -20,13 +17,10 @@ public sealed class Shr32ByZero : BaseTransform
 
 	public override bool Match(Context context, Transform transform)
 	{
-		if (!context.Operand2.IsResolvedConstant)
+		if (!context.Operand2.IsConstantZero)
 			return false;
 
-		if (context.Operand2.ConstantUnsigned64 != 0)
-			return false;
-
-		if (AreStatusFlagUsed(context))
+		if (AreAnyStatusFlagsUsed(context))
 			return false;
 
 		return true;

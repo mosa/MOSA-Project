@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
 public sealed class LoadParamZeroExtend8x64 : BaseLowerTo32Transform
 {
-	public LoadParamZeroExtend8x64() : base(IRInstruction.LoadParamZeroExtend8x64, TransformType.Manual | TransformType.Optimization)
+	public LoadParamZeroExtend8x64() : base(IR.LoadParamZeroExtend8x64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -17,7 +17,7 @@ public sealed class LoadParamZeroExtend8x64 : BaseLowerTo32Transform
 
 		transform.SplitOperand(operand1, out Operand op0Low, out Operand _);
 
-		context.SetInstruction(IRInstruction.LoadParamZeroExtend8x32, resultLow, op0Low);
-		context.AppendInstruction(IRInstruction.To64, result, resultLow, Operand.Constant32_0);
+		context.SetInstruction(IR.LoadParamZeroExtend8x32, resultLow, op0Low);
+		context.AppendInstruction(IR.To64, result, resultLow, Operand.Constant32_0);
 	}
 }

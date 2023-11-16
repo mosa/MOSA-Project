@@ -6,10 +6,7 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.Ordering;
 
-/// <summary>
-/// And32
-/// </summary>
-[Transform("x64.Optimizations.Auto.Ordering")]
+[Transform()]
 public sealed class And32 : BaseTransform
 {
 	public And32() : base(X64.And32, TransformType.Auto | TransformType.Optimization)

@@ -10,7 +10,7 @@ internal static partial class IntrinsicMethods
 	[IntrinsicMethod("Mosa.Runtime.Intrinsic::StoreR8")]
 	private static void StoreR8(Context context, Transform transform)
 	{
-		var instruction = IRInstruction.StoreR8;
+		var instruction = IR.StoreR8;
 
 		var operand1 = context.Operand1;
 		var operand2 = context.OperandCount == 3 ? context.Operand2 : transform.ConstantZero;

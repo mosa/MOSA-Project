@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Rewrite;
 /// </summary>
 public sealed class Compare64x32ZeroExtend : BaseTransform
 {
-	public Compare64x32ZeroExtend() : base(IRInstruction.Compare64x32, TransformType.Manual | TransformType.Optimization)
+	public Compare64x32ZeroExtend() : base(IR.Compare64x32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -22,13 +22,13 @@ public sealed class Compare64x32ZeroExtend : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.ZeroExtend32x64)
+		if (context.Operand1.Definitions[0].Instruction != IR.ZeroExtend32x64)
 			return false;
 
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.ZeroExtend32x64)
+		if (context.Operand2.Definitions[0].Instruction != IR.ZeroExtend32x64)
 			return false;
 
 		return true;
@@ -43,6 +43,6 @@ public sealed class Compare64x32ZeroExtend : BaseTransform
 
 		var cond = context.ConditionCode;
 
-		context.SetInstruction(IRInstruction.Compare32x32, cond, result, t1, t2);
+		context.SetInstruction(IR.Compare32x32, cond, result, t1, t2);
 	}
 }

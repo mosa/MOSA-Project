@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
-/// <summary>
-/// MoveObjectCoalescing
-/// </summary>
-[Transform("IR.Optimizations.Auto.Simplification")]
+[Transform()]
 public sealed class MoveObjectCoalescing : BaseTransform
 {
-	public MoveObjectCoalescing() : base(IRInstruction.MoveObject, TransformType.Auto | TransformType.Optimization)
+	public MoveObjectCoalescing() : base(IR.MoveObject, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -24,7 +21,7 @@ public sealed class MoveObjectCoalescing : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.MoveObject)
+		if (context.Operand1.Definitions[0].Instruction != IR.MoveObject)
 			return false;
 
 		return true;
@@ -36,6 +33,6 @@ public sealed class MoveObjectCoalescing : BaseTransform
 
 		var t1 = context.Operand1.Definitions[0].Operand1;
 
-		context.SetInstruction(IRInstruction.MoveObject, result, t1);
+		context.SetInstruction(IR.MoveObject, result, t1);
 	}
 }

@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
-/// <summary>
-/// GetLow32FromShiftedRight32
-/// </summary>
-[Transform("IR.Optimizations.Auto.Simplification")]
+[Transform()]
 public sealed class GetLow32FromShiftedRight32 : BaseTransform
 {
-	public GetLow32FromShiftedRight32() : base(IRInstruction.GetLow32, TransformType.Auto | TransformType.Optimization)
+	public GetLow32FromShiftedRight32() : base(IR.GetLow32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -22,7 +19,7 @@ public sealed class GetLow32FromShiftedRight32 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.ShiftRight32)
+		if (context.Operand1.Definitions[0].Instruction != IR.ShiftRight32)
 			return false;
 
 		if (!context.Operand1.Definitions[0].Operand2.IsResolvedConstant)
@@ -40,6 +37,6 @@ public sealed class GetLow32FromShiftedRight32 : BaseTransform
 
 		var t1 = context.Operand1.Definitions[0].Operand1;
 
-		context.SetInstruction(IRInstruction.Truncate64x32, result, t1);
+		context.SetInstruction(IR.Truncate64x32, result, t1);
 	}
 }

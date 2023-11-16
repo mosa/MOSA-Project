@@ -6,7 +6,7 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x86.Transforms.Optimizations.Manual.Size;
 
-[Transform("x86.Optimizations.Manual.Size")]
+[Transform]
 public sealed class Lea32By2 : BaseTransform
 {
 	public Lea32By2() : base(X86.Lea32, TransformType.Manual | TransformType.Optimization)
@@ -18,10 +18,13 @@ public sealed class Lea32By2 : BaseTransform
 		if (!transform.IsLowerCodeSize)
 			return false;
 
-		if (!context.Operand2.IsResolvedConstant)
+		if (!context.Operand2.IsConstantZero)
 			return false;
 
-		if (context.Operand2.ConstantUnsigned64 != 2)
+		if (!context.Operand4.IsResolvedConstant)
+			return false;
+
+		if (context.Operand4.ConstantUnsigned64 != 2)
 			return false;
 
 		if (context.Operand1.Register == CPURegister.ESP)

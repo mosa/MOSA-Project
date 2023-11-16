@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove;
 
-/// <summary>
-/// Or64
-/// </summary>
-[Transform("IR.Optimizations.Auto.ConstantMove")]
+[Transform()]
 public sealed class Or64 : BaseTransform
 {
-	public Or64() : base(IRInstruction.Or64, TransformType.Auto | TransformType.Optimization)
+	public Or64() : base(IR.Or64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -32,6 +29,6 @@ public sealed class Or64 : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2;
 
-		context.SetInstruction(IRInstruction.Or64, result, t2, t1);
+		context.SetInstruction(IR.Or64, result, t2, t1);
 	}
 }

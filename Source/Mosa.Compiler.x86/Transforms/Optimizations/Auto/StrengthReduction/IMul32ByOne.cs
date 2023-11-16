@@ -6,10 +6,7 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.StrengthReduction;
 
-/// <summary>
-/// IMul32ByOne
-/// </summary>
-[Transform("x86.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class IMul32ByOne : BaseTransform
 {
 	public IMul32ByOne() : base(X86.IMul32, TransformType.Auto | TransformType.Optimization)
@@ -18,13 +15,10 @@ public sealed class IMul32ByOne : BaseTransform
 
 	public override bool Match(Context context, Transform transform)
 	{
-		if (!context.Operand2.IsResolvedConstant)
+		if (!context.Operand2.IsConstantOne)
 			return false;
 
-		if (context.Operand2.ConstantUnsigned64 != 1)
-			return false;
-
-		if (AreStatusFlagUsed(context))
+		if (AreAnyStatusFlagsUsed(context))
 			return false;
 
 		return true;

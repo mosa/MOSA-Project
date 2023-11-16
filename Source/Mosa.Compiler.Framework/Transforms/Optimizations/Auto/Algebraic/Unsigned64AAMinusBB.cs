@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Algebraic;
 
-/// <summary>
-/// Unsigned64AAMinusBB
-/// </summary>
-[Transform("IR.Optimizations.Auto.Algebraic")]
+[Transform()]
 public sealed class Unsigned64AAMinusBB : BaseTransform
 {
-	public Unsigned64AAMinusBB() : base(IRInstruction.Sub64, TransformType.Auto | TransformType.Optimization)
+	public Unsigned64AAMinusBB() : base(IR.Sub64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -25,13 +22,13 @@ public sealed class Unsigned64AAMinusBB : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned64)
+		if (context.Operand1.Definitions[0].Instruction != IR.MulUnsigned64)
 			return false;
 
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned64)
+		if (context.Operand2.Definitions[0].Instruction != IR.MulUnsigned64)
 			return false;
 
 		if (!AreSame(context.Operand1.Definitions[0].Operand1, context.Operand1.Definitions[0].Operand2))
@@ -53,8 +50,8 @@ public sealed class Unsigned64AAMinusBB : BaseTransform
 		var v1 = transform.VirtualRegisters.Allocate64();
 		var v2 = transform.VirtualRegisters.Allocate64();
 
-		context.SetInstruction(IRInstruction.Add64, v1, t1, t2);
-		context.AppendInstruction(IRInstruction.Sub64, v2, t1, t2);
-		context.AppendInstruction(IRInstruction.MulUnsigned64, result, v2, v1);
+		context.SetInstruction(IR.Add64, v1, t1, t2);
+		context.AppendInstruction(IR.Sub64, v2, t1, t2);
+		context.AppendInstruction(IR.MulUnsigned64, result, v2, v1);
 	}
 }

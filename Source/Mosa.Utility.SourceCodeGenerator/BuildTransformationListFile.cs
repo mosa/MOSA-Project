@@ -18,21 +18,23 @@ public class BuildTransformationListFile : BuildBaseTemplate
 
 	protected override void Body()
 	{
-		Lines.AppendLine("using System.Collections.Generic;");
 		Lines.AppendLine("using Mosa.Compiler.Framework;");
 		Lines.AppendLine();
 
 		Lines.AppendLine($"namespace {Namespace};");
 		Lines.AppendLine();
 		Lines.AppendLine("/// <summary>");
-		Lines.AppendLine("/// Transformations");
+		Lines.AppendLine($"/// {Classname}");
 		Lines.AppendLine("/// </summary>");
 		Lines.AppendLine($"public static class {Classname}");
 		Lines.AppendLine("{");
-		Lines.AppendLine("\tpublic static readonly List<BaseTransform> List = new List<BaseTransform> {");
+		Lines.AppendLine("\tpublic static readonly List<BaseTransform> List = new() {");
 
-		foreach (var name in BuildTransformations.Transformations)
+		foreach (var entry in BuildTransformations.Transformations)
 		{
+			var shortname = entry.Value;
+			var name = entry.Key;
+
 			var include = false;
 
 			foreach (var filter in Filters)
@@ -42,27 +44,15 @@ public class BuildTransformationListFile : BuildBaseTemplate
 					include = true;
 					break;
 				}
-
-				//var regex = new Regex(filter);
-
-				//var match = regex.Match(name);
-
-				//if (match.Success)
-				//{
-				//	include = true;
-				//	break;
-				//}
 			}
 
 			if (include)
 			{
-				var pos = name.IndexOf('.');
+				//var pos = name.IndexOf('.');
+				//var newname = name.Substring(pos + 1);
 
-				//var newname = name.Replace(Namespace, string.Empty);
-				//var newname = name;
-				var newname = name.Substring(pos + 1);
-
-				Lines.AppendLine($"\t\tnew {newname}(),");
+				//Lines.AppendLine($"\t\tnew {newname}(),");
+				Lines.AppendLine($"\t\tnew {shortname}(),");
 			}
 		}
 

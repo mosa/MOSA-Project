@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-/// <summary>
-/// LoadParamManagedPointerAddressFold
-/// </summary>
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class LoadParamManagedPointerAddressFold : BaseTransform
 {
-	public LoadParamManagedPointerAddressFold() : base(IRInstruction.LoadParamManagedPointer, TransformType.Auto | TransformType.Optimization)
+	public LoadParamManagedPointerAddressFold() : base(IR.LoadParamManagedPointer, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -19,16 +16,13 @@ public sealed class LoadParamManagedPointerAddressFold : BaseTransform
 		if (!context.Operand1.IsVirtualRegister)
 			return false;
 
-		if (!context.Operand2.IsResolvedConstant)
-			return false;
-
-		if (context.Operand2.ConstantUnsigned64 != 0)
+		if (!context.Operand2.IsConstantZero)
 			return false;
 
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.AddressOf)
+		if (context.Operand1.Definitions[0].Instruction != IR.AddressOf)
 			return false;
 
 		if (!IsParameter(context.Operand1.Definitions[0].Operand1))
@@ -46,6 +40,6 @@ public sealed class LoadParamManagedPointerAddressFold : BaseTransform
 
 		var t1 = context.Operand1.Definitions[0].Operand1;
 
-		context.SetInstruction(IRInstruction.LoadParamManagedPointer, result, t1);
+		context.SetInstruction(IR.LoadParamManagedPointer, result, t1);
 	}
 }

@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Phi;
 
 public sealed class PhiManagedPointerBranchHoisting : BasePhiTransform
 {
-	public PhiManagedPointerBranchHoisting() : base(IRInstruction.PhiManagedPointer, TransformType.Manual | TransformType.Optimization)
+	public PhiManagedPointerBranchHoisting() : base(IR.PhiManagedPointer, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -24,7 +24,7 @@ public sealed class PhiManagedPointerBranchHoisting : BasePhiTransform
 
 		var ctx = context.Result.Uses[0];
 
-		if (ctx.Instruction != IRInstruction.BranchManagedPointer)
+		if (ctx.Instruction != IR.BranchManagedPointer)
 			return false;
 
 		if (!ctx.Operand2.IsResolvedConstant)

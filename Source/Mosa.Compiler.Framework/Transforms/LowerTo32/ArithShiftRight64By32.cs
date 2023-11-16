@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
 public sealed class ArithShiftRight64By32 : BaseLowerTo32Transform
 {
-	public ArithShiftRight64By32() : base(IRInstruction.ArithShiftRight64, TransformType.Manual | TransformType.Optimization)
+	public ArithShiftRight64By32() : base(IR.ArithShiftRight64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -24,8 +24,8 @@ public sealed class ArithShiftRight64By32 : BaseLowerTo32Transform
 		var v1 = transform.VirtualRegisters.Allocate32();
 		var v2 = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction(IRInstruction.GetHigh32, v1, operand1);
-		context.AppendInstruction(IRInstruction.ArithShiftRight32, v2, v1, Operand.Constant32_31);
-		context.AppendInstruction(IRInstruction.To64, result, v1, v2);
+		context.SetInstruction(IR.GetHigh32, v1, operand1);
+		context.AppendInstruction(IR.ArithShiftRight32, v2, v1, Operand.Constant32_31);
+		context.AppendInstruction(IR.To64, result, v1, v2);
 	}
 }

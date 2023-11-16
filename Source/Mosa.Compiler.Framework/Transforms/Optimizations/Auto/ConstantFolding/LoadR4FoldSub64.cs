@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-/// <summary>
-/// LoadR4FoldSub64
-/// </summary>
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class LoadR4FoldSub64 : BaseTransform
 {
-	public LoadR4FoldSub64() : base(IRInstruction.LoadR4, TransformType.Auto | TransformType.Optimization)
+	public LoadR4FoldSub64() : base(IR.LoadR4, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -22,7 +19,7 @@ public sealed class LoadR4FoldSub64 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Sub64)
+		if (context.Operand1.Definitions[0].Instruction != IR.Sub64)
 			return false;
 
 		if (!IsResolvedConstant(context.Operand2))
@@ -44,6 +41,6 @@ public sealed class LoadR4FoldSub64 : BaseTransform
 
 		var e1 = Operand.CreateConstant(Sub64(To64(t3), To64(t2)));
 
-		context.SetInstruction(IRInstruction.LoadR4, result, t1, e1);
+		context.SetInstruction(IR.LoadR4, result, t1, e1);
 	}
 }

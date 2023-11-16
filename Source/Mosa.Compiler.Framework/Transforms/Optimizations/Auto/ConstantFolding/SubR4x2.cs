@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-/// <summary>
-/// SubR4x2
-/// </summary>
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class SubR4x2 : BaseTransform
 {
-	public SubR4x2() : base(IRInstruction.SubR4, TransformType.Auto | TransformType.Optimization)
+	public SubR4x2() : base(IR.SubR4, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -24,7 +21,7 @@ public sealed class SubR4x2 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.SubR4)
+		if (context.Operand1.Definitions[0].Instruction != IR.SubR4)
 			return false;
 
 		if (!IsResolvedConstant(context.Operand1.Definitions[0].Operand2))
@@ -46,6 +43,6 @@ public sealed class SubR4x2 : BaseTransform
 
 		var e1 = Operand.CreateConstant(SubR4(ToR4(t2), ToR4(t3)));
 
-		context.SetInstruction(IRInstruction.SubR4, result, t1, e1);
+		context.SetInstruction(IR.SubR4, result, t1, e1);
 	}
 }

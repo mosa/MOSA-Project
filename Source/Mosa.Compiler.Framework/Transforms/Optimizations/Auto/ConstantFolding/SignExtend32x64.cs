@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-/// <summary>
-/// SignExtend32x64
-/// </summary>
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class SignExtend32x64 : BaseTransform
 {
-	public SignExtend32x64() : base(IRInstruction.SignExtend32x64, TransformType.Auto | TransformType.Optimization)
+	public SignExtend32x64() : base(IR.SignExtend32x64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -32,6 +29,6 @@ public sealed class SignExtend32x64 : BaseTransform
 
 		var e1 = Operand.CreateConstant(SignExtend32x64(To32(t1)));
 
-		context.SetInstruction(IRInstruction.Move64, result, e1);
+		context.SetInstruction(IR.Move64, result, e1);
 	}
 }

@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
 
-/// <summary>
-/// And64Zero
-/// </summary>
-[Transform("IR.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class And64Zero : BaseTransform
 {
-	public And64Zero() : base(IRInstruction.And64, TransformType.Auto | TransformType.Optimization)
+	public And64Zero() : base(IR.And64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -18,10 +15,7 @@ public sealed class And64Zero : BaseTransform
 
 	public override bool Match(Context context, Transform transform)
 	{
-		if (!context.Operand2.IsResolvedConstant)
-			return false;
-
-		if (context.Operand2.ConstantUnsigned64 != 0)
+		if (!context.Operand2.IsConstantZero)
 			return false;
 
 		return true;
@@ -33,17 +27,14 @@ public sealed class And64Zero : BaseTransform
 
 		var e1 = Operand.CreateConstant(To64(0));
 
-		context.SetInstruction(IRInstruction.Move64, result, e1);
+		context.SetInstruction(IR.Move64, result, e1);
 	}
 }
 
-/// <summary>
-/// And64Zero_v1
-/// </summary>
-[Transform("IR.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class And64Zero_v1 : BaseTransform
 {
-	public And64Zero_v1() : base(IRInstruction.And64, TransformType.Auto | TransformType.Optimization)
+	public And64Zero_v1() : base(IR.And64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -51,10 +42,7 @@ public sealed class And64Zero_v1 : BaseTransform
 
 	public override bool Match(Context context, Transform transform)
 	{
-		if (!context.Operand1.IsResolvedConstant)
-			return false;
-
-		if (context.Operand1.ConstantUnsigned64 != 0)
+		if (!context.Operand1.IsConstantZero)
 			return false;
 
 		return true;
@@ -66,6 +54,6 @@ public sealed class And64Zero_v1 : BaseTransform
 
 		var e1 = Operand.CreateConstant(To64(0));
 
-		context.SetInstruction(IRInstruction.Move64, result, e1);
+		context.SetInstruction(IR.Move64, result, e1);
 	}
 }

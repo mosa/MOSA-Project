@@ -8,10 +8,10 @@ namespace Mosa.Compiler.x86.Transforms.RuntimeCall;
 /// <summary>
 /// MulOverflowOut64
 /// </summary>
-[Transform("x86.RuntimeCall")]
+[Transform]
 public sealed class MulOverflowOut64 : BaseTransform
 {
-	public MulOverflowOut64() : base(IRInstruction.MulOverflowOut64, TransformType.Manual | TransformType.Transform)
+	public MulOverflowOut64() : base(IR.MulOverflowOut64, TransformType.Manual | TransformType.Transform)
 	{
 	}
 
@@ -38,9 +38,9 @@ public sealed class MulOverflowOut64 : BaseTransform
 
 		var symbol = Operand.CreateLabel(method, transform.Is32BitPlatform);
 
-		context.SetInstruction(IRInstruction.AddressOf, v2, v1);
-		context.AppendInstruction(IRInstruction.CallStatic, result, symbol, operand1, operand2, v2);
-		context.AppendInstruction(IRInstruction.LoadZeroExtend8x32, result2, v2, Operand.Constant32_0);
+		context.SetInstruction(IR.AddressOf, v2, v1);
+		context.AppendInstruction(IR.CallStatic, result, symbol, operand1, operand2, v2);
+		context.AppendInstruction(IR.LoadZeroExtend8x32, result2, v2, Operand.Constant32_0);
 
 		transform.MethodScanner.MethodInvoked(method, transform.Method);
 	}

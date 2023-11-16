@@ -7,7 +7,7 @@ namespace Mosa.Compiler.x86.Transforms.FixedRegisters;
 /// <summary>
 /// MovStoreSeg32
 /// </summary>
-[Transform("x86.FixedRegisters")]
+[Transform]
 public sealed class MovStoreSeg32 : BaseTransform
 {
 	public MovStoreSeg32() : base(X86.MovStoreSeg32, TransformType.Manual | TransformType.Transform)

@@ -6,10 +6,7 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.StrengthReduction;
 
-/// <summary>
-/// And32ByZero
-/// </summary>
-[Transform("x86.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class And32ByZero : BaseTransform
 {
 	public And32ByZero() : base(X86.And32, TransformType.Auto | TransformType.Optimization, true)
@@ -18,13 +15,10 @@ public sealed class And32ByZero : BaseTransform
 
 	public override bool Match(Context context, Transform transform)
 	{
-		if (!context.Operand2.IsResolvedConstant)
+		if (!context.Operand2.IsConstantZero)
 			return false;
 
-		if (context.Operand2.ConstantUnsigned64 != 0)
-			return false;
-
-		if (AreStatusFlagUsed(context))
+		if (AreAnyStatusFlagsUsed(context))
 			return false;
 
 		return true;
@@ -40,10 +34,7 @@ public sealed class And32ByZero : BaseTransform
 	}
 }
 
-/// <summary>
-/// And32ByZero_v1
-/// </summary>
-[Transform("x86.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class And32ByZero_v1 : BaseTransform
 {
 	public And32ByZero_v1() : base(X86.And32, TransformType.Auto | TransformType.Optimization, true)
@@ -52,13 +43,10 @@ public sealed class And32ByZero_v1 : BaseTransform
 
 	public override bool Match(Context context, Transform transform)
 	{
-		if (!context.Operand1.IsResolvedConstant)
+		if (!context.Operand1.IsConstantZero)
 			return false;
 
-		if (context.Operand1.ConstantUnsigned64 != 0)
-			return false;
-
-		if (AreStatusFlagUsed(context))
+		if (AreAnyStatusFlagsUsed(context))
 			return false;
 
 		return true;

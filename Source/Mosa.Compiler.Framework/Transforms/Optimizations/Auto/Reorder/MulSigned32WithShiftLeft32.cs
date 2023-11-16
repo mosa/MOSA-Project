@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Reorder;
 
-/// <summary>
-/// MulSigned32WithShiftLeft32
-/// </summary>
-[Transform("IR.Optimizations.Auto.Reorder")]
+[Transform()]
 public sealed class MulSigned32WithShiftLeft32 : BaseTransform
 {
-	public MulSigned32WithShiftLeft32() : base(IRInstruction.MulSigned32, TransformType.Auto | TransformType.Optimization)
+	public MulSigned32WithShiftLeft32() : base(IR.MulSigned32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -22,7 +19,7 @@ public sealed class MulSigned32WithShiftLeft32 : BaseTransform
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.ShiftLeft32)
+		if (context.Operand2.Definitions[0].Instruction != IR.ShiftLeft32)
 			return false;
 
 		return true;
@@ -38,18 +35,15 @@ public sealed class MulSigned32WithShiftLeft32 : BaseTransform
 
 		var v1 = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction(IRInstruction.MulSigned32, v1, t1, t2);
-		context.AppendInstruction(IRInstruction.ShiftLeft32, result, v1, t3);
+		context.SetInstruction(IR.MulSigned32, v1, t1, t2);
+		context.AppendInstruction(IR.ShiftLeft32, result, v1, t3);
 	}
 }
 
-/// <summary>
-/// MulSigned32WithShiftLeft32_v1
-/// </summary>
-[Transform("IR.Optimizations.Auto.Reorder")]
+[Transform()]
 public sealed class MulSigned32WithShiftLeft32_v1 : BaseTransform
 {
-	public MulSigned32WithShiftLeft32_v1() : base(IRInstruction.MulSigned32, TransformType.Auto | TransformType.Optimization)
+	public MulSigned32WithShiftLeft32_v1() : base(IR.MulSigned32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -61,7 +55,7 @@ public sealed class MulSigned32WithShiftLeft32_v1 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.ShiftLeft32)
+		if (context.Operand1.Definitions[0].Instruction != IR.ShiftLeft32)
 			return false;
 
 		return true;
@@ -77,7 +71,7 @@ public sealed class MulSigned32WithShiftLeft32_v1 : BaseTransform
 
 		var v1 = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction(IRInstruction.MulSigned32, v1, t3, t1);
-		context.AppendInstruction(IRInstruction.ShiftLeft32, result, v1, t2);
+		context.SetInstruction(IR.MulSigned32, v1, t3, t1);
+		context.AppendInstruction(IR.ShiftLeft32, result, v1, t2);
 	}
 }

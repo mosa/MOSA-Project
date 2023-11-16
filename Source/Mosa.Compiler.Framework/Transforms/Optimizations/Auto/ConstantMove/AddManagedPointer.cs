@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove;
 
-/// <summary>
-/// AddManagedPointer
-/// </summary>
-[Transform("IR.Optimizations.Auto.ConstantMove")]
+[Transform()]
 public sealed class AddManagedPointer : BaseTransform
 {
-	public AddManagedPointer() : base(IRInstruction.AddManagedPointer, TransformType.Auto | TransformType.Optimization)
+	public AddManagedPointer() : base(IR.AddManagedPointer, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -32,6 +29,6 @@ public sealed class AddManagedPointer : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2;
 
-		context.SetInstruction(IRInstruction.AddManagedPointer, result, t2, t1);
+		context.SetInstruction(IR.AddManagedPointer, result, t2, t1);
 	}
 }

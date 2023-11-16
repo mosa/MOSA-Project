@@ -2,9 +2,9 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.x64.Transforms.Optimizations.Manual.Standard;
+namespace Mosa.Compiler.x64.Transforms.Optimizations.Manual.Rewrite;
 
-[Transform("x64.Optimizations.Manual.Standard")]
+[Transform]
 public sealed class Mov64ToXor64 : BaseTransform
 {
 	public Mov64ToXor64() : base(X64.Mov64, TransformType.Manual | TransformType.Optimization)
@@ -16,7 +16,7 @@ public sealed class Mov64ToXor64 : BaseTransform
 		if (!context.Operand1.IsConstantZero)
 			return false;
 
-		if (AreStatusFlagUsed(context))
+		if (AreAnyStatusFlagsUsed(context))
 			return false;
 
 		return true;

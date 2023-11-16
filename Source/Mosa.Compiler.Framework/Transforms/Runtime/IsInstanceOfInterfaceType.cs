@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Transforms.Runtime;
 /// </summary>
 public sealed class IsInstanceOfInterfaceType : BaseRuntimeTransform
 {
-	public IsInstanceOfInterfaceType() : base(IRInstruction.IsInstanceOfInterfaceType, TransformType.Manual | TransformType.Transform)
+	public IsInstanceOfInterfaceType() : base(IR.IsInstanceOfInterfaceType, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Propagate;
 
 public sealed class MoveObjectPropagate : BaseTransform
 {
-	public MoveObjectPropagate() : base(IRInstruction.MoveObject, TransformType.Manual | TransformType.Optimization)
+	public MoveObjectPropagate() : base(IR.MoveObject, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

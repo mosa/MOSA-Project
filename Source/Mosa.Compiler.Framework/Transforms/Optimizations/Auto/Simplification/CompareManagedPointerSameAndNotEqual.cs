@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
-/// <summary>
-/// CompareManagedPointerSameAndNotEqual
-/// </summary>
-[Transform("IR.Optimizations.Auto.Simplification")]
+[Transform()]
 public sealed class CompareManagedPointerSameAndNotEqual : BaseTransform
 {
-	public CompareManagedPointerSameAndNotEqual() : base(IRInstruction.CompareManagedPointer, TransformType.Auto | TransformType.Optimization)
+	public CompareManagedPointerSameAndNotEqual() : base(IR.CompareManagedPointer, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -33,6 +30,6 @@ public sealed class CompareManagedPointerSameAndNotEqual : BaseTransform
 
 		var e1 = Operand.CreateConstant(To32(0));
 
-		context.SetInstruction(IRInstruction.Move32, result, e1);
+		context.SetInstruction(IR.Move32, result, e1);
 	}
 }

@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
 
-/// <summary>
-/// SubManagedPointerByZero
-/// </summary>
-[Transform("IR.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class SubManagedPointerByZero : BaseTransform
 {
-	public SubManagedPointerByZero() : base(IRInstruction.SubManagedPointer, TransformType.Auto | TransformType.Optimization)
+	public SubManagedPointerByZero() : base(IR.SubManagedPointer, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -18,10 +15,7 @@ public sealed class SubManagedPointerByZero : BaseTransform
 
 	public override bool Match(Context context, Transform transform)
 	{
-		if (!context.Operand2.IsResolvedConstant)
-			return false;
-
-		if (context.Operand2.ConstantUnsigned64 != 0)
+		if (!context.Operand2.IsConstantZero)
 			return false;
 
 		return true;
@@ -33,6 +27,6 @@ public sealed class SubManagedPointerByZero : BaseTransform
 
 		var t1 = context.Operand1;
 
-		context.SetInstruction(IRInstruction.MoveManagedPointer, result, t1);
+		context.SetInstruction(IR.MoveManagedPointer, result, t1);
 	}
 }

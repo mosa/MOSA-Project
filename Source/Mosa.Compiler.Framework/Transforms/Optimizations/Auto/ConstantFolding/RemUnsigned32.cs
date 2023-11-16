@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-/// <summary>
-/// RemUnsigned32
-/// </summary>
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class RemUnsigned32 : BaseTransform
 {
-	public RemUnsigned32() : base(IRInstruction.RemUnsigned32, TransformType.Auto | TransformType.Optimization)
+	public RemUnsigned32() : base(IR.RemUnsigned32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -36,6 +33,6 @@ public sealed class RemUnsigned32 : BaseTransform
 
 		var e1 = Operand.CreateConstant(RemUnsigned32(To32(t1), To32(t2)));
 
-		context.SetInstruction(IRInstruction.Move32, result, e1);
+		context.SetInstruction(IR.Move32, result, e1);
 	}
 }

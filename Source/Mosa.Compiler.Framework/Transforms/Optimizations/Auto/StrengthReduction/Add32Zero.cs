@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
 
-/// <summary>
-/// Add32Zero
-/// </summary>
-[Transform("IR.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class Add32Zero : BaseTransform
 {
-	public Add32Zero() : base(IRInstruction.Add32, TransformType.Auto | TransformType.Optimization)
+	public Add32Zero() : base(IR.Add32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -18,10 +15,7 @@ public sealed class Add32Zero : BaseTransform
 
 	public override bool Match(Context context, Transform transform)
 	{
-		if (!context.Operand2.IsResolvedConstant)
-			return false;
-
-		if (context.Operand2.ConstantUnsigned64 != 0)
+		if (!context.Operand2.IsConstantZero)
 			return false;
 
 		return true;
@@ -33,17 +27,14 @@ public sealed class Add32Zero : BaseTransform
 
 		var t1 = context.Operand1;
 
-		context.SetInstruction(IRInstruction.Move32, result, t1);
+		context.SetInstruction(IR.Move32, result, t1);
 	}
 }
 
-/// <summary>
-/// Add32Zero_v1
-/// </summary>
-[Transform("IR.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class Add32Zero_v1 : BaseTransform
 {
-	public Add32Zero_v1() : base(IRInstruction.Add32, TransformType.Auto | TransformType.Optimization)
+	public Add32Zero_v1() : base(IR.Add32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -51,10 +42,7 @@ public sealed class Add32Zero_v1 : BaseTransform
 
 	public override bool Match(Context context, Transform transform)
 	{
-		if (!context.Operand1.IsResolvedConstant)
-			return false;
-
-		if (context.Operand1.ConstantUnsigned64 != 0)
+		if (!context.Operand1.IsConstantZero)
 			return false;
 
 		return true;
@@ -66,6 +54,6 @@ public sealed class Add32Zero_v1 : BaseTransform
 
 		var t1 = context.Operand2;
 
-		context.SetInstruction(IRInstruction.Move32, result, t1);
+		context.SetInstruction(IR.Move32, result, t1);
 	}
 }

@@ -5,10 +5,10 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Useless;
 /// <summary>
 /// LoadParamZeroExtend16x32Double
 /// </summary>
-[Transform("IR.Optimizations.Manual.Useless")]
+[Transform]
 public sealed class LoadParamZeroExtend16x32Double : BaseTransform
 {
-	public LoadParamZeroExtend16x32Double() : base(IRInstruction.ZeroExtend16x32, TransformType.Manual | TransformType.Optimization)
+	public LoadParamZeroExtend16x32Double() : base(IR.ZeroExtend16x32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -22,7 +22,7 @@ public sealed class LoadParamZeroExtend16x32Double : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.LoadParamZeroExtend16x32)
+		if (context.Operand1.Definitions[0].Instruction != IR.LoadParamZeroExtend16x32)
 			return false;
 
 		return true;
@@ -33,6 +33,6 @@ public sealed class LoadParamZeroExtend16x32Double : BaseTransform
 		var result = context.Result;
 		var operand1 = context.Operand1;
 
-		context.SetInstruction(IRInstruction.Move32, result, operand1);
+		context.SetInstruction(IR.Move32, result, operand1);
 	}
 }

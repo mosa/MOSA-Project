@@ -9,7 +9,6 @@ namespace Mosa.Compiler.ARM32.Instructions;
 /// <summary>
 /// SMlal - Multiply Signed Long Accumulate
 /// </summary>
-/// <seealso cref="Mosa.Compiler.ARM32.ARM32Instruction" />
 public sealed class SMlal : ARM32Instruction
 {
 	internal SMlal()

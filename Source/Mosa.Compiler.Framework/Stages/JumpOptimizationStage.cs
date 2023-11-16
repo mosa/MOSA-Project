@@ -37,7 +37,7 @@ public sealed class JumpOptimizationStage : BaseMethodCompilerStage
 			if (next == target)
 			{
 				// insert pseudo flow instruction --- this is important when protected regions exists
-				node.SetInstruction(IRInstruction.Flow, target);
+				node.SetInstruction(IR.Flow, target);
 				JumpsRemovedCount.Increment();
 				continue;
 			}
@@ -58,7 +58,7 @@ public sealed class JumpOptimizationStage : BaseMethodCompilerStage
 				branchNode.ConditionCode = branchNode.ConditionCode.GetOpposite();
 
 				// insert pseudo flow instruction --- this is important when protected regions exists
-				jumpNode.SetInstruction(IRInstruction.Flow, branchNode.BranchTargets[0]);
+				jumpNode.SetInstruction(IR.Flow, branchNode.BranchTargets[0]);
 				// update branch target
 				branchNode.UpdateBranchTarget(0, jumpTarget);
 

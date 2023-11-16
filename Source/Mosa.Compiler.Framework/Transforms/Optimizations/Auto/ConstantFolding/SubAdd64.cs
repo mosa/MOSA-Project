@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-/// <summary>
-/// SubAdd64
-/// </summary>
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class SubAdd64 : BaseTransform
 {
-	public SubAdd64() : base(IRInstruction.Sub64, TransformType.Auto | TransformType.Optimization)
+	public SubAdd64() : base(IR.Sub64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -24,7 +21,7 @@ public sealed class SubAdd64 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Add64)
+		if (context.Operand1.Definitions[0].Instruction != IR.Add64)
 			return false;
 
 		if (!IsResolvedConstant(context.Operand1.Definitions[0].Operand2))
@@ -46,17 +43,14 @@ public sealed class SubAdd64 : BaseTransform
 
 		var e1 = Operand.CreateConstant(Sub64(To64(t2), To64(t3)));
 
-		context.SetInstruction(IRInstruction.Add64, result, t1, e1);
+		context.SetInstruction(IR.Add64, result, t1, e1);
 	}
 }
 
-/// <summary>
-/// SubAdd64_v1
-/// </summary>
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class SubAdd64_v1 : BaseTransform
 {
-	public SubAdd64_v1() : base(IRInstruction.Sub64, TransformType.Auto | TransformType.Optimization)
+	public SubAdd64_v1() : base(IR.Sub64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -70,7 +64,7 @@ public sealed class SubAdd64_v1 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Add64)
+		if (context.Operand1.Definitions[0].Instruction != IR.Add64)
 			return false;
 
 		if (!IsResolvedConstant(context.Operand1.Definitions[0].Operand1))
@@ -92,6 +86,6 @@ public sealed class SubAdd64_v1 : BaseTransform
 
 		var e1 = Operand.CreateConstant(Sub64(To64(t1), To64(t3)));
 
-		context.SetInstruction(IRInstruction.Add64, result, t2, e1);
+		context.SetInstruction(IR.Add64, result, t2, e1);
 	}
 }

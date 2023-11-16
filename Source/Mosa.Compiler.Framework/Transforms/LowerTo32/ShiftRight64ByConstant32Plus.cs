@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
 public sealed class ShiftRight64ByConstant32Plus : BaseLowerTo32Transform
 {
-	public ShiftRight64ByConstant32Plus() : base(IRInstruction.ShiftRight64, TransformType.Manual | TransformType.Optimization)
+	public ShiftRight64ByConstant32Plus() : base(IR.ShiftRight64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -25,8 +25,8 @@ public sealed class ShiftRight64ByConstant32Plus : BaseLowerTo32Transform
 		var v1 = transform.VirtualRegisters.Allocate32();
 		var v2 = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction(IRInstruction.GetHigh32, v1, operand1);
-		context.AppendInstruction(IRInstruction.ShiftRight32, v2, v1, Operand.CreateConstant(shift - 32));
-		context.AppendInstruction(IRInstruction.To64, result, v2, Operand.Constant32_0);
+		context.SetInstruction(IR.GetHigh32, v1, operand1);
+		context.AppendInstruction(IR.ShiftRight32, v2, v1, Operand.CreateConstant(shift - 32));
+		context.AppendInstruction(IR.To64, result, v2, Operand.Constant32_0);
 	}
 }

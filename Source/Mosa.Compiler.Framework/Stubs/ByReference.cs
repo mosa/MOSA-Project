@@ -28,10 +28,10 @@ internal static partial class StubMethods
 		context.AppendInstruction(loadValue, opValue, value);
 
 		// Store value inside instance
-		var store = transform.Is32BitPlatform ? IRInstruction.Store32 : IRInstruction.Store64;
+		var store = transform.Is32BitPlatform ? IR.Store32 : IR.Store64;
 		context.AppendInstruction(store, null, opInstance, transform.ConstantZero, opValue);
 
-		context.AppendInstruction(IRInstruction.Jmp, transform.BasicBlocks.EpilogueBlock);
+		context.AppendInstruction(IR.Jmp, transform.BasicBlocks.EpilogueBlock);
 	}
 
 	[StubMethod("System.ByReference`1::get_Value")]
@@ -48,13 +48,13 @@ internal static partial class StubMethods
 		context.AppendInstruction(loadInstance, opInstance, instance);
 
 		// Load value from instance into return operand
-		var loadValue = transform.Is32BitPlatform ? IRInstruction.Load32 : IRInstruction.Load64;
+		var loadValue = transform.Is32BitPlatform ? IR.Load32 : IR.Load64;
 		context.AppendInstruction(loadValue, opReturn, opInstance, transform.ConstantZero);
 
 		// Set return
 		var setReturn = transform.MethodCompiler.GetReturnInstruction(opReturn.Primitive);
 		context.AppendInstruction(setReturn, null, opReturn);
 
-		context.AppendInstruction(IRInstruction.Jmp, transform.BasicBlocks.EpilogueBlock);
+		context.AppendInstruction(IR.Jmp, transform.BasicBlocks.EpilogueBlock);
 	}
 }

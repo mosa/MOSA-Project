@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove;
 
-/// <summary>
-/// Sub64ToAdd
-/// </summary>
-[Transform("IR.Optimizations.Auto.ConstantMove")]
+[Transform()]
 public sealed class Sub64ToAdd : BaseTransform
 {
-	public Sub64ToAdd() : base(IRInstruction.Sub64, TransformType.Auto | TransformType.Optimization)
+	public Sub64ToAdd() : base(IR.Sub64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -34,6 +31,6 @@ public sealed class Sub64ToAdd : BaseTransform
 
 		var e1 = Operand.CreateConstant(Neg64(To64(t2)));
 
-		context.SetInstruction(IRInstruction.Add64, result, t1, e1);
+		context.SetInstruction(IR.Add64, result, t1, e1);
 	}
 }

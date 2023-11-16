@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
 
-/// <summary>
-/// MulHu32ByZero
-/// </summary>
-[Transform("IR.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class MulHu32ByZero : BaseTransform
 {
-	public MulHu32ByZero() : base(IRInstruction.MulHu32, TransformType.Auto | TransformType.Optimization)
+	public MulHu32ByZero() : base(IR.MulHu32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -18,10 +15,7 @@ public sealed class MulHu32ByZero : BaseTransform
 
 	public override bool Match(Context context, Transform transform)
 	{
-		if (!context.Operand2.IsResolvedConstant)
-			return false;
-
-		if (context.Operand2.ConstantUnsigned64 != 0)
+		if (!context.Operand2.IsConstantZero)
 			return false;
 
 		return true;
@@ -33,17 +27,14 @@ public sealed class MulHu32ByZero : BaseTransform
 
 		var e1 = Operand.CreateConstant(To32(0));
 
-		context.SetInstruction(IRInstruction.Move32, result, e1);
+		context.SetInstruction(IR.Move32, result, e1);
 	}
 }
 
-/// <summary>
-/// MulHu32ByZero_v1
-/// </summary>
-[Transform("IR.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class MulHu32ByZero_v1 : BaseTransform
 {
-	public MulHu32ByZero_v1() : base(IRInstruction.MulHu32, TransformType.Auto | TransformType.Optimization)
+	public MulHu32ByZero_v1() : base(IR.MulHu32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -51,10 +42,7 @@ public sealed class MulHu32ByZero_v1 : BaseTransform
 
 	public override bool Match(Context context, Transform transform)
 	{
-		if (!context.Operand1.IsResolvedConstant)
-			return false;
-
-		if (context.Operand1.ConstantUnsigned64 != 0)
+		if (!context.Operand1.IsConstantZero)
 			return false;
 
 		return true;
@@ -66,6 +54,6 @@ public sealed class MulHu32ByZero_v1 : BaseTransform
 
 		var e1 = Operand.CreateConstant(To32(0));
 
-		context.SetInstruction(IRInstruction.Move32, result, e1);
+		context.SetInstruction(IR.Move32, result, e1);
 	}
 }

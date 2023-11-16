@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-/// <summary>
-/// MulR4x2
-/// </summary>
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class MulR4x2 : BaseTransform
 {
-	public MulR4x2() : base(IRInstruction.MulR4, TransformType.Auto | TransformType.Optimization)
+	public MulR4x2() : base(IR.MulR4, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -24,7 +21,7 @@ public sealed class MulR4x2 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.MulR4)
+		if (context.Operand1.Definitions[0].Instruction != IR.MulR4)
 			return false;
 
 		if (!IsResolvedConstant(context.Operand1.Definitions[0].Operand2))
@@ -46,17 +43,14 @@ public sealed class MulR4x2 : BaseTransform
 
 		var e1 = Operand.CreateConstant(MulR4(ToR4(t2), ToR4(t3)));
 
-		context.SetInstruction(IRInstruction.MulR4, result, t1, e1);
+		context.SetInstruction(IR.MulR4, result, t1, e1);
 	}
 }
 
-/// <summary>
-/// MulR4x2_v1
-/// </summary>
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class MulR4x2_v1 : BaseTransform
 {
-	public MulR4x2_v1() : base(IRInstruction.MulR4, TransformType.Auto | TransformType.Optimization)
+	public MulR4x2_v1() : base(IR.MulR4, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -70,7 +64,7 @@ public sealed class MulR4x2_v1 : BaseTransform
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.MulR4)
+		if (context.Operand2.Definitions[0].Instruction != IR.MulR4)
 			return false;
 
 		if (!IsResolvedConstant(context.Operand2.Definitions[0].Operand2))
@@ -92,17 +86,14 @@ public sealed class MulR4x2_v1 : BaseTransform
 
 		var e1 = Operand.CreateConstant(MulR4(ToR4(t3), ToR4(t1)));
 
-		context.SetInstruction(IRInstruction.MulR4, result, t2, e1);
+		context.SetInstruction(IR.MulR4, result, t2, e1);
 	}
 }
 
-/// <summary>
-/// MulR4x2_v2
-/// </summary>
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class MulR4x2_v2 : BaseTransform
 {
-	public MulR4x2_v2() : base(IRInstruction.MulR4, TransformType.Auto | TransformType.Optimization)
+	public MulR4x2_v2() : base(IR.MulR4, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -116,7 +107,7 @@ public sealed class MulR4x2_v2 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.MulR4)
+		if (context.Operand1.Definitions[0].Instruction != IR.MulR4)
 			return false;
 
 		if (!IsResolvedConstant(context.Operand1.Definitions[0].Operand1))
@@ -138,17 +129,14 @@ public sealed class MulR4x2_v2 : BaseTransform
 
 		var e1 = Operand.CreateConstant(MulR4(ToR4(t1), ToR4(t3)));
 
-		context.SetInstruction(IRInstruction.MulR4, result, t2, e1);
+		context.SetInstruction(IR.MulR4, result, t2, e1);
 	}
 }
 
-/// <summary>
-/// MulR4x2_v3
-/// </summary>
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class MulR4x2_v3 : BaseTransform
 {
-	public MulR4x2_v3() : base(IRInstruction.MulR4, TransformType.Auto | TransformType.Optimization)
+	public MulR4x2_v3() : base(IR.MulR4, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -162,7 +150,7 @@ public sealed class MulR4x2_v3 : BaseTransform
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.MulR4)
+		if (context.Operand2.Definitions[0].Instruction != IR.MulR4)
 			return false;
 
 		if (!IsResolvedConstant(context.Operand2.Definitions[0].Operand1))
@@ -184,6 +172,6 @@ public sealed class MulR4x2_v3 : BaseTransform
 
 		var e1 = Operand.CreateConstant(MulR4(ToR4(t2), ToR4(t1)));
 
-		context.SetInstruction(IRInstruction.MulR4, result, t3, e1);
+		context.SetInstruction(IR.MulR4, result, t3, e1);
 	}
 }

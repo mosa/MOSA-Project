@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.BitValue;
 
-/// <summary>
-/// ArithShiftRight32ButNotSigned
-/// </summary>
-[Transform("IR.Optimizations.Auto.BitValue")]
+[Transform()]
 public sealed class ArithShiftRight32ButNotSigned : BaseTransform
 {
-	public ArithShiftRight32ButNotSigned() : base(IRInstruction.ArithShiftRight32, TransformType.Auto | TransformType.Optimization)
+	public ArithShiftRight32ButNotSigned() : base(IR.ArithShiftRight32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -31,6 +28,6 @@ public sealed class ArithShiftRight32ButNotSigned : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2;
 
-		context.SetInstruction(IRInstruction.ShiftRight32, result, t1, t2);
+		context.SetInstruction(IR.ShiftRight32, result, t1, t2);
 	}
 }

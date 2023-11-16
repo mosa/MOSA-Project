@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.CodeMotion;
 /// </summary>
 public sealed class LoadParam32 : BaseCodeMotionTransform
 {
-	public LoadParam32() : base(IRInstruction.LoadParam32, TransformType.Manual | TransformType.Optimization)
+	public LoadParam32() : base(IR.LoadParam32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 }

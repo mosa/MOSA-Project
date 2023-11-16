@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Transforms.Runtime;
 /// </summary>
 public sealed class UnboxAny : BaseRuntimeTransform
 {
-	public UnboxAny() : base(IRInstruction.UnboxAny, TransformType.Manual | TransformType.Transform)
+	public UnboxAny() : base(IR.UnboxAny, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

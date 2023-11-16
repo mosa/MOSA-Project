@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Transforms.Call;
 /// </summary>
 public sealed class SetReturnR8 : BaseTransform
 {
-	public SetReturnR8() : base(IRInstruction.SetReturnR8, TransformType.Manual | TransformType.Transform)
+	public SetReturnR8() : base(IR.SetReturnR8, TransformType.Manual | TransformType.Transform)
 	{
 	}
 
@@ -18,6 +18,6 @@ public sealed class SetReturnR8 : BaseTransform
 
 	public override void Transform(Context context, Transform transform)
 	{
-		context.SetInstruction(IRInstruction.MoveR8, transform.PhysicalRegisters.AllocateR8(transform.Architecture.ReturnFloatingPointRegister), context.Operand1);
+		context.SetInstruction(IR.MoveR8, transform.PhysicalRegisters.AllocateR8(transform.Architecture.ReturnFloatingPointRegister), context.Operand1);
 	}
 }

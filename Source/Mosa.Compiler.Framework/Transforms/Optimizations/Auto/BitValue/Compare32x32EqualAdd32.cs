@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.BitValue;
 
-/// <summary>
-/// Compare32x32EqualAdd32
-/// </summary>
-[Transform("IR.Optimizations.Auto.BitValue")]
+[Transform()]
 public sealed class Compare32x32EqualAdd32 : BaseTransform
 {
-	public Compare32x32EqualAdd32() : base(IRInstruction.Compare32x32, TransformType.Auto | TransformType.Optimization)
+	public Compare32x32EqualAdd32() : base(IR.Compare32x32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -25,7 +22,7 @@ public sealed class Compare32x32EqualAdd32 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Add32)
+		if (context.Operand1.Definitions[0].Instruction != IR.Add32)
 			return false;
 
 		if (!IsResolvedConstant(context.Operand1.Definitions[0].Operand2))
@@ -50,18 +47,15 @@ public sealed class Compare32x32EqualAdd32 : BaseTransform
 
 		var v1 = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction(IRInstruction.Sub32, v1, t3, t2);
-		context.AppendInstruction(IRInstruction.Compare32x32, ConditionCode.Equal, result, t1, v1);
+		context.SetInstruction(IR.Sub32, v1, t3, t2);
+		context.AppendInstruction(IR.Compare32x32, ConditionCode.Equal, result, t1, v1);
 	}
 }
 
-/// <summary>
-/// Compare32x32EqualAdd32_v1
-/// </summary>
-[Transform("IR.Optimizations.Auto.BitValue")]
+[Transform()]
 public sealed class Compare32x32EqualAdd32_v1 : BaseTransform
 {
-	public Compare32x32EqualAdd32_v1() : base(IRInstruction.Compare32x32, TransformType.Auto | TransformType.Optimization)
+	public Compare32x32EqualAdd32_v1() : base(IR.Compare32x32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -76,7 +70,7 @@ public sealed class Compare32x32EqualAdd32_v1 : BaseTransform
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.Add32)
+		if (context.Operand2.Definitions[0].Instruction != IR.Add32)
 			return false;
 
 		if (!IsResolvedConstant(context.Operand2.Definitions[0].Operand2))
@@ -101,7 +95,7 @@ public sealed class Compare32x32EqualAdd32_v1 : BaseTransform
 
 		var v1 = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction(IRInstruction.Sub32, v1, t1, t3);
-		context.AppendInstruction(IRInstruction.Compare32x32, ConditionCode.Equal, result, t2, v1);
+		context.SetInstruction(IR.Sub32, v1, t1, t3);
+		context.AppendInstruction(IR.Compare32x32, ConditionCode.Equal, result, t2, v1);
 	}
 }

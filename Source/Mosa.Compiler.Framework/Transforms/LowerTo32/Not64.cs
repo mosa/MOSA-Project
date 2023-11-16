@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
 public sealed class Not64 : BaseLowerTo32Transform
 {
-	public Not64() : base(IRInstruction.Not64, TransformType.Manual | TransformType.Optimization)
+	public Not64() : base(IR.Not64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -18,11 +18,11 @@ public sealed class Not64 : BaseLowerTo32Transform
 		var resultLow = transform.VirtualRegisters.Allocate32();
 		var resultHigh = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction(IRInstruction.GetLow32, op0Low, operand1);
-		context.AppendInstruction(IRInstruction.GetHigh32, op0High, operand1);
+		context.SetInstruction(IR.GetLow32, op0Low, operand1);
+		context.AppendInstruction(IR.GetHigh32, op0High, operand1);
 
-		context.AppendInstruction(IRInstruction.Not32, resultLow, op0Low);
-		context.AppendInstruction(IRInstruction.Not32, resultHigh, op0High);
-		context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
+		context.AppendInstruction(IR.Not32, resultLow, op0Low);
+		context.AppendInstruction(IR.Not32, resultHigh, op0High);
+		context.AppendInstruction(IR.To64, result, resultLow, resultHigh);
 	}
 }

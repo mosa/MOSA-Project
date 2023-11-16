@@ -5,10 +5,10 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.StrengthReduct
 /// <summary>
 /// DivSigned32ByPowerOfTwo
 /// </summary>
-[Transform("IR.Optimizations.Manual.StrengthReduction")]
+[Transform]
 public sealed class DivSigned32ByPowerOfTwo : BaseTransform
 {
-	public DivSigned32ByPowerOfTwo() : base(IRInstruction.DivSigned32, TransformType.Auto | TransformType.Optimization, true)
+	public DivSigned32ByPowerOfTwo() : base(IR.DivSigned32, TransformType.Auto | TransformType.Optimization, true)
 	{
 	}
 
@@ -43,12 +43,12 @@ public sealed class DivSigned32ByPowerOfTwo : BaseTransform
 		var v3 = transform.VirtualRegisters.Allocate32();
 
 		// shrsi t,n,k-1
-		context.SetInstruction(IRInstruction.ArithShiftRight32, v1, n, Operand.CreateConstant32(k - 1));
+		context.SetInstruction(IR.ArithShiftRight32, v1, n, Operand.CreateConstant32(k - 1));
 		// shri t, t,32 - k
-		context.AppendInstruction(IRInstruction.ShiftRight32, v2, v1, Operand.CreateConstant(32 - k));
+		context.AppendInstruction(IR.ShiftRight32, v2, v1, Operand.CreateConstant(32 - k));
 		// add t,n,t
-		context.AppendInstruction(IRInstruction.Add32, v3, v2, n);
+		context.AppendInstruction(IR.Add32, v3, v2, n);
 		// shrsi q,t,k
-		context.AppendInstruction(IRInstruction.ArithShiftRight32, result, v3, Operand.CreateConstant(k));
+		context.AppendInstruction(IR.ArithShiftRight32, result, v3, Operand.CreateConstant(k));
 	}
 }

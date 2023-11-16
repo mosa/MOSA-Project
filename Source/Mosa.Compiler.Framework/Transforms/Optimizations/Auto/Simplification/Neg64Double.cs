@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
-/// <summary>
-/// Neg64Double
-/// </summary>
-[Transform("IR.Optimizations.Auto.Simplification")]
+[Transform()]
 public sealed class Neg64Double : BaseTransform
 {
-	public Neg64Double() : base(IRInstruction.Neg64, TransformType.Auto | TransformType.Optimization)
+	public Neg64Double() : base(IR.Neg64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -22,7 +19,7 @@ public sealed class Neg64Double : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Neg64)
+		if (context.Operand1.Definitions[0].Instruction != IR.Neg64)
 			return false;
 
 		return true;
@@ -34,6 +31,6 @@ public sealed class Neg64Double : BaseTransform
 
 		var t1 = context.Operand1.Definitions[0].Operand1;
 
-		context.SetInstruction(IRInstruction.Move64, result, t1);
+		context.SetInstruction(IR.Move64, result, t1);
 	}
 }

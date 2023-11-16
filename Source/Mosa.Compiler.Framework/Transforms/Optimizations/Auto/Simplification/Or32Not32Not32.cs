@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
-/// <summary>
-/// Or32Not32Not32
-/// </summary>
-[Transform("IR.Optimizations.Auto.Simplification")]
+[Transform()]
 public sealed class Or32Not32Not32 : BaseTransform
 {
-	public Or32Not32Not32() : base(IRInstruction.Or32, TransformType.Auto | TransformType.Optimization)
+	public Or32Not32Not32() : base(IR.Or32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -25,13 +22,13 @@ public sealed class Or32Not32Not32 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Not32)
+		if (context.Operand1.Definitions[0].Instruction != IR.Not32)
 			return false;
 
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.Not32)
+		if (context.Operand2.Definitions[0].Instruction != IR.Not32)
 			return false;
 
 		return true;
@@ -46,7 +43,7 @@ public sealed class Or32Not32Not32 : BaseTransform
 
 		var v1 = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction(IRInstruction.And32, v1, t1, t2);
-		context.AppendInstruction(IRInstruction.Not32, result, v1);
+		context.SetInstruction(IR.And32, v1, t1, t2);
+		context.AppendInstruction(IR.Not32, result, v1);
 	}
 }

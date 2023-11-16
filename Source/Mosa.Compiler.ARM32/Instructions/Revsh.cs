@@ -9,7 +9,6 @@ namespace Mosa.Compiler.ARM32.Instructions;
 /// <summary>
 /// Revsh - Byte-Reverse Signed Halfword
 /// </summary>
-/// <seealso cref="Mosa.Compiler.ARM32.ARM32Instruction" />
 public sealed class Revsh : ARM32Instruction
 {
 	internal Revsh()

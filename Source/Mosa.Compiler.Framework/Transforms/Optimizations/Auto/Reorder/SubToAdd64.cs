@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Reorder;
 
-/// <summary>
-/// SubToAdd64
-/// </summary>
-[Transform("IR.Optimizations.Auto.Reorder")]
+[Transform()]
 public sealed class SubToAdd64 : BaseTransform
 {
-	public SubToAdd64() : base(IRInstruction.Sub64, TransformType.Auto | TransformType.Optimization)
+	public SubToAdd64() : base(IR.Sub64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -31,6 +28,6 @@ public sealed class SubToAdd64 : BaseTransform
 
 		var e1 = Operand.CreateConstant(Neg64(ToSigned64(t2)));
 
-		context.SetInstruction(IRInstruction.Add64, result, t1, e1);
+		context.SetInstruction(IR.Add64, result, t1, e1);
 	}
 }

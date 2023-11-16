@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove;
 
-/// <summary>
-/// Or32Expression
-/// </summary>
-[Transform("IR.Optimizations.Auto.ConstantMove")]
+[Transform()]
 public sealed class Or32Expression : BaseTransform
 {
-	public Or32Expression() : base(IRInstruction.Or32, TransformType.Auto | TransformType.Optimization)
+	public Or32Expression() : base(IR.Or32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -22,7 +19,7 @@ public sealed class Or32Expression : BaseTransform
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.Or32)
+		if (context.Operand2.Definitions[0].Instruction != IR.Or32)
 			return false;
 
 		if (IsResolvedConstant(context.Operand1))
@@ -47,18 +44,15 @@ public sealed class Or32Expression : BaseTransform
 
 		var v1 = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction(IRInstruction.Or32, v1, t1, t2);
-		context.AppendInstruction(IRInstruction.Or32, result, v1, t3);
+		context.SetInstruction(IR.Or32, v1, t1, t2);
+		context.AppendInstruction(IR.Or32, result, v1, t3);
 	}
 }
 
-/// <summary>
-/// Or32Expression_v1
-/// </summary>
-[Transform("IR.Optimizations.Auto.ConstantMove")]
+[Transform()]
 public sealed class Or32Expression_v1 : BaseTransform
 {
-	public Or32Expression_v1() : base(IRInstruction.Or32, TransformType.Auto | TransformType.Optimization)
+	public Or32Expression_v1() : base(IR.Or32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -70,7 +64,7 @@ public sealed class Or32Expression_v1 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Or32)
+		if (context.Operand1.Definitions[0].Instruction != IR.Or32)
 			return false;
 
 		if (IsResolvedConstant(context.Operand2))
@@ -95,18 +89,15 @@ public sealed class Or32Expression_v1 : BaseTransform
 
 		var v1 = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction(IRInstruction.Or32, v1, t3, t1);
-		context.AppendInstruction(IRInstruction.Or32, result, v1, t2);
+		context.SetInstruction(IR.Or32, v1, t3, t1);
+		context.AppendInstruction(IR.Or32, result, v1, t2);
 	}
 }
 
-/// <summary>
-/// Or32Expression_v2
-/// </summary>
-[Transform("IR.Optimizations.Auto.ConstantMove")]
+[Transform()]
 public sealed class Or32Expression_v2 : BaseTransform
 {
-	public Or32Expression_v2() : base(IRInstruction.Or32, TransformType.Auto | TransformType.Optimization)
+	public Or32Expression_v2() : base(IR.Or32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -118,7 +109,7 @@ public sealed class Or32Expression_v2 : BaseTransform
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.Or32)
+		if (context.Operand2.Definitions[0].Instruction != IR.Or32)
 			return false;
 
 		if (IsResolvedConstant(context.Operand1))
@@ -143,18 +134,15 @@ public sealed class Or32Expression_v2 : BaseTransform
 
 		var v1 = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction(IRInstruction.Or32, v1, t1, t3);
-		context.AppendInstruction(IRInstruction.Or32, result, v1, t2);
+		context.SetInstruction(IR.Or32, v1, t1, t3);
+		context.AppendInstruction(IR.Or32, result, v1, t2);
 	}
 }
 
-/// <summary>
-/// Or32Expression_v3
-/// </summary>
-[Transform("IR.Optimizations.Auto.ConstantMove")]
+[Transform()]
 public sealed class Or32Expression_v3 : BaseTransform
 {
-	public Or32Expression_v3() : base(IRInstruction.Or32, TransformType.Auto | TransformType.Optimization)
+	public Or32Expression_v3() : base(IR.Or32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -166,7 +154,7 @@ public sealed class Or32Expression_v3 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Or32)
+		if (context.Operand1.Definitions[0].Instruction != IR.Or32)
 			return false;
 
 		if (IsResolvedConstant(context.Operand2))
@@ -191,7 +179,7 @@ public sealed class Or32Expression_v3 : BaseTransform
 
 		var v1 = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction(IRInstruction.Or32, v1, t3, t2);
-		context.AppendInstruction(IRInstruction.Or32, result, v1, t1);
+		context.SetInstruction(IR.Or32, v1, t3, t2);
+		context.AppendInstruction(IR.Or32, result, v1, t1);
 	}
 }

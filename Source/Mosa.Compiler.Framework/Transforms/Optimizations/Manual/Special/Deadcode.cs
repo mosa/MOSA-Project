@@ -28,20 +28,20 @@ public sealed class Deadcode : BaseTransform
 		if (!context.Instruction.IsIRInstruction)
 			return false;
 
-		if (context.Instruction == IRInstruction.CallDynamic
-			|| context.Instruction == IRInstruction.CallInterface
-			|| context.Instruction == IRInstruction.CallDirect
-			|| context.Instruction == IRInstruction.CallStatic
-			|| context.Instruction == IRInstruction.CallVirtual
-			|| context.Instruction == IRInstruction.NewObject
-			|| context.Instruction == IRInstruction.SetReturnObject     // should not be necessary
-			|| context.Instruction == IRInstruction.SetReturnManagedPointer
-			|| context.Instruction == IRInstruction.SetReturn32
-			|| context.Instruction == IRInstruction.SetReturn64
-			|| context.Instruction == IRInstruction.SetReturnR4
-			|| context.Instruction == IRInstruction.SetReturnR8
-			|| context.Instruction == IRInstruction.SetReturnCompound
-			|| context.Instruction == IRInstruction.IntrinsicMethodCall)
+		if (context.Instruction == IR.CallDynamic
+			|| context.Instruction == IR.CallInterface
+			|| context.Instruction == IR.CallDirect
+			|| context.Instruction == IR.CallStatic
+			|| context.Instruction == IR.CallVirtual
+			|| context.Instruction == IR.NewObject
+			|| context.Instruction == IR.SetReturnObject     // should not be necessary
+			|| context.Instruction == IR.SetReturnManagedPointer
+			|| context.Instruction == IR.SetReturn32
+			|| context.Instruction == IR.SetReturn64
+			|| context.Instruction == IR.SetReturnR4
+			|| context.Instruction == IR.SetReturnR8
+			|| context.Instruction == IR.SetReturnCompound
+			|| context.Instruction == IR.IntrinsicMethodCall)
 			return false;
 
 		return true;

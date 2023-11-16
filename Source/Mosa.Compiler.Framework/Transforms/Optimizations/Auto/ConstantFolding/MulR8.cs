@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-/// <summary>
-/// MulR8
-/// </summary>
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class MulR8 : BaseTransform
 {
-	public MulR8() : base(IRInstruction.MulR8, TransformType.Auto | TransformType.Optimization)
+	public MulR8() : base(IR.MulR8, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -36,6 +33,6 @@ public sealed class MulR8 : BaseTransform
 
 		var e1 = Operand.CreateConstant(MulR8(ToR8(t1), ToR8(t2)));
 
-		context.SetInstruction(IRInstruction.MoveR8, result, e1);
+		context.SetInstruction(IR.MoveR8, result, e1);
 	}
 }

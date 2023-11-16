@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
-/// <summary>
-/// Compare32x32SameAndNotEqual
-/// </summary>
-[Transform("IR.Optimizations.Auto.Simplification")]
+[Transform()]
 public sealed class Compare32x32SameAndNotEqual : BaseTransform
 {
-	public Compare32x32SameAndNotEqual() : base(IRInstruction.Compare32x32, TransformType.Auto | TransformType.Optimization)
+	public Compare32x32SameAndNotEqual() : base(IR.Compare32x32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -33,6 +30,6 @@ public sealed class Compare32x32SameAndNotEqual : BaseTransform
 
 		var e1 = Operand.CreateConstant(To32(0));
 
-		context.SetInstruction(IRInstruction.Move32, result, e1);
+		context.SetInstruction(IR.Move32, result, e1);
 	}
 }

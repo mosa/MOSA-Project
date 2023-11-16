@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
 
-/// <summary>
-/// And64Max
-/// </summary>
-[Transform("IR.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class And64Max : BaseTransform
 {
-	public And64Max() : base(IRInstruction.And64, TransformType.Auto | TransformType.Optimization)
+	public And64Max() : base(IR.And64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -33,17 +30,14 @@ public sealed class And64Max : BaseTransform
 
 		var t1 = context.Operand1;
 
-		context.SetInstruction(IRInstruction.Move64, result, t1);
+		context.SetInstruction(IR.Move64, result, t1);
 	}
 }
 
-/// <summary>
-/// And64Max_v1
-/// </summary>
-[Transform("IR.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class And64Max_v1 : BaseTransform
 {
-	public And64Max_v1() : base(IRInstruction.And64, TransformType.Auto | TransformType.Optimization)
+	public And64Max_v1() : base(IR.And64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -66,6 +60,6 @@ public sealed class And64Max_v1 : BaseTransform
 
 		var t1 = context.Operand2;
 
-		context.SetInstruction(IRInstruction.Move64, result, t1);
+		context.SetInstruction(IR.Move64, result, t1);
 	}
 }

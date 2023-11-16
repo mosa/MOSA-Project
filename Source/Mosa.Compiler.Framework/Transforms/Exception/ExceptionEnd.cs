@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transforms.Exception;
 /// </summary>
 public sealed class ExceptionEnd : BaseExceptionTransform
 {
-	public ExceptionEnd() : base(IRInstruction.ExceptionEnd, TransformType.Manual | TransformType.Transform)
+	public ExceptionEnd() : base(IR.ExceptionEnd, TransformType.Manual | TransformType.Transform)
 	{
 	}
 
@@ -30,14 +30,14 @@ public sealed class ExceptionEnd : BaseExceptionTransform
 
 		if (handler == null)
 		{
-			context.SetInstruction(IRInstruction.Jmp, target);
+			context.SetInstruction(IR.Jmp, target);
 			return;
 		}
 
 		var handlerBlock = transform.BasicBlocks.GetByLabel(handler.HandlerStart);
 
-		context.SetInstruction(IRInstruction.MoveObject, transform.LeaveTargetRegister, Operand.CreateConstant32(target.Label));
-		context.AppendInstruction(IRInstruction.MoveObject, transform.ExceptionRegister, Operand.NullObject);
-		context.AppendInstruction(IRInstruction.Jmp, handlerBlock);
+		context.SetInstruction(IR.MoveObject, transform.LeaveTargetRegister, Operand.CreateConstant32(target.Label));
+		context.AppendInstruction(IR.MoveObject, transform.ExceptionRegister, Operand.NullObject);
+		context.AppendInstruction(IR.Jmp, handlerBlock);
 	}
 }

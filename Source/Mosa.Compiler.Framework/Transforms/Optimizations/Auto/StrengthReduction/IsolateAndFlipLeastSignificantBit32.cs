@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
 
-/// <summary>
-/// IsolateAndFlipLeastSignificantBit32
-/// </summary>
-[Transform("IR.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class IsolateAndFlipLeastSignificantBit32 : BaseTransform
 {
-	public IsolateAndFlipLeastSignificantBit32() : base(IRInstruction.Add32, TransformType.Auto | TransformType.Optimization)
+	public IsolateAndFlipLeastSignificantBit32() : base(IR.Add32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -19,16 +16,13 @@ public sealed class IsolateAndFlipLeastSignificantBit32 : BaseTransform
 		if (!context.Operand1.IsVirtualRegister)
 			return false;
 
-		if (!context.Operand2.IsResolvedConstant)
-			return false;
-
-		if (context.Operand2.ConstantUnsigned64 != 1)
+		if (!context.Operand2.IsConstantOne)
 			return false;
 
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.ShiftRight32)
+		if (context.Operand1.Definitions[0].Instruction != IR.ShiftRight32)
 			return false;
 
 		if (!context.Operand1.Definitions[0].Operand1.IsVirtualRegister)
@@ -43,7 +37,7 @@ public sealed class IsolateAndFlipLeastSignificantBit32 : BaseTransform
 		if (!context.Operand1.Definitions[0].Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.ShiftLeft32)
+		if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IR.ShiftLeft32)
 			return false;
 
 		if (!context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2.IsResolvedConstant)
@@ -65,27 +59,21 @@ public sealed class IsolateAndFlipLeastSignificantBit32 : BaseTransform
 
 		var e1 = Operand.CreateConstant(To32(1));
 
-		context.SetInstruction(IRInstruction.Not32, v1, t1);
-		context.AppendInstruction(IRInstruction.And32, result, v1, e1);
+		context.SetInstruction(IR.Not32, v1, t1);
+		context.AppendInstruction(IR.And32, result, v1, e1);
 	}
 }
 
-/// <summary>
-/// IsolateAndFlipLeastSignificantBit32_v1
-/// </summary>
-[Transform("IR.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class IsolateAndFlipLeastSignificantBit32_v1 : BaseTransform
 {
-	public IsolateAndFlipLeastSignificantBit32_v1() : base(IRInstruction.Add32, TransformType.Auto | TransformType.Optimization)
+	public IsolateAndFlipLeastSignificantBit32_v1() : base(IR.Add32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
 	public override bool Match(Context context, Transform transform)
 	{
-		if (!context.Operand1.IsResolvedConstant)
-			return false;
-
-		if (context.Operand1.ConstantUnsigned64 != 1)
+		if (!context.Operand1.IsConstantOne)
 			return false;
 
 		if (!context.Operand2.IsVirtualRegister)
@@ -94,7 +82,7 @@ public sealed class IsolateAndFlipLeastSignificantBit32_v1 : BaseTransform
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.ShiftRight32)
+		if (context.Operand2.Definitions[0].Instruction != IR.ShiftRight32)
 			return false;
 
 		if (!context.Operand2.Definitions[0].Operand1.IsVirtualRegister)
@@ -109,7 +97,7 @@ public sealed class IsolateAndFlipLeastSignificantBit32_v1 : BaseTransform
 		if (!context.Operand2.Definitions[0].Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.ShiftLeft32)
+		if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IR.ShiftLeft32)
 			return false;
 
 		if (!context.Operand2.Definitions[0].Operand1.Definitions[0].Operand2.IsResolvedConstant)
@@ -131,7 +119,7 @@ public sealed class IsolateAndFlipLeastSignificantBit32_v1 : BaseTransform
 
 		var e1 = Operand.CreateConstant(To32(1));
 
-		context.SetInstruction(IRInstruction.Not32, v1, t1);
-		context.AppendInstruction(IRInstruction.And32, result, v1, e1);
+		context.SetInstruction(IR.Not32, v1, t1);
+		context.AppendInstruction(IR.And32, result, v1, e1);
 	}
 }

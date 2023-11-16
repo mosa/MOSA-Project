@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.ConstantMove;
 
 public sealed class BranchManagedPointer : BaseTransform
 {
-	public BranchManagedPointer() : base(IRInstruction.BranchManagedPointer, TransformType.Manual | TransformType.Optimization)
+	public BranchManagedPointer() : base(IR.BranchManagedPointer, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -24,6 +24,6 @@ public sealed class BranchManagedPointer : BaseTransform
 
 	public override void Transform(Context context, Transform transform)
 	{
-		context.SetInstruction(IRInstruction.BranchManagedPointer, context.ConditionCode.GetReverse(), context.Result, context.Operand2, context.Operand1, context.BranchTargets[0]);
+		context.SetInstruction(IR.BranchManagedPointer, context.ConditionCode.GetReverse(), context.Result, context.Operand2, context.Operand1, context.BranchTargets[0]);
 	}
 }

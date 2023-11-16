@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Rewrite;
 
 public sealed class Branch32LessThanZero : BaseTransform
 {
-	public Branch32LessThanZero() : base(IRInstruction.Branch32, TransformType.Manual | TransformType.Optimization)
+	public Branch32LessThanZero() : base(IR.Branch32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

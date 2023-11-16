@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove;
 
-/// <summary>
-/// Xor32
-/// </summary>
-[Transform("IR.Optimizations.Auto.ConstantMove")]
+[Transform()]
 public sealed class Xor32 : BaseTransform
 {
-	public Xor32() : base(IRInstruction.Xor32, TransformType.Auto | TransformType.Optimization)
+	public Xor32() : base(IR.Xor32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -32,6 +29,6 @@ public sealed class Xor32 : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2;
 
-		context.SetInstruction(IRInstruction.Xor32, result, t2, t1);
+		context.SetInstruction(IR.Xor32, result, t2, t1);
 	}
 }

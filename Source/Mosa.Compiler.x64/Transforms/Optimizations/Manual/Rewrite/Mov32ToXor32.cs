@@ -2,9 +2,9 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.x64.Transforms.Manual.Standard;
+namespace Mosa.Compiler.x64.Transforms.Optimizations.Manual.Rewrite;
 
-[Transform("x64.Optimizations.Manual.Standard")]
+[Transform]
 public sealed class Mov32ToXor32 : BaseTransform
 {
 	public Mov32ToXor32() : base(X64.Mov32, TransformType.Manual | TransformType.Optimization)
@@ -16,7 +16,7 @@ public sealed class Mov32ToXor32 : BaseTransform
 		if (!context.Operand1.IsConstantZero)
 			return false;
 
-		if (AreStatusFlagUsed(context))
+		if (AreAnyStatusFlagsUsed(context))
 			return false;
 
 		return true;

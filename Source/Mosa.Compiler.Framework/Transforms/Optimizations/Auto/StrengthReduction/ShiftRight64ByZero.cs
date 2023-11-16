@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
 
-/// <summary>
-/// ShiftRight64ByZero
-/// </summary>
-[Transform("IR.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class ShiftRight64ByZero : BaseTransform
 {
-	public ShiftRight64ByZero() : base(IRInstruction.ShiftRight64, TransformType.Auto | TransformType.Optimization)
+	public ShiftRight64ByZero() : base(IR.ShiftRight64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -18,10 +15,7 @@ public sealed class ShiftRight64ByZero : BaseTransform
 
 	public override bool Match(Context context, Transform transform)
 	{
-		if (!context.Operand2.IsResolvedConstant)
-			return false;
-
-		if (context.Operand2.ConstantUnsigned64 != 0)
+		if (!context.Operand2.IsConstantZero)
 			return false;
 
 		return true;
@@ -33,6 +27,6 @@ public sealed class ShiftRight64ByZero : BaseTransform
 
 		var t1 = context.Operand1;
 
-		context.SetInstruction(IRInstruction.Move64, result, t1);
+		context.SetInstruction(IR.Move64, result, t1);
 	}
 }

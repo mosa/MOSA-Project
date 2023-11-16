@@ -24,7 +24,7 @@ internal static partial class IntrinsicMethods
 		context.SetInstruction(X64.Mov64, rax, operand1);
 		context.AppendInstruction(X64.Mov64, rcx, operand2);
 		context.AppendInstruction(X64.CpuId, rax, rax, rcx);
-		context.AppendInstruction(IRInstruction.Gen, rax, rbx, rcx, rdx);
+		context.AppendInstruction(IR.Gen, rax, rbx, rcx, rdx);
 		context.AppendInstruction(X64.Mov64, result, rbx);
 	}
 }

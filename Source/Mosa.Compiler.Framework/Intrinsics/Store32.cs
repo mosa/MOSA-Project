@@ -10,7 +10,7 @@ internal static partial class IntrinsicMethods
 	[IntrinsicMethod("Mosa.Runtime.Intrinsic::Store32")]
 	private static void Store32(Context context, Transform transform)
 	{
-		var instruction = IRInstruction.Store32;
+		var instruction = IR.Store32;
 
 		var operand1 = context.Operand1;
 		var operand2 = context.OperandCount == 3 ? context.Operand2 : transform.ConstantZero;

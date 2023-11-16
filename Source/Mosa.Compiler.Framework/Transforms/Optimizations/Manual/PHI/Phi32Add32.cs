@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Phi;
 
 public sealed class Phi32Add32 : BasePhiTransform
 {
-	public Phi32Add32() : base(IRInstruction.Phi32, TransformType.Manual | TransformType.Optimization)
+	public Phi32Add32() : base(IR.Phi32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -33,7 +33,7 @@ public sealed class Phi32Add32 : BasePhiTransform
 
 		var ctx = context.Result.Uses[0];
 
-		if (ctx.Instruction != IRInstruction.Add32)
+		if (ctx.Instruction != IR.Add32)
 			return false;
 
 		if (!ctx.Operand2.IsResolvedConstant)

@@ -48,14 +48,14 @@ public sealed class TypeInitializerStage : BaseCompilerStage
 		var epilogueBlock = basicBlocks.CreateEpilogueBlock();
 
 		var prologue = new Context(prologueBlock);
-		prologue.AppendInstruction(IRInstruction.Prologue);
-		prologue.AppendInstruction(IRInstruction.Jmp, startBlock);
+		prologue.AppendInstruction(IR.Prologue);
+		prologue.AppendInstruction(IR.Jmp, startBlock);
 
 		var epilogue = new Context(epilogueBlock);
-		epilogue.AppendInstruction(IRInstruction.Epilogue);
+		epilogue.AppendInstruction(IR.Epilogue);
 
 		body = new Context(startBlock);
-		body.AppendInstruction(IRInstruction.Jmp, epilogueBlock);
+		body.AppendInstruction(IR.Jmp, epilogueBlock);
 		body.GotoPrevious();
 	}
 
@@ -109,7 +109,7 @@ public sealed class TypeInitializerStage : BaseCompilerStage
 	{
 		var symbol = Operand.CreateLabel(method, Architecture.Is32BitPlatform);
 
-		body.AppendInstruction(IRInstruction.CallStatic, null, symbol);
+		body.AppendInstruction(IR.CallStatic, null, symbol);
 	}
 
 	#endregion Private Methods

@@ -10,7 +10,7 @@ internal static partial class IntrinsicMethods
 	[IntrinsicMethod("Mosa.Runtime.Intrinsic::LoadR4")]
 	private static void LoadR4(Context context, Transform transform)
 	{
-		var instruction = IRInstruction.LoadR4;
+		var instruction = IR.LoadR4;
 
 		var result = context.Result;
 		var operand1 = context.Operand1;

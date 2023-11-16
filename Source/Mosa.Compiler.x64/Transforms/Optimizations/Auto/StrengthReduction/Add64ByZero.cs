@@ -6,10 +6,7 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.StrengthReduction;
 
-/// <summary>
-/// Add64ByZero
-/// </summary>
-[Transform("x64.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class Add64ByZero : BaseTransform
 {
 	public Add64ByZero() : base(X64.Add64, TransformType.Auto | TransformType.Optimization)
@@ -18,13 +15,10 @@ public sealed class Add64ByZero : BaseTransform
 
 	public override bool Match(Context context, Transform transform)
 	{
-		if (!context.Operand2.IsResolvedConstant)
+		if (!context.Operand2.IsConstantZero)
 			return false;
 
-		if (context.Operand2.ConstantUnsigned64 != 0)
-			return false;
-
-		if (AreStatusFlagUsed(context))
+		if (AreAnyStatusFlagsUsed(context))
 			return false;
 
 		return true;

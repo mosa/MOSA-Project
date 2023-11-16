@@ -6,7 +6,7 @@ namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
 public sealed class Compare64x64Rest : BaseLowerTo32Transform
 {
-	public Compare64x64Rest() : base(IRInstruction.Compare64x64, TransformType.Manual | TransformType.Optimization)
+	public Compare64x64Rest() : base(IR.Compare64x64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -48,33 +48,33 @@ public sealed class Compare64x64Rest : BaseLowerTo32Transform
 		var op1High = transform.VirtualRegisters.Allocate32();
 		var tempLow = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction(IRInstruction.GetLow32, op0Low, operand1);
-		context.AppendInstruction(IRInstruction.GetHigh32, op0High, operand1);
-		context.AppendInstruction(IRInstruction.GetLow32, op1Low, operand2);
-		context.AppendInstruction(IRInstruction.GetHigh32, op1High, operand2);
+		context.SetInstruction(IR.GetLow32, op0Low, operand1);
+		context.AppendInstruction(IR.GetHigh32, op0High, operand1);
+		context.AppendInstruction(IR.GetLow32, op1Low, operand2);
+		context.AppendInstruction(IR.GetHigh32, op1High, operand2);
 
 		// Compare high
-		context.AppendInstruction(IRInstruction.Branch32, ConditionCode.Equal, null, op0High, op1High, newBlocks[1].Block);
-		context.AppendInstruction(IRInstruction.Jmp, newBlocks[0].Block);
+		context.AppendInstruction(IR.Branch32, ConditionCode.Equal, null, op0High, op1High, newBlocks[1].Block);
+		context.AppendInstruction(IR.Jmp, newBlocks[0].Block);
 
-		newBlocks[0].AppendInstruction(IRInstruction.Branch32, condition, null, op0High, op1High, newBlocks[2].Block);
-		newBlocks[0].AppendInstruction(IRInstruction.Jmp, newBlocks[3].Block);
+		newBlocks[0].AppendInstruction(IR.Branch32, condition, null, op0High, op1High, newBlocks[2].Block);
+		newBlocks[0].AppendInstruction(IR.Jmp, newBlocks[3].Block);
 
 		// Compare low
-		newBlocks[1].AppendInstruction(IRInstruction.Branch32, conditionUnsigned, null, op0Low, op1Low, newBlocks[2].Block);
-		newBlocks[1].AppendInstruction(IRInstruction.Jmp, newBlocks[3].Block);
+		newBlocks[1].AppendInstruction(IR.Branch32, conditionUnsigned, null, op0Low, op1Low, newBlocks[2].Block);
+		newBlocks[1].AppendInstruction(IR.Jmp, newBlocks[3].Block);
 
 		// Success
-		newBlocks[2].AppendInstruction(IRInstruction.Move32, tempLow, Operand.CreateConstant((uint)1));
-		newBlocks[2].AppendInstruction(IRInstruction.Jmp, newBlocks[4].Block);
+		newBlocks[2].AppendInstruction(IR.Move32, tempLow, Operand.CreateConstant((uint)1));
+		newBlocks[2].AppendInstruction(IR.Jmp, newBlocks[4].Block);
 
 		// Failed
-		newBlocks[3].AppendInstruction(IRInstruction.Move32, tempLow, Operand.Constant32_0);
-		newBlocks[3].AppendInstruction(IRInstruction.Jmp, newBlocks[4].Block);
+		newBlocks[3].AppendInstruction(IR.Move32, tempLow, Operand.Constant32_0);
+		newBlocks[3].AppendInstruction(IR.Jmp, newBlocks[4].Block);
 
 		// Exit
-		newBlocks[4].AppendInstruction(IRInstruction.Move32, resultLow, tempLow);
-		newBlocks[4].AppendInstruction(IRInstruction.Move32, resultHigh, Operand.Constant32_0);
-		newBlocks[4].AppendInstruction(IRInstruction.Jmp, nextBlock.Block);
+		newBlocks[4].AppendInstruction(IR.Move32, resultLow, tempLow);
+		newBlocks[4].AppendInstruction(IR.Move32, resultHigh, Operand.Constant32_0);
+		newBlocks[4].AppendInstruction(IR.Jmp, nextBlock.Block);
 	}
 }

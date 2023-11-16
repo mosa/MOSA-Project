@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
 
-/// <summary>
-/// MulSigned64ByOne
-/// </summary>
-[Transform("IR.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class MulSigned64ByOne : BaseTransform
 {
-	public MulSigned64ByOne() : base(IRInstruction.MulSigned64, TransformType.Auto | TransformType.Optimization)
+	public MulSigned64ByOne() : base(IR.MulSigned64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -18,10 +15,7 @@ public sealed class MulSigned64ByOne : BaseTransform
 
 	public override bool Match(Context context, Transform transform)
 	{
-		if (!context.Operand2.IsResolvedConstant)
-			return false;
-
-		if (context.Operand2.ConstantUnsigned64 != 1)
+		if (!context.Operand2.IsConstantOne)
 			return false;
 
 		return true;
@@ -33,17 +27,14 @@ public sealed class MulSigned64ByOne : BaseTransform
 
 		var t1 = context.Operand1;
 
-		context.SetInstruction(IRInstruction.Move64, result, t1);
+		context.SetInstruction(IR.Move64, result, t1);
 	}
 }
 
-/// <summary>
-/// MulSigned64ByOne_v1
-/// </summary>
-[Transform("IR.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class MulSigned64ByOne_v1 : BaseTransform
 {
-	public MulSigned64ByOne_v1() : base(IRInstruction.MulSigned64, TransformType.Auto | TransformType.Optimization)
+	public MulSigned64ByOne_v1() : base(IR.MulSigned64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -51,10 +42,7 @@ public sealed class MulSigned64ByOne_v1 : BaseTransform
 
 	public override bool Match(Context context, Transform transform)
 	{
-		if (!context.Operand1.IsResolvedConstant)
-			return false;
-
-		if (context.Operand1.ConstantUnsigned64 != 1)
+		if (!context.Operand1.IsConstantOne)
 			return false;
 
 		return true;
@@ -66,6 +54,6 @@ public sealed class MulSigned64ByOne_v1 : BaseTransform
 
 		var t1 = context.Operand2;
 
-		context.SetInstruction(IRInstruction.Move64, result, t1);
+		context.SetInstruction(IR.Move64, result, t1);
 	}
 }

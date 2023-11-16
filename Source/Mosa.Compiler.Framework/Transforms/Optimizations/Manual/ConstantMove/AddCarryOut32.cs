@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.ConstantMove;
 /// </summary>
 public sealed class AddCarryOut32 : BaseTransform
 {
-	public AddCarryOut32() : base(IRInstruction.AddCarryOut32, TransformType.Manual | TransformType.Optimization)
+	public AddCarryOut32() : base(IR.AddCarryOut32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

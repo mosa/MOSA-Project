@@ -25,7 +25,7 @@ internal static partial class IntrinsicMethods
 		context.AppendInstruction(X86.Mov32, ecx, operand2);
 		context.AppendInstruction(X86.Mov32, ecx, Operand.Constant32_0);
 		context.AppendInstruction(X86.CpuId, eax, eax, ecx);
-		context.AppendInstruction(IRInstruction.Gen, eax, ebx, ecx, edx);
+		context.AppendInstruction(IR.Gen, eax, ebx, ecx, edx);
 		context.AppendInstruction(X86.Mov32, result, eax);
 	}
 }

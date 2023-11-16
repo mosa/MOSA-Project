@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
 
-/// <summary>
-/// RemUnsigned32ByPowerOfTwo
-/// </summary>
-[Transform("IR.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class RemUnsigned32ByPowerOfTwo : BaseTransform
 {
-	public RemUnsigned32ByPowerOfTwo() : base(IRInstruction.RemUnsigned32, TransformType.Auto | TransformType.Optimization)
+	public RemUnsigned32ByPowerOfTwo() : base(IR.RemUnsigned32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -37,6 +34,6 @@ public sealed class RemUnsigned32ByPowerOfTwo : BaseTransform
 
 		var e1 = Operand.CreateConstant(Sub32(ShiftLeft32(1, And32(GetPowerOfTwo(To32(t2)), Sub32(32, 1))), 1));
 
-		context.SetInstruction(IRInstruction.And32, result, t1, e1);
+		context.SetInstruction(IR.And32, result, t1, e1);
 	}
 }

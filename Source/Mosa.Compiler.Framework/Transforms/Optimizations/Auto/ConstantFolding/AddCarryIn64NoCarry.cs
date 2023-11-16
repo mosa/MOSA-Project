@@ -4,22 +4,16 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-/// <summary>
-/// AddCarryIn64NoCarry
-/// </summary>
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class AddCarryIn64NoCarry : BaseTransform
 {
-	public AddCarryIn64NoCarry() : base(IRInstruction.AddCarryIn64, TransformType.Auto | TransformType.Optimization)
+	public AddCarryIn64NoCarry() : base(IR.AddCarryIn64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
 	public override bool Match(Context context, Transform transform)
 	{
-		if (!context.Operand3.IsResolvedConstant)
-			return false;
-
-		if (context.Operand3.ConstantUnsigned64 != 0)
+		if (!context.Operand3.IsConstantZero)
 			return false;
 
 		return true;
@@ -32,6 +26,6 @@ public sealed class AddCarryIn64NoCarry : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2;
 
-		context.SetInstruction(IRInstruction.Add64, result, t1, t2);
+		context.SetInstruction(IR.Add64, result, t1, t2);
 	}
 }

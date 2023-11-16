@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-/// <summary>
-/// ShiftRight64x2
-/// </summary>
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class ShiftRight64x2 : BaseTransform
 {
-	public ShiftRight64x2() : base(IRInstruction.ShiftRight64, TransformType.Auto | TransformType.Optimization)
+	public ShiftRight64x2() : base(IR.ShiftRight64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -24,7 +21,7 @@ public sealed class ShiftRight64x2 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.ShiftRight64)
+		if (context.Operand1.Definitions[0].Instruction != IR.ShiftRight64)
 			return false;
 
 		if (!IsResolvedConstant(context.Operand1.Definitions[0].Operand2))
@@ -52,6 +49,6 @@ public sealed class ShiftRight64x2 : BaseTransform
 
 		var e1 = Operand.CreateConstant(Add64(To64(t2), To64(t3)));
 
-		context.SetInstruction(IRInstruction.ShiftRight64, result, t1, e1);
+		context.SetInstruction(IR.ShiftRight64, result, t1, e1);
 	}
 }

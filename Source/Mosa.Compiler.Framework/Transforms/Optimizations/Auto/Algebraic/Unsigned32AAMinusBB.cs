@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Algebraic;
 
-/// <summary>
-/// Unsigned32AAMinusBB
-/// </summary>
-[Transform("IR.Optimizations.Auto.Algebraic")]
+[Transform()]
 public sealed class Unsigned32AAMinusBB : BaseTransform
 {
-	public Unsigned32AAMinusBB() : base(IRInstruction.Sub32, TransformType.Auto | TransformType.Optimization)
+	public Unsigned32AAMinusBB() : base(IR.Sub32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -25,13 +22,13 @@ public sealed class Unsigned32AAMinusBB : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+		if (context.Operand1.Definitions[0].Instruction != IR.MulUnsigned32)
 			return false;
 
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+		if (context.Operand2.Definitions[0].Instruction != IR.MulUnsigned32)
 			return false;
 
 		if (!AreSame(context.Operand1.Definitions[0].Operand1, context.Operand1.Definitions[0].Operand2))
@@ -53,8 +50,8 @@ public sealed class Unsigned32AAMinusBB : BaseTransform
 		var v1 = transform.VirtualRegisters.Allocate32();
 		var v2 = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction(IRInstruction.Add32, v1, t1, t2);
-		context.AppendInstruction(IRInstruction.Sub32, v2, t1, t2);
-		context.AppendInstruction(IRInstruction.MulUnsigned32, result, v2, v1);
+		context.SetInstruction(IR.Add32, v1, t1, t2);
+		context.AppendInstruction(IR.Sub32, v2, t1, t2);
+		context.AppendInstruction(IR.MulUnsigned32, result, v2, v1);
 	}
 }

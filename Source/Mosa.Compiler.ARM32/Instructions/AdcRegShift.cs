@@ -9,7 +9,6 @@ namespace Mosa.Compiler.ARM32.Instructions;
 /// <summary>
 /// AdcRegShift - Addition with Carry
 /// </summary>
-/// <seealso cref="Mosa.Compiler.ARM32.ARM32Instruction" />
 public sealed class AdcRegShift : ARM32Instruction
 {
 	internal AdcRegShift()

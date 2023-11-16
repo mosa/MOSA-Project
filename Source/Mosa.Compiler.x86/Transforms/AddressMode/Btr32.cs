@@ -7,7 +7,7 @@ namespace Mosa.Compiler.x86.Transforms.AddressMode;
 /// <summary>
 /// Btr32
 /// </summary>
-[Transform("x86.AddressMode")]
+[Transform]
 public sealed class Btr32 : BaseAddressModeTransform
 {
 	public Btr32() : base(X86.Btr32, TransformType.Manual | TransformType.Transform)

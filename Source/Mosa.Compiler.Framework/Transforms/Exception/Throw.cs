@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Transforms.Exception;
 /// </summary>
 public sealed class Throw : BaseExceptionTransform
 {
-	public Throw() : base(IRInstruction.Throw, TransformType.Manual | TransformType.Transform)
+	public Throw() : base(IR.Throw, TransformType.Manual | TransformType.Transform)
 	{
 	}
 
@@ -15,8 +15,8 @@ public sealed class Throw : BaseExceptionTransform
 	{
 		var method = transform.Compiler.PlatformInternalRuntimeType.FindMethodByName("ExceptionHandler");
 
-		context.SetInstruction(IRInstruction.MoveObject, transform.ExceptionRegister, context.Operand1);
-		context.AppendInstruction(IRInstruction.CallStatic, null, Operand.CreateLabel(method, transform.Is32BitPlatform));
+		context.SetInstruction(IR.MoveObject, transform.ExceptionRegister, context.Operand1);
+		context.AppendInstruction(IR.CallStatic, null, Operand.CreateLabel(method, transform.Is32BitPlatform));
 
 		transform.MethodScanner.MethodInvoked(method, transform.Method);
 	}

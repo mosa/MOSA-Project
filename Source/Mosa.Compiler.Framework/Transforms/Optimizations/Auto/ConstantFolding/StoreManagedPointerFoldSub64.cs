@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-/// <summary>
-/// StoreManagedPointerFoldSub64
-/// </summary>
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class StoreManagedPointerFoldSub64 : BaseTransform
 {
-	public StoreManagedPointerFoldSub64() : base(IRInstruction.StoreManagedPointer, TransformType.Auto | TransformType.Optimization)
+	public StoreManagedPointerFoldSub64() : base(IR.StoreManagedPointer, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -22,7 +19,7 @@ public sealed class StoreManagedPointerFoldSub64 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Sub64)
+		if (context.Operand1.Definitions[0].Instruction != IR.Sub64)
 			return false;
 
 		if (!IsResolvedConstant(context.Operand2))
@@ -45,6 +42,6 @@ public sealed class StoreManagedPointerFoldSub64 : BaseTransform
 
 		var e1 = Operand.CreateConstant(Sub64(To64(t3), To64(t2)));
 
-		context.SetInstruction(IRInstruction.StoreManagedPointer, result, t1, e1, t4);
+		context.SetInstruction(IR.StoreManagedPointer, result, t1, e1, t4);
 	}
 }

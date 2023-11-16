@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
-/// <summary>
-/// Sub64MultipleWithCommon
-/// </summary>
-[Transform("IR.Optimizations.Auto.Simplification")]
+[Transform()]
 public sealed class Sub64MultipleWithCommon : BaseTransform
 {
-	public Sub64MultipleWithCommon() : base(IRInstruction.Sub64, TransformType.Auto | TransformType.Optimization)
+	public Sub64MultipleWithCommon() : base(IR.Sub64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -25,13 +22,13 @@ public sealed class Sub64MultipleWithCommon : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned64)
+		if (context.Operand1.Definitions[0].Instruction != IR.MulUnsigned64)
 			return false;
 
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned64)
+		if (context.Operand2.Definitions[0].Instruction != IR.MulUnsigned64)
 			return false;
 
 		if (!AreSame(context.Operand1.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand1))
@@ -50,18 +47,15 @@ public sealed class Sub64MultipleWithCommon : BaseTransform
 
 		var v1 = transform.VirtualRegisters.Allocate64();
 
-		context.SetInstruction(IRInstruction.Sub64, v1, t2, t3);
-		context.AppendInstruction(IRInstruction.MulUnsigned64, result, t1, v1);
+		context.SetInstruction(IR.Sub64, v1, t2, t3);
+		context.AppendInstruction(IR.MulUnsigned64, result, t1, v1);
 	}
 }
 
-/// <summary>
-/// Sub64MultipleWithCommon_v1
-/// </summary>
-[Transform("IR.Optimizations.Auto.Simplification")]
+[Transform()]
 public sealed class Sub64MultipleWithCommon_v1 : BaseTransform
 {
-	public Sub64MultipleWithCommon_v1() : base(IRInstruction.Sub64, TransformType.Auto | TransformType.Optimization)
+	public Sub64MultipleWithCommon_v1() : base(IR.Sub64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -76,13 +70,13 @@ public sealed class Sub64MultipleWithCommon_v1 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned64)
+		if (context.Operand1.Definitions[0].Instruction != IR.MulUnsigned64)
 			return false;
 
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned64)
+		if (context.Operand2.Definitions[0].Instruction != IR.MulUnsigned64)
 			return false;
 
 		if (!AreSame(context.Operand1.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand2))
@@ -101,18 +95,15 @@ public sealed class Sub64MultipleWithCommon_v1 : BaseTransform
 
 		var v1 = transform.VirtualRegisters.Allocate64();
 
-		context.SetInstruction(IRInstruction.Sub64, v1, t2, t3);
-		context.AppendInstruction(IRInstruction.MulUnsigned64, result, t1, v1);
+		context.SetInstruction(IR.Sub64, v1, t2, t3);
+		context.AppendInstruction(IR.MulUnsigned64, result, t1, v1);
 	}
 }
 
-/// <summary>
-/// Sub64MultipleWithCommon_v2
-/// </summary>
-[Transform("IR.Optimizations.Auto.Simplification")]
+[Transform()]
 public sealed class Sub64MultipleWithCommon_v2 : BaseTransform
 {
-	public Sub64MultipleWithCommon_v2() : base(IRInstruction.Sub64, TransformType.Auto | TransformType.Optimization)
+	public Sub64MultipleWithCommon_v2() : base(IR.Sub64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -127,13 +118,13 @@ public sealed class Sub64MultipleWithCommon_v2 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned64)
+		if (context.Operand1.Definitions[0].Instruction != IR.MulUnsigned64)
 			return false;
 
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned64)
+		if (context.Operand2.Definitions[0].Instruction != IR.MulUnsigned64)
 			return false;
 
 		if (!AreSame(context.Operand1.Definitions[0].Operand2, context.Operand2.Definitions[0].Operand1))
@@ -152,18 +143,15 @@ public sealed class Sub64MultipleWithCommon_v2 : BaseTransform
 
 		var v1 = transform.VirtualRegisters.Allocate64();
 
-		context.SetInstruction(IRInstruction.Sub64, v1, t1, t3);
-		context.AppendInstruction(IRInstruction.MulUnsigned64, result, t2, v1);
+		context.SetInstruction(IR.Sub64, v1, t1, t3);
+		context.AppendInstruction(IR.MulUnsigned64, result, t2, v1);
 	}
 }
 
-/// <summary>
-/// Sub64MultipleWithCommon_v3
-/// </summary>
-[Transform("IR.Optimizations.Auto.Simplification")]
+[Transform()]
 public sealed class Sub64MultipleWithCommon_v3 : BaseTransform
 {
-	public Sub64MultipleWithCommon_v3() : base(IRInstruction.Sub64, TransformType.Auto | TransformType.Optimization)
+	public Sub64MultipleWithCommon_v3() : base(IR.Sub64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -178,13 +166,13 @@ public sealed class Sub64MultipleWithCommon_v3 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned64)
+		if (context.Operand1.Definitions[0].Instruction != IR.MulUnsigned64)
 			return false;
 
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned64)
+		if (context.Operand2.Definitions[0].Instruction != IR.MulUnsigned64)
 			return false;
 
 		if (!AreSame(context.Operand1.Definitions[0].Operand2, context.Operand2.Definitions[0].Operand2))
@@ -203,7 +191,7 @@ public sealed class Sub64MultipleWithCommon_v3 : BaseTransform
 
 		var v1 = transform.VirtualRegisters.Allocate64();
 
-		context.SetInstruction(IRInstruction.Sub64, v1, t1, t3);
-		context.AppendInstruction(IRInstruction.MulUnsigned64, result, t2, v1);
+		context.SetInstruction(IR.Sub64, v1, t1, t3);
+		context.AppendInstruction(IR.MulUnsigned64, result, t2, v1);
 	}
 }

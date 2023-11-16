@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Transforms.Call;
 /// </summary>
 public sealed class SetReturnCompound : BaseTransform
 {
-	public SetReturnCompound() : base(IRInstruction.SetReturnCompound, TransformType.Manual | TransformType.Transform)
+	public SetReturnCompound() : base(IR.SetReturnCompound, TransformType.Manual | TransformType.Transform)
 	{
 	}
 
@@ -19,6 +19,6 @@ public sealed class SetReturnCompound : BaseTransform
 	public override void Transform(Context context, Transform transform)
 	{
 		var offset = Operand.CreateConstant32(transform.Architecture.OffsetOfFirstParameter);
-		context.SetInstruction(IRInstruction.StoreCompound, null, transform.StackFrame, offset, context.Operand1);
+		context.SetInstruction(IR.StoreCompound, null, transform.StackFrame, offset, context.Operand1);
 	}
 }

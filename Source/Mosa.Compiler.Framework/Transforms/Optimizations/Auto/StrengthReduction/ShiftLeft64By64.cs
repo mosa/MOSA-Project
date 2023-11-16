@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
 
-/// <summary>
-/// ShiftLeft64By64
-/// </summary>
-[Transform("IR.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class ShiftLeft64By64 : BaseTransform
 {
-	public ShiftLeft64By64() : base(IRInstruction.ShiftLeft64, TransformType.Auto | TransformType.Optimization)
+	public ShiftLeft64By64() : base(IR.ShiftLeft64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -33,6 +30,6 @@ public sealed class ShiftLeft64By64 : BaseTransform
 
 		var c1 = Operand.CreateConstant(0);
 
-		context.SetInstruction(IRInstruction.Move64, result, c1);
+		context.SetInstruction(IR.Move64, result, c1);
 	}
 }

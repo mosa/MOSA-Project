@@ -7,7 +7,7 @@ namespace Mosa.Compiler.x64.Transforms.AddressMode;
 /// <summary>
 /// Sub32
 /// </summary>
-[Transform("x64.AddressMode")]
+[Transform]
 public sealed class Sub32 : BaseAddressModeTransform
 {
 	public Sub32() : base(X64.Sub32, TransformType.Manual | TransformType.Transform)

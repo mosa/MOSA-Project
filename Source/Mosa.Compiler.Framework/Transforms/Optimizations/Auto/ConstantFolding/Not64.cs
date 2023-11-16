@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-/// <summary>
-/// Not64
-/// </summary>
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class Not64 : BaseTransform
 {
-	public Not64() : base(IRInstruction.Not64, TransformType.Auto | TransformType.Optimization)
+	public Not64() : base(IR.Not64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -32,6 +29,6 @@ public sealed class Not64 : BaseTransform
 
 		var e1 = Operand.CreateConstant(Not64(To64(t1)));
 
-		context.SetInstruction(IRInstruction.Move64, result, e1);
+		context.SetInstruction(IR.Move64, result, e1);
 	}
 }

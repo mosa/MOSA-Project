@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-/// <summary>
-/// LoadZeroExtend8x32AddressFold
-/// </summary>
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class LoadZeroExtend8x32AddressFold : BaseTransform
 {
-	public LoadZeroExtend8x32AddressFold() : base(IRInstruction.LoadZeroExtend8x32, TransformType.Auto | TransformType.Optimization)
+	public LoadZeroExtend8x32AddressFold() : base(IR.LoadZeroExtend8x32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -19,16 +16,13 @@ public sealed class LoadZeroExtend8x32AddressFold : BaseTransform
 		if (!context.Operand1.IsVirtualRegister)
 			return false;
 
-		if (!context.Operand2.IsResolvedConstant)
-			return false;
-
-		if (context.Operand2.ConstantUnsigned64 != 0)
+		if (!context.Operand2.IsConstantZero)
 			return false;
 
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.AddressOf)
+		if (context.Operand1.Definitions[0].Instruction != IR.AddressOf)
 			return false;
 
 		if (!IsParameter(context.Operand1.Definitions[0].Operand1))
@@ -43,6 +37,6 @@ public sealed class LoadZeroExtend8x32AddressFold : BaseTransform
 
 		var t1 = context.Operand1.Definitions[0].Operand1;
 
-		context.SetInstruction(IRInstruction.LoadParamZeroExtend8x32, result, t1);
+		context.SetInstruction(IR.LoadParamZeroExtend8x32, result, t1);
 	}
 }

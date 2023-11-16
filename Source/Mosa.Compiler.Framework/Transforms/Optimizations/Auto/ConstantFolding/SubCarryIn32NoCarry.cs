@@ -4,22 +4,16 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-/// <summary>
-/// SubCarryIn32NoCarry
-/// </summary>
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class SubCarryIn32NoCarry : BaseTransform
 {
-	public SubCarryIn32NoCarry() : base(IRInstruction.SubCarryIn32, TransformType.Auto | TransformType.Optimization)
+	public SubCarryIn32NoCarry() : base(IR.SubCarryIn32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
 	public override bool Match(Context context, Transform transform)
 	{
-		if (!context.Operand3.IsResolvedConstant)
-			return false;
-
-		if (context.Operand3.ConstantUnsigned64 != 0)
+		if (!context.Operand3.IsConstantZero)
 			return false;
 
 		return true;
@@ -32,6 +26,6 @@ public sealed class SubCarryIn32NoCarry : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2;
 
-		context.SetInstruction(IRInstruction.Sub32, result, t1, t2);
+		context.SetInstruction(IR.Sub32, result, t1, t2);
 	}
 }

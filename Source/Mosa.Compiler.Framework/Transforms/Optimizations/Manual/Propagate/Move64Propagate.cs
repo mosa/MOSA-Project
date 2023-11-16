@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Propagate;
 
 public sealed class Move64Propagate : BaseTransform
 {
-	public Move64Propagate() : base(IRInstruction.Move64, TransformType.Manual | TransformType.Optimization)
+	public Move64Propagate() : base(IR.Move64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

@@ -6,10 +6,7 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.Consolidation;
 
-/// <summary>
-/// IMul32Mov32ByOne
-/// </summary>
-[Transform("x86.Optimizations.Auto.Consolidation")]
+[Transform()]
 public sealed class IMul32Mov32ByOne : BaseTransform
 {
 	public IMul32Mov32ByOne() : base(X86.IMul32, TransformType.Auto | TransformType.Optimization)
@@ -27,13 +24,10 @@ public sealed class IMul32Mov32ByOne : BaseTransform
 		if (context.Operand2.Definitions[0].Instruction != X86.Mov32)
 			return false;
 
-		if (!context.Operand2.Definitions[0].Operand1.IsResolvedConstant)
+		if (!context.Operand2.Definitions[0].Operand1.IsConstantOne)
 			return false;
 
-		if (context.Operand2.Definitions[0].Operand1.ConstantUnsigned64 != 1)
-			return false;
-
-		if (AreStatusFlagUsed(context))
+		if (AreAnyStatusFlagsUsed(context))
 			return false;
 
 		return true;

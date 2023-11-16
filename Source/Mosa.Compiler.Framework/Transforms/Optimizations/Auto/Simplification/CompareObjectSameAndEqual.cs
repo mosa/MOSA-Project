@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
-/// <summary>
-/// CompareObjectSameAndEqual
-/// </summary>
-[Transform("IR.Optimizations.Auto.Simplification")]
+[Transform()]
 public sealed class CompareObjectSameAndEqual : BaseTransform
 {
-	public CompareObjectSameAndEqual() : base(IRInstruction.CompareObject, TransformType.Auto | TransformType.Optimization)
+	public CompareObjectSameAndEqual() : base(IR.CompareObject, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -33,6 +30,6 @@ public sealed class CompareObjectSameAndEqual : BaseTransform
 
 		var e1 = Operand.CreateConstant(To32(1));
 
-		context.SetInstruction(IRInstruction.Move32, result, e1);
+		context.SetInstruction(IR.Move32, result, e1);
 	}
 }

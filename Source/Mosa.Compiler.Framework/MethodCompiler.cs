@@ -642,11 +642,11 @@ public sealed class MethodCompiler
 		var epilogueBlock = BasicBlocks.CreateEpilogueBlock();
 
 		var prologue = new Context(prologueBlock);
-		prologue.AppendInstruction(IRInstruction.Prologue);
-		prologue.AppendInstruction(IRInstruction.Jmp, startBlock);
+		prologue.AppendInstruction(IR.Prologue);
+		prologue.AppendInstruction(IR.Jmp, startBlock);
 
 		var epilogue = new Context(epilogueBlock);
-		epilogue.AppendInstruction(IRInstruction.Epilogue);
+		epilogue.AppendInstruction(IR.Epilogue);
 
 		var start = new Context(startBlock);
 
@@ -1016,20 +1016,20 @@ public sealed class MethodCompiler
 	{
 		return elementType switch
 		{
-			ElementType.I1 => IRInstruction.LoadParamSignExtend8x32,
-			ElementType.U1 => IRInstruction.LoadParamZeroExtend8x32,
-			ElementType.I2 => IRInstruction.LoadParamSignExtend16x32,
-			ElementType.U2 => IRInstruction.LoadParamZeroExtend16x32,
-			ElementType.I4 => IRInstruction.LoadParam32,
-			ElementType.U4 => IRInstruction.LoadParam32,
-			ElementType.I8 => IRInstruction.LoadParam64,
-			ElementType.U8 => IRInstruction.LoadParam64,
-			ElementType.R4 => IRInstruction.LoadParamR4,
-			ElementType.R8 => IRInstruction.LoadParamR8,
-			ElementType.Object => IRInstruction.LoadParamObject,
-			ElementType.I when Is32BitPlatform => IRInstruction.LoadParam32,
-			ElementType.I when Is64BitPlatform => IRInstruction.LoadParam64,
-			ElementType.ManagedPointer => IRInstruction.LoadParamManagedPointer,
+			ElementType.I1 => IR.LoadParamSignExtend8x32,
+			ElementType.U1 => IR.LoadParamZeroExtend8x32,
+			ElementType.I2 => IR.LoadParamSignExtend16x32,
+			ElementType.U2 => IR.LoadParamZeroExtend16x32,
+			ElementType.I4 => IR.LoadParam32,
+			ElementType.U4 => IR.LoadParam32,
+			ElementType.I8 => IR.LoadParam64,
+			ElementType.U8 => IR.LoadParam64,
+			ElementType.R4 => IR.LoadParamR4,
+			ElementType.R8 => IR.LoadParamR8,
+			ElementType.Object => IR.LoadParamObject,
+			ElementType.I when Is32BitPlatform => IR.LoadParam32,
+			ElementType.I when Is64BitPlatform => IR.LoadParam64,
+			ElementType.ManagedPointer => IR.LoadParamManagedPointer,
 			_ => throw new InvalidOperationCompilerException(),
 		};
 	}
@@ -1038,13 +1038,13 @@ public sealed class MethodCompiler
 	{
 		return primitiveType switch
 		{
-			PrimitiveType.Int32 => IRInstruction.SetReturn32,
-			PrimitiveType.Int64 => IRInstruction.SetReturn64,
-			PrimitiveType.R4 => IRInstruction.SetReturnR4,
-			PrimitiveType.R8 => IRInstruction.SetReturnR8,
-			PrimitiveType.Object => IRInstruction.SetReturnObject,
-			PrimitiveType.ValueType => IRInstruction.SetReturnCompound,
-			PrimitiveType.ManagedPointer => IRInstruction.SetReturnManagedPointer,
+			PrimitiveType.Int32 => IR.SetReturn32,
+			PrimitiveType.Int64 => IR.SetReturn64,
+			PrimitiveType.R4 => IR.SetReturnR4,
+			PrimitiveType.R8 => IR.SetReturnR8,
+			PrimitiveType.Object => IR.SetReturnObject,
+			PrimitiveType.ValueType => IR.SetReturnCompound,
+			PrimitiveType.ManagedPointer => IR.SetReturnManagedPointer,
 			_ => throw new InvalidOperationCompilerException(),
 		};
 	}
@@ -1053,20 +1053,20 @@ public sealed class MethodCompiler
 	{
 		return elementType switch
 		{
-			ElementType.R4 => IRInstruction.BoxR4,
-			ElementType.R8 => IRInstruction.BoxR8,
-			ElementType.U4 => IRInstruction.Box32,
-			ElementType.I4 => IRInstruction.Box32,
-			ElementType.U8 => IRInstruction.Box64,
-			ElementType.I8 => IRInstruction.Box64,
-			ElementType.I1 => IRInstruction.Box32,
-			ElementType.U1 => IRInstruction.Box32,
-			ElementType.I2 => IRInstruction.Box32,
-			ElementType.U2 => IRInstruction.Box32,
-			ElementType.I when Is32BitPlatform => IRInstruction.Box32,
-			ElementType.I when Is64BitPlatform => IRInstruction.Box64,
-			ElementType.ManagedPointer when Is32BitPlatform => IRInstruction.Box32,
-			ElementType.ManagedPointer when Is64BitPlatform => IRInstruction.Box64,
+			ElementType.R4 => IR.BoxR4,
+			ElementType.R8 => IR.BoxR8,
+			ElementType.U4 => IR.Box32,
+			ElementType.I4 => IR.Box32,
+			ElementType.U8 => IR.Box64,
+			ElementType.I8 => IR.Box64,
+			ElementType.I1 => IR.Box32,
+			ElementType.U1 => IR.Box32,
+			ElementType.I2 => IR.Box32,
+			ElementType.U2 => IR.Box32,
+			ElementType.I when Is32BitPlatform => IR.Box32,
+			ElementType.I when Is64BitPlatform => IR.Box64,
+			ElementType.ManagedPointer when Is32BitPlatform => IR.Box32,
+			ElementType.ManagedPointer when Is64BitPlatform => IR.Box64,
 			_ => throw new CompilerException($"Invalid ElementType = {elementType}"),
 		};
 	}
@@ -1075,20 +1075,20 @@ public sealed class MethodCompiler
 	{
 		return elementType switch
 		{
-			ElementType.I1 => IRInstruction.LoadSignExtend8x32,
-			ElementType.U1 => IRInstruction.LoadZeroExtend8x32,
-			ElementType.I2 => IRInstruction.LoadSignExtend16x32,
-			ElementType.U2 => IRInstruction.LoadZeroExtend16x32,
-			ElementType.I4 => IRInstruction.Load32,
-			ElementType.U4 => IRInstruction.Load32,
-			ElementType.I8 => IRInstruction.Load64,
-			ElementType.U8 => IRInstruction.Load64,
-			ElementType.R4 => IRInstruction.LoadR4,
-			ElementType.R8 => IRInstruction.LoadR8,
-			ElementType.Object => IRInstruction.LoadObject,
-			ElementType.I when Is32BitPlatform => IRInstruction.Load32,
-			ElementType.I when Is64BitPlatform => IRInstruction.Load64,
-			ElementType.ManagedPointer => IRInstruction.LoadManagedPointer,
+			ElementType.I1 => IR.LoadSignExtend8x32,
+			ElementType.U1 => IR.LoadZeroExtend8x32,
+			ElementType.I2 => IR.LoadSignExtend16x32,
+			ElementType.U2 => IR.LoadZeroExtend16x32,
+			ElementType.I4 => IR.Load32,
+			ElementType.U4 => IR.Load32,
+			ElementType.I8 => IR.Load64,
+			ElementType.U8 => IR.Load64,
+			ElementType.R4 => IR.LoadR4,
+			ElementType.R8 => IR.LoadR8,
+			ElementType.Object => IR.LoadObject,
+			ElementType.I when Is32BitPlatform => IR.Load32,
+			ElementType.I when Is64BitPlatform => IR.Load64,
+			ElementType.ManagedPointer => IR.LoadManagedPointer,
 			_ => throw new CompilerException($"Invalid ElementType = {elementType}"),
 		};
 	}
@@ -1097,20 +1097,20 @@ public sealed class MethodCompiler
 	{
 		return elementType switch
 		{
-			ElementType.I1 => IRInstruction.Move32,
-			ElementType.U1 => IRInstruction.Move32,
-			ElementType.I2 => IRInstruction.Move32,
-			ElementType.U2 => IRInstruction.Move32,
-			ElementType.I4 => IRInstruction.Move32,
-			ElementType.U4 => IRInstruction.Move32,
-			ElementType.I8 => IRInstruction.Move64,
-			ElementType.U8 => IRInstruction.Move64,
-			ElementType.R4 => IRInstruction.MoveR4,
-			ElementType.R8 => IRInstruction.MoveR8,
-			ElementType.Object => IRInstruction.MoveObject,
-			ElementType.I when Is32BitPlatform => IRInstruction.Move32,
-			ElementType.I when Is64BitPlatform => IRInstruction.Move64,
-			ElementType.ManagedPointer => IRInstruction.MoveManagedPointer,
+			ElementType.I1 => IR.Move32,
+			ElementType.U1 => IR.Move32,
+			ElementType.I2 => IR.Move32,
+			ElementType.U2 => IR.Move32,
+			ElementType.I4 => IR.Move32,
+			ElementType.U4 => IR.Move32,
+			ElementType.I8 => IR.Move64,
+			ElementType.U8 => IR.Move64,
+			ElementType.R4 => IR.MoveR4,
+			ElementType.R8 => IR.MoveR8,
+			ElementType.Object => IR.MoveObject,
+			ElementType.I when Is32BitPlatform => IR.Move32,
+			ElementType.I when Is64BitPlatform => IR.Move64,
+			ElementType.ManagedPointer => IR.MoveManagedPointer,
 			_ => throw new CompilerException($"Invalid ElementType = {elementType}"),
 		};
 	}
@@ -1119,13 +1119,13 @@ public sealed class MethodCompiler
 	{
 		return type switch
 		{
-			PrimitiveType.Object => IRInstruction.MoveObject,
-			PrimitiveType.Int32 => IRInstruction.Move32,
-			PrimitiveType.Int64 => IRInstruction.Move64,
-			PrimitiveType.R4 => IRInstruction.MoveR4,
-			PrimitiveType.R8 => IRInstruction.MoveR8,
-			PrimitiveType.ManagedPointer => IRInstruction.MoveManagedPointer,
-			PrimitiveType.ValueType => IRInstruction.MoveCompound,
+			PrimitiveType.Object => IR.MoveObject,
+			PrimitiveType.Int32 => IR.Move32,
+			PrimitiveType.Int64 => IR.Move64,
+			PrimitiveType.R4 => IR.MoveR4,
+			PrimitiveType.R8 => IR.MoveR8,
+			PrimitiveType.ManagedPointer => IR.MoveManagedPointer,
+			PrimitiveType.ValueType => IR.MoveCompound,
 			_ => throw new CompilerException($"Invalid StackType = {type}"),
 		};
 	}
@@ -1134,20 +1134,20 @@ public sealed class MethodCompiler
 	{
 		return elementType switch
 		{
-			ElementType.I1 => IRInstruction.Store8,
-			ElementType.U1 => IRInstruction.Store8,
-			ElementType.I2 => IRInstruction.Store16,
-			ElementType.U2 => IRInstruction.Store16,
-			ElementType.I4 => IRInstruction.Store32,
-			ElementType.U4 => IRInstruction.Store32,
-			ElementType.I8 => IRInstruction.Store64,
-			ElementType.U8 => IRInstruction.Store64,
-			ElementType.R4 => IRInstruction.StoreR4,
-			ElementType.R8 => IRInstruction.StoreR8,
-			ElementType.Object => IRInstruction.StoreObject,
-			ElementType.I when Is32BitPlatform => IRInstruction.Store32,
-			ElementType.I when Is64BitPlatform => IRInstruction.Store64,
-			ElementType.ManagedPointer => IRInstruction.StoreManagedPointer,
+			ElementType.I1 => IR.Store8,
+			ElementType.U1 => IR.Store8,
+			ElementType.I2 => IR.Store16,
+			ElementType.U2 => IR.Store16,
+			ElementType.I4 => IR.Store32,
+			ElementType.U4 => IR.Store32,
+			ElementType.I8 => IR.Store64,
+			ElementType.U8 => IR.Store64,
+			ElementType.R4 => IR.StoreR4,
+			ElementType.R8 => IR.StoreR8,
+			ElementType.Object => IR.StoreObject,
+			ElementType.I when Is32BitPlatform => IR.Store32,
+			ElementType.I when Is64BitPlatform => IR.Store64,
+			ElementType.ManagedPointer => IR.StoreManagedPointer,
 			_ => throw new CompilerException($"Invalid ElementType = {elementType}"),
 		};
 	}
@@ -1156,20 +1156,20 @@ public sealed class MethodCompiler
 	{
 		return elementType switch
 		{
-			ElementType.I1 => IRInstruction.StoreParam8,
-			ElementType.U1 => IRInstruction.StoreParam8,
-			ElementType.I2 => IRInstruction.StoreParam16,
-			ElementType.U2 => IRInstruction.StoreParam16,
-			ElementType.I4 => IRInstruction.StoreParam32,
-			ElementType.U4 => IRInstruction.StoreParam32,
-			ElementType.I8 => IRInstruction.StoreParam64,
-			ElementType.U8 => IRInstruction.StoreParam64,
-			ElementType.R4 => IRInstruction.StoreParamR4,
-			ElementType.R8 => IRInstruction.StoreParamR8,
-			ElementType.Object => IRInstruction.StoreParamObject,
-			ElementType.I when Is32BitPlatform => IRInstruction.StoreParam32,
-			ElementType.I when Is64BitPlatform => IRInstruction.StoreParam64,
-			ElementType.ManagedPointer => IRInstruction.StoreParamManagedPointer,
+			ElementType.I1 => IR.StoreParam8,
+			ElementType.U1 => IR.StoreParam8,
+			ElementType.I2 => IR.StoreParam16,
+			ElementType.U2 => IR.StoreParam16,
+			ElementType.I4 => IR.StoreParam32,
+			ElementType.U4 => IR.StoreParam32,
+			ElementType.I8 => IR.StoreParam64,
+			ElementType.U8 => IR.StoreParam64,
+			ElementType.R4 => IR.StoreParamR4,
+			ElementType.R8 => IR.StoreParamR8,
+			ElementType.Object => IR.StoreParamObject,
+			ElementType.I when Is32BitPlatform => IR.StoreParam32,
+			ElementType.I when Is64BitPlatform => IR.StoreParam64,
+			ElementType.ManagedPointer => IR.StoreParamManagedPointer,
 			_ => throw new CompilerException($"Invalid ElementType = {elementType}"),
 		};
 	}

@@ -6,10 +6,7 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.StrengthReduction;
 
-/// <summary>
-/// Add32By1Not32
-/// </summary>
-[Transform("x86.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class Add32By1Not32 : BaseTransform
 {
 	public Add32By1Not32() : base(X86.Add32, TransformType.Auto | TransformType.Optimization)
@@ -21,10 +18,7 @@ public sealed class Add32By1Not32 : BaseTransform
 		if (!context.Operand1.IsVirtualRegister)
 			return false;
 
-		if (!context.Operand2.IsResolvedConstant)
-			return false;
-
-		if (context.Operand2.ConstantUnsigned64 != 1)
+		if (!context.Operand2.IsConstantOne)
 			return false;
 
 		if (!context.Operand1.IsDefinedOnce)
@@ -52,10 +46,7 @@ public sealed class Add32By1Not32 : BaseTransform
 	}
 }
 
-/// <summary>
-/// Add32By1Not32_v1
-/// </summary>
-[Transform("x86.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class Add32By1Not32_v1 : BaseTransform
 {
 	public Add32By1Not32_v1() : base(X86.Add32, TransformType.Auto | TransformType.Optimization)
@@ -64,10 +55,7 @@ public sealed class Add32By1Not32_v1 : BaseTransform
 
 	public override bool Match(Context context, Transform transform)
 	{
-		if (!context.Operand1.IsResolvedConstant)
-			return false;
-
-		if (context.Operand1.ConstantUnsigned64 != 1)
+		if (!context.Operand1.IsConstantOne)
 			return false;
 
 		if (!context.Operand2.IsVirtualRegister)

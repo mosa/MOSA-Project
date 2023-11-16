@@ -14,7 +14,7 @@ internal static partial class IntrinsicMethods
 		var thisObject = context.Operand2;
 		var result = context.Result;
 
-		context.SetInstruction(IRInstruction.CallDynamic, null, ctor, thisObject);
-		context.AppendInstruction(IRInstruction.MoveObject, result, thisObject);
+		context.SetInstruction(IR.CallDynamic, null, ctor, thisObject);
+		context.AppendInstruction(IR.MoveObject, result, thisObject);
 	}
 }

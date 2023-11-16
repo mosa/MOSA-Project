@@ -1219,6 +1219,8 @@ public partial class MainForm : Form
 		MosaSettings.AddSearchPath(Path.GetDirectoryName(filename));
 
 		MosaSettings.ResolveFileAndPathSettings();
+		MosaSettings.AddStandardPlugs();
+		MosaSettings.ExpandSearchPaths();
 	}
 
 	private void UpdateTransformLabels()

@@ -21,7 +21,7 @@ internal static partial class IntrinsicMethods
 			// try to find the constant - a bit of a hack
 			var ctx = new Context(operand.Definitions[0]);
 
-			if ((ctx.Instruction == IRInstruction.Move64 || ctx.Instruction == IRInstruction.Move32) && ctx.Operand1.IsConstant)
+			if ((ctx.Instruction == IR.Move64 || ctx.Instruction == IR.Move32) && ctx.Operand1.IsConstant)
 			{
 				operand = ctx.Operand1;
 			}
@@ -39,7 +39,7 @@ internal static partial class IntrinsicMethods
 			throw new CompilerException();
 		}
 
-		context.SetInstruction(IRInstruction.Move64, context.Result, Operand.CreateLabel(method, transform.Is32BitPlatform));
+		context.SetInstruction(IR.Move64, context.Result, Operand.CreateLabel(method, transform.Is32BitPlatform));
 
 		transform.MethodScanner.MethodInvoked(method, transform.Method);
 	}

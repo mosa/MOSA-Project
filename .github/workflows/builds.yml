@@ -8,7 +8,7 @@ permissions:
   contents: write
 
 env:
-  BUILD_VERSION: 2.5.0.${{ github.run_number }}
+  BUILD_VERSION: 2.5.1.${{ github.run_number }}
 
 jobs:
 

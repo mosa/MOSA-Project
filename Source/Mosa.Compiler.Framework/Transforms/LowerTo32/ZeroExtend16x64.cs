@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
 public sealed class ZeroExtend16x64 : BaseLowerTo32Transform
 {
-	public ZeroExtend16x64() : base(IRInstruction.ZeroExtend16x64, TransformType.Manual | TransformType.Optimization)
+	public ZeroExtend16x64() : base(IR.ZeroExtend16x64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -16,8 +16,8 @@ public sealed class ZeroExtend16x64 : BaseLowerTo32Transform
 		var resultLow = transform.VirtualRegisters.Allocate32();
 		var v1 = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction(IRInstruction.GetLow32, resultLow, operand1);
-		context.AppendInstruction(IRInstruction.ZeroExtend16x32, v1, resultLow);
-		context.AppendInstruction(IRInstruction.To64, result, operand1, Operand.Constant32_0);
+		context.SetInstruction(IR.GetLow32, resultLow, operand1);
+		context.AppendInstruction(IR.ZeroExtend16x32, v1, resultLow);
+		context.AppendInstruction(IR.To64, result, operand1, Operand.Constant32_0);
 	}
 }

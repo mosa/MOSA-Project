@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Useless;
 
-/// <summary>
-/// SignExtend8x32Double
-/// </summary>
-[Transform("IR.Optimizations.Auto.Useless")]
+[Transform()]
 public sealed class SignExtend8x32Double : BaseTransform
 {
-	public SignExtend8x32Double() : base(IRInstruction.SignExtend8x32, TransformType.Auto | TransformType.Optimization)
+	public SignExtend8x32Double() : base(IR.SignExtend8x32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -24,7 +21,7 @@ public sealed class SignExtend8x32Double : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.SignExtend8x32)
+		if (context.Operand1.Definitions[0].Instruction != IR.SignExtend8x32)
 			return false;
 
 		if (IsConstant(context.Operand1.Definitions[0].Operand1))
@@ -39,6 +36,6 @@ public sealed class SignExtend8x32Double : BaseTransform
 
 		var t1 = context.Operand1.Definitions[0].Operand1;
 
-		context.SetInstruction(IRInstruction.Move32, result, t1);
+		context.SetInstruction(IR.Move32, result, t1);
 	}
 }

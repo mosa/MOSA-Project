@@ -108,11 +108,6 @@ public sealed class Architecture : BaseArchitecture
 	/// </summary>
 	public override string PlatformName => "x86";
 
-	/// <summary>
-	/// Gets the instructions.
-	/// </summary>
-	public override List<BaseInstruction> Instructions => X86Instructions.List;
-
 	public override OpcodeEncoder GetOpcodeEncoder()
 	{
 		return new OpcodeEncoder(8);
@@ -148,15 +143,16 @@ public sealed class Architecture : BaseArchitecture
 		pipeline.InsertAfterLast<PlatformIntrinsicStage>(
 			new BaseMethodCompilerStage[]
 			{
+				//new AdvanceIRTransformStage(),
 				new IRTransformationStage(),
 				mosaSettings.PlatformOptimizations ? new Stages.OptimizationStage() : null,
-				new PlatformTransformationStage(),
+				new PlatformTransformStage(),
 			});
 
 		pipeline.InsertBefore<CodeGenerationStage>(
 			new BaseMethodCompilerStage[]
 			{
-				new PlatformTransformationStage(),
+				new PlatformTransformStage(),
 				mosaSettings.PlatformOptimizations ? new Stages.OptimizationStage() : null,
 			});
 

@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
 
-/// <summary>
-/// Compare32x64RemUnsigned
-/// </summary>
-[Transform("IR.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class Compare32x64RemUnsigned : BaseTransform
 {
-	public Compare32x64RemUnsigned() : base(IRInstruction.Compare32x64, TransformType.Auto | TransformType.Optimization)
+	public Compare32x64RemUnsigned() : base(IR.Compare32x64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -22,16 +19,13 @@ public sealed class Compare32x64RemUnsigned : BaseTransform
 		if (!context.Operand1.IsVirtualRegister)
 			return false;
 
-		if (!context.Operand2.IsResolvedConstant)
-			return false;
-
-		if (context.Operand2.ConstantUnsigned64 != 0)
+		if (!context.Operand2.IsConstantZero)
 			return false;
 
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.RemUnsigned64)
+		if (context.Operand1.Definitions[0].Instruction != IR.RemUnsigned64)
 			return false;
 
 		if (!context.Operand1.Definitions[0].Operand2.IsResolvedConstant)
@@ -51,17 +45,14 @@ public sealed class Compare32x64RemUnsigned : BaseTransform
 
 		var c1 = Operand.CreateConstant(1);
 
-		context.SetInstruction(IRInstruction.And64, result, t1, c1);
+		context.SetInstruction(IR.And64, result, t1, c1);
 	}
 }
 
-/// <summary>
-/// Compare32x64RemUnsigned_v1
-/// </summary>
-[Transform("IR.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class Compare32x64RemUnsigned_v1 : BaseTransform
 {
-	public Compare32x64RemUnsigned_v1() : base(IRInstruction.Compare32x64, TransformType.Auto | TransformType.Optimization)
+	public Compare32x64RemUnsigned_v1() : base(IR.Compare32x64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -70,10 +61,7 @@ public sealed class Compare32x64RemUnsigned_v1 : BaseTransform
 		if (context.ConditionCode != ConditionCode.Equal)
 			return false;
 
-		if (!context.Operand1.IsResolvedConstant)
-			return false;
-
-		if (context.Operand1.ConstantUnsigned64 != 0)
+		if (!context.Operand1.IsConstantZero)
 			return false;
 
 		if (!context.Operand2.IsVirtualRegister)
@@ -82,7 +70,7 @@ public sealed class Compare32x64RemUnsigned_v1 : BaseTransform
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.RemUnsigned64)
+		if (context.Operand2.Definitions[0].Instruction != IR.RemUnsigned64)
 			return false;
 
 		if (!context.Operand2.Definitions[0].Operand2.IsResolvedConstant)
@@ -102,6 +90,6 @@ public sealed class Compare32x64RemUnsigned_v1 : BaseTransform
 
 		var c1 = Operand.CreateConstant(1);
 
-		context.SetInstruction(IRInstruction.And64, result, t1, c1);
+		context.SetInstruction(IR.And64, result, t1, c1);
 	}
 }

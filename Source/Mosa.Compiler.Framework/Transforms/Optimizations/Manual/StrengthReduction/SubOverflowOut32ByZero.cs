@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.StrengthReduct
 /// </summary>
 public sealed class SubOverflowOut32ByZero : BaseTransform
 {
-	public SubOverflowOut32ByZero() : base(IRInstruction.SubOverflowOut32, TransformType.Manual | TransformType.Optimization, true)
+	public SubOverflowOut32ByZero() : base(IR.SubOverflowOut32, TransformType.Manual | TransformType.Optimization, true)
 	{
 	}
 
@@ -30,8 +30,8 @@ public sealed class SubOverflowOut32ByZero : BaseTransform
 		var result2 = context.Result2;
 		var operand1 = context.Operand1;
 
-		context.SetInstruction(IRInstruction.Move32, result, operand1);
-		context.AppendInstruction(IRInstruction.Move32, result2, Operand.Constant32_0);
+		context.SetInstruction(IR.Move32, result, operand1);
+		context.AppendInstruction(IR.Move32, result2, Operand.Constant32_0);
 	}
 }
 
@@ -40,7 +40,7 @@ public sealed class SubOverflowOut32ByZero : BaseTransform
 /// </summary>
 public sealed class SubOverflowOut32ByZero2 : BaseTransform
 {
-	public SubOverflowOut32ByZero2() : base(IRInstruction.SubOverflowOut32, TransformType.Manual | TransformType.Optimization, true)
+	public SubOverflowOut32ByZero2() : base(IR.SubOverflowOut32, TransformType.Manual | TransformType.Optimization, true)
 	{
 	}
 
@@ -63,7 +63,7 @@ public sealed class SubOverflowOut32ByZero2 : BaseTransform
 		var result2 = context.Result2;
 		var operand2 = context.Operand2;
 
-		context.SetInstruction(IRInstruction.Move32, result, operand2);
-		context.AppendInstruction(IRInstruction.Move32, result2, Operand.Constant32_0);
+		context.SetInstruction(IR.Move32, result, operand2);
+		context.AppendInstruction(IR.Move32, result2, Operand.Constant32_0);
 	}
 }

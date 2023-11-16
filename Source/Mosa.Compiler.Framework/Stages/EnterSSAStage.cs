@@ -365,12 +365,12 @@ public sealed class EnterSSAStage : BaseMethodCompilerStage
 	{
 		return primitiveType switch
 		{
-			PrimitiveType.Int32 => IRInstruction.Phi32,
-			PrimitiveType.Int64 => IRInstruction.Phi64,
-			PrimitiveType.R4 => IRInstruction.PhiR4,
-			PrimitiveType.R8 => IRInstruction.PhiR8,
-			PrimitiveType.Object => IRInstruction.PhiObject,
-			PrimitiveType.ManagedPointer => IRInstruction.PhiManagedPointer,
+			PrimitiveType.Int32 => IR.Phi32,
+			PrimitiveType.Int64 => IR.Phi64,
+			PrimitiveType.R4 => IR.PhiR4,
+			PrimitiveType.R8 => IR.PhiR8,
+			PrimitiveType.Object => IR.PhiObject,
+			PrimitiveType.ManagedPointer => IR.PhiManagedPointer,
 			_ => throw new InvalidOperationCompilerException(),
 		};
 	}

@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
 
-/// <summary>
-/// Xor32Max
-/// </summary>
-[Transform("IR.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class Xor32Max : BaseTransform
 {
-	public Xor32Max() : base(IRInstruction.Xor32, TransformType.Auto | TransformType.Optimization)
+	public Xor32Max() : base(IR.Xor32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -33,17 +30,14 @@ public sealed class Xor32Max : BaseTransform
 
 		var t1 = context.Operand1;
 
-		context.SetInstruction(IRInstruction.Not32, result, t1);
+		context.SetInstruction(IR.Not32, result, t1);
 	}
 }
 
-/// <summary>
-/// Xor32Max_v1
-/// </summary>
-[Transform("IR.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class Xor32Max_v1 : BaseTransform
 {
-	public Xor32Max_v1() : base(IRInstruction.Xor32, TransformType.Auto | TransformType.Optimization)
+	public Xor32Max_v1() : base(IR.Xor32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -66,6 +60,6 @@ public sealed class Xor32Max_v1 : BaseTransform
 
 		var t1 = context.Operand2;
 
-		context.SetInstruction(IRInstruction.Not32, result, t1);
+		context.SetInstruction(IR.Not32, result, t1);
 	}
 }

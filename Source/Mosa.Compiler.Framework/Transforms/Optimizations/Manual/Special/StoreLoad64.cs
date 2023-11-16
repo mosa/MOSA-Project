@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Special;
 
 public sealed class StoreLoad64 : BaseTransform
 {
-	public StoreLoad64() : base(IRInstruction.Store64, TransformType.Manual | TransformType.Optimization)
+	public StoreLoad64() : base(IR.Store64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -32,7 +32,7 @@ public sealed class StoreLoad64 : BaseTransform
 			? context.Operand2.Uses[0]
 			: context.Operand2.Uses[1];
 
-		if (load.Instruction != IRInstruction.Load64)
+		if (load.Instruction != IR.Load64)
 			return false;
 
 		if (!(context.Operand3.IsConstant || context.Operand3.IsDefinedOnce))
@@ -50,7 +50,7 @@ public sealed class StoreLoad64 : BaseTransform
 			? context.Operand2.Uses[0]
 			: context.Operand2.Uses[1];
 
-		context.SetInstruction(IRInstruction.Move64, load.Result, context.Operand3);
+		context.SetInstruction(IR.Move64, load.Result, context.Operand3);
 		load.SetNop();
 	}
 }

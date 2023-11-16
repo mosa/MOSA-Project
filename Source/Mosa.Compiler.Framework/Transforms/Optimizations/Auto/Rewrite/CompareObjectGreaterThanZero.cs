@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Rewrite;
 
-/// <summary>
-/// CompareObjectGreaterThanZero
-/// </summary>
-[Transform("IR.Optimizations.Auto.Rewrite")]
+[Transform()]
 public sealed class CompareObjectGreaterThanZero : BaseTransform
 {
-	public CompareObjectGreaterThanZero() : base(IRInstruction.CompareObject, TransformType.Auto | TransformType.Optimization)
+	public CompareObjectGreaterThanZero() : base(IR.CompareObject, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -32,17 +29,14 @@ public sealed class CompareObjectGreaterThanZero : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2;
 
-		context.SetInstruction(IRInstruction.CompareObject, ConditionCode.NotEqual, result, t1, t2);
+		context.SetInstruction(IR.CompareObject, ConditionCode.NotEqual, result, t1, t2);
 	}
 }
 
-/// <summary>
-/// CompareObjectGreaterThanZero_v1
-/// </summary>
-[Transform("IR.Optimizations.Auto.Rewrite")]
+[Transform()]
 public sealed class CompareObjectGreaterThanZero_v1 : BaseTransform
 {
-	public CompareObjectGreaterThanZero_v1() : base(IRInstruction.CompareObject, TransformType.Auto | TransformType.Optimization)
+	public CompareObjectGreaterThanZero_v1() : base(IR.CompareObject, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -64,6 +58,6 @@ public sealed class CompareObjectGreaterThanZero_v1 : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2;
 
-		context.SetInstruction(IRInstruction.CompareObject, ConditionCode.NotEqual, result, t2, t1);
+		context.SetInstruction(IR.CompareObject, ConditionCode.NotEqual, result, t2, t1);
 	}
 }

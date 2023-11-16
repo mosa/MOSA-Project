@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
 
-/// <summary>
-/// UselessXor64ShiftRight64
-/// </summary>
-[Transform("IR.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class UselessXor64ShiftRight64 : BaseTransform
 {
-	public UselessXor64ShiftRight64() : base(IRInstruction.ShiftRight64, TransformType.Auto | TransformType.Optimization)
+	public UselessXor64ShiftRight64() : base(IR.ShiftRight64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -22,7 +19,7 @@ public sealed class UselessXor64ShiftRight64 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Xor64)
+		if (context.Operand1.Definitions[0].Instruction != IR.Xor64)
 			return false;
 
 		if (!IsConstant(context.Operand1.Definitions[0].Operand2))
@@ -47,17 +44,14 @@ public sealed class UselessXor64ShiftRight64 : BaseTransform
 		var t1 = context.Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand2;
 
-		context.SetInstruction(IRInstruction.ShiftRight64, result, t1, t2);
+		context.SetInstruction(IR.ShiftRight64, result, t1, t2);
 	}
 }
 
-/// <summary>
-/// UselessXor64ShiftRight64_v1
-/// </summary>
-[Transform("IR.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class UselessXor64ShiftRight64_v1 : BaseTransform
 {
-	public UselessXor64ShiftRight64_v1() : base(IRInstruction.ShiftRight64, TransformType.Auto | TransformType.Optimization)
+	public UselessXor64ShiftRight64_v1() : base(IR.ShiftRight64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -69,7 +63,7 @@ public sealed class UselessXor64ShiftRight64_v1 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Xor64)
+		if (context.Operand1.Definitions[0].Instruction != IR.Xor64)
 			return false;
 
 		if (!IsConstant(context.Operand1.Definitions[0].Operand1))
@@ -94,6 +88,6 @@ public sealed class UselessXor64ShiftRight64_v1 : BaseTransform
 		var t1 = context.Operand1.Definitions[0].Operand2;
 		var t2 = context.Operand2;
 
-		context.SetInstruction(IRInstruction.ShiftRight64, result, t1, t2);
+		context.SetInstruction(IR.ShiftRight64, result, t1, t2);
 	}
 }

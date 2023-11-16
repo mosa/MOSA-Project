@@ -7,7 +7,7 @@ namespace Mosa.Compiler.x64.Transforms.FixedRegisters;
 /// <summary>
 /// IDiv32
 /// </summary>
-[Transform("x64.FixedRegisters")]
+[Transform]
 public sealed class IDiv32 : BaseTransform
 {
 	public IDiv32() : base(X64.IDiv32, TransformType.Manual | TransformType.Transform)

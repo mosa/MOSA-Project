@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove;
 
-/// <summary>
-/// And32
-/// </summary>
-[Transform("IR.Optimizations.Auto.ConstantMove")]
+[Transform()]
 public sealed class And32 : BaseTransform
 {
-	public And32() : base(IRInstruction.And32, TransformType.Auto | TransformType.Optimization)
+	public And32() : base(IR.And32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -32,6 +29,6 @@ public sealed class And32 : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2;
 
-		context.SetInstruction(IRInstruction.And32, result, t2, t1);
+		context.SetInstruction(IR.And32, result, t2, t1);
 	}
 }

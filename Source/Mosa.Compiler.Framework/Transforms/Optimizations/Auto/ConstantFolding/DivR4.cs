@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-/// <summary>
-/// DivR4
-/// </summary>
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class DivR4 : BaseTransform
 {
-	public DivR4() : base(IRInstruction.DivR4, TransformType.Auto | TransformType.Optimization)
+	public DivR4() : base(IR.DivR4, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -36,6 +33,6 @@ public sealed class DivR4 : BaseTransform
 
 		var e1 = Operand.CreateConstant(DivR4(ToR4(t1), ToR4(t2)));
 
-		context.SetInstruction(IRInstruction.MoveR4, result, e1);
+		context.SetInstruction(IR.MoveR4, result, e1);
 	}
 }

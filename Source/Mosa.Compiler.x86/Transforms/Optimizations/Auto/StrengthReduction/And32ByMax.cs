@@ -6,10 +6,7 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.StrengthReduction;
 
-/// <summary>
-/// And32ByMax
-/// </summary>
-[Transform("x86.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class And32ByMax : BaseTransform
 {
 	public And32ByMax() : base(X86.And32, TransformType.Auto | TransformType.Optimization, true)
@@ -24,7 +21,7 @@ public sealed class And32ByMax : BaseTransform
 		if (context.Operand2.ConstantUnsigned64 != 0xFFFFFFFF)
 			return false;
 
-		if (AreStatusFlagUsed(context))
+		if (AreAnyStatusFlagsUsed(context))
 			return false;
 
 		return true;
@@ -40,10 +37,7 @@ public sealed class And32ByMax : BaseTransform
 	}
 }
 
-/// <summary>
-/// And32ByMax_v1
-/// </summary>
-[Transform("x86.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class And32ByMax_v1 : BaseTransform
 {
 	public And32ByMax_v1() : base(X86.And32, TransformType.Auto | TransformType.Optimization, true)
@@ -58,7 +52,7 @@ public sealed class And32ByMax_v1 : BaseTransform
 		if (context.Operand1.ConstantUnsigned64 != 0xFFFFFFFF)
 			return false;
 
-		if (AreStatusFlagUsed(context))
+		if (AreAnyStatusFlagsUsed(context))
 			return false;
 
 		return true;

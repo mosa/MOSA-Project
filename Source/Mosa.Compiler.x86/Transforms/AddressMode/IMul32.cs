@@ -7,7 +7,7 @@ namespace Mosa.Compiler.x86.Transforms.AddressMode;
 /// <summary>
 /// IMul32
 /// </summary>
-[Transform("x86.AddressMode")]
+[Transform]
 public sealed class IMul32 : BaseAddressModeTransform
 {
 	public IMul32() : base(X86.IMul32, TransformType.Manual | TransformType.Transform)

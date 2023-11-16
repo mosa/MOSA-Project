@@ -7,7 +7,7 @@ namespace Mosa.Compiler.x86.Transforms.FixedRegisters;
 /// <summary>
 /// Sar32
 /// </summary>
-[Transform("x86.FixedRegisters")]
+[Transform]
 public sealed class Sar32 : BaseTransform
 {
 	public Sar32() : base(X86.Sar32, TransformType.Manual | TransformType.Transform)

@@ -1,0 +1,45 @@
+﻿{
+	"Family": "x86",
+	"Section": "IRTransform.Auto",
+	"Commutative": [
+		"X86.Add32",
+		"X86.And32",
+		"X86.Or32",
+		"X86.Xor32"
+	],
+	"Optimizations": [
+		{
+			"Type": "Advanced",
+			"Name": "Add32",
+			"SubName": "ToLea32Constant",
+			"Expression": "IR.Add32 a b",
+			"Filter": "IsResolvedConstant(b)",
+			"Result": "(X86.Lea32 a 0 1 b)",
+			"Priority": "45",
+			"Variations": "Yes",
+			"Log": "Yes"
+		},
+		{
+			"Type": "Advanced",
+			"Name": "Add32",
+			"SubName": "ToLea32",
+			"Expression": "IR.Add32 a b",
+			"Filter": "!IsConstant(b)",
+			"Result": "(X86.Lea32 a b 1 0)",
+			"Priority": "45",
+			"Variations": "Yes",
+			"Log": "Yes"
+		},
+		{
+			"Type": "Advanced",
+			"Name": "Add32ShiftLeft3232",
+			"SubName": "ToLea32",
+			"Expression": "IR.Add32 a (IR.ShiftLeft32 b c)",
+			"Filter": "!IsConstant(b) && IsResolvedConstant(c) && IsUnsignedBetween32(c,1,4)",
+			"Result": "(X86.Lea32 a b c 0)",
+			"Priority": "55",
+			"Variations": "Yes",
+			"Log": "Yes"
+		}
+	]
+}

@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-/// <summary>
-/// DivSigned32
-/// </summary>
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class DivSigned32 : BaseTransform
 {
-	public DivSigned32() : base(IRInstruction.DivSigned32, TransformType.Auto | TransformType.Optimization)
+	public DivSigned32() : base(IR.DivSigned32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -36,6 +33,6 @@ public sealed class DivSigned32 : BaseTransform
 
 		var e1 = Operand.CreateConstant(DivSigned32(ToSigned32(t1), ToSigned32(t2)));
 
-		context.SetInstruction(IRInstruction.Move32, result, e1);
+		context.SetInstruction(IR.Move32, result, e1);
 	}
 }

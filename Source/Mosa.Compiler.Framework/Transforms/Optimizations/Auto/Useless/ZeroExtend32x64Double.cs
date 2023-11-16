@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Useless;
 
-/// <summary>
-/// ZeroExtend32x64Double
-/// </summary>
-[Transform("IR.Optimizations.Auto.Useless")]
+[Transform()]
 public sealed class ZeroExtend32x64Double : BaseTransform
 {
-	public ZeroExtend32x64Double() : base(IRInstruction.ZeroExtend32x64, TransformType.Auto | TransformType.Optimization)
+	public ZeroExtend32x64Double() : base(IR.ZeroExtend32x64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -24,7 +21,7 @@ public sealed class ZeroExtend32x64Double : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.ZeroExtend32x64)
+		if (context.Operand1.Definitions[0].Instruction != IR.ZeroExtend32x64)
 			return false;
 
 		if (IsConstant(context.Operand1.Definitions[0].Operand1))
@@ -39,6 +36,6 @@ public sealed class ZeroExtend32x64Double : BaseTransform
 
 		var t1 = context.Operand1.Definitions[0].Operand1;
 
-		context.SetInstruction(IRInstruction.Move64, result, t1);
+		context.SetInstruction(IR.Move64, result, t1);
 	}
 }

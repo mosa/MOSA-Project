@@ -7,7 +7,7 @@ namespace Mosa.Compiler.x64.Transforms.FixedRegisters;
 /// <summary>
 /// Out32
 /// </summary>
-[Transform("x64.FixedRegisters")]
+[Transform]
 public sealed class Out32 : BaseTransform
 {
 	public Out32() : base(X64.Out32, TransformType.Manual | TransformType.Transform)

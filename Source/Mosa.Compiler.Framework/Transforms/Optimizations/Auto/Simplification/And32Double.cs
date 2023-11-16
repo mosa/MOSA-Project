@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
-/// <summary>
-/// And32Double
-/// </summary>
-[Transform("IR.Optimizations.Auto.Simplification")]
+[Transform()]
 public sealed class And32Double : BaseTransform
 {
-	public And32Double() : base(IRInstruction.And32, TransformType.Auto | TransformType.Optimization)
+	public And32Double() : base(IR.And32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -22,7 +19,7 @@ public sealed class And32Double : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.And32)
+		if (context.Operand1.Definitions[0].Instruction != IR.And32)
 			return false;
 
 		if (!AreSame(context.Operand1.Definitions[0].Operand1, context.Operand2))
@@ -38,17 +35,14 @@ public sealed class And32Double : BaseTransform
 		var t1 = context.Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand1.Definitions[0].Operand2;
 
-		context.SetInstruction(IRInstruction.And32, result, t1, t2);
+		context.SetInstruction(IR.And32, result, t1, t2);
 	}
 }
 
-/// <summary>
-/// And32Double_v1
-/// </summary>
-[Transform("IR.Optimizations.Auto.Simplification")]
+[Transform()]
 public sealed class And32Double_v1 : BaseTransform
 {
-	public And32Double_v1() : base(IRInstruction.And32, TransformType.Auto | TransformType.Optimization)
+	public And32Double_v1() : base(IR.And32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -60,7 +54,7 @@ public sealed class And32Double_v1 : BaseTransform
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.And32)
+		if (context.Operand2.Definitions[0].Instruction != IR.And32)
 			return false;
 
 		if (!AreSame(context.Operand1, context.Operand2.Definitions[0].Operand1))
@@ -76,17 +70,14 @@ public sealed class And32Double_v1 : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2.Definitions[0].Operand2;
 
-		context.SetInstruction(IRInstruction.And32, result, t1, t2);
+		context.SetInstruction(IR.And32, result, t1, t2);
 	}
 }
 
-/// <summary>
-/// And32Double_v2
-/// </summary>
-[Transform("IR.Optimizations.Auto.Simplification")]
+[Transform()]
 public sealed class And32Double_v2 : BaseTransform
 {
-	public And32Double_v2() : base(IRInstruction.And32, TransformType.Auto | TransformType.Optimization)
+	public And32Double_v2() : base(IR.And32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -98,7 +89,7 @@ public sealed class And32Double_v2 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.And32)
+		if (context.Operand1.Definitions[0].Instruction != IR.And32)
 			return false;
 
 		if (!AreSame(context.Operand1.Definitions[0].Operand2, context.Operand2))
@@ -114,17 +105,14 @@ public sealed class And32Double_v2 : BaseTransform
 		var t1 = context.Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand1.Definitions[0].Operand2;
 
-		context.SetInstruction(IRInstruction.And32, result, t2, t1);
+		context.SetInstruction(IR.And32, result, t2, t1);
 	}
 }
 
-/// <summary>
-/// And32Double_v3
-/// </summary>
-[Transform("IR.Optimizations.Auto.Simplification")]
+[Transform()]
 public sealed class And32Double_v3 : BaseTransform
 {
-	public And32Double_v3() : base(IRInstruction.And32, TransformType.Auto | TransformType.Optimization)
+	public And32Double_v3() : base(IR.And32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -136,7 +124,7 @@ public sealed class And32Double_v3 : BaseTransform
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.And32)
+		if (context.Operand2.Definitions[0].Instruction != IR.And32)
 			return false;
 
 		if (!AreSame(context.Operand1, context.Operand2.Definitions[0].Operand2))
@@ -152,6 +140,6 @@ public sealed class And32Double_v3 : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2.Definitions[0].Operand1;
 
-		context.SetInstruction(IRInstruction.And32, result, t1, t2);
+		context.SetInstruction(IR.And32, result, t1, t2);
 	}
 }

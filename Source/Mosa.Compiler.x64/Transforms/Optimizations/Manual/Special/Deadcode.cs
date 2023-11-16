@@ -4,7 +4,7 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x64.Transforms.Optimizations.Manual.Special;
 
-[Transform("x64.Optimizations.Manual.Special")]
+[Transform]
 public sealed class Deadcode : BaseTransform
 {
 	public Deadcode() : base(TransformType.Manual | TransformType.Optimization)
@@ -48,7 +48,7 @@ public sealed class Deadcode : BaseTransform
 			|| instruction.IsSignFlagModified
 			|| instruction.IsParityFlagModified)
 		{
-			return !AreStatusFlagUsed(context);
+			return !AreAnyStatusFlagsUsed(context);
 		}
 
 		return true;

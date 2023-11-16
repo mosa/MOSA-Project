@@ -4,7 +4,7 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x86.Transforms.Optimizations.Manual.StrengthReduction;
 
-[Transform("x86.Optimizations.Manual.StrengthReduction")]
+[Transform]
 public sealed class Mul32ByZero : BaseTransform
 {
 	public Mul32ByZero() : base(X86.Mul32, TransformType.Manual | TransformType.Optimization, true)

@@ -6,10 +6,7 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.Simplication;
 
-/// <summary>
-/// SubFromZero
-/// </summary>
-[Transform("x86.Optimizations.Auto.Simplication")]
+[Transform()]
 public sealed class SubFromZero : BaseTransform
 {
 	public SubFromZero() : base(X86.Sub32, TransformType.Auto | TransformType.Optimization)
@@ -18,10 +15,7 @@ public sealed class SubFromZero : BaseTransform
 
 	public override bool Match(Context context, Transform transform)
 	{
-		if (!context.Operand1.IsResolvedConstant)
-			return false;
-
-		if (context.Operand1.ConstantUnsigned64 != 0)
+		if (!context.Operand1.IsConstantZero)
 			return false;
 
 		if (!IsVirtualRegister(context.Operand2))

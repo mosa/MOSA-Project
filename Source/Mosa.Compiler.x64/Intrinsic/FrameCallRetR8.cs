@@ -22,7 +22,7 @@ internal static partial class IntrinsicMethods
 		transform.SplitOperand(result, out Operand op0L, out Operand op0H);
 
 		context.SetInstruction(X64.Call, null, methodAddress);
-		context.AppendInstruction(IRInstruction.Gen, xmm0);
+		context.AppendInstruction(IR.Gen, xmm0);
 
 		//context.AppendInstruction(X64.Movdi64ss, eax, xmm0);        // FIXME: X64
 		context.AppendInstruction(X64.Pextrd64, edx, xmm0, Operand.Constant64_1);

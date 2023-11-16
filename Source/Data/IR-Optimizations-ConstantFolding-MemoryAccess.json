@@ -308,39 +308,6 @@
 		{
 			"Type": "ConstantFolding",
 			"Name": "Store8",
-			"SubName": "FoldAdd##",
-			"Expression": "IR.Store8 (IR.Add## a b) c d",
-			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.Store8 a [Add##(To##(b),To##(c))] d)"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "Store8",
-			"SubName": "FoldAdd##",
-			"Expression": "IR.Store8 (IR.Add## a b) c d",
-			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.Store8 a [Add##(To##(b),To##(c))] d)"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "Store8",
-			"SubName": "FoldAdd##",
-			"Expression": "IR.Store8 (IR.Add## a b) c d",
-			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.Store8 a [Add##(To##(b),To##(c))] d)"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "Store8",
-			"SubName": "FoldAdd##",
-			"Expression": "IR.Store8 (IR.Add## a b) c d",
-			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",
-			"Result": "(IR.Store8 a [Add##(To##(b),To##(c))] d)"
-		},
-
-		{
-			"Type": "ConstantFolding",
-			"Name": "Store8",
 			"SubName": "FoldSub##",
 			"Expression": "IR.Store8 (IR.Sub## a b) c d",
 			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b)",

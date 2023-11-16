@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-/// <summary>
-/// SubAddR8
-/// </summary>
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class SubAddR8 : BaseTransform
 {
-	public SubAddR8() : base(IRInstruction.SubR8, TransformType.Auto | TransformType.Optimization)
+	public SubAddR8() : base(IR.SubR8, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -24,7 +21,7 @@ public sealed class SubAddR8 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.AddR8)
+		if (context.Operand1.Definitions[0].Instruction != IR.AddR8)
 			return false;
 
 		if (!IsResolvedConstant(context.Operand1.Definitions[0].Operand2))
@@ -46,17 +43,14 @@ public sealed class SubAddR8 : BaseTransform
 
 		var e1 = Operand.CreateConstant(SubR8(ToR8(t2), ToR8(t3)));
 
-		context.SetInstruction(IRInstruction.AddR8, result, t1, e1);
+		context.SetInstruction(IR.AddR8, result, t1, e1);
 	}
 }
 
-/// <summary>
-/// SubAddR8_v1
-/// </summary>
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class SubAddR8_v1 : BaseTransform
 {
-	public SubAddR8_v1() : base(IRInstruction.SubR8, TransformType.Auto | TransformType.Optimization)
+	public SubAddR8_v1() : base(IR.SubR8, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -70,7 +64,7 @@ public sealed class SubAddR8_v1 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.AddR8)
+		if (context.Operand1.Definitions[0].Instruction != IR.AddR8)
 			return false;
 
 		if (!IsResolvedConstant(context.Operand1.Definitions[0].Operand1))
@@ -92,6 +86,6 @@ public sealed class SubAddR8_v1 : BaseTransform
 
 		var e1 = Operand.CreateConstant(SubR8(ToR8(t1), ToR8(t3)));
 
-		context.SetInstruction(IRInstruction.AddR8, result, t2, e1);
+		context.SetInstruction(IR.AddR8, result, t2, e1);
 	}
 }

@@ -9,7 +9,6 @@ namespace Mosa.Compiler.ARM32.Instructions;
 /// <summary>
 /// MovRegShift - Move Immediate with Register Shift
 /// </summary>
-/// <seealso cref="Mosa.Compiler.ARM32.ARM32Instruction" />
 public sealed class MovRegShift : ARM32Instruction
 {
 	internal MovRegShift()

@@ -6,10 +6,7 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.StrengthReduction;
 
-/// <summary>
-/// Inc32Not32
-/// </summary>
-[Transform("x64.Optimizations.Auto.StrengthReduction")]
+[Transform()]
 public sealed class Inc32Not32 : BaseTransform
 {
 	public Inc32Not32() : base(X64.Inc32, TransformType.Auto | TransformType.Optimization)

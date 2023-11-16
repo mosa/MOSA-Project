@@ -7,7 +7,7 @@ namespace Mosa.Compiler.x64.Transforms.FixedRegisters;
 /// <summary>
 /// Shr64
 /// </summary>
-[Transform("x64.FixedRegisters")]
+[Transform]
 public sealed class Shr64 : BaseTransform
 {
 	public Shr64() : base(X64.Shr64, TransformType.Manual | TransformType.Transform)

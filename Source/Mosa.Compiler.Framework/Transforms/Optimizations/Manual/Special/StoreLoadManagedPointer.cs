@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Special;
 
 public sealed class StoreLoadManagedPointer : BaseTransform
 {
-	public StoreLoadManagedPointer() : base(IRInstruction.StoreManagedPointer, TransformType.Manual | TransformType.Optimization)
+	public StoreLoadManagedPointer() : base(IR.StoreManagedPointer, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -29,7 +29,7 @@ public sealed class StoreLoadManagedPointer : BaseTransform
 			? context.Operand2.Uses[0]
 			: context.Operand2.Uses[1];
 
-		if (load.Instruction != IRInstruction.LoadManagedPointer)
+		if (load.Instruction != IR.LoadManagedPointer)
 			return false;
 
 		if (!context.Operand3.IsDefinedOnce)
@@ -47,7 +47,7 @@ public sealed class StoreLoadManagedPointer : BaseTransform
 			? context.Operand2.Uses[0]
 			: context.Operand2.Uses[1];
 
-		context.SetInstruction(IRInstruction.MoveManagedPointer, load.Result, context.Operand3);
+		context.SetInstruction(IR.MoveManagedPointer, load.Result, context.Operand3);
 		load.SetNop();
 	}
 }

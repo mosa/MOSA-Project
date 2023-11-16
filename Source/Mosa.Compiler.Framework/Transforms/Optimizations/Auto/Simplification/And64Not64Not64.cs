@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
-/// <summary>
-/// And64Not64Not64
-/// </summary>
-[Transform("IR.Optimizations.Auto.Simplification")]
+[Transform()]
 public sealed class And64Not64Not64 : BaseTransform
 {
-	public And64Not64Not64() : base(IRInstruction.And64, TransformType.Auto | TransformType.Optimization)
+	public And64Not64Not64() : base(IR.And64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -25,13 +22,13 @@ public sealed class And64Not64Not64 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Not64)
+		if (context.Operand1.Definitions[0].Instruction != IR.Not64)
 			return false;
 
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.Not64)
+		if (context.Operand2.Definitions[0].Instruction != IR.Not64)
 			return false;
 
 		return true;
@@ -46,7 +43,7 @@ public sealed class And64Not64Not64 : BaseTransform
 
 		var v1 = transform.VirtualRegisters.Allocate64();
 
-		context.SetInstruction(IRInstruction.Or64, v1, t1, t2);
-		context.AppendInstruction(IRInstruction.Not64, result, v1);
+		context.SetInstruction(IR.Or64, v1, t1, t2);
+		context.AppendInstruction(IR.Not64, result, v1);
 	}
 }

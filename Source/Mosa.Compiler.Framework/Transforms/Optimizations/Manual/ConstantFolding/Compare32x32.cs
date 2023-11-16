@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.ConstantFoldin
 
 public sealed class Compare32x32 : BaseTransform
 {
-	public Compare32x32() : base(IRInstruction.Compare32x32, TransformType.Manual | TransformType.Optimization)
+	public Compare32x32() : base(IR.Compare32x32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -27,6 +27,6 @@ public sealed class Compare32x32 : BaseTransform
 
 		var e1 = Operand.CreateConstant(BoolTo32(compare));
 
-		context.SetInstruction(IRInstruction.Move32, context.Result, e1);
+		context.SetInstruction(IR.Move32, context.Result, e1);
 	}
 }

@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
-/// <summary>
-/// Compare64x32NotPassThru
-/// </summary>
-[Transform("IR.Optimizations.Auto.Simplification")]
+[Transform()]
 public sealed class Compare64x32NotPassThru : BaseTransform
 {
-	public Compare64x32NotPassThru() : base(IRInstruction.Compare64x32, TransformType.Auto | TransformType.Optimization)
+	public Compare64x32NotPassThru() : base(IR.Compare64x32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -22,22 +19,16 @@ public sealed class Compare64x32NotPassThru : BaseTransform
 		if (!context.Operand1.IsVirtualRegister)
 			return false;
 
-		if (!context.Operand2.IsResolvedConstant)
-			return false;
-
-		if (context.Operand2.ConstantUnsigned64 != 0)
+		if (!context.Operand2.IsConstantZero)
 			return false;
 
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.And32)
+		if (context.Operand1.Definitions[0].Instruction != IR.And32)
 			return false;
 
-		if (!context.Operand1.Definitions[0].Operand2.IsResolvedConstant)
-			return false;
-
-		if (context.Operand1.Definitions[0].Operand2.ConstantUnsigned64 != 1)
+		if (!context.Operand1.Definitions[0].Operand2.IsConstantOne)
 			return false;
 
 		return true;
@@ -53,18 +44,15 @@ public sealed class Compare64x32NotPassThru : BaseTransform
 
 		var c1 = Operand.CreateConstant(1);
 
-		context.SetInstruction(IRInstruction.Not32, v1, t1);
-		context.AppendInstruction(IRInstruction.And32, result, v1, c1);
+		context.SetInstruction(IR.Not32, v1, t1);
+		context.AppendInstruction(IR.And32, result, v1, c1);
 	}
 }
 
-/// <summary>
-/// Compare64x32NotPassThru_v1
-/// </summary>
-[Transform("IR.Optimizations.Auto.Simplification")]
+[Transform()]
 public sealed class Compare64x32NotPassThru_v1 : BaseTransform
 {
-	public Compare64x32NotPassThru_v1() : base(IRInstruction.Compare64x32, TransformType.Auto | TransformType.Optimization)
+	public Compare64x32NotPassThru_v1() : base(IR.Compare64x32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -73,10 +61,7 @@ public sealed class Compare64x32NotPassThru_v1 : BaseTransform
 		if (context.ConditionCode != ConditionCode.Equal)
 			return false;
 
-		if (!context.Operand1.IsResolvedConstant)
-			return false;
-
-		if (context.Operand1.ConstantUnsigned64 != 0)
+		if (!context.Operand1.IsConstantZero)
 			return false;
 
 		if (!context.Operand2.IsVirtualRegister)
@@ -85,13 +70,10 @@ public sealed class Compare64x32NotPassThru_v1 : BaseTransform
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.And32)
+		if (context.Operand2.Definitions[0].Instruction != IR.And32)
 			return false;
 
-		if (!context.Operand2.Definitions[0].Operand2.IsResolvedConstant)
-			return false;
-
-		if (context.Operand2.Definitions[0].Operand2.ConstantUnsigned64 != 1)
+		if (!context.Operand2.Definitions[0].Operand2.IsConstantOne)
 			return false;
 
 		return true;
@@ -107,18 +89,15 @@ public sealed class Compare64x32NotPassThru_v1 : BaseTransform
 
 		var c1 = Operand.CreateConstant(1);
 
-		context.SetInstruction(IRInstruction.Not32, v1, t1);
-		context.AppendInstruction(IRInstruction.And32, result, v1, c1);
+		context.SetInstruction(IR.Not32, v1, t1);
+		context.AppendInstruction(IR.And32, result, v1, c1);
 	}
 }
 
-/// <summary>
-/// Compare64x32NotPassThru_v2
-/// </summary>
-[Transform("IR.Optimizations.Auto.Simplification")]
+[Transform()]
 public sealed class Compare64x32NotPassThru_v2 : BaseTransform
 {
-	public Compare64x32NotPassThru_v2() : base(IRInstruction.Compare64x32, TransformType.Auto | TransformType.Optimization)
+	public Compare64x32NotPassThru_v2() : base(IR.Compare64x32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -130,22 +109,16 @@ public sealed class Compare64x32NotPassThru_v2 : BaseTransform
 		if (!context.Operand1.IsVirtualRegister)
 			return false;
 
-		if (!context.Operand2.IsResolvedConstant)
-			return false;
-
-		if (context.Operand2.ConstantUnsigned64 != 0)
+		if (!context.Operand2.IsConstantZero)
 			return false;
 
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.And32)
+		if (context.Operand1.Definitions[0].Instruction != IR.And32)
 			return false;
 
-		if (!context.Operand1.Definitions[0].Operand1.IsResolvedConstant)
-			return false;
-
-		if (context.Operand1.Definitions[0].Operand1.ConstantUnsigned64 != 1)
+		if (!context.Operand1.Definitions[0].Operand1.IsConstantOne)
 			return false;
 
 		return true;
@@ -161,18 +134,15 @@ public sealed class Compare64x32NotPassThru_v2 : BaseTransform
 
 		var c1 = Operand.CreateConstant(1);
 
-		context.SetInstruction(IRInstruction.Not32, v1, t1);
-		context.AppendInstruction(IRInstruction.And32, result, v1, c1);
+		context.SetInstruction(IR.Not32, v1, t1);
+		context.AppendInstruction(IR.And32, result, v1, c1);
 	}
 }
 
-/// <summary>
-/// Compare64x32NotPassThru_v3
-/// </summary>
-[Transform("IR.Optimizations.Auto.Simplification")]
+[Transform()]
 public sealed class Compare64x32NotPassThru_v3 : BaseTransform
 {
-	public Compare64x32NotPassThru_v3() : base(IRInstruction.Compare64x32, TransformType.Auto | TransformType.Optimization)
+	public Compare64x32NotPassThru_v3() : base(IR.Compare64x32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -181,10 +151,7 @@ public sealed class Compare64x32NotPassThru_v3 : BaseTransform
 		if (context.ConditionCode != ConditionCode.Equal)
 			return false;
 
-		if (!context.Operand1.IsResolvedConstant)
-			return false;
-
-		if (context.Operand1.ConstantUnsigned64 != 0)
+		if (!context.Operand1.IsConstantZero)
 			return false;
 
 		if (!context.Operand2.IsVirtualRegister)
@@ -193,13 +160,10 @@ public sealed class Compare64x32NotPassThru_v3 : BaseTransform
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.And32)
+		if (context.Operand2.Definitions[0].Instruction != IR.And32)
 			return false;
 
-		if (!context.Operand2.Definitions[0].Operand1.IsResolvedConstant)
-			return false;
-
-		if (context.Operand2.Definitions[0].Operand1.ConstantUnsigned64 != 1)
+		if (!context.Operand2.Definitions[0].Operand1.IsConstantOne)
 			return false;
 
 		return true;
@@ -215,7 +179,7 @@ public sealed class Compare64x32NotPassThru_v3 : BaseTransform
 
 		var c1 = Operand.CreateConstant(1);
 
-		context.SetInstruction(IRInstruction.Not32, v1, t1);
-		context.AppendInstruction(IRInstruction.And32, result, v1, c1);
+		context.SetInstruction(IR.Not32, v1, t1);
+		context.AppendInstruction(IR.And32, result, v1, c1);
 	}
 }

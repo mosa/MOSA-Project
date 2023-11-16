@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Phi;
 
 public sealed class PhiR8Dead : BasePhiTransform
 {
-	public PhiR8Dead() : base(IRInstruction.PhiR8, TransformType.Manual | TransformType.Optimization)
+	public PhiR8Dead() : base(IR.PhiR8, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

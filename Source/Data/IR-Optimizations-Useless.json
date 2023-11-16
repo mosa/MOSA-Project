@@ -153,26 +153,7 @@
 			"Priority": "85",
 			"Variations": "No"
 		},
-		{
-			"Type": "Useless",
-			"Name": "ZeroExtend8x32",
-			"SubName": "ZeroExtend16x32",
-			"Expression": "IR.ZeroExtend8x32 (IR.ZeroExtend16x32 a)",
-			"Filter": "!IsConstant(a)",
-			"Result": "(IR.ZeroExtend8x32 a)",
-			"Priority": "85",
-			"Variations": "No"
-		},
-		{
-			"Type": "Useless",
-			"Name": "ZeroExtend16x32",
-			"SubName": "ZeroExtend8x32",
-			"Expression": "IR.ZeroExtend16x32 (IR.ZeroExtend8x32 a)",
-			"Filter": "!IsConstant(a)",
-			"Result": "(IR.ZeroExtend8x32 a)",
-			"Priority": "85",
-			"Variations": "No"
-		},
+
 		{
 			"Type": "Useless",
 			"Name": "ZeroExtend8x64",

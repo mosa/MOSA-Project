@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-/// <summary>
-/// AddSub32
-/// </summary>
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class AddSub32 : BaseTransform
 {
-	public AddSub32() : base(IRInstruction.Add32, TransformType.Auto | TransformType.Optimization)
+	public AddSub32() : base(IR.Add32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -24,7 +21,7 @@ public sealed class AddSub32 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Sub32)
+		if (context.Operand1.Definitions[0].Instruction != IR.Sub32)
 			return false;
 
 		if (!IsResolvedConstant(context.Operand1.Definitions[0].Operand2))
@@ -46,17 +43,14 @@ public sealed class AddSub32 : BaseTransform
 
 		var e1 = Operand.CreateConstant(Add32(To32(t2), To32(t3)));
 
-		context.SetInstruction(IRInstruction.Sub32, result, t1, e1);
+		context.SetInstruction(IR.Sub32, result, t1, e1);
 	}
 }
 
-/// <summary>
-/// AddSub32_v1
-/// </summary>
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class AddSub32_v1 : BaseTransform
 {
-	public AddSub32_v1() : base(IRInstruction.Add32, TransformType.Auto | TransformType.Optimization)
+	public AddSub32_v1() : base(IR.Add32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -70,7 +64,7 @@ public sealed class AddSub32_v1 : BaseTransform
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.Sub32)
+		if (context.Operand2.Definitions[0].Instruction != IR.Sub32)
 			return false;
 
 		if (!IsResolvedConstant(context.Operand2.Definitions[0].Operand2))
@@ -92,6 +86,6 @@ public sealed class AddSub32_v1 : BaseTransform
 
 		var e1 = Operand.CreateConstant(Add32(To32(t3), To32(t1)));
 
-		context.SetInstruction(IRInstruction.Sub32, result, t2, e1);
+		context.SetInstruction(IR.Sub32, result, t2, e1);
 	}
 }

@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove;
 
-/// <summary>
-/// MulSigned32
-/// </summary>
-[Transform("IR.Optimizations.Auto.ConstantMove")]
+[Transform()]
 public sealed class MulSigned32 : BaseTransform
 {
-	public MulSigned32() : base(IRInstruction.MulSigned32, TransformType.Auto | TransformType.Optimization)
+	public MulSigned32() : base(IR.MulSigned32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -32,6 +29,6 @@ public sealed class MulSigned32 : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2;
 
-		context.SetInstruction(IRInstruction.MulSigned32, result, t2, t1);
+		context.SetInstruction(IR.MulSigned32, result, t2, t1);
 	}
 }

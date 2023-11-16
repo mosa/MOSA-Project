@@ -9,7 +9,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.ConstantFoldin
 /// </summary>
 public sealed class SubCarryOut64 : BaseTransform
 {
-	public SubCarryOut64() : base(IRInstruction.SubCarryOut64, TransformType.Manual | TransformType.Optimization)
+	public SubCarryOut64() : base(IR.SubCarryOut64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -37,7 +37,7 @@ public sealed class SubCarryOut64 : BaseTransform
 		var e1 = Operand.CreateConstant(t1 - t2);
 		var carry = IntegerTwiddling.IsSubUnsignedCarry(t1, t2);
 
-		context.SetInstruction(IRInstruction.Move64, result, e1);
-		context.AppendInstruction(IRInstruction.Move64, result2, carry ? Operand.Constant64_1 : Operand.Constant64_0);
+		context.SetInstruction(IR.Move64, result, e1);
+		context.AppendInstruction(IR.Move64, result2, carry ? Operand.Constant64_1 : Operand.Constant64_0);
 	}
 }

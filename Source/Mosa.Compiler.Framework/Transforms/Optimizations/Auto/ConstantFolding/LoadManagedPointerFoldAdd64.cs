@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-/// <summary>
-/// LoadManagedPointerFoldAdd64
-/// </summary>
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class LoadManagedPointerFoldAdd64 : BaseTransform
 {
-	public LoadManagedPointerFoldAdd64() : base(IRInstruction.LoadManagedPointer, TransformType.Auto | TransformType.Optimization)
+	public LoadManagedPointerFoldAdd64() : base(IR.LoadManagedPointer, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -22,7 +19,7 @@ public sealed class LoadManagedPointerFoldAdd64 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Add64)
+		if (context.Operand1.Definitions[0].Instruction != IR.Add64)
 			return false;
 
 		if (!IsResolvedConstant(context.Operand2))
@@ -44,6 +41,6 @@ public sealed class LoadManagedPointerFoldAdd64 : BaseTransform
 
 		var e1 = Operand.CreateConstant(Add64(To64(t2), To64(t3)));
 
-		context.SetInstruction(IRInstruction.LoadManagedPointer, result, t1, e1);
+		context.SetInstruction(IR.LoadManagedPointer, result, t1, e1);
 	}
 }

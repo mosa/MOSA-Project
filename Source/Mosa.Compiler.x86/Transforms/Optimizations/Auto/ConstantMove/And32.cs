@@ -6,10 +6,7 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.ConstantMove;
 
-/// <summary>
-/// And32
-/// </summary>
-[Transform("x86.Optimizations.Auto.ConstantMove")]
+[Transform()]
 public sealed class And32 : BaseTransform
 {
 	public And32() : base(X86.And32, TransformType.Auto | TransformType.Optimization)
@@ -30,7 +27,7 @@ public sealed class And32 : BaseTransform
 		if (!IsConstant(context.Operand2.Definitions[0].Operand1))
 			return false;
 
-		if (AreStatusFlagUsed(context))
+		if (AreAnyStatusFlagsUsed(context))
 			return false;
 
 		return true;

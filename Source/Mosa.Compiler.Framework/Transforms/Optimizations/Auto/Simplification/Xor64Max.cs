@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
-/// <summary>
-/// Xor64Max
-/// </summary>
-[Transform("IR.Optimizations.Auto.Simplification")]
+[Transform()]
 public sealed class Xor64Max : BaseTransform
 {
-	public Xor64Max() : base(IRInstruction.Xor64, TransformType.Auto | TransformType.Optimization)
+	public Xor64Max() : base(IR.Xor64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -31,17 +28,14 @@ public sealed class Xor64Max : BaseTransform
 
 		var t1 = context.Operand1;
 
-		context.SetInstruction(IRInstruction.Not64, result, t1);
+		context.SetInstruction(IR.Not64, result, t1);
 	}
 }
 
-/// <summary>
-/// Xor64Max_v1
-/// </summary>
-[Transform("IR.Optimizations.Auto.Simplification")]
+[Transform()]
 public sealed class Xor64Max_v1 : BaseTransform
 {
-	public Xor64Max_v1() : base(IRInstruction.Xor64, TransformType.Auto | TransformType.Optimization)
+	public Xor64Max_v1() : base(IR.Xor64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -62,6 +56,6 @@ public sealed class Xor64Max_v1 : BaseTransform
 
 		var t1 = context.Operand2;
 
-		context.SetInstruction(IRInstruction.Not64, result, t1);
+		context.SetInstruction(IR.Not64, result, t1);
 	}
 }

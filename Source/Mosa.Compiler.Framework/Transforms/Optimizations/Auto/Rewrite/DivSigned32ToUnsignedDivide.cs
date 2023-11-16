@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Rewrite;
 
-/// <summary>
-/// DivSigned32ToUnsignedDivide
-/// </summary>
-[Transform("IR.Optimizations.Auto.Rewrite")]
+[Transform()]
 public sealed class DivSigned32ToUnsignedDivide : BaseTransform
 {
-	public DivSigned32ToUnsignedDivide() : base(IRInstruction.DivSigned32, TransformType.Auto | TransformType.Optimization)
+	public DivSigned32ToUnsignedDivide() : base(IR.DivSigned32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -41,7 +38,7 @@ public sealed class DivSigned32ToUnsignedDivide : BaseTransform
 
 		var e1 = Operand.CreateConstant(Neg32(To32(t2)));
 
-		context.SetInstruction(IRInstruction.DivUnsigned32, v1, t1, e1);
-		context.AppendInstruction(IRInstruction.Neg32, result, v1);
+		context.SetInstruction(IR.DivUnsigned32, v1, t1, e1);
+		context.AppendInstruction(IR.Neg32, result, v1);
 	}
 }

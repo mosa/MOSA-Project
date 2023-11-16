@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-/// <summary>
-/// ArithShiftRight64
-/// </summary>
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class ArithShiftRight64 : BaseTransform
 {
-	public ArithShiftRight64() : base(IRInstruction.ArithShiftRight64, TransformType.Auto | TransformType.Optimization)
+	public ArithShiftRight64() : base(IR.ArithShiftRight64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -36,6 +33,6 @@ public sealed class ArithShiftRight64 : BaseTransform
 
 		var e1 = Operand.CreateConstant(ArithmeticShiftRight64(To64(t1), ToSigned64(t2)));
 
-		context.SetInstruction(IRInstruction.Move64, result, e1);
+		context.SetInstruction(IR.Move64, result, e1);
 	}
 }

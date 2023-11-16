@@ -6,10 +6,7 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.ConstantMove;
 
-/// <summary>
-/// Shl32
-/// </summary>
-[Transform("x86.Optimizations.Auto.ConstantMove")]
+[Transform()]
 public sealed class Shl32 : BaseTransform
 {
 	public Shl32() : base(X86.Shl32, TransformType.Auto | TransformType.Optimization)
@@ -30,7 +27,7 @@ public sealed class Shl32 : BaseTransform
 		if (!IsConstant(context.Operand2.Definitions[0].Operand1))
 			return false;
 
-		if (AreStatusFlagUsed(context))
+		if (AreAnyStatusFlagsUsed(context))
 			return false;
 
 		return true;

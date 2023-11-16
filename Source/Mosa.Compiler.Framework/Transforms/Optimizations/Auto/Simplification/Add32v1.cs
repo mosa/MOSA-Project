@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
-/// <summary>
-/// Add32v1
-/// </summary>
-[Transform("IR.Optimizations.Auto.Simplification")]
+[Transform()]
 public sealed class Add32v1 : BaseTransform
 {
-	public Add32v1() : base(IRInstruction.Add32, TransformType.Auto | TransformType.Optimization)
+	public Add32v1() : base(IR.Add32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -22,7 +19,7 @@ public sealed class Add32v1 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Sub32)
+		if (context.Operand1.Definitions[0].Instruction != IR.Sub32)
 			return false;
 
 		if (!AreSame(context.Operand1.Definitions[0].Operand2, context.Operand2))
@@ -37,17 +34,14 @@ public sealed class Add32v1 : BaseTransform
 
 		var t1 = context.Operand1.Definitions[0].Operand2;
 
-		context.SetInstruction(IRInstruction.Move32, result, t1);
+		context.SetInstruction(IR.Move32, result, t1);
 	}
 }
 
-/// <summary>
-/// Add32v1_v1
-/// </summary>
-[Transform("IR.Optimizations.Auto.Simplification")]
+[Transform()]
 public sealed class Add32v1_v1 : BaseTransform
 {
-	public Add32v1_v1() : base(IRInstruction.Add32, TransformType.Auto | TransformType.Optimization)
+	public Add32v1_v1() : base(IR.Add32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -59,7 +53,7 @@ public sealed class Add32v1_v1 : BaseTransform
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.Sub32)
+		if (context.Operand2.Definitions[0].Instruction != IR.Sub32)
 			return false;
 
 		if (!AreSame(context.Operand1, context.Operand2.Definitions[0].Operand2))
@@ -74,6 +68,6 @@ public sealed class Add32v1_v1 : BaseTransform
 
 		var t1 = context.Operand1;
 
-		context.SetInstruction(IRInstruction.Move32, result, t1);
+		context.SetInstruction(IR.Move32, result, t1);
 	}
 }

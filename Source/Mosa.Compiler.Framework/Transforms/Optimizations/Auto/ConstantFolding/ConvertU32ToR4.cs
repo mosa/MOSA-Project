@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-/// <summary>
-/// ConvertU32ToR4
-/// </summary>
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class ConvertU32ToR4 : BaseTransform
 {
-	public ConvertU32ToR4() : base(IRInstruction.ConvertI32ToR4, TransformType.Auto | TransformType.Optimization)
+	public ConvertU32ToR4() : base(IR.ConvertI32ToR4, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -32,6 +29,6 @@ public sealed class ConvertU32ToR4 : BaseTransform
 
 		var e1 = Operand.CreateConstant(ToR4(To32(t1)));
 
-		context.SetInstruction(IRInstruction.MoveR4, result, e1);
+		context.SetInstruction(IR.MoveR4, result, e1);
 	}
 }

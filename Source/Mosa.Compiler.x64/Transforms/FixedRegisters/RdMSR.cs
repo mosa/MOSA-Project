@@ -7,7 +7,7 @@ namespace Mosa.Compiler.x64.Transforms.FixedRegisters;
 /// <summary>
 /// RdMSR
 /// </summary>
-[Transform("x64.FixedRegisters")]
+[Transform]
 public sealed class RdMSR : BaseTransform
 {
 	public RdMSR() : base(X64.RdMSR, TransformType.Manual | TransformType.Transform)

@@ -41,88 +41,88 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		Register(InstructionsRemovedCount);
 		Register(BranchesRemovedCount);
 
-		Register(IRInstruction.Phi32, Phi32);
-		Register(IRInstruction.Phi64, Phi64);
+		Register(IR.Phi32, Phi32);
+		Register(IR.Phi64, Phi64);
 
-		Register(IRInstruction.Move32, Move32);
-		Register(IRInstruction.Move64, Move64);
+		Register(IR.Move32, Move32);
+		Register(IR.Move64, Move64);
 
-		Register(IRInstruction.Truncate64x32, Truncate64x32);
+		Register(IR.Truncate64x32, Truncate64x32);
 
-		Register(IRInstruction.GetLow32, GetLow32);
-		Register(IRInstruction.GetHigh32, GetHigh32);
-		Register(IRInstruction.To64, To64);
+		Register(IR.GetLow32, GetLow32);
+		Register(IR.GetHigh32, GetHigh32);
+		Register(IR.To64, To64);
 
-		Register(IRInstruction.Or32, Or32);
-		Register(IRInstruction.Or64, Or64);
-		Register(IRInstruction.And32, And32);
-		Register(IRInstruction.And64, And64);
-		Register(IRInstruction.Xor32, Xor32);
-		Register(IRInstruction.Xor64, Xor64);
-		Register(IRInstruction.Neg32, Neg32);
-		Register(IRInstruction.Neg64, Neg64);
-		Register(IRInstruction.Not32, Not32);
-		Register(IRInstruction.Not64, Not64);
+		Register(IR.Or32, Or32);
+		Register(IR.Or64, Or64);
+		Register(IR.And32, And32);
+		Register(IR.And64, And64);
+		Register(IR.Xor32, Xor32);
+		Register(IR.Xor64, Xor64);
+		Register(IR.Neg32, Neg32);
+		Register(IR.Neg64, Neg64);
+		Register(IR.Not32, Not32);
+		Register(IR.Not64, Not64);
 
-		Register(IRInstruction.LoadZeroExtend8x32, LoadZeroExtend8x32);
-		Register(IRInstruction.LoadZeroExtend16x32, LoadZeroExtend16x32);
+		Register(IR.LoadZeroExtend8x32, LoadZeroExtend8x32);
+		Register(IR.LoadZeroExtend16x32, LoadZeroExtend16x32);
 
-		Register(IRInstruction.LoadZeroExtend8x64, LoadZeroExtend8x64);
-		Register(IRInstruction.LoadZeroExtend16x64, LoadZeroExtend16x64);
-		Register(IRInstruction.LoadZeroExtend32x64, LoadZeroExtend32x64);
+		Register(IR.LoadZeroExtend8x64, LoadZeroExtend8x64);
+		Register(IR.LoadZeroExtend16x64, LoadZeroExtend16x64);
+		Register(IR.LoadZeroExtend32x64, LoadZeroExtend32x64);
 
-		Register(IRInstruction.LoadParamZeroExtend8x32, LoadParamZeroExtend8x32);
-		Register(IRInstruction.LoadParamZeroExtend16x32, LoadParamZeroExtend16x32);
-		Register(IRInstruction.LoadParamZeroExtend8x64, LoadParamZeroExtend8x64);
-		Register(IRInstruction.LoadParamZeroExtend16x64, LoadParamZeroExtend16x64);
-		Register(IRInstruction.LoadParamZeroExtend32x64, LoadParamZeroExtend32x64);
+		Register(IR.LoadParamZeroExtend8x32, LoadParamZeroExtend8x32);
+		Register(IR.LoadParamZeroExtend16x32, LoadParamZeroExtend16x32);
+		Register(IR.LoadParamZeroExtend8x64, LoadParamZeroExtend8x64);
+		Register(IR.LoadParamZeroExtend16x64, LoadParamZeroExtend16x64);
+		Register(IR.LoadParamZeroExtend32x64, LoadParamZeroExtend32x64);
 
-		Register(IRInstruction.ShiftRight32, ShiftRight32);
-		Register(IRInstruction.ShiftRight64, ShiftRight64);
+		Register(IR.ShiftRight32, ShiftRight32);
+		Register(IR.ShiftRight64, ShiftRight64);
 
-		Register(IRInstruction.ArithShiftRight32, ArithShiftRight32);
-		Register(IRInstruction.ArithShiftRight64, ArithShiftRight64);
+		Register(IR.ArithShiftRight32, ArithShiftRight32);
+		Register(IR.ArithShiftRight64, ArithShiftRight64);
 
-		Register(IRInstruction.ShiftLeft32, ShiftLeft32);
-		Register(IRInstruction.ShiftLeft64, ShiftLeft64);
+		Register(IR.ShiftLeft32, ShiftLeft32);
+		Register(IR.ShiftLeft64, ShiftLeft64);
 
-		Register(IRInstruction.Compare32x32, Compare32x32);
-		Register(IRInstruction.Compare64x64, Compare64x64);
-		Register(IRInstruction.Compare64x32, Compare64x32);
+		Register(IR.Compare32x32, Compare32x32);
+		Register(IR.Compare64x64, Compare64x64);
+		Register(IR.Compare64x32, Compare64x32);
 
-		Register(IRInstruction.MulUnsigned32, MulUnsigned32);
-		Register(IRInstruction.MulUnsigned64, MulUnsigned64);
+		Register(IR.MulUnsigned32, MulUnsigned32);
+		Register(IR.MulUnsigned64, MulUnsigned64);
 
-		Register(IRInstruction.MulSigned32, MulSigned32);
-		Register(IRInstruction.MulSigned64, MulSigned64);
+		Register(IR.MulSigned32, MulSigned32);
+		Register(IR.MulSigned64, MulSigned64);
 
-		Register(IRInstruction.Add32, Add32);
-		Register(IRInstruction.Add64, Add64);
-		Register(IRInstruction.AddCarryIn32, AddCarryIn32);
+		Register(IR.Add32, Add32);
+		Register(IR.Add64, Add64);
+		Register(IR.AddCarryIn32, AddCarryIn32);
 
-		Register(IRInstruction.SignExtend16x32, SignExtend16x32);
-		Register(IRInstruction.SignExtend8x32, SignExtend8x32);
-		Register(IRInstruction.SignExtend16x64, SignExtend16x64);
-		Register(IRInstruction.SignExtend8x64, SignExtend8x64);
-		Register(IRInstruction.SignExtend32x64, SignExtend32x64);
+		Register(IR.SignExtend16x32, SignExtend16x32);
+		Register(IR.SignExtend8x32, SignExtend8x32);
+		Register(IR.SignExtend16x64, SignExtend16x64);
+		Register(IR.SignExtend8x64, SignExtend8x64);
+		Register(IR.SignExtend32x64, SignExtend32x64);
 
-		Register(IRInstruction.ZeroExtend16x32, ZeroExtend16x32);
-		Register(IRInstruction.ZeroExtend8x32, ZeroExtend8x32);
-		Register(IRInstruction.ZeroExtend16x64, ZeroExtend16x64);
-		Register(IRInstruction.ZeroExtend8x64, ZeroExtend8x64);
-		Register(IRInstruction.ZeroExtend32x64, ZeroExtend32x64);
+		Register(IR.ZeroExtend16x32, ZeroExtend16x32);
+		Register(IR.ZeroExtend8x32, ZeroExtend8x32);
+		Register(IR.ZeroExtend16x64, ZeroExtend16x64);
+		Register(IR.ZeroExtend8x64, ZeroExtend8x64);
+		Register(IR.ZeroExtend32x64, ZeroExtend32x64);
 
-		Register(IRInstruction.RemUnsigned32, RemUnsigned32);
-		Register(IRInstruction.RemUnsigned64, RemUnsigned64);
+		Register(IR.RemUnsigned32, RemUnsigned32);
+		Register(IR.RemUnsigned64, RemUnsigned64);
 
-		Register(IRInstruction.IfThenElse32, IfThenElse32);
-		Register(IRInstruction.IfThenElse64, IfThenElse64);
-		Register(IRInstruction.NewString, NewString);
-		Register(IRInstruction.NewObject, NewObject);
-		Register(IRInstruction.NewArray, NewArray);
+		Register(IR.IfThenElse32, IfThenElse32);
+		Register(IR.IfThenElse64, IfThenElse64);
+		Register(IR.NewString, NewString);
+		Register(IR.NewObject, NewObject);
+		Register(IR.NewArray, NewArray);
 
-		Register(IRInstruction.DivUnsigned32, DivUnsigned32);
-		Register(IRInstruction.DivUnsigned64, DivUnsigned64);
+		Register(IR.DivUnsigned32, DivUnsigned32);
+		Register(IR.DivUnsigned64, DivUnsigned64);
 
 		// Any result
 
@@ -358,13 +358,13 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 			var node = block.BeforeLast;
 
-			while (node.IsEmptyOrNop || node.Instruction == IRInstruction.Jmp)
+			while (node.IsEmptyOrNop || node.Instruction == IR.Jmp)
 			{
 				node = node.Previous;
 			}
 
 			// Skip Switch instructions
-			if (node.Instruction == IRInstruction.Switch)
+			if (node.Instruction == IR.Switch)
 				continue;
 
 			Debug.Assert(node.Instruction.IsBranch);

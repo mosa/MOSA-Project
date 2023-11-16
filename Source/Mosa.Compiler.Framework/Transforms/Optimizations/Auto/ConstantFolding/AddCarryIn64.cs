@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-/// <summary>
-/// AddCarryIn64
-/// </summary>
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class AddCarryIn64 : BaseTransform
 {
-	public AddCarryIn64() : base(IRInstruction.AddCarryIn64, TransformType.Auto | TransformType.Optimization)
+	public AddCarryIn64() : base(IR.AddCarryIn64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -40,6 +37,6 @@ public sealed class AddCarryIn64 : BaseTransform
 
 		var e1 = Operand.CreateConstant(Add64(Add64(To64(t1), To64(t2)), BoolTo64(To64(t3))));
 
-		context.SetInstruction(IRInstruction.Move64, result, e1);
+		context.SetInstruction(IR.Move64, result, e1);
 	}
 }

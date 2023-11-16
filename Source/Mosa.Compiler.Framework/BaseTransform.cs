@@ -144,6 +144,26 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 		return operand.IsInteger;
 	}
 
+	protected static bool IsUnsignedBetween32(Operand operand, uint a, uint b)
+	{
+		return operand.IsInteger && operand.ConstantUnsigned32 >= a && operand.ConstantUnsigned32 <= b;
+	}
+
+	protected static bool IsUnsignedBetween64(Operand operand, uint a, uint b)
+	{
+		return operand.IsInteger && operand.ConstantUnsigned64 >= a && operand.ConstantUnsigned64 <= b;
+	}
+
+	protected static bool IsSignedBetween32(Operand operand, uint a, uint b)
+	{
+		return operand.IsInteger && operand.ConstantSigned32 >= a && operand.ConstantSigned32 <= b;
+	}
+
+	protected static bool IsSignedBetween64(Operand operand, uint a, uint b)
+	{
+		return operand.IsInteger && operand.ConstantSigned64 >= a && operand.ConstantSigned64 <= b;
+	}
+
 	protected static bool IsIntegerBetween0And32(Operand operand)
 	{
 		return operand.IsInteger && operand.ConstantSigned64 >= 0 && operand.ConstantSigned64 <= 32;
@@ -239,7 +259,7 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 		return value == 0;
 	}
 
-	public static bool AreStatusFlagUsed(Context context)
+	public static bool AreAnyStatusFlagsUsed(Context context)
 	{
 		return AreStatusFlagsUsed(context.Instruction, context.Node) != TriState.No;
 	}
@@ -273,7 +293,6 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 	{
 		return a == ulong.MaxValue;
 	}
-
 
 	#endregion Filter Methods
 
@@ -836,11 +855,6 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 	public enum TriState
 	{ Yes, No, Unknown };
 
-	public static TriState AreAnyStatusFlagsUsed(Context context)
-	{
-		return AreAnyStatusFlagsUsed(context.Node);
-	}
-
 	public static TriState AreAnyStatusFlagsUsed(Node node)
 	{
 		return AreStatusFlagsUsed(node.Next, true, true, true, true, true);
@@ -875,18 +889,18 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 			if (at.IsBlockEndInstruction)
 				return TriState.Unknown;
 
-			if (at.Instruction == IRInstruction.StableObjectTracking
-				|| at.Instruction == IRInstruction.UnstableObjectTracking
-				|| at.Instruction == IRInstruction.Kill
-				|| at.Instruction == IRInstruction.KillAll
-				|| at.Instruction == IRInstruction.KillAllExcept
-				|| at.Instruction == IRInstruction.Gen)
+			if (at.Instruction == IR.StableObjectTracking
+				|| at.Instruction == IR.UnstableObjectTracking
+				|| at.Instruction == IR.Kill
+				|| at.Instruction == IR.KillAll
+				|| at.Instruction == IR.KillAllExcept
+				|| at.Instruction == IR.Gen)
 				continue;
 
 			if (at.Instruction.IsReturn)
 				return TriState.No;
 
-			if (at.Instruction == IRInstruction.Epilogue)
+			if (at.Instruction == IR.Epilogue)
 				return TriState.No;
 
 			if (at.Instruction.IsUnconditionalBranch && at.Block.NextBlocks.Count == 1)

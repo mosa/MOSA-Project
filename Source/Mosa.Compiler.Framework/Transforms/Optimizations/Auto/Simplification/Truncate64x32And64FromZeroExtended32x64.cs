@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
-/// <summary>
-/// Truncate64x32And64FromZeroExtended32x64
-/// </summary>
-[Transform("IR.Optimizations.Auto.Simplification")]
+[Transform()]
 public sealed class Truncate64x32And64FromZeroExtended32x64 : BaseTransform
 {
-	public Truncate64x32And64FromZeroExtended32x64() : base(IRInstruction.Truncate64x32, TransformType.Auto | TransformType.Optimization)
+	public Truncate64x32And64FromZeroExtended32x64() : base(IR.Truncate64x32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -22,7 +19,7 @@ public sealed class Truncate64x32And64FromZeroExtended32x64 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.And64)
+		if (context.Operand1.Definitions[0].Instruction != IR.And64)
 			return false;
 
 		if (!context.Operand1.Definitions[0].Operand1.IsVirtualRegister)
@@ -34,13 +31,13 @@ public sealed class Truncate64x32And64FromZeroExtended32x64 : BaseTransform
 		if (!context.Operand1.Definitions[0].Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.ZeroExtend32x64)
+		if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IR.ZeroExtend32x64)
 			return false;
 
 		if (!context.Operand1.Definitions[0].Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.ZeroExtend32x64)
+		if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IR.ZeroExtend32x64)
 			return false;
 
 		return true;
@@ -53,6 +50,6 @@ public sealed class Truncate64x32And64FromZeroExtended32x64 : BaseTransform
 		var t1 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1;
 
-		context.SetInstruction(IRInstruction.And32, result, t1, t2);
+		context.SetInstruction(IR.And32, result, t1, t2);
 	}
 }

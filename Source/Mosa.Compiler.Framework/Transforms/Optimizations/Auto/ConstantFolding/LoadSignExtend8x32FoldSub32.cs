@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-/// <summary>
-/// LoadSignExtend8x32FoldSub32
-/// </summary>
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class LoadSignExtend8x32FoldSub32 : BaseTransform
 {
-	public LoadSignExtend8x32FoldSub32() : base(IRInstruction.LoadSignExtend8x32, TransformType.Auto | TransformType.Optimization)
+	public LoadSignExtend8x32FoldSub32() : base(IR.LoadSignExtend8x32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -22,7 +19,7 @@ public sealed class LoadSignExtend8x32FoldSub32 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.Sub32)
+		if (context.Operand1.Definitions[0].Instruction != IR.Sub32)
 			return false;
 
 		if (!IsResolvedConstant(context.Operand2))
@@ -44,6 +41,6 @@ public sealed class LoadSignExtend8x32FoldSub32 : BaseTransform
 
 		var e1 = Operand.CreateConstant(Sub32(To32(t3), To32(t2)));
 
-		context.SetInstruction(IRInstruction.LoadSignExtend8x32, result, t1, e1);
+		context.SetInstruction(IR.LoadSignExtend8x32, result, t1, e1);
 	}
 }

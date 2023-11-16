@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-/// <summary>
-/// AddCarryIn32Outside1
-/// </summary>
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class AddCarryIn32Outside1 : BaseTransform
 {
-	public AddCarryIn32Outside1() : base(IRInstruction.AddCarryIn32, TransformType.Auto | TransformType.Optimization)
+	public AddCarryIn32Outside1() : base(IR.AddCarryIn32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -35,6 +32,6 @@ public sealed class AddCarryIn32Outside1 : BaseTransform
 
 		var e1 = Operand.CreateConstant(Add32(To32(t1), BoolTo32(To32(t3))));
 
-		context.SetInstruction(IRInstruction.Add32, result, t2, e1);
+		context.SetInstruction(IR.Add32, result, t2, e1);
 	}
 }

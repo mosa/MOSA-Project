@@ -9,7 +9,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.StaticLoad;
 /// </summary>
 public sealed class Load32 : BaseTransform
 {
-	public Load32() : base(IRInstruction.Load32, TransformType.Manual | TransformType.Transform)
+	public Load32() : base(IR.Load32, TransformType.Manual | TransformType.Transform)
 	{
 	}
 
@@ -30,6 +30,6 @@ public sealed class Load32 : BaseTransform
 
 	public override void Transform(Context context, Transform transform)
 	{
-		context.SetInstruction(IRInstruction.Move32, context.Result, Operand.Constant32_0);
+		context.SetInstruction(IR.Move32, context.Result, Operand.Constant32_0);
 	}
 }

@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.BitValue;
 
 public sealed class BranchManagedPointer : BaseTransform
 {
-	public BranchManagedPointer() : base(IRInstruction.BranchManagedPointer, TransformType.Manual | TransformType.Optimization)
+	public BranchManagedPointer() : base(IR.BranchManagedPointer, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -40,7 +40,7 @@ public sealed class BranchManagedPointer : BaseTransform
 		{
 			var phiBlock = GetOtherBranchTarget(block, target);
 
-			context.SetInstruction(IRInstruction.Jmp, target);
+			context.SetInstruction(IR.Jmp, target);
 
 			RemoveRemainingInstructionInBlock(context);
 

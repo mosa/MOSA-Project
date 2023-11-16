@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.BitValue;
 
-/// <summary>
-/// RemSigned64ButNotSigned
-/// </summary>
-[Transform("IR.Optimizations.Auto.BitValue")]
+[Transform()]
 public sealed class RemSigned64ButNotSigned : BaseTransform
 {
-	public RemSigned64ButNotSigned() : base(IRInstruction.RemSigned64, TransformType.Auto | TransformType.Optimization)
+	public RemSigned64ButNotSigned() : base(IR.RemSigned64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -34,6 +31,6 @@ public sealed class RemSigned64ButNotSigned : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2;
 
-		context.SetInstruction(IRInstruction.RemUnsigned64, result, t1, t2);
+		context.SetInstruction(IR.RemUnsigned64, result, t1, t2);
 	}
 }

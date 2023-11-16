@@ -4,13 +4,10 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-/// <summary>
-/// AddR8x2
-/// </summary>
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class AddR8x2 : BaseTransform
 {
-	public AddR8x2() : base(IRInstruction.AddR8, TransformType.Auto | TransformType.Optimization)
+	public AddR8x2() : base(IR.AddR8, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -24,7 +21,7 @@ public sealed class AddR8x2 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.AddR8)
+		if (context.Operand1.Definitions[0].Instruction != IR.AddR8)
 			return false;
 
 		if (!IsResolvedConstant(context.Operand1.Definitions[0].Operand2))
@@ -46,17 +43,14 @@ public sealed class AddR8x2 : BaseTransform
 
 		var e1 = Operand.CreateConstant(AddR8(ToR8(t2), ToR8(t3)));
 
-		context.SetInstruction(IRInstruction.AddR8, result, t1, e1);
+		context.SetInstruction(IR.AddR8, result, t1, e1);
 	}
 }
 
-/// <summary>
-/// AddR8x2_v1
-/// </summary>
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class AddR8x2_v1 : BaseTransform
 {
-	public AddR8x2_v1() : base(IRInstruction.AddR8, TransformType.Auto | TransformType.Optimization)
+	public AddR8x2_v1() : base(IR.AddR8, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -70,7 +64,7 @@ public sealed class AddR8x2_v1 : BaseTransform
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.AddR8)
+		if (context.Operand2.Definitions[0].Instruction != IR.AddR8)
 			return false;
 
 		if (!IsResolvedConstant(context.Operand2.Definitions[0].Operand2))
@@ -92,17 +86,14 @@ public sealed class AddR8x2_v1 : BaseTransform
 
 		var e1 = Operand.CreateConstant(AddR8(ToR8(t3), ToR8(t1)));
 
-		context.SetInstruction(IRInstruction.AddR8, result, t2, e1);
+		context.SetInstruction(IR.AddR8, result, t2, e1);
 	}
 }
 
-/// <summary>
-/// AddR8x2_v2
-/// </summary>
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class AddR8x2_v2 : BaseTransform
 {
-	public AddR8x2_v2() : base(IRInstruction.AddR8, TransformType.Auto | TransformType.Optimization)
+	public AddR8x2_v2() : base(IR.AddR8, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -116,7 +107,7 @@ public sealed class AddR8x2_v2 : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
-		if (context.Operand1.Definitions[0].Instruction != IRInstruction.AddR8)
+		if (context.Operand1.Definitions[0].Instruction != IR.AddR8)
 			return false;
 
 		if (!IsResolvedConstant(context.Operand1.Definitions[0].Operand1))
@@ -138,17 +129,14 @@ public sealed class AddR8x2_v2 : BaseTransform
 
 		var e1 = Operand.CreateConstant(AddR8(ToR8(t1), ToR8(t3)));
 
-		context.SetInstruction(IRInstruction.AddR8, result, t2, e1);
+		context.SetInstruction(IR.AddR8, result, t2, e1);
 	}
 }
 
-/// <summary>
-/// AddR8x2_v3
-/// </summary>
-[Transform("IR.Optimizations.Auto.ConstantFolding")]
+[Transform()]
 public sealed class AddR8x2_v3 : BaseTransform
 {
-	public AddR8x2_v3() : base(IRInstruction.AddR8, TransformType.Auto | TransformType.Optimization)
+	public AddR8x2_v3() : base(IR.AddR8, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -162,7 +150,7 @@ public sealed class AddR8x2_v3 : BaseTransform
 		if (!context.Operand2.IsDefinedOnce)
 			return false;
 
-		if (context.Operand2.Definitions[0].Instruction != IRInstruction.AddR8)
+		if (context.Operand2.Definitions[0].Instruction != IR.AddR8)
 			return false;
 
 		if (!IsResolvedConstant(context.Operand2.Definitions[0].Operand1))
@@ -184,6 +172,6 @@ public sealed class AddR8x2_v3 : BaseTransform
 
 		var e1 = Operand.CreateConstant(AddR8(ToR8(t2), ToR8(t1)));
 
-		context.SetInstruction(IRInstruction.AddR8, result, t3, e1);
+		context.SetInstruction(IR.AddR8, result, t3, e1);
 	}
 }
