@@ -65,7 +65,6 @@
 			"Variations": "No",
 			"Log": "No"
 		},
-
 		{
 			"Type": "BitValue",
 			"Name": "Compare##x32Equal",

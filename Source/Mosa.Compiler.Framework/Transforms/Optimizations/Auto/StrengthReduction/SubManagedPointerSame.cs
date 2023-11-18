@@ -25,8 +25,8 @@ public sealed class SubManagedPointerSame : BaseTransform
 	{
 		var result = context.Result;
 
-		var e1 = Operand.CreateConstant(To32(0));
+		var c1 = Operand.CreateConstant(0);
 
-		context.SetInstruction(IR.MoveManagedPointer, result, e1);
+		context.SetInstruction(IR.MoveManagedPointer, result, c1);
 	}
 }

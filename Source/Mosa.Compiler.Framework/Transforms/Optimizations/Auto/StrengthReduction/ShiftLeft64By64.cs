@@ -28,8 +28,8 @@ public sealed class ShiftLeft64By64 : BaseTransform
 	{
 		var result = context.Result;
 
-		var c1 = Operand.CreateConstant(0);
+		var e1 = Operand.CreateConstant(To64(0));
 
-		context.SetInstruction(IR.Move64, result, c1);
+		context.SetInstruction(IR.Move64, result, e1);
 	}
 }
