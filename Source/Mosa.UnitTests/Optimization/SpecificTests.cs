@@ -245,4 +245,22 @@ public static class SpecificTests
 
 		return a + c1 == v2;
 	}
+
+	[MosaUnitTest(Series = "U4")]
+	public static uint MulBy3(uint a)
+	{
+		return a * 3;
+	}
+
+	[MosaUnitTest(Series = "U4")]
+	public static uint MulBy5(uint a)
+	{
+		return a * 5;
+	}
+
+	[MosaUnitTest(Series = "U4")]
+	public static uint MulBy9(uint a)
+	{
+		return a * 9;
+	}
 }

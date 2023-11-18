@@ -22,6 +22,6 @@ public sealed class MulHu32 : BaseIRTransform
 
 		var v1 = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction2(X86.Mul32, result, v1, operand1, operand2);
+		context.SetInstruction2(X86.Mul32, v1, result, operand1, operand2);
 	}
 }

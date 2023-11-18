@@ -119,6 +119,36 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 		return a == b;
 	}
 
+	protected static bool Contains(Operand operand1, long a)
+	{
+		return IsResolvedConstant(operand1) && operand1.ConstantSigned32 == a;
+	}
+
+	protected static bool Contains(Operand operand1, long a, long b)
+	{
+		return IsResolvedConstant(operand1) && (operand1.ConstantSigned32 == a || operand1.ConstantSigned32 == b);
+	}
+
+	protected static bool Contains(Operand operand1, long a, long b, long c)
+	{
+		return IsResolvedConstant(operand1) && (operand1.ConstantSigned32 == a || operand1.ConstantSigned32 == b || operand1.ConstantSigned32 == c);
+	}
+
+	protected static bool Contains(Operand operand1, ulong a)
+	{
+		return IsResolvedConstant(operand1) && operand1.ConstantUnsigned64 == a;
+	}
+
+	protected static bool Contains(Operand operand1, ulong a, ulong b)
+	{
+		return IsResolvedConstant(operand1) && (operand1.ConstantUnsigned64 == a || operand1.ConstantUnsigned64 == b);
+	}
+
+	protected static bool Contains(Operand operand1, ulong a, ulong b, ulong c)
+	{
+		return IsResolvedConstant(operand1) && (operand1.ConstantUnsigned64 == a || operand1.ConstantUnsigned64 == b && operand1.ConstantUnsigned64 == c);
+	}
+
 	protected static bool IsEvenInteger(Operand operand)
 	{
 		return operand.IsInteger && (operand.ConstantUnsigned64 & 1) == 0;
@@ -272,6 +302,16 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 	protected static bool IsResultAndOperand1Same(Context context)
 	{
 		return context.Result == context.Operand1;
+	}
+
+	protected static bool IsResult1Used(Context context)
+	{
+		return context.Result.IsUsed;
+	}
+
+	protected static bool IsResult2Used(Context context)
+	{
+		return context.Result2.IsUsed;
 	}
 
 	protected static bool IsSignedMax32(uint a)

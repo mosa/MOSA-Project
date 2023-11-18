@@ -404,12 +404,17 @@ public class BuildTransformations : BuildBaseTemplate
 		}
 	}
 
+	//private string CreateConstant(string value)
+	//{
+	//	return "Operand.CreateConstant({name});";
+	//}
+
 	private string CreateExpression(Method method, Dictionary<string, int> labelToLabelNbr, Dictionary<Operand, int> constantToConstantNbr)
 	{
 		var sb = new StringBuilder();
 
 		sb.Append(method.MethodName);
-		sb.Append("(");
+		sb.Append('(');
 
 		foreach (var operand in method.Parameters)
 		{
@@ -441,7 +446,7 @@ public class BuildTransformations : BuildBaseTemplate
 		if (method.Parameters.Count != 0)
 			sb.Length -= 2;
 
-		sb.Append(")");
+		sb.Append(')');
 
 		return sb.ToString();
 	}

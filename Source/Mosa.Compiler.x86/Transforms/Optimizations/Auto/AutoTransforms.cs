@@ -59,5 +59,6 @@ public static class AutoTransforms
 		new Rewrite.Lea32ToMov32Constant1(),
 		new Rewrite.Lea32ToMov32Constant2(),
 		new Rewrite.Lea32RemoveScale(),
+		new Rewrite.Mov32ToLea32By3Or5Or9(),
 	};
 }

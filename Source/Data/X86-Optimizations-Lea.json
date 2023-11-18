@@ -47,6 +47,16 @@
 			"Result": "(X86.Lea32 a 0 1 d)",
 			"Variations": "No",
 			"Log": "Yes"
+		},
+		{
+			"Type": "Rewrite",
+			"Name": "Mov32ToLea32",
+			"SubName": "By3Or5Or9",
+			"Expression": "X86.Mul32 a b",
+			"Filter": "!IsResult1Used(@) && !IsZero(a) && Contains(b, 3, 5, 9) && !AreAnyStatusFlagsUsed(@)",
+			"Result": "(X86.Lea32 a a [Sub32(To32(b),1)] 0)",
+			"Variations": "No",
+			"Log": "Yes"
 		}
 	]
 }

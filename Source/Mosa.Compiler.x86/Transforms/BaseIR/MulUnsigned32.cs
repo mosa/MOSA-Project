@@ -18,6 +18,6 @@ public sealed class MulUnsigned32 : BaseIRTransform
 	{
 		var v1 = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction2(X86.Mul32, v1, context.Result, context.Operand1, context.Operand2);
+		context.SetInstruction2(X86.Mul32, context.Result, v1, context.Operand1, context.Operand2);
 	}
 }
