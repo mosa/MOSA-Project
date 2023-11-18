@@ -320,6 +320,7 @@ public static class ManualTransforms
 		new BitValue.BranchManagedPointer(),
 		new BitValue.BranchObject(),
 
-		//new BitValue.Compare32x32Add32Rewrite()
-};
+		new BitValue.AddCarryOut32ToAdd32(),
+		new BitValue.AddCarryOut64ToAdd64()
+	};
 }

@@ -9,7 +9,7 @@ namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.Rewrite;
 [Transform()]
 public sealed class Mov32ToLea32By3Or5Or9 : BaseTransform
 {
-	public Mov32ToLea32By3Or5Or9() : base(X86.Mul32, TransformType.Auto | TransformType.Optimization, true)
+	public Mov32ToLea32By3Or5Or9() : base(X86.Mul32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

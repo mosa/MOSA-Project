@@ -63,7 +63,7 @@
 			"Filter": "!IsCPURegister(a,%ESI) && !IsCPURegister(a,%EDI) && !AreAnyStatusFlagsUsed(@)",
 			"Result": "(X86.Movzx8To32 a)",
 			"Variations": "Yes",
-			"Log": "Yes",
+			"Log": "No",
 			"Ignore": "Yes"
 		},
 		{
@@ -111,7 +111,7 @@
 			"Filter": "!AreAnyStatusFlagsUsed(@)",
 			"Result": "(X86.Mov32 0)",
 			"Variations": "Yes",
-			"Log": "Yes"
+			"Log": "No"
 		},
 		{
 			"Type": "StrengthReduction",
@@ -121,7 +121,7 @@
 			"Filter": "!AreAnyStatusFlagsUsed(@)",
 			"Result": "(X86.Mov32 0xFFFFFFFF)",
 			"Variations": "Yes",
-			"Log": "Yes"
+			"Log": "No"
 		},
 		{
 			"Type": "StrengthReduction",

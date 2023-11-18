@@ -45,7 +45,7 @@
 			"Filter": "!IsCPURegister(a,%RSI) && !IsCPURegister(a,%RDI) && !AreAnyStatusFlagsUsed(@)",
 			"Result": "(X64.Movzx8To## a)",
 			"Variations": "Yes",
-			"Log": "Yes",
+			"Log": "No",
 			"Ignore": "Yes"
 		},
 		{
