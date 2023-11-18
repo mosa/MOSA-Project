@@ -51,7 +51,7 @@ public sealed class Mul32 : BaseTransform
 		Debug.Assert(operand2.IsPhysicalRegister || operand2.IsVirtualRegister);
 
 		context.AppendInstruction2(X86.Mul32, eax, edx, eax, operand2);
-		context.AppendInstruction(X86.Mov32, result, eax);
 		context.AppendInstruction(X86.Mov32, result2, edx);
+		context.AppendInstruction(X86.Mov32, result, eax);
 	}
 }

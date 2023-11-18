@@ -42,7 +42,7 @@ public sealed class Mul32Ditto : BaseTransform
 		var result = context.Result;
 		var result2 = context.Result2;
 
-		context.SetInstruction(X86.Mov32, result, previous.Result);
-		context.AppendInstruction(X86.Mov32, result2, previous.Result2);
+		context.SetInstruction(X86.Mov32, result2, previous.Result2);
+		context.AppendInstruction(X86.Mov32, result, previous.Result);
 	}
 }
