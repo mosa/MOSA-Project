@@ -40,21 +40,21 @@ public sealed class IDiv64 : BaseTransform
 		var rax = transform.PhysicalRegisters.Allocate64(CPURegister.RAX);
 		var rdx = transform.PhysicalRegisters.Allocate64(CPURegister.RDX);
 
-		context.SetInstruction(X64.Mov64, rdx, operand1);
-		context.AppendInstruction(X64.Mov64, rax, operand2);
+		context.SetInstruction(X64.Mov64, rdx, operand2);
+		context.AppendInstruction(X64.Mov64, rax, operand1);
 
 		if (operand3.IsPhysicalRegister)
 		{
-			context.AppendInstruction2(X64.IDiv64, rdx, rax, rdx, rax, operand3);
+			context.AppendInstruction2(X64.IDiv64, rax, rdx, rax, rdx, operand3);
 		}
 		else
 		{
 			var v3 = transform.VirtualRegisters.Allocate64();
 			context.AppendInstruction(X64.Mov64, v3, operand3);
-			context.AppendInstruction2(X64.IDiv64, rdx, rax, rdx, rax, v3);
+			context.AppendInstruction2(X64.IDiv64, rax, rdx, rax, rdx, v3);
 		}
 
-		context.AppendInstruction(X64.Mov64, result2, rax);
-		context.AppendInstruction(X64.Mov64, result, rdx);
+		context.AppendInstruction(X64.Mov64, result2, rdx);
+		context.AppendInstruction(X64.Mov64, result, rax);
 	}
 }

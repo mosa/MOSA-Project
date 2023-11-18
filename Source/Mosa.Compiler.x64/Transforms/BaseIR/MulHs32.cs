@@ -20,8 +20,6 @@ public sealed class MulHs32 : BaseIRTransform
 		var operand1 = context.Operand1;
 		var operand2 = context.Operand2;
 
-		var v1 = transform.VirtualRegisters.Allocate32();
-
-		context.SetInstruction2(X64.IMul32, result, v1, operand1, operand2);
+		context.SetInstruction(X64.IMul32, result, operand1, operand2);
 	}
 }
