@@ -106,7 +106,7 @@
 			"Name": "Lea32",
 			"SubName": "Join",
 			"Expression": "X86.Lea32 (X86.Lea32 a b c d1) 0 1 d2",
-			"Filter": "IsResolvedConstant(d1) && IsResolvedConstant(d2)",
+			"Filter": "IsResolvedConstant(d2) && IsResolvedConstant(d1) ",
 			"Result": "(X86.Lea32 a b c [Add32(To32(d1),To32(d2))])",
 			"Variations": "No",
 			"Log": "Yes"

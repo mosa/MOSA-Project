@@ -30,10 +30,10 @@ public sealed class Lea32Join : BaseTransform
 		if (context.Operand1.Definitions[0].Instruction != X86.Lea32)
 			return false;
 
-		if (!IsResolvedConstant(context.Operand1.Definitions[0].Operand4))
+		if (!IsResolvedConstant(context.Operand4))
 			return false;
 
-		if (!IsResolvedConstant(context.Operand4))
+		if (!IsResolvedConstant(context.Operand1.Definitions[0].Operand4))
 			return false;
 
 		return true;
