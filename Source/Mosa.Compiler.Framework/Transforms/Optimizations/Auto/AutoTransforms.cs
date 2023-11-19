@@ -931,6 +931,8 @@ public static class AutoTransforms
 		new BitValue.MulSigned64ButNotSigned(),
 		new BitValue.RemSigned32ButNotSigned(),
 		new BitValue.RemSigned64ButNotSigned(),
+		new BitValue.DivSigned32ButNotSigned(),
+		new BitValue.DivSigned64ButNotSigned(),
 		new BitValue.ArithShiftRight32ButNotSigned(),
 		new BitValue.ArithShiftRight64ButNotSigned(),
 		new BitValue.Compare32x32EqualAdd32(),

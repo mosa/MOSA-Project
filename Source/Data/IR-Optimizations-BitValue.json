@@ -56,6 +56,17 @@
 		},
 		{
 			"Type": "BitValue",
+			"Name": "DivSigned##",
+			"SubName": "ButNotSigned",
+			"Expression": "IR.DivSigned## a b",
+			"Filter": "IsBitValueSignBitCleared##(a) && IsBitValueSignBitCleared##(b)",
+			"Result": "(IR.DivUnsigned## a b)",
+			"Priority": "20",
+			"Variations": "No",
+			"Log": "Yes"
+		},
+		{
+			"Type": "BitValue",
 			"Name": "ArithShiftRight##",
 			"SubName": "ButNotSigned",
 			"Expression": "IR.ArithShiftRight## a b",
@@ -97,7 +108,6 @@
 				"IR.Compare64x64"
 			]
 		},
-
 		{
 			"Type": "BitValue",
 			"Name": "Compare##x32SignedLess",
