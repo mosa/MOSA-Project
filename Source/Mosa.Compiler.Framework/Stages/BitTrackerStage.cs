@@ -86,9 +86,14 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		Register(IR.ShiftLeft32, ShiftLeft32);
 		Register(IR.ShiftLeft64, ShiftLeft64);
 
-		Register(IR.Compare32x32, Compare32x32);
-		Register(IR.Compare64x64, Compare64x64);
-		Register(IR.Compare64x32, Compare64x32);
+		Register(IR.Compare32x32, Compare);
+		Register(IR.Compare32x64, Compare);
+		Register(IR.Compare64x32, Compare);
+		Register(IR.Compare64x64, Compare);
+		Register(IR.CompareObject, Compare);
+		Register(IR.CompareManagedPointer, Compare);
+		Register(IR.CompareR4, Compare);
+		Register(IR.CompareR8, Compare);
 
 		Register(IR.MulUnsigned32, MulUnsigned32);
 		Register(IR.MulUnsigned64, MulUnsigned64);
@@ -124,19 +129,14 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		Register(IR.DivUnsigned32, DivUnsigned32);
 		Register(IR.DivUnsigned64, DivUnsigned64);
 
-		// Any result
-
-		//Register(IRInstruction.LoadParamSignExtend16x32, Any32);
-		//Register(IRInstruction.LoadParamSignExtend16x64, Any64);
-		//Register(IRInstruction.LoadParamSignExtend32x64, Any64);
-		//Register(IRInstruction.LoadParamSignExtend8x32, Any32);
-		//Register(IRInstruction.LoadParamSignExtend8x64, Any64);
-
-		//Register(IRInstruction.LoadSignExtend16x32, Any32);
-		//Register(IRInstruction.LoadSignExtend16x64, Any64);
-		//Register(IRInstruction.LoadSignExtend32x64, Any64);
-		//Register(IRInstruction.LoadSignExtend8x32, Any32);
-		//Register(IRInstruction.LoadSignExtend8x64, Any64);
+		Register(IR.AddCarryOut32, Result2NarrowToBoolean);
+		Register(IR.AddCarryOut64, Result2NarrowToBoolean);
+		Register(IR.SubCarryOut32, Result2NarrowToBoolean);
+		Register(IR.SubCarryOut64, Result2NarrowToBoolean);
+		Register(IR.SubOverflowOut32, Result2NarrowToBoolean);
+		Register(IR.SubOverflowOut64, Result2NarrowToBoolean);
+		Register(IR.AddOverflowOut32, Result2NarrowToBoolean);
+		Register(IR.AddOverflowOut64, Result2NarrowToBoolean);
 
 		// TODO:
 
@@ -145,15 +145,10 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		// RemSigned32	-- if known to be unsigned, then treat like RemUnsigned
 		// RemSigned64	-- if known to be unsigned, then treat like RemUnsigned
 
-		// AddCarryOut32
-		// AddCarryOut64
-		// AddCarryIn32
-		// AddCarryIn64
-
 		// Sub32
 		// Sub64
-		// SubCarryOut32
-		// SubCarryOut64
+		// AddCarryIn32
+		// AddCarryIn64
 		// SubCarryIn32
 		// SubCarryIn64
 	}
@@ -579,7 +574,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		}
 	}
 
-	private static void Compare32x32(Node node)
+	private static void Compare(Node node)
 	{
 		var result = node.Result.BitValue;
 		var value1 = node.Operand1.BitValue;
@@ -593,43 +588,9 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		}
 		else
 		{
-			result.SetStable(value1, value2);
-		}
-	}
-
-	private static void Compare64x32(Node node)
-	{
-		var result = node.Result.BitValue;
-		var value1 = node.Operand1.BitValue;
-		var value2 = node.Operand2.BitValue;
-
-		var compare = BaseTransform.EvaluateCompare(value1, value2, node.ConditionCode);
-
-		if (compare.HasValue)
-		{
-			result.SetValue(compare.Value);
-		}
-		else
-		{
-			result.SetStable(value1, value2);
-		}
-	}
-
-	private static void Compare64x64(Node node)
-	{
-		var result = node.Result.BitValue;
-		var value1 = node.Operand1.BitValue;
-		var value2 = node.Operand2.BitValue;
-
-		var compare = BaseTransform.EvaluateCompare(value1, value2, node.ConditionCode);
-
-		if (compare.HasValue)
-		{
-			result.SetValue(compare.Value);
-		}
-		else
-		{
-			result.SetStable(value1, value2);
+			result
+				.NarrowToBoolean()
+				.SetStable(value1, value2);
 		}
 	}
 
@@ -1863,6 +1824,13 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 				.NarrowClearBits(BitTwiddling.GetBitsOver(value2.MinValue == 0 ? value1.MaxValue : value1.MaxValue / value2.MinValue))
 				.SetStable(value1, value2);
 		}
+	}
+
+	private static void Result2NarrowToBoolean(Node node)
+	{
+		var result2 = node.Result2.BitValue;
+
+		result2.NarrowToBoolean().SetStable();
 	}
 
 	#endregion IR Instructions
