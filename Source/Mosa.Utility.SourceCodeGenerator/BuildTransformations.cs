@@ -822,7 +822,7 @@ public class BuildTransformations : BuildBaseTemplate
 
 	protected string GetOperandName(int index)
 	{
-		if (index < 3)
+		if (index < 5)
 			return $"Operand{index + 1}";
 		else
 			return $"GetOperand({index})";

@@ -4,7 +4,7 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.Rewrite;
+namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.Lea;
 
 [Transform()]
 public sealed class Lea32Shift32 : BaseTransform
@@ -27,13 +27,10 @@ public sealed class Lea32Shift32 : BaseTransform
 		if (context.Operand2.Definitions[0].Instruction != X86.Shl32)
 			return false;
 
-		if (!IsResolvedConstant(context.Operand2.Definitions[0].Operand2))
+		if (!IsVirtualRegister(context.Operand2.Definitions[0].Operand1))
 			return false;
 
 		if (!IsUnsignedBetween32(context.Operand2.Definitions[0].Operand2, 1, 3))
-			return false;
-
-		if (!IsVirtualRegister(context.Operand2.Definitions[0].Operand1))
 			return false;
 
 		return true;
@@ -46,7 +43,7 @@ public sealed class Lea32Shift32 : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2.Definitions[0].Operand1;
 		var t3 = context.Operand2.Definitions[0].Operand2;
-		var t4 = context.GetOperand(3);
+		var t4 = context.Operand4;
 
 		var e1 = Operand.CreateConstant(ShiftLeft32(1, To32(t3)));
 

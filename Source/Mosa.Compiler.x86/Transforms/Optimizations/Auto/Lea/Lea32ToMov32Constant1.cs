@@ -4,7 +4,7 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.Rewrite;
+namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.Lea;
 
 [Transform()]
 public sealed class Lea32ToMov32Constant1 : BaseTransform
@@ -28,7 +28,7 @@ public sealed class Lea32ToMov32Constant1 : BaseTransform
 	{
 		var result = context.Result;
 
-		var t1 = context.GetOperand(3);
+		var t1 = context.Operand4;
 
 		context.SetInstruction(X86.Mov32, result, t1);
 	}

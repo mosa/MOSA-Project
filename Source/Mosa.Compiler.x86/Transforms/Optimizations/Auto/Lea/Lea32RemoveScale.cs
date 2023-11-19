@@ -4,12 +4,12 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.Rewrite;
+namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.Lea;
 
 [Transform()]
-public sealed class Lea32ToMov32Constant2 : BaseTransform
+public sealed class Lea32RemoveScale : BaseTransform
 {
-	public Lea32ToMov32Constant2() : base(X86.Lea32, TransformType.Auto | TransformType.Optimization)
+	public Lea32RemoveScale() : base(X86.Lea32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -18,7 +18,7 @@ public sealed class Lea32ToMov32Constant2 : BaseTransform
 		if (!context.Operand2.IsConstantZero)
 			return false;
 
-		if (!context.GetOperand(3).IsConstantZero)
+		if (IsOne(context.Operand3))
 			return false;
 
 		return true;
@@ -29,7 +29,11 @@ public sealed class Lea32ToMov32Constant2 : BaseTransform
 		var result = context.Result;
 
 		var t1 = context.Operand1;
+		var t2 = context.Operand4;
 
-		context.SetInstruction(X86.Mov32, result, t1);
+		var c1 = Operand.CreateConstant(0);
+		var c2 = Operand.CreateConstant(1);
+
+		context.SetInstruction(X86.Lea32, result, t1, c1, c2, t2);
 	}
 }

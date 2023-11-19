@@ -5,7 +5,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.BitValue;
 [Transform()]
 public sealed class AddCarryOut32ToAdd32 : BaseTransform
 {
-	public AddCarryOut32ToAdd32() : base(IR.AddCarryOut32, TransformType.Manual | TransformType.Optimization, true)
+	public AddCarryOut32ToAdd32() : base(IR.AddCarryOut32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

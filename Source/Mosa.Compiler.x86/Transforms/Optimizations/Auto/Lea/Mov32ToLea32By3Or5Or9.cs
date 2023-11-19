@@ -4,7 +4,7 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.Rewrite;
+namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.Lea;
 
 [Transform()]
 public sealed class Mov32ToLea32By3Or5Or9 : BaseTransform

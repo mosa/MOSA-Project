@@ -5,7 +5,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.BitValue;
 [Transform()]
 public sealed class AddCarryOut64ToAdd64 : BaseTransform
 {
-	public AddCarryOut64ToAdd64() : base(IR.AddCarryOut64, TransformType.Manual | TransformType.Optimization, true)
+	public AddCarryOut64ToAdd64() : base(IR.AddCarryOut64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
