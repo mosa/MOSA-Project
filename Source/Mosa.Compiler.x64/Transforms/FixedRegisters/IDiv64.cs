@@ -19,10 +19,10 @@ public sealed class IDiv64 : BaseTransform
 			&& context.Result2.IsPhysicalRegister
 			&& context.Operand1.IsPhysicalRegister
 			&& context.Operand2.IsPhysicalRegister
-			&& context.Result.Register == CPURegister.RDX
-			&& context.Result2.Register == CPURegister.RAX
-			&& context.Operand1.Register == CPURegister.RDX
-			&& context.Operand2.Register == CPURegister.RAX)
+			&& context.Result.Register == CPURegister.RAX
+			&& context.Result2.Register == CPURegister.RDX
+			&& context.Operand1.Register == CPURegister.RAX
+			&& context.Operand2.Register == CPURegister.RDX)
 			return false;
 
 		return true;
