@@ -581,13 +581,13 @@ public class BuildTransformations : BuildBaseTemplate
 			if (!filter.IsNegated)
 				sb.Append('!');
 
-			sb.Append(ProcessPrefilters(filter, transform));
+			sb.Append(ProcessPrefilters(filter));
 
 			EmitCondition(sb.ToString());
 		}
 	}
 
-	private string ProcessPrefilters(Method filter, Transformation transform)
+	private string ProcessPrefilters(Method filter)
 	{
 		var sb = new StringBuilder();
 
