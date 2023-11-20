@@ -8,7 +8,6 @@ namespace Mosa.Compiler.x86.Transforms.Tweak;
 /// <summary>
 /// Movzx16To32
 /// </summary>
-[Transform]
 public sealed class Movzx16To32 : BaseTransform
 {
 	public Movzx16To32() : base(X86.Movzx16To32, TransformType.Manual | TransformType.Transform)

@@ -7,7 +7,6 @@ namespace Mosa.Compiler.x64.Transforms.FixedRegisters;
 /// <summary>
 /// Shld32
 /// </summary>
-[Transform]
 public sealed class Shld32 : BaseTransform
 {
 	public Shld32() : base(X64.Shld32, TransformType.Manual | TransformType.Transform)

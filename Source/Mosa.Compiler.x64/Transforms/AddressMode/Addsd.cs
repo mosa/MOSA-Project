@@ -7,7 +7,6 @@ namespace Mosa.Compiler.x64.Transforms.AddressMode;
 /// <summary>
 /// Addsd
 /// </summary>
-[Transform]
 public sealed class Addsd : BaseAddressModeTransform
 {
 	public Addsd() : base(X64.Addsd, TransformType.Manual | TransformType.Transform)

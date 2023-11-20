@@ -7,7 +7,6 @@ namespace Mosa.Compiler.x64.Transforms.BaseIR;
 /// <summary>
 /// SubCarryOut32
 /// </summary>
-[Transform]
 public sealed class SubCarryOut32 : BaseIRTransform
 {
 	public SubCarryOut32() : base(IR.SubCarryOut32, TransformType.Manual | TransformType.Transform)

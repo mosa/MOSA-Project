@@ -6,7 +6,6 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.StrengthReduction;
 
-[Transform()]
 public sealed class Sar32ZeroValue : BaseTransform
 {
 	public Sar32ZeroValue() : base(X86.Sar32, TransformType.Auto | TransformType.Optimization)

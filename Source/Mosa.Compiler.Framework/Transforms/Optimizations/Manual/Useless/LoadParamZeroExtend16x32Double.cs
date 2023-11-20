@@ -5,7 +5,6 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Useless;
 /// <summary>
 /// LoadParamZeroExtend16x32Double
 /// </summary>
-[Transform]
 public sealed class LoadParamZeroExtend16x32Double : BaseTransform
 {
 	public LoadParamZeroExtend16x32Double() : base(IR.ZeroExtend16x32, TransformType.Manual | TransformType.Optimization)

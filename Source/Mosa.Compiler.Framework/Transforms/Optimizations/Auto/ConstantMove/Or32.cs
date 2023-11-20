@@ -4,7 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove;
 
-[Transform()]
 public sealed class Or32 : BaseTransform
 {
 	public Or32() : base(IR.Or32, TransformType.Auto | TransformType.Optimization)

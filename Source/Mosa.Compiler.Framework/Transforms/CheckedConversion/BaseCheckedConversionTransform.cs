@@ -10,6 +10,13 @@ namespace Mosa.Compiler.Framework.Transforms.CheckedConversion
 			: base(instruction, type, log)
 		{ }
 
+		public override int Priority => -10;
+
+		public override bool Match(Context context, Transform transform)
+		{
+			return true;
+		}
+
 		public void CallCheckOverflow(Transform transform, Context context, string vmcall)
 		{
 			var result = context.Result;

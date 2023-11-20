@@ -11,13 +11,6 @@ public sealed class Unbox : BaseRuntimeTransform
 	{
 	}
 
-	public override int Priority => 50;
-
-	public override bool Match(Context context, Transform transform)
-	{
-		return true;
-	}
-
 	public override void Transform(Context context, Transform transform)
 	{
 		//SetVMCall(transform, context, "Unbox", context.Result, context.GetOperands());

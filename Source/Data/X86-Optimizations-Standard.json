@@ -63,7 +63,7 @@
 			"Filter": "!IsCPURegister(a,%ESI) && !IsCPURegister(a,%EDI) && !AreAnyStatusFlagsUsed(@)",
 			"Result": "(X86.Movzx8To32 a)",
 			"Variations": "Yes",
-			"Log": "Yes",
+			"Log": "No",
 			"Ignore": "Yes"
 		},
 		{
@@ -95,8 +95,8 @@
 		},
 		{
 			"Type": "Simplication",
-			"Name": "SubFromZero",
-			"SubName": "",
+			"Name": "Sub32",
+			"SubName": "FromZero",
 			"Expression": "X86.Sub32 0 x",
 			"Filter": "IsVirtualRegister(x)",
 			"Result": "(X86.Neg32 x)",
@@ -111,7 +111,7 @@
 			"Filter": "!AreAnyStatusFlagsUsed(@)",
 			"Result": "(X86.Mov32 0)",
 			"Variations": "Yes",
-			"Log": "Yes"
+			"Log": "No"
 		},
 		{
 			"Type": "StrengthReduction",
@@ -119,9 +119,9 @@
 			"SubName": "ByMax",
 			"Expression": "X86.And32 a 0xFFFFFFFF",
 			"Filter": "!AreAnyStatusFlagsUsed(@)",
-			"Result": "(X86.Mov32 0xFFFFFFFF)",
+			"Result": "(X86.Mov32 [To32(0xFFFFFFFF)])",
 			"Variations": "Yes",
-			"Log": "Yes"
+			"Log": "No"
 		},
 		{
 			"Type": "StrengthReduction",
@@ -177,7 +177,6 @@
 			"Result": "(X86.Mov32 a)",
 			"Priority": "80"
 		},
-
 		{
 			"Type": "Consolidation",
 			"Name": "IMul32Mov32",

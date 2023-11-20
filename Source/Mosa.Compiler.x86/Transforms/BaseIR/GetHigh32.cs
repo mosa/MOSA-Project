@@ -7,7 +7,6 @@ namespace Mosa.Compiler.x86.Transforms.BaseIR;
 /// <summary>
 /// GetHigh32
 /// </summary>
-[Transform]
 public sealed class GetHigh32 : BaseIRTransform
 {
 	public GetHigh32() : base(IR.GetHigh32, TransformType.Manual | TransformType.Transform)

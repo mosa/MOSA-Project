@@ -9,7 +9,6 @@ namespace Mosa.Compiler.x64.Transforms.Optimizations.Manual.Rewrite;
 // A search is required to determine if a status flag is used.
 // However, if the search is not conclusive, the transformation is not made.
 
-[Transform]
 public sealed class Sub64ToLea64 : BaseTransform
 {
 	public Sub64ToLea64() : base(X64.Sub64, TransformType.Manual | TransformType.Optimization)
@@ -22,9 +21,6 @@ public sealed class Sub64ToLea64 : BaseTransform
 			return false;
 
 		if (!context.Operand2.IsResolvedConstant)
-			return false;
-
-		if (!AreSame(context.Operand1, context.Result))
 			return false;
 
 		if (context.Operand1.Register == CPURegister.RSP)
@@ -43,6 +39,6 @@ public sealed class Sub64ToLea64 : BaseTransform
 	{
 		var constant = Operand.CreateConstant(-context.Operand2.ConstantSigned32);
 
-		context.SetInstruction(X64.Lea64, context.Result, context.Operand1, constant);
+		context.SetInstruction(X64.Lea64, context.Result, context.Operand1, Operand.Constant64_0, Operand.Constant64_1, constant);
 	}
 }

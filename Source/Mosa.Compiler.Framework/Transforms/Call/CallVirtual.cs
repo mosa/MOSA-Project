@@ -13,11 +13,6 @@ public sealed class CallVirtual : BasePlugTransform
 	{
 	}
 
-	public override bool Match(Context context, Transform transform)
-	{
-		return true;
-	}
-
 	public override void Transform(Context context, Transform transform)
 	{
 		var call = context.Operand1;

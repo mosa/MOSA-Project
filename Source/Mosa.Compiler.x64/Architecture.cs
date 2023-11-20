@@ -212,7 +212,7 @@ public sealed class Architecture : BaseArchitecture
 	/// <exception cref="NotImplementCompilerException"></exception>
 	public override void InsertStoreInstruction(Context context, Operand destination, Operand offset, Operand value)
 	{
-		BaseInstruction instruction = X64.MovStore32;
+		BaseInstruction instruction = X64.MovStore64;
 
 		if (value.IsR4)
 		{
@@ -236,7 +236,7 @@ public sealed class Architecture : BaseArchitecture
 	/// <exception cref="NotImplementCompilerException"></exception>
 	public override void InsertLoadInstruction(Context context, Operand destination, Operand source, Operand offset)
 	{
-		BaseInstruction instruction = X64.MovLoad32;
+		BaseInstruction instruction = X64.MovLoad64;
 
 		if (destination.IsR4)
 		{
@@ -299,8 +299,28 @@ public sealed class Architecture : BaseArchitecture
 	///   <c>true</c> if [is parameter store] [the specified context]; otherwise, <c>false</c>.</returns>
 	public override bool IsParameterStore(Node node, out Operand operand)
 	{
-		// TODO
 		operand = null;
+
+		if (node.OperandCount != 3
+			|| !node.Instruction.IsMemoryWrite
+			|| !node.Operand1.IsPhysicalRegister
+			|| node.Operand1.Register != CPURegister.RBP
+			)
+			return false;
+
+		if (node.Instruction == X64.MovStore64
+			|| node.Instruction == X64.MovStore32
+			|| node.Instruction == X64.MovStore16
+			|| node.Instruction == X64.MovStore8
+			|| node.Instruction == X64.MovssStore
+			|| node.Instruction == X64.MovssStore
+			|| node.Instruction == X64.MovsdStore
+			)
+		{
+			operand = node.Operand2;
+			return true;
+		}
+
 		return false;
 	}
 
@@ -321,22 +341,24 @@ public sealed class Architecture : BaseArchitecture
 			|| node.Operand1.Register != CPURegister.RBP)
 			return false;
 
-		// TODO - incomplete, add 64bit load instructions
-		if (node.Instruction == X64.MovLoad32
+		if (node.Instruction == X64.MovLoad64
+			|| node.Instruction == X64.MovLoad32
 			|| node.Instruction == X64.MovLoad16
 			|| node.Instruction == X64.MovLoad8
 			|| node.Instruction == X64.MovssLoad
 			|| node.Instruction == X64.MovsdLoad
-
 			|| node.Instruction == X64.MovzxLoad16
 			|| node.Instruction == X64.MovzxLoad8
 			|| node.Instruction == X64.Movzx16To32
 			|| node.Instruction == X64.Movzx8To32
-
+			|| node.Instruction == X64.Movzx16To64
+			|| node.Instruction == X64.Movzx8To64
 			|| node.Instruction == X64.MovsxLoad16
 			|| node.Instruction == X64.MovsxLoad8
 			|| node.Instruction == X64.Movsx16To32
-			|| node.Instruction == X64.Movsx8To32)
+			|| node.Instruction == X64.Movsx8To32
+			|| node.Instruction == X64.Movsx16To64
+			|| node.Instruction == X64.Movsx8To64)
 		{
 			operand = node.Operand2;
 			return true;
@@ -354,6 +376,7 @@ public sealed class Architecture : BaseArchitecture
 			operand = node.Operand1;
 			return true;
 		}
-		return true;
+
+		return false;
 	}
 }

@@ -4,7 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
 
-[Transform()]
 public sealed class And64Zero : BaseTransform
 {
 	public And64Zero() : base(IR.And64, TransformType.Auto | TransformType.Optimization)
@@ -25,13 +24,12 @@ public sealed class And64Zero : BaseTransform
 	{
 		var result = context.Result;
 
-		var e1 = Operand.CreateConstant(To64(0));
+		var e1 = Operand.Constant64_0;
 
 		context.SetInstruction(IR.Move64, result, e1);
 	}
 }
 
-[Transform()]
 public sealed class And64Zero_v1 : BaseTransform
 {
 	public And64Zero_v1() : base(IR.And64, TransformType.Auto | TransformType.Optimization)
@@ -52,7 +50,7 @@ public sealed class And64Zero_v1 : BaseTransform
 	{
 		var result = context.Result;
 
-		var e1 = Operand.CreateConstant(To64(0));
+		var e1 = Operand.Constant64_0;
 
 		context.SetInstruction(IR.Move64, result, e1);
 	}

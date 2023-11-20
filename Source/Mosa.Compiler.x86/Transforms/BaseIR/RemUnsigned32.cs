@@ -7,7 +7,6 @@ namespace Mosa.Compiler.x86.Transforms.BaseIR;
 /// <summary>
 /// RemUnsigned32
 /// </summary>
-[Transform]
 public sealed class RemUnsigned32 : BaseIRTransform
 {
 	public RemUnsigned32() : base(IR.RemUnsigned32, TransformType.Manual | TransformType.Transform)
@@ -24,6 +23,6 @@ public sealed class RemUnsigned32 : BaseIRTransform
 		var v2 = transform.VirtualRegisters.Allocate32();
 
 		context.SetInstruction(X86.Mov32, v1, Operand.Constant32_0);
-		context.AppendInstruction2(X86.Div32, result, v2, v1, operand1, operand2);
+		context.AppendInstruction2(X86.Div32, v2, result, operand1, v1, operand2);
 	}
 }

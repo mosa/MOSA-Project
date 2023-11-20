@@ -4,7 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
 
-[Transform()]
 public sealed class Compare64x32RemUnsigned : BaseTransform
 {
 	public Compare64x32RemUnsigned() : base(IR.Compare64x32, TransformType.Auto | TransformType.Optimization)
@@ -43,13 +42,12 @@ public sealed class Compare64x32RemUnsigned : BaseTransform
 
 		var t1 = context.Operand1.Definitions[0].Operand1;
 
-		var c1 = Operand.CreateConstant(1);
+		var e1 = Operand.Constant32_1;
 
-		context.SetInstruction(IR.And32, result, t1, c1);
+		context.SetInstruction(IR.And32, result, t1, e1);
 	}
 }
 
-[Transform()]
 public sealed class Compare64x32RemUnsigned_v1 : BaseTransform
 {
 	public Compare64x32RemUnsigned_v1() : base(IR.Compare64x32, TransformType.Auto | TransformType.Optimization)
@@ -88,8 +86,8 @@ public sealed class Compare64x32RemUnsigned_v1 : BaseTransform
 
 		var t1 = context.Operand2.Definitions[0].Operand1;
 
-		var c1 = Operand.CreateConstant(1);
+		var e1 = Operand.Constant32_1;
 
-		context.SetInstruction(IR.And32, result, t1, c1);
+		context.SetInstruction(IR.And32, result, t1, e1);
 	}
 }

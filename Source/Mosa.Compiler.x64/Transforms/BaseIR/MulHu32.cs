@@ -7,7 +7,6 @@ namespace Mosa.Compiler.x64.Transforms.BaseIR;
 /// <summary>
 /// MulHu32
 /// </summary>
-[Transform]
 public sealed class MulHu32 : BaseIRTransform
 {
 	public MulHu32() : base(IR.MulHu32, TransformType.Manual | TransformType.Transform)
@@ -22,6 +21,6 @@ public sealed class MulHu32 : BaseIRTransform
 
 		var v1 = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction2(X64.Mul32, result, v1, operand1, operand2);
+		context.SetInstruction2(X64.Mul32, v1, result, operand1, operand2);
 	}
 }

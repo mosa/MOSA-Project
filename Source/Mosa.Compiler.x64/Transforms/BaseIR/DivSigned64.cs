@@ -7,7 +7,6 @@ namespace Mosa.Compiler.x64.Transforms.BaseIR;
 /// <summary>
 /// DivSigned64
 /// </summary>
-[Transform]
 public sealed class DivSigned64 : BaseIRTransform
 {
 	public DivSigned64() : base(IR.DivSigned64, TransformType.Manual | TransformType.Transform)
@@ -26,6 +25,6 @@ public sealed class DivSigned64 : BaseIRTransform
 
 		context.SetInstruction(X64.Mov64, v2, operand1);
 		context.AppendInstruction(X64.Cdq64, v3, v2);
-		context.AppendInstruction2(X64.IDiv64, v1, result, v3, v2, operand2);
+		context.AppendInstruction2(X64.IDiv64, result, v1, v2, v3, operand2);
 	}
 }

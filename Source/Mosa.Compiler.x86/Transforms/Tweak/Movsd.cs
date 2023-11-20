@@ -7,7 +7,6 @@ namespace Mosa.Compiler.x86.Transforms.Tweak;
 /// <summary>
 /// Movsd
 /// </summary>
-[Transform]
 public sealed class Movsd : BaseTransform
 {
 	public Movsd() : base(X86.Movsd, TransformType.Manual | TransformType.Optimization)

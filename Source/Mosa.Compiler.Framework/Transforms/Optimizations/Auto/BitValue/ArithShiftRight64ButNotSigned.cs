@@ -4,7 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.BitValue;
 
-[Transform()]
 public sealed class ArithShiftRight64ButNotSigned : BaseTransform
 {
 	public ArithShiftRight64ButNotSigned() : base(IR.ArithShiftRight64, TransformType.Auto | TransformType.Optimization)

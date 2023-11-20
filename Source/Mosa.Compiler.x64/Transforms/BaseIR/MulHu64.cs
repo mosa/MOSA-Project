@@ -7,7 +7,6 @@ namespace Mosa.Compiler.x64.Transforms.BaseIR;
 /// <summary>
 /// MulHu64
 /// </summary>
-[Transform]
 public sealed class MulHu64 : BaseIRTransform
 {
 	public MulHu64() : base(IR.MulHu64, TransformType.Manual | TransformType.Transform, true)
@@ -22,6 +21,6 @@ public sealed class MulHu64 : BaseIRTransform
 
 		var v1 = transform.VirtualRegisters.Allocate64();
 
-		context.SetInstruction2(X64.Mul64, result, v1, operand1, operand2);
+		context.SetInstruction2(X64.Mul64, v1, result, operand1, operand2);
 	}
 }

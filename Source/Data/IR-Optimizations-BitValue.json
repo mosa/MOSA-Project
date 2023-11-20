@@ -45,6 +45,17 @@
 		},
 		{
 			"Type": "BitValue",
+			"Name": "DivSigned##",
+			"SubName": "ButNotSigned",
+			"Expression": "IR.DivSigned## a b",
+			"Filter": "IsBitValueSignBitCleared##(a) && IsBitValueSignBitCleared##(b)",
+			"Result": "(IR.DivUnsigned## a b)",
+			"Priority": "20",
+			"Variations": "No",
+			"Log": "No"
+		},
+		{
+			"Type": "BitValue",
 			"Name": "RemSigned##",
 			"SubName": "ButNotSigned",
 			"Expression": "IR.RemSigned## a b",
@@ -65,7 +76,6 @@
 			"Variations": "No",
 			"Log": "No"
 		},
-
 		{
 			"Type": "BitValue",
 			"Name": "Compare##x32Equal",
@@ -98,7 +108,6 @@
 				"IR.Compare64x64"
 			]
 		},
-
 		{
 			"Type": "BitValue",
 			"Name": "Compare##x32SignedLess",
@@ -162,6 +171,18 @@
 				"IR.Compare64x32",
 				"IR.Compare64x64"
 			]
+		},
+		{
+			"Type": "BitValue",
+			"Name": "AddCarryOut##",
+			"SubName": "ButNotSigned",
+			"Expression": "IR.AddCarryOut## a b",
+			"Filter": "IsBitValueSignBitCleared##(a) && IsBitValueSignBitCleared##(b)",
+			"Result": "(IR.Add## a b)",
+			"Result2": "(IR.Move## [To32(0)])",
+			"Priority": "20",
+			"Variations": "No",
+			"Log": "Yes"
 		}
 	]
 }

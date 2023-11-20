@@ -7,7 +7,6 @@ namespace Mosa.Compiler.x86.Transforms.AddressMode;
 /// <summary>
 /// Shr32
 /// </summary>
-[Transform]
 public sealed class Shr32 : BaseAddressModeTransform
 {
 	public Shr32() : base(X86.Shr32, TransformType.Manual | TransformType.Transform)

@@ -7,7 +7,6 @@ namespace Mosa.Compiler.x86.Transforms.BaseIR;
 /// <summary>
 /// MulUnsigned64
 /// </summary>
-[Transform]
 public sealed class MulUnsigned64 : BaseIRTransform
 {
 	public MulUnsigned64() : base(IR.MulUnsigned64, TransformType.Manual | TransformType.Transform)
@@ -27,7 +26,7 @@ public sealed class MulUnsigned64 : BaseIRTransform
 		var v5 = transform.VirtualRegisters.Allocate32();
 		var v6 = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction2(X86.Mul32, v1, resultLow, op2L, op1L);
+		context.SetInstruction2(X86.Mul32, resultLow, v1, op2L, op1L);
 
 		context.AppendInstruction(X86.Mov32, v2, op1L);
 		context.AppendInstruction(X86.IMul32, v3, v2, op2H);

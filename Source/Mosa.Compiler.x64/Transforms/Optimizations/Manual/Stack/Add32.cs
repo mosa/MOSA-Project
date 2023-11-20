@@ -10,7 +10,6 @@ namespace Mosa.Compiler.x64.Transforms.Optimizations.Manual.Stack;
 /// <summary>
 /// Add32
 /// </summary>
-[Transform]
 public sealed class Add32 : BaseTransform
 {
 	public Add32() : base(X64.Add32, TransformType.Manual | TransformType.Optimization)

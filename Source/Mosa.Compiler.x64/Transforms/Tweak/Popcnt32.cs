@@ -5,7 +5,7 @@ namespace Mosa.Compiler.x64.Transforms.Tweak;
 /// <summary>
 /// Popcnt32
 /// </summary>
-//[Transform] public sealed class Popcnt32 : BaseTransform
+// public sealed class Popcnt32 : BaseTransform
 //{
 //	public Popcnt32() : base(X64.Popcnt32, TransformType.Manual | TransformType.Transform)
 //	{

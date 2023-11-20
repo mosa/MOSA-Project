@@ -11,6 +11,13 @@ namespace Mosa.Compiler.Framework.Transforms.Runtime
 			: base(instruction, type, log)
 		{ }
 
+		public override int Priority => 50;
+
+		public override bool Match(Context context, Transform transform)
+		{
+			return true;
+		}
+
 		#region Helpers
 
 		public static MosaMethod GetVMCallMethod(Transform transform, string vmcall)

@@ -5,9 +5,11 @@
 		"X64.Add32",
 		"X64.And32",
 		"X64.Or32",
+		"X64.Xor32",
 		"X64.Add64",
 		"X64.And64",
-		"X64.Or64"
+		"X64.Or64",
+		"X64.Xor64"
 	],
 	"Optimizations": [
 		{
@@ -38,14 +40,34 @@
 			"Variations": "Yes"
 		},
 		{
+			"Type": "StrengthReduction",
+			"Name": "IMul##",
+			"SubName": "ByZero",
+			"Expression": "X64.IMul## a 0",
+			"Filter": "!AreAnyStatusFlagsUsed(@)",
+			"Result": "(X64.Mov## 0)",
+			"Variations": "No",
+			"Log": "No"
+		},
+		{
+			"Type": "StrengthReduction",
+			"Name": "IMul##",
+			"SubName": "ByOne",
+			"Expression": "X64.IMul## a 1",
+			"Filter": "!AreAnyStatusFlagsUsed(@)",
+			"Result": "(X64.Mov## 1)",
+			"Variations": "No",
+			"Log": "No"
+		},
+		{
 			"Type": "Shrink",
 			"Name": "And##",
 			"SubName": "ByFF",
 			"Expression": "X64.And## a 0xFF",
-			"Filter": "!IsCPURegister(a,%RSI) && !IsCPURegister(a,%RDI) && !AreAnyStatusFlagsUsed(@)",
+			"Filter": "!IsCPURegister(a,%ESI) && !IsCPURegister(a,%EDI) && !AreAnyStatusFlagsUsed(@)",
 			"Result": "(X64.Movzx8To## a)",
 			"Variations": "Yes",
-			"Log": "Yes",
+			"Log": "No",
 			"Ignore": "Yes"
 		},
 		{
@@ -82,6 +104,100 @@
 			"Expression": "X64.Sub## 0 x",
 			"Filter": "IsVirtualRegister(x)",
 			"Result": "(X64.Neg## x)",
+			"Variations": "No",
+			"Log": "No"
+		},
+		{
+			"Type": "StrengthReduction",
+			"Name": "And##",
+			"SubName": "ByZero",
+			"Expression": "X64.And## a 0",
+			"Filter": "!AreAnyStatusFlagsUsed(@)",
+			"Result": "(X64.Mov## 0)",
+			"Variations": "Yes",
+			"Log": "No"
+		},
+		{
+			"Type": "StrengthReduction",
+			"Name": "And##",
+			"SubName": "ByMax",
+			"Expression": "X64.And## a 0xFFFFFFFF",
+			"Filter": "!AreAnyStatusFlagsUsed(@)",
+			"Result": "(X64.Mov## [To##(0xFFFFFFFF)])",
+			"Variations": "Yes",
+			"Log": "No"
+		},
+		{
+			"Type": "StrengthReduction",
+			"Name": "Sar##",
+			"SubName": "ZeroValue",
+			"Expression": "X64.Sar## 0 a",
+			"Filter": "!AreAnyStatusFlagsUsed(@)",
+			"Result": "(X64.Mov## 0)",
+			"Priority": "80"
+		},
+		{
+			"Type": "StrengthReduction",
+			"Name": "Sar##",
+			"SubName": "ByZero",
+			"Expression": "X64.Sar## a 0",
+			"Filter": "!AreAnyStatusFlagsUsed(@)",
+			"Result": "(X64.Mov## a)",
+			"Priority": "80"
+		},
+		{
+			"Type": "StrengthReduction",
+			"Name": "Shl##",
+			"SubName": "ZeroValue",
+			"Expression": "X64.Shl## 0 a",
+			"Filter": "!AreAnyStatusFlagsUsed(@)",
+			"Result": "(X64.Mov## 0)",
+			"Priority": "80"
+		},
+		{
+			"Type": "StrengthReduction",
+			"Name": "Shl##",
+			"SubName": "ByZero",
+			"Expression": "X64.Shl## a 0",
+			"Filter": "!AreAnyStatusFlagsUsed(@)",
+			"Result": "(X64.Mov## a)",
+			"Priority": "80"
+		},
+		{
+			"Type": "StrengthReduction",
+			"Name": "Shr##",
+			"SubName": "ZeroValue",
+			"Expression": "X64.Shr## 0 a",
+			"Filter": "!AreAnyStatusFlagsUsed(@)",
+			"Result": "(X64.Mov## 0)",
+			"Priority": "80"
+		},
+		{
+			"Type": "StrengthReduction",
+			"Name": "Shr##",
+			"SubName": "ByZero",
+			"Expression": "X64.Shr## a 0",
+			"Filter": "!AreAnyStatusFlagsUsed(@)",
+			"Result": "(X64.Mov## a)",
+			"Priority": "80"
+		},
+		{
+			"Type": "Consolidation",
+			"Name": "IMul##Mov##",
+			"SubName": "ByZero",
+			"Expression": "X64.IMul## a (X64.Mov## 0)",
+			"Filter": "!AreAnyStatusFlagsUsed(@)",
+			"Result": "(X64.Mov## 0)",
+			"Variations": "No",
+			"Log": "No"
+		},
+		{
+			"Type": "Consolidation",
+			"Name": "IMul##Mov##",
+			"SubName": "ByOne",
+			"Expression": "X64.IMul## a (X64.Mov## 1)",
+			"Filter": "!AreAnyStatusFlagsUsed(@)",
+			"Result": "(X64.Mov## a)",
 			"Variations": "No",
 			"Log": "No"
 		}

@@ -4,7 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-[Transform()]
 public sealed class LoadParamManagedPointerAddressFold : BaseTransform
 {
 	public LoadParamManagedPointerAddressFold() : base(IR.LoadParamManagedPointer, TransformType.Auto | TransformType.Optimization)

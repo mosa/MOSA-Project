@@ -7,7 +7,6 @@ namespace Mosa.Compiler.x86.Transforms.FixedRegisters;
 /// <summary>
 /// IMul32Constant
 /// </summary>
-[Transform]
 public sealed class IMul32Constant : BaseTransform
 {
 	public IMul32Constant() : base(X86.IMul32, TransformType.Manual | TransformType.Transform)

@@ -7,7 +7,6 @@ namespace Mosa.Compiler.ARM32.Transforms.BaseIR;
 /// <summary>
 /// MoveR8
 /// </summary>
-[Transform]
 public sealed class MoveR8 : BaseIRTransform
 {
 	public MoveR8() : base(IR.MoveR8, TransformType.Manual | TransformType.Transform)

@@ -98,7 +98,7 @@
 			"SubName": "Max",
 			"Expression": "IR.Or64 a 0xFFFFFFFFFFFFFFFF",
 			"Filter": "",
-			"Result": "(IR.Move64 0xFFFFFFFFFFFFFFFF)",
+			"Result": "(IR.Move64 [To64(0xFFFFFFFFFFFFFFFF)])",
 			"Priority": "80",
 			"Variations": "Yes"
 		},
@@ -220,7 +220,7 @@
 			"SubName": "Same",
 			"Expression": "IR.SubManagedPointer a a",
 			"Filter": "",
-			"Result": "(IR.MoveManagedPointer [To32(0)])",
+			"Result": "(IR.MoveManagedPointer 0)",
 			"Priority": "80"
 		},
 		{
@@ -369,7 +369,7 @@
 			"SubName": "By32",
 			"Expression": "IR.ShiftLeft32 x 32",
 			"Filter": "",
-			"Result": "(IR.Move32 0)",
+			"Result": "(IR.Move32 [To32(0)])",
 			"Priority": "80"
 		},
 		{
@@ -378,16 +378,7 @@
 			"SubName": "By32",
 			"Expression": "IR.ShiftRight32 a 32",
 			"Filter": "",
-			"Result": "(IR.Move32 0)",
-			"Priority": "80"
-		},
-		{
-			"Type": "StrengthReduction",
-			"Name": "ArithShiftRight32",
-			"SubName": "By32",
-			"Expression": "IR.ArithShiftRight32 a 32",
-			"Filter": "",
-			"Result": "(IR.Move32 0)",
+			"Result": "(IR.Move32 [To32(0)])",
 			"Priority": "80"
 		},
 		{
@@ -396,26 +387,16 @@
 			"SubName": "By64",
 			"Expression": "IR.ShiftLeft64 x 64",
 			"Filter": "",
-			"Result": "(IR.Move64 0)",
+			"Result": "(IR.Move64 [To64(0)])",
 			"Priority": "80"
 		},
-
 		{
 			"Type": "StrengthReduction",
 			"Name": "ShiftRight64",
 			"SubName": "By64",
 			"Expression": "IR.ShiftRight64 a 64",
 			"Filter": "",
-			"Result": "(IR.Move64 0)",
-			"Priority": "80"
-		},
-		{
-			"Type": "StrengthReduction",
-			"Name": "ArithShiftRight64",
-			"SubName": "By64",
-			"Expression": "IR.ArithShiftRight64 a 64",
-			"Filter": "",
-			"Result": "(IR.Move64 0)",
+			"Result": "(IR.Move64 [To64(0)])",
 			"Priority": "80"
 		},
 		{
@@ -425,6 +406,97 @@
 			"Expression": "IR.MulHu32 a 0",
 			"Filter": "",
 			"Result": "(IR.Move32 [To32(0)])",
+			"Priority": "80",
+			"Variations": "Yes"
+		},
+
+		{
+			"Type": "StrengthReduction",
+			"Name": "AddCarryOut##",
+			"SubName": "ByZero",
+			"Expression": "IR.AddCarryOut## a 0",
+			"Filter": "!IsResult2Used(@)",
+			"Result": "(IR.Move## a)",
+			"Result2": "(IR.Move## [To##(0)])",
+			"Priority": "80",
+			"Variations": "Yes"
+		},
+		{
+			"Type": "StrengthReduction",
+			"Name": "AddOverflowOut##",
+			"SubName": "ByZero",
+			"Expression": "IR.AddOverflowOut## a 0",
+			"Filter": "!IsResult2Used(@)",
+			"Result": "(IR.Move## a)",
+			"Result2": "(IR.Move## [To##(0)])",
+			"Priority": "80",
+			"Variations": "Yes"
+		},
+
+		{
+			"Type": "StrengthReduction",
+			"Name": "SubCarryOut##",
+			"SubName": "ByZero",
+			"Expression": "IR.SubCarryOut## a 0",
+			"Filter": "!IsResult2Used(@)",
+			"Result": "(IR.Move## a)",
+			"Result2": "(IR.Move## [To##(0)])",
+			"Priority": "80",
+			"Variations": "No"
+		},
+		{
+			"Type": "StrengthReduction",
+			"Name": "SubOverflowOut##",
+			"SubName": "ByZero",
+			"Expression": "IR.SubOverflowOut## a 0",
+			"Filter": "!IsResult2Used(@)",
+			"Result": "(IR.Move## a)",
+			"Result2": "(IR.Move## [To##(0)])",
+			"Priority": "80",
+			"Variations": "No"
+		},
+		{
+			"Type": "StrengthReduction",
+			"Name": "MulCarryOut##",
+			"SubName": "ByOne",
+			"Expression": "IR.MulCarryOut## a 1",
+			"Filter": "!IsResult2Used(@)",
+			"Result": "(IR.Move## a)",
+			"Result2": "(IR.Move## [To##(0)])",
+			"Priority": "80",
+			"Variations": "Yes"
+		},
+		{
+			"Type": "StrengthReduction",
+			"Name": "MulOverflowOut##",
+			"SubName": "ByOne",
+			"Expression": "IR.MulOverflowOut## a 1",
+			"Filter": "!IsResult2Used(@)",
+			"Result": "(IR.Move## a)",
+			"Result2": "(IR.Move## [To##(0)])",
+			"Priority": "80",
+			"Variations": "Yes"
+		},
+
+		{
+			"Type": "StrengthReduction",
+			"Name": "MulCarryOut##",
+			"SubName": "ByZero",
+			"Expression": "IR.MulCarryOut## a 0",
+			"Filter": "!IsResult2Used(@)",
+			"Result": "(IR.Move## [To##(0)]))",
+			"Result2": "(IR.Move## [To##(0)])",
+			"Priority": "80",
+			"Variations": "Yes"
+		},
+		{
+			"Type": "StrengthReduction",
+			"Name": "MulOverflowOut##",
+			"SubName": "ByZero",
+			"Expression": "IR.MulOverflowOut## a 0",
+			"Filter": "!IsResult2Used(@)",
+			"Result": "(IR.Move## [To##(0)]))",
+			"Result2": "(IR.Move## [To##(0)])",
 			"Priority": "80",
 			"Variations": "Yes"
 		}

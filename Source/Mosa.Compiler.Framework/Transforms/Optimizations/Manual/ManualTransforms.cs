@@ -48,31 +48,6 @@ public static class ManualTransforms
 		new ConstantFolding.BranchManagedPointer(),
 		new ConstantFolding.Switch(),
 
-		new StrengthReduction.AddCarryOut32ByZero(),
-		new StrengthReduction.AddCarryOut64ByZero(),
-		new StrengthReduction.AddOverflowOut32ByZero(),
-		new StrengthReduction.AddOverflowOut64ByZero(),
-		new StrengthReduction.SubCarryOut32ByZero(),
-		new StrengthReduction.SubCarryOut64ByZero(),
-		new StrengthReduction.SubOverflowOut32ByZero(),
-		new StrengthReduction.SubOverflowOut64ByZero(),
-
-		new StrengthReduction.AddCarryOut32ByZero2(),
-		new StrengthReduction.AddCarryOut64ByZero2(),
-		new StrengthReduction.AddOverflowOut32ByZero2(),
-		new StrengthReduction.AddOverflowOut64ByZero2(),
-		new StrengthReduction.SubOverflowOut32ByZero2(),
-		new StrengthReduction.SubOverflowOut64ByZero2(),
-
-		new StrengthReduction.MulCarryOut32ByOne(),
-		new StrengthReduction.MulCarryOut32ByZero(),
-		new StrengthReduction.MulCarryOut64ByOne(),
-		new StrengthReduction.MulCarryOut64ByZero(),
-		new StrengthReduction.MulOverflowOut32ByOne(),
-		new StrengthReduction.MulOverflowOut32ByZero(),
-		new StrengthReduction.MulOverflowOut64ByOne(),
-		new StrengthReduction.MulOverflowOut64ByZero(),
-
 		new Special.Deadcode(),
 		new Special.GetLow32From64(),
 		new Special.GetLow32CPURegister(),
@@ -84,11 +59,6 @@ public static class ManualTransforms
 		new Special.StoreLoadManagedPointer(),
 		new Special.StoreLoad32(),
 		new Special.StoreLoad64(),
-
-		new Simplification.AddCarryOut32CarryNotUsed(),
-		new Simplification.AddCarryOut64CarryNotUsed(),
-		new Simplification.SubCarryOut32CarryNotUsed(),
-		new Simplification.SubCarryOut64CarryNotUsed(),
 
 		new Propagate.Move32Propagate(),
 		new Propagate.Move32PropagateConstant(),
@@ -276,9 +246,6 @@ public static class ManualTransforms
 		new StaticLoad.Load32(),
 		new StaticLoad.Load64(),
 
-		new Simplification.DivUnsignedMagicNumber32(),
-		new Simplification.DivUnsignedMagicNumber64(),
-
 		new Useless.LoadParamZeroExtend8x32Double(),
 		new Useless.LoadParamZeroExtend16x32Double(),
 		new Useless.LoadParamZeroExtend8x64Double(),
@@ -320,6 +287,7 @@ public static class ManualTransforms
 		new BitValue.BranchManagedPointer(),
 		new BitValue.BranchObject(),
 
-		//new BitValue.Compare32x32Add32Rewrite()
-};
+		new StrengthReduction.DivUnsignedMagicNumber32(),
+		new StrengthReduction.DivUnsignedMagicNumber64(),
+	};
 }

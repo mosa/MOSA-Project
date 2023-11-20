@@ -8,7 +8,6 @@ namespace Mosa.Compiler.x64.Transforms.Tweak;
 /// <summary>
 /// Setcc
 /// </summary>
-[Transform]
 public sealed class Setcc : BaseTransform
 {
 	public Setcc() : base(X64.Setcc, TransformType.Manual | TransformType.Transform)

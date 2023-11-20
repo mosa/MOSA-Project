@@ -247,6 +247,13 @@ public sealed class BitValue
 			.NarrowClearBits(value.BitsClear);
 	}
 
+	public BitValue NarrowToBoolean()
+	{
+		return
+			NarrowMax(1)
+			.NarrowClearBits(~1ul);
+	}
+
 	public BitValue SetStable(bool stable)
 	{
 		if (!IsStable && stable)

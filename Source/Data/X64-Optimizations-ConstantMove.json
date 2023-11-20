@@ -1,0 +1,96 @@
+﻿{
+	"Family": "x86",
+	"Section": "Optimizations.Auto",
+	"Commutative": [
+		"X64.Add32",
+		"X64.And32",
+		"X64.Or32",
+		"X64.Xor32",
+		"X64.Add64",
+		"X64.And64",
+		"X64.Or64",
+		"X64.Xor64"
+	],
+	"Optimizations": [
+		{
+			"Type": "ConstantMove",
+			"Name": "Add##",
+			"SubName": "",
+			"Expression": "X64.Add## a (X64.Mov## c)",
+			"Filter": "IsConstant(c) && !AreAnyStatusFlagsUsed(@)",
+			"Result": "(X64.Add## a c)",
+			"Variations": "No",
+			"Log": "No"
+		},
+		{
+			"Type": "ConstantMove",
+			"Name": "Sub##",
+			"SubName": "",
+			"Expression": "X64.Sub## a (X64.Mov## c)",
+			"Filter": "IsConstant(c) && !AreAnyStatusFlagsUsed(@)",
+			"Result": "(X64.Sub## a c)",
+			"Variations": "No",
+			"Log": "No"
+		},
+		{
+			"Type": "ConstantMove",
+			"Name": "And##",
+			"SubName": "",
+			"Expression": "X64.And## a (X64.Mov## c)",
+			"Filter": "IsConstant(c) && !AreAnyStatusFlagsUsed(@)",
+			"Result": "(X64.And## a c)",
+			"Variations": "No",
+			"Log": "No"
+		},
+		{
+			"Type": "ConstantMove",
+			"Name": "Or##",
+			"SubName": "",
+			"Expression": "X64.Or## a (X64.Mov## c)",
+			"Filter": "IsConstant(c) && !AreAnyStatusFlagsUsed(@)",
+			"Result": "(X64.Or## a c)",
+			"Variations": "No",
+			"Log": "No"
+		},
+		{
+			"Type": "ConstantMove",
+			"Name": "Xor##",
+			"SubName": "",
+			"Expression": "X64.Xor## a (X64.Mov## c)",
+			"Filter": "IsConstant(c) && !AreAnyStatusFlagsUsed(@)",
+			"Result": "(X64.Xor## a c)",
+			"Variations": "No",
+			"Log": "No"
+		},
+		{
+			"Type": "ConstantMove",
+			"Name": "Sar##",
+			"SubName": "",
+			"Expression": "X64.Sar## a (X64.Mov## c)",
+			"Filter": "IsConstant(c) && !AreAnyStatusFlagsUsed(@)",
+			"Result": "(X64.Sar## a c)",
+			"Variations": "No",
+			"Log": "No"
+		},
+		{
+			"Type": "ConstantMove",
+			"Name": "Shl##",
+			"SubName": "",
+			"Expression": "X64.Shl## a (X64.Mov## c)",
+			"Filter": "IsConstant(c) && !AreAnyStatusFlagsUsed(@)",
+			"Result": "(X64.Shl## a c)",
+			"Variations": "No",
+			"Log": "No"
+		},
+		{
+			"Type": "ConstantMove",
+			"Name": "Shr##",
+			"SubName": "",
+			"Expression": "X64.Shr## a (X64.Mov## c)",
+			"Filter": "IsConstant(c) && !AreAnyStatusFlagsUsed(@)",
+			"Result": "(X64.Shr## a c)",
+			"Variations": "No",
+			"Log": "No"
+		}
+	]
+}

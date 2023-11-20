@@ -4,7 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
-[Transform()]
 public sealed class GetLow32To64 : BaseTransform
 {
 	public GetLow32To64() : base(IR.GetLow32, TransformType.Auto | TransformType.Optimization)

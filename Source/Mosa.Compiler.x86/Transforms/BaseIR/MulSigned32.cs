@@ -7,7 +7,6 @@ namespace Mosa.Compiler.x86.Transforms.BaseIR;
 /// <summary>
 /// MulSigned32
 /// </summary>
-[Transform]
 public sealed class MulSigned32 : BaseIRTransform
 {
 	public MulSigned32() : base(IR.MulSigned32, TransformType.Manual | TransformType.Transform)
@@ -18,6 +17,6 @@ public sealed class MulSigned32 : BaseIRTransform
 	{
 		var v1 = transform.VirtualRegisters.Allocate32();
 
-		context.SetInstruction2(X86.Mul32, v1, context.Result, context.Operand1, context.Operand2);
+		context.SetInstruction2(X86.Mul32, context.Result, v1, context.Operand1, context.Operand2);
 	}
 }

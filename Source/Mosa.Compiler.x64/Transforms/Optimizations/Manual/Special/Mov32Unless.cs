@@ -4,7 +4,6 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x64.Transforms.Optimizations.Manual.Special;
 
-[Transform]
 public sealed class Mov32Unless : BaseTransform
 {
 	public Mov32Unless() : base(X64.Mov32, TransformType.Manual | TransformType.Optimization)

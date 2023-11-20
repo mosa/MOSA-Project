@@ -4,7 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Useless;
 
-[Transform()]
 public sealed class SignExtend8x64Double : BaseTransform
 {
 	public SignExtend8x64Double() : base(IR.SignExtend8x64, TransformType.Auto | TransformType.Optimization)

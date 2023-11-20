@@ -7,7 +7,6 @@ namespace Mosa.Compiler.x86.Transforms.Tweak;
 /// <summary>
 /// Shrd32
 /// </summary>
-[Transform]
 public sealed class Shrd32 : BaseTransform
 {
 	public Shrd32() : base(X86.Shrd32, TransformType.Manual | TransformType.Transform)

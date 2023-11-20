@@ -59,6 +59,9 @@ public class LabelSet
 
 	public void AddUse(Node node)
 	{
+		if (node == null)
+			return;
+
 		foreach (var operand in node.Operands)
 		{
 			if (operand.IsLabel)

@@ -11,13 +11,6 @@ public sealed class BoxR8 : BaseRuntimeTransform
 	{
 	}
 
-	public override int Priority => -10;
-
-	public override bool Match(Context context, Transform transform)
-	{
-		return true;
-	}
-
 	public override void Transform(Context context, Transform transform)
 	{
 		SetVMCall(transform, context, "BoxR8", context.Result, context.GetOperands());

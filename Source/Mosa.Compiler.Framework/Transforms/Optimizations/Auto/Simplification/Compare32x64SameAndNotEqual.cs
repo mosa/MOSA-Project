@@ -4,7 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
-[Transform()]
 public sealed class Compare32x64SameAndNotEqual : BaseTransform
 {
 	public Compare32x64SameAndNotEqual() : base(IR.Compare32x64, TransformType.Auto | TransformType.Optimization)
@@ -28,7 +27,7 @@ public sealed class Compare32x64SameAndNotEqual : BaseTransform
 	{
 		var result = context.Result;
 
-		var e1 = Operand.CreateConstant(To64(0));
+		var e1 = Operand.Constant64_0;
 
 		context.SetInstruction(IR.Move64, result, e1);
 	}

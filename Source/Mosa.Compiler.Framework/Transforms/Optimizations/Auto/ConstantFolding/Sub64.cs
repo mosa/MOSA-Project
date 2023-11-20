@@ -4,7 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-[Transform()]
 public sealed class Sub64 : BaseTransform
 {
 	public Sub64() : base(IR.Sub64, TransformType.Auto | TransformType.Optimization)

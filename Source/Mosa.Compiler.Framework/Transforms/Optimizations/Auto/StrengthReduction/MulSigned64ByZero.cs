@@ -4,7 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
 
-[Transform()]
 public sealed class MulSigned64ByZero : BaseTransform
 {
 	public MulSigned64ByZero() : base(IR.MulSigned64, TransformType.Auto | TransformType.Optimization)
@@ -25,13 +24,12 @@ public sealed class MulSigned64ByZero : BaseTransform
 	{
 		var result = context.Result;
 
-		var e1 = Operand.CreateConstant(To64(0));
+		var e1 = Operand.Constant64_0;
 
 		context.SetInstruction(IR.Move64, result, e1);
 	}
 }
 
-[Transform()]
 public sealed class MulSigned64ByZero_v1 : BaseTransform
 {
 	public MulSigned64ByZero_v1() : base(IR.MulSigned64, TransformType.Auto | TransformType.Optimization)
@@ -52,7 +50,7 @@ public sealed class MulSigned64ByZero_v1 : BaseTransform
 	{
 		var result = context.Result;
 
-		var e1 = Operand.CreateConstant(To64(0));
+		var e1 = Operand.Constant64_0;
 
 		context.SetInstruction(IR.Move64, result, e1);
 	}

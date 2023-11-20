@@ -7,7 +7,6 @@ namespace Mosa.Compiler.x86.Transforms.BaseIR;
 /// <summary>
 /// DivSigned32
 /// </summary>
-[Transform]
 public sealed class DivSigned32 : BaseIRTransform
 {
 	public DivSigned32() : base(IR.DivSigned32, TransformType.Manual | TransformType.Transform)
@@ -26,6 +25,6 @@ public sealed class DivSigned32 : BaseIRTransform
 
 		context.SetInstruction(X86.Mov32, v2, operand1);
 		context.AppendInstruction(X86.Cdq32, v3, v2);
-		context.AppendInstruction2(X86.IDiv32, v1, result, v3, v2, operand2);
+		context.AppendInstruction2(X86.IDiv32, result, v1, v2, v3, operand2);
 	}
 }

@@ -4,7 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-[Transform()]
 public sealed class SubCarryIn64NoCarry : BaseTransform
 {
 	public SubCarryIn64NoCarry() : base(IR.SubCarryIn64, TransformType.Auto | TransformType.Optimization)

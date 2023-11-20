@@ -4,7 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
 
-[Transform()]
 public sealed class ShiftLeft32By32 : BaseTransform
 {
 	public ShiftLeft32By32() : base(IR.ShiftLeft32, TransformType.Auto | TransformType.Optimization)
@@ -28,8 +27,8 @@ public sealed class ShiftLeft32By32 : BaseTransform
 	{
 		var result = context.Result;
 
-		var c1 = Operand.CreateConstant(0);
+		var e1 = Operand.Constant32_0;
 
-		context.SetInstruction(IR.Move32, result, c1);
+		context.SetInstruction(IR.Move32, result, e1);
 	}
 }

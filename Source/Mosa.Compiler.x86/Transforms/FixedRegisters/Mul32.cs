@@ -8,7 +8,6 @@ namespace Mosa.Compiler.x86.Transforms.FixedRegisters;
 /// <summary>
 /// Mul32
 /// </summary>
-[Transform]
 public sealed class Mul32 : BaseTransform
 {
 	public Mul32() : base(X86.Mul32, TransformType.Manual | TransformType.Transform)
@@ -21,8 +20,8 @@ public sealed class Mul32 : BaseTransform
 			&& context.Result2.IsPhysicalRegister
 			&& context.Operand1.IsPhysicalRegister
 			&& !context.Operand2.IsConstant
-			&& context.Result.Register == CPURegister.EDX
-			&& context.Result2.Register == CPURegister.EAX
+			&& context.Result.Register == CPURegister.EAX
+			&& context.Result2.Register == CPURegister.EDX
 			&& context.Operand1.Register == CPURegister.EAX)
 			return false;
 
@@ -50,8 +49,8 @@ public sealed class Mul32 : BaseTransform
 
 		Debug.Assert(operand2.IsPhysicalRegister || operand2.IsVirtualRegister);
 
-		context.AppendInstruction2(X86.Mul32, edx, eax, eax, operand2);
-		context.AppendInstruction(X86.Mov32, result, edx);
-		context.AppendInstruction(X86.Mov32, result2, eax);
+		context.AppendInstruction2(X86.Mul32, eax, edx, eax, operand2);
+		context.AppendInstruction(X86.Mov32, result2, edx);
+		context.AppendInstruction(X86.Mov32, result, eax);
 	}
 }

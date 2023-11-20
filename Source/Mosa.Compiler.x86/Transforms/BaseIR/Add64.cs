@@ -7,7 +7,6 @@ namespace Mosa.Compiler.x86.Transforms.BaseIR;
 /// <summary>
 /// Add64
 /// </summary>
-[Transform]
 public sealed class Add64 : BaseIRTransform
 {
 	public Add64() : base(IR.Add64, TransformType.Manual | TransformType.Transform)

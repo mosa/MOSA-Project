@@ -4,7 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-[Transform()]
 public sealed class RemUnsigned64 : BaseTransform
 {
 	public RemUnsigned64() : base(IR.RemUnsigned64, TransformType.Auto | TransformType.Optimization)

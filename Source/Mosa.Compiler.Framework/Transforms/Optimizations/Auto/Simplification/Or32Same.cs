@@ -4,7 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
-[Transform()]
 public sealed class Or32Same : BaseTransform
 {
 	public Or32Same() : base(IR.Or32, TransformType.Auto | TransformType.Optimization)

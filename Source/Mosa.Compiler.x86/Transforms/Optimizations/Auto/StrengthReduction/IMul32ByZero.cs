@@ -6,7 +6,6 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.StrengthReduction;
 
-[Transform()]
 public sealed class IMul32ByZero : BaseTransform
 {
 	public IMul32ByZero() : base(X86.IMul32, TransformType.Auto | TransformType.Optimization)

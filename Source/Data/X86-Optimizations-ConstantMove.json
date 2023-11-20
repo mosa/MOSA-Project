@@ -58,7 +58,6 @@
 			"Variations": "No",
 			"Log": "No"
 		},
-
 		{
 			"Type": "ConstantMove",
 			"Name": "Sar32",
@@ -79,7 +78,6 @@
 			"Variations": "No",
 			"Log": "No"
 		},
-
 		{
 			"Type": "ConstantMove",
 			"Name": "Shr32",

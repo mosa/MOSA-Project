@@ -6,7 +6,6 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.Ordering;
 
-[Transform()]
 public sealed class Or32 : BaseTransform
 {
 	public Or32() : base(X64.Or32, TransformType.Auto | TransformType.Optimization)

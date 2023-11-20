@@ -7,7 +7,6 @@ namespace Mosa.Compiler.x86.Transforms.AddressMode;
 /// <summary>
 /// Or32
 /// </summary>
-[Transform]
 public sealed class Or32 : BaseAddressModeTransform
 {
 	public Or32() : base(X86.Or32, TransformType.Manual | TransformType.Transform)

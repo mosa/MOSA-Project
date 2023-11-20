@@ -7,7 +7,6 @@ namespace Mosa.Compiler.x86.Transforms.AddressMode;
 /// <summary>
 /// Divss
 /// </summary>
-[Transform]
 public sealed class Divss : BaseAddressModeTransform
 {
 	public Divss() : base(X86.Divss, TransformType.Manual | TransformType.Transform)

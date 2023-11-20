@@ -6,10 +6,9 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.StrengthReduction;
 
-[Transform()]
 public sealed class And32ByMax : BaseTransform
 {
-	public And32ByMax() : base(X86.And32, TransformType.Auto | TransformType.Optimization, true)
+	public And32ByMax() : base(X86.And32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -31,16 +30,15 @@ public sealed class And32ByMax : BaseTransform
 	{
 		var result = context.Result;
 
-		var c1 = Operand.CreateConstant(0xFFFFFFFF);
+		var e1 = Operand.Constant32_FFFFFFFF;
 
-		context.SetInstruction(X86.Mov32, result, c1);
+		context.SetInstruction(X86.Mov32, result, e1);
 	}
 }
 
-[Transform()]
 public sealed class And32ByMax_v1 : BaseTransform
 {
-	public And32ByMax_v1() : base(X86.And32, TransformType.Auto | TransformType.Optimization, true)
+	public And32ByMax_v1() : base(X86.And32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -62,8 +60,8 @@ public sealed class And32ByMax_v1 : BaseTransform
 	{
 		var result = context.Result;
 
-		var c1 = Operand.CreateConstant(0xFFFFFFFF);
+		var e1 = Operand.Constant32_FFFFFFFF;
 
-		context.SetInstruction(X86.Mov32, result, c1);
+		context.SetInstruction(X86.Mov32, result, e1);
 	}
 }

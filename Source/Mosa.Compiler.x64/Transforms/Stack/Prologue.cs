@@ -4,7 +4,6 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x64.Transforms.Stack;
 
-[Transform]
 public sealed class Prologue : BaseTransform
 {
 	public Prologue() : base(IR.Prologue, TransformType.Manual | TransformType.Transform)

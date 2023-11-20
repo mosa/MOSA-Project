@@ -4,7 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
 
-[Transform()]
 public sealed class IsolateAndFlipLeastSignificantBit32 : BaseTransform
 {
 	public IsolateAndFlipLeastSignificantBit32() : base(IR.Add32, TransformType.Auto | TransformType.Optimization)
@@ -57,14 +56,13 @@ public sealed class IsolateAndFlipLeastSignificantBit32 : BaseTransform
 
 		var v1 = transform.VirtualRegisters.Allocate32();
 
-		var e1 = Operand.CreateConstant(To32(1));
+		var e1 = Operand.Constant32_1;
 
 		context.SetInstruction(IR.Not32, v1, t1);
 		context.AppendInstruction(IR.And32, result, v1, e1);
 	}
 }
 
-[Transform()]
 public sealed class IsolateAndFlipLeastSignificantBit32_v1 : BaseTransform
 {
 	public IsolateAndFlipLeastSignificantBit32_v1() : base(IR.Add32, TransformType.Auto | TransformType.Optimization)
@@ -117,7 +115,7 @@ public sealed class IsolateAndFlipLeastSignificantBit32_v1 : BaseTransform
 
 		var v1 = transform.VirtualRegisters.Allocate32();
 
-		var e1 = Operand.CreateConstant(To32(1));
+		var e1 = Operand.Constant32_1;
 
 		context.SetInstruction(IR.Not32, v1, t1);
 		context.AppendInstruction(IR.And32, result, v1, e1);

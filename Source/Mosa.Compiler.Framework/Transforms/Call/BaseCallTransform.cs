@@ -11,6 +11,11 @@ public abstract class BasePlugTransform : BaseTransform
 		: base(instruction, type, log)
 	{ }
 
+	public override bool Match(Context context, Transform transform)
+	{
+		return true;
+	}
+
 	#region Helpers
 
 	public static uint CalculateInterfaceMethodTableOffset(Transform transform, MosaMethod invokeTarget)

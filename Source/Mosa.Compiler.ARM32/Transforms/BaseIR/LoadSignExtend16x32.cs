@@ -8,7 +8,6 @@ namespace Mosa.Compiler.ARM32.Transforms.BaseIR;
 /// <summary>
 /// LoadSignExtend16x32
 /// </summary>
-[Transform]
 public sealed class LoadSignExtend16x32 : BaseIRTransform
 {
 	public LoadSignExtend16x32() : base(IR.LoadSignExtend16x32, TransformType.Manual | TransformType.Transform)

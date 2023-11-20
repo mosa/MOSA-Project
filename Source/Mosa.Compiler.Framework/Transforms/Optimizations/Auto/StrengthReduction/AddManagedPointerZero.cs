@@ -4,7 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
 
-[Transform()]
 public sealed class AddManagedPointerZero : BaseTransform
 {
 	public AddManagedPointerZero() : base(IR.AddManagedPointer, TransformType.Auto | TransformType.Optimization)
@@ -25,13 +24,12 @@ public sealed class AddManagedPointerZero : BaseTransform
 	{
 		var result = context.Result;
 
-		var e1 = Operand.CreateConstant(To32(0));
+		var e1 = Operand.Constant32_0;
 
 		context.SetInstruction(IR.MoveManagedPointer, result, e1);
 	}
 }
 
-[Transform()]
 public sealed class AddManagedPointerZero_v1 : BaseTransform
 {
 	public AddManagedPointerZero_v1() : base(IR.AddManagedPointer, TransformType.Auto | TransformType.Optimization)
@@ -52,7 +50,7 @@ public sealed class AddManagedPointerZero_v1 : BaseTransform
 	{
 		var result = context.Result;
 
-		var e1 = Operand.CreateConstant(To32(0));
+		var e1 = Operand.Constant32_0;
 
 		context.SetInstruction(IR.MoveManagedPointer, result, e1);
 	}

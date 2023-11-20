@@ -18,6 +18,5 @@ namespace Mosa.Compiler.x86.Transforms.BaseIR
 		}
 
 		#endregion Overrides
-
 	}
 }

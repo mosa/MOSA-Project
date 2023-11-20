@@ -8,6 +8,13 @@ namespace Mosa.Compiler.Framework.Transforms.Plug
 			: base(instruction, type, log)
 		{ }
 
+		public override int Priority => 100;
+
+		public override bool Match(Context context, Transform transform)
+		{
+			return IsPlugged(context, transform);
+		}
+
 		#region Helpers
 
 		public static bool IsPlugged(Context context, Transform transform)

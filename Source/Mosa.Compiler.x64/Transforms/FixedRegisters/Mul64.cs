@@ -8,7 +8,6 @@ namespace Mosa.Compiler.x64.Transforms.FixedRegisters;
 /// <summary>
 /// Mul64
 /// </summary>
-[Transform]
 public sealed class Mul64 : BaseTransform
 {
 	public Mul64() : base(X64.Mul64, TransformType.Manual | TransformType.Transform)
@@ -21,8 +20,8 @@ public sealed class Mul64 : BaseTransform
 			&& context.Result2.IsPhysicalRegister
 			&& context.Operand1.IsPhysicalRegister
 			&& !context.Operand2.IsConstant
-			&& context.Result.Register == CPURegister.RDX
-			&& context.Result2.Register == CPURegister.RAX
+			&& context.Result.Register == CPURegister.RAX
+			&& context.Result2.Register == CPURegister.RDX
 			&& context.Operand1.Register == CPURegister.RAX)
 			return false;
 
@@ -50,8 +49,8 @@ public sealed class Mul64 : BaseTransform
 
 		Debug.Assert(operand2.IsPhysicalRegister || operand2.IsVirtualRegister);
 
-		context.AppendInstruction2(X64.Mul64, rdx, rax, rax, operand2);
-		context.AppendInstruction(X64.Mov64, result, rdx);
-		context.AppendInstruction(X64.Mov64, result2, rax);
+		context.AppendInstruction2(X64.Mul64, rax, rdx, rax, operand2);
+		context.AppendInstruction(X64.Mov64, result, rax);
+		context.AppendInstruction(X64.Mov64, result2, rdx);
 	}
 }

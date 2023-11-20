@@ -7,7 +7,6 @@ namespace Mosa.Compiler.x86.Transforms.AddressMode;
 /// <summary>
 /// Subss
 /// </summary>
-[Transform]
 public sealed class Subss : BaseAddressModeTransform
 {
 	public Subss() : base(X86.Subss, TransformType.Manual | TransformType.Transform)

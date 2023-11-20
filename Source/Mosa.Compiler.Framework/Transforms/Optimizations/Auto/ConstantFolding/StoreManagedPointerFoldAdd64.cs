@@ -4,7 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-[Transform()]
 public sealed class StoreManagedPointerFoldAdd64 : BaseTransform
 {
 	public StoreManagedPointerFoldAdd64() : base(IR.StoreManagedPointer, TransformType.Auto | TransformType.Optimization)

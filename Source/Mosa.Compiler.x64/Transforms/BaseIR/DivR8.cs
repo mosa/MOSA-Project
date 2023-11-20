@@ -7,7 +7,6 @@ namespace Mosa.Compiler.x64.Transforms.BaseIR;
 /// <summary>
 /// DivR8
 /// </summary>
-[Transform]
 public sealed class DivR8 : BaseIRTransform
 {
 	public DivR8() : base(IR.DivR8, TransformType.Manual | TransformType.Transform)

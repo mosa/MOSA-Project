@@ -4,7 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
 
-[Transform()]
 public sealed class Or32Max : BaseTransform
 {
 	public Or32Max() : base(IR.Or32, TransformType.Auto | TransformType.Optimization)
@@ -28,13 +27,12 @@ public sealed class Or32Max : BaseTransform
 	{
 		var result = context.Result;
 
-		var e1 = Operand.CreateConstant(To32(0xFFFFFFFF));
+		var e1 = Operand.Constant32_FFFFFFFF;
 
 		context.SetInstruction(IR.Move32, result, e1);
 	}
 }
 
-[Transform()]
 public sealed class Or32Max_v1 : BaseTransform
 {
 	public Or32Max_v1() : base(IR.Or32, TransformType.Auto | TransformType.Optimization)
@@ -58,7 +56,7 @@ public sealed class Or32Max_v1 : BaseTransform
 	{
 		var result = context.Result;
 
-		var e1 = Operand.CreateConstant(To32(0xFFFFFFFF));
+		var e1 = Operand.Constant32_FFFFFFFF;
 
 		context.SetInstruction(IR.Move32, result, e1);
 	}

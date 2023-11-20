@@ -4,7 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
 
-[Transform()]
 public sealed class DivSigned32ByZero : BaseTransform
 {
 	public DivSigned32ByZero() : base(IR.DivSigned32, TransformType.Auto | TransformType.Optimization)
@@ -31,7 +30,7 @@ public sealed class DivSigned32ByZero : BaseTransform
 	{
 		var result = context.Result;
 
-		var e1 = Operand.CreateConstant(To32(0));
+		var e1 = Operand.Constant32_0;
 
 		context.SetInstruction(IR.Move32, result, e1);
 	}
