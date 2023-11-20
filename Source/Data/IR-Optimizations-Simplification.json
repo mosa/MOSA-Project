@@ -134,7 +134,7 @@
 			"SubName": "FromShiftedMore32",
 			"Expression": "IR.GetHigh32 (IR.ShiftRight64 a b)",
 			"Filter": "IsResolvedConstant(b) && IsGreaterOrEqual(And32(To32(b),63),32)",
-			"Result": "(IR.Move32 0)"
+			"Result": "(IR.Move32 [To32(0)])"
 		},
 		{
 			"Type": "Simplification",
@@ -142,7 +142,7 @@
 			"SubName": "FromShiftedMore32",
 			"Expression": "IR.GetLow32 (IR.ShiftLeft64 a b)",
 			"Filter": "IsResolvedConstant(b) && IsGreaterOrEqual(And32(To32(b),63),32)",
-			"Result": "(IR.Move32 0)"
+			"Result": "(IR.Move32 [To32(0)])"
 		},
 		{
 			"Type": "Simplification",
@@ -393,7 +393,7 @@
 			"SubName": "PassThru",
 			"Expression": "IR.Compare32x## {!=} (IR.And## a 1) 0)",
 			"Filter": "",
-			"Result": "(IR.And## a 1)",
+			"Result": "(IR.And## a [To##(1)])",
 			"Variations": "Yes"
 		},
 		{
@@ -402,7 +402,7 @@
 			"SubName": "PassThru",
 			"Expression": "IR.Compare64x## {!=} (IR.And## a 1) 0)",
 			"Filter": "",
-			"Result": "(IR.And## a 1)",
+			"Result": "(IR.And## a [To##(1)])",
 			"Variations": "Yes"
 		},
 		{
@@ -429,7 +429,7 @@
 			"SubName": "PassThru2",
 			"Expression": "IR.Compare32x## {==} (IR.And## a 1) 1)",
 			"Filter": "",
-			"Result": "(IR.And## a 1)",
+			"Result": "(IR.And## a [To##(1)])",
 			"Variations": "Yes"
 		},
 		{
@@ -438,7 +438,7 @@
 			"SubName": "PassThru2",
 			"Expression": "IR.Compare64x## {==} (IR.And## a 1) 1)",
 			"Filter": "",
-			"Result": "(IR.And## a 1)",
+			"Result": "(IR.And## a [To##(1)])",
 			"Variations": "Yes"
 		},
 		{

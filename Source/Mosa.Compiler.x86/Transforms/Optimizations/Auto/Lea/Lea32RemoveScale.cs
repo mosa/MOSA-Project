@@ -31,9 +31,9 @@ public sealed class Lea32RemoveScale : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand4;
 
-		var c1 = Operand.CreateConstant(0);
-		var c2 = Operand.CreateConstant(1);
+		var e1 = Operand.Constant32_0;
+		var e2 = Operand.Constant32_1;
 
-		context.SetInstruction(X86.Lea32, result, t1, c1, c2, t2);
+		context.SetInstruction(X86.Lea32, result, t1, e1, e2, t2);
 	}
 }

@@ -34,7 +34,7 @@
 			"SubName": "RemoveScale",
 			"Expression": "X86.Lea32 a 0 c d",
 			"Filter": "!IsOne(c)",
-			"Result": "(X86.Lea32 a 0 1 d)",
+			"Result": "(X86.Lea32 a [To32(0)] [To32(1)] d)",
 			"Variations": "No",
 			"Log": "No"
 		},
@@ -44,7 +44,7 @@
 			"SubName": "By3Or5Or9",
 			"Expression": "X86.Mul32 a b",
 			"Filter": "!IsResult1Used(@) && !IsZero(a) && Contains(b, 3, 5, 9) && !AreAnyStatusFlagsUsed(@)",
-			"Result": "(X86.Lea32 a a [Sub32(To32(b),1)] 0)",
+			"Result": "(X86.Lea32 a a [Sub32(To32(b),1)] [To32(0)])",
 			"Variations": "No",
 			"Log": "No"
 		},
@@ -73,7 +73,7 @@
 			"Name": "Lea32",
 			"SubName": "Join",
 			"Expression": "X86.Lea32 (X86.Lea32 a b c d1) 0 1 d2",
-			"Filter": "IsResolvedConstant(d2) && IsResolvedConstant(d1) ",
+			"Filter": "IsResolvedConstant(d2) && IsResolvedConstant(d1)",
 			"Result": "(X86.Lea32 a b c [Add32(To32(d1),To32(d2))])",
 			"Variations": "No",
 			"Log": "No"

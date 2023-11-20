@@ -32,7 +32,7 @@ public sealed class AddCarryOut32ButNotSigned : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2;
 
-		var e1 = Operand.CreateConstant(To32(0));
+		var e1 = Operand.Constant32_0;
 
 		context.SetInstruction(IR.Add32, result, t1, t2);
 		context.AppendInstruction(IR.Move32, result2, e1);

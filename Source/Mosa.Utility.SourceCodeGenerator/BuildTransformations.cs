@@ -294,7 +294,7 @@ public class BuildTransformations : BuildBaseTemplate
 			if (constantTextToConstantNbr.TryGetValue(name, out var found))
 			{
 				constantToConstantNbr.Add(operand, found);
-				Lines.AppendLine($"\t\tvar c{operand} = Operand.CreateConstant({name});");
+				Lines.AppendLine($"\t\tvar c{operand} = {CreateConstant(name)};");
 				continue;
 			}
 
@@ -302,7 +302,7 @@ public class BuildTransformations : BuildBaseTemplate
 			constantTextToConstantNbr.Add(name, constantNbr);
 			constantToConstantNbr.Add(operand, constantNbr);
 
-			Lines.AppendLine($"\t\tvar c{constantNbr} = Operand.CreateConstant({name});");
+			Lines.AppendLine($"\t\tvar c{constantNbr} = {CreateConstant(name)};");
 		}
 		if (constantNbr != 0)
 			Lines.AppendLine("");
@@ -416,7 +416,7 @@ public class BuildTransformations : BuildBaseTemplate
 				methodToMethodNbr.Add(operand.Method, methodNbr);
 				methodToExpressionText.Add(name, methodNbr);
 
-				Lines.AppendLine($"\t\tvar e{methodNbr} = Operand.CreateConstant({name});");
+				Lines.AppendLine($"\t\tvar e{methodNbr} = {CreateConstant(name)};");
 			}
 		}
 	}
@@ -445,10 +445,15 @@ public class BuildTransformations : BuildBaseTemplate
 		return postOrder;
 	}
 
-	//private string CreateConstant(string value)
-	//{
-	//	return "Operand.CreateConstant({name});";
-	//}
+	private static string CreateConstant(string value) => $"Operand.CreateConstant({value})"
+			.Replace("Operand.CreateConstant(To32(0))", "Operand.Constant32_0")
+			.Replace("Operand.CreateConstant(To32(1))", "Operand.Constant32_1")
+			.Replace("Operand.CreateConstant(To32(2))", "Operand.Constant32_2")
+			.Replace("Operand.CreateConstant(To32(4))", "Operand.Constant32_4")
+			.Replace("Operand.CreateConstant(To64(0))", "Operand.Constant64_0")
+			.Replace("Operand.CreateConstant(To64(1))", "Operand.Constant64_1")
+			.Replace("Operand.CreateConstant(To64(2))", "Operand.Constant64_2")
+			.Replace("Operand.CreateConstant(To64(4))", "Operand.Constant64_4");
 
 	private string CreateExpression(Method method, Dictionary<string, int> labelToLabelNbr, Dictionary<Operand, int> constantToConstantNbr)
 	{

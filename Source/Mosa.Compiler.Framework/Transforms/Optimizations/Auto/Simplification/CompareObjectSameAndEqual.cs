@@ -28,7 +28,7 @@ public sealed class CompareObjectSameAndEqual : BaseTransform
 	{
 		var result = context.Result;
 
-		var e1 = Operand.CreateConstant(To32(1));
+		var e1 = Operand.Constant32_1;
 
 		context.SetInstruction(IR.Move32, result, e1);
 	}

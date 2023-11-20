@@ -28,7 +28,7 @@ public sealed class MulSigned64ByNegative1 : BaseTransform
 
 		var t1 = context.Operand1;
 
-		var e1 = Operand.CreateConstant(To64(0));
+		var e1 = Operand.Constant64_0;
 
 		context.SetInstruction(IR.Sub64, result, e1, t1);
 	}
@@ -58,7 +58,7 @@ public sealed class MulSigned64ByNegative1_v1 : BaseTransform
 
 		var t1 = context.Operand2;
 
-		var e1 = Operand.CreateConstant(To64(0));
+		var e1 = Operand.Constant64_0;
 
 		context.SetInstruction(IR.Sub64, result, e1, t1);
 	}

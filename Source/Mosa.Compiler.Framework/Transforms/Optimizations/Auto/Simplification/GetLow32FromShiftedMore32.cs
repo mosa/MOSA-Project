@@ -35,8 +35,8 @@ public sealed class GetLow32FromShiftedMore32 : BaseTransform
 	{
 		var result = context.Result;
 
-		var c1 = Operand.CreateConstant(0);
+		var e1 = Operand.Constant32_0;
 
-		context.SetInstruction(IR.Move32, result, c1);
+		context.SetInstruction(IR.Move32, result, e1);
 	}
 }

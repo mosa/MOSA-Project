@@ -40,9 +40,9 @@ public sealed class Compare64x32PassThru : BaseTransform
 
 		var t1 = context.Operand1.Definitions[0].Operand1;
 
-		var c1 = Operand.CreateConstant(1);
+		var e1 = Operand.Constant32_1;
 
-		context.SetInstruction(IR.And32, result, t1, c1);
+		context.SetInstruction(IR.And32, result, t1, e1);
 	}
 }
 
@@ -82,9 +82,9 @@ public sealed class Compare64x32PassThru_v1 : BaseTransform
 
 		var t1 = context.Operand2.Definitions[0].Operand1;
 
-		var c1 = Operand.CreateConstant(1);
+		var e1 = Operand.Constant32_1;
 
-		context.SetInstruction(IR.And32, result, t1, c1);
+		context.SetInstruction(IR.And32, result, t1, e1);
 	}
 }
 
@@ -124,9 +124,9 @@ public sealed class Compare64x32PassThru_v2 : BaseTransform
 
 		var t1 = context.Operand1.Definitions[0].Operand2;
 
-		var c1 = Operand.CreateConstant(1);
+		var e1 = Operand.Constant32_1;
 
-		context.SetInstruction(IR.And32, result, t1, c1);
+		context.SetInstruction(IR.And32, result, t1, e1);
 	}
 }
 
@@ -166,8 +166,8 @@ public sealed class Compare64x32PassThru_v3 : BaseTransform
 
 		var t1 = context.Operand2.Definitions[0].Operand2;
 
-		var c1 = Operand.CreateConstant(1);
+		var e1 = Operand.Constant32_1;
 
-		context.SetInstruction(IR.And32, result, t1, c1);
+		context.SetInstruction(IR.And32, result, t1, e1);
 	}
 }

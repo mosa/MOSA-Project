@@ -57,7 +57,7 @@ public sealed class IsolateAndFlipLeastSignificantBit32 : BaseTransform
 
 		var v1 = transform.VirtualRegisters.Allocate32();
 
-		var e1 = Operand.CreateConstant(To32(1));
+		var e1 = Operand.Constant32_1;
 
 		context.SetInstruction(IR.Not32, v1, t1);
 		context.AppendInstruction(IR.And32, result, v1, e1);
@@ -117,7 +117,7 @@ public sealed class IsolateAndFlipLeastSignificantBit32_v1 : BaseTransform
 
 		var v1 = transform.VirtualRegisters.Allocate32();
 
-		var e1 = Operand.CreateConstant(To32(1));
+		var e1 = Operand.Constant32_1;
 
 		context.SetInstruction(IR.Not32, v1, t1);
 		context.AppendInstruction(IR.And32, result, v1, e1);

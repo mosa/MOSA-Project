@@ -37,10 +37,9 @@ public sealed class Mov32ToLea32By3Or5Or9 : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2;
 
-		var c1 = Operand.CreateConstant(0);
-
 		var e1 = Operand.CreateConstant(Sub32(To32(t2), 1));
+		var e2 = Operand.Constant32_0;
 
-		context.SetInstruction(X86.Lea32, result, t1, t1, e1, c1);
+		context.SetInstruction(X86.Lea32, result, t1, t1, e1, e2);
 	}
 }

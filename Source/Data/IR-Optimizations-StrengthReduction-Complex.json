@@ -38,7 +38,7 @@
 			"SubName": "RemUnsigned",
 			"Expression": "IR.Compare32x## {==} (IR.RemUnsigned## a 2) 0",
 			"Filter": "",
-			"Result": "(IR.And## a 1)",
+			"Result": "(IR.And## a [To##(1)])",
 			"Variations": "Yes"
 		},
 		{
@@ -47,7 +47,7 @@
 			"SubName": "RemUnsigned",
 			"Expression": "IR.Compare64x## {==} (IR.RemUnsigned## a 2) 0",
 			"Filter": "",
-			"Result": "(IR.And## a 1)",
+			"Result": "(IR.And## a [To##(1)])",
 			"Variations": "Yes"
 		},
 		{

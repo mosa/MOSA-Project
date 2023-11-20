@@ -25,7 +25,7 @@ public sealed class AddManagedPointerZero : BaseTransform
 	{
 		var result = context.Result;
 
-		var e1 = Operand.CreateConstant(To32(0));
+		var e1 = Operand.Constant32_0;
 
 		context.SetInstruction(IR.MoveManagedPointer, result, e1);
 	}
@@ -52,7 +52,7 @@ public sealed class AddManagedPointerZero_v1 : BaseTransform
 	{
 		var result = context.Result;
 
-		var e1 = Operand.CreateConstant(To32(0));
+		var e1 = Operand.Constant32_0;
 
 		context.SetInstruction(IR.MoveManagedPointer, result, e1);
 	}
