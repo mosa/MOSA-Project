@@ -31,9 +31,9 @@ public sealed class And32ByMax : BaseTransform
 	{
 		var result = context.Result;
 
-		var c1 = Operand.CreateConstant(0xFFFFFFFF);
+		var e1 = Operand.Constant32_FFFFFFFF;
 
-		context.SetInstruction(X86.Mov32, result, c1);
+		context.SetInstruction(X86.Mov32, result, e1);
 	}
 }
 
@@ -62,8 +62,8 @@ public sealed class And32ByMax_v1 : BaseTransform
 	{
 		var result = context.Result;
 
-		var c1 = Operand.CreateConstant(0xFFFFFFFF);
+		var e1 = Operand.Constant32_FFFFFFFF;
 
-		context.SetInstruction(X86.Mov32, result, c1);
+		context.SetInstruction(X86.Mov32, result, e1);
 	}
 }

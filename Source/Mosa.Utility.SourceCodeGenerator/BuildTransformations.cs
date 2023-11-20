@@ -450,6 +450,7 @@ public class BuildTransformations : BuildBaseTemplate
 			.Replace("Operand.CreateConstant(To32(1))", "Operand.Constant32_1")
 			.Replace("Operand.CreateConstant(To32(2))", "Operand.Constant32_2")
 			.Replace("Operand.CreateConstant(To32(4))", "Operand.Constant32_4")
+			.Replace("Operand.CreateConstant(To32(0xFFFFFFFF))", "Operand.Constant32_FFFFFFFF")
 			.Replace("Operand.CreateConstant(To64(0))", "Operand.Constant64_0")
 			.Replace("Operand.CreateConstant(To64(1))", "Operand.Constant64_1")
 			.Replace("Operand.CreateConstant(To64(2))", "Operand.Constant64_2")

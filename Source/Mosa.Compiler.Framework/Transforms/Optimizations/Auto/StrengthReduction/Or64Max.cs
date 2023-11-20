@@ -28,9 +28,9 @@ public sealed class Or64Max : BaseTransform
 	{
 		var result = context.Result;
 
-		var c1 = Operand.CreateConstant(0xFFFFFFFFFFFFFFFF);
+		var e1 = Operand.CreateConstant(To64(0xFFFFFFFFFFFFFFFF));
 
-		context.SetInstruction(IR.Move64, result, c1);
+		context.SetInstruction(IR.Move64, result, e1);
 	}
 }
 
@@ -58,8 +58,8 @@ public sealed class Or64Max_v1 : BaseTransform
 	{
 		var result = context.Result;
 
-		var c1 = Operand.CreateConstant(0xFFFFFFFFFFFFFFFF);
+		var e1 = Operand.CreateConstant(To64(0xFFFFFFFFFFFFFFFF));
 
-		context.SetInstruction(IR.Move64, result, c1);
+		context.SetInstruction(IR.Move64, result, e1);
 	}
 }

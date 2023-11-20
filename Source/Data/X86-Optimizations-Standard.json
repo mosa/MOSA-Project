@@ -119,7 +119,7 @@
 			"SubName": "ByMax",
 			"Expression": "X86.And32 a 0xFFFFFFFF",
 			"Filter": "!AreAnyStatusFlagsUsed(@)",
-			"Result": "(X86.Mov32 0xFFFFFFFF)",
+			"Result": "(X86.Mov32 [To32(0xFFFFFFFF)])",
 			"Variations": "Yes",
 			"Log": "No"
 		},

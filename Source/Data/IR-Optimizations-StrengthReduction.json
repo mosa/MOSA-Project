@@ -98,7 +98,7 @@
 			"SubName": "Max",
 			"Expression": "IR.Or64 a 0xFFFFFFFFFFFFFFFF",
 			"Filter": "",
-			"Result": "(IR.Move64 0xFFFFFFFFFFFFFFFF)",
+			"Result": "(IR.Move64 [To64(0xFFFFFFFFFFFFFFFF)])",
 			"Priority": "80",
 			"Variations": "Yes"
 		},
