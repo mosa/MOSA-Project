@@ -11,13 +11,6 @@ public sealed class NewArray : BaseRuntimeTransform
 	{
 	}
 
-	public override int Priority => -10;
-
-	public override bool Match(Context context, Transform transform)
-	{
-		return true;
-	}
-
 	public override void Transform(Context context, Transform transform)
 	{
 		var method = GetVMCallMethod(transform, "AllocateArray");

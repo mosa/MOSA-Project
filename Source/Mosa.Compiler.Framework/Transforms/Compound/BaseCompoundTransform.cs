@@ -10,6 +10,13 @@ public abstract class BaseCompoundTransform : BaseTransform
 		: base(instruction, type, log)
 	{ }
 
+	public override int Priority => -10;
+
+	public override bool Match(Context context, Transform transform)
+	{
+		return true;
+	}
+
 	#region Helpers
 
 	protected static void CopyCompound(Transform transform, Context context, Operand destinationBase, Operand destination, Operand sourceBase, Operand source, Operand operandType)

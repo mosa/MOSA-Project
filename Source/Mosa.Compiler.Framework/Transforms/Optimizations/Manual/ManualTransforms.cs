@@ -85,11 +85,6 @@ public static class ManualTransforms
 		new Special.StoreLoad32(),
 		new Special.StoreLoad64(),
 
-		new Simplification.AddCarryOut32CarryNotUsed(),
-		new Simplification.AddCarryOut64CarryNotUsed(),
-		new Simplification.SubCarryOut32CarryNotUsed(),
-		new Simplification.SubCarryOut64CarryNotUsed(),
-
 		new Propagate.Move32Propagate(),
 		new Propagate.Move32PropagateConstant(),
 		new Propagate.Move64Propagate(),
