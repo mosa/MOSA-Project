@@ -9,7 +9,7 @@ namespace Mosa.Compiler.x64.Transforms.AddressMode;
 /// </summary>
 public sealed class Neg32 : BaseAddressModeTransform
 {
-	public Neg32() : base(X64.Adc32, TransformType.Manual | TransformType.Transform)
+	public Neg32() : base(X64.Neg32, TransformType.Manual | TransformType.Transform)
 	{
 	}
 
