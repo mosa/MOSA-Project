@@ -4,7 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
 
-[Transform()]
 public sealed class AddCarryOut32ByZero : BaseTransform
 {
 	public AddCarryOut32ByZero() : base(IR.AddCarryOut32, TransformType.Auto | TransformType.Optimization)
@@ -38,7 +37,6 @@ public sealed class AddCarryOut32ByZero : BaseTransform
 	}
 }
 
-[Transform()]
 public sealed class AddCarryOut32ByZero_v1 : BaseTransform
 {
 	public AddCarryOut32ByZero_v1() : base(IR.AddCarryOut32, TransformType.Auto | TransformType.Optimization)

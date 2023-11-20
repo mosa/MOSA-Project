@@ -6,7 +6,6 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.Ordering;
 
-[Transform()]
 public sealed class Adc64 : BaseTransform
 {
 	public Adc64() : base(X64.Adc64, TransformType.Auto | TransformType.Optimization)

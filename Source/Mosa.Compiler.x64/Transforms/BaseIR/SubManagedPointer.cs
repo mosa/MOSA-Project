@@ -7,7 +7,6 @@ namespace Mosa.Compiler.x64.Transforms.BaseIR;
 /// <summary>
 /// Sub32
 /// </summary>
-[Transform]
 public sealed class SubManagedPointer : BaseIRTransform
 {
 	public SubManagedPointer() : base(IR.SubManagedPointer, TransformType.Manual | TransformType.Transform)

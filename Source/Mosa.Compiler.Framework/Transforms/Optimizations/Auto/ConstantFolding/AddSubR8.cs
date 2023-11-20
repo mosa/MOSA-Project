@@ -4,7 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-[Transform()]
 public sealed class AddSubR8 : BaseTransform
 {
 	public AddSubR8() : base(IR.AddR8, TransformType.Auto | TransformType.Optimization)
@@ -47,7 +46,6 @@ public sealed class AddSubR8 : BaseTransform
 	}
 }
 
-[Transform()]
 public sealed class AddSubR8_v1 : BaseTransform
 {
 	public AddSubR8_v1() : base(IR.AddR8, TransformType.Auto | TransformType.Optimization)

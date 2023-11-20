@@ -7,7 +7,6 @@ namespace Mosa.Compiler.x64.Transforms.AddressMode;
 /// <summary>
 /// Sar64
 /// </summary>
-[Transform]
 public sealed class Sar64 : BaseAddressModeTransform
 {
 	public Sar64() : base(X64.Sar64, TransformType.Manual | TransformType.Transform)

@@ -6,7 +6,6 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.Lea;
 
-[Transform()]
 public sealed class Lea32ToMov32Constant2 : BaseTransform
 {
 	public Lea32ToMov32Constant2() : base(X86.Lea32, TransformType.Auto | TransformType.Optimization)

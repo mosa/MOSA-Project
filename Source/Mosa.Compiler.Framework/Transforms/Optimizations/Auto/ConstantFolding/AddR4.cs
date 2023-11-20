@@ -4,7 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-[Transform()]
 public sealed class AddR4 : BaseTransform
 {
 	public AddR4() : base(IR.AddR4, TransformType.Auto | TransformType.Optimization)

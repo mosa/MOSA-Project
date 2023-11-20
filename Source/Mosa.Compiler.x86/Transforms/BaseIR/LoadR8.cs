@@ -8,7 +8,6 @@ namespace Mosa.Compiler.x86.Transforms.BaseIR;
 /// <summary>
 /// LoadR8
 /// </summary>
-[Transform]
 public sealed class LoadR8 : BaseIRTransform
 {
 	public LoadR8() : base(IR.LoadR8, TransformType.Manual | TransformType.Transform)

@@ -7,7 +7,6 @@ namespace Mosa.Compiler.x86.Transforms.FixedRegisters;
 /// <summary>
 /// Out16
 /// </summary>
-[Transform]
 public sealed class Out16 : BaseTransform
 {
 	public Out16() : base(X86.Out16, TransformType.Manual | TransformType.Transform)

@@ -4,7 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
 
-[Transform()]
 public sealed class AddOverflowOut64ByZero : BaseTransform
 {
 	public AddOverflowOut64ByZero() : base(IR.AddOverflowOut64, TransformType.Auto | TransformType.Optimization)

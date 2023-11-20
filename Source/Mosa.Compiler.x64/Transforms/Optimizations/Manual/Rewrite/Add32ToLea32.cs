@@ -9,7 +9,6 @@ namespace Mosa.Compiler.x64.Transforms.Optimizations.Manual.Rewrite;
 // A search is required to determine if a status flag is used.
 // However, if the search is not conclusive, the transformation is not made.
 
-[Transform]
 public sealed class Add32ToLea32 : BaseTransform
 {
 	public Add32ToLea32() : base(X64.Add32, TransformType.Manual | TransformType.Optimization)

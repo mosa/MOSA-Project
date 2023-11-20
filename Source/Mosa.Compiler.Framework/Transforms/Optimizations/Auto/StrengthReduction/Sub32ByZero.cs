@@ -4,7 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
 
-[Transform()]
 public sealed class Sub32ByZero : BaseTransform
 {
 	public Sub32ByZero() : base(IR.Sub32, TransformType.Auto | TransformType.Optimization)

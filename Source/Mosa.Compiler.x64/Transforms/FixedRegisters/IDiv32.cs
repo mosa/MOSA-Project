@@ -7,7 +7,6 @@ namespace Mosa.Compiler.x64.Transforms.FixedRegisters;
 /// <summary>
 /// IDiv32
 /// </summary>
-[Transform]
 public sealed class IDiv32 : BaseTransform
 {
 	public IDiv32() : base(X64.IDiv32, TransformType.Manual | TransformType.Transform)
@@ -47,11 +46,11 @@ public sealed class IDiv32 : BaseTransform
 		{
 			var v1 = transform.VirtualRegisters.Allocate32();
 			context.AppendInstruction(X64.Mov64, v1, operand3);
-			context.AppendInstruction2(X64.IDiv32, rax,rdx, rax, rdx,  v1);
+			context.AppendInstruction2(X64.IDiv32, rax, rdx, rax, rdx, v1);
 		}
 		else
 		{
-			context.AppendInstruction2(X64.IDiv32, rax, rdx, rax, rdx,operand3);
+			context.AppendInstruction2(X64.IDiv32, rax, rdx, rax, rdx, operand3);
 		}
 
 		context.AppendInstruction(X64.Mov64, result2, rdx);

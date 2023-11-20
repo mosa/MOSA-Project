@@ -4,7 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.BitValue;
 
-[Transform()]
 public sealed class AddCarryOut32ButNotSigned : BaseTransform
 {
 	public AddCarryOut32ButNotSigned() : base(IR.AddCarryOut32, TransformType.Auto | TransformType.Optimization, true)

@@ -4,7 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
-[Transform()]
 public sealed class Compare64x64SameAndEqual : BaseTransform
 {
 	public Compare64x64SameAndEqual() : base(IR.Compare64x64, TransformType.Auto | TransformType.Optimization)

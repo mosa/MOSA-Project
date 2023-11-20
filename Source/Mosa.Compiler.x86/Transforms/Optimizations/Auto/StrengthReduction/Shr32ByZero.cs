@@ -6,7 +6,6 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.StrengthReduction;
 
-[Transform()]
 public sealed class Shr32ByZero : BaseTransform
 {
 	public Shr32ByZero() : base(X86.Shr32, TransformType.Auto | TransformType.Optimization)

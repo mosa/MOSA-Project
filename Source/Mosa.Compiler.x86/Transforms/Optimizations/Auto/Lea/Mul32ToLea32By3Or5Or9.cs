@@ -6,7 +6,6 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.Lea;
 
-[Transform()]
 public sealed class Mul32ToLea32By3Or5Or9 : BaseTransform
 {
 	public Mul32ToLea32By3Or5Or9() : base(X86.Mul32, TransformType.Auto | TransformType.Optimization)

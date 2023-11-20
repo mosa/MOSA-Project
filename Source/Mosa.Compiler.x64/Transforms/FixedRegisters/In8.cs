@@ -7,7 +7,6 @@ namespace Mosa.Compiler.x64.Transforms.FixedRegisters;
 /// <summary>
 /// In8
 /// </summary>
-[Transform]
 public sealed class In8 : BaseTransform
 {
 	public In8() : base(X64.In8, TransformType.Manual | TransformType.Transform)

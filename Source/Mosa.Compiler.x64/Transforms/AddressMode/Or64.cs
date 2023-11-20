@@ -7,7 +7,6 @@ namespace Mosa.Compiler.x64.Transforms.AddressMode;
 /// <summary>
 /// Or64
 /// </summary>
-[Transform]
 public sealed class Or64 : BaseAddressModeTransform
 {
 	public Or64() : base(X64.Or64, TransformType.Manual | TransformType.Transform)

@@ -4,7 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
 
-[Transform()]
 public sealed class MulOverflowOut32ByZero : BaseTransform
 {
 	public MulOverflowOut32ByZero() : base(IR.MulOverflowOut32, TransformType.Auto | TransformType.Optimization)

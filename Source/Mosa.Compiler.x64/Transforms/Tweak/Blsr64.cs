@@ -7,7 +7,6 @@ namespace Mosa.Compiler.x64.Transforms.Tweak;
 /// <summary>
 /// Blsr64
 /// </summary>
-[Transform]
 public sealed class Blsr64 : BaseTransform
 {
 	public Blsr64() : base(X64.Blsr64, TransformType.Manual | TransformType.Transform)

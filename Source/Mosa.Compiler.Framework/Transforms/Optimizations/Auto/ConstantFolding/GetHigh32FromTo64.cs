@@ -4,7 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-[Transform()]
 public sealed class GetHigh32FromTo64 : BaseTransform
 {
 	public GetHigh32FromTo64() : base(IR.GetHigh32, TransformType.Auto | TransformType.Optimization)

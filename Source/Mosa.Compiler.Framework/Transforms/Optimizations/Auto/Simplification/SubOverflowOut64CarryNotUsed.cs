@@ -4,7 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
-[Transform()]
 public sealed class SubOverflowOut64CarryNotUsed : BaseTransform
 {
 	public SubOverflowOut64CarryNotUsed() : base(IR.SubOverflowOut64, TransformType.Auto | TransformType.Optimization)

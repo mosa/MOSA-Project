@@ -7,7 +7,6 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.StrengthReduct
 /// <summary>
 /// DivUnsignedMagicNumber64
 /// </summary>
-[Transform]
 public sealed class DivUnsignedMagicNumber64 : BaseTransform
 {
 	public DivUnsignedMagicNumber64() : base(IR.DivUnsigned64, TransformType.Manual | TransformType.Optimization)

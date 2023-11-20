@@ -4,7 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
 
-[Transform()]
 public sealed class Xor64Xor64 : BaseTransform
 {
 	public Xor64Xor64() : base(IR.Xor64, TransformType.Auto | TransformType.Optimization)
@@ -40,7 +39,6 @@ public sealed class Xor64Xor64 : BaseTransform
 	}
 }
 
-[Transform()]
 public sealed class Xor64Xor64_v1 : BaseTransform
 {
 	public Xor64Xor64_v1() : base(IR.Xor64, TransformType.Auto | TransformType.Optimization)
@@ -76,7 +74,6 @@ public sealed class Xor64Xor64_v1 : BaseTransform
 	}
 }
 
-[Transform()]
 public sealed class Xor64Xor64_v2 : BaseTransform
 {
 	public Xor64Xor64_v2() : base(IR.Xor64, TransformType.Auto | TransformType.Optimization)
@@ -112,7 +109,6 @@ public sealed class Xor64Xor64_v2 : BaseTransform
 	}
 }
 
-[Transform()]
 public sealed class Xor64Xor64_v3 : BaseTransform
 {
 	public Xor64Xor64_v3() : base(IR.Xor64, TransformType.Auto | TransformType.Optimization)

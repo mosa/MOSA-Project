@@ -4,7 +4,6 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x64.Transforms.Optimizations.Manual.Special;
 
-[Transform]
 public sealed class Mov64Coalescing : BaseTransform
 {
 	public Mov64Coalescing() : base(X64.Mov64, TransformType.Manual | TransformType.Optimization)

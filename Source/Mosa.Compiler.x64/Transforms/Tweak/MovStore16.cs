@@ -7,7 +7,6 @@ namespace Mosa.Compiler.x64.Transforms.Tweak;
 /// <summary>
 /// MovStore16
 /// </summary>
-[Transform]
 public sealed class MovStore16 : BaseTransform
 {
 	public MovStore16() : base(X64.MovStore16, TransformType.Manual | TransformType.Transform)

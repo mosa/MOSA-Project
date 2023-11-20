@@ -4,7 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-[Transform()]
 public sealed class Sub32x2 : BaseTransform
 {
 	public Sub32x2() : base(IR.Sub32, TransformType.Auto | TransformType.Optimization)

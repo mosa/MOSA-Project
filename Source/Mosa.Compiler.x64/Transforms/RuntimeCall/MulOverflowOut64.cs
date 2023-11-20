@@ -8,7 +8,6 @@ namespace Mosa.Compiler.x64.Transforms.RuntimeCall;
 /// <summary>
 /// MulOverflowOut64
 /// </summary>
-[Transform]
 public sealed class MulOverflowOut64 : BaseTransform
 {
 	public MulOverflowOut64() : base(IR.MulOverflowOut64, TransformType.Manual | TransformType.Transform)

@@ -6,7 +6,6 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.Simplication;
 
-[Transform()]
 public sealed class SubFromZero : BaseTransform
 {
 	public SubFromZero() : base(X86.Sub32, TransformType.Auto | TransformType.Optimization)

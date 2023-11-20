@@ -4,7 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-[Transform()]
 public sealed class Add64 : BaseTransform
 {
 	public Add64() : base(IR.Add64, TransformType.Auto | TransformType.Optimization)

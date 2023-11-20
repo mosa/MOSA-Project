@@ -7,7 +7,6 @@ namespace Mosa.Compiler.x86.Transforms.Tweak;
 /// <summary>
 /// Cmp32
 /// </summary>
-[Transform]
 public sealed class Cmp32 : BaseTransform
 {
 	public Cmp32() : base(X86.Cmp32, TransformType.Manual | TransformType.Transform)

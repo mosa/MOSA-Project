@@ -8,7 +8,6 @@ namespace Mosa.Compiler.x64.Transforms.Tweak;
 /// <summary>
 /// Movss
 /// </summary>
-[Transform]
 public sealed class Movss : BaseTransform
 {
 	public Movss() : base(X64.Movss, TransformType.Manual | TransformType.Transform)

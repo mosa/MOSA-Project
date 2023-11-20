@@ -4,7 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
 
-[Transform()]
 public sealed class ShiftRight64ZeroValue : BaseTransform
 {
 	public ShiftRight64ZeroValue() : base(IR.ShiftRight64, TransformType.Auto | TransformType.Optimization)

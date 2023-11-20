@@ -7,7 +7,6 @@ namespace Mosa.Compiler.x64.Transforms.AddressMode;
 /// <summary>
 /// Shr64
 /// </summary>
-[Transform]
 public sealed class Shr64 : BaseAddressModeTransform
 {
 	public Shr64() : base(X64.Shr64, TransformType.Manual | TransformType.Transform)

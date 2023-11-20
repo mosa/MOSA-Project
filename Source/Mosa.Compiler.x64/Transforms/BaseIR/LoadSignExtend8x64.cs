@@ -7,7 +7,6 @@ namespace Mosa.Compiler.x64.Transforms.BaseIR;
 /// <summary>
 /// LoadSignExtend8x64
 /// </summary>
-[Transform]
 public sealed class LoadSignExtend8x64 : BaseIRTransform
 {
 	public LoadSignExtend8x64() : base(IR.LoadSignExtend8x64, TransformType.Manual | TransformType.Transform)

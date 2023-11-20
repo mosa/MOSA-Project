@@ -4,7 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-[Transform()]
 public sealed class Or32x2 : BaseTransform
 {
 	public Or32x2() : base(IR.Or32, TransformType.Auto | TransformType.Optimization)
@@ -47,7 +46,6 @@ public sealed class Or32x2 : BaseTransform
 	}
 }
 
-[Transform()]
 public sealed class Or32x2_v1 : BaseTransform
 {
 	public Or32x2_v1() : base(IR.Or32, TransformType.Auto | TransformType.Optimization)
@@ -90,7 +88,6 @@ public sealed class Or32x2_v1 : BaseTransform
 	}
 }
 
-[Transform()]
 public sealed class Or32x2_v2 : BaseTransform
 {
 	public Or32x2_v2() : base(IR.Or32, TransformType.Auto | TransformType.Optimization)
@@ -133,7 +130,6 @@ public sealed class Or32x2_v2 : BaseTransform
 	}
 }
 
-[Transform()]
 public sealed class Or32x2_v3 : BaseTransform
 {
 	public Or32x2_v3() : base(IR.Or32, TransformType.Auto | TransformType.Optimization)

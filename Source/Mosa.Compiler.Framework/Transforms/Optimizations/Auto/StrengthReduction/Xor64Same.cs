@@ -4,7 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReduction;
 
-[Transform()]
 public sealed class Xor64Same : BaseTransform
 {
 	public Xor64Same() : base(IR.Xor64, TransformType.Auto | TransformType.Optimization)

@@ -7,7 +7,6 @@ namespace Mosa.Compiler.x64.Transforms.FixedRegisters;
 /// <summary>
 /// Cdq64
 /// </summary>
-[Transform]
 public sealed class Cdq64 : BaseTransform
 {
 	public Cdq64() : base(X64.Cdq64, TransformType.Manual | TransformType.Transform)

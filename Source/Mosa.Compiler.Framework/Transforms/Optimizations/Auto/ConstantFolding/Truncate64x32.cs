@@ -4,7 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
-[Transform()]
 public sealed class Truncate64x32 : BaseTransform
 {
 	public Truncate64x32() : base(IR.Truncate64x32, TransformType.Auto | TransformType.Optimization)

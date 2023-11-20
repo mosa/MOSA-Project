@@ -4,7 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
-[Transform()]
 public sealed class Compare32x64PassThru : BaseTransform
 {
 	public Compare32x64PassThru() : base(IR.Compare32x64, TransformType.Auto | TransformType.Optimization)
@@ -46,7 +45,6 @@ public sealed class Compare32x64PassThru : BaseTransform
 	}
 }
 
-[Transform()]
 public sealed class Compare32x64PassThru_v1 : BaseTransform
 {
 	public Compare32x64PassThru_v1() : base(IR.Compare32x64, TransformType.Auto | TransformType.Optimization)
@@ -88,7 +86,6 @@ public sealed class Compare32x64PassThru_v1 : BaseTransform
 	}
 }
 
-[Transform()]
 public sealed class Compare32x64PassThru_v2 : BaseTransform
 {
 	public Compare32x64PassThru_v2() : base(IR.Compare32x64, TransformType.Auto | TransformType.Optimization)
@@ -130,7 +127,6 @@ public sealed class Compare32x64PassThru_v2 : BaseTransform
 	}
 }
 
-[Transform()]
 public sealed class Compare32x64PassThru_v3 : BaseTransform
 {
 	public Compare32x64PassThru_v3() : base(IR.Compare32x64, TransformType.Auto | TransformType.Optimization)

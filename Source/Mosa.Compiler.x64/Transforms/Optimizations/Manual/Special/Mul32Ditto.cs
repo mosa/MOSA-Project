@@ -4,7 +4,6 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x64.Transforms.Optimizations.Manual.Special;
 
-[Transform]
 public sealed class Mul32Ditto : BaseTransform
 {
 	public Mul32Ditto() : base(X64.Mul32, TransformType.Manual | TransformType.Optimization)

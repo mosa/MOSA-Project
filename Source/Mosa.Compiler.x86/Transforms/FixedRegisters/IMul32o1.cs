@@ -8,7 +8,6 @@ namespace Mosa.Compiler.x86.Transforms.FixedRegisters;
 /// <summary>
 /// IMul32o1
 /// </summary>
-[Transform]
 public sealed class IMul32o1 : BaseTransform
 {
 	public IMul32o1() : base(X86.IMul32o1, TransformType.Manual | TransformType.Transform)

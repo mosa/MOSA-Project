@@ -8,7 +8,6 @@ namespace Mosa.Compiler.x64.Transforms.Tweak;
 /// <summary>
 /// Movzx16To64
 /// </summary>
-[Transform]
 public sealed class Movzx16To64 : BaseTransform
 {
 	public Movzx16To64() : base(X64.Movzx16To64, TransformType.Manual | TransformType.Transform)

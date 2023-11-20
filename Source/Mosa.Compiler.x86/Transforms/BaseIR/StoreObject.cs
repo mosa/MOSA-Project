@@ -7,7 +7,6 @@ namespace Mosa.Compiler.x86.Transforms.BaseIR;
 /// <summary>
 /// StoreObject
 /// </summary>
-[Transform]
 public sealed class StoreObject : BaseIRTransform
 {
 	public StoreObject() : base(IR.StoreObject, TransformType.Manual | TransformType.Transform)

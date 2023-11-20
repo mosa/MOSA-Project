@@ -7,7 +7,6 @@ namespace Mosa.Compiler.x86.Transforms.Tweak;
 /// <summary>
 /// Tzcnt32
 /// </summary>
-[Transform]
 public sealed class Tzcnt32 : BaseTransform
 {
 	public Tzcnt32() : base(X86.Tzcnt32, TransformType.Manual | TransformType.Transform)

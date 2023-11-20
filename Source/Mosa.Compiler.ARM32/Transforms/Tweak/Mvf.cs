@@ -7,7 +7,6 @@ namespace Mosa.Compiler.ARM32.Transforms.Tweak;
 /// <summary>
 /// Mvf
 /// </summary>
-[Transform]
 public sealed class Mvf : BaseTransform
 {
 	public Mvf() : base(ARM32.Mvf, TransformType.Manual | TransformType.Transform)

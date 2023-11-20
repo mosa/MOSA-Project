@@ -4,7 +4,6 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x64.Transforms.Optimizations.Manual.Rewrite;
 
-[Transform]
 public sealed class Cmp32ToZero : BaseTransform
 {
 	public Cmp32ToZero() : base(X64.Cmp32, TransformType.Manual | TransformType.Optimization)
