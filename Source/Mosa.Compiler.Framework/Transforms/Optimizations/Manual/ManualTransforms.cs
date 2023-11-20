@@ -246,9 +246,6 @@ public static class ManualTransforms
 		new StaticLoad.Load32(),
 		new StaticLoad.Load64(),
 
-		new Simplification.DivUnsignedMagicNumber32(),
-		new Simplification.DivUnsignedMagicNumber64(),
-
 		new Useless.LoadParamZeroExtend8x32Double(),
 		new Useless.LoadParamZeroExtend16x32Double(),
 		new Useless.LoadParamZeroExtend8x64Double(),
@@ -289,5 +286,8 @@ public static class ManualTransforms
 		new BitValue.Branch64(),
 		new BitValue.BranchManagedPointer(),
 		new BitValue.BranchObject(),
+
+		new StrengthReduction.DivUnsignedMagicNumber32(),
+		new StrengthReduction.DivUnsignedMagicNumber64(),
 	};
 }
