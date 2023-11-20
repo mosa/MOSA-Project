@@ -515,24 +515,6 @@
 		},
 		{
 			"Type": "Simplification",
-			"Name": "MulCarryOut##",
-			"SubName": "CarryNotUsed",
-			"Expression": "IR.MulCarryOut## a b",
-			"Filter": "!IsResult2Used(@)",
-			"Result": "(IR.MulSigned## a b)",
-			"Variations": "No"
-		},
-		{
-			"Type": "Simplification",
-			"Name": "MulOverflowOut##",
-			"SubName": "CarryNotUsed",
-			"Expression": "IR.MulOverflowOut## a b",
-			"Filter": "!IsResult2Used(@)",
-			"Result": "(IR.MulSigned## a b)",
-			"Variations": "No"
-		},
-		{
-			"Type": "Simplification",
 			"Name": "SubCarryOut##",
 			"SubName": "CarryNotUsed",
 			"Expression": "IR.SubCarryOut## a b",
@@ -547,6 +529,24 @@
 			"Expression": "IR.SubOverflowOut## a b",
 			"Filter": "!IsResult2Used(@)",
 			"Result": "(IR.Sub## a b)",
+			"Variations": "No"
+		},
+		{
+			"Type": "Simplification",
+			"Name": "MulCarryOut##",
+			"SubName": "CarryNotUsed",
+			"Expression": "IR.MulCarryOut## a b",
+			"Filter": "!IsResult2Used(@)",
+			"Result": "(IR.MulSigned## a b)",
+			"Variations": "No"
+		},
+		{
+			"Type": "Simplification",
+			"Name": "MulOverflowOut##",
+			"SubName": "CarryNotUsed",
+			"Expression": "IR.MulOverflowOut## a b",
+			"Filter": "!IsResult2Used(@)",
+			"Result": "(IR.MulSigned## a b)",
 			"Variations": "No"
 		}
 	]

@@ -408,6 +408,97 @@
 			"Result": "(IR.Move32 [To32(0)])",
 			"Priority": "80",
 			"Variations": "Yes"
+		},
+
+		{
+			"Type": "StrengthReduction",
+			"Name": "AddCarryOut##",
+			"SubName": "ByZero",
+			"Expression": "IR.AddCarryOut## a 0",
+			"Filter": "!IsResult2Used(@)",
+			"Result": "(IR.Move## a)",
+			"Result2": "(IR.Move## [To##(0)])",
+			"Priority": "80",
+			"Variations": "Yes"
+		},
+		{
+			"Type": "StrengthReduction",
+			"Name": "AddOverflowOut##",
+			"SubName": "ByZero",
+			"Expression": "IR.AddOverflowOut## a 0",
+			"Filter": "!IsResult2Used(@)",
+			"Result": "(IR.Move## a)",
+			"Result2": "(IR.Move## [To##(0)])",
+			"Priority": "80",
+			"Variations": "Yes"
+		},
+
+		{
+			"Type": "StrengthReduction",
+			"Name": "SubCarryOut##",
+			"SubName": "ByZero",
+			"Expression": "IR.SubCarryOut## a 0",
+			"Filter": "!IsResult2Used(@)",
+			"Result": "(IR.Move## a)",
+			"Result2": "(IR.Move## [To##(0)])",
+			"Priority": "80",
+			"Variations": "No"
+		},
+		{
+			"Type": "StrengthReduction",
+			"Name": "SubOverflowOut##",
+			"SubName": "ByZero",
+			"Expression": "IR.SubOverflowOut## a 0",
+			"Filter": "!IsResult2Used(@)",
+			"Result": "(IR.Move## a)",
+			"Result2": "(IR.Move## [To##(0)])",
+			"Priority": "80",
+			"Variations": "No"
+		},
+		{
+			"Type": "StrengthReduction",
+			"Name": "MulCarryOut##",
+			"SubName": "ByOne",
+			"Expression": "IR.MulCarryOut## a 1",
+			"Filter": "!IsResult2Used(@)",
+			"Result": "(IR.Move## a)",
+			"Result2": "(IR.Move## [To##(0)])",
+			"Priority": "80",
+			"Variations": "Yes"
+		},
+		{
+			"Type": "StrengthReduction",
+			"Name": "MulOverflowOut##",
+			"SubName": "ByOne",
+			"Expression": "IR.MulOverflowOut## a 1",
+			"Filter": "!IsResult2Used(@)",
+			"Result": "(IR.Move## a)",
+			"Result2": "(IR.Move## [To##(0)])",
+			"Priority": "80",
+			"Variations": "Yes"
+		},
+
+		{
+			"Type": "StrengthReduction",
+			"Name": "MulCarryOut##",
+			"SubName": "ByZero",
+			"Expression": "IR.MulCarryOut## a 0",
+			"Filter": "!IsResult2Used(@)",
+			"Result": "(IR.Move## [To##(0)]))",
+			"Result2": "(IR.Move## [To##(0)])",
+			"Priority": "80",
+			"Variations": "Yes"
+		},
+		{
+			"Type": "StrengthReduction",
+			"Name": "MulOverflowOut##",
+			"SubName": "ByZero",
+			"Expression": "IR.MulOverflowOut## a 0",
+			"Filter": "!IsResult2Used(@)",
+			"Result": "(IR.Move## [To##(0)]))",
+			"Result2": "(IR.Move## [To##(0)])",
+			"Priority": "80",
+			"Variations": "Yes"
 		}
 	]
 }
