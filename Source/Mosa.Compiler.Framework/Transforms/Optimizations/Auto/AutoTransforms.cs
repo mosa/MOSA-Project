@@ -929,10 +929,10 @@ public static class AutoTransforms
 		new Useless.ZeroExtend32x64ZeroExtend16x64(),
 		new BitValue.MulSigned32ButNotSigned(),
 		new BitValue.MulSigned64ButNotSigned(),
-		new BitValue.RemSigned32ButNotSigned(),
-		new BitValue.RemSigned64ButNotSigned(),
 		new BitValue.DivSigned32ButNotSigned(),
 		new BitValue.DivSigned64ButNotSigned(),
+		new BitValue.RemSigned32ButNotSigned(),
+		new BitValue.RemSigned64ButNotSigned(),
 		new BitValue.ArithShiftRight32ButNotSigned(),
 		new BitValue.ArithShiftRight64ButNotSigned(),
 		new BitValue.Compare32x32EqualAdd32(),
@@ -959,5 +959,7 @@ public static class AutoTransforms
 		new BitValue.Compare32x64UnsignedLessAdd32_v1(),
 		new BitValue.Compare64x64UnsignedLessAdd64(),
 		new BitValue.Compare64x64UnsignedLessAdd64_v1(),
+		new BitValue.AddCarryOut32ButNotSigned(),
+		new BitValue.AddCarryOut64ButNotSigned(),
 	};
 }

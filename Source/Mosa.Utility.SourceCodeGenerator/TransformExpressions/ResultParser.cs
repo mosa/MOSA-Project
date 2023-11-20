@@ -6,6 +6,9 @@ public static class ResultParser
 {
 	public static Node Parse(List<Token> tokens)
 	{
+		if (tokens.Count == 0)
+			return null;
+
 		return ParseNode(tokens, 0, 0, null).node;
 	}
 

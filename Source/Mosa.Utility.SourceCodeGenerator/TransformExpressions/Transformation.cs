@@ -8,53 +8,63 @@ public class Transformation
 	public readonly string FilterText;
 	public readonly string PrefilterText;
 	public readonly string ResultText;
+	public readonly string Result2Text;
 
 	protected readonly List<Token> TokenizedExpression;
 	protected readonly List<Token> TokenizedFilter;
 	protected readonly List<Token> TokenizedResult;
+	protected readonly List<Token> TokenizedResult2;
 	protected readonly List<Token> TokenizedPrefilter;
 
 	public readonly LabelSet LabelSet;
 	public readonly Node InstructionTree;
 	public readonly Node ResultInstructionTree;
+	public readonly Node Result2InstructionTree;
 	public readonly List<Method> Filters;
 	public readonly List<Method> Prefilters;
 
-	public Transformation(string expression, string filter, string result, string prefilterText)
+	public Transformation(string expression, string filter, string result, string result2, string prefilterText)
 	{
 		ExpressionText = expression;
 		FilterText = filter;
 		ResultText = result;
+		Result2Text = result2;
 		PrefilterText = prefilterText;
 
 		TokenizedExpression = Tokenizer.Parse(ExpressionText);
 		TokenizedFilter = Tokenizer.Parse(FilterText);
 		TokenizedPrefilter = Tokenizer.Parse(PrefilterText);
 		TokenizedResult = Tokenizer.Parse(ResultText);
+		TokenizedResult2 = Tokenizer.Parse(Result2Text);
 
 		InstructionTree = InstructionParser.Parse(TokenizedExpression);
 		ResultInstructionTree = ResultParser.Parse(TokenizedResult);
+		Result2InstructionTree = ResultParser.Parse(TokenizedResult2);
 		Filters = FilterParser.ParseAll(TokenizedFilter);
 		Prefilters = PrefilterParser.ParseAll(TokenizedPrefilter);
 
 		LabelSet = new LabelSet(InstructionTree);
 		LabelSet.AddUse(ResultInstructionTree);
+		LabelSet.AddUse(Result2InstructionTree);
 	}
 
-	private Transformation(Node instructionTree, Node resultInstructionTree, List<Method> filters, List<Method> prefilters)
+	private Transformation(Node instructionTree, Node resultInstructionTree, Node result2InstructionTree, List<Method> filters, List<Method> prefilters)
 	{
 		InstructionTree = instructionTree;
 		ResultInstructionTree = resultInstructionTree;
+		Result2InstructionTree = result2InstructionTree;
+
 		Filters = filters;
 		Prefilters = prefilters;
 
 		LabelSet = new LabelSet(InstructionTree);
 		LabelSet.AddUse(ResultInstructionTree);
+		LabelSet.AddUse(Result2InstructionTree);
 	}
 
 	public override string ToString()
 	{
-		return $"{InstructionTree} & {FilterText} -> {ResultText}";
+		return $"{InstructionTree} & {FilterText} -> {ResultText} : {Result2Text}";
 	}
 
 	public List<Node> __Preorder(Node tree)
@@ -242,13 +252,18 @@ public class Transformation
 		return result;
 	}
 
-	public List<Operand> GetAllOperands(Node tree)
+	public static List<Operand> GetAllOperands(Node tree, Node tree2)
 	{
 		var result = new List<Operand>();
 		var worklistNode = new Stack<Node>();
 		var worklistMethod = new Stack<Method>();
 
 		worklistNode.Push(tree);
+
+		if (tree2 != null)
+		{
+			worklistNode.Push(tree2);
+		}
 
 		while (worklistNode.Count != 0 || worklistMethod.Count != 0)
 		{
@@ -357,7 +372,7 @@ public class Transformation
 			}
 		}
 
-		return new Transformation(instructionTree, ResultInstructionTree, Filters, Prefilters);
+		return new Transformation(instructionTree, ResultInstructionTree, Result2InstructionTree, Filters, Prefilters);
 	}
 
 	public static ConditionCode GetReverse(ConditionCode conditionCode)

@@ -56,6 +56,7 @@ public class BuildTransformations : BuildBaseTemplate
 		string filter = node.Filter;
 		string prefilter = node.Prefilter;
 		string result = node.Result;
+		string result2 = node.Result2;
 
 		bool log = node.Log != null && node.Log == "Yes";
 		bool variations = node.Variations != null && node.Variations == "Yes";
@@ -86,24 +87,24 @@ public class BuildTransformations : BuildBaseTemplate
 		if (commutativeInstructions == null)
 			commutativeInstructions = CommutativeInstructions;
 
-		GenerateTranformations(name, type, subName, expression, filter, prefilter, result, variations, log, optimization, priority, commutativeInstructions);
+		GenerateTranformations(name, type, subName, expression, filter, prefilter, result, variations, log, optimization, priority, commutativeInstructions, result2);
 	}
 
-	private void GenerateTranformations(string name, string type, string subName, string expression, string filter, string prefilter, string result, bool variations, bool log, bool optimization, int priority, List<string> commutativeInstructions)
+	private void GenerateTranformations(string name, string type, string subName, string expression, string filter, string prefilter, string result, bool variations, bool log, bool optimization, int priority, List<string> commutativeInstructions, string result2)
 	{
 		if (expression.Contains("R#"))
 		{
-			GenerateTransformation(R4(name), R4(type), R4(subName), new Transformation(R4(expression), R4(filter), R4(result), prefilter), variations, log, optimization, priority, commutativeInstructions);
-			GenerateTransformation(R8(name), R8(type), R8(subName), new Transformation(R8(expression), R8(filter), R8(result), prefilter), variations, log, optimization, priority, commutativeInstructions);
+			GenerateTransformation(R4(name), R4(type), R4(subName), new Transformation(R4(expression), R4(filter), R4(result), R4(result2), prefilter), variations, log, optimization, priority, commutativeInstructions);
+			GenerateTransformation(R8(name), R8(type), R8(subName), new Transformation(R8(expression), R8(filter), R8(result), R4(result2), prefilter), variations, log, optimization, priority, commutativeInstructions);
 		}
 		else if (expression.Contains("##"))
 		{
-			GenerateTransformation(To32(name), To32(type), To32(subName), new Transformation(To32(expression), To32(filter), To32(result), prefilter), variations, log, optimization, priority, commutativeInstructions);
-			GenerateTransformation(To64(name), To64(type), To64(subName), new Transformation(To64(expression), To64(filter), To64(result), prefilter), variations, log, optimization, priority, commutativeInstructions);
+			GenerateTransformation(To32(name), To32(type), To32(subName), new Transformation(To32(expression), To32(filter), To32(result), To32(result2), prefilter), variations, log, optimization, priority, commutativeInstructions);
+			GenerateTransformation(To64(name), To64(type), To64(subName), new Transformation(To64(expression), To64(filter), To64(result), To32(result2), prefilter), variations, log, optimization, priority, commutativeInstructions);
 		}
 		else
 		{
-			GenerateTransformation(name, type, subName, new Transformation(expression, filter, result, prefilter), variations, log, optimization, priority, commutativeInstructions);
+			GenerateTransformation(name, type, subName, new Transformation(expression, filter, result, result2, prefilter), variations, log, optimization, priority, commutativeInstructions);
 		}
 	}
 
@@ -237,6 +238,12 @@ public class BuildTransformations : BuildBaseTemplate
 	{
 		// Capture the result type
 		Lines.AppendLine("\t\tvar result = context.Result;");
+
+		if (transform.Result2InstructionTree != null)
+		{
+			Lines.AppendLine("\t\tvar result2 = context.Result2;");
+		}
+
 		Lines.AppendLine("");
 
 		// Capture all the labeled operands into variables
@@ -263,28 +270,17 @@ public class BuildTransformations : BuildBaseTemplate
 		if (labelCount != 0)
 			Lines.AppendLine("");
 
-		var postOrder = transform.GetPostorder(transform.ResultInstructionTree);
-
 		// Create virtual register for each child instruction
-		var virtualRegisterNbr = 0;
 		var nodeNbrToVirtualRegisterNbr = new Dictionary<int, int>();
-		foreach (var node in postOrder)
-		{
-			if (node == transform.ResultInstructionTree)
-				continue;
 
-			virtualRegisterNbr++;
-			var resultType = DetermineResultType(node);
+		var postOrder = CreateVirtualRegisters(transform, nodeNbrToVirtualRegisterNbr, transform.ResultInstructionTree);
+		var postOrder2 = CreateVirtualRegisters(transform, nodeNbrToVirtualRegisterNbr, transform.Result2InstructionTree);
 
-			nodeNbrToVirtualRegisterNbr.Add(node.NodeNbr, virtualRegisterNbr);
-
-			Lines.AppendLine($"\t\tvar v{virtualRegisterNbr} = transform.VirtualRegisters.Allocate{resultType}();");
-		}
-		if (virtualRegisterNbr != 0)
+		if (nodeNbrToVirtualRegisterNbr.Count != 0)
 			Lines.AppendLine();
 
 		// Create all the constants variables
-		var operandList = transform.GetAllOperands(transform.ResultInstructionTree);
+		var operandList = Transformation.GetAllOperands(transform.ResultInstructionTree, transform.Result2InstructionTree);
 		var constantNbr = 0;
 		var constantTextToConstantNbr = new Dictionary<string, int>();
 		var constantToConstantNbr = new Dictionary<Operand, int>();
@@ -312,37 +308,25 @@ public class BuildTransformations : BuildBaseTemplate
 			Lines.AppendLine("");
 
 		// Evaluate functions
-		var methodNbr = 0;
 		var methodToExpressionText = new Dictionary<string, int>();
 		var methodToMethodNbr = new Dictionary<Method, int>();
-		foreach (var node in postOrder)
-		{
-			foreach (var operand in node.Operands)
-			{
-				if (!operand.IsMethod)
-					continue;
 
-				var name = CreateExpression(operand.Method, labelToLabelNbr, constantToConstantNbr);
+		EvaluateFunctions(labelToLabelNbr, constantToConstantNbr, methodToExpressionText, methodToMethodNbr, postOrder);
+		EvaluateFunctions(labelToLabelNbr, constantToConstantNbr, methodToExpressionText, methodToMethodNbr, postOrder2);
 
-				if (methodToExpressionText.TryGetValue(name, out var found))
-				{
-					methodToMethodNbr.Add(operand.Method, found);
-					continue;
-				}
-
-				methodNbr++;
-
-				methodToMethodNbr.Add(operand.Method, methodNbr);
-				methodToExpressionText.Add(name, methodNbr);
-
-				Lines.AppendLine($"\t\tvar e{methodNbr} = Operand.CreateConstant({name});");
-			}
-		}
-		if (methodNbr != 0)
+		if (methodToMethodNbr.Count != 0)
 			Lines.AppendLine("");
 
 		// Create Instructions
-		var firstInstruction = true;
+		CreateInstructions(transform, labelToLabelNbr, nodeNbrToVirtualRegisterNbr, constantToConstantNbr, methodToMethodNbr, true, postOrder);
+		CreateInstructions(transform, labelToLabelNbr, nodeNbrToVirtualRegisterNbr, constantToConstantNbr, methodToMethodNbr, false, postOrder2);
+	}
+
+	private void CreateInstructions(Transformation transform, Dictionary<string, int> labelToLabelNbr, Dictionary<int, int> nodeNbrToVirtualRegisterNbr, Dictionary<Operand, int> constantToConstantNbr, Dictionary<Method, int> methodToMethodNbr, bool firstInstruction, List<Node> postOrder)
+	{
+		if (postOrder == null)
+			return;
+
 		foreach (var node in postOrder)
 		{
 			var sb = new StringBuilder();
@@ -391,7 +375,10 @@ public class BuildTransformations : BuildBaseTemplate
 			if (!string.IsNullOrWhiteSpace(node.InstructionName))
 			{
 				var instruction = node.InstructionName;
-				var result = node == transform.ResultInstructionTree ? "result" : $"v{nodeNbrToVirtualRegisterNbr[node.NodeNbr]}";
+				var result =
+					node == transform.ResultInstructionTree ? "result"
+						: node == transform.Result2InstructionTree ? "result2"
+						: $"v{nodeNbrToVirtualRegisterNbr[node.NodeNbr]}";
 
 				Lines.AppendLine($"\t\tcontext.{operation}Instruction({instruction}, {condition}{result}, {operands});");
 			}
@@ -402,6 +389,60 @@ public class BuildTransformations : BuildBaseTemplate
 
 			firstInstruction = false;
 		}
+	}
+
+	private void EvaluateFunctions(Dictionary<string, int> labelToLabelNbr, Dictionary<Operand, int> constantToConstantNbr, Dictionary<string, int> methodToExpressionText, Dictionary<Method, int> methodToMethodNbr, List<Node> postOrder)
+	{
+		if (postOrder == null)
+			return;
+
+		foreach (var node in postOrder)
+		{
+			foreach (var operand in node.Operands)
+			{
+				if (!operand.IsMethod)
+					continue;
+
+				var name = CreateExpression(operand.Method, labelToLabelNbr, constantToConstantNbr);
+
+				if (methodToExpressionText.TryGetValue(name, out var found))
+				{
+					methodToMethodNbr.Add(operand.Method, found);
+					continue;
+				}
+
+				var methodNbr = methodToMethodNbr.Count + 1;
+
+				methodToMethodNbr.Add(operand.Method, methodNbr);
+				methodToExpressionText.Add(name, methodNbr);
+
+				Lines.AppendLine($"\t\tvar e{methodNbr} = Operand.CreateConstant({name});");
+			}
+		}
+	}
+
+	private List<Node> CreateVirtualRegisters(Transformation transform, Dictionary<int, int> nodeNbrToVirtualRegisterNbr, Node resultTree)
+	{
+		if (resultTree == null)
+			return null;
+
+		var postOrder = transform.GetPostorder(resultTree);
+
+		foreach (var node in postOrder)
+		{
+			if (node == resultTree)
+				continue;
+
+			var resultType = DetermineResultType(node);
+
+			var virtualRegisterNbr = nodeNbrToVirtualRegisterNbr.Count + 1;
+
+			nodeNbrToVirtualRegisterNbr.Add(node.NodeNbr, virtualRegisterNbr);
+
+			Lines.AppendLine($"\t\tvar v{virtualRegisterNbr} = transform.VirtualRegisters.Allocate{resultType}();");
+		}
+
+		return postOrder;
 	}
 
 	//private string CreateConstant(string value)
