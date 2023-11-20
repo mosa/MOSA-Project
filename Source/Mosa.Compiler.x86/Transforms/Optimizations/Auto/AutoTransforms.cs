@@ -58,7 +58,7 @@ public static class AutoTransforms
 		new Lea.Lea32ToMov32Constant1(),
 		new Lea.Lea32ToMov32Constant2(),
 		new Lea.Lea32RemoveScale(),
-		new Lea.Mov32ToLea32By3Or5Or9(),
+		new Lea.Mul32ToLea32By3Or5Or9(),
 		new Lea.Lea32Shift32(),
 		new Lea.Lea32Shift32v2(),
 		new Lea.Lea32Join(),
