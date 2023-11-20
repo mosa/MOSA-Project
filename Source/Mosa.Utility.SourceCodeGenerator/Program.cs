@@ -224,6 +224,12 @@ public static class Program
 			.Execute();
 
 		new BuildTransformations(
+			Path.Combine(dataPath, @"X64-Optimizations-ConstantMove.json"),
+			Path.Combine(targetPath, @"Mosa.Compiler.x64\Transforms\Optimizations\Auto"),
+			"Mosa.Compiler.x64.Transforms.Optimizations.Auto")
+			.Execute();
+
+		new BuildTransformations(
 			Path.Combine(dataPath, @"X64-Optimizations-Ordering.json"),
 			Path.Combine(targetPath, @"Mosa.Compiler.x64\Transforms\Optimizations\Auto"),
 			"Mosa.Compiler.x64.Transforms.Optimizations.Auto")
