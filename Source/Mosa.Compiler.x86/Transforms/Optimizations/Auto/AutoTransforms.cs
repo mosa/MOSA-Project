@@ -24,7 +24,7 @@ public static class AutoTransforms
 		new Specific.And32Add32ToBlsr32_v1(),
 		new Specific.And32Add32ToBlsr32_v2(),
 		new Specific.And32Add32ToBlsr32_v3(),
-		new Simplication.SubFromZero(),
+		new Simplication.Sub32FromZero(),
 		new StrengthReduction.And32ByZero(),
 		new StrengthReduction.And32ByZero_v1(),
 		new StrengthReduction.And32ByMax(),

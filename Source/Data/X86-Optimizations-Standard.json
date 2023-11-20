@@ -95,8 +95,8 @@
 		},
 		{
 			"Type": "Simplication",
-			"Name": "SubFromZero",
-			"SubName": "",
+			"Name": "Sub32",
+			"SubName": "FromZero",
 			"Expression": "X86.Sub32 0 x",
 			"Filter": "IsVirtualRegister(x)",
 			"Result": "(X86.Neg32 x)",
@@ -177,7 +177,6 @@
 			"Result": "(X86.Mov32 a)",
 			"Priority": "80"
 		},
-
 		{
 			"Type": "Consolidation",
 			"Name": "IMul32Mov32",

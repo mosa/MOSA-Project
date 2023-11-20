@@ -4,20 +4,22 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.Simplication;
+namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.StrengthReduction;
 
-public sealed class SubFromZero : BaseTransform
+public sealed class Sar64ZeroValue : BaseTransform
 {
-	public SubFromZero() : base(X86.Sub32, TransformType.Auto | TransformType.Optimization)
+	public Sar64ZeroValue() : base(X64.Sar64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
+
+	public override int Priority => 80;
 
 	public override bool Match(Context context, Transform transform)
 	{
 		if (!context.Operand1.IsConstantZero)
 			return false;
 
-		if (!IsVirtualRegister(context.Operand2))
+		if (AreAnyStatusFlagsUsed(context))
 			return false;
 
 		return true;
@@ -27,8 +29,8 @@ public sealed class SubFromZero : BaseTransform
 	{
 		var result = context.Result;
 
-		var t1 = context.Operand2;
+		var c1 = Operand.CreateConstant(0);
 
-		context.SetInstruction(X86.Neg32, result, t1);
+		context.SetInstruction(X64.Mov64, result, c1);
 	}
 }
