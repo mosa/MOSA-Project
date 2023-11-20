@@ -24,13 +24,13 @@ public sealed class AddressOf : BaseIRTransform
 		}
 		else if (context.Operand1.IsLocalStack)
 		{
-			context.SetInstruction(X64.Lea64, context.Result, transform.StackFrame, context.Operand1);
+			context.SetInstruction(X64.Lea64, context.Result, transform.StackFrame, Operand.Constant64_0, Operand.Constant64_1, context.Operand1);
 		}
 		else
 		{
 			var offset = Operand.CreateConstant32(context.Operand1.Offset);
 
-			context.SetInstruction(X64.Lea64, context.Result, transform.StackFrame, offset);
+			context.SetInstruction(X64.Lea64, context.Result, transform.StackFrame, Operand.Constant64_0, Operand.Constant64_1, offset);
 		}
 	}
 }

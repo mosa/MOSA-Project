@@ -4,9 +4,9 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x64.Transforms.Optimizations.Manual.Rewrite;
 
-public sealed class Lea32ToInc32 : BaseTransform
+public sealed class Lea64ToInc64 : BaseTransform
 {
-	public Lea32ToInc32() : base(X64.Lea32, TransformType.Manual | TransformType.Optimization)
+	public Lea64ToInc64() : base(X64.Lea64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
@@ -37,6 +37,6 @@ public sealed class Lea32ToInc32 : BaseTransform
 	{
 		var result = context.Result;
 
-		context.SetInstruction(X64.Inc32, result, result);
+		context.SetInstruction(X64.Inc64, result, result);
 	}
 }

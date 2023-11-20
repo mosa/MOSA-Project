@@ -1,0 +1,86 @@
+﻿{
+	"Family": "x86",
+	"Section": "Optimizations.Auto",
+	"Commutative": [
+		"X64.Add32",
+		"X64.And32",
+		"X64.Or32",
+		"X64.Xor32",
+		"X64.Add64",
+		"X64.And64",
+		"X64.Or64",
+		"X64.Xor64"
+	],
+	"Optimizations": [
+		{
+			"Type": "Lea",
+			"Name": "Lea##",
+			"SubName": "ToMov##Constant1",
+			"Expression": "X64.Lea## 0 0 c d",
+			"Filter": "",
+			"Result": "(X64.Mov## d)",
+			"Variations": "No",
+			"Log": "No"
+		},
+		{
+			"Type": "Lea",
+			"Name": "Lea##",
+			"SubName": "ToMov##Constant2",
+			"Expression": "X64.Lea## a 0 c 0",
+			"Filter": "",
+			"Result": "(X64.Mov## a)",
+			"Variations": "No",
+			"Log": "No"
+		},
+		{
+			"Type": "Lea",
+			"Name": "Lea##",
+			"SubName": "RemoveScale",
+			"Expression": "X64.Lea## a 0 c d",
+			"Filter": "!IsOne(c)",
+			"Result": "(X64.Lea## a [To##(0)] [To##(1)] d)",
+			"Variations": "No",
+			"Log": "No"
+		},
+		{
+			"Type": "Lea",
+			"Name": "Mul##ToLea##",
+			"SubName": "By3Or5Or9",
+			"Expression": "X64.Mul## a b",
+			"Filter": "!IsResult2Used(@) && !IsZero(a) && Contains(b, 3, 5, 9) && !AreAnyStatusFlagsUsed(@)",
+			"Result": "(X64.Lea## a a [Sub##(To##(b),1)] [To##(0)])",
+			"Variations": "No",
+			"Log": "No"
+		},
+		{
+			"Type": "Lea",
+			"Name": "Lea##",
+			"SubName": "Shift##",
+			"Expression": "X64.Lea## a (X64.Shl## b c) 1 d",
+			"Filter": "IsVirtualRegister(b) && IsUnsignedBetween##(c, 1, 3)",
+			"Result": "(X64.Lea## a b [ShiftLeft##(1,To##(c))] d)",
+			"Variations": "No",
+			"Log": "No"
+		},
+		{
+			"Type": "Lea",
+			"Name": "Lea##",
+			"SubName": "Shift##v2",
+			"Expression": "X64.Lea## (X64.Shl## b c) a 1 d",
+			"Filter": "IsVirtualRegister(a) && IsVirtualRegister(b) && IsUnsignedBetween##(c, 1, 3)",
+			"Result": "(X64.Lea## a b [ShiftLeft##(1,To##(c))] d)",
+			"Variations": "No",
+			"Log": "No"
+		},
+		{
+			"Type": "Lea",
+			"Name": "Lea##",
+			"SubName": "Join",
+			"Expression": "X64.Lea## (X64.Lea## a b c d1) 0 1 d2",
+			"Filter": "IsResolvedConstant(d2) && IsResolvedConstant(d1)",
+			"Result": "(X64.Lea## a b c [Add##(To##(d1),To##(d2))])",
+			"Variations": "No",
+			"Log": "No"
+		}
+	]
+}

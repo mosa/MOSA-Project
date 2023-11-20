@@ -37,6 +37,17 @@ public sealed class Add64ToLea64 : BaseTransform
 
 	public override void Transform(Context context, Transform transform)
 	{
-		context.SetInstruction(X64.Lea64, context.Result, context.Operand1, context.Operand2);
+		var result = context.Result;
+		var operand1 = context.Operand1;
+		var operand2 = context.Operand2;
+
+		if (operand2.IsConstant)
+		{
+			context.SetInstruction(X64.Lea64, result, operand1, Operand.Constant64_0, Operand.Constant64_1, operand2);
+		}
+		else
+		{
+			context.SetInstruction(X64.Lea64, result, operand1, operand2, Operand.Constant64_1, Operand.Constant64_0);
+		}
 	}
 }

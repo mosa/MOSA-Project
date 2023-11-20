@@ -23,9 +23,6 @@ public sealed class Sub64ToLea64 : BaseTransform
 		if (!context.Operand2.IsResolvedConstant)
 			return false;
 
-		if (!AreSame(context.Operand1, context.Result))
-			return false;
-
 		if (context.Operand1.Register == CPURegister.RSP)
 			return false;
 
@@ -42,6 +39,6 @@ public sealed class Sub64ToLea64 : BaseTransform
 	{
 		var constant = Operand.CreateConstant(-context.Operand2.ConstantSigned32);
 
-		context.SetInstruction(X64.Lea64, context.Result, context.Operand1, constant);
+		context.SetInstruction(X64.Lea64, context.Result, context.Operand1, Operand.Constant64_0, Operand.Constant64_1, constant);
 	}
 }
