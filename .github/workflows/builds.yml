@@ -372,7 +372,7 @@ jobs:
         run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.CoolWorld.x86.dll -o${{ matrix.optimization }} -check -test -vmware-svga -include bin/Include
 
   linux-x64-compile-test:
-    name: Linux - X64 Compile Test -o${{ matrix.optimization }}
+    name: Linux - X64 Compile Tests
     runs-on: ubuntu-latest
     timeout-minutes: 15
     needs: linux-build
