@@ -74,8 +74,7 @@ internal static class Program
 
 	private static void SetDefaultSettings(MosaSettings mosaSettings)
 	{
-		mosaSettings.Launcher = false;
-
+		mosaSettings.Launcher = true;
 	}
 
 	private static void SetRequiredSettings(MosaSettings mosaSettings)
