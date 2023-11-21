@@ -47,7 +47,7 @@ public partial class Disassembler
 
 		try
 		{
-			var dasm = arch.CreateDisassembler(memoryArea.CreateLeReader((uint)Offset));
+			var dasm = arch.CreateDisassembler(memoryArea.CreateLeReader((long)Offset));
 
 			foreach (var instr in dasm)
 			{
@@ -59,7 +59,7 @@ public partial class Disassembler
 				instruction = instruction.Replace(",", ", ");
 
 				// fix up
-				instruction = ChangeHex(instruction);
+				//instruction = ChangeHex(instruction);
 
 				sb.AppendFormat("{0:x8}", address);
 				sb.Append(' ');
@@ -94,7 +94,7 @@ public partial class Disassembler
 		}
 	}
 
-	private StringBuilder BytesToHex(byte[] memory, uint offset, int length)
+	private static StringBuilder BytesToHex(byte[] memory, uint offset, int length)
 	{
 		if (length == 0)
 			return null;
@@ -113,7 +113,7 @@ public partial class Disassembler
 		return sb;
 	}
 
-	private bool IsHex(char c)
+	private static bool IsHex(char c)
 	{
 		if (c >= '0' && c <= '9')
 			return true;
@@ -127,26 +127,23 @@ public partial class Disassembler
 		return false;
 	}
 
-	private bool IsNext8Hex(string s, int start)
+	private static int IsNextWordHex(string s, int start)
 	{
-		if (start + 8 > s.Length)
-			return false;
-
-		for (var i = start; i < start + 8; i++)
+		for (var i = 0; i < s.Length - start; i++)
 		{
-			var c = s[i];
+			var c = s[start + i];
+
+			if (c == 'h' && i != 0)
+				return i;
 
 			if (!IsHex(c))
-				return false;
+				return 0;
 		}
 
-		if (start + 8 == s.Length)
-			return true;
-
-		return !IsHex(s[start + 8]);
+		return 0;
 	}
 
-	private string ChangeHex(string s)
+	private static string ChangeHex(string s)
 	{
 		var sb = new StringBuilder();
 
@@ -154,21 +151,23 @@ public partial class Disassembler
 		{
 			var c = s[i];
 
-			if (!IsNext8Hex(s, i))
+			var l = IsNextWordHex(s, i);
+
+			if (l == 0)
 			{
 				sb.Append(c);
 				continue;
 			}
 			else
 			{
-				var hex = s.Substring(i, 8);
-				var value = uint.Parse(hex, System.Globalization.NumberStyles.HexNumber);
-				var hex2 = Convert.ToString(value, 16);
+				var hex = s.Substring(i, l);
+				var value = long.Parse(hex, System.Globalization.NumberStyles.HexNumber);
+				var hex2 = Convert.ToString(value, 16).ToUpper();
 
-				sb.Append("x");
+				sb.Append("0x");
 				sb.Append(hex2);
 
-				i += 8;
+				i += l;
 			}
 		}
 
