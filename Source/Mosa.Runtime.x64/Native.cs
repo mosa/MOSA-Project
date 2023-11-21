@@ -130,16 +130,16 @@ public static unsafe class Native
 	public static extern void SetCR4(ulong status);
 
 	[DllImport("Mosa.Compiler.x64.Intrinsic::GetCR0")]
-	public static extern uint GetCR0();
+	public static extern ulong GetCR0();
 
 	[DllImport("Mosa.Compiler.x64.Intrinsic::GetCR2")]
-	public static extern uint GetCR2();
+	public static extern ulong GetCR2();
 
 	[DllImport("Mosa.Compiler.x64.Intrinsic::GetCR3")]
-	public static extern uint GetCR3();
+	public static extern ulong GetCR3();
 
 	[DllImport("Mosa.Compiler.x64.Intrinsic::GetCR4")]
-	public static extern uint GetCR4();
+	public static extern ulong GetCR4();
 
 	[DllImport("Mosa.Compiler.x64.Intrinsic::Get8")]
 	public static extern byte Get8(ulong address);

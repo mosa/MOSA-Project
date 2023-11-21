@@ -29,7 +29,8 @@ public static class PlatformPlug
 		PIC.Setup();
 		RTC.Setup();
 
-		if (BootSettings.EnableDebugOutput) SerialController.Setup(SerialController.COM1);
+		if (BootSettings.EnableDebugOutput)
+			SerialController.Setup(SerialController.COM1);
 	}
 
 	[Plug("Mosa.Kernel.BareMetal.Platform::GetBootReservedRegion")]
@@ -46,7 +47,8 @@ public static class PlatformPlug
 	[Plug("Mosa.Kernel.BareMetal.Platform::DebugWrite")]
 	public static void DebugWrite(byte c)
 	{
-		if (BootSettings.EnableDebugOutput) SerialController.Write(SerialController.COM1, c);
+		if (BootSettings.EnableDebugOutput)
+			SerialController.Write(SerialController.COM1, c);
 	}
 
 	[Plug("Mosa.Kernel.BareMetal.Platform::GetTime")]

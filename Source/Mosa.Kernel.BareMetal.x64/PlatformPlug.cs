@@ -20,16 +20,17 @@ public static class PlatformPlug
 	[Plug("Mosa.Kernel.BareMetal.Platform::EntryPoint")]
 	public static void EntryPoint()
 	{
-		//var eax = Native.GetMultibootEAX();
-		//var ebx = Native.GetMultibootEBX();
+		var rax = Native.GetMultibootRAX();
+		var rbx = Native.GetMultibootRBX();
 
-		//Multiboot.Setup(new Pointer(ebx), eax);
+		Multiboot.Setup(new Pointer(rbx), (uint)rax);
 
-		//SSE.Setup();
-		//PIC.Setup();
+		SSE.Setup();
+		PIC.Setup();
 		RTC.Setup();
 
-		if (BootSettings.EnableDebugOutput) SerialController.Setup(SerialController.COM1);
+		if (BootSettings.EnableDebugOutput)
+			SerialController.Setup(SerialController.COM1);
 	}
 
 	[Plug("Mosa.Kernel.BareMetal.Platform::GetBootReservedRegion")]
@@ -46,7 +47,8 @@ public static class PlatformPlug
 	[Plug("Mosa.Kernel.BareMetal.Platform::DebugWrite")]
 	public static void DebugWrite(byte c)
 	{
-		if (BootSettings.EnableDebugOutput) Serial.Write(SerialController.COM1, c);
+		if (BootSettings.EnableDebugOutput)
+			Serial.Write(SerialController.COM1, c);
 	}
 
 	[Plug("Mosa.Kernel.BareMetal.Platform::GetTime")]
