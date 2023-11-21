@@ -1277,12 +1277,12 @@ public partial class MainForm : Form
 
 	private void btnSaveA_Click(object sender, EventArgs e)
 	{
-		File.WriteAllText(Path.Combine(Path.GetTempPath(), "MOSA", "A.txt"), tbInstructions.Text);
+		File.WriteAllText(Path.Combine(MosaSettings.TemporaryFolder, "A.txt"), tbInstructions.Text);
 	}
 
 	private void btnSaveB_Click(object sender, EventArgs e)
 	{
-		File.WriteAllText(Path.Combine(Path.GetTempPath(), "MOSA", "B.txt"), tbInstructions.Text);
+		File.WriteAllText(Path.Combine(MosaSettings.TemporaryFolder, "B.txt"), tbInstructions.Text);
 	}
 
 	private void DisplayCheckStateChanged(object sender, EventArgs e)
@@ -1475,11 +1475,11 @@ public partial class MainForm : Form
 
 	private void button2_Click(object sender, EventArgs e)
 	{
-		File.WriteAllText(Path.Combine(Path.GetTempPath(), "MOSA", "1.txt"), tbTransforms.Text);
+		File.WriteAllText(Path.Combine(MosaSettings.TemporaryFolder, "1.txt"), tbTransforms.Text);
 	}
 
 	private void button1_Click(object sender, EventArgs e)
 	{
-		File.WriteAllText(Path.Combine(Path.GetTempPath(), "MOSA", "2.txt"), tbTransforms.Text);
+		File.WriteAllText(Path.Combine(MosaSettings.TemporaryFolder, "2.txt"), tbTransforms.Text);
 	}
 }

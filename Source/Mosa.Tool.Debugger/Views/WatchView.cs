@@ -179,7 +179,7 @@ public partial class WatchView : DebugDockContent
 			}
 			else
 			{
-				MainForm.MosaSettings.WatchFile = Path.Combine(Path.GetTempPath(), "default.watches");
+				MainForm.MosaSettings.WatchFile = Path.Combine(MainForm.MosaSettings.TemporaryFolder, "default.watches");
 			}
 		}
 

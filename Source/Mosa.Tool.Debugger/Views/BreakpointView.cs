@@ -1,6 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.ComponentModel;
+using Mosa.Utility.Configuration;
 
 namespace Mosa.Tool.Debugger.Views;
 
@@ -111,7 +112,7 @@ public partial class BreakpointView : DebugDockContent
 			}
 			else
 			{
-				MainForm.MosaSettings.BreakpointFile = Path.Combine(Path.GetTempPath(), "default.breakpoints");
+				MainForm.MosaSettings.BreakpointFile = Path.Combine(MainForm.MosaSettings.TemporaryFolder, "default.breakpoints");
 			}
 		}
 

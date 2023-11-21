@@ -1,9 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Runtime;
-using Mosa.Runtime.x86;
 
-namespace Mosa.Kernel.BareMetal.x86;
+namespace Mosa.Kernel.BareMetal.Intel;
 
 /// <summary>
 /// Screen
@@ -154,10 +153,10 @@ public static class VGAText
 	{
 		var location = Row * Columns + Column;
 
-		Native.Out8(0x3D4, 0x0F);
-		Native.Out8(0x3D5, (byte)(location & 0xFF));
+		Platform.IO.Out8(0x3D4, 0x0F);
+		Platform.IO.Out8(0x3D5, (byte)(location & 0xFF));
 
-		Native.Out8(0x3D4, 0x0E);
-		Native.Out8(0x3D5, (byte)((location >> 8) & 0xFF));
+		Platform.IO.Out8(0x3D4, 0x0E);
+		Platform.IO.Out8(0x3D5, (byte)((location >> 8) & 0xFF));
 	}
 }

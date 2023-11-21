@@ -27,6 +27,7 @@
 		<file src="..\..\bin\Mosa.Compiler.MosaTypeSystem.dll" target="contentFiles/any/net7.0/Tools" />
 		<file src="..\..\bin\Mosa.Compiler.MosaTypeSystem.CLR.dll" target="contentFiles/any/net7.0/Tools" />
 		<file src="..\..\bin\Mosa.Compiler.ARM32.dll" target="contentFiles/any/net7.0/Tools" />
+		<file src="..\..\bin\Mosa.Compiler.Intel.dll" target="contentFiles/any/net7.0/Tools" />
 		<file src="..\..\bin\Mosa.Compiler.x86.dll" target="contentFiles/any/net7.0/Tools" />
 		<file src="..\..\bin\Mosa.Compiler.x64.dll" target="contentFiles/any/net7.0/Tools" />
 		<file src="..\..\bin\Mosa.Tool.Explorer.*" target="contentFiles/any/net7.0/Tools" />

@@ -1,13 +1,11 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Runtime.x86;
-
-namespace Mosa.Kernel.BareMetal.x86;
+namespace Mosa.Kernel.BareMetal.Intel;
 
 /// <summary>
 /// Serial Controller
 /// </summary>
-public static class Serial
+public static class SerialController
 {
 	public const ushort COM1 = 0x3F8; // Kernel log
 	public const ushort COM2 = 0x2F8; // Mosa Debugger
@@ -25,33 +23,33 @@ public static class Serial
 	public static void Setup(ushort com)
 	{
 		// Disable all interrupts
-		Native.Out8((ushort)(com + COM_Interrupt), 0x00);
+		Platform.IO.Out8((ushort)(com + COM_Interrupt), 0x00);
 
 		// Enable DLAB (set baud rate divisor)
-		Native.Out8((ushort)(com + COM_ModemControl), 0x80);
+		Platform.IO.Out8((ushort)(com + COM_ModemControl), 0x80);
 
 		// Set divisor to 1 (lo byte) 115200 baud
-		Native.Out8((ushort)(com + COM_Data), 0x01);
+		Platform.IO.Out8((ushort)(com + COM_Data), 0x01);
 
 		// (hi byte)
-		Native.Out8((ushort)(com + COM_Interrupt), 0x00);
+		Platform.IO.Out8((ushort)(com + COM_Interrupt), 0x00);
 
 		// 8 bits, no parity, one stop bit
-		Native.Out8((ushort)(com + COM_ModemControl), 0x03);
+		Platform.IO.Out8((ushort)(com + COM_ModemControl), 0x03);
 
 		// Enable FIFO, clear them, with 14-byte threshold
-		Native.Out8((ushort)(com + COM_LineControl), 0xC7);
+		Platform.IO.Out8((ushort)(com + COM_LineControl), 0xC7);
 
 		// IRQs enabled, RTS/DSR set
-		Native.Out8((ushort)(com + COM_LineStatus), 0x0B);
+		Platform.IO.Out8((ushort)(com + COM_LineStatus), 0x0B);
 
 		// Enable all interrupts
-		Native.Out8((ushort)(com + COM_Interrupt), 0x0F);
+		Platform.IO.Out8((ushort)(com + COM_Interrupt), 0x0F);
 	}
 
 	public static bool IsDataReady(ushort com)
 	{
-		return (Native.In8((ushort)(com + COM_ModemStatus)) & 0x01) == 0x01;
+		return (Platform.IO.In8((ushort)(com + COM_ModemStatus)) & 0x01) == 0x01;
 	}
 
 	public static byte Read(ushort com)
@@ -61,12 +59,12 @@ public static class Serial
 			//Native.Hlt();
 		}
 
-		return Native.In8(com);
+		return Platform.IO.In8(com);
 	}
 
 	public static void WaitForWriteReady(ushort com)
 	{
-		while ((Native.In8((ushort)(com + COM_ModemStatus)) & 0x20) == 0x0)
+		while ((Platform.IO.In8((ushort)(com + COM_ModemStatus)) & 0x20) == 0x0)
 		{
 			//Native.Hlt();
 		}
@@ -76,7 +74,7 @@ public static class Serial
 	{
 		WaitForWriteReady(com);
 
-		Native.Out8(com, c);
+		Platform.IO.Out8(com, c);
 	}
 
 	public static void Write(ushort com, string message)
