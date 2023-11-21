@@ -18,7 +18,7 @@ public partial class MainWindow : Window
 {
 	private readonly MosaSettings MosaSettings = new();
 	private readonly Stopwatch Stopwatch = new();
-	private readonly CompilerHooks CompilerHooks = new();
+	private readonly CompilerHooks CompilerHooks;
 	private readonly DispatcherTimer Timer;
 
 	private Builder Builder;
@@ -36,8 +36,18 @@ public partial class MainWindow : Window
 			OutputProgress.Value = CompletedMethods;
 		};
 
-		CompilerHooks.NotifyProgress = NotifyProgress;
-		CompilerHooks.NotifyStatus = NotifyStatus;
+		CompilerHooks = CreateCompilerHooks();
+	}
+
+	private CompilerHooks CreateCompilerHooks()
+	{
+		var compilerHooks = new CompilerHooks
+		{
+			NotifyProgress = NotifyProgress,
+			NotifyStatus = NotifyStatus
+		};
+
+		return compilerHooks;
 	}
 
 	private void NotifyProgress(int total, int at)
