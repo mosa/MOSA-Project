@@ -391,22 +391,22 @@ jobs:
           name: linux-build-artifact
           path: bin
       - name: x64 Compile Test - BareMetal HelloWorld - o0
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x86.dll -o0 -check -launch-off -output-counters
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x64.dll -x64 -o0 -check -launch-off -output-counters
       - name: x64 Compile Test - BareMetal HelloWorld - o1
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x86.dll -o1 -check -launch-off -output-counters
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x64.dll -x64 -o1 -check -launch-off -output-counters
       - name: x64 Compile Test - BareMetal HelloWorld - o2
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x86.dll -o2 -check -launch-off -output-counters
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x64.dll -x64 -o2 -check -launch-off -output-counters
       - name: x64 Compile Test - BareMetal HelloWorld - o3
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x86.dll -o3 -check -launch-off -output-counters
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x64.dll -x64 -o3 -check -launch-off -output-counters
       - name: x64 Compile Test - BareMetal HelloWorld - o4
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x86.dll -o4 -check -launch-off -output-counters
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x64.dll -x64 -o4 -check -launch-off -output-counters
       - name: x64 Compile Test - BareMetal HelloWorld - o5
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x86.dll -o5 -check -launch-off -output-counters
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x64.dll -x64 -o5 -check -launch-off -output-counters
       - name: x64 Compile Test - BareMetal HelloWorld - o6
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x86.dll -o6 -check -launch-off -output-counters
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x64.dll -x64 -o6 -check -launch-off -output-counters
       - name: x64 Compile Test - BareMetal HelloWorld - o7
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x86.dll -o7 -check -launch-off -output-counters
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x64.dll -x64 -o7 -check -launch-off -output-counters
       - name: x64 Compile Test - BareMetal HelloWorld - o8
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x86.dll -o8 -check -launch-off -output-counters
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x64.dll -x64 -o8 -check -launch-off -output-counters
       - name: x64 Compile Test - BareMetal HelloWorld - o9
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x86.dll -o9 -check -launch-off -output-counters
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x64.dll -x64 -o9 -check -launch-off -output-counters
