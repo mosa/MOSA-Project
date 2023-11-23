@@ -15,6 +15,8 @@ public sealed class StoreParamR4 : BaseIRTransform
 
 	public override void Transform(Context context, Transform transform)
 	{
-		TransformStore(transform, context, ARM32.Stf, transform.StackFrame, context.Operand1, context.Operand2);
+		//operand1 = MoveConstantToRegister(transform, context, operand1);
+
+		TransformFloatingPointStore(transform, context, ARM32.Stf, transform.StackFrame, context.Operand1, context.Operand2);
 	}
 }

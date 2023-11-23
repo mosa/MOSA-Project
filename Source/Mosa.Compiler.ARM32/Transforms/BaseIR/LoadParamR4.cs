@@ -18,6 +18,6 @@ public sealed class LoadParamR4 : BaseIRTransform
 	{
 		Debug.Assert(context.Operand1.IsConstant);
 
-		TransformLoad(transform, context, ARM32.Ldf, context.Result, transform.StackFrame, context.Operand1);
+		TransformFloatingPointLoad(transform, context, ARM32.Ldf, context.Result, transform.StackFrame, context.Operand1);
 	}
 }

@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Transforms.Expand;
 /// </summary>
 public static class IRTransforms
 {
-	public static readonly List<BaseTransform> List = new List<BaseTransform>
+	public static readonly List<BaseTransform> List = new()
 	{
 		new CheckArrayBounds(),
 

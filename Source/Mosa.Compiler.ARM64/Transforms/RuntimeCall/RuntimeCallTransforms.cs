@@ -9,7 +9,7 @@ namespace Mosa.Compiler.ARM64.Transforms.RuntimeCall;
 /// </summary>
 public static class RuntimeCallTransforms
 {
-	public static readonly List<BaseTransform> List = new List<BaseTransform>
+	public static readonly List<BaseTransform> List = new()
 	{
 	};
 }

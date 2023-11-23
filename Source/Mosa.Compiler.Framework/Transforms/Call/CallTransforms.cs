@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Transforms.Call;
 /// </summary>
 public static class CallTransforms
 {
-	public static readonly List<BaseTransform> List = new List<BaseTransform>
+	public static readonly List<BaseTransform> List = new()
 	{
 		new SetReturnObject(),
 		new SetReturnManagedPointer(),

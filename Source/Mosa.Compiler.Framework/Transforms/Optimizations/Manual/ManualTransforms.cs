@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual;
 /// </summary>
 public static class ManualTransforms
 {
-	public static readonly List<BaseTransform> List = new List<BaseTransform>
+	public static readonly List<BaseTransform> List = new()
 	{
 		new ConstantMove.Compare32x32(),
 		new ConstantMove.Compare32x64(),

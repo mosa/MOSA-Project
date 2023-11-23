@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Transforms.Compound;
 /// </summary>
 public static class CompoundTransforms
 {
-	public static readonly List<BaseTransform> List = new List<BaseTransform>
+	public static readonly List<BaseTransform> List = new()
 	{
 		new LoadCompound(),
 		new LoadParamCompound(),

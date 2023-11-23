@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Transforms.Exception;
 /// </summary>
 public static class ExceptionTransforms
 {
-	public static readonly List<BaseTransform> List = new List<BaseTransform>
+	public static readonly List<BaseTransform> List = new()
 	{
 		new Throw(),
 		new FinallyStart(),

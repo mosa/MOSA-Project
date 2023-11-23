@@ -9,7 +9,7 @@ namespace Mosa.Compiler.x64.Transforms.Stack;
 /// </summary>
 public static class StackTransforms
 {
-	public static readonly List<BaseTransform> List = new List<BaseTransform>
+	public static readonly List<BaseTransform> List = new()
 	{
 		new Epilogue(),
 		new Prologue(),

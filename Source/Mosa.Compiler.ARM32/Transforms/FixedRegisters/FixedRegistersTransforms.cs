@@ -9,7 +9,7 @@ namespace Mosa.Compiler.ARM32.Transforms.FixedRegisters;
 /// </summary>
 public static class FixedRegistersTransforms
 {
-	public static readonly List<BaseTransform> List = new List<BaseTransform>
+	public static readonly List<BaseTransform> List = new()
 	{
 	};
 }

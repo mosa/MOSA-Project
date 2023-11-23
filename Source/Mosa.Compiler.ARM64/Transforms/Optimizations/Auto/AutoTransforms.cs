@@ -12,7 +12,7 @@ namespace Mosa.Compiler.ARM64.Transforms.Optimizations.Auto;
 /// </summary>
 public static class AutoTransforms
 {
-	public static readonly List<BaseTransform> List = new List<BaseTransform>
+	public static readonly List<BaseTransform> List = new()
 	{
 	};
 }
