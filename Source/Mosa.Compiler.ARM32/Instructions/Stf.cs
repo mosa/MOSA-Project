@@ -26,6 +26,7 @@ public sealed class Stf : ARM32Instruction
 			opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
 			opcodeEncoder.Append3Bits(0b110);
 			opcodeEncoder.Append1Bit(0b1);
+			opcodeEncoder.Append1Bit(node.StatusRegister == StatusRegister.UpDirection ? 1 : 0);
 			opcodeEncoder.Append1Bit(node.Operand3.IsR4 ? 0 : 1);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append1Bit(0b0);
