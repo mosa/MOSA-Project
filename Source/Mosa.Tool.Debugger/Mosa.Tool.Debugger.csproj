@@ -164,7 +164,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="dnlib" Version="4.2.0" />
+		<PackageReference Include="dnlib" Version="4.3.0" />
 	</ItemGroup>
 
 	<ItemGroup>

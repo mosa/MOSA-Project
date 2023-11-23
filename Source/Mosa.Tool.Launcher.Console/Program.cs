@@ -30,6 +30,7 @@ internal static class Program
 
 			mosaSettings.LoadAppLocations();
 			mosaSettings.SetDefaultSettings();
+			SetDefaultSettings(mosaSettings);
 			mosaSettings.LoadArguments(args);
 			mosaSettings.NormalizeSettings();
 			mosaSettings.ResolveDefaults();
@@ -71,10 +72,14 @@ internal static class Program
 		return 0;
 	}
 
+	private static void SetDefaultSettings(MosaSettings mosaSettings)
+	{
+		mosaSettings.Launcher = true;
+	}
+
 	private static void SetRequiredSettings(MosaSettings mosaSettings)
 	{
 		mosaSettings.LauncherExit = true;
-		mosaSettings.Launcher = true;
 		mosaSettings.LauncherStart = true;
 		mosaSettings.EmulatorDisplay = true;
 	}

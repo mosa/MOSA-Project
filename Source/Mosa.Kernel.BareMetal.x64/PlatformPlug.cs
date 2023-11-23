@@ -1,8 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.DeviceSystem;
+using Mosa.Runtime;
 using Mosa.Runtime.Plug;
 using Mosa.Runtime.x64;
+using Mosa.Kernel.BareMetal.Intel;
 
 namespace Mosa.Kernel.BareMetal.x64;
 
@@ -18,14 +20,17 @@ public static class PlatformPlug
 	[Plug("Mosa.Kernel.BareMetal.Platform::EntryPoint")]
 	public static void EntryPoint()
 	{
-		//var eax = Native.GetMultibootEAX();
-		//var ebx = Native.GetMultibootEBX();
+		var rax = Native.GetMultibootRAX();
+		var rbx = Native.GetMultibootRBX();
 
-		//Multiboot.Setup(new Pointer(ebx), eax);
+		Multiboot.Setup(new Pointer(rbx), (uint)rax);
 
-		//SSE.Setup();
-		//SerialDebug.Setup();
-		//PIC.Setup();
+		SSE.Setup();
+		PIC.Setup();
+		RTC.Setup();
+
+		if (BootSettings.EnableDebugOutput)
+			SerialController.Setup(SerialController.COM1);
 	}
 
 	[Plug("Mosa.Kernel.BareMetal.Platform::GetBootReservedRegion")]
@@ -36,19 +41,33 @@ public static class PlatformPlug
 
 	public static PlatformArchitecture GetPlatformArchitecture() => PlatformArchitecture.X64;
 
-	//[Plug("Mosa.Kernel.BareMetal.Platform::ConsoleWrite")]
-	//public static void ConsoleWrite(byte c) => x64.VGAConsole.Write(c);
+	[Plug("Mosa.Kernel.BareMetal.Platform::ConsoleWrite")]
+	public static void ConsoleWrite(byte c) => VGAConsole.Write(c);
 
-	//[Plug("Mosa.Kernel.BareMetal.Platform::DebugWrite")]
-	//public static void DebugWrite(byte c) => x64.SerialDebug.Write(c);
+	[Plug("Mosa.Kernel.BareMetal.Platform::DebugWrite")]
+	public static void DebugWrite(byte c)
+	{
+		if (BootSettings.EnableDebugOutput)
+			Serial.Write(SerialController.COM1, c);
+	}
+
+	[Plug("Mosa.Kernel.BareMetal.Platform::GetTime")]
+	public static Time GetTime() => new(
+		RTC.BCDToBinary(RTC.Second),
+		RTC.BCDToBinary(RTC.Minute),
+		RTC.BCDToBinary(RTC.Hour),
+		RTC.BCDToBinary(RTC.Day),
+		RTC.BCDToBinary(RTC.Month),
+		(ushort)(RTC.BCDToBinary(RTC.Century) * 100 + RTC.BCDToBinary(RTC.Year))
+	);
 
 	public static class PageTablePlug
 	{
 		//[Plug("Mosa.Kernel.BareMetal.Platform+PageTable::Setup")]
 		//public static void Setup() => x64.PageTable.Setup();
 
-		//[Plug("Mosa.Kernel.BareMetal.Platform+PageTable::GetPageShift")]
-		//public static uint GetPageShift() => 12;
+		[Plug("Mosa.Kernel.BareMetal.Platform+PageTable::GetPageShift")]
+		public static uint GetPageShift() => 12;
 
 		//[Plug("Mosa.Kernel.BareMetal.Platform+PageTable::Initialize")]
 		//public static void Initialize() => x64.PageTable.Initialize();
@@ -119,12 +138,12 @@ public static class PlatformPlug
 
 	public static class SerialPlug
 	{
-		//public static void Setup(int serial) => x64.Serial.Setup((ushort)serial);
+		public static void Setup(int serial) => SerialController.Setup((ushort)serial);
 
-		//public static void Write(int serial, byte data) => x64.Serial.Write((ushort)serial, data);
+		public static void Write(int serial, byte data) => SerialController.Write((ushort)serial, data);
 
-		//public static byte Read(int serial) => x64.Serial.Read((ushort)serial);
+		public static byte Read(int serial) => SerialController.Read((ushort)serial);
 
-		//public static bool IsDataReady(int serial) => x64.Serial.IsDataReady((ushort)serial);
+		public static bool IsDataReady(int serial) => SerialController.IsDataReady((ushort)serial);
 	}
 }

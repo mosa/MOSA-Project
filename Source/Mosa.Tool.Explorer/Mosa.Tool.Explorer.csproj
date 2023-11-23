@@ -34,8 +34,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="System.ComponentModel.Composition" Version="7.0.0" />
-		<PackageReference Include="dnlib" Version="4.2.0" />
+		<PackageReference Include="System.ComponentModel.Composition" Version="8.0.0" />
+		<PackageReference Include="dnlib" Version="4.3.0" />
 	</ItemGroup>
 
 	<ItemGroup>

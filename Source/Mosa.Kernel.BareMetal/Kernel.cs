@@ -8,5 +8,5 @@ public static class Kernel
 {
 	public static ServiceManager ServiceManager { get; set; }
 
-	public static Keyboard Keyboard { get; set; }
+	public static Keyboard Keyboard { get; set; } // temporary hack
 }

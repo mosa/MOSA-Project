@@ -69,8 +69,8 @@ public partial class LaunchView : DebugDockContent
 
 	private void AddImages()
 	{
-		SearchImages(Path.GetTempPath(), ImageExtensions);
-		SearchImages(Path.Combine(Path.GetTempPath(), "MOSA"), ImageExtensions);
+		SearchImages(MainForm.MosaSettings.TemporaryFolder, ImageExtensions);
+		SearchImages(Path.Combine(MainForm.MosaSettings.TemporaryFolder), ImageExtensions);
 		SearchImages(Directory.GetCurrentDirectory(), ImageExtensions);
 	}
 

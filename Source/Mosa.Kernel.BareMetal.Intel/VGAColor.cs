@@ -1,6 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Kernel.BareMetal.x86;
+namespace Mosa.Kernel.BareMetal.Intel;
 
 public static class VGAColor
 {

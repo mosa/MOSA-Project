@@ -1,9 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Runtime.x86;
-
 //https://github.com/nifanfa/MOOS/blob/master/Kernel/Driver/RTC.cs
-namespace Mosa.Kernel.BareMetal.x86;
+
+namespace Mosa.Kernel.BareMetal.Intel;
 
 public static class RTC
 {
@@ -29,14 +28,14 @@ public static class RTC
 
 	public static byte Get(byte index)
 	{
-		Native.Out8(0x70, index);
+		Platform.IO.Out8(0x70, index);
 
-		return Native.In8(0x71);
+		return Platform.IO.In8(0x71);
 	}
 
 	public static void Set(byte index, byte value)
 	{
-		Native.Out8(0x70, index);
-		Native.Out8(0x71, value);
+		Platform.IO.Out8(0x70, index);
+		Platform.IO.Out8(0x71, value);
 	}
 }

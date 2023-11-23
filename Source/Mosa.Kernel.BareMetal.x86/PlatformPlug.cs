@@ -4,6 +4,7 @@ using Mosa.DeviceSystem;
 using Mosa.Runtime;
 using Mosa.Runtime.Plug;
 using Mosa.Runtime.x86;
+using Mosa.Kernel.BareMetal.Intel;
 
 namespace Mosa.Kernel.BareMetal.x86;
 
@@ -28,7 +29,8 @@ public static class PlatformPlug
 		PIC.Setup();
 		RTC.Setup();
 
-		if (BootSettings.EnableDebugOutput) Serial.Setup(Serial.COM1);
+		if (BootSettings.EnableDebugOutput)
+			SerialController.Setup(SerialController.COM1);
 	}
 
 	[Plug("Mosa.Kernel.BareMetal.Platform::GetBootReservedRegion")]
@@ -45,7 +47,8 @@ public static class PlatformPlug
 	[Plug("Mosa.Kernel.BareMetal.Platform::DebugWrite")]
 	public static void DebugWrite(byte c)
 	{
-		if (BootSettings.EnableDebugOutput) Serial.Write(Serial.COM1, c);
+		if (BootSettings.EnableDebugOutput)
+			SerialController.Write(SerialController.COM1, c);
 	}
 
 	[Plug("Mosa.Kernel.BareMetal.Platform::GetTime")]
@@ -136,15 +139,15 @@ public static class PlatformPlug
 	public static class SerialPlug
 	{
 		[Plug("Mosa.Kernel.BareMetal.Platform+Serial::Setup")]
-		public static void Setup(int serial) => Serial.Setup((ushort)serial);
+		public static void Setup(int serial) => SerialController.Setup((ushort)serial);
 
 		[Plug("Mosa.Kernel.BareMetal.Platform+Serial::Write")]
-		public static void Write(int serial, byte data) => Serial.Write((ushort)serial, data);
+		public static void Write(int serial, byte data) => SerialController.Write((ushort)serial, data);
 
 		[Plug("Mosa.Kernel.BareMetal.Platform+Serial::Read")]
-		public static byte Read(int serial) => Serial.Read((ushort)serial);
+		public static byte Read(int serial) => SerialController.Read((ushort)serial);
 
 		[Plug("Mosa.Kernel.BareMetal.Platform+Serial::IsDataReady")]
-		public static bool IsDataReady(int serial) => Serial.IsDataReady((ushort)serial);
+		public static bool IsDataReady(int serial) => SerialController.IsDataReady((ushort)serial);
 	}
 }

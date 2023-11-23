@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Runtime.x86;
-
-namespace Mosa.Kernel.BareMetal.x86;
+namespace Mosa.Kernel.BareMetal;
 
 /// <summary>
 /// Programmable Interrupt Controller (PIC)
@@ -40,38 +38,38 @@ public static class PIC
 	{
 		//Debug.WriteLine("PIC::Setup()");
 
-		byte masterMask = Native.In8(PICConstants.PIC1_Data);
-		byte slaveMask = Native.In8(PICConstants.PIC2_Data);
+		byte masterMask = Platform.IO.In8(PICConstants.PIC1_Data);
+		byte slaveMask = Platform.IO.In8(PICConstants.PIC2_Data);
 
 		// ICW1 - Set Initialize Controller & Expect ICW4
-		Native.Out8(PICConstants.PIC1_Command, PICConstants.ICW1_Initialization + PICConstants.ICW1_ICW4);
+		Platform.IO.Out8(PICConstants.PIC1_Command, PICConstants.ICW1_Initialization + PICConstants.ICW1_ICW4);
 
 		// ICW2 - interrupt offset
-		Native.Out8(PICConstants.PIC1_Data, PICConstants.ICW2_MasterOffset);
+		Platform.IO.Out8(PICConstants.PIC1_Data, PICConstants.ICW2_MasterOffset);
 
 		// ICW3
-		Native.Out8(PICConstants.PIC1_Data, 4);
+		Platform.IO.Out8(PICConstants.PIC1_Data, 4);
 
 		// ICW4 - Set 8086 Mode
-		Native.Out8(PICConstants.PIC1_Data, PICConstants.ICW4_8086);
+		Platform.IO.Out8(PICConstants.PIC1_Data, PICConstants.ICW4_8086);
 
 		// OCW1
-		Native.Out8(PICConstants.PIC1_Data, masterMask);
+		Platform.IO.Out8(PICConstants.PIC1_Data, masterMask);
 
 		// ICW1 - Set Initialize Controller & Expect ICW4
-		Native.Out8(PICConstants.PIC2_Command, PICConstants.ICW1_Initialization + PICConstants.ICW1_ICW4);
+		Platform.IO.Out8(PICConstants.PIC2_Command, PICConstants.ICW1_Initialization + PICConstants.ICW1_ICW4);
 
 		// ICW2 - interrupt offset
-		Native.Out8(PICConstants.PIC2_Data, PICConstants.ICW2_SlaveOffset);
+		Platform.IO.Out8(PICConstants.PIC2_Data, PICConstants.ICW2_SlaveOffset);
 
 		// ICW3
-		Native.Out8(PICConstants.PIC2_Data, 2);
+		Platform.IO.Out8(PICConstants.PIC2_Data, 2);
 
 		// ICW4 - Set 8086 Mode
-		Native.Out8(PICConstants.PIC2_Data, PICConstants.ICW4_8086);
+		Platform.IO.Out8(PICConstants.PIC2_Data, PICConstants.ICW4_8086);
 
 		// OCW1
-		Native.Out8(PICConstants.PIC2_Data, slaveMask);
+		Platform.IO.Out8(PICConstants.PIC2_Data, slaveMask);
 
 		//Debug.WriteLine("PIC::Complete()");
 	}
@@ -84,9 +82,9 @@ public static class PIC
 	{
 		if (irq >= 40) // or untranslated IRQ >= 8
 		{
-			Native.Out8(PICConstants.PIC2_Command, PICConstants.EOI);
+			Platform.IO.Out8(PICConstants.PIC2_Command, PICConstants.EOI);
 		}
 
-		Native.Out8(PICConstants.PIC1_Command, PICConstants.EOI);
+		Platform.IO.Out8(PICConstants.PIC1_Command, PICConstants.EOI);
 	}
 }

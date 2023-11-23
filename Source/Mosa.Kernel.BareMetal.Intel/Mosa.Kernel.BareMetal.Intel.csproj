@@ -3,9 +3,7 @@
 	<Import Project="../Mosa.BareMetal.targets" />
 
 	<ItemGroup>
-		<ProjectReference Include="..\Mosa.Kernel.BareMetal.Intel\Mosa.Kernel.BareMetal.Intel.csproj" />
 		<ProjectReference Include="..\Mosa.Kernel.BareMetal\Mosa.Kernel.BareMetal.csproj" />
-		<ProjectReference Include="..\Mosa.Runtime.x86\Mosa.Runtime.x86.csproj" />
 	</ItemGroup>
 
 </Project>

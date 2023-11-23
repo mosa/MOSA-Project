@@ -15,6 +15,6 @@ public sealed class StoreParamManagedPointer : BaseIRTransform
 
 	public override void Transform(Context context, Transform transform)
 	{
-		context.SetInstruction(ARM32.Mov, null, transform.StackFrame, context.Operand1, context.Operand2);
+		TransformStore(transform, context, ARM32.Str8, transform.StackFrame, context.Operand1, context.Operand2);
 	}
 }
