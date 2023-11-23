@@ -9,7 +9,7 @@ namespace Mosa.Compiler.x64.Transforms.Tweak;
 /// </summary>
 public static class TweakTransforms
 {
-	public static readonly List<BaseTransform> List = new List<BaseTransform>
+	public static readonly List<BaseTransform> List = new()
 	{
 		new Blsr32(),
 		new Blsr64(),

@@ -55,78 +55,56 @@ namespace Mosa.Compiler.ARM32.Transforms
 			}
 		}
 
-		public static void MoveConstantRight(Transform transform, Context context)
-		{
-			Debug.Assert(context.OperandCount == 2);
-			Debug.Assert(context.Instruction.IsCommutative);
-
-			var operand1 = context.Operand1;
-
-			if (operand1.IsConstant && context.Instruction.IsCommutative)
-			{
-				var operand2 = context.Operand2;
-
-				context.Operand1 = operand2;
-				context.Operand2 = operand1;
-			}
-		}
-
 		public static void TransformLoad(Transform transform, Context context, BaseInstruction loadInstruction, Operand result, Operand baseOperand, Operand offsetOperand)
 		{
 			baseOperand = MoveConstantToRegister(transform, context, baseOperand);
-			var upDirection = true;
-
-			if (offsetOperand.IsResolvedConstant)
-			{
-				if (offsetOperand.ConstantUnsigned64 >= 0 && offsetOperand.ConstantSigned32 <= 0xFFF)
-				{
-					// Nothing
-				}
-				else if (offsetOperand.ConstantUnsigned64 < 0 && -offsetOperand.ConstantSigned32 <= 0xFFF)
-				{
-					upDirection = false;
-					offsetOperand = Operand.CreateConstant32(-offsetOperand.ConstantSigned32);
-				}
-				else
-				{
-					offsetOperand = MoveConstantToRegister(transform, context, offsetOperand);
-				}
-			}
-			else if (offsetOperand.IsUnresolvedConstant)
-			{
-				offsetOperand = MoveConstantToRegister(transform, context, offsetOperand);
-			}
+			offsetOperand = LimitOffsetToRange(transform, context, offsetOperand, 12, out var upDirection);
 
 			context.SetInstruction(loadInstruction, upDirection ? StatusRegister.UpDirection : StatusRegister.DownDirection, result, baseOperand, offsetOperand);
 		}
 
 		public static void TransformStore(Transform transform, Context context, BaseInstruction storeInstruction, Operand baseOperand, Operand offsetOperand, Operand sourceOperand)
 		{
-			baseOperand = MoveConstantToRegister(transform, context, baseOperand);
 			sourceOperand = MoveConstantToRegister(transform, context, sourceOperand);
+			baseOperand = MoveConstantToRegister(transform, context, baseOperand);
+			offsetOperand = LimitOffsetToRange(transform, context, offsetOperand, 12, out var upDirection);
 
-			var upDirection = true;
+			context.SetInstruction(storeInstruction, upDirection ? StatusRegister.UpDirection : StatusRegister.DownDirection, null, baseOperand, offsetOperand, sourceOperand);
+		}
 
-			if (offsetOperand.IsResolvedConstant)
+		public static void TransformFloatingPointLoad(Transform transform, Context context, BaseInstruction loadInstruction, Operand result, Operand baseOperand, Operand offsetOperand)
+		{
+			if (baseOperand.IsConstant && offsetOperand.IsVirtualRegister)
 			{
-				if (offsetOperand.ConstantUnsigned64 >= 0 && offsetOperand.ConstantSigned32 <= 0xFFF)
-				{
-					// Nothing
-				}
-				else if (offsetOperand.ConstantUnsigned64 < 0 && -offsetOperand.ConstantSigned32 <= 0xFFF)
-				{
-					offsetOperand = Operand.CreateConstant32(-offsetOperand.ConstantSigned32);
-				}
-				else
-				{
-					upDirection = false;
-					offsetOperand = MoveConstantToRegister(transform, context, offsetOperand);
-				}
+				// swap
+				var tmp = baseOperand;
+				baseOperand = offsetOperand;
+				offsetOperand = tmp;
 			}
-			else if (offsetOperand.IsUnresolvedConstant)
+
+			baseOperand = MoveConstantToRegister(transform, context, baseOperand);
+			offsetOperand = LimitOffsetToRange(transform, context, offsetOperand, 8, out var upDirection);
+
+			ConformBaseOffsetToContant(transform, context, ref baseOperand, ref offsetOperand);
+
+			context.SetInstruction(loadInstruction, upDirection ? StatusRegister.UpDirection : StatusRegister.DownDirection, result, baseOperand, offsetOperand);
+		}
+
+		public static void TransformFloatingPointStore(Transform transform, Context context, BaseInstruction storeInstruction, Operand baseOperand, Operand offsetOperand, Operand sourceOperand)
+		{
+			if (baseOperand.IsConstant && offsetOperand.IsVirtualRegister)
 			{
-				offsetOperand = MoveConstantToRegister(transform, context, offsetOperand);
+				// swap
+				var tmp = baseOperand;
+				baseOperand = offsetOperand;
+				offsetOperand = tmp;
 			}
+
+			sourceOperand = MoveConstantToFloatRegister(transform, context, sourceOperand);
+			baseOperand = MoveConstantToRegister(transform, context, baseOperand);
+			offsetOperand = LimitOffsetToRange(transform, context, offsetOperand, 8, out var upDirection);
+
+			ConformBaseOffsetToContant(transform, context, ref baseOperand, ref offsetOperand);
 
 			context.SetInstruction(storeInstruction, upDirection ? StatusRegister.UpDirection : StatusRegister.DownDirection, null, baseOperand, offsetOperand, sourceOperand);
 		}
@@ -236,14 +214,14 @@ namespace Mosa.Compiler.ARM32.Transforms
 				: transform.VirtualRegisters.AllocateR8();
 
 			var symbol = operand.IsR4
-				? transform.Linker.GetConstantSymbol((float)operand.ConstantUnsigned64)
-				: transform.Linker.GetConstantSymbol((double)operand.ConstantUnsigned64);
+				? transform.Linker.GetConstantSymbol(operand.ConstantFloat)
+				: transform.Linker.GetConstantSymbol(operand.ConstantDouble);
 
 			var label = operand.IsR4
 				? Operand.CreateLabelR4(symbol.Name)
 				: Operand.CreateLabelR8(symbol.Name);
 
-			var source = MoveConstantToRegisterOrImmediate(transform, context, label, true);
+			var source = MoveConstantToRegister(transform, context, label);
 
 			context.InsertBefore().SetInstruction(ARM32.Ldf, v1, source, Operand.Constant32_0);
 
@@ -289,6 +267,67 @@ namespace Mosa.Compiler.ARM32.Transforms
 			}
 
 			return null;
+		}
+
+		public static void MoveConstantRight(Transform transform, Context context)
+		{
+			Debug.Assert(context.OperandCount == 2);
+			Debug.Assert(context.Instruction.IsCommutative);
+
+			var operand1 = context.Operand1;
+
+			if (operand1.IsConstant && context.Instruction.IsCommutative)
+			{
+				var operand2 = context.Operand2;
+
+				context.Operand1 = operand2;
+				context.Operand2 = operand1;
+			}
+		}
+
+		private static Operand LimitOffsetToRange(Transform transform, Context context, Operand offsetOperand, int bits, out bool upDirection)
+		{
+			var mask = 1 << (bits + 1) - 1;
+
+			// bits == 4 then mask == 0xFFF
+
+			upDirection = true;
+
+			if (offsetOperand.IsResolvedConstant)
+			{
+				if (offsetOperand.ConstantUnsigned64 >= 0 && offsetOperand.ConstantSigned32 <= mask)
+				{
+					// Nothing
+				}
+				else if (offsetOperand.ConstantUnsigned64 < 0 && -offsetOperand.ConstantSigned32 <= mask)
+				{
+					offsetOperand = Operand.CreateConstant32(-offsetOperand.ConstantSigned32);
+				}
+				else
+				{
+					upDirection = false;
+					offsetOperand = MoveConstantToRegister(transform, context, offsetOperand);
+				}
+			}
+			else if (offsetOperand.IsUnresolvedConstant)
+			{
+				offsetOperand = MoveConstantToRegister(transform, context, offsetOperand);
+			}
+
+			return offsetOperand;
+		}
+
+		private static void ConformBaseOffsetToContant(Transform transform, Context context, ref Operand baseOperand, ref Operand offsetOperand)
+		{
+			if (offsetOperand.IsVirtualRegister)
+			{
+				var before = context.InsertBefore();
+				var v1 = transform.VirtualRegisters.Allocate32();
+				before.SetInstruction(ARM32.Add, v1, baseOperand, offsetOperand);
+
+				baseOperand = v1;
+				offsetOperand = Operand.Constant32_0;
+			}
 		}
 
 		#endregion Helpers

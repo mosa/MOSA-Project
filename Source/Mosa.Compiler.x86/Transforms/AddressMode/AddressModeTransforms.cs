@@ -9,7 +9,7 @@ namespace Mosa.Compiler.x86.Transforms.AddressMode;
 /// </summary>
 public static class AddressModeTransforms
 {
-	public static readonly List<BaseTransform> List = new List<BaseTransform>
+	public static readonly List<BaseTransform> List = new()
 	{
 		new Adc32(),
 		new Add32(),

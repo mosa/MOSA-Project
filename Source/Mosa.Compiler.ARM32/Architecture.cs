@@ -142,6 +142,7 @@ public sealed class Architecture : BaseArchitecture
 		pipeline.InsertAfterLast<PlatformIntrinsicStage>(
 			new BaseMethodCompilerStage[]
 			{
+				new FloatingTweakTransform(),
 				new IRTransformStage(),
 				mosaSettings.PlatformOptimizations ? new Stages.OptimizationStage() : null,
 				new PlatformTransformStage(),

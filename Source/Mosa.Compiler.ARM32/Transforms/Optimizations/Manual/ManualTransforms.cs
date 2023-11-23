@@ -11,7 +11,7 @@ namespace Mosa.Compiler.ARM32.Transforms.Optimizations.Manual;
 /// </summary>
 public static class ManualTransforms
 {
-	public static readonly List<BaseTransform> List = new List<BaseTransform>
+	public static readonly List<BaseTransform> List = new()
 	{
 	};
 }

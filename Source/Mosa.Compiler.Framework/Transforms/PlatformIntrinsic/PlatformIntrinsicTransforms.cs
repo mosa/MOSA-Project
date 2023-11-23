@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Transforms.PlatformIntrinsic;
 /// </summary>
 public static class PlatformIntrinsicTransforms
 {
-	public static readonly List<BaseTransform> List = new List<BaseTransform>
+	public static readonly List<BaseTransform> List = new()
 	{
 		new IntrinsicMethodCall(),
 	};

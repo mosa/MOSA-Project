@@ -9,7 +9,7 @@ namespace Mosa.Compiler.ARM64.Transforms.Tweak;
 /// </summary>
 public static class TweakTransforms
 {
-	public static readonly List<BaseTransform> List = new List<BaseTransform>
+	public static readonly List<BaseTransform> List = new()
 	{
 		//new Mov(),
 		//new Mvf(),

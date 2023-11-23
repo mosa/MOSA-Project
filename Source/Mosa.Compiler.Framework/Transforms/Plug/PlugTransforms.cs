@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Transforms.Plug;
 /// </summary>
 public static class PlugTransforms
 {
-	public static readonly List<BaseTransform> List = new List<BaseTransform>
+	public static readonly List<BaseTransform> List = new()
 	{
 		new CallDirect(),
 		new CallStatic(),

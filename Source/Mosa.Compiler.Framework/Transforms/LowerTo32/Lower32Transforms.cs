@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 /// </summary>
 public static class LowerTo32Transforms
 {
-	public static readonly List<BaseTransform> List = new List<BaseTransform>
+	public static readonly List<BaseTransform> List = new()
 	{
 		new Add64(),
 		new And64(),

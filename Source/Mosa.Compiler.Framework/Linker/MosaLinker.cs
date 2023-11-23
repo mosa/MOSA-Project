@@ -297,7 +297,7 @@ public sealed class MosaLinker
 
 	public LinkerSymbol GetConstantSymbol(uint value)
 	{
-		var name = $"$const32${value:x}";
+		var name = $"$c32${value:x}";
 
 		var data = BitConverter.GetBytes(value);
 
@@ -313,7 +313,7 @@ public sealed class MosaLinker
 
 	public LinkerSymbol GetConstantSymbol(ulong value)
 	{
-		var name = $"$const64${value:x}";
+		var name = $"$c64${value:x}";
 
 		var data = BitConverter.GetBytes(value);
 
