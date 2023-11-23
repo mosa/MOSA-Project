@@ -23,6 +23,9 @@ public sealed class MulHu32 : BaseIRTransform
 
 		var v1 = transform.VirtualRegisters.Allocate32();
 
+		operand1 = MoveConstantToRegister(transform, context, operand1);
+		operand2 = MoveConstantToRegister(transform, context, operand2);
+
 		context.SetInstruction2(ARM32.UMull, result, v1, operand1, operand2);
 	}
 }

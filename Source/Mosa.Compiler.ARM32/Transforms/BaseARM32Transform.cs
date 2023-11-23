@@ -177,8 +177,16 @@ namespace Mosa.Compiler.ARM32.Transforms
 					var before = context.InsertBefore();
 
 					var v1 = transform.VirtualRegisters.Allocate32();
-					before.SetInstruction(ARM32.Movw, v1, Operand.CreateConstant32(operand.ConstantUnsigned32 & 0xFFFF));
-					before.AppendInstruction(ARM32.Movt, v1, v1, Operand.CreateConstant32(operand.ConstantUnsigned32 >> 16));
+
+					var low = operand.ConstantUnsigned32 & 0xFFFF;
+					var high = operand.ConstantUnsigned32 >> 16;
+
+					before.SetInstruction(ARM32.Movw, v1, Operand.CreateConstant32(low));
+
+					if (high != 0)
+					{
+						before.AppendInstruction(ARM32.Movt, v1, v1, Operand.CreateConstant32(high));
+					}
 
 					return v1;
 				}
@@ -186,7 +194,9 @@ namespace Mosa.Compiler.ARM32.Transforms
 			else if (operand.IsUnresolvedConstant)
 			{
 				var before = context.InsertBefore();
+
 				var v1 = transform.VirtualRegisters.Allocate32();
+
 				before.SetInstruction(ARM32.Movw, v1, operand);
 				before.AppendInstruction(ARM32.Movt, v1, v1, operand);
 
@@ -233,7 +243,9 @@ namespace Mosa.Compiler.ARM32.Transforms
 				? Operand.CreateLabelR4(symbol.Name)
 				: Operand.CreateLabelR8(symbol.Name);
 
-			context.InsertBefore().SetInstruction(ARM32.Ldf, v1, label, Operand.Constant32_0);
+			var source = MoveConstantToRegisterOrImmediate(transform, context, label, true);
+
+			context.InsertBefore().SetInstruction(ARM32.Ldf, v1, source, Operand.Constant32_0);
 
 			return v1;
 		}
