@@ -23,7 +23,7 @@ public sealed class Deadcode : BaseTransform
 		if (context.Instruction.IsCall)
 			return false;
 
-		if (context.Options == InstructionOption.Set)
+		if (context.Options == InstructionOption.SetFlags)
 			return false;
 
 		if (context.Result.IsUsed)

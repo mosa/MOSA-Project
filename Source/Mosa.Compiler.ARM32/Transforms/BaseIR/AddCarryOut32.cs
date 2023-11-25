@@ -23,7 +23,7 @@ public sealed class AddCarryOut32 : BaseIRTransform
 		operand1 = MoveConstantToRegister(transform, context, operand1);
 		operand2 = MoveConstantToRegisterOrImmediate(transform, context, operand2);
 
-		context.SetInstruction(ARM32.Add, InstructionOption.Set, result, operand1, operand2);
+		context.SetInstruction(ARM32.Add, InstructionOption.SetFlags, result, operand1, operand2);
 		context.AppendInstruction(ARM32.Mov, ConditionCode.Carry, result2, Operand.Constant32_1);
 		context.AppendInstruction(ARM32.Mov, ConditionCode.NoCarry, result2, Operand.Constant32_0);
 	}

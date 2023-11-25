@@ -9,11 +9,7 @@ namespace Mosa.Compiler.Framework;
 public enum InstructionOption
 {
 	None = 0,
-
-	Set = 0b0001,
-
-	UpDirection = 0b10,
-	DownDirection = 0b00,
-
-	Marked = 0b100,
+	SetFlags = 1,
+	UpDirection = 2,
+	Marked = 4,
 };

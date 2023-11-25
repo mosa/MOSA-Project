@@ -41,7 +41,7 @@ public sealed class ShiftRight64 : BaseIRTransform
 		op2L = MoveConstantToRegister(transform, context, op2L);
 
 		context.SetInstruction(ARM32.Rsb, v1, op2L, Operand.Constant32_32);
-		context.AppendInstruction(ARM32.Sub, InstructionOption.Set, v2, op2L, Operand.Constant32_32);
+		context.AppendInstruction(ARM32.Sub, InstructionOption.SetFlags, v2, op2L, Operand.Constant32_32);
 		context.AppendInstruction(ARM32.Lsr, v3, op1L, op2L);
 		context.AppendInstruction(ARM32.OrrRegShift, v4, v3, op1H, v1, Operand.Constant32_0 /* LSL */);
 		context.AppendInstruction(ARM32.OrrRegShift, ConditionCode.Zero, resultLow, v4, op1H, v2, Operand.Constant32_2 /* ASR */);

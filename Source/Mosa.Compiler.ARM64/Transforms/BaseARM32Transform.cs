@@ -120,7 +120,7 @@ namespace Mosa.Compiler.ARM64.Transforms
 				offsetOperand = MoveConstantToRegister(transform, context, offsetOperand);
 			}
 
-			context.SetInstruction(loadInstruction, upDirection ? InstructionOption.UpDirection : InstructionOption.DownDirection, result, baseOperand, offsetOperand);
+			context.SetInstruction(loadInstruction, upDirection ? InstructionOption.UpDirection : InstructionOption.None, result, baseOperand, offsetOperand);
 		}
 
 		public static void TransformStore(Transform transform, Context context, BaseInstruction storeInstruction, Operand baseOperand, Operand offsetOperand, Operand sourceOperand)
@@ -151,7 +151,7 @@ namespace Mosa.Compiler.ARM64.Transforms
 				offsetOperand = MoveConstantToRegister(transform, context, offsetOperand);
 			}
 
-			context.SetInstruction(storeInstruction, upDirection ? InstructionOption.UpDirection : InstructionOption.DownDirection, null, baseOperand, offsetOperand, sourceOperand);
+			context.SetInstruction(storeInstruction, upDirection ? InstructionOption.UpDirection : InstructionOption.None, null, baseOperand, offsetOperand, sourceOperand);
 		}
 
 		public static Operand MoveConstantToRegister(Transform transform, Context context, Operand operand)

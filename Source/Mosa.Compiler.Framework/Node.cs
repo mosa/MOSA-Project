@@ -305,15 +305,15 @@ public sealed class Node
 	/// <summary>
 	/// Gets or sets a value indicating whether this intruction should update the condition codes.
 	/// </summary>
-	public bool IsSetConditionCodes
+	public bool IsSetFlags
 	{
 		get
 		{
-			return Options.HasFlag(InstructionOption.Set);
+			return Options.HasFlag(InstructionOption.SetFlags);
 		}
 		set
 		{
-			Options |= InstructionOption.Set;
+			Options |= InstructionOption.SetFlags;
 		}
 	}
 
@@ -339,11 +339,7 @@ public sealed class Node
 	{
 		get
 		{
-			return Options.HasFlag(InstructionOption.DownDirection);
-		}
-		set
-		{
-			Options |= InstructionOption.DownDirection;
+			return !IsUpDirection;
 		}
 	}
 

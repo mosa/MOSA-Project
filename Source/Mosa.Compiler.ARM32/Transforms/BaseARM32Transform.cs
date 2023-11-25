@@ -60,7 +60,7 @@ namespace Mosa.Compiler.ARM32.Transforms
 			baseOperand = MoveConstantToRegister(transform, context, baseOperand);
 			offsetOperand = LimitOffsetToRange(transform, context, offsetOperand, 12, out var upDirection);
 
-			context.SetInstruction(loadInstruction, upDirection ? InstructionOption.UpDirection : InstructionOption.DownDirection, result, baseOperand, offsetOperand);
+			context.SetInstruction(loadInstruction, upDirection ? InstructionOption.UpDirection : InstructionOption.None, result, baseOperand, offsetOperand);
 		}
 
 		public static void TransformStore(Transform transform, Context context, BaseInstruction storeInstruction, Operand baseOperand, Operand offsetOperand, Operand sourceOperand)
@@ -69,7 +69,7 @@ namespace Mosa.Compiler.ARM32.Transforms
 			baseOperand = MoveConstantToRegister(transform, context, baseOperand);
 			offsetOperand = LimitOffsetToRange(transform, context, offsetOperand, 12, out var upDirection);
 
-			context.SetInstruction(storeInstruction, upDirection ? InstructionOption.UpDirection : InstructionOption.DownDirection, null, baseOperand, offsetOperand, sourceOperand);
+			context.SetInstruction(storeInstruction, upDirection ? InstructionOption.UpDirection : InstructionOption.None, null, baseOperand, offsetOperand, sourceOperand);
 		}
 
 		public static void TransformFloatingPointLoad(Transform transform, Context context, BaseInstruction loadInstruction, Operand result, Operand baseOperand, Operand offsetOperand)
@@ -87,7 +87,7 @@ namespace Mosa.Compiler.ARM32.Transforms
 
 			ConformBaseOffsetToContant(transform, context, ref baseOperand, ref offsetOperand);
 
-			context.SetInstruction(loadInstruction, upDirection ? InstructionOption.UpDirection : InstructionOption.DownDirection, result, baseOperand, offsetOperand);
+			context.SetInstruction(loadInstruction, upDirection ? InstructionOption.UpDirection : InstructionOption.None, result, baseOperand, offsetOperand);
 		}
 
 		public static void TransformFloatingPointStore(Transform transform, Context context, BaseInstruction storeInstruction, Operand baseOperand, Operand offsetOperand, Operand sourceOperand)
@@ -106,7 +106,7 @@ namespace Mosa.Compiler.ARM32.Transforms
 
 			ConformBaseOffsetToContant(transform, context, ref baseOperand, ref offsetOperand);
 
-			context.SetInstruction(storeInstruction, upDirection ? InstructionOption.UpDirection : InstructionOption.DownDirection, null, baseOperand, offsetOperand, sourceOperand);
+			context.SetInstruction(storeInstruction, upDirection ? InstructionOption.UpDirection : InstructionOption.None, null, baseOperand, offsetOperand, sourceOperand);
 		}
 
 		public static Operand MoveConstantToRegister(Transform transform, Context context, Operand operand)
