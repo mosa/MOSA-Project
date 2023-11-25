@@ -238,7 +238,7 @@ public sealed class MoveResolver
 					break;
 			}
 
-			context.Marked = true;
+			context.IsMarked = true;
 		}
 
 		return Moves.Count;

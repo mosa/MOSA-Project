@@ -2,7 +2,6 @@
 
 using Mosa.DeviceSystem;
 using Mosa.Runtime;
-using Mosa.Runtime.ARM32;
 using Mosa.Runtime.Plug;
 
 namespace Mosa.Kernel.BareMetal.ARM32;
@@ -13,13 +12,11 @@ public static class PlatformPlug
 	private const uint InitialGCMemoryPoolAddress = 0x03000000;  // @ 48MB
 	private const uint InitialGCMemoryPoolSize = 16 * 1024 * 1024;  // [Size=16MB]
 
-	[Plug("Mosa.Kernel.BareMetal.Platform::EntryPoint")]
-	public static void EntryPoint()
+	[Plug("Mosa.Kernel.BareMetal.Platform::Initialization")]
+	public static void Initialization()
 	{
-		//var eax = Native.GetMultibootEAX();
-		//var ebx = Native.GetMultibootEBX();
-
-		//Multiboot.Setup(new Pointer(ebx), eax);
+		SystemBoard.Setup();
+		MMIO.Setup();
 	}
 
 	[Plug("Mosa.Kernel.BareMetal.Platform::GetBootReservedRegion")]

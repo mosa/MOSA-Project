@@ -853,9 +853,9 @@ public class BuildInstructionFiles : BuildBaseTemplate
 			case "forward32": code = "EmitForward32"; return;
 			case "supress8": code = "SuppressByte"; return;
 			case "conditional": code = "Append4Bits"; postcode = "GetConditionCode(node.ConditionCode)"; return;
-			case "status": code = "Append1Bit"; postcode = " == StatusRegister.Set ? 1 : 0"; return;
-			case "updir": code = "Append1Bit"; postcode = " == StatusRegister.UpDirection ? 1 : 0"; return;
-			case "downdir": code = "Append1Bit"; postcode = " == StatusRegister.DownDirection ? 1 : 0"; return;
+			case "status": code = "Append1Bit"; postcode = ".IsSetConditionCodes ? 1 : 0"; return;
+			case "updir": code = "Append1Bit"; postcode = ".IsUpDirection ? 1 : 0"; return;
+			case "downdir": code = "Append1Bit"; postcode = ".IsDownDirection ? 1 : 0"; return;
 			case "fp": code = "Append1Bit"; postcode = ".IsR4 ? 0 : 1"; return;
 			case "int": code = "Append1Bit"; postcode = ".IsInteger ? 1 : 0"; return;
 			case "float": code = "Append1Bit"; postcode = ".IsFloatingPoint ? 1 : 0"; return;
@@ -923,7 +923,7 @@ public class BuildInstructionFiles : BuildBaseTemplate
 			"r1" => "node.Result",
 			"r2" => "node.Result2",
 			"label" => "node.BranchTargets[0].Label",
-			"status" => "node.StatusRegister",
+			"status" => "node",
 			_ => part
 		};
 	}

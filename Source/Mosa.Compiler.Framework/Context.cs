@@ -50,14 +50,14 @@ public sealed class Context
 	/// Gets or sets the label.
 	/// </summary>
 	/// <value>The label.</value>
-	public bool Marked
-	{ get => Node.Marked; set => Node.Marked = value; }
+	public bool IsMarked
+	{ get => Node.IsMarked; set => Node.IsMarked = value; }
 
 	/// <summary>
 	/// Gets or sets status resister setting.
 	/// </summary>
-	public StatusRegister StatusRegister
-	{ get => Node.StatusRegister; set => Node.StatusRegister = value; }
+	public InstructionOption Options
+	{ get => Node.Options; set => Node.Options = value; }
 
 	/// <summary>
 	/// Gets the branch targets.
@@ -484,7 +484,7 @@ public sealed class Context
 	/// <param name="instruction">The instruction.</param>
 	/// <param name="statusRegister">if set to <c>true</c> [update status].</param>
 	/// <param name="result">The result.</param>
-	public void SetInstruction(BaseInstruction instruction, StatusRegister statusRegister, Operand result)
+	public void SetInstruction(BaseInstruction instruction, InstructionOption statusRegister, Operand result)
 	{
 		Node.SetInstruction(instruction, statusRegister, result);
 	}
@@ -518,7 +518,7 @@ public sealed class Context
 	/// <param name="statusRegister">if set to <c>true</c> [update status].</param>
 	/// <param name="result">The result.</param>
 	/// <param name="operand1">The operand1.</param>
-	public void SetInstruction(BaseInstruction instruction, StatusRegister statusRegister, Operand result, Operand operand1)
+	public void SetInstruction(BaseInstruction instruction, InstructionOption statusRegister, Operand result, Operand operand1)
 	{
 		Node.SetInstruction(instruction, statusRegister, result, operand1);
 	}
@@ -605,7 +605,7 @@ public sealed class Context
 	/// <param name="result">The result.</param>
 	/// <param name="operand1">The operand1.</param>
 	/// <param name="operand2">The operand2.</param>
-	public void SetInstruction(BaseInstruction instruction, StatusRegister statusRegister, Operand result, Operand operand1, Operand operand2)
+	public void SetInstruction(BaseInstruction instruction, InstructionOption statusRegister, Operand result, Operand operand1, Operand operand2)
 	{
 		Node.SetInstruction(instruction, statusRegister, result, operand1, operand2);
 	}
@@ -630,7 +630,7 @@ public sealed class Context
 	/// <param name="condition">The condition.</param>
 	/// <param name="result">The result.</param>
 	/// <param name="operand1">The operand1.</param>
-	public void SetInstruction(BaseInstruction instruction, StatusRegister statusRegister, ConditionCode condition, Operand result, Operand operand1)
+	public void SetInstruction(BaseInstruction instruction, InstructionOption statusRegister, ConditionCode condition, Operand result, Operand operand1)
 	{
 		Node.SetInstruction(instruction, statusRegister, condition, result, operand1);
 	}
@@ -685,7 +685,7 @@ public sealed class Context
 	/// <param name="result">The result.</param>
 	/// <param name="operand1">The operand1.</param>
 	/// <param name="operand2">The operand2.</param>
-	public void SetInstruction(BaseInstruction instruction, StatusRegister statusRegister, ConditionCode condition, Operand result, Operand operand1, Operand operand2)
+	public void SetInstruction(BaseInstruction instruction, InstructionOption statusRegister, ConditionCode condition, Operand result, Operand operand1, Operand operand2)
 	{
 		Node.SetInstruction(instruction, statusRegister, condition, result, operand1, operand2);
 	}
@@ -713,7 +713,7 @@ public sealed class Context
 	/// <param name="operand1">The operand1.</param>
 	/// <param name="operand2">The operand2.</param>
 	/// <param name="operand3">The operand3.</param>
-	public void SetInstruction(BaseInstruction instruction, StatusRegister statusRegister, Operand result, Operand operand1, Operand operand2, Operand operand3)
+	public void SetInstruction(BaseInstruction instruction, InstructionOption statusRegister, Operand result, Operand operand1, Operand operand2, Operand operand3)
 	{
 		Node.SetInstruction(instruction, statusRegister, result, operand1, operand2, operand3);
 	}
@@ -848,7 +848,7 @@ public sealed class Context
 	/// <param name="instruction">The instruction.</param>
 	/// <param name="statusRegister">if set to <c>true</c> [update status].</param>
 	/// <param name="result">The result.</param>
-	public void AppendInstruction(BaseInstruction instruction, StatusRegister statusRegister, Operand result)
+	public void AppendInstruction(BaseInstruction instruction, InstructionOption statusRegister, Operand result)
 	{
 		AppendInstruction();
 		Node.SetInstruction(instruction, statusRegister, result);
@@ -873,7 +873,7 @@ public sealed class Context
 	/// <param name="statusRegister">if set to <c>true</c> [update status].</param>
 	/// <param name="result">The result.</param>
 	/// <param name="operand1">The operand1.</param>
-	public void AppendInstruction(BaseInstruction instruction, StatusRegister statusRegister, Operand result, Operand operand1)
+	public void AppendInstruction(BaseInstruction instruction, InstructionOption statusRegister, Operand result, Operand operand1)
 	{
 		AppendInstruction();
 		Node.SetInstruction(instruction, statusRegister, result, operand1);
@@ -954,7 +954,7 @@ public sealed class Context
 	/// <param name="result">The result.</param>
 	/// <param name="operand1">The operand1.</param>
 	/// <param name="operand2">The operand2.</param>
-	public void AppendInstruction(BaseInstruction instruction, StatusRegister statusRegister, Operand result, Operand operand1, Operand operand2)
+	public void AppendInstruction(BaseInstruction instruction, InstructionOption statusRegister, Operand result, Operand operand1, Operand operand2)
 	{
 		AppendInstruction();
 		Node.SetInstruction(instruction, statusRegister, result, operand1, operand2);
@@ -1032,7 +1032,7 @@ public sealed class Context
 	/// <param name="condition">The condition.</param>
 	/// <param name="result">The result.</param>
 	/// <param name="operand1">The operand1.</param>
-	public void AppendInstruction(BaseInstruction instruction, StatusRegister statusRegister, ConditionCode condition, Operand result, Operand operand1)
+	public void AppendInstruction(BaseInstruction instruction, InstructionOption statusRegister, ConditionCode condition, Operand result, Operand operand1)
 	{
 		AppendInstruction();
 		Node.SetInstruction(instruction, statusRegister, condition, result, operand1);
@@ -1091,7 +1091,7 @@ public sealed class Context
 	/// <param name="result">The result.</param>
 	/// <param name="operand1">The operand1.</param>
 	/// <param name="operand2">The operand2.</param>
-	public void AppendInstruction(BaseInstruction instruction, StatusRegister statusRegister, ConditionCode condition, Operand result, Operand operand1, Operand operand2)
+	public void AppendInstruction(BaseInstruction instruction, InstructionOption statusRegister, ConditionCode condition, Operand result, Operand operand1, Operand operand2)
 	{
 		AppendInstruction();
 		Node.SetInstruction(instruction, statusRegister, condition, result, operand1, operand2);

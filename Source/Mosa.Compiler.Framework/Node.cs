@@ -42,11 +42,6 @@ public sealed class Node
 	/// </summary>
 	private BasicBlock basicBlock;
 
-	/// <summary>
-	/// The additional properties of an instruction node
-	/// </summary>
-	private NodeAddition addition;
-
 	#endregion Data Members
 
 	#region Properties
@@ -292,7 +287,67 @@ public sealed class Node
 	/// </summary>
 	public ConditionCode ConditionCode { get; set; }
 
-	public StatusRegister StatusRegister { get; set; }
+	/// <summary>
+	/// Gets or sets a value indicating whether this node is marked.
+	/// </summary>
+	public bool IsMarked
+	{
+		get
+		{
+			return Options.HasFlag(InstructionOption.Marked);
+		}
+		set
+		{
+			Options |= InstructionOption.Marked;
+		}
+	}
+
+	/// <summary>
+	/// Gets or sets a value indicating whether this intruction should update the condition codes.
+	/// </summary>
+	public bool IsSetConditionCodes
+	{
+		get
+		{
+			return Options.HasFlag(InstructionOption.Set);
+		}
+		set
+		{
+			Options |= InstructionOption.Set;
+		}
+	}
+
+	/// <summary>
+	/// Gets or sets a value indicating whether this intruction has an up direction.
+	/// </summary>
+	public bool IsUpDirection
+	{
+		get
+		{
+			return Options.HasFlag(InstructionOption.UpDirection);
+		}
+		set
+		{
+			Options |= InstructionOption.UpDirection;
+		}
+	}
+
+	/// <summary>
+	/// Gets or sets a value indicating whether this intruction has an up direction.
+	/// </summary>
+	public bool IsDownDirection
+	{
+		get
+		{
+			return Options.HasFlag(InstructionOption.DownDirection);
+		}
+		set
+		{
+			Options |= InstructionOption.DownDirection;
+		}
+	}
+
+	public InstructionOption Options { get; set; }
 
 	/// <summary>
 	/// Holds branch targets
@@ -302,9 +357,6 @@ public sealed class Node
 	/// <summary>
 	/// Gets the branch targets count.
 	/// </summary>
-	/// <value>
-	/// The branch targets count.
-	/// </value>
 	public int BranchTargetsCount => BranchTargets?.Count ?? 0;
 
 	/// <summary>
@@ -315,7 +367,7 @@ public sealed class Node
 	{
 		Debug.Assert(block != null);
 
-		(BranchTargets ?? (BranchTargets = new List<BasicBlock>(1))).Add(block);
+		(BranchTargets ??= new List<BasicBlock>(1)).Add(block);
 
 		Block?.AddBranchInstruction(this);
 	}
@@ -334,11 +386,6 @@ public sealed class Node
 	}
 
 	/// <summary>
-	/// Gets or sets a value indicating whether this <see cref="Node"/> is marked.
-	/// </summary>
-	public bool Marked { get; set; }
-
-	/// <summary>
 	/// Gets or sets the number of operands
 	/// </summary>
 	public int OperandCount { get; set; }
@@ -348,25 +395,15 @@ public sealed class Node
 	/// </summary>
 	public int ResultCount { get; set; }
 
-	private void CheckAddition()
-	{
-		if (addition == null)
-		{
-			addition = new NodeAddition();
-		}
-	}
-
 	/// <summary>
 	/// Gets or sets the phi blocks.
 	/// </summary>
-	/// <value>
-	/// The phi blocks.
-	/// </value>
-	public List<BasicBlock> PhiBlocks
-	{
-		get => addition?.PhiBlocks;
-		set { CheckAddition(); addition.PhiBlocks = value; }
-	}
+	public List<BasicBlock> PhiBlocks { get; set; }
+
+	/// <summary>
+	/// Gets or sets additional operands
+	/// </summary>
+	private Operand[] AdditionalOperands { get; set; }
 
 	/// <summary>
 	/// Gets a value indicating whether this is the start instruction.
@@ -421,8 +458,7 @@ public sealed class Node
 		ClearOperands();
 
 		ConditionCode = ConditionCode.Undefined;
-		StatusRegister = StatusRegister.NotSet;
-		addition = null;
+		Options = InstructionOption.None;
 		Block = null;
 		BranchTargets = null;
 	}
@@ -435,11 +471,20 @@ public sealed class Node
 		ClearOperands();
 
 		ConditionCode = ConditionCode.Undefined;
-		StatusRegister = StatusRegister.NotSet;
+		Options = InstructionOption.None;
 		Instruction = null;
-		addition = null;
 		Block.RemoveBranchInstruction(this);
 		BranchTargets = null;
+
+		PhiBlocks?.Clear();
+
+		if (AdditionalOperands != null)
+		{
+			for (int i = 0; i < AdditionalOperands.Length; i++)
+			{
+				AdditionalOperands[i] = null;
+			}
+		}
 
 		//Block.DebugCheck();
 	}
@@ -689,8 +734,8 @@ public sealed class Node
 			{
 				case 0: operand1 = operand2; continue;
 				case 1: operand2 = operand3; continue;
-				case 2: operand3 = addition.AdditionalOperands[i - 2]; continue;
-				case 3: addition.AdditionalOperands[i - 3] = addition.AdditionalOperands[i - 2 + 1]; continue;
+				case 2: operand3 = AdditionalOperands[i - 2]; continue;
+				case 3: AdditionalOperands[i - 3] = AdditionalOperands[i - 2 + 1]; continue;
 			}
 		}
 
@@ -713,39 +758,37 @@ public sealed class Node
 	/// <param name="operand">The operand.</param>
 	private void SetAdditionalOperand(int index, Operand operand)
 	{
-		CheckAddition();
-
 		//if (addition.AdditionalOperands == null) addition.AdditionalOperands = new Operand[253];
 		//Debug.Assert(index < 255, @"No Index");
 		Debug.Assert(index >= 3, "No Index");
 
 		SizeAdditionalOperands(index - 3 + 1);
 
-		addition.AdditionalOperands[index - 3] = operand;
+		AdditionalOperands[index - 3] = operand;
 	}
 
 	private void SizeAdditionalOperands(int index)
 	{
-		if (addition.AdditionalOperands == null)
+		if (AdditionalOperands == null)
 		{
 			var minsize = Math.Max(index, 8);
 
-			addition.AdditionalOperands = new Operand[minsize];
+			AdditionalOperands = new Operand[minsize];
 			return;
 		}
 
-		if (index < addition.AdditionalOperands.Length)
+		if (index < AdditionalOperands.Length)
 			return;
 
-		var old = addition.AdditionalOperands;
+		var old = AdditionalOperands;
 
 		var newsize = Math.Max(index, old.Length * 2);
 
-		addition.AdditionalOperands = new Operand[newsize];
+		AdditionalOperands = new Operand[newsize];
 
 		for (var i = 0; i < old.Length; i++)
 		{
-			addition.AdditionalOperands[i] = old[i];
+			AdditionalOperands[i] = old[i];
 		}
 	}
 
@@ -756,7 +799,7 @@ public sealed class Node
 	/// <returns></returns>
 	private Operand GetAdditionalOperand(int index)
 	{
-		if (addition == null || addition.AdditionalOperands == null)
+		if (AdditionalOperands == null)
 			return null;
 
 		Debug.Assert(index >= 3, "No Index");
@@ -765,7 +808,7 @@ public sealed class Node
 
 		SizeAdditionalOperands(index - 3 + 1);
 
-		return addition.AdditionalOperands[index - 3];
+		return AdditionalOperands[index - 3];
 	}
 
 	/// <summary>
@@ -784,7 +827,7 @@ public sealed class Node
 
 		sb.AppendFormat($"{Label:X5}:");
 
-		if (Marked)
+		if (IsMarked)
 			sb.Append('*');
 		else
 			sb.Append(' ');
@@ -1082,10 +1125,10 @@ public sealed class Node
 	/// <param name="instruction">The instruction.</param>
 	/// <param name="updateStatus">if set to <c>true</c> [update status].</param>
 	/// <param name="result">The result.</param>
-	public Node(BaseInstruction instruction, StatusRegister statusRegister, Operand result)
+	public Node(BaseInstruction instruction, InstructionOption options, Operand result)
 		: this(instruction, result)
 	{
-		StatusRegister = statusRegister;
+		Options = options;
 	}
 
 	/// <summary>
@@ -1234,11 +1277,11 @@ public sealed class Node
 	/// <param name="instruction">The instruction.</param>
 	/// <param name="updateStatus">if set to <c>true</c> [update status].</param>
 	/// <param name="result">The result.</param>
-	public void SetInstruction(BaseInstruction instruction, StatusRegister statusRegister, Operand result)
+	public void SetInstruction(BaseInstruction instruction, InstructionOption options, Operand result)
 	{
 		SetInstruction(instruction, 0, 1);
 		Result = result;
-		StatusRegister = statusRegister;
+		Options = options;
 	}
 
 	/// <summary>
@@ -1301,12 +1344,12 @@ public sealed class Node
 	/// <param name="updateStatus">if set to <c>true</c> [update status].</param>
 	/// <param name="result">The result.</param>
 	/// <param name="operand1">The operand1.</param>
-	public void SetInstruction(BaseInstruction instruction, StatusRegister statusRegister, Operand result, Operand operand1)
+	public void SetInstruction(BaseInstruction instruction, InstructionOption options, Operand result, Operand operand1)
 	{
 		SetInstruction(instruction, 1, (byte)(result == null ? 0 : 1));
 		Result = result;
 		Operand1 = operand1;
-		StatusRegister = statusRegister;
+		Options = options;
 	}
 
 	/// <summary>
@@ -1438,7 +1481,7 @@ public sealed class Node
 	/// <param name="operand5">The operand4.</param>
 	public void SetInstruction(BaseInstruction instruction, Operand result, Operand operand1, Operand operand2, Operand operand3, Operand operand4, Operand operand5)
 	{
-		SetInstruction(instruction, 4, (byte)(result == null ? 0 : 1));
+		SetInstruction(instruction, 5, (byte)(result == null ? 0 : 1));
 		Result = result;
 		Operand1 = operand1;
 		Operand2 = operand2;
@@ -1454,8 +1497,8 @@ public sealed class Node
 		Operand1 = operand1;
 		Operand2 = operand2;
 		Operand3 = operand3;
+		Operand4 = operand4;
 		ConditionCode = conditionCode;
-		SetOperand(3, operand4);
 	}
 
 	/// <summary>
@@ -1466,13 +1509,13 @@ public sealed class Node
 	/// <param name="result">The result.</param>
 	/// <param name="operand1">The operand1.</param>
 	/// <param name="operand2">The operand2.</param>
-	public void SetInstruction(BaseInstruction instruction, StatusRegister statusRegister, Operand result, Operand operand1, Operand operand2)
+	public void SetInstruction(BaseInstruction instruction, InstructionOption options, Operand result, Operand operand1, Operand operand2)
 	{
 		SetInstruction(instruction, 2, (byte)(result == null ? 0 : 1));
 		Result = result;
 		Operand1 = operand1;
 		Operand2 = operand2;
-		StatusRegister = statusRegister;
+		Options = options;
 	}
 
 	/// <summary>
@@ -1498,13 +1541,13 @@ public sealed class Node
 	/// <param name="updateStatus">if set to <c>true</c> [update status].</param>
 	/// <param name="result">The result.</param>
 	/// <param name="operand1">The operand1.</param>
-	public void SetInstruction(BaseInstruction instruction, StatusRegister statusRegister, ConditionCode condition, Operand result, Operand operand1)
+	public void SetInstruction(BaseInstruction instruction, InstructionOption options, ConditionCode condition, Operand result, Operand operand1)
 	{
 		SetInstruction(instruction, 1, (byte)(result == null ? 0 : 1));
 		Result = result;
 		Operand1 = operand1;
 		ConditionCode = condition;
-		StatusRegister = statusRegister;
+		Options = options;
 	}
 
 	/// <summary>
@@ -1584,14 +1627,14 @@ public sealed class Node
 	/// <param name="result">The result.</param>
 	/// <param name="operand1">The operand1.</param>
 	/// <param name="operand2">The operand2.</param>
-	public void SetInstruction(BaseInstruction instruction, StatusRegister statusRegister, ConditionCode condition, Operand result, Operand operand1, Operand operand2)
+	public void SetInstruction(BaseInstruction instruction, InstructionOption options, ConditionCode condition, Operand result, Operand operand1, Operand operand2)
 	{
 		SetInstruction(instruction, 2, (byte)(result == null ? 0 : 1));
 		Result = result;
 		Operand1 = operand1;
 		Operand2 = operand2;
 		ConditionCode = condition;
-		StatusRegister = statusRegister;
+		Options = options;
 	}
 
 	/// <summary>
@@ -1604,14 +1647,14 @@ public sealed class Node
 	/// <param name="operand1">The operand1.</param>
 	/// <param name="operand2">The operand2.</param>
 	/// <param name="operand3">The operand3.</param>
-	public void SetInstruction(BaseInstruction instruction, StatusRegister statusRegister, Operand result, Operand operand1, Operand operand2, Operand operand3)
+	public void SetInstruction(BaseInstruction instruction, InstructionOption options, Operand result, Operand operand1, Operand operand2, Operand operand3)
 	{
 		SetInstruction(instruction, 3, (byte)(result == null ? 0 : 1));
 		Result = result;
 		Operand1 = operand1;
 		Operand2 = operand2;
 		Operand3 = operand3;
-		StatusRegister = statusRegister;
+		Options = options;
 	}
 
 	/// <summary>
@@ -1624,15 +1667,15 @@ public sealed class Node
 	/// <param name="operand1">The operand1.</param>
 	/// <param name="operand2">The operand2.</param>
 	/// <param name="operand3">The operand3.</param>
-	public void SetInstruction(BaseInstruction instruction, StatusRegister statusRegister, Operand result, Operand operand1, Operand operand2, Operand operand3, Operand operand4)
+	public void SetInstruction(BaseInstruction instruction, InstructionOption options, Operand result, Operand operand1, Operand operand2, Operand operand3, Operand operand4)
 	{
-		SetInstruction(instruction, 3, (byte)(result == null ? 0 : 1));
+		SetInstruction(instruction, 4, (byte)(result == null ? 0 : 1));
 		Result = result;
 		Operand1 = operand1;
 		Operand2 = operand2;
 		Operand3 = operand3;
 		Operand4 = operand4;
-		StatusRegister = statusRegister;
+		Options = options;
 	}
 
 	#endregion SetInstructions

@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 namespace Mosa.Runtime.ARM64;
 
 /// <summary>
-/// Provides stub methods for selected x86 native assembly instructions.
+/// Provides stub methods for selected ARM64 native assembly instructions.
 /// </summary>
 public static class Native
 {

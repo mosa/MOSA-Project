@@ -49,7 +49,7 @@ public static class Boot
 
 		Console.ForegroundColor = ConsoleColor.LightGreen;
 		Console.Write("> Platform initialization...");
-		Platform.EntryPoint();
+		Platform.Initialization();
 		Console.ForegroundColor = ConsoleColor.DarkGray;
 		Console.WriteLine(" [Completed]");
 	}

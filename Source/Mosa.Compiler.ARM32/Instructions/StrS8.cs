@@ -26,7 +26,7 @@ public sealed class StrS8 : ARM32Instruction
 			opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
 			opcodeEncoder.Append3Bits(0b000);
 			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append1Bit(node.StatusRegister == StatusRegister.UpDirection ? 1 : 0);
+			opcodeEncoder.Append1Bit(node.IsUpDirection ? 1 : 0);
 			opcodeEncoder.Append1Bit(0b1);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append1Bit(0b0);
@@ -46,7 +46,7 @@ public sealed class StrS8 : ARM32Instruction
 			opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
 			opcodeEncoder.Append3Bits(0b000);
 			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append1Bit(node.StatusRegister == StatusRegister.UpDirection ? 1 : 0);
+			opcodeEncoder.Append1Bit(node.IsUpDirection ? 1 : 0);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append1Bit(0b0);

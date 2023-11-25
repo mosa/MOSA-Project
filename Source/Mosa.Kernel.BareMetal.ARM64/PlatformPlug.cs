@@ -12,13 +12,9 @@ public static class PlatformPlug
 	private const uint InitialGCMemoryPoolAddress = 0x03000000;  // @ 48MB
 	private const uint InitialGCMemoryPoolSize = 16 * 1024 * 1024;  // [Size=16MB]
 
-	[Plug("Mosa.Kernel.BareMetal.Platform::EntryPoint")]
-	public static void EntryPoint()
+	[Plug("Mosa.Kernel.BareMetal.Platform::Initialization")]
+	public static void Initialization()
 	{
-		//var eax = Native.GetMultibootEAX();
-		//var ebx = Native.GetMultibootEBX();
-
-		//Multiboot.Setup(new Pointer(ebx), eax);
 	}
 
 	[Plug("Mosa.Kernel.BareMetal.Platform::GetBootReservedRegion")]
