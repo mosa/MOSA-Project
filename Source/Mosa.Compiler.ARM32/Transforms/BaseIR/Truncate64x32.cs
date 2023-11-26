@@ -24,6 +24,6 @@ public sealed class Truncate64x32 : BaseIRTransform
 
 		op1L = MoveConstantToRegisterOrImmediate(transform, context, op1L);
 
-		context.SetInstruction(ARM32.Mov, StatusRegister.Set, resultLow, op1L);
+		context.SetInstruction(ARM32.Mov, InstructionOption.SetFlags, resultLow, op1L);
 	}
 }

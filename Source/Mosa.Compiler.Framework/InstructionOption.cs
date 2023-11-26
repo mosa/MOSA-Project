@@ -3,8 +3,13 @@
 namespace Mosa.Compiler.Framework;
 
 /// <summary>
-/// Status Register
+/// Instruction Options
 /// </summary>
-
-public enum StatusRegister
-{ NotSet = 0, Set = 1, UpDirection = 3, DownDirection = 4 };
+[Flags]
+public enum InstructionOption
+{
+	None = 0,
+	SetFlags = 1,
+	UpDirection = 2,
+	Marked = 4,
+};

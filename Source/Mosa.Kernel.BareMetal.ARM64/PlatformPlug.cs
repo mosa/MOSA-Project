@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.DeviceSystem;
+using Mosa.Runtime;
 using Mosa.Runtime.Plug;
 
 namespace Mosa.Kernel.BareMetal.ARM64;
@@ -11,17 +12,9 @@ public static class PlatformPlug
 	private const uint InitialGCMemoryPoolAddress = 0x03000000;  // @ 48MB
 	private const uint InitialGCMemoryPoolSize = 16 * 1024 * 1024;  // [Size=16MB]
 
-	[Plug("Mosa.Kernel.BareMetal.Platform::EntryPoint")]
-	public static void EntryPoint()
+	[Plug("Mosa.Kernel.BareMetal.Platform::Initialization")]
+	public static void Initialization()
 	{
-		//var eax = Native.GetMultibootEAX();
-		//var ebx = Native.GetMultibootEBX();
-
-		//Multiboot.Setup(new Pointer(ebx), eax);
-
-		//SSE.Setup();
-		//SerialDebug.Setup();
-		//PIC.Setup();
 	}
 
 	[Plug("Mosa.Kernel.BareMetal.Platform::GetBootReservedRegion")]
@@ -76,23 +69,23 @@ public static class PlatformPlug
 
 	public static class IOPlugPlug
 	{
-		//[Plug("Mosa.Kernel.BareMetal.Platform+IO::In8")]
-		//public static byte In8(ushort address) => Native.In8(address);
+		[Plug("Mosa.Kernel.BareMetal.Platform+IO::In8")]
+		public static byte In8(ushort address) => new Pointer(address).Load8();
 
-		//[Plug("Mosa.Kernel.BareMetal.Platform+IO::In16")]
-		//public static ushort In16(ushort address) => Native.In16(address);
+		[Plug("Mosa.Kernel.BareMetal.Platform+IO::In16")]
+		public static ushort In16(ushort address) => new Pointer(address).Load16();
 
-		//[Plug("Mosa.Kernel.BareMetal.Platform+IO::In32")]
-		//public static uint In32(ushort address) => Native.In32(address);
+		[Plug("Mosa.Kernel.BareMetal.Platform+IO::In32")]
+		public static uint In32(ushort address) => new Pointer(address).Load32();
 
-		//[Plug("Mosa.Kernel.BareMetal.Platform+IO::Out8")]
-		//public static void Out8(ushort address, byte data) => Native.Out8(address, data);
+		[Plug("Mosa.Kernel.BareMetal.Platform+IO::Out8")]
+		public static void Out8(ushort address, byte data) => new Pointer(address).Store8(data);
 
-		//[Plug("Mosa.Kernel.BareMetal.Platform+IO::Out16")]
-		//public static void Out16(ushort address, ushort data) => Native.Out16(address, data);
+		[Plug("Mosa.Kernel.BareMetal.Platform+IO::Out16")]
+		public static void Out16(ushort address, ushort data) => new Pointer(address).Store16(data);
 
-		//[Plug("Mosa.Kernel.BareMetal.Platform+IO::Out32")]
-		//public static void Out32(ushort address, uint data) => Native.Out32(address, data);
+		[Plug("Mosa.Kernel.BareMetal.Platform+IO::Out32")]
+		public static void Out32(ushort address, uint data) => new Pointer(address).Store32(data);
 	}
 
 	public static class SchedulerPlug

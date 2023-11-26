@@ -21,7 +21,7 @@ public sealed class Deadcode : BaseTransform
 		if (context.Instruction.IsCall)
 			return false;
 
-		if (context.StatusRegister == StatusRegister.Set)
+		if (context.Node.IsSetFlags)
 			return false;
 
 		if (context.Result.IsUsed)

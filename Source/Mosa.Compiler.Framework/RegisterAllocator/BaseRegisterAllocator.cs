@@ -1458,7 +1458,7 @@ public abstract class BaseRegisterAllocator
 
 					SpillMoves++;
 
-					context.Marked = true;
+					context.IsMarked = true;
 				}
 			}
 		}

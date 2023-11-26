@@ -24,7 +24,7 @@ public sealed class Sub64 : BaseIRTransform
 		op2L = MoveConstantToRegisterOrImmediate(transform, context, op2L);
 		op2H = MoveConstantToRegisterOrImmediate(transform, context, op2H);
 
-		context.SetInstruction(ARM32.Sub, StatusRegister.Set, resultLow, op1L, op2L);
+		context.SetInstruction(ARM32.Sub, InstructionOption.SetFlags, resultLow, op1L, op2L);
 		context.AppendInstruction(ARM32.Sbc, resultHigh, op1H, op2H);
 	}
 }

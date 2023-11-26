@@ -27,7 +27,7 @@ public sealed class Ldr8 : ARM32Instruction
 			opcodeEncoder.Append2Bits(0b01);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append1Bit(node.StatusRegister == StatusRegister.UpDirection ? 1 : 0);
+			opcodeEncoder.Append1Bit(node.IsUpDirection ? 1 : 0);
 			opcodeEncoder.Append1Bit(0b1);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append1Bit(0b1);
@@ -43,7 +43,7 @@ public sealed class Ldr8 : ARM32Instruction
 			opcodeEncoder.Append2Bits(0b01);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append1Bit(node.StatusRegister == StatusRegister.UpDirection ? 1 : 0);
+			opcodeEncoder.Append1Bit(node.IsUpDirection ? 1 : 0);
 			opcodeEncoder.Append1Bit(0b1);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append1Bit(0b1);

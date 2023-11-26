@@ -26,7 +26,7 @@ public sealed class Add64 : BaseIRTransform
 		op2L = MoveConstantToRegisterOrImmediate(transform, context, op2L);
 		op2H = MoveConstantToRegisterOrImmediate(transform, context, op2H);
 
-		context.SetInstruction(ARM32.Add, StatusRegister.Set, resultLow, op1L, op2L);
+		context.SetInstruction(ARM32.Add, InstructionOption.SetFlags, resultLow, op1L, op2L);
 		context.AppendInstruction(ARM32.Adc, resultHigh, op1H, op2H);
 	}
 }

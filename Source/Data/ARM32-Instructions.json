@@ -37,19 +37,19 @@
 			"Description": "Move from processor register to coprocessor",
 			"OperandDescriptions": [
 				{
-					"Result": "ARM source/destination register",
-					"Operand1": "Coprocessor source/destination register",
-					"Operand2": "Coprocessor operand register",
-					"Operand3": "Coprocessor number",
-					"Operand4": "Coprocessor operation mode",
+					"Result": "ARM destination register",
+					"Operand1": "Coprocessor number",
+					"Operand2": "Coprocessor operation mode",
+					"Operand3": "Coprocessor operand register",
+					"Operand4": "Coprocessor source/destination register",
 					"Operand5": "Coprocessor information"
 				}
 			],
 			"OpcodeEncodingAppend": "",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][register][constant][constant][constant]",
-					"Encoding": "[arm-coprocessor-transfer],s=status:status,l=1,rd=reg4:r,crn=reg4:o1,crm=reg4:o2,cpn=imm4:o3,opcode=imm4:o4,cp=imm4:o5"
+					"Condition": "[constant][constant][constant][constant][constant]",
+					"Encoding": "[arm-coprocessor-transfer],s=status:status,l=1,rd=reg4:r,crn=imm4:o2,crm=imm4:o3,cpn=imm4:o4,opcode=imm4:o2,cp=imm4:o5"
 				}
 			]
 		},
@@ -68,19 +68,19 @@
 			"Description": "Move from coprocessor to processor register",
 			"OperandDescriptions": [
 				{
-					"Result": "ARM source/destination register",
-					"Operand1": "Coprocessor source/destination register",
-					"Operand2": "Coprocessor operand register",
-					"Operand3": "Coprocessor number",
-					"Operand4": "Coprocessor operation mode",
+					"Result": "ARM destination register",
+					"Operand1": "Coprocessor number",
+					"Operand2": "Coprocessor operation mode",
+					"Operand3": "Coprocessor operand register",
+					"Operand4": "Coprocessor source/destination register",
 					"Operand5": "Coprocessor information"
 				}
 			],
 			"OpcodeEncodingAppend": "",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][register][constant][constant][constant]",
-					"Encoding": "[arm-coprocessor-transfer],s=status:status,l=0,rd=reg4:r,crn=reg4:o1,crm=reg4:o2,cpn=imm4:o3,opcode=imm4:o4,cp=imm4:o5"
+					"Condition": "[constant][constant][constant][constant][constant]",
+					"Encoding": "[arm-coprocessor-transfer],s=status:status,l=0,rd=reg4:r,crn=imm4:o2,crm=imm4:o3,cpn=imm4:o4,opcode=imm4:o2,cp=imm4:o5"
 				}
 			]
 		},
@@ -1360,13 +1360,13 @@
 			"FlagsUnchanged": "",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 2,
+			"OperandCount": 3,
 			"ResultCount": 0,
 			"Description": "Block transfer multiple registers from memory",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][constant]",
-					"Encoding": "[arm-block-transfer],p=0,u=updir:status,s=0,w=0,l=1,rn=reg4:o1,list=imm16:o2"
+					"Condition": "[register][constant][constant]",
+					"Encoding": "[arm-block-transfer],p=0,u=updir:status,s=imm1:o2,w=0,l=1,rn=reg4:o1,list=imm16:o2"
 				}
 			]
 		},
@@ -1380,13 +1380,13 @@
 			"FlagsUnchanged": "",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 2,
+			"OperandCount": 3,
 			"ResultCount": 0,
 			"Description": "Block transfer multiple registers to memory",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][constant]",
-					"Encoding": "[arm-block-transfer],p=1,u=updir:status,s=0,w=0,l=0,rn=reg4:o1,list=imm16:o2"
+					"Condition": "[register][constant][constant]",
+					"Encoding": "[arm-block-transfer],p=1,u=updir:status,s=imm1:o2,w=0,l=0,rn=reg4:o1,list=imm16:o2"
 				}
 			]
 		},

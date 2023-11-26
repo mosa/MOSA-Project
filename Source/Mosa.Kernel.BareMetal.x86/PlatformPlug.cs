@@ -17,8 +17,8 @@ public static class PlatformPlug
 	public static void ForceInclude()
 	{ }
 
-	[Plug("Mosa.Kernel.BareMetal.Platform::EntryPoint")]
-	public static void EntryPoint()
+	[Plug("Mosa.Kernel.BareMetal.Platform::Initialization")]
+	public static void Initialization()
 	{
 		var eax = Native.GetMultibootEAX();
 		var ebx = Native.GetMultibootEBX();
@@ -30,7 +30,9 @@ public static class PlatformPlug
 		RTC.Setup();
 
 		if (BootSettings.EnableDebugOutput)
+		{
 			SerialController.Setup(SerialController.COM1);
+		}
 	}
 
 	[Plug("Mosa.Kernel.BareMetal.Platform::GetBootReservedRegion")]

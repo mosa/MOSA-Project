@@ -24,7 +24,7 @@ public sealed class IfThenElse32 : BaseIRTransform
 		operand2 = MoveConstantToRegisterOrImmediate(transform, context, operand2);
 		operand3 = MoveConstantToRegisterOrImmediate(transform, context, operand3);
 
-		context.SetInstruction(ARM32.Cmp, StatusRegister.Set, null, operand1, Operand.Constant32_0);
+		context.SetInstruction(ARM32.Cmp, InstructionOption.SetFlags, null, operand1, Operand.Constant32_0);
 		context.AppendInstruction(ARM32.Mov, ConditionCode.Equal, result, operand2);
 		context.AppendInstruction(ARM32.Mov, ConditionCode.NotEqual, result, operand3);
 	}
